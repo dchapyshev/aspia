@@ -23,10 +23,11 @@
 #include <QPointer>
 #include <QTimer>
 
+#include "base/shared_pointer.h"
 #include "base/net/tcp_channel.h"
-#include "base/peer/client_authenticator.h"
 #include "base/peer/host_id.h"
 #include "base/peer/relay_peer_manager.h"
+#include "base/peer/user_list_base.h"
 #include "proto/host_internal.h"
 
 namespace host {
@@ -40,6 +41,8 @@ public:
     ~RouterController() final;
 
     void start(const QString& address, quint16 port, const QByteArray& public_key);
+
+    void setUserList(base::SharedPointer<base::UserListBase> user_list);
 
     const QString& address() const { return address_; }
     quint16 port() const { return port_; }
@@ -56,8 +59,8 @@ signals:
     void sig_clientConnected();
 
 private slots:
-    void onTcpConnected();
-    void onTcpDisconnected(base::TcpChannel::ErrorCode error_code);
+    void onTcpReady();
+    void onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code);
     void onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer);
     void onNewPeerConnected();
 
@@ -68,13 +71,14 @@ private:
     void hostIdRequest();
 
     QPointer<base::TcpChannel> tcp_channel_;
-    QPointer<base::ClientAuthenticator> authenticator_;
     QPointer<base::RelayPeerManager> peer_manager_;
     QPointer<QTimer> reconnect_timer_;
 
     QString address_;
     quint16 port_ = 0;
     QByteArray public_key_;
+
+    base::SharedPointer<base::UserListBase> user_list_;
 
     base::HostId host_id_ = base::kInvalidHostId;
     proto::internal::RouterState router_state_;

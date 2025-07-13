@@ -38,29 +38,23 @@ class Session : public QObject
     Q_OBJECT
 
 public:
-    Session(proto::router::SessionType session_type, QObject* parent);
+    Session(base::TcpChannel* channel, QObject* parent);
     virtual ~Session() override;
 
     using SessionId = qint64;
 
-    void setChannel(base::TcpChannel* channel);
     void setRelayKeyPool(base::SharedPointer<KeyPool> relay_key_pool);
     void setDatabaseFactory(base::SharedPointer<DatabaseFactory> database_factory);
 
     void start();
 
-    void setVersion(const QVersionNumber& version);
-    const QVersionNumber& version() const { return version_; }
-    void setOsName(const QString& os_name);
-    const QString& osName() const { return os_name_; }
-    void setComputerName(const QString& computer_name);
-    const QString& computerName() const { return computer_name_; }
-    void setArchitecture(const QString& architecture);
-    const QString& architecture() const { return architecture_; }
-    void setUserName(const QString& username);
-    const QString& userName() const { return username_; }
+    QVersionNumber version() const;
+    QString osName() const;
+    QString computerName() const;
+    QString architecture() const;
+    QString userName() const;
+    proto::router::SessionType sessionType() const;
 
-    proto::router::SessionType sessionType() const { return session_type_; }
     SessionId sessionId() const { return session_id_; }
     const QString& address() const { return address_; }
     time_t startTime() const { return start_time_; }
@@ -85,12 +79,11 @@ protected:
     Session* sessionById(SessionId session_id) const;
 
 private slots:
-    void onTcpDisconnected(base::TcpChannel::ErrorCode error_code);
+    void onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code);
     void onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer);
     void onTcpMessageWritten(quint8 channel_id, size_t pending);
 
 private:
-    const proto::router::SessionType session_type_;
     const SessionId session_id_;
     time_t start_time_ = 0;
 
@@ -98,13 +91,7 @@ private:
 
     base::SharedPointer<DatabaseFactory> database_factory_;
     base::SharedPointer<KeyPool> relay_key_pool_;
-
     QString address_;
-    QString username_;
-    QVersionNumber version_;
-    QString os_name_;
-    QString computer_name_;
-    QString architecture_;
 };
 
 } // namespace router

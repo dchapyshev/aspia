@@ -25,8 +25,8 @@
 namespace router {
 
 //--------------------------------------------------------------------------------------------------
-SessionRelay::SessionRelay(QObject* parent)
-    : Session(proto::router::SESSION_TYPE_RELAY, parent)
+SessionRelay::SessionRelay(base::TcpChannel* channel, QObject* parent)
+    : Session(channel, parent)
 {
     LOG(INFO) << "Ctor";
 }

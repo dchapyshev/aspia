@@ -20,6 +20,7 @@
 
 #include "base/asio_event_dispatcher.h"
 #include "base/logging.h"
+#include "base/peer/server_authenticator.h"
 
 namespace base {
 
@@ -38,6 +39,27 @@ TcpServer::~TcpServer()
 
     std::error_code ignored_error;
     acceptor_.cancel(ignored_error);
+}
+
+//--------------------------------------------------------------------------------------------------
+void TcpServer::setUserList(SharedPointer<UserListBase> user_list)
+{
+    user_list_ = user_list;
+    DCHECK(user_list_);
+}
+
+//--------------------------------------------------------------------------------------------------
+void TcpServer::setPrivateKey(const QByteArray& private_key)
+{
+    private_key_ = private_key;
+}
+
+//--------------------------------------------------------------------------------------------------
+void TcpServer::setAnonymousAccess(
+    ServerAuthenticator::AnonymousAccess anonymous_access, quint32 session_types)
+{
+    anonymous_access_ = anonymous_access;
+    anonymous_session_types_ = session_types;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -102,21 +124,21 @@ void TcpServer::start(quint16 port, const QString& iface)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool TcpServer::hasPendingConnections()
+bool TcpServer::hasReadyConnections()
 {
-    return !pending_.isEmpty();
+    return !ready_.isEmpty();
 }
 
 //--------------------------------------------------------------------------------------------------
-TcpChannel* TcpServer::nextPendingConnection()
+TcpChannel* TcpServer::nextReadyConnection()
 {
-    if (pending_.isEmpty())
+    if (ready_.isEmpty())
         return nullptr;
 
-    TcpChannel* channel = pending_.front();
+    TcpChannel* channel = ready_.front();
     channel->setParent(nullptr);
 
-    pending_.pop_front();
+    ready_.pop_front();
     return channel;
 }
 
@@ -164,14 +186,69 @@ void TcpServer::doAccept()
         {
             accept_error_count_ = 0;
 
+            ServerAuthenticator* authenticator = new ServerAuthenticator();
+            authenticator->setUserList(user_list_);
+
+            if (!private_key_.isEmpty())
+            {
+                if (!authenticator->setPrivateKey(private_key_))
+                {
+                    LOG(ERROR) << "Failed to set private key for authenticator";
+                    delete authenticator;
+                    return;
+                }
+
+                if (!authenticator->setAnonymousAccess(anonymous_access_, anonymous_session_types_))
+                {
+                    LOG(ERROR) << "Failed to set anonymous access settings";
+                    delete authenticator;
+                    return;
+                }
+            }
+
+            TcpChannel* channel = new TcpChannel(std::move(socket), authenticator, this);
+
+            connect(channel, &TcpChannel::sig_authenticated, this, [this, channel]()
+            {
+                removePendingChannel(channel);
+                ready_.append(channel);
+                emit sig_newConnection();
+            });
+
+            connect(channel, &TcpChannel::sig_errorOccurred,
+                    this, [this, channel](TcpChannel::ErrorCode error_code)
+            {
+                removePendingChannel(channel);
+                channel->deleteLater();
+            });
+
             // Connection accepted.
-            pending_.push_back(new TcpChannel(std::move(socket), this));
-            emit sig_newConnection();
+            pending_.push_back(channel);
+
+            // Start authentication.
+            channel->doAuthentication();
         }
 
         // Accept next connection.
         doAccept();
     });
+}
+
+//--------------------------------------------------------------------------------------------------
+void TcpServer::removePendingChannel(TcpChannel* channel)
+{
+    // Disconnect all connected signals between the server and channel.
+    disconnect(channel, nullptr, this, nullptr);
+
+    // Remove channel from pending queue.
+    for (auto it = pending_.begin(); it != pending_.end(); ++it)
+    {
+        if (*it != channel)
+            continue;
+
+        pending_.erase(it);
+        break;
+    }
 }
 
 } // namespace base

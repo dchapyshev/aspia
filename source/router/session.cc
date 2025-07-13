@@ -35,23 +35,17 @@ Session::SessionId createSessionId()
 }
 
 //--------------------------------------------------------------------------------------------------
-Session::Session(proto::router::SessionType session_type, QObject* parent)
+Session::Session(base::TcpChannel* channel, QObject* parent)
     : QObject(parent),
-      session_type_(session_type),
-      session_id_(createSessionId())
+      session_id_(createSessionId()),
+      tcp_channel_(channel)
 {
-    // Nothing
+    DCHECK(tcp_channel_);
+    tcp_channel_->setParent(this);
 }
 
 //--------------------------------------------------------------------------------------------------
 Session::~Session() = default;
-
-//--------------------------------------------------------------------------------------------------
-void Session::setChannel(base::TcpChannel* channel)
-{
-    tcp_channel_ = channel;
-    tcp_channel_->setParent(this);
-}
 
 //--------------------------------------------------------------------------------------------------
 void Session::setRelayKeyPool(base::SharedPointer<KeyPool> relay_key_pool)
@@ -92,13 +86,85 @@ void Session::start()
 
     address_ = tcp_channel_->peerAddress();
 
-    connect(tcp_channel_, &base::TcpChannel::sig_disconnected, this, &Session::onTcpDisconnected);
+    connect(tcp_channel_, &base::TcpChannel::sig_errorOccurred, this, &Session::onTcpErrorOccurred);
     connect(tcp_channel_, &base::TcpChannel::sig_messageReceived, this, &Session::onTcpMessageReceived);
     connect(tcp_channel_, &base::TcpChannel::sig_messageWritten, this, &Session::onTcpMessageWritten);
 
     tcp_channel_->resume();
 
     onSessionReady();
+}
+
+//--------------------------------------------------------------------------------------------------
+QVersionNumber Session::version() const
+{
+    if (!tcp_channel_)
+    {
+        LOG(ERROR) << "Invalid TCP channel";
+        return QVersionNumber();
+    }
+
+    return tcp_channel_->peerVersion();
+}
+
+//--------------------------------------------------------------------------------------------------
+QString Session::osName() const
+{
+    if (!tcp_channel_)
+    {
+        LOG(ERROR) << "Invalid TCP channel";
+        return QString();
+    }
+
+    return tcp_channel_->peerOsName();
+}
+
+//--------------------------------------------------------------------------------------------------
+QString Session::computerName() const
+{
+    if (!tcp_channel_)
+    {
+        LOG(ERROR) << "Invalid TCP channel";
+        return QString();
+    }
+
+    return tcp_channel_->peerComputerName();
+}
+
+//--------------------------------------------------------------------------------------------------
+QString Session::architecture() const
+{
+    if (!tcp_channel_)
+    {
+        LOG(ERROR) << "Invalid TCP channel";
+        return QString();
+    }
+
+    return tcp_channel_->peerArchitecture();
+}
+
+//--------------------------------------------------------------------------------------------------
+QString Session::userName() const
+{
+    if (!tcp_channel_)
+    {
+        LOG(ERROR) << "Invalid TCP channel";
+        return QString();
+    }
+
+    return tcp_channel_->peerUserName();
+}
+
+//--------------------------------------------------------------------------------------------------
+proto::router::SessionType Session::sessionType() const
+{
+    if (!tcp_channel_)
+    {
+        LOG(ERROR) << "Invalid TCP channel";
+        return proto::router::SESSION_TYPE_UNKNOWN;
+    }
+
+    return static_cast<proto::router::SessionType>(tcp_channel_->peerSessionType());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -126,36 +192,6 @@ Session* Session::sessionById(SessionId session_id) const
 }
 
 //--------------------------------------------------------------------------------------------------
-void Session::setVersion(const QVersionNumber& version)
-{
-    version_ = version;
-}
-
-//--------------------------------------------------------------------------------------------------
-void Session::setOsName(const QString& os_name)
-{
-    os_name_ = os_name;
-}
-
-//--------------------------------------------------------------------------------------------------
-void Session::setComputerName(const QString& computer_name)
-{
-    computer_name_ = computer_name;
-}
-
-//--------------------------------------------------------------------------------------------------
-void Session::setArchitecture(const QString& architecture)
-{
-    architecture_ = architecture;
-}
-
-//--------------------------------------------------------------------------------------------------
-void Session::setUserName(const QString& username)
-{
-    username_ = username;
-}
-
-//--------------------------------------------------------------------------------------------------
 std::chrono::seconds Session::duration() const
 {
     std::chrono::time_point<std::chrono::system_clock> time_point =
@@ -173,7 +209,7 @@ void Session::sendMessage(const QByteArray& message)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Session::onTcpDisconnected(base::TcpChannel::ErrorCode error_code)
+void Session::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code)
 {
     LOG(INFO) << "Network error:" << error_code;
     emit sig_sessionFinished(session_id_);

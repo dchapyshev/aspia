@@ -20,7 +20,7 @@
 #define COMMON_WIN_FILE_STREAM_H
 
 #include <QByteArray>
-#include <QMutex>
+#include <mutex>
 
 #include <shlobj.h>
 
@@ -62,7 +62,7 @@ private:
     base::ScopedHandle data_event_;
     QByteArray buffer_;
     bool is_terminated_ = false;
-    QMutex lock_;
+    std::mutex lock_;
 };
 
 } // namespace common

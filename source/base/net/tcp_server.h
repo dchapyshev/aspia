@@ -24,7 +24,10 @@
 
 #include <asio/ip/address.hpp>
 
+#include "base/shared_pointer.h"
 #include "base/net/tcp_channel.h"
+#include "base/peer/user_list_base.h"
+#include "base/peer/server_authenticator.h"
 
 namespace base {
 
@@ -38,10 +41,19 @@ public:
     explicit TcpServer(QObject* parent = nullptr);
     ~TcpServer();
 
+    void setUserList(SharedPointer<UserListBase> user_list);
+    SharedPointer<UserListBase> userList() const { return user_list_; }
+
+    void setPrivateKey(const QByteArray& private_key);
+    QByteArray privateKey() const { return private_key_; }
+
+    void setAnonymousAccess(
+        ServerAuthenticator::AnonymousAccess anonymous_access, quint32 session_types);
+
     void start(quint16 port, const QString& iface = QString());
 
-    bool hasPendingConnections();
-    TcpChannel* nextPendingConnection();
+    bool hasReadyConnections();
+    TcpChannel* nextReadyConnection();
 
     static bool isValidListenInterface(const QString& iface);
 
@@ -50,11 +62,21 @@ signals:
 
 private:
     void doAccept();
+    void removePendingChannel(TcpChannel* channel);
 
     asio::ip::tcp::acceptor acceptor_;
     int accept_error_count_ = 0;
 
+    SharedPointer<UserListBase> user_list_;
+    QByteArray private_key_;
+
+    ServerAuthenticator::AnonymousAccess anonymous_access_ =
+        ServerAuthenticator::AnonymousAccess::DISABLE;
+
+    quint32 anonymous_session_types_ = 0;
+
     QQueue<TcpChannel*> pending_;
+    QQueue<TcpChannel*> ready_;
 
     Q_DISABLE_COPY(TcpServer)
 };

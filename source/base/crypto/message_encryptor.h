@@ -16,40 +16,54 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_CRYPTO_MESSAGE_DECRYPTOR_OPENSSL_H
-#define BASE_CRYPTO_MESSAGE_DECRYPTOR_OPENSSL_H
+#ifndef BASE_CRYPTO_MESSAGE_ENCRYPTOR_H
+#define BASE_CRYPTO_MESSAGE_ENCRYPTOR_H
 
 #include <QByteArray>
+#include <QObject>
 
-#include "base/crypto/message_decryptor.h"
 #include "base/crypto/openssl_util.h"
 
 namespace base {
 
-class MessageDecryptorOpenssl final : public MessageDecryptor
+class MessageEncryptor
 {
+    Q_GADGET
+
 public:
-    ~MessageDecryptorOpenssl() final;
+    ~MessageEncryptor();
 
-    static std::unique_ptr<MessageDecryptor> createForAes256Gcm(
+    enum class Type
+    {
+        UNKNOWN,
+        FAKE,
+        AES256_GCM,
+        CHACHA20_POLY1305
+    };
+    Q_ENUM(Type)
+
+    static std::unique_ptr<MessageEncryptor> createForAes256Gcm(
         const QByteArray& key, const QByteArray& iv);
 
-    static std::unique_ptr<MessageDecryptor> createForChaCha20Poly1305(
+    static std::unique_ptr<MessageEncryptor> createForChaCha20Poly1305(
         const QByteArray& key, const QByteArray& iv);
 
-    // MessageDecryptor implementation.
-    size_t decryptedDataSize(size_t in_size) final;
-    bool decrypt(const void* in, size_t in_size, void* out) final;
+    Type type() const { return type_; }
+
+    size_t encryptedDataSize(size_t in_size);
+    bool encrypt(const void* in, size_t in_size, void* out);
 
 private:
-    MessageDecryptorOpenssl(MessageDecryptor::Type type, EVP_CIPHER_CTX_ptr ctx, const QByteArray& iv);
+    MessageEncryptor(MessageEncryptor::Type type, EVP_CIPHER_CTX_ptr ctx, const QByteArray& iv);
+
+    const Type type_;
 
     EVP_CIPHER_CTX_ptr ctx_;
     QByteArray iv_;
 
-    Q_DISABLE_COPY(MessageDecryptorOpenssl)
+    Q_DISABLE_COPY(MessageEncryptor)
 };
 
 } // namespace base
 
-#endif // BASE_CRYPTO_MESSAGE_DECRYPTOR_OPENSSL_H
+#endif // BASE_CRYPTO_MESSAGE_ENCRYPTOR_H

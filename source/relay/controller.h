@@ -28,10 +28,6 @@
 #include "relay/sessions_worker.h"
 #include "relay/key_factory.h"
 
-namespace base {
-class ClientAuthenticator;
-} // namespace base
-
 namespace relay {
 
 class Controller final: public QObject
@@ -46,8 +42,8 @@ public:
 
 private slots:
     void onPoolKeyExpired(quint32 key_id);
-    void onTcpConnected();
-    void onTcpDisconnected(base::TcpChannel::ErrorCode error_code);
+    void onTcpReady();
+    void onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code);
     void onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer);
     void onSessionStarted();
     void onSessionStatistics(const proto::router::RelayStat& relay_stat);
@@ -74,7 +70,6 @@ private:
 
     QPointer<QTimer> reconnect_timer_;
     base::TcpChannel* tcp_channel_ = nullptr;
-    QPointer<base::ClientAuthenticator> authenticator_;
     KeyFactory* key_factory_ = nullptr;
     SessionsWorker* sessions_worker_ = nullptr;
 

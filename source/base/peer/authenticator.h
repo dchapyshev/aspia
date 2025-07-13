@@ -23,7 +23,6 @@
 #include <QTimer>
 #include <QVersionNumber>
 
-#include "base/net/tcp_channel.h"
 #include "proto/key_exchange.h"
 
 namespace base {
@@ -51,7 +50,6 @@ public:
     {
         SUCCESS,
         UNKNOWN_ERROR,
-        NETWORK_ERROR,
         PROTOCOL_ERROR,
         VERSION_ERROR,
         ACCESS_DENIED,
@@ -59,7 +57,7 @@ public:
     };
     Q_ENUM(ErrorCode)
 
-    void start(TcpChannel* tcp_channel);
+    void start();
 
     [[nodiscard]] proto::key_exchange::Identify identify() const { return identify_; }
     [[nodiscard]] proto::key_exchange::Encryption encryption() const { return encryption_; }
@@ -73,8 +71,17 @@ public:
 
     // Returns the current state.
     [[nodiscard]] State state() const { return state_; }
+    [[nodiscard]] const QByteArray& sessionKey() const { return session_key_; }
+    [[nodiscard]] const QByteArray& encryptIv() const { return encrypt_iv_; }
+    [[nodiscard]] const QByteArray& decryptIv() const { return decrypt_iv_; }
+
+public slots:
+    void onIncomingMessage(const QByteArray& data);
+    void onMessageWritten();
 
 signals:
+    void sig_outgoingMessage(const QByteArray& data);
+    void sig_keyChanged();
     void sig_finished(ErrorCode error_code);
 
 protected:
@@ -82,7 +89,6 @@ protected:
     virtual void onReceived(const QByteArray& buffer) = 0;
     virtual void onWritten() = 0;
 
-    void sendMessage(const google::protobuf::MessageLite& message);
     void sendMessage(const QByteArray& data);
     void finish(const Location& location, ErrorCode error_code);
     void setPeerVersion(const proto::peer::Version& version);
@@ -90,8 +96,6 @@ protected:
     void setPeerComputerName(const QString& name);
     void setPeerArch(const QString& arch);
     void setPeerDisplayName(const QString& display_name);
-
-    [[nodiscard]] bool onSessionKeyChanged();
 
     proto::key_exchange::Encryption encryption_ = proto::key_exchange::ENCRYPTION_UNKNOWN;
     proto::key_exchange::Identify identify_ = proto::key_exchange::IDENTIFY_SRP;
@@ -102,14 +106,8 @@ protected:
     quint32 session_type_ = 0; // Selected session type.
     QString user_name_;
 
-private slots:
-    void onTcpDisconnected(TcpChannel::ErrorCode error_code);
-    void onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer);
-    void onTcpMessageWritten(quint8 channel_id, size_t pending);
-
 private:
     QPointer<QTimer> timer_;
-    QPointer<TcpChannel> tcp_channel_;
     State state_ = State::STOPPED;
     QVersionNumber peer_version_; // Remote peer version.
     QString peer_os_name_;

@@ -37,7 +37,7 @@ FileStream::FileStream()
 FileStream::~FileStream()
 {
     {
-        QMutexLocker<QMutex> lock(&lock_);
+        std::scoped_lock lock(lock_);
         is_terminated_ = true;
     }
 
@@ -49,7 +49,7 @@ FileStream::~FileStream()
 void FileStream::addData(const QByteArray& data)
 {
     {
-        QMutexLocker<QMutex> lock(&lock_);
+        std::scoped_lock lock(lock_);
         buffer_.append(data);
     }
 

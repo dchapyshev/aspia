@@ -22,6 +22,7 @@
 #include "base/logging.h"
 #include "base/version_constants.h"
 #include "client/ui/authorization_dialog.h"
+#include "common/ui/session_type.h"
 #include "common/ui/status_dialog.h"
 
 namespace client {
@@ -170,13 +171,6 @@ void SessionWindow::onStatusChanged(Client::Status status, const QVariant& data)
                 }
                 break;
 
-                case RouterController::ErrorType::AUTHENTICATION:
-                {
-                    onErrorOccurred(tr("Authentication error when connecting to the router: %1")
-                        .arg(authErrorToString(error.code.authentication)));
-                }
-                break;
-
                 case RouterController::ErrorType::ROUTER:
                     onErrorOccurred(routerErrorToString(error.code.router));
                     break;
@@ -262,21 +256,6 @@ void SessionWindow::onStatusChanged(Client::Status status, const QVariant& data)
         }
         break;
 
-        case Client::Status::ACCESS_DENIED:
-        {
-            if (data.canConvert<base::Authenticator::ErrorCode>())
-            {
-                base::Authenticator::ErrorCode error_code =
-                    data.value<base::Authenticator::ErrorCode>();
-                onErrorOccurred(authErrorToString(error_code));
-            }
-            else
-            {
-                LOG(ERROR) << "Unable to convert error code";
-            }
-        }
-        break;
-
         default:
             break;
     }
@@ -285,40 +264,9 @@ void SessionWindow::onStatusChanged(Client::Status status, const QVariant& data)
 //--------------------------------------------------------------------------------------------------
 void SessionWindow::setClientTitle(const Config& config)
 {
-    QString session_name;
-
-    switch (config.session_type)
-    {
-        case proto::peer::SESSION_TYPE_DESKTOP_MANAGE:
-            session_name = tr("Desktop Manage");
-            break;
-
-        case proto::peer::SESSION_TYPE_DESKTOP_VIEW:
-            session_name = tr("Desktop View");
-            break;
-
-        case proto::peer::SESSION_TYPE_FILE_TRANSFER:
-            session_name = tr("File Transfer");
-            break;
-
-        case proto::peer::SESSION_TYPE_SYSTEM_INFO:
-            session_name = tr("System Information");
-            break;
-
-        case proto::peer::SESSION_TYPE_TEXT_CHAT:
-            session_name = tr("Text Chat");
-            break;
-
-        case proto::peer::SESSION_TYPE_PORT_FORWARDING:
-            session_name = tr("Port Forwarding");
-            break;
-
-        default:
-            NOTREACHED();
-            break;
-    }
-
+    QString session_name = common::sessionName(config.session_type);
     QString computer_name = config.computer_name;
+
     if (computer_name.isEmpty())
     {
         if (config.router_config.has_value())
@@ -352,7 +300,20 @@ QString SessionWindow::netErrorToString(base::TcpChannel::ErrorCode error_code)
             break;
 
         case base::TcpChannel::ErrorCode::ACCESS_DENIED:
+            message = QT_TR_NOOP("Wrong user name or password.");
+            break;
+
+        case base::TcpChannel::ErrorCode::CRYPTO_ERROR:
             message = QT_TR_NOOP("Cryptography error (message encryption or decryption failed).");
+            break;
+
+        case base::TcpChannel::ErrorCode::SESSION_DENIED:
+            message = QT_TR_NOOP("Specified session type is not allowed for the user.");
+            break;
+
+        case base::TcpChannel::ErrorCode::VERSION_ERROR:
+            message = QT_TR_NOOP("Version of the application you are connecting to is less than "
+                                 " the minimum supported version.");
             break;
 
         case base::TcpChannel::ErrorCode::NETWORK_ERROR:
@@ -393,47 +354,6 @@ QString SessionWindow::netErrorToString(base::TcpChannel::ErrorCode error_code)
             message = QT_TR_NOOP("An unknown error occurred.");
         }
         break;
-    }
-
-    return tr(message);
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
-QString SessionWindow::authErrorToString(base::Authenticator::ErrorCode error_code)
-{
-    const char* message;
-
-    switch (error_code)
-    {
-        case base::Authenticator::ErrorCode::SUCCESS:
-            message = QT_TR_NOOP("Authentication successfully completed.");
-            break;
-
-        case base::Authenticator::ErrorCode::NETWORK_ERROR:
-            message = QT_TR_NOOP("Network authentication error.");
-            break;
-
-        case base::Authenticator::ErrorCode::PROTOCOL_ERROR:
-            message = QT_TR_NOOP("Violation of the data exchange protocol.");
-            break;
-
-        case base::Authenticator::ErrorCode::VERSION_ERROR:
-            message = QT_TR_NOOP("Version of the application you are connecting to is less than "
-                                 " the minimum supported version.");
-            break;
-
-        case base::Authenticator::ErrorCode::ACCESS_DENIED:
-            message = QT_TR_NOOP("Wrong user name or password.");
-            break;
-
-        case base::Authenticator::ErrorCode::SESSION_DENIED:
-            message = QT_TR_NOOP("Specified session type is not allowed for the user.");
-            break;
-
-        default:
-            message = QT_TR_NOOP("An unknown error occurred.");
-            break;
     }
 
     return tr(message);

@@ -20,7 +20,6 @@
 #define CLIENT_UI_SESSION_WINDOW_H
 
 #include "base/net/tcp_channel.h"
-#include "base/peer/authenticator.h"
 #include "client/client.h"
 #include "client/client_config.h"
 #include "client/router_controller.h"
@@ -68,7 +67,6 @@ private:
     void onErrorOccurred(const QString& message);
 
     static QString netErrorToString(base::TcpChannel::ErrorCode error_code);
-    static QString authErrorToString(base::Authenticator::ErrorCode error_code);
     static QString routerErrorToString(RouterController::ErrorCode error_code);
 
     std::shared_ptr<SessionState> session_state_;

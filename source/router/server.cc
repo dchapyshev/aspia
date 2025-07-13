@@ -134,25 +134,21 @@ bool Server::start()
         settings.setSeedKey(seed_key);
     }
 
-    std::unique_ptr<base::UserListBase> user_list = UserListDb::open(*database_factory_);
+    base::SharedPointer<base::UserListBase> user_list(UserListDb::open(*database_factory_).release());
     user_list->setSeedKey(seed_key);
-
-    authenticator_manager_ = new base::ServerAuthenticatorManager(this);
-
-    connect(authenticator_manager_, &base::ServerAuthenticatorManager::sig_sessionReady,
-            this, &Server::onSessionAuthenticated);
-
-    authenticator_manager_->setPrivateKey(private_key);
-    authenticator_manager_->setUserList(std::move(user_list));
-    authenticator_manager_->setAnonymousAccess(
-        base::ServerAuthenticator::AnonymousAccess::ENABLE,
-        proto::router::SESSION_TYPE_HOST | proto::router::SESSION_TYPE_RELAY);
 
     key_factory_ = new KeyFactory(this);
     connect(key_factory_, &KeyFactory::sig_keyUsed, this, &Server::onPoolKeyUsed);
 
     tcp_server_ = new base::TcpServer(this);
     connect(tcp_server_, &base::TcpServer::sig_newConnection, this, &Server::onNewConnection);
+
+    tcp_server_->setPrivateKey(private_key);
+    tcp_server_->setUserList(std::move(user_list));
+    tcp_server_->setAnonymousAccess(
+        base::ServerAuthenticator::AnonymousAccess::ENABLE,
+        proto::router::SESSION_TYPE_HOST | proto::router::SESSION_TYPE_RELAY);
+
     tcp_server_->start(port, listen_interface);
 
     LOG(INFO) << "Server started";
@@ -175,94 +171,6 @@ void Server::onPoolKeyUsed(Session::SessionId session_id, quint32 key_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Server::onSessionAuthenticated()
-{
-    if (!authenticator_manager_)
-    {
-        LOG(ERROR) << "No authenticator manager instance";
-        return;
-    }
-
-    while (authenticator_manager_->hasReadySessions())
-    {
-        base::ServerAuthenticatorManager::SessionInfo session_info =
-            authenticator_manager_->nextReadySession();
-
-        QString address = session_info.channel->peerAddress();
-        proto::router::SessionType session_type =
-            static_cast<proto::router::SessionType>(session_info.session_type);
-
-        LOG(INFO) << "New session:" << session_type << "(" << address << ")";
-
-        Session* session = nullptr;
-
-        switch (session_info.session_type)
-        {
-            case proto::router::SESSION_TYPE_CLIENT:
-            {
-                if (!client_white_list_.isEmpty() && !client_white_list_.contains(address))
-                    break;
-
-                session = new SessionClient(session_manager_);
-            }
-            break;
-
-            case proto::router::SESSION_TYPE_HOST:
-            {
-                if (!host_white_list_.isEmpty() && !host_white_list_.contains(address))
-                    break;
-
-                session = new SessionHost(session_manager_);
-            }
-            break;
-
-            case proto::router::SESSION_TYPE_ADMIN:
-            {
-                if (!admin_white_list_.isEmpty() && !admin_white_list_.contains(address))
-                    break;
-
-                session = new SessionAdmin(session_manager_);
-            }
-            break;
-
-            case proto::router::SESSION_TYPE_RELAY:
-            {
-                if (!relay_white_list_.isEmpty() && !relay_white_list_.contains(address))
-                    break;
-
-                session = new SessionRelay(session_manager_);
-            }
-            break;
-
-            default:
-            {
-                LOG(ERROR) << "Unsupported session type:"
-                           << static_cast<int>(session_info.session_type);
-            }
-            break;
-        }
-
-        if (!session)
-        {
-            LOG(ERROR) << "Connection rejected for" << address;
-            return;
-        }
-
-        session->setChannel(session_info.channel);
-        session->setDatabaseFactory(database_factory_);
-        session->setRelayKeyPool(key_factory_->sharedKeyPool());
-        session->setVersion(session_info.version);
-        session->setOsName(session_info.os_name);
-        session->setComputerName(session_info.computer_name);
-        session->setArchitecture(session_info.architecture);
-        session->setUserName(session_info.user_name);
-
-        session_manager_->addSession(session);
-        session->start();
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
 void Server::onNewConnection()
 {
     if (!tcp_server_)
@@ -271,12 +179,82 @@ void Server::onNewConnection()
         return;
     }
 
-    while (tcp_server_->hasPendingConnections())
+    while (tcp_server_->hasReadyConnections())
     {
-        base::TcpChannel* channel = tcp_server_->nextPendingConnection();
+        base::TcpChannel* channel = tcp_server_->nextReadyConnection();
         LOG(INFO) << "New connection:" << channel->peerAddress();
-        authenticator_manager_->addNewChannel(channel);
+        addSession(channel);
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void Server::addSession(base::TcpChannel* channel)
+{
+    QString address = channel->peerAddress();
+    proto::router::SessionType session_type =
+        static_cast<proto::router::SessionType>(channel->peerSessionType());
+
+    LOG(INFO) << "New session:" << session_type << "(" << address << ")";
+
+    Session* session = nullptr;
+
+    switch (session_type)
+    {
+        case proto::router::SESSION_TYPE_CLIENT:
+        {
+            if (!client_white_list_.isEmpty() && !client_white_list_.contains(address))
+                break;
+
+            session = new SessionClient(channel, session_manager_);
+        }
+        break;
+
+        case proto::router::SESSION_TYPE_HOST:
+        {
+            if (!host_white_list_.isEmpty() && !host_white_list_.contains(address))
+                break;
+
+            session = new SessionHost(channel, session_manager_);
+        }
+        break;
+
+        case proto::router::SESSION_TYPE_ADMIN:
+        {
+            if (!admin_white_list_.isEmpty() && !admin_white_list_.contains(address))
+                break;
+
+            session = new SessionAdmin(channel, session_manager_);
+        }
+        break;
+
+        case proto::router::SESSION_TYPE_RELAY:
+        {
+            if (!relay_white_list_.isEmpty() && !relay_white_list_.contains(address))
+                break;
+
+            session = new SessionRelay(channel, session_manager_);
+        }
+        break;
+
+        default:
+        {
+            LOG(ERROR) << "Unsupported session type:" << session_type;
+        }
+        break;
+    }
+
+    if (!session)
+    {
+        LOG(ERROR) << "Connection rejected for" << address;
+        channel->deleteLater();
+        return;
+    }
+
+    session->setDatabaseFactory(database_factory_);
+    session->setRelayKeyPool(key_factory_->sharedKeyPool());
+
+    session_manager_->addSession(session);
+    session->start();
 }
 
 } // namespace router

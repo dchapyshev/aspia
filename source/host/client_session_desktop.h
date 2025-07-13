@@ -47,8 +47,7 @@ class ClientSessionDesktop final : public ClientSession
     Q_OBJECT
 
 public:
-    ClientSessionDesktop(
-        proto::peer::SessionType session_type, base::TcpChannel* channel, QObject* parent);
+    ClientSessionDesktop(base::TcpChannel* channel, QObject* parent);
     ~ClientSessionDesktop() final;
 
     void encodeScreen(const base::Frame* frame, const base::MouseCursor* cursor);

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/crypto/message_encryptor_openssl.h"
-#include "base/crypto/message_decryptor_openssl.h"
+#include "base/crypto/message_encryptor.h"
+#include "base/crypto/message_decryptor.h"
 
 #include <gtest/gtest.h>
 
@@ -119,19 +119,19 @@ TEST(CryptorAes256GcmTest, TestVector)
     EXPECT_EQ(decrypt_iv.size(), 12);
 
     std::unique_ptr<MessageEncryptor> client_encryptor =
-        MessageEncryptorOpenssl::createForAes256Gcm(key, encrypt_iv);
+        MessageEncryptor::createForAes256Gcm(key, encrypt_iv);
     ASSERT_NE(client_encryptor, nullptr);
 
     std::unique_ptr<MessageDecryptor> client_decryptor =
-        MessageDecryptorOpenssl::createForAes256Gcm(key, decrypt_iv);
+        MessageDecryptor::createForAes256Gcm(key, decrypt_iv);
     ASSERT_NE(client_decryptor, nullptr);
 
     std::unique_ptr<MessageEncryptor> host_encryptor =
-        MessageEncryptorOpenssl::createForAes256Gcm(key, decrypt_iv);
+        MessageEncryptor::createForAes256Gcm(key, decrypt_iv);
     ASSERT_NE(host_encryptor, nullptr);
 
     std::unique_ptr<MessageDecryptor> host_decryptor =
-        MessageDecryptorOpenssl::createForAes256Gcm(key, encrypt_iv);
+        MessageDecryptor::createForAes256Gcm(key, encrypt_iv);
     ASSERT_NE(host_encryptor, nullptr);
 
     for (int i = 0; i < 100; ++i)
@@ -153,11 +153,11 @@ TEST(CryptorAes256GcmTest, WrongKey)
     EXPECT_EQ(iv.size(), 12);
 
     std::unique_ptr<MessageEncryptor> client_encryptor =
-        MessageEncryptorOpenssl::createForAes256Gcm(client_key, iv);
+        MessageEncryptor::createForAes256Gcm(client_key, iv);
     ASSERT_NE(client_encryptor, nullptr);
 
     std::unique_ptr<MessageDecryptor> host_decryptor =
-        MessageDecryptorOpenssl::createForAes256Gcm(host_key, iv);
+        MessageDecryptor::createForAes256Gcm(host_key, iv);
     ASSERT_NE(host_decryptor, nullptr);
 
     wrongKey(client_encryptor.get(), host_decryptor.get());
@@ -175,19 +175,19 @@ TEST(CryptorChaCha20Poly1305Test, TestVector)
     EXPECT_EQ(decrypt_iv.size(), 12);
 
     std::unique_ptr<MessageEncryptor> client_encryptor =
-        MessageEncryptorOpenssl::createForChaCha20Poly1305(key, encrypt_iv);
+        MessageEncryptor::createForChaCha20Poly1305(key, encrypt_iv);
     ASSERT_NE(client_encryptor, nullptr);
 
     std::unique_ptr<MessageDecryptor> client_decryptor =
-        MessageDecryptorOpenssl::createForChaCha20Poly1305(key, decrypt_iv);
+        MessageDecryptor::createForChaCha20Poly1305(key, decrypt_iv);
     ASSERT_NE(client_decryptor, nullptr);
 
     std::unique_ptr<MessageEncryptor> host_encryptor =
-        MessageEncryptorOpenssl::createForChaCha20Poly1305(key, decrypt_iv);
+        MessageEncryptor::createForChaCha20Poly1305(key, decrypt_iv);
     ASSERT_NE(host_encryptor, nullptr);
 
     std::unique_ptr<MessageDecryptor> host_decryptor =
-        MessageDecryptorOpenssl::createForChaCha20Poly1305(key, encrypt_iv);
+        MessageDecryptor::createForChaCha20Poly1305(key, encrypt_iv);
     ASSERT_NE(host_encryptor, nullptr);
 
     for (int i = 0; i < 100; ++i)
@@ -209,11 +209,11 @@ TEST(CryptorChaCha20Poly1305Test, WrongKey)
     EXPECT_EQ(iv.size(), 12);
 
     std::unique_ptr<MessageEncryptor> client_encryptor =
-        MessageEncryptorOpenssl::createForAes256Gcm(client_key, iv);
+        MessageEncryptor::createForAes256Gcm(client_key, iv);
     ASSERT_NE(client_encryptor, nullptr);
 
     std::unique_ptr<MessageDecryptor> host_decryptor =
-        MessageDecryptorOpenssl::createForAes256Gcm(host_key, iv);
+        MessageDecryptor::createForAes256Gcm(host_key, iv);
     ASSERT_NE(host_decryptor, nullptr);
 
     wrongKey(client_encryptor.get(), host_decryptor.get());

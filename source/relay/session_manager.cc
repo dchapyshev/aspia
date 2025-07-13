@@ -20,7 +20,7 @@
 
 #include "base/asio_event_dispatcher.h"
 #include "base/logging.h"
-#include "base/crypto/message_decryptor_openssl.h"
+#include "base/crypto/message_decryptor.h"
 
 namespace relay {
 
@@ -39,7 +39,7 @@ QByteArray decryptSecret(const proto::relay::PeerToRelay& message, const KeyPool
     }
 
     std::unique_ptr<base::MessageDecryptor> decryptor =
-        base::MessageDecryptorOpenssl::createForChaCha20Poly1305(key.first, key.second);
+        base::MessageDecryptor::createForChaCha20Poly1305(key.first, key.second);
     if (!decryptor)
     {
         LOG(ERROR) << "Decryptor not created";

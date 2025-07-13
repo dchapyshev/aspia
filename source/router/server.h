@@ -22,7 +22,6 @@
 #include <QList>
 
 #include "base/net/tcp_server.h"
-#include "base/peer/server_authenticator_manager.h"
 #include "router/key_factory.h"
 #include "router/session_manager.h"
 
@@ -44,13 +43,13 @@ public:
 
 private slots:
     void onPoolKeyUsed(Session::SessionId session_id, quint32 key_id);
-    void onSessionAuthenticated();
     void onNewConnection();
 
 private:
+    void addSession(base::TcpChannel* channel);
+
     base::SharedPointer<DatabaseFactory> database_factory_;
     base::TcpServer* tcp_server_ = nullptr;
-    QPointer<base::ServerAuthenticatorManager> authenticator_manager_;
     KeyFactory* key_factory_ = nullptr;
     SessionManager* session_manager_ = nullptr;
 

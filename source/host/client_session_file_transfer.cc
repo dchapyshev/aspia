@@ -174,7 +174,7 @@ QString agentFilePath()
 //--------------------------------------------------------------------------------------------------
 ClientSessionFileTransfer::ClientSessionFileTransfer(base::TcpChannel* channel,
                                                      QObject* parent)
-    : ClientSession(proto::peer::SESSION_TYPE_FILE_TRANSFER, channel, parent),
+    : ClientSession(channel, parent),
       attach_timer_(new QTimer(this))
 {
     LOG(INFO) << "Ctor";

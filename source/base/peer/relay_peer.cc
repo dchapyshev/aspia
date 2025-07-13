@@ -24,7 +24,7 @@
 #include "base/logging.h"
 #include "base/crypto/generic_hash.h"
 #include "base/crypto/key_pair.h"
-#include "base/crypto/message_encryptor_openssl.h"
+#include "base/crypto/message_encryptor.h"
 #include "base/serialization.h"
 #include "proto/relay_peer.h"
 
@@ -35,6 +35,7 @@ namespace base {
 
 namespace {
 
+//--------------------------------------------------------------------------------------------------
 QStringList endpointsToString(const asio::ip::tcp::resolver::results_type& endpoints)
 {
     if (endpoints.empty())
@@ -52,8 +53,9 @@ QStringList endpointsToString(const asio::ip::tcp::resolver::results_type& endpo
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-RelayPeer::RelayPeer(QObject* parent)
+RelayPeer::RelayPeer(Authenticator* authenticator, QObject* parent)
     : QObject(parent),
+      authenticator_(authenticator),
       io_context_(AsioEventDispatcher::currentIoContext()),
       socket_(io_context_),
       resolver_(io_context_)
@@ -131,7 +133,6 @@ TcpChannel* RelayPeer::takeChannel()
     pending_channel_ = nullptr;
 
     channel->setParent(nullptr);
-
     return channel;
 }
 
@@ -196,12 +197,34 @@ void RelayPeer::onConnected()
                 return;
             }
 
-            is_finished_ = true;
-
-            pending_channel_ = new TcpChannel(std::move(socket_), this);
+            pending_channel_ = new TcpChannel(std::move(socket_), authenticator_.release(), this);
             pending_channel_->setHostId(connection_offer_.host_data().host_id());
 
-            emit sig_connectionReady();
+            connect(pending_channel_, &TcpChannel::sig_authenticated, this, [this]()
+            {
+                LOG(INFO) << "Authentication finished";
+
+                // Disconnect all connected signals between the RelayPeer and channel.
+                disconnect(pending_channel_, nullptr, this, nullptr);
+                is_finished_ = true;
+
+                emit sig_connectionReady();
+            });
+
+            connect(pending_channel_, &TcpChannel::sig_errorOccurred,
+                    this, [this](TcpChannel::ErrorCode error_code)
+            {
+                LOG(ERROR) << "Authentication failed:" << error_code;
+
+                // Disconnect all connected signals between the RelayPeer and channel.
+                disconnect(pending_channel_, nullptr, this, nullptr);
+                is_finished_ = true;
+
+                emit sig_connectionError();
+            });
+
+            LOG(INFO) << "Start authentication";
+            pending_channel_->doAuthentication();
         });
     });
 }
@@ -266,7 +289,7 @@ QByteArray RelayPeer::authenticationMessage(
     QByteArray session_key = base::GenericHash::hash(base::GenericHash::Type::BLAKE2s256, temp);
 
     std::unique_ptr<MessageEncryptor> encryptor =
-        MessageEncryptorOpenssl::createForChaCha20Poly1305(session_key, QByteArray::fromStdString(key.iv()));
+        MessageEncryptor::createForChaCha20Poly1305(session_key, QByteArray::fromStdString(key.iv()));
     if (!encryptor)
     {
         LOG(ERROR) << "createForChaCha20Poly1305 failed";

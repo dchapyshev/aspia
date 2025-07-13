@@ -44,8 +44,7 @@ public:
     };
     Q_ENUM(State)
 
-    static ClientSession* create(
-        proto::peer::SessionType session_type, base::TcpChannel* channel, QObject* parent = nullptr);
+    static ClientSession* create(base::TcpChannel* channel, QObject* parent = nullptr);
 
     void start();
     void stop();
@@ -53,19 +52,11 @@ public:
     State state() const { return state_; }
     quint32 id() const { return id_; }
 
-    void setClientVersion(const QVersionNumber& version);
-    const QVersionNumber& clientVersion() const { return version_; }
-
-    void setUserName(const QString& username);
-    const QString& userName() const { return username_; }
-
-    void setComputerName(const QString& computer_name);
-    const QString& computerName() const;
-
-    void setDisplayName(const QString& display_name);
-    const QString& displayName() const;
-
-    proto::peer::SessionType sessionType() const { return session_type_; }
+    QVersionNumber clientVersion() const;
+    QString userName() const;
+    QString computerName() const;
+    QString displayName() const;
+    proto::peer::SessionType sessionType() const;
 
     void setSessionId(base::SessionId session_id);
     base::SessionId sessionId() const { return session_id_; }
@@ -80,7 +71,7 @@ signals:
     void sig_clientSessionTextChat(quint32 id, const proto::text_chat::TextChat& text_chat);
 
 protected:
-    ClientSession(proto::peer::SessionType session_type, base::TcpChannel* channel, QObject* parent);
+    ClientSession(base::TcpChannel* channel, QObject* parent);
 
     // Called when the session is ready to send and receive data. When this method is called, the
     // session should start initializing (for example, making a configuration request).
@@ -91,18 +82,13 @@ protected:
     size_t pendingMessages() const;
 
 private slots:
-    void onTcpDisconnected(base::TcpChannel::ErrorCode error_code);
+    void onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code);
     void onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer);
 
 private:
     base::SessionId session_id_ = base::kInvalidSessionId;
     State state_ = State::CREATED;
     quint32 id_;
-    proto::peer::SessionType session_type_;
-    QVersionNumber version_;
-    QString username_;
-    QString computer_name_;
-    QString display_name_;
 
     base::TcpChannel* tcp_channel_ = nullptr;
 };

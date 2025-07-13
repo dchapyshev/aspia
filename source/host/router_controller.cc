@@ -20,6 +20,8 @@
 
 #include "base/logging.h"
 #include "base/serialization.h"
+#include "base/peer/client_authenticator.h"
+#include "base/peer/server_authenticator.h"
 #include "host/host_storage.h"
 #include "proto/router_peer.h"
 
@@ -64,6 +66,12 @@ void RouterController::start(const QString& address, quint16 port, const QByteAr
 }
 
 //--------------------------------------------------------------------------------------------------
+void RouterController::setUserList(base::SharedPointer<base::UserListBase> user_list)
+{
+    user_list_ = user_list;
+}
+
+//--------------------------------------------------------------------------------------------------
 bool RouterController::hasPendingConnections() const
 {
     return !channels_.isEmpty();
@@ -83,55 +91,22 @@ base::TcpChannel* RouterController::nextPendingConnection()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterController::onTcpConnected()
+void RouterController::onTcpReady()
 {
     DCHECK(tcp_channel_);
 
     LOG(INFO) << "Connection to the router is established";
+    routerStateChanged(proto::internal::RouterState::CONNECTED);
 
-    authenticator_ = new base::ClientAuthenticator(this);
-
-    authenticator_->setIdentify(proto::key_exchange::IDENTIFY_ANONYMOUS);
-    authenticator_->setPeerPublicKey(public_key_);
-    authenticator_->setSessionType(proto::router::SESSION_TYPE_HOST);
-
-    connect(authenticator_, &base::Authenticator::sig_finished,
-            this, [this](base::Authenticator::ErrorCode error_code)
-    {
-        if (error_code == base::Authenticator::ErrorCode::SUCCESS)
-        {
-            connect(tcp_channel_, &base::TcpChannel::sig_disconnected,
-                    this, &RouterController::onTcpDisconnected);
-            connect(tcp_channel_, &base::TcpChannel::sig_messageReceived,
-                    this, &RouterController::onTcpMessageReceived);
-
-            LOG(INFO) << "Router connected";
-            routerStateChanged(proto::internal::RouterState::CONNECTED);
-
-            // Now the session will receive incoming messages.
-            tcp_channel_->resume();
-
-            hostIdRequest();
-        }
-        else
-        {
-            LOG(ERROR) << "Authentication failed:" << error_code;
-            delayedConnectToRouter();
-        }
-
-        // Authenticator is no longer needed.
-        authenticator_->deleteLater();
-        authenticator_ = nullptr;
-    });
-
-    authenticator_->start(tcp_channel_);
+    // Now the session will receive incoming messages.
+    tcp_channel_->resume();
+    hostIdRequest();
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterController::onTcpDisconnected(base::TcpChannel::ErrorCode error_code)
+void RouterController::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code)
 {
     LOG(INFO) << "Connection to the router is lost:" << error_code;
-
     routerStateChanged(proto::internal::RouterState::FAILED);
     delayedConnectToRouter();
 }
@@ -206,7 +181,10 @@ void RouterController::onTcpMessageReceived(quint8 /* channel_id */, const QByte
         if (connection_offer.error_code() == proto::router::ConnectionOffer::SUCCESS &&
             connection_offer.peer_role() == proto::router::ConnectionOffer::HOST)
         {
-            peer_manager_->addConnectionOffer(connection_offer);
+            base::ServerAuthenticator* authenticator = new base::ServerAuthenticator();
+            authenticator->setUserList(user_list_);
+
+            peer_manager_->addConnectionOffer(connection_offer, authenticator);
         }
         else
         {
@@ -238,8 +216,17 @@ void RouterController::connectToRouter()
 
     routerStateChanged(proto::internal::RouterState::CONNECTING);
 
-    tcp_channel_ = new base::TcpChannel(this);
-    connect(tcp_channel_, &base::TcpChannel::sig_connected, this, &RouterController::onTcpConnected);
+    base::ClientAuthenticator* authenticator = new base::ClientAuthenticator();
+
+    authenticator->setIdentify(proto::key_exchange::IDENTIFY_ANONYMOUS);
+    authenticator->setPeerPublicKey(public_key_);
+    authenticator->setSessionType(proto::router::SESSION_TYPE_HOST);
+
+    tcp_channel_ = new base::TcpChannel(authenticator, this);
+
+    connect(tcp_channel_, &base::TcpChannel::sig_authenticated, this, &RouterController::onTcpReady);
+    connect(tcp_channel_, &base::TcpChannel::sig_errorOccurred, this, &RouterController::onTcpErrorOccurred);
+    connect(tcp_channel_, &base::TcpChannel::sig_messageReceived, this, &RouterController::onTcpMessageReceived);
 
     tcp_channel_->connectTo(address_, port_);
 }
@@ -268,7 +255,7 @@ void RouterController::hostIdRequest()
 {
     LOG(INFO) << "Started ID request for session";
 
-    if (!tcp_channel_ || !tcp_channel_->isConnected())
+    if (!tcp_channel_ || !tcp_channel_->isAuthenticated())
     {
         LOG(INFO) << "No active connection to the router";
         return;

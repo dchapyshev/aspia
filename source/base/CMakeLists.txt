@@ -213,16 +213,10 @@ list(APPEND SOURCE_BASE_CRYPTO
     crypto/key_pair.h
     crypto/large_number_increment.cc
     crypto/large_number_increment.h
+    crypto/message_decryptor.cc
     crypto/message_decryptor.h
-    crypto/message_decryptor_fake.cc
-    crypto/message_decryptor_fake.h
-    crypto/message_decryptor_openssl.cc
-    crypto/message_decryptor_openssl.h
+    crypto/message_encryptor.cc
     crypto/message_encryptor.h
-    crypto/message_encryptor_fake.cc
-    crypto/message_encryptor_fake.h
-    crypto/message_encryptor_openssl.cc
-    crypto/message_encryptor_openssl.h
     crypto/openssl_util.cc
     crypto/openssl_util.h
     crypto/os_crypt.h
@@ -480,8 +474,6 @@ list(APPEND SOURCE_BASE_PEER
     peer/relay_peer_manager.h
     peer/server_authenticator.cc
     peer/server_authenticator.h
-    peer/server_authenticator_manager.cc
-    peer/server_authenticator_manager.h
     peer/user.cc
     peer/user.h
     peer/user_list.cc

@@ -34,8 +34,8 @@ const size_t kHostKeySize = 512;
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-SessionHost::SessionHost(QObject* parent)
-    : Session(proto::router::SESSION_TYPE_HOST, parent)
+SessionHost::SessionHost(base::TcpChannel* channel, QObject* parent)
+    : Session(channel, parent)
 {
     LOG(INFO) << "Ctor";
 }

@@ -177,48 +177,17 @@ bool Controller::start()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Controller::onTcpConnected()
+void Controller::onTcpReady()
 {
-    LOG(INFO) << "Connection to the router is established";
+    LOG(INFO) << "Connection to the router is established (session count:" << session_count_ << ")";
 
-    authenticator_ = new base::ClientAuthenticator(this);
-
-    authenticator_->setIdentify(proto::key_exchange::IDENTIFY_ANONYMOUS);
-    authenticator_->setPeerPublicKey(router_public_key_);
-    authenticator_->setSessionType(proto::router::SESSION_TYPE_RELAY);
-
-    connect(authenticator_, &base::Authenticator::sig_finished,
-            this, [this](base::Authenticator::ErrorCode error_code)
-    {
-        if (error_code == base::Authenticator::ErrorCode::SUCCESS)
-        {
-            connect(tcp_channel_, &base::TcpChannel::sig_disconnected,
-                    this, &Controller::onTcpDisconnected);
-            connect(tcp_channel_, &base::TcpChannel::sig_messageReceived,
-                    this, &Controller::onTcpMessageReceived);
-
-            LOG(INFO) << "Authentication complete (session count:" << session_count_ << ")";
-
-            // Now the session will receive incoming messages.
-            tcp_channel_->resume();
-
-            sendKeyPool(max_peer_count_ - static_cast<quint32>(session_count_));
-        }
-        else
-        {
-            LOG(ERROR) << "Authentication failed:" << error_code;
-            delayedConnectToRouter();
-        }
-
-        // Authenticator is no longer needed.
-        authenticator_->deleteLater();
-    });
-
-    authenticator_->start(tcp_channel_);
+    // Now the session will receive incoming messages.
+    tcp_channel_->resume();
+    sendKeyPool(max_peer_count_ - static_cast<quint32>(session_count_));
 }
 
 //--------------------------------------------------------------------------------------------------
-void Controller::onTcpDisconnected(base::TcpChannel::ErrorCode error_code)
+void Controller::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code)
 {
     LOG(INFO) << "The connection to the router has been lost:" << error_code;
 
@@ -317,10 +286,20 @@ void Controller::connectToRouter()
 {
     LOG(INFO) << "Connecting to router...";
 
-    // Create channel.
-    tcp_channel_ = new base::TcpChannel(this);
+    base::ClientAuthenticator* authenticator = new base::ClientAuthenticator();
+    authenticator->setIdentify(proto::key_exchange::IDENTIFY_ANONYMOUS);
+    authenticator->setPeerPublicKey(router_public_key_);
+    authenticator->setSessionType(proto::router::SESSION_TYPE_RELAY);
 
-    connect(tcp_channel_, &base::TcpChannel::sig_connected, this, &Controller::onTcpConnected);
+    // Create channel.
+    tcp_channel_ = new base::TcpChannel(authenticator, this);
+
+    connect(tcp_channel_, &base::TcpChannel::sig_authenticated,
+            this, &Controller::onTcpReady);
+    connect(tcp_channel_, &base::TcpChannel::sig_errorOccurred,
+            this, &Controller::onTcpErrorOccurred);
+    connect(tcp_channel_, &base::TcpChannel::sig_messageReceived,
+            this, &Controller::onTcpMessageReceived);
 
     // Connect to router.
     tcp_channel_->connectTo(router_address_, router_port_);

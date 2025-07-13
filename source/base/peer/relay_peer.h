@@ -22,12 +22,13 @@
 #include <QByteArray>
 #include <QObject>
 
+#include <asio/ip/tcp.hpp>
+
 #include "base/location.h"
 #include "base/net/tcp_channel.h"
+#include "base/peer/authenticator.h"
 #include "proto/router.h"
 #include "proto/router_peer.h"
-
-#include <asio/ip/tcp.hpp>
 
 namespace base {
 
@@ -36,7 +37,7 @@ class RelayPeer final : public QObject
     Q_OBJECT
 
 public:
-    explicit RelayPeer(QObject* parent = nullptr);
+    explicit RelayPeer(Authenticator* authenticator, QObject* parent = nullptr);
     ~RelayPeer();
 
     void start(const proto::router::ConnectionOffer& offer);
@@ -57,6 +58,7 @@ private:
     static QByteArray authenticationMessage(
         const proto::router::RelayKey& key, const std::string& secret);
 
+    std::unique_ptr<Authenticator> authenticator_;
     proto::router::ConnectionOffer connection_offer_;
     bool is_finished_ = false;
 

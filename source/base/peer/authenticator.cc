@@ -21,14 +21,11 @@
 #include "base/location.h"
 #include "base/logging.h"
 #include "base/serialization.h"
-#include "base/crypto/message_decryptor_openssl.h"
-#include "base/crypto/message_encryptor_openssl.h"
 
 namespace base {
 
 namespace {
 
-constexpr quint8 kChannelIdAuthenticator = 0;
 constexpr std::chrono::minutes kTimeout{ 1 };
 
 auto g_errorCodeType = qRegisterMetaType<base::Authenticator::ErrorCode>();
@@ -56,7 +53,7 @@ Authenticator::~Authenticator()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Authenticator::start(TcpChannel* tcp_channel)
+void Authenticator::start()
 {
     if (state() != State::STOPPED)
     {
@@ -64,52 +61,50 @@ void Authenticator::start(TcpChannel* tcp_channel)
         return;
     }
 
-    tcp_channel_ = tcp_channel;
-    DCHECK(tcp_channel_);
-
-    LOG(INFO) << "Authentication started for:" << tcp_channel_->peerAddress();
     state_ = State::PENDING;
 
     // If authentication does not complete within the specified time interval, an error will be
     // raised.
     timer_->start(kTimeout);
 
-    connect(tcp_channel_, &TcpChannel::sig_disconnected, this, &Authenticator::onTcpDisconnected);
-    connect(tcp_channel_, &TcpChannel::sig_messageReceived, this, &Authenticator::onTcpMessageReceived);
-    connect(tcp_channel_, &TcpChannel::sig_messageWritten, this, &Authenticator::onTcpMessageWritten);
-
     if (onStarted())
-        tcp_channel_->resume();
+    {
+        LOG(INFO) << "Authentication started";
+    }
+    else
+    {
+        LOG(ERROR) << "Unable to start authentication";
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
-void Authenticator::sendMessage(const google::protobuf::MessageLite& message)
+void Authenticator::onIncomingMessage(const QByteArray& data)
 {
-    sendMessage(base::serialize(message));
+    if (state() != State::PENDING)
+        return;
+
+    onReceived(data);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Authenticator::onMessageWritten()
+{
+    if (state() != State::PENDING)
+        return;
+
+    onWritten();
 }
 
 //--------------------------------------------------------------------------------------------------
 void Authenticator::sendMessage(const QByteArray& data)
 {
-    if (tcp_channel_)
-        tcp_channel_->send(kChannelIdAuthenticator, data);
+    emit sig_outgoingMessage(data);
 }
 
 //--------------------------------------------------------------------------------------------------
 void Authenticator::finish(const Location& location, ErrorCode error_code)
 {
-    // If the network channel is already destroyed, then exit (we have a repeated notification).
-    if (!tcp_channel_)
-        return;
-
-    tcp_channel_->pause();
-    tcp_channel_->setChannelIdSupport(true);
-
     timer_->stop();
-
-    disconnect(tcp_channel_, &TcpChannel::sig_disconnected, this, &Authenticator::onTcpDisconnected);
-    disconnect(tcp_channel_, &TcpChannel::sig_messageReceived, this, &Authenticator::onTcpMessageReceived);
-    disconnect(tcp_channel_, &TcpChannel::sig_messageWritten, this, &Authenticator::onTcpMessageWritten);
 
     if (error_code == ErrorCode::SUCCESS)
         state_ = State::SUCCESS;
@@ -149,85 +144,6 @@ void Authenticator::setPeerArch(const QString& arch)
 void Authenticator::setPeerDisplayName(const QString& display_name)
 {
     peer_display_name_ = display_name;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Authenticator::onSessionKeyChanged()
-{
-    LOG(INFO) << "Session key changed";
-
-    if (!tcp_channel_)
-    {
-        LOG(ERROR) << "No valid TCP channel";
-        return false;
-    }
-
-    std::unique_ptr<MessageEncryptor> encryptor;
-    std::unique_ptr<MessageDecryptor> decryptor;
-
-    if (encryption_ == proto::key_exchange::ENCRYPTION_AES256_GCM)
-    {
-        encryptor = MessageEncryptorOpenssl::createForAes256Gcm(
-            session_key_, encrypt_iv_);
-        decryptor = MessageDecryptorOpenssl::createForAes256Gcm(
-            session_key_, decrypt_iv_);
-    }
-    else
-    {
-        DCHECK_EQ(encryption_, proto::key_exchange::ENCRYPTION_CHACHA20_POLY1305);
-
-        encryptor = MessageEncryptorOpenssl::createForChaCha20Poly1305(
-            session_key_, encrypt_iv_);
-        decryptor = MessageDecryptorOpenssl::createForChaCha20Poly1305(
-            session_key_, decrypt_iv_);
-    }
-
-    if (!encryptor)
-    {
-        LOG(ERROR) << "Invalid encryptor";
-        return false;
-    }
-
-    if (!decryptor)
-    {
-        LOG(ERROR) << "Invalid decryptor";
-        return false;
-    }
-
-    tcp_channel_->setEncryptor(std::move(encryptor));
-    tcp_channel_->setDecryptor(std::move(decryptor));
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-void Authenticator::onTcpDisconnected(TcpChannel::ErrorCode error_code)
-{
-    LOG(INFO) << "Network error:" << error_code;
-
-    ErrorCode result = ErrorCode::NETWORK_ERROR;
-
-    if (error_code == TcpChannel::ErrorCode::ACCESS_DENIED)
-        result = ErrorCode::ACCESS_DENIED;
-
-    finish(FROM_HERE, result);
-}
-
-//--------------------------------------------------------------------------------------------------
-void Authenticator::onTcpMessageReceived(quint8 /* channel_id */, const QByteArray& buffer)
-{
-    if (state() != State::PENDING)
-        return;
-
-    onReceived(buffer);
-}
-
-//--------------------------------------------------------------------------------------------------
-void Authenticator::onTcpMessageWritten(quint8 /* channel_id */, size_t /* pending */)
-{
-    if (state() != State::PENDING)
-        return;
-
-    onWritten();
 }
 
 } // namespace base

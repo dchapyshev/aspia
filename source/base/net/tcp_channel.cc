@@ -28,14 +28,14 @@
 #include "base/location.h"
 #include "base/logging.h"
 #include "base/crypto/large_number_increment.h"
-#include "base/crypto/message_encryptor_fake.h"
-#include "base/crypto/message_decryptor_fake.h"
+#include "base/crypto/message_decryptor.h"
+#include "base/crypto/message_encryptor.h"
 
 namespace base {
 
 namespace {
 
-const int kWriteQueueReservedSize = 64;
+const int kWriteQueueReservedSize = 128;
 const TcpChannel::Seconds kKeepAliveInterval { 60 };
 const TcpChannel::Seconds kKeepAliveTimeout { 30 };
 
@@ -82,21 +82,24 @@ int calculateSpeed(int last_speed, const TcpChannel::Milliseconds& duration, qin
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-TcpChannel::TcpChannel(QObject* parent)
+TcpChannel::TcpChannel(Authenticator* authenticator, QObject* parent)
     : QObject(parent),
       io_context_(base::AsioEventDispatcher::currentIoContext()),
       socket_(io_context_),
-      resolver_(std::make_unique<asio::ip::tcp::resolver>(io_context_))
+      resolver_(std::make_unique<asio::ip::tcp::resolver>(io_context_)),
+      authenticator_(authenticator)
 {
     LOG(INFO) << "Ctor";
     init();
 }
 
 //--------------------------------------------------------------------------------------------------
-TcpChannel::TcpChannel(asio::ip::tcp::socket&& socket, QObject* parent)
+TcpChannel::TcpChannel(
+    asio::ip::tcp::socket&& socket, Authenticator* authenticator, QObject* parent)
     : QObject(parent),
       io_context_(base::AsioEventDispatcher::currentIoContext()),
-      socket_(std::move(socket))
+      socket_(std::move(socket)),
+      authenticator_(authenticator)
 {
     LOG(INFO) << "Ctor";
     DCHECK(socket_.is_open());
@@ -116,21 +119,17 @@ TcpChannel::~TcpChannel()
 const quint32 TcpChannel::kMaxMessageSize = 7 * 1024 * 1024; // 7 MB
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::setEncryptor(std::unique_ptr<MessageEncryptor> encryptor)
+void TcpChannel::doAuthentication()
 {
-    CHECK(encryptor);
+    if (!authenticator_)
+    {
+        onErrorOccurred(FROM_HERE, ErrorCode::UNKNOWN);
+        return;
+    }
 
-    LOG(INFO) << "Encryptor changed from" << encryptor_->type() << "to" << encryptor->type();
-    encryptor_ = std::move(encryptor);
-}
-
-//--------------------------------------------------------------------------------------------------
-void TcpChannel::setDecryptor(std::unique_ptr<MessageDecryptor> decryptor)
-{
-    CHECK(decryptor);
-
-    LOG(INFO) << "Decryptor changed from" << decryptor_->type() << "to" << decryptor->type();
-    decryptor_ = std::move(decryptor);
+    LOG(INFO) << "Start authentication";
+    authenticator_->start();
+    resume();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -194,10 +193,7 @@ void TcpChannel::connectTo(const QString& address, quint16 port)
         if (error_code)
         {
             if (error_code == asio::error::operation_aborted)
-            {
-                LOG(INFO) << "Operation is aborted";
                 return;
-            }
 
             onErrorOccurred(FROM_HERE, error_code);
             return;
@@ -212,7 +208,6 @@ void TcpChannel::connectTo(const QString& address, quint16 port)
             {
                 // If more than one address for a host was resolved, then we return false and cancel
                 // attempts to connect to all addresses.
-                LOG(INFO) << "Operation is aborted";
                 return false;
             }
 
@@ -223,10 +218,7 @@ void TcpChannel::connectTo(const QString& address, quint16 port)
             if (error_code)
             {
                 if (error_code == asio::error::operation_aborted)
-                {
-                    LOG(INFO) << "Operation is aborted";
                     return;
-                }
 
                 onErrorOccurred(FROM_HERE, error_code);
                 return;
@@ -234,27 +226,19 @@ void TcpChannel::connectTo(const QString& address, quint16 port)
 
             LOG(INFO) << "Connected to endpoint:" << endpoint.address().to_string()
                       << ":" << endpoint.port();
+
             setConnected(true);
             emit sig_connected();
+
+            doAuthentication();
         });
     });
 }
 
 //--------------------------------------------------------------------------------------------------
-bool TcpChannel::isConnected() const
-{
-    return connected_;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool TcpChannel::isPaused() const
-{
-    return paused_;
-}
-
-//--------------------------------------------------------------------------------------------------
 void TcpChannel::pause()
 {
+    LOG(INFO) << "Channel is paused";
     paused_ = true;
 }
 
@@ -264,6 +248,7 @@ void TcpChannel::resume()
     if (!isConnected() || !paused_)
         return;
 
+    LOG(INFO) << "Channel is resumed";
     paused_ = false;
 
     switch (state_)
@@ -290,19 +275,6 @@ void TcpChannel::resume()
 void TcpChannel::send(quint8 channel_id, const QByteArray& buffer)
 {
     addWriteTask(WriteTask::Type::USER_DATA, channel_id, buffer);
-}
-
-//--------------------------------------------------------------------------------------------------
-void TcpChannel::setChannelIdSupport(bool enable)
-{
-    is_channel_id_supported_ = enable;
-    LOG(INFO) << "Support for channel id is changed:" << enable;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool TcpChannel::hasChannelIdSupport() const
-{
-    return is_channel_id_supported_;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -400,15 +372,21 @@ void TcpChannel::disconnectFrom()
 //--------------------------------------------------------------------------------------------------
 void TcpChannel::init()
 {
-    encryptor_ = std::make_unique<MessageEncryptorFake>();
-    decryptor_ = std::make_unique<MessageDecryptorFake>();
-
     write_queue_.reserve(kWriteQueueReservedSize);
 
     keep_alive_timer_ = new QTimer(this);
     keep_alive_timer_->setSingleShot(true);
 
     connect(keep_alive_timer_, &QTimer::timeout, this, &TcpChannel::onKeepAliveTimer);
+
+    if (authenticator_)
+    {
+        authenticator_->setParent(this);
+
+        connect(authenticator_, &Authenticator::sig_outgoingMessage, this, &TcpChannel::onAuthenticatorMessage);
+        connect(authenticator_, &Authenticator::sig_keyChanged, this, &TcpChannel::onKeyChanged);
+        connect(authenticator_, &Authenticator::sig_finished, this, &TcpChannel::onAuthenticatorFinished);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -442,6 +420,100 @@ void TcpChannel::setConnected(bool connected)
 }
 
 //--------------------------------------------------------------------------------------------------
+void TcpChannel::onKeyChanged()
+{
+    if (!authenticator_)
+    {
+        onErrorOccurred(FROM_HERE, ErrorCode::UNKNOWN);
+        return;
+    }
+
+    if (authenticator_->encryption() == proto::key_exchange::ENCRYPTION_AES256_GCM)
+    {
+        encryptor_ = MessageEncryptor::createForAes256Gcm(
+            authenticator_->sessionKey(), authenticator_->encryptIv());
+        decryptor_ = MessageDecryptor::createForAes256Gcm(
+            authenticator_->sessionKey(), authenticator_->decryptIv());
+    }
+    else
+    {
+        DCHECK_EQ(authenticator_->encryption(), proto::key_exchange::ENCRYPTION_CHACHA20_POLY1305);
+
+        encryptor_ = MessageEncryptor::createForChaCha20Poly1305(
+            authenticator_->sessionKey(), authenticator_->encryptIv());
+        decryptor_ = MessageDecryptor::createForChaCha20Poly1305(
+            authenticator_->sessionKey(), authenticator_->decryptIv());
+    }
+
+    if (!encryptor_ || !decryptor_)
+    {
+        onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
+        return;
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void TcpChannel::onAuthenticatorMessage(const QByteArray& data)
+{
+    send(0, data);
+}
+
+//--------------------------------------------------------------------------------------------------
+void TcpChannel::onAuthenticatorFinished(Authenticator::ErrorCode error_code)
+{
+    pause();
+
+    if (!authenticator_)
+    {
+        onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
+        return;
+    }
+
+    switch (error_code)
+    {
+        case Authenticator::ErrorCode::SUCCESS:
+            break;
+
+        case Authenticator::ErrorCode::PROTOCOL_ERROR:
+            onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
+            return;
+
+        case Authenticator::ErrorCode::SESSION_DENIED:
+            onErrorOccurred(FROM_HERE, ErrorCode::SESSION_DENIED);
+            return;
+
+        case Authenticator::ErrorCode::VERSION_ERROR:
+            onErrorOccurred(FROM_HERE, ErrorCode::VERSION_ERROR);
+            return;
+
+        case Authenticator::ErrorCode::ACCESS_DENIED:
+            onErrorOccurred(FROM_HERE, ErrorCode::ACCESS_DENIED);
+            return;
+
+        default:
+            onErrorOccurred(FROM_HERE, ErrorCode::UNKNOWN);
+            return;
+    }
+
+    is_channel_id_supported_ = true;
+    LOG(INFO) << "Support for channel id is enabled";
+
+    version_       = authenticator_->peerVersion();
+    os_name_       = authenticator_->peerOsName();
+    computer_name_ = authenticator_->peerComputerName();
+    display_name_  = authenticator_->peerDisplayName();
+    architecture_  = authenticator_->peerArch();
+    user_name_     = authenticator_->userName();
+    session_type_  = authenticator_->sessionType();
+
+    authenticator_->deleteLater();
+    authenticator_ = nullptr;
+
+    authenticated_ = true;
+    emit sig_authenticated();
+}
+
+//--------------------------------------------------------------------------------------------------
 void TcpChannel::onErrorOccurred(const Location& location, const std::error_code& error_code)
 {
     ErrorCode error = ErrorCode::UNKNOWN;
@@ -469,13 +541,32 @@ void TcpChannel::onErrorOccurred(const Location& location, const std::error_code
 void TcpChannel::onErrorOccurred(const Location& location, ErrorCode error_code)
 {
     LOG(ERROR) << "Connection finished with error" << error_code << "from" << location;
+
+    if (authenticator_ && error_code == ErrorCode::CRYPTO_ERROR)
+    {
+        LOG(ERROR) << "Invalid key or username/password";
+        error_code = ErrorCode::ACCESS_DENIED;
+    }
+
     disconnectFrom();
-    emit sig_disconnected(error_code);
+    emit sig_errorOccurred(error_code);
 }
 
 //--------------------------------------------------------------------------------------------------
 void TcpChannel::onMessageWritten(quint8 channel_id)
 {
+    if (!authenticated_)
+    {
+        if (!authenticator_)
+        {
+            onErrorOccurred(FROM_HERE, ErrorCode::UNKNOWN);
+            return;
+        }
+
+        authenticator_->onMessageWritten();
+        return;
+    }
+
     emit sig_messageWritten(channel_id, write_queue_.size());
 }
 
@@ -511,11 +602,34 @@ void TcpChannel::onMessageReceived()
         return;
     }
 
+    auto on_autenticator_message = [this](const char* data, size_t size)
+    {
+        if (!authenticator_)
+        {
+            onErrorOccurred(FROM_HERE, ErrorCode::UNKNOWN);
+            return;
+        }
+
+        authenticator_->onIncomingMessage(QByteArray::fromRawData(data, size));
+    };
+
+    if (!decryptor_)
+    {
+        on_autenticator_message(read_data, read_size);
+        return;
+    }
+
     resizeBuffer(&decrypt_buffer_, decryptor_->decryptedDataSize(read_size));
 
     if (!decryptor_->decrypt(read_data, read_size, decrypt_buffer_.data()))
     {
-        onErrorOccurred(FROM_HERE, ErrorCode::ACCESS_DENIED);
+        onErrorOccurred(FROM_HERE, ErrorCode::CRYPTO_ERROR);
+        return;
+    }
+
+    if (!authenticated_)
+    {
+        on_autenticator_message(decrypt_buffer_.data(), decrypt_buffer_.size());
         return;
     }
 
@@ -525,10 +639,10 @@ void TcpChannel::onMessageReceived()
 //--------------------------------------------------------------------------------------------------
 void TcpChannel::addWriteTask(WriteTask::Type type, quint8 channel_id, const QByteArray& data)
 {
-    const bool schedule_write = write_queue_.empty();
+    const bool schedule_write = write_queue_.isEmpty();
 
     // Add the buffer to the queue for sending.
-    write_queue_.push_back(WriteTask(type, channel_id, data));
+    write_queue_.emplace_back(type, channel_id, data);
 
     if (schedule_write)
         doWrite();
@@ -549,8 +663,18 @@ void TcpChannel::doWrite()
 
     if (task.type() == WriteTask::Type::USER_DATA)
     {
-        // Calculate the size of the encrypted message.
-        size_t target_data_size = encryptor_->encryptedDataSize(source_buffer.size());
+        size_t target_data_size;
+
+        if (encryptor_)
+        {
+            // Calculate the size of the encrypted message.
+            target_data_size = encryptor_->encryptedDataSize(source_buffer.size());
+        }
+        else
+        {
+            target_data_size = source_buffer.size();
+        }
+
         if (is_channel_id_supported_)
             target_data_size += sizeof(UserDataHeader);
 
@@ -580,11 +704,18 @@ void TcpChannel::doWrite()
             write_buffer += sizeof(header);
         }
 
-        // Encrypt the message.
-        if (!encryptor_->encrypt(source_buffer.data(), source_buffer.size(), write_buffer))
+        if (encryptor_)
         {
-            onErrorOccurred(FROM_HERE, ErrorCode::ACCESS_DENIED);
-            return;
+            // Encrypt the message.
+            if (!encryptor_->encrypt(source_buffer.data(), source_buffer.size(), write_buffer))
+            {
+                onErrorOccurred(FROM_HERE, ErrorCode::CRYPTO_ERROR);
+                return;
+            }
+        }
+        else
+        {
+            memcpy(write_buffer, source_buffer.data(), source_buffer.size());
         }
     }
     else
@@ -605,10 +736,7 @@ void TcpChannel::doWrite()
         if (error_code)
         {
             if (error_code == asio::error::operation_aborted)
-            {
-                LOG(INFO) << "Operation is aborted";
                 return;
-            }
 
             onErrorOccurred(FROM_HERE, error_code);
             return;
@@ -648,10 +776,7 @@ void TcpChannel::doReadSize()
         if (error_code)
         {
             if (error_code == asio::error::operation_aborted)
-            {
-                LOG(INFO) << "Operation is aborted";
                 return;
-            }
 
             onErrorOccurred(FROM_HERE, error_code);
             return;
@@ -702,10 +827,7 @@ void TcpChannel::doReadUserData(size_t length)
         if (error_code)
         {
             if (error_code == asio::error::operation_aborted)
-            {
-                LOG(INFO) << "Operation is aborted";
                 return;
-            }
 
             onErrorOccurred(FROM_HERE, error_code);
             return;
@@ -749,10 +871,7 @@ void TcpChannel::doReadServiceHeader()
         if (error_code)
         {
             if (error_code == asio::error::operation_aborted)
-            {
-                LOG(INFO) << "Operation is aborted";
                 return;
-            }
 
             onErrorOccurred(FROM_HERE, error_code);
             return;
@@ -811,10 +930,7 @@ void TcpChannel::doReadServiceData(size_t length)
         if (error_code)
         {
             if (error_code == asio::error::operation_aborted)
-            {
-                LOG(INFO) << "Operation is aborted";
                 return;
-            }
 
             onErrorOccurred(FROM_HERE, error_code);
             return;

@@ -36,9 +36,10 @@ RelayPeerManager::~RelayPeerManager()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RelayPeerManager::addConnectionOffer(const proto::router::ConnectionOffer& offer)
+void RelayPeerManager::addConnectionOffer(
+    const proto::router::ConnectionOffer& offer, Authenticator* authenticator)
 {
-    RelayPeer* peer = new RelayPeer(this);
+    RelayPeer* peer = new RelayPeer(authenticator, this);
 
     connect(peer, &RelayPeer::sig_connectionError, this, &RelayPeerManager::onRelayConnectionError);
     connect(peer, &RelayPeer::sig_connectionReady, this, &RelayPeerManager::onRelayConnectionReady);

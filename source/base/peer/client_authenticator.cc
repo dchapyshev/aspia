@@ -90,36 +90,42 @@ ClientAuthenticator::~ClientAuthenticator()
 //--------------------------------------------------------------------------------------------------
 void ClientAuthenticator::setPeerPublicKey(const QByteArray& public_key)
 {
+    LOG(INFO) << "Public key assigned:" << public_key.size();
     peer_public_key_ = public_key;
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClientAuthenticator::setIdentify(proto::key_exchange::Identify identify)
 {
+    LOG(INFO) << "Identify assigned:" << identify;
     identify_ = identify;
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClientAuthenticator::setUserName(const QString& username)
 {
+    LOG(INFO) << "User name assigned:" << username;
     username_ = username;
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClientAuthenticator::setPassword(const QString& password)
 {
+    LOG(INFO) << "Password assigned";
     password_ = password;
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClientAuthenticator::setSessionType(quint32 session_type)
 {
+    LOG(INFO) << "Session type assigned:" << session_type;
     session_type_ = session_type;
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClientAuthenticator::setDisplayName(const QString& display_name)
 {
+    LOG(INFO) << "Display name assigned:" << display_name;
     display_name_ = display_name;
 }
 
@@ -204,11 +210,9 @@ void ClientAuthenticator::onWritten()
         {
             LOG(INFO) << "Sended: ClientKeyExchange";
             internal_state_ = InternalState::READ_SESSION_CHALLENGE;
-            if (!onSessionKeyChanged())
-            {
-                finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
-                return;
-            }
+
+            LOG(INFO) << "Session key is ready";
+            emit sig_keyChanged();
         }
         break;
 
@@ -293,8 +297,10 @@ void ClientAuthenticator::sendClientHello()
     version->set_patch(ASPIA_VERSION_PATCH);
     version->set_revision(GIT_COMMIT_COUNT);
 
-    LOG(INFO) << "Sending: ClientHello";
-    sendMessage(client_hello);
+    QByteArray message = base::serialize(client_hello);
+
+    LOG(INFO) << "Sending: ClientHello (" << message.size() << ")";
+    sendMessage(message);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -358,10 +364,10 @@ bool ClientAuthenticator::readServerHello(const QByteArray& buffer)
         return false;
     }
 
-    if (!session_key_.isEmpty() && !onSessionKeyChanged())
+    if (!session_key_.isEmpty())
     {
-        finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
-        return false;
+        LOG(INFO) << "Session key is ready";
+        emit sig_keyChanged();
     }
 
     return true;
@@ -373,8 +379,10 @@ void ClientAuthenticator::sendIdentify()
     proto::key_exchange::SrpIdentify identify;
     identify.set_username(username_.toStdString());
 
-    LOG(INFO) << "Sending: Identify";
-    sendMessage(identify);
+    QByteArray message = base::serialize(identify);
+
+    LOG(INFO) << "Sending: Identify (" << message.size() << ")";
+    sendMessage(message);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -447,8 +455,10 @@ void ClientAuthenticator::sendClientKeyExchange()
     client_key_exchange.set_a(A_.toStdString());
     client_key_exchange.set_iv(encrypt_iv_.toStdString());
 
-    LOG(INFO) << "Sending: ClientKeyExchange";
-    sendMessage(client_key_exchange);
+    QByteArray message = base::serialize(client_key_exchange);
+
+    LOG(INFO) << "Sending: ClientKeyExchange (" << message.size() << ")";
+    sendMessage(message);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -526,8 +536,10 @@ void ClientAuthenticator::sendSessionResponse()
     response.set_display_name(display_name_.toStdString());
     response.set_arch(QSysInfo::buildCpuArchitecture().toStdString());
 
-    LOG(INFO) << "Sending: SessionResponse";
-    sendMessage(response);
+    QByteArray message = base::serialize(response);
+
+    LOG(INFO) << "Sending: SessionResponse (" << message.size() << ")";
+    sendMessage(message);
 }
 
 } // namespace base

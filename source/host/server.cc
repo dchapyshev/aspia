@@ -55,7 +55,6 @@ Server::Server(QObject* parent)
       update_timer_(new QTimer(this)),
       settings_watcher_(new QFileSystemWatcher(this)),
       tcp_server_(new base::TcpServer(this)),
-      authenticator_manager_(new base::ServerAuthenticatorManager(this)),
       user_session_manager_(new UserSessionManager(this)),
       password_expire_timer_(new QTimer(this))
 {
@@ -63,8 +62,6 @@ Server::Server(QObject* parent)
 
     connect(update_timer_, &QTimer::timeout, this, &Server::checkForUpdates);
     connect(settings_watcher_, &QFileSystemWatcher::fileChanged, this, &Server::updateConfiguration);
-    connect(authenticator_manager_, &base::ServerAuthenticatorManager::sig_sessionReady,
-            this, &Server::onSessionAuthenticated);
 
     connect(user_session_manager_, &UserSessionManager::sig_routerStateRequested,
             this, &Server::onRouterStateRequested);
@@ -205,40 +202,6 @@ void Server::onChangeOneTimeSessions(quint32 sessions)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Server::onSessionAuthenticated()
-{
-    LOG(INFO) << "New client session";
-
-    while (authenticator_manager_->hasReadySessions())
-    {
-        base::ServerAuthenticatorManager::SessionInfo session_info =
-            authenticator_manager_->nextReadySession();
-
-        const QVersionNumber& host_version = base::kCurrentVersion;
-        if (host_version > session_info.version)
-        {
-            LOG(ERROR) << "Version mismatch (host:" << host_version.toString()
-                       << "client:" << session_info.version.toString() << ")";
-        }
-
-        ClientSession* session = ClientSession::create(
-            static_cast<proto::peer::SessionType>(session_info.session_type), session_info.channel);
-        if (!session)
-        {
-            LOG(ERROR) << "Invalid client session";
-            return;
-        }
-
-        session->setClientVersion(session_info.version);
-        session->setComputerName(session_info.computer_name);
-        session->setDisplayName(session_info.display_name);
-        session->setUserName(session_info.user_name);
-
-        user_session_manager_->onClientSession(session);
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
 void Server::onNewDirectConnection()
 {
     LOG(INFO) << "New DIRECT connection";
@@ -249,8 +212,8 @@ void Server::onNewDirectConnection()
         return;
     }
 
-    while (tcp_server_->hasPendingConnections())
-        startAuthentication(tcp_server_->nextPendingConnection());
+    while (tcp_server_->hasReadyConnections())
+        startSession(tcp_server_->nextReadyConnection());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -279,7 +242,7 @@ void Server::onNewRelayConnection()
     }
 
     while (router_controller_->hasPendingConnections())
-        startAuthentication(router_controller_->nextPendingConnection());
+        startSession(router_controller_->nextPendingConnection());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -395,14 +358,28 @@ void Server::onFileDownloaderProgress(int percentage)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Server::startAuthentication(base::TcpChannel* channel)
+void Server::startSession(base::TcpChannel* channel)
 {
     LOG(INFO) << "Start authentication";
 
     static const size_t kReadBufferSize = 1 * 1024 * 1024; // 1 Mb.
     channel->setReadBufferSize(kReadBufferSize);
 
-    authenticator_manager_->addNewChannel(channel);
+    const QVersionNumber& host_version = base::kCurrentVersion;
+    if (host_version > channel->peerVersion())
+    {
+        LOG(ERROR) << "Version mismatch (host:" << host_version
+                   << "client:" << channel->peerVersion() << ")";
+    }
+
+    ClientSession* session = ClientSession::create(channel);
+    if (!session)
+    {
+        LOG(ERROR) << "Invalid client session";
+        return;
+    }
+
+    user_session_manager_->onClientSession(session);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -522,7 +499,7 @@ void Server::reloadUserList()
     LOG(INFO) << "Reloading user list";
 
     // Read the list of regular users.
-    std::unique_ptr<base::UserList> user_list = settings_.userList();
+    base::SharedPointer<base::UserListBase> user_list(settings_.userList().release());
 
     user_list->add(createOneTimeUser());
 
@@ -530,7 +507,9 @@ void Server::reloadUserList()
         LOG(ERROR) << "Empty seed key for user list";
 
     // Updating the list of users.
-    authenticator_manager_->setUserList(std::move(user_list));
+    tcp_server_->setUserList(user_list);
+    if (router_controller_)
+        router_controller_->setUserList(user_list);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -555,6 +534,7 @@ void Server::connectToRouter()
     connect(router_controller_, &RouterController::sig_clientConnected,
             this, &Server::onNewRelayConnection);
 
+    router_controller_->setUserList(tcp_server_->userList());
     router_controller_->start(
         settings_.routerAddress(), settings_.routerPort(), settings_.routerPublicKey());
 }

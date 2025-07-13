@@ -36,7 +36,7 @@ public:
     explicit RelayPeerManager(QObject* parent = nullptr);
     ~RelayPeerManager() final;
 
-    void addConnectionOffer(const proto::router::ConnectionOffer& offer);
+    void addConnectionOffer(const proto::router::ConnectionOffer& offer, Authenticator* authenticator);
     QQueue<TcpChannel*> takePendingConnections();
 
 signals:

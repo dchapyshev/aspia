@@ -28,10 +28,8 @@
 namespace host {
 
 //--------------------------------------------------------------------------------------------------
-ClientSession::ClientSession(
-    proto::peer::SessionType session_type, base::TcpChannel* channel, QObject* parent)
+ClientSession::ClientSession(base::TcpChannel* channel, QObject* parent)
     : QObject(parent),
-      session_type_(session_type),
       tcp_channel_(channel)
 {
     DCHECK(tcp_channel_);
@@ -53,8 +51,7 @@ ClientSession::~ClientSession()
 
 //--------------------------------------------------------------------------------------------------
 // static
-ClientSession* ClientSession::create(
-    proto::peer::SessionType session_type, base::TcpChannel* channel, QObject* parent)
+ClientSession* ClientSession::create(base::TcpChannel* channel, QObject* parent)
 {
     if (!channel)
     {
@@ -62,11 +59,11 @@ ClientSession* ClientSession::create(
         return nullptr;
     }
 
-    switch (session_type)
+    switch (channel->peerSessionType())
     {
         case proto::peer::SESSION_TYPE_DESKTOP_MANAGE:
         case proto::peer::SESSION_TYPE_DESKTOP_VIEW:
-            return new ClientSessionDesktop(session_type, channel, parent);
+            return new ClientSessionDesktop(channel, parent);
 
         case proto::peer::SESSION_TYPE_FILE_TRANSFER:
             return new ClientSessionFileTransfer(channel, parent);
@@ -81,8 +78,11 @@ ClientSession* ClientSession::create(
             return new ClientSessionPortForwarding(channel, parent);
 
         default:
-            LOG(ERROR) << "Unknown session type:" << session_type;
+        {
+            LOG(ERROR) << "Unknown session type:" << channel->peerSessionType();
+            channel->deleteLater();
             return nullptr;
+        }
     }
 }
 
@@ -92,7 +92,7 @@ void ClientSession::start()
     LOG(INFO) << "Starting client session";
     state_ = State::STARTED;
 
-    connect(tcp_channel_, &base::TcpChannel::sig_disconnected, this, &ClientSession::onTcpDisconnected);
+    connect(tcp_channel_, &base::TcpChannel::sig_errorOccurred, this, &ClientSession::onTcpErrorOccurred);
     connect(tcp_channel_, &base::TcpChannel::sig_messageReceived, this, &ClientSession::onTcpMessageReceived);
 
     tcp_channel_->resume();
@@ -109,39 +109,63 @@ void ClientSession::stop()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSession::setClientVersion(const QVersionNumber& version)
+QVersionNumber ClientSession::clientVersion() const
 {
-    version_ = version;
+    if (!tcp_channel_)
+    {
+        LOG(ERROR) << "TCP channel is unavailable";
+        return QVersionNumber();
+    }
+
+    return tcp_channel_->peerVersion();
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSession::setUserName(const QString& username)
+QString ClientSession::userName() const
 {
-    username_ = username;
+    if (!tcp_channel_)
+    {
+        LOG(ERROR) << "TCP channel is unavailable";
+        return QString();
+    }
+
+    return tcp_channel_->peerUserName();
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSession::setComputerName(const QString& computer_name)
+QString ClientSession::computerName() const
 {
-    computer_name_ = computer_name;
+    if (!tcp_channel_)
+    {
+        LOG(ERROR) << "TCP channel is unavailable";
+        return QString();
+    }
+
+    return tcp_channel_->peerComputerName();
 }
 
 //--------------------------------------------------------------------------------------------------
-const QString& ClientSession::computerName() const
+QString ClientSession::displayName() const
 {
-    return computer_name_;
+    if (!tcp_channel_)
+    {
+        LOG(ERROR) << "TCP channel is unavailable";
+        return QString();
+    }
+
+    return tcp_channel_->peerDisplayName();
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSession::setDisplayName(const QString& display_name)
+proto::peer::SessionType ClientSession::sessionType() const
 {
-    display_name_ = display_name;
-}
+    if (!tcp_channel_)
+    {
+        LOG(ERROR) << "TCP channel is unavailable";
+        return proto::peer::SESSION_TYPE_UNKNOWN;
+    }
 
-//--------------------------------------------------------------------------------------------------
-const QString& ClientSession::displayName() const
-{
-    return display_name_;
+    return static_cast<proto::peer::SessionType>(tcp_channel_->peerSessionType());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -163,7 +187,7 @@ size_t ClientSession::pendingMessages() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSession::onTcpDisconnected(base::TcpChannel::ErrorCode error_code)
+void ClientSession::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code)
 {
     LOG(ERROR) << "Client disconnected with error:" << error_code;
     state_ = State::FINISHED;

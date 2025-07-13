@@ -31,7 +31,7 @@ class SharedKeyPool;
 class SessionClient final : public Session
 {
 public:
-    explicit SessionClient(QObject* parent = nullptr);
+    explicit SessionClient(base::TcpChannel* channel, QObject* parent = nullptr);
     ~SessionClient() final;
 
 protected:

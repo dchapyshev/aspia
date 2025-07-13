@@ -29,10 +29,6 @@
 #include "client/router_controller.h"
 #include "base/net/tcp_channel.h"
 
-namespace base {
-class ClientAuthenticator;
-} // namespace base
-
 namespace client {
 
 class Client : public QObject
@@ -65,8 +61,7 @@ public:
         WAIT_FOR_ROUTER_TIMEOUT,
         WAIT_FOR_HOST,
         WAIT_FOR_HOST_TIMEOUT,
-        VERSION_MISMATCH,
-        ACCESS_DENIED
+        VERSION_MISMATCH
     };
     Q_ENUM(Status)
 
@@ -91,8 +86,8 @@ protected:
     int speedTx();
 
 private slots:
-    void onTcpConnected();
-    void onTcpDisconnected(base::TcpChannel::ErrorCode error_code);
+    void onTcpReady();
+    void onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code);
     void onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer);
     void onTcpMessageWritten(quint8 channel_id, size_t pending);
     void onRouterConnected(const QVersionNumber& router_version);
@@ -101,14 +96,13 @@ private slots:
     void onRouterErrorOccurred(const client::RouterController::Error& error);
 
 private:
-    void startAuthentication();
     void delayedReconnect();
+    void channelReady();
 
     QTimer* timeout_timer_ = nullptr;
     QTimer* reconnect_timer_ = nullptr;
     QPointer<RouterController> router_controller_;
     QPointer<base::TcpChannel> tcp_channel_;
-    QPointer<base::ClientAuthenticator> authenticator_;
 
     std::shared_ptr<SessionState> session_state_;
 

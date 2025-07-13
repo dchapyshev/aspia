@@ -30,6 +30,7 @@
 
 #include "base/net/variable_size.h"
 #include "base/net/write_task.h"
+#include "base/peer/authenticator.h"
 #include "base/peer/host_id.h"
 
 namespace base {
@@ -45,15 +46,10 @@ class TcpChannel final : public QObject
 
 public:
     // Constructor available for client.
-    explicit TcpChannel(QObject* parent = nullptr);
+    explicit TcpChannel(Authenticator* authenticator, QObject* parent = nullptr);
     ~TcpChannel() final;
 
     static const quint32 kMaxMessageSize;
-
-    using Clock = std::chrono::steady_clock;
-    using TimePoint = std::chrono::time_point<Clock>;
-    using Milliseconds = std::chrono::milliseconds;
-    using Seconds = std::chrono::seconds;
 
     enum class ErrorCode
     {
@@ -66,8 +62,17 @@ public:
         // Violation of the communication protocol.
         INVALID_PROTOCOL,
 
-        // Cryptography error (message encryption or decryption failed).
+        // Authentication error.
         ACCESS_DENIED,
+
+        // Cryptography error (message encryption or decryption failed).
+        CRYPTO_ERROR,
+
+        // Session type is not allowed.
+        SESSION_DENIED,
+
+        // Version mismatch.
+        VERSION_ERROR,
 
         // An error occurred with the network (e.g., the network cable was accidentally plugged out).
         NETWORK_ERROR,
@@ -92,11 +97,10 @@ public:
     };
     Q_ENUM(ErrorCode)
 
-    // Sets an instance of a class to encrypt and decrypt messages.
-    // By default, a fake cryptographer is created that only copies the original message.
-    // You must explicitly establish a cryptographer before or after establishing a connection.
-    void setEncryptor(std::unique_ptr<MessageEncryptor> encryptor);
-    void setDecryptor(std::unique_ptr<MessageDecryptor> decryptor);
+    using Clock = std::chrono::steady_clock;
+    using TimePoint = std::chrono::time_point<Clock>;
+    using Milliseconds = std::chrono::milliseconds;
+    using Seconds = std::chrono::seconds;
 
     // Gets the address of the remote host as a string.
     QString peerAddress() const;
@@ -105,11 +109,14 @@ public:
     void connectTo(const QString& address, quint16 port);
 
     // Returns true if the channel is connected and false if not connected.
-    bool isConnected() const;
+    bool isConnected() const { return connected_; }
+
+    // Returns true if the channel has already been fully authenticated.
+    bool isAuthenticated() const { return authenticated_; }
 
     // Returns true if the channel is paused and false if not. If the channel is not connected,
     // then the return value is undefined.
-    bool isPaused() const;
+    bool isPaused() const { return paused_; }
 
     // Pauses the channel. After calling the method, new messages will not be read from the socket.
     // If at the time the method was called, the message was read, then notification of this
@@ -121,9 +128,6 @@ public:
 
     // Sending a message. After the call, the message will be added to the queue to be sent.
     void send(quint8 channel_id, const QByteArray& buffer);
-
-    void setChannelIdSupport(bool enable);
-    bool hasChannelIdSupport() const;
 
     bool setReadBufferSize(size_t size);
     bool setWriteBufferSize(size_t size);
@@ -138,9 +142,18 @@ public:
     int speedRx();
     int speedTx();
 
+    QVersionNumber peerVersion() const { return version_; }
+    QString peerOsName() const { return os_name_; }
+    QString peerComputerName() const { return computer_name_; }
+    QString peerDisplayName() const { return display_name_; }
+    QString peerArchitecture() const { return architecture_; }
+    QString peerUserName() const { return user_name_; }
+    quint32 peerSessionType() const { return session_type_; }
+
 signals:
     void sig_connected();
-    void sig_disconnected(ErrorCode error_code);
+    void sig_authenticated();
+    void sig_errorOccurred(ErrorCode error_code);
     void sig_messageReceived(quint8 channel_id, const QByteArray& buffer);
     void sig_messageWritten(quint8 channel_id, size_t pending);
 
@@ -149,7 +162,11 @@ protected:
     friend class RelayPeer;
 
     // Constructor available for server. An already connected socket is being moved.
-    TcpChannel(asio::ip::tcp::socket&& socket, QObject* parent);
+    TcpChannel(asio::ip::tcp::socket&& socket, Authenticator* authenticator, QObject* parent);
+
+    // Starts authentication. In the client channel, it starts automatically when a connection is
+    // established. In the server channel, it is started by the RelayPeer or TcpServer.
+    void doAuthentication();
 
     // Disconnects to remote host. The method is not available for an external call.
     // To disconnect, you must destroy the channel by calling the destructor.
@@ -201,6 +218,10 @@ private:
     void init();
     void setConnected(bool connected);
 
+    void onKeyChanged();
+    void onAuthenticatorMessage(const QByteArray& data);
+    void onAuthenticatorFinished(Authenticator::ErrorCode error_code);
+
     void onErrorOccurred(const Location& location, const std::error_code& error_code);
     void onErrorOccurred(const Location& location, ErrorCode error_code);
 
@@ -231,10 +252,20 @@ private:
     TimePoint keep_alive_timestamp_;
 
     bool connected_ = false;
+    bool authenticated_ = false;
     bool paused_ = true;
 
+    QPointer<Authenticator> authenticator_;
     std::unique_ptr<MessageEncryptor> encryptor_;
     std::unique_ptr<MessageDecryptor> decryptor_;
+
+    QVersionNumber version_;
+    QString os_name_;
+    QString computer_name_;
+    QString display_name_;
+    QString architecture_;
+    QString user_name_;
+    quint32 session_type_ = 0;
 
     WriteQueue write_queue_;
     VariableSizeWriter variable_size_writer_;

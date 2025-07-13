@@ -68,56 +68,36 @@ void OnlineCheckerRouter::start(const ComputerList& computers)
 
     LOG(INFO) << "Connecting to router...";
 
-    tcp_channel_ = new base::TcpChannel(this);
+    base::ClientAuthenticator* authenticator = new base::ClientAuthenticator();
+    authenticator->setIdentify(proto::key_exchange::IDENTIFY_SRP);
+    authenticator->setUserName(router_config_.username);
+    authenticator->setPassword(router_config_.password);
+    authenticator->setSessionType(proto::router::SESSION_TYPE_CLIENT);
 
-    connect(tcp_channel_, &base::TcpChannel::sig_connected, this, &OnlineCheckerRouter::onTcpConnected);
+    tcp_channel_ = new base::TcpChannel(authenticator, this);
+
+    connect(tcp_channel_, &base::TcpChannel::sig_authenticated,
+            this, &OnlineCheckerRouter::onTcpReady);
+    connect(tcp_channel_, &base::TcpChannel::sig_errorOccurred,
+            this, &OnlineCheckerRouter::onTcpErrorOccurred);
+    connect(tcp_channel_, &base::TcpChannel::sig_messageReceived,
+            this, &OnlineCheckerRouter::onTcpMessageReceived);
 
     tcp_channel_->connectTo(router_config_.address, router_config_.port);
 }
 
 //--------------------------------------------------------------------------------------------------
-void OnlineCheckerRouter::onTcpConnected()
+void OnlineCheckerRouter::onTcpReady()
 {
     LOG(INFO) << "Connection to the router is established";
 
-    authenticator_ = new base::ClientAuthenticator(this);
-
-    authenticator_->setIdentify(proto::key_exchange::IDENTIFY_SRP);
-    authenticator_->setUserName(router_config_.username);
-    authenticator_->setPassword(router_config_.password);
-    authenticator_->setSessionType(proto::router::SESSION_TYPE_CLIENT);
-
-    connect(authenticator_, &base::Authenticator::sig_finished,
-            this, [this](base::Authenticator::ErrorCode error_code)
-    {
-        if (error_code == base::Authenticator::ErrorCode::SUCCESS)
-        {
-            connect(tcp_channel_, &base::TcpChannel::sig_disconnected,
-                    this, &OnlineCheckerRouter::onTcpDisconnected);
-            connect(tcp_channel_, &base::TcpChannel::sig_messageReceived,
-                    this, &OnlineCheckerRouter::onTcpMessageReceived);
-
-            // Now the session will receive incoming messages.
-            tcp_channel_->resume();
-
-            checkNextComputer();
-        }
-        else
-        {
-            LOG(ERROR) << "Authentication failed:" << error_code;
-            onFinished(FROM_HERE);
-        }
-
-        // Authenticator is no longer needed.
-        authenticator_->deleteLater();
-        authenticator_ = nullptr;
-    });
-
-    authenticator_->start(tcp_channel_);
+    // Now the session will receive incoming messages.
+    tcp_channel_->resume();
+    checkNextComputer();
 }
 
 //--------------------------------------------------------------------------------------------------
-void OnlineCheckerRouter::onTcpDisconnected(base::TcpChannel::ErrorCode error_code)
+void OnlineCheckerRouter::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code)
 {
     LOG(INFO) << "Connection to the router is lost (" << error_code << ")";
     onFinished(FROM_HERE);
@@ -179,12 +159,6 @@ void OnlineCheckerRouter::onFinished(const base::Location& location)
     {
         tcp_channel_->deleteLater();
         tcp_channel_ = nullptr;
-    }
-
-    if (authenticator_)
-    {
-        authenticator_->deleteLater();
-        authenticator_ = nullptr;
     }
 
     for (const auto& computer : std::as_const(computers_))

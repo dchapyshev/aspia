@@ -58,6 +58,9 @@ void ServerAuthenticator::setUserList(SharedPointer<UserListBase> user_list)
 {
     user_list_ = std::move(user_list);
     DCHECK(user_list_);
+
+    LOG(INFO) << "User list is assigned (count:" << user_list_->list().size() << "seed key:"
+              << user_list_->seedKey().size() << ")";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -94,8 +97,7 @@ bool ServerAuthenticator::setPrivateKey(const QByteArray& private_key)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool ServerAuthenticator::setAnonymousAccess(
-    AnonymousAccess anonymous_access, quint32 session_types)
+bool ServerAuthenticator::setAnonymousAccess(AnonymousAccess anonymous_access, quint32 session_types)
 {
     // The method must be called before calling start().
     if (state() != State::STOPPED)
@@ -209,8 +211,8 @@ void ServerAuthenticator::onWritten()
 
             if (!session_key_.isEmpty())
             {
-                if (!onSessionKeyChanged())
-                    return;
+                LOG(INFO) << "Session key is ready";
+                emit sig_keyChanged();
             }
 
             switch (identify_)
@@ -258,7 +260,7 @@ void ServerAuthenticator::onWritten()
 //--------------------------------------------------------------------------------------------------
 void ServerAuthenticator::onClientHello(const QByteArray& buffer)
 {
-    LOG(INFO) << "Received: ClientHello";
+    LOG(INFO) << "Received: ClientHello (" << buffer.size() << ")";
 
     proto::key_exchange::ClientHello client_hello;
     if (!parse(buffer, &client_hello))
@@ -404,14 +406,16 @@ void ServerAuthenticator::onClientHello(const QByteArray& buffer)
     version->set_patch(ASPIA_VERSION_PATCH);
     version->set_revision(GIT_COMMIT_COUNT);
 
-    LOG(INFO) << "Sending: ServerHello";
-    sendMessage(server_hello);
+    QByteArray message = base::serialize(server_hello);
+
+    LOG(INFO) << "Sending: ServerHello (" << message.size() << ")";
+    sendMessage(message);
 }
 
 //--------------------------------------------------------------------------------------------------
 void ServerAuthenticator::onIdentify(const QByteArray& buffer)
 {
-    LOG(INFO) << "Received: Identify";
+    LOG(INFO) << "Received: Identify (" << buffer.size() << ")";
 
     proto::key_exchange::SrpIdentify identify;
     if (!parse(buffer, &identify))
@@ -512,14 +516,16 @@ void ServerAuthenticator::onIdentify(const QByteArray& buffer)
     server_key_exchange.set_b(B_.toStdString());
     server_key_exchange.set_iv(encrypt_iv_.toStdString());
 
-    LOG(INFO) << "Sending: ServerKeyExchange";
-    sendMessage(server_key_exchange);
+    QByteArray message = base::serialize(server_key_exchange);
+
+    LOG(INFO) << "Sending: ServerKeyExchange (" << message.size() << ")";
+    sendMessage(message);
 }
 
 //--------------------------------------------------------------------------------------------------
 void ServerAuthenticator::onClientKeyExchange(const QByteArray& buffer)
 {
-    LOG(INFO) << "Received: ClientKeyExchange";
+    LOG(INFO) << "Received: ClientKeyExchange (" << buffer.size() << ")";
 
     proto::key_exchange::SrpClientKeyExchange client_key_exchange;
     if (!parse(buffer, &client_key_exchange))
@@ -567,8 +573,8 @@ void ServerAuthenticator::onClientKeyExchange(const QByteArray& buffer)
         }
     }
 
-    if (!onSessionKeyChanged())
-        return;
+    LOG(INFO) << "Session key is ready";
+    emit sig_keyChanged();
 
     internal_state_ = InternalState::SEND_SESSION_CHALLENGE;
     doSessionChallenge();
@@ -591,14 +597,16 @@ void ServerAuthenticator::doSessionChallenge()
     session_challenge.set_cpu_cores(static_cast<quint32>(SysInfo::processorThreads()));
     session_challenge.set_arch(QSysInfo::buildCpuArchitecture().toStdString());
 
-    LOG(INFO) << "Sending: SessionChallenge";
-    sendMessage(session_challenge);
+    QByteArray message = base::serialize(session_challenge);
+
+    LOG(INFO) << "Sending: SessionChallenge (" << message.size() << ")";
+    sendMessage(message);
 }
 
 //--------------------------------------------------------------------------------------------------
 void ServerAuthenticator::onSessionResponse(const QByteArray& buffer)
 {
-    LOG(INFO) << "Received: SessionResponse";
+    LOG(INFO) << "Received: SessionResponse (" << buffer.size() << ")";
 
     proto::key_exchange::SessionResponse response;
     if (!parse(buffer, &response))

@@ -45,10 +45,8 @@
 namespace host {
 
 //--------------------------------------------------------------------------------------------------
-ClientSessionDesktop::ClientSessionDesktop(proto::peer::SessionType session_type,
-                                           base::TcpChannel* channel,
-                                           QObject* parent)
-    : ClientSession(session_type, channel, parent),
+ClientSessionDesktop::ClientSessionDesktop(base::TcpChannel* channel, QObject* parent)
+    : ClientSession(channel, parent),
       overflow_detection_timer_(new QTimer(this)),
       stat_counter_(id())
 {

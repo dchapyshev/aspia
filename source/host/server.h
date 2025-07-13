@@ -24,7 +24,6 @@
 #include <QTimer>
 
 #include "base/net/tcp_server.h"
-#include "base/peer/server_authenticator_manager.h"
 #include "common/http_file_downloader.h"
 #include "common/update_checker.h"
 #include "host/router_controller.h"
@@ -50,7 +49,6 @@ private slots:
     void onCredentialsRequested();
     void onChangeOneTimePassword();
     void onChangeOneTimeSessions(quint32 sessions);
-    void onSessionAuthenticated();
     void onNewDirectConnection();
     void onRouterStateChanged(const proto::internal::RouterState& router_state);
     void onHostIdAssigned(base::HostId host_id);
@@ -61,7 +59,7 @@ private slots:
     void onFileDownloaderProgress(int percentage);
 
 private:
-    void startAuthentication(base::TcpChannel* channel);
+    void startSession(base::TcpChannel* channel);
     void addFirewallRules();
     void deleteFirewallRules();
     void updateConfiguration(const QString& path);
@@ -81,7 +79,6 @@ private:
     QPointer<RouterController> router_controller_;
 
     base::TcpServer* tcp_server_ = nullptr;
-    base::ServerAuthenticatorManager* authenticator_manager_ = nullptr;
     UserSessionManager* user_session_manager_ = nullptr;
 
     QPointer<common::UpdateChecker> update_checker_;

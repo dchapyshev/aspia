@@ -23,10 +23,8 @@
 
 #include "base/location.h"
 #include "base/logging.h"
-#include "base/serialization.h"
 #include "base/net/tcp_channel.h"
 #include "build/build_config.h"
-#include "proto/key_exchange.h"
 
 namespace client {
 
@@ -50,8 +48,7 @@ public:
 
 private slots:
     void onTcpConnected();
-    void onTcpDisconnected(base::TcpChannel::ErrorCode error_code);
-    void onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer);
+    void onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code);
 
 private:
     void onFinished(const base::Location& location, bool online);
@@ -101,11 +98,10 @@ void OnlineCheckerDirect::Instance::start(FinishCallback finish_callback)
     LOG(INFO) << "Starting connection to" << address_ << ":" << port_
               << "(computer:" << computer_id_ << ")";
 
-    tcp_channel_ = new base::TcpChannel(this);
+    tcp_channel_ = new base::TcpChannel(nullptr, this);
 
     connect(tcp_channel_, &base::TcpChannel::sig_connected, this, &Instance::onTcpConnected);
-    connect(tcp_channel_, &base::TcpChannel::sig_disconnected, this, &Instance::onTcpDisconnected);
-    connect(tcp_channel_, &base::TcpChannel::sig_messageReceived, this, &Instance::onTcpMessageReceived);
+    connect(tcp_channel_, &base::TcpChannel::sig_errorOccurred, this, &Instance::onTcpErrorOccurred);
 
     tcp_channel_->connectTo(address_, port_);
 }
@@ -115,55 +111,14 @@ void OnlineCheckerDirect::Instance::onTcpConnected()
 {
     LOG(INFO) << "Connection to" << address_ << ":" << port_
               << "established (computer:" << computer_id_ << ")";
-
-    proto::key_exchange::ClientHello message;
-
-    message.set_encryption(proto::key_exchange::ENCRYPTION_CHACHA20_POLY1305);
-    message.set_identify(proto::key_exchange::IDENTIFY_SRP);
-
-    proto::peer::Version* version = message.mutable_version();
-    version->set_major(ASPIA_VERSION_MAJOR);
-    version->set_minor(ASPIA_VERSION_MINOR);
-    version->set_patch(ASPIA_VERSION_PATCH);
-    version->set_revision(GIT_COMMIT_COUNT);
-
-    tcp_channel_->resume();
-    tcp_channel_->send(proto::peer::CHANNEL_ID_SESSION, base::serialize(message));
+    onFinished(FROM_HERE, true);
 }
 
 //--------------------------------------------------------------------------------------------------
-void OnlineCheckerDirect::Instance::onTcpDisconnected(base::TcpChannel::ErrorCode /* error_code */)
+void OnlineCheckerDirect::Instance::onTcpErrorOccurred(base::TcpChannel::ErrorCode /* error_code */)
 {
     LOG(INFO) << "Connection aborted for computer:" << computer_id_;
     onFinished(FROM_HERE, false);
-}
-
-//--------------------------------------------------------------------------------------------------
-void OnlineCheckerDirect::Instance::onTcpMessageReceived(quint8 /* channel_id */, const QByteArray& buffer)
-{
-    proto::key_exchange::ServerHello message;
-
-    if (!base::parse(buffer, &message))
-    {
-        LOG(ERROR) << "Invalid message received";
-        return;
-    }
-
-    switch (message.encryption())
-    {
-        case proto::key_exchange::ENCRYPTION_CHACHA20_POLY1305:
-        {
-            LOG(INFO) << "Message received for computer:" << computer_id_;
-            onFinished(FROM_HERE, true);
-        }
-        break;
-
-        default:
-        {
-            LOG(ERROR) << "Invalid encryption method:" << message.encryption();
-        }
-        return;
-    }
 }
 
 //--------------------------------------------------------------------------------------------------

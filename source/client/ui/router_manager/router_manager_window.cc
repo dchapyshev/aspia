@@ -461,15 +461,13 @@ void RouterManagerWindow::connectToRouter(const RouterConfig& router_config)
             Qt::QueuedConnection);
     connect(router, &Router::sig_connected, this, &RouterManagerWindow::onConnected,
             Qt::QueuedConnection);
-    connect(router, &Router::sig_disconnected, this, &RouterManagerWindow::onDisconnected,
+    connect(router, &Router::sig_errorOccurred, this, &RouterManagerWindow::onErrorOccurred,
             Qt::QueuedConnection);
     connect(router, &Router::sig_waitForRouter, this, &RouterManagerWindow::onWaitForRouter,
             Qt::QueuedConnection);
     connect(router, &Router::sig_waitForRouterTimeout, this, &RouterManagerWindow::onWaitForRouterTimeout,
             Qt::QueuedConnection);
     connect(router, &Router::sig_versionMismatch, this, &RouterManagerWindow::onVersionMismatch,
-            Qt::QueuedConnection);
-    connect(router, &Router::sig_accessDenied, this, &RouterManagerWindow::onAccessDenied,
             Qt::QueuedConnection);
     connect(router, &Router::sig_sessionList, this, &RouterManagerWindow::onSessionList,
             Qt::QueuedConnection);
@@ -531,7 +529,7 @@ void RouterManagerWindow::onConnected(const QVersionNumber& peer_version)
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterManagerWindow::onDisconnected(base::TcpChannel::ErrorCode error_code)
+void RouterManagerWindow::onErrorOccurred(base::TcpChannel::ErrorCode error_code)
 {
     is_connected_ = false;
 
@@ -543,6 +541,19 @@ void RouterManagerWindow::onDisconnected(base::TcpChannel::ErrorCode error_code)
             break;
 
         case base::TcpChannel::ErrorCode::ACCESS_DENIED:
+            message = QT_TR_NOOP("An error occured while authenticating: wrong user name or password.");
+            break;
+
+        case base::TcpChannel::ErrorCode::VERSION_ERROR:
+            message = QT_TR_NOOP("Version of the application you are connecting to is less than "
+                                 " the minimum supported version.");
+            break;
+
+        case base::TcpChannel::ErrorCode::SESSION_DENIED:
+            message = QT_TR_NOOP("Specified session type is not allowed for the user.");
+            break;
+
+        case base::TcpChannel::ErrorCode::CRYPTO_ERROR:
             message = QT_TR_NOOP("Cryptography error (message encryption or decryption failed).");
             break;
 
@@ -613,46 +624,6 @@ void RouterManagerWindow::onVersionMismatch(const QVersionNumber& router, const 
                          "Please update the application.").arg(router_version, client_version);
 
     status_dialog_->addMessageAndActivate(tr("Error: %1").arg(message));
-}
-
-//--------------------------------------------------------------------------------------------------
-void RouterManagerWindow::onAccessDenied(base::Authenticator::ErrorCode error_code)
-{
-    const char* message;
-
-    switch (error_code)
-    {
-        case base::Authenticator::ErrorCode::SUCCESS:
-            message = QT_TR_NOOP("Authentication successfully completed.");
-            break;
-
-        case base::Authenticator::ErrorCode::NETWORK_ERROR:
-            message = QT_TR_NOOP("Network authentication error.");
-            break;
-
-        case base::Authenticator::ErrorCode::PROTOCOL_ERROR:
-            message = QT_TR_NOOP("Violation of the data exchange protocol.");
-            break;
-
-        case base::Authenticator::ErrorCode::VERSION_ERROR:
-            message = QT_TR_NOOP("Version of the application you are connecting to is less than "
-                                 " the minimum supported version.");
-            break;
-
-        case base::Authenticator::ErrorCode::ACCESS_DENIED:
-            message = QT_TR_NOOP("An error occured while authenticating: wrong user name or password.");
-            break;
-
-        case base::Authenticator::ErrorCode::SESSION_DENIED:
-            message = QT_TR_NOOP("Specified session type is not allowed for the user.");
-            break;
-
-        default:
-            message = QT_TR_NOOP("An unknown error occurred.");
-            break;
-    }
-
-    status_dialog_->addMessageAndActivate(tr("Error: %1").arg(tr(message)));
 }
 
 //--------------------------------------------------------------------------------------------------

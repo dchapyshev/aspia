@@ -58,9 +58,11 @@ RouterController::~RouterController()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterController::connectTo(base::HostId host_id, bool wait_for_host)
+void RouterController::connectTo(
+    base::HostId host_id, base::Authenticator* authenticator, bool wait_for_host)
 {
     host_id_ = host_id;
+    host_authenticator_.reset(authenticator);
     wait_for_host_ = wait_for_host;
 
     DCHECK_NE(host_id_, base::kInvalidHostId);
@@ -68,10 +70,20 @@ void RouterController::connectTo(base::HostId host_id, bool wait_for_host)
     LOG(INFO) << "Connecting to router... (host_id=" << host_id_ << "wait_for_host="
               << wait_for_host_ << ")";
 
-    router_channel_ = new base::TcpChannel(this);
+    base::ClientAuthenticator* router_authenticator = new base::ClientAuthenticator();
+    router_authenticator->setIdentify(proto::key_exchange::IDENTIFY_SRP);
+    router_authenticator->setUserName(router_config_.username);
+    router_authenticator->setPassword(router_config_.password);
+    router_authenticator->setSessionType(proto::router::SESSION_TYPE_CLIENT);
 
-    connect(router_channel_, &base::TcpChannel::sig_connected,
-            this, &RouterController::onTcpConnected);
+    router_channel_ = new base::TcpChannel(router_authenticator, this);
+
+    connect(router_channel_, &base::TcpChannel::sig_authenticated,
+            this, &RouterController::onTcpReady);
+    connect(router_channel_, &base::TcpChannel::sig_errorOccurred,
+            this, &RouterController::onTcpErrorOccurred);
+    connect(router_channel_, &base::TcpChannel::sig_messageReceived,
+            this, &RouterController::onTcpMessageReceived);
 
     router_channel_->connectTo(router_config_.address, router_config_.port);
 }
@@ -91,57 +103,21 @@ base::TcpChannel* RouterController::takeChannel()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterController::onTcpConnected()
+void RouterController::onTcpReady()
 {
     LOG(INFO) << "Connection to the router is established";
 
-    authenticator_ = new base::ClientAuthenticator(this);
+    emit sig_routerConnected(router_channel_->peerVersion());
 
-    authenticator_->setIdentify(proto::key_exchange::IDENTIFY_SRP);
-    authenticator_->setUserName(router_config_.username);
-    authenticator_->setPassword(router_config_.password);
-    authenticator_->setSessionType(proto::router::SESSION_TYPE_CLIENT);
+    LOG(INFO) << "Sending connection request (host_id:" << host_id_ << ")";
 
-    connect(authenticator_, &base::Authenticator::sig_finished,
-            this, [this](base::Authenticator::ErrorCode error_code)
-    {
-        if (error_code == base::Authenticator::ErrorCode::SUCCESS)
-        {
-            emit sig_routerConnected(authenticator_->peerVersion());
-
-            connect(router_channel_, &base::TcpChannel::sig_disconnected,
-                    this, &RouterController::onTcpDisconnected);
-            connect(router_channel_, &base::TcpChannel::sig_messageReceived,
-                    this, &RouterController::onTcpMessageReceived);
-
-            LOG(INFO) << "Sending connection request (host_id:" << host_id_ << ")";
-
-            // Now the session will receive incoming messages.
-            router_channel_->resume();
-
-            sendConnectionRequest();
-        }
-        else
-        {
-            LOG(ERROR) << "Authentication failed:" << error_code;
-
-            Error error;
-            error.type = ErrorType::AUTHENTICATION;
-            error.code.authentication = error_code;
-
-            emit sig_errorOccurred(error);
-        }
-
-        // Authenticator is no longer needed.
-        authenticator_->deleteLater();
-        authenticator_ = nullptr;
-    });
-
-    authenticator_->start(router_channel_);
+    // Now the session will receive incoming messages.
+    router_channel_->resume();
+    sendConnectionRequest();
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterController::onTcpDisconnected(base::TcpChannel::ErrorCode error_code)
+void RouterController::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code)
 {
     LOG(INFO) << "Connection to the router is lost (" << error_code << ")";
 
@@ -212,7 +188,7 @@ void RouterController::onTcpMessageReceived(quint8 /* channel_id */, const QByte
         }
         else
         {
-            relay_peer_ = new base::RelayPeer(this);
+            relay_peer_ = new base::RelayPeer(host_authenticator_.release(), this);
 
             connect(relay_peer_, &base::RelayPeer::sig_connectionError,
                     this, &RouterController::onRelayConnectionError);

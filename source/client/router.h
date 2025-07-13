@@ -21,7 +21,7 @@
 
 #include <QTimer>
 
-#include "base/peer/client_authenticator.h"
+#include "base/net/tcp_channel.h"
 #include "proto/router_admin.h"
 
 namespace client {
@@ -54,26 +54,24 @@ public:
 signals:
     void sig_connecting();
     void sig_connected(const QVersionNumber& peer_version);
-    void sig_disconnected(base::TcpChannel::ErrorCode error_code);
+    void sig_errorOccurred(base::TcpChannel::ErrorCode error_code);
     void sig_waitForRouter();
     void sig_waitForRouterTimeout();
     void sig_versionMismatch(const QVersionNumber& router, const QVersionNumber& client);
-    void sig_accessDenied(base::Authenticator::ErrorCode error_code);
     void sig_sessionList(std::shared_ptr<proto::router::SessionList> session_list);
     void sig_sessionResult(std::shared_ptr<proto::router::SessionResult> session_result);
     void sig_userList(std::shared_ptr<proto::router::UserList> user_list);
     void sig_userResult(std::shared_ptr<proto::router::UserResult> user_result);
 
 private slots:
-    void onTcpConnected();
-    void onTcpDisconnected(base::TcpChannel::ErrorCode error_code);
+    void onTcpReady();
+    void onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code);
     void onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer);
 
 private:
     QTimer* timeout_timer_ = nullptr;
     QTimer* reconnect_timer_ = nullptr;
     QPointer<base::TcpChannel> tcp_channel_;
-    QPointer<base::ClientAuthenticator> authenticator_;
 
     QString router_address_;
     quint16 router_port_ = 0;

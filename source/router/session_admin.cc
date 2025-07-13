@@ -29,8 +29,8 @@
 namespace router {
 
 //--------------------------------------------------------------------------------------------------
-SessionAdmin::SessionAdmin(QObject* parent)
-    : Session(proto::router::SESSION_TYPE_ADMIN, parent)
+SessionAdmin::SessionAdmin(base::TcpChannel* channel, QObject* parent)
+    : Session(channel, parent)
 {
     LOG(INFO) << "Ctor";
 }

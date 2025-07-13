@@ -21,6 +21,7 @@
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/version_constants.h"
+#include "base/peer/client_authenticator.h"
 #include "proto/router.h"
 
 namespace client {
@@ -93,8 +94,18 @@ void Router::connectToRouter(const QString& address, quint16 port)
 
     emit sig_connecting();
 
-    tcp_channel_ = new base::TcpChannel(this);
-    connect(tcp_channel_, &base::TcpChannel::sig_connected, this, &Router::onTcpConnected);
+    base::ClientAuthenticator* authenticator = new base::ClientAuthenticator(this);
+    authenticator->setIdentify(proto::key_exchange::IDENTIFY_SRP);
+    authenticator->setSessionType(proto::router::SESSION_TYPE_ADMIN);
+    authenticator->setUserName(router_username_);
+    authenticator->setPassword(router_password_);
+
+    tcp_channel_ = new base::TcpChannel(authenticator, this);
+
+    connect(tcp_channel_, &base::TcpChannel::sig_authenticated, this, &Router::onTcpReady);
+    connect(tcp_channel_, &base::TcpChannel::sig_errorOccurred, this, &Router::onTcpErrorOccurred);
+    connect(tcp_channel_, &base::TcpChannel::sig_messageReceived, this, &Router::onTcpMessageReceived);
+
     tcp_channel_->connectTo(router_address_, router_port_);
 }
 
@@ -235,7 +246,7 @@ void Router::disconnectPeerSession(qint64 relay_session_id, quint64 peer_session
 }
 
 //--------------------------------------------------------------------------------------------------
-void Router::onTcpConnected()
+void Router::onTcpReady()
 {
     LOG(INFO) << "Router connected";
 
@@ -243,60 +254,29 @@ void Router::onTcpConnected()
     reconnect_timer_->stop();
     timeout_timer_->stop();
 
-    authenticator_ = new base::ClientAuthenticator(this);
-    authenticator_->setIdentify(proto::key_exchange::IDENTIFY_SRP);
-    authenticator_->setSessionType(proto::router::SESSION_TYPE_ADMIN);
-    authenticator_->setUserName(router_username_);
-    authenticator_->setPassword(router_password_);
+    const QVersionNumber& router_version = tcp_channel_->peerVersion();
+    const QVersionNumber& client_version = base::kCurrentVersion;
 
-    connect(authenticator_, &base::Authenticator::sig_finished,
-            this, [this](base::Authenticator::ErrorCode error_code)
+    if (router_version > client_version)
     {
-        if (error_code == base::Authenticator::ErrorCode::SUCCESS)
-        {
-            LOG(INFO) << "Successful authentication";
+        LOG(ERROR) << "Version mismatch (router:" << router_version.toString()
+        << "client:" << client_version.toString();
+        emit sig_versionMismatch(router_version, client_version);
+    }
+    else
+    {
+        emit sig_connected(router_version);
 
-            connect(tcp_channel_, &base::TcpChannel::sig_disconnected,
-                    this, &Router::onTcpDisconnected);
-            connect(tcp_channel_, &base::TcpChannel::sig_messageReceived,
-                    this, &Router::onTcpMessageReceived);
-
-            const QVersionNumber& router_version = authenticator_->peerVersion();
-            const QVersionNumber& client_version = base::kCurrentVersion;
-
-            if (router_version > client_version)
-            {
-                LOG(ERROR) << "Version mismatch (router:" << router_version.toString()
-                           << "client:" << client_version.toString();
-                emit sig_versionMismatch(router_version, client_version);
-            }
-            else
-            {
-                emit sig_connected(router_version);
-
-                // Now the session will receive incoming messages.
-                tcp_channel_->resume();
-            }
-        }
-        else
-        {
-            LOG(INFO) << "Failed authentication:" << error_code;
-            emit sig_accessDenied(error_code);
-        }
-
-        // Authenticator is no longer needed.
-        authenticator_->deleteLater();
-        authenticator_ = nullptr;
-    });
-
-    authenticator_->start(tcp_channel_);
+        // Now the session will receive incoming messages.
+        tcp_channel_->resume();
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
-void Router::onTcpDisconnected(base::TcpChannel::ErrorCode error_code)
+void Router::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code)
 {
     LOG(INFO) << "Router disconnected:" << error_code;
-    emit sig_disconnected(error_code);
+    emit sig_errorOccurred(error_code);
 
     if (isAutoReconnect())
     {

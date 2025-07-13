@@ -27,7 +27,6 @@
 #include "client/router_config.h"
 
 namespace base {
-class ClientAuthenticator;
 class Location;
 } // namespace base
 
@@ -55,8 +54,8 @@ signals:
     void sig_checkerFinished();
 
 private slots:
-    void onTcpConnected();
-    void onTcpDisconnected(base::TcpChannel::ErrorCode error_code);
+    void onTcpReady();
+    void onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code);
     void onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer);
 
 private:
@@ -64,7 +63,6 @@ private:
     void onFinished(const base::Location& location);
 
     QPointer<base::TcpChannel> tcp_channel_;
-    QPointer<base::ClientAuthenticator> authenticator_;
     QTimer timer_;
     RouterConfig router_config_;
 

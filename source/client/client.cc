@@ -31,6 +31,7 @@ namespace client {
 namespace {
 
 auto g_statusType = qRegisterMetaType<client::Client::Status>();
+static const size_t kReadBufferSize = 2 * 1024 * 1024; // 2 Mb.
 
 } // namespace
 
@@ -114,6 +115,15 @@ void Client::start()
 
     Config config = session_state_->config();
 
+    std::unique_ptr<base::ClientAuthenticator> authenticator =
+        std::make_unique<base::ClientAuthenticator>();
+
+    authenticator->setIdentify(proto::key_exchange::IDENTIFY_SRP);
+    authenticator->setUserName(session_state_->hostUserName());
+    authenticator->setPassword(session_state_->hostPassword());
+    authenticator->setSessionType(static_cast<quint32>(session_state_->sessionType()));
+    authenticator->setDisplayName(session_state_->displayName());
+
     if (base::isHostId(config.address_or_id))
     {
         LOG(INFO) << "Starting RELAY connection";
@@ -143,7 +153,8 @@ void Client::start()
         }
 
         emit sig_statusChanged(Status::ROUTER_CONNECTING);
-        router_controller_->connectTo(base::stringToHostId(config.address_or_id), reconnecting);
+        router_controller_->connectTo(
+            base::stringToHostId(config.address_or_id), authenticator.release(), reconnecting);
     }
     else
     {
@@ -156,9 +167,13 @@ void Client::start()
         }
 
         // Create a network channel for messaging.
-        tcp_channel_ = new base::TcpChannel(this);
+        tcp_channel_ = new base::TcpChannel(authenticator.release(), this);
+        tcp_channel_->setReadBufferSize(kReadBufferSize);
 
-        connect(tcp_channel_, &base::TcpChannel::sig_connected, this, &Client::onTcpConnected);
+        connect(tcp_channel_, &base::TcpChannel::sig_authenticated, this, &Client::onTcpReady);
+        connect(tcp_channel_, &base::TcpChannel::sig_errorOccurred, this, &Client::onTcpErrorOccurred);
+        connect(tcp_channel_, &base::TcpChannel::sig_messageReceived, this, &Client::onTcpMessageReceived);
+        connect(tcp_channel_, &base::TcpChannel::sig_messageWritten, this, &Client::onTcpMessageWritten);
 
         // Now connect to the host.
         emit sig_statusChanged(Status::HOST_CONNECTING);
@@ -234,14 +249,14 @@ int Client::speedTx()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::onTcpConnected()
+void Client::onTcpReady()
 {
     LOG(INFO) << "Connection established";
-    startAuthentication();
+    channelReady();
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::onTcpDisconnected(base::TcpChannel::ErrorCode error_code)
+void Client::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code)
 {
     LOG(INFO) << "Connection terminated:" << error_code;
 
@@ -341,7 +356,11 @@ void Client::onHostConnected()
     tcp_channel_ = router_controller_->takeChannel();
     tcp_channel_->setParent(this);
 
-    startAuthentication();
+    connect(tcp_channel_, &base::TcpChannel::sig_errorOccurred, this, &Client::onTcpErrorOccurred);
+    connect(tcp_channel_, &base::TcpChannel::sig_messageReceived, this, &Client::onTcpMessageReceived);
+    connect(tcp_channel_, &base::TcpChannel::sig_messageWritten, this, &Client::onTcpMessageWritten);
+
+    channelReady();
 
     // Router controller is no longer needed.
     LOG(INFO) << "Post task to destroy router controller";
@@ -366,80 +385,39 @@ void Client::onRouterErrorOccurred(const RouterController::Error& error)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::startAuthentication()
+void Client::delayedReconnect()
 {
-    LOG(INFO) << "Start authentication for" << session_state_->hostUserName();
+    reconnect_timer_->start(std::chrono::seconds(5));
+}
 
+//--------------------------------------------------------------------------------------------------
+void Client::channelReady()
+{
     session_state_->setReconnecting(false);
     reconnect_timer_->stop();
     timeout_timer_->stop();
 
-    static const size_t kReadBufferSize = 2 * 1024 * 1024; // 2 Mb.
+    const QVersionNumber& host_version = tcp_channel_->peerVersion();
+    session_state_->setHostVersion(host_version);
 
-    tcp_channel_->setReadBufferSize(kReadBufferSize);
-
-    authenticator_ = new base::ClientAuthenticator(this);
-    authenticator_->setIdentify(proto::key_exchange::IDENTIFY_SRP);
-    authenticator_->setUserName(session_state_->hostUserName());
-    authenticator_->setPassword(session_state_->hostPassword());
-    authenticator_->setSessionType(static_cast<quint32>(session_state_->sessionType()));
-    authenticator_->setDisplayName(session_state_->displayName());
-
-    connect(authenticator_, &base::Authenticator::sig_finished,
-            this, [this](base::Authenticator::ErrorCode error_code)
+    const QVersionNumber& client_version = base::kCurrentVersion;
+    if (host_version > client_version)
     {
-        if (error_code == base::Authenticator::ErrorCode::SUCCESS)
-        {
-            LOG(INFO) << "Successful authentication";
+        LOG(ERROR) << "Version mismatch. Host:" << host_version << "Client:" << client_version;
+        emit sig_statusChanged(Status::VERSION_MISMATCH);
+        return;
+    }
 
-            connect(tcp_channel_, &base::TcpChannel::sig_disconnected,
-                    this, &Client::onTcpDisconnected);
-            connect(tcp_channel_, &base::TcpChannel::sig_messageReceived,
-                    this, &Client::onTcpMessageReceived);
-            connect(tcp_channel_, &base::TcpChannel::sig_messageWritten,
-                    this, &Client::onTcpMessageWritten);
+    emit sig_statusChanged(Status::HOST_CONNECTED);
 
-            const QVersionNumber& host_version = authenticator_->peerVersion();
-            session_state_->setHostVersion(host_version);
+    // Signal that everything is ready to start the session (connection established,
+    // authentication passed).
+    onSessionStarted();
 
-            const QVersionNumber& client_version = base::kCurrentVersion;
-            if (host_version > client_version)
-            {
-                LOG(ERROR) << "Version mismatch. Host:" << host_version.toString()
-                           << "Client:" << client_version.toString();
-                emit sig_statusChanged(Status::VERSION_MISMATCH);
-            }
-            else
-            {
-                emit sig_statusChanged(Status::HOST_CONNECTED);
+    emit sig_showSessionWindow();
 
-                // Signal that everything is ready to start the session (connection established,
-                // authentication passed).
-                onSessionStarted();
-
-                emit sig_showSessionWindow();
-
-                // Now the session will receive incoming messages.
-                tcp_channel_->resume();
-            }
-        }
-        else
-        {
-            LOG(INFO) << "Failed authentication:" << error_code;
-            emit sig_statusChanged(Status::ACCESS_DENIED, QVariant::fromValue(error_code));
-        }
-
-        // Authenticator is no longer needed.
-        authenticator_->deleteLater();
-    });
-
-    authenticator_->start(std::move(tcp_channel_));
-}
-
-//--------------------------------------------------------------------------------------------------
-void Client::delayedReconnect()
-{
-    reconnect_timer_->start(std::chrono::seconds(5));
+    // Now the session will receive incoming messages.
+    tcp_channel_->resume();
 }
 
 } // namespace client

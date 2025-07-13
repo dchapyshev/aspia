@@ -22,14 +22,9 @@
 #include <QTimer>
 
 #include "base/net/tcp_channel.h"
-#include "base/peer/authenticator.h"
 #include "base/peer/host_id.h"
 #include "base/peer/relay_peer.h"
 #include "client/router_config.h"
-
-namespace base {
-class ClientAuthenticator;
-} // namespace base
 
 namespace client {
 
@@ -41,7 +36,6 @@ public:
     enum class ErrorType
     {
         NETWORK,
-        AUTHENTICATION,
         ROUTER
     };
     Q_ENUM(ErrorType)
@@ -64,7 +58,6 @@ public:
         union Code
         {
             base::TcpChannel::ErrorCode network;
-            base::Authenticator::ErrorCode authentication;
             ErrorCode router;
         } code;
     };
@@ -72,7 +65,7 @@ public:
     explicit RouterController(const RouterConfig& router_config, QObject* parent = nullptr);
     ~RouterController() final;
 
-    void connectTo(base::HostId host_id, bool wait_for_host);
+    void connectTo(base::HostId host_id, base::Authenticator* authenticator, bool wait_for_host);
     base::TcpChannel* takeChannel();
 
 signals:
@@ -82,8 +75,8 @@ signals:
     void sig_errorOccurred(const client::RouterController::Error& error);
 
 private slots:
-    void onTcpConnected();
-    void onTcpDisconnected(base::TcpChannel::ErrorCode error_code);
+    void onTcpReady();
+    void onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code);
     void onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer);
     void onRelayConnectionReady();
     void onRelayConnectionError();
@@ -93,7 +86,6 @@ private:
     void waitForHost();
 
     QPointer<base::TcpChannel> router_channel_ = nullptr;
-    QPointer<base::ClientAuthenticator> authenticator_ = nullptr;
     QTimer* status_request_timer_ = nullptr;
     QPointer<base::RelayPeer> relay_peer_ = nullptr;
     RouterConfig router_config_;
@@ -101,6 +93,7 @@ private:
     base::HostId host_id_ = base::kInvalidHostId;
     bool wait_for_host_ = false;
 
+    std::unique_ptr<base::Authenticator> host_authenticator_;
     base::TcpChannel* host_channel_ = nullptr;
 
     Q_DISABLE_COPY(RouterController)

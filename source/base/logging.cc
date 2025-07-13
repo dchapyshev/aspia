@@ -18,6 +18,12 @@
 
 #include "base/logging.h"
 
+#include <QDateTime>
+#include <QFile>
+#include <QDir>
+#include <QMutex>
+#include <QThread>
+
 #include "base/debug.h"
 
 #if defined(Q_OS_WINDOWS)
@@ -37,12 +43,6 @@
 #include <mach-o/dyld.h>
 #include <sys/syslimits.h>
 #endif // defined(Q_OS_MACOS)
-
-#include <QDateTime>
-#include <QFile>
-#include <QDir>
-#include <QMutex>
-#include <QThread>
 
 namespace base {
 

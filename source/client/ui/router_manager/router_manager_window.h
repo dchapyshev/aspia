@@ -23,7 +23,6 @@
 #include <QPointer>
 #include <QVersionNumber>
 
-#include "base/peer/authenticator.h"
 #include "base/net/tcp_channel.h"
 #include "client/router_config.h"
 #include "proto/router_admin.h"
@@ -54,11 +53,10 @@ public:
 public slots:
     void onConnecting();
     void onConnected(const QVersionNumber& peer_version);
-    void onDisconnected(base::TcpChannel::ErrorCode error_code);
+    void onErrorOccurred(base::TcpChannel::ErrorCode error_code);
     void onWaitForRouter();
     void onWaitForRouterTimeout();
     void onVersionMismatch(const QVersionNumber& router, const QVersionNumber& client);
-    void onAccessDenied(base::Authenticator::ErrorCode error_code);
     void onSessionList(std::shared_ptr<proto::router::SessionList> session_list);
     void onSessionResult(std::shared_ptr<proto::router::SessionResult> session_result);
     void onUserList(std::shared_ptr<proto::router::UserList> user_list);

@@ -29,8 +29,8 @@
 namespace router {
 
 //--------------------------------------------------------------------------------------------------
-SessionClient::SessionClient(QObject* parent)
-    : Session(proto::router::SESSION_TYPE_CLIENT, parent)
+SessionClient::SessionClient(base::TcpChannel* channel, QObject* parent)
+    : Session(channel, parent)
 {
     LOG(INFO) << "Ctor";
 }
