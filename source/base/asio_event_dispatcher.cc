@@ -243,7 +243,13 @@ void AsioEventDispatcher::scheduleNextTimer()
     timer_.async_wait([this, timer_id](const std::error_code& error_code)
     {
         if (error_code)
+        {
+            if (error_code == asio::error::operation_aborted)
+                return;
+
+            LOG(ERROR) << "Timer error:" << error_code;
             return;
+        }
 
         auto it = findTimer(timer_id);
         if (it == timers_.end())
