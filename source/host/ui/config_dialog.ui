@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>448</width>
-    <height>554</height>
+    <width>451</width>
+    <height>588</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -509,6 +509,12 @@
             <iconset resource="../../common/resources/common.qrc">
              <normaloff>:/img/add.svg</normaloff>:/img/add.svg</iconset>
            </property>
+           <property name="iconSize">
+            <size>
+             <width>24</width>
+             <height>24</height>
+            </size>
+           </property>
           </widget>
          </item>
          <item>
@@ -529,6 +535,12 @@
             <iconset resource="../../common/resources/common.qrc">
              <normaloff>:/img/pencil-drawing.svg</normaloff>:/img/pencil-drawing.svg</iconset>
            </property>
+           <property name="iconSize">
+            <size>
+             <width>24</width>
+             <height>24</height>
+            </size>
+           </property>
           </widget>
          </item>
          <item>
@@ -548,6 +560,12 @@
            <property name="icon">
             <iconset resource="../../common/resources/common.qrc">
              <normaloff>:/img/cancel.svg</normaloff>:/img/cancel.svg</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>24</width>
+             <height>24</height>
+            </size>
            </property>
           </widget>
          </item>

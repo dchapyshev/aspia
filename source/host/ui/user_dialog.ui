@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>394</width>
-    <height>286</height>
+    <height>296</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -100,6 +100,12 @@
           <iconset resource="../../common/resources/common.qrc">
            <normaloff>:/img/check-all.svg</normaloff>:/img/check-all.svg</iconset>
          </property>
+         <property name="iconSize">
+          <size>
+           <width>24</width>
+           <height>24</height>
+          </size>
+         </property>
         </widget>
        </item>
        <item>
@@ -120,6 +126,12 @@
           <iconset resource="../../common/resources/common.qrc">
            <normaloff>:/img/uncheck-all.svg</normaloff>:/img/uncheck-all.svg</iconset>
          </property>
+         <property name="iconSize">
+          <size>
+           <width>24</width>
+           <height>24</height>
+          </size>
+         </property>
         </widget>
        </item>
        <item>
@@ -139,6 +151,12 @@
      </item>
      <item>
       <widget class="QTreeWidget" name="tree_sessions">
+       <property name="iconSize">
+        <size>
+         <width>24</width>
+         <height>24</height>
+        </size>
+       </property>
        <property name="indentation">
         <number>0</number>
        </property>
