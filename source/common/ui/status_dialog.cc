@@ -65,7 +65,7 @@ void StatusDialog::addMessage(const QString& message)
 //--------------------------------------------------------------------------------------------------
 void StatusDialog::addMessageAndActivate(const QString& message)
 {
-    if (isHidden())
+    if (!isVisible())
     {
         LOG(INFO) << "Window is hidden. Show and activate";
         show();

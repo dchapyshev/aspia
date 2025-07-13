@@ -210,7 +210,7 @@ void SessionWindow::onStatusChanged(Client::Status status, const QVariant& data)
                     .arg(session_state_->hostAddress()).arg(session_state_->hostPort()));
             }
 
-            status_dialog_->hide();
+            status_dialog_->setVisible(false);
         }
         break;
 
