@@ -20,7 +20,6 @@
 #define CONSOLE_APPLICATION_H
 
 #include "base/gui_application.h"
-#include "console/settings.h"
 
 namespace console {
 
@@ -34,8 +33,6 @@ public:
 
     static Application* instance();
 
-    Settings& settings() { return settings_; }
-
 public slots:
     void activateWindow();
     void openFile(const QString& file_path);
@@ -45,7 +42,6 @@ signals:
     void sig_fileOpened(const QString& file_path);
 
 private:
-    Settings settings_;
     Q_DISABLE_COPY(Application)
 };
 

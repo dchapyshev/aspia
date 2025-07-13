@@ -23,6 +23,7 @@
 #include "base/logging.h"
 #include "build/build_config.h"
 #include "build/version.h"
+#include "console/settings.h"
 
 namespace console {
 
@@ -65,13 +66,15 @@ Application::Application(int& argc, char* argv[])
         }
     });
 
-    if (!hasLocale(settings_.locale()))
+    Settings settings;
+
+    if (!hasLocale(settings.locale()))
     {
         LOG(INFO) << "Set default locale";
-        settings_.setLocale(DEFAULT_LOCALE);
+        settings.setLocale(DEFAULT_LOCALE);
     }
 
-    setLocale(settings_.locale());
+    setLocale(settings.locale());
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -25,8 +25,6 @@
 #include "base/net/address.h"
 #include "build/build_config.h"
 #include "client/config_factory.h"
-#include "client/router_config_storage.h"
-#include "client/ui/client_settings.h"
 #include "client/ui/desktop/desktop_config_dialog.h"
 #include "client/ui/desktop/desktop_session_window.h"
 #include "client/ui/file_transfer/file_transfer_session_window.h"
@@ -35,8 +33,8 @@
 #include "client/ui/text_chat/text_chat_session_window.h"
 #include "common/desktop_session_constants.h"
 #include "common/ui/session_type.h"
-#include "console/application.h"
 #include "console/computer_factory.h"
+#include "console/settings.h"
 
 namespace console {
 
@@ -386,7 +384,7 @@ void FastConnectDialog::onButtonBoxClicked(QAbstractButton* button)
 //--------------------------------------------------------------------------------------------------
 void FastConnectDialog::readState()
 {
-    QDataStream stream(Application::instance()->settings().fastConnectConfig(address_book_guid_));
+    QDataStream stream(Settings().fastConnectConfig(address_book_guid_));
     stream.setVersion(QDataStream::Qt_5_15);
 
     int session_type = 0;
@@ -461,7 +459,7 @@ void FastConnectDialog::writeState()
                << creds_from_address_book << session_params_from_address_book << port_forwarding_config;
     }
 
-    Application::instance()->settings().setFastConnectConfig(address_book_guid_, buffer);
+    Settings().setFastConnectConfig(address_book_guid_, buffer);
 }
 
 } // namespace console

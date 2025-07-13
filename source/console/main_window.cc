@@ -41,6 +41,7 @@
 #include "console/import_export_util.h"
 #include "console/mru_action.h"
 #include "console/update_settings_dialog.h"
+#include "console/settings.h"
 #include "common/ui/update_dialog.h"
 
 namespace console {
@@ -50,7 +51,7 @@ MainWindow::MainWindow(const QString& file_path)
 {
     LOG(INFO) << "Ctor";
 
-    Settings& settings = Application::instance()->settings();
+    Settings settings;
     Application::instance()->setAttribute(
         Qt::AA_DontShowIconsInMenus, !settings.showIconsInMenus());
 
@@ -151,7 +152,7 @@ MainWindow::MainWindow(const QString& file_path)
     {
         Application* instance = Application::instance();
         instance->setAttribute(Qt::AA_DontShowIconsInMenus, !enable);
-        instance->settings().setShowIconsInMenus(enable);
+        Settings().setShowIconsInMenus(enable);
     });
 
     connect(ui.tool_bar, &QToolBar::visibilityChanged, ui.action_toolbar, &QAction::setChecked);
@@ -163,7 +164,7 @@ MainWindow::MainWindow(const QString& file_path)
     connect(ui.action_large_icons, &QAction::toggled, this, [this](bool enable)
     {
         ui.tool_bar->setIconSize(enable ? QSize(32, 32) : QSize(24, 24));
-        Application::instance()->settings().setLargeIcons(enable);
+        Settings().setLargeIcons(enable);
     });
 
     QActionGroup* session_type_group = new QActionGroup(this);
@@ -328,7 +329,7 @@ void MainWindow::onOpen()
 {
     LOG(INFO) << "[ACTION] Open address book";
 
-    Settings& settings = Application::instance()->settings();
+    Settings settings;
 
     QString file_path =
         QFileDialog::getOpenFileName(this,
@@ -353,7 +354,7 @@ void MainWindow::onSave()
     AddressBookTab* tab = currentAddressBookTab();
     if (tab && tab->save())
     {
-        if (Application::instance()->settings().isRecentOpenEnabled())
+        if (Settings().isRecentOpenEnabled())
         {
             if (mru_.addRecentFile(tab->filePath()))
                 rebuildMruMenu();
@@ -382,7 +383,7 @@ void MainWindow::onSaveAs()
             std::unique_ptr<AddressBookTab> duplicate_tab(tab->duplicateTab());
             if (duplicate_tab->saveAs())
             {
-                if (Application::instance()->settings().isRecentOpenEnabled())
+                if (Settings().isRecentOpenEnabled())
                 {
                     const QString& new_path = duplicate_tab->filePath();
                     if (mru_.addRecentFile(new_path))
@@ -394,7 +395,7 @@ void MainWindow::onSaveAs()
         }
         else if (tab->saveAs())
         {
-            if (Application::instance()->settings().isRecentOpenEnabled())
+            if (Settings().isRecentOpenEnabled())
             {
                 const QString& new_path = tab->filePath();
                 if (mru_.addRecentFile(new_path))
@@ -741,7 +742,7 @@ void MainWindow::onCheckUpdates()
 {
 #if defined(Q_OS_WINDOWS)
     LOG(INFO) << "[ACTION] Check for updates";
-    common::UpdateDialog(Application::instance()->settings().updateServer(),"console", this).exec();
+    common::UpdateDialog(Settings().updateServer(),"console", this).exec();
 #endif
 }
 
@@ -1327,7 +1328,7 @@ void MainWindow::onLanguageChanged(QAction* action)
 
     QString new_locale = static_cast<common::LanguageAction*>(action)->locale();
 
-    application->settings().setLocale(new_locale);
+    Settings().setLocale(new_locale);
     application->setLocale(new_locale);
 
     ui.retranslateUi(this);
@@ -1359,11 +1360,11 @@ void MainWindow::onRecentOpenTriggered(QAction* action)
             rebuildMruMenu();
         }
 
-        Application::instance()->settings().setRecentOpenEnabled(action->isChecked());
+        Settings().setRecentOpenEnabled(action->isChecked());
     }
     else if (action == ui.action_remember_last)
     {
-        Application::instance()->settings().setRecentOpenEnabled(true);
+        Settings().setRecentOpenEnabled(true);
     }
     else
     {
@@ -1456,7 +1457,7 @@ void MainWindow::closeEvent(QCloseEvent* event)
         }
     }
 
-    Settings& settings = Application::instance()->settings();
+    Settings settings;
 
     settings.setToolBarEnabled(ui.action_toolbar->isChecked());
     settings.setStatusBarEnabled(ui.action_statusbar->isChecked());
@@ -1603,7 +1604,7 @@ void MainWindow::addAddressBookTab(AddressBookTab* new_tab)
 
     const QString& file_path = new_tab->filePath();
 
-    if (Application::instance()->settings().isRecentOpenEnabled())
+    if (Settings().isRecentOpenEnabled())
     {
         if (mru_.addRecentFile(file_path))
             rebuildMruMenu();
