@@ -399,8 +399,8 @@ void DesktopSessionWindow::onCapabilitiesChanged(const proto::desktop::Capabilit
     video_encodings_ = capabilities.video_encodings();
 
     // The list of extensions is passed as a string. Extensions are separated by a semicolon.
-    QStringList extensions =
-        QString::fromStdString(capabilities.extensions()).split(';', Qt::SkipEmptyParts);
+    QList<QStringView> extensions =
+        QStringView(QString::fromStdString(capabilities.extensions())).split(';', Qt::SkipEmptyParts);
 
     // By default, remote update is disabled.
     toolbar_->enableRemoteUpdate(false);
