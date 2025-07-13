@@ -114,8 +114,7 @@ void AsioEventDispatcher::registerTimer(
     const TimePoint start_time = Clock::now();
     const TimePoint end_time = start_time + Milliseconds(interval);
 
-    timers_.emplace(std::make_pair(
-        timer_id, TimerData(Milliseconds(interval), type, object, start_time, end_time)));
+    timers_.emplace(timer_id, TimerData(Milliseconds(interval), type, object, start_time, end_time));
 
     scheduleNextTimer();
 }
