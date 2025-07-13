@@ -84,10 +84,11 @@ void removeOldFiles(const QString& path, qint64 max_file_age)
     QDateTime time = QDateTime::currentDateTime().addDays(-max_file_age);
     QDir current_dir(path);
 
-    QFileInfoList files = current_dir.entryInfoList();
+    QFileInfoList files = current_dir.entryInfoList(
+        QStringList() << "*.log", QDir::Files | QDir::NoSymLinks | QDir::NoDotAndDotDot);
     for (const auto& file : std::as_const(files))
     {
-        if (file.birthTime() < time)
+        if (file.lastModified() < time)
             QFile::remove(file.filePath());
     }
 }
