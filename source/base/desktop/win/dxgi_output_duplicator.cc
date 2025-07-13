@@ -503,7 +503,7 @@ void DxgiOutputDuplicator::setup(Context* context)
     // Always copy entire monitor during the first duplicate() function call.
     context->updated_region += untranslatedDesktopRect();
     DCHECK(std::find(contexts_.begin(), contexts_.end(), context) == contexts_.end());
-    contexts_.push_back(context);
+    contexts_.emplace_back(context);
 }
 
 //--------------------------------------------------------------------------------------------------

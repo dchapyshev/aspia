@@ -331,7 +331,7 @@ void ClientSessionFileTransfer::onReceived(const QByteArray& buffer)
     else
     {
         // IPC channel not connected yet.
-        pending_messages_.push_back(buffer);
+        pending_messages_.emplace_back(buffer);
     }
 }
 

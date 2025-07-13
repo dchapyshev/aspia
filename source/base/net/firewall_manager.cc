@@ -273,7 +273,7 @@ void FirewallManager::allRules(QVector<Microsoft::WRL::ComPtr<INetFwRule>>* rule
         if (application_path_.compare(QString::fromWCharArray(bstr_path), Qt::CaseInsensitive) != 0)
             continue;
 
-        rules->push_back(rule);
+        rules->emplace_back(rule);
     }
 }
 

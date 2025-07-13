@@ -241,7 +241,7 @@ bool XmlSettings::readFunc(QIODevice& device, QSettings::SettingsMap& map)
                 if (name.isEmpty())
                     return false;
 
-                segments.append(name);
+                segments.emplace_back(name);
                 type = attributes.value(kTypeAttribute).toString();
             }
             break;

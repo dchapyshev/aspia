@@ -143,7 +143,7 @@ bool DxgiDuplicatorController::deviceNames(QStringList* output)
         for (const auto& duplicator : duplicators_)
         {
             for (int i = 0; i < duplicator.screenCount(); ++i)
-                output->push_back(duplicator.deviceName(i));
+                output->emplace_back(duplicator.deviceName(i));
         }
 
         return true;
@@ -304,7 +304,7 @@ bool DxgiDuplicatorController::doInitialize()
         }
 
         DCHECK(!duplicator.desktopRect().isEmpty());
-        duplicators_.push_back(std::move(duplicator));
+        duplicators_.emplace_back(std::move(duplicator));
 
         desktop_rect_ = desktop_rect_.united(duplicators_.back().desktopRect());
     }

@@ -44,7 +44,7 @@ void RelayPeerManager::addConnectionOffer(
     connect(peer, &RelayPeer::sig_connectionError, this, &RelayPeerManager::onRelayConnectionError);
     connect(peer, &RelayPeer::sig_connectionReady, this, &RelayPeerManager::onRelayConnectionReady);
 
-    pending_.push_back(peer);
+    pending_.emplace_back(peer);
     peer->start(offer);
 }
 
@@ -70,7 +70,7 @@ void RelayPeerManager::onRelayConnectionReady()
         TcpChannel* channel = peer->takeChannel();
         channel->setParent(this);
 
-        channels_.push_back(channel);
+        channels_.emplace_back(channel);
         emit sig_newPeerConnected();
     }
 

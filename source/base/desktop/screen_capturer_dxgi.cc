@@ -59,7 +59,7 @@ bool screenListFromDeviceNames(const QStringList& device_names,
         {
             if (gdi_screen.title == device_name)
             {
-                screen_list->screens.push_back(gdi_screen);
+                screen_list->screens.emplace_back(gdi_screen);
                 device_found = true;
                 break;
             }
@@ -71,8 +71,8 @@ bool screenListFromDeviceNames(const QStringList& device_names,
 
             // devices_names[i] has not been found in gdi_names, so use max_screen_id.
             ++max_screen_id;
-            screen_list->screens.push_back(
-                { max_screen_id, QString(), QPoint(), QSize(), QPoint(), false });
+            screen_list->screens.emplace_back(
+                max_screen_id, QString(), QPoint(), QSize(), QPoint(), false);
         }
         else
         {
@@ -162,8 +162,7 @@ bool ScreenCapturerDxgi::screenList(ScreenList* screens)
 
     for (const auto& screen : std::as_const(screens->screens))
     {
-        dpi_for_rect_.push_back(
-            std::make_pair(QRect(screen.position, screen.resolution), screen.dpi));
+        dpi_for_rect_.emplace_back(QRect(screen.position, screen.resolution), screen.dpi);
     }
 
     return result;

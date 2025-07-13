@@ -776,7 +776,7 @@ void AddressBookTab::startOnlineChecker()
         computer_to_check.address_or_id = QString::fromStdString(computer->address());
         computer_to_check.port = computer->port();
 
-        computers.push_back(std::move(computer_to_check));
+        computers.emplace_back(std::move(computer_to_check));
     }
 
     if (computers.empty())
@@ -1157,8 +1157,8 @@ void AddressBookTab::restoreState(const QByteArray& state)
     else
     {
         QList<int> sizes;
-        sizes.push_back(200);
-        sizes.push_back(width() - 200);
+        sizes.emplace_back(200);
+        sizes.emplace_back(width() - 200);
         ui.splitter->setSizes(sizes);
     }
 }

@@ -280,11 +280,11 @@ AddressBookDialog::AddressBookDialog(QWidget* parent,
         proto::peer::SESSION_TYPE_DESKTOP_VIEW, data_->root_group().config());
     port_forwarding_tab->restoreSettings(data_->root_group().config());
 
-    tabs_.append(general_tab);
-    tabs_.append(desktop_manage_tab);
-    tabs_.append(desktop_view_tab);
-    tabs_.append(port_forwarding_tab);
-    tabs_.append(parent_tab);
+    tabs_.emplace_back(general_tab);
+    tabs_.emplace_back(desktop_manage_tab);
+    tabs_.emplace_back(desktop_view_tab);
+    tabs_.emplace_back(port_forwarding_tab);
+    tabs_.emplace_back(parent_tab);
 
     QSize min_size;
 

@@ -159,7 +159,7 @@ QList<QTreeWidgetItem*> ComputerGroupItem::ComputerList()
     QList<QTreeWidgetItem*> list;
 
     for (int i = 0; i < computer_group_->computer_size(); ++i)
-        list.push_back(new ComputerItem(computer_group_->mutable_computer(i), this));
+        list.emplace_back(new ComputerItem(computer_group_->mutable_computer(i), this));
 
     return list;
 }

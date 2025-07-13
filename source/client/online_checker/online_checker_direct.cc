@@ -176,7 +176,7 @@ void OnlineCheckerDirect::start(const ComputerList& computers)
 
         LOG(INFO) << "Instance for" << computer.computer_id << "is created (address:"
                   << computer.address << "port:" << port << ")";
-        work_queue_.push_back(instance);
+        work_queue_.emplace_back(instance);
         pending_queue_.pop_front();
 
         --count;
@@ -203,7 +203,7 @@ void OnlineCheckerDirect::onChecked(int computer_id, bool online)
         LOG(INFO) << "Instance for" << computer.computer_id << "is created (address:"
                   << computer.address << "port:" << computer.port << ")";
 
-        work_queue_.push_back(instance);
+        work_queue_.emplace_back(instance);
         work_queue_.back()->start(std::bind(&OnlineCheckerDirect::onChecked, this,
                                             std::placeholders::_1, std::placeholders::_2));
         pending_queue_.pop_front();

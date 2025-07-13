@@ -181,7 +181,7 @@ QList<quint32> NotifierWindow::sessions(proto::peer::SessionType session_type)
     {
         SessionTreeItem* item = static_cast<SessionTreeItem*>(ui.tree->topLevelItem(i));
         if (item->sessionType() == session_type)
-            result.push_back(item->id());
+            result.emplace_back(item->id());
     }
 
     return result;

@@ -276,8 +276,8 @@ HRESULT FileObject::EnumFormatEtc(DWORD dwDirection, IEnumFORMATETC** ppEnum)
         TYMED_ISTREAM
     };
 
-    formats.push_back(file_group_descriptor_format);
-    formats.push_back(file_contents_format);
+    formats.emplace_back(file_group_descriptor_format);
+    formats.emplace_back(file_contents_format);
 
     *ppEnum = new FormatEnumerator(formats);
     return S_OK;

@@ -254,7 +254,7 @@ void UserSessionAgent::onIpcMessageReceived(const QByteArray& buffer)
     {
         LOG(INFO) << "Connect event received";
 
-        clients_.push_back(Client(incoming_message_->connect_event()));
+        clients_.emplace_back(incoming_message_->connect_event());
         emit sig_clientListChanged(clients_);
     }
     else if (incoming_message_->has_disconnect_event())

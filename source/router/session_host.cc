@@ -151,7 +151,7 @@ void SessionHost::readHostIdRequest(const proto::router::HostIdRequest& host_id_
 
                 if (!host_id_list_.contains(host_id))
                 {
-                    host_id_list_.push_back(host_id);
+                    host_id_list_.emplace_back(host_id);
                     removeOtherWithSameId();
                 }
             }

@@ -80,7 +80,7 @@ void FileRemoveQueueBuilder::onTaskDone(const common::FileTask& task)
         const proto::file_transfer::List::Item& item = reply.file_list().item(i);
         QString item_path = path + '/' + QString::fromStdString(item.name());
 
-        pending_tasks_.push_back(FileRemover::Task(std::move(item_path), item.is_directory()));
+        pending_tasks_.emplace_back(std::move(item_path), item.is_directory());
     }
 
     doPendingTasks();

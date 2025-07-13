@@ -372,7 +372,7 @@ void IpcServer::onNewConnection(size_t index, IpcChannel* channel)
 {
     LOG(INFO) << "New IPC connecting (channel_name" << channel_name_ << ")";
 
-    pending_.push_back(channel);
+    pending_.emplace_back(channel);
     emit sig_newConnection();
 }
 

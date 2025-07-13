@@ -39,8 +39,7 @@ QList<Session*> SessionManager::sessions() const
 //--------------------------------------------------------------------------------------------------
 void SessionManager::addSession(Session* session)
 {
-    sessions_.append(session);
-
+    sessions_.emplace_back(session);
     connect(session, &Session::sig_sessionFinished, this, &SessionManager::onSessionFinished);
 }
 

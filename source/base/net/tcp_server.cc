@@ -223,7 +223,7 @@ void TcpServer::doAccept()
             });
 
             // Connection accepted.
-            pending_.push_back(channel);
+            pending_.emplace_back(channel);
 
             // Start authentication.
             channel->doAuthentication();

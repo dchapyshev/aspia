@@ -38,7 +38,7 @@ std::string qualifiedCppTypeName(const std::string& full_name)
 void collectAllMessages(const google::protobuf::Descriptor* descriptor,
                         std::vector<const google::protobuf::Descriptor*>* messages)
 {
-    messages->push_back(descriptor);
+    messages->emplace_back(descriptor);
     for (int i = 0; i < descriptor->nested_type_count(); ++i)
         collectAllMessages(descriptor->nested_type(i), messages);
 }
@@ -56,14 +56,14 @@ void collectFileEnums(const google::protobuf::FileDescriptor* file,
                       std::vector<const google::protobuf::EnumDescriptor*>* enums)
 {
     for (int i = 0; i < file->enum_type_count(); ++i)
-        enums->push_back(file->enum_type(i));
+        enums->emplace_back(file->enum_type(i));
 
     for (int i = 0; i < file->message_type_count(); ++i)
     {
         const google::protobuf::Descriptor* msg = file->message_type(i);
 
         for (int j = 0; j < msg->enum_type_count(); ++j)
-            enums->push_back(msg->enum_type(j));
+            enums->emplace_back(msg->enum_type(j));
     }
 }
 

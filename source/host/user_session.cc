@@ -220,7 +220,7 @@ void UserSession::onClientSession(ClientSession* client_session)
                     this, &UserSession::onUnconfirmedSessionFinished, Qt::QueuedConnection);
 
             unconfirmed_client_session->setTimeout(auto_confirmation_interval_);
-            pending_clients_.push_back(unconfirmed_client_session);
+            pending_clients_.emplace_back(unconfirmed_client_session);
 
             if (ipc_channel_)
             {
@@ -880,7 +880,9 @@ void UserSession::addNewClientSession(ClientSession* client_session)
 {
     DCHECK(client_session);
 
-    switch (client_session->sessionType())
+    proto::peer::SessionType session_type = client_session->sessionType();
+
+    switch (session_type)
     {
         case proto::peer::SESSION_TYPE_DESKTOP_MANAGE:
         case proto::peer::SESSION_TYPE_DESKTOP_VIEW:
@@ -888,8 +890,6 @@ void UserSession::addNewClientSession(ClientSession* client_session)
             LOG(INFO) << "New desktop session (sid" << session_id_ << ")";
 
             bool enable_required = !hasDesktopClients();
-
-            clients_.append(client_session);
 
             ClientSessionDesktop* desktop_client = static_cast<ClientSessionDesktop*>(client_session);
 
@@ -936,32 +936,11 @@ void UserSession::addNewClientSession(ClientSession* client_session)
         break;
 
         case proto::peer::SESSION_TYPE_FILE_TRANSFER:
-        {
-            LOG(INFO) << "New file transfer session (sid" << session_id_ << ")";
-            clients_.append(std::move(client_session));
-        }
-        break;
-
         case proto::peer::SESSION_TYPE_SYSTEM_INFO:
-        {
-            LOG(INFO) << "New system info session (sid" << session_id_ << ")";
-            clients_.append(std::move(client_session));
-        }
-        break;
-
         case proto::peer::SESSION_TYPE_TEXT_CHAT:
-        {
-            LOG(INFO) << "New text chat session (sid" << session_id_ << ")";
-            clients_.append(std::move(client_session));
-        }
-        break;
-
         case proto::peer::SESSION_TYPE_PORT_FORWARDING:
-        {
-            LOG(INFO) << "New port forwarding session (sid" << session_id_ << ")";
-            clients_.append(std::move(client_session));
-        }
-        break;
+            LOG(INFO) << "New session:" << session_type << " (sid" << session_id_ << ")";
+            break;
 
         default:
         {
@@ -969,6 +948,8 @@ void UserSession::addNewClientSession(ClientSession* client_session)
             return;
         }
     }
+
+    clients_.emplace_back(client_session);
 
     connect(client_session, &ClientSession::sig_clientSessionConfigured,
             this, &UserSession::onClientSessionConfigured);
@@ -988,7 +969,7 @@ void UserSession::addNewClientSession(ClientSession* client_session)
     // Notify the UI of a new connection.
     sendConnectEvent(*client_session);
 
-    if (client_session->sessionType() == proto::peer::SESSION_TYPE_TEXT_CHAT)
+    if (session_type == proto::peer::SESSION_TYPE_TEXT_CHAT)
     {
         onTextChatSessionStarted(client_session->id());
 

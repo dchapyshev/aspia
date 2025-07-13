@@ -203,7 +203,7 @@ BOOL CALLBACK Desktop::enumDesktopProc(LPWSTR desktop, LPARAM lparam)
         return FALSE;
     }
 
-    list->append(QString::fromWCharArray(desktop));
+    list->emplace_back(QString::fromWCharArray(desktop));
     return TRUE;
 }
 

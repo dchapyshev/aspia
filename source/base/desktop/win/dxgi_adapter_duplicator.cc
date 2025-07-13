@@ -111,7 +111,7 @@ DxgiAdapterDuplicator::ErrorCode DxgiAdapterDuplicator::doInitialize()
                     return ErrorCode::CRITICAL_ERROR;
                 }
 
-                duplicators_.push_back(std::move(duplicator));
+                duplicators_.emplace_back(std::move(duplicator));
 
                 desktop_rect_ = desktop_rect_.united(duplicators_.back().desktopRect());
             }

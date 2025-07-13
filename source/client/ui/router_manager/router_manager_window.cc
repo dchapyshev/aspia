@@ -1693,8 +1693,8 @@ void RouterManagerWindow::restoreState(const QByteArray& state)
         int side_size = height() / 2;
 
         QList<int> sizes;
-        sizes.push_back(side_size);
-        sizes.push_back(side_size);
+        sizes.emplace_back(side_size);
+        sizes.emplace_back(side_size);
         ui->splitter_relay_hori->setSizes(sizes);
     }
 

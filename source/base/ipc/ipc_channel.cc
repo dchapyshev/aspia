@@ -239,7 +239,7 @@ void IpcChannel::send(const QByteArray& buffer)
     const bool schedule_write = write_queue_.empty();
 
     // Add the buffer to the queue for sending.
-    write_queue_.push_back(buffer);
+    write_queue_.emplace_back(buffer);
 
     if (schedule_write)
         doWriteSize();

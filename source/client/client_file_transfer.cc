@@ -133,7 +133,7 @@ void ClientFileTransfer::onTask(const common::FileTask& task)
         const bool schedule = remote_task_queue_.isEmpty();
 
         // Add the request to the queue.
-        remote_task_queue_.push_back(task);
+        remote_task_queue_.emplace_back(task);
 
         // If the request queue was empty, then run execution.
         if (schedule)

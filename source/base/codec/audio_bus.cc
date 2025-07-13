@@ -295,7 +295,7 @@ void AudioBus::BuildChannelData(int channels, int aligned_frames, float* data)
     // Initialize |channel_data_| with pointers into |data|.
     channel_data_.reserve(channels);
     for (int i = 0; i < channels; ++i)
-        channel_data_.push_back(data + i * aligned_frames);
+        channel_data_.emplace_back(data + i * aligned_frames);
 }
 
 //--------------------------------------------------------------------------------------------------

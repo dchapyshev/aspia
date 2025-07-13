@@ -416,7 +416,7 @@ void FilePanel::removeSelected()
     FileRemover::TaskList items;
 
     for (const auto& index : std::as_const(selected_rows))
-        items.push_back(FileRemover::Task(current_path + model->nameAt(index), model->isFolder(index)));
+        items.emplace_back(current_path + model->nameAt(index), model->isFolder(index));
 
     if (items.isEmpty())
         return;
@@ -447,10 +447,7 @@ void FilePanel::sendSelected()
     QList<FileTransfer::Item> items;
 
     for (const auto& index : std::as_const(selected_rows))
-    {
-        items.push_back(FileTransfer::Item(
-            model->nameAt(index), model->sizeAt(index), model->isFolder(index)));
-    }
+        items.emplace_back(model->nameAt(index), model->sizeAt(index), model->isFolder(index));
 
     if (items.isEmpty())
         return;

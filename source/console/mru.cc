@@ -39,7 +39,7 @@ QStringList normalizedFileList(const QStringList& source_list)
     QStringList result;
 
     for (const auto& file : source_list)
-        result.push_back(normalizedFilePath(file));
+        result.emplace_back(normalizedFilePath(file));
 
     return result;
 }
@@ -102,7 +102,7 @@ void Mru::pinFile(const QString& file_path)
     if (isPinnedFile(normalized_path))
         return;
 
-    pinned_list_.push_back(normalized_path);
+    pinned_list_.emplace_back(normalized_path);
 }
 
 //--------------------------------------------------------------------------------------------------

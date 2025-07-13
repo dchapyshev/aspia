@@ -156,7 +156,7 @@ std::shared_ptr<MouseCursor> CursorDecoder::decode(const proto::desktop::CursorS
         }
 
         // Add the cursor to the end of the list.
-        cache_.push_back(std::move(mouse_cursor));
+        cache_.emplace_back(std::move(mouse_cursor));
 
         // If the current cache size exceeds the maximum cache size.
         if (cache_.size() > cache_size_.value())

@@ -182,7 +182,7 @@ bool CursorEncoder::encode(const MouseCursor& mouse_cursor, proto::desktop::Curs
     }
 
     // Add the cursor to the cache.
-    cache_.push_back(hash);
+    cache_.emplace_back(hash);
 
     // If the current cache size exceeds the maximum cache size.
     if (cache_.size() > kCacheSize)

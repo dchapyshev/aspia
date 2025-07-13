@@ -60,7 +60,7 @@ void OnlineChecker::checkComputers(const std::optional<RouterConfig>& router_con
             router_computer.computer_id = computer.computer_id;
             router_computer.host_id = base::stringToHostId(computer.address_or_id);
 
-            router_computers_.push_back(router_computer);
+            router_computers_.emplace_back(router_computer);
         }
         else
         {
@@ -69,7 +69,7 @@ void OnlineChecker::checkComputers(const std::optional<RouterConfig>& router_con
             direct_computer.address = computer.address_or_id;
             direct_computer.port = computer.port;
 
-            direct_computers_.push_back(direct_computer);
+            direct_computers_.emplace_back(direct_computer);
         }
     }
 

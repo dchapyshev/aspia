@@ -172,7 +172,7 @@ QList<QAbstractEventDispatcher::TimerInfo> AsioEventDispatcher::registeredTimers
     {
         const TimerData& timer = it->second;
         if (timer.object == object)
-            list.append({ it->first, static_cast<int>(timer.interval.count()), timer.type });
+            list.emplace_back(it->first, static_cast<int>(timer.interval.count()), timer.type);
     }
 
     return list;

@@ -59,7 +59,7 @@ Translations::Translations()
         LOG(INFO) << "Added:" << qm_file << locale_name;
 
         if (locale_list_.contains(locale_name))
-            locale_list_[locale_name].push_back(qm_file);
+            locale_list_[locale_name].emplace_back(qm_file);
         else
             locale_list_.insert(locale_name, QStringList(qm_file));
     }
@@ -92,7 +92,7 @@ Translations::LocaleList Translations::localeList() const
                 + " (" + QLocale::territoryToString(locale.territory()) + ")";
         }
 
-        list.push_back(Locale(locale_code, name));
+        list.emplace_back(locale_code, name);
     };
 
     add_locale("en");
@@ -132,7 +132,7 @@ void Translations::installTranslators(const QString& locale)
         if (translator->load(file, kTranslationsDir))
         {
             if (QCoreApplication::installTranslator(translator.get()))
-                translator_list_.push_back(translator.release());
+                translator_list_.emplace_back(translator.release());
         }
     }
 }

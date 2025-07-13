@@ -250,7 +250,7 @@ void SessionManager::onPendingSessionReady(
                             this, &SessionManager::onSessionFinished);
 
                     // Now the opposite peer is found, start the data transfer between them.
-                    active_sessions_.push_back(session);
+                    active_sessions_.emplace_back(session);
                     session->start();
 
                     emit sig_sessionStarted();
@@ -310,7 +310,7 @@ void SessionManager::doAccept(SessionManager* self)
                     self, &SessionManager::onPendingSessionFailed);
 
             // A new peer is connected. Create and start the pending session.
-            self->pending_sessions_.push_back(session);
+            self->pending_sessions_.emplace_back(session);
             session->start();
         }
         else

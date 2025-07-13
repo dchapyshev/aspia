@@ -141,8 +141,8 @@ bool ScreenCaptureUtils::screenList(ScreenCapturer::ScreenList* screen_list)
                          static_cast<int>(device_mode.dmPelsHeight)));
         QPoint dpi = dpiByRect(rect);
 
-        screen_list->screens.push_back(
-            {device_index, device_name, rect.topLeft(), rect.size(), dpi, is_primary });
+        screen_list->screens.emplace_back(
+            device_index, device_name, rect.topLeft(), rect.size(), dpi, is_primary);
     }
 
     return true;

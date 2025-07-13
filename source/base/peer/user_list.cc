@@ -51,7 +51,7 @@ std::unique_ptr<UserList> UserList::duplicate() const
 void UserList::add(const User& user)
 {
     if (user.isValid())
-        list_.append(user);
+        list_.emplace_back(user);
 }
 
 //--------------------------------------------------------------------------------------------------

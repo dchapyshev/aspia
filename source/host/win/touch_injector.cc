@@ -41,7 +41,7 @@ void appendMapValuesToVector(
     for (auto& id_and_pointer_touch_info : *touches_in_contact)
     {
         OWN_POINTER_TOUCH_INFO& pointer_touch_info = id_and_pointer_touch_info;
-        output_vector->push_back(pointer_touch_info);
+        output_vector->emplace_back(pointer_touch_info);
     }
 }
 
@@ -195,7 +195,7 @@ void TouchInjector::addNewTouchPoints(const proto::desktop::TouchEvent& event)
         pointer_touch_info.pointerInfo.pointerFlags =
             OWN_POINTER_FLAG_INRANGE | OWN_POINTER_FLAG_INCONTACT | OWN_POINTER_FLAG_DOWN;
         convertToPointerTouchInfo(touch_point, &pointer_touch_info);
-        touches.push_back(pointer_touch_info);
+        touches.emplace_back(pointer_touch_info);
 
         // All points in the map should be a move point.
         pointer_touch_info.pointerInfo.pointerFlags =
@@ -246,7 +246,7 @@ void TouchInjector::endTouchPoints(const proto::desktop::TouchEvent& event)
         pointer_touch_info.pointerInfo.pointerFlags = OWN_POINTER_FLAG_UP;
 
         touches_in_contact_.remove(touch_point.id());
-        touches.push_back(pointer_touch_info);
+        touches.emplace_back(pointer_touch_info);
     }
 
     appendMapValuesToVector(&touches_in_contact_, &touches);
@@ -270,7 +270,7 @@ void TouchInjector::cancelTouchPoints(const proto::desktop::TouchEvent& event)
             OWN_POINTER_FLAG_UP | OWN_POINTER_FLAG_CANCELED;
 
         touches_in_contact_.remove(touch_point.id());
-        touches.push_back(pointer_touch_info);
+        touches.emplace_back(pointer_touch_info);
     }
 
     appendMapValuesToVector(&touches_in_contact_, &touches);
