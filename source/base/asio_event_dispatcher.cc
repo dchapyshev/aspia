@@ -58,7 +58,6 @@ bool AsioEventDispatcher::processEvents(QEventLoop::ProcessEventsFlags flags)
 {
     interrupted_.store(false, std::memory_order_relaxed);
 
-    emit awake();
     QCoreApplication::sendPostedEvents();
 
     // When calling method sendPostedEvents, the state of variable may change, so we check it.
