@@ -25,7 +25,7 @@
 #include <asio/steady_timer.hpp>
 
 #include <atomic>
-#include <unordered_map>
+#include <vector>
 
 namespace base {
 
@@ -61,6 +61,7 @@ private:
 
     struct TimerData
     {
+        int timer_id;
         Milliseconds interval;
         Qt::TimerType type;
         QObject* object;
@@ -68,13 +69,13 @@ private:
         TimePoint end_time;
     };
 
+    std::vector<TimerData>::iterator findTimer(int timer_id);
     void scheduleNextTimer();
 
     asio::io_context io_context_;
     asio::executor_work_guard<asio::io_context::executor_type> work_guard_;
     std::atomic_bool interrupted_ { false };
-    std::unordered_map<int, TimerData> timers_;
-    std::unordered_map<int, TimerData>::const_iterator timers_end_;
+    std::vector<TimerData> timers_;
     asio::steady_timer timer_;
 
     Q_DISABLE_COPY(AsioEventDispatcher)
