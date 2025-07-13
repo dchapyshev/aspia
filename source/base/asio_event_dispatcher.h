@@ -69,8 +69,8 @@ private:
         TimePoint end_time;
     };
 
-    std::vector<TimerData>::iterator findTimer(int timer_id);
-    void scheduleNextTimer();
+    Q_ALWAYS_INLINE std::vector<TimerData>::iterator findTimer(int timer_id);
+    Q_ALWAYS_INLINE void scheduleNextTimer();
 
     asio::io_context io_context_;
     asio::executor_work_guard<asio::io_context::executor_type> work_guard_;
