@@ -105,7 +105,7 @@ QIcon FilePlatformUtil::directoryIcon()
 QIcon FilePlatformUtil::driveIcon(proto::file_transfer::DriveList::Item::Type type)
 {
     // Desktop (not present in official header)
-    static const SHSTOCKICONID SIID_DESKTOP = static_cast<SHSTOCKICONID>(34);
+    static const SHSTOCKICONID SIID_DESKTOP = static_cast<SHSTOCKICONID>(34); // NOLINT
 
     switch (type)
     {

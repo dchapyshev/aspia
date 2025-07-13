@@ -264,8 +264,8 @@ bool DxgiDuplicatorController::doInitialize()
     DCHECK(desktop_rect_.isEmpty());
     DCHECK(duplicators_.empty());
 
-    d3d_info_.min_feature_level = static_cast<D3D_FEATURE_LEVEL>(0);
-    d3d_info_.max_feature_level = static_cast<D3D_FEATURE_LEVEL>(0);
+    d3d_info_.min_feature_level = static_cast<D3D_FEATURE_LEVEL>(0); // NOLINT
+    d3d_info_.max_feature_level = static_cast<D3D_FEATURE_LEVEL>(0); // NOLINT
 
     std::vector<D3dDevice> devices = D3dDevice::enumDevices();
     if (devices.empty())
