@@ -70,7 +70,6 @@ bool AsioEventDispatcher::processEvents(QEventLoop::ProcessEventsFlags flags)
 
     do
     {
-        io_context_.restart();
         current_count = io_context_.poll();
 
         QCoreApplication::sendPostedEvents();
@@ -80,7 +79,6 @@ bool AsioEventDispatcher::processEvents(QEventLoop::ProcessEventsFlags flags)
             !current_count)
         {
             emit aboutToBlock();
-            io_context_.restart();
             current_count = io_context_.run_one();
             emit awake();
         }
