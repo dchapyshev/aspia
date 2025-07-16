@@ -74,6 +74,7 @@ private:
     asio::executor_work_guard<asio::io_context::executor_type> work_guard_;
     std::atomic_bool interrupted_ { false };
     std::unordered_map<int, TimerData> timers_;
+    std::unordered_map<int, TimerData>::const_iterator timers_end_;
     asio::steady_timer timer_;
 
     Q_DISABLE_COPY(AsioEventDispatcher)

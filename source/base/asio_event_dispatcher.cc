@@ -38,6 +38,7 @@ const float kLoadFactorForTimersMap = 0.5;
 AsioEventDispatcher::AsioEventDispatcher(QObject* parent)
     : QAbstractEventDispatcher(parent),
       work_guard_(asio::make_work_guard(io_context_)),
+      timers_end_(timers_.cend()),
       timer_(io_context_)
 {
     LOG(INFO) << "Ctor";
@@ -112,6 +113,7 @@ void AsioEventDispatcher::registerTimer(
     const TimePoint end_time = start_time + Milliseconds(interval);
 
     timers_.emplace(timer_id, TimerData(Milliseconds(interval), type, object, start_time, end_time));
+    timers_end_ = timers_.cend();
 
     scheduleNextTimer();
 }
@@ -120,10 +122,11 @@ void AsioEventDispatcher::registerTimer(
 bool AsioEventDispatcher::unregisterTimer(int timer_id)
 {
     auto it = timers_.find(timer_id);
-    if (it == timers_.end())
+    if (it == timers_end_)
         return false;
 
     timers_.erase(it);
+    timers_end_ = timers_.cend();
 
     if (!timers_.empty())
         scheduleNextTimer();
@@ -153,6 +156,7 @@ bool AsioEventDispatcher::unregisterTimers(QObject* object)
     if (!removed)
         return false;
 
+    timers_end_ = timers_.cend();
     if (!timers_.empty())
         scheduleNextTimer();
 
@@ -164,7 +168,7 @@ QList<QAbstractEventDispatcher::TimerInfo> AsioEventDispatcher::registeredTimers
 {
     QList<TimerInfo> list;
 
-    for (auto it = timers_.cbegin(), it_end = timers_.cend(); it != it_end; ++it)
+    for (auto it = timers_.cbegin(); it != timers_end_; ++it)
     {
         const TimerData& timer = it->second;
         if (timer.object == object)
@@ -178,7 +182,7 @@ QList<QAbstractEventDispatcher::TimerInfo> AsioEventDispatcher::registeredTimers
 int AsioEventDispatcher::remainingTime(int timer_id)
 {
     const auto& it = timers_.find(timer_id);
-    if (it == timers_.cend())
+    if (it == timers_end_)
         return -1;
 
     const TimerData& timer = it->second;
@@ -223,11 +227,11 @@ asio::io_context& AsioEventDispatcher::ioContext()
 void AsioEventDispatcher::scheduleNextTimer()
 {
     // Find the timer that should be completed before all others.
-    const auto& next_expire_timer = std::min_element(timers_.cbegin(), timers_.cend(),
-                                                     [](const auto& lhs, const auto& rhs)
-                                                     {
-                                                         return lhs.second.end_time < rhs.second.end_time;
-                                                     });
+    const auto& next_expire_timer = std::min_element(timers_.cbegin(), timers_end_,
+        [](const auto& lhs, const auto& rhs)
+    {
+        return lhs.second.end_time < rhs.second.end_time;
+    });
 
     const int timer_id = next_expire_timer->first;
 
@@ -239,7 +243,7 @@ void AsioEventDispatcher::scheduleNextTimer()
             return;
 
         auto it = timers_.find(timer_id);
-        if (it == timers_.end())
+        if (it == timers_end_)
             return;
 
         QTimerEvent event(timer_id);
@@ -247,7 +251,7 @@ void AsioEventDispatcher::scheduleNextTimer()
 
         // When calling method sendEvent the timer may have been deleted.
         it = timers_.find(timer_id);
-        if (it == timers_.end())
+        if (it == timers_end_)
             return;
 
         TimerData& timer = it->second;
