@@ -30,6 +30,7 @@ namespace base {
 namespace {
 
 const size_t kReservedSizeForTimersMap = 50;
+const float kLoadFactorForTimersMap = 0.5;
 
 } // namespace
 
@@ -41,6 +42,7 @@ AsioEventDispatcher::AsioEventDispatcher(QObject* parent)
 {
     LOG(INFO) << "Ctor";
     timers_.reserve(kReservedSizeForTimersMap);
+    timers_.max_load_factor(kLoadFactorForTimersMap);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -109,14 +111,15 @@ void AsioEventDispatcher::registerTimer(
     const TimePoint start_time = Clock::now();
     const TimePoint end_time = start_time + Milliseconds(interval);
 
-    timers_.emplace_back(timer_id, Milliseconds(interval), type, object, start_time, end_time);
+    timers_.emplace(timer_id, TimerData(Milliseconds(interval), type, object, start_time, end_time));
+
     scheduleNextTimer();
 }
 
 //--------------------------------------------------------------------------------------------------
 bool AsioEventDispatcher::unregisterTimer(int timer_id)
 {
-    auto it = findTimer(timer_id);
+    auto it = timers_.find(timer_id);
     if (it == timers_.end())
         return false;
 
@@ -136,7 +139,7 @@ bool AsioEventDispatcher::unregisterTimers(QObject* object)
 
     while (it != timers_.end())
     {
-        if (it->object == object)
+        if (it->second.object == object)
         {
             it = timers_.erase(it);
             removed = true;
@@ -163,8 +166,9 @@ QList<QAbstractEventDispatcher::TimerInfo> AsioEventDispatcher::registeredTimers
 
     for (auto it = timers_.cbegin(), it_end = timers_.cend(); it != it_end; ++it)
     {
-        if (it->object == object)
-            list.emplace_back(it->timer_id, static_cast<int>(it->interval.count()), it->type);
+        const TimerData& timer = it->second;
+        if (timer.object == object)
+            list.emplace_back(it->first, static_cast<int>(timer.interval.count()), timer.type);
     }
 
     return list;
@@ -173,12 +177,15 @@ QList<QAbstractEventDispatcher::TimerInfo> AsioEventDispatcher::registeredTimers
 //--------------------------------------------------------------------------------------------------
 int AsioEventDispatcher::remainingTime(int timer_id)
 {
-    const auto& it = findTimer(timer_id);
-    if (it == timers_.end())
+    const auto& it = timers_.find(timer_id);
+    if (it == timers_.cend())
         return -1;
 
-    const Milliseconds elapsed = std::chrono::duration_cast<Milliseconds>(Clock::now() - it->start_time);
-    return static_cast<int>((it->interval - elapsed).count());
+    const TimerData& timer = it->second;
+    const Milliseconds elapsed = std::chrono::duration_cast<Milliseconds>(
+        Clock::now() - timer.start_time);
+
+    return static_cast<int>((timer.interval - elapsed).count());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -213,58 +220,39 @@ asio::io_context& AsioEventDispatcher::ioContext()
 }
 
 //--------------------------------------------------------------------------------------------------
-std::vector<AsioEventDispatcher::TimerData>::iterator AsioEventDispatcher::findTimer(int timer_id)
-{
-    auto it_end = timers_.end();
-
-    for (auto it = timers_.begin(); it != it_end; ++it)
-    {
-        if (it->timer_id == timer_id)
-            return it;
-    }
-
-    return it_end;
-}
-
-//--------------------------------------------------------------------------------------------------
 void AsioEventDispatcher::scheduleNextTimer()
 {
     // Find the timer that should be completed before all others.
     const auto& next_expire_timer = std::min_element(timers_.cbegin(), timers_.cend(),
-        [](const auto& lhs, const auto& rhs)
-    {
-        return lhs.end_time < rhs.end_time;
-    });
+                                                     [](const auto& lhs, const auto& rhs)
+                                                     {
+                                                         return lhs.second.end_time < rhs.second.end_time;
+                                                     });
 
-    const int timer_id = next_expire_timer->timer_id;
+    const int timer_id = next_expire_timer->first;
 
     // Start waiting for the timer.
-    timer_.expires_at(next_expire_timer->end_time);
+    timer_.expires_at(next_expire_timer->second.end_time);
     timer_.async_wait([this, timer_id](const std::error_code& error_code)
     {
         if (error_code)
-        {
-            if (error_code == asio::error::operation_aborted)
-                return;
-
-            LOG(ERROR) << "Timer error:" << error_code;
             return;
-        }
 
-        auto it = findTimer(timer_id);
+        auto it = timers_.find(timer_id);
         if (it == timers_.end())
             return;
 
         QTimerEvent event(timer_id);
-        QCoreApplication::sendEvent(it->object, &event);
+        QCoreApplication::sendEvent(it->second.object, &event);
 
         // When calling method sendEvent the timer may have been deleted.
-        it = findTimer(timer_id);
+        it = timers_.find(timer_id);
         if (it == timers_.end())
             return;
 
-        it->start_time = it->end_time;
-        it->end_time += it->interval;
+        TimerData& timer = it->second;
+        timer.start_time = timer.end_time;
+        timer.end_time += timer.interval;
 
         scheduleNextTimer();
     });
