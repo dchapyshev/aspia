@@ -20,9 +20,16 @@
 #define BASE_ASIO_EVENT_DISPATCHER_H
 
 #include <QAbstractEventDispatcher>
+#include <QEvent>
 
 #include <asio/io_context.hpp>
 #include <asio/steady_timer.hpp>
+
+#if defined(Q_OS_WINDOWS)
+#include <asio/windows/object_handle.hpp>
+#else
+
+#endif
 
 #include <atomic>
 #include <unordered_map>
@@ -68,14 +75,48 @@ private:
         TimePoint end_time;
     };
 
-    void scheduleNextTimer();
+    struct SocketData
+    {
+#if defined(Q_OS_WINDOWS)
+        using Handle = asio::windows::object_handle;
+#else
+        using Handle = asio::posix::stream_descriptor;
+#endif
+        explicit SocketData(Handle handle)
+            : handle(std::move(handle))
+        {
+            // Nothing
+        }
+
+        QSocketNotifier* read = nullptr;
+        QSocketNotifier* write = nullptr;
+        QSocketNotifier* exception = nullptr;
+        Handle handle;
+    };
+
+    Q_ALWAYS_INLINE void scheduleNextTimer();
+    Q_ALWAYS_INLINE void ayncWaitForSocketEvent(qintptr socket, SocketData::Handle& handle);
+
+#if defined(Q_OS_WINDOWS)
+    // Returns |false| if execution should be aborted (the notifier no longer exists).
+    Q_ALWAYS_INLINE bool sendSocketEvent(
+        qintptr socket, long events, long mask, QSocketNotifier* notifier, QEvent::Type type);
+#endif // defined(Q_OS_WINDOWS)
+
+    using Timers = std::unordered_map<int, TimerData>;
+    using TimersConstIterator = Timers::const_iterator;
+    using Sockets = std::unordered_map<qintptr, SocketData>;
+    using SocketsConstIterator = Sockets::const_iterator;
 
     asio::io_context io_context_;
     asio::executor_work_guard<asio::io_context::executor_type> work_guard_;
     std::atomic_bool interrupted_ { false };
-    std::unordered_map<int, TimerData> timers_;
-    std::unordered_map<int, TimerData>::const_iterator timers_end_;
     asio::steady_timer timer_;
+
+    Timers timers_;
+    TimersConstIterator timers_end_;
+    Sockets sockets_;
+    SocketsConstIterator sockets_end_;
 
     Q_DISABLE_COPY(AsioEventDispatcher)
 };

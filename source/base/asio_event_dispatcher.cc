@@ -19,6 +19,7 @@
 #include "base/asio_event_dispatcher.h"
 
 #include <QCoreApplication>
+#include <QSocketNotifier>
 #include <QThread>
 
 #include <asio/post.hpp>
@@ -29,8 +30,10 @@ namespace base {
 
 namespace {
 
-const size_t kReservedSizeForTimersMap = 50;
+const size_t kReservedSizeForTimersMap = 256;
 const float kLoadFactorForTimersMap = 0.5;
+const size_t kReservedSizeForSocketsMap = 256;
+const float kLoadFactorForSocketsMap = 0.5;
 
 } // namespace
 
@@ -38,12 +41,15 @@ const float kLoadFactorForTimersMap = 0.5;
 AsioEventDispatcher::AsioEventDispatcher(QObject* parent)
     : QAbstractEventDispatcher(parent),
       work_guard_(asio::make_work_guard(io_context_)),
+      timer_(io_context_),
       timers_end_(timers_.cend()),
-      timer_(io_context_)
+      sockets_end_(sockets_.cend())
 {
     LOG(INFO) << "Ctor";
     timers_.reserve(kReservedSizeForTimersMap);
     timers_.max_load_factor(kLoadFactorForTimersMap);
+    sockets_.reserve(kReservedSizeForSocketsMap);
+    sockets_.max_load_factor(kLoadFactorForSocketsMap);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -91,15 +97,122 @@ bool AsioEventDispatcher::processEvents(QEventLoop::ProcessEventsFlags flags)
 }
 
 //--------------------------------------------------------------------------------------------------
-void AsioEventDispatcher::registerSocketNotifier(QSocketNotifier* /* notifier */)
+void AsioEventDispatcher::registerSocketNotifier(QSocketNotifier* notifier)
 {
-    NOTIMPLEMENTED();
+    if (!notifier)
+        return;
+
+    const qintptr socket = notifier->socket();
+    const QSocketNotifier::Type type = notifier->type();
+
+    auto it = sockets_.find(socket);
+    if (it != sockets_end_)
+    {
+        SocketData& data = it->second;
+
+        if (type == QSocketNotifier::Read && !data.read)
+            data.read = notifier;
+        else if (type == QSocketNotifier::Write && !data.write)
+            data.write = notifier;
+        else if (type == QSocketNotifier::Exception && !data.exception)
+            data.exception = notifier;
+        return;
+    }
+
+    WSAEVENT wsa_event = WSACreateEvent();
+    if (wsa_event == WSA_INVALID_EVENT)
+    {
+        LOG(ERROR) << "WSACreateEvent failed:" << WSAGetLastError();
+        return;
+    }
+
+    static const long kEventMask = FD_READ | FD_ACCEPT | FD_WRITE | FD_CONNECT | FD_OOB | FD_CLOSE;
+
+    if (WSAEventSelect(socket, wsa_event, kEventMask) == SOCKET_ERROR)
+    {
+        LOG(ERROR) << "WSAEventSelect failed:" << WSAGetLastError();
+        WSACloseEvent(wsa_event);
+        return;
+    }
+
+    SocketData data(asio::windows::object_handle(io_context_, wsa_event));
+
+    switch (type)
+    {
+        case QSocketNotifier::Read:
+            data.read = notifier;
+            break;
+
+        case QSocketNotifier::Write:
+            data.write = notifier;
+            break;
+
+        case QSocketNotifier::Exception:
+            data.exception = notifier;
+            break;
+
+        default:
+            return;
+    }
+
+    ayncWaitForSocketEvent(socket, data.handle);
+
+    sockets_.emplace(socket, std::move(data));
+    sockets_end_ = sockets_.cend();
 }
 
 //--------------------------------------------------------------------------------------------------
-void AsioEventDispatcher::unregisterSocketNotifier(QSocketNotifier* /* notifier */)
+void AsioEventDispatcher::unregisterSocketNotifier(QSocketNotifier* notifier)
 {
-    NOTIMPLEMENTED();
+    if (!notifier)
+        return;
+
+    const qintptr socket = notifier->socket();
+
+    auto it = sockets_.find(socket);
+    if (it == sockets_end_)
+        return;
+
+    SocketData& data = it->second;
+
+    if (data.read != notifier && data.write != notifier && data.exception != notifier)
+        return;
+
+    switch (notifier->type())
+    {
+        case QSocketNotifier::Read:
+            data.read = nullptr;
+            break;
+
+        case QSocketNotifier::Write:
+            data.write = nullptr;
+            break;
+
+        case QSocketNotifier::Exception:
+            data.exception = nullptr;
+            break;
+
+        default:
+            return;
+    }
+
+    if (data.read || data.write || data.exception)
+    {
+        // There are active notifiers for this socket.
+        return;
+    }
+
+    std::error_code ignored_error;
+    data.handle.cancel(ignored_error);
+
+    if (data.handle.native_handle() != WSA_INVALID_EVENT)
+    {
+        WSAEventSelect(socket, nullptr, 0);
+        WSACloseEvent(data.handle.native_handle());
+    }
+
+    sockets_.erase(it);
+    sockets_end_ = sockets_.cend();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -261,5 +374,75 @@ void AsioEventDispatcher::scheduleNextTimer()
         scheduleNextTimer();
     });
 }
+
+//--------------------------------------------------------------------------------------------------
+void AsioEventDispatcher::ayncWaitForSocketEvent(qintptr socket, SocketData::Handle& handle)
+{
+    handle.async_wait([this, socket](const std::error_code& error_code)
+    {
+        if (error_code)
+            return;
+
+        auto it = sockets_.find(socket);
+        if (it == sockets_end_)
+            return;
+
+        SocketData& data = it->second;
+
+        WSAEVENT wsaEvent = data.handle.native_handle();
+        WSANETWORKEVENTS networkEvents;
+        memset(&networkEvents, 0, sizeof(networkEvents));
+
+        if (WSAEnumNetworkEvents(socket, wsaEvent, &networkEvents) == SOCKET_ERROR)
+        {
+            LOG(ERROR) << "WSAEnumNetworkEvents failed:" << WSAGetLastError();
+            return;
+        }
+
+        const long events = networkEvents.lNetworkEvents;
+
+        if (!sendSocketEvent(socket, events, FD_READ | FD_ACCEPT, data.read, QEvent::SockAct))
+            return;
+
+        if (!sendSocketEvent(socket, events, FD_WRITE | FD_CONNECT, data.write, QEvent::SockAct))
+            return;
+
+        if (!sendSocketEvent(socket, events, FD_OOB, data.exception, QEvent::SockAct))
+            return;
+
+        if (!sendSocketEvent(socket, events, FD_CLOSE, data.read, QEvent::SockClose))
+            return;
+
+        ayncWaitForSocketEvent(socket, data.handle);
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
+#if defined(Q_OS_WINDOWS)
+bool AsioEventDispatcher::sendSocketEvent(
+    qintptr socket, long events, long mask, QSocketNotifier* notifier, QEvent::Type type)
+{
+    if (!(events & mask) || !notifier)
+    {
+        // There are no notifications for this event type or there is no notifier for this event type.
+        return true;
+    }
+
+    // To avoid searching the list on each iteration, we save the old end of the list. If the
+    // end has changed, the list has changed and we check for the presence of the socket.
+    SocketsConstIterator old_end = sockets_end_;
+
+    QEvent event(type);
+    QCoreApplication::sendEvent(notifier, &event);
+
+    if (old_end == sockets_end_)
+    {
+        // The socket list has not changed.
+        return true;
+    }
+
+    return sockets_.find(socket) != sockets_end_;
+}
+#endif // defined(Q_OS_WINDOWS)
 
 } // namespace base
