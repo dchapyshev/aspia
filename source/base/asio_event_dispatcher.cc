@@ -359,13 +359,18 @@ void AsioEventDispatcher::scheduleNextTimer()
         if (it == timers_end_)
             return;
 
+        TimersConstIterator old_end = timers_end_;
+
         QTimerEvent event(timer_id);
         QCoreApplication::sendEvent(it->second.object, &event);
 
-        // When calling method sendEvent the timer may have been deleted.
-        it = timers_.find(timer_id);
-        if (it == timers_end_)
-            return;
+        if (old_end != timers_end_)
+        {
+            // When calling method sendEvent the timer may have been deleted.
+            it = timers_.find(timer_id);
+            if (it == timers_end_)
+                return;
+        }
 
         TimerData& timer = it->second;
         timer.start_time = timer.end_time;
