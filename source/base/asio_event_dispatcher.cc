@@ -408,17 +408,16 @@ void AsioEventDispatcher::ayncWaitForSocketEvent(qintptr socket, SocketData::Han
 
         SocketData& data = it->second;
 
-        WSAEVENT wsaEvent = data.handle.native_handle();
-        WSANETWORKEVENTS networkEvents;
-        memset(&networkEvents, 0, sizeof(networkEvents));
+        WSAEVENT wsa_event = data.handle.native_handle();
+        WSANETWORKEVENTS network_events = {};
 
-        if (WSAEnumNetworkEvents(socket, wsaEvent, &networkEvents) == SOCKET_ERROR)
+        if (WSAEnumNetworkEvents(socket, wsa_event, &network_events) == SOCKET_ERROR)
         {
             LOG(ERROR) << "WSAEnumNetworkEvents failed:" << WSAGetLastError();
             return;
         }
 
-        const long events = networkEvents.lNetworkEvents;
+        const long events = network_events.lNetworkEvents;
 
         if (!sendSocketEvent(socket, events, FD_READ | FD_ACCEPT, data.read, QEvent::SockAct))
             return;
