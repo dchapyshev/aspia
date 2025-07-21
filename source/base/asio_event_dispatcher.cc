@@ -256,9 +256,7 @@ bool AsioEventDispatcher::unregisterTimer(int timer_id)
     timers_.erase(it);
     timers_end_ = timers_.cend();
 
-    if (!timers_.empty())
-        scheduleNextTimer();
-
+    scheduleNextTimer();
     return true;
 }
 
@@ -285,9 +283,7 @@ bool AsioEventDispatcher::unregisterTimers(QObject* object)
         return false;
 
     timers_end_ = timers_.cend();
-    if (!timers_.empty())
-        scheduleNextTimer();
-
+    scheduleNextTimer();
     return true;
 }
 
@@ -354,6 +350,9 @@ asio::io_context& AsioEventDispatcher::ioContext()
 //--------------------------------------------------------------------------------------------------
 void AsioEventDispatcher::scheduleNextTimer()
 {
+    if (timers_.empty())
+        return;
+
     // Find the timer that should be completed before all others.
     const auto& next_expire_timer = std::min_element(timers_.cbegin(), timers_end_,
         [](const auto& lhs, const auto& rhs)
@@ -375,15 +374,18 @@ void AsioEventDispatcher::scheduleNextTimer()
             return;
 
         TimersConstIterator old_end = timers_end_;
+        TimerData& timer = it->second;
 
         QTimerEvent event(timer_id);
-        QCoreApplication::sendEvent(it->second.object, &event);
+        QCoreApplication::sendEvent(timer.object, &event);
 
         // When calling method sendEvent the timer may have been deleted.
-        if (old_end != timers_end_ && timers_.find(timer_id) == timers_end_)
+        if (old_end != timers_end_ && !timers_.contains(timer_id))
+        {
+            scheduleNextTimer();
             return;
+        }
 
-        TimerData& timer = it->second;
         timer.start_time = timer.end_time;
         timer.end_time += timer.interval;
 
@@ -459,7 +461,7 @@ bool AsioEventDispatcher::sendSocketEvent(
         return true;
     }
 
-    return sockets_.find(socket) != sockets_end_;
+    return sockets_.contains(socket);
 }
 #endif // defined(Q_OS_WINDOWS)
 
