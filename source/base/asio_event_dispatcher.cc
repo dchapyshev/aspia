@@ -224,7 +224,7 @@ void AsioEventDispatcher::unregisterSocketNotifier(QSocketNotifier* notifier)
         WSAEventSelect(socket, nullptr, 0);
         WSACloseEvent(data.handle.native_handle());
     }
-#endif // defined(Q_OS_WINDOWS)
+#endif
 
     sockets_.erase(it);
     sockets_end_ = sockets_.cend();
@@ -481,7 +481,7 @@ void AsioEventDispatcher::asyncWaitForSocketEvent(
             return;
 
         SocketData& data = it->second;
-        QSocketNotifier* notifier = nullptr;
+        QSocketNotifier* notifier;
 
         switch (wait_type)
         {
@@ -511,7 +511,7 @@ void AsioEventDispatcher::asyncWaitForSocketEvent(
         QEvent event(QEvent::SockAct);
         QCoreApplication::sendEvent(notifier, &event);
 
-        if (old_end != sockets_end_ && sockets_.find(socket) == sockets_end_)
+        if (old_end != sockets_end_ && !sockets_.contains(socket))
             return;
 
         asyncWaitForSocketEvent(data.handle, wait_type);
