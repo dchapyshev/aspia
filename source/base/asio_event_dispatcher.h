@@ -28,7 +28,7 @@
 #if defined(Q_OS_WINDOWS)
 #include <asio/windows/object_handle.hpp>
 #else
-
+#include <asio/posix/stream_descriptor.hpp>
 #endif
 
 #include <atomic>
@@ -95,13 +95,17 @@ private:
     };
 
     Q_ALWAYS_INLINE void scheduleNextTimer();
-    Q_ALWAYS_INLINE void ayncWaitForSocketEvent(qintptr socket, SocketData::Handle& handle);
 
 #if defined(Q_OS_WINDOWS)
+    Q_ALWAYS_INLINE void ayncWaitForSocketEvent(qintptr socket, SocketData::Handle& handle);
+
     // Returns |false| if execution should be aborted (the notifier no longer exists).
     Q_ALWAYS_INLINE bool sendSocketEvent(
         qintptr socket, long events, long mask, QSocketNotifier* notifier, QEvent::Type type);
-#endif // defined(Q_OS_WINDOWS)
+#else
+    Q_ALWAYS_INLINE void ayncWaitForSocketEvent(
+        SocketData::Handle& handle, SocketData::Handle::wait_type wait_type);
+#endif
 
     using Timers = std::unordered_map<int, TimerData>;
     using TimersConstIterator = Timers::const_iterator;

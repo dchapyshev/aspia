@@ -104,61 +104,74 @@ void AsioEventDispatcher::registerSocketNotifier(QSocketNotifier* notifier)
 
     const qintptr socket = notifier->socket();
     const QSocketNotifier::Type type = notifier->type();
+    bool is_new_socket = false;
 
     auto it = sockets_.find(socket);
-    if (it != sockets_end_)
+    if (it == sockets_end_)
     {
-        SocketData& data = it->second;
+        is_new_socket = true;
 
-        if (type == QSocketNotifier::Read && !data.read)
-            data.read = notifier;
-        else if (type == QSocketNotifier::Write && !data.write)
-            data.write = notifier;
-        else if (type == QSocketNotifier::Exception && !data.exception)
-            data.exception = notifier;
-        return;
-    }
-
-    WSAEVENT wsa_event = WSACreateEvent();
-    if (wsa_event == WSA_INVALID_EVENT)
-    {
-        LOG(ERROR) << "WSACreateEvent failed:" << WSAGetLastError();
-        return;
-    }
-
-    static const long kEventMask = FD_READ | FD_ACCEPT | FD_WRITE | FD_CONNECT | FD_OOB | FD_CLOSE;
-
-    if (WSAEventSelect(socket, wsa_event, kEventMask) == SOCKET_ERROR)
-    {
-        LOG(ERROR) << "WSAEventSelect failed:" << WSAGetLastError();
-        WSACloseEvent(wsa_event);
-        return;
-    }
-
-    SocketData data(asio::windows::object_handle(io_context_, wsa_event));
-
-    switch (type)
-    {
-        case QSocketNotifier::Read:
-            data.read = notifier;
-            break;
-
-        case QSocketNotifier::Write:
-            data.write = notifier;
-            break;
-
-        case QSocketNotifier::Exception:
-            data.exception = notifier;
-            break;
-
-        default:
+#if defined(Q_OS_WINDOWS)
+        WSAEVENT wsa_event = WSACreateEvent();
+        if (wsa_event == WSA_INVALID_EVENT)
+        {
+            LOG(ERROR) << "WSACreateEvent failed:" << WSAGetLastError();
             return;
+        }
+
+        static const long kEventMask = FD_READ | FD_ACCEPT | FD_WRITE | FD_CONNECT | FD_OOB | FD_CLOSE;
+
+        if (WSAEventSelect(socket, wsa_event, kEventMask) == SOCKET_ERROR)
+        {
+            LOG(ERROR) << "WSAEventSelect failed:" << WSAGetLastError();
+            WSACloseEvent(wsa_event);
+            return;
+        }
+
+        SocketData data(SocketData::Handle(io_context_, wsa_event));
+#else
+        SocketData data(SocketData::Handle(io_context_, socket))
+#endif
+
+        it = sockets_.emplace(socket, std::move(data)).first;
+        sockets_end_ = sockets_.cend();
     }
 
-    ayncWaitForSocketEvent(socket, data.handle);
+    SocketData& data = it->second;
 
-    sockets_.emplace(socket, std::move(data));
-    sockets_end_ = sockets_.cend();
+    if (type == QSocketNotifier::Read && !data.read)
+    {
+        data.read = notifier;
+
+#if defined(Q_OS_UNIX)
+        asyncWaitForSocketEvent(data.handle, SocketData::Handle::wait_read);
+#endif
+    }
+    else if (type == QSocketNotifier::Write && !data.write)
+    {
+        data.write = notifier;
+
+#if defined(Q_OS_UNIX)
+        asyncWaitForSocketEvent(data.handle, SocketData::Handle::wait_write);
+#endif
+    }
+    else if (type == QSocketNotifier::Exception && !data.exception)
+    {
+        data.exception = notifier;
+
+#if defined(Q_OS_UNIX)
+        asyncWaitForSocketEvent(data.handle, SocketData::Handle::wait_error);
+#endif
+    }
+    else
+    {
+        return;
+    }
+
+#if defined(Q_OS_WINDOWS)
+    if (is_new_socket)
+        ayncWaitForSocketEvent(socket, data.handle);
+#endif
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -205,11 +218,13 @@ void AsioEventDispatcher::unregisterSocketNotifier(QSocketNotifier* notifier)
     std::error_code ignored_error;
     data.handle.cancel(ignored_error);
 
+#if defined(Q_OS_WINDOWS)
     if (data.handle.native_handle() != WSA_INVALID_EVENT)
     {
         WSAEventSelect(socket, nullptr, 0);
         WSACloseEvent(data.handle.native_handle());
     }
+#endif // defined(Q_OS_WINDOWS)
 
     sockets_.erase(it);
     sockets_end_ = sockets_.cend();
@@ -364,13 +379,9 @@ void AsioEventDispatcher::scheduleNextTimer()
         QTimerEvent event(timer_id);
         QCoreApplication::sendEvent(it->second.object, &event);
 
-        if (old_end != timers_end_)
-        {
-            // When calling method sendEvent the timer may have been deleted.
-            it = timers_.find(timer_id);
-            if (it == timers_end_)
-                return;
-        }
+        // When calling method sendEvent the timer may have been deleted.
+        if (old_end != timers_end_ && timers_.find(timer_id) == timers_end_)
+            return;
 
         TimerData& timer = it->second;
         timer.start_time = timer.end_time;
@@ -380,6 +391,7 @@ void AsioEventDispatcher::scheduleNextTimer()
     });
 }
 
+#if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
 void AsioEventDispatcher::ayncWaitForSocketEvent(qintptr socket, SocketData::Handle& handle)
 {
@@ -421,9 +433,10 @@ void AsioEventDispatcher::ayncWaitForSocketEvent(qintptr socket, SocketData::Han
         ayncWaitForSocketEvent(socket, data.handle);
     });
 }
+#endif // defined(Q_OS_WINDOWS)
 
-//--------------------------------------------------------------------------------------------------
 #if defined(Q_OS_WINDOWS)
+//--------------------------------------------------------------------------------------------------
 bool AsioEventDispatcher::sendSocketEvent(
     qintptr socket, long events, long mask, QSocketNotifier* notifier, QEvent::Type type)
 {
@@ -449,5 +462,60 @@ bool AsioEventDispatcher::sendSocketEvent(
     return sockets_.find(socket) != sockets_end_;
 }
 #endif // defined(Q_OS_WINDOWS)
+
+#if defined(Q_OS_UNIX)
+//--------------------------------------------------------------------------------------------------
+void AsioEventDispatcher::asyncWaitForSocketEvent(
+    SocketData::Handle& handle, SocketData::Handle::wait_type wait_type)
+{
+    const qintptr socket = handle.native_handle();
+
+    handle.async_wait(wait_type, [this, socket, wait_type](const std::error_code& error_code)
+    {
+        if (error_code)
+            return;
+
+        auto it = sockets_.find(socket);
+        if (it == sockets_end_)
+            return;
+
+        SocketData& data = it->second;
+        QSocketNotifier* notifier = nullptr;
+
+        switch (wait_type)
+        {
+            case SocketData::Handle::wait_read:
+                notifier = data.read;
+                break;
+
+            case SocketData::Handle::wait_write:
+                notifier = data.write;
+                break;
+
+            case SocketData::Handle::wait_error:
+                notifier = data.exception;
+                break;
+
+            default:
+                return;
+        }
+
+        if (!notifier)
+            return;
+
+        // To avoid searching the list on each iteration, we save the old end of the list. If
+        // the end has changed, the list has changed and we check for the presence of the socket.
+        SocketsConstIterator old_end = sockets_end_;
+
+        QEvent event(QEvent::SockAct);
+        QCoreApplication::sendEvent(notifier, &event);
+
+        if (old_end != sockets_end_ && sockets_.find(socket) == sockets_end_)
+            return;
+
+        asyncWaitForSocketEvent(data.handle, wait_type);
+    });
+}
+#endif
 
 } // namespace base
