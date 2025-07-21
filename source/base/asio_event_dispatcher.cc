@@ -517,6 +517,6 @@ void AsioEventDispatcher::asyncWaitForSocketEvent(
         asyncWaitForSocketEvent(data.handle, wait_type);
     });
 }
-#endif
+#endif // defined(Q_OS_UNIX)
 
 } // namespace base
