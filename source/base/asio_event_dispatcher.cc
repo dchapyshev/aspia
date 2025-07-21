@@ -201,12 +201,9 @@ void AsioEventDispatcher::unregisterSocketNotifier(QSocketNotifier* notifier)
             data.write = nullptr;
             break;
 
-        case QSocketNotifier::Exception:
+        default:
             data.exception = nullptr;
             break;
-
-        default:
-            return;
     }
 
     if (data.read || data.write || data.exception)
@@ -493,12 +490,9 @@ void AsioEventDispatcher::asyncWaitForSocketEvent(
                 notifier = data.write;
                 break;
 
-            case SocketData::Handle::wait_error:
+            default:
                 notifier = data.exception;
                 break;
-
-            default:
-                return;
         }
 
         if (!notifier)
