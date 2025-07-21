@@ -139,26 +139,30 @@ void AsioEventDispatcher::registerSocketNotifier(QSocketNotifier* notifier)
 
     SocketData& data = it->second;
 
-    if (type == QSocketNotifier::Read)
+    if (type == QSocketNotifier::Read && !data.read)
     {
         data.read = notifier;
 #if defined(Q_OS_UNIX)
         asyncWaitForSocketEvent(data.handle, SocketData::Handle::wait_read);
 #endif
     }
-    else if (type == QSocketNotifier::Write)
+    else if (type == QSocketNotifier::Write && !data.write)
     {
         data.write = notifier;
 #if defined(Q_OS_UNIX)
         asyncWaitForSocketEvent(data.handle, SocketData::Handle::wait_write);
 #endif
     }
-    else
+    else if (type == QSocketNotifier::Exception && !data.exception)
     {
         data.exception = notifier;
 #if defined(Q_OS_UNIX)
         asyncWaitForSocketEvent(data.handle, SocketData::Handle::wait_error);
 #endif
+    }
+    else
+    {
+        return;
     }
 
 #if defined(Q_OS_WINDOWS)
