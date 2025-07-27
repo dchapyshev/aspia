@@ -367,14 +367,13 @@ void AsioEventDispatcher::scheduleNextTimer()
         if (it == timers_end_)
             return;
 
-        TimersConstIterator old_end = timers_end_;
         TimerData& timer = it->second;
 
         QTimerEvent event(timer_id);
         QCoreApplication::sendEvent(timer.object, &event);
 
         // When calling method sendEvent the timer may have been deleted.
-        if (old_end != timers_end_ && !timers_.contains(timer_id))
+        if (!timers_.contains(timer_id))
         {
             scheduleNextTimer();
             return;
@@ -441,18 +440,8 @@ bool AsioEventDispatcher::sendSocketEvent(
         return true;
     }
 
-    // To avoid searching the list on each iteration, we save the old end of the list. If the
-    // end has changed, the list has changed and we check for the presence of the socket.
-    SocketsConstIterator old_end = sockets_end_;
-
     QEvent event(type);
     QCoreApplication::sendEvent(notifier, &event);
-
-    if (old_end == sockets_end_)
-    {
-        // The socket list has not changed.
-        return true;
-    }
 
     return sockets_.contains(socket);
 }
@@ -495,14 +484,10 @@ void AsioEventDispatcher::asyncWaitForSocketEvent(
         if (!notifier)
             return;
 
-        // To avoid searching the list on each iteration, we save the old end of the list. If
-        // the end has changed, the list has changed and we check for the presence of the socket.
-        SocketsConstIterator old_end = sockets_end_;
-
         QEvent event(QEvent::SockAct);
         QCoreApplication::sendEvent(notifier, &event);
 
-        if (old_end != sockets_end_ && !sockets_.contains(socket))
+        if (!sockets_.contains(socket))
             return;
 
         asyncWaitForSocketEvent(data.handle, wait_type);
