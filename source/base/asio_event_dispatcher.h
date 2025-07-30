@@ -123,17 +123,13 @@ private:
     asio::steady_timer very_coarse_timer_;
 
     Timers precise_timers_;
-    TimersIterator precise_timers_end_;
 
     Timers coarse_timers_;
-    TimersIterator coarse_timers_end_;
 
     Timers very_coarse_timers_;
-    TimersIterator very_coarse_timers_end_;
     bool very_coarse_timers_changed_ = false;
 
     Sockets sockets_;
-    SocketsIterator sockets_end_;
     bool sockets_changed_ = false;
 
     Q_DISABLE_COPY(AsioEventDispatcher)
