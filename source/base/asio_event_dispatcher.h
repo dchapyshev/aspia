@@ -73,7 +73,30 @@ private:
     using SocketHandle = asio::posix::stream_descriptor;
 #endif
 
-    struct TimerData
+    using PreciseTimerHandle = asio::high_resolution_timer;
+    using CoarseTimerHandle = asio::steady_timer;
+
+    struct PreciseTimerData
+    {
+        PreciseTimerHandle handle;
+        Milliseconds interval;
+        Qt::TimerType type;
+        QObject* object;
+        TimePoint start_time;
+        TimePoint end_time;
+    };
+
+    struct CoarseTimerData
+    {
+        CoarseTimerHandle handle;
+        Milliseconds interval;
+        Qt::TimerType type;
+        QObject* object;
+        TimePoint start_time;
+        TimePoint end_time;
+    };
+
+    struct VeryCoarseTimerData
     {
         Milliseconds interval;
         Qt::TimerType type;
@@ -96,8 +119,8 @@ private:
         SocketHandle handle;
     };
 
-    void schedulePreciseTimer();
-    void scheduleCoarseTimer();
+    void schedulePreciseTimer(PreciseTimerHandle& handle, int timer_id, TimePoint end_time);
+    void scheduleCoarseTimer(CoarseTimerHandle& handle, int timer_id, TimePoint end_time);
     void scheduleVeryCoarseTimer();
 
 #if defined(Q_OS_WINDOWS)
@@ -109,24 +132,24 @@ private:
     void ayncWaitForSocketEvent(SocketHandle& handle, SocketHandle::wait_type wait_type);
 #endif
 
-    using Timers = std::unordered_map<int, TimerData>;
-    using TimersIterator = Timers::const_iterator;
+    using PreciseTimers = std::unordered_map<int, PreciseTimerData>;
+    using CoarseTimers = std::unordered_map<int, CoarseTimerData>;
+    using VeryCoarseTimers = std::unordered_map<int, VeryCoarseTimerData>;
     using Sockets = std::unordered_map<qintptr, SocketData>;
-    using SocketsIterator = Sockets::const_iterator;
 
     asio::io_context io_context_;
     asio::executor_work_guard<asio::io_context::executor_type> work_guard_;
     std::atomic_bool interrupted_ { false };
 
-    asio::high_resolution_timer precise_timer_;
-    asio::steady_timer coarse_timer_;
     asio::steady_timer very_coarse_timer_;
 
-    Timers precise_timers_;
+    PreciseTimers precise_timers_;
+    bool precise_timers_changed_ = false;
 
-    Timers coarse_timers_;
+    CoarseTimers coarse_timers_;
+    bool coarse_timers_changed_ = false;
 
-    Timers very_coarse_timers_;
+    VeryCoarseTimers very_coarse_timers_;
     bool very_coarse_timers_changed_ = false;
 
     Sockets sockets_;
