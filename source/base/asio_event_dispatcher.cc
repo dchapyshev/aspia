@@ -30,10 +30,18 @@ namespace base {
 
 namespace {
 
-const size_t kReservedSizeForTimersMap = 256;
-const float kLoadFactorForTimersMap = 0.5;
-const size_t kReservedSizeForSocketsMap = 256;
-const float kLoadFactorForSocketsMap = 0.5;
+const size_t kReservedSizeForPreciseTimers = 8;
+
+const size_t kReservedSizeForCoarseTimers = 64;
+const float kLoadFactorForCoarseTimers = 0.5;
+
+const size_t kReservedSizeForVeryCoarseTimers = 1024;
+const float kLoadFactorForVeryCoarseTimers = 0.5;
+const qint64 kMinWindowForVeryCoarseTimers = 1000; // 1 second.
+const qint64 kToleranceForVeryCoarseTimers = 1000; // 1 second.
+
+const size_t kReservedSizeForSockets = 256;
+const float kLoadFactorForSockets = 0.5;
 
 } // namespace
 
@@ -41,15 +49,26 @@ const float kLoadFactorForSocketsMap = 0.5;
 AsioEventDispatcher::AsioEventDispatcher(QObject* parent)
     : QAbstractEventDispatcher(parent),
       work_guard_(asio::make_work_guard(io_context_)),
-      timer_(io_context_),
-      timers_end_(timers_.cend()),
+      precise_timer_(io_context_),
+      coarse_timer_(io_context_),
+      very_coarse_timer_(io_context_),
+      precise_timers_end_(precise_timers_.cend()),
+      coarse_timers_end_(coarse_timers_.cend()),
+      very_coarse_timers_end_(very_coarse_timers_.cend()),
       sockets_end_(sockets_.cend())
 {
     LOG(INFO) << "Ctor";
-    timers_.reserve(kReservedSizeForTimersMap);
-    timers_.max_load_factor(kLoadFactorForTimersMap);
-    sockets_.reserve(kReservedSizeForSocketsMap);
-    sockets_.max_load_factor(kLoadFactorForSocketsMap);
+
+    precise_timers_.reserve(kReservedSizeForPreciseTimers);
+
+    coarse_timers_.reserve(kReservedSizeForCoarseTimers);
+    coarse_timers_.max_load_factor(kLoadFactorForCoarseTimers);
+
+    very_coarse_timers_.reserve(kReservedSizeForVeryCoarseTimers);
+    very_coarse_timers_.max_load_factor(kLoadFactorForVeryCoarseTimers);
+
+    sockets_.reserve(kReservedSizeForSockets);
+    sockets_.max_load_factor(kLoadFactorForSockets);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -119,7 +138,7 @@ void AsioEventDispatcher::registerSocketNotifier(QSocketNotifier* notifier)
             return;
         }
 
-        static const long kEventMask = FD_READ | FD_ACCEPT | FD_WRITE | FD_CONNECT | FD_OOB | FD_CLOSE;
+        const long kEventMask = FD_READ | FD_ACCEPT | FD_WRITE | FD_CONNECT | FD_OOB | FD_CLOSE;
 
         if (WSAEventSelect(socket, wsa_event, kEventMask) == SOCKET_ERROR)
         {
@@ -135,6 +154,7 @@ void AsioEventDispatcher::registerSocketNotifier(QSocketNotifier* notifier)
 
         it = sockets_.emplace(socket, std::move(data)).first;
         sockets_end_ = sockets_.cend();
+        sockets_changed_ = true;
     }
 
     SocketData& data = it->second;
@@ -222,63 +242,104 @@ void AsioEventDispatcher::unregisterSocketNotifier(QSocketNotifier* notifier)
 
     sockets_.erase(it);
     sockets_end_ = sockets_.cend();
+    sockets_changed_ = true;
 }
 
 //--------------------------------------------------------------------------------------------------
 void AsioEventDispatcher::registerTimer(
-    int timer_id, qint64 interval, Qt::TimerType type, QObject* object)
+    int timer_id, qint64 interval_ms, Qt::TimerType type, QObject* object)
 {
     if (!object)
         return;
 
+    const Milliseconds interval(interval_ms);
     const TimePoint start_time = Clock::now();
-    const TimePoint end_time = start_time + Milliseconds(interval);
+    const TimePoint end_time = start_time + interval;
 
-    timers_.emplace(timer_id, TimerData(Milliseconds(interval), type, object, start_time, end_time));
-    timers_end_ = timers_.cend();
+    if (type == Qt::PreciseTimer)
+    {
+        precise_timers_.emplace(timer_id, TimerData(interval, type, object, start_time, end_time));
+        precise_timers_end_ = precise_timers_.cend();
 
-    scheduleNextTimer();
+        schedulePreciseTimer();
+    }
+    else if (type == Qt::CoarseTimer)
+    {
+        coarse_timers_.emplace(timer_id, TimerData(interval, type, object, start_time, end_time));
+        coarse_timers_end_ = coarse_timers_.cend();
+
+        scheduleCoarseTimer();
+    }
+    else if (type == Qt::VeryCoarseTimer)
+    {
+        bool schedule = very_coarse_timers_.empty();
+
+        very_coarse_timers_.emplace(timer_id, TimerData(interval, type, object, start_time, end_time));
+        very_coarse_timers_end_ = very_coarse_timers_.cend();
+        very_coarse_timers_changed_ = true;
+
+        updateVeryCoarseWindow();
+        if (schedule)
+            scheduleVeryCoarseTimer();
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
 bool AsioEventDispatcher::unregisterTimer(int timer_id)
 {
-    auto it = timers_.find(timer_id);
-    if (it == timers_end_)
-        return false;
+    auto remove_timer = [&](Timers& timers, TimersIterator& end)
+    {
+        if (timers.erase(timer_id) == 0)
+            return false;
+        end = timers.cend();
+        return true;
+    };
 
-    timers_.erase(it);
-    timers_end_ = timers_.cend();
+    if (remove_timer(precise_timers_, precise_timers_end_))
+        return true;
+    if (remove_timer(coarse_timers_, coarse_timers_end_))
+        return true;
 
-    scheduleNextTimer();
-    return true;
+    if (remove_timer(very_coarse_timers_, very_coarse_timers_end_))
+    {
+        // If there are no more timers left in the list, then we stop the timer.
+        if (very_coarse_timers_.empty())
+            very_coarse_timer_.cancel();
+        else
+            updateVeryCoarseWindow();
+        return true;
+    }
+
+    return false;
 }
 
 //--------------------------------------------------------------------------------------------------
 bool AsioEventDispatcher::unregisterTimers(QObject* object)
 {
-    auto it = timers_.begin();
+    auto remove_timers = [object](Timers& timers, TimersIterator& end)
+    {
+        if (std::erase_if(timers, [&](const auto& timer) { return timer.second.object == object; }) == 0)
+            return false;
+        end = timers.cend();
+        return true;
+    };
+
     bool removed = false;
 
-    while (it != timers_.end())
+    removed |= remove_timers(precise_timers_, precise_timers_end_);
+    removed |= remove_timers(coarse_timers_, coarse_timers_end_);
+
+    if (remove_timers(very_coarse_timers_, very_coarse_timers_end_))
     {
-        if (it->second.object == object)
-        {
-            it = timers_.erase(it);
-            removed = true;
-        }
+        // If there are no more timers left in the list, then we stop the timer.
+        if (very_coarse_timers_.empty())
+            very_coarse_timer_.cancel();
         else
-        {
-            ++it;
-        }
+            updateVeryCoarseWindow();
+        removed = true;
     }
 
-    if (!removed)
-        return false;
-
-    timers_end_ = timers_.cend();
-    scheduleNextTimer();
-    return true;
+    return removed;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -286,12 +347,19 @@ QList<QAbstractEventDispatcher::TimerInfo> AsioEventDispatcher::registeredTimers
 {
     QList<TimerInfo> list;
 
-    for (auto it = timers_.cbegin(); it != timers_end_; ++it)
+    auto add_timers = [&](const Timers& timers, const TimersIterator& end)
     {
-        const TimerData& timer = it->second;
-        if (timer.object == object)
-            list.emplace_back(it->first, static_cast<int>(timer.interval.count()), timer.type);
-    }
+        for (auto it = timers.cbegin(); it != end; ++it)
+        {
+            const TimerData& timer = it->second;
+            if (timer.object == object)
+                list.emplace_back(it->first, static_cast<int>(timer.interval.count()), timer.type);
+        }
+    };
+
+    add_timers(precise_timers_, precise_timers_end_);
+    add_timers(coarse_timers_, coarse_timers_end_);
+    add_timers(very_coarse_timers_, very_coarse_timers_end_);
 
     return list;
 }
@@ -299,15 +367,28 @@ QList<QAbstractEventDispatcher::TimerInfo> AsioEventDispatcher::registeredTimers
 //--------------------------------------------------------------------------------------------------
 int AsioEventDispatcher::remainingTime(int timer_id)
 {
-    const auto& it = timers_.find(timer_id);
-    if (it == timers_end_)
-        return -1;
+    auto get_time = [timer_id](const Timers& timers, const TimersIterator& end)
+    {
+        const auto& it = timers.find(timer_id);
+        if (it == end)
+            return -1;
 
-    const TimerData& timer = it->second;
-    const Milliseconds elapsed = std::chrono::duration_cast<Milliseconds>(
-        Clock::now() - timer.start_time);
+        const TimerData& timer = it->second;
+        const Milliseconds elapsed = std::chrono::duration_cast<Milliseconds>(
+            Clock::now() - timer.start_time);
 
-    return static_cast<int>((timer.interval - elapsed).count());
+        return static_cast<int>((timer.interval - elapsed).count());
+    };
+
+    int time = get_time(precise_timers_, precise_timers_end_);
+    if (time != -1)
+        return time;
+
+    time = get_time(coarse_timers_, coarse_timers_end_);
+    if (time != -1)
+        return time;
+
+    return get_time(very_coarse_timers_, very_coarse_timers_end_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -342,13 +423,13 @@ asio::io_context& AsioEventDispatcher::ioContext()
 }
 
 //--------------------------------------------------------------------------------------------------
-void AsioEventDispatcher::scheduleNextTimer()
+void AsioEventDispatcher::schedulePreciseTimer()
 {
-    if (timers_.empty())
+    if (precise_timers_.empty())
         return;
 
     // Find the timer that should be completed before all others.
-    const auto& next_expire_timer = std::min_element(timers_.cbegin(), timers_end_,
+    const auto& next_expire_timer = std::min_element(precise_timers_.cbegin(), precise_timers_end_,
         [](const auto& lhs, const auto& rhs)
     {
         return lhs.second.end_time < rhs.second.end_time;
@@ -357,33 +438,170 @@ void AsioEventDispatcher::scheduleNextTimer()
     const int timer_id = next_expire_timer->first;
 
     // Start waiting for the timer.
-    timer_.expires_at(next_expire_timer->second.end_time);
-    timer_.async_wait([this, timer_id](const std::error_code& error_code)
+    precise_timer_.expires_at(next_expire_timer->second.end_time);
+    precise_timer_.async_wait([this, timer_id](const std::error_code& error_code)
     {
         if (error_code)
             return;
 
-        auto it = timers_.find(timer_id);
-        if (it == timers_end_)
+        auto it = precise_timers_.find(timer_id);
+        if (it != precise_timers_end_)
+        {
+            TimerData& timer = it->second;
+
+            timer.start_time = timer.end_time;
+            timer.end_time += timer.interval;
+
+            QTimerEvent event(timer_id);
+            QCoreApplication::sendEvent(timer.object, &event);
+        }
+
+        schedulePreciseTimer();
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
+void AsioEventDispatcher::scheduleCoarseTimer()
+{
+    if (coarse_timers_.empty())
+        return;
+
+    // Find the timer that should be completed before all others.
+    const auto& next_expire_timer = std::min_element(coarse_timers_.cbegin(), coarse_timers_end_,
+        [](const auto& lhs, const auto& rhs)
+    {
+        return lhs.second.end_time < rhs.second.end_time;
+    });
+
+    const int timer_id = next_expire_timer->first;
+
+    // Start waiting for the timer.
+    coarse_timer_.expires_at(next_expire_timer->second.end_time);
+    coarse_timer_.async_wait([this, timer_id](const std::error_code& error_code)
+    {
+        if (error_code)
             return;
 
-        TimerData& timer = it->second;
-
-        QTimerEvent event(timer_id);
-        QCoreApplication::sendEvent(timer.object, &event);
-
-        // When calling method sendEvent the timer may have been deleted.
-        if (!timers_.contains(timer_id))
+        auto it = coarse_timers_.find(timer_id);
+        if (it != coarse_timers_end_)
         {
-            scheduleNextTimer();
+            TimerData& timer = it->second;
+
+            timer.start_time = timer.end_time;
+            timer.end_time += timer.interval;
+
+            QTimerEvent event(timer_id);
+            QCoreApplication::sendEvent(timer.object, &event);
+        }
+
+        scheduleCoarseTimer();
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
+void AsioEventDispatcher::scheduleVeryCoarseTimer()
+{
+    if (very_coarse_timers_.empty())
+        return;
+
+    // Start waiting for the timer.
+    very_coarse_timer_.expires_after(very_coarse_window_size_);
+    very_coarse_timer_.async_wait([this](const std::error_code& error_code)
+    {
+        if (error_code)
+            return;
+
+        TimePoint current_time = Clock::now();
+
+        do
+        {
+            very_coarse_timers_changed_ = false;
+            auto it = very_coarse_timers_.begin();
+
+            while (it != very_coarse_timers_end_)
+            {
+                TimerData& timer = it->second;
+
+                if (timer.end_time > current_time)
+                    continue;
+
+                timer.start_time = current_time;
+                timer.end_time = current_time + timer.interval;
+
+                QTimerEvent event(it->first);
+                QCoreApplication::sendEvent(timer.object, &event);
+
+                // As a result of calling method sendEvent, the list of timers may change.
+                if (very_coarse_timers_changed_)
+                {
+                    // The list of timers has changed, iterators may be invalid.
+                    break;
+                }
+            }
+        }
+        while (very_coarse_timers_changed_);
+
+        scheduleVeryCoarseTimer();
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
+// 1. Set the initial range [low, high] = [kMinWindowForVeryCoarseTimers, ∞].
+// 2. For each interval I:
+//    - For each possible k, calculate the acceptable range:
+//        range_low = ceil((I - tol) / k)
+//        range_high = floor((I + tol) / k)
+//    - Combine all such ranges for this timer into one maximally wide acceptable range.
+//    - Intersect it with [low, high].
+// 3. If after the intersections [low, high] remains empty → there is no solution.
+// 4. Otherwise, take the maximum possible T = high.
+void AsioEventDispatcher::updateVeryCoarseWindow()
+{
+    qint64 global_low = kMinWindowForVeryCoarseTimers;
+    qint64 global_high = std::numeric_limits<qint64>::max();
+
+    for (auto it = very_coarse_timers_.begin(); it != very_coarse_timers_end_; ++it)
+    {
+        qint64 I = it->second.interval.count();
+
+        qint64 local_low = -1;
+        qint64 local_high = -1;
+
+        qint64 max_k = (I + kToleranceForVeryCoarseTimers) / kMinWindowForVeryCoarseTimers;
+
+        for (qint64 k = 1; k <= max_k; ++k)
+        {
+            qint64 range_low = (I - kToleranceForVeryCoarseTimers + k - 1) / k; // ceil
+            qint64 range_high = (I + kToleranceForVeryCoarseTimers) / k;        // floor
+
+            if (range_low > range_high)
+                continue;
+
+            if (local_low == -1 || range_low < local_low)
+                local_low = range_low;
+
+            if (local_high == -1 || range_high > local_high)
+                local_high = range_high;
+        }
+
+        if (local_low == -1)
+        {
+            // This timer is not compatible with any T - fallback.
+            very_coarse_window_size_ = Milliseconds(kMinWindowForVeryCoarseTimers);
             return;
         }
 
-        timer.start_time = timer.end_time;
-        timer.end_time += timer.interval;
+        global_low = std::max(global_low, local_low);
+        global_high = std::min(global_high, local_high);
 
-        scheduleNextTimer();
-    });
+        if (global_low > global_high)
+        {
+            very_coarse_window_size_ = Milliseconds(kMinWindowForVeryCoarseTimers);
+            return;
+        }
+    }
+
+    very_coarse_window_size_ = Milliseconds(global_high);
 }
 
 #if defined(Q_OS_WINDOWS)
@@ -397,7 +615,10 @@ void AsioEventDispatcher::ayncWaitForSocketEvent(qintptr socket, SocketData::Han
 
         auto it = sockets_.find(socket);
         if (it == sockets_end_)
+        {
+            // The socket is no longer in the list. The next async wait for it will not be called.
             return;
+        }
 
         SocketData& data = it->second;
 
@@ -412,16 +633,13 @@ void AsioEventDispatcher::ayncWaitForSocketEvent(qintptr socket, SocketData::Han
 
         const long events = network_events.lNetworkEvents;
 
-        if (!sendSocketEvent(socket, events, FD_READ | FD_ACCEPT, data.read, QEvent::SockAct))
+        if (!sendSocketEvent(data.read, socket, events, FD_READ | FD_ACCEPT | FD_CLOSE))
             return;
 
-        if (!sendSocketEvent(socket, events, FD_WRITE | FD_CONNECT, data.write, QEvent::SockAct))
+        if (!sendSocketEvent(data.write, socket, events, FD_WRITE | FD_CONNECT))
             return;
 
-        if (!sendSocketEvent(socket, events, FD_OOB, data.exception, QEvent::SockAct))
-            return;
-
-        if (!sendSocketEvent(socket, events, FD_CLOSE, data.read, QEvent::SockClose))
+        if (!sendSocketEvent(data.exception, socket, events, FD_OOB))
             return;
 
         ayncWaitForSocketEvent(socket, data.handle);
@@ -432,7 +650,7 @@ void AsioEventDispatcher::ayncWaitForSocketEvent(qintptr socket, SocketData::Han
 #if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
 bool AsioEventDispatcher::sendSocketEvent(
-    qintptr socket, long events, long mask, QSocketNotifier* notifier, QEvent::Type type)
+    QSocketNotifier* notifier, qintptr socket, long events, long mask)
 {
     if (!(events & mask) || !notifier)
     {
@@ -440,9 +658,17 @@ bool AsioEventDispatcher::sendSocketEvent(
         return true;
     }
 
-    QEvent event(type);
+    sockets_changed_ = false;
+
+    QEvent event(QEvent::SockAct);
     QCoreApplication::sendEvent(notifier, &event);
 
+    // The socket list may change during call sendEvent.
+    if (!sockets_changed_)
+        return true;
+
+    // If the list has changed, we try to find the socket in it. If there is no socket, then further
+    // execution should be interrupted and the next asynchronous wait will not be called.
     return sockets_.contains(socket);
 }
 #endif // defined(Q_OS_WINDOWS)
@@ -461,7 +687,10 @@ void AsioEventDispatcher::asyncWaitForSocketEvent(
 
         auto it = sockets_.find(socket);
         if (it == sockets_end_)
+        {
+            // The socket is no longer in the list. The next async wait for it will not be called.
             return;
+        }
 
         SocketData& data = it->second;
         QSocketNotifier* notifier;
@@ -484,10 +713,15 @@ void AsioEventDispatcher::asyncWaitForSocketEvent(
         if (!notifier)
             return;
 
+        sockets_changed_ = false;
+
         QEvent event(QEvent::SockAct);
         QCoreApplication::sendEvent(notifier, &event);
 
-        if (!sockets_.contains(socket))
+        // The socket list may change during call sendEvent. If the list has changed, we try to find
+        // the socket in it. If there is no socket, then further execution should be interrupted and
+        // the next asynchronous wait will not be called.
+        if (sockets_changed_ && !sockets_.contains(socket))
             return;
 
         asyncWaitForSocketEvent(data.handle, wait_type);

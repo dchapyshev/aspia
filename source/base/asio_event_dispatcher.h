@@ -23,6 +23,7 @@
 #include <QEvent>
 
 #include <asio/io_context.hpp>
+#include <asio/high_resolution_timer.hpp>
 #include <asio/steady_timer.hpp>
 
 #if defined(Q_OS_WINDOWS)
@@ -49,7 +50,7 @@ public:
     void registerSocketNotifier(QSocketNotifier* notifier) final;
     void unregisterSocketNotifier(QSocketNotifier* notifier) final;
 
-    void registerTimer(int timer_id, qint64 interval, Qt::TimerType type, QObject* object) final;
+    void registerTimer(int timer_id, qint64 interval_ms, Qt::TimerType type, QObject* object) final;
     bool unregisterTimer(int timer_id) final;
     bool unregisterTimers(QObject* object) final;
     QList<TimerInfo> registeredTimers(QObject* object) const final;
@@ -94,33 +95,47 @@ private:
         Handle handle;
     };
 
-    Q_ALWAYS_INLINE void scheduleNextTimer();
+    void schedulePreciseTimer();
+    void scheduleCoarseTimer();
+    void scheduleVeryCoarseTimer();
+    void updateVeryCoarseWindow();
 
 #if defined(Q_OS_WINDOWS)
-    Q_ALWAYS_INLINE void ayncWaitForSocketEvent(qintptr socket, SocketData::Handle& handle);
+    void ayncWaitForSocketEvent(qintptr socket, SocketData::Handle& handle);
 
     // Returns |false| if execution should be aborted (the notifier no longer exists).
-    Q_ALWAYS_INLINE bool sendSocketEvent(
-        qintptr socket, long events, long mask, QSocketNotifier* notifier, QEvent::Type type);
+    bool sendSocketEvent(QSocketNotifier* notifier, qintptr socket, long events, long mask);
 #else
-    Q_ALWAYS_INLINE void ayncWaitForSocketEvent(
-        SocketData::Handle& handle, SocketData::Handle::wait_type wait_type);
+    void ayncWaitForSocketEvent(SocketData::Handle& handle, SocketData::Handle::wait_type wait_type);
 #endif
 
     using Timers = std::unordered_map<int, TimerData>;
-    using TimersConstIterator = Timers::const_iterator;
+    using TimersIterator = Timers::const_iterator;
     using Sockets = std::unordered_map<qintptr, SocketData>;
-    using SocketsConstIterator = Sockets::const_iterator;
+    using SocketsIterator = Sockets::const_iterator;
 
     asio::io_context io_context_;
     asio::executor_work_guard<asio::io_context::executor_type> work_guard_;
     std::atomic_bool interrupted_ { false };
-    asio::steady_timer timer_;
 
-    Timers timers_;
-    TimersConstIterator timers_end_;
+    asio::high_resolution_timer precise_timer_;
+    asio::steady_timer coarse_timer_;
+    asio::steady_timer very_coarse_timer_;
+
+    Timers precise_timers_;
+    TimersIterator precise_timers_end_;
+
+    Timers coarse_timers_;
+    TimersIterator coarse_timers_end_;
+
+    Timers very_coarse_timers_;
+    TimersIterator very_coarse_timers_end_;
+    Milliseconds very_coarse_window_size_;
+    bool very_coarse_timers_changed_ = false;
+
     Sockets sockets_;
-    SocketsConstIterator sockets_end_;
+    SocketsIterator sockets_end_;
+    bool sockets_changed_ = false;
 
     Q_DISABLE_COPY(AsioEventDispatcher)
 };
