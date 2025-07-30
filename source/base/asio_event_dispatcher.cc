@@ -146,9 +146,9 @@ void AsioEventDispatcher::registerSocketNotifier(QSocketNotifier* notifier)
             return;
         }
 
-        SocketData data(SocketData::Handle(io_context_, wsa_event));
+        SocketData data(SocketHandle(io_context_, wsa_event));
 #else
-        SocketData data(SocketData::Handle(io_context_, socket))
+        SocketData data(SocketHandle(io_context_, socket))
 #endif
 
         it = sockets_.emplace(socket, std::move(data)).first;
@@ -162,21 +162,21 @@ void AsioEventDispatcher::registerSocketNotifier(QSocketNotifier* notifier)
     {
         data.read = notifier;
 #if defined(Q_OS_UNIX)
-        asyncWaitForSocketEvent(data.handle, SocketData::Handle::wait_read);
+        asyncWaitForSocketEvent(data.handle, SocketHandle::wait_read);
 #endif
     }
     else if (type == QSocketNotifier::Write && !data.write)
     {
         data.write = notifier;
 #if defined(Q_OS_UNIX)
-        asyncWaitForSocketEvent(data.handle, SocketData::Handle::wait_write);
+        asyncWaitForSocketEvent(data.handle, SocketHandle::wait_write);
 #endif
     }
     else if (type == QSocketNotifier::Exception && !data.exception)
     {
         data.exception = notifier;
 #if defined(Q_OS_UNIX)
-        asyncWaitForSocketEvent(data.handle, SocketData::Handle::wait_error);
+        asyncWaitForSocketEvent(data.handle, SocketHandle::wait_error);
 #endif
     }
     else
@@ -546,7 +546,7 @@ void AsioEventDispatcher::scheduleVeryCoarseTimer()
 
 #if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
-void AsioEventDispatcher::ayncWaitForSocketEvent(qintptr socket, SocketData::Handle& handle)
+void AsioEventDispatcher::ayncWaitForSocketEvent(qintptr socket, SocketHandle& handle)
 {
     handle.async_wait([this, socket](const std::error_code& error_code)
     {
@@ -616,7 +616,7 @@ bool AsioEventDispatcher::sendSocketEvent(
 #if defined(Q_OS_UNIX)
 //--------------------------------------------------------------------------------------------------
 void AsioEventDispatcher::asyncWaitForSocketEvent(
-    SocketData::Handle& handle, SocketData::Handle::wait_type wait_type)
+    SocketHandle& handle, SocketHandle::wait_type wait_type)
 {
     const qintptr socket = handle.native_handle();
 
@@ -637,11 +637,11 @@ void AsioEventDispatcher::asyncWaitForSocketEvent(
 
         switch (wait_type)
         {
-            case SocketData::Handle::wait_read:
+            case SocketHandle::wait_read:
                 notifier = data.read;
                 break;
 
-            case SocketData::Handle::wait_write:
+            case SocketHandle::wait_write:
                 notifier = data.write;
                 break;
 

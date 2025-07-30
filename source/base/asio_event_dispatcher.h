@@ -67,6 +67,12 @@ private:
     using TimePoint = Clock::time_point;
     using Milliseconds = std::chrono::milliseconds;
 
+#if defined(Q_OS_WINDOWS)
+    using SocketHandle = asio::windows::object_handle;
+#else
+    using SocketHandle = asio::posix::stream_descriptor;
+#endif
+
     struct TimerData
     {
         Milliseconds interval;
@@ -78,12 +84,7 @@ private:
 
     struct SocketData
     {
-#if defined(Q_OS_WINDOWS)
-        using Handle = asio::windows::object_handle;
-#else
-        using Handle = asio::posix::stream_descriptor;
-#endif
-        explicit SocketData(Handle handle)
+        explicit SocketData(SocketHandle handle)
             : handle(std::move(handle))
         {
             // Nothing
@@ -92,7 +93,7 @@ private:
         QSocketNotifier* read = nullptr;
         QSocketNotifier* write = nullptr;
         QSocketNotifier* exception = nullptr;
-        Handle handle;
+        SocketHandle handle;
     };
 
     void schedulePreciseTimer();
@@ -100,12 +101,12 @@ private:
     void scheduleVeryCoarseTimer();
 
 #if defined(Q_OS_WINDOWS)
-    void ayncWaitForSocketEvent(qintptr socket, SocketData::Handle& handle);
+    void ayncWaitForSocketEvent(qintptr socket, SocketHandle& handle);
 
     // Returns |false| if execution should be aborted (the notifier no longer exists).
     bool sendSocketEvent(QSocketNotifier* notifier, qintptr socket, long events, long mask);
 #else
-    void ayncWaitForSocketEvent(SocketData::Handle& handle, SocketData::Handle::wait_type wait_type);
+    void ayncWaitForSocketEvent(SocketHandle& handle, SocketHandle::wait_type wait_type);
 #endif
 
     using Timers = std::unordered_map<int, TimerData>;
