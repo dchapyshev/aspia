@@ -98,7 +98,6 @@ private:
     void schedulePreciseTimer();
     void scheduleCoarseTimer();
     void scheduleVeryCoarseTimer();
-    void updateVeryCoarseWindow();
 
 #if defined(Q_OS_WINDOWS)
     void ayncWaitForSocketEvent(qintptr socket, SocketData::Handle& handle);
@@ -130,7 +129,6 @@ private:
 
     Timers very_coarse_timers_;
     TimersIterator very_coarse_timers_end_;
-    Milliseconds very_coarse_window_size_;
     bool very_coarse_timers_changed_ = false;
 
     Sockets sockets_;

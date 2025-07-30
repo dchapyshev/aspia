@@ -37,8 +37,7 @@ const float kLoadFactorForCoarseTimers = 0.5;
 
 const size_t kReservedSizeForVeryCoarseTimers = 1024;
 const float kLoadFactorForVeryCoarseTimers = 0.5;
-const qint64 kMinWindowForVeryCoarseTimers = 1000; // 1 second.
-const qint64 kToleranceForVeryCoarseTimers = 1000; // 1 second.
+const qint64 kWindowForVeryCoarseTimers = 1000;
 
 const size_t kReservedSizeForSockets = 256;
 const float kLoadFactorForSockets = 0.5;
@@ -278,7 +277,6 @@ void AsioEventDispatcher::registerTimer(
         very_coarse_timers_end_ = very_coarse_timers_.cend();
         very_coarse_timers_changed_ = true;
 
-        updateVeryCoarseWindow();
         if (schedule)
             scheduleVeryCoarseTimer();
     }
@@ -305,8 +303,6 @@ bool AsioEventDispatcher::unregisterTimer(int timer_id)
         // If there are no more timers left in the list, then we stop the timer.
         if (very_coarse_timers_.empty())
             very_coarse_timer_.cancel();
-        else
-            updateVeryCoarseWindow();
         return true;
     }
 
@@ -334,8 +330,6 @@ bool AsioEventDispatcher::unregisterTimers(QObject* object)
         // If there are no more timers left in the list, then we stop the timer.
         if (very_coarse_timers_.empty())
             very_coarse_timer_.cancel();
-        else
-            updateVeryCoarseWindow();
         removed = true;
     }
 
@@ -505,7 +499,7 @@ void AsioEventDispatcher::scheduleVeryCoarseTimer()
         return;
 
     // Start waiting for the timer.
-    very_coarse_timer_.expires_after(very_coarse_window_size_);
+    very_coarse_timer_.expires_after(Milliseconds(kWindowForVeryCoarseTimers));
     very_coarse_timer_.async_wait([this](const std::error_code& error_code)
     {
         if (error_code)
@@ -523,10 +517,13 @@ void AsioEventDispatcher::scheduleVeryCoarseTimer()
                 TimerData& timer = it->second;
 
                 if (timer.end_time > current_time)
+                {
+                    ++it;
                     continue;
+                }
 
-                timer.start_time = current_time;
-                timer.end_time = current_time + timer.interval;
+                timer.start_time = timer.end_time;
+                timer.end_time += timer.interval;
 
                 QTimerEvent event(it->first);
                 QCoreApplication::sendEvent(timer.object, &event);
@@ -537,71 +534,14 @@ void AsioEventDispatcher::scheduleVeryCoarseTimer()
                     // The list of timers has changed, iterators may be invalid.
                     break;
                 }
+
+                ++it;
             }
         }
         while (very_coarse_timers_changed_);
 
         scheduleVeryCoarseTimer();
     });
-}
-
-//--------------------------------------------------------------------------------------------------
-// 1. Set the initial range [low, high] = [kMinWindowForVeryCoarseTimers, ∞].
-// 2. For each interval I:
-//    - For each possible k, calculate the acceptable range:
-//        range_low = ceil((I - tol) / k)
-//        range_high = floor((I + tol) / k)
-//    - Combine all such ranges for this timer into one maximally wide acceptable range.
-//    - Intersect it with [low, high].
-// 3. If after the intersections [low, high] remains empty → there is no solution.
-// 4. Otherwise, take the maximum possible T = high.
-void AsioEventDispatcher::updateVeryCoarseWindow()
-{
-    qint64 global_low = kMinWindowForVeryCoarseTimers;
-    qint64 global_high = std::numeric_limits<qint64>::max();
-
-    for (auto it = very_coarse_timers_.begin(); it != very_coarse_timers_end_; ++it)
-    {
-        qint64 I = it->second.interval.count();
-
-        qint64 local_low = -1;
-        qint64 local_high = -1;
-
-        qint64 max_k = (I + kToleranceForVeryCoarseTimers) / kMinWindowForVeryCoarseTimers;
-
-        for (qint64 k = 1; k <= max_k; ++k)
-        {
-            qint64 range_low = (I - kToleranceForVeryCoarseTimers + k - 1) / k; // ceil
-            qint64 range_high = (I + kToleranceForVeryCoarseTimers) / k;        // floor
-
-            if (range_low > range_high)
-                continue;
-
-            if (local_low == -1 || range_low < local_low)
-                local_low = range_low;
-
-            if (local_high == -1 || range_high > local_high)
-                local_high = range_high;
-        }
-
-        if (local_low == -1)
-        {
-            // This timer is not compatible with any T - fallback.
-            very_coarse_window_size_ = Milliseconds(kMinWindowForVeryCoarseTimers);
-            return;
-        }
-
-        global_low = std::max(global_low, local_low);
-        global_high = std::min(global_high, local_high);
-
-        if (global_low > global_high)
-        {
-            very_coarse_window_size_ = Milliseconds(kMinWindowForVeryCoarseTimers);
-            return;
-        }
-    }
-
-    very_coarse_window_size_ = Milliseconds(global_high);
 }
 
 #if defined(Q_OS_WINDOWS)
