@@ -85,26 +85,19 @@ private:
     using SocketHandle = asio::posix::stream_descriptor;
 #endif
 
-    struct PreciseTimer
+    template <typename HandleType>
+    struct GenericTimer
     {
-        asio::high_resolution_timer handle;
+        HandleType handle;
         Milliseconds interval;
         Qt::TimerType type;
         QObject* object;
         TimePoint start_time;
         TimePoint end_time;
     };
+    using PreciseTimer = GenericTimer<asio::high_resolution_timer>;
     using PreciseTimers = std::unordered_map<int, PreciseTimer>;
-
-    struct CoarseTimer
-    {
-        asio::steady_timer handle;
-        Milliseconds interval;
-        Qt::TimerType type;
-        QObject* object;
-        TimePoint start_time;
-        TimePoint end_time;
-    };
+    using CoarseTimer = GenericTimer<asio::steady_timer>;
     using CoarseTimers = std::unordered_map<int, CoarseTimer>;
 
     struct SocketData
