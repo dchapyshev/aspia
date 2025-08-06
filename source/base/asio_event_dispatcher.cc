@@ -94,10 +94,12 @@ bool AsioEventDispatcher::processEvents(QEventLoop::ProcessEventsFlags flags)
         return false;
 
     size_t total_count = 0;
-    size_t current_count = 0;
+    size_t current_count;
 
     do
     {
+        current_count = 0;
+
         QCoreApplication::sendPostedEvents();
 
         // Processing of Zero timers should be performed after QCoreApplication::sendPostedEvents
@@ -125,7 +127,6 @@ bool AsioEventDispatcher::processEvents(QEventLoop::ProcessEventsFlags flags)
         }
 
         total_count += current_count;
-        current_count = 0;
     }
     while (!interrupted_.load(std::memory_order_relaxed) && current_count);
 
