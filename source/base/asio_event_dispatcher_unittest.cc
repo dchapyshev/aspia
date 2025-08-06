@@ -43,7 +43,7 @@ TEST(TimersTest, PreciseTimerRegistrationSpeed)
     {
         QTimer *t = new QTimer();
         t->setTimerType(Qt::PreciseTimer);
-        t->setInterval(1000000); // чтобы не срабатывал во время теста
+        t->setInterval(100);
         t->start();
         timers.push_back(t);
     }
@@ -65,7 +65,7 @@ TEST(TimersTest, CoarseTimerRegistrationSpeed)
     {
         QTimer *t = new QTimer();
         t->setTimerType(Qt::CoarseTimer);
-        t->setInterval(1000000); // чтобы не срабатывал во время теста
+        t->setInterval(1000000);
         t->start();
         timers.push_back(t);
     }
@@ -87,7 +87,7 @@ TEST(TimersTest, VeryCoarseTimerRegistrationSpeed)
     {
         QTimer *t = new QTimer();
         t->setTimerType(Qt::VeryCoarseTimer);
-        t->setInterval(1000000); // чтобы не срабатывал во время теста
+        t->setInterval(1000000);
         t->start();
         timers.push_back(t);
     }
@@ -219,7 +219,7 @@ TEST(TimersTest, ManyVeryCoarseTimersTriggering)
 TEST(TimersTest, OnePreciseTimerRepeat100Times)
 {
     constexpr int intervalMs = 10;
-    constexpr int repeats = 10;
+    constexpr int repeats = 100;
 
     QVector<qint64> deltas;
     deltas.reserve(repeats);
@@ -242,8 +242,6 @@ TEST(TimersTest, OnePreciseTimerRepeat100Times)
         qint64 now = refClock.elapsed();
         qint64 delta = now - expectedTime;
         deltas.append(delta);
-
-        GTEST_LOG_(WARNING) << "#" << count << ": " << delta;
 
         ++count;
         expectedTime += intervalMs;

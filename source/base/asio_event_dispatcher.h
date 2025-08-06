@@ -72,7 +72,7 @@ private:
     struct MultimediaTimer
     {
         asio::windows::object_handle event_handle;
-        quint32 native_timer_id;
+        quint32 native_id;
         Milliseconds interval;
         Qt::TimerType type;
         QObject* object;

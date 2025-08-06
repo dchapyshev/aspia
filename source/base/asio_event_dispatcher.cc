@@ -252,8 +252,8 @@ void AsioEventDispatcher::registerTimer(
     if (!object)
         return;
 
-    //if (type == Qt::PreciseTimer && interval_ms > 100)
-    //    type = Qt::CoarseTimer;
+    if (type == Qt::PreciseTimer && interval_ms > 100)
+        type = Qt::CoarseTimer;
 
     Milliseconds interval(interval_ms);
     TimePoint start_time = Clock::now();
@@ -267,7 +267,7 @@ void AsioEventDispatcher::registerTimer(
         // only provides accuracy within 15ms. Multimedia timers provide 1ms accuracy, but their
         // availability is very limited. We try to create a multimedia timer and if that fails, we
         // create a asio::high_resolution_timer-based timer.
-        do
+        for (;;)
         {
             HANDLE event_handle = CreateEventW(nullptr, FALSE, FALSE, nullptr);
             if (!event_handle)
@@ -275,7 +275,7 @@ void AsioEventDispatcher::registerTimer(
 
             asio::windows::object_handle handle(io_context_, event_handle);
 
-            const UINT flags = TIME_PERIODIC | TIME_CALLBACK_EVENT_SET;
+            const UINT flags = TIME_PERIODIC | TIME_KILL_SYNCHRONOUS | TIME_CALLBACK_EVENT_SET;
             quint32 native_id = timeSetEvent(
                 interval_ms, 1, reinterpret_cast<LPTIMECALLBACK>(event_handle), 0, flags);
             if (!native_id)
@@ -288,7 +288,6 @@ void AsioEventDispatcher::registerTimer(
             scheduleMultimediaTimer(timer_it->second.event_handle, timer_id);
             return;
         }
-        while (false);
 #endif
 
         auto timer_it = precise_timers_.emplace(timer_id, PreciseTimer(
@@ -328,10 +327,7 @@ bool AsioEventDispatcher::unregisterTimer(int timer_id)
     {
         MultimediaTimer& timer = it->second;
 
-        std::error_code ignored_error;
-        timer.event_handle.cancel(ignored_error);
-        timeKillEvent(timer.native_timer_id);
-
+        timeKillEvent(timer.native_id);
         multimedia_timers_.erase(it);
 
         multimedia_timers_changed_ = true;
@@ -366,10 +362,7 @@ bool AsioEventDispatcher::unregisterTimers(QObject* object)
 
         if (timer.object == object)
         {
-            std::error_code ignored_error;
-            timer.event_handle.cancel(ignored_error);
-            timeKillEvent(timer.native_timer_id);
-
+            timeKillEvent(timer.native_id);
             it = multimedia_timers_.erase(it);
 
             multimedia_timers_changed_ = true;
