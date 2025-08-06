@@ -24,19 +24,27 @@
 
 #include <asio/post.hpp>
 
+#if defined(Q_OS_WINDOWS)
+#include <qt_windows.h>
+#include <Mmsystem.h>
+#endif
+
 #include "base/logging.h"
 
 namespace base {
 
 namespace {
 
-const size_t kReservedSizeForPreciseTimers = 8;
+#if defined(Q_OS_WINDOWS)
+const size_t kReservedSizeForMultimediaTimers = 32;
+const float kLoadFactorForMultimediaTimers = 0.5;
+#endif
 
-const size_t kReservedSizeForCoarseTimers = 64;
+const size_t kReservedSizeForPreciseTimers = 64;
+const float kLoadFactorForPreciseTimers = 0.5;
+
+const size_t kReservedSizeForCoarseTimers = 128;
 const float kLoadFactorForCoarseTimers = 0.5;
-
-const size_t kReservedSizeForVeryCoarseTimers = 1024;
-const float kLoadFactorForVeryCoarseTimers = 0.5;
 
 const size_t kReservedSizeForSockets = 256;
 const float kLoadFactorForSockets = 0.5;
@@ -50,13 +58,16 @@ AsioEventDispatcher::AsioEventDispatcher(QObject* parent)
 {
     LOG(INFO) << "Ctor";
 
+#if defined(Q_OS_WINDOWS)
+    multimedia_timers_.reserve(kReservedSizeForMultimediaTimers);
+    multimedia_timers_.max_load_factor(kLoadFactorForMultimediaTimers);
+#endif
+
     precise_timers_.reserve(kReservedSizeForPreciseTimers);
+    precise_timers_.max_load_factor(kLoadFactorForPreciseTimers);
 
     coarse_timers_.reserve(kReservedSizeForCoarseTimers);
     coarse_timers_.max_load_factor(kLoadFactorForCoarseTimers);
-
-    very_coarse_timers_.reserve(kReservedSizeForVeryCoarseTimers);
-    very_coarse_timers_.max_load_factor(kLoadFactorForVeryCoarseTimers);
 
     sockets_.reserve(kReservedSizeForSockets);
     sockets_.max_load_factor(kLoadFactorForSockets);
@@ -241,52 +252,93 @@ void AsioEventDispatcher::registerTimer(
     if (!object)
         return;
 
+    //if (type == Qt::PreciseTimer && interval_ms > 100)
+    //    type = Qt::CoarseTimer;
+
+    Milliseconds interval(interval_ms);
+    TimePoint start_time = Clock::now();
+
     if (type == Qt::PreciseTimer)
     {
-        Milliseconds interval(interval_ms);
-        TimePoint start_time = Clock::now();
         TimePoint end_time = start_time + interval;
 
-        auto timer_it = precise_timers_.emplace(timer_id, PreciseTimerData(
-            PreciseTimerHandle(io_context_), interval, type, object, start_time, end_time)).first;
+#if defined(Q_OS_WINDOWS)
+        // In Windows asio::high_resolution_timer is equivalent to asio::steady_timer and therefore
+        // only provides accuracy within 15ms. Multimedia timers provide 1ms accuracy, but their
+        // availability is very limited. We try to create a multimedia timer and if that fails, we
+        // create a asio::high_resolution_timer-based timer.
+        do
+        {
+            HANDLE event_handle = CreateEventW(nullptr, FALSE, FALSE, nullptr);
+            if (!event_handle)
+                break;
+
+            asio::windows::object_handle handle(io_context_, event_handle);
+
+            const UINT flags = TIME_PERIODIC | TIME_CALLBACK_EVENT_SET;
+            quint32 native_id = timeSetEvent(
+                interval_ms, 1, reinterpret_cast<LPTIMECALLBACK>(event_handle), 0, flags);
+            if (!native_id)
+                break;
+
+            auto timer_it = multimedia_timers_.emplace(timer_id, MultimediaTimer(
+                std::move(handle), native_id, interval, type, object, start_time, end_time)).first;
+            multimedia_timers_changed_ = true;
+
+            scheduleMultimediaTimer(timer_it->second.event_handle, timer_id);
+            return;
+        }
+        while (false);
+#endif
+
+        auto timer_it = precise_timers_.emplace(timer_id, PreciseTimer(
+            asio::high_resolution_timer(io_context_), interval, type, object, start_time, end_time)).first;
         precise_timers_changed_ = true;
 
         schedulePreciseTimer(timer_it->second.handle, timer_id, end_time);
     }
-    else if (type == Qt::CoarseTimer)
+    else if (type == Qt::CoarseTimer || type == Qt::VeryCoarseTimer)
     {
-        Milliseconds interval(interval_ms);
-        TimePoint start_time = Clock::now();
+        if (type == Qt::VeryCoarseTimer)
+        {
+            // Very coarse timers should wake up the thread as infrequently as possible, so their
+            // interval cannot be lower than 1 second and should be rounded to the nearest second.
+            // This allows timers to fire less frequently and allows multiple timers to fire at the
+            // same time.
+            interval = (interval < Milliseconds(1000)) ? Seconds(1) : std::chrono::round<Seconds>(interval);
+            start_time = std::chrono::floor<Seconds>(start_time);
+        }
+
         TimePoint end_time = start_time + interval;
 
-        auto timer_it = coarse_timers_.emplace(timer_id, CoarseTimerData(
-            CoarseTimerHandle(io_context_), interval, type, object, start_time, end_time)).first;
+        auto timer_it = coarse_timers_.emplace(timer_id, CoarseTimer(
+            asio::steady_timer(io_context_), interval, type, object, start_time, end_time)).first;
         coarse_timers_changed_ = true;
 
         scheduleCoarseTimer(timer_it->second.handle, timer_id, end_time);
-    }
-    else if (type == Qt::VeryCoarseTimer)
-    {
-        // Very coarse timers should wake up the thread as infrequently as possible, so their
-        // interval cannot be lower than 1 second and should be rounded to the nearest second.
-        // This allows timers to fire less frequently and allows multiple timers to fire at the
-        // same time.
-        Seconds interval = (interval_ms < 1000) ?
-            Seconds(1) : std::chrono::round<Seconds>(Milliseconds(interval_ms));
-        TimePoint start_time = std::chrono::floor<Seconds>(Clock::now());
-        TimePoint end_time = start_time + interval;
-
-        auto timer_it = very_coarse_timers_.emplace(timer_id, CoarseTimerData(
-            CoarseTimerHandle(io_context_), interval, type, object, start_time, end_time)).first;
-        very_coarse_timers_changed_ = true;
-
-        scheduleVeryCoarseTimer(timer_it->second.handle, timer_id, end_time);
     }
 }
 
 //--------------------------------------------------------------------------------------------------
 bool AsioEventDispatcher::unregisterTimer(int timer_id)
 {
+#if defined(Q_OS_WINDOWS)
+    auto it = multimedia_timers_.find(timer_id);
+    if (it != multimedia_timers_.end())
+    {
+        MultimediaTimer& timer = it->second;
+
+        std::error_code ignored_error;
+        timer.event_handle.cancel(ignored_error);
+        timeKillEvent(timer.native_timer_id);
+
+        multimedia_timers_.erase(it);
+
+        multimedia_timers_changed_ = true;
+        return true;
+    }
+#endif
+
     if (precise_timers_.erase(timer_id) != 0)
     {
         precise_timers_changed_ = true;
@@ -299,12 +351,6 @@ bool AsioEventDispatcher::unregisterTimer(int timer_id)
         return true;
     }
 
-    if (very_coarse_timers_.erase(timer_id) != 0)
-    {
-        very_coarse_timers_changed_ = true;
-        return true;
-    }
-
     return false;
 }
 
@@ -312,6 +358,29 @@ bool AsioEventDispatcher::unregisterTimer(int timer_id)
 bool AsioEventDispatcher::unregisterTimers(QObject* object)
 {
     bool removed = false;
+
+#if defined(Q_OS_WINDOWS)
+    for (auto it = multimedia_timers_.begin(); it != multimedia_timers_.end();)
+    {
+        MultimediaTimer& timer = it->second;
+
+        if (timer.object == object)
+        {
+            std::error_code ignored_error;
+            timer.event_handle.cancel(ignored_error);
+            timeKillEvent(timer.native_timer_id);
+
+            it = multimedia_timers_.erase(it);
+
+            multimedia_timers_changed_ = true;
+            removed = true;
+        }
+        else
+        {
+            ++it;
+        }
+    }
+#endif
 
     if (std::erase_if(precise_timers_,
         [object](const auto& timer) { return timer.second.object == object; }) != 0)
@@ -327,13 +396,6 @@ bool AsioEventDispatcher::unregisterTimers(QObject* object)
         removed = true;
     }
 
-    if (std::erase_if(very_coarse_timers_,
-        [object](const auto& timer) { return timer.second.object == object; }) != 0)
-    {
-        very_coarse_timers_changed_ = true;
-        removed = true;
-    }
-
     return removed;
 }
 
@@ -342,23 +404,25 @@ QList<QAbstractEventDispatcher::TimerInfo> AsioEventDispatcher::registeredTimers
 {
     QList<TimerInfo> list;
 
+#if defined(Q_OS_WINDOWS)
+    for (auto it = multimedia_timers_.cbegin(); it != multimedia_timers_.cend(); ++it)
+    {
+        const MultimediaTimer& timer = it->second;
+        if (timer.object == object)
+            list.emplace_back(it->first, static_cast<int>(timer.interval.count()), timer.type);
+    }
+#endif
+
     for (auto it = precise_timers_.cbegin(); it != precise_timers_.cend(); ++it)
     {
-        const PreciseTimerData& timer = it->second;
+        const PreciseTimer& timer = it->second;
         if (timer.object == object)
             list.emplace_back(it->first, static_cast<int>(timer.interval.count()), timer.type);
     }
 
     for (auto it = coarse_timers_.cbegin(); it != coarse_timers_.cend(); ++it)
     {
-        const CoarseTimerData& timer = it->second;
-        if (timer.object == object)
-            list.emplace_back(it->first, static_cast<int>(timer.interval.count()), timer.type);
-    }
-
-    for (auto it = very_coarse_timers_.cbegin(); it != very_coarse_timers_.cend(); ++it)
-    {
-        const CoarseTimerData& timer = it->second;
+        const CoarseTimer& timer = it->second;
         if (timer.object == object)
             list.emplace_back(it->first, static_cast<int>(timer.interval.count()), timer.type);
     }
@@ -376,6 +440,12 @@ int AsioEventDispatcher::remainingTime(int timer_id)
         return static_cast<int>((interval - elapsed).count());
     };
 
+#if defined(Q_OS_WINDOWS)
+    const auto& multimedia_it = multimedia_timers_.find(timer_id);
+    if (multimedia_it != multimedia_timers_.end())
+        return get_time(multimedia_it->second.start_time, multimedia_it->second.interval);
+#endif
+
     const auto& precise_it = precise_timers_.find(timer_id);
     if (precise_it != precise_timers_.end())
         return get_time(precise_it->second.start_time, precise_it->second.interval);
@@ -383,10 +453,6 @@ int AsioEventDispatcher::remainingTime(int timer_id)
     const auto& coarse_it = coarse_timers_.find(timer_id);
     if (coarse_it != coarse_timers_.end())
         return get_time(coarse_it->second.start_time, coarse_it->second.interval);
-
-    const auto& very_coarse_it = very_coarse_timers_.find(timer_id);
-    if (very_coarse_it != very_coarse_timers_.end())
-        return get_time(very_coarse_it->second.start_time, very_coarse_it->second.interval);
 
     return -1;
 }
@@ -424,7 +490,7 @@ asio::io_context& AsioEventDispatcher::ioContext()
 
 //--------------------------------------------------------------------------------------------------
 void AsioEventDispatcher::schedulePreciseTimer(
-    PreciseTimerHandle& handle, int timer_id, TimePoint end_time)
+    asio::high_resolution_timer& handle, int timer_id, TimePoint end_time)
 {
     // Start waiting for the timer.
     handle.expires_at(end_time);
@@ -437,7 +503,7 @@ void AsioEventDispatcher::schedulePreciseTimer(
         if (it == precise_timers_.end())
             return;
 
-        PreciseTimerData& timer = it->second;
+        PreciseTimer& timer = it->second;
 
         timer.start_time = timer.end_time;
         timer.end_time += timer.interval;
@@ -456,7 +522,7 @@ void AsioEventDispatcher::schedulePreciseTimer(
 
 //--------------------------------------------------------------------------------------------------
 void AsioEventDispatcher::scheduleCoarseTimer(
-    CoarseTimerHandle& handle, int timer_id, TimePoint end_time)
+    asio::steady_timer& handle, int timer_id, TimePoint end_time)
 {
     // Start waiting for the timer.
     handle.expires_at(end_time);
@@ -469,7 +535,7 @@ void AsioEventDispatcher::scheduleCoarseTimer(
         if (it == coarse_timers_.end())
             return;
 
-        CoarseTimerData& timer = it->second;
+        CoarseTimer& timer = it->second;
 
         timer.start_time = timer.end_time;
         timer.end_time += timer.interval;
@@ -486,37 +552,37 @@ void AsioEventDispatcher::scheduleCoarseTimer(
     });
 }
 
+#if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
-void AsioEventDispatcher::scheduleVeryCoarseTimer(
-    CoarseTimerHandle& handle, int timer_id, TimePoint end_time)
+void AsioEventDispatcher::scheduleMultimediaTimer(asio::windows::object_handle& handle, int timer_id)
 {
     // Start waiting for the timer.
-    handle.expires_at(end_time);
     handle.async_wait([this, timer_id](const std::error_code& error_code)
     {
         if (error_code)
             return;
 
-        auto it = very_coarse_timers_.find(timer_id);
-        if (it == very_coarse_timers_.end())
+        auto it = multimedia_timers_.find(timer_id);
+        if (it == multimedia_timers_.end())
             return;
 
-        CoarseTimerData& timer = it->second;
+        MultimediaTimer& timer = it->second;
 
         timer.start_time = timer.end_time;
         timer.end_time += timer.interval;
 
-        very_coarse_timers_changed_ = false;
+        multimedia_timers_changed_ = false;
 
         QTimerEvent event(timer_id);
         QCoreApplication::sendEvent(timer.object, &event);
 
-        if (very_coarse_timers_changed_ && !very_coarse_timers_.contains(timer_id))
+        if (multimedia_timers_changed_ && !multimedia_timers_.contains(timer_id))
             return;
 
-        scheduleVeryCoarseTimer(timer.handle, timer_id, timer.end_time);
+        scheduleMultimediaTimer(timer.event_handle, timer_id);
     });
 }
+#endif // defined(Q_OS_WINDOWS)
 
 #if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
