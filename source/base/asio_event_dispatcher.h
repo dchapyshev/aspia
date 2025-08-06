@@ -95,6 +95,8 @@ private:
         TimePoint start_time;
         TimePoint end_time;
     };
+
+    using ZeroTimers = std::unordered_map<int, QObject*>;
     using PreciseTimer = GenericTimer<asio::high_resolution_timer>;
     using PreciseTimers = std::unordered_map<int, PreciseTimer>;
     using CoarseTimer = GenericTimer<asio::steady_timer>;
@@ -129,6 +131,8 @@ private:
     asio::io_context io_context_;
     asio::executor_work_guard<asio::io_context::executor_type> work_guard_;
     std::atomic_bool interrupted_ { false };
+
+    ZeroTimers zero_timers_;
 
 #if defined(Q_OS_WINDOWS)
     MultimediaTimers multimedia_timers_;

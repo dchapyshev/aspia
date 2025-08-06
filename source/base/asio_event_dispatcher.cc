@@ -35,6 +35,8 @@ namespace base {
 
 namespace {
 
+const size_t kReservedSizeForZeroTimers = 32;
+
 #if defined(Q_OS_WINDOWS)
 const size_t kReservedSizeForMultimediaTimers = 16;
 const float kLoadFactorForMultimediaTimers = 0.5;
@@ -56,6 +58,8 @@ AsioEventDispatcher::AsioEventDispatcher(QObject* parent)
     : QAbstractEventDispatcher(parent),
       work_guard_(asio::make_work_guard(io_context_))
 {
+    zero_timers_.reserve(kReservedSizeForZeroTimers);
+
 #if defined(Q_OS_WINDOWS)
     multimedia_timers_.reserve(kReservedSizeForMultimediaTimers);
     multimedia_timers_.max_load_factor(kLoadFactorForMultimediaTimers);
@@ -94,9 +98,22 @@ bool AsioEventDispatcher::processEvents(QEventLoop::ProcessEventsFlags flags)
 
     do
     {
-        current_count = io_context_.poll();
-
         QCoreApplication::sendPostedEvents();
+
+        // Processing of Zero timers should be performed after QCoreApplication::sendPostedEvents
+        // and before I/O and regular timers.
+        while (!zero_timers_.empty())
+        {
+            auto first_timer = zero_timers_.begin();
+
+            QTimerEvent event(first_timer->first);
+            QCoreApplication::sendEvent(first_timer->second, &event);
+
+            zero_timers_.erase(first_timer);
+            ++current_count;
+        }
+
+        current_count += io_context_.poll();
 
         if (flags.testFlag(QEventLoop::WaitForMoreEvents) &&
             !interrupted_.load(std::memory_order_relaxed) &&
@@ -108,6 +125,7 @@ bool AsioEventDispatcher::processEvents(QEventLoop::ProcessEventsFlags flags)
         }
 
         total_count += current_count;
+        current_count = 0;
     }
     while (!interrupted_.load(std::memory_order_relaxed) && current_count);
 
@@ -137,6 +155,8 @@ void AsioEventDispatcher::registerSocketNotifier(QSocketNotifier* notifier)
             return;
         }
 
+        // In Windows we subscribe to all events at once. If the notifier for a specific event is
+        // not registered, it is ignored.
         const long kEventMask = FD_READ | FD_ACCEPT | FD_WRITE | FD_CONNECT | FD_OOB | FD_CLOSE;
 
         if (WSAEventSelect(socket, wsa_event, kEventMask) == SOCKET_ERROR)
@@ -249,6 +269,14 @@ void AsioEventDispatcher::registerTimer(
     if (!object)
         return;
 
+    // Optimization for single-shot zero timers.
+    if (interval_ms == 0)
+    {
+        zero_timers_.emplace(timer_id, object);
+        wakeUp();
+        return;
+    }
+
     // Precision timers have high overhead resources. If the timer has a large interval, then we
     // force it to be coarse.
     if (type == Qt::PreciseTimer && interval_ms > 100)
@@ -323,6 +351,9 @@ void AsioEventDispatcher::registerTimer(
 //--------------------------------------------------------------------------------------------------
 bool AsioEventDispatcher::unregisterTimer(int timer_id)
 {
+    if (zero_timers_.erase(timer_id) != 0)
+        return true;
+
 #if defined(Q_OS_WINDOWS)
     auto it = multimedia_timers_.find(timer_id);
     if (it != multimedia_timers_.end())
@@ -354,6 +385,9 @@ bool AsioEventDispatcher::unregisterTimer(int timer_id)
 bool AsioEventDispatcher::unregisterTimers(QObject* object)
 {
     bool removed = false;
+
+    removed |= std::erase_if(
+        zero_timers_, [object](const auto& timer) { return timer.second == object; }) != 0;
 
 #if defined(Q_OS_WINDOWS)
     for (auto it = multimedia_timers_.begin(); it != multimedia_timers_.end();)

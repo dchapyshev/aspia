@@ -277,4 +277,31 @@ TEST(TimersTest, OnePreciseTimerRepeat100Times)
     ASSERT_LT(max, 15);           // No spike above 15 ms
 }
 
+TEST(TimersTest, ZeroSingleShotTriggering)
+{
+    constexpr int timerCount = 100;
+    int triggeredCount = 0;
+
+    QEventLoop loop;
+
+    QElapsedTimer elapsed;
+    elapsed.start();
+
+    for (int i = 0; i < timerCount; ++i)
+    {
+        QTimer::singleShot(0, [&]()
+        {
+            ++triggeredCount;
+            if (triggeredCount == timerCount)
+                loop.quit();
+        });
+    }
+
+    loop.exec();
+    qint64 elapsedMs = elapsed.elapsed();
+
+    ASSERT_EQ(triggeredCount, timerCount);
+    ASSERT_LT(elapsedMs, 5000);
+}
+
 } // namespace base
