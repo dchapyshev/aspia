@@ -94,6 +94,7 @@ endif()
 
 list(APPEND SOURCE_BASE_TESTS
     aligned_memory_unittest.cc
+    asio_event_dispatcher_unittest.cc
     bitset_unittest.cc
     scoped_clear_last_error_unittest.cc
     tests_main.cc)
@@ -635,7 +636,7 @@ target_link_libraries(aspia_base PRIVATE aspia_proto
     ${THIRD_PARTY_LIBS} ${BASE_PLATFORM_LIBS} ${QT_COMMON_LIBS} ${QT_PLATFORM_LIBS})
 
 if (WIN32)
-    set(BASE_TESTS_PLATFORM_LIBS crypt32 dbghelp iphlpapi ws2_32)
+    set(BASE_TESTS_PLATFORM_LIBS avrt crypt32 dbghelp iphlpapi ws2_32)
 endif()
 
 if (LINUX)

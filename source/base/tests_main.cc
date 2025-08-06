@@ -16,22 +16,35 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
+#include "base/asio_event_dispatcher.h"
 #include "base/logging.h"
 #include "base/crypto/scoped_crypto_initializer.h"
+
+#include <QCoreApplication>
+#include <QTimer>
 
 #include <gtest/gtest.h>
 
 int main(int argc, char **argv)
 {
-    ::testing::InitGoogleTest(&argc, argv);
-    base::initLogging();
+    base::LoggingSettings logging_settings;
+    logging_settings.min_log_level = base::LOG_INFO;
 
-    int ret = 1;
+    base::ScopedLogging scoped_logging(logging_settings);
+
+    QCoreApplication::setEventDispatcher(new base::AsioEventDispatcher());
+    QCoreApplication app(argc, argv);
+    ::testing::InitGoogleTest(&argc, argv);
 
     base::ScopedCryptoInitializer crypto_initializer;
-    if (crypto_initializer.isSucceeded())
-        ret = RUN_ALL_TESTS();
+    if (!crypto_initializer.isSucceeded())
+        return 1;
 
-    base::shutdownLogging();
-    return ret;
+    QTimer::singleShot(0, []()
+    {
+        int result = RUN_ALL_TESTS();
+        QCoreApplication::exit(result);
+    });
+
+    return app.exec();
 }
