@@ -276,7 +276,7 @@ void AsioEventDispatcher::registerTimer(
 
             asio::windows::object_handle handle(io_context_, event_handle);
 
-            const UINT flags = TIME_PERIODIC | TIME_KILL_SYNCHRONOUS | TIME_CALLBACK_EVENT_SET;
+            const UINT flags = TIME_PERIODIC | TIME_CALLBACK_EVENT_SET;
             quint32 native_id = timeSetEvent(
                 interval_ms, 1, reinterpret_cast<LPTIMECALLBACK>(event_handle), 0, flags);
             if (!native_id)
@@ -420,28 +420,26 @@ QList<QAbstractEventDispatcher::TimerInfo> AsioEventDispatcher::registeredTimers
 //--------------------------------------------------------------------------------------------------
 int AsioEventDispatcher::remainingTime(int timer_id)
 {
-    auto get_time = [](TimePoint start_time, Milliseconds interval)
+    auto get_time = [timer_id](const auto& timers) -> int
     {
+        const auto& it = timers.find(timer_id);
+        if (it == timers.end())
+            return -1;
+
         const Milliseconds elapsed =
-            std::chrono::duration_cast<Milliseconds>(Clock::now() - start_time);
-        return static_cast<int>((interval - elapsed).count());
+            std::chrono::duration_cast<Milliseconds>(Clock::now() - it->second.start_time);
+        return static_cast<int>((it->second.interval - elapsed).count());
     };
 
 #if defined(Q_OS_WINDOWS)
-    const auto& multimedia_it = multimedia_timers_.find(timer_id);
-    if (multimedia_it != multimedia_timers_.end())
-        return get_time(multimedia_it->second.start_time, multimedia_it->second.interval);
+    if (int time = get_time(multimedia_timers_); time != -1)
+        return time;
 #endif
 
-    const auto& precise_it = precise_timers_.find(timer_id);
-    if (precise_it != precise_timers_.end())
-        return get_time(precise_it->second.start_time, precise_it->second.interval);
+    if (int time = get_time(precise_timers_); time != -1)
+        return time;
 
-    const auto& coarse_it = coarse_timers_.find(timer_id);
-    if (coarse_it != coarse_timers_.end())
-        return get_time(coarse_it->second.start_time, coarse_it->second.interval);
-
-    return -1;
+    return get_time(coarse_timers_);
 }
 
 //--------------------------------------------------------------------------------------------------
