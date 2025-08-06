@@ -66,6 +66,7 @@ private:
     using Clock = std::chrono::steady_clock;
     using TimePoint = Clock::time_point;
     using Milliseconds = std::chrono::milliseconds;
+    using Seconds = std::chrono::seconds;
 
 #if defined(Q_OS_WINDOWS)
     using SocketHandle = asio::windows::object_handle;
@@ -96,15 +97,6 @@ private:
         TimePoint end_time;
     };
 
-    struct VeryCoarseTimerData
-    {
-        Milliseconds interval;
-        Qt::TimerType type;
-        QObject* object;
-        TimePoint start_time;
-        TimePoint end_time;
-    };
-
     struct SocketData
     {
         explicit SocketData(SocketHandle handle)
@@ -121,7 +113,7 @@ private:
 
     void schedulePreciseTimer(PreciseTimerHandle& handle, int timer_id, TimePoint end_time);
     void scheduleCoarseTimer(CoarseTimerHandle& handle, int timer_id, TimePoint end_time);
-    void scheduleVeryCoarseTimer();
+    void scheduleVeryCoarseTimer(CoarseTimerHandle& handle, int timer_id, TimePoint end_time);
 
 #if defined(Q_OS_WINDOWS)
     void ayncWaitForSocketEvent(qintptr socket, SocketHandle& handle);
@@ -134,14 +126,11 @@ private:
 
     using PreciseTimers = std::unordered_map<int, PreciseTimerData>;
     using CoarseTimers = std::unordered_map<int, CoarseTimerData>;
-    using VeryCoarseTimers = std::unordered_map<int, VeryCoarseTimerData>;
     using Sockets = std::unordered_map<qintptr, SocketData>;
 
     asio::io_context io_context_;
     asio::executor_work_guard<asio::io_context::executor_type> work_guard_;
     std::atomic_bool interrupted_ { false };
-
-    asio::steady_timer very_coarse_timer_;
 
     PreciseTimers precise_timers_;
     bool precise_timers_changed_ = false;
@@ -149,7 +138,7 @@ private:
     CoarseTimers coarse_timers_;
     bool coarse_timers_changed_ = false;
 
-    VeryCoarseTimers very_coarse_timers_;
+    CoarseTimers very_coarse_timers_;
     bool very_coarse_timers_changed_ = false;
 
     Sockets sockets_;

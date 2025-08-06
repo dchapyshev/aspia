@@ -37,7 +37,6 @@ const float kLoadFactorForCoarseTimers = 0.5;
 
 const size_t kReservedSizeForVeryCoarseTimers = 1024;
 const float kLoadFactorForVeryCoarseTimers = 0.5;
-const qint64 kWindowForVeryCoarseTimers = 1000;
 
 const size_t kReservedSizeForSockets = 256;
 const float kLoadFactorForSockets = 0.5;
@@ -47,8 +46,7 @@ const float kLoadFactorForSockets = 0.5;
 //--------------------------------------------------------------------------------------------------
 AsioEventDispatcher::AsioEventDispatcher(QObject* parent)
     : QAbstractEventDispatcher(parent),
-      work_guard_(asio::make_work_guard(io_context_)),
-      very_coarse_timer_(io_context_)
+      work_guard_(asio::make_work_guard(io_context_))
 {
     LOG(INFO) << "Ctor";
 
@@ -243,12 +241,12 @@ void AsioEventDispatcher::registerTimer(
     if (!object)
         return;
 
-    const Milliseconds interval(interval_ms);
-    const TimePoint start_time = Clock::now();
-    const TimePoint end_time = start_time + interval;
-
     if (type == Qt::PreciseTimer)
     {
+        Milliseconds interval(interval_ms);
+        TimePoint start_time = Clock::now();
+        TimePoint end_time = start_time + interval;
+
         auto timer_it = precise_timers_.emplace(timer_id, PreciseTimerData(
             PreciseTimerHandle(io_context_), interval, type, object, start_time, end_time)).first;
         precise_timers_changed_ = true;
@@ -257,6 +255,10 @@ void AsioEventDispatcher::registerTimer(
     }
     else if (type == Qt::CoarseTimer)
     {
+        Milliseconds interval(interval_ms);
+        TimePoint start_time = Clock::now();
+        TimePoint end_time = start_time + interval;
+
         auto timer_it = coarse_timers_.emplace(timer_id, CoarseTimerData(
             CoarseTimerHandle(io_context_), interval, type, object, start_time, end_time)).first;
         coarse_timers_changed_ = true;
@@ -265,14 +267,16 @@ void AsioEventDispatcher::registerTimer(
     }
     else if (type == Qt::VeryCoarseTimer)
     {
-        bool schedule = very_coarse_timers_.empty();
+        Seconds interval = (interval_ms < 1000) ?
+            Seconds(1) : std::chrono::round<Seconds>(Milliseconds(interval_ms));
+        TimePoint start_time = std::chrono::floor<Seconds>(Clock::now());
+        TimePoint end_time = start_time + interval;
 
-        very_coarse_timers_.emplace(timer_id, VeryCoarseTimerData(
-            interval, type, object, start_time, end_time));
+        auto timer_it = very_coarse_timers_.emplace(timer_id, CoarseTimerData(
+            CoarseTimerHandle(io_context_), interval, type, object, start_time, end_time)).first;
         very_coarse_timers_changed_ = true;
 
-        if (schedule)
-            scheduleVeryCoarseTimer();
+        scheduleVeryCoarseTimer(timer_it->second.handle, timer_id, end_time);
     }
 }
 
@@ -294,10 +298,6 @@ bool AsioEventDispatcher::unregisterTimer(int timer_id)
     if (very_coarse_timers_.erase(timer_id) != 0)
     {
         very_coarse_timers_changed_ = true;
-
-        // If there are no more timers left in the list, then we stop the timer.
-        if (very_coarse_timers_.empty())
-            very_coarse_timer_.cancel();
         return true;
     }
 
@@ -327,10 +327,6 @@ bool AsioEventDispatcher::unregisterTimers(QObject* object)
         [object](const auto& timer) { return timer.second.object == object; }) != 0)
     {
         very_coarse_timers_changed_ = true;
-
-        // If there are no more timers left in the list, then we stop the timer.
-        if (very_coarse_timers_.empty())
-            very_coarse_timer_.cancel();
         removed = true;
     }
 
@@ -358,7 +354,7 @@ QList<QAbstractEventDispatcher::TimerInfo> AsioEventDispatcher::registeredTimers
 
     for (auto it = very_coarse_timers_.cbegin(); it != very_coarse_timers_.cend(); ++it)
     {
-        const VeryCoarseTimerData& timer = it->second;
+        const CoarseTimerData& timer = it->second;
         if (timer.object == object)
             list.emplace_back(it->first, static_cast<int>(timer.interval.count()), timer.type);
     }
@@ -487,54 +483,34 @@ void AsioEventDispatcher::scheduleCoarseTimer(
 }
 
 //--------------------------------------------------------------------------------------------------
-void AsioEventDispatcher::scheduleVeryCoarseTimer()
+void AsioEventDispatcher::scheduleVeryCoarseTimer(
+    CoarseTimerHandle& handle, int timer_id, TimePoint end_time)
 {
-    if (very_coarse_timers_.empty())
-        return;
-
     // Start waiting for the timer.
-    very_coarse_timer_.expires_after(Milliseconds(kWindowForVeryCoarseTimers));
-    very_coarse_timer_.async_wait([this](const std::error_code& error_code)
+    handle.expires_at(end_time);
+    handle.async_wait([this, timer_id](const std::error_code& error_code)
     {
         if (error_code)
             return;
 
-        TimePoint current_time = Clock::now();
+        auto it = very_coarse_timers_.find(timer_id);
+        if (it == very_coarse_timers_.end())
+            return;
 
-        do
-        {
-            very_coarse_timers_changed_ = false;
-            auto it = very_coarse_timers_.begin();
+        CoarseTimerData& timer = it->second;
 
-            while (it != very_coarse_timers_.end())
-            {
-                VeryCoarseTimerData& timer = it->second;
+        timer.start_time = timer.end_time;
+        timer.end_time += timer.interval;
 
-                if (timer.end_time > current_time)
-                {
-                    ++it;
-                    continue;
-                }
+        very_coarse_timers_changed_ = false;
 
-                timer.start_time = timer.end_time;
-                timer.end_time += timer.interval;
+        QTimerEvent event(timer_id);
+        QCoreApplication::sendEvent(timer.object, &event);
 
-                QTimerEvent event(it->first);
-                QCoreApplication::sendEvent(timer.object, &event);
+        if (very_coarse_timers_changed_ && !very_coarse_timers_.contains(timer_id))
+            return;
 
-                // As a result of calling method sendEvent, the list of timers may change.
-                if (very_coarse_timers_changed_)
-                {
-                    // The list of timers has changed, iterators may be invalid.
-                    break;
-                }
-
-                ++it;
-            }
-        }
-        while (very_coarse_timers_changed_);
-
-        scheduleVeryCoarseTimer();
+        scheduleVeryCoarseTimer(timer.handle, timer_id, timer.end_time);
     });
 }
 
