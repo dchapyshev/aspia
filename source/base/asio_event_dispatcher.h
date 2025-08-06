@@ -122,15 +122,15 @@ private:
     };
     using Sockets = std::unordered_map<qintptr, SocketData>;
 
-    void asyncWaitForPreciseTimer(asio::high_resolution_timer& handle, int timer_id, TimePoint end_time);
-    void asyncWaitForCoarseTimer(asio::steady_timer& handle, int timer_id, TimePoint end_time);
+    void asyncWaitPreciseTimer(asio::high_resolution_timer& handle, int timer_id, TimePoint end_time);
+    void asyncWaitCoarseTimer(asio::steady_timer& handle, int timer_id, TimePoint end_time);
 
 #if defined(Q_OS_WINDOWS)
-    void asyncWaitForMultimediaTimer(asio::windows::object_handle& handle, int timer_id);
-    void asyncWaitForSocket(qintptr socket, SocketHandle& handle);
+    void asyncWaitMultimediaTimer(asio::windows::object_handle& handle, int timer_id);
+    void asyncWaitSocket(qintptr socket, SocketHandle& handle);
     bool sendSocketEvent(QSocketNotifier* notifier, qintptr socket, long events, long mask);
 #else
-    void asyncWaitForSocket(SocketHandle& handle, SocketHandle::wait_type wait_type);
+    void asyncWaitSocket(SocketHandle& handle, SocketHandle::wait_type wait_type);
 #endif
 
     asio::io_context io_context_;
