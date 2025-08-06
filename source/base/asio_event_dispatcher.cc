@@ -398,28 +398,21 @@ QList<QAbstractEventDispatcher::TimerInfo> AsioEventDispatcher::registeredTimers
 {
     QList<TimerInfo> list;
 
-#if defined(Q_OS_WINDOWS)
-    for (auto it = multimedia_timers_.cbegin(); it != multimedia_timers_.cend(); ++it)
+    auto add_timers = [&](const auto& timers)
     {
-        const MultimediaTimer& timer = it->second;
-        if (timer.object == object)
-            list.emplace_back(it->first, static_cast<int>(timer.interval.count()), timer.type);
-    }
+        for (const auto& [id, timer] : timers)
+        {
+            if (timer.object == object)
+                list.emplace_back(id, static_cast<int>(timer.interval.count()), timer.type);
+        }
+    };
+
+#if defined(Q_OS_WINDOWS)
+    add_timers(multimedia_timers_);
 #endif
 
-    for (auto it = precise_timers_.cbegin(); it != precise_timers_.cend(); ++it)
-    {
-        const PreciseTimer& timer = it->second;
-        if (timer.object == object)
-            list.emplace_back(it->first, static_cast<int>(timer.interval.count()), timer.type);
-    }
-
-    for (auto it = coarse_timers_.cbegin(); it != coarse_timers_.cend(); ++it)
-    {
-        const CoarseTimer& timer = it->second;
-        if (timer.object == object)
-            list.emplace_back(it->first, static_cast<int>(timer.interval.count()), timer.type);
-    }
+    add_timers(precise_timers_);
+    add_timers(coarse_timers_);
 
     return list;
 }
