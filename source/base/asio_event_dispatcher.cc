@@ -275,6 +275,8 @@ void AsioEventDispatcher::registerTimer(
 
             asio::windows::object_handle handle(io_context_, event_handle);
 
+            // TODO: Use CreateWaitableTimerExW with flag CREATE_WAITABLE_TIMER_HIGH_RESOLUTION after
+            // Windows 7/8 support ends.
             const UINT flags = TIME_PERIODIC | TIME_CALLBACK_EVENT_SET;
             quint32 native_id = timeSetEvent(
                 interval_ms, 1, reinterpret_cast<LPTIMECALLBACK>(event_handle), 0, flags);
@@ -415,14 +417,16 @@ QList<QAbstractEventDispatcher::TimerInfo> AsioEventDispatcher::registeredTimers
 //--------------------------------------------------------------------------------------------------
 int AsioEventDispatcher::remainingTime(int timer_id)
 {
-    auto get_time = [timer_id](const auto& timers) -> int
+    TimePoint now = Clock::now();
+
+    auto get_time = [&](const auto& timers) -> int
     {
         const auto& it = timers.find(timer_id);
         if (it == timers.end())
             return -1;
 
         const Milliseconds elapsed =
-            std::chrono::duration_cast<Milliseconds>(Clock::now() - it->second.start_time);
+            std::chrono::duration_cast<Milliseconds>(now - it->second.start_time);
         return static_cast<int>((it->second.interval - elapsed).count());
     };
 
