@@ -267,6 +267,10 @@ void AsioEventDispatcher::registerTimer(
     }
     else if (type == Qt::VeryCoarseTimer)
     {
+        // Very coarse timers should wake up the thread as infrequently as possible, so their
+        // interval cannot be lower than 1 second and should be rounded to the nearest second.
+        // This allows timers to fire less frequently and allows multiple timers to fire at the
+        // same time.
         Seconds interval = (interval_ms < 1000) ?
             Seconds(1) : std::chrono::round<Seconds>(Milliseconds(interval_ms));
         TimePoint start_time = std::chrono::floor<Seconds>(Clock::now());
