@@ -36,7 +36,7 @@ namespace base {
 namespace {
 
 #if defined(Q_OS_WINDOWS)
-const size_t kReservedSizeForMultimediaTimers = 32;
+const size_t kReservedSizeForMultimediaTimers = 16;
 const float kLoadFactorForMultimediaTimers = 0.5;
 #endif
 
@@ -164,21 +164,21 @@ void AsioEventDispatcher::registerSocketNotifier(QSocketNotifier* notifier)
     {
         data.read = notifier;
 #if defined(Q_OS_UNIX)
-        asyncWaitForSocketEvent(data.handle, SocketHandle::wait_read);
+        asyncWaitForSocket(data.handle, SocketHandle::wait_read);
 #endif
     }
     else if (type == QSocketNotifier::Write && !data.write)
     {
         data.write = notifier;
 #if defined(Q_OS_UNIX)
-        asyncWaitForSocketEvent(data.handle, SocketHandle::wait_write);
+        asyncWaitForSocket(data.handle, SocketHandle::wait_write);
 #endif
     }
     else if (type == QSocketNotifier::Exception && !data.exception)
     {
         data.exception = notifier;
 #if defined(Q_OS_UNIX)
-        asyncWaitForSocketEvent(data.handle, SocketHandle::wait_error);
+        asyncWaitForSocket(data.handle, SocketHandle::wait_error);
 #endif
     }
     else
@@ -188,7 +188,7 @@ void AsioEventDispatcher::registerSocketNotifier(QSocketNotifier* notifier)
 
 #if defined(Q_OS_WINDOWS)
     if (is_new_socket)
-        ayncWaitForSocketEvent(socket, data.handle);
+        asyncWaitForSocket(socket, data.handle);
 #endif
 }
 
@@ -265,9 +265,10 @@ void AsioEventDispatcher::registerTimer(
 #if defined(Q_OS_WINDOWS)
         // In Windows asio::high_resolution_timer is equivalent to asio::steady_timer and therefore
         // only provides accuracy within 15ms. Multimedia timers provide 1ms accuracy, but their
-        // availability is very limited. We try to create a multimedia timer and if that fails, we
-        // create a asio::high_resolution_timer-based timer.
-        for (;;)
+        // availability is very limited. We try to create no more than the quantity specified in
+        // kReservedSizeForMultimediaTimers. If the number of timers is greater or it is not possible
+        // to create a multimedia timer, then we create asio::high_resolution_timer timer.
+        while (multimedia_timers_.size() <= kReservedSizeForMultimediaTimers)
         {
             HANDLE event_handle = CreateEventW(nullptr, FALSE, FALSE, nullptr);
             if (!event_handle)
@@ -285,7 +286,7 @@ void AsioEventDispatcher::registerTimer(
                 std::move(handle), native_id, interval, type, object, start_time, end_time)).first;
             multimedia_timers_changed_ = true;
 
-            scheduleMultimediaTimer(timer_it->second.event_handle, timer_id);
+            asyncWaitForMultimediaTimer(timer_it->second.event_handle, timer_id);
             return;
         }
 #endif
@@ -294,7 +295,7 @@ void AsioEventDispatcher::registerTimer(
             asio::high_resolution_timer(io_context_), interval, type, object, start_time, end_time)).first;
         precise_timers_changed_ = true;
 
-        schedulePreciseTimer(timer_it->second.handle, timer_id, end_time);
+        asyncWaitForPreciseTimer(timer_it->second.handle, timer_id, end_time);
     }
     else if (type == Qt::CoarseTimer || type == Qt::VeryCoarseTimer)
     {
@@ -314,7 +315,7 @@ void AsioEventDispatcher::registerTimer(
             asio::steady_timer(io_context_), interval, type, object, start_time, end_time)).first;
         coarse_timers_changed_ = true;
 
-        scheduleCoarseTimer(timer_it->second.handle, timer_id, end_time);
+        asyncWaitForCoarseTimer(timer_it->second.handle, timer_id, end_time);
     }
 }
 
@@ -482,7 +483,7 @@ asio::io_context& AsioEventDispatcher::ioContext()
 }
 
 //--------------------------------------------------------------------------------------------------
-void AsioEventDispatcher::schedulePreciseTimer(
+void AsioEventDispatcher::asyncWaitForPreciseTimer(
     asio::high_resolution_timer& handle, int timer_id, TimePoint end_time)
 {
     // Start waiting for the timer.
@@ -509,12 +510,12 @@ void AsioEventDispatcher::schedulePreciseTimer(
         if (precise_timers_changed_ && !precise_timers_.contains(timer_id))
             return;
 
-        schedulePreciseTimer(timer.handle, timer_id, timer.end_time);
+        asyncWaitForPreciseTimer(timer.handle, timer_id, timer.end_time);
     });
 }
 
 //--------------------------------------------------------------------------------------------------
-void AsioEventDispatcher::scheduleCoarseTimer(
+void AsioEventDispatcher::asyncWaitForCoarseTimer(
     asio::steady_timer& handle, int timer_id, TimePoint end_time)
 {
     // Start waiting for the timer.
@@ -541,13 +542,14 @@ void AsioEventDispatcher::scheduleCoarseTimer(
         if (coarse_timers_changed_ && !coarse_timers_.contains(timer_id))
             return;
 
-        scheduleCoarseTimer(timer.handle, timer_id, timer.end_time);
+        asyncWaitForCoarseTimer(timer.handle, timer_id, timer.end_time);
     });
 }
 
 #if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
-void AsioEventDispatcher::scheduleMultimediaTimer(asio::windows::object_handle& handle, int timer_id)
+void AsioEventDispatcher::asyncWaitForMultimediaTimer(
+    asio::windows::object_handle& handle, int timer_id)
 {
     // Start waiting for the timer.
     handle.async_wait([this, timer_id](const std::error_code& error_code)
@@ -572,14 +574,14 @@ void AsioEventDispatcher::scheduleMultimediaTimer(asio::windows::object_handle& 
         if (multimedia_timers_changed_ && !multimedia_timers_.contains(timer_id))
             return;
 
-        scheduleMultimediaTimer(timer.event_handle, timer_id);
+        asyncWaitForMultimediaTimer(timer.event_handle, timer_id);
     });
 }
 #endif // defined(Q_OS_WINDOWS)
 
 #if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
-void AsioEventDispatcher::ayncWaitForSocketEvent(qintptr socket, SocketHandle& handle)
+void AsioEventDispatcher::asyncWaitForSocket(qintptr socket, SocketHandle& handle)
 {
     handle.async_wait([this, socket](const std::error_code& error_code)
     {
@@ -615,7 +617,7 @@ void AsioEventDispatcher::ayncWaitForSocketEvent(qintptr socket, SocketHandle& h
         if (!sendSocketEvent(data.exception, socket, events, FD_OOB))
             return;
 
-        ayncWaitForSocketEvent(socket, data.handle);
+        asyncWaitForSocket(socket, data.handle);
     });
 }
 #endif // defined(Q_OS_WINDOWS)
@@ -648,8 +650,7 @@ bool AsioEventDispatcher::sendSocketEvent(
 
 #if defined(Q_OS_UNIX)
 //--------------------------------------------------------------------------------------------------
-void AsioEventDispatcher::asyncWaitForSocketEvent(
-    SocketHandle& handle, SocketHandle::wait_type wait_type)
+void AsioEventDispatcher::asyncWaitForSocket(SocketHandle& handle, SocketHandle::wait_type wait_type)
 {
     const qintptr socket = handle.native_handle();
 
@@ -697,7 +698,7 @@ void AsioEventDispatcher::asyncWaitForSocketEvent(
         if (sockets_changed_ && !sockets_.contains(socket))
             return;
 
-        asyncWaitForSocketEvent(data.handle, wait_type);
+        asyncWaitForSocket(data.handle, wait_type);
     });
 }
 #endif // defined(Q_OS_UNIX)
