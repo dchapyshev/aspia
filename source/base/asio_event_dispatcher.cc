@@ -137,7 +137,8 @@ void AsioEventDispatcher::registerSocketNotifier(QSocketNotifier* notifier)
             return;
         }
 
-        SocketData data(SocketHandle(io_context_, wsa_event));
+        // Now asio::windows::object_handle owns the handle.
+        SocketHandle handle(io_context_, wsa_event);
 
         // In Windows we subscribe to all events at once. If the notifier for a specific event is
         // not registered, it is ignored.
@@ -149,10 +150,9 @@ void AsioEventDispatcher::registerSocketNotifier(QSocketNotifier* notifier)
             return;
         }
 #else
-        SocketData data(SocketHandle(io_context_, socket))
+        SocketHandle handle(io_context_, socket))
 #endif
-
-        it = sockets_.emplace(socket, std::move(data)).first;
+        it = sockets_.emplace(socket, SocketData(std::move(handle))).first;
     }
 
     SocketData& data = it->second;
@@ -180,6 +180,7 @@ void AsioEventDispatcher::registerSocketNotifier(QSocketNotifier* notifier)
     }
     else
     {
+        LOG(ERROR) << "Multiple socket notifiers for" << socket;
         return;
     }
 
@@ -203,32 +204,20 @@ void AsioEventDispatcher::unregisterSocketNotifier(QSocketNotifier* notifier)
 
     SocketData& data = it->second;
 
-    if (data.read != notifier && data.write != notifier && data.exception != notifier)
+    if (data.read == notifier)
+        data.read = nullptr;
+    else if (data.write == notifier)
+        data.write = nullptr;
+    else if (data.exception == notifier)
+        data.exception = nullptr;
+    else
         return;
-
-    switch (notifier->type())
-    {
-        case QSocketNotifier::Read:
-            data.read = nullptr;
-            break;
-
-        case QSocketNotifier::Write:
-            data.write = nullptr;
-            break;
-
-        default:
-            data.exception = nullptr;
-            break;
-    }
 
     if (data.read || data.write || data.exception)
     {
         // There are active notifiers for this socket.
         return;
     }
-
-    std::error_code ignored_error;
-    data.handle.cancel(ignored_error);
 
 #if defined(Q_OS_WINDOWS)
     if (data.handle.native_handle() != WSA_INVALID_EVENT)
@@ -260,7 +249,7 @@ void AsioEventDispatcher::registerTimer(
         // interval cannot be lower than 1 second and should be rounded to the nearest second.
         // This allows timers to fire less frequently and allows multiple timers to fire at the
         // same time.
-        interval = (interval < Milliseconds(1000)) ? Seconds(1) : std::chrono::ceil<Seconds>(interval);
+        interval = std::chrono::ceil<Seconds>(interval);
         start_time = std::chrono::floor<Seconds>(start_time);
         type = Qt::CoarseTimer;
     }
@@ -279,7 +268,10 @@ void AsioEventDispatcher::registerTimer(
         {
             HANDLE event = CreateEventW(nullptr, FALSE, FALSE, nullptr);
             if (!event)
+            {
+                PLOG(ERROR) << "CreateEventW failed";
                 break;
+            }
 
             // Now asio::windows::object_handle owns the handle.
             asio::windows::object_handle handle(io_context_, event);
@@ -290,7 +282,10 @@ void AsioEventDispatcher::registerTimer(
             quint32 native_id = timeSetEvent(
                 interval_ms, 1, reinterpret_cast<LPTIMECALLBACK>(event), 0, flags);
             if (!native_id)
+            {
+                // Normal case if there are too many multimedia timers registered.
                 break;
+            }
 
             auto timer = multimedia_timers_.emplace(timer_id, MultimediaTimer(
                 std::move(handle), native_id, interval, end_time, object)).first;
@@ -561,35 +556,31 @@ void AsioEventDispatcher::asyncWaitSocket(qintptr socket, SocketHandle& handle)
 
         const long events = network_events.lNetworkEvents;
 
-        if (!sendSocketEvent(data.read, socket, events, FD_READ | FD_ACCEPT | FD_CLOSE))
+        auto send_event = [&](QSocketNotifier* notifier, long mask) -> bool
+        {
+            // There are no notifications for this event type or there is no notifier for this event type.
+            if (!(events & mask) || !notifier)
+                return true;
+
+            QEvent event(QEvent::SockAct);
+            QCoreApplication::sendEvent(notifier, &event);
+
+            // If the list has changed, we try to find the socket in it. If there is no socket, then further
+            // execution should be interrupted and the next asynchronous wait will not be called.
+            return sockets_.contains(socket);
+        };
+
+        if (!send_event(data.read, FD_READ | FD_ACCEPT | FD_CLOSE))
             return;
 
-        if (!sendSocketEvent(data.write, socket, events, FD_WRITE | FD_CONNECT))
+        if (!send_event(data.write, FD_WRITE | FD_CONNECT))
             return;
 
-        if (!sendSocketEvent(data.exception, socket, events, FD_OOB))
+        if (!send_event(data.exception, FD_OOB))
             return;
 
         asyncWaitSocket(socket, data.handle);
     });
-}
-#endif // defined(Q_OS_WINDOWS)
-
-#if defined(Q_OS_WINDOWS)
-//--------------------------------------------------------------------------------------------------
-bool AsioEventDispatcher::sendSocketEvent(
-    QSocketNotifier* notifier, qintptr socket, long events, long mask)
-{
-    // There are no notifications for this event type or there is no notifier for this event type.
-    if (!(events & mask) || !notifier)
-        return true;
-
-    QEvent event(QEvent::SockAct);
-    QCoreApplication::sendEvent(notifier, &event);
-
-    // If the list has changed, we try to find the socket in it. If there is no socket, then further
-    // execution should be interrupted and the next asynchronous wait will not be called.
-    return sockets_.contains(socket);
 }
 #endif // defined(Q_OS_WINDOWS)
 

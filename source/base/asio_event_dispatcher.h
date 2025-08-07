@@ -118,7 +118,6 @@ private:
 #if defined(Q_OS_WINDOWS)
     void asyncWaitMultimediaTimer(asio::windows::object_handle& handle, int timer_id);
     void asyncWaitSocket(qintptr socket, SocketHandle& handle);
-    bool sendSocketEvent(QSocketNotifier* notifier, qintptr socket, long events, long mask);
 #else
     void asyncWaitSocket(SocketHandle& handle, SocketHandle::wait_type wait_type);
 #endif
