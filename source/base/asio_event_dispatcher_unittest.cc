@@ -17,16 +17,13 @@
 //
 
 #include <QCoreApplication>
+#include <QHostInfo>
 #include <QTimer>
+#include <QTcpServer>
+#include <QTcpSocket>
 #include <QThread>
 
 #include <gtest/gtest.h>
-
-#if defined(Q_OS_UNIX)
-#include <dirent.h>
-#include <unistd.h>
-#include <string>
-#endif
 
 namespace base {
 
@@ -279,7 +276,7 @@ TEST(TimersTest, OnePreciseTimerRepeat100Times)
 
 TEST(TimersTest, ZeroSingleShotTriggering)
 {
-    constexpr int timerCount = 100;
+    constexpr int timerCount = 10000;
     int triggeredCount = 0;
 
     QEventLoop loop;
@@ -302,6 +299,136 @@ TEST(TimersTest, ZeroSingleShotTriggering)
 
     ASSERT_EQ(triggeredCount, timerCount);
     ASSERT_LT(elapsedMs, 5000);
+}
+
+TEST(SocketTest, EchoClientServer)
+{
+    constexpr int iterations = 1000;
+    constexpr quint16 port = 12345;
+    const QByteArray testMessage = "Hello, Echo Server!";
+
+    QEventLoop loop;
+    int currentIteration = 0;
+
+    std::function<void()> runIteration;
+
+    runIteration = [&]()
+    {
+        //GTEST_LOG_(INFO) << "Starting iteration " << currentIteration;
+
+        QTcpServer* server = new QTcpServer();
+        QTcpSocket* client = new QTcpSocket();
+        QByteArray* receiveBuffer = new QByteArray();
+        QTimer* watchdog = new QTimer();
+
+        // Watchdog timeout per iteration
+        watchdog->setSingleShot(true);
+        QObject::connect(watchdog, &QTimer::timeout, [&]()
+        {
+            GTEST_FAIL() << "Iteration timed out at " << currentIteration;
+            loop.quit();
+        });
+        watchdog->start(1000); // 1 second per iteration max
+
+        // Server accepts new connection
+        QObject::connect(server, &QTcpServer::newConnection, [=]()
+        {
+            //GTEST_LOG_(INFO) << "Server: newConnection accepted";
+            QTcpSocket* serverSocket = server->nextPendingConnection();
+
+            QObject::connect(serverSocket, &QTcpSocket::readyRead, [=]()
+            {
+                //GTEST_LOG_(INFO) << "Server: readyRead triggered";
+                QByteArray data = serverSocket->readAll();
+                //GTEST_LOG_(INFO) << "Server: received " << data.toStdString();
+                serverSocket->write(data);
+                serverSocket->flush();
+            });
+
+            QObject::connect(serverSocket, &QTcpSocket::disconnected, serverSocket, &QObject::deleteLater);
+
+            // Edge case: data arrived before readyRead connected
+            if (serverSocket->bytesAvailable() > 0) {
+                emit serverSocket->readyRead();
+            }
+        });
+
+        // Client logic
+        QObject::connect(client, &QTcpSocket::connected, [=]()
+        {
+            QTimer::singleShot(0, [=]()
+            {
+                //GTEST_LOG_(INFO) << "Client: sending message";
+                client->write(testMessage);
+                client->flush();
+            });
+        });
+
+        QObject::connect(client, &QTcpSocket::readyRead, [=, &loop, &currentIteration, &runIteration]()
+        {
+            *receiveBuffer += client->readAll();
+            //GTEST_LOG_(INFO) << "Client: received chunk, total: " << receiveBuffer->size();
+
+            if (receiveBuffer->size() >= testMessage.size())
+            {
+                if (*receiveBuffer == testMessage)
+                {
+                    //GTEST_LOG_(INFO) << "Client: echo successful";
+
+                    watchdog->stop();
+                    watchdog->deleteLater();
+                    delete receiveBuffer;
+
+                    client->disconnectFromHost();
+                    client->deleteLater();
+                    server->close();
+                    server->deleteLater();
+
+                    ++currentIteration;
+                    if (currentIteration >= iterations)
+                    {
+                        loop.quit();
+                    }
+                    else
+                    {
+                        QTimer::singleShot(0, runIteration);
+                    }
+                }
+                else
+                {
+                    GTEST_FAIL() << "Incorrect echo: " << receiveBuffer->constData();
+                    loop.quit();
+                }
+            }
+        });
+
+        QObject::connect(client, &QTcpSocket::errorOccurred, [=, &loop](QAbstractSocket::SocketError)
+        {
+            GTEST_FAIL() << "Client error: " << client->errorString().toStdString();
+            loop.quit();
+        });
+
+        QObject::connect(server, &QTcpServer::acceptError, [=, &loop](QAbstractSocket::SocketError)
+        {
+            GTEST_FAIL() << "Server error: " << server->errorString().toStdString();
+            loop.quit();
+        });
+
+        // Start server and connect client
+        if (!server->listen(QHostAddress::LocalHost, port))
+        {
+            GTEST_FAIL() << "Server failed to listen on port " << port;
+            loop.quit();
+            return;
+        }
+
+        client->connectToHost(QHostAddress::LocalHost, port);
+    };
+
+    runIteration();
+    loop.exec();
+
+    SUCCEED();
 }
 
 } // namespace base

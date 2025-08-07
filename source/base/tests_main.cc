@@ -23,28 +23,83 @@
 #include <QCoreApplication>
 #include <QTimer>
 
+#if defined(Q_OS_UNIX)
+#include <dirent.h>
+#include <unistd.h>
+#include <string>
+#endif
+
+#if defined(Q_OS_WINDOWS)
+#include <qt_windows.h>
+#endif
+
 #include <gtest/gtest.h>
+
+namespace {
+
+int countOpenHandles()
+{
+#if defined(Q_OS_WINDOWS)
+    DWORD handleCount = 0;
+    if (GetProcessHandleCount(GetCurrentProcess(), &handleCount))
+        return static_cast<int>(handleCount);
+    return -1;
+#else
+#if defined(Q_OS_LINUX)
+    const char* fd_dir = "/proc/self/fd";
+#elif defined(Q_OS_MACOS)
+    const char* fd_dir = "/dev/fd";
+#else
+    return -1;
+#endif
+
+    DIR* dir = opendir(fd_dir);
+    if (!dir)
+        return -1;
+
+    int count = 0;
+    while (dirent* entry = readdir(dir))
+    {
+        if (entry->d_name[0] != '.')
+            ++count;
+    }
+    closedir(dir);
+    return count;
+#endif
+}
+
+} // namespace
 
 int main(int argc, char **argv)
 {
-    base::LoggingSettings logging_settings;
-    logging_settings.min_log_level = base::LOG_INFO;
+    int handles_before = countOpenHandles();
+    int ret;
 
-    base::ScopedLogging scoped_logging(logging_settings);
-
-    QCoreApplication::setEventDispatcher(new base::AsioEventDispatcher());
-    QCoreApplication app(argc, argv);
-    ::testing::InitGoogleTest(&argc, argv);
-
-    base::ScopedCryptoInitializer crypto_initializer;
-    if (!crypto_initializer.isSucceeded())
-        return 1;
-
-    QTimer::singleShot(0, []()
     {
-        int result = RUN_ALL_TESTS();
-        QCoreApplication::exit(result);
-    });
+        base::LoggingSettings logging_settings;
+        logging_settings.min_log_level = base::LOG_INFO;
 
-    return app.exec();
+        base::ScopedLogging scoped_logging(logging_settings);
+
+        QCoreApplication::setEventDispatcher(new base::AsioEventDispatcher());
+        QCoreApplication app(argc, argv);
+        ::testing::InitGoogleTest(&argc, argv);
+
+        base::ScopedCryptoInitializer crypto_initializer;
+        if (!crypto_initializer.isSucceeded())
+            return 1;
+
+        QTimer::singleShot(0, []()
+        {
+            int result = RUN_ALL_TESTS();
+            QCoreApplication::exit(result);
+        });
+
+        ret = app.exec();
+    }
+
+    int handles_after = countOpenHandles();
+    GTEST_LOG_(INFO) << "Open handles before: " << handles_before << " after: " << handles_after;
+
+    return ret;
 }

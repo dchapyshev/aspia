@@ -104,15 +104,22 @@ bool AsioEventDispatcher::processEvents(QEventLoop::ProcessEventsFlags flags)
 
         // Processing of Zero timers should be performed after QCoreApplication::sendPostedEvents
         // and before I/O and regular timers.
-        while (!zero_timers_.empty())
+        if (!zero_timers_.empty())
         {
-            auto first_timer = zero_timers_.begin();
+            ZeroTimers timers = zero_timers_;
+            zero_timers_changed_ = false;
 
-            QTimerEvent event(first_timer->first);
-            QCoreApplication::sendEvent(first_timer->second, &event);
+            for (const auto& [id, object] : timers)
+            {
+                if (zero_timers_changed_ && !zero_timers_.contains(id))
+                    continue;
 
-            zero_timers_.erase(first_timer);
-            ++current_count;
+                zero_timers_changed_ = false;
+
+                QTimerEvent event(id);
+                QCoreApplication::sendEvent(object, &event);
+                ++current_count;
+            }
         }
 
         current_count += io_context_.poll();
@@ -274,6 +281,7 @@ void AsioEventDispatcher::registerTimer(
     if (interval_ms == 0)
     {
         zero_timers_.emplace(timer_id, object);
+        zero_timers_changed_ = true;
         wakeUp();
         return;
     }
@@ -282,6 +290,8 @@ void AsioEventDispatcher::registerTimer(
     // force it to be coarse.
     if (type == Qt::PreciseTimer && interval_ms > 100)
         type = Qt::CoarseTimer;
+    else if (interval_ms >= 20000)
+        type = Qt::VeryCoarseTimer;
 
     Milliseconds interval(interval_ms);
     TimePoint start_time = Clock::now();
@@ -298,17 +308,18 @@ void AsioEventDispatcher::registerTimer(
         // to create a multimedia timer, then we create asio::high_resolution_timer timer.
         while (multimedia_timers_.size() <= kReservedSizeForMultimediaTimers)
         {
-            HANDLE event_handle = CreateEventW(nullptr, FALSE, FALSE, nullptr);
-            if (!event_handle)
+            HANDLE event = CreateEventW(nullptr, FALSE, FALSE, nullptr);
+            if (!event)
                 break;
 
-            asio::windows::object_handle handle(io_context_, event_handle);
+            // Now asio::windows::object_handle owns the handle.
+            asio::windows::object_handle handle(io_context_, event);
 
             // TODO: Use CreateWaitableTimerExW with flag CREATE_WAITABLE_TIMER_HIGH_RESOLUTION after
             // Windows 7/8 support ends.
             const UINT flags = TIME_PERIODIC | TIME_CALLBACK_EVENT_SET;
             quint32 native_id = timeSetEvent(
-                interval_ms, 1, reinterpret_cast<LPTIMECALLBACK>(event_handle), 0, flags);
+                interval_ms, 1, reinterpret_cast<LPTIMECALLBACK>(event), 0, flags);
             if (!native_id)
                 break;
 
@@ -320,9 +331,10 @@ void AsioEventDispatcher::registerTimer(
             return;
         }
 #endif
+        asio::high_resolution_timer handle(io_context_);
 
         auto timer_it = precise_timers_.emplace(timer_id, PreciseTimer(
-            asio::high_resolution_timer(io_context_), interval, type, object, start_time, end_time)).first;
+            std::move(handle), interval, type, object, start_time, end_time)).first;
         precise_timers_changed_ = true;
 
         asyncWaitPreciseTimer(timer_it->second.handle, timer_id, end_time);
@@ -340,9 +352,10 @@ void AsioEventDispatcher::registerTimer(
         }
 
         TimePoint end_time = start_time + interval;
+        asio::steady_timer handle(io_context_);
 
         auto timer_it = coarse_timers_.emplace(timer_id, CoarseTimer(
-            asio::steady_timer(io_context_), interval, type, object, start_time, end_time)).first;
+            std::move(handle), interval, type, object, start_time, end_time)).first;
         coarse_timers_changed_ = true;
 
         asyncWaitCoarseTimer(timer_it->second.handle, timer_id, end_time);
@@ -353,7 +366,10 @@ void AsioEventDispatcher::registerTimer(
 bool AsioEventDispatcher::unregisterTimer(int timer_id)
 {
     if (zero_timers_.erase(timer_id) != 0)
+    {
+        zero_timers_changed_ = true;
         return true;
+    }
 
 #if defined(Q_OS_WINDOWS)
     auto it = multimedia_timers_.find(timer_id);
@@ -387,8 +403,11 @@ bool AsioEventDispatcher::unregisterTimers(QObject* object)
 {
     bool removed = false;
 
-    removed |= std::erase_if(
-        zero_timers_, [object](const auto& timer) { return timer.second == object; }) != 0;
+    if (std::erase_if(zero_timers_, [object](const auto& timer) { return timer.second == object; }) != 0)
+    {
+        zero_timers_changed_ = true;
+        removed = true;
+    }
 
 #if defined(Q_OS_WINDOWS)
     for (auto it = multimedia_timers_.begin(); it != multimedia_timers_.end();)
@@ -430,6 +449,12 @@ QList<QAbstractEventDispatcher::TimerInfo> AsioEventDispatcher::registeredTimers
 {
     QList<TimerInfo> list;
 
+    for (const auto& [id, timer_object] : zero_timers_)
+    {
+        if (timer_object == object)
+            list.emplace_back(id, 0, Qt::CoarseTimer);
+    }
+
     auto add_timers = [&](const auto& timers)
     {
         for (const auto& [id, timer] : timers)
@@ -452,6 +477,9 @@ QList<QAbstractEventDispatcher::TimerInfo> AsioEventDispatcher::registeredTimers
 //--------------------------------------------------------------------------------------------------
 int AsioEventDispatcher::remainingTime(int timer_id)
 {
+    if (zero_timers_.contains(timer_id))
+        return 0;
+
     TimePoint now = Clock::now();
 
     auto get_time = [&](const auto& timers) -> int
@@ -462,7 +490,9 @@ int AsioEventDispatcher::remainingTime(int timer_id)
 
         const Milliseconds elapsed =
             std::chrono::duration_cast<Milliseconds>(now - it->second.start_time);
-        return static_cast<int>((it->second.interval - elapsed).count());
+        qint64 remaining = (it->second.interval - elapsed).count();
+
+        return static_cast<int>(remaining > 0 ? remaining : 0);
     };
 
 #if defined(Q_OS_WINDOWS)

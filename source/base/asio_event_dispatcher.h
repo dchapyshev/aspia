@@ -133,6 +133,7 @@ private:
     std::atomic_bool interrupted_ { false };
 
     ZeroTimers zero_timers_;
+    bool zero_timers_changed_ = false;
 
 #if defined(Q_OS_WINDOWS)
     MultimediaTimers multimedia_timers_;
