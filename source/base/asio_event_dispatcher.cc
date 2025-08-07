@@ -150,7 +150,7 @@ void AsioEventDispatcher::registerSocketNotifier(QSocketNotifier* notifier)
             return;
         }
 #else
-        SocketHandle handle(io_context_, socket))
+        SocketHandle handle(io_context_, socket);
 #endif
         it = sockets_.emplace(socket, SocketData(std::move(handle))).first;
     }
@@ -264,7 +264,7 @@ void AsioEventDispatcher::registerTimer(
         // availability is very limited. We try to create no more than the quantity specified in
         // kReservedSizeForMultimediaTimers. If the number of timers is greater or it is not possible
         // to create a multimedia timer, then we create asio::high_resolution_timer timer.
-        while (multimedia_timers_.size() <= kReservedSizeForMultimediaTimers)
+        while (multimedia_timers_.size() < kReservedSizeForMultimediaTimers)
         {
             HANDLE event = CreateEventW(nullptr, FALSE, FALSE, nullptr);
             if (!event)
