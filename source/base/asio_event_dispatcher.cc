@@ -35,8 +35,6 @@ namespace base {
 
 namespace {
 
-const size_t kReservedSizeForZeroTimers = 32;
-
 #if defined(Q_OS_WINDOWS)
 const size_t kReservedSizeForMultimediaTimers = 16;
 const float kLoadFactorForMultimediaTimers = 0.5;
@@ -58,8 +56,6 @@ AsioEventDispatcher::AsioEventDispatcher(QObject* parent)
     : QAbstractEventDispatcher(parent),
       work_guard_(asio::make_work_guard(io_context_))
 {
-    zero_timers_.reserve(kReservedSizeForZeroTimers);
-
 #if defined(Q_OS_WINDOWS)
     multimedia_timers_.reserve(kReservedSizeForMultimediaTimers);
     multimedia_timers_.max_load_factor(kLoadFactorForMultimediaTimers);
@@ -98,28 +94,8 @@ bool AsioEventDispatcher::processEvents(QEventLoop::ProcessEventsFlags flags)
 
     do
     {
-        current_count = 0;
-
         QCoreApplication::sendPostedEvents();
-
-        // Processing of Zero timers should be performed after QCoreApplication::sendPostedEvents
-        // and before I/O and regular timers.
-        if (!zero_timers_.empty())
-        {
-            ZeroTimers timers = zero_timers_;
-
-            for (const auto& [id, object] : timers)
-            {
-                if (!zero_timers_.contains(id))
-                    continue;
-
-                QTimerEvent event(id);
-                QCoreApplication::sendEvent(object, &event);
-                ++current_count;
-            }
-        }
-
-        current_count += io_context_.poll();
+        current_count = io_context_.poll();
 
         if (flags.testFlag(QEventLoop::WaitForMoreEvents) &&
             !interrupted_.load(std::memory_order_relaxed) &&
@@ -272,14 +248,6 @@ void AsioEventDispatcher::registerTimer(
     if (!object)
         return;
 
-    // Optimization for single-shot zero timers.
-    if (interval_ms == 0)
-    {
-        zero_timers_.emplace(timer_id, object);
-        wakeUp();
-        return;
-    }
-
     // Precision timers have high overhead resources. If the timer has a large interval, then we
     // force it to be coarse.
     if (type == Qt::PreciseTimer && interval_ms > 100)
@@ -356,9 +324,6 @@ void AsioEventDispatcher::registerTimer(
 //--------------------------------------------------------------------------------------------------
 bool AsioEventDispatcher::unregisterTimer(int timer_id)
 {
-    if (zero_timers_.erase(timer_id) != 0)
-        return true;
-
 #if defined(Q_OS_WINDOWS)
     auto it = multimedia_timers_.find(timer_id);
     if (it != multimedia_timers_.end())
@@ -382,9 +347,6 @@ bool AsioEventDispatcher::unregisterTimer(int timer_id)
 bool AsioEventDispatcher::unregisterTimers(QObject* object)
 {
     bool removed = false;
-
-    removed |= std::erase_if(
-        zero_timers_, [object](const auto& timer) { return timer.second == object; }) != 0;
 
 #if defined(Q_OS_WINDOWS)
     for (auto it = multimedia_timers_.begin(); it != multimedia_timers_.end();)
@@ -416,12 +378,6 @@ QList<QAbstractEventDispatcher::TimerInfo> AsioEventDispatcher::registeredTimers
 {
     QList<TimerInfo> list;
 
-    for (const auto& [id, timer_object] : zero_timers_)
-    {
-        if (timer_object == object)
-            list.emplace_back(id, 0, Qt::CoarseTimer);
-    }
-
     auto add_timers = [&](const auto& timers)
     {
         for (const auto& [id, timer] : timers)
@@ -444,9 +400,6 @@ QList<QAbstractEventDispatcher::TimerInfo> AsioEventDispatcher::registeredTimers
 //--------------------------------------------------------------------------------------------------
 int AsioEventDispatcher::remainingTime(int timer_id)
 {
-    if (zero_timers_.contains(timer_id))
-        return 0;
-
     TimePoint now = Clock::now();
 
     auto get_time = [&](const auto& timers) -> int

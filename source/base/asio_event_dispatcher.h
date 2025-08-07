@@ -96,7 +96,6 @@ private:
         TimePoint end_time;
     };
 
-    using ZeroTimers = std::unordered_map<int, QObject*>;
     using PreciseTimer = GenericTimer<asio::high_resolution_timer>;
     using PreciseTimers = std::unordered_map<int, PreciseTimer>;
     using CoarseTimer = GenericTimer<asio::steady_timer>;
@@ -136,7 +135,6 @@ private:
     MultimediaTimers multimedia_timers_;
 #endif
 
-    ZeroTimers zero_timers_;
     PreciseTimers precise_timers_;
     CoarseTimers coarse_timers_;
     Sockets sockets_;
