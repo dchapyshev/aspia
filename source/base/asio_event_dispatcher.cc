@@ -107,14 +107,11 @@ bool AsioEventDispatcher::processEvents(QEventLoop::ProcessEventsFlags flags)
         if (!zero_timers_.empty())
         {
             ZeroTimers timers = zero_timers_;
-            zero_timers_changed_ = false;
 
             for (const auto& [id, object] : timers)
             {
-                if (zero_timers_changed_ && !zero_timers_.contains(id))
+                if (!zero_timers_.contains(id))
                     continue;
-
-                zero_timers_changed_ = false;
 
                 QTimerEvent event(id);
                 QCoreApplication::sendEvent(object, &event);
@@ -180,7 +177,6 @@ void AsioEventDispatcher::registerSocketNotifier(QSocketNotifier* notifier)
 #endif
 
         it = sockets_.emplace(socket, std::move(data)).first;
-        sockets_changed_ = true;
     }
 
     SocketData& data = it->second;
@@ -267,7 +263,6 @@ void AsioEventDispatcher::unregisterSocketNotifier(QSocketNotifier* notifier)
 #endif
 
     sockets_.erase(it);
-    sockets_changed_ = true;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -281,7 +276,6 @@ void AsioEventDispatcher::registerTimer(
     if (interval_ms == 0)
     {
         zero_timers_.emplace(timer_id, object);
-        zero_timers_changed_ = true;
         wakeUp();
         return;
     }
@@ -325,7 +319,6 @@ void AsioEventDispatcher::registerTimer(
 
             auto timer_it = multimedia_timers_.emplace(timer_id, MultimediaTimer(
                 std::move(handle), native_id, interval, type, object, start_time, end_time)).first;
-            multimedia_timers_changed_ = true;
 
             asyncWaitMultimediaTimer(timer_it->second.event_handle, timer_id);
             return;
@@ -335,7 +328,6 @@ void AsioEventDispatcher::registerTimer(
 
         auto timer_it = precise_timers_.emplace(timer_id, PreciseTimer(
             std::move(handle), interval, type, object, start_time, end_time)).first;
-        precise_timers_changed_ = true;
 
         asyncWaitPreciseTimer(timer_it->second.handle, timer_id, end_time);
     }
@@ -356,7 +348,6 @@ void AsioEventDispatcher::registerTimer(
 
         auto timer_it = coarse_timers_.emplace(timer_id, CoarseTimer(
             std::move(handle), interval, type, object, start_time, end_time)).first;
-        coarse_timers_changed_ = true;
 
         asyncWaitCoarseTimer(timer_it->second.handle, timer_id, end_time);
     }
@@ -366,10 +357,7 @@ void AsioEventDispatcher::registerTimer(
 bool AsioEventDispatcher::unregisterTimer(int timer_id)
 {
     if (zero_timers_.erase(timer_id) != 0)
-    {
-        zero_timers_changed_ = true;
         return true;
-    }
 
 #if defined(Q_OS_WINDOWS)
     auto it = multimedia_timers_.find(timer_id);
@@ -377,23 +365,15 @@ bool AsioEventDispatcher::unregisterTimer(int timer_id)
     {
         timeKillEvent(it->second.native_id);
         multimedia_timers_.erase(it);
-
-        multimedia_timers_changed_ = true;
         return true;
     }
 #endif
 
     if (precise_timers_.erase(timer_id) != 0)
-    {
-        precise_timers_changed_ = true;
         return true;
-    }
 
     if (coarse_timers_.erase(timer_id) != 0)
-    {
-        coarse_timers_changed_ = true;
         return true;
-    }
 
     return false;
 }
@@ -403,11 +383,8 @@ bool AsioEventDispatcher::unregisterTimers(QObject* object)
 {
     bool removed = false;
 
-    if (std::erase_if(zero_timers_, [object](const auto& timer) { return timer.second == object; }) != 0)
-    {
-        zero_timers_changed_ = true;
-        removed = true;
-    }
+    removed |= std::erase_if(
+        zero_timers_, [object](const auto& timer) { return timer.second == object; }) != 0;
 
 #if defined(Q_OS_WINDOWS)
     for (auto it = multimedia_timers_.begin(); it != multimedia_timers_.end();)
@@ -416,8 +393,6 @@ bool AsioEventDispatcher::unregisterTimers(QObject* object)
         {
             timeKillEvent(it->second.native_id);
             it = multimedia_timers_.erase(it);
-
-            multimedia_timers_changed_ = true;
             removed = true;
         }
         else
@@ -427,19 +402,11 @@ bool AsioEventDispatcher::unregisterTimers(QObject* object)
     }
 #endif
 
-    if (std::erase_if(precise_timers_,
-        [object](const auto& timer) { return timer.second.object == object; }) != 0)
-    {
-        precise_timers_changed_ = true;
-        removed = true;
-    }
+    removed |= std::erase_if(
+        precise_timers_, [object](const auto& timer) { return timer.second.object == object; }) != 0;
 
-    if (std::erase_if(coarse_timers_,
-        [object](const auto& timer) { return timer.second.object == object; }) != 0)
-    {
-        coarse_timers_changed_ = true;
-        removed = true;
-    }
+    removed |= std::erase_if(
+        coarse_timers_, [object](const auto& timer) { return timer.second.object == object; }) != 0;
 
     return removed;
 }
@@ -557,12 +524,10 @@ void AsioEventDispatcher::asyncWaitPreciseTimer(
         timer.start_time = timer.end_time;
         timer.end_time += timer.interval;
 
-        precise_timers_changed_ = false;
-
         QTimerEvent event(timer_id);
         QCoreApplication::sendEvent(timer.object, &event);
 
-        if (precise_timers_changed_ && !precise_timers_.contains(timer_id))
+        if (!precise_timers_.contains(timer_id))
             return;
 
         asyncWaitPreciseTimer(timer.handle, timer_id, timer.end_time);
@@ -589,12 +554,10 @@ void AsioEventDispatcher::asyncWaitCoarseTimer(
         timer.start_time = timer.end_time;
         timer.end_time += timer.interval;
 
-        coarse_timers_changed_ = false;
-
         QTimerEvent event(timer_id);
         QCoreApplication::sendEvent(timer.object, &event);
 
-        if (coarse_timers_changed_ && !coarse_timers_.contains(timer_id))
+        if (!coarse_timers_.contains(timer_id))
             return;
 
         asyncWaitCoarseTimer(timer.handle, timer_id, timer.end_time);
@@ -620,12 +583,10 @@ void AsioEventDispatcher::asyncWaitMultimediaTimer(asio::windows::object_handle&
         timer.start_time = timer.end_time;
         timer.end_time += timer.interval;
 
-        multimedia_timers_changed_ = false;
-
         QTimerEvent event(timer_id);
         QCoreApplication::sendEvent(timer.object, &event);
 
-        if (multimedia_timers_changed_ && !multimedia_timers_.contains(timer_id))
+        if (!multimedia_timers_.contains(timer_id))
             return;
 
         asyncWaitMultimediaTimer(timer.event_handle, timer_id);
@@ -682,14 +643,8 @@ bool AsioEventDispatcher::sendSocketEvent(
     if (!(events & mask) || !notifier)
         return true;
 
-    sockets_changed_ = false;
-
     QEvent event(QEvent::SockAct);
     QCoreApplication::sendEvent(notifier, &event);
-
-    // The socket list may change during call sendEvent.
-    if (!sockets_changed_)
-        return true;
 
     // If the list has changed, we try to find the socket in it. If there is no socket, then further
     // execution should be interrupted and the next asynchronous wait will not be called.
@@ -710,10 +665,7 @@ void AsioEventDispatcher::asyncWaitSocket(SocketHandle& handle, SocketHandle::wa
 
         auto it = sockets_.find(socket);
         if (it == sockets_.end())
-        {
-            // The socket is no longer in the list. The next async wait for it will not be called.
             return;
-        }
 
         SocketData& data = it->second;
         QSocketNotifier* notifier;
@@ -736,15 +688,13 @@ void AsioEventDispatcher::asyncWaitSocket(SocketHandle& handle, SocketHandle::wa
         if (!notifier)
             return;
 
-        sockets_changed_ = false;
-
         QEvent event(QEvent::SockAct);
         QCoreApplication::sendEvent(notifier, &event);
 
         // The socket list may change during call sendEvent. If the list has changed, we try to find
         // the socket in it. If there is no socket, then further execution should be interrupted and
         // the next asynchronous wait will not be called.
-        if (sockets_changed_ && !sockets_.contains(socket))
+        if (!sockets_.contains(socket))
             return;
 
         asyncWaitSocket(data.handle, wait_type);

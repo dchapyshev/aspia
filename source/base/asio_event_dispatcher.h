@@ -132,22 +132,14 @@ private:
     asio::executor_work_guard<asio::io_context::executor_type> work_guard_;
     std::atomic_bool interrupted_ { false };
 
-    ZeroTimers zero_timers_;
-    bool zero_timers_changed_ = false;
-
 #if defined(Q_OS_WINDOWS)
     MultimediaTimers multimedia_timers_;
-    bool multimedia_timers_changed_ = false;
 #endif
 
+    ZeroTimers zero_timers_;
     PreciseTimers precise_timers_;
-    bool precise_timers_changed_ = false;
-
     CoarseTimers coarse_timers_;
-    bool coarse_timers_changed_ = false;
-
     Sockets sockets_;
-    bool sockets_changed_ = false;
 
     Q_DISABLE_COPY(AsioEventDispatcher)
 };
