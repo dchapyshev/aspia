@@ -71,13 +71,11 @@ private:
 #if defined(Q_OS_WINDOWS)
     struct MultimediaTimer
     {
-        asio::windows::object_handle event_handle;
+        asio::windows::object_handle handle;
         quint32 native_id;
         Milliseconds interval;
-        Qt::TimerType type;
-        QObject* object;
-        TimePoint start_time;
         TimePoint end_time;
+        QObject* object;
     };
     using MultimediaTimers = std::unordered_map<int, MultimediaTimer>;
     using SocketHandle = asio::windows::object_handle;
@@ -85,21 +83,14 @@ private:
     using SocketHandle = asio::posix::stream_descriptor;
 #endif
 
-    template <typename HandleType>
+    template <typename TimerHandle>
     struct GenericTimer
     {
-        HandleType handle;
+        TimerHandle handle;
         Milliseconds interval;
-        Qt::TimerType type;
-        QObject* object;
-        TimePoint start_time;
         TimePoint end_time;
+        QObject* object;
     };
-
-    using PreciseTimer = GenericTimer<asio::high_resolution_timer>;
-    using PreciseTimers = std::unordered_map<int, PreciseTimer>;
-    using CoarseTimer = GenericTimer<asio::steady_timer>;
-    using CoarseTimers = std::unordered_map<int, CoarseTimer>;
 
     struct SocketData
     {
@@ -114,6 +105,11 @@ private:
         QSocketNotifier* exception = nullptr;
         SocketHandle handle;
     };
+
+    using PreciseTimer = GenericTimer<asio::high_resolution_timer>;
+    using PreciseTimers = std::unordered_map<int, PreciseTimer>;
+    using CoarseTimer = GenericTimer<asio::steady_timer>;
+    using CoarseTimers = std::unordered_map<int, CoarseTimer>;
     using Sockets = std::unordered_map<qintptr, SocketData>;
 
     void asyncWaitPreciseTimer(asio::high_resolution_timer& handle, int timer_id, TimePoint end_time);
