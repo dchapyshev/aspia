@@ -137,6 +137,8 @@ void AsioEventDispatcher::registerSocketNotifier(QSocketNotifier* notifier)
             return;
         }
 
+        SocketData data(SocketHandle(io_context_, wsa_event));
+
         // In Windows we subscribe to all events at once. If the notifier for a specific event is
         // not registered, it is ignored.
         const long kEventMask = FD_READ | FD_ACCEPT | FD_WRITE | FD_CONNECT | FD_OOB | FD_CLOSE;
@@ -144,11 +146,8 @@ void AsioEventDispatcher::registerSocketNotifier(QSocketNotifier* notifier)
         if (WSAEventSelect(socket, wsa_event, kEventMask) == SOCKET_ERROR)
         {
             LOG(ERROR) << "WSAEventSelect failed:" << WSAGetLastError();
-            WSACloseEvent(wsa_event);
             return;
         }
-
-        SocketData data(SocketHandle(io_context_, wsa_event));
 #else
         SocketData data(SocketHandle(io_context_, socket))
 #endif
@@ -233,10 +232,7 @@ void AsioEventDispatcher::unregisterSocketNotifier(QSocketNotifier* notifier)
 
 #if defined(Q_OS_WINDOWS)
     if (data.handle.native_handle() != WSA_INVALID_EVENT)
-    {
         WSAEventSelect(socket, nullptr, 0);
-        WSACloseEvent(data.handle.native_handle());
-    }
 #endif
 
     sockets_.erase(it);
@@ -308,7 +304,7 @@ void AsioEventDispatcher::registerTimer(
 
         asyncWaitPreciseTimer(timer->second.handle, timer_id, end_time);
     }
-    else if (type == Qt::CoarseTimer)
+    else
     {
         auto timer = coarse_timers_.emplace(timer_id, CoarseTimer(
             asio::steady_timer(io_context_), interval, end_time, object)).first;
@@ -360,11 +356,11 @@ bool AsioEventDispatcher::unregisterTimers(QObject* object)
     }
 #endif
 
-    removed |= std::erase_if(
-        precise_timers_, [object](const auto& timer) { return timer.second.object == object; }) != 0;
+    removed |= std::erase_if(precise_timers_,
+        [object](const auto& timer) { return timer.second.object == object; }) != 0;
 
-    removed |= std::erase_if(
-        coarse_timers_, [object](const auto& timer) { return timer.second.object == object; }) != 0;
+    removed |= std::erase_if(coarse_timers_,
+        [object](const auto& timer) { return timer.second.object == object; }) != 0;
 
     return removed;
 }
