@@ -364,7 +364,7 @@ QList<QAbstractEventDispatcher::TimerInfo> AsioEventDispatcher::registeredTimers
 {
     QList<TimerInfo> list;
 
-    auto add_timers = [&](const auto& timers, Qt::TimerType type)
+    auto add_timers = [&](const auto& timers, Qt::TimerType type) noexcept
     {
         for (const auto& [id, timer] : timers)
         {
@@ -388,7 +388,7 @@ int AsioEventDispatcher::remainingTime(int timer_id)
 {
     TimePoint now = Clock::now();
 
-    auto get_time = [&](const auto& timers) -> int
+    auto get_time = [&](const auto& timers) noexcept -> int
     {
         const auto& it = timers.find(timer_id);
         if (it == timers.end())
@@ -418,7 +418,7 @@ int AsioEventDispatcher::remainingTime(int timer_id)
 void AsioEventDispatcher::wakeUp()
 {
     // To stop run_one inside method processEvents completes.
-    asio::post(io_context_, []{});
+    asio::post(io_context_, []() noexcept {});
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -451,7 +451,7 @@ void AsioEventDispatcher::asyncWaitPreciseTimer(
 {
     // Start waiting for the timer.
     handle.expires_at(end_time);
-    handle.async_wait([this, timer_id](const std::error_code& error_code)
+    handle.async_wait([this, timer_id](const std::error_code& error_code) noexcept
     {
         if (error_code)
             return;
@@ -479,7 +479,7 @@ void AsioEventDispatcher::asyncWaitCoarseTimer(
 {
     // Start waiting for the timer.
     handle.expires_at(end_time);
-    handle.async_wait([this, timer_id](const std::error_code& error_code)
+    handle.async_wait([this, timer_id](const std::error_code& error_code) noexcept
     {
         if (error_code)
             return;
@@ -506,7 +506,7 @@ void AsioEventDispatcher::asyncWaitCoarseTimer(
 void AsioEventDispatcher::asyncWaitMultimediaTimer(asio::windows::object_handle& handle, int timer_id)
 {
     // Start waiting for the timer.
-    handle.async_wait([this, timer_id](const std::error_code& error_code)
+    handle.async_wait([this, timer_id](const std::error_code& error_code) noexcept
     {
         if (error_code)
             return;
@@ -533,7 +533,7 @@ void AsioEventDispatcher::asyncWaitMultimediaTimer(asio::windows::object_handle&
 //--------------------------------------------------------------------------------------------------
 void AsioEventDispatcher::asyncWaitSocket(SocketHandle& handle, qintptr socket)
 {
-    handle.async_wait([this, socket](const std::error_code& error_code)
+    handle.async_wait([this, socket](const std::error_code& error_code) noexcept
     {
         if (error_code)
             return;
@@ -555,7 +555,7 @@ void AsioEventDispatcher::asyncWaitSocket(SocketHandle& handle, qintptr socket)
 
         const long events = network_events.lNetworkEvents;
 
-        auto send_event = [&](QSocketNotifier* notifier, long mask) -> bool
+        auto send_event = [&](QSocketNotifier* notifier, long mask) noexcept -> bool
         {
             // There are no notifications for this event type or there is no notifier for this event type.
             if (!(events & mask) || !notifier)
@@ -589,7 +589,7 @@ void AsioEventDispatcher::asyncWaitSocket(SocketHandle& handle, SocketHandle::wa
 {
     const qintptr socket = handle.native_handle();
 
-    handle.async_wait(wait_type, [this, socket, wait_type](const std::error_code& error_code)
+    handle.async_wait(wait_type, [this, socket, wait_type](const std::error_code& error_code) noexcept
     {
         if (error_code)
             return;
