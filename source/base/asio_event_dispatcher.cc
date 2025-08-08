@@ -122,13 +122,11 @@ void AsioEventDispatcher::registerSocketNotifier(QSocketNotifier* notifier)
 
     const qintptr socket = notifier->socket();
     const QSocketNotifier::Type type = notifier->type();
-    bool is_new_socket = false;
+    bool is_socket_added = false;
 
     auto it = sockets_.find(socket);
     if (it == sockets_.end())
     {
-        is_new_socket = true;
-
 #if defined(Q_OS_WINDOWS)
         WSAEVENT wsa_event = WSACreateEvent();
         if (wsa_event == WSA_INVALID_EVENT)
@@ -153,6 +151,7 @@ void AsioEventDispatcher::registerSocketNotifier(QSocketNotifier* notifier)
         SocketHandle handle(io_context_, socket);
 #endif
         it = sockets_.emplace(socket, SocketData(std::move(handle))).first;
+        is_socket_added = true;
     }
 
     SocketData& data = it->second;
@@ -185,8 +184,8 @@ void AsioEventDispatcher::registerSocketNotifier(QSocketNotifier* notifier)
     }
 
 #if defined(Q_OS_WINDOWS)
-    if (is_new_socket)
-        asyncWaitSocket(socket, data.handle);
+    if (is_socket_added)
+        asyncWaitSocket(data.handle, socket);
 #endif
 }
 
@@ -532,7 +531,7 @@ void AsioEventDispatcher::asyncWaitMultimediaTimer(asio::windows::object_handle&
 
 #if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
-void AsioEventDispatcher::asyncWaitSocket(qintptr socket, SocketHandle& handle)
+void AsioEventDispatcher::asyncWaitSocket(SocketHandle& handle, qintptr socket)
 {
     handle.async_wait([this, socket](const std::error_code& error_code)
     {
@@ -579,7 +578,7 @@ void AsioEventDispatcher::asyncWaitSocket(qintptr socket, SocketHandle& handle)
         if (!send_event(data.exception, FD_OOB))
             return;
 
-        asyncWaitSocket(socket, data.handle);
+        asyncWaitSocket(data.handle, socket);
     });
 }
 #endif // defined(Q_OS_WINDOWS)
