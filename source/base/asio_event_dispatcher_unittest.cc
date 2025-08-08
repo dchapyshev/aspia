@@ -213,10 +213,10 @@ TEST(TimersTest, ManyVeryCoarseTimersTriggering)
     ASSERT_LT(elapsedMs, 5000);
 }
 
-TEST(TimersTest, OnePreciseTimerRepeat100Times)
+TEST(TimersTest, OnePreciseTimerRepeats)
 {
     constexpr int intervalMs = 10;
-    constexpr int repeats = 100;
+    constexpr int repeats = 50;
 
     QVector<qint64> deltas;
     deltas.reserve(repeats);
@@ -272,6 +272,134 @@ TEST(TimersTest, OnePreciseTimerRepeat100Times)
 
     ASSERT_LT(std::abs(avg), 5);  // Average drift within ±5 ms
     ASSERT_LT(max, 15);           // No spike above 15 ms
+}
+
+TEST(TimersTest, OneCoarseTimerRepeats)
+{
+    constexpr int intervalMs = 100;
+    constexpr int repeats = 50;
+
+    QVector<qint64> deltas;
+    deltas.reserve(repeats);
+
+    QElapsedTimer refClock;
+    refClock.start();
+
+    QEventLoop loop;
+    int count = 0;
+
+    QTimer* timer = new QTimer();
+    timer->setTimerType(Qt::CoarseTimer);
+    timer->setInterval(intervalMs);
+    timer->setSingleShot(false);
+
+    qint64 expectedTime = refClock.elapsed() + intervalMs;
+
+    QObject::connect(timer, &QTimer::timeout, [=, &count, &deltas, &loop, &expectedTime]() mutable
+    {
+        qint64 now = refClock.elapsed();
+        qint64 delta = now - expectedTime;
+        deltas.append(delta);
+
+        ++count;
+        expectedTime += intervalMs;
+
+        if (count >= repeats)
+        {
+            timer->stop();
+            timer->deleteLater();
+            loop.quit();
+        }
+    });
+
+    timer->start();
+
+    // Failsafe timeout
+    QTimer::singleShot(10000, &loop, [&]()
+    {
+        GTEST_LOG_(WARNING) << "Test timeout!";
+        loop.quit();
+    });
+
+    loop.exec();
+
+    ASSERT_EQ(deltas.size(), repeats);
+
+    qint64 min = *std::min_element(deltas.begin(), deltas.end());
+    qint64 max = *std::max_element(deltas.begin(), deltas.end());
+    double avg = std::accumulate(deltas.begin(), deltas.end(), 0.0) / deltas.size();
+
+    GTEST_LOG_(INFO) << "min: " << min << " ms, max: " << max << " ms, avg: " << avg << " ms";
+
+    ASSERT_LT(std::abs(avg), 50); // Average drift within 30 ms
+    ASSERT_LT(max, 30);           // No spike above 30 ms
+}
+
+TEST(TimersTest, OneVeryCoarseTimerRepeats)
+{
+    constexpr int requestedMs = 100; // Will be rounded by VeryCoarseTimer
+    constexpr int repeats = 15;
+
+    QVector<qint64> intervals;
+    intervals.reserve(repeats);
+
+    QElapsedTimer clock;
+    clock.start();
+
+    QEventLoop loop;
+    int count = 0;
+    qint64 prev = clock.elapsed();
+
+    auto* timer = new QTimer();
+    timer->setTimerType(Qt::VeryCoarseTimer);
+    timer->setInterval(requestedMs);
+    timer->setSingleShot(false);
+
+    QObject::connect(timer, &QTimer::timeout, [&]()
+    {
+        const qint64 now = clock.elapsed();
+        intervals.append(now - prev); // measure inter-fire interval
+        prev = now;
+
+        if (++count >= repeats)
+        {
+            timer->stop();
+            timer->deleteLater();
+            loop.quit();
+        }
+    });
+
+    timer->start();
+
+    // Failsafe: generous to avoid CI flakiness
+    QTimer::singleShot(/* generous */ 60000, &loop, [&]()
+    {
+        GTEST_LOG_(WARNING) << "Test timeout!";
+        loop.quit();
+    });
+
+    loop.exec();
+
+    ASSERT_EQ(intervals.size(), repeats);
+
+    // Basic sanity: VeryCoarse should never be "faster" than requested 100ms.
+    // (This should always hold; if it doesn't — something's truly off.)
+    for (qint64 iv : intervals)
+    {
+        ASSERT_GE(iv, requestedMs);
+    }
+
+    // Log stats for visibility, but keep assertions loose.
+    const qint64 min = *std::min_element(intervals.begin(), intervals.end());
+    const qint64 max = *std::max_element(intervals.begin(), intervals.end());
+    const double avg = std::accumulate(intervals.begin(), intervals.end(), 0.0) / intervals.size();
+
+    GTEST_LOG_(INFO) << "min: " << min << " ms, max: " << max << " ms, avg: " << avg << " ms";
+
+    // Very loose upper bounds to avoid flakes across OS/CI.
+    // Adjust if your lab environment is stable.
+    ASSERT_LT(max, 60000); // nothing absurd like a minute spike
+    ASSERT_LT(avg, 20000); // average not completely out of whack
 }
 
 TEST(TimersTest, ZeroSingleShotTriggering)

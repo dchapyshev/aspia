@@ -236,10 +236,16 @@ void AsioEventDispatcher::registerTimer(
     Milliseconds interval(interval_ms);
     TimePoint start_time = Clock::now();
 
-    // Precision timers have high overhead resources. If the timer has a large interval, then we
-    // force it to be coarse.
-    if (type == Qt::PreciseTimer && interval_ms > 100)
+    if (interval_ms == 0)
     {
+        // Zero-interval timers do not require precision because they will fire immediately. Coarse
+        // timers, however, provide less overhead.
+        type = Qt::CoarseTimer;
+    }
+    else if (type == Qt::PreciseTimer && interval_ms > 100)
+    {
+        // Precision timers have high overhead resources. If the timer has a large interval, then we
+        // force it to be coarse.
         type = Qt::CoarseTimer;
     }
     else if (type == Qt::VeryCoarseTimer || interval_ms >= 20000)
