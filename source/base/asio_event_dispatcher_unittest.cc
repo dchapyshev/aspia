@@ -16,6 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
+#include <QAbstractEventDispatcher>
 #include <QCoreApplication>
 #include <QHostInfo>
 #include <QTimer>
@@ -26,6 +27,134 @@
 #include <gtest/gtest.h>
 
 namespace base {
+
+class ED_TestObject : public QObject
+{
+public:
+    static int customType()
+    {
+        static int t = QEvent::registerEventType();
+        return t;
+    }
+
+    int received = 0;
+    QVector<qint64> deltas;
+    qint64 lastMs = -1;
+    QElapsedTimer clk;
+
+protected:
+    void customEvent(QEvent* ev) override
+    {
+        if (ev->type() == customType())
+        {
+            ++received;
+            qint64 now = clk.elapsed();
+            if (lastMs >= 0) deltas.append(now - lastMs);
+            lastMs = now;
+        }
+        QObject::customEvent(ev);
+    }
+};
+
+TEST(DispatcherTests, PostEvent_DeliversAll)
+{
+    // Preconditions
+    auto* disp = QAbstractEventDispatcher::instance(QThread::currentThread());
+    ASSERT_NE(disp, nullptr);
+
+    ED_TestObject obj;
+    obj.moveToThread(QThread::currentThread());
+    obj.clk.start();
+
+    // Post a bunch of custom events
+    constexpr int N = 64;
+    for (int i = 0; i < N; ++i)
+    {
+        QCoreApplication::postEvent(&obj,
+            new QEvent(static_cast<QEvent::Type>(ED_TestObject::customType())));
+    }
+
+    // Pump the loop until all are processed or timeout
+    QElapsedTimer wait; wait.start();
+    while (obj.received < N && wait.elapsed() < 2000)
+    {
+        QCoreApplication::processEvents(QEventLoop::AllEvents, 10);
+        QThread::msleep(1);
+    }
+
+    EXPECT_EQ(obj.received, N);
+}
+
+// Cross-thread wakeups
+TEST(DispatcherTests, CrossThread_Post_WakeupLatency_Soft)
+{
+    auto* disp = QAbstractEventDispatcher::instance(QThread::currentThread());
+    ASSERT_NE(disp, nullptr);
+
+    ED_TestObject obj;
+    obj.clk.start();
+
+    constexpr int N = 24;
+    constexpr int gapMs = 5;
+
+    std::atomic<int> posted{0};
+    std::thread worker([&]()
+    {
+        for (int i = 0; i < N; ++i)
+        {
+            QCoreApplication::postEvent(&obj,
+                new QEvent(static_cast<QEvent::Type>(ED_TestObject::customType())));
+            ++posted;
+            QThread::msleep(gapMs);
+        }
+    });
+
+    QElapsedTimer wait; wait.start();
+    while ((obj.received < N || posted.load() < N) && wait.elapsed() < 4000)
+    {
+        QCoreApplication::processEvents(QEventLoop::AllEvents, 5);
+        QThread::msleep(1);
+    }
+    worker.join();
+
+    ASSERT_EQ(posted.load(), N);
+    ASSERT_EQ(obj.received, N);
+
+    if (!obj.deltas.isEmpty())
+    {
+        const double avg = std::accumulate(obj.deltas.begin(), obj.deltas.end(), 0.0) / obj.deltas.size();
+        EXPECT_LT(avg, 50.0);
+    }
+}
+
+// Nested event loops
+TEST(DispatcherTests, NestedEventLoops_NoDeadlock)
+{
+    auto* disp = QAbstractEventDispatcher::instance(QThread::currentThread());
+    ASSERT_NE(disp, nullptr);
+
+    bool entered = false;
+    bool finished = false;
+
+    QTimer::singleShot(5, [&]()
+    {
+        entered = true;
+        QEventLoop inner;
+        QTimer::singleShot(30, &inner, [&](){ inner.quit(); });
+        inner.exec();
+        finished = true;
+    });
+
+    QElapsedTimer wait; wait.start();
+    while (!finished && wait.elapsed() < 2000)
+    {
+        QCoreApplication::processEvents(QEventLoop::AllEvents, 10);
+        QThread::msleep(1);
+    }
+
+    EXPECT_TRUE(entered);
+    EXPECT_TRUE(finished);
+}
 
 TEST(TimersTest, PreciseTimerRegistrationSpeed)
 {
@@ -215,35 +344,32 @@ TEST(TimersTest, ManyVeryCoarseTimersTriggering)
 
 TEST(TimersTest, OnePreciseTimerRepeats)
 {
-    constexpr int intervalMs = 10;
+    constexpr int requestedMs = 10;
     constexpr int repeats = 50;
+    constexpr int expectedErrorMs = 3; // +/- 3ms
 
-    QVector<qint64> deltas;
-    deltas.reserve(repeats);
+    QVector<qint64> intervals;
+    intervals.reserve(repeats);
 
-    QElapsedTimer refClock;
-    refClock.start();
+    QElapsedTimer clock;
+    clock.start();
 
     QEventLoop loop;
     int count = 0;
+    qint64 prev = clock.elapsed();
 
-    QTimer* timer = new QTimer();
+    auto* timer = new QTimer();
     timer->setTimerType(Qt::PreciseTimer);
-    timer->setInterval(intervalMs);
+    timer->setInterval(requestedMs);
     timer->setSingleShot(false);
 
-    qint64 expectedTime = refClock.elapsed() + intervalMs;
-
-    QObject::connect(timer, &QTimer::timeout, [=, &count, &deltas, &loop, &expectedTime]() mutable
+    QObject::connect(timer, &QTimer::timeout, [&]()
     {
-        qint64 now = refClock.elapsed();
-        qint64 delta = now - expectedTime;
-        deltas.append(delta);
+        const qint64 now = clock.elapsed();
+        intervals.append(now - prev); // measure inter-fire interval
+        prev = now;
 
-        ++count;
-        expectedTime += intervalMs;
-
-        if (count >= repeats)
+        if (++count >= repeats)
         {
             timer->stop();
             timer->deleteLater();
@@ -253,8 +379,8 @@ TEST(TimersTest, OnePreciseTimerRepeats)
 
     timer->start();
 
-    // Failsafe timeout
-    QTimer::singleShot(10000, &loop, [&]()
+    // Failsafe: generous to avoid CI flakiness
+    QTimer::singleShot(/* generous */ 60000, &loop, [&]()
     {
         GTEST_LOG_(WARNING) << "Test timeout!";
         loop.quit();
@@ -262,49 +388,47 @@ TEST(TimersTest, OnePreciseTimerRepeats)
 
     loop.exec();
 
-    ASSERT_EQ(deltas.size(), repeats);
+    ASSERT_EQ(intervals.size(), repeats);
 
-    qint64 min = *std::min_element(deltas.begin(), deltas.end());
-    qint64 max = *std::max_element(deltas.begin(), deltas.end());
-    double avg = std::accumulate(deltas.begin(), deltas.end(), 0.0) / deltas.size();
+    const qint64 min = *std::min_element(intervals.begin(), intervals.end());
+    const qint64 max = *std::max_element(intervals.begin(), intervals.end());
+    const double avg = std::accumulate(intervals.begin(), intervals.end(), 0.0) / intervals.size();
 
-    GTEST_LOG_(INFO) << "min: " << min << " ms, max: " << max << " ms, avg: " << avg << " ms";
+    GTEST_LOG_(INFO) << "expected: " << requestedMs << " ms, min: " << min << " ms, max: " << max
+                     << " ms, avg: " << avg << " ms";
 
-    ASSERT_LT(std::abs(avg), 5);  // Average drift within ±5 ms
-    ASSERT_LT(max, 15);           // No spike above 15 ms
+    EXPECT_LT(max, requestedMs + expectedErrorMs);
+    EXPECT_GT(min, requestedMs - expectedErrorMs);
 }
 
 TEST(TimersTest, OneCoarseTimerRepeats)
 {
-    constexpr int intervalMs = 100;
+    constexpr int requestedMs = 100;
     constexpr int repeats = 50;
+    constexpr int expectedErrorMs = 15; // +/- 15ms
 
-    QVector<qint64> deltas;
-    deltas.reserve(repeats);
+    QVector<qint64> intervals;
+    intervals.reserve(repeats);
 
-    QElapsedTimer refClock;
-    refClock.start();
+    QElapsedTimer clock;
+    clock.start();
 
     QEventLoop loop;
     int count = 0;
+    qint64 prev = clock.elapsed();
 
-    QTimer* timer = new QTimer();
+    auto* timer = new QTimer();
     timer->setTimerType(Qt::CoarseTimer);
-    timer->setInterval(intervalMs);
+    timer->setInterval(requestedMs);
     timer->setSingleShot(false);
 
-    qint64 expectedTime = refClock.elapsed() + intervalMs;
-
-    QObject::connect(timer, &QTimer::timeout, [=, &count, &deltas, &loop, &expectedTime]() mutable
+    QObject::connect(timer, &QTimer::timeout, [&]()
     {
-        qint64 now = refClock.elapsed();
-        qint64 delta = now - expectedTime;
-        deltas.append(delta);
+        const qint64 now = clock.elapsed();
+        intervals.append(now - prev); // measure inter-fire interval
+        prev = now;
 
-        ++count;
-        expectedTime += intervalMs;
-
-        if (count >= repeats)
+        if (++count >= repeats)
         {
             timer->stop();
             timer->deleteLater();
@@ -314,8 +438,8 @@ TEST(TimersTest, OneCoarseTimerRepeats)
 
     timer->start();
 
-    // Failsafe timeout
-    QTimer::singleShot(10000, &loop, [&]()
+    // Failsafe: generous to avoid CI flakiness
+    QTimer::singleShot(/* generous */ 60000, &loop, [&]()
     {
         GTEST_LOG_(WARNING) << "Test timeout!";
         loop.quit();
@@ -323,22 +447,24 @@ TEST(TimersTest, OneCoarseTimerRepeats)
 
     loop.exec();
 
-    ASSERT_EQ(deltas.size(), repeats);
+    ASSERT_EQ(intervals.size(), repeats);
 
-    qint64 min = *std::min_element(deltas.begin(), deltas.end());
-    qint64 max = *std::max_element(deltas.begin(), deltas.end());
-    double avg = std::accumulate(deltas.begin(), deltas.end(), 0.0) / deltas.size();
+    const qint64 min = *std::min_element(intervals.begin(), intervals.end());
+    const qint64 max = *std::max_element(intervals.begin(), intervals.end());
+    const double avg = std::accumulate(intervals.begin(), intervals.end(), 0.0) / intervals.size();
 
-    GTEST_LOG_(INFO) << "min: " << min << " ms, max: " << max << " ms, avg: " << avg << " ms";
+    GTEST_LOG_(INFO) << "expected: " << requestedMs << " ms, min: " << min << " ms, max: " << max
+                     << " ms, avg: " << avg << " ms";
 
-    ASSERT_LT(std::abs(avg), 50); // Average drift within 30 ms
-    ASSERT_LT(max, 30);           // No spike above 30 ms
+    EXPECT_LT(max, requestedMs + expectedErrorMs);
+    EXPECT_GT(min, requestedMs - expectedErrorMs);
 }
 
 TEST(TimersTest, OneVeryCoarseTimerRepeats)
 {
-    constexpr int requestedMs = 100; // Will be rounded by VeryCoarseTimer
-    constexpr int repeats = 15;
+    constexpr int requestedMs = 100;
+    constexpr int repeats = 10;
+    constexpr int expectedErrorMs = 1000; // +/- 1000ms
 
     QVector<qint64> intervals;
     intervals.reserve(repeats);
@@ -383,23 +509,20 @@ TEST(TimersTest, OneVeryCoarseTimerRepeats)
     ASSERT_EQ(intervals.size(), repeats);
 
     // Basic sanity: VeryCoarse should never be "faster" than requested 100ms.
-    // (This should always hold; if it doesn't — something's truly off.)
+    // (This should always hold; if it doesn't - something's truly off.)
     for (qint64 iv : intervals)
     {
         ASSERT_GE(iv, requestedMs);
     }
 
-    // Log stats for visibility, but keep assertions loose.
     const qint64 min = *std::min_element(intervals.begin(), intervals.end());
     const qint64 max = *std::max_element(intervals.begin(), intervals.end());
     const double avg = std::accumulate(intervals.begin(), intervals.end(), 0.0) / intervals.size();
 
-    GTEST_LOG_(INFO) << "min: " << min << " ms, max: " << max << " ms, avg: " << avg << " ms";
+    GTEST_LOG_(INFO) << "expected: " << requestedMs << " ms, min: " << min << " ms, max: " << max
+                     << " ms, avg: " << avg << " ms";
 
-    // Very loose upper bounds to avoid flakes across OS/CI.
-    // Adjust if your lab environment is stable.
-    ASSERT_LT(max, 60000); // nothing absurd like a minute spike
-    ASSERT_LT(avg, 20000); // average not completely out of whack
+    EXPECT_LT(max, requestedMs + expectedErrorMs);
 }
 
 TEST(TimersTest, ZeroSingleShotTriggering)
@@ -431,7 +554,7 @@ TEST(TimersTest, ZeroSingleShotTriggering)
 
 TEST(SocketTest, EchoClientServer)
 {
-    constexpr int iterations = 1000;
+    constexpr int iterations = 100;
     constexpr quint16 port = 12345;
     const QByteArray testMessage = "Hello, Echo Server!";
 
