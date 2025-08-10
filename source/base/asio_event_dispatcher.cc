@@ -294,21 +294,21 @@ void AsioEventDispatcher::registerTimer(
             auto timer = multimedia_timers_.emplace(timer_id, MultimediaTimer(
                 std::move(handle), native_id, interval, end_time, object)).first;
 
-            asyncWaitMultimediaTimer(timer->second.handle, timer_id, object);
+            asyncWaitMultimediaTimer(timer_id, timer->second);
             return;
         }
 #endif
         auto timer = precise_timers_.emplace(timer_id, PreciseTimer(
             asio::high_resolution_timer(io_context_), interval, end_time, object)).first;
 
-        asyncWaitPreciseTimer(timer->second.handle, end_time, timer_id, object);
+        asyncWaitPreciseTimer(timer_id, timer->second);
     }
     else
     {
         auto timer = coarse_timers_.emplace(timer_id, CoarseTimer(
             asio::steady_timer(io_context_), interval, end_time, object)).first;
 
-        asyncWaitCoarseTimer(timer->second.handle, end_time, timer_id, object);
+        asyncWaitCoarseTimer(timer_id, timer->second);
     }
 }
 
@@ -459,74 +459,62 @@ asio::io_context& AsioEventDispatcher::ioContext()
 }
 
 //--------------------------------------------------------------------------------------------------
-void AsioEventDispatcher::asyncWaitPreciseTimer(
-    asio::high_resolution_timer& handle, TimePoint end_time, int timer_id, QObject* object)
+void AsioEventDispatcher::asyncWaitPreciseTimer(int timer_id, PreciseTimer& timer)
 {
-    handle.expires_at(end_time);
-    handle.async_wait([this, timer_id, object](const std::error_code& error_code) noexcept
+    timer.handle.expires_at(timer.end_time);
+    timer.handle.async_wait([this, timer_id, &timer](const std::error_code& error_code) noexcept
     {
         if (error_code)
             return;
 
         QTimerEvent event(timer_id);
-        QCoreApplication::sendEvent(object, &event);
+        QCoreApplication::sendEvent(timer.object, &event);
 
-        auto it = precise_timers_.find(timer_id);
-        if (it == precise_timers_.end())
+        if (!precise_timers_.contains(timer_id))
             return;
 
-        PreciseTimer& timer = it->second;
         timer.end_time += timer.interval;
-
-        asyncWaitPreciseTimer(timer.handle, timer.end_time, timer_id, object);
+        asyncWaitPreciseTimer(timer_id, timer);
     });
 }
 
 //--------------------------------------------------------------------------------------------------
-void AsioEventDispatcher::asyncWaitCoarseTimer(
-    asio::steady_timer& handle, TimePoint end_time, int timer_id, QObject* object)
+void AsioEventDispatcher::asyncWaitCoarseTimer(int timer_id, CoarseTimer& timer)
 {
-    handle.expires_at(end_time);
-    handle.async_wait([this, timer_id, object](const std::error_code& error_code) noexcept
+    timer.handle.expires_at(timer.end_time);
+    timer.handle.async_wait([this, timer_id, &timer](const std::error_code& error_code) noexcept
     {
         if (error_code)
             return;
 
         QTimerEvent event(timer_id);
-        QCoreApplication::sendEvent(object, &event);
+        QCoreApplication::sendEvent(timer.object, &event);
 
-        auto it = coarse_timers_.find(timer_id);
-        if (it == coarse_timers_.end())
+        if (!coarse_timers_.contains(timer_id))
             return;
 
-        CoarseTimer& timer = it->second;
         timer.end_time += timer.interval;
-
-        asyncWaitCoarseTimer(timer.handle, timer.end_time, timer_id, object);
+        asyncWaitCoarseTimer(timer_id, timer);
     });
 }
 
 #if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
-void AsioEventDispatcher::asyncWaitMultimediaTimer(
-    asio::windows::object_handle& handle, int timer_id, QObject* object)
+void AsioEventDispatcher::asyncWaitMultimediaTimer(int timer_id, MultimediaTimer& timer)
 {
-    handle.async_wait([this, timer_id, object](const std::error_code& error_code) noexcept
+    timer.handle.async_wait([this, timer_id, &timer](const std::error_code& error_code) noexcept
     {
         if (error_code)
             return;
 
         QTimerEvent event(timer_id);
-        QCoreApplication::sendEvent(object, &event);
+        QCoreApplication::sendEvent(timer.object, &event);
 
-        auto it = multimedia_timers_.find(timer_id);
-        if (it == multimedia_timers_.end())
+        if (!multimedia_timers_.contains(timer_id))
             return;
 
-        MultimediaTimer& timer = it->second;
         timer.end_time += timer.interval;
-
-        asyncWaitMultimediaTimer(timer.handle, timer_id, object);
+        asyncWaitMultimediaTimer(timer_id, timer);
     });
 }
 #endif // defined(Q_OS_WINDOWS)

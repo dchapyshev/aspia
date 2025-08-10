@@ -118,13 +118,11 @@ private:
     using CoarseTimers = std::unordered_map<int, CoarseTimer>;
     using Sockets = std::unordered_map<qintptr, SocketData>;
 
-    void asyncWaitPreciseTimer(
-        asio::high_resolution_timer& handle, TimePoint end_time, int timer_id, QObject* object);
-    void asyncWaitCoarseTimer(
-        asio::steady_timer& handle, TimePoint end_time, int timer_id, QObject* object);
+    void asyncWaitPreciseTimer(int timer_id, PreciseTimer& timer);
+    void asyncWaitCoarseTimer(int timer_id, CoarseTimer& timer);
 
 #if defined(Q_OS_WINDOWS)
-    void asyncWaitMultimediaTimer(asio::windows::object_handle& handle, int timer_id, QObject* object);
+    void asyncWaitMultimediaTimer(int timer_id, MultimediaTimer& timer);
     void asyncWaitSocket(SocketHandle& handle, qintptr socket);
 #else
     void asyncWaitSocket(SocketHandle& handle, SocketHandle::wait_type wait_type);
