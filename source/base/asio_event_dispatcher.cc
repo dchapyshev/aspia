@@ -534,8 +534,8 @@ void AsioEventDispatcher::asyncWaitSocket(SocketHandle& handle, qintptr socket)
 
         SocketData& data = it->second;
 
-        WSANETWORKEVENTS network_events = {};
-        if (WSAEnumNetworkEvents(socket, data.handle.native_handle(), &network_events) == SOCKET_ERROR)
+        WSANETWORKEVENTS events = {};
+        if (WSAEnumNetworkEvents(socket, data.handle.native_handle(), &events) == SOCKET_ERROR)
         {
             LOG(ERROR) << "WSAEnumNetworkEvents failed:" << WSAGetLastError();
             return;
@@ -544,7 +544,7 @@ void AsioEventDispatcher::asyncWaitSocket(SocketHandle& handle, qintptr socket)
         auto send_event = [&](QSocketNotifier* notifier, long mask) noexcept -> bool
         {
             // There are no notifications for this event type or no notifier for this event type.
-            if (!(network_events.lNetworkEvents & mask) || !notifier)
+            if (!(events.lNetworkEvents & mask) || !notifier)
                 return true;
 
             QEvent event(QEvent::SockAct);
