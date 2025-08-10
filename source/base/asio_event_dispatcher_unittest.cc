@@ -525,6 +525,52 @@ TEST(TimersTest, OneVeryCoarseTimerRepeats)
     EXPECT_LT(max, requestedMs + expectedErrorMs);
 }
 
+TEST(TimersTest, ManyCoarseAndOneTimerRepeats)
+{
+    constexpr int requestedMs = 30;
+    constexpr int repeats = 1000;
+
+    QEventLoop loop;
+    int count = 0;
+
+    QObject owner;
+
+    for (int i = 0; i < 7000; ++i)
+    {
+        auto* timer = new QTimer(&owner);
+        timer->setTimerType(Qt::CoarseTimer);
+        timer->setInterval(15000);
+        timer->setSingleShot(false);
+        timer->start();
+    }
+
+    auto* timer = new QTimer();
+    timer->setTimerType(Qt::CoarseTimer);
+    timer->setInterval(requestedMs);
+    timer->setSingleShot(false);
+
+    QObject::connect(timer, &QTimer::timeout, [&]()
+    {
+        if (++count >= repeats)
+        {
+            timer->stop();
+            timer->deleteLater();
+            loop.quit();
+        }
+    });
+
+    timer->start();
+
+    // Failsafe: generous to avoid CI flakiness
+    QTimer::singleShot(/* generous */ 60000, &loop, [&]()
+    {
+        GTEST_LOG_(WARNING) << "Test timeout!";
+        loop.quit();
+    });
+
+    loop.exec();
+}
+
 TEST(TimersTest, ZeroSingleShotTriggering)
 {
     constexpr int timerCount = 10000;

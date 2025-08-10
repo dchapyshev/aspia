@@ -71,6 +71,8 @@ private:
 #if defined(Q_OS_WINDOWS)
     struct MultimediaTimer
     {
+        void cancel();
+
         asio::windows::object_handle handle;
         quint32 native_id;
         Milliseconds interval;
@@ -86,6 +88,8 @@ private:
     template <typename TimerHandle>
     struct GenericTimer
     {
+        void cancel() { handle.cancel(); }
+
         TimerHandle handle;
         Milliseconds interval;
         TimePoint end_time;
@@ -100,6 +104,8 @@ private:
             // Nothing
         }
 
+        void cancel();
+
         QSocketNotifier* read = nullptr;
         QSocketNotifier* write = nullptr;
         QSocketNotifier* exception = nullptr;
@@ -112,11 +118,13 @@ private:
     using CoarseTimers = std::unordered_map<int, CoarseTimer>;
     using Sockets = std::unordered_map<qintptr, SocketData>;
 
-    void asyncWaitPreciseTimer(asio::high_resolution_timer& handle, int timer_id, TimePoint end_time);
-    void asyncWaitCoarseTimer(asio::steady_timer& handle, int timer_id, TimePoint end_time);
+    void asyncWaitPreciseTimer(
+        asio::high_resolution_timer& handle, TimePoint end_time, int timer_id, QObject* object);
+    void asyncWaitCoarseTimer(
+        asio::steady_timer& handle, TimePoint end_time, int timer_id, QObject* object);
 
 #if defined(Q_OS_WINDOWS)
-    void asyncWaitMultimediaTimer(asio::windows::object_handle& handle, int timer_id);
+    void asyncWaitMultimediaTimer(asio::windows::object_handle& handle, int timer_id, QObject* object);
     void asyncWaitSocket(SocketHandle& handle, qintptr socket);
 #else
     void asyncWaitSocket(SocketHandle& handle, SocketHandle::wait_type wait_type);

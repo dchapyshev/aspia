@@ -212,15 +212,14 @@ void AsioEventDispatcher::unregisterSocketNotifier(QSocketNotifier* notifier)
     else
         return;
 
+    // There are active notifiers for this socket.
     if (data.read || data.write || data.exception)
-    {
-        // There are active notifiers for this socket.
         return;
-    }
+
+    data.cancel();
 
 #if defined(Q_OS_WINDOWS)
-    if (data.handle.native_handle() != WSA_INVALID_EVENT)
-        WSAEventSelect(socket, nullptr, 0);
+    WSAEventSelect(socket, nullptr, 0);
 #endif
 
     sockets_.erase(it);
@@ -259,7 +258,7 @@ void AsioEventDispatcher::registerTimer(
         type = Qt::CoarseTimer;
     }
 
-    TimePoint end_time = start_time + interval;
+    const TimePoint end_time = start_time + interval;
 
     if (type == Qt::PreciseTimer)
     {
@@ -295,41 +294,47 @@ void AsioEventDispatcher::registerTimer(
             auto timer = multimedia_timers_.emplace(timer_id, MultimediaTimer(
                 std::move(handle), native_id, interval, end_time, object)).first;
 
-            asyncWaitMultimediaTimer(timer->second.handle, timer_id);
+            asyncWaitMultimediaTimer(timer->second.handle, timer_id, object);
             return;
         }
 #endif
         auto timer = precise_timers_.emplace(timer_id, PreciseTimer(
             asio::high_resolution_timer(io_context_), interval, end_time, object)).first;
 
-        asyncWaitPreciseTimer(timer->second.handle, timer_id, end_time);
+        asyncWaitPreciseTimer(timer->second.handle, end_time, timer_id, object);
     }
     else
     {
         auto timer = coarse_timers_.emplace(timer_id, CoarseTimer(
             asio::steady_timer(io_context_), interval, end_time, object)).first;
 
-        asyncWaitCoarseTimer(timer->second.handle, timer_id, end_time);
+        asyncWaitCoarseTimer(timer->second.handle, end_time, timer_id, object);
     }
 }
 
 //--------------------------------------------------------------------------------------------------
 bool AsioEventDispatcher::unregisterTimer(int timer_id)
 {
-#if defined(Q_OS_WINDOWS)
-    auto it = multimedia_timers_.find(timer_id);
-    if (it != multimedia_timers_.end())
+    auto remove_by_id = [](auto& timers, int timer_id) noexcept -> bool
     {
-        timeKillEvent(it->second.native_id);
-        multimedia_timers_.erase(it);
+        auto it = timers.find(timer_id);
+        if (it == timers.end())
+            return false;
+
+        it->second.cancel();
+        timers.erase(it);
         return true;
-    }
+    };
+
+#if defined(Q_OS_WINDOWS)
+    if (remove_by_id(multimedia_timers_, timer_id))
+        return true;
 #endif
 
-    if (precise_timers_.erase(timer_id) != 0)
+    if (remove_by_id(precise_timers_, timer_id))
         return true;
 
-    if (coarse_timers_.erase(timer_id) != 0)
+    if (remove_by_id(coarse_timers_, timer_id))
         return true;
 
     return false;
@@ -340,27 +345,29 @@ bool AsioEventDispatcher::unregisterTimers(QObject* object)
 {
     bool removed = false;
 
-#if defined(Q_OS_WINDOWS)
-    for (auto it = multimedia_timers_.begin(); it != multimedia_timers_.end();)
+    auto remove_by_object = [&removed](auto& timers, QObject* object) noexcept
     {
-        if (it->second.object == object)
+        for (auto it = timers.begin(); it != timers.end();)
         {
-            timeKillEvent(it->second.native_id);
-            it = multimedia_timers_.erase(it);
-            removed = true;
+            if (it->second.object == object)
+            {
+                it->second.cancel();
+                it = timers.erase(it);
+                removed |= true;
+            }
+            else
+            {
+                ++it;
+            }
         }
-        else
-        {
-            ++it;
-        }
-    }
+    };
+
+#if defined(Q_OS_WINDOWS)
+    remove_by_object(multimedia_timers_, object);
 #endif
 
-    removed |= std::erase_if(precise_timers_,
-        [object](const auto& timer) { return timer.second.object == object; }) != 0;
-
-    removed |= std::erase_if(coarse_timers_,
-        [object](const auto& timer) { return timer.second.object == object; }) != 0;
+    remove_by_object(precise_timers_, object);
+    remove_by_object(coarse_timers_,  object);
 
     return removed;
 }
@@ -453,14 +460,16 @@ asio::io_context& AsioEventDispatcher::ioContext()
 
 //--------------------------------------------------------------------------------------------------
 void AsioEventDispatcher::asyncWaitPreciseTimer(
-    asio::high_resolution_timer& handle, int timer_id, TimePoint end_time)
+    asio::high_resolution_timer& handle, TimePoint end_time, int timer_id, QObject* object)
 {
-    // Start waiting for the timer.
     handle.expires_at(end_time);
-    handle.async_wait([this, timer_id](const std::error_code& error_code) noexcept
+    handle.async_wait([this, timer_id, object](const std::error_code& error_code) noexcept
     {
         if (error_code)
             return;
+
+        QTimerEvent event(timer_id);
+        QCoreApplication::sendEvent(object, &event);
 
         auto it = precise_timers_.find(timer_id);
         if (it == precise_timers_.end())
@@ -469,26 +478,22 @@ void AsioEventDispatcher::asyncWaitPreciseTimer(
         PreciseTimer& timer = it->second;
         timer.end_time += timer.interval;
 
-        QTimerEvent event(timer_id);
-        QCoreApplication::sendEvent(timer.object, &event);
-
-        if (!precise_timers_.contains(timer_id))
-            return;
-
-        asyncWaitPreciseTimer(timer.handle, timer_id, timer.end_time);
+        asyncWaitPreciseTimer(timer.handle, timer.end_time, timer_id, object);
     });
 }
 
 //--------------------------------------------------------------------------------------------------
 void AsioEventDispatcher::asyncWaitCoarseTimer(
-    asio::steady_timer& handle, int timer_id, TimePoint end_time)
+    asio::steady_timer& handle, TimePoint end_time, int timer_id, QObject* object)
 {
-    // Start waiting for the timer.
     handle.expires_at(end_time);
-    handle.async_wait([this, timer_id](const std::error_code& error_code) noexcept
+    handle.async_wait([this, timer_id, object](const std::error_code& error_code) noexcept
     {
         if (error_code)
             return;
+
+        QTimerEvent event(timer_id);
+        QCoreApplication::sendEvent(object, &event);
 
         auto it = coarse_timers_.find(timer_id);
         if (it == coarse_timers_.end())
@@ -497,25 +502,22 @@ void AsioEventDispatcher::asyncWaitCoarseTimer(
         CoarseTimer& timer = it->second;
         timer.end_time += timer.interval;
 
-        QTimerEvent event(timer_id);
-        QCoreApplication::sendEvent(timer.object, &event);
-
-        if (!coarse_timers_.contains(timer_id))
-            return;
-
-        asyncWaitCoarseTimer(timer.handle, timer_id, timer.end_time);
+        asyncWaitCoarseTimer(timer.handle, timer.end_time, timer_id, object);
     });
 }
 
 #if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
-void AsioEventDispatcher::asyncWaitMultimediaTimer(asio::windows::object_handle& handle, int timer_id)
+void AsioEventDispatcher::asyncWaitMultimediaTimer(
+    asio::windows::object_handle& handle, int timer_id, QObject* object)
 {
-    // Start waiting for the timer.
-    handle.async_wait([this, timer_id](const std::error_code& error_code) noexcept
+    handle.async_wait([this, timer_id, object](const std::error_code& error_code) noexcept
     {
         if (error_code)
             return;
+
+        QTimerEvent event(timer_id);
+        QCoreApplication::sendEvent(object, &event);
 
         auto it = multimedia_timers_.find(timer_id);
         if (it == multimedia_timers_.end())
@@ -524,13 +526,7 @@ void AsioEventDispatcher::asyncWaitMultimediaTimer(asio::windows::object_handle&
         MultimediaTimer& timer = it->second;
         timer.end_time += timer.interval;
 
-        QTimerEvent event(timer_id);
-        QCoreApplication::sendEvent(timer.object, &event);
-
-        if (!multimedia_timers_.contains(timer_id))
-            return;
-
-        asyncWaitMultimediaTimer(timer.handle, timer_id);
+        asyncWaitMultimediaTimer(timer.handle, timer_id, object);
     });
 }
 #endif // defined(Q_OS_WINDOWS)
@@ -550,28 +546,24 @@ void AsioEventDispatcher::asyncWaitSocket(SocketHandle& handle, qintptr socket)
 
         SocketData& data = it->second;
 
-        WSAEVENT wsa_event = data.handle.native_handle();
         WSANETWORKEVENTS network_events = {};
-
-        if (WSAEnumNetworkEvents(socket, wsa_event, &network_events) == SOCKET_ERROR)
+        if (WSAEnumNetworkEvents(socket, data.handle.native_handle(), &network_events) == SOCKET_ERROR)
         {
             LOG(ERROR) << "WSAEnumNetworkEvents failed:" << WSAGetLastError();
             return;
         }
 
-        const long events = network_events.lNetworkEvents;
-
         auto send_event = [&](QSocketNotifier* notifier, long mask) noexcept -> bool
         {
-            // There are no notifications for this event type or there is no notifier for this event type.
-            if (!(events & mask) || !notifier)
+            // There are no notifications for this event type or no notifier for this event type.
+            if (!(network_events.lNetworkEvents & mask) || !notifier)
                 return true;
 
             QEvent event(QEvent::SockAct);
             QCoreApplication::sendEvent(notifier, &event);
 
-            // If the list has changed, we try to find the socket in it. If there is no socket, then further
-            // execution should be interrupted and the next asynchronous wait will not be called.
+            // If the list has changed, we try to find the socket in it. If there is no socket, then
+            // further execution should be interrupted and the next wait will not be called.
             return sockets_.contains(socket);
         };
 
@@ -638,5 +630,22 @@ void AsioEventDispatcher::asyncWaitSocket(SocketHandle& handle, SocketHandle::wa
     });
 }
 #endif // defined(Q_OS_UNIX)
+
+#if defined(Q_OS_WINDOWS)
+//--------------------------------------------------------------------------------------------------
+void AsioEventDispatcher::MultimediaTimer::cancel()
+{
+    std::error_code ignored_error;
+    handle.cancel(ignored_error);
+    timeKillEvent(native_id);
+}
+#endif // defined(Q_OS_WINDOWS)
+
+//--------------------------------------------------------------------------------------------------
+void AsioEventDispatcher::SocketData::cancel()
+{
+    std::error_code ignored_error;
+    handle.cancel(ignored_error);
+}
 
 } // namespace base
