@@ -63,8 +63,10 @@ public:
     asio::io_context& ioContext();
 
 private:
-    using Clock = std::chrono::steady_clock;
-    using TimePoint = Clock::time_point;
+    using PreciseClock = std::chrono::high_resolution_clock;
+    using PreciseTimePoint = PreciseClock::time_point;
+    using CoarseClock = std::chrono::steady_clock;
+    using CoarseTimePoint = CoarseClock::time_point;
     using Milliseconds = std::chrono::milliseconds;
     using Seconds = std::chrono::seconds;
 
@@ -76,7 +78,7 @@ private:
         asio::windows::object_handle handle;
         quint32 native_id;
         Milliseconds interval;
-        TimePoint end_time;
+        PreciseTimePoint end_time;
         QObject* object;
     };
     using MultimediaTimers = std::unordered_map<int, MultimediaTimer>;
@@ -85,14 +87,14 @@ private:
     using SocketHandle = asio::posix::stream_descriptor;
 #endif
 
-    template <typename TimerHandle>
+    template <typename TimerHandleType, typename TimePointType>
     struct GenericTimer
     {
         void cancel() { handle.cancel(); }
 
-        TimerHandle handle;
+        TimerHandleType handle;
         Milliseconds interval;
-        TimePoint end_time;
+        TimePointType end_time;
         QObject* object;
     };
 
@@ -112,14 +114,16 @@ private:
         SocketHandle handle;
     };
 
-    using PreciseTimer = GenericTimer<asio::high_resolution_timer>;
+    using PreciseTimer = GenericTimer<asio::high_resolution_timer, PreciseTimePoint>;
     using PreciseTimers = std::unordered_map<int, PreciseTimer>;
-    using CoarseTimer = GenericTimer<asio::steady_timer>;
+    using CoarseTimer = GenericTimer<asio::steady_timer, CoarseTimePoint>;
     using CoarseTimers = std::unordered_map<int, CoarseTimer>;
     using Sockets = std::unordered_map<qintptr, SocketData>;
 
-    void asyncWaitPreciseTimer(asio::high_resolution_timer& handle, TimePoint end_time, int timer_id);
-    void asyncWaitCoarseTimer(asio::steady_timer& handle, TimePoint end_time, int timer_id);
+    void asyncWaitPreciseTimer(
+        asio::high_resolution_timer& handle, const PreciseTimePoint& end_time, int timer_id);
+    void asyncWaitCoarseTimer(
+        asio::steady_timer& handle, const CoarseTimePoint& end_time, int timer_id);
 
 #if defined(Q_OS_WINDOWS)
     void asyncWaitMultimediaTimer(asio::windows::object_handle& handle, int timer_id);
