@@ -20,8 +20,6 @@
 
 #include "base/logging.h"
 #include "base/files/file_descriptor_watcher_posix.h"
-#include "base/message_loop/message_loop.h"
-#include "base/message_loop/message_pump_asio.h"
 #include "base/x11/x_server_clipboard.h"
 
 namespace common {
@@ -49,13 +47,13 @@ void ClipboardX11::init()
     display_ = XOpenDisplay(nullptr);
     if (!display_)
     {
-        LOG(LS_ERROR) << "Couldn't open X display";
+        LOG(ERROR) << "Couldn't open X display";
         return;
     }
 
     x_server_clipboard_ = std::make_unique<base::XServerClipboard>();
     x_server_clipboard_->init(
-        display_, std::bind(&ClipboardX11::onData, this, std::placeholders::_1));
+        display_, std::bind(&ClipboardX11::onTextData, this, std::placeholders::_1));
 
     x_connection_watcher_ = std::make_unique<base::FileDescriptorWatcher>();
     x_connection_watcher_->startWatching(
@@ -67,10 +65,19 @@ void ClipboardX11::init()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClipboardX11::setData(const std::string& data)
+void ClipboardX11::setData(const QString& mime_type, const QByteArray& data)
 {
+    if (mime_type != kMimeTypeTextUtf8)
+        return;
+
     if (x_server_clipboard_)
-        x_server_clipboard_->setClipboard(data);
+        x_server_clipboard_->setClipboard(data.toStdString());
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClipboardX11::onTextData(const std::string& text)
+{
+    onData(kMimeTypeTextUtf8, QByteArray::fromStdString(text));
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -19,7 +19,6 @@
 #ifndef COMMON_CLIPBOARD_X11_H
 #define COMMON_CLIPBOARD_X11_H
 
-#include "base/macros_magic.h"
 #include "common/clipboard.h"
 
 struct _XDisplay;
@@ -42,9 +41,10 @@ public:
 protected:
     // Clipboard implementation.
     void init() final;
-    void setData(const std::string& data) final;
+    void setData(const QString& mime_type, const QByteArray& data) final;
 
 private:
+    void onTextData(const std::string& text);
     void pumpXEvents();
 
     // Underlying X11 clipboard implementation.

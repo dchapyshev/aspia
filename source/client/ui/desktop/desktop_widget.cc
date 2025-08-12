@@ -26,10 +26,7 @@
 #include <QWheelEvent>
 
 #if defined(Q_OS_LINUX)
-#include <X11/XKBlib.h>
-#if defined(KeyPress)
-#undef KeyPress
-#endif // defined(KeyPress)
+#include "base/x11/x11_headers.h"
 #endif // defined(Q_OS_LINUX)
 
 #if defined(Q_OS_MACOS)
@@ -55,7 +52,7 @@ bool isNumLockActivated()
     Display* display = XOpenDisplay(nullptr);
     if (!display)
     {
-        LOG(LS_ERROR) << "XOpenDisplay failed";
+        LOG(ERROR) << "XOpenDisplay failed";
         return false;
     }
 
@@ -82,7 +79,7 @@ bool isCapsLockActivated()
     Display* display = XOpenDisplay(nullptr);
     if (!display)
     {
-        LOG(LS_ERROR) << "XOpenDisplay failed";
+        LOG(ERROR) << "XOpenDisplay failed";
         return false;
     }
 

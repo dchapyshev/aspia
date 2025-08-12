@@ -20,6 +20,7 @@
 #define COMMON_FILE_WORKER_H
 
 #include <QObject>
+#include <QTimer>
 
 #include <memory>
 
