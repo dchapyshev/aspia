@@ -19,13 +19,12 @@
 #ifndef HOST_INPUT_INJECTOR_X11_H
 #define HOST_INPUT_INJECTOR_X11_H
 
-#include "host/input_injector.h"
+#include <QSet>
 
 #include <memory>
-#include <set>
 
-#include <X11/X.h>
-#include <X11/Xlib.h>
+#include "base/x11/x11_headers.h"
+#include "host/input_injector.h"
 
 namespace host {
 
@@ -34,18 +33,18 @@ class InputInjectorX11 final : public InputInjector
 public:
     ~InputInjectorX11();
 
-    static std::unique_ptr<InputInjectorX11> create();
+    static InputInjectorX11* create(QObject* parent = nullptr);
 
     // InputInjector implementation.
-    void setScreenOffset(const base::Point& offset) final;
+    void setScreenOffset(const QPoint& offset) final;
     void setBlockInput(bool enable) final;
-    void injectKeyEvent(const proto::KeyEvent& event) final;
-    void injectTextEvent(const proto::TextEvent& event) final;
-    void injectMouseEvent(const proto::MouseEvent& event) final;
-    void injectTouchEvent(const proto::TouchEvent& event) final;
+    void injectKeyEvent(const proto::desktop::KeyEvent& event) final;
+    void injectTextEvent(const proto::desktop::TextEvent& event) final;
+    void injectMouseEvent(const proto::desktop::MouseEvent& event) final;
+    void injectTouchEvent(const proto::desktop::TouchEvent& event) final;
 
 private:
-    InputInjectorX11();
+    explicit InputInjectorX11(QObject* parent = nullptr);
     bool init();
 
     // Compensates for global button mappings and resets the XTest device mapping.
@@ -61,9 +60,9 @@ private:
     Display* display_ = nullptr;
     Window root_window_ = BadValue;
 
-    base::Point screen_offset_;
+    QPoint screen_offset_;
 
-    base::Point last_mouse_pos_;
+    QPoint last_mouse_pos_;
     bool left_button_pressed_ = false;
     bool right_button_pressed_ = false;
     bool middle_button_pressed_ = false;
@@ -76,7 +75,7 @@ private:
 
     int pointer_button_map_[kNumPointerButtons];
 
-    std::set<int> pressed_keys_;
+    QSet<int> pressed_keys_;
 
     Q_DISABLE_COPY(InputInjectorX11)
 };

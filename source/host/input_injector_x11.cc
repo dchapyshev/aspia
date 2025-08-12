@@ -19,12 +19,8 @@
 #include "host/input_injector_x11.h"
 
 #include "base/logging.h"
-#include "base/stl_util.h"
+#include "base/x11/x11_headers.h"
 #include "common/keycode_converter.h"
-
-#include <X11/extensions/XTest.h>
-#include <X11/Xutil.h>
-#include <X11/XKBlib.h>
 
 namespace host {
 
@@ -65,15 +61,16 @@ bool isModifierKey(uint32_t usbKeycode)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-InputInjectorX11::InputInjectorX11()
+InputInjectorX11::InputInjectorX11(QObject* parent)
+    : InputInjector(parent)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
 InputInjectorX11::~InputInjectorX11()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 
     releasePressedKeys();
     setAutoRepeatEnabled(true);
@@ -84,17 +81,17 @@ InputInjectorX11::~InputInjectorX11()
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::unique_ptr<InputInjectorX11> InputInjectorX11::create()
+InputInjectorX11* InputInjectorX11::create(QObject* parent)
 {
-    std::unique_ptr<InputInjectorX11> instance(new InputInjectorX11());
+    std::unique_ptr<InputInjectorX11> instance(new InputInjectorX11(parent));
     if (!instance->init())
         return nullptr;
 
-    return instance;
+    return instance.release();
 }
 
 //--------------------------------------------------------------------------------------------------
-void InputInjectorX11::setScreenOffset(const base::Point& offset)
+void InputInjectorX11::setScreenOffset(const QPoint& offset)
 {
     screen_offset_ = offset;
 }
@@ -106,19 +103,19 @@ void InputInjectorX11::setBlockInput(bool /* enable */)
 }
 
 //--------------------------------------------------------------------------------------------------
-void InputInjectorX11::injectKeyEvent(const proto::KeyEvent& event)
+void InputInjectorX11::injectKeyEvent(const proto::desktop::KeyEvent& event)
 {
     int keycode = common::KeycodeConverter::usbKeycodeToNativeKeycode(event.usb_keycode());
     if (keycode == common::KeycodeConverter::invalidNativeKeycode())
     {
-        LOG(LS_ERROR) << "Invalid key code: " << event.usb_keycode();
+        LOG(ERROR) << "Invalid key code:" << event.usb_keycode();
         return;
     }
 
-    bool is_pressed = (event.flags() & proto::KeyEvent::PRESSED) != 0;
+    bool is_pressed = (event.flags() & proto::desktop::KeyEvent::PRESSED) != 0;
     if (is_pressed)
     {
-        if (base::contains(pressed_keys_, keycode))
+        if (pressed_keys_.contains(keycode))
         {
             // Ignore repeats for modifier keys.
             if (isModifierKey(event.usb_keycode()))
@@ -126,13 +123,13 @@ void InputInjectorX11::injectKeyEvent(const proto::KeyEvent& event)
 
             // Key is already held down, so lift the key up to ensure this repeated press takes
             // effect.
-            XTestFakeKeyEvent(display_, keycode, False, CurrentTime);
+            XTestFakeKeyEvent(display_, keycode, X11_False, CurrentTime);
         }
 
         if (!isLockKey(keycode))
         {
-            bool capsLock = (event.flags() & proto::KeyEvent::CAPSLOCK) != 0;
-            bool numLock = (event.flags() & proto::KeyEvent::NUMLOCK) != 0;
+            bool capsLock = (event.flags() & proto::desktop::KeyEvent::CAPSLOCK) != 0;
+            bool numLock = (event.flags() & proto::desktop::KeyEvent::NUMLOCK) != 0;
             setLockStates(capsLock, numLock);
         }
 
@@ -141,18 +138,18 @@ void InputInjectorX11::injectKeyEvent(const proto::KeyEvent& event)
         if (isAutoRepeatEnabled())
             setAutoRepeatEnabled(false);
 
-        pressed_keys_.emplace(keycode);
+        pressed_keys_.insert(keycode);
     }
     else
     {
-        if (!base::contains(pressed_keys_, keycode))
+        if (!pressed_keys_.contains(keycode))
         {
-            LOG(LS_INFO) << "Button release event has arrived, but such a button has "
-                         << "not been pressed before";
+            LOG(INFO) << "Button release event has arrived, but such a button has "
+                         "not been pressed before";
             return;
         }
 
-        pressed_keys_.erase(keycode);
+        pressed_keys_.remove(keycode);
     }
 
     XTestFakeKeyEvent(display_, keycode, is_pressed, CurrentTime);
@@ -160,22 +157,22 @@ void InputInjectorX11::injectKeyEvent(const proto::KeyEvent& event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void InputInjectorX11::injectTextEvent(const proto::TextEvent& /* event */)
+void InputInjectorX11::injectTextEvent(const proto::desktop::TextEvent& /* event */)
 {
     NOTIMPLEMENTED();
 }
 
 //--------------------------------------------------------------------------------------------------
-void InputInjectorX11::injectMouseEvent(const proto::MouseEvent& event)
+void InputInjectorX11::injectMouseEvent(const proto::desktop::MouseEvent& event)
 {
-    base::Point pos(event.x(), event.y());
-    pos.add(screen_offset_);
+    QPoint pos(event.x(), event.y());
+    pos += screen_offset_;
 
-    bool left_button_pressed = (event.mask() & proto::MouseEvent::LEFT_BUTTON) != 0;
-    bool middle_button_pressed = (event.mask() & proto::MouseEvent::MIDDLE_BUTTON) != 0;
-    bool right_button_pressed = (event.mask() & proto::MouseEvent::RIGHT_BUTTON) != 0;
-    bool back_button_pressed = (event.mask() & proto::MouseEvent::BACK_BUTTON) != 0;
-    bool forward_button_pressed = (event.mask() & proto::MouseEvent::FORWARD_BUTTON) != 0;
+    bool left_button_pressed = (event.mask() & proto::desktop::MouseEvent::LEFT_BUTTON) != 0;
+    bool middle_button_pressed = (event.mask() & proto::desktop::MouseEvent::MIDDLE_BUTTON) != 0;
+    bool right_button_pressed = (event.mask() & proto::desktop::MouseEvent::RIGHT_BUTTON) != 0;
+    bool back_button_pressed = (event.mask() & proto::desktop::MouseEvent::BACK_BUTTON) != 0;
+    bool forward_button_pressed = (event.mask() & proto::desktop::MouseEvent::FORWARD_BUTTON) != 0;
 
     bool inject_motion = true;
 
@@ -234,9 +231,9 @@ void InputInjectorX11::injectMouseEvent(const proto::MouseEvent& event)
 
     int wheel_movement = 0;
 
-    if (event.mask() & proto::MouseEvent::WHEEL_UP)
+    if (event.mask() & proto::desktop::MouseEvent::WHEEL_UP)
         wheel_movement = 120;
-    else if (event.mask() & proto::MouseEvent::WHEEL_DOWN)
+    else if (event.mask() & proto::desktop::MouseEvent::WHEEL_DOWN)
         wheel_movement = -120;
 
     if (wheel_movement != 0)
@@ -261,7 +258,7 @@ void InputInjectorX11::injectMouseEvent(const proto::MouseEvent& event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void InputInjectorX11::injectTouchEvent(const proto::TouchEvent& /* event */)
+void InputInjectorX11::injectTouchEvent(const proto::desktop::TouchEvent& /* event */)
 {
     NOTIMPLEMENTED();
 }
@@ -272,20 +269,20 @@ bool InputInjectorX11::init()
     display_ = XOpenDisplay(nullptr);
     if (!display_)
     {
-        LOG(LS_ERROR) << "XOpenDisplay failed";
+        LOG(ERROR) << "XOpenDisplay failed";
         return false;
     }
 
     root_window_ = XRootWindow(display_, DefaultScreen(display_));
     if (root_window_ == BadValue)
     {
-        LOG(LS_ERROR) << "Unable to get the root window";
+        LOG(ERROR) << "Unable to get the root window";
         return false;
     }
 
     if (!ignoreXServerGrabs(display_, true))
     {
-        LOG(LS_ERROR) << "Server does not support XTest";
+        LOG(ERROR) << "Server does not support XTest";
         return false;
     }
 
@@ -318,7 +315,7 @@ void InputInjectorX11::initMouseButtonMap()
     {
         if (pointer_button_map_[i] == -1)
         {
-            LOG(LS_ERROR) << "Global pointer mapping does not support button " << i + 1;
+            LOG(ERROR) << "Global pointer mapping does not support button" << i + 1;
         }
     }
 
@@ -327,7 +324,7 @@ void InputInjectorX11::initMouseButtonMap()
     {
         // If XInput is not available, we're done. But it would be very unusual to
         // have a server that supports XTest but not XInput, so log it as an error.
-        LOG(LS_ERROR) << "X Input extension not available: " << error;
+        LOG(ERROR) << "X Input extension not available:" << error;
         return;
     }
 
@@ -356,14 +353,14 @@ void InputInjectorX11::initMouseButtonMap()
 
     if (!device_found)
     {
-        LOG(LS_ERROR) << "Cannot find XTest device.";
+        LOG(ERROR) << "Cannot find XTest device.";
         return;
     }
 
     XDevice* device = XOpenDevice(display_, device_id);
     if (!device)
     {
-        LOG(LS_ERROR) << "Cannot open XTest device.";
+        LOG(ERROR) << "Cannot open XTest device.";
         return;
     }
 
@@ -376,7 +373,7 @@ void InputInjectorX11::initMouseButtonMap()
     error = XSetDeviceButtonMapping(display_, device, button_mapping.get(), num_device_buttons);
     if (error != Success)
     {
-        LOG(LS_ERROR) << "Failed to set XTest device button mapping: " << error;
+        LOG(ERROR) << "Failed to set XTest device button mapping:" << error;
     }
 
     XCloseDevice(display_, device);
@@ -411,7 +408,7 @@ bool InputInjectorX11::isLockKey(int keycode)
     KeySym keysym;
 
     if (XkbGetState(display_, XkbUseCoreKbd, &state) == Success &&
-        XkbLookupKeySym(display_, keycode, XkbStateMods(&state), nullptr, &keysym) == True)
+        XkbLookupKeySym(display_, keycode, XkbStateMods(&state), nullptr, &keysym) == X11_True)
     {
         return keysym == XK_Caps_Lock || keysym == XK_Num_Lock;
     }
@@ -425,7 +422,7 @@ bool InputInjectorX11::isAutoRepeatEnabled()
     XKeyboardState state;
     if (!XGetKeyboardControl(display_, &state))
     {
-        LOG(LS_ERROR) << "Failed to get keyboard auto-repeat status, assuming ON";
+        LOG(ERROR) << "Failed to get keyboard auto-repeat status, assuming ON";
         return true;
     }
 

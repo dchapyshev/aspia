@@ -651,7 +651,7 @@ void MainWindow::onSettings()
 
     if (self_uid != 0 && self_uid == effective_uid)
     {
-        LOG(LS_INFO) << "Start settings dialog as super user";
+        LOG(INFO) << "Start settings dialog as super user";
 
         QProcess* process = new QProcess(this);
 

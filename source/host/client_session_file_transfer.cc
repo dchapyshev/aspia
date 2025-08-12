@@ -270,21 +270,17 @@ void ClientSessionFileTransfer::onStarted()
     std::array<char, 512> buffer;
     while (fgets(buffer.data(), buffer.size(), pipe.get()))
     {
-        std::u16string line = base::toLower(base::utf16FromLocal8Bit(buffer.data()));
-        if (!base::contains(line, u":0"))
+        QString line = QString::fromLocal8Bit(buffer.data()).toLower();
+        if (!line.contains(":0"))
             continue;
 
-        std::vector<std::u16string_view> splitted = base::splitStringView(
-            line, u" ", base::TRIM_WHITESPACE, base::SPLIT_WANT_NONEMPTY);
-        if (splitted.empty())
+        QStringList splitted = line.split(' ', Qt::SkipEmptyParts);
+        if (splitted.isEmpty())
             continue;
 
-        std::string user_name = base::local8BitFromUtf16(splitted.front());
-        std::string command_line =
-            fmt::format("sudo -u {} {} --channel_id={} &",
-                        user_name,
-                        agentFilePath().c_str(),
-                        base::local8BitFromUtf16(channel_id));
+        QString user_name = splitted.front();
+        QByteArray command_line = QString("sudo -u {} {} --channel_id={} &")
+            .arg(user_name, agentFilePath(), channel_id).toLocal8Bit();
 
         LOG(INFO) << "Start file transfer session agent:" << command_line;
 

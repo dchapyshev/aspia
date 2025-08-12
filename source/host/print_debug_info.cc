@@ -136,9 +136,6 @@ void printDebugInfo(quint32 features)
     LOG(INFO) << "Process elevated:" << (base::isProcessElevated() ? "Yes" : "No");
     LOG(INFO) << "Active console session ID:" << WTSGetActiveConsoleSessionId();
     LOG(INFO) << "Computer name:" << base::SysInfo::computerName();
-#endif // defined(Q_OS_WINDOWS)
-
-    LOG(INFO) << "Environment variables:" << QProcessEnvironment::systemEnvironment().toStringList();
 
     if (features & INCLUDE_VIDEO_ADAPTERS)
     {
@@ -208,6 +205,9 @@ void printDebugInfo(quint32 features)
         }
         LOG(INFO) << "#####################################################";
     }
+#endif // defined(Q_OS_WINDOWS)
+
+    LOG(INFO) << "Environment variables:" << QProcessEnvironment::systemEnvironment().toStringList();
 }
 
 } // namespace host

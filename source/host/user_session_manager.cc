@@ -324,12 +324,16 @@ void UserSessionManager::onClientSession(ClientSession* client_session)
 
     std::unique_ptr<ClientSession> client_session_deleter(client_session);
 
-    base::SessionId session_id = base::activeConsoleSessionId();
+    base::SessionId session_id = 0;
+
+#if defined(Q_OS_WINDOWS)
+    session_id = base::activeConsoleSessionId();
     if (session_id == base::kInvalidSessionId)
     {
         LOG(ERROR) << "Failed to get session id";
         return;
     }
+#endif
 
     bool user_session_found = false;
 
@@ -531,34 +535,24 @@ void UserSessionManager::startSessionProcess(
     std::array<char, 512> buffer;
     while (fgets(buffer.data(), buffer.size(), pipe.get()))
     {
-        std::u16string line = base::toLower(base::utf16FromLocal8Bit(buffer.data()));
+        QString line = QString::fromLocal8Bit(buffer.data()).toLower();
 
-        if (base::contains(line, u":0") || base::contains(line, u"tty2"))
+        if (line.contains(":0") || line.contains("tty2"))
         {
-            std::vector<std::u16string_view> splitted = base::splitStringView(
-                line, u" ", base::TRIM_WHITESPACE, base::SPLIT_WANT_NONEMPTY);
+            QStringList splitted = line.split(' ', Qt::SkipEmptyParts);
 
-            if (!splitted.empty())
+            if (!splitted.isEmpty())
             {
-                std::string user_name = base::local8BitFromUtf16(splitted.front());
-
-                std::filesystem::path file_path;
-                if (!base::BasePaths::currentExecDir(&file_path))
-                {
-                    LOG(ERROR) << "Failed to get current exec directory (sid=" << session_id << ")";
-                    return;
-                }
-
+                QString user_name = splitted.front();
+                QString file_path = QCoreApplication::applicationDirPath();
                 file_path.append(kExecutableNameForUi);
 
-                std::string command_line =
-                    fmt::format("sudo DISPLAY=':0' FONTCONFIG_PATH=/etc/fonts "
-                                "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u {0})/bus "
-                                "-u {0} {1} --hidden &",
-                                user_name,
-                                file_path.c_str());
+                QByteArray command_line =
+                    QString("sudo DISPLAY=':0' FONTCONFIG_PATH=/etc/fonts "
+                            "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u %1)/bus "
+                            "-u %1 %2 --hidden &").arg(user_name, file_path).toLocal8Bit();
 
-                int ret = system(command_line.c_str());
+                int ret = system(command_line.data());
                 LOG(INFO) << "system result:" << ret;
             }
         }

@@ -299,26 +299,23 @@ std::unique_ptr<DesktopSessionProcess> DesktopSessionProcess::create(
         return nullptr;
     }
 
-    LOG(LS_INFO) << "WHO:";
+    LOG(INFO) << "WHO:";
     std::array<char, 512> buffer;
     while (fgets(buffer.data(), buffer.size(), pipe.get()))
     {
-        std::u16string line = base::toLower(base::utf16FromLocal8Bit(buffer.data()));
+        QString line = QString::fromLocal8Bit(buffer.data()).toLower();
         LOG(INFO) << line;
-        if (!base::contains(line, u":0"))
+        if (!line.contains(":0"))
             continue;
 
-        std::vector<std::u16string_view> splitted = base::splitStringView(
-            line, u" ", base::TRIM_WHITESPACE, base::SPLIT_WANT_NONEMPTY);
-        if (splitted.empty())
+        QStringList splitted = line.split(' ', Qt::SkipEmptyParts);
+        if (splitted.isEmpty())
             continue;
 
-        std::string user_name = base::local8BitFromUtf16(splitted.front());
-        std::string command_line =
-            fmt::format("sudo DISPLAY=':0' -u {} {} --channel_id={} &",
-                        user_name,
-                        filePath().c_str(),
-                        base::local8BitFromUtf16(channel_id));
+        QString user_name = splitted.front();
+        QByteArray command_line =
+            QString("sudo DISPLAY=':0' -u %1 %2 --channel_id=%3 &")
+                .arg(user_name, filePath(), channel_id).toLocal8Bit();
 
         LOG(INFO) << "Start desktop session agent:" << command_line;
 
@@ -338,10 +335,9 @@ std::unique_ptr<DesktopSessionProcess> DesktopSessionProcess::create(
 
     LOG(ERROR) << "Connected X sessions not found";
 
-    std::string command_line =
-        fmt::format("sudo DISPLAY=':0' -u root {} --channel_id={} &",
-                    filePath().c_str(),
-                    base::local8BitFromUtf16(channel_id));
+    QByteArray command_line =
+        QString("sudo DISPLAY=':0' -u root %1 --channel_id=%2 &")
+            .arg(filePath(), channel_id).toLocal8Bit();
 
     LOG(INFO) << "Start desktop session agent:" << command_line;
 
@@ -390,7 +386,7 @@ void DesktopSessionProcess::kill()
 #elif defined(Q_OS_LINUX)
     if (::kill(pid_, SIGKILL) != 0)
     {
-        PLOG(LS_ERROR) << "kill failed";
+        PLOG(ERROR) << "kill failed";
     }
 #else
     NOTIMPLEMENTED();

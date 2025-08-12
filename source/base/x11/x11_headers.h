@@ -78,6 +78,10 @@
 #undef False
 #endif
 
+#if defined(CREATE)
+#undef CREATE
+#endif
+
 #define X11_Bool int
 #define X11_Status int
 #define X11_True 1
@@ -90,5 +94,6 @@
 #define X11_FocusOut 10
 #define X11_FontChange 255
 #define X11_Expose 12
+#define X11_CREATE 1
 
 #endif // BASE_X11_X11_HEADERS_H

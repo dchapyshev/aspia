@@ -43,17 +43,19 @@ namespace host {
 //--------------------------------------------------------------------------------------------------
 DesktopSessionAgent::DesktopSessionAgent(QObject* parent)
     : QObject(parent),
+#if defined(Q_OS_WINDOWS)
       ui_thread_(base::Thread::QtDispatcher),
+#endif
       screen_capture_timer_(new QTimer(this))
 {
     LOG(INFO) << "Ctor";
 
+#if defined(Q_OS_WINDOWS)
     connect(&ui_thread_, &base::Thread::started, this, &DesktopSessionAgent::onBeforeThreadRunning,
             Qt::DirectConnection);
     connect(&ui_thread_, &base::Thread::finished, this, &DesktopSessionAgent::onAfterThreadRunning,
             Qt::DirectConnection);
 
-#if defined(Q_OS_WINDOWS)
     // At the end of the user's session, the program ends later than the others.
     if (!SetProcessShutdownParameters(0, SHUTDOWN_NORETRY))
     {

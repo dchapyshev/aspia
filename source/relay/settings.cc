@@ -140,7 +140,7 @@ quint16 Settings::peerPort() const
 //--------------------------------------------------------------------------------------------------
 void Settings::setPeerIdleTimeout(const std::chrono::minutes& timeout)
 {
-    impl_.setValue("peer_idle_timeout", timeout.count());
+    impl_.setValue("peer_idle_timeout", static_cast<qint64>(timeout.count()));
 }
 
 //--------------------------------------------------------------------------------------------------

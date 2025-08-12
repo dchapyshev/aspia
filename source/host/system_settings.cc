@@ -344,7 +344,7 @@ std::chrono::milliseconds SystemSettings::oneTimePasswordExpire() const
     static const std::chrono::milliseconds kMaxValue { 24 * 60 * 60 * 1000 }; // 24 hours.
 
     std::chrono::milliseconds value(
-        settings_.value(kOneTimePasswordExpire, kDefaultValue.count()).toLongLong());
+        settings_.value(kOneTimePasswordExpire, static_cast<qint64>(kDefaultValue.count())).toLongLong());
 
     if (value < kMinValue)
         value = kMinValue;
@@ -357,7 +357,7 @@ std::chrono::milliseconds SystemSettings::oneTimePasswordExpire() const
 //--------------------------------------------------------------------------------------------------
 void SystemSettings::setOneTimePasswordExpire(const std::chrono::milliseconds& interval)
 {
-    settings_.setValue(kOneTimePasswordExpire, interval.count());
+    settings_.setValue(kOneTimePasswordExpire, static_cast<qint64>(interval.count()));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -440,7 +440,7 @@ std::chrono::milliseconds SystemSettings::autoConfirmationInterval() const
     static const std::chrono::milliseconds kMaxValue { 60 * 1000 }; // 60 seconds.
 
     std::chrono::milliseconds value(settings_.value(
-        kConnectConfirmationAutoConfirmationInterval, kDefaultValue.count()).toLongLong());
+        kConnectConfirmationAutoConfirmationInterval, static_cast<qint64>(kDefaultValue.count())).toLongLong());
 
     if (value < kMinValue)
         value = kMinValue;
@@ -453,7 +453,7 @@ std::chrono::milliseconds SystemSettings::autoConfirmationInterval() const
 //--------------------------------------------------------------------------------------------------
 void SystemSettings::setAutoConfirmationInterval(const std::chrono::milliseconds& interval)
 {
-    settings_.setValue(kConnectConfirmationAutoConfirmationInterval, interval.count());
+    settings_.setValue(kConnectConfirmationAutoConfirmationInterval, static_cast<qint64>(interval.count()));
 }
 
 //--------------------------------------------------------------------------------------------------

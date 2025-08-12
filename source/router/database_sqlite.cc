@@ -742,7 +742,7 @@ QString DatabaseSqlite::databaseDirectory()
 #if defined(Q_OS_WINDOWS)
     dir_path = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
     dir_path.append("/aspia");
-#elif (Q_OS_LINUX)
+#elif defined(Q_OS_LINUX)
     dir_path.append("/var/lib/aspia");
 #else
     NOTIMPLEMENTED();
