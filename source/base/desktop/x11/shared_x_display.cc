@@ -22,8 +22,7 @@
 
 #include <algorithm>
 
-#include <X11/Xlib.h>
-#include <X11/extensions/XTest.h>
+#include "base/x11/x11_headers.h"
 
 namespace base {
 
@@ -33,9 +32,9 @@ const char* eventTypeToString(int event)
 {
     switch (event)
     {
-        case KeyPress:
+        case X11_KeyPress:
             return "KeyPress";
-        case KeyRelease:
+        case X11_KeyRelease:
             return "KeyRelease";
         case ButtonPress:
             return "ButtonPress";
@@ -47,13 +46,13 @@ const char* eventTypeToString(int event)
             return "EnterNotify";
         case LeaveNotify:
             return "LeaveNotify";
-        case FocusIn:
+        case X11_FocusIn:
             return "FocusIn";
-        case FocusOut:
+        case X11_FocusOut:
             return "FocusOut";
         case KeymapNotify:
             return "KeymapNotify";
-        case Expose:
+        case X11_Expose:
             return "Expose";
         case GraphicsExpose:
             return "GraphicsExpose";
@@ -124,36 +123,36 @@ SharedXDisplay::~SharedXDisplay()
 
 //--------------------------------------------------------------------------------------------------
 // static
-base::local_shared_ptr<SharedXDisplay> SharedXDisplay::create(const std::string& display_name)
+std::shared_ptr<SharedXDisplay> SharedXDisplay::create(const QString& display_name)
 {
-    Display* display = XOpenDisplay(display_name.empty() ? nullptr : display_name.c_str());
+    Display* display = XOpenDisplay(display_name.isEmpty() ? nullptr : display_name.toLocal8Bit().data());
     if (!display)
     {
-        LOG(LS_ERROR) << "Unable to open display";
+        LOG(ERROR) << "Unable to open display";
         return nullptr;
     }
 
-    return base::make_local_shared<SharedXDisplay>(display);
+    return std::make_shared<SharedXDisplay>(display);
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
-base::local_shared_ptr<SharedXDisplay> SharedXDisplay::createDefault()
+std::shared_ptr<SharedXDisplay> SharedXDisplay::createDefault()
 {
-    return create(std::string());
+    return create(QString());
 }
 
 //--------------------------------------------------------------------------------------------------
 void SharedXDisplay::addEventHandler(int type, XEventHandler* handler)
 {
-    LOG(LS_INFO) << "Added event handler: " << eventTypeToString(type) << " (" << type << ")";
+    LOG(INFO) << "Added event handler:" << eventTypeToString(type) << "(" << type << ")";
     event_handlers_[type].push_back(handler);
 }
 
 //--------------------------------------------------------------------------------------------------
 void SharedXDisplay::removeEventHandler(int type, XEventHandler* handler)
 {
-    LOG(LS_INFO) << "Removed event handler: " << eventTypeToString(type) << " (" << type << ")";
+    LOG(INFO) << "Removed event handler:" << eventTypeToString(type) << "(" << type << ")";
 
     EventHandlersMap::iterator handlers = event_handlers_.find(type);
     if (handlers == event_handlers_.end())
@@ -172,7 +171,7 @@ void SharedXDisplay::removeEventHandler(int type, XEventHandler* handler)
 void SharedXDisplay::processPendingXEvents()
 {
     // Hold reference to |this| to prevent it from being destroyed while processing events.
-    base::local_shared_ptr<SharedXDisplay> self = shared_from_this();
+    std::shared_ptr<SharedXDisplay> self = shared_from_this();
 
     // Find the number of events that are outstanding "now."  We don't just loop on XPending because
     // we want to guarantee this terminates.

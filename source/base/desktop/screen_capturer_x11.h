@@ -26,15 +26,7 @@
 #include "base/desktop/x11/x_server_pixel_buffer.h"
 #include "base/desktop/x11/shared_x_display.h"
 
-#include <X11/X.h>
-#include <X11/Xlib.h>
-#include <X11/extensions/Xdamage.h>
-#include <X11/extensions/Xfixes.h>
-#include <X11/extensions/Xrandr.h>
-
-#if defined(Status)
-#undef Status
-#endif
+#include "base/x11/x11_headers.h"
 
 namespace base {
 
@@ -43,10 +35,10 @@ class ScreenCapturerX11 final
       public SharedXDisplay::XEventHandler
 {
 public:
-    ScreenCapturerX11();
+    explicit ScreenCapturerX11(QObject* parent = nullptr);
     ~ScreenCapturerX11() final;
 
-    static std::unique_ptr<ScreenCapturerX11> create();
+    static ScreenCapturerX11* create(QObject* parent = nullptr);
 
     // ScreenCapturer implementation.
     int screenCount() final;
@@ -55,7 +47,7 @@ public:
     ScreenId currentScreen() const final;
     const Frame* captureFrame(Error* error) final;
     const MouseCursor* captureCursor() final;
-    Point cursorPosition() final;
+    QPoint cursorPosition() final;
 
 protected:
     // ScreenCapturer implementation.
@@ -87,7 +79,7 @@ private:
 
     Frame* captureFrameImpl();
 
-    base::local_shared_ptr<SharedXDisplay> display_;
+    std::shared_ptr<SharedXDisplay> display_;
 
     // X11 graphics context.
     GC gc_ = nullptr;
@@ -98,7 +90,7 @@ private:
     int randr_event_base_ = 0;
     XRRMonitorInfo* monitors_ = nullptr;
     int num_monitors_ = 0;
-    Rect selected_monitor_rect_;
+    QRect selected_monitor_rect_;
 
     // selected_monitor_name_ will be changed to kFullDesktopScreenId
     // by a call to SelectSource() at the end of Init() because
@@ -106,7 +98,7 @@ private:
     // Setting it to kFullDesktopScreenId here might be misleading.
     Atom selected_monitor_name_ = 0;
 
-    typedef XRRMonitorInfo* (*get_monitors_func)(Display*, Window, Bool, int*);
+    typedef XRRMonitorInfo* (*get_monitors_func)(Display*, Window, X11_Bool, int*);
     typedef void (*free_monitors_func)(XRRMonitorInfo*);
     get_monitors_func get_monitors_ = nullptr;
     free_monitors_func free_monitors_ = nullptr;
@@ -135,7 +127,7 @@ private:
 
     // Invalid region from the previous capture. This is used to synchronize the
     // current with the last buffer used.
-    Region last_invalid_region_;
+    QRegion last_invalid_region_;
 
     std::unique_ptr<XAtomCache> atom_cache_;
     std::unique_ptr<MouseCursor> mouse_cursor_;

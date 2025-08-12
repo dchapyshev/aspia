@@ -19,9 +19,6 @@
 #include "base/audio/audio_output_pulse.h"
 
 #include "base/logging.h"
-#include "base/message_loop/message_loop.h"
-#include "base/message_loop/message_pump_asio.h"
-#include "base/threading/simple_thread.h"
 
 base::PulseAudioSymbolTable* pulseSymbolTable()
 {
@@ -58,19 +55,27 @@ private:
 
 } // namespace
 
+//--------------------------------------------------------------------------------------------------
 AudioOutputPulse::AudioOutputPulse(const NeedMoreDataCB& need_more_data_cb)
-    : AudioOutput(need_more_data_cb)
+    : AudioOutput(need_more_data_cb),
+      timer_(new QTimer(this))
 {
+    timer_->setTimerType(Qt::PreciseTimer);
+
+    connect(timer_, &QTimer::timeout, this, &AudioOutputPulse::onTimerExpired);
+
     if (initDevice())
         initPlayout();
 }
 
+//--------------------------------------------------------------------------------------------------
 AudioOutputPulse::~AudioOutputPulse()
 {
     stop();
     terminate();
 }
 
+//--------------------------------------------------------------------------------------------------
 bool AudioOutputPulse::start()
 {
     if (!playout_initialized_)
@@ -79,30 +84,15 @@ bool AudioOutputPulse::start()
     if (playing_)
         return true;
 
-    MessageLoop* message_loop = MessageLoop::current();
-    if (!message_loop)
-    {
-        LOG(LS_ERROR) << "No message loop in current thread";
-        return false;
-    }
+    timer_->setInterval(std::chrono::milliseconds(period_time_));
+    timer_->start();
 
-    if (message_loop->type() != MessageLoop::Type::ASIO)
-    {
-        LOG(LS_ERROR) << "Wrong message loop type: " << static_cast<int>(message_loop->type());
-        return false;
-    }
-
-    timer_ = std::make_unique<asio::high_resolution_timer>(
-        message_loop->pumpAsio()->ioContext());
-    timer_->expires_after(std::chrono::milliseconds(period_time_));
-    timer_->async_wait(
-        std::bind(&AudioOutputPulse::onTimerExpired, this, std::placeholders::_1));
-
-    LOG(LS_INFO) << "Audio playout started";
+    LOG(INFO) << "Audio playout started";
     playing_ = true;
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool AudioOutputPulse::stop()
 {
     if (!playout_initialized_)
@@ -111,12 +101,7 @@ bool AudioOutputPulse::stop()
     if (!play_stream_)
         return false;
 
-    if (timer_)
-    {
-        timer_->cancel();
-        timer_.reset();
-    }
-
+    timer_->stop();
     playout_initialized_ = false;
     playing_ = false;
 
@@ -132,12 +117,12 @@ bool AudioOutputPulse::stop()
             // Disconnect the stream.
             if (LATE(pa_stream_disconnect)(play_stream_) != PA_OK)
             {
-                LOG(LS_ERROR) << "Failed to disconnect play stream: "
-                              << LATE(pa_context_errno)(pa_context_);
+                LOG(ERROR) << "Failed to disconnect play stream:"
+                           << LATE(pa_context_errno)(pa_context_);
                 return false;
             }
 
-            LOG(LS_INFO) << "Disconnected playback";
+            LOG(INFO) << "Disconnected playback";
         }
 
         LATE(pa_stream_unref)(play_stream_);
@@ -146,28 +131,32 @@ bool AudioOutputPulse::stop()
 
     play_buffer_.reset();
 
-    LOG(LS_INFO) << "Audio playout stopped";
+    LOG(INFO) << "Audio playout stopped";
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 void AudioOutputPulse::paContextStateCallback(pa_context* c, void* self)
 {
     static_cast<AudioOutputPulse*>(self)->paContextStateCallbackHandler(c);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 void AudioOutputPulse::paServerInfoCallback(pa_context*, const pa_server_info* i, void* self)
 {
     static_cast<AudioOutputPulse*>(self)->paServerInfoCallbackHandler(i);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 void AudioOutputPulse::paStreamStateCallback(pa_stream* p, void* self)
 {
     static_cast<AudioOutputPulse*>(self)->paStreamStateCallbackHandler(p);
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 void AudioOutputPulse::paStreamWriteCallback(
     pa_stream* /* stream */, size_t /* buffer_space */, void* self)
@@ -175,6 +164,7 @@ void AudioOutputPulse::paStreamWriteCallback(
     static_cast<AudioOutputPulse*>(self)->paStreamWriteCallbackHandler();
 }
 
+//--------------------------------------------------------------------------------------------------
 void AudioOutputPulse::paContextStateCallbackHandler(pa_context* context)
 {
     pa_context_state_t state = LATE(pa_context_get_state)(context);
@@ -201,16 +191,18 @@ void AudioOutputPulse::paContextStateCallbackHandler(pa_context* context)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void AudioOutputPulse::paServerInfoCallbackHandler(const pa_server_info* i)
 {
-    LOG(LS_INFO) << "PulseAudio version: " << i->server_version;
-    LOG(LS_INFO) << "Native sample rate: " << i->sample_spec.rate;
-    LOG(LS_INFO) << "Native channels: " << static_cast<int>(i->sample_spec.channels);
-    LOG(LS_INFO) << "Native format: " << i->sample_spec.format;
+    LOG(INFO) << "PulseAudio version:" << i->server_version;
+    LOG(INFO) << "Native sample rate:" << i->sample_spec.rate;
+    LOG(INFO) << "Native channels:" << static_cast<int>(i->sample_spec.channels);
+    LOG(INFO) << "Native format:" << i->sample_spec.format;
 
     LATE(pa_threaded_mainloop_signal)(pa_main_loop_, 0);
 }
 
+//--------------------------------------------------------------------------------------------------
 void AudioOutputPulse::paStreamStateCallbackHandler(pa_stream* stream)
 {
     pa_stream_state_t state = LATE(pa_stream_get_state)(stream);
@@ -223,17 +215,19 @@ void AudioOutputPulse::paStreamStateCallbackHandler(pa_stream* stream)
 
         case PA_STREAM_FAILED:
         default:
-            LOG(LS_ERROR) << "Stream error: " << LATE(pa_context_errno)(pa_context_);
+            LOG(ERROR) << "Stream error:" << LATE(pa_context_errno)(pa_context_);
             LATE(pa_threaded_mainloop_signal)(pa_main_loop_, 0);
             break;
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void AudioOutputPulse::paStreamWriteCallbackHandler()
 {
     LATE(pa_threaded_mainloop_signal)(pa_main_loop_, 0);
 }
 
+//--------------------------------------------------------------------------------------------------
 bool AudioOutputPulse::initDevice()
 {
     if (device_initialized_)
@@ -242,16 +236,17 @@ bool AudioOutputPulse::initDevice()
     // Initialize PulseAudio.
     if (!initPulseAudio())
     {
-        LOG(LS_ERROR) << "Failed to initialize PulseAudio";
+        LOG(ERROR) << "Failed to initialize PulseAudio";
         terminatePulseAudio();
         return false;
     }
 
-    LOG(LS_INFO) << "Audio device initialized";
+    LOG(INFO) << "Audio device initialized";
     device_initialized_ = true;
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool AudioOutputPulse::initPlayout()
 {
     if (playing_)
@@ -279,7 +274,7 @@ bool AudioOutputPulse::initPlayout()
 
     if (!play_stream_)
     {
-        LOG(LS_ERROR) << "Failed to create play stream: " << LATE(pa_context_errno)(pa_context_);
+        LOG(ERROR) << "Failed to create play stream:" << LATE(pa_context_errno)(pa_context_);
         return false;
     }
 
@@ -305,7 +300,7 @@ bool AudioOutputPulse::initPlayout()
                                          nullptr,
                                          nullptr))
     {
-        LOG(LS_ERROR) << "Failed to connect play stream: " << LATE(pa_context_errno)(pa_context_);
+        LOG(ERROR) << "Failed to connect play stream:" << LATE(pa_context_errno)(pa_context_);
         return false;
     }
 
@@ -324,10 +319,11 @@ bool AudioOutputPulse::initPlayout()
     // Mark playout side as initialized.
     playout_initialized_ = true;
 
-    LOG(LS_INFO) << "Audio playout initialized";
+    LOG(INFO) << "Audio playout initialized";
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void AudioOutputPulse::terminate()
 {
     if (!device_initialized_)
@@ -336,16 +332,17 @@ void AudioOutputPulse::terminate()
     // Terminate PulseAudio.
     terminatePulseAudio();
 
-    LOG(LS_INFO) << "Audio output terminated";
+    LOG(INFO) << "Audio output terminated";
     device_initialized_ = false;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool AudioOutputPulse::initPulseAudio()
 {
     if (!pulseSymbolTable()->load())
     {
         // Most likely the Pulse library and sound server are not installed on this system.
-        LOG(LS_ERROR) << "Failed to load symbol table";
+        LOG(ERROR) << "Failed to load symbol table";
         return false;
     }
 
@@ -353,14 +350,14 @@ bool AudioOutputPulse::initPulseAudio()
     // asynchronous API event loop.
     if (pa_main_loop_)
     {
-        LOG(LS_ERROR) << "PA mainloop has already existed";
+        LOG(ERROR) << "PA mainloop has already existed";
         return false;
     }
 
     pa_main_loop_ = LATE(pa_threaded_mainloop_new)();
     if (!pa_main_loop_)
     {
-        LOG(LS_ERROR) << "Could not create mainloop";
+        LOG(ERROR) << "Could not create mainloop";
         return false;
     }
 
@@ -368,7 +365,7 @@ bool AudioOutputPulse::initPulseAudio()
     int ret = LATE(pa_threaded_mainloop_start)(pa_main_loop_);
     if (ret != PA_OK)
     {
-        LOG(LS_ERROR) << "Failed to start main loop: " << ret;
+        LOG(ERROR) << "Failed to start main loop:" << ret;
         return false;
     }
 
@@ -377,13 +374,13 @@ bool AudioOutputPulse::initPulseAudio()
     pa_main_loop_api_ = LATE(pa_threaded_mainloop_get_api)(pa_main_loop_);
     if (!pa_main_loop_api_)
     {
-        LOG(LS_ERROR) << "Could not create mainloop API";
+        LOG(ERROR) << "Could not create mainloop API";
         return false;
     }
 
     if (pa_context_)
     {
-        LOG(LS_ERROR) << "PA context has already existed";
+        LOG(ERROR) << "PA context has already existed";
         return false;
     }
 
@@ -391,7 +388,7 @@ bool AudioOutputPulse::initPulseAudio()
     pa_context_ = LATE(pa_context_new)(pa_main_loop_api_, "Aspia Client");
     if (!pa_context_)
     {
-        LOG(LS_ERROR) << "Could not create context";
+        LOG(ERROR) << "Could not create context";
         return false;
     }
 
@@ -403,7 +400,7 @@ bool AudioOutputPulse::initPulseAudio()
     ret = LATE(pa_context_connect)(pa_context_, nullptr, PA_CONTEXT_NOAUTOSPAWN, nullptr);
     if (ret != PA_OK)
     {
-        LOG(LS_ERROR) << "Failed to connect context: " << ret;
+        LOG(ERROR) << "Failed to connect context:" << ret;
         return false;
     }
 
@@ -417,16 +414,16 @@ bool AudioOutputPulse::initPulseAudio()
     {
         if (state == PA_CONTEXT_FAILED)
         {
-            LOG(LS_ERROR) << "Failed to connect to PulseAudio sound server";
+            LOG(ERROR) << "Failed to connect to PulseAudio sound server";
         }
         else if (state == PA_CONTEXT_TERMINATED)
         {
-            LOG(LS_ERROR) << "PulseAudio connection terminated early";
+            LOG(ERROR) << "PulseAudio connection terminated early";
         }
         else
         {
             // Shouldn't happen, because we only signal on one of those three states.
-            LOG(LS_ERROR) << "Unknown problem connecting to PulseAudio";
+            LOG(ERROR) << "Unknown problem connecting to PulseAudio";
         }
         return false;
     }
@@ -441,10 +438,11 @@ bool AudioOutputPulse::initPulseAudio()
         LATE(pa_operation_unref)(op);
     }
 
-    LOG(LS_INFO) << "PulseAudio initialized";
+    LOG(INFO) << "PulseAudio initialized";
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void AudioOutputPulse::terminatePulseAudio()
 {
     // Do nothing if the instance doesn't exist likely pulseSymbolTable.load() fails.
@@ -466,22 +464,16 @@ void AudioOutputPulse::terminatePulseAudio()
     LATE(pa_threaded_mainloop_free)(pa_main_loop_);
     pa_main_loop_ = nullptr;
 
-    LOG(LS_INFO) << "PulseAudio terminated";
+    LOG(INFO) << "PulseAudio terminated";
 }
 
-void AudioOutputPulse::onTimerExpired(const std::error_code& error_code)
+//--------------------------------------------------------------------------------------------------
+void AudioOutputPulse::onTimerExpired()
 {
-    if (error_code == asio::error::operation_aborted)
-        return;
-
-    if (!error_code)
-        writePlayoutData();
-
-    timer_->expires_after(std::chrono::milliseconds(period_time_));
-    timer_->async_wait(
-        std::bind(&AudioOutputPulse::onTimerExpired, this, std::placeholders::_1));
+    writePlayoutData();
 }
 
+//--------------------------------------------------------------------------------------------------
 void AudioOutputPulse::writePlayoutData()
 {
     while (true)
@@ -517,8 +509,7 @@ void AudioOutputPulse::writePlayoutData()
                                       0,
                                       PA_SEEK_RELATIVE) < 0)
             {
-                LOG(LS_ERROR) << "pa_stream_write failed: "
-                              << LATE(pa_context_errno)(pa_context_);
+                LOG(ERROR) << "pa_stream_write failed:" << LATE(pa_context_errno)(pa_context_);
             }
         }
 

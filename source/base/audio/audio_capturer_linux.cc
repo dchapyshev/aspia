@@ -19,69 +19,27 @@
 #include "base/audio/audio_capturer_linux.h"
 
 #include "base/logging.h"
-#include "base/message_loop/message_loop_task_runner.h"
 
 namespace base {
 
 //--------------------------------------------------------------------------------------------------
-AudioCapturerLinux::AudioCapturerLinux()
-    : silence_detector_(0)
+AudioCapturerLinux::AudioCapturerLinux(QObject* parent)
+    : AudioCapturer(parent)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
 AudioCapturerLinux::~AudioCapturerLinux()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
 bool AudioCapturerLinux::start(const PacketCapturedCallback& callback)
 {
-    callback_ = callback;
-    DCHECK(callback_);
-
-    std::filesystem::path pipe_path("/etc/pulse/fifo_output"); // Correct way?
-    if (pipe_path.empty())
-    {
-        LOG(LS_ERROR) << "Empty pipe path";
-        return false;
-    }
-
-    pipe_reader_ = AudioPipeReader::create(
-        MessageLoopTaskRunner::current(), pipe_path, this);
-    if (!pipe_reader_)
-    {
-        LOG(LS_ERROR) << "AudioPipeReader::create failed";
-        return false;
-    }
-
-    silence_detector_.reset(AudioPipeReader::kSamplingRate, AudioPipeReader::kChannels);
-
-    pipe_reader_->start();
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-void AudioCapturerLinux::onDataRead(const std::string& data)
-{
-    DCHECK(callback_);
-
-    if (silence_detector_.isSilence(reinterpret_cast<const int16_t*>(data.data()),
-                                    data.size() / sizeof(int16_t) / AudioPipeReader::kChannels))
-    {
-        return;
-    }
-
-    std::unique_ptr<proto::AudioPacket> packet = std::make_unique<proto::AudioPacket>();
-    packet->add_data(data);
-    packet->set_encoding(proto::AUDIO_ENCODING_RAW);
-    packet->set_sampling_rate(AudioPipeReader::kSamplingRate);
-    packet->set_bytes_per_sample(AudioPipeReader::kBytesPerSample);
-    packet->set_channels(AudioPipeReader::kChannels);
-
-    callback_(std::move(packet));
+    NOTIMPLEMENTED();
+    return false;
 }
 
 } // namespace base

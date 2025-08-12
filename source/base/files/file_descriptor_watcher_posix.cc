@@ -18,9 +18,8 @@
 
 #include "base/files/file_descriptor_watcher_posix.h"
 
+#include "base/asio_event_dispatcher.h"
 #include "base/logging.h"
-#include "base/message_loop/message_loop.h"
-#include "base/message_loop/message_pump_asio.h"
 
 #include <asio/posix/descriptor.hpp>
 
@@ -43,7 +42,7 @@ private:
 
 //--------------------------------------------------------------------------------------------------
 FileDescriptorWatcher::Watcher::Watcher(int fd, Mode mode, const Callback& callback)
-    : asio::posix::descriptor(base::MessageLoop::current()->pumpAsio()->ioContext()),
+    : asio::posix::descriptor(base::AsioEventDispatcher::currentIoContext()),
       callback_(callback)
 {
     DCHECK(callback_);
@@ -86,7 +85,7 @@ void FileDescriptorWatcher::Watcher::start()
 
         if (error_code)
         {
-            LOG(LS_ERROR) << "FD watcher error: " << error_code.message();
+            LOG(ERROR) << "FD watcher error:" << error_code;
         }
         else
         {

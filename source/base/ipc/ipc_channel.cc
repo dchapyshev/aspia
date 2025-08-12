@@ -166,7 +166,7 @@ bool IpcChannel::connectTo(const QString& channel_id)
     is_connected_ = true;
     return true;
 #else
-    asio::local::stream_protocol::endpoint endpoint(base::local8BitFromUtf16(channel_name_));
+    asio::local::stream_protocol::endpoint endpoint(channel_name_.toLocal8Bit().toStdString());
     std::error_code error_code;
     stream_.connect(endpoint, error_code);
     if (error_code)
@@ -254,7 +254,7 @@ QString IpcChannel::channelName(const QString& channel_id)
     name.append(channel_id);
     return name;
 #else
-    std::u16string name(kLocalSocketPrefix);
+    QString name(kLocalSocketPrefix);
     name.append(channel_id);
     return name;
 #endif

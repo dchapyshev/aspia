@@ -42,12 +42,12 @@ bool loadSymbol(DllHandle handle, const char* symbol_name, void** symbol)
     char* err = dlerror();
     if (err)
     {
-        LOG(LS_ERROR) << "Error loading symbol " << symbol_name << " : " << err;
+        LOG(ERROR) << "Error loading symbol" << symbol_name << ":" << err;
         return false;
     }
     else if (!*symbol)
     {
-        LOG(LS_ERROR) << "Symbol " << symbol_name << " is NULL";
+        LOG(ERROR) << "Symbol" << symbol_name << "is NULL";
         return false;
     }
     return true;
@@ -62,7 +62,7 @@ DllHandle internalLoadDll(const char dll_name[])
 
     if (handle == kInvalidDllHandle)
     {
-        LOG(LS_ERROR) << "Can't load " << dll_name << " : " << dllError();
+        LOG(ERROR) << "Can't load" << dll_name << ":" << dllError();
     }
     return handle;
 }
@@ -72,7 +72,7 @@ void internalUnloadDll(DllHandle handle)
 {
     if (dlclose(handle) != 0)
     {
-        LOG(LS_ERROR) << dllError();
+        LOG(ERROR) << dllError();
     }
 }
 

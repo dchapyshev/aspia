@@ -29,14 +29,14 @@ DesktopResizerX11::DesktopResizerX11() = default;
 DesktopResizerX11::~DesktopResizerX11() = default;
 
 //--------------------------------------------------------------------------------------------------
-std::vector<Size> DesktopResizerX11::supportedResolutions(ScreenId /* screen_id */)
+QList<QSize> DesktopResizerX11::supportedResolutions(ScreenId /* screen_id */)
 {
     NOTIMPLEMENTED();
     return {};
 }
 
 //--------------------------------------------------------------------------------------------------
-bool DesktopResizerX11::setResolution(ScreenId /* screen_id */, const Size& /* resolution */)
+bool DesktopResizerX11::setResolution(ScreenId /* screen_id */, const QSize& /* resolution */)
 {
     NOTIMPLEMENTED();
     return false;

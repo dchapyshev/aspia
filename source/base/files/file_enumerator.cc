@@ -98,7 +98,7 @@ time_t FileEnumerator::FileInfo::lastWriteTime() const
 #if defined(Q_OS_WINDOWS)
     return fileTimeToUnixTime(find_data_.ftLastWriteTime);
 #else
-    return items_[pos_].lastModified().toTime_t();
+    return items_[pos_].lastModified().toSecsSinceEpoch();
 #endif
 }
 

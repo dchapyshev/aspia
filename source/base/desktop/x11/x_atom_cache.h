@@ -19,8 +19,7 @@
 #ifndef BASE_DESKTOP_X11_X_ATOM_CACHE_H
 #define BASE_DESKTOP_X11_X_ATOM_CACHE_H
 
-#include <X11/X.h>
-#include <X11/Xlib.h>
+#include "base/x11/x11_headers.h"
 
 namespace base {
 
@@ -43,10 +42,10 @@ private:
     Atom createIfNotExist(Atom* atom, const char* name);
 
     ::Display* const display_;
-    Atom wm_state_ = None;
-    Atom window_type_ = None;
-    Atom window_type_normal_ = None;
-    Atom icc_profile_ = None;
+    Atom wm_state_ = X11_None;
+    Atom window_type_ = X11_None;
+    Atom window_type_normal_ = X11_None;
+    Atom icc_profile_ = X11_None;
 };
 
 } // namespace base

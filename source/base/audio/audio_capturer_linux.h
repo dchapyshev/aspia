@@ -20,31 +20,19 @@
 #define BASE_AUDIO_AUDIO_CAPTURER_LINUX_H
 
 #include "base/audio/audio_capturer.h"
-#include "base/audio/audio_silence_detector.h"
-#include "base/audio/linux/audio_pipe_reader.h"
 
 namespace base {
 
-class AudioCapturerLinux final
-    : public AudioCapturer,
-      public AudioPipeReader::Delegate
+class AudioCapturerLinux final : public AudioCapturer
 {
 public:
-    AudioCapturerLinux();
+    explicit AudioCapturerLinux(QObject* parent = nullptr);
     ~AudioCapturerLinux() final;
 
     // AudioCapturer interface.
     bool start(const PacketCapturedCallback& callback) final;
 
-protected:
-    // AudioPipeReader::Delegate implementation.
-    void onDataRead(const std::string& data) final;
-
 private:
-    local_shared_ptr<AudioPipeReader> pipe_reader_;
-    PacketCapturedCallback callback_;
-    AudioSilenceDetector silence_detector_;
-
     Q_DISABLE_COPY(AudioCapturerLinux)
 };
 

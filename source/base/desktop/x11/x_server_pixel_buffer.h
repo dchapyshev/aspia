@@ -21,14 +21,12 @@
 #ifndef BASE_DESKTOP_X11_X_SERVER_PIXEL_BUFFER_H
 #define BASE_DESKTOP_X11_X_SERVER_PIXEL_BUFFER_H
 
-#include "base/macros_magic.h"
-#include "base/desktop/geometry.h"
+#include <QRect>
 
 #include <memory>
 #include <vector>
 
-#include <X11/Xutil.h>
-#include <X11/extensions/XShm.h>
+#include "base/x11/x11_headers.h"
 
 namespace base {
 
@@ -51,10 +49,10 @@ public:
     bool isInitialized() { return window_ != 0; }
 
     // Returns the size of the window the buffer was initialized for.
-    Size windowSize() { return window_rect_.size(); }
+    QSize windowSize() { return window_rect_.size(); }
 
     // Returns the rectangle of the window the buffer was initialized for.
-    const Rect& windowRect() { return window_rect_; }
+    const QRect& windowRect() { return window_rect_; }
 
     // Returns true if the window can be found.
     bool isWindowValid() const;
@@ -68,7 +66,7 @@ public:
     // Capture the specified rectangle and stores it in the |frame|. In the case where the
     // full-screen data is captured by synchronize(), this simply returns the pointer without doing
     // any more work. The caller must ensure that |rect| is not larger than windowSize().
-    bool captureRect(const Rect& rect, Frame* frame);
+    bool captureRect(const QRect& rect, Frame* frame);
 
 private:
     void releaseSharedMemorySegment();
@@ -78,7 +76,7 @@ private:
 
     Display* display_ = nullptr;
     Window window_ = 0;
-    Rect window_rect_;
+    QRect window_rect_;
     XImage* x_image_ = nullptr;
     XShmSegmentInfo* shm_segment_info_ = nullptr;
     XImage* x_shm_image_ = nullptr;

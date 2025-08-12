@@ -19,9 +19,10 @@
 #ifndef BASE_DESKTOP_X11_SHARED_X_DISPLAY_H
 #define BASE_DESKTOP_X11_SHARED_X_DISPLAY_H
 
-#include "base/memory/local_memory.h"
+#include <QtGlobal>
 
 #include <map>
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -33,7 +34,7 @@ typedef union _XEvent XEvent;
 namespace base {
 
 // A ref-counted object to store XDisplay connection.
-class SharedXDisplay : public base::enable_shared_from_this<SharedXDisplay>
+class SharedXDisplay : public std::enable_shared_from_this<SharedXDisplay>
 {
 public:
     class XEventHandler
@@ -51,11 +52,11 @@ public:
 
     // Creates a new X11 Display for the |display_name|. NULL is returned if X11 connection failed.
     // Equivalent to CreateDefault() when |display_name| is empty.
-    static base::local_shared_ptr<SharedXDisplay> create(const std::string& display_name);
+    static std::shared_ptr<SharedXDisplay> create(const QString& display_name);
 
     // Creates X11 Display connection for the default display (e.g. specified in DISPLAY). NULL is
     // returned if X11 connection failed.
-    static base::local_shared_ptr<SharedXDisplay> createDefault();
+    static std::shared_ptr<SharedXDisplay> createDefault();
 
     Display* display() { return display_; }
 

@@ -22,25 +22,35 @@
 
 namespace base {
 
-DesktopEnvironmentLinux::DesktopEnvironmentLinux() = default;
+//--------------------------------------------------------------------------------------------------
+DesktopEnvironmentLinux::DesktopEnvironmentLinux(QObject* parent)
+    : DesktopEnvironment(parent)
+{
+    // Nothing
+}
 
+//--------------------------------------------------------------------------------------------------
 DesktopEnvironmentLinux::~DesktopEnvironmentLinux() = default;
 
+//--------------------------------------------------------------------------------------------------
 void DesktopEnvironmentLinux::disableWallpaper()
 {
     NOTIMPLEMENTED();
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopEnvironmentLinux::disableFontSmoothing()
 {
     NOTIMPLEMENTED();
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopEnvironmentLinux::disableEffects()
 {
     NOTIMPLEMENTED();
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopEnvironmentLinux::revertAll()
 {
     NOTIMPLEMENTED();

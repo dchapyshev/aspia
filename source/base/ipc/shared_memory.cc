@@ -193,17 +193,17 @@ SharedMemory::~SharedMemory()
     struct stat info;
     if (fstat(handle_.get(), &info) != 0)
     {
-        PLOG(LS_ERROR) << "fstat failed";
+        PLOG(ERROR) << "fstat failed";
     }
     else
     {
         munmap(data_, info.st_size);
     }
 
-    std::string name = base::local8BitFromUtf16(createFilePath(id_));
-    if (shm_unlink(name.c_str()) == -1)
+    QByteArray name = createFilePath(id_).toLocal8Bit();
+    if (shm_unlink(name.data()) == -1)
     {
-        PLOG(LS_ERROR) << "shm_unlink failed";
+        PLOG(ERROR) << "shm_unlink failed";
     }
 #endif // defined(Q_OS_UNIX)
 }
@@ -243,7 +243,7 @@ SharedMemory* SharedMemory::create(Mode mode, size_t size)
     {
         id = createUniqueId();
 
-        std::string name = base::local8BitFromUtf16(createFilePath(id));
+        QByteArray name = createFilePath(id).toLocal8Bit();
         int open_flags = O_CREAT;
 
         if (mode == Mode::READ_ONLY)
@@ -256,10 +256,10 @@ SharedMemory* SharedMemory::create(Mode mode, size_t size)
             open_flags |= O_RDWR;
         }
 
-        fd = shm_open(name.c_str(), open_flags, S_IRUSR | S_IWUSR);
+        fd = shm_open(name.data(), open_flags, S_IRUSR | S_IWUSR);
         if (fd == -1)
         {
-            PLOG(LS_ERROR) << "shm_open failed";
+            PLOG(ERROR) << "shm_open failed";
             continue;
         }
 
@@ -268,13 +268,13 @@ SharedMemory* SharedMemory::create(Mode mode, size_t size)
 
     if (fd == -1)
     {
-        LOG(LS_ERROR) << "Unable to create shared memory";
+        LOG(ERROR) << "Unable to create shared memory";
         return nullptr;
     }
 
     if (ftruncate(fd, size) == -1)
     {
-        PLOG(LS_ERROR) << "ftruncate failed";
+        PLOG(ERROR) << "ftruncate failed";
         return nullptr;
     }
 
@@ -285,14 +285,13 @@ SharedMemory* SharedMemory::create(Mode mode, size_t size)
     void* memory = mmap(nullptr, size, protection, MAP_SHARED, fd, 0);
     if (!memory)
     {
-        PLOG(LS_ERROR) << "mmap failed";
+        PLOG(ERROR) << "mmap failed";
         return nullptr;
     }
 
     memset(memory, 0, size);
 
-    return std::unique_ptr<SharedMemory>(
-        new SharedMemory(id, ScopedPlatformHandle(fd), memory, std::move(factory_proxy)));
+    return new SharedMemory(id, ScopedPlatformHandle(fd), memory);
 #else
     NOTIMPLEMENTED();
     return nullptr;
@@ -314,7 +313,7 @@ SharedMemory* SharedMemory::open(Mode mode, int id)
 
     return new SharedMemory(id, std::move(file), memory);
 #elif defined(Q_OS_UNIX)
-    std::string name = base::local8BitFromUtf16(createFilePath(id));
+    QByteArray name = createFilePath(id).toLocal8Bit();
     int open_flags = 0;
 
     if (mode == Mode::READ_ONLY)
@@ -327,17 +326,17 @@ SharedMemory* SharedMemory::open(Mode mode, int id)
         open_flags |= O_RDWR;
     }
 
-    int fd = shm_open(name.c_str(), open_flags, S_IRUSR | S_IWUSR);
+    int fd = shm_open(name.data(), open_flags, S_IRUSR | S_IWUSR);
     if (fd == -1)
     {
-        PLOG(LS_ERROR) << "shm_open failed";
+        PLOG(ERROR) << "shm_open failed";
         return nullptr;
     }
 
     struct stat info;
     if (fstat(fd, &info) != 0)
     {
-        PLOG(LS_ERROR) << "Unable to get shared memory size";
+        PLOG(ERROR) << "Unable to get shared memory size";
         return nullptr;
     }
 
@@ -348,12 +347,11 @@ SharedMemory* SharedMemory::open(Mode mode, int id)
     void* memory = mmap(nullptr, info.st_size, protection, MAP_SHARED, fd, 0);
     if (!memory)
     {
-        PLOG(LS_ERROR) << "mmap failed";
+        PLOG(ERROR) << "mmap failed";
         return nullptr;
     }
 
-    return std::unique_ptr<SharedMemory>(
-        new SharedMemory(id, ScopedPlatformHandle(fd), memory, std::move(factory_proxy)));
+    return new SharedMemory(id, ScopedPlatformHandle(fd), memory);
 #else
     NOTIMPLEMENTED();
     return nullptr;

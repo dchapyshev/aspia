@@ -20,9 +20,6 @@
 
 #include "base/logging.h"
 
-#include <X11/Xatom.h>
-#include <X11/extensions/Xfixes.h>
-
 namespace base {
 
 //--------------------------------------------------------------------------------------------------
@@ -47,7 +44,7 @@ void XServerClipboard::init(Display* display, const ClipboardChangedCallback& ca
     int xfixes_error_base;
     if (!XFixesQueryExtension(display_, &xfixes_event_base_, &xfixes_error_base))
     {
-        LOG(LS_ERROR) << "X server does not support XFixes";
+        LOG(ERROR) << "X server does not support XFixes";
         return;
     }
 
@@ -68,7 +65,7 @@ void XServerClipboard::init(Display* display, const ClipboardChangedCallback& ca
     static const int kNumAtomNames = std::size(kAtomNames);
 
     Atom atoms[kNumAtomNames];
-    if (XInternAtoms(display_, const_cast<char**>(kAtomNames), kNumAtomNames, False, atoms))
+    if (XInternAtoms(display_, const_cast<char**>(kAtomNames), kNumAtomNames, X11_False, atoms))
     {
         clipboard_atom_ = atoms[0];
         large_selection_atom_ = atoms[1];
@@ -80,7 +77,7 @@ void XServerClipboard::init(Display* display, const ClipboardChangedCallback& ca
     }
     else
     {
-        LOG(LS_ERROR) << "XInternAtoms failed";
+        LOG(ERROR) << "XInternAtoms failed";
     }
 
     XFixesSelectSelectionInput(display_, clipboard_window_, clipboard_atom_,
@@ -165,7 +162,7 @@ void XServerClipboard::onSetSelectionOwnerNotify(Atom selection, Time /* timesta
 //--------------------------------------------------------------------------------------------------
 void XServerClipboard::onPropertyNotify(XEvent* event)
 {
-    if (large_selection_property_ != None &&
+    if (large_selection_property_ != X11_None &&
         event->xproperty.atom == large_selection_property_ &&
         event->xproperty.state == PropertyNewValue)
     {
@@ -175,16 +172,16 @@ void XServerClipboard::onPropertyNotify(XEvent* event)
         unsigned char *data;
 
         XGetWindowProperty(display_, clipboard_window_, large_selection_property_,
-                         0, ~0L, True, AnyPropertyType, &type, &format,
+                         0, ~0L, X11_True, AnyPropertyType, &type, &format,
                          &item_count, &after, &data);
-        if (type != None)
+        if (type != X11_None)
         {
             // TODO(lambroslambrou): Properly support large transfers - http://crbug.com/151447.
             XFree(data);
 
             // If the property is zero-length then the large transfer is complete.
             if (item_count == 0)
-                large_selection_property_ = None;
+                large_selection_property_ = X11_None;
         }
     }
 }
@@ -192,7 +189,7 @@ void XServerClipboard::onPropertyNotify(XEvent* event)
 //--------------------------------------------------------------------------------------------------
 void XServerClipboard::onSelectionNotify(XEvent* event)
 {
-    if (event->xselection.property != None)
+    if (event->xselection.property != X11_None)
     {
         Atom type;
         int format;
@@ -200,7 +197,7 @@ void XServerClipboard::onSelectionNotify(XEvent* event)
         unsigned char *data;
 
         XGetWindowProperty(display_, clipboard_window_, event->xselection.property,
-                           0, ~0L, True, AnyPropertyType, &type, &format,
+                           0, ~0L, X11_True, AnyPropertyType, &type, &format,
                            &item_count, &after, &data);
         if (type == large_selection_atom_)
         {
@@ -210,8 +207,8 @@ void XServerClipboard::onSelectionNotify(XEvent* event)
         else
         {
             // Standard selection - call the selection notifier.
-            large_selection_property_ = None;
-            if (type != None)
+            large_selection_property_ = X11_None;
+            if (type != X11_None)
             {
                 handleSelectionNotify(&event->xselection, type, format, item_count, data);
                 XFree(data);
@@ -233,12 +230,12 @@ void XServerClipboard::onSelectionRequest(XEvent* event)
     selection_event.time = event->xselectionrequest.time;
     selection_event.target = event->xselectionrequest.target;
 
-    if (event->xselectionrequest.property == None)
+    if (event->xselectionrequest.property == X11_None)
          event->xselectionrequest.property = event->xselectionrequest.target;
 
     if (!isSelectionOwner(selection_event.selection))
     {
-        selection_event.property = None;
+        selection_event.property = X11_None;
     }
     else
     {
@@ -257,7 +254,7 @@ void XServerClipboard::onSelectionRequest(XEvent* event)
                                selection_event.target);
         }
     }
-    XSendEvent(display_, selection_event.requestor, False, 0,
+    XSendEvent(display_, selection_event.requestor, X11_False, 0,
                reinterpret_cast<XEvent*>(&selection_event));
 }
 
@@ -406,7 +403,7 @@ void XServerClipboard::assertSelectionOwnership(Atom selection)
     }
     else
     {
-        LOG(LS_ERROR) << "XSetSelectionOwner failed for selection " << selection;
+        LOG(ERROR) << "XSetSelectionOwner failed for selection " << selection;
     }
 }
 

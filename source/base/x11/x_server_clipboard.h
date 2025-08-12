@@ -19,12 +19,14 @@
 #ifndef BASE_X11_X_SERVER_CLIPBOARD_H
 #define BASE_X11_X_SERVER_CLIPBOARD_H
 
+#include <QtGlobal>
+
 #include <chrono>
 #include <functional>
 #include <set>
 #include <string>
 
-#include <X11/Xlib.h>
+#include "base/x11/x11_headers.h"
 
 namespace base {
 
@@ -105,12 +107,12 @@ private:
     int xfixes_event_base_ = -1;
 
     // Cached atoms for various strings, initialized during init().
-    Atom clipboard_atom_ = None;
-    Atom large_selection_atom_ = None;
-    Atom selection_string_atom_ = None;
-    Atom targets_atom_ = None;
-    Atom timestamp_atom_ = None;
-    Atom utf8_string_atom_ = None;
+    Atom clipboard_atom_ = X11_None;
+    Atom large_selection_atom_ = X11_None;
+    Atom selection_string_atom_ = X11_None;
+    Atom targets_atom_ = X11_None;
+    Atom timestamp_atom_ = X11_None;
+    Atom utf8_string_atom_ = X11_None;
 
     // The set of X selections owned by |clipboard_window_| (can be Primary or Clipboard or both).
     std::set<Atom> selections_owned_;
@@ -120,7 +122,7 @@ private:
 
     // Stores the property to use for large transfers, or None if a large transfer is not currently
     // in-progress.
-    Atom large_selection_property_ = None;
+    Atom large_selection_property_ = X11_None;
 
     // Remembers the start time of selection processing, and is set to null when processing is
     // complete. This is used to decide whether to begin processing a new selection or continue with

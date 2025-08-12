@@ -19,7 +19,9 @@
 #ifndef BASE_DESKTOP_X11_X_ERROR_TRAP_H
 #define BASE_DESKTOP_X11_X_ERROR_TRAP_H
 
-#include <X11/Xlib.h>
+#include <QtGlobal>
+
+#include "base/x11/x11_headers.h"
 
 namespace base {
 

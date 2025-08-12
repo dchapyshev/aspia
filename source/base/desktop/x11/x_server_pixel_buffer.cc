@@ -23,7 +23,6 @@
 #include "base/desktop/x11/x_atom_cache.h"
 #include "base/desktop/x11/x_error_trap.h"
 
-#include <X11/Xutil.h>
 #include <stdint.h>
 #include <string.h>
 #include <sys/ipc.h>
@@ -34,7 +33,7 @@ namespace base {
 namespace {
 
 //--------------------------------------------------------------------------------------------------
-bool getWindowRect(::Display* display, ::Window window, Rect* rect,
+bool getWindowRect(::Display* display, ::Window window, QRect* rect,
                    XWindowAttributes* attributes /* = nullptr */)
 {
     XWindowAttributes localAttributes;
@@ -53,7 +52,7 @@ bool getWindowRect(::Display* display, ::Window window, Rect* rect,
         }
     }
 
-    *rect = Rect::makeXYWH(attributes->x, attributes->y, attributes->width, attributes->height);
+    *rect = QRect(QPoint(attributes->x, attributes->y), QSize(attributes->width, attributes->height));
 
     {
         XErrorTrap errorTrap(display);
@@ -73,7 +72,7 @@ bool getWindowRect(::Display* display, ::Window window, Rect* rect,
 // Returns the number of bits |mask| has to be shifted left so its last
 // (most-significant) bit set becomes the most-significant bit of the word.
 // When |mask| is 0 the function returns 31.
-uint32_t maskToShift(uint32_t mask)
+quint32 maskToShift(quint32 mask)
 {
     int shift = 0;
 
@@ -118,7 +117,7 @@ bool isXImageRGBFormat(XImage* image)
 //--------------------------------------------------------------------------------------------------
 // We expose two forms of blitting to handle variations in the pixel format.
 // In FastBlit(), the operation is effectively a memcpy.
-void fastBlit(XImage* x_image, uint8_t* src_pos, const Rect& rect, Frame* frame)
+void fastBlit(XImage* x_image, uint8_t* src_pos, const QRect& rect, Frame* frame)
 {
     DCHECK_LE(frame->topLeft().x(), rect.left());
     DCHECK_LE(frame->topLeft().y(), rect.top());
@@ -127,7 +126,7 @@ void fastBlit(XImage* x_image, uint8_t* src_pos, const Rect& rect, Frame* frame)
     int dst_x = rect.left() - frame->topLeft().x();
     int dst_y = rect.top() - frame->topLeft().y();
 
-    uint8_t* dst_pos = frame->frameData() + frame->stride() * dst_y;
+    quint8* dst_pos = frame->frameData() + frame->stride() * dst_y;
     dst_pos += dst_x * frame->format().bytesPerPixel();
 
     int height = rect.height();
@@ -142,7 +141,7 @@ void fastBlit(XImage* x_image, uint8_t* src_pos, const Rect& rect, Frame* frame)
 }
 
 //--------------------------------------------------------------------------------------------------
-void slowBlit(XImage* x_image, uint8_t* src_pos, const Rect& rect, Frame* frame)
+void slowBlit(XImage* x_image, uint8_t* src_pos, const QRect& rect, Frame* frame)
 {
     DCHECK_LE(frame->topLeft().x(), rect.left());
     DCHECK_LE(frame->topLeft().y(), rect.top());
@@ -266,7 +265,7 @@ bool XServerPixelBuffer::init(XAtomCache* cache, Window window)
     XWindowAttributes attributes;
     if (!getWindowRect(display_, window, &window_rect_, &attributes))
     {
-        LOG(LS_ERROR) << "getWindowRect failed";
+        LOG(ERROR) << "getWindowRect failed";
         return false;
     }
 
@@ -283,11 +282,11 @@ void XServerPixelBuffer::initShm(const XWindowAttributes& attributes)
     int default_depth = attributes.depth;
 
     int major, minor;
-    Bool have_pixmaps;
+    X11_Bool have_pixmaps;
 
     if (!XShmQueryVersion(display_, &major, &minor, &have_pixmaps))
     {
-        LOG(LS_INFO) << "Shared memory not supported. captureRect will use the XImage API instead";
+        LOG(INFO) << "Shared memory not supported. captureRect will use the XImage API instead";
         return;
     }
 
@@ -295,7 +294,7 @@ void XServerPixelBuffer::initShm(const XWindowAttributes& attributes)
     shm_segment_info_ = new XShmSegmentInfo;
     shm_segment_info_->shmid = -1;
     shm_segment_info_->shmaddr = nullptr;
-    shm_segment_info_->readOnly = False;
+    shm_segment_info_->readOnly = X11_False;
 
     x_shm_image_ = XShmCreateImage(display_, default_visual, default_depth,
                                    ZPixmap, 0, shm_segment_info_,
@@ -314,26 +313,26 @@ void XServerPixelBuffer::initShm(const XWindowAttributes& attributes)
 
                 XErrorTrap error_trap(display_);
                 using_shm = XShmAttach(display_, shm_segment_info_);
-                XSync(display_, False);
+                XSync(display_, X11_False);
 
                 if (error_trap.lastErrorAndDisable() != 0)
                     using_shm = false;
 
                 if (using_shm)
                 {
-                    LOG(LS_INFO) << "Using X shared memory segment " << shm_segment_info_->shmid;
+                    LOG(INFO) << "Using X shared memory segment " << shm_segment_info_->shmid;
                 }
             }
         }
         else
         {
-            LOG(LS_ERROR) << "Failed to get shared memory segment. Performance may be degraded";
+            LOG(ERROR) << "Failed to get shared memory segment. Performance may be degraded";
         }
     }
 
     if (!using_shm)
     {
-        LOG(LS_ERROR) << "Not using shared memory. Performance may be degraded.";
+        LOG(ERROR) << "Not using shared memory. Performance may be degraded.";
         releaseSharedMemorySegment();
         return;
     }
@@ -344,8 +343,8 @@ void XServerPixelBuffer::initShm(const XWindowAttributes& attributes)
     shmctl(shm_segment_info_->shmid, IPC_RMID, 0);
     shm_segment_info_->shmid = -1;
 
-    LOG(LS_INFO) << "Using X shared memory extension v" << major << "." << minor
-                 << " with" << (have_pixmaps ? "" : "out") << " pixmaps.";
+    LOG(INFO) << "Using X shared memory extension v" << major << "." << minor
+              << "with" << (have_pixmaps ? "" : "out") << "pixmaps.";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -354,7 +353,7 @@ bool XServerPixelBuffer::initPixmaps(int depth)
     int format = XShmPixmapFormat(display_);
     if (format != ZPixmap)
     {
-        LOG(LS_ERROR) << "Unsupported format: " << format;
+        LOG(ERROR) << "Unsupported format:" << format;
         return false;
     }
 
@@ -363,10 +362,10 @@ bool XServerPixelBuffer::initPixmaps(int depth)
         shm_pixmap_ = XShmCreatePixmap(display_, window_, shm_segment_info_->shmaddr,
                                        shm_segment_info_, window_rect_.width(), window_rect_.height(),
                                        depth);
-        XSync(display_, False);
+        XSync(display_, X11_False);
         if (error_trap.lastErrorAndDisable() != 0)
         {
-            LOG(LS_ERROR) << "XShmCreatePixmap failed";
+            LOG(ERROR) << "XShmCreatePixmap failed";
 
             // |shm_pixmap_| is not not valid because the request was not processed by the X Server,
             // so zero it.
@@ -380,14 +379,14 @@ bool XServerPixelBuffer::initPixmaps(int depth)
         XGCValues shm_gc_values;
 
         shm_gc_values.subwindow_mode = IncludeInferiors;
-        shm_gc_values.graphics_exposures = False;
+        shm_gc_values.graphics_exposures = X11_False;
 
         shm_gc_ = XCreateGC(display_, window_, GCSubwindowMode | GCGraphicsExposures, &shm_gc_values);
-        XSync(display_, False);
+        XSync(display_, X11_False);
 
         if (error_trap.lastErrorAndDisable() != 0)
         {
-            LOG(LS_ERROR) << "XCreateGC failed";
+            LOG(ERROR) << "XCreateGC failed";
 
             XFreePixmap(display_, shm_pixmap_);
             shm_pixmap_ = 0;
@@ -428,13 +427,13 @@ void XServerPixelBuffer::synchronize()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool XServerPixelBuffer::captureRect(const Rect& rect, Frame* frame)
+bool XServerPixelBuffer::captureRect(const QRect& rect, Frame* frame)
 {
     DCHECK_LE(rect.right(), window_rect_.width());
     DCHECK_LE(rect.bottom(), window_rect_.height());
 
     XImage* image;
-    uint8_t* data;
+    quint8* data;
 
     if (shm_segment_info_ && (shm_pixmap_ || xshm_get_image_succeeded_))
     {
@@ -442,7 +441,7 @@ bool XServerPixelBuffer::captureRect(const Rect& rect, Frame* frame)
         {
             XCopyArea(display_, window_, shm_pixmap_, shm_gc_, rect.left(), rect.top(),
                       rect.width(), rect.height(), rect.left(), rect.top());
-            XSync(display_, False);
+            XSync(display_, X11_False);
         }
 
         image = x_shm_image_;

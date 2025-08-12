@@ -26,7 +26,7 @@ namespace base {
 class DesktopEnvironmentLinux final : public DesktopEnvironment
 {
 public:
-    DesktopEnvironmentLinux();
+    explicit DesktopEnvironmentLinux(QObject* parent = nullptr);
     ~DesktopEnvironmentLinux() final;
 
 protected:

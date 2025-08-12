@@ -139,8 +139,6 @@ if (LINUX)
         audio/audio_output_pulse.h)
 
     list(APPEND SOURCE_BASE_AUDIO_LINUX
-        audio/linux/audio_pipe_reader.cc
-        audio/linux/audio_pipe_reader.h
         audio/linux/late_binding_symbol_table.cc
         audio/linux/late_binding_symbol_table.h
         audio/linux/pulseaudio_symbol_table.cc
@@ -570,6 +568,7 @@ endif()
 
 if (LINUX)
     list(APPEND SOURCE_BASE_X11
+        x11/x11_headers.h
         x11/x_server_clipboard.cc
         x11/x_server_clipboard.h)
 endif()

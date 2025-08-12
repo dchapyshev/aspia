@@ -22,24 +22,23 @@
 #include "base/desktop/mouse_cursor.h"
 #include "base/desktop/shared_memory_frame.h"
 #include "base/desktop/x11/x_error_trap.h"
-#include "base/memory/byte_array.h"
 
 #include <dlfcn.h>
 
 namespace base {
 
 //--------------------------------------------------------------------------------------------------
-ScreenCapturerX11::ScreenCapturerX11()
-    : ScreenCapturer(ScreenCapturer::Type::LINUX_X11)
+ScreenCapturerX11::ScreenCapturerX11(QObject* parent)
+    : ScreenCapturer(ScreenCapturer::Type::LINUX_X11, parent)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
     helper_.setLogGridSize(4);
 }
 
 //--------------------------------------------------------------------------------------------------
 ScreenCapturerX11::~ScreenCapturerX11()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
 
     display_->removeEventHandler(ConfigureNotify, this);
 
@@ -54,16 +53,16 @@ ScreenCapturerX11::~ScreenCapturerX11()
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::unique_ptr<ScreenCapturerX11> ScreenCapturerX11::create()
+ScreenCapturerX11* ScreenCapturerX11::create(QObject* parent)
 {
-    std::unique_ptr<ScreenCapturerX11> instance = std::make_unique<ScreenCapturerX11>();
+    std::unique_ptr<ScreenCapturerX11> instance = std::make_unique<ScreenCapturerX11>(parent);
     if (!instance->init())
     {
-        LOG(LS_ERROR) << "Unable to initialize X11 screen capturer";
+        LOG(ERROR) << "Unable to initialize X11 screen capturer";
         return nullptr;
     }
 
-    return instance;
+    return instance.release();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -79,7 +78,7 @@ bool ScreenCapturerX11::screenList(ScreenList* screens)
 
     if (!use_randr_)
     {
-        LOG(LS_INFO) << "No screen list";
+        LOG(INFO) << "No screen list";
         screens->screens.push_back({});
         return true;
     }
@@ -93,20 +92,20 @@ bool ScreenCapturerX11::screenList(ScreenList* screens)
         XRRMonitorInfo& m = monitors_[i];
 
         char* monitor_title = XGetAtomName(display(), m.name);
-        Point position = Point(m.x, m.y);
-        Size resolution = Size(m.width, m.height);
-        Point dpi = Point(96, 96);
+        QPoint position(m.x, m.y);
+        QSize resolution(m.width, m.height);
+        QPoint dpi(96, 96);
         bool primary = m.primary != 0;
 
-        std::string title;
+        QString title;
         if (monitor_title)
-            title = monitor_title;
+            title = QString::fromLocal8Bit(monitor_title);
         else
             title = "Unknown monitor";
 
         // Note name is an X11 Atom used to id the monitor.
-        screens->screens.push_back(
-            {static_cast<ScreenId>(m.name), title, position, resolution, dpi, primary });
+        screens->screens.emplace_back(
+            static_cast<ScreenId>(m.name), title, position, resolution, dpi, primary);
         XFree(monitor_title);
     }
 
@@ -125,7 +124,7 @@ bool ScreenCapturerX11::selectScreen(ScreenId screen_id)
     if (!use_randr_ || screen_id == kFullDesktopScreenId)
     {
         selected_monitor_name_ = kFullDesktopScreenId;
-        selected_monitor_rect_ = Rect::makeSize(x_server_pixel_buffer_.windowSize());
+        selected_monitor_rect_ = QRect(QPoint(0, 0), x_server_pixel_buffer_.windowSize());
         return true;
     }
 
@@ -133,11 +132,11 @@ bool ScreenCapturerX11::selectScreen(ScreenId screen_id)
     {
         if (screen_id == static_cast<ScreenId>(monitors_[i].name))
         {
-            LOG(LS_INFO) << "XRandR selected source: " << screen_id;
+            LOG(INFO) << "XRandR selected source:" << screen_id;
 
             XRRMonitorInfo& m = monitors_[i];
             selected_monitor_name_ = m.name;
-            selected_monitor_rect_ = Rect::makeXYWH(m.x, m.y, m.width, m.height);
+            selected_monitor_rect_ = QRect(QPoint(m.x, m.y), QSize(m.width, m.height));
 
             return true;
         }
@@ -163,7 +162,7 @@ const Frame* ScreenCapturerX11::captureFrame(Error* error)
     if (!x_server_pixel_buffer_.isInitialized())
     {
         // We failed to initialize pixel buffer.
-        LOG(LS_ERROR) << "Pixel buffer is not initialized";
+        LOG(ERROR) << "Pixel buffer is not initialized";
         *error = Error::PERMANENT;
         return nullptr;
     }
@@ -174,7 +173,7 @@ const Frame* ScreenCapturerX11::captureFrame(Error* error)
             selected_monitor_rect_.size(), PixelFormat::ARGB(), sharedMemoryFactory());
         if (!frame)
         {
-            LOG(LS_ERROR) << "Unable to create frame";
+            LOG(ERROR) << "Unable to create frame";
             return nullptr;
         }
 
@@ -187,12 +186,12 @@ const Frame* ScreenCapturerX11::captureFrame(Error* error)
     Frame* result = captureFrameImpl();
     if (!result)
     {
-        LOG(LS_ERROR) << "Temporarily failed to capture screen";
+        LOG(ERROR) << "Temporarily failed to capture screen";
         *error = Error::PERMANENT;
         return nullptr;
     }
 
-    Region* updated_region = result->updatedRegion();
+    QRegion* updated_region = result->updatedRegion();
     last_invalid_region_ = *updated_region;
     updated_region->translate(-selected_monitor_rect_.left(), -selected_monitor_rect_.top());
 
@@ -212,24 +211,24 @@ const MouseCursor* ScreenCapturerX11::captureCursor()
         x_image = XFixesGetCursorImage(display());
         if (!x_image || error_trap.lastErrorAndDisable() != 0)
         {
-            LOG(LS_ERROR) << "XFixesGetCursorImage failed";
+            LOG(ERROR) << "XFixesGetCursorImage failed";
             return nullptr;
         }
     }
 
-    Size size(x_image->width, x_image->height);
-    Point hotspot(std::min(x_image->xhot, x_image->width),
-                  std::min(x_image->yhot, x_image->height));
+    QSize size(x_image->width, x_image->height);
+    QPoint hotspot(std::min(x_image->xhot, x_image->width),
+                   std::min(x_image->yhot, x_image->height));
 
     if (size.width() <= 0 || size.height() <= 0)
     {
-        LOG(LS_ERROR) << "Invalid cursor size: " << size;
+        LOG(ERROR) << "Invalid cursor size:" << size;
         return nullptr;
     }
 
     size_t image_size = x_image->width * x_image->height;
 
-    ByteArray image_data;
+    QByteArray image_data;
     image_data.resize(image_size * MouseCursor::kBytesPerPixel);
 
     unsigned long* src = x_image->pixels;
@@ -246,7 +245,7 @@ const MouseCursor* ScreenCapturerX11::captureCursor()
 }
 
 //--------------------------------------------------------------------------------------------------
-Point ScreenCapturerX11::cursorPosition()
+QPoint ScreenCapturerX11::cursorPosition()
 {
     Window root_window;
     Window child_window;
@@ -257,20 +256,20 @@ Point ScreenCapturerX11::cursorPosition()
     unsigned int mask;
 
     XErrorTrap errorTrap(display_->display());
-    Bool result = XQueryPointer(display_->display(),
-                                root_window_,
-                                &root_window,
-                                &child_window,
-                                &root_x, &root_y,
-                                &win_x, &win_y,
-                                &mask);
+    X11_Bool result = XQueryPointer(display_->display(),
+                                    root_window_,
+                                    &root_window,
+                                    &child_window,
+                                    &root_x, &root_y,
+                                    &win_x, &win_y,
+                                    &mask);
     if (!result || errorTrap.lastErrorAndDisable() != 0)
     {
-        LOG(LS_ERROR) << "XQueryPointer failed";
-        return Point(0, 0);
+        LOG(ERROR) << "XQueryPointer failed";
+        return QPoint(0, 0);
     }
 
-    return Point(root_x, root_y).subtract(selected_monitor_rect_.topLeft());
+    return QPoint(root_x, root_y) - selected_monitor_rect_.topLeft();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -285,7 +284,7 @@ bool ScreenCapturerX11::init()
     display_ = SharedXDisplay::createDefault();
     if (!display_)
     {
-        LOG(LS_ERROR) << "SharedXDisplay::createDefault failed";
+        LOG(ERROR) << "SharedXDisplay::createDefault failed";
         return false;
     }
 
@@ -294,7 +293,7 @@ bool ScreenCapturerX11::init()
     root_window_ = RootWindow(display(), DefaultScreen(display()));
     if (root_window_ == BadValue)
     {
-        LOG(LS_ERROR) << "Unable to get the root window";
+        LOG(ERROR) << "Unable to get the root window";
         deinitXlib();
         return false;
     }
@@ -302,7 +301,7 @@ bool ScreenCapturerX11::init()
     gc_ = XCreateGC(display(), root_window_, 0, nullptr);
     if (gc_ == nullptr)
     {
-        LOG(LS_ERROR) << "Unable to get graphics context";
+        LOG(ERROR) << "Unable to get graphics context";
         deinitXlib();
         return false;
     }
@@ -313,12 +312,12 @@ bool ScreenCapturerX11::init()
     // of XDamage.
     if (XFixesQueryExtension(display(), &xfixes_event_base_, &xfixes_error_base_))
     {
-        LOG(LS_INFO) << "X server supports XFixes";
+        LOG(INFO) << "X server supports XFixes";
         has_xfixes_ = true;
     }
     else
     {
-        LOG(LS_INFO) << "X server does not support XFixes";
+        LOG(INFO) << "X server does not support XFixes";
     }
 
     // Register for changes to the dimensions of the root window.
@@ -334,7 +333,7 @@ bool ScreenCapturerX11::init()
 
     if (!x_server_pixel_buffer_.init(atom_cache_.get(), DefaultRootWindow(display())))
     {
-        LOG(LS_ERROR) << "Failed to initialize pixel buffer";
+        LOG(ERROR) << "Failed to initialize pixel buffer";
         return false;
     }
 
@@ -344,10 +343,10 @@ bool ScreenCapturerX11::init()
     // Default source set here so that selected_monitor_rect_ is sized correctly.
     if (!selectScreen(kFullDesktopScreenId))
     {
-        LOG(LS_ERROR) << "Unable select screen";
+        LOG(ERROR) << "Unable select screen";
     }
 
-    LOG(LS_INFO) << "X11 screen capturer is initialized!";
+    LOG(INFO) << "X11 screen capturer is initialized!";
     return true;
 }
 
@@ -367,7 +366,7 @@ bool ScreenCapturerX11::handleXEvent(const XEvent& event)
     {
         XRRUpdateConfiguration(const_cast<XEvent*>(&event));
         updateMonitors();
-        LOG(LS_INFO) << "XRandR screen change event received";
+        LOG(INFO) << "XRandR screen change event received";
         return true;
     }
     else if (event.type == ConfigureNotify)
@@ -389,7 +388,7 @@ void ScreenCapturerX11::initXDamage()
     // Check for XDamage extension.
     if (!XDamageQueryExtension(display(), &damage_event_base_, &damage_error_base_))
     {
-        LOG(LS_INFO) << "X server does not support XDamage";
+        LOG(INFO) << "X server does not support XDamage";
         return;
     }
 
@@ -401,7 +400,7 @@ void ScreenCapturerX11::initXDamage()
     damage_handle_ = XDamageCreate(display(), root_window_, XDamageReportNonEmpty);
     if (!damage_handle_)
     {
-        LOG(LS_ERROR) << "Unable to initialize XDamage";
+        LOG(ERROR) << "Unable to initialize XDamage";
         return;
     }
 
@@ -410,14 +409,14 @@ void ScreenCapturerX11::initXDamage()
     if (!damage_region_)
     {
         XDamageDestroy(display(), damage_handle_);
-        LOG(LS_ERROR) << "Unable to create XFixes region";
+        LOG(ERROR) << "Unable to create XFixes region";
         return;
     }
 
     display_->addEventHandler(damage_event_base_ + XDamageNotify, this);
 
     use_damage_ = true;
-    LOG(LS_INFO) << "Using XDamage extension";
+    LOG(INFO) << "Using XDamage extension";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -442,8 +441,7 @@ void ScreenCapturerX11::initXrandr()
             if (get_monitors_ && free_monitors_)
             {
                 use_randr_ = true;
-                LOG(LS_INFO) << "Using XRandR extension v" << major_version << '.'
-                             << minor_version;
+                LOG(INFO) << "Using XRandR extension v" << major_version << '.' << minor_version;
                 monitors_ = get_monitors_(display(), root_window_, true, &num_monitors_);
 
                 // Register for screen change notifications
@@ -452,17 +450,17 @@ void ScreenCapturerX11::initXrandr()
             }
             else
             {
-                LOG(LS_ERROR) << "Unable to link XRandR monitor functions";
+                LOG(ERROR) << "Unable to link XRandR monitor functions";
             }
         }
         else
         {
-            LOG(LS_ERROR) << "XRandR entension is older than v1.5";
+            LOG(ERROR) << "XRandR entension is older than v1.5";
         }
     }
     else
     {
-        LOG(LS_ERROR) << "X server does not support XRandR";
+        LOG(ERROR) << "X server does not support XRandR";
     }
 }
 
@@ -481,7 +479,7 @@ void ScreenCapturerX11::updateMonitors()
     {
         if (selected_monitor_name_ == static_cast<Atom>(kFullDesktopScreenId))
         {
-            selected_monitor_rect_ = Rect::makeSize(x_server_pixel_buffer_.windowSize());
+            selected_monitor_rect_ = QRect(QPoint(0, 0), x_server_pixel_buffer_.windowSize());
             return;
         }
 
@@ -490,15 +488,15 @@ void ScreenCapturerX11::updateMonitors()
             XRRMonitorInfo& m = monitors_[i];
             if (selected_monitor_name_ == m.name)
             {
-                LOG(LS_INFO) << "XRandR monitor " << m.name << " rect updated";
-                selected_monitor_rect_ = Rect::makeXYWH(m.x, m.y, m.width, m.height);
+                LOG(INFO) << "XRandR monitor" << m.name << "rect updated";
+                selected_monitor_rect_ = QRect(QPoint(m.x, m.y), QSize(m.width, m.height));
                 return;
             }
         }
 
         // The selected monitor is not connected anymore
-        LOG(LS_INFO) << "XRandR selected monitor " << selected_monitor_name_ << " lost";
-        selected_monitor_rect_ = Rect::makeWH(0, 0);
+        LOG(INFO) << "XRandR selected monitor" << selected_monitor_name_ << "lost";
+        selected_monitor_rect_ = QRect(QPoint(0, 0), QSize(0, 0));
     }
 }
 
@@ -511,11 +509,11 @@ void ScreenCapturerX11::screenConfigurationChanged()
     helper_.clearInvalidRegion();
     if (!x_server_pixel_buffer_.init(atom_cache_.get(), DefaultRootWindow(display())))
     {
-        LOG(LS_ERROR) << "Failed to initialize pixel buffer after screen configuration change";
+        LOG(ERROR) << "Failed to initialize pixel buffer after screen configuration change";
     }
 
     if (!use_randr_)
-        selected_monitor_rect_ = Rect::makeSize(x_server_pixel_buffer_.windowSize());
+        selected_monitor_rect_ = QRect(QPoint(0, 0), x_server_pixel_buffer_.windowSize());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -533,11 +531,11 @@ void ScreenCapturerX11::synchronizeFrame()
     Frame* last = queue_.previousFrame();
     DCHECK(current != last);
 
-    for (Region::Iterator it(last_invalid_region_); !it.isAtEnd(); it.advance())
+    for (const auto& rect : std::as_const(last_invalid_region_))
     {
-        if (selected_monitor_rect_.containsRect(it.rect()))
+        if (selected_monitor_rect_.contains(rect))
         {
-            Rect r = it.rect();
+            QRect r = rect;
             r.translate(-selected_monitor_rect_.left(), -selected_monitor_rect_.top());
             current->copyPixelsFrom(*last, r.topLeft(), r);
         }
@@ -592,36 +590,35 @@ Frame* ScreenCapturerX11::captureFrameImpl()
     if (use_damage_ && queue_.previousFrame())
         synchronizeFrame();
 
-    Region* updated_region = frame->updatedRegion();
+    QRegion* updated_region = frame->updatedRegion();
 
     // Clear updated region.
-    updated_region->clear();
+    *updated_region = QRegion();
 
     x_server_pixel_buffer_.synchronize();
     if (use_damage_ && queue_.previousFrame())
     {
         // Atomically fetch and clear the damage region.
-        XDamageSubtract(display(), damage_handle_, None, damage_region_);
+        XDamageSubtract(display(), damage_handle_, X11_None, damage_region_);
         int rectsNum = 0;
         XRectangle bounds;
         XRectangle* rects = XFixesFetchRegionAndBounds(display(), damage_region_,
                                                        &rectsNum, &bounds);
         for (int i = 0; i < rectsNum; ++i)
         {
-            updated_region->addRect(
-                Rect::makeXYWH(rects[i].x, rects[i].y, rects[i].width, rects[i].height));
+            *updated_region +=
+                QRect(QPoint(rects[i].x, rects[i].y), QSize(rects[i].width, rects[i].height));
         }
         XFree(rects);
         helper_.invalidateRegion(*updated_region);
 
         // Capture the damaged portions of the desktop.
         helper_.takeInvalidRegion(updated_region);
-        updated_region->intersectWith(selected_monitor_rect_);
+        *updated_region = updated_region->intersected(selected_monitor_rect_);
 
-        //for (const auto& rect : *updated_region)
-        for (Region::Iterator it(*updated_region); !it.isAtEnd(); it.advance())
+        for (const auto& rect : std::as_const(*updated_region))
         {
-            if (!x_server_pixel_buffer_.captureRect(it.rect(), frame))
+            if (!x_server_pixel_buffer_.captureRect(rect, frame))
                 return nullptr;
         }
     }
@@ -632,7 +629,7 @@ Frame* ScreenCapturerX11::captureFrameImpl()
         if (!x_server_pixel_buffer_.captureRect(selected_monitor_rect_, frame))
             return nullptr;
 
-        *updated_region = Region(selected_monitor_rect_);
+        *updated_region = QRegion(selected_monitor_rect_);
     }
 
     return frame;

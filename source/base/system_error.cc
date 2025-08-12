@@ -20,7 +20,7 @@
 
 #if defined(Q_OS_WINDOWS)
 #include <qt_windows.h>
-#elif defined(Q_OS_POSIX)
+#elif defined(Q_OS_UNIX)
 #include <cstring>
 #include <cerrno>
 #endif
@@ -40,7 +40,7 @@ SystemError SystemError::last()
 {
 #if defined(Q_OS_WINDOWS)
     return SystemError(GetLastError());
-#elif defined(Q_OS_POSIX)
+#elif defined(Q_OS_UNIX)
     return SystemError(errno);
 #else
 #error Platform support not implemented
@@ -73,7 +73,7 @@ QString SystemError::toString(Code code)
         return QString::fromWCharArray(msgbuf, len).trimmed() + ' ' + QString::number(code, 16);
 
     return QString("Error (0x%1) while retrieving error. (0x%2)").arg(GetLastError()).arg(code);
-#elif defined(Q_OS_POSIX)
+#elif defined(Q_OS_UNIX)
     return std::strerror(code);
 #else
 #error Platform support not implemented

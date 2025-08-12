@@ -294,7 +294,7 @@ void ScreenCapturerWrapper::selectCapturer(ScreenCapturer::Error last_error)
     screen_capturer_ = ScreenCapturerX11::create();
     if (!screen_capturer_)
     {
-        LOG(LS_ERROR) << "Unable to create X11 screen capturer";
+        LOG(ERROR) << "Unable to create X11 screen capturer";
         return;
     }
 #elif defined(Q_OS_MACOS)

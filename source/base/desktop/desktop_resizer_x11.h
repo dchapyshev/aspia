@@ -30,8 +30,8 @@ public:
     ~DesktopResizerX11() final;
 
     // DesktopResizer implementation.
-    std::vector<Size> supportedResolutions(ScreenId screen_id) final;
-    bool setResolution(ScreenId screen_id, const Size& resolution) final;
+    QList<QSize> supportedResolutions(ScreenId screen_id) final;
+    bool setResolution(ScreenId screen_id, const QSize& resolution) final;
     void restoreResolution(ScreenId screen_id) final;
     void restoreResulution() final;
 

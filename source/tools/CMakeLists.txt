@@ -16,7 +16,8 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 #
 
+add_subdirectory(qtprotoc)
+
 if (WIN32)
-    add_subdirectory(qtprotoc)
     add_subdirectory(sha256)
 endif()

@@ -67,9 +67,9 @@ Atom XAtomCache::createIfNotExist(Atom* atom, const char* name)
 {
     DCHECK(atom);
 
-    if (*atom == None)
+    if (*atom == X11_None)
     {
-        *atom = XInternAtom(display(), name, True);
+        *atom = XInternAtom(display(), name, X11_True);
     }
 
     return *atom;

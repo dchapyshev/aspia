@@ -19,7 +19,8 @@
 #ifndef BASE_AUDIO_AUDIO_OUTPUT_PULSE_H
 #define BASE_AUDIO_AUDIO_OUTPUT_PULSE_H
 
-#include "base/waitable_event.h"
+#include <QTimer>
+
 #include "base/audio/audio_output.h"
 #include "base/audio/linux/pulseaudio_symbol_table.h"
 
@@ -58,7 +59,7 @@ private:
     void terminate();
     bool initPulseAudio();
     void terminatePulseAudio();
-    void onTimerExpired(const std::error_code& error_code);
+    void onTimerExpired();
     void writePlayoutData();
 
     bool device_initialized_ = false;
@@ -72,7 +73,7 @@ private:
     pa_context* pa_context_ = nullptr;
 
     pa_stream* play_stream_ = nullptr;
-    std::unique_ptr<asio::high_resolution_timer> timer_;
+    QTimer* timer_ = nullptr;
 
     int period_time_ = 0;
     int period_size_ = 0;

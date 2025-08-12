@@ -60,7 +60,7 @@ public:
 
 #if defined(Q_OS_WINDOWS)
     void onNewConnetion(const std::error_code& error_code, size_t bytes_transferred);
-#elif defined(Q_OS_POSIX)
+#elif defined(Q_OS_UNIX)
     void onNewConnetion(const std::error_code& error_code,
                         asio::local::stream_protocol::socket socket);
 #endif
@@ -72,7 +72,7 @@ private:
 #if defined(Q_OS_WINDOWS)
     std::unique_ptr<asio::windows::stream_handle> handle_;
     std::unique_ptr<asio::windows::overlapped_ptr> overlapped_;
-#elif defined(Q_OS_POSIX)
+#elif defined(Q_OS_UNIX)
     std::unique_ptr<asio::local::stream_protocol::acceptor> acceptor_;
     std::unique_ptr<asio::local::stream_protocol::socket> handle_;
 #endif
@@ -169,7 +169,7 @@ bool IpcServer::Listener::listen(asio::io_context& io_context, const QString& ch
     overlapped_->complete(std::error_code(), 0);
     return true;
 #else
-    std::string channel_file = base::local8BitFromUtf16(channel_name);
+    std::string channel_file = channel_name.toLocal8Bit().toStdString();
 
     asio::local::stream_protocol::endpoint endpoint(channel_file);
     acceptor_ = std::make_unique<asio::local::stream_protocol::acceptor>(io_context);
@@ -189,7 +189,7 @@ bool IpcServer::Listener::listen(asio::io_context& io_context, const QString& ch
         return false;
     }
 
-    std::string command_line = fmt::format("chmod 777 {}", channel_file.data());
+    std::string command_line = "chmod 777 " + channel_file;
 
     int ret = system(command_line.c_str());
     LOG(INFO) << "Set security attributes:" << command_line << "(ret:" << ret << ")";
@@ -231,7 +231,7 @@ void IpcServer::Listener::onNewConnetion(
 }
 #endif // defined(Q_OS_WINDOWS)
 
-#if defined(Q_OS_POSIX)
+#if defined(Q_OS_UNIX)
 //--------------------------------------------------------------------------------------------------
 void IpcServer::Listener::onNewConnetion(
     const std::error_code& error_code, asio::local::stream_protocol::socket socket)
@@ -249,12 +249,9 @@ void IpcServer::Listener::onNewConnetion(
         return;
     }
 
-    std::unique_ptr<IpcChannel> channel =
-        std::unique_ptr<IpcChannel>(new IpcChannel(server_->channel_name_, std::move(socket)));
-
-    server_->onNewConnection(index_, std::move(channel));
+    server_->onNewConnection(index_, new IpcChannel(server_->channel_name_, std::move(socket), server_));
 }
-#endif // defined(Q_OS_POSIX)
+#endif // defined(Q_OS_UNIX)
 
 //--------------------------------------------------------------------------------------------------
 IpcServer::IpcServer(QObject* parent)

@@ -19,7 +19,7 @@
 #ifndef BASE_AUDIO_LINUX_LATE_BINDING_SYMBOL_TABLE_H
 #define BASE_AUDIO_LINUX_LATE_BINDING_SYMBOL_TABLE_H
 
-#include "base/macros_magic.h"
+#include <QtGlobal>
 
 #include <cassert>
 #include <cstring>

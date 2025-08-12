@@ -18,10 +18,13 @@
 
 #include "base/service.h"
 
-#include "base/logging.h"
-#include "base/crypto/scoped_crypto_initializer.h"
+#include <QCoreApplication>
+#include <QTimer>
 
 #include <signal.h>
+
+#include "base/logging.h"
+#include "base/crypto/scoped_crypto_initializer.h"
 
 namespace base {
 
@@ -29,7 +32,8 @@ namespace {
 
 Service* g_self = nullptr;
 
-const char* sigToString(int sig)
+//--------------------------------------------------------------------------------------------------
+QString sigToString(int sig)
 {
     switch (sig)
     {
@@ -55,91 +59,77 @@ const char* sigToString(int sig)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-Service::Service(std::u16string_view name, MessageLoop::Type type)
-    : type_(type),
-      name_(name)
+Service::Service(const QString& name, QObject* parent)
+    : name_(name)
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
     g_self = this;
 }
 
 //--------------------------------------------------------------------------------------------------
 Service::~Service()
 {
-    LOG(LS_INFO) << "Dtor";
+    LOG(INFO) << "Dtor";
     g_self = nullptr;
 }
 
 //--------------------------------------------------------------------------------------------------
-void Service::exec()
+int Service::exec(Application& application)
 {
-    LOG(LS_INFO) << "Begin";
+    LOG(INFO) << "Begin";
 
     if (signal(SIGKILL, signalHandler) == SIG_ERR)
-        LOG(LS_ERROR) << "Unable to install signal handler for SIGKILL";
+        LOG(ERROR) << "Unable to install signal handler for SIGKILL";
 
     if (signal(SIGTERM, signalHandler) == SIG_ERR)
-        LOG(LS_ERROR) << "Unable to install signal handler for SIGTERM";
+        LOG(ERROR) << "Unable to install signal handler for SIGTERM";
 
     if (signal(SIGHUP, signalHandler) == SIG_ERR)
-        LOG(LS_ERROR) << "Unable to install signal handler for SIGHUP";
+        LOG(ERROR) << "Unable to install signal handler for SIGHUP";
 
     if (signal(SIGQUIT, signalHandler) == SIG_ERR)
-        LOG(LS_ERROR) << "Unable to install signal handler for SIGQUIT";
+        LOG(ERROR) << "Unable to install signal handler for SIGQUIT";
 
     if (signal(SIGINT, signalHandler) == SIG_ERR)
-        LOG(LS_ERROR) << "Unable to install signal handler for SIGQUIT";
+        LOG(ERROR) << "Unable to install signal handler for SIGQUIT";
 
     if (signal(SIGSTOP, signalHandler) == SIG_ERR)
-        LOG(LS_ERROR) << "Unable to install signal handler for SIGSTOP";
+        LOG(ERROR) << "Unable to install signal handler for SIGSTOP";
 
     if (signal(SIGABRT, signalHandler) == SIG_ERR)
-        LOG(LS_ERROR) << "Unable to install signal handler for SIGABRT";
+        LOG(ERROR) << "Unable to install signal handler for SIGABRT";
 
     std::unique_ptr<ScopedCryptoInitializer> crypto_initializer =
         std::make_unique<ScopedCryptoInitializer>();
     CHECK(crypto_initializer->isSucceeded());
 
-    LOG(LS_INFO) << "Cryptography initialized successfully";
+    LOG(INFO) << "Cryptography initialized successfully";
 
-    message_loop_ = std::make_unique<MessageLoop>(type_);
-    task_runner_ = message_loop_->taskRunner();
+    QTimer::singleShot(0, this, &Service::onStart);
 
-    LOG(LS_INFO) << "Message loop created";
+    LOG(INFO) << "Run message loop";
+    int ret = application.exec();
 
-    task_runner_->postTask(std::bind(&Service::onStart, this));
-
-    LOG(LS_INFO) << "Run message loop";
-    message_loop_->run();
-    message_loop_.reset();
-
-    LOG(LS_INFO) << "End";
+    LOG(INFO) << "End";
+    return ret;
 }
 
 //--------------------------------------------------------------------------------------------------
 void Service::stopHandlerImpl()
 {
-    if (!task_runner_)
-        return;
-
-    if (!task_runner_->belongsToCurrentThread())
+    QTimer::singleShot(0, this, [this]()
     {
-        task_runner_->postTask(std::bind(&Service::stopHandlerImpl, this));
-        return;
-    }
-
-    onStop();
-
-    // A message loop termination command was received.
-    task_runner_->postQuit();
-    task_runner_.reset();
+        // A message loop termination command was received.
+        onStop();
+        QCoreApplication::quit();
+    });
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
 void Service::signalHandler(int sig)
 {
-    LOG(LS_INFO) << "Signal received: " << sigToString(sig) << " (" << sig << ")";
+    LOG(INFO) << "Signal received: " << sigToString(sig) << " (" << sig << ")";
 
     switch (sig)
     {

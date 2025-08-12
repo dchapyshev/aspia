@@ -19,6 +19,8 @@
 #ifndef BASE_FILES_FILE_DESCRIPTOR_WATCHER_POSIX_H
 #define BASE_FILES_FILE_DESCRIPTOR_WATCHER_POSIX_H
 
+#include <QtGlobal>
+
 #include <functional>
 #include <memory>
 
