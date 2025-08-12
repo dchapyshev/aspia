@@ -63,7 +63,6 @@ set(CMAKE_SKIP_BUILD_RPATH ON)
 find_package(Qt6 CONFIG REQUIRED Core Gui Network PrintSupport Sql Widgets Xml LinguistTools Svg)
 find_package(Qt6DeviceDiscoverySupportPrivate CONFIG REQUIRED)
 find_package(Qt6FbSupportPrivate CONFIG REQUIRED)
-find_package(Qt6EntryPointPrivate CONFIG REQUIRED)
 
 find_package(asio CONFIG REQUIRED)
 find_package(CURL CONFIG REQUIRED)
@@ -77,6 +76,7 @@ find_package(unofficial-sqlite3 CONFIG REQUIRED)
 find_package(zstd CONFIG REQUIRED)
 
 if (WIN32)
+    find_package(Qt6EntryPointPrivate CONFIG REQUIRED)
     find_package(WDK REQUIRED)
 endif()
 
