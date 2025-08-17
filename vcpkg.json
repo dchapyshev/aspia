@@ -30,7 +30,43 @@
         "gui",
         "freetype",
         "doubleconversion",
-        "brotli"
+        "brotli",
+        {
+          "name": "fontconfig",
+          "platform": "linux"
+        },
+        {
+          "name": "xrender",
+          "platform": "linux"
+        },
+        {
+          "name": "xlib",
+          "platform": "linux"
+        },
+        {
+          "name": "xkbcommon-x11",
+          "platform": "linux"
+        },
+        {
+          "name": "xkb",
+          "platform": "linux"
+        },
+        {
+          "name": "xcb-xlib",
+          "platform": "linux"
+        },
+        {
+          "name": "xcb",
+          "platform": "linux"
+        },
+        {
+          "name": "opengl",
+          "platform": "linux"
+        },
+        {
+          "name": "egl",
+          "platform": "linux"
+        }
       ]
     },
     "qtsvg",

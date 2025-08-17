@@ -81,6 +81,11 @@ if (WIN32)
 endif()
 
 if (LINUX)
+    find_package(Qt6EglFSDeviceIntegrationPrivate CONFIG REQUIRED)
+    find_package(Qt6InputSupportPrivate CONFIG REQUIRED)
+    find_package(Qt6OpenGL CONFIG REQUIRED)
+    find_package(Qt6XcbQpaPrivate CONFIG REQUIRED)
+
     find_library(XFIXES_LIB NAMES libXfixes Xfixes REQUIRED)
     message(STATUS "XFixes library: ${XFIXES_LIB}")
 
