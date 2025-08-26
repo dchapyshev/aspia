@@ -1,13 +1,13 @@
 {
   "version": 3,
   "cmakeMinimumRequired": {
-    "major": 3,
-    "minor": 21,
+    "major": 4,
+    "minor": 0,
     "patch": 0
   },
   "configurePresets": [
     {
-      "name": "ninja-multi-vcpkg-ci",
+      "name": "ninja-vcpkg-ci",
       "binaryDir": "${sourceDir}/builds/${presetName}",
       "generator": "Ninja Multi-Config",
       "cacheVariables": {
@@ -28,10 +28,10 @@
       }
     },
     {
-      "name": "ninja-multi-vcpkg-local-base",
+      "name": "ninja-vcpkg-local-base",
       "hidden": true,
       "inherits": [
-        "ninja-multi-vcpkg-ci"
+        "ninja-vcpkg-ci"
       ],
       "environment": {
         "VCPKG_ROOT": "${sourceDir}/vcpkg",
@@ -40,18 +40,18 @@
       }
     },
     {
-      "name": "ninja-multi-vcpkg-local-unix",
+      "name": "ninja-vcpkg-local-unix",
       "inherits": [
-        "ninja-multi-vcpkg-local-base"
+        "ninja-vcpkg-local-base"
       ],
       "environment": {
         "VCPKG_DOWNLOADS": "/opt/vcpkg/downloads"
       }
     },
     {
-      "name": "ninja-multi-vcpkg-local-mac-arm64",
+      "name": "ninja-vcpkg-local-mac-arm64",
       "inherits": [
-        "ninja-multi-vcpkg-local-unix"
+        "ninja-vcpkg-local-unix"
       ],
       "architecture": {
         "value": "arm64",
@@ -73,10 +73,10 @@
       }
     },
     {
-      "name": "ninja-multi-vcpkg-local-win-x86",
+      "name": "ninja-vcpkg-local-win-x86",
       "description": "Run x86 Native Tools Command Prompt for VS 2022 and then run 'C:/Users/v3133/AppData/Local/Programs/Microsoft VS Code/Code.exe'",
       "inherits": [
-        "ninja-multi-vcpkg-local-base"
+        "ninja-vcpkg-local-base"
       ],
       "architecture": {
         "value": "x86",
@@ -101,9 +101,46 @@
       }
     },
     {
-      "name": "ninja-multi-vcpkg-local-win-x86-gui",
+      "name": "ninja-vcpkg-local-win-x86-gui",
       "inherits": [
-        "ninja-multi-vcpkg-local-win-x86"
+        "ninja-vcpkg-local-win-x86"
+      ],
+      "environment": {
+        "FORCE_WITHGUIAPP": "1"
+      }
+    }
+    {
+      "name": "ninja-vcpkg-local-win-x64",
+      "description": "Run x64 Native Tools Command Prompt for VS 2022 and then run 'C:/Users/v3133/AppData/Local/Programs/Microsoft VS Code/Code.exe'",
+      "inherits": [
+        "ninja-vcpkg-local-base"
+      ],
+      "architecture": {
+        "value": "x64",
+        "strategy": "external"
+      },
+      "vendor": {
+        "microsoft.com/VisualStudioSettings/CMake/1.0": {
+          "hostOS": [
+            "Windows"
+          ]
+        }
+      },
+      "cacheVariables": {
+        "VCPKG_TARGET_TRIPLET": "x64-windows-static"
+      },
+      "environment": {
+        "VCPKG_TRIPLET": "x64-windows-static",
+        "VCPKG_DEFAULT_HOST_TRIPLET": "x64-windows-static",
+        "VCPKG_DOWNLOADS": "C:/vcpkg/downloads",
+        "VCPKG_DEFAULT_BINARY_CACHE": "C:/vcpkg/bincache-$env{VCPKG_TRIPLET}",
+        "NINJAPATH": "C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/Ninja/ninja.exe"
+      }
+    },
+    {
+      "name": "ninja-vcpkg-local-win-x64-gui",
+      "inherits": [
+        "ninja-vcpkg-local-win-x64"
       ],
       "environment": {
         "FORCE_WITHGUIAPP": "1"
@@ -112,55 +149,75 @@
   ],
   "buildPresets": [
     {
-      "name": "ninja-multi-vcpkg-ci-release",
-      "configurePreset": "ninja-multi-vcpkg-ci",
+      "name": "ninja-vcpkg-ci-release",
+      "configurePreset": "ninja-vcpkg-ci",
       "configuration": "Release"
     },
     {
-      "name": "ninja-multi-vcpkg-ci-debug",
-      "configurePreset": "ninja-multi-vcpkg-ci",
+      "name": "ninja-vcpkg-ci-debug",
+      "configurePreset": "ninja-vcpkg-ci",
       "configuration": "Debug"
     },
     {
-      "name": "ninja-multi-vcpkg-local-win-x86-release",
-      "configurePreset": "ninja-multi-vcpkg-local-win-x86",
+      "name": "ninja-vcpkg-local-win-x86-release",
+      "configurePreset": "ninja-vcpkg-local-win-x86",
       "configuration": "Release"
     },
     {
-      "name": "ninja-multi-vcpkg-local-win-x86-debug",
-      "configurePreset": "ninja-multi-vcpkg-local-win-x86",
+      "name": "ninja-vcpkg-local-win-x86-debug",
+      "configurePreset": "ninja-vcpkg-local-win-x86",
       "configuration": "Debug"
     },
     {
-      "name": "ninja-multi-vcpkg-local-win-x86-release-gui",
-      "configurePreset": "ninja-multi-vcpkg-local-win-x86-gui",
+      "name": "ninja-vcpkg-local-win-x86-release-gui",
+      "configurePreset": "ninja-vcpkg-local-win-x86-gui",
       "configuration": "Release"
     },
     {
-      "name": "ninja-multi-vcpkg-local-win-x86-debug-gui",
-      "configurePreset": "ninja-multi-vcpkg-local-win-x86-gui",
+      "name": "ninja-vcpkg-local-win-x86-debug-gui",
+      "configurePreset": "ninja-vcpkg-local-win-x86-gui",
       "configuration": "Debug"
     },
     {
-      "name": "ninja-multi-vcpkg-local-unix-release",
-      "configurePreset": "ninja-multi-vcpkg-local-unix",
+      "name": "ninja-vcpkg-local-win-x64-release",
+      "configurePreset": "ninja-vcpkg-local-win-x64",
       "configuration": "Release"
     },
     {
-      "name": "ninja-multi-vcpkg-local-unix-debug",
-      "configurePreset": "ninja-multi-vcpkg-local-unix",
+      "name": "ninja-vcpkg-local-win-x64-debug",
+      "configurePreset": "ninja-vcpkg-local-win-x64",
+      "configuration": "Debug"
+    },
+    {
+      "name": "ninja-vcpkg-local-win-x64-release-gui",
+      "configurePreset": "ninja-vcpkg-local-win-x64-gui",
+      "configuration": "Release"
+    },
+    {
+      "name": "ninja-vcpkg-local-win-x64-debug-gui",
+      "configurePreset": "ninja-vcpkg-local-win-x64-gui",
+      "configuration": "Debug"
+    },
+    {
+      "name": "ninja-vcpkg-local-unix-release",
+      "configurePreset": "ninja-vcpkg-local-unix",
+      "configuration": "Release"
+    },
+    {
+      "name": "ninja-vcpkg-local-unix-debug",
+      "configurePreset": "ninja-vcpkg-local-unix",
       "configuration": "Debug"
     }
   ],
   "testPresets": [
     {
-      "name": "ninja-multi-vcpkg-ci-release", 
-      "configurePreset": "ninja-multi-vcpkg-ci",
+      "name": "ninja-vcpkg-ci-release", 
+      "configurePreset": "ninja-vcpkg-ci",
       "configuration": "Release"
     },
     {
-      "name": "ninja-multi-vcpkg-ci-debug", 
-      "configurePreset": "ninja-multi-vcpkg-ci",
+      "name": "ninja-vcpkg-ci-debug", 
+      "configurePreset": "ninja-vcpkg-ci",
       "configuration": "Debug"
     }
   ]
