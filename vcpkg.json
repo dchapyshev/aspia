@@ -61,11 +61,15 @@
         },
         {
           "name": "opengl",
-          "platform": "linux"
+          "platform": "linux | osx"
         },
         {
           "name": "egl",
           "platform": "linux"
+        },
+        {
+          "name": "cups",
+          "platform": "osx"
         }
       ]
     },
