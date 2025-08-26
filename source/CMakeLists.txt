@@ -67,6 +67,14 @@ if (WIN32)
     set(QT_PLATFORM_LIBS Qt6::QWindowsIntegrationPlugin)
 endif()
 
+if (LINUX)
+    set(QT_PLATFORM_LIBS
+        Qt6::EglFSDeviceIntegrationPrivate Qt6::EglFSDeviceIntegrationPrivate_resources_1
+        Qt6::OpenGL Qt6::OpenGLPrivate
+        Qt6::InputSupportPrivate
+        Qt6::XcbQpaPrivate)
+endif()
+
 set(THIRD_PARTY_LIBS
     CURL::libcurl
     protobuf::libprotobuf-lite
