@@ -186,11 +186,14 @@ void generateHeadComment(google::protobuf::io::Printer& file)
 }
 
 //--------------------------------------------------------------------------------------------------
-void trimTrailingNuls(std::string& str)
+void trimAfterEOF(std::string& text)
 {
-    while (!str.empty() && str.back() == '\0')
+    const std::string marker = "// EOF\n";
+
+    size_t pos = text.find(marker);
+    if (pos != std::string::npos)
     {
-        str.pop_back();
+        text.resize(pos);
     }
 }
 
@@ -302,8 +305,9 @@ bool MetatypeGenerator::Generate(const google::protobuf::FileDescriptor* file,
     }
 
     header.Print("\n#endif // $GUARD$\n", "GUARD", include_guard);
+    header.Print("// EOF\n");
 
-    trimTrailingNuls(header_content);
+    trimAfterEOF(header_content);
     writeFileIfChanged(header_name, header_content, context);
 
     //
@@ -359,7 +363,9 @@ bool MetatypeGenerator::Generate(const google::protobuf::FileDescriptor* file,
     for (const auto* msg : messages)
         generateMessageOperator(msg, source);
 
-    trimTrailingNuls(source_content);
+    source.Print("// EOF\n");
+
+    trimAfterEOF(source_content);
     writeFileIfChanged(source_name, source_content, context);
 
     return true;

@@ -5,6 +5,10 @@
     "asio",
     "curl",
     "gtest",
+    {
+      "name": "icu",
+      "platform": "linux | osx"
+    },
     "libvpx",
     "libyuv",
     "openssl",

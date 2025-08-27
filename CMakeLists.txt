@@ -41,6 +41,9 @@ else()
     message(STATUS "VCPKG_INSTALLED_DIR -> external: ${VCPKG_INSTALLED_DIR}")
 endif()
 
+message(STATUS "VCPKG_TARGET_TRIPLET: ${VCPKG_TARGET_TRIPLET}")
+message(STATUS "VCPKG_HOST_TRIPLET: ${VCPKG_HOST_TRIPLET}")
+
 add_definitions(-DASPIA_VERSION_MAJOR=${ASPIA_VERSION_MAJOR}
                 -DASPIA_VERSION_MINOR=${ASPIA_VERSION_MINOR}
                 -DASPIA_VERSION_PATCH=${ASPIA_VERSION_PATCH})
@@ -109,7 +112,16 @@ if (LINUX)
 endif()
 
 if (APPLE)
-    set(CMAKE_OSX_ARCHITECTURES "x86_64")
+    if (${VCPKG_TARGET_TRIPLET} STREQUAL "arm64-osx")
+        set(CMAKE_OSX_ARCHITECTURES "arm64")
+    else()
+        set(CMAKE_OSX_ARCHITECTURES "x86_64")
+    endif()
+
+    message(STATUS "CMAKE_OSX_ARCHITECTURES: ${CMAKE_OSX_ARCHITECTURES}")
+
+    find_package(Qt6OpenGL CONFIG REQUIRED)
+
     find_library(FOUNDATION_LIB Foundation)
     find_library(COREAUDIO_LIB CoreAudio)
     find_library(AUDIOTOOLBOX_LIB AudioToolbox)

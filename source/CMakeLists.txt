@@ -75,6 +75,12 @@ if (LINUX)
         Qt6::XcbQpaPrivate)
 endif()
 
+if (APPLE)
+    set(QT_PLATFORM_LIBS
+        Qt6::OpenGL Qt6::OpenGLPrivate
+        Qt6::QMacStylePlugin)
+endif()
+
 set(THIRD_PARTY_LIBS
     CURL::libcurl
     protobuf::libprotobuf-lite
