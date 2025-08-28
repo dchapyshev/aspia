@@ -108,7 +108,7 @@
       "environment": {
         "FORCE_WITHGUIAPP": "1"
       }
-    }
+    },
     {
       "name": "ninja-vcpkg-local-win-x64",
       "description": "Run x64 Native Tools Command Prompt for VS 2022 and then run 'C:/Users/v3133/AppData/Local/Programs/Microsoft VS Code/Code.exe'",
