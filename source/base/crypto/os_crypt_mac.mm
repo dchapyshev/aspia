@@ -19,41 +19,24 @@
 #include "base/crypto/os_crypt.h"
 
 #include "base/logging.h"
-#include "base/strings/unicode.h"
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 // static
-bool OSCrypt::encryptString16(std::u16string_view plaintext, std::string* ciphertext)
+bool OSCrypt::encryptString(const QString& plaintext, QByteArray* ciphertext)
 {
-    return encryptString(utf8FromUtf16(plaintext), ciphertext);
-}
-
-// static
-bool OSCrypt::decryptString16(std::string_view ciphertext, std::u16string* plaintext)
-{
-    std::string utf8;
-
-    if (!decryptString(ciphertext, &utf8))
-        return false;
-
-    *plaintext = utf16FromUtf8(utf8);
+    NOTIMPLEMENTED();
+    ciphertext->assign(plaintext.toUtf8());
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
-bool OSCrypt::encryptString(std::string_view plaintext, std::string* ciphertext)
+bool OSCrypt::decryptString(const QByteArray& ciphertext, QString* plaintext)
 {
     NOTIMPLEMENTED();
-    ciphertext->assign(plaintext);
-    return true;
-}
-
-// static
-bool OSCrypt::decryptString(std::string_view ciphertext, std::string* plaintext)
-{
-    NOTIMPLEMENTED();
-    plaintext->assign(ciphertext);
+    plaintext->assign(QString::fromUtf8(ciphertext));
     return true;
 }
 

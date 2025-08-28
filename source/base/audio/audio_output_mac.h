@@ -19,10 +19,11 @@
 #ifndef BASE_AUDIO_AUDIO_OUTPUT_MAC_H
 #define BASE_AUDIO_AUDIO_OUTPUT_MAC_H
 
-#include "base/waitable_event.h"
 #include "base/audio/audio_output.h"
 
+#include <condition_variable>
 #include <mutex>
+#include <thread>
 #include <vector>
 
 #include <AudioToolbox/AudioConverter.h>
@@ -85,8 +86,8 @@ private:
     static const uint32_t kPlayBufferSizeInSamples = kSamplesPerChannel10ms * kChannels * kBuffersOut;
 
     std::mutex lock_;
-    WaitableEvent stop_event_;
-    std::unique_ptr<SimpleThread> worker_thread_;
+    std::condition_variable stop_event_;
+    std::unique_ptr<std::thread> worker_thread_;
 
     AudioDeviceID output_device_id_ = kAudioObjectUnknown;
     AudioDeviceIOProcID device_io_proc_id_;

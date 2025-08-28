@@ -19,8 +19,6 @@
 #include "common/clipboard_mac.h"
 
 #include "base/logging.h"
-#include "base/mac/nsstring_conversions.h"
-#include "base/message_loop/message_loop.h"
 
 #import <Cocoa/Cocoa.h>
 
@@ -29,9 +27,9 @@ namespace common {
 //--------------------------------------------------------------------------------------------------
 ClipboardMac::ClipboardMac(QObject* parent)
     : Clipboard(parent),
-      timer_(base::WaitableTimer::Type::SINGLE_SHOT, base::MessageLoop::current()->taskRunner())
+      timer_(new QTimer(this))
 {
-    // Nothing
+    connect(timer_, &QTimer::timeout, this, &ClipboardMac::checkForChanges);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -50,10 +48,13 @@ void ClipboardMac::init()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClipboardMac::setData(const std::string& data)
+void ClipboardMac::setData(const QString& mime_type, const QByteArray& data)
 {
+    if (mime_type != kMimeTypeTextUtf8)
+        return;
+
     // Write text to clipboard.
-    NSString* text = base::utf8ToNSString(data);
+    NSString* text = QString::fromUtf8(data).toNSString();
     NSPasteboard* pasteboard = [NSPasteboard generalPasteboard];
     [pasteboard clearContents];
     [pasteboard writeObjects:@[ text ]];
@@ -66,7 +67,7 @@ void ClipboardMac::setData(const std::string& data)
 void ClipboardMac::startTimer()
 {
     // Restart timer.
-    timer_.start(std::chrono::milliseconds(1000), std::bind(&ClipboardMac::checkForChanges, this));
+    timer_->start(std::chrono::milliseconds(1000));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -80,10 +81,8 @@ void ClipboardMac::checkForChanges()
 
         NSArray* objects = [pasteboard readObjectsForClasses:@[ [NSString class] ] options:0];
         if ([objects count])
-            onData(base::NSStringToUtf8([objects lastObject]));
+            onData(kMimeTypeTextUtf8, QString::fromNSString([objects lastObject]).toUtf8());
     }
-
-    startTimer();
 }
 
 } // namespace common

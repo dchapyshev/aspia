@@ -19,8 +19,8 @@
 #ifndef COMMON_CLIPBOARD_MAC_H
 #define COMMON_CLIPBOARD_MAC_H
 
-#include "base/macros_magic.h"
-#include "base/waitable_timer.h"
+#include <QTimer>
+
 #include "common/clipboard.h"
 
 namespace common {
@@ -36,13 +36,13 @@ public:
 protected:
     // Clipboard implementation.
     void init() final;
-    void setData(const std::string& data) final;
+    void setData(const QString& mime_type, const QByteArray& data) final;
 
 private:
     void startTimer();
     void checkForChanges();
 
-    base::WaitableTimer timer_;
+    QTimer* timer_ = nullptr;
     int current_change_count_ = 0;
 
     Q_DISABLE_COPY(ClipboardMac)

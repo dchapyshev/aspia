@@ -26,7 +26,7 @@ namespace base {
 class DesktopEnvironmentMac final : public DesktopEnvironment
 {
 public:
-    DesktopEnvironmentMac();
+    explicit DesktopEnvironmentMac(QObject* parent = nullptr);
     ~DesktopEnvironmentMac() final;
 
 protected:

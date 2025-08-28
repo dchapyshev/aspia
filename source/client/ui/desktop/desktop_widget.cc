@@ -653,7 +653,7 @@ void DesktopWidget::enableKeyHooks(bool enable)
                                       this);
         if (!event_tap_)
         {
-            LOG(LS_ERROR) << "CGEventTapCreate failed";
+            LOG(ERROR) << "CGEventTapCreate failed";
             return;
         }
 
@@ -780,9 +780,9 @@ CGEventRef DesktopWidget::keyboardFilterProc(
     if (self_widget && focus_widget && self_widget == focus_widget &&
         self_widget->enable_key_sequenses_)
     {
-        quint32 flags = ((type == kCGEventKeyDown) ? proto::KeyEvent::PRESSED : 0);
-        flags |= (isCapsLockActivated() ? proto::KeyEvent::CAPSLOCK : 0);
-        flags |= (isNumLockActivated() ? proto::KeyEvent::NUMLOCK : 0);
+        quint32 flags = ((type == kCGEventKeyDown) ? proto::desktop::KeyEvent::PRESSED : 0);
+        flags |= (isCapsLockActivated() ? proto::desktop::KeyEvent::CAPSLOCK : 0);
+        flags |= (isNumLockActivated() ? proto::desktop::KeyEvent::NUMLOCK : 0);
 
         CGKeyCode key_code = CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode);
 
@@ -795,7 +795,7 @@ CGEventRef DesktopWidget::keyboardFilterProc(
         }
         else
         {
-            LOG(LS_ERROR) << "Unable to convert key code:" << key_code;
+            LOG(ERROR) << "Unable to convert key code:" << key_code;
         }
     }
 

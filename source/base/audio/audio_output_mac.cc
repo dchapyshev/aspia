@@ -19,8 +19,6 @@
 #include "base/audio/audio_output_mac.h"
 
 #include "base/logging.h"
-#include "base/threading/simple_thread.h"
-#include "build/build_config.h"
 #include "third_party/portaudio/pa_ringbuffer.h"
 
 #include <mach/mach.h>
@@ -29,9 +27,9 @@
 
 namespace base {
 
+//--------------------------------------------------------------------------------------------------
 AudioOutputMac::AudioOutputMac(const NeedMoreDataCB& need_more_data_cb)
-    : AudioOutput(need_more_data_cb),
-      stop_event_(WaitableEvent::ResetPolicy::AUTOMATIC, WaitableEvent::InitialState::NOT_SIGNALED)
+    : AudioOutput(need_more_data_cb)
 {
     memset(convert_data_, 0, sizeof(convert_data_));
     memset(&stream_format_, 0, sizeof(AudioStreamBasicDescription));
@@ -41,6 +39,7 @@ AudioOutputMac::AudioOutputMac(const NeedMoreDataCB& need_more_data_cb)
         initPlayout();
 }
 
+//--------------------------------------------------------------------------------------------------
 AudioOutputMac::~AudioOutputMac()
 {
     stop();
@@ -49,10 +48,11 @@ AudioOutputMac::~AudioOutputMac()
     kern_return_t kern_err = semaphore_destroy(mach_task_self(), semaphore_);
     if (kern_err != KERN_SUCCESS)
     {
-        LOG(LS_ERROR) << "semaphore_destroy() error: " << kern_err;
+        LOG(ERROR) << "semaphore_destroy() error: " << kern_err;
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 bool AudioOutputMac::start()
 {
     std::scoped_lock lock(lock_);
@@ -64,24 +64,24 @@ bool AudioOutputMac::start()
         return true;
 
     DCHECK(!worker_thread_);
-    worker_thread_ = std::make_unique<SimpleThread>();
-    worker_thread_->start(std::bind(&AudioOutputMac::threadRun, this));
+    worker_thread_ = std::make_unique<std::thread>(std::bind(&AudioOutputMac::threadRun, this));
 
     OSStatus err = AudioDeviceStart(output_device_id_, device_io_proc_id_);
     if (err != noErr)
     {
-        LOG(LS_ERROR) << "AudioDeviceStart failed";
+        LOG(ERROR) << "AudioDeviceStart failed";
         return false;
     }
 
-    LOG(LS_INFO) << "Audio playout started";
+    LOG(INFO) << "Audio playout started";
     playing_ = true;
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool AudioOutputMac::stop()
 {
-    std::scoped_lock lock(lock_);
+    std::unique_lock lock(lock_);
 
     if (!playout_initialized_)
         return true;
@@ -90,25 +90,25 @@ bool AudioOutputMac::stop()
     {
         playing_ = false;
         do_stop_ = true; // Signal to io proc to stop audio device.
-        lock_.unlock();  // Cannot be under lock, risk of deadlock.
-        if (!stop_event_.wait(std::chrono::seconds(2)))
+        while (do_stop_)
         {
-            std::scoped_lock crit_scoped(lock_);
-            LOG(LS_ERROR) << "Timed out stopping the render IOProc."
-                             "We may have failed to detect a device removal.";
+            if (stop_event_.wait_for(lock, std::chrono::seconds(2)) == std::cv_status::timeout)
+            {
+                LOG(ERROR) << "Timed out stopping the render IOProc."
+                              "We may have failed to detect a device removal.";
 
-            // We assume capturing on a shared device has stopped as well if the IOProc times out.
-            AudioDeviceStop(output_device_id_, device_io_proc_id_);
-            AudioDeviceDestroyIOProcID(output_device_id_, device_io_proc_id_);
+                // We assume capturing on a shared device has stopped as well if the IOProc times out.
+                AudioDeviceStop(output_device_id_, device_io_proc_id_);
+                AudioDeviceDestroyIOProcID(output_device_id_, device_io_proc_id_);
+                do_stop_ = false;
+            }
         }
-        lock_.lock();
-        do_stop_ = false;
-        LOG(LS_INFO) << "Playout stopped";
+        LOG(INFO) << "Playout stopped";
     }
     else
     {
         AudioDeviceDestroyIOProcID(output_device_id_, device_io_proc_id_);
-        LOG(LS_INFO) << "Playout uninitialized (output device)";
+        LOG(INFO) << "Playout uninitialized (output device)";
     }
 
     // Setting this signal will allow the worker thread to be stopped.
@@ -116,7 +116,7 @@ bool AudioOutputMac::stop()
     if (worker_thread_)
     {
         lock_.unlock();
-        worker_thread_->stop();
+        worker_thread_->join();
         worker_thread_.reset();
         lock_.lock();
     }
@@ -134,6 +134,7 @@ bool AudioOutputMac::stop()
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool AudioOutputMac::initDevice()
 {
     std::scoped_lock lock(lock_);
@@ -157,7 +158,7 @@ bool AudioOutputMac::initDevice()
         if (PaUtil_InitializeRingBuffer(pa_render_buffer_.get(), sizeof(SInt16),
                                         render_buffer_data_.size(), render_buffer_data_.data()) == -1)
         {
-            LOG(LS_ERROR) << "PaUtil_InitializeRingBuffer failed";
+            LOG(ERROR) << "PaUtil_InitializeRingBuffer failed";
             return false;
         }
     }
@@ -165,7 +166,7 @@ bool AudioOutputMac::initDevice()
     kern_return_t kern_err = semaphore_create(mach_task_self(), &semaphore_, SYNC_POLICY_FIFO, 0);
     if (kern_err != KERN_SUCCESS)
     {
-        LOG(LS_ERROR) << "semaphore_create failed: " << kern_err;
+        LOG(ERROR) << "semaphore_create failed:" << kern_err;
         return false;
     }
 
@@ -184,7 +185,7 @@ bool AudioOutputMac::initDevice()
         kAudioObjectSystemObject, &property_address, 0, nullptr, size, &run_loop);
     if (err != noErr)
     {
-        LOG(LS_ERROR) << "Error in AudioObjectSetPropertyData";
+        LOG(ERROR) << "Error in AudioObjectSetPropertyData";
         return false;
     }
 
@@ -193,11 +194,12 @@ bool AudioOutputMac::initDevice()
     AudioObjectAddPropertyListener(
         kAudioObjectSystemObject, &property_address, &objectListenerProc, this);
 
-    LOG(LS_INFO) << "Audio device initialized";
+    LOG(INFO) << "Audio device initialized";
     device_initialized_ = true;
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void AudioOutputMac::terminate()
 {
     if (!device_initialized_)
@@ -205,7 +207,7 @@ void AudioOutputMac::terminate()
 
     if (playing_)
     {
-        LOG(LS_ERROR) << "Playback must be stopped";
+        LOG(ERROR) << "Playback must be stopped";
         return;
     }
 
@@ -224,6 +226,7 @@ void AudioOutputMac::terminate()
     device_initialized_ = false;
 }
 
+//--------------------------------------------------------------------------------------------------
 bool AudioOutputMac::initPlayout()
 {
     std::scoped_lock lock(lock_);
@@ -249,13 +252,13 @@ bool AudioOutputMac::initPlayout()
         kAudioObjectSystemObject, &property_address, 0, nullptr, &size, &output_device_id_);
     if (err != noErr)
     {
-        LOG(LS_ERROR) << "AudioObjectGetPropertyData failed";
+        LOG(ERROR) << "AudioObjectGetPropertyData failed";
         return false;
     }
 
     if (output_device_id_ == kAudioDeviceUnknown)
     {
-        LOG(LS_ERROR) << "No default device exists";
+        LOG(ERROR) << "No default device exists";
         return false;
     }
 
@@ -273,33 +276,33 @@ bool AudioOutputMac::initPlayout()
         output_device_id_, &property_address, 0, nullptr, &size, &stream_format_);
     if (err != noErr)
     {
-        LOG(LS_ERROR) << "AudioObjectGetPropertyData failed";
+        LOG(ERROR) << "AudioObjectGetPropertyData failed";
         return false;
     }
 
     if (stream_format_.mFormatID != kAudioFormatLinearPCM)
     {
-        LOG(LS_ERROR) << "Unacceptable output stream format";
+        LOG(ERROR) << "Unacceptable output stream format";
         return false;
     }
 
     if (stream_format_.mChannelsPerFrame > kMaxDeviceChannels)
     {
-        LOG(LS_ERROR) << "Too many channels on output device (mChannelsPerFrame = "
-                      << stream_format_.mChannelsPerFrame << ")";
+        LOG(ERROR) << "Too many channels on output device (mChannelsPerFrame ="
+                   << stream_format_.mChannelsPerFrame << ")";
         return false;
     }
 
     if (stream_format_.mFormatFlags & kAudioFormatFlagIsNonInterleaved)
     {
-        LOG(LS_ERROR) << "Non-interleaved audio data is not supported."
-                         "AudioHardware streams should not have this format.";
+        LOG(ERROR) << "Non-interleaved audio data is not supported."
+                      "AudioHardware streams should not have this format.";
         return false;
     }
 
     if (!setDesiredFormat())
     {
-        LOG(LS_ERROR) << "setDesiredFormat failed";
+        LOG(ERROR) << "setDesiredFormat failed";
         return false;
     }
 
@@ -309,25 +312,26 @@ bool AudioOutputMac::initPlayout()
         output_device_id_, &property_address, &objectListenerProc, this);
     if (err != noErr)
     {
-        LOG(LS_ERROR) << "AudioObjectAddPropertyListener failed";
+        LOG(ERROR) << "AudioObjectAddPropertyListener failed";
         return false;
     }
 
     err = AudioDeviceCreateIOProcID(output_device_id_, deviceIOProc, this, &device_io_proc_id_);
     if (err != noErr)
     {
-        LOG(LS_ERROR) << "AudioDeviceCreateIOProcID failed";
+        LOG(ERROR) << "AudioDeviceCreateIOProcID failed";
         return false;
     }
 
-    LOG(LS_INFO) << "Playout initialized";
+    LOG(INFO) << "Playout initialized";
     playout_initialized_ = true;
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 void AudioOutputMac::threadRun()
 {
-    LOG(LS_INFO) << "Audio thread started";
+    LOG(INFO) << "Audio thread started";
 
     const int policy = SCHED_FIFO;
     const int min_prio = sched_get_priority_min(policy);
@@ -338,7 +342,7 @@ void AudioOutputMac::threadRun()
         param.sched_priority = max_prio - 1;
         if (pthread_setschedparam(pthread_self(), policy, &param) != 0)
         {
-            LOG(LS_ERROR) << "pthread_setschedparam failed";
+            LOG(ERROR) << "pthread_setschedparam failed";
         }
     }
 
@@ -359,13 +363,13 @@ void AudioOutputMac::threadRun()
                 if (!is_device_alive_)
                 {
                     // The render device is no longer alive; stop the worker thread.
-                    LOG(LS_INFO) << "No renderer device";
+                    LOG(INFO) << "No renderer device";
                     return;
                 }
             }
             else if (kern_err != KERN_SUCCESS)
             {
-                LOG(LS_ERROR) << "semaphore_timedwait failed: " << kern_err;
+                LOG(ERROR) << "semaphore_timedwait failed: " << kern_err;
             }
         }
 
@@ -378,6 +382,7 @@ void AudioOutputMac::threadRun()
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 bool AudioOutputMac::setDesiredFormat()
 {
     render_delay_offset_samples_ =
@@ -400,7 +405,7 @@ bool AudioOutputMac::setDesiredFormat()
     OSStatus err = AudioConverterNew(&desired_format_, &stream_format_, &converter_);
     if (err != noErr)
     {
-        LOG(LS_ERROR) << "AudioConverterNew failed";
+        LOG(ERROR) << "AudioConverterNew failed";
         return false;
     }
 
@@ -428,7 +433,7 @@ bool AudioOutputMac::setDesiredFormat()
     err = AudioObjectGetPropertyData(output_device_id_, &property_address, 0, nullptr, &size, &range);
     if (err != noErr)
     {
-        LOG(LS_ERROR) << "AudioObjectGetPropertyData failed";
+        LOG(ERROR) << "AudioObjectGetPropertyData failed";
         return false;
     }
 
@@ -443,13 +448,14 @@ bool AudioOutputMac::setDesiredFormat()
         output_device_id_, &property_address, 0, nullptr, size, &buf_byte_count);
     if (err != noErr)
     {
-        LOG(LS_ERROR) << "AudioObjectSetPropertyData failed";
+        LOG(ERROR) << "AudioObjectSetPropertyData failed";
         return false;
     }
 
     return true;
 }
 
+//--------------------------------------------------------------------------------------------------
 OSStatus AudioOutputMac::objectListenerProc(AudioObjectID object_id,
                                             UInt32 number_addresses,
                                             const AudioObjectPropertyAddress addresses[],
@@ -463,6 +469,7 @@ OSStatus AudioOutputMac::objectListenerProc(AudioObjectID object_id,
     return 0;
 }
 
+//--------------------------------------------------------------------------------------------------
 void AudioOutputMac::implObjectListenerProc(const AudioObjectID object_id,
                                             const UInt32 number_addresses,
                                             const AudioObjectPropertyAddress addresses[])
@@ -476,6 +483,7 @@ void AudioOutputMac::implObjectListenerProc(const AudioObjectID object_id,
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void AudioOutputMac::handleDeviceChange()
 {
     AudioObjectPropertyAddress property_address =
@@ -487,15 +495,16 @@ void AudioOutputMac::handleDeviceChange()
 
     if (err == kAudioHardwareBadDeviceError || device_is_alive == 0)
     {
-        LOG(LS_ERROR) << "Render device is not alive (probably removed)";
+        LOG(ERROR) << "Render device is not alive (probably removed)";
         is_device_alive_ = false;
     }
     else if (err != noErr)
     {
-        LOG(LS_ERROR) << "AudioDeviceGetPropertyData failed";
+        LOG(ERROR) << "AudioDeviceGetPropertyData failed";
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 void AudioOutputMac::handleStreamFormatChange(const AudioObjectID object_id,
                                               const AudioObjectPropertyAddress property_address)
 {
@@ -509,20 +518,20 @@ void AudioOutputMac::handleStreamFormatChange(const AudioObjectID object_id,
         object_id, &property_address, 0, nullptr, &size, &stream_format);
     if (err != noErr)
     {
-        LOG(LS_ERROR) << "AudioObjectGetPropertyData failed";
+        LOG(ERROR) << "AudioObjectGetPropertyData failed";
         return;
     }
 
     if (stream_format.mFormatID != kAudioFormatLinearPCM)
     {
-        LOG(LS_ERROR) << "Unacceptable input stream format";
+        LOG(ERROR) << "Unacceptable input stream format";
         return;
     }
 
     if (stream_format.mChannelsPerFrame > kMaxDeviceChannels)
     {
-        LOG(LS_ERROR) << "Too many channels on device (mChannelsPerFrame = "
-                      << stream_format.mChannelsPerFrame << ")";
+        LOG(ERROR) << "Too many channels on device (mChannelsPerFrame ="
+                   << stream_format.mChannelsPerFrame << ")";
         return;
     }
 
@@ -530,6 +539,7 @@ void AudioOutputMac::handleStreamFormatChange(const AudioObjectID object_id,
     setDesiredFormat();
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 OSStatus AudioOutputMac::deviceIOProc(AudioDeviceID,
                                       const AudioTimeStamp*,
@@ -547,6 +557,7 @@ OSStatus AudioOutputMac::deviceIOProc(AudioDeviceID,
     return 0;
 }
 
+//--------------------------------------------------------------------------------------------------
 // static
 OSStatus AudioOutputMac::outConverterProc(AudioConverterRef,
                                           UInt32* number_data_packets,
@@ -559,6 +570,7 @@ OSStatus AudioOutputMac::outConverterProc(AudioConverterRef,
     return self->implOutConverterProc(number_data_packets, data);
 }
 
+//--------------------------------------------------------------------------------------------------
 void AudioOutputMac::implDeviceIOProc(AudioBufferList* output_data)
 {
     // Check if we should close down audio device. Double-checked locking optimization to remove
@@ -573,7 +585,7 @@ void AudioOutputMac::implDeviceIOProc(AudioBufferList* output_data)
             AudioDeviceDestroyIOProcID(output_device_id_, device_io_proc_id_);
 
             do_stop_ = false;
-            stop_event_.signal();
+            stop_event_.notify_all();
             return;
         }
     }
@@ -595,15 +607,16 @@ void AudioOutputMac::implDeviceIOProc(AudioBufferList* output_data)
         if (err == 1)
         {
             // This is our own error.
-            LOG(LS_ERROR) << "AudioConverterFillComplexBuffer failed";
+            LOG(ERROR) << "AudioConverterFillComplexBuffer failed";
         }
         else
         {
-            LOG(LS_ERROR) << "AudioConverterFillComplexBuffer failed";
+            LOG(ERROR) << "AudioConverterFillComplexBuffer failed";
         }
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 OSStatus AudioOutputMac::implOutConverterProc(UInt32* number_data_packets, AudioBufferList* data)
 {
     DCHECK(data->mNumberBuffers == 1);
@@ -621,7 +634,7 @@ OSStatus AudioOutputMac::implOutConverterProc(UInt32* number_data_packets, Audio
     kern_return_t kern_err = semaphore_signal_all(semaphore_);
     if (kern_err != KERN_SUCCESS)
     {
-        LOG(LS_ERROR) << "semaphore_signal_all failed: " << kern_err;
+        LOG(ERROR) << "semaphore_signal_all failed:" << kern_err;
         return 1;
     }
 

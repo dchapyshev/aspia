@@ -18,6 +18,7 @@
 
 #include "base/mac/app_nap_blocker.h"
 
+#include <QtGlobal>
 #include <mutex>
 
 #include <Cocoa/Cocoa.h>
