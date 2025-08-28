@@ -15,7 +15,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  VCPKG_INSTALLED_DIR: ${{ github.workspace }}/builds/ninja-multi-vcpkg-ci/vcpkg_installed
+  VCPKG_INSTALLED_DIR: ${{ github.workspace }}/builds/ninja-vcpkg-ci/vcpkg_installed
   VCPKG_ROOT_PROJECT: ${{ github.workspace }}/vcpkg4aspia
   VCPKG_BINARY_SOURCES: 'default,readwrite'
 
@@ -27,11 +27,11 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        os: [ubuntu20.04]
+        os: [ubuntu-x64]
         arch: [x64]
         build_type: [release, debug]
         include:
-          - os: ubuntu20.04
+          - os: ubuntu-x64
             arch: x64
             triplet: x64-linux
 
@@ -76,16 +76,16 @@ jobs:
           mkdir -p $VCPKG_DOWNLOADS
 
           # Build vcpkg dependencies
-          cmake --preset ninja-multi-vcpkg-ci
+          cmake --preset ninja-vcpkg-ci
 
           # Build project
-          cmake --build --preset ninja-multi-vcpkg-ci-${{ matrix.build_type }}
+          cmake --build --preset ninja-vcpkg-ci-${{ matrix.build_type }}
 
           # Run tests
-          ctest --preset ninja-multi-vcpkg-ci-${{ matrix.build_type }}
+          ctest --preset ninja-vcpkg-ci-${{ matrix.build_type }}
 
           # Create deb packages
-          cpack --config ${{ github.workspace }}/builds/ninja-multi-vcpkg-ci/CPackConfig.cmake -C ${{ matrix.build_type }}
+          cpack --config ${{ github.workspace }}/builds/ninja-vcpkg-ci/CPackConfig.cmake -C ${{ matrix.build_type }}
 
           # Need to backup vcpkg executable to prevent it's rebuild/redownload each time
           if [ -f vcpkg4aspia/vcpkg ]; then
