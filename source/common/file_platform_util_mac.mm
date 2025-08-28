@@ -67,28 +67,28 @@ QIcon FilePlatformUtil::directoryIcon()
 
 //--------------------------------------------------------------------------------------------------
 // static
-QIcon FilePlatformUtil::driveIcon(proto::DriveList::Item::Type type)
+QIcon FilePlatformUtil::driveIcon(proto::file_transfer::DriveList::Item::Type type)
 {
     QString icon_name;
 
     switch (type)
     {
-        case proto::DriveList::Item::TYPE_HOME_FOLDER:
+        case proto::file_transfer::DriveList::Item::TYPE_HOME_FOLDER:
             icon_name = QStringLiteral(":/img/home.svg");
             break;
 
-        case proto::DriveList::Item::TYPE_DESKTOP_FOLDER:
+        case proto::file_transfer::DriveList::Item::TYPE_DESKTOP_FOLDER:
             icon_name = QStringLiteral(":/img/desktop.svg");
             break;
 
-        case proto::DriveList::Item::TYPE_ROOT_DIRECTORY:
+        case proto::file_transfer::DriveList::Item::TYPE_ROOT_DIRECTORY:
             icon_name = QStringLiteral(":/img/folder.svg");
             break;
 
-        case proto::DriveList::Item::TYPE_REMOTE:
-        case proto::DriveList::Item::TYPE_CDROM:
-        case proto::DriveList::Item::TYPE_RAM:
-        case proto::DriveList::Item::TYPE_FIXED:
+        case proto::file_transfer::DriveList::Item::TYPE_REMOTE:
+        case proto::file_transfer::DriveList::Item::TYPE_CDROM:
+        case proto::file_transfer::DriveList::Item::TYPE_RAM:
+        case proto::file_transfer::DriveList::Item::TYPE_FIXED:
         default:
             icon_name = QStringLiteral(":/img/hdd.svg");
             break;

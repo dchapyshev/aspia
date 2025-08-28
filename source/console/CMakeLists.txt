@@ -106,7 +106,7 @@ if (WIN32)
 endif()
 
 if (APPLE)
-    set(CONSOLE_PLATFORM_LIBS ${COREAUDIO_LIB} ${AUDIOTOOLBOX_LIB})
+    set(CONSOLE_PLATFORM_LIBS ${COREAUDIO_LIB} ${AUDIOTOOLBOX_LIB} portaudio)
     set(aspia_console_ICON ${PROJECT_SOURCE_DIR}/source/common/resources/aspia-console.icns)
     set(aspia_console_PLIST ${PROJECT_SOURCE_DIR}/source/console/Info.plist)
 

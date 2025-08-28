@@ -22,25 +22,35 @@
 
 namespace base {
 
-DesktopEnvironmentMac::DesktopEnvironmentMac() = default;
+//--------------------------------------------------------------------------------------------------
+DesktopEnvironmentMac::DesktopEnvironmentMac(QObject* parent)
+    : DesktopEnvironment(parent)
+{
+    // Nothing
+}
 
+//--------------------------------------------------------------------------------------------------
 DesktopEnvironmentMac::~DesktopEnvironmentMac() = default;
 
+//--------------------------------------------------------------------------------------------------
 void DesktopEnvironmentMac::disableWallpaper()
 {
     NOTIMPLEMENTED();
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopEnvironmentMac::disableFontSmoothing()
 {
     NOTIMPLEMENTED();
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopEnvironmentMac::disableEffects()
 {
     NOTIMPLEMENTED();
 }
 
+//--------------------------------------------------------------------------------------------------
 void DesktopEnvironmentMac::revertAll()
 {
     NOTIMPLEMENTED();

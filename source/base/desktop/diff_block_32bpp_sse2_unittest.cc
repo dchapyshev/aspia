@@ -22,6 +22,8 @@
 #include <gtest/gtest.h>
 #include <libyuv/cpu_id.h>
 
+#if defined(Q_PROCESSOR_X86)
+
 namespace base {
 
 namespace {
@@ -207,3 +209,5 @@ TEST(diff_block_sse2, block_difference_test_first)
 }
 
 } // namespace base
+
+#endif

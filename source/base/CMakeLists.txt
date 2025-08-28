@@ -334,20 +334,6 @@ list(APPEND SOURCE_BASE_DESKTOP_TESTS
     desktop/diff_block_32bpp_sse2_unittest.cc
     desktop/frame_unittest.cc)
 
-if (APPLE)
-    list(APPEND SOURCE_BASE_DESKTOP_MAC
-        desktop/mac/desktop_configuration_monitor.cc
-        desktop/mac/desktop_configuration_monitor.h
-        desktop/mac/desktop_configuration.mm
-        desktop/mac/desktop_configuration.h
-        desktop/mac/frame_cgimage.mm
-        desktop/mac/frame_cgimage.h
-        desktop/mac/frame_iosurface.mm
-        desktop/mac/frame_iosurface.h
-        desktop/mac/frame_provider.mm
-        desktop/mac/frame_provider.h)
-endif()
-
 if (WIN32)
     list(APPEND SOURCE_BASE_DESKTOP_WIN
         desktop/win/bitmap_info.h

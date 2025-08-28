@@ -96,7 +96,7 @@ float Frame::scaleFactor() const
 #if defined(Q_OS_MACOS)
     // At least on Windows the logical and physical pixel are the same
     // See http://crbug.com/948362.
-    if (dpi() != Point(0, 0) && dpi().x() == dpi().y())
+    if (dpi() != QPoint(0, 0) && dpi().x() == dpi().y())
         scale = dpi().x() / kStandardDPI;
 #endif
 
