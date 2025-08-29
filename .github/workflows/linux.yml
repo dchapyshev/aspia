@@ -27,13 +27,16 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        os: [ubuntu22.04]
-        arch: [x64]
+        os: [linux]
+        arch: [x64, arm64]
         build_type: [release, debug]
         include:
           - os: ubuntu22.04
             arch: x64
             triplet: x64-linux
+          - os: rpios12
+            arch: arm64
+            triplet: arm64-linux
 
     steps:
       # Step 1
