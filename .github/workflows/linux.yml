@@ -27,7 +27,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        os: [linux]
+        os: [ubuntu22.04, rpios12]
         arch: [x64, arm64]
         build_type: [release, debug]
         include:
