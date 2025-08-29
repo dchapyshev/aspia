@@ -61,7 +61,7 @@ jobs:
         if: matrix.arch != 'amd64_arm64'
         with:
           arch: ${{ matrix.arch }}
-          toolset: 14.41
+          toolset: 14.44
 
       # Step 4
       - name: Dependencies, Build, Tests (Windows/PowerShell)
