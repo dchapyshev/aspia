@@ -48,10 +48,18 @@ else()
     set(QTPROTOC_FILENAME "qtprotoc")
 endif()
 
+set(QTPROTOC_FILEPATH "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${QTPROTOC_FILENAME}")
+
+if (NOT EXISTS "${QTPROTOC_FILEPATH}")
+    set(QTPROTOC_FILEPATH "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${CMAKE_BUILD_TYPE}/${QTPROTOC_FILENAME}")
+endif()
+
+message(STATUS "QTPROTOC_FILEPATH: ${QTPROTOC_FILEPATH}")
+
 # Generate files with Qt meta types.
 protobuf_generate(LANGUAGE qt
                   TARGET aspia_proto
-                  PLUGIN "protoc-gen-qt=${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${QTPROTOC_FILENAME}"
+                  PLUGIN "protoc-gen-qt=${QTPROTOC_FILEPATH}"
                   GENERATE_EXTENSIONS .h .cc
                   ${SOURCE_PROTO})
 
