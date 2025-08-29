@@ -78,6 +78,8 @@ jobs:
           mkdir -p $VCPKG_DEFAULT_BINARY_CACHE
           mkdir -p $VCPKG_DOWNLOADS
 
+          export PATH="/Applications/CMake.app/Contents/bin:$PATH"
+
           # Build vcpkg dependencies
           arch -arch ${{ matrix.arch }} cmake --preset ninja-vcpkg-ci
 
