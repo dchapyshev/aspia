@@ -28,7 +28,6 @@ jobs:
       fail-fast: true
       matrix:
         os: [ubuntu22.04, rpios12]
-        arch: [x64, arm64]
         build_type: [release, debug]
         include:
           - os: ubuntu22.04
