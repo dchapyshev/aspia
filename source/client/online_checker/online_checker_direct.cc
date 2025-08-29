@@ -30,7 +30,7 @@ namespace client {
 
 namespace {
 
-const qint64 kNumberOfParallelTasks = 30;
+const qsizetype kNumberOfParallelTasks = 30;
 const std::chrono::seconds kTimeout { 15 };
 
 } // namespace
@@ -163,7 +163,7 @@ void OnlineCheckerDirect::start(const ComputerList& computers)
         return;
     }
 
-    int count = std::min(pending_queue_.size(), kNumberOfParallelTasks);
+    qsizetype count = std::min(pending_queue_.size(), kNumberOfParallelTasks);
     while (count != 0)
     {
         const Computer& computer = pending_queue_.front();
