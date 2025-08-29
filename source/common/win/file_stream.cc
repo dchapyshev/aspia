@@ -103,7 +103,7 @@ HRESULT FileStream::Read(void* pv, ULONG cb, ULONG* pcbRead)
         }
         else if (!buffer_.isEmpty())
         {
-            qint64 to_copy = std::min(static_cast<qint64>(cb - total_read), buffer_.size());
+            qsizetype to_copy = std::min(qsizetype(cb - total_read), buffer_.size());
             memcpy(reinterpret_cast<char*>(pv) + total_read, buffer_.data(), to_copy);
 
             buffer_.remove(0, to_copy);
