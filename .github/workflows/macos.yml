@@ -27,13 +27,16 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        os: [macos12]
-        arch: [x64]
+        os: [macos15]
+        arch: [arm64, x86_64]
         build_type: [release, debug]
         include:
-          - os: macos12
-            arch: x64
+          - os: macos15
+            arch: x86_64
             triplet: x64-osx
+          - os: macos15
+            arch: arm64
+            triplet: arm64-osx
 
     steps:
       # Step 1
@@ -76,10 +79,10 @@ jobs:
           mkdir -p $VCPKG_DOWNLOADS
 
           # Build vcpkg dependencies
-          cmake --preset ninja-multi-vcpkg-ci
+          arch -arch ${{ matrix.arch }} cmake --preset ninja-multi-vcpkg-ci
 
           # Build project
-          cmake --build --preset ninja-multi-vcpkg-ci-${{ matrix.build_type }}
+          arch -arch ${{ matrix.arch }} cmake --build --preset ninja-multi-vcpkg-ci-${{ matrix.build_type }}
 
           # Run tests
           ctest --preset ninja-multi-vcpkg-ci-${{ matrix.build_type }}
