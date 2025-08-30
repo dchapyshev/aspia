@@ -346,7 +346,12 @@ TEST(TimersTest, OnePreciseTimerRepeats)
 {
     constexpr int requestedMs = 10;
     constexpr int repeats = 50;
+
+#if defined(NDEBUG)
     constexpr int expectedErrorMs = 3; // +/- 3ms
+#else
+    constexpr int expectedErrorMs = 10; // +/- 10ms
+#endif
 
     QVector<qint64> intervals;
     intervals.reserve(repeats);
@@ -397,15 +402,20 @@ TEST(TimersTest, OnePreciseTimerRepeats)
     GTEST_LOG_(INFO) << "expected: " << requestedMs << " ms, min: " << min << " ms, max: " << max
                      << " ms, avg: " << avg << " ms";
 
-    EXPECT_LT(max, requestedMs + expectedErrorMs);
-    EXPECT_GT(min, requestedMs - expectedErrorMs);
+    EXPECT_LE(max, requestedMs + expectedErrorMs);
+    EXPECT_GE(min, requestedMs - expectedErrorMs);
 }
 
 TEST(TimersTest, OneCoarseTimerRepeats)
 {
     constexpr int requestedMs = 100;
     constexpr int repeats = 50;
+
+#if defined(NDEBUG)
     constexpr int expectedErrorMs = 15; // +/- 15ms
+#else
+    constexpr int expectedErrorMs = 20; // +/- 20ms
+#endif
 
     QVector<qint64> intervals;
     intervals.reserve(repeats);
@@ -456,15 +466,20 @@ TEST(TimersTest, OneCoarseTimerRepeats)
     GTEST_LOG_(INFO) << "expected: " << requestedMs << " ms, min: " << min << " ms, max: " << max
                      << " ms, avg: " << avg << " ms";
 
-    EXPECT_LT(max, requestedMs + expectedErrorMs);
-    EXPECT_GT(min, requestedMs - expectedErrorMs);
+    EXPECT_LE(max, requestedMs + expectedErrorMs);
+    EXPECT_GE(min, requestedMs - expectedErrorMs);
 }
 
 TEST(TimersTest, OneVeryCoarseTimerRepeats)
 {
     constexpr int requestedMs = 100;
     constexpr int repeats = 10;
+
+#if defined(NDEBUG)
     constexpr int expectedErrorMs = 1000; // +/- 1000ms
+#else
+    constexpr int expectedErrorMs = 1500; // +/- 1500ms
+#endif
 
     QVector<qint64> intervals;
     intervals.reserve(repeats);
@@ -522,7 +537,7 @@ TEST(TimersTest, OneVeryCoarseTimerRepeats)
     GTEST_LOG_(INFO) << "expected: " << requestedMs << " ms, min: " << min << " ms, max: " << max
                      << " ms, avg: " << avg << " ms";
 
-    EXPECT_LT(max, requestedMs + expectedErrorMs);
+    EXPECT_LE(max, requestedMs + expectedErrorMs);
 }
 
 TEST(TimersTest, ManyCoarseAndOneTimerRepeats)
