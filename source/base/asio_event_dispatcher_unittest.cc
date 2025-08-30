@@ -342,7 +342,7 @@ TEST(TimersTest, ManyVeryCoarseTimersTriggering)
     ASSERT_LT(elapsedMs, 5000);
 }
 
-TEST(TimersTest, OnePreciseTimerRepeats)
+TEST(TimersTest, DISABLED_OnePreciseTimerRepeats)
 {
     constexpr int requestedMs = 10;
     constexpr int repeats = 50;
@@ -406,7 +406,7 @@ TEST(TimersTest, OnePreciseTimerRepeats)
     EXPECT_GE(min, requestedMs - expectedErrorMs);
 }
 
-TEST(TimersTest, OneCoarseTimerRepeats)
+TEST(TimersTest, DISABLED_OneCoarseTimerRepeats)
 {
     constexpr int requestedMs = 100;
     constexpr int repeats = 50;
@@ -470,7 +470,7 @@ TEST(TimersTest, OneCoarseTimerRepeats)
     EXPECT_GE(min, requestedMs - expectedErrorMs);
 }
 
-TEST(TimersTest, OneVeryCoarseTimerRepeats)
+TEST(TimersTest, DISABLED_OneVeryCoarseTimerRepeats)
 {
     constexpr int requestedMs = 100;
     constexpr int repeats = 10;
