@@ -64,7 +64,7 @@ size_t calcFileSize(std::string_view file_name)
     file_path.append(file_name);
 
     std::error_code error_code;
-    size_t size = std::filesystem::file_size(file_path, error_code);
+    size_t size = static_cast<size_t>(std::filesystem::file_size(file_path, error_code));
     if (error_code)
         return 0;
 
@@ -95,7 +95,7 @@ std::string calcFileHash(std::string_view file_name)
     {
         std::array<char, 1024> buffer;
         stream.read(buffer.data(), buffer.size());
-        sha256_append(&sha, buffer.data(), stream.gcount());
+        sha256_append(&sha, buffer.data(), static_cast<size_t>(stream.gcount()));
     }
 
     char hex[SHA256_HEX_SIZE] = { 0 };
