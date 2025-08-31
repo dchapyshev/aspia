@@ -81,6 +81,8 @@ find_package(zstd CONFIG REQUIRED)
 if (WIN32)
     find_package(Qt6EntryPointPrivate CONFIG REQUIRED)
     find_package(WDK REQUIRED)
+
+    set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 endif()
 
 if (LINUX)
