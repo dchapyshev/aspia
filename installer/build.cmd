@@ -1,6 +1,6 @@
 @echo off
 
-set SDK_VERSION=10.0.18362.0
+set SDK_VERSION=10.0.19041.0
 
 set ASPIA_VERSION=%1
 set ASPIA_ARCH=%2
