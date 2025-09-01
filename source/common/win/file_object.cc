@@ -188,7 +188,7 @@ HRESULT FileObject::GetData(FORMATETC* pFormatEtc, STGMEDIUM* pMedium)
         const int index = pFormatEtc->lindex;
         const int count = files_.file_size();
 
-        if (index < 0 && index >= count)
+        if (index < 0 || index >= count)
         {
             LOG(ERROR) << "Invalid lindex:" << index << "(count:" << count << ")";
             return DV_E_LINDEX;
