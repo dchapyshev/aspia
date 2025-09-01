@@ -32,7 +32,7 @@ SessionInfo::SessionInfo(SessionId session_id)
     if (!WTSQuerySessionInformationW(WTS_CURRENT_SERVER_HANDLE,
                                      session_id,
                                      WTSSessionInfoEx,
-                                     reinterpret_cast<LPWSTR*>(info.recieve()),
+                                     reinterpret_cast<LPWSTR*>(info.receive()),
                                      &bytes_returned))
     {
         PLOG(ERROR) << "WTSQuerySessionInformationW failed";

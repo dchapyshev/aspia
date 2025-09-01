@@ -28,7 +28,7 @@ SessionEnumerator::SessionEnumerator()
 {
     DWORD level = 1;
 
-    if (!WTSEnumerateSessionsExW(WTS_CURRENT_SERVER_HANDLE, &level, 0, info_.recieve(), &count_))
+    if (!WTSEnumerateSessionsExW(WTS_CURRENT_SERVER_HANDLE, &level, 0, info_.receive(), &count_))
     {
         PLOG(ERROR) << "WTSEnumerateSessionsExW failed";
         return;

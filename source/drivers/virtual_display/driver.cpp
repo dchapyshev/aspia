@@ -312,7 +312,7 @@ void SwapChainProcessor::runCore()
             // for better quality if there is no new frame for a while
             acquired_buffer.Reset();
             
-            // Indicate to OS that we have finished inital processing of the frame, it is a hint that
+            // Indicate to OS that we have finished initial processing of the frame, it is a hint that
             // OS could start preparing another frame
             hr = IddCxSwapChainFinishedProcessingFrame(swap_chain_);
             if (FAILED(hr))

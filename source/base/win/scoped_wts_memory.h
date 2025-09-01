@@ -54,7 +54,7 @@ public:
         return memory;
     }
 
-    T** recieve()
+    T** receive()
     {
         close();
         return &memory_;
