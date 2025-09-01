@@ -541,12 +541,12 @@ void RouterManagerWindow::onErrorOccurred(base::TcpChannel::ErrorCode error_code
             break;
 
         case base::TcpChannel::ErrorCode::ACCESS_DENIED:
-            message = QT_TR_NOOP("An error occured while authenticating: wrong user name or password.");
+            message = QT_TR_NOOP("An error occurred while authenticating: wrong user name or password.");
             break;
 
         case base::TcpChannel::ErrorCode::VERSION_ERROR:
             message = QT_TR_NOOP("Version of the application you are connecting to is less than "
-                                 " the minimum supported version.");
+                                 "the minimum supported version.");
             break;
 
         case base::TcpChannel::ErrorCode::SESSION_DENIED:

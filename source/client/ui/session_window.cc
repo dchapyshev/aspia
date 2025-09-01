@@ -313,7 +313,7 @@ QString SessionWindow::netErrorToString(base::TcpChannel::ErrorCode error_code)
 
         case base::TcpChannel::ErrorCode::VERSION_ERROR:
             message = QT_TR_NOOP("Version of the application you are connecting to is less than "
-                                 " the minimum supported version.");
+                                 "the minimum supported version.");
             break;
 
         case base::TcpChannel::ErrorCode::NETWORK_ERROR:
