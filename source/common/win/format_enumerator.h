@@ -45,7 +45,7 @@ private:
 
     LONG ref_count_ = 1;
     const QVector<FORMATETC> formats_;
-    qsizetype index_;
+    qsizetype index_ = 0;
 };
 
 } // namespace common
