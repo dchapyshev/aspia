@@ -32,7 +32,7 @@ std::unique_ptr<Frame> createTestFrame(const QRect& rect, int pixels_value)
     memset(frame->frameData(),
            pixels_value,
            static_cast<size_t>(frame->stride()) * static_cast<size_t>(size.height()));
-    return std::move(frame);
+    return frame;
 }
 
 } // namespace

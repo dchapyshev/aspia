@@ -249,7 +249,7 @@ std::optional<base::User> readUser(sqlite3_stmt* statement)
     user.sessions  = *sessions;
     user.flags     = *flags;
 
-    return std::move(user);
+    return user;
 }
 
 } // namespace
