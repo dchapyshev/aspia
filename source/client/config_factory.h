@@ -20,7 +20,6 @@
 #define CLIENT_CONFIG_FACTORY_H
 
 #include "proto/desktop.h"
-#include "proto/port_forwarding.h"
 
 namespace client {
 
@@ -29,11 +28,9 @@ class ConfigFactory
 public:
     static proto::desktop::Config defaultDesktopManageConfig();
     static proto::desktop::Config defaultDesktopViewConfig();
-    static proto::port_forwarding::Config defaultPortForwardingConfig();
 
     static void setDefaultDesktopManageConfig(proto::desktop::Config* config);
     static void setDefaultDesktopViewConfig(proto::desktop::Config* config);
-    static void setDefaultPortForwardingConfig(proto::port_forwarding::Config* config);
 
     // Corrects invalid values in the configuration if they are.
     static void fixupDesktopConfig(proto::desktop::Config* config);

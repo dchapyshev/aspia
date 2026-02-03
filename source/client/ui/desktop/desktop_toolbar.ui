@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>469</width>
-    <height>46</height>
+    <height>51</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -74,7 +74,6 @@
      <addaction name="action_text_chat"/>
      <addaction name="action_task_manager"/>
      <addaction name="action_system_info"/>
-     <addaction name="action_port_forwarding"/>
      <addaction name="separator"/>
      <addaction name="action_update"/>
      <addaction name="action_menu"/>
@@ -467,21 +466,6 @@
    </property>
    <property name="text">
     <string>Pause audio when minimizing</string>
-   </property>
-   <property name="visible">
-    <bool>false</bool>
-   </property>
-  </action>
-  <action name="action_port_forwarding">
-   <property name="icon">
-    <iconset resource="../../../common/resources/common.qrc">
-     <normaloff>:/img/ethernet-off.svg</normaloff>:/img/ethernet-off.svg</iconset>
-   </property>
-   <property name="text">
-    <string>Port Forwarding</string>
-   </property>
-   <property name="toolTip">
-    <string>Port Forwarding</string>
    </property>
    <property name="visible">
     <bool>false</bool>

@@ -21,7 +21,6 @@
 #include "base/logging.h"
 #include "host/client_session_desktop.h"
 #include "host/client_session_file_transfer.h"
-#include "host/client_session_port_forwarding.h"
 #include "host/client_session_system_info.h"
 #include "host/client_session_text_chat.h"
 
@@ -73,9 +72,6 @@ ClientSession* ClientSession::create(base::TcpChannel* channel, QObject* parent)
 
         case proto::peer::SESSION_TYPE_TEXT_CHAT:
             return new ClientSessionTextChat(channel, parent);
-
-        case proto::peer::SESSION_TYPE_PORT_FORWARDING:
-            return new ClientSessionPortForwarding(channel, parent);
 
         default:
         {

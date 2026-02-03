@@ -557,10 +557,6 @@ int clientMain(int argc, char* argv[])
         {
             config.session_type = proto::peer::SESSION_TYPE_TEXT_CHAT;
         }
-        else if (session_type == "port-forwarding")
-        {
-            config.session_type = proto::peer::SESSION_TYPE_PORT_FORWARDING;
-        }
         else
         {
             LOG(ERROR) << "Unknown session type specified:" << session_type;

@@ -94,7 +94,6 @@ MainWindow::MainWindow(QWidget* parent)
     ui.action_file_transfer->setChecked(one_time_sessions & proto::peer::SESSION_TYPE_FILE_TRANSFER);
     ui.action_system_info->setChecked(one_time_sessions & proto::peer::SESSION_TYPE_SYSTEM_INFO);
     ui.action_text_chat->setChecked(one_time_sessions & proto::peer::SESSION_TYPE_TEXT_CHAT);
-    ui.action_port_forwarding->setChecked(one_time_sessions & proto::peer::SESSION_TYPE_PORT_FORWARDING);
 
     connect(ui.menu_access, &QMenu::triggered, this, &MainWindow::onOneTimeSessionsChanged);
 
@@ -929,9 +928,6 @@ quint32 MainWindow::calcOneTimeSessions()
 
     if (ui.action_text_chat->isChecked())
         sessions |= proto::peer::SESSION_TYPE_TEXT_CHAT;
-
-    if (ui.action_port_forwarding->isChecked())
-        sessions |= proto::peer::SESSION_TYPE_PORT_FORWARDING;
 
     return sessions;
 }

@@ -60,7 +60,7 @@
      <x>0</x>
      <y>0</y>
      <width>891</width>
-     <height>26</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_file">
@@ -113,7 +113,6 @@
     <addaction name="action_file_transfer"/>
     <addaction name="action_text_chat"/>
     <addaction name="action_system_info"/>
-    <addaction name="action_port_forwarding"/>
    </widget>
    <widget class="QMenu" name="menu_help">
     <property name="title">
@@ -206,7 +205,6 @@
    <addaction name="action_file_transfer"/>
    <addaction name="action_text_chat"/>
    <addaction name="action_system_info"/>
-   <addaction name="action_port_forwarding"/>
    <addaction name="separator"/>
    <addaction name="action_about"/>
    <addaction name="action_exit"/>
@@ -703,30 +701,6 @@
    </property>
    <property name="toolTip">
     <string>Export computer group to file</string>
-   </property>
-  </action>
-  <action name="action_port_forwarding">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="../common/resources/common.qrc">
-     <normaloff>:/img/ethernet-off.svg</normaloff>:/img/ethernet-off.svg</iconset>
-   </property>
-   <property name="text">
-    <string>Port Forwarding</string>
-   </property>
-  </action>
-  <action name="action_port_forwarding_connect">
-   <property name="icon">
-    <iconset resource="../common/resources/common.qrc">
-     <normaloff>:/img/ethernet-off.svg</normaloff>:/img/ethernet-off.svg</iconset>
-   </property>
-   <property name="text">
-    <string>Port Forwarding</string>
-   </property>
-   <property name="toolTip">
-    <string>Port Forwarding</string>
    </property>
   </action>
   <action name="action_large_icons">

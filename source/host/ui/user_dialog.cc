@@ -81,7 +81,6 @@ UserDialog::UserDialog(const base::User& user, const QStringList& exist_names, Q
     add_session(proto::peer::SESSION_TYPE_FILE_TRANSFER);
     add_session(proto::peer::SESSION_TYPE_SYSTEM_INFO);
     add_session(proto::peer::SESSION_TYPE_TEXT_CHAT);
-    add_session(proto::peer::SESSION_TYPE_PORT_FORWARDING);
 
     connect(ui.button_check_all, &QPushButton::clicked, this, &UserDialog::onCheckAllButtonPressed);
     connect(ui.button_check_none, &QPushButton::clicked, this, &UserDialog::onCheckNoneButtonPressed);

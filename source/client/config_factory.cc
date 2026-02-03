@@ -55,15 +55,6 @@ proto::desktop::Config ConfigFactory::defaultDesktopViewConfig()
 
 //--------------------------------------------------------------------------------------------------
 // static
-proto::port_forwarding::Config ConfigFactory::defaultPortForwardingConfig()
-{
-    proto::port_forwarding::Config config;
-    setDefaultPortForwardingConfig(&config);
-    return config;
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
 void ConfigFactory::setDefaultDesktopManageConfig(proto::desktop::Config* config)
 {
     DCHECK(config);
@@ -98,18 +89,6 @@ void ConfigFactory::setDefaultDesktopViewConfig(proto::desktop::Config* config)
     config->mutable_pixel_format()->CopyFrom(base::serialize(base::PixelFormat::RGB332()));
 
     fixupDesktopConfig(config);
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
-void ConfigFactory::setDefaultPortForwardingConfig(proto::port_forwarding::Config* config)
-{
-    DCHECK(config);
-
-    config->set_command_line(std::string());
-    config->set_local_port(8080);
-    config->set_remote_port(8080);
-    config->set_remote_host(std::string());
 }
 
 //--------------------------------------------------------------------------------------------------

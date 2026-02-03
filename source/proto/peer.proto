@@ -36,10 +36,9 @@ enum SessionType
     SESSION_TYPE_FILE_TRANSFER   = 4;
     SESSION_TYPE_SYSTEM_INFO     = 8;
     SESSION_TYPE_TEXT_CHAT       = 16;
-    SESSION_TYPE_PORT_FORWARDING = 32;
 
     // When adding or removing session types, you need to recalculate this value.
-    SESSION_TYPE_ALL            = 63;
+    SESSION_TYPE_ALL            = 31;
 }
 
 message Version

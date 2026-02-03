@@ -29,7 +29,6 @@
 #include "base/version_constants.h"
 #include "client/ui/desktop/desktop_session_window.h"
 #include "client/ui/file_transfer/file_transfer_session_window.h"
-#include "client/ui/port_forwarding/port_forwarding_session_window.h"
 #include "client/ui/sys_info/system_info_session_window.h"
 #include "client/ui/text_chat/text_chat_session_window.h"
 #include "client/ui/router_manager/router_manager_window.h"
@@ -145,9 +144,6 @@ MainWindow::MainWindow(const QString& file_path)
     connect(ui.action_text_chat_connect, &QAction::triggered,
             this, &MainWindow::onTextChatConnect);
 
-    connect(ui.action_port_forwarding_connect, &QAction::triggered,
-            this, &MainWindow::onPortForwardingConnect);
-
     connect(ui.action_show_icons_in_menus, &QAction::triggered, this, [=](bool enable)
     {
         Application* instance = Application::instance();
@@ -174,7 +170,6 @@ MainWindow::MainWindow(const QString& file_path)
     session_type_group->addAction(ui.action_file_transfer);
     session_type_group->addAction(ui.action_system_info);
     session_type_group->addAction(ui.action_text_chat);
-    session_type_group->addAction(ui.action_port_forwarding);
 
     switch (settings.sessionType())
     {
@@ -196,10 +191,6 @@ MainWindow::MainWindow(const QString& file_path)
 
         case proto::peer::SESSION_TYPE_TEXT_CHAT:
             ui.action_text_chat->setChecked(true);
-            break;
-
-        case proto::peer::SESSION_TYPE_PORT_FORWARDING:
-            ui.action_port_forwarding->setChecked(true);
             break;
 
         default:
@@ -894,32 +885,6 @@ void MainWindow::onTextChatConnect()
 }
 
 //--------------------------------------------------------------------------------------------------
-void MainWindow::onPortForwardingConnect()
-{
-    LOG(INFO) << "[ACTION] Connect to port forwarding session";
-
-    AddressBookTab* tab = currentAddressBookTab();
-    if (tab)
-    {
-        ComputerItem* computer_item = tab->currentComputer();
-        if (computer_item)
-        {
-            proto::address_book::Computer computer = computer_item->computerToConnect();
-            computer.set_session_type(proto::peer::SESSION_TYPE_PORT_FORWARDING);
-            connectToComputer(computer, tab->displayName(), tab->routerConfig());
-        }
-        else
-        {
-            LOG(ERROR) << "No active computer";
-        }
-    }
-    else
-    {
-        LOG(ERROR) << "No active tab";
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
 void MainWindow::onCurrentTabChanged(int index)
 {
     LOG(INFO) << "[ACTION] Current tab changed to:" << index;
@@ -1146,7 +1111,6 @@ void MainWindow::onComputerContextMenu(ComputerItem* computer_item, const QPoint
         menu.addAction(ui.action_file_transfer_connect);
         menu.addAction(ui.action_text_chat_connect);
         menu.addAction(ui.action_system_info_connect);
-        menu.addAction(ui.action_port_forwarding_connect);
         menu.addSeparator();
         menu.addAction(ui.action_modify_computer);
         menu.addAction(ui.action_copy_computer);
@@ -1198,10 +1162,6 @@ void MainWindow::onComputerDoubleClicked(const proto::address_book::Computer& co
     else if (ui.action_text_chat->isChecked())
     {
         computer_to_connect.set_session_type(proto::peer::SESSION_TYPE_TEXT_CHAT);
-    }
-    else if (ui.action_port_forwarding->isChecked())
-    {
-        computer_to_connect.set_session_type(proto::peer::SESSION_TYPE_PORT_FORWARDING);
     }
     else
     {
@@ -1480,8 +1440,6 @@ void MainWindow::closeEvent(QCloseEvent* event)
         settings.setSessionType(proto::peer::SESSION_TYPE_SYSTEM_INFO);
     else if (ui.action_text_chat->isChecked())
         settings.setSessionType(proto::peer::SESSION_TYPE_TEXT_CHAT);
-    else if (ui.action_port_forwarding->isChecked())
-        settings.setSessionType(proto::peer::SESSION_TYPE_PORT_FORWARDING);
 
     QApplication::quit();
     QMainWindow::closeEvent(event);
@@ -1757,13 +1715,6 @@ void MainWindow::connectToComputer(const proto::address_book::Computer& computer
         case proto::peer::SESSION_TYPE_TEXT_CHAT:
             session_window = new client::TextChatSessionWindow();
             break;
-
-        case proto::peer::SESSION_TYPE_PORT_FORWARDING:
-        {
-            session_window = new client::PortForwardingSessionWindow(
-                computer.session_config().port_forwarding());
-        }
-        break;
 
         default:
             NOTREACHED();

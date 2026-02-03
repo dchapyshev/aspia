@@ -23,7 +23,6 @@ list(APPEND SOURCE_PROTO
     file_transfer.proto
     key_exchange.proto
     peer.proto
-    port_forwarding.proto
     host_internal.proto
     relay_peer.proto
     router.proto

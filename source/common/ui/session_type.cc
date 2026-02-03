@@ -44,9 +44,6 @@ const char* sessionTypeToString(proto::peer::SessionType session_type)
         case proto::peer::SESSION_TYPE_TEXT_CHAT:
             return QT_TRANSLATE_NOOP("SessionType", "Text Chat");
 
-        case proto::peer::SESSION_TYPE_PORT_FORWARDING:
-            return QT_TRANSLATE_NOOP("SessionType", "Port Forwarding");
-
         default:
             return "";
     }
@@ -71,9 +68,6 @@ const char* sessionTypeToShortString(proto::peer::SessionType session_type)
 
         case proto::peer::SESSION_TYPE_TEXT_CHAT:
             return QT_TRANSLATE_NOOP("SessionType", "Chat");
-
-        case proto::peer::SESSION_TYPE_PORT_FORWARDING:
-            return QT_TRANSLATE_NOOP("SessionType", "Ports");
 
         default:
             return "";
@@ -113,9 +107,6 @@ QIcon sessionIcon(proto::peer::SessionType session_type)
 
         case proto::peer::SESSION_TYPE_TEXT_CHAT:
             return QIcon(":/img/chat.svg");
-
-        case proto::peer::SESSION_TYPE_PORT_FORWARDING:
-            return QIcon(":/img/ethernet-off.svg");
 
         default:
             return QIcon();

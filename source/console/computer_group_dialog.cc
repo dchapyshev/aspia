@@ -27,7 +27,6 @@
 #include "console/computer_group_dialog_desktop.h"
 #include "console/computer_group_dialog_general.h"
 #include "console/computer_group_dialog_parent.h"
-#include "console/computer_group_dialog_port_forwarding.h"
 
 namespace console {
 
@@ -42,8 +41,7 @@ enum ItemType
     ITEM_TYPE_PARENT,
     ITEM_TYPE_GENERAL,
     ITEM_TYPE_DESKTOP_MANAGE,
-    ITEM_TYPE_DESKTOP_VIEW,
-    ITEM_TYPE_PORT_FORWARDING
+    ITEM_TYPE_DESKTOP_VIEW
 };
 
 } // namespace
@@ -95,13 +93,8 @@ ComputerGroupDialog::ComputerGroupDialog(QWidget* parent,
     desktop_view_item->setIcon(0, common::sessionIcon(proto::peer::SESSION_TYPE_DESKTOP_VIEW));
     desktop_view_item->setText(0, common::sessionShortName(proto::peer::SESSION_TYPE_DESKTOP_VIEW));
 
-    QTreeWidgetItem* port_forwarding_item = new QTreeWidgetItem(ITEM_TYPE_PORT_FORWARDING);
-    port_forwarding_item->setIcon(0, common::sessionIcon(proto::peer::SESSION_TYPE_PORT_FORWARDING));
-    port_forwarding_item->setText(0, common::sessionShortName(proto::peer::SESSION_TYPE_PORT_FORWARDING));
-
     sessions_item->addChild(desktop_manage_item);
     sessions_item->addChild(desktop_view_item);
-    sessions_item->addChild(port_forwarding_item);
 
     ComputerGroupDialogParent* parent_tab =
         new ComputerGroupDialogParent(ITEM_TYPE_PARENT, false, ui.widget);
@@ -111,20 +104,16 @@ ComputerGroupDialog::ComputerGroupDialog(QWidget* parent,
         new ComputerGroupDialogDesktop(ITEM_TYPE_DESKTOP_MANAGE, false, ui.widget);
     ComputerGroupDialogDesktop* desktop_view_tab =
         new ComputerGroupDialogDesktop(ITEM_TYPE_DESKTOP_VIEW, false, ui.widget);
-    ComputerGroupDialogPortForwarding* port_forwarding_tab =
-        new ComputerGroupDialogPortForwarding(ITEM_TYPE_PORT_FORWARDING, false, ui.widget);
 
     general_tab->restoreSettings(computer_group_->config());
     desktop_manage_tab->restoreSettings(
         proto::peer::SESSION_TYPE_DESKTOP_MANAGE, computer_group_->config());
     desktop_view_tab->restoreSettings(
         proto::peer::SESSION_TYPE_DESKTOP_VIEW, computer_group_->config());
-    port_forwarding_tab->restoreSettings(computer_group_->config());
 
     tabs_.append(general_tab);
     tabs_.append(desktop_manage_tab);
     tabs_.append(desktop_view_tab);
-    tabs_.append(port_forwarding_tab);
     tabs_.append(parent_tab);
 
     QSize min_size;
@@ -296,13 +285,6 @@ bool ComputerGroupDialog::saveChanges()
 
             desktop_tab->saveSettings(proto::peer::SESSION_TYPE_DESKTOP_VIEW,
                 computer_group_->mutable_config());
-        }
-        else if (type == ITEM_TYPE_PORT_FORWARDING)
-        {
-            ComputerGroupDialogPortForwarding* port_forwarding_tab =
-                static_cast<ComputerGroupDialogPortForwarding*>(tab);
-
-            port_forwarding_tab->saveSettings(computer_group_->mutable_config());
         }
     }
 

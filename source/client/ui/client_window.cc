@@ -513,7 +513,6 @@ void ClientWindow::reloadSessionTypes()
     add_session(proto::peer::SESSION_TYPE_FILE_TRANSFER);
     add_session(proto::peer::SESSION_TYPE_SYSTEM_INFO);
     add_session(proto::peer::SESSION_TYPE_TEXT_CHAT);
-    add_session(proto::peer::SESSION_TYPE_PORT_FORWARDING);
 
     int item_index = combobox->findData(QVariant(current_session_type));
     if (item_index != -1)

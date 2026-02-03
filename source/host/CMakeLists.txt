@@ -23,8 +23,6 @@ list(APPEND SOURCE_HOST_CORE
     client_session_desktop.h
     client_session_file_transfer.cc
     client_session_file_transfer.h
-    client_session_port_forwarding.cc
-    client_session_port_forwarding.h
     client_session_system_info.cc
     client_session_system_info.h
     client_session_text_chat.cc

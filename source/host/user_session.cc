@@ -174,8 +174,7 @@ void UserSession::onClientSession(ClientSession* client_session)
     bool confirm_required = true;
 
     proto::peer::SessionType session_type = client_session->sessionType();
-    if (session_type == proto::peer::SESSION_TYPE_SYSTEM_INFO ||
-        session_type == proto::peer::SESSION_TYPE_PORT_FORWARDING)
+    if (session_type == proto::peer::SESSION_TYPE_SYSTEM_INFO)
     {
         LOG(INFO) << "Confirmation for system info session NOT required (sid" << session_id_ << ")";
         confirm_required = false;
@@ -823,8 +822,7 @@ void UserSession::sendConnectEvent(const ClientSession& client_session)
     }
 
     proto::peer::SessionType session_type = client_session.sessionType();
-    if (session_type == proto::peer::SESSION_TYPE_SYSTEM_INFO ||
-        session_type == proto::peer::SESSION_TYPE_PORT_FORWARDING)
+    if (session_type == proto::peer::SESSION_TYPE_SYSTEM_INFO)
     {
         LOG(INFO) << "Notify for" << session_type << "session is NOT required (sid" << session_id_ << ")";
         return;
@@ -938,7 +936,6 @@ void UserSession::addNewClientSession(ClientSession* client_session)
         case proto::peer::SESSION_TYPE_FILE_TRANSFER:
         case proto::peer::SESSION_TYPE_SYSTEM_INFO:
         case proto::peer::SESSION_TYPE_TEXT_CHAT:
-        case proto::peer::SESSION_TYPE_PORT_FORWARDING:
             LOG(INFO) << "New session:" << session_type << " (sid" << session_id_ << ")";
             break;
 
