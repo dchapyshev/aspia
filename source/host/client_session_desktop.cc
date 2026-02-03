@@ -375,6 +375,12 @@ void ClientSessionDesktop::setVideoErrorCode(proto::desktop::VideoErrorCode erro
 //--------------------------------------------------------------------------------------------------
 void ClientSessionDesktop::setCursorPosition(const proto::desktop::CursorPosition& cursor_position)
 {
+    if (!scale_reducer_)
+    {
+        LOG(ERROR) << "Scale reducer is not initialized!";
+        return;
+    }
+
     if (!desktop_session_config_.cursor_position)
         return;
 
