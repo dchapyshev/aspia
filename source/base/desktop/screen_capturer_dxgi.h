@@ -61,7 +61,7 @@ private:
 
     int current_screen_index_ = -1;
     ScreenId current_screen_id_ = kFullDesktopScreenId;
-    FrameQueue<DxgiFrame> queue_;
+    std::unique_ptr<DxgiFrame> frame_;
     std::unique_ptr<DxgiCursor> cursor_;
     QVector<std::pair<QRect, QPoint>> dpi_for_rect_;
     int temporary_error_count_ = 0;

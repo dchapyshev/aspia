@@ -210,24 +210,20 @@ const Frame* ScreenCapturerDxgi::captureFrame(Error* error)
 {
     DCHECK(error);
 
-    queue_.moveToNextFrame();
-
-    if (!queue_.currentFrame())
+    if (!frame_)
     {
-        queue_.replaceCurrentFrame(
-            std::make_unique<DxgiFrame>(controller_, sharedMemoryFactory()));
+        frame_ = std::make_unique<DxgiFrame>(controller_, sharedMemoryFactory());
     }
 
     DxgiDuplicatorController::Result result;
 
     if (current_screen_index_ == -1)
     {
-        result = controller_->duplicate(queue_.currentFrame(), cursor_.get());
+        result = controller_->duplicate(frame_.get(), cursor_.get());
     }
     else
     {
-        result = controller_->duplicateMonitor(
-            queue_.currentFrame(), cursor_.get(), current_screen_index_);
+        result = controller_->duplicateMonitor(frame_.get(), cursor_.get(), current_screen_index_);
     }
 
     using DuplicateResult = DxgiDuplicatorController::Result;
@@ -244,7 +240,7 @@ const Frame* ScreenCapturerDxgi::captureFrame(Error* error)
         {
             temporary_error_count_ = 0;
             *error = Error::SUCCEEDED;
-            return queue_.currentFrame()->frame().get();
+            return frame_->frame().get();
         }
 
         case DuplicateResult::UNSUPPORTED_SESSION:
@@ -324,7 +320,7 @@ QPoint ScreenCapturerDxgi::cursorPosition()
 //--------------------------------------------------------------------------------------------------
 void ScreenCapturerDxgi::reset()
 {
-    queue_.reset();
+    frame_.reset();
 }
 
 } // namespace base
