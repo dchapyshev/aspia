@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <WixLocalization Culture="fr-fr" xmlns="http://schemas.microsoft.com/wix/2006/localization">
     <String Id="Locale" Overridable="yes">fr</String>
-    <String Id="ProductName" Overridable="yes">Relais Aspia</String>
+    <String Id="ProductName" Overridable="yes">Relais SmartCafe</String>
     <String Id="DowngradeErrorMessage" Overridable="yes">Une version plus récente de l application est déjà installée.</String>
 </WixLocalization>

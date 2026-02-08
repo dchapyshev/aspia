@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <WixLocalization Culture="ja-jp" xmlns="http://schemas.microsoft.com/wix/2006/localization">
     <String Id="Locale" Overridable="yes">ja</String>
-    <String Id="ProductName" Overridable="yes">Aspia Host</String>
+    <String Id="ProductName" Overridable="yes">SmartCafe Host</String>
     <String Id="DowngradeErrorMessage" Overridable="yes">A newer version of the application is already installed.</String>
     <String Id="CreateDesktopShortcut" Overridable="yes">Create desktop shortcut</String>
     <String Id="CreateProgramMenuShortcut" Overridable="yes">Create shortcut in the Start menu</String>

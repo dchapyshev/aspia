@@ -1,5 +1,5 @@
 #
-# Aspia Project
+# SmartCafe Project
 # Copyright (C) 2016-2025 Dmitry Chapyshev <dmitry@aspia.ru>
 #
 # This program is free software: you can redistribute it and/or modify
@@ -17,3 +17,4 @@
 #
 
 add_executable(aspia_sha256 main.cc sha256.cc sha256.h)
+set_target_properties(aspia_sha256 PROPERTIES OUTPUT_NAME "smartcafe_sha256")

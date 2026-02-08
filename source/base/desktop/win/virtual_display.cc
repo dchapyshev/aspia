@@ -1,5 +1,5 @@
 //
-// Aspia Project
+// SmartCafe Project
 // Copyright (C) 2016-2025 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
@@ -70,7 +70,7 @@ VirtualDisplay::VirtualDisplay()
     create_info.pszzCompatibleIds = L"aspia_virtual_display\0\0";
     create_info.pszInstanceId = L"aspia_virtual_display";;
     create_info.pszzHardwareIds = L"aspia_virtual_display\0\0";
-    create_info.pszDeviceDescription = L"Aspia Virtual Display";
+    create_info.pszDeviceDescription = L"SmartCafe Virtual Display";
     create_info.CapabilityFlags = SWDeviceCapabilitiesRemovable |
         SWDeviceCapabilitiesSilentInstall | SWDeviceCapabilitiesDriverRequired;
 

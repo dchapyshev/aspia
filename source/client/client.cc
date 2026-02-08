@@ -1,5 +1,5 @@
 //
-// Aspia Project
+// SmartCafe Project
 // Copyright (C) 2016-2025 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
@@ -408,7 +408,9 @@ void Client::channelReady()
         return;
     }
 
-    emit sig_statusChanged(Status::HOST_CONNECTED);
+    // After authentication we already know the peer's computer name (sent by Host in handshake).
+    emit sig_statusChanged(Status::HOST_CONNECTED, tcp_channel_ ? tcp_channel_->peerComputerName()
+                                                               : QString());
 
     // Signal that everything is ready to start the session (connection established,
     // authentication passed).

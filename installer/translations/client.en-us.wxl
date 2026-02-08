@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <WixLocalization Culture="en-us" xmlns="http://schemas.microsoft.com/wix/2006/localization">
     <String Id="Locale" Overridable="yes">en</String>
-    <String Id="ProductName" Overridable="yes">Aspia Client</String>
-    <String Id="ShortcutName" Overridable="yes">Aspia Client</String>
+    <String Id="ProductName" Overridable="yes">SmartCafe Client</String>
+    <String Id="ShortcutName" Overridable="yes">SmartCafe Client</String>
     <String Id="DowngradeErrorMessage" Overridable="yes">A newer version of the application is already installed.</String>
     <String Id="CreateDesktopShortcut" Overridable="yes">Create desktop shortcut</String>
     <String Id="CreateProgramMenuShortcut" Overridable="yes">Create shortcut in the Start menu</String>

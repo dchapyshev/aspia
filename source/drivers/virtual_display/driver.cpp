@@ -1,5 +1,5 @@
 //
-// Aspia Project
+// SmartCafe Project
 // Copyright (C) 2016-2025 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
@@ -365,9 +365,9 @@ void IndirectDeviceContext::initAdapter()
     adapter_caps.EndPointDiagnostics.TransmissionType = IDDCX_TRANSMISSION_TYPE_WIRED_OTHER;
 
     // Declare your device strings for telemetry (required)
-    adapter_caps.EndPointDiagnostics.pEndPointFriendlyName = L"Aspia Virtual Display";
+    adapter_caps.EndPointDiagnostics.pEndPointFriendlyName = L"SmartCafe Virtual Display";
     adapter_caps.EndPointDiagnostics.pEndPointManufacturerName = L"Dmitry Chapyshev";
-    adapter_caps.EndPointDiagnostics.pEndPointModelName = L"Aspia Virtual Display";
+    adapter_caps.EndPointDiagnostics.pEndPointModelName = L"SmartCafe Virtual Display";
 
     // Declare your hardware and firmware versions (required)
     IDDCX_ENDPOINT_VERSION version;

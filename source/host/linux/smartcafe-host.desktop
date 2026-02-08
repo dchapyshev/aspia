@@ -1,7 +1,7 @@
 [Desktop Entry]
-Name=Aspia Host
-Name[ru]=Хост Aspia
-Exec=/usr/bin/aspia_host
+Name=SmartCafe Host
+Name[ru]=Хост SmartCafe
+Exec=/usr/bin/smartcafe_host
 Icon=aspia_host.png
 Type=Application
 Categories=Utility;

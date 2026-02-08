@@ -1,5 +1,5 @@
 //
-// Aspia Project
+// SmartCafe Project
 // Copyright (C) 2016-2025 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
@@ -22,7 +22,7 @@ LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 
 1 RT_MANIFEST "relay.manifest"
 
-#define ASPIA_ORIGINAL_FILE_NAME "aspia_relay.exe"
-#define ASPIA_FILE_DESCRIPTION "Aspia Relay Service"
+#define ASPIA_ORIGINAL_FILE_NAME "smartcafe_relay.exe"
+#define ASPIA_FILE_DESCRIPTION "SmartCafe Relay Service"
 
 #include "build/version.rc"

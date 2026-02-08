@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <WixLocalization Culture="uk-ua" xmlns="http://schemas.microsoft.com/wix/2006/localization">
     <String Id="Locale" Overridable="yes">uk</String>
-    <String Id="ProductName" Overridable="yes">Хост Aspia</String>
+    <String Id="ProductName" Overridable="yes">Хост SmartCafe</String>
     <String Id="DowngradeErrorMessage" Overridable="yes">Найновішу версію програми вже встановлено.</String>
     <String Id="CreateDesktopShortcut" Overridable="yes">Створити ярлик на робочих столах</String>
     <String Id="CreateProgramMenuShortcut" Overridable="yes">Створити ярлик в меню "Пуск"</String>

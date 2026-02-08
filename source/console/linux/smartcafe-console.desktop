@@ -1,7 +1,7 @@
 [Desktop Entry]
-Name=Aspia Console
-Name[ru]=Консоль Aspia
-Exec=/usr/bin/aspia_console
+Name=SmartCafe Console
+Name[ru]=Консоль SmartCafe
+Exec=/usr/bin/smartcafe_console
 Icon=aspia_console.png
 Type=Application
 Categories=Utility;

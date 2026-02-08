@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
    <mime-type type="application/aab">
-     <comment>Aspia Address Book</comment>
+     <comment>SmartCafe Address Book</comment>
      <icon name="aspia_address_book"/>
      <magic priority="50">
        <match value="search-string" type="string" offset="10:140"/>

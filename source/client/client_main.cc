@@ -1,5 +1,5 @@
 //
-// Aspia Project
+// SmartCafe Project
 // Copyright (C) 2016-2025 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
@@ -484,7 +484,7 @@ int clientMain(int argc, char* argv[])
         "router-password");
 
     QCommandLineParser parser;
-    parser.setApplicationDescription(QApplication::translate("Client", "Aspia Client"));
+    parser.setApplicationDescription(QApplication::translate("Client", "SmartCafe Client"));
     parser.addHelpOption();
     parser.addVersionOption();
     parser.addOption(address_option);

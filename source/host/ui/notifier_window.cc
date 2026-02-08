@@ -1,5 +1,5 @@
 //
-// Aspia Project
+// SmartCafe Project
 // Copyright (C) 2016-2025 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
@@ -481,7 +481,7 @@ void NotifierWindow::onThemeChanged()
 
     ui.label_title->setText(
         QString("<html><head/><body><p><span style=\"font-weight:700;\">%1</span></p></body></html>")
-            .arg(tr("Aspia Host")));
+            .arg(tr("SmartCafe Host")));
     ui.label_title->setStyleSheet("padding: 3px;");
 }
 

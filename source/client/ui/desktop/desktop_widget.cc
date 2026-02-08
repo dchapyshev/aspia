@@ -1,5 +1,5 @@
 //
-// Aspia Project
+// SmartCafe Project
 // Copyright (C) 2016-2025 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
@@ -531,7 +531,7 @@ void DesktopWidget::paintEvent(QPaintEvent* /* event */)
         painter_.setPen(Qt::black);
 
         painter_.drawPixmap(icon_pos, icon);
-        painter_.drawText(title_rect, Qt::AlignVCenter, QStringLiteral("Aspia"));
+        painter_.drawText(title_rect, Qt::AlignVCenter, QStringLiteral("SmartCafe"));
 
         QString message;
         switch (last_error_code_)

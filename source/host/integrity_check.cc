@@ -1,5 +1,5 @@
 //
-// Aspia Project
+// SmartCafe Project
 // Copyright (C) 2016-2025 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
@@ -31,10 +31,10 @@ bool integrityCheck()
 #if defined(Q_OS_WINDOWS)
     static const char* kFiles[] =
     {
-        "aspia_host.exe",
-        "aspia_desktop_agent.exe",
-        "aspia_file_agent.exe",
-        "aspia_host_service.exe"
+        "smartcafe_host.exe",
+        "smartcafe_desktop_agent.exe",
+        "smartcafe_file_agent.exe",
+        "smartcafe_host_service.exe"
     };
     static const size_t kMinFileSize = 5 * 1024; // 5 kB.
 

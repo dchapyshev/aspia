@@ -98,7 +98,7 @@
     </message>
     <message>
         <location filename="../console/address_book_dialog.ui" line="225"/>
-        <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
+        <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). SmartCafe does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -352,8 +352,8 @@
     </message>
     <message>
         <location filename="../client/client_main.cc" line="487"/>
-        <source>Aspia Client</source>
-        <translation>Aspia 客户端</translation>
+        <source>SmartCafe Client</source>
+        <translation>SmartCafe 客户端</translation>
     </message>
     <message>
         <location filename="../client/client_main.cc" line="43"/>
@@ -405,7 +405,7 @@
     </message>
     <message>
         <location filename="../client/ui/client_settings_dialog.ui" line="99"/>
-        <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
+        <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). SmartCafe does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -428,8 +428,8 @@
     <name>ClientWindow</name>
     <message>
         <location filename="../client/ui/client_window.ui" line="14"/>
-        <source>Aspia Client</source>
-        <translation>Aspia 客户端</translation>
+        <source>SmartCafe Client</source>
+        <translation>SmartCafe 客户端</translation>
     </message>
     <message>
         <location filename="../client/ui/client_window.ui" line="21"/>
@@ -983,7 +983,7 @@
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="397"/>
-        <source>Disable Aspia shutdown</source>
+        <source>Disable SmartCafe shutdown</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1048,7 +1048,7 @@
     </message>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="472"/>
-        <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
+        <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). SmartCafe does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1130,8 +1130,8 @@
     <name>Console</name>
     <message>
         <location filename="../console/main.cc" line="57"/>
-        <source>Aspia Console</source>
-        <translation>Aspia 控制台</translation>
+        <source>SmartCafe Console</source>
+        <translation>SmartCafe 控制台</translation>
     </message>
     <message>
         <location filename="../console/main.cc" line="60"/>
@@ -1148,8 +1148,8 @@
     <name>ConsoleMainWindow</name>
     <message>
         <location filename="../console/main_window.ui" line="14"/>
-        <source>Aspia Console</source>
-        <translation>Aspia 控制台</translation>
+        <source>SmartCafe Console</source>
+        <translation>SmartCafe 控制台</translation>
     </message>
     <message>
         <location filename="../console/main_window.ui" line="68"/>
@@ -2161,8 +2161,8 @@
         <translation>不能同时指定导出和导入参数。</translation>
     </message>
     <message>
-        <source>Aspia Host</source>
-        <translation type="obsolete">Aspia 主机</translation>
+        <source>SmartCafe Host</source>
+        <translation type="obsolete">SmartCafe 主机</translation>
     </message>
 </context>
 <context>
@@ -2209,8 +2209,8 @@
     <name>MainWindow</name>
     <message>
         <location filename="../host/ui/main_window.ui" line="26"/>
-        <source>Aspia Host</source>
-        <translation>Aspia 主机</translation>
+        <source>SmartCafe Host</source>
+        <translation>SmartCafe 主机</translation>
     </message>
     <message>
         <location filename="../host/ui/main_window.ui" line="72"/>
@@ -4225,7 +4225,7 @@
     <name>TextChatWidget</name>
     <message>
         <location filename="../common/ui/text_chat_widget.ui" line="20"/>
-        <source>Aspia Chat</source>
+        <source>SmartCafe Chat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4654,8 +4654,8 @@
     </message>
     <message>
         <location filename="../client/ui/client_window.cc" line="224"/>
-        <source>Aspia Client</source>
-        <translation type="unfinished">Aspia 客户端</translation>
+        <source>SmartCafe Client</source>
+        <translation type="unfinished">SmartCafe 客户端</translation>
     </message>
     <message>
         <location filename="../client/ui/client_window.cc" line="322"/>
@@ -7209,7 +7209,7 @@
     </message>
     <message>
         <location filename="../client/ui/sys_info/sys_info_widget_summary.cc" line="156"/>
-        <source>Aspia Information</source>
+        <source>SmartCafe Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -8043,8 +8043,8 @@
     </message>
     <message>
         <location filename="../common/ui/about_dialog.cc" line="114"/>
-        <source>Aspia is free software released under GNU General Public License 3.</source>
-        <translation>Aspia是根据以下版本发布的免费软件GNU通用公共许可证3。</translation>
+        <source>SmartCafe is free software released under GNU General Public License 3.</source>
+        <translation>SmartCafe是根据以下版本发布的免费软件GNU通用公共许可证3。</translation>
     </message>
     <message>
         <location filename="../common/ui/about_dialog.cc" line="115"/>
@@ -8552,8 +8552,8 @@
     </message>
     <message>
         <location filename="../console/address_book_tab.cc" line="1219"/>
-        <source>Aspia Address Book (*.aab)</source>
-        <translation>Aspia 通讯录 (*.aab)</translation>
+        <source>SmartCafe Address Book (*.aab)</source>
+        <translation>SmartCafe 通讯录 (*.aab)</translation>
     </message>
     <message>
         <location filename="../console/address_book_tab.cc" line="1234"/>
@@ -8899,8 +8899,8 @@
     </message>
     <message>
         <location filename="../console/main_window.cc" line="337"/>
-        <source>Aspia Address Book (*.aab)</source>
-        <translation>Aspia 通讯录 (*.aab)</translation>
+        <source>SmartCafe Address Book (*.aab)</source>
+        <translation>SmartCafe 通讯录 (*.aab)</translation>
     </message>
     <message>
         <location filename="../console/main_window.cc" line="595"/>
@@ -9010,8 +9010,8 @@
     <message>
         <location filename="../console/main_window.cc" line="752"/>
         <location filename="../console/main_window.cc" line="1578"/>
-        <source>Aspia Console</source>
-        <translation>Aspia 控制台</translation>
+        <source>SmartCafe Console</source>
+        <translation>SmartCafe 控制台</translation>
     </message>
     <message>
         <location filename="../console/main_window.cc" line="634"/>
@@ -9471,8 +9471,8 @@
         <location filename="../host/ui/main_window.cc" line="488"/>
         <location filename="../host/ui/main_window.cc" line="719"/>
         <location filename="../host/ui/main_window.cc" line="906"/>
-        <source>Aspia Host</source>
-        <translation>Aspia 主机</translation>
+        <source>SmartCafe Host</source>
+        <translation>SmartCafe 主机</translation>
     </message>
     <message>
         <location filename="../host/ui/main_window.cc" line="227"/>
@@ -9563,8 +9563,8 @@
     </message>
     <message>
         <location filename="../host/ui/main_window.cc" line="737"/>
-        <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
-        <translation>如果您退出Aspia，将无法连接到此计算机，除非您再次手动打开计算机或Aspia。 您真的要退出该应用程序吗？</translation>
+        <source>If you exit from SmartCafe, it will not be possible to connect to this computer until you turn on the computer or SmartCafe again manually. Do you really want to exit the application?</source>
+        <translation>如果您退出SmartCafe，将无法连接到此计算机，除非您再次手动打开计算机或SmartCafe。 您真的要退出该应用程序吗？</translation>
     </message>
 </context>
 <context>
@@ -9606,8 +9606,8 @@
     </message>
     <message>
         <location filename="../host/ui/notifier_window.cc" line="478"/>
-        <source>Aspia Host</source>
-        <translation type="unfinished">Aspia 主机</translation>
+        <source>SmartCafe Host</source>
+        <translation type="unfinished">SmartCafe 主机</translation>
     </message>
 </context>
 <context>

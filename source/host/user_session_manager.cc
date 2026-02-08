@@ -1,5 +1,5 @@
 //
-// Aspia Project
+// SmartCafe Project
 // Copyright (C) 2016-2025 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
@@ -39,11 +39,11 @@ namespace host {
 namespace {
 
 #if defined(Q_OS_UNIX)
-const char kExecutableNameForUi[] = "aspia_host";
+const char kExecutableNameForUi[] = "smartcafe_host";
 #endif // defined(Q_OS_UNIX)
 
 #if defined(Q_OS_WINDOWS)
-const char kExecutableNameForUi[] = "aspia_host.exe";
+const char kExecutableNameForUi[] = "smartcafe_host.exe";
 
 // Name of the default session desktop.
 const wchar_t kDefaultDesktopName[] = L"winsta0\\default";

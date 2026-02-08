@@ -1,5 +1,5 @@
 //
-// Aspia Project
+// SmartCafe Project
 // Copyright (C) 2016-2025 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
@@ -385,7 +385,7 @@ bool AudioOutputPulse::initPulseAudio()
     }
 
     // Create a new PulseAudio context.
-    pa_context_ = LATE(pa_context_new)(pa_main_loop_api_, "Aspia Client");
+    pa_context_ = LATE(pa_context_new)(pa_main_loop_api_, "SmartCafe Client");
     if (!pa_context_)
     {
         LOG(ERROR) << "Could not create context";

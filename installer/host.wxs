@@ -4,10 +4,10 @@
 <?include version.wxi ?>
 
  <!-- Variables -->
-<?define ProductName="Aspia Host"?>
-<?define InstallLocation="Aspia Host"?>
-<?define ServiceName="aspia-host-service"?>
-<?define ServiceDisplayName="Aspia Host Service"?>
+<?define ProductName="SmartCafe Host"?>
+<?define InstallLocation="SmartCafe Host"?>
+<?define ServiceName="smartcafe-host-service"?>
+<?define ServiceDisplayName="SmartCafe Host Service"?>
 <?define ServiceDescription="Accepts incoming remote desktop connections to this computer."?>
 
 <!-- Product description -->
@@ -28,12 +28,12 @@
 
     <Directory Id="TARGETDIR" Name="SourceDir">
         <Directory Id="$(var.Program_Files)">
-            <Directory Id="VendorProgramFilesFolder" Name="Aspia">
+            <Directory Id="VendorProgramFilesFolder" Name="SmartCafe">
                 <Directory Id="INSTALLLOCATION" Name="Host" />
             </Directory>
         </Directory>
         <Directory Id="ProgramMenuFolder">
-            <Directory Id="ApplicationMenuFolder" Name="Aspia" />
+            <Directory Id="ApplicationMenuFolder" Name="SmartCafe" />
         </Directory>
         <Directory Id="DesktopFolder" />
     </Directory>
@@ -42,7 +42,7 @@
     <DirectoryRef Id="ApplicationMenuFolder">
         <Component Id="ProgramMenuShortcut" Guid="{C0DBE098-F1FD-49F6-8BD9-D18BDF9C80DA}">
             <Condition>STARTMENU_SHORTCUT</Condition>
-            <Shortcut Id="ConfigProgramMenuShortcut" Name="!(loc.ProductName)" WorkingDirectory="INSTALLLOCATION" Target="[INSTALLLOCATION]aspia_host.exe"/>
+            <Shortcut Id="ConfigProgramMenuShortcut" Name="!(loc.ProductName)" WorkingDirectory="INSTALLLOCATION" Target="[INSTALLLOCATION]smartcafe_host.exe"/>
             <RemoveFolder Id="ApplicationMenuFolder" On="uninstall" />
             <RegistryValue Root="HKCU" Key="SOFTWARE\$(var.ProductName)" Type="string" Value="" KeyPath="yes" />
         </Component>
@@ -52,7 +52,7 @@
     <DirectoryRef Id="DesktopFolder">
         <Component Id="DesktopShortcut" Guid="{6463EBB6-56AC-4FA7-9262-37BBC43435D5}">
             <Condition>DESKTOP_SHORTCUT</Condition>
-            <Shortcut Id="ConfigDesktopShortcut" Name="!(loc.ProductName)" WorkingDirectory="INSTALLLOCATION" Target="[INSTALLLOCATION]aspia_host.exe"/>
+            <Shortcut Id="ConfigDesktopShortcut" Name="!(loc.ProductName)" WorkingDirectory="INSTALLLOCATION" Target="[INSTALLLOCATION]smartcafe_host.exe"/>
             <RegistryValue Root="HKCU" Key="SOFTWARE\$(var.ProductName)" Type="string" Value="" KeyPath="yes" />
         </Component>
     </DirectoryRef>
@@ -60,10 +60,10 @@
     <!-- Host applications and service -->
     <DirectoryRef Id="INSTALLLOCATION" FileSource="$(var.SourceFiles)">
         <Component Id ="Applications" DiskId="1" Guid="{A0E3C629-4A61-4ED0-BD9D-FE12C71D7E36}">
-            <File Id="aspia_desktop_agent.exe" Name="aspia_desktop_agent.exe" />
-            <File Id="aspia_file_agent.exe" Name="aspia_file_agent.exe" />
-            <File Id="aspia_host_service.exe" Name="aspia_host_service.exe" KeyPath="yes" />
-            <File Id="aspia_host.exe" Name="aspia_host.exe" />
+            <File Id="smartcafe_desktop_agent.exe" Name="smartcafe_desktop_agent.exe" />
+            <File Id="smartcafe_file_agent.exe" Name="smartcafe_file_agent.exe" />
+            <File Id="smartcafe_host_service.exe" Name="smartcafe_host_service.exe" KeyPath="yes" />
+            <File Id="smartcafe_host.exe" Name="smartcafe_host.exe" />
             <File Id="aspia_host_core.dll" Name="aspia_host_core.dll" />
             <ServiceInstall Id="ServiceInstaller" Type="ownProcess" Vital="yes" Name="$(var.ServiceName)" DisplayName="$(var.ServiceDisplayName)" Description="$(var.ServiceDescription)" Start="auto" Account="LocalSystem" ErrorControl="ignore" Interactive="no">
                 <ServiceDependency Id="RpcSs"/>
@@ -93,7 +93,7 @@
     <WixVariable Id="WixUIUpIco" Value="resources/up.ico" />
     <WixVariable Id="WixUILicenseRtf" Value="resources/license.rtf" />
 
-    <CustomAction Id="ImportSettings" Execute="deferred" Impersonate="no" Return="asyncWait" FileKey="aspia_host.exe" ExeCommand="--import=&quot;[SourceDir]aspia-host.conf&quot; --silent" />
+    <CustomAction Id="ImportSettings" Execute="deferred" Impersonate="no" Return="asyncWait" FileKey="smartcafe_host.exe" ExeCommand="--import=&quot;[SourceDir]aspia-host.conf&quot; --silent" />
     <InstallExecuteSequence>
         <Custom Action="ImportSettings" After="InstallFiles">1</Custom>
     </InstallExecuteSequence>

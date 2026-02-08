@@ -1,5 +1,5 @@
 //
-// Aspia Project
+// SmartCafe Project
 // Copyright (C) 2016-2025 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
@@ -485,7 +485,7 @@ void MainWindow::onVideoRecordingStateChanged(
     else
         message = tr("User \"%1\" (%2) stopped screen recording.").arg(user_name, computer_name);
 
-    tray_icon_.showMessage(tr("Aspia Host"), message, QIcon(":/img/aspia-host.ico"), 1200);
+    tray_icon_.showMessage(tr("SmartCafe Host"), message, QIcon(":/img/aspia-host.ico"), 1200);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -716,7 +716,7 @@ void MainWindow::onHelp()
 void MainWindow::onAbout()
 {
     LOG(INFO) << "[ACTION] About";
-    common::AboutDialog(tr("Aspia Host"), this).exec();
+    common::AboutDialog(tr("SmartCafe Host"), this).exec();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -734,8 +734,8 @@ void MainWindow::onExit()
 
     QMessageBox message_box(QMessageBox::Question,
         tr("Confirmation"),
-        tr("If you exit from Aspia, it will not be possible to connect to this computer until "
-           "you turn on the computer or Aspia again manually. Do you really want to exit the "
+        tr("If you exit from SmartCafe, it will not be possible to connect to this computer until "
+           "you turn on the computer or SmartCafe again manually. Do you really want to exit the "
            "application?"),
         QMessageBox::Yes | QMessageBox::No,
         this);
@@ -903,7 +903,7 @@ void MainWindow::updateTrayIconTooltip()
         ip.prepend(tr("IP addresses:") + QLatin1Char('\n'));
 
     QString tooltip;
-    tooltip += tr("Aspia Host") + QLatin1String("\n\n");
+    tooltip += tr("SmartCafe Host") + QLatin1String("\n\n");
     tooltip += tr("ID: %1").arg(ui.edit_id->text()) + QLatin1Char('\n');
     tooltip += ip;
 

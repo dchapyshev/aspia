@@ -1,5 +1,5 @@
 [Unit]
-Description=Aspia Relay
+Description=SmartCafe Host
 Before=runlevel2.target runlevel3.target runlevel4.target runlevel5.target shutdown.target
 After=network-online.target network.service ntp.service
 Conflicts=shutdown.target
@@ -7,9 +7,9 @@ Conflicts=shutdown.target
 [Service]
 WorkingDirectory=/usr/bin
 #EnvironmentFile=/usr/bin/env.sh
-Environment=ASPIA_LOG_LEVEL=2
+#Environment=SVC=smartcafe-host-service
 Restart=always
-ExecStart=/usr/bin/aspia_relay
+ExecStart=/usr/bin/smartcafe_host_service
 RestartSec=5000ms
 
 [Install]

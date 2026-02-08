@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <WixLocalization Culture="zh-tw" xmlns="http://schemas.microsoft.com/wix/2006/localization">
     <String Id="Locale" Overridable="yes">zh_TW</String>
-    <String Id="ProductName" Overridable="yes">Aspia Console</String>
-    <String Id="ShortcutName" Overridable="yes">Aspia Console</String>
+    <String Id="ProductName" Overridable="yes">SmartCafe Console</String>
+    <String Id="ShortcutName" Overridable="yes">SmartCafe Console</String>
     <String Id="DowngradeErrorMessage" Overridable="yes">已安裝較新版本的應用程式。</String>
-    <String Id="AddressBookFile" Overridable="yes">Aspia 通訊錄 (.aab)</String>
+    <String Id="AddressBookFile" Overridable="yes">SmartCafe 通訊錄 (.aab)</String>
     <String Id="CreateDesktopShortcut" Overridable="yes">建立桌面捷徑</String>
     <String Id="CreateProgramMenuShortcut" Overridable="yes">在「開始」功能表建立捷徑</String>
 </WixLocalization>

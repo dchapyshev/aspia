@@ -1,5 +1,5 @@
 //
-// Aspia Project
+// SmartCafe Project
 // Copyright (C) 2016-2025 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
@@ -1216,7 +1216,7 @@ bool AddressBookTab::saveToFile(const QString& file_path)
         path = QFileDialog::getSaveFileName(this,
                                             tr("Save Address Book"),
                                             settings.lastDirectory(),
-                                            tr("Aspia Address Book (*.aab)"));
+                                            tr("SmartCafe Address Book (*.aab)"));
         if (path.isEmpty())
         {
             LOG(INFO) << "File path not selected";

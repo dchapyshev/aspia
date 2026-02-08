@@ -1,5 +1,5 @@
 //
-// Aspia Project
+// SmartCafe Project
 // Copyright (C) 2016-2025 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
@@ -38,13 +38,13 @@ namespace host {
 namespace {
 
 #if defined(Q_OS_LINUX)
-const char kDesktopAgentFile[] = "aspia_desktop_agent";
+const char kDesktopAgentFile[] = "smartcafe_desktop_agent";
 #endif
 
 #if defined(Q_OS_WINDOWS)
 // Name of the default session desktop.
 const wchar_t kDefaultDesktopName[] = L"winsta0\\default";
-const char kDesktopAgentFile[] = "aspia_desktop_agent.exe";
+const char kDesktopAgentFile[] = "smartcafe_desktop_agent.exe";
 
 //--------------------------------------------------------------------------------------------------
 bool copyProcessToken(DWORD desired_access, base::ScopedHandle* token_out)

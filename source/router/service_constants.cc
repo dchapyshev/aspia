@@ -1,5 +1,5 @@
 //
-// Aspia Project
+// SmartCafe Project
 // Copyright (C) 2016-2025 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
@@ -20,9 +20,9 @@
 
 namespace router {
 
-const char kServiceFileName[] = "aspia_router.exe";
-const char kServiceName[] = "aspia-router";
-const char kServiceDisplayName[] = "Aspia Router Service";
+const char kServiceFileName[] = "smartcafe_router.exe";
+const char kServiceName[] = "smartcafe-router";
+const char kServiceDisplayName[] = "SmartCafe Router Service";
 const char kServiceDescription[] =
     "Assigns identifiers to peers and routes traffic to bypass NAT.";
 

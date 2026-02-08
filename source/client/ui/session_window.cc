@@ -1,5 +1,5 @@
 //
-// Aspia Project
+// SmartCafe Project
 // Copyright (C) 2016-2025 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
@@ -208,6 +208,18 @@ void SessionWindow::onStatusChanged(Client::Status status, const QVariant& data)
             {
                 status_dialog_->addMessageAndActivate(tr("Connection to host %1:%2 established.")
                     .arg(session_state_->hostAddress()).arg(session_state_->hostPort()));
+            }
+
+            // If no custom name was provided in Config (Client UI doesn't set it),
+            // update the title using the computer name received from the Host.
+            if (session_state_->isConnectionByHostId() && session_state_->computerName().isEmpty())
+            {
+                const QString peer_computer_name = data.toString().trimmed();
+                if (!peer_computer_name.isEmpty())
+                {
+                    const QString session_name = common::sessionName(session_state_->sessionType());
+                    setWindowTitle(QString("%1 - %2").arg(peer_computer_name, session_name));
+                }
             }
 
             status_dialog_->setVisible(false);

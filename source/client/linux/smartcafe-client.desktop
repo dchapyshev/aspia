@@ -1,7 +1,7 @@
 [Desktop Entry]
-Name=Aspia Client
-Name[ru]=Клиент Aspia
-Exec=/usr/bin/aspia_client
+Name=SmartCafe Client
+Name[ru]=Клиент SmartCafe
+Exec=/usr/bin/smartcafe_client
 Icon=aspia_client.png
 Type=Application
 Categories=Utility;

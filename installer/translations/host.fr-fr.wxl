@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <WixLocalization Culture="fr-fr" xmlns="http://schemas.microsoft.com/wix/2006/localization">
     <String Id="Locale" Overridable="yes">fr</String>
-    <String Id="ProductName" Overridable="yes">Hôte Aspia</String>
+    <String Id="ProductName" Overridable="yes">Hôte SmartCafe</String>
     <String Id="DowngradeErrorMessage" Overridable="yes">Une version plus récente de l application est déjà installée.</String>
     <String Id="CreateDesktopShortcut" Overridable="yes">Créer un raccourci sur le bureau</String>
     <String Id="CreateProgramMenuShortcut" Overridable="yes">Créer un raccourci dans le menu démarrer</String>

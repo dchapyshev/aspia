@@ -1,5 +1,5 @@
 #
-# Aspia Project
+# SmartCafe Project
 # Copyright (C) 2016-2025 Dmitry Chapyshev <dmitry@aspia.ru>
 #
 # This program is free software: you can redistribute it and/or modify
@@ -194,30 +194,34 @@ if (WIN32)
     set(HOST_PLATFORM_LIBS Qt6::EntryPointPrivate Qt6::EntryPointImplementation)
 endif()
 
-# Aspia Host (GUI)
+# SmartCafe Host (GUI)
 add_executable(aspia_host ui/host_entry_point.cc ui/host.rc)
+set_target_properties(aspia_host PROPERTIES OUTPUT_NAME "smartcafe_host")
 if (WIN32)
     set_target_properties(aspia_host PROPERTIES WIN32_EXECUTABLE TRUE)
     set_target_properties(aspia_host PROPERTIES LINK_FLAGS "/MANIFEST:NO")
 endif()
 target_link_libraries(aspia_host aspia_host_core ${HOST_PLATFORM_LIBS})
 
-# Aspia Host Service
+# SmartCafe Host Service
 add_executable(aspia_host_service service_entry_point.cc service.rc)
+set_target_properties(aspia_host_service PROPERTIES OUTPUT_NAME "smartcafe_host_service")
 if (WIN32)
     set_target_properties(aspia_host_service PROPERTIES LINK_FLAGS "/MANIFEST:NO")
 endif()
 target_link_libraries(aspia_host_service aspia_host_core ${HOST_PLATFORM_LIBS})
 
-# Aspia Desktop Agent
+# SmartCafe Desktop Agent
 add_executable(aspia_desktop_agent WIN32 desktop_agent_entry_point.cc desktop_agent.rc)
+set_target_properties(aspia_desktop_agent PROPERTIES OUTPUT_NAME "smartcafe_desktop_agent")
 if (WIN32)
     set_target_properties(aspia_desktop_agent PROPERTIES LINK_FLAGS "/MANIFEST:NO")
 endif()
 target_link_libraries(aspia_desktop_agent aspia_host_core ${HOST_PLATFORM_LIBS})
 
-# Aspia File Transfer Agent
+# SmartCafe File Transfer Agent
 add_executable(aspia_file_agent WIN32 file_agent_entry_point.cc file_agent.rc)
+set_target_properties(aspia_file_agent PROPERTIES OUTPUT_NAME "smartcafe_file_agent")
 if (WIN32)
     set_target_properties(aspia_file_agent PROPERTIES LINK_FLAGS "/MANIFEST:NO")
 endif()

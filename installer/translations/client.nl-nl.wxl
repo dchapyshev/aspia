@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <WixLocalization Culture="nl-nl" xmlns="http://schemas.microsoft.com/wix/2006/localization">
     <String Id="Locale" Overridable="yes">nl</String>
-    <String Id="ProductName" Overridable="yes">Aspia Client</String>
-    <String Id="ShortcutName" Overridable="yes">Aspia Client</String>
+    <String Id="ProductName" Overridable="yes">SmartCafe Client</String>
+    <String Id="ShortcutName" Overridable="yes">SmartCafe Client</String>
     <String Id="DowngradeErrorMessage" Overridable="yes">Er is al een nieuwere versie van de applicatie geinstalleerd.</String>
     <String Id="CreateDesktopShortcut" Overridable="yes">Maak bureaublad snelkoppelingen</String>
     <String Id="CreateProgramMenuShortcut" Overridable="yes">Maak snelkoppelingen in het Start menu</String>

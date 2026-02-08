@@ -1,5 +1,5 @@
 #
-# Aspia Project
+# SmartCafe Project
 # Copyright (C) 2016-2025 Dmitry Chapyshev <dmitry@aspia.ru>
 #
 # This program is free software: you can redistribute it and/or modify
@@ -118,9 +118,9 @@ if (LINUX)
 endif()
 
 add_executable(aspia_console MACOSX_BUNDLE ${aspia_console_ICON} ${SOURCE_CONSOLE})
+set_target_properties(aspia_console PROPERTIES OUTPUT_NAME "smartcafe_console")
 
 if (APPLE)
-    set_target_properties(aspia_console PROPERTIES OUTPUT_NAME "Aspia Console")
     set_target_properties(aspia_console PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${aspia_console_PLIST})
     set_target_properties(aspia_console PROPERTIES MACOSX_BUNDLE_ICONFILE ${aspia_console_ICON})
 endif()

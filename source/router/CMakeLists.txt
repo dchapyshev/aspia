@@ -1,5 +1,5 @@
 #
-# Aspia Project
+# SmartCafe Project
 # Copyright (C) 2016-2025 Dmitry Chapyshev <dmitry@aspia.ru>
 #
 # This program is free software: you can redistribute it and/or modify
@@ -76,6 +76,7 @@ if (APPLE)
 endif()
 
 add_executable(aspia_router ${SOURCE_ROUTER} ${SOURCE_ROUTER_WIN})
+set_target_properties(aspia_router PROPERTIES OUTPUT_NAME "smartcafe_router")
 
 if (WIN32)
     set_target_properties(aspia_router PROPERTIES LINK_FLAGS "/MANIFEST:NO")

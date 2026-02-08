@@ -1,5 +1,5 @@
 #
-# Aspia Project
+# SmartCafe Project
 # Copyright (C) 2016-2025 Dmitry Chapyshev <dmitry@aspia.ru>
 #
 # This program is free software: you can redistribute it and/or modify
@@ -228,7 +228,7 @@ endif()
 # Installers
 ###################################################################################################
 
-set(CPACK_PACKAGE_NAME "aspia")
+set(CPACK_PACKAGE_NAME "smartcafe")
 set(CPACK_PACKAGE_VENDOR "Dmitry Chapyshev")
 set(CPACK_PACKAGE_CONTACT "Dmitry Chapyshev <dmitry@aspia.ru>")
 set(CPACK_PACKAGE_HOMEPAGE_URL "https://aspia.org/")
@@ -251,13 +251,13 @@ if (LINUX)
             BUNDLE DESTINATION . COMPONENT host
             RUNTIME DESTINATION bin COMPONENT host
             LIBRARY DESTINATION lib COMPONENT host)
-    set(CPACK_COMPONENT_HOST_NAME "aspia-host")
-    set(CPACK_COMPONENT_HOST_DISPLAY_NAME "Aspia Host")
+    set(CPACK_COMPONENT_HOST_NAME "smartcafe-host")
+    set(CPACK_COMPONENT_HOST_DISPLAY_NAME "SmartCafe Host")
     set(CPACK_COMPONENT_HOST_DESCRIPTION "Remote desktop software.")
 
     if (LINUX)
         # Desktop file.
-        install(FILES host/linux/aspia-host.desktop
+        install(FILES host/linux/smartcafe-host.desktop
             DESTINATION share/applications COMPONENT host)
 
         # Host icons.
@@ -273,7 +273,7 @@ if (LINUX)
             DESTINATION share/icons/hicolor/64x64/apps COMPONENT host)
 
         # Service file.
-        install(FILES host/linux/aspia-host-service.service
+        install(FILES host/linux/smartcafe-host-service.service
             DESTINATION lib/systemd/system COMPONENT host)
 
         set(CPACK_DEBIAN_HOST_FILE_NAME
@@ -292,17 +292,17 @@ endif()
 install(TARGETS aspia_console
     BUNDLE DESTINATION . COMPONENT console
     RUNTIME DESTINATION bin COMPONENT console)
-set(CPACK_COMPONENT_CONSOLE_NAME "aspia-console")
-set(CPACK_COMPONENT_CONSOLE_DISPLAY_NAME "Aspia Console")
+set(CPACK_COMPONENT_CONSOLE_NAME "smartcafe-console")
+set(CPACK_COMPONENT_CONSOLE_DISPLAY_NAME "SmartCafe Console")
 set(CPACK_COMPONENT_CONSOLE_DESCRIPTION "Console for managing hosts and routers.")
 
 if (LINUX)
     # Desktop file.
-    install(FILES console/linux/aspia-console.desktop
+    install(FILES console/linux/smartcafe-console.desktop
         DESTINATION share/applications COMPONENT console)
 
     # Mime types.
-    install(FILES console/linux/aspia-console.xml
+    install(FILES console/linux/smartcafe-console.xml
         DESTINATION share/mime/packages COMPONENT console)
     install(CODE "execute_process(COMMAND update-mime-database /usr/share/mime)")
 
@@ -345,13 +345,13 @@ endif()
 install(TARGETS aspia_client
     BUNDLE DESTINATION . COMPONENT client
     RUNTIME DESTINATION bin COMPONENT client)
-set(CPACK_COMPONENT_CLIENT_NAME "aspia-client")
-set(CPACK_COMPONENT_CLIENT_DISPLAY_NAME "Aspia Client")
+set(CPACK_COMPONENT_CLIENT_NAME "smartcafe-client")
+set(CPACK_COMPONENT_CLIENT_DISPLAY_NAME "SmartCafe Client")
 set(CPACK_COMPONENT_CLIENT_DESCRIPTION "Client for managing hosts.")
 
 if (LINUX)
     # Desktop file.
-    install(FILES client/linux/aspia-client.desktop
+    install(FILES client/linux/smartcafe-client.desktop
         DESTINATION share/applications COMPONENT client)
 
     # Icons.
@@ -384,12 +384,12 @@ if (LINUX)
     install(TARGETS aspia_router
         BUNDLE DESTINATION . COMPONENT router
         RUNTIME DESTINATION bin COMPONENT router)
-    set(CPACK_COMPONENT_ROUTER_NAME "aspia-router")
-    set(CPACK_COMPONENT_ROUTER_DISPLAY_NAME "Aspia Router")
+    set(CPACK_COMPONENT_ROUTER_NAME "smartcafe-router")
+    set(CPACK_COMPONENT_ROUTER_DISPLAY_NAME "SmartCafe Router")
     set(CPACK_COMPONENT_ROUTER_DESCRIPTION "Provides a connection routing service.")
 
     # Service file.
-    install(FILES router/linux/aspia-router.service DESTINATION lib/systemd/system COMPONENT router)
+    install(FILES router/linux/smartcafe-router.service DESTINATION lib/systemd/system COMPONENT router)
 
     set(CPACK_DEBIAN_ROUTER_FILE_NAME
         "${CPACK_COMPONENT_ROUTER_NAME}-${CPACK_PACKAGE_VERSION}-${CMAKE_SYSTEM_PROCESSOR}.deb")
@@ -403,12 +403,12 @@ if (LINUX)
     install(TARGETS aspia_relay
         BUNDLE DESTINATION . COMPONENT relay
         RUNTIME DESTINATION bin COMPONENT relay)
-    set(CPACK_COMPONENT_RELAY_NAME "aspia-relay")
-    set(CPACK_COMPONENT_RELAY_DISPLAY_NAME "Aspia Relay")
+    set(CPACK_COMPONENT_RELAY_NAME "smartcafe-relay")
+    set(CPACK_COMPONENT_RELAY_DISPLAY_NAME "SmartCafe Relay")
     set(CPACK_COMPONENT_RELAY_DESCRIPTION "Provides a service for transferring data between peers.")
 
     # Service file.
-    install(FILES relay/linux/aspia-relay.service DESTINATION lib/systemd/system COMPONENT relay)
+    install(FILES relay/linux/smartcafe-relay.service DESTINATION lib/systemd/system COMPONENT relay)
 
     set(CPACK_DEBIAN_RELAY_FILE_NAME
         "${CPACK_COMPONENT_RELAY_NAME}-${CPACK_PACKAGE_VERSION}-${CMAKE_SYSTEM_PROCESSOR}.deb")

@@ -1,5 +1,5 @@
 //
-// Aspia Project
+// SmartCafe Project
 // Copyright (C) 2016-2025 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
@@ -111,7 +111,7 @@ AboutDialog::AboutDialog(const QString& application_name, QWidget* parent)
 
     QString license =
         QString("%1<br>%2<br><a href='%3'>%3</a>")
-        .arg(tr("Aspia is free software released under GNU General Public License 3."),
+        .arg(tr("SmartCafe is free software released under GNU General Public License 3."),
              tr("You can get a copy of license here:"),
              kGplLink);
 

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <WixLocalization Culture="sv-fi" xmlns="http://schemas.microsoft.com/wix/2006/localization">
     <String Id="Locale" Overridable="yes">sv</String>
-    <String Id="ProductName" Overridable="yes">Aspia Console</String>
-    <String Id="ShortcutName" Overridable="yes">Aspia Console</String>
+    <String Id="ProductName" Overridable="yes">SmartCafe Console</String>
+    <String Id="ShortcutName" Overridable="yes">SmartCafe Console</String>
     <String Id="DowngradeErrorMessage" Overridable="yes">A newer version of the application is already installed.</String>
-    <String Id="AddressBookFile" Overridable="yes">Aspia Address Book (.aab)</String>
+    <String Id="AddressBookFile" Overridable="yes">SmartCafe Address Book (.aab)</String>
     <String Id="CreateDesktopShortcut" Overridable="yes">Create desktop shortcut</String>
     <String Id="CreateProgramMenuShortcut" Overridable="yes">Create shortcut in the Start menu</String>
 </WixLocalization>

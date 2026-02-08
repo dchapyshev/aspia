@@ -1,5 +1,5 @@
 //
-// Aspia Project
+// SmartCafe Project
 // Copyright (C) 2016-2025 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
@@ -26,8 +26,8 @@ namespace base {
 
 namespace {
 
-constexpr wchar_t kWindowClassName[] = L"Aspia_MessageWindowClass";
-constexpr wchar_t kWindowName[] = L"Aspia_MessageWindow";
+constexpr wchar_t kWindowClassName[] = L"SmartCafe_MessageWindowClass";
+constexpr wchar_t kWindowName[] = L"SmartCafe_MessageWindow";
 
 static std::atomic_bool _class_registered = false;
 

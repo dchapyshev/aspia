@@ -1,5 +1,5 @@
 //
-// Aspia Project
+// SmartCafe Project
 // Copyright (C) 2016-2025 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
@@ -20,11 +20,11 @@
 
 namespace host {
 
-const char kHostServiceFileName[] = "aspia_host_service.exe";
+const char kHostServiceFileName[] = "smartcafe_host_service.exe";
 
-const char kHostServiceName[] = "aspia-host-service";
+const char kHostServiceName[] = "smartcafe-host-service";
 
-const char kHostServiceDisplayName[] = "Aspia Host Service";
+const char kHostServiceDisplayName[] = "SmartCafe Host Service";
 
 const char kHostServiceDescription[] =
     "Accepts incoming remote desktop connections to this computer.";

@@ -1,5 +1,5 @@
 //
-// Aspia Project
+// SmartCafe Project
 // Copyright (C) 2016-2025 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
@@ -43,11 +43,11 @@ namespace host {
 namespace {
 
 #if defined(Q_OS_LINUX)
-const char kFileTransferAgentFile[] = "aspia_file_agent";
+const char kFileTransferAgentFile[] = "smartcafe_file_agent";
 #endif // defined(Q_OS_LINUX)
 
 #if defined(Q_OS_WINDOWS)
-const char kFileTransferAgentFile[] = "aspia_file_agent.exe";
+const char kFileTransferAgentFile[] = "smartcafe_file_agent.exe";
 const wchar_t kDefaultDesktopName[] = L"winsta0\\default";
 
 //--------------------------------------------------------------------------------------------------

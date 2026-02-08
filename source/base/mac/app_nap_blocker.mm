@@ -1,5 +1,5 @@
 //
-// Aspia Project
+// SmartCafe Project
 // Copyright (C) 2016-2025 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
@@ -98,7 +98,7 @@ void AppNapBlocker::setBlocked(bool enable)
     {
         id_ = [[NSProcessInfo processInfo]
             beginActivityWithOptions: NSActivityUserInitiated
-            reason: @"Aspia connection"];
+            reason: @"SmartCafe connection"];
         [id_ retain];
     }
     else

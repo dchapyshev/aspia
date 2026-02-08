@@ -1,5 +1,5 @@
 //
-// Aspia Project
+// SmartCafe Project
 // Copyright (C) 2016-2025 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
@@ -123,24 +123,24 @@ int main(int /* argc */, const char* const* /* argv */)
 
     const char* kFilesTable[] =
     {
-        "aspia_client.exe",
-        "aspia_console.exe",
-        "aspia_desktop_agent.exe",
-        "aspia_file_transfer_agent.exe",
-        "aspia_host.exe",
+        "smartcafe_client.exe",
+        "smartcafe_console.exe",
+        "smartcafe_desktop_agent.exe",
+        "smartcafe_file_transfer_agent.exe",
+        "smartcafe_host.exe",
         "aspia_host_core.dll",
-        "aspia_host_service.exe",
-        "aspia_relay.exe",
-        "aspia_router.exe"
+        "smartcafe_host_service.exe",
+        "smartcafe_relay.exe",
+        "smartcafe_router.exe"
     };
 
     const char* kInstallersTable[] =
     {
-        "aspia-client",
-        "aspia-console",
-        "aspia-host",
-        "aspia-relay",
-        "aspia-router"
+        "smartcafe-client",
+        "smartcafe-console",
+        "smartcafe-host",
+        "smartcafe-relay",
+        "smartcafe-router"
     };
 
     std::cout << '|' << std::setw(kFileNameWidth) << "File Name"

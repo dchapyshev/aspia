@@ -1,5 +1,5 @@
 //
-// Aspia Project
+// SmartCafe Project
 // Copyright (C) 2016-2025 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
@@ -335,7 +335,7 @@ void MainWindow::onOpen()
         QFileDialog::getOpenFileName(this,
                                      tr("Open Address Book"),
                                      settings.lastDirectory(),
-                                     tr("Aspia Address Book (*.aab)"));
+                                     tr("SmartCafe Address Book (*.aab)"));
     if (file_path.isEmpty())
     {
         LOG(INFO) << "No selected file path";
@@ -750,7 +750,7 @@ void MainWindow::onCheckUpdates()
 void MainWindow::onAbout()
 {
     LOG(INFO) << "[ACTION] About";
-    common::AboutDialog(tr("Aspia Console"), this).exec();
+    common::AboutDialog(tr("SmartCafe Console"), this).exec();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1576,7 +1576,7 @@ void MainWindow::showTrayIcon(bool show)
 
         tray_icon_.reset(new QSystemTrayIcon(this));
         tray_icon_->setIcon(QIcon(":/img/aspia-console.ico"));
-        tray_icon_->setToolTip(tr("Aspia Console"));
+        tray_icon_->setToolTip(tr("SmartCafe Console"));
         tray_icon_->setContextMenu(tray_menu_.get());
         tray_icon_->show();
 

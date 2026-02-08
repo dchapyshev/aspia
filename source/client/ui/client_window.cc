@@ -1,5 +1,5 @@
 //
-// Aspia Project
+// SmartCafe Project
 // Copyright (C) 2016-2025 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
@@ -221,7 +221,7 @@ void ClientWindow::onHelp()
 void ClientWindow::onAbout()
 {
     LOG(INFO) << "[ACTION] About button";
-    common::AboutDialog(tr("Aspia Client"), this).exec();
+    common::AboutDialog(tr("SmartCafe Client"), this).exec();
 }
 
 //--------------------------------------------------------------------------------------------------

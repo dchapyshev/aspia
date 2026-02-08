@@ -1,5 +1,5 @@
 //
-// Aspia Project
+// SmartCafe Project
 // Copyright (C) 2016-2025 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
@@ -153,7 +153,7 @@ void SysInfoWidgetSummary::setSystemInfo(const proto::system_info::SystemInfo& s
         items << mk(tr("Client Version"), client_version_);
         items << mk(tr("Router Version"), router_version_);
 
-        ui.tree->addTopLevelItem(new Item(":/img/info.svg", tr("Aspia Information"), items));
+        ui.tree->addTopLevelItem(new Item(":/img/info.svg", tr("SmartCafe Information"), items));
     }
 
     if (system_info.has_operating_system())

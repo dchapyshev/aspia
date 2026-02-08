@@ -1,5 +1,5 @@
 #
-# Aspia Project
+# SmartCafe Project
 # Copyright (C) 2016-2025 Dmitry Chapyshev <dmitry@aspia.ru>
 #
 # This program is free software: you can redistribute it and/or modify
@@ -279,6 +279,7 @@ if (APPLE)
 endif()
 
 add_executable(aspia_client MACOSX_BUNDLE ${aspia_client_ICON} client_entry_point.cc client.rc)
+set_target_properties(aspia_client PROPERTIES OUTPUT_NAME "smartcafe_client")
 target_link_libraries(aspia_client aspia_client_core ${CLIENT_PLATFORM_LIBS})
 qt_import_plugins(aspia_client INCLUDE "" EXCLUDE "" INCLUDE_BY_TYPE "" EXCLUDE_BY_TYPE imageformats)
 
@@ -288,7 +289,6 @@ if (WIN32)
 endif()
 
 if (APPLE)
-    set_target_properties(aspia_client PROPERTIES OUTPUT_NAME "Aspia Client")
     set_target_properties(aspia_client PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${aspia_client_PLIST})
     set_target_properties(aspia_client PROPERTIES MACOSX_BUNDLE_ICONFILE ${aspia_client_ICON})
 endif()

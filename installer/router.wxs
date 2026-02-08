@@ -4,10 +4,10 @@
 <?include version.wxi ?>
 
  <!-- Variables -->
-<?define ProductName="Aspia Router"?>
-<?define InstallLocation="Aspia Router"?>
-<?define ServiceName="aspia-router"?>
-<?define ServiceDisplayName="Aspia Router Service"?>
+<?define ProductName="SmartCafe Router"?>
+<?define InstallLocation="SmartCafe Router"?>
+<?define ServiceName="smartcafe-router"?>
+<?define ServiceDisplayName="SmartCafe Router Service"?>
 <?define ServiceDescription="Assigns identifiers to peers and routes traffic to bypass NAT."?>
 
 <!-- Product description -->
@@ -28,7 +28,7 @@
 
     <Directory Id="TARGETDIR" Name="SourceDir">
         <Directory Id="$(var.Program_Files)">
-            <Directory Id="VendorProgramFilesFolder" Name="Aspia">
+            <Directory Id="VendorProgramFilesFolder" Name="SmartCafe">
                 <Directory Id="INSTALLLOCATION" Name="Router" />
             </Directory>
         </Directory>
@@ -37,7 +37,7 @@
     <!-- Router service -->
     <DirectoryRef Id="INSTALLLOCATION" FileSource="$(var.SourceFiles)">
         <Component Id ="Applications" DiskId="1" Guid="{A0E3C629-4A61-4ED0-BD9D-FE12C71D7E36}">
-            <File Id="aspia_router.exe" Name="aspia_router.exe" KeyPath="yes" />
+            <File Id="smartcafe_router.exe" Name="smartcafe_router.exe" KeyPath="yes" />
             <ServiceInstall Id="ServiceInstaller" Type="ownProcess" Vital="yes" Name="$(var.ServiceName)" DisplayName="$(var.ServiceDisplayName)" Description="$(var.ServiceDescription)" Start="auto" Account="LocalSystem" ErrorControl="ignore" Interactive="no">
                 <ServiceDependency Id="RpcSs"/>
                 <ServiceDependency Id="Tcpip"/>

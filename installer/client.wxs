@@ -4,9 +4,9 @@
 <?include version.wxi ?>
 
 <!-- Variables -->
-<?define ProductName="Aspia Client"?>
-<?define InstallLocation="Aspia Client"?>
-<?define Executable="aspia_client.exe"?>
+<?define ProductName="SmartCafe Client"?>
+<?define InstallLocation="SmartCafe Client"?>
+<?define Executable="smartcafe_client.exe"?>
 
 <!-- Product description -->
 <Product Id="*" Name="!(loc.ProductName)" Language="1033" Version="$(var.Version)" Manufacturer="$(var.Manufacturer)" UpgradeCode="{33B57F67-C531-4713-B29B-06796E5BACD6}">
@@ -26,12 +26,12 @@
 
     <Directory Id="TARGETDIR" Name="SourceDir">
         <Directory Id="$(var.Program_Files)">
-            <Directory Id="VendorProgramFilesFolder" Name="Aspia">
+            <Directory Id="VendorProgramFilesFolder" Name="SmartCafe">
                 <Directory Id="INSTALLLOCATION" Name="Client" />
             </Directory>
         </Directory>
         <Directory Id="ProgramMenuFolder">
-            <Directory Id="ApplicationMenuFolder" Name="Aspia" />
+            <Directory Id="ApplicationMenuFolder" Name="SmartCafe" />
         </Directory>
         <Directory Id="DesktopFolder" />
     </Directory>

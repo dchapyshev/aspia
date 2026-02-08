@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <WixLocalization Culture="ru-ru" xmlns="http://schemas.microsoft.com/wix/2006/localization">
     <String Id="Locale" Overridable="yes">ru</String>
-    <String Id="ProductName" Overridable="yes">Консоль Aspia</String>
-    <String Id="ShortcutName" Overridable="yes">Консоль Aspia</String>
+    <String Id="ProductName" Overridable="yes">Консоль SmartCafe</String>
+    <String Id="ShortcutName" Overridable="yes">Консоль SmartCafe</String>
     <String Id="DowngradeErrorMessage">Более новая версия приложения уже установлена.</String>
-    <String Id="AddressBookFile" Overridable="yes">Адресная книга Aspia (.aab)</String>
+    <String Id="AddressBookFile" Overridable="yes">Адресная книга SmartCafe (.aab)</String>
     <String Id="CreateDesktopShortcut" Overridable="yes">Создать ярлык на рабочем столе</String>
     <String Id="CreateProgramMenuShortcut" Overridable="yes">Создать ярлык в меню "Пуск"</String>
 </WixLocalization>

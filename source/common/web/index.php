@@ -1,6 +1,6 @@
 <?php
 //
-// Aspia Project
+// SmartCafe Project
 // Copyright (C) 2016-2025 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
@@ -21,12 +21,12 @@
 <html>
 	<head>
 		<meta charset="utf-8" />
-		<title>Aspia Update Server</title>
+		<title>SmartCafe Update Server</title>
 	</head>
 	<body>
 		<table>
 			<tr>
-				<td>Welcome to Aspia Update Server</td>
+				<td>Welcome to SmartCafe Update Server</td>
 			</tr>
 		</table>
 	</body>

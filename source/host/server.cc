@@ -1,5 +1,5 @@
 //
-// Aspia Project
+// SmartCafe Project
 // Copyright (C) 2016-2025 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
@@ -44,7 +44,7 @@ namespace host {
 
 namespace {
 
-const char kFirewallRuleName[] = "Aspia Host Service";
+const char kFirewallRuleName[] = "SmartCafe Host Service";
 const char kFirewallRuleDecription[] = "Allow incoming TCP connections";
 
 } // namespace
@@ -313,7 +313,7 @@ void Server::onFileDownloaderCompleted()
         QDir().mkpath(file_path);
 
         QString file_name =
-            "/aspia_host_" + QString::fromLatin1(base::Random::byteArray(16).toHex()) + ".msi";
+            "/smartcafe_host_" + QString::fromLatin1(base::Random::byteArray(16).toHex()) + ".msi";
 
         file_path = QDir::toNativeSeparators(file_path.append(file_name));
 

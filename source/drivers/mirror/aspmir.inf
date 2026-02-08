@@ -2,7 +2,7 @@
 
 [Version]
 Signature = "$Windows NT$"
-Provider  = %Aspia%
+Provider  = %SmartCafe%
 ClassGUID = {4D36E968-E325-11CE-BFC1-08002BE10318}
 Class     = Display
 DriverVer = 30/06/2024,1.0
@@ -14,7 +14,7 @@ aspmirv1.Display  = 11 ; system32
 
 ; Driver information
 [Manufacturer]
-%Aspia% = Mirror.Mfg
+%SmartCafe% = Mirror.Mfg
 
 [Mirror.Mfg]
 %Mirror% = aspmir, aspia_mirror
@@ -82,5 +82,5 @@ SERVICEROOT   = "System\CurrentControlSet\Services"
 ; Localizable Strings
 DiskId    = "Mirror Installation DISK (VIDEO)"
 GraphAdap = "Graphics Adapter"
-Aspia     = "Aspia"
-Mirror    = "Aspia Mirror Driver"
+SmartCafe     = "SmartCafe"
+Mirror    = "SmartCafe Mirror Driver"

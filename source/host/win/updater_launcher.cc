@@ -1,5 +1,5 @@
 //
-// Aspia Project
+// SmartCafe Project
 // Copyright (C) 2016-2025 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
@@ -157,7 +157,7 @@ bool launchUpdater(base::SessionId session_id)
     }
 
     QString file_dir = QDir::toNativeSeparators(QCoreApplication::applicationDirPath());
-    QString command_line = file_dir + "\\aspia_host.exe --update";
+    QString command_line = file_dir + "\\smartcafe_host.exe --update";
 
     return createProcessWithToken(user_token, command_line);
 }

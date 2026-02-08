@@ -1,6 +1,6 @@
 Purpose
 =======
-These scripts are intended for the server part of the Aspia update system. They are installed on the web server.
+These scripts are intended for the server part of the SmartCafe update system. They are installed on the web server.
 
 Installation
 ------------

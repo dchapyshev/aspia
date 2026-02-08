@@ -1,5 +1,5 @@
 //
-// Aspia Project
+// SmartCafe Project
 // Copyright (C) 2016-2025 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
@@ -79,7 +79,7 @@ PowerSaveBlocker::PowerSaveBlocker()
     LOG(INFO) << "Ctor";
 
 #if defined(Q_OS_WINDOWS)
-    static const wchar_t kDescription[] = L"Aspia session is active";
+    static const wchar_t kDescription[] = L"SmartCafe session is active";
 
     // The display will always be on as long as the class instance exists.
     handle_.reset(createPowerRequest(PowerRequestDisplayRequired, kDescription));

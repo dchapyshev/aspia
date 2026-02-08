@@ -23,7 +23,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Aspia Host</string>
+   <string>SmartCafe Host</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <property name="styleSheet">
@@ -238,7 +238,7 @@ border-radius: 2px;
    </property>
    <widget class="QMenu" name="menu_aspia">
     <property name="title">
-     <string notr="true">Aspia</string>
+     <string notr="true">SmartCafe</string>
     </property>
     <addaction name="action_settings"/>
     <addaction name="separator"/>

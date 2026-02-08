@@ -1,8 +1,8 @@
-Aspia
+SmartCafe
 =====
 Remote desktop, file transfer and system information tool.
 
-With Aspia, you can create your own NAT traversal infrastructure (using Router and Relay servers) with connection by ID or use direct connections. Aspia supports many features. Among them, detailed information about the system, audio, text chat.
+With SmartCafe, you can create your own NAT traversal infrastructure (using Router and Relay servers) with connection by ID or use direct connections. SmartCafe supports many features. Among them, detailed information about the system, audio, text chat.
 
 |Build Status|
 |:--:|
@@ -19,7 +19,7 @@ Currently supported
 - Encryption
 - Authorization (it is possible to add users with different access rights)
 - Address book with encryption and master-password
-- <b>NAT traversal with connection by ID</b> (with using Aspia Router and Aspia Relay)
+- <b>NAT traversal with connection by ID</b> (with using SmartCafe Router and SmartCafe Relay)
 - Direct connections
 - Audio support
 - Video recording

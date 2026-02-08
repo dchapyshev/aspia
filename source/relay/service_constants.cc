@@ -1,5 +1,5 @@
 //
-// Aspia Project
+// SmartCafe Project
 // Copyright (C) 2016-2025 Dmitry Chapyshev <dmitry@aspia.ru>
 //
 // This program is free software: you can redistribute it and/or modify
@@ -20,9 +20,9 @@
 
 namespace relay {
 
-const char kServiceFileName[] = "aspia_relay.exe";
-const char kServiceName[] = "aspia-relay";
-const char kServiceDisplayName[] = "Aspia Relay Service";
+const char kServiceFileName[] = "smartcafe_relay.exe";
+const char kServiceName[] = "smartcafe-relay";
+const char kServiceDisplayName[] = "SmartCafe Relay Service";
 const char kServiceDescription[] = "Proxies user traffic to bypass NAT.";
 
 } // namespace relay

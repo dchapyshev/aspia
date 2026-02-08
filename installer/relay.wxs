@@ -4,10 +4,10 @@
 <?include version.wxi ?>
 
  <!-- Variables -->
-<?define ProductName="Aspia Relay"?>
-<?define InstallLocation="Aspia Relay"?>
-<?define ServiceName="aspia-relay"?>
-<?define ServiceDisplayName="Aspia Relay Service"?>
+<?define ProductName="SmartCafe Relay"?>
+<?define InstallLocation="SmartCafe Relay"?>
+<?define ServiceName="smartcafe-relay"?>
+<?define ServiceDisplayName="SmartCafe Relay Service"?>
 <?define ServiceDescription="Proxies user traffic to bypass NAT."?>
 
 <!-- Product description -->
@@ -28,7 +28,7 @@
 
     <Directory Id="TARGETDIR" Name="SourceDir">
         <Directory Id="$(var.Program_Files)">
-            <Directory Id="VendorProgramFilesFolder" Name="Aspia">
+            <Directory Id="VendorProgramFilesFolder" Name="SmartCafe">
                 <Directory Id="INSTALLLOCATION" Name="Relay" />
             </Directory>
         </Directory>
@@ -37,7 +37,7 @@
     <!-- Relay service -->
     <DirectoryRef Id="INSTALLLOCATION" FileSource="$(var.SourceFiles)">
         <Component Id ="Applications" DiskId="1" Guid="{A462DE7C-8791-4123-8690-D67E34B1ECA5}">
-            <File Id="aspia_relay.exe" Name="aspia_relay.exe" KeyPath="yes" />
+            <File Id="smartcafe_relay.exe" Name="smartcafe_relay.exe" KeyPath="yes" />
             <ServiceInstall Id="ServiceInstaller" Type="ownProcess" Vital="yes" Name="$(var.ServiceName)" DisplayName="$(var.ServiceDisplayName)" Description="$(var.ServiceDescription)" Start="auto" Account="LocalSystem" ErrorControl="ignore" Interactive="no">
                 <ServiceDependency Id="RpcSs"/>
                 <ServiceDependency Id="Tcpip"/>
