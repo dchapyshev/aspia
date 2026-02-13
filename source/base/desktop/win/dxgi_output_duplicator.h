@@ -126,11 +126,6 @@ private:
     // function call, their updated_region_ will be merged and copied.
     QVector<Context*> contexts_;
 
-    // The last full frame of this output and its offset. If on AcquireNextFrame() failed because
-    // of timeout, i.e. no update, we can copy content from |last_frame_|.
-    SharedPointer<Frame> last_frame_;
-    QPoint last_frame_offset_;
-
     qint64 num_frames_captured_ = 0;
     Desktop desktop_;
 };

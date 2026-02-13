@@ -324,9 +324,6 @@ bool DxgiOutputDuplicator::duplicate(
             }
         }
 
-        last_frame_ = target;
-        last_frame_offset_ = offset;
-
         updated_region.translate(offset.x(), offset.y());
         *target->updatedRegion() += updated_region;
         ++num_frames_captured_;
@@ -334,30 +331,7 @@ bool DxgiOutputDuplicator::duplicate(
         return texture_->release() && releaseFrame();
     }
 
-    if (last_frame_)
-    {
-        // No change since last frame or AcquireNextFrame() timed out, we will export last frame to
-        // the target.
-        for (const auto& rect : updated_region)
-        {
-            // The Rect in |source|, starts from last_frame_offset_.
-            QRect source_rect = rect;
-
-            // The Rect in |target|, starts from offset.
-            QRect target_rect = source_rect;
-
-            source_rect.translate(last_frame_offset_);
-            target_rect.translate(offset);
-
-            libyuv::ARGBCopy(last_frame_->frameDataAtPos(source_rect.topLeft()), last_frame_->stride(),
-                             target->frameDataAtPos(target_rect.topLeft()), target->stride(),
-                             target_rect.width(), target_rect.height());
-        }
-
-        updated_region.translate(offset.x(), offset.y());
-        *target->updatedRegion() += updated_region;
-    }
-    else
+    if (num_frames_captured_ == 0)
     {
         // If we were at the very first frame, and capturing failed, the
         // context->updated_region should be kept unchanged for next attempt.
@@ -535,9 +509,6 @@ QSize DxgiOutputDuplicator::desktopSize() const
 //--------------------------------------------------------------------------------------------------
 qint64 DxgiOutputDuplicator::numFramesCaptured() const
 {
-#if !defined(NDEBUG)
-    DCHECK_EQ(!!last_frame_, num_frames_captured_ > 0);
-#endif
     return num_frames_captured_;
 }
 
