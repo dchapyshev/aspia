@@ -29,6 +29,10 @@ class QLocalServer;
 class QLockFile;
 
 namespace base {
+#if defined(Q_OS_WINDOWS)
+class MessageWindow;
+#endif // defined(Q_OS_WINDOWS)
+
 class ScopedCryptoInitializer;
 } // namespace base
 
@@ -65,6 +69,8 @@ public slots:
 signals:
     void sig_messageReceived(const QByteArray& message);
     void sig_themeChanged();
+    void sig_sessionEvent(quint32 event, quint32 session_id);
+    void sig_powerEvent(quint32 event);
 
 protected:
     bool event(QEvent* event) override;
@@ -82,6 +88,10 @@ private:
     base::Thread io_thread_;
     std::unique_ptr<base::ScopedCryptoInitializer> crypto_initializer_;
     std::unique_ptr<Translations> translations_;
+
+#if defined(Q_OS_WINDOWS)
+    std::unique_ptr<base::MessageWindow> message_window_;
+#endif // defined(Q_OS_WINDOWS)
 
     Q_DISABLE_COPY(GuiApplication)
 };

@@ -18,6 +18,7 @@
 
 #include "base/gui_application.h"
 
+#include <QAbstractNativeEventFilter>
 #include <QCryptographicHash>
 #include <QDataStream>
 #include <QDir>
@@ -34,6 +35,8 @@
 
 #if defined(Q_OS_WINDOWS)
 #include <qt_windows.h>
+#include <wtsapi32.h>
+#include "base/win/message_window.h"
 #endif // defined(Q_OS_WINDOWS)
 
 #if defined(Q_OS_UNIX)
@@ -133,12 +136,68 @@ GuiApplication::GuiApplication(int& argc, char* argv[])
         small_icon_size = kMaxSmallIconSize;
 
     setStyle(new CustomStyle(small_icon_size));
+
+#if defined(Q_OS_WINDOWS)
+    message_window_ = std::make_unique<base::MessageWindow>();
+    bool created = message_window_->create([this](
+        UINT message, WPARAM wparam, LPARAM lparam, LRESULT& result)
+    {
+        switch (message)
+        {
+            case WM_WTSSESSION_CHANGE:
+            {
+                quint32 event = static_cast<quint32>(wparam);
+                quint32 session_id = static_cast<quint32>(lparam);
+
+                emit sig_sessionEvent(event, session_id);
+            }
+            break;
+
+            case WM_POWERBROADCAST:
+            {
+                quint32 event = static_cast<quint32>(wparam);
+
+                emit sig_powerEvent(event);
+            }
+            break;
+
+            default:
+                break;
+        }
+
+        return false;
+    });
+
+    if (created)
+    {
+        if (!WTSRegisterSessionNotification(message_window_->hwnd(), NOTIFY_FOR_ALL_SESSIONS))
+        {
+            PLOG(ERROR) << "WTSRegisterSessionNotification failed";
+        }
+    }
+    else
+    {
+        LOG(ERROR) << "Unable to create messaging window";
+    }
+#endif // defined(Q_OS_WINDOWS)
 }
 
 //--------------------------------------------------------------------------------------------------
 GuiApplication::~GuiApplication()
 {
     LOG(INFO) << "Dtor";
+
+#if defined(Q_OS_WINDOWS)
+    if (message_window_)
+    {
+        if (!WTSUnRegisterSessionNotification(message_window_->hwnd()))
+        {
+            PLOG(ERROR) << "WTSUnRegisterSessionNotification failed";
+        }
+
+        message_window_.reset();
+    }
+#endif // defined(Q_OS_WINDOWS)
 
     io_thread_.stop();
 

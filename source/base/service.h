@@ -22,11 +22,6 @@
 #include <QString>
 
 #include "base/application.h"
-#include "base/session_id.h"
-
-#if defined(Q_OS_WINDOWS)
-#include "base/win/session_status.h"
-#endif // defined(Q_OS_WINDOWS)
 
 namespace base {
 
@@ -46,16 +41,15 @@ public:
 
     const QString& name() const { return name_; }
 
+signals:
+    void sig_sessionEvent(quint32 event, quint32 session_id);
+    void sig_powerEvent(quint32 event);
+
 protected:
     friend class ServiceThread;
 
     virtual void onStart() = 0;
     virtual void onStop() = 0;
-
-#if defined(Q_OS_WINDOWS)
-    virtual void onSessionEvent(SessionStatus event, SessionId session_id) = 0;
-    virtual void onPowerEvent(quint32 event) = 0;
-#endif // defined(Q_OS_WINDOWS)
 
 private:
 #if defined(Q_OS_UNIX)

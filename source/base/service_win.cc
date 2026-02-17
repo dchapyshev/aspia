@@ -58,6 +58,41 @@ const wchar_t kComProcessMandatoryLabel[] =
     SDDL_ACE(SDDL_MANDATORY_LABEL, SDDL_NO_EXECUTE_UP, SDDL_ML_MEDIUM);
 
 //--------------------------------------------------------------------------------------------------
+QString powerEventToString(quint32 event)
+{
+    const char* name;
+
+    switch (event)
+    {
+    case PBT_APMPOWERSTATUSCHANGE:
+        name = "PBT_APMPOWERSTATUSCHANGE";
+        break;
+
+    case PBT_APMRESUMEAUTOMATIC:
+        name = "PBT_APMRESUMEAUTOMATIC";
+        break;
+
+    case PBT_APMRESUMESUSPEND:
+        name = "PBT_APMRESUMESUSPEND";
+        break;
+
+    case PBT_APMSUSPEND:
+        name = "PBT_APMSUSPEND";
+        break;
+
+    case PBT_POWERSETTINGCHANGE:
+        name = "PBT_POWERSETTINGCHANGE";
+        break;
+
+    default:
+        name = "UNKNOWN";
+        break;
+    }
+
+    return QString("%1 (%2)").arg(name).arg(static_cast<int>(event));
+}
+
+//--------------------------------------------------------------------------------------------------
 QString serviceStateToString(DWORD state)
 {
     switch (state)
@@ -307,12 +342,13 @@ DWORD WINAPI ServiceThread::serviceControlHandler(
             if (!self)
                 return NO_ERROR;
 
-            SessionStatus session_status = static_cast<SessionStatus>(event_type);
-            SessionId session_id =
+            quint32 session_id =
                 reinterpret_cast<WTSSESSION_NOTIFICATION*>(event_data)->dwSessionId;
 
-            self->doEvent(std::bind(
-                &Service::onSessionEvent, self->service_, session_status, session_id));
+            self->doEvent([event_type, session_id]()
+            {
+                emit self->service_->sig_sessionEvent(event_type, session_id);
+            });
         }
         return NO_ERROR;
 
@@ -321,7 +357,11 @@ DWORD WINAPI ServiceThread::serviceControlHandler(
             if (!self)
                 return NO_ERROR;
 
-            self->doEvent(std::bind(&Service::onPowerEvent, self->service_, event_type));
+            self->doEvent([event_type]()
+            {
+                LOG(INFO) << "Power event detected:" << powerEventToString(event_type);
+                self->service_->sig_powerEvent(event_type);
+            });
         }
         return NO_ERROR;
 
@@ -395,6 +435,9 @@ int Service::exec(Application& application)
         service_thread->startup_state = ServiceThread::State::MESSAGE_LOOP_CREATED;
         service_thread->startup_condition.notify_all();
     }
+
+    connect(this, &Service::sig_powerEvent, &application, &Application::sig_powerEvent);
+    connect(this, &Service::sig_sessionEvent, &application, &Application::sig_sessionEvent);
 
     int ret = application.exec();
     service_thread.reset();
