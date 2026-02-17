@@ -19,6 +19,7 @@
 list(APPEND SOURCE_BASE
     aligned_memory.cc
     aligned_memory.h
+    application.cc
     application.h
     applications_reader.h
     asio_event_dispatcher.cc
@@ -534,8 +535,6 @@ if (WIN32)
         win/session_info.h
         win/session_status.cc
         win/session_status.h
-        win/session_watcher.cc
-        win/session_watcher.h
         win/user_enumerator.cc
         win/user_enumerator.h
         win/user_group_enumerator.cc
