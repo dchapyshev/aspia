@@ -39,11 +39,6 @@ protected:
     void onStart() final;
     void onStop() final;
 
-#if defined(Q_OS_WINDOWS)
-    void onSessionEvent(base::SessionStatus event, base::SessionId session_id) final;
-    void onPowerEvent(quint32 event) final;
-#endif // defined(Q_OS_WINDOWS)
-
 private:
     QPointer<Controller> controller_;
 

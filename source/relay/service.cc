@@ -59,18 +59,4 @@ void Service::onStop()
     LOG(INFO) << "Service stopped";
 }
 
-#if defined(Q_OS_WINDOWS)
-//--------------------------------------------------------------------------------------------------
-void Service::onSessionEvent(base::SessionStatus /* event */, base::SessionId /* session_id */)
-{
-    // Nothing
-}
-
-//--------------------------------------------------------------------------------------------------
-void Service::onPowerEvent(quint32 /* event */)
-{
-    // Nothing
-}
-#endif // defined(Q_OS_WINDOWS)
-
 } // namespace relay
