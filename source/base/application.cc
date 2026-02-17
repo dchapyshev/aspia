@@ -16,30 +16,22 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_APPLICATION_H
-#define BASE_APPLICATION_H
-
-#include <QCoreApplication>
+#include "base/application.h"
 
 namespace base {
 
-class Application final : public QCoreApplication
+//--------------------------------------------------------------------------------------------------
+Application::Application(int& argc, char* argv[])
+    : QCoreApplication(argc, argv)
 {
-    Q_OBJECT
+    // Nothing
+}
 
-public:
-    Application(int& argc, char* argv[]);
-
-    static Application* instance();
-
-signals:
-    void sig_sessionEvent(quint32 event, quint32 session_id);
-    void sig_powerEvent(quint32 event);
-
-private:
-    Q_DISABLE_COPY(Application)
-};
+//--------------------------------------------------------------------------------------------------
+// static
+Application* Application::instance()
+{
+    return static_cast<Application*>(QCoreApplication::instance());
+}
 
 } // namespace base
-
-#endif // BASE_APPLICATION_H
