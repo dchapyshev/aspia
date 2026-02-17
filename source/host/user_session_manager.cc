@@ -334,12 +334,8 @@ void UserSessionManager::onClientSession(ClientSession* client_session)
 //--------------------------------------------------------------------------------------------------
 void UserSessionManager::onUserSessionEvent(quint32 status, quint32 session_id)
 {
-    QString status_str;
 #if defined(Q_OS_WINDOWS)
-    status_str = base::sessionStatusToString(status);
-#else
-    status_str = QString::number(static_cast<int>(status));
-#endif
+    QString status_str = base::sessionStatusToString(status);
 
     LOG(INFO) << "User session event (status=" << status_str << "session_id=" << session_id << ")";
 
@@ -386,6 +382,7 @@ void UserSessionManager::onUserSessionEvent(quint32 status, quint32 session_id)
         }
         break;
     }
+#endif // defined(Q_OS_WINDOWS)
 }
 
 //--------------------------------------------------------------------------------------------------
