@@ -455,6 +455,22 @@ void ClientDesktop::onMetricsRequest()
 }
 
 //--------------------------------------------------------------------------------------------------
+void ClientDesktop::onSwitchSession(quint32 session_id)
+{
+    proto::switch_session::ClientToHost message;
+    proto::switch_session::SwitchSession* switch_session = message.mutable_switch_session();
+
+    switch_session->set_dummy(1);
+    switch_session->set_session_id(session_id);
+
+    proto::desktop::Extension* extension = outgoing_message_.newMessage().mutable_extension();
+    extension->set_name(common::kSwitchSessionExtension);
+    extension->set_data(message.SerializeAsString());
+
+    sendMessage(outgoing_message_.serialize());
+}
+
+//--------------------------------------------------------------------------------------------------
 void ClientDesktop::readCapabilities(const proto::desktop::Capabilities& capabilities)
 {
     LOG(INFO) << "Capabilities received";
@@ -475,6 +491,7 @@ void ClientDesktop::readCapabilities(const proto::desktop::Capabilities& capabil
     {
         // Everything is fine, we send the current configuration.
         setDesktopConfig(desktop_config_);
+        sendSessionListRequest();
     }
 }
 
@@ -735,10 +752,44 @@ void ClientDesktop::readExtension(const proto::desktop::Extension& extension)
 
         emit sig_systemInfo(system_info);
     }
+    else if (extension.name() == common::kSwitchSessionExtension)
+    {
+        proto::switch_session::HostToClient incoming_message;
+
+        if (!incoming_message.ParseFromString(extension.data()))
+        {
+            LOG(ERROR) << "Unable to parse switch session extension data";
+            return;
+        }
+
+        if (incoming_message.has_session_list())
+        {
+            emit sig_sessionListChanged(incoming_message.session_list());
+        }
+        else
+        {
+            LOG(WARNING) << "Unhandled switch session extension message";
+        }
+    }
     else
     {
         LOG(ERROR) << "Unknown extension:" << extension.name();
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientDesktop::sendSessionListRequest()
+{
+    proto::switch_session::ClientToHost message;
+    proto::switch_session::SessionListRequest* request = message.mutable_session_list_request();
+
+    request->set_dummy(1);
+
+    proto::desktop::Extension* extension = outgoing_message_.newMessage().mutable_extension();
+    extension->set_name(common::kSwitchSessionExtension);
+    extension->set_data(message.SerializeAsString());
+
+    sendMessage(outgoing_message_.serialize());
 }
 
 } // namespace client

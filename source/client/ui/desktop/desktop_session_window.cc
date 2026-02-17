@@ -305,6 +305,8 @@ Client* DesktopSessionWindow::createClient()
             Qt::QueuedConnection);
     connect(client, &ClientDesktop::sig_mouseCursorChanged, this, &DesktopSessionWindow::onMouseCursorChanged,
             Qt::QueuedConnection);
+    connect(client, &ClientDesktop::sig_sessionListChanged, this, &DesktopSessionWindow::onSessionListChanged,
+            Qt::QueuedConnection);
 
     connect(this, &DesktopSessionWindow::sig_desktopConfigChanged, client, &ClientDesktop::setDesktopConfig,
             Qt::QueuedConnection);
@@ -333,6 +335,9 @@ Client* DesktopSessionWindow::createClient()
     connect(this, &DesktopSessionWindow::sig_taskManager, client, &ClientDesktop::onTaskManager,
             Qt::QueuedConnection);
     connect(this, &DesktopSessionWindow::sig_metricsRequested, client, &ClientDesktop::onMetricsRequest,
+            Qt::QueuedConnection);
+
+    connect(toolbar_, &DesktopToolBar::sig_switchSession, client, &ClientDesktop::onSwitchSession,
             Qt::QueuedConnection);
 
     client->setDesktopConfig(desktop_config_);
@@ -626,6 +631,12 @@ void DesktopSessionWindow::onMouseCursorChanged(std::shared_ptr<base::MouseCurso
         desktop_->setCursorShape(QPixmap::fromImage(std::move(image)),
                                  QPoint(hotspot_x, hotspot_y));
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopSessionWindow::onSessionListChanged(const proto::switch_session::SessionList& sessions)
+{
+    toolbar_->setSessionList(sessions);
 }
 
 //--------------------------------------------------------------------------------------------------

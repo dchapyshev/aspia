@@ -68,6 +68,7 @@ public slots:
     void onFrameChanged(const QSize& screen_size, std::shared_ptr<base::Frame> frame);
     void onDrawFrame();
     void onMouseCursorChanged(std::shared_ptr<base::MouseCursor> mouse_cursor);
+    void onSessionListChanged(const proto::switch_session::SessionList& sessions);
 
 signals:
     void sig_desktopConfigChanged(const proto::desktop::Config& config);

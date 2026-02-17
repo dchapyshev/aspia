@@ -54,6 +54,18 @@ DesktopToolBar::DesktopToolBar(proto::peer::SessionType session_type, QWidget* p
         onChangeResolutionAction(action);
     });
 
+    sessions_menu_ = new QMenu(this);
+    sessions_group_ = new QActionGroup(sessions_menu_);
+    ui.action_switch_session->setMenu(sessions_menu_);
+
+    QToolButton* switch_session_button = qobject_cast<QToolButton*>(
+        ui.toolbar->widgetForAction(ui.action_switch_session));
+    switch_session_button->setPopupMode(QToolButton::InstantPopup);
+
+    connect(sessions_menu_, &QMenu::aboutToShow, this, &DesktopToolBar::onMenuShow);
+    connect(sessions_menu_, &QMenu::aboutToHide, this, &DesktopToolBar::onMenuHide);
+    connect(sessions_group_, &QActionGroup::triggered, this, &DesktopToolBar::onSwitchSessionAction);
+
     DesktopSettings settings;
 
     ui.action_autoscroll->setChecked(settings.autoScrolling());
@@ -423,6 +435,59 @@ void DesktopToolBar::setScreenType(const proto::desktop::ScreenType& screen_type
 }
 
 //--------------------------------------------------------------------------------------------------
+void DesktopToolBar::setSessionList(const proto::switch_session::SessionList& session_list)
+{
+    LOG(INFO) << "Session list received:" << session_list;
+
+    bool enable = session_list.session_size() != 0;
+
+    ui.action_switch_session->setVisible(enable);
+    ui.action_switch_session->setEnabled(enable);
+
+    for (int i = 0; i < sessions_actions_.size(); ++i)
+        delete sessions_actions_[i];
+    sessions_actions_.clear();
+    sessions_menu_->clear();
+
+    if (enable)
+    {
+        for (int i = 0; i < session_list.session_size(); ++i)
+        {
+            const proto::switch_session::Session& session = session_list.session(i);
+
+            QString user_name = QString::fromStdString(session.user_name());
+            QString text;
+
+            if (user_name.isEmpty())
+            {
+                text = tr("Session %1").arg(i + 1);
+            }
+            else
+            {
+                text = tr("Session %1 (%2)").arg(i + 1).arg(user_name);
+            }
+
+            if (session.is_console())
+                text.append("*");
+
+            QAction* session_action = new QAction();
+            session_action->setText(text);
+            session_action->setData(session.session_id());
+            session_action->setCheckable(true);
+
+            if (session_list.current_session_id() == session.session_id())
+                session_action->setChecked(true);
+
+            sessions_group_->addAction(session_action);
+            sessions_menu_->addAction(session_action);
+            sessions_actions_.append(session_action);
+        }
+    }
+
+    updateSize();
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopToolBar::startRecording(bool enable)
 {
     LOG(INFO) << "[ACTION] Start recording:" << enable;
@@ -711,6 +776,12 @@ void DesktopToolBar::onChangeScreenAction(QAction* action)
     out_screen.set_title(screen.title());
 
     emit sig_screenSelected(screen);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopToolBar::onSwitchSessionAction(QAction* action)
+{
+    LOG(INFO) << "[ACTION] Switch session action:" << action;
 }
 
 //--------------------------------------------------------------------------------------------------

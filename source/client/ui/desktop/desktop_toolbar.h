@@ -20,6 +20,7 @@
 #define CLIENT_UI_DESKTOP_DESKTOP_TOOLBAR_H
 
 #include "proto/desktop.h"
+#include "proto/switch_session.h"
 #include "proto/peer.h"
 #include "ui_desktop_toolbar.h"
 
@@ -46,6 +47,7 @@ public:
 
     void setScreenList(const proto::desktop::ScreenList& screen_list);
     void setScreenType(const proto::desktop::ScreenType& screen_type);
+    void setSessionList(const proto::switch_session::SessionList& session_list);
     void startRecording(bool enable);
 
     int scale() const { return scale_; }
@@ -79,6 +81,7 @@ signals:
     void sig_recordingStateChanged(bool enable);
     void sig_videoPauseChanged(bool enable);
     void sig_audioPauseChanged(bool enable);
+    void sig_switchSession(quint32 session_id);
 
 protected:
     // QFrame implementation.
@@ -93,6 +96,7 @@ private slots:
     void onPowerControl(QAction* action);
     void onChangeResolutionAction(QAction* action);
     void onChangeScreenAction(QAction* action);
+    void onSwitchSessionAction(QAction* action);
     void onMenuShow();
     void onMenuHide();
     void onShowRecordSettings();
@@ -124,6 +128,10 @@ private:
 
     QMenu* scale_menu_ = nullptr;
     QActionGroup* scale_group_ = nullptr;
+
+    QMenu* sessions_menu_ = nullptr;
+    QActionGroup* sessions_group_ = nullptr;
+    QList<QAction*> sessions_actions_;
 
     QTimer* hide_timer_ = nullptr;
 

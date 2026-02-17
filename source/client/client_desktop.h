@@ -27,6 +27,7 @@
 #include "client/input_event_filter.h"
 #include "common/clipboard_monitor.h"
 #include "proto/desktop.h"
+#include "proto/switch_session.h"
 #include "proto/system_info.h"
 #include "proto/task_manager.h"
 
@@ -100,6 +101,7 @@ public slots:
     void onSystemInfoRequest(const proto::system_info::SystemInfoRequest& request);
     void onTaskManager(const proto::task_manager::ClientToHost& message);
     void onMetricsRequest();
+    void onSwitchSession(quint32 session_id);
 
 signals:
     void sig_configRequired();
@@ -114,6 +116,7 @@ signals:
     void sig_frameChanged(const QSize& screen_size, std::shared_ptr<base::Frame> frame);
     void sig_drawFrame();
     void sig_mouseCursorChanged(std::shared_ptr<base::MouseCursor> mouse_cursor);
+    void sig_sessionListChanged(const proto::switch_session::SessionList& sessions);
 
 protected:
     // Client implementation.
@@ -132,6 +135,7 @@ private:
     void readCursorPosition(const proto::desktop::CursorPosition& cursor_position);
     void readClipboardEvent(const proto::desktop::ClipboardEvent& event);
     void readExtension(const proto::desktop::Extension& extension);
+    void sendSessionListRequest();
 
     bool started_ = false;
 

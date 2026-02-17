@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>469</width>
+    <width>866</width>
     <height>51</height>
    </rect>
   </property>
@@ -63,6 +63,7 @@
      </property>
      <addaction name="action_pin"/>
      <addaction name="separator"/>
+     <addaction name="action_switch_session"/>
      <addaction name="action_power_control"/>
      <addaction name="action_cad"/>
      <addaction name="action_settings"/>
@@ -469,6 +470,21 @@
    </property>
    <property name="visible">
     <bool>false</bool>
+   </property>
+  </action>
+  <action name="action_switch_session">
+   <property name="icon">
+    <iconset resource="../../../common/resources/common.qrc">
+     <normaloff>:/img/user-account.svg</normaloff>:/img/user-account.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Switch Session</string>
+   </property>
+   <property name="visible">
+    <bool>false</bool>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
  </widget>
