@@ -171,6 +171,12 @@ void ClientSession::setSessionId(base::SessionId session_id)
 }
 
 //--------------------------------------------------------------------------------------------------
+base::HostId ClientSession::hostId() const
+{
+    return tcp_channel_->hostId();
+}
+
+//--------------------------------------------------------------------------------------------------
 void ClientSession::sendMessage(const QByteArray& buffer)
 {
     tcp_channel_->send(proto::peer::CHANNEL_ID_SESSION, buffer);

@@ -34,10 +34,12 @@
 #include "host/service_constants.h"
 #include "host/host_storage.h"
 #include "proto/desktop_internal.h"
+#include "proto/switch_session.h"
 #include "proto/task_manager.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/safe_mode_util.h"
+#include "base/win/session_enumerator.h"
 #include "host/system_info.h"
 #include "host/win/updater_launcher.h"
 #endif // defined(Q_OS_WINDOWS)
@@ -245,6 +247,37 @@ void ClientSessionDesktop::onTaskManagerMessage(const proto::task_manager::HostT
     proto::desktop::Extension* extension = outgoing_message_.newMessage().mutable_extension();
     extension->set_name(common::kTaskManagerExtension);
     extension->set_data(message.SerializeAsString());
+
+    sendMessage(outgoing_message_.serialize());
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientSessionDesktop::onUpdateSessionsList()
+{
+    proto::switch_session::HostToClient outgoing_message;
+    proto::switch_session::SessionList* session_list = outgoing_message.mutable_session_list();
+
+    session_list->set_current_session_id(sessionId());
+
+    for (base::SessionEnumerator it; !it.isAtEnd(); it.advance())
+    {
+        if (it.sessionId() == 0) // Don't add system session.
+            continue;
+
+        proto::switch_session::Session* session = session_list->add_session();
+
+        session->set_session_id(it.sessionId());
+        session->set_user_name(it.userName().toStdString());
+        session->set_session_name(it.sessionName().toStdString());
+        session->set_domain_name(it.domainName().toStdString());
+        session->set_is_console(it.isConsole());
+        session->set_is_locked(it.isUserLocked());
+        session->set_is_active(it.isActive());
+    }
+
+    proto::desktop::Extension* desktop_extension = outgoing_message_.newMessage().mutable_extension();
+    desktop_extension->set_name(common::kSwitchSessionExtension);
+    desktop_extension->set_data(outgoing_message.SerializeAsString());
 
     sendMessage(outgoing_message_.serialize());
 }
@@ -474,6 +507,10 @@ void ClientSessionDesktop::readExtension(const proto::desktop::Extension& extens
     else if (extension.name() == common::kVideoRecordingExtension)
     {
         readVideoRecordingExtension(extension.data());
+    }
+    else if (extension.name() == common::kSwitchSessionExtension)
+    {
+        readSwitchSessionExtension(extension.data());
     }
     else
     {
@@ -838,6 +875,33 @@ void ClientSessionDesktop::readTaskManagerExtension(const std::string& data)
     }
 
     task_manager_->readMessage(message);
+#endif // defined(Q_OS_WINDOWS)
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientSessionDesktop::readSwitchSessionExtension(const std::string& data)
+{
+#if defined(Q_OS_WINDOWS)
+    proto::switch_session::ClientToHost incoming_message;
+
+    if (!incoming_message.ParseFromString(data))
+    {
+        LOG(ERROR) << "Unable to parse switch session extension data";
+        return;
+    }
+
+    if (incoming_message.has_session_list_request())
+    {
+        onUpdateSessionsList();
+    }
+    else if (incoming_message.has_switch_session())
+    {
+        // TODO
+    }
+    else
+    {
+        LOG(WARNING) << "Unhandled message for switch session extension";
+    }
 #endif // defined(Q_OS_WINDOWS)
 }
 

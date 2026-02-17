@@ -79,6 +79,7 @@ protected:
 private slots:
 #if defined(Q_OS_WINDOWS)
     void onTaskManagerMessage(const proto::task_manager::HostToClient& message);
+    void onUpdateSessionsList();
 #endif // defined(Q_OS_WINDOWS)
 
 private:
@@ -93,6 +94,7 @@ private:
     void readSystemInfoExtension(const std::string& data);
     void readVideoRecordingExtension(const std::string& data);
     void readTaskManagerExtension(const std::string& data);
+    void readSwitchSessionExtension(const std::string& data);
     void onOverflowDetectionTimer();
     void downStepOverflow();
     void upStepOverflow();
