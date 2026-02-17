@@ -139,6 +139,21 @@ QString SessionEnumerator::farmName() const
 }
 
 //--------------------------------------------------------------------------------------------------
+bool SessionEnumerator::isConsole() const
+{
+    if (!info_[current_]->pSessionName)
+        return false;
+
+    return _wcsicmp(info_[current_]->pSessionName, L"console") == 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SessionEnumerator::isActive() const
+{
+    return state() == WTSActive;
+}
+
+//--------------------------------------------------------------------------------------------------
 bool SessionEnumerator::isUserLocked() const
 {
     SessionInfo session_info(sessionId());

@@ -60,6 +60,8 @@ public:
     // is empty.
     QString farmName() const;
 
+    bool isConsole() const;
+    bool isActive() const;
     bool isUserLocked() const;
 
 private:
