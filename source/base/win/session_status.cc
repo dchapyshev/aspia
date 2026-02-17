@@ -22,65 +22,43 @@
 
 namespace base {
 
-namespace {
-
 //--------------------------------------------------------------------------------------------------
-bool constexpr isEqual(SessionStatus status1, DWORD status2)
-{
-    return static_cast<DWORD>(status1) == status2;
-}
-
-static_assert(isEqual(SessionStatus::CONSOLE_CONNECT, WTS_CONSOLE_CONNECT));
-static_assert(isEqual(SessionStatus::CONSOLE_DISCONNECT, WTS_CONSOLE_DISCONNECT));
-static_assert(isEqual(SessionStatus::REMOTE_CONNECT, WTS_REMOTE_CONNECT));
-static_assert(isEqual(SessionStatus::REMOTE_DISCONNECT, WTS_REMOTE_DISCONNECT));
-static_assert(isEqual(SessionStatus::SESSION_LOGON, WTS_SESSION_LOGON));
-static_assert(isEqual(SessionStatus::SESSION_LOGOFF, WTS_SESSION_LOGOFF));
-static_assert(isEqual(SessionStatus::SESSION_LOCK, WTS_SESSION_LOCK));
-static_assert(isEqual(SessionStatus::SESSION_UNLOCK, WTS_SESSION_UNLOCK));
-static_assert(isEqual(SessionStatus::SESSION_REMOTE_CONTROL, WTS_SESSION_REMOTE_CONTROL));
-static_assert(isEqual(SessionStatus::SESSION_CREATE, WTS_SESSION_CREATE));
-static_assert(isEqual(SessionStatus::SESSION_TERMINATE, WTS_SESSION_TERMINATE));
-
-} // namespace
-
-//--------------------------------------------------------------------------------------------------
-const char* sessionStatusToString(SessionStatus status)
+const char* sessionStatusToString(quint32 status)
 {
     switch (status)
     {
-        case SessionStatus::CONSOLE_CONNECT:
-            return "CONSOLE_CONNECT";
+        case WTS_CONSOLE_CONNECT:
+            return "WTS_CONSOLE_CONNECT";
 
-        case SessionStatus::CONSOLE_DISCONNECT:
-            return "CONSOLE_DISCONNECT";
+        case WTS_CONSOLE_DISCONNECT:
+            return "WTS_CONSOLE_DISCONNECT";
 
-        case SessionStatus::REMOTE_CONNECT:
-            return "REMOTE_CONNECT";
+        case WTS_REMOTE_CONNECT:
+            return "WTS_REMOTE_CONNECT";
 
-        case SessionStatus::REMOTE_DISCONNECT:
-            return "REMOTE_DISCONNECT";
+        case WTS_REMOTE_DISCONNECT:
+            return "WTS_REMOTE_DISCONNECT";
 
-        case SessionStatus::SESSION_LOGON:
-            return "SESSION_LOGON";
+        case WTS_SESSION_LOGON:
+            return "WTS_SESSION_LOGON";
 
-        case SessionStatus::SESSION_LOGOFF:
-            return "SESSION_LOGOFF";
+        case WTS_SESSION_LOGOFF:
+            return "WTS_SESSION_LOGOFF";
 
-        case SessionStatus::SESSION_LOCK:
-            return "SESSION_LOCK";
+        case WTS_SESSION_LOCK:
+            return "WTS_SESSION_LOCK";
 
-        case SessionStatus::SESSION_UNLOCK:
-            return "SESSION_UNLOCK";
+        case WTS_SESSION_UNLOCK:
+            return "WTS_SESSION_UNLOCK";
 
-        case SessionStatus::SESSION_REMOTE_CONTROL:
-            return "SESSION_REMOTE_CONTROL";
+        case WTS_SESSION_REMOTE_CONTROL:
+            return "WTS_SESSION_REMOTE_CONTROL";
 
-        case SessionStatus::SESSION_CREATE:
-            return "SESSION_CREATE";
+        case WTS_SESSION_CREATE:
+            return "WTS_SESSION_CREATE";
 
-        case SessionStatus::SESSION_TERMINATE:
-            return "SESSION_TERMINATE";
+        case WTS_SESSION_TERMINATE:
+            return "WTS_SESSION_TERMINATE";
 
         default:
             return "UNKNOWN";
