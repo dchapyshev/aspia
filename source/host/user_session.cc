@@ -240,7 +240,7 @@ void UserSession::onClientSession(ClientSession* client_session)
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSession::onUserSessionEvent(base::SessionStatus status, base::SessionId session_id)
+void UserSession::onUserSessionEvent(quint32 status, quint32 session_id)
 {
     QString status_str;
 #if defined(Q_OS_WINDOWS)
@@ -254,7 +254,7 @@ void UserSession::onUserSessionEvent(base::SessionStatus status, base::SessionId
 
     switch (status)
     {
-        case base::SessionStatus::CONSOLE_CONNECT:
+        case WTS_CONSOLE_CONNECT:
         {
             if (state_ == State::FINISHED)
             {
@@ -292,7 +292,7 @@ void UserSession::onUserSessionEvent(base::SessionStatus status, base::SessionId
         }
         break;
 
-        case base::SessionStatus::CONSOLE_DISCONNECT:
+        case WTS_CONSOLE_DISCONNECT:
         {
             if (session_id != session_id_)
             {
@@ -321,7 +321,7 @@ void UserSession::onUserSessionEvent(base::SessionStatus status, base::SessionId
         }
         break;
 
-        case base::SessionStatus::REMOTE_DISCONNECT:
+        case WTS_REMOTE_DISCONNECT:
         {
             if (session_id != session_id_)
             {
@@ -340,7 +340,7 @@ void UserSession::onUserSessionEvent(base::SessionStatus status, base::SessionId
         }
         break;
 
-        case base::SessionStatus::SESSION_LOGON:
+        case WTS_SESSION_LOGON:
         {
             emit sig_credentialsRequested();
         }

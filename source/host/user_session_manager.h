@@ -24,7 +24,6 @@
 
 #include "base/session_id.h"
 #include "base/ipc/ipc_server.h"
-#include "base/win/session_status.h"
 #include "host/user_session.h"
 
 namespace host {
@@ -38,7 +37,6 @@ public:
     ~UserSessionManager() final;
 
     bool start();
-    void onUserSessionEvent(base::SessionStatus status, base::SessionId session_id);
     void onRouterStateChanged(const proto::internal::RouterState& router_state);
     void onUpdateCredentials(base::HostId host_id, const QString& password);
     void onSettingsChanged();
@@ -51,6 +49,7 @@ signals:
     void sig_changeOneTimeSessions(quint32 sessions);
 
 private slots:
+    void onUserSessionEvent(quint32 status, quint32 session_id);
     void onUserSessionFinished();
     void onIpcNewConnection();
 

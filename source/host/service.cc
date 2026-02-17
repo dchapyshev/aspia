@@ -31,47 +31,6 @@
 
 namespace host {
 
-namespace {
-
-#if defined(Q_OS_WINDOWS)
-//--------------------------------------------------------------------------------------------------
-QString powerEventToString(quint32 event)
-{
-    const char* name;
-
-    switch (event)
-    {
-        case PBT_APMPOWERSTATUSCHANGE:
-            name = "PBT_APMPOWERSTATUSCHANGE";
-            break;
-
-        case PBT_APMRESUMEAUTOMATIC:
-            name = "PBT_APMRESUMEAUTOMATIC";
-            break;
-
-        case PBT_APMRESUMESUSPEND:
-            name = "PBT_APMRESUMESUSPEND";
-            break;
-
-        case PBT_APMSUSPEND:
-            name = "PBT_APMSUSPEND";
-            break;
-
-        case PBT_POWERSETTINGCHANGE:
-            name = "PBT_POWERSETTINGCHANGE";
-            break;
-
-        default:
-            name = "UNKNOWN";
-            break;
-    }
-
-    return QString("%1 (%2)").arg(name).arg(static_cast<int>(event));
-}
-#endif // defined(Q_OS_WINDOWS)
-
-} // namespace
-
 //--------------------------------------------------------------------------------------------------
 Service::Service(QObject* parent)
     : base::Service(kHostServiceName, parent)
@@ -135,38 +94,5 @@ void Service::onStop()
     delete server_;
     LOG(INFO) << "Service is stopped";
 }
-
-#if defined(Q_OS_WINDOWS)
-//--------------------------------------------------------------------------------------------------
-void Service::onSessionEvent(base::SessionStatus status, base::SessionId session_id)
-{
-    LOG(INFO) << "Session event detected (status:" << base::sessionStatusToString(status)
-              << ", session_id:" << session_id << ")";
-
-    if (server_)
-    {
-        server_->setSessionEvent(status, session_id);
-    }
-    else
-    {
-        LOG(ERROR) << "No server instance";
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-void Service::onPowerEvent(quint32 event)
-{
-    LOG(INFO) << "Power event detected:" << powerEventToString(event);
-
-    if (server_)
-    {
-        server_->setPowerEvent(event);
-    }
-    else
-    {
-        LOG(ERROR) << "No server instance";
-    }
-}
-#endif // defined(Q_OS_WINDOWS)
 
 } // namespace host

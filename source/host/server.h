@@ -41,10 +41,9 @@ public:
     ~Server() final;
 
     void start();
-    void setSessionEvent(base::SessionStatus status, base::SessionId session_id);
-    void setPowerEvent(quint32 power_event);
 
 private slots:
+    void onPowerEvent(quint32 power_event);
     void onRouterStateRequested();
     void onCredentialsRequested();
     void onChangeOneTimePassword();

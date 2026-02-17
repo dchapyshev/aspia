@@ -24,6 +24,7 @@
 #include <QFile>
 #include <QStandardPaths>
 
+#include "base/application.h"
 #include "base/logging.h"
 #include "base/version_constants.h"
 #include "base/crypto/password_generator.h"
@@ -74,6 +75,9 @@ Server::Server(QObject* parent)
 
     connect(tcp_server_, &base::TcpServer::sig_newConnection,
             this, &Server::onNewDirectConnection);
+
+    connect(base::Application::instance(), &base::Application::sig_powerEvent,
+            this, &Server::onPowerEvent);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -121,15 +125,7 @@ void Server::start()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Server::setSessionEvent(base::SessionStatus status, base::SessionId session_id)
-{
-    LOG(INFO) << "Session event (status:" << static_cast<int>(status)
-              << "session_id:" << session_id << ")";
-    user_session_manager_->onUserSessionEvent(status, session_id);
-}
-
-//--------------------------------------------------------------------------------------------------
-void Server::setPowerEvent(quint32 power_event)
+void Server::onPowerEvent(quint32 power_event)
 {
 #if defined(Q_OS_WINDOWS)
     LOG(INFO) << "Power event:" << power_event;

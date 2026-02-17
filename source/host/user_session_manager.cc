@@ -21,6 +21,7 @@
 #include <QCoreApplication>
 #include <QDir>
 
+#include "base/application.h"
 #include "base/location.h"
 #include "base/logging.h"
 #include "base/ipc/ipc_channel.h"
@@ -138,6 +139,9 @@ UserSessionManager::UserSessionManager(QObject* parent)
     : QObject(parent)
 {
     LOG(INFO) << "Ctor";
+
+    connect(base::Application::instance(), &base::Application::sig_sessionEvent,
+            this, &UserSessionManager::onUserSessionEvent);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -227,63 +231,6 @@ bool UserSessionManager::start()
 
     LOG(INFO) << "User session manager is started";
     return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-void UserSessionManager::onUserSessionEvent(base::SessionStatus status, base::SessionId session_id)
-{
-    QString status_str;
-#if defined(Q_OS_WINDOWS)
-    status_str = base::sessionStatusToString(status);
-#else
-    status_str = QString::number(static_cast<int>(status));
-#endif
-
-    LOG(INFO) << "User session event (status=" << status_str << "session_id=" << session_id << ")";
-
-    // Send an event of each session.
-    for (const auto& session : std::as_const(sessions_))
-        session->onUserSessionEvent(status, session_id);
-
-    switch (status)
-    {
-        case base::SessionStatus::CONSOLE_CONNECT:
-        case base::SessionStatus::REMOTE_CONNECT:
-        case base::SessionStatus::SESSION_LOGON:
-        {
-            // Start UI process in user session.
-            startSessionProcess(FROM_HERE, session_id);
-        }
-        break;
-
-        case base::SessionStatus::SESSION_UNLOCK:
-        {
-            for (const auto& session : std::as_const(sessions_))
-            {
-                if (session->sessionId() != session_id)
-                    continue;
-
-                if (!session->isConnectedToUi())
-                {
-                    // Start UI process in user session.
-                    LOG(INFO) << "Starting session process for session:" << session_id;
-                    startSessionProcess(FROM_HERE, session_id);
-                }
-                else
-                {
-                    LOG(INFO) << "Session proccess already connected for session:" << session_id;
-                }
-                break;
-            }
-        }
-        break;
-
-        default:
-        {
-            // Ignore other events.
-        }
-        break;
-    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -381,6 +328,63 @@ void UserSessionManager::onClientSession(ClientSession* client_session)
     if (!user_session_found)
     {
         LOG(ERROR) << "User session with id" << session_id << "not found";
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserSessionManager::onUserSessionEvent(quint32 status, quint32 session_id)
+{
+    QString status_str;
+#if defined(Q_OS_WINDOWS)
+    status_str = base::sessionStatusToString(status);
+#else
+    status_str = QString::number(static_cast<int>(status));
+#endif
+
+    LOG(INFO) << "User session event (status=" << status_str << "session_id=" << session_id << ")";
+
+    // Send an event of each session.
+    for (const auto& session : std::as_const(sessions_))
+        session->onUserSessionEvent(status, session_id);
+
+    switch (status)
+    {
+        case WTS_CONSOLE_CONNECT:
+        case WTS_REMOTE_CONNECT:
+        case WTS_SESSION_LOGON:
+        {
+            // Start UI process in user session.
+            startSessionProcess(FROM_HERE, session_id);
+        }
+        break;
+
+        case WTS_SESSION_UNLOCK:
+        {
+            for (const auto& session : std::as_const(sessions_))
+            {
+                if (session->sessionId() != session_id)
+                    continue;
+
+                if (!session->isConnectedToUi())
+                {
+                    // Start UI process in user session.
+                    LOG(INFO) << "Starting session process for session:" << session_id;
+                    startSessionProcess(FROM_HERE, session_id);
+                }
+                else
+                {
+                    LOG(INFO) << "Session proccess already connected for session:" << session_id;
+                }
+                break;
+            }
+        }
+        break;
+
+        default:
+        {
+            // Ignore other events.
+        }
+        break;
     }
 }
 
