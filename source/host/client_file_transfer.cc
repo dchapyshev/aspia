@@ -218,13 +218,13 @@ void ClientFileTransfer::onStarted()
 
 #if defined(Q_OS_WINDOWS)
     base::ScopedHandle session_token;
-    if (!createLoggedOnUserToken(sessionId(), &session_token))
+    if (!createLoggedOnUserToken(userSessionId(), &session_token))
     {
         LOG(ERROR) << "createSessionToken failed";
         return;
     }
 
-    base::SessionInfo session_info(sessionId());
+    base::SessionInfo session_info(userSessionId());
     if (!session_info.isValid())
     {
         LOG(ERROR) << "Unable to get session info";

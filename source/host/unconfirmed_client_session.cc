@@ -40,7 +40,7 @@ UnconfirmedClientSession::UnconfirmedClientSession(Client* client_session, QObje
     DCHECK(client_session_);
 
     client_session_->setParent(this);
-    id_ = client_session_->id();
+    id_ = client_session_->clientId();
     timer_->setSingleShot(true);
 }
 

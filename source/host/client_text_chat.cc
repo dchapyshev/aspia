@@ -90,7 +90,7 @@ void ClientTextChat::onReceived(const QByteArray& buffer)
 
     if (hasUser())
     {
-        emit sig_clientSessionTextChat(id(), text_chat);
+        emit sig_clientTextChat(clientId(), text_chat);
     }
     else
     {

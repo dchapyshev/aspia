@@ -206,7 +206,7 @@ void UserSession::onClientSession(Client* client_session)
             proto::internal::ConnectConfirmationRequest* request =
                 outgoing_message_.newMessage().mutable_connect_confirmation_request();
 
-            request->set_id(client_session->id());
+            request->set_id(client_session->clientId());
             request->set_session_type(client_session->sessionType());
             request->set_computer_name(client_session->computerName().toStdString());
             request->set_user_name(client_session->userName().toStdString());
@@ -271,7 +271,7 @@ void UserSession::onUserSessionEvent(quint32 status, quint32 session_id)
             session_id_ = session_id;
 
             for (const auto& client : std::as_const(clients_))
-                client->setSessionId(session_id);
+                client->setUserSessionId(session_id);
 
             desktop_dettach_timer_->stop();
 
@@ -430,14 +430,14 @@ void UserSession::onClientSessionFinished()
             continue;
         }
 
-        LOG(INFO) << "Client session with id" << client_session->sessionId()
+        LOG(INFO) << "Client session with id" << client_session->userSessionId()
                   << "finished. Delete it (sid" << session_id_ << ")";
 
         if (client_session->sessionType() == proto::peer::SESSION_TYPE_TEXT_CHAT)
-            onTextChatSessionFinished(client_session->id());
+            onTextChatSessionFinished(client_session->clientId());
 
         // Notification of the UI about disconnecting the client.
-        sendDisconnectEvent(client_session->id());
+        sendDisconnectEvent(client_session->clientId());
 
         // Session will be destroyed after completion of the current call.
         client_session->deleteLater();
@@ -488,7 +488,7 @@ void UserSession::onClientSessionTextChat(quint32 id, const proto::text_chat::Te
 
     for (const auto& client : std::as_const(clients_))
     {
-        if (client->sessionType() == proto::peer::SESSION_TYPE_TEXT_CHAT && client->id() != id)
+        if (client->sessionType() == proto::peer::SESSION_TYPE_TEXT_CHAT && client->clientId() != id)
         {
             ClientTextChat* text_chat_session = static_cast<ClientTextChat*>(client);
             text_chat_session->sendTextChat(text_chat);
@@ -764,7 +764,7 @@ void UserSession::onSessionDettached(const base::Location& location)
         const QString& user_name = client->userName();
         if (user_name.startsWith("#"))
         {
-            LOG(INFO) << "Stop one-time desktop client (id" << client->id()
+            LOG(INFO) << "Stop one-time desktop client (id" << client->clientId()
                       << "user_name" << user_name << "sid" << session_id_ << ")";
             client->stop();
         }
@@ -776,7 +776,7 @@ void UserSession::onSessionDettached(const base::Location& location)
         if (client->sessionType() != proto::peer::SESSION_TYPE_FILE_TRANSFER)
             continue;
 
-        LOG(INFO) << "Stop file transfer client (id" << client->id()
+        LOG(INFO) << "Stop file transfer client (id" << client->clientId()
                   << "user_name" << client->userName() << "sid" << session_id_ << ")";
         client->stop();
     }
@@ -823,7 +823,7 @@ void UserSession::sendConnectEvent(const Client& client_session)
         return;
     }
 
-    LOG(INFO) << "Sending connect event for session ID" << client_session.id()
+    LOG(INFO) << "Sending connect event for session ID" << client_session.clientId()
               << "(sid" << session_id_ << ")";
 
     proto::internal::ConnectEvent* event = outgoing_message_.newMessage().mutable_connect_event();
@@ -831,7 +831,7 @@ void UserSession::sendConnectEvent(const Client& client_session)
     event->set_computer_name(client_session.computerName().toStdString());
     event->set_display_name(client_session.displayName().toStdString());
     event->set_session_type(client_session.sessionType());
-    event->set_id(client_session.id());
+    event->set_id(client_session.clientId());
 
     ipc_channel_->send(outgoing_message_.serialize());
 }
@@ -859,7 +859,7 @@ void UserSession::stopClientSession(quint32 id)
 
     for (const auto& client_session : std::as_const(clients_))
     {
-        if (client_session->id() == id)
+        if (client_session->clientId() == id)
         {
             LOG(INFO) << "Client session with id" << id << "found in list. Stop it";
             client_session->stop();
@@ -943,19 +943,19 @@ void UserSession::addNewClientSession(Client* client_session)
 
     clients_.emplace_back(client_session);
 
-    connect(client_session, &Client::sig_clientSessionConfigured,
+    connect(client_session, &Client::sig_clientConfigured,
             this, &UserSession::onClientSessionConfigured);
-    connect(client_session, &Client::sig_clientSessionFinished,
+    connect(client_session, &Client::sig_clientFinished,
             this, &UserSession::onClientSessionFinished);
-    connect(client_session, &Client::sig_clientSessionVideoRecording,
+    connect(client_session, &Client::sig_clientVideoRecording,
             this, &UserSession::onClientSessionVideoRecording);
-    connect(client_session, &Client::sig_clientSessionTextChat,
+    connect(client_session, &Client::sig_clientTextChat,
             this, &UserSession::onClientSessionTextChat);
 
     LOG(INFO) << "Starting session... (sid" << session_id_ << ")";
 
     client_session->setParent(this);
-    client_session->setSessionId(sessionId());
+    client_session->setUserSessionId(sessionId());
     client_session->start();
 
     // Notify the UI of a new connection.
@@ -963,7 +963,7 @@ void UserSession::addNewClientSession(Client* client_session)
 
     if (session_type == proto::peer::SESSION_TYPE_TEXT_CHAT)
     {
-        onTextChatSessionStarted(client_session->id());
+        onTextChatSessionStarted(client_session->clientId());
 
         bool has_user = ipc_channel_ != nullptr;
         for (const auto& client : std::as_const(clients_))
@@ -1017,7 +1017,7 @@ void UserSession::onTextChatSessionStarted(quint32 id)
         if (client->sessionType() != proto::peer::SESSION_TYPE_TEXT_CHAT)
             continue;
 
-        if (client->id() == id)
+        if (client->clientId() == id)
         {
             ClientTextChat* text_chat_client = static_cast<ClientTextChat*>(client);
 
@@ -1043,7 +1043,7 @@ void UserSession::onTextChatSessionStarted(quint32 id)
         if (client->sessionType() != proto::peer::SESSION_TYPE_TEXT_CHAT)
             continue;
 
-        if (client->id() != id)
+        if (client->clientId() != id)
         {
             ClientTextChat* text_chat_session = static_cast<ClientTextChat*>(client);
             text_chat_session->sendTextChat(outgoing_message_.message().text_chat());
@@ -1069,7 +1069,7 @@ void UserSession::onTextChatSessionFinished(quint32 id)
         if (client->sessionType() != proto::peer::SESSION_TYPE_TEXT_CHAT)
             continue;
 
-        if (client->id() == id)
+        if (client->clientId() == id)
         {
             ClientTextChat* text_chat_session = static_cast<ClientTextChat*>(client);
 
@@ -1092,7 +1092,7 @@ void UserSession::onTextChatSessionFinished(quint32 id)
         if (client->sessionType() != proto::peer::SESSION_TYPE_TEXT_CHAT)
             continue;
 
-        if (client->id() != id)
+        if (client->clientId() != id)
         {
             ClientTextChat* text_chat_session = static_cast<ClientTextChat*>(client);
             text_chat_session->sendTextChat(outgoing_message_.message().text_chat());

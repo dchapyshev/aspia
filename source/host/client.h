@@ -50,7 +50,7 @@ public:
     void stop();
 
     State state() const { return state_; }
-    quint32 id() const { return id_; }
+    quint32 clientId() const { return client_id_; }
 
     QVersionNumber clientVersion() const;
     QString userName() const;
@@ -58,17 +58,16 @@ public:
     QString displayName() const;
     proto::peer::SessionType sessionType() const;
 
-    void setSessionId(base::SessionId session_id);
-    base::SessionId sessionId() const { return session_id_; }
+    void setUserSessionId(base::SessionId user_session_id);
+    base::SessionId userSessionId() const { return user_session_id_; }
 
     base::HostId hostId() const;
 
 signals:
-    void sig_clientSessionConfigured();
-    void sig_clientSessionFinished();
-    void sig_clientSessionVideoRecording(
-        const QString& computer_name, const QString& user_name, bool started);
-    void sig_clientSessionTextChat(quint32 id, const proto::text_chat::TextChat& text_chat);
+    void sig_clientConfigured();
+    void sig_clientFinished();
+    void sig_clientVideoRecording(const QString& computer_name, const QString& user_name, bool started);
+    void sig_clientTextChat(quint32 id, const proto::text_chat::TextChat& text_chat);
 
 protected:
     Client(base::TcpChannel* channel, QObject* parent);
@@ -86,9 +85,9 @@ private slots:
     void onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer);
 
 private:
-    base::SessionId session_id_ = base::kInvalidSessionId;
+    base::SessionId user_session_id_ = base::kInvalidSessionId;
     State state_ = State::CREATED;
-    quint32 id_;
+    quint32 client_id_;
 
     base::TcpChannel* tcp_channel_ = nullptr;
 };

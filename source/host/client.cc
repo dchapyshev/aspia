@@ -38,15 +38,15 @@ Client::Client(base::TcpChannel* channel, QObject* parent)
     // All sessions are executed in one thread. We can safely use a global counter to get session IDs.
     // Session IDs must start with 1.
     static quint32 id_counter = 0;
-    id_ = ++id_counter;
+    client_id_ = ++id_counter;
 
-    LOG(INFO) << "Ctor (id=" << id_ << ")";
+    LOG(INFO) << "Ctor (id=" << client_id_ << ")";
 }
 
 //--------------------------------------------------------------------------------------------------
 Client::~Client()
 {
-    LOG(INFO) << "Dtor (id=" << id_ << ")";
+    LOG(INFO) << "Dtor (id=" << client_id_ << ")";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -102,7 +102,7 @@ void Client::stop()
     LOG(INFO) << "Stop client session";
 
     state_ = State::FINISHED;
-    emit sig_clientSessionFinished();
+    emit sig_clientFinished();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -166,9 +166,9 @@ proto::peer::SessionType Client::sessionType() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::setSessionId(base::SessionId session_id)
+void Client::setUserSessionId(base::SessionId user_session_id)
 {
-    session_id_ = session_id;
+    user_session_id_ = user_session_id;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -194,7 +194,7 @@ void Client::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code)
 {
     LOG(ERROR) << "Client disconnected with error:" << error_code;
     state_ = State::FINISHED;
-    emit sig_clientSessionFinished();
+    emit sig_clientFinished();
 }
 
 //--------------------------------------------------------------------------------------------------

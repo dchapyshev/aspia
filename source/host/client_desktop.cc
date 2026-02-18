@@ -51,7 +51,7 @@ namespace host {
 ClientDesktop::ClientDesktop(base::TcpChannel* channel, QObject* parent)
     : Client(channel, parent),
       overflow_detection_timer_(new QTimer(this)),
-      stat_counter_(id())
+      stat_counter_(clientId())
 {
     LOG(INFO) << "Ctor";
 
@@ -263,7 +263,7 @@ void ClientDesktop::onUpdateSessionsList()
     proto::switch_session::HostToClient outgoing_message;
     proto::switch_session::SessionList* session_list = outgoing_message.mutable_session_list();
 
-    session_list->set_current_session_id(sessionId());
+    session_list->set_current_session_id(userSessionId());
 
     for (base::SessionEnumerator it; !it.isAtEnd(); it.advance())
     {
@@ -605,7 +605,7 @@ void ClientDesktop::readConfig(const proto::desktop::Config& config)
     LOG(INFO) << "Clear clipboard:" << desktop_session_config_.clear_clipboard;
     LOG(INFO) << "Cursor position:" << desktop_session_config_.cursor_position;
 
-    emit sig_clientSessionConfigured();
+    emit sig_clientConfigured();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -795,7 +795,7 @@ void ClientDesktop::readRemoteUpdateExtension(const std::string& /* data */)
 
     if (sessionType() == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
     {
-        launchUpdater(sessionId());
+        launchUpdater(userSessionId());
     }
     else
     {
@@ -857,7 +857,7 @@ void ClientDesktop::readVideoRecordingExtension(const std::string& data)
             return;
     }
 
-    emit sig_clientSessionVideoRecording(computerName(), userName(), started);
+    emit sig_clientVideoRecording(computerName(), userName(), started);
 }
 
 //--------------------------------------------------------------------------------------------------
