@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST_CLIENT_SESSION_H
-#define HOST_CLIENT_SESSION_H
+#ifndef HOST_CLIENT_H
+#define HOST_CLIENT_H
 
 #include <QObject>
 #include <QVersionNumber>
@@ -29,12 +29,12 @@
 
 namespace host {
 
-class ClientConnection : public QObject
+class Client : public QObject
 {
     Q_OBJECT
 
 public:
-    virtual ~ClientConnection() override;
+    virtual ~Client() override;
 
     enum class State
     {
@@ -44,7 +44,7 @@ public:
     };
     Q_ENUM(State)
 
-    static ClientConnection* create(base::TcpChannel* channel, QObject* parent = nullptr);
+    static Client* create(base::TcpChannel* channel, QObject* parent = nullptr);
 
     void start();
     void stop();
@@ -71,7 +71,7 @@ signals:
     void sig_clientSessionTextChat(quint32 id, const proto::text_chat::TextChat& text_chat);
 
 protected:
-    ClientConnection(base::TcpChannel* channel, QObject* parent);
+    Client(base::TcpChannel* channel, QObject* parent);
 
     // Called when the session is ready to send and receive data. When this method is called, the
     // session should start initializing (for example, making a configuration request).
@@ -95,4 +95,4 @@ private:
 
 } // namespace host
 
-#endif // HOST_CLIENT_SESSION_H
+#endif // HOST_CLIENT_H

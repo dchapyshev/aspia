@@ -23,26 +23,26 @@
 
 namespace host {
 
-class ClientConnection;
+class Client;
 
 class UnconfirmedClientSession final : public QObject
 {
     Q_OBJECT
 
 public:
-    UnconfirmedClientSession(ClientConnection* client_session, QObject* parent = nullptr);
+    UnconfirmedClientSession(Client* client_session, QObject* parent = nullptr);
     ~UnconfirmedClientSession();
 
     void setTimeout(const std::chrono::milliseconds& timeout);
 
-    ClientConnection* takeClientSession();
+    Client* takeClientSession();
     quint32 id() const;
 
 signals:
     void sig_finished(quint32 id, bool is_rejected);
 
 private:
-    ClientConnection* client_session_ = nullptr;
+    Client* client_session_ = nullptr;
     QTimer* timer_ = nullptr;
     quint32 id_;
 

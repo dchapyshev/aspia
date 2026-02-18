@@ -26,7 +26,7 @@
 #include "base/session_id.h"
 #include "base/ipc/ipc_channel.h"
 #include "base/peer/host_id.h"
-#include "host/client_session.h"
+#include "host/client.h"
 #include "host/desktop_session_manager.h"
 #include "host/system_settings.h"
 #include "host/unconfirmed_client_session.h"
@@ -65,7 +65,7 @@ public:
     base::SessionId sessionId() const { return session_id_; }
     bool isConnectedToUi() const { return ipc_channel_ != nullptr; }
 
-    void onClientSession(ClientConnection* client_session);
+    void onClientSession(Client* client_session);
     void onUserSessionEvent(quint32 status, quint32 session_id);
     void onRouterStateChanged(const proto::internal::RouterState& router_state);
     void onUpdateCredentials(base::HostId host_id, const QString& password);
@@ -91,10 +91,10 @@ private slots:
 
 private:
     void onSessionDettached(const base::Location& location);
-    void sendConnectEvent(const ClientConnection& client_session);
+    void sendConnectEvent(const Client& client_session);
     void sendDisconnectEvent(quint32 session_id);
     void stopClientSession(quint32 id);
-    void addNewClientSession(ClientConnection* client_session);
+    void addNewClientSession(Client* client_session);
     void setState(const base::Location& location, State state);
     void onTextChatHasUser(const base::Location& location, bool has_user);
     void onTextChatSessionStarted(quint32 id);
@@ -116,7 +116,7 @@ private:
     std::chrono::milliseconds auto_confirmation_interval_ { 0 };
 
     QList<UnconfirmedClientSession*> pending_clients_;
-    QList<ClientConnection*> clients_;
+    QList<Client*> clients_;
 
     DesktopSessionManager* desktop_session_ = nullptr;
 

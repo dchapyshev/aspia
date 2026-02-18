@@ -16,26 +16,20 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST_CLIENT_SESSION_TEXT_CHAT_H
-#define HOST_CLIENT_SESSION_TEXT_CHAT_H
+#ifndef HOST_CLIENT_SYSTEM_INFO_H
+#define HOST_CLIENT_SYSTEM_INFO_H
 
-#include "host/client_session.h"
+#include "host/client.h"
 
 namespace host {
 
-class ClientConnectionTextChat final : public ClientConnection
+class ClientSystemInfo final : public Client
 {
     Q_OBJECT
 
 public:
-    ClientConnectionTextChat(base::TcpChannel* channel, QObject* parent);
-    ~ClientConnectionTextChat() final;
-
-    void sendTextChat(const proto::text_chat::TextChat& text_chat);
-    void sendStatus(proto::text_chat::Status::Code code);
-
-    bool hasUser() const;
-    void setHasUser(bool enable);
+    ClientSystemInfo(base::TcpChannel* channel, QObject* parent);
+    ~ClientSystemInfo() final;
 
 protected:
     // ClientConnection implementation.
@@ -43,11 +37,9 @@ protected:
     void onReceived(const QByteArray& buffer) final;
 
 private:
-    bool has_user_ = false;
-
-    Q_DISABLE_COPY(ClientConnectionTextChat)
+    Q_DISABLE_COPY(ClientSystemInfo)
 };
 
 } // namespace host
 
-#endif // HOST_CLIENT_SESSION_TEXT_CHAT_H
+#endif // HOST_CLIENT_SYSTEM_INFO_H

@@ -16,14 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST_CLIENT_SESSION_DESKTOP_H
-#define HOST_CLIENT_SESSION_DESKTOP_H
+#ifndef HOST_CLIENT_DESKTOP_H
+#define HOST_CLIENT_DESKTOP_H
 
 #include <QPointer>
 #include <QTimer>
 
 #include "base/serialization.h"
-#include "host/client_session.h"
+#include "host/client.h"
 #include "host/desktop_session.h"
 #include "host/stat_counter.h"
 
@@ -42,13 +42,13 @@ class VideoEncoder;
 
 namespace host {
 
-class ClientConnectionDesktop final : public ClientConnection
+class ClientDesktop final : public Client
 {
     Q_OBJECT
 
 public:
-    ClientConnectionDesktop(base::TcpChannel* channel, QObject* parent);
-    ~ClientConnectionDesktop() final;
+    ClientDesktop(base::TcpChannel* channel, QObject* parent);
+    ~ClientDesktop() final;
 
     void encodeScreen(const base::Frame* frame, const base::MouseCursor* cursor);
     void encodeAudio(const proto::desktop::AudioPacket& audio_packet);
@@ -127,9 +127,9 @@ private:
 
     StatCounter stat_counter_;
 
-    Q_DISABLE_COPY(ClientConnectionDesktop)
+    Q_DISABLE_COPY(ClientDesktop)
 };
 
 } // namespace host
 
-#endif // HOST_CLIENT_SESSION_DESKTOP_H
+#endif // HOST_CLIENT_DESKTOP_H

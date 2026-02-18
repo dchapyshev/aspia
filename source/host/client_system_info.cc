@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/client_session_system_info.h"
+#include "host/client_system_info.h"
 
 #include "base/logging.h"
 #include "base/serialization.h"
@@ -28,26 +28,26 @@
 namespace host {
 
 //--------------------------------------------------------------------------------------------------
-ClientConnectionSystemInfo::ClientConnectionSystemInfo(base::TcpChannel* channel, QObject* parent)
-    : ClientConnection(channel, parent)
+ClientSystemInfo::ClientSystemInfo(base::TcpChannel* channel, QObject* parent)
+    : Client(channel, parent)
 {
     LOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
-ClientConnectionSystemInfo::~ClientConnectionSystemInfo()
+ClientSystemInfo::~ClientSystemInfo()
 {
     LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientConnectionSystemInfo::onStarted()
+void ClientSystemInfo::onStarted()
 {
     LOG(INFO) << "Session started";
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientConnectionSystemInfo::onReceived(const QByteArray& buffer)
+void ClientSystemInfo::onReceived(const QByteArray& buffer)
 {
 #if defined(Q_OS_WINDOWS)
     proto::system_info::SystemInfoRequest request;

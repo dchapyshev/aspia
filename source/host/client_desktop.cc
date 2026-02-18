@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/client_session_desktop.h"
+#include "host/client_desktop.h"
 
 #include <QCoreApplication>
 
@@ -48,30 +48,30 @@
 namespace host {
 
 //--------------------------------------------------------------------------------------------------
-ClientConnectionDesktop::ClientConnectionDesktop(base::TcpChannel* channel, QObject* parent)
-    : ClientConnection(channel, parent),
+ClientDesktop::ClientDesktop(base::TcpChannel* channel, QObject* parent)
+    : Client(channel, parent),
       overflow_detection_timer_(new QTimer(this)),
       stat_counter_(id())
 {
     LOG(INFO) << "Ctor";
 
     connect(overflow_detection_timer_, &QTimer::timeout,
-            this, &ClientConnectionDesktop::onOverflowDetectionTimer);
+            this, &ClientDesktop::onOverflowDetectionTimer);
 
 #if defined(Q_OS_WINDOWS)
     connect(base::Application::instance(), &base::Application::sig_sessionEvent,
-            this, &ClientConnectionDesktop::onUpdateSessionsList);
+            this, &ClientDesktop::onUpdateSessionsList);
 #endif // defined(Q_OS_WINDOWS)
 }
 
 //--------------------------------------------------------------------------------------------------
-ClientConnectionDesktop::~ClientConnectionDesktop()
+ClientDesktop::~ClientDesktop()
 {
     LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientConnectionDesktop::onStarted()
+void ClientDesktop::onStarted()
 {
     max_fps_ = DesktopSessionManager::maxCaptureFps();
 
@@ -146,7 +146,7 @@ void ClientConnectionDesktop::onStarted()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientConnectionDesktop::onReceived(const QByteArray& buffer)
+void ClientDesktop::onReceived(const QByteArray& buffer)
 {
     if (!incoming_message_.parse(buffer))
     {
@@ -248,7 +248,7 @@ void ClientConnectionDesktop::onReceived(const QByteArray& buffer)
 
 #if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
-void ClientConnectionDesktop::onTaskManagerMessage(const proto::task_manager::HostToClient& message)
+void ClientDesktop::onTaskManagerMessage(const proto::task_manager::HostToClient& message)
 {
     proto::desktop::Extension* extension = outgoing_message_.newMessage().mutable_extension();
     extension->set_name(common::kTaskManagerExtension);
@@ -258,7 +258,7 @@ void ClientConnectionDesktop::onTaskManagerMessage(const proto::task_manager::Ho
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientConnectionDesktop::onUpdateSessionsList()
+void ClientDesktop::onUpdateSessionsList()
 {
     proto::switch_session::HostToClient outgoing_message;
     proto::switch_session::SessionList* session_list = outgoing_message.mutable_session_list();
@@ -290,7 +290,7 @@ void ClientConnectionDesktop::onUpdateSessionsList()
 #endif // defined(Q_OS_WINDOWS)
 
 //--------------------------------------------------------------------------------------------------
-void ClientConnectionDesktop::encodeScreen(const base::Frame* frame, const base::MouseCursor* cursor)
+void ClientDesktop::encodeScreen(const base::Frame* frame, const base::MouseCursor* cursor)
 {
     if (critical_overflow_)
         return;
@@ -386,7 +386,7 @@ void ClientConnectionDesktop::encodeScreen(const base::Frame* frame, const base:
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientConnectionDesktop::encodeAudio(const proto::desktop::AudioPacket& audio_packet)
+void ClientDesktop::encodeAudio(const proto::desktop::AudioPacket& audio_packet)
 {
     if (critical_overflow_)
         return;
@@ -402,7 +402,7 @@ void ClientConnectionDesktop::encodeAudio(const proto::desktop::AudioPacket& aud
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientConnectionDesktop::setVideoErrorCode(proto::desktop::VideoErrorCode error_code)
+void ClientDesktop::setVideoErrorCode(proto::desktop::VideoErrorCode error_code)
 {
     CHECK_NE(error_code, proto::desktop::VIDEO_ERROR_CODE_OK);
 
@@ -412,7 +412,7 @@ void ClientConnectionDesktop::setVideoErrorCode(proto::desktop::VideoErrorCode e
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientConnectionDesktop::setCursorPosition(const proto::desktop::CursorPosition& cursor_position)
+void ClientDesktop::setCursorPosition(const proto::desktop::CursorPosition& cursor_position)
 {
     if (!scale_reducer_)
     {
@@ -437,7 +437,7 @@ void ClientConnectionDesktop::setCursorPosition(const proto::desktop::CursorPosi
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientConnectionDesktop::setScreenList(const proto::desktop::ScreenList& list)
+void ClientDesktop::setScreenList(const proto::desktop::ScreenList& list)
 {
     LOG(INFO) << "Send screen list to client";
 
@@ -449,7 +449,7 @@ void ClientConnectionDesktop::setScreenList(const proto::desktop::ScreenList& li
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientConnectionDesktop::setScreenType(const proto::desktop::ScreenType& type)
+void ClientDesktop::setScreenType(const proto::desktop::ScreenType& type)
 {
     LOG(INFO) << "Send screen type to client";
 
@@ -461,7 +461,7 @@ void ClientConnectionDesktop::setScreenType(const proto::desktop::ScreenType& ty
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientConnectionDesktop::injectClipboardEvent(const proto::desktop::ClipboardEvent& event)
+void ClientDesktop::injectClipboardEvent(const proto::desktop::ClipboardEvent& event)
 {
     if (sessionType() == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
     {
@@ -476,7 +476,7 @@ void ClientConnectionDesktop::injectClipboardEvent(const proto::desktop::Clipboa
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientConnectionDesktop::readExtension(const proto::desktop::Extension& extension)
+void ClientDesktop::readExtension(const proto::desktop::Extension& extension)
 {
     if (extension.name() == common::kTaskManagerExtension)
     {
@@ -525,7 +525,7 @@ void ClientConnectionDesktop::readExtension(const proto::desktop::Extension& ext
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientConnectionDesktop::readConfig(const proto::desktop::Config& config)
+void ClientDesktop::readConfig(const proto::desktop::Config& config)
 {
     switch (config.video_encoding())
     {
@@ -609,7 +609,7 @@ void ClientConnectionDesktop::readConfig(const proto::desktop::Config& config)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientConnectionDesktop::readSelectScreenExtension(const std::string& data)
+void ClientDesktop::readSelectScreenExtension(const std::string& data)
 {
     LOG(INFO) << "Select screen request";
 
@@ -626,7 +626,7 @@ void ClientConnectionDesktop::readSelectScreenExtension(const std::string& data)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientConnectionDesktop::readPreferredSizeExtension(const std::string& data)
+void ClientDesktop::readPreferredSizeExtension(const std::string& data)
 {
     proto::desktop::Size preferred_size;
 
@@ -652,7 +652,7 @@ void ClientConnectionDesktop::readPreferredSizeExtension(const std::string& data
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientConnectionDesktop::readVideoPauseExtension(const std::string& data)
+void ClientDesktop::readVideoPauseExtension(const std::string& data)
 {
     proto::desktop::Pause pause;
 
@@ -678,7 +678,7 @@ void ClientConnectionDesktop::readVideoPauseExtension(const std::string& data)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientConnectionDesktop::readAudioPauseExtension(const std::string& data)
+void ClientDesktop::readAudioPauseExtension(const std::string& data)
 {
     proto::desktop::Pause pause;
 
@@ -693,7 +693,7 @@ void ClientConnectionDesktop::readAudioPauseExtension(const std::string& data)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientConnectionDesktop::readPowerControlExtension(const std::string& data)
+void ClientDesktop::readPowerControlExtension(const std::string& data)
 {
     if (sessionType() != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
     {
@@ -788,7 +788,7 @@ void ClientConnectionDesktop::readPowerControlExtension(const std::string& data)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientConnectionDesktop::readRemoteUpdateExtension(const std::string& /* data */)
+void ClientDesktop::readRemoteUpdateExtension(const std::string& /* data */)
 {
 #if defined(Q_OS_WINDOWS)
     LOG(INFO) << "Remote update requested";
@@ -805,7 +805,7 @@ void ClientConnectionDesktop::readRemoteUpdateExtension(const std::string& /* da
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientConnectionDesktop::readSystemInfoExtension(const std::string& data)
+void ClientDesktop::readSystemInfoExtension(const std::string& data)
 {
 #if defined(Q_OS_WINDOWS)
     proto::system_info::SystemInfoRequest system_info_request;
@@ -830,7 +830,7 @@ void ClientConnectionDesktop::readSystemInfoExtension(const std::string& data)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientConnectionDesktop::readVideoRecordingExtension(const std::string& data)
+void ClientDesktop::readVideoRecordingExtension(const std::string& data)
 {
     proto::desktop::VideoRecording video_recording;
 
@@ -861,7 +861,7 @@ void ClientConnectionDesktop::readVideoRecordingExtension(const std::string& dat
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientConnectionDesktop::readTaskManagerExtension(const std::string& data)
+void ClientDesktop::readTaskManagerExtension(const std::string& data)
 {
 #if defined(Q_OS_WINDOWS)
     proto::task_manager::ClientToHost message;
@@ -877,7 +877,7 @@ void ClientConnectionDesktop::readTaskManagerExtension(const std::string& data)
         task_manager_ = new TaskManager(this);
 
         connect(task_manager_, &TaskManager::sig_taskManagerMessage,
-                this, &ClientConnectionDesktop::onTaskManagerMessage);
+                this, &ClientDesktop::onTaskManagerMessage);
     }
 
     task_manager_->readMessage(message);
@@ -885,7 +885,7 @@ void ClientConnectionDesktop::readTaskManagerExtension(const std::string& data)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientConnectionDesktop::readSwitchSessionExtension(const std::string& data)
+void ClientDesktop::readSwitchSessionExtension(const std::string& data)
 {
 #if defined(Q_OS_WINDOWS)
     proto::switch_session::ClientToHost incoming_message;
@@ -914,7 +914,7 @@ void ClientConnectionDesktop::readSwitchSessionExtension(const std::string& data
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientConnectionDesktop::onOverflowDetectionTimer()
+void ClientDesktop::onOverflowDetectionTimer()
 {
     // Maximum value of messages in the queue for sending.
     static const size_t kCriticalPendingCount = 12;
@@ -981,7 +981,7 @@ void ClientConnectionDesktop::onOverflowDetectionTimer()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientConnectionDesktop::downStepOverflow()
+void ClientDesktop::downStepOverflow()
 {
     int fps = qApp->property("SCREEN_CAPTURE_FPS").toInt();
     int new_fps = fps;
@@ -1046,7 +1046,7 @@ void ClientConnectionDesktop::downStepOverflow()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientConnectionDesktop::upStepOverflow()
+void ClientDesktop::upStepOverflow()
 {
     int fps = qApp->property("SCREEN_CAPTURE_FPS").toInt();
     int new_fps = fps;

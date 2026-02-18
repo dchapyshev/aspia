@@ -19,7 +19,7 @@
 #include "host/unconfirmed_client_session.h"
 
 #include "base/logging.h"
-#include "host/client_session.h"
+#include "host/client.h"
 
 namespace host {
 
@@ -30,7 +30,7 @@ const std::chrono::seconds kRejectInterval { 60 };
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-UnconfirmedClientSession::UnconfirmedClientSession(ClientConnection* client_session, QObject* parent)
+UnconfirmedClientSession::UnconfirmedClientSession(Client* client_session, QObject* parent)
     : QObject(parent),
       client_session_(client_session),
       timer_(new QTimer(this))
@@ -81,12 +81,12 @@ void UnconfirmedClientSession::setTimeout(const std::chrono::milliseconds& timeo
 }
 
 //--------------------------------------------------------------------------------------------------
-ClientConnection* UnconfirmedClientSession::takeClientSession()
+Client* UnconfirmedClientSession::takeClientSession()
 {
     if (!client_session_)
         return nullptr;
 
-    ClientConnection* client_session = client_session_;
+    Client* client_session = client_session_;
     client_session_ = nullptr;
 
     client_session->setParent(nullptr);

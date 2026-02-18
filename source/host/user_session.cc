@@ -20,8 +20,8 @@
 
 #include "base/location.h"
 #include "base/logging.h"
-#include "host/client_session_desktop.h"
-#include "host/client_session_text_chat.h"
+#include "host/client_desktop.h"
+#include "host/client_text_chat.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/session_status.h"
@@ -167,7 +167,7 @@ void UserSession::restart(base::IpcChannel* channel)
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSession::onClientSession(ClientConnection* client_session)
+void UserSession::onClientSession(Client* client_session)
 {
     DCHECK(client_session);
 
@@ -422,9 +422,9 @@ void UserSession::onClientSessionFinished()
 
     for (auto it = clients_.begin(); it != clients_.end();)
     {
-        ClientConnection* client_session = *it;
+        Client* client_session = *it;
 
-        if (client_session->state() != ClientConnection::State::FINISHED)
+        if (client_session->state() != Client::State::FINISHED)
         {
             ++it;
             continue;
@@ -490,7 +490,7 @@ void UserSession::onClientSessionTextChat(quint32 id, const proto::text_chat::Te
     {
         if (client->sessionType() == proto::peer::SESSION_TYPE_TEXT_CHAT && client->id() != id)
         {
-            ClientConnectionTextChat* text_chat_session = static_cast<ClientConnectionTextChat*>(client);
+            ClientTextChat* text_chat_session = static_cast<ClientTextChat*>(client);
             text_chat_session->sendTextChat(text_chat);
         }
     }
@@ -593,8 +593,8 @@ void UserSession::onIpcMessageReceived(const QByteArray& buffer)
                     {
                         for (const auto& client : std::as_const(clients_))
                         {
-                            ClientConnectionDesktop* desktop_client =
-                                dynamic_cast<ClientConnectionDesktop*>(client);
+                            ClientDesktop* desktop_client =
+                                dynamic_cast<ClientDesktop*>(client);
 
                             if (desktop_client)
                                 desktop_client->setVideoErrorCode(proto::desktop::VIDEO_ERROR_CODE_PAUSED);
@@ -660,7 +660,7 @@ void UserSession::onIpcMessageReceived(const QByteArray& buffer)
         {
             if (client->sessionType() == proto::peer::SESSION_TYPE_TEXT_CHAT)
             {
-                ClientConnectionTextChat* text_chat_session = static_cast<ClientConnectionTextChat*>(client);
+                ClientTextChat* text_chat_session = static_cast<ClientTextChat*>(client);
                 text_chat_session->sendTextChat(incoming_message_->text_chat());
             }
         }
@@ -728,7 +728,7 @@ void UserSession::onDesktopSessionStopped()
     auto it = clients_.begin();
     while (it != clients_.end())
     {
-        ClientConnection* session = *it;
+        Client* session = *it;
         session->deleteLater();
         it = clients_.erase(it);
     }
@@ -757,7 +757,7 @@ void UserSession::onSessionDettached(const base::Location& location)
     // Stop one-time desktop clients.
     for (const auto& client : std::as_const(clients_))
     {
-        ClientConnectionDesktop* desktop_client = dynamic_cast<ClientConnectionDesktop*>(client);
+        ClientDesktop* desktop_client = dynamic_cast<ClientDesktop*>(client);
         if (!desktop_client)
             continue;
 
@@ -808,7 +808,7 @@ void UserSession::onSessionDettached(const base::Location& location)
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSession::sendConnectEvent(const ClientConnection& client_session)
+void UserSession::sendConnectEvent(const Client& client_session)
 {
     if (!ipc_channel_)
     {
@@ -869,7 +869,7 @@ void UserSession::stopClientSession(quint32 id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSession::addNewClientSession(ClientConnection* client_session)
+void UserSession::addNewClientSession(Client* client_session)
 {
     DCHECK(client_session);
 
@@ -884,41 +884,41 @@ void UserSession::addNewClientSession(ClientConnection* client_session)
 
             bool enable_required = !hasDesktopClients();
 
-            ClientConnectionDesktop* desktop_client = static_cast<ClientConnectionDesktop*>(client_session);
+            ClientDesktop* desktop_client = static_cast<ClientDesktop*>(client_session);
 
-            connect(desktop_client, &ClientConnectionDesktop::sig_control,
+            connect(desktop_client, &ClientDesktop::sig_control,
                     desktop_session_, &DesktopSessionManager::control);
-            connect(desktop_client, &ClientConnectionDesktop::sig_selectScreen,
+            connect(desktop_client, &ClientDesktop::sig_selectScreen,
                     desktop_session_, &DesktopSessionManager::selectScreen);
-            connect(desktop_client, &ClientConnectionDesktop::sig_captureScreen,
+            connect(desktop_client, &ClientDesktop::sig_captureScreen,
                     desktop_session_, &DesktopSessionManager::captureScreen);
-            connect(desktop_client, &ClientConnectionDesktop::sig_captureFpsChanged,
+            connect(desktop_client, &ClientDesktop::sig_captureFpsChanged,
                     desktop_session_, &DesktopSessionManager::setScreenCaptureFps);
-            connect(desktop_client, &ClientConnectionDesktop::sig_injectKeyEvent,
+            connect(desktop_client, &ClientDesktop::sig_injectKeyEvent,
                     desktop_session_, &DesktopSessionManager::injectKeyEvent);
-            connect(desktop_client, &ClientConnectionDesktop::sig_injectTextEvent,
+            connect(desktop_client, &ClientDesktop::sig_injectTextEvent,
                     desktop_session_, &DesktopSessionManager::injectTextEvent);
-            connect(desktop_client, &ClientConnectionDesktop::sig_injectMouseEvent,
+            connect(desktop_client, &ClientDesktop::sig_injectMouseEvent,
                     desktop_session_, &DesktopSessionManager::injectMouseEvent);
-            connect(desktop_client, &ClientConnectionDesktop::sig_injectTouchEvent,
+            connect(desktop_client, &ClientDesktop::sig_injectTouchEvent,
                     desktop_session_, &DesktopSessionManager::injectTouchEvent);
-            connect(desktop_client, &ClientConnectionDesktop::sig_injectClipboardEvent,
+            connect(desktop_client, &ClientDesktop::sig_injectClipboardEvent,
                     desktop_session_, &DesktopSessionManager::injectClipboardEvent);
 
             connect(desktop_session_, &DesktopSessionManager::sig_screenCaptured,
-                    desktop_client, &ClientConnectionDesktop::encodeScreen);
+                    desktop_client, &ClientDesktop::encodeScreen);
             connect(desktop_session_, &DesktopSessionManager::sig_screenCaptureError,
-                    desktop_client, &ClientConnectionDesktop::setVideoErrorCode);
+                    desktop_client, &ClientDesktop::setVideoErrorCode);
             connect(desktop_session_, &DesktopSessionManager::sig_audioCaptured,
-                    desktop_client, &ClientConnectionDesktop::encodeAudio);
+                    desktop_client, &ClientDesktop::encodeAudio);
             connect(desktop_session_, &DesktopSessionManager::sig_cursorPositionChanged,
-                    desktop_client, &ClientConnectionDesktop::setCursorPosition);
+                    desktop_client, &ClientDesktop::setCursorPosition);
             connect(desktop_session_, &DesktopSessionManager::sig_screenListChanged,
-                    desktop_client, &ClientConnectionDesktop::setScreenList);
+                    desktop_client, &ClientDesktop::setScreenList);
             connect(desktop_session_, &DesktopSessionManager::sig_screenTypeChanged,
-                    desktop_client, &ClientConnectionDesktop::setScreenType);
+                    desktop_client, &ClientDesktop::setScreenType);
             connect(desktop_session_, &DesktopSessionManager::sig_clipboardEvent,
-                    desktop_client, &ClientConnectionDesktop::injectClipboardEvent);
+                    desktop_client, &ClientDesktop::injectClipboardEvent);
 
             if (enable_required)
             {
@@ -943,13 +943,13 @@ void UserSession::addNewClientSession(ClientConnection* client_session)
 
     clients_.emplace_back(client_session);
 
-    connect(client_session, &ClientConnection::sig_clientSessionConfigured,
+    connect(client_session, &Client::sig_clientSessionConfigured,
             this, &UserSession::onClientSessionConfigured);
-    connect(client_session, &ClientConnection::sig_clientSessionFinished,
+    connect(client_session, &Client::sig_clientSessionFinished,
             this, &UserSession::onClientSessionFinished);
-    connect(client_session, &ClientConnection::sig_clientSessionVideoRecording,
+    connect(client_session, &Client::sig_clientSessionVideoRecording,
             this, &UserSession::onClientSessionVideoRecording);
-    connect(client_session, &ClientConnection::sig_clientSessionTextChat,
+    connect(client_session, &Client::sig_clientSessionTextChat,
             this, &UserSession::onClientSessionTextChat);
 
     LOG(INFO) << "Starting session... (sid" << session_id_ << ")";
@@ -971,7 +971,7 @@ void UserSession::addNewClientSession(ClientConnection* client_session)
             if (client->sessionType() != proto::peer::SESSION_TYPE_TEXT_CHAT)
                 continue;
 
-            ClientConnectionTextChat* text_chat_client = static_cast<ClientConnectionTextChat*>(client);
+            ClientTextChat* text_chat_client = static_cast<ClientTextChat*>(client);
             text_chat_client->setHasUser(has_user);
         }
     }
@@ -996,7 +996,7 @@ void UserSession::onTextChatHasUser(const base::Location& location, bool has_use
         if (client->sessionType() != proto::peer::SESSION_TYPE_TEXT_CHAT)
             continue;
 
-        ClientConnectionTextChat* text_chat_client = static_cast<ClientConnectionTextChat*>(client);
+        ClientTextChat* text_chat_client = static_cast<ClientTextChat*>(client);
 
         proto::text_chat::Status::Code code = proto::text_chat::Status::CODE_USER_CONNECTED;
         if (!has_user)
@@ -1019,7 +1019,7 @@ void UserSession::onTextChatSessionStarted(quint32 id)
 
         if (client->id() == id)
         {
-            ClientConnectionTextChat* text_chat_client = static_cast<ClientConnectionTextChat*>(client);
+            ClientTextChat* text_chat_client = static_cast<ClientTextChat*>(client);
 
             if (!ipc_channel_)
                 text_chat_client->sendStatus(proto::text_chat::Status::CODE_USER_DISCONNECTED);
@@ -1045,7 +1045,7 @@ void UserSession::onTextChatSessionStarted(quint32 id)
 
         if (client->id() != id)
         {
-            ClientConnectionTextChat* text_chat_session = static_cast<ClientConnectionTextChat*>(client);
+            ClientTextChat* text_chat_session = static_cast<ClientTextChat*>(client);
             text_chat_session->sendTextChat(outgoing_message_.message().text_chat());
         }
     }
@@ -1071,7 +1071,7 @@ void UserSession::onTextChatSessionFinished(quint32 id)
 
         if (client->id() == id)
         {
-            ClientConnectionTextChat* text_chat_session = static_cast<ClientConnectionTextChat*>(client);
+            ClientTextChat* text_chat_session = static_cast<ClientTextChat*>(client);
 
             proto::text_chat::Status* text_chat_status =
                 outgoing_message_.newMessage().mutable_text_chat()->mutable_chat_status();
@@ -1094,7 +1094,7 @@ void UserSession::onTextChatSessionFinished(quint32 id)
 
         if (client->id() != id)
         {
-            ClientConnectionTextChat* text_chat_session = static_cast<ClientConnectionTextChat*>(client);
+            ClientTextChat* text_chat_session = static_cast<ClientTextChat*>(client);
             text_chat_session->sendTextChat(outgoing_message_.message().text_chat());
         }
     }
@@ -1124,7 +1124,7 @@ void UserSession::mergeAndSendConfiguration()
 
     for (const auto& client : std::as_const(clients_))
     {
-        ClientConnectionDesktop* desktop_client = dynamic_cast<ClientConnectionDesktop*>(client);
+        ClientDesktop* desktop_client = dynamic_cast<ClientDesktop*>(client);
         if (!desktop_client)
             continue;
 

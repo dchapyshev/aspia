@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST_CLIENT_SESSION_FILE_TRANSFER_H
-#define HOST_CLIENT_SESSION_FILE_TRANSFER_H
+#ifndef HOST_CLIENT_FILE_TRANSFER_H
+#define HOST_CLIENT_FILE_TRANSFER_H
 
 #include <QList>
 #include <QTimer>
@@ -25,17 +25,17 @@
 #include "base/location.h"
 #include "base/ipc/ipc_channel.h"
 #include "base/ipc/ipc_server.h"
-#include "host/client_session.h"
+#include "host/client.h"
 
 namespace host {
 
-class ClientConnectionFileTransfer final : public ClientConnection
+class ClientFileTransfer final : public Client
 {
     Q_OBJECT
 
 public:
-    ClientConnectionFileTransfer(base::TcpChannel* channel, QObject* parent);
-    ~ClientConnectionFileTransfer() final;
+    ClientFileTransfer(base::TcpChannel* channel, QObject* parent);
+    ~ClientFileTransfer() final;
 
 protected:
     // ClientConnection implementation.
@@ -57,9 +57,9 @@ private:
     QList<QByteArray> pending_messages_;
     bool has_logged_on_user_ = false;
 
-    Q_DISABLE_COPY(ClientConnectionFileTransfer)
+    Q_DISABLE_COPY(ClientFileTransfer)
 };
 
 } // namespace host
 
-#endif // HOST_CLIENT_SESSION_FILE_TRANSFER_H
+#endif // HOST_CLIENT_FILE_TRANSFER_H

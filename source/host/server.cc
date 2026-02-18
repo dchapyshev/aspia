@@ -32,7 +32,7 @@
 #include "base/net/tcp_channel.h"
 #include "base/peer/user_list.h"
 #include "common/update_info.h"
-#include "host/client_session.h"
+#include "host/client.h"
 #include "host/host_storage.h"
 
 #if defined(Q_OS_WINDOWS)
@@ -371,7 +371,7 @@ void Server::startSession(base::TcpChannel* channel)
                    << "client:" << channel->peerVersion() << ")";
     }
 
-    ClientConnection* session = ClientConnection::create(channel);
+    Client* session = Client::create(channel);
     if (!session)
     {
         LOG(ERROR) << "Invalid client session";

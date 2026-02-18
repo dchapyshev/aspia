@@ -25,7 +25,7 @@
 #include "base/location.h"
 #include "base/logging.h"
 #include "base/ipc/ipc_channel.h"
-#include "host/client_session.h"
+#include "host/client.h"
 #include "host/host_storage.h"
 
 #if defined(Q_OS_WINDOWS)
@@ -265,12 +265,12 @@ void UserSessionManager::onSettingsChanged()
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionManager::onClientSession(ClientConnection* client_session)
+void UserSessionManager::onClientSession(Client* client_session)
 {
     LOG(INFO) << "Adding a new client connection (user:" << client_session->userName()
               << "host_id:" << client_session->hostId() << ")";
 
-    std::unique_ptr<ClientConnection> client_session_deleter(client_session);
+    std::unique_ptr<Client> client_session_deleter(client_session);
 
     base::SessionId session_id = 0;
 

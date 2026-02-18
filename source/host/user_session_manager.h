@@ -40,7 +40,7 @@ public:
     void onRouterStateChanged(const proto::internal::RouterState& router_state);
     void onUpdateCredentials(base::HostId host_id, const QString& password);
     void onSettingsChanged();
-    void onClientSession(ClientConnection* client_session);
+    void onClientSession(Client* client_session);
 
 signals:
     void sig_routerStateRequested();
