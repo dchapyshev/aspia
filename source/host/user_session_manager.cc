@@ -335,9 +335,8 @@ void UserSessionManager::onClientSession(ClientSession* client_session)
 void UserSessionManager::onUserSessionEvent(quint32 status, quint32 session_id)
 {
 #if defined(Q_OS_WINDOWS)
-    QString status_str = base::sessionStatusToString(status);
-
-    LOG(INFO) << "User session event (status=" << status_str << "session_id=" << session_id << ")";
+    LOG(INFO) << "User session event (status=" << base::sessionStatusToString(status)
+              << "session_id=" << session_id << ")";
 
     // Send an event of each session.
     for (const auto& session : std::as_const(sessions_))

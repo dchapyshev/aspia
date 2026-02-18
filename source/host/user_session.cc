@@ -243,10 +243,8 @@ void UserSession::onClientSession(ClientSession* client_session)
 void UserSession::onUserSessionEvent(quint32 status, quint32 session_id)
 {
 #if defined(Q_OS_WINDOWS)
-    QString status_str = base::sessionStatusToString(status);
-
-    LOG(INFO) << "Session event:" << status_str << "(event_id" << session_id << "current_id" << session_id_
-              << "type" << type_ << "state" << state_ << ")";
+    LOG(INFO) << "Session event:" << base::sessionStatusToString(status) << "(event_id" << session_id
+              << "current_id" << session_id_ << "type" << type_ << "state" << state_ << ")";
 
     switch (status)
     {

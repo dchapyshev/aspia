@@ -70,6 +70,7 @@ signals:
     void sig_injectMouseEvent(const proto::desktop::MouseEvent& event);
     void sig_injectTouchEvent(const proto::desktop::TouchEvent& event);
     void sig_injectClipboardEvent(const proto::desktop::ClipboardEvent& event);
+    void sig_switchSession(quint32 session_id);
 
 protected:
     // ClientSession implementation.

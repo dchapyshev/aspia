@@ -20,6 +20,7 @@
 
 #include <QCoreApplication>
 
+#include "base/application.h"
 #include "base/logging.h"
 #include "base/power_controller.h"
 #include "base/codec/audio_encoder.h"
@@ -56,6 +57,9 @@ ClientSessionDesktop::ClientSessionDesktop(base::TcpChannel* channel, QObject* p
 
     connect(overflow_detection_timer_, &QTimer::timeout,
             this, &ClientSessionDesktop::onOverflowDetectionTimer);
+
+    connect(base::Application::instance(), &base::Application::sig_sessionEvent,
+            this, &ClientSessionDesktop::onUpdateSessionsList);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -896,7 +900,9 @@ void ClientSessionDesktop::readSwitchSessionExtension(const std::string& data)
     }
     else if (incoming_message.has_switch_session())
     {
-        // TODO
+        const proto::switch_session::SwitchSession& switch_session =
+            incoming_message.switch_session();
+        emit sig_switchSession(switch_session.session_id());
     }
     else
     {
