@@ -58,8 +58,10 @@ ClientSessionDesktop::ClientSessionDesktop(base::TcpChannel* channel, QObject* p
     connect(overflow_detection_timer_, &QTimer::timeout,
             this, &ClientSessionDesktop::onOverflowDetectionTimer);
 
+#if defined(Q_OS_WINDOWS)
     connect(base::Application::instance(), &base::Application::sig_sessionEvent,
             this, &ClientSessionDesktop::onUpdateSessionsList);
+#endif // defined(Q_OS_WINDOWS)
 }
 
 //--------------------------------------------------------------------------------------------------
