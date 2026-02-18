@@ -29,12 +29,12 @@
 
 namespace host {
 
-class ClientSession : public QObject
+class ClientConnection : public QObject
 {
     Q_OBJECT
 
 public:
-    virtual ~ClientSession() override;
+    virtual ~ClientConnection() override;
 
     enum class State
     {
@@ -44,7 +44,7 @@ public:
     };
     Q_ENUM(State)
 
-    static ClientSession* create(base::TcpChannel* channel, QObject* parent = nullptr);
+    static ClientConnection* create(base::TcpChannel* channel, QObject* parent = nullptr);
 
     void start();
     void stop();
@@ -71,7 +71,7 @@ signals:
     void sig_clientSessionTextChat(quint32 id, const proto::text_chat::TextChat& text_chat);
 
 protected:
-    ClientSession(base::TcpChannel* channel, QObject* parent);
+    ClientConnection(base::TcpChannel* channel, QObject* parent);
 
     // Called when the session is ready to send and receive data. When this method is called, the
     // session should start initializing (for example, making a configuration request).

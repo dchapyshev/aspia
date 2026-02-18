@@ -23,13 +23,13 @@
 
 namespace host {
 
-class ClientSessionTextChat final : public ClientSession
+class ClientConnectionTextChat final : public ClientConnection
 {
     Q_OBJECT
 
 public:
-    ClientSessionTextChat(base::TcpChannel* channel, QObject* parent);
-    ~ClientSessionTextChat() final;
+    ClientConnectionTextChat(base::TcpChannel* channel, QObject* parent);
+    ~ClientConnectionTextChat() final;
 
     void sendTextChat(const proto::text_chat::TextChat& text_chat);
     void sendStatus(proto::text_chat::Status::Code code);
@@ -38,14 +38,14 @@ public:
     void setHasUser(bool enable);
 
 protected:
-    // ClientSession implementation.
+    // ClientConnection implementation.
     void onStarted() final;
     void onReceived(const QByteArray& buffer) final;
 
 private:
     bool has_user_ = false;
 
-    Q_DISABLE_COPY(ClientSessionTextChat)
+    Q_DISABLE_COPY(ClientConnectionTextChat)
 };
 
 } // namespace host

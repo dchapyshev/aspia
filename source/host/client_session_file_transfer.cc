@@ -172,9 +172,9 @@ QString agentFilePath()
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-ClientSessionFileTransfer::ClientSessionFileTransfer(base::TcpChannel* channel,
+ClientConnectionFileTransfer::ClientConnectionFileTransfer(base::TcpChannel* channel,
                                                      QObject* parent)
-    : ClientSession(channel, parent),
+    : ClientConnection(channel, parent),
       attach_timer_(new QTimer(this))
 {
     LOG(INFO) << "Ctor";
@@ -188,13 +188,13 @@ ClientSessionFileTransfer::ClientSessionFileTransfer(base::TcpChannel* channel,
 }
 
 //--------------------------------------------------------------------------------------------------
-ClientSessionFileTransfer::~ClientSessionFileTransfer()
+ClientConnectionFileTransfer::~ClientConnectionFileTransfer()
 {
     LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSessionFileTransfer::onStarted()
+void ClientConnectionFileTransfer::onStarted()
 {
     QString channel_id = base::IpcServer::createUniqueId();
 
@@ -203,9 +203,9 @@ void ClientSessionFileTransfer::onStarted()
     ipc_server_ = new base::IpcServer(this);
 
     connect(ipc_server_, &base::IpcServer::sig_newConnection,
-            this, &ClientSessionFileTransfer::onIpcNewConnection);
+            this, &ClientConnectionFileTransfer::onIpcNewConnection);
     connect(ipc_server_, &base::IpcServer::sig_errorOccurred,
-            this, &ClientSessionFileTransfer::onIpcErrorOccurred);
+            this, &ClientConnectionFileTransfer::onIpcErrorOccurred);
 
     if (!ipc_server_->start(channel_id))
     {
@@ -309,7 +309,7 @@ void ClientSessionFileTransfer::onStarted()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSessionFileTransfer::onReceived(const QByteArray& buffer)
+void ClientConnectionFileTransfer::onReceived(const QByteArray& buffer)
 {
     if (!has_logged_on_user_)
     {
@@ -332,19 +332,19 @@ void ClientSessionFileTransfer::onReceived(const QByteArray& buffer)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSessionFileTransfer::onIpcDisconnected()
+void ClientConnectionFileTransfer::onIpcDisconnected()
 {
     onError(FROM_HERE);
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSessionFileTransfer::onIpcMessageReceived(const QByteArray& buffer)
+void ClientConnectionFileTransfer::onIpcMessageReceived(const QByteArray& buffer)
 {
     sendMessage(buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSessionFileTransfer::onIpcNewConnection()
+void ClientConnectionFileTransfer::onIpcNewConnection()
 {
     LOG(INFO) << "IPC channel for file transfer session is connected";
 
@@ -369,9 +369,9 @@ void ClientSessionFileTransfer::onIpcNewConnection()
     attach_timer_->stop();
 
     connect(ipc_channel_, &base::IpcChannel::sig_disconnected,
-            this, &ClientSessionFileTransfer::onIpcDisconnected);
+            this, &ClientConnectionFileTransfer::onIpcDisconnected);
     connect(ipc_channel_, &base::IpcChannel::sig_messageReceived,
-            this, &ClientSessionFileTransfer::onIpcMessageReceived);
+            this, &ClientConnectionFileTransfer::onIpcMessageReceived);
 
     ipc_channel_->resume();
 
@@ -382,13 +382,13 @@ void ClientSessionFileTransfer::onIpcNewConnection()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSessionFileTransfer::onIpcErrorOccurred()
+void ClientConnectionFileTransfer::onIpcErrorOccurred()
 {
     onError(FROM_HERE);
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSessionFileTransfer::onError(const base::Location& location)
+void ClientConnectionFileTransfer::onError(const base::Location& location)
 {
     LOG(ERROR) << "Error occurred (from" << location << ")";
     stop();

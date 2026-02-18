@@ -28,26 +28,26 @@
 namespace host {
 
 //--------------------------------------------------------------------------------------------------
-ClientSessionSystemInfo::ClientSessionSystemInfo(base::TcpChannel* channel, QObject* parent)
-    : ClientSession(channel, parent)
+ClientConnectionSystemInfo::ClientConnectionSystemInfo(base::TcpChannel* channel, QObject* parent)
+    : ClientConnection(channel, parent)
 {
     LOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
-ClientSessionSystemInfo::~ClientSessionSystemInfo()
+ClientConnectionSystemInfo::~ClientConnectionSystemInfo()
 {
     LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSessionSystemInfo::onStarted()
+void ClientConnectionSystemInfo::onStarted()
 {
     LOG(INFO) << "Session started";
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSessionSystemInfo::onReceived(const QByteArray& buffer)
+void ClientConnectionSystemInfo::onReceived(const QByteArray& buffer)
 {
 #if defined(Q_OS_WINDOWS)
     proto::system_info::SystemInfoRequest request;

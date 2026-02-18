@@ -27,7 +27,7 @@
 namespace host {
 
 //--------------------------------------------------------------------------------------------------
-ClientSession::ClientSession(base::TcpChannel* channel, QObject* parent)
+ClientConnection::ClientConnection(base::TcpChannel* channel, QObject* parent)
     : QObject(parent),
       tcp_channel_(channel)
 {
@@ -43,14 +43,14 @@ ClientSession::ClientSession(base::TcpChannel* channel, QObject* parent)
     LOG(INFO) << "Ctor (id=" << id_ << ")";
 }
 
-ClientSession::~ClientSession()
+ClientConnection::~ClientConnection()
 {
     LOG(INFO) << "Dtor (id=" << id_ << ")";
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
-ClientSession* ClientSession::create(base::TcpChannel* channel, QObject* parent)
+ClientConnection* ClientConnection::create(base::TcpChannel* channel, QObject* parent)
 {
     if (!channel)
     {
@@ -62,16 +62,16 @@ ClientSession* ClientSession::create(base::TcpChannel* channel, QObject* parent)
     {
         case proto::peer::SESSION_TYPE_DESKTOP_MANAGE:
         case proto::peer::SESSION_TYPE_DESKTOP_VIEW:
-            return new ClientSessionDesktop(channel, parent);
+            return new ClientConnectionDesktop(channel, parent);
 
         case proto::peer::SESSION_TYPE_FILE_TRANSFER:
-            return new ClientSessionFileTransfer(channel, parent);
+            return new ClientConnectionFileTransfer(channel, parent);
 
         case proto::peer::SESSION_TYPE_SYSTEM_INFO:
-            return new ClientSessionSystemInfo(channel, parent);
+            return new ClientConnectionSystemInfo(channel, parent);
 
         case proto::peer::SESSION_TYPE_TEXT_CHAT:
-            return new ClientSessionTextChat(channel, parent);
+            return new ClientConnectionTextChat(channel, parent);
 
         default:
         {
@@ -83,20 +83,20 @@ ClientSession* ClientSession::create(base::TcpChannel* channel, QObject* parent)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSession::start()
+void ClientConnection::start()
 {
     LOG(INFO) << "Starting client session";
     state_ = State::STARTED;
 
-    connect(tcp_channel_, &base::TcpChannel::sig_errorOccurred, this, &ClientSession::onTcpErrorOccurred);
-    connect(tcp_channel_, &base::TcpChannel::sig_messageReceived, this, &ClientSession::onTcpMessageReceived);
+    connect(tcp_channel_, &base::TcpChannel::sig_errorOccurred, this, &ClientConnection::onTcpErrorOccurred);
+    connect(tcp_channel_, &base::TcpChannel::sig_messageReceived, this, &ClientConnection::onTcpMessageReceived);
 
     tcp_channel_->resume();
     onStarted();
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSession::stop()
+void ClientConnection::stop()
 {
     LOG(INFO) << "Stop client session";
 
@@ -105,7 +105,7 @@ void ClientSession::stop()
 }
 
 //--------------------------------------------------------------------------------------------------
-QVersionNumber ClientSession::clientVersion() const
+QVersionNumber ClientConnection::clientVersion() const
 {
     if (!tcp_channel_)
     {
@@ -117,7 +117,7 @@ QVersionNumber ClientSession::clientVersion() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QString ClientSession::userName() const
+QString ClientConnection::userName() const
 {
     if (!tcp_channel_)
     {
@@ -129,7 +129,7 @@ QString ClientSession::userName() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QString ClientSession::computerName() const
+QString ClientConnection::computerName() const
 {
     if (!tcp_channel_)
     {
@@ -141,7 +141,7 @@ QString ClientSession::computerName() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QString ClientSession::displayName() const
+QString ClientConnection::displayName() const
 {
     if (!tcp_channel_)
     {
@@ -153,7 +153,7 @@ QString ClientSession::displayName() const
 }
 
 //--------------------------------------------------------------------------------------------------
-proto::peer::SessionType ClientSession::sessionType() const
+proto::peer::SessionType ClientConnection::sessionType() const
 {
     if (!tcp_channel_)
     {
@@ -165,31 +165,31 @@ proto::peer::SessionType ClientSession::sessionType() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSession::setSessionId(base::SessionId session_id)
+void ClientConnection::setSessionId(base::SessionId session_id)
 {
     session_id_ = session_id;
 }
 
 //--------------------------------------------------------------------------------------------------
-base::HostId ClientSession::hostId() const
+base::HostId ClientConnection::hostId() const
 {
     return tcp_channel_->hostId();
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSession::sendMessage(const QByteArray& buffer)
+void ClientConnection::sendMessage(const QByteArray& buffer)
 {
     tcp_channel_->send(proto::peer::CHANNEL_ID_SESSION, buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
-size_t ClientSession::pendingMessages() const
+size_t ClientConnection::pendingMessages() const
 {
     return tcp_channel_->pendingMessages();
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSession::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code)
+void ClientConnection::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code)
 {
     LOG(ERROR) << "Client disconnected with error:" << error_code;
     state_ = State::FINISHED;
@@ -197,7 +197,7 @@ void ClientSession::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSession::onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer)
+void ClientConnection::onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer)
 {
     if (channel_id == proto::peer::CHANNEL_ID_SESSION)
     {

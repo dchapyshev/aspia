@@ -32,6 +32,7 @@
 #include "base/win/scoped_object.h"
 #include "base/win/session_enumerator.h"
 #include "base/win/session_info.h"
+#include "base/win/session_status.h"
 #include <UserEnv.h>
 #endif // defined(Q_OS_WINDOWS)
 
@@ -264,12 +265,12 @@ void UserSessionManager::onSettingsChanged()
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionManager::onClientSession(ClientSession* client_session)
+void UserSessionManager::onClientSession(ClientConnection* client_session)
 {
     LOG(INFO) << "Adding a new client connection (user:" << client_session->userName()
               << "host_id:" << client_session->hostId() << ")";
 
-    std::unique_ptr<ClientSession> client_session_deleter(client_session);
+    std::unique_ptr<ClientConnection> client_session_deleter(client_session);
 
     base::SessionId session_id = 0;
 

@@ -23,21 +23,21 @@
 
 namespace host {
 
-class ClientSessionSystemInfo final : public ClientSession
+class ClientConnectionSystemInfo final : public ClientConnection
 {
     Q_OBJECT
 
 public:
-    ClientSessionSystemInfo(base::TcpChannel* channel, QObject* parent);
-    ~ClientSessionSystemInfo() final;
+    ClientConnectionSystemInfo(base::TcpChannel* channel, QObject* parent);
+    ~ClientConnectionSystemInfo() final;
 
 protected:
-    // ClientSession implementation.
+    // ClientConnection implementation.
     void onStarted() final;
     void onReceived(const QByteArray& buffer) final;
 
 private:
-    Q_DISABLE_COPY(ClientSessionSystemInfo)
+    Q_DISABLE_COPY(ClientConnectionSystemInfo)
 };
 
 } // namespace host

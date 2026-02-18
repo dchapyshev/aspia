@@ -29,16 +29,16 @@
 
 namespace host {
 
-class ClientSessionFileTransfer final : public ClientSession
+class ClientConnectionFileTransfer final : public ClientConnection
 {
     Q_OBJECT
 
 public:
-    ClientSessionFileTransfer(base::TcpChannel* channel, QObject* parent);
-    ~ClientSessionFileTransfer() final;
+    ClientConnectionFileTransfer(base::TcpChannel* channel, QObject* parent);
+    ~ClientConnectionFileTransfer() final;
 
 protected:
-    // ClientSession implementation.
+    // ClientConnection implementation.
     void onStarted() final;
     void onReceived(const QByteArray& buffer) final;
 
@@ -57,7 +57,7 @@ private:
     QList<QByteArray> pending_messages_;
     bool has_logged_on_user_ = false;
 
-    Q_DISABLE_COPY(ClientSessionFileTransfer)
+    Q_DISABLE_COPY(ClientConnectionFileTransfer)
 };
 
 } // namespace host

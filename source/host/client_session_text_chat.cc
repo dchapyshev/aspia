@@ -26,26 +26,26 @@
 namespace host {
 
 //--------------------------------------------------------------------------------------------------
-ClientSessionTextChat::ClientSessionTextChat(base::TcpChannel* channel, QObject* parent)
-    : ClientSession(channel, parent)
+ClientConnectionTextChat::ClientConnectionTextChat(base::TcpChannel* channel, QObject* parent)
+    : ClientConnection(channel, parent)
 {
     LOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
-ClientSessionTextChat::~ClientSessionTextChat()
+ClientConnectionTextChat::~ClientConnectionTextChat()
 {
     LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSessionTextChat::sendTextChat(const proto::text_chat::TextChat& text_chat)
+void ClientConnectionTextChat::sendTextChat(const proto::text_chat::TextChat& text_chat)
 {
     sendMessage(base::serialize(text_chat));
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSessionTextChat::sendStatus(proto::text_chat::Status::Code code)
+void ClientConnectionTextChat::sendStatus(proto::text_chat::Status::Code code)
 {
     LOG(INFO) << "Send text chat status";
 
@@ -59,26 +59,26 @@ void ClientSessionTextChat::sendStatus(proto::text_chat::Status::Code code)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool ClientSessionTextChat::hasUser() const
+bool ClientConnectionTextChat::hasUser() const
 {
     return has_user_;
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSessionTextChat::setHasUser(bool enable)
+void ClientConnectionTextChat::setHasUser(bool enable)
 {
     LOG(INFO) << "Has user changed (has_user=" << enable << ")";
     has_user_ = enable;
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSessionTextChat::onStarted()
+void ClientConnectionTextChat::onStarted()
 {
     LOG(INFO) << "Session started";
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSessionTextChat::onReceived(const QByteArray& buffer)
+void ClientConnectionTextChat::onReceived(const QByteArray& buffer)
 {
     proto::text_chat::TextChat text_chat;
 

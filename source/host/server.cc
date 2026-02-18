@@ -371,7 +371,7 @@ void Server::startSession(base::TcpChannel* channel)
                    << "client:" << channel->peerVersion() << ")";
     }
 
-    ClientSession* session = ClientSession::create(channel);
+    ClientConnection* session = ClientConnection::create(channel);
     if (!session)
     {
         LOG(ERROR) << "Invalid client session";

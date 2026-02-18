@@ -42,13 +42,13 @@ class VideoEncoder;
 
 namespace host {
 
-class ClientSessionDesktop final : public ClientSession
+class ClientConnectionDesktop final : public ClientConnection
 {
     Q_OBJECT
 
 public:
-    ClientSessionDesktop(base::TcpChannel* channel, QObject* parent);
-    ~ClientSessionDesktop() final;
+    ClientConnectionDesktop(base::TcpChannel* channel, QObject* parent);
+    ~ClientConnectionDesktop() final;
 
     void encodeScreen(const base::Frame* frame, const base::MouseCursor* cursor);
     void encodeAudio(const proto::desktop::AudioPacket& audio_packet);
@@ -73,7 +73,7 @@ signals:
     void sig_switchSession(quint32 session_id);
 
 protected:
-    // ClientSession implementation.
+    // ClientConnection implementation.
     void onStarted() final;
     void onReceived(const QByteArray& buffer) final;
 
@@ -127,7 +127,7 @@ private:
 
     StatCounter stat_counter_;
 
-    Q_DISABLE_COPY(ClientSessionDesktop)
+    Q_DISABLE_COPY(ClientConnectionDesktop)
 };
 
 } // namespace host
