@@ -23,7 +23,7 @@
 #include "base/crypto/generic_hash.h"
 #include "base/crypto/random.h"
 #include "router/database.h"
-#include "router/server.h"
+#include "router/service.h"
 
 namespace router {
 

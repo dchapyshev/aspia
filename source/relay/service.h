@@ -20,9 +20,14 @@
 #define RELAY_SERVICE_H
 
 #include <QPointer>
+#include <QTimer>
 
+#include "base/serialization.h"
 #include "base/service.h"
-#include "relay/controller.h"
+#include "base/net/tcp_channel.h"
+#include "proto/router_relay.h"
+#include "relay/sessions_worker.h"
+#include "relay/key_factory.h"
 
 namespace relay {
 
@@ -39,8 +44,44 @@ protected:
     void onStart() final;
     void onStop() final;
 
+private slots:
+    void onPoolKeyExpired(quint32 key_id);
+    void onTcpReady();
+    void onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code);
+    void onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer);
+    void onSessionStarted();
+    void onSessionStatistics(const proto::router::RelayStat& relay_stat);
+    void onSessionFinished();
+
 private:
-    QPointer<Controller> controller_;
+    bool start();
+    void connectToRouter();
+    void delayedConnectToRouter();
+    void sendKeyPool(quint32 key_count);
+
+    // Router settings.
+    QString router_address_;
+    quint16 router_port_ = 0;
+    QByteArray router_public_key_;
+
+    // Peers settings.
+    QString listen_interface_;
+    QString peer_address_;
+    quint16 peer_port_ = 0;
+    std::chrono::minutes peer_idle_timeout_;
+    quint32 max_peer_count_ = 0;
+    bool statistics_enabled_ = false;
+    std::chrono::seconds statistics_interval_;
+
+    QPointer<QTimer> reconnect_timer_;
+    base::TcpChannel* tcp_channel_ = nullptr;
+    KeyFactory* key_factory_ = nullptr;
+    SessionsWorker* sessions_worker_ = nullptr;
+
+    base::Parser<proto::router::RouterToRelay> incoming_message_;
+    base::Serializer<proto::router::RelayToRouter> outgoing_message_;
+
+    int session_count_ = 0;
 
     Q_DISABLE_COPY(Service)
 };

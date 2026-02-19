@@ -19,12 +19,19 @@
 #ifndef ROUTER_SERVICE_H
 #define ROUTER_SERVICE_H
 
+#include <QList>
 #include <QPointer>
 
 #include "base/service.h"
-#include "router/server.h"
+#include "base/net/tcp_server.h"
+#include "router/key_factory.h"
+#include "router/session_manager.h"
 
 namespace router {
+
+class DatabaseFactory;
+class SessionHost;
+class SessionRelay;
 
 class Service final : public base::Service
 {
@@ -39,8 +46,23 @@ protected:
     void onStart() final;
     void onStop() final;
 
+private slots:
+    void onPoolKeyUsed(Session::SessionId session_id, quint32 key_id);
+    void onNewConnection();
+
 private:
-    QPointer<Server> server_;
+    bool start();
+    void addSession(base::TcpChannel* channel);
+
+    base::SharedPointer<DatabaseFactory> database_factory_;
+    base::TcpServer* tcp_server_ = nullptr;
+    KeyFactory* key_factory_ = nullptr;
+    SessionManager* session_manager_ = nullptr;
+
+    QStringList client_white_list_;
+    QStringList host_white_list_;
+    QStringList admin_white_list_;
+    QStringList relay_white_list_;
 
     Q_DISABLE_COPY(Service)
 };

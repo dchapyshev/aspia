@@ -22,7 +22,7 @@
 #include "base/serialization.h"
 #include "base/crypto/random.h"
 #include "proto/relay_peer.h"
-#include "router/server.h"
+#include "router/service.h"
 #include "router/session_host.h"
 #include "router/session_relay.h"
 

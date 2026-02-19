@@ -30,8 +30,6 @@ list(APPEND SOURCE_ROUTER
     main.cc
     migration_utils.cc
     migration_utils.h
-    server.cc
-    server.h
     service.cc
     service.h
     service_constants.cc

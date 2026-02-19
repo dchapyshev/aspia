@@ -17,8 +17,6 @@
 #
 
 list(APPEND SOURCE_RELAY
-    controller.cc
-    controller.h
     key_factory.cc
     key_factory.h
     key_pool.cc
