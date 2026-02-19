@@ -36,8 +36,6 @@
 
 #if defined(Q_OS_WINDOWS)
 #include "router/win/service_util.h"
-#else
-#include "router/server.h"
 #endif
 
 namespace {
