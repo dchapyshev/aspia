@@ -28,8 +28,6 @@
 
 #if defined(Q_OS_WINDOWS)
 #include "relay/win/service_util.h"
-#else
-#include "relay/controller.h"
 #endif
 
 namespace {
