@@ -92,7 +92,7 @@ void UserSessionAgent::onUpdateCredentials(proto::internal::CredentialsRequest::
         outgoing_message_.newMessage().mutable_credentials_request();
     request->set_type(request_type);
 
-    ipc_channel_->send(outgoing_message_.serialize());
+    sendSessionMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -110,7 +110,7 @@ void UserSessionAgent::onOneTimeSessions(quint32 sessions)
         outgoing_message_.newMessage().mutable_one_time_sessions();
     one_time_sessions->set_sessions(sessions);
 
-    ipc_channel_->send(outgoing_message_.serialize());
+    sendSessionMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -129,7 +129,7 @@ void UserSessionAgent::onKillClient(quint32 id)
     control->set_code(proto::internal::ServiceControl::CODE_KILL);
     control->set_unsigned_integer(id);
 
-    ipc_channel_->send(outgoing_message_.serialize());
+    sendSessionMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -148,7 +148,7 @@ void UserSessionAgent::onConnectConfirmation(quint32 id, bool accept)
     confirmation->set_id(id);
     confirmation->set_accept_connection(accept);
 
-    ipc_channel_->send(outgoing_message_.serialize());
+    sendSessionMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -167,7 +167,7 @@ void UserSessionAgent::onMouseLock(bool enable)
     control->set_code(proto::internal::ServiceControl::CODE_LOCK_MOUSE);
     control->set_boolean(enable);
 
-    ipc_channel_->send(outgoing_message_.serialize());
+    sendSessionMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -186,7 +186,7 @@ void UserSessionAgent::onKeyboardLock(bool enable)
     control->set_code(proto::internal::ServiceControl::CODE_LOCK_KEYBOARD);
     control->set_boolean(enable);
 
-    ipc_channel_->send(outgoing_message_.serialize());
+    sendSessionMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -205,7 +205,7 @@ void UserSessionAgent::onPause(bool enable)
     control->set_code(proto::internal::ServiceControl::CODE_PAUSE);
     control->set_boolean(enable);
 
-    ipc_channel_->send(outgoing_message_.serialize());
+    sendSessionMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -220,7 +220,7 @@ void UserSessionAgent::onTextChat(const proto::text_chat::TextChat& text_chat)
     }
 
     outgoing_message_.newMessage().mutable_text_chat()->CopyFrom(text_chat);
-    ipc_channel_->send(outgoing_message_.serialize());
+    sendSessionMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -231,8 +231,14 @@ void UserSessionAgent::onIpcDisconnected()
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionAgent::onIpcMessageReceived(const QByteArray& buffer)
+void UserSessionAgent::onIpcMessageReceived(quint8 channel_id, const QByteArray& buffer)
 {
+    if (channel_id != proto::internal::CHANNEL_ID_SESSION)
+    {
+        LOG(WARNING) << "Unhandled message from channel" << channel_id;
+        return;
+    }
+
     if (!incoming_message_.parse(buffer))
     {
         LOG(ERROR) << "Invalid message from service";
@@ -304,6 +310,12 @@ void UserSessionAgent::onIpcMessageReceived(const QByteArray& buffer)
     {
         LOG(ERROR) << "Unhandled message from service";
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserSessionAgent::sendSessionMessage()
+{
+    ipc_channel_->send(proto::internal::CHANNEL_ID_SESSION, outgoing_message_.serialize());
 }
 
 } // namespace host

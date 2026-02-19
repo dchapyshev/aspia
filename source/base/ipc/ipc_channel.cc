@@ -37,12 +37,12 @@ const int kWriteQueueReservedSize = 64;
 const quint32 kMaxMessageSize = 16 * 1024 * 1024; // 16MB
 
 #if defined(Q_OS_UNIX)
-const char kLocalSocketPrefix[] = "/tmp/aspia_";
+const char kNamePrefix[] = "/tmp/aspia_";
 #endif // defined(Q_OS_UNIX)
 
 #if defined(Q_OS_WINDOWS)
 
-const char kPipeNamePrefix[] = "\\\\.\\pipe\\aspia.";
+const char kNamePrefix[] = "\\\\.\\pipe\\aspia.";
 const DWORD kConnectTimeout = 5000; // ms
 
 //--------------------------------------------------------------------------------------------------
@@ -109,15 +109,15 @@ IpcChannel::~IpcChannel()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool IpcChannel::connectTo(const QString& channel_id)
+bool IpcChannel::connectTo(const QString& channel_name)
 {
-    if (channel_id.isEmpty())
+    if (channel_name.isEmpty())
     {
         LOG(ERROR) << "Empty channel id";
         return false;
     }
 
-    channel_name_ = channelName(channel_id);
+    channel_name_ = channelName(channel_name);
 
 #if defined(Q_OS_WINDOWS)
     const DWORD flags = SECURITY_SQOS_PRESENT | SECURITY_IDENTIFICATION | FILE_FLAG_OVERLAPPED;
@@ -226,38 +226,32 @@ void IpcChannel::resume()
     is_paused_ = false;
 
     // If we have a message that was received before the pause command.
-    if (read_size_)
+    if (read_header_.message_size)
         onMessageReceived();
 
-    DCHECK_EQ(read_size_, 0);
-    doReadSize();
+    DCHECK_EQ(read_header_.message_size, 0);
+    doReadHeader();
 }
 
 //--------------------------------------------------------------------------------------------------
-void IpcChannel::send(const QByteArray& buffer)
+void IpcChannel::send(quint8 channel_id, const QByteArray& buffer)
 {
     const bool schedule_write = write_queue_.empty();
 
     // Add the buffer to the queue for sending.
-    write_queue_.emplace_back(buffer);
+    write_queue_.emplace_back(channel_id, buffer);
 
     if (schedule_write)
-        doWriteSize();
+        doWriteHeader();
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
-QString IpcChannel::channelName(const QString& channel_id)
+QString IpcChannel::channelName(const QString& channel_name)
 {
-#if defined(Q_OS_WINDOWS)
-    QString name(kPipeNamePrefix);
-    name.append(channel_id);
+    QString name(kNamePrefix);
+    name.append(channel_name);
     return name;
-#else
-    QString name(kLocalSocketPrefix);
-    name.append(channel_id);
-    return name;
-#endif
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -273,23 +267,28 @@ void IpcChannel::onErrorOccurred(const Location& location, const std::error_code
 //--------------------------------------------------------------------------------------------------
 void IpcChannel::onMessageReceived()
 {
-    emit sig_messageReceived(read_buffer_);
-    read_size_ = 0;
+    emit sig_messageReceived(read_header_.channel_id, read_buffer_);
+
+    read_header_.message_size = 0;
+    read_header_.channel_id = 0;
 }
 
 //--------------------------------------------------------------------------------------------------
-void IpcChannel::doWriteSize()
+void IpcChannel::doWriteHeader()
 {
-    write_size_ = static_cast<quint32>(write_queue_.front().size());
+    WriteTask task = write_queue_.front();
 
-    if (!write_size_ || write_size_ > kMaxMessageSize)
+    write_header_.message_size = task.data().size();
+    write_header_.channel_id = task.channelId();
+
+    if (!write_header_.message_size || write_header_.message_size > kMaxMessageSize)
     {
         onErrorOccurred(FROM_HERE, asio::error::message_size);
         return;
     }
 
     asio::async_write(stream_,
-                      asio::buffer(&write_size_, sizeof(write_size_)),
+                      asio::buffer(&write_header_, sizeof(write_header_)),
                       [this](const std::error_code& error_code, size_t bytes_transferred)
     {
         if (error_code)
@@ -301,7 +300,7 @@ void IpcChannel::doWriteSize()
             return;
         }
 
-        DCHECK_EQ(bytes_transferred, sizeof(write_size_));
+        DCHECK_EQ(bytes_transferred, sizeof(write_header_.message_size));
         doWriteData();
     });
 }
@@ -311,7 +310,7 @@ void IpcChannel::doWriteData()
 {
     DCHECK(!write_queue_.empty());
 
-    const QByteArray& buffer = write_queue_.front();
+    const QByteArray& buffer = write_queue_.front().data();
 
     // Send the buffer to the recipient.
     asio::async_write(stream_, asio::buffer(buffer.data(), buffer.size()),
@@ -326,7 +325,7 @@ void IpcChannel::doWriteData()
             return;
         }
 
-        DCHECK_EQ(bytes_transferred, write_size_);
+        DCHECK_EQ(bytes_transferred, write_header_.message_size);
         DCHECK(!write_queue_.empty());
 
         // Delete the sent message from the queue.
@@ -336,15 +335,15 @@ void IpcChannel::doWriteData()
         if (write_queue_.empty())
             return;
 
-        doWriteSize();
+        doWriteHeader();
     });
 }
 
 //--------------------------------------------------------------------------------------------------
-void IpcChannel::doReadSize()
+void IpcChannel::doReadHeader()
 {
     asio::async_read(stream_,
-                     asio::buffer(&read_size_, sizeof(read_size_)),
+                     asio::buffer(&read_header_, sizeof(read_header_)),
                      [this](const std::error_code& error_code, size_t bytes_transferred)
     {
         if (error_code)
@@ -356,9 +355,9 @@ void IpcChannel::doReadSize()
             return;
         }
 
-        DCHECK_EQ(bytes_transferred, sizeof(read_size_));
+        DCHECK_EQ(bytes_transferred, sizeof(read_header_));
 
-        if (!read_size_ || read_size_ > kMaxMessageSize)
+        if (!read_header_.message_size || read_header_.message_size > kMaxMessageSize)
         {
             onErrorOccurred(FROM_HERE, asio::error::message_size);
             return;
@@ -371,13 +370,13 @@ void IpcChannel::doReadSize()
 //--------------------------------------------------------------------------------------------------
 void IpcChannel::doReadData()
 {
-    if (read_buffer_.capacity() < static_cast<QByteArray::size_type>(read_size_))
+    if (read_buffer_.capacity() < static_cast<QByteArray::size_type>(read_header_.message_size))
     {
         read_buffer_.clear();
-        read_buffer_.reserve(read_size_);
+        read_buffer_.reserve(read_header_.message_size);
     }
 
-    read_buffer_.resize(read_size_);
+    read_buffer_.resize(read_header_.message_size);
 
     asio::async_read(stream_,
                      asio::buffer(read_buffer_.data(), read_buffer_.size()),
@@ -392,7 +391,7 @@ void IpcChannel::doReadData()
             return;
         }
 
-        DCHECK_EQ(bytes_transferred, read_size_);
+        DCHECK_EQ(bytes_transferred, read_header_.message_size);
 
         if (is_paused_)
             return;
@@ -402,8 +401,8 @@ void IpcChannel::doReadData()
         if (is_paused_)
             return;
 
-        DCHECK_EQ(read_size_, 0);
-        doReadSize();
+        DCHECK_EQ(read_header_.message_size, 0);
+        doReadHeader();
     });
 }
 

@@ -44,7 +44,7 @@ public:
     explicit IpcChannel(QObject* parent = nullptr);
     ~IpcChannel();
 
-    bool connectTo(const QString& channel_id);
+    bool connectTo(const QString& channel_name);
 
     void disconnectFrom();
 
@@ -54,13 +54,13 @@ public:
     void pause();
     void resume();
 
-    void send(const QByteArray& buffer);
+    void send(quint8 channel_id, const QByteArray& buffer);
 
     SessionId peerSessionId() const { return peer_session_id_; }
 
 signals:
     void sig_disconnected();
-    void sig_messageReceived(const QByteArray& buffer);
+    void sig_messageReceived(quint8 channel_id, const QByteArray& buffer);
 
 private:
     friend class IpcServer;
@@ -72,15 +72,45 @@ private:
 #endif
 
     IpcChannel(const QString& channel_name, Stream&& stream, QObject* parent);
-    static QString channelName(const QString& channel_id);
+    static QString channelName(const QString& channel_name);
 
     void onErrorOccurred(const Location& location, const std::error_code& error_code);
     void onMessageReceived();
 
-    void doWriteSize();
+    void doWriteHeader();
     void doWriteData();
-    void doReadSize();
+    void doReadHeader();
     void doReadData();
+
+    struct Header
+    {
+        quint32 message_size;
+        quint8 channel_id;
+    };
+
+    class WriteTask
+    {
+    public:
+        WriteTask(quint8 channel_id, const QByteArray& data)
+            : channel_id_(channel_id),
+              data_(data)
+        {
+            // Nothing
+        }
+
+        WriteTask(const WriteTask& other) = default;
+        WriteTask& operator=(const WriteTask& other) = default;
+
+        quint8 channelId() const { return channel_id_; }
+        const QByteArray& data() const { return data_; }
+        QByteArray& data() { return data_; }
+
+    private:
+        quint8 channel_id_;
+        QByteArray data_;
+    };
+
+    using WriteQueue = QQueue<WriteTask>;
 
     QString channel_name_;
     Stream stream_;
@@ -88,10 +118,10 @@ private:
     bool is_connected_ = false;
     bool is_paused_ = true;
 
-    QQueue<QByteArray> write_queue_;
-    quint32 write_size_ = 0;
+    WriteQueue write_queue_;
+    Header write_header_;
 
-    quint32 read_size_ = 0;
+    Header read_header_;
     QByteArray read_buffer_;
 
     SessionId peer_session_id_ = kInvalidSessionId;

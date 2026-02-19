@@ -221,15 +221,8 @@ void UserSession::onClientSession(Client* client_session)
             unconfirmed_client_session->setTimeout(auto_confirmation_interval_);
             pending_clients_.emplace_back(unconfirmed_client_session);
 
-            if (ipc_channel_)
-            {
-                LOG(INFO) << "Sending connect request to UI process (sid" << session_id_ << ")";
-                ipc_channel_->send(outgoing_message_.serialize());
-            }
-            else
-            {
-                LOG(ERROR) << "Invalid IPC channel (sid" << session_id_ << ")";
-            }
+            LOG(INFO) << "Sending connect request to UI process (sid" << session_id_ << ")";
+            sendSessionMessage();
         }
     }
     else
@@ -352,18 +345,10 @@ void UserSession::onUserSessionEvent(quint32 status, quint32 session_id)
 //--------------------------------------------------------------------------------------------------
 void UserSession::onRouterStateChanged(const proto::internal::RouterState& router_state)
 {
-    LOG(INFO) << "Router state changed (sid" << session_id_ << ")";
-
-    if (!ipc_channel_)
-    {
-        LOG(ERROR) << "No active IPC channel (sid" << session_id_ << ")";
-        return;
-    }
-
-    LOG(INFO) << "Router:" << router_state << "sid" << session_id_ << ")";
+    LOG(INFO) << "Router state changed:" << router_state << "sid" << session_id_ << ")";
 
     outgoing_message_.newMessage().mutable_router_state()->CopyFrom(router_state);
-    ipc_channel_->send(outgoing_message_.serialize());
+    sendSessionMessage();
 
     emit sig_credentialsRequested();
 }
@@ -372,12 +357,6 @@ void UserSession::onRouterStateChanged(const proto::internal::RouterState& route
 void UserSession::onUpdateCredentials(base::HostId host_id, const QString& password)
 {
     LOG(INFO) << "Send credentials for host ID:" << host_id << "(sid" << session_id_ << ")";
-
-    if (!ipc_channel_)
-    {
-        LOG(ERROR) << "No active IPC channel (sid" << session_id_ << ")";
-        return;
-    }
 
     if (host_id == base::kInvalidHostId)
     {
@@ -395,7 +374,7 @@ void UserSession::onUpdateCredentials(base::HostId host_id, const QString& passw
         credentials->set_password(password.toStdString());
 #endif // defined(Q_OS_WINDOWS)
 
-    ipc_channel_->send(outgoing_message_.serialize());
+    sendSessionMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -462,30 +441,18 @@ void UserSession::onClientSessionFinished()
 void UserSession::onClientSessionVideoRecording(
     const QString& computer_name, const QString& user_name, bool started)
 {
-    if (!ipc_channel_)
-    {
-        LOG(INFO) << "IPC channel not exists (sid" << session_id_ << ")";
-        return;
-    }
-
     proto::internal::VideoRecordingState* video_recording_state =
         outgoing_message_.newMessage().mutable_video_recording_state();
     video_recording_state->set_computer_name(computer_name.toStdString());
     video_recording_state->set_user_name(user_name.toStdString());
     video_recording_state->set_started(started);
 
-    ipc_channel_->send(outgoing_message_.serialize());
+    sendSessionMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
 void UserSession::onClientSessionTextChat(quint32 id, const proto::text_chat::TextChat& text_chat)
 {
-    if (!ipc_channel_)
-    {
-        LOG(INFO) << "IPC channel not exists (sid" << session_id_ << ")";
-        return;
-    }
-
     for (const auto& client : std::as_const(clients_))
     {
         if (client->sessionType() == proto::peer::SESSION_TYPE_TEXT_CHAT && client->clientId() != id)
@@ -496,7 +463,7 @@ void UserSession::onClientSessionTextChat(quint32 id, const proto::text_chat::Te
     }
 
     outgoing_message_.newMessage().mutable_text_chat()->CopyFrom(text_chat);
-    ipc_channel_->send(outgoing_message_.serialize());
+    sendSessionMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -508,8 +475,14 @@ void UserSession::onIpcDisconnected()
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSession::onIpcMessageReceived(const QByteArray& buffer)
+void UserSession::onIpcMessageReceived(quint8 channel_id, const QByteArray& buffer)
 {
+    if (channel_id != proto::internal::CHANNEL_ID_SESSION)
+    {
+        LOG(WARNING) << "Unhandled message from channel" << channel_id;
+        return;
+    }
+
     if (!incoming_message_.parse(buffer))
     {
         LOG(ERROR) << "Invalid message from UI (sid" << session_id_ << ")";
@@ -833,23 +806,17 @@ void UserSession::sendConnectEvent(const Client& client_session)
     event->set_session_type(client_session.sessionType());
     event->set_id(client_session.clientId());
 
-    ipc_channel_->send(outgoing_message_.serialize());
+    sendSessionMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
 void UserSession::sendDisconnectEvent(quint32 session_id)
 {
-    if (!ipc_channel_)
-    {
-        LOG(ERROR) << "No active IPC channel (sid" << session_id_ << ")";
-        return;
-    }
-
     LOG(INFO) << "Sending disconnect event for session ID" << session_id
               << "(sid" << session_id_ << ")";
 
     outgoing_message_.newMessage().mutable_disconnect_event()->set_id(session_id);
-    ipc_channel_->send(outgoing_message_.serialize());
+    sendSessionMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1050,13 +1017,7 @@ void UserSession::onTextChatSessionStarted(quint32 id)
         }
     }
 
-    if (!ipc_channel_)
-    {
-        LOG(INFO) << "IPC channel not exists (sid" << session_id_ << ")";
-        return;
-    }
-
-    ipc_channel_->send(outgoing_message_.serialize());
+    sendSessionMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1099,13 +1060,7 @@ void UserSession::onTextChatSessionFinished(quint32 id)
         }
     }
 
-    if (!ipc_channel_)
-    {
-        LOG(INFO) << "IPC channel not exists (sid" << session_id_ << ")";
-        return;
-    }
-
-    ipc_channel_->send(outgoing_message_.serialize());
+    sendSessionMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1178,6 +1133,18 @@ bool UserSession::hasDesktopClients() const
     }
 
     return false;
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserSession::sendSessionMessage()
+{
+    if (!ipc_channel_)
+    {
+        LOG(INFO) << "IPC channel not exists (sid" << session_id_ << ")";
+        return;
+    }
+
+    ipc_channel_->send(proto::internal::CHANNEL_ID_SESSION, outgoing_message_.serialize());
 }
 
 } // namespace host

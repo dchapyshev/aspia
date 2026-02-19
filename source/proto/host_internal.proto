@@ -28,6 +28,12 @@ import "text_chat.proto";
 
 package proto.internal;
 
+enum ChannelId
+{
+    CHANNEL_ID_SESSION = 0;
+    CHANNEL_ID_SERVICE = 1;
+}
+
 message CredentialsRequest
 {
     enum Type

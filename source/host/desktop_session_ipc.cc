@@ -20,6 +20,7 @@
 
 #include "base/logging.h"
 #include "base/desktop/mouse_cursor.h"
+#include "proto/host_internal.h"
 
 namespace host {
 
@@ -62,7 +63,7 @@ void DesktopSessionIpc::control(proto::internal::DesktopControl::Action action)
     LOG(INFO) << "Send CONTROL with action:" << action << "(sid" << session_id_ << ")";
 
     outgoing_message_.newMessage().mutable_control()->set_action(action);
-    ipc_channel_->send(outgoing_message_.serialize());
+    sendSessionMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -79,7 +80,7 @@ void DesktopSessionIpc::configure(const Config& config)
     configure->set_clear_clipboard(config.clear_clipboard);
     configure->set_cursor_position(config.cursor_position);
 
-    ipc_channel_->send(outgoing_message_.serialize());
+    sendSessionMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -88,7 +89,7 @@ void DesktopSessionIpc::selectScreen(const proto::desktop::Screen& screen)
     LOG(INFO) << "Send SELECT_SCREEN (sid" << session_id_ << ")";
 
     outgoing_message_.newMessage().mutable_select_source()->mutable_screen()->CopyFrom(screen);
-    ipc_channel_->send(outgoing_message_.serialize());
+    sendSessionMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -116,7 +117,7 @@ void DesktopSessionIpc::captureScreen()
     else
     {
         outgoing_message_.newMessage().mutable_next_screen_capture()->set_update_interval(0);
-        ipc_channel_->send(outgoing_message_.serialize());
+        sendSessionMessage();
     }
 }
 
@@ -136,35 +137,35 @@ void DesktopSessionIpc::setScreenCaptureFps(int fps)
 void DesktopSessionIpc::injectKeyEvent(const proto::desktop::KeyEvent& event)
 {
     outgoing_message_.newMessage().mutable_key_event()->CopyFrom(event);
-    ipc_channel_->send(outgoing_message_.serialize());
+    sendSessionMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionIpc::injectTextEvent(const proto::desktop::TextEvent& event)
 {
     outgoing_message_.newMessage().mutable_text_event()->CopyFrom(event);
-    ipc_channel_->send(outgoing_message_.serialize());
+    sendSessionMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionIpc::injectMouseEvent(const proto::desktop::MouseEvent& event)
 {
     outgoing_message_.newMessage().mutable_mouse_event()->CopyFrom(event);
-    ipc_channel_->send(outgoing_message_.serialize());
+    sendSessionMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionIpc::injectTouchEvent(const proto::desktop::TouchEvent &event)
 {
     outgoing_message_.newMessage().mutable_touch_event()->CopyFrom(event);
-    ipc_channel_->send(outgoing_message_.serialize());
+    sendSessionMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionIpc::injectClipboardEvent(const proto::desktop::ClipboardEvent& event)
 {
     outgoing_message_.newMessage().mutable_clipboard_event()->CopyFrom(event);
-    ipc_channel_->send(outgoing_message_.serialize());
+    sendSessionMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -175,8 +176,14 @@ void DesktopSessionIpc::onIpcDisconnected()
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionIpc::onIpcMessageReceived(const QByteArray& buffer)
+void DesktopSessionIpc::onIpcMessageReceived(quint8 channel_id, const QByteArray& buffer)
 {
+    if (channel_id != proto::internal::CHANNEL_ID_SESSION)
+    {
+        LOG(WARNING) << "Unhandled message from channel" << channel_id;
+        return;
+    }
+
     if (!incoming_message_.parse(buffer))
     {
         LOG(ERROR) << "Invalid message from desktop (sid" << session_id_ << ")";
@@ -235,6 +242,12 @@ void DesktopSessionIpc::onIpcMessageReceived(const QByteArray& buffer)
 }
 
 //--------------------------------------------------------------------------------------------------
+void DesktopSessionIpc::sendSessionMessage()
+{
+    ipc_channel_->send(proto::internal::CHANNEL_ID_SESSION, outgoing_message_.serialize());
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopSessionIpc::onScreenCaptured(const proto::internal::ScreenCaptured& screen_captured)
 {
     const base::Frame* frame = nullptr;
@@ -289,7 +302,7 @@ void DesktopSessionIpc::onScreenCaptured(const proto::internal::ScreenCaptured& 
 
     outgoing_message_.newMessage().mutable_next_screen_capture()->set_update_interval(
         update_interval_.count());
-    ipc_channel_->send(outgoing_message_.serialize());
+    sendSessionMessage();
 }
 
 //--------------------------------------------------------------------------------------------------

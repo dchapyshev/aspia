@@ -27,6 +27,7 @@
 #include "base/desktop/screen_capturer_wrapper.h"
 #include "base/ipc/shared_memory.h"
 #include "host/system_settings.h"
+#include "proto/host_internal.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "base/desktop/desktop_environment_win.h"
@@ -151,7 +152,7 @@ void DesktopSessionAgent::onSharedMemoryCreate(int id)
     shared_buffer->set_type(proto::internal::SharedBuffer::CREATE);
     shared_buffer->set_shared_buffer_id(id);
 
-    ipc_channel_->send(outgoing_message_.serialize());
+    sendSessionMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -165,7 +166,7 @@ void DesktopSessionAgent::onSharedMemoryDestroy(int id)
     shared_buffer->set_type(proto::internal::SharedBuffer::RELEASE);
     shared_buffer->set_shared_buffer_id(id);
 
-    ipc_channel_->send(outgoing_message_.serialize());
+    sendSessionMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -205,7 +206,7 @@ void DesktopSessionAgent::onScreenListChanged(
     }
 
     LOG(INFO) << "Sending screen list to service";
-    ipc_channel_->send(outgoing_message_.serialize());
+    sendSessionMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -217,7 +218,7 @@ void DesktopSessionAgent::onCursorPositionChanged(const QPoint& position)
     cursor_position->set_x(position.x());
     cursor_position->set_y(position.y());
 
-    ipc_channel_->send(outgoing_message_.serialize());
+    sendSessionMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -250,7 +251,7 @@ void DesktopSessionAgent::onScreenTypeChanged(
             break;
     }
 
-    ipc_channel_->send(outgoing_message_.serialize());
+    sendSessionMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -265,8 +266,14 @@ void DesktopSessionAgent::onIpcDisconnected()
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionAgent::onIpcMessageReceived(const QByteArray& buffer)
+void DesktopSessionAgent::onIpcMessageReceived(quint8 channel_id, const QByteArray& buffer)
 {
+    if (channel_id != proto::internal::CHANNEL_ID_SESSION)
+    {
+        LOG(WARNING) << "Unhandled message from channel" << channel_id;
+        return;
+    }
+
     if (!incoming_message_.parse(buffer))
     {
         LOG(ERROR) << "Invalid message from service";
@@ -437,7 +444,13 @@ void DesktopSessionAgent::onClipboardEvent(const proto::desktop::ClipboardEvent&
     LOG(INFO) << "Send clipboard event";
 
     outgoing_message_.newMessage().mutable_clipboard_event()->CopyFrom(event);
-    ipc_channel_->send(outgoing_message_.serialize());
+    sendSessionMessage();
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopSessionAgent::sendSessionMessage()
+{
+    ipc_channel_->send(proto::internal::CHANNEL_ID_SESSION, outgoing_message_.serialize());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -495,7 +508,7 @@ void DesktopSessionAgent::setEnabled(bool enable)
         connect(audio_capturer_, &base::AudioCapturerWrapper::sig_sendMessage, this,
                 [this](const QByteArray& data)
         {
-            ipc_channel_->send(QByteArray(data));
+            ipc_channel_->send(proto::internal::CHANNEL_ID_SESSION, QByteArray(data));
         }, Qt::QueuedConnection);
 
         audio_capturer_->start();
@@ -584,7 +597,7 @@ void DesktopSessionAgent::captureScreen()
             return;
         }
 
-        ipc_channel_->send(outgoing_message_.serialize());
+        sendSessionMessage();
         return;
     }
 
@@ -635,7 +648,7 @@ void DesktopSessionAgent::captureScreen()
     {
         // If a frame or cursor was captured, send a message to the service. The next capture
         // will be scheduled after the response from the service.
-        ipc_channel_->send(outgoing_message_.serialize());
+        sendSessionMessage();
     }
     else
     {

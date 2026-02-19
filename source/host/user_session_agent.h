@@ -86,9 +86,11 @@ signals:
 
 private slots:
     void onIpcDisconnected();
-    void onIpcMessageReceived(const QByteArray& buffer);
+    void onIpcMessageReceived(quint8 channel_id, const QByteArray& buffer);
 
 private:
+    void sendSessionMessage();
+
     QPointer<base::IpcChannel> ipc_channel_;
 
     base::Parser<proto::internal::ServiceToUi> incoming_message_;

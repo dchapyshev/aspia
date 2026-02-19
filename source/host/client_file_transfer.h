@@ -38,13 +38,13 @@ public:
     ~ClientFileTransfer() final;
 
 protected:
-    // ClientConnection implementation.
+    // Client implementation.
     void onStarted() final;
     void onReceived(const QByteArray& buffer) final;
 
 private slots:
     void onIpcDisconnected();
-    void onIpcMessageReceived(const QByteArray& buffer);
+    void onIpcMessageReceived(quint8 channel_id, const QByteArray& buffer);
     void onIpcNewConnection();
     void onIpcErrorOccurred();
 

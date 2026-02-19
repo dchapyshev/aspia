@@ -21,6 +21,8 @@
 #include <QCoreApplication>
 #include <QDir>
 
+#include "proto/host_internal.h"
+
 #if defined(Q_OS_LINUX)
 #include <signal.h>
 #include <spawn.h>
@@ -322,7 +324,7 @@ void ClientFileTransfer::onReceived(const QByteArray& buffer)
 
     if (ipc_channel_)
     {
-        ipc_channel_->send(buffer);
+        ipc_channel_->send(proto::internal::CHANNEL_ID_SESSION, buffer);
     }
     else
     {
@@ -338,8 +340,14 @@ void ClientFileTransfer::onIpcDisconnected()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientFileTransfer::onIpcMessageReceived(const QByteArray& buffer)
+void ClientFileTransfer::onIpcMessageReceived(quint8 channel_id, const QByteArray& buffer)
 {
+    if (channel_id != proto::internal::CHANNEL_ID_SESSION)
+    {
+        LOG(WARNING) << "Unhandled message from channel" << channel_id;
+        return;
+    }
+
     sendMessage(buffer);
 }
 
@@ -376,7 +384,7 @@ void ClientFileTransfer::onIpcNewConnection()
     ipc_channel_->resume();
 
     for (auto& message : pending_messages_)
-        ipc_channel_->send(message);
+        ipc_channel_->send(proto::internal::CHANNEL_ID_SESSION, message);
 
     pending_messages_.clear();
 }

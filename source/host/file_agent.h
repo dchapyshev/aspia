@@ -37,7 +37,7 @@ public:
 
 private slots:
     void onIpcDisconnected();
-    void onIpcMessageReceived(const QByteArray& buffer);
+    void onIpcMessageReceived(quint8 channel_id, const QByteArray& buffer);
 
 private:
     base::IpcChannel* ipc_channel_ = nullptr;

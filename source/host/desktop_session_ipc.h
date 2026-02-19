@@ -53,11 +53,12 @@ public:
 
 private slots:
     void onIpcDisconnected();
-    void onIpcMessageReceived(const QByteArray& buffer);
+    void onIpcMessageReceived(quint8 channel_id, const QByteArray& buffer);
 
 private:
     using SharedBuffers = QMap<int, base::SharedPointer<base::SharedMemory>>;
 
+    void sendSessionMessage();
     void onScreenCaptured(const proto::internal::ScreenCaptured& screen_captured);
     void onCreateSharedBuffer(int shared_buffer_id);
     void onReleaseSharedBuffer(int shared_buffer_id);
