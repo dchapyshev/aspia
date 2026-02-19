@@ -55,8 +55,6 @@ list(APPEND SOURCE_HOST_CORE
     print_debug_info.h
     router_controller.cc
     router_controller.h
-    server.cc
-    server.h
     service.cc
     service.h
     service_constants.cc

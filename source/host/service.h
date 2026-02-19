@@ -19,10 +19,17 @@
 #ifndef HOST_SERVICE_H
 #define HOST_SERVICE_H
 
+#include <QFileSystemWatcher>
 #include <QPointer>
+#include <QTimer>
 
 #include "base/service.h"
-#include "host/server.h"
+#include "base/net/tcp_server.h"
+#include "common/http_file_downloader.h"
+#include "common/update_checker.h"
+#include "host/router_controller.h"
+#include "host/user_session_manager.h"
+#include "host/system_settings.h"
 
 namespace host {
 
@@ -39,8 +46,51 @@ protected:
     void onStart() final;
     void onStop() final;
 
+private slots:
+    void onPowerEvent(quint32 power_event);
+    void onRouterStateRequested();
+    void onCredentialsRequested();
+    void onChangeOneTimePassword();
+    void onChangeOneTimeSessions(quint32 sessions);
+    void onNewDirectConnection();
+    void onRouterStateChanged(const proto::internal::RouterState& router_state);
+    void onHostIdAssigned(base::HostId host_id);
+    void onNewRelayConnection();
+    void onUpdateCheckedFinished(const QByteArray& result);
+    void onFileDownloaderError(int error_code);
+    void onFileDownloaderCompleted();
+    void onFileDownloaderProgress(int percentage);
+
 private:
-    QPointer<Server> server_;
+    void startSession(base::TcpChannel* channel);
+    void addFirewallRules();
+    void deleteFirewallRules();
+    void updateConfiguration(const QString& path);
+    void reloadUserList();
+    void connectToRouter();
+    void disconnectFromRouter();
+    void checkForUpdates();
+
+    void updateOneTimeCredentials(const base::Location& location);
+    base::User createOneTimeUser() const;
+
+    QTimer* update_timer_ = nullptr;
+
+    QFileSystemWatcher* settings_watcher_ = nullptr;
+    SystemSettings settings_;
+
+    QPointer<RouterController> router_controller_;
+
+    base::TcpServer* tcp_server_ = nullptr;
+    UserSessionManager* user_session_manager_ = nullptr;
+
+    QPointer<common::UpdateChecker> update_checker_;
+    QPointer<common::HttpFileDownloader> update_downloader_;
+
+    QTimer* password_expire_timer_ = nullptr;
+    QString one_time_password_;
+    quint32 one_time_sessions_ = 0;
+
     Q_DISABLE_COPY(Service)
 };
 
