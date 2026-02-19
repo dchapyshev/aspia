@@ -475,7 +475,7 @@ void UserSession::onIpcDisconnected()
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSession::onIpcMessageReceived(quint8 channel_id, const QByteArray& buffer)
+void UserSession::onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer)
 {
     if (channel_id != proto::internal::CHANNEL_ID_SESSION)
     {

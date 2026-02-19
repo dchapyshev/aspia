@@ -67,7 +67,7 @@ void FileAgent::onIpcDisconnected()
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileAgent::onIpcMessageReceived(quint8 channel_id, const QByteArray& buffer)
+void FileAgent::onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer)
 {
     if (channel_id != proto::internal::CHANNEL_ID_SESSION)
     {

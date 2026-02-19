@@ -231,7 +231,7 @@ void UserSessionAgent::onIpcDisconnected()
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionAgent::onIpcMessageReceived(quint8 channel_id, const QByteArray& buffer)
+void UserSessionAgent::onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer)
 {
     if (channel_id != proto::internal::CHANNEL_ID_SESSION)
     {

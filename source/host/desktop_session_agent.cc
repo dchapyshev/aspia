@@ -266,7 +266,7 @@ void DesktopSessionAgent::onIpcDisconnected()
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionAgent::onIpcMessageReceived(quint8 channel_id, const QByteArray& buffer)
+void DesktopSessionAgent::onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer)
 {
     if (channel_id != proto::internal::CHANNEL_ID_SESSION)
     {

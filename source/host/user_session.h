@@ -84,7 +84,7 @@ private slots:
     void onClientSessionVideoRecording(const QString& computer_name, const QString& user_name, bool started);
     void onClientSessionTextChat(quint32 id, const proto::text_chat::TextChat& text_chat);
     void onIpcDisconnected();
-    void onIpcMessageReceived(quint8 channel_id, const QByteArray& buffer);
+    void onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer);
     void onUnconfirmedSessionFinished(quint32 id, bool is_rejected);
     void onDesktopSessionStarted();
     void onDesktopSessionStopped();

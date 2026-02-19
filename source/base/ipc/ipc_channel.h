@@ -54,13 +54,13 @@ public:
     void pause();
     void resume();
 
-    void send(quint8 channel_id, const QByteArray& buffer);
+    void send(quint32 channel_id, const QByteArray& buffer);
 
     SessionId peerSessionId() const { return peer_session_id_; }
 
 signals:
     void sig_disconnected();
-    void sig_messageReceived(quint8 channel_id, const QByteArray& buffer);
+    void sig_messageReceived(quint32 channel_id, const QByteArray& buffer);
 
 private:
     friend class IpcServer;
@@ -85,13 +85,13 @@ private:
     struct Header
     {
         quint32 message_size;
-        quint8 channel_id;
+        quint32 channel_id;
     };
 
     class WriteTask
     {
     public:
-        WriteTask(quint8 channel_id, const QByteArray& data)
+        WriteTask(quint32 channel_id, const QByteArray& data)
             : channel_id_(channel_id),
               data_(data)
         {
@@ -106,7 +106,7 @@ private:
         QByteArray& data() { return data_; }
 
     private:
-        quint8 channel_id_;
+        quint32 channel_id_;
         QByteArray data_;
     };
 

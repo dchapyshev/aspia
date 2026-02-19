@@ -234,7 +234,7 @@ void IpcChannel::resume()
 }
 
 //--------------------------------------------------------------------------------------------------
-void IpcChannel::send(quint8 channel_id, const QByteArray& buffer)
+void IpcChannel::send(quint32 channel_id, const QByteArray& buffer)
 {
     const bool schedule_write = write_queue_.empty();
 

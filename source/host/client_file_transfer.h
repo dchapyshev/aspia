@@ -44,7 +44,7 @@ protected:
 
 private slots:
     void onIpcDisconnected();
-    void onIpcMessageReceived(quint8 channel_id, const QByteArray& buffer);
+    void onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer);
     void onIpcNewConnection();
     void onIpcErrorOccurred();
 
