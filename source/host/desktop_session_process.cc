@@ -334,7 +334,7 @@ void DesktopSessionProcess::start(base::SessionId session_id, const QString& cha
         QString user_name = splitted.front();
         QByteArray command_line =
             QString("sudo DISPLAY=':0' -u %1 %2 --channel_id=%3 &")
-                .arg(user_name, filePath(), channel_id).toLocal8Bit();
+                .arg(user_name, filePath(), channel_name).toLocal8Bit();
 
         LOG(INFO) << "Start desktop session agent:" << command_line;
 
@@ -359,7 +359,7 @@ void DesktopSessionProcess::start(base::SessionId session_id, const QString& cha
 
     QByteArray command_line =
         QString("sudo DISPLAY=':0' -u root %1 --channel_id=%2 &")
-            .arg(filePath(), channel_id).toLocal8Bit();
+            .arg(filePath(), channel_name).toLocal8Bit();
 
     LOG(INFO) << "Start desktop session agent:" << command_line;
 
