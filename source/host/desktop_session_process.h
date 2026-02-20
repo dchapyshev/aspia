@@ -70,7 +70,7 @@ private:
 #endif // defined(Q_OS_WINDOWS)
 
 #if defined(Q_OS_LINUX)
-    const pid_t pid_;
+    pid_t pid_;
 #endif // defined(Q_OS_LINUX)
 
     State state_ = State::STOPPED;
