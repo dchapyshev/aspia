@@ -215,26 +215,11 @@ bool startProcessWithToken(HANDLE token,
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-#if defined(Q_OS_WINDOWS)
-DesktopSessionProcess::DesktopSessionProcess(
-    base::ScopedHandle&& process, base::ScopedHandle&& thread)
-    : process_(std::move(process)),
-      thread_(std::move(thread))
+DesktopSessionProcess::DesktopSessionProcess(QObject* parent)
+    : QObject(parent)
 {
     LOG(INFO) << "Ctor";
 }
-#elif defined(Q_OS_LINUX)
-DesktopSessionProcess::DesktopSessionProcess(pid_t pid)
-    : pid_(pid)
-{
-    LOG(INFO) << "Ctor";
-}
-#else
-DesktopSessionProcess::DesktopSessionProcess()
-{
-    LOG(INFO) << "Ctor";
-}
-#endif
 
 //--------------------------------------------------------------------------------------------------
 DesktopSessionProcess::~DesktopSessionProcess()
@@ -244,59 +229,93 @@ DesktopSessionProcess::~DesktopSessionProcess()
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::unique_ptr<DesktopSessionProcess> DesktopSessionProcess::create(
-    base::SessionId session_id, const QString& channel_id)
+QString DesktopSessionProcess::filePath()
 {
+    QString file_path = QCoreApplication::applicationDirPath();
+    file_path.append(QLatin1Char('/'));
+    file_path.append(kDesktopAgentFile);
+    return QDir::toNativeSeparators(file_path);
+}
+
+//--------------------------------------------------------------------------------------------------
+DesktopSessionProcess::State DesktopSessionProcess::state() const
+{
+    return state_;
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopSessionProcess::start(base::SessionId session_id, const QString& channel_name)
+{
+    setState(State::STARTING);
+
     if (session_id == base::kInvalidSessionId)
     {
         LOG(ERROR) << "An attempt was detected to start a process in a INVALID session (session_id="
-                   << session_id << "channel_id=" << channel_id << ")";
-        return nullptr;
+                   << session_id << "channel_name=" << channel_name << ")";
+        setState(State::ERROR_OCURRED);
+        return;
     }
 
 #if defined(Q_OS_WINDOWS)
     if (session_id == base::kServiceSessionId)
     {
         LOG(ERROR) << "An attempt was detected to start a process in a SERVICES session ("
-                   << "session_id=" << session_id << "channel_id=" << channel_id << ")";
-        return nullptr;
+                   << "session_id=" << session_id << "channel_name=" << channel_name << ")";
+        setState(State::ERROR_OCURRED);
+        return;
     }
 
     base::ScopedHandle session_token;
     if (!createSessionToken(session_id, &session_token))
     {
-        LOG(ERROR) << "createSessionToken failed (session_id=" << session_id << "channel_id="
-                   << channel_id << ")";
-        return nullptr;
+        LOG(ERROR) << "createSessionToken failed (session_id=" << session_id << "channel_name="
+                   << channel_name << ")";
+        setState(State::ERROR_OCURRED);
+        return;
     }
 
-    QString command_line = filePath() + " --channel_id " + channel_id;
+    QString command_line = filePath() + " --channel_id " + channel_name;
     base::ScopedHandle process_handle;
     base::ScopedHandle thread_handle;
 
     if (!startProcessWithToken(session_token, command_line, &process_handle, &thread_handle))
     {
-        LOG(ERROR) << "startProcessWithToken failed (session_id=" << session_id << "channel_id="
-                   << channel_id << ")";
-        return nullptr;
+        LOG(ERROR) << "startProcessWithToken failed (session_id=" << session_id << "channel_name="
+                   << channel_name << ")";
+        setState(State::ERROR_OCURRED);
+        return;
     }
 
-    return std::unique_ptr<DesktopSessionProcess>(
-        new DesktopSessionProcess(std::move(process_handle), std::move(thread_handle)));
+    process_ = std::move(process_handle);
+    thread_ = std::move(thread_handle);
+
+    finish_notifier_ = new QWinEventNotifier(process_, this);
+    connect(finish_notifier_, &QWinEventNotifier::activated, [this](HANDLE /* handle */)
+    {
+        finish_notifier_->setEnabled(false);
+        setState(State::STOPPED);
+    });
+
+    setState(State::STARTED);
+    finish_notifier_->setEnabled(true);
 #elif defined(Q_OS_LINUX)
+    // TODO: Notifications about the completion of the process are not implemented for Linux.
+
     std::error_code ignored_error;
     std::filesystem::directory_iterator it("/usr/share/xsessions/", ignored_error);
     if (it == std::filesystem::end(it))
     {
         LOG(ERROR) << "No X11 sessions";
-        return nullptr;
+        setState(State::ERROR_OCURRED);
+        return;
     }
 
     std::unique_ptr<FILE, decltype(&pclose)> pipe(popen("who", "r"), pclose);
     if (!pipe)
     {
         LOG(ERROR) << "Unable to open pipe";
-        return nullptr;
+        setState(State::ERROR_OCURRED);
+        return;
     }
 
     LOG(INFO) << "WHO:";
@@ -327,10 +346,13 @@ std::unique_ptr<DesktopSessionProcess> DesktopSessionProcess::create(
         if (posix_spawn(&pid, "/bin/sh", nullptr, nullptr, argv, environ) != 0)
         {
             PLOG(ERROR) << "Unable to start process";
-            return nullptr;
+            setState(State::ERROR_OCURRED);
+            return;
         }
 
-        return std::unique_ptr<DesktopSessionProcess>(new DesktopSessionProcess(pid));
+        pid_ = pid;
+        setState(State::STARTED);
+        return;
     }
 
     LOG(ERROR) << "Connected X sessions not found";
@@ -349,24 +371,16 @@ std::unique_ptr<DesktopSessionProcess> DesktopSessionProcess::create(
     if (posix_spawn(&pid, "/bin/sh", nullptr, nullptr, argv, environ) != 0)
     {
         PLOG(ERROR) << "Unable to start process";
-        return nullptr;
+        setState(State::ERROR_OCURRED);
+        return;
     }
 
-    return std::unique_ptr<DesktopSessionProcess>(new DesktopSessionProcess(pid));
+    pid_ = pid;
+    setState(State::STARTED);
 #else
     NOTIMPLEMENTED();
-    return std::unique_ptr<DesktopSessionProcess>();
+    setState(State::ERROR_OCURRED);
 #endif
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
-QString DesktopSessionProcess::filePath()
-{
-    QString file_path = QCoreApplication::applicationDirPath();
-    file_path.append(QLatin1Char('/'));
-    file_path.append(kDesktopAgentFile);
-    return QDir::toNativeSeparators(file_path);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -391,6 +405,13 @@ void DesktopSessionProcess::kill()
 #else
     NOTIMPLEMENTED();
 #endif
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopSessionProcess::setState(State state)
+{
+    state_ = state;
+    emit sig_stateChanged(state);
 }
 
 } // namespace host

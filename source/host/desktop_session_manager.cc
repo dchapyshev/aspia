@@ -223,19 +223,34 @@ void DesktopSessionManager::attachSession(const base::Location& location, base::
 
     LOG(INFO) << "Starting desktop session process";
 
-    std::unique_ptr<DesktopSessionProcess> process =
-        DesktopSessionProcess::create(session_id, channel_id);
-    if (!process)
+    std::unique_ptr<DesktopSessionProcess> process = std::make_unique<DesktopSessionProcess>();
+
+    connect(process.get(), &DesktopSessionProcess::sig_stateChanged,
+            this, [this, session_id, channel_id](DesktopSessionProcess::State state)
     {
-        LOG(ERROR) << "Failed to create session process (sid" << session_id
-                   << "channel_id" << channel_id << ")";
+        switch (state)
+        {
+            case DesktopSessionProcess::State::ERROR_OCURRED:
+            {
+                LOG(ERROR) << "Failed to create session process (sid" << session_id
+                           << "channel_id" << channel_id << ")";
+                onErrorOccurred();
+            }
+            break;
 
-        onErrorOccurred();
-        return;
-    }
+            case DesktopSessionProcess::State::STARTED:
+            {
+                LOG(INFO) << "Desktop session process created (sid" << session_id
+                          << "channel_id" << channel_id << ")";
+            }
+            break;
 
-    LOG(INFO) << "Desktop session process created (sid" << session_id
-              << "channel_id" << channel_id << ")";
+            default:
+                break;
+        }
+    });
+
+    process->start(session_id, channel_id);
 }
 
 //--------------------------------------------------------------------------------------------------

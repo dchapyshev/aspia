@@ -19,52 +19,63 @@
 #ifndef HOST_DESKTOP_SESSION_PROCESS_H
 #define HOST_DESKTOP_SESSION_PROCESS_H
 
+#include <QObject>
+#include <QPointer>
 #include <QString>
-
-#include <memory>
 
 #include "base/session_id.h"
 
 #if defined(Q_OS_WINDOWS)
+#include <QWinEventNotifier>
 #include "base/win/scoped_object.h"
 #endif // defined(Q_OS_WINDOWS)
 
-namespace ipc {
-class Channel;
-} // namespace ipc
-
 namespace host {
 
-class DesktopSessionProcess
+class DesktopSessionProcess final : public QObject
 {
+    Q_OBJECT
+
 public:
+    explicit DesktopSessionProcess(QObject* parent = nullptr);
     ~DesktopSessionProcess();
 
-    static std::unique_ptr<DesktopSessionProcess> create(
-        base::SessionId session_id, const QString& channel_id);
     static QString filePath();
 
+    enum class State
+    {
+        STOPPED,
+        STARTING,
+        ERROR_OCURRED,
+        STARTED
+    };
+
+    State state() const;
+
+public slots:
+    void start(base::SessionId session_id, const QString& channel_name);
     void kill();
 
+signals:
+    void sig_stateChanged(host::DesktopSessionProcess::State state);
+
 private:
-#if defined(Q_OS_WINDOWS)
-    DesktopSessionProcess(base::ScopedHandle&& process, base::ScopedHandle&& thread);
-#elif defined(Q_OS_LINUX)
-    explicit DesktopSessionProcess(pid_t pid);
-#else
-    DesktopSessionProcess();
-#endif
+    void setState(State state);
 
 #if defined(Q_OS_WINDOWS)
     base::ScopedHandle process_;
     base::ScopedHandle thread_;
+
+    QPointer<QWinEventNotifier> finish_notifier_;
 #endif // defined(Q_OS_WINDOWS)
 
 #if defined(Q_OS_LINUX)
     const pid_t pid_;
 #endif // defined(Q_OS_LINUX)
 
-    Q_DISABLE_COPY(DesktopSessionProcess)
+    State state_ = State::STOPPED;
+
+    Q_DISABLE_COPY_MOVE(DesktopSessionProcess)
 };
 
 } // namespace host

@@ -153,7 +153,7 @@ public:
 signals:
     void sig_connected();
     void sig_authenticated();
-    void sig_errorOccurred(ErrorCode error_code);
+    void sig_errorOccurred(base::TcpChannel::ErrorCode error_code);
     void sig_messageReceived(quint8 channel_id, const QByteArray& buffer);
     void sig_messageWritten(quint8 channel_id, size_t pending);
 
