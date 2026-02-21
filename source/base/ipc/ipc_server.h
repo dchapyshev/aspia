@@ -42,7 +42,7 @@ public:
 
     static QString createUniqueId();
 
-    bool start(const QString& channel_id);
+    bool start(const QString& channel_name);
     void stop();
     bool hasPendingConnections();
     IpcChannel* nextPendingConnection();

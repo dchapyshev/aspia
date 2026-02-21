@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST_DESKTOP_SESSION_PROCESS_H
-#define HOST_DESKTOP_SESSION_PROCESS_H
+#ifndef HOST_DESKTOP_PROCESS_H
+#define HOST_DESKTOP_PROCESS_H
 
 #include <QObject>
 #include <QPointer>
@@ -32,13 +32,13 @@
 
 namespace host {
 
-class DesktopSessionProcess final : public QObject
+class DesktopProcess final : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit DesktopSessionProcess(QObject* parent = nullptr);
-    ~DesktopSessionProcess();
+    explicit DesktopProcess(QObject* parent = nullptr);
+    ~DesktopProcess();
 
     static QString filePath();
 
@@ -49,6 +49,7 @@ public:
         ERROR_OCURRED,
         STARTED
     };
+    Q_ENUM(State)
 
     State state() const;
 
@@ -57,7 +58,7 @@ public slots:
     void kill();
 
 signals:
-    void sig_stateChanged(host::DesktopSessionProcess::State state);
+    void sig_stateChanged(host::DesktopProcess::State state);
 
 private:
     void setState(State state);
@@ -66,7 +67,7 @@ private:
     base::ScopedHandle process_;
     base::ScopedHandle thread_;
 
-    QPointer<QWinEventNotifier> finish_notifier_;
+    QWinEventNotifier* finish_notifier_ = nullptr;
 #endif // defined(Q_OS_WINDOWS)
 
 #if defined(Q_OS_LINUX)
@@ -75,9 +76,9 @@ private:
 
     State state_ = State::STOPPED;
 
-    Q_DISABLE_COPY_MOVE(DesktopSessionProcess)
+    Q_DISABLE_COPY_MOVE(DesktopProcess)
 };
 
 } // namespace host
 
-#endif // HOST_DESKTOP_SESSION_PROCESS_H
+#endif // HOST_DESKTOP_PROCESS_H

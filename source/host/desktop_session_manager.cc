@@ -27,7 +27,7 @@
 #include "base/ipc/ipc_channel.h"
 #include "host/desktop_session_fake.h"
 #include "host/desktop_session_ipc.h"
-#include "host/desktop_session_process.h"
+#include "host/desktop_process.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/session_info.h"
@@ -223,14 +223,14 @@ void DesktopSessionManager::attachSession(const base::Location& location, base::
 
     LOG(INFO) << "Starting desktop session process";
 
-    std::unique_ptr<DesktopSessionProcess> process = std::make_unique<DesktopSessionProcess>();
+    std::unique_ptr<DesktopProcess> process = std::make_unique<DesktopProcess>();
 
-    connect(process.get(), &DesktopSessionProcess::sig_stateChanged,
-            this, [this, session_id, channel_id](DesktopSessionProcess::State state)
+    connect(process.get(), &DesktopProcess::sig_stateChanged,
+            this, [this, session_id, channel_id](DesktopProcess::State state)
     {
         switch (state)
         {
-            case DesktopSessionProcess::State::ERROR_OCURRED:
+            case DesktopProcess::State::ERROR_OCURRED:
             {
                 LOG(ERROR) << "Failed to create session process (sid" << session_id
                            << "channel_id" << channel_id << ")";
@@ -238,7 +238,7 @@ void DesktopSessionManager::attachSession(const base::Location& location, base::
             }
             break;
 
-            case DesktopSessionProcess::State::STARTED:
+            case DesktopProcess::State::STARTED:
             {
                 LOG(INFO) << "Desktop session process created (sid" << session_id
                           << "channel_id" << channel_id << ")";

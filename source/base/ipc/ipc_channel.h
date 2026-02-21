@@ -82,12 +82,6 @@ private:
     void doReadHeader();
     void doReadData();
 
-    struct Header
-    {
-        quint32 message_size;
-        quint32 channel_id;
-    };
-
     class WriteTask
     {
     public:
@@ -101,13 +95,19 @@ private:
         WriteTask(const WriteTask& other) = default;
         WriteTask& operator=(const WriteTask& other) = default;
 
-        quint8 channelId() const { return channel_id_; }
+        quint32 channelId() const { return channel_id_; }
         const QByteArray& data() const { return data_; }
         QByteArray& data() { return data_; }
 
     private:
         quint32 channel_id_;
         QByteArray data_;
+    };
+
+    struct Header
+    {
+        quint32 message_size;
+        quint32 channel_id;
     };
 
     using WriteQueue = QQueue<WriteTask>;

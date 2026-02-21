@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/desktop_session_process.h"
+#include "host/desktop_process.h"
 
 #include <QCoreApplication>
 #include <QDir>
@@ -215,21 +215,21 @@ bool startProcessWithToken(HANDLE token,
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-DesktopSessionProcess::DesktopSessionProcess(QObject* parent)
+DesktopProcess::DesktopProcess(QObject* parent)
     : QObject(parent)
 {
     LOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
-DesktopSessionProcess::~DesktopSessionProcess()
+DesktopProcess::~DesktopProcess()
 {
     LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
-QString DesktopSessionProcess::filePath()
+QString DesktopProcess::filePath()
 {
     QString file_path = QCoreApplication::applicationDirPath();
     file_path.append(QLatin1Char('/'));
@@ -238,14 +238,20 @@ QString DesktopSessionProcess::filePath()
 }
 
 //--------------------------------------------------------------------------------------------------
-DesktopSessionProcess::State DesktopSessionProcess::state() const
+DesktopProcess::State DesktopProcess::state() const
 {
     return state_;
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionProcess::start(base::SessionId session_id, const QString& channel_name)
+void DesktopProcess::start(base::SessionId session_id, const QString& channel_name)
 {
+    if (state_ != State::STOPPED)
+    {
+        LOG(ERROR) << "Desktop process already started";
+        return;
+    }
+
     setState(State::STARTING);
 
     if (session_id == base::kInvalidSessionId)
@@ -384,7 +390,7 @@ void DesktopSessionProcess::start(base::SessionId session_id, const QString& cha
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionProcess::kill()
+void DesktopProcess::kill()
 {
 #if defined(Q_OS_WINDOWS)
     if (!process_.isValid())
@@ -408,7 +414,7 @@ void DesktopSessionProcess::kill()
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionProcess::setState(State state)
+void DesktopProcess::setState(State state)
 {
     state_ = state;
     emit sig_stateChanged(state);

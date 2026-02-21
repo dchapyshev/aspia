@@ -29,6 +29,12 @@ list(APPEND SOURCE_HOST_CORE
     client_text_chat.h
     desktop_agent_main.cc
     desktop_agent_main.h
+    desktop_client.cc
+    desktop_client.h
+    desktop_manager.cc
+    desktop_manager.h
+    desktop_process.cc
+    desktop_process.h
     desktop_session.cc
     desktop_session.h
     desktop_session_manager.cc
@@ -39,8 +45,6 @@ list(APPEND SOURCE_HOST_CORE
     desktop_session_fake.h
     desktop_session_ipc.cc
     desktop_session_ipc.h
-    desktop_session_process.cc
-    desktop_session_process.h
     file_agent.cc
     file_agent.h
     file_agent_main.cc
