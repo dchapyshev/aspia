@@ -30,8 +30,8 @@ package proto.internal;
 
 enum ChannelId
 {
-    CHANNEL_ID_SESSION = 0;
-    CHANNEL_ID_SERVICE = 1;
+    CHANNEL_ID_SERVICE = 0;
+    CHANNEL_ID_SESSION = 1;
 }
 
 message CredentialsRequest
