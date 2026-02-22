@@ -64,8 +64,7 @@ void AudioCapturerWrapper::onBeforeThreadRunning()
 
     capturer_->start([this](std::unique_ptr<proto::desktop::AudioPacket> packet)
     {
-        outgoing_message_.newMessage().set_allocated_audio_packet(packet.release());
-        emit sig_sendMessage(outgoing_message_.serialize());
+        emit sig_audioCaptured(*packet);
     });
 }
 

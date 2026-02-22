@@ -27,6 +27,10 @@ list(APPEND SOURCE_HOST_CORE
     client_system_info.h
     client_text_chat.cc
     client_text_chat.h
+    desktop_agent.cc
+    desktop_agent.h
+    desktop_agent_client.cc
+    desktop_agent_client.h
     desktop_agent_main.cc
     desktop_agent_main.h
     desktop_client.cc

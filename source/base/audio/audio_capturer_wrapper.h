@@ -19,9 +19,8 @@
 #ifndef BASE_AUDIO_AUDIO_CAPTURER_WRAPPER_H
 #define BASE_AUDIO_AUDIO_CAPTURER_WRAPPER_H
 
-#include "base/serialization.h"
 #include "base/thread.h"
-#include "proto/desktop_internal.h"
+#include "proto/desktop.h"
 
 namespace base {
 
@@ -38,7 +37,7 @@ public:
     void start();
 
 signals:
-    void sig_sendMessage(const QByteArray& data);
+    void sig_audioCaptured(const proto::desktop::AudioPacket& packet);
 
 private slots:
     void onBeforeThreadRunning();
@@ -47,7 +46,6 @@ private slots:
 private:
     Thread thread_;
     std::unique_ptr<AudioCapturer> capturer_;
-    base::Serializer<proto::internal::DesktopToService> outgoing_message_;
 
     Q_DISABLE_COPY(AudioCapturerWrapper)
 };

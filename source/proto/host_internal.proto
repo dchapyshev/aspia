@@ -34,6 +34,30 @@ enum ChannelId
     CHANNEL_ID_SESSION = 1;
 }
 
+message SessionDescription
+{
+    peer.SessionType session_type = 1;
+    peer.Version version          = 2;
+    string os_name                = 3;
+    string computer_name          = 4;
+    string display_name           = 5;
+    string architecture           = 6;
+    string user_name              = 7;
+}
+
+message NetworkOverflow
+{
+    enum State
+    {
+        OVERFLOW_UNKNOWN = 0;
+        OVERFLOW_START   = 1;
+        OVERFLOW_END     = 2;
+    }
+
+    State state    = 1;
+    uint32 pending = 2;
+}
+
 message CredentialsRequest
 {
     enum Type
@@ -110,7 +134,6 @@ message ServiceControl
         CODE_PAUSE         = 2;
         CODE_LOCK_MOUSE    = 3;
         CODE_LOCK_KEYBOARD = 4;
-        CODE_VOICE_CHAT    = 5;
     }
 
     Code code = 1;

@@ -505,6 +505,7 @@ void DesktopSessionAgent::setEnabled(bool enable)
 
         audio_capturer_ = new base::AudioCapturerWrapper(this);
 
+#if 0
         connect(audio_capturer_, &base::AudioCapturerWrapper::sig_sendMessage, this,
                 [this](const QByteArray& data)
         {
@@ -512,6 +513,7 @@ void DesktopSessionAgent::setEnabled(bool enable)
         }, Qt::QueuedConnection);
 
         audio_capturer_->start();
+#endif
 
         LOG(INFO) << "Session successfully enabled";
 

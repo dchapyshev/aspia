@@ -611,13 +611,6 @@ void UserSession::onIpcMessageReceived(quint32 channel_id, const QByteArray& buf
             }
             break;
 
-            case proto::internal::ServiceControl::CODE_VOICE_CHAT:
-            {
-                // TODO
-                NOTIMPLEMENTED();
-            }
-            break;
-
             default:
             {
                 LOG(ERROR) << "Unhandled control code:" << control.code() << "(sid" << session_id_ << ")";

@@ -98,8 +98,8 @@ private:
     bool lock_at_disconnect_ = false;
     bool clear_clipboard_ = false;
 
-    base::Parser<proto::internal::ServiceToDesktop> incoming_message_;
-    base::Serializer<proto::internal::DesktopToService> outgoing_message_;
+    base::Parser<proto::internal::ServiceToDesktopOld> incoming_message_;
+    base::Serializer<proto::internal::DesktopToServiceOld> outgoing_message_;
 
     Q_DISABLE_COPY(DesktopSessionAgent)
 };

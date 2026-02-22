@@ -24,6 +24,8 @@ syntax = "proto3";
 option optimize_for = LITE_RUNTIME;
 
 import "desktop.proto";
+import "host_internal.proto";
+import "peer.proto";
 
 package proto.internal;
 
@@ -101,7 +103,7 @@ message DesktopControl
     Action action = 1;
 }
 
-message ServiceToDesktop
+message ServiceToDesktopOld
 {
     DesktopControl control                 = 1;
     Configure configure                    = 2;
@@ -114,7 +116,7 @@ message ServiceToDesktop
     desktop.ClipboardEvent clipboard_event = 9;
 }
 
-message DesktopToService
+message DesktopToServiceOld
 {
     desktop.ScreenList screen_list         = 1;
     SharedBuffer shared_buffer             = 2;
@@ -123,4 +125,10 @@ message DesktopToService
     desktop.ClipboardEvent clipboard_event = 5;
     desktop.CursorPosition cursor_position = 6;
     desktop.ScreenType screen_type         = 7;
+}
+
+message ServiceToDesktop
+{
+    SessionDescription session_description = 1;
+    NetworkOverflow network_overflow       = 2;
 }

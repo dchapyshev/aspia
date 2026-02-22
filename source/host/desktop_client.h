@@ -23,6 +23,7 @@
 
 #include "base/ipc/ipc_channel.h"
 #include "base/net/tcp_channel.h"
+#include "proto/peer.h"
 
 namespace host {
 
@@ -32,7 +33,7 @@ class DesktopClient final : public QObject
 
 public:
     explicit DesktopClient(base::TcpChannel* tcp_channel, QObject* parent = nullptr);
-    ~DesktopClient();
+    ~DesktopClient() final;
 
     void start(const QString& ipc_channel_name);
 
@@ -46,10 +47,11 @@ public slots:
     void onIpcChannelDisconnected();
 
     void onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code);
-    void onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer);
+    void onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray& buffer);
 
 private:
     bool connectToAgent(const QString& ipc_channel_name);
+    void sendIpcServiceMessage(const QByteArray& buffer);
 
     base::IpcChannel* ipc_channel_ = nullptr;
     base::TcpChannel* tcp_channel_ = nullptr;

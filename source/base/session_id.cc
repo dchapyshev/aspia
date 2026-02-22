@@ -25,6 +25,8 @@
 #include <qt_windows.h>
 #endif // defined(Q_OS_WINDOWS)
 
+#include "base/logging.h"
+
 namespace base {
 
 #if defined(Q_OS_WINDOWS)
@@ -36,6 +38,20 @@ static_assert(kInvalidSessionId == std::numeric_limits<DWORD>::max());
 SessionId activeConsoleSessionId()
 {
     return WTSGetActiveConsoleSessionId();
+}
+
+//--------------------------------------------------------------------------------------------------
+SessionId currentProcessSessionId()
+{
+    DWORD session_id = kInvalidSessionId;
+
+    if (!ProcessIdToSessionId(GetCurrentProcessId(), &session_id))
+    {
+        PLOG(ERROR) << "ProcessIdToSessionId failed";
+        return kInvalidSessionId;
+    }
+
+    return session_id;
 }
 
 #endif // defined(Q_OS_WINDOWS)

@@ -34,6 +34,7 @@ const SessionId kInvalidSessionId = 0xFFFFFFFF;
 const SessionId kServiceSessionId = 0;
 
 SessionId activeConsoleSessionId();
+SessionId currentProcessSessionId();
 
 #elif defined(Q_OS_UNIX)
 

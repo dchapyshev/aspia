@@ -19,31 +19,12 @@
 #include "host/desktop_client.h"
 
 #include "base/logging.h"
+#include "base/numeric_utils.h"
+#include "base/serialization.h"
+#include "proto/desktop_internal.h"
 #include "proto/host_internal.h"
 
 namespace host {
-
-namespace {
-
-//--------------------------------------------------------------------------------------------------
-quint32 makeUint32(quint16 high, quint16 low)
-{
-    return (static_cast<quint32>(high) << 16) | static_cast<quint32>(low);
-}
-
-//--------------------------------------------------------------------------------------------------
-quint16 highWord(quint32 value)
-{
-    return static_cast<quint16>(value >> 16);
-}
-
-//--------------------------------------------------------------------------------------------------
-quint16 lowWord(quint32 value)
-{
-    return static_cast<quint16>(value & 0xFFFF);
-}
-
-} // namespace
 
 //--------------------------------------------------------------------------------------------------
 DesktopClient::DesktopClient(base::TcpChannel* tcp_channel, QObject* parent)
@@ -99,6 +80,8 @@ void DesktopClient::start(const QString& ipc_channel_name)
 //--------------------------------------------------------------------------------------------------
 void DesktopClient::onIpcChannelChanged(const QString& ipc_channel_name)
 {
+    LOG(INFO) << "Connection to new IPC channel:" << ipc_channel_name;
+
     if (!connectToAgent(ipc_channel_name))
     {
         emit sig_finished();
@@ -111,8 +94,8 @@ void DesktopClient::onIpcChannelChanged(const QString& ipc_channel_name)
 //--------------------------------------------------------------------------------------------------
 void DesktopClient::onIpcChannelMessage(quint32 channel_id, const QByteArray& buffer)
 {
-    quint16 tcp_channel_id = lowWord(channel_id);
-    quint16 ipc_channel_id = highWord(channel_id);
+    quint16 tcp_channel_id = base::lowWord(channel_id);
+    quint16 ipc_channel_id = base::highWord(channel_id);
 
     if (ipc_channel_id == proto::internal::CHANNEL_ID_SESSION)
     {
@@ -130,6 +113,8 @@ void DesktopClient::onIpcChannelDisconnected()
     if (!ipc_channel_)
         return;
 
+    LOG(INFO) << "IPC channel disconnected";
+
     ipc_channel_->disconnect(this); // Disconnect all signals.
     ipc_channel_->deleteLater();
     ipc_channel_ = nullptr;
@@ -144,12 +129,14 @@ void DesktopClient::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopClient::onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer)
+void DesktopClient::onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray& buffer)
 {
-    if (channel_id != proto::peer::CHANNEL_ID_SERVICE)
+    if (tcp_channel_id != proto::peer::CHANNEL_ID_SERVICE)
     {
+        quint32 channel_id = base::makeUint32(proto::internal::CHANNEL_ID_SESSION, tcp_channel_id);
+
         if (ipc_channel_)
-            ipc_channel_->send(makeUint32(proto::internal::CHANNEL_ID_SESSION, channel_id), buffer);
+            ipc_channel_->send(channel_id, buffer);
     }
     else
     {
@@ -173,7 +160,33 @@ bool DesktopClient::connectToAgent(const QString& ipc_channel_name)
         return false;
     }
 
+    proto::peer::SessionType session_type =
+        static_cast<proto::peer::SessionType>(tcp_channel_->peerSessionType());
+    CHECK(session_type == proto::peer::SESSION_TYPE_DESKTOP_MANAGE ||
+          session_type == proto::peer::SESSION_TYPE_DESKTOP_VIEW);
+
+    proto::internal::ServiceToDesktop message;
+    proto::internal::SessionDescription* description = message.mutable_session_description();
+
+    description->set_session_type(session_type);
+    *description->mutable_version() = base::serialize(tcp_channel_->peerVersion());
+    description->set_os_name(tcp_channel_->peerOsName().toStdString());
+    description->set_computer_name(tcp_channel_->peerComputerName().toStdString());
+    description->set_display_name(tcp_channel_->peerDisplayName().toStdString());
+    description->set_architecture(tcp_channel_->peerArchitecture().toStdString());
+    description->set_user_name(tcp_channel_->peerUserName().toStdString());
+
+    sendIpcServiceMessage(base::serialize(message));
     return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopClient::sendIpcServiceMessage(const QByteArray& buffer)
+{
+    quint32 channel_id = base::makeUint32(proto::internal::CHANNEL_ID_SERVICE, 0);
+
+    if (ipc_channel_)
+        ipc_channel_->send(channel_id, buffer);
 }
 
 } // namespace host

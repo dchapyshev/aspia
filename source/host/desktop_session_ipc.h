@@ -73,8 +73,8 @@ private:
 
     std::chrono::milliseconds update_interval_ { 40 }; // 25 fps by default.
 
-    base::Serializer<proto::internal::ServiceToDesktop> outgoing_message_;
-    base::Parser<proto::internal::DesktopToService> incoming_message_;
+    base::Serializer<proto::internal::ServiceToDesktopOld> outgoing_message_;
+    base::Parser<proto::internal::DesktopToServiceOld> incoming_message_;
 
     Q_DISABLE_COPY(DesktopSessionIpc)
 };

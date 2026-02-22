@@ -20,7 +20,6 @@
 #define HOST_DESKTOP_PROCESS_H
 
 #include <QObject>
-#include <QPointer>
 #include <QString>
 
 #include "base/session_id.h"
@@ -38,7 +37,7 @@ class DesktopProcess final : public QObject
 
 public:
     explicit DesktopProcess(QObject* parent = nullptr);
-    ~DesktopProcess();
+    ~DesktopProcess() final;
 
     static QString filePath();
 
