@@ -158,6 +158,8 @@ DesktopAgentClient::DesktopAgentClient(base::IpcChannel* ipc_channel, QObject* p
     LOG(INFO) << "Ctor";
     CHECK(ipc_channel_);
 
+    ipc_channel_->setParent(this);
+
     connect(ipc_channel_, &base::IpcChannel::sig_disconnected,
             this, &DesktopAgentClient::onIpcDisconnected);
     connect(ipc_channel_, &base::IpcChannel::sig_messageReceived,
