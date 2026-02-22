@@ -190,7 +190,7 @@ void DesktopAgentClient::onScreenCaptureData(const base::Frame* frame, const bas
 {
     proto::desktop::HostToClient& message = outgoing_message_.newMessage();
 
-    if (!is_video_paused_ && frame && video_encoder_)
+    if (!is_video_paused_ && frame && !frame->constUpdatedRegion().isEmpty() && video_encoder_)
     {
         DCHECK(scale_reducer_);
 

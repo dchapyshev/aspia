@@ -59,6 +59,7 @@ private slots:
 private slots:
     void onScreenListChanged(
         const base::ScreenCapturer::ScreenList& list, base::ScreenCapturer::ScreenId current);
+    void onSelectScreen(const proto::desktop::Screen& screen);
     void onCursorPositionChanged(const QPoint& position);
     void onScreenTypeChanged(base::ScreenCapturer::ScreenType type, const QString& name);
     void onClipboardEvent(const proto::desktop::ClipboardEvent& event);

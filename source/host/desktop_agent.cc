@@ -21,11 +21,14 @@
 #include <QCoreApplication>
 #include <QTimer>
 
+#include "base/application.h"
 #include "base/logging.h"
 #include "base/power_controller.h"
 #include "base/ipc/ipc_channel.h"
+#include "host/system_settings.h"
 
 #if defined(Q_OS_WINDOWS)
+#include "base/desktop/desktop_environment_win.h"
 #include "host/input_injector_win.h"
 #endif // defined(Q_OS_WINDOWS)
 
@@ -44,6 +47,29 @@ DesktopAgent::DesktopAgent(QObject* parent)
 
     screen_capture_timer_->setTimerType(Qt::PreciseTimer);
     connect(screen_capture_timer_, &QTimer::timeout, this, &DesktopAgent::onCaptureScreen);
+
+    SystemSettings settings;
+    preferred_video_capturer_ =
+        static_cast<base::ScreenCapturer::Type>(settings.preferredVideoCapturer());
+    LOG(INFO) << "Preferred video capturer:" << static_cast<int>(preferred_video_capturer_);
+
+#if defined(Q_OS_WINDOWS)
+    // At the end of the user's session, the program ends later than the others.
+    if (!SetProcessShutdownParameters(0, SHUTDOWN_NORETRY))
+    {
+        PLOG(ERROR) << "SetProcessShutdownParameters failed";
+    }
+
+    if (!SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS))
+    {
+        PLOG(ERROR) << "SetPriorityClass failed";
+    }
+
+    connect(base::Application::instance(), &base::Application::sig_queryEndSession, []()
+    {
+        base::DesktopEnvironmentWin::updateEnvironment();
+    });
+#endif // defined(Q_OS_WINDOWS)
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -94,6 +120,7 @@ void DesktopAgent::onIpcNewConnection()
         connect(client, &DesktopAgentClient::sig_injectTextEvent, this, &DesktopAgent::onInjectTextEvent);
         connect(client, &DesktopAgentClient::sig_injectTouchEvent, this, &DesktopAgent::onInjectTouchEvent);
         connect(client, &DesktopAgentClient::sig_captureScreen, this, &DesktopAgent::onCaptureScreen);
+        connect(client, &DesktopAgentClient::sig_selectScreen, this, &DesktopAgent::onSelectScreen);
         connect(client, &DesktopAgentClient::sig_configured, this, &DesktopAgent::onClientConfigured);
         connect(client, &DesktopAgentClient::sig_finished, this, &DesktopAgent::onClientFinished);
 
@@ -396,6 +423,23 @@ void DesktopAgent::onScreenListChanged(
 
     for (const auto& client : std::as_const(clients_))
         client->onScreenListChanged(screen_list);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopAgent::onSelectScreen(const proto::desktop::Screen& screen)
+{
+    LOG(INFO) << "Select screen received:" << screen;
+
+    if (!screen_capturer_)
+    {
+        LOG(ERROR) << "Screen capturer NOT initialized";
+        return;
+    }
+
+    base::ScreenCapturer::ScreenId screen_id = static_cast<base::ScreenCapturer::ScreenId>(screen.id());
+    QSize resolution = base::parse(screen.resolution());
+
+    screen_capturer_->selectScreen(screen_id, resolution);
 }
 
 //--------------------------------------------------------------------------------------------------
