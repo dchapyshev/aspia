@@ -21,7 +21,11 @@
 
 #include <QCoreApplication>
 
+#include "base/thread.h"
+
 namespace base {
+
+class MessageWindow;
 
 class Application final : public QCoreApplication
 {
@@ -29,14 +33,22 @@ class Application final : public QCoreApplication
 
 public:
     Application(int& argc, char* argv[]);
+    ~Application() final;
 
     static Application* instance();
 
 signals:
+    void sig_queryEndSession();
     void sig_sessionEvent(quint32 event, quint32 session_id);
     void sig_powerEvent(quint32 event);
 
 private:
+#if defined(Q_OS_WINDOWS)
+    base::Thread ui_thread_;
+    std::unique_ptr<base::MessageWindow> message_window_;
+    bool is_service_ = false;
+#endif // defined(Q_OS_WINDOWS)
+
     Q_DISABLE_COPY(Application)
 };
 

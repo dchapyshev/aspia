@@ -37,6 +37,7 @@
 #include <qt_windows.h>
 #include <wtsapi32.h>
 #include "base/win/message_window.h"
+#include "base/win/session_status.h"
 #endif // defined(Q_OS_WINDOWS)
 
 #if defined(Q_OS_UNIX)
@@ -149,6 +150,8 @@ GuiApplication::GuiApplication(int& argc, char* argv[])
                 quint32 event = static_cast<quint32>(wparam);
                 quint32 session_id = static_cast<quint32>(lparam);
 
+                LOG(INFO) << "WM_WTSSESSION_CHANGE received (event:" << sessionStatusToString(event)
+                          << "session id:" << session_id << ")";
                 emit sig_sessionEvent(event, session_id);
             }
             break;
@@ -157,6 +160,7 @@ GuiApplication::GuiApplication(int& argc, char* argv[])
             {
                 quint32 event = static_cast<quint32>(wparam);
 
+                LOG(INFO) << "WM_POWERBROADCAST received (event:" << event << ")";
                 emit sig_powerEvent(event);
             }
             break;
