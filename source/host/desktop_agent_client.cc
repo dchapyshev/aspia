@@ -165,8 +165,10 @@ DesktopAgentClient::DesktopAgentClient(base::IpcChannel* ipc_channel, QObject* p
     connect(ipc_channel_, &base::IpcChannel::sig_messageReceived,
             this, &DesktopAgentClient::onIpcMessageReceived);
 
+#if defined(Q_OS_WINDOWS)
     connect(base::Application::instance(), &base::Application::sig_sessionEvent,
             this, &DesktopAgentClient::onUpdateSessionsList);
+#endif // defined(Q_OS_WINDOWS)
 }
 
 //--------------------------------------------------------------------------------------------------
