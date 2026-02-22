@@ -716,6 +716,7 @@ void UserSession::onSessionDettached(const base::Location& location)
     if (ipc_channel_)
     {
         LOG(INFO) << "Post task to delete IPC channel (sid" << session_id_ << ")";
+        ipc_channel_->disconnect(this);
         ipc_channel_->deleteLater();
         ipc_channel_ = nullptr;
     }

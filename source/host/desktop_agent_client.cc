@@ -56,6 +56,33 @@ constexpr int kMaxScreenCaptureFpsHighEnd = 30;
 constexpr int kMaxScreenCaptureFpsLowEnd = 20;
 
 //--------------------------------------------------------------------------------------------------
+int defaultCaptureFps()
+{
+    int default_capture_fps = kDefaultScreenCaptureFps;
+
+    if (qEnvironmentVariableIsSet("ASPIA_DEFAULT_FPS"))
+    {
+        bool ok = false;
+        int default_fps = qEnvironmentVariableIntValue("ASPIA_DEFAULT_FPS", &ok);
+        if (ok)
+        {
+            LOG(INFO) << "Default FPS specified by environment variable";
+
+            if (default_fps < 1 || default_fps > 60)
+            {
+                LOG(INFO) << "Environment variable contains an incorrect default FPS:" << default_fps;
+            }
+            else
+            {
+                default_capture_fps = default_fps;
+            }
+        }
+    }
+
+    return default_capture_fps;
+}
+
+//--------------------------------------------------------------------------------------------------
 int maxCaptureFps()
 {
     int max_capture_fps = kMaxScreenCaptureFpsHighEnd;
@@ -92,6 +119,33 @@ int maxCaptureFps()
     }
 
     return max_capture_fps;
+}
+
+//--------------------------------------------------------------------------------------------------
+int minCaptureFps()
+{
+    int min_capture_fps = kMinScreenCaptureFps;
+
+    if (qEnvironmentVariableIsSet("ASPIA_MIN_FPS"))
+    {
+        bool ok = false;
+        int min_fps = qEnvironmentVariableIntValue("ASPIA_MIN_FPS", &ok);
+        if (ok)
+        {
+            LOG(INFO) << "Minimum FPS specified by environment variable";
+
+            if (min_fps < 1 || min_fps > 60)
+            {
+                LOG(INFO) << "Environment variable contains an incorrect minimum FPS:" << min_fps;
+            }
+            else
+            {
+                min_capture_fps = min_fps;
+            }
+        }
+    }
+
+    return min_capture_fps;
 }
 
 } // namespace
