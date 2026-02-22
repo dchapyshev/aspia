@@ -38,6 +38,7 @@ list(APPEND SOURCE_BASE
     location.h
     logging.cc
     logging.h
+    numeric_utils.h
     power_controller.h
     process_handle.cc
     process_handle.h
