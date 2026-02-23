@@ -27,7 +27,6 @@
 #include "base/ipc/ipc_channel.h"
 #include "base/peer/host_id.h"
 #include "host/client.h"
-#include "host/desktop_session_manager.h"
 #include "host/system_settings.h"
 #include "host/unconfirmed_client_session.h"
 #include "proto/host_internal.h"
@@ -71,11 +70,17 @@ public:
     void onUpdateCredentials(base::HostId host_id, const QString& password);
     void onSettingsChanged();
 
+    void onAskForConfirmation(const proto::internal::ConnectConfirmationRequest& request);
+
 signals:
     void sig_routerStateRequested();
     void sig_credentialsRequested();
     void sig_changeOneTimePassword();
     void sig_changeOneTimeSessions(quint32 sessions);
+    void sig_askForConfirmation(quint32 request_id, bool accept);
+    void sig_lockMouseChanged(bool enable);
+    void sig_lockKeyboardChanged(bool enable);
+    void sig_pauseChanged(bool enable);
     void sig_finished();
 
 private slots:
@@ -86,8 +91,6 @@ private slots:
     void onIpcDisconnected();
     void onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer);
     void onUnconfirmedSessionFinished(quint32 id, bool is_rejected);
-    void onDesktopSessionStarted();
-    void onDesktopSessionStopped();
 
 private:
     void onSessionDettached(const base::Location& location);
@@ -99,8 +102,6 @@ private:
     void onTextChatHasUser(const base::Location& location, bool has_user);
     void onTextChatSessionStarted(quint32 id);
     void onTextChatSessionFinished(quint32 id);
-    void mergeAndSendConfiguration();
-    bool hasDesktopClients() const;
     void sendSessionMessage();
 
     base::IpcChannel* ipc_channel_ = nullptr;
@@ -108,7 +109,6 @@ private:
     Type type_;
     State state_ = State::DETTACHED;
     QTimer* ui_attach_timer_ = nullptr;
-    QTimer* desktop_dettach_timer_ = nullptr;
 
     base::SessionId session_id_;
 
@@ -118,8 +118,6 @@ private:
 
     QList<UnconfirmedClientSession*> pending_clients_;
     QList<Client*> clients_;
-
-    DesktopSessionManager* desktop_session_ = nullptr;
 
     base::Parser<proto::internal::UiToService> incoming_message_;
     base::Serializer<proto::internal::ServiceToUi> outgoing_message_;

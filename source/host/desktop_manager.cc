@@ -91,6 +91,12 @@ void DesktopManager::onNewChannel(base::TcpChannel* tcp_channel)
 }
 
 //--------------------------------------------------------------------------------------------------
+base::SessionId DesktopManager::sessionId() const
+{
+    return session_id_;
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopManager::start()
 {
     if (process_)
@@ -198,8 +204,9 @@ void DesktopManager::onProcessStateChanged(DesktopProcess::State state)
 //--------------------------------------------------------------------------------------------------
 void DesktopManager::onRestartTimeout()
 {
+    base::SessionId session_id = session_id_;
     dettach(FROM_HERE);
-    attach(FROM_HERE, session_id_);
+    attach(FROM_HERE, session_id);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -270,6 +277,7 @@ void DesktopManager::dettach(const base::Location& location)
 
     LOG(INFO) << "Dettach from session" << session_id_ << "from" << location;
 
+    session_id_ = base::kInvalidSessionId;
     attach_timer_->stop();
 
     process_->disconnect(this); // Disconnect all signals.

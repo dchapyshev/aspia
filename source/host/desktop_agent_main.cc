@@ -24,7 +24,7 @@
 #include "base/asio_event_dispatcher.h"
 #include "base/logging.h"
 #include "build/version.h"
-#include "host/desktop_session_agent.h"
+#include "host/desktop_agent.h"
 #include "host/print_debug_info.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -37,13 +37,12 @@ int desktopAgentMain(int& argc, char* argv[])
 
     base::Application::setEventDispatcher(new base::AsioEventDispatcher());
     base::Application::setApplicationVersion(ASPIA_VERSION_STRING);
-
     base::Application application(argc, argv);
 
     host::printDebugInfo(host::INCLUDE_VIDEO_ADAPTERS | host::INCLUDE_WINDOW_STATIONS);
 
     QCommandLineOption channel_id_option("channel_id",
-        base::Application::translate("FileAgentMain", "IPC channel id."), "channel_id");
+        base::Application::translate("DesktopAgentMain", "IPC channel id."), "channel_id");
 
     QCommandLineParser parser;
     parser.addOption(channel_id_option);
@@ -58,7 +57,7 @@ int desktopAgentMain(int& argc, char* argv[])
         return 1;
     }
 
-    host::DesktopSessionAgent desktop_agent;
+    host::DesktopAgent desktop_agent;
     desktop_agent.start(parser.value(channel_id_option));
 
     return application.exec();

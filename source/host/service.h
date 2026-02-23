@@ -27,6 +27,7 @@
 #include "base/net/tcp_server.h"
 #include "common/http_file_downloader.h"
 #include "common/update_checker.h"
+#include "host/desktop_manager.h"
 #include "host/router_controller.h"
 #include "host/user_session_manager.h"
 #include "host/system_settings.h"
@@ -56,10 +57,12 @@ private slots:
     void onRouterStateChanged(const proto::internal::RouterState& router_state);
     void onHostIdAssigned(base::HostId host_id);
     void onNewRelayConnection();
+    void onAskForConfirmation(quint32 request_id, bool accept);
     void onUpdateCheckedFinished(const QByteArray& result);
     void onFileDownloaderError(int error_code);
     void onFileDownloaderCompleted();
     void onFileDownloaderProgress(int percentage);
+    void onRepeatedTasks();
 
 private:
     void startSession(base::TcpChannel* channel);
@@ -74,7 +77,7 @@ private:
     void updateOneTimeCredentials(const base::Location& location);
     base::User createOneTimeUser() const;
 
-    QTimer* update_timer_ = nullptr;
+    QTimer* repeated_timer_ = nullptr;
 
     QFileSystemWatcher* settings_watcher_ = nullptr;
     SystemSettings settings_;
@@ -82,6 +85,10 @@ private:
     QPointer<RouterController> router_controller_;
 
     base::TcpServer* tcp_server_ = nullptr;
+
+    DesktopManager* desktop_manager_ = nullptr;
+    QList<std::pair<base::TcpChannel*, QTime>> pending_channels_;
+
     UserSessionManager* user_session_manager_ = nullptr;
 
     QPointer<common::UpdateChecker> update_checker_;

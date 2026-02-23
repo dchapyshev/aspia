@@ -42,11 +42,15 @@ public:
     void onSettingsChanged();
     void onClientSession(Client* client_session);
 
+    void onAskForConfirmation(
+        base::SessionId session_id, const proto::internal::ConnectConfirmationRequest& request);
+
 signals:
     void sig_routerStateRequested();
     void sig_credentialsRequested();
     void sig_changeOneTimePassword();
     void sig_changeOneTimeSessions(quint32 sessions);
+    void sig_askForConfirmation(quint32 request_id, bool accept);
 
 private slots:
     void onUserSessionEvent(quint32 status, quint32 session_id);

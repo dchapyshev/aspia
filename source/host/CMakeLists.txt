@@ -19,8 +19,6 @@
 list(APPEND SOURCE_HOST_CORE
     client.cc
     client.h
-    client_desktop.cc
-    client_desktop.h
     client_file_transfer.cc
     client_file_transfer.h
     client_system_info.cc
@@ -39,16 +37,6 @@ list(APPEND SOURCE_HOST_CORE
     desktop_manager.h
     desktop_process.cc
     desktop_process.h
-    desktop_session.cc
-    desktop_session.h
-    desktop_session_manager.cc
-    desktop_session_manager.h
-    desktop_session_agent.cc
-    desktop_session_agent.h
-    desktop_session_fake.cc
-    desktop_session_fake.h
-    desktop_session_ipc.cc
-    desktop_session_ipc.h
     file_agent.cc
     file_agent.h
     file_agent_main.cc

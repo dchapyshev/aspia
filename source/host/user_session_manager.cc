@@ -333,11 +333,36 @@ void UserSessionManager::onClientSession(Client* client_session)
 }
 
 //--------------------------------------------------------------------------------------------------
+void UserSessionManager::onAskForConfirmation(
+    base::SessionId session_id, const proto::internal::ConnectConfirmationRequest& request)
+{
+    if (request.session_type() == proto::peer::SESSION_TYPE_SYSTEM_INFO)
+    {
+        LOG(INFO) << "Accept: confirmation for system info session NOT required";
+        emit sig_askForConfirmation(request.id(), true);
+        return;
+    }
+
+    for (const auto& session : std::as_const(sessions_))
+    {
+        if (session->sessionId() == session_id)
+        {
+            // If the GUI process is available, then we ask it if the connection is allowed.
+            session->onAskForConfirmation(request);
+            return;
+        }
+    }
+
+    LOG(INFO) << "Reject: no active GUI process for session id" << session_id;
+    emit sig_askForConfirmation(request.id(), false);
+}
+
+//--------------------------------------------------------------------------------------------------
 void UserSessionManager::onUserSessionEvent(quint32 status, quint32 session_id)
 {
 #if defined(Q_OS_WINDOWS)
-    LOG(INFO) << "User session event (status=" << base::sessionStatusToString(status)
-              << "session_id=" << session_id << ")";
+    LOG(INFO) << "User session event (status:" << base::sessionStatusToString(status)
+              << "session_id:" << session_id << ")";
 
     // Send an event of each session.
     for (const auto& session : std::as_const(sessions_))
@@ -589,6 +614,8 @@ void UserSessionManager::addUserSession(
             this, &UserSessionManager::sig_changeOneTimePassword);
     connect(user_session, &UserSession::sig_changeOneTimeSessions,
             this, &UserSessionManager::sig_changeOneTimeSessions);
+    connect(user_session, &UserSession::sig_askForConfirmation,
+            this, &UserSessionManager::sig_askForConfirmation);
     connect(user_session, &UserSession::sig_finished,
             this, &UserSessionManager::onUserSessionFinished, Qt::QueuedConnection);
 

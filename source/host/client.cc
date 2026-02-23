@@ -19,7 +19,6 @@
 #include "host/client.h"
 
 #include "base/logging.h"
-#include "host/client_desktop.h"
 #include "host/client_file_transfer.h"
 #include "host/client_system_info.h"
 #include "host/client_text_chat.h"
@@ -61,10 +60,6 @@ Client* Client::create(base::TcpChannel* channel, QObject* parent)
 
     switch (channel->peerSessionType())
     {
-        case proto::peer::SESSION_TYPE_DESKTOP_MANAGE:
-        case proto::peer::SESSION_TYPE_DESKTOP_VIEW:
-            return new ClientDesktop(channel, parent);
-
         case proto::peer::SESSION_TYPE_FILE_TRANSFER:
             return new ClientFileTransfer(channel, parent);
 

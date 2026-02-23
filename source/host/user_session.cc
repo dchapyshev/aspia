@@ -20,10 +20,10 @@
 
 #include "base/location.h"
 #include "base/logging.h"
-#include "host/client_desktop.h"
 #include "host/client_text_chat.h"
 
 #if defined(Q_OS_WINDOWS)
+#include "base/win/session_info.h"
 #include "base/win/session_status.h"
 #endif // defined(Q_OS_WINDOWS)
 
@@ -34,7 +34,6 @@ UserSession::UserSession(base::SessionId session_id, base::IpcChannel* ipc_chann
     : QObject(parent),
       ipc_channel_(ipc_channel),
       ui_attach_timer_(new QTimer(this)),
-      desktop_dettach_timer_(new QTimer(this)),
       session_id_(session_id)
 {
     type_ = UserSession::Type::CONSOLE;
@@ -45,13 +44,6 @@ UserSession::UserSession(base::SessionId session_id, base::IpcChannel* ipc_chann
         LOG(INFO) << "Session attach timeout (sid" << session_id_ << ")";
         setState(FROM_HERE, State::FINISHED);
         emit sig_finished();
-    });
-
-    desktop_dettach_timer_->setSingleShot(true);
-    connect(desktop_dettach_timer_, &QTimer::timeout, this, [this]()
-    {
-        if (desktop_session_)
-            desktop_session_->dettachSession(FROM_HERE);
     });
 
 #if defined(Q_OS_WINDOWS)
@@ -91,15 +83,6 @@ void UserSession::start()
     LOG(INFO) << "User session started" << (ipc_channel_ ? "WITH" : "WITHOUT")
               << "connection to UI (sid" << session_id_ << ")";
 
-    desktop_session_ = new DesktopSessionManager(this);
-
-    connect(desktop_session_, &DesktopSessionManager::sig_desktopSessionStarted,
-            this, &UserSession::onDesktopSessionStarted);
-    connect(desktop_session_, &DesktopSessionManager::sig_desktopSessionStopped,
-            this, &UserSession::onDesktopSessionStopped);
-
-    desktop_session_->attachSession(FROM_HERE, session_id_);
-
     if (ipc_channel_)
     {
         LOG(INFO) << "IPC channel exists (sid" << session_id_ << ")";
@@ -134,9 +117,6 @@ void UserSession::restart(base::IpcChannel* channel)
               << "connection to UI (sid" << session_id_ << ")";
 
     ui_attach_timer_->stop();
-    desktop_dettach_timer_->stop();
-
-    desktop_session_->attachSession(FROM_HERE, session_id_);
 
     if (ipc_channel_)
     {
@@ -265,17 +245,6 @@ void UserSession::onUserSessionEvent(quint32 status, quint32 session_id)
 
             for (const auto& client : std::as_const(clients_))
                 client->setUserSessionId(session_id);
-
-            desktop_dettach_timer_->stop();
-
-            if (desktop_session_)
-            {
-                desktop_session_->attachSession(FROM_HERE, session_id);
-            }
-            else
-            {
-                LOG(ERROR) << "No desktop session manager";
-            }
         }
         break;
 
@@ -291,17 +260,6 @@ void UserSession::onUserSessionEvent(quint32 status, quint32 session_id)
             if (type_ == Type::RDP)
             {
                 LOG(ERROR) << "CONSOLE_DISCONNECT for RDP session detected (sid" << session_id_ << ")";
-            }
-
-            desktop_dettach_timer_->stop();
-
-            if (desktop_session_)
-            {
-                desktop_session_->dettachSession(FROM_HERE);
-            }
-            else
-            {
-                LOG(ERROR) << "No desktop session manager";
             }
 
             onSessionDettached(FROM_HERE);
@@ -389,9 +347,58 @@ void UserSession::onSettingsChanged()
 }
 
 //--------------------------------------------------------------------------------------------------
+void UserSession::onAskForConfirmation(const proto::internal::ConnectConfirmationRequest& request)
+{
+    base::SessionInfo session_info(sessionId());
+    if (!session_info.isValid())
+    {
+        LOG(ERROR) << "Reject: unable to get session info";
+        emit sig_askForConfirmation(request.id(), false);
+        return;
+    }
+
+    if (session_info.connectState() != base::SessionInfo::ConnectState::ACTIVE)
+    {
+        if (no_user_action_ == SystemSettings::NoUserAction::ACCEPT)
+        {
+            LOG(INFO) << "Accept: no active user";
+            emit sig_askForConfirmation(request.id(), true);
+        }
+        else
+        {
+            DCHECK_EQ(no_user_action_, SystemSettings::NoUserAction::REJECT);
+            LOG(INFO) << "Reject: no active user";
+            emit sig_askForConfirmation(request.id(), false);
+        }
+        return;
+    }
+
+    if (!ipc_channel_)
+    {
+        LOG(INFO) << "Reject: user is active, but there is no connection to the GUI";
+        emit sig_askForConfirmation(request.id(), false);
+        return;
+    }
+
+    if (!connect_confirmation_)
+    {
+        LOG(INFO) << "Accept: connect confirmation is disabled";
+        emit sig_askForConfirmation(request.id(), true);
+        return;
+    }
+
+    proto::internal::ConnectConfirmationRequest* ipc_request =
+        outgoing_message_.newMessage().mutable_connect_confirmation_request();
+    ipc_request->CopyFrom(request);
+
+    // Send confirmation request to GUI.
+    sendSessionMessage();
+}
+
+//--------------------------------------------------------------------------------------------------
 void UserSession::onClientSessionConfigured()
 {
-    mergeAndSendConfiguration();
+
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -423,17 +430,6 @@ void UserSession::onClientSessionFinished()
 
         // Delete a session from the list.
         it = clients_.erase(it);
-    }
-
-    if (!hasDesktopClients())
-    {
-        LOG(INFO) << "No desktop clients connected. Disabling the desktop agent (sid" << session_id_ << ")";
-        desktop_session_->control(proto::internal::DesktopControl::DISABLE);
-
-        desktop_session_->setScreenCaptureFps(DesktopSessionManager::defaultCaptureFps());
-        desktop_session_->setMouseLock(false);
-        desktop_session_->setKeyboardLock(false);
-        desktop_session_->setPaused(false);
     }
 }
 
@@ -470,7 +466,6 @@ void UserSession::onClientSessionTextChat(quint32 id, const proto::text_chat::Te
 void UserSession::onIpcDisconnected()
 {
     LOG(INFO) << "Ipc channel disconnected (sid" << session_id_ << ")";
-    desktop_dettach_timer_->start(std::chrono::seconds(5));
     onSessionDettached(FROM_HERE);
 }
 
@@ -551,33 +546,9 @@ void UserSession::onIpcMessageReceived(quint32 channel_id, const QByteArray& buf
                     return;
                 }
 
-                bool is_paused = control.boolean();
-
                 LOG(INFO) << "ServiceControl::CODE_PAUSE (sid" << session_id_ << "paused"
-                          << is_paused << ")";
-
-                desktop_session_->setPaused(is_paused);
-                desktop_session_->control(is_paused ?
-                    proto::internal::DesktopControl::DISABLE : proto::internal::DesktopControl::ENABLE);
-
-                if (is_paused)
-                {
-                    QTimer::singleShot(std::chrono::milliseconds(500), this, [this]()
-                    {
-                        for (const auto& client : std::as_const(clients_))
-                        {
-                            ClientDesktop* desktop_client =
-                                dynamic_cast<ClientDesktop*>(client);
-
-                            if (desktop_client)
-                                desktop_client->setVideoErrorCode(proto::desktop::VIDEO_ERROR_CODE_PAUSED);
-                        }
-                    });
-                }
-                else
-                {
-                    mergeAndSendConfiguration();
-                }
+                          << control.boolean() << ")";
+                emit sig_pauseChanged(control.boolean());
             }
             break;
 
@@ -591,8 +562,7 @@ void UserSession::onIpcMessageReceived(quint32 channel_id, const QByteArray& buf
 
                 LOG(INFO) << "ServiceControl::CODE_LOCK_MOUSE (sid" << session_id_
                           << "lock_mouse" << control.boolean() << ")";
-
-                desktop_session_->setMouseLock(control.boolean());
+                emit sig_lockMouseChanged(control.boolean());
             }
             break;
 
@@ -606,8 +576,7 @@ void UserSession::onIpcMessageReceived(quint32 channel_id, const QByteArray& buf
 
                 LOG(INFO) << "ServiceControl::CODE_LOCK_KEYBOARD (sid" << session_id_
                           << "lock_keyboard" << control.boolean() << ")";
-
-                desktop_session_->setKeyboardLock(control.boolean());
+                emit sig_lockKeyboardChanged(control.boolean());
             }
             break;
 
@@ -660,49 +629,6 @@ void UserSession::onUnconfirmedSessionFinished(quint32 id, bool is_rejected)
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSession::onDesktopSessionStarted()
-{
-    LOG(INFO) << "Desktop session is connected (sid" << session_id_ << ")";
-
-    proto::internal::DesktopControl::Action action = proto::internal::DesktopControl::ENABLE;
-    if (!hasDesktopClients())
-    {
-        LOG(INFO) << "No desktop clients. Disable session (sid" << session_id_ << ")";
-        action = proto::internal::DesktopControl::DISABLE;
-    }
-    else
-    {
-        desktop_session_->setKeyboardLock(false);
-        desktop_session_->setMouseLock(false);
-        desktop_session_->setPaused(false);
-    }
-
-    desktop_session_->control(action);
-    onClientSessionConfigured();
-}
-
-//--------------------------------------------------------------------------------------------------
-void UserSession::onDesktopSessionStopped()
-{
-    LOG(INFO) << "Desktop session is disconnected (sid" << session_id_ << ")";
-
-    if (type_ != Type::RDP)
-        return;
-
-    LOG(INFO) << "Session type is RDP. Disconnect all (sid" << session_id_ << ")";
-
-    auto it = clients_.begin();
-    while (it != clients_.end())
-    {
-        Client* session = *it;
-        session->deleteLater();
-        it = clients_.erase(it);
-    }
-
-    onSessionDettached(FROM_HERE);
-}
-
-//--------------------------------------------------------------------------------------------------
 void UserSession::onSessionDettached(const base::Location& location)
 {
     if (state_ == State::DETTACHED)
@@ -722,6 +648,7 @@ void UserSession::onSessionDettached(const base::Location& location)
     }
 
     // Stop one-time desktop clients.
+#if 0
     for (const auto& client : std::as_const(clients_))
     {
         ClientDesktop* desktop_client = dynamic_cast<ClientDesktop*>(client);
@@ -736,6 +663,7 @@ void UserSession::onSessionDettached(const base::Location& location)
             client->stop();
         }
     }
+#endif
 
     // Stop all file transfer clients.
     for (const auto& client : std::as_const(clients_))
@@ -838,57 +766,6 @@ void UserSession::addNewClientSession(Client* client_session)
 
     switch (session_type)
     {
-        case proto::peer::SESSION_TYPE_DESKTOP_MANAGE:
-        case proto::peer::SESSION_TYPE_DESKTOP_VIEW:
-        {
-            LOG(INFO) << "New desktop session (sid" << session_id_ << ")";
-
-            bool enable_required = !hasDesktopClients();
-
-            ClientDesktop* desktop_client = static_cast<ClientDesktop*>(client_session);
-
-            connect(desktop_client, &ClientDesktop::sig_control,
-                    desktop_session_, &DesktopSessionManager::control);
-            connect(desktop_client, &ClientDesktop::sig_selectScreen,
-                    desktop_session_, &DesktopSessionManager::selectScreen);
-            connect(desktop_client, &ClientDesktop::sig_captureScreen,
-                    desktop_session_, &DesktopSessionManager::captureScreen);
-            connect(desktop_client, &ClientDesktop::sig_captureFpsChanged,
-                    desktop_session_, &DesktopSessionManager::setScreenCaptureFps);
-            connect(desktop_client, &ClientDesktop::sig_injectKeyEvent,
-                    desktop_session_, &DesktopSessionManager::injectKeyEvent);
-            connect(desktop_client, &ClientDesktop::sig_injectTextEvent,
-                    desktop_session_, &DesktopSessionManager::injectTextEvent);
-            connect(desktop_client, &ClientDesktop::sig_injectMouseEvent,
-                    desktop_session_, &DesktopSessionManager::injectMouseEvent);
-            connect(desktop_client, &ClientDesktop::sig_injectTouchEvent,
-                    desktop_session_, &DesktopSessionManager::injectTouchEvent);
-            connect(desktop_client, &ClientDesktop::sig_injectClipboardEvent,
-                    desktop_session_, &DesktopSessionManager::injectClipboardEvent);
-
-            connect(desktop_session_, &DesktopSessionManager::sig_screenCaptured,
-                    desktop_client, &ClientDesktop::encodeScreen);
-            connect(desktop_session_, &DesktopSessionManager::sig_screenCaptureError,
-                    desktop_client, &ClientDesktop::setVideoErrorCode);
-            connect(desktop_session_, &DesktopSessionManager::sig_audioCaptured,
-                    desktop_client, &ClientDesktop::encodeAudio);
-            connect(desktop_session_, &DesktopSessionManager::sig_cursorPositionChanged,
-                    desktop_client, &ClientDesktop::setCursorPosition);
-            connect(desktop_session_, &DesktopSessionManager::sig_screenListChanged,
-                    desktop_client, &ClientDesktop::setScreenList);
-            connect(desktop_session_, &DesktopSessionManager::sig_screenTypeChanged,
-                    desktop_client, &ClientDesktop::setScreenType);
-            connect(desktop_session_, &DesktopSessionManager::sig_clipboardEvent,
-                    desktop_client, &ClientDesktop::injectClipboardEvent);
-
-            if (enable_required)
-            {
-                LOG(INFO) << "Has desktop clients. Enable desktop session (sid" << session_id_ << ")";
-                desktop_session_->control(proto::internal::DesktopControl::ENABLE);
-            }
-        }
-        break;
-
         case proto::peer::SESSION_TYPE_FILE_TRANSFER:
         case proto::peer::SESSION_TYPE_SYSTEM_INFO:
         case proto::peer::SESSION_TYPE_TEXT_CHAT:
@@ -1055,78 +932,6 @@ void UserSession::onTextChatSessionFinished(quint32 id)
     }
 
     sendSessionMessage();
-}
-
-//--------------------------------------------------------------------------------------------------
-void UserSession::mergeAndSendConfiguration()
-{
-    if (!hasDesktopClients())
-    {
-        LOG(INFO) << "No desktop clients (sid" << session_id_ << ")";
-        return;
-    }
-
-    LOG(INFO) << "Client session configured (sid" << session_id_ << ")";
-
-    DesktopSession::Config system_config;
-    memset(&system_config, 0, sizeof(system_config));
-
-    for (const auto& client : std::as_const(clients_))
-    {
-        ClientDesktop* desktop_client = dynamic_cast<ClientDesktop*>(client);
-        if (!desktop_client)
-            continue;
-
-        const DesktopSession::Config& client_config = desktop_client->desktopSessionConfig();
-
-        // If at least one client has disabled font smoothing, then the font smoothing will be
-        // disabled for everyone.
-        system_config.disable_font_smoothing =
-            system_config.disable_font_smoothing || client_config.disable_font_smoothing;
-
-        // If at least one client has disabled effects, then the effects will be disabled for
-        // everyone.
-        system_config.disable_effects =
-            system_config.disable_effects || client_config.disable_effects;
-
-        // If at least one client has disabled the wallpaper, then the effects will be disabled for
-        // everyone.
-        system_config.disable_wallpaper =
-            system_config.disable_wallpaper || client_config.disable_wallpaper;
-
-        // If at least one client has enabled input block, then the block will be enabled for
-        // everyone.
-        system_config.block_input = system_config.block_input || client_config.block_input;
-
-        system_config.lock_at_disconnect =
-            system_config.lock_at_disconnect || client_config.lock_at_disconnect;
-
-        system_config.clear_clipboard =
-            system_config.clear_clipboard || client_config.clear_clipboard;
-
-        system_config.cursor_position =
-            system_config.cursor_position || client_config.cursor_position;
-    }
-
-    desktop_session_->configure(system_config);
-    desktop_session_->captureScreen();
-}
-
-//--------------------------------------------------------------------------------------------------
-bool UserSession::hasDesktopClients() const
-{
-    for (const auto& session : std::as_const(clients_))
-    {
-        proto::peer::SessionType session_type = session->sessionType();
-
-        if (session_type == proto::peer::SESSION_TYPE_DESKTOP_MANAGE ||
-            session_type == proto::peer::SESSION_TYPE_DESKTOP_VIEW)
-        {
-            return true;
-        }
-    }
-
-    return false;
 }
 
 //--------------------------------------------------------------------------------------------------

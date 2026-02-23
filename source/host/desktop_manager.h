@@ -19,9 +19,7 @@
 #ifndef HOST_DESKTOP_MANAGER_H
 #define HOST_DESKTOP_MANAGER_H
 
-#include <QMap>
 #include <QObject>
-#include <QPointer>
 
 #include "base/location.h"
 #include "base/ipc/ipc_channel.h"
@@ -43,6 +41,7 @@ public:
     static DesktopManager* instance();
 
     void onNewChannel(base::TcpChannel* tcp_channel);
+    base::SessionId sessionId() const;
 
 public slots:
     void start();
@@ -67,7 +66,7 @@ private:
     QString ipc_channel_name_;
     bool is_console_ = true;
 
-    QPointer<DesktopProcess> process_;
+    DesktopProcess* process_ = nullptr;
 
     QTimer* restart_timer_ = nullptr;
     QTimer* attach_timer_ = nullptr;

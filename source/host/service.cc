@@ -55,15 +55,16 @@ const char kFirewallRuleDecription[] = "Allow incoming TCP connections";
 //--------------------------------------------------------------------------------------------------
 Service::Service(QObject* parent)
     : base::Service(kHostServiceName, parent),
-      update_timer_(new QTimer(this)),
+      repeated_timer_(new QTimer(this)),
       settings_watcher_(new QFileSystemWatcher(this)),
       tcp_server_(new base::TcpServer(this)),
+      desktop_manager_(new DesktopManager(this)),
       user_session_manager_(new UserSessionManager(this)),
       password_expire_timer_(new QTimer(this))
 {
     LOG(INFO) << "Ctor";
 
-    connect(update_timer_, &QTimer::timeout, this, &Service::checkForUpdates);
+    connect(repeated_timer_, &QTimer::timeout, this, &Service::onRepeatedTasks);
     connect(settings_watcher_, &QFileSystemWatcher::fileChanged, this, &Service::updateConfiguration);
 
     connect(user_session_manager_, &UserSessionManager::sig_routerStateRequested,
@@ -74,6 +75,8 @@ Service::Service(QObject* parent)
             this, &Service::onChangeOneTimePassword);
     connect(user_session_manager_, &UserSessionManager::sig_changeOneTimeSessions,
             this, &Service::onChangeOneTimeSessions);
+    connect(user_session_manager_, &UserSessionManager::sig_askForConfirmation,
+            this, &Service::onAskForConfirmation);
 
     connect(tcp_server_, &base::TcpServer::sig_newConnection,
             this, &Service::onNewDirectConnection);
@@ -143,7 +146,8 @@ void Service::onStart()
     }
 
     settings_watcher_->addPath(settings_file_path);
-    update_timer_->start(std::chrono::minutes(5));
+    repeated_timer_->start(std::chrono::seconds(30));
+    desktop_manager_->start();
     user_session_manager_->start();
 
     addFirewallRules();
@@ -289,6 +293,31 @@ void Service::onNewRelayConnection()
 }
 
 //--------------------------------------------------------------------------------------------------
+void Service::onAskForConfirmation(quint32 request_id, bool accept)
+{
+    for (auto it = pending_channels_.begin(), it_end = pending_channels_.end(); it != it_end; ++it)
+    {
+        base::TcpChannel* channel = it->first;
+
+        if (channel->instanceId() != request_id)
+            continue;
+
+        if (accept)
+        {
+            LOG(INFO) << "TCP channel" << request_id << "is accepted";
+            desktop_manager_->onNewChannel(channel);
+        }
+        else
+        {
+            LOG(INFO) << "TCP channel" << request_id << "is rejected";
+            channel->deleteLater();
+        }
+        pending_channels_.erase(it);
+        return;
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
 void Service::onUpdateCheckedFinished(const QByteArray& result)
 {
     if (result.isEmpty())
@@ -401,13 +430,36 @@ void Service::onFileDownloaderProgress(int percentage)
 }
 
 //--------------------------------------------------------------------------------------------------
+void Service::onRepeatedTasks()
+{
+    QTime current_time = QTime::currentTime();
+
+    // Check if there are any sessions that have not been confirmed for more than 60 seconds and
+    // delete them.
+    for (auto it = pending_channels_.begin(); it != pending_channels_.end(); ++it)
+    {
+        base::TcpChannel* channel = it->first;
+        QTime time = it->second;
+
+        if (time.secsTo(current_time) > 60)
+        {
+            channel->deleteLater();
+            it = pending_channels_.erase(it);
+        }
+    }
+
+    checkForUpdates();
+}
+
+//--------------------------------------------------------------------------------------------------
 void Service::startSession(base::TcpChannel* channel)
 {
-    LOG(INFO) << "Start authentication";
+    LOG(INFO) << "TCP channel is ready";
 
     static const int kReadBufferSize = 2 * 1024 * 1024; // 2 Mb.
     static const int kWriteBufferSize = 2 * 1024 * 1024; // 2 Mb.
 
+    channel->setParent(this);
     channel->setReadBufferSize(kReadBufferSize);
     channel->setWriteBufferSize(kWriteBufferSize);
 
@@ -416,6 +468,34 @@ void Service::startSession(base::TcpChannel* channel)
     {
         LOG(ERROR) << "Version mismatch (host:" << host_version
                    << "client:" << channel->peerVersion() << ")";
+    }
+
+    proto::peer::SessionType session_type =
+        static_cast<proto::peer::SessionType>(channel->peerSessionType());
+
+    if (session_type == proto::peer::SESSION_TYPE_DESKTOP_MANAGE ||
+        session_type == proto::peer::SESSION_TYPE_DESKTOP_VIEW)
+    {
+        base::SessionId session_id = desktop_manager_->sessionId();
+        if (session_id == base::kInvalidSessionId)
+        {
+            LOG(ERROR) << "Invalid session ID for desktop manager";
+            channel->deleteLater();
+            return;
+        }
+
+        SystemSettings settings;
+
+        proto::internal::ConnectConfirmationRequest request;
+        request.set_id(channel->instanceId());
+        request.set_session_type(session_type);
+        request.set_computer_name(channel->peerComputerName().toStdString());
+        request.set_user_name(channel->peerUserName().toStdString());
+        request.set_timeout(settings.autoConfirmationInterval().count());
+
+        pending_channels_.emplace_back(channel, QTime::currentTime());
+        user_session_manager_->onAskForConfirmation(session_id, request);
+        return;
     }
 
     Client* session = Client::create(channel);
