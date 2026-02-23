@@ -208,6 +208,8 @@ void DesktopAgent::onClientFinished()
     if (!clients_.isEmpty())
         return;
 
+    LOG(INFO) << "Last desktop client disconnected";
+
     if (clear_clipboard_)
     {
         if (clipboard_monitor_)

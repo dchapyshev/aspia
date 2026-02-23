@@ -222,6 +222,18 @@ void DesktopManager::onClientFinished()
     client->disconnect(this); // Disoconnect all signals.
     client->deleteLater();
     clients_.removeOne(client);
+
+    if (!clients_.isEmpty())
+        return;
+
+    LOG(INFO) << "Last desktop client disconnected";
+
+    base::SessionId session_id = base::activeConsoleSessionId();
+    if (session_id != session_id_)
+    {
+        dettach(FROM_HERE);
+        attach(FROM_HERE, session_id);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
