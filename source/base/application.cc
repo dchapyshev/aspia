@@ -102,6 +102,13 @@ Application::Application(int& argc, char* argv[])
     {
         LOG(INFO) << "UI thread starting";
 
+        message_window_ = std::make_unique<base::MessageWindow>();
+        if (!message_window_->create(on_window_message))
+        {
+            LOG(ERROR) << "Couldn't create window";
+            return;
+        }
+
         if (!is_service_)
         {
             LOG(INFO) << "Application mode detected";
@@ -114,13 +121,6 @@ Application::Application(int& argc, char* argv[])
         else
         {
             LOG(INFO) << "Service mode detected";
-        }
-
-        message_window_ = std::make_unique<base::MessageWindow>();
-        if (!message_window_->create(on_window_message))
-        {
-            LOG(ERROR) << "Couldn't create window";
-            return;
         }
     },
     Qt::DirectConnection);
