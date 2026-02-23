@@ -42,6 +42,14 @@ const TcpChannel::Seconds kKeepAliveTimeout { 30 };
 auto g_errorCodeType = qRegisterMetaType<base::TcpChannel::ErrorCode>();
 
 //--------------------------------------------------------------------------------------------------
+quint32 makeInstanceId()
+{
+    static thread_local quint32 instance_id = 0;
+    ++instance_id;
+    return instance_id;
+}
+
+//--------------------------------------------------------------------------------------------------
 QStringList endpointsToString(const asio::ip::tcp::resolver::results_type& endpoints)
 {
     if (endpoints.empty())
@@ -84,6 +92,7 @@ int calculateSpeed(int last_speed, const TcpChannel::Milliseconds& duration, qin
 //--------------------------------------------------------------------------------------------------
 TcpChannel::TcpChannel(Authenticator* authenticator, QObject* parent)
     : QObject(parent),
+      instance_id_(makeInstanceId()),
       io_context_(base::AsioEventDispatcher::currentIoContext()),
       socket_(io_context_),
       resolver_(std::make_unique<asio::ip::tcp::resolver>(io_context_)),
@@ -97,6 +106,7 @@ TcpChannel::TcpChannel(Authenticator* authenticator, QObject* parent)
 TcpChannel::TcpChannel(
     asio::ip::tcp::socket&& socket, Authenticator* authenticator, QObject* parent)
     : QObject(parent),
+      instance_id_(makeInstanceId()),
       io_context_(base::AsioEventDispatcher::currentIoContext()),
       socket_(std::move(socket)),
       authenticator_(authenticator)

@@ -137,6 +137,8 @@ public:
     base::HostId hostId() const { return host_id_; }
     void setHostId(base::HostId host_id) { host_id_ = host_id; }
 
+    quint32 instanceId() const { return instance_id_; }
+
     qint64 totalRx() const { return total_rx_; }
     qint64 totalTx() const { return total_tx_; }
     int speedRx();
@@ -241,6 +243,8 @@ private:
 
     void addTxBytes(size_t bytes_count);
     void addRxBytes(size_t bytes_count);
+
+    const quint32 instance_id_;
 
     asio::io_context& io_context_;
     asio::ip::tcp::socket socket_;
