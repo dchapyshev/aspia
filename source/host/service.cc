@@ -31,6 +31,7 @@
 #include "base/net/tcp_channel.h"
 #include "base/peer/user_list.h"
 #include "common/update_info.h"
+#include "host/file_client.h"
 #include "host/host_storage.h"
 #include "host/service_constants.h"
 
@@ -305,7 +306,31 @@ void Service::onAskForConfirmation(quint32 request_id, bool accept)
         if (accept)
         {
             LOG(INFO) << "TCP channel" << request_id << "is accepted";
-            desktop_manager_->onNewChannel(channel);
+
+            proto::peer::SessionType session_type =
+                static_cast<proto::peer::SessionType>(channel->peerSessionType());
+
+            switch (session_type)
+            {
+                case proto::peer::SESSION_TYPE_DESKTOP_MANAGE:
+                case proto::peer::SESSION_TYPE_DESKTOP_VIEW:
+                    desktop_manager_->onNewChannel(channel);
+                    break;
+
+                case proto::peer::SESSION_TYPE_FILE_TRANSFER:
+                {
+                    FileClient* client = new FileClient(channel, this);
+                    file_clients_.emplace_back(client);
+
+                    connect(client, &FileClient::sig_finished, this, &Service::onFileClientFinished);
+                    client->start(desktop_manager_->sessionId());
+                }
+                break;
+
+                default:
+                    NOTREACHED();
+                    break;
+            }
         }
         else
         {
@@ -452,6 +477,22 @@ void Service::onRepeatedTasks()
 }
 
 //--------------------------------------------------------------------------------------------------
+void Service::onFileClientFinished()
+{
+    FileClient* client = dynamic_cast<FileClient*>(sender());
+    if (!client)
+    {
+        LOG(ERROR) << "Unknown sender for finish slot";
+        return;
+    }
+
+    client->disconnect(this);
+    client->deleteLater();
+
+    file_clients_.removeOne(client);
+}
+
+//--------------------------------------------------------------------------------------------------
 void Service::startSession(base::TcpChannel* channel)
 {
     LOG(INFO) << "TCP channel is ready";
@@ -474,7 +515,8 @@ void Service::startSession(base::TcpChannel* channel)
         static_cast<proto::peer::SessionType>(channel->peerSessionType());
 
     if (session_type == proto::peer::SESSION_TYPE_DESKTOP_MANAGE ||
-        session_type == proto::peer::SESSION_TYPE_DESKTOP_VIEW)
+        session_type == proto::peer::SESSION_TYPE_DESKTOP_VIEW ||
+        session_type == proto::peer::SESSION_TYPE_FILE_TRANSFER)
     {
         base::SessionId session_id = desktop_manager_->sessionId();
         if (session_id == base::kInvalidSessionId)

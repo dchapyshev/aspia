@@ -19,8 +19,6 @@
 list(APPEND SOURCE_HOST_CORE
     client.cc
     client.h
-    client_file_transfer.cc
-    client_file_transfer.h
     client_system_info.cc
     client_system_info.h
     client_text_chat.cc
@@ -41,6 +39,8 @@ list(APPEND SOURCE_HOST_CORE
     file_agent.h
     file_agent_main.cc
     file_agent_main.h
+    file_client.cc
+    file_client.h
     host_export.h
     host_storage.cc
     host_storage.h
@@ -57,8 +57,6 @@ list(APPEND SOURCE_HOST_CORE
     service_constants.h
     service_main.cc
     service_main.h
-    stat_counter.cc
-    stat_counter.h
     system_settings.cc
     system_settings.h
     unconfirmed_client_session.cc

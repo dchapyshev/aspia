@@ -16,50 +16,60 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST_CLIENT_FILE_TRANSFER_H
-#define HOST_CLIENT_FILE_TRANSFER_H
+#ifndef HOST_FILE_CLIENT_H
+#define HOST_FILE_CLIENT_H
 
-#include <QList>
-#include <QTimer>
+#include <QObject>
 
 #include "base/location.h"
+#include "base/session_id.h"
 #include "base/ipc/ipc_channel.h"
-#include "base/ipc/ipc_server.h"
-#include "host/client.h"
+#include "base/net/tcp_channel.h"
 
 namespace host {
 
-class ClientFileTransfer final : public Client
+class FileClient final : public QObject
 {
     Q_OBJECT
 
 public:
-    ClientFileTransfer(base::TcpChannel* channel, QObject* parent);
-    ~ClientFileTransfer() final;
+    explicit FileClient(base::TcpChannel* tcp_channel, QObject* parent = nullptr);
+    ~FileClient() final;
 
-protected:
-    // Client implementation.
-    void onStarted() final;
-    void onReceived(const QByteArray& buffer) final;
+public slots:
+    void start(base::SessionId session_id);
+
+signals:
+    void sig_started();
+    void sig_finished();
 
 private slots:
-    void onIpcDisconnected();
-    void onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer);
     void onIpcNewConnection();
     void onIpcErrorOccurred();
 
+    void onIpcMessageReceived(quint32 ipc_channel_id, const QByteArray& buffer);
+    void onIpcDisconnected();
+
+    void onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code);
+    void onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray& buffer);
+
 private:
+    bool startIpcServer(const QString& ipc_channel_name);
+    void onStarted(const base::Location& location, bool has_user);
     void onError(const base::Location& location);
 
-    QTimer* attach_timer_ = nullptr;
+    base::TcpChannel* tcp_channel_ = nullptr;
+
     base::IpcServer* ipc_server_ = nullptr;
     base::IpcChannel* ipc_channel_ = nullptr;
-    QList<QByteArray> pending_messages_;
+
+    QTimer* attach_timer_ = nullptr;
+
     bool has_logged_on_user_ = false;
 
-    Q_DISABLE_COPY(ClientFileTransfer)
+    Q_DISABLE_COPY_MOVE(FileClient)
 };
 
 } // namespace host
 
-#endif // HOST_CLIENT_FILE_TRANSFER_H
+#endif // HOST_DESKTOP_MANAGER_H

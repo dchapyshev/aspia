@@ -34,6 +34,8 @@
 
 namespace host {
 
+class FileClient;
+
 class Service final : public base::Service
 {
     Q_OBJECT
@@ -63,6 +65,7 @@ private slots:
     void onFileDownloaderCompleted();
     void onFileDownloaderProgress(int percentage);
     void onRepeatedTasks();
+    void onFileClientFinished();
 
 private:
     void startSession(base::TcpChannel* channel);
@@ -87,6 +90,8 @@ private:
     base::TcpServer* tcp_server_ = nullptr;
 
     DesktopManager* desktop_manager_ = nullptr;
+    QList<FileClient*> file_clients_;
+
     QList<std::pair<base::TcpChannel*, QTime>> pending_channels_;
 
     UserSessionManager* user_session_manager_ = nullptr;

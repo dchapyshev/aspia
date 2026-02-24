@@ -16,21 +16,10 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/client_file_transfer.h"
+#include "host/file_client.h"
 
 #include <QCoreApplication>
 #include <QDir>
-
-#include "proto/host_internal.h"
-
-#if defined(Q_OS_LINUX)
-#include <signal.h>
-#include <spawn.h>
-#endif // defined(Q_OS_LINUX)
-
-#include "base/logging.h"
-#include "base/serialization.h"
-#include "proto/file_transfer.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/scoped_object.h"
@@ -39,6 +28,17 @@
 #include <UserEnv.h>
 #include <WtsApi32.h>
 #endif // defined(Q_OS_WINDOWS)
+
+#if defined(Q_OS_LINUX)
+#include <signal.h>
+#include <spawn.h>
+#endif // defined(Q_OS_LINUX)
+
+#include "base/logging.h"
+#include "base/serialization.h"
+#include "base/ipc/ipc_server.h"
+#include "proto/file_transfer.h"
+#include "proto/host_internal.h"
 
 namespace host {
 
@@ -174,12 +174,20 @@ QString agentFilePath()
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-ClientFileTransfer::ClientFileTransfer(base::TcpChannel* channel,
-                                                     QObject* parent)
-    : Client(channel, parent),
+FileClient::FileClient(base::TcpChannel* tcp_channel, QObject* parent)
+    : QObject(parent),
+      tcp_channel_(tcp_channel),
       attach_timer_(new QTimer(this))
 {
     LOG(INFO) << "Ctor";
+    CHECK(tcp_channel_);
+
+    tcp_channel_->setParent(this);
+
+    connect(tcp_channel_, &base::TcpChannel::sig_errorOccurred,
+            this, &FileClient::onTcpErrorOccurred);
+    connect(tcp_channel_, &base::TcpChannel::sig_messageReceived,
+            this, &FileClient::onTcpMessageReceived);
 
     attach_timer_->setSingleShot(true);
     connect(attach_timer_, &QTimer::timeout, this, [this]()
@@ -190,43 +198,29 @@ ClientFileTransfer::ClientFileTransfer(base::TcpChannel* channel,
 }
 
 //--------------------------------------------------------------------------------------------------
-ClientFileTransfer::~ClientFileTransfer()
+FileClient::~FileClient()
 {
     LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientFileTransfer::onStarted()
+void FileClient::start(base::SessionId session_id)
 {
-    QString channel_id = base::IpcServer::createUniqueId();
-
-    LOG(INFO) << "Starting ipc channel for file transfer";
-
-    ipc_server_ = new base::IpcServer(this);
-
-    connect(ipc_server_, &base::IpcServer::sig_newConnection,
-            this, &ClientFileTransfer::onIpcNewConnection);
-    connect(ipc_server_, &base::IpcServer::sig_errorOccurred,
-            this, &ClientFileTransfer::onIpcErrorOccurred);
-
-    if (!ipc_server_->start(channel_id))
-    {
-        LOG(ERROR) << "Failed to start IPC server (channel_id:" << channel_id << ")";
-        onError(FROM_HERE);
-        return;
-    }
-
-    LOG(INFO) << "IPC channel started";
+    QString ipc_channel_id = base::IpcServer::createUniqueId();
 
 #if defined(Q_OS_WINDOWS)
     base::ScopedHandle session_token;
-    if (!createLoggedOnUserToken(userSessionId(), &session_token))
+    if (!createLoggedOnUserToken(session_id, &session_token))
     {
-        LOG(ERROR) << "createSessionToken failed";
+        LOG(WARNING) << "createSessionToken failed";
+
+        // There is no logged in user. The session starts, but responds to all client requests with
+        // an error.
+        onStarted(FROM_HERE, false);
         return;
     }
 
-    base::SessionInfo session_info(userSessionId());
+    base::SessionInfo session_info(session_id);
     if (!session_info.isValid())
     {
         LOG(ERROR) << "Unable to get session info";
@@ -236,11 +230,22 @@ void ClientFileTransfer::onStarted()
 
     if (session_info.isUserLocked())
     {
-        LOG(ERROR) << "User session is locked";
+        LOG(WARNING) << "User session is locked";
+
+        // There is a logged in user, but his session is blocked. The session starts, but responds
+        // to all client requests with an error.
+        onStarted(FROM_HERE, false);
         return;
     }
 
-    QString command_line = agentFilePath() + " --channel_id " + channel_id;
+    if (!startIpcServer(ipc_channel_id))
+    {
+        LOG(ERROR) << "Unable to start IPC server";
+        onError(FROM_HERE);
+        return;
+    }
+
+    QString command_line = agentFilePath() + " --channel_id " + ipc_channel_id;
 
     LOG(INFO) << "Starting agent process with command line:" << command_line;
 
@@ -258,6 +263,7 @@ void ClientFileTransfer::onStarted()
     if (it == std::filesystem::end(it))
     {
         LOG(ERROR) << "No X11 sessions";
+        onError(FROM_HERE);
         return;
     }
 
@@ -280,9 +286,16 @@ void ClientFileTransfer::onStarted()
         if (splitted.isEmpty())
             continue;
 
+        if (!startIpcServer(ipc_channel_id))
+        {
+            LOG(ERROR) << "Unable to start IPC server";
+            onError(FROM_HERE);
+            return;
+        }
+
         QString user_name = splitted.front();
-        QByteArray command_line = QString("sudo -u {} {} --channel_id={} &")
-            .arg(user_name, agentFilePath(), channel_id).toLocal8Bit();
+        QByteArray command_line = QString("sudo -u %1 %2 --channel_id=%3 &")
+            .arg(user_name, agentFilePath(), ipc_channel_id).toLocal8Bit();
 
         LOG(INFO) << "Start file transfer session agent:" << command_line;
 
@@ -305,101 +318,159 @@ void ClientFileTransfer::onStarted()
 #endif
 
     LOG(INFO) << "Wait for starting agent process";
-    has_logged_on_user_ = true;
-
     attach_timer_->start(std::chrono::seconds(10));
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientFileTransfer::onReceived(const QByteArray& buffer)
-{
-    if (!has_logged_on_user_)
-    {
-        proto::file_transfer::Reply reply;
-        reply.set_error_code(proto::file_transfer::ERROR_CODE_NO_LOGGED_ON_USER);
-
-        sendMessage(base::serialize(reply));
-        return;
-    }
-
-    if (ipc_channel_)
-    {
-        ipc_channel_->send(proto::internal::CHANNEL_ID_SESSION, buffer);
-    }
-    else
-    {
-        // IPC channel not connected yet.
-        pending_messages_.emplace_back(buffer);
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-void ClientFileTransfer::onIpcDisconnected()
-{
-    onError(FROM_HERE);
-}
-
-//--------------------------------------------------------------------------------------------------
-void ClientFileTransfer::onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer)
-{
-    if (channel_id != proto::internal::CHANNEL_ID_SESSION)
-    {
-        LOG(WARNING) << "Unhandled message from channel" << channel_id;
-        return;
-    }
-
-    sendMessage(buffer);
-}
-
-//--------------------------------------------------------------------------------------------------
-void ClientFileTransfer::onIpcNewConnection()
+void FileClient::onIpcNewConnection()
 {
     LOG(INFO) << "IPC channel for file transfer session is connected";
 
     if (!ipc_server_)
     {
         LOG(ERROR) << "No IPC server instance!";
+        onError(FROM_HERE);
         return;
     }
 
     if (!ipc_server_->hasPendingConnections())
     {
         LOG(ERROR) << "No pending connections in IPC server";
+        onError(FROM_HERE);
         return;
     }
 
     ipc_channel_ = ipc_server_->nextPendingConnection();
     ipc_channel_->setParent(this);
 
+    ipc_server_->disconnect(this);
     ipc_server_->deleteLater();
     ipc_server_ = nullptr;
 
-    attach_timer_->stop();
-
     connect(ipc_channel_, &base::IpcChannel::sig_disconnected,
-            this, &ClientFileTransfer::onIpcDisconnected);
+            this, &FileClient::onIpcDisconnected);
     connect(ipc_channel_, &base::IpcChannel::sig_messageReceived,
-            this, &ClientFileTransfer::onIpcMessageReceived);
+            this, &FileClient::onIpcMessageReceived);
 
-    ipc_channel_->resume();
-
-    for (auto& message : pending_messages_)
-        ipc_channel_->send(proto::internal::CHANNEL_ID_SESSION, message);
-
-    pending_messages_.clear();
+    onStarted(FROM_HERE, true);
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientFileTransfer::onIpcErrorOccurred()
+void FileClient::onIpcErrorOccurred()
 {
     onError(FROM_HERE);
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientFileTransfer::onError(const base::Location& location)
+void FileClient::onIpcMessageReceived(quint32 ipc_channel_id, const QByteArray& buffer)
+{
+    if (ipc_channel_id != proto::internal::CHANNEL_ID_SESSION)
+    {
+        LOG(WARNING) << "Unhandled message from channel" << ipc_channel_id;
+        return;
+    }
+
+    tcp_channel_->send(proto::peer::CHANNEL_ID_SESSION, buffer);
+}
+
+//--------------------------------------------------------------------------------------------------
+void FileClient::onIpcDisconnected()
+{
+    onError(FROM_HERE);
+}
+
+//--------------------------------------------------------------------------------------------------
+void FileClient::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code)
+{
+    LOG(WARNING) << "TCP error occurred:" << error_code;
+    onError(FROM_HERE);
+}
+
+//--------------------------------------------------------------------------------------------------
+void FileClient::onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray& buffer)
+{
+    if (!has_logged_on_user_)
+    {
+        proto::file_transfer::Reply reply;
+        reply.set_error_code(proto::file_transfer::ERROR_CODE_NO_LOGGED_ON_USER);
+
+        tcp_channel_->send(proto::peer::CHANNEL_ID_SESSION, base::serialize(reply));
+        return;
+    }
+
+    if (!ipc_channel_)
+    {
+        LOG(ERROR) << "IPC channel is not connected";
+        onError(FROM_HERE);
+        return;
+    }
+
+    ipc_channel_->send(proto::internal::CHANNEL_ID_SESSION, buffer);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool FileClient::startIpcServer(const QString& ipc_channel_name)
+{
+    LOG(INFO) << "Starting IPC server for file transfer session";
+
+    if (ipc_server_)
+    {
+        LOG(ERROR) << "IPC server is already started";
+        return false;
+    }
+
+    ipc_server_ = new base::IpcServer(this);
+
+    connect(ipc_server_, &base::IpcServer::sig_newConnection,
+            this, &FileClient::onIpcNewConnection);
+    connect(ipc_server_, &base::IpcServer::sig_errorOccurred,
+            this, &FileClient::onIpcErrorOccurred);
+
+    if (!ipc_server_->start(ipc_channel_name))
+    {
+        LOG(ERROR) << "Failed to start IPC server (name:" << ipc_channel_name << ")";
+        return false;
+    }
+
+    LOG(INFO) << "IPC server is started";
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void FileClient::onStarted(const base::Location& location, bool has_user)
+{
+    LOG(INFO) << "File client is started (has user:" << has_user << "from:" << location << ")";
+    has_logged_on_user_ = has_user;
+
+    attach_timer_->stop();
+
+    if (has_user)
+    {
+        CHECK(ipc_channel_);
+        ipc_channel_->resume();
+    }
+
+    tcp_channel_->resume();
+    emit sig_started();
+}
+
+//--------------------------------------------------------------------------------------------------
+void FileClient::onError(const base::Location& location)
 {
     LOG(ERROR) << "Error occurred (from" << location << ")";
-    stop();
+
+    attach_timer_->stop();
+
+    if (ipc_server_)
+        ipc_server_->disconnect(this);
+
+    if (ipc_channel_)
+        ipc_channel_->disconnect(this);
+
+    if (tcp_channel_)
+        tcp_channel_->disconnect(this);
+
+    emit sig_finished();
 }
 
 } // namespace host
