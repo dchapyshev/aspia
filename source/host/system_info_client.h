@@ -16,30 +16,40 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST_CLIENT_SYSTEM_INFO_H
-#define HOST_CLIENT_SYSTEM_INFO_H
+#ifndef HOST_SYSTEM_INFO_CLIENT_H
+#define HOST_SYSTEM_INFO_CLIENT_H
 
-#include "host/client.h"
+#include <QObject>
+
+#include "base/net/tcp_channel.h"
 
 namespace host {
 
-class ClientSystemInfo final : public Client
+class SystemInfoClient final : public QObject
 {
     Q_OBJECT
 
 public:
-    ClientSystemInfo(base::TcpChannel* channel, QObject* parent);
-    ~ClientSystemInfo() final;
+    explicit SystemInfoClient(base::TcpChannel* tcp_channel, QObject* parent = nullptr);
+    ~SystemInfoClient() final;
 
-protected:
-    // ClientConnection implementation.
-    void onStarted() final;
-    void onReceived(const QByteArray& buffer) final;
+public slots:
+    void start();
+
+signals:
+    void sig_started();
+    void sig_finished();
+
+private slots:
+    void onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code);
+    void onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray& buffer);
 
 private:
-    Q_DISABLE_COPY(ClientSystemInfo)
+    base::TcpChannel* tcp_channel_ = nullptr;
+
+    Q_DISABLE_COPY_MOVE(SystemInfoClient)
 };
 
 } // namespace host
 
-#endif // HOST_CLIENT_SYSTEM_INFO_H
+#endif // HOST_SYSTEM_INFO_CLIENT_H

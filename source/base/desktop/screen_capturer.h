@@ -138,18 +138,21 @@ private:
     const Type type_;
 };
 
+//--------------------------------------------------------------------------------------------------
 template <typename FrameType>
 void ScreenCapturer::FrameQueue<FrameType>::moveToNextFrame()
 {
     current_ = (current_ + 1) % kQueueLength;
 }
 
+//--------------------------------------------------------------------------------------------------
 template <typename FrameType>
 void ScreenCapturer::FrameQueue<FrameType>::replaceCurrentFrame(std::unique_ptr<FrameType> frame)
 {
     frames_[current_] = std::move(frame);
 }
 
+//--------------------------------------------------------------------------------------------------
 template <typename FrameType>
 void ScreenCapturer::FrameQueue<FrameType>::reset()
 {
@@ -158,12 +161,14 @@ void ScreenCapturer::FrameQueue<FrameType>::reset()
     current_ = 0;
 }
 
+//--------------------------------------------------------------------------------------------------
 template <typename FrameType>
 FrameType* ScreenCapturer::FrameQueue<FrameType>::currentFrame() const
 {
     return frames_[current_].get();
 }
 
+//--------------------------------------------------------------------------------------------------
 template <typename FrameType>
 FrameType* ScreenCapturer::FrameQueue<FrameType>::previousFrame() const
 {

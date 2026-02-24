@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/client_system_info.h"
+#include "host/system_info_client.h"
 
 #include "base/logging.h"
 #include "base/serialization.h"
@@ -28,26 +28,40 @@
 namespace host {
 
 //--------------------------------------------------------------------------------------------------
-ClientSystemInfo::ClientSystemInfo(base::TcpChannel* channel, QObject* parent)
-    : Client(channel, parent)
+SystemInfoClient::SystemInfoClient(base::TcpChannel* tcp_channel, QObject* parent)
+    : QObject(parent),
+      tcp_channel_(tcp_channel)
 {
     LOG(INFO) << "Ctor";
+    CHECK(tcp_channel_);
+
+    tcp_channel_->setParent(this);
 }
 
 //--------------------------------------------------------------------------------------------------
-ClientSystemInfo::~ClientSystemInfo()
+SystemInfoClient::~SystemInfoClient()
 {
     LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSystemInfo::onStarted()
+void SystemInfoClient::start()
 {
-    LOG(INFO) << "Session started";
+    tcp_channel_->resume();
+    emit sig_started();
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSystemInfo::onReceived(const QByteArray& buffer)
+void SystemInfoClient::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code)
+{
+    LOG(WARNING) << "TCP error occurred:" << error_code;
+
+    tcp_channel_->disconnect(this);
+    emit sig_finished();
+}
+
+//--------------------------------------------------------------------------------------------------
+void SystemInfoClient::onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray& buffer)
 {
 #if defined(Q_OS_WINDOWS)
     proto::system_info::SystemInfoRequest request;
@@ -61,7 +75,7 @@ void ClientSystemInfo::onReceived(const QByteArray& buffer)
     proto::system_info::SystemInfo system_info;
     createSystemInfo(request, &system_info);
 
-    sendMessage(base::serialize(system_info));
+    tcp_channel_->send(proto::peer::CHANNEL_ID_SESSION, base::serialize(system_info));
 #endif // defined(Q_OS_WINDOWS)
 }
 

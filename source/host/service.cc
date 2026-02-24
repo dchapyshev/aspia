@@ -34,6 +34,7 @@
 #include "host/file_client.h"
 #include "host/host_storage.h"
 #include "host/service_constants.h"
+#include "host/system_info_client.h"
 
 #if defined(Q_OS_WINDOWS)
 #include <qt_windows.h>
@@ -322,8 +323,22 @@ void Service::onAskForConfirmation(quint32 request_id, bool accept)
                     FileClient* client = new FileClient(channel, this);
                     file_clients_.emplace_back(client);
 
-                    connect(client, &FileClient::sig_finished, this, &Service::onFileClientFinished);
+                    connect(client, &FileClient::sig_finished,
+                            this, &Service::onFileClientFinished);
+
                     client->start(desktop_manager_->sessionId());
+                }
+                break;
+
+                case proto::peer::SESSION_TYPE_SYSTEM_INFO:
+                {
+                    SystemInfoClient* client = new SystemInfoClient(channel, this);
+                    system_info_clients_.emplace_back(client);
+
+                    connect(client, &SystemInfoClient::sig_finished,
+                            this, &Service::onSystemInfoClientFinished);
+
+                    client->start();
                 }
                 break;
 
@@ -493,6 +508,22 @@ void Service::onFileClientFinished()
 }
 
 //--------------------------------------------------------------------------------------------------
+void Service::onSystemInfoClientFinished()
+{
+    SystemInfoClient* client = dynamic_cast<SystemInfoClient*>(sender());
+    if (!client)
+    {
+        LOG(ERROR) << "Unknown sender for finish slot";
+        return;
+    }
+
+    client->disconnect(this);
+    client->deleteLater();
+
+    system_info_clients_.removeOne(client);
+}
+
+//--------------------------------------------------------------------------------------------------
 void Service::startSession(base::TcpChannel* channel)
 {
     LOG(INFO) << "TCP channel is ready";
@@ -516,7 +547,8 @@ void Service::startSession(base::TcpChannel* channel)
 
     if (session_type == proto::peer::SESSION_TYPE_DESKTOP_MANAGE ||
         session_type == proto::peer::SESSION_TYPE_DESKTOP_VIEW ||
-        session_type == proto::peer::SESSION_TYPE_FILE_TRANSFER)
+        session_type == proto::peer::SESSION_TYPE_FILE_TRANSFER ||
+        session_type == proto::peer::SESSION_TYPE_SYSTEM_INFO)
     {
         base::SessionId session_id = desktop_manager_->sessionId();
         if (session_id == base::kInvalidSessionId)
