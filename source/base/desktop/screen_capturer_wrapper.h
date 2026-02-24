@@ -40,7 +40,6 @@ public:
 
     void selectScreen(ScreenCapturer::ScreenId screen_id, const QSize& resolution);
     ScreenCapturer::Error captureFrame(const Frame** frame, const MouseCursor** mouse_cursor);
-    void setSharedMemoryFactory(SharedMemoryFactory* shared_memory_factory);
     void enableWallpaper(bool enable);
     void enableEffects(bool enable);
     void enableFontSmoothing(bool enable);
@@ -56,7 +55,6 @@ private:
     ScreenCapturer::ScreenId defaultScreen();
     void selectCapturer(ScreenCapturer::Error last_error);
 
-    SharedMemoryFactory* shared_memory_factory_ = nullptr;
     ScreenCapturer::Type preferred_type_;
 
     int screen_count_ = 0;

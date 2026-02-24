@@ -34,8 +34,6 @@ public:
 
     virtual ~Frame() = default;
 
-    SharedMemory* sharedMemory() const { return shared_memory_; }
-
     quint8* frameDataAtPos(const QPoint& pos) const;
     quint8* frameDataAtPos(int x, int y) const;
     quint8* frameData() const { return data_; }
@@ -71,15 +69,13 @@ protected:
     Frame(const QSize& size,
           const PixelFormat& format,
           int stride,
-          quint8* data,
-          SharedMemory* shared_memory);
+          quint8* data);
 
     static size_t calcMemorySize(const QSize& size, int bytes_per_pixel);
 
     // Ownership of the buffers is defined by the classes that inherit from this class. They must
     // guarantee that the buffer is not deleted before the frame is deleted.
     quint8* data_;
-    SharedMemory* shared_memory_;
     QSize size_;
     PixelFormat format_;
     int stride_;

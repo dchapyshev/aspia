@@ -45,13 +45,8 @@ static volatile Registrator registrator;
 const float Frame::kStandardDPI = 96.0;
 
 //--------------------------------------------------------------------------------------------------
-Frame::Frame(const QSize& size,
-             const PixelFormat& format,
-             int stride,
-             quint8* data,
-             SharedMemory* shared_memory)
+Frame::Frame(const QSize& size, const PixelFormat& format, int stride, quint8* data)
     : data_(data),
-      shared_memory_(shared_memory),
       size_(size),
       format_(format),
       stride_(stride)

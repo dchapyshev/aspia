@@ -211,9 +211,7 @@ const Frame* ScreenCapturerDxgi::captureFrame(Error* error)
     DCHECK(error);
 
     if (!frame_)
-    {
-        frame_ = std::make_unique<DxgiFrame>(controller_, sharedMemoryFactory());
-    }
+        frame_ = std::make_unique<DxgiFrame>(controller_);
 
     DxgiDuplicatorController::Result result;
 

@@ -293,9 +293,7 @@ list(APPEND SOURCE_BASE_DESKTOP
     desktop/screen_capturer_helper.cc
     desktop/screen_capturer_helper.h
     desktop/screen_capturer_wrapper.cc
-    desktop/screen_capturer_wrapper.h
-    desktop/shared_memory_frame.cc
-    desktop/shared_memory_frame.h)
+    desktop/screen_capturer_wrapper.h)
 
 if (WIN32)
     list(APPEND SOURCE_BASE_DESKTOP
@@ -403,11 +401,7 @@ list(APPEND SOURCE_BASE_IPC
     ipc/ipc_channel.cc
     ipc/ipc_channel.h
     ipc/ipc_server.cc
-    ipc/ipc_server.h
-    ipc/shared_memory.cc
-    ipc/shared_memory.h
-    ipc/shared_memory_factory.cc
-    ipc/shared_memory_factory.h)
+    ipc/ipc_server.h)
 
 if (APPLE)
     list(APPEND SOURCE_BASE_MAC

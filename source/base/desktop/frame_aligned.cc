@@ -24,7 +24,7 @@ namespace base {
 
 //--------------------------------------------------------------------------------------------------
 FrameAligned::FrameAligned(const QSize& size, const PixelFormat& format, quint8* data)
-    : Frame(size, format, size.width() * format.bytesPerPixel(), data, nullptr)
+    : Frame(size, format, size.width() * format.bytesPerPixel(), data)
 {
     // Nothing
 }

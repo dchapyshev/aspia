@@ -20,7 +20,6 @@
 #define BASE_DESKTOP_FRAME_DIB_H
 
 #include "base/desktop/frame.h"
-#include "base/ipc/shared_memory.h"
 #include "base/win/scoped_gdi_object.h"
 
 #include <memory>
@@ -34,10 +33,7 @@ class FrameDib final : public Frame
 public:
     ~FrameDib() final = default;
 
-    static std::unique_ptr<FrameDib> create(const QSize& size,
-                                            const PixelFormat& format,
-                                            SharedMemoryFactory* shared_memory_factory,
-                                            HDC hdc);
+    static std::unique_ptr<FrameDib> create(const QSize& size, const PixelFormat& format, HDC hdc);
 
     HBITMAP bitmap() { return bitmap_; }
 
@@ -46,11 +42,9 @@ private:
              const PixelFormat& format,
              int stride,
              quint8* data,
-             std::unique_ptr<SharedMemory> shared_memory,
              HBITMAP bitmap);
 
     ScopedHBITMAP bitmap_;
-    std::unique_ptr<SharedMemory> owned_shared_memory_;
 
     Q_DISABLE_COPY(FrameDib)
 };

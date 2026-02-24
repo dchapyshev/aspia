@@ -20,7 +20,6 @@
 
 #include "base/logging.h"
 #include "base/desktop/win/bitmap_info.h"
-#include "base/ipc/shared_memory_factory.h"
 
 namespace base {
 
@@ -29,21 +28,16 @@ FrameDib::FrameDib(const QSize& size,
                    const PixelFormat& format,
                    int stride,
                    quint8* data,
-                   std::unique_ptr<SharedMemory> shared_memory,
                    HBITMAP bitmap)
-    : Frame(size, format, stride, data, shared_memory.get()),
-      bitmap_(bitmap),
-      owned_shared_memory_(std::move(shared_memory))
+    : Frame(size, format, stride, data),
+      bitmap_(bitmap)
 {
     // Nothing
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::unique_ptr<FrameDib> FrameDib::create(const QSize& size,
-                                           const PixelFormat& format,
-                                           SharedMemoryFactory* shared_memory_factory,
-                                           HDC hdc)
+std::unique_ptr<FrameDib> FrameDib::create(const QSize& size, const PixelFormat& format, HDC hdc)
 {
     const int bytes_per_row = size.width() * format.bytesPerPixel();
     const size_t buffer_size = calcMemorySize(size, format.bytesPerPixel());
@@ -82,22 +76,13 @@ std::unique_ptr<FrameDib> FrameDib::create(const QSize& size,
         }
     }
 
-    std::unique_ptr<SharedMemory> shared_memory;
-    HANDLE section_handle = nullptr;
-
-    if (shared_memory_factory)
-    {
-        shared_memory.reset(shared_memory_factory->create(buffer_size));
-        section_handle = shared_memory->handle();
-    }
-
     void* data = nullptr;
 
     HBITMAP bitmap = CreateDIBSection(hdc,
                                       reinterpret_cast<LPBITMAPINFO>(&bmi),
                                       DIB_RGB_COLORS,
                                       &data,
-                                      section_handle,
+                                      nullptr,
                                       0);
     if (!bitmap)
     {
@@ -106,8 +91,7 @@ std::unique_ptr<FrameDib> FrameDib::create(const QSize& size,
     }
 
     return std::unique_ptr<FrameDib>(new FrameDib(
-        size, format, bytes_per_row, reinterpret_cast<quint8*>(data),
-        std::move(shared_memory), bitmap));
+        size, format, bytes_per_row, reinterpret_cast<quint8*>(data), bitmap));
 }
 
 } // namespace base

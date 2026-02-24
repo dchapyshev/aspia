@@ -28,7 +28,6 @@
 namespace base {
 
 class DxgiDuplicatorController;
-class SharedMemoryFactory;
 
 // A pair of a SharedFrame and a DxgiDuplicatorController::Context for the client of
 // DxgiDuplicatorController.
@@ -37,8 +36,7 @@ class DxgiFrame final
 public:
     using Context = DxgiFrameContext;
 
-    explicit DxgiFrame(std::shared_ptr<DxgiDuplicatorController> controller,
-                       SharedMemoryFactory* shared_memory_factory);
+    explicit DxgiFrame(std::shared_ptr<DxgiDuplicatorController> controller);
     ~DxgiFrame();
 
     // Should not be called if prepare() is not executed or returns false.
@@ -55,7 +53,6 @@ private:
     // Should not be called if prepare() is not executed or returns false.
     Context* context();
 
-    SharedMemoryFactory* const shared_memory_factory_;
     std::optional<QSize> last_frame_size_;
     ScreenCapturer::ScreenId source_id_ = ScreenCapturer::kFullDesktopScreenId;
     SharedPointer<Frame> frame_;

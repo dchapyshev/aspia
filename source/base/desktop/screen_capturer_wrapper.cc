@@ -23,7 +23,6 @@
 #include "base/desktop/desktop_resizer.h"
 #include "base/desktop/mouse_cursor.h"
 #include "base/desktop/power_save_blocker.h"
-#include "base/ipc/shared_memory_factory.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "base/desktop/screen_capturer_win.h"
@@ -201,15 +200,6 @@ ScreenCapturer::Error ScreenCapturerWrapper::captureFrame(
 }
 
 //--------------------------------------------------------------------------------------------------
-void ScreenCapturerWrapper::setSharedMemoryFactory(SharedMemoryFactory* shared_memory_factory)
-{
-    shared_memory_factory_ = shared_memory_factory;
-
-    if (screen_capturer_)
-        screen_capturer_->setSharedMemoryFactory(shared_memory_factory);
-}
-
-//--------------------------------------------------------------------------------------------------
 void ScreenCapturerWrapper::enableWallpaper(bool enable)
 {
     if (!environment_)
@@ -325,7 +315,6 @@ void ScreenCapturerWrapper::selectCapturer(ScreenCapturer::Error last_error)
         environment_->onDesktopChanged();
     });
 
-    screen_capturer_->setSharedMemoryFactory(shared_memory_factory_);
     if (last_screen_id_ != ScreenCapturer::kInvalidScreenId)
     {
         LOG(INFO) << "Restore selected screen:" << last_screen_id_;

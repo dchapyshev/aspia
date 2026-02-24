@@ -24,7 +24,7 @@ namespace base {
 
 //--------------------------------------------------------------------------------------------------
 FrameQImage::FrameQImage(QImage&& img)
-    : Frame(QSize(img.size()), PixelFormat::ARGB(), img.bytesPerLine(), img.bits(), nullptr),
+    : Frame(QSize(img.size()), PixelFormat::ARGB(), img.bytesPerLine(), img.bits()),
       image_(std::move(img))
 {
     // Nothing

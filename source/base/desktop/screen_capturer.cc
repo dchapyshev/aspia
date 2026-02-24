@@ -18,8 +18,6 @@
 
 #include "base/desktop/screen_capturer.h"
 
-#include "base/ipc/shared_memory_factory.h"
-
 namespace base {
 
 //--------------------------------------------------------------------------------------------------
@@ -28,18 +26,6 @@ ScreenCapturer::ScreenCapturer(Type type, QObject* parent)
       type_(type)
 {
     // Nothing
-}
-
-//--------------------------------------------------------------------------------------------------
-void ScreenCapturer::setSharedMemoryFactory(SharedMemoryFactory* shared_memory_factory)
-{
-    shared_memory_factory_ = shared_memory_factory;
-}
-
-//--------------------------------------------------------------------------------------------------
-SharedMemoryFactory* ScreenCapturer::sharedMemoryFactory() const
-{
-    return shared_memory_factory_;
 }
 
 //--------------------------------------------------------------------------------------------------

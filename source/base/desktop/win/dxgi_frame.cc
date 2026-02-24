@@ -20,17 +20,14 @@
 
 #include "base/logging.h"
 #include "base/desktop/frame_aligned.h"
-#include "base/desktop/shared_memory_frame.h"
 
 namespace base {
 
 //--------------------------------------------------------------------------------------------------
-DxgiFrame::DxgiFrame(std::shared_ptr<DxgiDuplicatorController> controller,
-                     SharedMemoryFactory* shared_memory_factory)
-    : shared_memory_factory_(shared_memory_factory),
-      context_(std::move(controller))
+DxgiFrame::DxgiFrame(std::shared_ptr<DxgiDuplicatorController> controller)
+    : context_(std::move(controller))
 {
-    LOG(INFO) << "Ctor" << (shared_memory_factory_ ? "WITH" : "WITHOUT") << "shared memory factory";
+    LOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -63,17 +60,7 @@ bool DxgiFrame::prepare(const QSize& size, ScreenCapturer::ScreenId source_id)
     {
         std::unique_ptr<Frame> frame;
 
-        if (shared_memory_factory_)
-        {
-            frame = SharedMemoryFrame::create(size, PixelFormat::ARGB(), shared_memory_factory_);
-            LOG(INFO) << "SharedMemoryFrame created";
-        }
-        else
-        {
-            frame = FrameAligned::create(size, PixelFormat::ARGB(), 32);
-            LOG(INFO) << "FrameAligned created";
-        }
-
+        frame = FrameAligned::create(size, PixelFormat::ARGB(), 32);
         if (!frame)
         {
             LOG(ERROR) << "DxgiFrame cannot create a new Frame";

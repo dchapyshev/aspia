@@ -29,7 +29,6 @@
 namespace base {
 
 class MouseCursor;
-class SharedMemoryFactory;
 
 class ScreenCapturer : public QObject
 {
@@ -98,13 +97,10 @@ public:
     virtual const MouseCursor* captureCursor() = 0;
     virtual QPoint cursorPosition() = 0;
 
-    void setSharedMemoryFactory(SharedMemoryFactory* shared_memory_factory);
-    SharedMemoryFactory* sharedMemoryFactory() const;
-
     Type type() const;
 
 signals:
-    void sig_screenTypeChanged(ScreenType type, const QString& name);
+    void sig_screenTypeChanged(base::ScreenCapturer::ScreenType type, const QString& name);
     void sig_desktopChanged();
 
 protected:
@@ -139,7 +135,6 @@ protected:
     };
 
 private:
-    SharedMemoryFactory* shared_memory_factory_ = nullptr;
     const Type type_;
 };
 
