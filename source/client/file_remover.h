@@ -102,7 +102,7 @@ private:
     Action failure_action_ = ACTION_ASK;
     size_t tasks_count_ = 0;
 
-    Q_DISABLE_COPY(FileRemover)
+    Q_DISABLE_COPY_MOVE(FileRemover)
 };
 
 } // namespace client

@@ -54,7 +54,7 @@ private:
     std::optional<bool> font_smoothing_;
     std::optional<bool> effects_;
 
-    Q_DISABLE_COPY(DesktopEnvironment)
+    Q_DISABLE_COPY_MOVE(DesktopEnvironment)
 };
 
 } // namespace base

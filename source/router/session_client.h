@@ -45,7 +45,7 @@ private:
     void readCheckHostStatus(const proto::router::CheckHostStatus& check_host_status);
     SessionHost* sessionByHostId(base::HostId host_id);
 
-    Q_DISABLE_COPY(SessionClient)
+    Q_DISABLE_COPY_MOVE(SessionClient)
 };
 
 } // namespace router

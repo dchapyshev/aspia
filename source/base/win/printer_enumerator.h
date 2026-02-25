@@ -60,7 +60,7 @@ private:
     int count_ = 0;
     int current_ = 0;
 
-    Q_DISABLE_COPY(PrinterEnumerator)
+    Q_DISABLE_COPY_MOVE(PrinterEnumerator)
 };
 
 } // namespace base

@@ -53,7 +53,7 @@ private:
     MessageCallback message_callback_;
     HWND hwnd_ = nullptr;
 
-    Q_DISABLE_COPY(MessageWindow)
+    Q_DISABLE_COPY_MOVE(MessageWindow)
 };
 
 } // namespace base

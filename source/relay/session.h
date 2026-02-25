@@ -80,7 +80,7 @@ private:
     asio::ip::tcp::socket socket_[kNumberOfSides];
     std::array<quint8, kBufferSize> buffer_[kNumberOfSides];
 
-    Q_DISABLE_COPY(Session)
+    Q_DISABLE_COPY_MOVE(Session)
 };
 
 } // namespace relay

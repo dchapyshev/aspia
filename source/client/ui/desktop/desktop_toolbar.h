@@ -140,7 +140,7 @@ private:
 
     int scale_ = 100;
 
-    Q_DISABLE_COPY(DesktopToolBar)
+    Q_DISABLE_COPY_MOVE(DesktopToolBar)
 };
 
 } // namespace client

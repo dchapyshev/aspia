@@ -61,7 +61,7 @@ private:
     FileTransfer::TaskList tasks_;
     qint64 total_size_ = 0;
 
-    Q_DISABLE_COPY(FileTransferQueueBuilder)
+    Q_DISABLE_COPY_MOVE(FileTransferQueueBuilder)
 };
 
 } // namespace client

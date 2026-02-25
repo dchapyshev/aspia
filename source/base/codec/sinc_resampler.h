@@ -157,7 +157,7 @@ private:
     float* r3_;
     float* r4_;
 
-    Q_DISABLE_COPY(SincResampler)
+    Q_DISABLE_COPY_MOVE(SincResampler)
 };
 
 } // namespace base

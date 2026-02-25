@@ -42,7 +42,7 @@ private:
     unsigned long total_entries_ = 0;
     unsigned long current_entry_ = 0;
 
-    Q_DISABLE_COPY(UserGroupEnumerator)
+    Q_DISABLE_COPY_MOVE(UserGroupEnumerator)
 };
 
 } // base

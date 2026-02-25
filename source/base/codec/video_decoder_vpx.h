@@ -39,7 +39,7 @@ private:
 
     ScopedVpxCodec codec_;
 
-    Q_DISABLE_COPY(VideoDecoderVPX)
+    Q_DISABLE_COPY_MOVE(VideoDecoderVPX)
 };
 
 } // namespace base

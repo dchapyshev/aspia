@@ -78,7 +78,7 @@ private:
     QString previous_path_;
     QList<Drive> drives_;
 
-    Q_DISABLE_COPY(AddressBarModel)
+    Q_DISABLE_COPY_MOVE(AddressBarModel)
 };
 
 } // namespace client

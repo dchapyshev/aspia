@@ -39,7 +39,7 @@ public:
     static quint64 number64();
 
 private:
-    Q_DISABLE_COPY(Random)
+    Q_DISABLE_COPY_MOVE(Random)
 };
 
 } // namespace base

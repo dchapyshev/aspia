@@ -39,7 +39,7 @@ public:
 
 private:
     QSettings storage_;
-    Q_DISABLE_COPY(RouterConfigStorage)
+    Q_DISABLE_COPY_MOVE(RouterConfigStorage)
 };
 
 } // namespace client

@@ -55,7 +55,7 @@ private:
     std::unique_ptr<quint8[], base::AlignedFreeDeleter> translate_buffer_;
     size_t translate_buffer_size_ = 0;
 
-    Q_DISABLE_COPY(VideoEncoderZstd)
+    Q_DISABLE_COPY_MOVE(VideoEncoderZstd)
 };
 
 } // namespace base

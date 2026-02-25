@@ -37,7 +37,7 @@ public:
 private:
     QByteArray key_;
 
-    Q_DISABLE_COPY(DataCryptorChaCha20Poly1305)
+    Q_DISABLE_COPY_MOVE(DataCryptorChaCha20Poly1305)
 };
 
 } // namespace base

@@ -104,7 +104,7 @@ private:
     common::StatusDialog* status_dialog_ = nullptr;
     proto::internal::RouterState::State last_state_ = proto::internal::RouterState::DISABLED;
 
-    Q_DISABLE_COPY(MainWindow)
+    Q_DISABLE_COPY_MOVE(MainWindow)
 };
 
 } // namespace host

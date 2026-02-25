@@ -125,7 +125,7 @@ private:
     int current_relays_column_ = 0;
     int current_active_conn_column_ = 0;
 
-    Q_DISABLE_COPY(RouterManagerWindow)
+    Q_DISABLE_COPY_MOVE(RouterManagerWindow)
 };
 
 } // namespace client

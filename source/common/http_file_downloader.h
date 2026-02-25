@@ -52,7 +52,7 @@ private:
     const QString url_;
     QByteArray data_;
 
-    Q_DISABLE_COPY(HttpFileDownloader)
+    Q_DISABLE_COPY_MOVE(HttpFileDownloader)
 };
 
 } // namespace common

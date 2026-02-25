@@ -46,7 +46,7 @@ private:
     std::unique_ptr<Database> db_;
     QByteArray seed_key_;
 
-    Q_DISABLE_COPY(UserListDb)
+    Q_DISABLE_COPY_MOVE(UserListDb)
 };
 
 } // namespace router

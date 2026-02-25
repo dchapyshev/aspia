@@ -69,7 +69,7 @@ private:
     QStringList admin_white_list_;
     QStringList relay_white_list_;
 
-    Q_DISABLE_COPY(Service)
+    Q_DISABLE_COPY_MOVE(Service)
 };
 
 } // namespace router

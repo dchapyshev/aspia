@@ -77,7 +77,7 @@ private:
     qint64 prev_cpu_idle_time_[kMaxCpuCount];
     qint64 prev_cpu_total_time_[kMaxCpuCount];
 
-    Q_DISABLE_COPY(ProcessMonitor)
+    Q_DISABLE_COPY_MOVE(ProcessMonitor)
 };
 
 } // namespace host

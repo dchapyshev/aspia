@@ -44,7 +44,7 @@ public:
 private:
     bool opened_ = false;
 
-    Q_DISABLE_COPY(ScopedClipboard)
+    Q_DISABLE_COPY_MOVE(ScopedClipboard)
 };
 
 } // namespace base

@@ -67,7 +67,7 @@ public:
                          const BigNum& N, const BigNum& g);
 
 private:
-    Q_DISABLE_COPY(SrpMath)
+    Q_DISABLE_COPY_MOVE(SrpMath)
 };
 
 } // namespace base

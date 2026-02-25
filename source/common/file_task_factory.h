@@ -59,7 +59,7 @@ private:
 
     const FileTask::Target target_;
 
-    Q_DISABLE_COPY(FileTaskFactory)
+    Q_DISABLE_COPY_MOVE(FileTaskFactory)
 };
 
 } // namespace common

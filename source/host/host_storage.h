@@ -49,7 +49,7 @@ public:
 private:
     QSettings impl_;
 
-    Q_DISABLE_COPY(HostStorage)
+    Q_DISABLE_COPY_MOVE(HostStorage)
 };
 
 } // namespace host

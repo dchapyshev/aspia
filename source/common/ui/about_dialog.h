@@ -41,7 +41,7 @@ private slots:
 private:
     std::unique_ptr<Ui::AboutDialog> ui;
 
-    Q_DISABLE_COPY(AboutDialog)
+    Q_DISABLE_COPY_MOVE(AboutDialog)
 };
 
 } // namespace common

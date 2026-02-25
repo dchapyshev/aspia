@@ -78,7 +78,7 @@ private:
     quint64 video_track_num_ = 0;
     bool initialized_ = false;
 
-    Q_DISABLE_COPY(WebmFileMuxer)
+    Q_DISABLE_COPY_MOVE(WebmFileMuxer)
 };
 
 } // namespace base

@@ -96,7 +96,7 @@ private:
     std::unique_ptr<base::Authenticator> host_authenticator_;
     base::TcpChannel* host_channel_ = nullptr;
 
-    Q_DISABLE_COPY(RouterController)
+    Q_DISABLE_COPY_MOVE(RouterController)
 };
 
 } // namespace client

@@ -97,7 +97,7 @@ private:
 
     ClientList clients_;
 
-    Q_DISABLE_COPY(UserSessionAgent)
+    Q_DISABLE_COPY_MOVE(UserSessionAgent)
 };
 
 } // namespace host

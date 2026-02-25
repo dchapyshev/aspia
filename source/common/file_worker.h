@@ -57,7 +57,7 @@ private:
     std::unique_ptr<FileDepacketizer> depacketizer_;
     std::unique_ptr<FilePacketizer> packetizer_;
 
-    Q_DISABLE_COPY(FileWorker)
+    Q_DISABLE_COPY_MOVE(FileWorker)
 };
 
 } // namespace common

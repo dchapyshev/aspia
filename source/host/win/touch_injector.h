@@ -57,7 +57,7 @@ private:
     // All the POINTER_TOUCH_INFOs are stored as "move" points.
     QMap<quint32, OWN_POINTER_TOUCH_INFO> touches_in_contact_;
 
-    Q_DISABLE_COPY(TouchInjector)
+    Q_DISABLE_COPY_MOVE(TouchInjector)
 };
 
 } // namespace host

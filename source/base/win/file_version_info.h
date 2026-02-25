@@ -87,7 +87,7 @@ private:
     // This is a pointer into |data_| if it exists. Otherwise nullptr.
     const VS_FIXEDFILEINFO* const fixed_file_info_;
 
-    Q_DISABLE_COPY(FileVersionInfo)
+    Q_DISABLE_COPY_MOVE(FileVersionInfo)
 };
 
 } // namespace base

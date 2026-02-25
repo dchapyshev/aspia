@@ -47,7 +47,7 @@ private:
     std::unique_ptr<HttpFileDownloader> downloader_ = nullptr;
     QFile& file_;
 
-    Q_DISABLE_COPY(DownloadDialog)
+    Q_DISABLE_COPY_MOVE(DownloadDialog)
 };
 
 } // namespace common

@@ -83,7 +83,7 @@ private:
 
     base::SerializerImpl serializer_;
 
-    Q_DISABLE_COPY(ClientFileTransfer)
+    Q_DISABLE_COPY_MOVE(ClientFileTransfer)
 };
 
 } // namespace client

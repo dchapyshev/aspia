@@ -31,7 +31,7 @@ public:
     static proto::address_book::Computer defaultComputer();
 
 private:
-    Q_DISABLE_COPY(ComputerFactory)
+    Q_DISABLE_COPY_MOVE(ComputerFactory)
 };
 
 } // namespace console

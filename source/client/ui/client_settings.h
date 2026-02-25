@@ -64,7 +64,7 @@ public:
 
 private:
     QSettings settings_;
-    Q_DISABLE_COPY(ClientSettings)
+    Q_DISABLE_COPY_MOVE(ClientSettings)
 };
 
 } // namespace client

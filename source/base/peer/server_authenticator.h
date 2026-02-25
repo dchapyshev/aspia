@@ -95,7 +95,7 @@ private:
     BigNum B_;
     BigNum A_;
 
-    Q_DISABLE_COPY(ServerAuthenticator)
+    Q_DISABLE_COPY_MOVE(ServerAuthenticator)
 };
 
 } // namespace base

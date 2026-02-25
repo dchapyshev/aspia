@@ -61,7 +61,7 @@ public:
 
 private:
     const int index_;
-    Q_DISABLE_COPY(ColumnAction)
+    Q_DISABLE_COPY_MOVE(ColumnAction)
 };
 
 class HostTreeItem final : public QTreeWidgetItem
@@ -138,7 +138,7 @@ public:
     proto::router::Session session;
 
 private:
-    Q_DISABLE_COPY(HostTreeItem)
+    Q_DISABLE_COPY_MOVE(HostTreeItem)
 };
 
 class RelayTreeItem final : public QTreeWidgetItem
@@ -190,7 +190,7 @@ public:
     proto::router::Session session;
 
 private:
-    Q_DISABLE_COPY(RelayTreeItem)
+    Q_DISABLE_COPY_MOVE(RelayTreeItem)
 };
 
 class PeerConnectionTreeItem final : public QTreeWidgetItem
@@ -250,7 +250,7 @@ public:
     proto::router::PeerConnection conn;
 
 private:
-    Q_DISABLE_COPY(PeerConnectionTreeItem)
+    Q_DISABLE_COPY_MOVE(PeerConnectionTreeItem)
 };
 
 class UserTreeItem final : public QTreeWidgetItem
@@ -288,7 +288,7 @@ public:
     base::User user;
 
 private:
-    Q_DISABLE_COPY(UserTreeItem)
+    Q_DISABLE_COPY_MOVE(UserTreeItem)
 };
 
 //--------------------------------------------------------------------------------------------------

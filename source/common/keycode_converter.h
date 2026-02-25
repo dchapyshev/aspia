@@ -63,7 +63,7 @@ public:
     static quint32 qtKeycodeToUsbKeycode(int qt_keycode);
 
 private:
-    Q_DISABLE_COPY(KeycodeConverter)
+    Q_DISABLE_COPY_MOVE(KeycodeConverter)
 };
 
 } // namespace common

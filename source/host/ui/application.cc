@@ -49,7 +49,7 @@ public:
 
 private:
     EventFilter() = default;
-    Q_DISABLE_COPY(EventFilter)
+    Q_DISABLE_COPY_MOVE(EventFilter)
 };
 
 //--------------------------------------------------------------------------------------------------

@@ -45,7 +45,7 @@ private:
     QByteArray seed_key_;
     QVector<User> list_;
 
-    Q_DISABLE_COPY(UserList)
+    Q_DISABLE_COPY_MOVE(UserList)
 };
 
 } // namespace base

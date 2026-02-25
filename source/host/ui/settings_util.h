@@ -37,7 +37,7 @@ private:
                              bool silent,
                              QWidget* parent);
 
-    Q_DISABLE_COPY(SettingsUtil)
+    Q_DISABLE_COPY_MOVE(SettingsUtil)
 };
 
 } // namespace host

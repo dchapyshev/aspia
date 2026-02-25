@@ -48,7 +48,7 @@ private:
     QHash<QString, QStringList> locale_list_;
     QVector<QTranslator*> translator_list_;
 
-    Q_DISABLE_COPY(Translations)
+    Q_DISABLE_COPY_MOVE(Translations)
 };
 
 } // namespace base

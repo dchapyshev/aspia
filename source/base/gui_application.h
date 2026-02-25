@@ -93,7 +93,7 @@ private:
     std::unique_ptr<base::MessageWindow> message_window_;
 #endif // defined(Q_OS_WINDOWS)
 
-    Q_DISABLE_COPY(GuiApplication)
+    Q_DISABLE_COPY_MOVE(GuiApplication)
 };
 
 } // namespace base

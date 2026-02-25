@@ -69,7 +69,7 @@ public:
 
 private:
     proto::system_info::Processes::Process process_;
-    Q_DISABLE_COPY(ProcessTreeItem)
+    Q_DISABLE_COPY_MOVE(ProcessTreeItem)
 };
 
 } // namespace

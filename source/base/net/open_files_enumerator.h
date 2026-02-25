@@ -44,7 +44,7 @@ private:
     quint32 total_entries_ = 0;
     quint32 current_pos_ = 0;
 
-    Q_DISABLE_COPY(OpenFilesEnumerator)
+    Q_DISABLE_COPY_MOVE(OpenFilesEnumerator)
 };
 
 } // namespace base

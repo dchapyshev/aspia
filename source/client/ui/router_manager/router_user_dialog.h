@@ -50,7 +50,7 @@ private:
     QStringList users_;
     bool account_changed_ = true;
 
-    Q_DISABLE_COPY(RouterUserDialog)
+    Q_DISABLE_COPY_MOVE(RouterUserDialog)
 };
 
 } // namespace client

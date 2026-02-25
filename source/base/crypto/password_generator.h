@@ -51,7 +51,7 @@ private:
     quint32 characters_ = kDefaultCharacters;
     qsizetype length_ = kDefaultLength;
 
-    Q_DISABLE_COPY(PasswordGenerator)
+    Q_DISABLE_COPY_MOVE(PasswordGenerator)
 };
 
 } // namespace base

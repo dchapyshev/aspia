@@ -42,7 +42,7 @@ public:
 private:
     QSettings settings_;
 
-    Q_DISABLE_COPY(UserSettings)
+    Q_DISABLE_COPY_MOVE(UserSettings)
 };
 
 } // namespace host

@@ -34,7 +34,7 @@ public:
 
 private:
     CURL* curl_;
-    Q_DISABLE_COPY(ScopedCURL)
+    Q_DISABLE_COPY_MOVE(ScopedCURL)
 };
 
 class ScopedCURLM
@@ -47,7 +47,7 @@ public:
 
 private:
     CURLM* curlm_;
-    Q_DISABLE_COPY(ScopedCURLM)
+    Q_DISABLE_COPY_MOVE(ScopedCURLM)
 };
 
 } // namespace base

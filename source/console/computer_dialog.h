@@ -68,7 +68,7 @@ private:
 
     proto::address_book::Computer computer_;
 
-    Q_DISABLE_COPY(ComputerDialog)
+    Q_DISABLE_COPY_MOVE(ComputerDialog)
 };
 
 } // namespace console

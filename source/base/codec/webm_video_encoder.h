@@ -57,7 +57,7 @@ private:
     vpx_codec_enc_cfg_t config_;
     ScopedVpxCodec codec_;
 
-    Q_DISABLE_COPY(WebmVideoEncoder)
+    Q_DISABLE_COPY_MOVE(WebmVideoEncoder)
 };
 
 } // namespace base

@@ -34,7 +34,7 @@ public:
 
 private:
     QString file_path_;
-    Q_DISABLE_COPY(MruAction)
+    Q_DISABLE_COPY_MOVE(MruAction)
 };
 
 } // namespace console

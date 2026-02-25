@@ -61,7 +61,7 @@ private:
     EVP_CIPHER_CTX_ptr ctx_;
     QByteArray iv_;
 
-    Q_DISABLE_COPY(MessageEncryptor)
+    Q_DISABLE_COPY_MOVE(MessageEncryptor)
 };
 
 } // namespace base

@@ -73,7 +73,7 @@ private:
     QPoint start_pos_;
     QRect window_rect_;
 
-    Q_DISABLE_COPY(NotifierWindow)
+    Q_DISABLE_COPY_MOVE(NotifierWindow)
 };
 
 } // namespace host

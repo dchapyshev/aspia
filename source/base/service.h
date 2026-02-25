@@ -59,7 +59,7 @@ private:
 
     QString name_;
 
-    Q_DISABLE_COPY(Service)
+    Q_DISABLE_COPY_MOVE(Service)
 };
 
 } // namespace base

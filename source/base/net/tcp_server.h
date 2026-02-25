@@ -78,7 +78,7 @@ private:
     QQueue<TcpChannel*> pending_;
     QQueue<TcpChannel*> ready_;
 
-    Q_DISABLE_COPY(TcpServer)
+    Q_DISABLE_COPY_MOVE(TcpServer)
 };
 
 } // namespace base

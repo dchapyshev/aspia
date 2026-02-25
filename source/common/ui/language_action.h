@@ -36,7 +36,7 @@ public:
 private:
     QString locale_code_;
 
-    Q_DISABLE_COPY(LanguageAction)
+    Q_DISABLE_COPY_MOVE(LanguageAction)
 };
 
 } // namespace common

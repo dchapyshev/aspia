@@ -38,7 +38,7 @@ public:
 
 private:
     const int last_errno_;
-    Q_DISABLE_COPY(ScopedClearLastErrorBase)
+    Q_DISABLE_COPY_MOVE(ScopedClearLastErrorBase)
 };
 
 #if defined(Q_OS_WINDOWS)
@@ -52,7 +52,7 @@ public:
 
 private:
     const unsigned long last_error_;
-    Q_DISABLE_COPY(ScopedClearLastError)
+    Q_DISABLE_COPY_MOVE(ScopedClearLastError)
 };
 
 #elif defined(Q_OS_UNIX)

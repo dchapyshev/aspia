@@ -81,7 +81,7 @@ private:
 
     HDEVINFO device_info_ = INVALID_HANDLE_VALUE;
 
-    Q_DISABLE_COPY(ScopedDeviceInfo)
+    Q_DISABLE_COPY_MOVE(ScopedDeviceInfo)
 };
 
 } // namespace base

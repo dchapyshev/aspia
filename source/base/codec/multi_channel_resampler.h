@@ -94,7 +94,7 @@ private:
     // the current Resample() call.
     int output_frames_ready_;
 
-    Q_DISABLE_COPY(MultiChannelResampler)
+    Q_DISABLE_COPY_MOVE(MultiChannelResampler)
 };
 
 } // namespace base

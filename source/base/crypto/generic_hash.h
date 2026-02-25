@@ -59,7 +59,7 @@ private:
     evp_md_ctx_st* ctxt_ = nullptr;
     const evp_md_st* md_ = nullptr;
 
-    Q_DISABLE_COPY(GenericHash)
+    Q_DISABLE_COPY_MOVE(GenericHash)
 };
 
 } // namespace base

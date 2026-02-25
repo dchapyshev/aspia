@@ -55,7 +55,7 @@ private:
 
     std::unique_ptr<MouseCursor> mouse_cursor_;
 
-    Q_DISABLE_COPY(DxgiCursor)
+    Q_DISABLE_COPY_MOVE(DxgiCursor)
 };
 
 } // namespace base

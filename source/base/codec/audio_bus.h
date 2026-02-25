@@ -215,7 +215,7 @@ private:
     // Protect SetChannelData() and set_frames() for use by CreateWrapper().
     bool can_set_channel_data_;
 
-    Q_DISABLE_COPY(AudioBus)
+    Q_DISABLE_COPY_MOVE(AudioBus)
 };
 
 // Delegates to FromInterleavedPartial()

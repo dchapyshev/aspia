@@ -65,7 +65,7 @@ private:
     QByteArray drive_list_state_;
     QByteArray file_list_state_;
 
-    Q_DISABLE_COPY(FileList)
+    Q_DISABLE_COPY_MOVE(FileList)
 };
 
 } // namespace client

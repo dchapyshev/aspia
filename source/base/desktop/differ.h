@@ -58,7 +58,7 @@ private:
     std::unique_ptr<quint8[]> diff_info_;
     DiffFullBlockFunc diff_full_block_func_;
 
-    Q_DISABLE_COPY(Differ)
+    Q_DISABLE_COPY_MOVE(Differ)
 };
 
 } // namespace base

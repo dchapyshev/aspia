@@ -66,7 +66,7 @@ public:
 
 private:
     proto::desktop::Screen screen_;
-    Q_DISABLE_COPY(SelectScreenAction)
+    Q_DISABLE_COPY_MOVE(SelectScreenAction)
 };
 
 } // namespace client

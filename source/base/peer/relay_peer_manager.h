@@ -52,7 +52,7 @@ private:
     QList<RelayPeer*> pending_;
     QQueue<TcpChannel*> channels_;
 
-    Q_DISABLE_COPY(RelayPeerManager)
+    Q_DISABLE_COPY_MOVE(RelayPeerManager)
 };
 
 } // namespace base

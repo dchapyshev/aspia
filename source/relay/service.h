@@ -88,7 +88,7 @@ private:
 
     int session_count_ = 0;
 
-    Q_DISABLE_COPY(Service)
+    Q_DISABLE_COPY_MOVE(Service)
 };
 
 } // namespace relay

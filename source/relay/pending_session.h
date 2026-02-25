@@ -87,7 +87,7 @@ private:
     QByteArray secret_;
     quint32 key_id_ = static_cast<quint32>(-1);
 
-    Q_DISABLE_COPY(PendingSession)
+    Q_DISABLE_COPY_MOVE(PendingSession)
 };
 
 } // namespace relay

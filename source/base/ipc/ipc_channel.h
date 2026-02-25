@@ -126,7 +126,7 @@ private:
 
     SessionId peer_session_id_ = kInvalidSessionId;
 
-    Q_DISABLE_COPY(IpcChannel)
+    Q_DISABLE_COPY_MOVE(IpcChannel)
 };
 
 } // namespace base

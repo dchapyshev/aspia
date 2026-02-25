@@ -47,7 +47,7 @@ private:
     double scale_x_ = 0;
     double scale_y_ = 0;
 
-    Q_DISABLE_COPY(ScaleReducer)
+    Q_DISABLE_COPY_MOVE(ScaleReducer)
 };
 
 } // namespace base

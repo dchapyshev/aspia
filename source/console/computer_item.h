@@ -61,7 +61,7 @@ private:
     ComputerGroupItem* parent_group_item_;
     int computer_id_ = 0;
 
-    Q_DISABLE_COPY(ComputerItem)
+    Q_DISABLE_COPY_MOVE(ComputerItem)
 };
 
 } // namespace console

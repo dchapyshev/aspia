@@ -67,7 +67,7 @@ private:
     QList<SysInfoWidget*> sys_info_widgets_;
     int current_widget_ = 0;
 
-    Q_DISABLE_COPY(SystemInfoSessionWindow)
+    Q_DISABLE_COPY_MOVE(SystemInfoSessionWindow)
 };
 
 } // namespace client

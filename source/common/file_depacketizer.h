@@ -46,7 +46,7 @@ private:
     quint64 file_size_ = 0;
     quint64 left_size_ = 0;
 
-    Q_DISABLE_COPY(FileDepacketizer)
+    Q_DISABLE_COPY_MOVE(FileDepacketizer)
 };
 
 } // namespace common

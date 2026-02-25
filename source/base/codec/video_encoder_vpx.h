@@ -66,7 +66,7 @@ private:
     std::unique_ptr<vpx_image_t> image_;
     QByteArray image_buffer_;
 
-    Q_DISABLE_COPY(VideoEncoderVPX)
+    Q_DISABLE_COPY_MOVE(VideoEncoderVPX)
 };
 
 } // namespace base

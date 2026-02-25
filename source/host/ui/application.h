@@ -40,7 +40,7 @@ signals:
     void sig_activated();
 
 private:
-    Q_DISABLE_COPY(Application)
+    Q_DISABLE_COPY_MOVE(Application)
 };
 
 } // namespace host

@@ -33,7 +33,7 @@ public:
 
 private:
     bool initialized_ = false;
-    Q_DISABLE_COPY(ScopedCryptoInitializer)
+    Q_DISABLE_COPY_MOVE(ScopedCryptoInitializer)
 };
 
 } // namespace base

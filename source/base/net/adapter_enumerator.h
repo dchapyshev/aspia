@@ -66,7 +66,7 @@ public:
         const _IP_ADAPTER_UNICAST_ADDRESS_LH* address_;
 #endif
 
-        Q_DISABLE_COPY(IpAddressEnumerator)
+        Q_DISABLE_COPY_MOVE(IpAddressEnumerator)
     };
 
     class GatewayEnumerator
@@ -83,7 +83,7 @@ public:
         const _IP_ADAPTER_GATEWAY_ADDRESS_LH* address_;
 #endif
 
-        Q_DISABLE_COPY(GatewayEnumerator)
+        Q_DISABLE_COPY_MOVE(GatewayEnumerator)
     };
 
     class DnsEnumerator
@@ -100,7 +100,7 @@ public:
         const _IP_ADAPTER_DNS_SERVER_ADDRESS_XP* address_ = nullptr;
 #endif
 
-        Q_DISABLE_COPY(DnsEnumerator)
+        Q_DISABLE_COPY_MOVE(DnsEnumerator)
     };
 
 private:
@@ -109,7 +109,7 @@ private:
     _IP_ADAPTER_ADDRESSES_LH* adapter_;
 #endif
 
-    Q_DISABLE_COPY(AdapterEnumerator)
+    Q_DISABLE_COPY_MOVE(AdapterEnumerator)
 };
 
 } // namespace base

@@ -35,7 +35,7 @@ public:
     std::unique_ptr<Database> openDatabase() const final;
 
 private:
-    Q_DISABLE_COPY(DatabaseFactorySqlite)
+    Q_DISABLE_COPY_MOVE(DatabaseFactorySqlite)
 };
 
 } // namespace router

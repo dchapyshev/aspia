@@ -165,7 +165,7 @@ private:
     DWORD value_size_;
     DWORD type_;
 
-    Q_DISABLE_COPY(RegistryValueIterator)
+    Q_DISABLE_COPY_MOVE(RegistryValueIterator)
 };
 
 class RegistryKeyIterator
@@ -208,7 +208,7 @@ private:
 
     wchar_t name_[MAX_PATH];
 
-    Q_DISABLE_COPY(RegistryKeyIterator)
+    Q_DISABLE_COPY_MOVE(RegistryKeyIterator)
 };
 
 } // namespace base

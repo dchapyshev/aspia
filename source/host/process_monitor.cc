@@ -152,7 +152,7 @@ private:
     }
 
     const std::wstring name_;
-    Q_DISABLE_COPY(ScopedPrivilege)
+    Q_DISABLE_COPY_MOVE(ScopedPrivilege)
 };
 
 //--------------------------------------------------------------------------------------------------

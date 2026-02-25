@@ -86,7 +86,7 @@ private:
     QPoint dpi_;
     quint32 capturer_type_ = 0;
 
-    Q_DISABLE_COPY(Frame)
+    Q_DISABLE_COPY_MOVE(Frame)
 };
 
 } // namespace base

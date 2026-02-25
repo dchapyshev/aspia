@@ -183,7 +183,7 @@ private:
     int cursor_shape_count_ = 0;
     int cursor_pos_count_ = 0;
 
-    Q_DISABLE_COPY(ClientDesktop)
+    Q_DISABLE_COPY_MOVE(ClientDesktop)
 };
 
 } // namespace client

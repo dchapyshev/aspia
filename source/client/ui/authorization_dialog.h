@@ -54,7 +54,7 @@ private:
     void fitSize();
 
     Ui::AuthorizationDialog ui;
-    Q_DISABLE_COPY(AuthorizationDialog)
+    Q_DISABLE_COPY_MOVE(AuthorizationDialog)
 };
 
 } // namespace client

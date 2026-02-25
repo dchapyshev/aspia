@@ -69,7 +69,7 @@ private:
     std::array<std::shared_ptr<Listener>, kListenersCount> listeners_;
     QQueue<IpcChannel*> pending_;
 
-    Q_DISABLE_COPY(IpcServer)
+    Q_DISABLE_COPY_MOVE(IpcServer)
 };
 
 } // namespace base

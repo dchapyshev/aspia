@@ -32,7 +32,7 @@ public:
     static bool writeFunc(QIODevice& device, const QSettings::SettingsMap& map);
 
 private:
-    Q_DISABLE_COPY(XmlSettings)
+    Q_DISABLE_COPY_MOVE(XmlSettings)
 };
 
 } // namespace base

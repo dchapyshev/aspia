@@ -52,7 +52,7 @@ private:
 
     HRESULT hr_;
 
-    Q_DISABLE_COPY(ScopedCOMInitializer)
+    Q_DISABLE_COPY_MOVE(ScopedCOMInitializer)
 };
 
 } // namespace base

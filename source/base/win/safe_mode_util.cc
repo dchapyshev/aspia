@@ -41,7 +41,7 @@ private:
     bool succeeded_ = false;
     void* old_value_ = nullptr;
 
-    Q_DISABLE_COPY(ScopedWow64FsRedirection);
+    Q_DISABLE_COPY_MOVE(ScopedWow64FsRedirection);
 };
 
 //--------------------------------------------------------------------------------------------------

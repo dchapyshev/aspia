@@ -30,7 +30,7 @@ public:
     static void doMigrate();
 
 private:
-    Q_DISABLE_COPY(MigrationUtils)
+    Q_DISABLE_COPY_MOVE(MigrationUtils)
 };
 
 } // namespace host

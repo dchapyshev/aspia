@@ -69,7 +69,7 @@ private:
     DWORD count_ = 0;
     DWORD current_ = 0;
 
-    Q_DISABLE_COPY(SessionEnumerator)
+    Q_DISABLE_COPY_MOVE(SessionEnumerator)
 };
 
 } // namespace base

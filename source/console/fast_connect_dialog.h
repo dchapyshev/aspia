@@ -63,7 +63,7 @@ private:
     std::optional<client::RouterConfig> router_config_;
     State state_;
 
-    Q_DISABLE_COPY(FastConnectDialog)
+    Q_DISABLE_COPY_MOVE(FastConnectDialog)
 };
 
 } // namespace console

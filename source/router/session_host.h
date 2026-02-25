@@ -53,7 +53,7 @@ private:
 
     HostIdList host_id_list_;
 
-    Q_DISABLE_COPY(SessionHost)
+    Q_DISABLE_COPY_MOVE(SessionHost)
 };
 
 } // namespace router

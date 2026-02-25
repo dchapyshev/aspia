@@ -79,7 +79,7 @@ private:
     Type type_;
     std::string category_;
 
-    Q_DISABLE_COPY(CategoryItem)
+    Q_DISABLE_COPY_MOVE(CategoryItem)
 };
 
 } // namespace

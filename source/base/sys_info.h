@@ -48,7 +48,7 @@ public:
     static QByteArray smbiosDump();
 
 private:
-    Q_DISABLE_COPY(SysInfo)
+    Q_DISABLE_COPY_MOVE(SysInfo)
 };
 
 } // namespace base

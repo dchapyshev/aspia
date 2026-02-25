@@ -546,7 +546,7 @@ private:
 
     ScopedClearLastError last_error_;
 
-    Q_DISABLE_COPY(LogMessage)
+    Q_DISABLE_COPY_MOVE(LogMessage)
 };
 
 // This class is used to explicitly ignore values in the conditional logging macros. This avoids
@@ -575,7 +575,7 @@ private:
     SystemError error_;
     LogMessage log_message_;
 
-    Q_DISABLE_COPY(ErrorLogMessage)
+    Q_DISABLE_COPY_MOVE(ErrorLogMessage)
 };
 
 class ScopedLogging

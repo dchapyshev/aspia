@@ -42,7 +42,7 @@ private:
     std::unique_ptr<PixelTranslator> translator_;
     std::unique_ptr<Frame> source_frame_;
 
-    Q_DISABLE_COPY(VideoDecoderZstd)
+    Q_DISABLE_COPY_MOVE(VideoDecoderZstd)
 };
 
 } // namespace base

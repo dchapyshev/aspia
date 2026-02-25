@@ -49,7 +49,7 @@ private:
     ScopedZstdDStream stream_;
     int taken_from_cache_ = 0;
 
-    Q_DISABLE_COPY(CursorDecoder)
+    Q_DISABLE_COPY_MOVE(CursorDecoder)
 };
 
 } // namespace base

@@ -45,7 +45,7 @@ private:
     base::RegistryKey key_;
     DWORD old_state_ = kNone;
 
-    Q_DISABLE_COPY(ScopedSasPolicy)
+    Q_DISABLE_COPY_MOVE(ScopedSasPolicy)
 };
 
 //--------------------------------------------------------------------------------------------------

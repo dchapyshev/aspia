@@ -37,7 +37,7 @@ public:
     static QByteArray decompress(const QByteArray& source);
 
 private:
-    Q_DISABLE_COPY(ZstdCompress)
+    Q_DISABLE_COPY_MOVE(ZstdCompress)
 };
 
 } // namespace base

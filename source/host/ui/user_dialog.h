@@ -52,7 +52,7 @@ private:
     base::User user_;
     bool account_changed_ = true;
 
-    Q_DISABLE_COPY(UserDialog)
+    Q_DISABLE_COPY_MOVE(UserDialog)
 };
 
 } // namespace host

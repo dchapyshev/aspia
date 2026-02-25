@@ -54,7 +54,7 @@ private:
     FileRemover::TaskList pending_tasks_;
     FileRemover::TaskList tasks_;
 
-    Q_DISABLE_COPY(FileRemoveQueueBuilder)
+    Q_DISABLE_COPY_MOVE(FileRemoveQueueBuilder)
 };
 
 } // namespace client

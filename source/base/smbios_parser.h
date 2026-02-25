@@ -48,7 +48,7 @@ private:
     quint8* end_ = nullptr;
     quint8* pos_ = nullptr;
 
-    Q_DISABLE_COPY(SmbiosTableEnumerator)
+    Q_DISABLE_COPY_MOVE(SmbiosTableEnumerator)
 };
 
 QString smbiosString(const SmbiosTable* table, quint8 number);
@@ -64,7 +64,7 @@ public:
 
 private:
     const SmbiosBiosTable* table_;
-    Q_DISABLE_COPY(SmbiosBios)
+    Q_DISABLE_COPY_MOVE(SmbiosBios)
 };
 
 class SmbiosBaseboard
@@ -78,7 +78,7 @@ public:
 
 private:
     const SmbiosBaseboardTable* table_;
-    Q_DISABLE_COPY(SmbiosBaseboard)
+    Q_DISABLE_COPY_MOVE(SmbiosBaseboard)
 };
 
 class SmbiosMemoryDevice
@@ -98,7 +98,7 @@ public:
 
 private:
     const SmbiosMemoryDeviceTable* table_;
-    Q_DISABLE_COPY(SmbiosMemoryDevice)
+    Q_DISABLE_COPY_MOVE(SmbiosMemoryDevice)
 };
 
 } // namespace base

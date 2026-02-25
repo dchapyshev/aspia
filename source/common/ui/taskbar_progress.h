@@ -68,7 +68,7 @@ private:
     bool paused_ = false;
     bool stopped_ = false;
 
-    Q_DISABLE_COPY(TaskbarProgress)
+    Q_DISABLE_COPY_MOVE(TaskbarProgress)
 };
 
 } // namespace common

@@ -59,7 +59,7 @@ private:
     void updateData();
 
     base::User user_;
-    Q_DISABLE_COPY(UserTreeItem)
+    Q_DISABLE_COPY_MOVE(UserTreeItem)
 };
 
 } // namespace host

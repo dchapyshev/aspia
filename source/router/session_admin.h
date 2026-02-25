@@ -49,7 +49,7 @@ private:
     proto::router::UserResult::ErrorCode modifyUser(const proto::router::User& user);
     proto::router::UserResult::ErrorCode deleteUser(const proto::router::User& user);
 
-    Q_DISABLE_COPY(SessionAdmin)
+    Q_DISABLE_COPY_MOVE(SessionAdmin)
 };
 
 } // namespace router

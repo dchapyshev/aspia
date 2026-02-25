@@ -61,7 +61,7 @@ private:
     HWND hwnd_ = nullptr;
     HDC hdc_ = nullptr;
 
-    Q_DISABLE_COPY(ScopedGetDC)
+    Q_DISABLE_COPY_MOVE(ScopedGetDC)
 };
 
 // Like ScopedHandle but for HDC.  Only use this on HDCs returned from
@@ -100,7 +100,7 @@ private:
 
     HDC hdc_ = nullptr;
 
-    Q_DISABLE_COPY(ScopedCreateDC)
+    Q_DISABLE_COPY_MOVE(ScopedCreateDC)
 };
 
 } // namespace base

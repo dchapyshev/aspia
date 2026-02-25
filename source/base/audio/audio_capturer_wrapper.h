@@ -47,7 +47,7 @@ private:
     Thread thread_;
     std::unique_ptr<AudioCapturer> capturer_;
 
-    Q_DISABLE_COPY(AudioCapturerWrapper)
+    Q_DISABLE_COPY_MOVE(AudioCapturerWrapper)
 };
 
 } // namespace base

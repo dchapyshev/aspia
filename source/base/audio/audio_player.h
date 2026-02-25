@@ -54,7 +54,7 @@ private:
     std::queue<std::unique_ptr<proto::desktop::AudioPacket>> work_queue_;
     size_t source_pos_ = 0;
 
-    Q_DISABLE_COPY(AudioPlayer)
+    Q_DISABLE_COPY_MOVE(AudioPlayer)
 };
 
 } // namespace base

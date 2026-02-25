@@ -115,7 +115,7 @@ public:
 private:
     mutable QSettings settings_;
 
-    Q_DISABLE_COPY(SystemSettings)
+    Q_DISABLE_COPY_MOVE(SystemSettings)
 };
 
 } // namespace host

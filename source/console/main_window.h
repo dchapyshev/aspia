@@ -116,7 +116,7 @@ private:
     std::unique_ptr<QMenu> tray_menu_;
     std::unique_ptr<common::UpdateChecker> update_checker_;
 
-    Q_DISABLE_COPY(MainWindow)
+    Q_DISABLE_COPY_MOVE(MainWindow)
 };
 
 } // namespace console

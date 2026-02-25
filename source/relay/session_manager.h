@@ -89,7 +89,7 @@ private:
     bool statistics_enabled_ = false;
     std::chrono::seconds statistics_interval_;
 
-    Q_DISABLE_COPY(SessionManager)
+    Q_DISABLE_COPY_MOVE(SessionManager)
 };
 
 } // namespace relay

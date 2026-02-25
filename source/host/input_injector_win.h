@@ -56,7 +56,7 @@ private:
 
     TouchInjector touch_injector_;
 
-    Q_DISABLE_COPY(InputInjectorWin)
+    Q_DISABLE_COPY_MOVE(InputInjectorWin)
 };
 
 } // namespace host

@@ -83,7 +83,7 @@ private:
     std::unique_ptr<DefaultAudioDeviceChangeDetector> default_device_detector_;
     HRESULT last_capture_error_;
 
-    Q_DISABLE_COPY(AudioCapturerWin)
+    Q_DISABLE_COPY_MOVE(AudioCapturerWin)
 };
 
 } // namespace base

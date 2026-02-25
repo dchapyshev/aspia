@@ -75,7 +75,7 @@ private:
     bool direct_finished_ = false;
     bool router_finished_ = false;
 
-    Q_DISABLE_COPY(OnlineChecker)
+    Q_DISABLE_COPY_MOVE(OnlineChecker)
 };
 
 } // namespace client

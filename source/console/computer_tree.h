@@ -49,7 +49,7 @@ private:
     QPoint start_pos_;
     QString mime_type_;
 
-    Q_DISABLE_COPY(ComputerTree)
+    Q_DISABLE_COPY_MOVE(ComputerTree)
 };
 
 } // namespace console

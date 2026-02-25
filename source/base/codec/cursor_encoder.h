@@ -41,7 +41,7 @@ private:
     ScopedZstdCStream stream_;
     QVector<quint32> cache_;
 
-    Q_DISABLE_COPY(CursorEncoder)
+    Q_DISABLE_COPY_MOVE(CursorEncoder)
 };
 
 } // namespace base

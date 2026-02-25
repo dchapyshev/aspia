@@ -57,7 +57,7 @@ private:
     std::unique_ptr<UpdateChecker> checker_;
     bool checker_finished_ = true;
 
-    Q_DISABLE_COPY(UpdateDialog)
+    Q_DISABLE_COPY_MOVE(UpdateDialog)
 };
 
 } // namespace common

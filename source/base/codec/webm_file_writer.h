@@ -59,7 +59,7 @@ private:
 
     proto::desktop::VideoEncoding last_video_encoding_ = proto::desktop::VIDEO_ENCODING_UNKNOWN;
 
-    Q_DISABLE_COPY(WebmFileWriter)
+    Q_DISABLE_COPY_MOVE(WebmFileWriter)
 };
 
 } // namespace base

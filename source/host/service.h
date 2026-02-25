@@ -136,7 +136,7 @@ private:
     QString one_time_password_;
     quint32 one_time_sessions_ = 0;
 
-    Q_DISABLE_COPY(Service)
+    Q_DISABLE_COPY_MOVE(Service)
 };
 
 } // namespace host

@@ -99,7 +99,7 @@ public:
 
 private:
     QSettings settings_;
-    Q_DISABLE_COPY(Settings)
+    Q_DISABLE_COPY_MOVE(Settings)
 };
 
 } // namespace console

@@ -68,7 +68,7 @@ private:
 
     QString application_path_;
 
-    Q_DISABLE_COPY(FirewallManager)
+    Q_DISABLE_COPY_MOVE(FirewallManager)
 };
 
 } // namespace base

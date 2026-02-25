@@ -66,7 +66,7 @@ public:
 private:
     T object_ = nullptr;
 
-    Q_DISABLE_COPY(ScopedGDIObject)
+    Q_DISABLE_COPY_MOVE(ScopedGDIObject)
 };
 
 // The traits class that uses DeleteObject() to close a handle.

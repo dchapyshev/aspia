@@ -52,7 +52,7 @@ signals:
 private:
     std::shared_ptr<KeyPool> pool_;
 
-    Q_DISABLE_COPY(KeyFactory)
+    Q_DISABLE_COPY_MOVE(KeyFactory)
 };
 
 } // namespace relay

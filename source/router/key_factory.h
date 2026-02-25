@@ -54,7 +54,7 @@ signals:
 private:
     base::SharedPointer<KeyPool> pool_;
 
-    Q_DISABLE_COPY(KeyFactory)
+    Q_DISABLE_COPY_MOVE(KeyFactory)
 };
 
 } // namespace router

@@ -33,7 +33,7 @@ public:
     static bool decryptString(const QByteArray& ciphertext, QString* plaintext);
 
 private:
-    Q_DISABLE_COPY(OSCrypt)
+    Q_DISABLE_COPY_MOVE(OSCrypt)
 };
 
 } // namespace base

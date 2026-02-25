@@ -43,7 +43,7 @@ private slots:
 
 private:
     Ui::ComputerDialogDesktop ui;
-    Q_DISABLE_COPY(ComputerDialogDesktop)
+    Q_DISABLE_COPY_MOVE(ComputerDialogDesktop)
 };
 
 } // namespace console

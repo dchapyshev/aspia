@@ -44,7 +44,7 @@ private:
     int channels_ = 0;
     OpusDecoder* decoder_ = nullptr;
 
-    Q_DISABLE_COPY(AudioDecoder)
+    Q_DISABLE_COPY_MOVE(AudioDecoder)
 };
 
 } // namespace base

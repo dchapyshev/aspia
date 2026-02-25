@@ -46,7 +46,7 @@ private:
     int animation_index_ = 0;
     QPointer<QLabel> status_label_ = nullptr;
 
-    Q_DISABLE_COPY(StatusBar)
+    Q_DISABLE_COPY_MOVE(StatusBar)
 };
 
 } // namespace console

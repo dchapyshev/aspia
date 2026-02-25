@@ -92,7 +92,7 @@ private:
     PixelFormat source_format_;
     PixelFormat target_format_;
 
-    Q_DISABLE_COPY(PixelTranslatorT)
+    Q_DISABLE_COPY_MOVE(PixelTranslatorT)
 };
 
 template<typename SourceT, typename TargetT>
@@ -160,7 +160,7 @@ private:
     PixelFormat source_format_;
     PixelFormat target_format_;
 
-    Q_DISABLE_COPY(PixelTranslatorFrom8_16bppT)
+    Q_DISABLE_COPY_MOVE(PixelTranslatorFrom8_16bppT)
 };
 
 } // namespace

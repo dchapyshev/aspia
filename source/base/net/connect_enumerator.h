@@ -52,7 +52,7 @@ private:
     quint32 num_entries_ = 0;
     quint32 pos_ = 0;
 
-    Q_DISABLE_COPY(ConnectEnumerator)
+    Q_DISABLE_COPY_MOVE(ConnectEnumerator)
 };
 
 } // namespace base

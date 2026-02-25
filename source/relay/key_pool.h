@@ -53,7 +53,7 @@ private:
     std::unordered_map<quint32, SessionKey> map_;
     quint32 current_key_id_ = 0;
 
-    Q_DISABLE_COPY(KeyPool)
+    Q_DISABLE_COPY_MOVE(KeyPool)
 };
 
 } // namespace relay

@@ -33,7 +33,7 @@ public:
     Edid edid() const;
 
 private:
-    Q_DISABLE_COPY(MonitorEnumerator)
+    Q_DISABLE_COPY_MOVE(MonitorEnumerator)
 };
 
 } // namespace base

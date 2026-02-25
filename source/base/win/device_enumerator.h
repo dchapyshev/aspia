@@ -54,7 +54,7 @@ private:
     mutable SP_DEVINFO_DATA device_info_data_;
     DWORD device_index_ = 0;
 
-    Q_DISABLE_COPY(DeviceEnumerator)
+    Q_DISABLE_COPY_MOVE(DeviceEnumerator)
 };
 
 } // namespace base

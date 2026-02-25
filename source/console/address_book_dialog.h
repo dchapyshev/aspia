@@ -63,7 +63,7 @@ private:
     bool password_changed_ = true;
     bool value_reverting_ = false;
 
-    Q_DISABLE_COPY(AddressBookDialog)
+    Q_DISABLE_COPY_MOVE(AddressBookDialog)
 };
 
 } // namespace console

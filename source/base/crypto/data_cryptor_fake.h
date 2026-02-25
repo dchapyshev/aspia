@@ -35,7 +35,7 @@ public:
     bool decrypt(QByteArrayView in, QByteArray* out) final;
 
 private:
-    Q_DISABLE_COPY(DataCryptorFake)
+    Q_DISABLE_COPY_MOVE(DataCryptorFake)
 };
 
 } // namespace base

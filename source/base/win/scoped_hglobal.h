@@ -65,7 +65,7 @@ private:
     HGLOBAL glob_;
     T* data_;
 
-    Q_DISABLE_COPY(ScopedHGLOBAL)
+    Q_DISABLE_COPY_MOVE(ScopedHGLOBAL)
 };
 
 } // namespace base

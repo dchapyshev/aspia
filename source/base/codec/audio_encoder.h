@@ -66,7 +66,7 @@ private:
     int leftover_buffer_size_ = 0;
     int leftover_samples_ = 0;
 
-    Q_DISABLE_COPY(AudioEncoder)
+    Q_DISABLE_COPY_MOVE(AudioEncoder)
 };
 
 } // namespace base

@@ -42,7 +42,7 @@ signals:
     void sig_fileOpened(const QString& file_path);
 
 private:
-    Q_DISABLE_COPY(Application)
+    Q_DISABLE_COPY_MOVE(Application)
 };
 
 } // namespace console

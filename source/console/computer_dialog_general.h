@@ -47,7 +47,7 @@ private:
 
     bool has_name_ = false;
 
-    Q_DISABLE_COPY(ComputerDialogGeneral)
+    Q_DISABLE_COPY_MOVE(ComputerDialogGeneral)
 };
 
 } // namespace console

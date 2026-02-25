@@ -70,7 +70,7 @@ private:
 
     ServiceState service_state_;
 
-    Q_DISABLE_COPY(ConfigDialog)
+    Q_DISABLE_COPY_MOVE(ConfigDialog)
 };
 
 } // namespace host

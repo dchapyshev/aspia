@@ -46,7 +46,7 @@ private:
 
     ScopedHBITMAP bitmap_;
 
-    Q_DISABLE_COPY(FrameDib)
+    Q_DISABLE_COPY_MOVE(FrameDib)
 };
 
 } // namespace base

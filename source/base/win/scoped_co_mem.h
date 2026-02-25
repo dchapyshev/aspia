@@ -73,7 +73,7 @@ public:
 private:
     T* mem_ptr_ = nullptr;
 
-    Q_DISABLE_COPY(ScopedCoMem)
+    Q_DISABLE_COPY_MOVE(ScopedCoMem)
 };
 
 } // namespace base

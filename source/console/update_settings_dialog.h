@@ -33,7 +33,7 @@ public:
 
 private:
     Ui::UpdateSettingsDialog ui;
-    Q_DISABLE_COPY(UpdateSettingsDialog)
+    Q_DISABLE_COPY_MOVE(UpdateSettingsDialog)
 };
 
 } // namespace console

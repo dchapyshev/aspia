@@ -44,7 +44,7 @@ private slots:
 
 private:
     Ui::ComputerGroupDialogDesktop ui;
-    Q_DISABLE_COPY(ComputerGroupDialogDesktop)
+    Q_DISABLE_COPY_MOVE(ComputerGroupDialogDesktop)
 };
 
 } // namespace console

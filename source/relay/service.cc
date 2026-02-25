@@ -53,7 +53,7 @@ private:
     std::shared_ptr<KeyPool> pool_;
     const quint32 key_id_;
 
-    Q_DISABLE_COPY(KeyDeleter)
+    Q_DISABLE_COPY_MOVE(KeyDeleter)
 };
 
 } // namespace

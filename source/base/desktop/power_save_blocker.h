@@ -38,7 +38,7 @@ private:
     ScopedHandle handle_;
 #endif // defined(Q_OS_WINDOWS)
 
-    Q_DISABLE_COPY(PowerSaveBlocker)
+    Q_DISABLE_COPY_MOVE(PowerSaveBlocker)
 };
 
 } // namespace base

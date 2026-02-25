@@ -56,7 +56,7 @@ protected:
 
 private:
     std::unique_ptr<Ui::TextChatSessionWindow> ui;
-    Q_DISABLE_COPY(TextChatSessionWindow)
+    Q_DISABLE_COPY_MOVE(TextChatSessionWindow)
 };
 
 } // namespace client

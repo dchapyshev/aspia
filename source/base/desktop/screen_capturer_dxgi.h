@@ -66,7 +66,7 @@ private:
     QVector<std::pair<QRect, QPoint>> dpi_for_rect_;
     int temporary_error_count_ = 0;
 
-    Q_DISABLE_COPY(ScreenCapturerDxgi)
+    Q_DISABLE_COPY_MOVE(ScreenCapturerDxgi)
 };
 
 } // namespace base

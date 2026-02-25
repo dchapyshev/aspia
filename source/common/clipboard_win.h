@@ -58,7 +58,7 @@ private:
     std::unique_ptr<base::MessageWindow> window_;
     std::unique_ptr<FileObject> file_object_;
 
-    Q_DISABLE_COPY(ClipboardWin)
+    Q_DISABLE_COPY_MOVE(ClipboardWin)
 };
 
 } // namespace common

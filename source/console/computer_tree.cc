@@ -45,7 +45,7 @@ public:
 
 private:
     const int index_;
-    Q_DISABLE_COPY(ColumnAction)
+    Q_DISABLE_COPY_MOVE(ColumnAction)
 };
 
 } // namespace

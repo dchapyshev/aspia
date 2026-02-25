@@ -126,7 +126,7 @@ private:
 
     QSet<quint32> remote_pressed_keys_;
 
-    Q_DISABLE_COPY(DesktopWidget)
+    Q_DISABLE_COPY_MOVE(DesktopWidget)
 };
 
 } // namespace client

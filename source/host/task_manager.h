@@ -50,7 +50,7 @@ private:
 
     std::unique_ptr<ProcessMonitor> process_monitor_;
 
-    Q_DISABLE_COPY(TaskManager)
+    Q_DISABLE_COPY_MOVE(TaskManager)
 };
 
 } // namespace host

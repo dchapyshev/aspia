@@ -42,7 +42,7 @@ private slots:
 
 private:
     Ui::OpenAddressBookDialog ui;
-    Q_DISABLE_COPY(OpenAddressBookDialog)
+    Q_DISABLE_COPY_MOVE(OpenAddressBookDialog)
 };
 
 } // namespace console

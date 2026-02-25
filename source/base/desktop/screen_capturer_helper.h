@@ -81,7 +81,7 @@ private:
     // If the value is <= 0, then the invalid region is not expanded to a grid.
     int log_grid_size_ = 0;
 
-    Q_DISABLE_COPY(ScreenCapturerHelper)
+    Q_DISABLE_COPY_MOVE(ScreenCapturerHelper)
 };
 
 } // namespace base

@@ -49,7 +49,7 @@ private:
     bool is_service_ = false;
 #endif // defined(Q_OS_WINDOWS)
 
-    Q_DISABLE_COPY(Application)
+    Q_DISABLE_COPY_MOVE(Application)
 };
 
 } // namespace base

@@ -60,7 +60,7 @@ private:
     QMap<qint64, Keys> pool_;
     KeyFactory* factory_;
 
-    Q_DISABLE_COPY(KeyPool)
+    Q_DISABLE_COPY_MOVE(KeyPool)
 };
 
 } // namespace router

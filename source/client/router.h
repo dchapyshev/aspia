@@ -81,7 +81,7 @@ private:
     bool auto_reconnect_ = true;
     bool reconnect_in_progress_ = false;
 
-    Q_DISABLE_COPY(Router)
+    Q_DISABLE_COPY_MOVE(Router)
 };
 
 } // namespace client

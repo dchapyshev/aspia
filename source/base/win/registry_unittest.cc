@@ -84,7 +84,7 @@ protected:
     QString foo_software_key_;
 
 private:
-    Q_DISABLE_COPY(RegistryTest)
+    Q_DISABLE_COPY_MOVE(RegistryTest)
 };
 
 // static

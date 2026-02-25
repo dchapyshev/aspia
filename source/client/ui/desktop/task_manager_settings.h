@@ -46,7 +46,7 @@ public:
 
 private:
     QSettings settings_;
-    Q_DISABLE_COPY(TaskManagerSettings)
+    Q_DISABLE_COPY_MOVE(TaskManagerSettings)
 };
 
 } // namespace client

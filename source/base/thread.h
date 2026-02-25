@@ -37,7 +37,7 @@ protected:
     void run() final;
 
 private:
-    Q_DISABLE_COPY(Thread)
+    Q_DISABLE_COPY_MOVE(Thread)
 };
 
 } // namespace base

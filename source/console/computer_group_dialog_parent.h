@@ -34,7 +34,7 @@ public:
 
 private:
     Ui::ComputerGroupDialogParent ui;
-    Q_DISABLE_COPY(ComputerGroupDialogParent)
+    Q_DISABLE_COPY_MOVE(ComputerGroupDialogParent)
 };
 
 } // namespace console

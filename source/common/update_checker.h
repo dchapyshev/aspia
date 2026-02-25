@@ -43,7 +43,7 @@ private:
     const QString package_;
     std::atomic_bool interrupted_ { false };
 
-    Q_DISABLE_COPY(UpdateChecker)
+    Q_DISABLE_COPY_MOVE(UpdateChecker)
 };
 
 } // namespace common

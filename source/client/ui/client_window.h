@@ -58,7 +58,7 @@ private:
     Ui::ClientWindow ui;
     std::unique_ptr<common::UpdateChecker> update_checker_;
 
-    Q_DISABLE_COPY(ClientWindow)
+    Q_DISABLE_COPY_MOVE(ClientWindow)
 };
 
 } // namespace client

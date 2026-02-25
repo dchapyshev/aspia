@@ -53,7 +53,7 @@ private:
     base::Parser<proto::router::RelayToRouter> incoming_message_;
     base::Serializer<proto::router::RouterToRelay> outgoing_message_;
 
-    Q_DISABLE_COPY(SessionRelay)
+    Q_DISABLE_COPY_MOVE(SessionRelay)
 };
 
 } // namespace router

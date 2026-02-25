@@ -55,7 +55,7 @@ private:
 
     bool initialized_ = false;
 
-    Q_DISABLE_COPY(VirtualDisplay)
+    Q_DISABLE_COPY_MOVE(VirtualDisplay)
 };
 
 } // namespace base

@@ -144,7 +144,7 @@ private:
     CoarseTimers coarse_timers_;
     Sockets sockets_;
 
-    Q_DISABLE_COPY(AsioEventDispatcher)
+    Q_DISABLE_COPY_MOVE(AsioEventDispatcher)
 };
 
 } // namespace base

@@ -129,7 +129,7 @@ private:
 
     std::unique_ptr<client::OnlineChecker> online_checker_;
 
-    Q_DISABLE_COPY(AddressBookTab)
+    Q_DISABLE_COPY_MOVE(AddressBookTab)
 };
 
 } // namespace console

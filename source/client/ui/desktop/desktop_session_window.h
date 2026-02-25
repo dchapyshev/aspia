@@ -155,7 +155,7 @@ private:
 
     QPoint wheel_angle_;
 
-    Q_DISABLE_COPY(DesktopSessionWindow)
+    Q_DISABLE_COPY_MOVE(DesktopSessionWindow)
 };
 
 } // namespace client

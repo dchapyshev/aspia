@@ -102,7 +102,7 @@ private:
     QPointer<FileRemoveDialog> remove_dialog_;
     QPointer<FileTransferDialog> transfer_dialog_;
 
-    Q_DISABLE_COPY(FileTransferSessionWindow)
+    Q_DISABLE_COPY_MOVE(FileTransferSessionWindow)
 };
 
 } // namespace client

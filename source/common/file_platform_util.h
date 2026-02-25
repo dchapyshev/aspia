@@ -47,7 +47,7 @@ public:
     static bool isValidFileName(const QString& file_name);
 
 private:
-    Q_DISABLE_COPY(FilePlatformUtil)
+    Q_DISABLE_COPY_MOVE(FilePlatformUtil)
 };
 
 } // namespace common

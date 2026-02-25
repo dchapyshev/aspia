@@ -46,7 +46,7 @@ protected:
 private:
     std::unique_ptr<Ui::StatusDialog> ui;
 
-    Q_DISABLE_COPY(StatusDialog)
+    Q_DISABLE_COPY_MOVE(StatusDialog)
 };
 
 } // namespace common

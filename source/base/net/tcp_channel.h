@@ -290,7 +290,7 @@ private:
     qint64 bytes_rx_ = 0;
     int speed_rx_ = 0;
 
-    Q_DISABLE_COPY(TcpChannel)
+    Q_DISABLE_COPY_MOVE(TcpChannel)
 };
 
 } // namespace base

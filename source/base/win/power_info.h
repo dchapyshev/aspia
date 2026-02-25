@@ -48,7 +48,7 @@ private:
     SYSTEM_POWER_STATUS power_status_;
     bool initialized_ = false;
 
-    Q_DISABLE_COPY(PowerInfo)
+    Q_DISABLE_COPY_MOVE(PowerInfo)
 };
 
 } // namespace base

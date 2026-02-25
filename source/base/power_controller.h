@@ -32,7 +32,7 @@ public:
     static bool lock();
 
 private:
-    Q_DISABLE_COPY(PowerController)
+    Q_DISABLE_COPY_MOVE(PowerController)
 };
 
 } // namespace base

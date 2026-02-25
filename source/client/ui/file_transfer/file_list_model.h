@@ -99,7 +99,7 @@ private:
 
     QString mime_type_;
 
-    Q_DISABLE_COPY(FileListModel)
+    Q_DISABLE_COPY_MOVE(FileListModel)
 };
 
 } // namespace client

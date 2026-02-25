@@ -41,7 +41,7 @@ public:
 private:
     bool impersonated_ = false;
 
-    Q_DISABLE_COPY(ScopedImpersonator)
+    Q_DISABLE_COPY_MOVE(ScopedImpersonator)
 };
 
 } // namespace base

@@ -46,7 +46,7 @@ private:
     base::Parser<proto::file_transfer::Request> request_;
     base::Serializer<proto::file_transfer::Reply> reply_;
 
-    Q_DISABLE_COPY(FileAgent)
+    Q_DISABLE_COPY_MOVE(FileAgent)
 };
 
 } // namespace host

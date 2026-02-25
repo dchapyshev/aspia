@@ -50,7 +50,7 @@ private:
     base::Thread thread_;
     std::unique_ptr<common::Clipboard> clipboard_;
 
-    Q_DISABLE_COPY(ClipboardMonitor)
+    Q_DISABLE_COPY_MOVE(ClipboardMonitor)
 };
 
 } // namespace common

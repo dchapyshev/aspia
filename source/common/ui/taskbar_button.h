@@ -68,7 +68,7 @@ private:
     QIcon overlay_icon_;
     QString overlay_description_;
 
-    Q_DISABLE_COPY(TaskbarButton)
+    Q_DISABLE_COPY_MOVE(TaskbarButton)
 };
 
 } // namespace common

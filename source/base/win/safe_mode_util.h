@@ -30,7 +30,7 @@ public:
     static bool setSafeModeService(const QString& service_name, bool enable);
 
 private:
-    Q_DISABLE_COPY(SafeModeUtil)
+    Q_DISABLE_COPY_MOVE(SafeModeUtil)
 };
 
 } // namespace base

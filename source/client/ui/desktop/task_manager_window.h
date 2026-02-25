@@ -83,7 +83,7 @@ private:
 
     QTimer* update_timer_ = nullptr;
 
-    Q_DISABLE_COPY(TaskManagerWindow)
+    Q_DISABLE_COPY_MOVE(TaskManagerWindow)
 };
 
 } // namespace client

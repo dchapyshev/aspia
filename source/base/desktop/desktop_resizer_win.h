@@ -38,7 +38,7 @@ private:
     class Screen;
     QMap<ScreenId, Screen> screens_;
 
-    Q_DISABLE_COPY(DesktopResizerWin)
+    Q_DISABLE_COPY_MOVE(DesktopResizerWin)
 };
 
 } // namespace base

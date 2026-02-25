@@ -34,7 +34,7 @@ public:
 
 private:
     Ui::ComputerDialogParent ui;
-    Q_DISABLE_COPY(ComputerDialogParent)
+    Q_DISABLE_COPY_MOVE(ComputerDialogParent)
 };
 
 } // namespace console

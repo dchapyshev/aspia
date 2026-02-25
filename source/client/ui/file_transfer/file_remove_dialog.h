@@ -46,7 +46,7 @@ public slots:
 
 signals:
     void sig_stop();
-    void sig_action(FileRemover::Action action);
+    void sig_action(client::FileRemover::Action action);
 
 protected:
     // QDialog implementation.
@@ -61,7 +61,7 @@ private:
     common::TaskbarProgress* taskbar_progress_ = nullptr;
 #endif // defined(Q_OS_WINDOWS)
 
-    Q_DISABLE_COPY(FileRemoveDialog)
+    Q_DISABLE_COPY_MOVE(FileRemoveDialog)
 };
 
 } // namespace client

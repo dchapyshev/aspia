@@ -46,7 +46,7 @@ signals:
     void sig_editFinished();
 
 private:
-    Q_DISABLE_COPY(FileItemDelegate)
+    Q_DISABLE_COPY_MOVE(FileItemDelegate)
 };
 
 } // namespace client

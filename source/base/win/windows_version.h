@@ -161,7 +161,7 @@ private:
     WOW64Status wow64_status_;
     QString processor_model_name_;
 
-    Q_DISABLE_COPY(OSInfo)
+    Q_DISABLE_COPY_MOVE(OSInfo)
 };
 
 Version windowsVersion();

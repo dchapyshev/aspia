@@ -42,7 +42,7 @@ private:
     std::chrono::time_point<std::chrono::steady_clock> begin_time_;
     std::chrono::time_point<std::chrono::steady_clock> end_time_;
 
-    Q_DISABLE_COPY(CaptureScheduler)
+    Q_DISABLE_COPY_MOVE(CaptureScheduler)
 };
 
 } // namespace base

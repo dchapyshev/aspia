@@ -49,7 +49,7 @@ private:
     QString mime_type_;
     QList<FileTransfer::Item> file_list_;
 
-    Q_DISABLE_COPY(FileMimeData)
+    Q_DISABLE_COPY_MOVE(FileMimeData)
 };
 
 } // namespace client

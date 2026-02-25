@@ -84,7 +84,7 @@ private:
 
     T* memory_ = nullptr;
 
-    Q_DISABLE_COPY(ScopedWtsMemory)
+    Q_DISABLE_COPY_MOVE(ScopedWtsMemory)
 };
 
 } // namespace base

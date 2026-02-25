@@ -71,7 +71,7 @@ private:
 
     TcpChannel* pending_channel_ = nullptr;
 
-    Q_DISABLE_COPY(RelayPeer)
+    Q_DISABLE_COPY_MOVE(RelayPeer)
 };
 
 } // namespace base

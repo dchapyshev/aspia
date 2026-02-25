@@ -38,7 +38,7 @@ signals:
     void sig_invalidNameEntered() const;
 
 private:
-    Q_DISABLE_COPY(FileNameValidator)
+    Q_DISABLE_COPY_MOVE(FileNameValidator)
 };
 
 } // namespace client

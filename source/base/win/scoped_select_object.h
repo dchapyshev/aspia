@@ -49,7 +49,7 @@ private:
     HDC hdc_;
     HGDIOBJ oldobj_;
 
-    Q_DISABLE_COPY(ScopedSelectObject)
+    Q_DISABLE_COPY_MOVE(ScopedSelectObject)
 };
 
 } // namespace base

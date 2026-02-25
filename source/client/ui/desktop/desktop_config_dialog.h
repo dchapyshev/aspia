@@ -68,7 +68,7 @@ private:
     std::unique_ptr<Ui::DesktopConfigDialog> ui;
     proto::desktop::Config config_;
 
-    Q_DISABLE_COPY(DesktopConfigDialog)
+    Q_DISABLE_COPY_MOVE(DesktopConfigDialog)
 };
 
 } // namespace client

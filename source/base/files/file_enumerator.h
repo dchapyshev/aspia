@@ -70,7 +70,7 @@ private:
     HANDLE find_handle_ = INVALID_HANDLE_VALUE;
 #endif
 
-    Q_DISABLE_COPY(FileEnumerator)
+    Q_DISABLE_COPY_MOVE(FileEnumerator)
 };
 
 }  // namespace base

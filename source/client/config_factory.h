@@ -36,7 +36,7 @@ public:
     static void fixupDesktopConfig(proto::desktop::Config* config);
 
 private:
-    Q_DISABLE_COPY(ConfigFactory)
+    Q_DISABLE_COPY_MOVE(ConfigFactory)
 };
 
 } // namespace client

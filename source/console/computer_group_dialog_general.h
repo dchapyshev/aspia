@@ -43,7 +43,7 @@ private:
     void showError(const QString& message);
 
     Ui::ComputerGroupDialogGeneral ui;
-    Q_DISABLE_COPY(ComputerGroupDialogGeneral)
+    Q_DISABLE_COPY_MOVE(ComputerGroupDialogGeneral)
 };
 
 } // namespace console

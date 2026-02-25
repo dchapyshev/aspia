@@ -47,7 +47,7 @@ private:
     QTimer* update_timer_ = nullptr;
     QTime duration_;
 
-    Q_DISABLE_COPY(StatisticsDialog)
+    Q_DISABLE_COPY_MOVE(StatisticsDialog)
 };
 
 } // namespace client

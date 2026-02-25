@@ -49,7 +49,7 @@ private:
 
     sqlite3* db_;
 
-    Q_DISABLE_COPY(DatabaseSqlite)
+    Q_DISABLE_COPY_MOVE(DatabaseSqlite)
 };
 
 } // namespace router

@@ -58,7 +58,7 @@ private:
     QTreeView* view_;
     AddressBarModel* model_;
 
-    Q_DISABLE_COPY(AddressBar)
+    Q_DISABLE_COPY_MOVE(AddressBar)
 };
 
 } // namespace client

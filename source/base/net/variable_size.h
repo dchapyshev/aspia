@@ -38,7 +38,7 @@ private:
     quint8 buffer_[4] = { 0 };
     size_t pos_ = 0;
 
-    Q_DISABLE_COPY(VariableSizeReader)
+    Q_DISABLE_COPY_MOVE(VariableSizeReader)
 };
 
 class VariableSizeWriter
@@ -52,7 +52,7 @@ public:
 private:
     quint8 buffer_[4];
 
-    Q_DISABLE_COPY(VariableSizeWriter)
+    Q_DISABLE_COPY_MOVE(VariableSizeWriter)
 };
 
 } // namespace base

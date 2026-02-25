@@ -34,7 +34,7 @@ public:
 
 private:
     HANDLE mmcss_handle_ = nullptr;
-    Q_DISABLE_COPY(ScopedMMCSSRegistration)
+    Q_DISABLE_COPY_MOVE(ScopedMMCSSRegistration)
 };
 
 } // namespace base

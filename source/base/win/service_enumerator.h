@@ -89,7 +89,7 @@ private:
     mutable std::unique_ptr<quint8[]> current_service_config_;
     DWORD current_service_index_ = 0;
 
-    Q_DISABLE_COPY(ServiceEnumerator)
+    Q_DISABLE_COPY_MOVE(ServiceEnumerator)
 };
 
 } // namespace base

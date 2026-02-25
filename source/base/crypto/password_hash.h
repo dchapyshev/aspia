@@ -35,7 +35,7 @@ public:
     static QByteArray hash(Type type, const QString& password, const QByteArray& salt);
 
 private:
-    Q_DISABLE_COPY(PasswordHash)
+    Q_DISABLE_COPY_MOVE(PasswordHash)
 };
 
 } // namespace base
