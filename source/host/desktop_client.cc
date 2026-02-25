@@ -78,6 +78,12 @@ void DesktopClient::start(const QString& ipc_channel_name)
 }
 
 //--------------------------------------------------------------------------------------------------
+quint32 DesktopClient::clientId() const
+{
+    return tcp_channel_->instanceId();
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopClient::onIpcChannelChanged(const QString& ipc_channel_name)
 {
     LOG(INFO) << "Connection to new IPC channel:" << ipc_channel_name;

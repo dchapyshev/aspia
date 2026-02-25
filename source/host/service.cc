@@ -35,6 +35,7 @@
 #include "host/host_storage.h"
 #include "host/service_constants.h"
 #include "host/system_info_client.h"
+#include "host/text_chat_client.h"
 
 #if defined(Q_OS_WINDOWS)
 #include <qt_windows.h>
@@ -342,6 +343,20 @@ void Service::onAskForConfirmation(quint32 request_id, bool accept)
                 }
                 break;
 
+                case proto::peer::SESSION_TYPE_TEXT_CHAT:
+                {
+                    TextChatClient* client = new TextChatClient(channel, this);
+                    text_chat_clients_.emplace_back(client);
+
+                    connect(client, &TextChatClient::sig_started,
+                            this, &Service::onTextChatClientStarted);
+                    connect(client, &TextChatClient::sig_finished,
+                            this, &Service::onTextChatClientFinished);
+                    connect(client, &TextChatClient::sig_messageReceived,
+                            this, &Service::onTextChatClientMessage);
+                }
+                break;
+
                 default:
                     NOTREACHED();
                     break;
@@ -478,17 +493,44 @@ void Service::onRepeatedTasks()
     // delete them.
     for (auto it = pending_channels_.begin(); it != pending_channels_.end(); ++it)
     {
-        base::TcpChannel* channel = it->first;
         QTime time = it->second;
 
         if (time.secsTo(current_time) > 60)
         {
+            base::TcpChannel* channel = it->first;
             channel->deleteLater();
             it = pending_channels_.erase(it);
         }
     }
 
     checkForUpdates();
+}
+
+//--------------------------------------------------------------------------------------------------
+void Service::onStopClient(quint32 client_id)
+{
+    auto stop_client = [this, client_id](auto* list)
+    {
+        for (auto it = file_clients_.begin(); it != file_clients_.end(); ++it)
+        {
+            FileClient* client = *it;
+
+            if (client->clientId() != client_id)
+                continue;
+
+            client->disconnect();
+            client->deleteLater();
+            file_clients_.erase(it);
+        }
+    };
+
+    stop_client(&file_clients_);
+    stop_client(&text_chat_clients_);
+    stop_client(&system_info_clients_);
+
+    proto::internal::DisconnectEvent event;
+    event.set_id(client_id);
+    user_session_manager_->onClientFinished(event);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -501,7 +543,11 @@ void Service::onFileClientFinished()
         return;
     }
 
-    client->disconnect(this);
+    proto::internal::DisconnectEvent event;
+    event.set_id(client->clientId());
+    user_session_manager_->onClientFinished(event);
+
+    client->disconnect();
     client->deleteLater();
 
     file_clients_.removeOne(client);
@@ -517,10 +563,111 @@ void Service::onSystemInfoClientFinished()
         return;
     }
 
-    client->disconnect(this);
+    proto::internal::DisconnectEvent event;
+    event.set_id(client->clientId());
+    user_session_manager_->onClientFinished(event);
+
+    client->disconnect();
     client->deleteLater();
 
     system_info_clients_.removeOne(client);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Service::onTextChatClientStarted(quint32 client_id)
+{
+    LOG(INFO) << "Text chat session started (client_id:" << client_id << ")";
+
+    TextChatClient* started_client = dynamic_cast<TextChatClient*>(sender());
+    if (!started_client)
+    {
+        LOG(ERROR) << "Unknown sender for started slot";
+        return;
+    }
+
+    DCHECK_EQ(client_id, started_client->clientId());
+
+    if (!user_session_manager_->isConnected())
+        started_client->onSendStatus(proto::text_chat::Status::CODE_USER_DISCONNECTED);
+
+    proto::text_chat::TextChat text_chat;
+    proto::text_chat::Status* text_chat_status = text_chat.mutable_chat_status();
+    text_chat_status->set_code(proto::text_chat::Status::CODE_STARTED);
+
+    QString display_name = started_client->displayName();
+    if (display_name.isEmpty())
+        display_name = started_client->computerName();
+
+    text_chat_status->set_source(display_name.toStdString());
+
+    // Send message to other clients.
+    for (const auto& client : std::as_const(text_chat_clients_))
+    {
+        if (client->clientId() != client_id)
+            client->onSendTextChat(text_chat);
+    }
+
+    // Send message to GUI.
+    user_session_manager_->onClientSessionTextChat(client_id, text_chat);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Service::onTextChatClientFinished(quint32 client_id)
+{
+    TextChatClient* finished_client = dynamic_cast<TextChatClient*>(sender());
+    if (!finished_client)
+    {
+        LOG(ERROR) << "Unknown sender for finish slot";
+        return;
+    }
+
+    DCHECK_EQ(finished_client->clientId(), client_id);
+
+    QString display_name = finished_client->displayName();
+    if (display_name.isEmpty())
+        display_name = finished_client->computerName();
+
+    proto::text_chat::TextChat text_chat;
+    proto::text_chat::Status* text_chat_status = text_chat.mutable_chat_status();
+
+    text_chat_status->set_code(proto::text_chat::Status::CODE_STOPPED);
+    text_chat_status->set_source(display_name.toStdString());
+
+    // Notify other clients about finish.
+    for (const auto& client : std::as_const(text_chat_clients_))
+    {
+        if (client->clientId() == client_id)
+            continue;
+
+        client->onSendTextChat(text_chat);
+    }
+
+    // Notify GUI about finish.
+    user_session_manager_->onClientSessionTextChat(client_id, text_chat);
+
+    // Send disconnect event to GUI.
+    proto::internal::DisconnectEvent event;
+    event.set_id(finished_client->clientId());
+    user_session_manager_->onClientFinished(event);
+
+    finished_client->disconnect();
+    finished_client->deleteLater();
+
+    text_chat_clients_.removeOne(finished_client);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Service::onTextChatClientMessage(quint32 client_id, const proto::text_chat::TextChat& text_chat)
+{
+    // Send message to GUI.
+    user_session_manager_->onClientSessionTextChat(client_id, text_chat);
+
+    // Send message to other text chat clients.
+    for (const auto& client : std::as_const(text_chat_clients_))
+    {
+        if (client_id != client->clientId())
+            client->onSendTextChat(text_chat);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -542,44 +689,27 @@ void Service::startSession(base::TcpChannel* channel)
                    << "client:" << channel->peerVersion() << ")";
     }
 
+    base::SessionId session_id = desktop_manager_->sessionId();
+    if (session_id == base::kInvalidSessionId)
+    {
+        LOG(ERROR) << "Invalid session ID for desktop manager";
+        channel->deleteLater();
+        return;
+    }
+
     proto::peer::SessionType session_type =
         static_cast<proto::peer::SessionType>(channel->peerSessionType());
+    SystemSettings settings;
 
-    if (session_type == proto::peer::SESSION_TYPE_DESKTOP_MANAGE ||
-        session_type == proto::peer::SESSION_TYPE_DESKTOP_VIEW ||
-        session_type == proto::peer::SESSION_TYPE_FILE_TRANSFER ||
-        session_type == proto::peer::SESSION_TYPE_SYSTEM_INFO)
-    {
-        base::SessionId session_id = desktop_manager_->sessionId();
-        if (session_id == base::kInvalidSessionId)
-        {
-            LOG(ERROR) << "Invalid session ID for desktop manager";
-            channel->deleteLater();
-            return;
-        }
+    proto::internal::ConnectConfirmationRequest request;
+    request.set_id(channel->instanceId());
+    request.set_session_type(session_type);
+    request.set_computer_name(channel->peerComputerName().toStdString());
+    request.set_user_name(channel->peerUserName().toStdString());
+    request.set_timeout(settings.autoConfirmationInterval().count());
 
-        SystemSettings settings;
-
-        proto::internal::ConnectConfirmationRequest request;
-        request.set_id(channel->instanceId());
-        request.set_session_type(session_type);
-        request.set_computer_name(channel->peerComputerName().toStdString());
-        request.set_user_name(channel->peerUserName().toStdString());
-        request.set_timeout(settings.autoConfirmationInterval().count());
-
-        pending_channels_.emplace_back(channel, QTime::currentTime());
-        user_session_manager_->onAskForConfirmation(session_id, request);
-        return;
-    }
-
-    Client* session = Client::create(channel);
-    if (!session)
-    {
-        LOG(ERROR) << "Invalid client session";
-        return;
-    }
-
-    user_session_manager_->onClientSession(session);
+    pending_channels_.emplace_back(channel, QTime::currentTime());
+    user_session_manager_->onAskForConfirmation(session_id, request);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -638,9 +768,6 @@ void Service::updateConfiguration(const QString& path)
 
     // Synchronize the parameters from the file.
     settings_.sync();
-
-    // Apply settings for user sessions BEFORE reloading the user list.
-    user_session_manager_->onSettingsChanged();
 
     // Reload user lists.
     updateOneTimeCredentials(FROM_HERE);

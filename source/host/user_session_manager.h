@@ -22,9 +22,11 @@
 #include <QObject>
 #include <QList>
 
+#include "base/serialization.h"
 #include "base/session_id.h"
+#include "base/peer/host_id.h"
 #include "base/ipc/ipc_server.h"
-#include "host/user_session.h"
+#include "proto/host_internal.h"
 
 namespace host {
 
@@ -39,33 +41,54 @@ public:
     bool start();
     void onRouterStateChanged(const proto::internal::RouterState& router_state);
     void onUpdateCredentials(base::HostId host_id, const QString& password);
-    void onSettingsChanged();
-    void onClientSession(Client* client_session);
+    bool isConnected() const;
 
+public slots:
     void onAskForConfirmation(
         base::SessionId session_id, const proto::internal::ConnectConfirmationRequest& request);
+    void onClientStarted(const proto::internal::ConnectEvent& event);
+    void onClientFinished(const proto::internal::DisconnectEvent& event);
+    void onClientSessionTextChat(quint32 client_id, const proto::text_chat::TextChat& text_chat);
+    void onClientSessionVideoRecording(
+        const QString& computer_name, const QString& user_name, bool started);
 
 signals:
+    void sig_attached();
+    void sig_dettached();
     void sig_routerStateRequested();
     void sig_credentialsRequested();
     void sig_changeOneTimePassword();
     void sig_changeOneTimeSessions(quint32 sessions);
     void sig_askForConfirmation(quint32 request_id, bool accept);
+    void sig_stopClient(quint32 client_id);
+    void sig_textChatMessage(const proto::text_chat::TextChat& text_chat);
+    void sig_lockMouseChanged(bool enable);
+    void sig_lockKeyboardChanged(bool enable);
+    void sig_pauseChanged(bool enable);
 
 private slots:
     void onUserSessionEvent(quint32 status, quint32 session_id);
-    void onUserSessionFinished();
     void onIpcNewConnection();
+    void onIpcDisconnected();
+    void onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer);
 
 private:
-    void startSessionProcess(const base::Location& location, base::SessionId session_id);
-    void addUserSession(const base::Location& location, base::SessionId session_id,
-                        base::IpcChannel* channel);
+    void attach(const base::Location& location, base::SessionId session_id);
+    void dettach(const base::Location& location);
+    void sendSessionMessage();
 
     base::IpcServer* ipc_server_ = nullptr;
-    QList<UserSession*> sessions_;
+    base::IpcChannel* ipc_channel_ = nullptr;
 
-    Q_DISABLE_COPY(UserSessionManager)
+    base::SessionId session_id_ = base::kInvalidSessionId;
+
+    bool is_console_ = true;
+    QTimer* attach_timer_ = nullptr;
+
+    base::Parser<proto::internal::UiToService> incoming_message_;
+    base::Serializer<proto::internal::ServiceToUi> outgoing_message_;
+
+    Q_DISABLE_COPY_MOVE(UserSessionManager)
 };
 
 } // namespace host

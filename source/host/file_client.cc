@@ -204,8 +204,21 @@ FileClient::~FileClient()
 }
 
 //--------------------------------------------------------------------------------------------------
+quint32 FileClient::clientId() const
+{
+    return tcp_channel_->instanceId();
+}
+
+//--------------------------------------------------------------------------------------------------
 void FileClient::start(base::SessionId session_id)
 {
+    if (session_id == base::kInvalidSessionId || session_id == 0)
+    {
+        LOG(ERROR) << "Invalid session id:" << session_id;
+        onError(FROM_HERE);
+        return;
+    }
+
     QString ipc_channel_id = base::IpcServer::createUniqueId();
 
 #if defined(Q_OS_WINDOWS)

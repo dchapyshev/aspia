@@ -36,10 +36,12 @@ public:
     ~DesktopClient() final;
 
     void start(const QString& ipc_channel_name);
+    quint32 clientId() const;
 
 signals:
     void sig_started();
     void sig_finished();
+    void sig_recordingChanged(const QString& computer_name, const QString& user_name, bool started);
 
 public slots:
     void onIpcChannelChanged(const QString& ipc_channel_name);

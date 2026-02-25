@@ -33,6 +33,8 @@ public:
     explicit SystemInfoClient(base::TcpChannel* tcp_channel, QObject* parent = nullptr);
     ~SystemInfoClient() final;
 
+    quint32 clientId() const;
+
 public slots:
     void start();
 

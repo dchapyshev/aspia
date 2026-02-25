@@ -16,62 +16,51 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST_FILE_CLIENT_H
-#define HOST_FILE_CLIENT_H
+#ifndef HOST_TEXT_CHAT_CLIENT_H
+#define HOST_TEXT_CHAT_CLIENT_H
 
 #include <QObject>
 
-#include "base/location.h"
-#include "base/session_id.h"
-#include "base/ipc/ipc_channel.h"
 #include "base/net/tcp_channel.h"
+#include "proto/text_chat.h"
 
 namespace host {
 
-class FileClient final : public QObject
+class TextChatClient final : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit FileClient(base::TcpChannel* tcp_channel, QObject* parent = nullptr);
-    ~FileClient() final;
+    explicit TextChatClient(base::TcpChannel* tcp_channel, QObject* parent = nullptr);
+    ~TextChatClient() final;
 
     quint32 clientId() const;
+    QString displayName() const;
+    QString computerName() const;
 
 public slots:
-    void start(base::SessionId session_id);
+    void start();
+    void onSendTextChat(const proto::text_chat::TextChat& text_chat);
+    void onSendStatus(proto::text_chat::Status::Code code);
 
 signals:
-    void sig_started();
-    void sig_finished();
+    void sig_started(quint32 client_id);
+    void sig_finished(quint32 client_id);
+    void sig_messageReceived(quint32 client_id, const proto::text_chat::TextChat& text_chat);
 
 private slots:
-    void onIpcNewConnection();
-    void onIpcErrorOccurred();
-
-    void onIpcMessageReceived(quint32 ipc_channel_id, const QByteArray& buffer);
-    void onIpcDisconnected();
-
     void onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code);
     void onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray& buffer);
 
+    void onUserSessionEvent(quint32 event_type, quint32 session_id);
+
 private:
-    bool startIpcServer(const QString& ipc_channel_name);
-    void onStarted(const base::Location& location, bool has_user);
-    void onError(const base::Location& location);
-
     base::TcpChannel* tcp_channel_ = nullptr;
+    bool has_user_ = true;
 
-    base::IpcServer* ipc_server_ = nullptr;
-    base::IpcChannel* ipc_channel_ = nullptr;
-
-    QTimer* attach_timer_ = nullptr;
-
-    bool has_logged_on_user_ = false;
-
-    Q_DISABLE_COPY_MOVE(FileClient)
+    Q_DISABLE_COPY_MOVE(TextChatClient)
 };
 
 } // namespace host
 
-#endif // HOST_DESKTOP_MANAGER_H
+#endif // HOST_TEXT_CHAT_CLIENT_H

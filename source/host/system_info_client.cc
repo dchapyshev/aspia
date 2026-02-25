@@ -36,12 +36,23 @@ SystemInfoClient::SystemInfoClient(base::TcpChannel* tcp_channel, QObject* paren
     CHECK(tcp_channel_);
 
     tcp_channel_->setParent(this);
+
+    connect(tcp_channel_, &base::TcpChannel::sig_errorOccurred,
+            this, &SystemInfoClient::onTcpErrorOccurred);
+    connect(tcp_channel_, &base::TcpChannel::sig_messageReceived,
+            this, &SystemInfoClient::onTcpMessageReceived);
 }
 
 //--------------------------------------------------------------------------------------------------
 SystemInfoClient::~SystemInfoClient()
 {
     LOG(INFO) << "Dtor";
+}
+
+//--------------------------------------------------------------------------------------------------
+quint32 SystemInfoClient::clientId() const
+{
+    return tcp_channel_->instanceId();
 }
 
 //--------------------------------------------------------------------------------------------------

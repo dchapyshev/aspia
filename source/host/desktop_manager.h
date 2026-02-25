@@ -62,7 +62,7 @@ private:
 
     static thread_local DesktopManager* instance_;
 
-    base::SessionId session_id_;
+    base::SessionId session_id_ = base::kInvalidSessionId;
     QString ipc_channel_name_;
     bool is_console_ = true;
 

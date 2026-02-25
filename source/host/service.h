@@ -36,6 +36,7 @@ namespace host {
 
 class FileClient;
 class SystemInfoClient;
+class TextChatClient;
 
 class Service final : public base::Service
 {
@@ -66,8 +67,12 @@ private slots:
     void onFileDownloaderCompleted();
     void onFileDownloaderProgress(int percentage);
     void onRepeatedTasks();
+    void onStopClient(quint32 client_id);
     void onFileClientFinished();
     void onSystemInfoClientFinished();
+    void onTextChatClientStarted(quint32 client_id);
+    void onTextChatClientFinished(quint32 client_id);
+    void onTextChatClientMessage(quint32 client_id, const proto::text_chat::TextChat& text_chat);
 
 private:
     void startSession(base::TcpChannel* channel);
@@ -92,8 +97,10 @@ private:
     base::TcpServer* tcp_server_ = nullptr;
 
     DesktopManager* desktop_manager_ = nullptr;
+
     QList<FileClient*> file_clients_;
     QList<SystemInfoClient*> system_info_clients_;
+    QList<TextChatClient*> text_chat_clients_;
 
     QList<std::pair<base::TcpChannel*, QTime>> pending_channels_;
 
