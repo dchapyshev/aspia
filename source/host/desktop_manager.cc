@@ -624,6 +624,8 @@ void DesktopManager::stopProcess()
         process_notifier_->deleteLater();
         process_notifier_ = nullptr;
     }
+
+    process_state_ = ProcessState::STOPPED;
 #elif defined(Q_OS_LINUX)
     if (::kill(pid_, SIGKILL) != 0)
     {
