@@ -27,8 +27,6 @@ list(APPEND SOURCE_HOST_CORE
     desktop_client.h
     desktop_manager.cc
     desktop_manager.h
-    desktop_process.cc
-    desktop_process.h
     file_agent.cc
     file_agent.h
     file_agent_main.cc

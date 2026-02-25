@@ -24,7 +24,11 @@
 #include "base/location.h"
 #include "base/ipc/ipc_channel.h"
 #include "base/net/tcp_channel.h"
-#include "host/desktop_process.h"
+
+#if defined(Q_OS_WINDOWS)
+#include <QWinEventNotifier>
+#include "base/win/scoped_object.h"
+#endif // defined(Q_OS_WINDOWS)
 
 namespace host {
 
@@ -36,7 +40,18 @@ public:
     explicit DesktopManager(QObject* parent = nullptr);
     ~DesktopManager() final;
 
+    enum class ProcessState
+    {
+        STOPPED,
+        STARTING,
+        ERROR_OCURRED,
+        STARTED
+    };
+    Q_ENUM(ProcessState)
+
     static DesktopManager* instance();
+    static QString filePath();
+
     base::SessionId sessionId() const;
     const QString& ipcChannelName() const;
 
@@ -50,13 +65,15 @@ signals:
 
 private slots:
     void onUserSessionEvent(quint32 event_type, quint32 session_id);
-    void onProcessStateChanged(host::DesktopProcess::State state);
+    void onProcessStateChanged(host::DesktopManager::ProcessState state);
     void onRestartTimeout();
     void onAttachTimeout();
 
 private:
     void attach(const base::Location& location, base::SessionId session_id);
     void dettach(const base::Location& location);
+    void startProcess(base::SessionId session_id, const QString& ipc_channel_name);
+    void stopProcess();
 
     static thread_local DesktopManager* instance_;
 
@@ -64,12 +81,23 @@ private:
     QString ipc_channel_name_;
     bool is_console_ = true;
 
-    DesktopProcess* process_ = nullptr;
-
     QTimer* restart_timer_ = nullptr;
     QTimer* attach_timer_ = nullptr;
 
     quint32 client_count_ = 0;
+
+#if defined(Q_OS_WINDOWS)
+    base::ScopedHandle process_;
+    base::ScopedHandle thread_;
+
+    QWinEventNotifier* process_notifier_ = nullptr;
+#endif // defined(Q_OS_WINDOWS)
+
+#if defined(Q_OS_LINUX)
+    pid_t pid_;
+#endif // defined(Q_OS_LINUX)
+
+    ProcessState process_state_ = ProcessState::STOPPED;
 
     Q_DISABLE_COPY_MOVE(DesktopManager)
 };
