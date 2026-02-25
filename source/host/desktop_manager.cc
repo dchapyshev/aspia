@@ -40,8 +40,8 @@ namespace host {
 
 namespace {
 
-const std::chrono::milliseconds kRestartTimeout { 3000 };
-const std::chrono::milliseconds kAttachTimeout { 15000 };
+constexpr std::chrono::milliseconds kRestartTimeout { 3000 };
+constexpr std::chrono::milliseconds kAttachTimeout { 15000 };
 
 #if defined(Q_OS_LINUX)
 const char kDesktopAgentFile[] = "aspia_desktop_agent";
@@ -386,7 +386,7 @@ void DesktopManager::onProcessStateChanged(ProcessState state)
         case ProcessState::STARTED:
         {
             attach_timer_->stop();
-            emit sig_ipcChannelChanged(ipc_channel_name_);
+            emit sig_attached(ipc_channel_name_);
         }
         break;
 
@@ -625,7 +625,7 @@ void DesktopManager::stopProcess()
         process_notifier_ = nullptr;
     }
 
-    process_state_ = ProcessState::STOPPED;
+    onProcessStateChanged(ProcessState::STOPPED);
 #elif defined(Q_OS_LINUX)
     if (::kill(pid_, SIGKILL) != 0)
     {

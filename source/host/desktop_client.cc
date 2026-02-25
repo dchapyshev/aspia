@@ -102,7 +102,7 @@ void DesktopClient::start(const QString& ipc_channel_name)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopClient::onIpcChannelChanged(const QString& ipc_channel_name)
+void DesktopClient::onAttached(const QString& ipc_channel_name)
 {
     LOG(INFO) << "Connection to new IPC channel:" << ipc_channel_name;
 

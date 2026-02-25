@@ -323,8 +323,10 @@ void Service::onAskForConfirmation(quint32 request_id, bool accept)
                             this, &Service::onDesktopClientStarted);
                     connect(client, &DesktopClient::sig_finished,
                             this, &Service::onDesktopClientFinished);
-                    connect(desktop_manager_, &DesktopManager::sig_ipcChannelChanged,
-                            client, &DesktopClient::onIpcChannelChanged);
+                    connect(client, &DesktopClient::sig_recordingChanged,
+                            user_session_, &UserSession::onClientRecording);
+                    connect(desktop_manager_, &DesktopManager::sig_attached,
+                            client, &DesktopClient::onAttached);
 
                     client->start(desktop_manager_->ipcChannelName());
                 }

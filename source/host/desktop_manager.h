@@ -61,7 +61,8 @@ public slots:
     void onClientFinished();
 
 signals:
-    void sig_ipcChannelChanged(const QString& name);
+    void sig_attached(const QString& ipc_channel_name);
+    void sig_dettached();
 
 private slots:
     void onUserSessionEvent(quint32 event_type, quint32 session_id);

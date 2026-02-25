@@ -41,14 +41,14 @@ public:
 
 public slots:
     void start(const QString& ipc_channel_name);
+    void onAttached(const QString& ipc_channel_name);
 
 signals:
     void sig_started(quint32 client_id);
     void sig_finished(quint32 client_id);
     void sig_recordingChanged(const QString& computer_name, const QString& user_name, bool started);
 
-public slots:
-    void onIpcChannelChanged(const QString& ipc_channel_name);
+private slots:
     void onIpcChannelMessage(quint32 channel_id, const QByteArray& buffer);
     void onIpcChannelDisconnected();
 
