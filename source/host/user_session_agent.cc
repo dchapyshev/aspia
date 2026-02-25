@@ -268,7 +268,7 @@ void UserSessionAgent::onIpcMessageReceived(quint32 channel_id, const QByteArray
 
         for (auto it = clients_.begin(), it_end = clients_.end(); it != it_end; ++it)
         {
-            if (it->id == incoming_message_->disconnect_event().id())
+            if (it->client_id == incoming_message_->disconnect_event().client_id())
             {
                 clients_.erase(it);
                 break;

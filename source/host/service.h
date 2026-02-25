@@ -20,7 +20,6 @@
 #define HOST_SERVICE_H
 
 #include <QFileSystemWatcher>
-#include <QPointer>
 #include <QTimer>
 
 #include "base/service.h"
@@ -34,6 +33,7 @@
 
 namespace host {
 
+class DesktopClient;
 class FileClient;
 class SystemInfoClient;
 class TextChatClient;
@@ -68,14 +68,22 @@ private slots:
     void onFileDownloaderProgress(int percentage);
     void onRepeatedTasks();
     void onStopClient(quint32 client_id);
-    void onFileClientFinished();
-    void onSystemInfoClientFinished();
+
+    void onDesktopClientStarted(quint32 client_id);
+    void onDesktopClientFinished(quint32 client_id);
+
+    void onFileClientStarted(quint32 client_id);
+    void onFileClientFinished(quint32 client_id);
+
+    void onSystemInfoClientStarted(quint32 client_id);
+    void onSystemInfoClientFinished(quint32 client_id);
+
     void onTextChatClientStarted(quint32 client_id);
     void onTextChatClientFinished(quint32 client_id);
     void onTextChatClientMessage(quint32 client_id, const proto::text_chat::TextChat& text_chat);
 
 private:
-    void startSession(base::TcpChannel* channel);
+    void startClient(base::TcpChannel* tcp_channel);
     void addFirewallRules();
     void deleteFirewallRules();
     void updateConfiguration(const QString& path);
@@ -92,22 +100,21 @@ private:
     QFileSystemWatcher* settings_watcher_ = nullptr;
     SystemSettings settings_;
 
-    QPointer<RouterController> router_controller_;
-
+    RouterController* router_controller_ = nullptr;
     base::TcpServer* tcp_server_ = nullptr;
 
     DesktopManager* desktop_manager_ = nullptr;
+    UserSession* user_session_ = nullptr;
 
+    QList<std::pair<base::TcpChannel*, QTime>> pending_channels_;
+
+    QList<DesktopClient*> desktop_clients_;
     QList<FileClient*> file_clients_;
     QList<SystemInfoClient*> system_info_clients_;
     QList<TextChatClient*> text_chat_clients_;
 
-    QList<std::pair<base::TcpChannel*, QTime>> pending_channels_;
-
-    UserSession* user_session_ = nullptr;
-
-    QPointer<common::UpdateChecker> update_checker_;
-    QPointer<common::HttpFileDownloader> update_downloader_;
+    common::UpdateChecker* update_checker_ = nullptr;
+    common::HttpFileDownloader* update_downloader_ = nullptr;
 
     QTimer* password_expire_timer_ = nullptr;
     QString one_time_password_;

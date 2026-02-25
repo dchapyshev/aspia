@@ -83,7 +83,7 @@ message OneTimeSessions
 
 message ConnectEvent
 {
-    uint32 id                     = 1;
+    uint32 client_id              = 1;
     string computer_name          = 2;
     string display_name           = 3;
     peer.SessionType session_type = 4;
@@ -91,7 +91,7 @@ message ConnectEvent
 
 message DisconnectEvent
 {
-    uint32 id = 1;
+    uint32 client_id = 1;
 }
 
 message RouterState

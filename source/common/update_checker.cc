@@ -26,8 +26,10 @@
 namespace common {
 
 //--------------------------------------------------------------------------------------------------
-UpdateChecker::UpdateChecker(QObject* parent)
-    : QThread(parent)
+UpdateChecker::UpdateChecker(const QString& server, const QString& package, QObject* parent)
+    : QThread(parent),
+      server_(server),
+      package_(package)
 {
     LOG(INFO) << "Ctor";
 }
@@ -39,18 +41,6 @@ UpdateChecker::~UpdateChecker()
 
     interrupted_.store(true, std::memory_order_relaxed);
     wait();
-}
-
-//--------------------------------------------------------------------------------------------------
-void UpdateChecker::setUpdateServer(const QString& update_server)
-{
-    update_server_ = update_server;
-}
-
-//--------------------------------------------------------------------------------------------------
-void UpdateChecker::setPackageName(const QString& package_name)
-{
-    package_name_ = package_name;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -118,10 +108,10 @@ void UpdateChecker::run()
 #endif
 
     QVersionNumber version({ASPIA_VERSION_MAJOR, ASPIA_VERSION_MINOR, ASPIA_VERSION_PATCH});
-    QString unicode_url(update_server_);
+    QString unicode_url(server_);
 
     unicode_url += "/update.php?";
-    unicode_url += "package=" + package_name_;
+    unicode_url += "package=" + package_;
     unicode_url += '&';
     unicode_url += "version=" + version.toString();
 

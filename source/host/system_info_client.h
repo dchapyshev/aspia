@@ -34,13 +34,15 @@ public:
     ~SystemInfoClient() final;
 
     quint32 clientId() const;
+    QString displayName() const;
+    QString computerName() const;
 
 public slots:
     void start();
 
 signals:
-    void sig_started();
-    void sig_finished();
+    void sig_started(quint32 client_id);
+    void sig_finished(quint32 client_id);
 
 private slots:
     void onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code);

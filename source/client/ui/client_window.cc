@@ -115,10 +115,7 @@ ClientWindow::ClientWindow(QWidget* parent)
 
     if (settings.checkUpdates())
     {
-        update_checker_ = std::make_unique<common::UpdateChecker>();
-
-        update_checker_->setUpdateServer(settings.updateServer());
-        update_checker_->setPackageName("client");
+        update_checker_ = std::make_unique<common::UpdateChecker>(settings.updateServer(), "client");
 
         connect(update_checker_.get(), &common::UpdateChecker::sig_checkedFinished,
                 this, &ClientWindow::onUpdateCheckedFinished);

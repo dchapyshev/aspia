@@ -242,7 +242,7 @@ bool UserSession::isAttached() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSession::onAskForConfirmation(
+void UserSession::onClientConfirmation(
     base::SessionId session_id, const proto::internal::ConfirmationRequest& request)
 {
     if (request.session_type() == proto::peer::SESSION_TYPE_SYSTEM_INFO)
@@ -301,29 +301,34 @@ void UserSession::onAskForConfirmation(
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSession::onClientStarted(const proto::internal::ConnectEvent& event)
+void UserSession::onClientStarted(quint32 client_id, proto::peer::SessionType session_type,
+    const QString& computer_name, const QString& display_name)
 {
-    outgoing_message_.newMessage().mutable_connect_event()->CopyFrom(event);
+    proto::internal::ConnectEvent* event = outgoing_message_.newMessage().mutable_connect_event();
+    event->set_client_id(client_id);
+    event->set_session_type(session_type);
+    event->set_computer_name(computer_name.toStdString());
+    event->set_display_name(display_name.toStdString());
+
     sendSessionMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSession::onClientFinished(const proto::internal::DisconnectEvent& event)
+void UserSession::onClientFinished(quint32 client_id)
 {
-    outgoing_message_.newMessage().mutable_disconnect_event()->CopyFrom(event);
+    outgoing_message_.newMessage().mutable_disconnect_event()->set_client_id(client_id);
     sendSessionMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSession::onClientSessionTextChat(
-    quint32 client_id, const proto::text_chat::TextChat& text_chat)
+void UserSession::onClientTextChat(quint32 client_id, const proto::text_chat::TextChat& text_chat)
 {
     outgoing_message_.newMessage().mutable_text_chat()->CopyFrom(text_chat);
     sendSessionMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSession::onClientSessionRecording(const QString& computer, const QString& user, bool started)
+void UserSession::onClientRecording(const QString& computer, const QString& user, bool started)
 {
     proto::internal::RecordingState* recording_state =
         outgoing_message_.newMessage().mutable_recording_state();

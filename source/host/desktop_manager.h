@@ -28,8 +28,6 @@
 
 namespace host {
 
-class DesktopClient;
-
 class DesktopManager final : public QObject
 {
     Q_OBJECT
@@ -39,12 +37,13 @@ public:
     ~DesktopManager() final;
 
     static DesktopManager* instance();
-
-    void onNewChannel(base::TcpChannel* tcp_channel);
     base::SessionId sessionId() const;
+    const QString& ipcChannelName() const;
 
 public slots:
     void start();
+    void onClientStarted();
+    void onClientFinished();
 
 signals:
     void sig_ipcChannelChanged(const QString& name);
@@ -54,7 +53,6 @@ private slots:
     void onProcessStateChanged(host::DesktopProcess::State state);
     void onRestartTimeout();
     void onAttachTimeout();
-    void onClientFinished();
 
 private:
     void attach(const base::Location& location, base::SessionId session_id);
@@ -71,7 +69,7 @@ private:
     QTimer* restart_timer_ = nullptr;
     QTimer* attach_timer_ = nullptr;
 
-    QList<DesktopClient*> clients_;
+    quint32 client_count_ = 0;
 
     Q_DISABLE_COPY_MOVE(DesktopManager)
 };

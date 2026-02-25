@@ -210,6 +210,18 @@ quint32 FileClient::clientId() const
 }
 
 //--------------------------------------------------------------------------------------------------
+QString FileClient::displayName() const
+{
+    return tcp_channel_->peerDisplayName();
+}
+
+//--------------------------------------------------------------------------------------------------
+QString FileClient::computerName() const
+{
+    return tcp_channel_->peerComputerName();
+}
+
+//--------------------------------------------------------------------------------------------------
 void FileClient::start(base::SessionId session_id)
 {
     if (session_id == base::kInvalidSessionId || session_id == 0)
@@ -464,7 +476,7 @@ void FileClient::onStarted(const base::Location& location, bool has_user)
     }
 
     tcp_channel_->resume();
-    emit sig_started();
+    emit sig_started(clientId());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -473,6 +485,7 @@ void FileClient::onError(const base::Location& location)
     LOG(ERROR) << "Error occurred (from" << location << ")";
 
     attach_timer_->stop();
+    tcp_channel_->disconnect(this);
 
     if (ipc_server_)
         ipc_server_->disconnect(this);
@@ -480,10 +493,7 @@ void FileClient::onError(const base::Location& location)
     if (ipc_channel_)
         ipc_channel_->disconnect(this);
 
-    if (tcp_channel_)
-        tcp_channel_->disconnect(this);
-
-    emit sig_finished();
+    emit sig_finished(clientId());
 }
 
 } // namespace host

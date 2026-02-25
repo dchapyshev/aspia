@@ -49,6 +49,30 @@ DesktopClient::~DesktopClient()
 }
 
 //--------------------------------------------------------------------------------------------------
+quint32 DesktopClient::clientId() const
+{
+    return tcp_channel_->instanceId();
+}
+
+//--------------------------------------------------------------------------------------------------
+proto::peer::SessionType DesktopClient::sessionType() const
+{
+    return static_cast<proto::peer::SessionType>(tcp_channel_->peerSessionType());
+}
+
+//--------------------------------------------------------------------------------------------------
+QString DesktopClient::displayName() const
+{
+    return tcp_channel_->peerDisplayName();
+}
+
+//--------------------------------------------------------------------------------------------------
+QString DesktopClient::computerName() const
+{
+    return tcp_channel_->peerComputerName();
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopClient::start(const QString& ipc_channel_name)
 {
     if (ipc_channel_)
@@ -67,20 +91,14 @@ void DesktopClient::start(const QString& ipc_channel_name)
 
     if (!connectToAgent(ipc_channel_name))
     {
-        emit sig_finished();
+        emit sig_finished(clientId());
         return;
     }
 
     tcp_channel_->resume();
     ipc_channel_->resume();
 
-    emit sig_started();
-}
-
-//--------------------------------------------------------------------------------------------------
-quint32 DesktopClient::clientId() const
-{
-    return tcp_channel_->instanceId();
+    emit sig_started(clientId());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -90,7 +108,7 @@ void DesktopClient::onIpcChannelChanged(const QString& ipc_channel_name)
 
     if (!connectToAgent(ipc_channel_name))
     {
-        emit sig_finished();
+        emit sig_finished(clientId());
         return;
     }
 
@@ -131,7 +149,7 @@ void DesktopClient::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code)
 {
     LOG(ERROR) << "TCP error:" << error_code;
     tcp_channel_->disconnect(this); // Disconnect all signals.
-    emit sig_finished();
+    emit sig_finished(clientId());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -166,8 +184,7 @@ bool DesktopClient::connectToAgent(const QString& ipc_channel_name)
         return false;
     }
 
-    proto::peer::SessionType session_type =
-        static_cast<proto::peer::SessionType>(tcp_channel_->peerSessionType());
+    proto::peer::SessionType session_type = sessionType();
     CHECK(session_type == proto::peer::SESSION_TYPE_DESKTOP_MANAGE ||
           session_type == proto::peer::SESSION_TYPE_DESKTOP_VIEW);
 

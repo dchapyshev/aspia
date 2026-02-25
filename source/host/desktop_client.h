@@ -23,7 +23,6 @@
 
 #include "base/ipc/ipc_channel.h"
 #include "base/net/tcp_channel.h"
-#include "proto/peer.h"
 
 namespace host {
 
@@ -35,12 +34,17 @@ public:
     explicit DesktopClient(base::TcpChannel* tcp_channel, QObject* parent = nullptr);
     ~DesktopClient() final;
 
-    void start(const QString& ipc_channel_name);
     quint32 clientId() const;
+    proto::peer::SessionType sessionType() const;
+    QString displayName() const;
+    QString computerName() const;
+
+public slots:
+    void start(const QString& ipc_channel_name);
 
 signals:
-    void sig_started();
-    void sig_finished();
+    void sig_started(quint32 client_id);
+    void sig_finished(quint32 client_id);
     void sig_recordingChanged(const QString& computer_name, const QString& user_name, bool started);
 
 public slots:

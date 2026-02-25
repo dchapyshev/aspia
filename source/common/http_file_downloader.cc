@@ -24,8 +24,9 @@
 namespace common {
 
 //--------------------------------------------------------------------------------------------------
-HttpFileDownloader::HttpFileDownloader(QObject* parent)
-    : QThread(parent)
+HttpFileDownloader::HttpFileDownloader(const QString& url, QObject* parent)
+    : QThread(parent),
+      url_(url)
 {
     LOG(INFO) << "Ctor";
 }
@@ -36,12 +37,6 @@ HttpFileDownloader::~HttpFileDownloader()
     LOG(INFO) << "Dtor";
     interrupted_.store(true, std::memory_order_relaxed);
     wait();
-}
-
-//--------------------------------------------------------------------------------------------------
-void HttpFileDownloader::setUrl(const QString& url)
-{
-    url_ = url;
 }
 
 //--------------------------------------------------------------------------------------------------

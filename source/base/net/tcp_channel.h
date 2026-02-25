@@ -134,9 +134,6 @@ public:
 
     size_t pendingMessages() const { return write_queue_.size(); }
 
-    base::HostId hostId() const { return host_id_; }
-    void setHostId(base::HostId host_id) { host_id_ = host_id; }
-
     quint32 instanceId() const { return instance_id_; }
 
     qint64 totalRx() const { return total_rx_; }
@@ -280,7 +277,6 @@ private:
     QByteArray read_buffer_;
     QByteArray decrypt_buffer_;
 
-    base::HostId host_id_ = base::kInvalidHostId;
     bool is_channel_id_supported_ = false;
 
     qint64 total_tx_ = 0;

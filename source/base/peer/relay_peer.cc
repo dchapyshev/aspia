@@ -198,7 +198,6 @@ void RelayPeer::onConnected()
             }
 
             pending_channel_ = new TcpChannel(std::move(socket_), authenticator_.release(), this);
-            pending_channel_->setHostId(connection_offer_.host_data().host_id());
 
             connect(pending_channel_, &TcpChannel::sig_authenticated, this, [this]()
             {

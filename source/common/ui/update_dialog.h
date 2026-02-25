@@ -35,9 +35,7 @@ class UpdateDialog final : public QDialog
     Q_OBJECT
 
 public:
-    UpdateDialog(const QString& update_server,
-                 const QString& package_name,
-                 QWidget* parent = nullptr);
+    UpdateDialog(const QString& server, const QString& package, QWidget* parent = nullptr);
     UpdateDialog(const UpdateInfo& update_info, QWidget* parent = nullptr);
     ~UpdateDialog() final;
 

@@ -44,12 +44,13 @@ public:
     bool isAttached() const;
 
 public slots:
-    void onAskForConfirmation(
+    void onClientConfirmation(
         base::SessionId session_id, const proto::internal::ConfirmationRequest& request);
-    void onClientStarted(const proto::internal::ConnectEvent& event);
-    void onClientFinished(const proto::internal::DisconnectEvent& event);
-    void onClientSessionTextChat(quint32 client_id, const proto::text_chat::TextChat& text_chat);
-    void onClientSessionRecording(const QString& computer, const QString& user, bool started);
+    void onClientStarted(quint32 client_id, proto::peer::SessionType session_type,
+        const QString& computer_name, const QString& display_name);
+    void onClientFinished(quint32 client_id);
+    void onClientTextChat(quint32 client_id, const proto::text_chat::TextChat& text_chat);
+    void onClientRecording(const QString& computer, const QString& user, bool started);
 
 signals:
     void sig_attached();

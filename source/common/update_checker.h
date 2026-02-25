@@ -29,11 +29,8 @@ class UpdateChecker final : public QThread
     Q_OBJECT
 
 public:
-    explicit UpdateChecker(QObject* parent = nullptr);
+    UpdateChecker(const QString& server, const QString& package, QObject* parent = nullptr);
     ~UpdateChecker();
-
-    void setUpdateServer(const QString& update_server);
-    void setPackageName(const QString& package_name);
 
 signals:
     void sig_checkedFinished(const QByteArray& result);
@@ -42,8 +39,8 @@ protected:
     void run() final;
 
 private:
-    QString update_server_;
-    QString package_name_;
+    const QString server_;
+    const QString package_;
     std::atomic_bool interrupted_ { false };
 
     Q_DISABLE_COPY(UpdateChecker)

@@ -31,6 +31,7 @@
 #include "base/net/tcp_channel.h"
 #include "base/peer/user_list.h"
 #include "common/update_info.h"
+#include "host/desktop_client.h"
 #include "host/file_client.h"
 #include "host/host_storage.h"
 #include "host/service_constants.h"
@@ -50,8 +51,8 @@ namespace host {
 
 namespace {
 
-const char kFirewallRuleName[] = "Aspia Host Service";
-const char kFirewallRuleDecription[] = "Allow incoming TCP connections";
+constexpr char kFirewallRuleName[] = "Aspia Host Service";
+constexpr char kFirewallRuleDecription[] = "Allow incoming TCP connections";
 
 } // namespace
 
@@ -172,9 +173,7 @@ void Service::onStart()
 void Service::onStop()
 {
     LOG(INFO) << "Service stopping...";
-
     deleteFirewallRules();
-
     LOG(INFO) << "Service is stopped";
 }
 
@@ -263,13 +262,13 @@ void Service::onNewDirectConnection()
     }
 
     while (tcp_server_->hasReadyConnections())
-        startSession(tcp_server_->nextReadyConnection());
+        startClient(tcp_server_->nextReadyConnection());
 }
 
 //--------------------------------------------------------------------------------------------------
 void Service::onRouterStateChanged(const proto::internal::RouterState& router_state)
 {
-    LOG(INFO) << "Router state changed";
+    LOG(INFO) << "Router state changed:" << router_state;
     user_session_->onRouterStateChanged(router_state);
 }
 
@@ -292,7 +291,7 @@ void Service::onNewRelayConnection()
     }
 
     while (router_controller_->hasPendingConnections())
-        startSession(router_controller_->nextPendingConnection());
+        startClient(router_controller_->nextPendingConnection());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -300,9 +299,9 @@ void Service::onAskForConfirmation(quint32 request_id, bool accept)
 {
     for (auto it = pending_channels_.begin(), it_end = pending_channels_.end(); it != it_end; ++it)
     {
-        base::TcpChannel* channel = it->first;
+        base::TcpChannel* tcp_channel = it->first;
 
-        if (channel->instanceId() != request_id)
+        if (tcp_channel->instanceId() != request_id)
             continue;
 
         if (accept)
@@ -310,22 +309,34 @@ void Service::onAskForConfirmation(quint32 request_id, bool accept)
             LOG(INFO) << "TCP channel" << request_id << "is accepted";
 
             proto::peer::SessionType session_type =
-                static_cast<proto::peer::SessionType>(channel->peerSessionType());
+                static_cast<proto::peer::SessionType>(tcp_channel->peerSessionType());
 
             switch (session_type)
             {
                 case proto::peer::SESSION_TYPE_DESKTOP_MANAGE:
                 case proto::peer::SESSION_TYPE_DESKTOP_VIEW:
-                    desktop_manager_->onNewChannel(channel);
-                    break;
+                {
+                    DesktopClient* client = new DesktopClient(tcp_channel, this);
+                    desktop_clients_.append(client);
+
+                    connect(client, &DesktopClient::sig_started,
+                            this, &Service::onDesktopClientStarted);
+                    connect(client, &DesktopClient::sig_finished,
+                            this, &Service::onDesktopClientFinished);
+                    connect(desktop_manager_, &DesktopManager::sig_ipcChannelChanged,
+                            client, &DesktopClient::onIpcChannelChanged);
+
+                    client->start(desktop_manager_->ipcChannelName());
+                }
+                break;
 
                 case proto::peer::SESSION_TYPE_FILE_TRANSFER:
                 {
-                    FileClient* client = new FileClient(channel, this);
+                    FileClient* client = new FileClient(tcp_channel, this);
                     file_clients_.emplace_back(client);
 
-                    connect(client, &FileClient::sig_finished,
-                            this, &Service::onFileClientFinished);
+                    connect(client, &FileClient::sig_started, this, &Service::onFileClientStarted);
+                    connect(client, &FileClient::sig_finished, this, &Service::onFileClientFinished);
 
                     client->start(desktop_manager_->sessionId());
                 }
@@ -333,9 +344,11 @@ void Service::onAskForConfirmation(quint32 request_id, bool accept)
 
                 case proto::peer::SESSION_TYPE_SYSTEM_INFO:
                 {
-                    SystemInfoClient* client = new SystemInfoClient(channel, this);
+                    SystemInfoClient* client = new SystemInfoClient(tcp_channel, this);
                     system_info_clients_.emplace_back(client);
 
+                    connect(client, &SystemInfoClient::sig_started,
+                            this, &Service::onSystemInfoClientStarted);
                     connect(client, &SystemInfoClient::sig_finished,
                             this, &Service::onSystemInfoClientFinished);
 
@@ -345,7 +358,7 @@ void Service::onAskForConfirmation(quint32 request_id, bool accept)
 
                 case proto::peer::SESSION_TYPE_TEXT_CHAT:
                 {
-                    TextChatClient* client = new TextChatClient(channel, this);
+                    TextChatClient* client = new TextChatClient(tcp_channel, this);
                     text_chat_clients_.emplace_back(client);
 
                     connect(client, &TextChatClient::sig_started,
@@ -365,7 +378,7 @@ void Service::onAskForConfirmation(quint32 request_id, bool accept)
         else
         {
             LOG(INFO) << "TCP channel" << request_id << "is rejected";
-            channel->deleteLater();
+            tcp_channel->deleteLater();
         }
         pending_channels_.erase(it);
         return;
@@ -395,7 +408,7 @@ void Service::onUpdateCheckedFinished(const QByteArray& result)
             {
                 LOG(INFO) << "New version available:" << update_version.toString();
 
-                update_downloader_ = new common::HttpFileDownloader(this);
+                update_downloader_ = new common::HttpFileDownloader(update_info.url(), this);
 
                 connect(update_downloader_, &common::HttpFileDownloader::sig_downloadError,
                         this, &Service::onFileDownloaderError);
@@ -404,7 +417,6 @@ void Service::onUpdateCheckedFinished(const QByteArray& result)
                 connect(update_downloader_, &common::HttpFileDownloader::sig_downloadProgress,
                         this, &Service::onFileDownloaderProgress);
 
-                update_downloader_->setUrl(update_info.url());
                 update_downloader_->start();
             }
             else
@@ -512,52 +524,100 @@ void Service::onRepeatedTasks()
 //--------------------------------------------------------------------------------------------------
 void Service::onStopClient(quint32 client_id)
 {
-    auto stop_client = [this, client_id](auto* list)
+    auto stop_by_id = [client_id](auto* list)
     {
-        for (auto it = file_clients_.begin(); it != file_clients_.end(); ++it)
+        for (auto it = list->begin(); it != list->end(); ++it)
         {
-            FileClient* client = *it;
+            auto* client = *it;
 
             if (client->clientId() != client_id)
                 continue;
 
             client->disconnect();
             client->deleteLater();
-            file_clients_.erase(it);
+            list->erase(it);
         }
     };
 
-    stop_client(&file_clients_);
-    stop_client(&text_chat_clients_);
-    stop_client(&system_info_clients_);
+    stop_by_id(&file_clients_);
+    stop_by_id(&text_chat_clients_);
+    stop_by_id(&system_info_clients_);
 
-    proto::internal::DisconnectEvent event;
-    event.set_id(client_id);
-    user_session_->onClientFinished(event);
+    user_session_->onClientFinished(client_id);
 }
 
 //--------------------------------------------------------------------------------------------------
-void Service::onFileClientFinished()
+void Service::onDesktopClientStarted(quint32 client_id)
+{
+    DesktopClient* client = dynamic_cast<DesktopClient*>(sender());
+    if (!client)
+    {
+        LOG(ERROR) << "Unknown sender for slot";
+        return;
+    }
+
+    DCHECK_EQ(client_id, client->clientId());
+
+    user_session_->onClientStarted(
+        client_id, client->sessionType(), client->computerName(), client->displayName());
+}
+
+//--------------------------------------------------------------------------------------------------
+void Service::onDesktopClientFinished(quint32 client_id)
+{
+    DesktopClient* client = dynamic_cast<DesktopClient*>(sender());
+    if (!client)
+    {
+        LOG(ERROR) << "Unknown sender for slot";
+        return;
+    }
+
+    DCHECK_EQ(client_id, client->clientId());
+
+    client->disconnect(this); // Disoconnect all signals.
+    client->deleteLater();
+
+    desktop_clients_.removeOne(client);
+    user_session_->onClientFinished(client_id);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Service::onFileClientStarted(quint32 client_id)
 {
     FileClient* client = dynamic_cast<FileClient*>(sender());
     if (!client)
     {
-        LOG(ERROR) << "Unknown sender for finish slot";
+        LOG(ERROR) << "Unknown sender for slot";
         return;
     }
 
-    proto::internal::DisconnectEvent event;
-    event.set_id(client->clientId());
-    user_session_->onClientFinished(event);
+    DCHECK_EQ(client_id, client->clientId());
+
+    user_session_->onClientStarted(client_id, proto::peer::SESSION_TYPE_FILE_TRANSFER,
+        client->computerName(), client->displayName());
+}
+
+//--------------------------------------------------------------------------------------------------
+void Service::onFileClientFinished(quint32 client_id)
+{
+    FileClient* client = dynamic_cast<FileClient*>(sender());
+    if (!client)
+    {
+        LOG(ERROR) << "Unknown sender for slot";
+        return;
+    }
+
+    DCHECK_EQ(client_id, client->clientId());
 
     client->disconnect();
     client->deleteLater();
 
     file_clients_.removeOne(client);
+    user_session_->onClientFinished(client_id);
 }
 
 //--------------------------------------------------------------------------------------------------
-void Service::onSystemInfoClientFinished()
+void Service::onSystemInfoClientStarted(quint32 client_id)
 {
     SystemInfoClient* client = dynamic_cast<SystemInfoClient*>(sender());
     if (!client)
@@ -566,14 +626,29 @@ void Service::onSystemInfoClientFinished()
         return;
     }
 
-    proto::internal::DisconnectEvent event;
-    event.set_id(client->clientId());
-    user_session_->onClientFinished(event);
+    DCHECK_EQ(client_id, client->clientId());
+
+    user_session_->onClientStarted(client_id, proto::peer::SESSION_TYPE_SYSTEM_INFO,
+        client->computerName(), client->displayName());
+}
+
+//--------------------------------------------------------------------------------------------------
+void Service::onSystemInfoClientFinished(quint32 client_id)
+{
+    SystemInfoClient* client = dynamic_cast<SystemInfoClient*>(sender());
+    if (!client)
+    {
+        LOG(ERROR) << "Unknown sender for finish slot";
+        return;
+    }
+
+    DCHECK_EQ(client_id, client->clientId());
 
     client->disconnect();
     client->deleteLater();
 
     system_info_clients_.removeOne(client);
+    user_session_->onClientFinished(client_id);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -611,7 +686,9 @@ void Service::onTextChatClientStarted(quint32 client_id)
     }
 
     // Send message to GUI.
-    user_session_->onClientSessionTextChat(client_id, text_chat);
+    user_session_->onClientStarted(client_id, proto::peer::SESSION_TYPE_TEXT_CHAT,
+        started_client->computerName(), started_client->displayName());
+    user_session_->onClientTextChat(client_id, text_chat);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -646,24 +723,22 @@ void Service::onTextChatClientFinished(quint32 client_id)
     }
 
     // Notify GUI about finish.
-    user_session_->onClientSessionTextChat(client_id, text_chat);
-
-    // Send disconnect event to GUI.
-    proto::internal::DisconnectEvent event;
-    event.set_id(finished_client->clientId());
-    user_session_->onClientFinished(event);
+    user_session_->onClientTextChat(client_id, text_chat);
 
     finished_client->disconnect();
     finished_client->deleteLater();
 
     text_chat_clients_.removeOne(finished_client);
+
+    // Send disconnect event to GUI.
+    user_session_->onClientFinished(client_id);
 }
 
 //--------------------------------------------------------------------------------------------------
 void Service::onTextChatClientMessage(quint32 client_id, const proto::text_chat::TextChat& text_chat)
 {
     // Send message to GUI.
-    user_session_->onClientSessionTextChat(client_id, text_chat);
+    user_session_->onClientTextChat(client_id, text_chat);
 
     // Send message to other text chat clients.
     for (const auto& client : std::as_const(text_chat_clients_))
@@ -674,45 +749,45 @@ void Service::onTextChatClientMessage(quint32 client_id, const proto::text_chat:
 }
 
 //--------------------------------------------------------------------------------------------------
-void Service::startSession(base::TcpChannel* channel)
+void Service::startClient(base::TcpChannel* tcp_channel)
 {
     LOG(INFO) << "TCP channel is ready";
 
     static const int kReadBufferSize = 2 * 1024 * 1024; // 2 Mb.
     static const int kWriteBufferSize = 2 * 1024 * 1024; // 2 Mb.
 
-    channel->setParent(this);
-    channel->setReadBufferSize(kReadBufferSize);
-    channel->setWriteBufferSize(kWriteBufferSize);
+    tcp_channel->setParent(this);
+    tcp_channel->setReadBufferSize(kReadBufferSize);
+    tcp_channel->setWriteBufferSize(kWriteBufferSize);
 
     const QVersionNumber& host_version = base::kCurrentVersion;
-    if (host_version > channel->peerVersion())
+    if (host_version > tcp_channel->peerVersion())
     {
-        LOG(ERROR) << "Version mismatch (host:" << host_version
-                   << "client:" << channel->peerVersion() << ")";
+        LOG(ERROR) << "Version mismatch (host:" << host_version << "client:"
+                   << tcp_channel->peerVersion() << ")";
     }
 
     base::SessionId session_id = desktop_manager_->sessionId();
     if (session_id == base::kInvalidSessionId)
     {
         LOG(ERROR) << "Invalid session ID for desktop manager";
-        channel->deleteLater();
+        tcp_channel->deleteLater();
         return;
     }
 
     proto::peer::SessionType session_type =
-        static_cast<proto::peer::SessionType>(channel->peerSessionType());
+        static_cast<proto::peer::SessionType>(tcp_channel->peerSessionType());
     SystemSettings settings;
 
     proto::internal::ConfirmationRequest request;
-    request.set_id(channel->instanceId());
+    request.set_id(tcp_channel->instanceId());
     request.set_session_type(session_type);
-    request.set_computer_name(channel->peerComputerName().toStdString());
-    request.set_user_name(channel->peerUserName().toStdString());
+    request.set_computer_name(tcp_channel->peerComputerName().toStdString());
+    request.set_user_name(tcp_channel->peerUserName().toStdString());
     request.set_timeout(settings.autoConfirmationInterval().count());
 
-    pending_channels_.emplace_back(channel, QTime::currentTime());
-    user_session_->onAskForConfirmation(session_id, request);
+    pending_channels_.emplace_back(tcp_channel, QTime::currentTime());
+    user_session_->onClientConfirmation(session_id, request);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -786,22 +861,20 @@ void Service::updateConfiguration(const QString& path)
             LOG(INFO) << "Router enabled";
 
             // Check if the connection parameters have changed.
-            if (router_controller_->address() != settings_.routerAddress() ||
-                router_controller_->port() != settings_.routerPort() ||
-                router_controller_->publicKey() != settings_.routerPublicKey())
-            {
-                // Reconnect to the router with new parameters.
-                LOG(INFO) << "Router parameters have changed";
-                connectToRouter();
-            }
-            else
+            if (router_controller_->address() == settings_.routerAddress() &&
+                router_controller_->port() == settings_.routerPort() &&
+                router_controller_->publicKey() == settings_.routerPublicKey())
             {
                 LOG(INFO) << "Router parameters without changes";
+                return;
             }
+
+            // Reconnect to the router with new parameters.
+            LOG(INFO) << "Router parameters have changed";
+            connectToRouter();
         }
         else
         {
-            // Destroy the controller.
             LOG(INFO) << "The router is now disabled";
             disconnectFromRouter();
 
@@ -810,15 +883,10 @@ void Service::updateConfiguration(const QString& path)
             user_session_->onRouterStateChanged(router_state);
         }
     }
-    else
+    else if (settings_.isRouterEnabled())
     {
-        LOG(INFO) << "No router controller";
-
-        if (settings_.isRouterEnabled())
-        {
-            LOG(INFO) << "Router enabled";
-            connectToRouter();
-        }
+        LOG(INFO) << "Router is enabled";
+        connectToRouter();
     }
 }
 
@@ -867,17 +935,16 @@ void Service::connectToRouter()
 //--------------------------------------------------------------------------------------------------
 void Service::disconnectFromRouter()
 {
-    if (router_controller_)
-    {
-        router_controller_->disconnect(this);
-        router_controller_->deleteLater();
-        router_controller_ = nullptr;
-        LOG(INFO) << "Disconnected from router";
-    }
-    else
+    if (!router_controller_)
     {
         LOG(INFO) << "No router controller";
+        return;
     }
+
+    router_controller_->disconnect(this);
+    router_controller_->deleteLater();
+    router_controller_ = nullptr;
+    LOG(INFO) << "Disconnected from router";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -891,8 +958,6 @@ void Service::checkForUpdates()
 
     qint64 last_timepoint = storage.lastUpdateCheck();
     qint64 current_timepoint = std::time(nullptr);
-
-    LOG(INFO) << "Last timepoint:" << last_timepoint << ", current:" << current_timepoint;
 
     qint64 time_diff = current_timepoint - last_timepoint;
     if (time_diff <= 0)
@@ -914,16 +979,12 @@ void Service::checkForUpdates()
 
     storage.setLastUpdateCheck(current_timepoint);
 
-    LOG(INFO) << "Start checking for updates";
-
-    update_checker_ = new common::UpdateChecker(this);
-
-    update_checker_->setUpdateServer(settings_.updateServer());
-    update_checker_->setPackageName("host");
+    update_checker_ = new common::UpdateChecker(settings_.updateServer(), "host", this);
 
     connect(update_checker_, &common::UpdateChecker::sig_checkedFinished,
             this, &Service::onUpdateCheckedFinished);
 
+    LOG(INFO) << "Start checking for updates";
     update_checker_->start();
 #endif // defined(Q_OS_WINDOWS)
 }
@@ -931,7 +992,7 @@ void Service::checkForUpdates()
 //--------------------------------------------------------------------------------------------------
 void Service::updateOneTimeCredentials(const base::Location &location)
 {
-    LOG(INFO) << "Updating credentials (from" << location << ")";
+    LOG(INFO) << "Updating credentials from" << location;
 
     if (settings_.oneTimePassword())
     {
@@ -987,8 +1048,8 @@ base::User Service::createOneTimeUser() const
     user.sessions = one_time_sessions_;
     user.flags = base::User::ENABLED;
 
-    LOG(INFO) << "One time user" << username << "created (host_id=" << host_id
-              << "sessions=" << one_time_sessions_ << ")";
+    LOG(INFO) << "One time user" << username << "created (host_id:" << host_id
+              << "sessions:" << one_time_sessions_ << ")";
     return user;
 }
 

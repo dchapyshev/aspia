@@ -30,7 +30,7 @@ namespace common {
 //--------------------------------------------------------------------------------------------------
 DownloadDialog::DownloadDialog(const QString& url, QFile& file, QWidget* parent)
     : QDialog(parent),
-      downloader_(std::make_unique<HttpFileDownloader>()),
+      downloader_(std::make_unique<HttpFileDownloader>(url)),
       file_(file)
 {
     LOG(INFO) << "Ctor";
@@ -54,7 +54,6 @@ DownloadDialog::DownloadDialog(const QString& url, QFile& file, QWidget* parent)
     connect(downloader_.get(), &HttpFileDownloader::sig_downloadProgress,
             this, &DownloadDialog::onFileDownloaderProgress);
 
-    downloader_->setUrl(url);
     downloader_->start();
 }
 

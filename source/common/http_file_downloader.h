@@ -29,10 +29,9 @@ class HttpFileDownloader final : public QThread
     Q_OBJECT
 
 public:
-    explicit HttpFileDownloader(QObject* parent = nullptr);
+    explicit HttpFileDownloader(const QString& url, QObject* parent = nullptr);
     ~HttpFileDownloader();
 
-    void setUrl(const QString& url);
     const QByteArray& data() const;
 
 signals:
@@ -50,7 +49,7 @@ private:
         HttpFileDownloader* self, double dltotal, double dlnow, double ultotal, double ulnow);
 
     std::atomic_bool interrupted_ { false };
-    QString url_;
+    const QString url_;
     QByteArray data_;
 
     Q_DISABLE_COPY(HttpFileDownloader)

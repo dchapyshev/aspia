@@ -56,10 +56,22 @@ quint32 SystemInfoClient::clientId() const
 }
 
 //--------------------------------------------------------------------------------------------------
+QString SystemInfoClient::displayName() const
+{
+    return tcp_channel_->peerDisplayName();
+}
+
+//--------------------------------------------------------------------------------------------------
+QString SystemInfoClient::computerName() const
+{
+    return tcp_channel_->peerComputerName();
+}
+
+//--------------------------------------------------------------------------------------------------
 void SystemInfoClient::start()
 {
     tcp_channel_->resume();
-    emit sig_started();
+    emit sig_started(clientId());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -68,7 +80,7 @@ void SystemInfoClient::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code
     LOG(WARNING) << "TCP error occurred:" << error_code;
 
     tcp_channel_->disconnect(this);
-    emit sig_finished();
+    emit sig_finished(clientId());
 }
 
 //--------------------------------------------------------------------------------------------------

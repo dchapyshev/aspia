@@ -45,7 +45,7 @@ class SessionTreeItem : public QTreeWidgetItem
 public:
     SessionTreeItem(const UserSessionAgent::Client& client)
         : session_type_(client.session_type),
-          id_(client.id),
+          client_id_(client.client_id),
           display_name_(client.display_name),
           computer_name_(client.computer_name)
     {
@@ -64,7 +64,7 @@ public:
     }
 
     proto::peer::SessionType sessionType() const { return session_type_; }
-    quint32 id() const { return id_; }
+    quint32 clientId() const { return client_id_; }
 
     void switchName()
     {
@@ -81,7 +81,7 @@ public:
 
 private:
     const proto::peer::SessionType session_type_;
-    const quint32 id_;
+    const quint32 client_id_;
     const QString display_name_;
     const QString computer_name_;
     bool is_display_name_ = true;
@@ -182,7 +182,7 @@ QList<quint32> NotifierWindow::sessions(proto::peer::SessionType session_type)
     {
         SessionTreeItem* item = static_cast<SessionTreeItem*>(ui.tree->topLevelItem(i));
         if (item->sessionType() == session_type)
-            result.emplace_back(item->id());
+            result.emplace_back(item->clientId());
     }
 
     return result;
@@ -218,7 +218,7 @@ void NotifierWindow::onClientListChanged(const UserSessionAgent::ClientList& cli
 
             QToolButton* stop_button =
                 createSessionButton(ui.tree, ":/img/stop.svg", tr("Disconnect"));
-            quint32 tree_item_id = tree_item->id();
+            quint32 tree_item_id = tree_item->clientId();
 
             connect(stop_button, &QToolButton::clicked, this, [this, tree_item_id]()
             {
@@ -280,8 +280,8 @@ void NotifierWindow::onStop()
         SessionTreeItem* item = static_cast<SessionTreeItem*>(ui.tree->topLevelItem(i));
         if (item)
         {
-            LOG(INFO) << "Disconnect session with ID:" << item->id();
-            emit sig_killSession(item->id());
+            LOG(INFO) << "Disconnect session with ID:" << item->clientId();
+            emit sig_killSession(item->clientId());
         }
     }
 }

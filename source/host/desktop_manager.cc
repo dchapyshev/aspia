@@ -21,7 +21,6 @@
 #include "base/application.h"
 #include "base/logging.h"
 #include "base/ipc/ipc_server.h"
-#include "host/desktop_client.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/session_status.h"
@@ -73,27 +72,15 @@ DesktopManager* DesktopManager::instance()
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopManager::onNewChannel(base::TcpChannel* tcp_channel)
-{
-    if (!tcp_channel)
-    {
-        LOG(ERROR) << "Invalid tcp channel pointer";
-        return;
-    }
-
-    DesktopClient* client = new DesktopClient(tcp_channel, this);
-    clients_.append(client);
-
-    connect(this, &DesktopManager::sig_ipcChannelChanged, client, &DesktopClient::onIpcChannelChanged);
-    connect(client, &DesktopClient::sig_finished, this, &DesktopManager::onClientFinished);
-
-    client->start(ipc_channel_name_);
-}
-
-//--------------------------------------------------------------------------------------------------
 base::SessionId DesktopManager::sessionId() const
 {
     return session_id_;
+}
+
+//--------------------------------------------------------------------------------------------------
+const QString& DesktopManager::ipcChannelName() const
+{
+    return ipc_channel_name_;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -106,6 +93,31 @@ void DesktopManager::start()
     }
 
     attach(FROM_HERE, base::activeConsoleSessionId());
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopManager::onClientStarted()
+{
+    ++client_count_;
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopManager::onClientFinished()
+{
+    CHECK(client_count_ > 0);
+    --client_count_;
+
+    if (client_count_)
+        return;
+
+    LOG(INFO) << "Last desktop client disconnected";
+
+    base::SessionId session_id = base::activeConsoleSessionId();
+    if (session_id != session_id_)
+    {
+        dettach(FROM_HERE);
+        attach(FROM_HERE, session_id);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -217,33 +229,6 @@ void DesktopManager::onAttachTimeout()
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopManager::onClientFinished()
-{
-    DesktopClient* client = dynamic_cast<DesktopClient*>(sender());
-    if (!client)
-    {
-        LOG(ERROR) << "Unknown sender for finish slot";
-        return;
-    }
-
-    client->disconnect(this); // Disoconnect all signals.
-    client->deleteLater();
-    clients_.removeOne(client);
-
-    if (!clients_.isEmpty())
-        return;
-
-    LOG(INFO) << "Last desktop client disconnected";
-
-    base::SessionId session_id = base::activeConsoleSessionId();
-    if (session_id != session_id_)
-    {
-        dettach(FROM_HERE);
-        attach(FROM_HERE, session_id);
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
 void DesktopManager::attach(const base::Location& location, base::SessionId session_id)
 {
     if (process_)
@@ -278,6 +263,7 @@ void DesktopManager::dettach(const base::Location& location)
     LOG(INFO) << "Dettach from session" << session_id_ << "from" << location;
 
     session_id_ = base::kInvalidSessionId;
+    ipc_channel_name_.clear();
     attach_timer_->stop();
 
     process_->disconnect(this); // Disconnect all signals.

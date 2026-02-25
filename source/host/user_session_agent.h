@@ -44,7 +44,7 @@ public:
     struct Client
     {
         explicit Client(const proto::internal::ConnectEvent& event)
-            : id(event.id()),
+            : client_id(event.client_id()),
               computer_name(QString::fromStdString(event.computer_name())),
               display_name(QString::fromStdString(event.display_name())),
               session_type(event.session_type())
@@ -52,7 +52,7 @@ public:
             // Nothing
         }
 
-        quint32 id;
+        quint32 client_id;
         QString computer_name;
         QString display_name;
         proto::peer::SessionType session_type;

@@ -216,7 +216,7 @@ MainWindow::MainWindow(const QString& file_path)
     }
 
     QString normalized_path(file_path);
-    normalized_path.replace(QLatin1Char('\\'), QLatin1Char('/'));
+    normalized_path.replace('\\', '/');
 
     // If the address book is pinned, then it is already open.
     if (!normalized_path.isEmpty() && !mru_.isPinnedFile(normalized_path))
@@ -234,10 +234,7 @@ MainWindow::MainWindow(const QString& file_path)
 
     if (settings.checkUpdates())
     {
-        update_checker_ = std::make_unique<common::UpdateChecker>();
-
-        update_checker_->setUpdateServer(settings.updateServer());
-        update_checker_->setPackageName("console");
+        update_checker_ = std::make_unique<common::UpdateChecker>(settings.updateServer(), "console");
 
         connect(update_checker_.get(), &common::UpdateChecker::sig_checkedFinished,
                 this, &MainWindow::onUpdateCheckedFinished);
