@@ -22,7 +22,9 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QFile>
+#include <QFileSystemWatcher>
 #include <QStandardPaths>
+#include <QTimer>
 
 #include "base/logging.h"
 #include "base/version_constants.h"
@@ -30,13 +32,17 @@
 #include "base/crypto/random.h"
 #include "base/net/tcp_channel.h"
 #include "base/peer/user_list.h"
+#include "common/http_file_downloader.h"
+#include "common/update_checker.h"
 #include "common/update_info.h"
 #include "host/desktop_client.h"
 #include "host/file_client.h"
 #include "host/host_storage.h"
+#include "host/router_manager.h"
 #include "host/service.h"
 #include "host/system_info_client.h"
 #include "host/text_chat_client.h"
+#include "host/user_session.h"
 
 #if defined(Q_OS_WINDOWS)
 #include <qt_windows.h>
@@ -925,13 +931,13 @@ void Service::connectToRouter()
     disconnectFromRouter();
 
     // Connect to the router.
-    router_controller_ = new RouterController(this);
+    router_controller_ = new RouterManager(this);
 
-    connect(router_controller_, &RouterController::sig_routerStateChanged,
+    connect(router_controller_, &RouterManager::sig_routerStateChanged,
             this, &Service::onRouterStateChanged);
-    connect(router_controller_, &RouterController::sig_hostIdAssigned,
+    connect(router_controller_, &RouterManager::sig_hostIdAssigned,
             this, &Service::onHostIdAssigned);
-    connect(router_controller_, &RouterController::sig_clientConnected,
+    connect(router_controller_, &RouterManager::sig_clientConnected,
             this, &Service::onNewRelayConnection);
 
     router_controller_->setUserList(tcp_server_->userList());

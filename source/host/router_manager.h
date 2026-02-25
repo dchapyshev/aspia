@@ -16,12 +16,10 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST_ROUTER_CONTROLLER_H
-#define HOST_ROUTER_CONTROLLER_H
+#ifndef HOST_ROUTER_MANAGER_H
+#define HOST_ROUTER_MANAGER_H
 
 #include <QQueue>
-#include <QPointer>
-#include <QTimer>
 
 #include "base/shared_pointer.h"
 #include "base/net/tcp_channel.h"
@@ -30,15 +28,17 @@
 #include "base/peer/user_list_base.h"
 #include "proto/host_internal.h"
 
+class QTimer;
+
 namespace host {
 
-class RouterController final : public QObject
+class RouterManager final : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit RouterController(QObject* parent = nullptr);
-    ~RouterController() final;
+    explicit RouterManager(QObject* parent = nullptr);
+    ~RouterManager() final;
 
     void start(const QString& address, quint16 port, const QByteArray& public_key);
 
@@ -70,9 +70,9 @@ private:
     void routerStateChanged(proto::internal::RouterState::State state);
     void hostIdRequest();
 
-    QPointer<base::TcpChannel> tcp_channel_;
-    QPointer<base::RelayPeerManager> peer_manager_;
-    QPointer<QTimer> reconnect_timer_;
+    base::TcpChannel* tcp_channel_ = nullptr;
+    base::RelayPeerManager* peer_manager_ = nullptr;
+    QTimer* reconnect_timer_ = nullptr;
 
     QString address_;
     quint16 port_ = 0;
@@ -85,9 +85,9 @@ private:
 
     QQueue<base::TcpChannel*> channels_;
 
-    Q_DISABLE_COPY(RouterController)
+    Q_DISABLE_COPY_MOVE(RouterManager)
 };
 
 } // namespace host
 
-#endif // HOST_ROUTER_CONTROLLER_H
+#endif // HOST_ROUTER_MANAGER_H

@@ -19,24 +19,35 @@
 #ifndef HOST_SERVICE_H
 #define HOST_SERVICE_H
 
-#include <QFileSystemWatcher>
-#include <QTimer>
-
 #include "base/service.h"
 #include "base/net/tcp_server.h"
-#include "common/http_file_downloader.h"
-#include "common/update_checker.h"
 #include "host/desktop_manager.h"
-#include "host/router_controller.h"
-#include "host/user_session.h"
 #include "host/system_settings.h"
+
+class QFileSystemWatcher;
+class QTimer;
+
+namespace common {
+class HttpFileDownloader;
+class UpdateChecker;
+} // namespace common
+
+namespace proto::internal {
+class RouterState;
+} // proto::internal
+
+namespace proto::text_chat {
+class TextChat;
+} // namespace proto::text_chat
 
 namespace host {
 
 class DesktopClient;
 class FileClient;
+class RouterManager;
 class SystemInfoClient;
 class TextChatClient;
+class UserSession;
 
 extern const char kHostServiceFileName[];
 extern const char kHostServiceName[];
@@ -105,7 +116,7 @@ private:
     QFileSystemWatcher* settings_watcher_ = nullptr;
     SystemSettings settings_;
 
-    RouterController* router_controller_ = nullptr;
+    RouterManager* router_controller_ = nullptr;
     base::TcpServer* tcp_server_ = nullptr;
 
     DesktopManager* desktop_manager_ = nullptr;

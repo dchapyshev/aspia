@@ -41,8 +41,8 @@ list(APPEND SOURCE_HOST_CORE
     integrity_check.h
     print_debug_info.cc
     print_debug_info.h
-    router_controller.cc
-    router_controller.h
+    router_manager.cc
+    router_manager.h
     service.cc
     service.h
     service_main.cc

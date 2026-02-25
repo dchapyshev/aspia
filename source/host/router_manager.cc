@@ -16,7 +16,9 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/router_controller.h"
+#include "host/router_manager.h"
+
+#include <QTimer>
 
 #include "base/logging.h"
 #include "base/serialization.h"
@@ -34,7 +36,7 @@ const std::chrono::seconds kReconnectTimeout{ 10 };
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-RouterController::RouterController(QObject* parent)
+RouterManager::RouterManager(QObject* parent)
     : QObject(parent),
       peer_manager_(new base::RelayPeerManager(this)),
       reconnect_timer_(new QTimer(this))
@@ -42,20 +44,20 @@ RouterController::RouterController(QObject* parent)
     LOG(INFO) << "Ctor";
 
     connect(peer_manager_, &base::RelayPeerManager::sig_newPeerConnected,
-            this, &RouterController::onNewPeerConnected);
+            this, &RouterManager::onNewPeerConnected);
 
     reconnect_timer_->setSingleShot(true);
-    connect(reconnect_timer_, &QTimer::timeout, this, &RouterController::connectToRouter);
+    connect(reconnect_timer_, &QTimer::timeout, this, &RouterManager::connectToRouter);
 }
 
 //--------------------------------------------------------------------------------------------------
-RouterController::~RouterController()
+RouterManager::~RouterManager()
 {
     LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterController::start(const QString& address, quint16 port, const QByteArray& public_key)
+void RouterManager::start(const QString& address, quint16 port, const QByteArray& public_key)
 {
     address_ = address;
     port_ = port;
@@ -66,19 +68,19 @@ void RouterController::start(const QString& address, quint16 port, const QByteAr
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterController::setUserList(base::SharedPointer<base::UserListBase> user_list)
+void RouterManager::setUserList(base::SharedPointer<base::UserListBase> user_list)
 {
     user_list_ = user_list;
 }
 
 //--------------------------------------------------------------------------------------------------
-bool RouterController::hasPendingConnections() const
+bool RouterManager::hasPendingConnections() const
 {
     return !channels_.isEmpty();
 }
 
 //--------------------------------------------------------------------------------------------------
-base::TcpChannel* RouterController::nextPendingConnection()
+base::TcpChannel* RouterManager::nextPendingConnection()
 {
     if (channels_.isEmpty())
         return nullptr;
@@ -91,7 +93,7 @@ base::TcpChannel* RouterController::nextPendingConnection()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterController::onTcpReady()
+void RouterManager::onTcpReady()
 {
     DCHECK(tcp_channel_);
 
@@ -104,7 +106,7 @@ void RouterController::onTcpReady()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterController::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code)
+void RouterManager::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code)
 {
     LOG(INFO) << "Connection to the router is lost:" << error_code;
     routerStateChanged(proto::internal::RouterState::FAILED);
@@ -112,7 +114,7 @@ void RouterController::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterController::onTcpMessageReceived(quint8 /* channel_id */, const QByteArray& buffer)
+void RouterManager::onTcpMessageReceived(quint8 /* channel_id */, const QByteArray& buffer)
 {
     proto::router::RouterToPeer in_message;
     if (!base::parse(buffer, &in_message))
@@ -198,7 +200,7 @@ void RouterController::onTcpMessageReceived(quint8 /* channel_id */, const QByte
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterController::onNewPeerConnected()
+void RouterManager::onNewPeerConnected()
 {
     LOG(INFO) << "New peer connected";
     channels_ = peer_manager_->takePendingConnections();
@@ -210,7 +212,7 @@ void RouterController::onNewPeerConnected()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterController::connectToRouter()
+void RouterManager::connectToRouter()
 {
     LOG(INFO) << "Connecting to router...";
 
@@ -224,22 +226,22 @@ void RouterController::connectToRouter()
 
     tcp_channel_ = new base::TcpChannel(authenticator, this);
 
-    connect(tcp_channel_, &base::TcpChannel::sig_authenticated, this, &RouterController::onTcpReady);
-    connect(tcp_channel_, &base::TcpChannel::sig_errorOccurred, this, &RouterController::onTcpErrorOccurred);
-    connect(tcp_channel_, &base::TcpChannel::sig_messageReceived, this, &RouterController::onTcpMessageReceived);
+    connect(tcp_channel_, &base::TcpChannel::sig_authenticated, this, &RouterManager::onTcpReady);
+    connect(tcp_channel_, &base::TcpChannel::sig_errorOccurred, this, &RouterManager::onTcpErrorOccurred);
+    connect(tcp_channel_, &base::TcpChannel::sig_messageReceived, this, &RouterManager::onTcpMessageReceived);
 
     tcp_channel_->connectTo(address_, port_);
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterController::delayedConnectToRouter()
+void RouterManager::delayedConnectToRouter()
 {
     LOG(INFO) << "Reconnect after" << kReconnectTimeout.count() << "seconds";
     reconnect_timer_->start(kReconnectTimeout);
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterController::routerStateChanged(proto::internal::RouterState::State state)
+void RouterManager::routerStateChanged(proto::internal::RouterState::State state)
 {
     LOG(INFO) << "Router state changed:" << state;
 
@@ -251,7 +253,7 @@ void RouterController::routerStateChanged(proto::internal::RouterState::State st
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterController::hostIdRequest()
+void RouterManager::hostIdRequest()
 {
     LOG(INFO) << "Started ID request for session";
 
