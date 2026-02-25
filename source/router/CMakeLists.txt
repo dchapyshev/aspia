@@ -32,8 +32,6 @@ list(APPEND SOURCE_ROUTER
     migration_utils.h
     service.cc
     service.h
-    service_constants.cc
-    service_constants.h
     session.cc
     session.h
     session_admin.cc

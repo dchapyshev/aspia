@@ -38,6 +38,11 @@ class FileClient;
 class SystemInfoClient;
 class TextChatClient;
 
+extern const char kHostServiceFileName[];
+extern const char kHostServiceName[];
+extern const char kHostServiceDisplayName[];
+extern const char kHostServiceDescription[];
+
 class Service final : public base::Service
 {
     Q_OBJECT

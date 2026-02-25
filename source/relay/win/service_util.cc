@@ -18,11 +18,11 @@
 
 #include "relay/win/service_util.h"
 
-#include "base/win/service_controller.h"
-#include "relay/service_constants.h"
-
 #include <QCoreApplication>
 #include <QTextStream>
+
+#include "base/win/service_controller.h"
+#include "relay/service.h"
 
 namespace relay {
 

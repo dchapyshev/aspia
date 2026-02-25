@@ -45,8 +45,6 @@ list(APPEND SOURCE_HOST_CORE
     router_controller.h
     service.cc
     service.h
-    service_constants.cc
-    service_constants.h
     service_main.cc
     service_main.h
     system_info_client.cc

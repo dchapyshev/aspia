@@ -22,7 +22,7 @@
 #include "base/net/tcp_server.h"
 #include "base/peer/client_authenticator.h"
 #include "relay/migration_utils.h"
-#include "relay/service_constants.h"
+#include "relay/service.h"
 #include "relay/settings.h"
 #include "proto/router.h"
 
@@ -37,7 +37,7 @@ class KeyDeleter
 public:
     KeyDeleter(std::shared_ptr<KeyPool> pool, quint32 key_id)
         : pool_(std::move(pool)),
-        key_id_(key_id)
+          key_id_(key_id)
     {
         DCHECK(pool_);
     }
@@ -57,6 +57,11 @@ private:
 };
 
 } // namespace
+
+const char kServiceFileName[] = "aspia_relay.exe";
+const char kServiceName[] = "aspia-relay";
+const char kServiceDisplayName[] = "Aspia Relay Service";
+const char kServiceDescription[] = "Proxies user traffic to bypass NAT.";
 
 //--------------------------------------------------------------------------------------------------
 Service::Service(QObject* parent)

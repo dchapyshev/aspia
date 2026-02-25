@@ -29,7 +29,6 @@
 #include "host/print_debug_info.h"
 #include "host/host_storage.h"
 #include "host/service.h"
-#include "host/service_constants.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/service_controller.h"

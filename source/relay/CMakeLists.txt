@@ -28,8 +28,6 @@ list(APPEND SOURCE_RELAY
     pending_session.h
     service.cc
     service.h
-    service_constants.cc
-    service_constants.h
     session.cc
     session.h
     session_key.cc

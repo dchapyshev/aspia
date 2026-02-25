@@ -34,7 +34,7 @@
 #include "host/desktop_client.h"
 #include "host/file_client.h"
 #include "host/host_storage.h"
-#include "host/service_constants.h"
+#include "host/service.h"
 #include "host/system_info_client.h"
 #include "host/text_chat_client.h"
 
@@ -55,6 +55,11 @@ constexpr char kFirewallRuleName[] = "Aspia Host Service";
 constexpr char kFirewallRuleDecription[] = "Allow incoming TCP connections";
 
 } // namespace
+
+const char kHostServiceFileName[] = "aspia_host_service.exe";
+const char kHostServiceName[] = "aspia-host-service";
+const char kHostServiceDisplayName[] = "Aspia Host Service";
+const char kHostServiceDescription[] = "Accepts incoming remote desktop connections to this computer.";
 
 //--------------------------------------------------------------------------------------------------
 Service::Service(QObject* parent)

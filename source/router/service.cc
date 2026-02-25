@@ -24,7 +24,6 @@
 #include "router/database.h"
 #include "router/database_factory_sqlite.h"
 #include "router/migration_utils.h"
-#include "router/service_constants.h"
 #include "router/session_admin.h"
 #include "router/session_client.h"
 #include "router/session_host.h"
@@ -33,6 +32,12 @@
 #include "router/user_list_db.h"
 
 namespace router {
+
+const char kServiceFileName[] = "aspia_router.exe";
+const char kServiceName[] = "aspia-router";
+const char kServiceDisplayName[] = "Aspia Router Service";
+const char kServiceDescription[] =
+    "Assigns identifiers to peers and routes traffic to bypass NAT.";
 
 //--------------------------------------------------------------------------------------------------
 Service::Service(QObject* parent)

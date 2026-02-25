@@ -24,7 +24,6 @@
 #include <QTimer>
 #include <QTranslator>
 
-#include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/crypto/password_generator.h"
 #include "base/desktop/screen_capturer.h"
@@ -35,7 +34,7 @@
 #include "host/ui/user_dialog.h"
 #include "host/ui/user_tree_item.h"
 #include "host/ui/settings_util.h"
-#include "host/service_constants.h"
+#include "host/service.h"
 #include "host/system_settings.h"
 #include "common/ui/update_dialog.h"
 
