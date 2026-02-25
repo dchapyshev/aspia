@@ -69,10 +69,8 @@ private slots:
     void onClientListChanged(const host::UserSessionAgent::ClientList& clients);
     void onCredentialsChanged(const proto::internal::Credentials& credentials);
     void onRouterStateChanged(const proto::internal::RouterState& state);
-    void onConnectConfirmationRequest(
-        const proto::internal::ConnectConfirmationRequest& request);
-    void onVideoRecordingStateChanged(
-        const QString& computer_name, const QString& user_name, bool started);
+    void onConfirmationRequest(const proto::internal::ConfirmationRequest& request);
+    void onRecordingStateChanged(const QString& computer, const QString& user, bool started);
     void onTextChat(const proto::text_chat::TextChat& text_chat);
 
     void realClose();

@@ -30,27 +30,26 @@
 
 namespace host {
 
-class UserSessionManager final : public QObject
+class UserSession final : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit UserSessionManager(QObject* parent = nullptr);
-    ~UserSessionManager() final;
+    explicit UserSession(QObject* parent = nullptr);
+    ~UserSession() final;
 
     bool start();
     void onRouterStateChanged(const proto::internal::RouterState& router_state);
     void onUpdateCredentials(base::HostId host_id, const QString& password);
-    bool isConnected() const;
+    bool isAttached() const;
 
 public slots:
     void onAskForConfirmation(
-        base::SessionId session_id, const proto::internal::ConnectConfirmationRequest& request);
+        base::SessionId session_id, const proto::internal::ConfirmationRequest& request);
     void onClientStarted(const proto::internal::ConnectEvent& event);
     void onClientFinished(const proto::internal::DisconnectEvent& event);
     void onClientSessionTextChat(quint32 client_id, const proto::text_chat::TextChat& text_chat);
-    void onClientSessionVideoRecording(
-        const QString& computer_name, const QString& user_name, bool started);
+    void onClientSessionRecording(const QString& computer, const QString& user, bool started);
 
 signals:
     void sig_attached();
@@ -79,16 +78,14 @@ private:
 
     base::IpcServer* ipc_server_ = nullptr;
     base::IpcChannel* ipc_channel_ = nullptr;
+    QTimer* attach_timer_ = nullptr;
 
     base::SessionId session_id_ = base::kInvalidSessionId;
-
-    bool is_console_ = true;
-    QTimer* attach_timer_ = nullptr;
 
     base::Parser<proto::internal::UiToService> incoming_message_;
     base::Serializer<proto::internal::ServiceToUi> outgoing_message_;
 
-    Q_DISABLE_COPY_MOVE(UserSessionManager)
+    Q_DISABLE_COPY_MOVE(UserSession)
 };
 
 } // namespace host

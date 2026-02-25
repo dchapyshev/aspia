@@ -59,8 +59,8 @@ list(APPEND SOURCE_HOST_CORE
     text_chat_client.h
     user_session_agent.cc
     user_session_agent.h
-    user_session_manager.cc
-    user_session_manager.h)
+    user_session.cc
+    user_session.h)
 
 if (WIN32)
     list(APPEND SOURCE_HOST_CORE

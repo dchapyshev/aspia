@@ -31,8 +31,8 @@ class ConnectConfirmDialog final : public QDialog
     Q_OBJECT
 
 public:
-    explicit ConnectConfirmDialog(const proto::internal::ConnectConfirmationRequest& request,
-                                  QWidget* parent = nullptr);
+    explicit ConnectConfirmDialog(
+        const proto::internal::ConfirmationRequest& request, QWidget* parent = nullptr);
     ~ConnectConfirmDialog() final;
 
 private slots:

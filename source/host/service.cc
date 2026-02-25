@@ -62,7 +62,7 @@ Service::Service(QObject* parent)
       settings_watcher_(new QFileSystemWatcher(this)),
       tcp_server_(new base::TcpServer(this)),
       desktop_manager_(new DesktopManager(this)),
-      user_session_manager_(new UserSessionManager(this)),
+      user_session_(new UserSession(this)),
       password_expire_timer_(new QTimer(this))
 {
     LOG(INFO) << "Ctor";
@@ -70,15 +70,15 @@ Service::Service(QObject* parent)
     connect(repeated_timer_, &QTimer::timeout, this, &Service::onRepeatedTasks);
     connect(settings_watcher_, &QFileSystemWatcher::fileChanged, this, &Service::updateConfiguration);
 
-    connect(user_session_manager_, &UserSessionManager::sig_routerStateRequested,
+    connect(user_session_, &UserSession::sig_routerStateRequested,
             this, &Service::onRouterStateRequested);
-    connect(user_session_manager_, &UserSessionManager::sig_credentialsRequested,
+    connect(user_session_, &UserSession::sig_credentialsRequested,
             this, &Service::onCredentialsRequested);
-    connect(user_session_manager_, &UserSessionManager::sig_changeOneTimePassword,
+    connect(user_session_, &UserSession::sig_changeOneTimePassword,
             this, &Service::onChangeOneTimePassword);
-    connect(user_session_manager_, &UserSessionManager::sig_changeOneTimeSessions,
+    connect(user_session_, &UserSession::sig_changeOneTimeSessions,
             this, &Service::onChangeOneTimeSessions);
-    connect(user_session_manager_, &UserSessionManager::sig_askForConfirmation,
+    connect(user_session_, &UserSession::sig_askForConfirmation,
             this, &Service::onAskForConfirmation);
 
     connect(tcp_server_, &base::TcpServer::sig_newConnection,
@@ -151,7 +151,7 @@ void Service::onStart()
     settings_watcher_->addPath(settings_file_path);
     repeated_timer_->start(std::chrono::seconds(30));
     desktop_manager_->start();
-    user_session_manager_->start();
+    user_session_->start();
 
     addFirewallRules();
     tcp_server_->start(settings_.tcpPort());
@@ -218,7 +218,7 @@ void Service::onRouterStateRequested()
     if (router_controller_)
         state = router_controller_->state();
 
-    user_session_manager_->onRouterStateChanged(state);
+    user_session_->onRouterStateChanged(state);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -233,7 +233,7 @@ void Service::onCredentialsRequested()
         password = one_time_password_;
     }
 
-    user_session_manager_->onUpdateCredentials(host_id, password);
+    user_session_->onUpdateCredentials(host_id, password);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -270,14 +270,14 @@ void Service::onNewDirectConnection()
 void Service::onRouterStateChanged(const proto::internal::RouterState& router_state)
 {
     LOG(INFO) << "Router state changed";
-    user_session_manager_->onRouterStateChanged(router_state);
+    user_session_->onRouterStateChanged(router_state);
 }
 
 //--------------------------------------------------------------------------------------------------
 void Service::onHostIdAssigned(base::HostId host_id)
 {
     LOG(INFO) << "New host ID assigned:" << host_id;
-    user_session_manager_->onUpdateCredentials(host_id, one_time_password_);
+    user_session_->onUpdateCredentials(host_id, one_time_password_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -414,6 +414,7 @@ void Service::onUpdateCheckedFinished(const QByteArray& result)
         }
     }
 
+    update_checker_->disconnect(this);
     update_checker_->deleteLater();
     update_checker_ = nullptr;
 }
@@ -422,6 +423,7 @@ void Service::onUpdateCheckedFinished(const QByteArray& result)
 void Service::onFileDownloaderError(int error_code)
 {
     LOG(ERROR) << "Unable to download update:" << error_code;
+    update_downloader_->disconnect(this);
     update_downloader_->deleteLater();
     update_downloader_ = nullptr;
 }
@@ -474,6 +476,7 @@ void Service::onFileDownloaderCompleted()
     }
 #endif // defined(Q_OS_WINDOWS)
 
+    update_downloader_->disconnect(this);
     update_downloader_->deleteLater();
     update_downloader_ = nullptr;
 }
@@ -530,7 +533,7 @@ void Service::onStopClient(quint32 client_id)
 
     proto::internal::DisconnectEvent event;
     event.set_id(client_id);
-    user_session_manager_->onClientFinished(event);
+    user_session_->onClientFinished(event);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -545,7 +548,7 @@ void Service::onFileClientFinished()
 
     proto::internal::DisconnectEvent event;
     event.set_id(client->clientId());
-    user_session_manager_->onClientFinished(event);
+    user_session_->onClientFinished(event);
 
     client->disconnect();
     client->deleteLater();
@@ -565,7 +568,7 @@ void Service::onSystemInfoClientFinished()
 
     proto::internal::DisconnectEvent event;
     event.set_id(client->clientId());
-    user_session_manager_->onClientFinished(event);
+    user_session_->onClientFinished(event);
 
     client->disconnect();
     client->deleteLater();
@@ -587,7 +590,7 @@ void Service::onTextChatClientStarted(quint32 client_id)
 
     DCHECK_EQ(client_id, started_client->clientId());
 
-    if (!user_session_manager_->isConnected())
+    if (!user_session_->isAttached())
         started_client->onSendStatus(proto::text_chat::Status::CODE_USER_DISCONNECTED);
 
     proto::text_chat::TextChat text_chat;
@@ -608,7 +611,7 @@ void Service::onTextChatClientStarted(quint32 client_id)
     }
 
     // Send message to GUI.
-    user_session_manager_->onClientSessionTextChat(client_id, text_chat);
+    user_session_->onClientSessionTextChat(client_id, text_chat);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -643,12 +646,12 @@ void Service::onTextChatClientFinished(quint32 client_id)
     }
 
     // Notify GUI about finish.
-    user_session_manager_->onClientSessionTextChat(client_id, text_chat);
+    user_session_->onClientSessionTextChat(client_id, text_chat);
 
     // Send disconnect event to GUI.
     proto::internal::DisconnectEvent event;
     event.set_id(finished_client->clientId());
-    user_session_manager_->onClientFinished(event);
+    user_session_->onClientFinished(event);
 
     finished_client->disconnect();
     finished_client->deleteLater();
@@ -660,7 +663,7 @@ void Service::onTextChatClientFinished(quint32 client_id)
 void Service::onTextChatClientMessage(quint32 client_id, const proto::text_chat::TextChat& text_chat)
 {
     // Send message to GUI.
-    user_session_manager_->onClientSessionTextChat(client_id, text_chat);
+    user_session_->onClientSessionTextChat(client_id, text_chat);
 
     // Send message to other text chat clients.
     for (const auto& client : std::as_const(text_chat_clients_))
@@ -701,7 +704,7 @@ void Service::startSession(base::TcpChannel* channel)
         static_cast<proto::peer::SessionType>(channel->peerSessionType());
     SystemSettings settings;
 
-    proto::internal::ConnectConfirmationRequest request;
+    proto::internal::ConfirmationRequest request;
     request.set_id(channel->instanceId());
     request.set_session_type(session_type);
     request.set_computer_name(channel->peerComputerName().toStdString());
@@ -709,7 +712,7 @@ void Service::startSession(base::TcpChannel* channel)
     request.set_timeout(settings.autoConfirmationInterval().count());
 
     pending_channels_.emplace_back(channel, QTime::currentTime());
-    user_session_manager_->onAskForConfirmation(session_id, request);
+    user_session_->onAskForConfirmation(session_id, request);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -800,12 +803,11 @@ void Service::updateConfiguration(const QString& path)
         {
             // Destroy the controller.
             LOG(INFO) << "The router is now disabled";
-            router_controller_->deleteLater();
-            router_controller_ = nullptr;
+            disconnectFromRouter();
 
             proto::internal::RouterState router_state;
             router_state.set_state(proto::internal::RouterState::DISABLED);
-            user_session_manager_->onRouterStateChanged(router_state);
+            user_session_->onRouterStateChanged(router_state);
         }
     }
     else
@@ -845,11 +847,7 @@ void Service::connectToRouter()
     LOG(INFO) << "Connecting to router...";
 
     // Destroy the previous instance.
-    if (router_controller_)
-    {
-        router_controller_->deleteLater();
-        router_controller_ = nullptr;
-    }
+    disconnectFromRouter();
 
     // Connect to the router.
     router_controller_ = new RouterController(this);
@@ -869,10 +867,9 @@ void Service::connectToRouter()
 //--------------------------------------------------------------------------------------------------
 void Service::disconnectFromRouter()
 {
-    LOG(INFO) << "Disconnect from router";
-
     if (router_controller_)
     {
+        router_controller_->disconnect(this);
         router_controller_->deleteLater();
         router_controller_ = nullptr;
         LOG(INFO) << "Disconnected from router";
@@ -913,10 +910,7 @@ void Service::checkForUpdates()
         return;
 
     if (days < settings_.updateCheckFrequency())
-    {
-        LOG(INFO) << "Not enough time has elapsed since the previous check for updates";
         return;
-    }
 
     storage.setLastUpdateCheck(current_timepoint);
 
@@ -987,7 +981,7 @@ base::User Service::createOneTimeUser() const
         return base::User();
     }
 
-    QString username = QLatin1Char('#') + base::hostIdToString(host_id);
+    QString username = '#' + base::hostIdToString(host_id);
     base::User user = base::User::create(username, one_time_password_);
 
     user.sessions = one_time_sessions_;

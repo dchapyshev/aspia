@@ -151,57 +151,40 @@ void MainWindow::connectToService()
 
     agent->moveToThread(base::GuiApplication::ioThread());
 
-    connect(agent, &UserSessionAgent::sig_statusChanged,
-            this, &MainWindow::onStatusChanged,
+    connect(agent, &UserSessionAgent::sig_statusChanged, this, &MainWindow::onStatusChanged,
             Qt::QueuedConnection);
-    connect(agent, &UserSessionAgent::sig_clientListChanged,
-            this, &MainWindow::onClientListChanged,
+    connect(agent, &UserSessionAgent::sig_clientListChanged, this, &MainWindow::onClientListChanged,
             Qt::QueuedConnection);
-    connect(agent, &UserSessionAgent::sig_credentialsChanged,
-            this, &MainWindow::onCredentialsChanged,
+    connect(agent, &UserSessionAgent::sig_credentialsChanged, this, &MainWindow::onCredentialsChanged,
             Qt::QueuedConnection);
-    connect(agent, &UserSessionAgent::sig_routerStateChanged,
-            this, &MainWindow::onRouterStateChanged,
+    connect(agent, &UserSessionAgent::sig_routerStateChanged, this, &MainWindow::onRouterStateChanged,
             Qt::QueuedConnection);
-    connect(agent, &UserSessionAgent::sig_connectConfirmationRequest,
-            this, &MainWindow::onConnectConfirmationRequest,
+    connect(agent, &UserSessionAgent::sig_confirmationRequest, this, &MainWindow::onConfirmationRequest,
             Qt::QueuedConnection);
-    connect(agent, &UserSessionAgent::sig_videoRecordingStateChanged,
-            this, &MainWindow::onVideoRecordingStateChanged,
+    connect(agent, &UserSessionAgent::sig_recordingStateChanged, this, &MainWindow::onRecordingStateChanged,
             Qt::QueuedConnection);
-    connect(agent, &UserSessionAgent::sig_textChat,
-            this, &MainWindow::onTextChat,
+    connect(agent, &UserSessionAgent::sig_textChat, this, &MainWindow::onTextChat,
             Qt::QueuedConnection);
 
-    connect(this, &MainWindow::sig_connectToService,
-            agent, &UserSessionAgent::onConnectToService,
+    connect(this, &MainWindow::sig_connectToService, agent, &UserSessionAgent::onConnectToService,
             Qt::QueuedConnection);
-    connect(this, &MainWindow::sig_disconnectFromService,
-            agent, &UserSessionAgent::deleteLater,
+    connect(this, &MainWindow::sig_disconnectFromService, agent, &UserSessionAgent::deleteLater,
             Qt::QueuedConnection);
-    connect(this, &MainWindow::sig_updateCredentials,
-            agent, &UserSessionAgent::onUpdateCredentials,
+    connect(this, &MainWindow::sig_updateCredentials, agent, &UserSessionAgent::onUpdateCredentials,
             Qt::QueuedConnection);
-    connect(this, &MainWindow::sig_oneTimeSessions,
-            agent, &UserSessionAgent::onOneTimeSessions,
+    connect(this, &MainWindow::sig_oneTimeSessions, agent, &UserSessionAgent::onOneTimeSessions,
             Qt::QueuedConnection);
-    connect(this, &MainWindow::sig_killClient,
-            agent, &UserSessionAgent::onKillClient,
+    connect(this, &MainWindow::sig_killClient, agent, &UserSessionAgent::onKillClient,
             Qt::QueuedConnection);
-    connect(this, &MainWindow::sig_connectConfirmation,
-            agent, &UserSessionAgent::onConnectConfirmation,
+    connect(this, &MainWindow::sig_connectConfirmation, agent, &UserSessionAgent::onConnectConfirmation,
             Qt::QueuedConnection);
-    connect(this, &MainWindow::sig_mouseLock,
-            agent, &UserSessionAgent::onMouseLock,
+    connect(this, &MainWindow::sig_mouseLock, agent, &UserSessionAgent::onMouseLock,
             Qt::QueuedConnection);
-    connect(this, &MainWindow::sig_keyboardLock,
-            agent, &UserSessionAgent::onKeyboardLock,
+    connect(this, &MainWindow::sig_keyboardLock, agent, &UserSessionAgent::onKeyboardLock,
             Qt::QueuedConnection);
-    connect(this, &MainWindow::sig_pause,
-            agent, &UserSessionAgent::onPause,
+    connect(this, &MainWindow::sig_pause, agent, &UserSessionAgent::onPause,
             Qt::QueuedConnection);
-    connect(this, &MainWindow::sig_textChat,
-            agent, &UserSessionAgent::onTextChat,
+    connect(this, &MainWindow::sig_textChat, agent, &UserSessionAgent::onTextChat,
             Qt::QueuedConnection);
 
     LOG(INFO) << "Connecting to service";
@@ -458,10 +441,9 @@ void MainWindow::onRouterStateChanged(const proto::internal::RouterState& state)
 }
 
 //--------------------------------------------------------------------------------------------------
-void MainWindow::onConnectConfirmationRequest(
-    const proto::internal::ConnectConfirmationRequest& request)
+void MainWindow::onConfirmationRequest(const proto::internal::ConfirmationRequest& request)
 {
-    LOG(INFO) << "Connection confirmation request (id=" << request.id() << ")";
+    LOG(INFO) << "Confirmation request (id=" << request.id() << ")";
 
     ConnectConfirmDialog dialog(request, this);
     bool accept = dialog.exec() == ConnectConfirmDialog::Accepted;
@@ -471,18 +453,15 @@ void MainWindow::onConnectConfirmationRequest(
 }
 
 //--------------------------------------------------------------------------------------------------
-void MainWindow::onVideoRecordingStateChanged(
-    const QString& computer_name, const QString& user_name, bool started)
+void MainWindow::onRecordingStateChanged(const QString& computer, const QString& user, bool started)
 {
-    LOG(INFO) << "Video recoring state changed (user_name=" << user_name
-              << "started=" << started << ")";
-
+    LOG(INFO) << "Video recoring state changed (user=" << user << "started=" << started << ")";
     QString message;
 
     if (started)
-        message = tr("User \"%1\" (%2) started screen recording.").arg(user_name, computer_name);
+        message = tr("User \"%1\" (%2) started screen recording.").arg(user, computer);
     else
-        message = tr("User \"%1\" (%2) stopped screen recording.").arg(user_name, computer_name);
+        message = tr("User \"%1\" (%2) stopped screen recording.").arg(user, computer);
 
     tray_icon_.showMessage(tr("Aspia Host"), message, QIcon(":/img/aspia-host.ico"), 1200);
 }

@@ -29,7 +29,7 @@
 #include "common/update_checker.h"
 #include "host/desktop_manager.h"
 #include "host/router_controller.h"
-#include "host/user_session_manager.h"
+#include "host/user_session.h"
 #include "host/system_settings.h"
 
 namespace host {
@@ -104,7 +104,7 @@ private:
 
     QList<std::pair<base::TcpChannel*, QTime>> pending_channels_;
 
-    UserSessionManager* user_session_manager_ = nullptr;
+    UserSession* user_session_ = nullptr;
 
     QPointer<common::UpdateChecker> update_checker_;
     QPointer<common::HttpFileDownloader> update_downloader_;

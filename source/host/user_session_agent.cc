@@ -143,10 +143,10 @@ void UserSessionAgent::onConnectConfirmation(quint32 id, bool accept)
         return;
     }
 
-    proto::internal::ConnectConfirmation* confirmation =
-        outgoing_message_.newMessage().mutable_connect_confirmation();
+    proto::internal::ConfirmationReply* confirmation =
+        outgoing_message_.newMessage().mutable_confirmation_reply();
     confirmation->set_id(id);
-    confirmation->set_accept_connection(accept);
+    confirmation->set_accept(accept);
 
     sendSessionMessage();
 }
@@ -245,16 +245,15 @@ void UserSessionAgent::onIpcMessageReceived(quint32 channel_id, const QByteArray
         return;
     }
 
-    if (incoming_message_->has_connect_confirmation_request())
+    if (incoming_message_->has_confirmation_request())
     {
-        const proto::internal::ConnectConfirmationRequest& request =
-            incoming_message_->connect_confirmation_request();
+        const proto::internal::ConfirmationRequest& request = incoming_message_->confirmation_request();
 
         LOG(INFO) << "Connect confirmation request received (id=" << request.id()
                   << "computer_name=" << request.computer_name() << "user_name="
                   << request.user_name() << ")";
 
-        emit sig_connectConfirmationRequest(request);
+        emit sig_confirmationRequest(request);
     }
     else if (incoming_message_->has_connect_event())
     {
@@ -294,17 +293,17 @@ void UserSessionAgent::onIpcMessageReceived(quint32 channel_id, const QByteArray
     {
         emit sig_textChat(incoming_message_->text_chat());
     }
-    else if (incoming_message_->has_video_recording_state())
+    else if (incoming_message_->has_recording_state())
     {
-        const proto::internal::VideoRecordingState& video_recording_state =
-            incoming_message_->video_recording_state();
+        const proto::internal::RecordingState& recording_state =
+            incoming_message_->recording_state();
 
-        LOG(INFO) << "Video recording state changed (" << video_recording_state  << ")";
+        LOG(INFO) << "Video recording state changed (" << recording_state  << ")";
 
-        emit sig_videoRecordingStateChanged(
-            QString::fromStdString(video_recording_state.computer_name()),
-            QString::fromStdString(video_recording_state.user_name()),
-            video_recording_state.started());
+        emit sig_recordingStateChanged(
+            QString::fromStdString(recording_state.computer_name()),
+            QString::fromStdString(recording_state.user_name()),
+            recording_state.started());
     }
     else
     {

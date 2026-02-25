@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/user_session_manager.h"
+#include "host/user_session.h"
 
 #include <QCoreApplication>
 #include <QDir>
@@ -136,7 +136,7 @@ bool createProcessWithToken(HANDLE token, const QString& command_line)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-UserSessionManager::UserSessionManager(QObject* parent)
+UserSession::UserSession(QObject* parent)
     : QObject(parent),
       attach_timer_(new QTimer(this))
 {
@@ -151,19 +151,19 @@ UserSessionManager::UserSessionManager(QObject* parent)
     });
 
     connect(base::Application::instance(), &base::Application::sig_sessionEvent,
-            this, &UserSessionManager::onUserSessionEvent);
+            this, &UserSession::onUserSessionEvent);
 }
 
 //--------------------------------------------------------------------------------------------------
-UserSessionManager::~UserSessionManager()
+UserSession::~UserSession()
 {
     LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
-bool UserSessionManager::start()
+bool UserSession::start()
 {
-    LOG(INFO) << "Starting user session manager";
+    LOG(INFO) << "Starting user session";
 
     if (ipc_server_)
     {
@@ -174,53 +174,42 @@ bool UserSessionManager::start()
     ipc_server_ = new base::IpcServer(this);
 
     connect(ipc_server_, &base::IpcServer::sig_newConnection,
-            this, &UserSessionManager::onIpcNewConnection);
+            this, &UserSession::onIpcNewConnection);
 
     QString ipc_channel_name = base::IpcServer::createUniqueId();
 
     HostStorage ipc_storage;
     ipc_storage.setChannelIdForUI(ipc_channel_name);
 
-    LOG(INFO) << "Start IPC server for UI (channel_id=" << ipc_channel_name << ")";
+    LOG(INFO) << "Start IPC server for UI (channel_name=" << ipc_channel_name << ")";
 
     // Start the server which will accept incoming connections from UI processes in user sessions.
     if (!ipc_server_->start(ipc_channel_name))
     {
-        LOG(ERROR) << "Failed to start IPC server for UI (channel_id=" << ipc_channel_name << ")";
+        LOG(ERROR) << "Failed to start IPC server for UI (channel_name=" << ipc_channel_name << ")";
         return false;
     }
 
-    LOG(INFO) << "IPC channel for UI started";
+    LOG(INFO) << "IPC server for UI is started";
+    base::SessionId session_id = 0;
 
 #if defined(Q_OS_WINDOWS)
-    base::SessionId session_id = base::activeConsoleSessionId();
+    session_id = base::activeConsoleSessionId();
     if (session_id == base::kInvalidSessionId)
     {
         LOG(ERROR) << "Unable to get active console session id";
         return false;
     }
-
-    LOG(INFO) << "Starting process for session id:" << session_id;
-
-    // Start UI process in user session.
-    attach(FROM_HERE, session_id);
-#else
-    attach(FROM_HERE, 0);
 #endif
 
+    attach(FROM_HERE, session_id);
     return true;
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionManager::onRouterStateChanged(const proto::internal::RouterState& router_state)
+void UserSession::onRouterStateChanged(const proto::internal::RouterState& router_state)
 {
-    LOG(INFO) << "Router state changed:" << router_state << "sid" << session_id_ << ")";
-
-    if (!isConnected())
-    {
-        LOG(INFO) << "Not connected to UI";
-        return;
-    }
+    LOG(INFO) << router_state;
 
     outgoing_message_.newMessage().mutable_router_state()->CopyFrom(router_state);
     sendSessionMessage();
@@ -229,19 +218,13 @@ void UserSessionManager::onRouterStateChanged(const proto::internal::RouterState
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionManager::onUpdateCredentials(base::HostId host_id, const QString& password)
+void UserSession::onUpdateCredentials(base::HostId host_id, const QString& password)
 {
     LOG(INFO) << "Set host ID for session:" << host_id;
 
-    if (!isConnected())
-    {
-        LOG(INFO) << "Not connected to UI";
-        return;
-    }
-
     if (host_id == base::kInvalidHostId)
     {
-        LOG(ERROR) << "Invalid host ID (sid" << session_id_ << ")";
+        LOG(ERROR) << "Invalid host ID";
         return;
     }
 
@@ -253,14 +236,14 @@ void UserSessionManager::onUpdateCredentials(base::HostId host_id, const QString
 }
 
 //--------------------------------------------------------------------------------------------------
-bool UserSessionManager::isConnected() const
+bool UserSession::isAttached() const
 {
     return ipc_channel_ != nullptr;
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionManager::onAskForConfirmation(
-    base::SessionId session_id, const proto::internal::ConnectConfirmationRequest& request)
+void UserSession::onAskForConfirmation(
+    base::SessionId session_id, const proto::internal::ConfirmationRequest& request)
 {
     if (request.session_type() == proto::peer::SESSION_TYPE_SYSTEM_INFO)
     {
@@ -271,7 +254,7 @@ void UserSessionManager::onAskForConfirmation(
 
     SystemSettings settings;
 
-    if (!isConnected())
+    if (!isAttached())
     {
         LOG(INFO) << "No active GUI process";
 
@@ -311,57 +294,48 @@ void UserSessionManager::onAskForConfirmation(
     }
 
     // If the GUI process is available, then we ask it if the connection is allowed.
-    proto::internal::ConnectConfirmationRequest* ipc_request =
-        outgoing_message_.newMessage().mutable_connect_confirmation_request();
-    ipc_request->CopyFrom(request);
+    outgoing_message_.newMessage().mutable_confirmation_request()->CopyFrom(request);
 
     // Send confirmation request to GUI.
     sendSessionMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionManager::onClientStarted(const proto::internal::ConnectEvent& event)
+void UserSession::onClientStarted(const proto::internal::ConnectEvent& event)
 {
     outgoing_message_.newMessage().mutable_connect_event()->CopyFrom(event);
     sendSessionMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionManager::onClientFinished(const proto::internal::DisconnectEvent& event)
+void UserSession::onClientFinished(const proto::internal::DisconnectEvent& event)
 {
     outgoing_message_.newMessage().mutable_disconnect_event()->CopyFrom(event);
     sendSessionMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionManager::onClientSessionTextChat(
+void UserSession::onClientSessionTextChat(
     quint32 client_id, const proto::text_chat::TextChat& text_chat)
 {
-    if (!isConnected())
-    {
-        LOG(INFO) << "Not connected to UI";
-        return;
-    }
-
     outgoing_message_.newMessage().mutable_text_chat()->CopyFrom(text_chat);
     sendSessionMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionManager::onClientSessionVideoRecording(
-    const QString& computer_name, const QString& user_name, bool started)
+void UserSession::onClientSessionRecording(const QString& computer, const QString& user, bool started)
 {
-    proto::internal::VideoRecordingState* video_recording_state =
-        outgoing_message_.newMessage().mutable_video_recording_state();
-    video_recording_state->set_computer_name(computer_name.toStdString());
-    video_recording_state->set_user_name(user_name.toStdString());
-    video_recording_state->set_started(started);
+    proto::internal::RecordingState* recording_state =
+        outgoing_message_.newMessage().mutable_recording_state();
+    recording_state->set_computer_name(computer.toStdString());
+    recording_state->set_user_name(user.toStdString());
+    recording_state->set_started(started);
 
     sendSessionMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionManager::onUserSessionEvent(quint32 status, quint32 session_id)
+void UserSession::onUserSessionEvent(quint32 status, quint32 session_id)
 {
 #if defined(Q_OS_WINDOWS)
     LOG(INFO) << "User session event (status:" << base::sessionStatusToString(status)
@@ -381,7 +355,7 @@ void UserSessionManager::onUserSessionEvent(quint32 status, quint32 session_id)
 
         case WTS_SESSION_UNLOCK:
         {
-            if (!isConnected() && session_id == session_id_)
+            if (!isAttached() && session_id == session_id_)
                 attach(FROM_HERE, session_id);
         }
         break;
@@ -394,15 +368,10 @@ void UserSessionManager::onUserSessionEvent(quint32 status, quint32 session_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionManager::onIpcNewConnection()
+void UserSession::onIpcNewConnection()
 {
     LOG(INFO) << "New IPC connection";
-
-    if (!ipc_server_)
-    {
-        LOG(ERROR) << "No IPC server instance!";
-        return;
-    }
+    CHECK(ipc_server_);
 
     if (!ipc_server_->hasPendingConnections())
     {
@@ -414,47 +383,26 @@ void UserSessionManager::onIpcNewConnection()
     ipc_channel_->setParent(this);
 
     connect(ipc_channel_, &base::IpcChannel::sig_disconnected,
-            this, &UserSessionManager::onIpcDisconnected);
+            this, &UserSession::onIpcDisconnected);
     connect(ipc_channel_, &base::IpcChannel::sig_messageReceived,
-            this, &UserSessionManager::onIpcMessageReceived);
-
-#if defined(Q_OS_WINDOWS)
-    session_id_ = ipc_channel_->peerSessionId();
-    if (session_id_ == base::kInvalidSessionId)
-    {
-        LOG(ERROR) << "Invalid session id";
-        return;
-    }
-
-    base::SessionId console_session_id = base::activeConsoleSessionId();
-    if (console_session_id == base::kInvalidSessionId)
-    {
-        LOG(ERROR) << "Invalid console session ID (sid" << session_id_ << ")";
-    }
-    else
-    {
-        LOG(INFO) << "Console session ID:" << console_session_id;
-    }
-
-    is_console_ = session_id_ != console_session_id;
-#endif
+            this, &UserSession::onIpcMessageReceived);
 
     attach_timer_->stop();
     ipc_channel_->resume();
 
-    LOG(INFO) << "Start user session:" << session_id_;
+    LOG(INFO) << "Start user session";
     emit sig_attached();
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionManager::onIpcDisconnected()
+void UserSession::onIpcDisconnected()
 {
-    LOG(INFO) << "Ipc channel disconnected (sid" << session_id_ << ")";
+    LOG(INFO) << "IPC channel disconnected";
     dettach(FROM_HERE);
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionManager::onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer)
+void UserSession::onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer)
 {
     if (channel_id != proto::internal::CHANNEL_ID_SESSION)
     {
@@ -464,7 +412,7 @@ void UserSessionManager::onIpcMessageReceived(quint32 channel_id, const QByteArr
 
     if (!incoming_message_.parse(buffer))
     {
-        LOG(ERROR) << "Invalid message from UI (sid" << session_id_ << ")";
+        LOG(ERROR) << "Invalid message from UI";
         return;
     }
 
@@ -475,13 +423,13 @@ void UserSessionManager::onIpcMessageReceived(quint32 channel_id, const QByteArr
 
         if (type == proto::internal::CredentialsRequest::NEW_PASSWORD)
         {
-            LOG(INFO) << "New credentials requested (sid" << session_id_ << ")";
+            LOG(INFO) << "New credentials requested";
             emit sig_changeOneTimePassword();
         }
         else
         {
             DCHECK_EQ(type, proto::internal::CredentialsRequest::REFRESH);
-            LOG(INFO) << "Credentials update requested (sid" << session_id_ << ")";
+            LOG(INFO) << "Credentials update requested";
         }
     }
     else if (incoming_message_->has_one_time_sessions())
@@ -489,15 +437,15 @@ void UserSessionManager::onIpcMessageReceived(quint32 channel_id, const QByteArr
         quint32 sessions = incoming_message_->one_time_sessions().sessions();
         emit sig_changeOneTimeSessions(sessions);
     }
-    else if (incoming_message_->has_connect_confirmation())
+    else if (incoming_message_->has_confirmation_reply())
     {
-        proto::internal::ConnectConfirmation connect_confirmation =
-            incoming_message_->connect_confirmation();
+        proto::internal::ConfirmationReply confirmation =
+            incoming_message_->confirmation_reply();
 
-        LOG(INFO) << "Connect confirmation (id=" << connect_confirmation.id() << "accept="
-                  << connect_confirmation.accept_connection() << "sid=" << session_id_ << ")";
+        LOG(INFO) << "Connect confirmation (request_id:" << confirmation.id() << "accept:"
+                  << confirmation.accept();
 
-        emit sig_askForConfirmation(connect_confirmation.id(), connect_confirmation.accept_connection());
+        emit sig_askForConfirmation(confirmation.id(), confirmation.accept());
     }
     else if (incoming_message_->has_control())
     {
@@ -509,11 +457,11 @@ void UserSessionManager::onIpcMessageReceived(quint32 channel_id, const QByteArr
             {
                 if (!control.has_unsigned_integer())
                 {
-                    LOG(ERROR) << "Invalid parameter for CODE_KILL (sid" << session_id_ << ")";
+                    LOG(ERROR) << "Invalid parameter for CODE_KILL";
                     return;
                 }
 
-                LOG(INFO) << "ServiceControl::CODE_KILL (sid" << session_id_ << "client_id"
+                LOG(INFO) << "ServiceControl::CODE_KILL (client_id"
                           << control.unsigned_integer() << ")";
                 emit sig_stopClient(static_cast<quint32>(control.unsigned_integer()));
             }
@@ -523,12 +471,11 @@ void UserSessionManager::onIpcMessageReceived(quint32 channel_id, const QByteArr
             {
                 if (!control.has_boolean())
                 {
-                    LOG(ERROR) << "Invalid parameter for CODE_PAUSE (sid" << session_id_ << ")";
+                    LOG(ERROR) << "Invalid parameter for CODE_PAUSE";
                     return;
                 }
 
-                LOG(INFO) << "ServiceControl::CODE_PAUSE (sid" << session_id_ << "paused"
-                          << control.boolean() << ")";
+                LOG(INFO) << "ServiceControl::CODE_PAUSE (paused" << control.boolean() << ")";
                 emit sig_pauseChanged(control.boolean());
             }
             break;
@@ -537,12 +484,11 @@ void UserSessionManager::onIpcMessageReceived(quint32 channel_id, const QByteArr
             {
                 if (!control.has_boolean())
                 {
-                    LOG(ERROR) << "Invalid parameter for CODE_LOCK_MOUSE (sid" << session_id_ << ")";
+                    LOG(ERROR) << "Invalid parameter for CODE_LOCK_MOUSE";
                     return;
                 }
 
-                LOG(INFO) << "ServiceControl::CODE_LOCK_MOUSE (sid" << session_id_
-                          << "lock_mouse" << control.boolean() << ")";
+                LOG(INFO) << "ServiceControl::CODE_LOCK_MOUSE (lock_mouse" << control.boolean() << ")";
                 emit sig_lockMouseChanged(control.boolean());
             }
             break;
@@ -551,39 +497,39 @@ void UserSessionManager::onIpcMessageReceived(quint32 channel_id, const QByteArr
             {
                 if (!control.has_boolean())
                 {
-                    LOG(ERROR) << "Invalid parameter for CODE_LOCK_KEYBOARD (sid" << session_id_ << ")";
+                    LOG(ERROR) << "Invalid parameter for CODE_LOCK_KEYBOARD";
                     return;
                 }
 
-                LOG(INFO) << "ServiceControl::CODE_LOCK_KEYBOARD (sid" << session_id_
-                          << "lock_keyboard" << control.boolean() << ")";
+                LOG(INFO) << "ServiceControl::CODE_LOCK_KEYBOARD (lock_keyboard" << control.boolean() << ")";
                 emit sig_lockKeyboardChanged(control.boolean());
             }
             break;
 
             default:
             {
-                LOG(ERROR) << "Unhandled control code:" << control.code() << "(sid" << session_id_ << ")";
+                LOG(ERROR) << "Unhandled control code:" << control.code();
                 return;
             }
         }
     }
     else if (incoming_message_->has_text_chat())
     {
-        LOG(INFO) << "Text chat message (sid" << session_id_ << ")";
+        LOG(INFO) << "Text chat message";
         emit sig_textChatMessage(incoming_message_->text_chat());
     }
     else
     {
-        LOG(ERROR) << "Unhandled message from UI (sid" << session_id_ << ")";
+        LOG(ERROR) << "Unhandled message from UI";
     }
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionManager::attach(const base::Location& location, base::SessionId session_id)
+void UserSession::attach(const base::Location& location, base::SessionId session_id)
 {
     LOG(INFO) << "Attaching to UI process (sid" << session_id << "from" << location << ")";
 
+    session_id_ = session_id;
     attach_timer_->start();
 
 #if defined(Q_OS_WINDOWS)
@@ -698,9 +644,9 @@ void UserSessionManager::attach(const base::Location& location, base::SessionId 
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionManager::dettach(const base::Location& location)
+void UserSession::dettach(const base::Location& location)
 {
-    LOG(INFO) << "Dettached (sid" << session_id_ << "from" << location << ")";
+    LOG(INFO) << "Dettached from" << location;
 
     if (ipc_channel_)
     {
@@ -709,15 +655,16 @@ void UserSessionManager::dettach(const base::Location& location)
         ipc_channel_ = nullptr;
     }
 
+    session_id_ = base::kInvalidSessionId;
     emit sig_dettached();
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionManager::sendSessionMessage()
+void UserSession::sendSessionMessage()
 {
     if (!ipc_channel_)
     {
-        LOG(INFO) << "IPC channel not exists (sid" << session_id_ << ")";
+        LOG(INFO) << "IPC channel is not connected";
         return;
     }
 

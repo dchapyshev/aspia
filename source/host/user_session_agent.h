@@ -79,9 +79,8 @@ signals:
     void sig_clientListChanged(const host::UserSessionAgent::ClientList& clients);
     void sig_credentialsChanged(const proto::internal::Credentials& credentials);
     void sig_routerStateChanged(const proto::internal::RouterState& state);
-    void sig_connectConfirmationRequest(const proto::internal::ConnectConfirmationRequest& request);
-    void sig_videoRecordingStateChanged(
-        const QString& computer_name, const QString& user_name, bool started);
+    void sig_confirmationRequest(const proto::internal::ConfirmationRequest& request);
+    void sig_recordingStateChanged(const QString& computer, const QString& user, bool started);
     void sig_textChat(const proto::text_chat::TextChat& text_chat);
 
 private slots:
