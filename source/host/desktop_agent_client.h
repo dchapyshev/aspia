@@ -20,28 +20,25 @@
 #define HOST_DESKTOP_AGENT_CLIENT_H
 
 #include <QObject>
-#include <QPointer>
-
 #include <memory>
 
 #include "base/serialization.h"
-#include "base/ipc/ipc_channel.h"
 #include "proto/desktop.h"
-
-#if defined(Q_OS_WINDOWS)
-#include "host/task_manager.h"
-#endif // defined(Q_OS_WINDOWS)
+#include "proto/task_manager.h"
 
 namespace base {
 class AudioEncoder;
 class CursorEncoder;
 class Frame;
+class IpcChannel;
 class MouseCursor;
 class ScaleReducer;
 class VideoEncoder;
 } // namespace base
 
 namespace host {
+
+class TaskManager;
 
 class DesktopAgentClient final : public QObject
 {
@@ -152,7 +149,7 @@ private:
     bool is_audio_paused_ = false;
 
 #if defined(Q_OS_WINDOWS)
-    QPointer<TaskManager> task_manager_;
+    TaskManager* task_manager_ = nullptr;
 #endif // defined(Q_OS_WINDOWS)
 
     base::Parser<proto::desktop::ClientToHost> incoming_message_;

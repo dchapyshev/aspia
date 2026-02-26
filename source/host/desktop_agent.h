@@ -21,15 +21,33 @@
 
 #include <QObject>
 
-#include "base/audio/audio_capturer_wrapper.h"
 #include "base/desktop/capture_scheduler.h"
-#include "base/desktop/screen_capturer_wrapper.h"
-#include "base/ipc/ipc_server.h"
-#include "common/clipboard_monitor.h"
-#include "host/desktop_agent_client.h"
-#include "host/input_injector.h"
+#include "base/desktop/screen_capturer.h"
+
+namespace base {
+class AudioCapturerWrapper;
+class IpcServer;
+class ScreenCapturerWrapper;
+} // namespace base
+
+namespace common {
+class ClipboardMonitor;
+} // namespace common
+
+namespace proto::desktop {
+class AudioPacket;
+class ClipboardEvent;
+class KeyEvent;
+class MouseEvent;
+class Screen;
+class TextEvent;
+class TouchEvent;
+} // namespace proto::desktop
 
 namespace host {
+
+class DesktopAgentClient;
+class InputInjector;
 
 class DesktopAgent final : public QObject
 {

@@ -24,8 +24,13 @@
 #include "base/application.h"
 #include "base/logging.h"
 #include "base/power_controller.h"
+#include "base/audio/audio_capturer_wrapper.h"
+#include "base/desktop/screen_capturer_wrapper.h"
 #include "base/ipc/ipc_channel.h"
+#include "base/ipc/ipc_server.h"
+#include "host/desktop_agent_client.h"
 #include "host/system_settings.h"
+#include "common/clipboard_monitor.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "base/desktop/desktop_environment_win.h"

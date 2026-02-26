@@ -31,6 +31,7 @@
 #include "base/codec/video_encoder_zstd.h"
 #include "base/desktop/frame.h"
 #include "base/desktop/screen_capturer.h"
+#include "base/ipc/ipc_channel.h"
 #include "common/desktop_session_constants.h"
 #include "host/host_storage.h"
 #include "host/service.h"
@@ -43,6 +44,7 @@
 #include "base/win/safe_mode_util.h"
 #include "base/win/session_enumerator.h"
 #include "host/system_info.h"
+#include "host/task_manager.h"
 #include "host/win/updater_launcher.h"
 #endif // defined(Q_OS_WINDOWS)
 
