@@ -85,6 +85,12 @@ QString DesktopClient::computerName() const
 }
 
 //--------------------------------------------------------------------------------------------------
+QString DesktopClient::userName() const
+{
+    return tcp_channel_->peerUserName();
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopClient::start(const QString& ipc_channel_name)
 {
     if (ipc_channel_)
@@ -188,6 +194,30 @@ void DesktopClient::onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray
         {
             sendSessionList();
         }
+        else if (message.has_switch_session())
+        {
+            if (sessionType() != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
+            {
+                LOG(ERROR) << "Switch session available only for desktop manage session type";
+                return;
+            }
+
+            base::SessionId session_id = message.switch_session().session_id();
+            if (session_id == base::kInvalidSessionId || session_id == base::kServiceSessionId)
+            {
+                LOG(ERROR) << "Invalid session id:" << session_id;
+                return;
+            }
+
+            LOG(INFO) << "Switch session received:" << session_id;
+            emit sig_switchSession(session_id);
+        }
+        else if (message.has_video_recording())
+        {
+            bool is_started =
+                message.video_recording().action() == proto::desktop::VideoRecording::ACTION_STARTED;
+            emit sig_recordingChanged(computerName(), userName(), is_started);
+        }
     }
     else
     {
@@ -234,7 +264,6 @@ bool DesktopClient::connectToAgent(const QString& ipc_channel_name)
 void DesktopClient::sendIpcServiceMessage(const QByteArray& buffer)
 {
     quint32 channel_id = base::makeUint32(proto::internal::CHANNEL_ID_SERVICE, 0);
-
     if (ipc_channel_)
         ipc_channel_->send(channel_id, buffer);
 }

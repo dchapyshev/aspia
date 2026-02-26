@@ -331,6 +331,8 @@ void Service::onConfirmationReply(quint32 request_id, bool accept)
                             this, &Service::onDesktopClientStarted);
                     connect(client, &DesktopClient::sig_finished,
                             this, &Service::onDesktopClientFinished);
+                    connect(client, &DesktopClient::sig_switchSession,
+                            this, &Service::onDesktopClientSwitchSession);
                     connect(client, &DesktopClient::sig_recordingChanged,
                             user_session_, &UserSession::onClientRecording);
                     connect(desktop_manager_, &DesktopManager::sig_attached,
@@ -590,6 +592,20 @@ void Service::onDesktopClientFinished(quint32 client_id)
 
     desktop_clients_.removeOne(client);
     user_session_->onClientFinished(client_id);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Service::onDesktopClientSwitchSession(base::SessionId session_id)
+{
+    DesktopClient* client = dynamic_cast<DesktopClient*>(sender());
+    if (!client)
+    {
+        LOG(ERROR) << "Unknown sender for slot";
+        return;
+    }
+
+    desktop_manager_->onSwitchSession(session_id);
+    user_session_->onSwitchSession(session_id);
 }
 
 //--------------------------------------------------------------------------------------------------

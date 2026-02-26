@@ -347,20 +347,6 @@ message PowerControl
     Action action = 1;
 }
 
-// Extension name: "video_recording"
-// Sent by host to client and by client to host.
-message VideoRecording
-{
-    enum Action
-    {
-        ACTION_UNKNOWN = 0;
-        ACTION_STARTED = 1;
-        ACTION_STOPPED = 2;
-    }
-
-    Action action = 1;
-}
-
 // Extension name: "screen_type"
 // Sent by host to client.
 message ScreenType

@@ -375,7 +375,10 @@ void DesktopAgentClient::onIpcMessageReceived(quint32 channel_id, const QByteArr
             return;
         }
 
-        readSessionMessage(static_cast<quint8>(tcp_channel_id), buffer);
+        if (tcp_channel_id != proto::peer::CHANNEL_ID_SESSION)
+            return;
+
+        readSessionMessage(buffer);
     }
     else if (ipc_channel_id == proto::internal::CHANNEL_ID_SERVICE)
     {
@@ -416,53 +419,46 @@ void DesktopAgentClient::onTaskManagerMessage(const proto::task_manager::HostToC
 #endif // defined(Q_OS_WINDOWS)
 
 //--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::readSessionMessage(quint8 channel_id, const QByteArray& buffer)
+void DesktopAgentClient::readSessionMessage(const QByteArray& buffer)
 {
-    if (channel_id == proto::peer::CHANNEL_ID_SESSION)
+    if (!incoming_message_.parse(buffer))
     {
-        if (!incoming_message_.parse(buffer))
-        {
-            LOG(ERROR) << "Invalid message from client";
-            return;
-        }
+        LOG(ERROR) << "Invalid message from client";
+        return;
+    }
 
-        if (incoming_message_->has_mouse_event())
-        {
-            readMouseEvent(incoming_message_->mouse_event());
-        }
-        else if (incoming_message_->has_key_event())
-        {
-            readKeyEvent(incoming_message_->key_event());
-        }
-        else if (incoming_message_->has_touch_event())
-        {
-            readTouchEvent(incoming_message_->touch_event());
-        }
-        else if (incoming_message_->has_text_event())
-        {
-            readTextEvent(incoming_message_->text_event());
-        }
-        else if (incoming_message_->has_clipboard_event())
-        {
-            readClipboardEvent(incoming_message_->clipboard_event());
-        }
-        else if (incoming_message_->has_extension())
-        {
-            readExtension(incoming_message_->extension());
-        }
-        else if (incoming_message_->has_config())
-        {
-            readConfig(incoming_message_->config());
-        }
-        else
-        {
-            LOG(ERROR) << "Unhandled message from client";
-            return;
-        }
+    if (incoming_message_->has_mouse_event())
+    {
+        readMouseEvent(incoming_message_->mouse_event());
+    }
+    else if (incoming_message_->has_key_event())
+    {
+        readKeyEvent(incoming_message_->key_event());
+    }
+    else if (incoming_message_->has_touch_event())
+    {
+        readTouchEvent(incoming_message_->touch_event());
+    }
+    else if (incoming_message_->has_text_event())
+    {
+        readTextEvent(incoming_message_->text_event());
+    }
+    else if (incoming_message_->has_clipboard_event())
+    {
+        readClipboardEvent(incoming_message_->clipboard_event());
+    }
+    else if (incoming_message_->has_extension())
+    {
+        readExtension(incoming_message_->extension());
+    }
+    else if (incoming_message_->has_config())
+    {
+        readConfig(incoming_message_->config());
     }
     else
     {
-        // TODO: Handle service message.
+        LOG(ERROR) << "Unhandled message from client";
+        return;
     }
 }
 
@@ -591,10 +587,6 @@ void DesktopAgentClient::readExtension(const proto::desktop::Extension& extensio
     else if (extension.name() == common::kSystemInfoExtension)
     {
         readSystemInfoExtension(extension.data());
-    }
-    else if (extension.name() == common::kVideoRecordingExtension)
-    {
-        readVideoRecordingExtension(extension.data());
     }
     else
     {
@@ -905,12 +897,6 @@ void DesktopAgentClient::readSystemInfoExtension(const std::string& data)
 
     sendSessionMessage();
 #endif // defined(Q_OS_WINDOWS)
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::readVideoRecordingExtension(const std::string& data)
-{
-
 }
 
 //--------------------------------------------------------------------------------------------------

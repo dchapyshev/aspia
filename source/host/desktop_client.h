@@ -42,6 +42,7 @@ public:
     proto::peer::SessionType sessionType() const;
     QString displayName() const;
     QString computerName() const;
+    QString userName() const;
 
 public slots:
     void start(const QString& ipc_channel_name);
@@ -51,7 +52,7 @@ signals:
     void sig_started(quint32 client_id);
     void sig_finished(quint32 client_id);
     void sig_switchSession(base::SessionId session_id);
-    void sig_recordingChanged(const QString& computer_name, const QString& user_name, bool started);
+    void sig_recordingChanged(const QString& computer, const QString& user, bool started);
 
 private slots:
     void onIpcChannelMessage(quint32 channel_id, const QByteArray& buffer);

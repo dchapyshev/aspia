@@ -63,6 +63,7 @@ public slots:
     void start();
     void onClientStarted();
     void onClientFinished();
+    void onSwitchSession(base::SessionId session_id);
 
 signals:
     void sig_attached(const QString& ipc_channel_name);

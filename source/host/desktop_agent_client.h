@@ -106,7 +106,7 @@ private slots:
 #endif // defined(Q_OS_WINDOWS)
 
 private:
-    void readSessionMessage(quint8 channel_id, const QByteArray& buffer);
+    void readSessionMessage(const QByteArray& buffer);
     void sendSessionMessage(const QByteArray& buffer);
     void sendSessionMessage();
 
@@ -124,7 +124,6 @@ private:
     void readPowerControlExtension(const std::string& data);
     void readRemoteUpdateExtension(const std::string& data);
     void readSystemInfoExtension(const std::string& data);
-    void readVideoRecordingExtension(const std::string& data);
     void readTaskManagerExtension(const std::string& data);
 
     void sendCapabilities();

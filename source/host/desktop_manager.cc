@@ -295,6 +295,13 @@ void DesktopManager::onClientFinished()
 }
 
 //--------------------------------------------------------------------------------------------------
+void DesktopManager::onSwitchSession(base::SessionId session_id)
+{
+    dettach(FROM_HERE);
+    attach(FROM_HERE, session_id);
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopManager::onUserSessionEvent(quint32 event_type, quint32 session_id)
 {
 #if defined(Q_OS_WINDOWS)

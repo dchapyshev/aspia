@@ -20,6 +20,7 @@
 #define HOST_SERVICE_H
 
 #include "base/service.h"
+#include "base/session_id.h"
 #include "base/peer/host_id.h"
 #include "base/peer/user.h"
 #include "host/system_settings.h"
@@ -93,6 +94,7 @@ private slots:
 
     void onDesktopClientStarted(quint32 client_id);
     void onDesktopClientFinished(quint32 client_id);
+    void onDesktopClientSwitchSession(base::SessionId session_id);
 
     void onFileClientStarted(quint32 client_id);
     void onFileClientFinished(quint32 client_id);

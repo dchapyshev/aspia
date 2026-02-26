@@ -24,8 +24,7 @@ package proto.desktop;
 
 message SwitchSession
 {
-    uint32 dummy      = 1; // Always set to 1.
-    uint32 session_id = 2;
+    uint32 session_id = 1;
 }
 
 message Session
@@ -50,6 +49,18 @@ message SessionListRequest
     uint32 dummy = 1; // Always set to 1.
 }
 
+message VideoRecording
+{
+    enum Action
+    {
+        ACTION_UNKNOWN = 0;
+        ACTION_STARTED = 1;
+        ACTION_STOPPED = 2;
+    }
+
+    Action action = 1;
+}
+
 message ServiceToClient
 {
     SessionList session_list = 1;
@@ -59,6 +70,7 @@ message ClientToService
 {
     SessionListRequest session_list_request = 1;
     SwitchSession switch_session            = 2;
+    VideoRecording video_recording          = 3;
 }
 
 

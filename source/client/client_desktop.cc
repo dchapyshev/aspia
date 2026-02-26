@@ -286,13 +286,14 @@ void ClientDesktop::setAudioPause(bool enable)
 //--------------------------------------------------------------------------------------------------
 void ClientDesktop::setVideoRecording(bool enable, const QString& file_path)
 {
-    proto::desktop::VideoRecording video_recording;
+    proto::desktop::ClientToService message;
+    proto::desktop::VideoRecording* video_recording = message.mutable_video_recording();
 
     if (enable)
     {
         LOG(INFO) << "Video recording enabled (file:" << file_path << ")";
 
-        video_recording.set_action(proto::desktop::VideoRecording::ACTION_STARTED);
+        video_recording->set_action(proto::desktop::VideoRecording::ACTION_STARTED);
 
         webm_file_writer_ =
             std::make_unique<base::WebmFileWriter>(file_path, sessionState()->computerName());
@@ -317,19 +318,14 @@ void ClientDesktop::setVideoRecording(bool enable, const QString& file_path)
     {
         LOG(INFO) << "Video recording disabled";
 
-        video_recording.set_action(proto::desktop::VideoRecording::ACTION_STOPPED);
+        video_recording->set_action(proto::desktop::VideoRecording::ACTION_STOPPED);
 
         webm_video_encode_timer_->deleteLater();
         webm_video_encoder_.reset();
         webm_file_writer_.reset();
     }
 
-    proto::desktop::Extension* extension = outgoing_message_.newMessage().mutable_extension();
-
-    extension->set_name(common::kVideoRecordingExtension);
-    extension->set_data(video_recording.SerializeAsString());
-
-    sendSessionMessage(outgoing_message_.serialize());
+    sendServiceMessage(base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -481,11 +477,8 @@ void ClientDesktop::onSwitchSession(quint32 session_id)
 {
     proto::desktop::ClientToService message;
     proto::desktop::SwitchSession* switch_session = message.mutable_switch_session();
-
-    switch_session->set_dummy(1);
     switch_session->set_session_id(session_id);
-
-    //sendMessage(outgoing_message_.serialize());
+    sendServiceMessage(base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
