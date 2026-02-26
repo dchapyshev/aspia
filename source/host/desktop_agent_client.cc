@@ -20,7 +20,6 @@
 
 #include <QThread>
 
-#include "base/application.h"
 #include "base/logging.h"
 #include "base/numeric_utils.h"
 #include "base/power_controller.h"
@@ -38,11 +37,9 @@
 #include "proto/desktop_internal.h"
 #include "proto/host_internal.h"
 #include "proto/peer.h"
-#include "proto/switch_session.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/safe_mode_util.h"
-#include "base/win/session_enumerator.h"
 #include "host/system_info.h"
 #include "host/task_manager.h"
 #include "host/win/updater_launcher.h"
@@ -166,11 +163,6 @@ DesktopAgentClient::DesktopAgentClient(base::IpcChannel* ipc_channel, QObject* p
             this, &DesktopAgentClient::onIpcDisconnected);
     connect(ipc_channel_, &base::IpcChannel::sig_messageReceived,
             this, &DesktopAgentClient::onIpcMessageReceived);
-
-#if defined(Q_OS_WINDOWS)
-    connect(base::Application::instance(), &base::Application::sig_sessionEvent,
-            this, &DesktopAgentClient::onUpdateSessionsList);
-#endif // defined(Q_OS_WINDOWS)
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -194,7 +186,7 @@ const DesktopAgentClient::Config& DesktopAgentClient::config() const
 //--------------------------------------------------------------------------------------------------
 void DesktopAgentClient::onScreenCaptureData(const base::Frame* frame, const base::MouseCursor* cursor)
 {
-    proto::desktop::HostToClient& message = outgoing_message_.newMessage();
+    proto::desktop::SessionToClient& message = outgoing_message_.newMessage();
 
     if (!is_video_paused_ && frame && !frame->constUpdatedRegion().isEmpty() && video_encoder_)
     {
@@ -421,37 +413,6 @@ void DesktopAgentClient::onTaskManagerMessage(const proto::task_manager::HostToC
 
     sendSessionMessage();
 }
-
-//--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::onUpdateSessionsList()
-{
-    proto::switch_session::HostToClient outgoing_message;
-    proto::switch_session::SessionList* session_list = outgoing_message.mutable_session_list();
-
-    session_list->set_current_session_id(base::currentProcessSessionId());
-
-    for (base::SessionEnumerator it; !it.isAtEnd(); it.advance())
-    {
-        if (it.sessionId() == 0) // Don't add system session.
-            continue;
-
-        proto::switch_session::Session* session = session_list->add_session();
-
-        session->set_session_id(it.sessionId());
-        session->set_user_name(it.userName().toStdString());
-        session->set_session_name(it.sessionName().toStdString());
-        session->set_domain_name(it.domainName().toStdString());
-        session->set_is_console(it.isConsole());
-        session->set_is_locked(it.isUserLocked());
-        session->set_is_active(it.isActive());
-    }
-
-    proto::desktop::Extension* desktop_extension = outgoing_message_.newMessage().mutable_extension();
-    desktop_extension->set_name(common::kSwitchSessionExtension);
-    desktop_extension->set_data(outgoing_message.SerializeAsString());
-
-    sendSessionMessage();
-}
 #endif // defined(Q_OS_WINDOWS)
 
 //--------------------------------------------------------------------------------------------------
@@ -634,10 +595,6 @@ void DesktopAgentClient::readExtension(const proto::desktop::Extension& extensio
     else if (extension.name() == common::kVideoRecordingExtension)
     {
         readVideoRecordingExtension(extension.data());
-    }
-    else if (extension.name() == common::kSwitchSessionExtension)
-    {
-        readSwitchSessionExtension(extension.data());
     }
     else
     {
@@ -978,12 +935,6 @@ void DesktopAgentClient::readTaskManagerExtension(const std::string& data)
 
     task_manager_->readMessage(message);
 #endif // defined(Q_OS_WINDOWS)
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::readSwitchSessionExtension(const std::string& data)
-{
-    // TODO
 }
 
 //--------------------------------------------------------------------------------------------------

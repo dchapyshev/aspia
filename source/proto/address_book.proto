@@ -20,7 +20,7 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
-import "desktop.proto";
+import "desktop_session.proto";
 import "peer.proto";
 
 package proto.address_book;

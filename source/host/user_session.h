@@ -49,6 +49,7 @@ public:
     bool isAttached() const;
 
 public slots:
+    void onSwitchSession(base::SessionId session_id);
     void onClientConfirmation(
         base::SessionId session_id, const proto::internal::ConfirmationRequest& request);
     void onClientStarted(quint32 client_id, proto::peer::SessionType session_type,
@@ -62,7 +63,7 @@ signals:
     void sig_dettached();
     void sig_changeOneTimePassword();
     void sig_changeOneTimeSessions(quint32 sessions);
-    void sig_askForConfirmation(quint32 request_id, bool accept);
+    void sig_confirmationReply(quint32 request_id, bool accept);
     void sig_stopClient(quint32 client_id);
     void sig_textChatMessage(const proto::text_chat::TextChat& text_chat);
     void sig_lockMouseChanged(bool enable);
@@ -85,6 +86,7 @@ private:
     QTimer* attach_timer_ = nullptr;
 
     base::SessionId session_id_ = base::kInvalidSessionId;
+    bool is_console_ = true;
 
     base::Parser<proto::internal::UiToService> incoming_message_;
     base::Serializer<proto::internal::ServiceToUi> outgoing_message_;

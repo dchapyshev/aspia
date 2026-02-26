@@ -20,7 +20,7 @@
 #define BASE_AUDIO_AUDIO_CAPTURER_WRAPPER_H
 
 #include "base/thread.h"
-#include "proto/desktop.h"
+#include "proto/desktop_session.h"
 
 namespace base {
 

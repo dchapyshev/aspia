@@ -23,7 +23,7 @@
 #include <qt_windows.h>
 
 #include "host/win/touch_injector_defines.h"
-#include "proto/desktop.h"
+#include "proto/desktop_session.h"
 
 namespace host {
 

@@ -21,7 +21,7 @@
 
 #include <QObject>
 
-#include "proto/desktop.h"
+#include "proto/desktop_session.h"
 
 namespace common {
 

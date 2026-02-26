@@ -18,12 +18,18 @@
 
 #include "host/desktop_client.h"
 
+#include "base/application.h"
 #include "base/logging.h"
 #include "base/numeric_utils.h"
 #include "base/serialization.h"
 #include "base/ipc/ipc_channel.h"
 #include "proto/desktop_internal.h"
+#include "proto/desktop_service.h"
 #include "proto/host_internal.h"
+
+#if defined(Q_OS_WINDOWS)
+#include "base/win/session_enumerator.h"
+#endif // defined(Q_OS_WINDOWS)
 
 namespace host {
 
@@ -41,6 +47,11 @@ DesktopClient::DesktopClient(base::TcpChannel* tcp_channel, QObject* parent)
             this, &DesktopClient::onTcpErrorOccurred);
     connect(tcp_channel_, &base::TcpChannel::sig_messageReceived,
             this, &DesktopClient::onTcpMessageReceived);
+
+#if defined(Q_OS_WINDOWS)
+    connect(base::Application::instance(), &base::Application::sig_sessionEvent,
+            this, &DesktopClient::sendSessionList);
+#endif // defined(Q_OS_WINDOWS)
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -156,16 +167,31 @@ void DesktopClient::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code)
 //--------------------------------------------------------------------------------------------------
 void DesktopClient::onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray& buffer)
 {
-    if (tcp_channel_id != proto::peer::CHANNEL_ID_SERVICE)
+    if (tcp_channel_id == proto::peer::CHANNEL_ID_SESSION)
     {
         quint32 channel_id = base::makeUint32(proto::internal::CHANNEL_ID_SESSION, tcp_channel_id);
 
         if (ipc_channel_)
             ipc_channel_->send(channel_id, buffer);
     }
+    else if (tcp_channel_id == proto::peer::CHANNEL_ID_SERVICE)
+    {
+        proto::desktop::ClientToService message;
+
+        if (!base::parse(buffer, &message))
+        {
+            LOG(ERROR) << "Unable to parse service message";
+            return;
+        }
+
+        if (message.has_session_list_request())
+        {
+            sendSessionList();
+        }
+    }
     else
     {
-        // TODO: Handle service message.
+        LOG(ERROR) << "Unhandled message from channel" << tcp_channel_id;
     }
 }
 
@@ -211,6 +237,35 @@ void DesktopClient::sendIpcServiceMessage(const QByteArray& buffer)
 
     if (ipc_channel_)
         ipc_channel_->send(channel_id, buffer);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopClient::sendSessionList()
+{
+#if defined(Q_OS_WINDOWS)
+    proto::desktop::ServiceToClient message;
+    proto::desktop::SessionList* session_list = message.mutable_session_list();
+
+    session_list->set_current_session_id(base::currentProcessSessionId());
+
+    for (base::SessionEnumerator it; !it.isAtEnd(); it.advance())
+    {
+        if (it.sessionId() == 0) // Don't add system session.
+            continue;
+
+        proto::desktop::Session* session = session_list->add_session();
+
+        session->set_session_id(it.sessionId());
+        session->set_user_name(it.userName().toStdString());
+        session->set_session_name(it.sessionName().toStdString());
+        session->set_domain_name(it.domainName().toStdString());
+        session->set_is_console(it.isConsole());
+        session->set_is_locked(it.isUserLocked());
+        session->set_is_active(it.isActive());
+    }
+
+    tcp_channel_->send(proto::peer::CHANNEL_ID_SERVICE, base::serialize(message));
+#endif // defined(Q_OS_WINDOWS)
 }
 
 } // namespace host

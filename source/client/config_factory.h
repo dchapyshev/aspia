@@ -19,7 +19,7 @@
 #ifndef CLIENT_CONFIG_FACTORY_H
 #define CLIENT_CONFIG_FACTORY_H
 
-#include "proto/desktop.h"
+#include "proto/desktop_session.h"
 
 namespace client {
 

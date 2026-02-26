@@ -39,7 +39,7 @@ ClientTextChat::~ClientTextChat()
 //--------------------------------------------------------------------------------------------------
 void ClientTextChat::onTextChatMessage(const proto::text_chat::TextChat& text_chat)
 {
-    sendMessage(base::serialize(text_chat));
+    sendSessionMessage(base::serialize(text_chat));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -59,6 +59,12 @@ void ClientTextChat::onSessionMessageReceived(const QByteArray& buffer)
     }
 
     emit sig_textChatMessage(text_chat);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientTextChat::onServiceMessageReceived(const QByteArray& /* buffer */)
+{
+    // Not used yet.
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -21,7 +21,7 @@
 
 #include <memory>
 
-#include "proto/desktop.h"
+#include "proto/desktop_session.h"
 
 struct OpusDecoder;
 

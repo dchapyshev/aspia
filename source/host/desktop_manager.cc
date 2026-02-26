@@ -298,18 +298,14 @@ void DesktopManager::onClientFinished()
 void DesktopManager::onUserSessionEvent(quint32 event_type, quint32 session_id)
 {
 #if defined(Q_OS_WINDOWS)
-    LOG(INFO) << "Session event:" << base::sessionStatusToString(event_type)
-              << "session id:" << session_id;
+    LOG(INFO) << "State: session_id=" << session_id_ << "console:" << is_console_;
 
     switch (event_type)
     {
         case WTS_CONSOLE_CONNECT:
         {
             if (!is_console_)
-            {
-                LOG(INFO) << "Ignore event for non-console session";
                 return;
-            }
 
             attach(FROM_HERE, session_id);
         }
@@ -318,10 +314,7 @@ void DesktopManager::onUserSessionEvent(quint32 event_type, quint32 session_id)
         case WTS_CONSOLE_DISCONNECT:
         {
             if (!is_console_)
-            {
-                LOG(INFO) << "Ignore event for non-console session";
                 return;
-            }
 
             dettach(FROM_HERE);
         }
@@ -330,10 +323,7 @@ void DesktopManager::onUserSessionEvent(quint32 event_type, quint32 session_id)
         case WTS_REMOTE_DISCONNECT:
         {
             if (is_console_)
-            {
-                LOG(INFO) << "Ignore event for console session";
                 return;
-            }
 
             dettach(FROM_HERE);
             attach(FROM_HERE, base::activeConsoleSessionId());

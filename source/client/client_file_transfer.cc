@@ -88,6 +88,12 @@ void ClientFileTransfer::onSessionMessageReceived(const QByteArray& buffer)
 }
 
 //--------------------------------------------------------------------------------------------------
+void ClientFileTransfer::onServiceMessageReceived(const QByteArray& /* buffer */)
+{
+    // Not used yet.
+}
+
+//--------------------------------------------------------------------------------------------------
 void ClientFileTransfer::onSessionMessageWritten(size_t /* pending */)
 {
     // Nothing
@@ -198,7 +204,7 @@ void ClientFileTransfer::doNextRemoteTask()
         return;
 
     // Send a request to the remote computer.
-    sendMessage(serializer_.serialize(remote_task_queue_.front().request()));
+    sendSessionMessage(serializer_.serialize(remote_task_queue_.front().request()));
 }
 
 //--------------------------------------------------------------------------------------------------

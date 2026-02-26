@@ -21,6 +21,7 @@
 
 #include <QObject>
 
+#include "base/session_id.h"
 #include "base/net/tcp_channel.h"
 
 namespace base {
@@ -49,6 +50,7 @@ public slots:
 signals:
     void sig_started(quint32 client_id);
     void sig_finished(quint32 client_id);
+    void sig_switchSession(base::SessionId session_id);
     void sig_recordingChanged(const QString& computer_name, const QString& user_name, bool started);
 
 private slots:
@@ -61,6 +63,7 @@ private slots:
 private:
     bool connectToAgent(const QString& ipc_channel_name);
     void sendIpcServiceMessage(const QByteArray& buffer);
+    void sendSessionList();
 
     base::IpcChannel* ipc_channel_ = nullptr;
     base::TcpChannel* tcp_channel_ = nullptr;

@@ -66,7 +66,7 @@ public:
     Q_ENUM(Status)
 
 signals:
-    void sig_statusChanged(Client::Status status, const QVariant& data = QVariant());
+    void sig_statusChanged(client::Client::Status status, const QVariant& data = QVariant());
     void sig_showSessionWindow();
 
 protected:
@@ -74,10 +74,12 @@ protected:
     // When calling this method, the client implementation should display a session window.
     virtual void onSessionStarted() = 0;
     virtual void onSessionMessageReceived(const QByteArray& buffer) = 0;
+    virtual void onServiceMessageReceived(const QByteArray& buffer) = 0;
     virtual void onSessionMessageWritten(size_t pending) = 0;
 
     // Sends outgoing message.
-    void sendMessage(const QByteArray& message);
+    void sendSessionMessage(const QByteArray& message);
+    void sendServiceMessage(const QByteArray& message);
 
     // Methods for obtaining network metrics.
     qint64 totalRx() const;

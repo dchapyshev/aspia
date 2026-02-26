@@ -26,8 +26,8 @@
 #include "client/client.h"
 #include "client/input_event_filter.h"
 #include "common/clipboard_monitor.h"
-#include "proto/desktop.h"
-#include "proto/switch_session.h"
+#include "proto/desktop_session.h"
+#include "proto/desktop_service.h"
 #include "proto/system_info.h"
 #include "proto/task_manager.h"
 
@@ -116,12 +116,13 @@ signals:
     void sig_frameChanged(const QSize& screen_size, std::shared_ptr<base::Frame> frame);
     void sig_drawFrame();
     void sig_mouseCursorChanged(std::shared_ptr<base::MouseCursor> mouse_cursor);
-    void sig_sessionListChanged(const proto::switch_session::SessionList& sessions);
+    void sig_sessionListChanged(const proto::desktop::SessionList& sessions);
 
 protected:
     // Client implementation.
     void onSessionStarted() final;
     void onSessionMessageReceived(const QByteArray& buffer) final;
+    void onServiceMessageReceived(const QByteArray& buffer) final;
     void onSessionMessageWritten(size_t pending) final;
 
 private slots:
@@ -142,8 +143,8 @@ private:
     std::shared_ptr<base::Frame> desktop_frame_;
     proto::desktop::Config desktop_config_;
 
-    base::Parser<proto::desktop::HostToClient> incoming_message_;
-    base::Serializer<proto::desktop::ClientToHost> outgoing_message_;
+    base::Parser<proto::desktop::SessionToClient> incomming_message_;
+    base::Serializer<proto::desktop::ClientToSession> outgoing_message_;
 
     proto::desktop::VideoEncoding video_encoding_ = proto::desktop::VIDEO_ENCODING_UNKNOWN;
     proto::desktop::AudioEncoding audio_encoding_ = proto::desktop::AUDIO_ENCODING_UNKNOWN;

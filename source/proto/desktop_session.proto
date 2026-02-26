@@ -425,7 +425,7 @@ message Config
     AudioEncoding audio_encoding = 7;
 }
 
-message HostToClient
+message SessionToClient
 {
     VideoPacket video_packet       = 1;
     AudioPacket audio_packet       = 2;
@@ -436,7 +436,7 @@ message HostToClient
     CursorPosition cursor_position = 7;
 }
 
-message ClientToHost
+message ClientToSession
 {
     MouseEvent mouse_event         = 1;
     KeyEvent key_event             = 2;

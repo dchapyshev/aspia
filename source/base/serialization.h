@@ -24,7 +24,7 @@
 #include <QVersionNumber>
 
 #include "base/desktop/pixel_format.h"
-#include "proto/desktop.h"
+#include "proto/desktop_session.h"
 #include "proto/peer.h"
 
 #include <google/protobuf/message_lite.h>

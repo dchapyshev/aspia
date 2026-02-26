@@ -21,7 +21,7 @@
 
 #include <QString>
 
-#include "proto/desktop.h"
+#include "proto/desktop_session.h"
 
 #include <chrono>
 #include <memory>

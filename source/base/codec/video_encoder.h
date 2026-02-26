@@ -21,7 +21,7 @@
 
 #include <QSize>
 
-#include "proto/desktop.h"
+#include "proto/desktop_session.h"
 
 namespace base {
 

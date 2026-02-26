@@ -29,7 +29,7 @@
 #include <memory>
 
 #include "base/desktop/frame.h"
-#include "proto/desktop.h"
+#include "proto/desktop_session.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/scoped_user_object.h"

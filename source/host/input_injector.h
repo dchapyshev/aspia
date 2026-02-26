@@ -22,7 +22,7 @@
 #include <QObject>
 #include <QPoint>
 
-#include "proto/desktop.h"
+#include "proto/desktop_session.h"
 
 namespace host {
 

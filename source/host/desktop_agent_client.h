@@ -23,7 +23,7 @@
 #include <memory>
 
 #include "base/serialization.h"
-#include "proto/desktop.h"
+#include "proto/desktop_session.h"
 #include "proto/task_manager.h"
 
 namespace base {
@@ -103,7 +103,6 @@ private slots:
 
 #if defined(Q_OS_WINDOWS)
     void onTaskManagerMessage(const proto::task_manager::HostToClient& message);
-    void onUpdateSessionsList();
 #endif // defined(Q_OS_WINDOWS)
 
 private:
@@ -127,7 +126,6 @@ private:
     void readSystemInfoExtension(const std::string& data);
     void readVideoRecordingExtension(const std::string& data);
     void readTaskManagerExtension(const std::string& data);
-    void readSwitchSessionExtension(const std::string& data);
 
     void sendCapabilities();
 
@@ -152,8 +150,8 @@ private:
     TaskManager* task_manager_ = nullptr;
 #endif // defined(Q_OS_WINDOWS)
 
-    base::Parser<proto::desktop::ClientToHost> incoming_message_;
-    base::Serializer<proto::desktop::HostToClient> outgoing_message_;
+    base::Parser<proto::desktop::ClientToSession> incoming_message_;
+    base::Serializer<proto::desktop::SessionToClient> outgoing_message_;
 
     Q_DISABLE_COPY_MOVE(DesktopAgentClient)
 };

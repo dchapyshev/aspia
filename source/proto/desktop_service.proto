@@ -20,7 +20,7 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
-package proto.switch_session;
+package proto.desktop;
 
 message SwitchSession
 {
@@ -50,12 +50,12 @@ message SessionListRequest
     uint32 dummy = 1; // Always set to 1.
 }
 
-message HostToClient
+message ServiceToClient
 {
     SessionList session_list = 1;
 }
 
-message ClientToHost
+message ClientToService
 {
     SessionListRequest session_list_request = 1;
     SwitchSession switch_session            = 2;

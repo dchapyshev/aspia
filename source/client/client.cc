@@ -189,7 +189,7 @@ void Client::setSessionState(std::shared_ptr<SessionState> session_state)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::sendMessage(const QByteArray& message)
+void Client::sendSessionMessage(const QByteArray& message)
 {
     if (!tcp_channel_)
     {
@@ -198,6 +198,18 @@ void Client::sendMessage(const QByteArray& message)
     }
 
     tcp_channel_->send(proto::peer::CHANNEL_ID_SESSION, message);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Client::sendServiceMessage(const QByteArray& message)
+{
+    if (!tcp_channel_)
+    {
+        LOG(ERROR) << "sendMessage called but channel not initialized";
+        return;
+    }
+
+    tcp_channel_->send(proto::peer::CHANNEL_ID_SERVICE, message);
 }
 
 //--------------------------------------------------------------------------------------------------

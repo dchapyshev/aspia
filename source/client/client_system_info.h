@@ -42,6 +42,7 @@ protected:
     // Client implementation.
     void onSessionStarted() final;
     void onSessionMessageReceived(const QByteArray& buffer) final;
+    void onServiceMessageReceived(const QByteArray& buffer) final;
     void onSessionMessageWritten(size_t pending) final;
 
 private:

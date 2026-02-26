@@ -18,8 +18,9 @@
 
 list(APPEND SOURCE_PROTO
     address_book.proto
-    desktop.proto
     desktop_internal.proto
+    desktop_service.proto
+    desktop_session.proto
     file_transfer.proto
     key_exchange.proto
     peer.proto
@@ -29,7 +30,6 @@ list(APPEND SOURCE_PROTO
     router_admin.proto
     router_peer.proto
     router_relay.proto
-    switch_session.proto
     system_info.proto
     task_manager.proto
     text_chat.proto)

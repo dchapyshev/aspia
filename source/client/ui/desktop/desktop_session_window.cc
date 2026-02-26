@@ -634,7 +634,7 @@ void DesktopSessionWindow::onMouseCursorChanged(std::shared_ptr<base::MouseCurso
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionWindow::onSessionListChanged(const proto::switch_session::SessionList& sessions)
+void DesktopSessionWindow::onSessionListChanged(const proto::desktop::SessionList& sessions)
 {
     toolbar_->setSessionList(sessions);
 }

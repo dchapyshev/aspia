@@ -19,7 +19,7 @@
 #ifndef BASE_CODEC_AUDIO_ENCODER_H
 #define BASE_CODEC_AUDIO_ENCODER_H
 
-#include "proto/desktop.h"
+#include "proto/desktop_session.h"
 
 struct OpusEncoder;
 

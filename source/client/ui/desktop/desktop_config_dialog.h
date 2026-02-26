@@ -21,7 +21,7 @@
 
 #include <QDialog>
 
-#include "proto/desktop.h"
+#include "proto/desktop_session.h"
 #include "proto/peer.h"
 
 class QAbstractButton;
@@ -37,10 +37,8 @@ class DesktopConfigDialog final : public QDialog
     Q_OBJECT
 
 public:
-    DesktopConfigDialog(proto::peer::SessionType session_type,
-                        const proto::desktop::Config& config,
-                        quint32 video_encodings,
-                        QWidget* parent = nullptr);
+    DesktopConfigDialog(proto::peer::SessionType session_type, const proto::desktop::Config& config,
+        quint32 video_encodings, QWidget* parent = nullptr);
     ~DesktopConfigDialog() final;
 
     void enableAudioFeature(bool enable);

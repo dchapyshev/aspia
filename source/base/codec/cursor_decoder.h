@@ -24,7 +24,7 @@
 
 #include "base/codec/scoped_zstd_stream.h"
 #include "base/desktop/mouse_cursor.h"
-#include "proto/desktop.h"
+#include "proto/desktop_session.h"
 
 #include <optional>
 

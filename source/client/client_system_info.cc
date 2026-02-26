@@ -39,7 +39,7 @@ ClientSystemInfo::~ClientSystemInfo()
 //--------------------------------------------------------------------------------------------------
 void ClientSystemInfo::onSystemInfoRequest(const proto::system_info::SystemInfoRequest& request)
 {
-    sendMessage(base::serialize(request));
+    sendSessionMessage(base::serialize(request));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -60,6 +60,12 @@ void ClientSystemInfo::onSessionMessageReceived(const QByteArray& buffer)
     }
 
     emit sig_systemInfo(system_info);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientSystemInfo::onServiceMessageReceived(const QByteArray& /* buffer */)
+{
+    // Not used yet.
 }
 
 //--------------------------------------------------------------------------------------------------

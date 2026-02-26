@@ -33,7 +33,6 @@
 #if defined(Q_OS_WINDOWS)
 #include "base/win/scoped_object.h"
 #include "base/win/session_info.h"
-#include "base/win/session_status.h"
 #include <UserEnv.h>
 #endif // defined(Q_OS_WINDOWS)
 
@@ -154,12 +153,12 @@ bool UserSession::start()
     HostStorage ipc_storage;
     ipc_storage.setChannelIdForUI(ipc_channel_name);
 
-    LOG(INFO) << "Start IPC server for UI (channel_name=" << ipc_channel_name << ")";
+    LOG(INFO) << "Start IPC server for UI (channel_name:" << ipc_channel_name << ")";
 
     // Start the server which will accept incoming connections from UI processes in user sessions.
     if (!ipc_server_->start(ipc_channel_name))
     {
-        LOG(ERROR) << "Failed to start IPC server for UI (channel_name=" << ipc_channel_name << ")";
+        LOG(ERROR) << "Failed to start IPC server for UI (channel_name:" << ipc_channel_name << ")";
         return false;
     }
 
@@ -189,16 +188,9 @@ void UserSession::onRouterStateChanged(const proto::internal::RouterState& route
 //--------------------------------------------------------------------------------------------------
 void UserSession::onUpdateCredentials(base::HostId host_id, const QString& password)
 {
-    if (host_id == base::kInvalidHostId)
-    {
-        LOG(ERROR) << "Invalid host ID";
-        return;
-    }
-
     proto::internal::Credentials* credentials = outgoing_message_.newMessage().mutable_credentials();
     credentials->set_host_id(host_id);
     credentials->set_password(password.toStdString());
-
     sendSessionMessage();
 }
 
@@ -209,13 +201,23 @@ bool UserSession::isAttached() const
 }
 
 //--------------------------------------------------------------------------------------------------
+void UserSession::onSwitchSession(base::SessionId session_id)
+{
+    LOG(INFO) << "Switch session:" << session_id;
+
+    is_console_ = session_id == base::activeConsoleSessionId();
+    dettach(FROM_HERE);
+    attach(FROM_HERE, session_id);
+}
+
+//--------------------------------------------------------------------------------------------------
 void UserSession::onClientConfirmation(
     base::SessionId session_id, const proto::internal::ConfirmationRequest& request)
 {
     if (request.session_type() == proto::peer::SESSION_TYPE_SYSTEM_INFO)
     {
         LOG(INFO) << "Accept: confirmation for system info session NOT required";
-        emit sig_askForConfirmation(request.id(), true);
+        emit sig_confirmationReply(request.id(), true);
         return;
     }
 
@@ -229,7 +231,7 @@ void UserSession::onClientConfirmation(
         if (!session_info.isValid())
         {
             LOG(ERROR) << "Reject: unable to get session info";
-            emit sig_askForConfirmation(request.id(), false);
+            emit sig_confirmationReply(request.id(), false);
             return;
         }
 
@@ -238,25 +240,25 @@ void UserSession::onClientConfirmation(
             if (settings.noUserAction() == SystemSettings::NoUserAction::ACCEPT)
             {
                 LOG(INFO) << "Accept: no active user";
-                emit sig_askForConfirmation(request.id(), true);
+                emit sig_confirmationReply(request.id(), true);
             }
             else
             {
                 LOG(INFO) << "Reject: no active user";
-                emit sig_askForConfirmation(request.id(), false);
+                emit sig_confirmationReply(request.id(), false);
             }
             return;
         }
 
         LOG(INFO) << "Reject: user is active, but there is no connection to the GUI";
-        emit sig_askForConfirmation(request.id(), false);
+        emit sig_confirmationReply(request.id(), false);
         return;
     }
 
     if (!settings.connectConfirmation())
     {
         LOG(INFO) << "Accept: connect confirmation is disabled";
-        emit sig_askForConfirmation(request.id(), true);
+        emit sig_confirmationReply(request.id(), true);
         return;
     }
 
@@ -276,7 +278,6 @@ void UserSession::onClientStarted(quint32 client_id, proto::peer::SessionType se
     event->set_session_type(session_type);
     event->set_computer_name(computer_name.toStdString());
     event->set_display_name(display_name.toStdString());
-
     sendSessionMessage();
 }
 
@@ -302,7 +303,6 @@ void UserSession::onClientRecording(const QString& computer, const QString& user
     recording_state->set_computer_name(computer.toStdString());
     recording_state->set_user_name(user.toStdString());
     recording_state->set_started(started);
-
     sendSessionMessage();
 }
 
@@ -310,20 +310,41 @@ void UserSession::onClientRecording(const QString& computer, const QString& user
 void UserSession::onUserSessionEvent(quint32 status, quint32 session_id)
 {
 #if defined(Q_OS_WINDOWS)
-    LOG(INFO) << "User session event (status:" << base::sessionStatusToString(status)
-              << "session_id:" << session_id << ")";
+    LOG(INFO) << "State: attached=" << isAttached() << "session_id=" << session_id_
+              << "is_console=" << is_console_;
 
     switch (status)
     {
         case WTS_CONSOLE_CONNECT:
-        case WTS_REMOTE_CONNECT:
-        case WTS_SESSION_LOGON:
         {
-            // Start UI process in user session.
+            if (!is_console_)
+                return;
+
             attach(FROM_HERE, session_id);
         }
         break;
 
+        case WTS_CONSOLE_DISCONNECT:
+        {
+            if (!is_console_)
+                return;
+
+            dettach(FROM_HERE);
+        }
+        break;
+
+        case WTS_REMOTE_DISCONNECT:
+        {
+            if (is_console_)
+                return;
+
+            is_console_ = true;
+            dettach(FROM_HERE);
+            attach(FROM_HERE, base::activeConsoleSessionId());
+        }
+        break;
+
+        case WTS_SESSION_LOGON:
         case WTS_SESSION_UNLOCK:
         {
             if (!isAttached() && session_id == session_id_)
@@ -368,7 +389,6 @@ void UserSession::onIpcNewConnection()
 //--------------------------------------------------------------------------------------------------
 void UserSession::onIpcDisconnected()
 {
-    LOG(INFO) << "IPC channel disconnected";
     dettach(FROM_HERE);
 }
 
@@ -416,7 +436,7 @@ void UserSession::onIpcMessageReceived(quint32 channel_id, const QByteArray& buf
         LOG(INFO) << "Connect confirmation (request_id:" << confirmation.id() << "accept:"
                   << confirmation.accept();
 
-        emit sig_askForConfirmation(confirmation.id(), confirmation.accept());
+        emit sig_confirmationReply(confirmation.id(), confirmation.accept());
     }
     else if (incoming_message_->has_control())
     {

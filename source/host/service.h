@@ -83,7 +83,7 @@ private slots:
     void onRouterStateChanged(const proto::internal::RouterState& router_state);
     void onHostIdAssigned(base::HostId host_id);
     void onNewRelayConnection();
-    void onAskForConfirmation(quint32 request_id, bool accept);
+    void onConfirmationReply(quint32 request_id, bool accept);
     void onUpdateCheckedFinished(const QByteArray& result);
     void onFileDownloaderError(int error_code);
     void onFileDownloaderCompleted();

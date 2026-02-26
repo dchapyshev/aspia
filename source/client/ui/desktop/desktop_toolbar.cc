@@ -435,7 +435,7 @@ void DesktopToolBar::setScreenType(const proto::desktop::ScreenType& screen_type
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopToolBar::setSessionList(const proto::switch_session::SessionList& session_list)
+void DesktopToolBar::setSessionList(const proto::desktop::SessionList& session_list)
 {
     LOG(INFO) << "Session list received:" << session_list;
 
@@ -453,7 +453,7 @@ void DesktopToolBar::setSessionList(const proto::switch_session::SessionList& se
     {
         for (int i = 0; i < session_list.session_size(); ++i)
         {
-            const proto::switch_session::Session& session = session_list.session(i);
+            const proto::desktop::Session& session = session_list.session(i);
 
             QString user_name = QString::fromStdString(session.user_name());
             QString text;

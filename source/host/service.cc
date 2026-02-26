@@ -91,8 +91,8 @@ Service::Service(QObject* parent)
             this, &Service::onChangeOneTimePassword);
     connect(user_session_, &UserSession::sig_changeOneTimeSessions,
             this, &Service::onChangeOneTimeSessions);
-    connect(user_session_, &UserSession::sig_askForConfirmation,
-            this, &Service::onAskForConfirmation);
+    connect(user_session_, &UserSession::sig_confirmationReply,
+            this, &Service::onConfirmationReply);
 
     connect(tcp_server_, &base::TcpServer::sig_newConnection,
             this, &Service::onNewDirectConnection);
@@ -303,7 +303,7 @@ void Service::onNewRelayConnection()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Service::onAskForConfirmation(quint32 request_id, bool accept)
+void Service::onConfirmationReply(quint32 request_id, bool accept)
 {
     for (auto it = pending_channels_.begin(), it_end = pending_channels_.end(); it != it_end; ++it)
     {

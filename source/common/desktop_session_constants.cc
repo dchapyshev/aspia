@@ -18,7 +18,7 @@
 
 #include "common/desktop_session_constants.h"
 
-#include "proto/desktop.h"
+#include "proto/desktop_session.h"
 
 namespace common {
 
@@ -32,12 +32,11 @@ const char kTaskManagerExtension[] = "task_manager";
 const char kVideoPauseExtension[] = "video_pause";
 const char kAudioPauseExtension[] = "audio_pause";
 const char kScreenTypeExtension[] = "screen_type";
-const char kSwitchSessionExtension[] = "switch_session";
 
 #if defined(Q_OS_WINDOWS)
 const char kSupportedExtensionsForManage[] =
     "select_screen;preferred_size;power_control;remote_update;system_info;video_recording;"
-    "task_manager;video_pause;audio_pause;screen_type;switch_session";
+    "task_manager;video_pause;audio_pause;screen_type";
 
 const char kSupportedExtensionsForView[] =
     "select_screen;preferred_size;system_info;video_recording;video_pause;audio_pause;screen_type";

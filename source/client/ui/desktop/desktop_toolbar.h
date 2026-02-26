@@ -19,8 +19,8 @@
 #ifndef CLIENT_UI_DESKTOP_DESKTOP_TOOLBAR_H
 #define CLIENT_UI_DESKTOP_DESKTOP_TOOLBAR_H
 
-#include "proto/desktop.h"
-#include "proto/switch_session.h"
+#include "proto/desktop_session.h"
+#include "proto/desktop_service.h"
 #include "proto/peer.h"
 #include "ui_desktop_toolbar.h"
 
@@ -47,7 +47,7 @@ public:
 
     void setScreenList(const proto::desktop::ScreenList& screen_list);
     void setScreenType(const proto::desktop::ScreenType& screen_type);
-    void setSessionList(const proto::switch_session::SessionList& session_list);
+    void setSessionList(const proto::desktop::SessionList& session_list);
     void startRecording(bool enable);
 
     int scale() const { return scale_; }
