@@ -21,14 +21,18 @@
 
 #include <QObject>
 
-#include "base/location.h"
-#include "base/ipc/ipc_channel.h"
+#include "base/session_id.h"
 #include "base/net/tcp_channel.h"
 
 #if defined(Q_OS_WINDOWS)
-#include <QWinEventNotifier>
 #include "base/win/scoped_object.h"
 #endif // defined(Q_OS_WINDOWS)
+
+class QWinEventNotifier;
+
+namespace base {
+class Location;
+} // namespace base
 
 namespace host {
 

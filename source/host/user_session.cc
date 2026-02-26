@@ -26,6 +26,7 @@
 #include "base/location.h"
 #include "base/logging.h"
 #include "base/ipc/ipc_channel.h"
+#include "base/ipc/ipc_server.h"
 #include "host/host_storage.h"
 #include "host/system_settings.h"
 

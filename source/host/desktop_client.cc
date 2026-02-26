@@ -21,6 +21,7 @@
 #include "base/logging.h"
 #include "base/numeric_utils.h"
 #include "base/serialization.h"
+#include "base/ipc/ipc_channel.h"
 #include "proto/desktop_internal.h"
 #include "proto/host_internal.h"
 

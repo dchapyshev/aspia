@@ -19,9 +19,18 @@
 #ifndef HOST_FILE_AGENT_H
 #define HOST_FILE_AGENT_H
 
+#include <QObject>
+
 #include "base/serialization.h"
-#include "base/ipc/ipc_channel.h"
-#include "common/file_worker.h"
+#include "proto/file_transfer.h"
+
+namespace base {
+class IpcChannel;
+} // namespace base
+
+namespace common {
+class FileWorker;
+} // namespace common
 
 namespace host {
 

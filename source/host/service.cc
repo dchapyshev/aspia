@@ -26,6 +26,7 @@
 #include <QStandardPaths>
 #include <QTimer>
 
+#include "base/location.h"
 #include "base/logging.h"
 #include "base/version_constants.h"
 #include "base/crypto/password_generator.h"
@@ -525,8 +526,8 @@ void Service::onRepeatedTasks()
 
         if (time.secsTo(current_time) > 60)
         {
-            base::TcpChannel* channel = it->first;
-            channel->deleteLater();
+            base::TcpChannel* tcp_channel = it->first;
+            tcp_channel->deleteLater();
             it = pending_channels_.erase(it);
         }
     }
@@ -539,7 +540,7 @@ void Service::onStopClient(quint32 client_id)
 {
     auto stop_by_id = [client_id](auto* list)
     {
-        for (auto it = list->begin(); it != list->end(); ++it)
+        for (auto it = list->begin(), it_end = list->end(); it != it_end; ++it)
         {
             auto* client = *it;
 
@@ -549,6 +550,7 @@ void Service::onStopClient(quint32 client_id)
             client->disconnect();
             client->deleteLater();
             list->erase(it);
+            break;
         }
     };
 

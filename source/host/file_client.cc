@@ -34,8 +34,10 @@
 #include <spawn.h>
 #endif // defined(Q_OS_LINUX)
 
+#include "base/location.h"
 #include "base/logging.h"
 #include "base/serialization.h"
+#include "base/ipc/ipc_channel.h"
 #include "base/ipc/ipc_server.h"
 #include "proto/file_transfer.h"
 #include "proto/host_internal.h"

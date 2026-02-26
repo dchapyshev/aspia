@@ -24,11 +24,14 @@
 #include "base/shared_pointer.h"
 #include "base/net/tcp_channel.h"
 #include "base/peer/host_id.h"
-#include "base/peer/relay_peer_manager.h"
 #include "base/peer/user_list_base.h"
 #include "proto/host_internal.h"
 
 class QTimer;
+
+namespace base {
+class RelayPeerManager;
+} // namespace base
 
 namespace host {
 

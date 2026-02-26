@@ -21,8 +21,11 @@
 
 #include <QObject>
 
-#include "base/ipc/ipc_channel.h"
 #include "base/net/tcp_channel.h"
+
+namespace base {
+class IpcChannel;
+} // namespace base
 
 namespace host {
 

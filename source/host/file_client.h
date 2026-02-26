@@ -21,10 +21,14 @@
 
 #include <QObject>
 
-#include "base/location.h"
 #include "base/session_id.h"
-#include "base/ipc/ipc_channel.h"
 #include "base/net/tcp_channel.h"
+
+namespace base {
+class IpcChannel;
+class IpcServer;
+class Location;
+} // namespace base
 
 namespace host {
 

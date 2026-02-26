@@ -22,12 +22,14 @@
 #include <QDir>
 
 #include "base/application.h"
+#include "base/location.h"
 #include "base/logging.h"
 #include "base/ipc/ipc_server.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/scoped_impersonator.h"
 #include "base/win/session_status.h"
+#include <QWinEventNotifier>
 #include <UserEnv.h>
 #endif // defined(Q_OS_WINDOWS)
 

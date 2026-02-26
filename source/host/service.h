@@ -27,6 +27,10 @@
 class QFileSystemWatcher;
 class QTimer;
 
+namespace base {
+class Location;
+} // namespace base
+
 namespace common {
 class HttpFileDownloader;
 class UpdateChecker;

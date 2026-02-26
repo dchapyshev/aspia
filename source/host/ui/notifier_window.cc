@@ -32,6 +32,10 @@
 #include "base/logging.h"
 #include "common/ui/session_type.h"
 
+#if defined(Q_OS_WINDOWS)
+#include <qt_windows.h>
+#endif // defined(Q_OS_WINDOWS)
+
 namespace host {
 
 namespace {

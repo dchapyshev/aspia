@@ -22,6 +22,8 @@
 
 #include "base/logging.h"
 #include "base/serialization.h"
+#include "base/ipc/ipc_channel.h"
+#include "common/file_worker.h"
 #include "proto/host_internal.h"
 
 namespace host {

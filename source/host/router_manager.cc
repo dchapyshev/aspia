@@ -23,6 +23,7 @@
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/peer/client_authenticator.h"
+#include "base/peer/relay_peer_manager.h"
 #include "base/peer/server_authenticator.h"
 #include "host/host_storage.h"
 #include "proto/router_peer.h"

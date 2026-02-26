@@ -25,8 +25,13 @@
 #include "base/serialization.h"
 #include "base/session_id.h"
 #include "base/peer/host_id.h"
-#include "base/ipc/ipc_server.h"
 #include "proto/host_internal.h"
+
+namespace base {
+class IpcChannel;
+class IpcServer;
+class Location;
+} // namespace base
 
 namespace host {
 

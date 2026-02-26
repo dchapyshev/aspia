@@ -19,6 +19,7 @@
 #include "host/user_session_agent.h"
 
 #include "base/logging.h"
+#include "base/ipc/ipc_channel.h"
 #include "host/host_storage.h"
 
 namespace host {
@@ -82,12 +83,6 @@ void UserSessionAgent::onUpdateCredentials(proto::internal::CredentialsRequest::
 {
     LOG(INFO) << "Update credentials request:" << request_type;
 
-    if (!ipc_channel_)
-    {
-        LOG(WARNING) << "No active IPC channel";
-        return;
-    }
-
     proto::internal::CredentialsRequest* request =
         outgoing_message_.newMessage().mutable_credentials_request();
     request->set_type(request_type);
@@ -99,12 +94,6 @@ void UserSessionAgent::onUpdateCredentials(proto::internal::CredentialsRequest::
 void UserSessionAgent::onOneTimeSessions(quint32 sessions)
 {
     LOG(INFO) << "One-time sessions changed:" << sessions;
-
-    if (!ipc_channel_)
-    {
-        LOG(WARNING) << "No active IPC channel";
-        return;
-    }
 
     proto::internal::OneTimeSessions* one_time_sessions =
         outgoing_message_.newMessage().mutable_one_time_sessions();
@@ -118,14 +107,7 @@ void UserSessionAgent::onKillClient(quint32 id)
 {
     LOG(INFO) << "Kill client request:" << id;
 
-    if (!ipc_channel_)
-    {
-        LOG(WARNING) << "No active IPC channel";
-        return;
-    }
-
     proto::internal::ServiceControl* control = outgoing_message_.newMessage().mutable_control();
-
     control->set_code(proto::internal::ServiceControl::CODE_KILL);
     control->set_unsigned_integer(id);
 
@@ -136,12 +118,6 @@ void UserSessionAgent::onKillClient(quint32 id)
 void UserSessionAgent::onConnectConfirmation(quint32 id, bool accept)
 {
     LOG(INFO) << "Connect confirmation (id=" << id << "accept=" << accept << ")";
-
-    if (!ipc_channel_)
-    {
-        LOG(WARNING) << "No active IPC channel";
-        return;
-    }
 
     proto::internal::ConfirmationReply* confirmation =
         outgoing_message_.newMessage().mutable_confirmation_reply();
@@ -156,14 +132,7 @@ void UserSessionAgent::onMouseLock(bool enable)
 {
     LOG(INFO) << "Mouse lock:" << enable;
 
-    if (!ipc_channel_)
-    {
-        LOG(WARNING) << "No active IPC channel";
-        return;
-    }
-
     proto::internal::ServiceControl* control = outgoing_message_.newMessage().mutable_control();
-
     control->set_code(proto::internal::ServiceControl::CODE_LOCK_MOUSE);
     control->set_boolean(enable);
 
@@ -175,14 +144,7 @@ void UserSessionAgent::onKeyboardLock(bool enable)
 {
     LOG(INFO) << "Keyboard lock:" << enable;
 
-    if (!ipc_channel_)
-    {
-        LOG(WARNING) << "No active IPC channel";
-        return;
-    }
-
     proto::internal::ServiceControl* control = outgoing_message_.newMessage().mutable_control();
-
     control->set_code(proto::internal::ServiceControl::CODE_LOCK_KEYBOARD);
     control->set_boolean(enable);
 
@@ -194,14 +156,7 @@ void UserSessionAgent::onPause(bool enable)
 {
     LOG(INFO) << "Pause:" << enable;
 
-    if (!ipc_channel_)
-    {
-        LOG(WARNING) << "No active IPC channel";
-        return;
-    }
-
     proto::internal::ServiceControl* control = outgoing_message_.newMessage().mutable_control();
-
     control->set_code(proto::internal::ServiceControl::CODE_PAUSE);
     control->set_boolean(enable);
 
@@ -212,13 +167,6 @@ void UserSessionAgent::onPause(bool enable)
 void UserSessionAgent::onTextChat(const proto::text_chat::TextChat& text_chat)
 {
     LOG(INFO) << "Text chat message";
-
-    if (!ipc_channel_)
-    {
-        LOG(WARNING) << "No active IPC channel";
-        return;
-    }
-
     outgoing_message_.newMessage().mutable_text_chat()->CopyFrom(text_chat);
     sendSessionMessage();
 }
@@ -227,6 +175,14 @@ void UserSessionAgent::onTextChat(const proto::text_chat::TextChat& text_chat)
 void UserSessionAgent::onIpcDisconnected()
 {
     LOG(INFO) << "IPC channel disconncted";
+
+    if (ipc_channel_)
+    {
+        ipc_channel_->disconnect(this);
+        ipc_channel_->deleteLater();
+        ipc_channel_ = nullptr;
+    }
+
     emit sig_statusChanged(Status::DISCONNECTED_FROM_SERVICE);
 }
 
@@ -314,6 +270,12 @@ void UserSessionAgent::onIpcMessageReceived(quint32 channel_id, const QByteArray
 //--------------------------------------------------------------------------------------------------
 void UserSessionAgent::sendSessionMessage()
 {
+    if (!ipc_channel_)
+    {
+        LOG(WARNING) << "IPC channel is not connected";
+        return;
+    }
+
     ipc_channel_->send(proto::internal::CHANNEL_ID_SESSION, outgoing_message_.serialize());
 }
 
