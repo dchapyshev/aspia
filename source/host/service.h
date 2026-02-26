@@ -20,8 +20,8 @@
 #define HOST_SERVICE_H
 
 #include "base/service.h"
-#include "base/net/tcp_server.h"
-#include "host/desktop_manager.h"
+#include "base/peer/host_id.h"
+#include "base/peer/user.h"
 #include "host/system_settings.h"
 
 class QFileSystemWatcher;
@@ -29,6 +29,8 @@ class QTimer;
 
 namespace base {
 class Location;
+class TcpChannel;
+class TcpServer;
 } // namespace base
 
 namespace common {
@@ -47,6 +49,7 @@ class TextChat;
 namespace host {
 
 class DesktopClient;
+class DesktopManager;
 class FileClient;
 class RouterManager;
 class SystemInfoClient;

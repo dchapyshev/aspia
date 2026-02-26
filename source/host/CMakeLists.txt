@@ -120,8 +120,6 @@ list(APPEND SOURCE_HOST_CORE_UI
 
 if (WIN32)
     list(APPEND SOURCE_HOST_CORE_WIN
-        win/sas_injector.cc
-        win/sas_injector.h
         win/touch_injector.cc
         win/touch_injector.h
         win/touch_injector_defines.h
