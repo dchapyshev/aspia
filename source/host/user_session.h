@@ -60,8 +60,6 @@ public slots:
 signals:
     void sig_attached();
     void sig_dettached();
-    void sig_routerStateRequested();
-    void sig_credentialsRequested();
     void sig_changeOneTimePassword();
     void sig_changeOneTimeSessions(quint32 sessions);
     void sig_askForConfirmation(quint32 request_id, bool accept);

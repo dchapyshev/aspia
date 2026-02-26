@@ -59,20 +59,14 @@ bool copyProcessToken(DWORD desired_access, base::ScopedHandle* token_out)
 {
     base::ScopedHandle process_token;
 
-    if (!OpenProcessToken(GetCurrentProcess(),
-                          TOKEN_DUPLICATE | desired_access,
-                          process_token.recieve()))
+    if (!OpenProcessToken(GetCurrentProcess(), TOKEN_DUPLICATE | desired_access, process_token.recieve()))
     {
         PLOG(ERROR) << "OpenProcessToken failed";
         return false;
     }
 
-    if (!DuplicateTokenEx(process_token,
-                          desired_access,
-                          nullptr,
-                          SecurityImpersonation,
-                          TokenPrimary,
-                          token_out->recieve()))
+    if (!DuplicateTokenEx(process_token, desired_access, nullptr, SecurityImpersonation,
+        TokenPrimary, token_out->recieve()))
     {
         PLOG(ERROR) << "DuplicateTokenEx failed";
         return false;
@@ -166,10 +160,8 @@ bool createSessionToken(DWORD session_id, base::ScopedHandle* token_out)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool startProcessWithToken(HANDLE token,
-                           const QString& command_line,
-                           base::ScopedHandle* process,
-                           base::ScopedHandle* thread)
+bool startProcessWithToken(HANDLE token, const QString& command_line, base::ScopedHandle* process,
+    base::ScopedHandle* thread)
 {
     STARTUPINFOW startup_info;
     memset(&startup_info, 0, sizeof(startup_info));
@@ -188,34 +180,19 @@ bool startProcessWithToken(HANDLE token,
     PROCESS_INFORMATION process_info;
     memset(&process_info, 0, sizeof(process_info));
 
-    if (!CreateProcessAsUserW(token,
-                              nullptr,
-                              const_cast<wchar_t*>(qUtf16Printable(command_line)),
-                              nullptr,
-                              nullptr,
-                              FALSE,
-                              CREATE_UNICODE_ENVIRONMENT | HIGH_PRIORITY_CLASS,
-                              environment,
-                              nullptr,
-                              &startup_info,
-                              &process_info))
+    if (!CreateProcessAsUserW(token, nullptr, const_cast<wchar_t*>(qUtf16Printable(command_line)),
+        nullptr, nullptr, FALSE, CREATE_UNICODE_ENVIRONMENT | HIGH_PRIORITY_CLASS, environment,
+        nullptr, &startup_info, &process_info))
     {
         PLOG(ERROR) << "CreateProcessAsUserW failed";
-        if (!DestroyEnvironmentBlock(environment))
-        {
-            PLOG(ERROR) << "DestroyEnvironmentBlock failed";
-        }
+        DestroyEnvironmentBlock(environment);
         return false;
     }
 
     thread->reset(process_info.hThread);
     process->reset(process_info.hProcess);
 
-    if (!DestroyEnvironmentBlock(environment))
-    {
-        PLOG(ERROR) << "DestroyEnvironmentBlock failed";
-    }
-
+    DestroyEnvironmentBlock(environment);
     return true;
 }
 #endif // defined(Q_OS_WINDOWS)

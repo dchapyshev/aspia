@@ -85,10 +85,8 @@ Service::Service(QObject* parent)
     connect(repeated_timer_, &QTimer::timeout, this, &Service::onRepeatedTasks);
     connect(settings_watcher_, &QFileSystemWatcher::fileChanged, this, &Service::updateConfiguration);
 
-    connect(user_session_, &UserSession::sig_routerStateRequested,
-            this, &Service::onRouterStateRequested);
-    connect(user_session_, &UserSession::sig_credentialsRequested,
-            this, &Service::onCredentialsRequested);
+    connect(user_session_, &UserSession::sig_attached,
+            this, &Service::onUserSessionAttached);
     connect(user_session_, &UserSession::sig_changeOneTimePassword,
             this, &Service::onChangeOneTimePassword);
     connect(user_session_, &UserSession::sig_changeOneTimeSessions,
@@ -223,20 +221,11 @@ void Service::onPowerEvent(quint32 power_event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Service::onRouterStateRequested()
+void Service::onChangeOneTimePassword()
 {
-    proto::internal::RouterState state;
-    state.set_state(proto::internal::RouterState::DISABLED);
+    updateOneTimeCredentials(FROM_HERE);
+    reloadUserList();
 
-    if (router_manager_)
-        state = router_manager_->state();
-
-    user_session_->onRouterStateChanged(state);
-}
-
-//--------------------------------------------------------------------------------------------------
-void Service::onCredentialsRequested()
-{
     base::HostId host_id = base::kInvalidHostId;
     QString password;
 
@@ -247,14 +236,6 @@ void Service::onCredentialsRequested()
     }
 
     user_session_->onUpdateCredentials(host_id, password);
-}
-
-//--------------------------------------------------------------------------------------------------
-void Service::onChangeOneTimePassword()
-{
-    updateOneTimeCredentials(FROM_HERE);
-    reloadUserList();
-    onCredentialsRequested();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -277,6 +258,26 @@ void Service::onNewDirectConnection()
 
     while (tcp_server_->hasReadyConnections())
         startClient(tcp_server_->nextReadyConnection());
+}
+
+//--------------------------------------------------------------------------------------------------
+void Service::onUserSessionAttached()
+{
+    proto::internal::RouterState state;
+    state.set_state(proto::internal::RouterState::DISABLED);
+
+    base::HostId host_id = base::kInvalidHostId;
+    QString password;
+
+    if (router_manager_)
+    {
+        state = router_manager_->state();
+        host_id = router_manager_->hostId();
+        password = one_time_password_;
+    }
+
+    user_session_->onRouterStateChanged(state);
+    user_session_->onUpdateCredentials(host_id, password);
 }
 
 //--------------------------------------------------------------------------------------------------

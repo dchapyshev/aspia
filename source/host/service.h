@@ -76,11 +76,10 @@ protected:
 
 private slots:
     void onPowerEvent(quint32 power_event);
-    void onRouterStateRequested();
-    void onCredentialsRequested();
     void onChangeOneTimePassword();
     void onChangeOneTimeSessions(quint32 sessions);
     void onNewDirectConnection();
+    void onUserSessionAttached();
     void onRouterStateChanged(const proto::internal::RouterState& router_state);
     void onHostIdAssigned(base::HostId host_id);
     void onNewRelayConnection();

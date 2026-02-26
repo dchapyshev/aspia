@@ -90,46 +90,18 @@ bool createProcessWithToken(HANDLE token, const QString& command_line)
     PROCESS_INFORMATION process_info;
     memset(&process_info, 0, sizeof(process_info));
 
-    if (!CreateProcessAsUserW(token,
-                              nullptr,
-                              const_cast<wchar_t*>(qUtf16Printable(command_line)),
-                              nullptr,
-                              nullptr,
-                              FALSE,
-                              CREATE_UNICODE_ENVIRONMENT | HIGH_PRIORITY_CLASS,
-                              environment,
-                              nullptr,
-                              &startup_info,
-                              &process_info))
+    if (!CreateProcessAsUserW(token, nullptr, const_cast<wchar_t*>(qUtf16Printable(command_line)),
+        nullptr, nullptr, FALSE, CREATE_UNICODE_ENVIRONMENT | HIGH_PRIORITY_CLASS, environment,
+        nullptr, &startup_info, &process_info))
     {
         PLOG(ERROR) << "CreateProcessAsUserW failed";
-        if (!DestroyEnvironmentBlock(environment))
-        {
-            PLOG(ERROR) << "DestroyEnvironmentBlock failed";
-        }
+        DestroyEnvironmentBlock(environment);
         return false;
     }
 
-    if (!SetPriorityClass(process_info.hProcess, NORMAL_PRIORITY_CLASS))
-    {
-        PLOG(ERROR) << "SetPriorityClass failed";
-    }
-
-    if (!CloseHandle(process_info.hThread))
-    {
-        PLOG(ERROR) << "CloseHandle failed";
-    }
-
-    if (!CloseHandle(process_info.hProcess))
-    {
-        PLOG(ERROR) << "CloseHandle failed";
-    }
-
-    if (!DestroyEnvironmentBlock(environment))
-    {
-        PLOG(ERROR) << "DestroyEnvironmentBlock failed";
-    }
-
+    CloseHandle(process_info.hThread);
+    CloseHandle(process_info.hProcess);
+    DestroyEnvironmentBlock(environment);
     return true;
 }
 #endif // defined(Q_OS_WINDOWS)
@@ -210,19 +182,13 @@ bool UserSession::start()
 //--------------------------------------------------------------------------------------------------
 void UserSession::onRouterStateChanged(const proto::internal::RouterState& router_state)
 {
-    LOG(INFO) << router_state;
-
     outgoing_message_.newMessage().mutable_router_state()->CopyFrom(router_state);
     sendSessionMessage();
-
-    emit sig_credentialsRequested();
 }
 
 //--------------------------------------------------------------------------------------------------
 void UserSession::onUpdateCredentials(base::HostId host_id, const QString& password)
 {
-    LOG(INFO) << "Set host ID for session:" << host_id;
-
     if (host_id == base::kInvalidHostId)
     {
         LOG(ERROR) << "Invalid host ID";
@@ -354,7 +320,6 @@ void UserSession::onUserSessionEvent(quint32 status, quint32 session_id)
         case WTS_SESSION_LOGON:
         {
             // Start UI process in user session.
-            emit sig_credentialsRequested();
             attach(FROM_HERE, session_id);
         }
         break;
@@ -461,26 +426,15 @@ void UserSession::onIpcMessageReceived(quint32 channel_id, const QByteArray& buf
         {
             case proto::internal::ServiceControl::CODE_KILL:
             {
-                if (!control.has_unsigned_integer())
-                {
-                    LOG(ERROR) << "Invalid parameter for CODE_KILL";
-                    return;
-                }
-
-                LOG(INFO) << "ServiceControl::CODE_KILL (client_id"
-                          << control.unsigned_integer() << ")";
+                CHECK(control.has_unsigned_integer());
+                LOG(INFO) << "ServiceControl::CODE_KILL (client_id" << control.unsigned_integer() << ")";
                 emit sig_stopClient(static_cast<quint32>(control.unsigned_integer()));
             }
             break;
 
             case proto::internal::ServiceControl::CODE_PAUSE:
             {
-                if (!control.has_boolean())
-                {
-                    LOG(ERROR) << "Invalid parameter for CODE_PAUSE";
-                    return;
-                }
-
+                CHECK(control.has_boolean());
                 LOG(INFO) << "ServiceControl::CODE_PAUSE (paused" << control.boolean() << ")";
                 emit sig_pauseChanged(control.boolean());
             }
@@ -488,12 +442,7 @@ void UserSession::onIpcMessageReceived(quint32 channel_id, const QByteArray& buf
 
             case proto::internal::ServiceControl::CODE_LOCK_MOUSE:
             {
-                if (!control.has_boolean())
-                {
-                    LOG(ERROR) << "Invalid parameter for CODE_LOCK_MOUSE";
-                    return;
-                }
-
+                CHECK(control.has_boolean());
                 LOG(INFO) << "ServiceControl::CODE_LOCK_MOUSE (lock_mouse" << control.boolean() << ")";
                 emit sig_lockMouseChanged(control.boolean());
             }
@@ -501,12 +450,7 @@ void UserSession::onIpcMessageReceived(quint32 channel_id, const QByteArray& buf
 
             case proto::internal::ServiceControl::CODE_LOCK_KEYBOARD:
             {
-                if (!control.has_boolean())
-                {
-                    LOG(ERROR) << "Invalid parameter for CODE_LOCK_KEYBOARD";
-                    return;
-                }
-
+                CHECK(control.has_boolean());
                 LOG(INFO) << "ServiceControl::CODE_LOCK_KEYBOARD (lock_keyboard" << control.boolean() << ")";
                 emit sig_lockKeyboardChanged(control.boolean());
             }
