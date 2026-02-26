@@ -249,12 +249,7 @@ void Service::onChangeOneTimeSessions(quint32 sessions)
 void Service::onNewDirectConnection()
 {
     LOG(INFO) << "New DIRECT connection";
-
-    if (!tcp_server_)
-    {
-        LOG(ERROR) << "No TCP server instance";
-        return;
-    }
+    CHECK(tcp_server_);
 
     while (tcp_server_->hasReadyConnections())
         startClient(tcp_server_->nextReadyConnection());
@@ -283,14 +278,12 @@ void Service::onUserSessionAttached()
 //--------------------------------------------------------------------------------------------------
 void Service::onRouterStateChanged(const proto::internal::RouterState& router_state)
 {
-    LOG(INFO) << "Router state changed:" << router_state;
     user_session_->onRouterStateChanged(router_state);
 }
 
 //--------------------------------------------------------------------------------------------------
 void Service::onHostIdAssigned(base::HostId host_id)
 {
-    LOG(INFO) << "New host ID assigned:" << host_id;
     user_session_->onUpdateCredentials(host_id, one_time_password_);
 }
 
