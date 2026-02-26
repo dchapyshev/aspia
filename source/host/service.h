@@ -123,7 +123,7 @@ private:
     QFileSystemWatcher* settings_watcher_ = nullptr;
     SystemSettings settings_;
 
-    RouterManager* router_controller_ = nullptr;
+    RouterManager* router_manager_ = nullptr;
     base::TcpServer* tcp_server_ = nullptr;
 
     DesktopManager* desktop_manager_ = nullptr;

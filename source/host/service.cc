@@ -228,8 +228,8 @@ void Service::onRouterStateRequested()
     proto::internal::RouterState state;
     state.set_state(proto::internal::RouterState::DISABLED);
 
-    if (router_controller_)
-        state = router_controller_->state();
+    if (router_manager_)
+        state = router_manager_->state();
 
     user_session_->onRouterStateChanged(state);
 }
@@ -240,9 +240,9 @@ void Service::onCredentialsRequested()
     base::HostId host_id = base::kInvalidHostId;
     QString password;
 
-    if (router_controller_)
+    if (router_manager_)
     {
-        host_id = router_controller_->hostId();
+        host_id = router_manager_->hostId();
         password = one_time_password_;
     }
 
@@ -298,14 +298,14 @@ void Service::onNewRelayConnection()
 {
     LOG(INFO) << "New RELAY connection";
 
-    if (!router_controller_)
+    if (!router_manager_)
     {
         LOG(ERROR) << "No router controller instance";
         return;
     }
 
-    while (router_controller_->hasPendingConnections())
-        startClient(router_controller_->nextPendingConnection());
+    while (router_manager_->hasPendingConnections())
+        startClient(router_manager_->nextPendingConnection());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -869,7 +869,7 @@ void Service::updateConfiguration(const QString& path)
     reloadUserList();
 
     // If a controller instance already exists.
-    if (router_controller_)
+    if (router_manager_)
     {
         LOG(INFO) << "Has router controller";
 
@@ -878,9 +878,9 @@ void Service::updateConfiguration(const QString& path)
             LOG(INFO) << "Router enabled";
 
             // Check if the connection parameters have changed.
-            if (router_controller_->address() == settings_.routerAddress() &&
-                router_controller_->port() == settings_.routerPort() &&
-                router_controller_->publicKey() == settings_.routerPublicKey())
+            if (router_manager_->address() == settings_.routerAddress() &&
+                router_manager_->port() == settings_.routerPort() &&
+                router_manager_->publicKey() == settings_.routerPublicKey())
             {
                 LOG(INFO) << "Router parameters without changes";
                 return;
@@ -913,17 +913,17 @@ void Service::reloadUserList()
     LOG(INFO) << "Reloading user list";
 
     // Read the list of regular users.
-    base::SharedPointer<base::UserListBase> user_list(settings_.userList().release());
+    base::SharedPointer<base::UserListBase> users(settings_.userList().release());
 
-    user_list->add(createOneTimeUser());
+    users->add(createOneTimeUser());
 
-    if (user_list->seedKey().isEmpty())
+    if (users->seedKey().isEmpty())
         LOG(ERROR) << "Empty seed key for user list";
 
     // Updating the list of users.
-    tcp_server_->setUserList(user_list);
-    if (router_controller_)
-        router_controller_->setUserList(user_list);
+    tcp_server_->setUserList(users);
+    if (router_manager_)
+        router_manager_->setUserList(users);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -934,34 +934,33 @@ void Service::connectToRouter()
     // Destroy the previous instance.
     disconnectFromRouter();
 
-    // Connect to the router.
-    router_controller_ = new RouterManager(this);
+    router_manager_ = new RouterManager(this);
 
-    connect(router_controller_, &RouterManager::sig_routerStateChanged,
+    connect(router_manager_, &RouterManager::sig_routerStateChanged,
             this, &Service::onRouterStateChanged);
-    connect(router_controller_, &RouterManager::sig_hostIdAssigned,
+    connect(router_manager_, &RouterManager::sig_hostIdAssigned,
             this, &Service::onHostIdAssigned);
-    connect(router_controller_, &RouterManager::sig_clientConnected,
+    connect(router_manager_, &RouterManager::sig_clientConnected,
             this, &Service::onNewRelayConnection);
 
-    router_controller_->setUserList(tcp_server_->userList());
-    router_controller_->start(
+    router_manager_->setUserList(tcp_server_->userList());
+    router_manager_->start(
         settings_.routerAddress(), settings_.routerPort(), settings_.routerPublicKey());
 }
 
 //--------------------------------------------------------------------------------------------------
 void Service::disconnectFromRouter()
 {
-    if (!router_controller_)
+    if (!router_manager_)
     {
-        LOG(INFO) << "No router controller";
+        LOG(INFO) << "No connected to router";
         return;
     }
 
-    router_controller_->disconnect(this);
-    router_controller_->deleteLater();
-    router_controller_ = nullptr;
     LOG(INFO) << "Disconnected from router";
+    router_manager_->disconnect(this);
+    router_manager_->deleteLater();
+    router_manager_ = nullptr;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1040,13 +1039,13 @@ void Service::updateOneTimeCredentials(const base::Location &location)
 //--------------------------------------------------------------------------------------------------
 base::User Service::createOneTimeUser() const
 {
-    if (!router_controller_)
+    if (!router_manager_)
     {
         LOG(WARNING) << "No router controller instance";
         return base::User();
     }
 
-    base::HostId host_id = router_controller_->hostId();
+    base::HostId host_id = router_manager_->hostId();
     if (host_id == base::kInvalidHostId)
     {
         LOG(INFO) << "Invalid host ID";
