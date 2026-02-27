@@ -57,7 +57,6 @@ const char kDesktopAgentFile[] = "aspia_desktop_agent.exe";
 bool copyProcessToken(DWORD desired_access, base::ScopedHandle* token_out)
 {
     base::ScopedHandle process_token;
-
     if (!OpenProcessToken(GetCurrentProcess(), TOKEN_DUPLICATE | desired_access, process_token.recieve()))
     {
         PLOG(ERROR) << "OpenProcessToken failed";
@@ -125,7 +124,6 @@ bool createSessionToken(DWORD session_id, base::ScopedHandle* token_out)
     }
 
     base::ScopedHandle privileged_token;
-
     if (!createPrivilegedToken(&privileged_token))
     {
         LOG(ERROR) << "createPrivilegedToken failed";
@@ -133,7 +131,6 @@ bool createSessionToken(DWORD session_id, base::ScopedHandle* token_out)
     }
 
     base::ScopedImpersonator impersonator;
-
     if (!impersonator.loggedOnUser(privileged_token))
     {
         LOG(ERROR) << "Failed to impersonate thread";
@@ -169,7 +166,6 @@ bool startProcessWithToken(HANDLE token, const QString& command_line, base::Scop
     startup_info.lpDesktop = const_cast<wchar_t*>(kDefaultDesktopName);
 
     void* environment = nullptr;
-
     if (!CreateEnvironmentBlock(&environment, token, FALSE))
     {
         PLOG(ERROR) << "CreateEnvironmentBlock failed";
@@ -273,7 +269,7 @@ void DesktopManager::onSwitchSession(base::SessionId session_id)
 void DesktopManager::onUserSessionEvent(quint32 event_type, quint32 session_id)
 {
 #if defined(Q_OS_WINDOWS)
-    LOG(INFO) << "State: session_id=" << session_id_ << "console:" << is_console_;
+    LOG(INFO) << "State: session_id=" << session_id_ << "console=" << is_console_;
 
     switch (event_type)
     {

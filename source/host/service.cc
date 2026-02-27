@@ -253,7 +253,7 @@ void Service::onNewDirectConnection()
     CHECK(tcp_server_);
 
     while (tcp_server_->hasReadyConnections())
-        startClient(tcp_server_->nextReadyConnection());
+        startConfirmation(tcp_server_->nextReadyConnection());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -300,7 +300,7 @@ void Service::onNewRelayConnection()
     }
 
     while (router_manager_->hasPendingConnections())
-        startClient(router_manager_->nextPendingConnection());
+        startConfirmation(router_manager_->nextPendingConnection());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -316,83 +316,7 @@ void Service::onConfirmationReply(quint32 request_id, bool accept)
         if (accept)
         {
             LOG(INFO) << "TCP channel" << request_id << "is accepted";
-
-            proto::peer::SessionType session_type =
-                static_cast<proto::peer::SessionType>(tcp_channel->peerSessionType());
-
-            switch (session_type)
-            {
-                case proto::peer::SESSION_TYPE_DESKTOP_MANAGE:
-                case proto::peer::SESSION_TYPE_DESKTOP_VIEW:
-                {
-                    DesktopClient* client = new DesktopClient(tcp_channel, this);
-                    desktop_clients_.append(client);
-
-                    connect(client, &DesktopClient::sig_started,
-                            this, &Service::onDesktopClientStarted);
-                    connect(client, &DesktopClient::sig_finished,
-                            this, &Service::onDesktopClientFinished);
-                    connect(client, &DesktopClient::sig_switchSession,
-                            this, &Service::onDesktopClientSwitchSession);
-
-                    connect(client, &DesktopClient::sig_started,
-                            desktop_manager_, &DesktopManager::onClientStarted);
-                    connect(client, &DesktopClient::sig_finished,
-                            desktop_manager_, &DesktopManager::onClientFinished);
-                    connect(desktop_manager_, &DesktopManager::sig_attached,
-                            client, &DesktopClient::onAttached);
-
-                    connect(client, &DesktopClient::sig_recordingChanged,
-                            user_session_, &UserSession::onClientRecording);
-
-                    client->start(desktop_manager_->ipcChannelName());
-                }
-                break;
-
-                case proto::peer::SESSION_TYPE_FILE_TRANSFER:
-                {
-                    FileClient* client = new FileClient(tcp_channel, this);
-                    file_clients_.emplace_back(client);
-
-                    connect(client, &FileClient::sig_started, this, &Service::onFileClientStarted);
-                    connect(client, &FileClient::sig_finished, this, &Service::onFileClientFinished);
-
-                    client->start(desktop_manager_->sessionId());
-                }
-                break;
-
-                case proto::peer::SESSION_TYPE_SYSTEM_INFO:
-                {
-                    SystemInfoClient* client = new SystemInfoClient(tcp_channel, this);
-                    system_info_clients_.emplace_back(client);
-
-                    connect(client, &SystemInfoClient::sig_started,
-                            this, &Service::onSystemInfoClientStarted);
-                    connect(client, &SystemInfoClient::sig_finished,
-                            this, &Service::onSystemInfoClientFinished);
-
-                    client->start();
-                }
-                break;
-
-                case proto::peer::SESSION_TYPE_TEXT_CHAT:
-                {
-                    ChatClient* client = new ChatClient(tcp_channel, this);
-                    chat_clients_.emplace_back(client);
-
-                    connect(client, &ChatClient::sig_started,
-                            this, &Service::onChatClientStarted);
-                    connect(client, &ChatClient::sig_finished,
-                            this, &Service::onChatClientFinished);
-                    connect(client, &ChatClient::sig_messageReceived,
-                            this, &Service::onChatClientMessage);
-                }
-                break;
-
-                default:
-                    NOTREACHED();
-                    break;
-            }
+            startClient(tcp_channel);
         }
         else
         {
@@ -612,7 +536,7 @@ void Service::onDesktopClientSwitchSession(base::SessionId session_id)
     }
 
     desktop_manager_->onSwitchSession(session_id);
-    user_session_->onSwitchSession(session_id);
+    user_session_->onClientSwitchSession(session_id);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -791,7 +715,7 @@ void Service::onUserChatMessage(const proto::chat::Chat& chat)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Service::startClient(base::TcpChannel* tcp_channel)
+void Service::startConfirmation(base::TcpChannel* tcp_channel)
 {
     LOG(INFO) << "TCP channel is ready";
 
@@ -822,6 +746,75 @@ void Service::startClient(base::TcpChannel* tcp_channel)
 
     pending_channels_.emplace_back(tcp_channel, QTime::currentTime());
     user_session_->onClientConfirmation(request);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Service::startClient(base::TcpChannel* tcp_channel)
+{
+    proto::peer::SessionType session_type =
+        static_cast<proto::peer::SessionType>(tcp_channel->peerSessionType());
+
+    switch (session_type)
+    {
+        case proto::peer::SESSION_TYPE_DESKTOP_MANAGE:
+        case proto::peer::SESSION_TYPE_DESKTOP_VIEW:
+        {
+            DesktopClient* client = new DesktopClient(tcp_channel, this);
+            desktop_clients_.append(client);
+
+            connect(client, &DesktopClient::sig_started, this, &Service::onDesktopClientStarted);
+            connect(client, &DesktopClient::sig_finished, this, &Service::onDesktopClientFinished);
+            connect(client, &DesktopClient::sig_switchSession, this, &Service::onDesktopClientSwitchSession);
+
+            connect(client, &DesktopClient::sig_started, desktop_manager_, &DesktopManager::onClientStarted);
+            connect(client, &DesktopClient::sig_finished, desktop_manager_, &DesktopManager::onClientFinished);
+            connect(desktop_manager_, &DesktopManager::sig_attached, client, &DesktopClient::onAttached);
+
+            connect(client, &DesktopClient::sig_recordingChanged, user_session_, &UserSession::onClientRecording);
+
+            client->start(desktop_manager_->ipcChannelName());
+        }
+        break;
+
+        case proto::peer::SESSION_TYPE_FILE_TRANSFER:
+        {
+            FileClient* client = new FileClient(tcp_channel, this);
+            file_clients_.emplace_back(client);
+
+            connect(client, &FileClient::sig_started, this, &Service::onFileClientStarted);
+            connect(client, &FileClient::sig_finished, this, &Service::onFileClientFinished);
+
+            client->start(desktop_manager_->sessionId());
+        }
+        break;
+
+        case proto::peer::SESSION_TYPE_SYSTEM_INFO:
+        {
+            SystemInfoClient* client = new SystemInfoClient(tcp_channel, this);
+            system_info_clients_.emplace_back(client);
+
+            connect(client, &SystemInfoClient::sig_started, this, &Service::onSystemInfoClientStarted);
+            connect(client, &SystemInfoClient::sig_finished, this, &Service::onSystemInfoClientFinished);
+
+            client->start();
+        }
+        break;
+
+        case proto::peer::SESSION_TYPE_TEXT_CHAT:
+        {
+            ChatClient* client = new ChatClient(tcp_channel, this);
+            chat_clients_.emplace_back(client);
+
+            connect(client, &ChatClient::sig_started, this, &Service::onChatClientStarted);
+            connect(client, &ChatClient::sig_finished, this, &Service::onChatClientFinished);
+            connect(client, &ChatClient::sig_messageReceived, this, &Service::onChatClientMessage);
+        }
+        break;
+
+        default:
+            NOTREACHED();
+            break;
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

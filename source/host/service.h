@@ -108,6 +108,7 @@ private slots:
     void onUserChatMessage(const proto::chat::Chat& chat);
 
 private:
+    void startConfirmation(base::TcpChannel* tcp_channel);
     void startClient(base::TcpChannel* tcp_channel);
     void addFirewallRules();
     void deleteFirewallRules();

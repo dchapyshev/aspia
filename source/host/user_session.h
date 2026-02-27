@@ -50,7 +50,7 @@ public:
     base::SessionId sessionId() const { return session_id_; }
 
 public slots:
-    void onSwitchSession(base::SessionId session_id);
+    void onClientSwitchSession(base::SessionId session_id);
     void onClientConfirmation(const proto::internal::ConfirmationRequest& request);
     void onClientStarted(quint32 client_id, proto::peer::SessionType session_type,
         const QString& computer_name, const QString& display_name);

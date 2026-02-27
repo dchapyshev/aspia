@@ -201,7 +201,7 @@ bool UserSession::isAttached() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSession::onSwitchSession(base::SessionId session_id)
+void UserSession::onClientSwitchSession(base::SessionId session_id)
 {
     LOG(INFO) << "Switch session:" << session_id;
 
