@@ -499,6 +499,12 @@ void UserSession::attach(const base::Location& location, base::SessionId session
 {
     LOG(INFO) << "Attaching to UI process (sid" << session_id << "from" << location << ")";
 
+    if (ipc_channel_)
+    {
+        LOG(ERROR) << "Already attached";
+        return;
+    }
+
     session_id_ = session_id;
     attach_timer_->start();
 
@@ -557,7 +563,7 @@ void UserSession::attach(const base::Location& location, base::SessionId session
 
     QString file_path = QDir::toNativeSeparators(QCoreApplication::applicationDirPath());
 
-    file_path.append(QLatin1Char('\\'));
+    file_path.append('\\');
     file_path.append(kExecutableNameForUi);
 
     QString command_line = file_path + " --hidden";

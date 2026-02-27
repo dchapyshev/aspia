@@ -140,7 +140,7 @@ void DesktopAgent::onIpcNewConnection()
 void DesktopAgent::onIpcErrorOccurred()
 {
     LOG(ERROR) << "Error in IPC server. Terminate application";
-    QCoreApplication::quit();
+    base::Application::quit();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -275,7 +275,9 @@ void DesktopAgent::onClientFinished()
     }
 
     screen_capture_timer_->stop();
+
     LOG(INFO) << "Session successfully disabled";
+    base::Application::quit();
 }
 
 //--------------------------------------------------------------------------------------------------
