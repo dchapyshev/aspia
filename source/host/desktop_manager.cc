@@ -28,7 +28,6 @@
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/scoped_impersonator.h"
-#include "base/win/session_status.h"
 #include <QWinEventNotifier>
 #include <UserEnv.h>
 #endif // defined(Q_OS_WINDOWS)
@@ -117,7 +116,7 @@ bool createSessionToken(DWORD session_id, base::ScopedHandle* token_out)
 {
     base::ScopedHandle session_token;
     const DWORD desired_access = TOKEN_ADJUST_DEFAULT | TOKEN_ADJUST_SESSIONID |
-                                 TOKEN_ASSIGN_PRIMARY | TOKEN_DUPLICATE | TOKEN_QUERY;
+        TOKEN_ASSIGN_PRIMARY | TOKEN_DUPLICATE | TOKEN_QUERY;
 
     if (!copyProcessToken(desired_access, &session_token))
     {
@@ -202,11 +201,11 @@ bool startProcessWithToken(HANDLE token, const QString& command_line, base::Scop
 //--------------------------------------------------------------------------------------------------
 DesktopManager::DesktopManager(QObject* parent)
     : QObject(parent),
+      ipc_channel_name_(base::IpcServer::createUniqueId()),
       restart_timer_(new QTimer(this)),
       attach_timer_(new QTimer(this))
 {
     LOG(INFO) << "Ctor";
-    instance_ = this;
 
     connect(base::Application::instance(), &base::Application::sig_sessionEvent,
             this, &DesktopManager::onUserSessionEvent);
@@ -225,14 +224,6 @@ DesktopManager::DesktopManager(QObject* parent)
 DesktopManager::~DesktopManager()
 {
     LOG(INFO) << "Dtor";
-    instance_ = nullptr;
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
-DesktopManager* DesktopManager::instance()
-{
-    return instance_;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -243,6 +234,12 @@ QString DesktopManager::filePath()
     file_path.append(QLatin1Char('/'));
     file_path.append(kDesktopAgentFile);
     return QDir::toNativeSeparators(file_path);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool DesktopManager::isAttached() const
+{
+    return session_id_ != base::kInvalidSessionId;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -258,20 +255,11 @@ const QString& DesktopManager::ipcChannelName() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopManager::start()
-{
-    if (process_)
-    {
-        LOG(ERROR) << "Desktop session process is already started";
-        return;
-    }
-
-    attach(FROM_HERE, base::activeConsoleSessionId());
-}
-
-//--------------------------------------------------------------------------------------------------
 void DesktopManager::onClientStarted()
 {
+    if (!client_count_ && !isAttached())
+        attach(FROM_HERE, base::activeConsoleSessionId());
+
     ++client_count_;
 }
 
@@ -284,14 +272,8 @@ void DesktopManager::onClientFinished()
     if (client_count_)
         return;
 
-    LOG(INFO) << "Last desktop client disconnected";
-
-    base::SessionId session_id = base::activeConsoleSessionId();
-    if (session_id != session_id_)
-    {
-        dettach(FROM_HERE);
-        attach(FROM_HERE, session_id);
-    }
+    LOG(INFO) << "Last desktop client is disconnected";
+    dettach(FROM_HERE);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -311,7 +293,7 @@ void DesktopManager::onUserSessionEvent(quint32 event_type, quint32 session_id)
     {
         case WTS_CONSOLE_CONNECT:
         {
-            if (!is_console_)
+            if (!is_console_ || !client_count_)
                 return;
 
             attach(FROM_HERE, session_id);
@@ -320,7 +302,7 @@ void DesktopManager::onUserSessionEvent(quint32 event_type, quint32 session_id)
 
         case WTS_CONSOLE_DISCONNECT:
         {
-            if (!is_console_)
+            if (!is_console_ || !client_count_)
                 return;
 
             dettach(FROM_HERE);
@@ -329,7 +311,7 @@ void DesktopManager::onUserSessionEvent(quint32 event_type, quint32 session_id)
 
         case WTS_REMOTE_DISCONNECT:
         {
-            if (is_console_)
+            if (is_console_ || !client_count_)
                 return;
 
             dettach(FROM_HERE);
@@ -402,7 +384,7 @@ void DesktopManager::onAttachTimeout()
 //--------------------------------------------------------------------------------------------------
 void DesktopManager::attach(const base::Location& location, base::SessionId session_id)
 {
-    if (process_)
+    if (isAttached())
     {
         LOG(INFO) << "Session already attached (session_id" << session_id_ << "from" << location << ")";
         return;
@@ -412,7 +394,6 @@ void DesktopManager::attach(const base::Location& location, base::SessionId sess
 
     session_id_ = session_id;
     is_console_ = session_id == base::activeConsoleSessionId();
-    ipc_channel_name_ = base::IpcServer::createUniqueId();
 
     attach_timer_->start();
     startProcess(session_id, ipc_channel_name_);
@@ -421,16 +402,15 @@ void DesktopManager::attach(const base::Location& location, base::SessionId sess
 //--------------------------------------------------------------------------------------------------
 void DesktopManager::dettach(const base::Location& location)
 {
-    if (!process_)
+    if (!isAttached())
     {
-        LOG(INFO) << "Session already dettached (session_id" << session_id_ << "from" << location << ")";
+        LOG(INFO) << "Session already dettached from" << location;
         return;
     }
 
     LOG(INFO) << "Dettach from session" << session_id_ << "from" << location;
 
     session_id_ = base::kInvalidSessionId;
-    ipc_channel_name_.clear();
     attach_timer_->stop();
 
     stopProcess();
@@ -611,9 +591,5 @@ void DesktopManager::stopProcess()
     NOTIMPLEMENTED();
 #endif
 }
-
-//--------------------------------------------------------------------------------------------------
-// static
-thread_local DesktopManager* DesktopManager::instance_ = nullptr;
 
 } // namespace host

@@ -53,14 +53,13 @@ public:
     };
     Q_ENUM(ProcessState)
 
-    static DesktopManager* instance();
     static QString filePath();
 
+    bool isAttached() const;
     base::SessionId sessionId() const;
     const QString& ipcChannelName() const;
 
 public slots:
-    void start();
     void onClientStarted();
     void onClientFinished();
     void onSwitchSession(base::SessionId session_id);
@@ -81,10 +80,8 @@ private:
     void startProcess(base::SessionId session_id, const QString& ipc_channel_name);
     void stopProcess();
 
-    static thread_local DesktopManager* instance_;
-
     base::SessionId session_id_ = base::kInvalidSessionId;
-    QString ipc_channel_name_;
+    const QString ipc_channel_name_;
     bool is_console_ = true;
 
     QTimer* restart_timer_ = nullptr;

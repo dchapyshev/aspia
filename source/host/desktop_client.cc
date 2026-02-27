@@ -107,15 +107,20 @@ void DesktopClient::start(const QString& ipc_channel_name)
 
     LOG(INFO) << "Connecting to IPC channel:" << ipc_channel_name;
 
-    if (!connectToAgent(ipc_channel_name))
+    QTimer::singleShot(0, this, [this, ipc_channel_name]()
     {
-        emit sig_finished(clientId());
-        return;
-    }
+        if (!connectToAgent(ipc_channel_name))
+        {
+            emit sig_finished(clientId());
+            return;
+        }
 
-    tcp_channel_->resume();
-    ipc_channel_->resume();
+        tcp_channel_->resume();
+        ipc_channel_->resume();
+    });
 
+    // First emit a start signal and then connect to the agent, because the agent process starts
+    // when this signal is emitted. Otherwise, there would be nothing to connect to.
     emit sig_started(clientId());
 }
 

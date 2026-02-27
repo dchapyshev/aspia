@@ -53,21 +53,11 @@ DesktopAgent::DesktopAgent(QObject* parent)
     screen_capture_timer_->setTimerType(Qt::PreciseTimer);
     connect(screen_capture_timer_, &QTimer::timeout, this, &DesktopAgent::onCaptureScreen);
 
-    SystemSettings settings;
-    preferred_video_capturer_ =
-        static_cast<base::ScreenCapturer::Type>(settings.preferredVideoCapturer());
-    LOG(INFO) << "Preferred video capturer:" << static_cast<int>(preferred_video_capturer_);
-
 #if defined(Q_OS_WINDOWS)
     // At the end of the user's session, the program ends later than the others.
     if (!SetProcessShutdownParameters(0, SHUTDOWN_NORETRY))
     {
         PLOG(ERROR) << "SetProcessShutdownParameters failed";
-    }
-
-    if (!SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS))
-    {
-        PLOG(ERROR) << "SetPriorityClass failed";
     }
 
     connect(base::Application::instance(), &base::Application::sig_queryEndSession, []()
@@ -171,7 +161,13 @@ void DesktopAgent::onClientConfigured()
     {
         capture_scheduler_.setUpdateInterval(std::chrono::milliseconds(40));
 
-        screen_capturer_ = new base::ScreenCapturerWrapper(preferred_video_capturer_, this);
+        SystemSettings settings;
+        base::ScreenCapturer::Type preferred_capturer =
+            static_cast<base::ScreenCapturer::Type>(settings.preferredVideoCapturer());
+
+        LOG(INFO) << "Preferred video capturer:" << static_cast<int>(preferred_capturer);
+
+        screen_capturer_ = new base::ScreenCapturerWrapper(preferred_capturer, this);
 
         connect(screen_capturer_, &base::ScreenCapturerWrapper::sig_screenListChanged,
                 this, &DesktopAgent::onScreenListChanged);

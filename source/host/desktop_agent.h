@@ -89,8 +89,6 @@ private:
     base::IpcServer* ipc_server_ = nullptr;
     QList<DesktopAgentClient*> clients_;
 
-    base::ScreenCapturer::Type preferred_video_capturer_ = base::ScreenCapturer::Type::DEFAULT;
-
     common::ClipboardMonitor* clipboard_monitor_ = nullptr;
     InputInjector* input_injector_ = nullptr;
     base::ScreenCapturerWrapper* screen_capturer_ = nullptr;

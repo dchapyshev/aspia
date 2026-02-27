@@ -163,7 +163,6 @@ void Service::onStart()
 
     settings_watcher_->addPath(settings_file_path);
     repeated_timer_->start(std::chrono::seconds(30));
-    desktop_manager_->start();
     user_session_->start();
 
     addFirewallRules();
