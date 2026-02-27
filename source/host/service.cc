@@ -494,13 +494,8 @@ void Service::onStopClient(quint32 client_id)
 void Service::onDesktopClientStarted(quint32 client_id)
 {
     DesktopClient* client = dynamic_cast<DesktopClient*>(sender());
-    if (!client)
-    {
-        LOG(ERROR) << "Unknown sender for slot";
-        return;
-    }
-
-    DCHECK_EQ(client_id, client->clientId());
+    CHECK(client);
+    CHECK_EQ(client_id, client->clientId());
 
     user_session_->onClientStarted(
         client_id, client->sessionType(), client->computerName(), client->displayName());
@@ -510,13 +505,8 @@ void Service::onDesktopClientStarted(quint32 client_id)
 void Service::onDesktopClientFinished(quint32 client_id)
 {
     DesktopClient* client = dynamic_cast<DesktopClient*>(sender());
-    if (!client)
-    {
-        LOG(ERROR) << "Unknown sender for slot";
-        return;
-    }
-
-    DCHECK_EQ(client_id, client->clientId());
+    CHECK(client);
+    CHECK_EQ(client_id, client->clientId());
 
     client->disconnect(this); // Disoconnect all signals.
     client->deleteLater();
@@ -529,11 +519,7 @@ void Service::onDesktopClientFinished(quint32 client_id)
 void Service::onDesktopClientSwitchSession(base::SessionId session_id)
 {
     DesktopClient* client = dynamic_cast<DesktopClient*>(sender());
-    if (!client)
-    {
-        LOG(ERROR) << "Unknown sender for slot";
-        return;
-    }
+    CHECK(client);
 
     desktop_manager_->onSwitchSession(session_id);
     user_session_->onClientSwitchSession(session_id);
@@ -543,13 +529,8 @@ void Service::onDesktopClientSwitchSession(base::SessionId session_id)
 void Service::onFileClientStarted(quint32 client_id)
 {
     FileClient* client = dynamic_cast<FileClient*>(sender());
-    if (!client)
-    {
-        LOG(ERROR) << "Unknown sender for slot";
-        return;
-    }
-
-    DCHECK_EQ(client_id, client->clientId());
+    CHECK(client);
+    CHECK_EQ(client_id, client->clientId());
 
     user_session_->onClientStarted(client_id, proto::peer::SESSION_TYPE_FILE_TRANSFER,
         client->computerName(), client->displayName());
@@ -559,13 +540,8 @@ void Service::onFileClientStarted(quint32 client_id)
 void Service::onFileClientFinished(quint32 client_id)
 {
     FileClient* client = dynamic_cast<FileClient*>(sender());
-    if (!client)
-    {
-        LOG(ERROR) << "Unknown sender for slot";
-        return;
-    }
-
-    DCHECK_EQ(client_id, client->clientId());
+    CHECK(client);
+    CHECK_EQ(client_id, client->clientId());
 
     client->disconnect();
     client->deleteLater();
@@ -578,13 +554,8 @@ void Service::onFileClientFinished(quint32 client_id)
 void Service::onSystemInfoClientStarted(quint32 client_id)
 {
     SystemInfoClient* client = dynamic_cast<SystemInfoClient*>(sender());
-    if (!client)
-    {
-        LOG(ERROR) << "Unknown sender for finish slot";
-        return;
-    }
-
-    DCHECK_EQ(client_id, client->clientId());
+    CHECK(client);
+    CHECK_EQ(client_id, client->clientId());
 
     user_session_->onClientStarted(client_id, proto::peer::SESSION_TYPE_SYSTEM_INFO,
         client->computerName(), client->displayName());
@@ -594,13 +565,8 @@ void Service::onSystemInfoClientStarted(quint32 client_id)
 void Service::onSystemInfoClientFinished(quint32 client_id)
 {
     SystemInfoClient* client = dynamic_cast<SystemInfoClient*>(sender());
-    if (!client)
-    {
-        LOG(ERROR) << "Unknown sender for finish slot";
-        return;
-    }
-
-    DCHECK_EQ(client_id, client->clientId());
+    CHECK(client);
+    CHECK_EQ(client_id, client->clientId());
 
     client->disconnect();
     client->deleteLater();
@@ -615,13 +581,8 @@ void Service::onChatClientStarted(quint32 client_id)
     LOG(INFO) << "Text chat session started (client_id:" << client_id << ")";
 
     ChatClient* started_client = dynamic_cast<ChatClient*>(sender());
-    if (!started_client)
-    {
-        LOG(ERROR) << "Unknown sender for started slot";
-        return;
-    }
-
-    DCHECK_EQ(client_id, started_client->clientId());
+    CHECK(started_client);
+    CHECK_EQ(client_id, started_client->clientId());
 
     if (!user_session_->isAttached())
         started_client->onSendStatus(proto::chat::Status::CODE_USER_DISCONNECTED);
@@ -653,13 +614,8 @@ void Service::onChatClientStarted(quint32 client_id)
 void Service::onChatClientFinished(quint32 client_id)
 {
     ChatClient* finished_client = dynamic_cast<ChatClient*>(sender());
-    if (!finished_client)
-    {
-        LOG(ERROR) << "Unknown sender for finish slot";
-        return;
-    }
-
-    DCHECK_EQ(finished_client->clientId(), client_id);
+    CHECK(finished_client);
+    CHECK_EQ(finished_client->clientId(), client_id);
 
     QString display_name = finished_client->displayName();
     if (display_name.isEmpty())
@@ -674,10 +630,8 @@ void Service::onChatClientFinished(quint32 client_id)
     // Notify other clients about finish.
     for (const auto& client : std::as_const(chat_clients_))
     {
-        if (client->clientId() == client_id)
-            continue;
-
-        client->onSendChat(chat);
+        if (client->clientId() != client_id)
+            client->onSendChat(chat);
     }
 
     // Notify GUI about finish.
@@ -751,10 +705,7 @@ void Service::startConfirmation(base::TcpChannel* tcp_channel)
 //--------------------------------------------------------------------------------------------------
 void Service::startClient(base::TcpChannel* tcp_channel)
 {
-    proto::peer::SessionType session_type =
-        static_cast<proto::peer::SessionType>(tcp_channel->peerSessionType());
-
-    switch (session_type)
+    switch (static_cast<proto::peer::SessionType>(tcp_channel->peerSessionType()))
     {
         case proto::peer::SESSION_TYPE_DESKTOP_MANAGE:
         case proto::peer::SESSION_TYPE_DESKTOP_VIEW:
@@ -1016,34 +967,32 @@ void Service::checkForUpdates()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Service::updateOneTimeCredentials(const base::Location &location)
+void Service::updateOneTimeCredentials(const base::Location& location)
 {
     LOG(INFO) << "Updating credentials from" << location;
 
-    if (settings_.oneTimePassword())
-    {
-        LOG(INFO) << "One-time password is enabled";
-
-        base::PasswordGenerator generator;
-        generator.setCharacters(settings_.oneTimePasswordCharacters());
-        generator.setLength(settings_.oneTimePasswordLength());
-
-        one_time_password_ = generator.result();
-
-        std::chrono::milliseconds expire_interval = settings_.oneTimePasswordExpire();
-        if (expire_interval > std::chrono::milliseconds(0))
-            password_expire_timer_->start(expire_interval);
-        else
-            password_expire_timer_->stop();
-    }
-    else
+    if (!settings_.oneTimePassword())
     {
         LOG(INFO) << "One-time password is disabled";
-
         password_expire_timer_->stop();
         one_time_sessions_ = 0;
         one_time_password_.clear();
+        return;
     }
+
+    LOG(INFO) << "One-time password is enabled";
+
+    base::PasswordGenerator generator;
+    generator.setCharacters(settings_.oneTimePasswordCharacters());
+    generator.setLength(settings_.oneTimePasswordLength());
+
+    one_time_password_ = generator.result();
+
+    std::chrono::milliseconds expire_interval = settings_.oneTimePasswordExpire();
+    if (expire_interval > std::chrono::milliseconds(0))
+        password_expire_timer_->start(expire_interval);
+    else
+        password_expire_timer_->stop();
 }
 
 //--------------------------------------------------------------------------------------------------
