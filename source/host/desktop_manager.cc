@@ -231,27 +231,9 @@ DesktopManager::~DesktopManager()
 QString DesktopManager::filePath()
 {
     QString file_path = QCoreApplication::applicationDirPath();
-    file_path.append(QLatin1Char('/'));
+    file_path.append('/');
     file_path.append(kDesktopAgentFile);
     return QDir::toNativeSeparators(file_path);
-}
-
-//--------------------------------------------------------------------------------------------------
-bool DesktopManager::isAttached() const
-{
-    return session_id_ != base::kInvalidSessionId;
-}
-
-//--------------------------------------------------------------------------------------------------
-base::SessionId DesktopManager::sessionId() const
-{
-    return session_id_;
-}
-
-//--------------------------------------------------------------------------------------------------
-const QString& DesktopManager::ipcChannelName() const
-{
-    return ipc_channel_name_;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -386,7 +368,7 @@ void DesktopManager::attach(const base::Location& location, base::SessionId sess
 {
     if (isAttached())
     {
-        LOG(INFO) << "Session already attached (session_id" << session_id_ << "from" << location << ")";
+        LOG(INFO) << "Session is already attached (session_id" << session_id_ << "from" << location << ")";
         return;
     }
 
@@ -412,8 +394,6 @@ void DesktopManager::dettach(const base::Location& location)
 
     session_id_ = base::kInvalidSessionId;
     attach_timer_->stop();
-
-    stopProcess();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -559,36 +539,6 @@ void DesktopManager::startProcess(base::SessionId session_id, const QString& ipc
 #else
     NOTIMPLEMENTED();
     onProcessStateChanged(ProcessState::ERROR_OCURRED);
-#endif
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopManager::stopProcess()
-{
-#if defined(Q_OS_WINDOWS)
-    if (process_.isValid())
-    {
-        if (!TerminateProcess(process_, 0))
-        {
-            PLOG(ERROR) << "TerminateProcess failed";
-        }
-    }
-
-    if (process_notifier_)
-    {
-        process_notifier_->setEnabled(false);
-        process_notifier_->deleteLater();
-        process_notifier_ = nullptr;
-    }
-
-    onProcessStateChanged(ProcessState::STOPPED);
-#elif defined(Q_OS_LINUX)
-    if (::kill(pid_, SIGKILL) != 0)
-    {
-        PLOG(ERROR) << "kill failed";
-    }
-#else
-    NOTIMPLEMENTED();
 #endif
 }
 

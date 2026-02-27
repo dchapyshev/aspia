@@ -55,9 +55,9 @@ public:
 
     static QString filePath();
 
-    bool isAttached() const;
-    base::SessionId sessionId() const;
-    const QString& ipcChannelName() const;
+    bool isAttached() const { return session_id_ != base::kInvalidSessionId; }
+    base::SessionId sessionId() const { return session_id_; }
+    const QString& ipcChannelName() const { return ipc_channel_name_; }
 
 public slots:
     void onClientStarted();
@@ -78,7 +78,6 @@ private:
     void attach(const base::Location& location, base::SessionId session_id);
     void dettach(const base::Location& location);
     void startProcess(base::SessionId session_id, const QString& ipc_channel_name);
-    void stopProcess();
 
     base::SessionId session_id_ = base::kInvalidSessionId;
     const QString ipc_channel_name_;

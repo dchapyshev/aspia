@@ -68,24 +68,7 @@ private slots:
 
     void onCaptureScreen();
 
-    void onInjectKeyEvent(const proto::desktop::KeyEvent& event);
-    void onInjectTextEvent(const proto::desktop::TextEvent& event);
-    void onInjectMouseEvent(const proto::desktop::MouseEvent& event);
-    void onInjectTouchEvent(const proto::desktop::TouchEvent& event);
-    void onInjectClipboardEvent(const proto::desktop::ClipboardEvent& event);
-
-private slots:
-    void onScreenListChanged(
-        const base::ScreenCapturer::ScreenList& list, base::ScreenCapturer::ScreenId current);
-    void onSelectScreen(const proto::desktop::Screen& screen);
-    void onCursorPositionChanged(const QPoint& position);
-    void onScreenTypeChanged(base::ScreenCapturer::ScreenType type, const QString& name);
-    void onClipboardEvent(const proto::desktop::ClipboardEvent& event);
-    void onAudioCaptured(const proto::desktop::AudioPacket& packet);
-
 private:
-    void mergeClientConfigurations();
-
     base::IpcServer* ipc_server_ = nullptr;
     QList<DesktopAgentClient*> clients_;
 

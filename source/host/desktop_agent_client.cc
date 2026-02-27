@@ -284,8 +284,42 @@ void DesktopAgentClient::onScreenCaptureError(proto::desktop::VideoErrorCode err
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::onScreenListChanged(const proto::desktop::ScreenList& screen_list)
+void DesktopAgentClient::onScreenListChanged(
+    const base::ScreenCapturer::ScreenList& list, base::ScreenCapturer::ScreenId current)
 {
+    proto::desktop::ScreenList screen_list;
+
+    screen_list.set_current_screen(current);
+
+    for (const auto& resolition_item : list.resolutions)
+    {
+        proto::desktop::Size* resolution = screen_list.add_resolution();
+        resolution->set_width(resolition_item.width());
+        resolution->set_height(resolition_item.height());
+    }
+
+    for (const auto& screen_item : list.screens)
+    {
+        proto::desktop::Screen* screen = screen_list.add_screen();
+        screen->set_id(screen_item.id);
+        screen->set_title(screen_item.title.toStdString());
+
+        proto::desktop::Point* position = screen->mutable_position();
+        position->set_x(screen_item.position.x());
+        position->set_y(screen_item.position.y());
+
+        proto::desktop::Size* resolution = screen->mutable_resolution();
+        resolution->set_width(screen_item.resolution.width());
+        resolution->set_height(screen_item.resolution.height());
+
+        proto::desktop::Point* dpi = screen->mutable_dpi();
+        dpi->set_x(screen_item.dpi.x());
+        dpi->set_y(screen_item.dpi.y());
+
+        if (screen_item.is_primary)
+            screen_list.set_primary_screen(screen_item.id);
+    }
+
     proto::desktop::Extension* extension = outgoing_message_.newMessage().mutable_extension();
     extension->set_name(common::kSelectScreenExtension);
     extension->set_data(screen_list.SerializeAsString());
@@ -293,8 +327,34 @@ void DesktopAgentClient::onScreenListChanged(const proto::desktop::ScreenList& s
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::onScreenTypeChanged(const proto::desktop::ScreenType& screen_type)
+void DesktopAgentClient::onScreenTypeChanged(base::ScreenCapturer::ScreenType type, const QString& name)
 {
+    proto::desktop::ScreenType screen_type;
+    screen_type.set_name(name.toStdString());
+
+    switch (type)
+    {
+        case base::ScreenCapturer::ScreenType::DESKTOP:
+            screen_type.set_type(proto::desktop::ScreenType::TYPE_DESKTOP);
+            break;
+
+        case base::ScreenCapturer::ScreenType::LOCK:
+            screen_type.set_type(proto::desktop::ScreenType::TYPE_LOCK);
+            break;
+
+        case base::ScreenCapturer::ScreenType::LOGIN:
+            screen_type.set_type(proto::desktop::ScreenType::TYPE_LOGIN);
+            break;
+
+        case base::ScreenCapturer::ScreenType::OTHER:
+            screen_type.set_type(proto::desktop::ScreenType::TYPE_OTHER);
+            break;
+
+        default:
+            screen_type.set_type(proto::desktop::ScreenType::TYPE_UNKNOWN);
+            break;
+    }
+
     proto::desktop::Extension* extension = outgoing_message_.newMessage().mutable_extension();
     extension->set_name(common::kScreenTypeExtension);
     extension->set_data(screen_type.SerializeAsString());
@@ -326,7 +386,7 @@ void DesktopAgentClient::onCursorPositionChanged(const QPoint& cursor_position)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::onClipbaordEvent(const proto::desktop::ClipboardEvent& event)
+void DesktopAgentClient::onClipboardEvent(const proto::desktop::ClipboardEvent& event)
 {
     if (sessionType() != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
         return;
@@ -684,7 +744,10 @@ void DesktopAgentClient::readSelectScreenExtension(const std::string& data)
         return;
     }
 
-    emit sig_selectScreen(screen);
+    base::ScreenCapturer::ScreenId screen_id = static_cast<base::ScreenCapturer::ScreenId>(screen.id());
+    QSize resolution = base::parse(screen.resolution());
+
+    emit sig_selectScreen(screen_id, resolution);
     preferred_size_ = QSize(0, 0);
 }
 

@@ -23,6 +23,7 @@
 #include <memory>
 
 #include "base/serialization.h"
+#include "base/desktop/screen_capturer.h"
 #include "proto/desktop_session.h"
 #include "proto/task_manager.h"
 
@@ -50,24 +51,13 @@ public:
 
     struct Config
     {
-        bool disable_font_smoothing = true;
+        bool disable_font_smoothing = false;
         bool disable_wallpaper = true;
         bool disable_effects = true;
         bool block_input = false;
         bool lock_at_disconnect = false;
         bool clear_clipboard = true;
         bool cursor_position = false;
-
-        bool equals(const Config& other) const
-        {
-            return (disable_font_smoothing == other.disable_font_smoothing) &&
-                   (disable_wallpaper == other.disable_wallpaper) &&
-                   (disable_effects == other.disable_effects) &&
-                   (block_input == other.block_input) &&
-                   (lock_at_disconnect == other.lock_at_disconnect) &&
-                   (clear_clipboard == other.clear_clipboard) &&
-                   (cursor_position == other.cursor_position);
-        }
     };
 
     proto::peer::SessionType sessionType() const;
@@ -75,10 +65,10 @@ public:
 
     void onScreenCaptureData(const base::Frame* frame, const base::MouseCursor* cursor);
     void onScreenCaptureError(proto::desktop::VideoErrorCode error_code);
-    void onScreenListChanged(const proto::desktop::ScreenList& screen_list);
-    void onScreenTypeChanged(const proto::desktop::ScreenType& screen_type);
+    void onScreenListChanged(const base::ScreenCapturer::ScreenList& list, base::ScreenCapturer::ScreenId current);
+    void onScreenTypeChanged(base::ScreenCapturer::ScreenType type, const QString& name);
     void onCursorPositionChanged(const QPoint& cursor_position);
-    void onClipbaordEvent(const proto::desktop::ClipboardEvent& event);
+    void onClipboardEvent(const proto::desktop::ClipboardEvent& event);
     void onAudioCaptureData(const proto::desktop::AudioPacket& audio_packet);
 
 public slots:
@@ -92,7 +82,7 @@ signals:
     void sig_injectClipboardEvent(const proto::desktop::ClipboardEvent& event);
 
     void sig_captureScreen();
-    void sig_selectScreen(const proto::desktop::Screen& screen);
+    void sig_selectScreen(base::ScreenCapturer::ScreenId screen_id, const QSize& resolution);
 
     void sig_configured();
     void sig_finished();
