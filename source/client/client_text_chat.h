@@ -16,27 +16,27 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_CLIENT_TEXT_CHAT_H
-#define CLIENT_CLIENT_TEXT_CHAT_H
+#ifndef CLIENT_CLIENT_CHAT_H
+#define CLIENT_CLIENT_CHAT_H
 
 #include "client/client.h"
-#include "proto/text_chat.h"
+#include "proto/chat.h"
 
 namespace client {
 
-class ClientTextChat final : public Client
+class ClientChat final : public Client
 {
     Q_OBJECT
 
 public:
-    explicit ClientTextChat(QObject* parent = nullptr);
-    ~ClientTextChat() final;
+    explicit ClientChat(QObject* parent = nullptr);
+    ~ClientChat() final;
 
 public slots:
-    void onTextChatMessage(const proto::text_chat::TextChat& text_chat);
+    void onChatMessage(const proto::chat::Chat& chat);
 
 signals:
-    void sig_textChatMessage(const proto::text_chat::TextChat& text_chat);
+    void sig_chatMessage(const proto::chat::Chat& chat);
 
 protected:
     // Client implementation.
@@ -46,9 +46,9 @@ protected:
     void onSessionMessageWritten(size_t pending) final;
 
 private:
-    Q_DISABLE_COPY_MOVE(ClientTextChat)
+    Q_DISABLE_COPY_MOVE(ClientChat)
 };
 
 } // namespace client
 
-#endif // CLIENT_CLIENT_TEXT_CHAT_H
+#endif // CLIENT_CLIENT_CHAT_H

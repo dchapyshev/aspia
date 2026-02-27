@@ -16,40 +16,33 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-syntax = "proto3";
+#ifndef COMMON_UI_CHAT_OUTGOING_MESSAGE_H
+#define COMMON_UI_CHAT_OUTGOING_MESSAGE_H
 
-option optimize_for = LITE_RUNTIME;
+#include "common/ui/chat_message.h"
+#include "ui_chat_outgoing_message.h"
 
-package proto.text_chat;
+namespace common {
 
-message Status
+class ChatOutgoingMessage final : public ChatMessage
 {
-    enum Code
-    {
-        CODE_UNKNOWN           = 0;
-        CODE_STARTED           = 1;
-        CODE_STOPPED           = 2;
-        CODE_TYPING            = 3;
-        CODE_USER_DISCONNECTED = 4;
-        CODE_USER_CONNECTED    = 5;
-    }
+    Q_OBJECT
 
-    int64 timestamp = 1;
-    string source   = 2;
-    string target   = 3;
-    Code code       = 4;
-}
+public:
+    explicit ChatOutgoingMessage(QWidget* parent = nullptr);
+    ~ChatOutgoingMessage() final;
 
-message Message
-{
-    int64 timestamp = 1;
-    string source   = 2;
-    string target   = 3;
-    string text     = 4;
-}
+    void setMessageText(const QString& text) final;
+    QString messageText() const final;
+    QString messageTime() const final;
 
-message TextChat
-{
-    Status chat_status = 1;
-    Message chat_message   = 2;
-}
+protected:
+    void resizeEvent(QResizeEvent* event) final;
+
+private:
+    Ui::ChatOutgoingMessage ui;
+};
+
+} // namespace common
+
+#endif // COMMON_UI_CHAT_OUTGOING_MESSAGE_H

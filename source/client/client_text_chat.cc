@@ -24,51 +24,51 @@
 namespace client {
 
 //--------------------------------------------------------------------------------------------------
-ClientTextChat::ClientTextChat(QObject* parent)
+ClientChat::ClientChat(QObject* parent)
     : Client(parent)
 {
     LOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
-ClientTextChat::~ClientTextChat()
+ClientChat::~ClientChat()
 {
     LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientTextChat::onTextChatMessage(const proto::text_chat::TextChat& text_chat)
+void ClientChat::onChatMessage(const proto::chat::Chat& chat)
 {
-    sendSessionMessage(base::serialize(text_chat));
+    sendSessionMessage(base::serialize(chat));
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientTextChat::onSessionStarted()
+void ClientChat::onSessionStarted()
 {
     LOG(INFO) << "Text chat session started";
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientTextChat::onSessionMessageReceived(const QByteArray& buffer)
+void ClientChat::onSessionMessageReceived(const QByteArray& buffer)
 {
-    proto::text_chat::TextChat text_chat;
-    if (!base::parse(buffer, &text_chat))
+    proto::chat::Chat chat;
+    if (!base::parse(buffer, &chat))
     {
         LOG(ERROR) << "Unable to parse text chat message";
         return;
     }
 
-    emit sig_textChatMessage(text_chat);
+    emit sig_chatMessage(chat);
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientTextChat::onServiceMessageReceived(const QByteArray& /* buffer */)
+void ClientChat::onServiceMessageReceived(const QByteArray& /* buffer */)
 {
     // Not used yet.
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientTextChat::onSessionMessageWritten(size_t /* pending */)
+void ClientChat::onSessionMessageWritten(size_t /* pending */)
 {
     // Nothing
 }

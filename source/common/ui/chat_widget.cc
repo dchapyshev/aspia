@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "common/ui/text_chat_widget.h"
+#include "common/ui/chat_widget.h"
 
 #include <QDateTime>
 #include <QFile>
@@ -29,10 +29,10 @@
 #include <QTimer>
 
 #include "base/logging.h"
-#include "common/ui/text_chat_incoming_message.h"
-#include "common/ui/text_chat_outgoing_message.h"
-#include "common/ui/text_chat_status_message.h"
-#include "ui_text_chat_widget.h"
+#include "common/ui/chat_incoming_message.h"
+#include "common/ui/chat_outgoing_message.h"
+#include "common/ui/chat_status_message.h"
+#include "ui_chat_widget.h"
 
 namespace common {
 
@@ -48,9 +48,9 @@ QString currentTime()
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-TextChatWidget::TextChatWidget(QWidget* parent)
+ChatWidget::ChatWidget(QWidget* parent)
     : QWidget(parent),
-      ui(std::make_unique<Ui::TextChatWidget>()),
+      ui(std::make_unique<Ui::ChatWidget>()),
       display_name_(QHostInfo::localHostName()),
       status_clear_timer_(new QTimer(this))
 {
@@ -62,7 +62,7 @@ TextChatWidget::TextChatWidget(QWidget* parent)
     ui->list_messages->verticalScrollBar()->installEventFilter(this);
 
     connect(status_clear_timer_, &QTimer::timeout, ui->label_status, &QLabel::clear);
-    connect(ui->button_send, &QToolButton::clicked, this, &TextChatWidget::onSendMessage);
+    connect(ui->button_send, &QToolButton::clicked, this, &ChatWidget::onSendMessage);
     connect(ui->button_tools, &QToolButton::clicked, this, [this]()
     {
         LOG(INFO) << "[ACTION] Show tool menu";
@@ -92,16 +92,16 @@ TextChatWidget::TextChatWidget(QWidget* parent)
 }
 
 //--------------------------------------------------------------------------------------------------
-TextChatWidget::~TextChatWidget()
+ChatWidget::~ChatWidget()
 {
     LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
-void TextChatWidget::readMessage(const proto::text_chat::Message& message)
+void ChatWidget::readMessage(const proto::chat::Message& message)
 {
     QListWidget* list_messages = ui->list_messages;
-    TextChatIncomingMessage* message_widget = new TextChatIncomingMessage(list_messages);
+    ChatIncomingMessage* message_widget = new ChatIncomingMessage(list_messages);
 
     message_widget->setTimestamp(message.timestamp());
     message_widget->setSource(QString::fromStdString(message.source()));
@@ -116,7 +116,7 @@ void TextChatWidget::readMessage(const proto::text_chat::Message& message)
 }
 
 //--------------------------------------------------------------------------------------------------
-void TextChatWidget::readStatus(const proto::text_chat::Status& status)
+void ChatWidget::readStatus(const proto::chat::Status& status)
 {
     status_clear_timer_->stop();
 
@@ -124,23 +124,23 @@ void TextChatWidget::readStatus(const proto::text_chat::Status& status)
 
     switch (status.code())
     {
-        case proto::text_chat::Status::CODE_TYPING:
+        case proto::chat::Status::CODE_TYPING:
             ui->label_status->setText(tr("%1 is typing...").arg(user_name));
             break;
 
-        case proto::text_chat::Status::CODE_STARTED:
+        case proto::chat::Status::CODE_STARTED:
             addStatusMessage(tr("User %1 has joined the chat (%2)").arg(user_name, currentTime()));
             break;
 
-        case proto::text_chat::Status::CODE_STOPPED:
+        case proto::chat::Status::CODE_STOPPED:
             addStatusMessage(tr("User %1 has left the chat (%2)").arg(user_name, currentTime()));
             break;
 
-        case proto::text_chat::Status::CODE_USER_CONNECTED:
+        case proto::chat::Status::CODE_USER_CONNECTED:
             addStatusMessage(tr("User %1 is logged in (%2)").arg(user_name, currentTime()));
             break;
 
-        case proto::text_chat::Status::CODE_USER_DISCONNECTED:
+        case proto::chat::Status::CODE_USER_DISCONNECTED:
             addStatusMessage(tr("User %1 is not logged in (%2)").arg(user_name, currentTime()));
             break;
 
@@ -152,7 +152,7 @@ void TextChatWidget::readStatus(const proto::text_chat::Status& status)
         status_clear_timer_->start(std::chrono::seconds(1));
 }
 
-void TextChatWidget::setDisplayName(const QString& display_name)
+void ChatWidget::setDisplayName(const QString& display_name)
 {
     display_name_ = display_name;
 
@@ -161,7 +161,7 @@ void TextChatWidget::setDisplayName(const QString& display_name)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool TextChatWidget::eventFilter(QObject* object, QEvent* event)
+bool ChatWidget::eventFilter(QObject* object, QEvent* event)
 {
     if (object == ui->edit_message && event->type() == QEvent::KeyPress)
     {
@@ -172,7 +172,7 @@ bool TextChatWidget::eventFilter(QObject* object, QEvent* event)
             return true;
         }
 
-        onSendStatus(proto::text_chat::Status::CODE_TYPING);
+        onSendStatus(proto::chat::Status::CODE_TYPING);
     }
     else if (object == ui->list_messages->horizontalScrollBar() ||
              object == ui->list_messages->verticalScrollBar())
@@ -187,13 +187,13 @@ bool TextChatWidget::eventFilter(QObject* object, QEvent* event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void TextChatWidget::resizeEvent(QResizeEvent* /* event */)
+void ChatWidget::resizeEvent(QResizeEvent* /* event */)
 {
     onUpdateSize();
 }
 
 //--------------------------------------------------------------------------------------------------
-void TextChatWidget::closeEvent(QCloseEvent* event)
+void ChatWidget::closeEvent(QCloseEvent* event)
 {
     LOG(INFO) << "Close event detected";
 
@@ -202,10 +202,10 @@ void TextChatWidget::closeEvent(QCloseEvent* event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void TextChatWidget::addOutgoingMessage(time_t timestamp, const QString& message)
+void ChatWidget::addOutgoingMessage(time_t timestamp, const QString& message)
 {
     QListWidget* list_messages = ui->list_messages;
-    TextChatOutgoingMessage* message_widget = new TextChatOutgoingMessage(list_messages);
+    ChatOutgoingMessage* message_widget = new ChatOutgoingMessage(list_messages);
 
     message_widget->setTimestamp(timestamp);
     message_widget->setMessageText(message);
@@ -219,10 +219,10 @@ void TextChatWidget::addOutgoingMessage(time_t timestamp, const QString& message
 }
 
 //--------------------------------------------------------------------------------------------------
-void TextChatWidget::addStatusMessage(const QString& message)
+void ChatWidget::addStatusMessage(const QString& message)
 {
     QListWidget* list_messages = ui->list_messages;
-    TextChatStatusMessage* message_widget = new TextChatStatusMessage(list_messages);
+    ChatStatusMessage* message_widget = new ChatStatusMessage(list_messages);
 
     message_widget->setMessageText(message);
 
@@ -235,7 +235,7 @@ void TextChatWidget::addStatusMessage(const QString& message)
 }
 
 //--------------------------------------------------------------------------------------------------
-void TextChatWidget::onSendMessage()
+void ChatWidget::onSendMessage()
 {
     QLineEdit* edit_message = ui->edit_message;
     QString message = edit_message->text();
@@ -259,27 +259,27 @@ void TextChatWidget::onSendMessage()
     edit_message->clear();
     edit_message->setFocus();
 
-    proto::text_chat::Message text_chat_message;
-    text_chat_message.set_timestamp(timestamp);
-    text_chat_message.set_source(display_name_.toStdString());
-    text_chat_message.set_text(message.toStdString());
+    proto::chat::Message chat_message;
+    chat_message.set_timestamp(timestamp);
+    chat_message.set_source(display_name_.toStdString());
+    chat_message.set_text(message.toStdString());
 
-    emit sig_sendMessage(text_chat_message);
+    emit sig_sendMessage(chat_message);
 }
 
 //--------------------------------------------------------------------------------------------------
-void TextChatWidget::onSendStatus(proto::text_chat::Status::Code code)
+void ChatWidget::onSendStatus(proto::chat::Status::Code code)
 {
-    proto::text_chat::Status text_chat_status;
-    text_chat_status.set_timestamp(QDateTime::currentSecsSinceEpoch());
-    text_chat_status.set_source(display_name_.toStdString());
-    text_chat_status.set_code(code);
+    proto::chat::Status chat_status;
+    chat_status.set_timestamp(QDateTime::currentSecsSinceEpoch());
+    chat_status.set_source(display_name_.toStdString());
+    chat_status.set_code(code);
 
-    emit sig_sendStatus(text_chat_status);
+    emit sig_sendStatus(chat_status);
 }
 
 //--------------------------------------------------------------------------------------------------
-void TextChatWidget::onClearHistory()
+void ChatWidget::onClearHistory()
 {
     LOG(INFO) << "[ACTION] Clear history";
 
@@ -289,7 +289,7 @@ void TextChatWidget::onClearHistory()
 }
 
 //--------------------------------------------------------------------------------------------------
-void TextChatWidget::onSaveChat()
+void ChatWidget::onSaveChat()
 {
     LOG(INFO) << "[ACTION] Save chat";
 
@@ -324,23 +324,23 @@ void TextChatWidget::onSaveChat()
     for (int i = 0; i < list_messages->count(); ++i)
     {
         QListWidgetItem* item = list_messages->item(i);
-        TextChatMessage* message_widget =
-            static_cast<TextChatMessage*>(list_messages->itemWidget(item));
+        ChatMessage* message_widget =
+            static_cast<ChatMessage*>(list_messages->itemWidget(item));
 
-        if (message_widget->direction() == TextChatMessage::Direction::INCOMING)
+        if (message_widget->direction() == ChatMessage::Direction::INCOMING)
         {
-            TextChatIncomingMessage* incoming_message_widget =
-                static_cast<TextChatIncomingMessage*>(message_widget);
+            ChatIncomingMessage* incoming_message_widget =
+                static_cast<ChatIncomingMessage*>(message_widget);
 
             stream << "[" << incoming_message_widget->messageTime() << "] "
                    << incoming_message_widget->source() << Qt::endl;
             stream << incoming_message_widget->messageText() << Qt::endl;
             stream << Qt::endl;
         }
-        else if (message_widget->direction() == TextChatMessage::Direction::OUTGOING)
+        else if (message_widget->direction() == ChatMessage::Direction::OUTGOING)
         {
-            TextChatOutgoingMessage* outgoing_message_widget =
-                static_cast<TextChatOutgoingMessage*>(message_widget);
+            ChatOutgoingMessage* outgoing_message_widget =
+                static_cast<ChatOutgoingMessage*>(message_widget);
 
             stream << "[" << outgoing_message_widget->messageTime() << "] " << Qt::endl;
             stream << outgoing_message_widget->messageText() << Qt::endl;
@@ -348,10 +348,10 @@ void TextChatWidget::onSaveChat()
         }
         else
         {
-            DCHECK_EQ(message_widget->direction(), TextChatMessage::Direction::STATUS);
+            DCHECK_EQ(message_widget->direction(), ChatMessage::Direction::STATUS);
 
-            TextChatStatusMessage* status_message_widget =
-                static_cast<TextChatStatusMessage*>(message_widget);
+            ChatStatusMessage* status_message_widget =
+                static_cast<ChatStatusMessage*>(message_widget);
 
             stream << status_message_widget->messageText() << Qt::endl;
             stream << Qt::endl;
@@ -360,7 +360,7 @@ void TextChatWidget::onSaveChat()
 }
 
 //--------------------------------------------------------------------------------------------------
-void TextChatWidget::onUpdateSize()
+void ChatWidget::onUpdateSize()
 {
     QListWidget* list_messages = ui->list_messages;
     int count = list_messages->count();
@@ -369,8 +369,8 @@ void TextChatWidget::onUpdateSize()
     {
         QListWidgetItem* item = list_messages->item(i);
 
-        TextChatMessage* message_widget =
-            static_cast<TextChatMessage*>(list_messages->itemWidget(item));
+        ChatMessage* message_widget =
+            static_cast<ChatMessage*>(list_messages->itemWidget(item));
         int viewport_width = list_messages->viewport()->width();
 
         message_widget->setFixedWidth(viewport_width);

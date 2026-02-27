@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/text_chat_client.h"
+#include "host/chat_client.h"
 
 #include "base/application.h"
 #include "base/logging.h"
@@ -26,7 +26,7 @@
 namespace host {
 
 //--------------------------------------------------------------------------------------------------
-TextChatClient::TextChatClient(base::TcpChannel* tcp_channel, QObject* parent)
+ChatClient::ChatClient(base::TcpChannel* tcp_channel, QObject* parent)
     : QObject(parent),
       tcp_channel_(tcp_channel)
 {
@@ -36,63 +36,63 @@ TextChatClient::TextChatClient(base::TcpChannel* tcp_channel, QObject* parent)
     tcp_channel_->setParent(this);
 
     connect(tcp_channel_, &base::TcpChannel::sig_errorOccurred,
-            this, &TextChatClient::onTcpErrorOccurred);
+            this, &ChatClient::onTcpErrorOccurred);
     connect(tcp_channel_, &base::TcpChannel::sig_messageReceived,
-            this, &TextChatClient::onTcpMessageReceived);
+            this, &ChatClient::onTcpMessageReceived);
 
     connect(base::Application::instance(), &base::Application::sig_sessionEvent,
-            this, &TextChatClient::onUserSessionEvent);
+            this, &ChatClient::onUserSessionEvent);
 }
 
 //--------------------------------------------------------------------------------------------------
-TextChatClient::~TextChatClient()
+ChatClient::~ChatClient()
 {
     LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
-quint32 TextChatClient::clientId() const
+quint32 ChatClient::clientId() const
 {
     return tcp_channel_->instanceId();
 }
 
 //--------------------------------------------------------------------------------------------------
-QString TextChatClient::displayName() const
+QString ChatClient::displayName() const
 {
     return tcp_channel_->peerDisplayName();
 }
 
 //--------------------------------------------------------------------------------------------------
-QString TextChatClient::computerName() const
+QString ChatClient::computerName() const
 {
     return tcp_channel_->peerComputerName();
 }
 
 //--------------------------------------------------------------------------------------------------
-void TextChatClient::start()
+void ChatClient::start()
 {
     tcp_channel_->resume();
     emit sig_started(clientId());
 }
 
 //--------------------------------------------------------------------------------------------------
-void TextChatClient::onSendTextChat(const proto::text_chat::TextChat& text_chat)
+void ChatClient::onSendChat(const proto::chat::Chat& chat)
 {
-    tcp_channel_->send(proto::peer::CHANNEL_ID_SESSION, base::serialize(text_chat));
+    tcp_channel_->send(proto::peer::CHANNEL_ID_SESSION, base::serialize(chat));
 }
 
 //--------------------------------------------------------------------------------------------------
-void TextChatClient::onSendStatus(proto::text_chat::Status::Code code)
+void ChatClient::onSendStatus(proto::chat::Status::Code code)
 {
     LOG(INFO) << "Send text chat status:" << code;
 
     switch (code)
     {
-        case proto::text_chat::Status::CODE_USER_CONNECTED:
+        case proto::chat::Status::CODE_USER_CONNECTED:
             has_user_ = true;
             break;
 
-        case proto::text_chat::Status::CODE_USER_DISCONNECTED:
+        case proto::chat::Status::CODE_USER_DISCONNECTED:
             has_user_ = false;
             break;
 
@@ -100,17 +100,17 @@ void TextChatClient::onSendStatus(proto::text_chat::Status::Code code)
             break;
     }
 
-    proto::text_chat::TextChat text_chat;
-    proto::text_chat::Status* text_chat_status = text_chat.mutable_chat_status();
+    proto::chat::Chat text_chat;
+    proto::chat::Status* text_chat_status = text_chat.mutable_chat_status();
 
     text_chat_status->set_code(code);
     text_chat_status->set_source(base::SysInfo::computerName().toStdString());
 
-    onSendTextChat(text_chat);
+    onSendChat(text_chat);
 }
 
 //--------------------------------------------------------------------------------------------------
-void TextChatClient::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code)
+void ChatClient::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code)
 {
     LOG(WARNING) << "TCP error occurred:" << error_code;
 
@@ -119,11 +119,11 @@ void TextChatClient::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code)
 }
 
 //--------------------------------------------------------------------------------------------------
-void TextChatClient::onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray& buffer)
+void ChatClient::onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray& buffer)
 {
-    proto::text_chat::TextChat text_chat;
+    proto::chat::Chat chat;
 
-    if (!base::parse(buffer, &text_chat))
+    if (!base::parse(buffer, &chat))
     {
         LOG(ERROR) << "Unable to parse system info request";
         return;
@@ -131,17 +131,17 @@ void TextChatClient::onTcpMessageReceived(quint8 tcp_channel_id, const QByteArra
 
     if (has_user_)
     {
-        emit sig_messageReceived(clientId(), text_chat);
+        emit sig_messageReceived(clientId(), chat);
     }
     else
     {
-        if (text_chat.has_chat_message())
-            onSendStatus(proto::text_chat::Status::CODE_USER_DISCONNECTED);
+        if (chat.has_chat_message())
+            onSendStatus(proto::chat::Status::CODE_USER_DISCONNECTED);
     }
 }
 
 //--------------------------------------------------------------------------------------------------
-void TextChatClient::onUserSessionEvent(quint32 event_type, quint32 session_id)
+void ChatClient::onUserSessionEvent(quint32 event_type, quint32 session_id)
 {
 
 }

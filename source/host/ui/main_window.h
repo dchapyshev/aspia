@@ -28,7 +28,7 @@
 
 namespace common {
 class StatusDialog;
-class TextChatWidget;
+class ChatWidget;
 } // namespace common
 
 namespace host {
@@ -51,14 +51,14 @@ public slots:
 signals:
     void sig_connectToService();
     void sig_disconnectFromService();
-    void sig_updateCredentials(proto::internal::CredentialsRequest::Type request_type);
+    void sig_updateCredentials(proto::internal::CredentialsRequest::Type type);
     void sig_oneTimeSessions(quint32 sessions);
     void sig_killClient(quint32 id);
     void sig_connectConfirmation(quint32 id, bool accept);
     void sig_mouseLock(bool enable);
     void sig_keyboardLock(bool enable);
     void sig_pause(bool enable);
-    void sig_textChat(const proto::text_chat::TextChat& text_chat);
+    void sig_chat(const proto::chat::Chat& chat);
 
 protected:
     // QMainWindow implementation.
@@ -71,7 +71,7 @@ private slots:
     void onRouterStateChanged(const proto::internal::RouterState& state);
     void onConfirmationRequest(const proto::internal::ConfirmationRequest& request);
     void onRecordingStateChanged(const QString& computer, const QString& user, bool started);
-    void onTextChat(const proto::text_chat::TextChat& text_chat);
+    void onChat(const proto::chat::Chat& chat);
 
     void realClose();
     void onLanguageChanged(QAction* action);
@@ -99,7 +99,7 @@ private:
     QSystemTrayIcon tray_icon_;
     QMenu tray_menu_;
     QPointer<NotifierWindow> notifier_;
-    QPointer<common::TextChatWidget> text_chat_widget_;
+    QPointer<common::ChatWidget> chat_widget_;
 
     common::StatusDialog* status_dialog_ = nullptr;
     proto::internal::RouterState::State last_state_ = proto::internal::RouterState::DISABLED;

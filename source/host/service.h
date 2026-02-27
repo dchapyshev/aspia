@@ -43,9 +43,9 @@ namespace proto::internal {
 class RouterState;
 } // proto::internal
 
-namespace proto::text_chat {
-class TextChat;
-} // namespace proto::text_chat
+namespace proto::chat {
+class Chat;
+} // namespace proto::chat
 
 namespace host {
 
@@ -54,7 +54,7 @@ class DesktopManager;
 class FileClient;
 class RouterManager;
 class SystemInfoClient;
-class TextChatClient;
+class ChatClient;
 class UserSession;
 
 extern const char kHostServiceFileName[];
@@ -81,7 +81,7 @@ private slots:
     void onChangeOneTimeSessions(quint32 sessions);
     void onNewDirectConnection();
     void onUserSessionAttached();
-    void onRouterStateChanged(const proto::internal::RouterState& router_state);
+    void onRouterStateChanged(const proto::internal::RouterState& state);
     void onHostIdAssigned(base::HostId host_id);
     void onNewRelayConnection();
     void onConfirmationReply(quint32 request_id, bool accept);
@@ -102,9 +102,10 @@ private slots:
     void onSystemInfoClientStarted(quint32 client_id);
     void onSystemInfoClientFinished(quint32 client_id);
 
-    void onTextChatClientStarted(quint32 client_id);
-    void onTextChatClientFinished(quint32 client_id);
-    void onTextChatClientMessage(quint32 client_id, const proto::text_chat::TextChat& text_chat);
+    void onChatClientStarted(quint32 client_id);
+    void onChatClientFinished(quint32 client_id);
+    void onChatClientMessage(quint32 client_id, const proto::chat::Chat& chat);
+    void onUserChatMessage(const proto::chat::Chat& chat);
 
 private:
     void startClient(base::TcpChannel* tcp_channel);
@@ -135,7 +136,7 @@ private:
     QList<DesktopClient*> desktop_clients_;
     QList<FileClient*> file_clients_;
     QList<SystemInfoClient*> system_info_clients_;
-    QList<TextChatClient*> text_chat_clients_;
+    QList<ChatClient*> chat_clients_;
 
     common::UpdateChecker* update_checker_ = nullptr;
     common::HttpFileDownloader* update_downloader_ = nullptr;

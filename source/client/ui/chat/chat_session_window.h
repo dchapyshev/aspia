@@ -16,49 +16,49 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_UI_TEXT_CHAT_TEXT_CHAT_SESSION_WINDOW_H
-#define CLIENT_UI_TEXT_CHAT_TEXT_CHAT_SESSION_WINDOW_H
+#ifndef CLIENT_UI_CHAT_CHAT_SESSION_WINDOW_H
+#define CLIENT_UI_CHAT_CHAT_SESSION_WINDOW_H
 
 #include <QTreeWidget>
 
 #include "client/ui/session_window.h"
-#include "proto/text_chat.h"
+#include "proto/chat.h"
 
 namespace Ui {
-class TextChatSessionWindow;
+class ChatSessionWindow;
 } // namespace Ui
 
 class QHBoxLayout;
 
 namespace client {
 
-class TextChatSessionWindow final : public SessionWindow
+class ChatSessionWindow final : public SessionWindow
 {
     Q_OBJECT
 
 public:
-    explicit TextChatSessionWindow(QWidget* parent = nullptr);
-    ~TextChatSessionWindow() final;
+    explicit ChatSessionWindow(QWidget* parent = nullptr);
+    ~ChatSessionWindow() final;
 
     // SessionWindow implementation.
     Client* createClient() final;
 
 public slots:
     void onShowWindow();
-    void onTextChatMessage(const proto::text_chat::TextChat& text_chat);
+    void onChatMessage(const proto::chat::Chat& chat);
 
 signals:
-    void sig_textChatMessage(const proto::text_chat::TextChat& text_chat);
+    void sig_chatMessage(const proto::chat::Chat& chat);
 
 protected:
     // SessionWindow implementation.
     void onInternalReset() final;
 
 private:
-    std::unique_ptr<Ui::TextChatSessionWindow> ui;
-    Q_DISABLE_COPY_MOVE(TextChatSessionWindow)
+    std::unique_ptr<Ui::ChatSessionWindow> ui;
+    Q_DISABLE_COPY_MOVE(ChatSessionWindow)
 };
 
 } // namespace client
 
-#endif // CLIENT_UI_TEXT_CHAT_TEXT_CHAT_SESSION_WINDOW_H
+#endif // CLIENT_UI_CHAT_CHAT_SESSION_WINDOW_H

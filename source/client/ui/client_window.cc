@@ -27,11 +27,11 @@
 #include "client/ui/application.h"
 #include "client/ui/client_settings.h"
 #include "client/ui/client_settings_dialog.h"
+#include "client/ui/chat/chat_session_window.h"
 #include "client/ui/desktop/desktop_config_dialog.h"
 #include "client/ui/desktop/desktop_session_window.h"
 #include "client/ui/file_transfer/file_transfer_session_window.h"
 #include "client/ui/sys_info/system_info_session_window.h"
-#include "client/ui/text_chat/text_chat_session_window.h"
 #include "client/ui/update_settings_dialog.h"
 #include "common/desktop_session_constants.h"
 #include "common/ui/about_dialog.h"
@@ -386,7 +386,7 @@ void ClientWindow::connectToHost()
             break;
 
         case proto::peer::SESSION_TYPE_TEXT_CHAT:
-            session_window = new TextChatSessionWindow();
+            session_window = new ChatSessionWindow();
             break;
 
         default:

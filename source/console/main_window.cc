@@ -27,13 +27,14 @@
 
 #include "base/logging.h"
 #include "base/version_constants.h"
+#include "client/ui/chat/chat_session_window.h"
 #include "client/ui/desktop/desktop_session_window.h"
 #include "client/ui/file_transfer/file_transfer_session_window.h"
 #include "client/ui/sys_info/system_info_session_window.h"
-#include "client/ui/text_chat/text_chat_session_window.h"
 #include "client/ui/router_manager/router_manager_window.h"
 #include "common/ui/about_dialog.h"
 #include "common/ui/language_action.h"
+#include "common/ui/update_dialog.h"
 #include "console/address_book_tab.h"
 #include "console/application.h"
 #include "console/fast_connect_dialog.h"
@@ -41,7 +42,6 @@
 #include "console/mru_action.h"
 #include "console/update_settings_dialog.h"
 #include "console/settings.h"
-#include "common/ui/update_dialog.h"
 
 namespace console {
 
@@ -1710,7 +1710,7 @@ void MainWindow::connectToComputer(const proto::address_book::Computer& computer
             break;
 
         case proto::peer::SESSION_TYPE_TEXT_CHAT:
-            session_window = new client::TextChatSessionWindow();
+            session_window = new client::ChatSessionWindow();
             break;
 
         default:

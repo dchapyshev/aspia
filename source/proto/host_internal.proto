@@ -23,8 +23,8 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
+import "chat.proto";
 import "peer.proto";
-import "text_chat.proto";
 
 package proto.internal;
 
@@ -159,7 +159,7 @@ message UiToService
     OneTimeSessions one_time_sessions        = 2;
     ConfirmationReply confirmation_reply     = 3;
     ServiceControl control                   = 4;
-    text_chat.TextChat text_chat             = 5;
+    chat.Chat chat                           = 5;
 }
 
 message ServiceToUi
@@ -170,5 +170,5 @@ message ServiceToUi
     DisconnectEvent disconnect_event         = 4;
     ConfirmationRequest confirmation_request = 5;
     RecordingState recording_state           = 6;
-    text_chat.TextChat text_chat             = 7;
+    chat.Chat chat                           = 7;
 }

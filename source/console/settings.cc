@@ -291,15 +291,15 @@ void Settings::setFastConnectConfig(const QString& guid, const QByteArray& confi
 //--------------------------------------------------------------------------------------------------
 bool Settings::showIconsInMenus() const
 {
-    bool defaultValue;
+    bool default_value;
 
 #if defined(Q_OS_MACOS)
-    defaultValue = false;
+    default_value = false;
 #else
-    defaultValue = true;
+    default_value = true;
 #endif
 
-    return settings_.value(kShowIconsInMenusParam, defaultValue).toBool();
+    return settings_.value(kShowIconsInMenusParam, default_value).toBool();
 }
 
 //--------------------------------------------------------------------------------------------------

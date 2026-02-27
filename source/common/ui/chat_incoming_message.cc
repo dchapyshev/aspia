@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "common/ui/text_chat_outgoing_message.h"
+#include "common/ui/chat_incoming_message.h"
 
 #include <QLocale>
 #include <QTime>
@@ -24,8 +24,8 @@
 namespace common {
 
 //--------------------------------------------------------------------------------------------------
-TextChatOutgoingMessage::TextChatOutgoingMessage(QWidget* parent)
-    : TextChatMessage(TextChatMessage::Direction::OUTGOING, parent)
+ChatIncomingMessage::ChatIncomingMessage(QWidget* parent)
+    : ChatMessage(ChatMessage::Direction::INCOMING, parent)
 {
     ui.setupUi(this);
 
@@ -34,31 +34,36 @@ TextChatOutgoingMessage::TextChatOutgoingMessage(QWidget* parent)
 }
 
 //--------------------------------------------------------------------------------------------------
-TextChatOutgoingMessage::~TextChatOutgoingMessage() = default;
+ChatIncomingMessage::~ChatIncomingMessage() = default;
 
 //--------------------------------------------------------------------------------------------------
-void TextChatOutgoingMessage::setMessageText(const QString& text)
+void ChatIncomingMessage::setSource(const QString& source)
 {
-    ui.label_message->setText(text);
-    adjustSize();
+    ui.label_source->setText(source);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString TextChatOutgoingMessage::messageText() const
+QString ChatIncomingMessage::source() const
+{
+    return ui.label_source->text();
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatIncomingMessage::setMessageText(const QString& text)
+{
+    ui.label_message->setText(text);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString ChatIncomingMessage::messageText() const
 {
     return ui.label_message->text();
 }
 
 //--------------------------------------------------------------------------------------------------
-QString TextChatOutgoingMessage::messageTime() const
+QString ChatIncomingMessage::messageTime() const
 {
     return ui.label_time->text();
-}
-
-//--------------------------------------------------------------------------------------------------
-void TextChatOutgoingMessage::resizeEvent(QResizeEvent* /* event */)
-{
-    adjustSize();
 }
 
 } // namespace common

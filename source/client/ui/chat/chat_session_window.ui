@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>TextChatSessionWindow</class>
- <widget class="QWidget" name="TextChatSessionWindow">
+ <class>ChatSessionWindow</class>
+ <widget class="QWidget" name="ChatSessionWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -30,7 +30,7 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="common::TextChatWidget" name="text_chat_widget" native="true"/>
+    <widget class="common::ChatWidget" name="text_chat_widget" native="true"/>
    </item>
   </layout>
   <action name="action_save">
@@ -96,9 +96,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>common::TextChatWidget</class>
+   <class>common::ChatWidget</class>
    <extends>QWidget</extends>
-   <header>common/ui/text_chat_widget.h</header>
+   <header>common/ui/chat_widget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "common/ui/text_chat_incoming_message.h"
+#include "common/ui/chat_status_message.h"
 
 #include <QLocale>
 #include <QTime>
@@ -24,46 +24,31 @@
 namespace common {
 
 //--------------------------------------------------------------------------------------------------
-TextChatIncomingMessage::TextChatIncomingMessage(QWidget* parent)
-    : TextChatMessage(TextChatMessage::Direction::INCOMING, parent)
+ChatStatusMessage::ChatStatusMessage(QWidget* parent)
+    : ChatMessage(ChatMessage::Direction::STATUS, parent)
 {
     ui.setupUi(this);
-
-    QString time = QLocale::system().toString(QTime::currentTime(), QLocale::ShortFormat);
-    ui.label_time->setText(time);
 }
 
 //--------------------------------------------------------------------------------------------------
-TextChatIncomingMessage::~TextChatIncomingMessage() = default;
+ChatStatusMessage::~ChatStatusMessage() = default;
 
 //--------------------------------------------------------------------------------------------------
-void TextChatIncomingMessage::setSource(const QString& source)
-{
-    ui.label_source->setText(source);
-}
-
-//--------------------------------------------------------------------------------------------------
-QString TextChatIncomingMessage::source() const
-{
-    return ui.label_source->text();
-}
-
-//--------------------------------------------------------------------------------------------------
-void TextChatIncomingMessage::setMessageText(const QString& text)
+void ChatStatusMessage::setMessageText(const QString& text)
 {
     ui.label_message->setText(text);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString TextChatIncomingMessage::messageText() const
+QString ChatStatusMessage::messageText() const
 {
     return ui.label_message->text();
 }
 
 //--------------------------------------------------------------------------------------------------
-QString TextChatIncomingMessage::messageTime() const
+QString ChatStatusMessage::messageTime() const
 {
-    return ui.label_time->text();
+    return QString();
 }
 
 } // namespace common

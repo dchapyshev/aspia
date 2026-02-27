@@ -16,14 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef COMMON_UI_TEXT_CHAT_MESSAGE_H
-#define COMMON_UI_TEXT_CHAT_MESSAGE_H
+#ifndef COMMON_UI_CHAT_MESSAGE_H
+#define COMMON_UI_CHAT_MESSAGE_H
 
 #include <QWidget>
 
 namespace common {
 
-class TextChatMessage : public QWidget
+class ChatMessage : public QWidget
 {
     Q_OBJECT
 
@@ -35,7 +35,7 @@ public:
         STATUS   = 2
     };
 
-    explicit TextChatMessage(Direction direction, QWidget* parent = nullptr)
+    explicit ChatMessage(Direction direction, QWidget* parent = nullptr)
         : QWidget(parent),
           direction_(direction)
     {
@@ -58,4 +58,4 @@ private:
 
 } // namespace common
 
-#endif // COMMON_UI_TEXT_CHAT_MESSAGE_H
+#endif // COMMON_UI_CHAT_MESSAGE_H

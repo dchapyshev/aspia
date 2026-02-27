@@ -16,33 +16,30 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef COMMON_UI_TEXT_CHAT_INCOMING_MESSAGE_H
-#define COMMON_UI_TEXT_CHAT_INCOMING_MESSAGE_H
+#ifndef COMMON_UI_CHAT_STATUS_MESSAGE_H
+#define COMMON_UI_CHAT_STATUS_MESSAGE_H
 
-#include "common/ui/text_chat_message.h"
-#include "ui_text_chat_incoming_message.h"
+#include "common/ui/chat_message.h"
+#include "ui_chat_status_message.h"
 
 namespace common {
 
-class TextChatIncomingMessage final : public TextChatMessage
+class ChatStatusMessage final : public ChatMessage
 {
     Q_OBJECT
 
 public:
-    explicit TextChatIncomingMessage(QWidget* parent = nullptr);
-    ~TextChatIncomingMessage() final;
-
-    void setSource(const QString& source);
-    QString source() const;
+    explicit ChatStatusMessage(QWidget* parent = nullptr);
+    ~ChatStatusMessage() final;
 
     void setMessageText(const QString& text) final;
     QString messageText() const final;
     QString messageTime() const final;
 
 private:
-    Ui::TextChatIncomingMessage ui;
+    Ui::ChatStatusMessage ui;
 };
 
 } // namespace common
 
-#endif // COMMON_UI_TEXT_CHAT_INCOMING_MESSAGE_H
+#endif // COMMON_UI_CHAT_STATUS_MESSAGE_H

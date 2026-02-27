@@ -16,35 +16,35 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef COMMON_UI_TEXT_CHAT_WIDGET_H
-#define COMMON_UI_TEXT_CHAT_WIDGET_H
+#ifndef COMMON_UI_CHAT_WIDGET_H
+#define COMMON_UI_CHAT_WIDGET_H
 
-#include "proto/text_chat.h"
+#include "proto/chat.h"
 
 #include <QWidget>
 
 namespace Ui {
-class TextChatWidget;
+class ChatWidget;
 } // namespace Ui
 
 namespace common {
 
-class TextChatWidget final : public QWidget
+class ChatWidget final : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit TextChatWidget(QWidget* parent = nullptr);
-    ~TextChatWidget() final;
+    explicit ChatWidget(QWidget* parent = nullptr);
+    ~ChatWidget() final;
 
-    void readMessage(const proto::text_chat::Message& message);
-    void readStatus(const proto::text_chat::Status& status);
+    void readMessage(const proto::chat::Message& message);
+    void readStatus(const proto::chat::Status& status);
 
     void setDisplayName(const QString& display_name);
 
 signals:
-    void sig_sendMessage(const proto::text_chat::Message& message);
-    void sig_sendStatus(const proto::text_chat::Status& status);
+    void sig_sendMessage(const proto::chat::Message& message);
+    void sig_sendStatus(const proto::chat::Status& status);
     void sig_textChatClosed();
 
 protected:
@@ -56,16 +56,16 @@ private:
     void addOutgoingMessage(time_t timestamp, const QString& message);
     void addStatusMessage(const QString& message);
     void onSendMessage();
-    void onSendStatus(proto::text_chat::Status::Code code);
+    void onSendStatus(proto::chat::Status::Code code);
     void onClearHistory();
     void onSaveChat();
     void onUpdateSize();
 
-    std::unique_ptr<Ui::TextChatWidget> ui;
+    std::unique_ptr<Ui::ChatWidget> ui;
     QString display_name_;
     QTimer* status_clear_timer_;
 };
 
 } // namespace common
 
-#endif // COMMON_UI_TEXT_CHAT_WIDGET_H
+#endif // COMMON_UI_CHAT_WIDGET_H

@@ -217,10 +217,10 @@ list(APPEND SOURCE_CLIENT_CORE_UI_SYS_INFO
     ui/sys_info/tree_to_html.cc
     ui/sys_info/tree_to_html.h)
 
-list(APPEND SOURCE_CLIENT_CORE_UI_TEXT_CHAT
-    ui/text_chat/text_chat_session_window.cc
-    ui/text_chat/text_chat_session_window.h
-    ui/text_chat/text_chat_session_window.ui)
+list(APPEND SOURCE_CLIENT_CORE_UI_CHAT
+    ui/chat/chat_session_window.cc
+    ui/chat/chat_session_window.h
+    ui/chat/chat_session_window.ui)
 
 source_group("" FILES ${SOURCE_CLIENT_CORE})
 source_group(online_checker FILES ${SOURCE_CLIENT_CORE_ONLINE_CHECKER})
@@ -229,7 +229,7 @@ source_group(ui\\desktop FILES ${SOURCE_CLIENT_CORE_UI_DESKTOP})
 source_group(ui\\file_transfer FILES ${SOURCE_CLIENT_CORE_UI_FILE_TRANSFER})
 source_group(ui\\router_manager FILES ${SOURCE_CLIENT_CORE_UI_ROUTER_MANAGER})
 source_group(ui\\sys_info FILES ${SOURCE_CLIENT_CORE_UI_SYS_INFO})
-source_group(ui\\text_chat FILES ${SOURCE_CLIENT_CORE_UI_TEXT_CHAT})
+source_group(ui\\chat FILES ${SOURCE_CLIENT_CORE_UI_CHAT})
 
 add_library(aspia_client_core STATIC
     ${SOURCE_CLIENT_CORE}
@@ -239,7 +239,7 @@ add_library(aspia_client_core STATIC
     ${SOURCE_CLIENT_CORE_UI_FILE_TRANSFER}
     ${SOURCE_CLIENT_CORE_UI_ROUTER_MANAGER}
     ${SOURCE_CLIENT_CORE_UI_SYS_INFO}
-    ${SOURCE_CLIENT_CORE_UI_TEXT_CHAT})
+    ${SOURCE_CLIENT_CORE_UI_CHAT})
 target_link_libraries(aspia_client_core PRIVATE
     aspia_base
     aspia_common

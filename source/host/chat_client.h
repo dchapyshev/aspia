@@ -16,23 +16,23 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST_TEXT_CHAT_CLIENT_H
-#define HOST_TEXT_CHAT_CLIENT_H
+#ifndef HOST_CHAT_CLIENT_H
+#define HOST_CHAT_CLIENT_H
 
 #include <QObject>
 
 #include "base/net/tcp_channel.h"
-#include "proto/text_chat.h"
+#include "proto/chat.h"
 
 namespace host {
 
-class TextChatClient final : public QObject
+class ChatClient final : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit TextChatClient(base::TcpChannel* tcp_channel, QObject* parent = nullptr);
-    ~TextChatClient() final;
+    explicit ChatClient(base::TcpChannel* tcp_channel, QObject* parent = nullptr);
+    ~ChatClient() final;
 
     quint32 clientId() const;
     QString displayName() const;
@@ -40,13 +40,13 @@ public:
 
 public slots:
     void start();
-    void onSendTextChat(const proto::text_chat::TextChat& text_chat);
-    void onSendStatus(proto::text_chat::Status::Code code);
+    void onSendChat(const proto::chat::Chat& chat);
+    void onSendStatus(proto::chat::Status::Code code);
 
 signals:
     void sig_started(quint32 client_id);
     void sig_finished(quint32 client_id);
-    void sig_messageReceived(quint32 client_id, const proto::text_chat::TextChat& text_chat);
+    void sig_messageReceived(quint32 client_id, const proto::chat::Chat& chat);
 
 private slots:
     void onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code);
@@ -58,9 +58,9 @@ private:
     base::TcpChannel* tcp_channel_ = nullptr;
     bool has_user_ = true;
 
-    Q_DISABLE_COPY_MOVE(TextChatClient)
+    Q_DISABLE_COPY_MOVE(ChatClient)
 };
 
 } // namespace host
 
-#endif // HOST_TEXT_CHAT_CLIENT_H
+#endif // HOST_CHAT_CLIENT_H

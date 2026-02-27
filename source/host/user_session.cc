@@ -288,9 +288,9 @@ void UserSession::onClientFinished(quint32 client_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSession::onClientTextChat(quint32 client_id, const proto::text_chat::TextChat& text_chat)
+void UserSession::onClientChat(quint32 client_id, const proto::chat::Chat& chat)
 {
-    outgoing_message_.newMessage().mutable_text_chat()->CopyFrom(text_chat);
+    outgoing_message_.newMessage().mutable_chat()->CopyFrom(chat);
     sendSessionMessage();
 }
 
@@ -482,10 +482,10 @@ void UserSession::onIpcMessageReceived(quint32 channel_id, const QByteArray& buf
             }
         }
     }
-    else if (incoming_message_->has_text_chat())
+    else if (incoming_message_->has_chat())
     {
         LOG(INFO) << "Text chat message";
-        emit sig_textChatMessage(incoming_message_->text_chat());
+        emit sig_chatMessage(incoming_message_->chat());
     }
     else
     {

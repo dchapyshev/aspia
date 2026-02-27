@@ -25,11 +25,11 @@
 #include "base/net/address.h"
 #include "build/build_config.h"
 #include "client/config_factory.h"
+#include "client/ui/chat/chat_session_window.h"
 #include "client/ui/desktop/desktop_config_dialog.h"
 #include "client/ui/desktop/desktop_session_window.h"
 #include "client/ui/file_transfer/file_transfer_session_window.h"
 #include "client/ui/sys_info/system_info_session_window.h"
-#include "client/ui/text_chat/text_chat_session_window.h"
 #include "common/desktop_session_constants.h"
 #include "common/ui/session_type.h"
 #include "console/computer_factory.h"
@@ -335,7 +335,7 @@ void FastConnectDialog::onButtonBoxClicked(QAbstractButton* button)
             break;
 
         case proto::peer::SESSION_TYPE_TEXT_CHAT:
-            session_window = new client::TextChatSessionWindow();
+            session_window = new client::ChatSessionWindow();
             break;
 
         default:

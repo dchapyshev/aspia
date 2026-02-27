@@ -68,14 +68,14 @@ public:
 
 public slots:
     void onConnectToService();
-    void onUpdateCredentials(proto::internal::CredentialsRequest::Type request_type);
+    void onUpdateCredentials(proto::internal::CredentialsRequest::Type type);
     void onOneTimeSessions(quint32 sessions);
     void onKillClient(quint32 id);
     void onConnectConfirmation(quint32 id, bool accept);
     void onMouseLock(bool enable);
     void onKeyboardLock(bool enable);
     void onPause(bool enable);
-    void onTextChat(const proto::text_chat::TextChat& text_chat);
+    void onChat(const proto::chat::Chat& chat);
 
 signals:
     void sig_statusChanged(host::UserSessionAgent::Status status);
@@ -84,7 +84,7 @@ signals:
     void sig_routerStateChanged(const proto::internal::RouterState& state);
     void sig_confirmationRequest(const proto::internal::ConfirmationRequest& request);
     void sig_recordingStateChanged(const QString& computer, const QString& user, bool started);
-    void sig_textChat(const proto::text_chat::TextChat& text_chat);
+    void sig_chat(const proto::chat::Chat& chat);
 
 private slots:
     void onIpcConnected();

@@ -16,64 +16,64 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/ui/text_chat/text_chat_session_window.h"
+#include "client/ui/chat/chat_session_window.h"
 
 #include "base/logging.h"
 #include "client/client_text_chat.h"
-#include "ui_text_chat_session_window.h"
+#include "ui_chat_session_window.h"
 
 namespace client {
 
 //--------------------------------------------------------------------------------------------------
-TextChatSessionWindow::TextChatSessionWindow(QWidget* parent)
+ChatSessionWindow::ChatSessionWindow(QWidget* parent)
     : SessionWindow(nullptr, parent),
-      ui(std::make_unique<Ui::TextChatSessionWindow>())
+      ui(std::make_unique<Ui::ChatSessionWindow>())
 {
     LOG(INFO) << "Ctor";
     ui->setupUi(this);
 
-    connect(ui->text_chat_widget, &common::TextChatWidget::sig_sendMessage,
-            this, [this](const proto::text_chat::Message& message)
+    connect(ui->text_chat_widget, &common::ChatWidget::sig_sendMessage,
+            this, [this](const proto::chat::Message& message)
     {
-        proto::text_chat::TextChat text_chat;
-        text_chat.mutable_chat_message()->CopyFrom(message);
-        emit sig_textChatMessage(text_chat);
+        proto::chat::Chat chat;
+        chat.mutable_chat_message()->CopyFrom(message);
+        emit sig_chatMessage(chat);
     });
 
-    connect(ui->text_chat_widget, &common::TextChatWidget::sig_sendStatus,
-            this, [this](const proto::text_chat::Status& status)
+    connect(ui->text_chat_widget, &common::ChatWidget::sig_sendStatus,
+            this, [this](const proto::chat::Status& status)
     {
-        proto::text_chat::TextChat text_chat;
-        text_chat.mutable_chat_status()->CopyFrom(status);
-        emit sig_textChatMessage(text_chat);
+        proto::chat::Chat chat;
+        chat.mutable_chat_status()->CopyFrom(status);
+        emit sig_chatMessage(chat);
     });
 }
 
 //--------------------------------------------------------------------------------------------------
-TextChatSessionWindow::~TextChatSessionWindow()
+ChatSessionWindow::~ChatSessionWindow()
 {
     LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
-Client* TextChatSessionWindow::createClient()
+Client* ChatSessionWindow::createClient()
 {
     LOG(INFO) << "Create client";
 
-    ClientTextChat* client = new ClientTextChat();
+    ClientChat* client = new ClientChat();
 
-    connect(this, &TextChatSessionWindow::sig_textChatMessage, client, &ClientTextChat::onTextChatMessage,
+    connect(this, &ChatSessionWindow::sig_chatMessage, client, &ClientChat::onChatMessage,
             Qt::QueuedConnection);
-    connect(client, &ClientTextChat::sig_showSessionWindow, this, &TextChatSessionWindow::onShowWindow,
+    connect(client, &ClientChat::sig_showSessionWindow, this, &ChatSessionWindow::onShowWindow,
             Qt::QueuedConnection);
-    connect(client, &ClientTextChat::sig_textChatMessage, this, &TextChatSessionWindow::onTextChatMessage,
+    connect(client, &ClientChat::sig_chatMessage, this, &ChatSessionWindow::onChatMessage,
             Qt::QueuedConnection);
 
     return client;
 }
 
 //--------------------------------------------------------------------------------------------------
-void TextChatSessionWindow::onShowWindow()
+void ChatSessionWindow::onShowWindow()
 {
     LOG(INFO) << "Show window";
 
@@ -84,11 +84,11 @@ void TextChatSessionWindow::onShowWindow()
 }
 
 //--------------------------------------------------------------------------------------------------
-void TextChatSessionWindow::onTextChatMessage(const proto::text_chat::TextChat& text_chat)
+void ChatSessionWindow::onChatMessage(const proto::chat::Chat& chat)
 {
-    if (text_chat.has_chat_message())
+    if (chat.has_chat_message())
     {
-        ui->text_chat_widget->readMessage(text_chat.chat_message());
+        ui->text_chat_widget->readMessage(chat.chat_message());
 
         if (QApplication::applicationState() != Qt::ApplicationActive)
         {
@@ -96,9 +96,9 @@ void TextChatSessionWindow::onTextChatMessage(const proto::text_chat::TextChat& 
             activateWindow();
         }
     }
-    else if (text_chat.has_chat_status())
+    else if (chat.has_chat_status())
     {
-        ui->text_chat_widget->readStatus(text_chat.chat_status());
+        ui->text_chat_widget->readStatus(chat.chat_status());
     }
     else
     {
@@ -107,7 +107,7 @@ void TextChatSessionWindow::onTextChatMessage(const proto::text_chat::TextChat& 
 }
 
 //--------------------------------------------------------------------------------------------------
-void TextChatSessionWindow::onInternalReset()
+void ChatSessionWindow::onInternalReset()
 {
     // Nothing
 }

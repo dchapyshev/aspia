@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>TextChatStatusMessage</class>
- <widget class="QWidget" name="TextChatStatusMessage">
+ <class>ChatStatusMessage</class>
+ <widget class="QWidget" name="ChatStatusMessage">
   <property name="geometry">
    <rect>
     <x>0</x>

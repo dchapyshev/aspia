@@ -44,7 +44,7 @@
 #include "host/router_manager.h"
 #include "host/service.h"
 #include "host/system_info_client.h"
-#include "host/text_chat_client.h"
+#include "host/chat_client.h"
 #include "host/user_session.h"
 
 #if defined(Q_OS_WINDOWS)
@@ -93,6 +93,8 @@ Service::Service(QObject* parent)
             this, &Service::onChangeOneTimeSessions);
     connect(user_session_, &UserSession::sig_confirmationReply,
             this, &Service::onConfirmationReply);
+    connect(user_session_, &UserSession::sig_chatMessage,
+            this, &Service::onUserChatMessage);
 
     connect(tcp_server_, &base::TcpServer::sig_newConnection,
             this, &Service::onNewDirectConnection);
@@ -375,15 +377,15 @@ void Service::onConfirmationReply(quint32 request_id, bool accept)
 
                 case proto::peer::SESSION_TYPE_TEXT_CHAT:
                 {
-                    TextChatClient* client = new TextChatClient(tcp_channel, this);
-                    text_chat_clients_.emplace_back(client);
+                    ChatClient* client = new ChatClient(tcp_channel, this);
+                    chat_clients_.emplace_back(client);
 
-                    connect(client, &TextChatClient::sig_started,
-                            this, &Service::onTextChatClientStarted);
-                    connect(client, &TextChatClient::sig_finished,
-                            this, &Service::onTextChatClientFinished);
-                    connect(client, &TextChatClient::sig_messageReceived,
-                            this, &Service::onTextChatClientMessage);
+                    connect(client, &ChatClient::sig_started,
+                            this, &Service::onChatClientStarted);
+                    connect(client, &ChatClient::sig_finished,
+                            this, &Service::onChatClientFinished);
+                    connect(client, &ChatClient::sig_messageReceived,
+                            this, &Service::onChatClientMessage);
                 }
                 break;
 
@@ -558,7 +560,7 @@ void Service::onStopClient(quint32 client_id)
     };
 
     stop_by_id(&file_clients_);
-    stop_by_id(&text_chat_clients_);
+    stop_by_id(&chat_clients_);
     stop_by_id(&system_info_clients_);
 
     user_session_->onClientFinished(client_id);
@@ -684,11 +686,11 @@ void Service::onSystemInfoClientFinished(quint32 client_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Service::onTextChatClientStarted(quint32 client_id)
+void Service::onChatClientStarted(quint32 client_id)
 {
     LOG(INFO) << "Text chat session started (client_id:" << client_id << ")";
 
-    TextChatClient* started_client = dynamic_cast<TextChatClient*>(sender());
+    ChatClient* started_client = dynamic_cast<ChatClient*>(sender());
     if (!started_client)
     {
         LOG(ERROR) << "Unknown sender for started slot";
@@ -698,35 +700,35 @@ void Service::onTextChatClientStarted(quint32 client_id)
     DCHECK_EQ(client_id, started_client->clientId());
 
     if (!user_session_->isAttached())
-        started_client->onSendStatus(proto::text_chat::Status::CODE_USER_DISCONNECTED);
+        started_client->onSendStatus(proto::chat::Status::CODE_USER_DISCONNECTED);
 
-    proto::text_chat::TextChat text_chat;
-    proto::text_chat::Status* text_chat_status = text_chat.mutable_chat_status();
-    text_chat_status->set_code(proto::text_chat::Status::CODE_STARTED);
+    proto::chat::Chat chat;
+    proto::chat::Status* chat_status = chat.mutable_chat_status();
+    chat_status->set_code(proto::chat::Status::CODE_STARTED);
 
     QString display_name = started_client->displayName();
     if (display_name.isEmpty())
         display_name = started_client->computerName();
 
-    text_chat_status->set_source(display_name.toStdString());
+    chat_status->set_source(display_name.toStdString());
 
     // Send message to other clients.
-    for (const auto& client : std::as_const(text_chat_clients_))
+    for (const auto& client : std::as_const(chat_clients_))
     {
         if (client->clientId() != client_id)
-            client->onSendTextChat(text_chat);
+            client->onSendChat(chat);
     }
 
     // Send message to GUI.
     user_session_->onClientStarted(client_id, proto::peer::SESSION_TYPE_TEXT_CHAT,
         started_client->computerName(), started_client->displayName());
-    user_session_->onClientTextChat(client_id, text_chat);
+    user_session_->onClientChat(client_id, chat);
 }
 
 //--------------------------------------------------------------------------------------------------
-void Service::onTextChatClientFinished(quint32 client_id)
+void Service::onChatClientFinished(quint32 client_id)
 {
-    TextChatClient* finished_client = dynamic_cast<TextChatClient*>(sender());
+    ChatClient* finished_client = dynamic_cast<ChatClient*>(sender());
     if (!finished_client)
     {
         LOG(ERROR) << "Unknown sender for finish slot";
@@ -739,45 +741,53 @@ void Service::onTextChatClientFinished(quint32 client_id)
     if (display_name.isEmpty())
         display_name = finished_client->computerName();
 
-    proto::text_chat::TextChat text_chat;
-    proto::text_chat::Status* text_chat_status = text_chat.mutable_chat_status();
+    proto::chat::Chat chat;
+    proto::chat::Status* chat_status = chat.mutable_chat_status();
 
-    text_chat_status->set_code(proto::text_chat::Status::CODE_STOPPED);
-    text_chat_status->set_source(display_name.toStdString());
+    chat_status->set_code(proto::chat::Status::CODE_STOPPED);
+    chat_status->set_source(display_name.toStdString());
 
     // Notify other clients about finish.
-    for (const auto& client : std::as_const(text_chat_clients_))
+    for (const auto& client : std::as_const(chat_clients_))
     {
         if (client->clientId() == client_id)
             continue;
 
-        client->onSendTextChat(text_chat);
+        client->onSendChat(chat);
     }
 
     // Notify GUI about finish.
-    user_session_->onClientTextChat(client_id, text_chat);
+    user_session_->onClientChat(client_id, chat);
 
     finished_client->disconnect();
     finished_client->deleteLater();
 
-    text_chat_clients_.removeOne(finished_client);
+    chat_clients_.removeOne(finished_client);
 
     // Send disconnect event to GUI.
     user_session_->onClientFinished(client_id);
 }
 
 //--------------------------------------------------------------------------------------------------
-void Service::onTextChatClientMessage(quint32 client_id, const proto::text_chat::TextChat& text_chat)
+void Service::onChatClientMessage(quint32 client_id, const proto::chat::Chat& chat)
 {
     // Send message to GUI.
-    user_session_->onClientTextChat(client_id, text_chat);
+    user_session_->onClientChat(client_id, chat);
 
     // Send message to other text chat clients.
-    for (const auto& client : std::as_const(text_chat_clients_))
+    for (const auto& client : std::as_const(chat_clients_))
     {
         if (client_id != client->clientId())
-            client->onSendTextChat(text_chat);
+            client->onSendChat(chat);
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void Service::onUserChatMessage(const proto::chat::Chat& chat)
+{
+    // Send message to text chat clients.
+    for (const auto& client : std::as_const(chat_clients_))
+        client->onSendChat(chat);
 }
 
 //--------------------------------------------------------------------------------------------------

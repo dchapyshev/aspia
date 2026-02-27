@@ -33,9 +33,9 @@
 #include "base/peer/host_id.h"
 #include "build/build_config.h"
 #include "common/ui/about_dialog.h"
+#include "common/ui/chat_widget.h"
 #include "common/ui/language_action.h"
 #include "common/ui/status_dialog.h"
-#include "common/ui/text_chat_widget.h"
 #include "host/user_session_agent.h"
 #include "host/system_settings.h"
 #include "host/ui/application.h"
@@ -163,7 +163,7 @@ void MainWindow::connectToService()
             Qt::QueuedConnection);
     connect(agent, &UserSessionAgent::sig_recordingStateChanged, this, &MainWindow::onRecordingStateChanged,
             Qt::QueuedConnection);
-    connect(agent, &UserSessionAgent::sig_textChat, this, &MainWindow::onTextChat,
+    connect(agent, &UserSessionAgent::sig_chat, this, &MainWindow::onChat,
             Qt::QueuedConnection);
 
     connect(this, &MainWindow::sig_connectToService, agent, &UserSessionAgent::onConnectToService,
@@ -184,7 +184,7 @@ void MainWindow::connectToService()
             Qt::QueuedConnection);
     connect(this, &MainWindow::sig_pause, agent, &UserSessionAgent::onPause,
             Qt::QueuedConnection);
-    connect(this, &MainWindow::sig_textChat, agent, &UserSessionAgent::onTextChat,
+    connect(this, &MainWindow::sig_chat, agent, &UserSessionAgent::onChat,
             Qt::QueuedConnection);
 
     LOG(INFO) << "Connecting to service";
@@ -297,7 +297,7 @@ void MainWindow::onClientListChanged(const UserSessionAgent::ClientList& clients
     {
         LOG(INFO) << "Text chat clients:" << text_chat_clients;
 
-        if (text_chat_widget_)
+        if (chat_widget_)
         {
             LOG(INFO) << "Text chat widget already exists";
         }
@@ -305,44 +305,44 @@ void MainWindow::onClientListChanged(const UserSessionAgent::ClientList& clients
         {
             LOG(INFO) << "Create text chat widget";
 
-            text_chat_widget_ = new common::TextChatWidget();
+            chat_widget_ = new common::ChatWidget();
 
-            connect(text_chat_widget_, &common::TextChatWidget::sig_sendMessage,
-                    this, [this](const proto::text_chat::Message& message)
+            connect(chat_widget_, &common::ChatWidget::sig_sendMessage,
+                    this, [this](const proto::chat::Message& message)
             {
-                proto::text_chat::TextChat text_chat;
-                text_chat.mutable_chat_message()->CopyFrom(message);
-                emit sig_textChat(text_chat);
+                proto::chat::Chat chat;
+                chat.mutable_chat_message()->CopyFrom(message);
+                emit sig_chat(chat);
             });
 
-            connect(text_chat_widget_, &common::TextChatWidget::sig_sendStatus,
-                    this, [this](const proto::text_chat::Status& status)
+            connect(chat_widget_, &common::ChatWidget::sig_sendStatus,
+                    this, [this](const proto::chat::Status& status)
             {
-                proto::text_chat::TextChat text_chat;
-                text_chat.mutable_chat_status()->CopyFrom(status);
-                emit sig_textChat(text_chat);
+                proto::chat::Chat chat;
+                chat.mutable_chat_status()->CopyFrom(status);
+                emit sig_chat(chat);
             });
 
-            connect(text_chat_widget_, &common::TextChatWidget::sig_textChatClosed, this, [this]()
+            connect(chat_widget_, &common::ChatWidget::sig_textChatClosed, this, [this]()
             {
                 QList<quint32> sessions = notifier_->sessions(proto::peer::SESSION_TYPE_TEXT_CHAT);
                 for (const auto& session : std::as_const(sessions))
                     onKillSession(session);
             });
 
-            text_chat_widget_->setAttribute(Qt::WA_DeleteOnClose);
-            text_chat_widget_->show();
-            text_chat_widget_->activateWindow();
+            chat_widget_->setAttribute(Qt::WA_DeleteOnClose);
+            chat_widget_->show();
+            chat_widget_->activateWindow();
         }
     }
     else
     {
         LOG(INFO) << "No text chat clients";
 
-        if (text_chat_widget_)
+        if (chat_widget_)
         {
             LOG(INFO) << "Close text chat window";
-            text_chat_widget_->close();
+            chat_widget_->close();
         }
     }
 }
@@ -467,22 +467,22 @@ void MainWindow::onRecordingStateChanged(const QString& computer, const QString&
 }
 
 //--------------------------------------------------------------------------------------------------
-void MainWindow::onTextChat(const proto::text_chat::TextChat& text_chat)
+void MainWindow::onChat(const proto::chat::Chat& chat)
 {
-    if (text_chat.has_chat_message())
+    if (chat.has_chat_message())
     {
-        if (text_chat_widget_)
+        if (chat_widget_)
         {
-            text_chat_widget_->readMessage(text_chat.chat_message());
+            chat_widget_->readMessage(chat.chat_message());
 
             if (QApplication::applicationState() != Qt::ApplicationActive)
-                text_chat_widget_->activateWindow();
+                chat_widget_->activateWindow();
         }
     }
-    else if (text_chat.has_chat_status())
+    else if (chat.has_chat_status())
     {
-        if (text_chat_widget_)
-            text_chat_widget_->readStatus(text_chat.chat_status());
+        if (chat_widget_)
+            chat_widget_->readStatus(chat.chat_status());
     }
     else
     {

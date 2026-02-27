@@ -38,12 +38,12 @@
 #include "base/desktop/frame_qimage.h"
 #include "base/desktop/mouse_cursor.h"
 #include "client/client_desktop.h"
+#include "client/ui/chat/chat_session_window.h"
 #include "client/ui/desktop/desktop_config_dialog.h"
 #include "client/ui/desktop/desktop_settings.h"
 #include "client/ui/desktop/desktop_toolbar.h"
 #include "client/ui/file_transfer/file_transfer_session_window.h"
 #include "client/ui/sys_info/system_info_session_window.h"
-#include "client/ui/text_chat/text_chat_session_window.h"
 #include "client/ui/desktop/statistics_dialog.h"
 #include "client/ui/desktop/task_manager_window.h"
 #include "common/desktop_session_constants.h"
@@ -225,7 +225,7 @@ DesktopSessionWindow::DesktopSessionWindow(proto::peer::SessionType session_type
                 break;
 
             case proto::peer::SESSION_TYPE_TEXT_CHAT:
-                session_window = new TextChatSessionWindow();
+                session_window = new ChatSessionWindow();
                 break;
 
             default:

@@ -16,30 +16,40 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef COMMON_UI_TEXT_CHAT_STATUS_MESSAGE_H
-#define COMMON_UI_TEXT_CHAT_STATUS_MESSAGE_H
+syntax = "proto3";
 
-#include "common/ui/text_chat_message.h"
-#include "ui_text_chat_status_message.h"
+option optimize_for = LITE_RUNTIME;
 
-namespace common {
+package proto.chat;
 
-class TextChatStatusMessage final : public TextChatMessage
+message Status
 {
-    Q_OBJECT
+    enum Code
+    {
+        CODE_UNKNOWN           = 0;
+        CODE_STARTED           = 1;
+        CODE_STOPPED           = 2;
+        CODE_TYPING            = 3;
+        CODE_USER_DISCONNECTED = 4;
+        CODE_USER_CONNECTED    = 5;
+    }
 
-public:
-    explicit TextChatStatusMessage(QWidget* parent = nullptr);
-    ~TextChatStatusMessage() final;
+    int64 timestamp = 1;
+    string source   = 2;
+    string target   = 3;
+    Code code       = 4;
+}
 
-    void setMessageText(const QString& text) final;
-    QString messageText() const final;
-    QString messageTime() const final;
+message Message
+{
+    int64 timestamp = 1;
+    string source   = 2;
+    string target   = 3;
+    string text     = 4;
+}
 
-private:
-    Ui::TextChatStatusMessage ui;
-};
-
-} // namespace common
-
-#endif // COMMON_UI_TEXT_CHAT_STATUS_MESSAGE_H
+message Chat
+{
+    Status chat_status = 1;
+    Message chat_message   = 2;
+}

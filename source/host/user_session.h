@@ -55,7 +55,7 @@ public slots:
     void onClientStarted(quint32 client_id, proto::peer::SessionType session_type,
         const QString& computer_name, const QString& display_name);
     void onClientFinished(quint32 client_id);
-    void onClientTextChat(quint32 client_id, const proto::text_chat::TextChat& text_chat);
+    void onClientChat(quint32 client_id, const proto::chat::Chat& chat);
     void onClientRecording(const QString& computer, const QString& user, bool started);
 
 signals:
@@ -65,7 +65,7 @@ signals:
     void sig_changeOneTimeSessions(quint32 sessions);
     void sig_confirmationReply(quint32 request_id, bool accept);
     void sig_stopClient(quint32 client_id);
-    void sig_textChatMessage(const proto::text_chat::TextChat& text_chat);
+    void sig_chatMessage(const proto::chat::Chat& chat);
     void sig_lockMouseChanged(bool enable);
     void sig_lockKeyboardChanged(bool enable);
     void sig_pauseChanged(bool enable);

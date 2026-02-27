@@ -71,6 +71,19 @@ list(APPEND SOURCE_COMMON_UI
     ui/about_dialog.cc
     ui/about_dialog.h
     ui/about_dialog.ui
+    ui/chat_status_message.cc
+    ui/chat_status_message.h
+    ui/chat_status_message.ui
+    ui/chat_incoming_message.cc
+    ui/chat_incoming_message.h
+    ui/chat_incoming_message.ui
+    ui/chat_message.h
+    ui/chat_outgoing_message.cc
+    ui/chat_outgoing_message.h
+    ui/chat_outgoing_message.ui
+    ui/chat_widget.cc
+    ui/chat_widget.h
+    ui/chat_widget.ui
     ui/download_dialog.cc
     ui/download_dialog.h
     ui/download_dialog.ui
@@ -81,19 +94,6 @@ list(APPEND SOURCE_COMMON_UI
     ui/status_dialog.cc
     ui/status_dialog.h
     ui/status_dialog.ui
-    ui/text_chat_incoming_message.cc
-    ui/text_chat_incoming_message.h
-    ui/text_chat_incoming_message.ui
-    ui/text_chat_message.h
-    ui/text_chat_outgoing_message.cc
-    ui/text_chat_outgoing_message.h
-    ui/text_chat_outgoing_message.ui
-    ui/text_chat_status_message.cc
-    ui/text_chat_status_message.h
-    ui/text_chat_status_message.ui
-    ui/text_chat_widget.cc
-    ui/text_chat_widget.h
-    ui/text_chat_widget.ui
     ui/update_dialog.cc
     ui/update_dialog.h
     ui/update_dialog.ui)

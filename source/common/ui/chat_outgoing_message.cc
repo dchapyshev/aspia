@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "common/ui/text_chat_status_message.h"
+#include "common/ui/chat_outgoing_message.h"
 
 #include <QLocale>
 #include <QTime>
@@ -24,31 +24,41 @@
 namespace common {
 
 //--------------------------------------------------------------------------------------------------
-TextChatStatusMessage::TextChatStatusMessage(QWidget* parent)
-    : TextChatMessage(TextChatMessage::Direction::STATUS, parent)
+ChatOutgoingMessage::ChatOutgoingMessage(QWidget* parent)
+    : ChatMessage(ChatMessage::Direction::OUTGOING, parent)
 {
     ui.setupUi(this);
+
+    QString time = QLocale::system().toString(QTime::currentTime(), QLocale::ShortFormat);
+    ui.label_time->setText(time);
 }
 
 //--------------------------------------------------------------------------------------------------
-TextChatStatusMessage::~TextChatStatusMessage() = default;
+ChatOutgoingMessage::~ChatOutgoingMessage() = default;
 
 //--------------------------------------------------------------------------------------------------
-void TextChatStatusMessage::setMessageText(const QString& text)
+void ChatOutgoingMessage::setMessageText(const QString& text)
 {
     ui.label_message->setText(text);
+    adjustSize();
 }
 
 //--------------------------------------------------------------------------------------------------
-QString TextChatStatusMessage::messageText() const
+QString ChatOutgoingMessage::messageText() const
 {
     return ui.label_message->text();
 }
 
 //--------------------------------------------------------------------------------------------------
-QString TextChatStatusMessage::messageTime() const
+QString ChatOutgoingMessage::messageTime() const
 {
-    return QString();
+    return ui.label_time->text();
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatOutgoingMessage::resizeEvent(QResizeEvent* /* event */)
+{
+    adjustSize();
 }
 
 } // namespace common

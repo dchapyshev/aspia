@@ -158,10 +158,10 @@ void UserSessionAgent::onPause(bool enable)
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionAgent::onTextChat(const proto::text_chat::TextChat& text_chat)
+void UserSessionAgent::onChat(const proto::chat::Chat& chat)
 {
     LOG(INFO) << "Text chat message";
-    outgoing_message_.newMessage().mutable_text_chat()->CopyFrom(text_chat);
+    outgoing_message_.newMessage().mutable_chat()->CopyFrom(chat);
     sendSessionMessage();
 }
 
@@ -254,9 +254,9 @@ void UserSessionAgent::onIpcMessageReceived(quint32 channel_id, const QByteArray
         LOG(INFO) << "Router state received (" << router_state << ")";
         emit sig_routerStateChanged(router_state);
     }
-    else if (incoming_message_->has_text_chat())
+    else if (incoming_message_->has_chat())
     {
-        emit sig_textChat(incoming_message_->text_chat());
+        emit sig_chat(incoming_message_->chat());
     }
     else if (incoming_message_->has_recording_state())
     {
