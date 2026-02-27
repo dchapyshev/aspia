@@ -211,8 +211,7 @@ void UserSession::onSwitchSession(base::SessionId session_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSession::onClientConfirmation(
-    base::SessionId session_id, const proto::internal::ConfirmationRequest& request)
+void UserSession::onClientConfirmation(const proto::internal::ConfirmationRequest& request)
 {
     if (request.session_type() == proto::peer::SESSION_TYPE_SYSTEM_INFO)
     {
@@ -227,7 +226,7 @@ void UserSession::onClientConfirmation(
     {
         LOG(INFO) << "No active GUI process";
 
-        base::SessionInfo session_info(session_id);
+        base::SessionInfo session_info(session_id_);
         if (!session_info.isValid())
         {
             LOG(ERROR) << "Reject: unable to get session info";

@@ -60,22 +60,16 @@ void UserSessionAgent::onConnectToService()
 
     ipc_channel_ = new base::IpcChannel(this);
 
+    connect(ipc_channel_, &base::IpcChannel::sig_connected,
+            this, &UserSessionAgent::onIpcConnected);
     connect(ipc_channel_, &base::IpcChannel::sig_disconnected,
             this, &UserSessionAgent::onIpcDisconnected);
+    connect(ipc_channel_, &base::IpcChannel::sig_errorOccurred,
+            this, &UserSessionAgent::onIpcErrorOccurred);
     connect(ipc_channel_, &base::IpcChannel::sig_messageReceived,
             this, &UserSessionAgent::onIpcMessageReceived);
 
-    if (ipc_channel_->connectTo(channel_id))
-    {
-        LOG(INFO) << "IPC channel connected (channel_id=" << channel_id << ")";
-        emit sig_statusChanged(Status::CONNECTED_TO_SERVICE);
-        ipc_channel_->resume();
-    }
-    else
-    {
-        LOG(INFO) << "IPC channel not connected (channel_id=" << channel_id << ")";
-        emit sig_statusChanged(Status::SERVICE_NOT_AVAILABLE);
-    }
+    ipc_channel_->connectTo(channel_id);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -172,6 +166,14 @@ void UserSessionAgent::onTextChat(const proto::text_chat::TextChat& text_chat)
 }
 
 //--------------------------------------------------------------------------------------------------
+void UserSessionAgent::onIpcConnected()
+{
+    LOG(INFO) << "IPC channel connected";
+    emit sig_statusChanged(Status::CONNECTED_TO_SERVICE);
+    ipc_channel_->resume();
+}
+
+//--------------------------------------------------------------------------------------------------
 void UserSessionAgent::onIpcDisconnected()
 {
     LOG(INFO) << "IPC channel disconncted";
@@ -184,6 +186,13 @@ void UserSessionAgent::onIpcDisconnected()
     }
 
     emit sig_statusChanged(Status::DISCONNECTED_FROM_SERVICE);
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserSessionAgent::onIpcErrorOccurred()
+{
+    LOG(INFO) << "Unable to connect to IPC server";
+    emit sig_statusChanged(Status::SERVICE_NOT_AVAILABLE);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -105,19 +105,7 @@ void DesktopClient::start(const QString& ipc_channel_name)
         return;
     }
 
-    LOG(INFO) << "Connecting to IPC channel:" << ipc_channel_name;
-
-    QTimer::singleShot(0, this, [this, ipc_channel_name]()
-    {
-        if (!connectToAgent(ipc_channel_name))
-        {
-            emit sig_finished(clientId());
-            return;
-        }
-
-        tcp_channel_->resume();
-        ipc_channel_->resume();
-    });
+    connectToAgent(ipc_channel_name);
 
     // First emit a start signal and then connect to the agent, because the agent process starts
     // when this signal is emitted. Otherwise, there would be nothing to connect to.
@@ -127,19 +115,36 @@ void DesktopClient::start(const QString& ipc_channel_name)
 //--------------------------------------------------------------------------------------------------
 void DesktopClient::onAttached(const QString& ipc_channel_name)
 {
-    LOG(INFO) << "Connection to new IPC channel:" << ipc_channel_name;
+    LOG(INFO) << "Connection to new IPC server:" << ipc_channel_name;
+    connectToAgent(ipc_channel_name);
+}
 
-    if (!connectToAgent(ipc_channel_name))
-    {
-        emit sig_finished(clientId());
-        return;
-    }
+//--------------------------------------------------------------------------------------------------
+void DesktopClient::onIpcConnected()
+{
+    proto::peer::SessionType session_type = sessionType();
+    CHECK(session_type == proto::peer::SESSION_TYPE_DESKTOP_MANAGE ||
+          session_type == proto::peer::SESSION_TYPE_DESKTOP_VIEW);
 
+    proto::internal::ServiceToDesktop message;
+    proto::internal::SessionDescription* description = message.mutable_session_description();
+
+    description->set_session_type(session_type);
+    *description->mutable_version() = base::serialize(tcp_channel_->peerVersion());
+    description->set_os_name(tcp_channel_->peerOsName().toStdString());
+    description->set_computer_name(tcp_channel_->peerComputerName().toStdString());
+    description->set_display_name(tcp_channel_->peerDisplayName().toStdString());
+    description->set_architecture(tcp_channel_->peerArchitecture().toStdString());
+    description->set_user_name(tcp_channel_->peerUserName().toStdString());
+
+    sendIpcServiceMessage(base::serialize(message));
+
+    tcp_channel_->resume();
     ipc_channel_->resume();
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopClient::onIpcChannelMessage(quint32 channel_id, const QByteArray& buffer)
+void DesktopClient::onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer)
 {
     quint16 tcp_channel_id = base::lowWord(channel_id);
     quint16 ipc_channel_id = base::highWord(channel_id);
@@ -155,7 +160,7 @@ void DesktopClient::onIpcChannelMessage(quint32 channel_id, const QByteArray& bu
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopClient::onIpcChannelDisconnected()
+void DesktopClient::onIpcDisconnected()
 {
     if (!ipc_channel_)
         return;
@@ -165,6 +170,13 @@ void DesktopClient::onIpcChannelDisconnected()
     ipc_channel_->disconnect(this); // Disconnect all signals.
     ipc_channel_->deleteLater();
     ipc_channel_ = nullptr;
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopClient::onIpcErrorOccurred()
+{
+    LOG(ERROR) << "Unable to connect to IPC server";
+    emit sig_finished(clientId());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -231,38 +243,26 @@ void DesktopClient::onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray
 }
 
 //--------------------------------------------------------------------------------------------------
-bool DesktopClient::connectToAgent(const QString& ipc_channel_name)
+void DesktopClient::connectToAgent(const QString& ipc_channel_name)
 {
-    ipc_channel_ = new base::IpcChannel(this);
-
-    connect(ipc_channel_, &base::IpcChannel::sig_disconnected,
-            this, &DesktopClient::onIpcChannelDisconnected);
-    connect(ipc_channel_, &base::IpcChannel::sig_messageReceived,
-            this, &DesktopClient::onIpcChannelMessage);
-
-    if (!ipc_channel_->connectTo(ipc_channel_name))
+    if (ipc_channel_)
     {
-        LOG(ERROR) << "Unable to connect to IPC server" << ipc_channel_name;
-        return false;
+        LOG(ERROR) << "IPC channel is already connected";
+        return;
     }
 
-    proto::peer::SessionType session_type = sessionType();
-    CHECK(session_type == proto::peer::SESSION_TYPE_DESKTOP_MANAGE ||
-          session_type == proto::peer::SESSION_TYPE_DESKTOP_VIEW);
+    ipc_channel_ = new base::IpcChannel(this);
 
-    proto::internal::ServiceToDesktop message;
-    proto::internal::SessionDescription* description = message.mutable_session_description();
+    connect(ipc_channel_, &base::IpcChannel::sig_connected,
+            this, &DesktopClient::onIpcConnected);
+    connect(ipc_channel_, &base::IpcChannel::sig_disconnected,
+            this, &DesktopClient::onIpcDisconnected);
+    connect(ipc_channel_, &base::IpcChannel::sig_errorOccurred,
+            this, &DesktopClient::onIpcErrorOccurred);
+    connect(ipc_channel_, &base::IpcChannel::sig_messageReceived,
+            this, &DesktopClient::onIpcMessageReceived);
 
-    description->set_session_type(session_type);
-    *description->mutable_version() = base::serialize(tcp_channel_->peerVersion());
-    description->set_os_name(tcp_channel_->peerOsName().toStdString());
-    description->set_computer_name(tcp_channel_->peerComputerName().toStdString());
-    description->set_display_name(tcp_channel_->peerDisplayName().toStdString());
-    description->set_architecture(tcp_channel_->peerArchitecture().toStdString());
-    description->set_user_name(tcp_channel_->peerUserName().toStdString());
-
-    sendIpcServiceMessage(base::serialize(message));
-    return true;
+    ipc_channel_->connectTo(ipc_channel_name);
 }
 
 //--------------------------------------------------------------------------------------------------

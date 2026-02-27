@@ -239,6 +239,8 @@ QString DesktopManager::filePath()
 //--------------------------------------------------------------------------------------------------
 void DesktopManager::onClientStarted()
 {
+    LOG(INFO) << "Client started (count:" << client_count_ << "attached:" << isAttached() << ")";
+
     if (!client_count_ && !isAttached())
         attach(FROM_HERE, base::activeConsoleSessionId());
 
@@ -248,8 +250,7 @@ void DesktopManager::onClientStarted()
 //--------------------------------------------------------------------------------------------------
 void DesktopManager::onClientFinished()
 {
-    CHECK(client_count_ > 0);
-    --client_count_;
+    client_count_ = std::max(client_count_ - 1, 0);
 
     if (client_count_)
         return;
@@ -261,6 +262,9 @@ void DesktopManager::onClientFinished()
 //--------------------------------------------------------------------------------------------------
 void DesktopManager::onSwitchSession(base::SessionId session_id)
 {
+    if (!client_count_)
+        return;
+
     dettach(FROM_HERE);
     attach(FROM_HERE, session_id);
 }

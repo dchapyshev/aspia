@@ -55,14 +55,16 @@ signals:
     void sig_recordingChanged(const QString& computer, const QString& user, bool started);
 
 private slots:
-    void onIpcChannelMessage(quint32 channel_id, const QByteArray& buffer);
-    void onIpcChannelDisconnected();
+    void onIpcConnected();
+    void onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer);
+    void onIpcDisconnected();
+    void onIpcErrorOccurred();
 
     void onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code);
     void onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray& buffer);
 
 private:
-    bool connectToAgent(const QString& ipc_channel_name);
+    void connectToAgent(const QString& ipc_channel_name);
     void sendIpcServiceMessage(const QByteArray& buffer);
     void sendSessionList();
 

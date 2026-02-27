@@ -18,6 +18,8 @@
 
 #include "base/ipc/ipc_channel.h"
 
+#include <QTimer>
+
 #include "base/asio_event_dispatcher.h"
 #include "base/location.h"
 #include "base/logging.h"
@@ -43,35 +45,7 @@ const char kNamePrefix[] = "/tmp/aspia_";
 #if defined(Q_OS_WINDOWS)
 
 const char kNamePrefix[] = "\\\\.\\pipe\\aspia.";
-const DWORD kConnectTimeout = 5000; // ms
-
-//--------------------------------------------------------------------------------------------------
-SessionId clientSessionIdImpl(HANDLE pipe_handle)
-{
-    ULONG session_id = kInvalidSessionId;
-
-    if (!GetNamedPipeClientSessionId(pipe_handle, &session_id))
-    {
-        PLOG(ERROR) << "GetNamedPipeClientSessionId failed";
-        return kInvalidSessionId;
-    }
-
-    return session_id;
-}
-
-//--------------------------------------------------------------------------------------------------
-SessionId serverSessionIdImpl(HANDLE pipe_handle)
-{
-    ULONG session_id = kInvalidSessionId;
-
-    if (!GetNamedPipeServerSessionId(pipe_handle, &session_id))
-    {
-        PLOG(ERROR) << "GetNamedPipeServerSessionId failed";
-        return kInvalidSessionId;
-    }
-
-    return session_id;
-}
+const DWORD kConnectTimeout = 3000; // ms
 
 #endif // defined(Q_OS_WINDOWS)
 
@@ -93,12 +67,7 @@ IpcChannel::IpcChannel(const QString& channel_name, Stream&& stream, QObject* pa
       is_connected_(true)
 {
     LOG(INFO) << "Ctor";
-
     write_queue_.reserve(kWriteQueueReservedSize);
-
-#if defined(Q_OS_WINDOWS)
-    peer_session_id_ = clientSessionIdImpl(stream_.native_handle());
-#endif // defined(Q_OS_WINDOWS)
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -109,93 +78,10 @@ IpcChannel::~IpcChannel()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool IpcChannel::connectTo(const QString& channel_name)
+void IpcChannel::connectTo(const QString& channel_name)
 {
-    if (channel_name.isEmpty())
-    {
-        LOG(ERROR) << "Empty channel id";
-        return false;
-    }
-
     channel_name_ = channelName(channel_name);
-
-#if defined(Q_OS_WINDOWS)
-    const DWORD flags = SECURITY_SQOS_PRESENT | SECURITY_IDENTIFICATION | FILE_FLAG_OVERLAPPED;
-
-    ScopedHandle handle;
-
-    while (true)
-    {
-        handle.reset(CreateFileW(qUtf16Printable(channel_name_),
-                                 GENERIC_WRITE | GENERIC_READ,
-                                 0,
-                                 nullptr,
-                                 OPEN_EXISTING,
-                                 flags,
-                                 nullptr));
-        if (handle.isValid())
-            break;
-
-        DWORD error_code = GetLastError();
-
-        if (error_code != ERROR_PIPE_BUSY)
-        {
-            LOG(ERROR) << "Failed to connect to the named pipe:"
-                       << SystemError::toString(error_code) << "(channel_name="
-                       << channel_name_ << ")";
-            return false;
-        }
-
-        if (!WaitNamedPipeW(qUtf16Printable(channel_name_), kConnectTimeout))
-        {
-            PLOG(ERROR) << "WaitNamedPipeW failed (channel_name=" << channel_name_ << ")";
-            return false;
-        }
-    }
-
-    std::error_code error_code;
-    stream_.assign(handle.release(), error_code);
-    if (error_code)
-    {
-        LOG(ERROR) << "Failed to assign handle:" << error_code;
-        return false;
-    }
-
-    peer_session_id_ = serverSessionIdImpl(stream_.native_handle());
-
-    is_connected_ = true;
-    return true;
-#else
-    asio::local::stream_protocol::endpoint endpoint(channel_name_.toLocal8Bit().toStdString());
-    std::error_code error_code;
-    stream_.connect(endpoint, error_code);
-    if (error_code)
-    {
-        LOG(ERROR) << "Unable to connect:" << error_code;
-        return false;
-    }
-
-    is_connected_ = true;
-    return true;
-#endif
-}
-
-//--------------------------------------------------------------------------------------------------
-void IpcChannel::disconnectFrom()
-{
-    if (!is_connected_)
-    {
-        LOG(INFO) << "Channel not in connected state";
-        return;
-    }
-
-    LOG(INFO) << "disconnect channel (channel_name=" << channel_name_ << ")";
-    is_connected_ = false;
-
-    std::error_code ignored_code;
-
-    stream_.cancel(ignored_code);
-    stream_.close(ignored_code);
+    scheduleConnectAttempt(std::chrono::milliseconds(0), 0);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -255,11 +141,103 @@ QString IpcChannel::channelName(const QString& channel_name)
 }
 
 //--------------------------------------------------------------------------------------------------
+bool IpcChannel::connectAttempt()
+{
+    if (channel_name_.isEmpty())
+    {
+        LOG(ERROR) << "Empty channel name";
+        return false;
+    }
+
+#if defined(Q_OS_WINDOWS)
+    const DWORD flags = SECURITY_SQOS_PRESENT | SECURITY_IDENTIFICATION | FILE_FLAG_OVERLAPPED;
+    ScopedHandle handle;
+
+    while (true)
+    {
+        handle.reset(CreateFileW(qUtf16Printable(channel_name_), GENERIC_WRITE | GENERIC_READ, 0,
+            nullptr, OPEN_EXISTING, flags, nullptr));
+        if (handle.isValid())
+            break;
+
+        DWORD error_code = GetLastError();
+
+        if (error_code != ERROR_PIPE_BUSY)
+        {
+            LOG(ERROR) << "Failed to connect to the named pipe:" << SystemError::toString(error_code)
+            << "(channel_name:" << channel_name_ << ")";
+            return false;
+        }
+
+        if (!WaitNamedPipeW(qUtf16Printable(channel_name_), kConnectTimeout))
+        {
+            PLOG(ERROR) << "WaitNamedPipeW failed (channel_name:" << channel_name_ << ")";
+            return false;
+        }
+    }
+
+    std::error_code error_code;
+    stream_.assign(handle.release(), error_code);
+    if (error_code)
+    {
+        LOG(ERROR) << "Failed to assign handle:" << error_code;
+        return false;
+    }
+#else
+    asio::local::stream_protocol::endpoint endpoint(channel_name_.toLocal8Bit().toStdString());
+    std::error_code error_code;
+    stream_.connect(endpoint, error_code);
+    if (error_code)
+    {
+        LOG(ERROR) << "Unable to connect:" << error_code;
+        return false;
+    }
+#endif
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void IpcChannel::scheduleConnectAttempt(const std::chrono::milliseconds& delay, int count)
+{
+    if (count > 30)
+    {
+        emit sig_errorOccurred();
+        return;
+    }
+
+    QTimer::singleShot(delay, this, [this, count]()
+    {
+        if (connectAttempt())
+        {
+            is_connected_ = true;
+            emit sig_connected();
+            return;
+        }
+
+        scheduleConnectAttempt(std::chrono::milliseconds(100), count + 1);
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
+void IpcChannel::disconnectFrom()
+{
+    if (!is_connected_)
+        return;
+
+    LOG(INFO) << "disconnect channel (channel_name=" << channel_name_ << ")";
+    is_connected_ = false;
+
+    std::error_code ignored_code;
+
+    stream_.cancel(ignored_code);
+    stream_.close(ignored_code);
+}
+
+//--------------------------------------------------------------------------------------------------
 void IpcChannel::onErrorOccurred(const Location& location, const std::error_code& error_code)
 {
-    LOG(ERROR) << "Error in IPC channel" << channel_name_ << ":" << error_code
-               << "(location=" << location << ")";
-
+    LOG(ERROR) << "Error in IPC channel" << channel_name_ << ":" << error_code << "(from" << location << ")";
     disconnectFrom();
     emit sig_disconnected();
 }

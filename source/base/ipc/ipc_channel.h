@@ -29,8 +29,6 @@
 #include <asio/local/stream_protocol.hpp>
 #endif
 
-#include "base/session_id.h"
-
 namespace base {
 
 class IpcServer;
@@ -44,9 +42,7 @@ public:
     explicit IpcChannel(QObject* parent = nullptr);
     ~IpcChannel();
 
-    bool connectTo(const QString& channel_name);
-
-    void disconnectFrom();
+    void connectTo(const QString& channel_name);
 
     bool isConnected() const;
     bool isPaused() const;
@@ -56,10 +52,10 @@ public:
 
     void send(quint32 channel_id, const QByteArray& buffer);
 
-    SessionId peerSessionId() const { return peer_session_id_; }
-
 signals:
+    void sig_connected();
     void sig_disconnected();
+    void sig_errorOccurred();
     void sig_messageReceived(quint32 channel_id, const QByteArray& buffer);
 
 private:
@@ -74,6 +70,9 @@ private:
     IpcChannel(const QString& channel_name, Stream&& stream, QObject* parent);
     static QString channelName(const QString& channel_name);
 
+    bool connectAttempt();
+    void scheduleConnectAttempt(const std::chrono::milliseconds& delay, int count);
+    void disconnectFrom();
     void onErrorOccurred(const Location& location, const std::error_code& error_code);
     void onMessageReceived();
 
@@ -123,8 +122,6 @@ private:
 
     Header read_header_;
     QByteArray read_buffer_;
-
-    SessionId peer_session_id_ = kInvalidSessionId;
 
     Q_DISABLE_COPY_MOVE(IpcChannel)
 };

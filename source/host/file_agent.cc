@@ -45,26 +45,35 @@ FileAgent::~FileAgent()
 //--------------------------------------------------------------------------------------------------
 void FileAgent::start(const QString& channel_id)
 {
-    LOG(INFO) << "Starting (channel_id=" << channel_id.data() << ")";
+    LOG(INFO) << "Starting (channel_id:" << channel_id << ")";
 
     ipc_channel_ = new base::IpcChannel(this);
 
-    if (!ipc_channel_->connectTo(channel_id))
-    {
-        LOG(ERROR) << "Connection failed";
-        return;
-    }
-
+    connect(ipc_channel_, &base::IpcChannel::sig_connected, this, &FileAgent::onIpcConnected);
     connect(ipc_channel_, &base::IpcChannel::sig_disconnected, this, &FileAgent::onIpcDisconnected);
+    connect(ipc_channel_, &base::IpcChannel::sig_errorOccurred, this, &FileAgent::onIpcErrorOccurred);
     connect(ipc_channel_, &base::IpcChannel::sig_messageReceived, this, &FileAgent::onIpcMessageReceived);
 
+    ipc_channel_->connectTo(channel_id);
+}
+
+//--------------------------------------------------------------------------------------------------
+void FileAgent::onIpcConnected()
+{
     ipc_channel_->resume();
 }
 
 //--------------------------------------------------------------------------------------------------
 void FileAgent::onIpcDisconnected()
 {
-    LOG(INFO) << "IPC channel disconnected";
+    LOG(INFO) << "IPC connection is terminated";
+    QCoreApplication::quit();
+}
+
+//--------------------------------------------------------------------------------------------------
+void FileAgent::onIpcErrorOccurred()
+{
+    LOG(INFO) << "Unable to connect to IPC server";
     QCoreApplication::quit();
 }
 

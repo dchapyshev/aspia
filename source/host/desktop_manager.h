@@ -86,7 +86,7 @@ private:
     QTimer* restart_timer_ = nullptr;
     QTimer* attach_timer_ = nullptr;
 
-    quint32 client_count_ = 0;
+    int client_count_ = 0;
 
 #if defined(Q_OS_WINDOWS)
     base::ScopedHandle process_;

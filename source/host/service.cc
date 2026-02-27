@@ -332,10 +332,16 @@ void Service::onConfirmationReply(quint32 request_id, bool accept)
                             this, &Service::onDesktopClientFinished);
                     connect(client, &DesktopClient::sig_switchSession,
                             this, &Service::onDesktopClientSwitchSession);
-                    connect(client, &DesktopClient::sig_recordingChanged,
-                            user_session_, &UserSession::onClientRecording);
+
+                    connect(client, &DesktopClient::sig_started,
+                            desktop_manager_, &DesktopManager::onClientStarted);
+                    connect(client, &DesktopClient::sig_finished,
+                            desktop_manager_, &DesktopManager::onClientFinished);
                     connect(desktop_manager_, &DesktopManager::sig_attached,
                             client, &DesktopClient::onAttached);
+
+                    connect(client, &DesktopClient::sig_recordingChanged,
+                            user_session_, &UserSession::onClientRecording);
 
                     client->start(desktop_manager_->ipcChannelName());
                 }
@@ -793,14 +799,6 @@ void Service::startClient(base::TcpChannel* tcp_channel)
                    << tcp_channel->peerVersion() << ")";
     }
 
-    base::SessionId session_id = desktop_manager_->sessionId();
-    if (session_id == base::kInvalidSessionId)
-    {
-        LOG(ERROR) << "Invalid session ID for desktop manager";
-        tcp_channel->deleteLater();
-        return;
-    }
-
     proto::peer::SessionType session_type =
         static_cast<proto::peer::SessionType>(tcp_channel->peerSessionType());
     SystemSettings settings;
@@ -813,7 +811,7 @@ void Service::startClient(base::TcpChannel* tcp_channel)
     request.set_timeout(settings.autoConfirmationInterval().count());
 
     pending_channels_.emplace_back(tcp_channel, QTime::currentTime());
-    user_session_->onClientConfirmation(session_id, request);
+    user_session_->onClientConfirmation(request);
 }
 
 //--------------------------------------------------------------------------------------------------

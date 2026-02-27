@@ -47,11 +47,11 @@ public:
     void onRouterStateChanged(const proto::internal::RouterState& router_state);
     void onUpdateCredentials(base::HostId host_id, const QString& password);
     bool isAttached() const;
+    base::SessionId sessionId() const { return session_id_; }
 
 public slots:
     void onSwitchSession(base::SessionId session_id);
-    void onClientConfirmation(
-        base::SessionId session_id, const proto::internal::ConfirmationRequest& request);
+    void onClientConfirmation(const proto::internal::ConfirmationRequest& request);
     void onClientStarted(quint32 client_id, proto::peer::SessionType session_type,
         const QString& computer_name, const QString& display_name);
     void onClientFinished(quint32 client_id);

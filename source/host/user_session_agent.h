@@ -87,7 +87,9 @@ signals:
     void sig_textChat(const proto::text_chat::TextChat& text_chat);
 
 private slots:
+    void onIpcConnected();
     void onIpcDisconnected();
+    void onIpcErrorOccurred();
     void onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer);
 
 private:

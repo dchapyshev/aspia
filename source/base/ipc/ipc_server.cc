@@ -192,7 +192,7 @@ bool IpcServer::Listener::listen(asio::io_context& io_context, const QString& ch
     std::string command_line = "chmod 777 " + channel_file;
 
     int ret = system(command_line.c_str());
-    LOG(INFO) << "Set security attributes:" << command_line << "(ret:" << ret << ")";
+    LOG(INFO) << "Set security attributes:" << command_line << "(ret" << ret << ")";
 
     acceptor_->listen(asio::local::stream_protocol::socket::max_listen_connections, error_code);
     if (error_code)
@@ -295,7 +295,7 @@ QString IpcServer::createUniqueId()
 //--------------------------------------------------------------------------------------------------
 bool IpcServer::start(const QString& channel_id)
 {
-    LOG(INFO) << "Starting IPC server (channel_id=" << channel_id << ")";
+    LOG(INFO) << "Starting IPC server (channel_id" << channel_id << ")";
 
     if (channel_id.isEmpty())
     {
@@ -309,7 +309,7 @@ bool IpcServer::start(const QString& channel_id)
     {
         if (!runListener(i))
         {
-            LOG(ERROR) << "runListener failed (i=" << i << ")";
+            LOG(ERROR) << "runListener failed (i:" << i << ")";
             return false;
         }
     }
@@ -320,7 +320,7 @@ bool IpcServer::start(const QString& channel_id)
 //--------------------------------------------------------------------------------------------------
 void IpcServer::stop()
 {
-    LOG(INFO) << "Stopping IPC server (channel_name=" << channel_name_ << ")";
+    LOG(INFO) << "Stopping IPC server (channel_name" << channel_name_ << ")";
 
     for (size_t i = 0; i < listeners_.size(); ++i)
     {
