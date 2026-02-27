@@ -873,16 +873,16 @@ void MainWindow::updateTrayIconTooltip()
         {
             QHostAddress address = addresses[j].ip();
             if (address.isGlobal())
-                ip += address.toString() + QLatin1Char('\n');
+                ip += address.toString() + '\n';
         }
     }
 
     if (!ip.isEmpty())
-        ip.prepend(tr("IP addresses:") + QLatin1Char('\n'));
+        ip.prepend(tr("IP addresses:") + '\n');
 
     QString tooltip;
-    tooltip += tr("Aspia Host") + QLatin1String("\n\n");
-    tooltip += tr("ID: %1").arg(ui.edit_id->text()) + QLatin1Char('\n');
+    tooltip += tr("Aspia Host") + "\n\n";
+    tooltip += tr("ID: %1").arg(ui.edit_id->text()) + '\n';
     tooltip += ip;
 
     tray_icon_.setToolTip(tooltip);

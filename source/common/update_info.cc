@@ -75,22 +75,22 @@ UpdateInfo UpdateInfo::fromXml(const QByteArray& buffer)
         if (token != QXmlStreamReader::StartElement)
             continue;
 
-        if (xml.name() == QLatin1String("update"))
+        if (xml.name() == "update")
             continue;
 
         while (xml.tokenType() != QXmlStreamReader::EndElement)
         {
             if (xml.tokenType() == QXmlStreamReader::StartElement)
             {
-                if (xml.name() == QLatin1String("version"))
+                if (xml.name() == "version")
                 {
                     update_info.version_ = QVersionNumber::fromString(parseElement(xml));
                 }
-                else if (xml.name() == QLatin1String("description"))
+                else if (xml.name() == "description")
                 {
                     update_info.description_ = parseElement(xml);
                 }
-                else if (xml.name() == QLatin1String("url"))
+                else if (xml.name() == "url")
                 {
                     update_info.url_ = parseElement(xml);
                 }

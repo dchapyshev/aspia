@@ -140,7 +140,7 @@ void UpdateDialog::onUpdateNow()
     {
         LOG(INFO) << "[ACTION] Update confirmed by user";
 
-        QTemporaryFile file(QDir::tempPath() + QLatin1String("/aspia-XXXXXX.msi"));
+        QTemporaryFile file(QDir::tempPath() + "/aspia-XXXXXX.msi");
         if (!file.open())
         {
             LOG(ERROR) << "Unable to open file:" << file.errorString();

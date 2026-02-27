@@ -44,10 +44,10 @@ QString normalizePath(const QString& path)
 
     QString normalized_path = path;
 
-    normalized_path.replace(QLatin1Char('\\'), QLatin1Char('/'));
+    normalized_path.replace('\\', '/');
 
-    if (!normalized_path.endsWith(QLatin1Char('/')))
-        normalized_path += QLatin1Char('/');
+    if (!normalized_path.endsWith('/'))
+        normalized_path += '/';
 
     return normalized_path;
 }

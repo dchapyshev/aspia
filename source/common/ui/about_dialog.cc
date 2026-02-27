@@ -89,7 +89,7 @@ QString createList(const QString& title, const char* array[], size_t array_size)
     {
         list.append(QString("&bull; %1").arg(array[i]));
         if (i + 1 != array_size)
-            list.append(QLatin1String("<br/>"));
+            list.append("<br/>");
     }
 
     return QString("<b>%1</b><br>%2").arg(title, list);

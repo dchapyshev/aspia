@@ -61,12 +61,9 @@ ConnectConfirmDialog::ConnectConfirmDialog(
         time_seconds_ = 60;
     }
 
-    QString user_name = QLatin1String("<b>") + QString::fromStdString(request.user_name()) +
-        QLatin1String("</b>");
-    QString computer_name = QLatin1String("<b>") + QString::fromStdString(request.computer_name()) +
-        QLatin1String("</b>");
-    QString session_name = QLatin1String("<b>") +
-        common::sessionName(request.session_type()) + QLatin1String("</b>");
+    QString user_name = "<b>" + QString::fromStdString(request.user_name()) + "</b>";
+    QString computer_name = "<b>" + QString::fromStdString(request.computer_name()) + "</b>";
+    QString session_name = "<b>" + common::sessionName(request.session_type()) + "</b>";
 
     message_ = tr("User %1 (%2) is trying to connect to your computer with %3 session type.")
         .arg(user_name, computer_name, session_name);
@@ -153,9 +150,7 @@ void ConnectConfirmDialog::updateMessage()
             tr("The connection will be automatically rejected after %n seconds.", "", time_seconds_);
     }
 
-    ui.label_msg->setText(
-        message_ + QLatin1String("<br/>") + timeout_string + QLatin1String("<br/><b>") + question_ +
-        QLatin1String("</b>"));
+    ui.label_msg->setText(message_ + "<br/>" + timeout_string + "<br/><b>" + question_ + "</b>");
 }
 
 } // namespace host

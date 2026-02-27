@@ -1117,9 +1117,9 @@ void DesktopSessionWindow::takeScreenshot()
 
     const char* format = nullptr;
 
-    if (selected_filter.contains(QLatin1String("*.png")))
+    if (selected_filter.contains("*.png"))
         format = "PNG";
-    else if (selected_filter.contains(QLatin1String("*.bmp")))
+    else if (selected_filter.contains("*.bmp"))
         format = "BMP";
 
     if (!format)

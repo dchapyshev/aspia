@@ -41,10 +41,10 @@ namespace {
 QString parentPath(const QString& path)
 {
     int from = -1;
-    if (path.endsWith(QLatin1Char('/')))
+    if (path.endsWith('/'))
         from = -2;
 
-    int last_slash = path.lastIndexOf(QLatin1Char('/'), from);
+    int last_slash = path.lastIndexOf('/', from);
     if (last_slash == -1)
         return AddressBarModel::computerPath();
 

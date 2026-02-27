@@ -29,32 +29,32 @@ namespace {
 //--------------------------------------------------------------------------------------------------
 void beginDocument(QXmlStreamWriter* writer)
 {
-    QString style = QLatin1String(
+    QString style =
         "body { font-family: Tahoma, Arial, Verdana; font-size:12px; }"
         "h1 { font-size:14px;  }"
         "td, th { padding:3px; border:1px solid black; }"
-        "th { font-weight:bold; }");
+        "th { font-weight:bold; }";
 
-    writer->writeStartElement(QLatin1String("html"));
-    writer->writeStartElement(QLatin1String("head"));
+    writer->writeStartElement("html");
+    writer->writeStartElement("head");
 
-    writer->writeStartElement(QLatin1String("meta"));
-    writer->writeAttribute(QLatin1String("http-equiv"), QLatin1String("Content-Type"));
-    writer->writeAttribute(QLatin1String("content"), QLatin1String("text/html; charset=utf-8"));
+    writer->writeStartElement("meta");
+    writer->writeAttribute("http-equiv", "Content-Type");
+    writer->writeAttribute("content", "text/html; charset=utf-8");
     writer->writeEndElement(); // meta
 
-    writer->writeStartElement(QLatin1String("style"));
-    writer->writeAttribute(QLatin1String("type"), QLatin1String("text/css"));
+    writer->writeStartElement("style");
+    writer->writeAttribute("type", "text/css");
     writer->writeCharacters(style);
     writer->writeEndElement(); // style
 
-    writer->writeStartElement(QLatin1String("title"));
-    writer->writeCharacters(QLatin1String("Document"));
+    writer->writeStartElement("title");
+    writer->writeCharacters("Document");
     writer->writeEndElement(); // title
 
     writer->writeEndElement(); // head
 
-    writer->writeStartElement(QLatin1String("body"));
+    writer->writeStartElement("body");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -67,12 +67,12 @@ void endDocument(QXmlStreamWriter* writer)
 //--------------------------------------------------------------------------------------------------
 void tableHeader(QXmlStreamWriter* writer, const QTreeWidget* tree)
 {
-    writer->writeStartElement(QLatin1String("tr"));
+    writer->writeStartElement("tr");
 
     QTreeWidgetItem* header = tree->headerItem();
     for (int i = 0; i < tree->columnCount(); ++i)
     {
-        writer->writeStartElement(QLatin1String("th"));
+        writer->writeStartElement("th");
         writer->writeCharacters(header->text(i));
         writer->writeEndElement(); // th
     }
@@ -86,27 +86,22 @@ void tableRow(QXmlStreamWriter* writer,
               const QTreeWidgetItem* item,
               int padding)
 {
-    writer->writeStartElement(QLatin1String("tr"));
+    writer->writeStartElement("tr");
 
     for (int i = 0; i < tree->columnCount(); ++i)
     {
-        writer->writeStartElement(QLatin1String("td"));
+        writer->writeStartElement("td");
 
         if (i == 0)
         {
             QString style;
 
             if (padding)
-            {
-                style = QLatin1String("padding-left: ") +
-                    QString::number(padding) + QLatin1String("px;");
-            }
+                style = "padding-left: " + QString::number(padding) + "px;";
             else
-            {
-                style = QLatin1String("font-weight: bold;");
-            }
+                style = "font-weight: bold;";
 
-            writer->writeAttribute(QLatin1String("style"), style);
+            writer->writeAttribute("style", style);
         }
 
         writer->writeCharacters(item->text(i));
@@ -124,10 +119,10 @@ void treeToHtml(const QTreeWidget* tree, QXmlStreamWriter* writer)
 {
     beginDocument(writer);
 
-    writer->writeStartElement(QLatin1String("table"));
-    writer->writeAttribute(QLatin1String("cellspacing"), QLatin1String("0"));
-    writer->writeAttribute(QLatin1String("cellpadding"), QLatin1String("0"));
-    writer->writeAttribute(QLatin1String("border"), QLatin1String("1"));
+    writer->writeStartElement("table");
+    writer->writeAttribute("cellspacing", "0");
+    writer->writeAttribute("cellpadding", "0");
+    writer->writeAttribute("border", "1");
 
     tableHeader(writer, tree);
 

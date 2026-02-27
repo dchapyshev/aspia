@@ -149,7 +149,7 @@ bool startProcessWithToken(HANDLE token, const QString& command_line, base::Scop
 QString agentFilePath()
 {
     QString file_path = QCoreApplication::applicationDirPath();
-    file_path.append(QLatin1Char('/'));
+    file_path.append('/');
     file_path.append(kFileTransferAgentFile);
     return QDir::toNativeSeparators(file_path);
 }

@@ -47,7 +47,7 @@ public:
             for (const auto& character : common::FilePlatformUtil::invalidFileNameCharacters())
             {
                 if (!characters.isEmpty())
-                    characters += QLatin1String(", ");
+                    characters += ", ";
 
                 characters += character;
             }

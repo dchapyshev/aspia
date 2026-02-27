@@ -101,7 +101,7 @@ public:
                 id += QString::number(session_data.host_id(i));
 
                 if (i != session_data.host_id_size() - 1)
-                    id += QLatin1String(", ");
+                    id += ", ";
             }
         }
         else
@@ -1075,14 +1075,14 @@ void RouterManagerWindow::copyRowFromTree(QTreeWidgetItem* item)
             QString text = item->text(i);
 
             if (!text.isEmpty())
-                result += text + QLatin1Char(' ');
+                result += text + ' ';
         }
 
         result.chop(1);
     }
     else
     {
-        result = item->text(0) + QLatin1String(": ") + item->text(1);
+        result = item->text(0) + ": " + item->text(1);
     }
 
     copyTextToClipboard(result);
@@ -1720,29 +1720,19 @@ QString RouterManagerWindow::delayToString(quint64 delay)
         if (!hours)
         {
             if (!minutes)
-            {
                 return seconds_string;
-            }
             else
-            {
-                return minutes_string + QLatin1Char(' ') + seconds_string;
-            }
+                return minutes_string + ' ' + seconds_string;
         }
         else
         {
-            return hours_string + QLatin1Char(' ') +
-                   minutes_string + QLatin1Char(' ') +
-                   seconds_string;
+            return hours_string + ' ' + minutes_string + ' ' + seconds_string;
         }
     }
     else
     {
         QString days_string = tr("%n days", "", static_cast<int>(days));
-
-        return days_string + QLatin1Char(' ') +
-               hours_string + QLatin1Char(' ') +
-               minutes_string + QLatin1Char(' ') +
-               seconds_string;
+        return days_string + ' ' + hours_string + ' ' + minutes_string + ' ' + seconds_string;
     }
 }
 

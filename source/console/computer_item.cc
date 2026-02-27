@@ -68,7 +68,7 @@ void ComputerItem::updateItem()
     setText(COLUMN_INDEX_NAME, QString::fromStdString(computer_->name()));
     setText(COLUMN_INDEX_ADDRESS, address_title);
     setText(COLUMN_INDEX_COMMENT, QString::fromStdString(
-        computer_->comment()).replace(QLatin1Char('\n'), QLatin1Char(' ')));
+        computer_->comment()).replace('\n', ' '));
 
     QLocale system_locale = QLocale::system();
 

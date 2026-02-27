@@ -127,7 +127,7 @@ void addDirectoryContent(const QString& path, proto::desktop::ClipboardEvent::Fi
         QString current_path = stack.top();
         stack.pop();
 
-        QString search_path = current_path + QLatin1String("\\*");
+        QString search_path = current_path + "\\*";
 
         WIN32_FIND_DATAW find_data;
         HANDLE find_handle = FindFirstFileExW(qUtf16Printable(search_path),
@@ -143,10 +143,10 @@ void addDirectoryContent(const QString& path, proto::desktop::ClipboardEvent::Fi
         {
             QString name = QString::fromWCharArray(find_data.cFileName);
 
-            if (name == QLatin1String(".") || name == QLatin1String(".."))
+            if (name == "." || name == "..")
                 continue;
 
-            QString full_path = current_path + QLatin1Char('\\') + name;
+            QString full_path = current_path + '\\' + name;
             bool is_directory = (find_data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0;
 
             proto::desktop::ClipboardEvent::FileList::File* file = files->add_file();

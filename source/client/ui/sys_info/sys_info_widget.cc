@@ -53,18 +53,18 @@ QString encodeUrl(const QString& str)
 
     for (const auto ch : str)
     {
-        if (ch.isDigit() || ch.isLetter() || ch == QLatin1Char('-') || ch == QLatin1Char('_') ||
-            ch == QLatin1Char('.') || ch == QLatin1Char('~'))
+        if (ch.isDigit() || ch.isLetter() || ch == '-' || ch == '_' ||
+            ch == '.' || ch == '~')
         {
             result += ch;
         }
-        else if (ch == QLatin1Char(' '))
+        else if (ch == ' ')
         {
-            result += QLatin1Char('+');
+            result += '+';
         }
         else
         {
-            result += QLatin1Char('%') + QString::number(ch.unicode(), 16);
+            result += '%' + QString::number(ch.unicode(), 16);
         }
     }
 
@@ -148,29 +148,19 @@ QString SysInfoWidget::delayToString(quint64 delay)
         if (!hours)
         {
             if (!minutes)
-            {
                 return seconds_string;
-            }
             else
-            {
-                return minutes_string + QLatin1Char(' ') + seconds_string;
-            }
+                return minutes_string + ' ' + seconds_string;
         }
         else
         {
-            return hours_string + QLatin1Char(' ') +
-                   minutes_string + QLatin1Char(' ') +
-                   seconds_string;
+            return hours_string + ' ' + minutes_string + ' ' + seconds_string;
         }
     }
     else
     {
         QString days_string = tr("%n days", "", static_cast<int>(days));
-
-        return days_string + QLatin1Char(' ') +
-               hours_string + QLatin1Char(' ') +
-               minutes_string + QLatin1Char(' ') +
-               seconds_string;
+        return days_string + ' ' + hours_string + ' ' + minutes_string + ' ' + seconds_string;
     }
 }
 
@@ -234,14 +224,14 @@ void SysInfoWidget::copyRow(QTreeWidgetItem* item)
             QString text = item->text(i);
 
             if (!text.isEmpty())
-                result += text + QLatin1Char(' ');
+                result += text + ' ';
         }
 
         result.chop(1);
     }
     else
     {
-        result = item->text(0) + QLatin1String(": ") + item->text(1);
+        result = item->text(0) + ": " + item->text(1);
     }
 
     copyTextToClipboard(result);

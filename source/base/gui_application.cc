@@ -106,7 +106,7 @@ GuiApplication::GuiApplication(int& argc, char* argv[])
 
     QString temp_path = QDir::tempPath();
 
-    if (temp_path.endsWith(QLatin1Char('\\')) || temp_path.endsWith(QLatin1Char('/')))
+    if (temp_path.endsWith('\\') || temp_path.endsWith('/'))
         temp_path = temp_path.left(temp_path.length() - 1);
 
     if (temp_path.endsWith(session_id))
@@ -116,7 +116,7 @@ GuiApplication::GuiApplication(int& argc, char* argv[])
     QByteArray app_path_hash = QCryptographicHash::hash(app_path, QCryptographicHash::Md5);
 
     server_name_ = QString::fromLatin1(app_path_hash.toHex()) + session_id;
-    lock_file_name_ = temp_path + QLatin1Char('/') + server_name_ + QLatin1String(".lock");
+    lock_file_name_ = temp_path + '/' + server_name_ + ".lock";
     lock_file_ = new QLockFile(lock_file_name_);
 
     crypto_initializer_ = std::make_unique<base::ScopedCryptoInitializer>();

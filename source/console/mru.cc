@@ -29,7 +29,7 @@ const int kMaxMruSize = 10;
 QString normalizedFilePath(const QString& file)
 {
     QString normalized(file);
-    normalized.replace(QLatin1Char('\\'), QLatin1Char('/'));
+    normalized.replace('\\', '/');
     return normalized;
 }
 
