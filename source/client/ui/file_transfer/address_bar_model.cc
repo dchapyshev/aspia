@@ -192,7 +192,7 @@ QModelIndex AddressBarModel::currentFolderIndex() const
 // static
 const QString& AddressBarModel::computerPath()
 {
-    static const QString kComputerPath = QStringLiteral(":computer");
+    static const QString kComputerPath = ":computer";
     return kComputerPath;
 }
 
@@ -277,7 +277,7 @@ QVariant AddressBarModel::data(const QModelIndex& index, int role) const
             case Qt::DecorationRole:
             {
                 if (index.column() == COLUMN_NAME)
-                    return QIcon(QStringLiteral(":/img/computer.svg"));
+                    return QIcon(":/img/computer.svg");
             }
             break;
 

@@ -422,39 +422,39 @@ void ClientWindow::onCheckUpdates()
 void ClientWindow::onThemeChanged()
 {
     static const QString kComboboxStyle =
-        QStringLiteral("QComboBox {"
-                           "border: 1px solid #CDCDCD;"
-                           "border-radius: 3px;"
-                           "padding: 3px;"
-                       "}"
-                       "QComboBox::drop-down {"
-                           "subcontrol-origin: padding;"
-                           "subcontrol-position: top right;"
-                           "border-left-width: 1px;"
-                           "border-left-color: #E1E8EE;"
-                           "border-left-style: solid;"
-                           "border-top-right-radius: 3px;"
-                           "border-bottom-right-radius: 3px;"
-                           "width: 25px;"
-                       "}"
-                       "QComboBox::drop-down::hover {"
-                           "background: #E9E9E9;"
-                       "}"
-                       "QComboBox::drop-down::pressed {"
-                           "background: #CDCDCD;"
-                       "}"
-                       "QComboBox::down-arrow {"
-                           "image: url(:/img/expand-arrow.svg);"
-                           "background-repeat: no-repeat;"
-                           "background-position: center center;"
-                           "width: 10px;"
-                           "height: 10px;"
-                       "}");
+        "QComboBox {"
+            "border: 1px solid #CDCDCD;"
+            "border-radius: 3px;"
+            "padding: 3px;"
+        "}"
+        "QComboBox::drop-down {"
+            "subcontrol-origin: padding;"
+            "subcontrol-position: top right;"
+            "border-left-width: 1px;"
+            "border-left-color: #E1E8EE;"
+            "border-left-style: solid;"
+            "border-top-right-radius: 3px;"
+            "border-bottom-right-radius: 3px;"
+            "width: 25px;"
+        "}"
+        "QComboBox::drop-down::hover {"
+            "background: #E9E9E9;"
+        "}"
+        "QComboBox::drop-down::pressed {"
+            "background: #CDCDCD;"
+        "}"
+        "QComboBox::down-arrow {"
+            "image: url(:/img/expand-arrow.svg);"
+            "background-repeat: no-repeat;"
+            "background-position: center center;"
+            "width: 10px;"
+            "height: 10px;"
+        "}";
 
     ui.combo_address->setStyleSheet(kComboboxStyle);
     ui.combo_session_type->setStyleSheet(kComboboxStyle);
 
-    static const QString kLabelStyle = QStringLiteral("QLabel { font: bold 11px; }");
+    static const QString kLabelStyle = "QLabel { font: bold 11px; }";
 
     ui.label_address->setStyleSheet(kLabelStyle);
     ui.label_session_type->setStyleSheet(kLabelStyle);

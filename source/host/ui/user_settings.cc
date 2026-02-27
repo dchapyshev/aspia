@@ -27,8 +27,8 @@ namespace host {
 
 namespace {
 
-const QString kLocaleParam = QStringLiteral("Locale");
-const QString kOneTimeSessionsParam = QStringLiteral("OneTimeSessions");
+const QString kLocaleParam = "Locale";
+const QString kOneTimeSessionsParam = "OneTimeSessions";
 
 } // namespace
 

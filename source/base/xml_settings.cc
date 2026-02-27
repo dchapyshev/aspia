@@ -27,18 +27,18 @@ namespace base {
 namespace {
 
 const QString kEmptyString;
-const QString kExtension = QStringLiteral("conf");
-const QString kSettingsElement = QStringLiteral("settings");
-const QString kGroupElement = QStringLiteral("group");
-const QString kValueElement = QStringLiteral("value");
-const QString kNameAttribute = QStringLiteral("name");
-const QString kTypeAttribute = QStringLiteral("type");
-const QString kInvalidType = QStringLiteral("invalid");
-const QString kByteArrayType = QStringLiteral("bytes");
-const QString kRectType = QStringLiteral("rect");
-const QString kSizeType = QStringLiteral("size");
-const QString kPointType = QStringLiteral("point");
-const QString kVariantType = QStringLiteral("variant");
+const QString kExtension = "conf";
+const QString kSettingsElement = "settings";
+const QString kGroupElement = "group";
+const QString kValueElement = "value";
+const QString kNameAttribute = "name";
+const QString kTypeAttribute = "type";
+const QString kInvalidType = "invalid";
+const QString kByteArrayType = "bytes";
+const QString kRectType = "rect";
+const QString kSizeType = "size";
+const QString kPointType = "point";
+const QString kVariantType = "variant";
 
 //--------------------------------------------------------------------------------------------------
 QStringView variantToType(const QVariant& value)

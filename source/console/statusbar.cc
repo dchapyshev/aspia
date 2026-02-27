@@ -65,7 +65,7 @@ void StatusBar::setCurrentComputerGroup(
 
     status_label_ = new QLabel(QString(), this);
 
-    static const QString kStyle = QStringLiteral("QLabel { padding: 3px; }");
+    static const QString kStyle = "QLabel { padding: 3px; }";
 
     first_label->setStyleSheet(kStyle);
     second_label->setStyleSheet(kStyle);

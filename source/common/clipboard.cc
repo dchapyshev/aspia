@@ -30,8 +30,8 @@ Clipboard::Clipboard(QObject* parent)
 }
 
 //--------------------------------------------------------------------------------------------------
-const QString Clipboard::kMimeTypeTextUtf8 = QStringLiteral("text/plain; charset=UTF-8");
-const QString Clipboard::kMimeTypeFileList = QStringLiteral("file-list");
+const QString Clipboard::kMimeTypeTextUtf8 = "text/plain; charset=UTF-8";
+const QString Clipboard::kMimeTypeFileList = "file-list";
 
 //--------------------------------------------------------------------------------------------------
 void Clipboard::start()

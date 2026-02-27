@@ -29,7 +29,7 @@ namespace base {
 
 namespace {
 
-const QString kTranslationsDir = QStringLiteral(":/tr/");
+const QString kTranslationsDir = ":/tr/";
 
 } // namespace
 

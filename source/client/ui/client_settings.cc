@@ -28,25 +28,22 @@ namespace client {
 
 namespace {
 
-const QString kLocaleParam = QStringLiteral("Locale");
-const QString kAddressListParam = QStringLiteral("AddressList");
-const QString kSessionTypeParam = QStringLiteral("SessionType");
-const QString kDesktopManageConfigParam = QStringLiteral("DesktopManageConfig");
-const QString kDesktopViewConfigParam = QStringLiteral("DesktopViewConfig");
-const QString kCheckUpdatesParam = QStringLiteral("CheckUpdates");
-const QString kUpdateServerParam = QStringLiteral("UpdateServer");
-const QString kOneTimePasswordCheckedParam = QStringLiteral("OneTimePasswordChecked");
-const QString kRouterManagerStateParam = QStringLiteral("RouterManagerState");
-const QString kDisplayNameParam = QStringLiteral("DisplayName");
+const QString kLocaleParam = "Locale";
+const QString kAddressListParam = "AddressList";
+const QString kSessionTypeParam = "SessionType";
+const QString kDesktopManageConfigParam = "DesktopManageConfig";
+const QString kDesktopViewConfigParam = "DesktopViewConfig";
+const QString kCheckUpdatesParam = "CheckUpdates";
+const QString kUpdateServerParam = "UpdateServer";
+const QString kOneTimePasswordCheckedParam = "OneTimePasswordChecked";
+const QString kRouterManagerStateParam = "RouterManagerState";
+const QString kDisplayNameParam = "DisplayName";
 
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
 ClientSettings::ClientSettings()
-    : settings_(base::XmlSettings::format(),
-                QSettings::UserScope,
-                QStringLiteral("aspia"),
-                QStringLiteral("client"))
+    : settings_(base::XmlSettings::format(), QSettings::UserScope, "aspia", "client")
 {
     // Nothing
 }

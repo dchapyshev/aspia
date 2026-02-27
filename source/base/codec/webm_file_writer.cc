@@ -178,7 +178,7 @@ bool WebmFileWriter::init()
         LOG(INFO) << "Path" << path_ << "already exists";
     }
 
-    QString time = QDateTime::currentDateTime().toString(QStringLiteral("yyyyMMdd-hhmmss.zzz"));
+    QString time = QDateTime::currentDateTime().toString("yyyyMMdd-hhmmss.zzz");
     QString file_name = QString("/%1-%2.%3.webm").arg(name_, time).arg(file_counter_);
     QString file_path = path_ + file_name;
 

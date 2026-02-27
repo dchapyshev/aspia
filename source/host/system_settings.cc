@@ -31,45 +31,44 @@ namespace {
 
 const size_t kPasswordHashSaltSize = 256;
 
-const QString kOrganization = QStringLiteral("aspia");
-const QString kApplication = QStringLiteral("host");
+const QString kOrganization = "aspia";
+const QString kApplication = "host";
 
-const QString kTcpPort = QStringLiteral("tcp_port");
-const QString kApplicationShutdown = QStringLiteral("application_shutdown");
-const QString kPreferredVideoCapturer = QStringLiteral("preferred_video_capturer");
+const QString kTcpPort = "tcp_port";
+const QString kApplicationShutdown = "application_shutdown";
+const QString kPreferredVideoCapturer = "preferred_video_capturer";
 
-const QString kRouterEnable = QStringLiteral("router/enable");
-const QString kRouterAddress = QStringLiteral("router/address");
-const QString kRouterPort = QStringLiteral("router/port");
-const QString kRouterPublicKey = QStringLiteral("router/public_key");
+const QString kRouterEnable = "router/enable";
+const QString kRouterAddress = "router/address";
+const QString kRouterPort = "router/port";
+const QString kRouterPublicKey = "router/public_key";
 
-const QString kSeedKey = QStringLiteral("seed_key");
-const QString kUsers = QStringLiteral("users");
-const QString kUserName = QStringLiteral("name");
-const QString kUserGroup = QStringLiteral("group");
-const QString kUserSalt = QStringLiteral("salt");
-const QString kUserVerifier = QStringLiteral("verifier");
-const QString kUserSessions = QStringLiteral("sessions");
-const QString kUserFlags = QStringLiteral("flags");
+const QString kSeedKey = "seed_key";
+const QString kUsers = "users";
+const QString kUserName = "name";
+const QString kUserGroup = "group";
+const QString kUserSalt = "salt";
+const QString kUserVerifier = "verifier";
+const QString kUserSessions = "sessions";
+const QString kUserFlags = "flags";
 
-const QString kUpdateServer = QStringLiteral("update/server");
-const QString kUpdateAutoUpdate = QStringLiteral("update/auto_update");
-const QString kUpdateCheckFrequency = QStringLiteral("update/check_frequency");
+const QString kUpdateServer = "update/server";
+const QString kUpdateAutoUpdate = "update/auto_update";
+const QString kUpdateCheckFrequency = "update/check_frequency";
 
-const QString kPasswordProtectionEnable = QStringLiteral("password_protection/enable");
-const QString kPasswordProtectionHash = QStringLiteral("password_protection/hash");
-const QString kPasswordProtectionSalt = QStringLiteral("password_protection/salt");
+const QString kPasswordProtectionEnable = "password_protection/enable";
+const QString kPasswordProtectionHash = "password_protection/hash";
+const QString kPasswordProtectionSalt = "password_protection/salt";
 
-const QString kOneTimePasswordEnable = QStringLiteral("one_time_password/enable");
-const QString kOneTimePasswordExpire = QStringLiteral("one_time_password/expire");
-const QString kOneTimePasswordLength = QStringLiteral("one_time_password/length");
-const QString kOneTimePasswordCharacters = QStringLiteral("one_time_password/characters");
+const QString kOneTimePasswordEnable = "one_time_password/enable";
+const QString kOneTimePasswordExpire = "one_time_password/expire";
+const QString kOneTimePasswordLength = "one_time_password/length";
+const QString kOneTimePasswordCharacters = "one_time_password/characters";
 
-const QString kConnectConfirmationEnable = QStringLiteral("connect_confirmation/enable");
-const QString kConnectConfirmationNoUserAction =
-    QStringLiteral("connect_confirmation/no_user_action");
+const QString kConnectConfirmationEnable = "connect_confirmation/enable";
+const QString kConnectConfirmationNoUserAction = "connect_confirmation/no_user_action";
 const QString kConnectConfirmationAutoConfirmationInterval =
-    QStringLiteral("connect_confirmation/auto_confirmation_interval");
+    "connect_confirmation/auto_confirmation_interval";
 
 } // namespace
 

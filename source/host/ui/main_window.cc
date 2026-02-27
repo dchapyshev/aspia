@@ -540,10 +540,11 @@ void MainWindow::onThemeChanged()
                                         "}").arg(color));
         };
 
-        static const QString kLabelStyle = QStringLiteral("QLabel {"
-                                                              "font: bold 11px;"
-                                                              "padding-left: 3px;"
-                                                          "}");
+        static const QString kLabelStyle =
+            "QLabel {"
+                "font: bold 11px;"
+                "padding-left: 3px;"
+            "}";
 
         QPalette window_palette = palette();
         QString edit_color = window_palette.color(QPalette::Window).name(QColor::HexRgb);

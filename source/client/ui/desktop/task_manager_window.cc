@@ -71,7 +71,7 @@ class ProcessItem final : public QTreeWidgetItem
 public:
     explicit ProcessItem(const proto::task_manager::Process& process)
     {
-        setIcon(PROC_COL_NAME, QIcon(QStringLiteral(":/img/browse-page.svg")));
+        setIcon(PROC_COL_NAME, QIcon(":/img/browse-page.svg"));
 
         setTextAlignment(PROC_COL_MEM_PRIVATE_WORKING_SET, Qt::AlignRight);
         setTextAlignment(PROC_COL_MEM_WORKING_SET, Qt::AlignRight);
@@ -96,7 +96,7 @@ public:
 
         QString user_name;
         if (process.process_id() == 0)
-            user_name = QStringLiteral("SYSTEM");
+            user_name = "SYSTEM";
         else
             user_name = QString::fromStdString(process.user_name());
 
@@ -161,7 +161,7 @@ public:
 
     static QString sizeToString(qint64 size)
     {
-        return QStringLiteral("%1 K").arg(size / 1024LL);
+        return QString("%1 K").arg(size / 1024LL);
     }
 
 private:
@@ -409,7 +409,7 @@ TaskManagerWindow::TaskManagerWindow(QWidget* parent)
     label_cpu_ = new QLabel(this);
     label_memory_ = new QLabel(this);
 
-    QString labels_style = QStringLiteral("padding:3px;");
+    QString labels_style = "padding:3px;";
     label_process_->setStyleSheet(labels_style);
     label_cpu_->setStyleSheet(labels_style);
     label_memory_->setStyleSheet(labels_style);
@@ -924,7 +924,7 @@ void TaskManagerWindow::readServiceList(const proto::task_manager::ServiceList& 
 {
     ui.tree_services->clear();
 
-    QIcon item_icon = QIcon(QStringLiteral(":/img/gear.svg"));
+    QIcon item_icon = QIcon(":/img/gear.svg");
 
     for (int i = 0; i < service_list.service_size(); ++i)
     {

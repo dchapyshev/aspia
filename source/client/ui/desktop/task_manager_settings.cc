@@ -24,20 +24,17 @@ namespace client {
 
 namespace {
 
-const QString kWindowStateParam = QStringLiteral("TaskManager/WindowState");
-const QString kProcessColumnStateParam = QStringLiteral("TaskManager/ProcessColumnState");
-const QString kServiceColumnStateParam = QStringLiteral("TaskManager/ServiceColumnState");
-const QString kUserColumnStateParam = QStringLiteral("TaskManager/UserColumnState");
-const QString kUpdateSpeedParam = QStringLiteral("TaskManager/UpdateSpeed");
+const QString kWindowStateParam = "TaskManager/WindowState";
+const QString kProcessColumnStateParam = "TaskManager/ProcessColumnState";
+const QString kServiceColumnStateParam = "TaskManager/ServiceColumnState";
+const QString kUserColumnStateParam = "TaskManager/UserColumnState";
+const QString kUpdateSpeedParam = "TaskManager/UpdateSpeed";
 
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
 TaskManagerSettings::TaskManagerSettings()
-    : settings_(QSettings::IniFormat,
-                QSettings::UserScope,
-                QStringLiteral("aspia"),
-                QStringLiteral("client"))
+    : settings_(QSettings::IniFormat, QSettings::UserScope, "aspia", "client")
 {
     // Nothing
 }

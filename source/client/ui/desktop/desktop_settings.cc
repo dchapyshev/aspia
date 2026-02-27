@@ -26,24 +26,21 @@ namespace client {
 
 namespace {
 
-const QString kScaleParam = QStringLiteral("Desktop/Scale");
-const QString kAutoScrollingParam = QStringLiteral("Desktop/AutoScrolling");
-const QString kSendKeyCombinationsParam = QStringLiteral("Desktop/SendKeyCombinations");
-const QString kRecordingPathParam = QStringLiteral("Desktop/RecordingPath");
-const QString kRecordSessionsParam = QStringLiteral("Desktop/RecordSessions");
-const QString kToolBarPinnedParam = QStringLiteral("Desktop/ToolBarPinned");
-const QString kPauseVideoParam = QStringLiteral("Desktop/PauseVideo");
-const QString kPauseAudioParam = QStringLiteral("Desktop/PauseAudio");
-const QString kWaitForHostParam = QStringLiteral("Desktop/WaitForHost");
+const QString kScaleParam = "Desktop/Scale";
+const QString kAutoScrollingParam = "Desktop/AutoScrolling";
+const QString kSendKeyCombinationsParam = "Desktop/SendKeyCombinations";
+const QString kRecordingPathParam = "Desktop/RecordingPath";
+const QString kRecordSessionsParam = "Desktop/RecordSessions";
+const QString kToolBarPinnedParam = "Desktop/ToolBarPinned";
+const QString kPauseVideoParam = "Desktop/PauseVideo";
+const QString kPauseAudioParam = "Desktop/PauseAudio";
+const QString kWaitForHostParam = "Desktop/WaitForHost";
 
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
 DesktopSettings::DesktopSettings()
-    : settings_(base::XmlSettings::format(),
-                QSettings::UserScope,
-                QStringLiteral("aspia"),
-                QStringLiteral("client"))
+    : settings_(base::XmlSettings::format(), QSettings::UserScope, "aspia", "client")
 {
     // Nothing
 }
@@ -102,8 +99,7 @@ void DesktopSettings::setSendKeyCombinations(bool enable)
 //--------------------------------------------------------------------------------------------------
 QString DesktopSettings::recordingPath() const
 {
-    QString default_path = QStandardPaths::writableLocation(QStandardPaths::MoviesLocation) +
-        QStringLiteral("/Aspia");
+    QString default_path = QStandardPaths::writableLocation(QStandardPaths::MoviesLocation) + "/Aspia";
     return settings_.value(kRecordingPathParam, default_path).toString();
 }
 

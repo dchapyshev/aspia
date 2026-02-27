@@ -24,17 +24,14 @@ namespace client {
 
 namespace {
 
-const QString kWindowGeometryParam = QStringLiteral("FileManager/WindowGeometry");
-const QString kWindowStateParam = QStringLiteral("FileManager/WindowState");
+const QString kWindowGeometryParam = "FileManager/WindowGeometry";
+const QString kWindowStateParam = "FileManager/WindowState";
 
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
 FileManagerSettings::FileManagerSettings()
-    : settings_(base::XmlSettings::format(),
-                QSettings::UserScope,
-                QStringLiteral("aspia"),
-                QStringLiteral("client"))
+    : settings_(base::XmlSettings::format(), QSettings::UserScope, "aspia", "client")
 {
     // Nothing
 }

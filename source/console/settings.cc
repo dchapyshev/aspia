@@ -28,36 +28,33 @@ namespace console {
 
 namespace {
 
-const QString kLocaleParam = QStringLiteral("Locale");
-const QString kLastDirectoryParam = QStringLiteral("LastDirectory");
-const QString kWindowGeometryParam = QStringLiteral("WindowGeometry");
-const QString kWindowStateParam = QStringLiteral("WindowState");
-const QString kAddressBookStateParam = QStringLiteral("AddressBookState");
-const QString kEnableRecentOpenParam = QStringLiteral("EnableRecentOpen");
-const QString kRecentOpenParam = QStringLiteral("RecentOpen");
-const QString kPinnedFilesParam = QStringLiteral("PinnedFiles");
-const QString kToolbarParam = QStringLiteral("Toolbar");
-const QString kStatusbarParam = QStringLiteral("Statusbar");
-const QString kMinimizeToTrayParam = QStringLiteral("MinimizeToTray");
-const QString kAlwaysShowTrayIconParam = QStringLiteral("AlwaysShowTrayIcon");
-const QString kSessionTypeParam = QStringLiteral("SessionType");
-const QString kCheckUpdatesParam = QStringLiteral("CheckUpdates");
-const QString kUpdateServerParam = QStringLiteral("UpdateServer");
-const QString kComputerDialogGeometryParam = QStringLiteral("ComputerDialogGeometry");
-const QString kComputerDialogStateParam = QStringLiteral("ComputerDialogState");
-const QString kComputerGroupDialogGeometryParam = QStringLiteral("ComputerGroupDialogGeometry");
-const QString kShowIconsInMenusParam = QStringLiteral("ShowIconsInMenus");
-const QString kAddressBookDialogGeometryParam = QStringLiteral("AddressBookDialogGeometry");
-const QString kLargeIconsParam = QStringLiteral("LargeIcons");
+const QString kLocaleParam = "Locale";
+const QString kLastDirectoryParam = "LastDirectory";
+const QString kWindowGeometryParam = "WindowGeometry";
+const QString kWindowStateParam = "WindowState";
+const QString kAddressBookStateParam = "AddressBookState";
+const QString kEnableRecentOpenParam = "EnableRecentOpen";
+const QString kRecentOpenParam = "RecentOpen";
+const QString kPinnedFilesParam = "PinnedFiles";
+const QString kToolbarParam = "Toolbar";
+const QString kStatusbarParam = "Statusbar";
+const QString kMinimizeToTrayParam = "MinimizeToTray";
+const QString kAlwaysShowTrayIconParam = "AlwaysShowTrayIcon";
+const QString kSessionTypeParam = "SessionType";
+const QString kCheckUpdatesParam = "CheckUpdates";
+const QString kUpdateServerParam = "UpdateServer";
+const QString kComputerDialogGeometryParam = "ComputerDialogGeometry";
+const QString kComputerDialogStateParam = "ComputerDialogState";
+const QString kComputerGroupDialogGeometryParam = "ComputerGroupDialogGeometry";
+const QString kShowIconsInMenusParam = "ShowIconsInMenus";
+const QString kAddressBookDialogGeometryParam = "AddressBookDialogGeometry";
+const QString kLargeIconsParam = "LargeIcons";
 
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
 Settings::Settings()
-    : settings_(base::XmlSettings::format(),
-                QSettings::UserScope,
-                QStringLiteral("aspia"),
-                QStringLiteral("console"))
+    : settings_(base::XmlSettings::format(), QSettings::UserScope, "aspia", "console")
 {
     // Nothing
 }
@@ -282,13 +279,13 @@ void Settings::setComputerGroupDialogGeometry(const QByteArray& geometry)
 //--------------------------------------------------------------------------------------------------
 QByteArray Settings::fastConnectConfig(const QString& guid)
 {
-    return settings_.value(QStringLiteral("FastConnect/") + guid).toByteArray();
+    return settings_.value("FastConnect/" + guid).toByteArray();
 }
 
 //--------------------------------------------------------------------------------------------------
 void Settings::setFastConnectConfig(const QString& guid, const QByteArray& config)
 {
-    settings_.setValue(QStringLiteral("FastConnect/") + guid, config);
+    settings_.setValue("FastConnect/" + guid, config);
 }
 
 //--------------------------------------------------------------------------------------------------
