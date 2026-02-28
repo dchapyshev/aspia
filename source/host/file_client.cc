@@ -167,10 +167,8 @@ FileClient::FileClient(base::TcpChannel* tcp_channel, QObject* parent)
 
     tcp_channel_->setParent(this);
 
-    connect(tcp_channel_, &base::TcpChannel::sig_errorOccurred,
-            this, &FileClient::onTcpErrorOccurred);
-    connect(tcp_channel_, &base::TcpChannel::sig_messageReceived,
-            this, &FileClient::onTcpMessageReceived);
+    connect(tcp_channel_, &base::TcpChannel::sig_errorOccurred, this, &FileClient::onTcpErrorOccurred);
+    connect(tcp_channel_, &base::TcpChannel::sig_messageReceived, this, &FileClient::onTcpMessageReceived);
 
     attach_timer_->setSingleShot(true);
     connect(attach_timer_, &QTimer::timeout, this, [this]()
@@ -355,10 +353,8 @@ void FileClient::onIpcNewConnection()
     ipc_server_->deleteLater();
     ipc_server_ = nullptr;
 
-    connect(ipc_channel_, &base::IpcChannel::sig_disconnected,
-            this, &FileClient::onIpcDisconnected);
-    connect(ipc_channel_, &base::IpcChannel::sig_messageReceived,
-            this, &FileClient::onIpcMessageReceived);
+    connect(ipc_channel_, &base::IpcChannel::sig_disconnected, this, &FileClient::onIpcDisconnected);
+    connect(ipc_channel_, &base::IpcChannel::sig_messageReceived, this, &FileClient::onIpcMessageReceived);
 
     onStarted(FROM_HERE, true);
 }
@@ -429,10 +425,8 @@ bool FileClient::startIpcServer(const QString& ipc_channel_name)
 
     ipc_server_ = new base::IpcServer(this);
 
-    connect(ipc_server_, &base::IpcServer::sig_newConnection,
-            this, &FileClient::onIpcNewConnection);
-    connect(ipc_server_, &base::IpcServer::sig_errorOccurred,
-            this, &FileClient::onIpcErrorOccurred);
+    connect(ipc_server_, &base::IpcServer::sig_newConnection, this, &FileClient::onIpcNewConnection);
+    connect(ipc_server_, &base::IpcServer::sig_errorOccurred, this, &FileClient::onIpcErrorOccurred);
 
     if (!ipc_server_->start(ipc_channel_name))
     {

@@ -202,10 +202,8 @@ QVariant stringToVariant(QStringView value, const QString& type)
 QSettings::Format XmlSettings::format()
 {
     static QSettings::Format xml_format =
-        QSettings::registerFormat(kExtension,
-                                  XmlSettings::readFunc,
-                                  XmlSettings::writeFunc,
-                                  Qt::CaseSensitive);
+        QSettings::registerFormat(kExtension, XmlSettings::readFunc, XmlSettings::writeFunc,
+            Qt::CaseSensitive);
 
     return xml_format;
 }

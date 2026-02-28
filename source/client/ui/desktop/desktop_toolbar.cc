@@ -37,7 +37,6 @@ DesktopToolBar::DesktopToolBar(proto::peer::SessionType session_type, QWidget* p
       session_type_(session_type)
 {
     LOG(INFO) << "Ctor";
-
     ui.setupUi(this);
 
     hide_timer_ = new QTimer(this);
@@ -422,16 +421,15 @@ void DesktopToolBar::setScreenList(const proto::desktop::ScreenList& screen_list
 //--------------------------------------------------------------------------------------------------
 void DesktopToolBar::setScreenType(const proto::desktop::ScreenType& screen_type)
 {
-    if (is_remote_update_enabled_)
-    {
-        bool show_update_button = screen_type.type() == proto::desktop::ScreenType::TYPE_DESKTOP;
+    if (!is_remote_update_enabled_)
+        return;
 
-        LOG(INFO) << "Show update button:" << show_update_button
-                  << "(type=" << screen_type.type() << "name=" << screen_type.name() << ")";
+    bool show_update_button = screen_type.type() == proto::desktop::ScreenType::TYPE_DESKTOP;
 
-        ui.action_update->setVisible(show_update_button);
-        updateSize();
-    }
+    LOG(INFO) << "Show update button:" << show_update_button
+              << "(type:" << screen_type.type() << "name:" << screen_type.name() << ")";
+    ui.action_update->setVisible(show_update_button);
+    updateSize();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -454,18 +452,13 @@ void DesktopToolBar::setSessionList(const proto::desktop::SessionList& session_l
         for (int i = 0; i < session_list.session_size(); ++i)
         {
             const proto::desktop::Session& session = session_list.session(i);
-
             QString user_name = QString::fromStdString(session.user_name());
             QString text;
 
             if (user_name.isEmpty())
-            {
                 text = tr("Session %1").arg(i + 1);
-            }
             else
-            {
                 text = tr("Session %1 (%2)").arg(i + 1).arg(user_name);
-            }
 
             if (session.is_console())
                 text.append("*");

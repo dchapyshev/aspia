@@ -84,23 +84,17 @@ Service::Service(QObject* parent)
 
     connect(repeated_timer_, &QTimer::timeout, this, &Service::onRepeatedTasks);
     connect(settings_watcher_, &QFileSystemWatcher::fileChanged, this, &Service::updateConfiguration);
-
-    connect(user_session_, &UserSession::sig_attached,
-            this, &Service::onUserSessionAttached);
-    connect(user_session_, &UserSession::sig_changeOneTimePassword,
-            this, &Service::onChangeOneTimePassword);
-    connect(user_session_, &UserSession::sig_changeOneTimeSessions,
-            this, &Service::onChangeOneTimeSessions);
-    connect(user_session_, &UserSession::sig_confirmationReply,
-            this, &Service::onConfirmationReply);
-    connect(user_session_, &UserSession::sig_chatMessage,
-            this, &Service::onUserChatMessage);
-
-    connect(tcp_server_, &base::TcpServer::sig_newConnection,
-            this, &Service::onNewDirectConnection);
-
-    connect(base::Application::instance(), &base::Application::sig_powerEvent,
-            this, &Service::onPowerEvent);
+    connect(user_session_, &UserSession::sig_attached, this, &Service::onUserSessionAttached);
+    connect(user_session_, &UserSession::sig_changeOneTimePassword, this, &Service::onChangeOneTimePassword);
+    connect(user_session_, &UserSession::sig_changeOneTimeSessions, this, &Service::onChangeOneTimeSessions);
+    connect(user_session_, &UserSession::sig_confirmationReply, this, &Service::onConfirmationReply);
+    connect(user_session_, &UserSession::sig_chatMessage, this, &Service::onUserChatMessage);
+    connect(user_session_, &UserSession::sig_stopClient, this, &Service::onStopClient);
+    connect(user_session_, &UserSession::sig_pauseChanged, desktop_manager_, &DesktopManager::onUserPause);
+    connect(user_session_, &UserSession::sig_lockMouseChanged, desktop_manager_, &DesktopManager::onUserLockMouse);
+    connect(user_session_, &UserSession::sig_lockKeyboardChanged, desktop_manager_, &DesktopManager::onUserLockKeyboard);
+    connect(tcp_server_, &base::TcpServer::sig_newConnection, this, &Service::onNewDirectConnection);
+    connect(base::Application::instance(), &base::Application::sig_powerEvent, this, &Service::onPowerEvent);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -116,9 +110,7 @@ void Service::onStart()
 
 #if defined(Q_OS_WINDOWS)
     if (!SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS))
-    {
         PLOG(ERROR) << "SetPriorityClass failed";
-    }
 
     if (MigrationUtils::isMigrationNeeded())
         MigrationUtils::doMigrate();
@@ -129,29 +121,19 @@ void Service::onStart()
         storage.setBootToSafeMode(false);
 
         if (!base::SafeModeUtil::setSafeMode(false))
-        {
             LOG(ERROR) << "Failed to turn off boot in safe mode";
-        }
         else
-        {
             LOG(INFO) << "Safe mode is disabled";
-        }
 
         if (!base::SafeModeUtil::setSafeModeService(kHostServiceName, false))
-        {
             LOG(ERROR) << "Failed to remove service from boot in Safe Mode";
-        }
         else
-        {
             LOG(INFO) << "Service removed from safe mode loading";
-        }
     }
 #endif // defined(Q_OS_WINDOWS)
 
-    LOG(INFO) << "Starting the host server";
-
     QString settings_file_path = settings_.filePath();
-    LOG(INFO) << "Configuration file path:" << settings_file_path;
+    LOG(INFO) << "Starting the host server. Configuration file path:" << settings_file_path;
 
     if (!QFileInfo::exists(settings_file_path))
     {
@@ -174,10 +156,7 @@ void Service::onStart()
     reloadUserList();
 
     if (settings_.isRouterEnabled())
-    {
-        LOG(INFO) << "Router enabled";
-        connectToRouter();
-    }
+        connectToRouter(FROM_HERE);
 
     LOG(INFO) << "Host server is started successfully";
 }
@@ -185,9 +164,7 @@ void Service::onStart()
 //--------------------------------------------------------------------------------------------------
 void Service::onStop()
 {
-    LOG(INFO) << "Service stopping...";
     deleteFirewallRules();
-    LOG(INFO) << "Service is stopped";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -199,18 +176,15 @@ void Service::onPowerEvent(quint32 power_event)
     switch (power_event)
     {
         case PBT_APMSUSPEND:
-        {
-            disconnectFromRouter();
-        }
-        break;
+            disconnectFromRouter(FROM_HERE);
+            break;
 
         case PBT_APMRESUMEAUTOMATIC:
         {
-            if (settings_.isRouterEnabled())
-            {
-                LOG(INFO) << "Router enabled";
-                connectToRouter();
-            }
+            if (!settings_.isRouterEnabled())
+                return;
+
+            connectToRouter(FROM_HERE);
         }
         break;
 
@@ -277,9 +251,9 @@ void Service::onUserSessionAttached()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Service::onRouterStateChanged(const proto::internal::RouterState& router_state)
+void Service::onRouterStateChanged(const proto::internal::RouterState& state)
 {
-    user_session_->onRouterStateChanged(router_state);
+    user_session_->onRouterStateChanged(state);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -292,12 +266,7 @@ void Service::onHostIdAssigned(base::HostId host_id)
 void Service::onNewRelayConnection()
 {
     LOG(INFO) << "New RELAY connection";
-
-    if (!router_manager_)
-    {
-        LOG(ERROR) << "No router controller instance";
-        return;
-    }
+    CHECK(router_manager_);
 
     while (router_manager_->hasPendingConnections())
         startConfirmation(router_manager_->nextPendingConnection());
@@ -313,16 +282,13 @@ void Service::onConfirmationReply(quint32 request_id, bool accept)
         if (tcp_channel->instanceId() != request_id)
             continue;
 
+        LOG(INFO) << "TCP channel" << request_id << "is" << (accept ? "accepted" : "rejected");
+
         if (accept)
-        {
-            LOG(INFO) << "TCP channel" << request_id << "is accepted";
             startClient(tcp_channel);
-        }
         else
-        {
-            LOG(INFO) << "TCP channel" << request_id << "is rejected";
             tcp_channel->deleteLater();
-        }
+
         pending_channels_.erase(it);
         return;
     }
@@ -331,6 +297,8 @@ void Service::onConfirmationReply(quint32 request_id, bool accept)
 //--------------------------------------------------------------------------------------------------
 void Service::onUpdateCheckedFinished(const QByteArray& result)
 {
+    CHECK(update_checker_);
+
     if (result.isEmpty())
     {
         LOG(ERROR) << "Error while retrieving update information";
@@ -378,6 +346,8 @@ void Service::onUpdateCheckedFinished(const QByteArray& result)
 void Service::onFileDownloaderError(int error_code)
 {
     LOG(ERROR) << "Unable to download update:" << error_code;
+    CHECK(update_downloader_);
+
     update_downloader_->disconnect(this);
     update_downloader_->deleteLater();
     update_downloader_ = nullptr;
@@ -386,6 +356,8 @@ void Service::onFileDownloaderError(int error_code)
 //--------------------------------------------------------------------------------------------------
 void Service::onFileDownloaderCompleted()
 {
+    CHECK(update_downloader_);
+
 #if defined(Q_OS_WINDOWS)
     QString file_path = QStandardPaths::writableLocation(QStandardPaths::TempLocation);
     if (file_path.isEmpty())
@@ -467,7 +439,7 @@ void Service::onRepeatedTasks()
 //--------------------------------------------------------------------------------------------------
 void Service::onStopClient(quint32 client_id)
 {
-    auto stop_by_id = [client_id](auto* list)
+    auto stop_by_id = [&](auto* list)
     {
         for (auto it = list->begin(), it_end = list->end(); it != it_end; ++it)
         {
@@ -476,18 +448,16 @@ void Service::onStopClient(quint32 client_id)
             if (client->clientId() != client_id)
                 continue;
 
-            client->disconnect();
+            client->disconnect(this);
             client->deleteLater();
             list->erase(it);
-            break;
+            return;
         }
     };
 
     stop_by_id(&file_clients_);
     stop_by_id(&chat_clients_);
     stop_by_id(&system_info_clients_);
-
-    user_session_->onClientFinished(client_id);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -521,7 +491,7 @@ void Service::onDesktopClientSwitchSession(base::SessionId session_id)
     DesktopClient* client = dynamic_cast<DesktopClient*>(sender());
     CHECK(client);
 
-    desktop_manager_->onSwitchSession(session_id);
+    desktop_manager_->onClientSwitchSession(session_id);
     user_session_->onClientSwitchSession(session_id);
 }
 
@@ -543,7 +513,7 @@ void Service::onFileClientFinished(quint32 client_id)
     CHECK(client);
     CHECK_EQ(client_id, client->clientId());
 
-    client->disconnect();
+    client->disconnect(this);
     client->deleteLater();
 
     file_clients_.removeOne(client);
@@ -568,7 +538,7 @@ void Service::onSystemInfoClientFinished(quint32 client_id)
     CHECK(client);
     CHECK_EQ(client_id, client->clientId());
 
-    client->disconnect();
+    client->disconnect(this);
     client->deleteLater();
 
     system_info_clients_.removeOne(client);
@@ -637,7 +607,7 @@ void Service::onChatClientFinished(quint32 client_id)
     // Notify GUI about finish.
     user_session_->onClientChat(client_id, chat);
 
-    finished_client->disconnect();
+    finished_client->disconnect(this);
     finished_client->deleteLater();
 
     chat_clients_.removeOne(finished_client);
@@ -672,6 +642,7 @@ void Service::onUserChatMessage(const proto::chat::Chat& chat)
 void Service::startConfirmation(base::TcpChannel* tcp_channel)
 {
     LOG(INFO) << "TCP channel is ready";
+    CHECK(tcp_channel);
 
     static const int kReadBufferSize = 2 * 1024 * 1024; // 2 Mb.
     static const int kWriteBufferSize = 2 * 1024 * 1024; // 2 Mb.
@@ -705,6 +676,8 @@ void Service::startConfirmation(base::TcpChannel* tcp_channel)
 //--------------------------------------------------------------------------------------------------
 void Service::startClient(base::TcpChannel* tcp_channel)
 {
+    CHECK(tcp_channel);
+
     switch (static_cast<proto::peer::SessionType>(tcp_channel->peerSessionType()))
     {
         case proto::peer::SESSION_TYPE_DESKTOP_MANAGE:
@@ -715,12 +688,13 @@ void Service::startClient(base::TcpChannel* tcp_channel)
 
             connect(client, &DesktopClient::sig_started, this, &Service::onDesktopClientStarted);
             connect(client, &DesktopClient::sig_finished, this, &Service::onDesktopClientFinished);
-            connect(client, &DesktopClient::sig_switchSession, this, &Service::onDesktopClientSwitchSession);
 
             connect(client, &DesktopClient::sig_started, desktop_manager_, &DesktopManager::onClientStarted);
             connect(client, &DesktopClient::sig_finished, desktop_manager_, &DesktopManager::onClientFinished);
+            connect(client, &DesktopClient::sig_switchSession, desktop_manager_, &DesktopManager::onClientSwitchSession);
             connect(desktop_manager_, &DesktopManager::sig_attached, client, &DesktopClient::onAttached);
 
+            connect(client, &DesktopClient::sig_switchSession, user_session_, &UserSession::onClientSwitchSession);
             connect(client, &DesktopClient::sig_recordingChanged, user_session_, &UserSession::onClientRecording);
 
             client->start(desktop_manager_->ipcChannelName());
@@ -783,7 +757,7 @@ void Service::addFirewallRules()
 
     if (!firewall.addTcpRule(kFirewallRuleName, kFirewallRuleDecription, tcp_port))
     {
-        LOG(ERROR) << "Unable to add firewall rule";
+        LOG(ERROR) << "Unable to add firewall rule for port" << tcp_port;
         return;
     }
 
@@ -848,13 +822,12 @@ void Service::updateConfiguration(const QString& path)
             }
 
             // Reconnect to the router with new parameters.
-            LOG(INFO) << "Router parameters have changed";
-            connectToRouter();
+            connectToRouter(FROM_HERE);
         }
         else
         {
             LOG(INFO) << "The router is now disabled";
-            disconnectFromRouter();
+            disconnectFromRouter(FROM_HERE);
 
             proto::internal::RouterState router_state;
             router_state.set_state(proto::internal::RouterState::DISABLED);
@@ -863,8 +836,7 @@ void Service::updateConfiguration(const QString& path)
     }
     else if (settings_.isRouterEnabled())
     {
-        LOG(INFO) << "Router is enabled";
-        connectToRouter();
+        connectToRouter(FROM_HERE);
     }
 }
 
@@ -888,21 +860,17 @@ void Service::reloadUserList()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Service::connectToRouter()
+void Service::connectToRouter(const base::Location& location)
 {
-    LOG(INFO) << "Connecting to router...";
-
     // Destroy the previous instance.
-    disconnectFromRouter();
+    disconnectFromRouter(FROM_HERE);
 
+    LOG(INFO) << "Connecting to router from" << location;
     router_manager_ = new RouterManager(this);
 
-    connect(router_manager_, &RouterManager::sig_routerStateChanged,
-            this, &Service::onRouterStateChanged);
-    connect(router_manager_, &RouterManager::sig_hostIdAssigned,
-            this, &Service::onHostIdAssigned);
-    connect(router_manager_, &RouterManager::sig_clientConnected,
-            this, &Service::onNewRelayConnection);
+    connect(router_manager_, &RouterManager::sig_routerStateChanged, this, &Service::onRouterStateChanged);
+    connect(router_manager_, &RouterManager::sig_hostIdAssigned, this, &Service::onHostIdAssigned);
+    connect(router_manager_, &RouterManager::sig_clientConnected, this, &Service::onNewRelayConnection);
 
     router_manager_->setUserList(tcp_server_->userList());
     router_manager_->start(
@@ -910,15 +878,15 @@ void Service::connectToRouter()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Service::disconnectFromRouter()
+void Service::disconnectFromRouter(const base::Location& location)
 {
     if (!router_manager_)
     {
-        LOG(INFO) << "No connected to router";
+        LOG(INFO) << "No connected to router (from" << location << ")";
         return;
     }
 
-    LOG(INFO) << "Disconnected from router";
+    LOG(INFO) << "Disconnected from router from" << location;
     router_manager_->disconnect(this);
     router_manager_->deleteLater();
     router_manager_ = nullptr;

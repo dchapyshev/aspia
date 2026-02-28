@@ -159,28 +159,14 @@ DesktopAgentClient::DesktopAgentClient(base::IpcChannel* ipc_channel, QObject* p
 
     ipc_channel_->setParent(this);
 
-    connect(ipc_channel_, &base::IpcChannel::sig_disconnected,
-            this, &DesktopAgentClient::onIpcDisconnected);
-    connect(ipc_channel_, &base::IpcChannel::sig_messageReceived,
-            this, &DesktopAgentClient::onIpcMessageReceived);
+    connect(ipc_channel_, &base::IpcChannel::sig_disconnected, this, &DesktopAgentClient::onIpcDisconnected);
+    connect(ipc_channel_, &base::IpcChannel::sig_messageReceived, this, &DesktopAgentClient::onIpcMessageReceived);
 }
 
 //--------------------------------------------------------------------------------------------------
 DesktopAgentClient::~DesktopAgentClient()
 {
     LOG(INFO) << "Dtor";
-}
-
-//--------------------------------------------------------------------------------------------------
-proto::peer::SessionType DesktopAgentClient::sessionType() const
-{
-    return session_type_;
-}
-
-//--------------------------------------------------------------------------------------------------
-const DesktopAgentClient::Config& DesktopAgentClient::config() const
-{
-    return config_;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -288,7 +274,6 @@ void DesktopAgentClient::onScreenListChanged(
     const base::ScreenCapturer::ScreenList& list, base::ScreenCapturer::ScreenId current)
 {
     proto::desktop::ScreenList screen_list;
-
     screen_list.set_current_screen(current);
 
     for (const auto& resolition_item : list.resolutions)
@@ -527,7 +512,6 @@ void DesktopAgentClient::sendSessionMessage(const QByteArray& buffer)
 {
     quint32 channel_id = base::makeUint32(
         proto::internal::CHANNEL_ID_SESSION, proto::peer::CHANNEL_ID_SESSION);
-
     ipc_channel_->send(channel_id, buffer);
 }
 
@@ -617,41 +601,23 @@ void DesktopAgentClient::readClipboardEvent(const proto::desktop::ClipboardEvent
 void DesktopAgentClient::readExtension(const proto::desktop::Extension& extension)
 {
     if (extension.name() == common::kTaskManagerExtension)
-    {
         readTaskManagerExtension(extension.data());
-    }
     else if (extension.name() == common::kSelectScreenExtension)
-    {
         readSelectScreenExtension(extension.data());
-    }
     else if (extension.name() == common::kPreferredSizeExtension)
-    {
         readPreferredSizeExtension(extension.data());
-    }
     else if (extension.name() == common::kVideoPauseExtension)
-    {
         readVideoPauseExtension(extension.data());
-    }
     else if (extension.name() == common::kAudioPauseExtension)
-    {
         readAudioPauseExtension(extension.data());
-    }
     else if (extension.name() == common::kPowerControlExtension)
-    {
         readPowerControlExtension(extension.data());
-    }
     else if (extension.name() == common::kRemoteUpdateExtension)
-    {
         readRemoteUpdateExtension(extension.data());
-    }
     else if (extension.name() == common::kSystemInfoExtension)
-    {
         readSystemInfoExtension(extension.data());
-    }
     else
-    {
         LOG(ERROR) << "Unknown extension:" << extension.name();
-    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -673,11 +639,9 @@ void DesktopAgentClient::readConfig(const proto::desktop::Config& config)
             break;
 
         default:
-        {
             // No supported video encoding.
             LOG(ERROR) << "Unsupported video encoding:" << config.video_encoding();
-        }
-        break;
+            break;
     }
 
     if (!video_encoder_)
@@ -693,11 +657,9 @@ void DesktopAgentClient::readConfig(const proto::desktop::Config& config)
             break;
 
         default:
-        {
             LOG(ERROR) << "Unsupported audio encoding:" << config.audio_encoding();
             audio_encoder_.reset();
-        }
-        break;
+            break;
     }
 
     cursor_encoder_.reset();
@@ -717,16 +679,15 @@ void DesktopAgentClient::readConfig(const proto::desktop::Config& config)
     config_.clear_clipboard = (config.flags() & proto::desktop::CLEAR_CLIPBOARD);
     config_.cursor_position = (config.flags() & proto::desktop::CURSOR_POSITION);
 
-    LOG(INFO) << "Client configuration changed";
-    LOG(INFO) << "Video encoding:" << config.video_encoding();
-    LOG(INFO) << "Enable cursor shape:" << (cursor_encoder_ != nullptr);
-    LOG(INFO) << "Disable font smoothing:" << config_.disable_font_smoothing;
-    LOG(INFO) << "Disable desktop effects:" << config_.disable_effects;
-    LOG(INFO) << "Disable desktop wallpaper:" << config_.disable_wallpaper;
-    LOG(INFO) << "Block input:" << config_.block_input;
-    LOG(INFO) << "Lock at disconnect:" << config_.lock_at_disconnect;
-    LOG(INFO) << "Clear clipboard:" << config_.clear_clipboard;
-    LOG(INFO) << "Cursor position:" << config_.cursor_position;
+    LOG(INFO) << "Client config changed (encoding:" << config.video_encoding()
+              << "cursor_shape:" << (cursor_encoder_ != nullptr)
+              << "font_smoothing:" << config_.disable_font_smoothing
+              << "effects:" << config_.disable_effects
+              << "wallpaper:" << config_.disable_wallpaper
+              << "block_input:" << config_.block_input
+              << "lock_at_disconnect:" << config_.lock_at_disconnect
+              << "clear_clipboard:" << config_.clear_clipboard
+              << "cursor_position:" << config_.cursor_position << ")";
 
     emit sig_configured();
 }
@@ -737,7 +698,6 @@ void DesktopAgentClient::readSelectScreenExtension(const std::string& data)
     LOG(INFO) << "Select screen request";
 
     proto::desktop::Screen screen;
-
     if (!screen.ParseFromString(data))
     {
         LOG(ERROR) << "Unable to parse select screen extension data";
@@ -755,7 +715,6 @@ void DesktopAgentClient::readSelectScreenExtension(const std::string& data)
 void DesktopAgentClient::readPreferredSizeExtension(const std::string& data)
 {
     proto::desktop::Size preferred_size;
-
     if (!preferred_size.ParseFromString(data))
     {
         LOG(ERROR) << "Unable to parse preferred size extension data";
@@ -772,7 +731,6 @@ void DesktopAgentClient::readPreferredSizeExtension(const std::string& data)
     }
 
     LOG(INFO) << "Preferred size changed:" << preferred_size;
-
     preferred_size_ = base::parse(preferred_size);
     emit sig_captureScreen();
 }
@@ -781,7 +739,6 @@ void DesktopAgentClient::readPreferredSizeExtension(const std::string& data)
 void DesktopAgentClient::readVideoPauseExtension(const std::string& data)
 {
     proto::desktop::Pause pause;
-
     if (!pause.ParseFromString(data))
     {
         LOG(ERROR) << "Unable to parse video pause extension data";
@@ -807,7 +764,6 @@ void DesktopAgentClient::readVideoPauseExtension(const std::string& data)
 void DesktopAgentClient::readAudioPauseExtension(const std::string& data)
 {
     proto::desktop::Pause pause;
-
     if (!pause.ParseFromString(data))
     {
         LOG(ERROR) << "Unable to parse pause extension data";
@@ -828,7 +784,6 @@ void DesktopAgentClient::readPowerControlExtension(const std::string& data)
     }
 
     proto::desktop::PowerControl power_control;
-
     if (!power_control.ParseFromString(data))
     {
         LOG(ERROR) << "Unable to parse power control extension data";
@@ -840,22 +795,16 @@ void DesktopAgentClient::readPowerControlExtension(const std::string& data)
         case proto::desktop::PowerControl::ACTION_SHUTDOWN:
         {
             LOG(INFO) << "SHUTDOWN command";
-
             if (!base::PowerController::shutdown())
-            {
                 LOG(ERROR) << "Unable to shutdown";
-            }
         }
         break;
 
         case proto::desktop::PowerControl::ACTION_REBOOT:
         {
             LOG(INFO) << "REBOOT command";
-
             if (!base::PowerController::reboot())
-            {
                 LOG(ERROR) << "Unable to reboot";
-            }
         }
         break;
 
@@ -874,11 +823,8 @@ void DesktopAgentClient::readPowerControlExtension(const std::string& data)
                 if (base::SafeModeUtil::setSafeMode(true))
                 {
                     LOG(INFO) << "Safe Mode boot enabled successfully";
-
                     if (!base::PowerController::reboot())
-                    {
                         LOG(ERROR) << "Unable to reboot";
-                    }
                 }
                 else
                 {
@@ -896,22 +842,16 @@ void DesktopAgentClient::readPowerControlExtension(const std::string& data)
         case proto::desktop::PowerControl::ACTION_LOGOFF:
         {
             LOG(INFO) << "LOGOFF command";
-
             if (!base::PowerController::logoff())
-            {
                 LOG(ERROR) << "base::PowerController::logoff failed";
-            }
         }
         break;
 
         case proto::desktop::PowerControl::ACTION_LOCK:
         {
             LOG(INFO) << "LOCK command";
-
             if (!base::PowerController::lock())
-            {
                 LOG(ERROR) << "base::PowerController::lock failed";
-            }
         }
         break;
 
@@ -946,9 +886,7 @@ void DesktopAgentClient::readSystemInfoExtension(const std::string& data)
     if (!data.empty())
     {
         if (!system_info_request.ParseFromString(data))
-        {
             LOG(ERROR) << "Unable to parse system info request";
-        }
     }
 
     proto::system_info::SystemInfo system_info;
@@ -977,7 +915,6 @@ void DesktopAgentClient::readTaskManagerExtension(const std::string& data)
     if (!task_manager_)
     {
         task_manager_ = new TaskManager(this);
-
         connect(task_manager_, &TaskManager::sig_taskManagerMessage,
                 this, &DesktopAgentClient::onTaskManagerMessage);
     }
@@ -1035,12 +972,10 @@ void DesktopAgentClient::sendCapabilities()
 #warning Not implemented
 #endif
 
-    LOG(INFO) << "Sending config request";
-    LOG(INFO) << "Supported extensions:" << capabilities->extensions();
-    LOG(INFO) << "Supported video encodings:" << capabilities->video_encodings();
-    LOG(INFO) << "Supported audio encodings:" << capabilities->audio_encodings();
-    LOG(INFO) << "OS type:" << capabilities->os_type();
-
+    LOG(INFO) << "Sending config request (extensions:" << capabilities->extensions()
+              << "video_encodings:" << capabilities->video_encodings()
+              << "audio_encodings:" << capabilities->audio_encodings()
+              << "OS:" << capabilities->os_type() << ")";
     sendSessionMessage();
 }
 

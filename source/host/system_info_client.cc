@@ -37,10 +37,8 @@ SystemInfoClient::SystemInfoClient(base::TcpChannel* tcp_channel, QObject* paren
 
     tcp_channel_->setParent(this);
 
-    connect(tcp_channel_, &base::TcpChannel::sig_errorOccurred,
-            this, &SystemInfoClient::onTcpErrorOccurred);
-    connect(tcp_channel_, &base::TcpChannel::sig_messageReceived,
-            this, &SystemInfoClient::onTcpMessageReceived);
+    connect(tcp_channel_, &base::TcpChannel::sig_errorOccurred, this, &SystemInfoClient::onTcpErrorOccurred);
+    connect(tcp_channel_, &base::TcpChannel::sig_messageReceived, this, &SystemInfoClient::onTcpMessageReceived);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -78,7 +76,6 @@ void SystemInfoClient::start()
 void SystemInfoClient::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code)
 {
     LOG(WARNING) << "TCP error occurred:" << error_code;
-
     tcp_channel_->disconnect(this);
     emit sig_finished(clientId());
 }
@@ -88,7 +85,6 @@ void SystemInfoClient::onTcpMessageReceived(quint8 tcp_channel_id, const QByteAr
 {
 #if defined(Q_OS_WINDOWS)
     proto::system_info::SystemInfoRequest request;
-
     if (!base::parse(buffer, &request))
     {
         LOG(ERROR) << "Unable to parse system info request";

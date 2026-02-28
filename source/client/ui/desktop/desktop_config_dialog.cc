@@ -44,9 +44,7 @@ enum ColorDepth
 
 //--------------------------------------------------------------------------------------------------
 DesktopConfigDialog::DesktopConfigDialog(proto::peer::SessionType session_type,
-                                         const proto::desktop::Config& config,
-                                         quint32 video_encodings,
-                                         QWidget* parent)
+    const proto::desktop::Config& config, quint32 video_encodings, QWidget* parent)
     : QDialog(parent),
       ui(std::make_unique<Ui::DesktopConfigDialog>()),
       config_(config)
@@ -243,7 +241,6 @@ void DesktopConfigDialog::onCodecChanged(int item_index)
 {
     proto::desktop::VideoEncoding encoding =
         static_cast<proto::desktop::VideoEncoding>(ui->combo_codec->itemData(item_index).toInt());
-
     LOG(INFO) << "[ACTION] Codec changed:" << encoding;
 
     bool has_pixel_format = (encoding == proto::desktop::VIDEO_ENCODING_ZSTD);

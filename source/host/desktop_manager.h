@@ -62,7 +62,10 @@ public:
 public slots:
     void onClientStarted();
     void onClientFinished();
-    void onSwitchSession(base::SessionId session_id);
+    void onClientSwitchSession(base::SessionId session_id);
+    void onUserPause(bool enable);
+    void onUserLockMouse(bool enable);
+    void onUserLockKeyboard(bool enable);
 
 signals:
     void sig_attached(const QString& ipc_channel_name);

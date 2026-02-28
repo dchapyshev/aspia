@@ -43,10 +43,8 @@ DesktopClient::DesktopClient(base::TcpChannel* tcp_channel, QObject* parent)
 
     tcp_channel_->setParent(this);
 
-    connect(tcp_channel_, &base::TcpChannel::sig_errorOccurred,
-            this, &DesktopClient::onTcpErrorOccurred);
-    connect(tcp_channel_, &base::TcpChannel::sig_messageReceived,
-            this, &DesktopClient::onTcpMessageReceived);
+    connect(tcp_channel_, &base::TcpChannel::sig_errorOccurred, this, &DesktopClient::onTcpErrorOccurred);
+    connect(tcp_channel_, &base::TcpChannel::sig_messageReceived, this, &DesktopClient::onTcpMessageReceived);
 
 #if defined(Q_OS_WINDOWS)
     connect(base::Application::instance(), &base::Application::sig_sessionEvent,
@@ -253,14 +251,10 @@ void DesktopClient::connectToAgent(const QString& ipc_channel_name)
 
     ipc_channel_ = new base::IpcChannel(this);
 
-    connect(ipc_channel_, &base::IpcChannel::sig_connected,
-            this, &DesktopClient::onIpcConnected);
-    connect(ipc_channel_, &base::IpcChannel::sig_disconnected,
-            this, &DesktopClient::onIpcDisconnected);
-    connect(ipc_channel_, &base::IpcChannel::sig_errorOccurred,
-            this, &DesktopClient::onIpcErrorOccurred);
-    connect(ipc_channel_, &base::IpcChannel::sig_messageReceived,
-            this, &DesktopClient::onIpcMessageReceived);
+    connect(ipc_channel_, &base::IpcChannel::sig_connected, this, &DesktopClient::onIpcConnected);
+    connect(ipc_channel_, &base::IpcChannel::sig_disconnected, this, &DesktopClient::onIpcDisconnected);
+    connect(ipc_channel_, &base::IpcChannel::sig_errorOccurred, this, &DesktopClient::onIpcErrorOccurred);
+    connect(ipc_channel_, &base::IpcChannel::sig_messageReceived, this, &DesktopClient::onIpcMessageReceived);
 
     ipc_channel_->connectTo(ipc_channel_name);
 }

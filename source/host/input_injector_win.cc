@@ -150,9 +150,7 @@ void sendKeyboardScancode(WORD scancode, DWORD flags)
 
     // Do the keyboard event.
     if (!SendInput(1, &input, sizeof(input)))
-    {
         PLOG(ERROR) << "SendInput failed";
-    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -168,9 +166,7 @@ void sendKeyboardVirtualKey(WORD key_code, DWORD flags)
 
     // Do the keyboard event.
     if (!SendInput(1, &input, sizeof(input)))
-    {
         PLOG(ERROR) << "SendInput failed";
-    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -185,9 +181,7 @@ void sendKeyboardUnicodeChar(WORD unicode_char, DWORD flags)
 
     // Do the keyboard event.
     if (!SendInput(1, &input, sizeof(input)))
-    {
         PLOG(ERROR) << "SendInput failed";
-    }
 }
 
 } // namespace
@@ -209,13 +203,9 @@ InputInjectorWin::~InputInjectorWin()
     {
         int scancode = common::KeycodeConverter::usbKeycodeToNativeKeycode(key);
         if (scancode != common::KeycodeConverter::invalidNativeKeycode())
-        {
             sendKeyboardScancode(static_cast<WORD>(scancode), KEYEVENTF_SCANCODE | KEYEVENTF_KEYUP);
-        }
         else
-        {
             LOG(ERROR) << "Invalid key code:" << key;
-        }
     }
 }
 

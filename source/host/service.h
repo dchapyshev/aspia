@@ -114,8 +114,8 @@ private:
     void deleteFirewallRules();
     void updateConfiguration(const QString& path);
     void reloadUserList();
-    void connectToRouter();
-    void disconnectFromRouter();
+    void connectToRouter(const base::Location& location);
+    void disconnectFromRouter(const base::Location& location);
     void checkForUpdates();
 
     void updateOneTimeCredentials(const base::Location& location);

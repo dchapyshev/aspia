@@ -40,9 +40,7 @@ UserSessionAgent::UserSessionAgent(QObject* parent)
 #if defined(Q_OS_WINDOWS)
     // 0x100-0x1FF Application reserved last shutdown range.
     if (!SetProcessShutdownParameters(0x100, SHUTDOWN_NORETRY))
-    {
         PLOG(ERROR) << "SetProcessShutdownParameters failed";
-    }
 #endif // defined(Q_OS_WINDOWS)
 }
 
@@ -55,32 +53,26 @@ UserSessionAgent::~UserSessionAgent()
 //--------------------------------------------------------------------------------------------------
 void UserSessionAgent::onConnectToService()
 {
-    QString channel_id = HostStorage().channelIdForUI();
-    LOG(INFO) << "Starting user session agent (channel_id=" << channel_id << ")";
+    QString channel_name = HostStorage().channelIdForUI();
+    LOG(INFO) << "Starting user session agent (channel_name:" << channel_name << ")";
 
     ipc_channel_ = new base::IpcChannel(this);
 
-    connect(ipc_channel_, &base::IpcChannel::sig_connected,
-            this, &UserSessionAgent::onIpcConnected);
-    connect(ipc_channel_, &base::IpcChannel::sig_disconnected,
-            this, &UserSessionAgent::onIpcDisconnected);
-    connect(ipc_channel_, &base::IpcChannel::sig_errorOccurred,
-            this, &UserSessionAgent::onIpcErrorOccurred);
-    connect(ipc_channel_, &base::IpcChannel::sig_messageReceived,
-            this, &UserSessionAgent::onIpcMessageReceived);
+    connect(ipc_channel_, &base::IpcChannel::sig_connected, this, &UserSessionAgent::onIpcConnected);
+    connect(ipc_channel_, &base::IpcChannel::sig_disconnected, this, &UserSessionAgent::onIpcDisconnected);
+    connect(ipc_channel_, &base::IpcChannel::sig_errorOccurred, this, &UserSessionAgent::onIpcErrorOccurred);
+    connect(ipc_channel_, &base::IpcChannel::sig_messageReceived, this, &UserSessionAgent::onIpcMessageReceived);
 
-    ipc_channel_->connectTo(channel_id);
+    ipc_channel_->connectTo(channel_name);
 }
 
 //--------------------------------------------------------------------------------------------------
 void UserSessionAgent::onUpdateCredentials(proto::internal::CredentialsRequest::Type request_type)
 {
     LOG(INFO) << "Update credentials request:" << request_type;
-
     proto::internal::CredentialsRequest* request =
         outgoing_message_.newMessage().mutable_credentials_request();
     request->set_type(request_type);
-
     sendSessionMessage();
 }
 
@@ -88,11 +80,9 @@ void UserSessionAgent::onUpdateCredentials(proto::internal::CredentialsRequest::
 void UserSessionAgent::onOneTimeSessions(quint32 sessions)
 {
     LOG(INFO) << "One-time sessions changed:" << sessions;
-
     proto::internal::OneTimeSessions* one_time_sessions =
         outgoing_message_.newMessage().mutable_one_time_sessions();
     one_time_sessions->set_sessions(sessions);
-
     sendSessionMessage();
 }
 
@@ -100,11 +90,9 @@ void UserSessionAgent::onOneTimeSessions(quint32 sessions)
 void UserSessionAgent::onKillClient(quint32 id)
 {
     LOG(INFO) << "Kill client request:" << id;
-
     proto::internal::ServiceControl* control = outgoing_message_.newMessage().mutable_control();
     control->set_code(proto::internal::ServiceControl::CODE_KILL);
     control->set_unsigned_integer(id);
-
     sendSessionMessage();
 }
 
@@ -112,12 +100,10 @@ void UserSessionAgent::onKillClient(quint32 id)
 void UserSessionAgent::onConnectConfirmation(quint32 id, bool accept)
 {
     LOG(INFO) << "Connect confirmation (id=" << id << "accept=" << accept << ")";
-
     proto::internal::ConfirmationReply* confirmation =
         outgoing_message_.newMessage().mutable_confirmation_reply();
     confirmation->set_id(id);
     confirmation->set_accept(accept);
-
     sendSessionMessage();
 }
 
@@ -125,11 +111,9 @@ void UserSessionAgent::onConnectConfirmation(quint32 id, bool accept)
 void UserSessionAgent::onMouseLock(bool enable)
 {
     LOG(INFO) << "Mouse lock:" << enable;
-
     proto::internal::ServiceControl* control = outgoing_message_.newMessage().mutable_control();
     control->set_code(proto::internal::ServiceControl::CODE_LOCK_MOUSE);
     control->set_boolean(enable);
-
     sendSessionMessage();
 }
 
@@ -137,11 +121,9 @@ void UserSessionAgent::onMouseLock(bool enable)
 void UserSessionAgent::onKeyboardLock(bool enable)
 {
     LOG(INFO) << "Keyboard lock:" << enable;
-
     proto::internal::ServiceControl* control = outgoing_message_.newMessage().mutable_control();
     control->set_code(proto::internal::ServiceControl::CODE_LOCK_KEYBOARD);
     control->set_boolean(enable);
-
     sendSessionMessage();
 }
 
@@ -149,11 +131,9 @@ void UserSessionAgent::onKeyboardLock(bool enable)
 void UserSessionAgent::onPause(bool enable)
 {
     LOG(INFO) << "Pause:" << enable;
-
     proto::internal::ServiceControl* control = outgoing_message_.newMessage().mutable_control();
     control->set_code(proto::internal::ServiceControl::CODE_PAUSE);
     control->set_boolean(enable);
-
     sendSessionMessage();
 }
 
@@ -214,16 +194,14 @@ void UserSessionAgent::onIpcMessageReceived(quint32 channel_id, const QByteArray
     {
         const proto::internal::ConfirmationRequest& request = incoming_message_->confirmation_request();
 
-        LOG(INFO) << "Connect confirmation request received (id=" << request.id()
-                  << "computer_name=" << request.computer_name() << "user_name="
-                  << request.user_name() << ")";
+        LOG(INFO) << "Connect confirmation request received (id:" << request.id()
+                  << "computer:" << request.computer_name() << "user:" << request.user_name() << ")";
 
         emit sig_confirmationRequest(request);
     }
     else if (incoming_message_->has_connect_event())
     {
         LOG(INFO) << "Connect event received";
-
         clients_.emplace_back(incoming_message_->connect_event());
         emit sig_clientListChanged(clients_);
     }

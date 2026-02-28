@@ -60,8 +60,8 @@ public:
         bool cursor_position = false;
     };
 
-    proto::peer::SessionType sessionType() const;
-    const Config& config() const;
+    proto::peer::SessionType sessionType() const { return session_type_; }
+    const Config& config() const { return config_; }
 
     void onScreenCaptureData(const base::Frame* frame, const base::MouseCursor* cursor);
     void onScreenCaptureError(proto::desktop::VideoErrorCode error_code);

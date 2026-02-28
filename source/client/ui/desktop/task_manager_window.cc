@@ -130,28 +130,20 @@ public:
         {
             case PROC_COL_PROCESS_ID:
                 return process_.process_id() < other_item->process_.process_id();
-
             case PROC_COL_SESSION_ID:
                 return process_.session_id() < other_item->process_.session_id();
-
             case PROC_COL_CPU_USAGE:
                 return process_.cpu_usage() < other_item->process_.cpu_usage();
-
             case PROC_COL_MEM_PRIVATE_WORKING_SET:
                 return process_.mem_private_working_set() < other_item->process_.mem_private_working_set();
-
             case PROC_COL_MEM_WORKING_SET:
                 return process_.mem_working_set() < other_item->process_.mem_working_set();
-
             case PROC_COL_MEM_PEAK_WORKING_SET:
                 return process_.mem_peak_working_set() < other_item->process_.mem_peak_working_set();
-
             case PROC_COL_MEM_WORKING_SET_DELTA:
                 return process_.mem_working_set_delta() < other_item->process_.mem_working_set_delta();
-
             case PROC_COL_THREAD_COUNT:
                 return process_.thread_count() < other_item->process_.thread_count();
-
             default:
                 break;
         }
@@ -196,25 +188,18 @@ private:
         {
             case proto::task_manager::Service::STATUS_CONTINUE_PENDING:
                 return tr("Continue Pending");
-
             case proto::task_manager::Service::STATUS_PAUSE_PENDING:
                 return tr("Pause Pending");
-
             case proto::task_manager::Service::STATUS_PAUSED:
                 return tr("Paused");
-
             case proto::task_manager::Service::STATUS_RUNNING:
                 return tr("Running");
-
             case proto::task_manager::Service::STATUS_START_PENDING:
                 return tr("Start Pending");
-
             case proto::task_manager::Service::STATUS_STOP_PENDING:
                 return tr("Stop Pending");
-
             case proto::task_manager::Service::STATUS_STOPPED:
                 return tr("Stopped");
-
             default:
                 return tr("Unknown");
         }
@@ -227,19 +212,14 @@ private:
         {
             case proto::task_manager::Service::STARTUP_TYPE_AUTO_START:
                 return tr("Auto Start");
-
             case proto::task_manager::Service::STARTUP_TYPE_DEMAND_START:
                 return tr("Demand Start");
-
             case proto::task_manager::Service::STARTUP_TYPE_DISABLED:
                 return tr("Disabled");
-
             case proto::task_manager::Service::STARTUP_TYPE_BOOT_START:
                 return tr("Boot Start");
-
             case proto::task_manager::Service::STARTUP_TYPE_SYSTEM_START:
                 return tr("System Start");
-
             default:
                 return tr("Unknown");
         }
@@ -305,34 +285,24 @@ private:
         {
             case proto::task_manager::User::CONNECT_STATE_ACTIVE:
                 return tr("Active");
-
             case proto::task_manager::User::CONNECT_STATE_CONNECTED:
                 return tr("Connected");
-
             case proto::task_manager::User::CONNECT_STATE_CONNECT_QUERY:
                 return tr("Connect Query");
-
             case proto::task_manager::User::CONNECT_STATE_SHADOW:
                 return tr("Shadow");
-
             case proto::task_manager::User::CONNECT_STATE_DISCONNECTED:
                 return tr("Disconnected");
-
             case proto::task_manager::User::CONNECT_STATE_IDLE:
                 return tr("Idle");
-
             case proto::task_manager::User::CONNECT_STATE_LISTEN:
                 return tr("Listen");
-
             case proto::task_manager::User::CONNECT_STATE_RESET:
                 return tr("Reset");
-
             case proto::task_manager::User::CONNECT_STATE_DOWN:
                 return tr("Down");
-
             case proto::task_manager::User::CONNECT_STATE_INIT:
                 return tr("Init");
-
             default:
                 return tr("Unknown");
         }
@@ -529,21 +499,13 @@ TaskManagerWindow::~TaskManagerWindow()
 void TaskManagerWindow::readMessage(const proto::task_manager::HostToClient& message)
 {
     if (message.has_process_list())
-    {
         readProcessList(message.process_list());
-    }
     else if (message.has_service_list())
-    {
         readServiceList(message.service_list());
-    }
     else if (message.has_user_list())
-    {
         readUserList(message.user_list());
-    }
     else
-    {
         LOG(ERROR) << "Unhandled task manager message";
-    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -716,13 +678,9 @@ void TaskManagerWindow::onStartService()
 
     ServiceItem* current_item = static_cast<ServiceItem*>(ui.tree_services->currentItem());
     if (current_item)
-    {
         sendServiceRequest(current_item->name(), proto::task_manager::ServiceRequest::COMMAND_START);
-    }
     else
-    {
         LOG(INFO) << "No selected item";
-    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -732,13 +690,9 @@ void TaskManagerWindow::onStopService()
 
     ServiceItem* current_item = static_cast<ServiceItem*>(ui.tree_services->currentItem());
     if (current_item)
-    {
         sendServiceRequest(current_item->name(), proto::task_manager::ServiceRequest::COMMAND_STOP);
-    }
     else
-    {
         LOG(INFO) << "No selected item";
-    }
 }
 
 //--------------------------------------------------------------------------------------------------

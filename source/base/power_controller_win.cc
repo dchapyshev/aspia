@@ -37,20 +37,14 @@ const DWORD kActionDelayInSeconds = 0;
 bool copyProcessToken(DWORD desired_access, ScopedHandle* token_out)
 {
     ScopedHandle process_token;
-    if (!OpenProcessToken(GetCurrentProcess(),
-                          TOKEN_DUPLICATE | desired_access,
-                          process_token.recieve()))
+    if (!OpenProcessToken(GetCurrentProcess(), TOKEN_DUPLICATE | desired_access, process_token.recieve()))
     {
         PLOG(ERROR) << "OpenProcessToken failed";
         return false;
     }
 
-    if (!DuplicateTokenEx(process_token,
-                          desired_access,
-                          nullptr,
-                          SecurityImpersonation,
-                          TokenPrimary,
-                          token_out->recieve()))
+    if (!DuplicateTokenEx(process_token, desired_access, nullptr, SecurityImpersonation,
+        TokenPrimary, token_out->recieve()))
     {
         PLOG(ERROR) << "DuplicateTokenEx failed";
         return false;
@@ -101,8 +95,7 @@ bool createPrivilegedToken(ScopedHandle* token_out)
 // static
 bool PowerController::shutdown()
 {
-    const DWORD desired_access =
-        TOKEN_ADJUST_DEFAULT | TOKEN_ASSIGN_PRIMARY | TOKEN_DUPLICATE | TOKEN_QUERY;
+    const DWORD desired_access = TOKEN_ADJUST_DEFAULT | TOKEN_ASSIGN_PRIMARY | TOKEN_DUPLICATE | TOKEN_QUERY;
 
     ScopedHandle process_token;
     if (!copyProcessToken(desired_access, &process_token))
@@ -145,8 +138,7 @@ bool PowerController::shutdown()
 // static
 bool PowerController::reboot()
 {
-    const DWORD desired_access =
-        TOKEN_ADJUST_DEFAULT | TOKEN_ASSIGN_PRIMARY | TOKEN_DUPLICATE | TOKEN_QUERY;
+    const DWORD desired_access = TOKEN_ADJUST_DEFAULT | TOKEN_ASSIGN_PRIMARY | TOKEN_DUPLICATE | TOKEN_QUERY;
 
     ScopedHandle process_token;
     if (!copyProcessToken(desired_access, &process_token))
@@ -191,9 +183,7 @@ bool PowerController::logoff()
 {
     DWORD session_id = base::kInvalidSessionId;
     if (!ProcessIdToSessionId(GetCurrentProcessId(), &session_id))
-    {
         PLOG(ERROR) << "ProcessIdToSessionId failed";
-    }
 
     if (session_id != kInvalidSessionId)
     {

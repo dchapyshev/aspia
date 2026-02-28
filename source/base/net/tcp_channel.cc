@@ -234,8 +234,8 @@ void TcpChannel::connectTo(const QString& address, quint16 port)
                 return;
             }
 
-            LOG(INFO) << "Connected to endpoint:" << endpoint.address().to_string()
-                      << ":" << endpoint.port();
+            LOG(INFO) << "Connected to endpoint:" << endpoint.address().to_string() << ":"
+                      << endpoint.port();
 
             setConnected(true);
             emit sig_connected();
@@ -363,7 +363,6 @@ int TcpChannel::speedRx()
     Milliseconds duration = std::chrono::duration_cast<Milliseconds>(current_time - begin_time_rx_);
 
     speed_rx_ = calculateSpeed(speed_rx_, duration, bytes_rx_);
-
     begin_time_rx_ = current_time;
     bytes_rx_ = 0;
 
@@ -377,7 +376,6 @@ int TcpChannel::speedTx()
     Milliseconds duration = std::chrono::duration_cast<Milliseconds>(current_time - begin_time_tx_);
 
     speed_tx_ = calculateSpeed(speed_tx_, duration, bytes_tx_);
-
     begin_time_tx_ = current_time;
     bytes_tx_ = 0;
 
@@ -425,7 +423,6 @@ void TcpChannel::init()
     if (authenticator_)
     {
         authenticator_->setParent(this);
-
         connect(authenticator_, &Authenticator::sig_outgoingMessage, this, &TcpChannel::onAuthenticatorMessage);
         connect(authenticator_, &Authenticator::sig_keyChanged, this, &TcpChannel::onKeyChanged);
         connect(authenticator_, &Authenticator::sig_finished, this, &TcpChannel::onAuthenticatorFinished);
@@ -445,35 +442,23 @@ void TcpChannel::setConnected(bool connected)
     asio::error_code error_code;
     socket_.set_option(no_delay_option, error_code);
     if (error_code)
-    {
         LOG(ERROR) << "Failed to disable Nagle's algorithm:" << error_code;
-    }
     else
-    {
         LOG(INFO) << "Nagle's algorithm is disabled";
-    }
 
     asio::socket_base::receive_buffer_size receive_option;
     socket_.get_option(receive_option, error_code);
     if (error_code)
-    {
         LOG(ERROR) << "Failed to get read buffer size:" << error_code;
-    }
     else
-    {
         LOG(INFO) << "Read buffer size:" << receive_option.value();
-    }
 
     asio::socket_base::send_buffer_size send_option;
     socket_.get_option(send_option, error_code);
     if (error_code)
-    {
         LOG(ERROR) << "Failed to get write buffer size:" << error_code;
-    }
     else
-    {
         LOG(INFO) << "Write buffer size:" << send_option.value();
-    }
 
     keep_alive_counter_.resize(sizeof(quint32));
     memset(keep_alive_counter_.data(), 0, keep_alive_counter_.size());
@@ -834,9 +819,8 @@ void TcpChannel::doWrite()
 void TcpChannel::doReadSize()
 {
     state_ = ReadState::READ_SIZE;
-    asio::async_read(socket_,
-                     variable_size_reader_.buffer(),
-                     [this](const std::error_code& error_code, size_t bytes_transferred)
+    asio::async_read(socket_, variable_size_reader_.buffer(),
+        [this](const std::error_code& error_code, size_t bytes_transferred)
     {
         if (error_code)
         {
@@ -885,9 +869,8 @@ void TcpChannel::doReadUserData(size_t length)
     resizeBuffer(&read_buffer_, length);
 
     state_ = ReadState::READ_USER_DATA;
-    asio::async_read(socket_,
-                     asio::buffer(read_buffer_.data(), read_buffer_.size()),
-                     [this](const std::error_code& error_code, size_t bytes_transferred)
+    asio::async_read(socket_, asio::buffer(read_buffer_.data(), read_buffer_.size()),
+        [this](const std::error_code& error_code, size_t bytes_transferred)
     {
         if (error_code)
         {
@@ -929,9 +912,8 @@ void TcpChannel::doReadServiceHeader()
     resizeBuffer(&read_buffer_, sizeof(ServiceHeader));
 
     state_ = ReadState::READ_SERVICE_HEADER;
-    asio::async_read(socket_,
-                     asio::buffer(read_buffer_.data(), read_buffer_.size()),
-                     [this](const std::error_code& error_code, size_t bytes_transferred)
+    asio::async_read(socket_, asio::buffer(read_buffer_.data(), read_buffer_.size()),
+        [this](const std::error_code& error_code, size_t bytes_transferred)
     {
         if (error_code)
         {

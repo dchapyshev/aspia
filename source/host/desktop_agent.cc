@@ -145,12 +145,9 @@ void DesktopAgent::onIpcNewConnection()
         connect(audio_capturer_, &base::AudioCapturerWrapper::sig_audioCaptured,
                 client, &DesktopAgentClient::onAudioCaptureData, Qt::QueuedConnection);
 
-        connect(client, &DesktopAgentClient::sig_captureScreen,
-                this, &DesktopAgent::onCaptureScreen);
-        connect(client, &DesktopAgentClient::sig_configured,
-                this, &DesktopAgent::onClientConfigured);
-        connect(client, &DesktopAgentClient::sig_finished,
-                this, &DesktopAgent::onClientFinished);
+        connect(client, &DesktopAgentClient::sig_captureScreen, this, &DesktopAgent::onCaptureScreen);
+        connect(client, &DesktopAgentClient::sig_configured, this, &DesktopAgent::onClientConfigured);
+        connect(client, &DesktopAgentClient::sig_finished, this, &DesktopAgent::onClientFinished);
 
         clients_.append(client);
 
@@ -169,61 +166,58 @@ void DesktopAgent::onIpcErrorOccurred()
 //--------------------------------------------------------------------------------------------------
 void DesktopAgent::onClientConfigured()
 {
-    DesktopAgentClient::Config system_config;
-    memset(&system_config, 0, sizeof(system_config));
+    DesktopAgentClient::Config merged_config;
 
     for (const auto& client : std::as_const(clients_))
     {
-        const DesktopAgentClient::Config& client_config = client->config();
+        const DesktopAgentClient::Config& config = client->config();
 
         // If at least one client has disabled font smoothing, then the font smoothing will be
         // disabled for everyone.
-        system_config.disable_font_smoothing =
-            system_config.disable_font_smoothing || client_config.disable_font_smoothing;
+        merged_config.disable_font_smoothing =
+            merged_config.disable_font_smoothing || config.disable_font_smoothing;
 
         // If at least one client has disabled effects, then the effects will be disabled for
         // everyone.
-        system_config.disable_effects =
-            system_config.disable_effects || client_config.disable_effects;
+        merged_config.disable_effects = merged_config.disable_effects || config.disable_effects;
 
         // If at least one client has disabled the wallpaper, then the effects will be disabled for
         // everyone.
-        system_config.disable_wallpaper =
-            system_config.disable_wallpaper || client_config.disable_wallpaper;
+        merged_config.disable_wallpaper =
+            merged_config.disable_wallpaper || config.disable_wallpaper;
 
         // If at least one client has enabled input block, then the block will be enabled for
         // everyone.
-        system_config.block_input = system_config.block_input || client_config.block_input;
+        merged_config.block_input = merged_config.block_input || config.block_input;
 
-        system_config.lock_at_disconnect =
-            system_config.lock_at_disconnect || client_config.lock_at_disconnect;
+        merged_config.lock_at_disconnect =
+            merged_config.lock_at_disconnect || config.lock_at_disconnect;
 
-        system_config.clear_clipboard =
-            system_config.clear_clipboard || client_config.clear_clipboard;
+        merged_config.clear_clipboard =
+            merged_config.clear_clipboard || config.clear_clipboard;
 
-        system_config.cursor_position =
-            system_config.cursor_position || client_config.cursor_position;
+        merged_config.cursor_position =
+            merged_config.cursor_position || config.cursor_position;
     }
 
-    LOG(INFO) << "Merged configuration";
-    LOG(INFO) << "Disable wallpaper:" << system_config.disable_wallpaper;
-    LOG(INFO) << "Disable effects:" << system_config.disable_effects;
-    LOG(INFO) << "Disable font smoothing:" << system_config.disable_font_smoothing;
-    LOG(INFO) << "Block input:" << system_config.block_input;
-    LOG(INFO) << "Lock at disconnect:" << system_config.lock_at_disconnect;
-    LOG(INFO) << "Clear clipboard:" << system_config.clear_clipboard;
-    LOG(INFO) << "Cursor position:" << system_config.cursor_position;
+    LOG(INFO) << "Merged configuration (wallpaper:" << merged_config.disable_wallpaper
+              << "effects:" << merged_config.disable_effects
+              << "font_smoothing:" << merged_config.disable_font_smoothing
+              << "block_input:" << merged_config.block_input
+              << "lock_at_disconnect:" << merged_config.lock_at_disconnect
+              << "clear_clipboard:" << merged_config.clear_clipboard
+              << "cursor_position:" << merged_config.cursor_position;
 
-    screen_capturer_->enableWallpaper(!system_config.disable_wallpaper);
-    screen_capturer_->enableEffects(!system_config.disable_effects);
-    screen_capturer_->enableFontSmoothing(!system_config.disable_font_smoothing);
-    screen_capturer_->enableCursorPosition(system_config.cursor_position);
+    screen_capturer_->enableWallpaper(!merged_config.disable_wallpaper);
+    screen_capturer_->enableEffects(!merged_config.disable_effects);
+    screen_capturer_->enableFontSmoothing(!merged_config.disable_font_smoothing);
+    screen_capturer_->enableCursorPosition(merged_config.cursor_position);
 
     if (input_injector_)
-        input_injector_->setBlockInput(system_config.block_input);
+        input_injector_->setBlockInput(merged_config.block_input);
 
-    lock_at_disconnect_ = system_config.lock_at_disconnect;
-    clear_clipboard_ = system_config.clear_clipboard;
+    lock_at_disconnect_ = merged_config.lock_at_disconnect;
+    clear_clipboard_ = merged_config.clear_clipboard;
 
     onCaptureScreen();
 }

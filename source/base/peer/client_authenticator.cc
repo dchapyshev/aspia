@@ -510,9 +510,9 @@ bool ClientAuthenticator::readSessionChallenge(const QByteArray& buffer)
     setPeerArch(QString::fromStdString(challenge.arch()));
     setPeerDisplayName(QString::fromStdString(challenge.display_name()));
 
-    LOG(INFO) << "Server (version=" << peerVersion().toString() << "name=" << peerComputerName()
-              << "os=" << peerOsName() << "cores=" << challenge.cpu_cores()
-              << "arch=" << peerArch() << "display_name=" << peerDisplayName()
+    LOG(INFO) << "Server (version:" << peerVersion().toString() << "name:" << peerComputerName()
+              << "os:" << peerOsName() << "cores:" << challenge.cpu_cores()
+              << "arch:" << peerArch() << "display_name:" << peerDisplayName()
               << ")";
 
     return true;

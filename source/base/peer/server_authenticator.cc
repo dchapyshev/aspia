@@ -647,10 +647,10 @@ void ServerAuthenticator::onSessionResponse(const QByteArray& buffer)
     setPeerArch(QString::fromStdString(response.arch()));
     setPeerDisplayName(QString::fromStdString(response.display_name()));
 
-    LOG(INFO) << "Client (session_type=" << response.session_type()
-              << "version=" << peerVersion().toString() << "name=" << peerComputerName()
-              << "os=" << peerOsName() << "cores=" << response.cpu_cores()
-              << "arch=" << peerArch() << "display_name=" << peerDisplayName()
+    LOG(INFO) << "Client (session_type:" << response.session_type()
+              << "version:" << peerVersion().toString() << "name:" << peerComputerName()
+              << "os:" << peerOsName() << "cores:" << response.cpu_cores()
+              << "arch:" << peerArch() << "display_name:" << peerDisplayName()
               << ")";
 
     BitSet<quint32> session_type = response.session_type();

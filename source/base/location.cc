@@ -52,9 +52,8 @@ QString Location::toString() const
 
 //--------------------------------------------------------------------------------------------------
 // static
-Q_NEVER_INLINE Location Location::createFromHere(const char* function_name,
-                                                 const char* file_name,
-                                                 int line_number)
+Q_NEVER_INLINE Location Location::createFromHere(const char* function_name, const char* file_name,
+    int line_number)
 {
     return Location(function_name, file_name, line_number);
 }

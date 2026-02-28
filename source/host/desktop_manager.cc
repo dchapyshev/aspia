@@ -226,10 +226,7 @@ DesktopManager::~DesktopManager()
 // static
 QString DesktopManager::filePath()
 {
-    QString file_path = QCoreApplication::applicationDirPath();
-    file_path.append('/');
-    file_path.append(kDesktopAgentFile);
-    return QDir::toNativeSeparators(file_path);
+    return QDir::toNativeSeparators(QCoreApplication::applicationDirPath() + '/' + kDesktopAgentFile);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -247,7 +244,6 @@ void DesktopManager::onClientStarted()
 void DesktopManager::onClientFinished()
 {
     client_count_ = std::max(client_count_ - 1, 0);
-
     if (client_count_)
         return;
 
@@ -256,13 +252,31 @@ void DesktopManager::onClientFinished()
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopManager::onSwitchSession(base::SessionId session_id)
+void DesktopManager::onClientSwitchSession(base::SessionId session_id)
 {
     if (!client_count_)
         return;
 
     dettach(FROM_HERE);
     attach(FROM_HERE, session_id);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopManager::onUserPause(bool enable)
+{
+
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopManager::onUserLockMouse(bool enable)
+{
+
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopManager::onUserLockKeyboard(bool enable)
+{
+
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -317,23 +331,10 @@ void DesktopManager::onProcessStateChanged(ProcessState state)
 
     switch (state)
     {
-        case ProcessState::STARTING:
-        {
-            // Nothing
-        }
-        break;
-
         case ProcessState::STARTED:
         {
             attach_timer_->stop();
             emit sig_attached(ipc_channel_name_);
-        }
-        break;
-
-        case ProcessState::STOPPED:
-        {
-            // We don't handle process termination in any way. Instead, we wait for session events
-            // in onUserSessionEvent slot to restart.
         }
         break;
 
@@ -345,6 +346,9 @@ void DesktopManager::onProcessStateChanged(ProcessState state)
             restart_timer_->start();
         }
         break;
+
+        default:
+            break;
     }
 }
 
@@ -373,7 +377,6 @@ void DesktopManager::attach(const base::Location& location, base::SessionId sess
     }
 
     LOG(INFO) << "Attach to session" << session_id << "from" << location;
-
     session_id_ = session_id;
     is_console_ = session_id == base::activeConsoleSessionId();
 
@@ -391,7 +394,6 @@ void DesktopManager::dettach(const base::Location& location)
     }
 
     LOG(INFO) << "Dettach from session" << session_id_ << "from" << location;
-
     session_id_ = base::kInvalidSessionId;
     attach_timer_->stop();
 }

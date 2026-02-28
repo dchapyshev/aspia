@@ -117,11 +117,7 @@ UserSession::UserSession(QObject* parent)
     attach_timer_->setSingleShot(true);
     attach_timer_->setInterval(std::chrono::seconds(15));
 
-    connect(attach_timer_, &QTimer::timeout, this, [this]()
-    {
-        dettach(FROM_HERE);
-    });
-
+    connect(attach_timer_, &QTimer::timeout, this, [this]() { dettach(FROM_HERE); });
     connect(base::Application::instance(), &base::Application::sig_sessionEvent,
             this, &UserSession::onUserSessionEvent);
 }
@@ -144,9 +140,7 @@ bool UserSession::start()
     }
 
     ipc_server_ = new base::IpcServer(this);
-
-    connect(ipc_server_, &base::IpcServer::sig_newConnection,
-            this, &UserSession::onIpcNewConnection);
+    connect(ipc_server_, &base::IpcServer::sig_newConnection, this, &UserSession::onIpcNewConnection);
 
     QString ipc_channel_name = base::IpcServer::createUniqueId();
 
@@ -204,7 +198,6 @@ bool UserSession::isAttached() const
 void UserSession::onClientSwitchSession(base::SessionId session_id)
 {
     LOG(INFO) << "Switch session:" << session_id;
-
     is_console_ = session_id == base::activeConsoleSessionId();
     dettach(FROM_HERE);
     attach(FROM_HERE, session_id);
@@ -297,11 +290,10 @@ void UserSession::onClientChat(quint32 client_id, const proto::chat::Chat& chat)
 //--------------------------------------------------------------------------------------------------
 void UserSession::onClientRecording(const QString& computer, const QString& user, bool started)
 {
-    proto::internal::RecordingState* recording_state =
-        outgoing_message_.newMessage().mutable_recording_state();
-    recording_state->set_computer_name(computer.toStdString());
-    recording_state->set_user_name(user.toStdString());
-    recording_state->set_started(started);
+    proto::internal::RecordingState* state = outgoing_message_.newMessage().mutable_recording_state();
+    state->set_computer_name(computer.toStdString());
+    state->set_user_name(user.toStdString());
+    state->set_started(started);
     sendSessionMessage();
 }
 
@@ -309,8 +301,7 @@ void UserSession::onClientRecording(const QString& computer, const QString& user
 void UserSession::onUserSessionEvent(quint32 status, quint32 session_id)
 {
 #if defined(Q_OS_WINDOWS)
-    LOG(INFO) << "State: attached=" << isAttached() << "session_id=" << session_id_
-              << "is_console=" << is_console_;
+    LOG(INFO) << "State: attached=" << isAttached() << "sid=" << session_id_ << "console=" << is_console_;
 
     switch (status)
     {
@@ -373,10 +364,8 @@ void UserSession::onIpcNewConnection()
     ipc_channel_ = ipc_server_->nextPendingConnection();
     ipc_channel_->setParent(this);
 
-    connect(ipc_channel_, &base::IpcChannel::sig_disconnected,
-            this, &UserSession::onIpcDisconnected);
-    connect(ipc_channel_, &base::IpcChannel::sig_messageReceived,
-            this, &UserSession::onIpcMessageReceived);
+    connect(ipc_channel_, &base::IpcChannel::sig_disconnected, this, &UserSession::onIpcDisconnected);
+    connect(ipc_channel_, &base::IpcChannel::sig_messageReceived, this, &UserSession::onIpcMessageReceived);
 
     attach_timer_->stop();
     ipc_channel_->resume();
@@ -429,12 +418,9 @@ void UserSession::onIpcMessageReceived(quint32 channel_id, const QByteArray& buf
     }
     else if (incoming_message_->has_confirmation_reply())
     {
-        proto::internal::ConfirmationReply confirmation =
-            incoming_message_->confirmation_reply();
-
+        proto::internal::ConfirmationReply confirmation = incoming_message_->confirmation_reply();
         LOG(INFO) << "Connect confirmation (request_id:" << confirmation.id() << "accept:"
                   << confirmation.accept();
-
         emit sig_confirmationReply(confirmation.id(), confirmation.accept());
     }
     else if (incoming_message_->has_control())
@@ -532,8 +518,7 @@ void UserSession::attach(const base::Location& location, base::SessionId session
               << "connect_state=" << session_info.connectState()
               << "win_station=" << session_info.winStationName()
               << "domain=" << session_info.domain()
-              << "locked=" << session_info.isUserLocked()
-              << ")";
+              << "locked=" << session_info.isUserLocked() << ")";
 
     if (session_info.connectState() != base::SessionInfo::ConnectState::ACTIVE)
     {
@@ -550,27 +535,25 @@ void UserSession::attach(const base::Location& location, base::SessionId session
     base::ScopedHandle user_token;
     if (!createLoggedOnUserToken(session_id, &user_token))
     {
-        LOG(ERROR) << "Failed to get user token (sid=" << session_id << ")";
+        LOG(ERROR) << "Failed to get user token (sid" << session_id << ")";
         return;
     }
 
     if (!user_token.isValid())
     {
-        LOG(INFO) << "User is not logged in (sid=" << session_id << ")";
+        LOG(INFO) << "User is not logged in (sid" << session_id << ")";
         return;
     }
 
-    QString file_path = QDir::toNativeSeparators(QCoreApplication::applicationDirPath());
-
-    file_path.append('\\');
-    file_path.append(kExecutableNameForUi);
+    QString file_path = QDir::toNativeSeparators(
+        QCoreApplication::applicationDirPath() + '\\' + kExecutableNameForUi);
 
     QString command_line = file_path + " --hidden";
 
     if (!createProcessWithToken(user_token, command_line))
     {
-        LOG(ERROR) << "Failed to start process with user token (sid=" << session_id
-                   << "cmd=" << command_line << ")";
+        LOG(ERROR) << "Unable to start process with user token (sid" << session_id
+                   << "cmd" << command_line << ")";
     }
 #elif defined(Q_OS_LINUX)
     std::error_code ignored_error;

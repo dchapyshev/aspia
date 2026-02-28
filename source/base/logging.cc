@@ -192,7 +192,6 @@ LoggingSettings::LoggingSettings()
         {
             int log_level = std::max(log_level_var, LOG_INFO);
             log_level = std::min(log_level, LOG_FATAL);
-
             min_log_level = log_level;
         }
     }
@@ -238,7 +237,6 @@ LoggingSettings::LoggingSettings()
         {
             static const int kMinValue = 1024;
             static const int kMaxValue = 10 * 1024 * 1024;
-
             max_log_file_size = static_cast<size_t>(std::min(std::max(value, kMinValue), kMaxValue));
         }
     }
@@ -330,7 +328,6 @@ bool initLogging(const LoggingSettings& settings)
 void shutdownLogging()
 {
     LOG(INFO) << "Logging finished";
-
     QMutexLocker lock(&g_log_file_lock);
     g_log_file.close();
 }
@@ -413,10 +410,7 @@ QString* makeCheckOpString(const QString& v1, const QString& v2, const char* nam
 }
 
 //--------------------------------------------------------------------------------------------------
-LogMessage::LogMessage(std::string_view file,
-                       int line,
-                       std::string_view function,
-                       LoggingSeverity severity)
+LogMessage::LogMessage(std::string_view file, int line, std::string_view function, LoggingSeverity severity)
     : severity_(severity),
       stream_(&string_)
 {
@@ -424,10 +418,7 @@ LogMessage::LogMessage(std::string_view file,
 }
 
 //--------------------------------------------------------------------------------------------------
-LogMessage::LogMessage(std::string_view file,
-                       int line,
-                       std::string_view function,
-                       const char* condition)
+LogMessage::LogMessage(std::string_view file, int line, std::string_view function, const char* condition)
     : severity_(LOG_FATAL),
       stream_(&string_)
 {
@@ -436,10 +427,7 @@ LogMessage::LogMessage(std::string_view file,
 }
 
 //--------------------------------------------------------------------------------------------------
-LogMessage::LogMessage(std::string_view file,
-                       int line,
-                       std::string_view function,
-                       QString* result)
+LogMessage::LogMessage(std::string_view file, int line, std::string_view function, QString* result)
     : severity_(LOG_FATAL),
       stream_(&string_)
 {
@@ -449,11 +437,8 @@ LogMessage::LogMessage(std::string_view file,
 }
 
 //--------------------------------------------------------------------------------------------------
-LogMessage::LogMessage(std::string_view file,
-                       int line,
-                       std::string_view function,
-                       LoggingSeverity severity,
-                       QString* result)
+LogMessage::LogMessage(std::string_view file, int line, std::string_view function,
+    LoggingSeverity severity, QString* result)
     : severity_(severity),
       stream_(&string_)
 {
@@ -472,7 +457,6 @@ LogMessage::~LogMessage()
     if ((g_logging_destination & LOG_TO_STDOUT) != 0)
     {
         debugPrint(message.data());
-
         fwrite(message.data(), message.size(), 1, stderr);
         fflush(stderr);
     }
@@ -560,7 +544,6 @@ QDebug operator<<(QDebug out, const _com_error& error)
 {
     const wchar_t* message = error.ErrorMessage();
     const quint32 code = static_cast<quint32>(error.Error());
-
     return out << (message ? QString::fromWCharArray(message) : "nullptr")
                << "(" << QString::number(code, 16) << ")";
 }
@@ -606,7 +589,6 @@ QDebug operator<<(QDebug out, const std::error_code& error)
 {
     const std::string message = error.message();
     const int value  = error.value();
-
     return out << QString::fromLocal8Bit(message.c_str(), static_cast<QString::size_type>(message.size()))
                << "(" << value << ')';
 }

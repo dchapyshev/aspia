@@ -64,7 +64,6 @@ Application::Application(int& argc, char* argv[])
                 if (!is_service_) // Service emits these signals.
                 {
                     quint32 event = static_cast<quint32>(wparam);
-
                     LOG(INFO) << "WM_POWERBROADCAST received (event:" << event << ")";
                     emit sig_powerEvent(event);
                 }
@@ -114,9 +113,7 @@ Application::Application(int& argc, char* argv[])
             LOG(INFO) << "Application mode detected";
 
             if (!WTSRegisterSessionNotification(message_window_->hwnd(), NOTIFY_FOR_ALL_SESSIONS))
-            {
                 PLOG(ERROR) << "WTSRegisterSessionNotification failed";
-            }
         }
         else
         {
@@ -130,9 +127,7 @@ Application::Application(int& argc, char* argv[])
         LOG(INFO) << "UI thread stopping";
 
         if (!WTSUnRegisterSessionNotification(message_window_->hwnd()))
-        {
             PLOG(ERROR) << "WTSUnRegisterSessionNotification failed";
-        }
 
         message_window_.reset();
     },

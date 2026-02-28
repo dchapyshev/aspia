@@ -35,10 +35,8 @@ ChatClient::ChatClient(base::TcpChannel* tcp_channel, QObject* parent)
 
     tcp_channel_->setParent(this);
 
-    connect(tcp_channel_, &base::TcpChannel::sig_errorOccurred,
-            this, &ChatClient::onTcpErrorOccurred);
-    connect(tcp_channel_, &base::TcpChannel::sig_messageReceived,
-            this, &ChatClient::onTcpMessageReceived);
+    connect(tcp_channel_, &base::TcpChannel::sig_errorOccurred, this, &ChatClient::onTcpErrorOccurred);
+    connect(tcp_channel_, &base::TcpChannel::sig_messageReceived, this, &ChatClient::onTcpMessageReceived);
 
     connect(base::Application::instance(), &base::Application::sig_sessionEvent,
             this, &ChatClient::onUserSessionEvent);
@@ -122,7 +120,6 @@ void ChatClient::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code)
 void ChatClient::onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray& buffer)
 {
     proto::chat::Chat chat;
-
     if (!base::parse(buffer, &chat))
     {
         LOG(ERROR) << "Unable to parse system info request";

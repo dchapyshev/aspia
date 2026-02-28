@@ -93,6 +93,7 @@ void RelayPeerManager::cleanup()
 
         if (peer->isFinished())
         {
+            peer->disconnect(this);
             peer->deleteLater();
             it = pending_.erase(it);
         }

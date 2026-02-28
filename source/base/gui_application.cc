@@ -96,9 +96,8 @@ GuiApplication::GuiApplication(int& argc, char* argv[])
 #if defined(Q_OS_WINDOWS)
     DWORD id = 0;
     if (!ProcessIdToSessionId(GetCurrentProcessId(), &id))
-    {
         PLOG(ERROR) << "ProcessIdToSessionId failed";
-    }
+
     QString session_id = QString::number(id);
 #else
     QString session_id = QString::number(getuid());
@@ -149,7 +148,6 @@ GuiApplication::GuiApplication(int& argc, char* argv[])
             {
                 quint32 event = static_cast<quint32>(wparam);
                 quint32 session_id = static_cast<quint32>(lparam);
-
                 LOG(INFO) << "WM_WTSSESSION_CHANGE received (event:" << sessionStatusToString(event)
                           << "session id:" << session_id << ")";
                 emit sig_sessionEvent(event, session_id);
@@ -159,7 +157,6 @@ GuiApplication::GuiApplication(int& argc, char* argv[])
             case WM_POWERBROADCAST:
             {
                 quint32 event = static_cast<quint32>(wparam);
-
                 LOG(INFO) << "WM_POWERBROADCAST received (event:" << event << ")";
                 emit sig_powerEvent(event);
             }
@@ -175,9 +172,7 @@ GuiApplication::GuiApplication(int& argc, char* argv[])
     if (created)
     {
         if (!WTSRegisterSessionNotification(message_window_->hwnd(), NOTIFY_FOR_ALL_SESSIONS))
-        {
             PLOG(ERROR) << "WTSRegisterSessionNotification failed";
-        }
     }
     else
     {
@@ -195,10 +190,7 @@ GuiApplication::~GuiApplication()
     if (message_window_)
     {
         if (!WTSUnRegisterSessionNotification(message_window_->hwnd()))
-        {
             PLOG(ERROR) << "WTSUnRegisterSessionNotification failed";
-        }
-
         message_window_.reset();
     }
 #endif // defined(Q_OS_WINDOWS)
