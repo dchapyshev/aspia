@@ -26,7 +26,7 @@
 
 namespace base {
 class AudioCapturerWrapper;
-class IpcServer;
+class IpcChannel;
 class ScreenCapturerWrapper;
 } // namespace base
 
@@ -57,11 +57,13 @@ public:
     explicit DesktopAgent(QObject* parent = nullptr);
     ~DesktopAgent() final;
 
-    bool start(const QString& ipc_channel_name);
+    void start(const QString& ipc_channel_name);
 
 private slots:
-    void onIpcNewConnection();
+    void onIpcConnected();
+    void onIpcDisconnected();
     void onIpcErrorOccurred();
+    void onIpcMessageReceived(quint32 ipc_channel_id, const QByteArray& buffer);
 
     void onClientConfigured();
     void onClientFinished();
@@ -69,10 +71,14 @@ private slots:
     void onCaptureScreen();
 
 private:
-    base::IpcServer* ipc_server_ = nullptr;
+    void startClient(const QString& ipc_channel_name);
+
+    // Control channel betwen service and agent.
+    base::IpcChannel* ipc_channel_ = nullptr;
+
     QList<DesktopAgentClient*> clients_;
 
-    common::ClipboardMonitor* clipboard_monitor_ = nullptr;
+    common::ClipboardMonitor* clipboard_ = nullptr;
     InputInjector* input_injector_ = nullptr;
     base::ScreenCapturerWrapper* screen_capturer_ = nullptr;
     base::AudioCapturerWrapper* audio_capturer_ = nullptr;

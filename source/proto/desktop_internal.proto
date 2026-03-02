@@ -23,12 +23,48 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
-import "host_internal.proto";
+import "peer.proto";
 
-package proto.internal;
+package proto.desktop;
 
-message ServiceToDesktop
+enum IpcChannelId
 {
-    SessionDescription session_description = 1;
-    NetworkOverflow network_overflow       = 2;
+    IPC_CHANNEL_ID_SERVICE = 0;
+    IPC_CHANNEL_ID_SESSION = 1;
+}
+
+// Service to desktop agent client.
+message Description
+{
+    peer.SessionType session_type = 1;
+    peer.Version version          = 2;
+    string os_name                = 3;
+    string computer_name          = 4;
+    string display_name           = 5;
+    string architecture           = 6;
+    string user_name              = 7;
+}
+
+// Service to desktop agent.
+message AgentControl
+{
+    string command_name = 1;
+
+    oneof value
+    {
+        int64 signed_integer    = 2;
+        uint64 unsigned_integer = 3;
+        bool boolean            = 4;
+        string utf8_string      = 5;
+    }
+}
+
+message ServiceToAgentClient
+{
+    Description description = 1;
+}
+
+message ServiceToAgent
+{
+    AgentControl control = 1;
 }

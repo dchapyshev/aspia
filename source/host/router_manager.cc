@@ -99,7 +99,7 @@ void RouterManager::onTcpReady()
     DCHECK(tcp_channel_);
 
     LOG(INFO) << "Connection to the router is established";
-    routerStateChanged(proto::internal::RouterState::CONNECTED);
+    routerStateChanged(proto::user::RouterState::CONNECTED);
 
     // Now the session will receive incoming messages.
     tcp_channel_->resume();
@@ -110,7 +110,7 @@ void RouterManager::onTcpReady()
 void RouterManager::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code)
 {
     LOG(INFO) << "Connection to the router is lost:" << error_code;
-    routerStateChanged(proto::internal::RouterState::FAILED);
+    routerStateChanged(proto::user::RouterState::FAILED);
     delayedConnectToRouter();
 }
 
@@ -217,7 +217,7 @@ void RouterManager::connectToRouter()
 {
     LOG(INFO) << "Connecting to router...";
 
-    routerStateChanged(proto::internal::RouterState::CONNECTING);
+    routerStateChanged(proto::user::RouterState::CONNECTING);
 
     base::ClientAuthenticator* authenticator = new base::ClientAuthenticator();
 
@@ -242,7 +242,7 @@ void RouterManager::delayedConnectToRouter()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterManager::routerStateChanged(proto::internal::RouterState::State state)
+void RouterManager::routerStateChanged(proto::user::RouterState::State state)
 {
     LOG(INFO) << "Router state changed:" << state;
 

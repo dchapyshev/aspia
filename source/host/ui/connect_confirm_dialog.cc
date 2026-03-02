@@ -30,7 +30,7 @@ namespace host {
 
 //--------------------------------------------------------------------------------------------------
 ConnectConfirmDialog::ConnectConfirmDialog(
-    const proto::internal::ConfirmationRequest& request, QWidget* parent)
+    const proto::user::ConfirmationRequest& request, QWidget* parent)
     : QDialog(parent),
       timer_(new QTimer(this)),
       auto_accept_(request.timeout() > 0)

@@ -25,6 +25,7 @@
 #include "base/logging.h"
 #include "base/crypto/scoped_crypto_initializer.h"
 #include "base/win/scoped_com_initializer.h"
+#include "base/win/session_status.h"
 #include "base/win/security_helpers.h"
 
 #include <sddl.h>
@@ -347,6 +348,8 @@ DWORD WINAPI ServiceThread::serviceControlHandler(
 
             self->doEvent([event_type, session_id]()
             {
+                LOG(INFO) << "User session event (event:" << sessionStatusToString(event_type)
+                          << "session id:" << session_id << ")";
                 emit self->service_->sig_sessionEvent(event_type, session_id);
             });
         }

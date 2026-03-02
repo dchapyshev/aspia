@@ -19,6 +19,7 @@
 #include "base/ipc/ipc_server.h"
 
 #include <QRandomGenerator>
+#include <QTimer>
 
 #include "base/asio_event_dispatcher.h"
 #include "base/location.h"
@@ -92,7 +93,7 @@ IpcServer::Listener::Listener(IpcServer* server, size_t index)
 IpcServer::Listener::~Listener() = default;
 
 //--------------------------------------------------------------------------------------------------
-bool IpcServer::Listener::listen(asio::io_context& io_context, const QString& channel_name)
+bool IpcServer::Listener::listen(asio::io_context& io_context, const QString& channel_path)
 {
 #if defined(Q_OS_WINDOWS)
     QString user_sid;
@@ -123,14 +124,9 @@ bool IpcServer::Listener::listen(asio::io_context& io_context, const QString& ch
     security_attributes.bInheritHandle = FALSE;
 
     ScopedHandle handle(
-        CreateNamedPipeW(qUtf16Printable(channel_name),
-                         FILE_FLAG_OVERLAPPED | PIPE_ACCESS_DUPLEX,
-                         PIPE_TYPE_BYTE | PIPE_READMODE_BYTE | PIPE_REJECT_REMOTE_CLIENTS,
-                         PIPE_UNLIMITED_INSTANCES,
-                         kPipeBufferSize,
-                         kPipeBufferSize,
-                         kAcceptTimeout,
-                         &security_attributes));
+        CreateNamedPipeW(qUtf16Printable(channel_path), FILE_FLAG_OVERLAPPED | PIPE_ACCESS_DUPLEX,
+            PIPE_TYPE_BYTE | PIPE_READMODE_BYTE | PIPE_REJECT_REMOTE_CLIENTS, PIPE_UNLIMITED_INSTANCES,
+            kPipeBufferSize, kPipeBufferSize, kAcceptTimeout, &security_attributes));
     if (!handle.isValid())
     {
         PLOG(ERROR) << "CreateNamedPipeW failed";
@@ -141,10 +137,8 @@ bool IpcServer::Listener::listen(asio::io_context& io_context, const QString& ch
 
     overlapped_ = std::make_unique<asio::windows::overlapped_ptr>(
         io_context,
-        std::bind(&IpcServer::Listener::onNewConnetion,
-                  shared_from_this(),
-                  std::placeholders::_1,
-                  std::placeholders::_2));
+        std::bind(&IpcServer::Listener::onNewConnetion, shared_from_this(),
+                  std::placeholders::_1, std::placeholders::_2));
 
     if (!ConnectNamedPipe(handle_->native_handle(), overlapped_->get()))
     {
@@ -169,7 +163,7 @@ bool IpcServer::Listener::listen(asio::io_context& io_context, const QString& ch
     overlapped_->complete(std::error_code(), 0);
     return true;
 #else
-    std::string channel_file = channel_name.toLocal8Bit().toStdString();
+    std::string channel_file = channel_path.toLocal8Bit().toStdString();
 
     asio::local::stream_protocol::endpoint endpoint(channel_file);
     acceptor_ = std::make_unique<asio::local::stream_protocol::acceptor>(io_context);
@@ -201,10 +195,8 @@ bool IpcServer::Listener::listen(asio::io_context& io_context, const QString& ch
         return false;
     }
 
-    acceptor_->async_accept(std::bind(&Listener::onNewConnetion,
-                                      shared_from_this(),
-                                      std::placeholders::_1,
-                                      std::placeholders::_2));
+    acceptor_->async_accept(std::bind(
+        &Listener::onNewConnetion, shared_from_this(), std::placeholders::_1, std::placeholders::_2));
     return true;
 #endif
 }
@@ -215,10 +207,7 @@ void IpcServer::Listener::onNewConnetion(
     const std::error_code& error_code, size_t /* bytes_transferred */)
 {
     if (!server_)
-    {
-        LOG(ERROR) << "Invalid pointer";
         return;
-    }
 
     if (error_code)
     {
@@ -237,10 +226,7 @@ void IpcServer::Listener::onNewConnetion(
     const std::error_code& error_code, asio::local::stream_protocol::socket socket)
 {
     if (!server_)
-    {
-        LOG(ERROR) << "Invalid pointer";
         return;
-    }
 
     if (error_code)
     {
@@ -293,17 +279,17 @@ QString IpcServer::createUniqueId()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool IpcServer::start(const QString& channel_id)
+bool IpcServer::start(const QString& channel_name)
 {
-    LOG(INFO) << "Starting IPC server (channel_id" << channel_id << ")";
+    LOG(INFO) << "Starting IPC server (channel" << channel_name << ")";
 
-    if (channel_id.isEmpty())
+    if (channel_name.isEmpty())
     {
-        LOG(ERROR) << "Empty channel id";
+        LOG(ERROR) << "Empty channel name";
         return false;
     }
 
-    channel_name_ = IpcChannel::channelName(channel_id);
+    channel_name_ = channel_name;
 
     for (size_t i = 0; i < listeners_.size(); ++i)
     {
@@ -320,7 +306,7 @@ bool IpcServer::start(const QString& channel_id)
 //--------------------------------------------------------------------------------------------------
 void IpcServer::stop()
 {
-    LOG(INFO) << "Stopping IPC server (channel_name" << channel_name_ << ")";
+    LOG(INFO) << "Stopping IPC server (channel" << channel_name_ << ")";
 
     for (size_t i = 0; i < listeners_.size(); ++i)
     {
@@ -361,22 +347,27 @@ bool IpcServer::runListener(size_t index)
         return false;
     }
 
-    return listener->listen(io_context_, channel_name_);
+    return listener->listen(io_context_, IpcChannel::channelPath(channel_name_));
 }
 
 //--------------------------------------------------------------------------------------------------
 void IpcServer::onNewConnection(size_t index, IpcChannel* channel)
 {
-    LOG(INFO) << "New IPC connecting (channel_name" << channel_name_ << ")";
-
+    LOG(INFO) << "New IPC connecting (channel" << channel_name_ << ")";
     pending_.emplace_back(channel);
+
+    if (!runListener(index))
+    {
+        LOG(ERROR) << "Unable to restart listener" << index;
+    }
+
     emit sig_newConnection();
 }
 
 //--------------------------------------------------------------------------------------------------
 void IpcServer::onErrorOccurred(const Location& location)
 {
-    LOG(ERROR) << "Error in IPC server (channel_name" << channel_name_ << "from" << location << ")";
+    LOG(ERROR) << "Error in IPC server (channel" << channel_name_ << "from" << location << ")";
     emit sig_errorOccurred();
 }
 

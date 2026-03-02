@@ -26,38 +26,9 @@ option optimize_for = LITE_RUNTIME;
 import "chat.proto";
 import "peer.proto";
 
-package proto.internal;
+package proto.user;
 
-enum ChannelId
-{
-    CHANNEL_ID_SERVICE = 0;
-    CHANNEL_ID_SESSION = 1;
-}
-
-message SessionDescription
-{
-    peer.SessionType session_type = 1;
-    peer.Version version          = 2;
-    string os_name                = 3;
-    string computer_name          = 4;
-    string display_name           = 5;
-    string architecture           = 6;
-    string user_name              = 7;
-}
-
-message NetworkOverflow
-{
-    enum State
-    {
-        OVERFLOW_UNKNOWN = 0;
-        OVERFLOW_START   = 1;
-        OVERFLOW_END     = 2;
-    }
-
-    State state    = 1;
-    uint32 pending = 2;
-}
-
+// Host UI to service.
 message CredentialsRequest
 {
     enum Type
@@ -70,6 +41,7 @@ message CredentialsRequest
     Type type = 1;
 }
 
+// Service to host UI.
 message Credentials
 {
     fixed64 host_id = 1;
@@ -81,6 +53,7 @@ message OneTimeSessions
     uint32 sessions = 1;
 }
 
+// Service to host UI.
 message ConnectEvent
 {
     uint32 client_id              = 1;
@@ -89,11 +62,13 @@ message ConnectEvent
     peer.SessionType session_type = 4;
 }
 
+// Service to host UI.
 message DisconnectEvent
 {
     uint32 client_id = 1;
 }
 
+// Service to host UI.
 message RouterState
 {
     enum State
@@ -110,6 +85,7 @@ message RouterState
     State state      = 3;
 }
 
+// Service to host UI.
 message ConfirmationRequest
 {
     uint32 id                     = 1;
@@ -119,24 +95,18 @@ message ConfirmationRequest
     peer.SessionType session_type = 5;
 }
 
+// Host UI to service.
 message ConfirmationReply
 {
     uint32 id   = 1;
     bool accept = 2;
 }
 
+// Host UI to service.
 message ServiceControl
 {
-    enum Code
-    {
-        CODE_UNKNOWN       = 0;
-        CODE_KILL          = 1;
-        CODE_PAUSE         = 2;
-        CODE_LOCK_MOUSE    = 3;
-        CODE_LOCK_KEYBOARD = 4;
-    }
+    string command_name = 1;
 
-    Code code = 1;
     oneof value
     {
         int64 signed_integer    = 2;
@@ -146,6 +116,7 @@ message ServiceControl
     }
 }
 
+// Service to host UI.
 message RecordingState
 {
     string computer_name = 1;
@@ -153,7 +124,7 @@ message RecordingState
     bool started         = 3;
 }
 
-message UiToService
+message UserToService
 {
     CredentialsRequest credentials_request   = 1;
     OneTimeSessions one_time_sessions        = 2;
@@ -162,7 +133,7 @@ message UiToService
     chat.Chat chat                           = 5;
 }
 
-message ServiceToUi
+message ServiceToUser
 {
     RouterState router_state                 = 1;
     Credentials credentials                  = 2;

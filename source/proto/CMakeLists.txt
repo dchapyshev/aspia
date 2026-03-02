@@ -18,13 +18,13 @@
 
 list(APPEND SOURCE_PROTO
     address_book.proto
+    chat.proto
     desktop_internal.proto
     desktop_service.proto
     desktop_session.proto
     file_transfer.proto
     key_exchange.proto
     peer.proto
-    host_internal.proto
     relay_peer.proto
     router.proto
     router_admin.proto
@@ -32,7 +32,7 @@ list(APPEND SOURCE_PROTO
     router_relay.proto
     system_info.proto
     task_manager.proto
-    chat.proto)
+    user.proto)
 
 source_group("" FILES ${SOURCE_PROTO} ${PROTO_CC_FILES} ${PROTO_H_FILES})
 

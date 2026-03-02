@@ -39,9 +39,9 @@ class HttpFileDownloader;
 class UpdateChecker;
 } // namespace common
 
-namespace proto::internal {
+namespace proto::user {
 class RouterState;
-} // proto::internal
+} // proto::user
 
 namespace proto::chat {
 class Chat;
@@ -81,7 +81,7 @@ private slots:
     void onChangeOneTimeSessions(quint32 sessions);
     void onNewDirectConnection();
     void onUserSessionAttached();
-    void onRouterStateChanged(const proto::internal::RouterState& state);
+    void onRouterStateChanged(const proto::user::RouterState& state);
     void onHostIdAssigned(base::HostId host_id);
     void onNewRelayConnection();
     void onConfirmationReply(quint32 request_id, bool accept);
@@ -91,6 +91,8 @@ private slots:
     void onFileDownloaderProgress(int percentage);
     void onRepeatedTasks();
     void onStopClient(quint32 client_id);
+
+    void onDesktopManagerAttached();
 
     void onDesktopClientStarted(quint32 client_id);
     void onDesktopClientFinished(quint32 client_id);
@@ -132,7 +134,7 @@ private:
     DesktopManager* desktop_manager_ = nullptr;
     UserSession* user_session_ = nullptr;
 
-    QList<std::pair<base::TcpChannel*, QTime>> pending_channels_;
+    QList<std::pair<base::TcpChannel*, QTime>> pending_confirmation_;
 
     QList<DesktopClient*> desktop_clients_;
     QList<FileClient*> file_clients_;

@@ -51,7 +51,7 @@ public slots:
 signals:
     void sig_connectToService();
     void sig_disconnectFromService();
-    void sig_updateCredentials(proto::internal::CredentialsRequest::Type type);
+    void sig_updateCredentials(proto::user::CredentialsRequest::Type type);
     void sig_oneTimeSessions(quint32 sessions);
     void sig_killClient(quint32 id);
     void sig_connectConfirmation(quint32 id, bool accept);
@@ -67,9 +67,9 @@ protected:
 private slots:
     void onStatusChanged(host::UserSessionAgent::Status status);
     void onClientListChanged(const host::UserSessionAgent::ClientList& clients);
-    void onCredentialsChanged(const proto::internal::Credentials& credentials);
-    void onRouterStateChanged(const proto::internal::RouterState& state);
-    void onConfirmationRequest(const proto::internal::ConfirmationRequest& request);
+    void onCredentialsChanged(const proto::user::Credentials& credentials);
+    void onRouterStateChanged(const proto::user::RouterState& state);
+    void onConfirmationRequest(const proto::user::ConfirmationRequest& request);
     void onRecordingStateChanged(const QString& computer, const QString& user, bool started);
     void onChat(const proto::chat::Chat& chat);
 
@@ -102,7 +102,7 @@ private:
     QPointer<common::ChatWidget> chat_widget_;
 
     common::StatusDialog* status_dialog_ = nullptr;
-    proto::internal::RouterState::State last_state_ = proto::internal::RouterState::DISABLED;
+    proto::user::RouterState::State last_state_ = proto::user::RouterState::DISABLED;
 
     Q_DISABLE_COPY_MOVE(MainWindow)
 };

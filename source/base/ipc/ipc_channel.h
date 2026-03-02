@@ -52,6 +52,9 @@ public:
 
     void send(quint32 channel_id, const QByteArray& buffer);
 
+    quint32 instanceId() const { return instance_id_; }
+    const QString& channelName() const { return channel_name_; }
+
 signals:
     void sig_connected();
     void sig_disconnected();
@@ -68,7 +71,7 @@ private:
 #endif
 
     IpcChannel(const QString& channel_name, Stream&& stream, QObject* parent);
-    static QString channelName(const QString& channel_name);
+    static QString channelPath(const QString& channel_name);
 
     bool connectAttempt();
     void scheduleConnectAttempt(const std::chrono::milliseconds& delay, int count);
@@ -111,6 +114,7 @@ private:
 
     using WriteQueue = QQueue<WriteTask>;
 
+    const quint32 instance_id_;
     QString channel_name_;
     Stream stream_;
 

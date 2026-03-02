@@ -46,7 +46,7 @@ class DesktopAgentClient final : public QObject
     Q_OBJECT
 
 public:
-    explicit DesktopAgentClient(base::IpcChannel* ipc_channel, QObject* parent = nullptr);
+    explicit DesktopAgentClient(QObject* parent = nullptr);
     ~DesktopAgentClient() final;
 
     struct Config
@@ -72,7 +72,7 @@ public:
     void onAudioCaptureData(const proto::desktop::AudioPacket& audio_packet);
 
 public slots:
-    void start();
+    void start(const QString& ipc_channel_name);
 
 signals:
     void sig_injectKeyEvent(const proto::desktop::KeyEvent& event);
@@ -88,6 +88,8 @@ signals:
     void sig_finished();
 
 private slots:
+    void onIpcConnected();
+    void onIpcErrorOccurred();
     void onIpcDisconnected();
     void onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer);
 

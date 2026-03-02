@@ -25,7 +25,7 @@
 #include "base/serialization.h"
 #include "base/session_id.h"
 #include "base/peer/host_id.h"
-#include "proto/host_internal.h"
+#include "proto/user.h"
 
 namespace base {
 class IpcChannel;
@@ -44,14 +44,14 @@ public:
     ~UserSession() final;
 
     bool start();
-    void onRouterStateChanged(const proto::internal::RouterState& router_state);
+    void onRouterStateChanged(const proto::user::RouterState& state);
     void onUpdateCredentials(base::HostId host_id, const QString& password);
     bool isAttached() const;
     base::SessionId sessionId() const { return session_id_; }
 
 public slots:
     void onClientSwitchSession(base::SessionId session_id);
-    void onClientConfirmation(const proto::internal::ConfirmationRequest& request);
+    void onClientConfirmation(const proto::user::ConfirmationRequest& request);
     void onClientStarted(quint32 client_id, proto::peer::SessionType session_type,
         const QString& computer_name, const QString& display_name);
     void onClientFinished(quint32 client_id);
@@ -79,7 +79,7 @@ private slots:
 private:
     void attach(const base::Location& location, base::SessionId session_id);
     void dettach(const base::Location& location);
-    void sendSessionMessage();
+    void sendMessage();
 
     base::IpcServer* ipc_server_ = nullptr;
     base::IpcChannel* ipc_channel_ = nullptr;
@@ -88,8 +88,8 @@ private:
     base::SessionId session_id_ = base::kInvalidSessionId;
     bool is_console_ = true;
 
-    base::Parser<proto::internal::UiToService> incoming_message_;
-    base::Serializer<proto::internal::ServiceToUi> outgoing_message_;
+    base::Parser<proto::user::UserToService> incoming_message_;
+    base::Serializer<proto::user::ServiceToUser> outgoing_message_;
 
     Q_DISABLE_COPY_MOVE(UserSession)
 };

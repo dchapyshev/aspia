@@ -67,74 +67,74 @@ void UserSessionAgent::onConnectToService()
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionAgent::onUpdateCredentials(proto::internal::CredentialsRequest::Type request_type)
+void UserSessionAgent::onUpdateCredentials(proto::user::CredentialsRequest::Type type)
 {
-    LOG(INFO) << "Update credentials request:" << request_type;
-    proto::internal::CredentialsRequest* request =
+    LOG(INFO) << "Update credentials request:" << type;
+    proto::user::CredentialsRequest* request =
         outgoing_message_.newMessage().mutable_credentials_request();
-    request->set_type(request_type);
-    sendSessionMessage();
+    request->set_type(type);
+    sendMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
 void UserSessionAgent::onOneTimeSessions(quint32 sessions)
 {
     LOG(INFO) << "One-time sessions changed:" << sessions;
-    proto::internal::OneTimeSessions* one_time_sessions =
+    proto::user::OneTimeSessions* one_time_sessions =
         outgoing_message_.newMessage().mutable_one_time_sessions();
     one_time_sessions->set_sessions(sessions);
-    sendSessionMessage();
+    sendMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
 void UserSessionAgent::onKillClient(quint32 id)
 {
     LOG(INFO) << "Kill client request:" << id;
-    proto::internal::ServiceControl* control = outgoing_message_.newMessage().mutable_control();
-    control->set_code(proto::internal::ServiceControl::CODE_KILL);
+    proto::user::ServiceControl* control = outgoing_message_.newMessage().mutable_control();
+    control->set_command_name("kill");
     control->set_unsigned_integer(id);
-    sendSessionMessage();
+    sendMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
 void UserSessionAgent::onConnectConfirmation(quint32 id, bool accept)
 {
-    LOG(INFO) << "Connect confirmation (id=" << id << "accept=" << accept << ")";
-    proto::internal::ConfirmationReply* confirmation =
+    LOG(INFO) << "Connect confirmation (id:" << id << "accept:" << accept << ")";
+    proto::user::ConfirmationReply* confirmation =
         outgoing_message_.newMessage().mutable_confirmation_reply();
     confirmation->set_id(id);
     confirmation->set_accept(accept);
-    sendSessionMessage();
+    sendMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
 void UserSessionAgent::onMouseLock(bool enable)
 {
     LOG(INFO) << "Mouse lock:" << enable;
-    proto::internal::ServiceControl* control = outgoing_message_.newMessage().mutable_control();
-    control->set_code(proto::internal::ServiceControl::CODE_LOCK_MOUSE);
+    proto::user::ServiceControl* control = outgoing_message_.newMessage().mutable_control();
+    control->set_command_name("lock_mouse");
     control->set_boolean(enable);
-    sendSessionMessage();
+    sendMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
 void UserSessionAgent::onKeyboardLock(bool enable)
 {
     LOG(INFO) << "Keyboard lock:" << enable;
-    proto::internal::ServiceControl* control = outgoing_message_.newMessage().mutable_control();
-    control->set_code(proto::internal::ServiceControl::CODE_LOCK_KEYBOARD);
+    proto::user::ServiceControl* control = outgoing_message_.newMessage().mutable_control();
+    control->set_command_name("lock_keyboard");
     control->set_boolean(enable);
-    sendSessionMessage();
+    sendMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
 void UserSessionAgent::onPause(bool enable)
 {
     LOG(INFO) << "Pause:" << enable;
-    proto::internal::ServiceControl* control = outgoing_message_.newMessage().mutable_control();
-    control->set_code(proto::internal::ServiceControl::CODE_PAUSE);
+    proto::user::ServiceControl* control = outgoing_message_.newMessage().mutable_control();
+    control->set_command_name("pause");
     control->set_boolean(enable);
-    sendSessionMessage();
+    sendMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -142,7 +142,7 @@ void UserSessionAgent::onChat(const proto::chat::Chat& chat)
 {
     LOG(INFO) << "Text chat message";
     outgoing_message_.newMessage().mutable_chat()->CopyFrom(chat);
-    sendSessionMessage();
+    sendMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -176,14 +176,8 @@ void UserSessionAgent::onIpcErrorOccurred()
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionAgent::onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer)
+void UserSessionAgent::onIpcMessageReceived(quint32 /* ipc_channel_id */, const QByteArray& buffer)
 {
-    if (channel_id != proto::internal::CHANNEL_ID_SESSION)
-    {
-        LOG(WARNING) << "Unhandled message from channel" << channel_id;
-        return;
-    }
-
     if (!incoming_message_.parse(buffer))
     {
         LOG(ERROR) << "Invalid message from service";
@@ -192,7 +186,7 @@ void UserSessionAgent::onIpcMessageReceived(quint32 channel_id, const QByteArray
 
     if (incoming_message_->has_confirmation_request())
     {
-        const proto::internal::ConfirmationRequest& request = incoming_message_->confirmation_request();
+        const proto::user::ConfirmationRequest& request = incoming_message_->confirmation_request();
 
         LOG(INFO) << "Connect confirmation request received (id:" << request.id()
                   << "computer:" << request.computer_name() << "user:" << request.user_name() << ")";
@@ -222,13 +216,13 @@ void UserSessionAgent::onIpcMessageReceived(quint32 channel_id, const QByteArray
     }
     else if (incoming_message_->has_credentials())
     {
-        const proto::internal::Credentials& credentials = incoming_message_->credentials();
+        const proto::user::Credentials& credentials = incoming_message_->credentials();
         LOG(INFO) << "Credentials received (host_id=" << credentials.host_id() << ")";
         emit sig_credentialsChanged(credentials);
     }
     else if (incoming_message_->has_router_state())
     {
-        const proto::internal::RouterState router_state = incoming_message_->router_state();
+        const proto::user::RouterState router_state = incoming_message_->router_state();
         LOG(INFO) << "Router state received (" << router_state << ")";
         emit sig_routerStateChanged(router_state);
     }
@@ -238,7 +232,7 @@ void UserSessionAgent::onIpcMessageReceived(quint32 channel_id, const QByteArray
     }
     else if (incoming_message_->has_recording_state())
     {
-        const proto::internal::RecordingState& recording_state =
+        const proto::user::RecordingState& recording_state =
             incoming_message_->recording_state();
 
         LOG(INFO) << "Video recording state changed (" << recording_state  << ")";
@@ -255,7 +249,7 @@ void UserSessionAgent::onIpcMessageReceived(quint32 channel_id, const QByteArray
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionAgent::sendSessionMessage()
+void UserSessionAgent::sendMessage()
 {
     if (!ipc_channel_)
     {
@@ -263,7 +257,7 @@ void UserSessionAgent::sendSessionMessage()
         return;
     }
 
-    ipc_channel_->send(proto::internal::CHANNEL_ID_SESSION, outgoing_message_.serialize());
+    ipc_channel_->send(0, outgoing_message_.serialize());
 }
 
 } // namespace host

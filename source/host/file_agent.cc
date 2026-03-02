@@ -24,7 +24,6 @@
 #include "base/serialization.h"
 #include "base/ipc/ipc_channel.h"
 #include "common/file_worker.h"
-#include "proto/host_internal.h"
 
 namespace host {
 
@@ -78,14 +77,8 @@ void FileAgent::onIpcErrorOccurred()
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileAgent::onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer)
+void FileAgent::onIpcMessageReceived(quint32 /* ipc_channel_id */, const QByteArray& buffer)
 {
-    if (channel_id != proto::internal::CHANNEL_ID_SESSION)
-    {
-        LOG(WARNING) << "Unhandled message from channel" << channel_id;
-        return;
-    }
-
     if (!request_.parse(buffer))
     {
         LOG(ERROR) << "Unable to parse message";
@@ -93,7 +86,7 @@ void FileAgent::onIpcMessageReceived(quint32 channel_id, const QByteArray& buffe
     }
 
     worker_->doRequest(request_.message(), &reply_.newMessage());
-    ipc_channel_->send(proto::internal::CHANNEL_ID_SESSION, reply_.serialize());
+    ipc_channel_->send(0, reply_.serialize());
 }
 
 } // namespace host

@@ -72,6 +72,3 @@ message ClientToService
     SwitchSession switch_session            = 2;
     VideoRecording video_recording          = 3;
 }
-
-
-

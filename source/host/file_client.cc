@@ -40,7 +40,7 @@
 #include "base/ipc/ipc_channel.h"
 #include "base/ipc/ipc_server.h"
 #include "proto/file_transfer.h"
-#include "proto/host_internal.h"
+#include "proto/user.h"
 
 namespace host {
 
@@ -366,14 +366,8 @@ void FileClient::onIpcErrorOccurred()
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileClient::onIpcMessageReceived(quint32 ipc_channel_id, const QByteArray& buffer)
+void FileClient::onIpcMessageReceived(quint32 /* ipc_channel_id */, const QByteArray& buffer)
 {
-    if (ipc_channel_id != proto::internal::CHANNEL_ID_SESSION)
-    {
-        LOG(WARNING) << "Unhandled message from channel" << ipc_channel_id;
-        return;
-    }
-
     tcp_channel_->send(proto::peer::CHANNEL_ID_SESSION, buffer);
 }
 
@@ -409,7 +403,7 @@ void FileClient::onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray& b
         return;
     }
 
-    ipc_channel_->send(proto::internal::CHANNEL_ID_SESSION, buffer);
+    ipc_channel_->send(0, buffer);
 }
 
 //--------------------------------------------------------------------------------------------------

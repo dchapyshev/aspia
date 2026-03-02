@@ -43,17 +43,24 @@ const char kNamePrefix[] = "/tmp/aspia_";
 #endif // defined(Q_OS_UNIX)
 
 #if defined(Q_OS_WINDOWS)
-
 const char kNamePrefix[] = "\\\\.\\pipe\\aspia.";
 const DWORD kConnectTimeout = 3000; // ms
-
 #endif // defined(Q_OS_WINDOWS)
+
+//--------------------------------------------------------------------------------------------------
+quint32 makeInstanceId()
+{
+    static thread_local quint32 instance_id = 0;
+    ++instance_id;
+    return instance_id;
+}
 
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
 IpcChannel::IpcChannel(QObject* parent)
     : QObject(parent),
+      instance_id_(makeInstanceId()),
       stream_(AsioEventDispatcher::currentIoContext())
 {
     LOG(INFO) << "Ctor";
@@ -62,6 +69,7 @@ IpcChannel::IpcChannel(QObject* parent)
 //--------------------------------------------------------------------------------------------------
 IpcChannel::IpcChannel(const QString& channel_name, Stream&& stream, QObject* parent)
     : QObject(parent),
+      instance_id_(makeInstanceId()),
       channel_name_(channel_name),
       stream_(std::move(stream)),
       is_connected_(true)
@@ -80,7 +88,7 @@ IpcChannel::~IpcChannel()
 //--------------------------------------------------------------------------------------------------
 void IpcChannel::connectTo(const QString& channel_name)
 {
-    channel_name_ = channelName(channel_name);
+    channel_name_ = channel_name;
     scheduleConnectAttempt(std::chrono::milliseconds(0), 0);
 }
 
@@ -108,7 +116,7 @@ void IpcChannel::resume()
     if (!is_connected_ || !is_paused_)
         return;
 
-    LOG(INFO) << "resume channel (channel_name=" << channel_name_ << ")";
+    LOG(INFO) << "resume channel (channel_name" << channel_name_ << ")";
     is_paused_ = false;
 
     // If we have a message that was received before the pause command.
@@ -133,7 +141,7 @@ void IpcChannel::send(quint32 channel_id, const QByteArray& buffer)
 
 //--------------------------------------------------------------------------------------------------
 // static
-QString IpcChannel::channelName(const QString& channel_name)
+QString IpcChannel::channelPath(const QString& channel_name)
 {
     QString name(kNamePrefix);
     name.append(channel_name);
@@ -149,13 +157,15 @@ bool IpcChannel::connectAttempt()
         return false;
     }
 
+    const QString channel_path = channelPath(channel_name_);
+
 #if defined(Q_OS_WINDOWS)
     const DWORD flags = SECURITY_SQOS_PRESENT | SECURITY_IDENTIFICATION | FILE_FLAG_OVERLAPPED;
     ScopedHandle handle;
 
     while (true)
     {
-        handle.reset(CreateFileW(qUtf16Printable(channel_name_), GENERIC_WRITE | GENERIC_READ, 0,
+        handle.reset(CreateFileW(qUtf16Printable(channel_path), GENERIC_WRITE | GENERIC_READ, 0,
             nullptr, OPEN_EXISTING, flags, nullptr));
         if (handle.isValid())
             break;
@@ -165,13 +175,13 @@ bool IpcChannel::connectAttempt()
         if (error_code != ERROR_PIPE_BUSY)
         {
             LOG(ERROR) << "Failed to connect to the named pipe:" << SystemError::toString(error_code)
-            << "(channel_name:" << channel_name_ << ")";
+            << "(channel_name" << channel_name_ << ")";
             return false;
         }
 
-        if (!WaitNamedPipeW(qUtf16Printable(channel_name_), kConnectTimeout))
+        if (!WaitNamedPipeW(qUtf16Printable(channel_path), kConnectTimeout))
         {
-            PLOG(ERROR) << "WaitNamedPipeW failed (channel_name:" << channel_name_ << ")";
+            PLOG(ERROR) << "WaitNamedPipeW failed (channel_name" << channel_name_ << ")";
             return false;
         }
     }
@@ -184,7 +194,7 @@ bool IpcChannel::connectAttempt()
         return false;
     }
 #else
-    asio::local::stream_protocol::endpoint endpoint(channel_name_.toLocal8Bit().toStdString());
+    asio::local::stream_protocol::endpoint endpoint(channel_path.toLocal8Bit().toStdString());
     std::error_code error_code;
     stream_.connect(endpoint, error_code);
     if (error_code)
@@ -202,6 +212,7 @@ void IpcChannel::scheduleConnectAttempt(const std::chrono::milliseconds& delay, 
 {
     if (count > 30)
     {
+        LOG(ERROR) << "Connection timeout (channel_name" << channel_name_ << ")";
         emit sig_errorOccurred();
         return;
     }
@@ -225,7 +236,7 @@ void IpcChannel::disconnectFrom()
     if (!is_connected_)
         return;
 
-    LOG(INFO) << "disconnect channel (channel_name=" << channel_name_ << ")";
+    LOG(INFO) << "disconnect channel (channel_name" << channel_name_ << ")";
     is_connected_ = false;
 
     std::error_code ignored_code;

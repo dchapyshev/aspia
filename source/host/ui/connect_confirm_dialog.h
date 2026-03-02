@@ -21,7 +21,7 @@
 
 #include <QDialog>
 
-#include "proto/host_internal.h"
+#include "proto/user.h"
 #include "ui_connect_confirm_dialog.h"
 
 namespace host {
@@ -32,7 +32,7 @@ class ConnectConfirmDialog final : public QDialog
 
 public:
     explicit ConnectConfirmDialog(
-        const proto::internal::ConfirmationRequest& request, QWidget* parent = nullptr);
+        const proto::user::ConfirmationRequest& request, QWidget* parent = nullptr);
     ~ConnectConfirmDialog() final;
 
 private slots:

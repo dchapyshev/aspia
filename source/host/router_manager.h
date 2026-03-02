@@ -25,7 +25,7 @@
 #include "base/net/tcp_channel.h"
 #include "base/peer/host_id.h"
 #include "base/peer/user_list_base.h"
-#include "proto/host_internal.h"
+#include "proto/user.h"
 
 class QTimer;
 
@@ -51,13 +51,13 @@ public:
     quint16 port() const { return port_; }
     const QByteArray& publicKey() const { return public_key_; }
     const base::HostId hostId() const { return host_id_; }
-    const proto::internal::RouterState state() const { return router_state_; }
+    const proto::user::RouterState state() const { return router_state_; }
 
     bool hasPendingConnections() const;
     base::TcpChannel* nextPendingConnection();
 
 signals:
-    void sig_routerStateChanged(const proto::internal::RouterState& router_state);
+    void sig_routerStateChanged(const proto::user::RouterState& state);
     void sig_hostIdAssigned(base::HostId host_id);
     void sig_clientConnected();
 
@@ -70,7 +70,7 @@ private slots:
 private:
     void connectToRouter();
     void delayedConnectToRouter();
-    void routerStateChanged(proto::internal::RouterState::State state);
+    void routerStateChanged(proto::user::RouterState::State state);
     void hostIdRequest();
 
     base::TcpChannel* tcp_channel_ = nullptr;
@@ -84,7 +84,7 @@ private:
     base::SharedPointer<base::UserListBase> user_list_;
 
     base::HostId host_id_ = base::kInvalidHostId;
-    proto::internal::RouterState router_state_;
+    proto::user::RouterState router_state_;
 
     QQueue<base::TcpChannel*> channels_;
 

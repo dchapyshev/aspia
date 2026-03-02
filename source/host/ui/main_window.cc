@@ -121,7 +121,7 @@ MainWindow::MainWindow(QWidget* parent)
     connect(ui.button_new_password, &QPushButton::clicked, this, [this]()
     {
         LOG(INFO) << "[ACTION] New password";
-        emit sig_updateCredentials(proto::internal::CredentialsRequest::NEW_PASSWORD);
+        emit sig_updateCredentials(proto::user::CredentialsRequest::NEW_PASSWORD);
     });
 
     connect(base::GuiApplication::instance(), &base::GuiApplication::sig_themeChanged,
@@ -143,7 +143,7 @@ void MainWindow::connectToService()
     {
         LOG(INFO) << "Already connected to service";
         emit sig_oneTimeSessions(calcOneTimeSessions());
-        emit sig_updateCredentials(proto::internal::CredentialsRequest::REFRESH);
+        emit sig_updateCredentials(proto::user::CredentialsRequest::REFRESH);
         return;
     }
 
@@ -348,7 +348,7 @@ void MainWindow::onClientListChanged(const UserSessionAgent::ClientList& clients
 }
 
 //--------------------------------------------------------------------------------------------------
-void MainWindow::onCredentialsChanged(const proto::internal::Credentials& credentials)
+void MainWindow::onCredentialsChanged(const proto::user::Credentials& credentials)
 {
     LOG(INFO) << "Credentials changed (host_id=" << credentials.host_id() << ")";
 
@@ -369,14 +369,14 @@ void MainWindow::onCredentialsChanged(const proto::internal::Credentials& creden
 }
 
 //--------------------------------------------------------------------------------------------------
-void MainWindow::onRouterStateChanged(const proto::internal::RouterState& state)
+void MainWindow::onRouterStateChanged(const proto::user::RouterState& state)
 {
     LOG(INFO) << "Router state changed (state=" << state.state() << ")";
     last_state_ = state.state();
 
     QString router;
 
-    if (state.state() != proto::internal::RouterState::DISABLED)
+    if (state.state() != proto::user::RouterState::DISABLED)
     {
         base::Address address(DEFAULT_ROUTER_TCP_PORT);
         address.setHost(QString::fromStdString(state.host_name()));
@@ -385,12 +385,12 @@ void MainWindow::onRouterStateChanged(const proto::internal::RouterState& state)
         router = address.toString();
     }
 
-    if (state.state() == proto::internal::RouterState::DISABLED)
+    if (state.state() == proto::user::RouterState::DISABLED)
         ui.button_status->setEnabled(false);
     else
         ui.button_status->setEnabled(true);
 
-    if (state.state() != proto::internal::RouterState::CONNECTED)
+    if (state.state() != proto::user::RouterState::CONNECTED)
     {
         ui.button_new_password->setEnabled(false);
 
@@ -406,19 +406,19 @@ void MainWindow::onRouterStateChanged(const proto::internal::RouterState& state)
 
     switch (state.state())
     {
-        case proto::internal::RouterState::DISABLED:
+        case proto::user::RouterState::DISABLED:
             status = tr("Router is disabled");
             break;
 
-        case proto::internal::RouterState::CONNECTING:
+        case proto::user::RouterState::CONNECTING:
             status = tr("Connecting to a router %1...").arg(router);
             break;
 
-        case proto::internal::RouterState::CONNECTED:
+        case proto::user::RouterState::CONNECTED:
             status = tr("Connected to a router %1").arg(router);
             break;
 
-        case proto::internal::RouterState::FAILED:
+        case proto::user::RouterState::FAILED:
             status = tr("Failed to connect to router %1").arg(router);
             break;
 
@@ -441,7 +441,7 @@ void MainWindow::onRouterStateChanged(const proto::internal::RouterState& state)
 }
 
 //--------------------------------------------------------------------------------------------------
-void MainWindow::onConfirmationRequest(const proto::internal::ConfirmationRequest& request)
+void MainWindow::onConfirmationRequest(const proto::user::ConfirmationRequest& request)
 {
     LOG(INFO) << "Confirmation request (id=" << request.id() << ")";
 
@@ -522,7 +522,7 @@ void MainWindow::onLanguageChanged(QAction* action)
         status_dialog_->retranslateUi();
 
     updateStatusBar();
-    emit sig_updateCredentials(proto::internal::CredentialsRequest::REFRESH);
+    emit sig_updateCredentials(proto::user::CredentialsRequest::REFRESH);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -801,22 +801,22 @@ void MainWindow::updateStatusBar()
 
     switch (last_state_)
     {
-        case proto::internal::RouterState::DISABLED:
+        case proto::user::RouterState::DISABLED:
             message = tr("Router is disabled");
             icon = ":/img/close.svg";
             break;
 
-        case proto::internal::RouterState::CONNECTING:
+        case proto::user::RouterState::CONNECTING:
             message = tr("Connecting to a router...");
             icon = ":/img/replay.svg";
             break;
 
-        case proto::internal::RouterState::CONNECTED:
+        case proto::user::RouterState::CONNECTED:
             message = tr("Connected to a router");
             icon = ":/img/done.svg";
             break;
 
-        case proto::internal::RouterState::FAILED:
+        case proto::user::RouterState::FAILED:
             message = tr("Connection error");
             icon = ":/img/close.svg";
             break;

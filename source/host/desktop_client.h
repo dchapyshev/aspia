@@ -26,6 +26,7 @@
 
 namespace base {
 class IpcChannel;
+class IpcServer;
 } // namespace base
 
 namespace host {
@@ -43,10 +44,13 @@ public:
     QString displayName() const;
     QString computerName() const;
     QString userName() const;
+    bool isAttached() const;
+
+    QString attach();
+    void dettach();
 
 public slots:
-    void start(const QString& ipc_channel_name);
-    void onAttached(const QString& ipc_channel_name);
+    void start();
 
 signals:
     void sig_started(quint32 client_id);
@@ -55,21 +59,23 @@ signals:
     void sig_recordingChanged(const QString& computer, const QString& user, bool started);
 
 private slots:
-    void onIpcConnected();
+    void onIpcNewConnection();
+    void onIpcErrorOccurred();
+
     void onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer);
     void onIpcDisconnected();
-    void onIpcErrorOccurred();
 
     void onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code);
     void onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray& buffer);
 
 private:
-    void connectToAgent(const QString& ipc_channel_name);
     void sendIpcServiceMessage(const QByteArray& buffer);
     void sendSessionList();
 
+    base::IpcServer* ipc_server_ = nullptr;
     base::IpcChannel* ipc_channel_ = nullptr;
     base::TcpChannel* tcp_channel_ = nullptr;
+    QTimer* attach_timer_ = nullptr;
 
     Q_DISABLE_COPY_MOVE(DesktopClient)
 };

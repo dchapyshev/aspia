@@ -23,7 +23,7 @@
 #include <QVector>
 
 #include "base/serialization.h"
-#include "proto/host_internal.h"
+#include "proto/user.h"
 
 namespace base {
 class IpcChannel;
@@ -46,7 +46,7 @@ public:
 
     struct Client
     {
-        explicit Client(const proto::internal::ConnectEvent& event)
+        explicit Client(const proto::user::ConnectEvent& event)
             : client_id(event.client_id()),
               computer_name(QString::fromStdString(event.computer_name())),
               display_name(QString::fromStdString(event.display_name())),
@@ -68,7 +68,7 @@ public:
 
 public slots:
     void onConnectToService();
-    void onUpdateCredentials(proto::internal::CredentialsRequest::Type type);
+    void onUpdateCredentials(proto::user::CredentialsRequest::Type type);
     void onOneTimeSessions(quint32 sessions);
     void onKillClient(quint32 id);
     void onConnectConfirmation(quint32 id, bool accept);
@@ -80,9 +80,9 @@ public slots:
 signals:
     void sig_statusChanged(host::UserSessionAgent::Status status);
     void sig_clientListChanged(const host::UserSessionAgent::ClientList& clients);
-    void sig_credentialsChanged(const proto::internal::Credentials& credentials);
-    void sig_routerStateChanged(const proto::internal::RouterState& state);
-    void sig_confirmationRequest(const proto::internal::ConfirmationRequest& request);
+    void sig_credentialsChanged(const proto::user::Credentials& credentials);
+    void sig_routerStateChanged(const proto::user::RouterState& state);
+    void sig_confirmationRequest(const proto::user::ConfirmationRequest& request);
     void sig_recordingStateChanged(const QString& computer, const QString& user, bool started);
     void sig_chat(const proto::chat::Chat& chat);
 
@@ -93,12 +93,12 @@ private slots:
     void onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer);
 
 private:
-    void sendSessionMessage();
+    void sendMessage();
 
     base::IpcChannel* ipc_channel_ = nullptr;
 
-    base::Parser<proto::internal::ServiceToUi> incoming_message_;
-    base::Serializer<proto::internal::UiToService> outgoing_message_;
+    base::Parser<proto::user::ServiceToUser> incoming_message_;
+    base::Serializer<proto::user::UserToService> outgoing_message_;
 
     ClientList clients_;
 

@@ -24,13 +24,9 @@
 #include "base/session_id.h"
 #include "base/net/tcp_channel.h"
 
-#if defined(Q_OS_WINDOWS)
-#include "base/win/scoped_object.h"
-#endif // defined(Q_OS_WINDOWS)
-
-class QWinEventNotifier;
-
 namespace base {
+class IpcChannel;
+class IpcServer;
 class Location;
 } // namespace base
 
@@ -44,20 +40,14 @@ public:
     explicit DesktopManager(QObject* parent = nullptr);
     ~DesktopManager() final;
 
-    enum class ProcessState
-    {
-        STOPPED,
-        STARTING,
-        ERROR_OCURRED,
-        STARTED
-    };
-    Q_ENUM(ProcessState)
-
     static QString filePath();
 
-    bool isAttached() const { return session_id_ != base::kInvalidSessionId; }
+    void start();
+
+    bool isAttached() const { return ipc_channel_ != nullptr; }
     base::SessionId sessionId() const { return session_id_; }
-    const QString& ipcChannelName() const { return ipc_channel_name_; }
+
+    void startClient(const QString& ipc_channel_name);
 
 public slots:
     void onClientStarted();
@@ -68,41 +58,35 @@ public slots:
     void onUserLockKeyboard(bool enable);
 
 signals:
-    void sig_attached(const QString& ipc_channel_name);
+    void sig_attached();
     void sig_dettached();
 
 private slots:
     void onUserSessionEvent(quint32 event_type, quint32 session_id);
-    void onProcessStateChanged(host::DesktopManager::ProcessState state);
     void onRestartTimeout();
     void onAttachTimeout();
+
+    void onIpcNewConnection();
+    void onIpcDisconnected();
+    void onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer);
 
 private:
     void attach(const base::Location& location, base::SessionId session_id);
     void dettach(const base::Location& location);
-    void startProcess(base::SessionId session_id, const QString& ipc_channel_name);
+    bool startProcess();
+    void sendMessage(const QByteArray& buffer);
 
     base::SessionId session_id_ = base::kInvalidSessionId;
     const QString ipc_channel_name_;
     bool is_console_ = true;
 
+    base::IpcServer* ipc_server_ = nullptr;
+    base::IpcChannel* ipc_channel_ = nullptr;
+
     QTimer* restart_timer_ = nullptr;
     QTimer* attach_timer_ = nullptr;
 
     int client_count_ = 0;
-
-#if defined(Q_OS_WINDOWS)
-    base::ScopedHandle process_;
-    base::ScopedHandle thread_;
-
-    QWinEventNotifier* process_notifier_ = nullptr;
-#endif // defined(Q_OS_WINDOWS)
-
-#if defined(Q_OS_LINUX)
-    pid_t pid_;
-#endif // defined(Q_OS_LINUX)
-
-    ProcessState process_state_ = ProcessState::STOPPED;
 
     Q_DISABLE_COPY_MOVE(DesktopManager)
 };

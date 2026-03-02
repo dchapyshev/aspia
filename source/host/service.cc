@@ -31,6 +31,7 @@
 #include "base/version_constants.h"
 #include "base/crypto/password_generator.h"
 #include "base/crypto/random.h"
+#include "base/ipc/ipc_channel.h"
 #include "base/net/tcp_channel.h"
 #include "base/net/tcp_server.h"
 #include "base/peer/user_list.h"
@@ -93,6 +94,7 @@ Service::Service(QObject* parent)
     connect(user_session_, &UserSession::sig_pauseChanged, desktop_manager_, &DesktopManager::onUserPause);
     connect(user_session_, &UserSession::sig_lockMouseChanged, desktop_manager_, &DesktopManager::onUserLockMouse);
     connect(user_session_, &UserSession::sig_lockKeyboardChanged, desktop_manager_, &DesktopManager::onUserLockKeyboard);
+    connect(desktop_manager_, &DesktopManager::sig_attached, this, &Service::onDesktopManagerAttached);
     connect(tcp_server_, &base::TcpServer::sig_newConnection, this, &Service::onNewDirectConnection);
     connect(base::Application::instance(), &base::Application::sig_powerEvent, this, &Service::onPowerEvent);
 }
@@ -147,6 +149,7 @@ void Service::onStart()
 
     settings_watcher_->addPath(settings_file_path);
     repeated_timer_->start(std::chrono::seconds(30));
+    desktop_manager_->start();
     user_session_->start();
 
     addFirewallRules();
@@ -233,8 +236,8 @@ void Service::onNewDirectConnection()
 //--------------------------------------------------------------------------------------------------
 void Service::onUserSessionAttached()
 {
-    proto::internal::RouterState state;
-    state.set_state(proto::internal::RouterState::DISABLED);
+    proto::user::RouterState state;
+    state.set_state(proto::user::RouterState::DISABLED);
 
     base::HostId host_id = base::kInvalidHostId;
     QString password;
@@ -251,7 +254,7 @@ void Service::onUserSessionAttached()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Service::onRouterStateChanged(const proto::internal::RouterState& state)
+void Service::onRouterStateChanged(const proto::user::RouterState& state)
 {
     user_session_->onRouterStateChanged(state);
 }
@@ -275,7 +278,7 @@ void Service::onNewRelayConnection()
 //--------------------------------------------------------------------------------------------------
 void Service::onConfirmationReply(quint32 request_id, bool accept)
 {
-    for (auto it = pending_channels_.begin(), it_end = pending_channels_.end(); it != it_end; ++it)
+    for (auto it = pending_confirmation_.begin(), it_end = pending_confirmation_.end(); it != it_end; ++it)
     {
         base::TcpChannel* tcp_channel = it->first;
 
@@ -289,7 +292,7 @@ void Service::onConfirmationReply(quint32 request_id, bool accept)
         else
             tcp_channel->deleteLater();
 
-        pending_channels_.erase(it);
+        pending_confirmation_.erase(it);
         return;
     }
 }
@@ -421,7 +424,7 @@ void Service::onRepeatedTasks()
 
     // Check if there are any sessions that have not been confirmed for more than 60 seconds and
     // delete them.
-    for (auto it = pending_channels_.begin(); it != pending_channels_.end(); ++it)
+    for (auto it = pending_confirmation_.begin(); it != pending_confirmation_.end(); ++it)
     {
         QTime time = it->second;
 
@@ -429,7 +432,7 @@ void Service::onRepeatedTasks()
         {
             base::TcpChannel* tcp_channel = it->first;
             tcp_channel->deleteLater();
-            it = pending_channels_.erase(it);
+            it = pending_confirmation_.erase(it);
         }
     }
 
@@ -461,6 +464,19 @@ void Service::onStopClient(quint32 client_id)
 }
 
 //--------------------------------------------------------------------------------------------------
+void Service::onDesktopManagerAttached()
+{
+    for (const auto& client : std::as_const(desktop_clients_))
+    {
+        if (client->isAttached())
+            continue;
+
+        QString ipc_channel_name = client->attach();
+        desktop_manager_->startClient(ipc_channel_name);
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
 void Service::onDesktopClientStarted(quint32 client_id)
 {
     DesktopClient* client = dynamic_cast<DesktopClient*>(sender());
@@ -469,6 +485,12 @@ void Service::onDesktopClientStarted(quint32 client_id)
 
     user_session_->onClientStarted(
         client_id, client->sessionType(), client->computerName(), client->displayName());
+
+    if (!desktop_manager_->isAttached())
+        return;
+
+    QString ipc_channel_name = client->attach();
+    desktop_manager_->startClient(ipc_channel_name);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -662,14 +684,14 @@ void Service::startConfirmation(base::TcpChannel* tcp_channel)
         static_cast<proto::peer::SessionType>(tcp_channel->peerSessionType());
     SystemSettings settings;
 
-    proto::internal::ConfirmationRequest request;
+    proto::user::ConfirmationRequest request;
     request.set_id(tcp_channel->instanceId());
     request.set_session_type(session_type);
     request.set_computer_name(tcp_channel->peerComputerName().toStdString());
     request.set_user_name(tcp_channel->peerUserName().toStdString());
     request.set_timeout(settings.autoConfirmationInterval().count());
 
-    pending_channels_.emplace_back(tcp_channel, QTime::currentTime());
+    pending_confirmation_.emplace_back(tcp_channel, QTime::currentTime());
     user_session_->onClientConfirmation(request);
 }
 
@@ -692,12 +714,13 @@ void Service::startClient(base::TcpChannel* tcp_channel)
             connect(client, &DesktopClient::sig_started, desktop_manager_, &DesktopManager::onClientStarted);
             connect(client, &DesktopClient::sig_finished, desktop_manager_, &DesktopManager::onClientFinished);
             connect(client, &DesktopClient::sig_switchSession, desktop_manager_, &DesktopManager::onClientSwitchSession);
-            connect(desktop_manager_, &DesktopManager::sig_attached, client, &DesktopClient::onAttached);
 
             connect(client, &DesktopClient::sig_switchSession, user_session_, &UserSession::onClientSwitchSession);
             connect(client, &DesktopClient::sig_recordingChanged, user_session_, &UserSession::onClientRecording);
 
-            client->start(desktop_manager_->ipcChannelName());
+            connect(desktop_manager_, &DesktopManager::sig_dettached, client, &DesktopClient::dettach);
+
+            client->start();
         }
         break;
 
@@ -829,9 +852,9 @@ void Service::updateConfiguration(const QString& path)
             LOG(INFO) << "The router is now disabled";
             disconnectFromRouter(FROM_HERE);
 
-            proto::internal::RouterState router_state;
-            router_state.set_state(proto::internal::RouterState::DISABLED);
-            user_session_->onRouterStateChanged(router_state);
+            proto::user::RouterState state;
+            state.set_state(proto::user::RouterState::DISABLED);
+            user_session_->onRouterStateChanged(state);
         }
     }
     else if (settings_.isRouterEnabled())

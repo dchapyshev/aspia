@@ -31,6 +31,7 @@
 #include "host/desktop_agent_client.h"
 #include "host/system_settings.h"
 #include "common/clipboard_monitor.h"
+#include "proto/desktop_internal.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "base/desktop/desktop_environment_win.h"
@@ -46,8 +47,8 @@ namespace host {
 //--------------------------------------------------------------------------------------------------
 DesktopAgent::DesktopAgent(QObject* parent)
     : QObject(parent),
-      ipc_server_(new base::IpcServer(this)),
-      clipboard_monitor_(new common::ClipboardMonitor(this)),
+      ipc_channel_(new base::IpcChannel(this)),
+      clipboard_(new common::ClipboardMonitor(this)),
       screen_capturer_(new base::ScreenCapturerWrapper(
           static_cast<base::ScreenCapturer::Type>(SystemSettings().preferredVideoCapturer()), this)),
       audio_capturer_(new base::AudioCapturerWrapper(this)),
@@ -55,8 +56,10 @@ DesktopAgent::DesktopAgent(QObject* parent)
 {
     LOG(INFO) << "Ctor";
 
-    connect(ipc_server_, &base::IpcServer::sig_newConnection, this, &DesktopAgent::onIpcNewConnection);
-    connect(ipc_server_, &base::IpcServer::sig_errorOccurred, this, &DesktopAgent::onIpcErrorOccurred);
+    connect(ipc_channel_, &base::IpcChannel::sig_connected, this, &DesktopAgent::onIpcConnected);
+    connect(ipc_channel_, &base::IpcChannel::sig_disconnected, this, &DesktopAgent::onIpcDisconnected);
+    connect(ipc_channel_, &base::IpcChannel::sig_errorOccurred, this, &DesktopAgent::onIpcErrorOccurred);
+    connect(ipc_channel_, &base::IpcChannel::sig_messageReceived, this, &DesktopAgent::onIpcMessageReceived);
 
     capture_scheduler_.setUpdateInterval(std::chrono::milliseconds(40));
     screen_capture_timer_->setTimerType(Qt::PreciseTimer);
@@ -92,75 +95,74 @@ DesktopAgent::~DesktopAgent()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool DesktopAgent::start(const QString& ipc_channel_name)
+void DesktopAgent::start(const QString& ipc_channel_name)
 {
-    if (!ipc_server_->start(ipc_channel_name))
-    {
-        LOG(ERROR) << "Unable to start IPC server";
-        return false;
-    }
-
-    clipboard_monitor_->start();
-    audio_capturer_->start();
-    return true;
+    ipc_channel_->connectTo(ipc_channel_name);
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopAgent::onIpcNewConnection()
+void DesktopAgent::onIpcConnected()
 {
-    while (ipc_server_->hasPendingConnections())
-    {
-        base::IpcChannel* ipc_channel = ipc_server_->nextPendingConnection();
-        if (!ipc_channel)
-        {
-            LOG(ERROR) << "Invalid IPC channel pointer";
-            continue;
-        }
+    clipboard_->start();
+    audio_capturer_->start();
+    ipc_channel_->resume();
+}
 
-        DesktopAgentClient* client = new DesktopAgentClient(ipc_channel, this);
-
-        connect(client, &DesktopAgentClient::sig_injectMouseEvent,
-                input_injector_, &InputInjector::injectMouseEvent);
-        connect(client, &DesktopAgentClient::sig_injectKeyEvent,
-                input_injector_, &InputInjector::injectKeyEvent);
-        connect(client, &DesktopAgentClient::sig_injectTextEvent,
-                input_injector_, &InputInjector::injectTextEvent);
-        connect(client, &DesktopAgentClient::sig_injectTouchEvent,
-                input_injector_, &InputInjector::injectTouchEvent);
-
-        connect(client, &DesktopAgentClient::sig_injectClipboardEvent,
-                clipboard_monitor_, &common::ClipboardMonitor::injectClipboardEvent);
-        connect(clipboard_monitor_, &common::ClipboardMonitor::sig_clipboardEvent,
-                client, &DesktopAgentClient::onClipboardEvent);
-
-        connect(screen_capturer_, &base::ScreenCapturerWrapper::sig_cursorPositionChanged,
-                client, &DesktopAgentClient::onCursorPositionChanged);
-        connect(client, &DesktopAgentClient::sig_selectScreen,
-                screen_capturer_, &base::ScreenCapturerWrapper::selectScreen);
-        connect(screen_capturer_, &base::ScreenCapturerWrapper::sig_screenTypeChanged,
-                client, &DesktopAgentClient::onScreenTypeChanged);
-        connect(screen_capturer_, &base::ScreenCapturerWrapper::sig_screenListChanged,
-                client, &DesktopAgentClient::onScreenListChanged);
-
-        connect(audio_capturer_, &base::AudioCapturerWrapper::sig_audioCaptured,
-                client, &DesktopAgentClient::onAudioCaptureData, Qt::QueuedConnection);
-
-        connect(client, &DesktopAgentClient::sig_captureScreen, this, &DesktopAgent::onCaptureScreen);
-        connect(client, &DesktopAgentClient::sig_configured, this, &DesktopAgent::onClientConfigured);
-        connect(client, &DesktopAgentClient::sig_finished, this, &DesktopAgent::onClientFinished);
-
-        clients_.append(client);
-
-        LOG(INFO) << "New IPC connection. Starting client...";
-        client->start();
-    }
+//--------------------------------------------------------------------------------------------------
+void DesktopAgent::onIpcDisconnected()
+{
+    LOG(ERROR) << "IPC channel is disconnected. Terminate application";
+    base::Application::quit();
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopAgent::onIpcErrorOccurred()
 {
-    LOG(ERROR) << "Error in IPC server. Terminate application";
+    LOG(ERROR) << "Error when connection to IPC server. Terminate application";
     base::Application::quit();
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopAgent::onIpcMessageReceived(quint32 /* ipc_channel_id */, const QByteArray& buffer)
+{
+    proto::desktop::ServiceToAgent message;
+    if (!base::parse(buffer, &message))
+    {
+        LOG(ERROR) << "Unable to parse message from service";
+        return;
+    }
+
+    if (message.has_control())
+    {
+        const proto::desktop::AgentControl& control = message.control();
+        const std::string& command_name = control.command_name();
+
+        if (command_name == "start_client")
+        {
+            CHECK(control.has_utf8_string());
+            startClient(QString::fromStdString(control.utf8_string()));
+        }
+        else if (command_name == "pause")
+        {
+            // TODO
+        }
+        else if (command_name == "lock_mouse")
+        {
+            // TODO
+        }
+        else if (command_name == "lock_keyboard")
+        {
+            // TODO
+        }
+        else
+        {
+            LOG(ERROR) << "Unhandled command:" << command_name;
+        }
+    }
+    else
+    {
+        LOG(ERROR) << "Unhandled message from service";
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -183,21 +185,15 @@ void DesktopAgent::onClientConfigured()
 
         // If at least one client has disabled the wallpaper, then the effects will be disabled for
         // everyone.
-        merged_config.disable_wallpaper =
-            merged_config.disable_wallpaper || config.disable_wallpaper;
+        merged_config.disable_wallpaper = merged_config.disable_wallpaper || config.disable_wallpaper;
 
         // If at least one client has enabled input block, then the block will be enabled for
         // everyone.
         merged_config.block_input = merged_config.block_input || config.block_input;
 
-        merged_config.lock_at_disconnect =
-            merged_config.lock_at_disconnect || config.lock_at_disconnect;
-
-        merged_config.clear_clipboard =
-            merged_config.clear_clipboard || config.clear_clipboard;
-
-        merged_config.cursor_position =
-            merged_config.cursor_position || config.cursor_position;
+        merged_config.lock_at_disconnect = merged_config.lock_at_disconnect || config.lock_at_disconnect;
+        merged_config.clear_clipboard = merged_config.clear_clipboard || config.clear_clipboard;
+        merged_config.cursor_position = merged_config.cursor_position || config.cursor_position;
     }
 
     LOG(INFO) << "Merged configuration (wallpaper:" << merged_config.disable_wallpaper
@@ -239,13 +235,13 @@ void DesktopAgent::onClientFinished()
     if (!clients_.isEmpty())
         return;
 
-    LOG(INFO) << "Last desktop client disconnected. Terminate application";
+    LOG(INFO) << "Last desktop client disconnected";
     screen_capture_timer_->stop();
 
     if (clear_clipboard_)
     {
         LOG(INFO) << "Clearing clipboard";
-        clipboard_monitor_->clearClipboard();
+        clipboard_->clearClipboard();
     }
 
     if (lock_at_disconnect_)
@@ -255,8 +251,6 @@ void DesktopAgent::onClientFinished()
         else
             LOG(INFO) << "User session locked";
     }
-
-    base::Application::quit();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -304,6 +298,48 @@ void DesktopAgent::onCaptureScreen()
 
     capture_scheduler_.onEndCapture();
     screen_capture_timer_->start(capture_scheduler_.nextCaptureDelay());
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopAgent::startClient(const QString& ipc_channel_name)
+{
+    CHECK(ipc_channel_);
+
+    DesktopAgentClient* client = new DesktopAgentClient(this);
+    clients_.append(client);
+
+    connect(client, &DesktopAgentClient::sig_injectMouseEvent,
+            input_injector_, &InputInjector::injectMouseEvent);
+    connect(client, &DesktopAgentClient::sig_injectKeyEvent,
+            input_injector_, &InputInjector::injectKeyEvent);
+    connect(client, &DesktopAgentClient::sig_injectTextEvent,
+            input_injector_, &InputInjector::injectTextEvent);
+    connect(client, &DesktopAgentClient::sig_injectTouchEvent,
+            input_injector_, &InputInjector::injectTouchEvent);
+
+    connect(client, &DesktopAgentClient::sig_injectClipboardEvent,
+            clipboard_, &common::ClipboardMonitor::injectClipboardEvent);
+    connect(clipboard_, &common::ClipboardMonitor::sig_clipboardEvent,
+            client, &DesktopAgentClient::onClipboardEvent);
+
+    connect(screen_capturer_, &base::ScreenCapturerWrapper::sig_cursorPositionChanged,
+            client, &DesktopAgentClient::onCursorPositionChanged);
+    connect(client, &DesktopAgentClient::sig_selectScreen,
+            screen_capturer_, &base::ScreenCapturerWrapper::selectScreen);
+    connect(screen_capturer_, &base::ScreenCapturerWrapper::sig_screenTypeChanged,
+            client, &DesktopAgentClient::onScreenTypeChanged);
+    connect(screen_capturer_, &base::ScreenCapturerWrapper::sig_screenListChanged,
+            client, &DesktopAgentClient::onScreenListChanged);
+
+    connect(audio_capturer_, &base::AudioCapturerWrapper::sig_audioCaptured,
+            client, &DesktopAgentClient::onAudioCaptureData, Qt::QueuedConnection);
+
+    connect(client, &DesktopAgentClient::sig_captureScreen, this, &DesktopAgent::onCaptureScreen);
+    connect(client, &DesktopAgentClient::sig_configured, this, &DesktopAgent::onClientConfigured);
+    connect(client, &DesktopAgentClient::sig_finished, this, &DesktopAgent::onClientFinished);
+
+    LOG(INFO) << "Starting client...";
+    client->start(ipc_channel_name);
 }
 
 } // namespace host

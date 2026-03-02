@@ -24,11 +24,14 @@
 #include "base/application.h"
 #include "base/location.h"
 #include "base/logging.h"
+#include "base/serialization.h"
+#include "base/ipc/ipc_channel.h"
 #include "base/ipc/ipc_server.h"
+#include "proto/desktop_internal.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/scoped_impersonator.h"
-#include <QWinEventNotifier>
+#include "base/win/scoped_object.h"
 #include <UserEnv.h>
 #endif // defined(Q_OS_WINDOWS)
 
@@ -41,7 +44,7 @@ namespace host {
 
 namespace {
 
-constexpr std::chrono::milliseconds kRestartTimeout { 3000 };
+constexpr std::chrono::milliseconds kRestartTimeout { 5000 };
 constexpr std::chrono::milliseconds kAttachTimeout { 15000 };
 
 #if defined(Q_OS_LINUX)
@@ -230,14 +233,36 @@ QString DesktopManager::filePath()
 }
 
 //--------------------------------------------------------------------------------------------------
+void DesktopManager::start()
+{
+    ipc_server_ = new base::IpcServer(this);
+    connect(ipc_server_, &base::IpcServer::sig_newConnection, this, &DesktopManager::onIpcNewConnection);
+    ipc_server_->start(ipc_channel_name_);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopManager::startClient(const QString& ipc_channel_name)
+{
+    proto::desktop::ServiceToAgent message;
+    proto::desktop::AgentControl* control = message.mutable_control();
+    control->set_command_name("start_client");
+    control->set_utf8_string(ipc_channel_name.toStdString());
+
+    LOG(INFO) << "Send command to start IPC connection" << ipc_channel_name;
+    sendMessage(base::serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopManager::onClientStarted()
 {
-    LOG(INFO) << "Client started (count:" << client_count_ << "attached:" << isAttached() << ")";
+    LOG(INFO) << "Client started (client count:" << client_count_ << "attached:" << isAttached() << ")";
 
-    if (!client_count_ && !isAttached())
-        attach(FROM_HERE, base::activeConsoleSessionId());
+    bool is_attach_needed = !client_count_ && !isAttached();
 
     ++client_count_;
+
+    if (is_attach_needed)
+        attach(FROM_HERE, base::activeConsoleSessionId());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -254,8 +279,12 @@ void DesktopManager::onClientFinished()
 //--------------------------------------------------------------------------------------------------
 void DesktopManager::onClientSwitchSession(base::SessionId session_id)
 {
-    if (!client_count_)
+    if (!client_count_ || session_id == session_id_)
+    {
+        LOG(WARNING) << "Unable to switch session (client count:" << client_count_
+                     << "session id:" << session_id << ")";
         return;
+    }
 
     dettach(FROM_HERE);
     attach(FROM_HERE, session_id);
@@ -264,54 +293,75 @@ void DesktopManager::onClientSwitchSession(base::SessionId session_id)
 //--------------------------------------------------------------------------------------------------
 void DesktopManager::onUserPause(bool enable)
 {
+    proto::desktop::ServiceToAgent message;
+    proto::desktop::AgentControl* control = message.mutable_control();
 
+    control->set_command_name("pause");
+    control->set_boolean(enable);
+
+    sendMessage(base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopManager::onUserLockMouse(bool enable)
 {
+    proto::desktop::ServiceToAgent message;
+    proto::desktop::AgentControl* control = message.mutable_control();
 
+    control->set_command_name("lock_mouse");
+    control->set_boolean(enable);
+
+    sendMessage(base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopManager::onUserLockKeyboard(bool enable)
 {
+    proto::desktop::ServiceToAgent message;
+    proto::desktop::AgentControl* control = message.mutable_control();
 
+    control->set_command_name("lock_keyboard");
+    control->set_boolean(enable);
+
+    sendMessage(base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopManager::onUserSessionEvent(quint32 event_type, quint32 session_id)
 {
 #if defined(Q_OS_WINDOWS)
-    LOG(INFO) << "State: session_id=" << session_id_ << "console=" << is_console_;
+    LOG(INFO) << "State (session_id:" << session_id_ << "console:" << is_console_ << "restarting:"
+              << restart_timer_->isActive() << "attaching:" << attach_timer_->isActive() << ")";
 
     switch (event_type)
     {
         case WTS_CONSOLE_CONNECT:
         {
-            if (!is_console_ || !client_count_)
-                return;
-
-            attach(FROM_HERE, session_id);
+            if (is_console_)
+                attach(FROM_HERE, session_id);
         }
         break;
 
         case WTS_CONSOLE_DISCONNECT:
         {
-            if (!is_console_ || !client_count_)
-                return;
-
-            dettach(FROM_HERE);
+            if (is_console_)
+                dettach(FROM_HERE);
         }
         break;
 
         case WTS_REMOTE_DISCONNECT:
         {
-            if (is_console_ || !client_count_)
+            if (is_console_)
                 return;
 
             dettach(FROM_HERE);
             attach(FROM_HERE, base::activeConsoleSessionId());
+        }
+        break;
+
+        case WTS_SESSION_UNLOCK:
+        {
+
         }
         break;
 
@@ -325,36 +375,9 @@ void DesktopManager::onUserSessionEvent(quint32 event_type, quint32 session_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopManager::onProcessStateChanged(ProcessState state)
-{
-    LOG(INFO) << "Process state changed:" << state << "(" << session_id_ << ")";
-
-    switch (state)
-    {
-        case ProcessState::STARTED:
-        {
-            attach_timer_->stop();
-            emit sig_attached(ipc_channel_name_);
-        }
-        break;
-
-        case ProcessState::ERROR_OCURRED:
-        {
-            // An error occurred while starting the process. Detach the session and start the timer
-            // to try to launch it again.
-            dettach(FROM_HERE);
-            restart_timer_->start();
-        }
-        break;
-
-        default:
-            break;
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
 void DesktopManager::onRestartTimeout()
 {
+    LOG(INFO) << "Restarting...";
     base::SessionId session_id = session_id_;
     dettach(FROM_HERE);
     attach(FROM_HERE, session_id);
@@ -368,6 +391,46 @@ void DesktopManager::onAttachTimeout()
 }
 
 //--------------------------------------------------------------------------------------------------
+void DesktopManager::onIpcNewConnection()
+{
+    CHECK(ipc_server_);
+    CHECK(!ipc_channel_);
+
+    if (!ipc_server_->hasPendingConnections())
+    {
+        LOG(ERROR) << "No pending IPC connections";
+        return;
+    }
+
+    ipc_channel_ = ipc_server_->nextPendingConnection();
+    CHECK(ipc_channel_);
+
+    LOG(INFO) << "Control IPC channel is connected:" << ipc_channel_->channelName()
+              << "(client_count:" << client_count_ << ")";
+
+    connect(ipc_channel_, &base::IpcChannel::sig_disconnected, this, &DesktopManager::onIpcDisconnected);
+    connect(ipc_channel_, &base::IpcChannel::sig_messageReceived, this, &DesktopManager::onIpcMessageReceived);
+
+    attach_timer_->stop();
+    ipc_channel_->resume();
+
+    emit sig_attached();
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopManager::onIpcDisconnected()
+{
+    dettach(FROM_HERE);
+    restart_timer_->start();
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopManager::onIpcMessageReceived(quint32 /* ipc_channel_id */, const QByteArray& /* buffer */)
+{
+    // Not used yet.
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopManager::attach(const base::Location& location, base::SessionId session_id)
 {
     if (isAttached())
@@ -376,12 +439,29 @@ void DesktopManager::attach(const base::Location& location, base::SessionId sess
         return;
     }
 
+    if (!client_count_)
+    {
+        LOG(INFO) << "No active clients";
+        return;
+    }
+
     LOG(INFO) << "Attach to session" << session_id << "from" << location;
+
     session_id_ = session_id;
     is_console_ = session_id == base::activeConsoleSessionId();
 
     attach_timer_->start();
-    startProcess(session_id, ipc_channel_name_);
+
+    if (startProcess())
+    {
+        LOG(INFO) << "Process has been launched successfully";
+        return;
+    }
+
+    // An error occurred while starting the process. Detach the session and start the timer to try
+    // to launch it again.
+    dettach(FROM_HERE);
+    restart_timer_->start();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -389,94 +469,76 @@ void DesktopManager::dettach(const base::Location& location)
 {
     if (!isAttached())
     {
-        LOG(INFO) << "Session already dettached from" << location;
+        LOG(INFO) << "Session already dettached (from" << location << ")";
         return;
     }
 
     LOG(INFO) << "Dettach from session" << session_id_ << "from" << location;
+
+    if (ipc_channel_)
+    {
+        ipc_channel_->disconnect();
+        ipc_channel_->deleteLater();
+        ipc_channel_ = nullptr;
+    }
+
     session_id_ = base::kInvalidSessionId;
+    is_console_ = true;
+
+    restart_timer_->stop();
     attach_timer_->stop();
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopManager::startProcess(base::SessionId session_id, const QString& ipc_channel_name)
+bool DesktopManager::startProcess()
 {
-    if (process_state_ != ProcessState::STOPPED)
-    {
-        LOG(ERROR) << "Desktop process already started";
-        return;
-    }
-
-    onProcessStateChanged(ProcessState::STARTING);
-
-    if (session_id == base::kInvalidSessionId)
+    if (session_id_ == base::kInvalidSessionId)
     {
         LOG(ERROR) << "An attempt was detected to start a process in a INVALID session (session_id:"
-                   << session_id << "channel_name:" << ipc_channel_name << ")";
-        onProcessStateChanged(ProcessState::ERROR_OCURRED);
-        return;
+                   << session_id_ << ")";
+        return false;
     }
 
 #if defined(Q_OS_WINDOWS)
-    if (session_id == base::kServiceSessionId)
+    if (session_id_ == base::kServiceSessionId)
     {
         LOG(ERROR) << "An attempt was detected to start a process in a SERVICES session ("
-                   << "session_id:" << session_id << "ipc_channel_name:" << ipc_channel_name << ")";
-        onProcessStateChanged(ProcessState::ERROR_OCURRED);
-        return;
+                   << "session_id:" << session_id_ << ")";
+        return false;
     }
 
     base::ScopedHandle session_token;
-    if (!createSessionToken(session_id, &session_token))
+    if (!createSessionToken(session_id_, &session_token))
     {
-        LOG(ERROR) << "createSessionToken failed (session_id:" << session_id << "ipc_channel_name:"
-                   << ipc_channel_name << ")";
-        onProcessStateChanged(ProcessState::ERROR_OCURRED);
-        return;
+        LOG(ERROR) << "createSessionToken failed (session_id:" << session_id_ << ")";
+        return false;
     }
 
-    QString command_line = filePath() + " --channel_id " + ipc_channel_name;
+    QString command_line = filePath() + " --channel_id " + ipc_channel_name_;
     base::ScopedHandle process_handle;
     base::ScopedHandle thread_handle;
 
     if (!startProcessWithToken(session_token, command_line, &process_handle, &thread_handle))
     {
-        LOG(ERROR) << "startProcessWithToken failed (session_id:" << session_id << "channel_name:"
-                   << ipc_channel_name << ")";
-        onProcessStateChanged(ProcessState::ERROR_OCURRED);
-        return;
+        LOG(ERROR) << "startProcessWithToken failed (session_id:" << session_id_ << ")";
+        return false;
     }
 
-    process_ = std::move(process_handle);
-    thread_ = std::move(thread_handle);
-
-    process_notifier_ = new QWinEventNotifier(process_, this);
-    connect(process_notifier_, &QWinEventNotifier::activated, [this](HANDLE /* handle */)
-    {
-        process_notifier_->setEnabled(false);
-        onProcessStateChanged(ProcessState::STOPPED);
-    });
-
-    onProcessStateChanged(ProcessState::STARTED);
-    process_notifier_->setEnabled(true);
+    return true;
 #elif defined(Q_OS_LINUX)
-    // TODO: Notifications about the completion of the process are not implemented for Linux.
-
     std::error_code ignored_error;
     std::filesystem::directory_iterator it("/usr/share/xsessions/", ignored_error);
     if (it == std::filesystem::end(it))
     {
         LOG(ERROR) << "No X11 sessions";
-        onProcessStateChanged(ProcessState::ERROR_OCURRED);
-        return;
+        return false;
     }
 
     std::unique_ptr<FILE, decltype(&pclose)> pipe(popen("who", "r"), pclose);
     if (!pipe)
     {
         LOG(ERROR) << "Unable to open pipe";
-        onProcessStateChanged(ProcessState::ERROR_OCURRED);
-        return;
+        return false;
     }
 
     LOG(INFO) << "WHO:";
@@ -507,16 +569,13 @@ void DesktopManager::startProcess(base::SessionId session_id, const QString& ipc
         if (posix_spawn(&pid, "/bin/sh", nullptr, nullptr, argv, environ) != 0)
         {
             PLOG(ERROR) << "Unable to start process";
-            onProcessStateChanged(ProcessState::ERROR_OCURRED);
-            return;
+            return false;
         }
 
-        pid_ = pid;
-        onProcessStateChanged(ProcessState::STARTED);
-        return;
+        return true;
     }
 
-    LOG(ERROR) << "Connected X sessions not found";
+    LOG(WARNING) << "Connected X sessions not found";
 
     QByteArray command_line =
         QString("sudo DISPLAY=':0' -u root %1 --channel_id=%2 &")
@@ -532,16 +591,26 @@ void DesktopManager::startProcess(base::SessionId session_id, const QString& ipc
     if (posix_spawn(&pid, "/bin/sh", nullptr, nullptr, argv, environ) != 0)
     {
         PLOG(ERROR) << "Unable to start process";
-        onProcessStateChanged(ProcessState::ERROR_OCURRED);
+        return false;
+    }
+
+    return true;
+#else
+    NOTIMPLEMENTED();
+    return false;
+#endif
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopManager::sendMessage(const QByteArray& buffer)
+{
+    if (!ipc_channel_)
+    {
+        LOG(WARNING) << "IPC channel is not connected";
         return;
     }
 
-    pid_ = pid;
-    onProcessStateChanged(ProcessState::STARTED);
-#else
-    NOTIMPLEMENTED();
-    onProcessStateChanged(ProcessState::ERROR_OCURRED);
-#endif
+    ipc_channel_->send(0, buffer);
 }
 
 } // namespace host

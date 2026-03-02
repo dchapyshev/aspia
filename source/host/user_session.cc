@@ -173,19 +173,19 @@ bool UserSession::start()
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSession::onRouterStateChanged(const proto::internal::RouterState& router_state)
+void UserSession::onRouterStateChanged(const proto::user::RouterState& state)
 {
-    outgoing_message_.newMessage().mutable_router_state()->CopyFrom(router_state);
-    sendSessionMessage();
+    outgoing_message_.newMessage().mutable_router_state()->CopyFrom(state);
+    sendMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
 void UserSession::onUpdateCredentials(base::HostId host_id, const QString& password)
 {
-    proto::internal::Credentials* credentials = outgoing_message_.newMessage().mutable_credentials();
+    proto::user::Credentials* credentials = outgoing_message_.newMessage().mutable_credentials();
     credentials->set_host_id(host_id);
     credentials->set_password(password.toStdString());
-    sendSessionMessage();
+    sendMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -204,7 +204,7 @@ void UserSession::onClientSwitchSession(base::SessionId session_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSession::onClientConfirmation(const proto::internal::ConfirmationRequest& request)
+void UserSession::onClientConfirmation(const proto::user::ConfirmationRequest& request)
 {
     if (request.session_type() == proto::peer::SESSION_TYPE_SYSTEM_INFO)
     {
@@ -258,68 +258,65 @@ void UserSession::onClientConfirmation(const proto::internal::ConfirmationReques
     outgoing_message_.newMessage().mutable_confirmation_request()->CopyFrom(request);
 
     // Send confirmation request to GUI.
-    sendSessionMessage();
+    sendMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
 void UserSession::onClientStarted(quint32 client_id, proto::peer::SessionType session_type,
     const QString& computer_name, const QString& display_name)
 {
-    proto::internal::ConnectEvent* event = outgoing_message_.newMessage().mutable_connect_event();
+    proto::user::ConnectEvent* event = outgoing_message_.newMessage().mutable_connect_event();
     event->set_client_id(client_id);
     event->set_session_type(session_type);
     event->set_computer_name(computer_name.toStdString());
     event->set_display_name(display_name.toStdString());
-    sendSessionMessage();
+    sendMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
 void UserSession::onClientFinished(quint32 client_id)
 {
     outgoing_message_.newMessage().mutable_disconnect_event()->set_client_id(client_id);
-    sendSessionMessage();
+    sendMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
 void UserSession::onClientChat(quint32 client_id, const proto::chat::Chat& chat)
 {
     outgoing_message_.newMessage().mutable_chat()->CopyFrom(chat);
-    sendSessionMessage();
+    sendMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
 void UserSession::onClientRecording(const QString& computer, const QString& user, bool started)
 {
-    proto::internal::RecordingState* state = outgoing_message_.newMessage().mutable_recording_state();
+    proto::user::RecordingState* state = outgoing_message_.newMessage().mutable_recording_state();
     state->set_computer_name(computer.toStdString());
     state->set_user_name(user.toStdString());
     state->set_started(started);
-    sendSessionMessage();
+    sendMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
 void UserSession::onUserSessionEvent(quint32 status, quint32 session_id)
 {
 #if defined(Q_OS_WINDOWS)
-    LOG(INFO) << "State: attached=" << isAttached() << "sid=" << session_id_ << "console=" << is_console_;
+    LOG(INFO) << "State (attached:" << isAttached() << "session_id:" << session_id_ << "console:"
+              << is_console_ << ")";
 
     switch (status)
     {
         case WTS_CONSOLE_CONNECT:
         {
-            if (!is_console_)
-                return;
-
-            attach(FROM_HERE, session_id);
+            if (is_console_)
+                attach(FROM_HERE, session_id);
         }
         break;
 
         case WTS_CONSOLE_DISCONNECT:
         {
-            if (!is_console_)
-                return;
-
-            dettach(FROM_HERE);
+            if (is_console_)
+                dettach(FROM_HERE);
         }
         break;
 
@@ -370,7 +367,7 @@ void UserSession::onIpcNewConnection()
     attach_timer_->stop();
     ipc_channel_->resume();
 
-    LOG(INFO) << "Start user session";
+    LOG(INFO) << "Start user session (IPC channel" << ipc_channel_->channelName() << ")";
     emit sig_attached();
 }
 
@@ -381,14 +378,8 @@ void UserSession::onIpcDisconnected()
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSession::onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer)
+void UserSession::onIpcMessageReceived(quint32 /* ipc_channel_id */, const QByteArray& buffer)
 {
-    if (channel_id != proto::internal::CHANNEL_ID_SESSION)
-    {
-        LOG(WARNING) << "Unhandled message from channel" << channel_id;
-        return;
-    }
-
     if (!incoming_message_.parse(buffer))
     {
         LOG(ERROR) << "Invalid message from UI";
@@ -397,17 +388,17 @@ void UserSession::onIpcMessageReceived(quint32 channel_id, const QByteArray& buf
 
     if (incoming_message_->has_credentials_request())
     {
-        const proto::internal::CredentialsRequest& request = incoming_message_->credentials_request();
-        proto::internal::CredentialsRequest::Type type = request.type();
+        const proto::user::CredentialsRequest& request = incoming_message_->credentials_request();
+        proto::user::CredentialsRequest::Type type = request.type();
 
-        if (type == proto::internal::CredentialsRequest::NEW_PASSWORD)
+        if (type == proto::user::CredentialsRequest::NEW_PASSWORD)
         {
             LOG(INFO) << "New credentials requested";
             emit sig_changeOneTimePassword();
         }
         else
         {
-            DCHECK_EQ(type, proto::internal::CredentialsRequest::REFRESH);
+            DCHECK_EQ(type, proto::user::CredentialsRequest::REFRESH);
             LOG(INFO) << "Credentials update requested";
         }
     }
@@ -418,54 +409,43 @@ void UserSession::onIpcMessageReceived(quint32 channel_id, const QByteArray& buf
     }
     else if (incoming_message_->has_confirmation_reply())
     {
-        proto::internal::ConfirmationReply confirmation = incoming_message_->confirmation_reply();
+        proto::user::ConfirmationReply confirmation = incoming_message_->confirmation_reply();
         LOG(INFO) << "Connect confirmation (request_id:" << confirmation.id() << "accept:"
                   << confirmation.accept();
         emit sig_confirmationReply(confirmation.id(), confirmation.accept());
     }
     else if (incoming_message_->has_control())
     {
-        const proto::internal::ServiceControl& control = incoming_message_->control();
+        const proto::user::ServiceControl& control = incoming_message_->control();
+        const std::string command_name = control.command_name();
 
-        switch (control.code())
+        if (command_name == "kill")
         {
-            case proto::internal::ServiceControl::CODE_KILL:
-            {
-                CHECK(control.has_unsigned_integer());
-                LOG(INFO) << "ServiceControl::CODE_KILL (client_id" << control.unsigned_integer() << ")";
-                emit sig_stopClient(static_cast<quint32>(control.unsigned_integer()));
-            }
-            break;
-
-            case proto::internal::ServiceControl::CODE_PAUSE:
-            {
-                CHECK(control.has_boolean());
-                LOG(INFO) << "ServiceControl::CODE_PAUSE (paused" << control.boolean() << ")";
-                emit sig_pauseChanged(control.boolean());
-            }
-            break;
-
-            case proto::internal::ServiceControl::CODE_LOCK_MOUSE:
-            {
-                CHECK(control.has_boolean());
-                LOG(INFO) << "ServiceControl::CODE_LOCK_MOUSE (lock_mouse" << control.boolean() << ")";
-                emit sig_lockMouseChanged(control.boolean());
-            }
-            break;
-
-            case proto::internal::ServiceControl::CODE_LOCK_KEYBOARD:
-            {
-                CHECK(control.has_boolean());
-                LOG(INFO) << "ServiceControl::CODE_LOCK_KEYBOARD (lock_keyboard" << control.boolean() << ")";
-                emit sig_lockKeyboardChanged(control.boolean());
-            }
-            break;
-
-            default:
-            {
-                LOG(ERROR) << "Unhandled control code:" << control.code();
-                return;
-            }
+            CHECK(control.has_unsigned_integer());
+            LOG(INFO) << "kill" << control.unsigned_integer();
+            emit sig_stopClient(static_cast<quint32>(control.unsigned_integer()));
+        }
+        else if (command_name == "pause")
+        {
+            CHECK(control.has_boolean());
+            LOG(INFO) << "pause" << control.boolean();
+            emit sig_pauseChanged(control.boolean());
+        }
+        else if (command_name == "lock_mouse")
+        {
+            CHECK(control.has_boolean());
+            LOG(INFO) << "lock_mouse" << control.boolean();
+            emit sig_lockMouseChanged(control.boolean());
+        }
+        else if (command_name == "lock_keyboard")
+        {
+            CHECK(control.has_boolean());
+            LOG(INFO) << "lock_keyboard" << control.boolean();
+            emit sig_lockKeyboardChanged(control.boolean());
+        }
+        else
+        {
+            LOG(ERROR) << "Unhandled command:" << command_name;
         }
     }
     else if (incoming_message_->has_chat())
@@ -618,7 +598,7 @@ void UserSession::dettach(const base::Location& location)
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSession::sendSessionMessage()
+void UserSession::sendMessage()
 {
     if (!ipc_channel_)
     {
@@ -626,7 +606,7 @@ void UserSession::sendSessionMessage()
         return;
     }
 
-    ipc_channel_->send(proto::internal::CHANNEL_ID_SESSION, outgoing_message_.serialize());
+    ipc_channel_->send(0, outgoing_message_.serialize());
 }
 
 } // namespace host

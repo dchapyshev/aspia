@@ -23,9 +23,9 @@
 #include "base/numeric_utils.h"
 #include "base/serialization.h"
 #include "base/ipc/ipc_channel.h"
+#include "base/ipc/ipc_server.h"
 #include "proto/desktop_internal.h"
 #include "proto/desktop_service.h"
-#include "proto/host_internal.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/session_enumerator.h"
@@ -36,7 +36,8 @@ namespace host {
 //--------------------------------------------------------------------------------------------------
 DesktopClient::DesktopClient(base::TcpChannel* tcp_channel, QObject* parent)
     : QObject(parent),
-      tcp_channel_(tcp_channel)
+      tcp_channel_(tcp_channel),
+      attach_timer_(new QTimer(this))
 {
     LOG(INFO) << "Ctor";
     CHECK(tcp_channel_);
@@ -50,6 +51,15 @@ DesktopClient::DesktopClient(base::TcpChannel* tcp_channel, QObject* parent)
     connect(base::Application::instance(), &base::Application::sig_sessionEvent,
             this, &DesktopClient::sendSessionList);
 #endif // defined(Q_OS_WINDOWS)
+
+    connect(attach_timer_, &QTimer::timeout, this, [this]()
+    {
+        LOG(WARNING) << "Timeout when desktop client starting";
+        emit sig_finished(clientId());
+    });
+
+    attach_timer_->setInterval(std::chrono::seconds(15));
+    attach_timer_->start();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -89,43 +99,82 @@ QString DesktopClient::userName() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopClient::start(const QString& ipc_channel_name)
+bool DesktopClient::isAttached() const
+{
+    return ipc_channel_ != nullptr;
+}
+
+//--------------------------------------------------------------------------------------------------
+QString DesktopClient::attach()
+{
+    CHECK(!ipc_channel_);
+    CHECK(!ipc_server_);
+
+    ipc_server_ = new base::IpcServer(this);
+
+    connect(ipc_server_, &base::IpcServer::sig_newConnection, this, &DesktopClient::onIpcNewConnection);
+    connect(ipc_server_, &base::IpcServer::sig_errorOccurred, this, &DesktopClient::onIpcErrorOccurred);
+
+    QString channel_name = base::IpcServer::createUniqueId();
+
+    if (!ipc_server_->start(channel_name))
+    {
+        LOG(ERROR) << "Unable to start IPC server";
+        emit sig_finished(clientId());
+        return QString();
+    }
+
+    return channel_name;
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopClient::dettach()
 {
     if (ipc_channel_)
     {
-        LOG(ERROR) << "IPC channel already started";
-        return;
+        ipc_channel_->disconnect(); // Disconnect all signals.
+        ipc_channel_->deleteLater();
+        ipc_channel_ = nullptr;
     }
 
-    if (ipc_channel_name.isEmpty())
-    {
-        LOG(ERROR) << "Empty name for IPC channel";
-        return;
-    }
+    attach_timer_->start();
+}
 
-    connectToAgent(ipc_channel_name);
-
-    // First emit a start signal and then connect to the agent, because the agent process starts
-    // when this signal is emitted. Otherwise, there would be nothing to connect to.
+//--------------------------------------------------------------------------------------------------
+void DesktopClient::start()
+{
     emit sig_started(clientId());
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopClient::onAttached(const QString& ipc_channel_name)
+void DesktopClient::onIpcNewConnection()
 {
-    LOG(INFO) << "Connection to new IPC server:" << ipc_channel_name;
-    connectToAgent(ipc_channel_name);
-}
+    CHECK(ipc_server_);
+    CHECK(!ipc_channel_);
 
-//--------------------------------------------------------------------------------------------------
-void DesktopClient::onIpcConnected()
-{
+    if (!ipc_server_->hasPendingConnections())
+    {
+        LOG(ERROR) << "No pending IPC connections";
+        emit sig_finished(clientId());
+        return;
+    }
+
+    ipc_channel_ = ipc_server_->nextPendingConnection();
+    ipc_channel_->setParent(this);
+
+    ipc_server_->disconnect();
+    ipc_server_->deleteLater();
+    ipc_server_ = nullptr;
+
+    connect(ipc_channel_, &base::IpcChannel::sig_disconnected, this, &DesktopClient::onIpcDisconnected);
+    connect(ipc_channel_, &base::IpcChannel::sig_messageReceived, this, &DesktopClient::onIpcMessageReceived);
+
     proto::peer::SessionType session_type = sessionType();
     CHECK(session_type == proto::peer::SESSION_TYPE_DESKTOP_MANAGE ||
           session_type == proto::peer::SESSION_TYPE_DESKTOP_VIEW);
 
-    proto::internal::ServiceToDesktop message;
-    proto::internal::SessionDescription* description = message.mutable_session_description();
+    proto::desktop::ServiceToAgentClient message;
+    proto::desktop::Description* description = message.mutable_description();
 
     description->set_session_type(session_type);
     *description->mutable_version() = base::serialize(tcp_channel_->peerVersion());
@@ -139,6 +188,14 @@ void DesktopClient::onIpcConnected()
 
     tcp_channel_->resume();
     ipc_channel_->resume();
+    attach_timer_->stop();
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopClient::onIpcErrorOccurred()
+{
+    LOG(ERROR) << "Error in IPC server";
+    emit sig_finished(clientId());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -147,7 +204,7 @@ void DesktopClient::onIpcMessageReceived(quint32 channel_id, const QByteArray& b
     quint16 tcp_channel_id = base::lowWord(channel_id);
     quint16 ipc_channel_id = base::highWord(channel_id);
 
-    if (ipc_channel_id == proto::internal::CHANNEL_ID_SESSION)
+    if (ipc_channel_id == proto::desktop::IPC_CHANNEL_ID_SESSION)
     {
         tcp_channel_->send(tcp_channel_id, buffer);
     }
@@ -164,24 +221,24 @@ void DesktopClient::onIpcDisconnected()
         return;
 
     LOG(INFO) << "IPC channel disconnected";
-
-    ipc_channel_->disconnect(this); // Disconnect all signals.
-    ipc_channel_->deleteLater();
-    ipc_channel_ = nullptr;
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopClient::onIpcErrorOccurred()
-{
-    LOG(ERROR) << "Unable to connect to IPC server";
-    emit sig_finished(clientId());
+    dettach();
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopClient::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code)
 {
     LOG(ERROR) << "TCP error:" << error_code;
-    tcp_channel_->disconnect(this); // Disconnect all signals.
+    CHECK(tcp_channel_);
+
+    tcp_channel_->disconnect();
+
+    if (ipc_channel_)
+    {
+        ipc_channel_->disconnect();
+        ipc_channel_->deleteLater();
+        ipc_channel_ = nullptr;
+    }
+
     emit sig_finished(clientId());
 }
 
@@ -190,7 +247,7 @@ void DesktopClient::onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray
 {
     if (tcp_channel_id == proto::peer::CHANNEL_ID_SESSION)
     {
-        quint32 channel_id = base::makeUint32(proto::internal::CHANNEL_ID_SESSION, tcp_channel_id);
+        quint32 channel_id = base::makeUint32(proto::desktop::IPC_CHANNEL_ID_SESSION, tcp_channel_id);
 
         if (ipc_channel_)
             ipc_channel_->send(channel_id, buffer);
@@ -241,28 +298,9 @@ void DesktopClient::onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopClient::connectToAgent(const QString& ipc_channel_name)
-{
-    if (ipc_channel_)
-    {
-        LOG(ERROR) << "IPC channel is already connected";
-        return;
-    }
-
-    ipc_channel_ = new base::IpcChannel(this);
-
-    connect(ipc_channel_, &base::IpcChannel::sig_connected, this, &DesktopClient::onIpcConnected);
-    connect(ipc_channel_, &base::IpcChannel::sig_disconnected, this, &DesktopClient::onIpcDisconnected);
-    connect(ipc_channel_, &base::IpcChannel::sig_errorOccurred, this, &DesktopClient::onIpcErrorOccurred);
-    connect(ipc_channel_, &base::IpcChannel::sig_messageReceived, this, &DesktopClient::onIpcMessageReceived);
-
-    ipc_channel_->connectTo(ipc_channel_name);
-}
-
-//--------------------------------------------------------------------------------------------------
 void DesktopClient::sendIpcServiceMessage(const QByteArray& buffer)
 {
-    quint32 channel_id = base::makeUint32(proto::internal::CHANNEL_ID_SERVICE, 0);
+    quint32 channel_id = base::makeUint32(proto::desktop::IPC_CHANNEL_ID_SERVICE, 0);
     if (ipc_channel_)
         ipc_channel_->send(channel_id, buffer);
 }

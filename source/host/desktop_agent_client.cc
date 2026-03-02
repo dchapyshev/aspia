@@ -35,7 +35,6 @@
 #include "host/host_storage.h"
 #include "host/service.h"
 #include "proto/desktop_internal.h"
-#include "proto/host_internal.h"
 #include "proto/peer.h"
 
 #if defined(Q_OS_WINDOWS)
@@ -150,16 +149,15 @@ int minCaptureFps()
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-DesktopAgentClient::DesktopAgentClient(base::IpcChannel* ipc_channel, QObject* parent)
+DesktopAgentClient::DesktopAgentClient(QObject* parent)
     : QObject(parent),
-      ipc_channel_(ipc_channel)
+      ipc_channel_(new base::IpcChannel(this))
 {
     LOG(INFO) << "Ctor";
-    CHECK(ipc_channel_);
 
-    ipc_channel_->setParent(this);
-
+    connect(ipc_channel_, &base::IpcChannel::sig_connected, this, &DesktopAgentClient::onIpcConnected);
     connect(ipc_channel_, &base::IpcChannel::sig_disconnected, this, &DesktopAgentClient::onIpcDisconnected);
+    connect(ipc_channel_, &base::IpcChannel::sig_errorOccurred, this, &DesktopAgentClient::onIpcErrorOccurred);
     connect(ipc_channel_, &base::IpcChannel::sig_messageReceived, this, &DesktopAgentClient::onIpcMessageReceived);
 }
 
@@ -236,10 +234,10 @@ void DesktopAgentClient::onScreenCaptureData(const base::Frame* frame, const bas
             screen_size->set_width(frame->size().width());
             screen_size->set_height(frame->size().height());
 
-            LOG(INFO) << "Video packet has format";
-            LOG(INFO) << "Capturer type:" << static_cast<base::ScreenCapturer::Type>(frame->capturerType());
-            LOG(INFO) << "Screen size:" << screen_size;
-            LOG(INFO) << "Video size:" << format->video_rect();
+            LOG(INFO) << "Video packet has format ("
+                      << "capturer type:" << static_cast<base::ScreenCapturer::Type>(frame->capturerType())
+                      << "screen size:" << screen_size
+                      << "cideo size:" << format->video_rect() << ")";
         }
     }
 
@@ -393,15 +391,30 @@ void DesktopAgentClient::onAudioCaptureData(const proto::desktop::AudioPacket& a
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::start()
+void DesktopAgentClient::start(const QString& ipc_channel_name)
 {
+    ipc_channel_->connectTo(ipc_channel_name);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopAgentClient::onIpcConnected()
+{
+    LOG(INFO) << "IPC channel is connected";
     ipc_channel_->resume();
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopAgentClient::onIpcErrorOccurred()
+{
+    LOG(ERROR) << "Unable to connect to IPC server";
+    ipc_channel_->disconnect(this);
+    emit sig_finished();
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopAgentClient::onIpcDisconnected()
 {
-    LOG(WARNING) << "IPC channel disconnected";
+    LOG(INFO) << "IPC channel is disconnected";
     ipc_channel_->disconnect(this);
     emit sig_finished();
 }
@@ -412,7 +425,7 @@ void DesktopAgentClient::onIpcMessageReceived(quint32 channel_id, const QByteArr
     quint16 tcp_channel_id = base::lowWord(channel_id);
     quint16 ipc_channel_id = base::highWord(channel_id);
 
-    if (ipc_channel_id == proto::internal::CHANNEL_ID_SESSION)
+    if (ipc_channel_id == proto::desktop::IPC_CHANNEL_ID_SESSION)
     {
         if (tcp_channel_id > std::numeric_limits<quint8>::max())
         {
@@ -425,9 +438,9 @@ void DesktopAgentClient::onIpcMessageReceived(quint32 channel_id, const QByteArr
 
         readSessionMessage(buffer);
     }
-    else if (ipc_channel_id == proto::internal::CHANNEL_ID_SERVICE)
+    else if (ipc_channel_id == proto::desktop::IPC_CHANNEL_ID_SERVICE)
     {
-        proto::internal::ServiceToDesktop message;
+        proto::desktop::ServiceToAgentClient message;
 
         if (!base::parse(buffer, &message))
         {
@@ -435,9 +448,9 @@ void DesktopAgentClient::onIpcMessageReceived(quint32 channel_id, const QByteArr
             return;
         }
 
-        if (message.has_session_description())
+        if (message.has_description())
         {
-            session_type_ = message.session_description().session_type();
+            session_type_ = message.description().session_type();
             sendCapabilities();
         }
         else
@@ -458,7 +471,6 @@ void DesktopAgentClient::onTaskManagerMessage(const proto::task_manager::HostToC
     proto::desktop::Extension* extension = outgoing_message_.newMessage().mutable_extension();
     extension->set_name(common::kTaskManagerExtension);
     extension->set_data(message.SerializeAsString());
-
     sendSessionMessage();
 }
 #endif // defined(Q_OS_WINDOWS)
@@ -473,45 +485,28 @@ void DesktopAgentClient::readSessionMessage(const QByteArray& buffer)
     }
 
     if (incoming_message_->has_mouse_event())
-    {
         readMouseEvent(incoming_message_->mouse_event());
-    }
     else if (incoming_message_->has_key_event())
-    {
         readKeyEvent(incoming_message_->key_event());
-    }
     else if (incoming_message_->has_touch_event())
-    {
         readTouchEvent(incoming_message_->touch_event());
-    }
     else if (incoming_message_->has_text_event())
-    {
         readTextEvent(incoming_message_->text_event());
-    }
     else if (incoming_message_->has_clipboard_event())
-    {
         readClipboardEvent(incoming_message_->clipboard_event());
-    }
     else if (incoming_message_->has_extension())
-    {
         readExtension(incoming_message_->extension());
-    }
     else if (incoming_message_->has_config())
-    {
         readConfig(incoming_message_->config());
-    }
     else
-    {
         LOG(ERROR) << "Unhandled message from client";
-        return;
-    }
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopAgentClient::sendSessionMessage(const QByteArray& buffer)
 {
     quint32 channel_id = base::makeUint32(
-        proto::internal::CHANNEL_ID_SESSION, proto::peer::CHANNEL_ID_SESSION);
+        proto::desktop::IPC_CHANNEL_ID_SESSION, proto::peer::CHANNEL_ID_SESSION);
     ipc_channel_->send(channel_id, buffer);
 }
 
