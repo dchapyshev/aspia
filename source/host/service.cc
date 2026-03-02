@@ -149,7 +149,6 @@ void Service::onStart()
 
     settings_watcher_->addPath(settings_file_path);
     repeated_timer_->start(std::chrono::seconds(30));
-    desktop_manager_->start();
     user_session_->start();
 
     addFirewallRules();
@@ -472,7 +471,7 @@ void Service::onDesktopManagerAttached()
             continue;
 
         QString ipc_channel_name = client->attach();
-        desktop_manager_->startClient(ipc_channel_name);
+        desktop_manager_->startAgentClient(ipc_channel_name);
     }
 }
 
@@ -490,7 +489,7 @@ void Service::onDesktopClientStarted(quint32 client_id)
         return;
 
     QString ipc_channel_name = client->attach();
-    desktop_manager_->startClient(ipc_channel_name);
+    desktop_manager_->startAgentClient(ipc_channel_name);
 }
 
 //--------------------------------------------------------------------------------------------------

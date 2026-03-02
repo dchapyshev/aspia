@@ -42,12 +42,10 @@ public:
 
     static QString filePath();
 
-    void start();
-
     bool isAttached() const { return ipc_channel_ != nullptr; }
     base::SessionId sessionId() const { return session_id_; }
 
-    void startClient(const QString& ipc_channel_name);
+    void startAgentClient(const QString& ipc_channel_name);
 
 public slots:
     void onClientStarted();
@@ -66,18 +64,21 @@ private slots:
     void onRestartTimeout();
     void onAttachTimeout();
 
+    // Slots for base::IpcServer.
     void onIpcNewConnection();
+    void onIpcErrorOccurred();
+
+    // Slots for base::IpcChannel.
     void onIpcDisconnected();
     void onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer);
 
 private:
     void attach(const base::Location& location, base::SessionId session_id);
     void dettach(const base::Location& location);
-    bool startProcess();
+    bool startProcess(const QString& ipc_channel_name);
     void sendMessage(const QByteArray& buffer);
 
     base::SessionId session_id_ = base::kInvalidSessionId;
-    const QString ipc_channel_name_;
     bool is_console_ = true;
 
     base::IpcServer* ipc_server_ = nullptr;

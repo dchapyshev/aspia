@@ -354,13 +354,15 @@ bool IpcServer::runListener(size_t index)
 void IpcServer::onNewConnection(size_t index, IpcChannel* channel)
 {
     LOG(INFO) << "New IPC connecting (channel" << channel_name_ << ")";
-    pending_.emplace_back(channel);
 
     if (!runListener(index))
     {
         LOG(ERROR) << "Unable to restart listener" << index;
+        emit sig_errorOccurred();
+        return;
     }
 
+    pending_.emplace_back(channel);
     emit sig_newConnection();
 }
 

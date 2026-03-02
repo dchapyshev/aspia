@@ -170,11 +170,16 @@ DesktopAgentClient::~DesktopAgentClient()
 //--------------------------------------------------------------------------------------------------
 void DesktopAgentClient::onScreenCaptureData(const base::Frame* frame, const base::MouseCursor* cursor)
 {
+    if (is_video_paused_ || !video_encoder_ || !frame)
+        return;
+
     proto::desktop::SessionToClient& message = outgoing_message_.newMessage();
 
-    if (!is_video_paused_ && frame && !frame->constUpdatedRegion().isEmpty() && video_encoder_)
+    if (!frame->constUpdatedRegion().isEmpty() || !frame_count_)
     {
         DCHECK(scale_reducer_);
+
+        ++frame_count_;
 
         if (source_size_ != frame->size())
         {

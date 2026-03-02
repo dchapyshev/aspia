@@ -200,7 +200,6 @@ bool startProcessWithToken(HANDLE token, const QString& command_line, base::Scop
 //--------------------------------------------------------------------------------------------------
 DesktopManager::DesktopManager(QObject* parent)
     : QObject(parent),
-      ipc_channel_name_(base::IpcServer::createUniqueId()),
       restart_timer_(new QTimer(this)),
       attach_timer_(new QTimer(this))
 {
@@ -233,16 +232,14 @@ QString DesktopManager::filePath()
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopManager::start()
+void DesktopManager::startAgentClient(const QString& ipc_channel_name)
 {
-    ipc_server_ = new base::IpcServer(this);
-    connect(ipc_server_, &base::IpcServer::sig_newConnection, this, &DesktopManager::onIpcNewConnection);
-    ipc_server_->start(ipc_channel_name_);
-}
+    if (ipc_channel_name.isEmpty())
+    {
+        LOG(ERROR) << "Empty IPC channel name";
+        return;
+    }
 
-//--------------------------------------------------------------------------------------------------
-void DesktopManager::startClient(const QString& ipc_channel_name)
-{
     proto::desktop::ServiceToAgent message;
     proto::desktop::AgentControl* control = message.mutable_control();
     control->set_command_name("start_client");
@@ -405,6 +402,12 @@ void DesktopManager::onIpcNewConnection()
     ipc_channel_ = ipc_server_->nextPendingConnection();
     CHECK(ipc_channel_);
 
+    ipc_channel_->setParent(this);
+
+    ipc_server_->disconnect();
+    ipc_server_->deleteLater();
+    ipc_server_ = nullptr;
+
     LOG(INFO) << "Control IPC channel is connected:" << ipc_channel_->channelName()
               << "(client_count:" << client_count_ << ")";
 
@@ -415,6 +418,13 @@ void DesktopManager::onIpcNewConnection()
     ipc_channel_->resume();
 
     emit sig_attached();
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopManager::onIpcErrorOccurred()
+{
+    dettach(FROM_HERE);
+    restart_timer_->start();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -452,16 +462,28 @@ void DesktopManager::attach(const base::Location& location, base::SessionId sess
 
     attach_timer_->start();
 
-    if (startProcess())
+    ipc_server_ = new base::IpcServer(this);
+
+    connect(ipc_server_, &base::IpcServer::sig_newConnection, this, &DesktopManager::onIpcNewConnection);
+    connect(ipc_server_, &base::IpcServer::sig_errorOccurred, this, &DesktopManager::onIpcErrorOccurred);
+
+    QString ipc_channel_name = base::IpcServer::createUniqueId();
+
+    if (!ipc_server_->start(ipc_channel_name))
     {
-        LOG(INFO) << "Process has been launched successfully";
+        dettach(FROM_HERE);
+        restart_timer_->start();
         return;
     }
 
-    // An error occurred while starting the process. Detach the session and start the timer to try
-    // to launch it again.
-    dettach(FROM_HERE);
-    restart_timer_->start();
+    if (!startProcess(ipc_channel_name))
+    {
+        dettach(FROM_HERE);
+        restart_timer_->start();
+        return;
+    }
+
+    LOG(INFO) << "Process has been launched successfully";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -474,6 +496,13 @@ void DesktopManager::dettach(const base::Location& location)
     }
 
     LOG(INFO) << "Dettach from session" << session_id_ << "from" << location;
+
+    if (ipc_server_)
+    {
+        ipc_server_->disconnect();
+        ipc_server_->deleteLater();
+        ipc_server_ = nullptr;
+    }
 
     if (ipc_channel_)
     {
@@ -490,7 +519,7 @@ void DesktopManager::dettach(const base::Location& location)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool DesktopManager::startProcess()
+bool DesktopManager::startProcess(const QString& ipc_channel_name)
 {
     if (session_id_ == base::kInvalidSessionId)
     {
@@ -514,7 +543,7 @@ bool DesktopManager::startProcess()
         return false;
     }
 
-    QString command_line = filePath() + " --channel_id " + ipc_channel_name_;
+    QString command_line = filePath() + " --channel_id " + ipc_channel_name;
     base::ScopedHandle process_handle;
     base::ScopedHandle thread_handle;
 
@@ -557,7 +586,7 @@ bool DesktopManager::startProcess()
         QString user_name = splitted.front();
         QByteArray command_line =
             QString("sudo DISPLAY=':0' -u %1 %2 --channel_id=%3 &")
-                .arg(user_name, filePath(), channel_name).toLocal8Bit();
+                .arg(user_name, filePath(), ipc_channel_name).toLocal8Bit();
 
         LOG(INFO) << "Start desktop session agent:" << command_line;
 
@@ -579,7 +608,7 @@ bool DesktopManager::startProcess()
 
     QByteArray command_line =
         QString("sudo DISPLAY=':0' -u root %1 --channel_id=%2 &")
-            .arg(filePath(), channel_name).toLocal8Bit();
+            .arg(filePath(), ipc_channel_name).toLocal8Bit();
 
     LOG(INFO) << "Start desktop session agent:" << command_line;
 

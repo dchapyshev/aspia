@@ -137,6 +137,8 @@ private:
     bool is_video_paused_ = false;
     bool is_audio_paused_ = false;
 
+    quint64 frame_count_ = 0;
+
 #if defined(Q_OS_WINDOWS)
     TaskManager* task_manager_ = nullptr;
 #endif // defined(Q_OS_WINDOWS)
