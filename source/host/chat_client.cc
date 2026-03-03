@@ -37,10 +37,13 @@ ChatClient::ChatClient(base::TcpChannel* tcp_channel, QObject* parent)
 
     tcp_channel_->setParent(this);
 
+    setProperty("version", tcp_channel_->peerVersion().toString());
+    setProperty("os_name", tcp_channel_->peerOsName());
     setProperty("session_type", tcp_channel_->peerSessionType());
     setProperty("user_name", tcp_channel_->peerUserName());
     setProperty("display_name", tcp_channel_->peerDisplayName());
     setProperty("computer_name", tcp_channel_->peerComputerName());
+    setProperty("arch", tcp_channel_->peerArchitecture());
 
     connect(tcp_channel_, &base::TcpChannel::sig_errorOccurred, this, &ChatClient::onTcpErrorOccurred);
     connect(tcp_channel_, &base::TcpChannel::sig_messageReceived, this, &ChatClient::onTcpMessageReceived);
