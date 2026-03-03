@@ -271,7 +271,7 @@ endif()
 
 add_executable(aspia_client MACOSX_BUNDLE ${aspia_client_ICON} client_entry_point.cc client.rc)
 target_link_libraries(aspia_client aspia_client_core ${CLIENT_PLATFORM_LIBS})
-qt_import_plugins(aspia_client INCLUDE "" EXCLUDE "" INCLUDE_BY_TYPE "" EXCLUDE_BY_TYPE imageformats)
+qt_import_plugins(aspia_client INCLUDE "" EXCLUDE "" INCLUDE_BY_TYPE imageformats iconengines EXCLUDE_BY_TYPE "")
 
 if (WIN32)
     set_target_properties(aspia_client PROPERTIES WIN32_EXECUTABLE TRUE)

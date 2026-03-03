@@ -152,6 +152,7 @@ void ChatWidget::readStatus(const proto::chat::Status& status)
         status_clear_timer_->start(std::chrono::seconds(1));
 }
 
+//--------------------------------------------------------------------------------------------------
 void ChatWidget::setDisplayName(const QString& display_name)
 {
     display_name_ = display_name;
