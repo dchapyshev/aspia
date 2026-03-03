@@ -43,13 +43,13 @@ public:
     explicit UserSession(QObject* parent = nullptr);
     ~UserSession() final;
 
-    bool start();
-    void onRouterStateChanged(const proto::user::RouterState& state);
-    void onUpdateCredentials(base::HostId host_id, const QString& password);
     bool isAttached() const;
     base::SessionId sessionId() const { return session_id_; }
 
 public slots:
+    bool start();
+    void onRouterStateChanged(const proto::user::RouterState& state);
+    void onUpdateCredentials(base::HostId host_id, const QString& password);
     void onClientSwitchSession(base::SessionId session_id);
     void onClientConfirmation(const proto::user::ConfirmationRequest& request);
     void onClientStarted(quint32 client_id);

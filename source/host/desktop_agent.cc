@@ -77,9 +77,7 @@ DesktopAgent::DesktopAgent(QObject* parent)
 #if defined(Q_OS_WINDOWS)
     // At the end of the user's session, the program ends later than the others.
     if (!SetProcessShutdownParameters(0, SHUTDOWN_NORETRY))
-    {
         PLOG(ERROR) << "SetProcessShutdownParameters failed";
-    }
 
     connect(base::Application::instance(), &base::Application::sig_queryEndSession, []()
     {
@@ -144,15 +142,18 @@ void DesktopAgent::onIpcMessageReceived(quint32 /* ipc_channel_id */, const QByt
         }
         else if (command_name == "pause")
         {
-            // TODO
+            CHECK(control.has_boolean());
+            is_paused_ = control.boolean();
         }
         else if (command_name == "lock_mouse")
         {
-            // TODO
+            CHECK(control.has_boolean());
+            is_mouse_locked_ = control.boolean();
         }
         else if (command_name == "lock_keyboard")
         {
-            // TODO
+            CHECK(control.has_boolean());
+            is_keyboard_locked_ = control.boolean();
         }
         else
         {
@@ -254,15 +255,56 @@ void DesktopAgent::onClientFinished()
 }
 
 //--------------------------------------------------------------------------------------------------
+void DesktopAgent::onInjectMouseEvent(const proto::desktop::MouseEvent& event)
+{
+    if (is_paused_ || is_mouse_locked_ || !input_injector_)
+        return;
+    input_injector_->injectMouseEvent(event);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopAgent::onInjectKeyEvent(const proto::desktop::KeyEvent& event)
+{
+    if (is_paused_ || is_keyboard_locked_ || !input_injector_)
+        return;
+    input_injector_->injectKeyEvent(event);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopAgent::onInjectTextEvent(const proto::desktop::TextEvent& event)
+{
+    if (is_paused_ || is_keyboard_locked_ || !input_injector_)
+        return;
+    input_injector_->injectTextEvent(event);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopAgent::onInjectTouchEvent(const proto::desktop::TouchEvent& event)
+{
+    if (is_paused_ || is_mouse_locked_ || is_keyboard_locked_ || !input_injector_)
+        return;
+    input_injector_->injectTouchEvent(event);
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopAgent::onCaptureScreen()
 {
     capture_scheduler_.onBeginCapture();
+
+    if (is_paused_)
+    {
+        for (const auto& client : std::as_const(clients_))
+            client->onScreenCaptureError(proto::desktop::VIDEO_ERROR_CODE_PAUSED);
+
+        capture_scheduler_.onEndCapture();
+        screen_capture_timer_->start(capture_scheduler_.nextCaptureDelay());
+        return;
+    }
 
     const base::Frame* frame = nullptr;
     const base::MouseCursor* cursor = nullptr;
 
     base::ScreenCapturer::Error error = screen_capturer_->captureFrame(&frame, &cursor);
-
     if (error != base::ScreenCapturer::Error::SUCCEEDED)
     {
         proto::desktop::VideoErrorCode error_code;
@@ -305,14 +347,10 @@ void DesktopAgent::startClient(const QString& ipc_channel_name)
     DesktopAgentClient* client = new DesktopAgentClient(this);
     clients_.append(client);
 
-    connect(client, &DesktopAgentClient::sig_injectMouseEvent,
-            input_injector_, &InputInjector::injectMouseEvent);
-    connect(client, &DesktopAgentClient::sig_injectKeyEvent,
-            input_injector_, &InputInjector::injectKeyEvent);
-    connect(client, &DesktopAgentClient::sig_injectTextEvent,
-            input_injector_, &InputInjector::injectTextEvent);
-    connect(client, &DesktopAgentClient::sig_injectTouchEvent,
-            input_injector_, &InputInjector::injectTouchEvent);
+    connect(client, &DesktopAgentClient::sig_injectMouseEvent, this, &DesktopAgent::onInjectMouseEvent);
+    connect(client, &DesktopAgentClient::sig_injectKeyEvent, this, &DesktopAgent::onInjectKeyEvent);
+    connect(client, &DesktopAgentClient::sig_injectTextEvent, this, &DesktopAgent::onInjectTextEvent);
+    connect(client, &DesktopAgentClient::sig_injectTouchEvent, this, &DesktopAgent::onInjectTouchEvent);
 
     connect(client, &DesktopAgentClient::sig_injectClipboardEvent,
             clipboard_, &common::ClipboardMonitor::injectClipboardEvent);

@@ -68,6 +68,11 @@ private slots:
     void onClientConfigured();
     void onClientFinished();
 
+    void onInjectMouseEvent(const proto::desktop::MouseEvent& event);
+    void onInjectKeyEvent(const proto::desktop::KeyEvent& event);
+    void onInjectTextEvent(const proto::desktop::TextEvent& event);
+    void onInjectTouchEvent(const proto::desktop::TouchEvent& event);
+
     void onCaptureScreen();
 
 private:
@@ -86,6 +91,9 @@ private:
     QTimer* screen_capture_timer_ = nullptr;
     base::CaptureScheduler capture_scheduler_;
 
+    bool is_paused_ = false;
+    bool is_mouse_locked_ = false;
+    bool is_keyboard_locked_ = false;
     bool lock_at_disconnect_ = false;
     bool clear_clipboard_ = false;
 
