@@ -470,7 +470,7 @@ void Service::onChatClientStarted(quint32 client_id)
     CHECK(started_client);
     CHECK_EQ(client_id, started_client->clientId());
 
-    if (!user_session_->isAttached())
+    if (user_session_->state() != UserSession::State::ATTACHED)
         started_client->onSendStatus(proto::chat::Status::CODE_USER_DISCONNECTED);
 
     proto::chat::Chat chat;

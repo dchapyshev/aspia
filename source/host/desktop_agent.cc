@@ -326,14 +326,15 @@ void DesktopAgent::onCaptureScreen()
 
         for (const auto& client : std::as_const(clients_))
             client->onScreenCaptureError(error_code);
-        return;
     }
+    else
+    {
+        if (input_injector_)
+            input_injector_->setScreenOffset(frame->topLeft());
 
-    if (input_injector_)
-        input_injector_->setScreenOffset(frame->topLeft());
-
-    for (const auto& client : std::as_const(clients_))
-        client->onScreenCaptureData(frame, cursor);
+        for (const auto& client : std::as_const(clients_))
+            client->onScreenCaptureData(frame, cursor);
+    }
 
     capture_scheduler_.onEndCapture();
     screen_capture_timer_->start(capture_scheduler_.nextCaptureDelay());

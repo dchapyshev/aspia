@@ -253,9 +253,9 @@ void DesktopManager::startAgentClient(const QString& ipc_channel_name)
 //--------------------------------------------------------------------------------------------------
 void DesktopManager::onClientStarted()
 {
-    LOG(INFO) << "Client started (client count:" << client_count_ << "attached:" << isAttached() << ")";
+    LOG(INFO) << "Client started (client count:" << client_count_ << "state:" << state_ << ")";
 
-    bool is_attach_needed = !client_count_ && !isAttached();
+    bool is_attach_needed = !client_count_ && state_ == State::DETTACHED;
 
     ++client_count_;
 
@@ -338,7 +338,7 @@ void DesktopManager::onUserSessionEvent(quint32 event_type, quint32 session_id)
 {
 #if defined(Q_OS_WINDOWS)
     LOG(INFO) << "State (session_id:" << session_id_ << "console:" << is_console_ << "restarting:"
-              << restart_timer_->isActive() << "attaching:" << attach_timer_->isActive() << ")";
+              << restart_timer_->isActive() << "state:" << state_ << ")";
 
     switch (event_type)
     {
@@ -363,12 +363,6 @@ void DesktopManager::onUserSessionEvent(quint32 event_type, quint32 session_id)
 
             dettach(FROM_HERE);
             attach(FROM_HERE, base::activeConsoleSessionId());
-        }
-        break;
-
-        case WTS_SESSION_UNLOCK:
-        {
-
         }
         break;
 
@@ -427,6 +421,7 @@ void DesktopManager::onIpcNewConnection()
     attach_timer_->stop();
     ipc_channel_->resume();
 
+    state_ = State::ATTACHED;
     emit sig_attached();
 }
 
@@ -453,7 +448,7 @@ void DesktopManager::onIpcMessageReceived(quint32 /* ipc_channel_id */, const QB
 //--------------------------------------------------------------------------------------------------
 void DesktopManager::attach(const base::Location& location, base::SessionId session_id)
 {
-    if (isAttached())
+    if (state_ != State::DETTACHED)
     {
         LOG(INFO) << "Session is already attached (session_id" << session_id_ << "from" << location << ")";
         return;
@@ -467,6 +462,7 @@ void DesktopManager::attach(const base::Location& location, base::SessionId sess
 
     LOG(INFO) << "Attach to session" << session_id << "from" << location;
 
+    state_ = State::ATTACHING;
     session_id_ = session_id;
     is_console_ = session_id == base::activeConsoleSessionId();
 
@@ -499,7 +495,7 @@ void DesktopManager::attach(const base::Location& location, base::SessionId sess
 //--------------------------------------------------------------------------------------------------
 void DesktopManager::dettach(const base::Location& location)
 {
-    if (!isAttached())
+    if (state_ == State::DETTACHED)
     {
         LOG(INFO) << "Session already dettached (from" << location << ")";
         return;
@@ -526,6 +522,7 @@ void DesktopManager::dettach(const base::Location& location)
 
     restart_timer_->stop();
     attach_timer_->stop();
+    state_ = State::DETTACHED;
 }
 
 //--------------------------------------------------------------------------------------------------

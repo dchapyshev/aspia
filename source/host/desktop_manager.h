@@ -40,9 +40,17 @@ public:
     explicit DesktopManager(QObject* parent = nullptr);
     ~DesktopManager() final;
 
+    enum class State
+    {
+        ATTACHED,
+        ATTACHING,
+        DETTACHED
+    };
+    Q_ENUM(State)
+
     static QString filePath();
 
-    bool isAttached() const { return ipc_channel_ != nullptr; }
+    State state() const { return state_; }
     base::SessionId sessionId() const { return session_id_; }
 
     void startAgentClient(const QString& ipc_channel_name);
@@ -78,6 +86,7 @@ private:
     bool startProcess(const QString& ipc_channel_name);
     void sendMessage(const QByteArray& buffer);
 
+    State state_ = State::DETTACHED;
     base::SessionId session_id_ = base::kInvalidSessionId;
     bool is_console_ = true;
 

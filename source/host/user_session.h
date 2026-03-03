@@ -43,7 +43,15 @@ public:
     explicit UserSession(QObject* parent = nullptr);
     ~UserSession() final;
 
-    bool isAttached() const;
+    enum class State
+    {
+        ATTACHED,
+        ATTACHING,
+        DETTACHED
+    };
+    Q_ENUM(State)
+
+    State state() const { return state_; }
     base::SessionId sessionId() const { return session_id_; }
 
 public slots:
@@ -86,6 +94,7 @@ private:
     QTimer* attach_timer_ = nullptr;
     QTimer* dettach_timer_ = nullptr;
 
+    State state_ = State::DETTACHED;
     base::SessionId session_id_ = base::kInvalidSessionId;
     bool is_console_ = true;
 

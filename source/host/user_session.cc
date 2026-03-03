@@ -195,12 +195,6 @@ void UserSession::onUpdateCredentials(base::HostId host_id, const QString& passw
 }
 
 //--------------------------------------------------------------------------------------------------
-bool UserSession::isAttached() const
-{
-    return ipc_channel_ != nullptr;
-}
-
-//--------------------------------------------------------------------------------------------------
 void UserSession::onClientSwitchSession(base::SessionId session_id)
 {
     LOG(INFO) << "Switch session:" << session_id;
@@ -221,7 +215,7 @@ void UserSession::onClientConfirmation(const proto::user::ConfirmationRequest& r
 
     SystemSettings settings;
 
-    if (!isAttached())
+    if (state_ == State::DETTACHED)
     {
         LOG(INFO) << "No active GUI process";
 
@@ -319,8 +313,7 @@ void UserSession::onClientRecording(const QString& computer, const QString& user
 void UserSession::onUserSessionEvent(quint32 status, quint32 session_id)
 {
 #if defined(Q_OS_WINDOWS)
-    LOG(INFO) << "State (attached:" << isAttached() << "session_id:" << session_id_ << "console:"
-              << is_console_ << ")";
+    LOG(INFO) << "State (state:" << state_ << "session_id:" << session_id_ << "console:" << is_console_ << ")";
 
     switch (status)
     {
@@ -352,7 +345,7 @@ void UserSession::onUserSessionEvent(quint32 status, quint32 session_id)
         case WTS_SESSION_LOGON:
         case WTS_SESSION_UNLOCK:
         {
-            if (!isAttached() && session_id == session_id_)
+            if (state_ == State::DETTACHED && is_console_ && session_id == base::activeConsoleSessionId())
                 attach(FROM_HERE, session_id);
         }
         break;
@@ -401,6 +394,10 @@ void UserSession::onIpcNewConnection()
 
         session_id_ = ipc_session_id;
     }
+    else
+    {
+        LOG(INFO) << "User GUI started by service";
+    }
 
     ipc_channel_ = ipc_channel;
 
@@ -412,6 +409,8 @@ void UserSession::onIpcNewConnection()
     ipc_channel_->resume();
 
     LOG(INFO) << "Start user session (IPC channel" << ipc_channel_->channelName() << ")";
+
+    state_ = State::ATTACHED;
     emit sig_attached();
 }
 
@@ -515,12 +514,13 @@ void UserSession::attach(const base::Location& location, base::SessionId session
 {
     LOG(INFO) << "Attaching to UI process (sid" << session_id << "from" << location << ")";
 
-    if (ipc_channel_)
+    if (state_ != State::DETTACHED)
     {
         LOG(ERROR) << "Already attached";
         return;
     }
 
+    state_ = State::ATTACHING;
     session_id_ = session_id;
     dettach_timer_->stop();
     attach_timer_->start();
@@ -529,12 +529,14 @@ void UserSession::attach(const base::Location& location, base::SessionId session
     if (session_id == base::kInvalidSessionId)
     {
         LOG(ERROR) << "An attempt was detected to start a process in a INVALID session";
+        dettach(FROM_HERE);
         return;
     }
 
     if (session_id == base::kServiceSessionId)
     {
         LOG(ERROR) << "An attempt was detected to start a process in a SERVICES session";
+        dettach(FROM_HERE);
         return;
     }
 
@@ -542,10 +544,11 @@ void UserSession::attach(const base::Location& location, base::SessionId session
     if (!session_info.isValid())
     {
         LOG(ERROR) << "Unable to get session info (sid" << session_id << ")";
+        dettach(FROM_HERE);
         return;
     }
 
-    LOG(INFO) << "# Session info (sid:" << session_id
+    LOG(INFO) << "Session info (sid:" << session_id
               << "username:" << session_info.userName()
               << "connect_state:" << session_info.connectState()
               << "win_station:" << session_info.winStationName()
@@ -555,12 +558,14 @@ void UserSession::attach(const base::Location& location, base::SessionId session
     if (session_info.connectState() != base::SessionInfo::ConnectState::ACTIVE)
     {
         LOG(INFO) << "Console session is not active. Launching the GUI is not required";
+        dettach(FROM_HERE);
         return;
     }
 
     if (session_info.isUserLocked())
     {
         LOG(INFO) << "Console session is locked. Launching the GUI is not required";
+        dettach(FROM_HERE);
         return;
     }
 
@@ -568,12 +573,14 @@ void UserSession::attach(const base::Location& location, base::SessionId session
     if (!createLoggedOnUserToken(session_id, &user_token))
     {
         LOG(ERROR) << "Failed to get user token (sid" << session_id << ")";
+        dettach(FROM_HERE);
         return;
     }
 
     if (!user_token.isValid())
     {
         LOG(INFO) << "User is not logged in (sid" << session_id << ")";
+        dettach(FROM_HERE);
         return;
     }
 
@@ -586,6 +593,8 @@ void UserSession::attach(const base::Location& location, base::SessionId session
     {
         LOG(ERROR) << "Unable to start process with user token (sid" << session_id
                    << "cmd" << command_line << ")";
+        dettach(FROM_HERE);
+        return;
     }
 #elif defined(Q_OS_LINUX)
     std::error_code ignored_error;
@@ -593,6 +602,7 @@ void UserSession::attach(const base::Location& location, base::SessionId session
     if (it == std::filesystem::end(it))
     {
         LOG(ERROR) << "No X11 sessions";
+        dettach(FROM_HERE);
         return;
     }
 
@@ -600,6 +610,7 @@ void UserSession::attach(const base::Location& location, base::SessionId session
     if (!pipe)
     {
         LOG(ERROR) << "Unable to open pipe";
+        dettach(FROM_HERE);
         return;
     }
 
@@ -647,21 +658,26 @@ void UserSession::dettach(const base::Location& location)
 
 #if defined(Q_OS_WINDOWS)
     base::SessionInfo session_info(session_id_);
-    if (session_info.isValid() && session_info.connectState() == base::SessionInfo::ConnectState::ACTIVE)
+    if (session_info.isValid())
     {
-        // The GUI process terminated while the user was in an active session.
-        // There may be the following reasons:
-        // 1. The user closed the application using the GUI.
-        // 2. The user killed the process.
-        // 3. The process has crashed.
-        // Start a timer, after which all connected clients will be disconnected.
+        if (session_info.connectState() == base::SessionInfo::ConnectState::ACTIVE &&
+            !session_info.isUserLocked())
+        {
+            // The GUI process terminated while the user was in an active session.
+            // There may be the following reasons:
+            // 1. The user closed the application using the GUI.
+            // 2. The user killed the process.
+            // 3. The process has crashed.
+            // Start a timer, after which all connected clients will be disconnected.
 
-        LOG(WARNING) << "GUI process terminated during an active user session";
-        dettach_timer_->start();
+            LOG(WARNING) << "GUI process terminated during an active user session";
+            dettach_timer_->start();
+        }
     }
 #endif // defined(Q_OS_WINDOWS)
 
     session_id_ = base::kInvalidSessionId;
+    state_ = State::DETTACHED;
     emit sig_dettached();
 }
 
