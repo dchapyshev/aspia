@@ -81,7 +81,6 @@ private slots:
     void onChangeOneTimeSessions(quint32 sessions);
     void onNewDirectConnection();
     void onUserSessionAttached();
-    void onRouterStateChanged(const proto::user::RouterState& state);
     void onHostIdAssigned(base::HostId host_id);
     void onNewRelayConnection();
     void onConfirmationReply(quint32 request_id, bool accept);

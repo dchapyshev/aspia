@@ -253,12 +253,6 @@ void Service::onUserSessionAttached()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Service::onRouterStateChanged(const proto::user::RouterState& state)
-{
-    user_session_->onRouterStateChanged(state);
-}
-
-//--------------------------------------------------------------------------------------------------
 void Service::onHostIdAssigned(base::HostId host_id)
 {
     user_session_->onUpdateCredentials(host_id, one_time_password_);
@@ -831,7 +825,7 @@ void Service::connectToRouter(const base::Location& location)
     LOG(INFO) << "Connecting to router from" << location;
     router_manager_ = new RouterManager(this);
 
-    connect(router_manager_, &RouterManager::sig_routerStateChanged, this, &Service::onRouterStateChanged);
+    connect(router_manager_, &RouterManager::sig_routerStateChanged, user_session_, &UserSession::onRouterStateChanged);
     connect(router_manager_, &RouterManager::sig_hostIdAssigned, this, &Service::onHostIdAssigned);
     connect(router_manager_, &RouterManager::sig_clientConnected, this, &Service::onNewRelayConnection);
 
