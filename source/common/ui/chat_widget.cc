@@ -108,8 +108,6 @@ void ChatWidget::readMessage(const proto::chat::Message& message)
     message_widget->setMessageText(QString::fromStdString(message.text()));
 
     QListWidgetItem* item = new QListWidgetItem(list_messages);
-
-    list_messages->addItem(item);
     list_messages->setItemWidget(item, message_widget);
 
     onUpdateSize();
@@ -212,8 +210,6 @@ void ChatWidget::addOutgoingMessage(time_t timestamp, const QString& message)
     message_widget->setMessageText(message);
 
     QListWidgetItem* item = new QListWidgetItem(list_messages);
-
-    list_messages->addItem(item);
     list_messages->setItemWidget(item, message_widget);
 
     onUpdateSize();
@@ -228,8 +224,6 @@ void ChatWidget::addStatusMessage(const QString& message)
     message_widget->setMessageText(message);
 
     QListWidgetItem* item = new QListWidgetItem(list_messages);
-
-    list_messages->addItem(item);
     list_messages->setItemWidget(item, message_widget);
 
     onUpdateSize();
@@ -372,6 +366,9 @@ void ChatWidget::onUpdateSize()
 
         ChatMessage* message_widget =
             static_cast<ChatMessage*>(list_messages->itemWidget(item));
+        if (!message_widget)
+            continue;
+
         int viewport_width = list_messages->viewport()->width();
 
         message_widget->setFixedWidth(viewport_width);
