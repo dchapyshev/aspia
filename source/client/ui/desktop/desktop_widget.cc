@@ -24,6 +24,7 @@
 
 #include <QApplication>
 #include <QWheelEvent>
+#include <QSvgRenderer>
 
 #if defined(Q_OS_LINUX)
 #include "base/x11/x11_headers.h"
@@ -100,25 +101,22 @@ bool isCapsLockActivated()
 //--------------------------------------------------------------------------------------------------
 bool isModifierKey(int key)
 {
-    return key == Qt::Key_Control || key == Qt::Key_Alt ||
-           key == Qt::Key_Shift || key == Qt::Key_Meta;
+    return key == Qt::Key_Control || key == Qt::Key_Alt || key == Qt::Key_Shift || key == Qt::Key_Meta;
 }
 
-const char* applicationStateToString(Qt::ApplicationState state)
+//--------------------------------------------------------------------------------------------------
+QImage imageFromSvgResource(const QString& path, const QSize& size)
 {
-    switch (state)
-    {
-        case Qt::ApplicationSuspended:
-            return "ApplicationSuspended";
-        case Qt::ApplicationHidden:
-            return "ApplicationHidden";
-        case Qt::ApplicationInactive:
-            return "ApplicationInactive";
-        case Qt::ApplicationActive:
-            return "ApplicationActive";
-        default:
-            return "Unknown";
-    }
+    QSvgRenderer renderer(path);
+    if (!renderer.isValid())
+        return QImage();
+
+    QImage image(size, QImage::Format_ARGB32_Premultiplied);
+    image.fill(Qt::transparent);
+    QPainter painter(&image);
+    renderer.render(&painter);
+
+    return image;
 }
 
 } // namespace
@@ -140,7 +138,7 @@ DesktopWidget::DesktopWidget(QWidget* parent)
     connect(static_cast<QApplication*>(QApplication::instance()), &QApplication::applicationStateChanged,
             this, [this](Qt::ApplicationState state)
     {
-        LOG(INFO) << "Application state changed:" << applicationStateToString(state);
+        LOG(INFO) << "Application state changed:" << state;
         if (state != Qt::ApplicationActive)
         {
             releaseKeyboardButtons();
@@ -523,15 +521,15 @@ void DesktopWidget::paintEvent(QPaintEvent* /* event */)
         painter_.fillRect(title_rect, QColor(207, 207, 207));
         painter_.fillRect(message_rect, QColor(255, 255, 255));
 
-        QPixmap icon(QStringLiteral(":/img/computer.svg"));
+        QImage icon = imageFromSvgResource(":/img/computer.svg", QSize(24, 24));
         QPoint icon_pos(title_rect.x() + 8, title_rect.y() + (kTitleHeight / 2) - (icon.height() / 2));
 
         title_rect.setLeft(icon_pos.x() + icon.width() + 8);
 
         painter_.setPen(Qt::black);
 
-        painter_.drawPixmap(icon_pos, icon);
-        painter_.drawText(title_rect, Qt::AlignVCenter, QStringLiteral("Aspia"));
+        painter_.drawImage(icon_pos, icon);
+        painter_.drawText(title_rect, Qt::AlignVCenter, "Aspia");
 
         QString message;
         switch (last_error_code_)
