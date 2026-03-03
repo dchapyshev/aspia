@@ -57,11 +57,6 @@ class SystemInfoClient;
 class ChatClient;
 class UserSession;
 
-extern const char kHostServiceFileName[];
-extern const char kHostServiceName[];
-extern const char kHostServiceDisplayName[];
-extern const char kHostServiceDescription[];
-
 class Service final : public base::Service
 {
     Q_OBJECT
@@ -69,6 +64,11 @@ class Service final : public base::Service
 public:
     explicit Service(QObject* parent = nullptr);
     ~Service() final;
+
+    static const char kFileName[];
+    static const char kName[];
+    static const char kDisplayName[];
+    static const char kDescription[];
 
 protected:
     // base::Service implementation.

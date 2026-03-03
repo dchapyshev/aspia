@@ -58,14 +58,16 @@ private:
 
 } // namespace
 
-const char kServiceFileName[] = "aspia_relay.exe";
-const char kServiceName[] = "aspia-relay";
-const char kServiceDisplayName[] = "Aspia Relay Service";
-const char kServiceDescription[] = "Proxies user traffic to bypass NAT.";
+//--------------------------------------------------------------------------------------------------
+// static
+const char Service::kFileName[] = "aspia_relay.exe";
+const char Service::kName[] = "aspia-relay";
+const char Service::kDisplayName[] = "Aspia Relay Service";
+const char Service::kDescription[] = "Proxies user traffic to bypass NAT.";
 
 //--------------------------------------------------------------------------------------------------
 Service::Service(QObject* parent)
-    : base::Service(kServiceName, parent),
+    : base::Service(Service::kName, parent),
       reconnect_timer_(new QTimer(this)),
       key_factory_(new KeyFactory(this))
 {

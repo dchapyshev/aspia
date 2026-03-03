@@ -29,7 +29,7 @@ namespace relay {
 //--------------------------------------------------------------------------------------------------
 int startService(QTextStream& out)
 {
-    base::ServiceController controller = base::ServiceController::open(relay::kServiceName);
+    base::ServiceController controller = base::ServiceController::open(relay::Service::kName);
     if (!controller.isValid())
     {
         out << "Failed to access the service. Not enough rights or service not installed."
@@ -50,7 +50,7 @@ int startService(QTextStream& out)
 //--------------------------------------------------------------------------------------------------
 int stopService(QTextStream& out)
 {
-    base::ServiceController controller = base::ServiceController::open(relay::kServiceName);
+    base::ServiceController controller = base::ServiceController::open(relay::Service::kName);
     if (!controller.isValid())
     {
         out << "Failed to access the service. Not enough rights or service not installed."
@@ -72,14 +72,14 @@ int stopService(QTextStream& out)
 int installService(QTextStream& out)
 {
     base::ServiceController controller = base::ServiceController::install(
-        relay::kServiceName, relay::kServiceDisplayName, QCoreApplication::applicationFilePath());
+        relay::Service::kName, relay::Service::kDisplayName, QCoreApplication::applicationFilePath());
     if (!controller.isValid())
     {
         out << "Failed to install the service." << Qt::endl;
         return 1;
     }
 
-    controller.setDescription(relay::kServiceDescription);
+    controller.setDescription(relay::Service::kDescription);
     out << "The service has been successfully installed." << Qt::endl;
     return 0;
 }
@@ -87,10 +87,10 @@ int installService(QTextStream& out)
 //--------------------------------------------------------------------------------------------------
 int removeService(QTextStream& out)
 {
-    if (base::ServiceController::isRunning(relay::kServiceName))
+    if (base::ServiceController::isRunning(relay::Service::kName))
         stopService(out);
 
-    if (!base::ServiceController::remove(relay::kServiceName))
+    if (!base::ServiceController::remove(relay::Service::kName))
     {
         out << "Failed to remove the service." << Qt::endl;
         return 1;

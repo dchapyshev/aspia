@@ -813,7 +813,7 @@ void DesktopAgentClient::readPowerControlExtension(const std::string& data)
 #if defined(Q_OS_WINDOWS)
             LOG(INFO) << "REBOOT_SAFE_MODE command";
 
-            if (base::SafeModeUtil::setSafeModeService(kHostServiceName, true))
+            if (base::SafeModeUtil::setSafeModeService(Service::kName, true))
             {
                 LOG(INFO) << "Service added successfully to start in safe mode";
 

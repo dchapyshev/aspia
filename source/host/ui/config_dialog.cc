@@ -878,12 +878,11 @@ void ConfigDialog::reloadServiceStatus()
 
     QString state;
 
-    if (base::ServiceController::isInstalled(kHostServiceName))
+    if (base::ServiceController::isInstalled(Service::kName))
     {
         ui.button_service_install_remove->setText(tr("Remove"));
 
-        base::ServiceController controller =
-            base::ServiceController::open(kHostServiceName);
+        base::ServiceController controller = base::ServiceController::open(Service::kName);
         if (controller.isValid())
         {
             if (controller.isRunning())
@@ -928,7 +927,7 @@ void ConfigDialog::reloadServiceStatus()
 bool ConfigDialog::isServiceStarted()
 {
 #if defined(Q_OS_WINDOWS)
-    base::ServiceController controller = base::ServiceController::open(kHostServiceName);
+    base::ServiceController controller = base::ServiceController::open(Service::kName);
     if (controller.isValid())
         return controller.isRunning();
 #endif // defined(Q_OS_WINDOWS)
@@ -942,10 +941,10 @@ bool ConfigDialog::installService()
     QString service_file_path = QCoreApplication::applicationDirPath();
 
     service_file_path.append('/');
-    service_file_path.append(kHostServiceFileName);
+    service_file_path.append(Service::kFileName);
 
     base::ServiceController controller = base::ServiceController::install(
-        kHostServiceName, kHostServiceDisplayName, service_file_path);
+        Service::kName, Service::kDisplayName, service_file_path);
     if (!controller.isValid())
     {
         LOG(INFO) << "Unable to install service";
@@ -958,7 +957,7 @@ bool ConfigDialog::installService()
     else
     {
         controller.setDependencies({ "RpcSs", "Tcpip", "NDIS", "AFD" });
-        controller.setDescription(kHostServiceDescription);
+        controller.setDescription(Service::kDescription);
     }
 
     return true;
@@ -971,7 +970,7 @@ bool ConfigDialog::installService()
 bool ConfigDialog::removeService()
 {
 #if defined(Q_OS_WINDOWS)
-    if (!base::ServiceController::remove(kHostServiceName))
+    if (!base::ServiceController::remove(Service::kName))
     {
         LOG(ERROR) << "Unable to remove service";
         QMessageBox::warning(this,
@@ -991,7 +990,7 @@ bool ConfigDialog::removeService()
 bool ConfigDialog::startService()
 {
 #if defined(Q_OS_WINDOWS)
-    base::ServiceController controller = base::ServiceController::open(kHostServiceName);
+    base::ServiceController controller = base::ServiceController::open(Service::kName);
     if (!controller.isValid())
     {
         LOG(ERROR) << "Unable to open service";
@@ -1024,7 +1023,7 @@ bool ConfigDialog::startService()
 bool ConfigDialog::stopService()
 {
 #if defined(Q_OS_WINDOWS)
-    base::ServiceController controller = base::ServiceController::open(kHostServiceName);
+    base::ServiceController controller = base::ServiceController::open(Service::kName);
     if (!controller.isValid())
     {
         LOG(ERROR) << "Unable to open service";

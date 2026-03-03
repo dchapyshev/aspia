@@ -31,11 +31,6 @@
 
 namespace relay {
 
-extern const char kServiceFileName[];
-extern const char kServiceName[];
-extern const char kServiceDisplayName[];
-extern const char kServiceDescription[];
-
 class Service final : public base::Service
 {
     Q_OBJECT
@@ -43,6 +38,11 @@ class Service final : public base::Service
 public:
     explicit Service(QObject* parent = nullptr);
     ~Service() final;
+
+    static const char kFileName[];
+    static const char kName[];
+    static const char kDisplayName[];
+    static const char kDescription[];
 
 protected:
     // base::Service implementation.

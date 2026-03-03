@@ -41,7 +41,7 @@ namespace host {
 int startService(QTextStream& out)
 {
     base::ServiceController controller =
-        base::ServiceController::open(host::kHostServiceName);
+        base::ServiceController::open(host::Service::kName);
     if (!controller.isValid())
     {
         out << "Failed to access the service. Not enough rights or service not installed."
@@ -64,7 +64,7 @@ int startService(QTextStream& out)
 //--------------------------------------------------------------------------------------------------
 int stopService(QTextStream& out)
 {
-    base::ServiceController controller = base::ServiceController::open(host::kHostServiceName);
+    base::ServiceController controller = base::ServiceController::open(host::Service::kName);
     if (!controller.isValid())
     {
         out << "Failed to access the service. Not enough rights or service not installed."
@@ -88,14 +88,14 @@ int stopService(QTextStream& out)
 int installService(QTextStream& out)
 {
     base::ServiceController controller = base::ServiceController::install(
-        host::kHostServiceName, host::kHostServiceDisplayName, base::Application::applicationFilePath());
+        host::Service::kName, host::Service::kDisplayName, base::Application::applicationFilePath());
     if (!controller.isValid())
     {
         out << "Failed to install the service." << Qt::endl;
         return 1;
     }
 
-    controller.setDescription(host::kHostServiceDescription);
+    controller.setDescription(host::Service::kDescription);
     out << "The service has been successfully installed." << Qt::endl;
     return 0;
 }
@@ -105,10 +105,10 @@ int installService(QTextStream& out)
 //--------------------------------------------------------------------------------------------------
 int removeService(QTextStream& out)
 {
-    if (base::ServiceController::isRunning(host::kHostServiceName))
+    if (base::ServiceController::isRunning(host::Service::kName))
         stopService(out);
 
-    if (!base::ServiceController::remove(host::kHostServiceName))
+    if (!base::ServiceController::remove(host::Service::kName))
     {
         out << "Failed to remove the service." << Qt::endl;
         return 1;

@@ -33,15 +33,17 @@
 
 namespace router {
 
-const char kServiceFileName[] = "aspia_router.exe";
-const char kServiceName[] = "aspia-router";
-const char kServiceDisplayName[] = "Aspia Router Service";
-const char kServiceDescription[] =
+//--------------------------------------------------------------------------------------------------
+// static
+const char Service::kFileName[] = "aspia_router.exe";
+const char Service::kName[] = "aspia-router";
+const char Service::kDisplayName[] = "Aspia Router Service";
+const char Service::kDescription[] =
     "Assigns identifiers to peers and routes traffic to bypass NAT.";
 
 //--------------------------------------------------------------------------------------------------
 Service::Service(QObject* parent)
-    : base::Service(kServiceName, parent),
+    : base::Service(Service::kName, parent),
       database_factory_(new DatabaseFactorySqlite()),
       session_manager_(new SessionManager(this))
 {

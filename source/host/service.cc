@@ -65,14 +65,16 @@ constexpr char kFirewallRuleDecription[] = "Allow incoming TCP connections";
 
 } // namespace
 
-const char kHostServiceFileName[] = "aspia_host_service.exe";
-const char kHostServiceName[] = "aspia-host-service";
-const char kHostServiceDisplayName[] = "Aspia Host Service";
-const char kHostServiceDescription[] = "Accepts incoming remote desktop connections to this computer.";
+//--------------------------------------------------------------------------------------------------
+// static
+const char Service::kFileName[] = "aspia_host_service.exe";
+const char Service::kName[] = "aspia-host-service";
+const char Service::kDisplayName[] = "Aspia Host Service";
+const char Service::kDescription[] = "Accepts incoming remote desktop connections to this computer.";
 
 //--------------------------------------------------------------------------------------------------
 Service::Service(QObject* parent)
-    : base::Service(kHostServiceName, parent),
+    : base::Service(kName, parent),
       repeated_timer_(new QTimer(this)),
       settings_watcher_(new QFileSystemWatcher(this)),
       tcp_server_(new base::TcpServer(this)),
@@ -122,7 +124,7 @@ void Service::onStart()
         else
             LOG(INFO) << "Safe mode is disabled";
 
-        if (!base::SafeModeUtil::setSafeModeService(kHostServiceName, false))
+        if (!base::SafeModeUtil::setSafeModeService(kName, false))
             LOG(ERROR) << "Failed to remove service from boot in Safe Mode";
         else
             LOG(INFO) << "Service removed from safe mode loading";
