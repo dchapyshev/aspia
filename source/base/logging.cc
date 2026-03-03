@@ -384,9 +384,7 @@ QString* makeCheckOpString(const unsigned int& v1, const unsigned int& v2, const
 }
 
 //--------------------------------------------------------------------------------------------------
-QString* makeCheckOpString(const unsigned long long& v1,
-                               const unsigned long long& v2,
-                               const char* names)
+QString* makeCheckOpString(const unsigned long long& v1, const unsigned long long& v2, const char* names)
 {
     return makeCheckOpString<unsigned long long, unsigned long long>(v1, v2, names);
 }
@@ -496,22 +494,15 @@ LogMessage::~LogMessage()
 // Writes the common header info to the stream.
 void LogMessage::init(std::string_view file, int line, std::string_view function)
 {
-    size_t last_slash_pos = file.find_last_of("\\/");
-    if (last_slash_pos != std::string_view::npos)
-        file.remove_prefix(last_slash_pos + 1);
-
     stream_ << severityName(severity_)
             << QDateTime::currentDateTime().toString("yyyy/MM/dd hh:mm:ss.zzz")
             << QThread::currentThreadId()
-            << file.data() << ':' << line << function.data() << "]";
+            << function.data() << ":" << line << "]";
 }
 
 //--------------------------------------------------------------------------------------------------
-ErrorLogMessage::ErrorLogMessage(std::string_view file,
-                                 int line,
-                                 std::string_view function,
-                                 LoggingSeverity severity,
-                                 SystemError error)
+ErrorLogMessage::ErrorLogMessage(std::string_view file, int line, std::string_view function,
+    LoggingSeverity severity, SystemError error)
     : error_(error),
       log_message_(file, line, function, severity)
 {
@@ -559,7 +550,7 @@ QDebug operator<<(QDebug out, const char8_t* ustr)
 QDebug operator<<(QDebug out, const std::u8string& ustr)
 {
     return out << QString::fromUtf8(reinterpret_cast<const char*>(ustr.c_str()),
-                                    static_cast<QString::size_type>(ustr.size()));
+        static_cast<QString::size_type>(ustr.size()));
 }
 
 //--------------------------------------------------------------------------------------------------

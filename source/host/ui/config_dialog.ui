@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>451</width>
-    <height>588</height>
+    <height>536</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -66,50 +66,6 @@
              </widget>
             </item>
            </layout>
-          </item>
-          <item>
-           <widget class="QWidget" name="widget_service" native="true">
-            <layout class="QVBoxLayout" name="verticalLayout_4">
-             <item>
-              <widget class="QLabel" name="label_service_status">
-               <property name="text">
-                <string notr="true">Current service state:</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <layout class="QHBoxLayout" name="horizontalLayout_2">
-               <item>
-                <spacer name="horizontalSpacer">
-                 <property name="orientation">
-                  <enum>Qt::Orientation::Horizontal</enum>
-                 </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>40</width>
-                   <height>20</height>
-                  </size>
-                 </property>
-                </spacer>
-               </item>
-               <item>
-                <widget class="QPushButton" name="button_service_start_stop">
-                 <property name="text">
-                  <string notr="true">Start</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QPushButton" name="button_service_install_remove">
-                 <property name="text">
-                  <string notr="true">Install</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
-            </layout>
-           </widget>
           </item>
          </layout>
         </widget>

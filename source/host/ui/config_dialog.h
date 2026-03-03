@@ -33,9 +33,6 @@ public:
     explicit ConfigDialog(QWidget* parent = nullptr);
     ~ConfigDialog() final;
 
-    enum class ServiceState { NOT_INSTALLED, ACCESS_DENIED, NOT_STARTED, STARTED };
-    Q_ENUM(ServiceState)
-
 private slots:
     void onOneTimeStateChanged(int state);
     void onConnConfirmStateChanged(int state);
@@ -44,8 +41,6 @@ private slots:
     void onAddUser();
     void onModifyUser();
     void onDeleteUser();
-    void onServiceInstallRemove();
-    void onServiceStartStop();
     void onPassProtectClicked();
     void onChangePassClicked();
     void onImport();
@@ -58,17 +53,8 @@ private:
     bool isConfigChanged() const;
     void reloadAll();
     void reloadUserList(const base::UserList& user_list);
-    void reloadServiceStatus();
-    bool isServiceStarted();
-    bool installService();
-    bool removeService();
-    bool startService();
-    bool stopService();
-    bool restartService();
 
     Ui::ConfigDialog ui;
-
-    ServiceState service_state_;
 
     Q_DISABLE_COPY_MOVE(ConfigDialog)
 };

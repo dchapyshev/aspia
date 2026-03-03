@@ -38,10 +38,6 @@
 #include "host/system_settings.h"
 #include "common/ui/update_dialog.h"
 
-#if defined(Q_OS_WINDOWS)
-#include "base/win/service_controller.h"
-#endif // defined(Q_OS_WINDOWS)
-
 namespace host {
 
 //--------------------------------------------------------------------------------------------------
@@ -62,18 +58,8 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     // General Tab
     //---------------------------------------------------------------------------------------------
 
-#if defined(Q_OS_LINUX) || defined(Q_OS_MACOS)
-    ui.widget_service->setVisible(false);
-    ui.groupbox_update_server->setVisible(false);
-#endif // defined(Q_OS_LINUX) || defined(Q_OS_MACOS)
-
     connect(ui.spinbox_port, QOverload<int>::of(&QSpinBox::valueChanged),
             this, &ConfigDialog::onConfigChanged);
-
-    connect(ui.button_service_install_remove, &QPushButton::clicked,
-            this, &ConfigDialog::onServiceInstallRemove);
-    connect(ui.button_service_start_stop, &QPushButton::clicked,
-            this, &ConfigDialog::onServiceStartStop);
 
     connect(ui.button_import, &QPushButton::clicked, this, &ConfigDialog::onImport);
     connect(ui.button_export, &QPushButton::clicked, this, &ConfigDialog::onExport);
@@ -427,55 +413,6 @@ void ConfigDialog::onDeleteUser()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ConfigDialog::onServiceInstallRemove()
-{
-    switch (service_state_)
-    {
-        case ServiceState::NOT_INSTALLED:
-            installService();
-            break;
-
-        case ServiceState::NOT_STARTED:
-        case ServiceState::STARTED:
-        {
-            if (service_state_ == ServiceState::STARTED)
-            {
-                if (!stopService())
-                    break;
-            }
-
-            removeService();
-        }
-        break;
-
-        default:
-            break;
-    }
-
-    reloadServiceStatus();
-}
-
-//--------------------------------------------------------------------------------------------------
-void ConfigDialog::onServiceStartStop()
-{
-    switch (service_state_)
-    {
-        case ServiceState::NOT_STARTED:
-            startService();
-            break;
-
-        case ServiceState::STARTED:
-            stopService();
-            break;
-
-        default:
-            break;
-    }
-
-    reloadServiceStatus();
-}
-
-//--------------------------------------------------------------------------------------------------
 void ConfigDialog::onPassProtectClicked()
 {
     SystemSettings settings;
@@ -557,30 +494,7 @@ void ConfigDialog::onImport()
     }
 
     if (SettingsUtil::importFromFile(file_path, false, this))
-    {
-        if (isServiceStarted())
-        {
-            QString message =
-                tr("Service configuration changed. "
-                   "For the changes to take effect, you must restart the service. "
-                   "Restart the service now?");
-
-            QMessageBox message_box(QMessageBox::Question,
-                                    tr("Confirmation"),
-                                    message,
-                                    QMessageBox::Yes | QMessageBox::No,
-                                    this);
-            message_box.button(QMessageBox::Yes)->setText(tr("Yes"));
-            message_box.button(QMessageBox::No)->setText(tr("No"));
-
-            if (message_box.exec() == QMessageBox::Yes)
-            {
-                restartService();
-            }
-        }
-
         reloadAll();
-    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -619,30 +533,6 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
 
             QMessageBox::warning(this, tr("Warning"), message, QMessageBox::Ok);
             return;
-        }
-
-        bool service_restart_required = false;
-
-        // Now we have only one parameter when changing which requires restarting the service.
-        if (isServiceStarted() && settings.tcpPort() != ui.spinbox_port->value())
-        {
-            QString message =
-                tr("Service configuration changed. "
-                   "For the changes to take effect, you must restart the service. "
-                   "Restart the service now?");
-
-            QMessageBox message_box(QMessageBox::Question,
-                                    tr("Confirmation"),
-                                    message,
-                                    QMessageBox::Yes | QMessageBox::No,
-                                    this);
-            message_box.button(QMessageBox::Yes)->setText(tr("Yes"));
-            message_box.button(QMessageBox::No)->setText(tr("No"));
-
-            if (message_box.exec() == QMessageBox::Yes)
-            {
-                service_restart_required = true;
-            }
         }
 
         settings.setRouterEnabled(ui.checkbox_enable_router->isChecked());
@@ -714,9 +604,6 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
         settings.sync();
 
         setConfigChanged(FROM_HERE, false);
-
-        if (service_restart_required)
-            restartService();
     }
 
     if (standard_button == QDialogButtonBox::Apply)
@@ -828,7 +715,6 @@ void ConfigDialog::reloadAll()
     if (current_video_capturer != -1)
         ui.combo_video_capturer->setCurrentIndex(current_video_capturer);
 
-    reloadServiceStatus();
     reloadUserList(*settings.userList());
 
     ui.spinbox_port->setValue(settings.tcpPort());
@@ -867,198 +753,6 @@ void ConfigDialog::reloadUserList(const base::UserList& user_list)
 
     ui.action_modify->setEnabled(false);
     ui.action_delete->setEnabled(false);
-}
-
-//--------------------------------------------------------------------------------------------------
-void ConfigDialog::reloadServiceStatus()
-{
-#if defined(Q_OS_WINDOWS)
-    ui.button_service_install_remove->setEnabled(true);
-    ui.button_service_start_stop->setEnabled(true);
-
-    QString state;
-
-    if (base::ServiceController::isInstalled(Service::kName))
-    {
-        ui.button_service_install_remove->setText(tr("Remove"));
-
-        base::ServiceController controller = base::ServiceController::open(Service::kName);
-        if (controller.isValid())
-        {
-            if (controller.isRunning())
-            {
-                service_state_ = ServiceState::STARTED;
-                state = tr("Started");
-                ui.button_service_start_stop->setText(tr("Stop"));
-            }
-            else
-            {
-                service_state_ = ServiceState::NOT_STARTED;
-                state = tr("Not started");
-                ui.button_service_start_stop->setText(tr("Start"));
-            }
-        }
-        else
-        {
-            service_state_ = ServiceState::ACCESS_DENIED;
-            state = tr("Installed");
-            ui.button_service_start_stop->setText(tr("Start"));
-
-            // The service is installed, but there is no access to management.
-            ui.button_service_install_remove->setEnabled(false);
-            ui.button_service_start_stop->setEnabled(false);
-        }
-    }
-    else
-    {
-        service_state_ = ServiceState::NOT_INSTALLED;
-        state = tr("Not installed");
-
-        ui.button_service_install_remove->setText(tr("Install"));
-        ui.button_service_start_stop->setText(tr("Start"));
-        ui.button_service_start_stop->setEnabled(false);
-    }
-
-    ui.label_service_status->setText(tr("Current service state: %1").arg(state));
-#endif // defined(Q_OS_WINDOWS)
-}
-
-//--------------------------------------------------------------------------------------------------
-bool ConfigDialog::isServiceStarted()
-{
-#if defined(Q_OS_WINDOWS)
-    base::ServiceController controller = base::ServiceController::open(Service::kName);
-    if (controller.isValid())
-        return controller.isRunning();
-#endif // defined(Q_OS_WINDOWS)
-    return false;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool ConfigDialog::installService()
-{
-#if defined(Q_OS_WINDOWS)
-    QString service_file_path = QCoreApplication::applicationDirPath();
-
-    service_file_path.append('/');
-    service_file_path.append(Service::kFileName);
-
-    base::ServiceController controller = base::ServiceController::install(
-        Service::kName, Service::kDisplayName, service_file_path);
-    if (!controller.isValid())
-    {
-        LOG(INFO) << "Unable to install service";
-        QMessageBox::warning(this,
-                             tr("Warning"),
-                             tr("The service could not be installed."),
-                             QMessageBox::Ok);
-        return false;
-    }
-    else
-    {
-        controller.setDependencies({ "RpcSs", "Tcpip", "NDIS", "AFD" });
-        controller.setDescription(Service::kDescription);
-    }
-
-    return true;
-#else
-    return false;
-#endif
-}
-
-//--------------------------------------------------------------------------------------------------
-bool ConfigDialog::removeService()
-{
-#if defined(Q_OS_WINDOWS)
-    if (!base::ServiceController::remove(Service::kName))
-    {
-        LOG(ERROR) << "Unable to remove service";
-        QMessageBox::warning(this,
-                             tr("Warning"),
-                             tr("The service could not be removed."),
-                             QMessageBox::Ok);
-        return false;
-    }
-
-    return true;
-#else
-    return false;
-#endif
-}
-
-//--------------------------------------------------------------------------------------------------
-bool ConfigDialog::startService()
-{
-#if defined(Q_OS_WINDOWS)
-    base::ServiceController controller = base::ServiceController::open(Service::kName);
-    if (!controller.isValid())
-    {
-        LOG(ERROR) << "Unable to open service";
-        QMessageBox::warning(this,
-                             tr("Warning"),
-                             tr("Could not access the service."),
-                             QMessageBox::Ok);
-        return false;
-    }
-    else
-    {
-        if (!controller.start())
-        {
-            LOG(ERROR) << "Unable to start serivce";
-            QMessageBox::warning(this,
-                                 tr("Warning"),
-                                 tr("The service could not be started."),
-                                 QMessageBox::Ok);
-            return false;
-        }
-    }
-
-    return true;
-#else
-    return false;
-#endif
-}
-
-//--------------------------------------------------------------------------------------------------
-bool ConfigDialog::stopService()
-{
-#if defined(Q_OS_WINDOWS)
-    base::ServiceController controller = base::ServiceController::open(Service::kName);
-    if (!controller.isValid())
-    {
-        LOG(ERROR) << "Unable to open service";
-        QMessageBox::warning(this,
-                             tr("Warning"),
-                             tr("Could not access the service."),
-                             QMessageBox::Ok);
-        return false;
-    }
-    else
-    {
-        if (!controller.stop())
-        {
-            LOG(ERROR) << "Unable to stop service";
-            QMessageBox::warning(this,
-                                 tr("Warning"),
-                                 tr("The service could not be stopped."),
-                                 QMessageBox::Ok);
-            return false;
-        }
-    }
-
-    return true;
-#else
-    return false;
-#endif
-}
-
-//--------------------------------------------------------------------------------------------------
-bool ConfigDialog::restartService()
-{
-    if (!stopService())
-        return false;
-
-    return startService();
 }
 
 } // namespace host
