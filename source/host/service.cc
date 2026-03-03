@@ -380,7 +380,7 @@ void Service::onRepeatedTasks()
 //--------------------------------------------------------------------------------------------------
 void Service::onStopClient(quint32 client_id)
 {
-    auto stop_by_id = [&](auto& list)
+    auto stop_one = [&](auto& list)
     {
         auto it = std::find_if(list.begin(), list.end(), [&](auto* client)
         {
@@ -393,10 +393,26 @@ void Service::onStopClient(quint32 client_id)
         emit (*it)->sig_finished(client_id);
     };
 
-    stop_by_id(desktop_clients_);
-    stop_by_id(file_clients_);
-    stop_by_id(chat_clients_);
-    stop_by_id(system_info_clients_);
+    auto stop_all = [&](auto& list)
+    {
+        for (const auto& client : std::as_const(list))
+            emit client->sig_finished(client->clientId());
+    };
+
+    if (client_id == 0)
+    {
+        stop_all(desktop_clients_);
+        stop_all(file_clients_);
+        stop_all(chat_clients_);
+        stop_all(system_info_clients_);
+    }
+    else
+    {
+        stop_one(desktop_clients_);
+        stop_one(file_clients_);
+        stop_one(chat_clients_);
+        stop_one(system_info_clients_);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -605,7 +621,7 @@ void Service::startClient(base::TcpChannel* tcp_channel)
             connect(client, &FileClient::sig_started, user_session_, &UserSession::onClientStarted);
             connect(client, &FileClient::sig_finished, user_session_, &UserSession::onClientFinished);
 
-            client->start(desktop_manager_->sessionId());
+            client->start(user_session_->sessionId());
         }
         break;
 

@@ -201,7 +201,7 @@ quint32 FileClient::clientId() const
 //--------------------------------------------------------------------------------------------------
 void FileClient::start(base::SessionId session_id)
 {
-    if (session_id == base::kInvalidSessionId || session_id == 0)
+    if (session_id == 0)
     {
         LOG(ERROR) << "Invalid session id:" << session_id;
         onError(FROM_HERE);

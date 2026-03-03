@@ -29,6 +29,8 @@
 #include <asio/local/stream_protocol.hpp>
 #endif
 
+#include "base/session_id.h"
+
 namespace base {
 
 class IpcServer;
@@ -54,6 +56,7 @@ public:
 
     quint32 instanceId() const { return instance_id_; }
     const QString& channelName() const { return channel_name_; }
+    base::SessionId sessionId() const { return session_id_; }
 
 signals:
     void sig_connected();
@@ -112,9 +115,18 @@ private:
         quint32 channel_id;
     };
 
+    enum class ReadState
+    {
+        IDLE,        // No reads are in progress right now.
+        READ_HEADER, // Reading the message header.
+        READ_DATA,   // Reading the contents of the user data.
+        PENDING      // There is a message about which we did not notify.
+    };
+
     using WriteQueue = QQueue<WriteTask>;
 
     const quint32 instance_id_;
+    base::SessionId session_id_ = base::kInvalidSessionId;
     QString channel_name_;
     Stream stream_;
 
@@ -124,6 +136,7 @@ private:
     WriteQueue write_queue_;
     Header write_header_;
 
+    ReadState read_state_ = ReadState::IDLE;
     Header read_header_;
     QByteArray read_buffer_;
 

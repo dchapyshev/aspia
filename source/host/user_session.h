@@ -74,6 +74,7 @@ private slots:
     void onIpcNewConnection();
     void onIpcDisconnected();
     void onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer);
+    void onDettachTimeout();
 
 private:
     void attach(const base::Location& location, base::SessionId session_id);
@@ -83,6 +84,7 @@ private:
     base::IpcServer* ipc_server_ = nullptr;
     base::IpcChannel* ipc_channel_ = nullptr;
     QTimer* attach_timer_ = nullptr;
+    QTimer* dettach_timer_ = nullptr;
 
     base::SessionId session_id_ = base::kInvalidSessionId;
     bool is_console_ = true;

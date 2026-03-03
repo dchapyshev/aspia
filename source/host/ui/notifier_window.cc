@@ -278,16 +278,7 @@ void NotifierWindow::onPause(bool value)
 void NotifierWindow::onStop()
 {
     LOG(INFO) << "[ACTION] Stop";
-
-    for (int i = 0; i < ui.tree->topLevelItemCount(); ++i)
-    {
-        SessionTreeItem* item = static_cast<SessionTreeItem*>(ui.tree->topLevelItem(i));
-        if (item)
-        {
-            LOG(INFO) << "Disconnect session with ID:" << item->clientId();
-            emit sig_killSession(item->clientId());
-        }
-    }
+    emit sig_killSession(0);
 }
 
 //--------------------------------------------------------------------------------------------------

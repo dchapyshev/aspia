@@ -111,14 +111,19 @@ bool createProcessWithToken(HANDLE token, const QString& command_line)
 //--------------------------------------------------------------------------------------------------
 UserSession::UserSession(QObject* parent)
     : QObject(parent),
-      attach_timer_(new QTimer(this))
+      attach_timer_(new QTimer(this)),
+      dettach_timer_(new QTimer(this))
 {
     LOG(INFO) << "Ctor";
 
     attach_timer_->setSingleShot(true);
     attach_timer_->setInterval(std::chrono::seconds(15));
 
+    dettach_timer_->setSingleShot(true);
+    dettach_timer_->setInterval(std::chrono::seconds(15));
+
     connect(attach_timer_, &QTimer::timeout, this, [this]() { dettach(FROM_HERE); });
+    connect(dettach_timer_, &QTimer::timeout, this, &UserSession::onDettachTimeout);
     connect(base::Application::instance(), &base::Application::sig_sessionEvent,
             this, &UserSession::onUserSessionEvent);
 }
@@ -371,12 +376,38 @@ void UserSession::onIpcNewConnection()
         return;
     }
 
-    ipc_channel_ = ipc_server_->nextPendingConnection();
-    ipc_channel_->setParent(this);
+    base::IpcChannel* ipc_channel = ipc_server_->nextPendingConnection();
+    ipc_channel->setParent(this);
+
+    if (ipc_channel_)
+    {
+        LOG(WARNING) << "IPC channel is already connected";
+        ipc_channel->deleteLater();
+        return;
+    }
+
+    if (session_id_ == base::kInvalidSessionId)
+    {
+        base::SessionId ipc_session_id = ipc_channel->sessionId();
+
+        LOG(INFO) << "User GUI started by user with session id" << ipc_session_id;
+
+        if (ipc_session_id != base::activeConsoleSessionId())
+        {
+            LOG(WARNING) << "Launching GUI is only possible in console session";
+            ipc_channel->deleteLater();
+            return;
+        }
+
+        session_id_ = ipc_session_id;
+    }
+
+    ipc_channel_ = ipc_channel;
 
     connect(ipc_channel_, &base::IpcChannel::sig_disconnected, this, &UserSession::onIpcDisconnected);
     connect(ipc_channel_, &base::IpcChannel::sig_messageReceived, this, &UserSession::onIpcMessageReceived);
 
+    dettach_timer_->stop();
     attach_timer_->stop();
     ipc_channel_->resume();
 
@@ -473,6 +504,13 @@ void UserSession::onIpcMessageReceived(quint32 /* ipc_channel_id */, const QByte
 }
 
 //--------------------------------------------------------------------------------------------------
+void UserSession::onDettachTimeout()
+{
+    LOG(INFO) << "Stop all clients";
+    emit sig_stopClient(0);
+}
+
+//--------------------------------------------------------------------------------------------------
 void UserSession::attach(const base::Location& location, base::SessionId session_id)
 {
     LOG(INFO) << "Attaching to UI process (sid" << session_id << "from" << location << ")";
@@ -484,6 +522,7 @@ void UserSession::attach(const base::Location& location, base::SessionId session
     }
 
     session_id_ = session_id;
+    dettach_timer_->stop();
     attach_timer_->start();
 
 #if defined(Q_OS_WINDOWS)
@@ -502,16 +541,16 @@ void UserSession::attach(const base::Location& location, base::SessionId session
     base::SessionInfo session_info(session_id);
     if (!session_info.isValid())
     {
-        LOG(ERROR) << "Unable to get session info (sid=" << session_id << ")";
+        LOG(ERROR) << "Unable to get session info (sid" << session_id << ")";
         return;
     }
 
-    LOG(INFO) << "# Session info (sid=" << session_id
-              << "username=" << session_info.userName()
-              << "connect_state=" << session_info.connectState()
-              << "win_station=" << session_info.winStationName()
-              << "domain=" << session_info.domain()
-              << "locked=" << session_info.isUserLocked() << ")";
+    LOG(INFO) << "# Session info (sid:" << session_id
+              << "username:" << session_info.userName()
+              << "connect_state:" << session_info.connectState()
+              << "win_station:" << session_info.winStationName()
+              << "domain:" << session_info.domain()
+              << "locked:" << session_info.isUserLocked() << ")";
 
     if (session_info.connectState() != base::SessionInfo::ConnectState::ACTIVE)
     {
@@ -605,6 +644,22 @@ void UserSession::dettach(const base::Location& location)
         ipc_channel_->deleteLater();
         ipc_channel_ = nullptr;
     }
+
+#if defined(Q_OS_WINDOWS)
+    base::SessionInfo session_info(session_id_);
+    if (session_info.isValid() && session_info.connectState() == base::SessionInfo::ConnectState::ACTIVE)
+    {
+        // The GUI process terminated while the user was in an active session.
+        // There may be the following reasons:
+        // 1. The user closed the application using the GUI.
+        // 2. The user killed the process.
+        // 3. The process has crashed.
+        // Start a timer, after which all connected clients will be disconnected.
+
+        LOG(WARNING) << "GUI process terminated during an active user session";
+        dettach_timer_->start();
+    }
+#endif // defined(Q_OS_WINDOWS)
 
     session_id_ = base::kInvalidSessionId;
     emit sig_dettached();

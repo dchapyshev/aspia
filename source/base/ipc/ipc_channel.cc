@@ -55,6 +55,42 @@ quint32 makeInstanceId()
     return instance_id;
 }
 
+//--------------------------------------------------------------------------------------------------
+SessionId clientSessionId(HANDLE pipe_handle)
+{
+#if defined(Q_OS_WINDOWS)
+    ULONG session_id = kInvalidSessionId;
+
+    if (!GetNamedPipeClientSessionId(pipe_handle, &session_id))
+    {
+        PLOG(ERROR) << "GetNamedPipeClientSessionId failed";
+        return kInvalidSessionId;
+    }
+
+    return session_id;
+#else
+    return kInvalidSessionId;
+#endif
+}
+
+//--------------------------------------------------------------------------------------------------
+SessionId serverSessionId(HANDLE pipe_handle)
+{
+#if defined(Q_OS_WINDOWS)
+    ULONG session_id = kInvalidSessionId;
+
+    if (!GetNamedPipeServerSessionId(pipe_handle, &session_id))
+    {
+        PLOG(ERROR) << "GetNamedPipeServerSessionId failed";
+        return kInvalidSessionId;
+    }
+
+    return session_id;
+#else
+    return kInvalidSessionId;
+#endif
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -70,6 +106,7 @@ IpcChannel::IpcChannel(QObject* parent)
 IpcChannel::IpcChannel(const QString& channel_name, Stream&& stream, QObject* parent)
     : QObject(parent),
       instance_id_(makeInstanceId()),
+      session_id_(clientSessionId(stream.native_handle())),
       channel_name_(channel_name),
       stream_(std::move(stream)),
       is_connected_(true)
@@ -119,9 +156,21 @@ void IpcChannel::resume()
     LOG(INFO) << "resume (channel" << channel_name_ << ")";
     is_paused_ = false;
 
-    // If we have a message that was received before the pause command.
-    if (read_header_.message_size)
-        onMessageReceived();
+    switch (read_state_)
+    {
+        // We already have an incomplete read operation.
+        case ReadState::READ_HEADER:
+        case ReadState::READ_DATA:
+            return;
+
+        // If we have a message that was received before the pause command.
+        case ReadState::PENDING:
+            onMessageReceived();
+            break;
+
+        default:
+            break;
+    }
 
     DCHECK_EQ(read_header_.message_size, 0);
     doReadHeader();
@@ -204,6 +253,7 @@ bool IpcChannel::connectAttempt()
     }
 #endif
 
+    session_id_ = serverSessionId(stream_.native_handle());
     return true;
 }
 
@@ -331,6 +381,8 @@ void IpcChannel::doWriteData()
 //--------------------------------------------------------------------------------------------------
 void IpcChannel::doReadHeader()
 {
+    read_state_ = ReadState::READ_HEADER;
+
     asio::async_read(stream_,
                      asio::buffer(&read_header_, sizeof(read_header_)),
                      [this](const std::error_code& error_code, size_t bytes_transferred)
@@ -359,6 +411,8 @@ void IpcChannel::doReadHeader()
 //--------------------------------------------------------------------------------------------------
 void IpcChannel::doReadData()
 {
+    read_state_ = ReadState::READ_DATA;
+
     if (read_buffer_.capacity() < static_cast<QByteArray::size_type>(read_header_.message_size))
     {
         read_buffer_.clear();
@@ -383,12 +437,18 @@ void IpcChannel::doReadData()
         DCHECK_EQ(bytes_transferred, read_header_.message_size);
 
         if (is_paused_)
+        {
+            read_state_ = ReadState::PENDING;
             return;
+        }
 
         onMessageReceived();
 
         if (is_paused_)
+        {
+            read_state_ = ReadState::IDLE;
             return;
+        }
 
         DCHECK_EQ(read_header_.message_size, 0);
         doReadHeader();
