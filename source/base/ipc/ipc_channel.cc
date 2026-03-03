@@ -116,7 +116,7 @@ void IpcChannel::resume()
     if (!is_connected_ || !is_paused_)
         return;
 
-    LOG(INFO) << "resume channel (channel_name" << channel_name_ << ")";
+    LOG(INFO) << "resume (channel" << channel_name_ << ")";
     is_paused_ = false;
 
     // If we have a message that was received before the pause command.
@@ -175,13 +175,13 @@ bool IpcChannel::connectAttempt()
         if (error_code != ERROR_PIPE_BUSY)
         {
             LOG(ERROR) << "Failed to connect to the named pipe:" << SystemError::toString(error_code)
-            << "(channel_name" << channel_name_ << ")";
+            << "(channel" << channel_name_ << ")";
             return false;
         }
 
         if (!WaitNamedPipeW(qUtf16Printable(channel_path), kConnectTimeout))
         {
-            PLOG(ERROR) << "WaitNamedPipeW failed (channel_name" << channel_name_ << ")";
+            PLOG(ERROR) << "WaitNamedPipeW failed (channel" << channel_name_ << ")";
             return false;
         }
     }
@@ -212,7 +212,7 @@ void IpcChannel::scheduleConnectAttempt(const std::chrono::milliseconds& delay, 
 {
     if (count > 30)
     {
-        LOG(ERROR) << "Connection timeout (channel_name" << channel_name_ << ")";
+        LOG(ERROR) << "Connection timeout (channel" << channel_name_ << ")";
         emit sig_errorOccurred();
         return;
     }
@@ -236,7 +236,7 @@ void IpcChannel::disconnectFrom()
     if (!is_connected_)
         return;
 
-    LOG(INFO) << "disconnect channel (channel_name" << channel_name_ << ")";
+    LOG(INFO) << "disconnect (channel" << channel_name_ << ")";
     is_connected_ = false;
 
     std::error_code ignored_code;

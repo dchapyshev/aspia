@@ -27,6 +27,7 @@
 #include "base/serialization.h"
 #include "base/ipc/ipc_channel.h"
 #include "base/ipc/ipc_server.h"
+#include "host/desktop_client.h"
 #include "proto/desktop_internal.h"
 
 #if defined(Q_OS_WINDOWS)
@@ -259,7 +260,16 @@ void DesktopManager::onClientStarted()
     ++client_count_;
 
     if (is_attach_needed)
+    {
         attach(FROM_HERE, base::activeConsoleSessionId());
+        return;
+    }
+
+    DesktopClient* client = dynamic_cast<DesktopClient*>(sender());
+    CHECK(client);
+
+    QString ipc_channel_name = client->attach();
+    startAgentClient(ipc_channel_name);
 }
 
 //--------------------------------------------------------------------------------------------------

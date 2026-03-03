@@ -87,12 +87,12 @@ void UserSessionAgent::onOneTimeSessions(quint32 sessions)
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionAgent::onKillClient(quint32 id)
+void UserSessionAgent::onStopClient(quint32 client_id)
 {
-    LOG(INFO) << "Kill client request:" << id;
+    LOG(INFO) << "Stop client request:" << client_id;
     proto::user::ServiceControl* control = outgoing_message_.newMessage().mutable_control();
-    control->set_command_name("kill");
-    control->set_unsigned_integer(id);
+    control->set_command_name("stop_client");
+    control->set_unsigned_integer(client_id);
     sendMessage();
 }
 

@@ -174,7 +174,7 @@ void MainWindow::connectToService()
             Qt::QueuedConnection);
     connect(this, &MainWindow::sig_oneTimeSessions, agent, &UserSessionAgent::onOneTimeSessions,
             Qt::QueuedConnection);
-    connect(this, &MainWindow::sig_killClient, agent, &UserSessionAgent::onKillClient,
+    connect(this, &MainWindow::sig_killClient, agent, &UserSessionAgent::onStopClient,
             Qt::QueuedConnection);
     connect(this, &MainWindow::sig_connectConfirmation, agent, &UserSessionAgent::onConnectConfirmation,
             Qt::QueuedConnection);

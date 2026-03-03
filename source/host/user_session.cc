@@ -21,6 +21,7 @@
 #include <QCoreApplication>
 #include <QDir>
 #include <QTimer>
+#include <QVariant>
 
 #include "base/application.h"
 #include "base/location.h"
@@ -262,14 +263,26 @@ void UserSession::onClientConfirmation(const proto::user::ConfirmationRequest& r
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSession::onClientStarted(quint32 client_id, proto::peer::SessionType session_type,
-    const QString& computer_name, const QString& display_name)
+void UserSession::onClientStarted(quint32 client_id)
 {
+    QObject* client = sender();
+    if (!client)
+    {
+        LOG(ERROR) << "Unable to get sender (client_id" << client_id << ")";
+        return;
+    }
+
+    proto::peer::SessionType session_type =
+        static_cast<proto::peer::SessionType>(client->property("session_type").toUInt());
+    QString computer_name = client->property("computer_name").toString();
+    QString display_name = client->property("display_name").toString();
+
     proto::user::ConnectEvent* event = outgoing_message_.newMessage().mutable_connect_event();
     event->set_client_id(client_id);
     event->set_session_type(session_type);
     event->set_computer_name(computer_name.toStdString());
     event->set_display_name(display_name.toStdString());
+
     sendMessage();
 }
 
@@ -419,10 +432,10 @@ void UserSession::onIpcMessageReceived(quint32 /* ipc_channel_id */, const QByte
         const proto::user::ServiceControl& control = incoming_message_->control();
         const std::string command_name = control.command_name();
 
-        if (command_name == "kill")
+        if (command_name == "stop_client")
         {
             CHECK(control.has_unsigned_integer());
-            LOG(INFO) << "kill" << control.unsigned_integer();
+            LOG(INFO) << "stop_client" << control.unsigned_integer();
             emit sig_stopClient(static_cast<quint32>(control.unsigned_integer()));
         }
         else if (command_name == "pause")

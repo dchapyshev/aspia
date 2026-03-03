@@ -18,6 +18,8 @@
 
 #include "host/chat_client.h"
 
+#include <QVariant>
+
 #include "base/application.h"
 #include "base/logging.h"
 #include "base/serialization.h"
@@ -34,6 +36,11 @@ ChatClient::ChatClient(base::TcpChannel* tcp_channel, QObject* parent)
     CHECK(tcp_channel_);
 
     tcp_channel_->setParent(this);
+
+    setProperty("session_type", tcp_channel_->peerSessionType());
+    setProperty("user_name", tcp_channel_->peerUserName());
+    setProperty("display_name", tcp_channel_->peerDisplayName());
+    setProperty("computer_name", tcp_channel_->peerComputerName());
 
     connect(tcp_channel_, &base::TcpChannel::sig_errorOccurred, this, &ChatClient::onTcpErrorOccurred);
     connect(tcp_channel_, &base::TcpChannel::sig_messageReceived, this, &ChatClient::onTcpMessageReceived);
@@ -52,18 +59,6 @@ ChatClient::~ChatClient()
 quint32 ChatClient::clientId() const
 {
     return tcp_channel_->instanceId();
-}
-
-//--------------------------------------------------------------------------------------------------
-QString ChatClient::displayName() const
-{
-    return tcp_channel_->peerDisplayName();
-}
-
-//--------------------------------------------------------------------------------------------------
-QString ChatClient::computerName() const
-{
-    return tcp_channel_->peerComputerName();
 }
 
 //--------------------------------------------------------------------------------------------------

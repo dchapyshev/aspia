@@ -91,19 +91,10 @@ private slots:
     void onFileDownloaderProgress(int percentage);
     void onRepeatedTasks();
     void onStopClient(quint32 client_id);
-
     void onDesktopManagerAttached();
-
-    void onDesktopClientStarted(quint32 client_id);
     void onDesktopClientFinished(quint32 client_id);
-    void onDesktopClientSwitchSession(base::SessionId session_id);
-
-    void onFileClientStarted(quint32 client_id);
     void onFileClientFinished(quint32 client_id);
-
-    void onSystemInfoClientStarted(quint32 client_id);
     void onSystemInfoClientFinished(quint32 client_id);
-
     void onChatClientStarted(quint32 client_id);
     void onChatClientFinished(quint32 client_id);
     void onChatClientMessage(quint32 client_id, const proto::chat::Chat& chat);

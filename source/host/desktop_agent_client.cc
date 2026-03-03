@@ -412,7 +412,7 @@ void DesktopAgentClient::onIpcConnected()
 void DesktopAgentClient::onIpcErrorOccurred()
 {
     LOG(ERROR) << "Unable to connect to IPC server";
-    ipc_channel_->disconnect(this);
+    ipc_channel_->disconnect();
     emit sig_finished();
 }
 
@@ -420,7 +420,7 @@ void DesktopAgentClient::onIpcErrorOccurred()
 void DesktopAgentClient::onIpcDisconnected()
 {
     LOG(INFO) << "IPC channel is disconnected";
-    ipc_channel_->disconnect(this);
+    ipc_channel_->disconnect();
     emit sig_finished();
 }
 
@@ -679,7 +679,7 @@ void DesktopAgentClient::readConfig(const proto::desktop::Config& config)
     config_.clear_clipboard = (config.flags() & proto::desktop::CLEAR_CLIPBOARD);
     config_.cursor_position = (config.flags() & proto::desktop::CURSOR_POSITION);
 
-    LOG(INFO) << "Client config changed (encoding:" << config.video_encoding()
+    LOG(INFO) << "Config changed (encoding:" << config.video_encoding()
               << "cursor_shape:" << (cursor_encoder_ != nullptr)
               << "font_smoothing:" << config_.disable_font_smoothing
               << "effects:" << config_.disable_effects

@@ -52,8 +52,7 @@ public:
 public slots:
     void onClientSwitchSession(base::SessionId session_id);
     void onClientConfirmation(const proto::user::ConfirmationRequest& request);
-    void onClientStarted(quint32 client_id, proto::peer::SessionType session_type,
-        const QString& computer_name, const QString& display_name);
+    void onClientStarted(quint32 client_id);
     void onClientFinished(quint32 client_id);
     void onClientChat(quint32 client_id, const proto::chat::Chat& chat);
     void onClientRecording(const QString& computer, const QString& user, bool started);

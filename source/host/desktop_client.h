@@ -40,10 +40,6 @@ public:
     ~DesktopClient() final;
 
     quint32 clientId() const;
-    proto::peer::SessionType sessionType() const;
-    QString displayName() const;
-    QString computerName() const;
-    QString userName() const;
     bool isAttached() const;
 
     QString attach();

@@ -18,6 +18,8 @@
 
 #include "host/desktop_client.h"
 
+#include <QVariant>
+
 #include "base/application.h"
 #include "base/logging.h"
 #include "base/numeric_utils.h"
@@ -43,6 +45,11 @@ DesktopClient::DesktopClient(base::TcpChannel* tcp_channel, QObject* parent)
     CHECK(tcp_channel_);
 
     tcp_channel_->setParent(this);
+
+    setProperty("session_type", tcp_channel_->peerSessionType());
+    setProperty("user_name", tcp_channel_->peerUserName());
+    setProperty("display_name", tcp_channel_->peerDisplayName());
+    setProperty("computer_name", tcp_channel_->peerComputerName());
 
     connect(tcp_channel_, &base::TcpChannel::sig_errorOccurred, this, &DesktopClient::onTcpErrorOccurred);
     connect(tcp_channel_, &base::TcpChannel::sig_messageReceived, this, &DesktopClient::onTcpMessageReceived);
@@ -72,30 +79,6 @@ DesktopClient::~DesktopClient()
 quint32 DesktopClient::clientId() const
 {
     return tcp_channel_->instanceId();
-}
-
-//--------------------------------------------------------------------------------------------------
-proto::peer::SessionType DesktopClient::sessionType() const
-{
-    return static_cast<proto::peer::SessionType>(tcp_channel_->peerSessionType());
-}
-
-//--------------------------------------------------------------------------------------------------
-QString DesktopClient::displayName() const
-{
-    return tcp_channel_->peerDisplayName();
-}
-
-//--------------------------------------------------------------------------------------------------
-QString DesktopClient::computerName() const
-{
-    return tcp_channel_->peerComputerName();
-}
-
-//--------------------------------------------------------------------------------------------------
-QString DesktopClient::userName() const
-{
-    return tcp_channel_->peerUserName();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -169,7 +152,8 @@ void DesktopClient::onIpcNewConnection()
     connect(ipc_channel_, &base::IpcChannel::sig_disconnected, this, &DesktopClient::onIpcDisconnected);
     connect(ipc_channel_, &base::IpcChannel::sig_messageReceived, this, &DesktopClient::onIpcMessageReceived);
 
-    proto::peer::SessionType session_type = sessionType();
+    proto::peer::SessionType session_type =
+        static_cast<proto::peer::SessionType>(tcp_channel_->peerSessionType());
     CHECK(session_type == proto::peer::SESSION_TYPE_DESKTOP_MANAGE ||
           session_type == proto::peer::SESSION_TYPE_DESKTOP_VIEW);
 
@@ -268,7 +252,7 @@ void DesktopClient::onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray
         }
         else if (message.has_switch_session())
         {
-            if (sessionType() != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
+            if (tcp_channel_->peerSessionType() != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
             {
                 LOG(ERROR) << "Switch session available only for desktop manage session type";
                 return;
@@ -288,7 +272,7 @@ void DesktopClient::onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray
         {
             bool is_started =
                 message.video_recording().action() == proto::desktop::VideoRecording::ACTION_STARTED;
-            emit sig_recordingChanged(computerName(), userName(), is_started);
+            emit sig_recordingChanged(tcp_channel_->peerComputerName(), tcp_channel_->peerUserName(), is_started);
         }
     }
     else

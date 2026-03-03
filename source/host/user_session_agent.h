@@ -70,8 +70,8 @@ public slots:
     void onConnectToService();
     void onUpdateCredentials(proto::user::CredentialsRequest::Type type);
     void onOneTimeSessions(quint32 sessions);
-    void onKillClient(quint32 id);
-    void onConnectConfirmation(quint32 id, bool accept);
+    void onStopClient(quint32 client_id);
+    void onConnectConfirmation(quint32 request_id, bool accept);
     void onMouseLock(bool enable);
     void onKeyboardLock(bool enable);
     void onPause(bool enable);

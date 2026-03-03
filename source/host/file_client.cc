@@ -167,6 +167,11 @@ FileClient::FileClient(base::TcpChannel* tcp_channel, QObject* parent)
 
     tcp_channel_->setParent(this);
 
+    setProperty("session_type", tcp_channel_->peerSessionType());
+    setProperty("user_name", tcp_channel_->peerUserName());
+    setProperty("display_name", tcp_channel_->peerDisplayName());
+    setProperty("computer_name", tcp_channel_->peerComputerName());
+
     connect(tcp_channel_, &base::TcpChannel::sig_errorOccurred, this, &FileClient::onTcpErrorOccurred);
     connect(tcp_channel_, &base::TcpChannel::sig_messageReceived, this, &FileClient::onTcpMessageReceived);
 
@@ -188,18 +193,6 @@ FileClient::~FileClient()
 quint32 FileClient::clientId() const
 {
     return tcp_channel_->instanceId();
-}
-
-//--------------------------------------------------------------------------------------------------
-QString FileClient::displayName() const
-{
-    return tcp_channel_->peerDisplayName();
-}
-
-//--------------------------------------------------------------------------------------------------
-QString FileClient::computerName() const
-{
-    return tcp_channel_->peerComputerName();
 }
 
 //--------------------------------------------------------------------------------------------------

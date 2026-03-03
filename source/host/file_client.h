@@ -41,8 +41,6 @@ public:
     ~FileClient() final;
 
     quint32 clientId() const;
-    QString displayName() const;
-    QString computerName() const;
 
 public slots:
     void start(base::SessionId session_id);

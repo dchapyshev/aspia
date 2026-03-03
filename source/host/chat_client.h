@@ -35,8 +35,6 @@ public:
     ~ChatClient() final;
 
     quint32 clientId() const;
-    QString displayName() const;
-    QString computerName() const;
 
 public slots:
     void start();
