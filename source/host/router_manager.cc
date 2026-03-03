@@ -22,10 +22,12 @@
 
 #include "base/logging.h"
 #include "base/serialization.h"
+#include "base/crypto/password_generator.h"
 #include "base/peer/client_authenticator.h"
 #include "base/peer/relay_peer_manager.h"
 #include "base/peer/server_authenticator.h"
 #include "host/host_storage.h"
+#include "host/system_settings.h"
 #include "proto/router_peer.h"
 
 namespace host {
@@ -40,7 +42,8 @@ const std::chrono::seconds kReconnectTimeout{ 10 };
 RouterManager::RouterManager(QObject* parent)
     : QObject(parent),
       peer_manager_(new base::RelayPeerManager(this)),
-      reconnect_timer_(new QTimer(this))
+      reconnect_timer_(new QTimer(this)),
+      password_expire_timer_(new QTimer(this))
 {
     LOG(INFO) << "Ctor";
 
@@ -49,29 +52,14 @@ RouterManager::RouterManager(QObject* parent)
 
     reconnect_timer_->setSingleShot(true);
     connect(reconnect_timer_, &QTimer::timeout, this, &RouterManager::connectToRouter);
+
+    connect(password_expire_timer_, &QTimer::timeout, this, &RouterManager::onUserListChanged);
 }
 
 //--------------------------------------------------------------------------------------------------
 RouterManager::~RouterManager()
 {
     LOG(INFO) << "Dtor";
-}
-
-//--------------------------------------------------------------------------------------------------
-void RouterManager::start(const QString& address, quint16 port, const QByteArray& public_key)
-{
-    address_ = address;
-    port_ = port;
-    public_key_ = public_key;
-
-    LOG(INFO) << "Starting host controller for router:" << address_ << ":" << port_;
-    connectToRouter();
-}
-
-//--------------------------------------------------------------------------------------------------
-void RouterManager::setUserList(base::SharedPointer<base::UserListBase> user_list)
-{
-    user_list_ = user_list;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -91,6 +79,69 @@ base::TcpChannel* RouterManager::nextPendingConnection()
 
     channels_.pop_front();
     return channel;
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterManager::start()
+{
+    SystemSettings settings;
+    address_ = settings.routerAddress();
+    port_ = settings.routerPort();
+    public_key_ = settings.routerPublicKey();
+
+    onUserListChanged();
+
+    LOG(INFO) << "Starting host controller for router:" << address_ << ":" << port_;
+    connectToRouter();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterManager::onUserListChanged()
+{
+    SystemSettings settings;
+    user_list_.reset(settings.userList().release());
+
+    if (!settings.oneTimePassword())
+    {
+        LOG(INFO) << "One-time password is disabled";
+        password_expire_timer_->stop();
+        one_time_sessions_ = 0;
+        one_time_password_.clear();
+    }
+    else
+    {
+        LOG(INFO) << "One-time password is enabled";
+
+        base::PasswordGenerator generator;
+        generator.setCharacters(settings.oneTimePasswordCharacters());
+        generator.setLength(settings.oneTimePasswordLength());
+
+        one_time_password_ = generator.result();
+
+        std::chrono::milliseconds expire_interval = settings.oneTimePasswordExpire();
+        if (expire_interval > std::chrono::milliseconds(0))
+            password_expire_timer_->start(expire_interval);
+        else
+            password_expire_timer_->stop();
+
+        user_list_->add(createOneTimeUser());
+    }
+
+    emit sig_credentialsChanged(host_id_, one_time_password_);
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterManager::onOneTimeSessionsChanged(quint32 one_time_sessions)
+{
+    one_time_sessions_ = one_time_sessions;
+    onUserListChanged();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterManager::onUserSessionAttached()
+{
+    emit sig_routerStateChanged(router_state_);
+    emit sig_credentialsChanged(host_id_, one_time_password_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -173,7 +224,7 @@ void RouterManager::onTcpMessageReceived(quint8 /* channel_id */, const QByteArr
         if (host_key_storage.lastHostId() != host_id_)
             host_key_storage.setLastHostId(host_id_);
 
-        emit sig_hostIdAssigned(host_id_);
+        emit sig_credentialsChanged(host_id_, one_time_password_);
     }
     else if (in_message.has_connection_offer())
     {
@@ -285,6 +336,32 @@ void RouterManager::hostIdRequest()
     // Send host ID request.
     LOG(INFO) << "Send ID request to router";
     tcp_channel_->send(proto::router::CHANNEL_ID_SESSION, base::serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+base::User RouterManager::createOneTimeUser() const
+{
+    if (host_id_ == base::kInvalidHostId)
+    {
+        LOG(INFO) << "Invalid host ID";
+        return base::User();
+    }
+
+    if (one_time_password_.isEmpty())
+    {
+        LOG(INFO) << "No password for one-time user";
+        return base::User();
+    }
+
+    QString username = '#' + base::hostIdToString(host_id_);
+    base::User user = base::User::create(username, one_time_password_);
+
+    user.sessions = one_time_sessions_;
+    user.flags = base::User::ENABLED;
+
+    LOG(INFO) << "One time user" << username << "created (host_id:" << host_id_
+              << "sessions:" << one_time_sessions_ << ")";
+    return user;
 }
 
 } // namespace host

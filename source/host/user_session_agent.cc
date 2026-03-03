@@ -217,7 +217,7 @@ void UserSessionAgent::onIpcMessageReceived(quint32 /* ipc_channel_id */, const 
     else if (incoming_message_->has_credentials())
     {
         const proto::user::Credentials& credentials = incoming_message_->credentials();
-        LOG(INFO) << "Credentials received (host_id=" << credentials.host_id() << ")";
+        LOG(INFO) << "Credentials received (host_id" << credentials.host_id() << ")";
         emit sig_credentialsChanged(credentials);
     }
     else if (incoming_message_->has_router_state())

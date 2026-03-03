@@ -29,7 +29,6 @@
 #include "base/location.h"
 #include "base/logging.h"
 #include "base/version_constants.h"
-#include "base/crypto/password_generator.h"
 #include "base/crypto/random.h"
 #include "base/ipc/ipc_channel.h"
 #include "base/net/tcp_channel.h"
@@ -78,16 +77,12 @@ Service::Service(QObject* parent)
       settings_watcher_(new QFileSystemWatcher(this)),
       tcp_server_(new base::TcpServer(this)),
       desktop_manager_(new DesktopManager(this)),
-      user_session_(new UserSession(this)),
-      password_expire_timer_(new QTimer(this))
+      user_session_(new UserSession(this))
 {
     LOG(INFO) << "Ctor";
 
     connect(repeated_timer_, &QTimer::timeout, this, &Service::onRepeatedTasks);
     connect(settings_watcher_, &QFileSystemWatcher::fileChanged, this, &Service::updateConfiguration);
-    connect(user_session_, &UserSession::sig_attached, this, &Service::onUserSessionAttached);
-    connect(user_session_, &UserSession::sig_changeOneTimePassword, this, &Service::onChangeOneTimePassword);
-    connect(user_session_, &UserSession::sig_changeOneTimeSessions, this, &Service::onChangeOneTimeSessions);
     connect(user_session_, &UserSession::sig_confirmationReply, this, &Service::onConfirmationReply);
     connect(user_session_, &UserSession::sig_chatMessage, this, &Service::onUserChatMessage);
     connect(user_session_, &UserSession::sig_stopClient, this, &Service::onStopClient);
@@ -154,7 +149,6 @@ void Service::onStart()
     addFirewallRules();
     tcp_server_->start(settings_.tcpPort());
 
-    updateOneTimeCredentials(FROM_HERE);
     reloadUserList();
 
     if (settings_.isRouterEnabled())
@@ -198,31 +192,6 @@ void Service::onPowerEvent(quint32 power_event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Service::onChangeOneTimePassword()
-{
-    updateOneTimeCredentials(FROM_HERE);
-    reloadUserList();
-
-    base::HostId host_id = base::kInvalidHostId;
-    QString password;
-
-    if (router_manager_)
-    {
-        host_id = router_manager_->hostId();
-        password = one_time_password_;
-    }
-
-    user_session_->onUpdateCredentials(host_id, password);
-}
-
-//--------------------------------------------------------------------------------------------------
-void Service::onChangeOneTimeSessions(quint32 sessions)
-{
-    one_time_sessions_ = sessions;
-    reloadUserList();
-}
-
-//--------------------------------------------------------------------------------------------------
 void Service::onNewDirectConnection()
 {
     LOG(INFO) << "New DIRECT connection";
@@ -230,32 +199,6 @@ void Service::onNewDirectConnection()
 
     while (tcp_server_->hasReadyConnections())
         startConfirmation(tcp_server_->nextReadyConnection());
-}
-
-//--------------------------------------------------------------------------------------------------
-void Service::onUserSessionAttached()
-{
-    proto::user::RouterState state;
-    state.set_state(proto::user::RouterState::DISABLED);
-
-    base::HostId host_id = base::kInvalidHostId;
-    QString password;
-
-    if (router_manager_)
-    {
-        state = router_manager_->state();
-        host_id = router_manager_->hostId();
-        password = one_time_password_;
-    }
-
-    user_session_->onRouterStateChanged(state);
-    user_session_->onUpdateCredentials(host_id, password);
-}
-
-//--------------------------------------------------------------------------------------------------
-void Service::onHostIdAssigned(base::HostId host_id)
-{
-    user_session_->onUpdateCredentials(host_id, one_time_password_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -757,7 +700,6 @@ void Service::updateConfiguration(const QString& path)
     settings_.sync();
 
     // Reload user lists.
-    updateOneTimeCredentials(FROM_HERE);
     reloadUserList();
 
     // If a controller instance already exists.
@@ -805,15 +747,13 @@ void Service::reloadUserList()
     // Read the list of regular users.
     base::SharedPointer<base::UserListBase> users(settings_.userList().release());
 
-    users->add(createOneTimeUser());
-
     if (users->seedKey().isEmpty())
         LOG(ERROR) << "Empty seed key for user list";
 
     // Updating the list of users.
     tcp_server_->setUserList(users);
     if (router_manager_)
-        router_manager_->setUserList(users);
+        router_manager_->onUserListChanged();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -826,12 +766,14 @@ void Service::connectToRouter(const base::Location& location)
     router_manager_ = new RouterManager(this);
 
     connect(router_manager_, &RouterManager::sig_routerStateChanged, user_session_, &UserSession::onRouterStateChanged);
-    connect(router_manager_, &RouterManager::sig_hostIdAssigned, this, &Service::onHostIdAssigned);
+    connect(router_manager_, &RouterManager::sig_credentialsChanged, user_session_, &UserSession::onUpdateCredentials);
     connect(router_manager_, &RouterManager::sig_clientConnected, this, &Service::onNewRelayConnection);
 
-    router_manager_->setUserList(tcp_server_->userList());
-    router_manager_->start(
-        settings_.routerAddress(), settings_.routerPort(), settings_.routerPublicKey());
+    connect(user_session_, &UserSession::sig_changeOneTimeSessions, router_manager_, &RouterManager::onOneTimeSessionsChanged);
+    connect(user_session_, &UserSession::sig_changeOneTimePassword, router_manager_, &RouterManager::onUserListChanged);
+    connect(user_session_, &UserSession::sig_attached, router_manager_, &RouterManager::onUserSessionAttached);
+
+    router_manager_->start();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -889,68 +831,6 @@ void Service::checkForUpdates()
     LOG(INFO) << "Start checking for updates";
     update_checker_->start();
 #endif // defined(Q_OS_WINDOWS)
-}
-
-//--------------------------------------------------------------------------------------------------
-void Service::updateOneTimeCredentials(const base::Location& location)
-{
-    LOG(INFO) << "Updating credentials from" << location;
-
-    if (!settings_.oneTimePassword())
-    {
-        LOG(INFO) << "One-time password is disabled";
-        password_expire_timer_->stop();
-        one_time_sessions_ = 0;
-        one_time_password_.clear();
-        return;
-    }
-
-    LOG(INFO) << "One-time password is enabled";
-
-    base::PasswordGenerator generator;
-    generator.setCharacters(settings_.oneTimePasswordCharacters());
-    generator.setLength(settings_.oneTimePasswordLength());
-
-    one_time_password_ = generator.result();
-
-    std::chrono::milliseconds expire_interval = settings_.oneTimePasswordExpire();
-    if (expire_interval > std::chrono::milliseconds(0))
-        password_expire_timer_->start(expire_interval);
-    else
-        password_expire_timer_->stop();
-}
-
-//--------------------------------------------------------------------------------------------------
-base::User Service::createOneTimeUser() const
-{
-    if (!router_manager_)
-    {
-        LOG(WARNING) << "No router controller instance";
-        return base::User();
-    }
-
-    base::HostId host_id = router_manager_->hostId();
-    if (host_id == base::kInvalidHostId)
-    {
-        LOG(INFO) << "Invalid host ID";
-        return base::User();
-    }
-
-    if (one_time_password_.isEmpty())
-    {
-        LOG(INFO) << "No password for one-time user";
-        return base::User();
-    }
-
-    QString username = '#' + base::hostIdToString(host_id);
-    base::User user = base::User::create(username, one_time_password_);
-
-    user.sessions = one_time_sessions_;
-    user.flags = base::User::ENABLED;
-
-    LOG(INFO) << "One time user" << username << "created (host_id:" << host_id
-              << "sessions:" << one_time_sessions_ << ")";
-    return user;
 }
 
 } // namespace host

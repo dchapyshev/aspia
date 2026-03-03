@@ -77,11 +77,7 @@ protected:
 
 private slots:
     void onPowerEvent(quint32 power_event);
-    void onChangeOneTimePassword();
-    void onChangeOneTimeSessions(quint32 sessions);
     void onNewDirectConnection();
-    void onUserSessionAttached();
-    void onHostIdAssigned(base::HostId host_id);
     void onNewRelayConnection();
     void onConfirmationReply(quint32 request_id, bool accept);
     void onUpdateCheckedFinished(const QByteArray& result);
@@ -110,9 +106,6 @@ private:
     void disconnectFromRouter(const base::Location& location);
     void checkForUpdates();
 
-    void updateOneTimeCredentials(const base::Location& location);
-    base::User createOneTimeUser() const;
-
     QTimer* repeated_timer_ = nullptr;
 
     QFileSystemWatcher* settings_watcher_ = nullptr;
@@ -133,10 +126,6 @@ private:
 
     common::UpdateChecker* update_checker_ = nullptr;
     common::HttpFileDownloader* update_downloader_ = nullptr;
-
-    QTimer* password_expire_timer_ = nullptr;
-    QString one_time_password_;
-    quint32 one_time_sessions_ = 0;
 
     Q_DISABLE_COPY_MOVE(Service)
 };

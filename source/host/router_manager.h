@@ -24,7 +24,7 @@
 #include "base/shared_pointer.h"
 #include "base/net/tcp_channel.h"
 #include "base/peer/host_id.h"
-#include "base/peer/user_list_base.h"
+#include "base/peer/user_list.h"
 #include "proto/user.h"
 
 class QTimer;
@@ -43,22 +43,22 @@ public:
     explicit RouterManager(QObject* parent = nullptr);
     ~RouterManager() final;
 
-    void start(const QString& address, quint16 port, const QByteArray& public_key);
-
-    void setUserList(base::SharedPointer<base::UserListBase> user_list);
-
     const QString& address() const { return address_; }
     quint16 port() const { return port_; }
     const QByteArray& publicKey() const { return public_key_; }
-    const base::HostId hostId() const { return host_id_; }
-    const proto::user::RouterState state() const { return router_state_; }
 
     bool hasPendingConnections() const;
     base::TcpChannel* nextPendingConnection();
 
+public slots:
+    void start();
+    void onUserListChanged();
+    void onOneTimeSessionsChanged(quint32 one_time_sessions);
+    void onUserSessionAttached();
+
 signals:
     void sig_routerStateChanged(const proto::user::RouterState& state);
-    void sig_hostIdAssigned(base::HostId host_id);
+    void sig_credentialsChanged(base::HostId host_id, const QString& one_time_password);
     void sig_clientConnected();
 
 private slots:
@@ -72,6 +72,7 @@ private:
     void delayedConnectToRouter();
     void routerStateChanged(proto::user::RouterState::State state);
     void hostIdRequest();
+    base::User createOneTimeUser() const;
 
     base::TcpChannel* tcp_channel_ = nullptr;
     base::RelayPeerManager* peer_manager_ = nullptr;
@@ -80,6 +81,10 @@ private:
     QString address_;
     quint16 port_ = 0;
     QByteArray public_key_;
+
+    QTimer* password_expire_timer_ = nullptr;
+    QString one_time_password_;
+    quint32 one_time_sessions_ = 0;
 
     base::SharedPointer<base::UserListBase> user_list_;
 
