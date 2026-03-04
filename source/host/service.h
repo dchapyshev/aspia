@@ -88,7 +88,7 @@ private slots:
     void onClientFinished();
     void onChatClientStarted();
     void onChatClientFinished();
-    void onChatClientMessage(quint32 client_id, const proto::chat::Chat& chat);
+    void onChatClientMessage(const proto::chat::Chat& chat);
     void onUserChatMessage(const proto::chat::Chat& chat);
     void onSettingsChanged(const QString& path);
 

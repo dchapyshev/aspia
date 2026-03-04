@@ -558,41 +558,29 @@ void Service::onSettingsChanged(const QString& /* path */)
     // Reload user lists.
     reloadUserList();
 
-    // If a controller instance already exists.
+    if (!settings_.isRouterEnabled())
+    {
+        LOG(INFO) << "Router is disabled";
+        proto::user::RouterState state;
+        state.set_state(proto::user::RouterState::DISABLED);
+        user_session_->onRouterStateChanged(state);
+        disconnectFromRouter(FROM_HERE);
+        return;
+    }
+
     if (router_manager_)
     {
-        LOG(INFO) << "Has router controller";
-
-        if (settings_.isRouterEnabled())
+        // Check if the connection parameters have changed.
+        if (router_manager_->address() == settings_.routerAddress() &&
+            router_manager_->port() == settings_.routerPort() &&
+            router_manager_->publicKey() == settings_.routerPublicKey())
         {
-            LOG(INFO) << "Router enabled";
-
-            // Check if the connection parameters have changed.
-            if (router_manager_->address() == settings_.routerAddress() &&
-                router_manager_->port() == settings_.routerPort() &&
-                router_manager_->publicKey() == settings_.routerPublicKey())
-            {
-                LOG(INFO) << "Router parameters without changes";
-                return;
-            }
-
-            // Reconnect to the router with new parameters.
-            connectToRouter(FROM_HERE);
-        }
-        else
-        {
-            LOG(INFO) << "The router is now disabled";
-            disconnectFromRouter(FROM_HERE);
-
-            proto::user::RouterState state;
-            state.set_state(proto::user::RouterState::DISABLED);
-            user_session_->onRouterStateChanged(state);
+            LOG(INFO) << "Router parameters without changes";
+            return;
         }
     }
-    else if (settings_.isRouterEnabled())
-    {
-        connectToRouter(FROM_HERE);
-    }
+
+    connectToRouter(FROM_HERE);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -636,76 +624,67 @@ void Service::startClient(base::TcpChannel* tcp_channel)
     tcp_channel->setReadBufferSize(kReadBufferSize);
     tcp_channel->setWriteBufferSize(kWriteBufferSize);
 
-    switch (static_cast<proto::peer::SessionType>(tcp_channel->peerSessionType()))
+    auto session_type = static_cast<proto::peer::SessionType>(tcp_channel->peerSessionType());
+    if (session_type == proto::peer::SESSION_TYPE_DESKTOP_MANAGE ||
+        session_type == proto::peer::SESSION_TYPE_DESKTOP_VIEW)
     {
-        case proto::peer::SESSION_TYPE_DESKTOP_MANAGE:
-        case proto::peer::SESSION_TYPE_DESKTOP_VIEW:
-        {
-            DesktopClient* client = new DesktopClient(tcp_channel, this);
-            clients_.append(client);
+        DesktopClient* client = new DesktopClient(tcp_channel, this);
+        clients_.append(client);
 
-            connect(client, &DesktopClient::sig_finished, this, &Service::onClientFinished);
+        connect(client, &DesktopClient::sig_finished, this, &Service::onClientFinished);
 
-            connect(client, &DesktopClient::sig_started, desktop_manager_, &DesktopManager::onClientStarted);
-            connect(client, &DesktopClient::sig_finished, desktop_manager_, &DesktopManager::onClientFinished);
-            connect(client, &DesktopClient::sig_switchSession, desktop_manager_, &DesktopManager::onClientSwitchSession);
+        connect(client, &DesktopClient::sig_started, desktop_manager_, &DesktopManager::onClientStarted);
+        connect(client, &DesktopClient::sig_finished, desktop_manager_, &DesktopManager::onClientFinished);
+        connect(client, &DesktopClient::sig_switchSession, desktop_manager_, &DesktopManager::onClientSwitchSession);
 
-            connect(client, &DesktopClient::sig_started, user_session_, &UserSession::onClientStarted);
-            connect(client, &DesktopClient::sig_finished, user_session_, &UserSession::onClientFinished);
-            connect(client, &DesktopClient::sig_switchSession, user_session_, &UserSession::onClientSwitchSession);
-            connect(client, &DesktopClient::sig_recordingChanged, user_session_, &UserSession::onClientRecording);
+        connect(client, &DesktopClient::sig_started, user_session_, &UserSession::onClientStarted);
+        connect(client, &DesktopClient::sig_finished, user_session_, &UserSession::onClientFinished);
+        connect(client, &DesktopClient::sig_switchSession, user_session_, &UserSession::onClientSwitchSession);
+        connect(client, &DesktopClient::sig_recordingChanged, user_session_, &UserSession::onClientRecording);
 
-            connect(desktop_manager_, &DesktopManager::sig_dettached, client, &DesktopClient::dettach);
+        connect(desktop_manager_, &DesktopManager::sig_dettached, client, &DesktopClient::dettach);
 
-            client->start();
-        }
-        break;
+        client->start();
+    }
+    else if (session_type == proto::peer::SESSION_TYPE_FILE_TRANSFER)
+    {
+        FileClient* client = new FileClient(tcp_channel, this);
+        clients_.emplace_back(client);
 
-        case proto::peer::SESSION_TYPE_FILE_TRANSFER:
-        {
-            FileClient* client = new FileClient(tcp_channel, this);
-            clients_.emplace_back(client);
+        connect(client, &FileClient::sig_finished, this, &Service::onClientFinished);
+        connect(client, &FileClient::sig_started, user_session_, &UserSession::onClientStarted);
+        connect(client, &FileClient::sig_finished, user_session_, &UserSession::onClientFinished);
 
-            connect(client, &FileClient::sig_finished, this, &Service::onClientFinished);
-            connect(client, &FileClient::sig_started, user_session_, &UserSession::onClientStarted);
-            connect(client, &FileClient::sig_finished, user_session_, &UserSession::onClientFinished);
+        client->start(user_session_->sessionId());
+    }
+    else if (session_type == proto::peer::SESSION_TYPE_SYSTEM_INFO)
+    {
+        SystemInfoClient* client = new SystemInfoClient(tcp_channel, this);
+        clients_.emplace_back(client);
 
-            client->start(user_session_->sessionId());
-        }
-        break;
+        connect(client, &SystemInfoClient::sig_finished, this, &Service::onClientFinished);
+        connect(client, &SystemInfoClient::sig_started, user_session_, &UserSession::onClientStarted);
+        connect(client, &SystemInfoClient::sig_finished, user_session_, &UserSession::onClientFinished);
 
-        case proto::peer::SESSION_TYPE_SYSTEM_INFO:
-        {
-            SystemInfoClient* client = new SystemInfoClient(tcp_channel, this);
-            clients_.emplace_back(client);
+        client->start();
+    }
+    else if (session_type == proto::peer::SESSION_TYPE_TEXT_CHAT)
+    {
+        ChatClient* client = new ChatClient(tcp_channel, this);
+        clients_.emplace_back(client);
 
-            connect(client, &SystemInfoClient::sig_finished, this, &Service::onClientFinished);
-            connect(client, &SystemInfoClient::sig_started, user_session_, &UserSession::onClientStarted);
-            connect(client, &SystemInfoClient::sig_finished, user_session_, &UserSession::onClientFinished);
+        connect(client, &ChatClient::sig_started, user_session_, &UserSession::onClientStarted);
+        connect(client, &ChatClient::sig_finished, user_session_, &UserSession::onClientFinished);
 
-            client->start();
-        }
-        break;
+        connect(client, &ChatClient::sig_started, this, &Service::onChatClientStarted);
+        connect(client, &ChatClient::sig_finished, this, &Service::onChatClientFinished);
+        connect(client, &ChatClient::sig_messageReceived, this, &Service::onChatClientMessage);
 
-        case proto::peer::SESSION_TYPE_TEXT_CHAT:
-        {
-            ChatClient* client = new ChatClient(tcp_channel, this);
-            clients_.emplace_back(client);
-
-            connect(client, &ChatClient::sig_started, user_session_, &UserSession::onClientStarted);
-            connect(client, &ChatClient::sig_finished, user_session_, &UserSession::onClientFinished);
-
-            connect(client, &ChatClient::sig_started, this, &Service::onChatClientStarted);
-            connect(client, &ChatClient::sig_finished, this, &Service::onChatClientFinished);
-            connect(client, &ChatClient::sig_messageReceived, this, &Service::onChatClientMessage);
-
-            client->start();
-        }
-        break;
-
-        default:
-            NOTREACHED();
-            break;
+        client->start();
+    }
+    else
+    {
+        NOTREACHED();
     }
 }
 
