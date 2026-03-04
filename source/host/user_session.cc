@@ -238,7 +238,7 @@ void UserSession::onClientConfirmation(const proto::user::ConfirmationRequest& r
     {
         LOG(INFO) << "No active GUI process";
 
-        base::SessionInfo session_info(session_id_);
+        base::SessionInfo session_info(base::activeConsoleSessionId());
         if (!session_info.isValid())
         {
             LOG(ERROR) << "Reject: unable to get session info";
