@@ -20,6 +20,7 @@
 #define HOST_DESKTOP_CLIENT_H
 
 #include <QObject>
+#include <QTime>
 
 #include "base/session_id.h"
 #include "base/net/tcp_channel.h"
@@ -67,10 +68,11 @@ private:
     void sendIpcServiceMessage(const QByteArray& buffer);
     void sendSessionList();
 
+    QTime dettach_time_;
     base::IpcServer* ipc_server_ = nullptr;
     base::IpcChannel* ipc_channel_ = nullptr;
     base::TcpChannel* tcp_channel_ = nullptr;
-    QTimer* attach_timer_ = nullptr;
+    QTimer* fake_capture_timer_ = nullptr;
 
     Q_DISABLE_COPY_MOVE(DesktopClient)
 };

@@ -38,8 +38,9 @@ namespace host {
 //--------------------------------------------------------------------------------------------------
 DesktopClient::DesktopClient(base::TcpChannel* tcp_channel, QObject* parent)
     : QObject(parent),
+      dettach_time_(QTime::currentTime()),
       tcp_channel_(tcp_channel),
-      attach_timer_(new QTimer(this))
+      fake_capture_timer_(new QTimer(this))
 {
     LOG(INFO) << "Ctor";
     CHECK(tcp_channel_);
@@ -63,14 +64,23 @@ DesktopClient::DesktopClient(base::TcpChannel* tcp_channel, QObject* parent)
             this, &DesktopClient::sendSessionList);
 #endif // defined(Q_OS_WINDOWS)
 
-    connect(attach_timer_, &QTimer::timeout, this, [this]()
+    connect(fake_capture_timer_, &QTimer::timeout, this, [this]()
     {
-        LOG(WARNING) << "Timeout when desktop client starting";
-        emit sig_finished();
+        if (dettach_time_.secsTo(QTime::currentTime()) > 15)
+        {
+            LOG(WARNING) << "Timeout when desktop client starting";
+            emit sig_finished();
+            return;
+        }
+
+        proto::desktop::SessionToClient message;
+        proto::desktop::VideoPacket* packet = message.mutable_video_packet();
+        packet->set_error_code(proto::desktop::VIDEO_ERROR_CODE_TEMPORARY);
+        tcp_channel_->send(proto::peer::CHANNEL_ID_SESSION, base::serialize(message));
     });
 
-    attach_timer_->setInterval(std::chrono::seconds(15));
-    attach_timer_->start();
+    fake_capture_timer_->setInterval(std::chrono::milliseconds(30));
+    fake_capture_timer_->start();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -118,7 +128,8 @@ void DesktopClient::dettach()
         ipc_channel_ = nullptr;
     }
 
-    attach_timer_->start();
+    dettach_time_ = QTime::currentTime();
+    fake_capture_timer_->start();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -168,9 +179,9 @@ void DesktopClient::onIpcNewConnection()
 
     sendIpcServiceMessage(base::serialize(message));
 
+    fake_capture_timer_->stop();
     tcp_channel_->resume();
     ipc_channel_->resume();
-    attach_timer_->stop();
 }
 
 //--------------------------------------------------------------------------------------------------

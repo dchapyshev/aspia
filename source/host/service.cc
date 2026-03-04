@@ -596,6 +596,8 @@ void Service::startConfirmation(base::TcpChannel* tcp_channel)
     {
         LOG(ERROR) << "Version mismatch (host:" << host_version << "client:"
                    << tcp_channel->peerVersion() << ")";
+        tcp_channel->deleteLater();
+        return;
     }
 
     proto::peer::SessionType session_type =
