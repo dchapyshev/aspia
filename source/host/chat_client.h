@@ -42,7 +42,7 @@ public slots:
 signals:
     void sig_started();
     void sig_finished();
-    void sig_messageReceived(quint32 client_id, const proto::chat::Chat& chat);
+    void sig_messageReceived(const proto::chat::Chat& chat);
 
 private slots:
     void onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code);

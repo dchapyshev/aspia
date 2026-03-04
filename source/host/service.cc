@@ -234,6 +234,8 @@ void Service::onConfirmationReply(quint32 request_id, bool accept)
         pending_confirmation_.erase(it);
         return;
     }
+
+    LOG(INFO) << "Pending connection has already been removed from the list";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -241,43 +243,44 @@ void Service::onUpdateCheckedFinished(const QByteArray& result)
 {
     CHECK(update_checker_);
 
-    if (result.isEmpty())
+    do
     {
-        LOG(ERROR) << "Error while retrieving update information";
-    }
-    else
-    {
+        if (result.isEmpty())
+        {
+            LOG(ERROR) << "Error while retrieving update information";
+            break;
+        }
+
         common::UpdateInfo update_info = common::UpdateInfo::fromXml(result);
         if (!update_info.isValid())
         {
             LOG(INFO) << "No updates available";
+            break;
         }
-        else
+
+        const QVersionNumber& current_version = base::kCurrentVersion;
+        const QVersionNumber& update_version = update_info.version();
+
+        if (update_version <= current_version)
         {
-            const QVersionNumber& current_version = base::kCurrentVersion;
-            const QVersionNumber& update_version = update_info.version();
-
-            if (update_version > current_version)
-            {
-                LOG(INFO) << "New version available:" << update_version.toString();
-
-                update_downloader_ = new common::HttpFileDownloader(update_info.url(), this);
-
-                connect(update_downloader_, &common::HttpFileDownloader::sig_downloadError,
-                        this, &Service::onFileDownloaderError);
-                connect(update_downloader_, &common::HttpFileDownloader::sig_downloadCompleted,
-                        this, &Service::onFileDownloaderCompleted);
-                connect(update_downloader_, &common::HttpFileDownloader::sig_downloadProgress,
-                        this, &Service::onFileDownloaderProgress);
-
-                update_downloader_->start();
-            }
-            else
-            {
-                LOG(INFO) << "No available updates";
-            }
+            LOG(INFO) << "No available updates";
+            break;
         }
+
+        LOG(INFO) << "New version available:" << update_version.toString();
+
+        update_downloader_ = new common::HttpFileDownloader(update_info.url(), this);
+
+        connect(update_downloader_, &common::HttpFileDownloader::sig_downloadError,
+                this, &Service::onFileDownloaderError);
+        connect(update_downloader_, &common::HttpFileDownloader::sig_downloadCompleted,
+                this, &Service::onFileDownloaderCompleted);
+        connect(update_downloader_, &common::HttpFileDownloader::sig_downloadProgress,
+                this, &Service::onFileDownloaderProgress);
+
+        update_downloader_->start();
     }
+    while (false);
 
     update_checker_->disconnect(this);
     update_checker_->deleteLater();
@@ -301,13 +304,15 @@ void Service::onFileDownloaderCompleted()
     CHECK(update_downloader_);
 
 #if defined(Q_OS_WINDOWS)
-    QString file_path = QStandardPaths::writableLocation(QStandardPaths::TempLocation);
-    if (file_path.isEmpty())
+    do
     {
-        LOG(ERROR) << "Unable to get temp directory";
-    }
-    else
-    {
+        QString file_path = QStandardPaths::writableLocation(QStandardPaths::TempLocation);
+        if (file_path.isEmpty())
+        {
+            LOG(ERROR) << "Unable to get temp directory";
+            break;
+        }
+
         QDir().mkpath(file_path);
 
         QString file_name =
@@ -318,31 +323,28 @@ void Service::onFileDownloaderCompleted()
         if (!base::writeFile(file_path, update_downloader_->data()))
         {
             LOG(ERROR) << "Unable to write file" << file_path;
+            break;
         }
-        else
+
+        QString arguments;
+
+        arguments += "/i "; // Normal install.
+        arguments += file_path; // MSI package file.
+        arguments += " /qn"; // No UI during the installation process.
+
+        if (!base::createProcess("msiexec", arguments, base::ProcessExecuteMode::ELEVATE))
         {
-            QString arguments;
+            LOG(ERROR) << "Unable to create update process (cmd:" << arguments << ")";
 
-            arguments += "/i "; // Normal install.
-            arguments += file_path; // MSI package file.
-            arguments += " /qn"; // No UI during the installation process.
-
-            if (base::createProcess("msiexec", arguments, base::ProcessExecuteMode::ELEVATE))
-            {
-                LOG(INFO) << "Update process started (cmd:" << arguments << ")";
-            }
-            else
-            {
-                LOG(ERROR) << "Unable to create update process (cmd:" << arguments << ")";
-
-                // If the update fails, delete the temporary file.
-                if (!QFile::remove(file_path))
-                {
-                    LOG(ERROR) << "Unable to remove installer file";
-                }
-            }
+            // If the update fails, delete the temporary file.
+            if (!QFile::remove(file_path))
+                LOG(ERROR) << "Unable to remove installer file";
+            break;
         }
+
+        LOG(INFO) << "Update process started (cmd:" << arguments << ")";
     }
+    while (false);
 #endif // defined(Q_OS_WINDOWS)
 
     update_downloader_->disconnect(this);
@@ -504,16 +506,21 @@ void Service::onChatClientFinished()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Service::onChatClientMessage(quint32 client_id, const proto::chat::Chat& chat)
+void Service::onChatClientMessage(const proto::chat::Chat& chat)
 {
+    ChatClient* sender_client = dynamic_cast<ChatClient*>(sender());
+    CHECK(sender_client);
+
+    quint32 sender_client_id = sender_client->property("client_id").toUInt();
+
     // Send message to GUI.
-    user_session_->onClientChat(client_id, chat);
+    user_session_->onClientChat(sender_client_id, chat);
 
     // Send message to other text chat clients.
     for (auto* client : std::as_const(clients_))
     {
         ChatClient* chat_client = dynamic_cast<ChatClient*>(client);
-        if (chat_client && client_id != chat_client->property("client_id"))
+        if (chat_client && sender_client_id != chat_client->property("client_id"))
             chat_client->onSendChat(chat);
     }
 }
@@ -531,7 +538,7 @@ void Service::onUserChatMessage(const proto::chat::Chat& chat)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Service::onSettingsChanged(const QString& path)
+void Service::onSettingsChanged(const QString& /* path */)
 {
     LOG(INFO) << "Configuration file change detected";
 
@@ -594,12 +601,7 @@ void Service::startConfirmation(base::TcpChannel* tcp_channel)
     LOG(INFO) << "TCP channel is ready";
     CHECK(tcp_channel);
 
-    static const int kReadBufferSize = 2 * 1024 * 1024; // 2 Mb.
-    static const int kWriteBufferSize = 2 * 1024 * 1024; // 2 Mb.
-
     tcp_channel->setParent(this);
-    tcp_channel->setReadBufferSize(kReadBufferSize);
-    tcp_channel->setWriteBufferSize(kWriteBufferSize);
 
     const QVersionNumber& host_version = base::kCurrentVersion;
     if (host_version > tcp_channel->peerVersion())
@@ -627,6 +629,12 @@ void Service::startConfirmation(base::TcpChannel* tcp_channel)
 void Service::startClient(base::TcpChannel* tcp_channel)
 {
     CHECK(tcp_channel);
+
+    static const int kReadBufferSize = 2 * 1024 * 1024; // 2 Mb.
+    static const int kWriteBufferSize = 2 * 1024 * 1024; // 2 Mb.
+
+    tcp_channel->setReadBufferSize(kReadBufferSize);
+    tcp_channel->setWriteBufferSize(kWriteBufferSize);
 
     switch (static_cast<proto::peer::SessionType>(tcp_channel->peerSessionType()))
     {
@@ -762,6 +770,7 @@ void Service::connectToRouter(const base::Location& location)
 {
     // Destroy the previous instance.
     disconnectFromRouter(FROM_HERE);
+    CHECK(!router_manager_);
 
     LOG(INFO) << "Connecting to router from" << location;
     router_manager_ = new RouterManager(this);

@@ -114,15 +114,14 @@ void ChatClient::onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray& b
         return;
     }
 
-    if (has_user_)
-    {
-        emit sig_messageReceived(property("client_id").toUInt(), chat);
-    }
-    else
+    if (!has_user_)
     {
         if (chat.has_chat_message())
             onSendStatus(proto::chat::Status::CODE_USER_DISCONNECTED);
+        return;
     }
+
+    emit sig_messageReceived(chat);
 }
 
 } // namespace host
