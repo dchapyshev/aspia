@@ -357,6 +357,17 @@ bool TcpChannel::setWriteBufferSize(int size)
 }
 
 //--------------------------------------------------------------------------------------------------
+size_t TcpChannel::pending() const
+{
+    size_t result = 0;
+
+    for (const auto& task : std::as_const(write_queue_))
+        result += task.data().size();
+
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
 int TcpChannel::speedRx()
 {
     TimePoint current_time = Clock::now();

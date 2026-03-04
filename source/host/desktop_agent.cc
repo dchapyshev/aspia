@@ -460,47 +460,51 @@ void DesktopAgent::onOverflowCheck()
             state = client->overflowState();
     }
 
-    if (critical_overflow_count_ > 0 || warning_overflow_count_ > 15)
-        max_fps_ = 18;
-    else if (warning_overflow_count_ > 5)
-        max_fps_ = 20;
-    else
-        max_fps_ = default_fps_;
-
     int current_fps = capture_scheduler_.fps();
+    int next_fps = current_fps;
 
     if (state == proto::desktop::Overflow::STATE_CRITICAL)
     {
-        ++critical_overflow_count_;
-        normal_count_ = 0;
+        pressure_score_ = std::min(100, pressure_score_ + 20);
+        stable_seconds_ = 0;
+        cooldown_seconds_ = 15;
 
-        if (current_fps > default_fps_)
-            capture_scheduler_.setFps(std::max(default_fps_ - 3, min_fps_));
-        else if (current_fps > min_fps_)
-            capture_scheduler_.setFps(std::max(current_fps - 3, min_fps_));
+        next_fps = std::max(min_fps_, std::min(current_fps - 3, default_fps_));
     }
     else if (state == proto::desktop::Overflow::STATE_WARNING)
     {
-        ++warning_overflow_count_;
-        normal_count_ = 0;
+        pressure_score_ = std::min(100, pressure_score_ + 8);
+        stable_seconds_ = 0;
 
-        if (current_fps > default_fps_)
-            capture_scheduler_.setFps(default_fps_);
-        else if (current_fps > min_fps_)
-            capture_scheduler_.setFps(current_fps - 1);
+        next_fps = std::max(min_fps_, std::min(current_fps - 2, default_fps_));
     }
-    else if (state == proto::desktop::Overflow::STATE_NONE)
+    else
     {
-        ++normal_count_;
+        pressure_score_ = std::max(0, pressure_score_ - 3);
+        ++stable_seconds_;
+        if (cooldown_seconds_ > 0)
+            --cooldown_seconds_;
 
-        // If there were no overflows within 30 seconds, then we increase the FPS.
-        if (normal_count_ < 30)
-            return;
+        if (stable_seconds_ >= 15 && cooldown_seconds_ == 0)
+        {
+            int max_fps = max_fps_;
 
-        int fps = current_fps + 1;
-        if (fps <= max_fps_)
-            capture_scheduler_.setFps(fps);
+            if (pressure_score_ >= 80)
+                max_fps = min_fps_;
+            else if (pressure_score_ >= 60)
+                max_fps = 18;
+            else if (pressure_score_ >= 40)
+                max_fps = 20;
+            else if (pressure_score_ >= 20)
+                max_fps = 22;
+
+            if (current_fps < std::min(max_fps, max_fps_))
+                next_fps = current_fps + 1;
+        }
     }
+
+    if (current_fps != next_fps)
+        capture_scheduler_.setFps(next_fps);
 }
 
 //--------------------------------------------------------------------------------------------------

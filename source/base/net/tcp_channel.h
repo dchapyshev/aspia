@@ -132,7 +132,7 @@ public:
     bool setReadBufferSize(int size);
     bool setWriteBufferSize(int size);
 
-    size_t pendingMessages() const { return write_queue_.size(); }
+    size_t pending() const;
 
     quint32 instanceId() const { return instance_id_; }
 

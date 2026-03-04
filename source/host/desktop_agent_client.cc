@@ -832,8 +832,7 @@ void DesktopAgentClient::readOverflow(proto::desktop::Overflow::State state)
 {
     if (state != overflow_state_)
     {
-        LOG(INFO) << "Overflow state:" << state << "critical count:" << critical_overflow_count_
-                  << "normal count:" << normal_count_;
+        LOG(INFO) << "Overflow state:" << state << "pressure score:" << pressure_score_;
         overflow_state_ = state;
     }
 
@@ -845,33 +844,20 @@ void DesktopAgentClient::readOverflow(proto::desktop::Overflow::State state)
     QSize forced_size = forced_size_;
 
     if (state == proto::desktop::Overflow::STATE_CRITICAL)
-    {
-        ++critical_overflow_count_;
-        normal_count_ = 0;
-
-        if (critical_overflow_count_ > 5)
-            forced_size = scaled_size(source_size_, 0.8);
-        else if (critical_overflow_count_ > 3)
-            forced_size = scaled_size(source_size_, 0.9);
-    }
+        pressure_score_ = std::min(100, pressure_score_ + 20);
     else if (state == proto::desktop::Overflow::STATE_WARNING)
-    {
-        critical_overflow_count_ = 0;
-        normal_count_ = 0;
-    }
+        pressure_score_ = std::min(100, pressure_score_ + 8);
     else if (state == proto::desktop::Overflow::STATE_NONE)
-    {
-        critical_overflow_count_ = 0;
-        ++normal_count_;
+        pressure_score_ = std::max(0, pressure_score_ - 3);
 
-        if (!forced_size.isEmpty())
-        {
-            if (normal_count_ > 30)
-                forced_size = QSize();
-            else if (normal_count_ > 15)
-                forced_size = scaled_size(source_size_, 0.9);
-        }
-    }
+    if (pressure_score_ >= 90)
+        forced_size = scaled_size(source_size_, 0.7);
+    else if (pressure_score_ >= 80)
+        forced_size = scaled_size(source_size_, 0.8);
+    else if (pressure_score_ >= 70)
+        forced_size = scaled_size(source_size_, 0.9);
+    else
+        forced_size = QSize();
 
     if (forced_size != forced_size_)
     {

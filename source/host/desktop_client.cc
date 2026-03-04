@@ -302,44 +302,20 @@ void DesktopClient::onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray
 //--------------------------------------------------------------------------------------------------
 void DesktopClient::onOverflowCheck()
 {
-    // Maximum value of messages in the queue for sending.
-    static const size_t kCriticalPendingCount = 10;
-
-    // Maximum average number of messages in the send queue.
-    static const size_t kWarningPendingCount = 5;
-
-    // The threshold at which the overflow is considered to have ended.
-    static const size_t kOverflowFinishThreshold = 1;
+    static const size_t kCriticalPendingBytes = 1 * 1024 * 1024; // 1 MB
+    static const size_t kWarningPendingBytes = 512 * 1024; // 512 kB
 
     proto::desktop::Overflow::State state = proto::desktop::Overflow::STATE_NONE;
-    size_t pending = tcp_channel_->pendingMessages();
+    size_t pending = tcp_channel_->pending();
 
-    if (pending > kCriticalPendingCount)
-    {
+    if (pending > kCriticalPendingBytes)
         state = proto::desktop::Overflow::STATE_CRITICAL;
-        write_normal_count_ = 0;
-        ++write_overflow_count_;
-    }
-    else if (pending > kWarningPendingCount)
-    {
+    else if (pending > kWarningPendingBytes)
         state = proto::desktop::Overflow::STATE_WARNING;
-        write_normal_count_ = 0;
-        ++write_overflow_count_;
-    }
-    else if (write_overflow_count_ > 0 && pending <= kOverflowFinishThreshold)
-    {
-        write_normal_count_ = 1;
-        write_overflow_count_ = 0;
-    }
-    else if (write_normal_count_ > 0)
-    {
-        ++write_normal_count_;
-    }
 
     if (state != last_state_)
     {
-        LOG(INFO) << "Overflow state:" << state << "pending:" << pending << "write overflow:"
-                  << write_overflow_count_ << "write normal:" << write_normal_count_;
+        LOG(INFO) << "Overflow state:" << state << "pending:" << pending;
         last_state_ = state;
     }
 

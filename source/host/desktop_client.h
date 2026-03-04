@@ -79,8 +79,6 @@ private:
     QTimer* overflow_timer_ = nullptr;
 
     proto::desktop::Overflow::State last_state_ = proto::desktop::Overflow::STATE_NONE;
-    size_t write_normal_count_ = 0;
-    size_t write_overflow_count_ = 0;
 
     Q_DISABLE_COPY_MOVE(DesktopClient)
 };

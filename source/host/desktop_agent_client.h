@@ -133,8 +133,7 @@ private:
     std::unique_ptr<base::AudioEncoder> audio_encoder_;
 
     proto::desktop::Overflow::State overflow_state_ = proto::desktop::Overflow::STATE_NONE;
-    int critical_overflow_count_ = 0;
-    int normal_count_ = 0;
+    int pressure_score_ = 0; // 0..100
 
     QSize source_size_;
     QSize preferred_size_;

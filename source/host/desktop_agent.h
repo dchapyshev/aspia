@@ -100,12 +100,14 @@ private:
     bool clear_clipboard_ = false;
 
     QTimer* overflow_timer_ = nullptr;
-    int critical_overflow_count_ = 0;
-    int warning_overflow_count_ = 0;
-    int normal_count_ = 0;
+
+    int pressure_score_ = 0; // 0..100
+    int stable_seconds_ = 0;
+    int cooldown_seconds_ = 0;
+
     const int default_fps_ = 0;
-    int min_fps_ = 0;
-    int max_fps_ = 0;
+    const int min_fps_ = 0;
+    const int max_fps_ = 0;
 
     Q_DISABLE_COPY_MOVE(DesktopAgent)
 };
