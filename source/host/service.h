@@ -20,9 +20,6 @@
 #define HOST_SERVICE_H
 
 #include "base/service.h"
-#include "base/session_id.h"
-#include "base/peer/host_id.h"
-#include "base/peer/user.h"
 #include "host/system_settings.h"
 
 class QFileSystemWatcher;
@@ -85,6 +82,7 @@ private slots:
     void onFileDownloaderCompleted();
     void onFileDownloaderProgress(int percentage);
     void onRepeatedTasks();
+    void onUserSessionAttached();
     void onStopClient(quint32 client_id);
     void onDesktopManagerAttached();
     void onDesktopClientFinished(quint32 client_id);

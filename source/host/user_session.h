@@ -54,6 +54,10 @@ public:
     State state() const { return state_; }
     base::SessionId sessionId() const { return session_id_; }
 
+    void sendConnectEvent(quint32 client_id, proto::peer::SessionType session_type,
+        const QString& computer_name, const QString& display_name);
+    void sendDisconnectEvent(quint32 client_id);
+
 public slots:
     bool start();
     void onRouterStateChanged(const proto::user::RouterState& state);

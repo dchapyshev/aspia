@@ -135,6 +135,25 @@ UserSession::~UserSession()
 }
 
 //--------------------------------------------------------------------------------------------------
+void UserSession::sendConnectEvent(quint32 client_id, proto::peer::SessionType session_type,
+    const QString &computer_name, const QString &display_name)
+{
+    proto::user::ConnectEvent* event = outgoing_message_.newMessage().mutable_connect_event();
+    event->set_client_id(client_id);
+    event->set_session_type(session_type);
+    event->set_computer_name(computer_name.toStdString());
+    event->set_display_name(display_name.toStdString());
+    sendMessage();
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserSession::sendDisconnectEvent(quint32 client_id)
+{
+    outgoing_message_.newMessage().mutable_disconnect_event()->set_client_id(client_id);
+    sendMessage();
+}
+
+//--------------------------------------------------------------------------------------------------
 bool UserSession::start()
 {
     LOG(INFO) << "Starting user session";
@@ -271,25 +290,17 @@ void UserSession::onClientStarted(quint32 client_id)
         return;
     }
 
-    proto::peer::SessionType session_type =
-        static_cast<proto::peer::SessionType>(client->property("session_type").toUInt());
+    auto session_type = static_cast<proto::peer::SessionType>(client->property("session_type").toUInt());
     QString computer_name = client->property("computer_name").toString();
     QString display_name = client->property("display_name").toString();
 
-    proto::user::ConnectEvent* event = outgoing_message_.newMessage().mutable_connect_event();
-    event->set_client_id(client_id);
-    event->set_session_type(session_type);
-    event->set_computer_name(computer_name.toStdString());
-    event->set_display_name(display_name.toStdString());
-
-    sendMessage();
+    sendConnectEvent(client_id, session_type, computer_name, display_name);
 }
 
 //--------------------------------------------------------------------------------------------------
 void UserSession::onClientFinished(quint32 client_id)
 {
-    outgoing_message_.newMessage().mutable_disconnect_event()->set_client_id(client_id);
-    sendMessage();
+    sendDisconnectEvent(client_id);
 }
 
 //--------------------------------------------------------------------------------------------------

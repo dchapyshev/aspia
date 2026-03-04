@@ -85,6 +85,7 @@ Service::Service(QObject* parent)
 
     connect(repeated_timer_, &QTimer::timeout, this, &Service::onRepeatedTasks);
     connect(settings_watcher_, &QFileSystemWatcher::fileChanged, this, &Service::updateConfiguration);
+    connect(user_session_, &UserSession::sig_attached, this, &Service::onUserSessionAttached);
     connect(user_session_, &UserSession::sig_confirmationReply, this, &Service::onConfirmationReply);
     connect(user_session_, &UserSession::sig_chatMessage, this, &Service::onUserChatMessage);
     connect(user_session_, &UserSession::sig_stopClient, this, &Service::onStopClient);
@@ -378,41 +379,46 @@ void Service::onRepeatedTasks()
 }
 
 //--------------------------------------------------------------------------------------------------
+void Service::onUserSessionAttached()
+{
+    auto send_connect_event = [this](const auto& list)
+    {
+        for (auto* client : std::as_const(list))
+        {
+            auto session_type = static_cast<proto::peer::SessionType>(client->property("session_type").toUInt());
+            QString computer_name = client->property("computer_name").toString();
+            QString display_name = client->property("display_name").toString();
+
+            user_session_->sendConnectEvent(client->clientId(), session_type, computer_name, display_name);
+        }
+    };
+
+    send_connect_event(desktop_clients_);
+    send_connect_event(file_clients_);
+    send_connect_event(chat_clients_);
+    send_connect_event(system_info_clients_);
+}
+
+//--------------------------------------------------------------------------------------------------
 void Service::onStopClient(quint32 client_id)
 {
-    auto stop_one = [&](auto& list)
+    auto stop = [&](auto& list)
     {
-        auto it = std::find_if(list.begin(), list.end(), [&](auto* client)
+        for (auto* client : std::as_const(list))
         {
-            return client->clientId() == client_id;
-        });
-
-        if (it == list.end())
-            return;
-
-        emit (*it)->sig_finished(client_id);
+            if (client_id == 0 || client_id == client->clientId())
+            {
+                emit client->sig_finished(client->clientId());
+                if (client_id != 0)
+                    break;
+            }
+        }
     };
 
-    auto stop_all = [&](auto& list)
-    {
-        for (const auto& client : std::as_const(list))
-            emit client->sig_finished(client->clientId());
-    };
-
-    if (client_id == 0)
-    {
-        stop_all(desktop_clients_);
-        stop_all(file_clients_);
-        stop_all(chat_clients_);
-        stop_all(system_info_clients_);
-    }
-    else
-    {
-        stop_one(desktop_clients_);
-        stop_one(file_clients_);
-        stop_one(chat_clients_);
-        stop_one(system_info_clients_);
-    }
+    stop(desktop_clients_);
+    stop(file_clients_);
+    stop(chat_clients_);
+    stop(system_info_clients_);
 }
 
 //--------------------------------------------------------------------------------------------------
