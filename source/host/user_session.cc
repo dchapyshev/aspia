@@ -573,20 +573,6 @@ void UserSession::attach(const base::Location& location, base::SessionId session
               << "domain:" << session_info.domain()
               << "locked:" << session_info.isUserLocked() << ")";
 
-    if (session_info.connectState() != base::SessionInfo::ConnectState::ACTIVE)
-    {
-        LOG(INFO) << "Console session is not active. Launching the GUI is not required";
-        dettach(FROM_HERE);
-        return;
-    }
-
-    if (session_info.isUserLocked())
-    {
-        LOG(INFO) << "Console session is locked. Launching the GUI is not required";
-        dettach(FROM_HERE);
-        return;
-    }
-
     base::ScopedHandle user_token;
     if (!createLoggedOnUserToken(session_id, &user_token))
     {
@@ -597,7 +583,14 @@ void UserSession::attach(const base::Location& location, base::SessionId session
 
     if (!user_token.isValid())
     {
-        LOG(INFO) << "User is not logged in (sid" << session_id << ")";
+        LOG(INFO) << "Console session is not active. Launching the GUI is not required";
+        dettach(FROM_HERE);
+        return;
+    }
+
+    if (session_info.isUserLocked())
+    {
+        LOG(INFO) << "Console session is locked. Launching the GUI is not required";
         dettach(FROM_HERE);
         return;
     }
