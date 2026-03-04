@@ -59,9 +59,24 @@ message AgentControl
     }
 }
 
+// Service to desktop agent.
+message Overflow
+{
+    enum State
+    {
+        STATE_UNKNOWN  = 0;
+        STATE_NONE     = 1;
+        STATE_WARNING  = 2;
+        STATE_CRITICAL = 3;
+    }
+
+    State state    = 1;
+}
+
 message ServiceToAgentClient
 {
     Description description = 1;
+    Overflow overflow       = 2;
 }
 
 message ServiceToAgent

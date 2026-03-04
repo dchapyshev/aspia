@@ -34,7 +34,6 @@
 #include "common/desktop_session_constants.h"
 #include "host/host_storage.h"
 #include "host/service.h"
-#include "proto/desktop_internal.h"
 #include "proto/peer.h"
 
 #if defined(Q_OS_WINDOWS)
@@ -45,108 +44,6 @@
 #endif // defined(Q_OS_WINDOWS)
 
 namespace host {
-
-namespace {
-
-constexpr int kDefaultScreenCaptureFps = 24;
-constexpr int kMinScreenCaptureFps = 1;
-constexpr int kMaxScreenCaptureFpsHighEnd = 30;
-constexpr int kMaxScreenCaptureFpsLowEnd = 20;
-
-//--------------------------------------------------------------------------------------------------
-int defaultCaptureFps()
-{
-    int default_capture_fps = kDefaultScreenCaptureFps;
-
-    if (qEnvironmentVariableIsSet("ASPIA_DEFAULT_FPS"))
-    {
-        bool ok = false;
-        int default_fps = qEnvironmentVariableIntValue("ASPIA_DEFAULT_FPS", &ok);
-        if (ok)
-        {
-            LOG(INFO) << "Default FPS specified by environment variable";
-
-            if (default_fps < 1 || default_fps > 60)
-            {
-                LOG(INFO) << "Environment variable contains an incorrect default FPS:" << default_fps;
-            }
-            else
-            {
-                default_capture_fps = default_fps;
-            }
-        }
-    }
-
-    return default_capture_fps;
-}
-
-//--------------------------------------------------------------------------------------------------
-int maxCaptureFps()
-{
-    int max_capture_fps = kMaxScreenCaptureFpsHighEnd;
-
-    bool max_fps_from_env = false;
-    if (qEnvironmentVariableIsSet("ASPIA_MAX_FPS"))
-    {
-        bool ok = false;
-        int max_fps = qEnvironmentVariableIntValue("ASPIA_MAX_FPS", &ok);
-        if (ok)
-        {
-            LOG(INFO) << "Maximum FPS specified by environment variable";
-
-            if (max_fps < 1 || max_fps > 60)
-            {
-                LOG(INFO) << "Environment variable contains an incorrect maximum FPS:" << max_fps;
-            }
-            else
-            {
-                max_capture_fps = max_fps;
-                max_fps_from_env = true;
-            }
-        }
-    }
-
-    if (!max_fps_from_env)
-    {
-        quint32 threads = QThread::idealThreadCount();
-        if (threads <= 2)
-        {
-            LOG(INFO) << "Low-end CPU detected. Maximum capture FPS:" << kMaxScreenCaptureFpsLowEnd;
-            max_capture_fps = kMaxScreenCaptureFpsLowEnd;
-        }
-    }
-
-    return max_capture_fps;
-}
-
-//--------------------------------------------------------------------------------------------------
-int minCaptureFps()
-{
-    int min_capture_fps = kMinScreenCaptureFps;
-
-    if (qEnvironmentVariableIsSet("ASPIA_MIN_FPS"))
-    {
-        bool ok = false;
-        int min_fps = qEnvironmentVariableIntValue("ASPIA_MIN_FPS", &ok);
-        if (ok)
-        {
-            LOG(INFO) << "Minimum FPS specified by environment variable";
-
-            if (min_fps < 1 || min_fps > 60)
-            {
-                LOG(INFO) << "Environment variable contains an incorrect minimum FPS:" << min_fps;
-            }
-            else
-            {
-                min_capture_fps = min_fps;
-            }
-        }
-    }
-
-    return min_capture_fps;
-}
-
-} // namespace
 
 //--------------------------------------------------------------------------------------------------
 DesktopAgentClient::DesktopAgentClient(QObject* parent)
@@ -389,6 +286,9 @@ void DesktopAgentClient::onAudioCaptureData(const proto::desktop::AudioPacket& a
     if (is_audio_paused_ || !audio_encoder_)
         return;
 
+    if (overflow_state_ == proto::desktop::Overflow::STATE_CRITICAL)
+        return;
+
     if (!audio_encoder_->encode(audio_packet, outgoing_message_.newMessage().mutable_audio_packet()))
         return;
 
@@ -457,6 +357,10 @@ void DesktopAgentClient::onIpcMessageReceived(quint32 channel_id, const QByteArr
         {
             session_type_ = message.description().session_type();
             sendCapabilities();
+        }
+        else if (message.has_overflow())
+        {
+            readOverflow(message.overflow().state());
         }
         else
         {
@@ -921,6 +825,59 @@ void DesktopAgentClient::readTaskManagerExtension(const std::string& data)
 
     task_manager_->readMessage(message);
 #endif // defined(Q_OS_WINDOWS)
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopAgentClient::readOverflow(proto::desktop::Overflow::State state)
+{
+    if (state != overflow_state_)
+    {
+        LOG(INFO) << "Overflow state:" << state << "critical count:" << critical_overflow_count_
+                  << "normal count:" << normal_count_;
+        overflow_state_ = state;
+    }
+
+    auto scaled_size = [](const QSize& size, double factor) -> QSize
+    {
+        return QSize(double(size.width()) * factor, double(size.height()) * factor);
+    };
+
+    QSize forced_size = forced_size_;
+
+    if (state == proto::desktop::Overflow::STATE_CRITICAL)
+    {
+        ++critical_overflow_count_;
+        normal_count_ = 0;
+
+        if (critical_overflow_count_ > 5)
+            forced_size = scaled_size(source_size_, 0.8);
+        else if (critical_overflow_count_ > 3)
+            forced_size = scaled_size(source_size_, 0.9);
+    }
+    else if (state == proto::desktop::Overflow::STATE_WARNING)
+    {
+        critical_overflow_count_ = 0;
+        normal_count_ = 0;
+    }
+    else if (state == proto::desktop::Overflow::STATE_NONE)
+    {
+        critical_overflow_count_ = 0;
+        ++normal_count_;
+
+        if (!forced_size.isEmpty())
+        {
+            if (normal_count_ > 30)
+                forced_size = QSize();
+            else if (normal_count_ > 15)
+                forced_size = scaled_size(source_size_, 0.9);
+        }
+    }
+
+    if (forced_size != forced_size_)
+    {
+        LOG(INFO) << "Forced size changed from" << forced_size_ << "to" << forced_size;
+        forced_size_ = forced_size;
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

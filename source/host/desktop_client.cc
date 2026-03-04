@@ -26,7 +26,6 @@
 #include "base/serialization.h"
 #include "base/ipc/ipc_channel.h"
 #include "base/ipc/ipc_server.h"
-#include "proto/desktop_internal.h"
 #include "proto/desktop_service.h"
 
 #if defined(Q_OS_WINDOWS)
@@ -40,7 +39,8 @@ DesktopClient::DesktopClient(base::TcpChannel* tcp_channel, QObject* parent)
     : QObject(parent),
       dettach_time_(QTime::currentTime()),
       tcp_channel_(tcp_channel),
-      fake_capture_timer_(new QTimer(this))
+      fake_capture_timer_(new QTimer(this)),
+      overflow_timer_(new QTimer(this))
 {
     LOG(INFO) << "Ctor";
     CHECK(tcp_channel_);
@@ -81,6 +81,15 @@ DesktopClient::DesktopClient(base::TcpChannel* tcp_channel, QObject* parent)
 
     fake_capture_timer_->setInterval(std::chrono::milliseconds(30));
     fake_capture_timer_->start();
+
+    connect(overflow_timer_, &QTimer::timeout, this, &DesktopClient::onOverflowCheck);
+    overflow_timer_->setInterval(std::chrono::milliseconds(1000));
+
+    if (!qEnvironmentVariableIsSet("ASPIA_NO_OVERFLOW_DETECTION"))
+    {
+        LOG(INFO) << "Overflow detection enabled";
+        overflow_timer_->start();
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -288,6 +297,56 @@ void DesktopClient::onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray
     {
         LOG(ERROR) << "Unhandled message from channel" << tcp_channel_id;
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopClient::onOverflowCheck()
+{
+    // Maximum value of messages in the queue for sending.
+    static const size_t kCriticalPendingCount = 10;
+
+    // Maximum average number of messages in the send queue.
+    static const size_t kWarningPendingCount = 5;
+
+    // The threshold at which the overflow is considered to have ended.
+    static const size_t kOverflowFinishThreshold = 1;
+
+    proto::desktop::Overflow::State state = proto::desktop::Overflow::STATE_NONE;
+    size_t pending = tcp_channel_->pendingMessages();
+
+    if (pending > kCriticalPendingCount)
+    {
+        state = proto::desktop::Overflow::STATE_CRITICAL;
+        write_normal_count_ = 0;
+        ++write_overflow_count_;
+    }
+    else if (pending > kWarningPendingCount)
+    {
+        state = proto::desktop::Overflow::STATE_WARNING;
+        write_normal_count_ = 0;
+        ++write_overflow_count_;
+    }
+    else if (write_overflow_count_ > 0 && pending <= kOverflowFinishThreshold)
+    {
+        write_normal_count_ = 1;
+        write_overflow_count_ = 0;
+    }
+    else if (write_normal_count_ > 0)
+    {
+        ++write_normal_count_;
+    }
+
+    if (state != last_state_)
+    {
+        LOG(INFO) << "Overflow state:" << state << "pending:" << pending << "write overflow:"
+                  << write_overflow_count_ << "write normal:" << write_normal_count_;
+        last_state_ = state;
+    }
+
+    proto::desktop::ServiceToAgentClient message;
+    proto::desktop::Overflow* overflow = message.mutable_overflow();
+    overflow->set_state(state);
+    sendIpcServiceMessage(base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------

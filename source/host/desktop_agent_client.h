@@ -24,6 +24,7 @@
 
 #include "base/serialization.h"
 #include "base/desktop/screen_capturer.h"
+#include "proto/desktop_internal.h"
 #include "proto/desktop_session.h"
 #include "proto/task_manager.h"
 
@@ -61,6 +62,7 @@ public:
     };
 
     proto::peer::SessionType sessionType() const { return session_type_; }
+    proto::desktop::Overflow::State overflowState() const { return overflow_state_; }
     const Config& config() const { return config_; }
 
     void onScreenCaptureData(const base::Frame* frame, const base::MouseCursor* cursor);
@@ -117,7 +119,7 @@ private:
     void readRemoteUpdateExtension(const std::string& data);
     void readSystemInfoExtension(const std::string& data);
     void readTaskManagerExtension(const std::string& data);
-
+    void readOverflow(proto::desktop::Overflow::State state);
     void sendCapabilities();
 
     base::IpcChannel* ipc_channel_ = nullptr;
@@ -129,6 +131,10 @@ private:
     std::unique_ptr<base::VideoEncoder> video_encoder_;
     std::unique_ptr<base::CursorEncoder> cursor_encoder_;
     std::unique_ptr<base::AudioEncoder> audio_encoder_;
+
+    proto::desktop::Overflow::State overflow_state_ = proto::desktop::Overflow::STATE_NONE;
+    int critical_overflow_count_ = 0;
+    int normal_count_ = 0;
 
     QSize source_size_;
     QSize preferred_size_;

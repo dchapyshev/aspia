@@ -30,15 +30,17 @@ public:
     CaptureScheduler() = default;
     ~CaptureScheduler() = default;
 
-    void setUpdateInterval(const std::chrono::milliseconds& update_interval);
     std::chrono::milliseconds updateInterval() const;
+
+    void setFps(int value);
+    int fps() const;
 
     void onBeginCapture();
     void onEndCapture();
     std::chrono::milliseconds nextCaptureDelay() const;
 
 private:
-    std::chrono::milliseconds update_interval_;
+    std::chrono::milliseconds update_interval_ { 40 };
     std::chrono::time_point<std::chrono::steady_clock> begin_time_;
     std::chrono::time_point<std::chrono::steady_clock> end_time_;
 

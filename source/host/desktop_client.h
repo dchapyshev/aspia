@@ -24,6 +24,7 @@
 
 #include "base/session_id.h"
 #include "base/net/tcp_channel.h"
+#include "proto/desktop_internal.h"
 
 namespace base {
 class IpcChannel;
@@ -64,6 +65,8 @@ private slots:
     void onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code);
     void onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray& buffer);
 
+    void onOverflowCheck();
+
 private:
     void sendIpcServiceMessage(const QByteArray& buffer);
     void sendSessionList();
@@ -73,6 +76,11 @@ private:
     base::IpcChannel* ipc_channel_ = nullptr;
     base::TcpChannel* tcp_channel_ = nullptr;
     QTimer* fake_capture_timer_ = nullptr;
+    QTimer* overflow_timer_ = nullptr;
+
+    proto::desktop::Overflow::State last_state_ = proto::desktop::Overflow::STATE_NONE;
+    size_t write_normal_count_ = 0;
+    size_t write_overflow_count_ = 0;
 
     Q_DISABLE_COPY_MOVE(DesktopClient)
 };

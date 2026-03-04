@@ -44,6 +44,108 @@
 
 namespace host {
 
+namespace {
+
+constexpr int kDefaultScreenCaptureFps = 24;
+constexpr int kMinScreenCaptureFps = 14;
+constexpr int kMaxScreenCaptureFpsHighEnd = 30;
+constexpr int kMaxScreenCaptureFpsLowEnd = 20;
+
+//--------------------------------------------------------------------------------------------------
+int defaultCaptureFps()
+{
+    int default_capture_fps = kDefaultScreenCaptureFps;
+
+    if (qEnvironmentVariableIsSet("ASPIA_DEFAULT_FPS"))
+    {
+        bool ok = false;
+        int default_fps = qEnvironmentVariableIntValue("ASPIA_DEFAULT_FPS", &ok);
+        if (ok)
+        {
+            LOG(INFO) << "Default FPS specified by environment variable";
+
+            if (default_fps < 1 || default_fps > 60)
+            {
+                LOG(INFO) << "Environment variable contains an incorrect default FPS:" << default_fps;
+            }
+            else
+            {
+                default_capture_fps = default_fps;
+            }
+        }
+    }
+
+    return default_capture_fps;
+}
+
+//--------------------------------------------------------------------------------------------------
+int maxCaptureFps()
+{
+    int max_capture_fps = kMaxScreenCaptureFpsHighEnd;
+
+    bool max_fps_from_env = false;
+    if (qEnvironmentVariableIsSet("ASPIA_MAX_FPS"))
+    {
+        bool ok = false;
+        int max_fps = qEnvironmentVariableIntValue("ASPIA_MAX_FPS", &ok);
+        if (ok)
+        {
+            LOG(INFO) << "Maximum FPS specified by environment variable";
+
+            if (max_fps < 1 || max_fps > 60)
+            {
+                LOG(INFO) << "Environment variable contains an incorrect maximum FPS:" << max_fps;
+            }
+            else
+            {
+                max_capture_fps = max_fps;
+                max_fps_from_env = true;
+            }
+        }
+    }
+
+    if (!max_fps_from_env)
+    {
+        quint32 threads = QThread::idealThreadCount();
+        if (threads <= 2)
+        {
+            LOG(INFO) << "Low-end CPU detected. Maximum capture FPS:" << kMaxScreenCaptureFpsLowEnd;
+            max_capture_fps = kMaxScreenCaptureFpsLowEnd;
+        }
+    }
+
+    return max_capture_fps;
+}
+
+//--------------------------------------------------------------------------------------------------
+int minCaptureFps()
+{
+    int min_capture_fps = kMinScreenCaptureFps;
+
+    if (qEnvironmentVariableIsSet("ASPIA_MIN_FPS"))
+    {
+        bool ok = false;
+        int min_fps = qEnvironmentVariableIntValue("ASPIA_MIN_FPS", &ok);
+        if (ok)
+        {
+            LOG(INFO) << "Minimum FPS specified by environment variable";
+
+            if (min_fps < 1 || min_fps > 60)
+            {
+                LOG(INFO) << "Environment variable contains an incorrect minimum FPS:" << min_fps;
+            }
+            else
+            {
+                min_capture_fps = min_fps;
+            }
+        }
+    }
+
+    return min_capture_fps;
+}
+
+} // namespace
+
 //--------------------------------------------------------------------------------------------------
 DesktopAgent::DesktopAgent(QObject* parent)
     : QObject(parent),
@@ -52,7 +154,11 @@ DesktopAgent::DesktopAgent(QObject* parent)
       screen_capturer_(new base::ScreenCapturerWrapper(
           static_cast<base::ScreenCapturer::Type>(SystemSettings().preferredVideoCapturer()), this)),
       audio_capturer_(new base::AudioCapturerWrapper(this)),
-      screen_capture_timer_(new QTimer(this))
+      screen_capture_timer_(new QTimer(this)),
+      overflow_timer_(new QTimer(this)),
+      default_fps_(defaultCaptureFps()),
+      min_fps_(minCaptureFps()),
+      max_fps_(maxCaptureFps())
 {
     LOG(INFO) << "Ctor";
 
@@ -61,10 +167,12 @@ DesktopAgent::DesktopAgent(QObject* parent)
     connect(ipc_channel_, &base::IpcChannel::sig_errorOccurred, this, &DesktopAgent::onIpcErrorOccurred);
     connect(ipc_channel_, &base::IpcChannel::sig_messageReceived, this, &DesktopAgent::onIpcMessageReceived);
 
-    capture_scheduler_.setUpdateInterval(std::chrono::milliseconds(40));
+    capture_scheduler_.setFps(defaultCaptureFps());
     screen_capture_timer_->setTimerType(Qt::PreciseTimer);
-
     connect(screen_capture_timer_, &QTimer::timeout, this, &DesktopAgent::onCaptureScreen);
+
+    overflow_timer_->setInterval(std::chrono::milliseconds(1000));
+    connect(overflow_timer_, &QTimer::timeout, this, &DesktopAgent::onOverflowCheck);
 
 #if defined(Q_OS_WINDOWS)
     input_injector_ = new InputInjectorWin(this);
@@ -101,6 +209,7 @@ void DesktopAgent::start(const QString& ipc_channel_name)
 //--------------------------------------------------------------------------------------------------
 void DesktopAgent::onIpcConnected()
 {
+    overflow_timer_->start();
     clipboard_->start();
     audio_capturer_->start();
     ipc_channel_->resume();
@@ -338,6 +447,60 @@ void DesktopAgent::onCaptureScreen()
 
     capture_scheduler_.onEndCapture();
     screen_capture_timer_->start(capture_scheduler_.nextCaptureDelay());
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopAgent::onOverflowCheck()
+{
+    proto::desktop::Overflow::State state = proto::desktop::Overflow::STATE_NONE;
+
+    for (auto* client : std::as_const(clients_))
+    {
+        if (client->overflowState() > state)
+            state = client->overflowState();
+    }
+
+    if (critical_overflow_count_ > 0 || warning_overflow_count_ > 15)
+        max_fps_ = 18;
+    else if (warning_overflow_count_ > 5)
+        max_fps_ = 20;
+    else
+        max_fps_ = default_fps_;
+
+    int current_fps = capture_scheduler_.fps();
+
+    if (state == proto::desktop::Overflow::STATE_CRITICAL)
+    {
+        ++critical_overflow_count_;
+        normal_count_ = 0;
+
+        if (current_fps > default_fps_)
+            capture_scheduler_.setFps(std::max(default_fps_ - 3, min_fps_));
+        else if (current_fps > min_fps_)
+            capture_scheduler_.setFps(std::max(current_fps - 3, min_fps_));
+    }
+    else if (state == proto::desktop::Overflow::STATE_WARNING)
+    {
+        ++warning_overflow_count_;
+        normal_count_ = 0;
+
+        if (current_fps > default_fps_)
+            capture_scheduler_.setFps(default_fps_);
+        else if (current_fps > min_fps_)
+            capture_scheduler_.setFps(current_fps - 1);
+    }
+    else if (state == proto::desktop::Overflow::STATE_NONE)
+    {
+        ++normal_count_;
+
+        // If there were no overflows within 30 seconds, then we increase the FPS.
+        if (normal_count_ < 30)
+            return;
+
+        int fps = current_fps + 1;
+        if (fps <= max_fps_)
+            capture_scheduler_.setFps(fps);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

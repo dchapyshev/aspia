@@ -23,6 +23,7 @@
 
 #include "base/desktop/capture_scheduler.h"
 #include "base/desktop/screen_capturer.h"
+#include "proto/desktop_internal.h"
 
 namespace base {
 class AudioCapturerWrapper;
@@ -74,6 +75,7 @@ private slots:
     void onInjectTouchEvent(const proto::desktop::TouchEvent& event);
 
     void onCaptureScreen();
+    void onOverflowCheck();
 
 private:
     void startClient(const QString& ipc_channel_name);
@@ -96,6 +98,14 @@ private:
     bool is_keyboard_locked_ = false;
     bool lock_at_disconnect_ = false;
     bool clear_clipboard_ = false;
+
+    QTimer* overflow_timer_ = nullptr;
+    int critical_overflow_count_ = 0;
+    int warning_overflow_count_ = 0;
+    int normal_count_ = 0;
+    const int default_fps_ = 0;
+    int min_fps_ = 0;
+    int max_fps_ = 0;
 
     Q_DISABLE_COPY_MOVE(DesktopAgent)
 };

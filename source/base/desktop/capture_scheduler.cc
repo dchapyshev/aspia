@@ -18,18 +18,28 @@
 
 #include "base/desktop/capture_scheduler.h"
 
-namespace base {
+#include "base/logging.h"
 
-//--------------------------------------------------------------------------------------------------
-void CaptureScheduler::setUpdateInterval(const std::chrono::milliseconds& update_interval)
-{
-    update_interval_ = update_interval;
-}
+namespace base {
 
 //--------------------------------------------------------------------------------------------------
 std::chrono::milliseconds CaptureScheduler::updateInterval() const
 {
     return update_interval_;
+}
+
+//--------------------------------------------------------------------------------------------------
+void CaptureScheduler::setFps(int value)
+{
+    CHECK_GT(value, 0);
+    LOG(INFO) << "FPS changed from" << fps() << "to" << value;
+    update_interval_ = std::chrono::milliseconds(1000 / value);
+}
+
+//--------------------------------------------------------------------------------------------------
+int CaptureScheduler::fps() const
+{
+    return 1000 / update_interval_.count();
 }
 
 //--------------------------------------------------------------------------------------------------
