@@ -100,7 +100,6 @@ void ChatClient::onSendStatus(proto::chat::Status::Code code)
 void ChatClient::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code)
 {
     LOG(WARNING) << "TCP error occurred:" << error_code;
-
     tcp_channel_->disconnect(this);
     emit sig_finished();
 }

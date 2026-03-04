@@ -84,7 +84,7 @@ Service::Service(QObject* parent)
     LOG(INFO) << "Ctor";
 
     connect(repeated_timer_, &QTimer::timeout, this, &Service::onRepeatedTasks);
-    connect(settings_watcher_, &QFileSystemWatcher::fileChanged, this, &Service::updateConfiguration);
+    connect(settings_watcher_, &QFileSystemWatcher::fileChanged, this, &Service::onSettingsChanged);
     connect(user_session_, &UserSession::sig_attached, this, &Service::onUserSessionAttached);
     connect(user_session_, &UserSession::sig_confirmationReply, this, &Service::onConfirmationReply);
     connect(user_session_, &UserSession::sig_chatMessage, this, &Service::onUserChatMessage);
@@ -510,7 +510,7 @@ void Service::onChatClientMessage(quint32 client_id, const proto::chat::Chat& ch
     user_session_->onClientChat(client_id, chat);
 
     // Send message to other text chat clients.
-    for (const auto& client : std::as_const(clients_))
+    for (auto* client : std::as_const(clients_))
     {
         ChatClient* chat_client = dynamic_cast<ChatClient*>(client);
         if (chat_client && client_id != chat_client->property("client_id"))
@@ -527,6 +527,64 @@ void Service::onUserChatMessage(const proto::chat::Chat& chat)
         ChatClient* chat_client = dynamic_cast<ChatClient*>(client);
         if (chat_client)
             chat_client->onSendChat(chat);
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void Service::onSettingsChanged(const QString& path)
+{
+    LOG(INFO) << "Configuration file change detected";
+
+    QString settings_file_path = settings_.filePath();
+
+    // While writing the configuration, the file may be empty for a short time. The configuration
+    // monitor has time to detect this, but we must not load an empty configuration.
+    if (QFileInfo(settings_file_path).size() <= 0)
+    {
+        LOG(INFO) << "Configuration file is empty. Configuration update skipped";
+        return;
+    }
+
+    // Synchronize the parameters from the file.
+    settings_.sync();
+
+    // Reload user lists.
+    reloadUserList();
+
+    // If a controller instance already exists.
+    if (router_manager_)
+    {
+        LOG(INFO) << "Has router controller";
+
+        if (settings_.isRouterEnabled())
+        {
+            LOG(INFO) << "Router enabled";
+
+            // Check if the connection parameters have changed.
+            if (router_manager_->address() == settings_.routerAddress() &&
+                router_manager_->port() == settings_.routerPort() &&
+                router_manager_->publicKey() == settings_.routerPublicKey())
+            {
+                LOG(INFO) << "Router parameters without changes";
+                return;
+            }
+
+            // Reconnect to the router with new parameters.
+            connectToRouter(FROM_HERE);
+        }
+        else
+        {
+            LOG(INFO) << "The router is now disabled";
+            disconnectFromRouter(FROM_HERE);
+
+            proto::user::RouterState state;
+            state.set_state(proto::user::RouterState::DISABLED);
+            user_session_->onRouterStateChanged(state);
+        }
+    }
+    else if (settings_.isRouterEnabled())
+    {
+        connectToRouter(FROM_HERE);
     }
 }
 
@@ -680,64 +738,6 @@ void Service::deleteFirewallRules()
     LOG(INFO) << "Delete firewall rule";
     firewall.deleteRuleByName(kFirewallRuleName);
 #endif // defined(Q_OS_WINDOWS)
-}
-
-//--------------------------------------------------------------------------------------------------
-void Service::updateConfiguration(const QString& path)
-{
-    LOG(INFO) << "Configuration file change detected";
-
-    QString settings_file_path = settings_.filePath();
-
-    // While writing the configuration, the file may be empty for a short time. The configuration
-    // monitor has time to detect this, but we must not load an empty configuration.
-    if (QFileInfo(settings_file_path).size() <= 0)
-    {
-        LOG(INFO) << "Configuration file is empty. Configuration update skipped";
-        return;
-    }
-
-    // Synchronize the parameters from the file.
-    settings_.sync();
-
-    // Reload user lists.
-    reloadUserList();
-
-    // If a controller instance already exists.
-    if (router_manager_)
-    {
-        LOG(INFO) << "Has router controller";
-
-        if (settings_.isRouterEnabled())
-        {
-            LOG(INFO) << "Router enabled";
-
-            // Check if the connection parameters have changed.
-            if (router_manager_->address() == settings_.routerAddress() &&
-                router_manager_->port() == settings_.routerPort() &&
-                router_manager_->publicKey() == settings_.routerPublicKey())
-            {
-                LOG(INFO) << "Router parameters without changes";
-                return;
-            }
-
-            // Reconnect to the router with new parameters.
-            connectToRouter(FROM_HERE);
-        }
-        else
-        {
-            LOG(INFO) << "The router is now disabled";
-            disconnectFromRouter(FROM_HERE);
-
-            proto::user::RouterState state;
-            state.set_state(proto::user::RouterState::DISABLED);
-            user_session_->onRouterStateChanged(state);
-        }
-    }
-    else if (settings_.isRouterEnabled())
-    {
-        connectToRouter(FROM_HERE);
-    }
 }
 
 //--------------------------------------------------------------------------------------------------

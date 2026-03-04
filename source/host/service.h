@@ -90,13 +90,13 @@ private slots:
     void onChatClientFinished();
     void onChatClientMessage(quint32 client_id, const proto::chat::Chat& chat);
     void onUserChatMessage(const proto::chat::Chat& chat);
+    void onSettingsChanged(const QString& path);
 
 private:
     void startConfirmation(base::TcpChannel* tcp_channel);
     void startClient(base::TcpChannel* tcp_channel);
     void addFirewallRules();
     void deleteFirewallRules();
-    void updateConfiguration(const QString& path);
     void reloadUserList();
     void connectToRouter(const base::Location& location);
     void disconnectFromRouter(const base::Location& location);
