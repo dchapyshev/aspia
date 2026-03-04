@@ -20,7 +20,6 @@
 
 #include <QVariant>
 
-#include "base/application.h"
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/sys_info.h"
@@ -37,6 +36,7 @@ ChatClient::ChatClient(base::TcpChannel* tcp_channel, QObject* parent)
 
     tcp_channel_->setParent(this);
 
+    setProperty("client_id", tcp_channel_->instanceId());
     setProperty("version", tcp_channel_->peerVersion().toString());
     setProperty("os_name", tcp_channel_->peerOsName());
     setProperty("session_type", tcp_channel_->peerSessionType());
@@ -47,9 +47,6 @@ ChatClient::ChatClient(base::TcpChannel* tcp_channel, QObject* parent)
 
     connect(tcp_channel_, &base::TcpChannel::sig_errorOccurred, this, &ChatClient::onTcpErrorOccurred);
     connect(tcp_channel_, &base::TcpChannel::sig_messageReceived, this, &ChatClient::onTcpMessageReceived);
-
-    connect(base::Application::instance(), &base::Application::sig_sessionEvent,
-            this, &ChatClient::onUserSessionEvent);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -59,16 +56,10 @@ ChatClient::~ChatClient()
 }
 
 //--------------------------------------------------------------------------------------------------
-quint32 ChatClient::clientId() const
-{
-    return tcp_channel_->instanceId();
-}
-
-//--------------------------------------------------------------------------------------------------
 void ChatClient::start()
 {
     tcp_channel_->resume();
-    emit sig_started(clientId());
+    emit sig_started();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -111,7 +102,7 @@ void ChatClient::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code)
     LOG(WARNING) << "TCP error occurred:" << error_code;
 
     tcp_channel_->disconnect(this);
-    emit sig_finished(clientId());
+    emit sig_finished();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -126,19 +117,13 @@ void ChatClient::onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray& b
 
     if (has_user_)
     {
-        emit sig_messageReceived(clientId(), chat);
+        emit sig_messageReceived(property("client_id").toUInt(), chat);
     }
     else
     {
         if (chat.has_chat_message())
             onSendStatus(proto::chat::Status::CODE_USER_DISCONNECTED);
     }
-}
-
-//--------------------------------------------------------------------------------------------------
-void ChatClient::onUserSessionEvent(quint32 event_type, quint32 session_id)
-{
-
 }
 
 } // namespace host

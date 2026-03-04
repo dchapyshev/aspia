@@ -281,26 +281,25 @@ void UserSession::onClientConfirmation(const proto::user::ConfirmationRequest& r
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSession::onClientStarted(quint32 client_id)
+void UserSession::onClientStarted()
 {
     QObject* client = sender();
-    if (!client)
-    {
-        LOG(ERROR) << "Unable to get sender (client_id" << client_id << ")";
-        return;
-    }
+    CHECK(client);
 
     auto session_type = static_cast<proto::peer::SessionType>(client->property("session_type").toUInt());
     QString computer_name = client->property("computer_name").toString();
     QString display_name = client->property("display_name").toString();
+    quint32 client_id = client->property("client_id").toUInt();
 
     sendConnectEvent(client_id, session_type, computer_name, display_name);
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSession::onClientFinished(quint32 client_id)
+void UserSession::onClientFinished()
 {
-    sendDisconnectEvent(client_id);
+    QObject* client = sender();
+    CHECK(client);
+    sendDisconnectEvent(client->property("client_id").toUInt());
 }
 
 //--------------------------------------------------------------------------------------------------

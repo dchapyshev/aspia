@@ -33,14 +33,12 @@ public:
     explicit SystemInfoClient(base::TcpChannel* tcp_channel, QObject* parent = nullptr);
     ~SystemInfoClient() final;
 
-    quint32 clientId() const;
-
 public slots:
     void start();
 
 signals:
-    void sig_started(quint32 client_id);
-    void sig_finished(quint32 client_id);
+    void sig_started();
+    void sig_finished();
 
 private slots:
     void onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code);

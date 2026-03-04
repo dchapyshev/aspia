@@ -39,6 +39,7 @@ SystemInfoClient::SystemInfoClient(base::TcpChannel* tcp_channel, QObject* paren
 
     tcp_channel_->setParent(this);
 
+    setProperty("client_id", tcp_channel_->instanceId());
     setProperty("version", tcp_channel_->peerVersion().toString());
     setProperty("os_name", tcp_channel_->peerOsName());
     setProperty("session_type", tcp_channel_->peerSessionType());
@@ -58,16 +59,10 @@ SystemInfoClient::~SystemInfoClient()
 }
 
 //--------------------------------------------------------------------------------------------------
-quint32 SystemInfoClient::clientId() const
-{
-    return tcp_channel_->instanceId();
-}
-
-//--------------------------------------------------------------------------------------------------
 void SystemInfoClient::start()
 {
     tcp_channel_->resume();
-    emit sig_started(clientId());
+    emit sig_started();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -75,7 +70,7 @@ void SystemInfoClient::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code
 {
     LOG(WARNING) << "TCP error occurred:" << error_code;
     tcp_channel_->disconnect(this);
-    emit sig_finished(clientId());
+    emit sig_finished();
 }
 
 //--------------------------------------------------------------------------------------------------

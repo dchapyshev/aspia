@@ -39,7 +39,6 @@ public:
     explicit DesktopClient(base::TcpChannel* tcp_channel, QObject* parent = nullptr);
     ~DesktopClient() final;
 
-    quint32 clientId() const;
     bool isAttached() const;
 
     QString attach();
@@ -49,8 +48,8 @@ public slots:
     void start();
 
 signals:
-    void sig_started(quint32 client_id);
-    void sig_finished(quint32 client_id);
+    void sig_started();
+    void sig_finished();
     void sig_switchSession(base::SessionId session_id);
     void sig_recordingChanged(const QString& computer, const QString& user, bool started);
 

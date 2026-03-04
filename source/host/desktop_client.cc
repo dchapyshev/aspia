@@ -46,6 +46,7 @@ DesktopClient::DesktopClient(base::TcpChannel* tcp_channel, QObject* parent)
 
     tcp_channel_->setParent(this);
 
+    setProperty("client_id", tcp_channel_->instanceId());
     setProperty("version", tcp_channel_->peerVersion().toString());
     setProperty("os_name", tcp_channel_->peerOsName());
     setProperty("session_type", tcp_channel_->peerSessionType());
@@ -65,7 +66,7 @@ DesktopClient::DesktopClient(base::TcpChannel* tcp_channel, QObject* parent)
     connect(attach_timer_, &QTimer::timeout, this, [this]()
     {
         LOG(WARNING) << "Timeout when desktop client starting";
-        emit sig_finished(clientId());
+        emit sig_finished();
     });
 
     attach_timer_->setInterval(std::chrono::seconds(15));
@@ -76,12 +77,6 @@ DesktopClient::DesktopClient(base::TcpChannel* tcp_channel, QObject* parent)
 DesktopClient::~DesktopClient()
 {
     LOG(INFO) << "Dtor";
-}
-
-//--------------------------------------------------------------------------------------------------
-quint32 DesktopClient::clientId() const
-{
-    return tcp_channel_->instanceId();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -106,7 +101,7 @@ QString DesktopClient::attach()
     if (!ipc_server_->start(channel_name))
     {
         LOG(ERROR) << "Unable to start IPC server";
-        emit sig_finished(clientId());
+        emit sig_finished();
         return QString();
     }
 
@@ -129,7 +124,7 @@ void DesktopClient::dettach()
 //--------------------------------------------------------------------------------------------------
 void DesktopClient::start()
 {
-    emit sig_started(clientId());
+    emit sig_started();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -141,7 +136,7 @@ void DesktopClient::onIpcNewConnection()
     if (!ipc_server_->hasPendingConnections())
     {
         LOG(ERROR) << "No pending IPC connections";
-        emit sig_finished(clientId());
+        emit sig_finished();
         return;
     }
 
@@ -182,7 +177,7 @@ void DesktopClient::onIpcNewConnection()
 void DesktopClient::onIpcErrorOccurred()
 {
     LOG(ERROR) << "Error in IPC server";
-    emit sig_finished(clientId());
+    emit sig_finished();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -226,7 +221,7 @@ void DesktopClient::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code)
         ipc_channel_ = nullptr;
     }
 
-    emit sig_finished(clientId());
+    emit sig_finished();
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -34,23 +34,19 @@ public:
     explicit ChatClient(base::TcpChannel* tcp_channel, QObject* parent = nullptr);
     ~ChatClient() final;
 
-    quint32 clientId() const;
-
 public slots:
     void start();
     void onSendChat(const proto::chat::Chat& chat);
     void onSendStatus(proto::chat::Status::Code code);
 
 signals:
-    void sig_started(quint32 client_id);
-    void sig_finished(quint32 client_id);
+    void sig_started();
+    void sig_finished();
     void sig_messageReceived(quint32 client_id, const proto::chat::Chat& chat);
 
 private slots:
     void onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code);
     void onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray& buffer);
-
-    void onUserSessionEvent(quint32 event_type, quint32 session_id);
 
 private:
     base::TcpChannel* tcp_channel_ = nullptr;

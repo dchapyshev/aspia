@@ -85,11 +85,9 @@ private slots:
     void onUserSessionAttached();
     void onStopClient(quint32 client_id);
     void onDesktopManagerAttached();
-    void onDesktopClientFinished(quint32 client_id);
-    void onFileClientFinished(quint32 client_id);
-    void onSystemInfoClientFinished(quint32 client_id);
-    void onChatClientStarted(quint32 client_id);
-    void onChatClientFinished(quint32 client_id);
+    void onClientFinished();
+    void onChatClientStarted();
+    void onChatClientFinished();
     void onChatClientMessage(quint32 client_id, const proto::chat::Chat& chat);
     void onUserChatMessage(const proto::chat::Chat& chat);
 
@@ -116,11 +114,7 @@ private:
     UserSession* user_session_ = nullptr;
 
     QList<std::pair<base::TcpChannel*, QTime>> pending_confirmation_;
-
-    QList<DesktopClient*> desktop_clients_;
-    QList<FileClient*> file_clients_;
-    QList<SystemInfoClient*> system_info_clients_;
-    QList<ChatClient*> chat_clients_;
+    QList<QObject*> clients_;
 
     common::UpdateChecker* update_checker_ = nullptr;
     common::HttpFileDownloader* update_downloader_ = nullptr;

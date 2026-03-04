@@ -64,8 +64,8 @@ public slots:
     void onUpdateCredentials(base::HostId host_id, const QString& password);
     void onClientSwitchSession(base::SessionId session_id);
     void onClientConfirmation(const proto::user::ConfirmationRequest& request);
-    void onClientStarted(quint32 client_id);
-    void onClientFinished(quint32 client_id);
+    void onClientStarted();
+    void onClientFinished();
     void onClientChat(quint32 client_id, const proto::chat::Chat& chat);
     void onClientRecording(const QString& computer, const QString& user, bool started);
 

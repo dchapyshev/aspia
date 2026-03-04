@@ -167,6 +167,7 @@ FileClient::FileClient(base::TcpChannel* tcp_channel, QObject* parent)
 
     tcp_channel_->setParent(this);
 
+    setProperty("client_id", tcp_channel_->instanceId());
     setProperty("version", tcp_channel_->peerVersion().toString());
     setProperty("os_name", tcp_channel_->peerOsName());
     setProperty("session_type", tcp_channel_->peerSessionType());
@@ -190,12 +191,6 @@ FileClient::FileClient(base::TcpChannel* tcp_channel, QObject* parent)
 FileClient::~FileClient()
 {
     LOG(INFO) << "Dtor";
-}
-
-//--------------------------------------------------------------------------------------------------
-quint32 FileClient::clientId() const
-{
-    return tcp_channel_->instanceId();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -443,7 +438,7 @@ void FileClient::onStarted(const base::Location& location, bool has_user)
     }
 
     tcp_channel_->resume();
-    emit sig_started(clientId());
+    emit sig_started();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -460,7 +455,7 @@ void FileClient::onError(const base::Location& location)
     if (ipc_channel_)
         ipc_channel_->disconnect(this);
 
-    emit sig_finished(clientId());
+    emit sig_finished();
 }
 
 } // namespace host

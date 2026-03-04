@@ -381,100 +381,68 @@ void Service::onRepeatedTasks()
 //--------------------------------------------------------------------------------------------------
 void Service::onUserSessionAttached()
 {
-    auto send_connect_event = [this](const auto& list)
+    for (auto* client : std::as_const(clients_))
     {
-        for (auto* client : std::as_const(list))
-        {
-            auto session_type = static_cast<proto::peer::SessionType>(client->property("session_type").toUInt());
-            QString computer_name = client->property("computer_name").toString();
-            QString display_name = client->property("display_name").toString();
+        auto session_type = static_cast<proto::peer::SessionType>(client->property("session_type").toUInt());
+        QString computer_name = client->property("computer_name").toString();
+        QString display_name = client->property("display_name").toString();
+        quint32 client_id = client->property("client_id").toUInt();
 
-            user_session_->sendConnectEvent(client->clientId(), session_type, computer_name, display_name);
-        }
-    };
-
-    send_connect_event(desktop_clients_);
-    send_connect_event(file_clients_);
-    send_connect_event(chat_clients_);
-    send_connect_event(system_info_clients_);
+        user_session_->sendConnectEvent(client_id, session_type, computer_name, display_name);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
 void Service::onStopClient(quint32 client_id)
 {
-    auto stop = [&](auto& list)
+    for (auto* client : std::as_const(clients_))
     {
-        for (auto* client : std::as_const(list))
-        {
-            if (client_id == 0 || client_id == client->clientId())
-            {
-                emit client->sig_finished(client->clientId());
-                if (client_id != 0)
-                    break;
-            }
-        }
-    };
+        quint32 current_client_id = client->property("client_id").toUInt();
 
-    stop(desktop_clients_);
-    stop(file_clients_);
-    stop(chat_clients_);
-    stop(system_info_clients_);
+        if (client_id == 0 || client_id == current_client_id)
+        {
+            QMetaObject::invokeMethod(client, "sig_finished");
+            if (client_id != 0)
+                 break;
+        }
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
 void Service::onDesktopManagerAttached()
 {
-    for (const auto& client : std::as_const(desktop_clients_))
+    for (auto* client : std::as_const(clients_))
     {
-        if (client->isAttached())
+        DesktopClient* desktop_client = dynamic_cast<DesktopClient*>(client);
+        if (!desktop_client || desktop_client->isAttached())
             continue;
 
-        QString ipc_channel_name = client->attach();
+        QString ipc_channel_name = desktop_client->attach();
         desktop_manager_->startAgentClient(ipc_channel_name);
     }
 }
 
 //--------------------------------------------------------------------------------------------------
-void Service::onDesktopClientFinished(quint32 client_id)
+void Service::onClientFinished()
 {
-    DesktopClient* client = dynamic_cast<DesktopClient*>(sender());
+    QObject* client = sender();
     CHECK(client);
-    CHECK_EQ(client_id, client->clientId());
+    CHECK_NE(clients_.indexOf(client), -1);
 
     client->deleteLater();
-    desktop_clients_.removeOne(client);
+    clients_.removeOne(client);
 }
 
 //--------------------------------------------------------------------------------------------------
-void Service::onFileClientFinished(quint32 client_id)
+void Service::onChatClientStarted()
 {
-    FileClient* client = dynamic_cast<FileClient*>(sender());
-    CHECK(client);
-    CHECK_EQ(client_id, client->clientId());
-
-    client->deleteLater();
-    file_clients_.removeOne(client);
-}
-
-//--------------------------------------------------------------------------------------------------
-void Service::onSystemInfoClientFinished(quint32 client_id)
-{
-    SystemInfoClient* client = dynamic_cast<SystemInfoClient*>(sender());
-    CHECK(client);
-    CHECK_EQ(client_id, client->clientId());
-
-    client->deleteLater();
-    system_info_clients_.removeOne(client);
-}
-
-//--------------------------------------------------------------------------------------------------
-void Service::onChatClientStarted(quint32 client_id)
-{
-    LOG(INFO) << "Text chat session started (client_id:" << client_id << ")";
-
     ChatClient* started_client = dynamic_cast<ChatClient*>(sender());
     CHECK(started_client);
-    CHECK_EQ(client_id, started_client->clientId());
+    CHECK_NE(clients_.indexOf(started_client), -1);
+
+    quint32 client_id = started_client->property("client_id").toUInt();
+
+    LOG(INFO) << "Text chat session started (client_id:" << client_id << ")";
 
     if (user_session_->state() != UserSession::State::ATTACHED)
         started_client->onSendStatus(proto::chat::Status::CODE_USER_DISCONNECTED);
@@ -490,10 +458,11 @@ void Service::onChatClientStarted(quint32 client_id)
     chat_status->set_source(display_name.toStdString());
 
     // Send message to other clients.
-    for (const auto& client : std::as_const(chat_clients_))
+    for (auto* client : std::as_const(clients_))
     {
-        if (client->clientId() != client_id)
-            client->onSendChat(chat);
+        ChatClient* chat_client = dynamic_cast<ChatClient*>(client);
+        if (chat_client && chat_client->property("client_id") != client_id)
+            chat_client->onSendChat(chat);
     }
 
     // Send message to GUI.
@@ -501,11 +470,13 @@ void Service::onChatClientStarted(quint32 client_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Service::onChatClientFinished(quint32 client_id)
+void Service::onChatClientFinished()
 {
     ChatClient* finished_client = dynamic_cast<ChatClient*>(sender());
     CHECK(finished_client);
-    CHECK_EQ(finished_client->clientId(), client_id);
+    CHECK_NE(clients_.indexOf(finished_client), -1);
+
+    quint32 client_id = finished_client->property("client_id").toUInt();
 
     QString display_name = finished_client->property("display_name").toString();
     if (display_name.isEmpty())
@@ -518,17 +489,18 @@ void Service::onChatClientFinished(quint32 client_id)
     chat_status->set_source(display_name.toStdString());
 
     // Notify other clients about finish.
-    for (const auto& client : std::as_const(chat_clients_))
+    for (auto* client : std::as_const(clients_))
     {
-        if (client->clientId() != client_id)
-            client->onSendChat(chat);
+        ChatClient* chat_client = dynamic_cast<ChatClient*>(client);
+        if (chat_client && chat_client->property("client_id").toUInt() != client_id)
+            chat_client->onSendChat(chat);
     }
 
     // Notify GUI about finish.
     user_session_->onClientChat(client_id, chat);
 
     finished_client->deleteLater();
-    chat_clients_.removeOne(finished_client);
+    clients_.removeOne(finished_client);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -538,10 +510,11 @@ void Service::onChatClientMessage(quint32 client_id, const proto::chat::Chat& ch
     user_session_->onClientChat(client_id, chat);
 
     // Send message to other text chat clients.
-    for (const auto& client : std::as_const(chat_clients_))
+    for (const auto& client : std::as_const(clients_))
     {
-        if (client_id != client->clientId())
-            client->onSendChat(chat);
+        ChatClient* chat_client = dynamic_cast<ChatClient*>(client);
+        if (chat_client && client_id != chat_client->property("client_id"))
+            chat_client->onSendChat(chat);
     }
 }
 
@@ -549,8 +522,12 @@ void Service::onChatClientMessage(quint32 client_id, const proto::chat::Chat& ch
 void Service::onUserChatMessage(const proto::chat::Chat& chat)
 {
     // Send message to text chat clients.
-    for (const auto& client : std::as_const(chat_clients_))
-        client->onSendChat(chat);
+    for (auto* client : std::as_const(clients_))
+    {
+        ChatClient* chat_client = dynamic_cast<ChatClient*>(client);
+        if (chat_client)
+            chat_client->onSendChat(chat);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -599,9 +576,9 @@ void Service::startClient(base::TcpChannel* tcp_channel)
         case proto::peer::SESSION_TYPE_DESKTOP_VIEW:
         {
             DesktopClient* client = new DesktopClient(tcp_channel, this);
-            desktop_clients_.append(client);
+            clients_.append(client);
 
-            connect(client, &DesktopClient::sig_finished, this, &Service::onDesktopClientFinished);
+            connect(client, &DesktopClient::sig_finished, this, &Service::onClientFinished);
 
             connect(client, &DesktopClient::sig_started, desktop_manager_, &DesktopManager::onClientStarted);
             connect(client, &DesktopClient::sig_finished, desktop_manager_, &DesktopManager::onClientFinished);
@@ -621,9 +598,9 @@ void Service::startClient(base::TcpChannel* tcp_channel)
         case proto::peer::SESSION_TYPE_FILE_TRANSFER:
         {
             FileClient* client = new FileClient(tcp_channel, this);
-            file_clients_.emplace_back(client);
+            clients_.emplace_back(client);
 
-            connect(client, &FileClient::sig_finished, this, &Service::onFileClientFinished);
+            connect(client, &FileClient::sig_finished, this, &Service::onClientFinished);
             connect(client, &FileClient::sig_started, user_session_, &UserSession::onClientStarted);
             connect(client, &FileClient::sig_finished, user_session_, &UserSession::onClientFinished);
 
@@ -634,9 +611,9 @@ void Service::startClient(base::TcpChannel* tcp_channel)
         case proto::peer::SESSION_TYPE_SYSTEM_INFO:
         {
             SystemInfoClient* client = new SystemInfoClient(tcp_channel, this);
-            system_info_clients_.emplace_back(client);
+            clients_.emplace_back(client);
 
-            connect(client, &SystemInfoClient::sig_finished, this, &Service::onSystemInfoClientFinished);
+            connect(client, &SystemInfoClient::sig_finished, this, &Service::onClientFinished);
             connect(client, &SystemInfoClient::sig_started, user_session_, &UserSession::onClientStarted);
             connect(client, &SystemInfoClient::sig_finished, user_session_, &UserSession::onClientFinished);
 
@@ -647,7 +624,7 @@ void Service::startClient(base::TcpChannel* tcp_channel)
         case proto::peer::SESSION_TYPE_TEXT_CHAT:
         {
             ChatClient* client = new ChatClient(tcp_channel, this);
-            chat_clients_.emplace_back(client);
+            clients_.emplace_back(client);
 
             connect(client, &ChatClient::sig_started, user_session_, &UserSession::onClientStarted);
             connect(client, &ChatClient::sig_finished, user_session_, &UserSession::onClientFinished);
