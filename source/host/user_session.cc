@@ -243,6 +243,7 @@ void UserSession::onClientConfirmation(const proto::user::ConfirmationRequest& r
         {
             LOG(INFO) << "Reject: invalid console session id";
             emit sig_confirmationReply(request.id(), false);
+            return;
         }
 
         base::SessionInfo session_info(session_id);
