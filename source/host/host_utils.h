@@ -16,22 +16,36 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST_PRINT_DEBUG_INFO_H
-#define HOST_PRINT_DEBUG_INFO_H
+#ifndef HOST_HOST_UTILS_H
+#define HOST_HOST_UTILS_H
 
 #include <QtGlobal>
 
 namespace host {
 
-enum DebugInfoFeatures
+class HostUtils
 {
-    INCLUDE_DEFAULT = 0,
-    INCLUDE_VIDEO_ADAPTERS = 1,
-    INCLUDE_WINDOW_STATIONS = 2
-};
+public:
+    static bool isMigrationNeeded();
+    static void doMigrate();
 
-void printDebugInfo(quint32 features = INCLUDE_DEFAULT);
+    // Performs integrity checks on host components.
+    // Returns true if check succeeded. Returns false if the check fails.
+    static bool integrityCheck();
+
+    enum DebugInfoFeatures
+    {
+        INCLUDE_DEFAULT = 0,
+        INCLUDE_VIDEO_ADAPTERS = 1,
+        INCLUDE_WINDOW_STATIONS = 2
+    };
+
+    static void printDebugInfo(quint32 features = INCLUDE_DEFAULT);
+
+private:
+    Q_DISABLE_COPY_MOVE(HostUtils)
+};
 
 } // namespace host
 
-#endif // HOST_PRINT_DEBUG_INFO_H
+#endif // HOST_HOST_UTILS_H

@@ -38,11 +38,9 @@ list(APPEND SOURCE_HOST_CORE
     host_export.h
     host_storage.cc
     host_storage.h
+    host_utils.cc
+    host_utils.h
     input_injector.h
-    integrity_check.cc
-    integrity_check.h
-    print_debug_info.cc
-    print_debug_info.h
     router_manager.cc
     router_manager.h
     service.cc
@@ -62,9 +60,7 @@ if (WIN32)
     list(APPEND SOURCE_HOST_CORE
         host_core.rc
         input_injector_win.cc
-        input_injector_win.h
-        migration_utils.cc
-        migration_utils.h)
+        input_injector_win.h)
 endif()
 
 if (LINUX)

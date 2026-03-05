@@ -25,8 +25,7 @@
 #include "base/asio_event_dispatcher.h"
 #include "base/logging.h"
 #include "build/version.h"
-#include "host/integrity_check.h"
-#include "host/print_debug_info.h"
+#include "host/host_utils.h"
 #include "host/host_storage.h"
 #include "host/service.h"
 
@@ -134,13 +133,13 @@ int hostServiceMain(int& argc, char* argv[])
 
     base::Application application(argc, argv);
 
-    if (!integrityCheck())
+    if (!HostUtils::integrityCheck())
     {
         LOG(ERROR) << "Integrity check failed. Application stopped";
         return 1;
     }
 
-    host::printDebugInfo();
+    host::HostUtils::printDebugInfo();
 
     QCommandLineParser parser;
 

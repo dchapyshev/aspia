@@ -24,8 +24,7 @@
 
 #include "base/logging.h"
 #include "build/version.h"
-#include "host/integrity_check.h"
-#include "host/print_debug_info.h"
+#include "host/host_utils.h"
 #include "host/system_settings.h"
 #include "host/ui/application.h"
 #include "host/ui/check_password_dialog.h"
@@ -108,7 +107,7 @@ int hostMain(int argc, char* argv[])
     host::Application application(argc, argv);
     host::Application::setQuitOnLastWindowClosed(false);
 
-    host::printDebugInfo();
+    host::HostUtils::printDebugInfo();
 
     QCommandLineOption hidden_option("hidden",
         base::GuiApplication::translate("HostMain", "Launch the application hidden."));
@@ -135,7 +134,7 @@ int hostMain(int argc, char* argv[])
 
     parser.process(application);
 
-    if (!host::integrityCheck())
+    if (!host::HostUtils::integrityCheck())
     {
         LOG(ERROR) << "Integrity check failed";
 

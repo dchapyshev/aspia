@@ -25,7 +25,7 @@
 #include "base/logging.h"
 #include "build/version.h"
 #include "host/desktop_agent.h"
-#include "host/print_debug_info.h"
+#include "host/host_utils.h"
 
 //--------------------------------------------------------------------------------------------------
 int desktopAgentMain(int& argc, char* argv[])
@@ -39,7 +39,8 @@ int desktopAgentMain(int& argc, char* argv[])
     base::Application::setApplicationVersion(ASPIA_VERSION_STRING);
     base::Application application(argc, argv);
 
-    host::printDebugInfo(host::INCLUDE_VIDEO_ADAPTERS | host::INCLUDE_WINDOW_STATIONS);
+    host::HostUtils::printDebugInfo(
+        host::HostUtils::INCLUDE_VIDEO_ADAPTERS | host::HostUtils::INCLUDE_WINDOW_STATIONS);
 
     QCommandLineOption channel_id_option("channel_id",
         base::Application::translate("DesktopAgentMain", "IPC channel id."), "channel_id");

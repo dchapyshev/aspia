@@ -53,7 +53,7 @@
 #include "base/net/firewall_manager.h"
 #include "base/win/process_util.h"
 #include "base/win/safe_mode_util.h"
-#include "host/migration_utils.h"
+#include "host/host_utils.h"
 #endif // defined(Q_OS_WINDOWS)
 
 namespace host {
@@ -112,8 +112,8 @@ void Service::onStart()
     if (!SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS))
         PLOG(ERROR) << "SetPriorityClass failed";
 
-    if (MigrationUtils::isMigrationNeeded())
-        MigrationUtils::doMigrate();
+    if (HostUtils::isMigrationNeeded())
+        HostUtils::doMigrate();
 
     HostStorage storage;
     if (storage.isBootToSafeMode())

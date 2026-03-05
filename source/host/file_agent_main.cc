@@ -25,7 +25,7 @@
 #include "base/logging.h"
 #include "build/version.h"
 #include "host/file_agent.h"
-#include "host/print_debug_info.h"
+#include "host/host_utils.h"
 
 //--------------------------------------------------------------------------------------------------
 int fileAgentMain(int& argc, char* argv[])
@@ -39,8 +39,7 @@ int fileAgentMain(int& argc, char* argv[])
     base::Application::setApplicationVersion(ASPIA_VERSION_STRING);
 
     base::Application application(argc, argv);
-
-    host::printDebugInfo();
+    host::HostUtils::printDebugInfo();
 
     QCommandLineOption channel_id_option("channel_id",
         base::Application::translate("FileAgentMain", "IPC channel id."), "channel_id");

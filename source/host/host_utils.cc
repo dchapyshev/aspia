@@ -16,17 +16,32 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/migration_utils.h"
+#include "host/host_utils.h"
 
+#include <QCoreApplication>
 #include <QFile>
 #include <QFileInfo>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QProcessEnvironment>
 
+#if defined(Q_OS_WINDOWS)
 #include <qt_windows.h>
 #include <ShlObj.h>
+#include <dxgi.h>
+#include <d3d11.h>
+#include <comdef.h>
+#include <wrl/client.h>
 
+#include "base/win/desktop.h"
+#include "base/win/process_util.h"
+#include "base/win/session_info.h"
+#include "base/win/window_station.h"
+#endif // defined(Q_OS_WINDOWS)
+
+#include "build/version.h"
 #include "base/logging.h"
+#include "base/sys_info.h"
 #include "base/peer/user_list.h"
 #include "host/host_storage.h"
 #include "host/system_settings.h"
@@ -38,10 +53,10 @@ namespace {
 //--------------------------------------------------------------------------------------------------
 QString configDir()
 {
+#if defined(Q_OS_WINDOWS)
     wchar_t buffer[MAX_PATH] = { 0 };
 
-    HRESULT hr = SHGetFolderPathW(nullptr, CSIDL_COMMON_APPDATA,
-                                  nullptr, SHGFP_TYPE_CURRENT, buffer);
+    HRESULT hr = SHGetFolderPathW(nullptr, CSIDL_COMMON_APPDATA, nullptr, SHGFP_TYPE_CURRENT, buffer);
     if (FAILED(hr))
     {
         LOG(ERROR) << "SHGetFolderPathW failed";
@@ -49,24 +64,27 @@ QString configDir()
     }
 
     return QString::fromWCharArray(buffer);
+#else
+    return "/etc/aspia";
+#endif
 }
 
 //--------------------------------------------------------------------------------------------------
 QString hostFilePath()
 {
-    return configDir() + "\\aspia\\host.json";
+    return configDir() + "/aspia/host.json";
 }
 
 //--------------------------------------------------------------------------------------------------
 QString hostKeyFilePath()
 {
-    return configDir() + "\\aspia\\host_key.json";
+    return configDir() + "/aspia/host_key.json";
 }
 
 //--------------------------------------------------------------------------------------------------
 QString hostIpcFilePath()
 {
-    return configDir() + "\\aspia\\host_ipc.json";
+    return configDir() + "/aspia/host_ipc.json";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -303,7 +321,7 @@ void doHostKeyMigrate(const QJsonDocument& doc)
 
 //--------------------------------------------------------------------------------------------------
 // static
-bool MigrationUtils::isMigrationNeeded()
+bool HostUtils::isMigrationNeeded()
 {
     QString host_file = hostFilePath();
     bool has_host_file = false;
@@ -349,7 +367,7 @@ bool MigrationUtils::isMigrationNeeded()
 
 //--------------------------------------------------------------------------------------------------
 // static
-void MigrationUtils::doMigrate()
+void HostUtils::doMigrate()
 {
     LOG(INFO) << "Start migration";
 
@@ -385,13 +403,9 @@ void MigrationUtils::doMigrate()
                 QString new_file_name = host_file + ".bak";
 
                 if (QFile::rename(host_file, new_file_name))
-                {
                     LOG(INFO) << "File" << host_file << "is renamed to" << new_file_name;
-                }
                 else
-                {
                     LOG(ERROR) << "Unable to rename file from" << host_file << "to" << new_file_name;
-                }
             }
         }
     }
@@ -424,13 +438,9 @@ void MigrationUtils::doMigrate()
                 QString new_file_name = host_key_file + ".bak";
 
                 if (QFile::rename(host_key_file, new_file_name))
-                {
                     LOG(INFO) << "File" << host_key_file << "is renamed to" << new_file_name;
-                }
                 else
-                {
                     LOG(ERROR) << "Unable to rename file from" << host_key_file << "to" << new_file_name;
-                }
             }
         }
     }
@@ -442,16 +452,246 @@ void MigrationUtils::doMigrate()
         QString new_file_name = host_ipc_file + ".bak";
 
         if (QFile::rename(host_ipc_file, new_file_name))
-        {
             LOG(INFO) << "File" << host_ipc_file << "is renamed to" << new_file_name;
-        }
         else
-        {
             LOG(ERROR) << "Unable to rename file from" << host_ipc_file << "to" << new_file_name;
-        }
     }
 
     LOG(INFO) << "Migration is DONE";
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+bool HostUtils::integrityCheck()
+{
+#if defined(Q_OS_WINDOWS)
+    static const char* kFiles[] =
+    {
+        "aspia_host.exe",
+        "aspia_desktop_agent.exe",
+        "aspia_file_agent.exe",
+        "aspia_host_service.exe"
+    };
+    static const size_t kMinFileSize = 50 * 1024; // 50 kB.
+
+    QString current_dir = QCoreApplication::applicationDirPath();
+    QString current_file = QCoreApplication::applicationFilePath();
+
+    bool current_file_found = false;
+
+    for (size_t i = 0; i < std::size(kFiles); ++i)
+    {
+        QString file_path(current_dir);
+
+        file_path.append('/');
+        file_path.append(kFiles[i]);
+
+        if (file_path == current_file)
+            current_file_found = true;
+
+        QFileInfo file_info(file_path);
+
+        if (!file_info.exists(file_path))
+        {
+            LOG(ERROR) << "File" << file_path << "does not exist";
+            return false;
+        }
+
+        if (!file_info.isFile() || file_info.isShortcut() || file_info.isSymLink())
+        {
+            LOG(ERROR) << "File" << file_path << "is not a file";
+            return false;
+        }
+
+        qint64 file_size = file_info.size();
+        if (file_size < kMinFileSize)
+        {
+            LOG(ERROR) << "File" << file_path << "is not the correct size:" << file_size;
+            return false;
+        }
+    }
+
+    if (!current_file_found)
+    {
+        LOG(ERROR) << "Current executable file was not found in the list of components";
+        return false;
+    }
+#endif // defined(Q_OS_WINDOWS)
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+void HostUtils::printDebugInfo(quint32 features)
+{
+    LOG(INFO) << "Version:" << ASPIA_VERSION_STRING
+              << " (arch: " << QSysInfo::buildCpuArchitecture() << ")";
+#if defined(GIT_CURRENT_BRANCH) && defined(GIT_COMMIT_HASH)
+    LOG(INFO) << "Git branch:" << GIT_CURRENT_BRANCH;
+    LOG(INFO) << "Git commit:" << GIT_COMMIT_HASH;
+#endif
+    LOG(INFO) << "Qt version:" << QT_VERSION_STR;
+    LOG(INFO) << "Command line:" << QCoreApplication::arguments();
+    LOG(INFO) << "OS:" << base::SysInfo::operatingSystemName()
+              << "(version:" << base::SysInfo::operatingSystemVersion()
+              <<  "arch:" << base::SysInfo::operatingSystemArchitecture() << ")";
+    LOG(INFO) << "CPU:" << base::SysInfo::processorName()
+              << "(vendor:" << base::SysInfo::processorVendor()
+              << "packages:" << base::SysInfo::processorPackages()
+              << "cores:" << base::SysInfo::processorCores()
+              << "threads:" << base::SysInfo::processorThreads() << ")";
+
+#if defined(Q_OS_WINDOWS)
+    MEMORYSTATUSEX memory_status;
+    memset(&memory_status, 0, sizeof(memory_status));
+    memory_status.dwLength = sizeof(memory_status);
+
+    if (GlobalMemoryStatusEx(&memory_status))
+    {
+        static const quint32 kMB = 1024 * 1024;
+
+        LOG(INFO) << "Total physical memory:" << (memory_status.ullTotalPhys / kMB)
+                  << "MB (free:" << (memory_status.ullAvailPhys / kMB) << "MB)";
+        LOG(INFO) << "Total page file:" << (memory_status.ullTotalPageFile / kMB)
+                  << "MB (free:" << (memory_status.ullAvailPageFile / kMB) << "MB)";
+        LOG(INFO) << "Total virtual memory:" << (memory_status.ullTotalVirtual / kMB)
+                  << "MB (free:" << (memory_status.ullAvailVirtual / kMB) << "MB)";
+    }
+    else
+    {
+        PLOG(ERROR) << "GlobalMemoryStatusEx failed";
+    }
+
+    DWORD session_id = 0;
+    if (!ProcessIdToSessionId(GetCurrentProcessId(), &session_id))
+    {
+        PLOG(ERROR) << "ProcessIdToSessionId failed";
+    }
+    else
+    {
+        base::SessionInfo session_info(session_id);
+        if (!session_info.isValid())
+        {
+            LOG(ERROR) << "Unable to get session info";
+        }
+        else
+        {
+            LOG(INFO) << "Process session ID:" << session_id;
+            LOG(INFO) << "Running in user session:" << session_info.userName();
+            LOG(INFO) << "Session connect state:" << session_info.connectState();
+            LOG(INFO) << "WinStation name:" << session_info.winStationName();
+            LOG(INFO) << "Domain name:" << session_info.domain();
+            LOG(INFO) << "User Locked:" << session_info.isUserLocked();
+        }
+    }
+
+    wchar_t username[64] = { 0 };
+    DWORD username_size = sizeof(username) / sizeof(username[0]);
+    if (!GetUserNameW(username, &username_size))
+    {
+        PLOG(ERROR) << "GetUserNameW failed";
+    }
+
+    SID_IDENTIFIER_AUTHORITY nt_authority = SECURITY_NT_AUTHORITY;
+    PSID admins_group = nullptr;
+    BOOL is_user_admin = AllocateAndInitializeSid(&nt_authority,
+                                                  2,
+                                                  SECURITY_BUILTIN_DOMAIN_RID,
+                                                  DOMAIN_ALIAS_RID_ADMINS,
+                                                  0, 0, 0, 0, 0, 0,
+                                                  &admins_group);
+    if (is_user_admin)
+    {
+        if (!CheckTokenMembership(nullptr, admins_group, &is_user_admin))
+        {
+            PLOG(ERROR) << "CheckTokenMembership failed";
+            is_user_admin = FALSE;
+        }
+        FreeSid(admins_group);
+    }
+    else
+    {
+        PLOG(ERROR) << "AllocateAndInitializeSid failed";
+    }
+
+    LOG(INFO) << "Running as user:" << username;
+    LOG(INFO) << "Member of admins group:" << (is_user_admin ? "Yes" : "No");
+    LOG(INFO) << "Process elevated:" << (base::isProcessElevated() ? "Yes" : "No");
+    LOG(INFO) << "Active console session ID:" << WTSGetActiveConsoleSessionId();
+    LOG(INFO) << "Computer name:" << base::SysInfo::computerName();
+
+    if (features & INCLUDE_VIDEO_ADAPTERS)
+    {
+        LOG(INFO) << "Video adapters";
+        LOG(INFO) << "#####################################################";
+        Microsoft::WRL::ComPtr<IDXGIFactory> factory;
+        _com_error error = CreateDXGIFactory(__uuidof(IDXGIFactory),
+                                             reinterpret_cast<void**>(factory.GetAddressOf()));
+        if (error.Error() != S_OK || !factory)
+        {
+            LOG(INFO) << "CreateDXGIFactory failed:" << error.ErrorMessage();
+        }
+        else
+        {
+            UINT adapter_index = 0;
+
+            while (true)
+            {
+                Microsoft::WRL::ComPtr<IDXGIAdapter> adapter;
+                error = factory->EnumAdapters(adapter_index, adapter.GetAddressOf());
+                if (error.Error() != S_OK)
+                    break;
+
+                DXGI_ADAPTER_DESC adapter_desc;
+                memset(&adapter_desc, 0, sizeof(adapter_desc));
+
+                if (SUCCEEDED(adapter->GetDesc(&adapter_desc)))
+                {
+                    static const quint32 kMB = 1024 * 1024;
+
+                    LOG(INFO) << adapter_desc.Description << "("
+                              << "video memory:" << (adapter_desc.DedicatedVideoMemory / kMB) << "MB"
+                              << ", system memory:" << (adapter_desc.DedicatedSystemMemory / kMB) << "MB"
+                              << ", shared memory:" << (adapter_desc.SharedSystemMemory / kMB) << "MB"
+                              << ")";
+                }
+
+                ++adapter_index;
+            }
+        }
+        LOG(INFO) << "#####################################################";
+    }
+
+    if (features & INCLUDE_WINDOW_STATIONS)
+    {
+        LOG(INFO) << "WindowStation list";
+        LOG(INFO) << "#####################################################";
+        QStringList windowStations = base::WindowStation::windowStationList();
+        for (const auto& window_station_name : std::as_const(windowStations))
+        {
+            QString desktops;
+
+            base::WindowStation window_station = base::WindowStation::open(window_station_name);
+            if (window_station.isValid())
+            {
+                QStringList list = base::Desktop::desktopList(window_station.get());
+
+                for (int i = 0; i < list.size(); ++i)
+                {
+                    desktops += list[i];
+                    if ((i + 1) != list.size())
+                        desktops += ", ";
+                }
+            }
+
+            LOG(INFO) << window_station_name << "(desktops:" << desktops << ")";
+        }
+        LOG(INFO) << "#####################################################";
+    }
+#endif // defined(Q_OS_WINDOWS)
+
+    LOG(INFO) << "Environment variables:" << QProcessEnvironment::systemEnvironment().toStringList();
 }
 
 } // namespace host
