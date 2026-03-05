@@ -18,6 +18,8 @@
 
 #include "base/desktop/screen_capturer_wrapper.h"
 
+#include <QTimer>
+
 #include "base/logging.h"
 #include "base/desktop/desktop_environment.h"
 #include "base/desktop/desktop_resizer.h"
@@ -64,24 +66,13 @@ void ScreenCapturerWrapper::selectScreen(ScreenCapturer::ScreenId screen_id, con
 
     if (screen_id == screen_capturer_->currentScreen())
     {
-        if (resolution.isEmpty())
+        if (!resolution.isEmpty() && resizer_)
         {
-            LOG(ERROR) << "Empty resolution";
-        }
-        else
-        {
-            if (!resizer_)
+            LOG(INFO) << "Change resolution for screen" << screen_id << "to:" << resolution;
+            if (!resizer_->setResolution(screen_id, resolution))
             {
-                LOG(ERROR) << "No desktop resizer";
-            }
-            else
-            {
-                LOG(INFO) << "Change resolution for screen" << screen_id << "to:" << resolution;
-                if (!resizer_->setResolution(screen_id, resolution))
-                {
-                    LOG(ERROR) << "setResolution failed";
-                    return;
-                }
+                LOG(ERROR) << "setResolution failed";
+                return;
             }
         }
     }
@@ -101,40 +92,33 @@ void ScreenCapturerWrapper::selectScreen(ScreenCapturer::ScreenId screen_id, con
     }
 
     ScreenCapturer::ScreenList screen_list;
-    if (screen_capturer_->screenList(&screen_list))
+    if (!screen_capturer_->screenList(&screen_list))
     {
-        LOG(INFO) << "Received an updated list of screens";
+        LOG(ERROR) << "ScreenCapturer::screenList failed";
+        return;
+    }
 
-        if (resizer_)
-        {
-            screen_list.resolutions = resizer_->supportedResolutions(screen_id);
-            if (screen_list.resolutions.empty())
-            {
-                LOG(INFO) << "No supported resolutions";
-            }
+    if (resizer_)
+    {
+        screen_list.resolutions = resizer_->supportedResolutions(screen_id);
+        if (screen_list.resolutions.empty())
+            LOG(INFO) << "No supported resolutions";
 
-            for (const auto& resolition : std::as_const(screen_list.resolutions))
-            {
-                LOG(INFO) << "Supported resolution:" << resolition;
-            }
-        }
-        else
-        {
-            LOG(INFO) << "No desktop resizer";
-        }
-
-        for (const auto& screen : std::as_const(screen_list.screens))
-        {
-            LOG(INFO) << "Screen #" << screen.id << "(position:" << screen.position
-                      << "resolution:" << screen.resolution << "DPI:" << screen.dpi << ")";
-        }
-
-        emit sig_screenListChanged(screen_list, screen_id);
+        for (const auto& resolition : std::as_const(screen_list.resolutions))
+            LOG(INFO) << "Supported resolution:" << resolition;
     }
     else
     {
-        LOG(ERROR) << "ScreenCapturer::screenList failed";
+        LOG(INFO) << "No desktop resizer";
     }
+
+    for (const auto& screen : std::as_const(screen_list.screens))
+    {
+        LOG(INFO) << "Screen #" << screen.id << "(position:" << screen.position
+                  << "resolution:" << screen.resolution << "DPI:" << screen.dpi << ")";
+    }
+
+    emit sig_screenListChanged(screen_list, screen_id);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -171,8 +155,13 @@ ScreenCapturer::Error ScreenCapturerWrapper::captureFrame(
                 return error;
 
             case ScreenCapturer::Error::PERMANENT:
-                selectCapturer(ScreenCapturer::Error::PERMANENT);
+            {
+                QTimer::singleShot(0, this, [this]()
+                {
+                    selectCapturer(ScreenCapturer::Error::PERMANENT);
+                });
                 return error;
+            }
 
             default:
                 NOTREACHED();
@@ -276,19 +265,22 @@ void ScreenCapturerWrapper::selectCapturer(ScreenCapturer::Error last_error)
 {
     LOG(INFO) << "Selecting screen capturer. Preferred capturer:" << preferred_type_;
 
-    delete screen_capturer_;
+    if (screen_capturer_)
+    {
+        screen_capturer_->disconnect();
+        screen_capturer_->deleteLater();
+        screen_capturer_ = nullptr;
+    }
 
 #if defined(Q_OS_WINDOWS)
     screen_capturer_ = ScreenCapturerWin::create(preferred_type_, last_error, this);
 #elif defined(Q_OS_LINUX)
-    screen_capturer_ = ScreenCapturerX11::create();
+    screen_capturer_ = ScreenCapturerX11::create(this);
     if (!screen_capturer_)
     {
         LOG(ERROR) << "Unable to create X11 screen capturer";
         return;
     }
-#elif defined(Q_OS_MACOS)
-    NOTIMPLEMENTED();
 #else
     NOTIMPLEMENTED();
 #endif

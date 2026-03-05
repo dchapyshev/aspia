@@ -19,8 +19,6 @@
 #ifndef BASE_DESKTOP_SCREEN_CAPTURER_WRAPPER_H
 #define BASE_DESKTOP_SCREEN_CAPTURER_WRAPPER_H
 
-#include <QPointer>
-
 #include "base/desktop/screen_capturer.h"
 
 namespace base {
@@ -65,7 +63,7 @@ private:
     std::unique_ptr<PowerSaveBlocker> power_save_blocker_;
     DesktopEnvironment* environment_ = nullptr;
     std::unique_ptr<DesktopResizer> resizer_;
-    QPointer<ScreenCapturer> screen_capturer_ = nullptr;
+    ScreenCapturer* screen_capturer_ = nullptr;
 
     Q_DISABLE_COPY_MOVE(ScreenCapturerWrapper)
 };

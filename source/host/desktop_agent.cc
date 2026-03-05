@@ -325,7 +325,7 @@ void DesktopAgent::onClientConfigured()
     lock_at_disconnect_ = merged_config.lock_at_disconnect;
     clear_clipboard_ = merged_config.clear_clipboard;
 
-    onCaptureScreen();
+    screen_capture_timer_->start(0);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -398,6 +398,12 @@ void DesktopAgent::onInjectTouchEvent(const proto::desktop::TouchEvent& event)
 //--------------------------------------------------------------------------------------------------
 void DesktopAgent::onCaptureScreen()
 {
+    if (capture_scheduler_.isInProgress())
+    {
+        LOG(INFO) << "Capture in progress";
+        return;
+    }
+
     capture_scheduler_.onBeginCapture();
 
     if (is_paused_)
@@ -433,7 +439,7 @@ void DesktopAgent::onCaptureScreen()
                 return;
         }
 
-        for (const auto& client : std::as_const(clients_))
+        for (auto* client : std::as_const(clients_))
             client->onScreenCaptureError(error_code);
     }
     else
@@ -441,7 +447,7 @@ void DesktopAgent::onCaptureScreen()
         if (input_injector_)
             input_injector_->setScreenOffset(frame->topLeft());
 
-        for (const auto& client : std::as_const(clients_))
+        for (auto* client : std::as_const(clients_))
             client->onScreenCaptureData(frame, cursor);
     }
 
@@ -537,7 +543,11 @@ void DesktopAgent::startClient(const QString& ipc_channel_name)
     connect(audio_capturer_, &base::AudioCapturerWrapper::sig_audioCaptured,
             client, &DesktopAgentClient::onAudioCaptureData, Qt::QueuedConnection);
 
-    connect(client, &DesktopAgentClient::sig_captureScreen, this, &DesktopAgent::onCaptureScreen);
+    // We can connect via a queue here to prevent possible screen capture from starting while the
+    // screen capture is in progress.
+    connect(client, &DesktopAgentClient::sig_captureScreen,
+            this, &DesktopAgent::onCaptureScreen, Qt::QueuedConnection);
+
     connect(client, &DesktopAgentClient::sig_configured, this, &DesktopAgent::onClientConfigured);
     connect(client, &DesktopAgentClient::sig_finished, this, &DesktopAgent::onClientFinished);
 

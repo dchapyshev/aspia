@@ -46,12 +46,14 @@ int CaptureScheduler::fps() const
 void CaptureScheduler::onBeginCapture()
 {
     begin_time_ = std::chrono::steady_clock::now();
+    in_progress_ = true;
 }
 
 //--------------------------------------------------------------------------------------------------
 void CaptureScheduler::onEndCapture()
 {
     end_time_ = std::chrono::steady_clock::now();
+    in_progress_ = false;
 }
 
 //--------------------------------------------------------------------------------------------------
