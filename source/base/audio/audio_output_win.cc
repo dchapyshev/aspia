@@ -84,9 +84,7 @@ bool AudioOutputWin::start()
         return false;
 
     if (is_restarting_)
-    {
         DCHECK(audio_thread_);
-    }
 
     if (!fillRenderEndpointBufferWithSilence(audio_client_.Get(), audio_render_client_.Get()))
     {
@@ -221,9 +219,7 @@ void AudioOutputWin::threadRun()
         // properly.
         _com_error error = audio_client_->Stop();
         if (FAILED(error.Error()))
-        {
             LOG(ERROR) << "IAudioClient::Stop failed:" << error;
-        }
     }
 }
 

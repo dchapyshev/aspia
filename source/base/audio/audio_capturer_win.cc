@@ -233,13 +233,9 @@ bool AudioCapturerWin::initialize()
     }
 
     // Initialize the IAudioClient.
-    hr = audio_client_->Initialize(
-        AUDCLNT_SHAREMODE_SHARED,
-        AUDCLNT_STREAMFLAGS_LOOPBACK,
+    hr = audio_client_->Initialize(AUDCLNT_SHAREMODE_SHARED, AUDCLNT_STREAMFLAGS_LOOPBACK,
         (kMaxExpectedTimerLag + audio_device_period_.count()) * k100nsPerMillisecond,
-        0,
-        wave_format_ex_,
-        nullptr);
+        0, wave_format_ex_, nullptr);
     if (FAILED(hr.Error()))
     {
         LOG(ERROR) << "Failed to initialize IAudioClient:" << hr;
