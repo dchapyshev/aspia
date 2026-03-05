@@ -41,7 +41,6 @@
 #include "base/win/net_share_enumerator.h"
 #include "base/win/service_enumerator.h"
 #include "base/win/user_enumerator.h"
-#include "base/win/user_group_enumerator.h"
 #include "base/win/video_adapter_enumerator.h"
 #include "common/system_info_constants.h"
 #include "host/win/process_monitor.h"

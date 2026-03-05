@@ -20,7 +20,6 @@
 
 #include "base/logging.h"
 #include "base/system_error.h"
-#include "base/win/user_group_enumerator.h"
 
 #include <qt_windows.h>
 #include <lm.h>
@@ -31,13 +30,8 @@ namespace base {
 UserEnumerator::UserEnumerator()
 {
     DWORD entries_read = 0;
-    DWORD error_code = NetUserEnum(nullptr, 3,
-                                   FILTER_NORMAL_ACCOUNT,
-                                   reinterpret_cast<LPBYTE*>(&user_info_),
-                                   MAX_PREFERRED_LENGTH,
-                                   &entries_read,
-                                   &total_entries_,
-                                   nullptr);
+    DWORD error_code = NetUserEnum(nullptr, 3, FILTER_NORMAL_ACCOUNT, reinterpret_cast<LPBYTE*>(&user_info_),
+        MAX_PREFERRED_LENGTH, &entries_read, &total_entries_, nullptr);
     if (error_code != NERR_Success)
     {
         LOG(ERROR) << "NetUserEnum failed:" << SystemError(error_code).toString();
@@ -107,14 +101,8 @@ QVector<std::pair<QString, QString>> UserEnumerator::groups() const
     DWORD total_entries = 0;
     DWORD entries_read = 0;
 
-    DWORD error_code = NetUserGetLocalGroups(nullptr, // server
-                                             user_name,
-                                             0, // level
-                                             LG_INCLUDE_INDIRECT,
-                                             reinterpret_cast<LPBYTE*>(&group_info),
-                                             MAX_PREFERRED_LENGTH,
-                                             &entries_read,
-                                             &total_entries);
+    DWORD error_code = NetUserGetLocalGroups(nullptr, user_name, 0, LG_INCLUDE_INDIRECT,
+        reinterpret_cast<LPBYTE*>(&group_info), MAX_PREFERRED_LENGTH, &entries_read, &total_entries);
     if (error_code != NERR_Success)
     {
         LOG(ERROR) << "NetUserGetLocalGroups failed:" << SystemError(error_code).toString();
@@ -193,6 +181,54 @@ quint32 UserEnumerator::badPasswordCount() const
 quint64 UserEnumerator::lastLogonTime() const
 {
     return user_info_[current_entry_].usri3_last_logon;
+}
+
+//--------------------------------------------------------------------------------------------------
+UserGroupEnumerator::UserGroupEnumerator()
+{
+    DWORD entries_read = 0;
+    DWORD error_code = NetLocalGroupEnum(nullptr, 1, reinterpret_cast<LPBYTE*>(&group_info_),
+        MAX_PREFERRED_LENGTH, &entries_read, &total_entries_, nullptr);
+    if (error_code != NERR_Success)
+    {
+        LOG(ERROR) << "NetLocalGroupEnum failed:" << SystemError(error_code).toString();
+        return;
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+UserGroupEnumerator::~UserGroupEnumerator()
+{
+    if (group_info_)
+        NetApiBufferFree(group_info_);
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserGroupEnumerator::advance()
+{
+    ++current_entry_;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool UserGroupEnumerator::isAtEnd() const
+{
+    return current_entry_ >= total_entries_;
+}
+
+//--------------------------------------------------------------------------------------------------
+QString UserGroupEnumerator::name() const
+{
+    if (!group_info_[current_entry_].lgrpi1_name)
+        return QString();
+    return QString::fromWCharArray(group_info_[current_entry_].lgrpi1_name);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString UserGroupEnumerator::comment() const
+{
+    if (!group_info_[current_entry_].lgrpi1_comment)
+        return QString();
+    return QString::fromWCharArray(group_info_[current_entry_].lgrpi1_comment);
 }
 
 } // base

@@ -23,9 +23,9 @@
 
 #include "base/application.h"
 #include "base/logging.h"
+#include "base/session_id.h"
 #include "base/crypto/scoped_crypto_initializer.h"
 #include "base/win/scoped_com_initializer.h"
-#include "base/win/session_status.h"
 #include "base/win/security_helpers.h"
 
 #include <sddl.h>
@@ -65,29 +65,24 @@ QString powerEventToString(quint32 event)
 
     switch (event)
     {
-    case PBT_APMPOWERSTATUSCHANGE:
-        name = "PBT_APMPOWERSTATUSCHANGE";
-        break;
-
-    case PBT_APMRESUMEAUTOMATIC:
-        name = "PBT_APMRESUMEAUTOMATIC";
-        break;
-
-    case PBT_APMRESUMESUSPEND:
-        name = "PBT_APMRESUMESUSPEND";
-        break;
-
-    case PBT_APMSUSPEND:
-        name = "PBT_APMSUSPEND";
-        break;
-
-    case PBT_POWERSETTINGCHANGE:
-        name = "PBT_POWERSETTINGCHANGE";
-        break;
-
-    default:
-        name = "UNKNOWN";
-        break;
+        case PBT_APMPOWERSTATUSCHANGE:
+            name = "PBT_APMPOWERSTATUSCHANGE";
+            break;
+        case PBT_APMRESUMEAUTOMATIC:
+            name = "PBT_APMRESUMEAUTOMATIC";
+            break;
+        case PBT_APMRESUMESUSPEND:
+            name = "PBT_APMRESUMESUSPEND";
+            break;
+        case PBT_APMSUSPEND:
+            name = "PBT_APMSUSPEND";
+            break;
+        case PBT_POWERSETTINGCHANGE:
+            name = "PBT_POWERSETTINGCHANGE";
+            break;
+        default:
+            name = "UNKNOWN";
+            break;
     }
 
     return QString("%1 (%2)").arg(name).arg(static_cast<int>(event));

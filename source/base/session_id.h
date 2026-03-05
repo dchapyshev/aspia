@@ -28,24 +28,20 @@
 namespace base {
 
 #if defined(Q_OS_WINDOWS)
-
 using SessionId = unsigned long;
-[[maybe_unused]] const SessionId kInvalidSessionId = 0xFFFFFFFF;
-[[maybe_unused]] const SessionId kServiceSessionId = 0;
+extern const SessionId kServiceSessionId;
+#elif defined(Q_OS_UNIX)
+using SessionId = pid_t;
+extern const SessionId kInvalidSessionId;
+#else // defined(Q_OS_*)
+#error Not implemented
+#endif
+
+extern const SessionId kInvalidSessionId;
 
 SessionId activeConsoleSessionId();
 SessionId currentProcessSessionId();
-
-#elif defined(Q_OS_UNIX)
-
-using SessionId = pid_t;
-[[maybe_unused]] const SessionId kInvalidSessionId = -1;
-
-#else // defined(Q_OS_*)
-
-#error Not implemented
-
-#endif
+const char* sessionStatusToString(quint32 status);
 
 } // namespace base
 

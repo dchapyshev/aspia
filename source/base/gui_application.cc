@@ -36,8 +36,8 @@
 #if defined(Q_OS_WINDOWS)
 #include <qt_windows.h>
 #include <wtsapi32.h>
+#include "base/session_id.h"
 #include "base/win/message_window.h"
-#include "base/win/session_status.h"
 #endif // defined(Q_OS_WINDOWS)
 
 #if defined(Q_OS_UNIX)

@@ -23,6 +23,7 @@
 #include <QVector>
 
 struct _USER_INFO_3;
+struct _LOCALGROUP_INFO_1;
 
 namespace base {
 
@@ -55,6 +56,26 @@ private:
     unsigned long current_entry_ = 0;
 
     Q_DISABLE_COPY_MOVE(UserEnumerator)
+};
+
+class UserGroupEnumerator
+{
+public:
+    UserGroupEnumerator();
+    ~UserGroupEnumerator();
+
+    void advance();
+    bool isAtEnd() const;
+
+    QString name() const;
+    QString comment() const;
+
+private:
+    _LOCALGROUP_INFO_1* group_info_ = nullptr;
+    unsigned long total_entries_ = 0;
+    unsigned long current_entry_ = 0;
+
+    Q_DISABLE_COPY_MOVE(UserGroupEnumerator)
 };
 
 } // base

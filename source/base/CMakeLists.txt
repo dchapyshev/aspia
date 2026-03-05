@@ -528,12 +528,8 @@ if (WIN32)
         win/session_enumerator.h
         win/session_info.cc
         win/session_info.h
-        win/session_status.cc
-        win/session_status.h
         win/user_enumerator.cc
         win/user_enumerator.h
-        win/user_group_enumerator.cc
-        win/user_group_enumerator.h
         win/video_adapter_enumerator.cc
         win/video_adapter_enumerator.h
         win/window_station.cc
