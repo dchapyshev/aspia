@@ -143,7 +143,7 @@ private:
     std::shared_ptr<base::Frame> desktop_frame_;
     proto::desktop::Config desktop_config_;
 
-    base::Parser<proto::desktop::SessionToClient> incomming_message_;
+    base::Parser<proto::desktop::SessionToClient> incoming_message_;
     base::Serializer<proto::desktop::ClientToSession> outgoing_message_;
 
     proto::desktop::VideoEncoding video_encoding_ = proto::desktop::VIDEO_ENCODING_UNKNOWN;

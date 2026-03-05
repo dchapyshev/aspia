@@ -764,13 +764,7 @@ void DesktopToolBar::onChangeResolutionAction(QAction* action)
 void DesktopToolBar::onChangeScreenAction(QAction* action)
 {
     const proto::desktop::Screen& screen = static_cast<SelectScreenAction*>(action)->screen();
-
     LOG(INFO) << "[ACTION] Screen selected (id=" << screen.id() << "title=" << screen.title() << ")";
-
-    proto::desktop::Screen out_screen;
-    out_screen.set_id(screen.id());
-    out_screen.set_title(screen.title());
-
     emit sig_screenSelected(screen);
 }
 
@@ -891,7 +885,7 @@ void DesktopToolBar::createAdditionalMenu(proto::peer::SessionType session_type)
         else
             return;
 
-        LOG(INFO) << "[ACTION] Scale chenged:" << scale_;
+        LOG(INFO) << "[ACTION] Scale changed:" << scale_;
 
         emit sig_scaleChanged();
     });

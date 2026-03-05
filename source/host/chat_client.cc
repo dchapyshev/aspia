@@ -110,7 +110,7 @@ void ChatClient::onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray& b
     proto::chat::Chat chat;
     if (!base::parse(buffer, &chat))
     {
-        LOG(ERROR) << "Unable to parse system info request";
+        LOG(ERROR) << "Unable to parse chat message";
         return;
     }
 

@@ -455,7 +455,7 @@ void MainWindow::onConfirmationRequest(const proto::user::ConfirmationRequest& r
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onRecordingStateChanged(const QString& computer, const QString& user, bool started)
 {
-    LOG(INFO) << "Video recoring state changed (user=" << user << "started=" << started << ")";
+    LOG(INFO) << "Video recording state changed (user:" << user << "started:" << started << ")";
     QString message;
 
     if (started)

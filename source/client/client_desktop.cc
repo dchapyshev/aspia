@@ -88,39 +88,39 @@ void ClientDesktop::onSessionStarted()
 //--------------------------------------------------------------------------------------------------
 void ClientDesktop::onSessionMessageReceived(const QByteArray& buffer)
 {
-    if (!incomming_message_.parse(buffer))
+    if (!incoming_message_.parse(buffer))
     {
         LOG(ERROR) << "Invalid session message from host";
         return;
     }
 
-    if (incomming_message_->has_video_packet() || incomming_message_->has_cursor_shape())
+    if (incoming_message_->has_video_packet() || incoming_message_->has_cursor_shape())
     {
-        if (incomming_message_->has_video_packet())
-            readVideoPacket(incomming_message_->video_packet());
+        if (incoming_message_->has_video_packet())
+            readVideoPacket(incoming_message_->video_packet());
 
-        if (incomming_message_->has_cursor_shape())
-            readCursorShape(incomming_message_->cursor_shape());
+        if (incoming_message_->has_cursor_shape())
+            readCursorShape(incoming_message_->cursor_shape());
     }
-    else if (incomming_message_->has_audio_packet())
+    else if (incoming_message_->has_audio_packet())
     {
-        readAudioPacket(incomming_message_->audio_packet());
+        readAudioPacket(incoming_message_->audio_packet());
     }
-    else if (incomming_message_->has_cursor_position())
+    else if (incoming_message_->has_cursor_position())
     {
-        readCursorPosition(incomming_message_->cursor_position());
+        readCursorPosition(incoming_message_->cursor_position());
     }
-    else if (incomming_message_->has_clipboard_event())
+    else if (incoming_message_->has_clipboard_event())
     {
-        readClipboardEvent(incomming_message_->clipboard_event());
+        readClipboardEvent(incoming_message_->clipboard_event());
     }
-    else if (incomming_message_->has_capabilities())
+    else if (incoming_message_->has_capabilities())
     {
-        readCapabilities(incomming_message_->capabilities());
+        readCapabilities(incoming_message_->capabilities());
     }
-    else if (incomming_message_->has_extension())
+    else if (incoming_message_->has_extension())
     {
-        readExtension(incomming_message_->extension());
+        readExtension(incoming_message_->extension());
     }
     else
     {

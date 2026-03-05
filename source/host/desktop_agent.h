@@ -80,7 +80,7 @@ private slots:
 private:
     void startClient(const QString& ipc_channel_name);
 
-    // Control channel betwen service and agent.
+    // Control channel between service and agent.
     base::IpcChannel* ipc_channel_ = nullptr;
 
     QList<DesktopAgentClient*> clients_;

@@ -338,7 +338,7 @@ void DesktopAgent::onClientFinished()
         return;
     }
 
-    client->disconnect(); // Disoconnect all signals.
+    client->disconnect();
     client->deleteLater();
     clients_.removeOne(client);
 
