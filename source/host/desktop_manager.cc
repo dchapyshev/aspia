@@ -435,8 +435,11 @@ void DesktopManager::onIpcErrorOccurred()
 //--------------------------------------------------------------------------------------------------
 void DesktopManager::onIpcDisconnected()
 {
+    if (is_console_)
+        return;
+
     dettach(FROM_HERE);
-    restart_timer_->start();
+    attach(FROM_HERE, base::activeConsoleSessionId());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -460,14 +463,13 @@ void DesktopManager::attach(const base::Location& location, base::SessionId sess
         return;
     }
 
-    LOG(INFO) << "Attach to session" << session_id << "from" << location;
-
     state_ = State::ATTACHING;
     session_id_ = session_id;
     is_console_ = session_id == base::activeConsoleSessionId();
 
-    attach_timer_->start();
+    LOG(INFO) << "Attach to session" << session_id << "from" << location;
 
+    attach_timer_->start();
     ipc_server_ = new base::IpcServer(this);
 
     connect(ipc_server_, &base::IpcServer::sig_newConnection, this, &DesktopManager::onIpcNewConnection);
