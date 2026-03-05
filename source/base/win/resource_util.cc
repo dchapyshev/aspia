@@ -24,7 +24,7 @@ namespace base {
 
 //--------------------------------------------------------------------------------------------------
 bool resourceFromModule(HMODULE module, int resource_id, const wchar_t* resource_type,
-                        void** data, size_t* length)
+    void** data, size_t* length)
 {
     if (!module)
     {

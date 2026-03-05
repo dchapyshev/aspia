@@ -31,17 +31,11 @@ public:
     Device() = default;
     virtual ~Device();
 
-    bool open(const QString& device_path,
-              DWORD desired_access,
-              DWORD share_mode);
+    bool open(const QString& device_path, DWORD desired_access, DWORD share_mode);
     bool open(const QString& device_path);
     void close();
-    bool ioControl(DWORD io_control_code,
-                   LPVOID input_buffer,
-                   DWORD input_buffer_size,
-                   LPVOID output_buffer,
-                   DWORD output_buffer_size,
-                   LPDWORD bytes_returned);
+    bool ioControl(DWORD io_control_code, LPVOID input_buffer, DWORD input_buffer_size,
+        LPVOID output_buffer, DWORD output_buffer_size, LPDWORD bytes_returned);
 
 private:
     ScopedHandle device_;

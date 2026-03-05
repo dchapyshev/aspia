@@ -27,17 +27,10 @@ Device::~Device()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Device::open(const QString& device_path,
-                  DWORD desired_access,
-                  DWORD share_mode)
+bool Device::open(const QString& device_path, DWORD desired_access, DWORD share_mode)
 {
-    device_.reset(CreateFileW(qUtf16Printable(device_path),
-                              desired_access,
-                              share_mode,
-                              nullptr,
-                              OPEN_EXISTING,
-                              0,
-                              nullptr));
+    device_.reset(CreateFileW(qUtf16Printable(device_path), desired_access, share_mode, nullptr,
+        OPEN_EXISTING, 0, nullptr));
     return device_.isValid();
 }
 
@@ -54,17 +47,11 @@ void Device::close()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Device::ioControl(DWORD io_control_code,
-                       LPVOID input_buffer,
-                       DWORD input_buffer_size,
-                       LPVOID output_buffer,
-                       DWORD output_buffer_size,
-                       LPDWORD bytes_returned)
+bool Device::ioControl(DWORD io_control_code, LPVOID input_buffer, DWORD input_buffer_size,
+    LPVOID output_buffer, DWORD output_buffer_size, LPDWORD bytes_returned)
 {
-    return !!DeviceIoControl(device_, io_control_code,
-                             input_buffer, input_buffer_size,
-                             output_buffer, output_buffer_size,
-                             bytes_returned, nullptr);
+    return !!DeviceIoControl(device_, io_control_code, input_buffer, input_buffer_size,
+        output_buffer, output_buffer_size, bytes_returned, nullptr);
 }
 
 } // namespace base

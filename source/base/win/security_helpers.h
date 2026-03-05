@@ -38,9 +38,8 @@ using ScopedSid = TypedBuffer<SID>;
 //  - Caller's identity is verified on every call (Dynamic cloaking).
 //  - Unless |activate_as_activator| is true, activations where the server
 //    would run under this process's identity are prohibited.
-bool initializeComSecurity(const wchar_t* security_descriptor,
-                           const wchar_t* mandatory_label,
-                           bool activate_as_activator);
+bool initializeComSecurity(const wchar_t* security_descriptor, const wchar_t* mandatory_label,
+    bool activate_as_activator);
 
 bool userSidString(QString* user_sid);
 

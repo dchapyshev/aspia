@@ -36,9 +36,8 @@ public:
     virtual ~ServiceController();
 
     static ServiceController open(const QString& name);
-    static ServiceController install(const QString& name,
-                                     const QString& display_name,
-                                     const QString& file_path);
+    static ServiceController install(const QString& name, const QString& display_name,
+        const QString& file_path);
     static bool remove(const QString& name);
     static bool isInstalled(const QString& name);
     static bool isRunning(const QString& name);

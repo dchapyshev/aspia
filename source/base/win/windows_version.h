@@ -142,9 +142,7 @@ public:
 private:
     static OSInfo** instanceStorage();
 
-    OSInfo(const _OSVERSIONINFOEXW& version_info,
-           const _SYSTEM_INFO& system_info,
-           int os_type);
+    OSInfo(const _OSVERSIONINFOEXW& version_info, const _SYSTEM_INFO& system_info, int os_type);
     ~OSInfo();
 
     Version version_;

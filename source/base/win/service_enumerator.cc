@@ -35,16 +35,9 @@ ServiceEnumerator::ServiceEnumerator(Type type)
     DWORD bytes_needed = 0;
     DWORD resume_handle = 0;
 
-    if (EnumServicesStatusExW(manager_handle_,
-                              SC_ENUM_PROCESS_INFO,
-                              type == Type::SERVICES ? SERVICE_WIN32 : SERVICE_DRIVER,
-                              SERVICE_STATE_ALL,
-                              nullptr,
-                              0,
-                              &bytes_needed,
-                              &services_count_,
-                              &resume_handle,
-                              nullptr)
+    if (EnumServicesStatusExW(manager_handle_, SC_ENUM_PROCESS_INFO,
+        type == Type::SERVICES ? SERVICE_WIN32 : SERVICE_DRIVER,
+        SERVICE_STATE_ALL, nullptr, 0, &bytes_needed, &services_count_, &resume_handle, nullptr)
         || GetLastError() != ERROR_MORE_DATA)
     {
         PLOG(ERROR) << "Unexpected return value";
@@ -53,16 +46,10 @@ ServiceEnumerator::ServiceEnumerator(Type type)
 
     services_buffer_ = std::make_unique<quint8[]>(bytes_needed);
 
-    if (!EnumServicesStatusExW(manager_handle_,
-                               SC_ENUM_PROCESS_INFO,
-                               type == Type::SERVICES ? SERVICE_WIN32 : SERVICE_DRIVER,
-                               SERVICE_STATE_ALL,
-                               services_buffer_.get(),
-                               bytes_needed,
-                               &bytes_needed,
-                               &services_count_,
-                               &resume_handle,
-                               nullptr))
+    if (!EnumServicesStatusExW(manager_handle_, SC_ENUM_PROCESS_INFO,
+        type == Type::SERVICES ? SERVICE_WIN32 : SERVICE_DRIVER,
+        SERVICE_STATE_ALL, services_buffer_.get(), bytes_needed, &bytes_needed, &services_count_,
+        &resume_handle, nullptr))
     {
         PLOG(ERROR) << "EnumServicesStatusExW failed";
         services_buffer_.reset();
@@ -108,8 +95,7 @@ SC_HANDLE ServiceEnumerator::currentServiceHandle() const
             SERVICE_QUERY_CONFIG | SERVICE_QUERY_STATUS | SERVICE_ENUMERATE_DEPENDENTS;
 
         current_service_handle_.reset(OpenServiceW(manager_handle_,
-                                                   services[current_service_index_].lpServiceName,
-                                                   desired_access));
+            services[current_service_index_].lpServiceName, desired_access));
     }
 
     return current_service_handle_;
@@ -124,10 +110,7 @@ LPQUERY_SERVICE_CONFIG ServiceEnumerator::currentServiceConfig() const
 
         DWORD bytes_needed = 0;
 
-        if (QueryServiceConfigW(service_handle,
-                                nullptr,
-                                0,
-                                &bytes_needed)
+        if (QueryServiceConfigW(service_handle, nullptr, 0, &bytes_needed)
             || GetLastError() != ERROR_INSUFFICIENT_BUFFER)
         {
             PLOG(ERROR) << "QueryServiceConfigW failed";
@@ -137,10 +120,8 @@ LPQUERY_SERVICE_CONFIG ServiceEnumerator::currentServiceConfig() const
         current_service_config_ = std::make_unique<quint8[]>(bytes_needed);
 
         if (!QueryServiceConfigW(service_handle,
-                                 reinterpret_cast<LPQUERY_SERVICE_CONFIG>(
-                                     current_service_config_.get()),
-                                 bytes_needed,
-                                 &bytes_needed))
+            reinterpret_cast<LPQUERY_SERVICE_CONFIG>(current_service_config_.get()),
+            bytes_needed, &bytes_needed))
         {
             PLOG(ERROR) << "QueryServiceConfigW failed";
             return nullptr;
@@ -179,11 +160,7 @@ QString ServiceEnumerator::description() const
 
     DWORD bytes_needed = 0;
 
-    if (QueryServiceConfig2W(service_handle,
-                             SERVICE_CONFIG_DESCRIPTION,
-                             nullptr,
-                             0,
-                             &bytes_needed)
+    if (QueryServiceConfig2W(service_handle, SERVICE_CONFIG_DESCRIPTION, nullptr, 0, &bytes_needed)
         || GetLastError() != ERROR_INSUFFICIENT_BUFFER)
     {
         PLOG(ERROR) << "QueryServiceConfig2W failed";
@@ -192,11 +169,8 @@ QString ServiceEnumerator::description() const
 
     std::unique_ptr<quint8[]> result = std::make_unique<quint8[]>(bytes_needed);
 
-    if (!QueryServiceConfig2W(service_handle,
-                              SERVICE_CONFIG_DESCRIPTION,
-                              result.get(),
-                              bytes_needed,
-                              &bytes_needed))
+    if (!QueryServiceConfig2W(service_handle, SERVICE_CONFIG_DESCRIPTION, result.get(), bytes_needed,
+        &bytes_needed))
     {
         PLOG(ERROR) << "QueryServiceConfig2W failed";
         return QString();
@@ -221,25 +195,18 @@ ServiceEnumerator::Status ServiceEnumerator::status() const
     {
         case SERVICE_CONTINUE_PENDING:
             return Status::CONTINUE_PENDING;
-
         case SERVICE_PAUSE_PENDING:
             return Status::PAUSE_PENDING;
-
         case SERVICE_PAUSED:
             return Status::PAUSED;
-
         case SERVICE_RUNNING:
             return Status::RUNNING;
-
         case SERVICE_START_PENDING:
             return Status::START_PENDING;
-
         case SERVICE_STOP_PENDING:
             return Status::STOP_PENDING;
-
         case SERVICE_STOPPED:
             return Status::STOPPED;
-
         default:
             return Status::UNKNOWN;
     }
@@ -257,19 +224,14 @@ ServiceEnumerator::StartupType ServiceEnumerator::startupType() const
     {
         case SERVICE_AUTO_START:
             return StartupType::AUTO_START;
-
         case SERVICE_DEMAND_START:
             return StartupType::DEMAND_START;
-
         case SERVICE_DISABLED:
             return StartupType::DISABLED;
-
         case SERVICE_BOOT_START:
             return StartupType::BOOT_START;
-
         case SERVICE_SYSTEM_START:
             return StartupType::SYSTEM_START;
-
         default:
             return StartupType::UNKNOWN;
     }

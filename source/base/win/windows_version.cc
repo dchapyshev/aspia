@@ -172,9 +172,7 @@ OSInfo* OSInfo::instance()
 }
 
 //--------------------------------------------------------------------------------------------------
-OSInfo::OSInfo(const _OSVERSIONINFOEXW& version_info,
-               const _SYSTEM_INFO& system_info,
-               int os_type)
+OSInfo::OSInfo(const _OSVERSIONINFOEXW& version_info, const _SYSTEM_INFO& system_info, int os_type)
     : version_(VERSION_PRE_XP),
       architecture_(OTHER_ARCHITECTURE),
       wow64_status_(wow64StatusForProcess())

@@ -27,10 +27,8 @@ ScopedClipboard::~ScopedClipboard()
 {
     if (opened_)
     {
-        //
         // CloseClipboard() must be called with anonymous access token. See
         // crbug.com/441834.
-        //
         BOOL result = ImpersonateAnonymousToken(GetCurrentThread());
         CHECK(result);
 

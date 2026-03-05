@@ -31,12 +31,8 @@ namespace base {
 namespace {
 
 //--------------------------------------------------------------------------------------------------
-bool makeScopedAbsoluteSd(const ScopedSd& relative_sd,
-                          ScopedSd* absolute_sd,
-                          ScopedAcl* dacl,
-                          ScopedSid* group,
-                          ScopedSid* owner,
-                          ScopedAcl* sacl)
+bool makeScopedAbsoluteSd(const ScopedSd& relative_sd, ScopedSd* absolute_sd, ScopedAcl* dacl,
+    ScopedSid* group, ScopedSid* owner, ScopedAcl* sacl)
 {
     // Get buffer sizes.
     DWORD absolute_sd_size = 0;
@@ -45,17 +41,8 @@ bool makeScopedAbsoluteSd(const ScopedSd& relative_sd,
     DWORD owner_size = 0;
     DWORD sacl_size = 0;
 
-    if (MakeAbsoluteSD(relative_sd.get(),
-                       nullptr,
-                       &absolute_sd_size,
-                       nullptr,
-                       &dacl_size,
-                       nullptr,
-                       &sacl_size,
-                       nullptr,
-                       &owner_size,
-                       nullptr,
-                       &group_size) ||
+    if (MakeAbsoluteSD(relative_sd.get(), nullptr, &absolute_sd_size, nullptr, &dacl_size, nullptr,
+        &sacl_size, nullptr, &owner_size, nullptr, &group_size) ||
         GetLastError() != ERROR_INSUFFICIENT_BUFFER)
     {
         PLOG(ERROR) << "MakeAbsoluteSD failed";
@@ -70,17 +57,9 @@ bool makeScopedAbsoluteSd(const ScopedSd& relative_sd,
     ScopedAcl local_sacl(sacl_size);
 
     // Do the conversion.
-    if (!MakeAbsoluteSD(relative_sd.get(),
-                        local_absolute_sd.get(),
-                        &absolute_sd_size,
-                        reinterpret_cast<PACL>(local_dacl.get()),
-                        &dacl_size,
-                        local_sacl.get(),
-                        &sacl_size,
-                        local_owner.get(),
-                        &owner_size,
-                        local_group.get(),
-                        &group_size))
+    if (!MakeAbsoluteSD(relative_sd.get(), local_absolute_sd.get(), &absolute_sd_size,
+        reinterpret_cast<PACL>(local_dacl.get()), &dacl_size, local_sacl.get(), &sacl_size,
+        local_owner.get(), &owner_size, local_group.get(), &group_size))
     {
         PLOG(ERROR) << "MakeAbsoluteSD failed";
         return false;
@@ -98,9 +77,8 @@ bool makeScopedAbsoluteSd(const ScopedSd& relative_sd,
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-bool initializeComSecurity(const wchar_t* security_descriptor,
-                           const wchar_t* mandatory_label,
-                           bool activate_as_activator)
+bool initializeComSecurity(const wchar_t* security_descriptor, const wchar_t* mandatory_label,
+    bool activate_as_activator)
 {
     QString sddl;
 

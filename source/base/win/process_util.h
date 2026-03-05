@@ -32,8 +32,7 @@ enum class ProcessExecuteMode
     NORMAL, ELEVATE
 };
 
-bool createProcess(
-    const QString& program, const QString& arguments,
+bool createProcess(const QString& program, const QString& arguments,
     ProcessExecuteMode mode = ProcessExecuteMode::NORMAL);
 
 bool copyProcessToken(DWORD desired_access, ScopedHandle* token_out);

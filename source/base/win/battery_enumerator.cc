@@ -29,11 +29,8 @@ namespace base {
 namespace {
 
 //--------------------------------------------------------------------------------------------------
-bool batteryInformation(Device& battery,
-                        ULONG tag,
-                        BATTERY_QUERY_INFORMATION_LEVEL level,
-                        LPVOID buffer,
-                        ULONG buffer_size)
+bool batteryInformation(Device& battery, ULONG tag, BATTERY_QUERY_INFORMATION_LEVEL level,
+    LPVOID buffer, ULONG buffer_size)
 {
     BATTERY_QUERY_INFORMATION battery_info;
 
@@ -43,10 +40,8 @@ bool batteryInformation(Device& battery,
 
     ULONG bytes_returned;
 
-    return battery.ioControl(IOCTL_BATTERY_QUERY_INFORMATION,
-                             &battery_info, sizeof(battery_info),
-                             buffer, buffer_size,
-                             &bytes_returned);
+    return battery.ioControl(IOCTL_BATTERY_QUERY_INFORMATION, &battery_info, sizeof(battery_info),
+        buffer, buffer_size, &bytes_returned);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -61,13 +56,9 @@ bool batteryStatus(Device& battery, ULONG tag, BATTERY_STATUS* status)
 
     DWORD bytes_returned = 0;
 
-    if (!battery.ioControl(IOCTL_BATTERY_QUERY_STATUS,
-                           &status_request, sizeof(status_request),
-                           &status_reply, sizeof(status_reply),
-                           &bytes_returned))
-    {
+    if (!battery.ioControl(IOCTL_BATTERY_QUERY_STATUS, &status_request, sizeof(status_request),
+        &status_reply, sizeof(status_reply), &bytes_returned))
         return false;
-    }
 
     *status = status_reply;
     return true;
@@ -98,11 +89,8 @@ bool BatteryEnumerator::isAtEnd() const
     memset(&device_iface_data, 0, sizeof(device_iface_data));
     device_iface_data.cbSize = sizeof(device_iface_data);
 
-    if (!SetupDiEnumDeviceInterfaces(device_info_.get(),
-                                     nullptr,
-                                     &GUID_DEVCLASS_BATTERY,
-                                     device_index_,
-                                     &device_iface_data))
+    if (!SetupDiEnumDeviceInterfaces(device_info_.get(), nullptr, &GUID_DEVCLASS_BATTERY,
+        device_index_, &device_iface_data))
     {
         DWORD error_code = GetLastError();
 
@@ -116,12 +104,8 @@ bool BatteryEnumerator::isAtEnd() const
     }
 
     DWORD required_size = 0;
-    if (SetupDiGetDeviceInterfaceDetailW(device_info_.get(),
-                                         &device_iface_data,
-                                         nullptr,
-                                         0,
-                                         &required_size,
-                                         nullptr) ||
+    if (SetupDiGetDeviceInterfaceDetailW(device_info_.get(), &device_iface_data, nullptr, 0,
+        &required_size, nullptr) ||
         GetLastError() != ERROR_INSUFFICIENT_BUFFER)
     {
         PLOG(ERROR) << "Unexpected return value";
@@ -134,12 +118,8 @@ bool BatteryEnumerator::isAtEnd() const
 
     detail_data->cbSize = sizeof(SP_DEVICE_INTERFACE_DETAIL_DATA_W);
 
-    if (!SetupDiGetDeviceInterfaceDetailW(device_info_.get(),
-                                          &device_iface_data,
-                                          detail_data,
-                                          required_size,
-                                          &required_size,
-                                          nullptr))
+    if (!SetupDiGetDeviceInterfaceDetailW(device_info_.get(), &device_iface_data, detail_data,
+        required_size, &required_size, nullptr))
     {
         PLOG(ERROR) << "SetupDiGetDeviceInterfaceDetailW failed";
         return true;
@@ -152,13 +132,9 @@ bool BatteryEnumerator::isAtEnd() const
     ULONG input_buffer = 0;
     ULONG output_buffer = 0;
 
-    if (!battery_.ioControl(IOCTL_BATTERY_QUERY_TAG,
-                            &input_buffer, sizeof(input_buffer),
-                            &output_buffer, sizeof(output_buffer),
-                            &bytes_returned))
-    {
+    if (!battery_.ioControl(IOCTL_BATTERY_QUERY_TAG, &input_buffer, sizeof(input_buffer),
+        &output_buffer, sizeof(output_buffer), &bytes_returned))
         return true;
-    }
 
     battery_tag_ = output_buffer;
     return false;

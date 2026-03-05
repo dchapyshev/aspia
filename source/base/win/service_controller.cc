@@ -79,9 +79,8 @@ ServiceController ServiceController::open(const QString& name)
 
 //--------------------------------------------------------------------------------------------------
 // static
-ServiceController ServiceController::install(const QString& name,
-                                             const QString& display_name,
-                                             const QString& file_path)
+ServiceController ServiceController::install(const QString& name, const QString& display_name,
+    const QString& file_path)
 {
     ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_ALL_ACCESS));
     if (!sc_manager.isValid())
@@ -90,19 +89,10 @@ ServiceController ServiceController::install(const QString& name,
         return ServiceController();
     }
 
-    ScopedScHandle service(CreateServiceW(sc_manager,
-                                          qUtf16Printable(name),
-                                          qUtf16Printable(display_name),
-                                          SERVICE_ALL_ACCESS,
-                                          SERVICE_WIN32_OWN_PROCESS,
-                                          SERVICE_AUTO_START,
-                                          SERVICE_ERROR_NORMAL,
-                                          qUtf16Printable(QDir::toNativeSeparators(file_path)),
-                                          nullptr,
-                                          nullptr,
-                                          nullptr,
-                                          nullptr,
-                                          nullptr));
+    ScopedScHandle service(CreateServiceW(sc_manager, qUtf16Printable(name),
+        qUtf16Printable(display_name), SERVICE_ALL_ACCESS, SERVICE_WIN32_OWN_PROCESS,
+        SERVICE_AUTO_START, SERVICE_ERROR_NORMAL, qUtf16Printable(QDir::toNativeSeparators(file_path)),
+        nullptr, nullptr, nullptr, nullptr, nullptr));
     if (!service.isValid())
     {
         PLOG(ERROR) << "CreateServiceW failed";
@@ -295,13 +285,9 @@ bool ServiceController::setDependencies(const QStringList& dependencies)
     buffer.append(static_cast<char>(0));
     buffer.append(static_cast<char>(0));
 
-    if (!ChangeServiceConfigW(service_,
-                              SERVICE_NO_CHANGE,
-                              SERVICE_NO_CHANGE,
-                              SERVICE_NO_CHANGE,
-                              nullptr, nullptr, nullptr,
-                              reinterpret_cast<const wchar_t*>(buffer.data()),
-                              nullptr, nullptr, nullptr))
+    if (!ChangeServiceConfigW(service_, SERVICE_NO_CHANGE, SERVICE_NO_CHANGE, SERVICE_NO_CHANGE,
+        nullptr, nullptr, nullptr, reinterpret_cast<const wchar_t*>(buffer.data()), nullptr,
+        nullptr, nullptr))
     {
         PLOG(ERROR) << "ChangeServiceConfigW failed";
         return false;
@@ -357,14 +343,9 @@ QStringList ServiceController::dependencies() const
 //--------------------------------------------------------------------------------------------------
 bool ServiceController::setAccount(const QString& username, const QString& password)
 {
-    if (!ChangeServiceConfigW(service_,
-                              SERVICE_NO_CHANGE,
-                              SERVICE_NO_CHANGE,
-                              SERVICE_NO_CHANGE,
-                              nullptr, nullptr, nullptr, nullptr,
-                              qUtf16Printable(username),
-                              qUtf16Printable(password),
-                              nullptr))
+    if (!ChangeServiceConfigW(service_, SERVICE_NO_CHANGE, SERVICE_NO_CHANGE, SERVICE_NO_CHANGE,
+        nullptr, nullptr, nullptr, nullptr, qUtf16Printable(username), qUtf16Printable(password),
+        nullptr))
     {
         PLOG(ERROR) << "ChangeServiceConfigW failed";
         return false;
