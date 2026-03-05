@@ -21,6 +21,7 @@
 
 #include <QString>
 
+#include "base/edid.h"
 #include "base/win/scoped_device_info.h"
 
 namespace base {
@@ -55,6 +56,33 @@ private:
     DWORD device_index_ = 0;
 
     Q_DISABLE_COPY_MOVE(DeviceEnumerator)
+};
+
+class MonitorEnumerator final : public DeviceEnumerator
+{
+public:
+    MonitorEnumerator();
+    ~MonitorEnumerator() final = default;
+
+    Edid edid() const;
+
+private:
+    Q_DISABLE_COPY_MOVE(MonitorEnumerator)
+};
+
+class VideoAdapterEnumarator final : public DeviceEnumerator
+{
+public:
+    VideoAdapterEnumarator();
+
+    QString adapterString() const;
+    QString biosString() const;
+    QString chipString() const;
+    QString dacType() const;
+    quint64 memorySize() const;
+
+private:
+    Q_DISABLE_COPY_MOVE(VideoAdapterEnumarator)
 };
 
 } // namespace base

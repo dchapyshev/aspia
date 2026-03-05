@@ -18,6 +18,8 @@
 
 #include "base/win/device_enumerator.h"
 
+#include <devguid.h>
+
 #include "base/logging.h"
 #include "base/system_error.h"
 #include "base/win/registry.h"
@@ -45,9 +47,7 @@ DeviceEnumerator::DeviceEnumerator(const GUID* class_guid, DWORD flags)
 {
     device_info_.reset(SetupDiGetClassDevsW(class_guid, nullptr, nullptr, flags));
     if (!device_info_.isValid())
-    {
         PLOG(ERROR) << "SetupDiGetClassDevsW failed";
-    }
 
     memset(&device_info_data_, 0, sizeof(device_info_data_));
     device_info_data_.cbSize = sizeof(device_info_data_);
@@ -64,10 +64,7 @@ bool DeviceEnumerator::isAtEnd() const
         DWORD error_code = GetLastError();
 
         if (error_code != ERROR_NO_MORE_ITEMS)
-        {
             LOG(ERROR) << "SetupDiEnumDeviceInfo failed:" << SystemError(error_code).toString();
-        }
-
         return true;
     }
 
@@ -85,13 +82,8 @@ QString DeviceEnumerator::friendlyName() const
 {
     wchar_t friendly_name[MAX_PATH] = { 0 };
 
-    if (!SetupDiGetDeviceRegistryPropertyW(device_info_.get(),
-                                           &device_info_data_,
-                                           SPDRP_FRIENDLYNAME,
-                                           nullptr,
-                                           reinterpret_cast<PBYTE>(friendly_name),
-                                           ARRAYSIZE(friendly_name),
-                                           nullptr))
+    if (!SetupDiGetDeviceRegistryPropertyW(device_info_.get(), &device_info_data_, SPDRP_FRIENDLYNAME,
+        nullptr, reinterpret_cast<PBYTE>(friendly_name), ARRAYSIZE(friendly_name), nullptr))
     {
         PLOG(ERROR) << "SetupDiGetDeviceRegistryPropertyW failed";
         return QString();
@@ -105,13 +97,8 @@ QString DeviceEnumerator::description() const
 {
     wchar_t description[MAX_PATH] = { 0 };
 
-    if (!SetupDiGetDeviceRegistryPropertyW(device_info_.get(),
-                                           &device_info_data_,
-                                           SPDRP_DEVICEDESC,
-                                           nullptr,
-                                           reinterpret_cast<PBYTE>(description),
-                                           ARRAYSIZE(description),
-                                           nullptr))
+    if (!SetupDiGetDeviceRegistryPropertyW(device_info_.get(), &device_info_data_, SPDRP_DEVICEDESC,
+        nullptr, reinterpret_cast<PBYTE>(description), ARRAYSIZE(description), nullptr))
     {
         PLOG(ERROR) << "SetupDiGetDeviceRegistryPropertyW failed";
         return QString();
@@ -125,13 +112,8 @@ QString DeviceEnumerator::driverKeyPath() const
 {
     wchar_t driver[MAX_PATH] = { 0 };
 
-    if (!SetupDiGetDeviceRegistryPropertyW(device_info_.get(),
-                                           &device_info_data_,
-                                           SPDRP_DRIVER,
-                                           nullptr,
-                                           reinterpret_cast<PBYTE>(driver),
-                                           ARRAYSIZE(driver),
-                                           nullptr))
+    if (!SetupDiGetDeviceRegistryPropertyW(device_info_.get(), &device_info_data_, SPDRP_DRIVER,
+        nullptr, reinterpret_cast<PBYTE>(driver), ARRAYSIZE(driver), nullptr))
     {
         PLOG(ERROR) << "SetupDiGetDeviceRegistryPropertyW failed";
         return QString();
@@ -214,17 +196,84 @@ QString DeviceEnumerator::deviceID() const
 {
     wchar_t device_id[MAX_PATH] = { 0 };
 
-    if (!SetupDiGetDeviceInstanceIdW(device_info_.get(),
-                                     &device_info_data_,
-                                     device_id,
-                                     ARRAYSIZE(device_id),
-                                     nullptr))
+    if (!SetupDiGetDeviceInstanceIdW(device_info_.get(), &device_info_data_, device_id,
+        ARRAYSIZE(device_id), nullptr))
     {
         PLOG(ERROR) << "SetupDiGetDeviceInstanceIdW failed";
         return QString();
     }
 
     return QString::fromWCharArray(device_id);
+}
+
+//--------------------------------------------------------------------------------------------------
+MonitorEnumerator::MonitorEnumerator()
+    : DeviceEnumerator(&GUID_DEVCLASS_MONITOR, DIGCF_PROFILE | DIGCF_PRESENT)
+{
+    // Nothing
+}
+
+//--------------------------------------------------------------------------------------------------
+Edid MonitorEnumerator::edid() const
+{
+    QString key_path = QString("SYSTEM\\CurrentControlSet\\Enum\\%1\\Device Parameters").arg(deviceID());
+
+    RegistryKey key;
+    LONG status = key.open(HKEY_LOCAL_MACHINE, key_path, KEY_READ);
+    if (status != ERROR_SUCCESS)
+    {
+        LOG(ERROR) << "Unable to open registry key:"
+                   << SystemError(static_cast<DWORD>(status)).toString();
+        return Edid();
+    }
+
+    QByteArray buffer;
+    status = key.readValueBIN("EDID", &buffer);
+    if (status != ERROR_SUCCESS)
+    {
+        LOG(ERROR) << "Unable to read EDID data from registry:"
+                   << SystemError(static_cast<DWORD>(status)).toString();
+        return Edid();
+    }
+
+    return Edid(buffer);
+}
+
+//--------------------------------------------------------------------------------------------------
+VideoAdapterEnumarator::VideoAdapterEnumarator()
+    : DeviceEnumerator(&GUID_DEVCLASS_DISPLAY, DIGCF_PROFILE | DIGCF_PRESENT)
+{
+    // Nothing
+}
+
+//--------------------------------------------------------------------------------------------------
+QString VideoAdapterEnumarator::adapterString() const
+{
+    return driverRegistryString("HardwareInformation.AdapterString");
+}
+
+//--------------------------------------------------------------------------------------------------
+QString VideoAdapterEnumarator::biosString() const
+{
+    return driverRegistryString("HardwareInformation.BiosString");
+}
+
+//--------------------------------------------------------------------------------------------------
+QString VideoAdapterEnumarator::chipString() const
+{
+    return driverRegistryString("HardwareInformation.ChipType");
+}
+
+//--------------------------------------------------------------------------------------------------
+QString VideoAdapterEnumarator::dacType() const
+{
+    return driverRegistryString("HardwareInformation.DacType");
+}
+
+//--------------------------------------------------------------------------------------------------
+quint64 VideoAdapterEnumarator::memorySize() const
+{
+    return driverRegistryDW("HardwareInformation.MemorySize");
 }
 
 } // namespace base

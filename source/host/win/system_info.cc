@@ -37,11 +37,9 @@
 #include "base/win/event_enumerator.h"
 #include "base/win/power_info.h"
 #include "base/win/printer_enumerator.h"
-#include "base/win/monitor_enumerator.h"
 #include "base/win/net_share_enumerator.h"
 #include "base/win/service_enumerator.h"
 #include "base/win/user_enumerator.h"
-#include "base/win/video_adapter_enumerator.h"
 #include "common/system_info_constants.h"
 #include "host/win/process_monitor.h"
 

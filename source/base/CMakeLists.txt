@@ -478,8 +478,6 @@ if (WIN32)
         win/message_window.h
         win/mini_dump_writer.cc
         win/mini_dump_writer.h
-        win/monitor_enumerator.cc
-        win/monitor_enumerator.h
         win/net_share_enumerator.cc
         win/net_share_enumerator.h
         win/power_info.cc
@@ -524,8 +522,6 @@ if (WIN32)
         win/session_info.h
         win/user_enumerator.cc
         win/user_enumerator.h
-        win/video_adapter_enumerator.cc
-        win/video_adapter_enumerator.h
         win/window_station.cc
         win/window_station.h
         win/windows_version.cc
