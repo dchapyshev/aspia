@@ -19,12 +19,16 @@
 #include "base/applications_reader.h"
 
 #include "base/logging.h"
+
+#if defined(Q_OS_WINDOWS)
 #include "base/win/registry.h"
+#endif // defined(Q_OS_WINDOWS)
 
 namespace base {
 
 namespace {
 
+#if defined(Q_OS_WINDOWS)
 const char kUninstallKeyPath[] = "Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall";
 const char kDisplayName[] = "DisplayName";
 const char kDisplayVersion[] = "DisplayVersion";
@@ -87,14 +91,15 @@ bool addApplication(
 
     return true;
 }
+#endif // defined(Q_OS_WINDOWS)
 
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
 void readApplicationsInformation(proto::system_info::Applications* applications)
 {
+#if defined(Q_OS_WINDOWS)
     RegistryKeyIterator machine_key_iterator(HKEY_LOCAL_MACHINE, kUninstallKeyPath);
-
     while (machine_key_iterator.valid())
     {
         addApplication(applications, machine_key_iterator.name(), 0);
@@ -102,7 +107,6 @@ void readApplicationsInformation(proto::system_info::Applications* applications)
     }
 
     RegistryKeyIterator user_key_iterator(HKEY_CURRENT_USER, kUninstallKeyPath);
-
     while (user_key_iterator.valid())
     {
         addApplication(applications, user_key_iterator.name(), 0);
@@ -110,57 +114,45 @@ void readApplicationsInformation(proto::system_info::Applications* applications)
     }
 
 #if defined(Q_PROCESSOR_X86_32)
-
     BOOL is_wow64;
 
     // If the x86 application is running in a x64 system.
     if (IsWow64Process(GetCurrentProcess(), &is_wow64) && is_wow64)
     {
-        RegistryKeyIterator machine64_key_iterator(HKEY_LOCAL_MACHINE,
-                                                   kUninstallKeyPath,
-                                                   KEY_WOW64_64KEY);
-
+        RegistryKeyIterator machine64_key_iterator(HKEY_LOCAL_MACHINE, kUninstallKeyPath, KEY_WOW64_64KEY);
         while (machine64_key_iterator.valid())
         {
             addApplication(applications, machine64_key_iterator.name(), KEY_WOW64_64KEY);
             ++machine64_key_iterator;
         }
 
-        RegistryKeyIterator user64_key_iterator(HKEY_CURRENT_USER,
-                                                kUninstallKeyPath,
-                                                KEY_WOW64_64KEY);
-
+        RegistryKeyIterator user64_key_iterator(HKEY_CURRENT_USER, kUninstallKeyPath, KEY_WOW64_64KEY);
         while (user64_key_iterator.valid())
         {
             addApplication(applications, user64_key_iterator.name(), KEY_WOW64_64KEY);
             ++user64_key_iterator;
         }
     }
-
 #elif defined(Q_PROCESSOR_X86_64)
-
-    RegistryKeyIterator machine32_key_iterator(HKEY_LOCAL_MACHINE,
-                                               kUninstallKeyPath,
-                                               KEY_WOW64_32KEY);
-
+    RegistryKeyIterator machine32_key_iterator(HKEY_LOCAL_MACHINE, kUninstallKeyPath, KEY_WOW64_32KEY);
     while (machine32_key_iterator.valid())
     {
         addApplication(applications, machine32_key_iterator.name(), KEY_WOW64_32KEY);
         ++machine32_key_iterator;
     }
 
-    RegistryKeyIterator user32_key_iterator(HKEY_CURRENT_USER,
-                                            kUninstallKeyPath,
-                                            KEY_WOW64_32KEY);
-
+    RegistryKeyIterator user32_key_iterator(HKEY_CURRENT_USER, kUninstallKeyPath, KEY_WOW64_32KEY);
     while (user32_key_iterator.valid())
     {
         addApplication(applications, user32_key_iterator.name(), KEY_WOW64_32KEY);
         ++user32_key_iterator;
     }
-
 #else
 #error Unknown Architecture
+#endif
+#else
+    Q_UNUSED(applications)
+    NOTIMPLEMENTED();
 #endif
 }
 

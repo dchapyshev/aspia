@@ -21,6 +21,7 @@ list(APPEND SOURCE_BASE
     aligned_memory.h
     application.cc
     application.h
+    applications_reader.cc
     applications_reader.h
     asio_event_dispatcher.cc
     asio_event_dispatcher.h
@@ -33,12 +34,14 @@ list(APPEND SOURCE_BASE
     edid.h
     gui_application.cc
     gui_application.h
+    license_reader.cc
     license_reader.h
     location.cc
     location.h
     logging.cc
     logging.h
     numeric_utils.h
+    power_controller.cc
     power_controller.h
     process_handle.cc
     process_handle.h
@@ -69,27 +72,18 @@ list(APPEND SOURCE_BASE
 
 if (WIN32)
     list(APPEND SOURCE_BASE
-        applications_reader_win.cc
-        license_reader_win.cc
-        power_controller_win.cc
         service_win.cc
         sys_info_win.cc)
 endif()
 
 if (LINUX)
     list(APPEND SOURCE_BASE
-        applications_reader_linux.cc
-        license_reader_linux.cc
-        power_controller_linux.cc
         service_posix.cc
         sys_info_linux.cc)
 endif()
 
 if (APPLE)
     list(APPEND SOURCE_BASE
-        applications_reader_mac.cc
-        license_reader_mac.cc
-        power_controller_mac.mm
         service_posix.cc
         sys_info_mac.mm)
 endif()

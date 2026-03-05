@@ -18,13 +18,16 @@
 
 #include "base/license_reader.h"
 
+#if defined(Q_OS_WINDOWS)
 #include "base/win/registry.h"
 #include "base/win/windows_version.h"
+#endif // defined(Q_OS_WINDOWS)
 
 namespace base {
 
 namespace {
 
+#if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
 std::string digitalProductIdToString(quint8* product_id, size_t product_id_size)
 {
@@ -95,9 +98,8 @@ bool msProductName(const QString& id, QString* product_name, REGSAM access)
 }
 
 //--------------------------------------------------------------------------------------------------
-void addMsProduct(proto::system_info::Licenses* message,
-                  const QString& product_name,
-                  const RegistryKey& key)
+void addMsProduct(proto::system_info::Licenses* message, const QString& product_name,
+    const RegistryKey& key)
 {
     DWORD product_id_size = 0;
 
@@ -397,12 +399,14 @@ void addVMWareProducts(proto::system_info::Licenses* message, REGSAM access)
         ++key_iterator;
     }
 }
+#endif // defined(Q_OS_WINDOWS)
 
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
 void readLicensesInformation(proto::system_info::Licenses* licenses)
 {
+#if defined(Q_OS_WINDOWS)
 #if defined(Q_PROCESSOR_X86_32)
     BOOL is_wow64;
 
@@ -427,6 +431,10 @@ void readLicensesInformation(proto::system_info::Licenses* licenses)
     addMsProducts(licenses, 0);
     addVisualStudio(licenses, 0);
     addVMWareProducts(licenses, 0);
+#else
+    Q_UNUSED(licenses)
+    NOTIMPLEMENTED();
+#endif
 }
 
 } // namespace base

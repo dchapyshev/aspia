@@ -18,18 +18,22 @@
 
 #include "base/power_controller.h"
 
+#include "base/logging.h"
+
+#if defined(Q_OS_WINDOWS)
+#include <qt_windows.h>
+#include <WtsApi32.h>
+
 #include "base/win/scoped_impersonator.h"
 #include "base/win/scoped_object.h"
 #include "base/win/session_info.h"
-#include "base/logging.h"
-
-#include <qt_windows.h>
-#include <WtsApi32.h>
+#endif // defined(Q_OS_WINDOWS)
 
 namespace base {
 
 namespace {
 
+#if defined(Q_OS_WINDOWS)
 // Delay for shutdown and reboot.
 const DWORD kActionDelayInSeconds = 0;
 
@@ -88,6 +92,7 @@ bool createPrivilegedToken(ScopedHandle* token_out)
     token_out->reset(privileged_token.release());
     return true;
 }
+#endif // defined(Q_OS_WINDOWS)
 
 } // namespace
 
@@ -95,6 +100,7 @@ bool createPrivilegedToken(ScopedHandle* token_out)
 // static
 bool PowerController::shutdown()
 {
+#if defined(Q_OS_WINDOWS)
     const DWORD desired_access = TOKEN_ADJUST_DEFAULT | TOKEN_ASSIGN_PRIMARY | TOKEN_DUPLICATE | TOKEN_QUERY;
 
     ScopedHandle process_token;
@@ -120,24 +126,24 @@ bool PowerController::shutdown()
 
     const DWORD reason = SHTDN_REASON_MAJOR_APPLICATION | SHTDN_REASON_MINOR_MAINTENANCE;
 
-    bool result = !!InitiateSystemShutdownExW(nullptr,
-                                              nullptr,
-                                              kActionDelayInSeconds,
-                                              TRUE,  // Force close apps.
-                                              FALSE, // Shutdown.
-                                              reason);
+    bool result = !!InitiateSystemShutdownExW(nullptr, nullptr, kActionDelayInSeconds, TRUE, FALSE, reason);
     if (!result)
     {
         PLOG(ERROR) << "InitiateSystemShutdownExW failed";
     }
 
     return result;
+#else
+    NOTIMPLEMENTED();
+    return false;
+#endif
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
 bool PowerController::reboot()
 {
+#if defined(Q_OS_WINDOWS)
     const DWORD desired_access = TOKEN_ADJUST_DEFAULT | TOKEN_ASSIGN_PRIMARY | TOKEN_DUPLICATE | TOKEN_QUERY;
 
     ScopedHandle process_token;
@@ -163,24 +169,22 @@ bool PowerController::reboot()
 
     const DWORD reason = SHTDN_REASON_MAJOR_APPLICATION | SHTDN_REASON_MINOR_MAINTENANCE;
 
-    bool result = !!InitiateSystemShutdownExW(nullptr,
-                                              nullptr,
-                                              kActionDelayInSeconds,
-                                              TRUE, // Force close apps.
-                                              TRUE, // Reboot.
-                                              reason);
+    bool result = !!InitiateSystemShutdownExW(nullptr, nullptr, kActionDelayInSeconds, TRUE, TRUE, reason);
     if (!result)
-    {
         PLOG(ERROR) << "InitiateSystemShutdownExW failed";
-    }
 
     return result;
+#else
+    NOTIMPLEMENTED();
+    return false;
+#endif
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
 bool PowerController::logoff()
 {
+#if defined(Q_OS_WINDOWS)
     DWORD session_id = base::kInvalidSessionId;
     if (!ProcessIdToSessionId(GetCurrentProcessId(), &session_id))
         PLOG(ERROR) << "ProcessIdToSessionId failed";
@@ -202,12 +206,17 @@ bool PowerController::logoff()
     }
 
     return true;
+#else
+    NOTIMPLEMENTED();
+    return false;
+#endif
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
 bool PowerController::lock()
 {
+#if defined(Q_OS_WINDOWS)
     if (!LockWorkStation())
     {
         PLOG(ERROR) << "LockWorkStation failed";
@@ -215,6 +224,10 @@ bool PowerController::lock()
     }
 
     return true;
+#else
+    NOTIMPLEMENTED();
+    return false;
+#endif
 }
 
 } // namespace base
