@@ -398,8 +398,7 @@ void DesktopSessionWindow::onCapabilitiesChanged(const proto::desktop::Capabilit
     video_encodings_ = capabilities.video_encodings();
 
     // The list of extensions is passed as a string. Extensions are separated by a semicolon.
-    QList<QStringView> extensions =
-        QStringView(QString::fromStdString(capabilities.extensions())).split(';', Qt::SkipEmptyParts);
+    QStringList extensions = QString::fromStdString(capabilities.extensions()).split(';', Qt::SkipEmptyParts);
 
     // By default, remote update is disabled.
     toolbar_->enableRemoteUpdate(false);
@@ -425,53 +424,29 @@ void DesktopSessionWindow::onCapabilitiesChanged(const proto::desktop::Capabilit
         bool value = flag.value();
 
         if (name == common::kFlagDisablePasteAsKeystrokes)
-        {
             toolbar_->enablePasteAsKeystrokesFeature(!value);
-        }
         else if (name == common::kFlagDisableAudio)
-        {
             disable_feature_audio_ = value;
-        }
         else if (name == common::kFlagDisableClipboard)
-        {
             disable_feature_clipboard_ = value;
-        }
         else if (name == common::kFlagDisableCursorShape)
-        {
             disable_feature_cursor_shape_ = value;
-        }
         else if (name == common::kFlagDisableCursorPosition)
-        {
             disable_feature_cursor_position_ = value;
-        }
         else if (name == common::kFlagDisableDesktopEffects)
-        {
             disable_feature_desktop_effects_ = value;
-        }
         else if (name == common::kFlagDisableDesktopWallpaper)
-        {
             disable_feature_desktop_wallpaper_ = value;
-        }
         else if (name == common::kFlagDisableFontSmoothing)
-        {
             disable_feature_font_smoothing_ = value;
-        }
         else if (name == common::kFlagDisableClearClipboard)
-        {
             disable_feature_clear_clipboard_ = value;
-        }
         else if (name == common::kFlagDisableLockAtDisconnect)
-        {
             disable_feature_lock_at_disconnect_ = value;
-        }
         else if (name == common::kFlagDisableBlockInput)
-        {
             disable_feature_block_input_ = value;
-        }
         else
-        {
             LOG(ERROR) << "Unknown flag" << name << "with value" << value;
-        }
     }
 }
 

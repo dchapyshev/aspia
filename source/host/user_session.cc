@@ -212,6 +212,9 @@ void UserSession::onUpdateCredentials(base::HostId host_id, const QString& passw
 //--------------------------------------------------------------------------------------------------
 void UserSession::onClientSwitchSession(base::SessionId session_id)
 {
+    if (session_id == session_id_)
+        return;
+
     LOG(INFO) << "Switch session:" << session_id;
     dettach(FROM_HERE);
     attach(FROM_HERE, session_id);
