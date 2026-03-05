@@ -51,18 +51,6 @@ public:
     };
     Q_ENUM(State)
 
-    enum class DettachReason
-    {
-        CONSOLE_DISCONNECT,
-        REMOTE_DISCONNECT,
-        IPC_DISCONNECTED,
-        ATTACH_TIMEOUT,
-        SWITCH_SESSION,
-        NOT_REQUIRED,
-        UNKNOWN_ERROR
-    };
-    Q_ENUM(DettachReason)
-
     State state() const { return state_; }
     base::SessionId sessionId() const { return session_id_; }
 
@@ -102,7 +90,7 @@ private slots:
 
 private:
     void attach(const base::Location& location, base::SessionId session_id);
-    void dettach(const base::Location& location, DettachReason reason);
+    void dettach(const base::Location& location);
     void sendMessage();
 
     base::IpcServer* ipc_server_ = nullptr;

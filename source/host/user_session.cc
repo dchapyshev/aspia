@@ -122,10 +122,7 @@ UserSession::UserSession(QObject* parent)
     dettach_timer_->setSingleShot(true);
     dettach_timer_->setInterval(std::chrono::seconds(15));
 
-    connect(attach_timer_, &QTimer::timeout, this, [this]()
-    {
-        dettach(FROM_HERE, DettachReason::ATTACH_TIMEOUT);
-    });
+    connect(attach_timer_, &QTimer::timeout, this, [this]() { dettach(FROM_HERE); });
     connect(dettach_timer_, &QTimer::timeout, this, &UserSession::onDettachTimeout);
     connect(base::Application::instance(), &base::Application::sig_sessionEvent,
             this, &UserSession::onUserSessionEvent);
@@ -185,16 +182,12 @@ bool UserSession::start()
     }
 
     LOG(INFO) << "IPC server for UI is started";
-    base::SessionId session_id = 0;
-
-#if defined(Q_OS_WINDOWS)
-    session_id = base::activeConsoleSessionId();
+    base::SessionId session_id = base::activeConsoleSessionId();
     if (session_id == base::kInvalidSessionId)
     {
         LOG(ERROR) << "Unable to get active console session id";
         return false;
     }
-#endif
 
     attach(FROM_HERE, session_id);
     return true;
@@ -220,8 +213,7 @@ void UserSession::onUpdateCredentials(base::HostId host_id, const QString& passw
 void UserSession::onClientSwitchSession(base::SessionId session_id)
 {
     LOG(INFO) << "Switch session:" << session_id;
-    is_console_ = session_id == base::activeConsoleSessionId();
-    dettach(FROM_HERE, DettachReason::SWITCH_SESSION);
+    dettach(FROM_HERE);
     attach(FROM_HERE, session_id);
 }
 
@@ -328,7 +320,7 @@ void UserSession::onClientFinished()
     base::SessionId session_id = base::activeConsoleSessionId();
     if (session_id_ != session_id)
     {
-        dettach(FROM_HERE, DettachReason::SWITCH_SESSION);
+        dettach(FROM_HERE);
         attach(FROM_HERE, session_id);
     }
 }
@@ -374,7 +366,7 @@ void UserSession::onUserSessionEvent(quint32 status, quint32 session_id)
         case WTS_CONSOLE_DISCONNECT:
         {
             if (is_console_)
-                dettach(FROM_HERE, DettachReason::CONSOLE_DISCONNECT);
+                dettach(FROM_HERE);
         }
         break;
 
@@ -383,7 +375,7 @@ void UserSession::onUserSessionEvent(quint32 status, quint32 session_id)
             if (is_console_ || session_id_ != session_id)
                 return;
 
-            dettach(FROM_HERE, DettachReason::REMOTE_DISCONNECT);
+            dettach(FROM_HERE);
             attach(FROM_HERE, base::activeConsoleSessionId());
         }
         break;
@@ -570,7 +562,7 @@ void UserSession::onIpcMessageReceived(quint32 /* ipc_channel_id */, const QByte
 void UserSession::onDettachTimeout()
 {
     LOG(INFO) << "Stop all clients";
-    dettach(FROM_HERE, DettachReason::IPC_DISCONNECTED);
+    dettach(FROM_HERE);
     emit sig_stopClient(0);
 }
 
@@ -595,14 +587,14 @@ void UserSession::attach(const base::Location& location, base::SessionId session
     if (session_id == base::kInvalidSessionId)
     {
         LOG(ERROR) << "An attempt was detected to start a process in a INVALID session";
-        dettach(FROM_HERE, DettachReason::UNKNOWN_ERROR);
+        dettach(FROM_HERE);
         return;
     }
 
     if (session_id == base::kServiceSessionId)
     {
         LOG(ERROR) << "An attempt was detected to start a process in a SERVICES session";
-        dettach(FROM_HERE, DettachReason::UNKNOWN_ERROR);
+        dettach(FROM_HERE);
         return;
     }
 
@@ -610,7 +602,7 @@ void UserSession::attach(const base::Location& location, base::SessionId session
     if (!session_info.isValid())
     {
         LOG(ERROR) << "Unable to get session info (sid" << session_id << ")";
-        dettach(FROM_HERE, DettachReason::UNKNOWN_ERROR);
+        dettach(FROM_HERE);
         return;
     }
 
@@ -625,21 +617,21 @@ void UserSession::attach(const base::Location& location, base::SessionId session
     if (!createLoggedOnUserToken(session_id, &user_token))
     {
         LOG(ERROR) << "Failed to get user token (sid" << session_id << ")";
-        dettach(FROM_HERE, DettachReason::UNKNOWN_ERROR);
+        dettach(FROM_HERE);
         return;
     }
 
     if (!user_token.isValid())
     {
         LOG(INFO) << "Console session is not active. Launching the GUI is not required";
-        dettach(FROM_HERE, DettachReason::NOT_REQUIRED);
+        dettach(FROM_HERE);
         return;
     }
 
     if (session_info.isUserLocked())
     {
         LOG(INFO) << "Console session is locked. Launching the GUI is not required";
-        dettach(FROM_HERE, DettachReason::NOT_REQUIRED);
+        dettach(FROM_HERE);
         return;
     }
 
@@ -652,7 +644,7 @@ void UserSession::attach(const base::Location& location, base::SessionId session
     {
         LOG(ERROR) << "Unable to start process with user token (sid" << session_id
                    << "cmd" << command_line << ")";
-        dettach(FROM_HERE, DettachReason::UNKNOWN_ERROR);
+        dettach(FROM_HERE);
         return;
     }
 #elif defined(Q_OS_LINUX)
@@ -661,7 +653,7 @@ void UserSession::attach(const base::Location& location, base::SessionId session
     if (it == std::filesystem::end(it))
     {
         LOG(ERROR) << "No X11 sessions";
-        dettach(FROM_HERE, DettachReason::UNKNOWN_ERROR);
+        dettach(FROM_HERE);
         return;
     }
 
@@ -669,7 +661,7 @@ void UserSession::attach(const base::Location& location, base::SessionId session
     if (!pipe)
     {
         LOG(ERROR) << "Unable to open pipe";
-        dettach(FROM_HERE, DettachReason::UNKNOWN_ERROR);
+        dettach(FROM_HERE);
         return;
     }
 
@@ -704,9 +696,9 @@ void UserSession::attach(const base::Location& location, base::SessionId session
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSession::dettach(const base::Location& location, DettachReason reason)
+void UserSession::dettach(const base::Location& location)
 {
-    LOG(INFO) << "Dettached from" << location << "reason:" << reason;
+    LOG(INFO) << "Dettached from" << location;
 
     if (ipc_channel_)
     {
