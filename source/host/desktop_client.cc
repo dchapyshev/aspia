@@ -61,7 +61,25 @@ DesktopClient::DesktopClient(base::TcpChannel* tcp_channel, QObject* parent)
 
 #if defined(Q_OS_WINDOWS)
     connect(base::Application::instance(), &base::Application::sig_sessionEvent,
-            this, &DesktopClient::sendSessionList);
+            this, [this](quint32 event_type, quint32 /* session_id */)
+    {
+        switch (event_type)
+        {
+            case WTS_CONSOLE_CONNECT:
+            case WTS_CONSOLE_DISCONNECT:
+            case WTS_REMOTE_CONNECT:
+            case WTS_REMOTE_DISCONNECT:
+            case WTS_SESSION_LOGON:
+            case WTS_SESSION_LOGOFF:
+            case WTS_SESSION_LOCK:
+            case WTS_SESSION_UNLOCK:
+                sendSessionList();
+                break;
+
+            default:
+                break;
+        }
+    });
 #endif // defined(Q_OS_WINDOWS)
 
     connect(fake_capture_timer_, &QTimer::timeout, this, [this]()

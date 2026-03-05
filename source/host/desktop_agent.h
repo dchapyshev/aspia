@@ -23,7 +23,6 @@
 
 #include "base/desktop/capture_scheduler.h"
 #include "base/desktop/screen_capturer.h"
-#include "proto/desktop_internal.h"
 
 namespace base {
 class AudioCapturerWrapper;
@@ -91,7 +90,7 @@ private:
     base::AudioCapturerWrapper* audio_capturer_ = nullptr;
 
     QTimer* screen_capture_timer_ = nullptr;
-    base::CaptureScheduler capture_scheduler_;
+    base::CaptureScheduler screen_capture_scheduler_;
 
     bool is_paused_ = false;
     bool is_mouse_locked_ = false;

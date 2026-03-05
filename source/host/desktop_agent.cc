@@ -54,28 +54,22 @@ constexpr int kMaxScreenCaptureFpsLowEnd = 20;
 //--------------------------------------------------------------------------------------------------
 int defaultCaptureFps()
 {
-    int default_capture_fps = kDefaultScreenCaptureFps;
+    if (!qEnvironmentVariableIsSet("ASPIA_DEFAULT_FPS"))
+        return kDefaultScreenCaptureFps;
 
-    if (qEnvironmentVariableIsSet("ASPIA_DEFAULT_FPS"))
+    bool ok = false;
+    int default_fps = qEnvironmentVariableIntValue("ASPIA_DEFAULT_FPS", &ok);
+    if (!ok)
+        return kDefaultScreenCaptureFps;
+
+    if (default_fps < 1 || default_fps > 60)
     {
-        bool ok = false;
-        int default_fps = qEnvironmentVariableIntValue("ASPIA_DEFAULT_FPS", &ok);
-        if (ok)
-        {
-            LOG(INFO) << "Default FPS specified by environment variable";
-
-            if (default_fps < 1 || default_fps > 60)
-            {
-                LOG(INFO) << "Environment variable contains an incorrect default FPS:" << default_fps;
-            }
-            else
-            {
-                default_capture_fps = default_fps;
-            }
-        }
+        LOG(INFO) << "Environment variable contains an incorrect default FPS:" << default_fps;
+        return kDefaultScreenCaptureFps;
     }
 
-    return default_capture_fps;
+    LOG(INFO) << "Default FPS specified by environment variable";
+    return default_fps;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -120,28 +114,22 @@ int maxCaptureFps()
 //--------------------------------------------------------------------------------------------------
 int minCaptureFps()
 {
-    int min_capture_fps = kMinScreenCaptureFps;
+    if (!qEnvironmentVariableIsSet("ASPIA_MIN_FPS"))
+        return kMinScreenCaptureFps;
 
-    if (qEnvironmentVariableIsSet("ASPIA_MIN_FPS"))
+    bool ok = false;
+    int min_fps = qEnvironmentVariableIntValue("ASPIA_MIN_FPS", &ok);
+    if (!ok)
+        return kMinScreenCaptureFps;
+
+    if (min_fps < 1 || min_fps > 60)
     {
-        bool ok = false;
-        int min_fps = qEnvironmentVariableIntValue("ASPIA_MIN_FPS", &ok);
-        if (ok)
-        {
-            LOG(INFO) << "Minimum FPS specified by environment variable";
-
-            if (min_fps < 1 || min_fps > 60)
-            {
-                LOG(INFO) << "Environment variable contains an incorrect minimum FPS:" << min_fps;
-            }
-            else
-            {
-                min_capture_fps = min_fps;
-            }
-        }
+        LOG(INFO) << "Environment variable contains an incorrect minimum FPS:" << min_fps;
+        return kMinScreenCaptureFps;
     }
 
-    return min_capture_fps;
+    LOG(INFO) << "Minimum FPS specified by environment variable";
+    return min_fps;
 }
 
 } // namespace
@@ -167,7 +155,7 @@ DesktopAgent::DesktopAgent(QObject* parent)
     connect(ipc_channel_, &base::IpcChannel::sig_errorOccurred, this, &DesktopAgent::onIpcErrorOccurred);
     connect(ipc_channel_, &base::IpcChannel::sig_messageReceived, this, &DesktopAgent::onIpcMessageReceived);
 
-    capture_scheduler_.setFps(defaultCaptureFps());
+    screen_capture_scheduler_.setFps(defaultCaptureFps());
     screen_capture_timer_->setTimerType(Qt::PreciseTimer);
     connect(screen_capture_timer_, &QTimer::timeout, this, &DesktopAgent::onCaptureScreen);
 
@@ -398,21 +386,21 @@ void DesktopAgent::onInjectTouchEvent(const proto::desktop::TouchEvent& event)
 //--------------------------------------------------------------------------------------------------
 void DesktopAgent::onCaptureScreen()
 {
-    if (capture_scheduler_.isInProgress())
+    if (screen_capture_scheduler_.isInProgress())
     {
         LOG(INFO) << "Capture in progress";
         return;
     }
 
-    capture_scheduler_.onBeginCapture();
+    screen_capture_scheduler_.onBeginCapture();
 
     if (is_paused_)
     {
         for (const auto& client : std::as_const(clients_))
             client->onScreenCaptureError(proto::desktop::VIDEO_ERROR_CODE_PAUSED);
 
-        capture_scheduler_.onEndCapture();
-        screen_capture_timer_->start(capture_scheduler_.nextCaptureDelay());
+        screen_capture_scheduler_.onEndCapture();
+        screen_capture_timer_->start(screen_capture_scheduler_.nextCaptureDelay());
         return;
     }
 
@@ -451,8 +439,8 @@ void DesktopAgent::onCaptureScreen()
             client->onScreenCaptureData(frame, cursor);
     }
 
-    capture_scheduler_.onEndCapture();
-    screen_capture_timer_->start(capture_scheduler_.nextCaptureDelay());
+    screen_capture_scheduler_.onEndCapture();
+    screen_capture_timer_->start(screen_capture_scheduler_.nextCaptureDelay());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -466,7 +454,7 @@ void DesktopAgent::onOverflowCheck()
             state = client->overflowState();
     }
 
-    int current_fps = capture_scheduler_.fps();
+    int current_fps = screen_capture_scheduler_.fps();
     int next_fps = current_fps;
 
     if (state == proto::desktop::Overflow::STATE_CRITICAL)
@@ -510,7 +498,7 @@ void DesktopAgent::onOverflowCheck()
     }
 
     if (current_fps != next_fps)
-        capture_scheduler_.setFps(next_fps);
+        screen_capture_scheduler_.setFps(next_fps);
 }
 
 //--------------------------------------------------------------------------------------------------

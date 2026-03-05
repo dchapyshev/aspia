@@ -436,7 +436,7 @@ void DesktopAgentClient::readMouseEvent(const proto::desktop::MouseEvent& mouse_
 
     if (!scale_reducer_)
     {
-        LOG(ERROR) << "Scale reducer NOT initialized";
+        LOG(ERROR) << "Scale reducer is NOT initialized";
         return;
     }
 
@@ -599,14 +599,14 @@ void DesktopAgentClient::readConfig(const proto::desktop::Config& config)
 //--------------------------------------------------------------------------------------------------
 void DesktopAgentClient::readSelectScreenExtension(const std::string& data)
 {
-    LOG(INFO) << "Select screen request";
-
     proto::desktop::Screen screen;
     if (!screen.ParseFromString(data))
     {
         LOG(ERROR) << "Unable to parse select screen extension data";
         return;
     }
+
+    LOG(INFO) << "Received:" << screen;
 
     base::ScreenCapturer::ScreenId screen_id = static_cast<base::ScreenCapturer::ScreenId>(screen.id());
     QSize resolution = base::parse(screen.resolution());
@@ -694,11 +694,12 @@ void DesktopAgentClient::readPowerControlExtension(const std::string& data)
         return;
     }
 
+    LOG(INFO) << "Received:" << power_control;
+
     switch (power_control.action())
     {
         case proto::desktop::PowerControl::ACTION_SHUTDOWN:
         {
-            LOG(INFO) << "SHUTDOWN command";
             if (!base::PowerController::shutdown())
                 LOG(ERROR) << "Unable to shutdown";
         }
@@ -706,7 +707,6 @@ void DesktopAgentClient::readPowerControlExtension(const std::string& data)
 
         case proto::desktop::PowerControl::ACTION_REBOOT:
         {
-            LOG(INFO) << "REBOOT command";
             if (!base::PowerController::reboot())
                 LOG(ERROR) << "Unable to reboot";
         }
@@ -715,37 +715,32 @@ void DesktopAgentClient::readPowerControlExtension(const std::string& data)
         case proto::desktop::PowerControl::ACTION_REBOOT_SAFE_MODE:
         {
 #if defined(Q_OS_WINDOWS)
-            LOG(INFO) << "REBOOT_SAFE_MODE command";
-
-            if (base::SafeModeUtil::setSafeModeService(Service::kName, true))
-            {
-                LOG(INFO) << "Service added successfully to start in safe mode";
-
-                HostStorage storage;
-                storage.setBootToSafeMode(true);
-
-                if (base::SafeModeUtil::setSafeMode(true))
-                {
-                    LOG(INFO) << "Safe Mode boot enabled successfully";
-                    if (!base::PowerController::reboot())
-                        LOG(ERROR) << "Unable to reboot";
-                }
-                else
-                {
-                    LOG(ERROR) << "Failed to enable boot in Safe Mode";
-                }
-            }
-            else
+            if (!base::SafeModeUtil::setSafeModeService(Service::kName, true))
             {
                 LOG(ERROR) << "Failed to add service to start in safe mode";
+                return;
             }
+
+            LOG(INFO) << "Service added successfully to start in safe mode";
+
+            HostStorage storage;
+            storage.setBootToSafeMode(true);
+
+            if (!base::SafeModeUtil::setSafeMode(true))
+            {
+                LOG(ERROR) << "Failed to enable boot in Safe Mode";
+                return;
+            }
+
+            LOG(INFO) << "Safe Mode boot enabled successfully";
+            if (!base::PowerController::reboot())
+                LOG(ERROR) << "Unable to reboot";
 #endif // defined(Q_OS_WINDOWS)
         }
         break;
 
         case proto::desktop::PowerControl::ACTION_LOGOFF:
         {
-            LOG(INFO) << "LOGOFF command";
             if (!base::PowerController::logoff())
                 LOG(ERROR) << "base::PowerController::logoff failed";
         }
@@ -753,7 +748,6 @@ void DesktopAgentClient::readPowerControlExtension(const std::string& data)
 
         case proto::desktop::PowerControl::ACTION_LOCK:
         {
-            LOG(INFO) << "LOCK command";
             if (!base::PowerController::lock())
                 LOG(ERROR) << "base::PowerController::lock failed";
         }
@@ -766,7 +760,7 @@ void DesktopAgentClient::readPowerControlExtension(const std::string& data)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::readRemoteUpdateExtension(const std::string& data)
+void DesktopAgentClient::readRemoteUpdateExtension(const std::string& /* data */)
 {
 #if defined(Q_OS_WINDOWS)
     LOG(INFO) << "Remote update requested";

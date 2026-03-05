@@ -520,7 +520,7 @@ void ClientDesktop::readVideoPacket(const proto::desktop::VideoPacket& packet)
 
     if (video_encoding_ != packet.encoding())
     {
-        LOG(INFO) << "Video encoding changed from:" << video_encoding_ << "to:" << packet.encoding();
+        LOG(INFO) << "Video encoding changed from" << video_encoding_ << "to" << packet.encoding();
 
         video_decoder_ = base::VideoDecoder::create(packet.encoding());
         video_encoding_ = packet.encoding();
