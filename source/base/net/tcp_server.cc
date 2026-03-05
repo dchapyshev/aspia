@@ -29,14 +29,12 @@ TcpServer::TcpServer(QObject* parent)
     : QObject(parent),
       acceptor_(AsioEventDispatcher::currentIoContext())
 {
-    LOG(INFO) << "Ctor";
+    // Nothing
 }
 
 //--------------------------------------------------------------------------------------------------
 TcpServer::~TcpServer()
 {
-    LOG(INFO) << "Dtor";
-
     std::error_code ignored_error;
     acceptor_.cancel(ignored_error);
 }

@@ -51,6 +51,18 @@ public:
     };
     Q_ENUM(State)
 
+    enum class DettachReason
+    {
+        CONSOLE_DISCONNECT,
+        REMOTE_DISCONNECT,
+        IPC_DISCONNECTED,
+        ATTACH_TIMEOUT,
+        SWITCH_SESSION,
+        NOT_REQUIRED,
+        UNKNOWN_ERROR
+    };
+    Q_ENUM(DettachReason)
+
     State state() const { return state_; }
     base::SessionId sessionId() const { return session_id_; }
 
@@ -67,7 +79,7 @@ public slots:
     void onClientStarted();
     void onClientFinished();
     void onClientChat(quint32 client_id, const proto::chat::Chat& chat);
-    void onClientRecording(const QString& computer, const QString& user, bool started);
+    void onClientRecording(bool started);
 
 signals:
     void sig_attached();
@@ -90,7 +102,7 @@ private slots:
 
 private:
     void attach(const base::Location& location, base::SessionId session_id);
-    void dettach(const base::Location& location);
+    void dettach(const base::Location& location, DettachReason reason);
     void sendMessage();
 
     base::IpcServer* ipc_server_ = nullptr;
@@ -101,6 +113,7 @@ private:
     State state_ = State::DETTACHED;
     base::SessionId session_id_ = base::kInvalidSessionId;
     bool is_console_ = true;
+    int desktop_client_count_ = 0;
 
     base::Parser<proto::user::UserToService> incoming_message_;
     base::Serializer<proto::user::ServiceToUser> outgoing_message_;

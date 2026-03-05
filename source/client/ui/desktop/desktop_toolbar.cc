@@ -435,7 +435,7 @@ void DesktopToolBar::setScreenType(const proto::desktop::ScreenType& screen_type
 //--------------------------------------------------------------------------------------------------
 void DesktopToolBar::setSessionList(const proto::desktop::SessionList& session_list)
 {
-    LOG(INFO) << "Session list received:" << session_list;
+    LOG(INFO) << "Received:" << session_list;
 
     bool enable = session_list.session_size() != 0;
 
@@ -452,6 +452,9 @@ void DesktopToolBar::setSessionList(const proto::desktop::SessionList& session_l
         for (int i = 0; i < session_list.session_size(); ++i)
         {
             const proto::desktop::Session& session = session_list.session(i);
+            if (!session.is_console() && (!session.is_active() || session.is_locked()))
+                continue;
+
             QString user_name = QString::fromStdString(session.user_name());
             QString text;
 
@@ -775,6 +778,7 @@ void DesktopToolBar::onChangeScreenAction(QAction* action)
 void DesktopToolBar::onSwitchSessionAction(QAction* action)
 {
     LOG(INFO) << "[ACTION] Switch session action:" << action;
+    emit sig_switchSession(action->data().toUInt());
 }
 
 //--------------------------------------------------------------------------------------------------

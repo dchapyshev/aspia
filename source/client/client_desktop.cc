@@ -142,6 +142,7 @@ void ClientDesktop::onServiceMessageReceived(const QByteArray& buffer)
 
     if (message.has_session_list())
     {
+        LOG(INFO) << "Received:" << message.session_list();
         emit sig_sessionListChanged(message.session_list());
     }
     else
@@ -154,10 +155,8 @@ void ClientDesktop::onServiceMessageReceived(const QByteArray& buffer)
 //--------------------------------------------------------------------------------------------------
 void ClientDesktop::onSessionMessageWritten(size_t pending)
 {
-    if (pending >= 2)
-        input_event_filter_.setNetworkOverflow(true);
-    else
-        input_event_filter_.setNetworkOverflow(false);
+    static const size_t kMaxPendingBytes = 100 * 1024; // 100 kB
+    input_event_filter_.setNetworkOverflow(pending > kMaxPendingBytes);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -478,13 +477,15 @@ void ClientDesktop::onSwitchSession(quint32 session_id)
     proto::desktop::ClientToService message;
     proto::desktop::SwitchSession* switch_session = message.mutable_switch_session();
     switch_session->set_session_id(session_id);
+
+    LOG(INFO) << "Send:" << *switch_session;
     sendServiceMessage(base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClientDesktop::readCapabilities(const proto::desktop::Capabilities& capabilities)
 {
-    LOG(INFO) << "Capabilities received";
+    LOG(INFO) << "Received:" << capabilities;
 
     // We notify the window about changes in the list of extensions and video encodings.
     // A window can disable/enable some of its capabilities in accordance with this information.

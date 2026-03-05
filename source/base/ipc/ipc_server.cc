@@ -244,8 +244,6 @@ IpcServer::IpcServer(QObject* parent)
     : QObject(parent),
       io_context_(AsioEventDispatcher::currentIoContext())
 {
-    LOG(INFO) << "Ctor";
-
     for (size_t i = 0; i < listeners_.size(); ++i)
         listeners_[i] = std::make_shared<Listener>(this, i);
 }
@@ -253,7 +251,6 @@ IpcServer::IpcServer(QObject* parent)
 //--------------------------------------------------------------------------------------------------
 IpcServer::~IpcServer()
 {
-    LOG(INFO) << "Dtor";
     stop();
 }
 

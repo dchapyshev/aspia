@@ -313,7 +313,7 @@ void Client::onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer)
     }
     else if (channel_id == proto::peer::CHANNEL_ID_SERVICE)
     {
-        // TODO
+        onServiceMessageReceived(buffer);
     }
     else
     {
@@ -330,7 +330,7 @@ void Client::onTcpMessageWritten(quint8 channel_id, size_t pending)
     }
     else if (channel_id == proto::peer::CHANNEL_ID_SERVICE)
     {
-        // TODO
+        // Nothing
     }
     else
     {

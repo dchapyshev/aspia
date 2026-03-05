@@ -99,7 +99,7 @@ IpcChannel::IpcChannel(QObject* parent)
       instance_id_(makeInstanceId()),
       stream_(AsioEventDispatcher::currentIoContext())
 {
-    LOG(INFO) << "Ctor";
+    // Nothing
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -111,14 +111,12 @@ IpcChannel::IpcChannel(const QString& channel_name, Stream&& stream, QObject* pa
       stream_(std::move(stream)),
       is_connected_(true)
 {
-    LOG(INFO) << "Ctor";
     write_queue_.reserve(kWriteQueueReservedSize);
 }
 
 //--------------------------------------------------------------------------------------------------
 IpcChannel::~IpcChannel()
 {
-    LOG(INFO) << "Dtor";
     disconnectFrom();
 }
 
@@ -153,7 +151,6 @@ void IpcChannel::resume()
     if (!is_connected_ || !is_paused_)
         return;
 
-    LOG(INFO) << "resume (channel" << channel_name_ << ")";
     is_paused_ = false;
 
     switch (read_state_)

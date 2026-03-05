@@ -122,7 +122,10 @@ UserSession::UserSession(QObject* parent)
     dettach_timer_->setSingleShot(true);
     dettach_timer_->setInterval(std::chrono::seconds(15));
 
-    connect(attach_timer_, &QTimer::timeout, this, [this]() { dettach(FROM_HERE); });
+    connect(attach_timer_, &QTimer::timeout, this, [this]()
+    {
+        dettach(FROM_HERE, DettachReason::ATTACH_TIMEOUT);
+    });
     connect(dettach_timer_, &QTimer::timeout, this, &UserSession::onDettachTimeout);
     connect(base::Application::instance(), &base::Application::sig_sessionEvent,
             this, &UserSession::onUserSessionEvent);
@@ -218,7 +221,7 @@ void UserSession::onClientSwitchSession(base::SessionId session_id)
 {
     LOG(INFO) << "Switch session:" << session_id;
     is_console_ = session_id == base::activeConsoleSessionId();
-    dettach(FROM_HERE);
+    dettach(FROM_HERE, DettachReason::SWITCH_SESSION);
     attach(FROM_HERE, session_id);
 }
 
@@ -299,6 +302,9 @@ void UserSession::onClientStarted()
     QString display_name = client->property("display_name").toString();
     quint32 client_id = client->property("client_id").toUInt();
 
+    if (session_type == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
+        ++desktop_client_count_;
+
     sendConnectEvent(client_id, session_type, computer_name, display_name);
 }
 
@@ -308,6 +314,23 @@ void UserSession::onClientFinished()
     QObject* client = sender();
     CHECK(client);
     sendDisconnectEvent(client->property("client_id").toUInt());
+
+    auto session_type = static_cast<proto::peer::SessionType>(client->property("session_type").toUInt());
+    if (session_type != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
+        return;
+
+    desktop_client_count_ = std::max(desktop_client_count_ - 1, 0);
+    if (desktop_client_count_)
+        return;
+
+    LOG(INFO) << "Last desktop client is disconnected";
+
+    base::SessionId session_id = base::activeConsoleSessionId();
+    if (session_id_ != session_id)
+    {
+        dettach(FROM_HERE, DettachReason::SWITCH_SESSION);
+        attach(FROM_HERE, session_id);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -318,11 +341,17 @@ void UserSession::onClientChat(quint32 client_id, const proto::chat::Chat& chat)
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSession::onClientRecording(const QString& computer, const QString& user, bool started)
+void UserSession::onClientRecording(bool started)
 {
+    QObject* client = sender();
+    CHECK(client);
+
+    QString computer_name = client->property("computer_name").toString();
+    QString user_name = client->property("user_name").toString();
+
     proto::user::RecordingState* state = outgoing_message_.newMessage().mutable_recording_state();
-    state->set_computer_name(computer.toStdString());
-    state->set_user_name(user.toStdString());
+    state->set_computer_name(computer_name.toStdString());
+    state->set_user_name(user_name.toStdString());
     state->set_started(started);
     sendMessage();
 }
@@ -345,7 +374,7 @@ void UserSession::onUserSessionEvent(quint32 status, quint32 session_id)
         case WTS_CONSOLE_DISCONNECT:
         {
             if (is_console_)
-                dettach(FROM_HERE);
+                dettach(FROM_HERE, DettachReason::CONSOLE_DISCONNECT);
         }
         break;
 
@@ -355,7 +384,7 @@ void UserSession::onUserSessionEvent(quint32 status, quint32 session_id)
                 return;
 
             is_console_ = true;
-            dettach(FROM_HERE);
+            dettach(FROM_HERE, DettachReason::REMOTE_DISCONNECT);
             attach(FROM_HERE, base::activeConsoleSessionId());
         }
         break;
@@ -435,7 +464,7 @@ void UserSession::onIpcNewConnection()
 //--------------------------------------------------------------------------------------------------
 void UserSession::onIpcDisconnected()
 {
-    dettach(FROM_HERE);
+    dettach(FROM_HERE, DettachReason::IPC_DISCONNECTED);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -547,14 +576,14 @@ void UserSession::attach(const base::Location& location, base::SessionId session
     if (session_id == base::kInvalidSessionId)
     {
         LOG(ERROR) << "An attempt was detected to start a process in a INVALID session";
-        dettach(FROM_HERE);
+        dettach(FROM_HERE, DettachReason::UNKNOWN_ERROR);
         return;
     }
 
     if (session_id == base::kServiceSessionId)
     {
         LOG(ERROR) << "An attempt was detected to start a process in a SERVICES session";
-        dettach(FROM_HERE);
+        dettach(FROM_HERE, DettachReason::UNKNOWN_ERROR);
         return;
     }
 
@@ -562,7 +591,7 @@ void UserSession::attach(const base::Location& location, base::SessionId session
     if (!session_info.isValid())
     {
         LOG(ERROR) << "Unable to get session info (sid" << session_id << ")";
-        dettach(FROM_HERE);
+        dettach(FROM_HERE, DettachReason::UNKNOWN_ERROR);
         return;
     }
 
@@ -577,21 +606,21 @@ void UserSession::attach(const base::Location& location, base::SessionId session
     if (!createLoggedOnUserToken(session_id, &user_token))
     {
         LOG(ERROR) << "Failed to get user token (sid" << session_id << ")";
-        dettach(FROM_HERE);
+        dettach(FROM_HERE, DettachReason::UNKNOWN_ERROR);
         return;
     }
 
     if (!user_token.isValid())
     {
         LOG(INFO) << "Console session is not active. Launching the GUI is not required";
-        dettach(FROM_HERE);
+        dettach(FROM_HERE, DettachReason::NOT_REQUIRED);
         return;
     }
 
     if (session_info.isUserLocked())
     {
         LOG(INFO) << "Console session is locked. Launching the GUI is not required";
-        dettach(FROM_HERE);
+        dettach(FROM_HERE, DettachReason::NOT_REQUIRED);
         return;
     }
 
@@ -604,7 +633,7 @@ void UserSession::attach(const base::Location& location, base::SessionId session
     {
         LOG(ERROR) << "Unable to start process with user token (sid" << session_id
                    << "cmd" << command_line << ")";
-        dettach(FROM_HERE);
+        dettach(FROM_HERE, DettachReason::UNKNOWN_ERROR);
         return;
     }
 #elif defined(Q_OS_LINUX)
@@ -613,7 +642,7 @@ void UserSession::attach(const base::Location& location, base::SessionId session
     if (it == std::filesystem::end(it))
     {
         LOG(ERROR) << "No X11 sessions";
-        dettach(FROM_HERE);
+        dettach(FROM_HERE, DettachReason::UNKNOWN_ERROR);
         return;
     }
 
@@ -621,7 +650,7 @@ void UserSession::attach(const base::Location& location, base::SessionId session
     if (!pipe)
     {
         LOG(ERROR) << "Unable to open pipe";
-        dettach(FROM_HERE);
+        dettach(FROM_HERE, DettachReason::UNKNOWN_ERROR);
         return;
     }
 
@@ -656,9 +685,9 @@ void UserSession::attach(const base::Location& location, base::SessionId session
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSession::dettach(const base::Location& location)
+void UserSession::dettach(const base::Location& location, DettachReason reason)
 {
-    LOG(INFO) << "Dettached from" << location;
+    LOG(INFO) << "Dettached from" << location << "reason:" << reason;
 
     if (ipc_channel_)
     {
@@ -668,21 +697,24 @@ void UserSession::dettach(const base::Location& location)
     }
 
 #if defined(Q_OS_WINDOWS)
-    base::SessionInfo session_info(session_id_);
-    if (session_info.isValid())
+    if (reason != DettachReason::SWITCH_SESSION)
     {
-        if (session_info.connectState() == base::SessionInfo::ConnectState::ACTIVE &&
-            !session_info.isUserLocked())
+        base::SessionInfo session_info(session_id_);
+        if (session_info.isValid())
         {
-            // The GUI process terminated while the user was in an active session.
-            // There may be the following reasons:
-            // 1. The user closed the application using the GUI.
-            // 2. The user killed the process.
-            // 3. The process has crashed.
-            // Start a timer, after which all connected clients will be disconnected.
+            if (session_info.connectState() == base::SessionInfo::ConnectState::ACTIVE &&
+                !session_info.isUserLocked())
+            {
+                // The GUI process terminated while the user was in an active session.
+                // There may be the following reasons:
+                // 1. The user closed the application using the GUI.
+                // 2. The user killed the process.
+                // 3. The process has crashed.
+                // Start a timer, after which all connected clients will be disconnected.
 
-            LOG(WARNING) << "GUI process terminated during an active user session";
-            dettach_timer_->start();
+                LOG(WARNING) << "GUI process terminated during an active user session";
+                dettach_timer_->start();
+            }
         }
     }
 #endif // defined(Q_OS_WINDOWS)

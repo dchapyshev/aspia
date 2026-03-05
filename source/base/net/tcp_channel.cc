@@ -98,7 +98,6 @@ TcpChannel::TcpChannel(Authenticator* authenticator, QObject* parent)
       resolver_(std::make_unique<asio::ip::tcp::resolver>(io_context_)),
       authenticator_(authenticator)
 {
-    LOG(INFO) << "Ctor";
     init();
 }
 
@@ -111,7 +110,6 @@ TcpChannel::TcpChannel(
       socket_(std::move(socket)),
       authenticator_(authenticator)
 {
-    LOG(INFO) << "Ctor";
     DCHECK(socket_.is_open());
     init();
     setConnected(true);
@@ -120,9 +118,7 @@ TcpChannel::TcpChannel(
 //--------------------------------------------------------------------------------------------------
 TcpChannel::~TcpChannel()
 {
-    LOG(INFO) << "Dtor (start)";
     disconnectFrom();
-    LOG(INFO) << "Dtor (end)";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -248,7 +244,6 @@ void TcpChannel::connectTo(const QString& address, quint16 port)
 //--------------------------------------------------------------------------------------------------
 void TcpChannel::pause()
 {
-    LOG(INFO) << "Channel is paused";
     paused_ = true;
 }
 
@@ -258,7 +253,6 @@ void TcpChannel::resume()
     if (!isConnected() || !paused_)
         return;
 
-    LOG(INFO) << "Channel is resumed";
     paused_ = false;
 
     switch (state_)
@@ -396,23 +390,19 @@ int TcpChannel::speedTx()
 //--------------------------------------------------------------------------------------------------
 void TcpChannel::disconnectFrom()
 {
-    LOG(INFO) << "Disconnect";
     setConnected(false);
 
     if (resolver_)
     {
-        LOG(INFO) << "Destroy resolver";
         resolver_->cancel();
         resolver_.reset();
     }
 
     if (socket_.is_open())
     {
-        LOG(INFO) << "Cancel async operations";
         std::error_code ignored_code;
         socket_.cancel(ignored_code);
 
-        LOG(INFO) << "Close socket";
         socket_.close(ignored_code);
     }
     else

@@ -53,7 +53,7 @@ signals:
     void sig_started();
     void sig_finished();
     void sig_switchSession(base::SessionId session_id);
-    void sig_recordingChanged(const QString& computer, const QString& user, bool started);
+    void sig_recordingChanged(bool started);
 
 private slots:
     void onIpcNewConnection();

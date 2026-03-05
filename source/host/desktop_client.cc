@@ -270,6 +270,8 @@ void DesktopClient::onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray
         }
         else if (message.has_switch_session())
         {
+            LOG(INFO) << "Received:" << message.switch_session();
+
             if (tcp_channel_->peerSessionType() != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
             {
                 LOG(ERROR) << "Switch session available only for desktop manage session type";
@@ -283,14 +285,13 @@ void DesktopClient::onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray
                 return;
             }
 
-            LOG(INFO) << "Switch session received:" << session_id;
             emit sig_switchSession(session_id);
         }
         else if (message.has_video_recording())
         {
             bool is_started =
                 message.video_recording().action() == proto::desktop::VideoRecording::ACTION_STARTED;
-            emit sig_recordingChanged(tcp_channel_->peerComputerName(), tcp_channel_->peerUserName(), is_started);
+            emit sig_recordingChanged(is_started);
         }
     }
     else
@@ -340,7 +341,11 @@ void DesktopClient::sendSessionList()
     proto::desktop::ServiceToClient message;
     proto::desktop::SessionList* session_list = message.mutable_session_list();
 
-    session_list->set_current_session_id(base::currentProcessSessionId());
+    base::SessionId session_id = 0;
+    if (ipc_channel_)
+        session_id = ipc_channel_->sessionId();
+
+    session_list->set_current_session_id(session_id);
 
     for (base::SessionEnumerator it; !it.isAtEnd(); it.advance())
     {
@@ -358,6 +363,7 @@ void DesktopClient::sendSessionList()
         session->set_is_active(it.isActive());
     }
 
+    LOG(INFO) << "Send:" << *session_list;
     tcp_channel_->send(proto::peer::CHANNEL_ID_SERVICE, base::serialize(message));
 #endif // defined(Q_OS_WINDOWS)
 }

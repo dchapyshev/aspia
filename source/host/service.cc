@@ -416,8 +416,10 @@ void Service::onDesktopManagerAttached()
     for (auto* client : std::as_const(clients_))
     {
         DesktopClient* desktop_client = dynamic_cast<DesktopClient*>(client);
-        if (!desktop_client || desktop_client->isAttached())
+        if (!desktop_client)
             continue;
+
+        desktop_client->dettach();
 
         QString ipc_channel_name = desktop_client->attach();
         desktop_manager_->startAgentClient(ipc_channel_name);
