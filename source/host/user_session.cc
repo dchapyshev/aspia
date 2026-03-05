@@ -380,10 +380,9 @@ void UserSession::onUserSessionEvent(quint32 status, quint32 session_id)
 
         case WTS_REMOTE_DISCONNECT:
         {
-            if (is_console_)
+            if (is_console_ || session_id_ != session_id)
                 return;
 
-            is_console_ = true;
             dettach(FROM_HERE, DettachReason::REMOTE_DISCONNECT);
             attach(FROM_HERE, base::activeConsoleSessionId());
         }
@@ -464,7 +463,25 @@ void UserSession::onIpcNewConnection()
 //--------------------------------------------------------------------------------------------------
 void UserSession::onIpcDisconnected()
 {
-    dettach(FROM_HERE, DettachReason::IPC_DISCONNECTED);
+#if defined(Q_OS_WINDOWS)
+    base::SessionInfo session_info(session_id_);
+    if (session_info.isValid())
+    {
+        if (session_info.connectState() == base::SessionInfo::ConnectState::ACTIVE &&
+            !session_info.isUserLocked())
+        {
+            // The GUI process terminated while the user was in an active session.
+            // There may be the following reasons:
+            // 1. The user closed the application using the GUI.
+            // 2. The user killed the process.
+            // 3. The process has crashed.
+            // Start a timer, after which all connected clients will be disconnected.
+
+            LOG(WARNING) << "GUI process terminated during an active user session";
+            dettach_timer_->start();
+        }
+    }
+#endif // defined(Q_OS_WINDOWS)
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -553,6 +570,7 @@ void UserSession::onIpcMessageReceived(quint32 /* ipc_channel_id */, const QByte
 void UserSession::onDettachTimeout()
 {
     LOG(INFO) << "Stop all clients";
+    dettach(FROM_HERE, DettachReason::IPC_DISCONNECTED);
     emit sig_stopClient(0);
 }
 
@@ -568,6 +586,7 @@ void UserSession::attach(const base::Location& location, base::SessionId session
     }
 
     state_ = State::ATTACHING;
+    is_console_ = session_id == base::activeConsoleSessionId();
     session_id_ = session_id;
     dettach_timer_->stop();
     attach_timer_->start();
@@ -696,30 +715,8 @@ void UserSession::dettach(const base::Location& location, DettachReason reason)
         ipc_channel_ = nullptr;
     }
 
-#if defined(Q_OS_WINDOWS)
-    if (reason != DettachReason::SWITCH_SESSION)
-    {
-        base::SessionInfo session_info(session_id_);
-        if (session_info.isValid())
-        {
-            if (session_info.connectState() == base::SessionInfo::ConnectState::ACTIVE &&
-                !session_info.isUserLocked())
-            {
-                // The GUI process terminated while the user was in an active session.
-                // There may be the following reasons:
-                // 1. The user closed the application using the GUI.
-                // 2. The user killed the process.
-                // 3. The process has crashed.
-                // Start a timer, after which all connected clients will be disconnected.
-
-                LOG(WARNING) << "GUI process terminated during an active user session";
-                dettach_timer_->start();
-            }
-        }
-    }
-#endif // defined(Q_OS_WINDOWS)
-
     session_id_ = base::kInvalidSessionId;
+    is_console_ = true;
     state_ = State::DETTACHED;
     emit sig_dettached();
 }

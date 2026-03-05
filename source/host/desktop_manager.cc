@@ -358,7 +358,7 @@ void DesktopManager::onUserSessionEvent(quint32 event_type, quint32 session_id)
 
         case WTS_REMOTE_DISCONNECT:
         {
-            if (is_console_)
+            if (is_console_ || session_id_ != session_id)
                 return;
 
             dettach(FROM_HERE);
