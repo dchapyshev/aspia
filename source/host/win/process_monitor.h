@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST_PROCESS_MONITOR_H
-#define HOST_PROCESS_MONITOR_H
+#ifndef HOST_WIN_PROCESS_MONITOR_H
+#define HOST_WIN_PROCESS_MONITOR_H
 
 #include <QByteArray>
 #include <QMap>
@@ -82,4 +82,4 @@ private:
 
 } // namespace host
 
-#endif // HOST_PROCESS_MONITOR_H
+#endif // HOST_WIN_PROCESS_MONITOR_H

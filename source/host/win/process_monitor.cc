@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/process_monitor.h"
+#include "host/win/process_monitor.h"
 
 #include <QSet>
 

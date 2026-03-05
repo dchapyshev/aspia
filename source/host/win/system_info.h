@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST_SYSTEM_INFO_H
-#define HOST_SYSTEM_INFO_H
+#ifndef HOST_WIN_SYSTEM_INFO_H
+#define HOST_WIN_SYSTEM_INFO_H
 
 #include "proto/system_info.h"
 
@@ -28,4 +28,4 @@ void createSystemInfo(const proto::system_info::SystemInfoRequest& request,
 
 } // namespace host
 
-#endif // HOST_SYSTEM_INFO_H
+#endif // HOST_WIN_SYSTEM_INFO_H

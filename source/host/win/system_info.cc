@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/system_info.h"
+#include "host/win/system_info.h"
 
 #include <QProcessEnvironment>
 #include <QStorageInfo>
@@ -44,7 +44,7 @@
 #include "base/win/user_group_enumerator.h"
 #include "base/win/video_adapter_enumerator.h"
 #include "common/system_info_constants.h"
-#include "host/process_monitor.h"
+#include "host/win/process_monitor.h"
 
 namespace host {
 

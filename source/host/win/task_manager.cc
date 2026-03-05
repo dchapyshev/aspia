@@ -16,14 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/task_manager.h"
+#include "host/win/task_manager.h"
 
 #include "base/logging.h"
 #include "base/win/service_enumerator.h"
 #include "base/win/service_controller.h"
 #include "base/win/session_enumerator.h"
 #include "base/win/session_info.h"
-#include "host/process_monitor.h"
+#include "host/win/process_monitor.h"
 
 namespace host {
 

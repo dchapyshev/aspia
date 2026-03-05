@@ -24,7 +24,7 @@
 #include "base/serialization.h"
 
 #if defined(Q_OS_WINDOWS)
-#include "host/system_info.h"
+#include "host/win/system_info.h"
 #endif // defined(Q_OS_WINDOWS)
 
 namespace host {

@@ -38,8 +38,8 @@
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/safe_mode_util.h"
-#include "host/system_info.h"
-#include "host/task_manager.h"
+#include "host/win/system_info.h"
+#include "host/win/task_manager.h"
 #include "host/win/updater_launcher.h"
 #endif // defined(Q_OS_WINDOWS)
 
@@ -137,9 +137,9 @@ void DesktopAgentClient::onScreenCaptureData(const base::Frame* frame, const bas
             screen_size->set_height(frame->size().height());
 
             LOG(INFO) << "Video packet has format ("
-                      << "capturer type:" << static_cast<base::ScreenCapturer::Type>(frame->capturerType())
-                      << "screen size:" << screen_size
-                      << "cideo size:" << format->video_rect() << ")";
+                      << "capturer:" << static_cast<base::ScreenCapturer::Type>(frame->capturerType())
+                      << "screen:" << *screen_size
+                      << "video:" << format->video_rect() << ")";
         }
     }
 

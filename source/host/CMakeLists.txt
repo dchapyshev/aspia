@@ -64,13 +64,7 @@ if (WIN32)
         input_injector_win.cc
         input_injector_win.h
         migration_utils.cc
-        migration_utils.h
-        process_monitor.cc
-        process_monitor.h
-        system_info.cc
-        system_info.h
-        task_manager.cc
-        task_manager.h)
+        migration_utils.h)
 endif()
 
 if (LINUX)
@@ -120,6 +114,12 @@ list(APPEND SOURCE_HOST_CORE_UI
 
 if (WIN32)
     list(APPEND SOURCE_HOST_CORE_WIN
+        win/process_monitor.cc
+        win/process_monitor.h
+        win/system_info.cc
+        win/system_info.h
+        win/task_manager.cc
+        win/task_manager.h
         win/touch_injector.cc
         win/touch_injector.h
         win/touch_injector_defines.h
