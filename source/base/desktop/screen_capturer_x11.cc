@@ -19,8 +19,8 @@
 #include "base/desktop/screen_capturer_x11.h"
 
 #include "base/logging.h"
+#include "base/desktop/frame_aligned.h"
 #include "base/desktop/mouse_cursor.h"
-#include "base/desktop/shared_memory_frame.h"
 #include "base/desktop/x11/x_error_trap.h"
 
 #include <dlfcn.h>
@@ -169,8 +169,8 @@ const Frame* ScreenCapturerX11::captureFrame(Error* error)
 
     if (!queue_.currentFrame())
     {
-        std::unique_ptr<Frame> frame = SharedMemoryFrame::create(
-            selected_monitor_rect_.size(), PixelFormat::ARGB(), sharedMemoryFactory());
+        std::unique_ptr<Frame> frame = FrameAligned::create(
+            selected_monitor_rect_.size(), PixelFormat::ARGB(), 32);
         if (!frame)
         {
             LOG(ERROR) << "Unable to create frame";
