@@ -20,13 +20,11 @@
 #define CLIENT_CLIENT_H
 
 #include <QObject>
-#include <QPointer>
 #include <QTimer>
 #include <QVariant>
 
-#include "client/client_config.h"
 #include "client/client_session_state.h"
-#include "client/router_controller.h"
+#include "client/router_manager.h"
 #include "base/net/tcp_channel.h"
 
 namespace client {
@@ -95,7 +93,7 @@ private slots:
     void onRouterConnected(const QVersionNumber& router_version);
     void onHostAwaiting();
     void onHostConnected();
-    void onRouterErrorOccurred(const client::RouterController::Error& error);
+    void onRouterErrorOccurred(const client::RouterManager::Error& error);
 
 private:
     void delayedReconnect();
@@ -103,8 +101,8 @@ private:
 
     QTimer* timeout_timer_ = nullptr;
     QTimer* reconnect_timer_ = nullptr;
-    QPointer<RouterController> router_controller_;
-    QPointer<base::TcpChannel> tcp_channel_;
+    RouterManager* router_controller_ = nullptr;
+    base::TcpChannel* tcp_channel_ = nullptr;
 
     std::shared_ptr<SessionState> session_state_;
 

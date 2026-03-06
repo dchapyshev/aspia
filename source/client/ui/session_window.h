@@ -22,7 +22,7 @@
 #include "base/net/tcp_channel.h"
 #include "client/client.h"
 #include "client/client_config.h"
-#include "client/router_controller.h"
+#include "client/router_manager.h"
 #include "client/client_session_state.h"
 
 #include <QWidget>
@@ -60,14 +60,14 @@ protected:
     void closeEvent(QCloseEvent* event) override;
 
 public slots:
-    void onStatusChanged(Client::Status status, const QVariant& data);
+    void onStatusChanged(client::Client::Status status, const QVariant& data);
 
 private:
     void setClientTitle(const Config& config);
     void onErrorOccurred(const QString& message);
 
     static QString netErrorToString(base::TcpChannel::ErrorCode error_code);
-    static QString routerErrorToString(RouterController::ErrorCode error_code);
+    static QString routerErrorToString(RouterManager::ErrorCode error_code);
 
     std::shared_ptr<SessionState> session_state_;
     common::StatusDialog* status_dialog_ = nullptr;

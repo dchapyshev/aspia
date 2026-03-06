@@ -155,23 +155,23 @@ void SessionWindow::onStatusChanged(Client::Status status, const QVariant& data)
 
         case Client::Status::ROUTER_ERROR:
         {
-            if (!data.canConvert<client::RouterController::Error>())
+            if (!data.canConvert<client::RouterManager::Error>())
             {
                 LOG(ERROR) << "Unable to convert error type";
                 return;
             }
 
-            RouterController::Error error = data.value<client::RouterController::Error>();
+            RouterManager::Error error = data.value<client::RouterManager::Error>();
             switch (error.type)
             {
-                case RouterController::ErrorType::NETWORK:
+                case RouterManager::ErrorType::NETWORK:
                 {
                     onErrorOccurred(tr("Network error when connecting to the router: %1")
                         .arg(netErrorToString(error.code.network)));
                 }
                 break;
 
-                case RouterController::ErrorType::ROUTER:
+                case RouterManager::ErrorType::ROUTER:
                     onErrorOccurred(routerErrorToString(error.code.router));
                     break;
 
@@ -361,25 +361,25 @@ QString SessionWindow::netErrorToString(base::TcpChannel::ErrorCode error_code)
 
 //--------------------------------------------------------------------------------------------------
 // static
-QString SessionWindow::routerErrorToString(RouterController::ErrorCode error_code)
+QString SessionWindow::routerErrorToString(RouterManager::ErrorCode error_code)
 {
     const char* message;
 
     switch (error_code)
     {
-        case RouterController::ErrorCode::PEER_NOT_FOUND:
+        case RouterManager::ErrorCode::PEER_NOT_FOUND:
             message = QT_TR_NOOP("The host with the specified ID is not online.");
             break;
 
-        case RouterController::ErrorCode::KEY_POOL_EMPTY:
+        case RouterManager::ErrorCode::KEY_POOL_EMPTY:
             message = QT_TR_NOOP("There are no relays available or the key pool is empty.");
             break;
 
-        case RouterController::ErrorCode::RELAY_ERROR:
+        case RouterManager::ErrorCode::RELAY_ERROR:
             message = QT_TR_NOOP("Failed to connect to the relay server.");
             break;
 
-        case RouterController::ErrorCode::ACCESS_DENIED:
+        case RouterManager::ErrorCode::ACCESS_DENIED:
             message = QT_TR_NOOP("Access is denied.");
             break;
 

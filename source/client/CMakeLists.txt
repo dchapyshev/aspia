@@ -49,8 +49,8 @@ list(APPEND SOURCE_CLIENT_CORE
     router_config.h
     router_config_storage.cc
     router_config_storage.h
-    router_controller.cc
-    router_controller.h
+    router_manager.cc
+    router_manager.h
     client_session_state.cc
     client_session_state.h)
 

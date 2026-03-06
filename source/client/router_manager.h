@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_ROUTER_CONTROLLER_H
-#define CLIENT_ROUTER_CONTROLLER_H
+#ifndef CLIENT_ROUTER_MANAGER_H
+#define CLIENT_ROUTER_MANAGER_H
 
 #include <QTimer>
 
@@ -28,7 +28,7 @@
 
 namespace client {
 
-class RouterController final : public QObject
+class RouterManager final : public QObject
 {
     Q_OBJECT
 
@@ -62,8 +62,8 @@ public:
         } code;
     };
 
-    explicit RouterController(const RouterConfig& router_config, QObject* parent = nullptr);
-    ~RouterController() final;
+    explicit RouterManager(const RouterConfig& router_config, QObject* parent = nullptr);
+    ~RouterManager() final;
 
     void connectTo(base::HostId host_id, base::Authenticator* authenticator, bool wait_for_host);
     base::TcpChannel* takeChannel();
@@ -72,7 +72,7 @@ signals:
     void sig_routerConnected(const QVersionNumber& version);
     void sig_hostAwaiting();
     void sig_hostConnected();
-    void sig_errorOccurred(const client::RouterController::Error& error);
+    void sig_errorOccurred(const client::RouterManager::Error& error);
 
 private slots:
     void onTcpReady();
@@ -85,9 +85,9 @@ private:
     void sendConnectionRequest();
     void waitForHost();
 
-    QPointer<base::TcpChannel> router_channel_ = nullptr;
+    base::TcpChannel* router_channel_ = nullptr;
     QTimer* status_request_timer_ = nullptr;
-    QPointer<base::RelayPeer> relay_peer_ = nullptr;
+    base::RelayPeer* relay_peer_ = nullptr;
     RouterConfig router_config_;
 
     base::HostId host_id_ = base::kInvalidHostId;
@@ -96,11 +96,11 @@ private:
     std::unique_ptr<base::Authenticator> host_authenticator_;
     base::TcpChannel* host_channel_ = nullptr;
 
-    Q_DISABLE_COPY_MOVE(RouterController)
+    Q_DISABLE_COPY_MOVE(RouterManager)
 };
 
 } // namespace client
 
-Q_DECLARE_METATYPE(client::RouterController::Error)
+Q_DECLARE_METATYPE(client::RouterManager::Error)
 
-#endif // CLIENT_ROUTER_CONTROLLER_H
+#endif // CLIENT_ROUTER_MANAGER_H

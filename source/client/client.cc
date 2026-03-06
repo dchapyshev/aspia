@@ -60,13 +60,17 @@ Client::Client(QObject* parent)
         if (tcp_channel_)
         {
             LOG(INFO) << "Destroy channel";
+            tcp_channel_->disconnect();
             tcp_channel_->deleteLater();
+            tcp_channel_ = nullptr;
         }
 
         if (router_controller_)
         {
             LOG(INFO) << "Destroy router controller";
+            router_controller_->disconnect();
             router_controller_->deleteLater();
+            router_controller_ = nullptr;
         }
     });
 
@@ -135,15 +139,15 @@ void Client::start()
             return;
         }
 
-        router_controller_ = new RouterController(*config.router_config, this);
+        router_controller_ = new RouterManager(*config.router_config, this);
 
-        connect(router_controller_, &RouterController::sig_routerConnected,
+        connect(router_controller_, &RouterManager::sig_routerConnected,
                 this, &Client::onRouterConnected);
-        connect(router_controller_, &RouterController::sig_hostAwaiting,
+        connect(router_controller_, &RouterManager::sig_hostAwaiting,
                 this, &Client::onHostAwaiting);
-        connect(router_controller_, &RouterController::sig_hostConnected,
+        connect(router_controller_, &RouterManager::sig_hostConnected,
                 this, &Client::onHostConnected);
-        connect(router_controller_, &RouterController::sig_errorOccurred,
+        connect(router_controller_, &RouterManager::sig_errorOccurred,
                 this, &Client::onRouterErrorOccurred);
 
         bool reconnecting = session_state_->isReconnecting();
@@ -275,32 +279,32 @@ void Client::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code)
     // Show an error to the user.
     emit sig_statusChanged(Status::HOST_DISCONNECTED, QVariant::fromValue(error_code));
 
-    if (session_state_->isAutoReconnect())
+    if (tcp_channel_)
     {
-        LOG(INFO) << "Reconnect to host enabled";
-        session_state_->setReconnecting(true);
+        tcp_channel_->disconnect();
+        tcp_channel_->deleteLater();
+        tcp_channel_ = nullptr;
+    }
 
-        timeout_timer_->start(std::chrono::minutes(5));
+    if (!session_state_->isAutoReconnect())
+        return;
 
-        // Delete old channel.
-        if (tcp_channel_)
-        {
-            LOG(INFO) << "Post task to destroy channel";
-            tcp_channel_->deleteLater();
-        }
+    LOG(INFO) << "Reconnect to host is enabled";
+    session_state_->setReconnecting(true);
 
-        if (session_state_->isConnectionByHostId())
-        {
-            // If you are using an ID connection, then start the connection immediately. The Router
-            // will notify you when the Host comes online again.
-            state_ = State::CREATED;
-            start();
-        }
-        else
-        {
-            emit sig_statusChanged(Status::WAIT_FOR_HOST);
-            delayedReconnect();
-        }
+    timeout_timer_->start(std::chrono::minutes(5));
+
+    if (session_state_->isConnectionByHostId())
+    {
+        // If you are using an ID connection, then start the connection immediately. The Router
+        // will notify you when the Host comes online again.
+        state_ = State::CREATED;
+        start();
+    }
+    else
+    {
+        emit sig_statusChanged(Status::WAIT_FOR_HOST);
+        delayedReconnect();
     }
 }
 
@@ -376,20 +380,24 @@ void Client::onHostConnected()
 
     // Router controller is no longer needed.
     LOG(INFO) << "Post task to destroy router controller";
+    router_controller_->disconnect();
     router_controller_->deleteLater();
+    router_controller_ = nullptr;
     is_connected_to_router_ = false;
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::onRouterErrorOccurred(const RouterController::Error& error)
+void Client::onRouterErrorOccurred(const RouterManager::Error& error)
 {
     emit sig_statusChanged(Status::ROUTER_ERROR, QVariant::fromValue(error));
 
     LOG(INFO) << "Post task to destroy router controller";
+    router_controller_->disconnect();
     router_controller_->deleteLater();
+    router_controller_ = nullptr;
     is_connected_to_router_ = false;
 
-    if (error.type == RouterController::ErrorType::NETWORK && session_state_->isReconnecting())
+    if (error.type == RouterManager::ErrorType::NETWORK && session_state_->isReconnecting())
     {
         emit sig_statusChanged(Status::WAIT_FOR_ROUTER);
         delayedReconnect();

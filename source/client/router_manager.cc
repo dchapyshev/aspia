@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/router_controller.h"
+#include "client/router_manager.h"
 
 #include "base/logging.h"
 #include "base/serialization.h"
@@ -27,12 +27,12 @@ namespace client {
 
 namespace {
 
-auto g_errorType = qRegisterMetaType<client::RouterController::Error>();
+auto g_errorType = qRegisterMetaType<client::RouterManager::Error>();
 
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-RouterController::RouterController(const RouterConfig& router_config, QObject* parent)
+RouterManager::RouterManager(const RouterConfig& router_config, QObject* parent)
     : QObject(parent),
       status_request_timer_(new QTimer(this)),
       router_config_(router_config)
@@ -43,7 +43,7 @@ RouterController::RouterController(const RouterConfig& router_config, QObject* p
 
     connect(status_request_timer_, &QTimer::timeout, this, [this]()
     {
-        LOG(INFO) << "Request host status from router (host_id=" << host_id_ << ")";
+        LOG(INFO) << "Request host status from router (host_id" << host_id_ << ")";
 
         proto::router::PeerToRouter message;
         message.mutable_check_host_status()->set_host_id(host_id_);
@@ -52,13 +52,13 @@ RouterController::RouterController(const RouterConfig& router_config, QObject* p
 }
 
 //--------------------------------------------------------------------------------------------------
-RouterController::~RouterController()
+RouterManager::~RouterManager()
 {
     LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterController::connectTo(
+void RouterManager::connectTo(
     base::HostId host_id, base::Authenticator* authenticator, bool wait_for_host)
 {
     host_id_ = host_id;
@@ -67,7 +67,7 @@ void RouterController::connectTo(
 
     DCHECK_NE(host_id_, base::kInvalidHostId);
 
-    LOG(INFO) << "Connecting to router... (host_id=" << host_id_ << "wait_for_host="
+    LOG(INFO) << "Connecting to router... (host_id" << host_id_ << "wait_for_host"
               << wait_for_host_ << ")";
 
     base::ClientAuthenticator* router_authenticator = new base::ClientAuthenticator();
@@ -79,17 +79,17 @@ void RouterController::connectTo(
     router_channel_ = new base::TcpChannel(router_authenticator, this);
 
     connect(router_channel_, &base::TcpChannel::sig_authenticated,
-            this, &RouterController::onTcpReady);
+            this, &RouterManager::onTcpReady);
     connect(router_channel_, &base::TcpChannel::sig_errorOccurred,
-            this, &RouterController::onTcpErrorOccurred);
+            this, &RouterManager::onTcpErrorOccurred);
     connect(router_channel_, &base::TcpChannel::sig_messageReceived,
-            this, &RouterController::onTcpMessageReceived);
+            this, &RouterManager::onTcpMessageReceived);
 
     router_channel_->connectTo(router_config_.address, router_config_.port);
 }
 
 //--------------------------------------------------------------------------------------------------
-base::TcpChannel* RouterController::takeChannel()
+base::TcpChannel* RouterManager::takeChannel()
 {
     if (!host_channel_)
         return nullptr;
@@ -103,13 +103,13 @@ base::TcpChannel* RouterController::takeChannel()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterController::onTcpReady()
+void RouterManager::onTcpReady()
 {
     LOG(INFO) << "Connection to the router is established";
 
     emit sig_routerConnected(router_channel_->peerVersion());
 
-    LOG(INFO) << "Sending connection request (host_id:" << host_id_ << ")";
+    LOG(INFO) << "Sending connection request (host_id" << host_id_ << ")";
 
     // Now the session will receive incoming messages.
     router_channel_->resume();
@@ -117,9 +117,9 @@ void RouterController::onTcpReady()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterController::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code)
+void RouterManager::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code)
 {
-    LOG(INFO) << "Connection to the router is lost (" << error_code << ")";
+    LOG(INFO) << "Connection to the router is lost:" << error_code;
 
     Error error;
     error.type = ErrorType::NETWORK;
@@ -129,7 +129,7 @@ void RouterController::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterController::onTcpMessageReceived(quint8 /* channel_id */, const QByteArray& buffer)
+void RouterManager::onTcpMessageReceived(quint8 /* channel_id */, const QByteArray& buffer)
 {
     Error error;
     error.type = ErrorType::ROUTER;
@@ -191,9 +191,9 @@ void RouterController::onTcpMessageReceived(quint8 /* channel_id */, const QByte
             relay_peer_ = new base::RelayPeer(host_authenticator_.release(), this);
 
             connect(relay_peer_, &base::RelayPeer::sig_connectionError,
-                    this, &RouterController::onRelayConnectionError);
+                    this, &RouterManager::onRelayConnectionError);
             connect(relay_peer_, &base::RelayPeer::sig_connectionReady,
-                    this, &RouterController::onRelayConnectionReady);
+                    this, &RouterManager::onRelayConnectionReady);
 
             relay_peer_->start(connection_offer);
         }
@@ -219,7 +219,7 @@ void RouterController::onTcpMessageReceived(quint8 /* channel_id */, const QByte
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterController::onRelayConnectionReady()
+void RouterManager::onRelayConnectionReady()
 {
     LOG(INFO) << "Relay connection ready";
 
@@ -233,11 +233,14 @@ void RouterController::onRelayConnectionReady()
     host_channel_->setParent(this);
 
     emit sig_hostConnected();
+
+    relay_peer_->disconnect();
     relay_peer_->deleteLater();
+    relay_peer_ = nullptr;
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterController::onRelayConnectionError()
+void RouterManager::onRelayConnectionError()
 {
     LOG(INFO) << "Relay connection error";
 
@@ -246,13 +249,16 @@ void RouterController::onRelayConnectionError()
     error.code.router = ErrorCode::RELAY_ERROR;
 
     emit sig_errorOccurred(error);
+
+    relay_peer_->disconnect();
     relay_peer_->deleteLater();
+    relay_peer_ = nullptr;
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterController::sendConnectionRequest()
+void RouterManager::sendConnectionRequest()
 {
-    LOG(INFO) << "Sending connection request (host_id=" << host_id_ << ")";
+    LOG(INFO) << "Sending connection request (host_id" << host_id_ << ")";
 
     proto::router::PeerToRouter message;
     message.mutable_connection_request()->set_host_id(host_id_);
@@ -260,7 +266,7 @@ void RouterController::sendConnectionRequest()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterController::waitForHost()
+void RouterManager::waitForHost()
 {
     LOG(INFO) << "Wait for host";
     emit sig_hostAwaiting();
