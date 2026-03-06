@@ -18,6 +18,8 @@
 
 #include "base/license_reader.h"
 
+#include "base/logging.h"
+
 #if defined(Q_OS_WINDOWS)
 #include "base/win/registry.h"
 #include "base/win/windows_version.h"
