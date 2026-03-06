@@ -65,12 +65,13 @@ public:
     proto::desktop::Overflow::State overflowState() const { return overflow_state_; }
     const Config& config() const { return config_; }
 
-    void onScreenCaptureData(const base::Frame* frame, const base::MouseCursor* cursor);
+    void onScreenCaptureData(const base::Frame* frame);
     void onScreenCaptureError(proto::desktop::VideoErrorCode error_code);
     void onScreenListChanged(const base::ScreenCapturer::ScreenList& list, base::ScreenCapturer::ScreenId current);
     void onScreenTypeChanged(base::ScreenCapturer::ScreenType type, const QString& name);
     void onCursorPositionChanged(const QPoint& cursor_position);
     void onClipboardEvent(const proto::desktop::ClipboardEvent& event);
+    void onCursorCaptureData(const base::MouseCursor* cursor);
     void onAudioCaptureData(const proto::desktop::AudioPacket& audio_packet);
 
 public slots:

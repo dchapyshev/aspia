@@ -22,12 +22,14 @@
 #include <QObject>
 
 #include "base/desktop/capture_scheduler.h"
+#include "base/desktop/power_save_blocker.h"
 #include "base/desktop/screen_capturer.h"
 
 namespace base {
 class AudioCapturerWrapper;
+class DesktopEnvironment;
+class DesktopResizer;
 class IpcChannel;
-class ScreenCapturerWrapper;
 } // namespace base
 
 namespace common {
@@ -59,6 +61,11 @@ public:
 
     void start(const QString& ipc_channel_name);
 
+signals:
+    void sig_screenListChanged(
+        const base::ScreenCapturer::ScreenList& list, base::ScreenCapturer::ScreenId current);
+    void sig_screenTypeChanged(base::ScreenCapturer::ScreenType type, const QString& name);
+
 private slots:
     void onIpcConnected();
     void onIpcDisconnected();
@@ -73,30 +80,44 @@ private slots:
     void onInjectTextEvent(const proto::desktop::TextEvent& event);
     void onInjectTouchEvent(const proto::desktop::TouchEvent& event);
 
+    void onSelectScreen(base::ScreenCapturer::ScreenId screen_id, const QSize& resolution);
+
     void onCaptureScreen();
     void onOverflowCheck();
 
 private:
     void startClient(const QString& ipc_channel_name);
+    void selectCapturer(base::ScreenCapturer::Error last_error);
+    base::ScreenCapturer::ScreenId defaultScreen();
 
     // Control channel between service and agent.
     base::IpcChannel* ipc_channel_ = nullptr;
 
     QList<DesktopAgentClient*> clients_;
 
+    base::PowerSaveBlocker power_save_blocker_;
     common::ClipboardMonitor* clipboard_ = nullptr;
     InputInjector* input_injector_ = nullptr;
-    base::ScreenCapturerWrapper* screen_capturer_ = nullptr;
+    base::ScreenCapturer* screen_capturer_ = nullptr;
     base::AudioCapturerWrapper* audio_capturer_ = nullptr;
+    base::DesktopEnvironment* desktop_environment_ = nullptr;
+    std::unique_ptr<base::DesktopResizer> screen_resizer_;
 
-    QTimer* screen_capture_timer_ = nullptr;
-    base::CaptureScheduler screen_capture_scheduler_;
+    base::ScreenCapturer::Type preferred_capturer_  = base::ScreenCapturer::Type::DEFAULT;
+    base::ScreenCapturer::ScreenId last_screen_id_ = base::ScreenCapturer::kInvalidScreenId;
+
+    int screen_count_ = 0;
+    QPoint last_cursor_pos_;
+
+    QTimer* capture_timer_ = nullptr;
+    base::CaptureScheduler capture_scheduler_;
 
     bool is_paused_ = false;
     bool is_mouse_locked_ = false;
     bool is_keyboard_locked_ = false;
-    bool lock_at_disconnect_ = false;
-    bool clear_clipboard_ = false;
+    bool is_cursor_position_ = false;
+    bool is_lock_at_disconnect_ = false;
+    bool is_clear_clipboard_ = false;
 
     QTimer* overflow_timer_ = nullptr;
 

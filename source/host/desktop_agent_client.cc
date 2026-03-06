@@ -65,100 +65,82 @@ DesktopAgentClient::~DesktopAgentClient()
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::onScreenCaptureData(const base::Frame* frame, const base::MouseCursor* cursor)
+void DesktopAgentClient::onScreenCaptureData(const base::Frame* frame)
 {
     if (is_video_paused_ || !video_encoder_ || !frame)
         return;
 
+    if (frame->constUpdatedRegion().isEmpty() && frame_count_ > 0)
+        return;
+
+    ++frame_count_;
+
+    if (source_size_ != frame->size())
+    {
+        // Every time we change the resolution, we have to reset the preferred size.
+        source_size_ = frame->size();
+        preferred_size_ = QSize(0, 0);
+        forced_size_ = QSize(0, 0);
+    }
+
+    QSize current_size = preferred_size_;
+
+    // If the preferred size is larger than the original, then we use the original size.
+    if (current_size.width() > source_size_.width() || current_size.height() > source_size_.height())
+    {
+        current_size = source_size_;
+    }
+
+    // If we don't have a preferred size, then we use the original frame size.
+    if (current_size.isEmpty())
+        current_size = source_size_;
+
+    if (!forced_size_.isEmpty())
+    {
+        int forced = forced_size_.width() * forced_size_.height();
+        int current = current_size.width() * current_size.height();
+
+        if (forced < current)
+            current_size = forced_size_;
+    }
+
+    const base::Frame* scaled_frame = scale_reducer_->scaleFrame(frame, current_size);
+    if (!scaled_frame)
+    {
+        LOG(ERROR) << "No scaled frame";
+        return;
+    }
+
     proto::desktop::SessionToClient& message = outgoing_message_.newMessage();
+    proto::desktop::VideoPacket* packet = message.mutable_video_packet();
 
-    if (!frame->constUpdatedRegion().isEmpty() || !frame_count_)
+    // Encode the frame into a video packet.
+    if (!video_encoder_->encode(scaled_frame, packet))
     {
-        DCHECK(scale_reducer_);
-
-        ++frame_count_;
-
-        if (source_size_ != frame->size())
-        {
-            // Every time we change the resolution, we have to reset the preferred size.
-            source_size_ = frame->size();
-            preferred_size_ = QSize(0, 0);
-            forced_size_ = QSize(0, 0);
-        }
-
-        QSize current_size = preferred_size_;
-
-        // If the preferred size is larger than the original, then we use the original size.
-        if (current_size.width() > source_size_.width() ||
-            current_size.height() > source_size_.height())
-        {
-            current_size = source_size_;
-        }
-
-        // If we don't have a preferred size, then we use the original frame size.
-        if (current_size.isEmpty())
-            current_size = source_size_;
-
-        if (!forced_size_.isEmpty())
-        {
-            int forced = forced_size_.width() * forced_size_.height();
-            int current = current_size.width() * current_size.height();
-
-            if (forced < current)
-                current_size = forced_size_;
-        }
-
-        const base::Frame* scaled_frame = scale_reducer_->scaleFrame(frame, current_size);
-        if (!scaled_frame)
-        {
-            LOG(ERROR) << "No scaled frame";
-            return;
-        }
-
-        proto::desktop::VideoPacket* packet = message.mutable_video_packet();
-
-        // Encode the frame into a video packet.
-        if (!video_encoder_->encode(scaled_frame, packet))
-        {
-            LOG(ERROR) << "Unable to encode video packet";
-            return;
-        }
-
-        if (packet->has_format())
-        {
-            proto::desktop::VideoPacketFormat* format = packet->mutable_format();
-
-            // In video packets that contain the format, we pass the screen capture type.
-            format->set_capturer_type(frame->capturerType());
-
-            // Real screen size.
-            proto::desktop::Size* screen_size = format->mutable_screen_size();
-            screen_size->set_width(frame->size().width());
-            screen_size->set_height(frame->size().height());
-
-            LOG(INFO) << "Video packet has format ("
-                      << "capturer:" << static_cast<base::ScreenCapturer::Type>(frame->capturerType())
-                      << "screen:" << *screen_size
-                      << "video:" << format->video_rect() << ")";
-        }
+        LOG(ERROR) << "Unable to encode video packet";
+        return;
     }
 
-    if (cursor && cursor_encoder_)
+    if (packet->has_format())
     {
-        if (!cursor_encoder_->encode(*cursor, message.mutable_cursor_shape()))
-            message.clear_cursor_shape();
+        proto::desktop::VideoPacketFormat* format = packet->mutable_format();
+
+        // In video packets that contain the format, we pass the screen capture type.
+        format->set_capturer_type(frame->capturerType());
+
+        // Real screen size.
+        proto::desktop::Size* screen_size = format->mutable_screen_size();
+        screen_size->set_width(frame->size().width());
+        screen_size->set_height(frame->size().height());
+
+        LOG(INFO) << "Video packet has format ("
+                  << "capturer:" << static_cast<base::ScreenCapturer::Type>(frame->capturerType())
+                  << "screen:" << *screen_size
+                  << "video:" << format->video_rect() << ")";
     }
 
-    if (message.has_video_packet() || message.has_cursor_shape())
-    {
-        sendSessionMessage();
-
-        if (message.has_video_packet())
-        {
-            video_encoder_->setEncodeBuffer(
-                std::move(*message.mutable_video_packet()->mutable_data()));
-        }
-    }
+    sendSessionMessage();
+    video_encoder_->setEncodeBuffer(std::move(*message.mutable_video_packet()->mutable_data()));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -277,6 +259,20 @@ void DesktopAgentClient::onClipboardEvent(const proto::desktop::ClipboardEvent& 
         return;
 
     outgoing_message_.newMessage().mutable_clipboard_event()->CopyFrom(event);
+    sendSessionMessage();
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopAgentClient::onCursorCaptureData(const base::MouseCursor* cursor)
+{
+    if (!cursor || !cursor_encoder_)
+        return;
+
+    proto::desktop::SessionToClient& message = outgoing_message_.newMessage();
+
+    if (!cursor_encoder_->encode(*cursor, message.mutable_cursor_shape()))
+        return;
+
     sendSessionMessage();
 }
 
