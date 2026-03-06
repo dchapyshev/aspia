@@ -29,15 +29,14 @@ namespace base {
 
 #if defined(Q_OS_WINDOWS)
 using SessionId = unsigned long;
-extern const SessionId kServiceSessionId;
 #elif defined(Q_OS_UNIX)
 using SessionId = pid_t;
-extern const SessionId kInvalidSessionId;
 #else // defined(Q_OS_*)
 #error Not implemented
 #endif
 
 extern const SessionId kInvalidSessionId;
+extern const SessionId kServiceSessionId;
 
 SessionId activeConsoleSessionId();
 SessionId currentProcessSessionId();

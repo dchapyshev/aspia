@@ -47,11 +47,8 @@ bool createLoggedOnUserToken(DWORD session_id, base::ScopedHandle* token_out)
     TOKEN_ELEVATION_TYPE elevation_type;
     DWORD returned_length;
 
-    if (!GetTokenInformation(user_token,
-                             TokenElevationType,
-                             &elevation_type,
-                             sizeof(elevation_type),
-                             &returned_length))
+    if (!GetTokenInformation(user_token, TokenElevationType, &elevation_type, sizeof(elevation_type),
+        &returned_length))
     {
         PLOG(ERROR) << "GetTokenInformation failed";
         return false;
@@ -65,11 +62,8 @@ bool createLoggedOnUserToken(DWORD session_id, base::ScopedHandle* token_out)
             TOKEN_LINKED_TOKEN linked_token_info;
 
             // Get the unfiltered token for a silent UAC bypass.
-            if (!GetTokenInformation(user_token,
-                                     TokenLinkedToken,
-                                     &linked_token_info,
-                                     sizeof(linked_token_info),
-                                     &returned_length))
+            if (!GetTokenInformation(user_token, TokenLinkedToken, &linked_token_info,
+                sizeof(linked_token_info), &returned_length))
             {
                 PLOG(ERROR) << "GetTokenInformation failed";
                 return false;
@@ -110,17 +104,9 @@ bool createProcessWithToken(HANDLE token, const QString& command_line)
     PROCESS_INFORMATION process_info;
     memset(&process_info, 0, sizeof(process_info));
 
-    if (!CreateProcessAsUserW(token,
-                              nullptr,
-                              const_cast<wchar_t*>(qUtf16Printable(command_line)),
-                              nullptr,
-                              nullptr,
-                              FALSE,
-                              CREATE_UNICODE_ENVIRONMENT,
-                              environment,
-                              nullptr,
-                              &startup_info,
-                              &process_info))
+    if (!CreateProcessAsUserW(token, nullptr, const_cast<wchar_t*>(qUtf16Printable(command_line)),
+        nullptr, nullptr, FALSE, CREATE_UNICODE_ENVIRONMENT, environment, nullptr, &startup_info,
+        &process_info))
     {
         PLOG(ERROR) << "CreateProcessAsUserW failed";
         DestroyEnvironmentBlock(environment);
@@ -130,11 +116,7 @@ bool createProcessWithToken(HANDLE token, const QString& command_line)
     base::ScopedHandle thread_deleter(process_info.hThread);
     base::ScopedHandle process_deleter(process_info.hProcess);
 
-    if (!DestroyEnvironmentBlock(environment))
-    {
-        PLOG(ERROR) << "DestroyEnvironmentBlock failed";
-    }
-
+    DestroyEnvironmentBlock(environment);
     return true;
 }
 

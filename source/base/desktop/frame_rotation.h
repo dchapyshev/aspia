@@ -32,13 +32,11 @@ enum class Rotation
     CLOCK_WISE_270 = 270,
 };
 
-// Rotates input Frame |source|, copies pixel in an unrotated rectangle
-// |source_rect| into the target rectangle of another Frame |target|.
-// Target rectangle here is the rotated |source_rect| plus |target_offset|.
-// |rotation| specifies |source| to |target| rotation. |source_rect| is in
-// |source| coordinate. |target_offset| is in |target| coordinate.
-// This function triggers check failure if |source| does not cover the
-// |source_rect|, or |target| does not cover the rotated |rect|.
+// Rotates input Frame |source|, copies pixel in an unrotated rectangle |source_rect| into the
+// target rectangle of another Frame |target|. Target rectangle here is the rotated |source_rect|
+// plus |target_offset|. |rotation| specifies |source| to |target| rotation. |source_rect| is in
+// |source| coordinate. |target_offset| is in |target| coordinate. This function triggers check
+// failure if |source| does not cover the |source_rect|, or |target| does not cover the rotated |rect|.
 void rotateFrame(const Frame& source, const QRect& source_rect, const Rotation& rotation,
     const QPoint& target_offset, Frame* target);
 
@@ -48,8 +46,7 @@ Rotation reverseRotation(Rotation rotation);
 // Returns a rotated Size of |size|.
 QSize rotateSize(const QSize& size, Rotation rotation);
 
-// Returns a rotated Rect of |rect|. The |size| represents the size of the Frame which |rect|
-// belongs in.
+// Returns a rotated Rect of |rect|. The |size| represents the size of the Frame which |rect| belongs in.
 QRect rotateRect(const QRect& rect, const QSize& size, Rotation rotation);
 
 } // namespace base

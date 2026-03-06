@@ -38,6 +38,7 @@ static_assert(kInvalidSessionId == std::numeric_limits<DWORD>::max());
 
 #if defined(Q_OS_UNIX)
 const SessionId kInvalidSessionId = -1;
+const SessionId kServiceSessionId = 0;
 #endif // defined(Q_OS_UNIX)
 
 //--------------------------------------------------------------------------------------------------
