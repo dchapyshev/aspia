@@ -21,11 +21,10 @@
 
 #include <QCoreApplication>
 
-#include "base/thread.h"
-
 namespace base {
 
 class MessageWindow;
+class Thread;
 
 class Application final : public QCoreApplication
 {
@@ -44,7 +43,7 @@ signals:
 
 private:
 #if defined(Q_OS_WINDOWS)
-    base::Thread ui_thread_;
+    std::unique_ptr<base::Thread> ui_thread_;
     std::unique_ptr<base::MessageWindow> message_window_;
     bool is_service_ = false;
 #endif // defined(Q_OS_WINDOWS)

@@ -58,8 +58,7 @@ StatusDialog::~StatusDialog()
 //--------------------------------------------------------------------------------------------------
 void StatusDialog::addMessage(const QString& message)
 {
-    ui->edit_status->appendPlainText(
-        QTime::currentTime().toString() + ' ' + message);
+    ui->edit_status->appendPlainText(QTime::currentTime().toString() + ' ' + message);
 }
 
 //--------------------------------------------------------------------------------------------------

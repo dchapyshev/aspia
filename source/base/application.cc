@@ -24,6 +24,7 @@
 #include <qt_windows.h>
 #include <wtsapi32.h>
 #include "base/session_id.h"
+#include "base/thread.h"
 #include "base/win/message_window.h"
 #endif // defined(Q_OS_WINDOWS)
 
@@ -31,12 +32,11 @@ namespace base {
 
 //--------------------------------------------------------------------------------------------------
 Application::Application(int& argc, char* argv[])
-    : QCoreApplication(argc, argv),
-#if defined(Q_OS_WINDOWS)
-      ui_thread_(base::Thread::QtDispatcher)
-#endif // defined(Q_OS_WINDOWS)
+    : QCoreApplication(argc, argv)
 {
 #if defined(Q_OS_WINDOWS)
+    ui_thread_ = std::make_unique<Thread>(base::Thread::QtDispatcher);
+
     auto on_window_message =
         [this](UINT message, WPARAM wparam, LPARAM lparam, LRESULT& result) -> bool
     {
@@ -96,7 +96,7 @@ Application::Application(int& argc, char* argv[])
 
     is_service_ = base::currentProcessSessionId() == 0;
 
-    connect(&ui_thread_, &base::Thread::sig_beforeRunning, this, [this, on_window_message]()
+    connect(ui_thread_.get(), &base::Thread::sig_beforeRunning, this, [this, on_window_message]()
     {
         LOG(INFO) << "UI thread starting";
 
@@ -121,7 +121,7 @@ Application::Application(int& argc, char* argv[])
     },
     Qt::DirectConnection);
 
-    connect(&ui_thread_, &base::Thread::sig_afterRunning, this, [this]()
+    connect(ui_thread_.get(), &base::Thread::sig_afterRunning, this, [this]()
     {
         LOG(INFO) << "UI thread stopping";
 
@@ -132,7 +132,7 @@ Application::Application(int& argc, char* argv[])
     },
     Qt::DirectConnection);
 
-    ui_thread_.start();
+    ui_thread_->start();
 #endif // defined(Q_OS_WINDOWS)
 }
 
@@ -140,10 +140,6 @@ Application::Application(int& argc, char* argv[])
 Application::~Application()
 {
     LOG(INFO) << "Dtor";
-
-#if defined(Q_OS_WINDOWS)
-    ui_thread_.stop();
-#endif // defined(Q_OS_WINDOWS)
 }
 
 //--------------------------------------------------------------------------------------------------

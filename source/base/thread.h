@@ -31,6 +31,7 @@ public:
     enum EventDispatcher { AsioDispatcher, QtDispatcher };
 
     explicit Thread(EventDispatcher dispatcher, QObject* parent = nullptr);
+    ~Thread() final;
 
     void stop();
 
