@@ -56,11 +56,10 @@ quint32 makeInstanceId()
 }
 
 //--------------------------------------------------------------------------------------------------
-SessionId clientSessionId(HANDLE pipe_handle)
+SessionId clientSessionId(Qt::HANDLE pipe_handle)
 {
 #if defined(Q_OS_WINDOWS)
     ULONG session_id = kInvalidSessionId;
-
     if (!GetNamedPipeClientSessionId(pipe_handle, &session_id))
     {
         PLOG(ERROR) << "GetNamedPipeClientSessionId failed";
@@ -74,11 +73,10 @@ SessionId clientSessionId(HANDLE pipe_handle)
 }
 
 //--------------------------------------------------------------------------------------------------
-SessionId serverSessionId(HANDLE pipe_handle)
+SessionId serverSessionId(Qt::HANDLE pipe_handle)
 {
 #if defined(Q_OS_WINDOWS)
     ULONG session_id = kInvalidSessionId;
-
     if (!GetNamedPipeServerSessionId(pipe_handle, &session_id))
     {
         PLOG(ERROR) << "GetNamedPipeServerSessionId failed";
