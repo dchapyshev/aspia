@@ -664,7 +664,7 @@ void DesktopAgent::selectCapturer(base::ScreenCapturer::Error last_error)
 #if defined(Q_OS_WINDOWS)
     screen_capturer_ = base::ScreenCapturerWin::create(preferred_capturer_, last_error, this);
 #elif defined(Q_OS_LINUX)
-    screen_capturer_ = ScreenCapturerX11::create(this);
+    screen_capturer_ = base::ScreenCapturerX11::create(this);
     if (!screen_capturer_)
     {
         LOG(ERROR) << "Unable to create X11 screen capturer";
