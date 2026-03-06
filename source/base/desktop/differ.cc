@@ -64,11 +64,6 @@ Differ::Differ(const QSize& size)
       full_blocks_x_(size.width() / kBlockSize),
       full_blocks_y_(size.height() / kBlockSize)
 {
-    LOG(INFO) << "Screen size:" << size;
-    LOG(INFO) << "Bytes per row:" << bytes_per_row_;
-    LOG(INFO) << "Diff size:" << diff_width_ << "x" << diff_height_;
-    LOG(INFO) << "Full blocks:" << full_blocks_x_ << "x" << full_blocks_y_;
-
     const size_t diff_info_size = static_cast<size_t>(diff_width_ * diff_height_);
 
     diff_info_ = std::make_unique<quint8[]>(diff_info_size);
@@ -78,13 +73,8 @@ Differ::Differ(const QSize& size)
     partial_column_width_ = size.width() - (full_blocks_x_ * kBlockSize);
     partial_row_height_ = size.height() - (full_blocks_y_ * kBlockSize);
 
-    LOG(INFO) << "Partial column:" << partial_column_width_;
-    LOG(INFO) << "Partial row:" << partial_row_height_;
-
     // Offset from the start of one block-row to the next.
     block_stride_y_ = bytes_per_row_ * kBlockSize;
-
-    LOG(INFO) << "Block stride:" << block_stride_y_;
 
     diff_full_block_func_ = diffFunction();
     CHECK(diff_full_block_func_);
