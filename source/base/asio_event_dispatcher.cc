@@ -244,10 +244,6 @@ void AsioEventDispatcher::registerTimer(
         // force it to be coarse.
         type = Qt::CoarseTimer;
     }
-    else if (interval_ms >= 20000)
-    {
-        type = Qt::VeryCoarseTimer;
-    }
 
     if (type == Qt::PreciseTimer)
     {
