@@ -405,10 +405,8 @@ void TcpChannel::disconnectFrom()
 
         socket_.close(ignored_code);
     }
-    else
-    {
-        LOG(INFO) << "Socket already closed";
-    }
+
+    keep_alive_timer_->stop();
 }
 
 //--------------------------------------------------------------------------------------------------

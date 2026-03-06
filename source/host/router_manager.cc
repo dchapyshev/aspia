@@ -162,6 +162,14 @@ void RouterManager::onTcpReady()
 void RouterManager::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code)
 {
     LOG(INFO) << "Connection to the router is lost:" << error_code;
+
+    if (tcp_channel_)
+    {
+        tcp_channel_->disconnect();
+        tcp_channel_->deleteLater();
+        tcp_channel_ = nullptr;
+    }
+
     routerStateChanged(proto::user::RouterState::FAILED);
     delayedConnectToRouter();
 }
@@ -268,6 +276,12 @@ void RouterManager::onNewPeerConnected()
 void RouterManager::connectToRouter()
 {
     LOG(INFO) << "Connecting to router...";
+
+    if (tcp_channel_)
+    {
+        LOG(ERROR) << "TCP channel is already connected";
+        return;
+    }
 
     routerStateChanged(proto::user::RouterState::CONNECTING);
 
