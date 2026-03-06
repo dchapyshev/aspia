@@ -96,7 +96,7 @@ Application::Application(int& argc, char* argv[])
 
     is_service_ = base::currentProcessSessionId() == 0;
 
-    connect(&ui_thread_, &base::Thread::started, this, [this, on_window_message]()
+    connect(&ui_thread_, &base::Thread::sig_beforeRunning, this, [this, on_window_message]()
     {
         LOG(INFO) << "UI thread starting";
 
@@ -121,7 +121,7 @@ Application::Application(int& argc, char* argv[])
     },
     Qt::DirectConnection);
 
-    connect(&ui_thread_, &base::Thread::finished, this, [this]()
+    connect(&ui_thread_, &base::Thread::sig_afterRunning, this, [this]()
     {
         LOG(INFO) << "UI thread stopping";
 

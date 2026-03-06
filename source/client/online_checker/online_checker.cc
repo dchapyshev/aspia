@@ -30,9 +30,9 @@ OnlineChecker::OnlineChecker(QObject* parent)
 {
     LOG(INFO) << "Ctor";
 
-    connect(&io_thread_, &base::Thread::started, this, &OnlineChecker::onBeforeThreadRunning,
+    connect(&io_thread_, &base::Thread::sig_beforeRunning, this, &OnlineChecker::onBeforeThreadRunning,
             Qt::DirectConnection);
-    connect(&io_thread_, &base::Thread::finished, this, &OnlineChecker::onAfterThreadRunning,
+    connect(&io_thread_, &base::Thread::sig_afterRunning, this, &OnlineChecker::onAfterThreadRunning,
             Qt::DirectConnection);
 }
 

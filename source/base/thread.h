@@ -25,12 +25,18 @@ namespace base {
 
 class Thread final : public QThread
 {
+    Q_OBJECT
+
 public:
     enum EventDispatcher { AsioDispatcher, QtDispatcher };
 
-    Thread(EventDispatcher dispatcher, QObject* parent = nullptr);
+    explicit Thread(EventDispatcher dispatcher, QObject* parent = nullptr);
 
     void stop();
+
+signals:
+    void sig_beforeRunning();
+    void sig_afterRunning();
 
 protected:
     // QThread implementation.

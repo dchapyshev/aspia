@@ -42,9 +42,9 @@ SessionsWorker::SessionsWorker(const QString& listen_interface,
     LOG(INFO) << "Ctor";
     DCHECK(peer_port_ && shared_key_pool_);
 
-    connect(&thread_, &base::Thread::started, this, &SessionsWorker::onBeforeThreadRunning,
+    connect(&thread_, &base::Thread::sig_beforeRunning, this, &SessionsWorker::onBeforeThreadRunning,
             Qt::DirectConnection);
-    connect(&thread_, &base::Thread::finished, this, &SessionsWorker::onAfterThreadRunning,
+    connect(&thread_, &base::Thread::sig_afterRunning, this, &SessionsWorker::onAfterThreadRunning,
             Qt::DirectConnection);
 }
 

@@ -50,7 +50,9 @@ void Thread::run()
     CHECK(com_initializer.isSucceeded());
 #endif // defined(Q_OS_WINDOWS)
 
+    emit sig_beforeRunning();
     exec();
+    emit sig_afterRunning();
 }
 
 } // namespace base
