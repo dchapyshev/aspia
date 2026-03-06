@@ -153,6 +153,7 @@ void RouterManager::onTcpReady()
     routerStateChanged(proto::user::RouterState::CONNECTED);
 
     // Now the session will receive incoming messages.
+    reconnect_timer_->stop();
     tcp_channel_->resume();
     hostIdRequest();
 }

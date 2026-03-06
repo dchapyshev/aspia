@@ -299,7 +299,7 @@ void TaskManager::sendUserList()
     for (base::SessionEnumerator enumerator; !enumerator.isAtEnd(); enumerator.advance())
     {
         // Skip services.
-        if (enumerator.sessionId() == 0)
+        if (enumerator.sessionId() == base::kServiceSessionId)
             continue;
 
         base::SessionInfo session_info(enumerator.sessionId());
