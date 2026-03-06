@@ -138,32 +138,4 @@ QString SessionEnumerator::farmName() const
     return QString::fromWCharArray(info_[current_]->pFarmName);
 }
 
-//--------------------------------------------------------------------------------------------------
-bool SessionEnumerator::isConsole() const
-{
-    if (!info_[current_]->pSessionName)
-        return false;
-
-    return _wcsicmp(info_[current_]->pSessionName, L"console") == 0;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool SessionEnumerator::isActive() const
-{
-    return state() == WTSActive;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool SessionEnumerator::isUserLocked() const
-{
-    SessionInfo session_info(sessionId());
-    if (!session_info.isValid())
-    {
-        LOG(ERROR) << "Unable to get session info";
-        return false;
-    }
-
-    return session_info.isUserLocked();
-}
-
 } // namespace base

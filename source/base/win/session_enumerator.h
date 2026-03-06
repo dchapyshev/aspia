@@ -60,10 +60,6 @@ public:
     // is empty.
     QString farmName() const;
 
-    bool isConsole() const;
-    bool isActive() const;
-    bool isUserLocked() const;
-
 private:
     ScopedWtsMemory<WTS_SESSION_INFO_1W> info_;
     DWORD count_ = 0;

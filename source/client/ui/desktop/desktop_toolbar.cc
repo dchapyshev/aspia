@@ -452,7 +452,7 @@ void DesktopToolBar::setSessionList(const proto::desktop::SessionList& session_l
         for (int i = 0; i < session_list.session_size(); ++i)
         {
             const proto::desktop::Session& session = session_list.session(i);
-            if (!session.is_console() && (!session.is_active() || session.is_locked()))
+            if (session.session_id() != session_list.console_session_id() && !session.is_active())
                 continue;
 
             QString user_name = QString::fromStdString(session.user_name());
@@ -463,7 +463,7 @@ void DesktopToolBar::setSessionList(const proto::desktop::SessionList& session_l
             else
                 text = tr("Session %1 (%2)").arg(i + 1).arg(user_name);
 
-            if (session.is_console())
+            if (session.session_id() == session_list.console_session_id())
                 text.append("*");
 
             QAction* session_action = new QAction();

@@ -30,18 +30,17 @@ message SwitchSession
 message Session
 {
     uint32 session_id   = 1;
-    string session_name = 2;
-    string domain_name  = 3;
-    string user_name    = 4;
-    bool is_console     = 5;
-    bool is_locked      = 6;
-    bool is_active      = 7;
+    string domain_name  = 2;
+    string user_name    = 3;
+    bool is_locked      = 5;
+    bool is_active      = 6;
 }
 
 message SessionList
 {
     repeated Session session  = 1;
     uint32 current_session_id = 2;
+    uint32 console_session_id = 3;
 }
 
 message SessionListRequest

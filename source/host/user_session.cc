@@ -297,7 +297,8 @@ void UserSession::onClientStarted()
     QString display_name = client->property("display_name").toString();
     quint32 client_id = client->property("client_id").toUInt();
 
-    if (session_type == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
+    if (session_type == proto::peer::SESSION_TYPE_DESKTOP_MANAGE ||
+        session_type == proto::peer::SESSION_TYPE_DESKTOP_VIEW)
         ++desktop_client_count_;
 
     sendConnectEvent(client_id, session_type, computer_name, display_name);
@@ -308,10 +309,12 @@ void UserSession::onClientFinished()
 {
     QObject* client = sender();
     CHECK(client);
+
     sendDisconnectEvent(client->property("client_id").toUInt());
 
     auto session_type = static_cast<proto::peer::SessionType>(client->property("session_type").toUInt());
-    if (session_type != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
+    if (session_type != proto::peer::SESSION_TYPE_DESKTOP_MANAGE &&
+        session_type != proto::peer::SESSION_TYPE_DESKTOP_VIEW)
         return;
 
     desktop_client_count_ = std::max(desktop_client_count_ - 1, 0);
@@ -321,7 +324,7 @@ void UserSession::onClientFinished()
     LOG(INFO) << "Last desktop client is disconnected";
 
     base::SessionId session_id = base::activeConsoleSessionId();
-    if (session_id_ != session_id)
+    if (session_id_ != session_id && session_id_ != base::kInvalidSessionId)
     {
         dettach(FROM_HERE);
         attach(FROM_HERE, session_id);

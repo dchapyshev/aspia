@@ -30,6 +30,7 @@
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/session_enumerator.h"
+#include "base/win/session_info.h"
 #endif // defined(Q_OS_WINDOWS)
 
 namespace host {
@@ -61,25 +62,7 @@ DesktopClient::DesktopClient(base::TcpChannel* tcp_channel, QObject* parent)
 
 #if defined(Q_OS_WINDOWS)
     connect(base::Application::instance(), &base::Application::sig_sessionEvent,
-            this, [this](quint32 event_type, quint32 /* session_id */)
-    {
-        switch (event_type)
-        {
-            case WTS_CONSOLE_CONNECT:
-            case WTS_CONSOLE_DISCONNECT:
-            case WTS_REMOTE_CONNECT:
-            case WTS_REMOTE_DISCONNECT:
-            case WTS_SESSION_LOGON:
-            case WTS_SESSION_LOGOFF:
-            case WTS_SESSION_LOCK:
-            case WTS_SESSION_UNLOCK:
-                sendSessionList();
-                break;
-
-            default:
-                break;
-        }
-    });
+            this, &DesktopClient::sendSessionList, Qt::QueuedConnection);
 #endif // defined(Q_OS_WINDOWS)
 
     connect(fake_capture_timer_, &QTimer::timeout, this, [this]()
@@ -290,12 +273,6 @@ void DesktopClient::onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray
         {
             LOG(INFO) << "Received:" << message.switch_session();
 
-            if (tcp_channel_->peerSessionType() != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
-            {
-                LOG(ERROR) << "Switch session available only for desktop manage session type";
-                return;
-            }
-
             base::SessionId session_id = message.switch_session().session_id();
             if (session_id == base::kInvalidSessionId || session_id == base::kServiceSessionId)
             {
@@ -359,26 +336,29 @@ void DesktopClient::sendSessionList()
     proto::desktop::ServiceToClient message;
     proto::desktop::SessionList* session_list = message.mutable_session_list();
 
-    base::SessionId session_id = 0;
+    base::SessionId console_session_id = base::activeConsoleSessionId();
+    base::SessionId current_session_id = 0;
     if (ipc_channel_)
-        session_id = ipc_channel_->sessionId();
+        current_session_id = ipc_channel_->sessionId();
 
-    session_list->set_current_session_id(session_id);
+    session_list->set_current_session_id(current_session_id);
+    session_list->set_console_session_id(console_session_id);
 
     for (base::SessionEnumerator it; !it.isAtEnd(); it.advance())
     {
-        if (it.sessionId() == 0) // Don't add system session.
+        if (it.sessionId() == base::kServiceSessionId) // Don't add system session.
+            continue;
+
+        base::SessionInfo session_info(it.sessionId());
+        if (!session_info.isValid())
             continue;
 
         proto::desktop::Session* session = session_list->add_session();
-
-        session->set_session_id(it.sessionId());
-        session->set_user_name(it.userName().toStdString());
-        session->set_session_name(it.sessionName().toStdString());
-        session->set_domain_name(it.domainName().toStdString());
-        session->set_is_console(it.isConsole());
-        session->set_is_locked(it.isUserLocked());
-        session->set_is_active(it.isActive());
+        session->set_session_id(session_info.sessionId());
+        session->set_user_name(session_info.userName().toStdString());
+        session->set_domain_name(session_info.domain().toStdString());
+        session->set_is_locked(session_info.isUserLocked());
+        session->set_is_active(session_info.connectState() == base::SessionInfo::ConnectState::ACTIVE);
     }
 
     LOG(INFO) << "Send:" << *session_list;
