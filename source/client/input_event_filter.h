@@ -32,7 +32,6 @@ public:
 
     void setSessionType(proto::peer::SessionType session_type);
     void setClipboardEnabled(bool enable);
-    void setNetworkOverflow(bool enable);
 
     bool mouseEvent(const proto::desktop::MouseEvent& event);
     bool keyEvent(const proto::desktop::KeyEvent& event);
@@ -51,7 +50,6 @@ public:
 private:
     proto::peer::SessionType session_type_ = proto::peer::SESSION_TYPE_UNKNOWN;
     bool clipboard_enabled_ = false;
-    bool network_overflow_ = false;
 
     qint32 last_pos_x_ = 0;
     qint32 last_pos_y_ = 0;

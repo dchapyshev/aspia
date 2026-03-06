@@ -153,10 +153,9 @@ void ClientDesktop::onServiceMessageReceived(const QByteArray& buffer)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientDesktop::onSessionMessageWritten(size_t pending)
+void ClientDesktop::onSessionMessageWritten(size_t /* pending */)
 {
-    static const size_t kMaxPendingBytes = 100 * 1024; // 100 kB
-    input_event_filter_.setNetworkOverflow(pending > kMaxPendingBytes);
+    // Nothing
 }
 
 //--------------------------------------------------------------------------------------------------
