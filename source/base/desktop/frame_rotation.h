@@ -39,11 +39,8 @@ enum class Rotation
 // |source| coordinate. |target_offset| is in |target| coordinate.
 // This function triggers check failure if |source| does not cover the
 // |source_rect|, or |target| does not cover the rotated |rect|.
-void rotateDesktopFrame(const Frame& source,
-                        const QRect& source_rect,
-                        const Rotation& rotation,
-                        const QPoint& target_offset,
-                        Frame* target);
+void rotateFrame(const Frame& source, const QRect& source_rect, const Rotation& rotation,
+    const QPoint& target_offset, Frame* target);
 
 // Returns a reverse rotation of |rotation|.
 Rotation reverseRotation(Rotation rotation);

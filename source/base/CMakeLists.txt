@@ -326,9 +326,6 @@ list(APPEND SOURCE_BASE_DESKTOP_TESTS
 
 if (WIN32)
     list(APPEND SOURCE_BASE_DESKTOP_WIN
-        desktop/win/bitmap_info.h
-        desktop/win/cursor.cc
-        desktop/win/cursor.h
         desktop/win/d3d_device.cc
         desktop/win/d3d_device.h
         desktop/win/display_configuration_monitor.cc

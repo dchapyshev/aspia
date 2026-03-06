@@ -32,9 +32,7 @@ public:
     explicit Differ(const QSize& size);
     ~Differ() = default;
 
-    void calcDirtyRegion(const quint8* prev_image,
-                         const quint8* curr_image,
-                         QRegion* changed_region);
+    void calcDirtyRegion(const quint8* prev_image, const quint8* curr_image, QRegion* changed_region);
 
 private:
     typedef quint8(*DiffFullBlockFunc)(const quint8*, const quint8*, int);

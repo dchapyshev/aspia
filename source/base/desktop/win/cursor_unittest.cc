@@ -17,7 +17,7 @@
 //
 
 #include "base/desktop/mouse_cursor.h"
-#include "base/desktop/win/cursor.h"
+#include "base/desktop/screen_capturer_gdi.h"
 #include "base/desktop/win/cursor_unittest_resources.h"
 #include "base/win/scoped_gdi_object.h"
 #include "base/win/scoped_user_object.h"
@@ -42,7 +42,7 @@ bool convertToMouseShapeAndCompare(unsigned left, unsigned right)
 
     // Convert |cursor| to |mouse_shape|.
     HDC dc = GetDC(nullptr);
-    std::unique_ptr<MouseCursor> mouse_shape(mouseCursorFromHCursor(dc, cursor));
+    std::unique_ptr<MouseCursor> mouse_shape(ScreenCapturerGdi::mouseCursorFromHCursor(dc, cursor));
     ReleaseDC(nullptr, dc);
 
     EXPECT_TRUE(mouse_shape.get());

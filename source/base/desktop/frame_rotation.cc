@@ -45,10 +45,7 @@ libyuv::RotationMode ToLibyuvRotationMode(Rotation rotation)
 }
 
 //--------------------------------------------------------------------------------------------------
-QRect rotateAndOffsetRect(const QRect& rect,
-                          const QSize& size,
-                          Rotation rotation,
-                          const QPoint &offset)
+QRect rotateAndOffsetRect(const QRect& rect, const QSize& size, Rotation rotation, const QPoint &offset)
 {
     QRect result = rotateRect(rect, size, rotation);
     result.translate(offset.x(), offset.y());
@@ -114,11 +111,8 @@ QRect rotateRect(const QRect& rect, const QSize& size, Rotation rotation)
 }
 
 //--------------------------------------------------------------------------------------------------
-void rotateDesktopFrame(const Frame& source,
-                        const QRect& source_rect,
-                        const Rotation& rotation,
-                        const QPoint& target_offset,
-                        Frame* target)
+void rotateFrame(const Frame& source, const QRect& source_rect, const Rotation& rotation,
+    const QPoint& target_offset, Frame* target)
 {
     DCHECK(target);
     DCHECK(QRect(QPoint(0, 0), source.size()).contains(source_rect));

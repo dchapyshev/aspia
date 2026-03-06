@@ -19,16 +19,11 @@
 #include "base/desktop/frame_dib.h"
 
 #include "base/logging.h"
-#include "base/desktop/win/bitmap_info.h"
 
 namespace base {
 
 //--------------------------------------------------------------------------------------------------
-FrameDib::FrameDib(const QSize& size,
-                   const PixelFormat& format,
-                   int stride,
-                   quint8* data,
-                   HBITMAP bitmap)
+FrameDib::FrameDib(const QSize& size, const PixelFormat& format, int stride, quint8* data, HBITMAP bitmap)
     : Frame(size, format, stride, data),
       bitmap_(bitmap)
 {
@@ -41,6 +36,21 @@ std::unique_ptr<FrameDib> FrameDib::create(const QSize& size, const PixelFormat&
 {
     const int bytes_per_row = size.width() * format.bytesPerPixel();
     const size_t buffer_size = calcMemorySize(size, format.bytesPerPixel());
+
+    struct BitmapInfo
+    {
+        BITMAPINFOHEADER header;
+        union
+        {
+            struct
+            {
+                quint32 red;
+                quint32 green;
+                quint32 blue;
+            } mask;
+            RGBQUAD color[256];
+        } u;
+    };
 
     BitmapInfo bmi;
     memset(&bmi, 0, sizeof(bmi));
@@ -78,12 +88,8 @@ std::unique_ptr<FrameDib> FrameDib::create(const QSize& size, const PixelFormat&
 
     void* data = nullptr;
 
-    HBITMAP bitmap = CreateDIBSection(hdc,
-                                      reinterpret_cast<LPBITMAPINFO>(&bmi),
-                                      DIB_RGB_COLORS,
-                                      &data,
-                                      nullptr,
-                                      0);
+    HBITMAP bitmap = CreateDIBSection(hdc, reinterpret_cast<LPBITMAPINFO>(&bmi), DIB_RGB_COLORS,
+        &data, nullptr, 0);
     if (!bitmap)
     {
         LOG(ERROR) << "CreateDIBSection failed";

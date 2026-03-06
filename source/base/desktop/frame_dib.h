@@ -38,11 +38,7 @@ public:
     HBITMAP bitmap() { return bitmap_; }
 
 private:
-    FrameDib(const QSize& size,
-             const PixelFormat& format,
-             int stride,
-             quint8* data,
-             HBITMAP bitmap);
+    FrameDib(const QSize& size, const PixelFormat& format, int stride, quint8* data, HBITMAP bitmap);
 
     ScopedHBITMAP bitmap_;
 

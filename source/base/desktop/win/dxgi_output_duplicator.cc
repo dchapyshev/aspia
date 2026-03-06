@@ -307,7 +307,7 @@ bool DxgiOutputDuplicator::duplicate(
                 // The |updated_region| returned by Windows is rotated, but the |source| frame is
                 // not. So we need to rotate it reversely.
                 const QRect source_rect = rotateRect(rect, desktopSize(), reverseRotation(rotation_));
-                rotateDesktopFrame(source, source_rect, rotation_, offset, target.get());
+                rotateFrame(source, source_rect, rotation_, offset, target.get());
             }
         }
         else

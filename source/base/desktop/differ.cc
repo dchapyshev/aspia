@@ -38,11 +38,8 @@ const int kBytesPerBlock = kBlockSize * kBytesPerPixel;
 // specified by the |width| and |height| values.
 // Note that if we force the capturer to always return images whose width and height are multiples
 // of kBlockSize, then this will never be called.
-quint8 diffPartialBlock(const quint8* prev_image,
-                         const quint8* curr_image,
-                         int bytes_per_row,
-                         int bytes_per_block,
-                         int height)
+quint8 diffPartialBlock(const quint8* prev_image, const quint8* curr_image, int bytes_per_row,
+    int bytes_per_block, int height)
 {
     for (int y = 0; y < height; ++y)
     {
@@ -286,9 +283,7 @@ void Differ::mergeBlocks(QRegion* dirty_region)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Differ::calcDirtyRegion(const quint8* prev_image,
-                             const quint8* curr_image,
-                             QRegion* dirty_region)
+void Differ::calcDirtyRegion(const quint8* prev_image, const quint8* curr_image, QRegion* dirty_region)
 {
     *dirty_region = QRegion();
 
