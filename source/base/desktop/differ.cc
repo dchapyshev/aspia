@@ -87,8 +87,6 @@ Differ::DiffFullBlockFunc Differ::diffFunction()
     if (libyuv::TestCpuFlag(libyuv::kCpuHasSSE2))
     {
 #if defined(Q_PROCESSOR_X86)
-        LOG(INFO) << "SSE2 differ loaded";
-
         if constexpr (kBlockSize == 16)
             return diffFullBlock_32bpp_16x16_SSE2;
         else if constexpr (kBlockSize == 32)
@@ -97,8 +95,6 @@ Differ::DiffFullBlockFunc Differ::diffFunction()
     }
     else
     {
-        LOG(INFO) << "C differ loaded";
-
         if constexpr (kBlockSize == 16)
             return diffFullBlock_32bpp_16x16_C;
         else if constexpr (kBlockSize == 32)
