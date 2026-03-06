@@ -96,9 +96,7 @@ private slots:
     void onIpcDisconnected();
     void onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer);
 
-#if defined(Q_OS_WINDOWS)
     void onTaskManagerMessage(const proto::task_manager::HostToClient& message);
-#endif // defined(Q_OS_WINDOWS)
 
 private:
     void readSessionMessage(const QByteArray& buffer);

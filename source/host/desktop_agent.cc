@@ -169,13 +169,7 @@ DesktopAgent::DesktopAgent(QObject* parent)
 
 #if defined(Q_OS_WINDOWS)
     input_injector_ = new InputInjectorWin(this);
-#elif defined(Q_OS_LINUX)
-    input_injector_ = InputInjectorX11::create();
-#else
-    LOG(ERROR) << "Input injector not supported for platform";
-#endif
 
-#if defined(Q_OS_WINDOWS)
     // At the end of the user's session, the program ends later than the others.
     if (!SetProcessShutdownParameters(0, SHUTDOWN_NORETRY))
         PLOG(ERROR) << "SetProcessShutdownParameters failed";
@@ -185,6 +179,10 @@ DesktopAgent::DesktopAgent(QObject* parent)
         base::DesktopEnvironmentWin::updateEnvironment();
     });
 #endif // defined(Q_OS_WINDOWS)
+
+#if defined(Q_OS_LINUX)
+    input_injector_ = InputInjectorX11::create();
+#endif // defined(Q_OS_LINUX)
 }
 
 //--------------------------------------------------------------------------------------------------

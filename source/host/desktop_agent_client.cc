@@ -369,7 +369,6 @@ void DesktopAgentClient::onIpcMessageReceived(quint32 channel_id, const QByteArr
     }
 }
 
-#if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
 void DesktopAgentClient::onTaskManagerMessage(const proto::task_manager::HostToClient& message)
 {
@@ -378,7 +377,6 @@ void DesktopAgentClient::onTaskManagerMessage(const proto::task_manager::HostToC
     extension->set_data(message.SerializeAsString());
     sendSessionMessage();
 }
-#endif // defined(Q_OS_WINDOWS)
 
 //--------------------------------------------------------------------------------------------------
 void DesktopAgentClient::readSessionMessage(const QByteArray& buffer)
