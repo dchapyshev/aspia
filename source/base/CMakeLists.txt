@@ -274,8 +274,6 @@ list(APPEND SOURCE_BASE_DESKTOP
     desktop/frame_qimage.h
     desktop/frame_rotation.cc
     desktop/frame_rotation.h
-    desktop/frame_simple.cc
-    desktop/frame_simple.h
     desktop/mouse_cursor.cc
     desktop/mouse_cursor.h
     desktop/pixel_format.cc

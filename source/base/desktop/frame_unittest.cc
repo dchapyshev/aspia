@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/desktop/frame_simple.h"
+#include "base/desktop/frame_aligned.h"
 
 #include <gtest/gtest.h>
 
@@ -27,7 +27,7 @@ namespace {
 std::unique_ptr<Frame> createTestFrame(const QRect& rect, int pixels_value)
 {
     QSize size = rect.size();
-    auto frame = FrameSimple::create(size, PixelFormat::ARGB());
+    auto frame = FrameAligned::create(size, PixelFormat::ARGB(), 32);
     frame->setTopLeft(rect.topLeft());
     memset(frame->frameData(),
            pixels_value,

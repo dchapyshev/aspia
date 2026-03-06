@@ -19,7 +19,7 @@
 #include "base/codec/scale_reducer.h"
 
 #include "base/logging.h"
-#include "base/desktop/frame_simple.h"
+#include "base/desktop/frame_aligned.h"
 
 #include <libyuv/scale_argb.h>
 
@@ -74,7 +74,7 @@ const Frame* ScaleReducer::scaleFrame(const Frame* source_frame, const QSize& ta
 
     if (!target_frame_)
     {
-        target_frame_ = FrameSimple::create(target_size, PixelFormat::ARGB());
+        target_frame_ = FrameAligned::create(target_size, PixelFormat::ARGB(), 32);
         if (!target_frame_)
         {
             LOG(ERROR) << "Unable to create target frame";
