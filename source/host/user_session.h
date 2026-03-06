@@ -27,6 +27,8 @@
 #include "base/peer/host_id.h"
 #include "proto/user.h"
 
+class QTimer;
+
 namespace base {
 class IpcChannel;
 class IpcServer;

@@ -47,7 +47,7 @@ SessionId activeConsoleSessionId()
 #if defined(Q_OS_WINDOWS)
     return WTSGetActiveConsoleSessionId();
 #else
-    return 0;
+    return 1;
 #endif
 }
 

@@ -232,6 +232,7 @@ void UserSession::onClientConfirmation(const proto::user::ConfirmationRequest& r
 
     SystemSettings settings;
 
+#if defined(Q_OS_WINDOWS)
     if (state_ == State::DETTACHED)
     {
         LOG(INFO) << "No active GUI process";
@@ -271,6 +272,7 @@ void UserSession::onClientConfirmation(const proto::user::ConfirmationRequest& r
         emit sig_confirmationReply(request.id(), false);
         return;
     }
+#endif // defined(Q_OS_WINDOWS)
 
     if (!settings.connectConfirmation())
     {
