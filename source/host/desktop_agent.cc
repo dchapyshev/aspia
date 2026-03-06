@@ -26,6 +26,7 @@
 #include "base/power_controller.h"
 #include "base/audio/audio_capturer_wrapper.h"
 #include "base/desktop/desktop_resizer.h"
+#include "base/desktop/desktop_environment.h"
 #include "base/desktop/mouse_cursor.h"
 #include "base/ipc/ipc_channel.h"
 #include "base/ipc/ipc_server.h"
