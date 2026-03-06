@@ -40,11 +40,13 @@ const quint32 kMaxMessageSize = 16 * 1024 * 1024; // 16MB
 
 #if defined(Q_OS_UNIX)
 const char kNamePrefix[] = "/tmp/aspia_";
+using PipeHandle = int;
 #endif // defined(Q_OS_UNIX)
 
 #if defined(Q_OS_WINDOWS)
 const char kNamePrefix[] = "\\\\.\\pipe\\aspia.";
 const DWORD kConnectTimeout = 3000; // ms
+using PipeHandle = HANDLE;
 #endif // defined(Q_OS_WINDOWS)
 
 //--------------------------------------------------------------------------------------------------
@@ -56,7 +58,7 @@ quint32 makeInstanceId()
 }
 
 //--------------------------------------------------------------------------------------------------
-SessionId clientSessionId(Qt::HANDLE pipe_handle)
+SessionId clientSessionId(PipeHandle pipe_handle)
 {
 #if defined(Q_OS_WINDOWS)
     ULONG session_id = kInvalidSessionId;
@@ -68,12 +70,13 @@ SessionId clientSessionId(Qt::HANDLE pipe_handle)
 
     return session_id;
 #else
+    Q_UNUSED(pipe_handle)
     return kInvalidSessionId;
 #endif
 }
 
 //--------------------------------------------------------------------------------------------------
-SessionId serverSessionId(Qt::HANDLE pipe_handle)
+SessionId serverSessionId(PipeHandle pipe_handle)
 {
 #if defined(Q_OS_WINDOWS)
     ULONG session_id = kInvalidSessionId;
