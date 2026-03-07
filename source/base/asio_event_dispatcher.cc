@@ -660,7 +660,7 @@ void AsioEventDispatcher::asyncWaitSocket(SocketHandle& handle, SocketHandle::wa
         // The socket list may change during call sendEvent. If the list has changed, we try to find
         // the socket in it. If there is no socket, then further execution should be interrupted and
         // the next asynchronous wait will not be called.
-        auto it = sockets_.find(socket);
+        it = sockets_.find(socket);
         if (it == sockets_.end())
             return;
 
