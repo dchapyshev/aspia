@@ -150,7 +150,7 @@ void AsioEventDispatcher::registerSocketNotifier(QSocketNotifier* notifier)
 #else
         SocketHandle handle(io_context_, socket);
 #endif
-        it = sockets_.emplace(socket, SocketData(std::move(handle))).first;
+        it = sockets_.emplace(socket, SocketData(uniqueId(), std::move(handle))).first;
         is_socket_added = true;
     }
 
@@ -280,14 +280,14 @@ void AsioEventDispatcher::registerTimer(
             }
 
             auto timer = multimedia_timers_.emplace(timer_id, MultimediaTimer(
-                std::move(handle), native_id, interval, end_time, object)).first;
+                uniqueId(), std::move(handle), native_id, interval, end_time, object)).first;
 
             asyncWaitMultimediaTimer(timer->second.handle, timer_id);
             return;
         }
 #endif
         auto timer = precise_timers_.emplace(timer_id, PreciseTimer(
-            asio::high_resolution_timer(io_context_), interval, end_time, object)).first;
+            uniqueId(), asio::high_resolution_timer(io_context_), interval, end_time, object)).first;
 
         asyncWaitPreciseTimer(timer->second.handle, end_time, timer_id);
     }
@@ -309,7 +309,7 @@ void AsioEventDispatcher::registerTimer(
         const CoarseTimePoint end_time = start_time + interval;
 
         auto timer = coarse_timers_.emplace(timer_id, CoarseTimer(
-            asio::steady_timer(io_context_), interval, end_time, object)).first;
+            uniqueId(), asio::steady_timer(io_context_), interval, end_time, object)).first;
 
         asyncWaitCoarseTimer(timer->second.handle, end_time, timer_id);
     }
@@ -475,12 +475,17 @@ void AsioEventDispatcher::asyncWaitPreciseTimer(
         if (it == precise_timers_.end())
             return;
 
-        PreciseTimer& timer = it->second;
+        quint64 unique_id = it->second.unique_id;
 
         QTimerEvent event(timer_id);
-        QCoreApplication::sendEvent(timer.object, &event);
+        QCoreApplication::sendEvent(it->second.object, &event);
 
-        if (!precise_timers_.contains(timer_id))
+        it = precise_timers_.find(timer_id);
+        if (it == precise_timers_.end())
+            return;
+
+        PreciseTimer& timer = it->second;
+        if (timer.unique_id != unique_id)
             return;
 
         timer.end_time += timer.interval;
@@ -502,12 +507,20 @@ void AsioEventDispatcher::asyncWaitCoarseTimer(
         if (it == coarse_timers_.end())
             return;
 
-        CoarseTimer& timer = it->second;
+        quint64 unique_id = it->second.unique_id;
 
         QTimerEvent event(timer_id);
-        QCoreApplication::sendEvent(timer.object, &event);
+        QCoreApplication::sendEvent(it->second.object, &event);
 
-        if (!coarse_timers_.contains(timer_id))
+        it = coarse_timers_.find(timer_id);
+        if (it == coarse_timers_.end())
+            return;
+
+        // Qt can reuse timer IDs. After calling sendEvent, a timer with the same ID may appear, but
+        // it is not the same timer. We don't need to call await on this timer because an async
+        // await was already called on it when it was registered.
+        CoarseTimer& timer = it->second;
+        if (timer.unique_id != unique_id)
             return;
 
         timer.end_time += timer.interval;
@@ -528,12 +541,17 @@ void AsioEventDispatcher::asyncWaitMultimediaTimer(asio::windows::object_handle&
         if (it == multimedia_timers_.end())
             return;
 
-        MultimediaTimer& timer = it->second;
+        quint64 unique_id = it->second.unique_id;
 
         QTimerEvent event(timer_id);
-        QCoreApplication::sendEvent(timer.object, &event);
+        QCoreApplication::sendEvent(it->second.object, &event);
 
-        if (!multimedia_timers_.contains(timer_id))
+        it = multimedia_timers_.find(timer_id);
+        if (it == multimedia_timers_.end())
+            return;
+
+        MultimediaTimer& timer = it->second;
+        if (timer.unique_id != unique_id)
             return;
 
         timer.end_time += timer.interval;
@@ -564,6 +582,8 @@ void AsioEventDispatcher::asyncWaitSocket(SocketHandle& handle, qintptr socket)
             return;
         }
 
+        quint64 unique_id = data.unique_id;
+
         auto send_event = [&](QSocketNotifier* notifier, long mask) noexcept -> bool
         {
             // There are no notifications for this event type or no notifier for this event type.
@@ -575,7 +595,11 @@ void AsioEventDispatcher::asyncWaitSocket(SocketHandle& handle, qintptr socket)
 
             // If the list has changed, we try to find the socket in it. If there is no socket, then
             // further execution should be interrupted and the next wait will not be called.
-            return sockets_.contains(socket);
+            auto it = sockets_.find(socket);
+            if (it == sockets_.end())
+                return false;
+
+            return it->second.unique_id == unique_id;
         };
 
         if (!send_event(data.read, FD_READ | FD_ACCEPT | FD_CLOSE))
@@ -628,19 +652,31 @@ void AsioEventDispatcher::asyncWaitSocket(SocketHandle& handle, SocketHandle::wa
         if (!notifier)
             return;
 
+        quint64 unique_id = data.unique_id;
+
         QEvent event(QEvent::SockAct);
         QCoreApplication::sendEvent(notifier, &event);
 
         // The socket list may change during call sendEvent. If the list has changed, we try to find
         // the socket in it. If there is no socket, then further execution should be interrupted and
         // the next asynchronous wait will not be called.
-        if (!sockets_.contains(socket))
+        auto it = sockets_.find(socket);
+        if (it == sockets_.end())
+            return;
+
+        if (it->second.unique_id != unique_id)
             return;
 
         asyncWaitSocket(data.handle, wait_type);
     });
 }
 #endif // defined(Q_OS_UNIX)
+
+//--------------------------------------------------------------------------------------------------
+quint64 AsioEventDispatcher::uniqueId()
+{
+    return ++counter_;
+}
 
 #if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
