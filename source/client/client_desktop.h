@@ -19,8 +19,6 @@
 #ifndef CLIENT_CLIENT_DESKTOP_H
 #define CLIENT_CLIENT_DESKTOP_H
 
-#include <QPointer>
-
 #include "base/serialization.h"
 #include "base/desktop/mouse_cursor.h"
 #include "client/client.h"
@@ -153,11 +151,11 @@ private:
     std::unique_ptr<base::CursorDecoder> cursor_decoder_;
     std::unique_ptr<base::AudioDecoder> audio_decoder_;
     std::unique_ptr<base::AudioPlayer> audio_player_;
-    QPointer<common::ClipboardMonitor> clipboard_monitor_;
+    common::ClipboardMonitor* clipboard_monitor_ = nullptr;
 
     InputEventFilter input_event_filter_;
 
-    QPointer<QTimer> webm_video_encode_timer_;
+    QTimer* webm_video_encode_timer_ = nullptr;
     std::unique_ptr<base::WebmVideoEncoder> webm_video_encoder_;
     std::unique_ptr<base::WebmFileWriter> webm_file_writer_;
 

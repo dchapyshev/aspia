@@ -75,6 +75,7 @@ private:
     {
         void cancel();
 
+        quint64 unique_id;
         asio::windows::object_handle handle;
         quint32 native_id;
         Milliseconds interval;
@@ -92,6 +93,7 @@ private:
     {
         void cancel() { handle.cancel(); }
 
+        quint64 unique_id;
         TimerHandleType handle;
         Milliseconds interval;
         TimePointType end_time;
@@ -100,14 +102,16 @@ private:
 
     struct SocketData
     {
-        explicit SocketData(SocketHandle handle)
-            : handle(std::move(handle))
+        explicit SocketData(quint64 unique_id, SocketHandle handle)
+            : unique_id(unique_id),
+              handle(std::move(handle))
         {
             // Nothing
         }
 
         void cancel();
 
+        quint64 unique_id;
         QSocketNotifier* read = nullptr;
         QSocketNotifier* write = nullptr;
         QSocketNotifier* exception = nullptr;
@@ -132,9 +136,12 @@ private:
     void asyncWaitSocket(SocketHandle& handle, SocketHandle::wait_type wait_type);
 #endif
 
+    quint64 uniqueId();
+
     asio::io_context io_context_;
     asio::executor_work_guard<asio::io_context::executor_type> work_guard_;
     std::atomic_bool interrupted_ { false };
+    quint64 counter_ = 0;
 
 #if defined(Q_OS_WINDOWS)
     MultimediaTimers multimedia_timers_;
