@@ -284,11 +284,9 @@ void IpcChannel::disconnectFrom()
     if (!is_connected_)
         return;
 
-    LOG(INFO) << "disconnect (channel" << channel_name_ << ")";
     is_connected_ = false;
 
     std::error_code ignored_code;
-
     stream_.cancel(ignored_code);
     stream_.close(ignored_code);
 }
