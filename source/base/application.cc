@@ -125,8 +125,11 @@ Application::Application(int& argc, char* argv[])
     {
         LOG(INFO) << "UI thread stopping";
 
-        if (!WTSUnRegisterSessionNotification(message_window_->hwnd()))
-            PLOG(ERROR) << "WTSUnRegisterSessionNotification failed";
+        if (!is_service_)
+        {
+            if (!WTSUnRegisterSessionNotification(message_window_->hwnd()))
+                PLOG(ERROR) << "WTSUnRegisterSessionNotification failed";
+        }
 
         message_window_.reset();
     },
