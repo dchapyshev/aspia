@@ -59,8 +59,7 @@ public:
     void wakeUp() final;
     void interrupt() final;
 
-    static asio::io_context& currentIoContext();
-    asio::io_context& ioContext();
+    static asio::io_context& ioContext();
 
 private:
     using PreciseClock = std::chrono::high_resolution_clock;

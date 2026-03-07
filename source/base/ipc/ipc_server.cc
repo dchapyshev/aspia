@@ -242,7 +242,7 @@ void IpcServer::Listener::onNewConnetion(
 //--------------------------------------------------------------------------------------------------
 IpcServer::IpcServer(QObject* parent)
     : QObject(parent),
-      io_context_(AsioEventDispatcher::currentIoContext())
+      io_context_(AsioEventDispatcher::ioContext())
 {
     for (size_t i = 0; i < listeners_.size(); ++i)
         listeners_[i] = std::make_shared<Listener>(this, i);

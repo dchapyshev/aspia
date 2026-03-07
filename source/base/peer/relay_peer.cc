@@ -56,7 +56,7 @@ QStringList endpointsToString(const asio::ip::tcp::resolver::results_type& endpo
 RelayPeer::RelayPeer(Authenticator* authenticator, QObject* parent)
     : QObject(parent),
       authenticator_(authenticator),
-      io_context_(AsioEventDispatcher::currentIoContext()),
+      io_context_(AsioEventDispatcher::ioContext()),
       socket_(io_context_),
       resolver_(io_context_)
 {

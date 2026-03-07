@@ -27,7 +27,7 @@ namespace base {
 //--------------------------------------------------------------------------------------------------
 TcpServer::TcpServer(QObject* parent)
     : QObject(parent),
-      acceptor_(AsioEventDispatcher::currentIoContext())
+      acceptor_(AsioEventDispatcher::ioContext())
 {
     // Nothing
 }

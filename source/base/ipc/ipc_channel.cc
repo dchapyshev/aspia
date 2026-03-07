@@ -98,7 +98,7 @@ SessionId serverSessionId(PipeHandle pipe_handle)
 IpcChannel::IpcChannel(QObject* parent)
     : QObject(parent),
       instance_id_(makeInstanceId()),
-      stream_(AsioEventDispatcher::currentIoContext())
+      stream_(AsioEventDispatcher::ioContext())
 {
     // Nothing
 }

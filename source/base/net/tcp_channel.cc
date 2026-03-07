@@ -93,7 +93,7 @@ int calculateSpeed(int last_speed, const TcpChannel::Milliseconds& duration, qin
 TcpChannel::TcpChannel(Authenticator* authenticator, QObject* parent)
     : QObject(parent),
       instance_id_(makeInstanceId()),
-      io_context_(base::AsioEventDispatcher::currentIoContext()),
+      io_context_(base::AsioEventDispatcher::ioContext()),
       socket_(io_context_),
       resolver_(std::make_unique<asio::ip::tcp::resolver>(io_context_)),
       authenticator_(authenticator)
@@ -106,7 +106,7 @@ TcpChannel::TcpChannel(
     asio::ip::tcp::socket&& socket, Authenticator* authenticator, QObject* parent)
     : QObject(parent),
       instance_id_(makeInstanceId()),
-      io_context_(base::AsioEventDispatcher::currentIoContext()),
+      io_context_(base::AsioEventDispatcher::ioContext()),
       socket_(std::move(socket)),
       authenticator_(authenticator)
 {

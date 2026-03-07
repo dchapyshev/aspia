@@ -446,19 +446,13 @@ void AsioEventDispatcher::interrupt()
 
 //--------------------------------------------------------------------------------------------------
 // static
-asio::io_context& AsioEventDispatcher::currentIoContext()
+asio::io_context& AsioEventDispatcher::ioContext()
 {
     base::AsioEventDispatcher* dispatcher =
         dynamic_cast<base::AsioEventDispatcher*>(QThread::currentThread()->eventDispatcher());
     CHECK(dispatcher);
 
-    return dispatcher->ioContext();
-}
-
-//--------------------------------------------------------------------------------------------------
-asio::io_context& AsioEventDispatcher::ioContext()
-{
-    return io_context_;
+    return dispatcher->io_context_;
 }
 
 //--------------------------------------------------------------------------------------------------

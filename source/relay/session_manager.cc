@@ -124,7 +124,7 @@ SessionManager::SessionManager(const asio::ip::address& address,
                                const std::chrono::seconds& statistics_interval,
                                QObject* parent)
     : QObject(parent),
-      acceptor_(base::AsioEventDispatcher::currentIoContext()),
+      acceptor_(base::AsioEventDispatcher::ioContext()),
       address_(address),
       port_(port),
       idle_timeout_(idle_timeout),
