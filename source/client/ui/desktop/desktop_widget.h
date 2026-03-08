@@ -21,14 +21,12 @@
 
 #include <QEvent>
 #include <QPainter>
-#include <QPointer>
 #include <QSet>
 #include <QTimer>
 #include <QWidget>
 
 #include <memory>
 
-#include "base/desktop/frame.h"
 #include "proto/desktop_session.h"
 
 #if defined(Q_OS_WINDOWS)
@@ -39,6 +37,10 @@
 #include "base/mac/scoped_cftyperef.h"
 #include <CoreGraphics/CGEventTypes.h>
 #endif // defined(Q_OS_MACOS)
+
+namespace base {
+class Frame;
+} // namespace base
 
 namespace client {
 
@@ -108,7 +110,7 @@ private:
     base::ScopedCFTypeRef<CFMachPortRef> event_tap_;
 #endif // defined(Q_OS_MACOS)
 
-    QPointer<QTimer> error_timer_;
+    QTimer* error_timer_ = nullptr;
     proto::desktop::VideoErrorCode last_error_code_ = proto::desktop::VIDEO_ERROR_CODE_OK;
     proto::desktop::VideoErrorCode current_error_code_ = proto::desktop::VIDEO_ERROR_CODE_OK;
     std::unique_ptr<QImage> error_image_;

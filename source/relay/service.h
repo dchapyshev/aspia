@@ -19,17 +19,17 @@
 #ifndef RELAY_SERVICE_H
 #define RELAY_SERVICE_H
 
-#include <QPointer>
 #include <QTimer>
 
 #include "base/serialization.h"
 #include "base/service.h"
 #include "base/net/tcp_channel.h"
 #include "proto/router_relay.h"
-#include "relay/sessions_worker.h"
-#include "relay/key_factory.h"
 
 namespace relay {
+
+class KeyFactory;
+class SessionsWorker;
 
 class Service final : public base::Service
 {
@@ -78,7 +78,7 @@ private:
     bool statistics_enabled_ = false;
     std::chrono::seconds statistics_interval_;
 
-    QPointer<QTimer> reconnect_timer_;
+    QTimer* reconnect_timer_ = nullptr;
     base::TcpChannel* tcp_channel_ = nullptr;
     KeyFactory* key_factory_ = nullptr;
     SessionsWorker* sessions_worker_ = nullptr;

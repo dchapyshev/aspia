@@ -22,12 +22,15 @@
 #include <optional>
 
 #include "client/router_config.h"
-#include "common/update_checker.h"
 #include "console/mru.h"
 #include "proto/address_book.h"
 #include "ui_main_window.h"
 
 class QSystemTrayIcon;
+
+namespace common {
+class UpdateChecker;
+} // namespace common
 
 namespace console {
 

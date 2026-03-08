@@ -20,9 +20,15 @@
 #define RELAY_SESSIONS_WORKER_H
 
 #include "base/thread.h"
-#include "relay/session_manager.h"
+
+namespace proto::router {
+class RelayStat;
+} // namespace proto::router
 
 namespace relay {
+
+class KeyPool;
+class SessionManager;
 
 class SessionsWorker final : public QObject
 {

@@ -24,13 +24,15 @@
 
 #include "proto/relay_peer.h"
 #include "proto/router_relay.h"
-#include "relay/pending_session.h"
-#include "relay/session.h"
-#include "relay/key_pool.h"
 
+#include <asio/ip/tcp.hpp>
 #include <asio/steady_timer.hpp>
 
 namespace relay {
+
+class PendingSession;
+class KeyPool;
+class Session;
 
 class SessionManager final : public QObject
 {

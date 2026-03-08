@@ -34,6 +34,7 @@
 #include "client/ui/sys_info/system_info_session_window.h"
 #include "client/ui/update_settings_dialog.h"
 #include "common/desktop_session_constants.h"
+#include "common/update_checker.h"
 #include "common/ui/about_dialog.h"
 #include "common/ui/language_action.h"
 #include "common/ui/session_type.h"

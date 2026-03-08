@@ -24,6 +24,7 @@
 #include "base/crypto/random.h"
 #include "router/database.h"
 #include "router/service.h"
+#include "router/session_manager.h"
 
 namespace router {
 

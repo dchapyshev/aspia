@@ -22,8 +22,11 @@
 #include <QByteArray>
 #include <QMainWindow>
 
-#include "common/update_checker.h"
 #include "ui_client_window.h"
+
+namespace common {
+class UpdateChecker;
+} // namespace common
 
 namespace client {
 

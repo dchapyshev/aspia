@@ -24,7 +24,6 @@
 #include "base/desktop/mouse_cursor.h"
 #include "client/client_desktop.h"
 #include "client/ui/session_window.h"
-#include "client/ui/desktop/desktop_widget.h"
 
 class QHBoxLayout;
 class QScrollArea;
@@ -37,6 +36,7 @@ namespace client {
 
 class DesktopConfigDialog;
 class DesktopToolBar;
+class DesktopWidget;
 class SystemInfoSessionWindow;
 class StatisticsDialog;
 class TaskManagerWindow;

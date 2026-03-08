@@ -123,7 +123,8 @@ QImage imageFromSvgResource(const QString& path, const QSize& size)
 
 //--------------------------------------------------------------------------------------------------
 DesktopWidget::DesktopWidget(QWidget* parent)
-    : QWidget(parent)
+    : QWidget(parent),
+      error_timer_(new QTimer(this))
 {
     LOG(INFO) << "Ctor";
 
@@ -134,6 +135,24 @@ DesktopWidget::DesktopWidget(QWidget* parent)
     setMouseTracking(true);
 
     enableKeyHooks(true);
+
+    connect(error_timer_, &QTimer::timeout, this, [this]()
+    {
+        if (last_error_code_ != proto::desktop::VIDEO_ERROR_CODE_OK)
+        {
+            current_error_code_ = last_error_code_;
+
+            if (frame_)
+            {
+                QImage* source_image = static_cast<base::FrameQImage*>(frame_.get())->image();
+                error_image_ = std::make_unique<QImage>(
+                    source_image->convertToFormat(QImage::Format_Grayscale8));
+            }
+        }
+
+        error_timer_->stop();
+        update();
+    });
 
     connect(static_cast<QApplication*>(QApplication::instance()), &QApplication::applicationStateChanged,
             this, [this](Qt::ApplicationState state)
@@ -175,36 +194,13 @@ void DesktopWidget::setDesktopFrameError(proto::desktop::VideoErrorCode error_co
     LOG(INFO) << "Video error detected:" << error_code;
     last_error_code_ = error_code;
 
-    if (error_timer_)
-        delete error_timer_;
-
-    error_timer_ = new QTimer(this);
-    connect(error_timer_, &QTimer::timeout, this, [this]()
-    {
-        if (last_error_code_ != proto::desktop::VIDEO_ERROR_CODE_OK)
-        {
-            current_error_code_ = last_error_code_;
-
-            if (frame_)
-            {
-                QImage* source_image = static_cast<base::FrameQImage*>(frame_.get())->image();
-                error_image_ = std::make_unique<QImage>(
-                    source_image->convertToFormat(QImage::Format_Grayscale8));
-            }
-        }
-
-        error_timer_->deleteLater();
-        update();
-    });
-
     error_timer_->start(std::chrono::milliseconds(1500));
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopWidget::drawDesktopFrame()
 {
-    if (error_timer_)
-        delete error_timer_;
+    error_timer_->stop();
 
     if (current_error_code_ != proto::desktop::VIDEO_ERROR_CODE_OK)
         error_image_.reset();

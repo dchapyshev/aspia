@@ -22,7 +22,6 @@
 #include <QObject>
 
 #include "base/session_id.h"
-#include "base/net/tcp_channel.h"
 
 namespace base {
 class IpcChannel;

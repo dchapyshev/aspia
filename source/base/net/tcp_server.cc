@@ -20,6 +20,7 @@
 
 #include "base/asio_event_dispatcher.h"
 #include "base/logging.h"
+#include "base/net/tcp_channel.h"
 #include "base/peer/server_authenticator.h"
 
 namespace base {

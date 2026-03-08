@@ -23,9 +23,9 @@
 #include <QObject>
 
 #include <asio/ip/address.hpp>
+#include <asio/ip/tcp.hpp>
 
 #include "base/shared_pointer.h"
-#include "base/net/tcp_channel.h"
 #include "base/peer/user_list_base.h"
 #include "base/peer/server_authenticator.h"
 

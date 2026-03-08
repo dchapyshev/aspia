@@ -21,8 +21,10 @@
 #include "base/logging.h"
 #include "base/net/tcp_server.h"
 #include "base/peer/client_authenticator.h"
+#include "relay/key_factory.h"
 #include "relay/migration_utils.h"
 #include "relay/service.h"
+#include "relay/sessions_worker.h"
 #include "relay/settings.h"
 #include "proto/router.h"
 

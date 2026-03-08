@@ -23,11 +23,13 @@
 #include "base/net/tcp_channel.h"
 #include "router/database.h"
 #include "router/database_factory_sqlite.h"
+#include "router/key_factory.h"
 #include "router/migration_utils.h"
 #include "router/session_admin.h"
 #include "router/session_client.h"
 #include "router/session_host.h"
 #include "router/session_relay.h"
+#include "router/session_manager.h"
 #include "router/settings.h"
 #include "router/user_list_db.h"
 

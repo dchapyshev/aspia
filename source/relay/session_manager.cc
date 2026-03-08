@@ -21,6 +21,9 @@
 #include "base/asio_event_dispatcher.h"
 #include "base/logging.h"
 #include "base/crypto/message_decryptor.h"
+#include "relay/pending_session.h"
+#include "relay/key_pool.h"
+#include "relay/session.h"
 
 namespace relay {
 

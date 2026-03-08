@@ -19,6 +19,7 @@
 #include "relay/sessions_worker.h"
 
 #include "base/logging.h"
+#include "relay/session_manager.h"
 
 namespace relay {
 

@@ -20,17 +20,17 @@
 #define ROUTER_SERVICE_H
 
 #include <QList>
-#include <QPointer>
 
 #include "base/service.h"
 #include "base/net/tcp_server.h"
-#include "router/key_factory.h"
-#include "router/session_manager.h"
+#include "router/session.h"
 
 namespace router {
 
 class DatabaseFactory;
+class KeyFactory;
 class SessionHost;
+class SessionManager;
 class SessionRelay;
 
 class Service final : public base::Service

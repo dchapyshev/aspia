@@ -32,6 +32,7 @@
 #include "client/ui/file_transfer/file_transfer_session_window.h"
 #include "client/ui/sys_info/system_info_session_window.h"
 #include "client/ui/router_manager/router_manager_window.h"
+#include "common/update_checker.h"
 #include "common/ui/about_dialog.h"
 #include "common/ui/language_action.h"
 #include "common/ui/update_dialog.h"
