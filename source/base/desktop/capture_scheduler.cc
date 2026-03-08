@@ -50,17 +50,11 @@ void CaptureScheduler::onBeginCapture()
 }
 
 //--------------------------------------------------------------------------------------------------
-void CaptureScheduler::onEndCapture()
+std::chrono::milliseconds CaptureScheduler::nextCaptureDelay()
 {
-    end_time_ = std::chrono::steady_clock::now();
+    std::chrono::milliseconds diff_time = std::chrono::duration_cast<std::chrono::milliseconds>(
+        std::chrono::steady_clock::now() - begin_time_);
     in_progress_ = false;
-}
-
-//--------------------------------------------------------------------------------------------------
-std::chrono::milliseconds CaptureScheduler::nextCaptureDelay() const
-{
-    std::chrono::milliseconds diff_time =
-        std::chrono::duration_cast<std::chrono::milliseconds>(end_time_ - begin_time_);
 
     if (diff_time > update_interval_)
         diff_time = update_interval_;

@@ -36,15 +36,13 @@ public:
     int fps() const;
 
     void onBeginCapture();
-    void onEndCapture();
     bool isInProgress() const { return in_progress_; }
 
-    std::chrono::milliseconds nextCaptureDelay() const;
+    std::chrono::milliseconds nextCaptureDelay();
 
 private:
     std::chrono::milliseconds update_interval_ { 40 };
     std::chrono::time_point<std::chrono::steady_clock> begin_time_;
-    std::chrono::time_point<std::chrono::steady_clock> end_time_;
     bool in_progress_ = false;
 
     Q_DISABLE_COPY_MOVE(CaptureScheduler)

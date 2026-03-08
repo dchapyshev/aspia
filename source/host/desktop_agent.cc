@@ -455,18 +455,6 @@ void DesktopAgent::onCaptureScreen()
         return;
     }
 
-    if (is_paused_)
-    {
-        capture_scheduler_.onBeginCapture();
-
-        for (const auto& client : std::as_const(clients_))
-            client->onScreenCaptureError(proto::desktop::VIDEO_ERROR_CODE_PAUSED);
-
-        capture_scheduler_.onEndCapture();
-        capture_timer_->start(capture_scheduler_.nextCaptureDelay());
-        return;
-    }
-
     if (!screen_capturer_)
     {
         LOG(ERROR) << "Screen capturer is NOT initialized";
@@ -474,6 +462,16 @@ void DesktopAgent::onCaptureScreen()
     }
 
     capture_scheduler_.onBeginCapture();
+
+    if (is_paused_)
+    {
+        for (const auto& client : std::as_const(clients_))
+            client->onScreenCaptureError(proto::desktop::VIDEO_ERROR_CODE_PAUSED);
+
+        capture_timer_->start(capture_scheduler_.nextCaptureDelay());
+        return;
+    }
+
     screen_capturer_->switchToInputDesktop();
 
     int count = screen_capturer_->screenCount();
@@ -550,7 +548,6 @@ void DesktopAgent::onCaptureScreen()
         }
     }
 
-    capture_scheduler_.onEndCapture();
     capture_timer_->start(capture_scheduler_.nextCaptureDelay());
 }
 
