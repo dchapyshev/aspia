@@ -20,7 +20,6 @@
 #define CLIENT_UI_ROUTER_MANAGER_ROUTER_MANAGER_WINDOW_H
 
 #include <QMainWindow>
-#include <QPointer>
 #include <QVersionNumber>
 
 #include "base/net/tcp_channel.h"
@@ -119,7 +118,7 @@ private:
     quint16 peer_port_ = 0;
     bool is_connected_ = false;
 
-    common::StatusDialog* status_dialog_;
+    common::StatusDialog* status_dialog_ = nullptr;
 
     int current_hosts_column_ = 0;
     int current_relays_column_ = 0;

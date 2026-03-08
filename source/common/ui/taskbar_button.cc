@@ -22,6 +22,7 @@
 #include <QEvent>
 #include <QGuiApplication>
 #include <QImage>
+#include <QWindow>
 
 #include <comdef.h>
 

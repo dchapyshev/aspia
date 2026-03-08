@@ -20,9 +20,11 @@
 #define CLIENT_UI_SYS_INFO_SYS_INFO_WIDGET_H
 
 #include <QWidget>
-#include <QTreeWidgetItem>
 
 #include "proto/system_info.h"
+
+class QTreeWidget;
+class QTreeWidgetItem;
 
 namespace client {
 

@@ -21,11 +21,13 @@
 #include <QtEndian>
 
 #include "base/asio_event_dispatcher.h"
+#include "base/location.h"
 #include "base/logging.h"
+#include "base/serialization.h"
 #include "base/crypto/generic_hash.h"
 #include "base/crypto/key_pair.h"
 #include "base/crypto/message_encryptor.h"
-#include "base/serialization.h"
+#include "base/peer/authenticator.h"
 #include "proto/relay_peer.h"
 
 #include <asio/connect.hpp>

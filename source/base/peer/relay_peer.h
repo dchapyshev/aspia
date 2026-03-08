@@ -19,18 +19,18 @@
 #ifndef BASE_PEER_RELAY_PEER_H
 #define BASE_PEER_RELAY_PEER_H
 
-#include <QByteArray>
 #include <QObject>
 
 #include <asio/ip/tcp.hpp>
 
-#include "base/location.h"
 #include "base/net/tcp_channel.h"
-#include "base/peer/authenticator.h"
 #include "proto/router.h"
 #include "proto/router_peer.h"
 
 namespace base {
+
+class Authenticator;
+class Location;
 
 class RelayPeer final : public QObject
 {

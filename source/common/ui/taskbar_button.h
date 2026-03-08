@@ -21,11 +21,11 @@
 
 #include <QIcon>
 #include <QObject>
-#include <QPointer>
-#include <QWindow>
 
 #include <wrl/client.h>
 #include <Shobjidl.h>
+
+class QWindow;
 
 namespace common {
 
@@ -64,7 +64,7 @@ private:
     Microsoft::WRL::ComPtr<ITaskbarList4> tblist_;
     QWindow* window_ = nullptr;
 
-    QPointer<TaskbarProgress> progressbar_;
+    TaskbarProgress* progressbar_ = nullptr;
     QIcon overlay_icon_;
     QString overlay_description_;
 

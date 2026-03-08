@@ -20,13 +20,12 @@
 #define COMMON_UI_DOWNLOAD_DIALOG_H
 
 #include <QFile>
-#include <QPointer>
-#include <QThread>
 
-#include "common/http_file_downloader.h"
 #include "ui_download_dialog.h"
 
 namespace common {
+
+class HttpFileDownloader;
 
 class DownloadDialog final : public QDialog
 {

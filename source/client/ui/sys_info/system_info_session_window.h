@@ -19,8 +19,6 @@
 #ifndef CLIENT_UI_SYS_INFO_SYSTEM_INFO_SESSION_WINDOW_H
 #define CLIENT_UI_SYS_INFO_SYSTEM_INFO_SESSION_WINDOW_H
 
-#include <QTreeWidget>
-
 #include "client/ui/session_window.h"
 #include "proto/system_info.h"
 
@@ -29,6 +27,8 @@ class SystemInfoSessionWindow;
 } // namespace Ui
 
 class QHBoxLayout;
+class QTreeWidget;
+class QTreeWidgetItem;
 
 namespace client {
 

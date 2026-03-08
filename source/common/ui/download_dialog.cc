@@ -24,6 +24,7 @@
 #include <QMessageBox>
 
 #include "base/logging.h"
+#include "common/http_file_downloader.h"
 
 namespace common {
 
