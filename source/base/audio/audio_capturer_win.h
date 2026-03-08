@@ -19,8 +19,6 @@
 #ifndef BASE_AUDIO_AUDIO_CAPTURER_WIN_H
 #define BASE_AUDIO_AUDIO_CAPTURER_WIN_H
 
-#include <QTimer>
-
 #include "base/win/scoped_co_mem.h"
 #include "base/audio/audio_capturer.h"
 #include "base/audio/audio_volume_filter_win.h"
@@ -28,6 +26,8 @@
 #include <Audioclient.h>
 #include <mmdeviceapi.h>
 #include <wrl/client.h>
+
+class QTimer;
 
 namespace base {
 

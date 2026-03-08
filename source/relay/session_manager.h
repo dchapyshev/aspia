@@ -19,14 +19,15 @@
 #ifndef RELAY_SESSION_MANAGER_H
 #define RELAY_SESSION_MANAGER_H
 
-#include <QList>
-#include <QTimer>
+#include <QObject>
 
 #include "proto/relay_peer.h"
 #include "proto/router_relay.h"
 
 #include <asio/ip/tcp.hpp>
 #include <asio/steady_timer.hpp>
+
+class QTimer;
 
 namespace relay {
 

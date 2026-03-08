@@ -19,12 +19,12 @@
 #ifndef CONSOLE_STATUSBAR_H
 #define CONSOLE_STATUSBAR_H
 
-#include <QLabel>
-#include <QPointer>
 #include <QStatusBar>
-#include <QTimer>
 
 #include "proto/address_book.h"
+
+class QLabel;
+class QTimer;
 
 namespace console {
 
@@ -44,7 +44,7 @@ public:
 private:
     QTimer* animation_timer_;
     int animation_index_ = 0;
-    QPointer<QLabel> status_label_ = nullptr;
+    QLabel* status_label_ = nullptr;
 
     Q_DISABLE_COPY_MOVE(StatusBar)
 };

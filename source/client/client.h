@@ -20,12 +20,13 @@
 #define CLIENT_CLIENT_H
 
 #include <QObject>
-#include <QTimer>
 #include <QVariant>
 
 #include "client/client_session_state.h"
 #include "client/router_manager.h"
 #include "base/net/tcp_channel.h"
+
+class QTimer;
 
 namespace client {
 

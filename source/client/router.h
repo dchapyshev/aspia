@@ -19,10 +19,12 @@
 #ifndef CLIENT_ROUTER_H
 #define CLIENT_ROUTER_H
 
-#include <QTimer>
+#include <QObject>
 
 #include "base/net/tcp_channel.h"
 #include "proto/router_admin.h"
+
+class QTimer;
 
 namespace client {
 
@@ -71,7 +73,7 @@ private slots:
 private:
     QTimer* timeout_timer_ = nullptr;
     QTimer* reconnect_timer_ = nullptr;
-    QPointer<base::TcpChannel> tcp_channel_;
+    base::TcpChannel* tcp_channel_ = nullptr;
 
     QString router_address_;
     quint16 router_port_ = 0;

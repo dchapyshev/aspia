@@ -18,6 +18,8 @@
 
 #include "relay/session_manager.h"
 
+#include <QTimer>
+
 #include "base/asio_event_dispatcher.h"
 #include "base/logging.h"
 #include "base/crypto/message_decryptor.h"

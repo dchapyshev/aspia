@@ -19,6 +19,8 @@
 #include "base/peer/relay_peer_manager.h"
 
 #include "base/logging.h"
+#include "base/net/tcp_channel.h"
+#include "base/peer/relay_peer.h"
 
 namespace base {
 

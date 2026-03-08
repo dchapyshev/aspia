@@ -19,12 +19,14 @@
 #ifndef RELAY_PENDING_SESSION_H
 #define RELAY_PENDING_SESSION_H
 
-#include <QTimer>
+#include <QObject>
 #include <QByteArray>
 
 #include <asio/ip/tcp.hpp>
 
 #include "proto/relay_peer.h"
+
+class QTimer;
 
 namespace base {
 class Location;

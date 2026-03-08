@@ -18,6 +18,8 @@
 
 #include "client/router.h"
 
+#include <QTimer>
+
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/version_constants.h"
@@ -50,7 +52,13 @@ Router::Router(QObject* parent)
         reconnect_timer_->stop();
         reconnect_in_progress_ = false;
         setAutoReconnect(false);
-        delete tcp_channel_;
+
+        if (tcp_channel_)
+        {
+            tcp_channel_->disconnect();
+            tcp_channel_->deleteLater();
+            tcp_channel_ = nullptr;
+        }
     });
 }
 
@@ -288,6 +296,7 @@ void Router::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code)
         // Delete old channel.
         if (tcp_channel_)
         {
+            tcp_channel_->disconnect();
             tcp_channel_->deleteLater();
             tcp_channel_ = nullptr;
         }

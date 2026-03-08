@@ -18,6 +18,9 @@
 
 #include "console/statusbar.h"
 
+#include <QLabel>
+#include <QTimer>
+
 namespace console {
 
 //--------------------------------------------------------------------------------------------------

@@ -18,6 +18,8 @@
 
 #include "client/router_manager.h"
 
+#include <QTimer>
+
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/peer/client_authenticator.h"

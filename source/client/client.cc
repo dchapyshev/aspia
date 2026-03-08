@@ -18,6 +18,8 @@
 
 #include "client/client.h"
 
+#include <QTimer>
+
 #include "base/logging.h"
 #include "base/version_constants.h"
 #include "base/peer/client_authenticator.h"

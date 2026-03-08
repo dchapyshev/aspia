@@ -23,10 +23,15 @@
 #include <QObject>
 #include <QQueue>
 
-#include "base/net/tcp_channel.h"
-#include "base/peer/relay_peer.h"
+namespace proto::router {
+class ConnectionOffer;
+} // namespace proto::router
 
 namespace base {
+
+class Authenticator;
+class RelayPeer;
+class TcpChannel;
 
 class RelayPeerManager final : public QObject
 {

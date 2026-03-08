@@ -20,15 +20,16 @@
 #define COMMON_FILE_WORKER_H
 
 #include <QObject>
-#include <QTimer>
-
 #include <memory>
 
-#include "common/file_depacketizer.h"
-#include "common/file_packetizer.h"
 #include "common/file_task.h"
 
+class QTimer;
+
 namespace common {
+
+class FileDepacketizer;
+class FilePacketizer;
 
 class FileWorker final : public QObject
 {

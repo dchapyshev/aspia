@@ -19,12 +19,14 @@
 #ifndef CLIENT_ROUTER_MANAGER_H
 #define CLIENT_ROUTER_MANAGER_H
 
-#include <QTimer>
+#include <QObject>
 
 #include "base/net/tcp_channel.h"
 #include "base/peer/host_id.h"
 #include "base/peer/relay_peer.h"
 #include "client/router_config.h"
+
+class QTimer;
 
 namespace client {
 

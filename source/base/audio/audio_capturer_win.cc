@@ -18,6 +18,8 @@
 
 #include "base/audio/audio_capturer_win.h"
 
+#include <QTimer>
+
 #include "base/logging.h"
 #include "base/audio/win/default_audio_device_change_detector.h"
 

@@ -19,6 +19,7 @@
 #include "relay/pending_session.h"
 
 #include <QtEndian>
+#include <QTimer>
 
 #include "base/location.h"
 #include "base/logging.h"
