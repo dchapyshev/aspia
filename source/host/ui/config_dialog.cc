@@ -101,6 +101,31 @@ ConfigDialog::ConfigDialog(QWidget* parent)
         common::UpdateDialog(SystemSettings().updateServer(), "host", this).exec();
     });
 
+    ui.combo_video_capturer->addItem(
+        tr("Default"), static_cast<quint32>(base::ScreenCapturer::Type::DEFAULT));
+
+#if defined(Q_OS_WINDOWS)
+    ui.combo_video_capturer->addItem(
+        "DXGI", static_cast<quint32>(base::ScreenCapturer::Type::WIN_DXGI));
+
+    ui.combo_video_capturer->addItem(
+        "GDI", static_cast<quint32>(base::ScreenCapturer::Type::WIN_GDI));
+
+#elif defined(Q_OS_LINUX)
+    ui.combo_video_capturer->addItem(
+        "X11", static_cast<quint32>(base::ScreenCapturer::Type::LINUX_X11));
+#elif defined(Q_OS_MACOS)
+    ui.combo_video_capturer->addItem(
+        "MACOSX", static_cast<quint32>(base::ScreenCapturer::Type::MACOSX));
+#else
+#error Platform support not implemented
+#endif
+
+    connect(ui.combo_video_capturer, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [this]()
+    {
+        setConfigChanged(FROM_HERE, true);
+    });
+
     //---------------------------------------------------------------------------------------------
     // Security Tab
     //---------------------------------------------------------------------------------------------
@@ -221,37 +246,6 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     connect(ui.button_delete, &QPushButton::clicked, this, &ConfigDialog::onDeleteUser);
 
     //---------------------------------------------------------------------------------------------
-    // Advanced Tab
-    //---------------------------------------------------------------------------------------------
-
-    ui.combo_video_capturer->addItem(
-        tr("Default"), static_cast<quint32>(base::ScreenCapturer::Type::DEFAULT));
-
-#if defined(Q_OS_WINDOWS)
-    ui.combo_video_capturer->addItem(
-        "DXGI", static_cast<quint32>(base::ScreenCapturer::Type::WIN_DXGI));
-
-    ui.combo_video_capturer->addItem(
-        "GDI", static_cast<quint32>(base::ScreenCapturer::Type::WIN_GDI));
-
-#elif defined(Q_OS_LINUX)
-    ui.combo_video_capturer->addItem(
-        "X11", static_cast<quint32>(base::ScreenCapturer::Type::LINUX_X11));
-#elif defined(Q_OS_MACOS)
-    ui.combo_video_capturer->addItem(
-        "MACOSX", static_cast<quint32>(base::ScreenCapturer::Type::MACOSX));
-#else
-#error Platform support not implemented
-#endif
-
-    connect(ui.combo_video_capturer, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [this]()
-    {
-        setConfigChanged(FROM_HERE, true);
-    });
-
-    ui.tab_bar->setTabVisible(4, QApplication::queryKeyboardModifiers().testFlag(Qt::ShiftModifier));
-
-    //---------------------------------------------------------------------------------------------
     // Other
     //---------------------------------------------------------------------------------------------
 
@@ -315,8 +309,7 @@ void ConfigDialog::onUserContextMenu(const QPoint& point)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ConfigDialog::onCurrentUserChanged(
-    QTreeWidgetItem* /* current */, QTreeWidgetItem* /* previous */)
+void ConfigDialog::onCurrentUserChanged(QTreeWidgetItem* /* current */, QTreeWidgetItem* /* previous */)
 {
     ui.button_modify->setEnabled(true);
     ui.button_delete->setEnabled(true);
