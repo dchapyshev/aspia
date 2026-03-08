@@ -21,11 +21,11 @@
 
 #include <QFile>
 
+#include "common/http_file_downloader.h"
 #include "ui_download_dialog.h"
 
 namespace common {
 
-class HttpFileDownloader;
 
 class DownloadDialog final : public QDialog
 {

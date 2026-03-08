@@ -26,9 +26,12 @@ namespace common {
 class LanguageAction final : public QAction
 {
 public:
-    LanguageAction(const QString& locale_code,
-                   const QString& locale_name,
-                   QObject* parent = nullptr);
+    LanguageAction(const QString& locale_code, const QString& locale_name, QObject* parent = nullptr)
+        : QAction(parent),
+          locale_code_(locale_code)
+    {
+        setText(locale_name);
+    }
     ~LanguageAction() final = default;
 
     const QString& locale() const { return locale_code_; }
