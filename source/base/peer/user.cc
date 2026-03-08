@@ -20,7 +20,6 @@
 
 #include "base/logging.h"
 #include "base/crypto/random.h"
-#include "base/crypto/srp_constants.h"
 #include "base/crypto/srp_math.h"
 
 namespace base {
@@ -122,7 +121,7 @@ User User::create(const QString& name, const QString& password)
         return User();
     }
 
-    std::optional<SrpNgPair> Ng_pair = pairByGroup(kDefaultGroup);
+    std::optional<SrpMath::NgPair> Ng_pair = SrpMath::pairByGroup(kDefaultGroup);
     if (!Ng_pair.has_value())
     {
         LOG(ERROR) << "Pair not found for group:" << kDefaultGroup;

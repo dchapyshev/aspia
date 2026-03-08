@@ -29,7 +29,6 @@
 #include "base/version_constants.h"
 #include "base/crypto/generic_hash.h"
 #include "base/crypto/random.h"
-#include "base/crypto/srp_constants.h"
 #include "base/crypto/srp_math.h"
 
 namespace base {
@@ -468,7 +467,7 @@ void ServerAuthenticator::onIdentify(const QByteArray& buffer)
         {
             session_types_ = user.sessions;
 
-            std::optional<SrpNgPair> Ng_pair = pairByGroup(user.group);
+            std::optional<SrpMath::NgPair> Ng_pair = SrpMath::pairByGroup(user.group);
             if (Ng_pair.has_value())
             {
                 N_ = BigNum::fromStdString(Ng_pair->first);
@@ -489,8 +488,8 @@ void ServerAuthenticator::onIdentify(const QByteArray& buffer)
         hash.addData(seed_key);
         hash.addData(user_name_.toUtf8());
 
-        N_ = BigNum::fromStdString(kSrpNgPair_8192.first);
-        g_ = BigNum::fromStdString(kSrpNgPair_8192.second);
+        N_ = BigNum::fromStdString(SrpMath::kNgPair_8192.first);
+        g_ = BigNum::fromStdString(SrpMath::kNgPair_8192.second);
         s_ = BigNum::fromByteArray(hash.result());
         v_ = SrpMath::calc_v(user_name_, seed_key, s_, N_, g_);
     }

@@ -16,7 +16,6 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/crypto/srp_constants.h"
 #include "base/crypto/srp_math.h"
 
 #include <gtest/gtest.h>
@@ -119,8 +118,8 @@ TEST(srp_math_test, test_vector)
     static_assert(sizeof(B_ref_buf) == 128);
     static_assert(sizeof(key_ref_buf) == 128);
 
-    BigNum N = BigNum::fromStdString(kSrpNgPair_1024.first);
-    BigNum g = BigNum::fromStdString(kSrpNgPair_1024.second);
+    BigNum N = BigNum::fromStdString(SrpMath::kNgPair_1024.first);
+    BigNum g = BigNum::fromStdString(SrpMath::kNgPair_1024.second);
     BigNum s = BigNum::fromStdString({ reinterpret_cast<const char*>(s_buf), sizeof(s_buf) });
     ASSERT_TRUE(N.isValid());
     ASSERT_TRUE(g.isValid());

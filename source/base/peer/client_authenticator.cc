@@ -29,7 +29,6 @@
 #include "base/crypto/generic_hash.h"
 #include "base/crypto/key_pair.h"
 #include "base/crypto/random.h"
-#include "base/crypto/srp_constants.h"
 #include "base/crypto/srp_math.h"
 
 namespace base {
@@ -45,21 +44,21 @@ bool verifyNg(std::string_view N, std::string_view g)
     {
         case 512: // 4096 bit
         {
-            if (N != kSrpNgPair_4096.first || g != kSrpNgPair_4096.second)
+            if (N != SrpMath::kNgPair_4096.first || g != SrpMath::kNgPair_4096.second)
                 return false;
         }
         break;
 
         case 768: // 6144 bit
         {
-            if (N != kSrpNgPair_6144.first || g != kSrpNgPair_6144.second)
+            if (N != SrpMath::kNgPair_6144.first || g != SrpMath::kNgPair_6144.second)
                 return false;
         }
         break;
 
         case 1024: // 8192 bit
         {
-            if (N != kSrpNgPair_8192.first || g != kSrpNgPair_8192.second)
+            if (N != SrpMath::kNgPair_8192.first || g != SrpMath::kNgPair_8192.second)
                 return false;
         }
         break;

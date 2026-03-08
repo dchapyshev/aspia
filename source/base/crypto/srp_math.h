@@ -22,6 +22,8 @@
 #include <QByteArray>
 #include <QString>
 
+#include <optional>
+
 #include "base/crypto/big_num.h"
 
 namespace base {
@@ -41,6 +43,18 @@ public:
     // x - private key.
     // v - password-proof value.
     // g - generator of prime modulo N.
+
+    using NgPair = std::pair<std::string_view, std::string_view>;
+
+    static const NgPair kNgPair_1024;
+    static const NgPair kNgPair_1536;
+    static const NgPair kNgPair_2048;
+    static const NgPair kNgPair_3072;
+    static const NgPair kNgPair_4096;
+    static const NgPair kNgPair_6144;
+    static const NgPair kNgPair_8192;
+
+    static std::optional<NgPair> pairByGroup(const QString& group);
 
     static BigNum calc_u(const BigNum& A, const BigNum& B, const BigNum& N);
     static BigNum calc_B(const BigNum& b, const BigNum& N, const BigNum& g, const BigNum& v);
