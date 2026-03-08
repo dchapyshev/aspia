@@ -23,6 +23,8 @@
 
 #include "base/session_id.h"
 
+class QTimer;
+
 namespace base {
 class IpcChannel;
 class IpcServer;

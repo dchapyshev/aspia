@@ -20,6 +20,7 @@
 
 #include <QCoreApplication>
 #include <QDir>
+#include <QTimer>
 
 #include "base/application.h"
 #include "base/location.h"
