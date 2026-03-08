@@ -24,7 +24,6 @@
 #include "base/application.h"
 #include "base/logging.h"
 #include "base/session_id.h"
-#include "base/crypto/scoped_crypto_initializer.h"
 #include "base/win/scoped_com_initializer.h"
 #include "base/win/security_helpers.h"
 
@@ -401,9 +400,6 @@ Service::~Service()
 int Service::exec(Application& application)
 {
     LOG(INFO) << "Begin";
-
-    ScopedCryptoInitializer crypto_initializer;
-    CHECK(crypto_initializer.isSucceeded());
 
     ScopedCOMInitializer com_initializer;
     CHECK(com_initializer.isSucceeded());

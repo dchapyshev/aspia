@@ -221,8 +221,6 @@ list(APPEND SOURCE_BASE_CRYPTO
     crypto/password_hash.h
     crypto/random.cc
     crypto/random.h
-    crypto/scoped_crypto_initializer.cc
-    crypto/scoped_crypto_initializer.h
     crypto/secure_memory.cc
     crypto/secure_memory.h
     crypto/srp_constants.cc

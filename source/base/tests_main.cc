@@ -18,7 +18,6 @@
 
 #include "base/asio_event_dispatcher.h"
 #include "base/logging.h"
-#include "base/crypto/scoped_crypto_initializer.h"
 
 #include <QCoreApplication>
 #include <QTimer>
@@ -84,10 +83,6 @@ int main(int argc, char **argv)
         QCoreApplication::setEventDispatcher(new base::AsioEventDispatcher());
         QCoreApplication app(argc, argv);
         ::testing::InitGoogleTest(&argc, argv);
-
-        base::ScopedCryptoInitializer crypto_initializer;
-        if (!crypto_initializer.isSucceeded())
-            return 1;
 
         QTimer::singleShot(0, []()
         {

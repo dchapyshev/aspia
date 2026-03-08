@@ -32,8 +32,6 @@ namespace base {
 #if defined(Q_OS_WINDOWS)
 class MessageWindow;
 #endif // defined(Q_OS_WINDOWS)
-
-class ScopedCryptoInitializer;
 } // namespace base
 
 namespace base {
@@ -86,7 +84,6 @@ private:
     QLocalServer* server_ = nullptr;
 
     base::Thread io_thread_;
-    std::unique_ptr<base::ScopedCryptoInitializer> crypto_initializer_;
     std::unique_ptr<Translations> translations_;
 
 #if defined(Q_OS_WINDOWS)
