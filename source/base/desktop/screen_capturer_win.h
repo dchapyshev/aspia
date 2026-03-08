@@ -33,6 +33,7 @@ public:
     ~ScreenCapturerWin();
 
     static ScreenCapturer* create(Type preferred_type, Error last_error, QObject* parent);
+    static MouseCursor* mouseCursorFromHCursor(HDC dc, HCURSOR cursor);
 
     void switchToInputDesktop() final;
 

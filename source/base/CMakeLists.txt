@@ -328,8 +328,6 @@ if (WIN32)
     list(APPEND SOURCE_BASE_DESKTOP_WIN
         desktop/win/d3d_device.cc
         desktop/win/d3d_device.h
-        desktop/win/display_configuration_monitor.cc
-        desktop/win/display_configuration_monitor.h
         desktop/win/dxgi_adapter_duplicator.cc
         desktop/win/dxgi_adapter_duplicator.h
         desktop/win/dxgi_context.cc

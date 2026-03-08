@@ -20,12 +20,12 @@
 #define BASE_DESKTOP_WIN_DXGI_DUPLICATOR_CONTROLLER_H
 
 #include "base/desktop/win/d3d_device.h"
-#include "base/desktop/win/display_configuration_monitor.h"
 #include "base/desktop/win/dxgi_adapter_duplicator.h"
 #include "base/desktop/win/dxgi_context.h"
 #include "base/desktop/win/dxgi_frame.h"
 
 #include <d3dcommon.h>
+#include <optional>
 
 namespace base {
 
@@ -182,7 +182,7 @@ private:
     QRect desktop_rect_;
     std::vector<DxgiAdapterDuplicator> duplicators_;
     D3dInfo d3d_info_;
-    DisplayConfigurationMonitor display_configuration_monitor_;
+    std::optional<QRect> full_screen_rect_;
     // A number to indicate how many succeeded duplications have been performed.
     quint32 succeeded_duplications_ = 0;
 };

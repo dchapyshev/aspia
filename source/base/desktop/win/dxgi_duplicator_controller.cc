@@ -21,6 +21,7 @@
 #include "base/logging.h"
 #include "base/desktop/frame_aligned.h"
 #include "base/desktop/win/dxgi_frame.h"
+#include "base/desktop/win/screen_capture_utils.h"
 
 #include <chrono>
 #include <thread>
@@ -168,8 +169,17 @@ DxgiDuplicatorController::Result DxgiDuplicatorController::doDuplicate(
     // still rely on dxgi components to return the output frame size.
     // TODO(zijiehe): Confirm whether IDXGIOutput::GetDesc() and IDXGIOutputDuplication::GetDesc()
     // can detect the resolution change without reinitialization.
-    if (display_configuration_monitor_.isChanged())
+    QRect rect = ScreenCaptureUtils::fullScreenRect();
+
+    if (!full_screen_rect_.has_value())
+    {
+        full_screen_rect_ = rect;
+    }
+    else if (rect != full_screen_rect_)
+    {
+        full_screen_rect_ = rect;
         deinitialize();
+    }
 
     if (!initialize())
     {
@@ -326,7 +336,7 @@ void DxgiDuplicatorController::deinitialize()
 {
     desktop_rect_ = QRect();
     duplicators_.clear();
-    display_configuration_monitor_.reset();
+    full_screen_rect_.reset();
 }
 
 //--------------------------------------------------------------------------------------------------

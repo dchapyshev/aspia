@@ -44,8 +44,6 @@ public:
     const MouseCursor* captureCursor() final;
     QPoint cursorPosition() final;
 
-    static MouseCursor* mouseCursorFromHCursor(HDC dc, HCURSOR cursor);
-
 protected:
     // ScreenCapturer implementation.
     void reset() final;
