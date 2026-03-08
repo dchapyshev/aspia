@@ -24,7 +24,6 @@
 #include <signal.h>
 
 #include "base/logging.h"
-#include "base/crypto/scoped_crypto_initializer.h"
 
 namespace base {
 
@@ -98,12 +97,6 @@ int Service::exec(Application& application)
 
     if (signal(SIGABRT, signalHandler) == SIG_ERR)
         LOG(ERROR) << "Unable to install signal handler for SIGABRT";
-
-    std::unique_ptr<ScopedCryptoInitializer> crypto_initializer =
-        std::make_unique<ScopedCryptoInitializer>();
-    CHECK(crypto_initializer->isSucceeded());
-
-    LOG(INFO) << "Cryptography initialized successfully";
 
     QTimer::singleShot(0, this, &Service::onStart);
 
