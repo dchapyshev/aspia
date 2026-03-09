@@ -31,8 +31,6 @@ public:
     explicit DesktopEnvironmentWin(QObject* parent = nullptr);
     ~DesktopEnvironmentWin() final;
 
-    static void updateEnvironment();
-
 protected:
     void disableWallpaper() final;
     void disableFontSmoothing() final;
@@ -40,8 +38,13 @@ protected:
     void revertAll() final;
 
 private:
+    bool wallpaper_changed_ = false;
+    bool font_smoothing_changed_ = false;
     bool drop_shadow_changed_ = false;
     bool animation_changed_ = false;
+    bool drag_full_windows_ = false;
+    bool ui_effects_changed_ = false;
+    bool client_area_animation_changed_ = false;
 
     Q_DISABLE_COPY_MOVE(DesktopEnvironmentWin)
 };

@@ -36,7 +36,6 @@
 #include "proto/desktop_internal.h"
 
 #if defined(Q_OS_WINDOWS)
-#include "base/desktop/desktop_environment_win.h"
 #include "base/desktop/screen_capturer_win.h"
 #include "host/input_injector_win.h"
 #endif // defined(Q_OS_WINDOWS)
@@ -174,11 +173,6 @@ DesktopAgent::DesktopAgent(QObject* parent)
     // At the end of the user's session, the program ends later than the others.
     if (!SetProcessShutdownParameters(0, SHUTDOWN_NORETRY))
         PLOG(ERROR) << "SetProcessShutdownParameters failed";
-
-    connect(base::Application::instance(), &base::Application::sig_queryEndSession, []()
-    {
-        base::DesktopEnvironmentWin::updateEnvironment();
-    });
 #endif // defined(Q_OS_WINDOWS)
 
 #if defined(Q_OS_LINUX)

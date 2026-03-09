@@ -29,72 +29,44 @@ namespace base {
 
 namespace {
 
-//--------------------------------------------------------------------------------------------------
-void updatePerUserSystemParameters()
+class ScopedUserImpersonator
 {
-    ScopedHandle user_token;
+public:
+    ScopedUserImpersonator()
+    {
+        DWORD session_id = 0;
+        if (!ProcessIdToSessionId(GetCurrentProcessId(), &session_id))
+        {
+            PLOG(ERROR) << "ProcessIdToSessionId failed";
+            return;
+        }
 
-    DWORD session_id = 0;
-    if (!ProcessIdToSessionId(GetCurrentProcessId(), &session_id))
-    {
-        PLOG(ERROR) << "ProcessIdToSessionId failed";
-    }
-    else
-    {
+        ScopedHandle user_token;
         if (!WTSQueryUserToken(session_id, user_token.recieve()))
         {
             PLOG(ERROR) << "WTSQueryUserToken failed";
+            return;
         }
-    }
 
-    // The process of the desktop session is running with "SYSTEM" account.
-    // We need the current real user, not "SYSTEM".
-    ScopedImpersonator impersonator;
-    if (user_token.isValid())
-    {
-        if (!impersonator.loggedOnUser(user_token))
+        // The process of the desktop session is running with "SYSTEM" account.
+        // We need the current real user, not "SYSTEM".
+        if (!user_token.isValid())
+        {
+            LOG(INFO) << "No active user";
+            return;
+        }
+
+        if (!impersonator_.loggedOnUser(user_token))
         {
             LOG(ERROR) << "loggedOnUser failed";
+            return;
         }
     }
 
-    HMODULE module = GetModuleHandleW(L"user32.dll");
-    if (module)
-    {
-        // The function prototype is relevant for versions starting from Windows Vista.
-        // Older versions have a different prototype.
-        typedef BOOL(WINAPI* UpdatePerUserSystemParametersFunc)(DWORD flags);
-
-        UpdatePerUserSystemParametersFunc update_per_user_system_parameters =
-            reinterpret_cast<UpdatePerUserSystemParametersFunc>(
-                GetProcAddress(module, "UpdatePerUserSystemParameters"));
-        if (update_per_user_system_parameters)
-        {
-            static const DWORD kUserLoggedOn = 1;
-            static const DWORD kPolicyChange = 2;
-            static const DWORD kRemoteSettings = 4;
-
-            DWORD flags = kPolicyChange | kRemoteSettings;
-            if (user_token.isValid())
-                flags |= kUserLoggedOn;
-
-            // WARNING! Undocumented function!
-            // Any ideas how to update user settings without using it?
-            if (!update_per_user_system_parameters(flags))
-            {
-                PLOG(ERROR) << "UpdatePerUserSystemParameters failed";
-            }
-        }
-        else
-        {
-            PLOG(ERROR) << "GetProcAddress failed";
-        }
-    }
-    else
-    {
-        PLOG(ERROR) << "GetModuleHandleW failed";
-    }
-}
+private:
+    ScopedImpersonator impersonator_;
+    Q_DISABLE_COPY_MOVE(ScopedUserImpersonator)
+};
 
 } // namespace
 
@@ -113,90 +85,67 @@ DesktopEnvironmentWin::~DesktopEnvironmentWin()
 }
 
 //--------------------------------------------------------------------------------------------------
-// static
-void DesktopEnvironmentWin::updateEnvironment()
-{
-    LOG(INFO) << "Updating environment";
-    updatePerUserSystemParameters();
-}
-
-//--------------------------------------------------------------------------------------------------
 void DesktopEnvironmentWin::disableWallpaper()
 {
     LOG(INFO) << "Disable desktop wallpaper";
+    ScopedUserImpersonator impersonator;
 
     wchar_t new_path[] = L"";
-    if (!SystemParametersInfoW(SPI_SETDESKWALLPAPER, 0, new_path, SPIF_SENDCHANGE))
-    {
-        PLOG(ERROR) << "SystemParametersInfoW failed";
-    }
+    SystemParametersInfoW(SPI_SETDESKWALLPAPER, 0, new_path, SPIF_SENDCHANGE);
+    wallpaper_changed_ = true;
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopEnvironmentWin::disableFontSmoothing()
 {
     LOG(INFO) << "Disable font smoothing";
-    if (!SystemParametersInfoW(SPI_SETFONTSMOOTHING, FALSE, nullptr, SPIF_SENDCHANGE))
-    {
-        PLOG(ERROR) << "SystemParametersInfoW failed";
-    }
+    ScopedUserImpersonator impersonator;
+
+    SystemParametersInfoW(SPI_SETFONTSMOOTHING, FALSE, nullptr, SPIF_SENDCHANGE);
+    font_smoothing_changed_ = true;
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopEnvironmentWin::disableEffects()
 {
     LOG(INFO) << "Disable desktop effects";
+    ScopedUserImpersonator impersonator;
 
     BOOL drop_shadow = TRUE;
-    if (SystemParametersInfoW(SPI_GETDROPSHADOW, 0, &drop_shadow, 0))
+    if (SystemParametersInfoW(SPI_GETDROPSHADOW, 0, &drop_shadow, 0) && drop_shadow)
     {
-        if (drop_shadow)
-        {
-            if (!SystemParametersInfoW(SPI_SETDROPSHADOW, 0, FALSE, SPIF_SENDCHANGE))
-            {
-                PLOG(ERROR) << "SystemParametersInfoW failed";
-            }
-            drop_shadow_changed_ = true;
-        }
-    }
-    else
-    {
-        PLOG(ERROR) << "SystemParametersInfoW failed";
+        SystemParametersInfoW(SPI_SETDROPSHADOW, 0, FALSE, SPIF_SENDCHANGE);
+        drop_shadow_changed_ = true;
     }
 
     ANIMATIONINFO animation;
     animation.cbSize = sizeof(animation);
-    if (SystemParametersInfoW(SPI_GETANIMATION, sizeof(animation), &animation, 0))
+    if (SystemParametersInfoW(SPI_GETANIMATION, sizeof(animation), &animation, 0) && animation.iMinAnimate)
     {
-        if (animation.iMinAnimate)
-        {
-            animation.iMinAnimate = FALSE;
-            if (!SystemParametersInfoW(
-                SPI_SETANIMATION, sizeof(animation), &animation, SPIF_SENDCHANGE))
-            {
-                PLOG(ERROR) << "SystemParametersInfoW failed";
-            }
-            animation_changed_ = true;
-        }
-    }
-    else
-    {
-        PLOG(ERROR) << "SystemParametersInfoW failed";
+        animation.iMinAnimate = FALSE;
+        SystemParametersInfoW(SPI_SETANIMATION, sizeof(animation), &animation, SPIF_SENDCHANGE);
+        animation_changed_ = true;
     }
 
-    if (!SystemParametersInfoW(SPI_SETDRAGFULLWINDOWS, FALSE, nullptr, SPIF_SENDCHANGE))
+    BOOL drag_full_windows = TRUE;
+    if (SystemParametersInfoW(SPI_GETDRAGFULLWINDOWS, 0, &drag_full_windows, 0) && drag_full_windows)
     {
-        PLOG(ERROR) << "SystemParametersInfoW failed";
+        SystemParametersInfoW(SPI_SETDRAGFULLWINDOWS, FALSE, nullptr, SPIF_SENDCHANGE);
+        drag_full_windows_ = true;
     }
 
-    if (!SystemParametersInfoW(SPI_SETUIEFFECTS, 0, FALSE, SPIF_SENDCHANGE))
+    BOOL ui_effects = TRUE;
+    if (SystemParametersInfoW(SPI_GETUIEFFECTS, 0, &ui_effects, 0) && ui_effects)
     {
-        PLOG(ERROR) << "SystemParametersInfoW failed";
+        SystemParametersInfoW(SPI_SETUIEFFECTS, 0, FALSE, SPIF_SENDCHANGE);
+        ui_effects_changed_ = true;
     }
 
-    if (!SystemParametersInfoW(SPI_SETCLIENTAREAANIMATION, 0, FALSE, SPIF_SENDCHANGE))
+    BOOL client_area_animation = TRUE;
+    if (SystemParametersInfoW(SPI_GETCLIENTAREAANIMATION, 0, &client_area_animation, 0) && client_area_animation)
     {
-        PLOG(ERROR) << "SystemParametersInfoW failed";
+        SystemParametersInfoW(SPI_SETCLIENTAREAANIMATION, 0, FALSE, SPIF_SENDCHANGE);
+        client_area_animation_changed_ = true;
     }
 }
 
@@ -204,13 +153,41 @@ void DesktopEnvironmentWin::disableEffects()
 void DesktopEnvironmentWin::revertAll()
 {
     LOG(INFO) << "Reverting desktop environment changes";
+    ScopedUserImpersonator impersonator;
+
+    if (wallpaper_changed_)
+    {
+        SystemParametersInfoW(SPI_SETDESKWALLPAPER, 0, SETWALLPAPER_DEFAULT, SPIF_SENDCHANGE);
+        wallpaper_changed_ = false;
+    }
+
+    if (font_smoothing_changed_)
+    {
+        SystemParametersInfoW(SPI_SETFONTSMOOTHING, TRUE, nullptr, SPIF_SENDCHANGE);
+        font_smoothing_changed_ = false;
+    }
+
+    if (drag_full_windows_)
+    {
+        SystemParametersInfoW(SPI_SETDRAGFULLWINDOWS, TRUE, 0, SPIF_SENDCHANGE);
+        drag_full_windows_ = false;
+    }
+
+    if (ui_effects_changed_)
+    {
+        SystemParametersInfoW(SPI_SETUIEFFECTS, 0, (PVOID)TRUE, SPIF_SENDCHANGE);
+        ui_effects_changed_ = false;
+    }
+
+    if (client_area_animation_changed_)
+    {
+        SystemParametersInfoW(SPI_SETCLIENTAREAANIMATION, 0, (PVOID)TRUE, SPIF_SENDCHANGE);
+        client_area_animation_changed_ = false;
+    }
 
     if (drop_shadow_changed_)
     {
-        if (!SystemParametersInfoW(SPI_SETDROPSHADOW, 0, reinterpret_cast<PVOID>(TRUE), SPIF_SENDCHANGE))
-        {
-            PLOG(ERROR) << "SystemParametersInfoW failed";
-        }
+        SystemParametersInfoW(SPI_SETDROPSHADOW, 0, (PVOID)TRUE, SPIF_SENDCHANGE);
         drop_shadow_changed_ = false;
     }
 
@@ -220,14 +197,9 @@ void DesktopEnvironmentWin::revertAll()
         animation.cbSize = sizeof(animation);
         animation.iMinAnimate = TRUE;
 
-        if (!SystemParametersInfoW(SPI_SETANIMATION, sizeof(animation), &animation, SPIF_SENDCHANGE))
-        {
-            PLOG(ERROR) << "SystemParametersInfoW failed";
-        }
+        SystemParametersInfoW(SPI_SETANIMATION, sizeof(animation), &animation, SPIF_SENDCHANGE);
         animation_changed_ = false;
     }
-
-    updatePerUserSystemParameters();
 }
 
 } // namespace base
