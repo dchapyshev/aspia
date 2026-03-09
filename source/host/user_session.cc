@@ -112,7 +112,8 @@ bool createProcessWithToken(HANDLE token, const QString& command_line)
 UserSession::UserSession(QObject* parent)
     : QObject(parent),
       attach_timer_(new QTimer(this)),
-      dettach_timer_(new QTimer(this))
+      dettach_timer_(new QTimer(this)),
+      startup_timer_(new QTimer(this))
 {
     LOG(INFO) << "Ctor";
 
@@ -122,8 +123,12 @@ UserSession::UserSession(QObject* parent)
     dettach_timer_->setSingleShot(true);
     dettach_timer_->setInterval(std::chrono::seconds(15));
 
+    startup_timer_->setSingleShot(true);
+    startup_timer_->setInterval(std::chrono::seconds(1));
+
     connect(attach_timer_, &QTimer::timeout, this, [this]() { dettach(FROM_HERE); });
     connect(dettach_timer_, &QTimer::timeout, this, &UserSession::onDettachTimeout);
+    connect(startup_timer_, &QTimer::timeout, this, &UserSession::onStartupUserCheck);
     connect(base::Application::instance(), &base::Application::sig_sessionEvent,
             this, &UserSession::onUserSessionEvent);
 }
@@ -189,7 +194,7 @@ bool UserSession::start()
         return false;
     }
 
-    attach(FROM_HERE, session_id);
+    attach(FROM_HERE, AttachReason::STARTUP, session_id);
     return true;
 }
 
@@ -217,7 +222,7 @@ void UserSession::onClientSwitchSession(base::SessionId session_id)
 
     LOG(INFO) << "Switch session:" << session_id;
     dettach(FROM_HERE);
-    attach(FROM_HERE, session_id);
+    attach(FROM_HERE, AttachReason::SWITCH_SESSION, session_id);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -253,22 +258,28 @@ void UserSession::onClientConfirmation(const proto::user::ConfirmationRequest& r
             return;
         }
 
-        if (session_info.connectState() != base::SessionInfo::ConnectState::ACTIVE)
+        if (session_info.connectState() == base::SessionInfo::ConnectState::ACTIVE)
         {
-            if (settings.noUserAction() == SystemSettings::NoUserAction::ACCEPT)
-            {
-                LOG(INFO) << "Accept: no active user";
-                emit sig_confirmationReply(request.id(), true);
-            }
-            else
-            {
-                LOG(INFO) << "Reject: no active user";
-                emit sig_confirmationReply(request.id(), false);
-            }
+            LOG(INFO) << "Reject: user is active, but there is no connection to the GUI";
+            emit sig_confirmationReply(request.id(), false);
             return;
         }
 
-        LOG(INFO) << "Reject: user is active, but there is no connection to the GUI";
+        if (!settings.connectConfirmation())
+        {
+            LOG(INFO) << "Accept: connect confirmation is disabled";
+            emit sig_confirmationReply(request.id(), true);
+            return;
+        }
+
+        if (settings.noUserAction() == SystemSettings::NoUserAction::ACCEPT)
+        {
+            LOG(INFO) << "Accept: no active user";
+            emit sig_confirmationReply(request.id(), true);
+            return;
+        }
+
+        LOG(INFO) << "Reject: no active user";
         emit sig_confirmationReply(request.id(), false);
         return;
     }
@@ -329,7 +340,7 @@ void UserSession::onClientFinished()
     if (session_id_ != session_id && session_id_ != base::kInvalidSessionId)
     {
         dettach(FROM_HERE);
-        attach(FROM_HERE, session_id);
+        attach(FROM_HERE, AttachReason::OTHER, session_id);
     }
 }
 
@@ -367,7 +378,7 @@ void UserSession::onUserSessionEvent(quint32 status, quint32 session_id)
         case WTS_CONSOLE_CONNECT:
         {
             if (is_console_)
-                attach(FROM_HERE, session_id);
+                attach(FROM_HERE, AttachReason::OTHER, session_id);
         }
         break;
 
@@ -384,7 +395,7 @@ void UserSession::onUserSessionEvent(quint32 status, quint32 session_id)
                 return;
 
             dettach(FROM_HERE);
-            attach(FROM_HERE, base::activeConsoleSessionId());
+            attach(FROM_HERE, AttachReason::OTHER, base::activeConsoleSessionId());
         }
         break;
 
@@ -392,7 +403,7 @@ void UserSession::onUserSessionEvent(quint32 status, quint32 session_id)
         case WTS_SESSION_UNLOCK:
         {
             if (state_ == State::DETTACHED && is_console_ && session_id == base::activeConsoleSessionId())
-                attach(FROM_HERE, session_id);
+                attach(FROM_HERE, AttachReason::OTHER, session_id);
         }
         break;
 
@@ -575,7 +586,33 @@ void UserSession::onDettachTimeout()
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSession::attach(const base::Location& location, base::SessionId session_id)
+void UserSession::onStartupUserCheck()
+{
+#if defined(Q_OS_WINDOWS)
+    // Windows can automatically restore login (ARSO, Automatic Restart Sign On) when rebooting
+    // (login as the user who was logged in before the reboot). When the service starts, we don't
+    // see the logged in user, but after a while they appear (in a locked state) without any events.
+    // Therefore, we check for a user logged in within the first 60 seconds (check is done 60 times
+    // with an interval of 1 second) after the service starts. If we don't do this, the GUI will be
+    // detected missing when a client connects, even though the user is still logged in, and the
+    // client will be rejected.
+    // Settings > Accounts > Sign-in options > Use my sign-in info to automatically finish...
+    base::SessionInfo session_info(base::activeConsoleSessionId());
+    if (session_info.isValid() && session_info.connectState() == base::SessionInfo::ConnectState::ACTIVE)
+    {
+        attach(FROM_HERE, AttachReason::OTHER, session_info.sessionId());
+        return;
+    }
+
+    static int attempt_count = 0;
+
+    if (attempt_count++ <= 60)
+        startup_timer_->start();
+#endif // defined(Q_OS_WINDOWS)
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserSession::attach(const base::Location& location, AttachReason reason, base::SessionId session_id)
 {
     LOG(INFO) << "Attaching to UI process (sid" << session_id << "from" << location << ")";
 
@@ -588,6 +625,8 @@ void UserSession::attach(const base::Location& location, base::SessionId session
     state_ = State::ATTACHING;
     is_console_ = session_id == base::activeConsoleSessionId();
     session_id_ = session_id;
+
+    startup_timer_->stop();
     dettach_timer_->stop();
     attach_timer_->start();
 
@@ -633,13 +672,9 @@ void UserSession::attach(const base::Location& location, base::SessionId session
     {
         LOG(INFO) << "Console session is not active. Launching the GUI is not required";
         dettach(FROM_HERE);
-        return;
-    }
 
-    if (session_info.isUserLocked())
-    {
-        LOG(INFO) << "Console session is locked. Launching the GUI is not required";
-        dettach(FROM_HERE);
+        if (reason == AttachReason::STARTUP)
+            startup_timer_->start();
         return;
     }
 
@@ -715,6 +750,7 @@ void UserSession::dettach(const base::Location& location)
         ipc_channel_ = nullptr;
     }
 
+    startup_timer_->stop();
     session_id_ = base::kInvalidSessionId;
     is_console_ = true;
     state_ = State::DETTACHED;

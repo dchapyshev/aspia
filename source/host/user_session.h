@@ -53,6 +53,14 @@ public:
     };
     Q_ENUM(State)
 
+    enum class AttachReason
+    {
+        STARTUP,
+        SWITCH_SESSION,
+        OTHER
+    };
+    Q_ENUM(AttachReason)
+
     State state() const { return state_; }
     base::SessionId sessionId() const { return session_id_; }
 
@@ -89,9 +97,10 @@ private slots:
     void onIpcDisconnected();
     void onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer);
     void onDettachTimeout();
+    void onStartupUserCheck();
 
 private:
-    void attach(const base::Location& location, base::SessionId session_id);
+    void attach(const base::Location& location, AttachReason reason, base::SessionId session_id);
     void dettach(const base::Location& location);
     void sendMessage();
 
@@ -99,6 +108,7 @@ private:
     base::IpcChannel* ipc_channel_ = nullptr;
     QTimer* attach_timer_ = nullptr;
     QTimer* dettach_timer_ = nullptr;
+    QTimer* startup_timer_ = nullptr;
 
     State state_ = State::DETTACHED;
     base::SessionId session_id_ = base::kInvalidSessionId;
