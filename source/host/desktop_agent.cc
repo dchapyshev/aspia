@@ -266,7 +266,7 @@ void DesktopAgent::onClientConfigured()
 {
     DesktopAgentClient::Config merged_config;
 
-    for (const auto& client : std::as_const(clients_))
+    for (auto* client : std::as_const(clients_))
     {
         const DesktopAgentClient::Config& config = client->config();
 
@@ -321,11 +321,7 @@ void DesktopAgent::onClientConfigured()
 void DesktopAgent::onClientFinished()
 {
     DesktopAgentClient* client = dynamic_cast<DesktopAgentClient*>(sender());
-    if (!client)
-    {
-        LOG(ERROR) << "Unknown sender for finish slot";
-        return;
-    }
+    CHECK(client);
 
     client->disconnect();
     client->deleteLater();
@@ -459,7 +455,7 @@ void DesktopAgent::onCaptureScreen()
 
     if (is_paused_)
     {
-        for (const auto& client : std::as_const(clients_))
+        for (auto* client : std::as_const(clients_))
             client->onScreenCaptureError(proto::desktop::VIDEO_ERROR_CODE_PAUSED);
 
         capture_timer_->start(capture_scheduler_.nextCaptureDelay());
