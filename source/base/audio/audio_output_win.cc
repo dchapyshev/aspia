@@ -334,7 +334,6 @@ bool AudioOutputWin::handleDataRequest()
         // Avoid breaking the thread loop implicitly by returning false and return true instead for
         // AUDCLNT_E_DEVICE_INVALIDATED even it is a valid error message. We will use notifications
         // about device changes instead to stop data callbacks and attempt to restart streaming.
-        LOG(ERROR) << "AUDCLNT_E_DEVICE_INVALIDATED";
         return true;
     }
 
@@ -349,10 +348,7 @@ bool AudioOutputWin::handleDataRequest()
     // the maximum buffer size we can request when calling IAudioRenderClient::GetBuffer().
     UINT32 num_requested_frames = endpoint_buffer_size_frames_ - num_unread_frames;
     if (num_requested_frames == 0)
-    {
-        LOG(ERROR) << "Audio thread is signaled but no new audio samples are needed";
         return true;
-    }
 
     // Request all available space in the rendering endpoint buffer into which the client can later
     // write an audio packet.
