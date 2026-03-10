@@ -268,33 +268,6 @@ void ServerAuthenticator::onClientHello(const QByteArray& buffer)
         return;
     }
 
-    if (client_hello.has_version())
-    {
-        LOG(INFO) << "ClientHello with version info";
-        setPeerVersion(client_hello.version());
-
-        const QVersionNumber& peer_version = peerVersion();
-
-        if (peer_version.isNull())
-        {
-            finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
-            return;
-        }
-
-        // Versions lower than 2.7.0 must send the version in SessionResponse/SessionChallenge message.
-        if (peer_version < kVersion_2_7_0)
-        {
-            finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
-            return;
-        }
-
-        if (peer_version < kMinimumSupportedVersion)
-        {
-            finish(FROM_HERE, ErrorCode::VERSION_ERROR);
-            return;
-        }
-    }
-
     const quint32 encryption = client_hello.encryption();
 
     LOG(INFO) << "Supported by client:";
@@ -398,12 +371,6 @@ void ServerAuthenticator::onClientHello(const QByteArray& buffer)
     // Now we are in the authentication phase.
     internal_state_ = InternalState::SEND_SERVER_HELLO;
     encryption_ = server_hello.encryption();
-
-    proto::peer::Version* version = server_hello.mutable_version();
-    version->set_major(ASPIA_VERSION_MAJOR);
-    version->set_minor(ASPIA_VERSION_MINOR);
-    version->set_patch(ASPIA_VERSION_PATCH);
-    version->set_revision(GIT_COMMIT_COUNT);
 
     QByteArray message = base::serialize(server_hello);
 
@@ -614,43 +581,22 @@ void ServerAuthenticator::onSessionResponse(const QByteArray& buffer)
         return;
     }
 
-    if (peerVersion().isNull())
-    {
-        setPeerVersion(response.version());
-
-        const QVersionNumber& peer_version = peerVersion();
-
-        if (peer_version.isNull())
-        {
-            finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
-            return;
-        }
-
-        // Versions greater than or equal to 2.7.0 must send the peer version in
-        // ServerHello/ClientHello message.
-        if (peer_version >= kVersion_2_7_0)
-        {
-            finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
-            return;
-        }
-
-        if (peer_version < kMinimumSupportedVersion)
-        {
-            finish(FROM_HERE, ErrorCode::VERSION_ERROR);
-            return;
-        }
-    }
-
     setPeerOsName(QString::fromStdString(response.os_name()));
     setPeerComputerName(QString::fromStdString(response.computer_name()));
     setPeerArch(QString::fromStdString(response.arch()));
     setPeerDisplayName(QString::fromStdString(response.display_name()));
+    setPeerVersion(response.version());
 
     LOG(INFO) << "Client (session_type:" << response.session_type()
               << "version:" << peerVersion().toString() << "name:" << peerComputerName()
               << "os:" << peerOsName() << "cores:" << response.cpu_cores()
-              << "arch:" << peerArch() << "display_name:" << peerDisplayName()
-              << ")";
+              << "arch:" << peerArch() << "display_name:" << peerDisplayName() << ")";
+
+    if (peerVersion() < kMinimumSupportedVersion)
+    {
+        finish(FROM_HERE, ErrorCode::VERSION_ERROR);
+        return;
+    }
 
     BitSet<quint32> session_type = response.session_type();
     if (session_type.count() != 1)

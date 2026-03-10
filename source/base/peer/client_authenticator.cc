@@ -290,12 +290,6 @@ void ClientAuthenticator::sendClientHello()
         client_hello.set_iv(encrypt_iv_.toStdString());
     }
 
-    proto::peer::Version* version = client_hello.mutable_version();
-    version->set_major(ASPIA_VERSION_MAJOR);
-    version->set_minor(ASPIA_VERSION_MINOR);
-    version->set_patch(ASPIA_VERSION_PATCH);
-    version->set_revision(GIT_COMMIT_COUNT);
-
     QByteArray message = base::serialize(client_hello);
 
     LOG(INFO) << "Sending: ClientHello (" << message.size() << ")";
@@ -312,33 +306,6 @@ bool ClientAuthenticator::readServerHello(const QByteArray& buffer)
     {
         finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
         return false;
-    }
-
-    if (server_hello.has_version())
-    {
-        LOG(INFO) << "ServerHello with version info";
-        setPeerVersion(server_hello.version());
-
-        const QVersionNumber& peer_version = peerVersion();
-
-        if (peer_version.isNull())
-        {
-            finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
-            return false;
-        }
-
-        // Versions lower than 2.7.0 must send the version in SessionResponse/SessionChallenge message.
-        if (peer_version < kVersion_2_7_0)
-        {
-            finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
-            return false;
-        }
-
-        if (peer_version < kMinimumSupportedVersion)
-        {
-            finish(FROM_HERE, ErrorCode::VERSION_ERROR);
-            return false;
-        }
     }
 
     LOG(INFO) << "Encryption:" << server_hello.encryption();
@@ -472,32 +439,6 @@ bool ClientAuthenticator::readSessionChallenge(const QByteArray& buffer)
         return false;
     }
 
-    if (peerVersion().isNull())
-    {
-        setPeerVersion(challenge.version());
-
-        const QVersionNumber& peer_version = peerVersion();
-
-        if (peer_version.isNull())
-        {
-            finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
-            return false;
-        }
-
-        // Versions greater than or equal to 2.7.0 must send the peer version in ServerHello message.
-        if (peer_version >= kVersion_2_7_0)
-        {
-            finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
-            return false;
-        }
-
-        if (peer_version < kMinimumSupportedVersion)
-        {
-            finish(FROM_HERE, ErrorCode::VERSION_ERROR);
-            return false;
-        }
-    }
-
     if (!(challenge.session_types() & session_type_))
     {
         finish(FROM_HERE, ErrorCode::SESSION_DENIED);
@@ -508,11 +449,17 @@ bool ClientAuthenticator::readSessionChallenge(const QByteArray& buffer)
     setPeerComputerName(QString::fromStdString(challenge.computer_name()));
     setPeerArch(QString::fromStdString(challenge.arch()));
     setPeerDisplayName(QString::fromStdString(challenge.display_name()));
+    setPeerVersion(challenge.version());
 
     LOG(INFO) << "Server (version:" << peerVersion().toString() << "name:" << peerComputerName()
               << "os:" << peerOsName() << "cores:" << challenge.cpu_cores()
-              << "arch:" << peerArch() << "display_name:" << peerDisplayName()
-              << ")";
+              << "arch:" << peerArch() << "display_name:" << peerDisplayName() << ")";
+
+    if (peerVersion() < kMinimumSupportedVersion)
+    {
+        finish(FROM_HERE, ErrorCode::VERSION_ERROR);
+        return false;
+    }
 
     return true;
 }
