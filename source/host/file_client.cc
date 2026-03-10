@@ -20,6 +20,7 @@
 
 #include <QCoreApplication>
 #include <QDir>
+#include <QTimer>
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/scoped_object.h"

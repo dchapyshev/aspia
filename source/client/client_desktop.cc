@@ -18,6 +18,8 @@
 
 #include "client/client_desktop.h"
 
+#include <QTimer>
+
 #include "base/logging.h"
 #include "base/codec/audio_decoder.h"
 #include "base/audio/audio_player.h"

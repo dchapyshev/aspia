@@ -18,6 +18,7 @@
 
 #include "host/desktop_client.h"
 
+#include <QTimer>
 #include <QVariant>
 
 #include "base/application.h"

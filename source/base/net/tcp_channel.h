@@ -19,20 +19,19 @@
 #ifndef BASE_NET_TCP_CHANNEL_H
 #define BASE_NET_TCP_CHANNEL_H
 
-#include <QByteArray>
 #include <QObject>
 #include <QQueue>
-#include <QTimer>
+#include <QVersionNumber>
 
 #include <chrono>
 
 #include <asio/ip/tcp.hpp>
-#include <asio/steady_timer.hpp>
 
-#include "base/peer/authenticator.h"
+class QTimer;
 
 namespace base {
 
+class Authenticator;
 class Location;
 class MessageEncryptor;
 class MessageDecryptor;
@@ -130,7 +129,7 @@ public:
     bool setReadBufferSize(int size);
     bool setWriteBufferSize(int size);
 
-    qsizetype pending() const;
+    qint64 pendingBytes() const;
 
     quint32 instanceId() const { return instance_id_; }
 
@@ -165,18 +164,13 @@ protected:
     // established. In the server channel, it is started by the RelayPeer or TcpServer.
     void doAuthentication();
 
-    // Disconnects to remote host. The method is not available for an external call.
-    // To disconnect, you must destroy the channel by calling the destructor.
-    void disconnectFrom();
-
 private:
     class WriteTask
     {
     public:
-        WriteTask(quint8 type, quint8 flags, quint8 channel_id, const QByteArray& data)
+        WriteTask(quint8 type, quint8 param, const QByteArray& data)
             : type_(type),
-              flags_(flags),
-              channel_id_(channel_id),
+              param_(param),
               data_(data)
         {
             // Nothing
@@ -186,30 +180,29 @@ private:
         WriteTask& operator=(const WriteTask& other) = default;
 
         quint8 type() const { return type_; }
-        quint8 flags() const { return flags_; }
-        quint8 channelId() const { return channel_id_; }
+        quint8 param() const { return param_; }
         const QByteArray& data() const { return data_; }
         QByteArray& data() { return data_; }
 
     private:
         quint8 type_;
-        quint8 flags_;
-        quint8 channel_id_;
+        quint8 param_;
         QByteArray data_;
     };
 
     enum class ReadState
     {
         IDLE,        // No reads are in progress right now.
-        READ_HEADER, // Reading the contents of the service header.
-        READ_DATA,   // Reading the contents of the service data.
+        READ_HEADER, // Reading the contents of the header.
+        READ_DATA,   // Reading the contents of the data.
         PENDING      // There is a message about which we did not notify.
     };
 
     enum MessageType
     {
         KEEP_ALIVE = 1,
-        USER_DATA  = 2
+        AUTH_DATA  = 2,
+        USER_DATA  = 3
     };
 
     enum KeepAliveFlags
@@ -226,35 +219,23 @@ private:
 
     struct Header
     {
-        quint8 type;       // Type of packet (see MessageType).
-        quint8 flags;      // Flags bitmask (depends on the type).
-        quint8 channel_id; // Channel ID.
-        quint8 reserved;   // Reserved.
-        quint32 length;    // Additional data size.
+        quint8 type;
+        quint8 param1; // Depends on the message type.
+        quint8 param2; // Not used yet.
+        quint8 param3; // Not used yet.
+        quint32 length;
     };
 
     void init();
     void setConnected(bool connected);
-
-    void onKeyChanged();
-    void onAuthenticatorMessage(const QByteArray& data);
-    void onAuthenticatorFinished(Authenticator::ErrorCode error_code);
-
     void onErrorOccurred(const Location& location, const std::error_code& error_code);
     void onErrorOccurred(const Location& location, ErrorCode error_code);
-
-    void onMessageWritten(quint8 channel_id);
     void onMessageReceived();
-
-    void addWriteTask(quint8 type, quint8 flags, quint8 channel_id, const QByteArray& data);
-
+    void addWriteTask(quint8 type, quint8 param, const QByteArray& data);
     void doWrite();
     void doReadHeader();
     void doReadData();
-
     void onKeepAliveTimer();
-    //void sendKeepAlive(quint8 flags, const void* data, size_t size);
-
     void addTxBytes(size_t bytes_count);
     void addRxBytes(size_t bytes_count);
 

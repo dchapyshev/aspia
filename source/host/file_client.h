@@ -24,6 +24,8 @@
 #include "base/session_id.h"
 #include "base/net/tcp_channel.h"
 
+class QTimer;
+
 namespace base {
 class IpcChannel;
 class IpcServer;

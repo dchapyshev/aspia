@@ -29,6 +29,8 @@
 #include "proto/system_info.h"
 #include "proto/task_manager.h"
 
+class QTimer;
+
 namespace base {
 class AudioDecoder;
 class AudioPlayer;

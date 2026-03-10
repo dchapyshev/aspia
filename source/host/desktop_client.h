@@ -26,6 +26,8 @@
 #include "base/net/tcp_channel.h"
 #include "proto/desktop_internal.h"
 
+class QTimer;
+
 namespace base {
 class IpcChannel;
 class IpcServer;

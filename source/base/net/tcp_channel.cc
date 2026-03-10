@@ -18,6 +18,7 @@
 
 #include "base/net/tcp_channel.h"
 
+#include <QTimer>
 #include <QThread>
 
 #include <asio/connect.hpp>
@@ -30,6 +31,7 @@
 #include "base/crypto/large_number_increment.h"
 #include "base/crypto/message_decryptor.h"
 #include "base/crypto/message_encryptor.h"
+#include "base/peer/authenticator.h"
 
 namespace base {
 
@@ -118,7 +120,7 @@ TcpChannel::TcpChannel(
 //--------------------------------------------------------------------------------------------------
 TcpChannel::~TcpChannel()
 {
-    disconnectFrom();
+    setConnected(false);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -244,6 +246,7 @@ void TcpChannel::connectTo(const QString& address, quint16 port)
 //--------------------------------------------------------------------------------------------------
 void TcpChannel::pause()
 {
+    keep_alive_timer_->stop();
     paused_ = true;
 }
 
@@ -253,6 +256,8 @@ void TcpChannel::resume()
     if (!isConnected() || !paused_)
         return;
 
+    keep_alive_timer_type_ = KEEP_ALIVE_INTERVAL;
+    keep_alive_timer_->start(kKeepAliveInterval);
     paused_ = false;
 
     switch (state_)
@@ -276,82 +281,47 @@ void TcpChannel::resume()
 //--------------------------------------------------------------------------------------------------
 void TcpChannel::send(quint8 channel_id, const QByteArray& buffer)
 {
-    addWriteTask(USER_DATA, 0, channel_id, buffer);
+    addWriteTask(USER_DATA, channel_id, buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
 bool TcpChannel::setReadBufferSize(int size)
 {
-    asio::socket_base::receive_buffer_size new_option(size);
+    asio::socket_base::receive_buffer_size option(size);
 
     asio::error_code error_code;
-    socket_.set_option(new_option, error_code);
+    socket_.set_option(option, error_code);
     if (error_code)
     {
         LOG(ERROR) << "Failed to set read buffer size:" << error_code;
         return false;
     }
 
-    asio::socket_base::receive_buffer_size current_option;
-    socket_.get_option(current_option, error_code);
-    if (error_code)
-    {
-        LOG(ERROR) << "Failed to get read buffer size:" << error_code;
-        return false;
-    }
-
-    // The operating system may adjust the buffer size at its discretion.
-    if (current_option.value() != size)
-    {
-        LOG(WARNING) << "Read buffer size set successfully, but actual size:"
-                     << current_option.value() << "expected:" << size;
-    }
-    else
-    {
-        LOG(INFO) << "Read buffer size is changed:" << size;
-    }
-
+    LOG(INFO) << "Read buffer size is changed:" << size;
     return true;
 }
 
 //--------------------------------------------------------------------------------------------------
 bool TcpChannel::setWriteBufferSize(int size)
 {
-    asio::socket_base::send_buffer_size new_option(size);
+    asio::socket_base::send_buffer_size option(size);
 
     asio::error_code error_code;
-    socket_.set_option(new_option, error_code);
+    socket_.set_option(option, error_code);
     if (error_code)
     {
         LOG(ERROR) << "Failed to set write buffer size:" << error_code;
         return false;
     }
 
-    asio::socket_base::send_buffer_size current_option;
-    socket_.get_option(current_option, error_code);
-    if (error_code)
-    {
-        LOG(ERROR) << "Failed to set write buffer size:" << error_code;
-        return false;
-    }
-
-    if (current_option.value() != size)
-    {
-        LOG(WARNING) << "Write buffer size set successfully, but actual size:"
-                     << current_option.value() << "expected:" << size;
-    }
-    else
-    {
-        LOG(INFO) << "Write buffer size is changed:" << size;
-    }
-
+    LOG(INFO) << "Write buffer size is changed:" << size;
     return true;
 }
 
 //--------------------------------------------------------------------------------------------------
-qsizetype TcpChannel::pending() const
+qint64 TcpChannel::pendingBytes() const
 {
-    qsizetype result = 0;
+    qint64 result = 0;
 
     for (const auto& task : std::as_const(write_queue_))
         result += task.data().size();
@@ -386,30 +356,10 @@ int TcpChannel::speedTx()
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::disconnectFrom()
-{
-    setConnected(false);
-
-    if (resolver_)
-    {
-        resolver_->cancel();
-        resolver_.reset();
-    }
-
-    if (socket_.is_open())
-    {
-        std::error_code ignored_code;
-        socket_.cancel(ignored_code);
-
-        socket_.close(ignored_code);
-    }
-
-    keep_alive_timer_->stop();
-}
-
-//--------------------------------------------------------------------------------------------------
 void TcpChannel::init()
 {
+    CHECK(authenticator_);
+
     write_queue_.reserve(kWriteQueueReservedSize);
 
     keep_alive_timer_ = new QTimer(this);
@@ -417,13 +367,83 @@ void TcpChannel::init()
 
     connect(keep_alive_timer_, &QTimer::timeout, this, &TcpChannel::onKeepAliveTimer);
 
-    if (authenticator_)
+    keep_alive_counter_.resize(sizeof(quint32));
+    memset(keep_alive_counter_.data(), 0, keep_alive_counter_.size());
+
+    authenticator_->setParent(this);
+
+    connect(authenticator_, &Authenticator::sig_outgoingMessage, this, [this](const QByteArray& data)
     {
-        authenticator_->setParent(this);
-        connect(authenticator_, &Authenticator::sig_outgoingMessage, this, &TcpChannel::onAuthenticatorMessage);
-        connect(authenticator_, &Authenticator::sig_keyChanged, this, &TcpChannel::onKeyChanged);
-        connect(authenticator_, &Authenticator::sig_finished, this, &TcpChannel::onAuthenticatorFinished);
-    }
+        addWriteTask(AUTH_DATA, 0, data);
+    });
+
+    connect(authenticator_, &Authenticator::sig_keyChanged, this, [this]()
+    {
+        if (authenticator_->encryption() == proto::key_exchange::ENCRYPTION_AES256_GCM)
+        {
+            encryptor_ = MessageEncryptor::createForAes256Gcm(
+                authenticator_->sessionKey(), authenticator_->encryptIv());
+            decryptor_ = MessageDecryptor::createForAes256Gcm(
+                authenticator_->sessionKey(), authenticator_->decryptIv());
+        }
+        else
+        {
+            DCHECK_EQ(authenticator_->encryption(), proto::key_exchange::ENCRYPTION_CHACHA20_POLY1305);
+
+            encryptor_ = MessageEncryptor::createForChaCha20Poly1305(
+                authenticator_->sessionKey(), authenticator_->encryptIv());
+            decryptor_ = MessageDecryptor::createForChaCha20Poly1305(
+                authenticator_->sessionKey(), authenticator_->decryptIv());
+        }
+
+        if (!encryptor_ || !decryptor_)
+        {
+            onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
+            return;
+        }
+    });
+
+    connect(authenticator_, &Authenticator::sig_finished,
+            this, [this](Authenticator::ErrorCode error_code)
+    {
+        pause();
+
+        switch (error_code)
+        {
+            case Authenticator::ErrorCode::SUCCESS:
+                break;
+            case Authenticator::ErrorCode::PROTOCOL_ERROR:
+                onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
+                return;
+            case Authenticator::ErrorCode::SESSION_DENIED:
+                onErrorOccurred(FROM_HERE, ErrorCode::SESSION_DENIED);
+                return;
+            case Authenticator::ErrorCode::VERSION_ERROR:
+                onErrorOccurred(FROM_HERE, ErrorCode::VERSION_ERROR);
+                return;
+            case Authenticator::ErrorCode::ACCESS_DENIED:
+                onErrorOccurred(FROM_HERE, ErrorCode::ACCESS_DENIED);
+                return;
+            default:
+                onErrorOccurred(FROM_HERE, ErrorCode::UNKNOWN);
+                return;
+        }
+
+        version_       = authenticator_->peerVersion();
+        os_name_       = authenticator_->peerOsName();
+        computer_name_ = authenticator_->peerComputerName();
+        display_name_  = authenticator_->peerDisplayName();
+        architecture_  = authenticator_->peerArch();
+        user_name_     = authenticator_->userName();
+        session_type_  = authenticator_->sessionType();
+
+        authenticator_->disconnect();
+        authenticator_->deleteLater();
+        authenticator_ = nullptr;
+
+        authenticated_ = true;
+        emit sig_authenticated();
+    });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -432,7 +452,24 @@ void TcpChannel::setConnected(bool connected)
     connected_ = connected;
 
     if (!connected_)
+    {
+        if (resolver_)
+        {
+            resolver_->cancel();
+            resolver_.reset();
+        }
+
+        if (socket_.is_open())
+        {
+            std::error_code ignored_code;
+            socket_.cancel(ignored_code);
+
+            socket_.close(ignored_code);
+        }
+
+        keep_alive_timer_->stop();
         return;
+    }
 
     asio::ip::tcp::no_delay no_delay_option(true);
 
@@ -456,106 +493,6 @@ void TcpChannel::setConnected(bool connected)
         LOG(ERROR) << "Failed to get write buffer size:" << error_code;
     else
         LOG(INFO) << "Write buffer size:" << send_option.value();
-
-    keep_alive_counter_.resize(sizeof(quint32));
-    memset(keep_alive_counter_.data(), 0, keep_alive_counter_.size());
-
-    LOG(INFO) << "Starting keep alive timer";
-
-    keep_alive_timer_type_ = KEEP_ALIVE_INTERVAL;
-    keep_alive_timer_->start(kKeepAliveInterval);
-}
-
-//--------------------------------------------------------------------------------------------------
-void TcpChannel::onKeyChanged()
-{
-    if (!authenticator_)
-    {
-        onErrorOccurred(FROM_HERE, ErrorCode::UNKNOWN);
-        return;
-    }
-
-    if (authenticator_->encryption() == proto::key_exchange::ENCRYPTION_AES256_GCM)
-    {
-        encryptor_ = MessageEncryptor::createForAes256Gcm(
-            authenticator_->sessionKey(), authenticator_->encryptIv());
-        decryptor_ = MessageDecryptor::createForAes256Gcm(
-            authenticator_->sessionKey(), authenticator_->decryptIv());
-    }
-    else
-    {
-        DCHECK_EQ(authenticator_->encryption(), proto::key_exchange::ENCRYPTION_CHACHA20_POLY1305);
-
-        encryptor_ = MessageEncryptor::createForChaCha20Poly1305(
-            authenticator_->sessionKey(), authenticator_->encryptIv());
-        decryptor_ = MessageDecryptor::createForChaCha20Poly1305(
-            authenticator_->sessionKey(), authenticator_->decryptIv());
-    }
-
-    if (!encryptor_ || !decryptor_)
-    {
-        onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
-        return;
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-void TcpChannel::onAuthenticatorMessage(const QByteArray& data)
-{
-    send(0, data);
-}
-
-//--------------------------------------------------------------------------------------------------
-void TcpChannel::onAuthenticatorFinished(Authenticator::ErrorCode error_code)
-{
-    pause();
-
-    if (!authenticator_)
-    {
-        onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
-        return;
-    }
-
-    switch (error_code)
-    {
-        case Authenticator::ErrorCode::SUCCESS:
-            break;
-
-        case Authenticator::ErrorCode::PROTOCOL_ERROR:
-            onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
-            return;
-
-        case Authenticator::ErrorCode::SESSION_DENIED:
-            onErrorOccurred(FROM_HERE, ErrorCode::SESSION_DENIED);
-            return;
-
-        case Authenticator::ErrorCode::VERSION_ERROR:
-            onErrorOccurred(FROM_HERE, ErrorCode::VERSION_ERROR);
-            return;
-
-        case Authenticator::ErrorCode::ACCESS_DENIED:
-            onErrorOccurred(FROM_HERE, ErrorCode::ACCESS_DENIED);
-            return;
-
-        default:
-            onErrorOccurred(FROM_HERE, ErrorCode::UNKNOWN);
-            return;
-    }
-
-    version_       = authenticator_->peerVersion();
-    os_name_       = authenticator_->peerOsName();
-    computer_name_ = authenticator_->peerComputerName();
-    display_name_  = authenticator_->peerDisplayName();
-    architecture_  = authenticator_->peerArch();
-    user_name_     = authenticator_->userName();
-    session_type_  = authenticator_->sessionType();
-
-    authenticator_->disconnect();
-    authenticator_->deleteLater();
-    authenticator_ = nullptr;
-
-    authenticated_ = true;
-    emit sig_authenticated();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -586,108 +523,82 @@ void TcpChannel::onErrorOccurred(const Location& location, const std::error_code
 void TcpChannel::onErrorOccurred(const Location& location, ErrorCode error_code)
 {
     LOG(ERROR) << "Connection finished with error" << error_code << "from" << location;
-
-    if (authenticator_ && error_code == ErrorCode::CRYPTO_ERROR)
-    {
-        LOG(ERROR) << "Invalid key or username/password";
-        error_code = ErrorCode::ACCESS_DENIED;
-    }
-
-    disconnectFrom();
+    setConnected(false);
     emit sig_errorOccurred(error_code);
-}
-
-//--------------------------------------------------------------------------------------------------
-void TcpChannel::onMessageWritten(quint8 channel_id)
-{
-    if (!authenticated_)
-    {
-        if (!authenticator_)
-        {
-            onErrorOccurred(FROM_HERE, ErrorCode::UNKNOWN);
-            return;
-        }
-
-        authenticator_->onMessageWritten();
-        return;
-    }
-
-    emit sig_messageWritten(channel_id);
 }
 
 //--------------------------------------------------------------------------------------------------
 void TcpChannel::onMessageReceived()
 {
-    if (read_buffer_.size() < sizeof(Header))
+    if (read_buffer_.isEmpty())
     {
         onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
         return;
     }
 
-    const Header* header = reinterpret_cast<const Header*>(read_buffer_.data());
-    if (header->length > kMaxMessageSize || header->length == 0 ||
-        header->length + sizeof(Header) != read_buffer_.size())
+    if (read_buffer_.size() > kMaxMessageSize || read_buffer_.size() != read_header_.length)
     {
-        LOG(INFO) << "Invalid message length:" << header->length;
+        LOG(INFO) << "Invalid message length:" << read_header_.length;
         onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
         return;
     }
 
-    auto on_autenticator_message = [this](const char* data, size_t size)
+    if (read_header_.type == AUTH_DATA)
     {
-        if (!authenticator_)
+        if (!authenticator_ || authenticated_)
         {
             onErrorOccurred(FROM_HERE, ErrorCode::UNKNOWN);
             return;
         }
-        authenticator_->onIncomingMessage(QByteArray::fromRawData(data, size));
-    };
 
-    char* read_data = read_buffer_.data() + sizeof(Header);
-    size_t read_size = read_buffer_.size() - sizeof(Header);
+        if (!decryptor_)
+        {
+            authenticator_->onIncomingMessage(read_buffer_);
+            return;
+        }
 
-    if (!decryptor_)
-    {
-        on_autenticator_message(read_data, read_size);
+        resizeBuffer(&decrypt_buffer_, decryptor_->decryptedDataSize(read_buffer_.size()));
+
+        if (!decryptor_->decrypt(read_buffer_.data(), read_buffer_.size(), decrypt_buffer_.data()))
+        {
+            onErrorOccurred(FROM_HERE, ErrorCode::ACCESS_DENIED);
+            return;
+        }
+
+        authenticator_->onIncomingMessage(decrypt_buffer_);
         return;
     }
 
-    resizeBuffer(&decrypt_buffer_, decryptor_->decryptedDataSize(read_size));
+    resizeBuffer(&decrypt_buffer_, decryptor_->decryptedDataSize(read_buffer_.size()));
 
-    if (!decryptor_->decrypt(read_data, read_size, decrypt_buffer_.data()))
+    if (!decryptor_->decrypt(read_buffer_.data(), read_buffer_.size(), decrypt_buffer_.data()))
     {
         onErrorOccurred(FROM_HERE, ErrorCode::CRYPTO_ERROR);
         return;
     }
 
-    if (!authenticated_)
+    if (read_header_.type == USER_DATA)
     {
-        on_autenticator_message(decrypt_buffer_.data(), decrypt_buffer_.size());
+        emit sig_messageReceived(read_header_.param1, decrypt_buffer_);
         return;
     }
 
-    if (header->type == USER_DATA)
+    if (read_header_.type == KEEP_ALIVE)
     {
-        emit sig_messageReceived(header->channel_id, decrypt_buffer_);
-        return;
-    }
-
-    if (header->type == KEEP_ALIVE)
-    {
-        if (header->flags & KEEP_ALIVE_PING)
+        if (read_header_.param1 & KEEP_ALIVE_PING)
         {
-            addWriteTask(KEEP_ALIVE, KEEP_ALIVE_PONG, 0, decrypt_buffer_);
+            addWriteTask(KEEP_ALIVE, KEEP_ALIVE_PONG, decrypt_buffer_);
             return;
         }
 
-        if (header->length != keep_alive_counter_.size())
+        if (decrypt_buffer_.size() != keep_alive_counter_.size())
         {
             onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
             return;
         }
 
         // Pong must contain the same data as ping.
-        if (memcmp(decrypt_buffer_.data(), keep_alive_counter_.data(), keep_alive_counter_.size()) != 0)
+        if (decrypt_buffer_ == keep_alive_counter_)
         {
             onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
             return;
@@ -712,12 +623,12 @@ void TcpChannel::onMessageReceived()
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::addWriteTask(quint8 type, quint8 flags, quint8 channel_id, const QByteArray& data)
+void TcpChannel::addWriteTask(quint8 type, quint8 param, const QByteArray& data)
 {
     const bool schedule_write = write_queue_.isEmpty();
 
     // Add the buffer to the queue for sending.
-    write_queue_.emplace_back(type, flags, channel_id, data);
+    write_queue_.emplace_back(type, param, data);
 
     if (schedule_write)
         doWrite();
@@ -735,31 +646,25 @@ void TcpChannel::doWrite()
         return;
     }
 
-    size_t target_data_size = sizeof(Header);
-
+    size_t target_data_size = source_buffer.size();
     if (encryptor_)
-    {
-        // Calculate the size of the encrypted message.
-        target_data_size += encryptor_->encryptedDataSize(source_buffer.size());
-    }
-    else
-    {
-        target_data_size += source_buffer.size();
-    }
+        target_data_size = encryptor_->encryptedDataSize(source_buffer.size());
 
-    if (target_data_size > kMaxMessageSize)
+    resizeBuffer(&write_buffer_, target_data_size + sizeof(Header));
+
+    if (write_buffer_.size() > kMaxMessageSize)
     {
         LOG(ERROR) << "Too big outgoing message:" << target_data_size;
         onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
         return;
     }
 
-    resizeBuffer(&write_buffer_, target_data_size);
-
     Header* header = reinterpret_cast<Header*>(write_buffer_.data());
     header->type = task.type();
-    header->flags = task.flags();
-    header->channel_id = task.channelId();
+    header->param1 = task.param();
+    header->param2 = 0;
+    header->param3 = 0;
+    header->length = static_cast<quint32>(target_data_size);
 
     if (encryptor_)
     {
@@ -796,17 +701,29 @@ void TcpChannel::doWrite()
         addTxBytes(bytes_transferred);
 
         const WriteTask& task = write_queue_.front();
-        quint8 task_type = task.type();
-        quint8 channel_id = task.channelId();
+        quint8 type = task.type();
+        quint8 channel_id = task.param();
 
         // Delete the sent message from the queue.
         write_queue_.pop_front();
 
         // If the queue is not empty, then we send the following message.
-        bool schedule_write = !write_queue_.empty();
+        bool schedule_write = !write_queue_.isEmpty();
 
-        if (task_type == USER_DATA)
-            onMessageWritten(channel_id);
+        if (type == USER_DATA)
+        {
+            emit sig_messageWritten(channel_id);
+        }
+        else if (type == AUTH_DATA)
+        {
+            if (!authenticator_ || authenticated_)
+            {
+                onErrorOccurred(FROM_HERE, ErrorCode::UNKNOWN);
+                return;
+            }
+
+            authenticator_->onMessageWritten();
+        }
 
         if (schedule_write)
             doWrite();
@@ -896,7 +813,7 @@ void TcpChannel::onKeepAliveTimer()
         keep_alive_timestamp_ = Clock::now();
 
         // Send ping.
-        addWriteTask(KEEP_ALIVE, KEEP_ALIVE_PING, 0, keep_alive_counter_);
+        addWriteTask(KEEP_ALIVE, KEEP_ALIVE_PING, keep_alive_counter_);
 
         // If a response is not received within the specified interval, the connection will be terminated.
         keep_alive_timer_type_ = KEEP_ALIVE_TIMEOUT;
