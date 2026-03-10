@@ -413,7 +413,7 @@ QByteArray SysInfo::smbiosDump()
     }
 
     QByteArray buffer;
-    buffer.resize(static_cast<QByteArray::size_type>(buffer_size));
+    buffer.resize(static_cast<qsizetype>(buffer_size));
 
     if (!GetSystemFirmwareTable('RSMB', 'PCAF', buffer.data(), buffer_size))
     {

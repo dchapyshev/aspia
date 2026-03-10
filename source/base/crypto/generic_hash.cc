@@ -128,7 +128,7 @@ QByteArray GenericHash::result() const
     CHECK_GT(len, 0);
 
     QByteArray result;
-    result.resize(static_cast<QByteArray::size_type>(len));
+    result.resize(static_cast<qsizetype>(len));
 
     int ret = EVP_DigestFinal(ctxt_, reinterpret_cast<quint8*>(result.data()), nullptr);
     CHECK_EQ(ret, 1);

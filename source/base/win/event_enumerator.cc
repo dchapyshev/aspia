@@ -30,10 +30,10 @@ namespace {
 //--------------------------------------------------------------------------------------------------
 void resizeBuffer(QByteArray* buffer, size_t size)
 {
-    if (buffer->capacity() < static_cast<QByteArray::size_type>(size))
-        buffer->reserve(static_cast<QByteArray::size_type>(size));
+    if (buffer->capacity() < static_cast<qsizetype>(size))
+        buffer->reserve(static_cast<qsizetype>(size));
 
-    buffer->resize(static_cast<QByteArray::size_type>(size));
+    buffer->resize(static_cast<qsizetype>(size));
 }
 
 //--------------------------------------------------------------------------------------------------

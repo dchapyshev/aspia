@@ -409,7 +409,7 @@ void IpcChannel::doReadData()
 {
     read_state_ = ReadState::READ_DATA;
 
-    if (read_buffer_.capacity() < static_cast<QByteArray::size_type>(read_header_.message_size))
+    if (read_buffer_.capacity() < static_cast<qsizetype>(read_header_.message_size))
     {
         read_buffer_.clear();
         read_buffer_.reserve(read_header_.message_size);

@@ -964,7 +964,7 @@ void TcpChannel::doReadServiceData(size_t length)
     DCHECK_EQ(state_, ReadState::READ_SERVICE_HEADER);
     DCHECK_GT(length, 0u);
 
-    read_buffer_.resize(read_buffer_.size() + static_cast<QByteArray::size_type>(length));
+    read_buffer_.resize(read_buffer_.size() + static_cast<qsizetype>(length));
 
     // Now we read the data after the header.
     state_ = ReadState::READ_SERVICE_DATA;
@@ -1094,7 +1094,7 @@ void TcpChannel::sendKeepAlive(quint8 flags, const void* data, size_t size)
     header.length = static_cast<quint32>(size);
 
     QByteArray buffer;
-    buffer.resize(static_cast<QByteArray::size_type>(sizeof(quint8) + sizeof(header) + size));
+    buffer.resize(static_cast<qsizetype>(sizeof(quint8) + sizeof(header) + size));
 
     // The first byte set to 0 indicates that this is a service message.
     buffer[0] = 0;

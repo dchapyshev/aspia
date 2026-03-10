@@ -31,7 +31,7 @@ void testVector(MessageEncryptor* client_encryptor, MessageDecryptor* client_dec
 
     QByteArray encrypted_msg_for_host;
 
-    encrypted_msg_for_host.resize(static_cast<QByteArray::size_type>(
+    encrypted_msg_for_host.resize(static_cast<qsizetype>(
         client_encryptor->encryptedDataSize(message_for_host.size())));
     ASSERT_EQ(encrypted_msg_for_host.size(), message_for_host.size() + 16);
 
@@ -42,7 +42,7 @@ void testVector(MessageEncryptor* client_encryptor, MessageDecryptor* client_dec
 
     QByteArray decrypted_msg_for_host;
 
-    decrypted_msg_for_host.resize(static_cast<QByteArray::size_type>(
+    decrypted_msg_for_host.resize(static_cast<qsizetype>(
         host_decryptor->decryptedDataSize(encrypted_msg_for_host.size())));
     ASSERT_EQ(decrypted_msg_for_host.size(), encrypted_msg_for_host.size() - 16);
 
@@ -57,7 +57,7 @@ void testVector(MessageEncryptor* client_encryptor, MessageDecryptor* client_dec
 
     QByteArray encrypted_msg_for_client;
 
-    encrypted_msg_for_client.resize(static_cast<QByteArray::size_type>(
+    encrypted_msg_for_client.resize(static_cast<qsizetype>(
         host_encryptor->encryptedDataSize(message_for_client.size())));
     ASSERT_EQ(encrypted_msg_for_client.size(), message_for_client.size() + 16);
 
@@ -69,7 +69,7 @@ void testVector(MessageEncryptor* client_encryptor, MessageDecryptor* client_dec
     QByteArray decrypted_msg_for_client;
 
     decrypted_msg_for_client.resize(
-        static_cast<QByteArray::size_type>(client_decryptor->decryptedDataSize(encrypted_msg_for_client.size())));
+        static_cast<qsizetype>(client_decryptor->decryptedDataSize(encrypted_msg_for_client.size())));
     ASSERT_EQ(decrypted_msg_for_client.size(), encrypted_msg_for_client.size() - 16);
 
     ret = client_decryptor->decrypt(encrypted_msg_for_client.data(),
@@ -86,7 +86,7 @@ void wrongKey(MessageEncryptor* client_encryptor, MessageDecryptor* host_decrypt
 
     QByteArray encrypted_msg_for_host;
 
-    encrypted_msg_for_host.resize(static_cast<QByteArray::size_type>(
+    encrypted_msg_for_host.resize(static_cast<qsizetype>(
         client_encryptor->encryptedDataSize(message_for_host.size())));
     ASSERT_EQ(encrypted_msg_for_host.size(), message_for_host.size() + 16);
 
@@ -97,7 +97,7 @@ void wrongKey(MessageEncryptor* client_encryptor, MessageDecryptor* host_decrypt
 
     QByteArray decrypted_msg_for_host;
 
-    decrypted_msg_for_host.resize(static_cast<QByteArray::size_type>(
+    decrypted_msg_for_host.resize(static_cast<qsizetype>(
         host_decryptor->decryptedDataSize(encrypted_msg_for_host.size())));
     ASSERT_EQ(decrypted_msg_for_host.size(), encrypted_msg_for_host.size() - 16);
 

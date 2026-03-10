@@ -295,7 +295,7 @@ BigNum calc_xy(const BigNum& x, const BigNum& y, const BigNum& N)
 
     const size_t xy_size = static_cast<size_t>(N_bytes) + static_cast<size_t>(N_bytes);
     QByteArray xy;
-    xy.resize(static_cast<QByteArray::size_type>(xy_size));
+    xy.resize(static_cast<qsizetype>(xy_size));
 
     if (BN_bn2binpad(x, reinterpret_cast<quint8*>(xy.data()), N_bytes) < 0)
         return BigNum();

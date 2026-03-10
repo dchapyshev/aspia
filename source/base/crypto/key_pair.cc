@@ -120,7 +120,7 @@ QByteArray KeyPair::privateKey() const
     }
 
     QByteArray private_key;
-    private_key.resize(static_cast<QByteArray::size_type>(private_key_length));
+    private_key.resize(static_cast<qsizetype>(private_key_length));
 
     if (EVP_PKEY_get_raw_private_key(pkey_.get(), reinterpret_cast<quint8*>(private_key.data()),
         &private_key_length) != 1)
@@ -156,7 +156,7 @@ QByteArray KeyPair::publicKey() const
     }
 
     QByteArray public_key;
-    public_key.resize(static_cast<QByteArray::size_type>(public_key_length));
+    public_key.resize(static_cast<qsizetype>(public_key_length));
 
     if (EVP_PKEY_get_raw_public_key(pkey_.get(), reinterpret_cast<quint8*>(public_key.data()),
         &public_key_length) != 1)
@@ -225,7 +225,7 @@ QByteArray KeyPair::sessionKey(const QByteArray& peer_public_key) const
     }
 
     QByteArray session_key;
-    session_key.resize(static_cast<QByteArray::size_type>(session_key_length));
+    session_key.resize(static_cast<qsizetype>(session_key_length));
 
     if (EVP_PKEY_derive(ctx.get(), reinterpret_cast<quint8*>(session_key.data()),
         &session_key_length) != 1)

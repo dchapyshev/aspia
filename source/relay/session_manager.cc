@@ -59,7 +59,7 @@ QByteArray decryptSecret(const proto::relay::PeerToRelay& message, const KeyPool
     }
 
     QByteArray target;
-    target.resize(static_cast<QByteArray::size_type>(decryptor->decryptedDataSize(source.size())));
+    target.resize(static_cast<qsizetype>(decryptor->decryptedDataSize(source.size())));
 
     if (!decryptor->decrypt(source.data(), source.size(), target.data()))
     {
@@ -95,6 +95,7 @@ void removeSessionT(QList<T*>* sessions, T* session_to_remove)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
 QString peerAddress(const asio::ip::tcp::socket& socket)
 {
     try

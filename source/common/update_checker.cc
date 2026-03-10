@@ -47,7 +47,7 @@ UpdateChecker::~UpdateChecker()
 static size_t writeDataFunc(void* ptr, size_t size, size_t nmemb, QByteArray* buffer)
 {
     size_t append_size = size * nmemb;
-    buffer->append(reinterpret_cast<char*>(ptr), static_cast<QByteArray::size_type>(append_size));
+    buffer->append(reinterpret_cast<char*>(ptr), static_cast<qsizetype>(append_size));
     return append_size;
 }
 

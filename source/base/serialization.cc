@@ -30,7 +30,7 @@ QByteArray serialize(const google::protobuf::MessageLite& message)
         return QByteArray();
 
     QByteArray buffer;
-    buffer.resize(static_cast<QByteArray::size_type>(size));
+    buffer.resize(static_cast<qsizetype>(size));
 
     message.SerializeWithCachedSizesToArray(reinterpret_cast<quint8*>(buffer.data()));
     return buffer;

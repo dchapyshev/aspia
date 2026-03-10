@@ -420,7 +420,7 @@ void DesktopAgent::onSelectScreen(base::ScreenCapturer::ScreenId screen_id, cons
     if (screen_resizer_)
     {
         screen_list.resolutions = screen_resizer_->supportedResolutions(screen_id);
-        if (screen_list.resolutions.empty())
+        if (screen_list.resolutions.isEmpty())
             LOG(INFO) << "No supported resolutions";
 
         for (const auto& resolition : std::as_const(screen_list.resolutions))
@@ -676,7 +676,7 @@ void DesktopAgent::selectCapturer(base::ScreenCapturer::Error last_error)
     {
         if (!desktop_environment_)
         {
-            LOG(ERROR) << "Desktop environment not initialized";
+            LOG(ERROR) << "Desktop environment is not initialized";
             return;
         }
 
@@ -695,7 +695,7 @@ base::ScreenCapturer::ScreenId DesktopAgent::defaultScreen()
 {
     if (!screen_capturer_)
     {
-        LOG(ERROR) << "Screen capturer not initialized";
+        LOG(ERROR) << "Screen capturer is not initialized";
         return base::ScreenCapturer::kInvalidScreenId;
     }
 

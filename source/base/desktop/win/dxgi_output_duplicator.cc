@@ -245,10 +245,10 @@ bool DxgiOutputDuplicator::duplicate(
         DXGI_OUTDUPL_POINTER_SHAPE_INFO* shape_info = cursor->pointerShapeInfo();
         QByteArray* buffer = cursor->pointerShapeBuffer();
 
-        if (buffer->capacity() < static_cast<QByteArray::size_type>(frame_info.PointerShapeBufferSize))
-            buffer->reserve(static_cast<QByteArray::size_type>(frame_info.PointerShapeBufferSize));
+        if (buffer->capacity() < static_cast<qsizetype>(frame_info.PointerShapeBufferSize))
+            buffer->reserve(static_cast<qsizetype>(frame_info.PointerShapeBufferSize));
 
-        buffer->resize(static_cast<QByteArray::size_type>(frame_info.PointerShapeBufferSize));
+        buffer->resize(static_cast<qsizetype>(frame_info.PointerShapeBufferSize));
 
         UINT buffer_required;
         _com_error hr = duplication_->GetFramePointerShape(frame_info.PointerShapeBufferSize,
