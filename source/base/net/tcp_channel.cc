@@ -598,7 +598,7 @@ void TcpChannel::onMessageReceived()
         }
 
         // Pong must contain the same data as ping.
-        if (decrypt_buffer_ == keep_alive_counter_)
+        if (decrypt_buffer_ != keep_alive_counter_)
         {
             onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
             return;
