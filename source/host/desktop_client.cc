@@ -298,11 +298,11 @@ void DesktopClient::onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray
 //--------------------------------------------------------------------------------------------------
 void DesktopClient::onOverflowCheck()
 {
-    static const size_t kCriticalPendingBytes = 1 * 1024 * 1024; // 1 MB
-    static const size_t kWarningPendingBytes = 512 * 1024; // 512 kB
+    static const qint64 kCriticalPendingBytes = 1 * 1024 * 1024; // 1 MB
+    static const qint64 kWarningPendingBytes = 512 * 1024; // 512 kB
 
     proto::desktop::Overflow::State state = proto::desktop::Overflow::STATE_NONE;
-    size_t pending = tcp_channel_->pending();
+    qint64 pending = tcp_channel_->pendingBytes();
 
     if (pending > kCriticalPendingBytes)
         state = proto::desktop::Overflow::STATE_CRITICAL;

@@ -29,7 +29,6 @@
 #include <asio/ip/tcp.hpp>
 #include <asio/steady_timer.hpp>
 
-#include "base/net/variable_size.h"
 #include "base/peer/authenticator.h"
 
 namespace base {
@@ -131,7 +130,7 @@ public:
     bool setReadBufferSize(int size);
     bool setWriteBufferSize(int size);
 
-    size_t pending() const;
+    qint64 pendingBytes() const;
 
     quint32 instanceId() const { return instance_id_; }
 
@@ -171,6 +170,36 @@ protected:
     void disconnectFrom();
 
 private:
+    class VariableSizeReader
+    {
+    public:
+        VariableSizeReader() = default;
+        ~VariableSizeReader() = default;
+
+        asio::mutable_buffer buffer();
+        std::optional<size_t> messageSize();
+
+    private:
+        quint8 buffer_[4] = { 0 };
+        size_t pos_ = 0;
+
+        Q_DISABLE_COPY_MOVE(VariableSizeReader)
+    };
+
+    class VariableSizeWriter
+    {
+    public:
+        VariableSizeWriter() = default;
+        ~VariableSizeWriter() = default;
+
+        asio::const_buffer variableSize(size_t size);
+
+    private:
+        quint8 buffer_[4];
+
+        Q_DISABLE_COPY_MOVE(VariableSizeWriter)
+    };
+
     class WriteTask
     {
     public:
@@ -197,8 +226,6 @@ private:
         quint8 channel_id_;
         QByteArray data_;
     };
-
-    using WriteQueue = QQueue<WriteTask>;
 
     enum class ReadState
     {
@@ -296,7 +323,7 @@ private:
     QString user_name_;
     quint32 session_type_ = 0;
 
-    WriteQueue write_queue_;
+    QQueue<WriteTask> write_queue_;
     VariableSizeWriter variable_size_writer_;
     QByteArray write_buffer_;
 
