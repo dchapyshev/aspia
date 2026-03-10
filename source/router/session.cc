@@ -229,11 +229,11 @@ void Session::onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Session::onTcpMessageWritten(quint8 channel_id, size_t pending)
+void Session::onTcpMessageWritten(quint8 channel_id)
 {
     if (channel_id == proto::router::CHANNEL_ID_SESSION)
     {
-        onSessionMessageWritten(channel_id, pending);
+        onSessionMessageWritten(channel_id);
     }
     else
     {

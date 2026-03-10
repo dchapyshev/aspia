@@ -153,12 +153,6 @@ void ClientDesktop::onServiceMessageReceived(const QByteArray& buffer)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientDesktop::onSessionMessageWritten(size_t /* pending */)
-{
-    // Nothing
-}
-
-//--------------------------------------------------------------------------------------------------
 void ClientDesktop::onClipboardEvent(const proto::desktop::ClipboardEvent& event)
 {
     if (!input_event_filter_.sendClipboardEvent(event))

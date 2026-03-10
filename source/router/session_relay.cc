@@ -82,7 +82,7 @@ void SessionRelay::onSessionMessageReceived(quint8 /* channel_id */, const QByte
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionRelay::onSessionMessageWritten(quint8 /* channel_id */, size_t /* pending */)
+void SessionRelay::onSessionMessageWritten(quint8 /* channel_id */)
 {
     // Nothing
 }

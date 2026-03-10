@@ -94,12 +94,6 @@ void ClientFileTransfer::onServiceMessageReceived(const QByteArray& /* buffer */
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientFileTransfer::onSessionMessageWritten(size_t /* pending */)
-{
-    // Nothing
-}
-
-//--------------------------------------------------------------------------------------------------
 void ClientFileTransfer::onTaskDone(const common::FileTask& task)
 {
     const proto::file_transfer::Request& request = task.request();

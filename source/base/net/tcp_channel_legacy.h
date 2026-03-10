@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_NET_TCP_CHANNEL_H
-#define BASE_NET_TCP_CHANNEL_H
+#ifndef BASE_NET_TCP_CHANNEL_LEGACY_H
+#define BASE_NET_TCP_CHANNEL_LEGACY_H
 
 #include <QByteArray>
 #include <QObject>
@@ -29,6 +29,7 @@
 #include <asio/ip/tcp.hpp>
 #include <asio/steady_timer.hpp>
 
+#include "base/net/variable_size.h"
 #include "base/peer/authenticator.h"
 
 namespace base {
@@ -38,14 +39,14 @@ class MessageEncryptor;
 class MessageDecryptor;
 class TcpServer;
 
-class TcpChannel final : public QObject
+class TcpChannelLegacy final : public QObject
 {
     Q_OBJECT
 
 public:
     // Constructor available for client.
-    explicit TcpChannel(Authenticator* authenticator, QObject* parent = nullptr);
-    ~TcpChannel() final;
+    explicit TcpChannelLegacy(Authenticator* authenticator, QObject* parent = nullptr);
+    ~TcpChannelLegacy() final;
 
     static const quint32 kMaxMessageSize;
 
@@ -130,7 +131,7 @@ public:
     bool setReadBufferSize(int size);
     bool setWriteBufferSize(int size);
 
-    qsizetype pending() const;
+    size_t pending() const;
 
     quint32 instanceId() const { return instance_id_; }
 
@@ -150,7 +151,7 @@ public:
 signals:
     void sig_connected();
     void sig_authenticated();
-    void sig_errorOccurred(base::TcpChannel::ErrorCode error_code);
+    void sig_errorOccurred(base::TcpChannelLegacy::ErrorCode error_code);
     void sig_messageReceived(quint8 channel_id, const QByteArray& buffer);
     void sig_messageWritten(quint8 channel_id);
 
@@ -159,7 +160,7 @@ protected:
     friend class RelayPeer;
 
     // Constructor available for server. An already connected socket is being moved.
-    TcpChannel(asio::ip::tcp::socket&& socket, Authenticator* authenticator, QObject* parent);
+    TcpChannelLegacy(asio::ip::tcp::socket&& socket, Authenticator* authenticator, QObject* parent);
 
     // Starts authentication. In the client channel, it starts automatically when a connection is
     // established. In the server channel, it is started by the RelayPeer or TcpServer.
@@ -173,11 +174,12 @@ private:
     class WriteTask
     {
     public:
-        WriteTask(quint8 type, quint8 flags, quint8 channel_id, const QByteArray& data)
+        enum class Type { SERVICE_DATA, USER_DATA };
+
+        WriteTask(Type type, quint8 channel_id, const QByteArray& data)
             : type_(type),
-              flags_(flags),
-              channel_id_(channel_id),
-              data_(data)
+            channel_id_(channel_id),
+            data_(data)
         {
             // Nothing
         }
@@ -185,31 +187,38 @@ private:
         WriteTask(const WriteTask& other) = default;
         WriteTask& operator=(const WriteTask& other) = default;
 
-        quint8 type() const { return type_; }
-        quint8 flags() const { return flags_; }
+        Type type() const { return type_; }
         quint8 channelId() const { return channel_id_; }
         const QByteArray& data() const { return data_; }
         QByteArray& data() { return data_; }
 
     private:
-        quint8 type_;
-        quint8 flags_;
+        Type type_;
         quint8 channel_id_;
         QByteArray data_;
     };
 
+    using WriteQueue = QQueue<WriteTask>;
+
     enum class ReadState
     {
-        IDLE,        // No reads are in progress right now.
-        READ_HEADER, // Reading the contents of the service header.
-        READ_DATA,   // Reading the contents of the service data.
-        PENDING      // There is a message about which we did not notify.
+        IDLE,                // No reads are in progress right now.
+        READ_SIZE,           // Reading the message size.
+        READ_SERVICE_HEADER, // Reading the contents of the service header.
+        READ_SERVICE_DATA,   // Reading the contents of the service data.
+        READ_USER_DATA,      // Reading the contents of the user data.
+        PENDING              // There is a message about which we did not notify.
     };
 
-    enum MessageType
+    struct UserDataHeader
     {
-        KEEP_ALIVE = 1,
-        USER_DATA  = 2
+        quint8 channel_id;
+        quint8 reserved;
+    };
+
+    enum ServiceMessageType
+    {
+        KEEP_ALIVE = 1
     };
 
     enum KeepAliveFlags
@@ -224,13 +233,13 @@ private:
         KEEP_ALIVE_INTERVAL = 1
     };
 
-    struct Header
+    struct ServiceHeader
     {
-        quint8 type;       // Type of packet (see MessageType).
-        quint8 flags;      // Flags bitmask (depends on the type).
-        quint8 channel_id; // Channel ID.
-        quint8 reserved;   // Reserved.
-        quint32 length;    // Additional data size.
+        quint8 type;      // Type of service packet (see ServiceDataType).
+        quint8 flags;     // Flags bitmask (depends on the type).
+        quint8 reserved1; // Reserved.
+        quint8 reserved2; // Reserved.
+        quint32 length;   // Additional data size.
     };
 
     void init();
@@ -246,14 +255,16 @@ private:
     void onMessageWritten(quint8 channel_id);
     void onMessageReceived();
 
-    void addWriteTask(quint8 type, quint8 flags, quint8 channel_id, const QByteArray& data);
+    void addWriteTask(WriteTask::Type type, quint8 channel_id, const QByteArray& data);
 
     void doWrite();
-    void doReadHeader();
-    void doReadData();
+    void doReadSize();
+    void doReadUserData(size_t length);
+    void doReadServiceHeader();
+    void doReadServiceData(size_t length);
 
     void onKeepAliveTimer();
-    //void sendKeepAlive(quint8 flags, const void* data, size_t size);
+    void sendKeepAlive(quint8 flags, const void* data, size_t size);
 
     void addTxBytes(size_t bytes_count);
     void addRxBytes(size_t bytes_count);
@@ -285,13 +296,16 @@ private:
     QString user_name_;
     quint32 session_type_ = 0;
 
-    QQueue<WriteTask> write_queue_;
+    WriteQueue write_queue_;
+    VariableSizeWriter variable_size_writer_;
     QByteArray write_buffer_;
 
     ReadState state_ = ReadState::IDLE;
-    Header read_header_;
+    VariableSizeReader variable_size_reader_;
     QByteArray read_buffer_;
     QByteArray decrypt_buffer_;
+
+    bool is_channel_id_supported_ = false;
 
     qint64 total_tx_ = 0;
     qint64 total_rx_ = 0;
@@ -304,11 +318,11 @@ private:
     qint64 bytes_rx_ = 0;
     int speed_rx_ = 0;
 
-    Q_DISABLE_COPY_MOVE(TcpChannel)
+    Q_DISABLE_COPY_MOVE(TcpChannelLegacy)
 };
 
 } // namespace base
 
-Q_DECLARE_METATYPE(base::TcpChannel::ErrorCode)
+Q_DECLARE_METATYPE(base::TcpChannelLegacy::ErrorCode)
 
-#endif // BASE_NET_TCP_CHANNEL_H
+#endif // BASE_NET_TCP_CHANNEL_LEGACY_H

@@ -39,7 +39,7 @@ protected:
     // Session implementation.
     void onSessionReady() final;
     void onSessionMessageReceived(quint8 channel_id, const QByteArray& buffer) final;
-    void onSessionMessageWritten(quint8 channel_id, size_t pending) final;
+    void onSessionMessageWritten(quint8 channel_id) final;
 
 private:
     void readConnectionRequest(const proto::router::ConnectionRequest& request);

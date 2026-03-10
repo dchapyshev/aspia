@@ -179,7 +179,6 @@ void Client::start()
         connect(tcp_channel_, &base::TcpChannel::sig_authenticated, this, &Client::onTcpReady);
         connect(tcp_channel_, &base::TcpChannel::sig_errorOccurred, this, &Client::onTcpErrorOccurred);
         connect(tcp_channel_, &base::TcpChannel::sig_messageReceived, this, &Client::onTcpMessageReceived);
-        connect(tcp_channel_, &base::TcpChannel::sig_messageWritten, this, &Client::onTcpMessageWritten);
 
         // Now connect to the host.
         emit sig_statusChanged(Status::HOST_CONNECTING);
@@ -328,23 +327,6 @@ void Client::onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::onTcpMessageWritten(quint8 channel_id, size_t pending)
-{
-    if (channel_id == proto::peer::CHANNEL_ID_SESSION)
-    {
-        onSessionMessageWritten(pending);
-    }
-    else if (channel_id == proto::peer::CHANNEL_ID_SERVICE)
-    {
-        // Nothing
-    }
-    else
-    {
-        LOG(ERROR) << "Unhandled outgoing message from channel:" << channel_id;
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
 void Client::onRouterConnected(const QVersionNumber& router_version)
 {
     LOG(INFO) << "Router connected";
@@ -376,7 +358,6 @@ void Client::onHostConnected()
 
     connect(tcp_channel_, &base::TcpChannel::sig_errorOccurred, this, &Client::onTcpErrorOccurred);
     connect(tcp_channel_, &base::TcpChannel::sig_messageReceived, this, &Client::onTcpMessageReceived);
-    connect(tcp_channel_, &base::TcpChannel::sig_messageWritten, this, &Client::onTcpMessageWritten);
 
     channelReady();
 

@@ -67,10 +67,4 @@ void ClientChat::onServiceMessageReceived(const QByteArray& /* buffer */)
     // Not used yet.
 }
 
-//--------------------------------------------------------------------------------------------------
-void ClientChat::onSessionMessageWritten(size_t /* pending */)
-{
-    // Nothing
-}
-
 } // namespace client

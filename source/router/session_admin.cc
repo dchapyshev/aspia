@@ -85,7 +85,7 @@ void SessionAdmin::onSessionMessageReceived(quint8 /* channel_id */, const QByte
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionAdmin::onSessionMessageWritten(quint8 /* channel_id */, size_t /* pending */)
+void SessionAdmin::onSessionMessageWritten(quint8 /* channel_id */)
 {
     // Nothing
 }

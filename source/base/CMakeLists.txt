@@ -402,11 +402,12 @@ list(APPEND SOURCE_BASE_NET
     net/curl_util.h
     net/tcp_channel.cc
     net/tcp_channel.h
+    net/tcp_channel_legacy.cc
+    net/tcp_channel_legacy.h
     net/tcp_server.cc
     net/tcp_server.h
     net/variable_size.cc
-    net/variable_size.h
-    net/write_task.h)
+    net/variable_size.h)
 
 if (WIN32)
     list(APPEND SOURCE_BASE_NET

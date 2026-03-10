@@ -68,10 +68,4 @@ void ClientSystemInfo::onServiceMessageReceived(const QByteArray& /* buffer */)
     // Not used yet.
 }
 
-//--------------------------------------------------------------------------------------------------
-void ClientSystemInfo::onSessionMessageWritten(size_t /* pending */)
-{
-    // Nothing
-}
-
 } // namespace client

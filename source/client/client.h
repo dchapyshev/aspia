@@ -74,7 +74,6 @@ protected:
     virtual void onSessionStarted() = 0;
     virtual void onSessionMessageReceived(const QByteArray& buffer) = 0;
     virtual void onServiceMessageReceived(const QByteArray& buffer) = 0;
-    virtual void onSessionMessageWritten(size_t pending) = 0;
 
     // Sends outgoing message.
     void sendSessionMessage(const QByteArray& message);
@@ -90,7 +89,6 @@ private slots:
     void onTcpReady();
     void onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code);
     void onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer);
-    void onTcpMessageWritten(quint8 channel_id, size_t pending);
     void onRouterConnected(const QVersionNumber& router_version);
     void onHostAwaiting();
     void onHostConnected();

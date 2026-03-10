@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/net/tcp_channel.h"
+#include "base/net/tcp_channel_legacy.h"
 
 #include <QThread>
 
@@ -36,10 +36,10 @@ namespace base {
 namespace {
 
 const int kWriteQueueReservedSize = 128;
-const TcpChannel::Seconds kKeepAliveInterval { 60 };
-const TcpChannel::Seconds kKeepAliveTimeout { 30 };
+const TcpChannelLegacy::Seconds kKeepAliveInterval { 60 };
+const TcpChannelLegacy::Seconds kKeepAliveTimeout { 30 };
 
-auto g_errorCodeType = qRegisterMetaType<base::TcpChannel::ErrorCode>();
+auto g_errorCodeType = qRegisterMetaType<base::TcpChannelLegacy::ErrorCode>();
 
 //--------------------------------------------------------------------------------------------------
 quint32 makeInstanceId()
@@ -79,7 +79,7 @@ void resizeBuffer(QByteArray* buffer, qint64 new_size)
 }
 
 //--------------------------------------------------------------------------------------------------
-int calculateSpeed(int last_speed, const TcpChannel::Milliseconds& duration, qint64 bytes)
+int calculateSpeed(int last_speed, const TcpChannelLegacy::Milliseconds& duration, qint64 bytes)
 {
     static const double kAlpha = 0.1;
     return static_cast<int>(
@@ -90,7 +90,7 @@ int calculateSpeed(int last_speed, const TcpChannel::Milliseconds& duration, qin
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-TcpChannel::TcpChannel(Authenticator* authenticator, QObject* parent)
+TcpChannelLegacy::TcpChannelLegacy(Authenticator* authenticator, QObject* parent)
     : QObject(parent),
       instance_id_(makeInstanceId()),
       io_context_(base::AsioEventDispatcher::ioContext()),
@@ -102,7 +102,7 @@ TcpChannel::TcpChannel(Authenticator* authenticator, QObject* parent)
 }
 
 //--------------------------------------------------------------------------------------------------
-TcpChannel::TcpChannel(
+TcpChannelLegacy::TcpChannelLegacy(
     asio::ip::tcp::socket&& socket, Authenticator* authenticator, QObject* parent)
     : QObject(parent),
       instance_id_(makeInstanceId()),
@@ -116,16 +116,16 @@ TcpChannel::TcpChannel(
 }
 
 //--------------------------------------------------------------------------------------------------
-TcpChannel::~TcpChannel()
+TcpChannelLegacy::~TcpChannelLegacy()
 {
     disconnectFrom();
 }
 
 //--------------------------------------------------------------------------------------------------
-const quint32 TcpChannel::kMaxMessageSize = 7 * 1024 * 1024; // 7 MB
+const quint32 TcpChannelLegacy::kMaxMessageSize = 7 * 1024 * 1024; // 7 MB
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::doAuthentication()
+void TcpChannelLegacy::doAuthentication()
 {
     if (!authenticator_)
     {
@@ -139,7 +139,7 @@ void TcpChannel::doAuthentication()
 }
 
 //--------------------------------------------------------------------------------------------------
-QString TcpChannel::peerAddress() const
+QString TcpChannelLegacy::peerAddress() const
 {
     if (!socket_.is_open() || !isConnected())
         return QString();
@@ -183,7 +183,7 @@ QString TcpChannel::peerAddress() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::connectTo(const QString& address, quint16 port)
+void TcpChannelLegacy::connectTo(const QString& address, quint16 port)
 {
     if (isConnected() || !resolver_)
         return;
@@ -242,13 +242,13 @@ void TcpChannel::connectTo(const QString& address, quint16 port)
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::pause()
+void TcpChannelLegacy::pause()
 {
     paused_ = true;
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::resume()
+void TcpChannelLegacy::resume()
 {
     if (!isConnected() || !paused_)
         return;
@@ -258,8 +258,10 @@ void TcpChannel::resume()
     switch (state_)
     {
         // We already have an incomplete read operation.
-        case ReadState::READ_HEADER:
-        case ReadState::READ_DATA:
+        case ReadState::READ_SIZE:
+        case ReadState::READ_USER_DATA:
+        case ReadState::READ_SERVICE_HEADER:
+        case ReadState::READ_SERVICE_DATA:
             return;
 
         default:
@@ -270,17 +272,17 @@ void TcpChannel::resume()
     if (state_ == ReadState::PENDING)
         onMessageReceived();
 
-    doReadHeader();
+    doReadSize();
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::send(quint8 channel_id, const QByteArray& buffer)
+void TcpChannelLegacy::send(quint8 channel_id, const QByteArray& buffer)
 {
-    addWriteTask(USER_DATA, 0, channel_id, buffer);
+    addWriteTask(WriteTask::Type::USER_DATA, channel_id, buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
-bool TcpChannel::setReadBufferSize(int size)
+bool TcpChannelLegacy::setReadBufferSize(int size)
 {
     asio::socket_base::receive_buffer_size new_option(size);
 
@@ -315,7 +317,7 @@ bool TcpChannel::setReadBufferSize(int size)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool TcpChannel::setWriteBufferSize(int size)
+bool TcpChannelLegacy::setWriteBufferSize(int size)
 {
     asio::socket_base::send_buffer_size new_option(size);
 
@@ -349,9 +351,9 @@ bool TcpChannel::setWriteBufferSize(int size)
 }
 
 //--------------------------------------------------------------------------------------------------
-qsizetype TcpChannel::pending() const
+size_t TcpChannelLegacy::pending() const
 {
-    qsizetype result = 0;
+    size_t result = 0;
 
     for (const auto& task : std::as_const(write_queue_))
         result += task.data().size();
@@ -360,7 +362,7 @@ qsizetype TcpChannel::pending() const
 }
 
 //--------------------------------------------------------------------------------------------------
-int TcpChannel::speedRx()
+int TcpChannelLegacy::speedRx()
 {
     TimePoint current_time = Clock::now();
     Milliseconds duration = std::chrono::duration_cast<Milliseconds>(current_time - begin_time_rx_);
@@ -373,7 +375,7 @@ int TcpChannel::speedRx()
 }
 
 //--------------------------------------------------------------------------------------------------
-int TcpChannel::speedTx()
+int TcpChannelLegacy::speedTx()
 {
     TimePoint current_time = Clock::now();
     Milliseconds duration = std::chrono::duration_cast<Milliseconds>(current_time - begin_time_tx_);
@@ -386,7 +388,7 @@ int TcpChannel::speedTx()
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::disconnectFrom()
+void TcpChannelLegacy::disconnectFrom()
 {
     setConnected(false);
 
@@ -408,26 +410,26 @@ void TcpChannel::disconnectFrom()
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::init()
+void TcpChannelLegacy::init()
 {
     write_queue_.reserve(kWriteQueueReservedSize);
 
     keep_alive_timer_ = new QTimer(this);
     keep_alive_timer_->setSingleShot(true);
 
-    connect(keep_alive_timer_, &QTimer::timeout, this, &TcpChannel::onKeepAliveTimer);
+    connect(keep_alive_timer_, &QTimer::timeout, this, &TcpChannelLegacy::onKeepAliveTimer);
 
     if (authenticator_)
     {
         authenticator_->setParent(this);
-        connect(authenticator_, &Authenticator::sig_outgoingMessage, this, &TcpChannel::onAuthenticatorMessage);
-        connect(authenticator_, &Authenticator::sig_keyChanged, this, &TcpChannel::onKeyChanged);
-        connect(authenticator_, &Authenticator::sig_finished, this, &TcpChannel::onAuthenticatorFinished);
+        connect(authenticator_, &Authenticator::sig_outgoingMessage, this, &TcpChannelLegacy::onAuthenticatorMessage);
+        connect(authenticator_, &Authenticator::sig_keyChanged, this, &TcpChannelLegacy::onKeyChanged);
+        connect(authenticator_, &Authenticator::sig_finished, this, &TcpChannelLegacy::onAuthenticatorFinished);
     }
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::setConnected(bool connected)
+void TcpChannelLegacy::setConnected(bool connected)
 {
     connected_ = connected;
 
@@ -467,7 +469,7 @@ void TcpChannel::setConnected(bool connected)
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::onKeyChanged()
+void TcpChannelLegacy::onKeyChanged()
 {
     if (!authenticator_)
     {
@@ -500,13 +502,13 @@ void TcpChannel::onKeyChanged()
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::onAuthenticatorMessage(const QByteArray& data)
+void TcpChannelLegacy::onAuthenticatorMessage(const QByteArray& data)
 {
     send(0, data);
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::onAuthenticatorFinished(Authenticator::ErrorCode error_code)
+void TcpChannelLegacy::onAuthenticatorFinished(Authenticator::ErrorCode error_code)
 {
     pause();
 
@@ -542,6 +544,9 @@ void TcpChannel::onAuthenticatorFinished(Authenticator::ErrorCode error_code)
             return;
     }
 
+    is_channel_id_supported_ = true;
+    LOG(INFO) << "Support for channel id is enabled";
+
     version_       = authenticator_->peerVersion();
     os_name_       = authenticator_->peerOsName();
     computer_name_ = authenticator_->peerComputerName();
@@ -559,7 +564,7 @@ void TcpChannel::onAuthenticatorFinished(Authenticator::ErrorCode error_code)
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::onErrorOccurred(const Location& location, const std::error_code& error_code)
+void TcpChannelLegacy::onErrorOccurred(const Location& location, const std::error_code& error_code)
 {
     ErrorCode error = ErrorCode::UNKNOWN;
 
@@ -583,7 +588,7 @@ void TcpChannel::onErrorOccurred(const Location& location, const std::error_code
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::onErrorOccurred(const Location& location, ErrorCode error_code)
+void TcpChannelLegacy::onErrorOccurred(const Location& location, ErrorCode error_code)
 {
     LOG(ERROR) << "Connection finished with error" << error_code << "from" << location;
 
@@ -598,7 +603,7 @@ void TcpChannel::onErrorOccurred(const Location& location, ErrorCode error_code)
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::onMessageWritten(quint8 channel_id)
+void TcpChannelLegacy::onMessageWritten(quint8 channel_id)
 {
     if (!authenticated_)
     {
@@ -616,19 +621,33 @@ void TcpChannel::onMessageWritten(quint8 channel_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::onMessageReceived()
+void TcpChannelLegacy::onMessageReceived()
 {
-    if (read_buffer_.size() < sizeof(Header))
+    char* read_data = read_buffer_.data();
+    size_t read_size = read_buffer_.size();
+
+    UserDataHeader header;
+
+    if (is_channel_id_supported_)
     {
-        onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
-        return;
+        if (read_size < sizeof(header))
+        {
+            onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
+            return;
+        }
+
+        memcpy(&header, read_data, sizeof(header));
+
+        read_data += sizeof(header);
+        read_size -= sizeof(header);
+    }
+    else
+    {
+        memset(&header, 0, sizeof(header));
     }
 
-    const Header* header = reinterpret_cast<const Header*>(read_buffer_.data());
-    if (header->length > kMaxMessageSize || header->length == 0 ||
-        header->length + sizeof(Header) != read_buffer_.size())
+    if (!read_size)
     {
-        LOG(INFO) << "Invalid message length:" << header->length;
         onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
         return;
     }
@@ -640,11 +659,9 @@ void TcpChannel::onMessageReceived()
             onErrorOccurred(FROM_HERE, ErrorCode::UNKNOWN);
             return;
         }
+
         authenticator_->onIncomingMessage(QByteArray::fromRawData(data, size));
     };
-
-    char* read_data = read_buffer_.data() + sizeof(Header);
-    size_t read_size = read_buffer_.size() - sizeof(Header);
 
     if (!decryptor_)
     {
@@ -666,68 +683,27 @@ void TcpChannel::onMessageReceived()
         return;
     }
 
-    if (header->type == USER_DATA)
-    {
-        emit sig_messageReceived(header->channel_id, decrypt_buffer_);
-        return;
-    }
-
-    if (header->type == KEEP_ALIVE)
-    {
-        if (header->flags & KEEP_ALIVE_PING)
-        {
-            addWriteTask(KEEP_ALIVE, KEEP_ALIVE_PONG, 0, decrypt_buffer_);
-            return;
-        }
-
-        if (header->length != keep_alive_counter_.size())
-        {
-            onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
-            return;
-        }
-
-        // Pong must contain the same data as ping.
-        if (memcmp(decrypt_buffer_.data(), keep_alive_counter_.data(), keep_alive_counter_.size()) != 0)
-        {
-            onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
-            return;
-        }
-
-        if (DCHECK_IS_ON())
-        {
-            Milliseconds ping_time = std::chrono::duration_cast<Milliseconds>(
-                Clock::now() - keep_alive_timestamp_);
-
-            DLOG(INFO) << "Ping result:" << ping_time.count() << "ms ("
-                       << keep_alive_counter_.size() << "bytes)";
-        }
-
-        // Increase the counter of sent packets.
-        largeNumberIncrement(&keep_alive_counter_);
-
-        // Restart keep alive timer.
-        keep_alive_timer_type_ = KEEP_ALIVE_INTERVAL;
-        keep_alive_timer_->start(kKeepAliveInterval);
-    }
+    emit sig_messageReceived(header.channel_id, decrypt_buffer_);
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::addWriteTask(quint8 type, quint8 flags, quint8 channel_id, const QByteArray& data)
+void TcpChannelLegacy::addWriteTask(WriteTask::Type type, quint8 channel_id, const QByteArray& data)
 {
     const bool schedule_write = write_queue_.isEmpty();
 
     // Add the buffer to the queue for sending.
-    write_queue_.emplace_back(type, flags, channel_id, data);
+    write_queue_.emplace_back(type, channel_id, data);
 
     if (schedule_write)
         doWrite();
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::doWrite()
+void TcpChannelLegacy::doWrite()
 {
     const WriteTask& task = write_queue_.front();
     const QByteArray& source_buffer = task.data();
+    const quint8 channel_id = task.channelId();
 
     if (source_buffer.isEmpty())
     {
@@ -735,45 +711,71 @@ void TcpChannel::doWrite()
         return;
     }
 
-    size_t target_data_size = sizeof(Header);
-
-    if (encryptor_)
+    if (task.type() == WriteTask::Type::USER_DATA)
     {
-        // Calculate the size of the encrypted message.
-        target_data_size += encryptor_->encryptedDataSize(source_buffer.size());
-    }
-    else
-    {
-        target_data_size += source_buffer.size();
-    }
+        size_t target_data_size;
 
-    if (target_data_size > kMaxMessageSize)
-    {
-        LOG(ERROR) << "Too big outgoing message:" << target_data_size;
-        onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
-        return;
-    }
-
-    resizeBuffer(&write_buffer_, target_data_size);
-
-    Header* header = reinterpret_cast<Header*>(write_buffer_.data());
-    header->type = task.type();
-    header->flags = task.flags();
-    header->channel_id = task.channelId();
-
-    if (encryptor_)
-    {
-        // Encrypt the message.
-        if (!encryptor_->encrypt(source_buffer.data(), source_buffer.size(),
-                                 write_buffer_.data() + sizeof(Header)))
+        if (encryptor_)
         {
-            onErrorOccurred(FROM_HERE, ErrorCode::CRYPTO_ERROR);
+            // Calculate the size of the encrypted message.
+            target_data_size = encryptor_->encryptedDataSize(source_buffer.size());
+        }
+        else
+        {
+            target_data_size = source_buffer.size();
+        }
+
+        if (is_channel_id_supported_)
+            target_data_size += sizeof(UserDataHeader);
+
+        if (target_data_size > kMaxMessageSize)
+        {
+            LOG(ERROR) << "Too big outgoing message:" << target_data_size;
+            onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
             return;
+        }
+
+        asio::const_buffer variable_size = variable_size_writer_.variableSize(target_data_size);
+
+        resizeBuffer(&write_buffer_, variable_size.size() + target_data_size);
+
+        // Copy the size of the message to the buffer.
+        memcpy(write_buffer_.data(), variable_size.data(), variable_size.size());
+
+        char* write_buffer = write_buffer_.data() + variable_size.size();
+        if (is_channel_id_supported_)
+        {
+            UserDataHeader header;
+            header.channel_id = channel_id;
+            header.reserved = 0;
+
+            // Copy the channel id to the buffer.
+            memcpy(write_buffer, &header, sizeof(header));
+            write_buffer += sizeof(header);
+        }
+
+        if (encryptor_)
+        {
+            // Encrypt the message.
+            if (!encryptor_->encrypt(source_buffer.data(), source_buffer.size(), write_buffer))
+            {
+                onErrorOccurred(FROM_HERE, ErrorCode::CRYPTO_ERROR);
+                return;
+            }
+        }
+        else
+        {
+            memcpy(write_buffer, source_buffer.data(), source_buffer.size());
         }
     }
     else
     {
-        memcpy(write_buffer_.data() + sizeof(Header), source_buffer.data(), source_buffer.size());
+        DCHECK_EQ(task.type(), WriteTask::Type::SERVICE_DATA);
+
+        resizeBuffer(&write_buffer_, source_buffer.size());
+
+        // Service data does not need encryption. Copy the source buffer.
+        memcpy(write_buffer_.data(), source_buffer.data(), source_buffer.size());
     }
 
     // Send the buffer to the recipient.
@@ -796,7 +798,7 @@ void TcpChannel::doWrite()
         addTxBytes(bytes_transferred);
 
         const WriteTask& task = write_queue_.front();
-        quint8 task_type = task.type();
+        WriteTask::Type task_type = task.type();
         quint8 channel_id = task.channelId();
 
         // Delete the sent message from the queue.
@@ -805,7 +807,7 @@ void TcpChannel::doWrite()
         // If the queue is not empty, then we send the following message.
         bool schedule_write = !write_queue_.empty();
 
-        if (task_type == USER_DATA)
+        if (task_type == WriteTask::Type::USER_DATA)
             onMessageWritten(channel_id);
 
         if (schedule_write)
@@ -814,10 +816,10 @@ void TcpChannel::doWrite()
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::doReadHeader()
+void TcpChannelLegacy::doReadSize()
 {
-    state_ = ReadState::READ_HEADER;
-    asio::async_read(socket_, asio::mutable_buffer(&read_header_, sizeof(Header)),
+    state_ = ReadState::READ_SIZE;
+    asio::async_read(socket_, variable_size_reader_.buffer(),
         [this](const std::error_code& error_code, size_t bytes_transferred)
     {
         if (error_code)
@@ -832,26 +834,41 @@ void TcpChannel::doReadHeader()
         // Update RX statistics.
         addRxBytes(bytes_transferred);
 
-        if (read_header_.length > kMaxMessageSize)
+        std::optional<size_t> size = variable_size_reader_.messageSize();
+        if (size.has_value())
         {
-            LOG(ERROR) << "Too big incoming message:" << read_header_.length;
-            onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
-            return;
-        }
+            size_t message_size = *size;
 
-        if (read_header_.length)
-            doReadData();
+            if (message_size > kMaxMessageSize)
+            {
+                LOG(ERROR) << "Too big incoming message:" << message_size;
+                onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
+                return;
+            }
+
+            // If the message size is 0 (in other words, the first received byte is 0), then you need
+            // to start reading the service message.
+            if (!message_size)
+            {
+                doReadServiceHeader();
+                return;
+            }
+
+            doReadUserData(message_size);
+        }
         else
-            doReadHeader();
+        {
+            doReadSize();
+        }
     });
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::doReadData()
+void TcpChannelLegacy::doReadUserData(size_t length)
 {
-    resizeBuffer(&read_buffer_, read_header_.length);
+    resizeBuffer(&read_buffer_, length);
 
-    state_ = ReadState::READ_DATA;
+    state_ = ReadState::READ_USER_DATA;
     asio::async_read(socket_, asio::buffer(read_buffer_.data(), read_buffer_.size()),
         [this](const std::error_code& error_code, size_t bytes_transferred)
     {
@@ -863,6 +880,8 @@ void TcpChannel::doReadData()
             onErrorOccurred(FROM_HERE, error_code);
             return;
         }
+
+        DCHECK_EQ(state_, ReadState::READ_USER_DATA);
 
         // Update RX statistics.
         addRxBytes(bytes_transferred);
@@ -883,12 +902,166 @@ void TcpChannel::doReadData()
             return;
         }
 
-        doReadHeader();
+        doReadSize();
     });
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::onKeepAliveTimer()
+void TcpChannelLegacy::doReadServiceHeader()
+{
+    resizeBuffer(&read_buffer_, sizeof(ServiceHeader));
+
+    state_ = ReadState::READ_SERVICE_HEADER;
+    asio::async_read(socket_, asio::buffer(read_buffer_.data(), read_buffer_.size()),
+        [this](const std::error_code& error_code, size_t bytes_transferred)
+    {
+        if (error_code)
+        {
+            if (error_code == asio::error::operation_aborted)
+                return;
+
+            onErrorOccurred(FROM_HERE, error_code);
+            return;
+        }
+
+        DCHECK_EQ(state_, ReadState::READ_SERVICE_HEADER);
+        DCHECK_EQ(read_buffer_.size(), sizeof(ServiceHeader));
+        DCHECK_EQ(bytes_transferred, read_buffer_.size());
+
+        // Update RX statistics.
+        addRxBytes(bytes_transferred);
+
+        ServiceHeader* header = reinterpret_cast<ServiceHeader*>(read_buffer_.data());
+        if (header->length > kMaxMessageSize)
+        {
+            LOG(INFO) << "Too big service message:" << header->length;
+            onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
+            return;
+        }
+
+        if (header->type == KEEP_ALIVE)
+        {
+            // Keep alive packet must always contain data.
+            if (!header->length)
+            {
+                onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
+                return;
+            }
+
+            doReadServiceData(header->length);
+        }
+        else
+        {
+            onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
+            return;
+        }
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
+void TcpChannelLegacy::doReadServiceData(size_t length)
+{
+    DCHECK_EQ(read_buffer_.size(), sizeof(ServiceHeader));
+    DCHECK_EQ(state_, ReadState::READ_SERVICE_HEADER);
+    DCHECK_GT(length, 0u);
+
+    read_buffer_.resize(read_buffer_.size() + static_cast<qsizetype>(length));
+
+    // Now we read the data after the header.
+    state_ = ReadState::READ_SERVICE_DATA;
+    asio::async_read(socket_,
+                     asio::buffer(read_buffer_.data() + sizeof(ServiceHeader),
+                                  read_buffer_.size() - sizeof(ServiceHeader)),
+                     [this](const std::error_code& error_code, size_t bytes_transferred)
+    {
+        if (error_code)
+        {
+            if (error_code == asio::error::operation_aborted)
+                return;
+
+            onErrorOccurred(FROM_HERE, error_code);
+            return;
+        }
+
+        DCHECK_EQ(state_, ReadState::READ_SERVICE_DATA);
+        DCHECK_GT(read_buffer_.size(), sizeof(ServiceHeader));
+
+        // Update RX statistics.
+        addRxBytes(bytes_transferred);
+
+        // Incoming buffer contains a service header.
+        ServiceHeader* header = reinterpret_cast<ServiceHeader*>(read_buffer_.data());
+
+        DCHECK_EQ(bytes_transferred, read_buffer_.size() - sizeof(ServiceHeader));
+        DCHECK_LE(header->length, kMaxMessageSize);
+
+        if (header->type == KEEP_ALIVE)
+        {
+            if (header->flags & KEEP_ALIVE_PING)
+            {
+                // Send pong.
+                sendKeepAlive(KEEP_ALIVE_PONG,
+                              read_buffer_.data() + sizeof(ServiceHeader),
+                              read_buffer_.size() - sizeof(ServiceHeader));
+            }
+            else
+            {
+                if (read_buffer_.size() < static_cast<qsizetype>(sizeof(ServiceHeader) + header->length))
+                {
+                    onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
+                    return;
+                }
+
+                if (header->length != keep_alive_counter_.size())
+                {
+                    onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
+                    return;
+                }
+
+                // Pong must contain the same data as ping.
+                if (memcmp(read_buffer_.data() + sizeof(ServiceHeader),
+                           keep_alive_counter_.data(),
+                           keep_alive_counter_.size()) != 0)
+                {
+                    onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
+                    return;
+                }
+
+                if (DCHECK_IS_ON())
+                {
+                    Milliseconds ping_time = std::chrono::duration_cast<Milliseconds>(
+                        Clock::now() - keep_alive_timestamp_);
+
+                    DLOG(INFO) << "Ping result:" << ping_time.count() << "ms ("
+                               << keep_alive_counter_.size() << "bytes)";
+                }
+
+                // The user can disable keep alive. Restart the timer only if keep alive is enabled.
+                if (keep_alive_timer_->isActive())
+                {
+                    DCHECK(!keep_alive_counter_.isEmpty());
+
+                    // Increase the counter of sent packets.
+                    largeNumberIncrement(&keep_alive_counter_);
+
+                    // Restart keep alive timer.
+                    keep_alive_timer_type_ = KEEP_ALIVE_INTERVAL;
+                    keep_alive_timer_->start(kKeepAliveInterval);
+                }
+            }
+        }
+        else
+        {
+            onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
+            return;
+        }
+
+        doReadSize();
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
+void TcpChannelLegacy::onKeepAliveTimer()
 {
     if (keep_alive_timer_type_ == KEEP_ALIVE_INTERVAL)
     {
@@ -896,7 +1069,7 @@ void TcpChannel::onKeepAliveTimer()
         keep_alive_timestamp_ = Clock::now();
 
         // Send ping.
-        addWriteTask(KEEP_ALIVE, KEEP_ALIVE_PING, 0, keep_alive_counter_);
+        sendKeepAlive(KEEP_ALIVE_PING, keep_alive_counter_.data(), keep_alive_counter_.size());
 
         // If a response is not received within the specified interval, the connection will be terminated.
         keep_alive_timer_type_ = KEEP_ALIVE_TIMEOUT;
@@ -912,14 +1085,38 @@ void TcpChannel::onKeepAliveTimer()
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::addTxBytes(size_t bytes_count)
+void TcpChannelLegacy::sendKeepAlive(quint8 flags, const void* data, size_t size)
+{
+    ServiceHeader header;
+    memset(&header, 0, sizeof(header));
+
+    header.type   = KEEP_ALIVE;
+    header.flags  = flags;
+    header.length = static_cast<quint32>(size);
+
+    QByteArray buffer;
+    buffer.resize(static_cast<qsizetype>(sizeof(quint8) + sizeof(header) + size));
+
+    // The first byte set to 0 indicates that this is a service message.
+    buffer[0] = 0;
+
+    // Now copy the header and data to the buffer.
+    memcpy(buffer.data() + sizeof(quint8), &header, sizeof(header));
+    memcpy(buffer.data() + sizeof(quint8) + sizeof(header), data, size);
+
+    // Add a task to the queue.
+    addWriteTask(WriteTask::Type::SERVICE_DATA, 0, std::move(buffer));
+}
+
+//--------------------------------------------------------------------------------------------------
+void TcpChannelLegacy::addTxBytes(size_t bytes_count)
 {
     bytes_tx_ += bytes_count;
     total_tx_ += bytes_count;
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::addRxBytes(size_t bytes_count)
+void TcpChannelLegacy::addRxBytes(size_t bytes_count)
 {
     bytes_rx_ += bytes_count;
     total_rx_ += bytes_count;

@@ -92,7 +92,7 @@ void SessionHost::onSessionMessageReceived(quint8 /* channel_id */, const QByteA
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionHost::onSessionMessageWritten(quint8 /* channel_id */, size_t /* pending */)
+void SessionHost::onSessionMessageWritten(quint8 /* channel_id */)
 {
     // Nothing
 }
