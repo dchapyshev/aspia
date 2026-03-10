@@ -84,7 +84,7 @@ bool AudioOutputWin::start()
         return false;
 
     if (is_restarting_)
-        DCHECK(audio_thread_);
+        CHECK(audio_thread_);
 
     if (!fillRenderEndpointBufferWithSilence(audio_client_.Get(), audio_render_client_.Get()))
     {
@@ -214,6 +214,9 @@ void AudioOutputWin::threadRun()
     if (streaming && error)
     {
         LOG(ERROR) << "WASAPI streaming failed";
+        is_restarting_ = false;
+        is_active_ = false;
+
         // Stop audio streaming since something has gone wrong in our main thread loop. Note that,
         // we are still in a "started" state, hence a stop() call is required to join the thread
         // properly.
@@ -412,20 +415,20 @@ void AudioOutputWin::stopThread()
 {
     DCHECK(!is_restarting_);
 
-    if (audio_thread_)
+    if (!audio_thread_)
+        return;
+
+    if (audio_thread_->isRunning())
     {
-        if (audio_thread_->isRunning())
-        {
-            SetEvent(stop_event_);
-            audio_thread_->wait();
-        }
-
-        audio_thread_.reset();
-
-        // Ensure that we don't quit the main thread loop immediately next time start() is called.
-        ResetEvent(stop_event_);
-        ResetEvent(restart_event_);
+        SetEvent(stop_event_);
+        audio_thread_->wait();
     }
+
+    audio_thread_.reset();
+
+    // Ensure that we don't quit the main thread loop immediately next time start() is called.
+    ResetEvent(stop_event_);
+    ResetEvent(restart_event_);
 }
 
 //--------------------------------------------------------------------------------------------------
