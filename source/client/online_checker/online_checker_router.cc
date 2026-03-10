@@ -157,6 +157,7 @@ void OnlineCheckerRouter::onFinished(const base::Location& location)
 
     if (tcp_channel_)
     {
+        tcp_channel_->disconnect();
         tcp_channel_->deleteLater();
         tcp_channel_ = nullptr;
     }

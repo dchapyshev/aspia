@@ -31,7 +31,6 @@
 #include "base/net/variable_size.h"
 #include "base/net/write_task.h"
 #include "base/peer/authenticator.h"
-#include "base/peer/host_id.h"
 
 namespace base {
 
@@ -256,7 +255,7 @@ private:
     bool authenticated_ = false;
     bool paused_ = true;
 
-    QPointer<Authenticator> authenticator_;
+    Authenticator* authenticator_ = nullptr;
     std::unique_ptr<MessageEncryptor> encryptor_;
     std::unique_ptr<MessageDecryptor> decryptor_;
 

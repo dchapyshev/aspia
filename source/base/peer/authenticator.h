@@ -19,7 +19,6 @@
 #ifndef BASE_PEER_AUTHENTICATOR_H
 #define BASE_PEER_AUTHENTICATOR_H
 
-#include <QPointer>
 #include <QTimer>
 #include <QVersionNumber>
 
@@ -82,7 +81,7 @@ public slots:
 signals:
     void sig_outgoingMessage(const QByteArray& data);
     void sig_keyChanged();
-    void sig_finished(ErrorCode error_code);
+    void sig_finished(base::Authenticator::ErrorCode error_code);
 
 protected:
     [[nodiscard]] virtual bool onStarted() = 0;
@@ -107,7 +106,7 @@ protected:
     QString user_name_;
 
 private:
-    QPointer<QTimer> timer_;
+    QTimer* timer_ = nullptr;
     State state_ = State::STOPPED;
     QVersionNumber peer_version_; // Remote peer version.
     QString peer_os_name_;

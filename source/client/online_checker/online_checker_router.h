@@ -20,10 +20,10 @@
 #define CLIENT_ONLINE_CHECKER_ONLINE_CHECKER_ROUTER_H
 
 #include <QQueue>
-#include <QPointer>
 #include <QTimer>
 
 #include "base/net/tcp_channel.h"
+#include "base/peer/host_id.h"
 #include "client/router_config.h"
 
 namespace base {
@@ -62,7 +62,7 @@ private:
     void checkNextComputer();
     void onFinished(const base::Location& location);
 
-    QPointer<base::TcpChannel> tcp_channel_;
+    base::TcpChannel* tcp_channel_ = nullptr;
     QTimer timer_;
     RouterConfig router_config_;
 

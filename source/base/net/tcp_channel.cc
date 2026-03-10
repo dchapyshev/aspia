@@ -555,6 +555,7 @@ void TcpChannel::onAuthenticatorFinished(Authenticator::ErrorCode error_code)
     user_name_     = authenticator_->userName();
     session_type_  = authenticator_->sessionType();
 
+    authenticator_->disconnect();
     authenticator_->deleteLater();
     authenticator_ = nullptr;
 
