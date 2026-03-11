@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/net/tcp_channel.h"
+#include "base/net/tcp_channel_ng.h"
 
 #include <QTimer>
 #include <QThread>
@@ -38,10 +38,10 @@ namespace base {
 namespace {
 
 const int kWriteQueueReservedSize = 128;
-const TcpChannel::Seconds kKeepAliveInterval { 60 };
-const TcpChannel::Seconds kKeepAliveTimeout { 30 };
+const TcpChannelNG::Seconds kKeepAliveInterval { 60 };
+const TcpChannelNG::Seconds kKeepAliveTimeout { 30 };
 
-auto g_errorCodeType = qRegisterMetaType<base::TcpChannel::ErrorCode>();
+auto g_errorCodeType = qRegisterMetaType<base::TcpChannelNG::ErrorCode>();
 
 //--------------------------------------------------------------------------------------------------
 quint32 makeInstanceId()
@@ -79,7 +79,7 @@ void resizeBuffer(QByteArray* buffer, qint64 size)
 }
 
 //--------------------------------------------------------------------------------------------------
-int calculateSpeed(int last_speed, const TcpChannel::Milliseconds& duration, qint64 bytes)
+int calculateSpeed(int last_speed, const TcpChannelNG::Milliseconds& duration, qint64 bytes)
 {
     static const double kAlpha = 0.1;
     return static_cast<int>(
@@ -90,7 +90,7 @@ int calculateSpeed(int last_speed, const TcpChannel::Milliseconds& duration, qin
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-TcpChannel::TcpChannel(Authenticator* authenticator, QObject* parent)
+TcpChannelNG::TcpChannelNG(Authenticator* authenticator, QObject* parent)
     : QObject(parent),
       instance_id_(makeInstanceId()),
       io_context_(base::AsioEventDispatcher::ioContext()),
@@ -102,7 +102,7 @@ TcpChannel::TcpChannel(Authenticator* authenticator, QObject* parent)
 }
 
 //--------------------------------------------------------------------------------------------------
-TcpChannel::TcpChannel(
+TcpChannelNG::TcpChannelNG(
     asio::ip::tcp::socket&& socket, Authenticator* authenticator, QObject* parent)
     : QObject(parent),
       instance_id_(makeInstanceId()),
@@ -116,16 +116,16 @@ TcpChannel::TcpChannel(
 }
 
 //--------------------------------------------------------------------------------------------------
-TcpChannel::~TcpChannel()
+TcpChannelNG::~TcpChannelNG()
 {
     setConnected(false);
 }
 
 //--------------------------------------------------------------------------------------------------
-const quint32 TcpChannel::kMaxMessageSize = 7 * 1024 * 1024; // 7 MB
+const quint32 TcpChannelNG::kMaxMessageSize = 7 * 1024 * 1024; // 7 MB
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::doAuthentication()
+void TcpChannelNG::doAuthentication()
 {
     if (!authenticator_)
     {
@@ -139,7 +139,7 @@ void TcpChannel::doAuthentication()
 }
 
 //--------------------------------------------------------------------------------------------------
-QString TcpChannel::peerAddress() const
+QString TcpChannelNG::peerAddress() const
 {
     if (!socket_.is_open() || !isConnected())
         return QString();
@@ -183,7 +183,7 @@ QString TcpChannel::peerAddress() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::connectTo(const QString& address, quint16 port)
+void TcpChannelNG::connectTo(const QString& address, quint16 port)
 {
     if (isConnected() || !resolver_)
         return;
@@ -239,7 +239,7 @@ void TcpChannel::connectTo(const QString& address, quint16 port)
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::setPaused(bool enable)
+void TcpChannelNG::setPaused(bool enable)
 {
     if (!isConnected() || paused_ == enable)
         return;
@@ -266,13 +266,13 @@ void TcpChannel::setPaused(bool enable)
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::send(quint8 channel_id, const QByteArray& buffer)
+void TcpChannelNG::send(quint8 channel_id, const QByteArray& buffer)
 {
     addWriteTask(USER_DATA, channel_id, buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
-bool TcpChannel::setReadBufferSize(int size)
+bool TcpChannelNG::setReadBufferSize(int size)
 {
     asio::socket_base::receive_buffer_size option(size);
 
@@ -289,7 +289,7 @@ bool TcpChannel::setReadBufferSize(int size)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool TcpChannel::setWriteBufferSize(int size)
+bool TcpChannelNG::setWriteBufferSize(int size)
 {
     asio::socket_base::send_buffer_size option(size);
 
@@ -306,7 +306,7 @@ bool TcpChannel::setWriteBufferSize(int size)
 }
 
 //--------------------------------------------------------------------------------------------------
-qint64 TcpChannel::pendingBytes() const
+qint64 TcpChannelNG::pendingBytes() const
 {
     qint64 result = 0;
 
@@ -317,7 +317,7 @@ qint64 TcpChannel::pendingBytes() const
 }
 
 //--------------------------------------------------------------------------------------------------
-int TcpChannel::speedRx()
+int TcpChannelNG::speedRx()
 {
     TimePoint current_time = Clock::now();
     Milliseconds duration = std::chrono::duration_cast<Milliseconds>(current_time - begin_time_rx_);
@@ -330,7 +330,7 @@ int TcpChannel::speedRx()
 }
 
 //--------------------------------------------------------------------------------------------------
-int TcpChannel::speedTx()
+int TcpChannelNG::speedTx()
 {
     TimePoint current_time = Clock::now();
     Milliseconds duration = std::chrono::duration_cast<Milliseconds>(current_time - begin_time_tx_);
@@ -343,7 +343,7 @@ int TcpChannel::speedTx()
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::init()
+void TcpChannelNG::init()
 {
     CHECK(authenticator_);
     authenticator_->setParent(this);
@@ -353,7 +353,7 @@ void TcpChannel::init()
     keep_alive_timer_ = new QTimer(this);
     keep_alive_timer_->setSingleShot(true);
 
-    connect(keep_alive_timer_, &QTimer::timeout, this, &TcpChannel::onKeepAliveTimer);
+    connect(keep_alive_timer_, &QTimer::timeout, this, &TcpChannelNG::onKeepAliveTimer);
 
     keep_alive_counter_.resize(sizeof(quint32));
     memset(keep_alive_counter_.data(), 0, keep_alive_counter_.size());
@@ -432,7 +432,7 @@ void TcpChannel::init()
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::setConnected(bool connected)
+void TcpChannelNG::setConnected(bool connected)
 {
     connected_ = connected;
 
@@ -474,7 +474,7 @@ void TcpChannel::setConnected(bool connected)
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::onErrorOccurred(const Location& location, const std::error_code& error_code)
+void TcpChannelNG::onErrorOccurred(const Location& location, const std::error_code& error_code)
 {
     ErrorCode error = ErrorCode::UNKNOWN;
 
@@ -498,7 +498,7 @@ void TcpChannel::onErrorOccurred(const Location& location, const std::error_code
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::onErrorOccurred(const Location& location, ErrorCode error_code)
+void TcpChannelNG::onErrorOccurred(const Location& location, ErrorCode error_code)
 {
     LOG(ERROR) << "Connection finished with error" << error_code << "from" << location;
     setConnected(false);
@@ -506,7 +506,7 @@ void TcpChannel::onErrorOccurred(const Location& location, ErrorCode error_code)
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::onMessageReceived()
+void TcpChannelNG::onMessageReceived()
 {
     if (read_buffer_.isEmpty())
     {
@@ -598,7 +598,7 @@ void TcpChannel::onMessageReceived()
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::addWriteTask(quint8 type, quint8 param, const QByteArray& data)
+void TcpChannelNG::addWriteTask(quint8 type, quint8 param, const QByteArray& data)
 {
     const bool schedule_write = write_queue_.isEmpty();
     write_queue_.emplace_back(type, param, data);
@@ -607,7 +607,7 @@ void TcpChannel::addWriteTask(quint8 type, quint8 param, const QByteArray& data)
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::doWrite()
+void TcpChannelNG::doWrite()
 {
     const WriteTask& task = write_queue_.front();
     const QByteArray& source_buffer = task.data();
@@ -696,7 +696,7 @@ void TcpChannel::doWrite()
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::doReadHeader()
+void TcpChannelNG::doReadHeader()
 {
     state_ = ReadState::READ_HEADER;
     asio::async_read(socket_, asio::mutable_buffer(&read_header_, sizeof(Header)),
@@ -727,7 +727,7 @@ void TcpChannel::doReadHeader()
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::doReadData()
+void TcpChannelNG::doReadData()
 {
     resizeBuffer(&read_buffer_, read_header_.length);
 
@@ -765,7 +765,7 @@ void TcpChannel::doReadData()
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::onKeepAliveTimer()
+void TcpChannelNG::onKeepAliveTimer()
 {
     if (keep_alive_timer_type_ == KEEP_ALIVE_INTERVAL)
     {
@@ -783,14 +783,14 @@ void TcpChannel::onKeepAliveTimer()
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::addTxBytes(size_t bytes_count)
+void TcpChannelNG::addTxBytes(size_t bytes_count)
 {
     bytes_tx_ += bytes_count;
     total_tx_ += bytes_count;
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::addRxBytes(size_t bytes_count)
+void TcpChannelNG::addRxBytes(size_t bytes_count)
 {
     bytes_rx_ += bytes_count;
     total_rx_ += bytes_count;

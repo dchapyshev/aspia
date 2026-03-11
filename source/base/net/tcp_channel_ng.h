@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_NET_TCP_CHANNEL_H
-#define BASE_NET_TCP_CHANNEL_H
+#ifndef BASE_NET_TCP_CHANNEL_NG_H
+#define BASE_NET_TCP_CHANNEL_NG_H
 
 #include <QObject>
 #include <QQueue>
@@ -37,14 +37,14 @@ class MessageEncryptor;
 class MessageDecryptor;
 class TcpServer;
 
-class TcpChannel final : public QObject
+class TcpChannelNG final : public QObject
 {
     Q_OBJECT
 
 public:
     // Constructor available for client.
-    explicit TcpChannel(Authenticator* authenticator, QObject* parent = nullptr);
-    ~TcpChannel() final;
+    explicit TcpChannelNG(Authenticator* authenticator, QObject* parent = nullptr);
+    ~TcpChannelNG() final;
 
     static const quint32 kMaxMessageSize;
 
@@ -146,7 +146,7 @@ public:
 signals:
     void sig_connected();
     void sig_authenticated();
-    void sig_errorOccurred(base::TcpChannel::ErrorCode error_code);
+    void sig_errorOccurred(base::TcpChannelNG::ErrorCode error_code);
     void sig_messageReceived(quint8 channel_id, const QByteArray& buffer);
     void sig_messageWritten(quint8 channel_id);
 
@@ -155,7 +155,7 @@ protected:
     friend class RelayPeer;
 
     // Constructor available for server. An already connected socket is being moved.
-    TcpChannel(asio::ip::tcp::socket&& socket, Authenticator* authenticator, QObject* parent);
+    TcpChannelNG(asio::ip::tcp::socket&& socket, Authenticator* authenticator, QObject* parent);
 
     // Starts authentication. In the client channel, it starts automatically when a connection is
     // established. In the server channel, it is started by the RelayPeer or TcpServer.
@@ -281,11 +281,11 @@ private:
     qint64 bytes_rx_ = 0;
     int speed_rx_ = 0;
 
-    Q_DISABLE_COPY_MOVE(TcpChannel)
+    Q_DISABLE_COPY_MOVE(TcpChannelNG)
 };
 
 } // namespace base
 
-Q_DECLARE_METATYPE(base::TcpChannel::ErrorCode)
+Q_DECLARE_METATYPE(base::TcpChannelNG::ErrorCode)
 
-#endif // BASE_NET_TCP_CHANNEL_H
+#endif // BASE_NET_TCP_CHANNEL_NG_H
