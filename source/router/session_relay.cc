@@ -59,7 +59,7 @@ void SessionRelay::onSessionReady()
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionRelay::onSessionMessageReceived(quint8 /* channel_id */, const QByteArray& buffer)
+void SessionRelay::onSessionMessage(quint8 /* channel_id */, const QByteArray& buffer)
 {
     if (!incoming_message_.parse(buffer))
     {

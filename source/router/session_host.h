@@ -43,7 +43,7 @@ public:
 protected:
     // Session implementation.
     void onSessionReady() final;
-    void onSessionMessageReceived(quint8 channel_id, const QByteArray& buffer) final;
+    void onSessionMessage(quint8 channel_id, const QByteArray& buffer) final;
 
 private:
     void readHostIdRequest(const proto::router::HostIdRequest& host_id_request);

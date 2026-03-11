@@ -173,7 +173,7 @@ void Session::onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer)
 {
     if (channel_id == proto::router::CHANNEL_ID_SESSION)
     {
-        onSessionMessageReceived(channel_id, buffer);
+        onSessionMessage(channel_id, buffer);
     }
     else
     {

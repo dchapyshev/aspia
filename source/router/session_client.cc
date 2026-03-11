@@ -49,7 +49,7 @@ void SessionClient::onSessionReady()
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionClient::onSessionMessageReceived(quint8 /* channel_id */, const QByteArray& buffer)
+void SessionClient::onSessionMessage(quint8 /* channel_id */, const QByteArray& buffer)
 {
     proto::router::PeerToRouter message;
     if (!base::parse(buffer, &message))
