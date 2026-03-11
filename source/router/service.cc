@@ -115,6 +115,23 @@ void Service::onNewConnection()
 }
 
 //--------------------------------------------------------------------------------------------------
+void Service::onNewLegacyConnection()
+{
+    if (!tcp_server_legacy_)
+    {
+        LOG(ERROR) << "No legacy TCP server instance";
+        return;
+    }
+
+    while (tcp_server_legacy_->hasReadyConnections())
+    {
+        base::TcpChannel* channel = tcp_server_legacy_->nextReadyConnection();
+        LOG(INFO) << "New legacy connection:" << channel->peerAddress();
+        addSession(channel);
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
 bool Service::start()
 {
     if (tcp_server_)
@@ -150,6 +167,13 @@ bool Service::start()
     if (!port)
     {
         LOG(ERROR) << "Invalid port specified in configuration file";
+        return false;
+    }
+
+    quint16 legacy_port = settings.legacyPort();
+    if (!legacy_port)
+    {
+        LOG(ERROR) << "Invalid legacy port specified in configuration file";
         return false;
     }
 
@@ -211,12 +235,21 @@ bool Service::start()
     connect(tcp_server_, &base::TcpServer::sig_newConnection, this, &Service::onNewConnection);
 
     tcp_server_->setPrivateKey(private_key);
-    tcp_server_->setUserList(std::move(user_list));
+    tcp_server_->setUserList(user_list);
     tcp_server_->setAnonymousAccess(
         base::ServerAuthenticator::AnonymousAccess::ENABLE,
         proto::router::SESSION_TYPE_HOST | proto::router::SESSION_TYPE_RELAY);
-
     tcp_server_->start(port, listen_interface);
+
+    tcp_server_legacy_ = new base::TcpServerLegacy(this);
+    connect(tcp_server_legacy_, &base::TcpServerLegacy::sig_newConnection, this, &Service::onNewLegacyConnection);
+
+    tcp_server_legacy_->setPrivateKey(private_key);
+    tcp_server_legacy_->setUserList(user_list);
+    tcp_server_legacy_->setAnonymousAccess(
+        base::ServerAuthenticator::AnonymousAccess::ENABLE,
+        proto::router::SESSION_TYPE_HOST | proto::router::SESSION_TYPE_RELAY);
+    tcp_server_legacy_->start(legacy_port, listen_interface);
 
     LOG(INFO) << "Server started";
     return true;
@@ -239,7 +272,6 @@ void Service::addSession(base::TcpChannel* channel)
         {
             if (!client_white_list_.isEmpty() && !client_white_list_.contains(address))
                 break;
-
             session = new SessionClient(channel, session_manager_);
         }
         break;
@@ -248,7 +280,6 @@ void Service::addSession(base::TcpChannel* channel)
         {
             if (!host_white_list_.isEmpty() && !host_white_list_.contains(address))
                 break;
-
             session = new SessionHost(channel, session_manager_);
         }
         break;
@@ -257,7 +288,6 @@ void Service::addSession(base::TcpChannel* channel)
         {
             if (!admin_white_list_.isEmpty() && !admin_white_list_.contains(address))
                 break;
-
             session = new SessionAdmin(channel, session_manager_);
         }
         break;
@@ -266,16 +296,13 @@ void Service::addSession(base::TcpChannel* channel)
         {
             if (!relay_white_list_.isEmpty() && !relay_white_list_.contains(address))
                 break;
-
             session = new SessionRelay(channel, session_manager_);
         }
         break;
 
         default:
-        {
             LOG(ERROR) << "Unsupported session type:" << session_type;
-        }
-        break;
+            break;
     }
 
     if (!session)

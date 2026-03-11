@@ -23,6 +23,7 @@
 
 #include "base/service.h"
 #include "base/net/tcp_server.h"
+#include "base/net/tcp_server_legacy.h"
 #include "router/session.h"
 
 namespace router {
@@ -54,6 +55,7 @@ protected:
 private slots:
     void onPoolKeyUsed(Session::SessionId session_id, quint32 key_id);
     void onNewConnection();
+    void onNewLegacyConnection();
 
 private:
     bool start();
@@ -61,6 +63,7 @@ private:
 
     base::SharedPointer<DatabaseFactory> database_factory_;
     base::TcpServer* tcp_server_ = nullptr;
+    base::TcpServerLegacy* tcp_server_legacy_ = nullptr;
     KeyFactory* key_factory_ = nullptr;
     SessionManager* session_manager_ = nullptr;
 
