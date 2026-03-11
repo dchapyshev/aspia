@@ -23,7 +23,7 @@
 #include "base/net/tcp_channel.h"
 #include "router/database.h"
 #include "router/database_factory_sqlite.h"
-#include "router/key_factory.h"
+#include "router/key_pool.h"
 #include "router/migration_utils.h"
 #include "router/session_admin.h"
 #include "router/session_client.h"
@@ -45,10 +45,13 @@ const char Service::kDescription[] =
 //--------------------------------------------------------------------------------------------------
 Service::Service(QObject* parent)
     : base::Service(Service::kName, parent),
-      database_factory_(new DatabaseFactorySqlite())
+      database_factory_(new DatabaseFactorySqlite()),
+      key_pool_(new KeyPool(this))
 {
     LOG(INFO) << "Ctor";
     instance_ = this;
+
+    connect(key_pool_, &KeyPool::sig_keyUsed, this, &Service::onPoolKeyUsed);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -99,6 +102,12 @@ bool Service::stopSession(qint64 session_id)
     }
 
     return false;
+}
+
+//--------------------------------------------------------------------------------------------------
+KeyPool& Service::keyPool()
+{
+    return *key_pool_;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -279,9 +288,6 @@ bool Service::start()
     base::SharedPointer<base::UserListBase> user_list(UserListDb::open(*database_factory_).release());
     user_list->setSeedKey(seed_key);
 
-    key_factory_ = new KeyFactory(this);
-    connect(key_factory_, &KeyFactory::sig_keyUsed, this, &Service::onPoolKeyUsed);
-
     tcp_server_ = new base::TcpServer(this);
     connect(tcp_server_, &base::TcpServer::sig_newConnection, this, &Service::onNewConnection);
 
@@ -364,7 +370,6 @@ void Service::addSession(base::TcpChannel* channel)
     }
 
     session->setDatabaseFactory(database_factory_);
-    session->setRelayKeyPool(key_factory_->sharedKeyPool());
 
     sessions_.emplace_back(session);
     connect(session, &Session::sig_finished, this, &Service::onSessionFinished);

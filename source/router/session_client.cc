@@ -23,6 +23,7 @@
 #include "base/version_constants.h"
 #include "base/crypto/random.h"
 #include "proto/relay_peer.h"
+#include "router/key_pool.h"
 #include "router/service.h"
 #include "router/session_host.h"
 #include "router/session_relay.h"
@@ -84,7 +85,7 @@ void SessionClient::readConnectionRequest(const proto::router::ConnectionRequest
     {
         LOG(INFO) << "Host with id" << request.host_id() << "found";
 
-        std::optional<KeyPool::Credentials> credentials = relayKeyPool().takeCredentials();
+        std::optional<KeyPool::Credentials> credentials = Service::instance()->keyPool().takeCredentials();
         if (!credentials.has_value())
         {
             LOG(ERROR) << "Empty key pool";

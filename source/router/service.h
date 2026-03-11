@@ -29,9 +29,8 @@
 namespace router {
 
 class DatabaseFactory;
-class KeyFactory;
+class KeyPool;
 class SessionHost;
-class SessionManager;
 class SessionRelay;
 
 class Service final : public base::Service
@@ -52,6 +51,7 @@ public:
     QList<Session*> sessions();
     Session* session(qint64 session_id);
     bool stopSession(qint64 session_id);
+    KeyPool& keyPool();
 
 protected:
     // base::Service implementation.
@@ -71,7 +71,7 @@ private:
     base::SharedPointer<DatabaseFactory> database_factory_;
     base::TcpServer* tcp_server_ = nullptr;
     base::TcpServerLegacy* tcp_server_legacy_ = nullptr;
-    KeyFactory* key_factory_ = nullptr;
+    KeyPool* key_pool_ = nullptr;
 
     QList<Session*> sessions_;
 

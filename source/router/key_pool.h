@@ -19,8 +19,8 @@
 #ifndef ROUTER_KEY_POOL_H
 #define ROUTER_KEY_POOL_H
 
+#include <QObject>
 #include <QMap>
-#include <QList>
 
 #include <optional>
 
@@ -28,11 +28,12 @@
 
 namespace router {
 
-class KeyFactory;
-
-class KeyPool
+class KeyPool final : public QObject
 {
+    Q_OBJECT
+
 public:
+    explicit KeyPool(QObject* parent = nullptr);
     ~KeyPool() = default;
 
     struct Credentials
@@ -49,16 +50,12 @@ public:
     size_t count() const;
     bool isEmpty() const;
 
+signals:
+    void sig_keyUsed(qint64 session_id, quint32 key_id);
+
 private:
-    friend class KeyFactory;
-
-    explicit KeyPool(KeyFactory* factory);
-    void dettach();
-
     using Keys = QList<proto::router::RelayKey>;
-
     QMap<qint64, Keys> pool_;
-    KeyFactory* factory_;
 
     Q_DISABLE_COPY_MOVE(KeyPool)
 };

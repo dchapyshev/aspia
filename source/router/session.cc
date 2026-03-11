@@ -55,12 +55,6 @@ Session::Session(base::TcpChannel* channel, QObject* parent)
 Session::~Session() = default;
 
 //--------------------------------------------------------------------------------------------------
-void Session::setRelayKeyPool(base::SharedPointer<KeyPool> relay_key_pool)
-{
-    relay_key_pool_ = std::move(relay_key_pool);
-}
-
-//--------------------------------------------------------------------------------------------------
 void Session::setDatabaseFactory(base::SharedPointer<DatabaseFactory> database_factory)
 {
     database_factory_ = std::move(database_factory);
@@ -69,12 +63,6 @@ void Session::setDatabaseFactory(base::SharedPointer<DatabaseFactory> database_f
 //--------------------------------------------------------------------------------------------------
 void Session::start()
 {
-    if (!relay_key_pool_)
-    {
-        LOG(FATAL) << "Invalid relay key pool";
-        return;
-    }
-
     if (!database_factory_)
     {
         LOG(FATAL) << "Invalid database factory";

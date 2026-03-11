@@ -25,13 +25,11 @@
 #include "base/shared_pointer.h"
 #include "base/net/tcp_channel.h"
 #include "proto/router.h"
-#include "router/key_pool.h"
 
 namespace router {
 
 class Database;
 class DatabaseFactory;
-class SessionManager;
 
 class Session : public QObject
 {
@@ -41,7 +39,6 @@ public:
     Session(base::TcpChannel* channel, QObject* parent);
     virtual ~Session() override;
 
-    void setRelayKeyPool(base::SharedPointer<KeyPool> relay_key_pool);
     void setDatabaseFactory(base::SharedPointer<DatabaseFactory> database_factory);
 
     void start();
@@ -67,9 +64,6 @@ protected:
 
     virtual void onSessionMessage(const QByteArray& buffer) = 0;
 
-    KeyPool& relayKeyPool() { return *relay_key_pool_; }
-    const KeyPool& relayKeyPool() const { return *relay_key_pool_; }
-
 private slots:
     void onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code);
     void onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer);
@@ -81,7 +75,6 @@ private:
     base::TcpChannel* tcp_channel_ = nullptr;
 
     base::SharedPointer<DatabaseFactory> database_factory_;
-    base::SharedPointer<KeyPool> relay_key_pool_;
     QString address_;
 };
 

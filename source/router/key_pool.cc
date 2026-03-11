@@ -19,21 +19,14 @@
 #include "router/key_pool.h"
 
 #include "base/logging.h"
-#include "router/key_factory.h"
 
 namespace router {
 
 //--------------------------------------------------------------------------------------------------
-KeyPool::KeyPool(KeyFactory* factory)
-    : factory_(factory)
+KeyPool::KeyPool(QObject* parent)
+    : QObject(parent)
 {
-    DCHECK(factory_);
-}
-
-//--------------------------------------------------------------------------------------------------
-void KeyPool::dettach()
-{
-    factory_ = nullptr;
+    // Nothing
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -53,7 +46,7 @@ void KeyPool::addKey(qint64 session_id, const proto::router::RelayKey& key)
 //--------------------------------------------------------------------------------------------------
 std::optional<KeyPool::Credentials> KeyPool::takeCredentials()
 {
-    if (pool_.empty())
+    if (pool_.isEmpty())
     {
         LOG(ERROR) << "Empty key pool";
         return std::nullopt;
@@ -100,8 +93,7 @@ std::optional<KeyPool::Credentials> KeyPool::takeCredentials()
         pool_.remove(preffered_relay.key());
     }
 
-    if (factory_)
-        emit factory_->sig_keyUsed(credentials.session_id, credentials.key.key_id());
+    emit sig_keyUsed(credentials.session_id, credentials.key.key_id());
 
     return std::move(credentials);
 }
