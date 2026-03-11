@@ -39,16 +39,6 @@ const int kWriteQueueReservedSize = 128;
 const TcpChannelLegacy::Seconds kKeepAliveInterval { 60 };
 const TcpChannelLegacy::Seconds kKeepAliveTimeout { 30 };
 
-auto g_errorCodeType = qRegisterMetaType<base::TcpChannelLegacy::ErrorCode>();
-
-//--------------------------------------------------------------------------------------------------
-quint32 makeInstanceId()
-{
-    static thread_local quint32 instance_id = 0;
-    ++instance_id;
-    return instance_id;
-}
-
 //--------------------------------------------------------------------------------------------------
 QStringList endpointsToString(const asio::ip::tcp::resolver::results_type& endpoints)
 {
@@ -78,21 +68,11 @@ void resizeBuffer(QByteArray* buffer, qint64 new_size)
     buffer->resize(new_size);
 }
 
-//--------------------------------------------------------------------------------------------------
-int calculateSpeed(int last_speed, const TcpChannelLegacy::Milliseconds& duration, qint64 bytes)
-{
-    static const double kAlpha = 0.1;
-    return static_cast<int>(
-        (kAlpha * ((1000.0 / static_cast<double>(duration.count())) * static_cast<double>(bytes))) +
-        ((1.0 - kAlpha) * static_cast<double>(last_speed)));
-}
-
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
 TcpChannelLegacy::TcpChannelLegacy(Authenticator* authenticator, QObject* parent)
-    : QObject(parent),
-      instance_id_(makeInstanceId()),
+    : TcpChannel(parent),
       io_context_(base::AsioEventDispatcher::ioContext()),
       socket_(io_context_),
       resolver_(std::make_unique<asio::ip::tcp::resolver>(io_context_)),
@@ -104,8 +84,7 @@ TcpChannelLegacy::TcpChannelLegacy(Authenticator* authenticator, QObject* parent
 //--------------------------------------------------------------------------------------------------
 TcpChannelLegacy::TcpChannelLegacy(
     asio::ip::tcp::socket&& socket, Authenticator* authenticator, QObject* parent)
-    : QObject(parent),
-      instance_id_(makeInstanceId()),
+    : TcpChannel(parent),
       io_context_(base::AsioEventDispatcher::ioContext()),
       socket_(std::move(socket)),
       authenticator_(authenticator)
@@ -120,9 +99,6 @@ TcpChannelLegacy::~TcpChannelLegacy()
 {
     disconnectFrom();
 }
-
-//--------------------------------------------------------------------------------------------------
-const quint32 TcpChannelLegacy::kMaxMessageSize = 7 * 1024 * 1024; // 7 MB
 
 //--------------------------------------------------------------------------------------------------
 void TcpChannelLegacy::doAuthentication()
@@ -355,32 +331,6 @@ qint64 TcpChannelLegacy::pendingBytes() const
         result += task.data().size();
 
     return result;
-}
-
-//--------------------------------------------------------------------------------------------------
-int TcpChannelLegacy::speedRx()
-{
-    TimePoint current_time = Clock::now();
-    Milliseconds duration = std::chrono::duration_cast<Milliseconds>(current_time - begin_time_rx_);
-
-    speed_rx_ = calculateSpeed(speed_rx_, duration, bytes_rx_);
-    begin_time_rx_ = current_time;
-    bytes_rx_ = 0;
-
-    return speed_rx_;
-}
-
-//--------------------------------------------------------------------------------------------------
-int TcpChannelLegacy::speedTx()
-{
-    TimePoint current_time = Clock::now();
-    Milliseconds duration = std::chrono::duration_cast<Milliseconds>(current_time - begin_time_tx_);
-
-    speed_tx_ = calculateSpeed(speed_tx_, duration, bytes_tx_);
-    begin_time_tx_ = current_time;
-    bytes_tx_ = 0;
-
-    return speed_tx_;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1023,15 +973,6 @@ void TcpChannelLegacy::doReadServiceData(size_t length)
                     return;
                 }
 
-                if (DCHECK_IS_ON())
-                {
-                    Milliseconds ping_time = std::chrono::duration_cast<Milliseconds>(
-                        Clock::now() - keep_alive_timestamp_);
-
-                    DLOG(INFO) << "Ping result:" << ping_time.count() << "ms ("
-                               << keep_alive_counter_.size() << "bytes)";
-                }
-
                 // The user can disable keep alive. Restart the timer only if keep alive is enabled.
                 if (keep_alive_timer_->isActive())
                 {
@@ -1061,9 +1002,6 @@ void TcpChannelLegacy::onKeepAliveTimer()
 {
     if (keep_alive_timer_type_ == KEEP_ALIVE_INTERVAL)
     {
-        // Save sending time.
-        keep_alive_timestamp_ = Clock::now();
-
         // Send ping.
         sendKeepAlive(KEEP_ALIVE_PING, keep_alive_counter_.data(), keep_alive_counter_.size());
 
@@ -1105,24 +1043,9 @@ void TcpChannelLegacy::sendKeepAlive(quint8 flags, const void* data, size_t size
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannelLegacy::addTxBytes(size_t bytes_count)
-{
-    bytes_tx_ += bytes_count;
-    total_tx_ += bytes_count;
-}
-
-//--------------------------------------------------------------------------------------------------
-void TcpChannelLegacy::addRxBytes(size_t bytes_count)
-{
-    bytes_rx_ += bytes_count;
-    total_rx_ += bytes_count;
-}
-
-//--------------------------------------------------------------------------------------------------
 asio::mutable_buffer TcpChannelLegacy::VariableSizeReader::buffer()
 {
     DCHECK_LT(pos_, std::size(buffer_));
-
     return asio::mutable_buffer(&buffer_[pos_], sizeof(quint8));
 }
 

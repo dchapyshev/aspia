@@ -41,16 +41,6 @@ const int kWriteQueueReservedSize = 128;
 const TcpChannelNG::Seconds kKeepAliveInterval { 60 };
 const TcpChannelNG::Seconds kKeepAliveTimeout { 30 };
 
-auto g_errorCodeType = qRegisterMetaType<base::TcpChannelNG::ErrorCode>();
-
-//--------------------------------------------------------------------------------------------------
-quint32 makeInstanceId()
-{
-    static thread_local quint32 instance_id = 0;
-    ++instance_id;
-    return instance_id;
-}
-
 //--------------------------------------------------------------------------------------------------
 QStringList endpointsToString(const asio::ip::tcp::resolver::results_type& endpoints)
 {
@@ -78,21 +68,11 @@ void resizeBuffer(QByteArray* buffer, qint64 size)
     buffer->resize(size);
 }
 
-//--------------------------------------------------------------------------------------------------
-int calculateSpeed(int last_speed, const TcpChannelNG::Milliseconds& duration, qint64 bytes)
-{
-    static const double kAlpha = 0.1;
-    return static_cast<int>(
-        (kAlpha * ((1000.0 / static_cast<double>(duration.count())) * static_cast<double>(bytes))) +
-        ((1.0 - kAlpha) * static_cast<double>(last_speed)));
-}
-
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
 TcpChannelNG::TcpChannelNG(Authenticator* authenticator, QObject* parent)
-    : QObject(parent),
-      instance_id_(makeInstanceId()),
+    : TcpChannel(parent),
       io_context_(base::AsioEventDispatcher::ioContext()),
       socket_(io_context_),
       resolver_(std::make_unique<asio::ip::tcp::resolver>(io_context_)),
@@ -104,8 +84,7 @@ TcpChannelNG::TcpChannelNG(Authenticator* authenticator, QObject* parent)
 //--------------------------------------------------------------------------------------------------
 TcpChannelNG::TcpChannelNG(
     asio::ip::tcp::socket&& socket, Authenticator* authenticator, QObject* parent)
-    : QObject(parent),
-      instance_id_(makeInstanceId()),
+    : TcpChannel(parent),
       io_context_(base::AsioEventDispatcher::ioContext()),
       socket_(std::move(socket)),
       authenticator_(authenticator)
@@ -120,9 +99,6 @@ TcpChannelNG::~TcpChannelNG()
 {
     setConnected(false);
 }
-
-//--------------------------------------------------------------------------------------------------
-const quint32 TcpChannelNG::kMaxMessageSize = 7 * 1024 * 1024; // 7 MB
 
 //--------------------------------------------------------------------------------------------------
 void TcpChannelNG::doAuthentication()
@@ -314,32 +290,6 @@ qint64 TcpChannelNG::pendingBytes() const
         result += task.data().size();
 
     return result;
-}
-
-//--------------------------------------------------------------------------------------------------
-int TcpChannelNG::speedRx()
-{
-    TimePoint current_time = Clock::now();
-    Milliseconds duration = std::chrono::duration_cast<Milliseconds>(current_time - begin_time_rx_);
-
-    speed_rx_ = calculateSpeed(speed_rx_, duration, bytes_rx_);
-    begin_time_rx_ = current_time;
-    bytes_rx_ = 0;
-
-    return speed_rx_;
-}
-
-//--------------------------------------------------------------------------------------------------
-int TcpChannelNG::speedTx()
-{
-    TimePoint current_time = Clock::now();
-    Milliseconds duration = std::chrono::duration_cast<Milliseconds>(current_time - begin_time_tx_);
-
-    speed_tx_ = calculateSpeed(speed_tx_, duration, bytes_tx_);
-    begin_time_tx_ = current_time;
-    bytes_tx_ = 0;
-
-    return speed_tx_;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -780,20 +730,6 @@ void TcpChannelNG::onKeepAliveTimer()
         DCHECK_EQ(keep_alive_timer_type_, KEEP_ALIVE_TIMEOUT);
         onErrorOccurred(FROM_HERE, ErrorCode::SOCKET_TIMEOUT);
     }
-}
-
-//--------------------------------------------------------------------------------------------------
-void TcpChannelNG::addTxBytes(size_t bytes_count)
-{
-    bytes_tx_ += bytes_count;
-    total_tx_ += bytes_count;
-}
-
-//--------------------------------------------------------------------------------------------------
-void TcpChannelNG::addRxBytes(size_t bytes_count)
-{
-    bytes_rx_ += bytes_count;
-    total_rx_ += bytes_count;
 }
 
 } // namespace base

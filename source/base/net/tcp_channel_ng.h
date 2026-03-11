@@ -19,13 +19,11 @@
 #ifndef BASE_NET_TCP_CHANNEL_NG_H
 #define BASE_NET_TCP_CHANNEL_NG_H
 
-#include <QObject>
 #include <QQueue>
-#include <QVersionNumber>
-
-#include <chrono>
 
 #include <asio/ip/tcp.hpp>
+
+#include "base/net/tcp_channel.h"
 
 class QTimer;
 
@@ -37,7 +35,7 @@ class MessageEncryptor;
 class MessageDecryptor;
 class TcpServer;
 
-class TcpChannelNG final : public QObject
+class TcpChannelNG final : public TcpChannel
 {
     Q_OBJECT
 
@@ -46,109 +44,34 @@ public:
     explicit TcpChannelNG(Authenticator* authenticator, QObject* parent = nullptr);
     ~TcpChannelNG() final;
 
-    static const quint32 kMaxMessageSize;
-
-    enum class ErrorCode
-    {
-        // Unknown error.
-        UNKNOWN,
-
-        // No error.
-        SUCCESS,
-
-        // Violation of the communication protocol.
-        INVALID_PROTOCOL,
-
-        // Authentication error.
-        ACCESS_DENIED,
-
-        // Cryptography error (message encryption or decryption failed).
-        CRYPTO_ERROR,
-
-        // Session type is not allowed.
-        SESSION_DENIED,
-
-        // Version mismatch.
-        VERSION_ERROR,
-
-        // An error occurred with the network (e.g., the network cable was accidentally plugged out).
-        NETWORK_ERROR,
-
-        // The connection was refused by the peer (or timed out).
-        CONNECTION_REFUSED,
-
-        // The remote host closed the connection.
-        REMOTE_HOST_CLOSED,
-
-        // The host address was not found.
-        SPECIFIED_HOST_NOT_FOUND,
-
-        // The socket operation timed out.
-        SOCKET_TIMEOUT,
-
-        // The address specified is already in use and was set to be exclusive.
-        ADDRESS_IN_USE,
-
-        // The address specified does not belong to the host.
-        ADDRESS_NOT_AVAILABLE
-    };
-    Q_ENUM(ErrorCode)
-
-    using Clock = std::chrono::steady_clock;
-    using TimePoint = std::chrono::time_point<Clock>;
-    using Milliseconds = std::chrono::milliseconds;
-    using Seconds = std::chrono::seconds;
-
     // Gets the address of the remote host as a string.
-    QString peerAddress() const;
+    QString peerAddress() const final;
 
     // Connects to a host at the specified address and port.
-    void connectTo(const QString& address, quint16 port);
+    void connectTo(const QString& address, quint16 port) final;
 
     // Returns true if the channel is connected and false if not connected.
-    bool isConnected() const { return connected_; }
+    bool isConnected() const final { return connected_; }
 
     // Returns true if the channel has already been fully authenticated.
-    bool isAuthenticated() const { return authenticated_; }
+    bool isAuthenticated() const final { return authenticated_; }
 
     // Returns true if the channel is paused and false if not. If the channel is not connected,
     // then the return value is undefined.
-    bool isPaused() const { return paused_; }
+    bool isPaused() const final { return paused_; }
 
     // Pauses or resume the channel. After calling the method, new messages will not be read from
     // the socket. If at the time the method was called with |true', the message was read, then
     // notification of this message will be received only after calling method with |false|.
-    void setPaused(bool enable);
+    void setPaused(bool enable) final;
 
     // Sending a message. After the call, the message will be added to the queue to be sent.
-    void send(quint8 channel_id, const QByteArray& buffer);
+    void send(quint8 channel_id, const QByteArray& buffer) final;
 
-    bool setReadBufferSize(int size);
-    bool setWriteBufferSize(int size);
+    bool setReadBufferSize(int size) final;
+    bool setWriteBufferSize(int size) final;
 
-    qint64 pendingBytes() const;
-
-    quint32 instanceId() const { return instance_id_; }
-
-    qint64 totalRx() const { return total_rx_; }
-    qint64 totalTx() const { return total_tx_; }
-    int speedRx();
-    int speedTx();
-
-    QVersionNumber peerVersion() const { return version_; }
-    QString peerOsName() const { return os_name_; }
-    QString peerComputerName() const { return computer_name_; }
-    QString peerDisplayName() const { return display_name_; }
-    QString peerArchitecture() const { return architecture_; }
-    QString peerUserName() const { return user_name_; }
-    quint32 peerSessionType() const { return session_type_; }
-
-signals:
-    void sig_connected();
-    void sig_authenticated();
-    void sig_errorOccurred(base::TcpChannelNG::ErrorCode error_code);
-    void sig_messageReceived(quint8 channel_id, const QByteArray& buffer);
-    void sig_messageWritten(quint8 channel_id);
+    qint64 pendingBytes() const final;
 
 protected:
     friend class TcpServer;
@@ -233,10 +156,6 @@ private:
     void doReadHeader();
     void doReadData();
     void onKeepAliveTimer();
-    void addTxBytes(size_t bytes_count);
-    void addRxBytes(size_t bytes_count);
-
-    const quint32 instance_id_;
 
     asio::io_context& io_context_;
     asio::ip::tcp::socket socket_;
@@ -254,14 +173,6 @@ private:
     std::unique_ptr<MessageEncryptor> encryptor_;
     std::unique_ptr<MessageDecryptor> decryptor_;
 
-    QVersionNumber version_;
-    QString os_name_;
-    QString computer_name_;
-    QString display_name_;
-    QString architecture_;
-    QString user_name_;
-    quint32 session_type_ = 0;
-
     QQueue<WriteTask> write_queue_;
     QByteArray write_buffer_;
 
@@ -270,22 +181,9 @@ private:
     QByteArray read_buffer_;
     QByteArray decrypt_buffer_;
 
-    qint64 total_tx_ = 0;
-    qint64 total_rx_ = 0;
-
-    TimePoint begin_time_tx_;
-    qint64 bytes_tx_ = 0;
-    int speed_tx_ = 0;
-
-    TimePoint begin_time_rx_;
-    qint64 bytes_rx_ = 0;
-    int speed_rx_ = 0;
-
     Q_DISABLE_COPY_MOVE(TcpChannelNG)
 };
 
 } // namespace base
-
-Q_DECLARE_METATYPE(base::TcpChannelNG::ErrorCode)
 
 #endif // BASE_NET_TCP_CHANNEL_NG_H
