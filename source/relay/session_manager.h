@@ -51,7 +51,7 @@ public:
     void start(std::shared_ptr<KeyPool> shared_key_pool);
 
 public slots:
-    void disconnectSession(quint64 session_id);
+    void onDisconnectSession(quint64 session_id);
 
 signals:
     void sig_started();

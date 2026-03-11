@@ -29,7 +29,7 @@
 namespace relay {
 
 class KeyFactory;
-class SessionsWorker;
+class SessionManager;
 
 class Service final : public base::Service
 {
@@ -81,7 +81,7 @@ private:
     QTimer* reconnect_timer_ = nullptr;
     base::TcpChannel* tcp_channel_ = nullptr;
     KeyFactory* key_factory_ = nullptr;
-    SessionsWorker* sessions_worker_ = nullptr;
+    SessionManager* session_manager_ = nullptr;
 
     base::Parser<proto::router::RouterToRelay> incoming_message_;
     base::Serializer<proto::router::RelayToRouter> outgoing_message_;

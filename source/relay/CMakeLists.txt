@@ -34,8 +34,6 @@ list(APPEND SOURCE_RELAY
     session_key.h
     session_manager.cc
     session_manager.h
-    sessions_worker.cc
-    sessions_worker.h
     settings.cc
     settings.h)
 

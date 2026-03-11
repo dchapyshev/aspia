@@ -25,7 +25,7 @@
 #include "relay/key_factory.h"
 #include "relay/migration_utils.h"
 #include "relay/service.h"
-#include "relay/sessions_worker.h"
+#include "relay/session_manager.h"
 #include "relay/settings.h"
 #include "proto/router.h"
 
@@ -190,7 +190,7 @@ void Service::onTcpMessageReceived(quint8 /* channel_id */, const QByteArray& bu
         switch (request.type())
         {
             case proto::router::PEER_CONNECTION_REQUEST_DISCONNECT:
-                emit sessions_worker_->sig_disconnectSession(request.peer_session_id());
+                session_manager_->onDisconnectSession(request.peer_session_id());
                 break;
 
             default:
@@ -298,15 +298,33 @@ bool Service::start()
         return false;
     }
 
-    sessions_worker_ = new SessionsWorker(
-        listen_interface_, peer_port_, peer_idle_timeout_, statistics_enabled_, statistics_interval_,
-        key_factory_->sharedKeyPool(), this);
+    asio::ip::address listen_address;
+    if (!listen_interface_.isEmpty())
+    {
+        std::error_code error_code;
+        listen_address = asio::ip::make_address(listen_interface_.toLocal8Bit().toStdString(), error_code);
+        if (error_code)
+        {
+            LOG(ERROR) << "Unable to get listen address:" << error_code;
+            return false;
+        }
+    }
+    else
+    {
+        listen_address = asio::ip::address_v6::any();
+    }
 
-    connect(sessions_worker_, &SessionsWorker::sig_sessionStarted, this, &Service::onSessionStarted);
-    connect(sessions_worker_, &SessionsWorker::sig_sessionFinished, this, &Service::onSessionFinished);
-    connect(sessions_worker_, &SessionsWorker::sig_sessionStatistics, this, &Service::onSessionStatistics);
+    LOG(INFO) << "Listen interface:"
+              << (listen_interface_.isEmpty() ? "ANY" : listen_interface_) << ":" << peer_port_;
 
-    sessions_worker_->start();
+    session_manager_ = new SessionManager(
+        listen_address, peer_port_, peer_idle_timeout_, statistics_enabled_, statistics_interval_, this);
+
+    connect(session_manager_, &SessionManager::sig_started, this, &Service::onSessionStarted);
+    connect(session_manager_, &SessionManager::sig_finished, this, &Service::onSessionFinished);
+    connect(session_manager_, &SessionManager::sig_statistics, this, &Service::onSessionStatistics);
+
+    session_manager_->start(key_factory_->sharedKeyPool());
 
     connectToRouter();
     return true;

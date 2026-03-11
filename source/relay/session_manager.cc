@@ -177,11 +177,11 @@ void SessionManager::start(std::shared_ptr<KeyPool> shared_key_pool)
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionManager::disconnectSession(quint64 session_id)
+void SessionManager::onDisconnectSession(quint64 session_id)
 {
     LOG(INFO) << "Disconnect session by session id:" << session_id;
 
-    for (const auto& session : std::as_const(active_sessions_))
+    for (auto* session : std::as_const(active_sessions_))
     {
         if (session->sessionId() == session_id)
         {
