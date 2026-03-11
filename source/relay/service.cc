@@ -19,6 +19,7 @@
 #include "relay/service.h"
 
 #include "base/logging.h"
+#include "base/net/tcp_channel_ng.h"
 #include "base/net/tcp_server.h"
 #include "base/peer/client_authenticator.h"
 #include "relay/key_factory.h"
@@ -327,7 +328,7 @@ void Service::connectToRouter()
     authenticator->setSessionType(proto::router::SESSION_TYPE_RELAY);
 
     // Create channel.
-    tcp_channel_ = new base::TcpChannel(authenticator, this);
+    tcp_channel_ = new base::TcpChannelNG(authenticator, this);
 
     connect(tcp_channel_, &base::TcpChannel::sig_authenticated,
             this, &Service::onTcpReady);

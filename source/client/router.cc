@@ -23,6 +23,7 @@
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/version_constants.h"
+#include "base/net/tcp_channel_ng.h"
 #include "base/peer/client_authenticator.h"
 #include "proto/router.h"
 
@@ -108,7 +109,7 @@ void Router::connectToRouter(const QString& address, quint16 port)
     authenticator->setUserName(router_username_);
     authenticator->setPassword(router_password_);
 
-    tcp_channel_ = new base::TcpChannel(authenticator, this);
+    tcp_channel_ = new base::TcpChannelNG(authenticator, this);
 
     connect(tcp_channel_, &base::TcpChannel::sig_authenticated, this, &Router::onTcpReady);
     connect(tcp_channel_, &base::TcpChannel::sig_errorOccurred, this, &Router::onTcpErrorOccurred);

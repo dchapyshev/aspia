@@ -22,6 +22,7 @@
 
 #include "base/logging.h"
 #include "base/serialization.h"
+#include "base/net/tcp_channel_ng.h"
 #include "base/peer/client_authenticator.h"
 #include "proto/router_peer.h"
 
@@ -78,7 +79,7 @@ void RouterManager::connectTo(
     router_authenticator->setPassword(router_config_.password);
     router_authenticator->setSessionType(proto::router::SESSION_TYPE_CLIENT);
 
-    router_channel_ = new base::TcpChannel(router_authenticator, this);
+    router_channel_ = new base::TcpChannelNG(router_authenticator, this);
 
     connect(router_channel_, &base::TcpChannel::sig_authenticated,
             this, &RouterManager::onTcpReady);

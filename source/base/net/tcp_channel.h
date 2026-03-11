@@ -120,6 +120,12 @@ signals:
     void sig_messageWritten(quint8 channel_id);
 
 protected:
+    friend class TcpServerLegacy;
+    friend class TcpServer;
+    friend class RelayPeer;
+
+    virtual void doAuthentication() = 0;
+
     void addTxBytes(size_t bytes_count);
     void addRxBytes(size_t bytes_count);
 

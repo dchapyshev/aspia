@@ -407,7 +407,9 @@ list(APPEND SOURCE_BASE_NET
     net/tcp_channel_ng.cc
     net/tcp_channel_ng.h
     net/tcp_server.cc
-    net/tcp_server.h)
+    net/tcp_server.h
+    net/tcp_server_legacy.cc
+    net/tcp_server_legacy.h)
 
 if (WIN32)
     list(APPEND SOURCE_BASE_NET

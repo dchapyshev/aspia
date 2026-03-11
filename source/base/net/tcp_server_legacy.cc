@@ -16,17 +16,17 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/net/tcp_server.h"
+#include "base/net/tcp_server_legacy.h"
 
 #include "base/asio_event_dispatcher.h"
 #include "base/logging.h"
-#include "base/net/tcp_channel_ng.h"
+#include "base/net/tcp_channel_legacy.h"
 #include "base/peer/server_authenticator.h"
 
 namespace base {
 
 //--------------------------------------------------------------------------------------------------
-TcpServer::TcpServer(QObject* parent)
+TcpServerLegacy::TcpServerLegacy(QObject* parent)
     : QObject(parent),
       acceptor_(AsioEventDispatcher::ioContext())
 {
@@ -34,27 +34,27 @@ TcpServer::TcpServer(QObject* parent)
 }
 
 //--------------------------------------------------------------------------------------------------
-TcpServer::~TcpServer()
+TcpServerLegacy::~TcpServerLegacy()
 {
     std::error_code ignored_error;
     acceptor_.cancel(ignored_error);
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpServer::setUserList(SharedPointer<UserListBase> user_list)
+void TcpServerLegacy::setUserList(SharedPointer<UserListBase> user_list)
 {
     user_list_ = user_list;
     DCHECK(user_list_);
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpServer::setPrivateKey(const QByteArray& private_key)
+void TcpServerLegacy::setPrivateKey(const QByteArray& private_key)
 {
     private_key_ = private_key;
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpServer::setAnonymousAccess(
+void TcpServerLegacy::setAnonymousAccess(
     ServerAuthenticator::AnonymousAccess anonymous_access, quint32 session_types)
 {
     anonymous_access_ = anonymous_access;
@@ -62,7 +62,7 @@ void TcpServer::setAnonymousAccess(
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpServer::start(quint16 port, const QString& iface)
+void TcpServerLegacy::start(quint16 port, const QString& iface)
 {
     if (acceptor_.is_open())
     {
@@ -123,13 +123,13 @@ void TcpServer::start(quint16 port, const QString& iface)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool TcpServer::hasReadyConnections()
+bool TcpServerLegacy::hasReadyConnections()
 {
     return !ready_.isEmpty();
 }
 
 //--------------------------------------------------------------------------------------------------
-TcpChannel* TcpServer::nextReadyConnection()
+TcpChannel* TcpServerLegacy::nextReadyConnection()
 {
     if (ready_.isEmpty())
         return nullptr;
@@ -143,7 +143,7 @@ TcpChannel* TcpServer::nextReadyConnection()
 
 //--------------------------------------------------------------------------------------------------
 // static
-bool TcpServer::isValidListenInterface(const QString& iface)
+bool TcpServerLegacy::isValidListenInterface(const QString& iface)
 {
     if (iface.isEmpty())
         return true;
@@ -160,7 +160,7 @@ bool TcpServer::isValidListenInterface(const QString& iface)
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpServer::doAccept()
+void TcpServerLegacy::doAccept()
 {
     acceptor_.async_accept([this](const std::error_code& error_code, asio::ip::tcp::socket socket)
     {
@@ -205,7 +205,7 @@ void TcpServer::doAccept()
                 }
             }
 
-            TcpChannel* channel = new TcpChannelNG(std::move(socket), authenticator, this);
+            TcpChannel* channel = new TcpChannelLegacy(std::move(socket), authenticator, this);
 
             connect(channel, &TcpChannel::sig_authenticated, this, [this, channel]()
             {
@@ -234,7 +234,7 @@ void TcpServer::doAccept()
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpServer::removePendingChannel(TcpChannel* channel)
+void TcpServerLegacy::removePendingChannel(TcpChannel* channel)
 {
     // Disconnect all connected signals between the server and channel.
     disconnect(channel, nullptr, this, nullptr);

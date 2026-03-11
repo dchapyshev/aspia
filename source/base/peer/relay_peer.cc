@@ -27,6 +27,8 @@
 #include "base/crypto/generic_hash.h"
 #include "base/crypto/key_pair.h"
 #include "base/crypto/message_encryptor.h"
+#include "base/net/tcp_channel_legacy.h"
+#include "base/net/tcp_channel_ng.h"
 #include "base/peer/authenticator.h"
 #include "proto/relay_peer.h"
 
@@ -85,12 +87,11 @@ void RelayPeer::start(const proto::router::ConnectionOffer& offer)
 
     QString host = QString::fromStdString(credentials.host());
 
-    LOG(INFO) << "Start resolving for" << host << ":" << credentials.port();
+    LOG(INFO) << "Start resolving for" << host << ":" << credentials.port()
+              << "(legacy:" << offer.is_legacy() << ")";
 
-    resolver_.async_resolve(host.toLocal8Bit().data(),
-                            std::to_string(credentials.port()),
-        [this](const std::error_code& error_code,
-               const asio::ip::tcp::resolver::results_type& endpoints)
+    resolver_.async_resolve(host.toLocal8Bit().data(), std::to_string(credentials.port()),
+        [this](const std::error_code& error_code, const asio::ip::tcp::resolver::results_type& endpoints)
     {
         if (error_code)
         {
@@ -103,19 +104,13 @@ void RelayPeer::start(const proto::router::ConnectionOffer& offer)
         LOG(INFO) << "Start connecting...";
 
         asio::async_connect(socket_, endpoints,
-                            [this](const std::error_code& error_code,
-                                   const asio::ip::tcp::endpoint& endpoint)
+            [this](const std::error_code& error_code, const asio::ip::tcp::endpoint& endpoint)
         {
             if (error_code)
             {
-                if (error_code != asio::error::operation_aborted)
-                {
-                    onErrorOccurred(FROM_HERE, error_code);
-                }
-                else
-                {
-                    LOG(ERROR) << "Operation aborted";
-                }
+                if (error_code == asio::error::operation_aborted)
+                    return;
+                onErrorOccurred(FROM_HERE, error_code);
                 return;
             }
 
@@ -160,14 +155,9 @@ void RelayPeer::onConnected()
     {
         if (error_code)
         {
-            if (error_code != asio::error::operation_aborted)
-            {
-                onErrorOccurred(FROM_HERE, error_code);
-            }
-            else
-            {
-                LOG(ERROR) << "Operation aborted";
-            }
+            if (error_code == asio::error::operation_aborted)
+                return;
+            onErrorOccurred(FROM_HERE, error_code);
             return;
         }
 
@@ -178,18 +168,13 @@ void RelayPeer::onConnected()
         }
 
         asio::async_write(socket_, asio::const_buffer(message_.data(), message_.size()),
-                          [this](const std::error_code& error_code, size_t bytes_transferred)
+            [this](const std::error_code& error_code, size_t bytes_transferred)
         {
             if (error_code)
             {
-                if (error_code != asio::error::operation_aborted)
-                {
-                    onErrorOccurred(FROM_HERE, error_code);
-                }
-                else
-                {
-                    LOG(ERROR) << "Operation aborted";
-                }
+                if (error_code == asio::error::operation_aborted)
+                    return;
+                onErrorOccurred(FROM_HERE, error_code);
                 return;
             }
 
@@ -199,7 +184,16 @@ void RelayPeer::onConnected()
                 return;
             }
 
-            pending_channel_ = new TcpChannel(std::move(socket_), authenticator_.release(), this);
+            if (connection_offer_.is_legacy())
+            {
+                pending_channel_ = new TcpChannelLegacy(
+                    std::move(socket_), authenticator_.release(), this);
+            }
+            else
+            {
+                pending_channel_ = new TcpChannelNG(
+                    std::move(socket_), authenticator_.release(), this);
+            }
 
             connect(pending_channel_, &TcpChannel::sig_authenticated, this, [this]()
             {
@@ -240,8 +234,7 @@ void RelayPeer::onErrorOccurred(const Location& location, const std::error_code&
 
 //--------------------------------------------------------------------------------------------------
 // static
-QByteArray RelayPeer::authenticationMessage(
-    const proto::router::RelayKey& key, const std::string& secret)
+QByteArray RelayPeer::authenticationMessage(const proto::router::RelayKey& key, const std::string& secret)
 {
     if (key.type() != proto::router::RelayKey::TYPE_X25519)
     {
@@ -306,7 +299,6 @@ QByteArray RelayPeer::authenticationMessage(
     }
 
     proto::relay::PeerToRelay message;
-
     message.set_key_id(key.key_id());
     message.set_public_key(key_pair.publicKey().toStdString());
     message.set_data(std::move(encrypted_secret));

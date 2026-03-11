@@ -23,7 +23,7 @@
 
 #include "base/location.h"
 #include "base/logging.h"
-#include "base/net/tcp_channel.h"
+#include "base/net/tcp_channel_ng.h"
 #include "build/build_config.h"
 
 namespace client {
@@ -98,7 +98,7 @@ void OnlineCheckerDirect::Instance::start(FinishCallback finish_callback)
     LOG(INFO) << "Starting connection to" << address_ << ":" << port_
               << "(computer:" << computer_id_ << ")";
 
-    tcp_channel_ = new base::TcpChannel(nullptr, this);
+    tcp_channel_ = new base::TcpChannelNG(nullptr, this);
 
     connect(tcp_channel_, &base::TcpChannel::sig_connected, this, &Instance::onTcpConnected);
     connect(tcp_channel_, &base::TcpChannel::sig_errorOccurred, this, &Instance::onTcpErrorOccurred);

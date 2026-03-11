@@ -87,6 +87,7 @@ message ConnectionOffer
     ErrorCode error_code    = 2;
     RelayCredentials relay  = 3;
     HostOfferData host_data = 4;
+    bool is_legacy          = 5;
 }
 
 message CheckHostStatus

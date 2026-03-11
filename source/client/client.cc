@@ -22,6 +22,7 @@
 
 #include "base/logging.h"
 #include "base/version_constants.h"
+#include "base/net/tcp_channel_ng.h"
 #include "base/peer/client_authenticator.h"
 
 #if defined(Q_OS_MACOS)
@@ -174,7 +175,7 @@ void Client::start()
         }
 
         // Create a network channel for messaging.
-        tcp_channel_ = new base::TcpChannel(authenticator.release(), this);
+        tcp_channel_ = new base::TcpChannelNG(authenticator.release(), this);
 
         connect(tcp_channel_, &base::TcpChannel::sig_authenticated, this, &Client::onTcpReady);
         connect(tcp_channel_, &base::TcpChannel::sig_errorOccurred, this, &Client::onTcpErrorOccurred);

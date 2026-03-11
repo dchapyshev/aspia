@@ -75,7 +75,7 @@ public:
     qint64 pendingBytes() const final;
 
 protected:
-    friend class TcpServer;
+    friend class TcpServerLegacy;
     friend class RelayPeer;
 
     // Constructor available for server. An already connected socket is being moved.
@@ -83,7 +83,7 @@ protected:
 
     // Starts authentication. In the client channel, it starts automatically when a connection is
     // established. In the server channel, it is started by the RelayPeer or TcpServer.
-    void doAuthentication();
+    void doAuthentication() final;
 
     // Disconnects to remote host. The method is not available for an external call.
     // To disconnect, you must destroy the channel by calling the destructor.

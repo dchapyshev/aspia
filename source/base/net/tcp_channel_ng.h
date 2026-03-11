@@ -82,7 +82,7 @@ protected:
 
     // Starts authentication. In the client channel, it starts automatically when a connection is
     // established. In the server channel, it is started by the RelayPeer or TcpServer.
-    void doAuthentication();
+    void doAuthentication() final;
 
 private:
     class WriteTask

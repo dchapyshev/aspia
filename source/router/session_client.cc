@@ -20,6 +20,7 @@
 
 #include "base/logging.h"
 #include "base/serialization.h"
+#include "base/version_constants.h"
 #include "base/crypto/random.h"
 #include "proto/relay_peer.h"
 #include "router/service.h"
@@ -114,13 +115,13 @@ void SessionClient::readConnectionRequest(const proto::router::ConnectionRequest
                 const std::optional<SessionRelay::PeerData>& peer_data = relay->peerData();
                 if (!peer_data.has_value())
                 {
-                    LOG(ERROR) << "No peer data for relay with session id"
-                               << credentials->session_id;
+                    LOG(ERROR) << "No peer data for relay with session id" << credentials->session_id;
                     offer->set_error_code(proto::router::ConnectionOffer::KEY_POOL_EMPTY);
                 }
                 else
                 {
                     offer->set_error_code(proto::router::ConnectionOffer::SUCCESS);
+                    offer->set_is_legacy(host->version() < base::kVersion_3_0_0);
 
                     proto::router::HostOfferData* offer_data = offer->mutable_host_data();
                     offer_data->set_host_id(request.host_id());
