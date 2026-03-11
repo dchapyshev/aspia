@@ -1011,6 +1011,7 @@
     <name>ConfigDialog</name>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="14"/>
+        <location filename="../host/ui/config_dialog.ui" line="168"/>
         <source>Settings</source>
         <translation>Параметры</translation>
     </message>
@@ -1032,7 +1033,7 @@
         <translation type="vanished">Порт:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="233"/>
+        <location filename="../host/ui/config_dialog.ui" line="243"/>
         <source>Change password</source>
         <translation>Изменить пароль</translation>
     </message>
@@ -1045,37 +1046,37 @@
         <translation type="vanished">Экспорт</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="208"/>
+        <location filename="../host/ui/config_dialog.ui" line="218"/>
         <source>Security</source>
         <translation>Безопасность</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="214"/>
+        <location filename="../host/ui/config_dialog.ui" line="224"/>
         <source>Password Protection of Settings</source>
         <translation>Защита настроек паролем</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="250"/>
+        <location filename="../host/ui/config_dialog.ui" line="260"/>
         <source>One-time Password</source>
         <translation>Одноразовый пароль</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="256"/>
+        <location filename="../host/ui/config_dialog.ui" line="266"/>
         <source>Enable one-time password</source>
         <translation>Включить одноразовый пароль</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="265"/>
+        <location filename="../host/ui/config_dialog.ui" line="275"/>
         <source>Change password:</source>
         <translation>Менять пароль:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="285"/>
+        <location filename="../host/ui/config_dialog.ui" line="295"/>
         <source>Characters count:</source>
         <translation>Количество символов:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="275"/>
+        <location filename="../host/ui/config_dialog.ui" line="285"/>
         <source>Characters:</source>
         <translation>Символы:</translation>
     </message>
@@ -1085,149 +1086,147 @@
         <translation>Общие</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="38"/>
+        <location filename="../host/ui/config_dialog.ui" line="36"/>
         <source>Incoming port:</source>
         <translation>Входящий порт:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="158"/>
-        <location filename="../host/ui/config_dialog.ui" line="347"/>
+        <location filename="../host/ui/config_dialog.ui" line="357"/>
         <source>Other</source>
         <translation>Разное</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="353"/>
+        <location filename="../host/ui/config_dialog.ui" line="363"/>
         <source>Disable Aspia shutdown</source>
         <translation>Запретить закрытие Aspia</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="177"/>
+        <location filename="../host/ui/config_dialog.ui" line="187"/>
         <source>Import settings</source>
         <translation>Импорт параметров</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="82"/>
+        <location filename="../host/ui/config_dialog.ui" line="92"/>
         <source>Automatic checking and installation of updates</source>
         <translation>Автоматически проверять и устанавливать обновления</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="91"/>
+        <location filename="../host/ui/config_dialog.ui" line="101"/>
         <source>Check for updates:</source>
         <translation>Проверять обновления:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="184"/>
+        <location filename="../host/ui/config_dialog.ui" line="194"/>
         <source>Export settings</source>
         <translation>Экспорт параметров</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="307"/>
+        <location filename="../host/ui/config_dialog.ui" line="317"/>
         <source>Connection Confirmation</source>
         <translation>Подтверждение подключения</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="313"/>
+        <location filename="../host/ui/config_dialog.ui" line="323"/>
         <source>Require confirmation when connected to a computer</source>
         <translation>Требовать подтверждение при подключении к компьютеру</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="322"/>
+        <location filename="../host/ui/config_dialog.ui" line="332"/>
         <source>Automatic confirmation of connection via:</source>
         <translation>Автоматическое подтверждение через:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="332"/>
+        <location filename="../host/ui/config_dialog.ui" line="342"/>
         <source>If there is no active user:</source>
         <translation>Если нет активного пользователя:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="377"/>
+        <location filename="../host/ui/config_dialog.ui" line="387"/>
         <source>Router</source>
         <translation>Маршрутизатор</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="383"/>
+        <location filename="../host/ui/config_dialog.ui" line="393"/>
         <source>Enable the use of a router</source>
         <translation>Включить использование маршрутизатора</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="395"/>
+        <location filename="../host/ui/config_dialog.ui" line="405"/>
         <source>Address:</source>
         <translation>Адрес:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="414"/>
+        <location filename="../host/ui/config_dialog.ui" line="424"/>
         <source>Public Key:</source>
         <translation>Публичный ключ:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="428"/>
+        <location filename="../host/ui/config_dialog.ui" line="438"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
         <translation>Маршрутизатор необходим для подключения к компьютеру при невозможности прямого подключения (обхода NAT). Aspia не предоставляет публичного маршрутизатора, но вы можете установить свой собственный. Загрузить маршрутизатор вы можете на &lt;a href=&quot;https://aspia.org&quot;&gt;официальном сайте&lt;/a&gt;.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="445"/>
-        <location filename="../host/ui/config_dialog.ui" line="556"/>
+        <location filename="../host/ui/config_dialog.ui" line="455"/>
+        <location filename="../host/ui/config_dialog.ui" line="566"/>
         <source>Users</source>
         <translation>Пользователи</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="459"/>
+        <location filename="../host/ui/config_dialog.ui" line="469"/>
         <source>Add new user</source>
         <translation>Добавить нового пользователя</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="485"/>
+        <location filename="../host/ui/config_dialog.ui" line="495"/>
         <source>Edit user</source>
         <translation>Редактировать пользователя</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="511"/>
+        <location filename="../host/ui/config_dialog.ui" line="521"/>
         <source>Delete user</source>
         <translation>Удалить пользователя</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="76"/>
+        <location filename="../host/ui/config_dialog.ui" line="86"/>
         <source>Update Server</source>
         <translation>Сервер обновлений</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="103"/>
+        <location filename="../host/ui/config_dialog.ui" line="113"/>
         <source>Use custom update server</source>
         <translation>Использовать свой сервер обновлений</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="112"/>
+        <location filename="../host/ui/config_dialog.ui" line="122"/>
         <source>Server:</source>
         <translation>Сервер:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="146"/>
+        <location filename="../host/ui/config_dialog.ui" line="156"/>
         <source>Check for updates</source>
         <translation>Проверить обновления</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="565"/>
         <source>Advanced</source>
-        <translation>Дополнительно</translation>
+        <translation type="vanished">Дополнительно</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="573"/>
+        <location filename="../host/ui/config_dialog.ui" line="71"/>
         <source>Preffered video capturer:</source>
         <translation>Предпочитаемый тип захвата видео:</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="613"/>
+        <location filename="../host/ui/config_dialog.ui" line="589"/>
         <source>Add</source>
         <translation>Добавить</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="622"/>
+        <location filename="../host/ui/config_dialog.ui" line="598"/>
         <source>Modify</source>
         <translation>Изменить</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="631"/>
+        <location filename="../host/ui/config_dialog.ui" line="607"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
@@ -4978,43 +4977,43 @@
 <context>
     <name>client::ClientWindow</name>
     <message>
-        <location filename="../client/ui/client_window.cc" line="79"/>
+        <location filename="../client/ui/client_window.cc" line="80"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="80"/>
+        <location filename="../client/ui/client_window.cc" line="81"/>
         <source>Are you sure you want to clear your connection history?</source>
         <translation>Вы действительно хотите очистить историю подключений?</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="83"/>
+        <location filename="../client/ui/client_window.cc" line="84"/>
         <source>Yes</source>
         <translation>Да</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="84"/>
+        <location filename="../client/ui/client_window.cc" line="85"/>
         <source>No</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="221"/>
+        <location filename="../client/ui/client_window.cc" line="222"/>
         <source>Aspia Client</source>
         <translation>Клиент Aspia</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="319"/>
-        <location filename="../client/ui/client_window.cc" line="337"/>
+        <location filename="../client/ui/client_window.cc" line="320"/>
+        <location filename="../client/ui/client_window.cc" line="338"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="320"/>
+        <location filename="../client/ui/client_window.cc" line="321"/>
         <source>An invalid computer address was entered.</source>
         <translation>Введен некорректный адрес компьютера.</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="338"/>
+        <location filename="../client/ui/client_window.cc" line="339"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation>Введен ID хоста, но маршрутизатор не настроен. Вам необходимо настроить ваш машрутизатор перед подключением.</translation>
     </message>
@@ -5127,34 +5126,34 @@
 <context>
     <name>client::DesktopSessionWindow</name>
     <message>
-        <location filename="../client/ui/desktop/desktop_session_window.cc" line="368"/>
-        <location filename="../client/ui/desktop/desktop_session_window.cc" line="377"/>
-        <location filename="../client/ui/desktop/desktop_session_window.cc" line="1109"/>
+        <location filename="../client/ui/desktop/desktop_session_window.cc" line="369"/>
+        <location filename="../client/ui/desktop/desktop_session_window.cc" line="378"/>
+        <location filename="../client/ui/desktop/desktop_session_window.cc" line="1110"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_session_window.cc" line="369"/>
+        <location filename="../client/ui/desktop/desktop_session_window.cc" line="370"/>
         <source>There are no supported video encodings.</source>
         <translation>Нет поддерживаемых кодировок видео.</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_session_window.cc" line="378"/>
+        <location filename="../client/ui/desktop/desktop_session_window.cc" line="379"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation>Текущий видео-кодек не поддерживается хостом. Пожалуйста, выберите другой кодек.</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_session_window.cc" line="1076"/>
+        <location filename="../client/ui/desktop/desktop_session_window.cc" line="1077"/>
         <source>Save File</source>
         <translation>Сохранение файла</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_session_window.cc" line="1078"/>
+        <location filename="../client/ui/desktop/desktop_session_window.cc" line="1079"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG изображение (*.png);;BMP изображение (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_session_window.cc" line="1109"/>
+        <location filename="../client/ui/desktop/desktop_session_window.cc" line="1110"/>
         <source>Could not save image</source>
         <translation>Не удалось сохранить изображение</translation>
     </message>
@@ -5253,22 +5252,22 @@
 <context>
     <name>client::DesktopWidget</name>
     <message>
-        <location filename="../client/ui/desktop/desktop_widget.cc" line="538"/>
+        <location filename="../client/ui/desktop/desktop_widget.cc" line="534"/>
         <source>The session was paused by a remote user</source>
         <translation>Сессия приостановлена удаленным пользователем</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_widget.cc" line="542"/>
+        <location filename="../client/ui/desktop/desktop_widget.cc" line="538"/>
         <source>The session is temporarily unavailable</source>
         <translation>Сессия временно недоступна</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_widget.cc" line="546"/>
+        <location filename="../client/ui/desktop/desktop_widget.cc" line="542"/>
         <source>The session is permanently unavailable</source>
         <translation>Сессия недоступна</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_widget.cc" line="550"/>
+        <location filename="../client/ui/desktop/desktop_widget.cc" line="546"/>
         <source>Error while receiving video stream: %1</source>
         <translation>Ошибка при получении видео-потока: %1</translation>
     </message>
@@ -6453,6 +6452,11 @@
         <translation>Хост недоступен. Ожидание переподключения...</translation>
     </message>
     <message>
+        <location filename="../client/ui/session_window.cc" line="260"/>
+        <source>Attempting to connect in compatibility mode...</source>
+        <translation>Попытка подключения в режиме совместимости...</translation>
+    </message>
+    <message>
         <source>Timeout waiting for reconnection</source>
         <translation type="vanished">Превышено время ожидания для переподключения</translation>
     </message>
@@ -6504,57 +6508,57 @@
         <translation type="vanished">Перенаправление портов</translation>
     </message>
     <message>
-        <location filename="../client/ui/session_window.cc" line="299"/>
+        <location filename="../client/ui/session_window.cc" line="303"/>
         <source>Violation of the communication protocol.</source>
         <translation>Нарушение протокола обмена данными.</translation>
     </message>
     <message>
-        <location filename="../client/ui/session_window.cc" line="307"/>
+        <location filename="../client/ui/session_window.cc" line="311"/>
         <source>Cryptography error (message encryption or decryption failed).</source>
         <translation>Ошибка криптографии (не удалось зашифровать или расшифровать сообщение).</translation>
     </message>
     <message>
-        <location filename="../client/ui/session_window.cc" line="315"/>
+        <location filename="../client/ui/session_window.cc" line="319"/>
         <source>Version of the application you are connecting to is less than the minimum supported version.</source>
         <translation>Версия приложения, к которому вы подключаетесь, ниже минимально поддерживаемой версии.</translation>
     </message>
     <message>
-        <location filename="../client/ui/session_window.cc" line="320"/>
+        <location filename="../client/ui/session_window.cc" line="324"/>
         <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
         <translation>Произошла ошибка в сети (например, сетевой кабель был случайно отключен).</translation>
     </message>
     <message>
-        <location filename="../client/ui/session_window.cc" line="324"/>
+        <location filename="../client/ui/session_window.cc" line="328"/>
         <source>Connection was refused by the peer (or timed out).</source>
         <translation>Подключение было отклонено другой стороной (или превышено время ожидания).</translation>
     </message>
     <message>
-        <location filename="../client/ui/session_window.cc" line="328"/>
+        <location filename="../client/ui/session_window.cc" line="332"/>
         <source>Remote host closed the connection.</source>
         <translation>Удаленный узел закрыл подключение.</translation>
     </message>
     <message>
-        <location filename="../client/ui/session_window.cc" line="332"/>
+        <location filename="../client/ui/session_window.cc" line="336"/>
         <source>Host address was not found.</source>
         <translation>Не найден адрес удаленного узла.</translation>
     </message>
     <message>
-        <location filename="../client/ui/session_window.cc" line="336"/>
+        <location filename="../client/ui/session_window.cc" line="340"/>
         <source>Socket operation timed out.</source>
         <translation>Превышено время ожидания.</translation>
     </message>
     <message>
-        <location filename="../client/ui/session_window.cc" line="340"/>
+        <location filename="../client/ui/session_window.cc" line="344"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
         <translation>Указанный адрес уже используется и был установлен монопольно.</translation>
     </message>
     <message>
-        <location filename="../client/ui/session_window.cc" line="344"/>
+        <location filename="../client/ui/session_window.cc" line="348"/>
         <source>Address specified does not belong to the host.</source>
         <translation>Указанный адрес не принадлежит узлу.</translation>
     </message>
     <message>
-        <location filename="../client/ui/session_window.cc" line="354"/>
+        <location filename="../client/ui/session_window.cc" line="358"/>
         <source>An unknown error occurred.</source>
         <translation>Произошла неизвестная ошибка.</translation>
     </message>
@@ -6575,17 +6579,17 @@
         <translation type="vanished">Версия приложения, к которому вы подключаетесь, меньше чем минимально поддерживаемая версия.</translation>
     </message>
     <message>
-        <location filename="../client/ui/session_window.cc" line="303"/>
+        <location filename="../client/ui/session_window.cc" line="307"/>
         <source>Wrong user name or password.</source>
         <translation>Неправильное имя пользователя или пароль.</translation>
     </message>
     <message>
-        <location filename="../client/ui/session_window.cc" line="311"/>
+        <location filename="../client/ui/session_window.cc" line="315"/>
         <source>Specified session type is not allowed for the user.</source>
         <translation>Указанный тип сессии не разрешен для пользователя.</translation>
     </message>
     <message>
-        <location filename="../client/ui/session_window.cc" line="371"/>
+        <location filename="../client/ui/session_window.cc" line="375"/>
         <source>The host with the specified ID is not online.</source>
         <translation>Хост с указанным ID не в сети.</translation>
     </message>
@@ -6594,22 +6598,22 @@
         <translation type="vanished">Хост с указанным ID не найден.</translation>
     </message>
     <message>
-        <location filename="../client/ui/session_window.cc" line="375"/>
+        <location filename="../client/ui/session_window.cc" line="379"/>
         <source>There are no relays available or the key pool is empty.</source>
         <translation>Нет доступных ретрансляторов или пул ключей пуст.</translation>
     </message>
     <message>
-        <location filename="../client/ui/session_window.cc" line="379"/>
+        <location filename="../client/ui/session_window.cc" line="383"/>
         <source>Failed to connect to the relay server.</source>
         <translation>Не удалось подключиться к серверу ретрансляции.</translation>
     </message>
     <message>
-        <location filename="../client/ui/session_window.cc" line="383"/>
+        <location filename="../client/ui/session_window.cc" line="387"/>
         <source>Access is denied.</source>
         <translation>Доступ запрещен.</translation>
     </message>
     <message>
-        <location filename="../client/ui/session_window.cc" line="387"/>
+        <location filename="../client/ui/session_window.cc" line="391"/>
         <source>Unknown error.</source>
         <translation>Неизвестная ошибка.</translation>
     </message>
@@ -9965,49 +9969,49 @@
 <context>
     <name>console::MainWindow</name>
     <message>
-        <location filename="../console/main_window.cc" line="210"/>
-        <location filename="../console/main_window.cc" line="599"/>
-        <location filename="../console/main_window.cc" line="610"/>
-        <location filename="../console/main_window.cc" line="622"/>
-        <location filename="../console/main_window.cc" line="676"/>
-        <location filename="../console/main_window.cc" line="689"/>
-        <location filename="../console/main_window.cc" line="1668"/>
+        <location filename="../console/main_window.cc" line="211"/>
+        <location filename="../console/main_window.cc" line="600"/>
+        <location filename="../console/main_window.cc" line="611"/>
+        <location filename="../console/main_window.cc" line="623"/>
+        <location filename="../console/main_window.cc" line="677"/>
+        <location filename="../console/main_window.cc" line="690"/>
+        <location filename="../console/main_window.cc" line="1669"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="211"/>
+        <location filename="../console/main_window.cc" line="212"/>
         <source>Pinned address book file &quot;%1&quot; was not found.&lt;br/&gt;This file will be unpinned.</source>
         <translation>Закрепленный файл адресной книги &quot;%1&quot; не найден.&lt;br/&gt;Этот файл будет откреплен.</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="324"/>
+        <location filename="../console/main_window.cc" line="325"/>
         <source>Open Address Book</source>
         <translation>Открытие адресной книги</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="326"/>
+        <location filename="../console/main_window.cc" line="327"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Адресная книга Aspia (*.aab)</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="584"/>
+        <location filename="../console/main_window.cc" line="585"/>
         <source>Open File</source>
         <translation>Открыть файл</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="586"/>
-        <location filename="../console/main_window.cc" line="663"/>
+        <location filename="../console/main_window.cc" line="587"/>
+        <location filename="../console/main_window.cc" line="664"/>
         <source>JSON files (*.json)</source>
         <translation>JSON-файлы (*.json)</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="600"/>
+        <location filename="../console/main_window.cc" line="601"/>
         <source>Could not open file for reading.</source>
         <translation>Не удалось открыть файл для чтения.</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="611"/>
+        <location filename="../console/main_window.cc" line="612"/>
         <source>Import file is empty.</source>
         <translation>Файл для импорта пустой.</translation>
     </message>
@@ -10020,119 +10024,119 @@
         <translation type="vanished">Импорт успешно завершен</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="623"/>
+        <location filename="../console/main_window.cc" line="624"/>
         <source>Failed to parse JSON document: %1.</source>
         <translation>Ошибка при разборе JSON документа: %1.</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="636"/>
+        <location filename="../console/main_window.cc" line="637"/>
         <source>Import completed successfully.</source>
         <translation>Импорт успешно завершен.</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="661"/>
+        <location filename="../console/main_window.cc" line="662"/>
         <source>Save File</source>
         <translation>Сохранить файл</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="677"/>
+        <location filename="../console/main_window.cc" line="678"/>
         <source>Could not open file for writing.</source>
         <translation>Не удалось открыть файл для записи.</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="690"/>
+        <location filename="../console/main_window.cc" line="691"/>
         <source>Unable to write file.</source>
         <translation>Не удалось записать файл.</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="698"/>
+        <location filename="../console/main_window.cc" line="699"/>
         <source>Export completed successfully.</source>
         <translation>Экспорт успешно завершен.</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="961"/>
-        <location filename="../console/main_window.cc" line="1307"/>
-        <location filename="../console/main_window.cc" line="1392"/>
+        <location filename="../console/main_window.cc" line="962"/>
+        <location filename="../console/main_window.cc" line="1308"/>
+        <location filename="../console/main_window.cc" line="1393"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="962"/>
-        <location filename="../console/main_window.cc" line="1393"/>
+        <location filename="../console/main_window.cc" line="963"/>
+        <location filename="../console/main_window.cc" line="1394"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>Адресная книга &quot;%1&quot; изменена. Сохранить изменения?</translation>
-    </message>
-    <message>
-        <location filename="../console/main_window.cc" line="966"/>
-        <location filename="../console/main_window.cc" line="1311"/>
-        <location filename="../console/main_window.cc" line="1397"/>
-        <source>Yes</source>
-        <translation>Да</translation>
     </message>
     <message>
         <location filename="../console/main_window.cc" line="967"/>
         <location filename="../console/main_window.cc" line="1312"/>
         <location filename="../console/main_window.cc" line="1398"/>
+        <source>Yes</source>
+        <translation>Да</translation>
+    </message>
+    <message>
+        <location filename="../console/main_window.cc" line="968"/>
+        <location filename="../console/main_window.cc" line="1313"/>
+        <location filename="../console/main_window.cc" line="1399"/>
         <source>No</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="968"/>
-        <location filename="../console/main_window.cc" line="1399"/>
+        <location filename="../console/main_window.cc" line="969"/>
+        <location filename="../console/main_window.cc" line="1400"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1201"/>
+        <location filename="../console/main_window.cc" line="1202"/>
         <source>Close other tabs</source>
         <translation>Закрыть другие вкладки</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1208"/>
+        <location filename="../console/main_window.cc" line="1209"/>
         <source>Close tab</source>
         <translation>Закрыть вкладку</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1209"/>
-        <location filename="../console/main_window.cc" line="1214"/>
+        <location filename="../console/main_window.cc" line="1210"/>
+        <location filename="../console/main_window.cc" line="1215"/>
         <source>Pin tab</source>
         <translation>Закрепить вкладку</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1308"/>
+        <location filename="../console/main_window.cc" line="1309"/>
         <source>The list of recently opened address books will be cleared. Continue?</source>
         <translation>Список недавно открытых адресных книг будет очищен. Продолжить?</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1345"/>
+        <location filename="../console/main_window.cc" line="1346"/>
         <source>Hide</source>
         <translation>Спрятать</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1360"/>
+        <location filename="../console/main_window.cc" line="1361"/>
         <source>Show</source>
         <translation>Показать</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1669"/>
+        <location filename="../console/main_window.cc" line="1670"/>
         <source>Connection by ID is specified in the properties of the computer, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation>В свойствах компьютера указано подключение по ID, но маршутизатор не настроен. Проверьте параметры маршрутизатора в свойствах адресной книги.</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="741"/>
-        <location filename="../console/main_window.cc" line="1534"/>
+        <location filename="../console/main_window.cc" line="742"/>
+        <location filename="../console/main_window.cc" line="1535"/>
         <source>Aspia Console</source>
         <translation>Консоль Aspia</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="291"/>
-        <location filename="../console/main_window.cc" line="635"/>
-        <location filename="../console/main_window.cc" line="697"/>
+        <location filename="../console/main_window.cc" line="292"/>
+        <location filename="../console/main_window.cc" line="636"/>
+        <location filename="../console/main_window.cc" line="698"/>
         <source>Information</source>
         <translation>Информация</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="292"/>
+        <location filename="../console/main_window.cc" line="293"/>
         <source>Address Book &quot;%1&quot; is already open.</source>
         <translation>Адресная книга &quot;%1&quot; уже открыта.</translation>
     </message>
@@ -10166,12 +10170,12 @@
 <context>
     <name>console::StatusBar</name>
     <message>
-        <location filename="../console/statusbar.cc" line="46"/>
+        <location filename="../console/statusbar.cc" line="49"/>
         <source>Status update</source>
         <translation>Обновление состояния</translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/statusbar.cc" line="59"/>
+        <location filename="../console/statusbar.cc" line="62"/>
         <source>%n child group(s)</source>
         <translation>
             <numerusform>%n дочерняя группа</numerusform>
@@ -10180,7 +10184,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/statusbar.cc" line="60"/>
+        <location filename="../console/statusbar.cc" line="63"/>
         <source>%n child computer(s)</source>
         <translation>
             <numerusform>%n дочерний компьютер</numerusform>
@@ -10266,28 +10270,28 @@
 <context>
     <name>host::ConfigDialog</name>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="389"/>
+        <location filename="../host/ui/config_dialog.cc" line="382"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="390"/>
+        <location filename="../host/ui/config_dialog.cc" line="383"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>Вы действительно хотите удалить пользователя &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="489"/>
+        <location filename="../host/ui/config_dialog.cc" line="482"/>
         <source>Import</source>
         <translation>Импорт</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="228"/>
+        <location filename="../host/ui/config_dialog.cc" line="105"/>
         <source>Default</source>
         <translation>По умолчанию</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="489"/>
-        <location filename="../host/ui/config_dialog.cc" line="506"/>
+        <location filename="../host/ui/config_dialog.cc" line="482"/>
+        <location filename="../host/ui/config_dialog.cc" line="499"/>
         <source>JSON-files (*.json)</source>
         <translation>JSON-файлы (*.json)</translation>
     </message>
@@ -10296,52 +10300,52 @@
         <translation type="vanished">Конфигурация службы изменена. Для принятия изменений требуется перезапуск службы. Перезапустить сейчас?</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="506"/>
+        <location filename="../host/ui/config_dialog.cc" line="499"/>
         <source>Export</source>
         <translation>Экспорт</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="531"/>
+        <location filename="../host/ui/config_dialog.cc" line="524"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
         <translation>Конфигурация не может быть записана. Проверьте имеются ли у вас достаточные права для записи.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="431"/>
-        <location filename="../host/ui/config_dialog.cc" line="468"/>
-        <location filename="../host/ui/config_dialog.cc" line="534"/>
-        <location filename="../host/ui/config_dialog.cc" line="546"/>
-        <location filename="../host/ui/config_dialog.cc" line="559"/>
+        <location filename="../host/ui/config_dialog.cc" line="424"/>
+        <location filename="../host/ui/config_dialog.cc" line="461"/>
+        <location filename="../host/ui/config_dialog.cc" line="527"/>
+        <location filename="../host/ui/config_dialog.cc" line="539"/>
+        <location filename="../host/ui/config_dialog.cc" line="552"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="135"/>
+        <location filename="../host/ui/config_dialog.cc" line="160"/>
         <source>Letters and digits</source>
         <translation>Буквы и цифры</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="140"/>
+        <location filename="../host/ui/config_dialog.cc" line="165"/>
         <source>Digits</source>
         <translation>Цифры</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="432"/>
-        <location filename="../host/ui/config_dialog.cc" line="469"/>
+        <location filename="../host/ui/config_dialog.cc" line="425"/>
+        <location filename="../host/ui/config_dialog.cc" line="462"/>
         <source>An error occurred while processing the password.</source>
         <translation>Возникла ошибка при обработке пароля.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="547"/>
+        <location filename="../host/ui/config_dialog.cc" line="540"/>
         <source>Incorrect router address entered.</source>
         <translation>Введен некорректный адрес маршрутизатора.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="560"/>
+        <location filename="../host/ui/config_dialog.cc" line="553"/>
         <source>Incorrect router public key entered.</source>
         <translation>Введен некорректный публичный ключ маршрутизатора.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="733"/>
+        <location filename="../host/ui/config_dialog.cc" line="726"/>
         <source>Remove</source>
         <translation>Удалить</translation>
     </message>
@@ -10370,7 +10374,7 @@
         <translation type="vanished">Не установлена</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="728"/>
+        <location filename="../host/ui/config_dialog.cc" line="721"/>
         <source>Install</source>
         <translation>Установить</translation>
     </message>
@@ -10400,87 +10404,87 @@
         <translation>Раз в месяц</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="121"/>
+        <location filename="../host/ui/config_dialog.cc" line="146"/>
         <source>On reboot</source>
         <translation>При перезагрузке</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="122"/>
+        <location filename="../host/ui/config_dialog.cc" line="147"/>
         <source>Every 5 minutes</source>
         <translation>Каждые 5 минут</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="123"/>
+        <location filename="../host/ui/config_dialog.cc" line="148"/>
         <source>Every 30 minutes</source>
         <translation>Каждые 30 минут</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="124"/>
+        <location filename="../host/ui/config_dialog.cc" line="149"/>
         <source>Every 1 hour</source>
         <translation>Каждый 1 час</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="125"/>
+        <location filename="../host/ui/config_dialog.cc" line="150"/>
         <source>Every 6 hours</source>
         <translation>Каждые 6 часов</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="126"/>
+        <location filename="../host/ui/config_dialog.cc" line="151"/>
         <source>Every 12 hours</source>
         <translation>Каждые 12 часов</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="127"/>
+        <location filename="../host/ui/config_dialog.cc" line="152"/>
         <source>Every 24 hours</source>
         <translation>Каждые 24 часа</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="138"/>
+        <location filename="../host/ui/config_dialog.cc" line="163"/>
         <source>Letters</source>
         <translation>Буквы</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="157"/>
+        <location filename="../host/ui/config_dialog.cc" line="182"/>
         <source>Never</source>
         <translation>Никогда</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="158"/>
+        <location filename="../host/ui/config_dialog.cc" line="183"/>
         <source>15 seconds</source>
         <translation>15 секунд</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="159"/>
+        <location filename="../host/ui/config_dialog.cc" line="184"/>
         <source>30 seconds</source>
         <translation>30 секунд</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="160"/>
+        <location filename="../host/ui/config_dialog.cc" line="185"/>
         <source>45 seconds</source>
         <translation>45 секунд</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="161"/>
+        <location filename="../host/ui/config_dialog.cc" line="186"/>
         <source>60 seconds</source>
         <translation>60 секунд</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="169"/>
+        <location filename="../host/ui/config_dialog.cc" line="194"/>
         <source>Accept connection</source>
         <translation>Принимать подключение</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="171"/>
+        <location filename="../host/ui/config_dialog.cc" line="196"/>
         <source>Reject connection</source>
         <translation>Отклонять подключение</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="394"/>
+        <location filename="../host/ui/config_dialog.cc" line="387"/>
         <source>Yes</source>
         <translation>Да</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="395"/>
+        <location filename="../host/ui/config_dialog.cc" line="388"/>
         <source>No</source>
         <translation>Нет</translation>
     </message>

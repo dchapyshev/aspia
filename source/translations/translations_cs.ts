@@ -905,6 +905,7 @@
     <name>ConfigDialog</name>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="14"/>
+        <location filename="../host/ui/config_dialog.ui" line="168"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
@@ -914,153 +915,148 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="445"/>
-        <location filename="../host/ui/config_dialog.ui" line="556"/>
+        <location filename="../host/ui/config_dialog.ui" line="455"/>
+        <location filename="../host/ui/config_dialog.ui" line="566"/>
         <source>Users</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="459"/>
+        <location filename="../host/ui/config_dialog.ui" line="469"/>
         <source>Add new user</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="485"/>
+        <location filename="../host/ui/config_dialog.ui" line="495"/>
         <source>Edit user</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="511"/>
+        <location filename="../host/ui/config_dialog.ui" line="521"/>
         <source>Delete user</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="76"/>
+        <location filename="../host/ui/config_dialog.ui" line="86"/>
         <source>Update Server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="103"/>
+        <location filename="../host/ui/config_dialog.ui" line="113"/>
         <source>Use custom update server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="112"/>
+        <location filename="../host/ui/config_dialog.ui" line="122"/>
         <source>Server:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="146"/>
+        <location filename="../host/ui/config_dialog.ui" line="156"/>
         <source>Check for updates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="613"/>
+        <location filename="../host/ui/config_dialog.ui" line="589"/>
         <source>Add</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="622"/>
+        <location filename="../host/ui/config_dialog.ui" line="598"/>
         <source>Modify</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="631"/>
+        <location filename="../host/ui/config_dialog.ui" line="607"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="377"/>
+        <location filename="../host/ui/config_dialog.ui" line="387"/>
         <source>Router</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="383"/>
+        <location filename="../host/ui/config_dialog.ui" line="393"/>
         <source>Enable the use of a router</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="395"/>
+        <location filename="../host/ui/config_dialog.ui" line="405"/>
         <source>Address:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="414"/>
+        <location filename="../host/ui/config_dialog.ui" line="424"/>
         <source>Public Key:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="573"/>
+        <location filename="../host/ui/config_dialog.ui" line="71"/>
         <source>Preffered video capturer:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="565"/>
-        <source>Advanced</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../host/ui/config_dialog.ui" line="233"/>
+        <location filename="../host/ui/config_dialog.ui" line="243"/>
         <source>Change password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="208"/>
+        <location filename="../host/ui/config_dialog.ui" line="218"/>
         <source>Security</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="214"/>
+        <location filename="../host/ui/config_dialog.ui" line="224"/>
         <source>Password Protection of Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="250"/>
+        <location filename="../host/ui/config_dialog.ui" line="260"/>
         <source>One-time Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="256"/>
+        <location filename="../host/ui/config_dialog.ui" line="266"/>
         <source>Enable one-time password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="285"/>
+        <location filename="../host/ui/config_dialog.ui" line="295"/>
         <source>Characters count:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="275"/>
+        <location filename="../host/ui/config_dialog.ui" line="285"/>
         <source>Characters:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="307"/>
+        <location filename="../host/ui/config_dialog.ui" line="317"/>
         <source>Connection Confirmation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="313"/>
+        <location filename="../host/ui/config_dialog.ui" line="323"/>
         <source>Require confirmation when connected to a computer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="322"/>
+        <location filename="../host/ui/config_dialog.ui" line="332"/>
         <source>Automatic confirmation of connection via:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="265"/>
+        <location filename="../host/ui/config_dialog.ui" line="275"/>
         <source>Change password:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="332"/>
+        <location filename="../host/ui/config_dialog.ui" line="342"/>
         <source>If there is no active user:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="428"/>
+        <location filename="../host/ui/config_dialog.ui" line="438"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1070,38 +1066,37 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="38"/>
+        <location filename="../host/ui/config_dialog.ui" line="36"/>
         <source>Incoming port:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="353"/>
+        <location filename="../host/ui/config_dialog.ui" line="363"/>
         <source>Disable Aspia shutdown</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="158"/>
-        <location filename="../host/ui/config_dialog.ui" line="347"/>
+        <location filename="../host/ui/config_dialog.ui" line="357"/>
         <source>Other</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="177"/>
+        <location filename="../host/ui/config_dialog.ui" line="187"/>
         <source>Import settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="184"/>
+        <location filename="../host/ui/config_dialog.ui" line="194"/>
         <source>Export settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="82"/>
+        <location filename="../host/ui/config_dialog.ui" line="92"/>
         <source>Automatic checking and installation of updates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="91"/>
+        <location filename="../host/ui/config_dialog.ui" line="101"/>
         <source>Check for updates:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3956,43 +3951,43 @@
 <context>
     <name>client::ClientWindow</name>
     <message>
-        <location filename="../client/ui/client_window.cc" line="79"/>
+        <location filename="../client/ui/client_window.cc" line="80"/>
         <source>Confirmation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="80"/>
+        <location filename="../client/ui/client_window.cc" line="81"/>
         <source>Are you sure you want to clear your connection history?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="83"/>
+        <location filename="../client/ui/client_window.cc" line="84"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="84"/>
+        <location filename="../client/ui/client_window.cc" line="85"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="221"/>
+        <location filename="../client/ui/client_window.cc" line="222"/>
         <source>Aspia Client</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="319"/>
-        <location filename="../client/ui/client_window.cc" line="337"/>
+        <location filename="../client/ui/client_window.cc" line="320"/>
+        <location filename="../client/ui/client_window.cc" line="338"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="320"/>
+        <location filename="../client/ui/client_window.cc" line="321"/>
         <source>An invalid computer address was entered.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="338"/>
+        <location filename="../client/ui/client_window.cc" line="339"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4038,34 +4033,34 @@
 <context>
     <name>client::DesktopSessionWindow</name>
     <message>
-        <location filename="../client/ui/desktop/desktop_session_window.cc" line="368"/>
-        <location filename="../client/ui/desktop/desktop_session_window.cc" line="377"/>
-        <location filename="../client/ui/desktop/desktop_session_window.cc" line="1109"/>
+        <location filename="../client/ui/desktop/desktop_session_window.cc" line="369"/>
+        <location filename="../client/ui/desktop/desktop_session_window.cc" line="378"/>
+        <location filename="../client/ui/desktop/desktop_session_window.cc" line="1110"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_session_window.cc" line="369"/>
+        <location filename="../client/ui/desktop/desktop_session_window.cc" line="370"/>
         <source>There are no supported video encodings.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_session_window.cc" line="378"/>
+        <location filename="../client/ui/desktop/desktop_session_window.cc" line="379"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_session_window.cc" line="1076"/>
+        <location filename="../client/ui/desktop/desktop_session_window.cc" line="1077"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_session_window.cc" line="1078"/>
+        <location filename="../client/ui/desktop/desktop_session_window.cc" line="1079"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_session_window.cc" line="1109"/>
+        <location filename="../client/ui/desktop/desktop_session_window.cc" line="1110"/>
         <source>Could not save image</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4164,22 +4159,22 @@
 <context>
     <name>client::DesktopWidget</name>
     <message>
-        <location filename="../client/ui/desktop/desktop_widget.cc" line="538"/>
+        <location filename="../client/ui/desktop/desktop_widget.cc" line="534"/>
         <source>The session was paused by a remote user</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_widget.cc" line="542"/>
+        <location filename="../client/ui/desktop/desktop_widget.cc" line="538"/>
         <source>The session is temporarily unavailable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_widget.cc" line="546"/>
+        <location filename="../client/ui/desktop/desktop_widget.cc" line="542"/>
         <source>The session is permanently unavailable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_widget.cc" line="550"/>
+        <location filename="../client/ui/desktop/desktop_widget.cc" line="546"/>
         <source>Error while receiving video stream: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5054,92 +5049,97 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/session_window.cc" line="299"/>
-        <source>Violation of the communication protocol.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/session_window.cc" line="307"/>
-        <source>Cryptography error (message encryption or decryption failed).</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/session_window.cc" line="315"/>
-        <source>Version of the application you are connecting to is less than the minimum supported version.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/session_window.cc" line="320"/>
-        <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/session_window.cc" line="324"/>
-        <source>Connection was refused by the peer (or timed out).</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/session_window.cc" line="328"/>
-        <source>Remote host closed the connection.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/session_window.cc" line="332"/>
-        <source>Host address was not found.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/session_window.cc" line="336"/>
-        <source>Socket operation timed out.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/session_window.cc" line="340"/>
-        <source>Address specified is already in use and was set to be exclusive.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/session_window.cc" line="344"/>
-        <source>Address specified does not belong to the host.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/session_window.cc" line="354"/>
-        <source>An unknown error occurred.</source>
+        <location filename="../client/ui/session_window.cc" line="260"/>
+        <source>Attempting to connect in compatibility mode...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../client/ui/session_window.cc" line="303"/>
-        <source>Wrong user name or password.</source>
+        <source>Violation of the communication protocol.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../client/ui/session_window.cc" line="311"/>
+        <source>Cryptography error (message encryption or decryption failed).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/session_window.cc" line="319"/>
+        <source>Version of the application you are connecting to is less than the minimum supported version.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/session_window.cc" line="324"/>
+        <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/session_window.cc" line="328"/>
+        <source>Connection was refused by the peer (or timed out).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/session_window.cc" line="332"/>
+        <source>Remote host closed the connection.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/session_window.cc" line="336"/>
+        <source>Host address was not found.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/session_window.cc" line="340"/>
+        <source>Socket operation timed out.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/session_window.cc" line="344"/>
+        <source>Address specified is already in use and was set to be exclusive.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/session_window.cc" line="348"/>
+        <source>Address specified does not belong to the host.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/session_window.cc" line="358"/>
+        <source>An unknown error occurred.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/session_window.cc" line="307"/>
+        <source>Wrong user name or password.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/session_window.cc" line="315"/>
         <source>Specified session type is not allowed for the user.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/session_window.cc" line="371"/>
+        <location filename="../client/ui/session_window.cc" line="375"/>
         <source>The host with the specified ID is not online.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/session_window.cc" line="375"/>
+        <location filename="../client/ui/session_window.cc" line="379"/>
         <source>There are no relays available or the key pool is empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/session_window.cc" line="379"/>
+        <location filename="../client/ui/session_window.cc" line="383"/>
         <source>Failed to connect to the relay server.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/session_window.cc" line="383"/>
+        <location filename="../client/ui/session_window.cc" line="387"/>
         <source>Access is denied.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/session_window.cc" line="387"/>
+        <location filename="../client/ui/session_window.cc" line="391"/>
         <source>Unknown error.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7257,166 +7257,166 @@
 <context>
     <name>console::MainWindow</name>
     <message>
-        <location filename="../console/main_window.cc" line="210"/>
-        <location filename="../console/main_window.cc" line="599"/>
-        <location filename="../console/main_window.cc" line="610"/>
-        <location filename="../console/main_window.cc" line="622"/>
-        <location filename="../console/main_window.cc" line="676"/>
-        <location filename="../console/main_window.cc" line="689"/>
-        <location filename="../console/main_window.cc" line="1668"/>
+        <location filename="../console/main_window.cc" line="211"/>
+        <location filename="../console/main_window.cc" line="600"/>
+        <location filename="../console/main_window.cc" line="611"/>
+        <location filename="../console/main_window.cc" line="623"/>
+        <location filename="../console/main_window.cc" line="677"/>
+        <location filename="../console/main_window.cc" line="690"/>
+        <location filename="../console/main_window.cc" line="1669"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="211"/>
+        <location filename="../console/main_window.cc" line="212"/>
         <source>Pinned address book file &quot;%1&quot; was not found.&lt;br/&gt;This file will be unpinned.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="291"/>
-        <location filename="../console/main_window.cc" line="635"/>
-        <location filename="../console/main_window.cc" line="697"/>
+        <location filename="../console/main_window.cc" line="292"/>
+        <location filename="../console/main_window.cc" line="636"/>
+        <location filename="../console/main_window.cc" line="698"/>
         <source>Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="292"/>
+        <location filename="../console/main_window.cc" line="293"/>
         <source>Address Book &quot;%1&quot; is already open.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="324"/>
+        <location filename="../console/main_window.cc" line="325"/>
         <source>Open Address Book</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="326"/>
+        <location filename="../console/main_window.cc" line="327"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="584"/>
+        <location filename="../console/main_window.cc" line="585"/>
         <source>Open File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="586"/>
-        <location filename="../console/main_window.cc" line="663"/>
+        <location filename="../console/main_window.cc" line="587"/>
+        <location filename="../console/main_window.cc" line="664"/>
         <source>JSON files (*.json)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="600"/>
+        <location filename="../console/main_window.cc" line="601"/>
         <source>Could not open file for reading.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="611"/>
+        <location filename="../console/main_window.cc" line="612"/>
         <source>Import file is empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="661"/>
+        <location filename="../console/main_window.cc" line="662"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="677"/>
+        <location filename="../console/main_window.cc" line="678"/>
         <source>Could not open file for writing.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="690"/>
+        <location filename="../console/main_window.cc" line="691"/>
         <source>Unable to write file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="698"/>
+        <location filename="../console/main_window.cc" line="699"/>
         <source>Export completed successfully.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="961"/>
-        <location filename="../console/main_window.cc" line="1307"/>
-        <location filename="../console/main_window.cc" line="1392"/>
+        <location filename="../console/main_window.cc" line="962"/>
+        <location filename="../console/main_window.cc" line="1308"/>
+        <location filename="../console/main_window.cc" line="1393"/>
         <source>Confirmation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="962"/>
-        <location filename="../console/main_window.cc" line="1393"/>
+        <location filename="../console/main_window.cc" line="963"/>
+        <location filename="../console/main_window.cc" line="1394"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/main_window.cc" line="966"/>
-        <location filename="../console/main_window.cc" line="1311"/>
-        <location filename="../console/main_window.cc" line="1397"/>
-        <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../console/main_window.cc" line="967"/>
         <location filename="../console/main_window.cc" line="1312"/>
         <location filename="../console/main_window.cc" line="1398"/>
-        <source>No</source>
+        <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../console/main_window.cc" line="968"/>
+        <location filename="../console/main_window.cc" line="1313"/>
         <location filename="../console/main_window.cc" line="1399"/>
+        <source>No</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../console/main_window.cc" line="969"/>
+        <location filename="../console/main_window.cc" line="1400"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1201"/>
+        <location filename="../console/main_window.cc" line="1202"/>
         <source>Close other tabs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1208"/>
+        <location filename="../console/main_window.cc" line="1209"/>
         <source>Close tab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1209"/>
-        <location filename="../console/main_window.cc" line="1214"/>
+        <location filename="../console/main_window.cc" line="1210"/>
+        <location filename="../console/main_window.cc" line="1215"/>
         <source>Pin tab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1308"/>
+        <location filename="../console/main_window.cc" line="1309"/>
         <source>The list of recently opened address books will be cleared. Continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1345"/>
+        <location filename="../console/main_window.cc" line="1346"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1360"/>
+        <location filename="../console/main_window.cc" line="1361"/>
         <source>Show</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="741"/>
-        <location filename="../console/main_window.cc" line="1534"/>
+        <location filename="../console/main_window.cc" line="742"/>
+        <location filename="../console/main_window.cc" line="1535"/>
         <source>Aspia Console</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="623"/>
+        <location filename="../console/main_window.cc" line="624"/>
         <source>Failed to parse JSON document: %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="636"/>
+        <location filename="../console/main_window.cc" line="637"/>
         <source>Import completed successfully.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1669"/>
+        <location filename="../console/main_window.cc" line="1670"/>
         <source>Connection by ID is specified in the properties of the computer, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7450,12 +7450,12 @@
 <context>
     <name>console::StatusBar</name>
     <message>
-        <location filename="../console/statusbar.cc" line="46"/>
+        <location filename="../console/statusbar.cc" line="49"/>
         <source>Status update</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/statusbar.cc" line="59"/>
+        <location filename="../console/statusbar.cc" line="62"/>
         <source>%n child group(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -7464,7 +7464,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/statusbar.cc" line="60"/>
+        <location filename="../console/statusbar.cc" line="63"/>
         <source>%n child computer(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -7546,158 +7546,158 @@
 <context>
     <name>host::ConfigDialog</name>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="389"/>
+        <location filename="../host/ui/config_dialog.cc" line="382"/>
         <source>Confirmation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="390"/>
+        <location filename="../host/ui/config_dialog.cc" line="383"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="489"/>
+        <location filename="../host/ui/config_dialog.cc" line="482"/>
         <source>Import</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="506"/>
+        <location filename="../host/ui/config_dialog.cc" line="499"/>
         <source>Export</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="531"/>
+        <location filename="../host/ui/config_dialog.cc" line="524"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="431"/>
-        <location filename="../host/ui/config_dialog.cc" line="468"/>
-        <location filename="../host/ui/config_dialog.cc" line="534"/>
-        <location filename="../host/ui/config_dialog.cc" line="546"/>
-        <location filename="../host/ui/config_dialog.cc" line="559"/>
+        <location filename="../host/ui/config_dialog.cc" line="424"/>
+        <location filename="../host/ui/config_dialog.cc" line="461"/>
+        <location filename="../host/ui/config_dialog.cc" line="527"/>
+        <location filename="../host/ui/config_dialog.cc" line="539"/>
+        <location filename="../host/ui/config_dialog.cc" line="552"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="733"/>
+        <location filename="../host/ui/config_dialog.cc" line="726"/>
         <source>Remove</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="728"/>
+        <location filename="../host/ui/config_dialog.cc" line="721"/>
         <source>Install</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="547"/>
+        <location filename="../host/ui/config_dialog.cc" line="540"/>
         <source>Incorrect router address entered.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="560"/>
+        <location filename="../host/ui/config_dialog.cc" line="553"/>
         <source>Incorrect router public key entered.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="489"/>
-        <location filename="../host/ui/config_dialog.cc" line="506"/>
+        <location filename="../host/ui/config_dialog.cc" line="482"/>
+        <location filename="../host/ui/config_dialog.cc" line="499"/>
         <source>JSON-files (*.json)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="228"/>
+        <location filename="../host/ui/config_dialog.cc" line="105"/>
         <source>Default</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="432"/>
-        <location filename="../host/ui/config_dialog.cc" line="469"/>
+        <location filename="../host/ui/config_dialog.cc" line="425"/>
+        <location filename="../host/ui/config_dialog.cc" line="462"/>
         <source>An error occurred while processing the password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="121"/>
+        <location filename="../host/ui/config_dialog.cc" line="146"/>
         <source>On reboot</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="122"/>
+        <location filename="../host/ui/config_dialog.cc" line="147"/>
         <source>Every 5 minutes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="123"/>
+        <location filename="../host/ui/config_dialog.cc" line="148"/>
         <source>Every 30 minutes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="124"/>
+        <location filename="../host/ui/config_dialog.cc" line="149"/>
         <source>Every 1 hour</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="125"/>
+        <location filename="../host/ui/config_dialog.cc" line="150"/>
         <source>Every 6 hours</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="126"/>
+        <location filename="../host/ui/config_dialog.cc" line="151"/>
         <source>Every 12 hours</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="127"/>
+        <location filename="../host/ui/config_dialog.cc" line="152"/>
         <source>Every 24 hours</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="138"/>
+        <location filename="../host/ui/config_dialog.cc" line="163"/>
         <source>Letters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="157"/>
+        <location filename="../host/ui/config_dialog.cc" line="182"/>
         <source>Never</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="158"/>
+        <location filename="../host/ui/config_dialog.cc" line="183"/>
         <source>15 seconds</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="159"/>
+        <location filename="../host/ui/config_dialog.cc" line="184"/>
         <source>30 seconds</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="160"/>
+        <location filename="../host/ui/config_dialog.cc" line="185"/>
         <source>45 seconds</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="161"/>
+        <location filename="../host/ui/config_dialog.cc" line="186"/>
         <source>60 seconds</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="135"/>
+        <location filename="../host/ui/config_dialog.cc" line="160"/>
         <source>Letters and digits</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="140"/>
+        <location filename="../host/ui/config_dialog.cc" line="165"/>
         <source>Digits</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="169"/>
+        <location filename="../host/ui/config_dialog.cc" line="194"/>
         <source>Accept connection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="171"/>
+        <location filename="../host/ui/config_dialog.cc" line="196"/>
         <source>Reject connection</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7727,12 +7727,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="394"/>
+        <location filename="../host/ui/config_dialog.cc" line="387"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="395"/>
+        <location filename="../host/ui/config_dialog.cc" line="388"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
