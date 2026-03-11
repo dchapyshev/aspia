@@ -52,6 +52,7 @@ public:
 
     qint64 decryptedDataSize(qint64 in_size);
     bool decrypt(const void* in, qint64 in_size, void* out);
+    bool decrypt(const void* in, qint64 in_size, const void* aad, qint64 aad_size, void* out);
 
 private:
     MessageDecryptor(MessageDecryptor::Type type, EVP_CIPHER_CTX_ptr ctx, const QByteArray& iv);

@@ -102,6 +102,12 @@ qint64 MessageDecryptor::decryptedDataSize(qint64 in_size)
 //--------------------------------------------------------------------------------------------------
 bool MessageDecryptor::decrypt(const void* in, qint64 in_size, void* out)
 {
+    return decrypt(in, in_size, nullptr, 0, out);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool MessageDecryptor::decrypt(const void* in, qint64 in_size, const void* aad, qint64 aad_size, void* out)
+{
     if (EVP_DecryptInit_ex(ctx_.get(), nullptr, nullptr, nullptr,
         reinterpret_cast<const quint8*>(iv_.data())) != 1)
     {
@@ -111,17 +117,24 @@ bool MessageDecryptor::decrypt(const void* in, qint64 in_size, void* out)
 
     int length;
 
-    if (EVP_DecryptUpdate(ctx_.get(),
-                          reinterpret_cast<quint8*>(out), &length,
-                          reinterpret_cast<const quint8*>(in) + kTagSize,
-                          static_cast<int>(in_size - kTagSize)) != 1)
+    if (aad && aad_size > 0)
+    {
+        if (EVP_DecryptUpdate(ctx_.get(), nullptr, &length, reinterpret_cast<const quint8*>(aad),
+            static_cast<int>(aad_size)) != 1)
+        {
+            LOG(ERROR) << "EVP_DecryptUpdate (AAD) failed";
+            return false;
+        }
+    }
+
+    if (EVP_DecryptUpdate(ctx_.get(), reinterpret_cast<quint8*>(out), &length,
+        reinterpret_cast<const quint8*>(in) + kTagSize, static_cast<int>(in_size - kTagSize)) != 1)
     {
         LOG(ERROR) << "EVP_DecryptUpdate failed";
         return false;
     }
 
-    if (EVP_CIPHER_CTX_ctrl(ctx_.get(), EVP_CTRL_AEAD_SET_TAG, kTagSize,
-                            const_cast<void*>(in)) != 1)
+    if (EVP_CIPHER_CTX_ctrl(ctx_.get(), EVP_CTRL_AEAD_SET_TAG, kTagSize, const_cast<void*>(in)) != 1)
     {
         LOG(ERROR) << "EVP_CIPHER_CTX_ctrl failed";
         return false;

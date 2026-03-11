@@ -537,7 +537,9 @@ void TcpChannel::onMessageReceived()
 
         resizeBuffer(&decrypt_buffer_, decryptor_->decryptedDataSize(read_buffer_.size()));
 
-        if (!decryptor_->decrypt(read_buffer_.data(), read_buffer_.size(), decrypt_buffer_.data()))
+        if (!decryptor_->decrypt(read_buffer_.data(), read_buffer_.size(), // Data
+                                 &read_header_, sizeof(read_header_), // AAD
+                                 decrypt_buffer_.data()))
         {
             onErrorOccurred(FROM_HERE, ErrorCode::ACCESS_DENIED);
             return;
@@ -549,7 +551,9 @@ void TcpChannel::onMessageReceived()
 
     resizeBuffer(&decrypt_buffer_, decryptor_->decryptedDataSize(read_buffer_.size()));
 
-    if (!decryptor_->decrypt(read_buffer_.data(), read_buffer_.size(), decrypt_buffer_.data()))
+    if (!decryptor_->decrypt(read_buffer_.data(), read_buffer_.size(), // Data
+                             &read_header_, sizeof(read_header_), // AAD
+                             decrypt_buffer_.data()))
     {
         onErrorOccurred(FROM_HERE, ErrorCode::CRYPTO_ERROR);
         return;
@@ -635,7 +639,8 @@ void TcpChannel::doWrite()
 
     if (encryptor_)
     {
-        if (!encryptor_->encrypt(source_buffer.data(), source_buffer.size(),
+        if (!encryptor_->encrypt(source_buffer.data(), source_buffer.size(), // Data
+                                 header, sizeof(Header), // AAD
                                  write_buffer_.data() + sizeof(Header)))
         {
             onErrorOccurred(FROM_HERE, ErrorCode::CRYPTO_ERROR);

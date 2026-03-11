@@ -107,6 +107,36 @@ void wrongKey(MessageEncryptor* client_encryptor, MessageDecryptor* host_decrypt
     ASSERT_FALSE(ret);
 }
 
+void wrongAad(MessageEncryptor* encryptor, MessageDecryptor* decryptor)
+{
+    const QByteArray message = QByteArray::fromHex(
+        "6006ee8029610876ec2facd5fc9ce6bd6dc03d4a5ddb4d6c28f2ff048d4f7eb7");
+    const QByteArray aad = QByteArray::fromHex("0307000000000040");
+    QByteArray modified_aad = aad;
+    modified_aad[1] = '\x08';
+
+    QByteArray encrypted_message;
+    encrypted_message.resize(static_cast<qsizetype>(encryptor->encryptedDataSize(message.size())));
+
+    bool ret = encryptor->encrypt(message.data(),
+                                  message.size(),
+                                  aad.data(),
+                                  aad.size(),
+                                  encrypted_message.data());
+    ASSERT_TRUE(ret);
+
+    QByteArray decrypted_message;
+    decrypted_message.resize(static_cast<qsizetype>(
+        decryptor->decryptedDataSize(encrypted_message.size())));
+
+    ret = decryptor->decrypt(encrypted_message.data(),
+                             encrypted_message.size(),
+                             modified_aad.data(),
+                             modified_aad.size(),
+                             decrypted_message.data());
+    ASSERT_FALSE(ret);
+}
+
 TEST(CryptorAes256GcmTest, TestVector)
 {
     const QByteArray key =
@@ -163,6 +193,21 @@ TEST(CryptorAes256GcmTest, WrongKey)
     wrongKey(client_encryptor.get(), host_decryptor.get());
 }
 
+TEST(CryptorAes256GcmTest, WrongAad)
+{
+    const QByteArray key =
+        QByteArray::fromHex("5ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014");
+    const QByteArray iv = QByteArray::fromHex("ee7eb0e6fb24d445597f3e6f");
+
+    std::unique_ptr<MessageEncryptor> encryptor = MessageEncryptor::createForAes256Gcm(key, iv);
+    ASSERT_NE(encryptor, nullptr);
+
+    std::unique_ptr<MessageDecryptor> decryptor = MessageDecryptor::createForAes256Gcm(key, iv);
+    ASSERT_NE(decryptor, nullptr);
+
+    wrongAad(encryptor.get(), decryptor.get());
+}
+
 TEST(CryptorChaCha20Poly1305Test, TestVector)
 {
     const QByteArray key =
@@ -217,6 +262,23 @@ TEST(CryptorChaCha20Poly1305Test, WrongKey)
     ASSERT_NE(host_decryptor, nullptr);
 
     wrongKey(client_encryptor.get(), host_decryptor.get());
+}
+
+TEST(CryptorChaCha20Poly1305Test, WrongAad)
+{
+    const QByteArray key =
+        QByteArray::fromHex("5ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014");
+    const QByteArray iv = QByteArray::fromHex("ee7eb0e6fb24d445597f3e6f");
+
+    std::unique_ptr<MessageEncryptor> encryptor =
+        MessageEncryptor::createForChaCha20Poly1305(key, iv);
+    ASSERT_NE(encryptor, nullptr);
+
+    std::unique_ptr<MessageDecryptor> decryptor =
+        MessageDecryptor::createForChaCha20Poly1305(key, iv);
+    ASSERT_NE(decryptor, nullptr);
+
+    wrongAad(encryptor.get(), decryptor.get());
 }
 
 } // namespace base

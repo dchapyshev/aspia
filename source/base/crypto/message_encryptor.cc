@@ -101,6 +101,12 @@ qint64 MessageEncryptor::encryptedDataSize(qint64 in_size)
 //--------------------------------------------------------------------------------------------------
 bool MessageEncryptor::encrypt(const void* in, qint64 in_size, void* out)
 {
+    return encrypt(in, in_size, nullptr, 0, out);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool MessageEncryptor::encrypt(const void* in, qint64 in_size, const void* aad, qint64 aad_size, void* out)
+{
     if (EVP_EncryptInit_ex(ctx_.get(), nullptr, nullptr, nullptr,
         reinterpret_cast<const quint8*>(iv_.data())) != 1)
     {
@@ -110,17 +116,24 @@ bool MessageEncryptor::encrypt(const void* in, qint64 in_size, void* out)
 
     int length;
 
-    if (EVP_EncryptUpdate(ctx_.get(),
-                          reinterpret_cast<quint8*>(out) + kTagSize, &length,
-                          reinterpret_cast<const quint8*>(in), static_cast<int>(in_size)) != 1)
+    if (aad && aad_size > 0)
+    {
+        if (EVP_EncryptUpdate(ctx_.get(), nullptr, &length, reinterpret_cast<const quint8*>(aad),
+            static_cast<int>(aad_size)) != 1)
+        {
+            LOG(ERROR) << "EVP_EncryptUpdate (AAD) failed";
+            return false;
+        }
+    }
+
+    if (EVP_EncryptUpdate(ctx_.get(), reinterpret_cast<quint8*>(out) + kTagSize, &length,
+        reinterpret_cast<const quint8*>(in), static_cast<int>(in_size)) != 1)
     {
         LOG(ERROR) << "EVP_EncryptUpdate failed";
         return false;
     }
 
-    if (EVP_EncryptFinal_ex(ctx_.get(),
-                            reinterpret_cast<quint8*>(out) + kTagSize + length,
-                            &length) != 1)
+    if (EVP_EncryptFinal_ex(ctx_.get(), reinterpret_cast<quint8*>(out) + kTagSize + length, &length) != 1)
     {
         LOG(ERROR) << "EVP_EncryptFinal_ex failed";
         return false;

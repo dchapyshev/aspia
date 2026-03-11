@@ -52,6 +52,7 @@ public:
 
     qint64 encryptedDataSize(qint64 in_size);
     bool encrypt(const void* in, qint64 in_size, void* out);
+    bool encrypt(const void* in, qint64 in_size, const void* aad, qint64 aad_size, void* out);
 
 private:
     MessageEncryptor(MessageEncryptor::Type type, EVP_CIPHER_CTX_ptr ctx, const QByteArray& iv);
