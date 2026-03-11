@@ -78,6 +78,22 @@ int generateAndPrintKeys(QTextStream& out)
 }
 
 //--------------------------------------------------------------------------------------------------
+QString publicKeyDirectory()
+{
+    QString dir_path;
+
+#if defined(Q_OS_WINDOWS)
+    dir_path = "C:/ProgramData/aspia";
+#elif defined(Q_OS_LINUX)
+    dir_path.append("/etc/aspia");
+#else
+    NOTIMPLEMENTED();
+#endif // defined(OS_*)
+
+    return dir_path;
+}
+
+//--------------------------------------------------------------------------------------------------
 int createConfig(QTextStream& out)
 {
     out << "Creation of initial configuration started." << Qt::endl;
@@ -95,14 +111,12 @@ int createConfig(QTextStream& out)
 
     out << "Settings file does not exist yet." << Qt::endl;
 
-    QString public_key_dir = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
+    QString public_key_dir = publicKeyDirectory();
     if (public_key_dir.isEmpty())
     {
         out << "Failed to get the path to the config directory." << Qt::endl;
         return 1;
     }
-
-    public_key_dir.append("/aspia");
 
     out << "Public key directory path: " << public_key_dir << Qt::endl;
 
@@ -222,7 +236,10 @@ int createConfig(QTextStream& out)
 //--------------------------------------------------------------------------------------------------
 int main(int argc, char* argv[])
 {
-    base::ScopedLogging logging;
+    base::LoggingSettings logging_settings;
+    logging_settings.min_log_level = base::LOG_INFO;
+
+    base::ScopedLogging scoped_logging(logging_settings);
 
     base::Application::setEventDispatcher(new base::AsioEventDispatcher());
     base::Application::setApplicationVersion(ASPIA_VERSION_STRING);

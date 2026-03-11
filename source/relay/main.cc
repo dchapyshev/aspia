@@ -56,7 +56,10 @@ int createConfig(QTextStream& out)
 //--------------------------------------------------------------------------------------------------
 int main(int argc, char* argv[])
 {
-    base::ScopedLogging logging;
+    base::LoggingSettings logging_settings;
+    logging_settings.min_log_level = base::LOG_INFO;
+
+    base::ScopedLogging scoped_logging(logging_settings);
 
     base::Application::setEventDispatcher(new base::AsioEventDispatcher());
     base::Application::setApplicationVersion(ASPIA_VERSION_STRING);
