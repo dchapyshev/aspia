@@ -22,9 +22,10 @@
 #include "base/net/tcp_channel.h"
 #include "router/database.h"
 #include "router/database_factory.h"
-#include "router/session_manager.h"
 
 namespace router {
+
+namespace {
 
 //--------------------------------------------------------------------------------------------------
 qint64 createSessionId()
@@ -33,6 +34,8 @@ qint64 createSessionId()
     ++last_session_id;
     return last_session_id;
 }
+
+} // namespace
 
 //--------------------------------------------------------------------------------------------------
 Session::Session(base::TcpChannel* channel, QObject* parent)
@@ -124,24 +127,6 @@ proto::router::SessionType Session::sessionType() const
 std::unique_ptr<Database> Session::openDatabase() const
 {
     return database_factory_->openDatabase();
-}
-
-//--------------------------------------------------------------------------------------------------
-SessionManager* Session::sessionManager() const
-{
-    return static_cast<SessionManager*>(parent());
-}
-
-//--------------------------------------------------------------------------------------------------
-QList<Session*> Session::sessions() const
-{
-    return sessionManager()->sessions();
-}
-
-//--------------------------------------------------------------------------------------------------
-Session* Session::sessionById(qint64 session_id) const
-{
-    return sessionManager()->sessionById(session_id);
 }
 
 //--------------------------------------------------------------------------------------------------

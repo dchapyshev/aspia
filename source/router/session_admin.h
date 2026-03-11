@@ -24,8 +24,6 @@
 
 namespace router {
 
-class ServerProxy;
-
 class SessionAdmin final : public Session
 {
 public:

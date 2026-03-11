@@ -70,10 +70,6 @@ protected:
     KeyPool& relayKeyPool() { return *relay_key_pool_; }
     const KeyPool& relayKeyPool() const { return *relay_key_pool_; }
 
-    SessionManager* sessionManager() const;
-    QList<Session*> sessions() const;
-    Session* sessionById(qint64 session_id) const;
-
 private slots:
     void onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code);
     void onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer);

@@ -25,7 +25,6 @@
 
 namespace router {
 
-class ServerProxy;
 class SessionHost;
 class SharedKeyPool;
 

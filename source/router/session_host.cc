@@ -24,7 +24,6 @@
 #include "base/crypto/random.h"
 #include "router/database.h"
 #include "router/service.h"
-#include "router/session_manager.h"
 
 namespace router {
 
@@ -195,15 +194,15 @@ void SessionHost::readResetHostId(const proto::router::ResetHostId& reset_host_i
 //--------------------------------------------------------------------------------------------------
 void SessionHost::removeOtherWithSameId()
 {
-    QList<Session*> session_list = sessions();
+    QList<Session*> sessions = Service::instance()->sessions();
     qint64 session_for_stopping = 0;
 
-    for (const auto& other_session : std::as_const(session_list))
+    for (auto* other_session : std::as_const(sessions))
     {
         if (other_session->sessionType() != proto::router::SESSION_TYPE_HOST || other_session == this)
             continue;
 
-        SessionHost* other_host_session = reinterpret_cast<SessionHost*>(other_session);
+        SessionHost* other_host_session = static_cast<SessionHost*>(other_session);
         bool is_found = false;
 
         for (const auto& host_id : std::as_const(host_id_list_))
@@ -224,7 +223,7 @@ void SessionHost::removeOtherWithSameId()
     }
 
     if (session_for_stopping)
-        sessionManager()->stopSession(session_for_stopping);
+        Service::instance()->stopSession(session_for_stopping);
 }
 
 } // namespace router

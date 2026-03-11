@@ -29,7 +29,6 @@
 #include "router/session_client.h"
 #include "router/session_host.h"
 #include "router/session_relay.h"
-#include "router/session_manager.h"
 #include "router/settings.h"
 #include "router/user_list_db.h"
 
@@ -46,16 +45,60 @@ const char Service::kDescription[] =
 //--------------------------------------------------------------------------------------------------
 Service::Service(QObject* parent)
     : base::Service(Service::kName, parent),
-      database_factory_(new DatabaseFactorySqlite()),
-      session_manager_(new SessionManager(this))
+      database_factory_(new DatabaseFactorySqlite())
 {
     LOG(INFO) << "Ctor";
+    instance_ = this;
 }
 
 //--------------------------------------------------------------------------------------------------
 Service::~Service()
 {
     LOG(INFO) << "Dtor";
+    instance_ = nullptr;
+}
+
+//--------------------------------------------------------------------------------------------------
+Service* Service::instance()
+{
+    return instance_;
+}
+
+//--------------------------------------------------------------------------------------------------
+QList<Session*> Service::sessions()
+{
+    return sessions_;
+}
+
+//--------------------------------------------------------------------------------------------------
+Session* Service::session(qint64 session_id)
+{
+    for (auto* session : std::as_const(sessions_))
+    {
+        if (session->sessionId() == session_id)
+            return session;
+    }
+
+    return nullptr;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Service::stopSession(qint64 session_id)
+{
+    for (auto it = sessions_.begin(), it_end = sessions_.end(); it != it_end; ++it)
+    {
+        Session* session = *it;
+
+        if (session->sessionId() == session_id)
+        {
+            session->disconnect();
+            session->deleteLater();
+            sessions_.erase(it);
+            return true;
+        }
+    }
+
+    return false;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -85,9 +128,7 @@ void Service::onStop()
 //--------------------------------------------------------------------------------------------------
 void Service::onPoolKeyUsed(qint64 session_id, quint32 key_id)
 {
-    QList<Session*> sessions = session_manager_->sessions();
-
-    for (auto* session : std::as_const(sessions))
+    for (auto* session : std::as_const(sessions_))
     {
         if (session->sessionId() == session_id)
         {
@@ -129,6 +170,16 @@ void Service::onNewLegacyConnection()
         LOG(INFO) << "New legacy connection:" << channel->peerAddress();
         addSession(channel);
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void Service::onSessionFinished()
+{
+    Session* session = dynamic_cast<Session*>(sender());
+    CHECK(session);
+    session->disconnect();
+    session->deleteLater();
+    sessions_.removeOne(session);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -272,7 +323,7 @@ void Service::addSession(base::TcpChannel* channel)
         {
             if (!client_white_list_.isEmpty() && !client_white_list_.contains(address))
                 break;
-            session = new SessionClient(channel, session_manager_);
+            session = new SessionClient(channel, this);
         }
         break;
 
@@ -280,7 +331,7 @@ void Service::addSession(base::TcpChannel* channel)
         {
             if (!host_white_list_.isEmpty() && !host_white_list_.contains(address))
                 break;
-            session = new SessionHost(channel, session_manager_);
+            session = new SessionHost(channel, this);
         }
         break;
 
@@ -288,7 +339,7 @@ void Service::addSession(base::TcpChannel* channel)
         {
             if (!admin_white_list_.isEmpty() && !admin_white_list_.contains(address))
                 break;
-            session = new SessionAdmin(channel, session_manager_);
+            session = new SessionAdmin(channel, this);
         }
         break;
 
@@ -296,7 +347,7 @@ void Service::addSession(base::TcpChannel* channel)
         {
             if (!relay_white_list_.isEmpty() && !relay_white_list_.contains(address))
                 break;
-            session = new SessionRelay(channel, session_manager_);
+            session = new SessionRelay(channel, this);
         }
         break;
 
@@ -315,8 +366,13 @@ void Service::addSession(base::TcpChannel* channel)
     session->setDatabaseFactory(database_factory_);
     session->setRelayKeyPool(key_factory_->sharedKeyPool());
 
-    session_manager_->addSession(session);
+    sessions_.emplace_back(session);
+    connect(session, &Session::sig_finished, this, &Service::onSessionFinished);
     session->start();
 }
+
+//--------------------------------------------------------------------------------------------------
+// static
+Service* Service::instance_ = nullptr;
 
 } // namespace router

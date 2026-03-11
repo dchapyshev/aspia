@@ -92,7 +92,8 @@ void SessionClient::readConnectionRequest(const proto::router::ConnectionRequest
         }
         else
         {
-            SessionRelay* relay = static_cast<SessionRelay*>(sessionById(credentials->session_id));
+            SessionRelay* relay = static_cast<SessionRelay*>(
+                Service::instance()->session(credentials->session_id));
             if (!relay)
             {
                 LOG(ERROR) << "No relay with session id" << credentials->session_id;
@@ -162,7 +163,7 @@ void SessionClient::readCheckHostStatus(const proto::router::CheckHostStatus& ch
 //--------------------------------------------------------------------------------------------------
 SessionHost* SessionClient::sessionByHostId(base::HostId host_id)
 {
-    QList<Session*> session_list = sessions();
+    QList<Session*> session_list = Service::instance()->sessions();
 
     for (const auto& session : std::as_const(session_list))
     {

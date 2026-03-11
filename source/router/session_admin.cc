@@ -23,8 +23,8 @@
 #include "base/peer/user.h"
 #include "router/database.h"
 #include "router/session_host.h"
+#include "router/service.h"
 #include "router/session_relay.h"
-#include "router/session_manager.h"
 
 namespace router {
 
@@ -130,7 +130,7 @@ void SessionAdmin::doUserRequest(const proto::router::UserRequest& request)
 //--------------------------------------------------------------------------------------------------
 void SessionAdmin::doSessionListRequest(const proto::router::SessionListRequest& /* request */)
 {
-    QList<Session*> session_list = sessions();
+    QList<Session*> session_list = Service::instance()->sessions();
 
     proto::router::RouterToAdmin message;
     proto::router::SessionList* result = message.mutable_session_list();
@@ -203,7 +203,7 @@ void SessionAdmin::doSessionRequest(const proto::router::SessionRequest& request
     {
         qint64 session_id = request.session_id();
 
-        if (!sessionManager()->stopSession(session_id))
+        if (!Service::instance()->stopSession(session_id))
         {
             LOG(ERROR) << "Session not found:" << session_id;
             session_result->set_error_code(proto::router::SessionResult::INVALID_SESSION_ID);
@@ -227,10 +227,10 @@ void SessionAdmin::doSessionRequest(const proto::router::SessionRequest& request
 void SessionAdmin::doPeerConnectionRequest(const proto::router::PeerConnectionRequest& request)
 {
     SessionRelay* relay_session =
-        dynamic_cast<SessionRelay*>(sessionManager()->sessionById(request.relay_session_id()));
+        dynamic_cast<SessionRelay*>(Service::instance()->session(request.relay_session_id()));
     if (!relay_session)
     {
-        LOG(ERROR) << "Relay with id" << request.relay_session_id() << "not found";
+        LOG(ERROR) << "Relay with id" << request.relay_session_id() << "is not found";
         return;
     }
 

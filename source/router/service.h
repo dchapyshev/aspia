@@ -47,6 +47,12 @@ public:
     static const char kDisplayName[];
     static const char kDescription[];
 
+    static Service* instance();
+
+    QList<Session*> sessions();
+    Session* session(qint64 session_id);
+    bool stopSession(qint64 session_id);
+
 protected:
     // base::Service implementation.
     void onStart() final;
@@ -56,6 +62,7 @@ private slots:
     void onPoolKeyUsed(qint64 session_id, quint32 key_id);
     void onNewConnection();
     void onNewLegacyConnection();
+    void onSessionFinished();
 
 private:
     bool start();
@@ -65,12 +72,15 @@ private:
     base::TcpServer* tcp_server_ = nullptr;
     base::TcpServerLegacy* tcp_server_legacy_ = nullptr;
     KeyFactory* key_factory_ = nullptr;
-    SessionManager* session_manager_ = nullptr;
+
+    QList<Session*> sessions_;
 
     QStringList client_white_list_;
     QStringList host_white_list_;
     QStringList admin_white_list_;
     QStringList relay_white_list_;
+
+    static Service* instance_;
 
     Q_DISABLE_COPY_MOVE(Service)
 };
