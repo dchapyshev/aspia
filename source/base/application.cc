@@ -125,7 +125,7 @@ Application::Application(int& argc, char* argv[])
     {
         LOG(INFO) << "UI thread stopping";
 
-        if (!is_service_)
+        if (message_window_ && !is_service_)
         {
             if (!WTSUnRegisterSessionNotification(message_window_->hwnd()))
                 PLOG(ERROR) << "WTSUnRegisterSessionNotification failed";
@@ -143,6 +143,11 @@ Application::Application(int& argc, char* argv[])
 Application::~Application()
 {
     LOG(INFO) << "Dtor";
+
+#if defined(Q_OS_WINDOWS)
+    if (ui_thread_)
+        ui_thread_->stop();
+#endif // defined(Q_OS_WINDOWS)
 }
 
 //--------------------------------------------------------------------------------------------------
