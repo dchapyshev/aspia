@@ -558,10 +558,8 @@ void TcpChannel::onMessageReceived()
     if (read_header_.type == USER_DATA)
     {
         emit sig_messageReceived(read_header_.param1, decrypt_buffer_);
-        return;
     }
-
-    if (read_header_.type == KEEP_ALIVE)
+    else if (read_header_.type == KEEP_ALIVE)
     {
         if (read_header_.param1 & KEEP_ALIVE_PING)
         {
@@ -588,6 +586,10 @@ void TcpChannel::onMessageReceived()
         // Restart keep alive timer.
         keep_alive_timer_type_ = KEEP_ALIVE_INTERVAL;
         keep_alive_timer_->start(kKeepAliveInterval);
+    }
+    else
+    {
+        // Ignore unknown types.
     }
 }
 
