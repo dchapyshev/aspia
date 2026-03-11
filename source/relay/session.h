@@ -1,4 +1,4 @@
-//
+﻿//
 // Aspia Project
 // Copyright (C) 2016-2026 Dmitry Chapyshev <dmitry@aspia.ru>
 //
@@ -45,8 +45,6 @@ public:
     using TimePoint = std::chrono::time_point<Clock>;
 
     void start();
-    void stop();
-    void disconnect();
 
     quint64 sessionId() const { return session_id_; }
     const QString& clientAddress() const { return client_address_; }
@@ -58,7 +56,7 @@ public:
     qint64 bytesTransferred() const { return bytes_transferred_; }
 
 signals:
-    void sig_sessionFinished(relay::Session* session);
+    void sig_finished();
 
 private:
     static void doReadSome(Session* session, int source);

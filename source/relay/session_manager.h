@@ -54,14 +54,14 @@ public slots:
     void disconnectSession(quint64 session_id);
 
 signals:
-    void sig_sessionStarted();
-    void sig_sessionStatistics(const proto::router::RelayStat& relay_stat);
-    void sig_sessionFinished();
+    void sig_started();
+    void sig_statistics(const proto::router::RelayStat& relay_stat);
+    void sig_finished();
 
 private slots:
-    void onPendingSessionReady(relay::PendingSession* session, const proto::relay::PeerToRelay& message);
-    void onPendingSessionFailed(relay::PendingSession* session);
-    void onSessionFinished(relay::Session* session);
+    void onPendingSessionReady(const proto::relay::PeerToRelay& message);
+    void onPendingSessionFailed();
+    void onSessionFinished();
 
 private:
     static void doAccept(SessionManager* self);

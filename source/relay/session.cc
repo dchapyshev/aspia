@@ -1,4 +1,4 @@
-//
+﻿//
 // Aspia Project
 // Copyright (C) 2016-2026 Dmitry Chapyshev <dmitry@aspia.ru>
 //
@@ -53,7 +53,15 @@ Session::Session(std::pair<asio::ip::tcp::socket, asio::ip::tcp::socket>&& socke
 //--------------------------------------------------------------------------------------------------
 Session::~Session()
 {
-    stop();
+    std::error_code ignored_code;
+    for (int i = 0; i < kNumberOfSides; ++i)
+    {
+        socket_[i].cancel(ignored_code);
+        socket_[i].close(ignored_code);
+    }
+
+    LOG(INFO) << "Session stopped. Duration:" << duration(Clock::now()).count() << ","
+              << "transferred:" << bytesTransferred();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -65,27 +73,6 @@ void Session::start()
 
     for (int i = 0; i < kNumberOfSides; ++i)
         Session::doReadSome(this, i);
-}
-
-//--------------------------------------------------------------------------------------------------
-void Session::stop()
-{
-    disconnect();
-    LOG(INFO) << "Session stopped (duration:" << duration(Clock::now()).count()
-              << "seconds, bytes transferred:" << bytesTransferred() << ")";
-}
-
-//--------------------------------------------------------------------------------------------------
-void Session::disconnect()
-{
-    std::error_code ignored_code;
-    for (int i = 0; i < kNumberOfSides; ++i)
-    {
-        socket_[i].cancel(ignored_code);
-        socket_[i].close(ignored_code);
-    }
-
-    emit sig_sessionFinished(this);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -118,37 +105,35 @@ void Session::doReadSome(Session* session, int source)
         {
             if (error_code != asio::error::operation_aborted)
                 session->onErrorOccurred(FROM_HERE, error_code);
+            return;
         }
-        else
-        {
-            session->bytes_transferred_ += bytes_transferred;
-            session->start_idle_time_ = TimePoint();
 
-            asio::async_write(
-                session->socket_[(source + kNumberOfSides - 1) % kNumberOfSides],
-                asio::const_buffer(session->buffer_[source].data(), bytes_transferred),
-                [session, source](const std::error_code& error_code, size_t /* bytes_transferred */)
+        session->bytes_transferred_ += bytes_transferred;
+        session->start_idle_time_ = TimePoint();
+
+        asio::async_write(
+            session->socket_[(source + kNumberOfSides - 1) % kNumberOfSides],
+            asio::const_buffer(session->buffer_[source].data(), bytes_transferred),
+            [session, source](const std::error_code& error_code, size_t /* bytes_transferred */)
+        {
+            if (error_code)
             {
-                if (error_code)
-                {
-                    if (error_code != asio::error::operation_aborted)
-                        session->onErrorOccurred(FROM_HERE, error_code);
-                }
-                else
-                {
-                    doReadSome(session, source);
-                }
-            });
-        }
+                if (error_code != asio::error::operation_aborted)
+                    session->onErrorOccurred(FROM_HERE, error_code);
+                return;
+            }
+
+            doReadSome(session, source);
+        });
     });
 }
 
 //--------------------------------------------------------------------------------------------------
 void Session::onErrorOccurred(const base::Location& location, const std::error_code& error_code)
 {
-    LOG(ERROR) << "Connection finished:" << error_code << "(" << location << ")";
-    emit sig_sessionFinished(this);
-    stop();
+    LOG(INFO) << "Connection finished:" << error_code << "from" << location;
+    emit sig_finished();
 }
 
 } // namespace relay
+

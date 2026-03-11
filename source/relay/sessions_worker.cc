@@ -92,11 +92,11 @@ void SessionsWorker::onBeforeThreadRunning()
     session_manager_ = std::make_unique<SessionManager>(
         listen_address, peer_port_, peer_idle_timeout_, statistics_enabled_, statistics_interval_);
 
-    connect(session_manager_.get(), &SessionManager::sig_sessionStarted,
+    connect(session_manager_.get(), &SessionManager::sig_started,
             this, &SessionsWorker::sig_sessionStarted, Qt::QueuedConnection);
-    connect(session_manager_.get(), &SessionManager::sig_sessionFinished,
+    connect(session_manager_.get(), &SessionManager::sig_finished,
             this, &SessionsWorker::sig_sessionFinished, Qt::QueuedConnection);
-    connect(session_manager_.get(), &SessionManager::sig_sessionStatistics,
+    connect(session_manager_.get(), &SessionManager::sig_statistics,
             this, &SessionsWorker::sig_sessionStatistics, Qt::QueuedConnection);
     connect(this, &SessionsWorker::sig_disconnectSession,
             session_manager_.get(), &SessionManager::disconnectSession, Qt::QueuedConnection);

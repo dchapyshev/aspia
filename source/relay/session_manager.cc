@@ -1,4 +1,4 @@
-//
+﻿//
 // Aspia Project
 // Copyright (C) 2016-2026 Dmitry Chapyshev <dmitry@aspia.ru>
 //
@@ -71,31 +71,6 @@ QByteArray decryptSecret(const proto::relay::PeerToRelay& message, const KeyPool
 }
 
 //--------------------------------------------------------------------------------------------------
-// Removes a session from the list.
-template<class T>
-void removeSessionT(QList<T*>* sessions, T* session_to_remove)
-{
-    session_to_remove->stop();
-
-    auto it = sessions->begin();
-    auto it_end = sessions->end();
-
-    while (it != it_end)
-    {
-        T* session = *it;
-
-        if (session == session_to_remove)
-        {
-            session->deleteLater();
-            sessions->erase(it);
-            return;
-        }
-
-        ++it;
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
 QString peerAddress(const asio::ip::tcp::socket& socket)
 {
     try
@@ -140,7 +115,6 @@ SessionManager::SessionManager(const asio::ip::address& address,
       statistics_interval_(statistics_interval)
 {
     LOG(INFO) << "Ctor";
-
     connect(idle_timer_, &QTimer::timeout, this, &SessionManager::onIdleTimeout);
     connect(stat_timer_, &QTimer::timeout, this, &SessionManager::onStatTimeout);
 }
@@ -149,7 +123,6 @@ SessionManager::SessionManager(const asio::ip::address& address,
 SessionManager::~SessionManager()
 {
     LOG(INFO) << "Dtor";
-
     std::error_code ignored_code;
     acceptor_.cancel(ignored_code);
     acceptor_.close(ignored_code);
@@ -159,35 +132,34 @@ SessionManager::~SessionManager()
 void SessionManager::start(std::shared_ptr<KeyPool> shared_key_pool)
 {
     LOG(INFO) << "Starting session manager";
-
     asio::ip::tcp::endpoint endpoint(address_, port_);
 
     std::error_code error_code;
     acceptor_.open(endpoint.protocol(), error_code);
     if (error_code)
     {
-        LOG(ERROR) << "acceptor_.open failed:" << error_code;
+        LOG(ERROR) << "open failed:" << error_code;
         return;
     }
 
     acceptor_.set_option(asio::ip::tcp::acceptor::reuse_address(true), error_code);
     if (error_code)
     {
-        LOG(ERROR) << "acceptor_.set_option failed:" << error_code;
+        LOG(ERROR) << "set_option failed:" << error_code;
         return;
     }
 
     acceptor_.bind(endpoint, error_code);
     if (error_code)
     {
-        LOG(ERROR) << "acceptor_.bind failed:" << error_code;
+        LOG(ERROR) << "bind failed:" << error_code;
         return;
     }
 
     acceptor_.listen(asio::ip::tcp::socket::max_listen_connections, error_code);
     if (error_code)
     {
-        LOG(ERROR) << "acceptor_.listen failed:" << error_code;
+        LOG(ERROR) << "listen failed:" << error_code;
         return;
     }
 
@@ -213,87 +185,87 @@ void SessionManager::disconnectSession(quint64 session_id)
     {
         if (session->sessionId() == session_id)
         {
-            session->disconnect();
+            removeSession(session);
             return;
         }
     }
 
-    LOG(ERROR) << "Session with id" << session_id << "not found";
+    LOG(ERROR) << "Session with id" << session_id << "is not found";
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionManager::onPendingSessionReady(
-    PendingSession* pending_session, const proto::relay::PeerToRelay& message)
+void SessionManager::onPendingSessionReady(const proto::relay::PeerToRelay& message)
 {
     LOG(INFO) << "Pending session ready for key_id:" << message.key_id();
 
+    PendingSession* pending_session = dynamic_cast<PendingSession*>(sender());
+    CHECK(pending_session);
+
     // Looking for a key with the specified identifier.
     std::optional<KeyPool::Key> key = shared_key_pool_->key(message.key_id(), message.public_key());
-    if (key.has_value())
+    if (!key.has_value())
     {
-        // Decrypt the identifiers of peers.
-        QByteArray secret = decryptSecret(message, *key);
-        if (!secret.isEmpty())
-        {
-            // Save the identifiers of peers and the identifier of their shared key.
-            pending_session->setIdentify(message.key_id(), secret);
-
-            // Trying to find a peer that wants to be connected.
-            for (const auto& other_pending_session : std::as_const(pending_sessions_))
-            {
-                if (pending_session->isPeerFor(*other_pending_session))
-                {
-                    LOG(INFO) << "Both peers are connected with key" << message.key_id();
-
-                    // Delete the key from the pool. It can no longer be used.
-                    shared_key_pool_->removeKey(message.key_id());
-
-                    Session* session = new Session(
-                        std::make_pair(pending_session->takeSocket(), other_pending_session->takeSocket()),
-                        secret, this);
-
-                    connect(session, &Session::sig_sessionFinished,
-                            this, &SessionManager::onSessionFinished);
-
-                    // Now the opposite peer is found, start the data transfer between them.
-                    active_sessions_.emplace_back(session);
-                    session->start();
-
-                    emit sig_sessionStarted();
-
-                    // Pending sessions are no longer needed, remove them.
-                    removePendingSession(other_pending_session);
-                    removePendingSession(pending_session);
-                    return;
-                }
-            }
-
-            LOG(INFO) << "Second peer has not connected yet";
-            return;
-        }
-        else
-        {
-            LOG(ERROR) << "Failed to decrypt shared secret. Connection will be completed";
-        }
-    }
-    else
-    {
-        LOG(ERROR) << "Key with id" << message.key_id() << "NOT found!";
+        LOG(ERROR) << "Key with id" << message.key_id() << "is NOT found!";
+        removePendingSession(pending_session);
+        return;
     }
 
-    // The key was not found in the pool.
-    removePendingSession(pending_session);
+    // Decrypt the identifiers of peers.
+    QByteArray secret = decryptSecret(message, *key);
+    if (secret.isEmpty())
+    {
+        LOG(ERROR) << "Failed to decrypt shared secret. Connection will be terminated";
+        removePendingSession(pending_session);
+        return;
+    }
+
+    // Save the identifiers of peers and the identifier of their shared key.
+    pending_session->setIdentify(message.key_id(), secret);
+
+    // Trying to find a peer that wants to be connected.
+    for (auto* other_pending_session : std::as_const(pending_sessions_))
+    {
+        if (!pending_session->isPeerFor(*other_pending_session))
+            continue;
+
+        LOG(INFO) << "Both peers are connected with key" << message.key_id();
+
+        // Delete the key from the pool. It can no longer be used.
+        shared_key_pool_->removeKey(message.key_id());
+
+        Session* session = new Session(
+            std::make_pair(pending_session->takeSocket(), other_pending_session->takeSocket()),
+            secret, this);
+        active_sessions_.emplace_back(session);
+
+        connect(session, &Session::sig_finished, this, &SessionManager::onSessionFinished);
+
+        // Now the opposite peer is found, start the data transfer between them.
+        session->start();
+        emit sig_started();
+
+        // Pending sessions are no longer needed, remove them.
+        removePendingSession(other_pending_session);
+        removePendingSession(pending_session);
+        return;
+    }
+
+    LOG(INFO) << "Second peer has not connected yet";
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionManager::onPendingSessionFailed(PendingSession* session)
+void SessionManager::onPendingSessionFailed()
 {
+    PendingSession* session = dynamic_cast<PendingSession*>(sender());
+    CHECK(session);
     removePendingSession(session);
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionManager::onSessionFinished(Session* session)
+void SessionManager::onSessionFinished()
 {
+    Session* session = dynamic_cast<Session*>(sender());
+    CHECK(session);
     removeSession(session);
 }
 
@@ -301,22 +273,19 @@ void SessionManager::onSessionFinished(Session* session)
 // static
 void SessionManager::doAccept(SessionManager* self)
 {
-    self->acceptor_.async_accept(
-        [self](const std::error_code& error_code, asio::ip::tcp::socket socket)
+    self->acceptor_.async_accept([self](const std::error_code& error_code, asio::ip::tcp::socket socket)
     {
         if (!error_code)
         {
             LOG(INFO) << "New accepted connection:" << peerAddress(socket);
 
             PendingSession* session = new PendingSession(std::move(socket), self);
+            self->pending_sessions_.emplace_back(session);
 
-            connect(session, &PendingSession::sig_pendingSessionReady,
-                    self, &SessionManager::onPendingSessionReady);
-            connect(session, &PendingSession::sig_pendingSessionFailed,
-                    self, &SessionManager::onPendingSessionFailed);
+            connect(session, &PendingSession::sig_ready, self, &SessionManager::onPendingSessionReady);
+            connect(session, &PendingSession::sig_failed, self, &SessionManager::onPendingSessionFailed);
 
             // A new peer is connected. Create and start the pending session.
-            self->pending_sessions_.emplace_back(session);
             session->start();
         }
         else
@@ -336,17 +305,19 @@ void SessionManager::doAccept(SessionManager* self)
 void SessionManager::onIdleTimeout()
 {
     auto current_time = Session::Clock::now();
-    auto it = active_sessions_.begin();
     int count = 0;
 
-    while (it != active_sessions_.end())
+    for (auto it = active_sessions_.begin(); it != active_sessions_.end();)
     {
         Session* session = *it;
 
         if (session->idleTime(current_time) >= idle_timeout_)
         {
+            session->disconnect();
             session->deleteLater();
+
             it = active_sessions_.erase(it);
+            emit sig_finished();
             ++count;
         }
         else
@@ -364,13 +335,11 @@ void SessionManager::onStatTimeout()
     Session::TimePoint now = Session::Clock::now();
 
     proto::router::RelayStat relay_stat;
-    relay_stat.set_uptime(
-        std::chrono::duration_cast<std::chrono::seconds>(now - start_time_).count());
+    relay_stat.set_uptime(std::chrono::duration_cast<std::chrono::seconds>(now - start_time_).count());
 
     for (const auto& session : std::as_const(active_sessions_))
     {
         proto::router::PeerConnection* peer_connection = relay_stat.add_peer_connection();
-
         peer_connection->set_session_id(session->sessionId());
         peer_connection->set_status(proto::router::PeerConnection::PEER_STATUS_ACTIVE);
         peer_connection->set_client_address(session->clientAddress().toStdString());
@@ -382,20 +351,24 @@ void SessionManager::onStatTimeout()
         peer_connection->set_duration(session->duration(now).count());
     }
 
-    emit sig_sessionStatistics(relay_stat);
+    emit sig_statistics(relay_stat);
 }
 
 //--------------------------------------------------------------------------------------------------
 void SessionManager::removePendingSession(PendingSession* session)
 {
-    removeSessionT(&pending_sessions_, session);
+    session->disconnect();
+    session->deleteLater();
+    pending_sessions_.removeOne(session);
 }
 
 //--------------------------------------------------------------------------------------------------
 void SessionManager::removeSession(Session* session)
 {
-    removeSessionT(&active_sessions_, session);
-    emit sig_sessionFinished();
+    session->disconnect();
+    session->deleteLater();
+    active_sessions_.removeOne(session);
+    emit sig_finished();
 }
 
 } // namespace relay

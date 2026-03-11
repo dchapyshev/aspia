@@ -58,8 +58,7 @@ PendingSession::PendingSession(asio::ip::tcp::socket&& socket, QObject* parent)
         else
         {
             std::string address = endpoint.address().to_string();
-            address_ = QString::fromLocal8Bit(
-                address.c_str(), static_cast<QString::size_type>(address.size()));
+            address_ = QString::fromLocal8Bit(address.c_str(), static_cast<qint64>(address.size()));
         }
     }
     catch (const std::error_code& error_code)
@@ -71,14 +70,16 @@ PendingSession::PendingSession(asio::ip::tcp::socket&& socket, QObject* parent)
 //--------------------------------------------------------------------------------------------------
 PendingSession::~PendingSession()
 {
-    stop();
+    std::error_code ignored_code;
+    socket_.cancel(ignored_code);
+    socket_.close(ignored_code);
+    timer_->stop();
 }
 
 //--------------------------------------------------------------------------------------------------
 void PendingSession::start()
 {
     LOG(INFO) << "Starting pending session";
-
     start_time_ = Clock::now();
 
     asio::ip::tcp::no_delay option(true);
@@ -86,22 +87,10 @@ void PendingSession::start()
 
     socket_.set_option(option, error_code);
     if (error_code)
-    {
         LOG(ERROR) << "Failed to disable Nagle's algorithm:" << error_code;
-    }
 
     timer_->start(kTimeout);
     PendingSession::doReadMessage(this);
-}
-
-//--------------------------------------------------------------------------------------------------
-void PendingSession::stop()
-{
-    timer_->stop();
-
-    std::error_code ignored_code;
-    socket_.cancel(ignored_code);
-    socket_.close(ignored_code);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -202,9 +191,8 @@ void PendingSession::doReadMessage(PendingSession* session)
 //--------------------------------------------------------------------------------------------------
 void PendingSession::onErrorOccurred(const base::Location& location, const std::error_code& error_code)
 {
-    LOG(ERROR) << "Connection error:" << error_code << "(" << location << ")";
-    emit sig_pendingSessionFailed(this);
-    stop();
+    LOG(ERROR) << "Connection error:" << error_code << "from" << location;
+    emit sig_failed();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -217,7 +205,7 @@ void PendingSession::onMessage()
         return;
     }
 
-    emit sig_pendingSessionReady(this, message);
+    emit sig_ready(message);
 }
 
 } // namespace relay

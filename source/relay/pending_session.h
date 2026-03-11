@@ -50,9 +50,6 @@ public:
     // will be called.
     void start();
 
-    // Stops a session. No notifications will not come after calling this method.
-    void stop();
-
     // Sets session credentials.
     void setIdentify(quint32 key_id, const QByteArray& secret);
 
@@ -68,10 +65,10 @@ public:
 
 signals:
     // Called when received authentication data from a peer.
-    void sig_pendingSessionReady(relay::PendingSession* session, const proto::relay::PeerToRelay& message);
+    void sig_ready(const proto::relay::PeerToRelay& message);
 
     // Called when an error has occurred.
-    void sig_pendingSessionFailed(relay::PendingSession* session);
+    void sig_failed();
 
 private:
     static void doReadMessage(PendingSession* pending_session);

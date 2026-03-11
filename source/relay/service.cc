@@ -76,9 +76,7 @@ Service::Service(QObject* parent)
 {
     LOG(INFO) << "Ctor";
 
-    connect(key_factory_, &KeyFactory::sig_keyExpired,
-            this, &Service::onPoolKeyExpired,
-            Qt::QueuedConnection);
+    connect(key_factory_, &KeyFactory::sig_keyExpired, this, &Service::onPoolKeyExpired, Qt::QueuedConnection);
 
     reconnect_timer_->setSingleShot(true);
     connect(reconnect_timer_, &QTimer::timeout, this, &Service::connectToRouter);
@@ -155,7 +153,7 @@ void Service::onTcpReady()
 //--------------------------------------------------------------------------------------------------
 void Service::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code)
 {
-    LOG(INFO) << "The connection to the router has been lost:" << error_code;
+    LOG(INFO) << "Connection to the router has been lost:" << error_code;
 
     // Clearing the key pool.
     key_factory_->clear();
@@ -304,12 +302,9 @@ bool Service::start()
         listen_interface_, peer_port_, peer_idle_timeout_, statistics_enabled_, statistics_interval_,
         key_factory_->sharedKeyPool(), this);
 
-    connect(sessions_worker_, &SessionsWorker::sig_sessionStarted,
-            this, &Service::onSessionStarted);
-    connect(sessions_worker_, &SessionsWorker::sig_sessionFinished,
-            this, &Service::onSessionFinished);
-    connect(sessions_worker_, &SessionsWorker::sig_sessionStatistics,
-            this, &Service::onSessionStatistics);
+    connect(sessions_worker_, &SessionsWorker::sig_sessionStarted, this, &Service::onSessionStarted);
+    connect(sessions_worker_, &SessionsWorker::sig_sessionFinished, this, &Service::onSessionFinished);
+    connect(sessions_worker_, &SessionsWorker::sig_sessionStatistics, this, &Service::onSessionStatistics);
 
     sessions_worker_->start();
 
@@ -320,24 +315,18 @@ bool Service::start()
 //--------------------------------------------------------------------------------------------------
 void Service::connectToRouter()
 {
-    LOG(INFO) << "Connecting to router...";
-
     base::ClientAuthenticator* authenticator = new base::ClientAuthenticator();
     authenticator->setIdentify(proto::key_exchange::IDENTIFY_ANONYMOUS);
     authenticator->setPeerPublicKey(router_public_key_);
     authenticator->setSessionType(proto::router::SESSION_TYPE_RELAY);
 
-    // Create channel.
     tcp_channel_ = new base::TcpChannelNG(authenticator, this);
 
-    connect(tcp_channel_, &base::TcpChannel::sig_authenticated,
-            this, &Service::onTcpReady);
-    connect(tcp_channel_, &base::TcpChannel::sig_errorOccurred,
-            this, &Service::onTcpErrorOccurred);
-    connect(tcp_channel_, &base::TcpChannel::sig_messageReceived,
-            this, &Service::onTcpMessageReceived);
+    connect(tcp_channel_, &base::TcpChannel::sig_authenticated, this, &Service::onTcpReady);
+    connect(tcp_channel_, &base::TcpChannel::sig_errorOccurred, this, &Service::onTcpErrorOccurred);
+    connect(tcp_channel_, &base::TcpChannel::sig_messageReceived, this, &Service::onTcpMessageReceived);
 
-    // Connect to router.
+    LOG(INFO) << "Connecting to router...";
     tcp_channel_->connectTo(router_address_, router_port_);
 }
 
