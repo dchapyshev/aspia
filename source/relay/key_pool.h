@@ -20,7 +20,6 @@
 #define RELAY_KEY_POOL_H
 
 #include <optional>
-#include <mutex>
 #include <unordered_map>
 
 #include "relay/session_key.h"
@@ -48,7 +47,6 @@ private:
     explicit KeyPool(KeyFactory* factory);
     void dettach();
 
-    mutable std::mutex lock_;
     KeyFactory* factory_;
     std::unordered_map<quint32, SessionKey> map_;
     quint32 current_key_id_ = 0;

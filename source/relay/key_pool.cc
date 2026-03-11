@@ -41,15 +41,12 @@ KeyPool::~KeyPool()
 void KeyPool::dettach()
 {
     LOG(INFO) << "Pool is dettached";
-    std::scoped_lock lock(lock_);
     factory_ = nullptr;
 }
 
 //--------------------------------------------------------------------------------------------------
 quint32 KeyPool::addKey(SessionKey&& session_key)
 {
-    std::scoped_lock lock(lock_);
-
     quint32 key_id = current_key_id_++;
     map_.try_emplace(key_id, std::move(session_key));
 
@@ -60,8 +57,6 @@ quint32 KeyPool::addKey(SessionKey&& session_key)
 //--------------------------------------------------------------------------------------------------
 bool KeyPool::removeKey(quint32 key_id)
 {
-    std::scoped_lock lock(lock_);
-
     auto result = map_.find(key_id);
     if (result != map_.end())
     {
@@ -80,8 +75,6 @@ void KeyPool::setKeyExpired(quint32 key_id)
     if (removeKey(key_id))
     {
         LOG(INFO) << "Key with ID" << key_id << "expired. It has been removed";
-
-        std::scoped_lock lock(lock_);
         if (factory_)
             emit factory_->sig_keyExpired(key_id);
     }
@@ -90,8 +83,6 @@ void KeyPool::setKeyExpired(quint32 key_id)
 //--------------------------------------------------------------------------------------------------
 std::optional<KeyPool::Key> KeyPool::key(quint32 key_id, const std::string& peer_public_key) const
 {
-    std::scoped_lock lock(lock_);
-
     auto result = map_.find(key_id);
     if (result == map_.end())
         return std::nullopt;
@@ -104,7 +95,6 @@ std::optional<KeyPool::Key> KeyPool::key(quint32 key_id, const std::string& peer
 void KeyPool::clear()
 {
     LOG(INFO) << "Key pool cleared";
-    std::scoped_lock lock(lock_);
     map_.clear();
 }
 
