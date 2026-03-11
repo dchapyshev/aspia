@@ -285,19 +285,16 @@ bool fillRenderEndpointBufferWithSilence(IAudioClient* client, IAudioRenderClien
     }
 
     UINT32 num_queued_frames = 0;
-    // Get number of audio frames that are queued up to play in the endpoint
-    // buffer.
+    // Get number of audio frames that are queued up to play in the endpoint buffer.
     error = client->GetCurrentPadding(&num_queued_frames);
     if (FAILED(error.Error()))
     {
         LOG(ERROR) << "IAudioClient::GetCurrentPadding failed:" << error;
         return false;
     }
-    LOG(INFO) << "num_queued_frames:" << num_queued_frames;
 
     BYTE* data = nullptr;
     int num_frames_to_fill = endpoint_buffer_size - num_queued_frames;
-    LOG(INFO) << "num_frames_to_fill:" << num_frames_to_fill;
 
     error = render_client->GetBuffer(num_frames_to_fill, &data);
     if (FAILED(error.Error()))
