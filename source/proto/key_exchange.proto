@@ -74,6 +74,7 @@ message ClientHello
     Identify identify    = 2;
     bytes public_key     = 3;
     bytes iv             = 4;
+    peer.Version version = 5; // Deprecated.
 }
 
 // Server to client.

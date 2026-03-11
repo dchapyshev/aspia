@@ -256,6 +256,10 @@ void SessionWindow::onStatusChanged(Client::Status status, const QVariant& data)
         }
         break;
 
+        case Client::Status::LEGACY_HOST:
+            onErrorOccurred(tr("Attempting to connect in compatibility mode..."));
+            break;
+
         default:
             break;
     }

@@ -60,7 +60,8 @@ public:
         WAIT_FOR_ROUTER_TIMEOUT,
         WAIT_FOR_HOST,
         WAIT_FOR_HOST_TIMEOUT,
-        VERSION_MISMATCH
+        VERSION_MISMATCH,
+        LEGACY_HOST // Remove this after support for versions below 3.0.0 ends.
     };
     Q_ENUM(Status)
 
@@ -98,6 +99,7 @@ private:
     void delayedReconnect();
     void channelReady();
 
+    bool is_legacy_mode_ = false;
     QTimer* timeout_timer_ = nullptr;
     QTimer* reconnect_timer_ = nullptr;
     RouterManager* router_controller_ = nullptr;

@@ -290,6 +290,15 @@ void ClientAuthenticator::sendClientHello()
         client_hello.set_iv(encrypt_iv_.toStdString());
     }
 
+    // Remove this after support for versions below 3.0.0 ends.
+    if (base::kMinimumSupportedVersion < base::kVersion_3_0_0)
+    {
+        proto::peer::Version* version = client_hello.mutable_version();
+        version->set_major(ASPIA_VERSION_MAJOR);
+        version->set_minor(ASPIA_VERSION_MINOR);
+        version->set_patch(ASPIA_VERSION_PATCH);
+    }
+
     QByteArray message = base::serialize(client_hello);
 
     LOG(INFO) << "Sending: ClientHello (" << message.size() << ")";

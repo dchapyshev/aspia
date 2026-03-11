@@ -23,6 +23,7 @@
 #include "base/logging.h"
 #include "base/version_constants.h"
 #include "base/net/tcp_channel_ng.h"
+#include "base/net/tcp_channel_legacy.h"
 #include "base/peer/client_authenticator.h"
 
 #if defined(Q_OS_MACOS)
@@ -174,8 +175,18 @@ void Client::start()
             emit sig_statusChanged(Status::STARTED);
         }
 
-        // Create a network channel for messaging.
-        tcp_channel_ = new base::TcpChannelNG(authenticator.release(), this);
+        // Remove this after support for versions below 3.0.0 ends.
+        if (base::kMinimumSupportedVersion < base::kVersion_3_0_0)
+        {
+            if (is_legacy_mode_)
+                tcp_channel_ = new base::TcpChannelLegacy(authenticator.release(), this);
+            else
+                tcp_channel_ = new base::TcpChannelNG(authenticator.release(), this);
+        }
+        else
+        {
+            tcp_channel_ = new base::TcpChannelNG(authenticator.release(), this);
+        }
 
         connect(tcp_channel_, &base::TcpChannel::sig_authenticated, this, &Client::onTcpReady);
         connect(tcp_channel_, &base::TcpChannel::sig_errorOccurred, this, &Client::onTcpErrorOccurred);
@@ -276,6 +287,26 @@ void Client::onTcpReady()
 //--------------------------------------------------------------------------------------------------
 void Client::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code)
 {
+    // Remove this after support for versions below 3.0.0 ends.
+    if (base::kMinimumSupportedVersion < base::kVersion_3_0_0)
+    {
+        if (error_code == base::TcpChannel::ErrorCode::REMOTE_HOST_CLOSED && !is_legacy_mode_ &&
+            !base::isHostId(session_state_->config().address_or_id) && !tcp_channel_->isAuthenticated())
+        {
+            LOG(INFO) << "Host may be out of date. Trying to connect in legacy mode";
+            emit sig_statusChanged(Status::LEGACY_HOST);
+
+            tcp_channel_->disconnect();
+            tcp_channel_->deleteLater();
+            tcp_channel_ = nullptr;
+
+            is_legacy_mode_ = true;
+            state_ = State::CREATED;
+            start();
+            return;
+        }
+    }
+
     LOG(INFO) << "Connection terminated:" << error_code;
 
     // Show an error to the user.
