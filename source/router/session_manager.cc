@@ -40,11 +40,11 @@ QList<Session*> SessionManager::sessions() const
 void SessionManager::addSession(Session* session)
 {
     sessions_.emplace_back(session);
-    connect(session, &Session::sig_sessionFinished, this, &SessionManager::onSessionFinished);
+    connect(session, &Session::sig_finished, this, &SessionManager::onSessionFinished);
 }
 
 //--------------------------------------------------------------------------------------------------
-bool SessionManager::stopSession(Session::SessionId id)
+bool SessionManager::stopSession(qint64 id)
 {
     for (auto it = sessions_.begin(), it_end = sessions_.end(); it != it_end; ++it)
     {
@@ -52,6 +52,7 @@ bool SessionManager::stopSession(Session::SessionId id)
 
         if (session->sessionId() == id)
         {
+            session->disconnect();
             session->deleteLater();
             sessions_.erase(it);
             return true;
@@ -62,9 +63,9 @@ bool SessionManager::stopSession(Session::SessionId id)
 }
 
 //--------------------------------------------------------------------------------------------------
-Session* SessionManager::sessionById(Session::SessionId session_id)
+Session* SessionManager::sessionById(qint64 session_id)
 {
-    for (const auto& session : std::as_const(sessions_))
+    for (auto* session : std::as_const(sessions_))
     {
         if (session->sessionId() == session_id)
             return session;
@@ -74,7 +75,7 @@ Session* SessionManager::sessionById(Session::SessionId session_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionManager::onSessionFinished(Session::SessionId session_id)
+void SessionManager::onSessionFinished(qint64 session_id)
 {
     for (auto it = sessions_.begin(), it_end = sessions_.end(); it != it_end; ++it)
     {
@@ -82,10 +83,8 @@ void SessionManager::onSessionFinished(Session::SessionId session_id)
 
         if (session->sessionId() == session_id)
         {
-            // Session will be destroyed after completion of the current call.
+            session->disconnect();
             session->deleteLater();
-
-            // Delete a session from the list.
             sessions_.erase(it);
             break;
         }

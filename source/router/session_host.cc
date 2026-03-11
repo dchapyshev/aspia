@@ -209,7 +209,7 @@ void SessionHost::readResetHostId(const proto::router::ResetHostId& reset_host_i
 void SessionHost::removeOtherWithSameId()
 {
     QList<Session*> session_list = sessions();
-    SessionId session_for_stopping = 0;
+    qint64 session_for_stopping = 0;
 
     for (const auto& other_session : std::as_const(session_list))
     {

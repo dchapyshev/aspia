@@ -53,7 +53,7 @@ protected:
     void onStop() final;
 
 private slots:
-    void onPoolKeyUsed(Session::SessionId session_id, quint32 key_id);
+    void onPoolKeyUsed(qint64 session_id, quint32 key_id);
     void onNewConnection();
     void onNewLegacyConnection();
 

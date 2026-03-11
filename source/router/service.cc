@@ -83,11 +83,11 @@ void Service::onStop()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Service::onPoolKeyUsed(Session::SessionId session_id, quint32 key_id)
+void Service::onPoolKeyUsed(qint64 session_id, quint32 key_id)
 {
     QList<Session*> sessions = session_manager_->sessions();
 
-    for (const auto& session : std::as_const(sessions))
+    for (auto* session : std::as_const(sessions))
     {
         if (session->sessionId() == session_id)
         {

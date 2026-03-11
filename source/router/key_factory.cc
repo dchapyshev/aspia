@@ -41,7 +41,7 @@ base::SharedPointer<KeyPool> KeyFactory::sharedKeyPool()
 }
 
 //--------------------------------------------------------------------------------------------------
-void KeyFactory::addKey(Session::SessionId session_id, const proto::router::RelayKey& key)
+void KeyFactory::addKey(qint64 session_id, const proto::router::RelayKey& key)
 {
     pool_->addKey(session_id, key);
 }
@@ -53,7 +53,7 @@ std::optional<KeyFactory::Credentials> KeyFactory::takeCredentials()
 }
 
 //--------------------------------------------------------------------------------------------------
-void KeyFactory::removeKeysForRelay(Session::SessionId session_id)
+void KeyFactory::removeKeysForRelay(qint64 session_id)
 {
     pool_->removeKeysForRelay(session_id);
 }
@@ -65,7 +65,7 @@ void KeyFactory::clear()
 }
 
 //--------------------------------------------------------------------------------------------------
-size_t KeyFactory::countForRelay(Session::SessionId session_id) const
+size_t KeyFactory::countForRelay(qint64 session_id) const
 {
     return pool_->countForRelay(session_id);
 }

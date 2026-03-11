@@ -213,7 +213,7 @@ void SessionAdmin::doSessionRequest(const proto::router::SessionRequest& request
 
     if (request.type() == proto::router::SESSION_REQUEST_DISCONNECT)
     {
-        Session::SessionId session_id = request.session_id();
+        qint64 session_id = request.session_id();
 
         if (!sessionManager()->stopSession(session_id))
         {

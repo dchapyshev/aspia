@@ -24,7 +24,6 @@
 #include "base/shared_pointer.h"
 #include "proto/router.h"
 #include "router/key_pool.h"
-#include "router/session.h"
 
 namespace router {
 
@@ -40,16 +39,16 @@ public:
 
     using Credentials = KeyPool::Credentials;
 
-    void addKey(Session::SessionId session_id, const proto::router::RelayKey& key);
+    void addKey(qint64 session_id, const proto::router::RelayKey& key);
     std::optional<Credentials> takeCredentials();
-    void removeKeysForRelay(Session::SessionId session_id);
+    void removeKeysForRelay(qint64 session_id);
     void clear();
-    size_t countForRelay(Session::SessionId session_id) const;
+    size_t countForRelay(qint64 session_id) const;
     size_t count() const;
     bool isEmpty() const;
 
 signals:
-    void sig_keyUsed(Session::SessionId session_id, quint32 key_id);
+    void sig_keyUsed(qint64 session_id, quint32 key_id);
 
 private:
     base::SharedPointer<KeyPool> pool_;

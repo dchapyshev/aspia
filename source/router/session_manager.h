@@ -38,12 +38,12 @@ public:
     QList<Session*> sessions() const;
 
     void addSession(Session* session);
-    bool stopSession(Session::SessionId id);
+    bool stopSession(qint64 id);
 
-    Session* sessionById(Session::SessionId session_id);
+    Session* sessionById(qint64 session_id);
 
 private slots:
-    void onSessionFinished(Session::SessionId session_id);
+    void onSessionFinished(qint64 session_id);
 
 private:
     QList<Session*> sessions_;

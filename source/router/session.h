@@ -41,8 +41,6 @@ public:
     Session(base::TcpChannel* channel, QObject* parent);
     virtual ~Session() override;
 
-    using SessionId = qint64;
-
     void setRelayKeyPool(base::SharedPointer<KeyPool> relay_key_pool);
     void setDatabaseFactory(base::SharedPointer<DatabaseFactory> database_factory);
 
@@ -55,13 +53,13 @@ public:
     QString userName() const;
     proto::router::SessionType sessionType() const;
 
-    SessionId sessionId() const { return session_id_; }
+    qint64 sessionId() const { return session_id_; }
     const QString& address() const { return address_; }
     time_t startTime() const { return start_time_; }
     std::chrono::seconds duration() const;
 
 signals:
-    void sig_sessionFinished(SessionId session_id);
+    void sig_finished(qint64 session_id);
 
 protected:
     void sendMessage(const QByteArray& message);
@@ -76,7 +74,7 @@ protected:
 
     SessionManager* sessionManager() const;
     QList<Session*> sessions() const;
-    Session* sessionById(SessionId session_id) const;
+    Session* sessionById(qint64 session_id) const;
 
 private slots:
     void onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code);
@@ -84,7 +82,7 @@ private slots:
     void onTcpMessageWritten(quint8 channel_id);
 
 private:
-    const SessionId session_id_;
+    const qint64 session_id_;
     time_t start_time_ = 0;
 
     base::TcpChannel* tcp_channel_ = nullptr;

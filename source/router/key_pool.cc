@@ -37,7 +37,7 @@ void KeyPool::dettach()
 }
 
 //--------------------------------------------------------------------------------------------------
-void KeyPool::addKey(Session::SessionId session_id, const proto::router::RelayKey& key)
+void KeyPool::addKey(qint64 session_id, const proto::router::RelayKey& key)
 {
     auto relay = pool_.find(session_id);
     if (relay == pool_.end())
@@ -107,7 +107,7 @@ std::optional<KeyPool::Credentials> KeyPool::takeCredentials()
 }
 
 //--------------------------------------------------------------------------------------------------
-void KeyPool::removeKeysForRelay(Session::SessionId session_id)
+void KeyPool::removeKeysForRelay(qint64 session_id)
 {
     LOG(INFO) << "All keys for relay" << session_id << "removed";
     pool_.remove(session_id);
@@ -121,7 +121,7 @@ void KeyPool::clear()
 }
 
 //--------------------------------------------------------------------------------------------------
-size_t KeyPool::countForRelay(Session::SessionId session_id) const
+size_t KeyPool::countForRelay(qint64 session_id) const
 {
     auto result = pool_.find(session_id);
     if (result == pool_.end())
