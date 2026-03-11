@@ -61,7 +61,7 @@ SystemInfoClient::~SystemInfoClient()
 //--------------------------------------------------------------------------------------------------
 void SystemInfoClient::start()
 {
-    tcp_channel_->resume();
+    tcp_channel_->setPaused(false);
     emit sig_started();
 }
 

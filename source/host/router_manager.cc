@@ -154,7 +154,7 @@ void RouterManager::onTcpReady()
 
     // Now the session will receive incoming messages.
     reconnect_timer_->stop();
-    tcp_channel_->resume();
+    tcp_channel_->setPaused(false);
     hostIdRequest();
 }
 

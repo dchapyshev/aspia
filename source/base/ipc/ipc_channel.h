@@ -48,9 +48,7 @@ public:
 
     bool isConnected() const;
     bool isPaused() const;
-
-    void pause();
-    void resume();
+    void setPaused(bool enable);
 
     void send(quint32 channel_id, const QByteArray& buffer);
 

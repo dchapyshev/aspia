@@ -463,7 +463,7 @@ void UserSession::onIpcNewConnection()
 
     dettach_timer_->stop();
     attach_timer_->stop();
-    ipc_channel_->resume();
+    ipc_channel_->setPaused(false);
 
     LOG(INFO) << "Start user session (IPC channel" << ipc_channel_->channelName() << ")";
 

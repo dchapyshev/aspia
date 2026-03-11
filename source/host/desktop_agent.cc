@@ -198,7 +198,7 @@ void DesktopAgent::onIpcConnected()
     overflow_timer_->start();
     clipboard_->start();
     audio_capturer_->start();
-    ipc_channel_->resume();
+    ipc_channel_->setPaused(false);
 }
 
 //--------------------------------------------------------------------------------------------------

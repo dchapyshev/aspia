@@ -420,7 +420,7 @@ void DesktopManager::onIpcNewConnection()
     connect(ipc_channel_, &base::IpcChannel::sig_messageReceived, this, &DesktopManager::onIpcMessageReceived);
 
     attach_timer_->stop();
-    ipc_channel_->resume();
+    ipc_channel_->setPaused(false);
 
     state_ = State::ATTACHED;
     emit sig_attached();

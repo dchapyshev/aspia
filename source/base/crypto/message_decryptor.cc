@@ -27,9 +27,9 @@ namespace base {
 
 namespace {
 
-const int kKeySize = 32; // 256 bits, 32 bytes.
-const int kIVSize = 12; // 96 bits, 12 bytes.
-const int kTagSize = 16; // 128 bits, 16 bytes.
+const qint64 kKeySize = 32; // 256 bits, 32 bytes.
+const qint64 kIVSize = 12; // 96 bits, 12 bytes.
+const qint64 kTagSize = 16; // 128 bits, 16 bytes.
 
 } // namespace
 
@@ -94,13 +94,13 @@ std::unique_ptr<MessageDecryptor> MessageDecryptor::createForChaCha20Poly1305(
 }
 
 //--------------------------------------------------------------------------------------------------
-size_t MessageDecryptor::decryptedDataSize(size_t in_size)
+qint64 MessageDecryptor::decryptedDataSize(qint64 in_size)
 {
     return in_size - kTagSize;
 }
 
 //--------------------------------------------------------------------------------------------------
-bool MessageDecryptor::decrypt(const void* in, size_t in_size, void* out)
+bool MessageDecryptor::decrypt(const void* in, qint64 in_size, void* out)
 {
     if (EVP_DecryptInit_ex(ctx_.get(), nullptr, nullptr, nullptr,
         reinterpret_cast<const quint8*>(iv_.data())) != 1)
@@ -114,7 +114,7 @@ bool MessageDecryptor::decrypt(const void* in, size_t in_size, void* out)
     if (EVP_DecryptUpdate(ctx_.get(),
                           reinterpret_cast<quint8*>(out), &length,
                           reinterpret_cast<const quint8*>(in) + kTagSize,
-                          static_cast<int>(in_size) - kTagSize) != 1)
+                          static_cast<int>(in_size - kTagSize)) != 1)
     {
         LOG(ERROR) << "EVP_DecryptUpdate failed";
         return false;

@@ -150,7 +150,7 @@ void UserSessionAgent::onIpcConnected()
 {
     LOG(INFO) << "IPC channel connected";
     emit sig_statusChanged(Status::CONNECTED_TO_SERVICE);
-    ipc_channel_->resume();
+    ipc_channel_->setPaused(false);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -115,13 +115,10 @@ public:
     // then the return value is undefined.
     bool isPaused() const { return paused_; }
 
-    // Pauses the channel. After calling the method, new messages will not be read from the socket.
-    // If at the time the method was called, the message was read, then notification of this
-    // message will be received only after calling method resume().
-    void pause();
-
-    // After calling the method, reading new messages will continue.
-    void resume();
+    // Pauses or resume the channel. After calling the method, new messages will not be read from
+    // the socket. If at the time the method was called with |true', the message was read, then
+    // notification of this message will be received only after calling method with |false|.
+    void setPaused(bool enable);
 
     // Sending a message. After the call, the message will be added to the queue to be sent.
     void send(quint8 channel_id, const QByteArray& buffer);
@@ -248,7 +245,6 @@ private:
     QTimer* keep_alive_timer_ = nullptr;
     KeepAliveTimerType keep_alive_timer_type_ = KEEP_ALIVE_INTERVAL;
     QByteArray keep_alive_counter_;
-    TimePoint keep_alive_timestamp_;
 
     bool connected_ = false;
     bool authenticated_ = false;

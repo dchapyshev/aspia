@@ -191,8 +191,8 @@ void DesktopClient::onIpcNewConnection()
     sendIpcServiceMessage(base::serialize(message));
 
     fake_capture_timer_->stop();
-    tcp_channel_->resume();
-    ipc_channel_->resume();
+    tcp_channel_->setPaused(false);
+    ipc_channel_->setPaused(false);
 }
 
 //--------------------------------------------------------------------------------------------------

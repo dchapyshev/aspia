@@ -67,17 +67,15 @@ QStringList endpointsToString(const asio::ip::tcp::resolver::results_type& endpo
 }
 
 //--------------------------------------------------------------------------------------------------
-void resizeBuffer(QByteArray* buffer, qint64 new_size)
+void resizeBuffer(QByteArray* buffer, qint64 size)
 {
-    // If the reserved buffer size is less, then increase it.
-    if (buffer->capacity() < new_size)
+    if (buffer->capacity() < size)
     {
         buffer->clear();
-        buffer->reserve(new_size);
+        buffer->reserve(size);
     }
 
-    // Change the size of the buffer.
-    buffer->resize(new_size);
+    buffer->resize(size);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -137,7 +135,7 @@ void TcpChannel::doAuthentication()
 
     LOG(INFO) << "Start authentication";
     authenticator_->start();
-    resume();
+    setPaused(false);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -202,7 +200,6 @@ void TcpChannel::connectTo(const QString& address, quint16 port)
         {
             if (error_code == asio::error::operation_aborted)
                 return;
-
             onErrorOccurred(FROM_HERE, error_code);
             return;
         }
@@ -227,13 +224,11 @@ void TcpChannel::connectTo(const QString& address, quint16 port)
             {
                 if (error_code == asio::error::operation_aborted)
                     return;
-
                 onErrorOccurred(FROM_HERE, error_code);
                 return;
             }
 
-            LOG(INFO) << "Connected to endpoint:" << endpoint.address().to_string() << ":"
-                      << endpoint.port();
+            LOG(INFO) << "Connected to endpoint:" << endpoint.address().to_string() << ":" << endpoint.port();
 
             setConnected(true);
             emit sig_connected();
@@ -244,32 +239,24 @@ void TcpChannel::connectTo(const QString& address, quint16 port)
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannel::pause()
+void TcpChannel::setPaused(bool enable)
 {
-    keep_alive_timer_->stop();
-    paused_ = true;
-}
-
-//--------------------------------------------------------------------------------------------------
-void TcpChannel::resume()
-{
-    if (!isConnected() || !paused_)
+    if (!isConnected() || paused_ == enable)
         return;
+
+    paused_ = enable;
+    if (paused_)
+    {
+        keep_alive_timer_->stop();
+        return;
+    }
 
     keep_alive_timer_type_ = KEEP_ALIVE_INTERVAL;
     keep_alive_timer_->start(kKeepAliveInterval);
-    paused_ = false;
 
-    switch (state_)
-    {
-        // We already have an incomplete read operation.
-        case ReadState::READ_HEADER:
-        case ReadState::READ_DATA:
-            return;
-
-        default:
-            break;
-    }
+    // We already have an incomplete read operation.
+    if (state_ == ReadState::READ_HEADER || state_ == ReadState::READ_DATA)
+        return;
 
     // If we have a message that was received before the pause command.
     if (state_ == ReadState::PENDING)
@@ -359,6 +346,7 @@ int TcpChannel::speedTx()
 void TcpChannel::init()
 {
     CHECK(authenticator_);
+    authenticator_->setParent(this);
 
     write_queue_.reserve(kWriteQueueReservedSize);
 
@@ -369,8 +357,6 @@ void TcpChannel::init()
 
     keep_alive_counter_.resize(sizeof(quint32));
     memset(keep_alive_counter_.data(), 0, keep_alive_counter_.size());
-
-    authenticator_->setParent(this);
 
     connect(authenticator_, &Authenticator::sig_outgoingMessage, this, [this](const QByteArray& data)
     {
@@ -403,10 +389,9 @@ void TcpChannel::init()
         }
     });
 
-    connect(authenticator_, &Authenticator::sig_finished,
-            this, [this](Authenticator::ErrorCode error_code)
+    connect(authenticator_, &Authenticator::sig_finished, this, [this](Authenticator::ErrorCode error_code)
     {
-        pause();
+        setPaused(true);
 
         switch (error_code)
         {
@@ -463,7 +448,6 @@ void TcpChannel::setConnected(bool connected)
         {
             std::error_code ignored_code;
             socket_.cancel(ignored_code);
-
             socket_.close(ignored_code);
         }
 
@@ -471,27 +455,21 @@ void TcpChannel::setConnected(bool connected)
         return;
     }
 
-    asio::ip::tcp::no_delay no_delay_option(true);
-
     asio::error_code error_code;
+
+    asio::ip::tcp::no_delay no_delay_option(true);
     socket_.set_option(no_delay_option, error_code);
-    if (error_code)
-        LOG(ERROR) << "Failed to disable Nagle's algorithm:" << error_code;
-    else
+    if (!error_code)
         LOG(INFO) << "Nagle's algorithm is disabled";
 
     asio::socket_base::receive_buffer_size receive_option;
     socket_.get_option(receive_option, error_code);
-    if (error_code)
-        LOG(ERROR) << "Failed to get read buffer size:" << error_code;
-    else
+    if (!error_code)
         LOG(INFO) << "Read buffer size:" << receive_option.value();
 
     asio::socket_base::send_buffer_size send_option;
     socket_.get_option(send_option, error_code);
-    if (error_code)
-        LOG(ERROR) << "Failed to get write buffer size:" << error_code;
-    else
+    if (!error_code)
         LOG(INFO) << "Write buffer size:" << send_option.value();
 }
 
@@ -604,15 +582,6 @@ void TcpChannel::onMessageReceived()
             return;
         }
 
-        if (DCHECK_IS_ON())
-        {
-            Milliseconds ping_time = std::chrono::duration_cast<Milliseconds>(
-                Clock::now() - keep_alive_timestamp_);
-
-            DLOG(INFO) << "Ping result:" << ping_time.count() << "ms ("
-                       << keep_alive_counter_.size() << "bytes)";
-        }
-
         // Increase the counter of sent packets.
         largeNumberIncrement(&keep_alive_counter_);
 
@@ -626,10 +595,7 @@ void TcpChannel::onMessageReceived()
 void TcpChannel::addWriteTask(quint8 type, quint8 param, const QByteArray& data)
 {
     const bool schedule_write = write_queue_.isEmpty();
-
-    // Add the buffer to the queue for sending.
     write_queue_.emplace_back(type, param, data);
-
     if (schedule_write)
         doWrite();
 }
@@ -646,9 +612,8 @@ void TcpChannel::doWrite()
         return;
     }
 
-    size_t target_data_size = source_buffer.size();
-    if (encryptor_)
-        target_data_size = encryptor_->encryptedDataSize(source_buffer.size());
+    qint64 target_data_size =
+        encryptor_ ? encryptor_->encryptedDataSize(source_buffer.size()) : source_buffer.size();
 
     resizeBuffer(&write_buffer_, target_data_size + sizeof(Header));
 
@@ -668,7 +633,6 @@ void TcpChannel::doWrite()
 
     if (encryptor_)
     {
-        // Encrypt the message.
         if (!encryptor_->encrypt(source_buffer.data(), source_buffer.size(),
                                  write_buffer_.data() + sizeof(Header)))
         {
@@ -681,7 +645,6 @@ void TcpChannel::doWrite()
         memcpy(write_buffer_.data() + sizeof(Header), source_buffer.data(), source_buffer.size());
     }
 
-    // Send the buffer to the recipient.
     asio::async_write(socket_,
                       asio::buffer(write_buffer_.data(), write_buffer_.size()),
                       [this](const std::error_code& error_code, size_t bytes_transferred)
@@ -690,29 +653,24 @@ void TcpChannel::doWrite()
         {
             if (error_code == asio::error::operation_aborted)
                 return;
-
             onErrorOccurred(FROM_HERE, error_code);
             return;
         }
 
+        addTxBytes(bytes_transferred); // Update TX statistics.
         DCHECK(!write_queue_.empty());
-
-        // Update TX statistics.
-        addTxBytes(bytes_transferred);
 
         const WriteTask& task = write_queue_.front();
         quint8 type = task.type();
-        quint8 channel_id = task.param();
+        quint8 param = task.param();
 
-        // Delete the sent message from the queue.
         write_queue_.pop_front();
 
-        // If the queue is not empty, then we send the following message.
         bool schedule_write = !write_queue_.isEmpty();
 
         if (type == USER_DATA)
         {
-            emit sig_messageWritten(channel_id);
+            emit sig_messageWritten(param);
         }
         else if (type == AUTH_DATA)
         {
@@ -741,13 +699,11 @@ void TcpChannel::doReadHeader()
         {
             if (error_code == asio::error::operation_aborted)
                 return;
-
             onErrorOccurred(FROM_HERE, error_code);
             return;
         }
 
-        // Update RX statistics.
-        addRxBytes(bytes_transferred);
+        addRxBytes(bytes_transferred); // Update RX statistics.
 
         if (read_header_.length > kMaxMessageSize)
         {
@@ -776,14 +732,11 @@ void TcpChannel::doReadData()
         {
             if (error_code == asio::error::operation_aborted)
                 return;
-
             onErrorOccurred(FROM_HERE, error_code);
             return;
         }
 
-        // Update RX statistics.
-        addRxBytes(bytes_transferred);
-
+        addRxBytes(bytes_transferred); // Update RX statistics.
         DCHECK_EQ(bytes_transferred, read_buffer_.size());
 
         if (paused_)
@@ -809,21 +762,15 @@ void TcpChannel::onKeepAliveTimer()
 {
     if (keep_alive_timer_type_ == KEEP_ALIVE_INTERVAL)
     {
-        // Save sending time.
-        keep_alive_timestamp_ = Clock::now();
-
-        // Send ping.
-        addWriteTask(KEEP_ALIVE, KEEP_ALIVE_PING, keep_alive_counter_);
-
         // If a response is not received within the specified interval, the connection will be terminated.
+        addWriteTask(KEEP_ALIVE, KEEP_ALIVE_PING, keep_alive_counter_);
         keep_alive_timer_type_ = KEEP_ALIVE_TIMEOUT;
         keep_alive_timer_->start(kKeepAliveTimeout);
     }
     else
     {
-        DCHECK_EQ(keep_alive_timer_type_, KEEP_ALIVE_TIMEOUT);
-
         // No response came within the specified period of time. We forcibly terminate the connection.
+        DCHECK_EQ(keep_alive_timer_type_, KEEP_ALIVE_TIMEOUT);
         onErrorOccurred(FROM_HERE, ErrorCode::SOCKET_TIMEOUT);
     }
 }

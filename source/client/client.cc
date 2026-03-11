@@ -422,7 +422,7 @@ void Client::channelReady()
     // Now the session will receive incoming messages.
     tcp_channel_->setReadBufferSize(kReadBufferSize);
     tcp_channel_->setWriteBufferSize(kWriteBufferSize);
-    tcp_channel_->resume();
+    tcp_channel_->setPaused(false);
 }
 
 } // namespace client

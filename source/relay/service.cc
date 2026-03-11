@@ -147,7 +147,7 @@ void Service::onTcpReady()
     LOG(INFO) << "Connection to the router is established (session count:" << session_count_ << ")";
 
     // Now the session will receive incoming messages.
-    tcp_channel_->resume();
+    tcp_channel_->setPaused(false);
     sendKeyPool(max_peer_count_ - static_cast<quint32>(session_count_));
 }
 

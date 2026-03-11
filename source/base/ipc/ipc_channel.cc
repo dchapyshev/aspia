@@ -141,18 +141,14 @@ bool IpcChannel::isPaused() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void IpcChannel::pause()
+void IpcChannel::setPaused(bool enable)
 {
-    is_paused_ = true;
-}
-
-//--------------------------------------------------------------------------------------------------
-void IpcChannel::resume()
-{
-    if (!is_connected_ || !is_paused_)
+    if (!is_connected_ || is_paused_ == enable)
         return;
 
-    is_paused_ = false;
+    is_paused_ = enable;
+    if (is_paused_)
+        return;
 
     switch (read_state_)
     {

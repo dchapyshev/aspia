@@ -268,15 +268,13 @@ void Router::onTcpReady()
     if (router_version > client_version)
     {
         LOG(ERROR) << "Version mismatch (router:" << router_version.toString()
-        << "client:" << client_version.toString();
+                   << "client:" << client_version.toString();
         emit sig_versionMismatch(router_version, client_version);
     }
     else
     {
         emit sig_connected(router_version);
-
-        // Now the session will receive incoming messages.
-        tcp_channel_->resume();
+        tcp_channel_->setPaused(false);
     }
 }
 

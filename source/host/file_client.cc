@@ -435,10 +435,10 @@ void FileClient::onStarted(const base::Location& location, bool has_user)
     if (has_user)
     {
         CHECK(ipc_channel_);
-        ipc_channel_->resume();
+        ipc_channel_->setPaused(false);
     }
 
-    tcp_channel_->resume();
+    tcp_channel_->setPaused(false);
     emit sig_started();
 }
 

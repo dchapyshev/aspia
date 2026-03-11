@@ -27,9 +27,9 @@ namespace base {
 
 namespace {
 
-const int kKeySize = 32; // 256 bits, 32 bytes.
-const int kIVSize = 12; // 96 bits, 12 bytes.
-const int kTagSize = 16; // 128 bits, 16 bytes.
+const qint64 kKeySize = 32; // 256 bits, 32 bytes.
+const qint64 kIVSize = 12; // 96 bits, 12 bytes.
+const qint64 kTagSize = 16; // 128 bits, 16 bytes.
 
 } // namespace
 
@@ -93,13 +93,13 @@ std::unique_ptr<MessageEncryptor> MessageEncryptor::createForChaCha20Poly1305(
 }
 
 //--------------------------------------------------------------------------------------------------
-size_t MessageEncryptor::encryptedDataSize(size_t in_size)
+qint64 MessageEncryptor::encryptedDataSize(qint64 in_size)
 {
     return in_size + kTagSize;
 }
 
 //--------------------------------------------------------------------------------------------------
-bool MessageEncryptor::encrypt(const void* in, size_t in_size, void* out)
+bool MessageEncryptor::encrypt(const void* in, qint64 in_size, void* out)
 {
     if (EVP_EncryptInit_ex(ctx_.get(), nullptr, nullptr, nullptr,
         reinterpret_cast<const quint8*>(iv_.data())) != 1)

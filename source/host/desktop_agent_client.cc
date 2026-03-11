@@ -301,7 +301,7 @@ void DesktopAgentClient::start(const QString& ipc_channel_name)
 void DesktopAgentClient::onIpcConnected()
 {
     LOG(INFO) << "IPC channel is connected";
-    ipc_channel_->resume();
+    ipc_channel_->setPaused(false);
 }
 
 //--------------------------------------------------------------------------------------------------

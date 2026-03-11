@@ -135,7 +135,7 @@ void TcpChannelLegacy::doAuthentication()
 
     LOG(INFO) << "Start authentication";
     authenticator_->start();
-    resume();
+    setPaused(false);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -242,18 +242,14 @@ void TcpChannelLegacy::connectTo(const QString& address, quint16 port)
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpChannelLegacy::pause()
+void TcpChannelLegacy::setPaused(bool enable)
 {
-    paused_ = true;
-}
-
-//--------------------------------------------------------------------------------------------------
-void TcpChannelLegacy::resume()
-{
-    if (!isConnected() || !paused_)
+    if (!isConnected() || paused_ == enable)
         return;
 
-    paused_ = false;
+    paused_ = enable;
+    if (paused_)
+        return;
 
     switch (state_)
     {
@@ -510,7 +506,7 @@ void TcpChannelLegacy::onAuthenticatorMessage(const QByteArray& data)
 //--------------------------------------------------------------------------------------------------
 void TcpChannelLegacy::onAuthenticatorFinished(Authenticator::ErrorCode error_code)
 {
-    pause();
+    setPaused(true);
 
     if (!authenticator_)
     {

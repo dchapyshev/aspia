@@ -90,9 +90,7 @@ void OnlineCheckerRouter::start(const ComputerList& computers)
 void OnlineCheckerRouter::onTcpReady()
 {
     LOG(INFO) << "Connection to the router is established";
-
-    // Now the session will receive incoming messages.
-    tcp_channel_->resume();
+    tcp_channel_->setPaused(false);
     checkNextComputer();
 }
 

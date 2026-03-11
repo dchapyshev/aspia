@@ -90,8 +90,7 @@ void Session::start()
     connect(tcp_channel_, &base::TcpChannel::sig_messageReceived, this, &Session::onTcpMessageReceived);
     connect(tcp_channel_, &base::TcpChannel::sig_messageWritten, this, &Session::onTcpMessageWritten);
 
-    tcp_channel_->resume();
-
+    tcp_channel_->setPaused(false);
     onSessionReady();
 }
 

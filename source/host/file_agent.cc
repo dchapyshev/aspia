@@ -59,7 +59,7 @@ void FileAgent::start(const QString& channel_id)
 //--------------------------------------------------------------------------------------------------
 void FileAgent::onIpcConnected()
 {
-    ipc_channel_->resume();
+    ipc_channel_->setPaused(false);
 }
 
 //--------------------------------------------------------------------------------------------------

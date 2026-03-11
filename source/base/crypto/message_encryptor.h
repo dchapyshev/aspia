@@ -50,8 +50,8 @@ public:
 
     Type type() const { return type_; }
 
-    size_t encryptedDataSize(size_t in_size);
-    bool encrypt(const void* in, size_t in_size, void* out);
+    qint64 encryptedDataSize(qint64 in_size);
+    bool encrypt(const void* in, qint64 in_size, void* out);
 
 private:
     MessageEncryptor(MessageEncryptor::Type type, EVP_CIPHER_CTX_ptr ctx, const QByteArray& iv);
