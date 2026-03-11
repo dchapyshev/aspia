@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "router/user_list_db.h"
+#include "router/user_list.h"
 
 #include "base/logging.h"
 #include "router/database.h"
@@ -24,18 +24,18 @@
 namespace router {
 
 //--------------------------------------------------------------------------------------------------
-UserListDb::UserListDb(std::unique_ptr<Database> db)
+UserList::UserList(std::unique_ptr<Database> db)
     : db_(std::move(db))
 {
     // Nothing
 }
 
 //--------------------------------------------------------------------------------------------------
-UserListDb::~UserListDb() = default;
+UserList::~UserList() = default;
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::unique_ptr<UserListDb> UserListDb::open()
+std::unique_ptr<UserList> UserList::open()
 {
     std::unique_ptr<Database> db = Database::open();
     if (!db)
@@ -44,35 +44,35 @@ std::unique_ptr<UserListDb> UserListDb::open()
         return nullptr;
     }
 
-    return std::unique_ptr<UserListDb>(new UserListDb(std::move(db)));
+    return std::unique_ptr<UserList>(new UserList(std::move(db)));
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserListDb::add(const base::User& user)
+void UserList::add(const base::User& user)
 {
     db_->addUser(user);
 }
 
 //--------------------------------------------------------------------------------------------------
-base::User UserListDb::find(const QString& username) const
+base::User UserList::find(const QString& username) const
 {
     return db_->findUser(username);
 }
 
 //--------------------------------------------------------------------------------------------------
-const QByteArray& UserListDb::seedKey() const
+const QByteArray& UserList::seedKey() const
 {
     return seed_key_;
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserListDb::setSeedKey(const QByteArray& seed_key)
+void UserList::setSeedKey(const QByteArray& seed_key)
 {
     seed_key_ = seed_key;
 }
 
 //--------------------------------------------------------------------------------------------------
-QVector<base::User> UserListDb::list() const
+QVector<base::User> UserList::list() const
 {
     return db_->userList();
 }

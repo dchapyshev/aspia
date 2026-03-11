@@ -27,7 +27,7 @@
 #include "router/session_host.h"
 #include "router/session_relay.h"
 #include "router/settings.h"
-#include "router/user_list_db.h"
+#include "router/user_list.h"
 
 namespace router {
 
@@ -369,7 +369,7 @@ bool Service::start()
         settings.setSeedKey(seed_key);
     }
 
-    base::SharedPointer<base::UserListBase> user_list(UserListDb::open().release());
+    base::SharedPointer<base::UserListBase> user_list(UserList::open().release());
     user_list->setSeedKey(seed_key);
 
     tcp_server_ = new base::TcpServer(this);

@@ -36,8 +36,8 @@ list(APPEND SOURCE_ROUTER
     session_relay.h
     settings.cc
     settings.h
-    user_list_db.cc
-    user_list_db.h)
+    user_list.cc
+    user_list.h)
 
 if (WIN32)
     list(APPEND SOURCE_ROUTER_WIN

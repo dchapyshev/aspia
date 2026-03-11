@@ -72,7 +72,6 @@ int generateAndPrintKeys(QTextStream& out)
 
     out << "Private key: " << private_key.toHex() << Qt::endl;
     out << "Public key: " << public_key.toHex() << Qt::endl;
-
     return 0;
 }
 

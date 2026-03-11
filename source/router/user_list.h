@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER_USER_LIST_DB_H
-#define ROUTER_USER_LIST_DB_H
+#ifndef ROUTER_USER_LIST_H
+#define ROUTER_USER_LIST_H
 
 #include "base/peer/user_list_base.h"
 
@@ -25,12 +25,12 @@ namespace router {
 
 class Database;
 
-class UserListDb final : public base::UserListBase
+class UserList final : public base::UserListBase
 {
 public:
-    ~UserListDb() final;
+    ~UserList() final;
 
-    static std::unique_ptr<UserListDb> open();
+    static std::unique_ptr<UserList> open();
 
     // base::UserListBase implementation.
     void add(const base::User& user) final;
@@ -40,14 +40,14 @@ public:
     QVector<base::User> list() const final;
 
 private:
-    explicit UserListDb(std::unique_ptr<Database> db);
+    explicit UserList(std::unique_ptr<Database> db);
 
     std::unique_ptr<Database> db_;
     QByteArray seed_key_;
 
-    Q_DISABLE_COPY_MOVE(UserListDb)
+    Q_DISABLE_COPY_MOVE(UserList)
 };
 
 } // namespace router
 
-#endif // ROUTER_USER_LIST_DB_H
+#endif // ROUTER_USER_LIST_H
