@@ -22,7 +22,6 @@
 #include "base/serialization.h"
 #include "base/peer/user.h"
 #include "router/database.h"
-#include "router/key_pool.h"
 #include "router/session_host.h"
 #include "router/service.h"
 #include "router/session_relay.h"
@@ -166,7 +165,7 @@ void SessionAdmin::doSessionListRequest(const proto::router::SessionListRequest&
         {
             proto::router::RelaySessionData session_data;
             session_data.set_pool_size(
-                Service::instance()->keyPool().countForRelay(session->sessionId()));
+                Service::instance()->keyCountForRelay(session->sessionId()));
 
             const std::optional<proto::router::RelayStat>& in_relay_stat =
                 static_cast<SessionRelay*>(session)->relayStat();

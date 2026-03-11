@@ -23,8 +23,6 @@ list(APPEND SOURCE_ROUTER
     database_factory_sqlite.h
     database_sqlite.cc
     database_sqlite.h
-    key_pool.cc
-    key_pool.h
     main.cc
     migration_utils.cc
     migration_utils.h

@@ -46,12 +46,27 @@ public:
     static const char kDisplayName[];
     static const char kDescription[];
 
+    struct Credentials
+    {
+        qint64 session_id;
+        proto::router::RelayKey key;
+    };
+
+    using Keys = QList<proto::router::RelayKey>;
+
     static Service* instance();
 
     QList<Session*> sessions();
     Session* session(qint64 session_id);
     bool stopSession(qint64 session_id);
-    KeyPool& keyPool();
+
+    void addKey(qint64 session_id, const proto::router::RelayKey& key);
+    std::optional<Credentials> takeCredentials();
+    void removeKeysForRelay(qint64 session_id);
+    void clearKeyPool();
+    size_t keyCountForRelay(qint64 session_id) const;
+    size_t keyCount() const;
+    bool isKeyPoolEmpty() const;
 
 protected:
     // base::Service implementation.
@@ -59,7 +74,6 @@ protected:
     void onStop() final;
 
 private slots:
-    void onPoolKeyUsed(qint64 session_id, quint32 key_id);
     void onNewConnection();
     void onNewLegacyConnection();
     void onSessionFinished();
@@ -71,7 +85,8 @@ private:
     base::SharedPointer<DatabaseFactory> database_factory_;
     base::TcpServer* tcp_server_ = nullptr;
     base::TcpServerLegacy* tcp_server_legacy_ = nullptr;
-    KeyPool* key_pool_ = nullptr;
+
+    QMap<qint64, Keys> key_pool_;
 
     QList<Session*> sessions_;
 

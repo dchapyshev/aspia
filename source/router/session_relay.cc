@@ -20,7 +20,6 @@
 
 #include "base/logging.h"
 #include "base/serialization.h"
-#include "router/key_pool.h"
 #include "router/service.h"
 
 namespace router {
@@ -36,7 +35,7 @@ SessionRelay::SessionRelay(base::TcpChannel* channel, QObject* parent)
 SessionRelay::~SessionRelay()
 {
     LOG(INFO) << "Dtor";
-    Service::instance()->keyPool().removeKeysForRelay(sessionId());
+    Service::instance()->removeKeysForRelay(sessionId());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -79,7 +78,7 @@ void SessionRelay::onSessionMessage(const QByteArray& buffer)
 //--------------------------------------------------------------------------------------------------
 void SessionRelay::readKeyPool(const proto::router::RelayKeyPool& key_pool)
 {
-    KeyPool& pool = Service::instance()->keyPool();
+    Service* service = Service::instance();
 
     LOG(INFO) << "Received key pool:" << key_pool.key_size() << "(" << address() << ")";
 
@@ -87,7 +86,7 @@ void SessionRelay::readKeyPool(const proto::router::RelayKeyPool& key_pool)
         key_pool.peer_host(), static_cast<quint16>(key_pool.peer_port())));
 
     for (int i = 0; i < key_pool.key_size(); ++i)
-        pool.addKey(sessionId(), key_pool.key(i));
+        service->addKey(sessionId(), key_pool.key(i));
 }
 
 } // namespace router

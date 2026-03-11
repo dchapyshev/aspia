@@ -23,7 +23,6 @@
 #include "base/net/tcp_channel.h"
 #include "router/database.h"
 #include "router/database_factory_sqlite.h"
-#include "router/key_pool.h"
 #include "router/migration_utils.h"
 #include "router/session_admin.h"
 #include "router/session_client.h"
@@ -45,13 +44,10 @@ const char Service::kDescription[] =
 //--------------------------------------------------------------------------------------------------
 Service::Service(QObject* parent)
     : base::Service(Service::kName, parent),
-      database_factory_(new DatabaseFactorySqlite()),
-      key_pool_(new KeyPool(this))
+      database_factory_(new DatabaseFactorySqlite())
 {
     LOG(INFO) << "Ctor";
     instance_ = this;
-
-    connect(key_pool_, &KeyPool::sig_keyUsed, this, &Service::onPoolKeyUsed);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -105,9 +101,120 @@ bool Service::stopSession(qint64 session_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-KeyPool& Service::keyPool()
+void Service::addKey(qint64 session_id, const proto::router::RelayKey& key)
 {
-    return *key_pool_;
+    auto relay = key_pool_.find(session_id);
+    if (relay == key_pool_.end())
+    {
+        LOG(INFO) << "Host not found in pool. It will be added";
+        relay = key_pool_.insert(session_id, Keys());
+    }
+
+    LOG(INFO) << "Added key with id" << key.key_id() << "for host" << session_id;
+    relay.value().append(key);
+}
+
+//--------------------------------------------------------------------------------------------------
+std::optional<Service::Credentials> Service::takeCredentials()
+{
+    if (key_pool_.isEmpty())
+    {
+        LOG(ERROR) << "Empty key pool";
+        return std::nullopt;
+    }
+
+    auto preffered_relay = key_pool_.end();
+    int max_count = 0;
+
+    for (auto it = key_pool_.begin(), it_end = key_pool_.end(); it != it_end; ++it)
+    {
+        int count = it.value().size();
+        if (count > max_count)
+        {
+            preffered_relay = it;
+            max_count = count;
+        }
+    }
+
+    if (preffered_relay == key_pool_.end())
+    {
+        LOG(ERROR) << "Empty key pool";
+        return std::nullopt;
+    }
+
+    LOG(INFO) << "Preffered relay:" << preffered_relay.key();
+
+    QList<proto::router::RelayKey>& keys = preffered_relay.value();
+    if (keys.isEmpty())
+    {
+        LOG(ERROR) << "Empty key pool for relay";
+        return std::nullopt;
+    }
+
+    Credentials credentials;
+    credentials.session_id = preffered_relay.key();
+    credentials.key = std::move(keys.back());
+
+    // Removing the key from the pool.
+    keys.pop_back();
+
+    if (keys.isEmpty())
+    {
+        LOG(INFO) << "Last key in the pool for relay. The relay will be removed from the pool";
+        key_pool_.remove(preffered_relay.key());
+    }
+
+    for (auto* session : std::as_const(sessions_))
+    {
+        if (session->sessionId() == credentials.session_id)
+        {
+            SessionRelay* relay_session = static_cast<SessionRelay*>(session);
+            relay_session->sendKeyUsed(credentials.key.key_id());
+        }
+    }
+
+    return std::move(credentials);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Service::removeKeysForRelay(qint64 session_id)
+{
+    LOG(INFO) << "All keys for relay" << session_id << "removed";
+    key_pool_.remove(session_id);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Service::clearKeyPool()
+{
+    LOG(INFO) << "Key pool cleared";
+    key_pool_.clear();
+}
+
+//--------------------------------------------------------------------------------------------------
+size_t Service::keyCountForRelay(qint64 session_id) const
+{
+    auto result = key_pool_.find(session_id);
+    if (result == key_pool_.end())
+        return 0;
+
+    return result.value().size();
+}
+
+//--------------------------------------------------------------------------------------------------
+size_t Service::keyCount() const
+{
+    size_t result = 0;
+
+    for (const auto& relay : std::as_const(key_pool_))
+        result += relay.size();
+
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Service::isKeyPoolEmpty() const
+{
+    return key_pool_.isEmpty();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -132,19 +239,6 @@ void Service::onStart()
 void Service::onStop()
 {
     LOG(INFO) << "Service stopping";
-}
-
-//--------------------------------------------------------------------------------------------------
-void Service::onPoolKeyUsed(qint64 session_id, quint32 key_id)
-{
-    for (auto* session : std::as_const(sessions_))
-    {
-        if (session->sessionId() == session_id)
-        {
-            SessionRelay* relay_session = static_cast<SessionRelay*>(session);
-            relay_session->sendKeyUsed(key_id);
-        }
-    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -238,7 +332,7 @@ bool Service::start()
     }
 
     client_white_list_ = settings.clientWhiteList();
-    if (client_white_list_.empty())
+    if (client_white_list_.isEmpty())
     {
         LOG(INFO) << "Empty client white list. Connections from all clients will be allowed";
     }
@@ -248,7 +342,7 @@ bool Service::start()
     }
 
     host_white_list_ = settings.hostWhiteList();
-    if (host_white_list_.empty())
+    if (host_white_list_.isEmpty())
     {
         LOG(INFO) << "Empty host white list. Connections from all hosts will be allowed";
     }
@@ -258,7 +352,7 @@ bool Service::start()
     }
 
     admin_white_list_ = settings.adminWhiteList();
-    if (admin_white_list_.empty())
+    if (admin_white_list_.isEmpty())
     {
         LOG(INFO) << "Empty admin white list. Connections from all admins will be allowed";
     }
@@ -268,7 +362,7 @@ bool Service::start()
     }
 
     relay_white_list_ = settings.relayWhiteList();
-    if (relay_white_list_.empty())
+    if (relay_white_list_.isEmpty())
     {
         LOG(INFO) << "Empty relay white list. Connections from all relays will be allowed";
     }

@@ -26,7 +26,6 @@
 namespace router {
 
 class SessionHost;
-class SharedKeyPool;
 
 class SessionClient final : public Session
 {
