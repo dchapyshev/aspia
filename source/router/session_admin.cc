@@ -42,13 +42,7 @@ SessionAdmin::~SessionAdmin()
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionAdmin::onSessionReady()
-{
-    // Nothing
-}
-
-//--------------------------------------------------------------------------------------------------
-void SessionAdmin::onSessionMessage(quint8 /* channel_id */, const QByteArray& buffer)
+void SessionAdmin::onSessionMessage(const QByteArray& buffer)
 {
     proto::router::AdminToRouter message;
 

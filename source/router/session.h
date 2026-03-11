@@ -65,8 +65,7 @@ protected:
     void sendMessage(const QByteArray& message);
     std::unique_ptr<Database> openDatabase() const;
 
-    virtual void onSessionReady() = 0;
-    virtual void onSessionMessage(quint8 channel_id, const QByteArray& buffer) = 0;
+    virtual void onSessionMessage(const QByteArray& buffer) = 0;
 
     KeyPool& relayKeyPool() { return *relay_key_pool_; }
     const KeyPool& relayKeyPool() const { return *relay_key_pool_; }

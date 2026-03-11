@@ -62,13 +62,7 @@ void SessionHost::sendConnectionOffer(const proto::router::ConnectionOffer& offe
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionHost::onSessionReady()
-{
-    // Nothing
-}
-
-//--------------------------------------------------------------------------------------------------
-void SessionHost::onSessionMessage(quint8 /* channel_id */, const QByteArray& buffer)
+void SessionHost::onSessionMessage(const QByteArray& buffer)
 {
     proto::router::PeerToRouter message;
     if (!base::parse(buffer, &message))

@@ -53,13 +53,7 @@ void SessionRelay::disconnectPeerSession(const proto::router::PeerConnectionRequ
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionRelay::onSessionReady()
-{
-    // Nothing
-}
-
-//--------------------------------------------------------------------------------------------------
-void SessionRelay::onSessionMessage(quint8 /* channel_id */, const QByteArray& buffer)
+void SessionRelay::onSessionMessage(const QByteArray& buffer)
 {
     if (!incoming_message_.parse(buffer))
     {

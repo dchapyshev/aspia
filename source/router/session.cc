@@ -82,7 +82,6 @@ void Session::start()
     start_time_ = std::chrono::system_clock::to_time_t(time_point);
 
     tcp_channel_->setPaused(false);
-    onSessionReady();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -173,7 +172,7 @@ void Session::onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer)
 {
     if (channel_id == proto::router::CHANNEL_ID_SESSION)
     {
-        onSessionMessage(channel_id, buffer);
+        onSessionMessage(buffer);
     }
     else
     {
