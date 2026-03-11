@@ -22,14 +22,12 @@
 #include <QObject>
 #include <QVersionNumber>
 
-#include "base/shared_pointer.h"
 #include "base/net/tcp_channel.h"
 #include "proto/router.h"
 
 namespace router {
 
 class Database;
-class DatabaseFactory;
 
 class Session : public QObject
 {
@@ -38,8 +36,6 @@ class Session : public QObject
 public:
     Session(base::TcpChannel* channel, QObject* parent);
     virtual ~Session() override;
-
-    void setDatabaseFactory(base::SharedPointer<DatabaseFactory> database_factory);
 
     void start();
 
@@ -60,8 +56,6 @@ signals:
 
 protected:
     void sendMessage(const QByteArray& message);
-    std::unique_ptr<Database> openDatabase() const;
-
     virtual void onSessionMessage(const QByteArray& buffer) = 0;
 
 private slots:
@@ -73,8 +67,6 @@ private:
     time_t start_time_ = 0;
 
     base::TcpChannel* tcp_channel_ = nullptr;
-
-    base::SharedPointer<DatabaseFactory> database_factory_;
     QString address_;
 };
 

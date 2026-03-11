@@ -87,7 +87,7 @@ void SessionHost::onSessionMessage(const QByteArray& buffer)
 //--------------------------------------------------------------------------------------------------
 void SessionHost::readHostIdRequest(const proto::router::HostIdRequest& host_id_request)
 {
-    std::unique_ptr<Database> database = openDatabase();
+    std::unique_ptr<Database> database = Database::open();
     if (!database)
     {
         LOG(ERROR) << "Failed to connect to database";

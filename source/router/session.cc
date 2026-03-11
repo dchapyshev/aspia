@@ -20,8 +20,6 @@
 
 #include "base/logging.h"
 #include "base/net/tcp_channel.h"
-#include "router/database.h"
-#include "router/database_factory.h"
 
 namespace router {
 
@@ -55,23 +53,10 @@ Session::Session(base::TcpChannel* channel, QObject* parent)
 Session::~Session() = default;
 
 //--------------------------------------------------------------------------------------------------
-void Session::setDatabaseFactory(base::SharedPointer<DatabaseFactory> database_factory)
-{
-    database_factory_ = std::move(database_factory);
-}
-
-//--------------------------------------------------------------------------------------------------
 void Session::start()
 {
-    if (!database_factory_)
-    {
-        LOG(FATAL) << "Invalid database factory";
-        return;
-    }
-
     std::chrono::time_point<std::chrono::system_clock> time_point = std::chrono::system_clock::now();
     start_time_ = std::chrono::system_clock::to_time_t(time_point);
-
     tcp_channel_->setPaused(false);
 }
 
@@ -109,12 +94,6 @@ QString Session::userName() const
 proto::router::SessionType Session::sessionType() const
 {
     return static_cast<proto::router::SessionType>(tcp_channel_->peerSessionType());
-}
-
-//--------------------------------------------------------------------------------------------------
-std::unique_ptr<Database> Session::openDatabase() const
-{
-    return database_factory_->openDatabase();
 }
 
 //--------------------------------------------------------------------------------------------------

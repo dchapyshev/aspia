@@ -28,8 +28,6 @@
 
 namespace router {
 
-class DatabaseFactory;
-class KeyPool;
 class SessionHost;
 class SessionRelay;
 
@@ -82,12 +80,10 @@ private:
     bool start();
     void addSession(base::TcpChannel* channel);
 
-    base::SharedPointer<DatabaseFactory> database_factory_;
     base::TcpServer* tcp_server_ = nullptr;
     base::TcpServerLegacy* tcp_server_legacy_ = nullptr;
 
     QMap<qint64, Keys> key_pool_;
-
     QList<Session*> sessions_;
 
     QStringList client_white_list_;

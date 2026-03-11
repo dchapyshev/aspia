@@ -21,8 +21,6 @@
 #include "base/logging.h"
 #include "base/crypto/random.h"
 #include "base/net/tcp_channel.h"
-#include "router/database.h"
-#include "router/database_factory_sqlite.h"
 #include "router/migration_utils.h"
 #include "router/session_admin.h"
 #include "router/session_client.h"
@@ -43,8 +41,7 @@ const char Service::kDescription[] =
 
 //--------------------------------------------------------------------------------------------------
 Service::Service(QObject* parent)
-    : base::Service(Service::kName, parent),
-      database_factory_(new DatabaseFactorySqlite())
+    : base::Service(Service::kName, parent)
 {
     LOG(INFO) << "Ctor";
     instance_ = this;
@@ -294,13 +291,6 @@ bool Service::start()
         return false;
     }
 
-    std::unique_ptr<Database> database = database_factory_->openDatabase();
-    if (!database)
-    {
-        LOG(ERROR) << "Failed to open the database";
-        return false;
-    }
-
     Settings settings;
 
     QByteArray private_key = settings.privateKey();
@@ -379,7 +369,7 @@ bool Service::start()
         settings.setSeedKey(seed_key);
     }
 
-    base::SharedPointer<base::UserListBase> user_list(UserListDb::open(*database_factory_).release());
+    base::SharedPointer<base::UserListBase> user_list(UserListDb::open().release());
     user_list->setSeedKey(seed_key);
 
     tcp_server_ = new base::TcpServer(this);
@@ -462,8 +452,6 @@ void Service::addSession(base::TcpChannel* channel)
         channel->deleteLater();
         return;
     }
-
-    session->setDatabaseFactory(database_factory_);
 
     sessions_.emplace_back(session);
     connect(session, &Session::sig_finished, this, &Service::onSessionFinished);

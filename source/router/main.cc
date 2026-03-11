@@ -29,7 +29,6 @@
 #include "base/files/file_util.h"
 #include "base/peer/user.h"
 #include "build/version.h"
-#include "router/database_factory_sqlite.h"
 #include "router/database.h"
 #include "router/service.h"
 #include "router/settings.h"
@@ -154,18 +153,14 @@ int createConfig(QTextStream& out)
         out << "Public key does not exist yet." << Qt::endl;
     }
 
-    std::unique_ptr<router::Database> db = router::DatabaseFactorySqlite().createDatabase();
+    std::unique_ptr<router::Database> db = router::Database::create();
     if (!db)
     {
-        db = router::DatabaseFactorySqlite().openDatabase();
+        db = router::Database::open();
         if (db)
-        {
             out << "Database already exists. Continuation is impossible." << Qt::endl;
-        }
         else
-        {
             out << "Failed to create new database." << Qt::endl;
-        }
         return 1;
     }
 

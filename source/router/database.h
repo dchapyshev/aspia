@@ -19,15 +19,20 @@
 #ifndef ROUTER_DATABASE_H
 #define ROUTER_DATABASE_H
 
+#include <QString>
+
+#include <memory>
+#include <sqlite3.h>
+
 #include "base/peer/host_id.h"
-#include "base/peer/user_list.h"
+#include "base/peer/user.h"
 
 namespace router {
 
 class Database
 {
 public:
-    virtual ~Database() = default;
+    ~Database();
 
     enum class ErrorCode
     {
@@ -36,13 +41,25 @@ public:
         NO_HOST_FOUND = 2
     };
 
-    virtual QVector<base::User> userList() const = 0;
-    virtual bool addUser(const base::User& user) = 0;
-    virtual bool modifyUser(const base::User& user) = 0;
-    virtual bool removeUser(qint64 entry_id) = 0;
-    virtual base::User findUser(const QString& username) = 0;
-    virtual ErrorCode hostId(const QByteArray& key_hash, base::HostId* host_id) const = 0;
-    virtual bool addHost(const QByteArray& key_hash) = 0;
+    static std::unique_ptr<Database> create();
+    static std::unique_ptr<Database> open();
+    static QString filePath();
+
+    QVector<base::User> userList() const;
+    bool addUser(const base::User& user);
+    bool modifyUser(const base::User& user);
+    bool removeUser(qint64 entry_id);
+    base::User findUser(const QString& username);
+    ErrorCode hostId(const QByteArray& key_hash, base::HostId* host_id) const;
+    bool addHost(const QByteArray& key_hash);
+
+private:
+    explicit Database(sqlite3* db);
+    static QString databaseDirectory();
+
+    sqlite3* db_;
+
+    Q_DISABLE_COPY_MOVE(Database)
 };
 
 } // namespace router

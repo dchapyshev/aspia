@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "router/database_sqlite.h"
+#include "router/database.h"
 
 #include "base/logging.h"
 
@@ -24,7 +24,6 @@
 
 #include <QDir>
 #include <QFileInfo>
-#include <QStandardPaths>
 
 namespace router {
 
@@ -253,21 +252,21 @@ std::optional<base::User> readUser(sqlite3_stmt* statement)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-DatabaseSqlite::DatabaseSqlite(sqlite3* db)
+Database::Database(sqlite3* db)
     : db_(db)
 {
     DCHECK(db_);
 }
 
 //--------------------------------------------------------------------------------------------------
-DatabaseSqlite::~DatabaseSqlite()
+Database::~Database()
 {
     sqlite3_close(db_);
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::unique_ptr<DatabaseSqlite> DatabaseSqlite::create()
+std::unique_ptr<Database> Database::create()
 {
     QString dir_path = databaseDirectory();
     if (dir_path.isEmpty())
@@ -308,7 +307,7 @@ std::unique_ptr<DatabaseSqlite> DatabaseSqlite::create()
         return nullptr;
     }
 
-    std::unique_ptr<DatabaseSqlite> db = open();
+    std::unique_ptr<Database> db = open();
     if (!db)
         return nullptr;
 
@@ -341,7 +340,7 @@ std::unique_ptr<DatabaseSqlite> DatabaseSqlite::create()
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::unique_ptr<DatabaseSqlite> DatabaseSqlite::open()
+std::unique_ptr<Database> Database::open()
 {
     QString file_path = filePath();
     if (file_path.isEmpty())
@@ -362,12 +361,12 @@ std::unique_ptr<DatabaseSqlite> DatabaseSqlite::open()
         return nullptr;
     }
 
-    return std::unique_ptr<DatabaseSqlite>(new DatabaseSqlite(db));
+    return std::unique_ptr<Database>(new Database(db));
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
-QString DatabaseSqlite::filePath()
+QString Database::filePath()
 {
     QString file_path = databaseDirectory();
     if (file_path.isEmpty())
@@ -378,7 +377,7 @@ QString DatabaseSqlite::filePath()
 }
 
 //--------------------------------------------------------------------------------------------------
-QVector<base::User> DatabaseSqlite::userList() const
+QVector<base::User> Database::userList() const
 {
     const char kQuery[] = "SELECT * FROM users";
 
@@ -407,7 +406,7 @@ QVector<base::User> DatabaseSqlite::userList() const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool DatabaseSqlite::addUser(const base::User& user)
+bool Database::addUser(const base::User& user)
 {
     if (!user.isValid())
     {
@@ -465,7 +464,7 @@ bool DatabaseSqlite::addUser(const base::User& user)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool DatabaseSqlite::modifyUser(const base::User& user)
+bool Database::modifyUser(const base::User& user)
 {
     if (!user.isValid())
     {
@@ -527,7 +526,7 @@ bool DatabaseSqlite::modifyUser(const base::User& user)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool DatabaseSqlite::removeUser(qint64 entry_id)
+bool Database::removeUser(qint64 entry_id)
 {
     static const char kQuery[] = "DELETE FROM users WHERE id=?";
 
@@ -562,7 +561,7 @@ bool DatabaseSqlite::removeUser(qint64 entry_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-base::User DatabaseSqlite::findUser(const QString& username)
+base::User Database::findUser(const QString& username)
 {
     const char kQuery[] = "SELECT * FROM users WHERE name=?";
 
@@ -593,7 +592,7 @@ base::User DatabaseSqlite::findUser(const QString& username)
 }
 
 //--------------------------------------------------------------------------------------------------
-Database::ErrorCode DatabaseSqlite::hostId(const QByteArray& key_hash, base::HostId* host_id) const
+Database::ErrorCode Database::hostId(const QByteArray& key_hash, base::HostId* host_id) const
 {
     if (key_hash.isEmpty())
     {
@@ -651,7 +650,7 @@ Database::ErrorCode DatabaseSqlite::hostId(const QByteArray& key_hash, base::Hos
 }
 
 //--------------------------------------------------------------------------------------------------
-bool DatabaseSqlite::addHost(const QByteArray& keyHash)
+bool Database::addHost(const QByteArray& keyHash)
 {
     if (keyHash.isEmpty())
     {
@@ -693,7 +692,7 @@ bool DatabaseSqlite::addHost(const QByteArray& keyHash)
 
 //--------------------------------------------------------------------------------------------------
 // static
-QString DatabaseSqlite::databaseDirectory()
+QString Database::databaseDirectory()
 {
     QString dir_path;
 

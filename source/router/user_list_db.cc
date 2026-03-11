@@ -20,7 +20,6 @@
 
 #include "base/logging.h"
 #include "router/database.h"
-#include "router/database_factory.h"
 
 namespace router {
 
@@ -36,9 +35,9 @@ UserListDb::~UserListDb() = default;
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::unique_ptr<UserListDb> UserListDb::open(const DatabaseFactory& factory)
+std::unique_ptr<UserListDb> UserListDb::open()
 {
-    std::unique_ptr<Database> db = factory.openDatabase();
+    std::unique_ptr<Database> db = Database::open();
     if (!db)
     {
         LOG(ERROR) << "Unable to open database";

@@ -81,7 +81,7 @@ void SessionAdmin::onSessionMessage(const QByteArray& buffer)
 //--------------------------------------------------------------------------------------------------
 void SessionAdmin::doUserListRequest()
 {
-    std::unique_ptr<Database> database = openDatabase();
+    std::unique_ptr<Database> database = Database::open();
     if (!database)
     {
         LOG(ERROR) << "Failed to connect to database";
@@ -256,7 +256,7 @@ proto::router::UserResult::ErrorCode SessionAdmin::addUser(const proto::router::
         return proto::router::UserResult::INVALID_DATA;
     }
 
-    std::unique_ptr<Database> database = openDatabase();
+    std::unique_ptr<Database> database = Database::open();
     if (!database)
     {
         LOG(ERROR) << "Failed to connect to database";
@@ -293,7 +293,7 @@ proto::router::UserResult::ErrorCode SessionAdmin::modifyUser(const proto::route
         return proto::router::UserResult::INVALID_DATA;
     }
 
-    std::unique_ptr<Database> database = openDatabase();
+    std::unique_ptr<Database> database = Database::open();
     if (!database)
     {
         LOG(ERROR) << "Failed to connect to database";
@@ -312,7 +312,7 @@ proto::router::UserResult::ErrorCode SessionAdmin::modifyUser(const proto::route
 //--------------------------------------------------------------------------------------------------
 proto::router::UserResult::ErrorCode SessionAdmin::deleteUser(const proto::router::User& user)
 {
-    std::unique_ptr<Database> database = openDatabase();
+    std::unique_ptr<Database> database = Database::open();
     if (!database)
     {
         LOG(ERROR) << "Failed to connect to database";

@@ -24,14 +24,13 @@
 namespace router {
 
 class Database;
-class DatabaseFactory;
 
 class UserListDb final : public base::UserListBase
 {
 public:
     ~UserListDb() final;
 
-    static std::unique_ptr<UserListDb> open(const DatabaseFactory& factory);
+    static std::unique_ptr<UserListDb> open();
 
     // base::UserListBase implementation.
     void add(const base::User& user) final;
