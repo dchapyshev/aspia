@@ -450,7 +450,7 @@ void TcpChannelNG::onErrorOccurred(const Location& location, const std::error_co
 //--------------------------------------------------------------------------------------------------
 void TcpChannelNG::onErrorOccurred(const Location& location, ErrorCode error_code)
 {
-    LOG(ERROR) << "Connection finished with error" << error_code << "from" << location;
+    LOG(ERROR) << "Connection finished:" << error_code << "from" << location;
     setConnected(false);
     emit sig_errorOccurred(error_code);
 }

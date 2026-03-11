@@ -422,12 +422,12 @@ void ServerAuthenticator::onIdentify(const QByteArray& buffer)
 
         if (user.isValid())
         {
-            LOG(INFO) << "User" << user_name_ << "found (enabled:"
+            LOG(INFO) << "User" << user_name_ << "is found (enabled:"
                       << ((user.flags & User::ENABLED) != 0) << ")";
         }
         else
         {
-            LOG(INFO) << "User" << user_name_ << "NOT found";
+            LOG(INFO) << "User" << user_name_ << "is NOT found";
         }
 
         if (user.isValid() && (user.flags & User::ENABLED))
