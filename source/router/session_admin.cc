@@ -85,12 +85,6 @@ void SessionAdmin::onSessionMessageReceived(quint8 /* channel_id */, const QByte
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionAdmin::onSessionMessageWritten(quint8 /* channel_id */)
-{
-    // Nothing
-}
-
-//--------------------------------------------------------------------------------------------------
 void SessionAdmin::doUserListRequest()
 {
     std::unique_ptr<Database> database = openDatabase();

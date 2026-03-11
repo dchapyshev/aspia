@@ -92,12 +92,6 @@ void SessionHost::onSessionMessageReceived(quint8 /* channel_id */, const QByteA
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionHost::onSessionMessageWritten(quint8 /* channel_id */)
-{
-    // Nothing
-}
-
-//--------------------------------------------------------------------------------------------------
 void SessionHost::readHostIdRequest(const proto::router::HostIdRequest& host_id_request)
 {
     std::unique_ptr<Database> database = openDatabase();
@@ -130,8 +124,7 @@ void SessionHost::readHostIdRequest(const proto::router::HostIdRequest& host_id_
     else if (host_id_request.type() == proto::router::HostIdRequest::EXISTING_ID)
     {
         // Using existing key.
-        key_hash = base::GenericHash::hash(
-            base::GenericHash::Type::BLAKE2b512, host_id_request.key());
+        key_hash = base::GenericHash::hash(base::GenericHash::Type::BLAKE2b512, host_id_request.key());
     }
     else
     {
@@ -224,7 +217,6 @@ void SessionHost::removeOtherWithSameId()
             if (other_host_session->hasHostId(host_id))
             {
                 LOG(INFO) << "Detected previous connection with ID" << host_id;
-
                 is_found = true;
                 break;
             }

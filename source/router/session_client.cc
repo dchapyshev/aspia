@@ -73,12 +73,6 @@ void SessionClient::onSessionMessageReceived(quint8 /* channel_id */, const QByt
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionClient::onSessionMessageWritten(quint8 /* channel_id */)
-{
-    // Nothing
-}
-
-//--------------------------------------------------------------------------------------------------
 void SessionClient::readConnectionRequest(const proto::router::ConnectionRequest& request)
 {
     LOG(INFO) << "New connection request (host_id:" << request.host_id() << ")";

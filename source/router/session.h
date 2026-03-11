@@ -67,7 +67,6 @@ protected:
 
     virtual void onSessionReady() = 0;
     virtual void onSessionMessageReceived(quint8 channel_id, const QByteArray& buffer) = 0;
-    virtual void onSessionMessageWritten(quint8 channel_id) = 0;
 
     KeyPool& relayKeyPool() { return *relay_key_pool_; }
     const KeyPool& relayKeyPool() const { return *relay_key_pool_; }
@@ -79,7 +78,6 @@ protected:
 private slots:
     void onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code);
     void onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer);
-    void onTcpMessageWritten(quint8 channel_id);
 
 private:
     const qint64 session_id_;

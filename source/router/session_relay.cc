@@ -82,12 +82,6 @@ void SessionRelay::onSessionMessageReceived(quint8 /* channel_id */, const QByte
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionRelay::onSessionMessageWritten(quint8 /* channel_id */)
-{
-    // Nothing
-}
-
-//--------------------------------------------------------------------------------------------------
 void SessionRelay::readKeyPool(const proto::router::RelayKeyPool& key_pool)
 {
     KeyPool& pool = relayKeyPool();

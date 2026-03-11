@@ -46,7 +46,6 @@ Session::Session(base::TcpChannel* channel, QObject* parent)
 
     connect(tcp_channel_, &base::TcpChannel::sig_errorOccurred, this, &Session::onTcpErrorOccurred);
     connect(tcp_channel_, &base::TcpChannel::sig_messageReceived, this, &Session::onTcpMessageReceived);
-    connect(tcp_channel_, &base::TcpChannel::sig_messageWritten, this, &Session::onTcpMessageWritten);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -181,19 +180,5 @@ void Session::onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer)
         LOG(ERROR) << "Unhandled incoming message from channel:" << channel_id;
     }
 }
-
-//--------------------------------------------------------------------------------------------------
-void Session::onTcpMessageWritten(quint8 channel_id)
-{
-    if (channel_id == proto::router::CHANNEL_ID_SESSION)
-    {
-        onSessionMessageWritten(channel_id);
-    }
-    else
-    {
-        LOG(ERROR) << "Unhandled outgoing message from channel:" << channel_id;
-    }
-}
-
 
 } // namespace router
