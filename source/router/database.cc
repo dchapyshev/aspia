@@ -20,259 +20,114 @@
 
 #include "base/logging.h"
 
-#include <optional>
+#include <utility>
 
 #include <QDir>
 #include <QFileInfo>
+#include <QSqlDatabase>
+#include <QSqlError>
+#include <QSqlQuery>
+#include <QVariant>
 
 namespace router {
 
 namespace {
 
 //--------------------------------------------------------------------------------------------------
-const char* columnTypeToString(int type)
+QSqlDatabase databaseByName(const QString& connection_name)
 {
-    switch (type)
-    {
-        case SQLITE_INTEGER:
-            return "SQLITE_INTEGER";
+    if (connection_name.isEmpty())
+        return QSqlDatabase();
 
-        case SQLITE_FLOAT:
-            return "SQLITE_FLOAT";
-
-        case SQLITE_BLOB:
-            return "SQLITE_BLOB";
-
-        case SQLITE_NULL:
-            return "SQLITE_NULL";
-
-        case SQLITE_TEXT:
-            return "SQLITE_TEXT";
-
-        default:
-            return "UNKNOWN";
-    }
+    return QSqlDatabase::database(connection_name, false);
 }
 
 //--------------------------------------------------------------------------------------------------
-bool writeText(sqlite3_stmt* statement, const QString& text, int column)
+base::User readUser(const QSqlQuery& query)
 {
-    QByteArray text_utf8 = text.toUtf8();
-
-    int error_code = sqlite3_bind_text(
-        statement, column, text_utf8.data(), static_cast<int>(text_utf8.size()), SQLITE_STATIC);
-    if (error_code != SQLITE_OK)
-    {
-        LOG(ERROR) << "sqlite3_bind_text failed:" << sqlite3_errstr(error_code)
-                   << "(error code:" << error_code << "column:" << column << ")";
-        return false;
-    }
-
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool writeBlob(sqlite3_stmt* statement, const QByteArray& blob, int column)
-{
-    int error_code = sqlite3_bind_blob(
-        statement, column, blob.data(), static_cast<int>(blob.size()), SQLITE_STATIC);
-    if (error_code != SQLITE_OK)
-    {
-        LOG(ERROR) << "sqlite3_bind_blob failed:" << sqlite3_errstr(error_code)
-                   << "(error code:" << error_code << "column:" << column << ")";
-        return false;
-    }
-
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool writeInt(sqlite3_stmt* statement, int number, int column)
-{
-    int error_code = sqlite3_bind_int(statement, column, number);
-    if (error_code != SQLITE_OK)
-    {
-        LOG(ERROR) << "sqlite3_bind_int failed:" << sqlite3_errstr(error_code)
-                   << "(error code:" << error_code << "column:" << column << ")";
-        return false;
-    }
-
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool writeInt64(sqlite3_stmt* statement, qint64 number, int column)
-{
-    int error_code = sqlite3_bind_int64(statement, column, number);
-    if (error_code != SQLITE_OK)
-    {
-        LOG(ERROR) << "sqlite3_bind_int64 failed:" << sqlite3_errstr(error_code)
-                   << "(error code:" << error_code << "column:" << column << ")";
-        return false;
-    }
-
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-template <typename T>
-std::optional<T> readInteger(sqlite3_stmt* statement, int column)
-{
-    int column_type = sqlite3_column_type(statement, column);
-    if (column_type != SQLITE_INTEGER)
-    {
-        LOG(ERROR) << "Type is not SQLITE_INTEGER:" << columnTypeToString(column_type) << "(" << column_type << ")";
-        return std::nullopt;
-    }
-
-    return static_cast<T>(sqlite3_column_int64(statement, column));
-}
-
-//--------------------------------------------------------------------------------------------------
-std::optional<QByteArray> readBlob(sqlite3_stmt* statement, int column)
-{
-    int column_type = sqlite3_column_type(statement, column);
-    if (column_type != SQLITE_BLOB)
-    {
-        LOG(ERROR) << "Type is not SQLITE_BLOB:" << columnTypeToString(column_type)
-                   << "(" << column_type << ")";
-        return std::nullopt;
-    }
-
-    int blob_size = sqlite3_column_bytes(statement, column);
-    if (blob_size <= 0)
-    {
-        LOG(ERROR) << "Field has an invalid size:" << blob_size;
-        return std::nullopt;
-    }
-
-    const void* blob = sqlite3_column_blob(statement, column);
-    if (!blob)
-    {
-        LOG(ERROR) << "Failed to get the pointer to the field";
-        return std::nullopt;
-    }
-
-    return QByteArray(reinterpret_cast<const char*>(blob), static_cast<size_t>(blob_size));
-}
-
-//--------------------------------------------------------------------------------------------------
-std::optional<QString> readText(sqlite3_stmt* statement, int column)
-{
-    int column_type = sqlite3_column_type(statement, column);
-    if (column_type != SQLITE_TEXT)
-    {
-        LOG(ERROR) << "Type is not SQLITE_TEXT:" << columnTypeToString(column_type)
-                   << "(" << column_type << ")";
-        return std::nullopt;
-    }
-
-    int string_size = sqlite3_column_bytes(statement, column);
-    if (string_size <= 0)
-    {
-        LOG(ERROR) << "Field has an invalid size:" << string_size;
-        return std::nullopt;
-    }
-
-    const quint8* string = sqlite3_column_text(statement, column);
-    if (!string)
-    {
-        LOG(ERROR) << "Failed to get the pointer to the field";
-        return std::nullopt;
-    }
-
-    return QString::fromUtf8(reinterpret_cast<const char*>(string), string_size);
-}
-
-//--------------------------------------------------------------------------------------------------
-std::optional<base::User> readUser(sqlite3_stmt* statement)
-{
-    std::optional<qint64> entry_id = readInteger<qint64>(statement, 0);
-    if (!entry_id.has_value())
-    {
-        LOG(ERROR) << "Failed to get field 'id'";
-        return std::nullopt;
-    }
-
-    std::optional<QString> name = readText(statement, 1);
-    if (!name.has_value())
-    {
-        LOG(ERROR) << "Failed to get field 'name'";
-        return std::nullopt;
-    }
-
-    std::optional<QString> group = readText(statement, 2);
-    if (!group.has_value())
-    {
-        LOG(ERROR) << "Failed to get field 'group'";
-        return std::nullopt;
-    }
-
-    std::optional<QByteArray> salt = readBlob(statement, 3);
-    if (!salt.has_value())
-    {
-        LOG(ERROR) << "Failed to get field 'salt'";
-        return std::nullopt;
-    }
-
-    std::optional<QByteArray> verifier = readBlob(statement, 4);
-    if (!verifier.has_value())
-    {
-        LOG(ERROR) << "Failed to get field 'verifier'";
-        return std::nullopt;
-    }
-
-    std::optional<quint32> sessions = readInteger<quint32>(statement, 5);
-    if (!sessions.has_value())
-    {
-        LOG(ERROR) << "Failed to get field 'sessions'";
-        return std::nullopt;
-    }
-
-    std::optional<quint32> flags = readInteger<quint32>(statement, 6);
-    if (!flags.has_value())
-    {
-        LOG(ERROR) << "Failed to get field 'flags'";
-        return std::nullopt;
-    }
-
     base::User user;
-
-    user.entry_id = *entry_id;
-    user.name     = std::move(*name);
-    user.group    = std::move(*group);
-    user.salt     = std::move(*salt);
-    user.verifier = std::move(*verifier);
-    user.sessions = *sessions;
-    user.flags    = *flags;
-
+    user.entry_id = query.value(0).toLongLong();
+    user.name = query.value(1).toString();
+    user.group = query.value(2).toString();
+    user.salt = query.value(3).toByteArray();
+    user.verifier = query.value(4).toByteArray();
+    user.sessions = query.value(5).toUInt();
+    user.flags = query.value(6).toUInt();
     return user;
+}
+
+//--------------------------------------------------------------------------------------------------
+QSqlDatabase ensureOpenDatabase(const QString& file_path)
+{
+    const QString connection_name = QStringLiteral("database");
+
+    QSqlDatabase db = databaseByName(connection_name);
+    if (db.isValid())
+    {
+        if (!db.isOpen() && !db.open())
+        {
+            LOG(ERROR) << "QSqlDatabase::open failed:" << db.lastError().text();
+            return QSqlDatabase();
+        }
+
+        return db;
+    }
+
+    db = QSqlDatabase::addDatabase(QStringLiteral("QSQLITE"), connection_name);
+    db.setDatabaseName(file_path);
+
+    if (!db.open())
+    {
+        LOG(ERROR) << "QSqlDatabase::open failed:" << db.lastError().text();
+        db = QSqlDatabase();
+        QSqlDatabase::removeDatabase(connection_name);
+        return QSqlDatabase();
+    }
+
+    return db;
 }
 
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-Database::Database(sqlite3* db)
-    : db_(db)
+Database::Database() = default;
+
+//--------------------------------------------------------------------------------------------------
+Database::Database(const QString& connection_name)
+    : connection_name_(std::move(connection_name))
 {
-    DCHECK(db_);
+    DCHECK(!connection_name_.isEmpty());
 }
 
 //--------------------------------------------------------------------------------------------------
-Database::~Database()
+Database::Database(Database&& other) noexcept
+    : connection_name_(std::move(other.connection_name_))
 {
-    sqlite3_close(db_);
+    other.connection_name_.clear();
 }
+
+//--------------------------------------------------------------------------------------------------
+Database& Database::operator=(Database&& other) noexcept
+{
+    if (this != &other)
+        connection_name_ = std::move(other.connection_name_);
+
+    other.connection_name_.clear();
+    return *this;
+}
+
+//--------------------------------------------------------------------------------------------------
+Database::~Database() = default;
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::unique_ptr<Database> Database::create()
+Database Database::create()
 {
     QString dir_path = databaseDirectory();
     if (dir_path.isEmpty())
     {
         LOG(ERROR) << "Invalid directory path";
-        return nullptr;
+        return Database();
     }
 
     QFileInfo dir_info(dir_path);
@@ -282,7 +137,7 @@ std::unique_ptr<Database> Database::create()
         if (!dir_info.isDir())
         {
             LOG(ERROR) << "Unable to create directory for database. Need to delete file" << dir_path;
-            return nullptr;
+            return Database();
         }
     }
     else
@@ -290,7 +145,7 @@ std::unique_ptr<Database> Database::create()
         if (!QDir().mkpath(dir_path))
         {
             LOG(ERROR) << "Unable to create directory for database";
-            return nullptr;
+            return Database();
         }
     }
 
@@ -298,41 +153,75 @@ std::unique_ptr<Database> Database::create()
     if (file_path.isEmpty())
     {
         LOG(ERROR) << "Invalid file path";
-        return nullptr;
+        return Database();
     }
 
     if (QFileInfo::exists(file_path))
     {
         LOG(ERROR) << "Database file already exists";
-        return nullptr;
+        return Database();
     }
 
-    std::unique_ptr<Database> db = open();
-    if (!db)
-        return nullptr;
+    Database db = open();
+    if (!db.isValid())
+        return Database();
 
-    const char kSql[] = "BEGIN TRANSACTION;"
-        "CREATE TABLE IF NOT EXISTS \"users\" ("
-            "\"id\" INTEGER UNIQUE,"
-            "\"name\" TEXT NOT NULL UNIQUE,"
-            "\"group\" TEXT NOT NULL,"
-            "\"salt\" BLOB NOT NULL,"
-            "\"verifier\" BLOB NOT NULL,"
-            "\"sessions\" INTEGER DEFAULT 0,"
-            "\"flags\" INTEGER DEFAULT 0,"
-            "PRIMARY KEY(\"id\" AUTOINCREMENT));"
-        "CREATE TABLE IF NOT EXISTS \"hosts\" ("
-            "\"id\" INTEGER UNIQUE,"
-            "\"key\" BLOB NOT NULL UNIQUE,"
-            "PRIMARY KEY(\"id\" AUTOINCREMENT));"
-        "COMMIT;";
-
-    char* error_string = nullptr;
-    int ret = sqlite3_exec(db->db_, kSql, nullptr, nullptr, &error_string);
-    if (ret != SQLITE_OK)
+    QSqlDatabase sql_db = databaseByName(db.connection_name_);
+    if (!sql_db.isValid())
     {
-        LOG(ERROR) << "sqlite3_exec failed:" << error_string;
-        return nullptr;
+        LOG(ERROR) << "Invalid database connection";
+        return Database();
+    }
+
+    if (!sql_db.transaction())
+    {
+        LOG(ERROR) << "Unable to execute transaction:" << sql_db.lastError();
+        return Database();
+    }
+
+    bool success = false;
+
+    do
+    {
+        QSqlQuery query(sql_db);
+        if (!query.exec("CREATE TABLE IF NOT EXISTS \"users\" ("
+                        "\"id\" INTEGER UNIQUE,"
+                        "\"name\" TEXT NOT NULL UNIQUE,"
+                        "\"group\" TEXT NOT NULL,"
+                        "\"salt\" BLOB NOT NULL,"
+                        "\"verifier\" BLOB NOT NULL,"
+                        "\"sessions\" INTEGER DEFAULT 0,"
+                        "\"flags\" INTEGER DEFAULT 0,"
+                        "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
+        {
+            LOG(ERROR) << "Unable to execute query:" << query.lastError();
+            break;
+        }
+
+        if (!query.exec("CREATE TABLE IF NOT EXISTS \"hosts\" ("
+                        "\"id\" INTEGER UNIQUE,"
+                        "\"key\" BLOB NOT NULL UNIQUE,"
+                        "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
+        {
+            LOG(ERROR) << "Unable to execute query:" << query.lastError();
+            break;
+        }
+
+        success = true;
+    }
+    while (false);
+
+    if (!success)
+    {
+        sql_db.rollback();
+        return Database();
+    }
+
+    if (!sql_db.commit())
+    {
+        LOG(ERROR) << "Unable to common transaction:" << sql_db.lastError();
+        sql_db.rollback();
+        return Database();
     }
 
     return db;
@@ -340,28 +229,22 @@ std::unique_ptr<Database> Database::create()
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::unique_ptr<Database> Database::open()
+Database Database::open()
 {
     QString file_path = filePath();
     if (file_path.isEmpty())
     {
         LOG(ERROR) << "Invalid file path";
-        return nullptr;
+        return Database();
     }
 
-    QByteArray file_path_utf8 = file_path.toUtf8();
     LOG(INFO) << "Opening database:" << file_path;
 
-    sqlite3* db = nullptr;
+    QSqlDatabase db = ensureOpenDatabase(file_path);
+    if (!db.isValid() || !db.isOpen())
+        return Database();
 
-    int error_code = sqlite3_open(file_path_utf8.data(), &db);
-    if (error_code != SQLITE_OK)
-    {
-        LOG(ERROR) << "sqlite3_open failed:" << sqlite3_errstr(error_code) << "(" << error_code << ")";
-        return nullptr;
-    }
-
-    return std::unique_ptr<Database>(new Database(db));
+    return Database(db.connectionName());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -372,228 +255,168 @@ QString Database::filePath()
     if (file_path.isEmpty())
         return QString();
 
-    file_path.append("/router.db3");
+    file_path.append(QStringLiteral("/router.db3"));
     return file_path;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::isValid() const
+{
+    const QSqlDatabase db = databaseByName(connection_name_);
+    return db.isValid() && db.isOpen();
 }
 
 //--------------------------------------------------------------------------------------------------
 QVector<base::User> Database::userList() const
 {
-    const char kQuery[] = "SELECT * FROM users";
-
-    sqlite3_stmt* statement;
-    int error_code = sqlite3_prepare(db_, kQuery, static_cast<int>(std::size(kQuery)), &statement, nullptr);
-    if (error_code != SQLITE_OK)
+    if (!isValid())
     {
-        LOG(ERROR) << "sqlite3_prepare failed:" << sqlite3_errstr(error_code) << "(" << error_code << ")";
+        LOG(ERROR) << "Database is not valid";
+        return {};
+    }
+
+    QSqlQuery query(databaseByName(connection_name_));
+    if (!query.exec(QStringLiteral(
+        "SELECT id, name, \"group\", salt, verifier, sessions, flags FROM users")))
+    {
+        LOG(ERROR) << "Unable to get user list:" << query.lastError();
         return {};
     }
 
     QVector<base::User> users;
-    for (;;)
-    {
-        error_code = sqlite3_step(statement);
-        if (error_code != SQLITE_ROW)
-            break;
+    while (query.next())
+        users.append(readUser(query));
 
-        std::optional<base::User> user = readUser(statement);
-        if (user.has_value())
-            users.append(std::move(*user));
-    }
-
-    sqlite3_finalize(statement);
     return users;
 }
 
 //--------------------------------------------------------------------------------------------------
 bool Database::addUser(const base::User& user)
 {
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return false;
+    }
+
     if (!user.isValid())
     {
         LOG(ERROR) << "Not valid user";
         return false;
     }
 
-    static const char kQuery[] =
-        "INSERT INTO users ('id', 'name', 'group', 'salt', 'verifier', 'sessions', 'flags') "
-        "VALUES (NULL, ?, ?, ?, ?, ?, ?)";
+    QSqlQuery query(databaseByName(connection_name_));
+    query.prepare(QStringLiteral(
+        "INSERT INTO users (id, name, \"group\", salt, verifier, sessions, flags) "
+        "VALUES (NULL, ?, ?, ?, ?, ?, ?)"));
+    query.addBindValue(user.name);
+    query.addBindValue(user.group);
+    query.addBindValue(user.salt);
+    query.addBindValue(user.verifier);
+    query.addBindValue(static_cast<qulonglong>(user.sessions));
+    query.addBindValue(static_cast<qulonglong>(user.flags));
 
-    sqlite3_stmt* statement = nullptr;
-    int error_code = sqlite3_prepare(db_, kQuery, static_cast<int>(std::size(kQuery)), &statement, nullptr);
-    if (error_code != SQLITE_OK)
+    if (!query.exec())
     {
-        LOG(ERROR) << "sqlite3_prepare failed:" << sqlite3_errstr(error_code) << "(" << error_code << ")";
+        LOG(ERROR) << "Unable to execute query:" << query.lastError();
         return false;
     }
 
-    bool result = false;
-
-    do
-    {
-        if (!writeText(statement, user.name, 1))
-            break;
-
-        if (!writeText(statement, user.group, 2))
-            break;
-
-        if (!writeBlob(statement, user.salt, 3))
-            break;
-
-        if (!writeBlob(statement, user.verifier, 4))
-            break;
-
-        if (!writeInt(statement, static_cast<int>(user.sessions), 5))
-            break;
-
-        if (!writeInt(statement, static_cast<int>(user.flags), 6))
-            break;
-
-        error_code = sqlite3_step(statement);
-        if (error_code != SQLITE_DONE)
-        {
-            LOG(ERROR) << "sqlite3_step failed:" << sqlite3_errstr(error_code) << "(" << error_code << ")";
-            break;
-        }
-
-        result = true;
-    }
-    while (false);
-
-    sqlite3_finalize(statement);
-    return result;
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
 bool Database::modifyUser(const base::User& user)
 {
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return false;
+    }
+
     if (!user.isValid())
     {
         LOG(ERROR) << "Not valid user";
         return false;
     }
 
-    static const char kQuery[] =
-        "UPDATE users SET ('name', 'group', 'salt', 'verifier', 'sessions', 'flags') = "
-        "(?, ?, ?, ?, ?, ?) WHERE id=?";
+    QSqlQuery query(databaseByName(connection_name_));
+    query.prepare(QStringLiteral(
+        "UPDATE users SET name=?, \"group\"=?, salt=?, verifier=?, sessions=?, flags=? WHERE id=?"));
+    query.addBindValue(user.name);
+    query.addBindValue(user.group);
+    query.addBindValue(user.salt);
+    query.addBindValue(user.verifier);
+    query.addBindValue(static_cast<qulonglong>(user.sessions));
+    query.addBindValue(static_cast<qulonglong>(user.flags));
+    query.addBindValue(user.entry_id);
 
-    sqlite3_stmt* statement = nullptr;
-    int error_code = sqlite3_prepare(db_, kQuery, static_cast<int>(std::size(kQuery)), &statement, nullptr);
-    if (error_code != SQLITE_OK)
+    if (!query.exec())
     {
-        LOG(ERROR) << "sqlite3_prepare failed:" << sqlite3_errstr(error_code)
-                   << "(" << error_code << ")";
+        LOG(ERROR) << "Unable to execute query:" << query.lastError();
         return false;
     }
 
-    bool result = false;
-
-    do
-    {
-        if (!writeText(statement, user.name, 1))
-            break;
-
-        if (!writeText(statement, user.group, 2))
-            break;
-
-        if (!writeBlob(statement, user.salt, 3))
-            break;
-
-        if (!writeBlob(statement, user.verifier, 4))
-            break;
-
-        if (!writeInt(statement, static_cast<int>(user.sessions), 5))
-            break;
-
-        if (!writeInt(statement, static_cast<int>(user.flags), 6))
-            break;
-
-        if (!writeInt64(statement, user.entry_id, 7))
-            break;
-
-        error_code = sqlite3_step(statement);
-        if (error_code != SQLITE_DONE)
-        {
-            LOG(ERROR) << "sqlite3_step failed:" << sqlite3_errstr(error_code) << "(" << error_code << ")";
-            break;
-        }
-
-        result = true;
-    }
-    while (false);
-
-    sqlite3_finalize(statement);
-    return result;
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
 bool Database::removeUser(qint64 entry_id)
 {
-    static const char kQuery[] = "DELETE FROM users WHERE id=?";
-
-    sqlite3_stmt* statement = nullptr;
-    int error_code = sqlite3_prepare(db_, kQuery, static_cast<int>(std::size(kQuery)), &statement, nullptr);
-    if (error_code != SQLITE_OK)
+    if (!isValid())
     {
-        LOG(ERROR) << "sqlite3_prepare failed:" << sqlite3_errstr(error_code);
+        LOG(ERROR) << "Database is not valid";
         return false;
     }
 
-    bool result = false;
+    QSqlQuery query(databaseByName(connection_name_));
+    query.prepare(QStringLiteral("DELETE FROM users WHERE id=?"));
+    query.addBindValue(entry_id);
 
-    do
+    if (!query.exec())
     {
-        if (!writeInt64(statement, entry_id, 1))
-            break;
-
-        error_code = sqlite3_step(statement);
-        if (error_code != SQLITE_DONE)
-        {
-            LOG(ERROR) << "sqlite3_step failed:" << sqlite3_errstr(error_code) << "(" << error_code << ")";
-            break;
-        }
-
-        result = true;
+        LOG(ERROR) << "Unable to execute query:" << query.lastError();
+        return false;
     }
-    while (false);
 
-    sqlite3_finalize(statement);
-    return result;
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
-base::User Database::findUser(const QString& username)
+base::User Database::findUser(const QString& username) const
 {
-    const char kQuery[] = "SELECT * FROM users WHERE name=?";
-
-    sqlite3_stmt* statement = nullptr;
-    int error_code = sqlite3_prepare(db_, kQuery, static_cast<int>(std::size(kQuery)), &statement, nullptr);
-    if (error_code != SQLITE_OK)
+    if (!isValid())
     {
-        LOG(ERROR) << "sqlite3_prepare failed:" << sqlite3_errstr(error_code) << "(" << error_code << ")";
+        LOG(ERROR) << "Database is not valid";
         return base::User::kInvalidUser;
     }
 
-    std::optional<base::User> user;
+    QSqlQuery query(databaseByName(connection_name_));
+    query.prepare(QStringLiteral(
+        "SELECT id, name, \"group\", salt, verifier, sessions, flags FROM users WHERE name=?"));
+    query.addBindValue(username);
 
-    do
+    if (!query.exec())
     {
-        if (!writeText(statement, username, 1))
-            break;
-
-        if (sqlite3_step(statement) != SQLITE_ROW)
-            break;
-
-        user = readUser(statement);
+        LOG(ERROR) << "Unable to execute query:" << query.lastError();
+        return base::User::kInvalidUser;
     }
-    while (false);
 
-    sqlite3_finalize(statement);
-    return user.value_or(base::User::kInvalidUser);
+    if (!query.next())
+        return base::User::kInvalidUser;
+
+    return readUser(query);
 }
 
 //--------------------------------------------------------------------------------------------------
 Database::ErrorCode Database::hostId(const QByteArray& key_hash, base::HostId* host_id) const
 {
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return ErrorCode::UNKNOWN;
+    }
+
     if (key_hash.isEmpty())
     {
         LOG(ERROR) << "Invalid key hash";
@@ -608,86 +431,49 @@ Database::ErrorCode Database::hostId(const QByteArray& key_hash, base::HostId* h
 
     *host_id = base::kInvalidHostId;
 
-    const char kQuery[] = "SELECT * FROM hosts WHERE key=?";
+    QSqlQuery query(databaseByName(connection_name_));
+    query.prepare(QStringLiteral("SELECT id FROM hosts WHERE key=?"));
+    query.addBindValue(key_hash);
 
-    sqlite3_stmt* statement;
-    int error_code = sqlite3_prepare(db_, kQuery, static_cast<int>(std::size(kQuery)), &statement, nullptr);
-    if (error_code != SQLITE_OK)
+    if (!query.exec())
     {
-        LOG(ERROR) << "sqlite3_prepare failed:" << sqlite3_errstr(error_code) << "(" << error_code << ")";
+        LOG(ERROR) << "Unable to execute query:" << query.lastError();
         return ErrorCode::UNKNOWN;
     }
 
-    ErrorCode result = ErrorCode::UNKNOWN;
+    if (!query.next())
+        return ErrorCode::NO_HOST_FOUND;
 
-    do
-    {
-        if (!writeBlob(statement, key_hash, 1))
-            break;
-
-        error_code = sqlite3_step(statement);
-        if (error_code != SQLITE_ROW)
-        {
-            LOG(ERROR) << "sqlite3_step failed:" << sqlite3_errstr(error_code) << "(" << error_code << ")";
-            result = ErrorCode::NO_HOST_FOUND;
-            break;
-        }
-
-        std::optional<qint64> entry_id = readInteger<qint64>(statement, 0);
-        if (!entry_id.has_value())
-        {
-            LOG(ERROR) << "Failed to get field 'id'";
-            break;
-        }
-
-        *host_id = static_cast<base::HostId>(*entry_id);
-        result = ErrorCode::SUCCESS;
-    }
-    while (false);
-
-    sqlite3_finalize(statement);
-    return result;
+    *host_id = static_cast<base::HostId>(query.value(0).toLongLong());
+    return ErrorCode::SUCCESS;
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::addHost(const QByteArray& keyHash)
+bool Database::addHost(const QByteArray& key_hash)
 {
-    if (keyHash.isEmpty())
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return false;
+    }
+
+    if (key_hash.isEmpty())
     {
         LOG(ERROR) << "Invalid parameters";
         return false;
     }
 
-    const char kQuery[] = "INSERT INTO hosts ('id', 'key') VALUES (NULL, ?)";
+    QSqlQuery query(databaseByName(connection_name_));
+    query.prepare(QStringLiteral("INSERT INTO hosts (id, key) VALUES (NULL, ?)"));
+    query.addBindValue(key_hash);
 
-    sqlite3_stmt* statement = nullptr;
-    int error_code = sqlite3_prepare(db_, kQuery, static_cast<int>(std::size(kQuery)), &statement, nullptr);
-    if (error_code != SQLITE_OK)
+    if (!query.exec())
     {
-        LOG(ERROR) << "sqlite3_prepare failed:" << sqlite3_errstr(error_code) << "(" << error_code << ")";
+        LOG(ERROR) << "Unable to execute query:" << query.lastError();
         return false;
     }
 
-    bool result = false;
-
-    do
-    {
-        if (!writeBlob(statement, keyHash, 1))
-            break;
-
-        error_code = sqlite3_step(statement);
-        if (error_code != SQLITE_DONE)
-        {
-            LOG(ERROR) << "sqlite3_step failed:" << sqlite3_errstr(error_code) << "(" << error_code << ")";
-            break;
-        }
-
-        result = true;
-    }
-    while (false);
-
-    sqlite3_finalize(statement);
-    return result;
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -697,9 +483,9 @@ QString Database::databaseDirectory()
     QString dir_path;
 
 #if defined(Q_OS_WINDOWS)
-    dir_path = "C:/ProgramData/aspia";
+    dir_path = QStringLiteral("C:/ProgramData/aspia");
 #elif defined(Q_OS_LINUX)
-    dir_path.append("/var/lib/aspia");
+    dir_path = QStringLiteral("/var/lib/aspia");
 #else
     NOTIMPLEMENTED();
 #endif // defined(OS_*)

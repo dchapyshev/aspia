@@ -152,11 +152,11 @@ int createConfig(QTextStream& out)
         out << "Public key does not exist yet." << Qt::endl;
     }
 
-    std::unique_ptr<router::Database> db = router::Database::create();
-    if (!db)
+    router::Database db = router::Database::create();
+    if (!db.isValid())
     {
         db = router::Database::open();
-        if (db)
+        if (db.isValid())
             out << "Database already exists. Continuation is impossible." << Qt::endl;
         else
             out << "Failed to create new database." << Qt::endl;
@@ -180,7 +180,7 @@ int createConfig(QTextStream& out)
     user.sessions = proto::router::SESSION_TYPE_ADMIN | proto::router::SESSION_TYPE_CLIENT;
     user.flags = base::User::ENABLED;
 
-    if (!db->addUser(user))
+    if (!db.addUser(user))
     {
         out << "Failed to add user to database." << Qt::endl;
         return 1;

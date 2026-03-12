@@ -75,7 +75,6 @@ find_package(OpenSSL REQUIRED)
 find_package(Opus CONFIG REQUIRED)
 find_package(protobuf CONFIG REQUIRED)
 find_package(unofficial-libvpx CONFIG REQUIRED)
-find_package(unofficial-sqlite3 CONFIG REQUIRED)
 find_package(zstd CONFIG REQUIRED)
 
 if (WIN32)

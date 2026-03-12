@@ -19,12 +19,11 @@
 #include "router/user_list.h"
 
 #include "base/logging.h"
-#include "router/database.h"
 
 namespace router {
 
 //--------------------------------------------------------------------------------------------------
-UserList::UserList(std::unique_ptr<Database> db)
+UserList::UserList(Database&& db)
     : db_(std::move(db))
 {
     // Nothing
@@ -37,8 +36,8 @@ UserList::~UserList() = default;
 // static
 std::unique_ptr<UserList> UserList::open()
 {
-    std::unique_ptr<Database> db = Database::open();
-    if (!db)
+    Database db = Database::open();
+    if (!db.isValid())
     {
         LOG(ERROR) << "Unable to open database";
         return nullptr;
@@ -50,13 +49,13 @@ std::unique_ptr<UserList> UserList::open()
 //--------------------------------------------------------------------------------------------------
 void UserList::add(const base::User& user)
 {
-    db_->addUser(user);
+    db_.addUser(user);
 }
 
 //--------------------------------------------------------------------------------------------------
 base::User UserList::find(const QString& username) const
 {
-    return db_->findUser(username);
+    return db_.findUser(username);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -74,7 +73,7 @@ void UserList::setSeedKey(const QByteArray& seed_key)
 //--------------------------------------------------------------------------------------------------
 QVector<base::User> UserList::list() const
 {
-    return db_->userList();
+    return db_.userList();
 }
 
 } // namespace router

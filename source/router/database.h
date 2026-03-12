@@ -21,9 +21,6 @@
 
 #include <QString>
 
-#include <memory>
-#include <sqlite3.h>
-
 #include "base/peer/host_id.h"
 #include "base/peer/user.h"
 
@@ -32,6 +29,9 @@ namespace router {
 class Database
 {
 public:
+    Database();
+    Database(Database&& other) noexcept;
+    Database& operator=(Database&& other) noexcept;
     ~Database();
 
     enum class ErrorCode
@@ -41,25 +41,26 @@ public:
         NO_HOST_FOUND = 2
     };
 
-    static std::unique_ptr<Database> create();
-    static std::unique_ptr<Database> open();
+    static Database create();
+    static Database open();
     static QString filePath();
 
+    bool isValid() const;
     QVector<base::User> userList() const;
     bool addUser(const base::User& user);
     bool modifyUser(const base::User& user);
     bool removeUser(qint64 entry_id);
-    base::User findUser(const QString& username);
+    base::User findUser(const QString& username) const;
     ErrorCode hostId(const QByteArray& key_hash, base::HostId* host_id) const;
     bool addHost(const QByteArray& key_hash);
 
 private:
-    explicit Database(sqlite3* db);
+    explicit Database(const QString& connection_name);
     static QString databaseDirectory();
 
-    sqlite3* db_;
+    QString connection_name_;
 
-    Q_DISABLE_COPY_MOVE(Database)
+    Q_DISABLE_COPY(Database)
 };
 
 } // namespace router

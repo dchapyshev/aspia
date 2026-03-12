@@ -19,11 +19,12 @@
 #ifndef ROUTER_USER_LIST_H
 #define ROUTER_USER_LIST_H
 
+#include <memory>
+
 #include "base/peer/user_list_base.h"
+#include "router/database.h"
 
 namespace router {
-
-class Database;
 
 class UserList final : public base::UserListBase
 {
@@ -40,9 +41,9 @@ public:
     QVector<base::User> list() const final;
 
 private:
-    explicit UserList(std::unique_ptr<Database> db);
+    explicit UserList(Database&& db);
 
-    std::unique_ptr<Database> db_;
+    Database db_;
     QByteArray seed_key_;
 
     Q_DISABLE_COPY_MOVE(UserList)

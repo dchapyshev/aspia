@@ -87,8 +87,8 @@ void SessionHost::onSessionMessage(const QByteArray& buffer)
 //--------------------------------------------------------------------------------------------------
 void SessionHost::readHostIdRequest(const proto::router::HostIdRequest& host_id_request)
 {
-    std::unique_ptr<Database> database = Database::open();
-    if (!database)
+    Database database = Database::open();
+    if (!database.isValid())
     {
         LOG(ERROR) << "Failed to connect to database";
         return;
@@ -106,7 +106,7 @@ void SessionHost::readHostIdRequest(const proto::router::HostIdRequest& host_id_
         // Calculate hash for key.
         key_hash = base::GenericHash::hash(base::GenericHash::Type::BLAKE2b512, key);
 
-        if (!database->addHost(key_hash))
+        if (!database.addHost(key_hash))
         {
             LOG(ERROR) << "Unable to add host";
             return;
@@ -127,7 +127,7 @@ void SessionHost::readHostIdRequest(const proto::router::HostIdRequest& host_id_
 
     base::HostId host_id = base::kInvalidHostId;
 
-    switch (database->hostId(key_hash, &host_id))
+    switch (database.hostId(key_hash, &host_id))
     {
         case Database::ErrorCode::SUCCESS:
         {

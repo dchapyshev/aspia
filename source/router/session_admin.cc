@@ -81,8 +81,8 @@ void SessionAdmin::onSessionMessage(const QByteArray& buffer)
 //--------------------------------------------------------------------------------------------------
 void SessionAdmin::doUserListRequest()
 {
-    std::unique_ptr<Database> database = Database::open();
-    if (!database)
+    Database database = Database::open();
+    if (!database.isValid())
     {
         LOG(ERROR) << "Failed to connect to database";
         return;
@@ -91,7 +91,7 @@ void SessionAdmin::doUserListRequest()
     proto::router::RouterToAdmin message;
     proto::router::UserList* list = message.mutable_user_list();
 
-    QVector<base::User> users = database->userList();
+    QVector<base::User> users = database.userList();
     for (const auto& user : std::as_const(users))
         list->add_user()->CopyFrom(user.serialize());
 
@@ -256,14 +256,14 @@ proto::router::UserResult::ErrorCode SessionAdmin::addUser(const proto::router::
         return proto::router::UserResult::INVALID_DATA;
     }
 
-    std::unique_ptr<Database> database = Database::open();
-    if (!database)
+    Database database = Database::open();
+    if (!database.isValid())
     {
         LOG(ERROR) << "Failed to connect to database";
         return proto::router::UserResult::INTERNAL_ERROR;
     }
 
-    if (!database->addUser(new_user))
+    if (!database.addUser(new_user))
         return proto::router::UserResult::INTERNAL_ERROR;
 
     return proto::router::UserResult::SUCCESS;
@@ -293,14 +293,14 @@ proto::router::UserResult::ErrorCode SessionAdmin::modifyUser(const proto::route
         return proto::router::UserResult::INVALID_DATA;
     }
 
-    std::unique_ptr<Database> database = Database::open();
-    if (!database)
+    Database database = Database::open();
+    if (!database.isValid())
     {
         LOG(ERROR) << "Failed to connect to database";
         return proto::router::UserResult::INTERNAL_ERROR;
     }
 
-    if (!database->modifyUser(new_user))
+    if (!database.modifyUser(new_user))
     {
         LOG(ERROR) << "modifyUser failed";
         return proto::router::UserResult::INTERNAL_ERROR;
@@ -312,8 +312,8 @@ proto::router::UserResult::ErrorCode SessionAdmin::modifyUser(const proto::route
 //--------------------------------------------------------------------------------------------------
 proto::router::UserResult::ErrorCode SessionAdmin::deleteUser(const proto::router::User& user)
 {
-    std::unique_ptr<Database> database = Database::open();
-    if (!database)
+    Database database = Database::open();
+    if (!database.isValid())
     {
         LOG(ERROR) << "Failed to connect to database";
         return proto::router::UserResult::INTERNAL_ERROR;
@@ -323,7 +323,7 @@ proto::router::UserResult::ErrorCode SessionAdmin::deleteUser(const proto::route
 
     LOG(INFO) << "User remove request:" << entry_id;
 
-    if (!database->removeUser(entry_id))
+    if (!database.removeUser(entry_id))
     {
         LOG(ERROR) << "removeUser failed";
         return proto::router::UserResult::INTERNAL_ERROR;

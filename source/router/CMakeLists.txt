@@ -72,7 +72,6 @@ target_link_libraries(aspia_router
     aspia_proto
     OpenSSL::Crypto
     ${Protobuf_LITE_LIBRARIES}
-    unofficial::sqlite3::sqlite3
     ${QT_COMMON_LIBS}
     ${QT_PLATFORM_LIBS}
     ${ROUTER_PLATFORM_LIBS})
