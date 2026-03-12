@@ -18,6 +18,8 @@
 
 #include "base/service_controller.h"
 
+#include "base/logging.h"
+
 #if defined(Q_OS_WINDOWS)
 #include "base/service_controller_win.h"
 #endif // defined(Q_OS_WINDOWS)
