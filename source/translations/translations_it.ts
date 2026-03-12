@@ -7631,28 +7631,23 @@
         <translation type="unfinished">L&apos;utente %1 si è autenticato (%2)</translation>
     </message>
     <message>
-        <location filename="../common/ui/chat_widget.cc" line="215"/>
+        <location filename="../common/ui/chat_widget.cc" line="214"/>
         <source>User %1 is not logged in (%2)</source>
         <translation type="unfinished">L&apos;utente %1 non si è autenticato (%2)</translation>
     </message>
     <message>
-        <location filename="../common/ui/chat_widget.cc" line="220"/>
+        <location filename="../common/ui/chat_widget.cc" line="218"/>
         <source>There are no connected users (%1)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/chat_widget.cc" line="225"/>
-        <source>Sorry, but I&apos;m offline right now</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../common/ui/chat_widget.cc" line="526"/>
-        <location filename="../common/ui/chat_widget.cc" line="593"/>
+        <location filename="../common/ui/chat_widget.cc" line="516"/>
+        <location filename="../common/ui/chat_widget.cc" line="583"/>
         <source>Warning</source>
         <translation type="unfinished">Attenzione</translation>
     </message>
     <message numerus="yes">
-        <location filename="../common/ui/chat_widget.cc" line="527"/>
+        <location filename="../common/ui/chat_widget.cc" line="517"/>
         <source>The message is too long. The maximum message length is %n characters.</source>
         <translation type="unfinished">
             <numerusform>Messaggio troppo lungo. La dimensione massima di un messaggi è %n caratteri.</numerusform>
@@ -7660,17 +7655,17 @@
         </translation>
     </message>
     <message>
-        <location filename="../common/ui/chat_widget.cc" line="576"/>
+        <location filename="../common/ui/chat_widget.cc" line="566"/>
         <source>Save File</source>
         <translation type="unfinished">Salva File</translation>
     </message>
     <message>
-        <location filename="../common/ui/chat_widget.cc" line="578"/>
+        <location filename="../common/ui/chat_widget.cc" line="568"/>
         <source>TXT files (*.txt)</source>
         <translation type="unfinished">Files TXT (*.txt)</translation>
     </message>
     <message>
-        <location filename="../common/ui/chat_widget.cc" line="594"/>
+        <location filename="../common/ui/chat_widget.cc" line="584"/>
         <source>Could not open file for writing.</source>
         <translation type="unfinished"></translation>
     </message>

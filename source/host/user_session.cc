@@ -1,4 +1,4 @@
-//
+﻿//
 // Aspia Project
 // Copyright (C) 2016-2026 Dmitry Chapyshev <dmitry@aspia.ru>
 //
@@ -764,6 +764,8 @@ void UserSession::attach(const base::Location& location, AttachReason reason, ba
 //--------------------------------------------------------------------------------------------------
 void UserSession::dettach(const base::Location& location)
 {
+    State state = state_;
+
     if (state_ == State::DETTACHED)
         return;
 
@@ -780,7 +782,9 @@ void UserSession::dettach(const base::Location& location)
     startup_timer_->stop();
     session_id_ = base::kInvalidSessionId;
     is_console_ = true;
-    emit sig_dettached();
+
+    if (state == State::ATTACHED)
+        emit sig_dettached();
 }
 
 //--------------------------------------------------------------------------------------------------

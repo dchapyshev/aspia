@@ -50,8 +50,6 @@ private slots:
 
 private:
     base::TcpChannel* tcp_channel_ = nullptr;
-    bool has_user_ = true;
-
     Q_DISABLE_COPY_MOVE(ChatClient)
 };
 

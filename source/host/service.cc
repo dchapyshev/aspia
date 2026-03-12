@@ -547,7 +547,7 @@ void Service::onChatClientMessage(const proto::chat::Chat& chat)
     quint32 sender_client_id = sender_client->property("client_id").toUInt();
 
     if (user_session_->state() == UserSession::State::DETTACHED && chat.has_chat_message())
-        sender_client->onSendStatus(proto::chat::Status::CODE_OFFLINE);
+        sender_client->onSendStatus(proto::chat::Status::CODE_USER_DISCONNECTED);
     else if (user_session_->state() == UserSession::State::ATTACHED)
         user_session_->onClientChat(sender_client_id, chat);
 

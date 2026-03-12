@@ -33,7 +33,6 @@ message Status
         CODE_USER_DISCONNECTED = 4;
         CODE_USER_CONNECTED    = 5;
         CODE_NO_USERS          = 6;
-        CODE_OFFLINE           = 7;
     }
 
     int64 timestamp = 1;
