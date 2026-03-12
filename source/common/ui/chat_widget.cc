@@ -190,6 +190,7 @@ void ChatWidget::readStatus(const proto::chat::Status& status)
     status_clear_timer_->stop();
 
     QString user_name = QString::fromStdString(status.source());
+    QString message;
 
     switch (status.code())
     {
@@ -198,28 +199,34 @@ void ChatWidget::readStatus(const proto::chat::Status& status)
             break;
 
         case proto::chat::Status::CODE_STARTED:
-            addStatusMessage(tr("User %1 has joined the chat (%2)").arg(user_name, currentTime()));
+            message = tr("User %1 has joined the chat (%2)").arg(user_name, currentTime());
             break;
 
         case proto::chat::Status::CODE_STOPPED:
-            addStatusMessage(tr("User %1 has left the chat (%2)").arg(user_name, currentTime()));
+            message = tr("User %1 has left the chat (%2)").arg(user_name, currentTime());
             break;
 
         case proto::chat::Status::CODE_USER_CONNECTED:
-            addStatusMessage(tr("User %1 is logged in (%2)").arg(user_name, currentTime()));
+            message = tr("User %1 is logged in (%2)").arg(user_name, currentTime());
             break;
 
         case proto::chat::Status::CODE_USER_DISCONNECTED:
-            addStatusMessage(tr("User %1 is not logged in (%2)").arg(user_name, currentTime()));
+            message = tr("User %1 is not logged in (%2)").arg(user_name, currentTime());
             break;
 
         case proto::chat::Status::CODE_NO_USERS:
-            addStatusMessage(tr("There are no connected users (%1)").arg(currentTime()));
+            message = tr("There are no connected users (%1)").arg(currentTime());
             break;
 
         default:
             LOG(ERROR) << "Unhandled status code:" << status.code();
             return;
+    }
+
+    if (!message.isEmpty())
+    {
+        addStatusMessage(message);
+        appendHistoryStatus(message);
     }
 
     status_clear_timer_->start(std::chrono::seconds(1));
@@ -331,7 +338,18 @@ void ChatWidget::addStatusMessage(const QString& message)
 void ChatWidget::appendHistoryMessage(
     qint64 timestamp, const QString& source, const QString& text, bool outgoing)
 {
-    history_messages_.push_back(HistoryMessage{ timestamp, source, text, outgoing });
+    history_messages_.push_back(HistoryMessage{ timestamp, source, text, outgoing, false });
+
+    while (history_messages_.size() > kMaxStoredMessages)
+        history_messages_.pop_front();
+
+    saveHistory();
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatWidget::appendHistoryStatus(const QString& text)
+{
+    history_messages_.push_back(HistoryMessage{ 0, QString(), text, false, true });
 
     while (history_messages_.size() > kMaxStoredMessages)
         history_messages_.pop_front();
@@ -393,6 +411,7 @@ void ChatWidget::loadHistory()
         message.source = item.value("source").toString();
         message.text = item.value("text").toString();
         message.outgoing = item.value("outgoing").toBool();
+        message.status = item.value("status").toBool();
 
         if (message.text.isEmpty())
             continue;
@@ -407,7 +426,9 @@ void ChatWidget::loadHistory()
 
     for (const HistoryMessage& message : std::as_const(history_messages_))
     {
-        if (message.outgoing)
+        if (message.status)
+            addStatusMessage(message.text);
+        else if (message.outgoing)
             addOutgoingMessage(message.timestamp, message.text);
         else
             addIncomingMessage(message.timestamp, message.source, message.text);
@@ -439,6 +460,7 @@ void ChatWidget::saveHistory() const
         item["source"] = message.source;
         item["text"] = message.text;
         item["outgoing"] = message.outgoing;
+        item["status"] = message.status;
         items.push_back(item);
     }
 

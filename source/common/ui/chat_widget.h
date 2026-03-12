@@ -61,12 +61,14 @@ private:
         QString source;
         QString text;
         bool outgoing = false;
+        bool status = false;
     };
 
     void addIncomingMessage(time_t timestamp, const QString& source, const QString& message);
     void addOutgoingMessage(time_t timestamp, const QString& message);
     void addStatusMessage(const QString& message);
     void appendHistoryMessage(qint64 timestamp, const QString& source, const QString& text, bool outgoing);
+    void appendHistoryStatus(const QString& text);
     void loadHistory();
     void saveHistory() const;
     void clearMessages();
@@ -86,4 +88,3 @@ private:
 } // namespace common
 
 #endif // COMMON_UI_CHAT_WIDGET_H
-
