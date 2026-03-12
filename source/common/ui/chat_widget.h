@@ -21,6 +21,7 @@
 
 #include "proto/chat.h"
 
+#include <QShowEvent>
 #include <QVector>
 #include <QWidget>
 
@@ -52,6 +53,7 @@ signals:
 
 protected:
     bool eventFilter(QObject* object, QEvent* event) final;
+    void showEvent(QShowEvent* event) final;
     void resizeEvent(QResizeEvent* event) final;
     void closeEvent(QCloseEvent* event) final;
 

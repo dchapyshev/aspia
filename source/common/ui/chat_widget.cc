@@ -282,6 +282,13 @@ bool ChatWidget::eventFilter(QObject* object, QEvent* event)
 }
 
 //--------------------------------------------------------------------------------------------------
+void ChatWidget::showEvent(QShowEvent* event)
+{
+    QWidget::showEvent(event);
+    QTimer::singleShot(0, this, &ChatWidget::onUpdateSize);
+}
+
+//--------------------------------------------------------------------------------------------------
 void ChatWidget::resizeEvent(QResizeEvent* /* event */)
 {
     onUpdateSize();
@@ -624,6 +631,10 @@ void ChatWidget::onSaveChat()
 void ChatWidget::onUpdateSize()
 {
     QListWidget* list_messages = ui->list_messages;
+    int viewport_width = list_messages->viewport()->width();
+    if (viewport_width <= 0)
+        return;
+
     int count = list_messages->count();
 
     for (int i = 0; i < count; ++i)
@@ -634,8 +645,6 @@ void ChatWidget::onUpdateSize()
             static_cast<ChatMessage*>(list_messages->itemWidget(item));
         if (!message_widget)
             continue;
-
-        int viewport_width = list_messages->viewport()->width();
 
         message_widget->setFixedWidth(viewport_width);
         message_widget->setFixedHeight(message_widget->heightForWidth(viewport_width));
