@@ -22,7 +22,6 @@
 
 #include "base/logging.h"
 #include "base/net/tcp_channel_ng.h"
-#include "base/net/tcp_server.h"
 #include "base/peer/client_authenticator.h"
 #include "relay/migration_utils.h"
 #include "relay/service.h"
@@ -92,21 +91,13 @@ Service::Service(QObject* parent)
     LOG(INFO) << "Router public key:" << router_public_key_.toHex().toStdString();
 
     // Peers settings.
-    listen_interface_ = settings.listenInterface();
     peer_address_ = settings.peerAddress();
     peer_port_ = settings.peerPort();
-    peer_idle_timeout_ = settings.peerIdleTimeout();
     max_peer_count_ = settings.maxPeerCount();
-    statistics_enabled_ = settings.isStatisticsEnabled();
-    statistics_interval_ = settings.statisticsInterval();
 
-    LOG(INFO) << "Listen interface:" << listen_interface_;
     LOG(INFO) << "Peer address:" << peer_address_;
     LOG(INFO) << "Peer port:" << peer_port_;
-    LOG(INFO) << "Peer idle timeout:" << peer_idle_timeout_.count();
     LOG(INFO) << "Max peer count:" << max_peer_count_;
-    LOG(INFO) << "Statistics enabled:" << statistics_enabled_;
-    LOG(INFO) << "Statistics interval:" << statistics_interval_.count();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -267,12 +258,6 @@ bool Service::start()
         return false;
     }
 
-    if (!base::TcpServer::isValidListenInterface(listen_interface_))
-    {
-        LOG(ERROR) << "Invalid listen interface";
-        return false;
-    }
-
     if (peer_address_.isEmpty())
     {
         LOG(ERROR) << "Empty peer address";
@@ -285,46 +270,18 @@ bool Service::start()
         return false;
     }
 
-    if (peer_idle_timeout_ < std::chrono::minutes(1) || peer_idle_timeout_ > std::chrono::minutes(60))
-    {
-        LOG(ERROR) << "Invalid peer idle specified";
-        return false;
-    }
-
-    if (statistics_interval_ < std::chrono::seconds(1) || statistics_interval_ > std::chrono::minutes(60))
-    {
-        LOG(ERROR) << "Invalid statistics interval";
-        return false;
-    }
-
-    asio::ip::address listen_address;
-    if (!listen_interface_.isEmpty())
-    {
-        std::error_code error_code;
-        listen_address = asio::ip::make_address(listen_interface_.toLocal8Bit().toStdString(), error_code);
-        if (error_code)
-        {
-            LOG(ERROR) << "Unable to get listen address:" << error_code;
-            return false;
-        }
-    }
-    else
-    {
-        listen_address = asio::ip::address_v6::any();
-    }
-
-    LOG(INFO) << "Listen interface:"
-              << (listen_interface_.isEmpty() ? "ANY" : listen_interface_) << ":" << peer_port_;
-
-    session_manager_ = new SessionManager(
-        listen_address, peer_port_, peer_idle_timeout_, statistics_enabled_, statistics_interval_, this);
+    session_manager_ = new SessionManager(this);
 
     connect(session_manager_, &SessionManager::sig_started, this, &Service::onSessionStarted);
     connect(session_manager_, &SessionManager::sig_finished, this, &Service::onSessionFinished);
     connect(session_manager_, &SessionManager::sig_statistics, this, &Service::onSessionStatistics);
     connect(session_manager_, &SessionManager::sig_keyExpired, this, &Service::onPoolKeyExpired);
 
-    session_manager_->start();
+    if (!session_manager_->start())
+    {
+        LOG(ERROR) << "Unable to start session manager";
+        return false;
+    }
 
     connectToRouter();
     return true;

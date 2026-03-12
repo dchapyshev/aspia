@@ -69,13 +69,9 @@ private:
     QByteArray router_public_key_;
 
     // Peers settings.
-    QString listen_interface_;
     QString peer_address_;
     quint16 peer_port_ = 0;
-    std::chrono::minutes peer_idle_timeout_;
     quint32 max_peer_count_ = 0;
-    bool statistics_enabled_ = false;
-    std::chrono::seconds statistics_interval_;
 
     QTimer* reconnect_timer_ = nullptr;
     base::TcpChannel* tcp_channel_ = nullptr;

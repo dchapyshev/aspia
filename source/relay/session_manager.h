@@ -40,17 +40,12 @@ class SessionManager final : public QObject
     Q_OBJECT
 
 public:
-    SessionManager(const asio::ip::address& address,
-                   quint16 port,
-                   const std::chrono::minutes& idle_timeout,
-                   bool statistics_enabled,
-                   const std::chrono::seconds& statistics_interval,
-                   QObject* parent = nullptr);
+    explicit SessionManager(QObject* parent = nullptr);
     ~SessionManager() final;
 
     using Key = std::pair<QByteArray, QByteArray>;
 
-    void start();
+    bool start();
     quint32 addKey(SessionKey&& session_key);
     bool removeKey(quint32 key_id);
     void setKeyExpired(quint32 key_id);
@@ -80,16 +75,13 @@ private:
     void removeSession(Session* session);
 
     std::unordered_map<quint32, SessionKey> key_pool_;
-    quint32 current_key_id_ = 0;
+    quint32 key_counter_ = 0;
 
     asio::ip::tcp::acceptor acceptor_;
     QList<PendingSession*> pending_sessions_;
     QList<Session*> active_sessions_;
 
-    const asio::ip::address address_;
-    const quint16 port_;
-
-    const std::chrono::minutes idle_timeout_;
+    std::chrono::minutes idle_timeout_;
     QTimer* idle_timer_ = nullptr;
     QTimer* stat_timer_ = nullptr;
 
@@ -97,9 +89,6 @@ private:
     using TimePoint = std::chrono::time_point<Clock>;
 
     TimePoint start_time_;
-
-    bool statistics_enabled_ = false;
-    std::chrono::seconds statistics_interval_;
 
     Q_DISABLE_COPY_MOVE(SessionManager)
 };

@@ -25,6 +25,7 @@
 #include "base/crypto/message_decryptor.h"
 #include "relay/pending_session.h"
 #include "relay/session.h"
+#include "relay/settings.h"
 
 namespace relay {
 
@@ -97,21 +98,11 @@ QString peerAddress(const asio::ip::tcp::socket& socket)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-SessionManager::SessionManager(const asio::ip::address& address,
-                               quint16 port,
-                               const std::chrono::minutes& idle_timeout,
-                               bool statistics_enabled,
-                               const std::chrono::seconds& statistics_interval,
-                               QObject* parent)
+SessionManager::SessionManager(QObject* parent)
     : QObject(parent),
       acceptor_(base::AsioEventDispatcher::ioContext()),
-      address_(address),
-      port_(port),
-      idle_timeout_(idle_timeout),
       idle_timer_(new QTimer(this)),
-      stat_timer_(new QTimer(this)),
-      statistics_enabled_(statistics_enabled),
-      statistics_interval_(statistics_interval)
+      stat_timer_(new QTimer(this))
 {
     LOG(INFO) << "Ctor";
     connect(idle_timer_, &QTimer::timeout, this, &SessionManager::onIdleTimeout);
@@ -128,53 +119,104 @@ SessionManager::~SessionManager()
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionManager::start()
+bool SessionManager::start()
 {
     LOG(INFO) << "Starting session manager";
-    asio::ip::tcp::endpoint endpoint(address_, port_);
+
+    Settings settings;
+
+    idle_timeout_ = settings.peerIdleTimeout();
+    if (idle_timeout_ < std::chrono::minutes(1) || idle_timeout_ > std::chrono::minutes(60))
+    {
+        LOG(ERROR) << "Invalid peer idle specified";
+        return false;
+    }
+
+    if (settings.isStatisticsEnabled())
+    {
+        std::chrono::seconds interval = settings.statisticsInterval();
+        if (interval < std::chrono::seconds(1) || interval > std::chrono::minutes(60))
+        {
+            LOG(ERROR) << "Invalid statistics interval";
+            return false;
+        }
+    }
+
+    LOG(INFO) << "Peer idle timeout:" << idle_timeout_.count();
+    LOG(INFO) << "Statistics enabled:" << settings.isStatisticsEnabled();
+    LOG(INFO) << "Statistics interval:" << settings.statisticsInterval().count();
+
+    qint16 port = settings.peerPort();
+    if (port == 0)
+    {
+        LOG(ERROR) << "Invalid peer port";
+        return false;
+    }
+
+    QString iface = settings.listenInterface();
+    asio::ip::address address;
+    if (!iface.isEmpty())
+    {
+        std::error_code error_code;
+        address = asio::ip::make_address(iface.toLocal8Bit().toStdString(), error_code);
+        if (error_code)
+        {
+            LOG(ERROR) << "Unable to get listen address:" << error_code;
+            return false;
+        }
+    }
+    else
+    {
+        address = asio::ip::address_v6::any();
+    }
+
+    LOG(INFO) << "Listen interface:" << (iface.isEmpty() ? "ANY" : iface) << ":" << port;
+
+    asio::ip::tcp::endpoint endpoint(address, port);
 
     std::error_code error_code;
     acceptor_.open(endpoint.protocol(), error_code);
     if (error_code)
     {
         LOG(ERROR) << "open failed:" << error_code;
-        return;
+        return false;
     }
 
     acceptor_.set_option(asio::ip::tcp::acceptor::reuse_address(true), error_code);
     if (error_code)
     {
         LOG(ERROR) << "set_option failed:" << error_code;
-        return;
+        return false;
     }
 
     acceptor_.bind(endpoint, error_code);
     if (error_code)
     {
         LOG(ERROR) << "bind failed:" << error_code;
-        return;
+        return false;
     }
 
     acceptor_.listen(asio::ip::tcp::socket::max_listen_connections, error_code);
     if (error_code)
     {
         LOG(ERROR) << "listen failed:" << error_code;
-        return;
+        return false;
     }
 
     start_time_ = Clock::now();
     idle_timer_->start(kIdleTimerInterval);
 
-    if (statistics_enabled_)
-        stat_timer_->start(statistics_interval_);
+    if (settings.isStatisticsEnabled())
+        stat_timer_->start(settings.statisticsInterval());
 
     SessionManager::doAccept(this);
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
 quint32 SessionManager::addKey(SessionKey&& session_key)
 {
-    quint32 key_id = current_key_id_++;
+    quint32 key_id = key_counter_++;
     key_pool_.try_emplace(key_id, std::move(session_key));
 
     LOG(INFO) << "Key with id" << key_id << "added to pool";
