@@ -21,6 +21,7 @@
 
 #include "proto/chat.h"
 
+#include <QVector>
 #include <QWidget>
 
 namespace Ui {
@@ -41,6 +42,7 @@ public:
     void readStatus(const proto::chat::Status& status);
 
     void setDisplayName(const QString& display_name);
+    void setHistoryId(const QString& history_id);
 
 signals:
     void sig_sendMessage(const proto::chat::Message& message);
@@ -53,8 +55,21 @@ protected:
     void closeEvent(QCloseEvent* event) final;
 
 private:
+    struct HistoryMessage
+    {
+        qint64 timestamp = 0;
+        QString source;
+        QString text;
+        bool outgoing = false;
+    };
+
+    void addIncomingMessage(time_t timestamp, const QString& source, const QString& message);
     void addOutgoingMessage(time_t timestamp, const QString& message);
     void addStatusMessage(const QString& message);
+    void appendHistoryMessage(qint64 timestamp, const QString& source, const QString& text, bool outgoing);
+    void loadHistory();
+    void saveHistory() const;
+    void clearMessages();
     void onSendMessage();
     void onSendStatus(proto::chat::Status::Code code);
     void onClearHistory();
@@ -63,6 +78,8 @@ private:
 
     std::unique_ptr<Ui::ChatWidget> ui;
     QString display_name_;
+    QString history_id_;
+    QVector<HistoryMessage> history_messages_;
     QTimer* status_clear_timer_;
 };
 

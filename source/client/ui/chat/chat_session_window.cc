@@ -19,10 +19,26 @@
 #include "client/ui/chat/chat_session_window.h"
 
 #include "base/logging.h"
+#include "base/crypto/generic_hash.h"
 #include "client/client_text_chat.h"
 #include "ui_chat_session_window.h"
 
 namespace client {
+
+namespace {
+
+//--------------------------------------------------------------------------------------------------
+QString chatHistoryId(const client::SessionState& session_state)
+{
+    base::GenericHash hash(base::GenericHash::SHA1);
+    hash.addData(session_state.hostAddress().toUtf8());
+    hash.addData(session_state.hostUserName().toUtf8());
+    hash.addData(session_state.hostPassword().toUtf8());
+
+    return QString::fromLatin1(hash.result().toHex()).first(32);
+}
+
+} // namespace
 
 //--------------------------------------------------------------------------------------------------
 ChatSessionWindow::ChatSessionWindow(QWidget* parent)
@@ -59,6 +75,8 @@ ChatSessionWindow::~ChatSessionWindow()
 Client* ChatSessionWindow::createClient()
 {
     LOG(INFO) << "Create client";
+
+    ui->text_chat_widget->setHistoryId(chatHistoryId(*sessionState()));
 
     ClientChat* client = new ClientChat();
 

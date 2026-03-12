@@ -27,9 +27,9 @@
 #include "build/version.h"
 #include "host/ui/user_settings.h"
 
-#if defined(Q_OS_WIN)
+#if defined(Q_OS_WINDOWS)
 #include <qt_windows.h>
-#endif // defined(Q_OS_WIN)
+#endif // defined(Q_OS_WINDOWS)
 
 namespace host {
 
@@ -88,8 +88,7 @@ Application::Application(int& argc, char* argv[])
     setApplicationVersion(ASPIA_VERSION_STRING);
     setWindowIcon(QIcon(":/img/aspia-host.ico"));
 
-    QAbstractEventDispatcher::instance()->installNativeEventFilter(
-        EventFilter::instance());
+    QAbstractEventDispatcher::instance()->installNativeEventFilter(EventFilter::instance());
 
     connect(this, &Application::sig_messageReceived, this, [this](const QByteArray& message)
     {

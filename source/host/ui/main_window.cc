@@ -128,6 +128,7 @@ MainWindow::MainWindow(QWidget* parent)
 
     chat_widget_ = new common::ChatWidget();
     chat_widget_->setWindowFlag(Qt::WindowStaysOnTopHint);
+    chat_widget_->setHistoryId("host");
 
     connect(chat_widget_, &common::ChatWidget::sig_sendMessage,
             this, [this](const proto::chat::Message& message)
@@ -808,8 +809,6 @@ void MainWindow::updateStatusBar()
 //--------------------------------------------------------------------------------------------------
 void MainWindow::updateTrayIconTooltip()
 {
-    LOG(INFO) << "Updating tray tooltip";
-
     QString ip;
 
     QList<QNetworkInterface> interfaces = QNetworkInterface::allInterfaces();

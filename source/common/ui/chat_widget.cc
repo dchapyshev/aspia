@@ -19,13 +19,20 @@
 #include "common/ui/chat_widget.h"
 
 #include <QDateTime>
+#include <QDir>
 #include <QFile>
 #include <QFileDialog>
 #include <QHostInfo>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QKeyEvent>
 #include <QMenu>
 #include <QMessageBox>
+#include <QSaveFile>
 #include <QScrollBar>
+#include <QStandardPaths>
+#include <QTextStream>
 #include <QTimer>
 
 #include "base/logging.h"
@@ -39,10 +46,34 @@ namespace common {
 namespace {
 
 const int kMaxMessageLength = 2048;
+const int kMaxStoredMessages = 50;
+const QString kHistoryDirName = "chat";
 
+//--------------------------------------------------------------------------------------------------
 QString currentTime()
 {
     return QLocale::system().toString(QTime::currentTime(), QLocale::ShortFormat);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString historyFilePath(const QString& history_id)
+{
+    QString base_path = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation);
+    if (base_path.isEmpty())
+    {
+        LOG(ERROR) << "Unable to get app config location";
+        return QString();
+    }
+
+    QDir dir(base_path);
+    if (!dir.mkpath(kHistoryDirName))
+    {
+        LOG(ERROR) << "Unable to create directory";
+        return QString();
+    }
+
+    QString file_name = QString::fromLatin1(history_id.toUtf8().toHex());
+    return dir.filePath(QString("%1/%2.json").arg(kHistoryDirName, file_name));
 }
 
 } // namespace
@@ -100,17 +131,11 @@ ChatWidget::~ChatWidget()
 //--------------------------------------------------------------------------------------------------
 void ChatWidget::readMessage(const proto::chat::Message& message)
 {
-    QListWidget* list_messages = ui->list_messages;
-    ChatIncomingMessage* message_widget = new ChatIncomingMessage(list_messages);
+    QString source = QString::fromStdString(message.source());
+    QString text = QString::fromStdString(message.text());
 
-    message_widget->setTimestamp(message.timestamp());
-    message_widget->setSource(QString::fromStdString(message.source()));
-    message_widget->setMessageText(QString::fromStdString(message.text()));
-
-    QListWidgetItem* item = new QListWidgetItem(list_messages);
-    list_messages->setItemWidget(item, message_widget);
-
-    onUpdateSize();
+    addIncomingMessage(message.timestamp(), source, text);
+    appendHistoryMessage(message.timestamp(), source, text, false);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -147,7 +172,7 @@ void ChatWidget::readStatus(const proto::chat::Status& status)
             return;
     }
 
-        status_clear_timer_->start(std::chrono::seconds(1));
+    status_clear_timer_->start(std::chrono::seconds(1));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -157,6 +182,16 @@ void ChatWidget::setDisplayName(const QString& display_name)
 
     if (display_name_.isEmpty())
         display_name_ = QHostInfo::localHostName();
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatWidget::setHistoryId(const QString& history_id)
+{
+    if (history_id_ == history_id)
+        return;
+
+    history_id_ = history_id;
+    loadHistory();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -201,6 +236,22 @@ void ChatWidget::closeEvent(QCloseEvent* event)
 }
 
 //--------------------------------------------------------------------------------------------------
+void ChatWidget::addIncomingMessage(time_t timestamp, const QString& source, const QString& message)
+{
+    QListWidget* list_messages = ui->list_messages;
+    ChatIncomingMessage* message_widget = new ChatIncomingMessage(list_messages);
+
+    message_widget->setTimestamp(timestamp);
+    message_widget->setSource(source);
+    message_widget->setMessageText(message);
+
+    QListWidgetItem* item = new QListWidgetItem(list_messages);
+    list_messages->setItemWidget(item, message_widget);
+
+    onUpdateSize();
+}
+
+//--------------------------------------------------------------------------------------------------
 void ChatWidget::addOutgoingMessage(time_t timestamp, const QString& message)
 {
     QListWidget* list_messages = ui->list_messages;
@@ -230,6 +281,154 @@ void ChatWidget::addStatusMessage(const QString& message)
 }
 
 //--------------------------------------------------------------------------------------------------
+void ChatWidget::appendHistoryMessage(
+    qint64 timestamp, const QString& source, const QString& text, bool outgoing)
+{
+    history_messages_.push_back(HistoryMessage{ timestamp, source, text, outgoing });
+
+    while (history_messages_.size() > kMaxStoredMessages)
+        history_messages_.pop_front();
+
+    saveHistory();
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatWidget::loadHistory()
+{
+    clearMessages();
+    history_messages_.clear();
+
+    if (history_id_.isEmpty())
+    {
+        LOG(INFO) << "Empty history id";
+        return;
+    }
+
+    QString file_path = historyFilePath(history_id_);
+    if (file_path.isEmpty())
+    {
+        LOG(ERROR) << "Unable to get history file path";
+        return;
+    }
+
+    LOG(INFO) << "Load chat history from" << file_path;
+
+    QFile file(file_path);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        LOG(ERROR) << "Unable to open history file";
+        return;
+    }
+
+    QByteArray buffer = file.readAll();
+    if (buffer.isEmpty())
+    {
+        LOG(INFO) << "Empty history file";
+        return;
+    }
+
+    QJsonDocument document = QJsonDocument::fromJson(buffer);
+    if (!document.isArray())
+    {
+        LOG(ERROR) << "Invalid chat history format";
+        return;
+    }
+
+    QVector<HistoryMessage> loaded_messages;
+
+    const QJsonArray items = document.array();
+    loaded_messages.reserve(items.size());
+
+    for (const QJsonValue& value : items)
+    {
+        if (!value.isObject())
+            continue;
+
+        const QJsonObject item = value.toObject();
+        HistoryMessage message;
+        message.timestamp = static_cast<qint64>(item.value("timestamp").toDouble());
+        message.source = item.value("source").toString();
+        message.text = item.value("text").toString();
+        message.outgoing = item.value("outgoing").toBool();
+
+        if (message.text.isEmpty())
+            continue;
+
+        loaded_messages.push_back(message);
+    }
+
+    while (loaded_messages.size() > kMaxStoredMessages)
+        loaded_messages.pop_front();
+
+    history_messages_ = loaded_messages;
+
+    for (const HistoryMessage& message : std::as_const(history_messages_))
+    {
+        if (message.outgoing)
+            addOutgoingMessage(message.timestamp, message.text);
+        else
+            addIncomingMessage(message.timestamp, message.source, message.text);
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatWidget::saveHistory() const
+{
+    if (history_id_.isEmpty())
+    {
+        LOG(INFO) << "Empty history id";
+        return;
+    }
+
+    QString file_path = historyFilePath(history_id_);
+    if (file_path.isEmpty())
+    {
+        LOG(ERROR) << "Unable to get history file path";
+        return;
+    }
+
+    if (history_messages_.isEmpty())
+    {
+        LOG(INFO) << "Remove history file";
+        QFile::remove(file_path);
+        return;
+    }
+
+    QJsonArray items;
+    for (const HistoryMessage& message : std::as_const(history_messages_))
+    {
+        QJsonObject item;
+        item["timestamp"] = static_cast<qint64>(message.timestamp);
+        item["source"] = message.source;
+        item["text"] = message.text;
+        item["outgoing"] = message.outgoing;
+        items.push_back(item);
+    }
+
+    QSaveFile file(file_path);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+        LOG(ERROR) << "Unable to open chat history file for writing:" << file_path;
+        return;
+    }
+
+    file.write(QJsonDocument(items).toJson(QJsonDocument::Compact));
+    if (!file.commit())
+    {
+        LOG(ERROR) << "Unable to write chat history";
+        return;
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatWidget::clearMessages()
+{
+    QListWidget* list_messages = ui->list_messages;
+    for (int i = list_messages->count() - 1; i >= 0; --i)
+        delete list_messages->item(i);
+}
+
+//--------------------------------------------------------------------------------------------------
 void ChatWidget::onSendMessage()
 {
     QLineEdit* edit_message = ui->edit_message;
@@ -251,6 +450,7 @@ void ChatWidget::onSendMessage()
     qint64 timestamp = QDateTime::currentSecsSinceEpoch();
 
     addOutgoingMessage(timestamp, message);
+    appendHistoryMessage(timestamp, display_name_, message, true);
     edit_message->clear();
     edit_message->setFocus();
 
@@ -278,9 +478,9 @@ void ChatWidget::onClearHistory()
 {
     LOG(INFO) << "[ACTION] Clear history";
 
-    QListWidget* list_messages = ui->list_messages;
-    for (int i = list_messages->count() - 1; i >= 0; --i)
-        delete list_messages->item(i);
+    clearMessages();
+    history_messages_.clear();
+    saveHistory();
 }
 
 //--------------------------------------------------------------------------------------------------
