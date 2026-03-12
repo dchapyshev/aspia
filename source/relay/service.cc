@@ -270,6 +270,12 @@ bool Service::start()
         return false;
     }
 
+    if (!max_peer_count_ || max_peer_count_ > 1000)
+    {
+        LOG(ERROR) << "Invalid max peer count";
+        return false;
+    }
+
     session_manager_ = new SessionManager(this);
 
     connect(session_manager_, &SessionManager::sig_started, this, &Service::onSessionStarted);
