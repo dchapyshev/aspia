@@ -16,19 +16,18 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_SERVICE_CONTROLLER_WIN_H
-#define BASE_SERVICE_CONTROLLER_WIN_H
+#ifndef BASE_SERVICE_CONTROLLER_SYSTEMD_H
+#define BASE_SERVICE_CONTROLLER_SYSTEMD_H
 
 #include "base/service_controller.h"
-#include "base/win/scoped_object.h"
 
 namespace base {
 
-class ServiceControllerWin final : public ServiceController
+class ServiceControllerSystemd final : public ServiceController
 {
 public:
-    ServiceControllerWin(SC_HANDLE sc_manager, SC_HANDLE service);
-    ~ServiceControllerWin() final;
+    ServiceControllerSystemd();
+    ~ServiceControllerSystemd() final;
 
     static std::unique_ptr<ServiceController> open(const QString& name);
     static std::unique_ptr<ServiceController> install(
@@ -49,12 +48,9 @@ public:
     bool stop() final;
 
 private:
-    ScopedScHandle sc_manager_;
-    mutable ScopedScHandle service_;
-
-    Q_DISABLE_COPY_MOVE(ServiceControllerWin)
+    Q_DISABLE_COPY_MOVE(ServiceControllerSystemd)
 };
 
 } // namespace base
 
-#endif // BASE_SERVICE_CONTROLLER_WIN_H
+#endif // BASE_SERVICE_CONTROLLER_SYSTEMD_H

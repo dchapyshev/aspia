@@ -52,6 +52,8 @@ list(APPEND SOURCE_BASE
     service.h
     service_controller.cc
     service_controller.h
+    service_controller_systemd.cc
+    service_controller_systemd.h
     session_id.cc
     session_id.h
     shared_pointer.h
