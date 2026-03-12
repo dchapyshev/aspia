@@ -104,9 +104,7 @@ list(APPEND SOURCE_HOST_CORE_UI
     ui/user_dialog.h
     ui/user_dialog.ui
     ui/user_settings.cc
-    ui/user_settings.h
-    ui/user_tree_item.cc
-    ui/user_tree_item.h)
+    ui/user_settings.h)
 
 if (WIN32)
     list(APPEND SOURCE_HOST_CORE_WIN

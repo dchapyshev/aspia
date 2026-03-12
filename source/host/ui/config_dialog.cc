@@ -18,6 +18,7 @@
 
 #include "host/ui/config_dialog.h"
 
+#include <QCollator>
 #include <QFileDialog>
 #include <QMenu>
 #include <QMessageBox>
@@ -32,13 +33,67 @@
 #include "host/ui/change_password_dialog.h"
 #include "host/ui/check_password_dialog.h"
 #include "host/ui/user_dialog.h"
-#include "host/ui/user_tree_item.h"
 #include "host/ui/settings_util.h"
 #include "host/service.h"
 #include "host/system_settings.h"
 #include "common/ui/update_dialog.h"
 
 namespace host {
+
+namespace {
+
+class UserTreeItem final : public QTreeWidgetItem
+{
+public:
+    explicit UserTreeItem(const base::User& user)
+        : user_(user)
+    {
+        updateData();
+    }
+    ~UserTreeItem() final = default;
+
+    const base::User& user() const { return user_; }
+
+    void setUser(const base::User& user)
+    {
+        user_ = user;
+        updateData();
+    }
+
+    // QTreeWidgetItem implementation.
+    bool operator<(const QTreeWidgetItem& other) const final
+    {
+        int column = treeWidget()->sortColumn();
+        if (column == 0)
+        {
+            QCollator collator;
+            collator.setCaseSensitivity(Qt::CaseInsensitive);
+            collator.setNumericMode(true);
+
+            return collator.compare(text(0), other.text(0)) <= 0;
+        }
+        else
+        {
+            return QTreeWidgetItem::operator<(other);
+        }
+    }
+
+private:
+    void updateData()
+    {
+        if (user_.flags & base::User::ENABLED)
+            setIcon(0, QIcon(":/img/user.svg"));
+        else
+            setIcon(0, QIcon(":/img/locked-user.svg"));
+
+        setText(0, user_.name);
+    }
+
+    base::User user_;
+    Q_DISABLE_COPY_MOVE(UserTreeItem)
+};
+
+} // namespace
 
 //--------------------------------------------------------------------------------------------------
 ConfigDialog::ConfigDialog(QWidget* parent)
