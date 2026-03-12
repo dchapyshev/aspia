@@ -47,7 +47,7 @@ namespace common {
 namespace {
 
 const int kMaxMessageLength = 2048;
-const int kMaxStoredMessages = 50;
+const int kMaxStoredMessages = 30;
 const QString kHistoryDirName = "chat";
 
 //--------------------------------------------------------------------------------------------------
@@ -110,7 +110,7 @@ void removeHistoryFilesOlderThan(int days)
         return;
 
     QDateTime expiration = QDateTime::currentDateTimeUtc().addDays(-days);
-    QFileInfoList files = dir.entryInfoList(QStringList() << QStringLiteral("*.json"), QDir::Files);
+    QFileInfoList files = dir.entryInfoList(QStringList() << "*.json", QDir::Files);
 
     for (const QFileInfo& file_info : std::as_const(files))
     {

@@ -2331,33 +2331,38 @@
         <translation>Пароль</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="287"/>
+        <location filename="../host/ui/main_window.ui" line="288"/>
         <source>F1</source>
         <translation type="unfinished">F1</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="313"/>
+        <location filename="../host/ui/main_window.ui" line="314"/>
         <source>Desktop Manage</source>
         <translation type="unfinished">Керування робочим столом</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="324"/>
+        <location filename="../host/ui/main_window.ui" line="325"/>
         <source>Desktop View</source>
         <translation type="unfinished">Перегляд робочого столу</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="335"/>
+        <location filename="../host/ui/main_window.ui" line="336"/>
         <source>File Transfer</source>
         <translation type="unfinished">Передача файлів</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="346"/>
+        <location filename="../host/ui/main_window.ui" line="347"/>
         <source>System Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="357"/>
+        <location filename="../host/ui/main_window.ui" line="358"/>
         <source>Text Chat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../host/ui/main_window.ui" line="363"/>
+        <source>Show chat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2366,7 +2371,7 @@
         <translation>Маршрутизатор відключено</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="250"/>
+        <location filename="../host/ui/main_window.ui" line="251"/>
         <source>Help</source>
         <translation>Допомога</translation>
     </message>
@@ -2375,37 +2380,37 @@
         <translation type="vanished">Вигляд</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="258"/>
+        <location filename="../host/ui/main_window.ui" line="259"/>
         <source>Language</source>
         <translation>Мова</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="264"/>
+        <location filename="../host/ui/main_window.ui" line="265"/>
         <source>Access</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="279"/>
+        <location filename="../host/ui/main_window.ui" line="280"/>
         <source>Exit</source>
         <translation>Вихід</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="284"/>
+        <location filename="../host/ui/main_window.ui" line="285"/>
         <source>Online Help...</source>
         <translation>Онлайн допомога...</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="292"/>
+        <location filename="../host/ui/main_window.ui" line="293"/>
         <source>About</source>
         <translation>Про</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="297"/>
+        <location filename="../host/ui/main_window.ui" line="298"/>
         <source>Settings...</source>
         <translation>Налаштування...</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="302"/>
+        <location filename="../host/ui/main_window.ui" line="303"/>
         <source>Hide</source>
         <translation>Сховати</translation>
     </message>
@@ -2973,27 +2978,27 @@
 <context>
     <name>ServiceMain</name>
     <message>
-        <location filename="../host/service_main.cc" line="148"/>
+        <location filename="../host/service_main.cc" line="130"/>
         <source>Install service.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/service_main.cc" line="150"/>
+        <location filename="../host/service_main.cc" line="132"/>
         <source>Remove service.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/service_main.cc" line="152"/>
+        <location filename="../host/service_main.cc" line="134"/>
         <source>Start service.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/service_main.cc" line="154"/>
+        <location filename="../host/service_main.cc" line="136"/>
         <source>Stop service.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/service_main.cc" line="163"/>
+        <location filename="../host/service_main.cc" line="138"/>
         <source>Get current host id.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8443,48 +8448,53 @@
 <context>
     <name>common::ChatWidget</name>
     <message>
-        <location filename="../common/ui/chat_widget.cc" line="71"/>
+        <location filename="../common/ui/chat_widget.cc" line="148"/>
         <source>Save chat...</source>
         <translation type="unfinished">Зберегти чат...</translation>
     </message>
     <message>
-        <location filename="../common/ui/chat_widget.cc" line="72"/>
+        <location filename="../common/ui/chat_widget.cc" line="149"/>
         <source>Clear chat</source>
         <translation type="unfinished">Очистити чат</translation>
     </message>
     <message>
-        <location filename="../common/ui/chat_widget.cc" line="126"/>
+        <location filename="../common/ui/chat_widget.cc" line="198"/>
         <source>%1 is typing...</source>
         <translation type="unfinished">%1 набирає текст...</translation>
     </message>
     <message>
-        <location filename="../common/ui/chat_widget.cc" line="130"/>
+        <location filename="../common/ui/chat_widget.cc" line="202"/>
         <source>User %1 has joined the chat (%2)</source>
         <translation type="unfinished">Користувач %1 долучається до чату (%2)</translation>
     </message>
     <message>
-        <location filename="../common/ui/chat_widget.cc" line="134"/>
+        <location filename="../common/ui/chat_widget.cc" line="206"/>
         <source>User %1 has left the chat (%2)</source>
         <translation type="unfinished">Користувач %1 залишає чат (%2)</translation>
     </message>
     <message>
-        <location filename="../common/ui/chat_widget.cc" line="138"/>
+        <location filename="../common/ui/chat_widget.cc" line="210"/>
         <source>User %1 is logged in (%2)</source>
         <translation type="unfinished">Користувач %1 в системі (%2)</translation>
     </message>
     <message>
-        <location filename="../common/ui/chat_widget.cc" line="142"/>
+        <location filename="../common/ui/chat_widget.cc" line="214"/>
         <source>User %1 is not logged in (%2)</source>
         <translation type="unfinished">Користувач %1 не в системі (%2)</translation>
     </message>
     <message>
-        <location filename="../common/ui/chat_widget.cc" line="244"/>
-        <location filename="../common/ui/chat_widget.cc" line="310"/>
+        <location filename="../common/ui/chat_widget.cc" line="218"/>
+        <source>There are no connected users (%1)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/ui/chat_widget.cc" line="502"/>
+        <location filename="../common/ui/chat_widget.cc" line="569"/>
         <source>Warning</source>
         <translation type="unfinished">Попередження</translation>
     </message>
     <message numerus="yes">
-        <location filename="../common/ui/chat_widget.cc" line="245"/>
+        <location filename="../common/ui/chat_widget.cc" line="503"/>
         <source>The message is too long. The maximum message length is %n characters.</source>
         <translation type="unfinished">
             <numerusform>Повідомлення занадто довге. Максимальна довжина повідомлення - %n символ.</numerusform>
@@ -8493,17 +8503,17 @@
         </translation>
     </message>
     <message>
-        <location filename="../common/ui/chat_widget.cc" line="293"/>
+        <location filename="../common/ui/chat_widget.cc" line="552"/>
         <source>Save File</source>
         <translation type="unfinished">Зберегти файл</translation>
     </message>
     <message>
-        <location filename="../common/ui/chat_widget.cc" line="295"/>
+        <location filename="../common/ui/chat_widget.cc" line="554"/>
         <source>TXT files (*.txt)</source>
         <translation type="unfinished">TXT файли (*.txt)</translation>
     </message>
     <message>
-        <location filename="../common/ui/chat_widget.cc" line="311"/>
+        <location filename="../common/ui/chat_widget.cc" line="570"/>
         <source>Could not open file for writing.</source>
         <translation type="unfinished">Неможливо відкрити файл для запису.</translation>
     </message>
@@ -9530,28 +9540,28 @@
 <context>
     <name>host::ConfigDialog</name>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="382"/>
+        <location filename="../host/ui/config_dialog.cc" line="437"/>
         <source>Confirmation</source>
         <translation>Підтвердження</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="383"/>
+        <location filename="../host/ui/config_dialog.cc" line="438"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>Ви впевнені, що хочете видалити користувача &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="482"/>
+        <location filename="../host/ui/config_dialog.cc" line="537"/>
         <source>Import</source>
         <translation>Імпорт</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="105"/>
+        <location filename="../host/ui/config_dialog.cc" line="160"/>
         <source>Default</source>
         <translation>Стандартний</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="482"/>
-        <location filename="../host/ui/config_dialog.cc" line="499"/>
+        <location filename="../host/ui/config_dialog.cc" line="537"/>
+        <location filename="../host/ui/config_dialog.cc" line="554"/>
         <source>JSON-files (*.json)</source>
         <translation>JSON файли (*.json)</translation>
     </message>
@@ -9560,153 +9570,153 @@
         <translation type="vanished">Налаштування сервісу замінено. Для примінення нових налаштувань потрібно перезапустити сервіс. Перезапустити сервіс зараз?</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="499"/>
+        <location filename="../host/ui/config_dialog.cc" line="554"/>
         <source>Export</source>
         <translation>Експорт</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="524"/>
+        <location filename="../host/ui/config_dialog.cc" line="579"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
         <translation>Неможливо записати налаштування.Переконайтеся, що у вас є відповідні права для запису.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="424"/>
-        <location filename="../host/ui/config_dialog.cc" line="461"/>
-        <location filename="../host/ui/config_dialog.cc" line="527"/>
-        <location filename="../host/ui/config_dialog.cc" line="539"/>
-        <location filename="../host/ui/config_dialog.cc" line="552"/>
+        <location filename="../host/ui/config_dialog.cc" line="479"/>
+        <location filename="../host/ui/config_dialog.cc" line="516"/>
+        <location filename="../host/ui/config_dialog.cc" line="582"/>
+        <location filename="../host/ui/config_dialog.cc" line="594"/>
+        <location filename="../host/ui/config_dialog.cc" line="607"/>
         <source>Warning</source>
         <translation>Попередження</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="52"/>
+        <location filename="../host/ui/config_dialog.cc" line="107"/>
         <source>Cancel</source>
         <translation>Відмінити</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="55"/>
+        <location filename="../host/ui/config_dialog.cc" line="110"/>
         <source>Apply</source>
         <translation>Примінити</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="67"/>
+        <location filename="../host/ui/config_dialog.cc" line="122"/>
         <source>Once a day</source>
         <translation>Щодня</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="68"/>
+        <location filename="../host/ui/config_dialog.cc" line="123"/>
         <source>Once a week</source>
         <translation>Щотижня</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="69"/>
+        <location filename="../host/ui/config_dialog.cc" line="124"/>
         <source>Once a month</source>
         <translation>Щомісяця</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="146"/>
+        <location filename="../host/ui/config_dialog.cc" line="201"/>
         <source>On reboot</source>
         <translation>При перезавантаженні</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="147"/>
+        <location filename="../host/ui/config_dialog.cc" line="202"/>
         <source>Every 5 minutes</source>
         <translation>Кожні 5 хвилин</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="148"/>
+        <location filename="../host/ui/config_dialog.cc" line="203"/>
         <source>Every 30 minutes</source>
         <translation>Кожні 30 хвилин</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="149"/>
+        <location filename="../host/ui/config_dialog.cc" line="204"/>
         <source>Every 1 hour</source>
         <translation>Кожну годину</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="150"/>
+        <location filename="../host/ui/config_dialog.cc" line="205"/>
         <source>Every 6 hours</source>
         <translation>Кожні 6 годин</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="151"/>
+        <location filename="../host/ui/config_dialog.cc" line="206"/>
         <source>Every 12 hours</source>
         <translation>Кожні 12 годин</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="152"/>
+        <location filename="../host/ui/config_dialog.cc" line="207"/>
         <source>Every 24 hours</source>
         <translation>Кожні 24 години</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="163"/>
+        <location filename="../host/ui/config_dialog.cc" line="218"/>
         <source>Letters</source>
         <translatorcomment>Буквы или письма?</translatorcomment>
         <translation>Букви</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="182"/>
+        <location filename="../host/ui/config_dialog.cc" line="237"/>
         <source>Never</source>
         <translation>Ніколи</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="183"/>
+        <location filename="../host/ui/config_dialog.cc" line="238"/>
         <source>15 seconds</source>
         <translation>15 секунд</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="184"/>
+        <location filename="../host/ui/config_dialog.cc" line="239"/>
         <source>30 seconds</source>
         <translation>30 секунд</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="185"/>
+        <location filename="../host/ui/config_dialog.cc" line="240"/>
         <source>45 seconds</source>
         <translation>45 секунд</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="186"/>
+        <location filename="../host/ui/config_dialog.cc" line="241"/>
         <source>60 seconds</source>
         <translation>60 секунд</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="194"/>
+        <location filename="../host/ui/config_dialog.cc" line="249"/>
         <source>Accept connection</source>
         <translation>Прийняти підключення</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="196"/>
+        <location filename="../host/ui/config_dialog.cc" line="251"/>
         <source>Reject connection</source>
         <translation>Відхилити підключення</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="387"/>
+        <location filename="../host/ui/config_dialog.cc" line="442"/>
         <source>Yes</source>
         <translation type="unfinished">Так</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="388"/>
+        <location filename="../host/ui/config_dialog.cc" line="443"/>
         <source>No</source>
         <translation type="unfinished">Ні</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="425"/>
-        <location filename="../host/ui/config_dialog.cc" line="462"/>
+        <location filename="../host/ui/config_dialog.cc" line="480"/>
+        <location filename="../host/ui/config_dialog.cc" line="517"/>
         <source>An error occurred while processing the password.</source>
         <translation>Сталася помилка під час обробки пароля.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="540"/>
+        <location filename="../host/ui/config_dialog.cc" line="595"/>
         <source>Incorrect router address entered.</source>
         <translation>Введено неправильну адресу маршрутизатора.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="553"/>
+        <location filename="../host/ui/config_dialog.cc" line="608"/>
         <source>Incorrect router public key entered.</source>
         <translation>Введено неправильний відкритий ключ маршрутизатора.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="726"/>
+        <location filename="../host/ui/config_dialog.cc" line="781"/>
         <source>Remove</source>
         <translation>Видалити</translation>
     </message>
@@ -9739,17 +9749,17 @@
         <translation type="vanished">Поточний стан служби: %1</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="721"/>
+        <location filename="../host/ui/config_dialog.cc" line="776"/>
         <source>Install</source>
         <translation>Встановити</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="160"/>
+        <location filename="../host/ui/config_dialog.cc" line="215"/>
         <source>Letters and digits</source>
         <translation>Букви і цифри</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="165"/>
+        <location filename="../host/ui/config_dialog.cc" line="220"/>
         <source>Digits</source>
         <translation>Цифри</translation>
     </message>
@@ -9822,101 +9832,101 @@
 <context>
     <name>host::MainWindow</name>
     <message>
-        <location filename="../host/ui/main_window.cc" line="466"/>
-        <location filename="../host/ui/main_window.cc" line="698"/>
-        <location filename="../host/ui/main_window.cc" line="885"/>
+        <location filename="../host/ui/main_window.cc" line="428"/>
+        <location filename="../host/ui/main_window.cc" line="662"/>
+        <location filename="../host/ui/main_window.cc" line="847"/>
         <source>Aspia Host</source>
         <translation>Хост Aspia</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="209"/>
-        <location filename="../host/ui/main_window.cc" line="677"/>
+        <location filename="../host/ui/main_window.cc" line="231"/>
+        <location filename="../host/ui/main_window.cc" line="641"/>
         <source>Show</source>
         <translation>Показати</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="360"/>
+        <location filename="../host/ui/main_window.cc" line="322"/>
         <source>Not available</source>
         <translation>Не доступно</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="414"/>
+        <location filename="../host/ui/main_window.cc" line="376"/>
         <source>Connecting to a router %1...</source>
         <translation>Підключення до маршрутизатора %1...</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="462"/>
+        <location filename="../host/ui/main_window.cc" line="424"/>
         <source>User &quot;%1&quot; (%2) started screen recording.</source>
         <translation>Користувач %1 (%2) почав запис екрану.</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="721"/>
+        <location filename="../host/ui/main_window.cc" line="685"/>
         <source>Yes</source>
         <translation type="unfinished">Так</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="722"/>
+        <location filename="../host/ui/main_window.cc" line="686"/>
         <source>No</source>
         <translation type="unfinished">Ні</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="820"/>
+        <location filename="../host/ui/main_window.cc" line="784"/>
         <source>Connection error</source>
         <translation>Помилка підключення</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="886"/>
+        <location filename="../host/ui/main_window.cc" line="848"/>
         <source>ID: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="882"/>
+        <location filename="../host/ui/main_window.cc" line="844"/>
         <source>IP addresses:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="410"/>
-        <location filename="../host/ui/main_window.cc" line="805"/>
+        <location filename="../host/ui/main_window.cc" line="372"/>
+        <location filename="../host/ui/main_window.cc" line="769"/>
         <source>Router is disabled</source>
         <translation>Маршрутизатор відключено</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="810"/>
+        <location filename="../host/ui/main_window.cc" line="774"/>
         <source>Connecting to a router...</source>
         <translation>Підключення до маршрутизатора...</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="418"/>
+        <location filename="../host/ui/main_window.cc" line="380"/>
         <source>Connected to a router %1</source>
         <translation>Підключено до маршрутизатора %1</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="815"/>
+        <location filename="../host/ui/main_window.cc" line="779"/>
         <source>Connected to a router</source>
         <translation>Підключено до маршрутизатора</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="422"/>
+        <location filename="../host/ui/main_window.cc" line="384"/>
         <source>Failed to connect to router %1</source>
         <translation>Не вдалося підключитися до маршрутизатора %1</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="464"/>
+        <location filename="../host/ui/main_window.cc" line="426"/>
         <source>User &quot;%1&quot; (%2) stopped screen recording.</source>
         <translation>Користувач %1 (%2) закінчив запис екрану.</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="682"/>
+        <location filename="../host/ui/main_window.cc" line="646"/>
         <source>Hide</source>
         <translation>Сховати</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="715"/>
+        <location filename="../host/ui/main_window.cc" line="679"/>
         <source>Confirmation</source>
         <translation>Підтвердження</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="716"/>
+        <location filename="../host/ui/main_window.cc" line="680"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation>Якщо ви закриєте Aspia, підключитись до цього комп&apos;ютера буде неможливо поки ви не увімкнете комп&apos;ютер або Aspia вручну.Ви хочете закрити програму?</translation>
     </message>
