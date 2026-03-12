@@ -542,13 +542,27 @@ void Service::onChatClientMessage(const proto::chat::Chat& chat)
 //--------------------------------------------------------------------------------------------------
 void Service::onUserChatMessage(const proto::chat::Chat& chat)
 {
+    int chat_clients = 0;
+
     // Send message to text chat clients.
     for (auto* client : std::as_const(clients_))
     {
         ChatClient* chat_client = dynamic_cast<ChatClient*>(client);
         if (chat_client)
+        {
             chat_client->onSendChat(chat);
+            ++chat_clients;
+        }
     }
+
+    if (chat_clients || !chat.has_chat_message())
+        return;
+
+    proto::chat::Chat echo_chat;
+    proto::chat::Status* chat_status = echo_chat.mutable_chat_status();
+
+    chat_status->set_code(proto::chat::Status::CODE_NO_USERS);
+    user_session_->onClientChat(0, echo_chat);
 }
 
 //--------------------------------------------------------------------------------------------------

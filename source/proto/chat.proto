@@ -32,6 +32,7 @@ message Status
         CODE_TYPING            = 3;
         CODE_USER_DISCONNECTED = 4;
         CODE_USER_CONNECTED    = 5;
+        CODE_NO_USERS          = 6;
     }
 
     int64 timestamp = 1;

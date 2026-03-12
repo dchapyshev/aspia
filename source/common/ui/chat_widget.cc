@@ -213,6 +213,10 @@ void ChatWidget::readStatus(const proto::chat::Status& status)
             addStatusMessage(tr("User %1 is not logged in (%2)").arg(user_name, currentTime()));
             break;
 
+        case proto::chat::Status::CODE_NO_USERS:
+            addStatusMessage(tr("There are no connected users (%1)").arg(currentTime()));
+            break;
+
         default:
             LOG(ERROR) << "Unhandled status code:" << status.code();
             return;
