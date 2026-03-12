@@ -83,6 +83,7 @@ private slots:
     void onFileDownloaderProgress(int percentage);
     void onRepeatedTasks();
     void onUserSessionAttached();
+    void onUserSessionDettached();
     void onStopClient(quint32 client_id);
     void onDesktopManagerAttached();
     void onClientFinished();

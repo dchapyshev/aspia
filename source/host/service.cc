@@ -86,6 +86,7 @@ Service::Service(QObject* parent)
     connect(repeated_timer_, &QTimer::timeout, this, &Service::onRepeatedTasks);
     connect(settings_watcher_, &QFileSystemWatcher::fileChanged, this, &Service::onSettingsChanged);
     connect(user_session_, &UserSession::sig_attached, this, &Service::onUserSessionAttached);
+    connect(user_session_, &UserSession::sig_dettached, this, &Service::onUserSessionDettached);
     connect(user_session_, &UserSession::sig_confirmationReply, this, &Service::onConfirmationReply);
     connect(user_session_, &UserSession::sig_chatMessage, this, &Service::onUserChatMessage);
     connect(user_session_, &UserSession::sig_stopClient, this, &Service::onStopClient);
@@ -400,9 +401,27 @@ void Service::onUserSessionAttached()
             }
             break;
 
+            case proto::peer::SESSION_TYPE_TEXT_CHAT:
+            {
+                ChatClient* chat_client = static_cast<ChatClient*>(client);
+                chat_client->onSendStatus(proto::chat::Status::CODE_USER_CONNECTED);
+            }
+            break;
+
             default:
                 break;
         }
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void Service::onUserSessionDettached()
+{
+    for (auto* client : std::as_const(clients_))
+    {
+        ChatClient* chat_client = dynamic_cast<ChatClient*>(client);
+        if (chat_client)
+            chat_client->onSendStatus(proto::chat::Status::CODE_USER_DISCONNECTED);
     }
 }
 
@@ -527,8 +546,10 @@ void Service::onChatClientMessage(const proto::chat::Chat& chat)
 
     quint32 sender_client_id = sender_client->property("client_id").toUInt();
 
-    // Send message to GUI.
-    user_session_->onClientChat(sender_client_id, chat);
+    if (user_session_->state() == UserSession::State::DETTACHED && chat.has_chat_message())
+        sender_client->onSendStatus(proto::chat::Status::CODE_OFFLINE);
+    else if (user_session_->state() == UserSession::State::ATTACHED)
+        user_session_->onClientChat(sender_client_id, chat);
 
     // Send message to other text chat clients.
     for (auto* client : std::as_const(clients_))

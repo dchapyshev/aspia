@@ -73,20 +73,6 @@ void ChatClient::onSendStatus(proto::chat::Status::Code code)
 {
     LOG(INFO) << "Send text chat status:" << code;
 
-    switch (code)
-    {
-        case proto::chat::Status::CODE_USER_CONNECTED:
-            has_user_ = true;
-            break;
-
-        case proto::chat::Status::CODE_USER_DISCONNECTED:
-            has_user_ = false;
-            break;
-
-        default:
-            break;
-    }
-
     proto::chat::Chat text_chat;
     proto::chat::Status* text_chat_status = text_chat.mutable_chat_status();
 
@@ -111,13 +97,6 @@ void ChatClient::onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray& b
     if (!base::parse(buffer, &chat))
     {
         LOG(ERROR) << "Unable to parse chat message";
-        return;
-    }
-
-    if (!has_user_)
-    {
-        if (chat.has_chat_message())
-            onSendStatus(proto::chat::Status::CODE_USER_DISCONNECTED);
         return;
     }
 

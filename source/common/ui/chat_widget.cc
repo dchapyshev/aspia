@@ -218,6 +218,14 @@ void ChatWidget::readStatus(const proto::chat::Status& status)
             message = tr("There are no connected users (%1)").arg(currentTime());
             break;
 
+        case proto::chat::Status::CODE_OFFLINE:
+        {
+            message = tr("Sorry, but I'm offline right now");
+            addIncomingMessage(status.timestamp(), user_name, message);
+            appendHistoryMessage(status.timestamp(), user_name, message, false);
+        }
+        return;
+
         default:
             LOG(ERROR) << "Unhandled status code:" << status.code();
             return;

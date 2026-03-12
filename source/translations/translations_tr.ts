@@ -6615,40 +6615,45 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/chat_widget.cc" line="214"/>
+        <location filename="../common/ui/chat_widget.cc" line="215"/>
         <source>User %1 is not logged in (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/chat_widget.cc" line="218"/>
+        <location filename="../common/ui/chat_widget.cc" line="220"/>
         <source>There are no connected users (%1)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/chat_widget.cc" line="502"/>
-        <location filename="../common/ui/chat_widget.cc" line="569"/>
+        <location filename="../common/ui/chat_widget.cc" line="225"/>
+        <source>Sorry, but I&apos;m offline right now</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/ui/chat_widget.cc" line="526"/>
+        <location filename="../common/ui/chat_widget.cc" line="593"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../common/ui/chat_widget.cc" line="503"/>
+        <location filename="../common/ui/chat_widget.cc" line="527"/>
         <source>The message is too long. The maximum message length is %n characters.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../common/ui/chat_widget.cc" line="552"/>
+        <location filename="../common/ui/chat_widget.cc" line="576"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/chat_widget.cc" line="554"/>
+        <location filename="../common/ui/chat_widget.cc" line="578"/>
         <source>TXT files (*.txt)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/chat_widget.cc" line="570"/>
+        <location filename="../common/ui/chat_widget.cc" line="594"/>
         <source>Could not open file for writing.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7743,101 +7748,101 @@
 <context>
     <name>host::MainWindow</name>
     <message>
-        <location filename="../host/ui/main_window.cc" line="322"/>
+        <location filename="../host/ui/main_window.cc" line="325"/>
         <source>Not available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="428"/>
-        <location filename="../host/ui/main_window.cc" line="662"/>
-        <location filename="../host/ui/main_window.cc" line="847"/>
+        <location filename="../host/ui/main_window.cc" line="431"/>
+        <location filename="../host/ui/main_window.cc" line="665"/>
+        <location filename="../host/ui/main_window.cc" line="850"/>
         <source>Aspia Host</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="231"/>
-        <location filename="../host/ui/main_window.cc" line="641"/>
+        <location filename="../host/ui/main_window.cc" line="232"/>
+        <location filename="../host/ui/main_window.cc" line="644"/>
         <source>Show</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="646"/>
+        <location filename="../host/ui/main_window.cc" line="649"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="679"/>
+        <location filename="../host/ui/main_window.cc" line="682"/>
         <source>Confirmation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="680"/>
+        <location filename="../host/ui/main_window.cc" line="683"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="372"/>
-        <location filename="../host/ui/main_window.cc" line="769"/>
+        <location filename="../host/ui/main_window.cc" line="375"/>
+        <location filename="../host/ui/main_window.cc" line="772"/>
         <source>Router is disabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="774"/>
+        <location filename="../host/ui/main_window.cc" line="777"/>
         <source>Connecting to a router...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="779"/>
+        <location filename="../host/ui/main_window.cc" line="782"/>
         <source>Connected to a router</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="784"/>
+        <location filename="../host/ui/main_window.cc" line="787"/>
         <source>Connection error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="380"/>
+        <location filename="../host/ui/main_window.cc" line="383"/>
         <source>Connected to a router %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="384"/>
+        <location filename="../host/ui/main_window.cc" line="387"/>
         <source>Failed to connect to router %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="376"/>
+        <location filename="../host/ui/main_window.cc" line="379"/>
         <source>Connecting to a router %1...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="424"/>
+        <location filename="../host/ui/main_window.cc" line="427"/>
         <source>User &quot;%1&quot; (%2) started screen recording.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="426"/>
+        <location filename="../host/ui/main_window.cc" line="429"/>
         <source>User &quot;%1&quot; (%2) stopped screen recording.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="685"/>
+        <location filename="../host/ui/main_window.cc" line="688"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="686"/>
+        <location filename="../host/ui/main_window.cc" line="689"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="848"/>
+        <location filename="../host/ui/main_window.cc" line="851"/>
         <source>ID: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="844"/>
+        <location filename="../host/ui/main_window.cc" line="847"/>
         <source>IP addresses:</source>
         <translation type="unfinished"></translation>
     </message>

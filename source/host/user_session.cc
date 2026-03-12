@@ -764,7 +764,11 @@ void UserSession::attach(const base::Location& location, AttachReason reason, ba
 //--------------------------------------------------------------------------------------------------
 void UserSession::dettach(const base::Location& location)
 {
+    if (state_ == State::DETTACHED)
+        return;
+
     LOG(INFO) << "Dettached from" << location;
+    state_ = State::DETTACHED;
 
     if (ipc_channel_)
     {
@@ -776,7 +780,6 @@ void UserSession::dettach(const base::Location& location)
     startup_timer_->stop();
     session_id_ = base::kInvalidSessionId;
     is_console_ = true;
-    state_ = State::DETTACHED;
     emit sig_dettached();
 }
 
