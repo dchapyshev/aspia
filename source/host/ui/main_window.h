@@ -76,6 +76,7 @@ private slots:
     void realClose();
     void onLanguageChanged(QAction* action);
     void onThemeChanged();
+    void onShowChat();
     void onSettings();
     void onShowHide();
     void onHelp();
@@ -99,7 +100,7 @@ private:
     QSystemTrayIcon tray_icon_;
     QMenu tray_menu_;
     QPointer<NotifierWindow> notifier_;
-    QPointer<common::ChatWidget> chat_widget_;
+    common::ChatWidget* chat_widget_ = nullptr;
 
     common::StatusDialog* status_dialog_ = nullptr;
     proto::user::RouterState::State last_state_ = proto::user::RouterState::DISABLED;

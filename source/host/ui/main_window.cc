@@ -69,6 +69,7 @@ MainWindow::MainWindow(QWidget* parent)
     ui.edit_id->setText("-");
     ui.edit_password->setText("-");
 
+    tray_menu_.addAction(ui.action_show_chat);
     tray_menu_.addAction(ui.action_settings);
     tray_menu_.addSeparator();
     tray_menu_.addAction(ui.action_show_hide);
@@ -110,6 +111,7 @@ MainWindow::MainWindow(QWidget* parent)
     });
 
     connect(ui.menu_language, &QMenu::triggered, this, &MainWindow::onLanguageChanged);
+    connect(ui.action_show_chat, &QAction::triggered, this, &MainWindow::onShowChat);
     connect(ui.action_settings, &QAction::triggered, this, &MainWindow::onSettings);
     connect(ui.action_show_hide, &QAction::triggered, this, &MainWindow::onShowHide);
     connect(ui.action_exit, &QAction::triggered, this, &MainWindow::onExit);
@@ -122,6 +124,32 @@ MainWindow::MainWindow(QWidget* parent)
     {
         LOG(INFO) << "[ACTION] New password";
         emit sig_updateCredentials(proto::user::CredentialsRequest::NEW_PASSWORD);
+    });
+
+    chat_widget_ = new common::ChatWidget();
+    chat_widget_->setWindowFlag(Qt::WindowStaysOnTopHint);
+
+    connect(chat_widget_, &common::ChatWidget::sig_sendMessage,
+            this, [this](const proto::chat::Message& message)
+    {
+        proto::chat::Chat chat;
+        chat.mutable_chat_message()->CopyFrom(message);
+        emit sig_chat(chat);
+    });
+
+    connect(chat_widget_, &common::ChatWidget::sig_sendStatus,
+            this, [this](const proto::chat::Status& status)
+    {
+        proto::chat::Chat chat;
+        chat.mutable_chat_status()->CopyFrom(status);
+        emit sig_chat(chat);
+    });
+
+    connect(chat_widget_, &common::ChatWidget::sig_textChatClosed, this, [this]()
+    {
+        QList<quint32> sessions = notifier_->sessions(proto::peer::SESSION_TYPE_TEXT_CHAT);
+        for (const auto& session : std::as_const(sessions))
+            onKillSession(session);
     });
 
     connect(base::GuiApplication::instance(), &base::GuiApplication::sig_themeChanged,
@@ -285,66 +313,6 @@ void MainWindow::onClientListChanged(const UserSessionAgent::ClientList& clients
     }
 
     notifier_->onClientListChanged(clients);
-
-    int text_chat_clients = 0;
-    for (const auto& client : clients)
-    {
-        if (client.session_type == proto::peer::SESSION_TYPE_TEXT_CHAT)
-            ++text_chat_clients;
-    }
-
-    if (text_chat_clients > 0)
-    {
-        LOG(INFO) << "Text chat clients:" << text_chat_clients;
-
-        if (chat_widget_)
-        {
-            LOG(INFO) << "Text chat widget already exists";
-        }
-        else
-        {
-            LOG(INFO) << "Create text chat widget";
-
-            chat_widget_ = new common::ChatWidget();
-
-            connect(chat_widget_, &common::ChatWidget::sig_sendMessage,
-                    this, [this](const proto::chat::Message& message)
-            {
-                proto::chat::Chat chat;
-                chat.mutable_chat_message()->CopyFrom(message);
-                emit sig_chat(chat);
-            });
-
-            connect(chat_widget_, &common::ChatWidget::sig_sendStatus,
-                    this, [this](const proto::chat::Status& status)
-            {
-                proto::chat::Chat chat;
-                chat.mutable_chat_status()->CopyFrom(status);
-                emit sig_chat(chat);
-            });
-
-            connect(chat_widget_, &common::ChatWidget::sig_textChatClosed, this, [this]()
-            {
-                QList<quint32> sessions = notifier_->sessions(proto::peer::SESSION_TYPE_TEXT_CHAT);
-                for (const auto& session : std::as_const(sessions))
-                    onKillSession(session);
-            });
-
-            chat_widget_->setAttribute(Qt::WA_DeleteOnClose);
-            chat_widget_->show();
-            chat_widget_->activateWindow();
-        }
-    }
-    else
-    {
-        LOG(INFO) << "No text chat clients";
-
-        if (chat_widget_)
-        {
-            LOG(INFO) << "Close text chat window";
-            chat_widget_->close();
-        }
-    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -471,18 +439,13 @@ void MainWindow::onChat(const proto::chat::Chat& chat)
 {
     if (chat.has_chat_message())
     {
-        if (chat_widget_)
-        {
-            chat_widget_->readMessage(chat.chat_message());
-
-            if (QApplication::applicationState() != Qt::ApplicationActive)
-                chat_widget_->activateWindow();
-        }
+        chat_widget_->readMessage(chat.chat_message());
+        chat_widget_->show();
+        chat_widget_->activateWindow();
     }
     else if (chat.has_chat_status())
     {
-        if (chat_widget_)
-            chat_widget_->readStatus(chat.chat_status());
+        chat_widget_->readStatus(chat.chat_status());
     }
     else
     {
@@ -567,6 +530,13 @@ void MainWindow::onThemeChanged()
 
         updateStatusBar();
     });
+}
+
+//--------------------------------------------------------------------------------------------------
+void MainWindow::onShowChat()
+{
+    chat_widget_->show();
+    chat_widget_->activateWindow();
 }
 
 //--------------------------------------------------------------------------------------------------

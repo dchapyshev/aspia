@@ -240,6 +240,7 @@ border-radius: 2px;
     <property name="title">
      <string notr="true">Aspia</string>
     </property>
+    <addaction name="action_show_chat"/>
     <addaction name="action_settings"/>
     <addaction name="separator"/>
     <addaction name="action_show_hide"/>
@@ -355,6 +356,14 @@ border-radius: 2px;
    </property>
    <property name="text">
     <string>Text Chat</string>
+   </property>
+  </action>
+  <action name="action_show_chat">
+   <property name="text">
+    <string>Show chat</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
  </widget>
