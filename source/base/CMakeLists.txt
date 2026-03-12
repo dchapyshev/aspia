@@ -50,6 +50,8 @@ list(APPEND SOURCE_BASE
     serialization.cc
     serialization.h
     service.h
+    service_controller.cc
+    service_controller.h
     session_id.cc
     session_id.h
     shared_pointer.h
@@ -72,6 +74,8 @@ list(APPEND SOURCE_BASE
 
 if (WIN32)
     list(APPEND SOURCE_BASE
+        service_controller_win.cc
+        service_controller_win.h
         service_win.cc
         sys_info_win.cc)
 endif()
@@ -502,8 +506,6 @@ if (WIN32)
         win/scoped_wts_memory.h
         win/security_helpers.cc
         win/security_helpers.h
-        win/service_controller.cc
-        win/service_controller.h
         win/service_enumerator.cc
         win/service_enumerator.h
         win/session_enumerator.cc

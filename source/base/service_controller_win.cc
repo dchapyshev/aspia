@@ -16,21 +16,16 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/win/service_controller.h"
-
-#include "base/logging.h"
-
-#include <memory>
+#include "base/service_controller_win.h"
 
 #include <QDir>
+
+#include "base/logging.h"
 
 namespace base {
 
 //--------------------------------------------------------------------------------------------------
-ServiceController::ServiceController() = default;
-
-//--------------------------------------------------------------------------------------------------
-ServiceController::ServiceController(SC_HANDLE sc_manager, SC_HANDLE service)
+ServiceControllerWin::ServiceControllerWin(SC_HANDLE sc_manager, SC_HANDLE service)
     : sc_manager_(sc_manager),
       service_(service)
 {
@@ -38,11 +33,11 @@ ServiceController::ServiceController(SC_HANDLE sc_manager, SC_HANDLE service)
 }
 
 //--------------------------------------------------------------------------------------------------
-ServiceController::~ServiceController() = default;
+ServiceControllerWin::~ServiceControllerWin() = default;
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::unique_ptr<ServiceController> ServiceController::open(const QString& name)
+std::unique_ptr<ServiceController> ServiceControllerWin::open(const QString& name)
 {
     ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_ALL_ACCESS));
     if (!sc_manager.isValid())
@@ -58,13 +53,12 @@ std::unique_ptr<ServiceController> ServiceController::open(const QString& name)
         return nullptr;
     }
 
-    return std::unique_ptr<ServiceController>(
-        new ServiceController(sc_manager.release(), service.release()));
+    return std::make_unique<ServiceControllerWin>(sc_manager.release(), service.release());
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::unique_ptr<ServiceController> ServiceController::install(
+std::unique_ptr<ServiceController> ServiceControllerWin::install(
     const QString& name, const QString& display_name, const QString& file_path)
 {
     ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_ALL_ACCESS));
@@ -101,13 +95,12 @@ std::unique_ptr<ServiceController> ServiceController::install(
         return nullptr;
     }
 
-    return std::unique_ptr<ServiceController>(
-        new ServiceController(sc_manager.release(), service.release()));
+    return std::make_unique<ServiceControllerWin>(sc_manager.release(), service.release());
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
-bool ServiceController::remove(const QString& name)
+bool ServiceControllerWin::remove(const QString& name)
 {
     ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_ALL_ACCESS));
     if (!sc_manager.isValid())
@@ -148,7 +141,7 @@ bool ServiceController::remove(const QString& name)
 
 //--------------------------------------------------------------------------------------------------
 // static
-bool ServiceController::isInstalled(const QString& name)
+bool ServiceControllerWin::isInstalled(const QString& name)
 {
     ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_CONNECT));
     if (!sc_manager.isValid())
@@ -173,7 +166,7 @@ bool ServiceController::isInstalled(const QString& name)
 
 //--------------------------------------------------------------------------------------------------
 // static
-bool ServiceController::isRunning(const QString& name)
+bool ServiceControllerWin::isRunning(const QString& name)
 {
     ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_CONNECT));
     if (!sc_manager.isValid())
@@ -190,7 +183,6 @@ bool ServiceController::isRunning(const QString& name)
     }
 
     SERVICE_STATUS status;
-
     if (!QueryServiceStatus(service, &status))
     {
         PLOG(ERROR) << "QueryServiceStatus failed";
@@ -201,14 +193,7 @@ bool ServiceController::isRunning(const QString& name)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ServiceController::close()
-{
-    service_.reset();
-    sc_manager_.reset();
-}
-
-//--------------------------------------------------------------------------------------------------
-bool ServiceController::setDescription(const QString& description)
+bool ServiceControllerWin::setDescription(const QString& description)
 {
     SERVICE_DESCRIPTIONW service_description;
     service_description.lpDescription = const_cast<LPWSTR>(qUtf16Printable(description));
@@ -224,7 +209,7 @@ bool ServiceController::setDescription(const QString& description)
 }
 
 //--------------------------------------------------------------------------------------------------
-QString ServiceController::description() const
+QString ServiceControllerWin::description() const
 {
     DWORD bytes_needed = 0;
 
@@ -256,7 +241,7 @@ QString ServiceController::description() const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool ServiceController::setDependencies(const QStringList& dependencies)
+bool ServiceControllerWin::setDependencies(const QStringList& dependencies)
 {
     QByteArray buffer;
 
@@ -283,7 +268,7 @@ bool ServiceController::setDependencies(const QStringList& dependencies)
 }
 
 //--------------------------------------------------------------------------------------------------
-QStringList ServiceController::dependencies() const
+QStringList ServiceControllerWin::dependencies() const
 {
     DWORD bytes_needed = 0;
 
@@ -327,7 +312,7 @@ QStringList ServiceController::dependencies() const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool ServiceController::setAccount(const QString& username, const QString& password)
+bool ServiceControllerWin::setAccount(const QString& username, const QString& password)
 {
     if (!ChangeServiceConfigW(service_, SERVICE_NO_CHANGE, SERVICE_NO_CHANGE, SERVICE_NO_CHANGE,
         nullptr, nullptr, nullptr, nullptr, qUtf16Printable(username), qUtf16Printable(password),
@@ -341,7 +326,7 @@ bool ServiceController::setAccount(const QString& username, const QString& passw
 }
 
 //--------------------------------------------------------------------------------------------------
-QString ServiceController::filePath() const
+QString ServiceControllerWin::filePath() const
 {
     DWORD bytes_needed = 0;
 
@@ -371,7 +356,7 @@ QString ServiceController::filePath() const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool ServiceController::isRunning() const
+bool ServiceControllerWin::isRunning() const
 {
     SERVICE_STATUS status;
 
@@ -385,7 +370,7 @@ bool ServiceController::isRunning() const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool ServiceController::start()
+bool ServiceControllerWin::start()
 {
     if (!StartServiceW(service_, 0, nullptr))
     {
@@ -415,7 +400,7 @@ bool ServiceController::start()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool ServiceController::stop()
+bool ServiceControllerWin::stop()
 {
     SERVICE_STATUS status;
 

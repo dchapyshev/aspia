@@ -18,7 +18,7 @@
 
 #include "router/win/service_util.h"
 
-#include "base/win/service_controller.h"
+#include "base/service_controller.h"
 #include "router/service.h"
 
 #include <QCoreApplication>

@@ -24,14 +24,11 @@
 #include "base/application.h"
 #include "base/asio_event_dispatcher.h"
 #include "base/logging.h"
+#include "base/service_controller.h"
 #include "build/version.h"
 #include "host/host_utils.h"
 #include "host/host_storage.h"
 #include "host/service.h"
-
-#if defined(Q_OS_WINDOWS)
-#include "base/win/service_controller.h"
-#endif // defined(Q_OS_WINDOWS)
 
 namespace host {
 

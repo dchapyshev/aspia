@@ -19,8 +19,8 @@
 #include "host/win/task_manager.h"
 
 #include "base/logging.h"
+#include "base/service_controller.h"
 #include "base/win/service_enumerator.h"
-#include "base/win/service_controller.h"
 #include "base/win/session_enumerator.h"
 #include "base/win/session_info.h"
 #include "host/win/process_monitor.h"

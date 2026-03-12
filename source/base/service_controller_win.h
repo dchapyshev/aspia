@@ -16,23 +16,23 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_WIN_SERVICE_CONTROLLER_H
-#define BASE_WIN_SERVICE_CONTROLLER_H
+#ifndef BASE_SERVICE_CONTROLLER_WIN_H
+#define BASE_SERVICE_CONTROLLER_WIN_H
 
 #include <QString>
 
 #include <memory>
 
+#include "base/service_controller.h"
 #include "base/win/scoped_object.h"
 
 namespace base {
 
-class ServiceController
+class ServiceControllerWin final : public ServiceController
 {
 public:
-    ServiceController();
-
-    virtual ~ServiceController();
+    ServiceControllerWin(SC_HANDLE sc_manager, SC_HANDLE service);
+    ~ServiceControllerWin() final;
 
     static std::unique_ptr<ServiceController> open(const QString& name);
     static std::unique_ptr<ServiceController> install(
@@ -41,32 +41,24 @@ public:
     static bool isInstalled(const QString& name);
     static bool isRunning(const QString& name);
 
-    void close();
-
-    bool setDescription(const QString& description);
-    QString description() const;
-
-    bool setDependencies(const QStringList& dependencies);
-    QStringList dependencies() const;
-
-    bool setAccount(const QString& username, const QString& password);
-
-    QString filePath() const;
-
-    bool isRunning() const;
-    bool start();
-    bool stop();
-
-protected:
-    ServiceController(SC_HANDLE sc_manager, SC_HANDLE service);
+    // ServiceController implementation.
+    bool setDescription(const QString& description) final;
+    QString description() const final;
+    bool setDependencies(const QStringList& dependencies) final;
+    QStringList dependencies() const final;
+    bool setAccount(const QString& username, const QString& password) final;
+    QString filePath() const final;
+    bool isRunning() const final;
+    bool start() final;
+    bool stop() final;
 
 private:
     ScopedScHandle sc_manager_;
     mutable ScopedScHandle service_;
 
-    Q_DISABLE_COPY_MOVE(ServiceController)
+    Q_DISABLE_COPY_MOVE(ServiceControllerWin)
 };
 
 } // namespace base
 
-#endif // BASE_WIN_SERVICE_CONTROLLER_H
+#endif // BASE_SERVICE_CONTROLLER_WIN_H
