@@ -238,7 +238,7 @@ void Service::onPoolKeyExpired(quint32 key_id)
 //--------------------------------------------------------------------------------------------------
 bool Service::start()
 {
-    LOG(INFO) << "Starting controller";
+    LOG(INFO) << "Starting service";
 
     if (router_address_.isEmpty())
     {
