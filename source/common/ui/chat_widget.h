@@ -43,6 +43,7 @@ public:
 
     void setDisplayName(const QString& display_name);
     void setHistoryId(const QString& history_id);
+    void setChatEnabled(bool enable);
 
 signals:
     void sig_sendMessage(const proto::chat::Message& message);

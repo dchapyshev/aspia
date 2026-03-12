@@ -129,6 +129,7 @@ MainWindow::MainWindow(QWidget* parent)
     chat_widget_ = new common::ChatWidget();
     chat_widget_->setWindowFlag(Qt::WindowStaysOnTopHint);
     chat_widget_->setHistoryId(QString());
+    chat_widget_->setChatEnabled(false);
 
     connect(chat_widget_, &common::ChatWidget::sig_sendMessage,
             this, [this](const proto::chat::Message& message)
@@ -282,6 +283,8 @@ void MainWindow::onStatusChanged(UserSessionAgent::Status status)
     {
         LOG(ERROR) << "Unandled status code: " << static_cast<int>(status);
     }
+
+    chat_widget_->setChatEnabled(connected_to_service_);
 }
 
 //--------------------------------------------------------------------------------------------------

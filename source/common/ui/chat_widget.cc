@@ -249,6 +249,13 @@ void ChatWidget::setHistoryId(const QString& history_id)
 }
 
 //--------------------------------------------------------------------------------------------------
+void ChatWidget::setChatEnabled(bool enable)
+{
+    ui->edit_message->setEnabled(enable);
+    ui->button_send->setEnabled(enable);
+}
+
+//--------------------------------------------------------------------------------------------------
 bool ChatWidget::eventFilter(QObject* object, QEvent* event)
 {
     if (object == ui->edit_message && event->type() == QEvent::KeyPress)
