@@ -38,55 +38,40 @@ ServiceController::ServiceController(SC_HANDLE sc_manager, SC_HANDLE service)
 }
 
 //--------------------------------------------------------------------------------------------------
-ServiceController::ServiceController(ServiceController&& other) noexcept
-    : sc_manager_(std::move(other.sc_manager_)),
-      service_(std::move(other.service_))
-{
-    // Nothing
-}
-
-//--------------------------------------------------------------------------------------------------
-ServiceController& ServiceController::operator=(ServiceController&& other) noexcept
-{
-    sc_manager_ = std::move(other.sc_manager_);
-    service_ = std::move(other.service_);
-    return *this;
-}
-
-//--------------------------------------------------------------------------------------------------
 ServiceController::~ServiceController() = default;
 
 //--------------------------------------------------------------------------------------------------
 // static
-ServiceController ServiceController::open(const QString& name)
+std::unique_ptr<ServiceController> ServiceController::open(const QString& name)
 {
     ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_ALL_ACCESS));
     if (!sc_manager.isValid())
     {
         PLOG(ERROR) << "OpenSCManagerW failed";
-        return ServiceController();
+        return nullptr;
     }
 
     ScopedScHandle service(OpenServiceW(sc_manager, qUtf16Printable(name), SERVICE_ALL_ACCESS));
     if (!service.isValid())
     {
         PLOG(ERROR) << "OpenServiceW failed";
-        return ServiceController();
+        return nullptr;
     }
 
-    return ServiceController(sc_manager.release(), service.release());
+    return std::unique_ptr<ServiceController>(
+        new ServiceController(sc_manager.release(), service.release()));
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
-ServiceController ServiceController::install(const QString& name, const QString& display_name,
-    const QString& file_path)
+std::unique_ptr<ServiceController> ServiceController::install(
+    const QString& name, const QString& display_name, const QString& file_path)
 {
     ScopedScHandle sc_manager(OpenSCManagerW(nullptr, nullptr, SC_MANAGER_ALL_ACCESS));
     if (!sc_manager.isValid())
     {
         PLOG(ERROR) << "OpenSCManagerW failed";
-        return ServiceController();
+        return nullptr;
     }
 
     ScopedScHandle service(CreateServiceW(sc_manager, qUtf16Printable(name),
@@ -96,7 +81,7 @@ ServiceController ServiceController::install(const QString& name, const QString&
     if (!service.isValid())
     {
         PLOG(ERROR) << "CreateServiceW failed";
-        return ServiceController();
+        return nullptr;
     }
 
     SC_ACTION action;
@@ -113,10 +98,11 @@ ServiceController ServiceController::install(const QString& name, const QString&
     if (!ChangeServiceConfig2W(service, SERVICE_CONFIG_FAILURE_ACTIONS, &actions))
     {
         PLOG(ERROR) << "ChangeServiceConfig2W failed";
-        return ServiceController();
+        return nullptr;
     }
 
-    return ServiceController(sc_manager.release(), service.release());
+    return std::unique_ptr<ServiceController>(
+        new ServiceController(sc_manager.release(), service.release()));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -382,12 +368,6 @@ QString ServiceController::filePath() const
         return QString();
 
     return QString::fromWCharArray(service_config->lpBinaryPathName);
-}
-
-//--------------------------------------------------------------------------------------------------
-bool ServiceController::isValid() const
-{
-    return sc_manager_.isValid() && service_.isValid();
 }
 
 //--------------------------------------------------------------------------------------------------

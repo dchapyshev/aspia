@@ -72,15 +72,15 @@ void TaskManager::readMessage(const proto::task_manager::ClientToHost& message)
         {
             case proto::task_manager::ServiceRequest::COMMAND_START:
             {
-                base::ServiceController controller = base::ServiceController::open(
+                std::unique_ptr<base::ServiceController> controller = base::ServiceController::open(
                     QString::fromStdString(message.service_request().name()));
-                if (!controller.isValid())
+                if (!controller)
                 {
                     LOG(ERROR) << "Unable to open service:" << message.service_request().name();
                     return;
                 }
 
-                if (!controller.start())
+                if (!controller->start())
                 {
                     LOG(ERROR) << "Unable to start service:" << message.service_request().name();
                     return;
@@ -92,15 +92,15 @@ void TaskManager::readMessage(const proto::task_manager::ClientToHost& message)
 
             case proto::task_manager::ServiceRequest::COMMAND_STOP:
             {
-                base::ServiceController controller = base::ServiceController::open(
+                std::unique_ptr<base::ServiceController> controller = base::ServiceController::open(
                     QString::fromStdString(message.service_request().name()));
-                if (!controller.isValid())
+                if (!controller)
                 {
                     LOG(ERROR) << "Unable to open service:" << message.service_request().name();
                     return;
                 }
 
-                if (!controller.stop())
+                if (!controller->stop())
                 {
                     LOG(ERROR) << "Unable to stop service:" << message.service_request().name();
                     return;

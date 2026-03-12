@@ -21,6 +21,8 @@
 
 #include <QString>
 
+#include <memory>
+
 #include "base/win/scoped_object.h"
 
 namespace base {
@@ -30,14 +32,11 @@ class ServiceController
 public:
     ServiceController();
 
-    ServiceController(ServiceController&& other) noexcept;
-    ServiceController& operator=(ServiceController&& other) noexcept;
-
     virtual ~ServiceController();
 
-    static ServiceController open(const QString& name);
-    static ServiceController install(const QString& name, const QString& display_name,
-        const QString& file_path);
+    static std::unique_ptr<ServiceController> open(const QString& name);
+    static std::unique_ptr<ServiceController> install(
+        const QString& name, const QString& display_name, const QString& file_path);
     static bool remove(const QString& name);
     static bool isInstalled(const QString& name);
     static bool isRunning(const QString& name);
@@ -54,9 +53,7 @@ public:
 
     QString filePath() const;
 
-    bool isValid() const;
     bool isRunning() const;
-
     bool start();
     bool stop();
 
@@ -67,7 +64,7 @@ private:
     ScopedScHandle sc_manager_;
     mutable ScopedScHandle service_;
 
-    Q_DISABLE_COPY(ServiceController)
+    Q_DISABLE_COPY_MOVE(ServiceController)
 };
 
 } // namespace base

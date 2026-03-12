@@ -29,15 +29,15 @@ namespace relay {
 //--------------------------------------------------------------------------------------------------
 int startService(QTextStream& out)
 {
-    base::ServiceController controller = base::ServiceController::open(relay::Service::kName);
-    if (!controller.isValid())
+    std::unique_ptr<base::ServiceController> controller = base::ServiceController::open(relay::Service::kName);
+    if (!controller)
     {
         out << "Failed to access the service. Not enough rights or service not installed."
             << Qt::endl;
         return 1;
     }
 
-    if (!controller.start())
+    if (!controller->start())
     {
         out << "Failed to start the service." << Qt::endl;
         return 1;
@@ -50,15 +50,15 @@ int startService(QTextStream& out)
 //--------------------------------------------------------------------------------------------------
 int stopService(QTextStream& out)
 {
-    base::ServiceController controller = base::ServiceController::open(relay::Service::kName);
-    if (!controller.isValid())
+    std::unique_ptr<base::ServiceController> controller = base::ServiceController::open(relay::Service::kName);
+    if (!controller)
     {
         out << "Failed to access the service. Not enough rights or service not installed."
             << Qt::endl;
         return 1;
     }
 
-    if (!controller.stop())
+    if (!controller->stop())
     {
         out << "Failed to stop the service." << Qt::endl;
         return 1;
@@ -71,15 +71,15 @@ int stopService(QTextStream& out)
 //--------------------------------------------------------------------------------------------------
 int installService(QTextStream& out)
 {
-    base::ServiceController controller = base::ServiceController::install(
+    std::unique_ptr<base::ServiceController> controller = base::ServiceController::install(
         relay::Service::kName, relay::Service::kDisplayName, QCoreApplication::applicationFilePath());
-    if (!controller.isValid())
+    if (!controller)
     {
         out << "Failed to install the service." << Qt::endl;
         return 1;
     }
 
-    controller.setDescription(relay::Service::kDescription);
+    controller->setDescription(relay::Service::kDescription);
     out << "The service has been successfully installed." << Qt::endl;
     return 0;
 }
