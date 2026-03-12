@@ -24,6 +24,7 @@
 
 #include "base/asio_event_dispatcher.h"
 #include "base/logging.h"
+#include "base/service_controller.h"
 #include "base/crypto/key_pair.h"
 #include "base/crypto/random.h"
 #include "base/files/file_util.h"
@@ -33,11 +34,79 @@
 #include "router/service.h"
 #include "router/settings.h"
 
-#if defined(Q_OS_WINDOWS)
-#include "router/win/service_util.h"
-#endif
-
 namespace {
+
+//--------------------------------------------------------------------------------------------------
+int startService(QTextStream& out)
+{
+    std::unique_ptr<base::ServiceController> controller = base::ServiceController::open(router::Service::kName);
+    if (!controller)
+    {
+        out << "Failed to access the service. Not enough rights or service not installed." << Qt::endl;
+        return 1;
+    }
+
+    if (!controller->start())
+    {
+        out << "Failed to start the service." << Qt::endl;
+        return 1;
+    }
+
+    out << "The service started successfully." << Qt::endl;
+    return 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+int stopService(QTextStream& out)
+{
+    std::unique_ptr<base::ServiceController> controller = base::ServiceController::open(router::Service::kName);
+    if (!controller)
+    {
+        out << "Failed to access the service. Not enough rights or service not installed." << Qt::endl;
+        return 1;
+    }
+
+    if (!controller->stop())
+    {
+        out << "Failed to stop the service." << Qt::endl;
+        return 1;
+    }
+
+    out << "The service has stopped successfully." << Qt::endl;
+    return 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+int installService(QTextStream& out)
+{
+    std::unique_ptr<base::ServiceController> controller = base::ServiceController::install(
+        router::Service::kName, router::Service::kDisplayName, QCoreApplication::applicationFilePath());
+    if (!controller)
+    {
+        out << "Failed to install the service." << Qt::endl;
+        return 1;
+    }
+
+    controller->setDescription(router::Service::kDescription);
+    out << "The service has been successfully installed." << Qt::endl;
+    return 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+int removeService(QTextStream& out)
+{
+    if (base::ServiceController::isRunning(router::Service::kName))
+        stopService(out);
+
+    if (!base::ServiceController::remove(router::Service::kName))
+    {
+        out << "Failed to remove the service." << Qt::endl;
+        return 1;
+    }
+
+    out << "The service was successfully deleted." << Qt::endl;
+    return 0;
+}
 
 //--------------------------------------------------------------------------------------------------
 bool generateKeys(QByteArray* private_key, QByteArray* public_key)
@@ -206,9 +275,8 @@ int createConfig(QTextStream& out)
     out << "Generate seed key..." << Qt::endl;
     QByteArray seed_key = base::Random::byteArray(64);
     if (seed_key.isEmpty())
-    {
         out << "Unable to generate seed key" << Qt::endl;
-    }
+
     out << "Seed key successfully generated" << Qt::endl;
 
     // Save the configuration file.
@@ -240,24 +308,18 @@ int main(int argc, char* argv[])
 
     base::Application application(argc, argv);
 
-#if defined(Q_OS_WINDOWS)
     QCommandLineOption install_option("install", "Install service.");
     QCommandLineOption remove_option("remove", "Remove service.");
     QCommandLineOption start_option("start", "Start service.");
     QCommandLineOption stop_option("stop", "Stop service.");
-#endif // defined(Q_OS_WINDOWS)
-
     QCommandLineOption keygen_option("keygen", "Generating public and private keys.");
     QCommandLineOption create_config_option("create-config", "Creates a configuration.");
 
     QCommandLineParser parser;
-
-#if defined(Q_OS_WINDOWS)
     parser.addOption(install_option);
     parser.addOption(remove_option);
     parser.addOption(start_option);
     parser.addOption(stop_option);
-#endif // defined(Q_OS_WINDOWS)
     parser.addOption(keygen_option);
     parser.addOption(create_config_option);
     parser.addHelpOption();
@@ -271,33 +333,17 @@ int main(int argc, char* argv[])
     QTextStream out(stdout, QIODevice::WriteOnly);
 
     if (parser.isSet(keygen_option))
-    {
         return generateAndPrintKeys(out);
-    }
     else if (parser.isSet(create_config_option))
-    {
         return createConfig(out);
-    }
-#if defined(Q_OS_WINDOWS)
     else if (parser.isSet(install_option))
-    {
-        return router::installService(out);
-    }
+        return installService(out);
     else if (parser.isSet(remove_option))
-    {
-        return router::removeService(out);
-    }
+        return removeService(out);
     else if (parser.isSet(start_option))
-    {
-        return router::startService(out);
-    }
+        return startService(out);
     else if (parser.isSet(stop_option))
-    {
-        return router::stopService(out);
-    }
-#endif // defined(Q_OS_WINDOWS)
-    else
-    {
-        return router::Service().exec(application);
-    }
+        return stopService(out);
+
+    return router::Service().exec(application);
 }

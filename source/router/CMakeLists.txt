@@ -40,10 +40,7 @@ list(APPEND SOURCE_ROUTER
     user_list.h)
 
 if (WIN32)
-    list(APPEND SOURCE_ROUTER_WIN
-        win/router.rc
-        win/service_util.cc
-        win/service_util.h)
+    list(APPEND SOURCE_ROUTER_WIN win/router.rc)
 endif()
 
 source_group("" FILES ${SOURCE_ROUTER})

@@ -32,7 +32,6 @@
 
 namespace host {
 
-#if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
 int startService(QTextStream& out)
 {
@@ -40,8 +39,7 @@ int startService(QTextStream& out)
         base::ServiceController::open(host::Service::kName);
     if (!controller)
     {
-        out << "Failed to access the service. Not enough rights or service not installed."
-            << Qt::endl;
+        out << "Failed to access the service. Not enough rights or service not installed." << Qt::endl;
         return 1;
     }
 
@@ -54,17 +52,14 @@ int startService(QTextStream& out)
     out << "The service started successfully." << Qt::endl;
     return 0;
 }
-#endif // defined(Q_OS_WINDOWS)
 
-#if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
 int stopService(QTextStream& out)
 {
     std::unique_ptr<base::ServiceController> controller = base::ServiceController::open(host::Service::kName);
     if (!controller)
     {
-        out << "Failed to access the service. Not enough rights or service not installed."
-            << Qt::endl;
+        out << "Failed to access the service. Not enough rights or service not installed." << Qt::endl;
         return 1;
     }
 
@@ -77,9 +72,7 @@ int stopService(QTextStream& out)
     out << "The service has stopped successfully." << Qt::endl;
     return 0;
 }
-#endif // defined(Q_OS_WINDOWS)
 
-#if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
 int installService(QTextStream& out)
 {
@@ -95,9 +88,7 @@ int installService(QTextStream& out)
     out << "The service has been successfully installed." << Qt::endl;
     return 0;
 }
-#endif // defined(Q_OS_WINDOWS)
 
-#if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
 int removeService(QTextStream& out)
 {
@@ -113,7 +104,6 @@ int removeService(QTextStream& out)
     out << "The service was successfully deleted." << Qt::endl;
     return 0;
 }
-#endif // defined(Q_OS_WINDOWS)
 
 //--------------------------------------------------------------------------------------------------
 int hostServiceMain(int& argc, char* argv[])
@@ -122,8 +112,6 @@ int hostServiceMain(int& argc, char* argv[])
     logging_settings.min_log_level = base::LOG_INFO;
 
     base::ScopedLogging scoped_logging(logging_settings);
-
-    LOG(INFO) << "Integrity check passed successfully";
 
     base::Application::setEventDispatcher(new base::AsioEventDispatcher());
     base::Application::setApplicationVersion(ASPIA_VERSION_STRING);
@@ -138,9 +126,6 @@ int hostServiceMain(int& argc, char* argv[])
 
     host::HostUtils::printDebugInfo();
 
-    QCommandLineParser parser;
-
-#if defined(Q_OS_WINDOWS)
     QCommandLineOption install_option("install",
         base::Application::translate("ServiceMain", "Install service."));
     QCommandLineOption remove_option("remove",
@@ -149,16 +134,14 @@ int hostServiceMain(int& argc, char* argv[])
         base::Application::translate("ServiceMain", "Start service."));
     QCommandLineOption stop_option("stop",
         base::Application::translate("ServiceMain", "Stop service."));
+    QCommandLineOption hostid_option("host-id",
+        base::Application::translate("ServiceMain", "Get current host id."));
 
+    QCommandLineParser parser;
     parser.addOption(install_option);
     parser.addOption(remove_option);
     parser.addOption(start_option);
     parser.addOption(stop_option);
-#endif // defined(Q_OS_WINDOWS)
-
-    QCommandLineOption hostid_option("host-id",
-        base::Application::translate("ServiceMain", "Get current host id."));
-
     parser.addOption(hostid_option);
     parser.addHelpOption();
     parser.addVersionOption();
@@ -173,28 +156,17 @@ int hostServiceMain(int& argc, char* argv[])
         out << storage.lastHostId() << Qt::endl;
         return 0;
     }
-#if defined(Q_OS_WINDOWS)
-    else if (parser.isSet(install_option))
-    {
+
+    if (parser.isSet(install_option))
         return installService(out);
-    }
     else if (parser.isSet(remove_option))
-    {
         return removeService(out);
-    }
     else if (parser.isSet(start_option))
-    {
         return startService(out);
-    }
     else if (parser.isSet(stop_option))
-    {
         return stopService(out);
-    }
-#endif // defined(Q_OS_WINDOWS)
-    else
-    {
-        return Service().exec(application);
-    }
+
+    return Service().exec(application);
 }
 
 } // namespace host

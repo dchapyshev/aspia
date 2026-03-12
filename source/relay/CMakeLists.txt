@@ -34,10 +34,7 @@ list(APPEND SOURCE_RELAY
     settings.h)
 
 if (WIN32)
-    list(APPEND SOURCE_RELAY_WIN
-        win/relay.rc
-        win/service_util.cc
-        win/service_util.h)
+    list(APPEND SOURCE_RELAY_WIN win/relay.rc)
 endif()
 
 source_group("" FILES ${SOURCE_RELAY})
