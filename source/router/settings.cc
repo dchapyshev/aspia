@@ -52,6 +52,7 @@ QString Settings::filePath()
 void Settings::reset()
 {
     setPort(DEFAULT_ROUTER_TCP_PORT);
+    setLegacyPort(DEFAULT_ROUTER_LEGACY_TCP_PORT);
     setPrivateKey(QByteArray());
     setClientWhiteList(WhiteList());
     setHostWhiteList(WhiteList());
