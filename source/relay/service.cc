@@ -131,7 +131,7 @@ void Service::onStop()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Service::onTcpReady()
+void Service::onTcpConnected()
 {
     LOG(INFO) << "Connection to the router is established (session count:" << session_count_ << ")";
 
@@ -303,7 +303,7 @@ void Service::connectToRouter()
 
     tcp_channel_ = new base::TcpChannelNG(authenticator, this);
 
-    connect(tcp_channel_, &base::TcpChannel::sig_authenticated, this, &Service::onTcpReady);
+    connect(tcp_channel_, &base::TcpChannel::sig_authenticated, this, &Service::onTcpConnected);
     connect(tcp_channel_, &base::TcpChannel::sig_errorOccurred, this, &Service::onTcpErrorOccurred);
     connect(tcp_channel_, &base::TcpChannel::sig_messageReceived, this, &Service::onTcpMessageReceived);
 
