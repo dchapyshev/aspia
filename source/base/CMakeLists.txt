@@ -52,8 +52,6 @@ list(APPEND SOURCE_BASE
     service.h
     service_controller.cc
     service_controller.h
-    service_controller_systemd.cc
-    service_controller_systemd.h
     session_id.cc
     session_id.h
     shared_pointer.h
@@ -84,6 +82,8 @@ endif()
 
 if (LINUX)
     list(APPEND SOURCE_BASE
+        service_controller_systemd.cc
+        service_controller_systemd.h
         service_posix.cc
         sys_info_linux.cc)
 endif()
@@ -582,7 +582,6 @@ add_library(aspia_base STATIC
     ${SOURCE_BASE_WIN}
     ${SOURCE_BASE_X11})
 
-target_include_directories(aspia_base SYSTEM PRIVATE ${INIPP_INCLUDE_DIRS})
 set_property(TARGET aspia_base PROPERTY AUTOMOC ON)
 set_property(TARGET aspia_base PROPERTY AUTOUIC ON)
 set_property(TARGET aspia_base PROPERTY AUTORCC ON)
