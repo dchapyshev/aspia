@@ -92,7 +92,7 @@ set(THIRD_PARTY_LIBS
     unofficial::libvpx::libvpx
     yuv)
 
-include_directories(${PROJECT_SOURCE_DIR}/source ${PROJECT_BINARY_DIR}/source)
+include_directories(${PROJECT_SOURCE_DIR}/source ${PROJECT_BINARY_DIR}/source ${INIPP_INCLUDE_DIRS})
 
 # C++ compliller flags.
 set(CMAKE_CXX_STANDARD 20)

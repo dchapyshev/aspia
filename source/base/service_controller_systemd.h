@@ -48,6 +48,10 @@ public:
     bool stop() final;
 
 private:
+    explicit ServiceControllerSystemd(const QString& unit_name);
+
+    QString unit_name_;
+
     Q_DISABLE_COPY_MOVE(ServiceControllerSystemd)
 };
 
