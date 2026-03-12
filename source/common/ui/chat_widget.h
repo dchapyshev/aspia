@@ -86,3 +86,4 @@ private:
 } // namespace common
 
 #endif // COMMON_UI_CHAT_WIDGET_H
+

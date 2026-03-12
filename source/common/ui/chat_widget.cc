@@ -22,6 +22,7 @@
 #include <QDir>
 #include <QFile>
 #include <QFileDialog>
+#include <QFileInfo>
 #include <QHostInfo>
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -56,7 +57,7 @@ QString currentTime()
 }
 
 //--------------------------------------------------------------------------------------------------
-QString historyFilePath(const QString& history_id)
+QString historyDirectoryPath(const QString& history_id)
 {
     QString base_path = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation);
     if (base_path.isEmpty())
@@ -65,6 +66,9 @@ QString historyFilePath(const QString& history_id)
         return QString();
     }
 
+    if (history_id.isEmpty())
+        return base_path;
+
     QDir dir(base_path);
     if (!dir.mkpath(kHistoryDirName))
     {
@@ -72,8 +76,50 @@ QString historyFilePath(const QString& history_id)
         return QString();
     }
 
-    QString file_name = QString::fromLatin1(history_id.toUtf8().toHex());
-    return dir.filePath(QString("%1/%2.json").arg(kHistoryDirName, file_name));
+    return dir.filePath(kHistoryDirName);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString historyFilePath(const QString& history_id)
+{
+    QString dir_path = historyDirectoryPath(history_id);
+    if (dir_path.isEmpty())
+        return QString();
+
+    if (history_id.isEmpty())
+        return QDir(dir_path).filePath("chat.json");
+
+    return QDir(dir_path).filePath(history_id + ".json");
+}
+
+//--------------------------------------------------------------------------------------------------
+void removeHistoryFilesOlderThan(int days)
+{
+    if (days <= 0)
+    {
+        LOG(ERROR) << "Invalid history retention days:" << days;
+        return;
+    }
+
+    QString dir_path = historyDirectoryPath(QString());
+    if (dir_path.isEmpty())
+        return;
+
+    QDir dir(dir_path);
+    if (!dir.exists())
+        return;
+
+    QDateTime expiration = QDateTime::currentDateTimeUtc().addDays(-days);
+    QFileInfoList files = dir.entryInfoList(QStringList() << QStringLiteral("*.json"), QDir::Files);
+
+    for (const QFileInfo& file_info : std::as_const(files))
+    {
+        if (file_info.lastModified().toUTC() >= expiration)
+            continue;
+
+        if (!dir.remove(file_info.fileName()))
+            LOG(ERROR) << "Unable to remove old chat history file:" << file_info.filePath();
+    }
 }
 
 } // namespace
@@ -187,9 +233,6 @@ void ChatWidget::setDisplayName(const QString& display_name)
 //--------------------------------------------------------------------------------------------------
 void ChatWidget::setHistoryId(const QString& history_id)
 {
-    if (history_id_ == history_id)
-        return;
-
     history_id_ = history_id;
     loadHistory();
 }
@@ -298,11 +341,7 @@ void ChatWidget::loadHistory()
     clearMessages();
     history_messages_.clear();
 
-    if (history_id_.isEmpty())
-    {
-        LOG(INFO) << "Empty history id";
-        return;
-    }
+    removeHistoryFilesOlderThan(30);
 
     QString file_path = historyFilePath(history_id_);
     if (file_path.isEmpty())
@@ -374,12 +413,6 @@ void ChatWidget::loadHistory()
 //--------------------------------------------------------------------------------------------------
 void ChatWidget::saveHistory() const
 {
-    if (history_id_.isEmpty())
-    {
-        LOG(INFO) << "Empty history id";
-        return;
-    }
-
     QString file_path = historyFilePath(history_id_);
     if (file_path.isEmpty())
     {

@@ -128,7 +128,7 @@ MainWindow::MainWindow(QWidget* parent)
 
     chat_widget_ = new common::ChatWidget();
     chat_widget_->setWindowFlag(Qt::WindowStaysOnTopHint);
-    chat_widget_->setHistoryId("host");
+    chat_widget_->setHistoryId(QString());
 
     connect(chat_widget_, &common::ChatWidget::sig_sendMessage,
             this, [this](const proto::chat::Message& message)
