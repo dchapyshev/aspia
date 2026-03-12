@@ -9,6 +9,7 @@
       "name": "icu",
       "platform": "linux | osx"
     },
+    "inipp",
     "libvpx",
     "libyuv",
     "openssl",
