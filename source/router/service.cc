@@ -18,6 +18,8 @@
 
 #include "router/service.h"
 
+#include <QHostAddress>
+
 #include "base/logging.h"
 #include "base/crypto/random.h"
 #include "base/net/tcp_channel.h"
@@ -30,6 +32,38 @@
 #include "router/user_list.h"
 
 namespace router {
+
+namespace {
+
+//--------------------------------------------------------------------------------------------------
+bool isAddressAllowed(const QStringList& white_list, const QString& address_string)
+{
+    if (white_list.isEmpty())
+        return true;
+
+    QHostAddress address(address_string);
+    if (address.protocol() != QAbstractSocket::IPv4Protocol &&
+        address.protocol() != QAbstractSocket::IPv6Protocol)
+    {
+        LOG(ERROR) << "Invalid peer IP address:" << address_string;
+        return false;
+    }
+
+    for (const auto& entry : white_list)
+    {
+        QHostAddress white_list_address(entry);
+        if (white_list_address == address)
+            return true;
+
+        QPair<QHostAddress, int> subnet = QHostAddress::parseSubnet(entry);
+        if (subnet.second >= 0 && address.isInSubnet(subnet))
+            return true;
+    }
+
+    return false;
+}
+
+} // namespace
 
 //--------------------------------------------------------------------------------------------------
 // static
@@ -390,7 +424,7 @@ void Service::addSession(base::TcpChannel* channel)
     {
         case proto::router::SESSION_TYPE_CLIENT:
         {
-            if (!client_white_list_.isEmpty() && !client_white_list_.contains(address))
+            if (!isAddressAllowed(client_white_list_, address))
                 break;
             session = new SessionClient(channel, this);
         }
@@ -398,7 +432,7 @@ void Service::addSession(base::TcpChannel* channel)
 
         case proto::router::SESSION_TYPE_HOST:
         {
-            if (!host_white_list_.isEmpty() && !host_white_list_.contains(address))
+            if (!isAddressAllowed(host_white_list_, address))
                 break;
             session = new SessionHost(channel, this);
         }
@@ -406,7 +440,7 @@ void Service::addSession(base::TcpChannel* channel)
 
         case proto::router::SESSION_TYPE_ADMIN:
         {
-            if (!admin_white_list_.isEmpty() && !admin_white_list_.contains(address))
+            if (!isAddressAllowed(admin_white_list_, address))
                 break;
             session = new SessionAdmin(channel, this);
         }
@@ -414,7 +448,7 @@ void Service::addSession(base::TcpChannel* channel)
 
         case proto::router::SESSION_TYPE_RELAY:
         {
-            if (!relay_white_list_.isEmpty() && !relay_white_list_.contains(address))
+            if (!isAddressAllowed(relay_white_list_, address))
                 break;
             session = new SessionRelay(channel, this);
         }

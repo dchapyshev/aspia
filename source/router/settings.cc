@@ -26,6 +26,27 @@
 
 namespace router {
 
+namespace {
+
+//--------------------------------------------------------------------------------------------------
+bool isValidWhiteListEntry(const QString& entry)
+{
+    QHostAddress address(entry);
+    if (address.protocol() == QAbstractSocket::IPv4Protocol ||
+        address.protocol() == QAbstractSocket::IPv6Protocol)
+    {
+        return true;
+    }
+
+    QPair<QHostAddress, int> subnet = QHostAddress::parseSubnet(entry);
+    if (subnet.second < 0)
+        return false;
+
+    return subnet.first.protocol() == QAbstractSocket::IPv4Protocol ||
+           subnet.first.protocol() == QAbstractSocket::IPv6Protocol;
+}
+
+} // namespace
 //--------------------------------------------------------------------------------------------------
 Settings::Settings()
     : impl_(base::XmlSettings::format(), QSettings::SystemScope, "aspia", "router")
@@ -181,16 +202,15 @@ void Settings::setWhiteList(const QString& key, const WhiteList& value)
 
     for (const auto& entry : value)
     {
-        QHostAddress address(entry);
+        const QString trimmed_entry = entry.trimmed();
 
-        if (address.protocol() == QAbstractSocket::IPv4Protocol ||
-            address.protocol() == QAbstractSocket::IPv6Protocol)
+        if (isValidWhiteListEntry(trimmed_entry))
         {
-            result += entry + ';';
+            result += trimmed_entry + ';';
         }
         else
         {
-            LOG(ERROR) << "Invalid IP address" << entry << "in" << key;
+            LOG(ERROR) << "Invalid IP address or subnet" << entry << "in" << key;
         }
     }
 
@@ -205,16 +225,15 @@ Settings::WhiteList Settings::whiteList(const QString& key) const
     auto it = result.begin();
     while (it != result.end())
     {
-        QHostAddress address(*it);
+        *it = it->trimmed();
 
-        if (address.protocol() == QAbstractSocket::IPv4Protocol ||
-            address.protocol() == QAbstractSocket::IPv6Protocol)
+        if (isValidWhiteListEntry(*it))
         {
             ++it;
         }
         else
         {
-            LOG(ERROR) << "Invalid IP address" << *it << "in" << key;
+            LOG(ERROR) << "Invalid IP address or subnet" << *it << "in" << key;
             it = result.erase(it);
         }
     }
