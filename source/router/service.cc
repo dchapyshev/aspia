@@ -51,10 +51,16 @@ Service::Service(QObject* parent)
 Service::~Service()
 {
     LOG(INFO) << "Dtor";
+
+    // Sessions can access the |instance_|, so we delete them all before zeroing the |instance_|.
+    for (auto* session : std::as_const(sessions_))
+        delete session;
+
     instance_ = nullptr;
 }
 
 //--------------------------------------------------------------------------------------------------
+// static
 Service* Service::instance()
 {
     return instance_;
@@ -103,7 +109,7 @@ void Service::addKey(qint64 session_id, const proto::router::RelayKey& key)
     auto relay = key_pool_.find(session_id);
     if (relay == key_pool_.end())
     {
-        LOG(INFO) << "Host not found in pool. It will be added";
+        LOG(INFO) << "Host not found in key pool. It will be added";
         relay = key_pool_.insert(session_id, Keys());
     }
 
@@ -193,7 +199,6 @@ size_t Service::keyCountForRelay(qint64 session_id) const
     auto result = key_pool_.find(session_id);
     if (result == key_pool_.end())
         return 0;
-
     return result.value().size();
 }
 
@@ -224,7 +229,7 @@ void Service::onStart()
 
     if (!start())
     {
-        LOG(ERROR) << "Unable to start server. Service not started";
+        LOG(ERROR) << "Unable to start service";
         QCoreApplication::quit();
         return;
     }
@@ -241,12 +246,7 @@ void Service::onStop()
 //--------------------------------------------------------------------------------------------------
 void Service::onNewConnection()
 {
-    if (!tcp_server_)
-    {
-        LOG(ERROR) << "No TCP server instance";
-        return;
-    }
-
+    CHECK(tcp_server_);
     while (tcp_server_->hasReadyConnections())
     {
         base::TcpChannel* channel = tcp_server_->nextReadyConnection();
@@ -258,12 +258,7 @@ void Service::onNewConnection()
 //--------------------------------------------------------------------------------------------------
 void Service::onNewLegacyConnection()
 {
-    if (!tcp_server_legacy_)
-    {
-        LOG(ERROR) << "No legacy TCP server instance";
-        return;
-    }
-
+    CHECK(tcp_server_legacy_);
     while (tcp_server_legacy_->hasReadyConnections())
     {
         base::TcpChannel* channel = tcp_server_legacy_->nextReadyConnection();
@@ -287,7 +282,7 @@ bool Service::start()
 {
     if (tcp_server_)
     {
-        LOG(ERROR) << "Server already started";
+        LOG(ERROR) << "Server already is started";
         return false;
     }
 
@@ -323,48 +318,32 @@ bool Service::start()
 
     client_white_list_ = settings.clientWhiteList();
     if (client_white_list_.isEmpty())
-    {
         LOG(INFO) << "Empty client white list. Connections from all clients will be allowed";
-    }
     else
-    {
         LOG(INFO) << "Client white list is not empty. Allowed clients:" << client_white_list_;
-    }
 
     host_white_list_ = settings.hostWhiteList();
     if (host_white_list_.isEmpty())
-    {
         LOG(INFO) << "Empty host white list. Connections from all hosts will be allowed";
-    }
     else
-    {
         LOG(INFO) << "Host white list is not empty. Allowed hosts:" << host_white_list_;
-    }
 
     admin_white_list_ = settings.adminWhiteList();
     if (admin_white_list_.isEmpty())
-    {
         LOG(INFO) << "Empty admin white list. Connections from all admins will be allowed";
-    }
     else
-    {
         LOG(INFO) << "Admin white list is not empty. Allowed admins:" << admin_white_list_;
-    }
 
     relay_white_list_ = settings.relayWhiteList();
     if (relay_white_list_.isEmpty())
-    {
         LOG(INFO) << "Empty relay white list. Connections from all relays will be allowed";
-    }
     else
-    {
         LOG(INFO) << "Relay white list is not empty. Allowed relays:" << relay_white_list_;
-    }
 
     QByteArray seed_key = settings.seedKey();
     if (seed_key.isEmpty())
     {
-        LOG(INFO) << "Empty seed key. New key generated";
+        LOG(INFO) << "Empty seed key. New key is generated";
         seed_key = base::Random::byteArray(64);
         settings.setSeedKey(seed_key);
     }
@@ -448,7 +427,7 @@ void Service::addSession(base::TcpChannel* channel)
 
     if (!session)
     {
-        LOG(ERROR) << "Connection rejected for" << address;
+        LOG(ERROR) << "Connection is rejected for" << address;
         channel->deleteLater();
         return;
     }

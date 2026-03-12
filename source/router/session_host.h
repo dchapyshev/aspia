@@ -31,9 +31,7 @@ public:
     explicit SessionHost(base::TcpChannel* channel, QObject* parent = nullptr);
     ~SessionHost() final;
 
-    using HostIdList = QList<base::HostId>;
-
-    const HostIdList& hostIdList() const { return host_id_list_; }
+    const QList<base::HostId>& hostIdList() const { return host_id_list_; }
     bool hasHostId(base::HostId host_id) const;
 
     void sendConnectionOffer(const proto::router::ConnectionOffer& offer);
@@ -47,7 +45,7 @@ private:
     void readResetHostId(const proto::router::ResetHostId& reset_host_id);
     void removeOtherWithSameId();
 
-    HostIdList host_id_list_;
+    QList<base::HostId> host_id_list_;
 
     Q_DISABLE_COPY_MOVE(SessionHost)
 };

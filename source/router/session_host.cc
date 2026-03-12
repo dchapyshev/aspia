@@ -188,7 +188,7 @@ void SessionHost::readResetHostId(const proto::router::ResetHostId& reset_host_i
         }
     }
 
-    LOG(ERROR) << "Host ID" << host_id << "NOT found in list";
+    LOG(ERROR) << "Host ID" << host_id << "is NOT found in list";
 }
 
 //--------------------------------------------------------------------------------------------------

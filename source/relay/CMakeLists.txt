@@ -17,10 +17,6 @@
 #
 
 list(APPEND SOURCE_RELAY
-    key_factory.cc
-    key_factory.h
-    key_pool.cc
-    key_pool.h
     main.cc
     migration_utils.cc
     migration_utils.h

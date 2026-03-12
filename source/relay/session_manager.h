@@ -21,18 +21,18 @@
 
 #include <QObject>
 
-#include "proto/relay_peer.h"
-#include "proto/router_relay.h"
-
 #include <asio/ip/tcp.hpp>
 #include <asio/steady_timer.hpp>
+
+#include "proto/relay_peer.h"
+#include "proto/router_relay.h"
+#include "relay/session_key.h"
 
 class QTimer;
 
 namespace relay {
 
 class PendingSession;
-class KeyPool;
 class Session;
 
 class SessionManager final : public QObject
@@ -48,7 +48,14 @@ public:
                    QObject* parent = nullptr);
     ~SessionManager() final;
 
-    void start(std::shared_ptr<KeyPool> shared_key_pool);
+    using Key = std::pair<QByteArray, QByteArray>;
+
+    void start();
+    quint32 addKey(SessionKey&& session_key);
+    bool removeKey(quint32 key_id);
+    void setKeyExpired(quint32 key_id);
+    std::optional<Key> keyFromPool(quint32 key_id, const std::string& peer_public_key) const;
+    void clearKeys();
 
 public slots:
     void onDisconnectSession(quint64 session_id);
@@ -56,6 +63,7 @@ public slots:
 signals:
     void sig_started();
     void sig_statistics(const proto::router::RelayStat& relay_stat);
+    void sig_keyExpired(quint32 key_id);
     void sig_finished();
 
 private slots:
@@ -71,6 +79,9 @@ private:
     void removePendingSession(PendingSession* sessions);
     void removeSession(Session* session);
 
+    std::unordered_map<quint32, SessionKey> key_pool_;
+    quint32 current_key_id_ = 0;
+
     asio::ip::tcp::acceptor acceptor_;
     QList<PendingSession*> pending_sessions_;
     QList<Session*> active_sessions_;
@@ -81,8 +92,6 @@ private:
     const std::chrono::minutes idle_timeout_;
     QTimer* idle_timer_ = nullptr;
     QTimer* stat_timer_ = nullptr;
-
-    std::shared_ptr<KeyPool> shared_key_pool_;
 
     using Clock = std::chrono::steady_clock;
     using TimePoint = std::chrono::time_point<Clock>;

@@ -290,7 +290,7 @@ void InputInjectorWin::injectTextEvent(const proto::desktop::TextEvent& event)
 
     beforeInput();
 
-    for (auto it = text.cbegin(); it != text.cend(); ++it)
+    for (auto it = text.cbegin(), it_end = text.cend(); it != it_end; ++it)
     {
         if (*it == '\n')
         {

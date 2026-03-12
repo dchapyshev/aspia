@@ -18,11 +18,12 @@
 
 #include "relay/service.h"
 
+#include <QPointer>
+
 #include "base/logging.h"
 #include "base/net/tcp_channel_ng.h"
 #include "base/net/tcp_server.h"
 #include "base/peer/client_authenticator.h"
-#include "relay/key_factory.h"
 #include "relay/migration_utils.h"
 #include "relay/service.h"
 #include "relay/session_manager.h"
@@ -38,22 +39,23 @@ const std::chrono::seconds kReconnectTimeout{ 15 };
 class KeyDeleter
 {
 public:
-    KeyDeleter(std::shared_ptr<KeyPool> pool, quint32 key_id)
-        : pool_(std::move(pool)),
+    KeyDeleter(QPointer<SessionManager> session_manager, quint32 key_id)
+        : session_manager_(session_manager),
           key_id_(key_id)
     {
-        DCHECK(pool_);
+        DCHECK(session_manager_);
     }
 
     ~KeyDeleter() = default;
 
     void deleteKey()
     {
-        pool_->setKeyExpired(key_id_);
+        if (session_manager_)
+            session_manager_->setKeyExpired(key_id_);
     }
 
 private:
-    std::shared_ptr<KeyPool> pool_;
+    QPointer<SessionManager> session_manager_;
     const quint32 key_id_;
 
     Q_DISABLE_COPY_MOVE(KeyDeleter)
@@ -71,12 +73,9 @@ const char Service::kDescription[] = "Proxies user traffic to bypass NAT.";
 //--------------------------------------------------------------------------------------------------
 Service::Service(QObject* parent)
     : base::Service(Service::kName, parent),
-      reconnect_timer_(new QTimer(this)),
-      key_factory_(new KeyFactory(this))
+      reconnect_timer_(new QTimer(this))
 {
     LOG(INFO) << "Ctor";
-
-    connect(key_factory_, &KeyFactory::sig_keyExpired, this, &Service::onPoolKeyExpired, Qt::QueuedConnection);
 
     reconnect_timer_->setSingleShot(true);
     connect(reconnect_timer_, &QTimer::timeout, this, &Service::connectToRouter);
@@ -156,7 +155,7 @@ void Service::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code)
     LOG(INFO) << "Connection to the router has been lost:" << error_code;
 
     // Clearing the key pool.
-    key_factory_->clear();
+    session_manager_->clearKeys();
 
     // Retrying a connection at a time interval.
     delayedConnectToRouter();
@@ -174,7 +173,7 @@ void Service::onTcpMessageReceived(quint8 /* channel_id */, const QByteArray& bu
     if (incoming_message_->has_key_used())
     {
         std::shared_ptr<KeyDeleter> key_deleter =
-            std::make_shared<KeyDeleter>(key_factory_->sharedKeyPool(), incoming_message_->key_used().key_id());
+            std::make_shared<KeyDeleter>(session_manager_, incoming_message_->key_used().key_id());
 
         // The router gave the key to the peers. They are required to use it within 30 seconds.
         // If it is not used during this time, then it will be removed from the pool.
@@ -323,8 +322,9 @@ bool Service::start()
     connect(session_manager_, &SessionManager::sig_started, this, &Service::onSessionStarted);
     connect(session_manager_, &SessionManager::sig_finished, this, &Service::onSessionFinished);
     connect(session_manager_, &SessionManager::sig_statistics, this, &Service::onSessionStatistics);
+    connect(session_manager_, &SessionManager::sig_keyExpired, this, &Service::onPoolKeyExpired);
 
-    session_manager_->start(key_factory_->sharedKeyPool());
+    session_manager_->start();
 
     connectToRouter();
     return true;
@@ -382,7 +382,7 @@ void Service::sendKeyPool(quint32 key_count)
         key->set_iv(session_key.iv().toStdString());
 
         // Add the key to the pool.
-        key->set_key_id(key_factory_->addKey(std::move(session_key)));
+        key->set_key_id(session_manager_->addKey(std::move(session_key)));
     }
 
     // Send a message to the router.

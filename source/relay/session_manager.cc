@@ -24,7 +24,6 @@
 #include "base/logging.h"
 #include "base/crypto/message_decryptor.h"
 #include "relay/pending_session.h"
-#include "relay/key_pool.h"
 #include "relay/session.h"
 
 namespace relay {
@@ -35,7 +34,7 @@ const std::chrono::minutes kIdleTimerInterval { 1 };
 
 //--------------------------------------------------------------------------------------------------
 // Decrypts an encrypted pair of peer identifiers using key |session_key|.
-QByteArray decryptSecret(const proto::relay::PeerToRelay& message, const KeyPool::Key& key)
+QByteArray decryptSecret(const proto::relay::PeerToRelay& message, const SessionManager::Key& key)
 {
     if (key.first.isEmpty() || key.second.isEmpty())
     {
@@ -129,7 +128,7 @@ SessionManager::~SessionManager()
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionManager::start(std::shared_ptr<KeyPool> shared_key_pool)
+void SessionManager::start()
 {
     LOG(INFO) << "Starting session manager";
     asio::ip::tcp::endpoint endpoint(address_, port_);
@@ -164,16 +163,63 @@ void SessionManager::start(std::shared_ptr<KeyPool> shared_key_pool)
     }
 
     start_time_ = Clock::now();
-
-    shared_key_pool_ = std::move(shared_key_pool);
-    DCHECK(shared_key_pool_);
-
     idle_timer_->start(kIdleTimerInterval);
 
     if (statistics_enabled_)
         stat_timer_->start(statistics_interval_);
 
     SessionManager::doAccept(this);
+}
+
+//--------------------------------------------------------------------------------------------------
+quint32 SessionManager::addKey(SessionKey&& session_key)
+{
+    quint32 key_id = current_key_id_++;
+    key_pool_.try_emplace(key_id, std::move(session_key));
+
+    LOG(INFO) << "Key with id" << key_id << "added to pool";
+    return key_id;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool SessionManager::removeKey(quint32 key_id)
+{
+    auto result = key_pool_.find(key_id);
+    if (result == key_pool_.end())
+        return false;
+
+    key_pool_.erase(result);
+    LOG(INFO) << "Key with id" << key_id << "removed from pool";
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void SessionManager::setKeyExpired(quint32 key_id)
+{
+    if (!removeKey(key_id))
+        return;
+
+    LOG(INFO) << "Key with ID" << key_id << "expired. It has been removed";
+    emit sig_keyExpired(key_id);
+}
+
+//--------------------------------------------------------------------------------------------------
+void SessionManager::clearKeys()
+{
+    LOG(INFO) << "Key pool cleared";
+    key_pool_.clear();
+}
+
+//--------------------------------------------------------------------------------------------------
+std::optional<SessionManager::Key> SessionManager::keyFromPool(
+    quint32 key_id, const std::string& peer_public_key) const
+{
+    auto result = key_pool_.find(key_id);
+    if (result == key_pool_.end())
+        return std::nullopt;
+
+    const SessionKey& session_key = result->second;
+    return std::make_pair(session_key.sessionKey(peer_public_key), session_key.iv());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -202,7 +248,7 @@ void SessionManager::onPendingSessionReady(const proto::relay::PeerToRelay& mess
     CHECK(pending_session);
 
     // Looking for a key with the specified identifier.
-    std::optional<KeyPool::Key> key = shared_key_pool_->key(message.key_id(), message.public_key());
+    std::optional<Key> key = keyFromPool(message.key_id(), message.public_key());
     if (!key.has_value())
     {
         LOG(ERROR) << "Key with id" << message.key_id() << "is NOT found!";
@@ -231,7 +277,7 @@ void SessionManager::onPendingSessionReady(const proto::relay::PeerToRelay& mess
         LOG(INFO) << "Both peers are connected with key" << message.key_id();
 
         // Delete the key from the pool. It can no longer be used.
-        shared_key_pool_->removeKey(message.key_id());
+        removeKey(message.key_id());
 
         Session* session = new Session(
             std::make_pair(pending_session->takeSocket(), other_pending_session->takeSocket()),
