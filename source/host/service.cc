@@ -386,11 +386,23 @@ void Service::onUserSessionAttached()
     for (auto* client : std::as_const(clients_))
     {
         auto session_type = static_cast<proto::peer::SessionType>(client->property("session_type").toUInt());
-        QString computer_name = client->property("computer_name").toString();
-        QString display_name = client->property("display_name").toString();
-        quint32 client_id = client->property("client_id").toUInt();
+        switch (session_type)
+        {
+            case proto::peer::SESSION_TYPE_DESKTOP_MANAGE:
+            case proto::peer::SESSION_TYPE_DESKTOP_VIEW:
+            case proto::peer::SESSION_TYPE_FILE_TRANSFER:
+            {
+                QString computer_name = client->property("computer_name").toString();
+                QString display_name = client->property("display_name").toString();
+                quint32 client_id = client->property("client_id").toUInt();
 
-        user_session_->sendConnectEvent(client_id, session_type, computer_name, display_name);
+                user_session_->sendConnectEvent(client_id, session_type, computer_name, display_name);
+            }
+            break;
+
+            default:
+                break;
+        }
     }
 }
 

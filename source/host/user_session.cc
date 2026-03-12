@@ -310,11 +310,23 @@ void UserSession::onClientStarted()
     QString display_name = client->property("display_name").toString();
     quint32 client_id = client->property("client_id").toUInt();
 
-    if (session_type == proto::peer::SESSION_TYPE_DESKTOP_MANAGE ||
-        session_type == proto::peer::SESSION_TYPE_DESKTOP_VIEW)
-        ++desktop_client_count_;
+    switch (session_type)
+    {
+        case proto::peer::SESSION_TYPE_DESKTOP_MANAGE:
+        case proto::peer::SESSION_TYPE_DESKTOP_VIEW:
+        {
+            ++desktop_client_count_;
+            sendConnectEvent(client_id, session_type, computer_name, display_name);
+        }
+        break;
 
-    sendConnectEvent(client_id, session_type, computer_name, display_name);
+        case proto::peer::SESSION_TYPE_FILE_TRANSFER:
+            sendConnectEvent(client_id, session_type, computer_name, display_name);
+            break;
+
+        default:
+            break;
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -323,24 +335,35 @@ void UserSession::onClientFinished()
     QObject* client = sender();
     CHECK(client);
 
-    sendDisconnectEvent(client->property("client_id").toUInt());
-
     auto session_type = static_cast<proto::peer::SessionType>(client->property("session_type").toUInt());
-    if (session_type != proto::peer::SESSION_TYPE_DESKTOP_MANAGE &&
-        session_type != proto::peer::SESSION_TYPE_DESKTOP_VIEW)
-        return;
-
-    desktop_client_count_ = std::max(desktop_client_count_ - 1, 0);
-    if (desktop_client_count_)
-        return;
-
-    LOG(INFO) << "Last desktop client is disconnected";
-
-    base::SessionId session_id = base::activeConsoleSessionId();
-    if (session_id_ != session_id && session_id_ != base::kInvalidSessionId)
+    switch (session_type)
     {
-        dettach(FROM_HERE);
-        attach(FROM_HERE, AttachReason::OTHER, session_id);
+        case proto::peer::SESSION_TYPE_DESKTOP_MANAGE:
+        case proto::peer::SESSION_TYPE_DESKTOP_VIEW:
+        {
+            sendDisconnectEvent(client->property("client_id").toUInt());
+
+            desktop_client_count_ = std::max(desktop_client_count_ - 1, 0);
+            if (desktop_client_count_)
+                return;
+
+            LOG(INFO) << "Last desktop client is disconnected";
+
+            base::SessionId session_id = base::activeConsoleSessionId();
+            if (session_id_ != session_id && session_id_ != base::kInvalidSessionId)
+            {
+                dettach(FROM_HERE);
+                attach(FROM_HERE, AttachReason::OTHER, session_id);
+            }
+        }
+        break;
+
+        case proto::peer::SESSION_TYPE_FILE_TRANSFER:
+            sendDisconnectEvent(client->property("client_id").toUInt());
+            break;
+
+        default:
+            break;
     }
 }
 

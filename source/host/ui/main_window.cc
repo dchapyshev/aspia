@@ -145,13 +145,6 @@ MainWindow::MainWindow(QWidget* parent)
         emit sig_chat(chat);
     });
 
-    connect(chat_widget_, &common::ChatWidget::sig_textChatClosed, this, [this]()
-    {
-        QList<quint32> sessions = notifier_->sessions(proto::peer::SESSION_TYPE_TEXT_CHAT);
-        for (const auto& session : std::as_const(sessions))
-            onKillSession(session);
-    });
-
     connect(base::GuiApplication::instance(), &base::GuiApplication::sig_themeChanged,
             this, &MainWindow::onThemeChanged);
 
