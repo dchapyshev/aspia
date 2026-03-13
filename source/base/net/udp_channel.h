@@ -22,6 +22,8 @@
 #include <QObject>
 #include <QQueue>
 
+#include <memory>
+
 #include <asio/ip/address.hpp>
 #include <asio/ip/udp.hpp>
 
@@ -32,6 +34,8 @@ class QTimer;
 namespace base {
 
 class Location;
+class MessageDecryptor;
+class MessageEncryptor;
 class StunPeer;
 
 class UdpChannel final : public QObject
@@ -45,6 +49,9 @@ public:
     void connectTo(const QString& address, quint16 port);
     void send(quint8 channel_id, const QByteArray& buffer);
 
+    void setEncryptor(std::unique_ptr<MessageEncryptor> encryptor);
+    void setDecryptor(std::unique_ptr<MessageDecryptor> decryptor);
+
 signals:
     void sig_connected();
     void sig_errorOccurred();
@@ -55,23 +62,95 @@ protected:
     UdpChannel(asio::ip::udp::socket&& socket, QObject* parent);
 
 private:
+    struct Header
+    {
+        quint8 type;
+        quint8 param1; // For USER_DATA: channel_id.
+        quint8 param2; // Not used yet.
+        quint8 param3; // Not used yet.
+        quint32 length;
+    };
+
+    enum MessageType
+    {
+        KEEP_ALIVE = 1,
+        USER_DATA  = 2
+    };
+
+    enum KeepAliveFlags
+    {
+        KEEP_ALIVE_PONG = 0,
+        KEEP_ALIVE_PING = 1
+    };
+
+    enum KeepAliveTimerType
+    {
+        KEEP_ALIVE_TIMEOUT = 0,
+        KEEP_ALIVE_INTERVAL = 1
+    };
+
+    class WriteTask
+    {
+    public:
+        WriteTask(quint8 type, quint8 param, const QByteArray& data)
+            : type_(type),
+              param_(param),
+              data_(data)
+        {
+            // Nothing
+        }
+
+        WriteTask(const WriteTask& other) = default;
+        WriteTask& operator=(const WriteTask& other) = default;
+
+        quint8 type() const { return type_; }
+        quint8 param() const { return param_; }
+        const QByteArray& data() const { return data_; }
+
+    private:
+        quint8 type_;
+        quint8 param_;
+        QByteArray data_;
+    };
+
     static int kcpOutputCallback(const char* buf, int len, IKCPCB* kcp, void* user);
 
-    void initKcp();
+    void init();
+    void doUdpSend();
     void onConnected();
     void onErrorOccurred(const Location& location, const std::error_code& error_code);
+    void addWriteTask(quint8 type, quint8 param, const QByteArray& data);
+    void doWrite();
     void doRead();
     void doKcpUpdate();
     void processKcpRecv();
+    void onMessageReceived();
+    void onKeepAliveTimer();
 
     asio::ip::udp::resolver resolver_;
     asio::ip::udp::socket socket_;
 
     IKCPCB* kcp_ = nullptr;
-    QTimer* update_timer_ = nullptr;
+    QTimer* update_timer_;
+    QTimer* keep_alive_timer_;
+    KeepAliveTimerType keep_alive_timer_type_ = KEEP_ALIVE_INTERVAL;
+    QByteArray keep_alive_counter_;
+
+    std::unique_ptr<MessageEncryptor> encryptor_;
+    std::unique_ptr<MessageDecryptor> decryptor_;
+
+    QQueue<WriteTask> write_queue_;
+    QByteArray write_buffer_;
+
+    Header read_header_;
+    QByteArray read_buffer_;
+    QByteArray decrypt_buffer_;
+
+    QQueue<QByteArray> udp_send_queue_;
+    bool udp_sending_ = false;
 
     static const int kRecvBufferSize = 65536;
-    std::array<uint8_t, kRecvBufferSize> recv_buffer_;
+    std::array<char, kRecvBufferSize> recv_buffer_;
 
     Q_DISABLE_COPY_MOVE(UdpChannel)
 };
