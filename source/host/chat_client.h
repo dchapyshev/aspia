@@ -37,7 +37,7 @@ public:
 public slots:
     void start();
     void onSendChat(const proto::chat::Chat& chat);
-    void onSendStatus(proto::chat::Status::Code code);
+    void onSendStatus(proto::chat::Status_Code code);
 
 signals:
     void sig_started();

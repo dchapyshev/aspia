@@ -35,6 +35,32 @@ std::string qualifiedCppTypeName(const std::string& full_name)
 }
 
 //--------------------------------------------------------------------------------------------------
+// For nested enums, protobuf C++ generates the actual type at the namespace level with underscores,
+// e.g. proto.chat.Status.Code -> proto::chat::Status_Code (NOT proto::chat::Status::Code which is just a 'using' alias).
+// Q_DECLARE_METATYPE requires the canonical type name, not an alias.
+std::string qualifiedCppEnumTypeName(const google::protobuf::EnumDescriptor* descriptor)
+{
+    if (descriptor->containing_type() == nullptr)
+        return qualifiedCppTypeName(descriptor->full_name());
+
+    const std::string package = descriptor->file()->package();
+    const std::string full_name = descriptor->full_name();
+
+    // Build the C++ namespace prefix from the package (dots -> ::)
+    std::string ns_prefix;
+    for (char c : package)
+        ns_prefix += (c == '.') ? "::" : std::string(1, c);
+
+    // The portion after the package: "Status.Code" -> "Status_Code"
+    const std::string rest = full_name.substr(package.empty() ? 0 : package.size() + 1);
+    std::string type_name;
+    for (char c : rest)
+        type_name += (c == '.') ? "_" : std::string(1, c);
+
+    return ns_prefix.empty() ? type_name : ns_prefix + "::" + type_name;
+}
+
+//--------------------------------------------------------------------------------------------------
 void collectAllMessages(const google::protobuf::Descriptor* descriptor,
                         std::vector<const google::protobuf::Descriptor*>* messages)
 {
@@ -89,7 +115,7 @@ std::string makeGetterName(const std::string& name)
 void generateEnumOperator(
     const google::protobuf::EnumDescriptor* descriptor, google::protobuf::io::Printer& source)
 {
-    const std::string cpp_enum_type = qualifiedCppTypeName(descriptor->full_name());
+    const std::string cpp_enum_type = qualifiedCppEnumTypeName(descriptor);
 
     source.Print("QDebug operator<<(QDebug out, $TYPE$ value)\n", "TYPE", cpp_enum_type);
     source.Print("{\n");
@@ -278,7 +304,7 @@ bool MetatypeGenerator::Generate(const google::protobuf::FileDescriptor* file,
 
     header.Print("// Meta type declarations for enumerations.\n");
     for (const auto* e : enums)
-        header.Print("Q_DECLARE_METATYPE($TYPE$)\n", "TYPE", qualifiedCppTypeName(e->full_name()));
+        header.Print("Q_DECLARE_METATYPE($TYPE$)\n", "TYPE", qualifiedCppEnumTypeName(e));
 
     header.Print("\n");
 
@@ -291,7 +317,7 @@ bool MetatypeGenerator::Generate(const google::protobuf::FileDescriptor* file,
     header.Print("// Stream operators for enumerations.\n");
     for (const auto* e : enums)
     {
-        const std::string cpp_enum_type = qualifiedCppTypeName(e->full_name());
+        const std::string cpp_enum_type = qualifiedCppEnumTypeName(e);
         header.Print("QDebug operator<<(QDebug out, $TYPE$ value);\n", "TYPE", cpp_enum_type);
     }
 
@@ -330,8 +356,17 @@ bool MetatypeGenerator::Generate(const google::protobuf::FileDescriptor* file,
     source.Print("    // Register enumerations.\n");
     for (const auto* e : enums)
     {
-        source.Print("    qRegisterMetaType<$TYPE$>(\"$TYPE$\");\n",
-                     "TYPE", qualifiedCppTypeName(e->full_name()));
+        const std::string canonical = qualifiedCppEnumTypeName(e);
+        source.Print("    qRegisterMetaType<$TYPE$>(\"$TYPE$\");\n", "TYPE", canonical);
+
+        // For nested enums, also register the 'using' alias name (e.g. "proto::chat::Status::Code")
+        // so that queued connections work regardless of which form is used in signal/slot declarations.
+        if (e->containing_type() != nullptr)
+        {
+            const std::string alias = qualifiedCppTypeName(e->full_name());
+            source.Print("    qRegisterMetaType<$CANONICAL$>(\"$ALIAS$\");\n",
+                         "CANONICAL", canonical, "ALIAS", alias);
+        }
     }
 
     source.Print("\n");

@@ -1,4 +1,4 @@
-//
+﻿//
 // Aspia Project
 // Copyright (C) 2016-2026 Dmitry Chapyshev <dmitry@aspia.ru>
 //
@@ -69,7 +69,7 @@ void ChatClient::onSendChat(const proto::chat::Chat& chat)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ChatClient::onSendStatus(proto::chat::Status::Code code)
+void ChatClient::onSendStatus(proto::chat::Status_Code code)
 {
     LOG(INFO) << "Send text chat status:" << code;
 
