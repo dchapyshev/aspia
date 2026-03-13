@@ -20,9 +20,14 @@
 #define BASE_NET_UDP_CHANNEL_H
 
 #include <QObject>
+#include <QQueue>
 
 #include <asio/ip/address.hpp>
 #include <asio/ip/udp.hpp>
+
+struct IKCPCB;
+
+class QTimer;
 
 namespace base {
 
@@ -50,11 +55,23 @@ protected:
     UdpChannel(asio::ip::udp::socket&& socket, QObject* parent);
 
 private:
+    static int kcpOutputCallback(const char* buf, int len, IKCPCB* kcp, void* user);
+
+    void initKcp();
     void onConnected();
     void onErrorOccurred(const Location& location, const std::error_code& error_code);
+    void doRead();
+    void doKcpUpdate();
+    void processKcpRecv();
 
     asio::ip::udp::resolver resolver_;
     asio::ip::udp::socket socket_;
+
+    IKCPCB* kcp_ = nullptr;
+    QTimer* update_timer_ = nullptr;
+
+    static const int kRecvBufferSize = 65536;
+    std::array<uint8_t, kRecvBufferSize> recv_buffer_;
 
     Q_DISABLE_COPY_MOVE(UdpChannel)
 };
