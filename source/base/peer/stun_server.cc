@@ -45,6 +45,7 @@ StunServer::~StunServer()
 void StunServer::start(quint16 port)
 {
     asio::ip::udp::endpoint endpoint(asio::ip::udp::v4(), port);
+    port_ = port;
 
     std::error_code error_code;
     udp_socket_.bind(endpoint, error_code);

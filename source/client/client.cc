@@ -24,7 +24,9 @@
 #include "base/version_constants.h"
 #include "base/net/tcp_channel_ng.h"
 #include "base/net/tcp_channel_legacy.h"
+#include "base/net/udp_channel.h"
 #include "base/peer/client_authenticator.h"
+#include "base/peer/stun_peer.h"
 
 #if defined(Q_OS_MACOS)
 #include "base/mac/app_nap_blocker.h"
@@ -393,8 +395,39 @@ void Client::onHostConnected()
 
     channelReady();
 
+    QString stun_host = router_controller_->stunHost();
+    quint16 stun_port = router_controller_->stunPort();
+
+    if (!stun_host.isEmpty() && stun_port)
+    {
+        LOG(INFO) << "Stun server data received:" << stun_host << ':' << stun_port;
+
+        stun_peer_ = new base::StunPeer(this);
+
+        connect(stun_peer_, &base::StunPeer::sig_channelReady, this,
+            [this](const QString& external_address, quint16 external_port)
+        {
+            LOG(INFO) << "External endpoint received:" << external_address << ':' << external_port;
+
+            base::UdpChannel* udp_channel = stun_peer_->takeChannel();
+            LOG(INFO) << "UDP channel created:" << (udp_channel != nullptr);
+            udp_channel->deleteLater();
+
+            stun_peer_->disconnect();
+            stun_peer_->deleteLater();
+            stun_peer_ = nullptr;
+        });
+
+        connect(stun_peer_, &base::StunPeer::sig_errorOccurred, this, [this]()
+        {
+            LOG(ERROR) << "Error in stun peer";
+            stun_peer_->disconnect();
+            stun_peer_->deleteLater();
+            stun_peer_ = nullptr;
+        });
+    }
+
     // Router controller is no longer needed.
-    LOG(INFO) << "Post task to destroy router controller";
     router_controller_->disconnect();
     router_controller_->deleteLater();
     router_controller_ = nullptr;

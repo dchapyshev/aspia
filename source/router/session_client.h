@@ -33,6 +33,8 @@ public:
     explicit SessionClient(base::TcpChannel* channel, QObject* parent = nullptr);
     ~SessionClient() final;
 
+    void setStunInfo(quint16 port);
+
 protected:
     // Session implementation.
     void onSessionMessage(const QByteArray& buffer) final;
@@ -41,6 +43,8 @@ private:
     void readConnectionRequest(const proto::router::ConnectionRequest& request);
     void readCheckHostStatus(const proto::router::CheckHostStatus& check_host_status);
     SessionHost* sessionByHostId(base::HostId host_id);
+
+    quint16 stun_port_ = 0;
 
     Q_DISABLE_COPY_MOVE(SessionClient)
 };

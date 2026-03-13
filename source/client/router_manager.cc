@@ -81,12 +81,9 @@ void RouterManager::connectTo(
 
     router_channel_ = new base::TcpChannelNG(router_authenticator, this);
 
-    connect(router_channel_, &base::TcpChannel::sig_authenticated,
-            this, &RouterManager::onTcpReady);
-    connect(router_channel_, &base::TcpChannel::sig_errorOccurred,
-            this, &RouterManager::onTcpErrorOccurred);
-    connect(router_channel_, &base::TcpChannel::sig_messageReceived,
-            this, &RouterManager::onTcpMessageReceived);
+    connect(router_channel_, &base::TcpChannel::sig_authenticated, this, &RouterManager::onTcpReady);
+    connect(router_channel_, &base::TcpChannel::sig_errorOccurred, this, &RouterManager::onTcpErrorOccurred);
+    connect(router_channel_, &base::TcpChannel::sig_messageReceived, this, &RouterManager::onTcpMessageReceived);
 
     router_channel_->connectTo(router_config_.address, router_config_.port);
 }
@@ -101,7 +98,6 @@ base::TcpChannel* RouterManager::takeChannel()
     host_channel_ = nullptr;
 
     channel->setParent(nullptr);
-
     return channel;
 }
 
@@ -109,13 +105,12 @@ base::TcpChannel* RouterManager::takeChannel()
 void RouterManager::onTcpReady()
 {
     LOG(INFO) << "Connection to the router is established";
-
     emit sig_routerConnected(router_channel_->peerVersion());
-
-    LOG(INFO) << "Sending connection request (host_id" << host_id_ << ")";
 
     // Now the session will receive incoming messages.
     router_channel_->setPaused(false);
+
+    LOG(INFO) << "Sending connection request (host_id" << host_id_ << ")";
     sendConnectionRequest();
 }
 
@@ -199,6 +194,23 @@ void RouterManager::onTcpMessageReceived(quint8 /* channel_id */, const QByteArr
                     this, &RouterManager::onRelayConnectionReady);
 
             relay_peer_->start(connection_offer);
+
+            if (connection_offer.has_stun_info())
+            {
+                const proto::router::StunServerInfo& stun_info = connection_offer.stun_info();
+                if (stun_info.version() != 1)
+                {
+                    LOG(INFO) << "Unsupported stun server version";
+                    return;
+                }
+
+                stun_host_ = QString::fromStdString(stun_info.host());
+                stun_port_ = stun_info.port();
+
+                // An empty string means that the router address should be used.
+                if (stun_host_.isEmpty())
+                    stun_host_ = router_config_.address;
+            }
         }
     }
     else if (message.has_host_status())

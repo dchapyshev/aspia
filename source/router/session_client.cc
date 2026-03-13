@@ -43,6 +43,12 @@ SessionClient::~SessionClient()
 }
 
 //--------------------------------------------------------------------------------------------------
+void SessionClient::setStunInfo(quint16 port)
+{
+    stun_port_ = port;
+}
+
+//--------------------------------------------------------------------------------------------------
 void SessionClient::onSessionMessage(const QByteArray& buffer)
 {
     proto::router::PeerToRouter message;
@@ -141,6 +147,17 @@ void SessionClient::readConnectionRequest(const proto::router::ConnectionRequest
     LOG(INFO) << "Sending connection offer to client";
     offer->clear_host_data(); // Host data is only needed by the host.
     offer->set_peer_role(proto::router::ConnectionOffer::CLIENT);
+
+    if (stun_port_)
+    {
+        // An empty host string means that the client should use the router's address as the
+        // server's host address. This is done to allow for future expansion, but is not currently used.
+        proto::router::StunServerInfo* stun_info = offer->mutable_stun_info();
+        stun_info->set_version(1);
+        stun_info->set_host("");
+        stun_info->set_port(stun_port_);
+    }
+
     sendMessage(base::serialize(message));
 }
 

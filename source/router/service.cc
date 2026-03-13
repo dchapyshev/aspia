@@ -433,7 +433,11 @@ void Service::addSession(base::TcpChannel* channel)
         {
             if (!isAddressAllowed(client_white_list_, address))
                 break;
-            session = new SessionClient(channel, this);
+
+            SessionClient* client_session = new SessionClient(channel, this);
+            if (stun_server_)
+                client_session->setStunInfo(stun_server_->port());
+            session = client_session;
         }
         break;
 

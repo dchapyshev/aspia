@@ -28,6 +28,10 @@
 
 class QTimer;
 
+namespace base {
+class StunPeer;
+} // namespace base
+
 namespace client {
 
 class Client : public QObject
@@ -104,6 +108,7 @@ private:
     QTimer* reconnect_timer_ = nullptr;
     RouterManager* router_controller_ = nullptr;
     base::TcpChannel* tcp_channel_ = nullptr;
+    base::StunPeer* stun_peer_ = nullptr;
 
     std::shared_ptr<SessionState> session_state_;
 

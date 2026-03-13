@@ -88,7 +88,7 @@ void RelayPeer::start(const proto::router::ConnectionOffer& offer)
     QString host = QString::fromStdString(credentials.host());
 
     LOG(INFO) << "Start resolving for" << host << ":" << credentials.port()
-              << "(legacy:" << offer.is_legacy() << ")";
+              << "(legacy" << offer.is_legacy() << ")";
 
     resolver_.async_resolve(host.toLocal8Bit().data(), std::to_string(credentials.port()),
         [this](const std::error_code& error_code, const asio::ip::tcp::resolver::results_type& endpoints)

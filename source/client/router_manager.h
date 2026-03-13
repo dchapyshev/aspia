@@ -70,6 +70,9 @@ public:
     void connectTo(base::HostId host_id, base::Authenticator* authenticator, bool wait_for_host);
     base::TcpChannel* takeChannel();
 
+    QString stunHost() const { return stun_host_; }
+    quint16 stunPort() const { return stun_port_; }
+
 signals:
     void sig_routerConnected(const QVersionNumber& version);
     void sig_hostAwaiting();
@@ -91,6 +94,9 @@ private:
     QTimer* status_request_timer_ = nullptr;
     base::RelayPeer* relay_peer_ = nullptr;
     RouterConfig router_config_;
+
+    QString stun_host_;
+    quint16 stun_port_ = 0;
 
     base::HostId host_id_ = base::kInvalidHostId;
     bool wait_for_host_ = false;

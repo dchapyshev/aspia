@@ -37,10 +37,13 @@ public:
 
     void start(quint16 port);
 
+    quint16 port() const { return port_; }
+
 private:
     void doReceiveRequest();
     bool doSendAddressReply();
 
+    quint16 port_ = 0;
     asio::ip::udp::socket udp_socket_;
     std::array<quint8, 1024> buffer_;
 
