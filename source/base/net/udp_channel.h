@@ -16,37 +16,44 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_PEER_STUN_SERVER_H
-#define BASE_PEER_STUN_SERVER_H
+#ifndef BASE_NET_UDP_CHANNEL_H
+#define BASE_NET_UDP_CHANNEL_H
 
 #include <QObject>
 
-#include <array>
-
+#include <asio/ip/address.hpp>
 #include <asio/ip/udp.hpp>
 
 namespace base {
 
-class StunServer final : public QObject
+class StunPeer;
+
+class UdpChannel final : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit StunServer(QObject* parent = nullptr);
-    ~StunServer();
+    ~UdpChannel() final;
 
-    void start(quint16 port);
+    void connectTo(const QString& address, quint16 port);
+    void send(quint8 channel_id, const QByteArray& buffer);
+
+signals:
+    void sig_connected();
+    void sig_errorOccurred();
+    void sig_messageReceived(quint8 channel_id, const QByteArray& buffer);
+    void sig_messageWritten(quint8 channel_id);
+
+protected:
+    friend class StunPeer;
+    UdpChannel(asio::ip::udp::socket&& socket, QObject* parent);
 
 private:
-    void doReceiveRequest();
-    bool doSendAddressReply();
+    asio::ip::udp::socket socket_;
 
-    asio::ip::udp::socket udp_socket_;
-    std::array<uint8_t, 1024> buffer_;
-
-    Q_DISABLE_COPY_MOVE(StunServer)
+    Q_DISABLE_COPY_MOVE(UdpChannel)
 };
 
 } // namespace base
 
-#endif // BASE_PEER_STUN_SERVER_H
+#endif // BASE_NET_UDP_CHANNEL_H

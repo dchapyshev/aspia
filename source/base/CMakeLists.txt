@@ -415,7 +415,9 @@ list(APPEND SOURCE_BASE_NET
     net/tcp_server.cc
     net/tcp_server.h
     net/tcp_server_legacy.cc
-    net/tcp_server_legacy.h)
+    net/tcp_server_legacy.h
+    net/udp_channel.cc
+    net/udp_channel.h)
 
 if (WIN32)
     list(APPEND SOURCE_BASE_NET
@@ -445,6 +447,10 @@ list(APPEND SOURCE_BASE_PEER
     peer/relay_peer_manager.h
     peer/server_authenticator.cc
     peer/server_authenticator.h
+    peer/stun_peer.cc
+    peer/stun_peer.h
+    peer/stun_server.cc
+    peer/stun_server.h
     peer/user.cc
     peer/user.h
     peer/user_list.cc

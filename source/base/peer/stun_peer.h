@@ -19,36 +19,34 @@
 #ifndef BASE_PEER_STUN_PEER_H
 #define BASE_PEER_STUN_PEER_H
 
-#include "base/location.h"
-#include "base/macros_magic.h"
-#include "base/waitable_timer.h"
-#include "proto/stun_peer.pb.h"
-
-#include <cstdint>
-#include <memory>
-#include <string>
+#include <QObject>
 
 #include <asio/ip/udp.hpp>
 
+class QTimer;
+
 namespace base {
 
-class StunPeer
+class Location;
+class UdpChannel;
+
+class StunPeer final : public QObject
 {
+    Q_OBJECT
+
 public:
-    StunPeer();
+    explicit StunPeer(QObject* parent = nullptr);
     ~StunPeer();
 
-    class Delegate
-    {
-    public:
-        virtual ~Delegate() = default;
+    void start(const QString& stun_host, quint16 stun_port);
+    UdpChannel* takeChannel();
 
-        virtual void onStunExternalEndpoint(
-            asio::ip::udp::socket socket, const asio::ip::udp::endpoint& endpoint) = 0;
-        virtual void onStunErrorOccurred() = 0;
-    };
+signals:
+    void sig_channelReady(const QString& external_address, quint16 external_port);
+    void sig_errorOccurred();
 
-    void start(std::u16string_view stun_host, uint16_t stun_port, Delegate* delegate);
+private slots:
+    void onAttempt();
 
 private:
     void doStart();
@@ -56,8 +54,7 @@ private:
     void doReceiveExternalAddress();
     void onErrorOccurred(const Location& location, const std::error_code& error_code);
 
-    Delegate* delegate_ = nullptr;
-    base::WaitableTimer timer_;
+    QTimer* timer_ = nullptr;
     int number_of_attempts_ = 0;
 
     std::string stun_host_;
@@ -65,9 +62,11 @@ private:
 
     asio::ip::udp::resolver udp_resolver_;
     asio::ip::udp::socket udp_socket_;
-    std::array<uint8_t, 1024> buffer_;
+    std::array<quint8, 1024> buffer_;
 
-    DISALLOW_COPY_AND_ASSIGN(StunPeer);
+    UdpChannel* ready_channel_ = nullptr;
+
+    Q_DISABLE_COPY_MOVE(StunPeer)
 };
 
 } // namespace base

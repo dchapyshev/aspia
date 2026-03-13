@@ -16,37 +16,29 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_PEER_STUN_SERVER_H
-#define BASE_PEER_STUN_SERVER_H
+syntax = "proto3";
 
-#include <QObject>
+option optimize_for = LITE_RUNTIME;
 
-#include <array>
+package proto.stun;
 
-#include <asio/ip/udp.hpp>
-
-namespace base {
-
-class StunServer final : public QObject
+message EndpointRequest
 {
-    Q_OBJECT
+    uint32 magic_number = 1;
+}
 
-public:
-    explicit StunServer(QObject* parent = nullptr);
-    ~StunServer();
+message Endpoint
+{
+    string ip_address = 1;
+    uint32 port = 2;
+}
 
-    void start(quint16 port);
+message StunToPeer
+{
+    Endpoint endpoint = 1;
+}
 
-private:
-    void doReceiveRequest();
-    bool doSendAddressReply();
-
-    asio::ip::udp::socket udp_socket_;
-    std::array<uint8_t, 1024> buffer_;
-
-    Q_DISABLE_COPY_MOVE(StunServer)
-};
-
-} // namespace base
-
-#endif // BASE_PEER_STUN_SERVER_H
+message PeerToStun
+{
+    EndpointRequest endpoint_request = 1;
+}

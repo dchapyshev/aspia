@@ -18,74 +18,120 @@
 
 #include "base/peer/stun_peer.h"
 
-#include "base/logging.h"
-#include "base/message_loop/message_loop.h"
-#include "base/message_loop/message_pump_asio.h"
-#include "base/strings/unicode.h"
+#include <QHostAddress>
+#include <QTimer>
 
 #include <asio/connect.hpp>
+
+#include "base/asio_event_dispatcher.h"
+#include "base/location.h"
+#include "base/logging.h"
+#include "base/net/udp_channel.h"
+#include "proto/stun.h"
 
 namespace base {
 
 namespace {
 
-asio::io_context& ioContext()
+//--------------------------------------------------------------------------------------------------
+QString addressToString(const asio::ip::address& address)
 {
-    return MessageLoop::current()->pumpAsio()->ioContext();
+    return QString::fromLocal8Bit(address.to_string());
+}
+
+//--------------------------------------------------------------------------------------------------
+QString endpointToString(const asio::ip::udp::endpoint& endpoint)
+{
+    return addressToString(endpoint.address()) + ':' + QString::number(endpoint.port());
+}
+
+//--------------------------------------------------------------------------------------------------
+bool isValidIpAddress(const QString& ip_address)
+{
+    if (ip_address.isEmpty())
+        return false;
+
+    QHostAddress address(ip_address);
+    if (address.protocol() == QAbstractSocket::IPv4Protocol ||
+        address.protocol() == QAbstractSocket::IPv6Protocol)
+    {
+        return true;
+    }
+
+    return false;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool isValidPort(quint32 port)
+{
+    return port != 0 && port <= 65535;
 }
 
 } // namespace
 
-StunPeer::StunPeer()
-    : timer_(base::WaitableTimer::Type::SINGLE_SHOT, base::MessageLoop::current()->taskRunner()),
-      udp_resolver_(ioContext()),
-      udp_socket_(ioContext())
+//--------------------------------------------------------------------------------------------------
+StunPeer::StunPeer(QObject* parent)
+    : QObject(parent),
+      timer_(new QTimer(this)),
+      udp_resolver_(AsioEventDispatcher::ioContext()),
+      udp_socket_(AsioEventDispatcher::ioContext())
 {
-    LOG(LS_INFO) << "Ctor";
+    LOG(INFO) << "Ctor";
+    timer_->setSingleShot(true);
+    connect(timer_, &QTimer::timeout, this, &StunPeer::onAttempt);
 }
 
+//--------------------------------------------------------------------------------------------------
 StunPeer::~StunPeer()
 {
-    LOG(LS_INFO) << "Dtor";
-
-    delegate_ = nullptr;
+    LOG(INFO) << "Dtor";
     doStop();
 }
 
-void StunPeer::start(std::u16string_view stun_host, uint16_t stun_port, Delegate* delegate)
+//--------------------------------------------------------------------------------------------------
+void StunPeer::start(const QString& stun_host, quint16 stun_port)
 {
-    delegate_ = delegate;
-    DCHECK(delegate_);
-
-    stun_host_ = local8BitFromUtf16(stun_host);
+    stun_host_ = stun_host.toLocal8Bit().toStdString();
     stun_port_ = std::to_string(stun_port);
-
     doStart();
 }
 
+//--------------------------------------------------------------------------------------------------
+UdpChannel* StunPeer::takeChannel()
+{
+    UdpChannel* channel = ready_channel_;
+    channel->setParent(nullptr);
+    ready_channel_ = nullptr;
+    return channel;
+}
+
+//--------------------------------------------------------------------------------------------------
+void StunPeer::onAttempt()
+{
+    static const int kMaxAttemptsCount = 3;
+
+    if (number_of_attempts_ > kMaxAttemptsCount)
+    {
+        onErrorOccurred(FROM_HERE, std::error_code());
+        return;
+    }
+
+    doStop();
+    doStart();
+}
+
+//--------------------------------------------------------------------------------------------------
 void StunPeer::doStart()
 {
     ++number_of_attempts_;
 
-    LOG(LS_INFO) << "Stun peer starting (server: " << stun_host_ << ":" << stun_port_
-                 << ", attempt #" << number_of_attempts_ << ")";
+    LOG(INFO) << "Stun peer starting (" << stun_host_ << ":" << stun_port_
+              << ", attempt" << number_of_attempts_ << ")";
 
-    timer_.start(std::chrono::seconds(5), [this]()
-    {
-        static const int kMaxAttemptsCount = 3;
-
-        if (number_of_attempts_ > kMaxAttemptsCount)
-        {
-            onErrorOccurred(FROM_HERE, std::error_code());
-            return;
-        }
-
-        doStop();
-        doStart();
-    });
+    timer_->start(std::chrono::seconds(3));
 
     udp_resolver_.async_resolve(stun_host_, stun_port_,
-        [=](const std::error_code& error_code,
+        [&](const std::error_code& error_code,
             const asio::ip::udp::resolver::results_type& endpoints)
     {
         if (error_code)
@@ -95,12 +141,12 @@ void StunPeer::doStart()
             return;
         }
 
-        LOG(LS_INFO) << "Resolved endpoints:";
+        LOG(INFO) << "Resolved endpoints:";
         for (const auto& it : endpoints)
-            LOG(LS_INFO) << it.endpoint().address() << ":" << it.endpoint().port();
+            LOG(INFO) << endpointToString(it.endpoint());
 
         asio::async_connect(udp_socket_, endpoints,
-            [=](const std::error_code& error_code, const asio::ip::udp::endpoint& endpoint)
+            [&](const std::error_code& error_code, const asio::ip::udp::endpoint& endpoint)
         {
             if (error_code)
             {
@@ -109,15 +155,16 @@ void StunPeer::doStart()
                 return;
             }
 
-            LOG(LS_INFO) << "Connected to " << endpoint.address() << ":" << endpoint.port();
+            LOG(INFO) << "Connected to" << endpointToString(endpoint);
             doReceiveExternalAddress();
         });
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 void StunPeer::doStop()
 {
-    timer_.stop();
+    timer_->stop();
     udp_resolver_.cancel();
 
     std::error_code ignored_code;
@@ -125,15 +172,16 @@ void StunPeer::doStop()
     udp_socket_.close(ignored_code);
 }
 
+//--------------------------------------------------------------------------------------------------
 void StunPeer::doReceiveExternalAddress()
 {
-    proto::PeerToStun message;
-    message.mutable_external_endpoint_request()->set_magic_number(0xA0B1C2D3);
+    proto::stun::PeerToStun message;
+    message.mutable_endpoint_request()->set_magic_number(0xA0B1C2D3);
 
     const size_t size = message.ByteSizeLong();
     if (!size || size > buffer_.size())
     {
-        LOG(LS_ERROR) << "Invalid message size: " << size;
+        LOG(ERROR) << "Invalid message size:" << size;
         onErrorOccurred(FROM_HERE, std::error_code());
         return;
     }
@@ -159,66 +207,56 @@ void StunPeer::doReceiveExternalAddress()
                 return;
             }
 
-            proto::StunToPeer message;
+            proto::stun::StunToPeer message;
             if (!message.ParseFromArray(buffer_.data(), static_cast<int>(bytes_transferred)))
             {
                 onErrorOccurred(FROM_HERE, error_code);
                 return;
             }
 
-            if (!message.has_external_endpoint())
+            if (!message.has_endpoint())
             {
                 onErrorOccurred(FROM_HERE, error_code);
                 return;
             }
 
-            const proto::ExternalEndpoint& external_endpoint = message.external_endpoint();
-            const std::string& host = external_endpoint.host();
-            const uint16_t port = static_cast<uint16_t>(external_endpoint.port());
+            const proto::stun::Endpoint& endpoint = message.endpoint();
 
-            LOG(LS_INFO) << "External endpoint: " << host << ":" << port;
+            QString ip_address = QString::fromStdString(endpoint.ip_address());
+            quint32 port = static_cast<quint16>(endpoint.port());
 
-            if (host.empty() || !port)
+            LOG(INFO) << "External endpoint:" << ip_address << ":" << port;
+
+            if (!isValidIpAddress(ip_address))
             {
                 onErrorOccurred(FROM_HERE, error_code);
                 return;
             }
 
-            std::error_code error;
-            asio::ip::address address = asio::ip::make_address(host, error);
-            if (error)
+            if (!isValidPort(port))
             {
-                onErrorOccurred(FROM_HERE, error);
+                onErrorOccurred(FROM_HERE, error_code);
                 return;
             }
 
-            if (delegate_)
-            {
-                delegate_->onStunExternalEndpoint(std::move(udp_socket_),
-                    asio::ip::udp::endpoint(address, port));
-                delegate_ = nullptr;
-            }
+            ready_channel_ = new UdpChannel(std::move(udp_socket_), this);
+            timer_->stop();
+
+            emit sig_channelReady(ip_address, static_cast<quint16>(port));
         });
     });
 }
 
+//--------------------------------------------------------------------------------------------------
 void StunPeer::onErrorOccurred(const base::Location& location, const std::error_code& error_code)
 {
     if (error_code)
-    {
-        LOG(LS_ERROR) << "Error occurred: " << base::utf16FromLocal8Bit(error_code.message())
-                      << " (from: " << location.toString() << ")";
-    }
+        LOG(ERROR) << "Error occurred" << error_code << "from" << location.toString();
     else
-    {
-        LOG(LS_ERROR) << "Error occurred (from: " << location.toString() << ")";
-    }
+        LOG(ERROR) << "Error occurred from" << location.toString();
 
-    if (delegate_)
-    {
-        delegate_->onStunErrorOccurred();
-        delegate_ = nullptr;
-    }
+    timer_->stop();
+    emit sig_errorOccurred();
 }
 
 } // namespace base
