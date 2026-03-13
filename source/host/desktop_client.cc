@@ -27,6 +27,7 @@
 #include "base/serialization.h"
 #include "base/ipc/ipc_channel.h"
 #include "base/ipc/ipc_server.h"
+#include "base/net/udp_channel.h"
 #include "proto/desktop_service.h"
 
 #if defined(Q_OS_WINDOWS)
@@ -78,7 +79,7 @@ DesktopClient::DesktopClient(base::TcpChannel* tcp_channel, QObject* parent)
         proto::desktop::SessionToClient message;
         proto::desktop::VideoPacket* packet = message.mutable_video_packet();
         packet->set_error_code(proto::desktop::VIDEO_ERROR_CODE_TEMPORARY);
-        tcp_channel_->send(proto::peer::CHANNEL_ID_SESSION, base::serialize(message));
+        tcp_channel_->send(proto::peer::CHANNEL_ID_0, base::serialize(message));
     });
 
     fake_capture_timer_->setInterval(std::chrono::milliseconds(30));
@@ -249,14 +250,14 @@ void DesktopClient::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code)
 //--------------------------------------------------------------------------------------------------
 void DesktopClient::onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray& buffer)
 {
-    if (tcp_channel_id == proto::peer::CHANNEL_ID_SESSION)
+    if (tcp_channel_id == proto::peer::CHANNEL_ID_0)
     {
         quint32 channel_id = base::makeUint32(proto::desktop::IPC_CHANNEL_ID_SESSION, tcp_channel_id);
 
         if (ipc_channel_)
             ipc_channel_->send(channel_id, buffer);
     }
-    else if (tcp_channel_id == proto::peer::CHANNEL_ID_SERVICE)
+    else if (tcp_channel_id == proto::peer::CHANNEL_ID_1)
     {
         proto::desktop::ClientToService message;
 
@@ -290,10 +291,61 @@ void DesktopClient::onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray
             emit sig_recordingChanged(is_started);
         }
     }
+    else if (tcp_channel_id == proto::peer::CHANNEL_ID_CONTROL)
+    {
+        proto::peer::ClientToHost message;
+
+        if (!base::parse(buffer, &message))
+        {
+            LOG(ERROR) << "Unable to parse control message";
+            return;
+        }
+
+        if (message.has_direct_udp_endpoint())
+        {
+            const proto::peer::DirectUdpEndpoint& udp_endpoint = message.direct_udp_endpoint();
+            QString udp_address = QString::fromStdString(udp_endpoint.ip_address());
+            quint32 udp_port = udp_endpoint.port();
+
+            LOG(INFO) << "Direct UDP endpoint received:" << udp_address << ':' << udp_port;
+
+            udp_channel_ = new base::UdpChannel(this);
+
+            connect(udp_channel_, &base::UdpChannel::sig_connected, this, &DesktopClient::onUdpConnected);
+            connect(udp_channel_, &base::UdpChannel::sig_errorOccurred, this, &DesktopClient::onUdpErrorOccurred);
+            connect(udp_channel_, &base::UdpChannel::sig_messageReceived, this, &DesktopClient::onUdpMessageReceived);
+
+            udp_channel_->connectTo(udp_address, udp_port);
+        }
+        else
+        {
+            LOG(WARNING) << "Unhandled control message";
+        }
+    }
     else
     {
         LOG(ERROR) << "Unhandled message from channel" << tcp_channel_id;
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopClient::onUdpConnected()
+{
+    // TODO
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopClient::onUdpErrorOccurred()
+{
+    udp_channel_->disconnect();
+    udp_channel_->deleteLater();
+    udp_channel_ = nullptr;
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopClient::onUdpMessageReceived(quint8 udp_channel_id, const QByteArray& buffer)
+{
+    // TODO
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -363,7 +415,7 @@ void DesktopClient::sendSessionList()
     }
 
     LOG(INFO) << "Send:" << *session_list;
-    tcp_channel_->send(proto::peer::CHANNEL_ID_SERVICE, base::serialize(message));
+    tcp_channel_->send(proto::peer::CHANNEL_ID_1, base::serialize(message));
 #endif // defined(Q_OS_WINDOWS)
 }
 

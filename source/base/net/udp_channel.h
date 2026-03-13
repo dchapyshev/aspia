@@ -26,6 +26,7 @@
 
 namespace base {
 
+class Location;
 class StunPeer;
 
 class UdpChannel final : public QObject
@@ -33,6 +34,7 @@ class UdpChannel final : public QObject
     Q_OBJECT
 
 public:
+    explicit UdpChannel(QObject* parent = nullptr);
     ~UdpChannel() final;
 
     void connectTo(const QString& address, quint16 port);
@@ -42,13 +44,16 @@ signals:
     void sig_connected();
     void sig_errorOccurred();
     void sig_messageReceived(quint8 channel_id, const QByteArray& buffer);
-    void sig_messageWritten(quint8 channel_id);
 
 protected:
     friend class StunPeer;
     UdpChannel(asio::ip::udp::socket&& socket, QObject* parent);
 
 private:
+    void onConnected();
+    void onErrorOccurred(const Location& location, const std::error_code& error_code);
+
+    asio::ip::udp::resolver resolver_;
     asio::ip::udp::socket socket_;
 
     Q_DISABLE_COPY_MOVE(UdpChannel)

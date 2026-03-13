@@ -65,7 +65,7 @@ void ChatClient::start()
 //--------------------------------------------------------------------------------------------------
 void ChatClient::onSendChat(const proto::chat::Chat& chat)
 {
-    tcp_channel_->send(proto::peer::CHANNEL_ID_SESSION, base::serialize(chat));
+    tcp_channel_->send(proto::peer::CHANNEL_ID_0, base::serialize(chat));
 }
 
 //--------------------------------------------------------------------------------------------------

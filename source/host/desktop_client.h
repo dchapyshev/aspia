@@ -31,6 +31,7 @@ class QTimer;
 namespace base {
 class IpcChannel;
 class IpcServer;
+class UdpChannel;
 } // namespace base
 
 namespace host {
@@ -67,6 +68,10 @@ private slots:
     void onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code);
     void onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray& buffer);
 
+    void onUdpConnected();
+    void onUdpErrorOccurred();
+    void onUdpMessageReceived(quint8 udp_channel_id, const QByteArray& buffer);
+
     void onOverflowCheck();
 
 private:
@@ -77,6 +82,7 @@ private:
     base::IpcServer* ipc_server_ = nullptr;
     base::IpcChannel* ipc_channel_ = nullptr;
     base::TcpChannel* tcp_channel_ = nullptr;
+    base::UdpChannel* udp_channel_ = nullptr;
     QTimer* fake_capture_timer_ = nullptr;
     QTimer* overflow_timer_ = nullptr;
 

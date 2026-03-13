@@ -360,7 +360,7 @@ void FileClient::onIpcErrorOccurred()
 //--------------------------------------------------------------------------------------------------
 void FileClient::onIpcMessageReceived(quint32 /* ipc_channel_id */, const QByteArray& buffer)
 {
-    tcp_channel_->send(proto::peer::CHANNEL_ID_SESSION, buffer);
+    tcp_channel_->send(proto::peer::CHANNEL_ID_0, buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -384,7 +384,7 @@ void FileClient::onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray& b
         proto::file_transfer::Reply reply;
         reply.set_error_code(proto::file_transfer::ERROR_CODE_NO_LOGGED_ON_USER);
 
-        tcp_channel_->send(proto::peer::CHANNEL_ID_SESSION, base::serialize(reply));
+        tcp_channel_->send(proto::peer::CHANNEL_ID_0, base::serialize(reply));
         return;
     }
 

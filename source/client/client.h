@@ -30,6 +30,7 @@ class QTimer;
 
 namespace base {
 class StunPeer;
+class UdpChannel;
 } // namespace base
 
 namespace client {
@@ -94,6 +95,8 @@ private slots:
     void onTcpReady();
     void onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code);
     void onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer);
+    void onUdpErrorOccurred();
+    void onUdpMessageReceived(quint8 channel_id, const QByteArray& buffer);
     void onRouterConnected(const QVersionNumber& router_version);
     void onHostAwaiting();
     void onHostConnected();
@@ -108,6 +111,7 @@ private:
     QTimer* reconnect_timer_ = nullptr;
     RouterManager* router_controller_ = nullptr;
     base::TcpChannel* tcp_channel_ = nullptr;
+    base::UdpChannel* udp_channel_ = nullptr;
     base::StunPeer* stun_peer_ = nullptr;
 
     std::shared_ptr<SessionState> session_state_;

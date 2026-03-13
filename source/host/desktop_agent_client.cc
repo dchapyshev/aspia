@@ -334,10 +334,8 @@ void DesktopAgentClient::onIpcMessageReceived(quint32 channel_id, const QByteArr
             return;
         }
 
-        if (tcp_channel_id != proto::peer::CHANNEL_ID_SESSION)
-            return;
-
-        readSessionMessage(buffer);
+        if (tcp_channel_id == proto::peer::CHANNEL_ID_0)
+            readSessionMessage(buffer);
     }
     else if (ipc_channel_id == proto::desktop::IPC_CHANNEL_ID_SERVICE)
     {
@@ -408,8 +406,7 @@ void DesktopAgentClient::readSessionMessage(const QByteArray& buffer)
 //--------------------------------------------------------------------------------------------------
 void DesktopAgentClient::sendSessionMessage(const QByteArray& buffer)
 {
-    quint32 channel_id = base::makeUint32(
-        proto::desktop::IPC_CHANNEL_ID_SESSION, proto::peer::CHANNEL_ID_SESSION);
+    quint32 channel_id = base::makeUint32(proto::desktop::IPC_CHANNEL_ID_SESSION, proto::peer::CHANNEL_ID_0);
     ipc_channel_->send(channel_id, buffer);
 }
 

@@ -87,7 +87,7 @@ void SystemInfoClient::onTcpMessageReceived(quint8 tcp_channel_id, const QByteAr
     proto::system_info::SystemInfo system_info;
     createSystemInfo(request, &system_info);
 
-    tcp_channel_->send(proto::peer::CHANNEL_ID_SESSION, base::serialize(system_info));
+    tcp_channel_->send(proto::peer::CHANNEL_ID_0, base::serialize(system_info));
 #endif // defined(Q_OS_WINDOWS)
 }
 

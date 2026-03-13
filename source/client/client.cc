@@ -22,6 +22,7 @@
 
 #include "base/logging.h"
 #include "base/version_constants.h"
+#include "base/serialization.h"
 #include "base/net/tcp_channel_ng.h"
 #include "base/net/tcp_channel_legacy.h"
 #include "base/net/udp_channel.h"
@@ -216,7 +217,7 @@ void Client::sendSessionMessage(const QByteArray& message)
         return;
     }
 
-    tcp_channel_->send(proto::peer::CHANNEL_ID_SESSION, message);
+    tcp_channel_->send(proto::peer::CHANNEL_ID_0, message);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -228,7 +229,7 @@ void Client::sendServiceMessage(const QByteArray& message)
         return;
     }
 
-    tcp_channel_->send(proto::peer::CHANNEL_ID_SERVICE, message);
+    tcp_channel_->send(proto::peer::CHANNEL_ID_1, message);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -346,11 +347,11 @@ void Client::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code)
 //--------------------------------------------------------------------------------------------------
 void Client::onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer)
 {
-    if (channel_id == proto::peer::CHANNEL_ID_SESSION)
+    if (channel_id == proto::peer::CHANNEL_ID_0)
     {
         onSessionMessageReceived(buffer);
     }
-    else if (channel_id == proto::peer::CHANNEL_ID_SERVICE)
+    else if (channel_id == proto::peer::CHANNEL_ID_1)
     {
         onServiceMessageReceived(buffer);
     }
@@ -358,6 +359,20 @@ void Client::onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer)
     {
         LOG(ERROR) << "Unhandled incoming message from channel:" << channel_id;
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void Client::onUdpErrorOccurred()
+{
+    udp_channel_->disconnect();
+    udp_channel_->deleteLater();
+    udp_channel_ = nullptr;
+}
+
+//--------------------------------------------------------------------------------------------------
+void Client::onUdpMessageReceived(quint8 channel_id, const QByteArray& buffer)
+{
+    // TODO
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -409,13 +424,24 @@ void Client::onHostConnected()
         {
             LOG(INFO) << "External endpoint received:" << external_address << ':' << external_port;
 
-            base::UdpChannel* udp_channel = stun_peer_->takeChannel();
-            LOG(INFO) << "UDP channel created:" << (udp_channel != nullptr);
-            udp_channel->deleteLater();
+            udp_channel_ = stun_peer_->takeChannel();
+            udp_channel_->setParent(this);
+
+            LOG(INFO) << "UDP channel created:" << (udp_channel_ != nullptr);
+
+            connect(udp_channel_, &base::UdpChannel::sig_errorOccurred, this, &Client::onUdpErrorOccurred);
+            connect(udp_channel_, &base::UdpChannel::sig_messageReceived, this, &Client::onUdpMessageReceived);
 
             stun_peer_->disconnect();
             stun_peer_->deleteLater();
             stun_peer_ = nullptr;
+
+            proto::peer::ClientToHost message;
+            proto::peer::DirectUdpEndpoint* udp_endpoint = message.mutable_direct_udp_endpoint();
+            udp_endpoint->set_ip_address(external_address.toStdString());
+            udp_endpoint->set_port(external_port);
+
+            tcp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, base::serialize(message));
         });
 
         connect(stun_peer_, &base::StunPeer::sig_errorOccurred, this, [this]()

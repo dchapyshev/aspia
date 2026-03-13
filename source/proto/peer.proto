@@ -24,18 +24,23 @@ package proto.peer;
 
 enum ChannelId
 {
-    CHANNEL_ID_SESSION = 0;
-    CHANNEL_ID_SERVICE = 1;
+    CHANNEL_ID_0       = 0; // Basic session data.
+    CHANNEL_ID_1       = 1; // Service session data.
+    CHANNEL_ID_2       = 2; // Depends on session implementation.
+    CHANNEL_ID_3       = 3; // Depends on session implementation.
+    CHANNEL_ID_4       = 4; // Depends on session implementation.
+    CHANNEL_ID_5       = 5; // Depends on session implementation.
+    CHANNEL_ID_CONTROL = 255;
 }
 
 enum SessionType
 {
-    SESSION_TYPE_UNKNOWN         = 0;
-    SESSION_TYPE_DESKTOP_MANAGE  = 1;
-    SESSION_TYPE_DESKTOP_VIEW    = 2;
-    SESSION_TYPE_FILE_TRANSFER   = 4;
-    SESSION_TYPE_SYSTEM_INFO     = 8;
-    SESSION_TYPE_TEXT_CHAT       = 16;
+    SESSION_TYPE_UNKNOWN        = 0;
+    SESSION_TYPE_DESKTOP_MANAGE = 1;
+    SESSION_TYPE_DESKTOP_VIEW   = 2;
+    SESSION_TYPE_FILE_TRANSFER  = 4;
+    SESSION_TYPE_SYSTEM_INFO    = 8;
+    SESSION_TYPE_TEXT_CHAT      = 16;
 
     // When adding or removing session types, you need to recalculate this value.
     SESSION_TYPE_ALL            = 31;
@@ -47,4 +52,16 @@ message Version
     uint32 minor    = 2;
     uint32 patch    = 3;
     uint32 revision = 4;
+}
+
+message DirectUdpEndpoint
+{
+    string ip_address = 1;
+    uint32 port       = 2;
+}
+
+// Use CHANNEL_ID_CONTROL to send.
+message ClientToHost
+{
+    DirectUdpEndpoint direct_udp_endpoint = 1;
 }
