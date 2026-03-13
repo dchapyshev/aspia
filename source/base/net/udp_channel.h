@@ -49,6 +49,8 @@ public:
     void connectTo(const QString& address, quint16 port);
     void send(quint8 channel_id, const QByteArray& buffer);
 
+    void setPaused(bool enable);
+
     void setEncryptor(std::unique_ptr<MessageEncryptor> encryptor);
     void setDecryptor(std::unique_ptr<MessageDecryptor> decryptor);
 
@@ -149,6 +151,9 @@ private:
 
     QQueue<QByteArray> udp_send_queue_;
     bool udp_sending_ = false;
+
+    bool paused_ = true;
+    bool reading_ = false;
 
     static const int kRecvBufferSize = 65536;
     std::array<char, kRecvBufferSize> recv_buffer_;

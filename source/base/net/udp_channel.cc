@@ -37,7 +37,7 @@ namespace {
 
 const quint32 kKcpConv = 1;
 const int kKcpUpdateIntervalMs = 10;
-const int kKcpMtu = 1400;
+const int kKcpMtu = 1200;
 const std::chrono::seconds kKeepAliveInterval { 30 };
 const std::chrono::seconds kKeepAliveTimeout { 30 };
 const int kWriteQueueReservedSize = 128;
@@ -164,6 +164,33 @@ void UdpChannel::connectTo(const QString& address, quint16 port)
 void UdpChannel::send(quint8 channel_id, const QByteArray& buffer)
 {
     addWriteTask(USER_DATA, channel_id, buffer);
+}
+
+//--------------------------------------------------------------------------------------------------
+void UdpChannel::setPaused(bool enable)
+{
+    if (paused_ == enable)
+        return;
+
+    paused_ = enable;
+    if (paused_)
+    {
+        keep_alive_timer_->stop();
+        update_timer_->stop();
+        return;
+    }
+
+    update_timer_->start(kKcpUpdateIntervalMs);
+
+    keep_alive_timer_type_ = KEEP_ALIVE_INTERVAL;
+    keep_alive_timer_->start(kKeepAliveInterval);
+
+    // Process any data that was accumulated while paused.
+    processKcpRecv();
+
+    // Resume reading if no read operation is in-flight.
+    if (!reading_)
+        doRead();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -319,15 +346,8 @@ void UdpChannel::doUdpSend()
 //--------------------------------------------------------------------------------------------------
 void UdpChannel::onConnected()
 {
-    update_timer_->start(kKcpUpdateIntervalMs);
-
     keep_alive_counter_.resize(sizeof(quint32));
     memset(keep_alive_counter_.data(), 0, keep_alive_counter_.size());
-
-    keep_alive_timer_type_ = KEEP_ALIVE_INTERVAL;
-    keep_alive_timer_->start(kKeepAliveInterval);
-
-    doRead();
     emit sig_connected();
 }
 
@@ -345,9 +365,13 @@ void UdpChannel::onErrorOccurred(const Location& location, const std::error_code
 //--------------------------------------------------------------------------------------------------
 void UdpChannel::doRead()
 {
+    reading_ = true;
+
     socket_.async_receive(asio::buffer(recv_buffer_.data(), recv_buffer_.size()),
         [this](const std::error_code& error_code, size_t bytes_transferred)
     {
+        reading_ = false;
+
         if (error_code)
         {
             if (error_code != asio::error::operation_aborted)
@@ -365,6 +389,9 @@ void UdpChannel::doRead()
             onErrorOccurred(FROM_HERE, std::error_code());
             return;
         }
+
+        if (paused_)
+            return;
 
         processKcpRecv();
 
@@ -435,6 +462,9 @@ void UdpChannel::processKcpRecv()
 
         consumed += payload_size;
         read_header_parsed_ = false;
+
+        if (paused_)
+            break;
     }
 
     // Remove consumed data from the read buffer.
