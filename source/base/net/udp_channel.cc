@@ -256,6 +256,7 @@ void UdpChannel::init()
     }
 
     kcp_->output = kcpOutputCallback;
+    kcp_->stream = 1;
 
     // Set KCP to fast mode: nodelay=1, interval=10ms, fast resend=2, no congestion control.
     ikcp_nodelay(kcp_, 1, kKcpUpdateIntervalMs, 2, 1);
@@ -387,56 +388,72 @@ void UdpChannel::processKcpRecv()
     if (!kcp_)
         return;
 
+    // Read all available data from KCP and append to the read buffer.
     while (true)
     {
         int peek_size = ikcp_peeksize(kcp_);
-        if (peek_size < 0)
+        if (peek_size <= 0)
             break;
 
-        if (peek_size < static_cast<int>(sizeof(Header)))
+        int offset = read_buffer_.size();
+        read_buffer_.resize(offset + peek_size);
+
+        int recv_size = ikcp_recv(kcp_, read_buffer_.data() + offset, peek_size);
+        if (recv_size <= 0)
         {
-            LOG(ERROR) << "KCP message too small for header:" << peek_size;
-            // Discard the message.
-            resizeBuffer(&read_buffer_, peek_size);
-            ikcp_recv(kcp_, read_buffer_.data(), read_buffer_.size());
-            continue;
+            read_buffer_.resize(offset);
+            break;
+        }
+    }
+
+    // Parse complete messages from the accumulated read buffer.
+    int consumed = 0;
+
+    while (true)
+    {
+        int available = read_buffer_.size() - consumed;
+
+        // Phase 1: Read the header.
+        if (!read_header_parsed_)
+        {
+            if (available < static_cast<int>(sizeof(Header)))
+                break;
+
+            memcpy(&read_header_, read_buffer_.constData() + consumed, sizeof(Header));
+            consumed += sizeof(Header);
+            read_header_parsed_ = true;
         }
 
-        resizeBuffer(&read_buffer_, peek_size);
+        // Phase 2: Read the payload.
+        available = read_buffer_.size() - consumed;
+        int payload_size = static_cast<int>(read_header_.length);
 
-        int recv_size = ikcp_recv(kcp_, read_buffer_.data(), read_buffer_.size());
-        if (recv_size < 0)
+        if (available < payload_size)
             break;
 
-        memcpy(&read_header_, read_buffer_.constData(), sizeof(Header));
+        onMessageReceived(read_buffer_.constData() + consumed, payload_size);
 
-        // Shift payload to the beginning of read_buffer_, removing the header.
-        qint64 payload_size = recv_size - sizeof(Header);
-        memmove(read_buffer_.data(), read_buffer_.data() + sizeof(Header), payload_size);
-        read_buffer_.resize(payload_size);
+        consumed += payload_size;
+        read_header_parsed_ = false;
+    }
 
-        if (static_cast<int>(read_header_.length) != read_buffer_.size())
-        {
-            LOG(ERROR) << "Header length mismatch: expected" << read_header_.length
-                       << "got" << read_buffer_.size();
-            onErrorOccurred(FROM_HERE, std::error_code());
-            return;
-        }
-
-        onMessageReceived();
+    // Remove consumed data from the read buffer.
+    if (consumed > 0)
+    {
+        read_buffer_.remove(0, consumed);
     }
 }
 
 //--------------------------------------------------------------------------------------------------
-void UdpChannel::onMessageReceived()
+void UdpChannel::onMessageReceived(const char* data, int size)
 {
     if (decryptor_)
     {
-        resizeBuffer(&decrypt_buffer_, decryptor_->decryptedDataSize(read_buffer_.size()));
+        resizeBuffer(&decrypt_buffer_, decryptor_->decryptedDataSize(size));
 
-        if (!decryptor_->decrypt(read_buffer_.data(), read_buffer_.size(),
-                                  &read_header_, sizeof(read_header_),
-                                  decrypt_buffer_.data()))
+        if (!decryptor_->decrypt(data, size,
+                                 &read_header_, sizeof(read_header_),
+                                 decrypt_buffer_.data()))
         {
             LOG(ERROR) << "Failed to decrypt incoming message";
             onErrorOccurred(FROM_HERE, std::error_code());
@@ -444,14 +461,18 @@ void UdpChannel::onMessageReceived()
         }
     }
 
-    const QByteArray& payload = decryptor_ ? decrypt_buffer_ : read_buffer_;
+    const char* payload_data = decryptor_ ? decrypt_buffer_.constData() : data;
+    int payload_size = decryptor_ ? decrypt_buffer_.size() : size;
 
     if (read_header_.type == USER_DATA)
     {
-        emit sig_messageReceived(read_header_.param1, payload);
+        emit sig_messageReceived(read_header_.param1,
+                                 QByteArray(payload_data, payload_size));
     }
     else if (read_header_.type == KEEP_ALIVE)
     {
+        QByteArray payload(payload_data, payload_size);
+
         if (read_header_.param1 & KEEP_ALIVE_PING)
         {
             addWriteTask(KEEP_ALIVE, KEEP_ALIVE_PONG, payload);

@@ -124,7 +124,7 @@ private:
     void doRead();
     void doKcpUpdate();
     void processKcpRecv();
-    void onMessageReceived();
+    void onMessageReceived(const char* data, int size);
     void onKeepAliveTimer();
 
     asio::ip::udp::resolver resolver_;
@@ -143,6 +143,7 @@ private:
     QByteArray write_buffer_;
 
     Header read_header_;
+    bool read_header_parsed_ = false;
     QByteArray read_buffer_;
     QByteArray decrypt_buffer_;
 
