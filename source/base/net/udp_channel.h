@@ -119,14 +119,13 @@ private:
 
     void init();
     void doUdpSend();
-    void onConnected();
     void onErrorOccurred(const Location& location, const std::error_code& error_code);
     void addWriteTask(quint8 type, quint8 param, const QByteArray& data);
     void doWrite();
     void doRead();
     void doKcpUpdate();
     void processKcpRecv();
-    void onMessageReceived(const char* data, int size);
+    void onMessageReceived(int offset);
     void onKeepAliveTimer();
 
     asio::ip::udp::resolver resolver_;
@@ -144,8 +143,6 @@ private:
     QQueue<WriteTask> write_queue_;
     QByteArray write_buffer_;
 
-    Header read_header_;
-    bool read_header_parsed_ = false;
     QByteArray read_buffer_;
     QByteArray decrypt_buffer_;
 

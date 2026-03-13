@@ -63,7 +63,7 @@ QStringList endpointsToString(const asio::ip::udp::resolver::results_type& endpo
         return QStringList();
 
     QStringList list;
-    list.resize(endpoints.size());
+    list.reserve(endpoints.size());
 
     for (auto it = endpoints.begin(), it_end = endpoints.end(); it != it_end; ++it)
         list.emplace_back(endpointToString(it->endpoint()));
@@ -134,7 +134,7 @@ UdpChannel::~UdpChannel()
 void UdpChannel::connectTo(const QString& address, quint16 port)
 {
     resolver_.async_resolve(address.toLocal8Bit().toStdString(), std::to_string(port),
-        [&](const std::error_code& error_code, const asio::ip::udp::resolver::results_type& endpoints)
+        [this](const std::error_code& error_code, const asio::ip::udp::resolver::results_type& endpoints)
     {
         if (error_code)
         {
@@ -146,7 +146,7 @@ void UdpChannel::connectTo(const QString& address, quint16 port)
         LOG(INFO) << "Resolved endpoints:" << endpointsToString(endpoints);
 
         asio::async_connect(socket_, endpoints,
-            [&](const std::error_code& error_code, const asio::ip::udp::endpoint& endpoint)
+            [this](const std::error_code& error_code, const asio::ip::udp::endpoint& endpoint)
         {
             if (error_code)
             {
@@ -156,7 +156,7 @@ void UdpChannel::connectTo(const QString& address, quint16 port)
             }
 
             LOG(INFO) << "Connected to" << endpointToString(endpoint);
-            onConnected();
+            emit sig_connected();
         });
     });
 }
@@ -209,57 +209,57 @@ void UdpChannel::doWrite()
     if (!kcp_ || write_queue_.isEmpty())
         return;
 
-    const WriteTask& task = write_queue_.front();
-    const QByteArray& source_buffer = task.data();
-
-    qint64 target_data_size =
-        encryptor_ ? encryptor_->encryptedDataSize(source_buffer.size()) : source_buffer.size();
-
-    if (target_data_size > kMaxMessageSize)
+    while (!write_queue_.isEmpty())
     {
-        LOG(ERROR) << "Too big outgoing message:" << target_data_size;
-        onErrorOccurred(FROM_HERE, std::error_code());
-        return;
-    }
+        const WriteTask& task = write_queue_.front();
+        const QByteArray& source_buffer = task.data();
 
-    resizeBuffer(&write_buffer_, sizeof(Header) + target_data_size);
+        qint64 target_data_size =
+            encryptor_ ? encryptor_->encryptedDataSize(source_buffer.size()) : source_buffer.size();
 
-    Header* header = reinterpret_cast<Header*>(write_buffer_.data());
-    header->type = task.type();
-    header->param1 = task.param();
-    header->param2 = 0;
-    header->param3 = 0;
-    header->length = static_cast<quint32>(target_data_size);
-
-    if (encryptor_)
-    {
-        if (!encryptor_->encrypt(source_buffer.data(), source_buffer.size(),
-                                  header, sizeof(Header),
-                                  write_buffer_.data() + sizeof(Header)))
+        if (target_data_size > kMaxMessageSize)
         {
-            LOG(ERROR) << "Failed to encrypt outgoing message";
+            LOG(ERROR) << "Too big outgoing message:" << target_data_size;
             onErrorOccurred(FROM_HERE, std::error_code());
             return;
         }
-    }
-    else
-    {
-        memcpy(write_buffer_.data() + sizeof(Header), source_buffer.constData(), source_buffer.size());
-    }
 
-    int ret = ikcp_send(kcp_, write_buffer_.constData(), write_buffer_.size());
-    if (ret < 0)
-    {
-        LOG(ERROR) << "ikcp_send failed with code:" << ret;
-        onErrorOccurred(FROM_HERE, std::error_code());
-        return;
+        resizeBuffer(&write_buffer_, sizeof(Header) + target_data_size);
+
+        Header* header = reinterpret_cast<Header*>(write_buffer_.data());
+        header->type = task.type();
+        header->param1 = task.param();
+        header->param2 = 0;
+        header->param3 = 0;
+        header->length = static_cast<quint32>(target_data_size);
+
+        if (encryptor_)
+        {
+            if (!encryptor_->encrypt(source_buffer.data(), source_buffer.size(),
+                                      header, sizeof(Header),
+                                      write_buffer_.data() + sizeof(Header)))
+            {
+                LOG(ERROR) << "Failed to encrypt outgoing message";
+                onErrorOccurred(FROM_HERE, std::error_code());
+                return;
+            }
+        }
+        else
+        {
+            memcpy(write_buffer_.data() + sizeof(Header),
+                   source_buffer.constData(), source_buffer.size());
+        }
+
+        int ret = ikcp_send(kcp_, write_buffer_.constData(), write_buffer_.size());
+        if (ret < 0)
+        {
+            LOG(ERROR) << "ikcp_send failed with code:" << ret;
+            onErrorOccurred(FROM_HERE, std::error_code());
+            return;
+        }
+
+        write_queue_.pop_front();
     }
-
-    write_queue_.pop_front();
-
-    // Process remaining tasks in the queue.
-    if (!write_queue_.isEmpty())
-        doWrite();
 
     // Flush KCP to send all queued segments immediately.
     ikcp_flush(kcp_);
@@ -305,6 +305,9 @@ void UdpChannel::init()
     keep_alive_timer_ = new QTimer(this);
     keep_alive_timer_->setSingleShot(true);
     connect(keep_alive_timer_, &QTimer::timeout, this, &UdpChannel::onKeepAliveTimer);
+
+    keep_alive_counter_.resize(sizeof(quint32));
+    memset(keep_alive_counter_.data(), 0, keep_alive_counter_.size());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -349,14 +352,6 @@ void UdpChannel::doUdpSend()
 
         doUdpSend();
     });
-}
-
-//--------------------------------------------------------------------------------------------------
-void UdpChannel::onConnected()
-{
-    keep_alive_counter_.resize(sizeof(quint32));
-    memset(keep_alive_counter_.data(), 0, keep_alive_counter_.size());
-    emit sig_connected();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -447,36 +442,29 @@ void UdpChannel::processKcpRecv()
     while (true)
     {
         int available = read_buffer_.size() - consumed;
+        int total_size = static_cast<int>(sizeof(Header));
 
-        // Phase 1: Read the header.
-        if (!read_header_parsed_)
-        {
-            if (available < static_cast<int>(sizeof(Header)))
-                break;
-
-            memcpy(&read_header_, read_buffer_.constData() + consumed, sizeof(Header));
-            consumed += sizeof(Header);
-            read_header_parsed_ = true;
-
-            if (read_header_.length > kMaxMessageSize)
-            {
-                LOG(ERROR) << "Too big incoming message:" << read_header_.length;
-                onErrorOccurred(FROM_HERE, std::error_code());
-                return;
-            }
-        }
-
-        // Phase 2: Read the payload.
-        available = read_buffer_.size() - consumed;
-        int payload_size = static_cast<int>(read_header_.length);
-
-        if (available < payload_size)
+        if (available < total_size)
             break;
 
-        onMessageReceived(read_buffer_.constData() + consumed, payload_size);
+        Header header;
+        memcpy(&header, read_buffer_.constData() + consumed, sizeof(Header));
 
-        consumed += payload_size;
-        read_header_parsed_ = false;
+        if (header.length > kMaxMessageSize)
+        {
+            LOG(ERROR) << "Too big incoming message:" << header.length;
+            onErrorOccurred(FROM_HERE, std::error_code());
+            return;
+        }
+
+        total_size += static_cast<int>(header.length);
+
+        if (available < total_size)
+            break;
+
+        onMessageReceived(consumed);
+
+        consumed += total_size;
 
         if (paused_)
             break;
@@ -490,14 +478,20 @@ void UdpChannel::processKcpRecv()
 }
 
 //--------------------------------------------------------------------------------------------------
-void UdpChannel::onMessageReceived(const char* data, int size)
+void UdpChannel::onMessageReceived(int offset)
 {
+    Header header;
+    memcpy(&header, read_buffer_.constData() + offset, sizeof(Header));
+
+    const char* data = read_buffer_.constData() + offset + sizeof(Header);
+    int size = static_cast<int>(header.length);
+
     if (decryptor_)
     {
         resizeBuffer(&decrypt_buffer_, decryptor_->decryptedDataSize(size));
 
         if (!decryptor_->decrypt(data, size,
-                                 &read_header_, sizeof(read_header_),
+                                 &header, sizeof(Header),
                                  decrypt_buffer_.data()))
         {
             LOG(ERROR) << "Failed to decrypt incoming message";
@@ -509,16 +503,16 @@ void UdpChannel::onMessageReceived(const char* data, int size)
     const char* payload_data = decryptor_ ? decrypt_buffer_.constData() : data;
     int payload_size = decryptor_ ? decrypt_buffer_.size() : size;
 
-    if (read_header_.type == USER_DATA)
+    if (header.type == USER_DATA)
     {
-        emit sig_messageReceived(read_header_.param1,
+        emit sig_messageReceived(header.param1,
                                  QByteArray(payload_data, payload_size));
     }
-    else if (read_header_.type == KEEP_ALIVE)
+    else if (header.type == KEEP_ALIVE)
     {
         QByteArray payload(payload_data, payload_size);
 
-        if (read_header_.param1 & KEEP_ALIVE_PING)
+        if (header.param1 & KEEP_ALIVE_PING)
         {
             addWriteTask(KEEP_ALIVE, KEEP_ALIVE_PONG, payload);
             return;
