@@ -42,7 +42,7 @@ StunServer::~StunServer()
 }
 
 //--------------------------------------------------------------------------------------------------
-void StunServer::start(uint16_t port)
+void StunServer::start(quint16 port)
 {
     asio::ip::udp::endpoint endpoint(asio::ip::udp::v4(), port);
 
@@ -82,8 +82,7 @@ void StunServer::doReceiveRequest()
                 {
                     if (message.endpoint_request().magic_number() == 0xA0B1C2D3)
                     {
-                        if (doSendAddressReply())
-                            return;
+                        doSendAddressReply();
                     }
                     else
                     {

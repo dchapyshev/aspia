@@ -196,6 +196,30 @@ QByteArray Settings::seedKey() const
 }
 
 //--------------------------------------------------------------------------------------------------
+void Settings::setEnableStun(bool enable)
+{
+    impl_.setValue("stun", enable);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Settings::isStunEnabled() const
+{
+    return impl_.value("stun", true).toBool();
+}
+
+//--------------------------------------------------------------------------------------------------
+void Settings::setStunPort(quint16 port)
+{
+    impl_.setValue("stun_port", port);
+}
+
+//--------------------------------------------------------------------------------------------------
+quint16 Settings::stunPort() const
+{
+    return impl_.value("stun_port", DEFAULT_STUN_PORT).toUInt();
+}
+
+//--------------------------------------------------------------------------------------------------
 void Settings::setWhiteList(const QString& key, const WhiteList& value)
 {
     QString result;

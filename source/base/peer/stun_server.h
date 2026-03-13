@@ -42,7 +42,7 @@ private:
     bool doSendAddressReply();
 
     asio::ip::udp::socket udp_socket_;
-    std::array<uint8_t, 1024> buffer_;
+    std::array<quint8, 1024> buffer_;
 
     Q_DISABLE_COPY_MOVE(StunServer)
 };

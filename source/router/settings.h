@@ -65,6 +65,12 @@ public:
     void setSeedKey(const QByteArray& seed_key);
     QByteArray seedKey() const;
 
+    void setEnableStun(bool enable);
+    bool isStunEnabled() const;
+
+    void setStunPort(quint16 port);
+    quint16 stunPort() const;
+
 private:
     void setWhiteList(const QString& key, const WhiteList& value);
     WhiteList whiteList(const QString& key) const;

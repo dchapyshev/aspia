@@ -131,8 +131,7 @@ void StunPeer::doStart()
     timer_->start(std::chrono::seconds(3));
 
     udp_resolver_.async_resolve(stun_host_, stun_port_,
-        [&](const std::error_code& error_code,
-            const asio::ip::udp::resolver::results_type& endpoints)
+        [&](const std::error_code& error_code, const asio::ip::udp::resolver::results_type& endpoints)
     {
         if (error_code)
         {
@@ -223,7 +222,7 @@ void StunPeer::doReceiveExternalAddress()
             const proto::stun::Endpoint& endpoint = message.endpoint();
 
             QString ip_address = QString::fromStdString(endpoint.ip_address());
-            quint32 port = static_cast<quint16>(endpoint.port());
+            quint32 port = static_cast<quint32>(endpoint.port());
 
             LOG(INFO) << "External endpoint:" << ip_address << ":" << port;
 

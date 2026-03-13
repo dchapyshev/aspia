@@ -23,6 +23,7 @@
 #include "base/logging.h"
 #include "base/crypto/random.h"
 #include "base/net/tcp_channel.h"
+#include "base/peer/stun_server.h"
 #include "router/migration_utils.h"
 #include "router/session_admin.h"
 #include "router/session_client.h"
@@ -404,6 +405,12 @@ bool Service::start()
         base::ServerAuthenticator::AnonymousAccess::ENABLE,
         proto::router::SESSION_TYPE_HOST | proto::router::SESSION_TYPE_RELAY);
     tcp_server_legacy_->start(legacy_port, listen_interface);
+
+    if (settings.isStunEnabled())
+    {
+        stun_server_ = new base::StunServer(this);
+        stun_server_->start(settings.stunPort());
+    }
 
     LOG(INFO) << "Server started";
     return true;
