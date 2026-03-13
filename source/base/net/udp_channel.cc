@@ -40,6 +40,7 @@ const int kKcpUpdateIntervalMs = 10;
 const int kKcpMtu = 1200;
 const std::chrono::seconds kKeepAliveInterval { 30 };
 const std::chrono::seconds kKeepAliveTimeout { 30 };
+const quint32 kMaxMessageSize = 7 * 1024 * 1024; // 7 MB
 const int kWriteQueueReservedSize = 128;
 const int kUdpSendQueueReservedSize = 256;
 
@@ -213,6 +214,13 @@ void UdpChannel::doWrite()
 
     qint64 target_data_size =
         encryptor_ ? encryptor_->encryptedDataSize(source_buffer.size()) : source_buffer.size();
+
+    if (target_data_size > kMaxMessageSize)
+    {
+        LOG(ERROR) << "Too big outgoing message:" << target_data_size;
+        onErrorOccurred(FROM_HERE, std::error_code());
+        return;
+    }
 
     resizeBuffer(&write_buffer_, sizeof(Header) + target_data_size);
 
@@ -449,6 +457,13 @@ void UdpChannel::processKcpRecv()
             memcpy(&read_header_, read_buffer_.constData() + consumed, sizeof(Header));
             consumed += sizeof(Header);
             read_header_parsed_ = true;
+
+            if (read_header_.length > kMaxMessageSize)
+            {
+                LOG(ERROR) << "Too big incoming message:" << read_header_.length;
+                onErrorOccurred(FROM_HERE, std::error_code());
+                return;
+            }
         }
 
         // Phase 2: Read the payload.
