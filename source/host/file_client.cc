@@ -158,27 +158,12 @@ QString agentFilePath()
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-FileClient::FileClient(base::TcpChannel* tcp_channel, QObject* parent)
-    : QObject(parent),
-      tcp_channel_(tcp_channel),
+FileClient::FileClient(base::TcpChannel* tcp_channel, base::SessionId session_id, QObject* parent)
+    : Client(tcp_channel, parent),
+      session_id_(session_id),
       attach_timer_(new QTimer(this))
 {
     LOG(INFO) << "Ctor";
-    CHECK(tcp_channel_);
-
-    tcp_channel_->setParent(this);
-
-    setProperty("client_id", tcp_channel_->instanceId());
-    setProperty("version", tcp_channel_->peerVersion().toString());
-    setProperty("os_name", tcp_channel_->peerOsName());
-    setProperty("session_type", tcp_channel_->peerSessionType());
-    setProperty("user_name", tcp_channel_->peerUserName());
-    setProperty("display_name", tcp_channel_->peerDisplayName());
-    setProperty("computer_name", tcp_channel_->peerComputerName());
-    setProperty("arch", tcp_channel_->peerArchitecture());
-
-    connect(tcp_channel_, &base::TcpChannel::sig_errorOccurred, this, &FileClient::onTcpErrorOccurred);
-    connect(tcp_channel_, &base::TcpChannel::sig_messageReceived, this, &FileClient::onTcpMessageReceived);
 
     attach_timer_->setSingleShot(true);
     connect(attach_timer_, &QTimer::timeout, this, [this]()
@@ -195,11 +180,11 @@ FileClient::~FileClient()
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileClient::start(base::SessionId session_id)
+void FileClient::start()
 {
-    if (session_id == 0)
+    if (session_id_ == 0)
     {
-        LOG(ERROR) << "Invalid session id:" << session_id;
+        LOG(ERROR) << "Invalid session id:" << session_id_;
         onError(FROM_HERE);
         return;
     }
@@ -208,7 +193,7 @@ void FileClient::start(base::SessionId session_id)
 
 #if defined(Q_OS_WINDOWS)
     base::ScopedHandle session_token;
-    if (!createLoggedOnUserToken(session_id, &session_token))
+    if (!createLoggedOnUserToken(session_id_, &session_token))
     {
         LOG(WARNING) << "createSessionToken failed";
 
@@ -218,7 +203,7 @@ void FileClient::start(base::SessionId session_id)
         return;
     }
 
-    base::SessionInfo session_info(session_id);
+    base::SessionInfo session_info(session_id_);
     if (!session_info.isValid())
     {
         LOG(ERROR) << "Unable to get session info";
@@ -360,7 +345,7 @@ void FileClient::onIpcErrorOccurred()
 //--------------------------------------------------------------------------------------------------
 void FileClient::onIpcMessageReceived(quint32 /* ipc_channel_id */, const QByteArray& buffer)
 {
-    tcp_channel_->send(proto::peer::CHANNEL_ID_0, buffer);
+    send(proto::peer::CHANNEL_ID_0, buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -370,21 +355,13 @@ void FileClient::onIpcDisconnected()
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileClient::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code)
-{
-    LOG(WARNING) << "TCP error occurred:" << error_code;
-    onError(FROM_HERE);
-}
-
-//--------------------------------------------------------------------------------------------------
-void FileClient::onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray& buffer)
+void FileClient::onMessage(quint8 tcp_channel_id, const QByteArray& buffer)
 {
     if (!has_logged_on_user_)
     {
         proto::file_transfer::Reply reply;
         reply.set_error_code(proto::file_transfer::ERROR_CODE_NO_LOGGED_ON_USER);
-
-        tcp_channel_->send(proto::peer::CHANNEL_ID_0, base::serialize(reply));
+        send(proto::peer::CHANNEL_ID_0, base::serialize(reply));
         return;
     }
 
@@ -438,7 +415,7 @@ void FileClient::onStarted(const base::Location& location, bool has_user)
         ipc_channel_->setPaused(false);
     }
 
-    tcp_channel_->setPaused(false);
+    resume();
     emit sig_started();
 }
 
@@ -448,7 +425,6 @@ void FileClient::onError(const base::Location& location)
     LOG(ERROR) << "Error occurred (from" << location << ")";
 
     attach_timer_->stop();
-    tcp_channel_->disconnect(this);
 
     if (ipc_server_)
         ipc_server_->disconnect(this);

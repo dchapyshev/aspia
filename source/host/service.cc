@@ -386,16 +386,16 @@ void Service::onUserSessionAttached()
 {
     for (auto* client : std::as_const(clients_))
     {
-        auto session_type = static_cast<proto::peer::SessionType>(client->property("session_type").toUInt());
+        proto::peer::SessionType session_type = client->sessionType();
         switch (session_type)
         {
             case proto::peer::SESSION_TYPE_DESKTOP_MANAGE:
             case proto::peer::SESSION_TYPE_DESKTOP_VIEW:
             case proto::peer::SESSION_TYPE_FILE_TRANSFER:
             {
-                QString computer_name = client->property("computer_name").toString();
-                QString display_name = client->property("display_name").toString();
-                quint32 client_id = client->property("client_id").toUInt();
+                QString computer_name = client->computerName();
+                QString display_name = client->displayName();
+                quint32 client_id = client->clientId();
 
                 user_session_->sendConnectEvent(client_id, session_type, computer_name, display_name);
             }
@@ -430,11 +430,11 @@ void Service::onStopClient(quint32 client_id)
 {
     for (auto* client : std::as_const(clients_))
     {
-        quint32 current_client_id = client->property("client_id").toUInt();
+        quint32 current_client_id = client->clientId();
 
         if (client_id == 0 || client_id == current_client_id)
         {
-            QMetaObject::invokeMethod(client, "sig_finished");
+            emit client->sig_finished();
             if (client_id != 0)
                  break;
         }
@@ -475,7 +475,7 @@ void Service::onChatClientStarted()
     CHECK(started_client);
     CHECK_NE(clients_.indexOf(started_client), -1);
 
-    quint32 client_id = started_client->property("client_id").toUInt();
+    quint32 client_id = started_client->clientId();
 
     LOG(INFO) << "Text chat session started (client_id:" << client_id << ")";
 
@@ -486,9 +486,9 @@ void Service::onChatClientStarted()
     proto::chat::Status* chat_status = chat.mutable_chat_status();
     chat_status->set_code(proto::chat::Status::CODE_STARTED);
 
-    QString display_name = started_client->property("display_name").toString();
+    QString display_name = started_client->displayName();
     if (display_name.isEmpty())
-        display_name = started_client->property("computer_name").toString();
+        display_name = started_client->computerName();
 
     chat_status->set_source(display_name.toStdString());
 
@@ -496,7 +496,7 @@ void Service::onChatClientStarted()
     for (auto* client : std::as_const(clients_))
     {
         ChatClient* chat_client = dynamic_cast<ChatClient*>(client);
-        if (chat_client && chat_client->property("client_id") != client_id)
+        if (chat_client && chat_client->clientId() != client_id)
             chat_client->onSendChat(chat);
     }
 
@@ -511,11 +511,11 @@ void Service::onChatClientFinished()
     CHECK(finished_client);
     CHECK_NE(clients_.indexOf(finished_client), -1);
 
-    quint32 client_id = finished_client->property("client_id").toUInt();
+    quint32 client_id = finished_client->clientId();
 
-    QString display_name = finished_client->property("display_name").toString();
+    QString display_name = finished_client->displayName();
     if (display_name.isEmpty())
-        display_name = finished_client->property("computer_name").toString();
+        display_name = finished_client->computerName();
 
     proto::chat::Chat chat;
     proto::chat::Status* chat_status = chat.mutable_chat_status();
@@ -527,7 +527,7 @@ void Service::onChatClientFinished()
     for (auto* client : std::as_const(clients_))
     {
         ChatClient* chat_client = dynamic_cast<ChatClient*>(client);
-        if (chat_client && chat_client->property("client_id").toUInt() != client_id)
+        if (chat_client && chat_client->clientId() != client_id)
             chat_client->onSendChat(chat);
     }
 
@@ -544,7 +544,7 @@ void Service::onChatClientMessage(const proto::chat::Chat& chat)
     ChatClient* sender_client = dynamic_cast<ChatClient*>(sender());
     CHECK(sender_client);
 
-    quint32 sender_client_id = sender_client->property("client_id").toUInt();
+    quint32 sender_client_id = sender_client->clientId();
 
     if (user_session_->state() == UserSession::State::DETTACHED && chat.has_chat_message())
         sender_client->onSendStatus(proto::chat::Status::CODE_USER_DISCONNECTED);
@@ -555,7 +555,7 @@ void Service::onChatClientMessage(const proto::chat::Chat& chat)
     for (auto* client : std::as_const(clients_))
     {
         ChatClient* chat_client = dynamic_cast<ChatClient*>(client);
-        if (chat_client && sender_client_id != chat_client->property("client_id"))
+        if (chat_client && sender_client_id != chat_client->clientId())
             chat_client->onSendChat(chat);
     }
 }
@@ -676,67 +676,68 @@ void Service::startClient(base::TcpChannel* tcp_channel)
     tcp_channel->setWriteBufferSize(kWriteBufferSize);
 
     auto session_type = static_cast<proto::peer::SessionType>(tcp_channel->peerSessionType());
+    Client* client_to_start = nullptr;
+
     if (session_type == proto::peer::SESSION_TYPE_DESKTOP_MANAGE ||
         session_type == proto::peer::SESSION_TYPE_DESKTOP_VIEW)
     {
         DesktopClient* client = new DesktopClient(tcp_channel, this);
-        clients_.append(client);
+        client_to_start = client;
 
-        connect(client, &DesktopClient::sig_finished, this, &Service::onClientFinished);
+        connect(client, &Client::sig_finished, this, &Service::onClientFinished);
 
-        connect(client, &DesktopClient::sig_started, desktop_manager_, &DesktopManager::onClientStarted);
-        connect(client, &DesktopClient::sig_finished, desktop_manager_, &DesktopManager::onClientFinished);
+        connect(client, &Client::sig_started, desktop_manager_, &DesktopManager::onClientStarted);
+        connect(client, &Client::sig_finished, desktop_manager_, &DesktopManager::onClientFinished);
         connect(client, &DesktopClient::sig_switchSession, desktop_manager_, &DesktopManager::onClientSwitchSession);
 
-        connect(client, &DesktopClient::sig_started, user_session_, &UserSession::onClientStarted);
-        connect(client, &DesktopClient::sig_finished, user_session_, &UserSession::onClientFinished);
+        connect(client, &Client::sig_started, user_session_, &UserSession::onClientStarted);
+        connect(client, &Client::sig_finished, user_session_, &UserSession::onClientFinished);
+
         connect(client, &DesktopClient::sig_switchSession, user_session_, &UserSession::onClientSwitchSession);
         connect(client, &DesktopClient::sig_recordingChanged, user_session_, &UserSession::onClientRecording);
 
         connect(desktop_manager_, &DesktopManager::sig_dettached, client, &DesktopClient::dettach);
-
-        client->start();
     }
     else if (session_type == proto::peer::SESSION_TYPE_FILE_TRANSFER)
     {
-        FileClient* client = new FileClient(tcp_channel, this);
-        clients_.emplace_back(client);
+        FileClient* client = new FileClient(tcp_channel, user_session_->sessionId(), this);
+        client_to_start = client;
 
-        connect(client, &FileClient::sig_finished, this, &Service::onClientFinished);
-        connect(client, &FileClient::sig_started, user_session_, &UserSession::onClientStarted);
-        connect(client, &FileClient::sig_finished, user_session_, &UserSession::onClientFinished);
-
-        client->start(user_session_->sessionId());
+        connect(client, &Client::sig_finished, this, &Service::onClientFinished);
+        connect(client, &Client::sig_started, user_session_, &UserSession::onClientStarted);
+        connect(client, &Client::sig_finished, user_session_, &UserSession::onClientFinished);
     }
     else if (session_type == proto::peer::SESSION_TYPE_SYSTEM_INFO)
     {
         SystemInfoClient* client = new SystemInfoClient(tcp_channel, this);
-        clients_.emplace_back(client);
+        client_to_start = client;
 
-        connect(client, &SystemInfoClient::sig_finished, this, &Service::onClientFinished);
-        connect(client, &SystemInfoClient::sig_started, user_session_, &UserSession::onClientStarted);
-        connect(client, &SystemInfoClient::sig_finished, user_session_, &UserSession::onClientFinished);
-
-        client->start();
+        connect(client, &Client::sig_finished, this, &Service::onClientFinished);
+        connect(client, &Client::sig_started, user_session_, &UserSession::onClientStarted);
+        connect(client, &Client::sig_finished, user_session_, &UserSession::onClientFinished);
     }
     else if (session_type == proto::peer::SESSION_TYPE_TEXT_CHAT)
     {
         ChatClient* client = new ChatClient(tcp_channel, this);
-        clients_.emplace_back(client);
+        client_to_start = client;
 
-        connect(client, &ChatClient::sig_started, user_session_, &UserSession::onClientStarted);
-        connect(client, &ChatClient::sig_finished, user_session_, &UserSession::onClientFinished);
+        connect(client, &Client::sig_started, user_session_, &UserSession::onClientStarted);
+        connect(client, &Client::sig_finished, user_session_, &UserSession::onClientFinished);
 
-        connect(client, &ChatClient::sig_started, this, &Service::onChatClientStarted);
-        connect(client, &ChatClient::sig_finished, this, &Service::onChatClientFinished);
+        connect(client, &Client::sig_started, this, &Service::onChatClientStarted);
+        connect(client, &Client::sig_finished, this, &Service::onChatClientFinished);
         connect(client, &ChatClient::sig_messageReceived, this, &Service::onChatClientMessage);
+    }
 
-        client->start();
-    }
-    else
+    if (!client_to_start)
     {
-        NOTREACHED();
+        LOG(INFO) << "Unknown session type:" << session_type;
+        tcp_channel->deleteLater();
+        return;
     }
+
+    clients_.append(client_to_start);
+    client_to_start->start();
 }
 
 //--------------------------------------------------------------------------------------------------

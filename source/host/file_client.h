@@ -19,10 +19,8 @@
 #ifndef HOST_FILE_CLIENT_H
 #define HOST_FILE_CLIENT_H
 
-#include <QObject>
-
 #include "base/session_id.h"
-#include "base/net/tcp_channel.h"
+#include "host/client.h"
 
 class QTimer;
 
@@ -34,20 +32,15 @@ class Location;
 
 namespace host {
 
-class FileClient final : public QObject
+class FileClient final : public Client
 {
     Q_OBJECT
 
 public:
-    explicit FileClient(base::TcpChannel* tcp_channel, QObject* parent = nullptr);
+    FileClient(base::TcpChannel* tcp_channel, base::SessionId session_id, QObject* parent = nullptr);
     ~FileClient() final;
 
-public slots:
-    void start(base::SessionId session_id);
-
-signals:
-    void sig_started();
-    void sig_finished();
+    void start() final;
 
 private slots:
     void onIpcNewConnection();
@@ -56,21 +49,19 @@ private slots:
     void onIpcMessageReceived(quint32 ipc_channel_id, const QByteArray& buffer);
     void onIpcDisconnected();
 
-    void onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code);
-    void onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray& buffer);
+protected:
+    void onMessage(quint8 channel_id, const QByteArray& buffer) final;
 
 private:
     bool startIpcServer(const QString& ipc_channel_name);
     void onStarted(const base::Location& location, bool has_user);
     void onError(const base::Location& location);
 
-    base::TcpChannel* tcp_channel_ = nullptr;
-
     base::IpcServer* ipc_server_ = nullptr;
     base::IpcChannel* ipc_channel_ = nullptr;
 
+    const base::SessionId session_id_;
     QTimer* attach_timer_ = nullptr;
-
     bool has_logged_on_user_ = false;
 
     Q_DISABLE_COPY_MOVE(FileClient)

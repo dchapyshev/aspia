@@ -21,13 +21,13 @@
 #include <QCoreApplication>
 #include <QDir>
 #include <QTimer>
-#include <QVariant>
 
 #include "base/application.h"
 #include "base/location.h"
 #include "base/logging.h"
 #include "base/ipc/ipc_channel.h"
 #include "base/ipc/ipc_server.h"
+#include "host/client.h"
 #include "host/host_storage.h"
 #include "host/system_settings.h"
 
@@ -302,13 +302,13 @@ void UserSession::onClientConfirmation(const proto::user::ConfirmationRequest& r
 //--------------------------------------------------------------------------------------------------
 void UserSession::onClientStarted()
 {
-    QObject* client = sender();
+    Client* client = dynamic_cast<Client*>(sender());
     CHECK(client);
 
-    auto session_type = static_cast<proto::peer::SessionType>(client->property("session_type").toUInt());
-    QString computer_name = client->property("computer_name").toString();
-    QString display_name = client->property("display_name").toString();
-    quint32 client_id = client->property("client_id").toUInt();
+    proto::peer::SessionType session_type = client->sessionType();
+    QString computer_name = client->computerName();
+    QString display_name = client->displayName();
+    quint32 client_id = client->clientId();
 
     switch (session_type)
     {
@@ -332,16 +332,16 @@ void UserSession::onClientStarted()
 //--------------------------------------------------------------------------------------------------
 void UserSession::onClientFinished()
 {
-    QObject* client = sender();
+    Client* client = dynamic_cast<Client*>(sender());
     CHECK(client);
 
-    auto session_type = static_cast<proto::peer::SessionType>(client->property("session_type").toUInt());
+    proto::peer::SessionType session_type = client->sessionType();
     switch (session_type)
     {
         case proto::peer::SESSION_TYPE_DESKTOP_MANAGE:
         case proto::peer::SESSION_TYPE_DESKTOP_VIEW:
         {
-            sendDisconnectEvent(client->property("client_id").toUInt());
+            sendDisconnectEvent(client->clientId());
 
             desktop_client_count_ = std::max(desktop_client_count_ - 1, 0);
             if (desktop_client_count_)
@@ -359,7 +359,7 @@ void UserSession::onClientFinished()
         break;
 
         case proto::peer::SESSION_TYPE_FILE_TRANSFER:
-            sendDisconnectEvent(client->property("client_id").toUInt());
+            sendDisconnectEvent(client->clientId());
             break;
 
         default:
@@ -377,11 +377,11 @@ void UserSession::onClientChat(quint32 client_id, const proto::chat::Chat& chat)
 //--------------------------------------------------------------------------------------------------
 void UserSession::onClientRecording(bool started)
 {
-    QObject* client = sender();
+    Client* client = dynamic_cast<Client*>(sender());
     CHECK(client);
 
-    QString computer_name = client->property("computer_name").toString();
-    QString user_name = client->property("user_name").toString();
+    QString computer_name = client->computerName();
+    QString user_name = client->userName();
 
     proto::user::RecordingState* state = outgoing_message_.newMessage().mutable_recording_state();
     state->set_computer_name(computer_name.toStdString());

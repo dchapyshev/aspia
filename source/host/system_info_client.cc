@@ -18,8 +18,6 @@
 
 #include "host/system_info_client.h"
 
-#include <QVariant>
-
 #include "base/logging.h"
 #include "base/serialization.h"
 
@@ -31,25 +29,9 @@ namespace host {
 
 //--------------------------------------------------------------------------------------------------
 SystemInfoClient::SystemInfoClient(base::TcpChannel* tcp_channel, QObject* parent)
-    : QObject(parent),
-      tcp_channel_(tcp_channel)
+    : Client(tcp_channel, parent)
 {
     LOG(INFO) << "Ctor";
-    CHECK(tcp_channel_);
-
-    tcp_channel_->setParent(this);
-
-    setProperty("client_id", tcp_channel_->instanceId());
-    setProperty("version", tcp_channel_->peerVersion().toString());
-    setProperty("os_name", tcp_channel_->peerOsName());
-    setProperty("session_type", tcp_channel_->peerSessionType());
-    setProperty("user_name", tcp_channel_->peerUserName());
-    setProperty("display_name", tcp_channel_->peerDisplayName());
-    setProperty("computer_name", tcp_channel_->peerComputerName());
-    setProperty("arch", tcp_channel_->peerArchitecture());
-
-    connect(tcp_channel_, &base::TcpChannel::sig_errorOccurred, this, &SystemInfoClient::onTcpErrorOccurred);
-    connect(tcp_channel_, &base::TcpChannel::sig_messageReceived, this, &SystemInfoClient::onTcpMessageReceived);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -61,20 +43,12 @@ SystemInfoClient::~SystemInfoClient()
 //--------------------------------------------------------------------------------------------------
 void SystemInfoClient::start()
 {
-    tcp_channel_->setPaused(false);
+    resume();
     emit sig_started();
 }
 
 //--------------------------------------------------------------------------------------------------
-void SystemInfoClient::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code)
-{
-    LOG(WARNING) << "TCP error occurred:" << error_code;
-    tcp_channel_->disconnect(this);
-    emit sig_finished();
-}
-
-//--------------------------------------------------------------------------------------------------
-void SystemInfoClient::onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray& buffer)
+void SystemInfoClient::onMessage(quint8 channel_id, const QByteArray& buffer)
 {
 #if defined(Q_OS_WINDOWS)
     proto::system_info::SystemInfoRequest request;
@@ -87,7 +61,7 @@ void SystemInfoClient::onTcpMessageReceived(quint8 tcp_channel_id, const QByteAr
     proto::system_info::SystemInfo system_info;
     createSystemInfo(request, &system_info);
 
-    tcp_channel_->send(proto::peer::CHANNEL_ID_0, base::serialize(system_info));
+    send(proto::peer::CHANNEL_ID_0, base::serialize(system_info));
 #endif // defined(Q_OS_WINDOWS)
 }
 

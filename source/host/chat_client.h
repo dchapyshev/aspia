@@ -19,14 +19,12 @@
 #ifndef HOST_CHAT_CLIENT_H
 #define HOST_CHAT_CLIENT_H
 
-#include <QObject>
-
-#include "base/net/tcp_channel.h"
+#include "host/client.h"
 #include "proto/chat.h"
 
 namespace host {
 
-class ChatClient final : public QObject
+class ChatClient final : public Client
 {
     Q_OBJECT
 
@@ -34,22 +32,19 @@ public:
     explicit ChatClient(base::TcpChannel* tcp_channel, QObject* parent = nullptr);
     ~ChatClient() final;
 
+    void start() final;
+
 public slots:
-    void start();
     void onSendChat(const proto::chat::Chat& chat);
     void onSendStatus(proto::chat::Status_Code code);
 
 signals:
-    void sig_started();
-    void sig_finished();
     void sig_messageReceived(const proto::chat::Chat& chat);
 
-private slots:
-    void onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code);
-    void onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray& buffer);
+protected:
+    void onMessage(quint8 channel_id, const QByteArray& buffer) final;
 
 private:
-    base::TcpChannel* tcp_channel_ = nullptr;
     Q_DISABLE_COPY_MOVE(ChatClient)
 };
 

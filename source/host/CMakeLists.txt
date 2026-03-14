@@ -19,6 +19,8 @@
 list(APPEND SOURCE_HOST_CORE
     chat_client.cc
     chat_client.h
+    client.cc
+    client.h
     desktop_agent.cc
     desktop_agent.h
     desktop_agent_client.cc

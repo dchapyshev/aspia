@@ -23,7 +23,7 @@
 #include <QTime>
 
 #include "base/session_id.h"
-#include "base/net/tcp_channel.h"
+#include "host/client.h"
 #include "proto/desktop_internal.h"
 
 class QTimer;
@@ -31,12 +31,11 @@ class QTimer;
 namespace base {
 class IpcChannel;
 class IpcServer;
-class UdpChannel;
 } // namespace base
 
 namespace host {
 
-class DesktopClient final : public QObject
+class DesktopClient final : public Client
 {
     Q_OBJECT
 
@@ -44,34 +43,24 @@ public:
     explicit DesktopClient(base::TcpChannel* tcp_channel, QObject* parent = nullptr);
     ~DesktopClient() final;
 
-    bool isAttached() const;
+    void start() final;
 
+    bool isAttached() const;
     QString attach();
     void dettach();
 
-public slots:
-    void start();
-
 signals:
-    void sig_started();
-    void sig_finished();
     void sig_switchSession(base::SessionId session_id);
     void sig_recordingChanged(bool started);
+
+protected:
+    void onMessage(quint8 channel_id, const QByteArray& buffer) final;
 
 private slots:
     void onIpcNewConnection();
     void onIpcErrorOccurred();
-
     void onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer);
     void onIpcDisconnected();
-
-    void onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code);
-    void onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray& buffer);
-
-    void onUdpConnected();
-    void onUdpErrorOccurred();
-    void onUdpMessageReceived(quint8 udp_channel_id, const QByteArray& buffer);
-
     void onOverflowCheck();
 
 private:
@@ -81,8 +70,6 @@ private:
     QTime dettach_time_;
     base::IpcServer* ipc_server_ = nullptr;
     base::IpcChannel* ipc_channel_ = nullptr;
-    base::TcpChannel* tcp_channel_ = nullptr;
-    base::UdpChannel* udp_channel_ = nullptr;
     QTimer* fake_capture_timer_ = nullptr;
     QTimer* overflow_timer_ = nullptr;
 

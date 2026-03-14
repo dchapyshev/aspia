@@ -46,12 +46,9 @@ class Chat;
 
 namespace host {
 
-class DesktopClient;
+class Client;
 class DesktopManager;
-class FileClient;
 class RouterManager;
-class SystemInfoClient;
-class ChatClient;
 class UserSession;
 
 class Service final : public base::Service
@@ -115,7 +112,7 @@ private:
     UserSession* user_session_ = nullptr;
 
     QList<std::pair<base::TcpChannel*, QTime>> pending_confirmation_;
-    QList<QObject*> clients_;
+    QList<Client*> clients_;
 
     common::UpdateChecker* update_checker_ = nullptr;
     common::HttpFileDownloader* update_downloader_ = nullptr;

@@ -19,21 +19,14 @@
 #include "host/desktop_client.h"
 
 #include <QTimer>
-#include <QVariant>
 
 #include "base/application.h"
 #include "base/logging.h"
 #include "base/numeric_utils.h"
 #include "base/serialization.h"
-#include "base/crypto/key_pair.h"
-#include "base/crypto/message_decryptor.h"
-#include "base/crypto/message_encryptor.h"
-#include "base/crypto/random.h"
 #include "base/ipc/ipc_channel.h"
 #include "base/ipc/ipc_server.h"
-#include "base/net/udp_channel.h"
 #include "proto/desktop_service.h"
-#include "proto/key_exchange.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/session_enumerator.h"
@@ -44,28 +37,12 @@ namespace host {
 
 //--------------------------------------------------------------------------------------------------
 DesktopClient::DesktopClient(base::TcpChannel* tcp_channel, QObject* parent)
-    : QObject(parent),
+    : Client(tcp_channel, parent),
       dettach_time_(QTime::currentTime()),
-      tcp_channel_(tcp_channel),
       fake_capture_timer_(new QTimer(this)),
       overflow_timer_(new QTimer(this))
 {
     LOG(INFO) << "Ctor";
-    CHECK(tcp_channel_);
-
-    tcp_channel_->setParent(this);
-
-    setProperty("client_id", tcp_channel_->instanceId());
-    setProperty("version", tcp_channel_->peerVersion().toString());
-    setProperty("os_name", tcp_channel_->peerOsName());
-    setProperty("session_type", tcp_channel_->peerSessionType());
-    setProperty("user_name", tcp_channel_->peerUserName());
-    setProperty("display_name", tcp_channel_->peerDisplayName());
-    setProperty("computer_name", tcp_channel_->peerComputerName());
-    setProperty("arch", tcp_channel_->peerArchitecture());
-
-    connect(tcp_channel_, &base::TcpChannel::sig_errorOccurred, this, &DesktopClient::onTcpErrorOccurred);
-    connect(tcp_channel_, &base::TcpChannel::sig_messageReceived, this, &DesktopClient::onTcpMessageReceived);
 
 #if defined(Q_OS_WINDOWS)
     connect(base::Application::instance(), &base::Application::sig_sessionEvent,
@@ -84,7 +61,7 @@ DesktopClient::DesktopClient(base::TcpChannel* tcp_channel, QObject* parent)
         proto::desktop::SessionToClient message;
         proto::desktop::VideoPacket* packet = message.mutable_video_packet();
         packet->set_error_code(proto::desktop::VIDEO_ERROR_CODE_TEMPORARY);
-        tcp_channel_->send(proto::peer::CHANNEL_ID_0, base::serialize(message));
+        send(proto::peer::CHANNEL_ID_0, base::serialize(message));
     });
 
     fake_capture_timer_->setInterval(std::chrono::milliseconds(30));
@@ -104,6 +81,12 @@ DesktopClient::DesktopClient(base::TcpChannel* tcp_channel, QObject* parent)
 DesktopClient::~DesktopClient()
 {
     LOG(INFO) << "Dtor";
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopClient::start()
+{
+    emit sig_started();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -150,119 +133,16 @@ void DesktopClient::dettach()
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopClient::start()
+void DesktopClient::onMessage(quint8 net_channel_id, const QByteArray& buffer)
 {
-    emit sig_started();
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopClient::onIpcNewConnection()
-{
-    CHECK(ipc_server_);
-    CHECK(!ipc_channel_);
-
-    if (!ipc_server_->hasPendingConnections())
+    if (net_channel_id == proto::peer::CHANNEL_ID_0)
     {
-        LOG(ERROR) << "No pending IPC connections";
-        emit sig_finished();
-        return;
-    }
-
-    ipc_channel_ = ipc_server_->nextPendingConnection();
-    ipc_channel_->setParent(this);
-
-    ipc_server_->disconnect();
-    ipc_server_->deleteLater();
-    ipc_server_ = nullptr;
-
-    connect(ipc_channel_, &base::IpcChannel::sig_disconnected, this, &DesktopClient::onIpcDisconnected);
-    connect(ipc_channel_, &base::IpcChannel::sig_messageReceived, this, &DesktopClient::onIpcMessageReceived);
-
-    proto::peer::SessionType session_type =
-        static_cast<proto::peer::SessionType>(tcp_channel_->peerSessionType());
-    CHECK(session_type == proto::peer::SESSION_TYPE_DESKTOP_MANAGE ||
-          session_type == proto::peer::SESSION_TYPE_DESKTOP_VIEW);
-
-    proto::desktop::ServiceToAgentClient message;
-    proto::desktop::Description* description = message.mutable_description();
-
-    description->set_session_type(session_type);
-    *description->mutable_version() = base::serialize(tcp_channel_->peerVersion());
-    description->set_os_name(tcp_channel_->peerOsName().toStdString());
-    description->set_computer_name(tcp_channel_->peerComputerName().toStdString());
-    description->set_display_name(tcp_channel_->peerDisplayName().toStdString());
-    description->set_architecture(tcp_channel_->peerArchitecture().toStdString());
-    description->set_user_name(tcp_channel_->peerUserName().toStdString());
-
-    sendIpcServiceMessage(base::serialize(message));
-
-    fake_capture_timer_->stop();
-    tcp_channel_->setPaused(false);
-    ipc_channel_->setPaused(false);
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopClient::onIpcErrorOccurred()
-{
-    LOG(ERROR) << "Error in IPC server";
-    emit sig_finished();
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopClient::onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer)
-{
-    quint16 tcp_channel_id = base::lowWord(channel_id);
-    quint16 ipc_channel_id = base::highWord(channel_id);
-
-    if (ipc_channel_id == proto::desktop::IPC_CHANNEL_ID_SESSION)
-    {
-        tcp_channel_->send(tcp_channel_id, buffer);
-    }
-    else
-    {
-        // TODO: Handle service message.
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopClient::onIpcDisconnected()
-{
-    if (!ipc_channel_)
-        return;
-
-    LOG(INFO) << "IPC channel disconnected";
-    dettach();
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopClient::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code)
-{
-    LOG(ERROR) << "TCP error:" << error_code;
-    CHECK(tcp_channel_);
-
-    tcp_channel_->disconnect();
-
-    if (ipc_channel_)
-    {
-        ipc_channel_->disconnect();
-        ipc_channel_->deleteLater();
-        ipc_channel_ = nullptr;
-    }
-
-    emit sig_finished();
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopClient::onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray& buffer)
-{
-    if (tcp_channel_id == proto::peer::CHANNEL_ID_0)
-    {
-        quint32 channel_id = base::makeUint32(proto::desktop::IPC_CHANNEL_ID_SESSION, tcp_channel_id);
+        quint32 channel_id = base::makeUint32(proto::desktop::IPC_CHANNEL_ID_SESSION, net_channel_id);
 
         if (ipc_channel_)
             ipc_channel_->send(channel_id, buffer);
     }
-    else if (tcp_channel_id == proto::peer::CHANNEL_ID_1)
+    else if (net_channel_id == proto::peer::CHANNEL_ID_1)
     {
         proto::desktop::ClientToService message;
 
@@ -296,127 +176,88 @@ void DesktopClient::onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray
             emit sig_recordingChanged(is_started);
         }
     }
-    else if (tcp_channel_id == proto::peer::CHANNEL_ID_CONTROL)
+    else
     {
-        proto::peer::ClientToHost message;
+        LOG(ERROR) << "Unhandled message from channel" << net_channel_id;
+    }
+}
 
-        if (!base::parse(buffer, &message))
-        {
-            LOG(ERROR) << "Unable to parse control message";
-            return;
-        }
+//--------------------------------------------------------------------------------------------------
+void DesktopClient::onIpcNewConnection()
+{
+    CHECK(ipc_server_);
+    CHECK(!ipc_channel_);
 
-        if (message.has_direct_udp_request())
-        {
-            const proto::peer::DirectUdpRequest& udp_request = message.direct_udp_request();
-            QString udp_address = QString::fromStdString(udp_request.ip_address());
-            quint32 udp_port = udp_request.port();
-            quint32 encryptions = udp_request.encryptions();
-            QByteArray client_public_key = QByteArray::fromStdString(udp_request.public_key());
-            QByteArray client_iv = QByteArray::fromStdString(udp_request.iv());
+    if (!ipc_server_->hasPendingConnections())
+    {
+        LOG(ERROR) << "No pending IPC connections";
+        emit sig_finished();
+        return;
+    }
 
-            LOG(INFO) << "Direct UDP endpoint received:" << udp_address << ':' << udp_port;
+    ipc_channel_ = ipc_server_->nextPendingConnection();
+    ipc_channel_->setParent(this);
 
-            base::KeyPair host_key_pair = base::KeyPair::create(base::KeyPair::Type::X25519);
-            if (!host_key_pair.isValid())
-            {
-                LOG(ERROR) << "Failed to create host UDP key pair";
-                return;
-            }
+    ipc_server_->disconnect();
+    ipc_server_->deleteLater();
+    ipc_server_ = nullptr;
 
-            QByteArray host_iv = base::Random::byteArray(12);
+    connect(ipc_channel_, &base::IpcChannel::sig_disconnected, this, &DesktopClient::onIpcDisconnected);
+    connect(ipc_channel_, &base::IpcChannel::sig_messageReceived, this, &DesktopClient::onIpcMessageReceived);
 
-            QByteArray session_key = host_key_pair.sessionKey(client_public_key);
-            if (session_key.isEmpty())
-            {
-                LOG(ERROR) << "Failed to derive UDP session key";
-                return;
-            }
+    proto::peer::SessionType session_type = sessionType();
+    CHECK(session_type == proto::peer::SESSION_TYPE_DESKTOP_MANAGE ||
+          session_type == proto::peer::SESSION_TYPE_DESKTOP_VIEW);
 
-            quint32 encryption = proto::key_exchange::ENCRYPTION_UNKNOWN;
-            if (encryptions & proto::key_exchange::ENCRYPTION_AES256_GCM)
-                encryption = proto::key_exchange::ENCRYPTION_AES256_GCM;
-            else if (encryptions & proto::key_exchange::ENCRYPTION_CHACHA20_POLY1305)
-                encryption = proto::key_exchange::ENCRYPTION_CHACHA20_POLY1305;
+    proto::desktop::ServiceToAgentClient message;
+    proto::desktop::Description* description = message.mutable_description();
 
-            if (encryption == proto::key_exchange::ENCRYPTION_UNKNOWN)
-            {
-                LOG(ERROR) << "No supported UDP encryption";
-                return;
-            }
+    description->set_session_type(session_type);
+    *description->mutable_version() = base::serialize(version());
+    description->set_os_name(osName().toStdString());
+    description->set_computer_name(computerName().toStdString());
+    description->set_display_name(displayName().toStdString());
+    description->set_architecture(architecture().toStdString());
+    description->set_user_name(userName().toStdString());
 
-            std::unique_ptr<base::MessageEncryptor> encryptor;
-            std::unique_ptr<base::MessageDecryptor> decryptor;
+    sendIpcServiceMessage(base::serialize(message));
 
-            if (encryption == proto::key_exchange::ENCRYPTION_AES256_GCM)
-            {
-                encryptor = base::MessageEncryptor::createForAes256Gcm(
-                    session_key, host_iv);
-                decryptor = base::MessageDecryptor::createForAes256Gcm(
-                    session_key, client_iv);
-            }
-            else
-            {
-                encryptor = base::MessageEncryptor::createForChaCha20Poly1305(
-                    session_key, host_iv);
-                decryptor = base::MessageDecryptor::createForChaCha20Poly1305(
-                    session_key, client_iv);
-            }
+    fake_capture_timer_->stop();
+    ipc_channel_->setPaused(false);
+    resume();
+}
 
-            if (!encryptor || !decryptor)
-            {
-                LOG(ERROR) << "Failed to create UDP encryptor/decryptor";
-                return;
-            }
+//--------------------------------------------------------------------------------------------------
+void DesktopClient::onIpcErrorOccurred()
+{
+    LOG(ERROR) << "Error in IPC server";
+    emit sig_finished();
+}
 
-            // Send reply with host's public key and IV.
-            proto::peer::HostToClient reply;
-            proto::peer::DirectUdpReply* udp_reply = reply.mutable_direct_udp_reply();
-            udp_reply->set_encryption(encryption);
-            udp_reply->set_public_key(host_key_pair.publicKey().toStdString());
-            udp_reply->set_iv(host_iv.toStdString());
-            tcp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, base::serialize(reply));
+//--------------------------------------------------------------------------------------------------
+void DesktopClient::onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer)
+{
+    quint16 tcp_channel_id = base::lowWord(channel_id);
+    quint16 ipc_channel_id = base::highWord(channel_id);
 
-            udp_channel_ = new base::UdpChannel(this);
-            udp_channel_->setEncryptor(std::move(encryptor));
-            udp_channel_->setDecryptor(std::move(decryptor));
-
-            connect(udp_channel_, &base::UdpChannel::sig_connected, this, &DesktopClient::onUdpConnected);
-            connect(udp_channel_, &base::UdpChannel::sig_errorOccurred, this, &DesktopClient::onUdpErrorOccurred);
-            connect(udp_channel_, &base::UdpChannel::sig_messageReceived, this, &DesktopClient::onUdpMessageReceived);
-
-            udp_channel_->connectTo(udp_address, udp_port);
-        }
-        else
-        {
-            LOG(WARNING) << "Unhandled control message";
-        }
+    if (ipc_channel_id == proto::desktop::IPC_CHANNEL_ID_SESSION)
+    {
+        send(tcp_channel_id, buffer);
     }
     else
     {
-        LOG(ERROR) << "Unhandled message from channel" << tcp_channel_id;
+        // TODO: Handle service message.
     }
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopClient::onUdpConnected()
+void DesktopClient::onIpcDisconnected()
 {
-    LOG(INFO) << "UDP channel connected";
-    udp_channel_->setPaused(false);
-}
+    if (!ipc_channel_)
+        return;
 
-//--------------------------------------------------------------------------------------------------
-void DesktopClient::onUdpErrorOccurred()
-{
-    udp_channel_->disconnect();
-    udp_channel_->deleteLater();
-    udp_channel_ = nullptr;
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopClient::onUdpMessageReceived(quint8 udp_channel_id, const QByteArray& buffer)
-{
-    // TODO
+    LOG(INFO) << "IPC channel disconnected";
+    dettach();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -426,7 +267,7 @@ void DesktopClient::onOverflowCheck()
     static const qint64 kWarningPendingBytes = 512 * 1024; // 512 kB
 
     proto::desktop::Overflow::State state = proto::desktop::Overflow::STATE_NONE;
-    qint64 pending = tcp_channel_->pendingBytes();
+    qint64 pending = pendingBytes();
 
     if (pending > kCriticalPendingBytes)
         state = proto::desktop::Overflow::STATE_CRITICAL;
@@ -486,7 +327,7 @@ void DesktopClient::sendSessionList()
     }
 
     LOG(INFO) << "Send:" << *session_list;
-    tcp_channel_->send(proto::peer::CHANNEL_ID_1, base::serialize(message));
+    send(proto::peer::CHANNEL_ID_1, base::serialize(message));
 #endif // defined(Q_OS_WINDOWS)
 }
 

@@ -21,11 +21,11 @@
 
 #include <QObject>
 
-#include "base/net/tcp_channel.h"
+#include "host/client.h"
 
 namespace host {
 
-class SystemInfoClient final : public QObject
+class SystemInfoClient final : public Client
 {
     Q_OBJECT
 
@@ -33,20 +33,12 @@ public:
     explicit SystemInfoClient(base::TcpChannel* tcp_channel, QObject* parent = nullptr);
     ~SystemInfoClient() final;
 
-public slots:
-    void start();
+    void start() final;
 
-signals:
-    void sig_started();
-    void sig_finished();
-
-private slots:
-    void onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code);
-    void onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray& buffer);
+protected:
+    void onMessage(quint8 channel_id, const QByteArray& buffer);
 
 private:
-    base::TcpChannel* tcp_channel_ = nullptr;
-
     Q_DISABLE_COPY_MOVE(SystemInfoClient)
 };
 
