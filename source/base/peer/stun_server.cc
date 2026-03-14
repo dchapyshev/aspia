@@ -101,8 +101,10 @@ void StunServer::doReceiveRequest()
         }
         else if (message.has_endpoint_request())
         {
-            if (message.endpoint_request().magic_number() == 0xA0B1C2D3)
-                doSendAddressReply(remote_endpoint_);
+            const proto::stun::EndpointRequest& request = message.endpoint_request();
+
+            if (request.magic_number() == 0xA0B1C2D3)
+                doSendAddressReply(request.transaction_id(), remote_endpoint_);
             else
                 LOG(ERROR) << "Invalid magic number:" << message.endpoint_request().magic_number();
         }
@@ -112,7 +114,7 @@ void StunServer::doReceiveRequest()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool StunServer::doSendAddressReply(const asio::ip::udp::endpoint& remote_endpoint)
+bool StunServer::doSendAddressReply(quint32 transaction_id, const asio::ip::udp::endpoint& remote_endpoint)
 {
     if (!udp_socket_.is_open())
     {
@@ -122,6 +124,8 @@ bool StunServer::doSendAddressReply(const asio::ip::udp::endpoint& remote_endpoi
 
     proto::stun::StunToPeer message;
     proto::stun::Endpoint* endpoint = message.mutable_endpoint();
+
+    endpoint->set_transaction_id(transaction_id);
     endpoint->set_ip_address(remote_endpoint.address().to_string());
     endpoint->set_port(remote_endpoint.port());
 

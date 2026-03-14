@@ -26,6 +26,7 @@
 #include "base/asio_event_dispatcher.h"
 #include "base/location.h"
 #include "base/logging.h"
+#include "base/crypto/random.h"
 #include "base/net/udp_channel.h"
 #include "proto/stun.h"
 
@@ -174,8 +175,12 @@ void StunPeer::doStop()
 //--------------------------------------------------------------------------------------------------
 void StunPeer::doReceiveExternalAddress()
 {
+    quint32 transaction_id = Random::number32();
+
     proto::stun::PeerToStun message;
-    message.mutable_endpoint_request()->set_magic_number(0xA0B1C2D3);
+    proto::stun::EndpointRequest* request = message.mutable_endpoint_request();
+    request->set_magic_number(0xA0B1C2D3);
+    request->set_transaction_id(transaction_id);
 
     const size_t size = message.ByteSizeLong();
     if (!size || size > buffer_.size())
@@ -188,7 +193,7 @@ void StunPeer::doReceiveExternalAddress()
     message.SerializeWithCachedSizesToArray(buffer_.data());
 
     udp_socket_.async_send(asio::buffer(buffer_.data(), size),
-        [this](const std::error_code& error_code, size_t /* bytes_transferred */)
+        [this, transaction_id](const std::error_code& error_code, size_t /* bytes_transferred */)
     {
         if (error_code)
         {
@@ -198,7 +203,7 @@ void StunPeer::doReceiveExternalAddress()
         }
 
         udp_socket_.async_receive(asio::buffer(buffer_.data(), buffer_.size()),
-            [this](const std::error_code& error_code, size_t bytes_transferred)
+            [this, transaction_id](const std::error_code& error_code, size_t bytes_transferred)
         {
             if (error_code)
             {
@@ -221,6 +226,11 @@ void StunPeer::doReceiveExternalAddress()
             }
 
             const proto::stun::Endpoint& endpoint = message.endpoint();
+            if (endpoint.transaction_id() != transaction_id)
+            {
+                onErrorOccurred(FROM_HERE, error_code);
+                return;
+            }
 
             QString ip_address = QString::fromStdString(endpoint.ip_address());
             quint32 port = static_cast<quint32>(endpoint.port());

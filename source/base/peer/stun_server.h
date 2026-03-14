@@ -41,7 +41,7 @@ public:
 
 private:
     void doReceiveRequest();
-    bool doSendAddressReply(const asio::ip::udp::endpoint& remote_endpoint);
+    bool doSendAddressReply(quint32 transaction_id, const asio::ip::udp::endpoint& remote_endpoint);
 
     quint16 port_ = 0;
     asio::ip::udp::socket udp_socket_;
