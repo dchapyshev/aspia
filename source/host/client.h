@@ -70,6 +70,8 @@ private slots:
     void onUdpMessageReceived(quint8 udp_channel_id, const QByteArray& buffer);
 
 private:
+    void readDirectUdpRequest(const proto::peer::DirectUdpRequest& request);
+
     base::TcpChannel* tcp_channel_ = nullptr;
     base::UdpChannel* udp_channel_ = nullptr;
 
