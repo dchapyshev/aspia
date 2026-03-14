@@ -35,17 +35,18 @@ public:
     explicit StunServer(QObject* parent = nullptr);
     ~StunServer();
 
-    void start(quint16 port);
+    bool start(quint16 port);
 
     quint16 port() const { return port_; }
 
 private:
     void doReceiveRequest();
-    bool doSendAddressReply();
+    bool doSendAddressReply(const asio::ip::udp::endpoint& remote_endpoint);
 
     quint16 port_ = 0;
     asio::ip::udp::socket udp_socket_;
-    std::array<quint8, 1024> buffer_;
+    asio::ip::udp::endpoint remote_endpoint_;
+    std::array<quint8, 1024> read_buffer_;
 
     Q_DISABLE_COPY_MOVE(StunServer)
 };

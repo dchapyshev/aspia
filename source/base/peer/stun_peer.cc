@@ -110,7 +110,7 @@ void StunPeer::onAttempt()
 {
     static const int kMaxAttemptsCount = 3;
 
-    if (number_of_attempts_ > kMaxAttemptsCount)
+    if (number_of_attempts_ >= kMaxAttemptsCount)
     {
         onErrorOccurred(FROM_HERE, std::error_code());
         return;
@@ -200,9 +200,10 @@ void StunPeer::doReceiveExternalAddress()
         udp_socket_.async_receive(asio::buffer(buffer_.data(), buffer_.size()),
             [this](const std::error_code& error_code, size_t bytes_transferred)
         {
-            if (error_code != asio::error::operation_aborted)
+            if (error_code)
             {
-                onErrorOccurred(FROM_HERE, error_code);
+                if (error_code != asio::error::operation_aborted)
+                    onErrorOccurred(FROM_HERE, error_code);
                 return;
             }
 
