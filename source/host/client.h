@@ -39,7 +39,7 @@ public:
     Client(base::TcpChannel* tcp_channel, QObject* parent);
     virtual ~Client();
 
-    virtual void start() = 0;
+    void start();
 
     quint32 clientId() const;
     proto::peer::SessionType sessionType() const;
@@ -57,8 +57,8 @@ signals:
 
 protected:
     void send(quint8 channel_id, const QByteArray& buffer);
-    void resume();
 
+    virtual void onStart() = 0;
     virtual void onMessage(quint8 channel_id, const QByteArray& buffer) = 0;
 
 private slots:

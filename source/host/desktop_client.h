@@ -43,8 +43,6 @@ public:
     explicit DesktopClient(base::TcpChannel* tcp_channel, QObject* parent = nullptr);
     ~DesktopClient() final;
 
-    void start() final;
-
     bool isAttached() const;
     QString attach();
     void dettach();
@@ -54,6 +52,7 @@ signals:
     void sig_recordingChanged(bool started);
 
 protected:
+    void onStart() final;
     void onMessage(quint8 channel_id, const QByteArray& buffer) final;
 
 private slots:

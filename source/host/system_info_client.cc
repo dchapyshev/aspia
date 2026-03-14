@@ -41,9 +41,8 @@ SystemInfoClient::~SystemInfoClient()
 }
 
 //--------------------------------------------------------------------------------------------------
-void SystemInfoClient::start()
+void SystemInfoClient::onStart()
 {
-    resume();
     emit sig_started();
 }
 

@@ -180,7 +180,57 @@ FileClient::~FileClient()
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileClient::start()
+void FileClient::onIpcNewConnection()
+{
+    LOG(INFO) << "IPC channel for file transfer session is connected";
+
+    if (!ipc_server_)
+    {
+        LOG(ERROR) << "No IPC server instance!";
+        onError(FROM_HERE);
+        return;
+    }
+
+    if (!ipc_server_->hasPendingConnections())
+    {
+        LOG(ERROR) << "No pending connections in IPC server";
+        onError(FROM_HERE);
+        return;
+    }
+
+    ipc_channel_ = ipc_server_->nextPendingConnection();
+    ipc_channel_->setParent(this);
+
+    ipc_server_->disconnect(this);
+    ipc_server_->deleteLater();
+    ipc_server_ = nullptr;
+
+    connect(ipc_channel_, &base::IpcChannel::sig_disconnected, this, &FileClient::onIpcDisconnected);
+    connect(ipc_channel_, &base::IpcChannel::sig_messageReceived, this, &FileClient::onIpcMessageReceived);
+
+    onStarted(FROM_HERE, true);
+}
+
+//--------------------------------------------------------------------------------------------------
+void FileClient::onIpcErrorOccurred()
+{
+    onError(FROM_HERE);
+}
+
+//--------------------------------------------------------------------------------------------------
+void FileClient::onIpcMessageReceived(quint32 /* ipc_channel_id */, const QByteArray& buffer)
+{
+    send(proto::peer::CHANNEL_ID_0, buffer);
+}
+
+//--------------------------------------------------------------------------------------------------
+void FileClient::onIpcDisconnected()
+{
+    onError(FROM_HERE);
+}
+
+//--------------------------------------------------------------------------------------------------
+void FileClient::onStart()
 {
     if (session_id_ == 0)
     {
@@ -278,7 +328,7 @@ void FileClient::start()
 
         QString user_name = splitted.front();
         QByteArray command_line = QString("sudo -u %1 %2 --channel_id=%3 &")
-            .arg(user_name, agentFilePath(), ipc_channel_id).toLocal8Bit();
+                                      .arg(user_name, agentFilePath(), ipc_channel_id).toLocal8Bit();
 
         LOG(INFO) << "Start file transfer session agent:" << command_line;
 
@@ -302,56 +352,6 @@ void FileClient::start()
 
     LOG(INFO) << "Wait for starting agent process";
     attach_timer_->start(std::chrono::seconds(10));
-}
-
-//--------------------------------------------------------------------------------------------------
-void FileClient::onIpcNewConnection()
-{
-    LOG(INFO) << "IPC channel for file transfer session is connected";
-
-    if (!ipc_server_)
-    {
-        LOG(ERROR) << "No IPC server instance!";
-        onError(FROM_HERE);
-        return;
-    }
-
-    if (!ipc_server_->hasPendingConnections())
-    {
-        LOG(ERROR) << "No pending connections in IPC server";
-        onError(FROM_HERE);
-        return;
-    }
-
-    ipc_channel_ = ipc_server_->nextPendingConnection();
-    ipc_channel_->setParent(this);
-
-    ipc_server_->disconnect(this);
-    ipc_server_->deleteLater();
-    ipc_server_ = nullptr;
-
-    connect(ipc_channel_, &base::IpcChannel::sig_disconnected, this, &FileClient::onIpcDisconnected);
-    connect(ipc_channel_, &base::IpcChannel::sig_messageReceived, this, &FileClient::onIpcMessageReceived);
-
-    onStarted(FROM_HERE, true);
-}
-
-//--------------------------------------------------------------------------------------------------
-void FileClient::onIpcErrorOccurred()
-{
-    onError(FROM_HERE);
-}
-
-//--------------------------------------------------------------------------------------------------
-void FileClient::onIpcMessageReceived(quint32 /* ipc_channel_id */, const QByteArray& buffer)
-{
-    send(proto::peer::CHANNEL_ID_0, buffer);
-}
-
-//--------------------------------------------------------------------------------------------------
-void FileClient::onIpcDisconnected()
-{
-    onError(FROM_HERE);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -415,7 +415,6 @@ void FileClient::onStarted(const base::Location& location, bool has_user)
         ipc_channel_->setPaused(false);
     }
 
-    resume();
     emit sig_started();
 }
 

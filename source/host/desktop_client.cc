@@ -84,12 +84,6 @@ DesktopClient::~DesktopClient()
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopClient::start()
-{
-    emit sig_started();
-}
-
-//--------------------------------------------------------------------------------------------------
 bool DesktopClient::isAttached() const
 {
     return ipc_channel_ != nullptr;
@@ -130,6 +124,12 @@ void DesktopClient::dettach()
 
     dettach_time_ = QTime::currentTime();
     fake_capture_timer_->start();
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopClient::onStart()
+{
+    emit sig_started();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -224,7 +224,6 @@ void DesktopClient::onIpcNewConnection()
 
     fake_capture_timer_->stop();
     ipc_channel_->setPaused(false);
-    resume();
 }
 
 //--------------------------------------------------------------------------------------------------

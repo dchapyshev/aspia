@@ -38,13 +38,6 @@ ChatClient::~ChatClient()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ChatClient::start()
-{
-    resume();
-    emit sig_started();
-}
-
-//--------------------------------------------------------------------------------------------------
 void ChatClient::onSendChat(const proto::chat::Chat& chat)
 {
     send(proto::peer::CHANNEL_ID_0, base::serialize(chat));
@@ -62,6 +55,12 @@ void ChatClient::onSendStatus(proto::chat::Status_Code code)
     text_chat_status->set_source(base::SysInfo::computerName().toStdString());
 
     onSendChat(text_chat);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatClient::onStart()
+{
+    emit sig_started();
 }
 
 //--------------------------------------------------------------------------------------------------

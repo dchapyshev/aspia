@@ -41,12 +41,24 @@ Client::Client(base::TcpChannel* tcp_channel, QObject* parent)
 
     connect(tcp_channel_, &base::TcpChannel::sig_errorOccurred, this, &Client::onTcpErrorOccurred);
     connect(tcp_channel_, &base::TcpChannel::sig_messageReceived, this, &Client::onTcpMessageReceived);
+    connect(this, &Client::sig_started, this, [this]()
+    {
+        tcp_channel_->setPaused(true);
+        if (udp_channel_)
+            udp_channel_->setPaused(true);
+    });
 }
 
 //--------------------------------------------------------------------------------------------------
 Client::~Client()
 {
     tcp_channel_->disconnect();
+}
+
+//--------------------------------------------------------------------------------------------------
+void Client::start()
+{
+    onStart();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -108,14 +120,6 @@ qint64 Client::pendingBytes() const
 void Client::send(quint8 channel_id, const QByteArray& buffer)
 {
     tcp_channel_->send(channel_id, buffer);
-}
-
-//--------------------------------------------------------------------------------------------------
-void Client::resume()
-{
-    tcp_channel_->setPaused(true);
-    if (udp_channel_)
-        udp_channel_->setPaused(true);
 }
 
 //--------------------------------------------------------------------------------------------------

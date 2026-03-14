@@ -40,8 +40,6 @@ public:
     FileClient(base::TcpChannel* tcp_channel, base::SessionId session_id, QObject* parent = nullptr);
     ~FileClient() final;
 
-    void start() final;
-
 private slots:
     void onIpcNewConnection();
     void onIpcErrorOccurred();
@@ -50,6 +48,7 @@ private slots:
     void onIpcDisconnected();
 
 protected:
+    void onStart() final;
     void onMessage(quint8 channel_id, const QByteArray& buffer) final;
 
 private:

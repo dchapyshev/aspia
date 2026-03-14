@@ -33,9 +33,8 @@ public:
     explicit SystemInfoClient(base::TcpChannel* tcp_channel, QObject* parent = nullptr);
     ~SystemInfoClient() final;
 
-    void start() final;
-
 protected:
+    void onStart() final;
     void onMessage(quint8 channel_id, const QByteArray& buffer);
 
 private:

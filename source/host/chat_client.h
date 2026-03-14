@@ -32,8 +32,6 @@ public:
     explicit ChatClient(base::TcpChannel* tcp_channel, QObject* parent = nullptr);
     ~ChatClient() final;
 
-    void start() final;
-
 public slots:
     void onSendChat(const proto::chat::Chat& chat);
     void onSendStatus(proto::chat::Status_Code code);
@@ -42,6 +40,7 @@ signals:
     void sig_messageReceived(const proto::chat::Chat& chat);
 
 protected:
+    void onStart() final;
     void onMessage(quint8 channel_id, const QByteArray& buffer) final;
 
 private:
