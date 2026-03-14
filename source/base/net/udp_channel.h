@@ -124,8 +124,8 @@ private:
     void doWrite();
     void doRead();
     void doKcpUpdate();
-    void processKcpRecv();
-    void onMessageReceived(int offset);
+    bool processKcpRecv();
+    bool onMessageReceived(int offset);
     void onKeepAliveTimer();
 
     asio::ip::udp::resolver resolver_;

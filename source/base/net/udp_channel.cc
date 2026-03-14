@@ -187,7 +187,8 @@ void UdpChannel::setPaused(bool enable)
     keep_alive_timer_->start(kKeepAliveInterval);
 
     // Process any data that was accumulated while paused.
-    processKcpRecv();
+    if (!processKcpRecv())
+        return;
 
     // Resume reading if no read operation is in-flight.
     if (!reading_)
@@ -226,17 +227,18 @@ void UdpChannel::doWrite()
 
         resizeBuffer(&write_buffer_, sizeof(Header) + target_data_size);
 
-        Header* header = reinterpret_cast<Header*>(write_buffer_.data());
-        header->type = task.type();
-        header->param1 = task.param();
-        header->param2 = 0;
-        header->param3 = 0;
-        header->length = static_cast<quint32>(target_data_size);
+        Header header;
+        header.type = task.type();
+        header.param1 = task.param();
+        header.param2 = 0;
+        header.param3 = 0;
+        header.length = static_cast<quint32>(target_data_size);
+        memcpy(write_buffer_.data(), &header, sizeof(Header));
 
         if (encryptor_)
         {
             if (!encryptor_->encrypt(source_buffer.data(), source_buffer.size(),
-                                      header, sizeof(Header),
+                                      &header, sizeof(Header),
                                       write_buffer_.data() + sizeof(Header)))
             {
                 LOG(ERROR) << "Failed to encrypt outgoing message";
@@ -280,8 +282,21 @@ void UdpChannel::setDecryptor(std::unique_ptr<MessageDecryptor> decryptor)
 //--------------------------------------------------------------------------------------------------
 void UdpChannel::init()
 {
+    static_assert(sizeof(Header) == 8, "Header must be 8 bytes without padding");
+
     write_queue_.reserve(kWriteQueueReservedSize);
     udp_send_queue_.reserve(kUdpSendQueueReservedSize);
+
+    update_timer_ = new QTimer(this);
+    update_timer_->setTimerType(Qt::PreciseTimer);
+    connect(update_timer_, &QTimer::timeout, this, &UdpChannel::doKcpUpdate);
+
+    keep_alive_timer_ = new QTimer(this);
+    keep_alive_timer_->setSingleShot(true);
+    connect(keep_alive_timer_, &QTimer::timeout, this, &UdpChannel::onKeepAliveTimer);
+
+    keep_alive_counter_.resize(sizeof(quint32));
+    memset(keep_alive_counter_.data(), 0, keep_alive_counter_.size());
 
     kcp_ = ikcp_create(kKcpConv, this);
     if (!kcp_)
@@ -297,17 +312,6 @@ void UdpChannel::init()
     ikcp_nodelay(kcp_, 1, kKcpUpdateIntervalMs, 2, 1);
     ikcp_setmtu(kcp_, kKcpMtu);
     ikcp_wndsize(kcp_, 128, 128);
-
-    update_timer_ = new QTimer(this);
-    update_timer_->setTimerType(Qt::PreciseTimer);
-    connect(update_timer_, &QTimer::timeout, this, &UdpChannel::doKcpUpdate);
-
-    keep_alive_timer_ = new QTimer(this);
-    keep_alive_timer_->setSingleShot(true);
-    connect(keep_alive_timer_, &QTimer::timeout, this, &UdpChannel::onKeepAliveTimer);
-
-    keep_alive_counter_.resize(sizeof(quint32));
-    memset(keep_alive_counter_.data(), 0, keep_alive_counter_.size());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -362,6 +366,13 @@ void UdpChannel::onErrorOccurred(const Location& location, const std::error_code
     else
         LOG(ERROR) << "Error occurred from" << location.toString();
 
+    keep_alive_timer_->stop();
+    update_timer_->stop();
+
+    std::error_code ignored_code;
+    socket_.cancel(ignored_code);
+    socket_.close(ignored_code);
+
     emit sig_errorOccurred();
 }
 
@@ -396,7 +407,8 @@ void UdpChannel::doRead()
         if (paused_)
             return;
 
-        processKcpRecv();
+        if (!processKcpRecv())
+            return;
 
         // Continue reading.
         doRead();
@@ -413,10 +425,10 @@ void UdpChannel::doKcpUpdate()
 }
 
 //--------------------------------------------------------------------------------------------------
-void UdpChannel::processKcpRecv()
+bool UdpChannel::processKcpRecv()
 {
     if (!kcp_)
-        return;
+        return false;
 
     // Read all available data from KCP and append to the read buffer.
     while (true)
@@ -434,6 +446,9 @@ void UdpChannel::processKcpRecv()
             read_buffer_.resize(offset);
             break;
         }
+
+        if (recv_size != peek_size)
+            read_buffer_.resize(offset + recv_size);
     }
 
     // Parse complete messages from the accumulated read buffer.
@@ -454,7 +469,7 @@ void UdpChannel::processKcpRecv()
         {
             LOG(ERROR) << "Too big incoming message:" << header.length;
             onErrorOccurred(FROM_HERE, std::error_code());
-            return;
+            return false;
         }
 
         total_size += static_cast<int>(header.length);
@@ -462,7 +477,8 @@ void UdpChannel::processKcpRecv()
         if (available < total_size)
             break;
 
-        onMessageReceived(consumed);
+        if (!onMessageReceived(consumed))
+            return false;
 
         consumed += total_size;
 
@@ -472,13 +488,13 @@ void UdpChannel::processKcpRecv()
 
     // Remove consumed data from the read buffer.
     if (consumed > 0)
-    {
         read_buffer_.remove(0, consumed);
-    }
+
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
-void UdpChannel::onMessageReceived(int offset)
+bool UdpChannel::onMessageReceived(int offset)
 {
     Header header;
     memcpy(&header, read_buffer_.constData() + offset, sizeof(Header));
@@ -496,7 +512,7 @@ void UdpChannel::onMessageReceived(int offset)
         {
             LOG(ERROR) << "Failed to decrypt incoming message";
             onErrorOccurred(FROM_HERE, std::error_code());
-            return;
+            return false;
         }
     }
 
@@ -515,14 +531,14 @@ void UdpChannel::onMessageReceived(int offset)
         if (header.param1 & KEEP_ALIVE_PING)
         {
             addWriteTask(KEEP_ALIVE, KEEP_ALIVE_PONG, payload);
-            return;
+            return true;
         }
 
         if (payload.size() != keep_alive_counter_.size())
         {
             LOG(ERROR) << "Invalid keep-alive payload size";
             onErrorOccurred(FROM_HERE, std::error_code());
-            return;
+            return false;
         }
 
         // Pong must contain the same data as ping.
@@ -530,7 +546,7 @@ void UdpChannel::onMessageReceived(int offset)
         {
             LOG(ERROR) << "Keep-alive counter mismatch";
             onErrorOccurred(FROM_HERE, std::error_code());
-            return;
+            return false;
         }
 
         // Increase the counter of sent packets.
@@ -544,6 +560,8 @@ void UdpChannel::onMessageReceived(int offset)
     {
         // Ignore unknown types.
     }
+
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------

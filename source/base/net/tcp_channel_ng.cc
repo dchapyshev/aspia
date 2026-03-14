@@ -48,7 +48,7 @@ QStringList endpointsToString(const asio::ip::tcp::resolver::results_type& endpo
         return QStringList();
 
     QStringList list;
-    list.resize(endpoints.size());
+    list.reserve(endpoints.size());
 
     for (auto it = endpoints.begin(), it_end = endpoints.end(); it != it_end; ++it)
         list.emplace_back(QString::fromLocal8Bit(it->endpoint().address().to_string()));
@@ -295,6 +295,8 @@ qint64 TcpChannelNG::pendingBytes() const
 //--------------------------------------------------------------------------------------------------
 void TcpChannelNG::init()
 {
+    static_assert(sizeof(Header) == 8, "Header must be 8 bytes without padding");
+
     CHECK(authenticator_);
     authenticator_->setParent(this);
 
@@ -580,17 +582,18 @@ void TcpChannelNG::doWrite()
         return;
     }
 
-    Header* header = reinterpret_cast<Header*>(write_buffer_.data());
-    header->type = task.type();
-    header->param1 = task.param();
-    header->param2 = 0;
-    header->param3 = 0;
-    header->length = static_cast<quint32>(target_data_size);
+    Header header;
+    header.type = task.type();
+    header.param1 = task.param();
+    header.param2 = 0;
+    header.param3 = 0;
+    header.length = static_cast<quint32>(target_data_size);
+    memcpy(write_buffer_.data(), &header, sizeof(Header));
 
     if (encryptor_)
     {
         if (!encryptor_->encrypt(source_buffer.data(), source_buffer.size(), // Data
-                                 header, sizeof(Header), // AAD
+                                 &header, sizeof(Header), // AAD
                                  write_buffer_.data() + sizeof(Header)))
         {
             onErrorOccurred(FROM_HERE, ErrorCode::CRYPTO_ERROR);
