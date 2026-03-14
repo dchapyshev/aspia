@@ -54,14 +54,30 @@ message Version
     uint32 revision = 4;
 }
 
-message DirectUdpEndpoint
+message DirectUdpRequest
 {
-    string ip_address = 1;
-    uint32 port       = 2;
+    string ip_address  = 1;
+    uint32 port        = 2;
+    uint32 encryptions = 3;
+    bytes public_key   = 4;
+    bytes iv           = 5;
+}
+
+message DirectUdpReply
+{
+    uint32 encryption = 1;
+    bytes public_key  = 2;
+    bytes iv          = 3;
 }
 
 // Use CHANNEL_ID_CONTROL to send.
 message ClientToHost
 {
-    DirectUdpEndpoint direct_udp_endpoint = 1;
+    DirectUdpRequest direct_udp_request = 1;
+}
+
+// Use CHANNEL_ID_CONTROL to send.
+message HostToClient
+{
+    DirectUdpReply direct_udp_reply = 1;
 }

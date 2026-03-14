@@ -25,10 +25,15 @@
 #include "base/logging.h"
 #include "base/numeric_utils.h"
 #include "base/serialization.h"
+#include "base/crypto/key_pair.h"
+#include "base/crypto/message_decryptor.h"
+#include "base/crypto/message_encryptor.h"
+#include "base/crypto/random.h"
 #include "base/ipc/ipc_channel.h"
 #include "base/ipc/ipc_server.h"
 #include "base/net/udp_channel.h"
 #include "proto/desktop_service.h"
+#include "proto/key_exchange.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/session_enumerator.h"
@@ -301,15 +306,80 @@ void DesktopClient::onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray
             return;
         }
 
-        if (message.has_direct_udp_endpoint())
+        if (message.has_direct_udp_request())
         {
-            const proto::peer::DirectUdpEndpoint& udp_endpoint = message.direct_udp_endpoint();
-            QString udp_address = QString::fromStdString(udp_endpoint.ip_address());
-            quint32 udp_port = udp_endpoint.port();
+            const proto::peer::DirectUdpRequest& udp_request = message.direct_udp_request();
+            QString udp_address = QString::fromStdString(udp_request.ip_address());
+            quint32 udp_port = udp_request.port();
+            quint32 encryptions = udp_request.encryptions();
+            QByteArray client_public_key = QByteArray::fromStdString(udp_request.public_key());
+            QByteArray client_iv = QByteArray::fromStdString(udp_request.iv());
 
             LOG(INFO) << "Direct UDP endpoint received:" << udp_address << ':' << udp_port;
 
+            base::KeyPair host_key_pair = base::KeyPair::create(base::KeyPair::Type::X25519);
+            if (!host_key_pair.isValid())
+            {
+                LOG(ERROR) << "Failed to create host UDP key pair";
+                return;
+            }
+
+            QByteArray host_iv = base::Random::byteArray(12);
+
+            QByteArray session_key = host_key_pair.sessionKey(client_public_key);
+            if (session_key.isEmpty())
+            {
+                LOG(ERROR) << "Failed to derive UDP session key";
+                return;
+            }
+
+            quint32 encryption = proto::key_exchange::ENCRYPTION_UNKNOWN;
+            if (encryptions & proto::key_exchange::ENCRYPTION_AES256_GCM)
+                encryption = proto::key_exchange::ENCRYPTION_AES256_GCM;
+            else if (encryptions & proto::key_exchange::ENCRYPTION_CHACHA20_POLY1305)
+                encryption = proto::key_exchange::ENCRYPTION_CHACHA20_POLY1305;
+
+            if (encryption == proto::key_exchange::ENCRYPTION_UNKNOWN)
+            {
+                LOG(ERROR) << "No supported UDP encryption";
+                return;
+            }
+
+            std::unique_ptr<base::MessageEncryptor> encryptor;
+            std::unique_ptr<base::MessageDecryptor> decryptor;
+
+            if (encryption == proto::key_exchange::ENCRYPTION_AES256_GCM)
+            {
+                encryptor = base::MessageEncryptor::createForAes256Gcm(
+                    session_key, host_iv);
+                decryptor = base::MessageDecryptor::createForAes256Gcm(
+                    session_key, client_iv);
+            }
+            else
+            {
+                encryptor = base::MessageEncryptor::createForChaCha20Poly1305(
+                    session_key, host_iv);
+                decryptor = base::MessageDecryptor::createForChaCha20Poly1305(
+                    session_key, client_iv);
+            }
+
+            if (!encryptor || !decryptor)
+            {
+                LOG(ERROR) << "Failed to create UDP encryptor/decryptor";
+                return;
+            }
+
+            // Send reply with host's public key and IV.
+            proto::peer::HostToClient reply;
+            proto::peer::DirectUdpReply* udp_reply = reply.mutable_direct_udp_reply();
+            udp_reply->set_encryption(encryption);
+            udp_reply->set_public_key(host_key_pair.publicKey().toStdString());
+            udp_reply->set_iv(host_iv.toStdString());
+            tcp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, base::serialize(reply));
+
             udp_channel_ = new base::UdpChannel(this);
+            udp_channel_->setEncryptor(std::move(encryptor));
+            udp_channel_->setDecryptor(std::move(decryptor));
 
             connect(udp_channel_, &base::UdpChannel::sig_connected, this, &DesktopClient::onUdpConnected);
             connect(udp_channel_, &base::UdpChannel::sig_errorOccurred, this, &DesktopClient::onUdpErrorOccurred);
@@ -331,7 +401,8 @@ void DesktopClient::onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray
 //--------------------------------------------------------------------------------------------------
 void DesktopClient::onUdpConnected()
 {
-    // TODO
+    LOG(INFO) << "UDP channel connected";
+    udp_channel_->setPaused(false);
 }
 
 //--------------------------------------------------------------------------------------------------

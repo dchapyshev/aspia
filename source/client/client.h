@@ -24,6 +24,7 @@
 
 #include "client/client_session_state.h"
 #include "client/router_manager.h"
+#include "base/crypto/key_pair.h"
 #include "base/net/tcp_channel.h"
 
 class QTimer;
@@ -113,6 +114,8 @@ private:
     base::TcpChannel* tcp_channel_ = nullptr;
     base::UdpChannel* udp_channel_ = nullptr;
     base::StunPeer* stun_peer_ = nullptr;
+    base::KeyPair udp_key_pair_;
+    QByteArray udp_iv_;
 
     std::shared_ptr<SessionState> session_state_;
 

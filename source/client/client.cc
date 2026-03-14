@@ -23,6 +23,9 @@
 #include "base/logging.h"
 #include "base/version_constants.h"
 #include "base/serialization.h"
+#include "base/crypto/message_decryptor.h"
+#include "base/crypto/message_encryptor.h"
+#include "base/crypto/random.h"
 #include "base/net/tcp_channel_ng.h"
 #include "base/net/tcp_channel_legacy.h"
 #include "base/net/udp_channel.h"
@@ -355,6 +358,76 @@ void Client::onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer)
     {
         onServiceMessageReceived(buffer);
     }
+    else if (channel_id == proto::peer::CHANNEL_ID_CONTROL)
+    {
+        proto::peer::HostToClient message;
+        if (!base::parse(buffer, &message))
+        {
+            LOG(ERROR) << "Unable to parse control message";
+            return;
+        }
+
+        if (message.has_direct_udp_reply())
+        {
+            const proto::peer::DirectUdpReply& udp_reply = message.direct_udp_reply();
+
+            if (!udp_channel_ || !udp_key_pair_.isValid())
+            {
+                LOG(ERROR) << "UDP reply received but no UDP channel or key pair";
+                return;
+            }
+
+            QByteArray host_public_key =
+                QByteArray::fromStdString(udp_reply.public_key());
+            QByteArray host_iv =
+                QByteArray::fromStdString(udp_reply.iv());
+            quint32 encryption = udp_reply.encryption();
+
+            QByteArray session_key = udp_key_pair_.sessionKey(host_public_key);
+            if (session_key.isEmpty())
+            {
+                LOG(ERROR) << "Failed to derive UDP session key";
+                return;
+            }
+
+            std::unique_ptr<base::MessageEncryptor> encryptor;
+            std::unique_ptr<base::MessageDecryptor> decryptor;
+
+            if (encryption == proto::key_exchange::ENCRYPTION_AES256_GCM)
+            {
+                encryptor = base::MessageEncryptor::createForAes256Gcm(
+                    session_key, udp_iv_);
+                decryptor = base::MessageDecryptor::createForAes256Gcm(
+                    session_key, host_iv);
+            }
+            else if (encryption == proto::key_exchange::ENCRYPTION_CHACHA20_POLY1305)
+            {
+                encryptor = base::MessageEncryptor::createForChaCha20Poly1305(
+                    session_key, udp_iv_);
+                decryptor = base::MessageDecryptor::createForChaCha20Poly1305(
+                    session_key, host_iv);
+            }
+            else
+            {
+                LOG(ERROR) << "Unknown UDP encryption type:" << encryption;
+                return;
+            }
+
+            if (!encryptor || !decryptor)
+            {
+                LOG(ERROR) << "Failed to create UDP encryptor/decryptor";
+                return;
+            }
+
+            udp_channel_->setEncryptor(std::move(encryptor));
+            udp_channel_->setDecryptor(std::move(decryptor));
+            udp_channel_->setPaused(false);
+
+            // Key pair is no longer needed.
+            udp_key_pair_ = base::KeyPair();
+            udp_iv_.clear();
+        }
+    }
     else
     {
         LOG(ERROR) << "Unhandled incoming message from channel:" << channel_id;
@@ -436,10 +509,24 @@ void Client::onHostConnected()
             stun_peer_->deleteLater();
             stun_peer_ = nullptr;
 
+            udp_key_pair_ = base::KeyPair::create(base::KeyPair::Type::X25519);
+            if (!udp_key_pair_.isValid())
+            {
+                LOG(ERROR) << "Failed to create UDP key pair";
+                return;
+            }
+
+            udp_iv_ = base::Random::byteArray(12);
+
             proto::peer::ClientToHost message;
-            proto::peer::DirectUdpEndpoint* udp_endpoint = message.mutable_direct_udp_endpoint();
-            udp_endpoint->set_ip_address(external_address.toStdString());
-            udp_endpoint->set_port(external_port);
+            proto::peer::DirectUdpRequest* udp_request = message.mutable_direct_udp_request();
+            udp_request->set_ip_address(external_address.toStdString());
+            udp_request->set_port(external_port);
+            udp_request->set_encryptions(
+                proto::key_exchange::ENCRYPTION_AES256_GCM |
+                proto::key_exchange::ENCRYPTION_CHACHA20_POLY1305);
+            udp_request->set_public_key(udp_key_pair_.publicKey().toStdString());
+            udp_request->set_iv(udp_iv_.toStdString());
 
             tcp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, base::serialize(message));
         });
@@ -451,6 +538,8 @@ void Client::onHostConnected()
             stun_peer_->deleteLater();
             stun_peer_ = nullptr;
         });
+
+        stun_peer_->start(stun_host, stun_port);
     }
 
     // Router controller is no longer needed.
