@@ -302,7 +302,7 @@ void ClientAuthenticator::sendClientHello()
     QByteArray message = base::serialize(client_hello);
 
     LOG(INFO) << "Sending: ClientHello (" << message.size() << ")";
-    sendMessage(message);
+    emit sig_outgoingMessage(message);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -357,7 +357,7 @@ void ClientAuthenticator::sendIdentify()
     QByteArray message = base::serialize(identify);
 
     LOG(INFO) << "Sending: Identify (" << message.size() << ")";
-    sendMessage(message);
+    emit sig_outgoingMessage(message);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -433,7 +433,7 @@ void ClientAuthenticator::sendClientKeyExchange()
     QByteArray message = base::serialize(client_key_exchange);
 
     LOG(INFO) << "Sending: ClientKeyExchange (" << message.size() << ")";
-    sendMessage(message);
+    emit sig_outgoingMessage(message);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -494,7 +494,7 @@ void ClientAuthenticator::sendSessionResponse()
     QByteArray message = base::serialize(response);
 
     LOG(INFO) << "Sending: SessionResponse (" << message.size() << ")";
-    sendMessage(message);
+    emit sig_outgoingMessage(message);
 }
 
 } // namespace base

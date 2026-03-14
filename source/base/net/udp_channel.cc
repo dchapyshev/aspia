@@ -369,6 +369,8 @@ void UdpChannel::onErrorOccurred(const Location& location, const std::error_code
     keep_alive_timer_->stop();
     update_timer_->stop();
 
+    resolver_.cancel();
+
     std::error_code ignored_code;
     socket_.cancel(ignored_code);
     socket_.close(ignored_code);

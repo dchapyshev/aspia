@@ -68,13 +68,9 @@ void Authenticator::start()
     timer_->start(kTimeout);
 
     if (onStarted())
-    {
         LOG(INFO) << "Authentication started";
-    }
     else
-    {
         LOG(ERROR) << "Unable to start authentication";
-    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -82,7 +78,6 @@ void Authenticator::onIncomingMessage(const QByteArray& data)
 {
     if (state() != State::PENDING)
         return;
-
     onReceived(data);
 }
 
@@ -91,14 +86,7 @@ void Authenticator::onMessageWritten()
 {
     if (state() != State::PENDING)
         return;
-
     onWritten();
-}
-
-//--------------------------------------------------------------------------------------------------
-void Authenticator::sendMessage(const QByteArray& data)
-{
-    emit sig_outgoingMessage(data);
 }
 
 //--------------------------------------------------------------------------------------------------

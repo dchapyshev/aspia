@@ -88,7 +88,6 @@ protected:
     virtual void onReceived(const QByteArray& buffer) = 0;
     virtual void onWritten() = 0;
 
-    void sendMessage(const QByteArray& data);
     void finish(const Location& location, ErrorCode error_code);
     void setPeerVersion(const proto::peer::Version& version);
     void setPeerOsName(const QString& name);
