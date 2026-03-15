@@ -93,7 +93,7 @@ protected:
     int speedTx();
 
 private slots:
-    void onTcpReady();
+    void onTcpConnected();
     void onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code);
     void onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer);
     void onUdpErrorOccurred();
@@ -102,6 +102,7 @@ private slots:
     void onHostAwaiting();
     void onHostConnected();
     void onRouterErrorOccurred(const client::RouterManager::Error& error);
+    void onStunChannelReady(const QString& external_address, quint16 external_port);
 
 private:
     void delayedReconnect();

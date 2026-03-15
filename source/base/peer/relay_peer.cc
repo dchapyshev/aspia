@@ -187,12 +187,12 @@ void RelayPeer::onConnected()
             if (connection_offer_.is_legacy())
             {
                 pending_channel_ = new TcpChannelLegacy(
-                    std::move(socket_), authenticator_.release(), this);
+                    TcpChannel::Type::RELAY, std::move(socket_), authenticator_.release(), this);
             }
             else
             {
                 pending_channel_ = new TcpChannelNG(
-                    std::move(socket_), authenticator_.release(), this);
+                    TcpChannel::Type::RELAY, std::move(socket_), authenticator_.release(), this);
             }
 
             connect(pending_channel_, &TcpChannel::sig_authenticated, this, [this]()

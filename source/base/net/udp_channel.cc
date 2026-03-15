@@ -168,6 +168,20 @@ void UdpChannel::send(quint8 channel_id, const QByteArray& buffer)
 }
 
 //--------------------------------------------------------------------------------------------------
+quint16 UdpChannel::port() const
+{
+    std::error_code error_code;
+    asio::ip::udp::endpoint endpoint = socket_.local_endpoint(error_code);
+    if (error_code)
+    {
+        LOG(ERROR) << "Unable to get local endpoint:" << error_code;
+        return 0;
+    }
+
+    return endpoint.port();
+}
+
+//--------------------------------------------------------------------------------------------------
 void UdpChannel::setPaused(bool enable)
 {
     if (paused_ == enable)

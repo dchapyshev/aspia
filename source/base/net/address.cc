@@ -20,71 +20,11 @@
 
 #include <QHostAddress>
 
+#include "base/net/net_utils.h"
+
 namespace base {
 
 namespace {
-
-const int kMaxHostNameLength = 64;
-
-//--------------------------------------------------------------------------------------------------
-bool isValidHostNameChar(const QChar c)
-{
-    if (c.isLetterOrNumber())
-        return true;
-
-    if (c == '.' || c == '_' || c == '-')
-        return true;
-
-    return false;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool isValidHostName(const QString& host)
-{
-    if (host.isEmpty())
-        return false;
-
-    int length = host.length();
-    if (length > kMaxHostNameLength)
-        return false;
-
-    size_t letter_count = 0;
-    size_t digit_count = 0;
-
-    for (int i = 0; i < length; ++i)
-    {
-        if (host[i].isDigit())
-            ++digit_count;
-
-        if (host[i].isLetter())
-            ++letter_count;
-
-        if (!isValidHostNameChar(host[i]))
-            return false;
-    }
-
-    if (!letter_count && !digit_count)
-        return false;
-
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool isValidPort(quint16 port)
-{
-    return port != 0;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool isValidPort(const QString& str)
-{
-    bool ok = false;
-    quint16 value = str.toUShort(&ok);
-    if (!ok)
-        return false;
-
-    return isValidPort(value);
-};
 
 struct AddressParts
 {
@@ -116,7 +56,7 @@ bool setHostAndPort(QString::const_iterator first,
         parts->host = fromIterators(first, last_colon);
         parts->port = fromIterators(port_start, last);
 
-        if (!isValidPort(parts->port))
+        if (!NetUtils::isValidPort(parts->port))
             return false;
     }
 
@@ -210,7 +150,7 @@ bool parse(QString::const_iterator& it, QString::const_iterator last, AddressPar
     else if (state == ParseState::PORT)
     {
         parts->port = fromIterators(first, last);
-        if (!isValidPort(parts->port))
+        if (!NetUtils::isValidPort(parts->port))
             return false;
     }
 
@@ -293,7 +233,7 @@ Address Address::fromString(const QString& str, quint16 default_port)
 
         if (address.protocol() == QAbstractSocket::IPv4Protocol ||
             address.protocol() == QAbstractSocket::IPv6Protocol ||
-            isValidHostName(parts.host))
+            NetUtils::isValidHostName(parts.host))
         {
             bool ok = false;
             quint16 port = parts.port.toUShort(&ok);
@@ -311,7 +251,7 @@ Address Address::fromString(const QString& str, quint16 default_port)
 //--------------------------------------------------------------------------------------------------
 QString Address::toString() const
 {
-    if (!isValidPort(port_))
+    if (!NetUtils::isValidPort(port_))
         return QString();
 
     QHostAddress address(host_);
@@ -325,7 +265,7 @@ QString Address::toString() const
     }
     else
     {
-        if (address.protocol() != QAbstractSocket::IPv4Protocol && !isValidHostName(host_))
+        if (address.protocol() != QAbstractSocket::IPv4Protocol && !NetUtils::isValidHostName(host_))
             return QString();
 
         if (port_ == default_port_)
@@ -362,14 +302,10 @@ quint16 Address::port() const
 //--------------------------------------------------------------------------------------------------
 bool Address::isValid() const
 {
-    if (!isValidPort(port_))
+    if (!NetUtils::isValidPort(port_))
         return false;
 
-    QHostAddress address(host_);
-
-    return address.protocol() == QAbstractSocket::IPv4Protocol ||
-           address.protocol() == QAbstractSocket::IPv6Protocol ||
-           isValidHostName(host_);
+    return NetUtils::isValidIpAddress(host_) || NetUtils::isValidHostName(host_);
 }
 
 //--------------------------------------------------------------------------------------------------

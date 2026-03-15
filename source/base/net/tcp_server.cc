@@ -205,7 +205,8 @@ void TcpServer::doAccept()
                 }
             }
 
-            TcpChannel* channel = new TcpChannelNG(std::move(socket), authenticator, this);
+            TcpChannel* channel = new TcpChannelNG(
+                TcpChannel::Type::DIRECT, std::move(socket), authenticator, this);
 
             connect(channel, &TcpChannel::sig_authenticated, this, [this, channel]()
             {

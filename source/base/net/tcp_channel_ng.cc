@@ -72,7 +72,7 @@ void resizeBuffer(QByteArray* buffer, qint64 size)
 
 //--------------------------------------------------------------------------------------------------
 TcpChannelNG::TcpChannelNG(Authenticator* authenticator, QObject* parent)
-    : TcpChannel(parent),
+    : TcpChannel(Type::DIRECT, parent),
       io_context_(base::AsioEventDispatcher::ioContext()),
       socket_(io_context_),
       resolver_(std::make_unique<asio::ip::tcp::resolver>(io_context_)),
@@ -83,8 +83,8 @@ TcpChannelNG::TcpChannelNG(Authenticator* authenticator, QObject* parent)
 
 //--------------------------------------------------------------------------------------------------
 TcpChannelNG::TcpChannelNG(
-    asio::ip::tcp::socket&& socket, Authenticator* authenticator, QObject* parent)
-    : TcpChannel(parent),
+    Type type, asio::ip::tcp::socket&& socket, Authenticator* authenticator, QObject* parent)
+    : TcpChannel(type, parent),
       io_context_(base::AsioEventDispatcher::ioContext()),
       socket_(std::move(socket)),
       authenticator_(authenticator)

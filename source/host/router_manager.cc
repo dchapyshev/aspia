@@ -248,6 +248,23 @@ void RouterManager::onTcpMessageReceived(quint8 /* channel_id */, const QByteArr
             base::ServerAuthenticator* authenticator = new base::ServerAuthenticator();
             authenticator->setUserList(user_list_);
 
+            if (connection_offer.has_stun_info())
+            {
+                const proto::router::StunServerInfo& stun_info = connection_offer.stun_info();
+                if (stun_info.version() != 1)
+                {
+                    LOG(INFO) << "Unsupported stun server version";
+                    return;
+                }
+
+                stun_host_ = QString::fromStdString(stun_info.host());
+                stun_port_ = stun_info.port();
+
+                // An empty string means that the router address should be used.
+                if (stun_host_.isEmpty())
+                    stun_host_ = address_;
+            }
+
             peer_manager_->addConnectionOffer(connection_offer, authenticator);
         }
         else

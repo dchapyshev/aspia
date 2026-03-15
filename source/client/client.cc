@@ -26,6 +26,7 @@
 #include "base/crypto/message_decryptor.h"
 #include "base/crypto/message_encryptor.h"
 #include "base/crypto/random.h"
+#include "base/net/net_utils.h"
 #include "base/net/tcp_channel_ng.h"
 #include "base/net/tcp_channel_legacy.h"
 #include "base/net/udp_channel.h"
@@ -194,7 +195,7 @@ void Client::start()
             tcp_channel_ = new base::TcpChannelNG(authenticator.release(), this);
         }
 
-        connect(tcp_channel_, &base::TcpChannel::sig_authenticated, this, &Client::onTcpReady);
+        connect(tcp_channel_, &base::TcpChannel::sig_authenticated, this, &Client::onTcpConnected);
         connect(tcp_channel_, &base::TcpChannel::sig_errorOccurred, this, &Client::onTcpErrorOccurred);
         connect(tcp_channel_, &base::TcpChannel::sig_messageReceived, this, &Client::onTcpMessageReceived);
 
@@ -284,7 +285,7 @@ int Client::speedTx()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::onTcpReady()
+void Client::onTcpConnected()
 {
     LOG(INFO) << "Connection established";
     channelReady();
@@ -492,45 +493,7 @@ void Client::onHostConnected()
 
         stun_peer_ = new base::StunPeer(this);
 
-        connect(stun_peer_, &base::StunPeer::sig_channelReady, this,
-            [this](const QString& external_address, quint16 external_port)
-        {
-            LOG(INFO) << "External endpoint received:" << external_address << ':' << external_port;
-
-            udp_channel_ = stun_peer_->takeChannel();
-            udp_channel_->setParent(this);
-
-            LOG(INFO) << "UDP channel created:" << (udp_channel_ != nullptr);
-
-            connect(udp_channel_, &base::UdpChannel::sig_errorOccurred, this, &Client::onUdpErrorOccurred);
-            connect(udp_channel_, &base::UdpChannel::sig_messageReceived, this, &Client::onUdpMessageReceived);
-
-            stun_peer_->disconnect();
-            stun_peer_->deleteLater();
-            stun_peer_ = nullptr;
-
-            udp_key_pair_ = base::KeyPair::create(base::KeyPair::Type::X25519);
-            if (!udp_key_pair_.isValid())
-            {
-                LOG(ERROR) << "Failed to create UDP key pair";
-                return;
-            }
-
-            udp_iv_ = base::Random::byteArray(12);
-
-            proto::peer::ClientToHost message;
-            proto::peer::DirectUdpRequest* udp_request = message.mutable_direct_udp_request();
-            udp_request->set_ip_address(external_address.toStdString());
-            udp_request->set_port(external_port);
-            udp_request->set_encryptions(
-                proto::key_exchange::ENCRYPTION_AES256_GCM |
-                proto::key_exchange::ENCRYPTION_CHACHA20_POLY1305);
-            udp_request->set_public_key(udp_key_pair_.publicKey().toStdString());
-            udp_request->set_iv(udp_iv_.toStdString());
-
-            tcp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, base::serialize(message));
-        });
-
+        connect(stun_peer_, &base::StunPeer::sig_channelReady, this, &Client::onStunChannelReady);
         connect(stun_peer_, &base::StunPeer::sig_errorOccurred, this, [this]()
         {
             LOG(ERROR) << "Error in stun peer";
@@ -565,6 +528,58 @@ void Client::onRouterErrorOccurred(const RouterManager::Error& error)
         emit sig_statusChanged(Status::WAIT_FOR_ROUTER);
         delayedReconnect();
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void Client::onStunChannelReady(const QString& external_address, quint16 external_port)
+{
+    CHECK(stun_peer_);
+
+    LOG(INFO) << "External endpoint received:" << external_address << ':' << external_port;
+
+    udp_channel_ = stun_peer_->takeChannel();
+    udp_channel_->setParent(this);
+
+    stun_peer_->disconnect();
+    stun_peer_->deleteLater();
+    stun_peer_ = nullptr;
+
+    connect(udp_channel_, &base::UdpChannel::sig_errorOccurred, this, &Client::onUdpErrorOccurred);
+    connect(udp_channel_, &base::UdpChannel::sig_messageReceived, this, &Client::onUdpMessageReceived);
+
+    udp_key_pair_ = base::KeyPair::create(base::KeyPair::Type::X25519);
+    if (!udp_key_pair_.isValid())
+    {
+        LOG(ERROR) << "Failed to create UDP key pair";
+        return;
+    }
+
+    udp_iv_ = base::Random::byteArray(12);
+
+    proto::peer::ClientToHost message;
+    proto::peer::DirectUdpRequest* request = message.mutable_direct_udp_request();
+
+    proto::peer::DirectUdpRequest::Endpoint* external_endpoint = request->mutable_external_endpoint();
+    external_endpoint->set_ip_address(external_address.toStdString());
+    external_endpoint->set_port(external_port);
+
+    QStringList local_ips = base::NetUtils::localIpList();
+    for (const auto& local_ip : std::as_const(local_ips))
+    {
+        proto::peer::DirectUdpRequest::Endpoint* local_endpoint = request->add_local_endpoints();
+        local_endpoint->set_ip_address(local_ip.toStdString());
+        local_endpoint->set_port(udp_channel_->port());
+    }
+
+    static const quint32 kSupportedEncryptios =
+        proto::key_exchange::ENCRYPTION_AES256_GCM | proto::key_exchange::ENCRYPTION_CHACHA20_POLY1305;
+
+    proto::peer::DirectUdpRequest::Credentials* credentials = request->mutable_credentials();
+    credentials->set_encryptions(kSupportedEncryptios);
+    credentials->set_public_key(udp_key_pair_.publicKey().toStdString());
+    credentials->set_iv(udp_iv_.toStdString());
+
+    tcp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------

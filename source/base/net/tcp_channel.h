@@ -31,7 +31,10 @@ class TcpChannel : public QObject
     Q_OBJECT
 
 public:
-    TcpChannel(QObject* parent);
+    enum class Type { DIRECT, RELAY };
+    Q_ENUM(Type)
+
+    TcpChannel(Type type, QObject* parent);
     ~TcpChannel() override = default;
 
     static const quint32 kMaxMessageSize;
@@ -99,6 +102,7 @@ public:
     virtual qint64 pendingBytes() const = 0;
 
     quint32 instanceId() const { return instance_id_; }
+    Type type() const { return type_; }
     qint64 totalRx() const { return total_rx_; }
     qint64 totalTx() const { return total_tx_; }
     int speedRx();
@@ -139,6 +143,7 @@ protected:
 
 private:
     const quint32 instance_id_;
+    const Type type_;
 
     qint64 total_tx_ = 0;
     qint64 total_rx_ = 0;

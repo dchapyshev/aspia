@@ -42,7 +42,7 @@ class TcpChannelLegacy final : public TcpChannel
 
 public:
     // Constructor available for client.
-    explicit TcpChannelLegacy(Authenticator* authenticator, QObject* parent = nullptr);
+    TcpChannelLegacy(Authenticator* authenticator, QObject* parent = nullptr);
     ~TcpChannelLegacy() final;
 
     // Gets the address of the remote host as a string.
@@ -79,7 +79,7 @@ protected:
     friend class RelayPeer;
 
     // Constructor available for server. An already connected socket is being moved.
-    TcpChannelLegacy(asio::ip::tcp::socket&& socket, Authenticator* authenticator, QObject* parent);
+    TcpChannelLegacy(Type type, asio::ip::tcp::socket&& socket, Authenticator* authenticator, QObject* parent);
 
     // Starts authentication. In the client channel, it starts automatically when a connection is
     // established. In the server channel, it is started by the RelayPeer or TcpServer.

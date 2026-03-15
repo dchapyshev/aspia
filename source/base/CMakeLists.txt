@@ -406,6 +406,8 @@ list(APPEND SOURCE_BASE_NET
     net/address.h
     net/curl_util.cc
     net/curl_util.h
+    net/net_utils.cc
+    net/net_utils.h
     net/tcp_channel.cc
     net/tcp_channel.h
     net/tcp_channel_legacy.cc

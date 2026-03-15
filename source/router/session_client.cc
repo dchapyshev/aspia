@@ -118,6 +118,17 @@ void SessionClient::readConnectionRequest(const proto::router::ConnectionRequest
                     offer->set_error_code(proto::router::ConnectionOffer::SUCCESS);
                     offer->set_is_legacy(host->version() < base::kVersion_3_0_0);
 
+                    if (stun_port_)
+                    {
+                        // An empty host string means that the client should use the router's address
+                        // as the server's host address. This is done to allow for future expansion,
+                        // but is not currently used.
+                        proto::router::StunServerInfo* stun_info = offer->mutable_stun_info();
+                        stun_info->set_version(1);
+                        stun_info->set_host("");
+                        stun_info->set_port(stun_port_);
+                    }
+
                     proto::router::HostOfferData* offer_data = offer->mutable_host_data();
                     offer_data->set_host_id(request.host_id());
 
@@ -147,16 +158,6 @@ void SessionClient::readConnectionRequest(const proto::router::ConnectionRequest
     LOG(INFO) << "Sending connection offer to client";
     offer->clear_host_data(); // Host data is only needed by the host.
     offer->set_peer_role(proto::router::ConnectionOffer::CLIENT);
-
-    if (stun_port_)
-    {
-        // An empty host string means that the client should use the router's address as the
-        // server's host address. This is done to allow for future expansion, but is not currently used.
-        proto::router::StunServerInfo* stun_info = offer->mutable_stun_info();
-        stun_info->set_version(1);
-        stun_info->set_host("");
-        stun_info->set_port(stun_port_);
-    }
 
     sendMessage(base::serialize(message));
 }

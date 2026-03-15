@@ -205,7 +205,8 @@ void TcpServerLegacy::doAccept()
                 }
             }
 
-            TcpChannel* channel = new TcpChannelLegacy(std::move(socket), authenticator, this);
+            TcpChannel* channel = new TcpChannelLegacy(
+                TcpChannel::Type::DIRECT, std::move(socket), authenticator, this);
 
             connect(channel, &TcpChannel::sig_authenticated, this, [this, channel]()
             {

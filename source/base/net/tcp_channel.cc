@@ -47,9 +47,10 @@ quint32 makeInstanceId()
 const quint32 TcpChannel::kMaxMessageSize = 7 * 1024 * 1024; // 7 MB
 
 //--------------------------------------------------------------------------------------------------
-TcpChannel::TcpChannel(QObject* parent)
+TcpChannel::TcpChannel(Type type, QObject* parent)
     : QObject(parent),
-      instance_id_(makeInstanceId())
+      instance_id_(makeInstanceId()),
+      type_(type)
 {
     // Nothing
 }

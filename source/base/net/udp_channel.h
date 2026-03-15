@@ -48,6 +48,7 @@ public:
 
     void connectTo(const QString& address, quint16 port);
     void send(quint8 channel_id, const QByteArray& buffer);
+    quint16 port() const;
 
     void setPaused(bool enable);
 

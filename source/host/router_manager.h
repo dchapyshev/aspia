@@ -47,6 +47,9 @@ public:
     quint16 port() const { return port_; }
     const QByteArray& publicKey() const { return public_key_; }
 
+    const QString& stunHost() const { return stun_host_; }
+    quint16 stunPort() const { return stun_port_; }
+
     bool hasPendingConnections() const;
     base::TcpChannel* nextPendingConnection();
 
@@ -81,6 +84,9 @@ private:
     QString address_;
     quint16 port_ = 0;
     QByteArray public_key_;
+
+    QString stun_host_;
+    quint16 stun_port_;
 
     QTimer* password_expire_timer_ = nullptr;
     QString one_time_password_;

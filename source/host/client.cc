@@ -25,6 +25,7 @@
 #include "base/crypto/message_encryptor.h"
 #include "base/crypto/random.h"
 #include "base/net/udp_channel.h"
+#include "base/peer/stun_peer.h"
 #include "proto/key_exchange.h"
 
 namespace host {
@@ -58,6 +59,16 @@ Client::~Client()
 //--------------------------------------------------------------------------------------------------
 void Client::start()
 {
+    if (tcp_channel_->type() == base::TcpChannel::Type::RELAY && !stun_host_.isEmpty() && stun_port_)
+    {
+        stun_peer_ = new base::StunPeer(this);
+
+        connect(stun_peer_, &base::StunPeer::sig_channelReady, this, &Client::onStunChannelReady);
+        connect(stun_peer_, &base::StunPeer::sig_errorOccurred, this, &Client::onStunErrorOccurred);
+
+        stun_peer_->start(stun_host_, stun_port_);
+    }
+
     onStart();
 }
 
@@ -117,6 +128,13 @@ qint64 Client::pendingBytes() const
 }
 
 //--------------------------------------------------------------------------------------------------
+void Client::setStunInfo(const QString& host, quint16 port)
+{
+    stun_host_ = host;
+    stun_port_ = port;
+}
+
+//--------------------------------------------------------------------------------------------------
 void Client::send(quint8 channel_id, const QByteArray& buffer)
 {
     tcp_channel_->send(channel_id, buffer);
@@ -157,12 +175,14 @@ void Client::onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray& buffe
 void Client::onUdpConnected()
 {
     LOG(INFO) << "UDP channel connected";
+    CHECK(udp_channel_);
     udp_channel_->setPaused(false);
 }
 
 //--------------------------------------------------------------------------------------------------
 void Client::onUdpErrorOccurred()
 {
+    CHECK(udp_channel_);
     udp_channel_->disconnect();
     udp_channel_->deleteLater();
     udp_channel_ = nullptr;
@@ -175,15 +195,52 @@ void Client::onUdpMessageReceived(quint8 udp_channel_id, const QByteArray& buffe
 }
 
 //--------------------------------------------------------------------------------------------------
+void Client::onStunChannelReady(const QString& external_address, quint16 /* external_port */)
+{
+    CHECK(stun_peer_);
+    stun_peer_->disconnect();
+    stun_peer_->deleteLater();
+    stun_peer_ = nullptr;
+
+    LOG(INFO) << "External address for host:" << external_address;
+    external_address_ = external_address;
+}
+
+//--------------------------------------------------------------------------------------------------
+void Client::onStunErrorOccurred()
+{
+    CHECK(stun_peer_);
+    stun_peer_->disconnect();
+    stun_peer_->deleteLater();
+    stun_peer_ = nullptr;
+}
+
+//--------------------------------------------------------------------------------------------------
 void Client::readDirectUdpRequest(const proto::peer::DirectUdpRequest& request)
 {
-    QString udp_address = QString::fromStdString(request.ip_address());
-    quint32 udp_port = request.port();
-    quint32 encryptions = request.encryptions();
-    QByteArray client_public_key = QByteArray::fromStdString(request.public_key());
-    QByteArray client_iv = QByteArray::fromStdString(request.iv());
+    if (!request.has_external_endpoint() || !request.local_endpoints_size() || !request.has_credentials())
+    {
+        LOG(INFO) << "Request does not contain the required data";
+        return;
+    }
 
-    LOG(INFO) << "Direct UDP endpoint received:" << udp_address << ':' << udp_port;
+    const proto::peer::DirectUdpRequest::Endpoint& external_endpoint = request.external_endpoint();
+
+    QString external_address = QString::fromStdString(external_endpoint.ip_address());
+    quint32 external_port = external_endpoint.port();
+
+    const proto::peer::DirectUdpRequest::Credentials& credentials = request.credentials();
+
+    quint32 encryptions = credentials.encryptions();
+    QByteArray client_public_key = QByteArray::fromStdString(credentials.public_key());
+    QByteArray client_iv = QByteArray::fromStdString(credentials.iv());
+
+    LOG(INFO) << "External client UDP endpoint:" << external_address << ':' << external_port;
+
+    for (int i = 0; i < request.local_endpoints_size(); ++i)
+    {
+        LOG(INFO) << "Local client UDP #" << i << ":" << request.local_endpoints(i);
+    }
 
     base::KeyPair host_key_pair = base::KeyPair::create(base::KeyPair::Type::X25519);
     if (!host_key_pair.isValid())
@@ -253,7 +310,7 @@ void Client::readDirectUdpRequest(const proto::peer::DirectUdpRequest& request)
     connect(udp_channel_, &base::UdpChannel::sig_errorOccurred, this, &Client::onUdpErrorOccurred);
     connect(udp_channel_, &base::UdpChannel::sig_messageReceived, this, &Client::onUdpMessageReceived);
 
-    udp_channel_->connectTo(udp_address, udp_port);
+    udp_channel_->connectTo(external_address, external_port);
 }
 
 } // namespace host

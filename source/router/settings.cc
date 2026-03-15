@@ -18,10 +18,9 @@
 
 #include "router/settings.h"
 
-#include <QHostAddress>
-
 #include "base/logging.h"
 #include "base/xml_settings.h"
+#include "base/net/net_utils.h"
 #include "build/build_config.h"
 
 namespace router {
@@ -31,19 +30,9 @@ namespace {
 //--------------------------------------------------------------------------------------------------
 bool isValidWhiteListEntry(const QString& entry)
 {
-    QHostAddress address(entry);
-    if (address.protocol() == QAbstractSocket::IPv4Protocol ||
-        address.protocol() == QAbstractSocket::IPv6Protocol)
-    {
+    if (base::NetUtils::isValidIpAddress(entry))
         return true;
-    }
-
-    QPair<QHostAddress, int> subnet = QHostAddress::parseSubnet(entry);
-    if (subnet.second < 0)
-        return false;
-
-    return subnet.first.protocol() == QAbstractSocket::IPv4Protocol ||
-           subnet.first.protocol() == QAbstractSocket::IPv6Protocol;
+    return base::NetUtils::isValidSubnet(entry);
 }
 
 } // namespace
