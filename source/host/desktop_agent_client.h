@@ -110,6 +110,7 @@ private:
     void readClipboardEvent(const proto::desktop::ClipboardEvent& clipboard_event);
     void readExtension(const proto::desktop::Extension& extension);
     void readConfig(const proto::desktop::Config& config);
+    void readKeyFrameExtension(const std::string& data);
     void readSelectScreenExtension(const std::string& data);
     void readPreferredSizeExtension(const std::string& data);
     void readVideoPauseExtension(const std::string& data);

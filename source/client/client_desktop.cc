@@ -333,7 +333,7 @@ void ClientDesktop::onKeyEvent(const proto::desktop::KeyEvent& event)
         return;
 
     outgoing_message_.newMessage().mutable_key_event()->CopyFrom(event);
-    sendSessionMessage(outgoing_message_.serialize());
+    sendSessionMessage(outgoing_message_.serialize(), true);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -343,7 +343,7 @@ void ClientDesktop::onTextEvent(const proto::desktop::TextEvent& event)
         return;
 
     outgoing_message_.newMessage().mutable_text_event()->CopyFrom(event);
-    sendSessionMessage(outgoing_message_.serialize());
+    sendSessionMessage(outgoing_message_.serialize(), true);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -353,7 +353,7 @@ void ClientDesktop::onMouseEvent(const proto::desktop::MouseEvent& event)
         return;
 
     outgoing_message_.newMessage().mutable_mouse_event()->CopyFrom(event);
-    sendSessionMessage(outgoing_message_.serialize());
+    sendSessionMessage(outgoing_message_.serialize(), true);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -577,6 +577,7 @@ void ClientDesktop::readVideoPacket(const proto::desktop::VideoPacket& packet)
     if (!video_decoder_->decode(packet, desktop_frame_.get()))
     {
         LOG(ERROR) << "The video packet could not be decoded";
+        sendKeyFrameRequest();
         return;
     }
 
@@ -776,6 +777,14 @@ void ClientDesktop::sendSessionListRequest()
     proto::desktop::SessionListRequest* request = message.mutable_session_list_request();
     request->set_dummy(1);
     sendServiceMessage(base::serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientDesktop::sendKeyFrameRequest()
+{
+    proto::desktop::Extension* extension = outgoing_message_.newMessage().mutable_extension();
+    extension->set_name(common::kKeyFrameExtension);
+    sendSessionMessage(outgoing_message_.serialize());
 }
 
 } // namespace client

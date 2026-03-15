@@ -136,6 +136,7 @@ private:
     void readClipboardEvent(const proto::desktop::ClipboardEvent& event);
     void readExtension(const proto::desktop::Extension& extension);
     void sendSessionListRequest();
+    void sendKeyFrameRequest();
 
     bool started_ = false;
 

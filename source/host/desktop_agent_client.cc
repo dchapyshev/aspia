@@ -495,6 +495,8 @@ void DesktopAgentClient::readClipboardEvent(const proto::desktop::ClipboardEvent
 //--------------------------------------------------------------------------------------------------
 void DesktopAgentClient::readExtension(const proto::desktop::Extension& extension)
 {
+    if (extension.name() == common::kKeyFrameExtension)
+        readKeyFrameExtension(extension.data());
     if (extension.name() == common::kTaskManagerExtension)
         readTaskManagerExtension(extension.data());
     else if (extension.name() == common::kSelectScreenExtension)
@@ -585,6 +587,14 @@ void DesktopAgentClient::readConfig(const proto::desktop::Config& config)
               << "cursor_position:" << config_.cursor_position << ")";
 
     emit sig_configured();
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopAgentClient::readKeyFrameExtension(const std::string& /* data */)
+{
+    LOG(INFO) << "Key frame requested by client";
+    if (video_encoder_)
+        video_encoder_->setKeyFrameRequired(true);
 }
 
 //--------------------------------------------------------------------------------------------------
