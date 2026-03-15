@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>315</width>
-    <height>502</height>
+    <width>352</width>
+    <height>480</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -48,22 +48,25 @@
      </item>
      <item>
       <property name="text">
-       <string notr="true">Total RX</string>
+       <string notr="true">Total TCP RX/TX</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string notr="true">Total TX</string>
+       <string notr="true">Speed TCP RX/TX</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string notr="true">Speed RX</string>
+       <string notr="true">Total UDP RX/TX</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string notr="true">Speed TX</string>
+       <string>Speed UDP RX/TX</string>
+      </property>
+      <property name="text">
+       <string notr="true"/>
       </property>
      </item>
      <item>
@@ -78,17 +81,7 @@
      </item>
      <item>
       <property name="text">
-       <string notr="true">MIN Video Packet</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string notr="true">MAX Video Packet</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string notr="true">AVG Video Packet</string>
+       <string notr="true">Video Packet MIN/MAX/AVG</string>
       </property>
      </item>
      <item>
@@ -103,17 +96,7 @@
      </item>
      <item>
       <property name="text">
-       <string notr="true">MIN Audio Packet</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string notr="true">MAX Audio Packet</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string notr="true">AVG Audio Packet</string>
+       <string notr="true">Audio Packet MIN/MAC/AVG</string>
       </property>
      </item>
      <item>

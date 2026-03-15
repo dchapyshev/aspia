@@ -249,51 +249,67 @@ void Client::sendServiceMessage(const QByteArray& message, bool udp)
 }
 
 //--------------------------------------------------------------------------------------------------
-qint64 Client::totalRx() const
+qint64 Client::totalTcpRx() const
 {
     if (!tcp_channel_)
-    {
-        LOG(ERROR) << "totalRx called but channel not initialized";
         return 0;
-    }
-
     return tcp_channel_->totalRx();
 }
 
 //--------------------------------------------------------------------------------------------------
-qint64 Client::totalTx() const
+qint64 Client::totalTcpTx() const
 {
     if (!tcp_channel_)
-    {
-        LOG(ERROR) << "totalTx called but channel not initialized";
         return 0;
-    }
-
     return tcp_channel_->totalTx();
 }
 
 //--------------------------------------------------------------------------------------------------
-int Client::speedRx()
+int Client::speedTcpRx()
 {
     if (!tcp_channel_)
-    {
-        LOG(ERROR) << "speedRx called but channel not initialized";
         return 0;
-    }
-
     return tcp_channel_->speedRx();
 }
 
 //--------------------------------------------------------------------------------------------------
-int Client::speedTx()
+int Client::speedTcpTx()
 {
     if (!tcp_channel_)
-    {
-        LOG(ERROR) << "speedTx called but channel not initialized";
         return 0;
-    }
-
     return tcp_channel_->speedTx();
+}
+
+//--------------------------------------------------------------------------------------------------
+qint64 Client::totalUdpRx() const
+{
+    if (!udp_channel_)
+        return 0;
+    return udp_channel_->totalRx();
+}
+
+//--------------------------------------------------------------------------------------------------
+qint64 Client::totalUdpTx() const
+{
+    if (!udp_channel_)
+        return 0;
+    return udp_channel_->totalTx();
+}
+
+//--------------------------------------------------------------------------------------------------
+int Client::speedUdpRx()
+{
+    if (!udp_channel_)
+        return 0;
+    return udp_channel_->speedRx();
+}
+
+//--------------------------------------------------------------------------------------------------
+int Client::speedUdpTx()
+{
+    if (!udp_channel_)
+        return 0;
+    return udp_channel_->speedTx();
 }
 
 //--------------------------------------------------------------------------------------------------

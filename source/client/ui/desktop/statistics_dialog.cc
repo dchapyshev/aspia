@@ -77,80 +77,52 @@ void StatisticsDialog::setMetrics(const ClientDesktop::Metrics& metrics)
                 item->setText(1, duration_.addSecs(
                     static_cast<int>(metrics.duration.count())).toString());
                 break;
-
             case 1:
-                item->setText(1, sizeToString(metrics.total_rx));
+                item->setText(1, sizeToString(metrics.total_tcp_rx) + " / " + sizeToString(metrics.total_tcp_tx));
                 break;
-
             case 2:
-                item->setText(1, sizeToString(metrics.total_tx));
+                item->setText(1, speedToString(metrics.speed_tcp_rx) + " / " + speedToString(metrics.speed_tcp_tx));
                 break;
-
             case 3:
-                item->setText(1, speedToString(metrics.speed_rx));
+                item->setText(1, sizeToString(metrics.total_udp_rx) + " / " + sizeToString(metrics.total_udp_tx));
                 break;
-
             case 4:
-                item->setText(1, speedToString(metrics.speed_tx));
+                item->setText(1, speedToString(metrics.speed_udp_rx) + " / " + speedToString(metrics.speed_udp_tx));
                 break;
-
             case 5:
                 item->setText(1, QString::number(metrics.video_packet_count));
                 break;
-
             case 6:
                 item->setText(1, QString("%1 / %2")
                               .arg(metrics.video_pause_count)
                               .arg(metrics.video_resume_count));
                 break;
-
             case 7:
-                item->setText(1, sizeToString(metrics.min_video_packet));
+                item->setText(1, sizeToString(metrics.min_video_packet) + " / " +
+                    sizeToString(metrics.max_video_packet) + " / " + sizeToString(metrics.avg_video_packet));
                 break;
-
             case 8:
-                item->setText(1, sizeToString(metrics.max_video_packet));
-                break;
-
-            case 9:
-                item->setText(1, sizeToString(metrics.avg_video_packet));
-                break;
-
-            case 10:
                 item->setText(1, QString::number(metrics.audio_packet_count));
                 break;
-
-            case 11:
+            case 9:
                 item->setText(1, QString("%1 / %2")
                               .arg(metrics.audio_pause_count)
                               .arg(metrics.audio_resume_count));
                 break;
-
-            case 12:
-                item->setText(1, sizeToString(metrics.min_audio_packet));
+            case 10:
+                item->setText(1, sizeToString(metrics.min_audio_packet) + " / " +
+                    sizeToString(metrics.max_audio_packet) + sizeToString(metrics.avg_audio_packet));
                 break;
-
-            case 13:
-                item->setText(1, sizeToString(metrics.max_audio_packet));
-                break;
-
-            case 14:
-                item->setText(1, sizeToString(metrics.avg_audio_packet));
-                break;
-
-            case 15:
+            case 11:
                 item->setText(1, capturerToString(metrics.video_capturer_type));
                 break;
-
-            case 16:
+            case 12:
                 item->setText(1, QString::number(metrics.fps));
                 break;
-
-            case 17:
+            case 13:
                 item->setText(1, QString::number(metrics.send_mouse));
                 break;
-
-            case 18:
+            case 14:
             {
                 int total_mouse = metrics.send_mouse + metrics.drop_mouse;
                 int percentage = 0;
@@ -161,36 +133,28 @@ void StatisticsDialog::setMetrics(const ClientDesktop::Metrics& metrics)
                 item->setText(1, QString("%1 (%2 %)").arg(metrics.drop_mouse).arg(percentage));
             }
             break;
-
-            case 19:
+            case 15:
                 item->setText(1, QString::number(metrics.send_key));
                 break;
-
-            case 20:
+            case 16:
                 item->setText(1, QString::number(metrics.send_text));
                 break;
-
-            case 21:
+            case 17:
                 item->setText(1, QString::number(metrics.read_clipboard));
                 break;
-
-            case 22:
+            case 18:
                 item->setText(1, QString::number(metrics.send_clipboard));
                 break;
-
-            case 23:
+            case 19:
                 item->setText(1, QString::number(metrics.cursor_shape_count));
                 break;
-
-            case 24:
+            case 20:
                 item->setText(1, QString::number(metrics.cursor_taken_from_cache));
                 break;
-
-            case 25:
+            case 21:
                 item->setText(1, QString::number(metrics.cursor_cached));
                 break;
-
-            case 26:
+            case 22:
                 item->setText(1, QString::number(metrics.cursor_pos_count));
                 break;
         }

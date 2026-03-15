@@ -35,6 +35,10 @@ const std::chrono::seconds kKeepAliveInterval { 30 };
 const std::chrono::seconds kKeepAliveTimeout { 30 };
 const quint32 kMaxMessageSize = 7 * 1024 * 1024; // 7 MB
 const int kWriteQueueReservedSize = 128;
+const int kReadBufferReserveSize = 512 * 1024;
+const int kWriteBufferReserveSize = 2 * 1024 * 1024;
+const int kDecryptBufferReserveSize = 2 * 1024 * 1024;
+const int kReadBufferCompactThreshold = 64 * 1024;
 
 //--------------------------------------------------------------------------------------------------
 void resizeBuffer(QByteArray* buffer, qint64 size)
@@ -46,6 +50,15 @@ void resizeBuffer(QByteArray* buffer, qint64 size)
     }
 
     buffer->resize(size);
+}
+
+//--------------------------------------------------------------------------------------------------
+int calculateSpeed(int last_speed, const std::chrono::milliseconds& duration, qint64 bytes)
+{
+    static const double kAlpha = 0.1;
+    return static_cast<int>(
+        (kAlpha * ((1000.0 / static_cast<double>(duration.count())) * static_cast<double>(bytes))) +
+        ((1.0 - kAlpha) * static_cast<double>(last_speed)));
 }
 
 } // namespace
@@ -124,9 +137,9 @@ void UdpChannel::setPaused(bool enable)
 }
 
 //--------------------------------------------------------------------------------------------------
-void UdpChannel::addWriteTask(quint8 type, quint8 param, const QByteArray& data)
+void UdpChannel::addWriteTask(quint8 type, quint8 param, QByteArray data)
 {
-    write_queue_.emplace_back(type, param, data);
+    write_queue_.emplace_back(type, param, std::move(data));
 
     if (write_queue_.size() == 1)
         doWrite();
@@ -176,12 +189,12 @@ void UdpChannel::doWrite()
         }
         else
         {
-            memcpy(write_buffer_.data() + sizeof(Header),
-                   source_buffer.constData(), source_buffer.size());
+            memcpy(write_buffer_.data() + sizeof(Header), source_buffer.constData(), source_buffer.size());
         }
 
-        if (!kcp_socket_->send(write_buffer_.constData(),
-                                static_cast<int>(write_buffer_.size())))
+        addTxBytes(write_buffer_.size());
+
+        if (!kcp_socket_->send(write_buffer_.constData(), static_cast<int>(write_buffer_.size())))
         {
             onErrorOccurred(FROM_HERE, std::error_code());
             return;
@@ -204,11 +217,40 @@ void UdpChannel::setDecryptor(std::unique_ptr<MessageDecryptor> decryptor)
 }
 
 //--------------------------------------------------------------------------------------------------
+int UdpChannel::speedRx()
+{
+    TimePoint current_time = Clock::now();
+    Milliseconds duration = std::chrono::duration_cast<Milliseconds>(current_time - begin_time_rx_);
+
+    speed_rx_ = calculateSpeed(speed_rx_, duration, bytes_rx_);
+    begin_time_rx_ = current_time;
+    bytes_rx_ = 0;
+
+    return speed_rx_;
+}
+
+//--------------------------------------------------------------------------------------------------
+int UdpChannel::speedTx()
+{
+    TimePoint current_time = Clock::now();
+    Milliseconds duration = std::chrono::duration_cast<Milliseconds>(current_time - begin_time_tx_);
+
+    speed_tx_ = calculateSpeed(speed_tx_, duration, bytes_tx_);
+    begin_time_tx_ = current_time;
+    bytes_tx_ = 0;
+
+    return speed_tx_;
+}
+
+//--------------------------------------------------------------------------------------------------
 void UdpChannel::init()
 {
     static_assert(sizeof(Header) == 8, "Header must be 8 bytes without padding");
 
     write_queue_.reserve(kWriteQueueReservedSize);
+    read_buffer_.reserve(kReadBufferReserveSize);
+    write_buffer_.reserve(kWriteBufferReserveSize);
+    decrypt_buffer_.reserve(kDecryptBufferReserveSize);
 
     connect(kcp_socket_, &KcpSocket::sig_connected, this, &UdpChannel::onKcpConnected);
     connect(kcp_socket_, &KcpSocket::sig_dataReceived, this, &UdpChannel::onKcpDataReceived);
@@ -261,9 +303,10 @@ void UdpChannel::onKcpConnected()
 }
 
 //--------------------------------------------------------------------------------------------------
-void UdpChannel::onKcpDataReceived(const QByteArray& data)
+void UdpChannel::onKcpDataReceived(const char* data, int size)
 {
-    read_buffer_.append(data);
+    read_buffer_.append(data, size);
+    addRxBytes(size);
 
     if (!paused_)
         parseMessages();
@@ -272,19 +315,17 @@ void UdpChannel::onKcpDataReceived(const QByteArray& data)
 //--------------------------------------------------------------------------------------------------
 bool UdpChannel::parseMessages()
 {
-    // Parse complete messages from the accumulated read buffer.
-    int consumed = 0;
-
+    // Parse complete messages using offset tracking to avoid O(n) memmove on each call.
     while (true)
     {
-        int available = read_buffer_.size() - consumed;
+        int available = read_buffer_.size() - read_offset_;
         int total_size = static_cast<int>(sizeof(Header));
 
         if (available < total_size)
             break;
 
         Header header;
-        memcpy(&header, read_buffer_.constData() + consumed, sizeof(Header));
+        memcpy(&header, read_buffer_.constData() + read_offset_, sizeof(Header));
 
         if (header.length > kMaxMessageSize)
         {
@@ -298,18 +339,21 @@ bool UdpChannel::parseMessages()
         if (available < total_size)
             break;
 
-        if (!onMessageReceived(consumed))
+        if (!onMessageReceived(read_offset_))
             return false;
 
-        consumed += total_size;
+        read_offset_ += total_size;
 
         if (paused_)
             break;
     }
 
-    // Remove consumed data from the read buffer.
-    if (consumed > 0)
-        read_buffer_.remove(0, consumed);
+    // Compact the buffer when consumed data exceeds threshold to limit memory waste.
+    if (read_offset_ > kReadBufferCompactThreshold)
+    {
+        read_buffer_.remove(0, read_offset_);
+        read_offset_ = 0;
+    }
 
     return true;
 }
@@ -342,20 +386,17 @@ bool UdpChannel::onMessageReceived(int offset)
 
     if (header.type == USER_DATA)
     {
-        emit sig_messageReceived(header.param1,
-                                 QByteArray(payload_data, payload_size));
+        emit sig_messageReceived(header.param1, QByteArray(payload_data, payload_size));
     }
     else if (header.type == KEEP_ALIVE)
     {
-        QByteArray payload(payload_data, payload_size);
-
         if (header.param1 & KEEP_ALIVE_PING)
         {
-            addWriteTask(KEEP_ALIVE, KEEP_ALIVE_PONG, payload);
+            addWriteTask(KEEP_ALIVE, KEEP_ALIVE_PONG, QByteArray(payload_data, payload_size));
             return true;
         }
 
-        if (payload.size() != keep_alive_counter_.size())
+        if (payload_size != keep_alive_counter_.size())
         {
             LOG(ERROR) << "Invalid keep-alive payload size";
             onErrorOccurred(FROM_HERE, std::error_code());
@@ -363,7 +404,7 @@ bool UdpChannel::onMessageReceived(int offset)
         }
 
         // Pong must contain the same data as ping.
-        if (payload != keep_alive_counter_)
+        if (memcmp(payload_data, keep_alive_counter_.constData(), payload_size) != 0)
         {
             LOG(ERROR) << "Keep-alive counter mismatch";
             onErrorOccurred(FROM_HERE, std::error_code());
@@ -400,6 +441,20 @@ void UdpChannel::onKeepAliveTimer()
         LOG(ERROR) << "Keep-alive timeout, closing connection";
         onErrorOccurred(FROM_HERE, std::error_code());
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void UdpChannel::addTxBytes(qint64 bytes_count)
+{
+    bytes_tx_ += bytes_count;
+    total_tx_ += bytes_count;
+}
+
+//--------------------------------------------------------------------------------------------------
+void UdpChannel::addRxBytes(qint64 bytes_count)
+{
+    bytes_rx_ += bytes_count;
+    total_rx_ += bytes_count;
 }
 
 } // namespace base

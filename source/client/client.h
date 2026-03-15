@@ -87,10 +87,14 @@ protected:
     void sendServiceMessage(const QByteArray& message, bool udp = false);
 
     // Methods for obtaining network metrics.
-    qint64 totalRx() const;
-    qint64 totalTx() const;
-    int speedRx();
-    int speedTx();
+    qint64 totalTcpRx() const;
+    qint64 totalTcpTx() const;
+    int speedTcpRx();
+    int speedTcpTx();
+    qint64 totalUdpRx() const;
+    qint64 totalUdpTx() const;
+    int speedUdpRx();
+    int speedUdpTx();
 
 private slots:
     void onTcpConnected();

@@ -54,6 +54,11 @@ public:
     void setEncryptor(std::unique_ptr<MessageEncryptor> encryptor);
     void setDecryptor(std::unique_ptr<MessageDecryptor> decryptor);
 
+    qint64 totalRx() const { return total_rx_; }
+    qint64 totalTx() const { return total_tx_; }
+    int speedRx();
+    int speedTx();
+
 signals:
     void sig_connected();
     void sig_errorOccurred();
@@ -64,6 +69,11 @@ protected:
     UdpChannel(asio::ip::udp::socket&& socket, QObject* parent);
 
 private:
+    using Clock = std::chrono::steady_clock;
+    using TimePoint = std::chrono::time_point<Clock>;
+    using Milliseconds = std::chrono::milliseconds;
+    using Seconds = std::chrono::seconds;
+
     struct Header
     {
         quint8 type;
@@ -94,16 +104,18 @@ private:
     class WriteTask
     {
     public:
-        WriteTask(quint8 type, quint8 param, const QByteArray& data)
+        WriteTask(quint8 type, quint8 param, QByteArray data)
             : type_(type),
               param_(param),
-              data_(data)
+              data_(std::move(data))
         {
             // Nothing
         }
 
         WriteTask(const WriteTask& other) = default;
         WriteTask& operator=(const WriteTask& other) = default;
+        WriteTask(WriteTask&& other) = default;
+        WriteTask& operator=(WriteTask&& other) = default;
 
         quint8 type() const { return type_; }
         quint8 param() const { return param_; }
@@ -117,13 +129,15 @@ private:
 
     void init();
     void onErrorOccurred(const Location& location, const std::error_code& error_code);
-    void addWriteTask(quint8 type, quint8 param, const QByteArray& data);
+    void addWriteTask(quint8 type, quint8 param, QByteArray data);
     void doWrite();
     void onKcpConnected();
-    void onKcpDataReceived(const QByteArray& data);
+    void onKcpDataReceived(const char* data, int size);
     bool parseMessages();
     bool onMessageReceived(int offset);
     void onKeepAliveTimer();
+    void addTxBytes(qint64 bytes_count);
+    void addRxBytes(qint64 bytes_count);
 
     KcpSocket* kcp_socket_ = nullptr;
     QTimer* keep_alive_timer_;
@@ -138,10 +152,22 @@ private:
 
     QByteArray read_buffer_;
     QByteArray decrypt_buffer_;
+    int read_offset_ = 0;
 
     bool connected_ = false;
     bool paused_ = true;
     bool client_connect_ = false;
+
+    qint64 total_tx_ = 0;
+    qint64 total_rx_ = 0;
+
+    TimePoint begin_time_tx_;
+    qint64 bytes_tx_ = 0;
+    int speed_tx_ = 0;
+
+    TimePoint begin_time_rx_;
+    qint64 bytes_rx_ = 0;
+    int speed_rx_ = 0;
 
     Q_DISABLE_COPY_MOVE(UdpChannel)
 };

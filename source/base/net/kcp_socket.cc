@@ -31,9 +31,11 @@ namespace base {
 namespace {
 
 const quint32 kKcpConv = 1;
-const int kKcpUpdateIntervalMs = 10;
-const int kKcpMtu = 1200;
+const int kKcpInitialUpdateMs = 10;
+const int kKcpMtu = 1400;
 const int kMaxKcpChunk = 120 * (kKcpMtu - 24);
+const int kKcpWindowSize = 512;
+const int kKcpReadBufferReserve = 512 * 1024;
 const int kUdpSendQueueReservedSize = 256;
 
 //--------------------------------------------------------------------------------------------------
@@ -123,9 +125,11 @@ KcpSocket::~KcpSocket()
 void KcpSocket::init()
 {
     udp_send_queue_.reserve(kUdpSendQueueReservedSize);
+    kcp_read_buffer_.reserve(kKcpReadBufferReserve);
 
     update_timer_ = new QTimer(this);
     update_timer_->setTimerType(Qt::PreciseTimer);
+    update_timer_->setSingleShot(true);
     connect(update_timer_, &QTimer::timeout, this, &KcpSocket::doKcpUpdate);
 
     kcp_ = ikcp_create(kKcpConv, this);
@@ -139,12 +143,15 @@ void KcpSocket::init()
     kcp_->stream = 1;
 
     // Set KCP to fast mode: nodelay=1, interval=10ms, fast resend=2, no congestion control.
-    ikcp_nodelay(kcp_, 1, kKcpUpdateIntervalMs, 2, 1);
+    ikcp_nodelay(kcp_, 1, kKcpInitialUpdateMs, 2, 1);
     ikcp_setmtu(kcp_, kKcpMtu);
-    ikcp_wndsize(kcp_, 128, 128);
+    ikcp_wndsize(kcp_, kKcpWindowSize, kKcpWindowSize);
+
+    // Lower minimum RTO for LAN/fast networks.
+    kcp_->rx_minrto = 10;
 
     // Start the KCP update timer. Reading will begin automatically once the socket is open.
-    update_timer_->start(kKcpUpdateIntervalMs);
+    update_timer_->start(kKcpInitialUpdateMs);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -333,7 +340,7 @@ void KcpSocket::readAvailableData()
     if (!kcp_)
         return;
 
-    QByteArray data;
+    int total_read = 0;
 
     while (true)
     {
@@ -341,22 +348,19 @@ void KcpSocket::readAvailableData()
         if (peek_size <= 0)
             break;
 
-        int offset = data.size();
-        data.resize(offset + peek_size);
+        int required = total_read + peek_size;
+        if (kcp_read_buffer_.size() < required)
+            kcp_read_buffer_.resize(required);
 
-        int recv_size = ikcp_recv(kcp_, data.data() + offset, peek_size);
+        int recv_size = ikcp_recv(kcp_, kcp_read_buffer_.data() + total_read, peek_size);
         if (recv_size <= 0)
-        {
-            data.resize(offset);
             break;
-        }
 
-        if (recv_size != peek_size)
-            data.resize(offset + recv_size);
+        total_read += recv_size;
     }
 
-    if (!data.isEmpty())
-        emit sig_dataReceived(data);
+    if (total_read > 0)
+        emit sig_dataReceived(kcp_read_buffer_.constData(), total_read);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -378,11 +382,12 @@ void KcpSocket::doUdpSend()
 
     udp_sending_ = true;
 
-    QByteArray data = std::move(udp_send_queue_.front());
+    // Move into member to keep data alive during async_send without lambda capture copy.
+    udp_send_active_ = std::move(udp_send_queue_.front());
     udp_send_queue_.pop_front();
 
-    socket_.async_send(asio::buffer(data.constData(), data.size()),
-        [this, data](const std::error_code& error_code, size_t /* bytes_transferred */)
+    socket_.async_send(asio::buffer(udp_send_active_.constData(), udp_send_active_.size()),
+        [this](const std::error_code& error_code, size_t /* bytes_transferred */)
     {
         if (error_code)
         {
@@ -404,7 +409,15 @@ void KcpSocket::doKcpUpdate()
     if (!kcp_ || !socket_.is_open())
         return;
 
-    ikcp_update(kcp_, currentTimeMs());
+    quint32 now = currentTimeMs();
+    ikcp_update(kcp_, now);
+
+    // Schedule next update adaptively instead of fixed interval.
+    quint32 next = ikcp_check(kcp_, now);
+    int delay = static_cast<int>(next - now);
+    if (delay < 1)
+        delay = 1;
+    update_timer_->start(delay);
 
     // Auto-start reading once the socket is open.
     if (!reading_)

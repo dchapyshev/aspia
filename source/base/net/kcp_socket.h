@@ -49,7 +49,7 @@ public:
 
 signals:
     void sig_connected();
-    void sig_dataReceived(const QByteArray& data);
+    void sig_dataReceived(const char* data, int size);
     void sig_errorOccurred();
 
 private:
@@ -69,9 +69,12 @@ private:
     QTimer* update_timer_;
 
     QQueue<QByteArray> udp_send_queue_;
+    QByteArray udp_send_active_;
     bool udp_sending_ = false;
     bool connected_ = false;
     bool reading_ = false;
+
+    QByteArray kcp_read_buffer_;
 
     static const int kRecvBufferSize = 65536;
     std::array<char, kRecvBufferSize> recv_buffer_;

@@ -56,10 +56,14 @@ public:
     struct Metrics
     {
         std::chrono::seconds duration;
-        qint64 total_rx = 0;
-        qint64 total_tx = 0;
-        int speed_rx = 0;
-        int speed_tx = 0;
+        qint64 total_tcp_rx = 0;
+        qint64 total_tcp_tx = 0;
+        int speed_tcp_rx = 0;
+        int speed_tcp_tx = 0;
+        qint64 total_udp_rx = 0;
+        qint64 total_udp_tx = 0;
+        int speed_udp_rx = 0;
+        int speed_udp_tx = 0;
         qint64 video_packet_count = 0;
         qint64 video_pause_count = 0;
         qint64 video_resume_count = 0;

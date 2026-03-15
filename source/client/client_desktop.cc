@@ -427,10 +427,14 @@ void ClientDesktop::onMetricsRequest()
 
     Metrics metrics;
     metrics.duration = session_duration;
-    metrics.total_rx = totalRx();
-    metrics.total_tx = totalTx();
-    metrics.speed_rx = speedRx();
-    metrics.speed_tx = speedTx();
+    metrics.total_tcp_rx = totalTcpRx();
+    metrics.total_tcp_tx = totalTcpTx();
+    metrics.speed_tcp_rx = speedTcpRx();
+    metrics.speed_tcp_tx = speedTcpTx();
+    metrics.total_udp_rx = totalUdpRx();
+    metrics.total_udp_tx = totalUdpTx();
+    metrics.speed_udp_rx = speedUdpRx();
+    metrics.speed_udp_tx = speedUdpTx();
 
     if (min_video_packet_ != std::numeric_limits<size_t>::max())
         metrics.min_video_packet = min_video_packet_;
