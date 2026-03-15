@@ -21,6 +21,9 @@
 
 #include <QObject>
 #include <QQueue>
+#include <QString>
+
+#include <array>
 
 #include <asio/ip/udp.hpp>
 
@@ -30,43 +33,48 @@ class QTimer;
 
 namespace base {
 
-class Location;
-
 class KcpSocket final : public QObject
 {
     Q_OBJECT
 
 public:
-    KcpSocket(asio::ip::udp::socket& socket, QObject* parent);
+    explicit KcpSocket(QObject* parent = nullptr);
+    KcpSocket(asio::ip::udp::socket&& socket, QObject* parent = nullptr);
     ~KcpSocket() final;
 
-    void start();
-    void stop();
-
+    void connectTo(const QString& address, quint16 port);
     bool send(const char* data, int size);
-    int input(const char* data, int size);
-    int peekSize();
-    int recv(char* buf, int size);
-
-    void setConnected(bool connected);
-    void flushUdpQueue();
+    void close();
+    quint16 port() const;
 
 signals:
+    void sig_connected();
+    void sig_dataReceived(const QByteArray& data);
     void sig_errorOccurred();
 
 private:
+    void init();
+
     static int kcpOutputCallback(const char* buf, int len, IKCPCB* kcp, void* user);
 
+    void doRead();
+    void readAvailableData();
     void doUdpSend();
     void doKcpUpdate();
 
-    asio::ip::udp::socket& socket_;
+    asio::ip::udp::resolver resolver_;
+    asio::ip::udp::socket socket_;
+    asio::ip::udp::endpoint remote_endpoint_;
     IKCPCB* kcp_ = nullptr;
     QTimer* update_timer_;
 
     QQueue<QByteArray> udp_send_queue_;
     bool udp_sending_ = false;
     bool connected_ = false;
+    bool reading_ = false;
+
+    static const int kRecvBufferSize = 65536;
+    std::array<char, kRecvBufferSize> recv_buffer_;
 
     Q_DISABLE_COPY_MOVE(KcpSocket)
 };

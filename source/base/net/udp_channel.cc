@@ -20,9 +20,6 @@
 
 #include <QTimer>
 
-#include <asio/connect.hpp>
-
-#include "base/asio_event_dispatcher.h"
 #include "base/location.h"
 #include "base/logging.h"
 #include "base/crypto/large_number_increment.h"
@@ -38,33 +35,6 @@ const std::chrono::seconds kKeepAliveInterval { 30 };
 const std::chrono::seconds kKeepAliveTimeout { 30 };
 const quint32 kMaxMessageSize = 7 * 1024 * 1024; // 7 MB
 const int kWriteQueueReservedSize = 128;
-
-//--------------------------------------------------------------------------------------------------
-QString addressToString(const asio::ip::address& address)
-{
-    return QString::fromLocal8Bit(address.to_string());
-}
-
-//--------------------------------------------------------------------------------------------------
-QString endpointToString(const asio::ip::udp::endpoint& endpoint)
-{
-    return addressToString(endpoint.address()) + ':' + QString::number(endpoint.port());
-}
-
-//--------------------------------------------------------------------------------------------------
-QStringList endpointsToString(const asio::ip::udp::resolver::results_type& endpoints)
-{
-    if (endpoints.empty())
-        return QStringList();
-
-    QStringList list;
-    list.reserve(endpoints.size());
-
-    for (auto it = endpoints.begin(), it_end = endpoints.end(); it != it_end; ++it)
-        list.emplace_back(endpointToString(it->endpoint()));
-
-    return list;
-}
 
 //--------------------------------------------------------------------------------------------------
 void resizeBuffer(QByteArray* buffer, qint64 size)
@@ -83,8 +53,7 @@ void resizeBuffer(QByteArray* buffer, qint64 size)
 //--------------------------------------------------------------------------------------------------
 UdpChannel::UdpChannel(QObject* parent)
     : QObject(parent),
-      resolver_(AsioEventDispatcher::ioContext()),
-      socket_(AsioEventDispatcher::ioContext())
+      kcp_socket_(new KcpSocket(this))
 {
     init();
 }
@@ -92,27 +61,8 @@ UdpChannel::UdpChannel(QObject* parent)
 //--------------------------------------------------------------------------------------------------
 UdpChannel::UdpChannel(asio::ip::udp::socket&& socket, QObject* parent)
     : QObject(parent),
-      resolver_(AsioEventDispatcher::ioContext()),
-      socket_(std::move(socket))
+      kcp_socket_(new KcpSocket(std::move(socket), this))
 {
-    connected_ = false;
-
-    // Reopen the socket on the same port to clear the STUN server association.
-    // A connected UDP socket filters incoming packets by peer address, so we need
-    // a fresh unconnected socket to receive from any peer.
-    std::error_code ec;
-    asio::ip::udp::endpoint local_ep = socket_.local_endpoint(ec);
-    if (!ec)
-    {
-        socket_.close(ec);
-        socket_.open(asio::ip::udp::v4(), ec);
-        if (!ec)
-            socket_.bind(local_ep, ec);
-    }
-
-    if (ec)
-        LOG(ERROR) << "Failed to reopen UDP socket:" << ec;
-
     init();
 }
 
@@ -120,45 +70,14 @@ UdpChannel::UdpChannel(asio::ip::udp::socket&& socket, QObject* parent)
 UdpChannel::~UdpChannel()
 {
     keep_alive_timer_->stop();
-
-    resolver_.cancel();
-
-    std::error_code ignored_code;
-    socket_.cancel(ignored_code);
-    socket_.close(ignored_code);
+    kcp_socket_->close();
 }
 
 //--------------------------------------------------------------------------------------------------
 void UdpChannel::connectTo(const QString& address, quint16 port)
 {
-    resolver_.async_resolve(address.toLocal8Bit().toStdString(), std::to_string(port),
-        [this](const std::error_code& error_code, const asio::ip::udp::resolver::results_type& endpoints)
-    {
-        if (error_code)
-        {
-            if (error_code != asio::error::operation_aborted)
-                onErrorOccurred(FROM_HERE, error_code);
-            return;
-        }
-
-        LOG(INFO) << "Resolved endpoints:" << endpointsToString(endpoints);
-
-        asio::async_connect(socket_, endpoints,
-            [this](const std::error_code& error_code, const asio::ip::udp::endpoint& endpoint)
-        {
-            if (error_code)
-            {
-                if (error_code != asio::error::operation_aborted)
-                    onErrorOccurred(FROM_HERE, error_code);
-                return;
-            }
-
-            LOG(INFO) << "Connected to" << endpointToString(endpoint);
-            connected_ = true;
-            kcp_socket_->setConnected(true);
-            emit sig_connected();
-        });
-    });
+    client_connect_ = true;
+    kcp_socket_->connectTo(address, port);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -176,15 +95,7 @@ bool UdpChannel::isConnected() const
 //--------------------------------------------------------------------------------------------------
 quint16 UdpChannel::port() const
 {
-    std::error_code error_code;
-    asio::ip::udp::endpoint endpoint = socket_.local_endpoint(error_code);
-    if (error_code)
-    {
-        LOG(ERROR) << "Unable to get local endpoint:" << error_code;
-        return 0;
-    }
-
-    return endpoint.port();
+    return kcp_socket_->port();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -197,12 +108,8 @@ void UdpChannel::setPaused(bool enable)
     if (paused_)
     {
         keep_alive_timer_->stop();
-        kcp_socket_->stop();
         return;
     }
-
-    // KCP update timer is needed to process incoming data even before connected.
-    kcp_socket_->start();
 
     if (connected_)
     {
@@ -212,12 +119,8 @@ void UdpChannel::setPaused(bool enable)
     }
 
     // Process any data that was accumulated while paused.
-    if (!processKcpRecv())
+    if (!parseMessages())
         return;
-
-    // Resume reading if no read operation is in-flight.
-    if (!reading_)
-        doRead();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -307,7 +210,8 @@ void UdpChannel::init()
 
     write_queue_.reserve(kWriteQueueReservedSize);
 
-    kcp_socket_ = new KcpSocket(socket_, this);
+    connect(kcp_socket_, &KcpSocket::sig_connected, this, &UdpChannel::onKcpConnected);
+    connect(kcp_socket_, &KcpSocket::sig_dataReceived, this, &UdpChannel::onKcpDataReceived);
     connect(kcp_socket_, &KcpSocket::sig_errorOccurred, this, [this]()
     {
         onErrorOccurred(FROM_HERE, std::error_code());
@@ -330,119 +234,44 @@ void UdpChannel::onErrorOccurred(const Location& location, const std::error_code
         LOG(ERROR) << "Error occurred from" << location.toString();
 
     keep_alive_timer_->stop();
-    kcp_socket_->stop();
-
-    resolver_.cancel();
-
-    std::error_code ignored_code;
-    socket_.cancel(ignored_code);
-    socket_.close(ignored_code);
+    kcp_socket_->close();
 
     connected_ = false;
-    kcp_socket_->setConnected(false);
     emit sig_errorOccurred();
 }
 
 //--------------------------------------------------------------------------------------------------
-void UdpChannel::doRead()
+void UdpChannel::onKcpConnected()
 {
-    reading_ = true;
+    connected_ = true;
 
-    auto read_handler = [this](const std::error_code& error_code, size_t bytes_transferred)
+    // Start keep-alive only if already unpaused.
+    if (!paused_)
     {
-        reading_ = false;
-
-        if (error_code)
-        {
-            if (error_code != asio::error::operation_aborted)
-                onErrorOccurred(FROM_HERE, error_code);
-            return;
-        }
-
-        if (!connected_)
-        {
-            // Connect to the actual peer now that we know its address.
-            std::error_code connect_ec;
-            socket_.connect(remote_endpoint_, connect_ec);
-            if (connect_ec)
-            {
-                onErrorOccurred(FROM_HERE, connect_ec);
-                return;
-            }
-
-            LOG(INFO) << "Peer connected:" << endpointToString(remote_endpoint_);
-            connected_ = true;
-            kcp_socket_->setConnected(true);
-
-            // Now that we're connected, start keep-alive.
-            keep_alive_timer_type_ = KEEP_ALIVE_INTERVAL;
-            keep_alive_timer_->start(kKeepAliveInterval);
-
-            // Flush any UDP packets that were buffered while waiting for the peer.
-            kcp_socket_->flushUdpQueue();
-        }
-
-        if (!kcp_socket_)
-            return;
-
-        int ret = kcp_socket_->input(recv_buffer_.data(), static_cast<int>(bytes_transferred));
-        if (ret < 0)
-        {
-            LOG(ERROR) << "ikcp_input failed with code:" << ret;
-            onErrorOccurred(FROM_HERE, std::error_code());
-            return;
-        }
-
-        if (paused_)
-            return;
-
-        if (!processKcpRecv())
-            return;
-
-        // Continue reading.
-        doRead();
-    };
-
-    if (connected_)
-    {
-        socket_.async_receive(
-            asio::buffer(recv_buffer_.data(), recv_buffer_.size()), read_handler);
+        keep_alive_timer_type_ = KEEP_ALIVE_INTERVAL;
+        keep_alive_timer_->start(kKeepAliveInterval);
     }
-    else
+
+    // Emit sig_connected only for client-initiated connections (connectTo path).
+    if (client_connect_)
     {
-        socket_.async_receive_from(
-            asio::buffer(recv_buffer_.data(), recv_buffer_.size()),
-            remote_endpoint_, read_handler);
+        client_connect_ = false;
+        emit sig_connected();
     }
 }
 
 //--------------------------------------------------------------------------------------------------
-bool UdpChannel::processKcpRecv()
+void UdpChannel::onKcpDataReceived(const QByteArray& data)
 {
-    if (!kcp_socket_)
-        return false;
+    read_buffer_.append(data);
 
-    // Read all available data from KCP and append to the read buffer.
-    while (true)
-    {
-        int peek_size = kcp_socket_->peekSize();
-        if (peek_size <= 0)
-            break;
+    if (!paused_)
+        parseMessages();
+}
 
-        int offset = read_buffer_.size();
-        read_buffer_.resize(offset + peek_size);
-
-        int recv_size = kcp_socket_->recv(read_buffer_.data() + offset, peek_size);
-        if (recv_size <= 0)
-        {
-            read_buffer_.resize(offset);
-            break;
-        }
-
-        if (recv_size != peek_size)
-            read_buffer_.resize(offset + recv_size);
-    }
-
+//--------------------------------------------------------------------------------------------------
+bool UdpChannel::parseMessages()
+{
     // Parse complete messages from the accumulated read buffer.
     int consumed = 0;
 

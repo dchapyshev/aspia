@@ -24,7 +24,6 @@
 
 #include <memory>
 
-#include <asio/ip/address.hpp>
 #include <asio/ip/udp.hpp>
 
 class QTimer;
@@ -120,14 +119,11 @@ private:
     void onErrorOccurred(const Location& location, const std::error_code& error_code);
     void addWriteTask(quint8 type, quint8 param, const QByteArray& data);
     void doWrite();
-    void doRead();
-    bool processKcpRecv();
+    void onKcpConnected();
+    void onKcpDataReceived(const QByteArray& data);
+    bool parseMessages();
     bool onMessageReceived(int offset);
     void onKeepAliveTimer();
-
-    asio::ip::udp::resolver resolver_;
-    asio::ip::udp::socket socket_;
-    asio::ip::udp::endpoint remote_endpoint_;
 
     KcpSocket* kcp_socket_ = nullptr;
     QTimer* keep_alive_timer_;
@@ -145,10 +141,7 @@ private:
 
     bool connected_ = false;
     bool paused_ = true;
-    bool reading_ = false;
-
-    static const int kRecvBufferSize = 65536;
-    std::array<char, kRecvBufferSize> recv_buffer_;
+    bool client_connect_ = false;
 
     Q_DISABLE_COPY_MOVE(UdpChannel)
 };

@@ -20,8 +20,10 @@
 
 #include <QTimer>
 
+#include <asio/connect.hpp>
 #include <ikcp.h>
 
+#include "base/asio_event_dispatcher.h"
 #include "base/logging.h"
 
 namespace base {
@@ -42,12 +44,83 @@ quint32 currentTimeMs()
             std::chrono::steady_clock::now().time_since_epoch()).count() & 0xFFFFFFFF);
 }
 
+//--------------------------------------------------------------------------------------------------
+QString addressToString(const asio::ip::address& address)
+{
+    return QString::fromLocal8Bit(address.to_string());
+}
+
+//--------------------------------------------------------------------------------------------------
+QString endpointToString(const asio::ip::udp::endpoint& endpoint)
+{
+    return addressToString(endpoint.address()) + ':' + QString::number(endpoint.port());
+}
+
+//--------------------------------------------------------------------------------------------------
+QStringList endpointsToString(const asio::ip::udp::resolver::results_type& endpoints)
+{
+    if (endpoints.empty())
+        return QStringList();
+
+    QStringList list;
+    list.reserve(endpoints.size());
+
+    for (auto it = endpoints.begin(), it_end = endpoints.end(); it != it_end; ++it)
+        list.emplace_back(endpointToString(it->endpoint()));
+
+    return list;
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-KcpSocket::KcpSocket(asio::ip::udp::socket& socket, QObject* parent)
+KcpSocket::KcpSocket(QObject* parent)
     : QObject(parent),
-      socket_(socket)
+      resolver_(AsioEventDispatcher::ioContext()),
+      socket_(AsioEventDispatcher::ioContext())
+{
+    init();
+}
+
+//--------------------------------------------------------------------------------------------------
+KcpSocket::KcpSocket(asio::ip::udp::socket&& socket, QObject* parent)
+    : QObject(parent),
+      resolver_(AsioEventDispatcher::ioContext()),
+      socket_(std::move(socket))
+{
+    // Reopen the socket on the same port to clear the STUN server association.
+    // A connected UDP socket filters incoming packets by peer address, so we need
+    // a fresh unconnected socket to receive from any peer.
+    std::error_code ec;
+    asio::ip::udp::endpoint local_ep = socket_.local_endpoint(ec);
+    if (!ec)
+    {
+        socket_.close(ec);
+        socket_.open(asio::ip::udp::v4(), ec);
+        if (!ec)
+            socket_.bind(local_ep, ec);
+    }
+
+    if (ec)
+        LOG(ERROR) << "Failed to reopen UDP socket:" << ec;
+
+    init();
+}
+
+//--------------------------------------------------------------------------------------------------
+KcpSocket::~KcpSocket()
+{
+    close();
+
+    if (kcp_)
+    {
+        ikcp_release(kcp_);
+        kcp_ = nullptr;
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void KcpSocket::init()
 {
     udp_send_queue_.reserve(kUdpSendQueueReservedSize);
 
@@ -69,30 +142,47 @@ KcpSocket::KcpSocket(asio::ip::udp::socket& socket, QObject* parent)
     ikcp_nodelay(kcp_, 1, kKcpUpdateIntervalMs, 2, 1);
     ikcp_setmtu(kcp_, kKcpMtu);
     ikcp_wndsize(kcp_, 128, 128);
-}
 
-//--------------------------------------------------------------------------------------------------
-KcpSocket::~KcpSocket()
-{
-    update_timer_->stop();
-
-    if (kcp_)
-    {
-        ikcp_release(kcp_);
-        kcp_ = nullptr;
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-void KcpSocket::start()
-{
+    // Start the KCP update timer. Reading will begin automatically once the socket is open.
     update_timer_->start(kKcpUpdateIntervalMs);
 }
 
 //--------------------------------------------------------------------------------------------------
-void KcpSocket::stop()
+void KcpSocket::connectTo(const QString& address, quint16 port)
 {
-    update_timer_->stop();
+    resolver_.async_resolve(address.toLocal8Bit().toStdString(), std::to_string(port),
+        [this](const std::error_code& error_code, const asio::ip::udp::resolver::results_type& endpoints)
+    {
+        if (error_code)
+        {
+            if (error_code != asio::error::operation_aborted)
+            {
+                LOG(ERROR) << "DNS resolve error:" << error_code;
+                emit sig_errorOccurred();
+            }
+            return;
+        }
+
+        LOG(INFO) << "Resolved endpoints:" << endpointsToString(endpoints);
+
+        asio::async_connect(socket_, endpoints,
+            [this](const std::error_code& error_code, const asio::ip::udp::endpoint& endpoint)
+        {
+            if (error_code)
+            {
+                if (error_code != asio::error::operation_aborted)
+                {
+                    LOG(ERROR) << "Connect error:" << error_code;
+                    emit sig_errorOccurred();
+                }
+                return;
+            }
+
+            LOG(INFO) << "Connected to" << endpointToString(endpoint);
+            connected_ = true;
+            emit sig_connected();
+        });
+    });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -124,43 +214,101 @@ bool KcpSocket::send(const char* data, int size)
 }
 
 //--------------------------------------------------------------------------------------------------
-int KcpSocket::input(const char* data, int size)
+void KcpSocket::close()
 {
-    if (!kcp_)
-        return -1;
+    update_timer_->stop();
+    resolver_.cancel();
 
-    return ikcp_input(kcp_, data, static_cast<long>(size));
+    std::error_code ignored_code;
+    socket_.cancel(ignored_code);
+    socket_.close(ignored_code);
 }
 
 //--------------------------------------------------------------------------------------------------
-int KcpSocket::peekSize()
+quint16 KcpSocket::port() const
 {
-    if (!kcp_)
-        return -1;
+    std::error_code error_code;
+    asio::ip::udp::endpoint endpoint = socket_.local_endpoint(error_code);
+    if (error_code)
+    {
+        LOG(ERROR) << "Unable to get local endpoint:" << error_code;
+        return 0;
+    }
 
-    return ikcp_peeksize(kcp_);
+    return endpoint.port();
 }
 
 //--------------------------------------------------------------------------------------------------
-int KcpSocket::recv(char* buf, int size)
+void KcpSocket::doRead()
 {
-    if (!kcp_)
-        return -1;
+    reading_ = true;
 
-    return ikcp_recv(kcp_, buf, size);
-}
+    auto read_handler = [this](const std::error_code& error_code, size_t bytes_transferred)
+    {
+        reading_ = false;
 
-//--------------------------------------------------------------------------------------------------
-void KcpSocket::setConnected(bool connected)
-{
-    connected_ = connected;
-}
+        if (error_code)
+        {
+            if (error_code != asio::error::operation_aborted)
+            {
+                LOG(ERROR) << "UDP receive error:" << error_code;
+                emit sig_errorOccurred();
+            }
+            return;
+        }
 
-//--------------------------------------------------------------------------------------------------
-void KcpSocket::flushUdpQueue()
-{
-    if (!udp_sending_ && !udp_send_queue_.isEmpty())
-        doUdpSend();
+        if (!connected_)
+        {
+            // Connect to the actual peer now that we know its address.
+            std::error_code connect_ec;
+            socket_.connect(remote_endpoint_, connect_ec);
+            if (connect_ec)
+            {
+                LOG(ERROR) << "Failed to connect to peer:" << connect_ec;
+                emit sig_errorOccurred();
+                return;
+            }
+
+            LOG(INFO) << "Peer connected:" << endpointToString(remote_endpoint_);
+            connected_ = true;
+
+            // Flush any UDP packets that were buffered while waiting for the peer.
+            if (!udp_sending_ && !udp_send_queue_.isEmpty())
+                doUdpSend();
+
+            emit sig_connected();
+        }
+
+        if (!kcp_)
+            return;
+
+        int ret = ikcp_input(kcp_, recv_buffer_.data(), static_cast<int>(bytes_transferred));
+        if (ret < 0)
+        {
+            LOG(ERROR) << "ikcp_input failed with code:" << ret;
+            emit sig_errorOccurred();
+            return;
+        }
+
+        readAvailableData();
+
+        if (!socket_.is_open())
+            return;
+
+        doRead();
+    };
+
+    if (connected_)
+    {
+        socket_.async_receive(
+            asio::buffer(recv_buffer_.data(), recv_buffer_.size()), read_handler);
+    }
+    else
+    {
+        socket_.async_receive_from(
+            asio::buffer(recv_buffer_.data(), recv_buffer_.size()),
+            remote_endpoint_, read_handler);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -177,6 +325,38 @@ int KcpSocket::kcpOutputCallback(const char* buf, int len, IKCPCB* /* kcp */, vo
         self->doUdpSend();
 
     return 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+void KcpSocket::readAvailableData()
+{
+    if (!kcp_)
+        return;
+
+    QByteArray data;
+
+    while (true)
+    {
+        int peek_size = ikcp_peeksize(kcp_);
+        if (peek_size <= 0)
+            break;
+
+        int offset = data.size();
+        data.resize(offset + peek_size);
+
+        int recv_size = ikcp_recv(kcp_, data.data() + offset, peek_size);
+        if (recv_size <= 0)
+        {
+            data.resize(offset);
+            break;
+        }
+
+        if (recv_size != peek_size)
+            data.resize(offset + recv_size);
+    }
+
+    if (!data.isEmpty())
+        emit sig_dataReceived(data);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -221,10 +401,25 @@ void KcpSocket::doUdpSend()
 //--------------------------------------------------------------------------------------------------
 void KcpSocket::doKcpUpdate()
 {
-    if (!kcp_)
+    if (!kcp_ || !socket_.is_open())
         return;
 
     ikcp_update(kcp_, currentTimeMs());
+
+    // Auto-start reading once the socket is open.
+    if (!reading_)
+    {
+        // Detect if the socket was connected externally (client path via async_connect).
+        if (!connected_)
+        {
+            std::error_code ec;
+            socket_.remote_endpoint(ec);
+            if (!ec)
+                connected_ = true;
+        }
+
+        doRead();
+    }
 }
 
 } // namespace base
