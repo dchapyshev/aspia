@@ -333,7 +333,7 @@ void ClientDesktop::onKeyEvent(const proto::desktop::KeyEvent& event)
         return;
 
     outgoing_message_.newMessage().mutable_key_event()->CopyFrom(event);
-    sendSessionMessage(outgoing_message_.serialize(), true);
+    sendSessionMessage(outgoing_message_.serialize());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -343,7 +343,7 @@ void ClientDesktop::onTextEvent(const proto::desktop::TextEvent& event)
         return;
 
     outgoing_message_.newMessage().mutable_text_event()->CopyFrom(event);
-    sendSessionMessage(outgoing_message_.serialize(), true);
+    sendSessionMessage(outgoing_message_.serialize());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -353,7 +353,7 @@ void ClientDesktop::onMouseEvent(const proto::desktop::MouseEvent& event)
         return;
 
     outgoing_message_.newMessage().mutable_mouse_event()->CopyFrom(event);
-    sendSessionMessage(outgoing_message_.serialize(), true);
+    sendSessionMessage(outgoing_message_.serialize());
 }
 
 //--------------------------------------------------------------------------------------------------

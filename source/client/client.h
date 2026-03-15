@@ -83,8 +83,8 @@ protected:
     virtual void onServiceMessageReceived(const QByteArray& buffer) = 0;
 
     // Sends outgoing message.
-    void sendSessionMessage(const QByteArray& message, bool udp = false);
-    void sendServiceMessage(const QByteArray& message, bool udp = false);
+    void sendSessionMessage(const QByteArray& message);
+    void sendServiceMessage(const QByteArray& message);
 
     // Methods for obtaining network metrics.
     qint64 totalTcpRx() const;

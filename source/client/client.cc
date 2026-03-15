@@ -213,7 +213,7 @@ void Client::setSessionState(std::shared_ptr<SessionState> session_state)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::sendSessionMessage(const QByteArray& message, bool udp)
+void Client::sendSessionMessage(const QByteArray& message)
 {
     if (!tcp_channel_)
     {
@@ -221,7 +221,7 @@ void Client::sendSessionMessage(const QByteArray& message, bool udp)
         return;
     }
 
-    if (udp && udp_ready_)
+    if (udp_ready_)
     {
         udp_channel_->send(proto::peer::CHANNEL_ID_0, message);
         return;
@@ -231,7 +231,7 @@ void Client::sendSessionMessage(const QByteArray& message, bool udp)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::sendServiceMessage(const QByteArray& message, bool udp)
+void Client::sendServiceMessage(const QByteArray& message)
 {
     if (!tcp_channel_)
     {
@@ -239,7 +239,7 @@ void Client::sendServiceMessage(const QByteArray& message, bool udp)
         return;
     }
 
-    if (udp && udp_ready_)
+    if (udp_ready_)
     {
         udp_channel_->send(proto::peer::CHANNEL_ID_1, message);
         return;
