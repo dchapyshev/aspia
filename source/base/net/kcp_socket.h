@@ -29,8 +29,6 @@
 
 struct IKCPCB;
 
-class QTimer;
-
 namespace base {
 
 class KcpSocket final : public QObject
@@ -49,8 +47,11 @@ public:
 
 signals:
     void sig_connected();
-    void sig_dataReceived(const char* data, int size);
+    void sig_dataReceived(const char* data, int size); // Only direct connection.
     void sig_errorOccurred();
+
+protected:
+    void timerEvent(QTimerEvent* event) final;
 
 private:
     void init();
@@ -66,7 +67,7 @@ private:
     asio::ip::udp::socket socket_;
     asio::ip::udp::endpoint remote_endpoint_;
     IKCPCB* kcp_ = nullptr;
-    QTimer* update_timer_;
+    int update_timer_id_ = 0;
 
     QQueue<QByteArray> udp_send_queue_;
     QByteArray udp_send_active_;

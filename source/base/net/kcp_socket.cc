@@ -18,7 +18,7 @@
 
 #include "base/net/kcp_socket.h"
 
-#include <QTimer>
+#include <QTimerEvent>
 
 #include <asio/connect.hpp>
 #include <ikcp.h>
@@ -127,11 +127,6 @@ void KcpSocket::init()
     udp_send_queue_.reserve(kUdpSendQueueReservedSize);
     kcp_read_buffer_.reserve(kKcpReadBufferReserve);
 
-    update_timer_ = new QTimer(this);
-    update_timer_->setTimerType(Qt::PreciseTimer);
-    update_timer_->setSingleShot(true);
-    connect(update_timer_, &QTimer::timeout, this, &KcpSocket::doKcpUpdate);
-
     kcp_ = ikcp_create(kKcpConv, this);
     if (!kcp_)
     {
@@ -151,7 +146,7 @@ void KcpSocket::init()
     kcp_->rx_minrto = 10;
 
     // Start the KCP update timer. Reading will begin automatically once the socket is open.
-    update_timer_->start(kKcpInitialUpdateMs);
+    update_timer_id_ = startTimer(kKcpInitialUpdateMs, Qt::PreciseTimer);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -223,7 +218,12 @@ bool KcpSocket::send(const char* data, int size)
 //--------------------------------------------------------------------------------------------------
 void KcpSocket::close()
 {
-    update_timer_->stop();
+    if (update_timer_id_ != 0)
+    {
+        killTimer(update_timer_id_);
+        update_timer_id_ = 0;
+    }
+
     resolver_.cancel();
 
     std::error_code ignored_code;
@@ -404,6 +404,13 @@ void KcpSocket::doUdpSend()
 }
 
 //--------------------------------------------------------------------------------------------------
+void KcpSocket::timerEvent(QTimerEvent* event)
+{
+    if (event->timerId() == update_timer_id_)
+        doKcpUpdate();
+}
+
+//--------------------------------------------------------------------------------------------------
 void KcpSocket::doKcpUpdate()
 {
     if (!kcp_ || !socket_.is_open())
@@ -417,7 +424,11 @@ void KcpSocket::doKcpUpdate()
     int delay = static_cast<int>(next - now);
     if (delay < 1)
         delay = 1;
-    update_timer_->start(delay);
+
+    // Restart the timer with the new interval.
+    if (update_timer_id_ != 0)
+        killTimer(update_timer_id_);
+    update_timer_id_ = startTimer(delay, Qt::PreciseTimer);
 
     // Auto-start reading once the socket is open.
     if (!reading_)
