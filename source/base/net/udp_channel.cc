@@ -22,27 +22,22 @@
 
 #include <asio/connect.hpp>
 
-#include <ikcp.h>
-
 #include "base/asio_event_dispatcher.h"
 #include "base/location.h"
 #include "base/logging.h"
 #include "base/crypto/large_number_increment.h"
 #include "base/crypto/message_decryptor.h"
 #include "base/crypto/message_encryptor.h"
+#include "base/net/kcp_socket.h"
 
 namespace base {
 
 namespace {
 
-const quint32 kKcpConv = 1;
-const int kKcpUpdateIntervalMs = 10;
-const int kKcpMtu = 1200;
 const std::chrono::seconds kKeepAliveInterval { 30 };
 const std::chrono::seconds kKeepAliveTimeout { 30 };
 const quint32 kMaxMessageSize = 7 * 1024 * 1024; // 7 MB
 const int kWriteQueueReservedSize = 128;
-const int kUdpSendQueueReservedSize = 256;
 
 //--------------------------------------------------------------------------------------------------
 QString addressToString(const asio::ip::address& address)
@@ -81,14 +76,6 @@ void resizeBuffer(QByteArray* buffer, qint64 size)
     }
 
     buffer->resize(size);
-}
-
-//--------------------------------------------------------------------------------------------------
-quint32 currentTimeMs()
-{
-    return static_cast<quint32>(
-        std::chrono::duration_cast<std::chrono::milliseconds>(
-            std::chrono::steady_clock::now().time_since_epoch()).count() & 0xFFFFFFFF);
 }
 
 } // namespace
@@ -133,19 +120,12 @@ UdpChannel::UdpChannel(asio::ip::udp::socket&& socket, QObject* parent)
 UdpChannel::~UdpChannel()
 {
     keep_alive_timer_->stop();
-    update_timer_->stop();
 
     resolver_.cancel();
 
     std::error_code ignored_code;
     socket_.cancel(ignored_code);
     socket_.close(ignored_code);
-
-    if (kcp_)
-    {
-        ikcp_release(kcp_);
-        kcp_ = nullptr;
-    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -175,6 +155,7 @@ void UdpChannel::connectTo(const QString& address, quint16 port)
 
             LOG(INFO) << "Connected to" << endpointToString(endpoint);
             connected_ = true;
+            kcp_socket_->setConnected(true);
             emit sig_connected();
         });
     });
@@ -216,12 +197,12 @@ void UdpChannel::setPaused(bool enable)
     if (paused_)
     {
         keep_alive_timer_->stop();
-        update_timer_->stop();
+        kcp_socket_->stop();
         return;
     }
 
     // KCP update timer is needed to process incoming data even before connected.
-    update_timer_->start(kKcpUpdateIntervalMs);
+    kcp_socket_->start();
 
     if (connected_)
     {
@@ -251,7 +232,7 @@ void UdpChannel::addWriteTask(quint8 type, quint8 param, const QByteArray& data)
 //--------------------------------------------------------------------------------------------------
 void UdpChannel::doWrite()
 {
-    if (!kcp_ || write_queue_.isEmpty())
+    if (!kcp_socket_ || write_queue_.isEmpty())
         return;
 
     while (!write_queue_.isEmpty())
@@ -282,8 +263,8 @@ void UdpChannel::doWrite()
         if (encryptor_)
         {
             if (!encryptor_->encrypt(source_buffer.data(), source_buffer.size(),
-                                      &header, sizeof(Header),
-                                      write_buffer_.data() + sizeof(Header)))
+                                     &header, sizeof(Header),
+                                     write_buffer_.data() + sizeof(Header)))
             {
                 LOG(ERROR) << "Failed to encrypt outgoing message";
                 onErrorOccurred(FROM_HERE, std::error_code());
@@ -296,32 +277,15 @@ void UdpChannel::doWrite()
                    source_buffer.constData(), source_buffer.size());
         }
 
-        // KCP limits a single ikcp_send to less than IKCP_WND_RCV (128) segments.
-        // With MSS = MTU - 24 = 1176 bytes, max is ~146 KB per call.
-        // Split larger messages into chunks. Stream mode reassembles them.
-        const int kMaxKcpChunk = 120 * (kKcpMtu - 24); // ~138 KB, safe margin
-        const char* ptr = write_buffer_.constData();
-        int remaining = static_cast<int>(write_buffer_.size());
-
-        while (remaining > 0)
+        if (!kcp_socket_->send(write_buffer_.constData(),
+                                static_cast<int>(write_buffer_.size())))
         {
-            int chunk = std::min(remaining, kMaxKcpChunk);
-            int ret = ikcp_send(kcp_, ptr, chunk);
-            if (ret < 0)
-            {
-                LOG(ERROR) << "ikcp_send failed with code:" << ret;
-                onErrorOccurred(FROM_HERE, std::error_code());
-                return;
-            }
-            ptr += chunk;
-            remaining -= chunk;
+            onErrorOccurred(FROM_HERE, std::error_code());
+            return;
         }
 
         write_queue_.pop_front();
     }
-
-    // Flush KCP to send all queued segments immediately.
-    ikcp_flush(kcp_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -342,11 +306,12 @@ void UdpChannel::init()
     static_assert(sizeof(Header) == 8, "Header must be 8 bytes without padding");
 
     write_queue_.reserve(kWriteQueueReservedSize);
-    udp_send_queue_.reserve(kUdpSendQueueReservedSize);
 
-    update_timer_ = new QTimer(this);
-    update_timer_->setTimerType(Qt::PreciseTimer);
-    connect(update_timer_, &QTimer::timeout, this, &UdpChannel::doKcpUpdate);
+    kcp_socket_ = new KcpSocket(socket_, this);
+    connect(kcp_socket_, &KcpSocket::sig_errorOccurred, this, [this]()
+    {
+        onErrorOccurred(FROM_HERE, std::error_code());
+    });
 
     keep_alive_timer_ = new QTimer(this);
     keep_alive_timer_->setSingleShot(true);
@@ -354,73 +319,6 @@ void UdpChannel::init()
 
     keep_alive_counter_.resize(sizeof(quint32));
     memset(keep_alive_counter_.data(), 0, keep_alive_counter_.size());
-
-    kcp_ = ikcp_create(kKcpConv, this);
-    if (!kcp_)
-    {
-        LOG(ERROR) << "Failed to create KCP object";
-        return;
-    }
-
-    kcp_->output = kcpOutputCallback;
-    kcp_->stream = 1;
-
-    // Set KCP to fast mode: nodelay=1, interval=10ms, fast resend=2, no congestion control.
-    ikcp_nodelay(kcp_, 1, kKcpUpdateIntervalMs, 2, 1);
-    ikcp_setmtu(kcp_, kKcpMtu);
-    ikcp_wndsize(kcp_, 128, 128);
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
-int UdpChannel::kcpOutputCallback(const char* buf, int len, IKCPCB* /* kcp */, void* user)
-{
-    UdpChannel* self = static_cast<UdpChannel*>(user);
-    if (!self || !self->socket_.is_open())
-        return -1;
-
-    self->udp_send_queue_.emplace_back(buf, len);
-
-    if (!self->udp_sending_)
-        self->doUdpSend();
-
-    return 0;
-}
-
-//--------------------------------------------------------------------------------------------------
-void UdpChannel::doUdpSend()
-{
-    if (udp_send_queue_.isEmpty())
-    {
-        udp_sending_ = false;
-        return;
-    }
-
-    if (!connected_)
-    {
-        // Can't send until we know the peer's address (learned on first receive).
-        // Keep packets in the queue; they will be sent once the peer connects.
-        udp_sending_ = false;
-        return;
-    }
-
-    udp_sending_ = true;
-
-    QByteArray data = std::move(udp_send_queue_.front());
-    udp_send_queue_.pop_front();
-
-    socket_.async_send(asio::buffer(data.constData(), data.size()),
-        [this, data](const std::error_code& error_code, size_t /* bytes_transferred */)
-    {
-        if (error_code)
-        {
-            if (error_code != asio::error::operation_aborted)
-                onErrorOccurred(FROM_HERE, error_code);
-            return;
-        }
-
-        doUdpSend();
-    });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -432,7 +330,7 @@ void UdpChannel::onErrorOccurred(const Location& location, const std::error_code
         LOG(ERROR) << "Error occurred from" << location.toString();
 
     keep_alive_timer_->stop();
-    update_timer_->stop();
+    kcp_socket_->stop();
 
     resolver_.cancel();
 
@@ -441,6 +339,7 @@ void UdpChannel::onErrorOccurred(const Location& location, const std::error_code
     socket_.close(ignored_code);
 
     connected_ = false;
+    kcp_socket_->setConnected(false);
     emit sig_errorOccurred();
 }
 
@@ -473,20 +372,20 @@ void UdpChannel::doRead()
 
             LOG(INFO) << "Peer connected:" << endpointToString(remote_endpoint_);
             connected_ = true;
+            kcp_socket_->setConnected(true);
 
             // Now that we're connected, start keep-alive.
             keep_alive_timer_type_ = KEEP_ALIVE_INTERVAL;
             keep_alive_timer_->start(kKeepAliveInterval);
 
             // Flush any UDP packets that were buffered while waiting for the peer.
-            if (!udp_sending_ && !udp_send_queue_.isEmpty())
-                doUdpSend();
+            kcp_socket_->flushUdpQueue();
         }
 
-        if (!kcp_)
+        if (!kcp_socket_)
             return;
 
-        int ret = ikcp_input(kcp_, recv_buffer_.data(), static_cast<long>(bytes_transferred));
+        int ret = kcp_socket_->input(recv_buffer_.data(), static_cast<int>(bytes_transferred));
         if (ret < 0)
         {
             LOG(ERROR) << "ikcp_input failed with code:" << ret;
@@ -518,31 +417,22 @@ void UdpChannel::doRead()
 }
 
 //--------------------------------------------------------------------------------------------------
-void UdpChannel::doKcpUpdate()
-{
-    if (!kcp_)
-        return;
-
-    ikcp_update(kcp_, currentTimeMs());
-}
-
-//--------------------------------------------------------------------------------------------------
 bool UdpChannel::processKcpRecv()
 {
-    if (!kcp_)
+    if (!kcp_socket_)
         return false;
 
     // Read all available data from KCP and append to the read buffer.
     while (true)
     {
-        int peek_size = ikcp_peeksize(kcp_);
+        int peek_size = kcp_socket_->peekSize();
         if (peek_size <= 0)
             break;
 
         int offset = read_buffer_.size();
         read_buffer_.resize(offset + peek_size);
 
-        int recv_size = ikcp_recv(kcp_, read_buffer_.data() + offset, peek_size);
+        int recv_size = kcp_socket_->recv(read_buffer_.data() + offset, peek_size);
         if (recv_size <= 0)
         {
             read_buffer_.resize(offset);

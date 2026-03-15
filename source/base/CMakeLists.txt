@@ -418,6 +418,8 @@ list(APPEND SOURCE_BASE_NET
     net/tcp_server.h
     net/tcp_server_legacy.cc
     net/tcp_server_legacy.h
+    net/kcp_socket.cc
+    net/kcp_socket.h
     net/udp_channel.cc
     net/udp_channel.h)
 

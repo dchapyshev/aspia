@@ -27,12 +27,11 @@
 #include <asio/ip/address.hpp>
 #include <asio/ip/udp.hpp>
 
-struct IKCPCB;
-
 class QTimer;
 
 namespace base {
 
+class KcpSocket;
 class Location;
 class MessageDecryptor;
 class MessageEncryptor;
@@ -117,15 +116,11 @@ private:
         QByteArray data_;
     };
 
-    static int kcpOutputCallback(const char* buf, int len, IKCPCB* kcp, void* user);
-
     void init();
-    void doUdpSend();
     void onErrorOccurred(const Location& location, const std::error_code& error_code);
     void addWriteTask(quint8 type, quint8 param, const QByteArray& data);
     void doWrite();
     void doRead();
-    void doKcpUpdate();
     bool processKcpRecv();
     bool onMessageReceived(int offset);
     void onKeepAliveTimer();
@@ -134,8 +129,7 @@ private:
     asio::ip::udp::socket socket_;
     asio::ip::udp::endpoint remote_endpoint_;
 
-    IKCPCB* kcp_ = nullptr;
-    QTimer* update_timer_;
+    KcpSocket* kcp_socket_ = nullptr;
     QTimer* keep_alive_timer_;
     KeepAliveTimerType keep_alive_timer_type_ = KEEP_ALIVE_INTERVAL;
     QByteArray keep_alive_counter_;
@@ -148,9 +142,6 @@ private:
 
     QByteArray read_buffer_;
     QByteArray decrypt_buffer_;
-
-    QQueue<QByteArray> udp_send_queue_;
-    bool udp_sending_ = false;
 
     bool connected_ = false;
     bool paused_ = true;
