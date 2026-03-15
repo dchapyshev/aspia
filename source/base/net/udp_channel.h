@@ -132,6 +132,7 @@ private:
 
     asio::ip::udp::resolver resolver_;
     asio::ip::udp::socket socket_;
+    asio::ip::udp::endpoint remote_endpoint_;
 
     IKCPCB* kcp_ = nullptr;
     QTimer* update_timer_;

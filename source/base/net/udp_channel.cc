@@ -108,7 +108,24 @@ UdpChannel::UdpChannel(asio::ip::udp::socket&& socket, QObject* parent)
       resolver_(AsioEventDispatcher::ioContext()),
       socket_(std::move(socket))
 {
-    connected_ = true;
+    connected_ = false;
+
+    // Reopen the socket on the same port to clear the STUN server association.
+    // A connected UDP socket filters incoming packets by peer address, so we need
+    // a fresh unconnected socket to receive from any peer.
+    std::error_code ec;
+    asio::ip::udp::endpoint local_ep = socket_.local_endpoint(ec);
+    if (!ec)
+    {
+        socket_.close(ec);
+        socket_.open(asio::ip::udp::v4(), ec);
+        if (!ec)
+            socket_.bind(local_ep, ec);
+    }
+
+    if (ec)
+        LOG(ERROR) << "Failed to reopen UDP socket:" << ec;
+
     init();
 }
 
@@ -203,10 +220,15 @@ void UdpChannel::setPaused(bool enable)
         return;
     }
 
+    // KCP update timer is needed to process incoming data even before connected.
     update_timer_->start(kKcpUpdateIntervalMs);
 
-    keep_alive_timer_type_ = KEEP_ALIVE_INTERVAL;
-    keep_alive_timer_->start(kKeepAliveInterval);
+    if (connected_)
+    {
+        // Start keep-alive only when we know the peer's address.
+        keep_alive_timer_type_ = KEEP_ALIVE_INTERVAL;
+        keep_alive_timer_->start(kKeepAliveInterval);
+    }
 
     // Process any data that was accumulated while paused.
     if (!processKcpRecv())
@@ -274,12 +296,25 @@ void UdpChannel::doWrite()
                    source_buffer.constData(), source_buffer.size());
         }
 
-        int ret = ikcp_send(kcp_, write_buffer_.constData(), write_buffer_.size());
-        if (ret < 0)
+        // KCP limits a single ikcp_send to less than IKCP_WND_RCV (128) segments.
+        // With MSS = MTU - 24 = 1176 bytes, max is ~146 KB per call.
+        // Split larger messages into chunks. Stream mode reassembles them.
+        const int kMaxKcpChunk = 120 * (kKcpMtu - 24); // ~138 KB, safe margin
+        const char* ptr = write_buffer_.constData();
+        int remaining = static_cast<int>(write_buffer_.size());
+
+        while (remaining > 0)
         {
-            LOG(ERROR) << "ikcp_send failed with code:" << ret;
-            onErrorOccurred(FROM_HERE, std::error_code());
-            return;
+            int chunk = std::min(remaining, kMaxKcpChunk);
+            int ret = ikcp_send(kcp_, ptr, chunk);
+            if (ret < 0)
+            {
+                LOG(ERROR) << "ikcp_send failed with code:" << ret;
+                onErrorOccurred(FROM_HERE, std::error_code());
+                return;
+            }
+            ptr += chunk;
+            remaining -= chunk;
         }
 
         write_queue_.pop_front();
@@ -361,6 +396,14 @@ void UdpChannel::doUdpSend()
         return;
     }
 
+    if (!connected_)
+    {
+        // Can't send until we know the peer's address (learned on first receive).
+        // Keep packets in the queue; they will be sent once the peer connects.
+        udp_sending_ = false;
+        return;
+    }
+
     udp_sending_ = true;
 
     QByteArray data = std::move(udp_send_queue_.front());
@@ -406,8 +449,7 @@ void UdpChannel::doRead()
 {
     reading_ = true;
 
-    socket_.async_receive(asio::buffer(recv_buffer_.data(), recv_buffer_.size()),
-        [this](const std::error_code& error_code, size_t bytes_transferred)
+    auto read_handler = [this](const std::error_code& error_code, size_t bytes_transferred)
     {
         reading_ = false;
 
@@ -416,6 +458,29 @@ void UdpChannel::doRead()
             if (error_code != asio::error::operation_aborted)
                 onErrorOccurred(FROM_HERE, error_code);
             return;
+        }
+
+        if (!connected_)
+        {
+            // Connect to the actual peer now that we know its address.
+            std::error_code connect_ec;
+            socket_.connect(remote_endpoint_, connect_ec);
+            if (connect_ec)
+            {
+                onErrorOccurred(FROM_HERE, connect_ec);
+                return;
+            }
+
+            LOG(INFO) << "Peer connected:" << endpointToString(remote_endpoint_);
+            connected_ = true;
+
+            // Now that we're connected, start keep-alive.
+            keep_alive_timer_type_ = KEEP_ALIVE_INTERVAL;
+            keep_alive_timer_->start(kKeepAliveInterval);
+
+            // Flush any UDP packets that were buffered while waiting for the peer.
+            if (!udp_sending_ && !udp_send_queue_.isEmpty())
+                doUdpSend();
         }
 
         if (!kcp_)
@@ -437,7 +502,19 @@ void UdpChannel::doRead()
 
         // Continue reading.
         doRead();
-    });
+    };
+
+    if (connected_)
+    {
+        socket_.async_receive(
+            asio::buffer(recv_buffer_.data(), recv_buffer_.size()), read_handler);
+    }
+    else
+    {
+        socket_.async_receive_from(
+            asio::buffer(recv_buffer_.data(), recv_buffer_.size()),
+            remote_endpoint_, read_handler);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

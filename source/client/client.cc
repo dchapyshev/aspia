@@ -612,7 +612,6 @@ void Client::onStunChannelReady(const QString& external_address, quint16 externa
     credentials->set_iv(udp_iv_.toStdString());
 
     tcp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, base::serialize(message));
-    udp_channel_->setPaused(false);
 }
 
 //--------------------------------------------------------------------------------------------------
