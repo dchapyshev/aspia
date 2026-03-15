@@ -48,6 +48,7 @@ public:
 
     void connectTo(const QString& address, quint16 port);
     void send(quint8 channel_id, const QByteArray& buffer);
+    bool isConnected() const;
     quint16 port() const;
 
     void setPaused(bool enable);
@@ -150,6 +151,7 @@ private:
     QQueue<QByteArray> udp_send_queue_;
     bool udp_sending_ = false;
 
+    bool connected_ = false;
     bool paused_ = true;
     bool reading_ = false;
 

@@ -142,6 +142,15 @@ bool NetUtils::isValidSubnet(const QString& subnet)
 
     return parsed_subnet.first.protocol() == QAbstractSocket::IPv4Protocol ||
            parsed_subnet.first.protocol() == QAbstractSocket::IPv6Protocol;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+bool NetUtils::isAddressEqual(const QString& address1, const QString& address2)
+{
+    QHostAddress host_address1(address1);
+    QHostAddress host_address2(address2);
+    return host_address1 == host_address2;
 };
 
 } // namespace base

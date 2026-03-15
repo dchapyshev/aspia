@@ -57,9 +57,10 @@ public:
 signals:
     void sig_started();
     void sig_finished();
+    void sig_udpStateChanged(bool enable);
 
 protected:
-    void send(quint8 channel_id, const QByteArray& buffer);
+    void send(quint8 channel_id, const QByteArray& buffer, bool udp = false);
 
     virtual void onStart() = 0;
     virtual void onMessage(quint8 channel_id, const QByteArray& buffer) = 0;
@@ -77,15 +78,20 @@ private slots:
 
 private:
     void readDirectUdpRequest(const proto::peer::DirectUdpRequest& request);
+    void connectToUdp(const QString& address, quint16 port, quint32 encryptions,
+        const QByteArray& public_key, const QByteArray& iv);
 
     QString stun_host_;
     quint16 stun_port_ = 0;
 
-    QString external_address_;
+    QString host_ext_address_;
 
     base::TcpChannel* tcp_channel_ = nullptr;
     base::UdpChannel* udp_channel_ = nullptr;
     base::StunPeer* stun_peer_ = nullptr;
+
+    QByteArray udp_test_data_;
+    bool udp_ready_ = false;
 
     Q_DISABLE_COPY_MOVE(Client)
 };

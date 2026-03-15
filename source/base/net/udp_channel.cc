@@ -108,6 +108,7 @@ UdpChannel::UdpChannel(asio::ip::udp::socket&& socket, QObject* parent)
       resolver_(AsioEventDispatcher::ioContext()),
       socket_(std::move(socket))
 {
+    connected_ = true;
     init();
 }
 
@@ -156,6 +157,7 @@ void UdpChannel::connectTo(const QString& address, quint16 port)
             }
 
             LOG(INFO) << "Connected to" << endpointToString(endpoint);
+            connected_ = true;
             emit sig_connected();
         });
     });
@@ -165,6 +167,12 @@ void UdpChannel::connectTo(const QString& address, quint16 port)
 void UdpChannel::send(quint8 channel_id, const QByteArray& buffer)
 {
     addWriteTask(USER_DATA, channel_id, buffer);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool UdpChannel::isConnected() const
+{
+    return connected_;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -389,6 +397,7 @@ void UdpChannel::onErrorOccurred(const Location& location, const std::error_code
     socket_.cancel(ignored_code);
     socket_.close(ignored_code);
 
+    connected_ = false;
     emit sig_errorOccurred();
 }
 

@@ -213,7 +213,7 @@ void Client::setSessionState(std::shared_ptr<SessionState> session_state)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::sendSessionMessage(const QByteArray& message)
+void Client::sendSessionMessage(const QByteArray& message, bool udp)
 {
     if (!tcp_channel_)
     {
@@ -221,15 +221,27 @@ void Client::sendSessionMessage(const QByteArray& message)
         return;
     }
 
+    if (udp && udp_ready_)
+    {
+        udp_channel_->send(proto::peer::CHANNEL_ID_0, message);
+        return;
+    }
+
     tcp_channel_->send(proto::peer::CHANNEL_ID_0, message);
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::sendServiceMessage(const QByteArray& message)
+void Client::sendServiceMessage(const QByteArray& message, bool udp)
 {
     if (!tcp_channel_)
     {
         LOG(ERROR) << "sendMessage called but channel not initialized";
+        return;
+    }
+
+    if (udp && udp_ready_)
+    {
+        udp_channel_->send(proto::peer::CHANNEL_ID_1, message);
         return;
     }
 
@@ -441,12 +453,32 @@ void Client::onUdpErrorOccurred()
     udp_channel_->disconnect();
     udp_channel_->deleteLater();
     udp_channel_ = nullptr;
+    udp_ready_ = false;
 }
 
 //--------------------------------------------------------------------------------------------------
 void Client::onUdpMessageReceived(quint8 channel_id, const QByteArray& buffer)
 {
-    // TODO
+    if (!udp_ready_)
+    {
+        LOG(INFO) << "UDP test data received:" << buffer;
+        udp_channel_->send(proto::peer::CHANNEL_ID_0, buffer);
+        udp_ready_ = true;
+        return;
+    }
+
+    if (channel_id == proto::peer::CHANNEL_ID_0)
+    {
+        onSessionMessageReceived(buffer);
+    }
+    else if (channel_id == proto::peer::CHANNEL_ID_1)
+    {
+        onServiceMessageReceived(buffer);
+    }
+    else
+    {
+        LOG(WARNING) << "Unhandled incoming message from channel" << channel_id;
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -580,6 +612,7 @@ void Client::onStunChannelReady(const QString& external_address, quint16 externa
     credentials->set_iv(udp_iv_.toStdString());
 
     tcp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, base::serialize(message));
+    udp_channel_->setPaused(false);
 }
 
 //--------------------------------------------------------------------------------------------------

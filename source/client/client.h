@@ -83,8 +83,8 @@ protected:
     virtual void onServiceMessageReceived(const QByteArray& buffer) = 0;
 
     // Sends outgoing message.
-    void sendSessionMessage(const QByteArray& message);
-    void sendServiceMessage(const QByteArray& message);
+    void sendSessionMessage(const QByteArray& message, bool udp = false);
+    void sendServiceMessage(const QByteArray& message, bool udp = false);
 
     // Methods for obtaining network metrics.
     qint64 totalRx() const;
@@ -124,6 +124,7 @@ private:
     State state_ = State::CREATED;
 
     bool is_connected_to_router_ = false;
+    bool udp_ready_ = false;
 };
 
 } // namespace client

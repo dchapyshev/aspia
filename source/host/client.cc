@@ -18,12 +18,15 @@
 
 #include "host/client.h"
 
+#include <QHostAddress>
+
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/crypto/key_pair.h"
 #include "base/crypto/message_decryptor.h"
 #include "base/crypto/message_encryptor.h"
 #include "base/crypto/random.h"
+#include "base/net/net_utils.h"
 #include "base/net/udp_channel.h"
 #include "base/peer/stun_peer.h"
 #include "proto/key_exchange.h"
@@ -135,8 +138,14 @@ void Client::setStunInfo(const QString& host, quint16 port)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::send(quint8 channel_id, const QByteArray& buffer)
+void Client::send(quint8 channel_id, const QByteArray& buffer, bool udp)
 {
+    if (udp && udp_ready_)
+    {
+        udp_channel_->send(channel_id, buffer);
+        return;
+    }
+
     tcp_channel_->send(channel_id, buffer);
 }
 
@@ -177,6 +186,11 @@ void Client::onUdpConnected()
     LOG(INFO) << "UDP channel connected";
     CHECK(udp_channel_);
     udp_channel_->setPaused(false);
+
+    udp_test_data_ = base::Random::byteArray(8).toHex();
+
+    LOG(INFO) << "Send UDP test data:" << udp_test_data_;
+    udp_channel_->send(proto::peer::CHANNEL_ID_0, udp_test_data_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -186,11 +200,38 @@ void Client::onUdpErrorOccurred()
     udp_channel_->disconnect();
     udp_channel_->deleteLater();
     udp_channel_ = nullptr;
+    udp_test_data_.clear();
+    udp_ready_ = false;
+
+    LOG(WARNING) << "UDP channel is disabled";
+    emit sig_udpStateChanged(false);
 }
 
 //--------------------------------------------------------------------------------------------------
 void Client::onUdpMessageReceived(quint8 udp_channel_id, const QByteArray& buffer)
 {
+    if (!udp_ready_)
+    {
+        if (buffer != udp_test_data_)
+        {
+            LOG(ERROR) << "Test data mismatch:" << udp_test_data_ << buffer;
+
+            udp_channel_->disconnect();
+            udp_channel_->deleteLater();
+            udp_channel_ = nullptr;
+
+            udp_test_data_.clear();
+            return;
+        }
+
+        udp_test_data_.clear();
+        udp_ready_ = true;
+
+        LOG(INFO) << "UDP channel is enabled";
+        emit sig_udpStateChanged(true);
+        return;
+    }
+
     onMessage(udp_channel_id, buffer);
 }
 
@@ -203,7 +244,7 @@ void Client::onStunChannelReady(const QString& external_address, quint16 /* exte
     stun_peer_ = nullptr;
 
     LOG(INFO) << "External address for host:" << external_address;
-    external_address_ = external_address;
+    host_ext_address_ = external_address;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -224,23 +265,71 @@ void Client::readDirectUdpRequest(const proto::peer::DirectUdpRequest& request)
         return;
     }
 
-    const proto::peer::DirectUdpRequest::Endpoint& external_endpoint = request.external_endpoint();
-
-    QString external_address = QString::fromStdString(external_endpoint.ip_address());
-    quint32 external_port = external_endpoint.port();
-
+    const proto::peer::DirectUdpRequest::Endpoint& client_ext_endpoint = request.external_endpoint();
     const proto::peer::DirectUdpRequest::Credentials& credentials = request.credentials();
 
-    quint32 encryptions = credentials.encryptions();
+    QString client_ext_address = QString::fromStdString(client_ext_endpoint.ip_address());
+    quint32 client_ext_port = client_ext_endpoint.port();
     QByteArray client_public_key = QByteArray::fromStdString(credentials.public_key());
     QByteArray client_iv = QByteArray::fromStdString(credentials.iv());
 
-    LOG(INFO) << "External client UDP endpoint:" << external_address << ':' << external_port;
+    LOG(INFO) << "External client UDP endpoint:" << client_ext_address << ':' << client_ext_port;
 
-    for (int i = 0; i < request.local_endpoints_size(); ++i)
+    // If the external addresses of the client and host are different, then we connect through the
+    // hole punched by stun.
+    if (!base::NetUtils::isAddressEqual(client_ext_address, host_ext_address_))
     {
-        LOG(INFO) << "Local client UDP #" << i << ":" << request.local_endpoints(i);
+        connectToUdp(client_ext_address, client_ext_port, credentials.encryptions(),
+            client_public_key, client_iv);
+        return;
     }
+
+    LOG(INFO) << "External addresses of the client and host match";
+
+    // If the external addresses for the client and host are the same, then most likely they are
+    // located within the same local network. We are trying to find a common subnet for them and
+    // connect directly.
+    QStringList host_ips = base::NetUtils::localIpList();
+    for (const auto& host_ip : std::as_const(host_ips))
+    {
+        QHostAddress host_addr(host_ip);
+        if (host_addr.protocol() != QAbstractSocket::IPv4Protocol)
+            continue;
+
+        quint32 host = host_addr.toIPv4Address();
+        quint32 host_subnet = host & 0xFFFFFF00; // /24 mask
+
+        for (int i = 0; i < request.local_endpoints_size(); ++i)
+        {
+            const proto::peer::DirectUdpRequest::Endpoint& client_local_endpoint = request.local_endpoints(i);
+
+            QString client_local_address = QString::fromStdString(client_local_endpoint.ip_address());
+            quint32 client_local_port = client_local_endpoint.port();
+
+            QHostAddress client_addr(client_local_address);
+            if (client_addr.protocol() != QAbstractSocket::IPv4Protocol)
+                continue;
+
+            quint32 client = client_addr.toIPv4Address();
+            quint32 client_subnet = client & 0xFFFFFF00; // /24 mask
+
+            if (client_subnet != host_subnet)
+                continue;
+
+            LOG(INFO) << "Common subnet was found for the host and client";
+
+            connectToUdp(client_local_address, client_local_port, credentials.encryptions(),
+                         client_public_key, client_iv);
+            return;
+        }
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void Client::connectToUdp(const QString& address, quint16 port, quint32 encryptions,
+    const QByteArray& client_public_key, const QByteArray& client_iv)
+{
+    CHECK(!udp_channel_);
 
     base::KeyPair host_key_pair = base::KeyPair::create(base::KeyPair::Type::X25519);
     if (!host_key_pair.isValid())
@@ -275,17 +364,13 @@ void Client::readDirectUdpRequest(const proto::peer::DirectUdpRequest& request)
 
     if (encryption == proto::key_exchange::ENCRYPTION_AES256_GCM)
     {
-        encryptor = base::MessageEncryptor::createForAes256Gcm(
-            session_key, host_iv);
-        decryptor = base::MessageDecryptor::createForAes256Gcm(
-            session_key, client_iv);
+        encryptor = base::MessageEncryptor::createForAes256Gcm(session_key, host_iv);
+        decryptor = base::MessageDecryptor::createForAes256Gcm(session_key, client_iv);
     }
     else
     {
-        encryptor = base::MessageEncryptor::createForChaCha20Poly1305(
-            session_key, host_iv);
-        decryptor = base::MessageDecryptor::createForChaCha20Poly1305(
-            session_key, client_iv);
+        encryptor = base::MessageEncryptor::createForChaCha20Poly1305(session_key, host_iv);
+        decryptor = base::MessageDecryptor::createForChaCha20Poly1305(session_key, client_iv);
     }
 
     if (!encryptor || !decryptor)
@@ -310,7 +395,7 @@ void Client::readDirectUdpRequest(const proto::peer::DirectUdpRequest& request)
     connect(udp_channel_, &base::UdpChannel::sig_errorOccurred, this, &Client::onUdpErrorOccurred);
     connect(udp_channel_, &base::UdpChannel::sig_messageReceived, this, &Client::onUdpMessageReceived);
 
-    udp_channel_->connectTo(external_address, external_port);
+    udp_channel_->connectTo(address, port);
 }
 
 } // namespace host
