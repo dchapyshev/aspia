@@ -736,9 +736,6 @@ void Service::startClient(base::TcpChannel* tcp_channel)
         return;
     }
 
-    if (router_manager_)
-        client_to_start->setStunInfo(router_manager_->stunHost(), router_manager_->stunPort());
-
     clients_.append(client_to_start);
     client_to_start->start();
 }

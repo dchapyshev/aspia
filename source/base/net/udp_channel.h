@@ -44,6 +44,8 @@ public:
     explicit UdpChannel(QObject* parent = nullptr);
     ~UdpChannel() final;
 
+    static UdpChannel* bind(quint16& port);
+
     void connectTo(const QString& address, quint16 port);
     void send(quint8 channel_id, const QByteArray& buffer);
     bool isConnected() const;
@@ -67,6 +69,7 @@ signals:
 protected:
     friend class StunPeer;
     UdpChannel(asio::ip::udp::socket&& socket, QObject* parent);
+    UdpChannel(KcpSocket* socket, QObject* parent);
 
 private:
     using Clock = std::chrono::steady_clock;

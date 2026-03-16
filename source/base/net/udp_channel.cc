@@ -82,10 +82,32 @@ UdpChannel::UdpChannel(asio::ip::udp::socket&& socket, QObject* parent)
 }
 
 //--------------------------------------------------------------------------------------------------
+UdpChannel::UdpChannel(KcpSocket* socket, QObject* parent)
+    : QObject(parent),
+      kcp_socket_(socket),
+      keep_alive_timer_(new QTimer(this))
+{
+    CHECK(kcp_socket_);
+    kcp_socket_->setParent(this);
+    init();
+}
+
+//--------------------------------------------------------------------------------------------------
 UdpChannel::~UdpChannel()
 {
     keep_alive_timer_->stop();
     kcp_socket_->close();
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+UdpChannel* UdpChannel::bind(quint16& port)
+{
+    KcpSocket* socket = KcpSocket::bind(port);
+    if (!socket)
+        return nullptr;
+
+    return new UdpChannel(socket);
 }
 
 //--------------------------------------------------------------------------------------------------

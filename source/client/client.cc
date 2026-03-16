@@ -531,7 +531,7 @@ void Client::onHostConnected(bool peer_address_equals, const QString& stun_host,
     stun_port_ = stun_port;
 
     if (peer_address_equals)
-        startDirectUdp(QString(), 0);
+        startDirectUdp(nullptr, QString(), 0);
     else
         startUdpHolePunching();
 
@@ -619,14 +619,13 @@ void Client::startUdpHolePunching()
         LOG(INFO) << "External endpoint received:" << external_address << ':' << external_port;
         CHECK(stun_peer_);
 
-        udp_channel_ = stun_peer_->takeChannel();
-        udp_channel_->setParent(this);
+        base::UdpChannel* udp_channel = stun_peer_->takeChannel();
 
         stun_peer_->disconnect();
         stun_peer_->deleteLater();
         stun_peer_ = nullptr;
 
-        startDirectUdp(external_address, external_port);
+        startDirectUdp(udp_channel, external_address, external_port);
     });
 
     connect(stun_peer_, &base::StunPeer::sig_errorOccurred, this, [this]()
@@ -643,8 +642,23 @@ void Client::startUdpHolePunching()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::startDirectUdp(const QString& address, quint16 port)
+void Client::startDirectUdp(base::UdpChannel* udp_channel, const QString& address, quint16 port)
 {
+    if (!udp_channel)
+    {
+        quint16 binded_port = 0;
+        udp_channel_ = base::UdpChannel::bind(binded_port);
+        if (!udp_channel)
+        {
+            LOG(ERROR) << "Unable to bind UDP port";
+            return;
+        }
+
+        port = binded_port;
+    }
+
+    udp_channel_->setParent(this);
+
     connect(udp_channel_, &base::UdpChannel::sig_errorOccurred, this, &Client::onUdpErrorOccurred);
     connect(udp_channel_, &base::UdpChannel::sig_messageReceived, this, &Client::onUdpMessageReceived);
 

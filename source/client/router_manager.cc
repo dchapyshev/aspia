@@ -211,6 +211,9 @@ void RouterManager::onTcpMessageReceived(quint8 /* channel_id */, const QByteArr
                 if (stun_host_.isEmpty())
                     stun_host_ = router_config_.address;
             }
+
+            if (connection_offer.has_peer_info())
+                is_peer_address_equals_ = connection_offer.peer_info().is_address_equals();
         }
     }
     else if (message.has_host_status())
@@ -247,7 +250,7 @@ void RouterManager::onRelayConnectionReady()
     host_channel_ = relay_peer_->takeChannel();
     host_channel_->setParent(this);
 
-    emit sig_hostConnected();
+    emit sig_hostConnected(is_peer_address_equals_, stun_host_, stun_port_);
 
     relay_peer_->disconnect();
     relay_peer_->deleteLater();
@@ -258,6 +261,7 @@ void RouterManager::onRelayConnectionReady()
 void RouterManager::onRelayConnectionError()
 {
     LOG(INFO) << "Relay connection error";
+    CHECK(relay_peer_);
 
     Error error;
     error.type = ErrorType::ROUTER;

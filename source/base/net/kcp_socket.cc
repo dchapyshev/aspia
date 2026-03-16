@@ -90,22 +90,6 @@ KcpSocket::KcpSocket(asio::ip::udp::socket&& socket, QObject* parent)
       resolver_(AsioEventDispatcher::ioContext()),
       socket_(std::move(socket))
 {
-    // Reopen the socket on the same port to clear the STUN server association.
-    // A connected UDP socket filters incoming packets by peer address, so we need
-    // a fresh unconnected socket to receive from any peer.
-    std::error_code ec;
-    asio::ip::udp::endpoint local_ep = socket_.local_endpoint(ec);
-    if (!ec)
-    {
-        socket_.close(ec);
-        socket_.open(asio::ip::udp::v4(), ec);
-        if (!ec)
-            socket_.bind(local_ep, ec);
-    }
-
-    if (ec)
-        LOG(ERROR) << "Failed to reopen UDP socket:" << ec;
-
     init();
 }
 
@@ -118,6 +102,44 @@ KcpSocket::~KcpSocket()
 
     close();
     ikcp_release(kcp_);
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+KcpSocket* KcpSocket::bind(quint16& port)
+{
+    asio::ip::udp::endpoint endpoint(asio::ip::address_v6::any(), port);
+
+    std::error_code error_code;
+    asio::ip::udp::socket socket(AsioEventDispatcher::ioContext());
+    socket.open(endpoint.protocol(), error_code);
+    if (error_code)
+    {
+        LOG(ERROR) << "Unable to open UDP socket on port" << port << ':' << error_code;
+        return nullptr;
+    }
+
+    socket.bind(endpoint, error_code);
+    if (error_code)
+    {
+        LOG(ERROR) << "Unable to bind UDP port" << port << ':' << error_code;
+        return nullptr;
+    }
+
+    if (!port)
+    {
+        std::error_code error_code;
+        asio::ip::udp::endpoint local_endpoint = socket.local_endpoint(error_code);
+        if (error_code)
+        {
+            LOG(ERROR) << "Unable to get binded endpoint:" << error_code;
+            return nullptr;
+        }
+
+        port = local_endpoint.port();
+    }
+
+    return new KcpSocket(std::move(socket));
 }
 
 //--------------------------------------------------------------------------------------------------

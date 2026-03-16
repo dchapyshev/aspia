@@ -41,6 +41,8 @@ public:
     KcpSocket(asio::ip::udp::socket&& socket, QObject* parent = nullptr);
     ~KcpSocket() final;
 
+    static KcpSocket* bind(quint16& port);
+
     void connectTo(const QString& address, quint16 port);
     bool send(const char* data, int size);
     void close();
