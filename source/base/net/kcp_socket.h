@@ -60,6 +60,7 @@ private:
     static void kcpWriteLogCallback(const char* log, struct IKCPCB* kcp, void* user);
 
     void doRead();
+    void onUdpDataReceived(size_t bytes_transferred);
     void readAvailableData();
     void doUdpSend();
     void doKcpUpdate();

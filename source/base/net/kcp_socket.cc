@@ -251,10 +251,30 @@ void KcpSocket::doRead()
 {
     reading_ = true;
 
-    auto read_handler = [this](const std::error_code& error_code, size_t bytes_transferred)
+    if (connected_)
     {
-        reading_ = false;
+        socket_.async_receive(asio::buffer(recv_buffer_.data(), recv_buffer_.size()),
+            [this](const std::error_code& error_code, size_t bytes_transferred)
+        {
+            if (error_code)
+            {
+                if (error_code != asio::error::operation_aborted)
+                {
+                    LOG(ERROR) << "UDP receive error:" << error_code;
+                    emit sig_errorOccurred();
+                }
+                return;
+            }
 
+            reading_ = false;
+            onUdpDataReceived(bytes_transferred);
+        });
+        return;
+    }
+
+    socket_.async_receive_from(asio::buffer(recv_buffer_.data(), recv_buffer_.size()), remote_endpoint_,
+        [this](const std::error_code& error_code, size_t bytes_transferred)
+    {
         if (error_code)
         {
             if (error_code != asio::error::operation_aborted)
@@ -265,58 +285,50 @@ void KcpSocket::doRead()
             return;
         }
 
-        if (!connected_)
+        reading_ = false;
+
+        // Connect to the actual peer now that we know its address.
+        std::error_code connect_ec;
+        socket_.connect(remote_endpoint_, connect_ec);
+        if (connect_ec)
         {
-            // Connect to the actual peer now that we know its address.
-            std::error_code connect_ec;
-            socket_.connect(remote_endpoint_, connect_ec);
-            if (connect_ec)
-            {
-                LOG(ERROR) << "Failed to connect to peer:" << connect_ec;
-                emit sig_errorOccurred();
-                return;
-            }
-
-            LOG(INFO) << "Peer connected:" << endpointToString(remote_endpoint_);
-            connected_ = true;
-
-            // Flush any UDP packets that were buffered while waiting for the peer.
-            if (!udp_sending_ && !udp_send_queue_.isEmpty())
-                doUdpSend();
-
-            emit sig_connected();
-        }
-
-        if (!kcp_)
-            return;
-
-        int ret = ikcp_input(kcp_, recv_buffer_.data(), static_cast<int>(bytes_transferred));
-        if (ret < 0)
-        {
-            LOG(ERROR) << "ikcp_input failed with code:" << ret;
+            LOG(ERROR) << "Failed to connect to peer:" << connect_ec;
             emit sig_errorOccurred();
             return;
         }
 
-        readAvailableData();
+        LOG(INFO) << "Peer connected:" << endpointToString(remote_endpoint_);
+        connected_ = true;
 
-        if (!socket_.is_open())
-            return;
+        // Flush any UDP packets that were buffered while waiting for the peer.
+        if (!udp_sending_ && !udp_send_queue_.isEmpty())
+            doUdpSend();
 
-        doRead();
-    };
+        emit sig_connected();
+        onUdpDataReceived(bytes_transferred);
+    });
+}
 
-    if (connected_)
+//--------------------------------------------------------------------------------------------------
+void KcpSocket::onUdpDataReceived(size_t bytes_transferred)
+{
+    if (!kcp_)
+        return;
+
+    int ret = ikcp_input(kcp_, recv_buffer_.data(), static_cast<int>(bytes_transferred));
+    if (ret < 0)
     {
-        socket_.async_receive(
-            asio::buffer(recv_buffer_.data(), recv_buffer_.size()), read_handler);
+        LOG(ERROR) << "ikcp_input failed with code:" << ret;
+        emit sig_errorOccurred();
+        return;
     }
-    else
-    {
-        socket_.async_receive_from(
-            asio::buffer(recv_buffer_.data(), recv_buffer_.size()),
-            remote_endpoint_, read_handler);
-    }
+
+    readAvailableData();
+
+    if (!socket_.is_open())
+        return;
+
+    doRead();
 }
 
 //--------------------------------------------------------------------------------------------------
