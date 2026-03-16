@@ -73,6 +73,15 @@ message StunServerInfo
     uint32 port    = 3;
 }
 
+message PeerInfo
+{
+    // If the opposite peer is outdated (version less than 3), then it is set to true.
+    bool is_legacy = 1;
+
+    // If the external address of the peers visible to the router matches, then it is set to true.
+    bool is_address_equals = 2;
+}
+
 message ConnectionOffer
 {
     enum PeerRole
@@ -95,7 +104,7 @@ message ConnectionOffer
     RelayCredentials relay   = 3;
     HostOfferData host_data  = 4;
     StunServerInfo stun_info = 5;
-    bool is_legacy           = 6;
+    PeerInfo peer_info       = 6;
 }
 
 message CheckHostStatus

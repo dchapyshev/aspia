@@ -104,13 +104,14 @@ private slots:
     void onUdpMessageReceived(quint8 channel_id, const QByteArray& buffer);
     void onRouterConnected(const QVersionNumber& router_version);
     void onHostAwaiting();
-    void onHostConnected();
+    void onHostConnected(bool peer_address_equals, const QString& stun_host, quint16 stun_port);
     void onRouterErrorOccurred(const client::RouterManager::Error& error);
-    void onStunChannelReady(const QString& external_address, quint16 external_port);
 
 private:
     void delayedReconnect();
     void channelReady();
+    void startUdpHolePunching();
+    void startDirectUdp(const QString& address, quint16 port);
 
     bool is_legacy_mode_ = false;
     QTimer* timeout_timer_ = nullptr;
@@ -121,6 +122,9 @@ private:
     base::StunPeer* stun_peer_ = nullptr;
     base::KeyPair udp_key_pair_;
     QByteArray udp_iv_;
+
+    QString stun_host_;
+    quint16 stun_port_ = 0;
 
     std::shared_ptr<SessionState> session_state_;
 

@@ -56,22 +56,11 @@ message Version
 
 message DirectUdpRequest
 {
-    message Endpoint
-    {
-        string ip_address = 1;
-        uint32 port       = 2;
-    }
-
-    message Credentials
-    {
-        uint32 encryptions = 1;
-        bytes public_key   = 2;
-        bytes iv           = 3;
-    }
-
-    Endpoint external_endpoint        = 1;
-    repeated Endpoint local_endpoints = 2;
-    Credentials credentials           = 3;
+    repeated string address = 1;
+    uint32 port             = 2;
+    uint32 encryptions      = 3;
+    bytes public_key        = 4;
+    bytes iv                = 5;
 }
 
 message DirectUdpReply

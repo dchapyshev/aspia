@@ -29,7 +29,7 @@ public:
     static QStringList localIpList();
     static bool isValidIpAddress(const QString& ip_address);
     static bool isValidHostName(const QString& host);
-    static bool isValidPort(quint16 port);
+    static bool isValidPort(quint32 port);
     static bool isValidPort(const QString& str);
     static bool isValidSubnet(const QString& subnet);
     static bool isAddressEqual(const QString& address1, const QString& address2);

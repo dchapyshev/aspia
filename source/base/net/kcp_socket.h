@@ -62,7 +62,6 @@ private:
 
     void doRead();
     void onUdpDataReceived(size_t bytes_transferred);
-    void readAvailableData();
     void doUdpSend();
     void doKcpUpdate();
 

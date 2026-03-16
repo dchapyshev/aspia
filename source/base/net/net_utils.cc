@@ -115,9 +115,9 @@ bool NetUtils::isValidHostName(const QString& host)
 
 //--------------------------------------------------------------------------------------------------
 // static
-bool NetUtils::isValidPort(quint16 port)
+bool NetUtils::isValidPort(quint32 port)
 {
-    return port != 0;
+    return port != 0 && port <= 65535;
 }
 
 //--------------------------------------------------------------------------------------------------

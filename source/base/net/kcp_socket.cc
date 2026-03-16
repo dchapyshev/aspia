@@ -324,12 +324,30 @@ void KcpSocket::onUdpDataReceived(size_t bytes_transferred)
         return;
     }
 
-    readAvailableData();
+    int total_read = 0;
 
-    if (!socket_.is_open())
-        return;
+    while (true)
+    {
+        int peek_size = ikcp_peeksize(kcp_);
+        if (peek_size <= 0)
+            break;
 
-    doRead();
+        int required = total_read + peek_size;
+        if (kcp_read_buffer_.size() < required)
+            kcp_read_buffer_.resize(required);
+
+        int recv_size = ikcp_recv(kcp_, kcp_read_buffer_.data() + total_read, peek_size);
+        if (recv_size <= 0)
+            break;
+
+        total_read += recv_size;
+    }
+
+    if (total_read > 0)
+        emit sig_dataReceived(kcp_read_buffer_.constData(), total_read);
+
+    if (socket_.is_open())
+        doRead();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -353,32 +371,6 @@ int KcpSocket::kcpOutputCallback(const char* buf, int len, IKCPCB* /* kcp */, vo
 void KcpSocket::kcpWriteLogCallback(const char* log, IKCPCB* /* kcp */, void* /* user */)
 {
     LOG(INFO) << log;
-}
-
-//--------------------------------------------------------------------------------------------------
-void KcpSocket::readAvailableData()
-{
-    int total_read = 0;
-
-    while (true)
-    {
-        int peek_size = ikcp_peeksize(kcp_);
-        if (peek_size <= 0)
-            break;
-
-        int required = total_read + peek_size;
-        if (kcp_read_buffer_.size() < required)
-            kcp_read_buffer_.resize(required);
-
-        int recv_size = ikcp_recv(kcp_, kcp_read_buffer_.data() + total_read, peek_size);
-        if (recv_size <= 0)
-            break;
-
-        total_read += recv_size;
-    }
-
-    if (total_read > 0)
-        emit sig_dataReceived(kcp_read_buffer_.constData(), total_read);
 }
 
 //--------------------------------------------------------------------------------------------------

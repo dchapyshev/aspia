@@ -93,7 +93,7 @@ void RelayPeer::start(const proto::router::ConnectionOffer& offer)
     QString host = QString::fromStdString(credentials.host());
 
     LOG(INFO) << "Start resolving for" << host << ":" << credentials.port()
-              << "(legacy" << offer.is_legacy() << ")";
+              << "(legacy" << offer.peer_info().is_legacy() << ")";
 
     auto guard = alive_guard_;
     resolver_.async_resolve(host.toLocal8Bit().data(), std::to_string(credentials.port()),
@@ -202,7 +202,7 @@ void RelayPeer::onConnected()
                 return;
             }
 
-            if (connection_offer_.is_legacy())
+            if (connection_offer_.peer_info().is_legacy())
             {
                 pending_channel_ = new TcpChannelLegacy(
                     TcpChannel::Type::RELAY, std::move(socket_), authenticator_.release(), this);

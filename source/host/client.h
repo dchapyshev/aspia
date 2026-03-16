@@ -26,7 +26,6 @@
 #include "proto/peer.h"
 
 namespace base {
-class StunPeer;
 class UdpChannel;
 } // namespace base
 
@@ -52,8 +51,6 @@ public:
     QString userName() const;
     qint64 pendingBytes() const;
 
-    void setStunInfo(const QString& host, quint16 port);
-
 signals:
     void sig_started();
     void sig_finished();
@@ -73,22 +70,13 @@ private slots:
     void onUdpErrorOccurred();
     void onUdpMessageReceived(quint8 udp_channel_id, const QByteArray& buffer);
 
-    void onStunChannelReady(const QString& external_address, quint16 external_port);
-    void onStunErrorOccurred();
-
 private:
     void readDirectUdpRequest(const proto::peer::DirectUdpRequest& request);
     void connectToUdp(const QString& address, quint16 port, quint32 encryptions,
         const QByteArray& public_key, const QByteArray& iv);
 
-    QString stun_host_;
-    quint16 stun_port_ = 0;
-
-    QString host_ext_address_;
-
     base::TcpChannel* tcp_channel_ = nullptr;
     base::UdpChannel* udp_channel_ = nullptr;
-    base::StunPeer* stun_peer_ = nullptr;
 
     QByteArray udp_test_data_;
     bool udp_ready_ = false;

@@ -142,7 +142,7 @@ void SessionAdmin::doSessionListRequest(const proto::router::SessionListRequest&
         item->set_session_id(session->sessionId());
         item->set_session_type(session->sessionType());
         item->set_timepoint(static_cast<quint64>(session->startTime()));
-        item->set_ip_address(session->address().toStdString());
+        item->set_ip_address(session->address().toString().toStdString());
         item->mutable_version()->CopyFrom(base::serialize(session->version()));
         item->set_os_name(session->osName().toStdString());
         item->set_computer_name(session->computerName().toStdString());

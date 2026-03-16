@@ -116,7 +116,10 @@ void SessionClient::readConnectionRequest(const proto::router::ConnectionRequest
                 else
                 {
                     offer->set_error_code(proto::router::ConnectionOffer::SUCCESS);
-                    offer->set_is_legacy(host->version() < base::kVersion_3_0_0);
+
+                    proto::router::PeerInfo* peer_info = offer->mutable_peer_info();
+                    peer_info->set_is_legacy(host->version() < base::kVersion_3_0_0);
+                    peer_info->set_is_address_equals(host->address() == address());
 
                     if (stun_port_)
                     {
@@ -140,9 +143,9 @@ void SessionClient::readConnectionRequest(const proto::router::ConnectionRequest
 
                     proto::relay::PeerToRelay::Secret secret;
                     secret.set_random_data(base::Random::string(16));
-                    secret.set_client_address(address().toStdString());
+                    secret.set_client_address(address().toString().toStdString());
                     secret.set_client_user_name(userName().toStdString());
-                    secret.set_host_address(host->address().toStdString());
+                    secret.set_host_address(host->address().toString().toStdString());
                     secret.set_host_id(request.host_id());
 
                     offer_credentials->set_secret(secret.SerializeAsString());

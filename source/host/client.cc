@@ -28,7 +28,6 @@
 #include "base/crypto/random.h"
 #include "base/net/net_utils.h"
 #include "base/net/udp_channel.h"
-#include "base/peer/stun_peer.h"
 #include "proto/key_exchange.h"
 
 namespace host {
@@ -62,16 +61,6 @@ Client::~Client()
 //--------------------------------------------------------------------------------------------------
 void Client::start()
 {
-    if (tcp_channel_->type() == base::TcpChannel::Type::RELAY && !stun_host_.isEmpty() && stun_port_)
-    {
-        stun_peer_ = new base::StunPeer(this);
-
-        connect(stun_peer_, &base::StunPeer::sig_channelReady, this, &Client::onStunChannelReady);
-        connect(stun_peer_, &base::StunPeer::sig_errorOccurred, this, &Client::onStunErrorOccurred);
-
-        stun_peer_->start(stun_host_, stun_port_);
-    }
-
     onStart();
 }
 
@@ -128,13 +117,6 @@ qint64 Client::pendingBytes() const
 {
     // TODO: UDP support.
     return tcp_channel_->pendingBytes();
-}
-
-//--------------------------------------------------------------------------------------------------
-void Client::setStunInfo(const QString& host, quint16 port)
-{
-    stun_host_ = host;
-    stun_port_ = port;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -236,100 +218,112 @@ void Client::onUdpMessageReceived(quint8 udp_channel_id, const QByteArray& buffe
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::onStunChannelReady(const QString& external_address, quint16 /* external_port */)
-{
-    CHECK(stun_peer_);
-    stun_peer_->disconnect();
-    stun_peer_->deleteLater();
-    stun_peer_ = nullptr;
-
-    LOG(INFO) << "External address for host:" << external_address;
-    host_ext_address_ = external_address;
-}
-
-//--------------------------------------------------------------------------------------------------
-void Client::onStunErrorOccurred()
-{
-    CHECK(stun_peer_);
-    stun_peer_->disconnect();
-    stun_peer_->deleteLater();
-    stun_peer_ = nullptr;
-}
-
-//--------------------------------------------------------------------------------------------------
 void Client::readDirectUdpRequest(const proto::peer::DirectUdpRequest& request)
 {
-    if (!request.has_external_endpoint() || !request.local_endpoints_size() || !request.has_credentials())
+    QStringList address_list;
+
+    for (int i = 0; i < request.address_size(); ++i)
     {
-        LOG(INFO) << "Request does not contain the required data";
-        return;
-    }
-
-    const proto::peer::DirectUdpRequest::Endpoint& client_ext_endpoint = request.external_endpoint();
-    const proto::peer::DirectUdpRequest::Credentials& credentials = request.credentials();
-
-    QString client_ext_address = QString::fromStdString(client_ext_endpoint.ip_address());
-    quint32 client_ext_port = client_ext_endpoint.port();
-    QByteArray client_public_key = QByteArray::fromStdString(credentials.public_key());
-    QByteArray client_iv = QByteArray::fromStdString(credentials.iv());
-
-    LOG(INFO) << "External client UDP endpoint:" << client_ext_address << ':' << client_ext_port;
-
-    // If the external addresses of the client and host are different, then we connect through the
-    // hole punched by stun.
-    if (!base::NetUtils::isAddressEqual(client_ext_address, host_ext_address_))
-    {
-        connectToUdp(client_ext_address, client_ext_port, credentials.encryptions(),
-            client_public_key, client_iv);
-        return;
-    }
-
-    LOG(INFO) << "External addresses of the client and host match";
-
-    // If the external addresses for the client and host are the same, then most likely they are
-    // located within the same local network. We are trying to find a common subnet for them and
-    // connect directly.
-    QStringList host_ips = base::NetUtils::localIpList();
-    for (const auto& host_ip : std::as_const(host_ips))
-    {
-        QHostAddress host_addr(host_ip);
-        if (host_addr.protocol() != QAbstractSocket::IPv4Protocol)
+        QString address = QString::fromStdString(request.address(i));
+        if (address.isEmpty() || !base::NetUtils::isValidIpAddress(address))
             continue;
+        address_list.emplace_back(address);
+    }
 
-        quint32 host = host_addr.toIPv4Address();
-        quint32 host_subnet = host & 0xFFFFFF00; // /24 mask
+    if (address_list.isEmpty())
+    {
+        LOG(ERROR) << "No valid addresses";
+        return;
+    }
 
-        for (int i = 0; i < request.local_endpoints_size(); ++i)
+    quint32 port = request.port();
+    if (!base::NetUtils::isValidPort(port))
+    {
+        LOG(ERROR) << "Invalid port:" << port;
+        return;
+    }
+
+    QByteArray public_key = QByteArray::fromStdString(request.public_key());
+    if (public_key.isEmpty())
+    {
+        LOG(ERROR) << "Empty public key";
+        return;
+    }
+
+    QByteArray iv = QByteArray::fromStdString(request.iv());
+    if (iv.isEmpty())
+    {
+        LOG(ERROR) << "Empty IV";
+        return;
+    }
+
+    QString address;
+
+    // If there is more than one address, then this is an attempt at a direct connection
+    // (without using STUN)
+    if (address_list.size() > 1)
+    {
+        QStringList host_address_list = base::NetUtils::localIpList();
+
+        for (const auto& host_address : std::as_const(host_address_list))
         {
-            const proto::peer::DirectUdpRequest::Endpoint& client_local_endpoint = request.local_endpoints(i);
-
-            QString client_local_address = QString::fromStdString(client_local_endpoint.ip_address());
-            quint32 client_local_port = client_local_endpoint.port();
-
-            QHostAddress client_addr(client_local_address);
-            if (client_addr.protocol() != QAbstractSocket::IPv4Protocol)
+            QHostAddress host_addr(host_address);
+            if (host_addr.protocol() != QAbstractSocket::IPv4Protocol)
                 continue;
 
-            quint32 client = client_addr.toIPv4Address();
-            quint32 client_subnet = client & 0xFFFFFF00; // /24 mask
+            quint32 host = host_addr.toIPv4Address();
+            quint32 host_subnet = host & 0xFFFFFF00; // /24 mask
 
-            if (client_subnet != host_subnet)
-                continue;
+            bool is_found = false;
 
-            LOG(INFO) << "Common subnet was found for the host and client";
+            for (const auto& client_address : std::as_const(address_list))
+            {
+                QHostAddress client_addr(client_address);
+                if (client_addr.protocol() != QAbstractSocket::IPv4Protocol)
+                    continue;
 
-            connectToUdp(client_local_address, client_local_port, credentials.encryptions(),
-                         client_public_key, client_iv);
-            return;
+                quint32 client = client_addr.toIPv4Address();
+                quint32 client_subnet = client & 0xFFFFFF00; // /24 mask
+
+                if (client_subnet != host_subnet)
+                    continue;
+
+                LOG(INFO) << "Common subnet was found for the host and client";
+                address = client_address;
+                is_found = true;
+                break;
+            }
+
+            if (is_found)
+                break;
         }
     }
+    else
+    {
+        address = address_list.first();
+    }
+
+    if (address.isEmpty())
+    {
+        LOG(WARNING) << "No suitable address was found for direct connection";
+        return;
+    }
+
+    LOG(INFO) << "Client UDP endpoint:" << address << ':' << port;
+    connectToUdp(address, static_cast<quint16>(port), request.encryptions(), public_key, iv);
 }
 
 //--------------------------------------------------------------------------------------------------
 void Client::connectToUdp(const QString& address, quint16 port, quint32 encryptions,
     const QByteArray& client_public_key, const QByteArray& client_iv)
 {
-    CHECK(!udp_channel_);
+    if (udp_channel_)
+    {
+        udp_channel_->disconnect();
+        udp_channel_->deleteLater();
+        udp_channel_ = nullptr;
+        udp_ready_ = false;
+    }
 
     base::KeyPair host_key_pair = base::KeyPair::create(base::KeyPair::Type::X25519);
     if (!host_key_pair.isValid())
@@ -339,6 +333,11 @@ void Client::connectToUdp(const QString& address, quint16 port, quint32 encrypti
     }
 
     QByteArray host_iv = base::Random::byteArray(12);
+    if (host_iv.isEmpty())
+    {
+        LOG(ERROR) << "Unable to create IV for UDP";
+        return;
+    }
 
     QByteArray session_key = host_key_pair.sessionKey(client_public_key);
     if (session_key.isEmpty())

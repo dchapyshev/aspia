@@ -43,7 +43,7 @@ Session::Session(base::TcpChannel* channel, QObject* parent)
 {
     DCHECK(tcp_channel_);
     tcp_channel_->setParent(this);
-    address_ = tcp_channel_->peerAddress();
+    address_.setAddress(tcp_channel_->peerAddress());
 
     connect(tcp_channel_, &base::TcpChannel::sig_errorOccurred, this, &Session::onTcpErrorOccurred);
     connect(tcp_channel_, &base::TcpChannel::sig_messageReceived, this, &Session::onTcpMessageReceived);

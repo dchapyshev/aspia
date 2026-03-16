@@ -19,6 +19,7 @@
 #ifndef ROUTER_SESSION_H
 #define ROUTER_SESSION_H
 
+#include <QHostAddress>
 #include <QObject>
 #include <QVersionNumber>
 
@@ -47,7 +48,7 @@ public:
     proto::router::SessionType sessionType() const;
 
     qint64 sessionId() const { return session_id_; }
-    const QString& address() const { return address_; }
+    const QHostAddress& address() const { return address_; }
     time_t startTime() const { return start_time_; }
     std::chrono::seconds duration() const;
 
@@ -67,7 +68,7 @@ private:
     time_t start_time_ = 0;
 
     base::TcpChannel* tcp_channel_ = nullptr;
-    QString address_;
+    QHostAddress address_;
 };
 
 } // namespace router
