@@ -241,7 +241,7 @@ void DesktopClient::onIpcMessageReceived(quint32 channel_id, const QByteArray& b
 
     if (ipc_channel_id == proto::desktop::IPC_CHANNEL_ID_SESSION)
     {
-        send(net_channel_id, buffer, true);
+        send(net_channel_id, buffer);
     }
     else
     {

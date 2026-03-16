@@ -120,9 +120,9 @@ qint64 Client::pendingBytes() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::send(quint8 channel_id, const QByteArray& buffer, bool udp)
+void Client::send(quint8 channel_id, const QByteArray& buffer)
 {
-    if (udp && udp_ready_)
+    if (udp_ready_)
     {
         udp_channel_->send(channel_id, buffer);
         return;
@@ -168,52 +168,23 @@ void Client::onUdpConnected()
     LOG(INFO) << "UDP channel connected";
     CHECK(udp_channel_);
     udp_channel_->setPaused(false);
-
-    udp_test_data_ = base::Random::byteArray(8).toHex();
-
-    LOG(INFO) << "Send UDP test data:" << udp_test_data_;
-    udp_channel_->send(proto::peer::CHANNEL_ID_0, udp_test_data_);
+    udp_ready_ = true;
 }
 
 //--------------------------------------------------------------------------------------------------
 void Client::onUdpErrorOccurred()
 {
+    LOG(WARNING) << "UDP channel is disabled";
     CHECK(udp_channel_);
     udp_channel_->disconnect();
     udp_channel_->deleteLater();
     udp_channel_ = nullptr;
-    udp_test_data_.clear();
     udp_ready_ = false;
-
-    LOG(WARNING) << "UDP channel is disabled";
-    emit sig_udpStateChanged(false);
 }
 
 //--------------------------------------------------------------------------------------------------
 void Client::onUdpMessageReceived(quint8 udp_channel_id, const QByteArray& buffer)
 {
-    if (!udp_ready_)
-    {
-        if (buffer != udp_test_data_)
-        {
-            LOG(ERROR) << "Test data mismatch:" << udp_test_data_ << buffer;
-
-            udp_channel_->disconnect();
-            udp_channel_->deleteLater();
-            udp_channel_ = nullptr;
-
-            udp_test_data_.clear();
-            return;
-        }
-
-        udp_test_data_.clear();
-        udp_ready_ = true;
-
-        LOG(INFO) << "UDP channel is enabled";
-        emit sig_udpStateChanged(true);
-        return;
-    }
-
     onMessage(udp_channel_id, buffer);
 }
 

@@ -54,10 +54,9 @@ public:
 signals:
     void sig_started();
     void sig_finished();
-    void sig_udpStateChanged(bool enable);
 
 protected:
-    void send(quint8 channel_id, const QByteArray& buffer, bool udp = false);
+    void send(quint8 channel_id, const QByteArray& buffer);
 
     virtual void onStart() = 0;
     virtual void onMessage(quint8 channel_id, const QByteArray& buffer) = 0;
@@ -77,8 +76,6 @@ private:
 
     base::TcpChannel* tcp_channel_ = nullptr;
     base::UdpChannel* udp_channel_ = nullptr;
-
-    QByteArray udp_test_data_;
     bool udp_ready_ = false;
 
     Q_DISABLE_COPY_MOVE(Client)
