@@ -416,19 +416,7 @@ void KcpSocket::doKcpUpdate()
     if (!kcp_ || !socket_.is_open())
         return;
 
-    quint32 now = currentTimeMs();
-    ikcp_update(kcp_, now);
-
-    // Schedule next update adaptively instead of fixed interval.
-    quint32 next = ikcp_check(kcp_, now);
-    int delay = static_cast<int>(next - now);
-    if (delay < 1)
-        delay = 1;
-
-    // Restart the timer with the new interval.
-    if (update_timer_id_ != 0)
-        killTimer(update_timer_id_);
-    update_timer_id_ = startTimer(delay, Qt::PreciseTimer);
+    ikcp_update(kcp_, currentTimeMs());
 
     // Auto-start reading once the socket is open.
     if (!reading_)
