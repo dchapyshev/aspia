@@ -57,6 +57,7 @@ private:
     void init();
 
     static int kcpOutputCallback(const char* buf, int len, IKCPCB* kcp, void* user);
+    static void kcpWriteLogCallback(const char* log, struct IKCPCB* kcp, void* user);
 
     void doRead();
     void readAvailableData();

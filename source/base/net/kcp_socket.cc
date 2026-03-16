@@ -135,6 +135,7 @@ void KcpSocket::init()
     }
 
     kcp_->output = kcpOutputCallback;
+    kcp_->writelog = kcpWriteLogCallback;
     kcp_->stream = 1;
 
     // Set KCP to fast mode: nodelay=1, interval=10ms, fast resend=2, no congestion control.
@@ -332,6 +333,13 @@ int KcpSocket::kcpOutputCallback(const char* buf, int len, IKCPCB* /* kcp */, vo
         self->doUdpSend();
 
     return 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+void KcpSocket::kcpWriteLogCallback(const char* log, IKCPCB* /* kcp */, void* /* user */)
+{
+    LOG(INFO) << log;
 }
 
 //--------------------------------------------------------------------------------------------------
