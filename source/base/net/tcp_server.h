@@ -64,6 +64,7 @@ private:
     void doAccept();
     void removePendingChannel(TcpChannel* channel);
 
+    SharedPointer<bool> alive_guard_ { new bool(true) };
     asio::ip::tcp::acceptor acceptor_;
     int accept_error_count_ = 0;
 

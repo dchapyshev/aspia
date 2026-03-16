@@ -26,6 +26,7 @@
 #include <asio/ip/tcp.hpp>
 #include <asio/steady_timer.hpp>
 
+#include "base/shared_pointer.h"
 #include "base/net/tcp_channel.h"
 #include "base/peer/authenticator.h"
 
@@ -213,6 +214,7 @@ private:
     void onKeepAliveTimer();
     void sendKeepAlive(quint8 flags, const void* data, size_t size);
 
+    SharedPointer<bool> alive_guard_ { new bool(true) };
     asio::io_context& io_context_;
     asio::ip::tcp::socket socket_;
     std::unique_ptr<asio::ip::tcp::resolver> resolver_;

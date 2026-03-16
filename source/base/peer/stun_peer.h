@@ -23,6 +23,8 @@
 
 #include <asio/ip/udp.hpp>
 
+#include "base/shared_pointer.h"
+
 class QTimer;
 
 namespace base {
@@ -60,6 +62,7 @@ private:
     std::string stun_host_;
     std::string stun_port_;
 
+    SharedPointer<bool> alive_guard_ { new bool(true) };
     asio::ip::udp::resolver udp_resolver_;
     asio::ip::udp::socket udp_socket_;
     std::array<quint8, 1024> buffer_;

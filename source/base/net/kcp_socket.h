@@ -21,11 +21,12 @@
 
 #include <QObject>
 #include <QQueue>
-#include <QString>
 
 #include <array>
 
 #include <asio/ip/udp.hpp>
+
+#include "base/shared_pointer.h"
 
 struct IKCPCB;
 
@@ -65,6 +66,7 @@ private:
     void doUdpSend();
     void doKcpUpdate();
 
+    SharedPointer<bool> alive_guard_ { new bool(true) };
     asio::ip::udp::resolver resolver_;
     asio::ip::udp::socket socket_;
     asio::ip::udp::endpoint remote_endpoint_;

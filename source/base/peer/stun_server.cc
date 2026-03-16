@@ -37,6 +37,11 @@ StunServer::StunServer(QObject* parent)
 StunServer::~StunServer()
 {
     LOG(INFO) << "Dtor";
+
+    // Mark guard before releasing resources so that any pending ASIO handlers
+    // (already completed but not yet dispatched) will see the object is gone.
+    *alive_guard_ = false;
+
     std::error_code ignored_error;
     udp_socket_.cancel(ignored_error);
     udp_socket_.close(ignored_error);
@@ -81,9 +86,13 @@ bool StunServer::start(quint16 port)
 //--------------------------------------------------------------------------------------------------
 void StunServer::doReceiveRequest()
 {
+    auto guard = alive_guard_;
     udp_socket_.async_receive_from(asio::buffer(read_buffer_.data(), read_buffer_.size()), remote_endpoint_,
-        [this](const std::error_code& error_code, size_t bytes_transferred)
+        [this, guard](const std::error_code& error_code, size_t bytes_transferred)
     {
+        if (!*guard)
+            return;
+
         if (error_code)
         {
             if (error_code == asio::error::operation_aborted)

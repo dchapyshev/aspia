@@ -20,10 +20,11 @@
 #define BASE_PEER_STUN_SERVER_H
 
 #include <QObject>
-
 #include <array>
 
 #include <asio/ip/udp.hpp>
+
+#include "base/shared_pointer.h"
 
 namespace base {
 
@@ -43,6 +44,7 @@ private:
     void doReceiveRequest();
     bool doSendAddressReply(quint32 transaction_id, const asio::ip::udp::endpoint& remote_endpoint);
 
+    SharedPointer<bool> alive_guard_ { new bool(true) };
     quint16 port_ = 0;
     asio::ip::udp::socket udp_socket_;
     asio::ip::udp::endpoint remote_endpoint_;

@@ -113,6 +113,11 @@ SessionManager::SessionManager(QObject* parent)
 SessionManager::~SessionManager()
 {
     LOG(INFO) << "Dtor";
+
+    // Mark guard before releasing resources so that any pending ASIO handlers
+    // (already completed but not yet dispatched) will see the object is gone.
+    *alive_guard_ = false;
+
     std::error_code ignored_code;
     acceptor_.cancel(ignored_code);
     acceptor_.close(ignored_code);
@@ -361,8 +366,12 @@ void SessionManager::onSessionFinished()
 // static
 void SessionManager::doAccept(SessionManager* self)
 {
-    self->acceptor_.async_accept([self](const std::error_code& error_code, asio::ip::tcp::socket socket)
+    auto guard = self->alive_guard_;
+    self->acceptor_.async_accept([self, guard](const std::error_code& error_code, asio::ip::tcp::socket socket)
     {
+        if (!*guard)
+            return;
+
         if (!error_code)
         {
             LOG(INFO) << "New accepted connection:" << peerAddress(socket);

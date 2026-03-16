@@ -112,6 +112,10 @@ KcpSocket::KcpSocket(asio::ip::udp::socket&& socket, QObject* parent)
 //--------------------------------------------------------------------------------------------------
 KcpSocket::~KcpSocket()
 {
+    // Mark guard before releasing resources so that any pending ASIO handlers
+    // (already completed but not yet dispatched) will see the object is gone.
+    *alive_guard_ = false;
+
     close();
     ikcp_release(kcp_);
 }
@@ -141,9 +145,13 @@ void KcpSocket::init()
 //--------------------------------------------------------------------------------------------------
 void KcpSocket::connectTo(const QString& address, quint16 port)
 {
+    auto guard = alive_guard_;
     resolver_.async_resolve(address.toLocal8Bit().toStdString(), std::to_string(port),
-        [this](const std::error_code& error_code, const asio::ip::udp::resolver::results_type& endpoints)
+        [this, guard](const std::error_code& error_code, const asio::ip::udp::resolver::results_type& endpoints)
     {
+        if (!*guard)
+            return;
+
         if (error_code)
         {
             if (error_code != asio::error::operation_aborted)
@@ -157,8 +165,11 @@ void KcpSocket::connectTo(const QString& address, quint16 port)
         LOG(INFO) << "Resolved endpoints:" << endpointsToString(endpoints);
 
         asio::async_connect(socket_, endpoints,
-            [this](const std::error_code& error_code, const asio::ip::udp::endpoint& endpoint)
+            [this, guard](const std::error_code& error_code, const asio::ip::udp::endpoint& endpoint)
         {
+            if (!*guard)
+                return;
+
             if (error_code)
             {
                 if (error_code != asio::error::operation_aborted)
@@ -238,9 +249,13 @@ void KcpSocket::doRead()
 
     if (connected_)
     {
+        auto guard = alive_guard_;
         socket_.async_receive(asio::buffer(recv_buffer_.data(), recv_buffer_.size()),
-            [this](const std::error_code& error_code, size_t bytes_transferred)
+            [this, guard](const std::error_code& error_code, size_t bytes_transferred)
         {
+            if (!*guard)
+                return;
+
             if (error_code)
             {
                 if (error_code != asio::error::operation_aborted)
@@ -257,9 +272,13 @@ void KcpSocket::doRead()
         return;
     }
 
+    auto guard = alive_guard_;
     socket_.async_receive_from(asio::buffer(recv_buffer_.data(), recv_buffer_.size()), remote_endpoint_,
-        [this](const std::error_code& error_code, size_t bytes_transferred)
+        [this, guard](const std::error_code& error_code, size_t bytes_transferred)
     {
+        if (!*guard)
+            return;
+
         if (error_code)
         {
             if (error_code != asio::error::operation_aborted)
@@ -385,9 +404,13 @@ void KcpSocket::doUdpSend()
     udp_send_active_ = std::move(udp_send_queue_.front());
     udp_send_queue_.pop_front();
 
+    auto guard = alive_guard_;
     socket_.async_send(asio::buffer(udp_send_active_.constData(), udp_send_active_.size()),
-        [this](const std::error_code& error_code, size_t /* bytes_transferred */)
+        [this, guard](const std::error_code& error_code, size_t /* bytes_transferred */)
     {
+        if (!*guard)
+            return;
+
         if (error_code)
         {
             if (error_code != asio::error::operation_aborted)

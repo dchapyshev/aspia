@@ -24,6 +24,7 @@
 
 #include <asio/ip/tcp.hpp>
 
+#include "base/shared_pointer.h"
 #include "base/peer/host_id.h"
 
 namespace base {
@@ -74,6 +75,8 @@ private:
 
     static const int kNumberOfSides = 2;
     static const int kBufferSize = 8192;
+
+    base::SharedPointer<bool> alive_guard_ { new bool(true) };
 
     asio::ip::tcp::socket socket_[kNumberOfSides];
     std::array<quint8, kBufferSize> buffer_[kNumberOfSides];

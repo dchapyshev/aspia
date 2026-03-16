@@ -71,6 +71,11 @@ RelayPeer::RelayPeer(Authenticator* authenticator, QObject* parent)
 RelayPeer::~RelayPeer()
 {
     LOG(INFO) << "Dtor";
+
+    // Mark guard before releasing resources so that any pending ASIO handlers
+    // (already completed but not yet dispatched) will see the object is gone.
+    *alive_guard_ = false;
+
     std::error_code ignored_code;
     socket_.cancel(ignored_code);
     socket_.close(ignored_code);
@@ -90,9 +95,13 @@ void RelayPeer::start(const proto::router::ConnectionOffer& offer)
     LOG(INFO) << "Start resolving for" << host << ":" << credentials.port()
               << "(legacy" << offer.is_legacy() << ")";
 
+    auto guard = alive_guard_;
     resolver_.async_resolve(host.toLocal8Bit().data(), std::to_string(credentials.port()),
-        [this](const std::error_code& error_code, const asio::ip::tcp::resolver::results_type& endpoints)
+        [this, guard](const std::error_code& error_code, const asio::ip::tcp::resolver::results_type& endpoints)
     {
+        if (!*guard)
+            return;
+
         if (error_code)
         {
             if (error_code != asio::error::operation_aborted)
@@ -104,8 +113,11 @@ void RelayPeer::start(const proto::router::ConnectionOffer& offer)
         LOG(INFO) << "Start connecting...";
 
         asio::async_connect(socket_, endpoints,
-            [this](const std::error_code& error_code, const asio::ip::tcp::endpoint& endpoint)
+            [this, guard](const std::error_code& error_code, const asio::ip::tcp::endpoint& endpoint)
         {
+            if (!*guard)
+                return;
+
             if (error_code)
             {
                 if (error_code == asio::error::operation_aborted)
@@ -150,14 +162,17 @@ void RelayPeer::onConnected()
 
     message_size_ = qToBigEndian(static_cast<quint32>(message_.size()));
 
+    auto guard = alive_guard_;
     asio::async_write(socket_, asio::const_buffer(&message_size_, sizeof(message_size_)),
-        [this](const std::error_code& error_code, size_t bytes_transferred)
+        [this, guard](const std::error_code& error_code, size_t bytes_transferred)
     {
+        if (!*guard)
+            return;
+
         if (error_code)
         {
-            if (error_code == asio::error::operation_aborted)
-                return;
-            onErrorOccurred(FROM_HERE, error_code);
+            if (error_code != asio::error::operation_aborted)
+                onErrorOccurred(FROM_HERE, error_code);
             return;
         }
 
@@ -168,8 +183,11 @@ void RelayPeer::onConnected()
         }
 
         asio::async_write(socket_, asio::const_buffer(message_.data(), message_.size()),
-            [this](const std::error_code& error_code, size_t bytes_transferred)
+            [this, guard](const std::error_code& error_code, size_t bytes_transferred)
         {
+            if (!*guard)
+                return;
+
             if (error_code)
             {
                 if (error_code == asio::error::operation_aborted)

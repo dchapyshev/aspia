@@ -36,6 +36,10 @@ TcpServerLegacy::TcpServerLegacy(QObject* parent)
 //--------------------------------------------------------------------------------------------------
 TcpServerLegacy::~TcpServerLegacy()
 {
+    // Mark guard before releasing resources so that any pending ASIO handlers
+    // (already completed but not yet dispatched) will see the object is gone.
+    *alive_guard_ = false;
+
     std::error_code ignored_error;
     acceptor_.cancel(ignored_error);
 }
@@ -162,8 +166,12 @@ bool TcpServerLegacy::isValidListenInterface(const QString& iface)
 //--------------------------------------------------------------------------------------------------
 void TcpServerLegacy::doAccept()
 {
-    acceptor_.async_accept([this](const std::error_code& error_code, asio::ip::tcp::socket socket)
+    auto guard = alive_guard_;
+    acceptor_.async_accept([this, guard](const std::error_code& error_code, asio::ip::tcp::socket socket)
     {
+        if (!*guard)
+            return;
+
         if (error_code)
         {
             if (error_code == asio::error::operation_aborted)

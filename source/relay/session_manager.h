@@ -24,6 +24,7 @@
 #include <asio/ip/tcp.hpp>
 #include <asio/steady_timer.hpp>
 
+#include "base/shared_pointer.h"
 #include "proto/relay_peer.h"
 #include "proto/router_relay.h"
 #include "relay/session_key.h"
@@ -77,6 +78,7 @@ private:
     std::unordered_map<quint32, SessionKey> key_pool_;
     quint32 key_counter_ = 0;
 
+    base::SharedPointer<bool> alive_guard_ { new bool(true) };
     asio::ip::tcp::acceptor acceptor_;
     QList<PendingSession*> pending_sessions_;
     QList<Session*> active_sessions_;

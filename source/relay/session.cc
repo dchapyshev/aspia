@@ -53,6 +53,10 @@ Session::Session(std::pair<asio::ip::tcp::socket, asio::ip::tcp::socket>&& socke
 //--------------------------------------------------------------------------------------------------
 Session::~Session()
 {
+    // Mark guard before releasing resources so that any pending ASIO handlers
+    // (already completed but not yet dispatched) will see the object is gone.
+    *alive_guard_ = false;
+
     std::error_code ignored_code;
     for (int i = 0; i < kNumberOfSides; ++i)
     {
@@ -97,10 +101,14 @@ std::chrono::seconds Session::duration(const TimePoint& current_time) const
 // static
 void Session::doReadSome(Session* session, int source)
 {
+    auto guard = session->alive_guard_;
     session->socket_[source].async_read_some(
         asio::buffer(session->buffer_[source].data(), session->buffer_[source].size()),
-        [session, source](const std::error_code& error_code, size_t bytes_transferred)
+        [guard, session, source](const std::error_code& error_code, size_t bytes_transferred)
     {
+        if (!*guard)
+            return;
+
         if (error_code)
         {
             if (error_code != asio::error::operation_aborted)
@@ -114,8 +122,11 @@ void Session::doReadSome(Session* session, int source)
         asio::async_write(
             session->socket_[(source + kNumberOfSides - 1) % kNumberOfSides],
             asio::const_buffer(session->buffer_[source].data(), bytes_transferred),
-            [session, source](const std::error_code& error_code, size_t /* bytes_transferred */)
+            [guard, session, source](const std::error_code& error_code, size_t /* bytes_transferred */)
         {
+            if (!*guard)
+                return;
+
             if (error_code)
             {
                 if (error_code != asio::error::operation_aborted)

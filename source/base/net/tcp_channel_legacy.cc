@@ -97,6 +97,9 @@ TcpChannelLegacy::TcpChannelLegacy(
 //--------------------------------------------------------------------------------------------------
 TcpChannelLegacy::~TcpChannelLegacy()
 {
+    // Mark guard before releasing resources so that any pending ASIO handlers
+    // (already completed but not yet dispatched) will see the object is gone.
+    *alive_guard_ = false;
     disconnectFrom();
 }
 
@@ -169,14 +172,17 @@ void TcpChannelLegacy::connectTo(const QString& address, quint16 port)
 
     LOG(INFO) << "Start resolving for" << host << ":" << service;
 
+    auto guard = alive_guard_;
     resolver_->async_resolve(host, service,
-        [this](const std::error_code& error_code, const asio::ip::tcp::resolver::results_type& endpoints)
+        [this, guard](const std::error_code& error_code, const asio::ip::tcp::resolver::results_type& endpoints)
     {
+        if (!*guard)
+            return;
+
         if (error_code)
         {
             if (error_code == asio::error::operation_aborted)
                 return;
-
             onErrorOccurred(FROM_HERE, error_code);
             return;
         }
@@ -195,8 +201,11 @@ void TcpChannelLegacy::connectTo(const QString& address, quint16 port)
 
             return true;
         },
-            [this](const std::error_code& error_code, const asio::ip::tcp::endpoint& endpoint)
+            [this, guard](const std::error_code& error_code, const asio::ip::tcp::endpoint& endpoint)
         {
+            if (!*guard)
+                return;
+
             if (error_code)
             {
                 if (error_code == asio::error::operation_aborted)
@@ -725,15 +734,17 @@ void TcpChannelLegacy::doWrite()
     }
 
     // Send the buffer to the recipient.
-    asio::async_write(socket_,
-                      asio::buffer(write_buffer_.data(), write_buffer_.size()),
-                      [this](const std::error_code& error_code, size_t bytes_transferred)
+    auto guard = alive_guard_;
+    asio::async_write(socket_, asio::buffer(write_buffer_.data(), write_buffer_.size()),
+        [this, guard](const std::error_code& error_code, size_t bytes_transferred)
     {
+        if (!*guard)
+            return;
+
         if (error_code)
         {
             if (error_code == asio::error::operation_aborted)
                 return;
-
             onErrorOccurred(FROM_HERE, error_code);
             return;
         }
@@ -765,14 +776,18 @@ void TcpChannelLegacy::doWrite()
 void TcpChannelLegacy::doReadSize()
 {
     state_ = ReadState::READ_SIZE;
+
+    auto guard = alive_guard_;
     asio::async_read(socket_, variable_size_reader_.buffer(),
-        [this](const std::error_code& error_code, size_t bytes_transferred)
+        [this, guard](const std::error_code& error_code, size_t bytes_transferred)
     {
+        if (!*guard)
+            return;
+
         if (error_code)
         {
             if (error_code == asio::error::operation_aborted)
                 return;
-
             onErrorOccurred(FROM_HERE, error_code);
             return;
         }
@@ -815,9 +830,14 @@ void TcpChannelLegacy::doReadUserData(size_t length)
     resizeBuffer(&read_buffer_, length);
 
     state_ = ReadState::READ_USER_DATA;
+
+    auto guard = alive_guard_;
     asio::async_read(socket_, asio::buffer(read_buffer_.data(), read_buffer_.size()),
-        [this](const std::error_code& error_code, size_t bytes_transferred)
+        [this, guard](const std::error_code& error_code, size_t bytes_transferred)
     {
+        if (!*guard)
+            return;
+
         if (error_code)
         {
             if (error_code == asio::error::operation_aborted)
@@ -858,14 +878,18 @@ void TcpChannelLegacy::doReadServiceHeader()
     resizeBuffer(&read_buffer_, sizeof(ServiceHeader));
 
     state_ = ReadState::READ_SERVICE_HEADER;
+
+    auto guard = alive_guard_;
     asio::async_read(socket_, asio::buffer(read_buffer_.data(), read_buffer_.size()),
-        [this](const std::error_code& error_code, size_t bytes_transferred)
+        [this, guard](const std::error_code& error_code, size_t bytes_transferred)
     {
+        if (!*guard)
+            return;
+
         if (error_code)
         {
             if (error_code == asio::error::operation_aborted)
                 return;
-
             onErrorOccurred(FROM_HERE, error_code);
             return;
         }
@@ -915,16 +939,20 @@ void TcpChannelLegacy::doReadServiceData(size_t length)
 
     // Now we read the data after the header.
     state_ = ReadState::READ_SERVICE_DATA;
+
+    auto guard = alive_guard_;
     asio::async_read(socket_,
-                     asio::buffer(read_buffer_.data() + sizeof(ServiceHeader),
-                                  read_buffer_.size() - sizeof(ServiceHeader)),
-                     [this](const std::error_code& error_code, size_t bytes_transferred)
+        asio::buffer(read_buffer_.data() + sizeof(ServiceHeader),
+                     read_buffer_.size() - sizeof(ServiceHeader)),
+        [this, guard](const std::error_code& error_code, size_t bytes_transferred)
     {
+        if (!*guard)
+            return;
+
         if (error_code)
         {
             if (error_code == asio::error::operation_aborted)
                 return;
-
             onErrorOccurred(FROM_HERE, error_code);
             return;
         }

@@ -70,6 +70,10 @@ PendingSession::PendingSession(asio::ip::tcp::socket&& socket, QObject* parent)
 //--------------------------------------------------------------------------------------------------
 PendingSession::~PendingSession()
 {
+    // Mark guard before releasing resources so that any pending ASIO handlers
+    // (already completed but not yet dispatched) will see the object is gone.
+    *alive_guard_ = false;
+
     std::error_code ignored_code;
     socket_.cancel(ignored_code);
     socket_.close(ignored_code);
@@ -140,10 +144,14 @@ quint32 PendingSession::keyId() const
 // static
 void PendingSession::doReadMessage(PendingSession* session)
 {
+    auto guard = session->alive_guard_;
     asio::async_read(session->socket_,
-                     asio::buffer(&session->buffer_size_, sizeof(quint32)),
-                     [session](const std::error_code& error_code, size_t bytes_transferred)
+        asio::buffer(&session->buffer_size_, sizeof(quint32)),
+        [session, guard](const std::error_code& error_code, size_t bytes_transferred)
     {
+        if (!*guard)
+            return;
+
         if (error_code)
         {
             if (error_code != asio::error::operation_aborted)
@@ -167,9 +175,12 @@ void PendingSession::doReadMessage(PendingSession* session)
         session->buffer_.resize(session->buffer_size_);
 
         asio::async_read(session->socket_,
-                         asio::buffer(session->buffer_.data(), session->buffer_.size()),
-                         [session](const std::error_code& error_code, size_t bytes_transferred)
+            asio::buffer(session->buffer_.data(), session->buffer_.size()),
+            [session, guard](const std::error_code& error_code, size_t bytes_transferred)
         {
+            if (!*guard)
+                return;
+
             if (error_code)
             {
                 if (error_code != asio::error::operation_aborted)
