@@ -35,10 +35,10 @@ const std::chrono::seconds kKeepAliveInterval { 30 };
 const std::chrono::seconds kKeepAliveTimeout { 30 };
 const quint32 kMaxMessageSize = 7 * 1024 * 1024; // 7 MB
 const int kWriteQueueReservedSize = 128;
-const int kReadBufferReserveSize = 512 * 1024;
+const int kReadBufferReserveSize = 1 * 1024 * 1024;
 const int kWriteBufferReserveSize = 2 * 1024 * 1024;
 const int kDecryptBufferReserveSize = 2 * 1024 * 1024;
-const int kReadBufferCompactThreshold = 64 * 1024;
+const int kReadBufferCompactThreshold = 1 * 1024 * 1024;
 
 //--------------------------------------------------------------------------------------------------
 void resizeBuffer(QByteArray* buffer, qint64 size)
