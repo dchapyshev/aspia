@@ -656,6 +656,10 @@ void Client::startDirectUdp(base::UdpChannel* udp_channel, const QString& addres
 
         port = binded_port;
     }
+    else
+    {
+        udp_channel_ = udp_channel;
+    }
 
     udp_channel_->setParent(this);
 
