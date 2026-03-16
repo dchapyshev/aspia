@@ -113,12 +113,7 @@ KcpSocket::KcpSocket(asio::ip::udp::socket&& socket, QObject* parent)
 KcpSocket::~KcpSocket()
 {
     close();
-
-    if (kcp_)
-    {
-        ikcp_release(kcp_);
-        kcp_ = nullptr;
-    }
+    ikcp_release(kcp_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -128,11 +123,7 @@ void KcpSocket::init()
     kcp_read_buffer_.reserve(kKcpReadBufferReserve);
 
     kcp_ = ikcp_create(kKcpConv, this);
-    if (!kcp_)
-    {
-        LOG(ERROR) << "Failed to create KCP object";
-        return;
-    }
+    CHECK(kcp_);
 
     kcp_->output = kcpOutputCallback;
     kcp_->writelog = kcpWriteLogCallback;
@@ -191,9 +182,6 @@ void KcpSocket::connectTo(const QString& address, quint16 port)
 //--------------------------------------------------------------------------------------------------
 bool KcpSocket::send(const char* data, int size)
 {
-    if (!kcp_)
-        return false;
-
     const char* ptr = data;
     int remaining = size;
 
@@ -312,9 +300,6 @@ void KcpSocket::doRead()
 //--------------------------------------------------------------------------------------------------
 void KcpSocket::onUdpDataReceived(size_t bytes_transferred)
 {
-    if (!kcp_)
-        return;
-
     int ret = ikcp_input(kcp_, recv_buffer_.data(), static_cast<int>(bytes_transferred));
     if (ret < 0)
     {
@@ -357,9 +342,6 @@ void KcpSocket::kcpWriteLogCallback(const char* log, IKCPCB* /* kcp */, void* /*
 //--------------------------------------------------------------------------------------------------
 void KcpSocket::readAvailableData()
 {
-    if (!kcp_)
-        return;
-
     int total_read = 0;
 
     while (true)
@@ -433,7 +415,7 @@ void KcpSocket::timerEvent(QTimerEvent* event)
 //--------------------------------------------------------------------------------------------------
 void KcpSocket::doKcpUpdate()
 {
-    if (!kcp_ || !socket_.is_open())
+    if (!socket_.is_open())
         return;
 
     ikcp_update(kcp_, currentTimeMs());
