@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>352</width>
-    <height>469</height>
+    <height>455</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -116,22 +116,17 @@
      </item>
      <item>
       <property name="text">
-       <string notr="true">Send Key Event</string>
+       <string notr="true">Key Event Send</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string notr="true">Send Text Event</string>
+       <string notr="true">Text Event Send</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string notr="true">Read Clipboard Event</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string notr="true">Send Clipboard Event</string>
+       <string notr="true">Clipboard Event Read/Send</string>
       </property>
      </item>
      <item>
