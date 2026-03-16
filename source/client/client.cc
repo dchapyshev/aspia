@@ -400,6 +400,8 @@ void Client::onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer)
         {
             const proto::peer::DirectUdpReply& udp_reply = message.direct_udp_reply();
 
+            LOG(INFO) << "Direct UDP reply is received";
+
             if (!udp_channel_ || !udp_key_pair_.isValid())
             {
                 LOG(ERROR) << "UDP reply received but no UDP channel or key pair";
@@ -484,17 +486,11 @@ void Client::onUdpMessageReceived(quint8 channel_id, const QByteArray& buffer)
     }
 
     if (channel_id == proto::peer::CHANNEL_ID_0)
-    {
         onSessionMessageReceived(buffer);
-    }
     else if (channel_id == proto::peer::CHANNEL_ID_1)
-    {
         onServiceMessageReceived(buffer);
-    }
     else
-    {
         LOG(WARNING) << "Unhandled incoming message from channel" << channel_id;
-    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -516,7 +512,8 @@ void Client::onHostAwaiting()
 //--------------------------------------------------------------------------------------------------
 void Client::onHostConnected(bool peer_address_equals, const QString& stun_host, quint16 stun_port)
 {
-    LOG(INFO) << "Host connected";
+    LOG(INFO) << "Host connected (peer address equals" << peer_address_equals << "stun"
+              << stun_host << ':' << stun_port << ')';
     CHECK(router_controller_);
 
     tcp_channel_ = router_controller_->takeChannel();
@@ -644,16 +641,19 @@ void Client::startUdpHolePunching()
 //--------------------------------------------------------------------------------------------------
 void Client::startDirectUdp(base::UdpChannel* udp_channel, const QString& address, quint16 port)
 {
+    LOG(INFO) << "Starting direct UDP...";
+
     if (!udp_channel)
     {
         quint16 binded_port = 0;
         udp_channel_ = base::UdpChannel::bind(binded_port);
-        if (!udp_channel)
+        if (!udp_channel_)
         {
             LOG(ERROR) << "Unable to bind UDP port";
             return;
         }
 
+        LOG(INFO) << "UDP port is binded:" << binded_port;
         port = binded_port;
     }
     else
@@ -702,6 +702,7 @@ void Client::startDirectUdp(base::UdpChannel* udp_channel, const QString& addres
     request->set_public_key(udp_key_pair_.publicKey().toStdString());
     request->set_iv(udp_iv_.toStdString());
 
+    LOG(INFO) << "Sending direct UDP request";
     tcp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, base::serialize(message));
 }
 

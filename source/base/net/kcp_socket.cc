@@ -32,7 +32,7 @@ namespace {
 
 const quint32 kKcpConv = 1;
 const int kKcpInitialUpdateMs = 10;
-const int kKcpMtu = 1400;
+const int kKcpMtu = 1200;
 const int kMaxKcpChunk = 120 * (kKcpMtu - 24);
 const int kKcpWindowSize = 512;
 const int kKcpReadBufferReserve = 512 * 1024;
