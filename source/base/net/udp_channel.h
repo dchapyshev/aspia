@@ -140,7 +140,7 @@ private:
     void addRxBytes(qint64 bytes_count);
 
     KcpSocket* kcp_socket_ = nullptr;
-    QTimer* keep_alive_timer_;
+    QTimer* keep_alive_timer_ = nullptr;
     KeepAliveTimerType keep_alive_timer_type_ = KEEP_ALIVE_INTERVAL;
     QByteArray keep_alive_counter_;
 

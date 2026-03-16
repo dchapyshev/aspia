@@ -66,7 +66,8 @@ int calculateSpeed(int last_speed, const std::chrono::milliseconds& duration, qi
 //--------------------------------------------------------------------------------------------------
 UdpChannel::UdpChannel(QObject* parent)
     : QObject(parent),
-      kcp_socket_(new KcpSocket(this))
+      kcp_socket_(new KcpSocket(this)),
+      keep_alive_timer_(new QTimer(this))
 {
     init();
 }
@@ -74,7 +75,8 @@ UdpChannel::UdpChannel(QObject* parent)
 //--------------------------------------------------------------------------------------------------
 UdpChannel::UdpChannel(asio::ip::udp::socket&& socket, QObject* parent)
     : QObject(parent),
-      kcp_socket_(new KcpSocket(std::move(socket), this))
+      kcp_socket_(new KcpSocket(std::move(socket), this)),
+      keep_alive_timer_(new QTimer(this))
 {
     init();
 }
@@ -148,7 +150,7 @@ void UdpChannel::addWriteTask(quint8 type, quint8 param, QByteArray data)
 //--------------------------------------------------------------------------------------------------
 void UdpChannel::doWrite()
 {
-    if (!kcp_socket_ || write_queue_.isEmpty())
+    if (write_queue_.isEmpty())
         return;
 
     while (!write_queue_.isEmpty())
@@ -189,6 +191,12 @@ void UdpChannel::doWrite()
         }
         else
         {
+            if (task.type() == USER_DATA)
+            {
+                onErrorOccurred(FROM_HERE, std::error_code());
+                return;
+            }
+
             memcpy(write_buffer_.data() + sizeof(Header), source_buffer.constData(), source_buffer.size());
         }
 
@@ -259,7 +267,6 @@ void UdpChannel::init()
         onErrorOccurred(FROM_HERE, std::error_code());
     });
 
-    keep_alive_timer_ = new QTimer(this);
     keep_alive_timer_->setSingleShot(true);
     connect(keep_alive_timer_, &QTimer::timeout, this, &UdpChannel::onKeepAliveTimer);
 
@@ -381,15 +388,21 @@ bool UdpChannel::onMessageReceived(int offset)
         }
     }
 
-    const char* payload_data = decryptor_ ? decrypt_buffer_.constData() : data;
-    int payload_size = decryptor_ ? decrypt_buffer_.size() : size;
-
     if (header.type == USER_DATA)
     {
-        emit sig_messageReceived(header.param1, QByteArray(payload_data, payload_size));
+        if (!decryptor_)
+        {
+            onErrorOccurred(FROM_HERE, std::error_code());
+            return false;
+        }
+
+        emit sig_messageReceived(header.param1, decrypt_buffer_);
     }
     else if (header.type == KEEP_ALIVE)
     {
+        const char* payload_data = decryptor_ ? decrypt_buffer_.constData() : data;
+        int payload_size = decryptor_ ? decrypt_buffer_.size() : size;
+
         if (header.param1 & KEEP_ALIVE_PING)
         {
             addWriteTask(KEEP_ALIVE, KEEP_ALIVE_PONG, QByteArray(payload_data, payload_size));

@@ -134,9 +134,6 @@ void KcpSocket::init()
     ikcp_setmtu(kcp_, kKcpMtu);
     ikcp_wndsize(kcp_, kKcpWindowSize, kKcpWindowSize);
 
-    // Lower minimum RTO for LAN/fast networks.
-    kcp_->rx_minrto = 10;
-
     // Start the KCP update timer. Reading will begin automatically once the socket is open.
     update_timer_id_ = startTimer(kKcpInitialUpdateMs, Qt::PreciseTimer);
 }
