@@ -113,7 +113,6 @@ UdpChannel* UdpChannel::bind(quint16& port)
 //--------------------------------------------------------------------------------------------------
 void UdpChannel::connectTo(const QString& address, quint16 port)
 {
-    client_connect_ = true;
     kcp_socket_->connectTo(address, port);
 }
 
@@ -130,9 +129,9 @@ bool UdpChannel::isConnected() const
 }
 
 //--------------------------------------------------------------------------------------------------
-quint16 UdpChannel::port() const
+bool UdpChannel::isEncrypted() const
 {
-    return kcp_socket_->port();
+    return encryptor_ && decryptor_;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -323,12 +322,7 @@ void UdpChannel::onKcpConnected()
         keep_alive_timer_->start(kKeepAliveInterval);
     }
 
-    // Emit sig_connected only for client-initiated connections (connectTo path).
-    if (client_connect_)
-    {
-        client_connect_ = false;
-        emit sig_connected();
-    }
+    emit sig_connected();
 }
 
 //--------------------------------------------------------------------------------------------------

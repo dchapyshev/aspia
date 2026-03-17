@@ -452,11 +452,12 @@ void Client::onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer)
 
             udp_channel_->setEncryptor(std::move(encryptor));
             udp_channel_->setDecryptor(std::move(decryptor));
-            udp_channel_->setPaused(false);
 
             // Key pair is no longer needed.
             udp_key_pair_ = base::KeyPair();
             udp_iv_.clear();
+
+            udp_channel_->accept();
         }
     }
     else
@@ -477,14 +478,6 @@ void Client::onUdpErrorOccurred()
 //--------------------------------------------------------------------------------------------------
 void Client::onUdpMessageReceived(quint8 channel_id, const QByteArray& buffer)
 {
-    if (!udp_ready_)
-    {
-        LOG(INFO) << "UDP test data received:" << buffer;
-        udp_channel_->send(proto::peer::CHANNEL_ID_0, buffer);
-        udp_ready_ = true;
-        return;
-    }
-
     if (channel_id == proto::peer::CHANNEL_ID_0)
         onSessionMessageReceived(buffer);
     else if (channel_id == proto::peer::CHANNEL_ID_1)
@@ -663,6 +656,12 @@ void Client::startDirectUdp(base::UdpChannel* udp_channel, const QString& addres
 
     udp_channel_->setParent(this);
 
+    connect(udp_channel_, &base::UdpChannel::sig_connected, this, [this]()
+    {
+        LOG(INFO) << "UDP channel is ready";
+        udp_channel_->setPaused(false);
+        udp_ready_ = true;
+    });
     connect(udp_channel_, &base::UdpChannel::sig_errorOccurred, this, &Client::onUdpErrorOccurred);
     connect(udp_channel_, &base::UdpChannel::sig_messageReceived, this, &Client::onUdpMessageReceived);
 

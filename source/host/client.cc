@@ -349,14 +349,6 @@ void Client::connectToUdp(const QString& address, quint16 port, quint32 encrypti
         return;
     }
 
-    // Send reply with host's public key and IV.
-    proto::peer::HostToClient reply;
-    proto::peer::DirectUdpReply* udp_reply = reply.mutable_direct_udp_reply();
-    udp_reply->set_encryption(encryption);
-    udp_reply->set_public_key(host_key_pair.publicKey().toStdString());
-    udp_reply->set_iv(host_iv.toStdString());
-    tcp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, base::serialize(reply));
-
     udp_channel_ = new base::UdpChannel(this);
     udp_channel_->setEncryptor(std::move(encryptor));
     udp_channel_->setDecryptor(std::move(decryptor));
@@ -366,6 +358,16 @@ void Client::connectToUdp(const QString& address, quint16 port, quint32 encrypti
     connect(udp_channel_, &base::UdpChannel::sig_messageReceived, this, &Client::onUdpMessageReceived);
 
     udp_channel_->connectTo(address, port);
+
+    // Send reply with host's public key and IV.
+    proto::peer::HostToClient reply;
+    proto::peer::DirectUdpReply* udp_reply = reply.mutable_direct_udp_reply();
+    udp_reply->set_address(udp_channel_->address().toStdString());
+    udp_reply->set_port(udp_channel_->port());
+    udp_reply->set_encryption(encryption);
+    udp_reply->set_public_key(host_key_pair.publicKey().toStdString());
+    udp_reply->set_iv(host_iv.toStdString());
+    tcp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, base::serialize(reply));
 }
 
 } // namespace host

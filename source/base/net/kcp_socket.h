@@ -44,9 +44,8 @@ public:
     static KcpSocket* bind(quint16& port);
 
     void connectTo(const QString& address, quint16 port);
-    bool send(const char* data, int size);
+    bool send(const void* data, int size);
     void close();
-    quint16 port() const;
 
 signals:
     void sig_connected();
@@ -60,12 +59,11 @@ private:
     void init();
 
     static int kcpOutputCallback(const char* buf, int len, IKCPCB* kcp, void* user);
-    static void kcpWriteLogCallback(const char* log, struct IKCPCB* kcp, void* user);
 
     void doRead();
     void onUdpDataReceived(size_t bytes_transferred);
     void doUdpSend();
-    void doKcpUpdate();
+    void sendHandshake();
 
     SharedPointer<bool> alive_guard_ { new bool(true) };
     asio::ip::udp::resolver resolver_;
@@ -77,6 +75,7 @@ private:
     QQueue<QByteArray> udp_send_queue_;
     QByteArray udp_send_active_;
     bool udp_sending_ = false;
+    bool has_remote_endpoint_ = false;
     bool connected_ = false;
     bool reading_ = false;
 

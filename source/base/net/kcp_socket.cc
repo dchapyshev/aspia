@@ -37,6 +37,7 @@ const int kMaxKcpChunk = 120 * (kKcpMtu - 24);
 const int kKcpWindowSize = 512;
 const int kKcpReadBufferReserve = 512 * 1024;
 const int kUdpSendQueueReservedSize = 256;
+const quint32 kMagicNumber = 0xDC8894AC;
 
 //--------------------------------------------------------------------------------------------------
 quint32 currentTimeMs()
@@ -56,21 +57,6 @@ QString addressToString(const asio::ip::address& address)
 QString endpointToString(const asio::ip::udp::endpoint& endpoint)
 {
     return addressToString(endpoint.address()) + ':' + QString::number(endpoint.port());
-}
-
-//--------------------------------------------------------------------------------------------------
-QStringList endpointsToString(const asio::ip::udp::resolver::results_type& endpoints)
-{
-    if (endpoints.empty())
-        return QStringList();
-
-    QStringList list;
-    list.reserve(endpoints.size());
-
-    for (auto it = endpoints.begin(), it_end = endpoints.end(); it != it_end; ++it)
-        list.emplace_back(endpointToString(it->endpoint()));
-
-    return list;
 }
 
 } // namespace
@@ -143,76 +129,44 @@ KcpSocket* KcpSocket::bind(quint16& port)
 }
 
 //--------------------------------------------------------------------------------------------------
-void KcpSocket::init()
-{
-    udp_send_queue_.reserve(kUdpSendQueueReservedSize);
-    kcp_read_buffer_.reserve(kKcpReadBufferReserve);
-
-    kcp_ = ikcp_create(kKcpConv, this);
-    CHECK(kcp_);
-
-    kcp_->output = kcpOutputCallback;
-    kcp_->writelog = kcpWriteLogCallback;
-    kcp_->stream = 1;
-
-    // Set KCP to fast mode: nodelay=1, interval=10ms, fast resend=2, no congestion control.
-    ikcp_nodelay(kcp_, 1, kKcpInitialUpdateMs, 2, 1);
-    ikcp_setmtu(kcp_, kKcpMtu);
-    ikcp_wndsize(kcp_, kKcpWindowSize, kKcpWindowSize);
-
-    // Start the KCP update timer. Reading will begin automatically once the socket is open.
-    update_timer_id_ = startTimer(kKcpInitialUpdateMs, Qt::PreciseTimer);
-}
-
-//--------------------------------------------------------------------------------------------------
 void KcpSocket::connectTo(const QString& address, quint16 port)
 {
-    auto guard = alive_guard_;
-    resolver_.async_resolve(address.toLocal8Bit().toStdString(), std::to_string(port),
-        [this, guard](const std::error_code& error_code, const asio::ip::udp::resolver::results_type& endpoints)
+    std::error_code error_code;
+    asio::ip::address ip_address =
+        asio::ip::make_address(address.toLocal8Bit().toStdString(), error_code);
+    if (error_code)
     {
-        if (!*guard)
-            return;
+        LOG(ERROR) << "Unable to parse address:" << error_code;
+        emit sig_errorOccurred();
+        return;
+    }
 
-        if (error_code)
-        {
-            if (error_code != asio::error::operation_aborted)
-            {
-                LOG(ERROR) << "DNS resolve error:" << error_code;
-                emit sig_errorOccurred();
-            }
-            return;
-        }
+    asio::ip::udp::endpoint remote_endpoint(ip_address, port);
 
-        LOG(INFO) << "Resolved endpoints:" << endpointsToString(endpoints);
+    socket_.open(remote_endpoint.protocol(), error_code);
+    if (error_code)
+    {
+        LOG(ERROR) << "Unable to open socket:" << error_code;
+        emit sig_errorOccurred();
+        return;
+    }
 
-        asio::async_connect(socket_, endpoints,
-            [this, guard](const std::error_code& error_code, const asio::ip::udp::endpoint& endpoint)
-        {
-            if (!*guard)
-                return;
+    socket_.connect(remote_endpoint, error_code);
+    if (error_code)
+    {
+        LOG(ERROR) << "Unable to connect socket:" << error_code;
+        emit sig_errorOccurred();
+        return;
+    }
 
-            if (error_code)
-            {
-                if (error_code != asio::error::operation_aborted)
-                {
-                    LOG(ERROR) << "Connect error:" << error_code;
-                    emit sig_errorOccurred();
-                }
-                return;
-            }
-
-            LOG(INFO) << "Connected to" << endpointToString(endpoint);
-            connected_ = true;
-            emit sig_connected();
-        });
-    });
+    has_remote_endpoint_ = true;
+    sendHandshake();
 }
 
 //--------------------------------------------------------------------------------------------------
-bool KcpSocket::send(const char* data, int size)
+bool KcpSocket::send(const void* data, int size)
 {
-    const char* ptr = data;
+    const char* ptr = reinterpret_cast<const char*>(data);
     int remaining = size;
 
     while (remaining > 0)
@@ -251,17 +205,24 @@ void KcpSocket::close()
 }
 
 //--------------------------------------------------------------------------------------------------
-quint16 KcpSocket::port() const
+void KcpSocket::init()
 {
-    std::error_code error_code;
-    asio::ip::udp::endpoint endpoint = socket_.local_endpoint(error_code);
-    if (error_code)
-    {
-        LOG(ERROR) << "Unable to get local endpoint:" << error_code;
-        return 0;
-    }
+    udp_send_queue_.reserve(kUdpSendQueueReservedSize);
+    kcp_read_buffer_.reserve(kKcpReadBufferReserve);
 
-    return endpoint.port();
+    kcp_ = ikcp_create(kKcpConv, this);
+    CHECK(kcp_);
+
+    kcp_->output = kcpOutputCallback;
+    kcp_->stream = 1;
+
+    // Set KCP to fast mode: nodelay=1, interval=10ms, fast resend=2, no congestion control.
+    ikcp_nodelay(kcp_, 1, kKcpInitialUpdateMs, 2, 1);
+    ikcp_setmtu(kcp_, kKcpMtu);
+    ikcp_wndsize(kcp_, kKcpWindowSize, kKcpWindowSize);
+
+    // Start the KCP update timer. Reading will begin automatically once the socket is open.
+    update_timer_id_ = startTimer(kKcpInitialUpdateMs, Qt::PreciseTimer);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -269,7 +230,7 @@ void KcpSocket::doRead()
 {
     reading_ = true;
 
-    if (connected_)
+    if (has_remote_endpoint_)
     {
         auto guard = alive_guard_;
         socket_.async_receive(asio::buffer(recv_buffer_.data(), recv_buffer_.size()),
@@ -323,14 +284,13 @@ void KcpSocket::doRead()
             return;
         }
 
-        LOG(INFO) << "Peer connected:" << endpointToString(remote_endpoint_);
-        connected_ = true;
+        LOG(INFO) << "Far peer endpoint has been received:" << endpointToString(remote_endpoint_);
+        has_remote_endpoint_ = true;
 
         // Flush any UDP packets that were buffered while waiting for the peer.
         if (!udp_sending_ && !udp_send_queue_.isEmpty())
             doUdpSend();
 
-        emit sig_connected();
         onUdpDataReceived(bytes_transferred);
     });
 }
@@ -366,7 +326,16 @@ void KcpSocket::onUdpDataReceived(size_t bytes_transferred)
     }
 
     if (total_read > 0)
-        emit sig_dataReceived(kcp_read_buffer_.constData(), total_read);
+    {
+        if (has_remote_endpoint_ && !connected_)
+        {
+            // TODO
+        }
+        else
+        {
+            emit sig_dataReceived(kcp_read_buffer_.constData(), total_read);
+        }
+    }
 
     if (socket_.is_open())
         doRead();
@@ -389,13 +358,6 @@ int KcpSocket::kcpOutputCallback(const char* buf, int len, IKCPCB* /* kcp */, vo
 }
 
 //--------------------------------------------------------------------------------------------------
-// static
-void KcpSocket::kcpWriteLogCallback(const char* log, IKCPCB* /* kcp */, void* /* user */)
-{
-    LOG(INFO) << log;
-}
-
-//--------------------------------------------------------------------------------------------------
 void KcpSocket::doUdpSend()
 {
     if (udp_send_queue_.isEmpty())
@@ -404,7 +366,7 @@ void KcpSocket::doUdpSend()
         return;
     }
 
-    if (!connected_)
+    if (!has_remote_endpoint_)
     {
         // Can't send until we know the peer's address (learned on first receive).
         // Keep packets in the queue; they will be sent once the peer connects.
@@ -442,13 +404,9 @@ void KcpSocket::doUdpSend()
 //--------------------------------------------------------------------------------------------------
 void KcpSocket::timerEvent(QTimerEvent* event)
 {
-    if (event->timerId() == update_timer_id_)
-        doKcpUpdate();
-}
+    if (event->timerId() != update_timer_id_)
+        return;
 
-//--------------------------------------------------------------------------------------------------
-void KcpSocket::doKcpUpdate()
-{
     if (!socket_.is_open())
         return;
 
@@ -456,18 +414,13 @@ void KcpSocket::doKcpUpdate()
 
     // Auto-start reading once the socket is open.
     if (!reading_)
-    {
-        // Detect if the socket was connected externally (client path via async_connect).
-        if (!connected_)
-        {
-            std::error_code ec;
-            socket_.remote_endpoint(ec);
-            if (!ec)
-                connected_ = true;
-        }
-
         doRead();
-    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void KcpSocket::sendHandshake()
+{
+    send(&kMagicNumber, sizeof(kMagicNumber));
 }
 
 } // namespace base

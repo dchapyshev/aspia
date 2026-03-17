@@ -49,7 +49,7 @@ public:
     void connectTo(const QString& address, quint16 port);
     void send(quint8 channel_id, const QByteArray& buffer);
     bool isConnected() const;
-    quint16 port() const;
+    bool isEncrypted() const;
 
     void setPaused(bool enable);
 
@@ -159,7 +159,6 @@ private:
 
     bool connected_ = false;
     bool paused_ = true;
-    bool client_connect_ = false;
 
     qint64 total_tx_ = 0;
     qint64 total_rx_ = 0;

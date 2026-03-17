@@ -70,6 +70,11 @@ message DirectUdpReply
     bytes iv          = 3;
 }
 
+message StartUdpHandshake
+{
+    uint32 dummy = 1;
+}
+
 // Use CHANNEL_ID_CONTROL to send.
 message ClientToHost
 {
