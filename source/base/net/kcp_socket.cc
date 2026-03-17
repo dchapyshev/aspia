@@ -241,7 +241,7 @@ int KcpSocket::kcpOutputCallback(const char* buf, int len, IKCPCB* /* kcp */, vo
 void KcpSocket::init()
 {
     udp_send_queue_.reserve(kUdpSendQueueReservedSize);
-    kcp_read_buffer_.reserve(kKcpReadBufferReserve);
+    kcp_read_.reserve(kKcpReadBufferReserve);
     udp_buffer_pool_.reserve(kPoolReservedSize);
 
     kcp_ = ikcp_create(kKcpConv, this);
@@ -267,7 +267,7 @@ void KcpSocket::doRead()
     if (has_remote_endpoint_)
     {
         auto guard = alive_guard_;
-        socket_.async_receive(asio::buffer(recv_buffer_.data(), recv_buffer_.size()),
+        socket_.async_receive(asio::buffer(udp_read_.data(), udp_read_.size()),
             [this, guard](const std::error_code& error_code, size_t bytes_transferred)
         {
             if (!*guard)
@@ -284,14 +284,15 @@ void KcpSocket::doRead()
             }
 
             udp_reading_ = false;
-            onUdpDataReceived(bytes_transferred);
+            onUdpRead(bytes_transferred);
         });
         return;
     }
 
+    SharedPointer<asio::ip::udp::endpoint> endpoint(new asio::ip::udp::endpoint());
     auto guard = alive_guard_;
-    socket_.async_receive_from(asio::buffer(recv_buffer_.data(), recv_buffer_.size()), remote_endpoint_,
-        [this, guard](const std::error_code& error_code, size_t bytes_transferred)
+    socket_.async_receive_from(asio::buffer(udp_read_.data(), udp_read_.size()), *endpoint,
+        [this, guard, endpoint](const std::error_code& error_code, size_t bytes_transferred)
     {
         if (!*guard)
             return;
@@ -308,7 +309,7 @@ void KcpSocket::doRead()
 
         // Connect to the actual peer now that we know its address.
         std::error_code connect_code;
-        socket_.connect(remote_endpoint_, connect_code);
+        socket_.connect(*endpoint, connect_code);
         if (connect_code)
         {
             LOG(ERROR) << "Failed to connect to peer:" << connect_code;
@@ -316,21 +317,21 @@ void KcpSocket::doRead()
             return;
         }
 
-        LOG(INFO) << "Far peer endpoint has been received:" << endpointToString(remote_endpoint_);
+        LOG(INFO) << "Far peer endpoint has been received:" << endpointToString(*endpoint);
         has_remote_endpoint_ = true;
 
         // Flush any UDP packets that were buffered while waiting for the peer.
         doUdpSend();
 
         udp_reading_ = false;
-        onUdpDataReceived(bytes_transferred);
+        onUdpRead(bytes_transferred);
     });
 }
 
 //--------------------------------------------------------------------------------------------------
-void KcpSocket::onUdpDataReceived(size_t bytes_transferred)
+void KcpSocket::onUdpRead(size_t bytes_transferred)
 {
-    int ret = ikcp_input(kcp_, recv_buffer_.data(), static_cast<int>(bytes_transferred));
+    int ret = ikcp_input(kcp_, udp_read_.data(), static_cast<int>(bytes_transferred));
     if (ret < 0)
     {
         LOG(ERROR) << "ikcp_input failed with code:" << ret;
@@ -347,56 +348,57 @@ void KcpSocket::onUdpDataReceived(size_t bytes_transferred)
             break;
 
         int required = total_read + peek_size;
-        if (kcp_read_buffer_.size() < required)
-            kcp_read_buffer_.resize(required);
+        if (kcp_read_.size() < required)
+            kcp_read_.resize(required);
 
-        int recv_size = ikcp_recv(kcp_, kcp_read_buffer_.data() + total_read, peek_size);
+        int recv_size = ikcp_recv(kcp_, kcp_read_.data() + total_read, peek_size);
         if (recv_size <= 0)
             break;
 
         total_read += recv_size;
     }
 
-    if (total_read > 0)
+    if (total_read <= 0)
     {
-        if (has_remote_endpoint_ && !ready_)
+        doRead();
+        return;
+    }
+
+    if (has_remote_endpoint_ && !ready_)
+    {
+        if (total_read < static_cast<int>(sizeof(kMagicNumber)))
         {
-            if (total_read < static_cast<int>(sizeof(kMagicNumber)))
-            {
-                LOG(ERROR) << "Handshake data too short:" << total_read;
-                emit sig_errorOccurred();
-                return;
-            }
-
-            quint32 received_magic;
-            memcpy(&received_magic, kcp_read_buffer_.constData(), sizeof(kMagicNumber));
-
-            if (received_magic != kMagicNumber)
-            {
-                LOG(ERROR) << "Invalid handshake magic number";
-                emit sig_errorOccurred();
-                return;
-            }
-
-            // Server side: respond with our own handshake.
-            if (!handshake_sent_)
-                sendHandshake();
-
-            LOG(INFO) << "Handshake completed";
-            ready_ = true;
-            emit sig_ready();
-
-            // Forward any data that arrived after the magic number.
-            int remaining = total_read - static_cast<int>(sizeof(kMagicNumber));
-            if (remaining > 0)
-            {
-                emit sig_dataReceived(kcp_read_buffer_.constData() + sizeof(kMagicNumber), remaining);
-            }
+            LOG(ERROR) << "Handshake data too short:" << total_read;
+            emit sig_errorOccurred();
+            return;
         }
-        else
+
+        quint32 received_magic;
+        memcpy(&received_magic, kcp_read_.constData(), sizeof(kMagicNumber));
+
+        if (received_magic != kMagicNumber)
         {
-            emit sig_dataReceived(kcp_read_buffer_.constData(), total_read);
+            LOG(ERROR) << "Invalid handshake magic number";
+            emit sig_errorOccurred();
+            return;
         }
+
+        // Server side: respond with our own handshake.
+        if (!handshake_sent_)
+            sendHandshake();
+
+        LOG(INFO) << "Handshake completed";
+        ready_ = true;
+        emit sig_ready();
+
+        // Forward any data that arrived after the magic number.
+        int remaining = total_read - static_cast<int>(sizeof(kMagicNumber));
+        if (remaining > 0)
+            emit sig_dataReceived(kcp_read_.constData() + sizeof(kMagicNumber), remaining);
+    }
+    else
+    {
+        emit sig_dataReceived(kcp_read_.constData(), total_read);
     }
 
     doRead();

@@ -60,7 +60,7 @@ private:
 
     void init();
     void doRead();
-    void onUdpDataReceived(size_t bytes_transferred);
+    void onUdpRead(size_t bytes_transferred);
     void doUdpSend();
     void sendHandshake();
     QByteArray acquireBuffer();
@@ -68,7 +68,6 @@ private:
 
     SharedPointer<bool> alive_guard_ { new bool(true) };
     asio::ip::udp::socket socket_;
-    asio::ip::udp::endpoint remote_endpoint_;
     IKCPCB* kcp_ = nullptr;
     int update_timer_id_ = 0;
 
@@ -83,10 +82,10 @@ private:
     bool ready_ = false;
     bool handshake_sent_ = false;
 
-    QByteArray kcp_read_buffer_;
+    QByteArray kcp_read_;
 
-    static const int kRecvBufferSize = 65536;
-    std::array<char, kRecvBufferSize> recv_buffer_;
+    static const int kReadBufferSize = 4096;
+    std::array<char, kReadBufferSize> udp_read_;
 
     Q_DISABLE_COPY_MOVE(KcpSocket)
 };
