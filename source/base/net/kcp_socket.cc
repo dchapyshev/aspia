@@ -125,7 +125,7 @@ KcpSocket* KcpSocket::bind(quint16& port)
         port = local_endpoint.port();
     }
 
-    return new KcpSocket(std::move(socket));
+    return new KcpSocket(std::move(socket), nullptr);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -69,7 +69,7 @@ signals:
 protected:
     friend class StunPeer;
     UdpChannel(asio::ip::udp::socket&& socket, QObject* parent);
-    UdpChannel(KcpSocket* socket, QObject* parent);
+    UdpChannel(KcpSocket* socket, QObject* parent = nullptr);
 
 private:
     using Clock = std::chrono::steady_clock;

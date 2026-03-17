@@ -107,7 +107,7 @@ UdpChannel* UdpChannel::bind(quint16& port)
     if (!socket)
         return nullptr;
 
-    return new UdpChannel(socket);
+    return new UdpChannel(socket, nullptr);
 }
 
 //--------------------------------------------------------------------------------------------------
