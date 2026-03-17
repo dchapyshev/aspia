@@ -224,10 +224,7 @@ void UdpChannel::doWrite()
         addTxBytes(write_buffer_.size());
 
         if (!kcp_socket_->send(write_buffer_.constData(), static_cast<int>(write_buffer_.size())))
-        {
-            onErrorOccurred(FROM_HERE, std::error_code());
             return;
-        }
 
         write_queue_.pop_front();
     }
