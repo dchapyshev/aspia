@@ -456,8 +456,6 @@ void Client::onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer)
             // Key pair is no longer needed.
             udp_key_pair_ = base::KeyPair();
             udp_iv_.clear();
-
-            udp_channel_->accept();
         }
     }
     else
@@ -467,12 +465,23 @@ void Client::onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer)
 }
 
 //--------------------------------------------------------------------------------------------------
+void Client::onUdpReady()
+{
+    LOG(INFO) << "UDP channel is ready";
+    CHECK(udp_channel_);
+    udp_ready_ = true;
+    udp_channel_->setPaused(false);
+}
+
+//--------------------------------------------------------------------------------------------------
 void Client::onUdpErrorOccurred()
 {
+    LOG(INFO) << "UDP channel is disconnected";
+    CHECK(udp_channel_);
+    udp_ready_ = false;
     udp_channel_->disconnect();
     udp_channel_->deleteLater();
     udp_channel_ = nullptr;
-    udp_ready_ = false;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -505,7 +514,7 @@ void Client::onHostAwaiting()
 //--------------------------------------------------------------------------------------------------
 void Client::onHostConnected(bool peer_address_equals, const QString& stun_host, quint16 stun_port)
 {
-    LOG(INFO) << "Host connected (peer address equals" << peer_address_equals << "stun"
+    LOG(INFO) << "Host connected (equals" << peer_address_equals << "stun"
               << stun_host << ':' << stun_port << ')';
     CHECK(router_controller_);
 
@@ -656,12 +665,7 @@ void Client::startDirectUdp(base::UdpChannel* udp_channel, const QString& addres
 
     udp_channel_->setParent(this);
 
-    connect(udp_channel_, &base::UdpChannel::sig_connected, this, [this]()
-    {
-        LOG(INFO) << "UDP channel is ready";
-        udp_channel_->setPaused(false);
-        udp_ready_ = true;
-    });
+    connect(udp_channel_, &base::UdpChannel::sig_ready, this, &Client::onUdpReady);
     connect(udp_channel_, &base::UdpChannel::sig_errorOccurred, this, &Client::onUdpErrorOccurred);
     connect(udp_channel_, &base::UdpChannel::sig_messageReceived, this, &Client::onUdpMessageReceived);
 

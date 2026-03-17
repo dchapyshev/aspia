@@ -163,23 +163,23 @@ void Client::onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray& buffe
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::onUdpConnected()
+void Client::onUdpReady()
 {
-    LOG(INFO) << "UDP channel connected";
+    LOG(INFO) << "UDP channel is connected";
     CHECK(udp_channel_);
-    udp_channel_->setPaused(false);
     udp_ready_ = true;
+    udp_channel_->setPaused(false);
 }
 
 //--------------------------------------------------------------------------------------------------
 void Client::onUdpErrorOccurred()
 {
-    LOG(WARNING) << "UDP channel is disabled";
+    LOG(WARNING) << "UDP channel is disconnected";
     CHECK(udp_channel_);
+    udp_ready_ = false;
     udp_channel_->disconnect();
     udp_channel_->deleteLater();
     udp_channel_ = nullptr;
-    udp_ready_ = false;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -353,7 +353,7 @@ void Client::connectToUdp(const QString& address, quint16 port, quint32 encrypti
     udp_channel_->setEncryptor(std::move(encryptor));
     udp_channel_->setDecryptor(std::move(decryptor));
 
-    connect(udp_channel_, &base::UdpChannel::sig_connected, this, &Client::onUdpConnected);
+    connect(udp_channel_, &base::UdpChannel::sig_ready, this, &Client::onUdpReady);
     connect(udp_channel_, &base::UdpChannel::sig_errorOccurred, this, &Client::onUdpErrorOccurred);
     connect(udp_channel_, &base::UdpChannel::sig_messageReceived, this, &Client::onUdpMessageReceived);
 
@@ -362,8 +362,6 @@ void Client::connectToUdp(const QString& address, quint16 port, quint32 encrypti
     // Send reply with host's public key and IV.
     proto::peer::HostToClient reply;
     proto::peer::DirectUdpReply* udp_reply = reply.mutable_direct_udp_reply();
-    udp_reply->set_address(udp_channel_->address().toStdString());
-    udp_reply->set_port(udp_channel_->port());
     udp_reply->set_encryption(encryption);
     udp_reply->set_public_key(host_key_pair.publicKey().toStdString());
     udp_reply->set_iv(host_iv.toStdString());

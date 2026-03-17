@@ -123,9 +123,9 @@ void UdpChannel::send(quint8 channel_id, const QByteArray& buffer)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool UdpChannel::isConnected() const
+bool UdpChannel::isReady() const
 {
-    return connected_;
+    return kcp_ready_ && isEncrypted();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -147,7 +147,7 @@ void UdpChannel::setPaused(bool enable)
         return;
     }
 
-    if (connected_)
+    if (kcp_ready_)
     {
         // Start keep-alive only when we know the peer's address.
         keep_alive_timer_type_ = KEEP_ALIVE_INTERVAL;
@@ -237,12 +237,14 @@ void UdpChannel::doWrite()
 void UdpChannel::setEncryptor(std::unique_ptr<MessageEncryptor> encryptor)
 {
     encryptor_ = std::move(encryptor);
+    onReadyCheck();
 }
 
 //--------------------------------------------------------------------------------------------------
 void UdpChannel::setDecryptor(std::unique_ptr<MessageDecryptor> decryptor)
 {
     decryptor_ = std::move(decryptor);
+    onReadyCheck();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -281,7 +283,7 @@ void UdpChannel::init()
     write_buffer_.reserve(kWriteBufferReserveSize);
     decrypt_buffer_.reserve(kDecryptBufferReserveSize);
 
-    connect(kcp_socket_, &KcpSocket::sig_connected, this, &UdpChannel::onKcpConnected);
+    connect(kcp_socket_, &KcpSocket::sig_ready, this, &UdpChannel::onKcpReady);
     connect(kcp_socket_, &KcpSocket::sig_dataReceived, this, &UdpChannel::onKcpDataReceived);
     connect(kcp_socket_, &KcpSocket::sig_errorOccurred, this, [this]()
     {
@@ -306,23 +308,16 @@ void UdpChannel::onErrorOccurred(const Location& location, const std::error_code
     keep_alive_timer_->stop();
     kcp_socket_->close();
 
-    connected_ = false;
+    kcp_ready_ = false;
     emit sig_errorOccurred();
 }
 
 //--------------------------------------------------------------------------------------------------
-void UdpChannel::onKcpConnected()
+void UdpChannel::onKcpReady()
 {
-    connected_ = true;
-
-    // Start keep-alive only if already unpaused.
-    if (!paused_)
-    {
-        keep_alive_timer_type_ = KEEP_ALIVE_INTERVAL;
-        keep_alive_timer_->start(kKeepAliveInterval);
-    }
-
-    emit sig_connected();
+    LOG(INFO) << "KCP is ready";
+    kcp_ready_ = true;
+    onReadyCheck();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -470,6 +465,23 @@ void UdpChannel::onKeepAliveTimer()
         LOG(ERROR) << "Keep-alive timeout, closing connection";
         onErrorOccurred(FROM_HERE, std::error_code());
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void UdpChannel::onReadyCheck()
+{
+    if (!kcp_ready_ || !isEncrypted())
+        return;
+
+    // Start keep-alive only if already unpaused.
+    if (!paused_)
+    {
+        keep_alive_timer_type_ = KEEP_ALIVE_INTERVAL;
+        keep_alive_timer_->start(kKeepAliveInterval);
+    }
+
+    LOG(INFO) << "UDP channel is ready";
+    emit sig_ready();
 }
 
 //--------------------------------------------------------------------------------------------------

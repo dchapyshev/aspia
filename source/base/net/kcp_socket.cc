@@ -275,11 +275,11 @@ void KcpSocket::doRead()
         reading_ = false;
 
         // Connect to the actual peer now that we know its address.
-        std::error_code connect_ec;
-        socket_.connect(remote_endpoint_, connect_ec);
-        if (connect_ec)
+        std::error_code connect_code;
+        socket_.connect(remote_endpoint_, connect_code);
+        if (connect_code)
         {
-            LOG(ERROR) << "Failed to connect to peer:" << connect_ec;
+            LOG(ERROR) << "Failed to connect to peer:" << connect_code;
             emit sig_errorOccurred();
             return;
         }
@@ -327,7 +327,7 @@ void KcpSocket::onUdpDataReceived(size_t bytes_transferred)
 
     if (total_read > 0)
     {
-        if (has_remote_endpoint_ && !connected_)
+        if (has_remote_endpoint_ && !ready_)
         {
             if (total_read < static_cast<int>(sizeof(kMagicNumber)))
             {
@@ -346,13 +346,12 @@ void KcpSocket::onUdpDataReceived(size_t bytes_transferred)
                 return;
             }
 
-            connected_ = true;
-
             // Server side: respond with our own handshake.
             if (!handshake_sent_)
                 sendHandshake();
 
             LOG(INFO) << "Handshake completed";
+            ready_ = true;
             emit sig_ready();
 
             // Forward any data that arrived after the magic number.

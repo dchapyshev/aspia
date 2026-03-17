@@ -65,7 +65,7 @@ private slots:
     void onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code);
     void onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray& buffer);
 
-    void onUdpConnected();
+    void onUdpReady();
     void onUdpErrorOccurred();
     void onUdpMessageReceived(quint8 udp_channel_id, const QByteArray& buffer);
 

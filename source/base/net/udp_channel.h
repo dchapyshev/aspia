@@ -48,7 +48,7 @@ public:
 
     void connectTo(const QString& address, quint16 port);
     void send(quint8 channel_id, const QByteArray& buffer);
-    bool isConnected() const;
+    bool isReady() const;
     bool isEncrypted() const;
 
     void setPaused(bool enable);
@@ -62,7 +62,7 @@ public:
     int speedTx();
 
 signals:
-    void sig_connected();
+    void sig_ready();
     void sig_errorOccurred();
     void sig_messageReceived(quint8 channel_id, const QByteArray& buffer);
 
@@ -134,11 +134,12 @@ private:
     void onErrorOccurred(const Location& location, const std::error_code& error_code);
     void addWriteTask(quint8 type, quint8 param, QByteArray data);
     void doWrite();
-    void onKcpConnected();
+    void onKcpReady();
     void onKcpDataReceived(const char* data, int size);
     bool parseMessages();
     bool onMessageReceived(int offset);
     void onKeepAliveTimer();
+    void onReadyCheck();
     void addTxBytes(qint64 bytes_count);
     void addRxBytes(qint64 bytes_count);
 
@@ -157,7 +158,7 @@ private:
     QByteArray decrypt_buffer_;
     int read_offset_ = 0;
 
-    bool connected_ = false;
+    bool kcp_ready_ = false;
     bool paused_ = true;
 
     qint64 total_tx_ = 0;

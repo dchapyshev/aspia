@@ -76,7 +76,7 @@ private:
     QByteArray udp_send_active_;
     bool udp_sending_ = false;
     bool has_remote_endpoint_ = false;
-    bool connected_ = false;
+    bool ready_ = false;
     bool reading_ = false;
     bool handshake_sent_ = false;
 

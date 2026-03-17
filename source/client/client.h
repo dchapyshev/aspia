@@ -100,6 +100,7 @@ private slots:
     void onTcpConnected();
     void onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code);
     void onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer);
+    void onUdpReady();
     void onUdpErrorOccurred();
     void onUdpMessageReceived(quint8 channel_id, const QByteArray& buffer);
     void onRouterConnected(const QVersionNumber& router_version);
