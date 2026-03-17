@@ -48,7 +48,7 @@ public:
     void close();
 
 signals:
-    void sig_connected();
+    void sig_ready();
     void sig_dataReceived(const char* data, int size); // Only direct connection.
     void sig_errorOccurred();
 
@@ -78,6 +78,7 @@ private:
     bool has_remote_endpoint_ = false;
     bool connected_ = false;
     bool reading_ = false;
+    bool handshake_sent_ = false;
 
     QByteArray kcp_read_buffer_;
 

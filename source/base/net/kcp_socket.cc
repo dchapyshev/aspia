@@ -329,7 +329,38 @@ void KcpSocket::onUdpDataReceived(size_t bytes_transferred)
     {
         if (has_remote_endpoint_ && !connected_)
         {
-            // TODO
+            if (total_read < static_cast<int>(sizeof(kMagicNumber)))
+            {
+                LOG(ERROR) << "Handshake data too short:" << total_read;
+                emit sig_errorOccurred();
+                return;
+            }
+
+            quint32 received_magic;
+            memcpy(&received_magic, kcp_read_buffer_.constData(), sizeof(kMagicNumber));
+
+            if (received_magic != kMagicNumber)
+            {
+                LOG(ERROR) << "Invalid handshake magic number";
+                emit sig_errorOccurred();
+                return;
+            }
+
+            connected_ = true;
+
+            // Server side: respond with our own handshake.
+            if (!handshake_sent_)
+                sendHandshake();
+
+            LOG(INFO) << "Handshake completed";
+            emit sig_ready();
+
+            // Forward any data that arrived after the magic number.
+            int remaining = total_read - static_cast<int>(sizeof(kMagicNumber));
+            if (remaining > 0)
+            {
+                emit sig_dataReceived(kcp_read_buffer_.constData() + sizeof(kMagicNumber), remaining);
+            }
         }
         else
         {
@@ -420,6 +451,7 @@ void KcpSocket::timerEvent(QTimerEvent* event)
 //--------------------------------------------------------------------------------------------------
 void KcpSocket::sendHandshake()
 {
+    handshake_sent_ = true;
     send(&kMagicNumber, sizeof(kMagicNumber));
 }
 
