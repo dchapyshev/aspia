@@ -174,14 +174,18 @@ void UdpChannel::doWrite()
     if (write_queue_.isEmpty())
         return;
 
+    if (!encryptor_)
+    {
+        onErrorOccurred(FROM_HERE, std::error_code());
+        return;
+    }
+
     while (!write_queue_.isEmpty())
     {
         const WriteTask& task = write_queue_.front();
         const QByteArray& source_buffer = task.data();
 
-        qint64 target_data_size =
-            encryptor_ ? encryptor_->encryptedDataSize(source_buffer.size()) : source_buffer.size();
-
+        qint64 target_data_size = encryptor_->encryptedDataSize(source_buffer.size());
         if (target_data_size > kMaxMessageSize)
         {
             LOG(ERROR) << "Too big outgoing message:" << target_data_size;
@@ -199,26 +203,12 @@ void UdpChannel::doWrite()
         header.length = static_cast<quint32>(target_data_size);
         memcpy(write_buffer_.data(), &header, sizeof(Header));
 
-        if (encryptor_)
+        if (!encryptor_->encrypt(source_buffer.constData(), source_buffer.size(),
+            &header, sizeof(Header), write_buffer_.data() + sizeof(Header)))
         {
-            if (!encryptor_->encrypt(source_buffer.data(), source_buffer.size(),
-                                     &header, sizeof(Header),
-                                     write_buffer_.data() + sizeof(Header)))
-            {
-                LOG(ERROR) << "Failed to encrypt outgoing message";
-                onErrorOccurred(FROM_HERE, std::error_code());
-                return;
-            }
-        }
-        else
-        {
-            if (task.type() == USER_DATA)
-            {
-                onErrorOccurred(FROM_HERE, std::error_code());
-                return;
-            }
-
-            memcpy(write_buffer_.data() + sizeof(Header), source_buffer.constData(), source_buffer.size());
+            LOG(ERROR) << "Failed to encrypt outgoing message";
+            onErrorOccurred(FROM_HERE, std::error_code());
+            return;
         }
 
         addTxBytes(write_buffer_.size());
@@ -382,50 +372,35 @@ bool UdpChannel::onMessageReceived(int offset)
     const char* data = read_buffer_.constData() + offset + sizeof(Header);
     int size = static_cast<int>(header.length);
 
-    if (decryptor_)
+    if (!decryptor_)
     {
-        resizeBuffer(&decrypt_buffer_, decryptor_->decryptedDataSize(size));
+        onErrorOccurred(FROM_HERE, std::error_code());
+        return false;
+    }
 
-        if (!decryptor_->decrypt(data, size,
-                                 &header, sizeof(Header),
-                                 decrypt_buffer_.data()))
-        {
-            LOG(ERROR) << "Failed to decrypt incoming message";
-            onErrorOccurred(FROM_HERE, std::error_code());
-            return false;
-        }
+    resizeBuffer(&decrypt_buffer_, decryptor_->decryptedDataSize(size));
+
+    if (!decryptor_->decrypt(data, size, &header, sizeof(Header), decrypt_buffer_.data()))
+    {
+        LOG(ERROR) << "Failed to decrypt incoming message";
+        onErrorOccurred(FROM_HERE, std::error_code());
+        return false;
     }
 
     if (header.type == USER_DATA)
     {
-        if (!decryptor_)
-        {
-            onErrorOccurred(FROM_HERE, std::error_code());
-            return false;
-        }
-
         emit sig_messageReceived(header.param1, decrypt_buffer_);
     }
     else if (header.type == KEEP_ALIVE)
     {
-        const char* payload_data = decryptor_ ? decrypt_buffer_.constData() : data;
-        int payload_size = decryptor_ ? decrypt_buffer_.size() : size;
-
         if (header.param1 & KEEP_ALIVE_PING)
         {
-            addWriteTask(KEEP_ALIVE, KEEP_ALIVE_PONG, QByteArray(payload_data, payload_size));
+            addWriteTask(KEEP_ALIVE, KEEP_ALIVE_PONG, decrypt_buffer_);
             return true;
         }
 
-        if (payload_size != keep_alive_counter_.size())
-        {
-            LOG(ERROR) << "Invalid keep-alive payload size";
-            onErrorOccurred(FROM_HERE, std::error_code());
-            return false;
-        }
-
         // Pong must contain the same data as ping.
-        if (memcmp(payload_data, keep_alive_counter_.constData(), payload_size) != 0)
+        if (decrypt_buffer_ != keep_alive_counter_)
         {
             LOG(ERROR) << "Keep-alive counter mismatch";
             onErrorOccurred(FROM_HERE, std::error_code());
