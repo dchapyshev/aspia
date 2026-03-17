@@ -56,10 +56,9 @@ protected:
     void timerEvent(QTimerEvent* event) final;
 
 private:
-    void init();
-
     static int kcpOutputCallback(const char* buf, int len, IKCPCB* kcp, void* user);
 
+    void init();
     void doRead();
     void onUdpDataReceived(size_t bytes_transferred);
     void doUdpSend();
@@ -73,13 +72,15 @@ private:
     IKCPCB* kcp_ = nullptr;
     int update_timer_id_ = 0;
 
+    QList<QByteArray> udp_buffer_pool_;
     QQueue<QByteArray> udp_send_queue_;
     QByteArray udp_send_active_;
-    QList<QByteArray> udp_buffer_pool_;
+
     bool udp_sending_ = false;
+    bool udp_reading_ = false;
+
     bool has_remote_endpoint_ = false;
     bool ready_ = false;
-    bool reading_ = false;
     bool handshake_sent_ = false;
 
     QByteArray kcp_read_buffer_;

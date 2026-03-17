@@ -203,6 +203,41 @@ void KcpSocket::close()
 }
 
 //--------------------------------------------------------------------------------------------------
+void KcpSocket::timerEvent(QTimerEvent* event)
+{
+    if (event->timerId() != update_timer_id_)
+        return;
+
+    quint32 current_time = currentTimeMs();
+
+    ikcp_update(kcp_, current_time);
+
+    quint32 next_time = ikcp_check(kcp_, current_time);
+    if (next_time - current_time < kKcpUpdateIntervalMs)
+        ikcp_flush(kcp_);
+
+    // Auto-start reading once the socket is open.
+    if (!udp_reading_)
+        doRead();
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+int KcpSocket::kcpOutputCallback(const char* buf, int len, IKCPCB* /* kcp */, void* user)
+{
+    KcpSocket* self = static_cast<KcpSocket*>(user);
+    DCHECK(self);
+
+    QByteArray buffer = self->acquireBuffer();
+    buffer.resize(len);
+    memcpy(buffer.data(), buf, len);
+
+    self->udp_send_queue_.emplace_back(std::move(buffer));
+    self->doUdpSend();
+    return 0;
+}
+
+//--------------------------------------------------------------------------------------------------
 void KcpSocket::init()
 {
     udp_send_queue_.reserve(kUdpSendQueueReservedSize);
@@ -227,7 +262,7 @@ void KcpSocket::init()
 //--------------------------------------------------------------------------------------------------
 void KcpSocket::doRead()
 {
-    reading_ = true;
+    udp_reading_ = true;
 
     if (has_remote_endpoint_)
     {
@@ -248,7 +283,7 @@ void KcpSocket::doRead()
                 return;
             }
 
-            reading_ = false;
+            udp_reading_ = false;
             onUdpDataReceived(bytes_transferred);
         });
         return;
@@ -271,8 +306,6 @@ void KcpSocket::doRead()
             return;
         }
 
-        reading_ = false;
-
         // Connect to the actual peer now that we know its address.
         std::error_code connect_code;
         socket_.connect(remote_endpoint_, connect_code);
@@ -287,9 +320,9 @@ void KcpSocket::doRead()
         has_remote_endpoint_ = true;
 
         // Flush any UDP packets that were buffered while waiting for the peer.
-        if (!udp_sending_ && !udp_send_queue_.isEmpty())
-            doUdpSend();
+        doUdpSend();
 
+        udp_reading_ = false;
         onUdpDataReceived(bytes_transferred);
     });
 }
@@ -366,46 +399,16 @@ void KcpSocket::onUdpDataReceived(size_t bytes_transferred)
         }
     }
 
-    if (socket_.is_open())
-        doRead();
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
-int KcpSocket::kcpOutputCallback(const char* buf, int len, IKCPCB* /* kcp */, void* user)
-{
-    KcpSocket* self = static_cast<KcpSocket*>(user);
-    if (!self || !self->socket_.is_open())
-        return -1;
-
-    QByteArray buffer = self->acquireBuffer();
-    buffer.resize(len);
-    memcpy(buffer.data(), buf, len);
-
-    self->udp_send_queue_.emplace_back(std::move(buffer));
-
-    if (!self->udp_sending_)
-        self->doUdpSend();
-
-    return 0;
+    doRead();
 }
 
 //--------------------------------------------------------------------------------------------------
 void KcpSocket::doUdpSend()
 {
-    if (udp_send_queue_.isEmpty())
-    {
-        udp_sending_ = false;
+    // Can't send until we know the peer's address (learned on first receive).
+    // Keep packets in the queue; they will be sent once the peer connects.
+    if (udp_send_queue_.isEmpty() || udp_sending_ || !has_remote_endpoint_)
         return;
-    }
-
-    if (!has_remote_endpoint_)
-    {
-        // Can't send until we know the peer's address (learned on first receive).
-        // Keep packets in the queue; they will be sent once the peer connects.
-        udp_sending_ = false;
-        return;
-    }
 
     udp_send_active_ = udp_send_queue_.dequeue();
     udp_sending_ = true;
@@ -429,30 +432,9 @@ void KcpSocket::doUdpSend()
             return;
         }
 
+        udp_sending_ = false;
         doUdpSend();
     });
-}
-
-//--------------------------------------------------------------------------------------------------
-void KcpSocket::timerEvent(QTimerEvent* event)
-{
-    if (event->timerId() != update_timer_id_)
-        return;
-
-    if (!socket_.is_open())
-        return;
-
-    quint32 current_time = currentTimeMs();
-
-    ikcp_update(kcp_, current_time);
-
-    quint32 next_time = ikcp_check(kcp_, current_time);
-    if (next_time - current_time < kKcpUpdateIntervalMs)
-        ikcp_flush(kcp_);
-
-    // Auto-start reading once the socket is open.
-    if (!reading_)
-        doRead();
 }
 
 //--------------------------------------------------------------------------------------------------
