@@ -64,7 +64,6 @@ QString endpointToString(const asio::ip::udp::endpoint& endpoint)
 //--------------------------------------------------------------------------------------------------
 KcpSocket::KcpSocket(QObject* parent)
     : QObject(parent),
-      resolver_(AsioEventDispatcher::ioContext()),
       socket_(AsioEventDispatcher::ioContext())
 {
     init();
@@ -73,7 +72,6 @@ KcpSocket::KcpSocket(QObject* parent)
 //--------------------------------------------------------------------------------------------------
 KcpSocket::KcpSocket(asio::ip::udp::socket&& socket, QObject* parent)
     : QObject(parent),
-      resolver_(AsioEventDispatcher::ioContext()),
       socket_(std::move(socket))
 {
     init();
@@ -196,8 +194,6 @@ void KcpSocket::close()
         killTimer(update_timer_id_);
         update_timer_id_ = 0;
     }
-
-    resolver_.cancel();
 
     std::error_code ignored_code;
     socket_.cancel(ignored_code);

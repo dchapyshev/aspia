@@ -66,7 +66,6 @@ private:
     void sendHandshake();
 
     SharedPointer<bool> alive_guard_ { new bool(true) };
-    asio::ip::udp::resolver resolver_;
     asio::ip::udp::socket socket_;
     asio::ip::udp::endpoint remote_endpoint_;
     IKCPCB* kcp_ = nullptr;
