@@ -64,6 +64,8 @@ private:
     void onUdpDataReceived(size_t bytes_transferred);
     void doUdpSend();
     void sendHandshake();
+    QByteArray acquireBuffer();
+    void releaseBuffer(QByteArray&& buffer);
 
     SharedPointer<bool> alive_guard_ { new bool(true) };
     asio::ip::udp::socket socket_;
@@ -73,6 +75,7 @@ private:
 
     QQueue<QByteArray> udp_send_queue_;
     QByteArray udp_send_active_;
+    QList<QByteArray> udp_buffer_pool_;
     bool udp_sending_ = false;
     bool has_remote_endpoint_ = false;
     bool ready_ = false;

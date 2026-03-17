@@ -31,12 +31,14 @@ namespace base {
 namespace {
 
 const quint32 kKcpConv = 1;
-const int kKcpInitialUpdateMs = 10;
+const int kKcpUpdateIntervalMs = 10;
 const int kKcpMtu = 1200;
 const int kMaxKcpChunk = 120 * (kKcpMtu - 24);
 const int kKcpWindowSize = 512;
 const int kKcpReadBufferReserve = 512 * 1024;
 const int kUdpSendQueueReservedSize = 256;
+const int kPoolReservedSize = 256;
+const int kPoolBufferReserved = 2 * 1024;
 const quint32 kMagicNumber = 0xDC8894AC;
 
 //--------------------------------------------------------------------------------------------------
@@ -205,6 +207,7 @@ void KcpSocket::init()
 {
     udp_send_queue_.reserve(kUdpSendQueueReservedSize);
     kcp_read_buffer_.reserve(kKcpReadBufferReserve);
+    udp_buffer_pool_.reserve(kPoolReservedSize);
 
     kcp_ = ikcp_create(kKcpConv, this);
     CHECK(kcp_);
@@ -213,12 +216,12 @@ void KcpSocket::init()
     kcp_->stream = 1;
 
     // Set KCP to fast mode: nodelay=1, interval=10ms, fast resend=2, no congestion control.
-    ikcp_nodelay(kcp_, 1, kKcpInitialUpdateMs, 2, 1);
+    ikcp_nodelay(kcp_, 1, kKcpUpdateIntervalMs, 2, 1);
     ikcp_setmtu(kcp_, kKcpMtu);
     ikcp_wndsize(kcp_, kKcpWindowSize, kKcpWindowSize);
 
     // Start the KCP update timer. Reading will begin automatically once the socket is open.
-    update_timer_id_ = startTimer(kKcpInitialUpdateMs, Qt::PreciseTimer);
+    update_timer_id_ = startTimer(kKcpUpdateIntervalMs, Qt::PreciseTimer);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -375,7 +378,11 @@ int KcpSocket::kcpOutputCallback(const char* buf, int len, IKCPCB* /* kcp */, vo
     if (!self || !self->socket_.is_open())
         return -1;
 
-    self->udp_send_queue_.emplace_back(buf, len);
+    QByteArray buffer = self->acquireBuffer();
+    buffer.resize(len);
+    memcpy(buffer.data(), buf, len);
+
+    self->udp_send_queue_.emplace_back(std::move(buffer));
 
     if (!self->udp_sending_)
         self->doUdpSend();
@@ -400,11 +407,8 @@ void KcpSocket::doUdpSend()
         return;
     }
 
+    udp_send_active_ = udp_send_queue_.dequeue();
     udp_sending_ = true;
-
-    // Move into member to keep data alive during async_send without lambda capture copy.
-    udp_send_active_ = std::move(udp_send_queue_.front());
-    udp_send_queue_.pop_front();
 
     auto guard = alive_guard_;
     socket_.async_send(asio::buffer(udp_send_active_.constData(), udp_send_active_.size()),
@@ -412,6 +416,8 @@ void KcpSocket::doUdpSend()
     {
         if (!*guard)
             return;
+
+        releaseBuffer(std::move(udp_send_active_));
 
         if (error_code)
         {
@@ -436,7 +442,13 @@ void KcpSocket::timerEvent(QTimerEvent* event)
     if (!socket_.is_open())
         return;
 
-    ikcp_update(kcp_, currentTimeMs());
+    quint32 current_time = currentTimeMs();
+
+    ikcp_update(kcp_, current_time);
+
+    quint32 next_time = ikcp_check(kcp_, current_time);
+    if (next_time - current_time < kKcpUpdateIntervalMs)
+        ikcp_flush(kcp_);
 
     // Auto-start reading once the socket is open.
     if (!reading_)
@@ -448,6 +460,24 @@ void KcpSocket::sendHandshake()
 {
     handshake_sent_ = true;
     send(&kMagicNumber, sizeof(kMagicNumber));
+}
+
+//--------------------------------------------------------------------------------------------------
+QByteArray KcpSocket::acquireBuffer()
+{
+    if (!udp_buffer_pool_.isEmpty())
+        return udp_buffer_pool_.takeLast();
+
+    QByteArray buffer;
+    buffer.reserve(kPoolBufferReserved);
+    return buffer;
+}
+
+//--------------------------------------------------------------------------------------------------
+void KcpSocket::releaseBuffer(QByteArray&& buffer)
+{
+    if (udp_buffer_pool_.size() < kPoolReservedSize)
+        udp_buffer_pool_.emplace_back(std::move(buffer));
 }
 
 } // namespace base
