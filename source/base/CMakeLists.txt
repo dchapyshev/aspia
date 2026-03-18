@@ -102,6 +102,7 @@ list(APPEND SOURCE_BASE_TESTS
     numeric_utils_unittest.cc
     scoped_clear_last_error_unittest.cc
     serialization_unittest.cc
+    shared_pointer_unittest.cc
     thread_local_pool_unittest.cc
     tests_main.cc)
 
