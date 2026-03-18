@@ -26,6 +26,7 @@
 
 #include "base/net/enet_util.h"
 
+class QSocketNotifier;
 class QTimer;
 
 namespace base {
@@ -139,6 +140,7 @@ private:
     void addTxBytes(qint64 bytes_count);
     void addRxBytes(qint64 bytes_count);
 
+    QSocketNotifier* notifier_ = nullptr;
     ScopedENetHost host_;
     ScopedENetPeer peer_;
     int update_timer_id_ = 0;

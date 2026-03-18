@@ -18,6 +18,7 @@
 
 #include "base/net/udp_channel.h"
 
+#include <QSocketNotifier>
 #include <QTimer>
 #include <QTimerEvent>
 
@@ -310,7 +311,6 @@ void UdpChannel::doWrite()
             return;
         }
 
-        enet_host_flush(host_);
         write_queue_.pop_front();
     }
 }
@@ -382,12 +382,19 @@ void UdpChannel::init(ENetHost* host)
 
     keep_alive_counter_.resize(sizeof(quint32));
     memset(keep_alive_counter_.data(), 0, keep_alive_counter_.size());
+
+    notifier_ = new QSocketNotifier(host->socket, QSocketNotifier::Read, this);
+    connect(notifier_, &QSocketNotifier::activated, this, &UdpChannel::processEvents);
+    notifier_->setEnabled(true);
 }
 
 //--------------------------------------------------------------------------------------------------
 void UdpChannel::close()
 {
     keep_alive_timer_->stop();
+
+    if (notifier_)
+        notifier_->setEnabled(false);
 
     if (update_timer_id_ != 0)
     {
@@ -417,7 +424,8 @@ void UdpChannel::processEvents()
             case ENET_EVENT_TYPE_CONNECT:
             {
                 LOG(INFO) << "ENet peer connected";
-                peer_.reset(event.peer);
+                if (!peer_)
+                    peer_.reset(event.peer);
                 enet_ready_ = true;
                 onReadyCheck();
             }
@@ -434,11 +442,13 @@ void UdpChannel::processEvents()
             break;
 
             case ENET_EVENT_TYPE_DISCONNECT:
+            {
                 LOG(INFO) << "ENet peer disconnected";
                 peer_.reset();
                 enet_ready_ = false;
                 emit sig_errorOccurred();
-                return; // Host may be destroyed by the slot, stop processing.
+            }
+            return; // Host may be destroyed by the slot, stop processing.
 
             case ENET_EVENT_TYPE_NONE:
                 break;
