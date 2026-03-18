@@ -86,6 +86,9 @@ UdpChannel::~UdpChannel()
 //--------------------------------------------------------------------------------------------------
 void UdpChannel::setReadySocket(qintptr socket)
 {
+    if (host_)
+        return;
+
     ENetAddress fake_address;
     fake_address.host = ENET_HOST_ANY;
     fake_address.port = 0;
@@ -111,12 +114,16 @@ void UdpChannel::setReadySocket(qintptr socket)
     host_->socket = socket;
     host_->address = address;
 
-    setUpdateEnabled(true);
+    update_timer_id_ = startTimer(kUpdateIntervalMs, Qt::PreciseTimer);
+    notifier_->setSocket(host_->socket);
+    notifier_->setEnabled(true);
 }
 
 //--------------------------------------------------------------------------------------------------
 void UdpChannel::bind(quint16* port)
 {
+    CHECK(port);
+
     if (host_)
         return;
 
@@ -146,7 +153,9 @@ void UdpChannel::bind(quint16* port)
         *port = bound_address.port;
     }
 
-    setUpdateEnabled(true);
+    update_timer_id_ = startTimer(kUpdateIntervalMs, Qt::PreciseTimer);
+    notifier_->setSocket(host_->socket);
+    notifier_->setEnabled(true);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -182,7 +191,10 @@ void UdpChannel::connectTo(const QString& address, quint16 port)
     }
 
     enet_host_flush(host_.get());
-    setUpdateEnabled(true);
+
+    update_timer_id_ = startTimer(kUpdateIntervalMs, Qt::PreciseTimer);
+    notifier_->setSocket(host_->socket);
+    notifier_->setEnabled(true);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -223,7 +235,8 @@ void UdpChannel::addWriteTask(quint8 channel_id, const QByteArray& data)
         return;
     }
 
-    ScopedENetPacket packet = acquirePacket(sizeof(Header) + target_data_size, ENET_PACKET_FLAG_RELIABLE);
+    //ScopedENetPacket packet = acquirePacket(sizeof(Header) + target_data_size, ENET_PACKET_FLAG_RELIABLE);
+    ScopedENetPacket packet(enet_packet_create(nullptr, sizeof(Header) + target_data_size, ENET_PACKET_FLAG_RELIABLE));
     if (!packet)
     {
         onErrorOccurred(FROM_HERE);
@@ -245,6 +258,13 @@ void UdpChannel::addWriteTask(quint8 channel_id, const QByteArray& data)
         onErrorOccurred(FROM_HERE);
         return;
     }
+
+    /*if (enet_peer_send(peer_.get(), channel_id, packet.release()) != 0)
+    {
+        LOG(ERROR) << "enet_peer_send failed";
+        onErrorOccurred(FROM_HERE);
+        return;
+    }*/
 
     bool schedule_write = write_queue_.empty();
 
@@ -271,7 +291,7 @@ void UdpChannel::doWrite()
     packet->freeCallback = [](ENetPacket* packet)
     {
         UdpChannel* self = reinterpret_cast<UdpChannel*>(packet->userData);
-        self->releasePacket(packet);
+        //self->releasePacket(packet);
         self->doWrite();
     };
 
@@ -333,7 +353,12 @@ void UdpChannel::timerEvent(QTimerEvent* event)
 //--------------------------------------------------------------------------------------------------
 void UdpChannel::close()
 {
-    setUpdateEnabled(false);
+    if (update_timer_id_ != 0)
+    {
+        killTimer(update_timer_id_);
+        update_timer_id_ = 0;
+    }
+    notifier_->setEnabled(false);
     peer_.reset();
     host_.reset();
     packet_pool_.clear();
@@ -442,23 +467,6 @@ void UdpChannel::onMessageReceived(quint8 channel_id, ScopedENetPacket packet)
 }
 
 //--------------------------------------------------------------------------------------------------
-void UdpChannel::setUpdateEnabled(bool enable)
-{
-    if (enable && update_timer_id_ == 0)
-    {
-        update_timer_id_ = startTimer(kUpdateIntervalMs, Qt::PreciseTimer);
-    }
-    else if (!enable && update_timer_id_ != 0)
-    {
-        killTimer(update_timer_id_);
-        update_timer_id_ = 0;
-    }
-
-    if (notifier_->isEnabled() != enable)
-        notifier_->setEnabled(enable);
-}
-
-//--------------------------------------------------------------------------------------------------
 void UdpChannel::onReadyCheck()
 {
     if (!connected_ || !encryptor_ || !decryptor_)
@@ -510,12 +518,13 @@ UdpChannel::ScopedENetPacket UdpChannel::acquirePacket(qint64 size, quint32 flag
 void UdpChannel::releasePacket(ENetPacket* packet)
 {
     if (packet_pool_.size() >= kPoolReservedSize)
-    {
-        enet_packet_destroy(packet);
         return;
-    }
 
-    packet_pool_.emplace_back(packet);
+    packet_pool_.emplace_back(
+        enet_packet_create(packet->data, packet->dataLength, ENET_PACKET_FLAG_NO_ALLOCATE));
+
+    packet->data = nullptr;
+    packet->dataLength = 0;
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -99,7 +99,6 @@ private:
     void addWriteTask(quint8 channel_id, const QByteArray& data);
     void doWrite();
     void onMessageReceived(quint8 channel_id, ScopedENetPacket packet);
-    void setUpdateEnabled(bool enable);
     void onReadyCheck();
     void addTxBytes(qint64 bytes_count);
     void addRxBytes(qint64 bytes_count);
