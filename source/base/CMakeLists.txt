@@ -104,6 +104,7 @@ list(APPEND SOURCE_BASE_TESTS
     serialization_unittest.cc
     shared_pointer_unittest.cc
     thread_local_pool_unittest.cc
+    xml_settings_unittest.cc
     tests_main.cc)
 
 list(APPEND SOURCE_BASE_AUDIO
