@@ -235,8 +235,7 @@ void UdpChannel::addWriteTask(quint8 channel_id, const QByteArray& data)
         return;
     }
 
-    //ScopedENetPacket packet = acquirePacket(sizeof(Header) + target_data_size, ENET_PACKET_FLAG_RELIABLE);
-    ScopedENetPacket packet(enet_packet_create(nullptr, sizeof(Header) + target_data_size, ENET_PACKET_FLAG_RELIABLE));
+    ScopedENetPacket packet = acquirePacket(sizeof(Header) + target_data_size, ENET_PACKET_FLAG_RELIABLE);
     if (!packet)
     {
         onErrorOccurred(FROM_HERE);
@@ -259,13 +258,6 @@ void UdpChannel::addWriteTask(quint8 channel_id, const QByteArray& data)
         return;
     }
 
-    /*if (enet_peer_send(peer_.get(), channel_id, packet.release()) != 0)
-    {
-        LOG(ERROR) << "enet_peer_send failed";
-        onErrorOccurred(FROM_HERE);
-        return;
-    }*/
-
     bool schedule_write = write_queue_.empty();
 
     write_queue_.emplace_back(channel_id, std::move(packet));
@@ -287,11 +279,17 @@ void UdpChannel::doWrite()
     addTxBytes(packet->dataLength);
     write_queue_.pop_front();
 
+    // This callback is called when a packet is removed.
     packet->userData = this;
     packet->freeCallback = [](ENetPacket* packet)
     {
         UdpChannel* self = reinterpret_cast<UdpChannel*>(packet->userData);
-        //self->releasePacket(packet);
+
+        // Call releasePacket to take back the allocated memory from this packet.
+        self->releasePacket(packet);
+
+        // Since the packet has been removed, the sending task is complete.
+        // Let's start the next sending task.
         self->doWrite();
     };
 
@@ -301,6 +299,8 @@ void UdpChannel::doWrite()
         onErrorOccurred(FROM_HERE);
         return;
     }
+
+    enet_host_flush(host_.get());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -515,16 +515,23 @@ UdpChannel::ScopedENetPacket UdpChannel::acquirePacket(qint64 size, quint32 flag
 }
 
 //--------------------------------------------------------------------------------------------------
-void UdpChannel::releasePacket(ENetPacket* packet)
+void UdpChannel::releasePacket(ENetPacket* release_packet)
 {
     if (packet_pool_.size() >= kPoolReservedSize)
         return;
 
-    packet_pool_.emplace_back(
-        enet_packet_create(packet->data, packet->dataLength, ENET_PACKET_FLAG_NO_ALLOCATE));
+    // Create a new package without allocating memory with using the data of the released packet.
+    ScopedENetPacket packet(enet_packet_create(
+        release_packet->data, release_packet->dataLength, ENET_PACKET_FLAG_NO_ALLOCATE));
 
-    packet->data = nullptr;
-    packet->dataLength = 0;
+    // Remove the flags, now the new packet owns the data.
+    packet->flags = 0;
+
+    // Old packet no longer contains data.
+    release_packet->data = nullptr;
+    release_packet->dataLength = 0;
+
+    packet_pool_.emplace_back(std::move(packet));
 }
 
 //--------------------------------------------------------------------------------------------------
