@@ -159,7 +159,7 @@ void UdpChannel::connectTo(const QString& address, quint16 port)
     if (!host_)
     {
         LOG(ERROR) << "Failed to create ENet host";
-        emit sig_errorOccurred();
+        onErrorOccurred(FROM_HERE);
         return;
     }
 
@@ -169,7 +169,7 @@ void UdpChannel::connectTo(const QString& address, quint16 port)
     if (enet_address_set_host(&enet_address, address.toLocal8Bit().constData()) != 0)
     {
         LOG(ERROR) << "Failed to resolve address:" << address;
-        emit sig_errorOccurred();
+        onErrorOccurred(FROM_HERE);
         return;
     }
 
@@ -177,7 +177,7 @@ void UdpChannel::connectTo(const QString& address, quint16 port)
     if (!peer_)
     {
         LOG(ERROR) << "Failed to initiate ENet connection";
-        emit sig_errorOccurred();
+        onErrorOccurred(FROM_HERE);
         return;
     }
 
@@ -197,8 +197,13 @@ void UdpChannel::setPaused(bool enable)
     if (paused_ == enable)
         return;
 
-    setUpdateEnabled(!enable);
     paused_ = enable;
+    if (paused_)
+        return;
+
+    for (auto& task : read_pending_)
+        onMessageReceived(task.first, std::move(task.second));
+    read_pending_.clear();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -255,7 +260,7 @@ void UdpChannel::doWrite()
     if (write_queue_.empty())
         return;
 
-    WriteTask& task = write_queue_.front();
+    Task& task = write_queue_.front();
     ScopedENetPacket packet = std::move(task.second);
     quint8 channel_id = task.first;
 
@@ -273,7 +278,7 @@ void UdpChannel::doWrite()
     if (enet_peer_send(peer_.get(), channel_id, packet.release()) != 0)
     {
         LOG(ERROR) << "enet_peer_send failed";
-        emit sig_errorOccurred();
+        onErrorOccurred(FROM_HERE);
         return;
     }
 }
@@ -360,14 +365,10 @@ void UdpChannel::processEvents()
 
             case ENET_EVENT_TYPE_RECEIVE:
             {
-                onMessageReceived(event.channelID, event.packet);
-                enet_packet_destroy(event.packet);
-
+                onMessageReceived(event.channelID, ScopedENetPacket(event.packet));
+                // Host was destroyed during parseMessages (error path).
                 if (!host_)
-                {
-                    // Host was destroyed during parseMessages (error path).
                     return;
-                }
             }
             break;
 
@@ -383,7 +384,7 @@ void UdpChannel::processEvents()
     if (result < 0)
     {
         LOG(ERROR) << "enet_host_service failed";
-        emit sig_errorOccurred();
+        onErrorOccurred(FROM_HERE);
     }
 }
 
@@ -396,8 +397,14 @@ void UdpChannel::onErrorOccurred(const Location& location)
 }
 
 //--------------------------------------------------------------------------------------------------
-void UdpChannel::onMessageReceived(quint8 channel_id, ENetPacket* packet)
+void UdpChannel::onMessageReceived(quint8 channel_id, ScopedENetPacket packet)
 {
+    if (paused_)
+    {
+        read_pending_.emplace_back(channel_id, std::move(packet));
+        return;
+    }
+
     if (!decryptor_)
     {
         onErrorOccurred(FROM_HERE);
@@ -455,11 +462,6 @@ void UdpChannel::onReadyCheck()
 {
     if (!connected_ || !encryptor_ || !decryptor_)
         return;
-
-    // The channel is created in a paused state. Once the connection is established, we stop the
-    // update. The owner must handle signal sig_ready and call method setPaused(false) to resume
-    // receiving messages.
-    setUpdateEnabled(false);
 
     LOG(INFO) << "UDP channel is ready";
     emit sig_ready();

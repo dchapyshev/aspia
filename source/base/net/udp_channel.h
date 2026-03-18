@@ -81,7 +81,7 @@ private:
     using TimePoint = std::chrono::time_point<Clock>;
     using Milliseconds = std::chrono::milliseconds;
     using Seconds = std::chrono::seconds;
-    using WriteTask = std::pair<quint8, ScopedENetPacket>;
+    using Task = std::pair<quint8, ScopedENetPacket>;
 
     struct Header
     {
@@ -98,7 +98,7 @@ private:
     void onErrorOccurred(const Location& location);
     void addWriteTask(quint8 channel_id, const QByteArray& data);
     void doWrite();
-    void onMessageReceived(quint8 channel_id, ENetPacket* packet);
+    void onMessageReceived(quint8 channel_id, ScopedENetPacket packet);
     void setUpdateEnabled(bool enable);
     void onReadyCheck();
     void addTxBytes(qint64 bytes_count);
@@ -115,7 +115,8 @@ private:
     std::unique_ptr<MessageDecryptor> decryptor_;
 
     std::deque<ScopedENetPacket> packet_pool_;
-    std::deque<WriteTask> write_queue_;
+    std::deque<Task> write_queue_;
+    std::deque<Task> read_pending_;
     QByteArray decrypt_buffer_;
 
     bool connected_ = false;
