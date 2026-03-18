@@ -64,24 +64,6 @@ using ENetPool = ThreadLocalPool<std::size(kENetBucketSizes), 64>;
 thread_local ENetPool tls_enet_pool(kENetBucketSizes);
 
 //--------------------------------------------------------------------------------------------------
-void* ENET_CALLBACK enetPoolMalloc(size_t size)
-{
-    return tls_enet_pool.allocate(size);
-}
-
-//--------------------------------------------------------------------------------------------------
-void ENET_CALLBACK enetPoolFree(void* memory)
-{
-    tls_enet_pool.deallocate(memory);
-}
-
-//--------------------------------------------------------------------------------------------------
-void ENET_CALLBACK enetPoolNoMemory()
-{
-    LOG(FATAL) << "ENet: out of memory";
-}
-
-//--------------------------------------------------------------------------------------------------
 void initializeEnetWithPool()
 {
     static struct Initializer
@@ -89,9 +71,9 @@ void initializeEnetWithPool()
         Initializer()
         {
             ENetCallbacks callbacks;
-            callbacks.malloc = enetPoolMalloc;
-            callbacks.free = enetPoolFree;
-            callbacks.no_memory = enetPoolNoMemory;
+            callbacks.malloc = [](size_t size) { return tls_enet_pool.allocate(size); };
+            callbacks.free = [](void* memory) { tls_enet_pool.deallocate(memory); };
+            callbacks.no_memory = []() { LOG(FATAL) << "ENet: out of memory"; };
 
             int ret = enet_initialize_with_callbacks(ENET_VERSION, &callbacks);
             CHECK(ret == 0) << "Failed to initialize ENet with custom allocator";
