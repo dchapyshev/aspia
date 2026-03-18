@@ -90,7 +90,7 @@ set(THIRD_PARTY_LIBS
     Opus::opus
     libwebm
     unofficial::libvpx::libvpx
-    kcp::kcp
+    unofficial::enet::enet
     yuv)
 
 include_directories(${PROJECT_SOURCE_DIR}/source ${PROJECT_BINARY_DIR}/source)

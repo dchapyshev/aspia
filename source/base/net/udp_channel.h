@@ -24,17 +24,15 @@
 
 #include <memory>
 
-#include <asio/ip/udp.hpp>
+#include "base/net/enet_util.h"
 
 class QTimer;
 
 namespace base {
 
-class KcpSocket;
 class Location;
 class MessageDecryptor;
 class MessageEncryptor;
-class StunPeer;
 
 class UdpChannel final : public QObject
 {
@@ -44,8 +42,8 @@ public:
     explicit UdpChannel(QObject* parent = nullptr);
     ~UdpChannel() final;
 
-    static UdpChannel* bind(quint16& port);
-
+    bool setReadySocket(qintptr socket);
+    bool bind(quint16* port);
     void connectTo(const QString& address, quint16 port);
     void send(quint8 channel_id, const QByteArray& buffer);
     bool isReady() const;
@@ -67,9 +65,7 @@ signals:
     void sig_messageReceived(quint8 channel_id, const QByteArray& buffer);
 
 protected:
-    friend class StunPeer;
-    UdpChannel(asio::ip::udp::socket&& socket, QObject* parent);
-    UdpChannel(KcpSocket* socket, QObject* parent = nullptr);
+    void timerEvent(QTimerEvent* event) final;
 
 private:
     using Clock = std::chrono::steady_clock;
@@ -130,20 +126,24 @@ private:
         QByteArray data_;
     };
 
-    void init();
+    void init(ENetHost* host);
+    void close();
+    void processEvents();
     void onErrorOccurred(const Location& location, const std::error_code& error_code);
+    void parseMessages();
     void addWriteTask(quint8 type, quint8 param, QByteArray data);
     void doWrite();
-    void onKcpReady();
-    void onKcpDataReceived(const char* data, int size);
-    bool parseMessages();
     bool onMessageReceived(int offset);
     void onKeepAliveTimer();
     void onReadyCheck();
     void addTxBytes(qint64 bytes_count);
     void addRxBytes(qint64 bytes_count);
 
-    KcpSocket* kcp_socket_ = nullptr;
+    ScopedENetHost host_;
+    ScopedENetPeer peer_;
+    int update_timer_id_ = 0;
+    bool enet_ready_ = false;
+
     QTimer* keep_alive_timer_ = nullptr;
     KeepAliveTimerType keep_alive_timer_type_ = KEEP_ALIVE_INTERVAL;
     QByteArray keep_alive_counter_;
@@ -158,7 +158,6 @@ private:
     QByteArray decrypt_buffer_;
     int read_offset_ = 0;
 
-    bool kcp_ready_ = false;
     bool paused_ = true;
 
     qint64 total_tx_ = 0;

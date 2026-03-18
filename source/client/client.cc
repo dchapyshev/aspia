@@ -530,9 +530,24 @@ void Client::onHostConnected(bool peer_address_equals, const QString& stun_host,
     stun_port_ = stun_port;
 
     if (peer_address_equals)
-        startDirectUdp(nullptr, QString(), 0);
+    {
+        udp_channel_ = new base::UdpChannel(this);
+
+        quint16 port = 0;
+        if (!udp_channel_->bind(&port))
+        {
+            LOG(ERROR) << "Unable to bind UDP port";
+            udp_channel_->deleteLater();
+            udp_channel_ = nullptr;
+            return;
+        }
+
+        startDirectUdp(QString(), port);
+    }
     else
+    {
         startUdpHolePunching();
+    }
 
     // Router controller is no longer needed.
     router_controller_->disconnect();
@@ -618,13 +633,22 @@ void Client::startUdpHolePunching()
         LOG(INFO) << "External endpoint received:" << external_address << ':' << external_port;
         CHECK(stun_peer_);
 
-        base::UdpChannel* udp_channel = stun_peer_->takeChannel();
+        qintptr socket = stun_peer_->takeSocket();
 
         stun_peer_->disconnect();
         stun_peer_->deleteLater();
         stun_peer_ = nullptr;
 
-        startDirectUdp(udp_channel, external_address, external_port);
+        udp_channel_ = new base::UdpChannel(this);
+        if (!udp_channel_->setReadySocket(socket))
+        {
+            LOG(ERROR) << "Unable to set ready socket";
+            udp_channel_->deleteLater();
+            udp_channel_ = nullptr;
+            return;
+        }
+
+        startDirectUdp(external_address, external_port);
     });
 
     connect(stun_peer_, &base::StunPeer::sig_errorOccurred, this, [this]()
@@ -641,29 +665,9 @@ void Client::startUdpHolePunching()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::startDirectUdp(base::UdpChannel* udp_channel, const QString& address, quint16 port)
+void Client::startDirectUdp(const QString& address, quint16 port)
 {
     LOG(INFO) << "Starting direct UDP...";
-
-    if (!udp_channel)
-    {
-        quint16 binded_port = 0;
-        udp_channel_ = base::UdpChannel::bind(binded_port);
-        if (!udp_channel_)
-        {
-            LOG(ERROR) << "Unable to bind UDP port";
-            return;
-        }
-
-        LOG(INFO) << "UDP port is binded:" << binded_port;
-        port = binded_port;
-    }
-    else
-    {
-        udp_channel_ = udp_channel;
-    }
-
-    udp_channel_->setParent(this);
 
     connect(udp_channel_, &base::UdpChannel::sig_ready, this, &Client::onUdpReady);
     connect(udp_channel_, &base::UdpChannel::sig_errorOccurred, this, &Client::onUdpErrorOccurred);

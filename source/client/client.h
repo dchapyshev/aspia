@@ -112,7 +112,7 @@ private:
     void delayedReconnect();
     void channelReady();
     void startUdpHolePunching();
-    void startDirectUdp(base::UdpChannel* udp_channel, const QString& address, quint16 port);
+    void startDirectUdp(const QString& address, quint16 port);
 
     bool is_legacy_mode_ = false;
     QTimer* timeout_timer_ = nullptr;

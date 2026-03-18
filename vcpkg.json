@@ -4,13 +4,13 @@
   "dependencies": [
     "asio",
     "curl",
+    "enet",
     "gtest",
     {
       "name": "icu",
       "platform": "linux | osx"
     },
     "inipp",
-    "kcp",
     "libvpx",
     "libyuv",
     "openssl",

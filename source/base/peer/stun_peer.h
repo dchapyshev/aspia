@@ -21,16 +21,13 @@
 
 #include <QObject>
 
-#include <asio/ip/udp.hpp>
-
-#include "base/shared_pointer.h"
-
+class QHostInfo;
+class QSocketNotifier;
 class QTimer;
 
 namespace base {
 
 class Location;
-class UdpChannel;
 
 class StunPeer final : public QObject
 {
@@ -41,7 +38,7 @@ public:
     ~StunPeer();
 
     void start(const QString& stun_host, quint16 stun_port);
-    UdpChannel* takeChannel();
+    qintptr takeSocket();
 
 signals:
     void sig_channelReady(const QString& external_address, quint16 external_port);
@@ -53,21 +50,22 @@ private slots:
 private:
     void doStart();
     void doStop();
-    void doReceiveExternalAddress();
-    void onErrorOccurred(const Location& location, const std::error_code& error_code);
+    void onHostResolved(const QHostInfo& host_info);
+    void onReadyRead();
+    void onErrorOccurred(const Location& location);
 
     QTimer* timer_ = nullptr;
     int number_of_attempts_ = 0;
 
-    std::string stun_host_;
-    std::string stun_port_;
+    QString stun_host_;
+    quint16 stun_port_ = 0;
 
-    SharedPointer<bool> alive_guard_ { new bool(true) };
-    asio::ip::udp::resolver udp_resolver_;
-    asio::ip::udp::socket udp_socket_;
-    std::array<quint8, 1024> buffer_;
+    qintptr socket_ = -1;
+    QSocketNotifier* read_notifier_ = nullptr;
+    quint32 transaction_id_ = 0;
+    int lookup_id_ = -1;
 
-    UdpChannel* ready_channel_ = nullptr;
+    qintptr ready_socket_ = -1;
 
     Q_DISABLE_COPY_MOVE(StunPeer)
 };

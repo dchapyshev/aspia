@@ -406,6 +406,10 @@ list(APPEND SOURCE_BASE_NET
     net/address.h
     net/curl_util.cc
     net/curl_util.h
+    net/enet_socket.cc
+    net/enet_socket.h
+    net/enet_util.cc
+    net/enet_util.h
     net/net_utils.cc
     net/net_utils.h
     net/tcp_channel.cc
@@ -418,8 +422,6 @@ list(APPEND SOURCE_BASE_NET
     net/tcp_server.h
     net/tcp_server_legacy.cc
     net/tcp_server_legacy.h
-    net/kcp_socket.cc
-    net/kcp_socket.h
     net/udp_channel.cc
     net/udp_channel.h)
 

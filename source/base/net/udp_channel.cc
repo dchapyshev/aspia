@@ -19,13 +19,15 @@
 #include "base/net/udp_channel.h"
 
 #include <QTimer>
+#include <QTimerEvent>
+
+#include <enet/enet.h>
 
 #include "base/location.h"
 #include "base/logging.h"
 #include "base/crypto/large_number_increment.h"
 #include "base/crypto/message_decryptor.h"
 #include "base/crypto/message_encryptor.h"
-#include "base/net/kcp_socket.h"
 
 namespace base {
 
@@ -39,6 +41,10 @@ const int kReadBufferReserveSize = 1 * 1024 * 1024;
 const int kWriteBufferReserveSize = 2 * 1024 * 1024;
 const int kDecryptBufferReserveSize = 2 * 1024 * 1024;
 const int kReadBufferCompactThreshold = 1 * 1024 * 1024;
+
+const int kUpdateIntervalMs = 10;
+const int kMaxPeers = 1;
+const int kChannelCount = 256;
 
 //--------------------------------------------------------------------------------------------------
 void resizeBuffer(QByteArray* buffer, qint64 size)
@@ -61,59 +67,135 @@ int calculateSpeed(int last_speed, const std::chrono::milliseconds& duration, qi
         ((1.0 - kAlpha) * static_cast<double>(last_speed)));
 }
 
+//--------------------------------------------------------------------------------------------------
+void ensureEnetInitialized()
+{
+    static struct Initializer
+    {
+        Initializer()
+        {
+            int ret = enet_initialize();
+            CHECK(ret == 0) << "Failed to initialize ENet";
+        }
+        ~Initializer() { enet_deinitialize(); }
+    } initializer;
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
 UdpChannel::UdpChannel(QObject* parent)
     : QObject(parent),
-      kcp_socket_(new KcpSocket(this)),
       keep_alive_timer_(new QTimer(this))
 {
-    init();
-}
-
-//--------------------------------------------------------------------------------------------------
-UdpChannel::UdpChannel(asio::ip::udp::socket&& socket, QObject* parent)
-    : QObject(parent),
-      kcp_socket_(new KcpSocket(std::move(socket), this)),
-      keep_alive_timer_(new QTimer(this))
-{
-    init();
-}
-
-//--------------------------------------------------------------------------------------------------
-UdpChannel::UdpChannel(KcpSocket* socket, QObject* parent)
-    : QObject(parent),
-      kcp_socket_(socket),
-      keep_alive_timer_(new QTimer(this))
-{
-    CHECK(kcp_socket_);
-    kcp_socket_->setParent(this);
-    init();
+    ensureEnetInitialized();
 }
 
 //--------------------------------------------------------------------------------------------------
 UdpChannel::~UdpChannel()
 {
-    keep_alive_timer_->stop();
-    kcp_socket_->close();
+    close();
 }
 
 //--------------------------------------------------------------------------------------------------
-// static
-UdpChannel* UdpChannel::bind(quint16& port)
+bool UdpChannel::setReadySocket(qintptr socket)
 {
-    KcpSocket* socket = KcpSocket::bind(port);
-    if (!socket)
-        return nullptr;
+    ENetAddress fake_address;
+    fake_address.host = ENET_HOST_ANY;
+    fake_address.port = 0;
 
-    return new UdpChannel(socket, nullptr);
+    ENetHost* host = enet_host_create(&fake_address, kMaxPeers, kChannelCount, 0, 0);
+    if (!host)
+    {
+        LOG(ERROR) << "Unable to create ENet host";
+        enet_socket_destroy(socket);
+        return false;
+    }
+
+    enet_socket_destroy(host->socket);
+
+    ENetAddress address;
+    if (enet_socket_get_address(socket, &address) < 0)
+    {
+        LOG(ERROR) << "Unable to get socket address";
+        enet_socket_destroy(socket);
+        return false;
+    }
+
+    host->socket = socket;
+    host->address = address;
+
+    init(host);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool UdpChannel::bind(quint16* port)
+{
+    ENetAddress address;
+    address.host = ENET_HOST_ANY;
+    address.port = *port;
+
+    ENetHost* host = enet_host_create(&address, kMaxPeers, kChannelCount, 0, 0);
+    if (!host)
+    {
+        LOG(ERROR) << "Unable to create ENet host on port" << *port;
+        return false;
+    }
+
+    if (!*port)
+    {
+        // Retrieve the actual port assigned by the OS.
+        ENetAddress bound_address;
+        if (enet_socket_get_address(host->socket, &bound_address) != 0)
+        {
+            LOG(ERROR) << "Unable to get bound port";
+            enet_host_destroy(host);
+            return false;
+        }
+
+        *port = bound_address.port;
+    }
+
+    init(host);
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
 void UdpChannel::connectTo(const QString& address, quint16 port)
 {
-    kcp_socket_->connectTo(address, port);
+    if (!host_)
+    {
+        ENetHost* host = enet_host_create(nullptr, kMaxPeers, kChannelCount, 0, 0);
+        if (!host)
+        {
+            LOG(ERROR) << "Failed to create ENet host";
+            emit sig_errorOccurred();
+            return;
+        }
+
+        init(host);
+    }
+
+    ENetAddress enet_address;
+    enet_address.port = port;
+
+    if (enet_address_set_host(&enet_address, address.toLocal8Bit().constData()) != 0)
+    {
+        LOG(ERROR) << "Failed to resolve address:" << address;
+        emit sig_errorOccurred();
+        return;
+    }
+
+    peer_.reset(enet_host_connect(host_, &enet_address, kChannelCount, 0));
+    if (!peer_)
+    {
+        LOG(ERROR) << "Failed to initiate ENet connection";
+        emit sig_errorOccurred();
+        return;
+    }
+
+    enet_host_flush(host_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -125,7 +207,7 @@ void UdpChannel::send(quint8 channel_id, const QByteArray& buffer)
 //--------------------------------------------------------------------------------------------------
 bool UdpChannel::isReady() const
 {
-    return kcp_ready_ && isEncrypted();
+    return enet_ready_ && isEncrypted();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -147,7 +229,7 @@ void UdpChannel::setPaused(bool enable)
         return;
     }
 
-    if (kcp_ready_)
+    if (enet_ready_)
     {
         // Start keep-alive only when we know the peer's address.
         keep_alive_timer_type_ = KEEP_ALIVE_INTERVAL;
@@ -155,8 +237,7 @@ void UdpChannel::setPaused(bool enable)
     }
 
     // Process any data that was accumulated while paused.
-    if (!parseMessages())
-        return;
+    parseMessages();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -213,9 +294,23 @@ void UdpChannel::doWrite()
 
         addTxBytes(write_buffer_.size());
 
-        if (!kcp_socket_->send(write_buffer_.constData(), static_cast<int>(write_buffer_.size())))
+        ENetPacket* packet = enet_packet_create(write_buffer_.constData(), write_buffer_.size(), ENET_PACKET_FLAG_RELIABLE);
+        if (!packet)
+        {
+            LOG(ERROR) << "Failed to create ENet packet";
+            emit sig_errorOccurred();
             return;
+        }
 
+        if (enet_peer_send(peer_, 0, packet) != 0)
+        {
+            LOG(ERROR) << "enet_peer_send failed";
+            enet_packet_destroy(packet);
+            emit sig_errorOccurred();
+            return;
+        }
+
+        enet_host_flush(host_);
         write_queue_.pop_front();
     }
 }
@@ -261,7 +356,16 @@ int UdpChannel::speedTx()
 }
 
 //--------------------------------------------------------------------------------------------------
-void UdpChannel::init()
+void UdpChannel::timerEvent(QTimerEvent* event)
+{
+    if (event->timerId() != update_timer_id_)
+        return;
+
+    processEvents();
+}
+
+//--------------------------------------------------------------------------------------------------
+void UdpChannel::init(ENetHost* host)
 {
     static_assert(sizeof(Header) == 8, "Header must be 8 bytes without padding");
 
@@ -270,18 +374,82 @@ void UdpChannel::init()
     write_buffer_.reserve(kWriteBufferReserveSize);
     decrypt_buffer_.reserve(kDecryptBufferReserveSize);
 
-    connect(kcp_socket_, &KcpSocket::sig_ready, this, &UdpChannel::onKcpReady);
-    connect(kcp_socket_, &KcpSocket::sig_dataReceived, this, &UdpChannel::onKcpDataReceived);
-    connect(kcp_socket_, &KcpSocket::sig_errorOccurred, this, [this]()
-    {
-        onErrorOccurred(FROM_HERE, std::error_code());
-    });
+    host_.reset(host);
+    update_timer_id_ = startTimer(kUpdateIntervalMs, Qt::PreciseTimer);
 
     keep_alive_timer_->setSingleShot(true);
     connect(keep_alive_timer_, &QTimer::timeout, this, &UdpChannel::onKeepAliveTimer);
 
     keep_alive_counter_.resize(sizeof(quint32));
     memset(keep_alive_counter_.data(), 0, keep_alive_counter_.size());
+}
+
+//--------------------------------------------------------------------------------------------------
+void UdpChannel::close()
+{
+    keep_alive_timer_->stop();
+
+    if (update_timer_id_ != 0)
+    {
+        killTimer(update_timer_id_);
+        update_timer_id_ = 0;
+    }
+
+    peer_.reset();
+    host_.reset();
+
+    enet_ready_ = false;
+}
+
+//--------------------------------------------------------------------------------------------------
+void UdpChannel::processEvents()
+{
+    if (!host_)
+        return;
+
+    ENetEvent event;
+    int result;
+
+    while ((result = enet_host_service(host_, &event, 0)) > 0)
+    {
+        switch (event.type)
+        {
+            case ENET_EVENT_TYPE_CONNECT:
+            {
+                LOG(INFO) << "ENet peer connected";
+                peer_.reset(event.peer);
+                enet_ready_ = true;
+                onReadyCheck();
+            }
+            break;
+
+            case ENET_EVENT_TYPE_RECEIVE:
+            {
+                addRxBytes(event.packet->dataLength);
+                read_buffer_.append(reinterpret_cast<const char*>(event.packet->data),
+                                    static_cast<int>(event.packet->dataLength));
+                parseMessages();
+                enet_packet_destroy(event.packet);
+            }
+            break;
+
+            case ENET_EVENT_TYPE_DISCONNECT:
+                LOG(INFO) << "ENet peer disconnected";
+                peer_.reset();
+                enet_ready_ = false;
+                emit sig_errorOccurred();
+                return; // Host may be destroyed by the slot, stop processing.
+
+            case ENET_EVENT_TYPE_NONE:
+                break;
+        }
+    }
+
+    if (result < 0)
+    {
+        LOG(ERROR) << "enet_host_service failed";
+        emit sig_errorOccurred();
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -292,33 +460,12 @@ void UdpChannel::onErrorOccurred(const Location& location, const std::error_code
     else
         LOG(ERROR) << "Error occurred from" << location.toString();
 
-    keep_alive_timer_->stop();
-    kcp_socket_->close();
-
-    kcp_ready_ = false;
+    close();
     emit sig_errorOccurred();
 }
 
 //--------------------------------------------------------------------------------------------------
-void UdpChannel::onKcpReady()
-{
-    LOG(INFO) << "KCP is ready";
-    kcp_ready_ = true;
-    onReadyCheck();
-}
-
-//--------------------------------------------------------------------------------------------------
-void UdpChannel::onKcpDataReceived(const char* data, int size)
-{
-    read_buffer_.append(data, size);
-    addRxBytes(size);
-
-    if (!paused_)
-        parseMessages();
-}
-
-//--------------------------------------------------------------------------------------------------
-bool UdpChannel::parseMessages()
+void UdpChannel::parseMessages()
 {
     // Parse complete messages using offset tracking to avoid O(n) memmove on each call.
     while (true)
@@ -336,7 +483,7 @@ bool UdpChannel::parseMessages()
         {
             LOG(ERROR) << "Too big incoming message:" << header.length;
             onErrorOccurred(FROM_HERE, std::error_code());
-            return false;
+            return;
         }
 
         total_size += static_cast<int>(header.length);
@@ -345,7 +492,7 @@ bool UdpChannel::parseMessages()
             break;
 
         if (!onMessageReceived(read_offset_))
-            return false;
+            return;
 
         read_offset_ += total_size;
 
@@ -359,8 +506,6 @@ bool UdpChannel::parseMessages()
         read_buffer_.remove(0, read_offset_);
         read_offset_ = 0;
     }
-
-    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -442,7 +587,7 @@ void UdpChannel::onKeepAliveTimer()
 //--------------------------------------------------------------------------------------------------
 void UdpChannel::onReadyCheck()
 {
-    if (!kcp_ready_ || !isEncrypted())
+    if (!enet_ready_ || !isEncrypted())
         return;
 
     // Start keep-alive only if already unpaused.
