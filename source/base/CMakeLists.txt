@@ -99,6 +99,7 @@ list(APPEND SOURCE_BASE_TESTS
     aligned_memory_unittest.cc
     asio_event_dispatcher_unittest.cc
     bitset_unittest.cc
+    numeric_utils_unittest.cc
     scoped_clear_last_error_unittest.cc
     serialization_unittest.cc
     thread_local_pool_unittest.cc
