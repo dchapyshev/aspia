@@ -100,6 +100,7 @@ list(APPEND SOURCE_BASE_TESTS
     asio_event_dispatcher_unittest.cc
     bitset_unittest.cc
     scoped_clear_last_error_unittest.cc
+    serialization_unittest.cc
     thread_local_pool_unittest.cc
     tests_main.cc)
 
