@@ -55,6 +55,8 @@ public:
     void setEncryptor(std::unique_ptr<MessageEncryptor> encryptor);
     void setDecryptor(std::unique_ptr<MessageDecryptor> decryptor);
 
+    qint64 pendingBytes() const;
+
     qint64 totalRx() const { return total_rx_; }
     qint64 totalTx() const { return total_tx_; }
     int speedRx();

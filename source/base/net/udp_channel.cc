@@ -34,7 +34,6 @@ namespace base {
 namespace {
 
 const quint32 kMaxMessageSize = 7 * 1024 * 1024; // 7 MB
-const int kDecryptBufferReserveSize = 2 * 1024 * 1024;
 const int kUpdateIntervalMs = 10;
 const int kMaxPeers = 1;
 const int kChannelCount = 256;
@@ -71,9 +70,6 @@ UdpChannel::UdpChannel(QObject* parent)
       notifier_(new QSocketNotifier(QSocketNotifier::Read, this))
 {
     ensureEnetInitialized();
-
-    decrypt_buffer_.reserve(kDecryptBufferReserveSize);
-
     connect(notifier_, &QSocketNotifier::activated, this, &UdpChannel::processEvents);
 }
 
@@ -122,7 +118,7 @@ void UdpChannel::setReadySocket(qintptr socket)
 //--------------------------------------------------------------------------------------------------
 void UdpChannel::bind(quint16* port)
 {
-    CHECK(port);
+    DCHECK(port);
 
     if (host_)
         return;
@@ -315,6 +311,17 @@ void UdpChannel::setDecryptor(std::unique_ptr<MessageDecryptor> decryptor)
 {
     decryptor_ = std::move(decryptor);
     onReadyCheck();
+}
+
+//--------------------------------------------------------------------------------------------------
+qint64 UdpChannel::pendingBytes() const
+{
+    qint64 result = 0;
+
+    for (const auto& task : std::as_const(write_queue_))
+        result += task.second->dataLength;
+
+    return result;
 }
 
 //--------------------------------------------------------------------------------------------------

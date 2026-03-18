@@ -115,8 +115,11 @@ QString Client::userName() const
 //--------------------------------------------------------------------------------------------------
 qint64 Client::pendingBytes() const
 {
-    // TODO: UDP support.
-    return tcp_channel_->pendingBytes();
+    qint64 result = tcp_channel_->pendingBytes();
+    if (udp_channel_)
+        result += udp_channel_->pendingBytes();
+
+    return result;
 }
 
 //--------------------------------------------------------------------------------------------------
