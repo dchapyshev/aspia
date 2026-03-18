@@ -223,7 +223,7 @@ void UdpChannel::addWriteTask(quint8 channel_id, const QByteArray& data)
         return;
     }
 
-    ScopedENetPacket packet = acquirePacket(target_data_size, ENET_PACKET_FLAG_RELIABLE);
+    ScopedENetPacket packet = acquirePacket(sizeof(Header) + target_data_size, ENET_PACKET_FLAG_RELIABLE);
     if (!packet)
     {
         onErrorOccurred(FROM_HERE);
@@ -423,13 +423,14 @@ void UdpChannel::onMessageReceived(quint8 channel_id, ScopedENetPacket packet)
     Header header;
     memcpy(&header, packet->data, sizeof(Header));
 
-    qint64 size = decryptor_->decryptedDataSize(packet->dataLength);
+    qint64 size = decryptor_->decryptedDataSize(packet->dataLength - sizeof(Header));
     if (decrypt_buffer_.capacity() < size)
         decrypt_buffer_.reserve(size);
 
     decrypt_buffer_.resize(size);
 
-    if (!decryptor_->decrypt(packet->data, packet->dataLength, &header, sizeof(Header), decrypt_buffer_.data()))
+    if (!decryptor_->decrypt(packet->data + sizeof(Header), packet->dataLength - sizeof(Header),
+        &header, sizeof(Header), decrypt_buffer_.data()))
     {
         LOG(ERROR) << "Failed to decrypt incoming message";
         onErrorOccurred(FROM_HERE);
