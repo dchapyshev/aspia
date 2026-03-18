@@ -84,7 +84,7 @@ int sendUdp(qintptr socket, const char* buffer, qint64 size)
 #if defined(Q_OS_WINDOWS)
     return ::send(static_cast<SOCKET>(socket), buffer, int(size), 0);
 #else
-    return ::send(static_cast<int>(socket_), buffer, int(size), 0);
+    return ::send(static_cast<int>(socket), buffer, int(size), 0);
 #endif
 }
 
