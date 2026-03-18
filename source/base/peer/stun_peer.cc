@@ -30,6 +30,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <unistd.h>
+#include <fcntl.h>
 #endif
 
 #include "base/location.h"
@@ -70,9 +71,15 @@ qintptr createUdpSocket()
 
     return static_cast<qintptr>(sock);
 #else
-    int sock = ::socket(AF_INET, SOCK_DGRAM | SOCK_NONBLOCK, IPPROTO_UDP);
+    int sock = ::socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
     if (sock < 0)
         return -1;
+
+    if (fcntl(sock, F_SETFL, fcntl(sock, F_GETFL, 0) | O_NONBLOCK) < 0)
+    {
+        ::close(sock);
+        return -1;
+    }
 
     return static_cast<qintptr>(sock);
 #endif
