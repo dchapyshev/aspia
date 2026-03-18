@@ -20,8 +20,8 @@
 #define BASE_NET_UDP_CHANNEL_H
 
 #include <QObject>
-#include <QList>
 
+#include <deque>
 #include <memory>
 
 class QSocketNotifier;
@@ -114,8 +114,8 @@ private:
     std::unique_ptr<MessageEncryptor> encryptor_;
     std::unique_ptr<MessageDecryptor> decryptor_;
 
-    QList<ScopedENetPacket> packet_pool_;
-    QList<WriteTask> write_queue_;
+    std::deque<ScopedENetPacket> packet_pool_;
+    std::deque<WriteTask> write_queue_;
     QByteArray decrypt_buffer_;
 
     bool connected_ = false;

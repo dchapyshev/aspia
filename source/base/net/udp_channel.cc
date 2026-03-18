@@ -34,9 +34,7 @@ namespace base {
 namespace {
 
 const quint32 kMaxMessageSize = 7 * 1024 * 1024; // 7 MB
-const int kWriteQueueReservedSize = 128;
 const int kDecryptBufferReserveSize = 2 * 1024 * 1024;
-
 const int kUpdateIntervalMs = 10;
 const int kMaxPeers = 1;
 const int kChannelCount = 256;
@@ -74,7 +72,6 @@ UdpChannel::UdpChannel(QObject* parent)
 {
     ensureEnetInitialized();
 
-    write_queue_.reserve(kWriteQueueReservedSize);
     decrypt_buffer_.reserve(kDecryptBufferReserveSize);
 
     connect(notifier_, &QSocketNotifier::activated, this, &UdpChannel::processEvents);
@@ -244,7 +241,7 @@ void UdpChannel::addWriteTask(quint8 channel_id, const QByteArray& data)
         return;
     }
 
-    bool schedule_write = write_queue_.isEmpty();
+    bool schedule_write = write_queue_.empty();
 
     write_queue_.emplace_back(channel_id, std::move(packet));
 
@@ -255,7 +252,7 @@ void UdpChannel::addWriteTask(quint8 channel_id, const QByteArray& data)
 //--------------------------------------------------------------------------------------------------
 void UdpChannel::doWrite()
 {
-    if (write_queue_.isEmpty())
+    if (write_queue_.empty())
         return;
 
     WriteTask& task = write_queue_.front();
@@ -409,6 +406,13 @@ void UdpChannel::onMessageReceived(quint8 channel_id, ENetPacket* packet)
 
     addRxBytes(packet->dataLength);
 
+    if (packet->dataLength > kMaxMessageSize)
+    {
+        LOG(ERROR) << "Too big incoming message:" << packet->dataLength;
+        onErrorOccurred(FROM_HERE);
+        return;
+    }
+
     Header header;
     memcpy(&header, packet->data, sizeof(Header));
 
@@ -478,9 +482,10 @@ void UdpChannel::addRxBytes(qint64 bytes_count)
 //--------------------------------------------------------------------------------------------------
 UdpChannel::ScopedENetPacket UdpChannel::acquirePacket(qint64 size, quint32 flags)
 {
-    if (!packet_pool_.isEmpty())
+    if (!packet_pool_.empty())
     {
-        ScopedENetPacket packet = packet_pool_.takeLast();
+        ScopedENetPacket packet = std::move(packet_pool_.front());
+        packet_pool_.pop_front();
 
         enet_packet_resize(packet.get(), size);
         packet->flags = flags;

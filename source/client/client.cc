@@ -531,18 +531,7 @@ void Client::onHostConnected(bool peer_address_equals, const QString& stun_host,
 
     if (peer_address_equals)
     {
-        udp_channel_ = new base::UdpChannel(this);
-
-        quint16 port = 0;
-        if (!udp_channel_->bind(&port))
-        {
-            LOG(ERROR) << "Unable to bind UDP port";
-            udp_channel_->deleteLater();
-            udp_channel_ = nullptr;
-            return;
-        }
-
-        startDirectUdp(QString(), port);
+        startDirectUdp(-1, QString(), 0);
     }
     else
     {
@@ -639,16 +628,7 @@ void Client::startUdpHolePunching()
         stun_peer_->deleteLater();
         stun_peer_ = nullptr;
 
-        udp_channel_ = new base::UdpChannel(this);
-        if (!udp_channel_->setReadySocket(socket))
-        {
-            LOG(ERROR) << "Unable to set ready socket";
-            udp_channel_->deleteLater();
-            udp_channel_ = nullptr;
-            return;
-        }
-
-        startDirectUdp(external_address, external_port);
+        startDirectUdp(socket, external_address, external_port);
     });
 
     connect(stun_peer_, &base::StunPeer::sig_errorOccurred, this, [this]()
@@ -665,13 +645,19 @@ void Client::startUdpHolePunching()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::startDirectUdp(const QString& address, quint16 port)
+void Client::startDirectUdp(qintptr socket, const QString& address, quint16 port)
 {
     LOG(INFO) << "Starting direct UDP...";
+    udp_channel_ = new base::UdpChannel(this);
 
     connect(udp_channel_, &base::UdpChannel::sig_ready, this, &Client::onUdpReady);
     connect(udp_channel_, &base::UdpChannel::sig_errorOccurred, this, &Client::onUdpErrorOccurred);
     connect(udp_channel_, &base::UdpChannel::sig_messageReceived, this, &Client::onUdpMessageReceived);
+
+    if (socket != -1)
+        udp_channel_->setReadySocket(socket);
+    else
+        udp_channel_->bind(&port);
 
     udp_key_pair_ = base::KeyPair::create(base::KeyPair::Type::X25519);
     if (!udp_key_pair_.isValid())
