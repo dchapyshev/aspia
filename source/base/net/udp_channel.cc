@@ -49,9 +49,18 @@ int calculateSpeed(int last_speed, const std::chrono::milliseconds& duration, qi
         ((1.0 - kAlpha) * static_cast<double>(last_speed)));
 }
 
-using ENetPool = ThreadLocalPool<8, 32>;
+// ENet hot-path allocations (per packet, x64 sizes + 16-byte AllocHeader):
+//   ENetPacket:          ~48 bytes  -> 64  total -> bucket[0] (64)
+//   ENetAcknowledgement: ~68 bytes  -> 84  total -> bucket[1] (128)
+//   ENetOutgoingCommand: ~96 bytes  -> 112 total -> bucket[1] (128)
+//   ENetIncomingCommand: ~92 bytes  -> 108 total -> bucket[1] (128)
+//   Packet data buffers: variable          total -> bucket[2..5]
+//
+// Cold-path allocations (ENetHost ~12KB, ENetPeer[] ~400*N, ENetChannel[] ~76*N)
+// are too large and infrequent for pooling — they fall through to std::malloc.
+constexpr size_t kENetBucketSizes[] = { 64, 128, 256, 512, 1024, 2048 };
 
-constexpr size_t kENetBucketSizes[] = { 64, 128, 256, 512, 1024, 2048, 4096, 8192 };
+using ENetPool = ThreadLocalPool<std::size(kENetBucketSizes), 64>;
 thread_local ENetPool tls_enet_pool(kENetBucketSizes);
 
 //--------------------------------------------------------------------------------------------------
