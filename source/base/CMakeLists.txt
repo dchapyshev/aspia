@@ -64,6 +64,7 @@ list(APPEND SOURCE_BASE
     system_error.h
     thread.cc
     thread.h
+    thread_local_pool.h
     translations.cc
     translations.h
     typed_buffer.h
@@ -99,6 +100,7 @@ list(APPEND SOURCE_BASE_TESTS
     asio_event_dispatcher_unittest.cc
     bitset_unittest.cc
     scoped_clear_last_error_unittest.cc
+    thread_local_pool_unittest.cc
     tests_main.cc)
 
 list(APPEND SOURCE_BASE_AUDIO

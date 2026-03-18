@@ -26,6 +26,7 @@
 
 #include "base/location.h"
 #include "base/logging.h"
+#include "base/thread_local_pool.h"
 #include "base/crypto/message_decryptor.h"
 #include "base/crypto/message_encryptor.h"
 
@@ -48,15 +49,43 @@ int calculateSpeed(int last_speed, const std::chrono::milliseconds& duration, qi
         ((1.0 - kAlpha) * static_cast<double>(last_speed)));
 }
 
+using ENetPool = ThreadLocalPool<8, 32>;
+
+constexpr size_t kENetBucketSizes[] = { 64, 128, 256, 512, 1024, 2048, 4096, 8192 };
+thread_local ENetPool tls_enet_pool(kENetBucketSizes);
+
 //--------------------------------------------------------------------------------------------------
-void ensureEnetInitialized()
+void* ENET_CALLBACK enetPoolMalloc(size_t size)
+{
+    return tls_enet_pool.allocate(size);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ENET_CALLBACK enetPoolFree(void* memory)
+{
+    tls_enet_pool.deallocate(memory);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ENET_CALLBACK enetPoolNoMemory()
+{
+    LOG(FATAL) << "ENet: out of memory";
+}
+
+//--------------------------------------------------------------------------------------------------
+void initializeEnetWithPool()
 {
     static struct Initializer
     {
         Initializer()
         {
-            int ret = enet_initialize();
-            CHECK(ret == 0) << "Failed to initialize ENet";
+            ENetCallbacks callbacks;
+            callbacks.malloc = enetPoolMalloc;
+            callbacks.free = enetPoolFree;
+            callbacks.no_memory = enetPoolNoMemory;
+
+            int ret = enet_initialize_with_callbacks(ENET_VERSION, &callbacks);
+            CHECK(ret == 0) << "Failed to initialize ENet with custom allocator";
         }
         ~Initializer() { enet_deinitialize(); }
     } initializer;
@@ -69,7 +98,7 @@ UdpChannel::UdpChannel(QObject* parent)
     : QObject(parent),
       notifier_(new QSocketNotifier(QSocketNotifier::Read, this))
 {
-    ensureEnetInitialized();
+    initializeEnetWithPool();
     connect(notifier_, &QSocketNotifier::activated, this, &UdpChannel::processEvents);
 }
 
