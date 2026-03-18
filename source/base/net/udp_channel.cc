@@ -26,7 +26,6 @@
 
 #include "base/location.h"
 #include "base/logging.h"
-#include "base/crypto/large_number_increment.h"
 #include "base/crypto/message_decryptor.h"
 #include "base/crypto/message_encryptor.h"
 
@@ -34,30 +33,14 @@ namespace base {
 
 namespace {
 
-const std::chrono::seconds kKeepAliveInterval { 30 };
-const std::chrono::seconds kKeepAliveTimeout { 30 };
 const quint32 kMaxMessageSize = 7 * 1024 * 1024; // 7 MB
 const int kWriteQueueReservedSize = 128;
-const int kReadBufferReserveSize = 1 * 1024 * 1024;
-const int kWriteBufferReserveSize = 2 * 1024 * 1024;
 const int kDecryptBufferReserveSize = 2 * 1024 * 1024;
-const int kReadBufferCompactThreshold = 1 * 1024 * 1024;
 
 const int kUpdateIntervalMs = 10;
 const int kMaxPeers = 1;
 const int kChannelCount = 256;
-
-//--------------------------------------------------------------------------------------------------
-void resizeBuffer(QByteArray* buffer, qint64 size)
-{
-    if (buffer->capacity() < size)
-    {
-        buffer->clear();
-        buffer->reserve(size);
-    }
-
-    buffer->resize(size);
-}
+const int kPoolReservedSize = 64;
 
 //--------------------------------------------------------------------------------------------------
 int calculateSpeed(int last_speed, const std::chrono::milliseconds& duration, qint64 bytes)
@@ -87,9 +70,14 @@ void ensureEnetInitialized()
 //--------------------------------------------------------------------------------------------------
 UdpChannel::UdpChannel(QObject* parent)
     : QObject(parent),
-      keep_alive_timer_(new QTimer(this))
+      notifier_(new QSocketNotifier(QSocketNotifier::Read, this))
 {
     ensureEnetInitialized();
+
+    write_queue_.reserve(kWriteQueueReservedSize);
+    decrypt_buffer_.reserve(kDecryptBufferReserveSize);
+
+    connect(notifier_, &QSocketNotifier::activated, this, &UdpChannel::processEvents);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -99,83 +87,83 @@ UdpChannel::~UdpChannel()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool UdpChannel::setReadySocket(qintptr socket)
+void UdpChannel::setReadySocket(qintptr socket)
 {
     ENetAddress fake_address;
     fake_address.host = ENET_HOST_ANY;
     fake_address.port = 0;
 
-    ENetHost* host = enet_host_create(&fake_address, kMaxPeers, kChannelCount, 0, 0);
-    if (!host)
+    host_.reset(enet_host_create(&fake_address, kMaxPeers, kChannelCount, 0, 0));
+    if (!host_)
     {
         LOG(ERROR) << "Unable to create ENet host";
-        enet_socket_destroy(socket);
-        return false;
+        onErrorOccurred(FROM_HERE);
+        return;
     }
 
-    enet_socket_destroy(host->socket);
+    enet_socket_destroy(host_->socket);
 
     ENetAddress address;
     if (enet_socket_get_address(socket, &address) < 0)
     {
         LOG(ERROR) << "Unable to get socket address";
-        enet_socket_destroy(socket);
-        return false;
+        onErrorOccurred(FROM_HERE);
+        return;
     }
 
-    host->socket = socket;
-    host->address = address;
+    host_->socket = socket;
+    host_->address = address;
 
-    init(host);
-    return true;
+    setUpdateEnabled(true);
 }
 
 //--------------------------------------------------------------------------------------------------
-bool UdpChannel::bind(quint16* port)
+void UdpChannel::bind(quint16* port)
 {
+    if (host_)
+        return;
+
     ENetAddress address;
     address.host = ENET_HOST_ANY;
     address.port = *port;
 
-    ENetHost* host = enet_host_create(&address, kMaxPeers, kChannelCount, 0, 0);
-    if (!host)
+    host_.reset(enet_host_create(&address, kMaxPeers, kChannelCount, 0, 0));
+    if (!host_)
     {
         LOG(ERROR) << "Unable to create ENet host on port" << *port;
-        return false;
+        onErrorOccurred(FROM_HERE);
+        return;
     }
 
     if (!*port)
     {
         // Retrieve the actual port assigned by the OS.
         ENetAddress bound_address;
-        if (enet_socket_get_address(host->socket, &bound_address) != 0)
+        if (enet_socket_get_address(host_->socket, &bound_address) != 0)
         {
             LOG(ERROR) << "Unable to get bound port";
-            enet_host_destroy(host);
-            return false;
+            onErrorOccurred(FROM_HERE);
+            return;
         }
 
         *port = bound_address.port;
     }
 
-    init(host);
-    return true;
+    setUpdateEnabled(true);
 }
 
 //--------------------------------------------------------------------------------------------------
 void UdpChannel::connectTo(const QString& address, quint16 port)
 {
+    if (host_)
+        return;
+
+    host_.reset(enet_host_create(nullptr, kMaxPeers, kChannelCount, 0, 0));
     if (!host_)
     {
-        ENetHost* host = enet_host_create(nullptr, kMaxPeers, kChannelCount, 0, 0);
-        if (!host)
-        {
-            LOG(ERROR) << "Failed to create ENet host";
-            emit sig_errorOccurred();
-            return;
-        }
-
-        init(host);
+        LOG(ERROR) << "Failed to create ENet host";
+        emit sig_errorOccurred();
+        return;
     }
 
     ENetAddress enet_address;
@@ -188,7 +176,7 @@ void UdpChannel::connectTo(const QString& address, quint16 port)
         return;
     }
 
-    peer_.reset(enet_host_connect(host_, &enet_address, kChannelCount, 0));
+    peer_.reset(enet_host_connect(host_.get(), &enet_address, kChannelCount, 0));
     if (!peer_)
     {
         LOG(ERROR) << "Failed to initiate ENet connection";
@@ -196,25 +184,14 @@ void UdpChannel::connectTo(const QString& address, quint16 port)
         return;
     }
 
-    enet_host_flush(host_);
+    enet_host_flush(host_.get());
+    setUpdateEnabled(true);
 }
 
 //--------------------------------------------------------------------------------------------------
 void UdpChannel::send(quint8 channel_id, const QByteArray& buffer)
 {
-    addWriteTask(USER_DATA, channel_id, buffer);
-}
-
-//--------------------------------------------------------------------------------------------------
-bool UdpChannel::isReady() const
-{
-    return enet_ready_ && isEncrypted();
-}
-
-//--------------------------------------------------------------------------------------------------
-bool UdpChannel::isEncrypted() const
-{
-    return encryptor_ && decryptor_;
+    addWriteTask(channel_id, buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -223,30 +200,55 @@ void UdpChannel::setPaused(bool enable)
     if (paused_ == enable)
         return;
 
+    setUpdateEnabled(!enable);
     paused_ = enable;
-    if (paused_)
-    {
-        keep_alive_timer_->stop();
-        return;
-    }
-
-    if (enet_ready_)
-    {
-        // Start keep-alive only when we know the peer's address.
-        keep_alive_timer_type_ = KEEP_ALIVE_INTERVAL;
-        keep_alive_timer_->start(kKeepAliveInterval);
-    }
-
-    // Process any data that was accumulated while paused.
-    parseMessages();
 }
 
 //--------------------------------------------------------------------------------------------------
-void UdpChannel::addWriteTask(quint8 type, quint8 param, QByteArray data)
+void UdpChannel::addWriteTask(quint8 channel_id, const QByteArray& data)
 {
-    write_queue_.emplace_back(type, param, std::move(data));
+    if (!encryptor_)
+    {
+        onErrorOccurred(FROM_HERE);
+        return;
+    }
 
-    if (write_queue_.size() == 1)
+    qint64 target_data_size = encryptor_->encryptedDataSize(data.size());
+    if (target_data_size > kMaxMessageSize)
+    {
+        LOG(ERROR) << "Too big outgoing message:" << target_data_size;
+        onErrorOccurred(FROM_HERE);
+        return;
+    }
+
+    ScopedENetPacket packet = acquirePacket(target_data_size, ENET_PACKET_FLAG_RELIABLE);
+    if (!packet)
+    {
+        onErrorOccurred(FROM_HERE);
+        return;
+    }
+
+    Header header;
+    header.type = USER_DATA;
+    header.reserved1 = 0;
+    header.reserved2 = 0;
+    header.reserved3 = 0;
+
+    memcpy(packet->data, &header, sizeof(Header));
+
+    if (!encryptor_->encrypt(data.constData(), data.size(), &header, sizeof(Header),
+        packet->data + sizeof(Header)))
+    {
+        LOG(ERROR) << "Failed to encrypt outgoing message";
+        onErrorOccurred(FROM_HERE);
+        return;
+    }
+
+    bool schedule_write = write_queue_.isEmpty();
+
+    write_queue_.emplace_back(channel_id, std::move(packet));
+
+    if (schedule_write)
         doWrite();
 }
 
@@ -256,62 +258,26 @@ void UdpChannel::doWrite()
     if (write_queue_.isEmpty())
         return;
 
-    if (!encryptor_)
+    WriteTask& task = write_queue_.front();
+    ScopedENetPacket packet = std::move(task.second);
+    quint8 channel_id = task.first;
+
+    addTxBytes(packet->dataLength);
+    write_queue_.pop_front();
+
+    packet->userData = this;
+    packet->freeCallback = [](ENetPacket* packet)
     {
-        onErrorOccurred(FROM_HERE, std::error_code());
+        UdpChannel* self = reinterpret_cast<UdpChannel*>(packet->userData);
+        self->releasePacket(packet);
+        self->doWrite();
+    };
+
+    if (enet_peer_send(peer_.get(), channel_id, packet.release()) != 0)
+    {
+        LOG(ERROR) << "enet_peer_send failed";
+        emit sig_errorOccurred();
         return;
-    }
-
-    while (!write_queue_.isEmpty())
-    {
-        const WriteTask& task = write_queue_.front();
-        const QByteArray& source_buffer = task.data();
-
-        qint64 target_data_size = encryptor_->encryptedDataSize(source_buffer.size());
-        if (target_data_size > kMaxMessageSize)
-        {
-            LOG(ERROR) << "Too big outgoing message:" << target_data_size;
-            onErrorOccurred(FROM_HERE, std::error_code());
-            return;
-        }
-
-        resizeBuffer(&write_buffer_, sizeof(Header) + target_data_size);
-
-        Header header;
-        header.type = task.type();
-        header.param1 = task.param();
-        header.param2 = 0;
-        header.param3 = 0;
-        header.length = static_cast<quint32>(target_data_size);
-        memcpy(write_buffer_.data(), &header, sizeof(Header));
-
-        if (!encryptor_->encrypt(source_buffer.constData(), source_buffer.size(),
-            &header, sizeof(Header), write_buffer_.data() + sizeof(Header)))
-        {
-            LOG(ERROR) << "Failed to encrypt outgoing message";
-            onErrorOccurred(FROM_HERE, std::error_code());
-            return;
-        }
-
-        addTxBytes(write_buffer_.size());
-
-        ENetPacket* packet = enet_packet_create(write_buffer_.constData(), write_buffer_.size(), ENET_PACKET_FLAG_RELIABLE);
-        if (!packet)
-        {
-            LOG(ERROR) << "Failed to create ENet packet";
-            emit sig_errorOccurred();
-            return;
-        }
-
-        if (enet_peer_send(peer_, 0, packet) != 0)
-        {
-            LOG(ERROR) << "enet_peer_send failed";
-            enet_packet_destroy(packet);
-            emit sig_errorOccurred();
-            return;
-        }
-
-        write_queue_.pop_front();
     }
 }
 
@@ -358,54 +324,18 @@ int UdpChannel::speedTx()
 //--------------------------------------------------------------------------------------------------
 void UdpChannel::timerEvent(QTimerEvent* event)
 {
-    if (event->timerId() != update_timer_id_)
-        return;
-
-    processEvents();
-}
-
-//--------------------------------------------------------------------------------------------------
-void UdpChannel::init(ENetHost* host)
-{
-    static_assert(sizeof(Header) == 8, "Header must be 8 bytes without padding");
-
-    write_queue_.reserve(kWriteQueueReservedSize);
-    read_buffer_.reserve(kReadBufferReserveSize);
-    write_buffer_.reserve(kWriteBufferReserveSize);
-    decrypt_buffer_.reserve(kDecryptBufferReserveSize);
-
-    host_.reset(host);
-    update_timer_id_ = startTimer(kUpdateIntervalMs, Qt::PreciseTimer);
-
-    keep_alive_timer_->setSingleShot(true);
-    connect(keep_alive_timer_, &QTimer::timeout, this, &UdpChannel::onKeepAliveTimer);
-
-    keep_alive_counter_.resize(sizeof(quint32));
-    memset(keep_alive_counter_.data(), 0, keep_alive_counter_.size());
-
-    notifier_ = new QSocketNotifier(host->socket, QSocketNotifier::Read, this);
-    connect(notifier_, &QSocketNotifier::activated, this, &UdpChannel::processEvents);
-    notifier_->setEnabled(true);
+    if (event->timerId() == update_timer_id_)
+        processEvents();
 }
 
 //--------------------------------------------------------------------------------------------------
 void UdpChannel::close()
 {
-    keep_alive_timer_->stop();
-
-    if (notifier_)
-        notifier_->setEnabled(false);
-
-    if (update_timer_id_ != 0)
-    {
-        killTimer(update_timer_id_);
-        update_timer_id_ = 0;
-    }
-
+    setUpdateEnabled(false);
     peer_.reset();
     host_.reset();
-
-    enet_ready_ = false;
+    packet_pool_.clear();
+    connected_ = false;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -417,7 +347,7 @@ void UdpChannel::processEvents()
     ENetEvent event;
     int result;
 
-    while ((result = enet_host_service(host_, &event, 0)) > 0)
+    while ((result = enet_host_service(host_.get(), &event, 0)) > 0)
     {
         switch (event.type)
         {
@@ -426,29 +356,27 @@ void UdpChannel::processEvents()
                 LOG(INFO) << "ENet peer connected";
                 if (!peer_)
                     peer_.reset(event.peer);
-                enet_ready_ = true;
+                connected_ = true;
                 onReadyCheck();
             }
             break;
 
             case ENET_EVENT_TYPE_RECEIVE:
             {
-                addRxBytes(event.packet->dataLength);
-                read_buffer_.append(reinterpret_cast<const char*>(event.packet->data),
-                                    static_cast<int>(event.packet->dataLength));
-                parseMessages();
+                onMessageReceived(event.channelID, event.packet);
                 enet_packet_destroy(event.packet);
+
+                if (!host_)
+                {
+                    // Host was destroyed during parseMessages (error path).
+                    return;
+                }
             }
             break;
 
             case ENET_EVENT_TYPE_DISCONNECT:
-            {
-                LOG(INFO) << "ENet peer disconnected";
-                peer_.reset();
-                enet_ready_ = false;
-                emit sig_errorOccurred();
-            }
-            return; // Host may be destroyed by the slot, stop processing.
+                onErrorOccurred(FROM_HERE);
+                return;
 
             case ENET_EVENT_TYPE_NONE:
                 break;
@@ -463,149 +391,71 @@ void UdpChannel::processEvents()
 }
 
 //--------------------------------------------------------------------------------------------------
-void UdpChannel::onErrorOccurred(const Location& location, const std::error_code& error_code)
+void UdpChannel::onErrorOccurred(const Location& location)
 {
-    if (error_code)
-        LOG(ERROR) << "Error occurred" << error_code << "from" << location.toString();
-    else
-        LOG(ERROR) << "Error occurred from" << location.toString();
-
+    LOG(ERROR) << "Error occurred from" << location.toString();
     close();
     emit sig_errorOccurred();
 }
 
 //--------------------------------------------------------------------------------------------------
-void UdpChannel::parseMessages()
+void UdpChannel::onMessageReceived(quint8 channel_id, ENetPacket* packet)
 {
-    // Parse complete messages using offset tracking to avoid O(n) memmove on each call.
-    while (true)
-    {
-        int available = read_buffer_.size() - read_offset_;
-        int total_size = static_cast<int>(sizeof(Header));
-
-        if (available < total_size)
-            break;
-
-        Header header;
-        memcpy(&header, read_buffer_.constData() + read_offset_, sizeof(Header));
-
-        if (header.length > kMaxMessageSize)
-        {
-            LOG(ERROR) << "Too big incoming message:" << header.length;
-            onErrorOccurred(FROM_HERE, std::error_code());
-            return;
-        }
-
-        total_size += static_cast<int>(header.length);
-
-        if (available < total_size)
-            break;
-
-        if (!onMessageReceived(read_offset_))
-            return;
-
-        read_offset_ += total_size;
-
-        if (paused_)
-            break;
-    }
-
-    // Compact the buffer when consumed data exceeds threshold to limit memory waste.
-    if (read_offset_ > kReadBufferCompactThreshold)
-    {
-        read_buffer_.remove(0, read_offset_);
-        read_offset_ = 0;
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-bool UdpChannel::onMessageReceived(int offset)
-{
-    Header header;
-    memcpy(&header, read_buffer_.constData() + offset, sizeof(Header));
-
-    const char* data = read_buffer_.constData() + offset + sizeof(Header);
-    int size = static_cast<int>(header.length);
-
     if (!decryptor_)
     {
-        onErrorOccurred(FROM_HERE, std::error_code());
-        return false;
+        onErrorOccurred(FROM_HERE);
+        return;
     }
 
-    resizeBuffer(&decrypt_buffer_, decryptor_->decryptedDataSize(size));
+    addRxBytes(packet->dataLength);
 
-    if (!decryptor_->decrypt(data, size, &header, sizeof(Header), decrypt_buffer_.data()))
+    Header header;
+    memcpy(&header, packet->data, sizeof(Header));
+
+    qint64 size = decryptor_->decryptedDataSize(packet->dataLength);
+    if (decrypt_buffer_.capacity() < size)
+        decrypt_buffer_.reserve(size);
+
+    decrypt_buffer_.resize(size);
+
+    if (!decryptor_->decrypt(packet->data, packet->dataLength, &header, sizeof(Header), decrypt_buffer_.data()))
     {
         LOG(ERROR) << "Failed to decrypt incoming message";
-        onErrorOccurred(FROM_HERE, std::error_code());
-        return false;
+        onErrorOccurred(FROM_HERE);
+        return;
     }
 
     if (header.type == USER_DATA)
-    {
-        emit sig_messageReceived(header.param1, decrypt_buffer_);
-    }
-    else if (header.type == KEEP_ALIVE)
-    {
-        if (header.param1 & KEEP_ALIVE_PING)
-        {
-            addWriteTask(KEEP_ALIVE, KEEP_ALIVE_PONG, decrypt_buffer_);
-            return true;
-        }
-
-        // Pong must contain the same data as ping.
-        if (decrypt_buffer_ != keep_alive_counter_)
-        {
-            LOG(ERROR) << "Keep-alive counter mismatch";
-            onErrorOccurred(FROM_HERE, std::error_code());
-            return false;
-        }
-
-        // Increase the counter of sent packets.
-        largeNumberIncrement(&keep_alive_counter_);
-
-        // Restart keep alive timer.
-        keep_alive_timer_type_ = KEEP_ALIVE_INTERVAL;
-        keep_alive_timer_->start(kKeepAliveInterval);
-    }
-    else
-    {
-        // Ignore unknown types.
-    }
-
-    return true;
+        emit sig_messageReceived(channel_id, decrypt_buffer_);
 }
 
 //--------------------------------------------------------------------------------------------------
-void UdpChannel::onKeepAliveTimer()
+void UdpChannel::setUpdateEnabled(bool enable)
 {
-    if (keep_alive_timer_type_ == KEEP_ALIVE_INTERVAL)
+    if (enable && update_timer_id_ == 0)
     {
-        addWriteTask(KEEP_ALIVE, KEEP_ALIVE_PING, keep_alive_counter_);
-        keep_alive_timer_type_ = KEEP_ALIVE_TIMEOUT;
-        keep_alive_timer_->start(kKeepAliveTimeout);
+        update_timer_id_ = startTimer(kUpdateIntervalMs, Qt::PreciseTimer);
     }
-    else
+    else if (!enable && update_timer_id_ != 0)
     {
-        DCHECK_EQ(keep_alive_timer_type_, KEEP_ALIVE_TIMEOUT);
-        LOG(ERROR) << "Keep-alive timeout, closing connection";
-        onErrorOccurred(FROM_HERE, std::error_code());
+        killTimer(update_timer_id_);
+        update_timer_id_ = 0;
     }
+
+    if (notifier_->isEnabled() != enable)
+        notifier_->setEnabled(enable);
 }
 
 //--------------------------------------------------------------------------------------------------
 void UdpChannel::onReadyCheck()
 {
-    if (!enet_ready_ || !isEncrypted())
+    if (!connected_ || !encryptor_ || !decryptor_)
         return;
 
-    // Start keep-alive only if already unpaused.
-    if (!paused_)
-    {
-        keep_alive_timer_type_ = KEEP_ALIVE_INTERVAL;
-        keep_alive_timer_->start(kKeepAliveInterval);
-    }
+    // The channel is created in a paused state. Once the connection is established, we stop the
+    // update. The owner must handle signal sig_ready and call method setPaused(false) to resume
+    // receiving messages.
+    setUpdateEnabled(false);
 
     LOG(INFO) << "UDP channel is ready";
     emit sig_ready();
@@ -623,6 +473,61 @@ void UdpChannel::addRxBytes(qint64 bytes_count)
 {
     bytes_rx_ += bytes_count;
     total_rx_ += bytes_count;
+}
+
+//--------------------------------------------------------------------------------------------------
+UdpChannel::ScopedENetPacket UdpChannel::acquirePacket(qint64 size, quint32 flags)
+{
+    if (!packet_pool_.isEmpty())
+    {
+        ScopedENetPacket packet = packet_pool_.takeLast();
+
+        enet_packet_resize(packet.get(), size);
+        packet->flags = flags;
+
+        return packet;
+    }
+
+    ScopedENetPacket packet(enet_packet_create(nullptr, size, flags));
+    if (!packet)
+    {
+        LOG(ERROR) << "Failed to create ENet packet";
+        return nullptr;
+    }
+
+    return packet;
+}
+
+//--------------------------------------------------------------------------------------------------
+void UdpChannel::releasePacket(ENetPacket* packet)
+{
+    if (packet_pool_.size() >= kPoolReservedSize)
+    {
+        enet_packet_destroy(packet);
+        return;
+    }
+
+    packet_pool_.emplace_back(packet);
+}
+
+//--------------------------------------------------------------------------------------------------
+void UdpChannel::ENetHostDeleter::operator()(ENetHost* host) const noexcept
+{
+    if (host)
+        enet_host_destroy(host);
+}
+
+void UdpChannel::ENetPeerDeleter::operator()(ENetPeer* peer) const noexcept
+{
+    if (peer)
+        enet_peer_reset(peer);
+}
+
+//--------------------------------------------------------------------------------------------------
+void UdpChannel::ENetPacketDeleter::operator()(ENetPacket* packet) const noexcept
+{
+    if (packet)
+        enet_packet_destroy(packet);
 }
 
 } // namespace base

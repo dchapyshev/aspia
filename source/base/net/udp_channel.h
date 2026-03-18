@@ -20,14 +20,16 @@
 #define BASE_NET_UDP_CHANNEL_H
 
 #include <QObject>
-#include <QQueue>
+#include <QList>
 
 #include <memory>
 
-#include "base/net/enet_util.h"
-
 class QSocketNotifier;
 class QTimer;
+
+typedef struct _ENetHost ENetHost;
+typedef struct _ENetPeer ENetPeer;
+typedef struct _ENetPacket ENetPacket;
 
 namespace base {
 
@@ -43,12 +45,10 @@ public:
     explicit UdpChannel(QObject* parent = nullptr);
     ~UdpChannel() final;
 
-    bool setReadySocket(qintptr socket);
-    bool bind(quint16* port);
+    void setReadySocket(qintptr socket);
+    void bind(quint16* port);
     void connectTo(const QString& address, quint16 port);
     void send(quint8 channel_id, const QByteArray& buffer);
-    bool isReady() const;
-    bool isEncrypted() const;
 
     void setPaused(bool enable);
 
@@ -69,97 +69,56 @@ protected:
     void timerEvent(QTimerEvent* event) final;
 
 private:
+    struct ENetHostDeleter { void operator()(ENetHost* host) const noexcept; };
+    struct ENetPeerDeleter { void operator()(ENetPeer* peer) const noexcept; };
+    struct ENetPacketDeleter { void operator()(ENetPacket* packet) const noexcept; };
+
+    using ScopedENetHost = std::unique_ptr<ENetHost, ENetHostDeleter>;
+    using ScopedENetPeer = std::unique_ptr<ENetPeer, ENetPeerDeleter>;
+    using ScopedENetPacket = std::unique_ptr<ENetPacket, ENetPacketDeleter>;
+
     using Clock = std::chrono::steady_clock;
     using TimePoint = std::chrono::time_point<Clock>;
     using Milliseconds = std::chrono::milliseconds;
     using Seconds = std::chrono::seconds;
+    using WriteTask = std::pair<quint8, ScopedENetPacket>;
 
     struct Header
     {
         quint8 type;
-        quint8 param1; // For USER_DATA: channel_id.
-        quint8 param2; // Not used yet.
-        quint8 param3; // Not used yet.
-        quint32 length;
+        quint8 reserved1;
+        quint8 reserved2;
+        quint8 reserved3;
     };
 
-    enum MessageType
-    {
-        KEEP_ALIVE = 1,
-        USER_DATA  = 2
-    };
+    enum MessageType { USER_DATA = 0 };
 
-    enum KeepAliveFlags
-    {
-        KEEP_ALIVE_PONG = 0,
-        KEEP_ALIVE_PING = 1
-    };
-
-    enum KeepAliveTimerType
-    {
-        KEEP_ALIVE_TIMEOUT = 0,
-        KEEP_ALIVE_INTERVAL = 1
-    };
-
-    class WriteTask
-    {
-    public:
-        WriteTask(quint8 type, quint8 param, QByteArray data)
-            : type_(type),
-              param_(param),
-              data_(std::move(data))
-        {
-            // Nothing
-        }
-
-        WriteTask(const WriteTask& other) = default;
-        WriteTask& operator=(const WriteTask& other) = default;
-        WriteTask(WriteTask&& other) = default;
-        WriteTask& operator=(WriteTask&& other) = default;
-
-        quint8 type() const { return type_; }
-        quint8 param() const { return param_; }
-        const QByteArray& data() const { return data_; }
-
-    private:
-        quint8 type_;
-        quint8 param_;
-        QByteArray data_;
-    };
-
-    void init(ENetHost* host);
     void close();
     void processEvents();
-    void onErrorOccurred(const Location& location, const std::error_code& error_code);
-    void parseMessages();
-    void addWriteTask(quint8 type, quint8 param, QByteArray data);
+    void onErrorOccurred(const Location& location);
+    void addWriteTask(quint8 channel_id, const QByteArray& data);
     void doWrite();
-    bool onMessageReceived(int offset);
-    void onKeepAliveTimer();
+    void onMessageReceived(quint8 channel_id, ENetPacket* packet);
+    void setUpdateEnabled(bool enable);
     void onReadyCheck();
     void addTxBytes(qint64 bytes_count);
     void addRxBytes(qint64 bytes_count);
+    ScopedENetPacket acquirePacket(qint64 size, quint32 flags);
+    void releasePacket(ENetPacket* packet);
 
     QSocketNotifier* notifier_ = nullptr;
     ScopedENetHost host_;
     ScopedENetPeer peer_;
     int update_timer_id_ = 0;
-    bool enet_ready_ = false;
-
-    QTimer* keep_alive_timer_ = nullptr;
-    KeepAliveTimerType keep_alive_timer_type_ = KEEP_ALIVE_INTERVAL;
-    QByteArray keep_alive_counter_;
 
     std::unique_ptr<MessageEncryptor> encryptor_;
     std::unique_ptr<MessageDecryptor> decryptor_;
 
-    QQueue<WriteTask> write_queue_;
-    QByteArray write_buffer_;
-
-    QByteArray read_buffer_;
+    QList<ScopedENetPacket> packet_pool_;
+    QList<WriteTask> write_queue_;
     QByteArray decrypt_buffer_;
-    int read_offset_ = 0;
 
+    bool connected_ = false;
     bool paused_ = true;
 
     qint64 total_tx_ = 0;
