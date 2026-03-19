@@ -124,11 +124,24 @@ message HostStatus
     Status status = 1;
 }
 
+message RemoveHost
+{
+    enum Flags
+    {
+        NO_FLAGS         = 0;
+        REMOVE_SETTINGS  = 1;
+        TRY_TO_UNINSTALL = 2;
+    }
+
+    uint32 flags = 1;
+}
+
 message RouterToPeer
 {
     HostIdResponse host_id_response  = 1;
     ConnectionOffer connection_offer = 2;
     HostStatus host_status           = 3;
+    RemoveHost remove_host           = 4;
 }
 
 message PeerToRouter

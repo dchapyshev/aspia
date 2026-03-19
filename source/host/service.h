@@ -89,6 +89,7 @@ private slots:
     void onChatClientMessage(const proto::chat::Chat& chat);
     void onUserChatMessage(const proto::chat::Chat& chat);
     void onSettingsChanged(const QString& path);
+    void onRemoveHost(quint32 flags);
 
 private:
     void startConfirmation(base::TcpChannel* tcp_channel);

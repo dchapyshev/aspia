@@ -41,6 +41,7 @@ public:
     };
 
     static void printDebugInfo(quint32 features = INCLUDE_DEFAULT);
+    static void uninstallApplication();
 
 private:
     Q_DISABLE_COPY_MOVE(HostUtils)

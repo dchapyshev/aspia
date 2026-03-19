@@ -21,6 +21,7 @@
 #include <QCoreApplication>
 #include <QFile>
 #include <QFileInfo>
+#include <QLibrary>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QProcessEnvironment>
@@ -692,6 +693,46 @@ void HostUtils::printDebugInfo(quint32 features)
 #endif // defined(Q_OS_WINDOWS)
 
     LOG(INFO) << "Environment variables:" << QProcessEnvironment::systemEnvironment().toStringList();
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+void HostUtils::uninstallApplication()
+{
+#if defined(Q_OS_WINDOWS)
+    // MSI upgrade code for host package.
+    constexpr wchar_t kUpgradeCode[] = L"{B460F717-1546-4FFC-9EDE-B21FD07E07CB}";
+
+    QLibrary msiLibrary("msi");
+    if (!msiLibrary.load())
+    {
+        LOG(ERROR) << "Unable to load msi library";
+        return;
+    }
+
+    using MsiEnumRelatedProductsWFunc =
+        UINT (WINAPI*)(LPCWSTR upgrade_code, DWORD reserved, DWORD product_index, LPWSTR product_buf);
+
+    const auto msiEnumRelatedProducts =
+        reinterpret_cast<MsiEnumRelatedProductsWFunc>(msiLibrary.resolve("MsiEnumRelatedProductsW"));
+    if (!msiEnumRelatedProducts)
+    {
+        LOG(ERROR) << "Unable to find MsiEnumRelatedProductsW";
+        return;
+    }
+
+    wchar_t productCode[MAX_PATH] = { 0 };
+    const UINT rc = msiEnumRelatedProducts(kUpgradeCode, 0, 0, productCode);
+    if (rc != ERROR_SUCCESS)
+    {
+        LOG(ERROR) << "MsiEnumRelatedProductsW failed:" << base::SystemError::toString(rc);
+        return;
+    }
+
+    QProcess::startDetached("msiexec.exe", { "/x", QString::fromStdWString(productCode), "/qn" });
+#else
+    NOTIMPLEMENTED();
+#endif
 }
 
 } // namespace host

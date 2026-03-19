@@ -146,10 +146,28 @@ void Router::stopSession(qint64 session_id)
     }
 
     proto::router::AdminToRouter message;
-
     proto::router::SessionRequest* request = message.mutable_session_request();
     request->set_type(proto::router::SESSION_REQUEST_DISCONNECT);
     request->set_session_id(session_id);
+
+    tcp_channel_->send(proto::router::CHANNEL_ID_SESSION, base::serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void Router::removeHost(qint64 session_id, quint32 flags)
+{
+    LOG(INFO) << "Sending remove host request (session_id:" << session_id << ")";
+
+    if (!tcp_channel_)
+    {
+        LOG(ERROR) << "Tcp channel not connected yet";
+        return;
+    }
+
+    proto::router::AdminToRouter message;
+    proto::router::RemoveHostRequest* request = message.mutable_remove_host_request();
+    request->set_session_id(session_id);
+    request->set_flags(flags);
 
     tcp_channel_->send(proto::router::CHANNEL_ID_SESSION, base::serialize(message));
 }

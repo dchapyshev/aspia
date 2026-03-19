@@ -72,6 +72,10 @@ void SessionAdmin::onSessionMessage(const QByteArray& buffer)
     {
         doPeerConnectionRequest(message.peer_connection_request());
     }
+    else if (message.has_remove_host_request())
+    {
+        doRemoveHostRequest(message.remove_host_request());
+    }
     else
     {
         LOG(ERROR) << "Unhandled message from manager";
@@ -236,6 +240,22 @@ void SessionAdmin::doPeerConnectionRequest(const proto::router::PeerConnectionRe
     }
 
     relay_session->disconnectPeerSession(request);
+}
+
+//--------------------------------------------------------------------------------------------------
+void SessionAdmin::doRemoveHostRequest(const proto::router::RemoveHostRequest& request)
+{
+    SessionHost* host_session =
+        dynamic_cast<SessionHost*>(Service::instance()->session(request.session_id()));
+    if (!host_session)
+    {
+        LOG(ERROR) << "Host with id" << request.session_id() << "is not found";
+        return;
+    }
+
+    proto::router::RemoveHost remove_host;
+    remove_host.set_flags(request.flags());
+    host_session->sendRemoveHost(remove_host);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -69,6 +69,7 @@ signals:
     void sig_disconnectFromRouter();
     void sig_refreshSessionList();
     void sig_stopSession(qint64 session_id);
+    void sig_removeHost(qint64 session_id, quint32 flags);
     void sig_refreshUserList();
     void sig_addUser(const proto::router::User& user);
     void sig_modifyUser(const proto::router::User& user);
@@ -90,6 +91,7 @@ private:
     void disconnectRelay();
     void disconnectAllRelays();
     void disconnectHost();
+    void removeHost();
     void disconnectAllHosts();
     void refreshUserList();
     void addUser();
@@ -102,9 +104,6 @@ private:
     void copyRowFromTree(QTreeWidgetItem* item);
     void copyColumnFromTree(QTreeWidgetItem* item, int column);
     void updateRelayStatistics();
-
-    void beforeRequest();
-    void afterRequest();
 
     void saveHostsToFile();
     void saveRelaysToFile();

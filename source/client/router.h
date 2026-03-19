@@ -46,6 +46,7 @@ public:
 
     void refreshSessionList();
     void stopSession(qint64 session_id);
+    void removeHost(qint64 session_id, quint32 flags);
 
     void refreshUserList();
     void addUser(const proto::router::User& user);

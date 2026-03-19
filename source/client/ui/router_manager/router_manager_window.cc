@@ -326,38 +326,17 @@ RouterManagerWindow::RouterManagerWindow(QWidget* parent)
 
     ui->label_active_conn->setText(tr("Active peers: %1").arg(0));
 
-    connect(ui->button_refresh_hosts, &QPushButton::clicked,
-            this, &RouterManagerWindow::refreshSessionList);
-
-    connect(ui->button_disconnect_host, &QPushButton::clicked,
-            this, &RouterManagerWindow::disconnectHost);
-
-    connect(ui->button_disconnect_all_hosts, &QPushButton::clicked,
-            this, &RouterManagerWindow::disconnectAllHosts);
-
-    connect(ui->button_refresh_relay, &QPushButton::clicked,
-            this, &RouterManagerWindow::refreshSessionList);
-
-    connect(ui->button_refresh_users, &QPushButton::clicked,
-            this, &RouterManagerWindow::refreshUserList);
-
-    connect(ui->button_add_user, &QPushButton::clicked,
-            this, &RouterManagerWindow::addUser);
-
-    connect(ui->button_modify_user, &QPushButton::clicked,
-            this, &RouterManagerWindow::modifyUser);
-
-    connect(ui->button_delete_user, &QPushButton::clicked,
-            this, &RouterManagerWindow::deleteUser);
-
-    connect(ui->tree_users, &QTreeWidget::currentItemChanged,
-            this, &RouterManagerWindow::onCurrentUserChanged);
-
-    connect(ui->tree_hosts, &QTreeWidget::currentItemChanged,
-            this, &RouterManagerWindow::onCurrentHostChanged);
-
-    connect(ui->tree_relay, &QTreeWidget::currentItemChanged,
-            this, &RouterManagerWindow::onCurrentRelayChanged);
+    connect(ui->button_refresh_hosts, &QPushButton::clicked, this, &RouterManagerWindow::refreshSessionList);
+    connect(ui->button_disconnect_host, &QPushButton::clicked, this, &RouterManagerWindow::disconnectHost);
+    connect(ui->button_disconnect_all_hosts, &QPushButton::clicked, this, &RouterManagerWindow::disconnectAllHosts);
+    connect(ui->button_refresh_relay, &QPushButton::clicked, this, &RouterManagerWindow::refreshSessionList);
+    connect(ui->button_refresh_users, &QPushButton::clicked, this, &RouterManagerWindow::refreshUserList);
+    connect(ui->button_add_user, &QPushButton::clicked, this, &RouterManagerWindow::addUser);
+    connect(ui->button_modify_user, &QPushButton::clicked, this, &RouterManagerWindow::modifyUser);
+    connect(ui->button_delete_user, &QPushButton::clicked, this, &RouterManagerWindow::deleteUser);
+    connect(ui->tree_users, &QTreeWidget::currentItemChanged, this, &RouterManagerWindow::onCurrentUserChanged);
+    connect(ui->tree_hosts, &QTreeWidget::currentItemChanged, this, &RouterManagerWindow::onCurrentHostChanged);
+    connect(ui->tree_relay, &QTreeWidget::currentItemChanged, this, &RouterManagerWindow::onCurrentRelayChanged);
 
     ui->tree_hosts->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(ui->tree_hosts, &QTreeWidget::customContextMenuRequested,
@@ -457,45 +436,27 @@ void RouterManagerWindow::connectToRouter(const RouterConfig& router_config)
     router->setUserName(router_config.username);
     router->setPassword(router_config.password);
 
-    connect(router, &Router::sig_connecting, this, &RouterManagerWindow::onConnecting,
-            Qt::QueuedConnection);
-    connect(router, &Router::sig_connected, this, &RouterManagerWindow::onConnected,
-            Qt::QueuedConnection);
-    connect(router, &Router::sig_errorOccurred, this, &RouterManagerWindow::onErrorOccurred,
-            Qt::QueuedConnection);
-    connect(router, &Router::sig_waitForRouter, this, &RouterManagerWindow::onWaitForRouter,
-            Qt::QueuedConnection);
-    connect(router, &Router::sig_waitForRouterTimeout, this, &RouterManagerWindow::onWaitForRouterTimeout,
-            Qt::QueuedConnection);
-    connect(router, &Router::sig_versionMismatch, this, &RouterManagerWindow::onVersionMismatch,
-            Qt::QueuedConnection);
-    connect(router, &Router::sig_sessionList, this, &RouterManagerWindow::onSessionList,
-            Qt::QueuedConnection);
-    connect(router, &Router::sig_sessionResult, this, &RouterManagerWindow::onSessionResult,
-            Qt::QueuedConnection);
-    connect(router, &Router::sig_userList, this, &RouterManagerWindow::onUserList,
-            Qt::QueuedConnection);
-    connect(router, &Router::sig_userResult, this, &RouterManagerWindow::onUserResult,
-            Qt::QueuedConnection);
+    connect(router, &Router::sig_connecting, this, &RouterManagerWindow::onConnecting, Qt::QueuedConnection);
+    connect(router, &Router::sig_connected, this, &RouterManagerWindow::onConnected, Qt::QueuedConnection);
+    connect(router, &Router::sig_errorOccurred, this, &RouterManagerWindow::onErrorOccurred, Qt::QueuedConnection);
+    connect(router, &Router::sig_waitForRouter, this, &RouterManagerWindow::onWaitForRouter, Qt::QueuedConnection);
+    connect(router, &Router::sig_waitForRouterTimeout, this, &RouterManagerWindow::onWaitForRouterTimeout, Qt::QueuedConnection);
+    connect(router, &Router::sig_versionMismatch, this, &RouterManagerWindow::onVersionMismatch, Qt::QueuedConnection);
+    connect(router, &Router::sig_sessionList, this, &RouterManagerWindow::onSessionList, Qt::QueuedConnection);
+    connect(router, &Router::sig_sessionResult, this, &RouterManagerWindow::onSessionResult, Qt::QueuedConnection);
+    connect(router, &Router::sig_userList, this, &RouterManagerWindow::onUserList, Qt::QueuedConnection);
+    connect(router, &Router::sig_userResult, this, &RouterManagerWindow::onUserResult, Qt::QueuedConnection);
 
-    connect(this, &RouterManagerWindow::sig_connectToRouter, router, &Router::connectToRouter,
-            Qt::QueuedConnection);
-    connect(this, &RouterManagerWindow::sig_disconnectFromRouter, router, &Router::deleteLater,
-            Qt::QueuedConnection);
-    connect(this, &RouterManagerWindow::sig_refreshSessionList, router, &Router::refreshSessionList,
-            Qt::QueuedConnection);
-    connect(this, &RouterManagerWindow::sig_stopSession, router, &Router::stopSession,
-            Qt::QueuedConnection);
-    connect(this, &RouterManagerWindow::sig_refreshUserList, router, &Router::refreshUserList,
-            Qt::QueuedConnection);
-    connect(this, &RouterManagerWindow::sig_addUser, router, &Router::addUser,
-            Qt::QueuedConnection);
-    connect(this, &RouterManagerWindow::sig_modifyUser, router, &Router::modifyUser,
-            Qt::QueuedConnection);
-    connect(this, &RouterManagerWindow::sig_deleteUser, router, &Router::deleteUser,
-            Qt::QueuedConnection);
-    connect(this, &RouterManagerWindow::sig_disconnectPeerSession, router, &Router::disconnectPeerSession,
-            Qt::QueuedConnection);
+    connect(this, &RouterManagerWindow::sig_connectToRouter, router, &Router::connectToRouter, Qt::QueuedConnection);
+    connect(this, &RouterManagerWindow::sig_disconnectFromRouter, router, &Router::deleteLater, Qt::QueuedConnection);
+    connect(this, &RouterManagerWindow::sig_refreshSessionList, router, &Router::refreshSessionList, Qt::QueuedConnection);
+    connect(this, &RouterManagerWindow::sig_stopSession, router, &Router::stopSession, Qt::QueuedConnection);
+    connect(this, &RouterManagerWindow::sig_removeHost, router, &Router::removeHost, Qt::QueuedConnection);
+    connect(this, &RouterManagerWindow::sig_refreshUserList, router, &Router::refreshUserList, Qt::QueuedConnection);
+    connect(this, &RouterManagerWindow::sig_addUser, router, &Router::addUser, Qt::QueuedConnection);
+    connect(this, &RouterManagerWindow::sig_modifyUser, router, &Router::modifyUser, Qt::QueuedConnection);
+    connect(this, &RouterManagerWindow::sig_deleteUser, router, &Router::deleteUser, Qt::QueuedConnection);
+    connect(this, &RouterManagerWindow::sig_disconnectPeerSession, router, &Router::disconnectPeerSession, Qt::QueuedConnection);
 
     emit sig_connectToRouter(router_config.address, router_config.port);
 }
@@ -539,59 +500,44 @@ void RouterManagerWindow::onErrorOccurred(base::TcpChannel::ErrorCode error_code
         case base::TcpChannel::ErrorCode::INVALID_PROTOCOL:
             message = QT_TR_NOOP("Violation of the communication protocol.");
             break;
-
         case base::TcpChannel::ErrorCode::ACCESS_DENIED:
             message = QT_TR_NOOP("An error occurred while authenticating: wrong user name or password.");
             break;
-
         case base::TcpChannel::ErrorCode::VERSION_ERROR:
             message = QT_TR_NOOP("Version of the application you are connecting to is less than "
                                  "the minimum supported version.");
             break;
-
         case base::TcpChannel::ErrorCode::SESSION_DENIED:
             message = QT_TR_NOOP("Specified session type is not allowed for the user.");
             break;
-
         case base::TcpChannel::ErrorCode::CRYPTO_ERROR:
             message = QT_TR_NOOP("Cryptography error (message encryption or decryption failed).");
             break;
-
         case base::TcpChannel::ErrorCode::NETWORK_ERROR:
             message = QT_TR_NOOP("An error occurred with the network (e.g., the network cable was accidentally plugged out).");
             break;
-
         case base::TcpChannel::ErrorCode::CONNECTION_REFUSED:
             message = QT_TR_NOOP("Connection was refused by the peer (or timed out).");
             break;
-
         case base::TcpChannel::ErrorCode::REMOTE_HOST_CLOSED:
             message = QT_TR_NOOP("Remote host closed the connection.");
             break;
-
         case base::TcpChannel::ErrorCode::SPECIFIED_HOST_NOT_FOUND:
             message = QT_TR_NOOP("Host address was not found.");
             break;
-
         case base::TcpChannel::ErrorCode::SOCKET_TIMEOUT:
             message = QT_TR_NOOP("Socket operation timed out.");
             break;
-
         case base::TcpChannel::ErrorCode::ADDRESS_IN_USE:
             message = QT_TR_NOOP("Address specified is already in use and was set to be exclusive.");
             break;
-
         case base::TcpChannel::ErrorCode::ADDRESS_NOT_AVAILABLE:
             message = QT_TR_NOOP("Address specified does not belong to the host.");
             break;
-
         default:
         {
             if (error_code != base::TcpChannel::ErrorCode::UNKNOWN)
-            {
                 LOG(ERROR) << "Unknown error code:" << static_cast<int>(error_code);
-            }
-
             message = QT_TR_NOOP("An unknown error occurred.");
         }
         break;
@@ -731,8 +677,6 @@ void RouterManagerWindow::onSessionList(std::shared_ptr<proto::router::SessionLi
         ui->tree_active_conn->setEnabled(false);
         ui->tree_active_conn->clear();
     }
-
-    afterRequest();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -747,15 +691,12 @@ void RouterManagerWindow::onSessionResult(std::shared_ptr<proto::router::Session
             case proto::router::SessionResult::INVALID_REQUEST:
                 message = QT_TR_NOOP("Invalid request.");
                 break;
-
             case proto::router::SessionResult::INTERNAL_ERROR:
                 message = QT_TR_NOOP("Unknown internal error.");
                 break;
-
             case proto::router::SessionResult::INVALID_SESSION_ID:
                 message = QT_TR_NOOP("Invalid session ID was passed.");
                 break;
-
             default:
                 message = QT_TR_NOOP("Unknown error type.");
                 break;
@@ -765,7 +706,6 @@ void RouterManagerWindow::onSessionResult(std::shared_ptr<proto::router::Session
     }
 
     refreshSessionList();
-    afterRequest();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -776,8 +716,6 @@ void RouterManagerWindow::onUserList(std::shared_ptr<proto::router::UserList> us
 
     for (int i = 0; i < user_list->user_size(); ++i)
         tree_users->addTopLevelItem(new UserTreeItem(user_list->user(i)));
-
-    afterRequest();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -792,15 +730,12 @@ void RouterManagerWindow::onUserResult(std::shared_ptr<proto::router::UserResult
             case proto::router::UserResult::INTERNAL_ERROR:
                 message = QT_TR_NOOP("Unknown internal error.");
                 break;
-
             case proto::router::UserResult::INVALID_DATA:
                 message = QT_TR_NOOP("Invalid data was passed.");
                 break;
-
             case proto::router::UserResult::ALREADY_EXISTS:
                 message = QT_TR_NOOP("A user with the specified name already exists.");
                 break;
-
             default:
                 message = QT_TR_NOOP("Unknown error type.");
                 break;
@@ -810,7 +745,6 @@ void RouterManagerWindow::onUserResult(std::shared_ptr<proto::router::UserResult
     }
 
     refreshUserList();
-    afterRequest();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -829,6 +763,7 @@ void RouterManagerWindow::onHostsContextMenu(const QPoint& pos)
     menu.addSeparator();
 
     QAction* disconnect_all_action = menu.addAction(tr("Disconnect All"));
+    QAction* remove_action = menu.addAction(tr("Remove"));
     QAction* refresh_action = menu.addAction(tr("Refresh"));
 
     menu.addSeparator();
@@ -871,6 +806,10 @@ void RouterManagerWindow::onHostsContextMenu(const QPoint& pos)
     else if (action == copy_col)
     {
         copyColumnFromTree(ui->tree_hosts->currentItem(), current_hosts_column_);
+    }
+    else if (action == remove_action)
+    {
+        removeHost();
     }
     else
     {
@@ -1183,8 +1122,6 @@ void RouterManagerWindow::refreshSessionList()
 {
     if (!is_connected_)
         return;
-
-    beforeRequest();
     emit sig_refreshSessionList();
 }
 
@@ -1214,7 +1151,6 @@ void RouterManagerWindow::disconnectRelay()
         return;
     }
 
-    beforeRequest();
     emit sig_stopSession(tree_item->session.session_id());
 }
 
@@ -1238,8 +1174,6 @@ void RouterManagerWindow::disconnectAllRelays()
     }
 
     LOG(INFO) << "[ACTION] Accepted by user";
-
-    beforeRequest();
 
     QTreeWidget* tree_relay = ui->tree_relay;
     for (int i = 0; i < tree_relay->topLevelItemCount(); ++i)
@@ -1278,9 +1212,49 @@ void RouterManagerWindow::disconnectHost()
     }
 
     LOG(INFO) << "[ACTION] Accepted by user";
-
-    beforeRequest();
     emit sig_stopSession(tree_item->session.session_id());
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterManagerWindow::removeHost()
+{
+    LOG(INFO) << "[ACTION] Remove host";
+
+    HostTreeItem* tree_item = static_cast<HostTreeItem*>(ui->tree_hosts->currentItem());
+    if (!tree_item)
+    {
+        LOG(INFO) << "No current item";
+        return;
+    }
+
+    QMessageBox message_box(this);
+    message_box.setWindowTitle(tr("Confirmation"));
+    message_box.setText(tr("Deleting a host will result in all its configuration for connecting "
+                          "to the router being deleted. This operation is irreversible. After deleting, the host "
+                          "will no longer connect to the router. Are you sure you want to do this?"));
+    message_box.setIcon(QMessageBox::Question);
+    message_box.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    message_box.button(QMessageBox::Yes)->setText(tr("Yes"));
+    message_box.button(QMessageBox::No)->setText(tr("No"));
+
+    QCheckBox* check_box = new QCheckBox(&message_box);
+    check_box->setText(tr("Try to uninstall the application (result is not guaranteed)"));
+
+    message_box.setCheckBox(check_box);
+
+    if (message_box.exec() == QMessageBox::No)
+    {
+        LOG(INFO) << "[ACTION] Rejected by user";
+        return;
+    }
+
+    LOG(INFO) << "[ACTION] Accepted by user";
+
+    quint32 flags = proto::router::RemoveHostRequest::REMOVE_SETTINGS;
+    if (check_box->isChecked())
+        flags |= proto::router::RemoveHostRequest::TRY_TO_UNINSTALL;
+
+    emit sig_removeHost(tree_item->session.session_id(), flags);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1303,7 +1277,6 @@ void RouterManagerWindow::disconnectAllHosts()
     }
 
     LOG(INFO) << "[ACTION] Accepted by user";
-    beforeRequest();
 
     QTreeWidget* tree_hosts = ui->tree_hosts;
     for (int i = 0; i < tree_hosts->topLevelItemCount(); ++i)
@@ -1317,7 +1290,6 @@ void RouterManagerWindow::disconnectAllHosts()
 //--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::refreshUserList()
 {
-    beforeRequest();
     emit sig_refreshUserList();
 }
 
@@ -1336,8 +1308,6 @@ void RouterManagerWindow::addUser()
     if (dialog.exec() == QDialog::Accepted)
     {
         LOG(INFO) << "[ACTION] Accepeted by user";
-
-        beforeRequest();
         emit sig_addUser(dialog.user().serialize());
     }
     else
@@ -1372,8 +1342,6 @@ void RouterManagerWindow::modifyUser()
     if (dialog.exec() == QDialog::Accepted)
     {
         LOG(INFO) << "[ACTION] Accepted by user";
-
-        beforeRequest();
         emit sig_modifyUser(dialog.user().serialize());
     }
     else
@@ -1414,8 +1382,6 @@ void RouterManagerWindow::deleteUser()
     if (message_box.exec() == QMessageBox::Yes)
     {
         LOG(INFO) << "[ACTION] Accepted by user";
-
-        beforeRequest();
         emit sig_deleteUser(entry_id);
     }
     else
@@ -1425,16 +1391,14 @@ void RouterManagerWindow::deleteUser()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterManagerWindow::onCurrentUserChanged(
-    QTreeWidgetItem* /* current */, QTreeWidgetItem* /* previous */)
+void RouterManagerWindow::onCurrentUserChanged(QTreeWidgetItem* /* current */, QTreeWidgetItem* /* previous */)
 {
     ui->button_modify_user->setEnabled(true);
     ui->button_delete_user->setEnabled(true);
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterManagerWindow::onCurrentHostChanged(QTreeWidgetItem* /* current */,
-                                               QTreeWidgetItem* /* previous */)
+void RouterManagerWindow::onCurrentHostChanged(QTreeWidgetItem* /* current */, QTreeWidgetItem* /* previous */)
 {
     // Nothing
 }
@@ -1448,28 +1412,13 @@ void RouterManagerWindow::onCurrentRelayChanged(
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterManagerWindow::beforeRequest()
-{
-    //
-}
-
-//--------------------------------------------------------------------------------------------------
-void RouterManagerWindow::afterRequest()
-{
-    //
-}
-
-//--------------------------------------------------------------------------------------------------
 void RouterManagerWindow::saveHostsToFile()
 {
     LOG(INFO) << "[ACTION] Save hosts to file";
 
     QString selected_filter;
-    QString file_path = QFileDialog::getSaveFileName(this,
-                                                     tr("Save File"),
-                                                     QString(),
-                                                     tr("JSON files (*.json)"),
-                                                     &selected_filter);
+    QString file_path = QFileDialog::getSaveFileName(
+        this, tr("Save File"), QString(), tr("JSON files (*.json)"), &selected_filter);
     if (file_path.isEmpty() || selected_filter.isEmpty())
     {
         LOG(INFO) << "No selected path";
@@ -1480,10 +1429,7 @@ void RouterManagerWindow::saveHostsToFile()
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
     {
         LOG(INFO) << "Unable to open file:" << file.errorString();
-        QMessageBox::warning(this,
-                             tr("Warning"),
-                             tr("Could not open file for writing."),
-                             QMessageBox::Ok);
+        QMessageBox::warning(this, tr("Warning"), tr("Could not open file for writing."), QMessageBox::Ok);
         return;
     }
 
@@ -1531,10 +1477,7 @@ void RouterManagerWindow::saveHostsToFile()
     if (written <= 0)
     {
         LOG(INFO) << "Unable to write file:" << file.errorString();
-        QMessageBox::warning(this,
-                             tr("Warning"),
-                             tr("Unable to write file."),
-                             QMessageBox::Ok);
+        QMessageBox::warning(this, tr("Warning"), tr("Unable to write file."), QMessageBox::Ok);
         return;
     }
 }
@@ -1545,11 +1488,8 @@ void RouterManagerWindow::saveRelaysToFile()
     LOG(INFO) << "[ACTION] Save relays to file";
 
     QString selected_filter;
-    QString file_path = QFileDialog::getSaveFileName(this,
-                                                     tr("Save File"),
-                                                     QString(),
-                                                     tr("JSON files (*.json)"),
-                                                     &selected_filter);
+    QString file_path = QFileDialog::getSaveFileName(
+        this, tr("Save File"), QString(), tr("JSON files (*.json)"), &selected_filter);
     if (file_path.isEmpty() || selected_filter.isEmpty())
     {
         LOG(INFO) << "No selected path";
@@ -1560,10 +1500,7 @@ void RouterManagerWindow::saveRelaysToFile()
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
     {
         LOG(INFO) << "Unable to open file:" << file.errorString();
-        QMessageBox::warning(this,
-                             tr("Warning"),
-                             tr("Could not open file for writing."),
-                             QMessageBox::Ok);
+        QMessageBox::warning(this, tr("Warning"), tr("Could not open file for writing."), QMessageBox::Ok);
         return;
     }
 
@@ -1630,10 +1567,7 @@ void RouterManagerWindow::saveRelaysToFile()
     if (written <= 0)
     {
         LOG(INFO) << "Unable to write file:" << file.errorString();
-        QMessageBox::warning(this,
-                             tr("Warning"),
-                             tr("Unable to write file."),
-                             QMessageBox::Ok);
+        QMessageBox::warning(this, tr("Warning"), tr("Unable to write file."), QMessageBox::Ok);
         return;
     }
 }
@@ -1775,8 +1709,7 @@ QString RouterManagerWindow::sizeToString(qint64 size)
     }
 
     return QString("%1 %2")
-        .arg(static_cast<double>(size) / static_cast<double>(divider), 0, 'g', 4)
-        .arg(units);
+        .arg(static_cast<double>(size) / static_cast<double>(divider), 0, 'g', 4).arg(units);
 }
 
 } // namespace client

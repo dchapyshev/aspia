@@ -61,6 +61,14 @@ void SessionHost::sendConnectionOffer(const proto::router::ConnectionOffer& offe
 }
 
 //--------------------------------------------------------------------------------------------------
+void SessionHost::sendRemoveHost(const proto::router::RemoveHost& remove_host)
+{
+    proto::router::RouterToPeer message;
+    message.mutable_remove_host()->CopyFrom(remove_host);
+    sendMessage(base::serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
 void SessionHost::onSessionMessage(const QByteArray& buffer)
 {
     proto::router::PeerToRouter message;

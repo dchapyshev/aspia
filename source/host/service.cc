@@ -46,6 +46,7 @@
 #include "host/system_info_client.h"
 #include "host/chat_client.h"
 #include "host/user_session.h"
+#include "proto/router_peer.h"
 
 #if defined(Q_OS_WINDOWS)
 #include <qt_windows.h>
@@ -633,6 +634,32 @@ void Service::onSettingsChanged(const QString& /* path */)
 }
 
 //--------------------------------------------------------------------------------------------------
+void Service::onRemoveHost(quint32 flags)
+{
+    LOG(WARNING) << "Received command to remove host!";
+
+    if (flags & proto::router::RemoveHost::REMOVE_SETTINGS)
+    {
+        LOG(INFO) << "Removing settings for connecting to a router";
+
+        settings_.setRouterEnabled(false);
+        settings_.setRouterAddress("");
+        settings_.setRouterPublicKey("");
+        settings_.sync();
+
+        HostStorage storage;
+        storage.setLastHostId(base::kInvalidHostId);
+        storage.setHostKey("");
+    }
+
+    if (flags & proto::router::RemoveHost::TRY_TO_UNINSTALL)
+    {
+        LOG(INFO) << "Attempting to uninstall the application";
+        HostUtils::uninstallApplication();
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
 void Service::startConfirmation(base::TcpChannel* tcp_channel)
 {
     LOG(INFO) << "TCP channel is ready";
@@ -809,6 +836,7 @@ void Service::connectToRouter(const base::Location& location)
     connect(router_manager_, &RouterManager::sig_routerStateChanged, user_session_, &UserSession::onRouterStateChanged);
     connect(router_manager_, &RouterManager::sig_credentialsChanged, user_session_, &UserSession::onUpdateCredentials);
     connect(router_manager_, &RouterManager::sig_clientConnected, this, &Service::onNewRelayConnection);
+    connect(router_manager_, &RouterManager::sig_removeHost, this, &Service::onRemoveHost);
 
     connect(user_session_, &UserSession::sig_changeOneTimeSessions, router_manager_, &RouterManager::onOneTimeSessionsChanged);
     connect(user_session_, &UserSession::sig_changeOneTimePassword, router_manager_, &RouterManager::onUserListChanged);

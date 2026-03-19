@@ -272,6 +272,10 @@ void RouterManager::onTcpMessageReceived(quint8 /* channel_id */, const QByteArr
             LOG(ERROR) << "Invalid connection offer";
         }
     }
+    else if (in_message.has_remove_host())
+    {
+        emit sig_removeHost(in_message.remove_host().flags());
+    }
     else
     {
         LOG(ERROR) << "Unhandled message from router";

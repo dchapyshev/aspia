@@ -35,6 +35,7 @@ public:
     bool hasHostId(base::HostId host_id) const;
 
     void sendConnectionOffer(const proto::router::ConnectionOffer& offer);
+    void sendRemoveHost(const proto::router::RemoveHost& remove_host);
 
 protected:
     // Session implementation.
