@@ -63,7 +63,7 @@
      </item>
      <item>
       <property name="text">
-       <string>Speed UDP RX/TX</string>
+       <string notr="true">Speed UDP RX/TX</string>
       </property>
       <property name="text">
        <string notr="true"/>

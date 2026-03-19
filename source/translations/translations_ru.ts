@@ -5826,12 +5826,12 @@
 <context>
     <name>client::RouterManagerWindow</name>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="508"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="469"/>
         <source>Connecting to %1:%2...</source>
         <translation>Подключение к %1:%2...</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="615"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="561"/>
         <source>Timeout waiting for reconnection.</source>
         <translation>Превышено время ожидания при попытке повторного подключения.</translation>
     </message>
@@ -5840,68 +5840,68 @@
         <translation type="vanished">Подключено к %1:%2</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="520"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="481"/>
         <source>Connected to: %1:%2 (version %3)</source>
         <translation>Подключено к: %1:%2 (версия %3)</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="540"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="501"/>
         <source>Violation of the communication protocol.</source>
         <translation>Нарушение протокола обмена данными.</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="557"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="514"/>
         <source>Cryptography error (message encryption or decryption failed).</source>
         <translation>Ошибка криптографии (не удалось зашифровать или расшифровать сообщение).</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="561"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="517"/>
         <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
         <translation>Произошла ошибка в сети (например, сетевой кабель был случайно отключен).</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="565"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="520"/>
         <source>Connection was refused by the peer (or timed out).</source>
         <translation>Подключение было отклонено другой стороной (или превышено время ожидания).</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="569"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="523"/>
         <source>Remote host closed the connection.</source>
         <translation>Удаленный узел закрыл подключение.</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="573"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="526"/>
         <source>Host address was not found.</source>
         <translation>Не найден адрес удаленного узла.</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="577"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="529"/>
         <source>Socket operation timed out.</source>
         <translation>Превышено время ожидания.</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="581"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="532"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
         <translation>Указанный адрес уже используется и был установлен монопольно.</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="585"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="535"/>
         <source>Address specified does not belong to the host.</source>
         <translation>Указанный адрес не принадлежит узлу.</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="595"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="541"/>
         <source>An unknown error occurred.</source>
         <translation>Произошла неизвестная ошибка.</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="600"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="626"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="546"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="572"/>
         <source>Error: %1</source>
         <translation>Ошибка: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="608"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="554"/>
         <source>Router is unavailable. Waiting for reconnection...</source>
         <translation>Маршрутизатор недоступен. Ожидание повторного подключения...</translation>
     </message>
@@ -5926,79 +5926,79 @@
         <translation type="vanished">Произошла ошибка при аутентификации: неправильное имя пользователя или пароль.</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="553"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="511"/>
         <source>Specified session type is not allowed for the user.</source>
         <translation>Указанный тип сессии не разрешен для пользователя.</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="748"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="692"/>
         <source>Invalid request.</source>
         <translation>Неверный запрос.</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="752"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="793"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="695"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="731"/>
         <source>Unknown internal error.</source>
         <translation>Неизвестная внутренняя ошибка.</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="756"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="698"/>
         <source>Invalid session ID was passed.</source>
         <translation>Передан некорректный ID сессии.</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="827"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="886"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="939"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="761"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="825"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="878"/>
         <source>Disconnect</source>
         <translation>Отключить</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="831"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="888"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="941"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="765"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="827"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="880"/>
         <source>Disconnect All</source>
         <translation>Отключить всех</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="832"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="889"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1015"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="767"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="828"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="954"/>
         <source>Refresh</source>
         <translation>Обновить</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="836"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="891"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="943"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="771"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="830"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="882"/>
         <source>Copy Row</source>
         <translation>Копировать строку</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="837"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="892"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="944"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="772"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="831"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="883"/>
         <source>Copy Value</source>
         <translation>Копировать значение</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="841"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="894"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="776"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="833"/>
         <source>Save to file...</source>
         <translation>Сохранить в файл...</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="995"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="934"/>
         <source>Modify</source>
         <translation>Изменить</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="998"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="937"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1012"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="951"/>
         <source>Add</source>
         <translation>Добавить</translation>
     </message>
@@ -6011,31 +6011,31 @@
         <translation type="vanished">Ожидающих подключений: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1469"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1549"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1421"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1492"/>
         <source>Save File</source>
         <translation>Сохранение файла</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1471"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1551"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1421"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1492"/>
         <source>JSON files (*.json)</source>
         <translation>JSON-файлы (*.json)</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1485"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1565"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1432"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1503"/>
         <source>Could not open file for writing.</source>
         <translation>Не удалось открыть файл для записи.</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1536"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1635"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1480"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1570"/>
         <source>Unable to write file.</source>
         <translation>Не удалось записать файл.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1714"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1648"/>
         <source>%n seconds</source>
         <translation>
             <numerusform>%n секунда</numerusform>
@@ -6044,7 +6044,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1715"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1649"/>
         <source>%n minutes</source>
         <translation>
             <numerusform>%n минута</numerusform>
@@ -6053,7 +6053,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1716"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1650"/>
         <source>%n hours</source>
         <translation>
             <numerusform>%n час</numerusform>
@@ -6062,7 +6062,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1734"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1668"/>
         <source>%n days</source>
         <translation>
             <numerusform>%n день</numerusform>
@@ -6071,134 +6071,152 @@
         </translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1753"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1687"/>
         <source>TB</source>
         <translation>ТБ</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1758"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1692"/>
         <source>GB</source>
         <translation>ГБ</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1763"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1697"/>
         <source>MB</source>
         <translation>МБ</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1768"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1702"/>
         <source>kB</source>
         <translation>кБ</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1773"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1707"/>
         <source>B</source>
         <translation>Б</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1205"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1267"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1142"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1201"/>
         <source>Are you sure you want to disconnect session &quot;%1&quot;?</source>
         <translation>Вы действительно хотите завершить сессию &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../client/ui/router_manager/router_manager_window.cc" line="327"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1138"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1178"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1077"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1117"/>
         <source>Active peers: %1</source>
         <translation>Активных пиров: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="517"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="478"/>
         <source>Connected to %1:%2.</source>
         <translation>Подключено к %1:%2.</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="544"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="504"/>
         <source>An error occurred while authenticating: wrong user name or password.</source>
         <translation>Произошла ошибка при аутентификации: неверное имя пользователя или пароль.</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="548"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="507"/>
         <source>Version of the application you are connecting to is less than the minimum supported version.</source>
         <translation>Версия приложения, к которому вы подключаетесь, ниже минимально поддерживаемой версии.</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="623"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="569"/>
         <source>The Router version is newer than the Client version (%1 &gt; %2). Please update the application.</source>
         <translation>Версия Маршрутизатора новее версии Клиента (%1 &gt; %2). Пожалуйста, обновите приложение.</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="760"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="805"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="701"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="740"/>
         <source>Unknown error type.</source>
         <translation>Неизвестный тип ошибки.</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="764"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="809"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1401"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1484"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1535"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1564"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1634"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="705"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="744"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1369"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1432"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1480"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1503"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1570"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="797"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="734"/>
         <source>Invalid data was passed.</source>
         <translation>Переданы некорректные данные.</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="801"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="737"/>
         <source>A user with the specified name already exists.</source>
         <translation>Пользователь с указанным именем уже существует.</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1204"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1227"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="766"/>
+        <source>Remove</source>
+        <translation>Удалить</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1141"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1163"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1200"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1231"/>
         <location filename="../client/ui/router_manager/router_manager_window.cc" line="1266"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1292"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1406"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1374"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1209"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1231"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1271"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1296"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1411"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1146"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1167"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1205"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1237"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1270"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1379"/>
         <source>Yes</source>
         <translation>Да</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1210"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1232"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1272"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1297"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1412"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1147"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1168"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1206"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1238"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1271"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1380"/>
         <source>No</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1228"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1164"/>
         <source>Are you sure you want to disconnect all relays?</source>
         <translation>Вы действительно хотите отключить все маршрутизаторы?</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1293"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1232"/>
+        <source>Deleting a host will result in all its configuration for connecting to the router being deleted. This operation is irreversible. After deleting, the host will no longer connect to the router. Are you sure you want to do this?</source>
+        <translation>Удаление хоста приведет к удалению всей его конфигурации для подключения к маршрутизатору. Эта операция необратима. После удаления хост больше не сможет подключаться к маршрутизатору. Вы уверены, что хотите это сделать?</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1241"/>
+        <source>Try to uninstall the application (result is not guaranteed)</source>
+        <translation>Попытаться удалить приложение (результат не гарантирован)</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1267"/>
         <source>Are you sure you want to disconnect all hosts?</source>
         <translation>Вы действительно хотите отключить все хосты?</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1401"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1369"/>
         <source>You cannot delete a built-in user.</source>
         <translation>Вы не можете удалить встроенного пользователя.</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1407"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1375"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>Вы действительно хотите удалить пользователя &quot;%1&quot;?</translation>
     </message>
