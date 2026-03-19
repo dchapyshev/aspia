@@ -43,27 +43,11 @@ add_dependencies(aspia_proto qtprotoc)
 # Generate standard files (.pb.h, .pb.cc).
 protobuf_generate(LANGUAGE cpp TARGET aspia_proto ${SOURCE_PROTO})
 
-if (WIN32)
-    set(QTPROTOC_FILENAME "qtprotoc.exe")
-else()
-    set(QTPROTOC_FILENAME "qtprotoc")
-endif()
-
-set(QTPROTOC_FILEPATH "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${QTPROTOC_FILENAME}")
-
-if (NOT EXISTS "${QTPROTOC_FILEPATH}")
-    message(STATUS "Default QTPROTOC path NOT exists")
-    set(QTPROTOC_FILEPATH "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/$<CONFIG>/${QTPROTOC_FILENAME}")
-else()
-    message(STATUS "Default QTPROTOC path exists")
-endif()
-
-message(STATUS "QTPROTOC_FILEPATH: ${QTPROTOC_FILEPATH}")
-
 # Generate files with Qt meta types.
 protobuf_generate(LANGUAGE qt
                   TARGET aspia_proto
-                  PLUGIN "protoc-gen-qt=${QTPROTOC_FILEPATH}"
+                  PLUGIN "protoc-gen-qt=$<TARGET_FILE:qtprotoc>"
+                  DEPENDENCIES qtprotoc
                   GENERATE_EXTENSIONS .h .cc
                   ${SOURCE_PROTO})
 
