@@ -478,10 +478,18 @@ void Client::onUdpErrorOccurred()
 {
     LOG(INFO) << "UDP channel is disconnected";
     CHECK(udp_channel_);
+
+    base::UdpChannel::Mode previous_mode = udp_channel_->mode();
+
     udp_ready_ = false;
     udp_channel_->disconnect();
     udp_channel_->deleteLater();
     udp_channel_ = nullptr;
+
+    // If we previously tried to establish a direct connection, then the next attempt will be UDP
+    // hole punching.
+    if (previous_mode == base::UdpChannel::Mode::BIND)
+        startUdpHolePunching();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -648,6 +656,8 @@ void Client::startUdpHolePunching()
 void Client::startDirectUdp(qintptr socket, const QString& address, quint16 port)
 {
     LOG(INFO) << "Starting direct UDP...";
+    CHECK(!udp_channel_);
+
     udp_channel_ = new base::UdpChannel(this);
 
     connect(udp_channel_, &base::UdpChannel::sig_ready, this, &Client::onUdpReady);

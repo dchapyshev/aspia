@@ -45,6 +45,15 @@ public:
     explicit UdpChannel(QObject* parent = nullptr);
     ~UdpChannel() final;
 
+    enum class Mode
+    {
+        UNKNOWN,
+        READY_SOCKET,
+        BIND,
+        CONNECT
+    };
+    Q_ENUM(Mode)
+
     void setReadySocket(qintptr socket);
     void bind(quint16* port);
     void connectTo(const QString& address, quint16 port);
@@ -57,6 +66,7 @@ public:
 
     qint64 pendingBytes() const;
 
+    Mode mode() const { return mode_; }
     qint64 totalRx() const { return total_rx_; }
     qint64 totalTx() const { return total_tx_; }
     int speedRx();
@@ -122,6 +132,8 @@ private:
 
     bool connected_ = false;
     bool paused_ = true;
+
+    Mode mode_ = Mode::UNKNOWN;
 
     qint64 total_tx_ = 0;
     qint64 total_rx_ = 0;

@@ -102,8 +102,10 @@ UdpChannel::~UdpChannel()
 //--------------------------------------------------------------------------------------------------
 void UdpChannel::setReadySocket(qintptr socket)
 {
-    if (host_)
+    if (host_ || mode_ != Mode::UNKNOWN)
         return;
+
+    mode_ = Mode::READY_SOCKET;
 
     ENetAddress fake_address;
     fake_address.host = ENET_HOST_ANY;
@@ -140,8 +142,10 @@ void UdpChannel::bind(quint16* port)
 {
     DCHECK(port);
 
-    if (host_)
+    if (host_ || mode_ != Mode::UNKNOWN)
         return;
+
+    mode_ = Mode::BIND;
 
     ENetAddress address;
     address.host = ENET_HOST_ANY;
@@ -177,8 +181,10 @@ void UdpChannel::bind(quint16* port)
 //--------------------------------------------------------------------------------------------------
 void UdpChannel::connectTo(const QString& address, quint16 port)
 {
-    if (host_)
+    if (host_ || mode_ != Mode::UNKNOWN)
         return;
+
+    mode_ = Mode::CONNECT;
 
     host_.reset(enet_host_create(nullptr, kMaxPeers, kChannelCount, 0, 0));
     if (!host_)
