@@ -282,7 +282,7 @@ void ClientDesktop::setVideoRecording(bool enable, const QString& file_path)
 
     if (enable)
     {
-        LOG(INFO) << "Video recording enabled (file:" << file_path << ")";
+        LOG(INFO) << "Video recording is enabled:" << file_path;
 
         video_recording->set_action(proto::desktop::VideoRecording::ACTION_STARTED);
 
@@ -307,7 +307,7 @@ void ClientDesktop::setVideoRecording(bool enable, const QString& file_path)
     }
     else
     {
-        LOG(INFO) << "Video recording disabled";
+        LOG(INFO) << "Video recording is disabled";
 
         video_recording->set_action(proto::desktop::VideoRecording::ACTION_STOPPED);
 
@@ -524,15 +524,17 @@ void ClientDesktop::readVideoPacket(const proto::desktop::VideoPacket& packet)
 
     if (!video_decoder_)
     {
-        LOG(ERROR) << "Video decoder not initialized";
+        LOG(ERROR) << "Video decoder is not initialized";
         return;
     }
 
     if (packet.has_format())
     {
+        const proto::desktop::VideoPacketFormat& format = packet.format();
+
+        LOG(INFO) << "Video packet has format:" << format;
         key_frame_received_ = true;
 
-        const proto::desktop::VideoPacketFormat& format = packet.format();
         QSize video_size = QSize(format.video_rect().width(), format.video_rect().height());
         QSize screen_size = video_size;
 
@@ -558,12 +560,8 @@ void ClientDesktop::readVideoPacket(const proto::desktop::VideoPacket& packet)
         }
 
         video_capturer_type_ = format.capturer_type();
-
-        LOG(INFO) << "New video size:" << video_size.width() << "x" << video_size.height();
-        LOG(INFO) << "New screen size:" << screen_size.width() << "x" << screen_size.height();
-        LOG(INFO) << "New video capturer:" << video_capturer_type_;
-
         desktop_frame_ = base::FrameQImage::create(video_size);
+
         emit sig_frameChanged(screen_size, desktop_frame_);
     }
 
@@ -731,20 +729,7 @@ void ClientDesktop::readExtension(const proto::desktop::Extension& extension)
             return;
         }
 
-        LOG(INFO) << "Screen list receive. Primary:" << screen_list.primary_screen()
-                  << "Current:" << screen_list.current_screen();
-
-        for (int i = 0; i < screen_list.screen_size(); ++i)
-        {
-            const proto::desktop::Screen& screen = screen_list.screen(i);
-            const proto::desktop::Point& dpi = screen.dpi();
-            const proto::desktop::Point& position = screen.position();
-            const proto::desktop::Size& resolution = screen.resolution();
-
-            LOG(INFO) << "Screen #" << i << ": id=" << screen.id() << "title=" << screen.title()
-                      << "dpi=" << dpi << "pos=" << position << "res=" << resolution;
-        }
-
+        LOG(INFO) << "Screen list receive:" << screen_list;
         emit sig_screenListChanged(screen_list);
     }
     else if (extension.name() == common::kScreenTypeExtension)
@@ -757,9 +742,7 @@ void ClientDesktop::readExtension(const proto::desktop::Extension& extension)
             return;
         }
 
-        LOG(INFO) << "Screen type received (type:" << screen_type.type()
-                  << "name:" << screen_type.name() << ")";
-
+        LOG(INFO) << "Screen type received:" << screen_type;
         emit sig_screenTypeChanged(screen_type);
     }
     else if (extension.name() == common::kSystemInfoExtension)
