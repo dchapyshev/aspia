@@ -200,7 +200,6 @@ void ClientDesktop::setCurrentScreen(const proto::desktop::Screen& screen)
     LOG(INFO) << "Current screen changed:" << screen.id();
 
     proto::desktop::Extension* extension = outgoing_message_.newMessage().mutable_extension();
-
     extension->set_name(common::kSelectScreenExtension);
     extension->set_data(screen.SerializeAsString());
 
@@ -217,7 +216,6 @@ void ClientDesktop::setPreferredSize(int width, int height)
     preferred_size.set_height(height);
 
     proto::desktop::Extension* extension = outgoing_message_.newMessage().mutable_extension();
-
     extension->set_name(common::kPreferredSizeExtension);
     extension->set_data(preferred_size.SerializeAsString());
 
@@ -244,7 +242,6 @@ void ClientDesktop::setVideoPause(bool enable)
     pause.set_enable(enable);
 
     proto::desktop::Extension* extension = outgoing_message_.newMessage().mutable_extension();
-
     extension->set_name(common::kVideoPauseExtension);
     extension->set_data(pause.SerializeAsString());
 
@@ -271,7 +268,6 @@ void ClientDesktop::setAudioPause(bool enable)
     pause.set_enable(enable);
 
     proto::desktop::Extension* extension = outgoing_message_.newMessage().mutable_extension();
-
     extension->set_name(common::kAudioPauseExtension);
     extension->set_data(pause.SerializeAsString());
 
@@ -367,10 +363,8 @@ void ClientDesktop::onPowerControl(proto::desktop::PowerControl::Action action)
     }
 
     proto::desktop::Extension* extension = outgoing_message_.newMessage().mutable_extension();
-
     proto::desktop::PowerControl power_control;
     power_control.set_action(action);
-
     extension->set_name(common::kPowerControlExtension);
     extension->set_data(power_control.SerializeAsString());
 
@@ -390,7 +384,6 @@ void ClientDesktop::onSystemInfoRequest(const proto::system_info::SystemInfoRequ
     proto::desktop::Extension* extension = outgoing_message_.newMessage().mutable_extension();
     extension->set_name(common::kSystemInfoExtension);
     extension->set_data(request.SerializeAsString());
-
     sendSessionMessage(outgoing_message_.serialize());
 }
 
@@ -400,7 +393,6 @@ void ClientDesktop::onTaskManager(const proto::task_manager::ClientToHost& messa
     proto::desktop::Extension* extension = outgoing_message_.newMessage().mutable_extension();
     extension->set_name(common::kTaskManagerExtension);
     extension->set_data(message.SerializeAsString());
-
     sendSessionMessage(outgoing_message_.serialize());
 }
 
