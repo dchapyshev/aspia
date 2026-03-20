@@ -143,6 +143,7 @@ private:
     void sendKeyFrameRequest();
 
     bool started_ = false;
+    bool key_frame_received_ = false;
 
     std::shared_ptr<base::Frame> desktop_frame_;
     proto::desktop::Config desktop_config_;

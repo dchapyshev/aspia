@@ -75,6 +75,7 @@ void ClientDesktop::onSessionStarted()
     LOG(INFO) << "Desktop session started";
 
     start_time_ = Clock::now();
+    key_frame_received_ = false;
     started_ = true;
 
     input_event_filter_.setSessionType(sessionState()->sessionType());
@@ -537,6 +538,8 @@ void ClientDesktop::readVideoPacket(const proto::desktop::VideoPacket& packet)
 
     if (packet.has_format())
     {
+        key_frame_received_ = true;
+
         const proto::desktop::VideoPacketFormat& format = packet.format();
         QSize video_size = QSize(format.video_rect().width(), format.video_rect().height());
         QSize screen_size = video_size;
@@ -572,6 +575,16 @@ void ClientDesktop::readVideoPacket(const proto::desktop::VideoPacket& packet)
         emit sig_frameChanged(screen_size, desktop_frame_);
     }
 
+    if (packet.flags() & proto::desktop::VIDEO_PACKET_FLAG_IS_KEY_FRAME)
+        key_frame_received_ = true;
+
+    if (!key_frame_received_)
+    {
+        // Until a keyframe is not received, we drop all video packets.
+        LOG(INFO) << "Video packet is dropped";
+        return;
+    }
+
     if (!desktop_frame_)
     {
         LOG(ERROR) << "The desktop frame is not initialized";
@@ -580,7 +593,8 @@ void ClientDesktop::readVideoPacket(const proto::desktop::VideoPacket& packet)
 
     if (!video_decoder_->decode(packet, desktop_frame_.get()))
     {
-        LOG(ERROR) << "The video packet could not be decoded";
+        LOG(ERROR) << "Unable to decode video packet";
+        key_frame_received_ = false;
         sendKeyFrameRequest();
         return;
     }

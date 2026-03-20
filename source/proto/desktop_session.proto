@@ -232,6 +232,12 @@ enum VideoErrorCode
     VIDEO_ERROR_CODE_PERMANENT = 3;
 }
 
+enum VideoPacketFlags
+{
+    VIDEO_PACKET_FLAG_NONE         = 0;
+    VIDEO_PACKET_FLAG_IS_KEY_FRAME = 1;
+}
+
 message VideoPacket
 {
     VideoEncoding encoding = 1;
@@ -248,6 +254,9 @@ message VideoPacket
     // If there is no error, then it takes the value VIDEO_ERROR_CODE_OK.
     // If the field has any other value, then all other fields are ignored.
     VideoErrorCode error_code = 5;
+
+    // Flags for the video packet.
+    uint32 flags = 6;
 }
 
 enum AudioEncoding

@@ -111,24 +111,26 @@ bool VideoEncoderZstd::encode(const Frame* frame, proto::desktop::VideoPacket* p
 {
     fillPacketInfo(frame, packet);
 
+    bool is_key_frame = isKeyFrameRequired();
+
     if (packet->has_format())
     {
         LOG(INFO) << "Has packet format";
 
         *packet->mutable_format()->mutable_pixel_format() = base::serialize(target_format_);
         updated_region_ = QRect(QPoint(0, 0), frame->size());
+        is_key_frame = true;
     }
     else
     {
-        if (isKeyFrameRequired())
-        {
+        if (is_key_frame)
             updated_region_ = QRect(QPoint(0, 0), frame->size());
-        }
         else
-        {
             updated_region_ = frame->constUpdatedRegion();
-        }
     }
+
+    if (is_key_frame)
+        packet->set_flags(proto::desktop::VIDEO_PACKET_FLAG_IS_KEY_FRAME);
 
     if (!translator_)
     {

@@ -204,6 +204,9 @@ bool VideoEncoderVPX::encode(const Frame* frame, proto::desktop::VideoPacket* pa
         is_key_frame = true;
     }
 
+    if (is_key_frame)
+        packet->set_flags(proto::desktop::VIDEO_PACKET_FLAG_IS_KEY_FRAME);
+
     // Convert the updated capture data ready for encode.
     // Update active map based on updated region.
     prepareImageAndActiveMap(is_key_frame, frame, packet);
