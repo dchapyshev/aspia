@@ -106,6 +106,7 @@ list(APPEND SOURCE_BASE_TESTS
     shared_pointer_unittest.cc
     thread_local_pool_unittest.cc
     xml_settings_unittest.cc
+    peer/host_id_unittest.cc
     peer/user_unittest.cc
     tests_main.cc)
 

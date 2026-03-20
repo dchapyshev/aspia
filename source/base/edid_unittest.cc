@@ -45,16 +45,10 @@ QByteArray createValidEdidBlock()
 
     // Manufacturer ID: "DEL" (Dell)
     // D=4, E=5, L=12
-    // Bit layout: 0 DDDDD EEEEE LLLLL
-    // 0 00100 00101 01100
-    // = 0x20AC => big-endian bytes: 0x20 0xAC
-    // But EDID stores big-endian, and code does qbswap, so we store as-is.
-    // D=4 => bits 14:10 = 00100
-    // E=5 => bits 9:5   = 00101
-    // L=12 => bits 4:0  = 01100
-    // Combined: 0_00100_00101_01100 = 0x212C
-    raw[8] = 0x21;  // high byte (big endian)
-    raw[9] = 0x2C;  // low byte
+    // Value = (4 << 10) | (5 << 5) | 12 = 0x10AC
+    // EDID stores big-endian: raw[8] = 0x10, raw[9] = 0xAC
+    raw[8] = 0x10;  // high byte (big endian)
+    raw[9] = 0xAC;  // low byte
 
     // Product code (little-endian): 0x1234
     raw[10] = 0x34;
@@ -469,8 +463,9 @@ TEST(edid_test, manufacturer_unknown)
     quint8* raw = reinterpret_cast<quint8*>(data.data());
 
     // Set manufacturer to "ZZZ" which is not in the table.
-    // Z=26 => bits: 0_11010_11010_11010 = 0x6D5A
-    raw[8] = 0x6D;
+    // Z=26 => (26 << 10) | (26 << 5) | 26 = 0x6B5A
+    // Big-endian: raw[8] = 0x6B, raw[9] = 0x5A
+    raw[8] = 0x6B;
     raw[9] = 0x5A;
 
     // Recompute checksum.

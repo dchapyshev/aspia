@@ -27,6 +27,9 @@ static_assert(sizeof(HostId) == 8);
 //--------------------------------------------------------------------------------------------------
 bool isHostId(const QString& str)
 {
+    if (str.isEmpty())
+        return false;
+
     bool result = true;
 
     for (QString::size_type i = 0; i < str.size(); ++i)
