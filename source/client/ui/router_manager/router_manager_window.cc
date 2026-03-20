@@ -382,22 +382,19 @@ RouterManagerWindow::RouterManagerWindow(QWidget* parent)
     });
 
     ui->tree_hosts->setMouseTracking(true);
-    connect(ui->tree_hosts, &QTreeWidget::itemEntered,
-            this, [this](QTreeWidgetItem* /* item */, int column)
+    connect(ui->tree_hosts, &QTreeWidget::itemEntered, this, [this](QTreeWidgetItem* /* item */, int column)
     {
         current_hosts_column_ = column;
     });
 
     ui->tree_relay->setMouseTracking(true);
-    connect(ui->tree_relay, &QTreeWidget::itemEntered,
-            this, [this](QTreeWidgetItem* /* item */, int column)
+    connect(ui->tree_relay, &QTreeWidget::itemEntered, this, [this](QTreeWidgetItem* /* item */, int column)
     {
         current_relays_column_ = column;
     });
 
     ui->tree_active_conn->setMouseTracking(true);
-    connect(ui->tree_active_conn, &QTreeWidget::itemEntered,
-            this, [this](QTreeWidgetItem* /* item */, int column)
+    connect(ui->tree_active_conn, &QTreeWidget::itemEntered, this, [this](QTreeWidgetItem* /* item */, int column)
     {
         current_active_conn_column_ = column;
     });
@@ -465,8 +462,7 @@ void RouterManagerWindow::connectToRouter(const RouterConfig& router_config)
 void RouterManagerWindow::onConnecting()
 {
     LOG(INFO) << "Connecting to router";
-    status_dialog_->addMessageAndActivate(
-        tr("Connecting to %1:%2...").arg(peer_address_).arg(peer_port_));
+    status_dialog_->addMessageAndActivate(tr("Connecting to %1:%2...").arg(peer_address_).arg(peer_port_));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -479,9 +475,7 @@ void RouterManagerWindow::onConnected(const QVersionNumber& peer_version)
     status_dialog_->hide();
 
     ui->statusbar->showMessage(tr("Connected to: %1:%2 (version %3)")
-                               .arg(peer_address_)
-                               .arg(peer_port_)
-                               .arg(peer_version.toString()));
+        .arg(peer_address_).arg(peer_port_).arg(peer_version.toString()));
     show();
     activateWindow();
 
@@ -784,37 +778,19 @@ void RouterManagerWindow::onHostsContextMenu(const QPoint& pos)
 
     QAction* action = menu.exec(ui->tree_hosts->viewport()->mapToGlobal(pos));
     if (action == save_action)
-    {
         saveHostsToFile();
-    }
     else if (action == disconnect_action)
-    {
         disconnectHost();
-    }
     else if (action == disconnect_all_action)
-    {
         disconnectAllHosts();
-    }
     else if (action == refresh_action)
-    {
         refreshSessionList();
-    }
     else if (action == copy_row)
-    {
         copyRowFromTree(ui->tree_hosts->currentItem());
-    }
     else if (action == copy_col)
-    {
         copyColumnFromTree(ui->tree_hosts->currentItem(), current_hosts_column_);
-    }
     else if (action == remove_action)
-    {
         removeHost();
-    }
-    else
-    {
-        // Nothing
-    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -841,29 +817,17 @@ void RouterManagerWindow::onRelaysContextMenu(const QPoint& pos)
 
     QAction* action = menu.exec(ui->tree_relay->viewport()->mapToGlobal(pos));
     if (action == save_action)
-    {
         saveRelaysToFile();
-    }
     else if (action == copy_row)
-    {
         copyRowFromTree(current_item);
-    }
     else if (action == copy_col)
-    {
         copyColumnFromTree(current_item, current_relays_column_);
-    }
     else if (action == refresh_action)
-    {
         refreshSessionList();
-    }
     else if (action == disconnect_action)
-    {
         disconnectRelay();
-    }
     else if (action == disconnect_all_action)
-    {
         disconnectAllRelays();
-    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1305,15 +1269,14 @@ void RouterManagerWindow::addUser()
         users.append(static_cast<UserTreeItem*>(tree_users->topLevelItem(i))->user.name);
 
     RouterUserDialog dialog(base::User(), users, this);
-    if (dialog.exec() == QDialog::Accepted)
-    {
-        LOG(INFO) << "[ACTION] Accepeted by user";
-        emit sig_addUser(dialog.user().serialize());
-    }
-    else
+    if (dialog.exec() != QDialog::Accepted)
     {
         LOG(INFO) << "[ACTION] Rejected by user";
+        return;
     }
+
+    LOG(INFO) << "[ACTION] Accepeted by user";
+    emit sig_addUser(dialog.user().serialize());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1372,8 +1335,7 @@ void RouterManagerWindow::deleteUser()
 
     QMessageBox message_box(QMessageBox::Question,
                             tr("Confirmation"),
-                            tr("Are you sure you want to delete user \"%1\"?")
-                                .arg(tree_item->text(0)),
+                            tr("Are you sure you want to delete user \"%1\"?").arg(tree_item->text(0)),
                             QMessageBox::Yes | QMessageBox::No,
                             this);
     message_box.button(QMessageBox::Yes)->setText(tr("Yes"));
@@ -1649,25 +1611,19 @@ QString RouterManagerWindow::delayToString(quint64 delay)
     QString minutes_string = tr("%n minutes", "", static_cast<int>(minutes));
     QString hours_string = tr("%n hours", "", static_cast<int>(hours));
 
-    if (!days)
-    {
-        if (!hours)
-        {
-            if (!minutes)
-                return seconds_string;
-            else
-                return minutes_string + ' ' + seconds_string;
-        }
-        else
-        {
-            return hours_string + ' ' + minutes_string + ' ' + seconds_string;
-        }
-    }
-    else
+    if (days)
     {
         QString days_string = tr("%n days", "", static_cast<int>(days));
         return days_string + ' ' + hours_string + ' ' + minutes_string + ' ' + seconds_string;
     }
+
+    if (hours)
+        return hours_string + ' ' + minutes_string + ' ' + seconds_string;
+
+    if (minutes)
+        return minutes_string + ' ' + seconds_string;
+
+    return seconds_string;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1683,30 +1639,15 @@ QString RouterManagerWindow::sizeToString(qint64 size)
     qint64 divider;
 
     if (size >= kTB)
-    {
-        units = tr("TB");
-        divider = kTB;
-    }
+        units = tr("TB"), divider = kTB;
     else if (size >= kGB)
-    {
-        units = tr("GB");
-        divider = kGB;
-    }
+        units = tr("GB"), divider = kGB;
     else if (size >= kMB)
-    {
-        units = tr("MB");
-        divider = kMB;
-    }
+        units = tr("MB"), divider = kMB;
     else if (size >= kKB)
-    {
-        units = tr("kB");
-        divider = kKB;
-    }
+        units = tr("kB"), divider = kKB;
     else
-    {
-        units = tr("B");
-        divider = 1;
-    }
+        units = tr("B"), divider = 1;
 
     return QString("%1 %2")
         .arg(static_cast<double>(size) / static_cast<double>(divider), 0, 'g', 4).arg(units);
