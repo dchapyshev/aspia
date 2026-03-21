@@ -326,14 +326,14 @@ RouterManagerWindow::RouterManagerWindow(QWidget* parent)
 
     ui->label_active_conn->setText(tr("Active peers: %1").arg(0));
 
-    connect(ui->button_refresh_hosts, &QPushButton::clicked, this, &RouterManagerWindow::refreshSessionList);
-    connect(ui->button_disconnect_host, &QPushButton::clicked, this, &RouterManagerWindow::disconnectHost);
-    connect(ui->button_disconnect_all_hosts, &QPushButton::clicked, this, &RouterManagerWindow::disconnectAllHosts);
-    connect(ui->button_refresh_relay, &QPushButton::clicked, this, &RouterManagerWindow::refreshSessionList);
-    connect(ui->button_refresh_users, &QPushButton::clicked, this, &RouterManagerWindow::refreshUserList);
-    connect(ui->button_add_user, &QPushButton::clicked, this, &RouterManagerWindow::addUser);
-    connect(ui->button_modify_user, &QPushButton::clicked, this, &RouterManagerWindow::modifyUser);
-    connect(ui->button_delete_user, &QPushButton::clicked, this, &RouterManagerWindow::deleteUser);
+    connect(ui->button_refresh_hosts, &QPushButton::clicked, this, &RouterManagerWindow::onRefreshSessionList);
+    connect(ui->button_disconnect_host, &QPushButton::clicked, this, &RouterManagerWindow::onDisconnectHost);
+    connect(ui->button_disconnect_all_hosts, &QPushButton::clicked, this, &RouterManagerWindow::onDisconnectAllHosts);
+    connect(ui->button_refresh_relay, &QPushButton::clicked, this, &RouterManagerWindow::onRefreshSessionList);
+    connect(ui->button_refresh_users, &QPushButton::clicked, this, &RouterManagerWindow::onRefreshUserList);
+    connect(ui->button_add_user, &QPushButton::clicked, this, &RouterManagerWindow::onAddUser);
+    connect(ui->button_modify_user, &QPushButton::clicked, this, &RouterManagerWindow::onModifyUser);
+    connect(ui->button_delete_user, &QPushButton::clicked, this, &RouterManagerWindow::onDeleteUser);
     connect(ui->tree_users, &QTreeWidget::currentItemChanged, this, &RouterManagerWindow::onCurrentUserChanged);
     connect(ui->tree_hosts, &QTreeWidget::currentItemChanged, this, &RouterManagerWindow::onCurrentHostChanged);
     connect(ui->tree_relay, &QTreeWidget::currentItemChanged, this, &RouterManagerWindow::onCurrentRelayChanged);
@@ -405,7 +405,7 @@ RouterManagerWindow::RouterManagerWindow(QWidget* parent)
     QTimer* update_timer = new QTimer(this);
     connect(update_timer, &QTimer::timeout, this, [this]()
     {
-        refreshSessionList();
+        onRefreshSessionList();
     });
     update_timer->start(std::chrono::seconds(3));
 }
@@ -699,7 +699,7 @@ void RouterManagerWindow::onSessionResult(std::shared_ptr<proto::router::Session
         QMessageBox::warning(this, tr("Warning"), tr(message), QMessageBox::Ok);
     }
 
-    refreshSessionList();
+    onRefreshSessionList();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -738,7 +738,7 @@ void RouterManagerWindow::onUserResult(std::shared_ptr<proto::router::UserResult
         QMessageBox::warning(this, tr("Warning"), tr(message), QMessageBox::Ok);
     }
 
-    refreshUserList();
+    onRefreshUserList();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -780,17 +780,17 @@ void RouterManagerWindow::onHostsContextMenu(const QPoint& pos)
     if (action == save_action)
         saveHostsToFile();
     else if (action == disconnect_action)
-        disconnectHost();
+        onDisconnectHost();
     else if (action == disconnect_all_action)
-        disconnectAllHosts();
+        onDisconnectAllHosts();
     else if (action == refresh_action)
-        refreshSessionList();
+        onRefreshSessionList();
     else if (action == copy_row)
         copyRowFromTree(ui->tree_hosts->currentItem());
     else if (action == copy_col)
         copyColumnFromTree(ui->tree_hosts->currentItem(), current_hosts_column_);
     else if (action == remove_action)
-        removeHost();
+        onRemoveHost();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -823,11 +823,11 @@ void RouterManagerWindow::onRelaysContextMenu(const QPoint& pos)
     else if (action == copy_col)
         copyColumnFromTree(current_item, current_relays_column_);
     else if (action == refresh_action)
-        refreshSessionList();
+        onRefreshSessionList();
     else if (action == disconnect_action)
-        disconnectRelay();
+        onDisconnectRelay();
     else if (action == disconnect_all_action)
-        disconnectAllRelays();
+        onDisconnectAllRelays();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -921,19 +921,19 @@ void RouterManagerWindow::onUsersContextMenu(const QPoint& pos)
     QAction* action = menu.exec(ui->tree_users->viewport()->mapToGlobal(pos));
     if (action == modify_action)
     {
-        modifyUser();
+        onModifyUser();
     }
     else if (action == delete_action)
     {
-        deleteUser();
+        onDeleteUser();
     }
     else if (action == add_action)
     {
-        addUser();
+        onAddUser();
     }
     else if (action == refresh_action)
     {
-        refreshUserList();
+        onRefreshUserList();
     }
     else
     {
@@ -1082,7 +1082,7 @@ void RouterManagerWindow::updateRelayStatistics()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterManagerWindow::refreshSessionList()
+void RouterManagerWindow::onRefreshSessionList()
 {
     if (!is_connected_)
         return;
@@ -1090,7 +1090,7 @@ void RouterManagerWindow::refreshSessionList()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterManagerWindow::disconnectRelay()
+void RouterManagerWindow::onDisconnectRelay()
 {
     LOG(INFO) << "[ACTION] Disconnect relay";
 
@@ -1119,7 +1119,7 @@ void RouterManagerWindow::disconnectRelay()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterManagerWindow::disconnectAllRelays()
+void RouterManagerWindow::onDisconnectAllRelays()
 {
     LOG(INFO) << "[ACTION] Disconnect all relays";
 
@@ -1149,7 +1149,7 @@ void RouterManagerWindow::disconnectAllRelays()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterManagerWindow::disconnectHost()
+void RouterManagerWindow::onDisconnectHost()
 {
     LOG(INFO) << "[ACTION] Disconnect host";
 
@@ -1180,7 +1180,7 @@ void RouterManagerWindow::disconnectHost()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterManagerWindow::removeHost()
+void RouterManagerWindow::onRemoveHost()
 {
     LOG(INFO) << "[ACTION] Remove host";
 
@@ -1222,7 +1222,7 @@ void RouterManagerWindow::removeHost()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterManagerWindow::disconnectAllHosts()
+void RouterManagerWindow::onDisconnectAllHosts()
 {
     LOG(INFO) << "[ACTION] Disconnect all hosts";
 
@@ -1252,13 +1252,13 @@ void RouterManagerWindow::disconnectAllHosts()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterManagerWindow::refreshUserList()
+void RouterManagerWindow::onRefreshUserList()
 {
     emit sig_refreshUserList();
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterManagerWindow::addUser()
+void RouterManagerWindow::onAddUser()
 {
     LOG(INFO) << "[ACTION] Add user";
 
@@ -1280,7 +1280,7 @@ void RouterManagerWindow::addUser()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterManagerWindow::modifyUser()
+void RouterManagerWindow::onModifyUser()
 {
     LOG(INFO) << "[ACTION] Modify user";
 
@@ -1314,7 +1314,7 @@ void RouterManagerWindow::modifyUser()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterManagerWindow::deleteUser()
+void RouterManagerWindow::onDeleteUser()
 {
     LOG(INFO) << "[ACTION] Delete user";
 

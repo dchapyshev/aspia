@@ -53,19 +53,12 @@ QString encodeUrl(const QString& str)
 
     for (const auto ch : str)
     {
-        if (ch.isDigit() || ch.isLetter() || ch == '-' || ch == '_' ||
-            ch == '.' || ch == '~')
-        {
+        if (ch.isDigit() || ch.isLetter() || ch == '-' || ch == '_' || ch == '.' || ch == '~')
             result += ch;
-        }
         else if (ch == ' ')
-        {
             result += '+';
-        }
         else
-        {
             result += '%' + QString::number(ch.unicode(), 16);
-        }
     }
 
     return result;
@@ -101,30 +94,15 @@ QString SysInfoWidget::sizeToString(qint64 size)
     qint64 divider;
 
     if (size >= kTB)
-    {
-        units = tr("TB");
-        divider = kTB;
-    }
+        units = tr("TB"), divider = kTB;
     else if (size >= kGB)
-    {
-        units = tr("GB");
-        divider = kGB;
-    }
+        units = tr("GB"), divider = kGB;
     else if (size >= kMB)
-    {
-        units = tr("MB");
-        divider = kMB;
-    }
+        units = tr("MB"), divider = kMB;
     else if (size >= kKB)
-    {
-        units = tr("kB");
-        divider = kKB;
-    }
+        units = tr("kB"), divider = kKB;
     else
-    {
-        units = tr("B");
-        divider = 1;
-    }
+        units = tr("B"), divider = 1;
 
     return QString("%1 %2")
         .arg(static_cast<double>(size) / static_cast<double>(divider), 0, 'g', 4)
@@ -143,25 +121,19 @@ QString SysInfoWidget::delayToString(quint64 delay)
     QString minutes_string = tr("%n minutes", "", static_cast<int>(minutes));
     QString hours_string = tr("%n hours", "", static_cast<int>(hours));
 
-    if (!days)
-    {
-        if (!hours)
-        {
-            if (!minutes)
-                return seconds_string;
-            else
-                return minutes_string + ' ' + seconds_string;
-        }
-        else
-        {
-            return hours_string + ' ' + minutes_string + ' ' + seconds_string;
-        }
-    }
-    else
+    if (days)
     {
         QString days_string = tr("%n days", "", static_cast<int>(days));
         return days_string + ' ' + hours_string + ' ' + minutes_string + ' ' + seconds_string;
     }
+
+    if (hours)
+        return hours_string + ' ' + minutes_string + ' ' + seconds_string;
+
+    if (minutes)
+        return minutes_string + ' ' + seconds_string;
+
+    return seconds_string;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -176,25 +148,13 @@ QString SysInfoWidget::speedToString(quint64 speed)
     quint64 divider;
 
     if (speed >= kGbps)
-    {
-        units = tr("Gbps");
-        divider = kGbps;
-    }
+        units = tr("Gbps"), divider = kGbps;
     else if (speed >= kMbps)
-    {
-        units = tr("Mbps");
-        divider = kMbps;
-    }
+        units = tr("Mbps"), divider = kMbps;
     else if (speed >= kKbps)
-    {
-        units = tr("Kbps");
-        divider = kKbps;
-    }
+        units = tr("Kbps"), divider = kKbps;
     else
-    {
-        units = tr("bps");
-        divider = 1;
-    }
+        units = tr("bps"), divider = 1;
 
     return QString("%1 %2")
         .arg(static_cast<double>(speed) / static_cast<double>(divider), 0, 'g', 4)

@@ -85,29 +85,27 @@ private slots:
     void onRelaysContextMenu(const QPoint& pos);
     void onActiveConnContextMenu(const QPoint& pos);
     void onUsersContextMenu(const QPoint& pos);
-
-private:
-    void refreshSessionList();
-    void disconnectRelay();
-    void disconnectAllRelays();
-    void disconnectHost();
-    void removeHost();
-    void disconnectAllHosts();
-    void refreshUserList();
-    void addUser();
-    void modifyUser();
-    void deleteUser();
+    void onRefreshSessionList();
+    void onDisconnectRelay();
+    void onDisconnectAllRelays();
+    void onDisconnectHost();
+    void onRemoveHost();
+    void onDisconnectAllHosts();
+    void onRefreshUserList();
+    void onAddUser();
+    void onModifyUser();
+    void onDeleteUser();
     void onCurrentUserChanged(QTreeWidgetItem* current, QTreeWidgetItem* previous);
     void onCurrentHostChanged(QTreeWidgetItem* current, QTreeWidgetItem* previous);
     void onCurrentRelayChanged(QTreeWidgetItem* current, QTreeWidgetItem* previous);
     void onContextMenuForTreeHeader(QTreeWidget* tree, const QPoint& pos);
+
+private:
     void copyRowFromTree(QTreeWidgetItem* item);
     void copyColumnFromTree(QTreeWidgetItem* item, int column);
     void updateRelayStatistics();
-
     void saveHostsToFile();
     void saveRelaysToFile();
-
     QByteArray saveState();
     void restoreState(const QByteArray& state);
 
