@@ -430,10 +430,6 @@ void UdpChannel::processEvents()
                 // adaptation to changes in network quality.
                 enet_peer_throttle_configure(peer_.get(), 3000, 2, 2);
 
-                // This is not the most optimal value for local networks, but there is a greater
-                // chance that the packet will be delivered.
-                peer_->mtu = 1200;
-
                 connected_ = true;
                 onReadyCheck();
             }
