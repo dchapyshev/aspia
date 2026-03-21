@@ -40,15 +40,6 @@ const int kMaxPeers = 1;
 const int kChannelCount = 256;
 const int kPoolReservedSize = 64;
 
-//--------------------------------------------------------------------------------------------------
-int calculateSpeed(int last_speed, const std::chrono::milliseconds& duration, qint64 bytes)
-{
-    static const double kAlpha = 0.1;
-    return static_cast<int>(
-        (kAlpha * ((1000.0 / static_cast<double>(duration.count())) * static_cast<double>(bytes))) +
-        ((1.0 - kAlpha) * static_cast<double>(last_speed)));
-}
-
 // ENet hot-path allocations (per packet, x64 sizes + 16-byte AllocHeader):
 //   ENetPacket:          ~48 bytes  -> 64  total -> bucket[0] (64)
 //   ENetAcknowledgement: ~68 bytes  -> 84  total -> bucket[1] (128)
@@ -62,6 +53,15 @@ constexpr size_t kENetBucketSizes[] = { 64, 128, 256, 512, 1024, 2048 };
 
 using ENetPool = ThreadLocalPool<std::size(kENetBucketSizes), 64>;
 thread_local ENetPool tls_enet_pool(kENetBucketSizes);
+
+//--------------------------------------------------------------------------------------------------
+int calculateSpeed(int last_speed, const std::chrono::milliseconds& duration, qint64 bytes)
+{
+    static const double kAlpha = 0.1;
+    return static_cast<int>(
+        (kAlpha * ((1000.0 / static_cast<double>(duration.count())) * static_cast<double>(bytes))) +
+        ((1.0 - kAlpha) * static_cast<double>(last_speed)));
+}
 
 //--------------------------------------------------------------------------------------------------
 void initializeEnetWithPool()
@@ -413,9 +413,27 @@ void UdpChannel::processEvents()
         {
             case ENET_EVENT_TYPE_CONNECT:
             {
-                LOG(INFO) << "ENet peer connected";
+                LOG(INFO) << "Peer connected";
                 if (!peer_)
                     peer_.reset(event.peer);
+
+                const int kSocketBufferSize = 2 * 1024 * 1024;
+
+                // Should improve resilience to traffic spikes.
+                enet_socket_set_option(host_->socket, ENET_SOCKOPT_SNDBUF, kSocketBufferSize);
+                enet_socket_set_option(host_->socket, ENET_SOCKOPT_RCVBUF, kSocketBufferSize);
+
+                // By default is 5s before the first retransmit. Reduce this to 3s.
+                enet_peer_timeout(peer_.get(), ENET_PEER_TIMEOUT_LIMIT, 3000, 10000);
+
+                // By default interval is 5s, we reduce it to 3s to increase the speed of
+                // adaptation to changes in network quality.
+                enet_peer_throttle_configure(peer_.get(), 3000, 2, 2);
+
+                // This is not the most optimal value for local networks, but there is a greater
+                // chance that the packet will be delivered.
+                peer_->mtu = 1200;
+
                 connected_ = true;
                 onReadyCheck();
             }
