@@ -44,14 +44,12 @@ SysInfoWidgetConnections::SysInfoWidgetConnections(QWidget* parent)
     connect(ui.tree, &QTreeWidget::customContextMenuRequested,
             this, &SysInfoWidgetConnections::onContextMenu);
 
-    connect(ui.tree, &QTreeWidget::itemDoubleClicked,
-            this, [this](QTreeWidgetItem* item, int /* column */)
+    connect(ui.tree, &QTreeWidget::itemDoubleClicked, this, [this](QTreeWidgetItem* item, int /* column */)
     {
         copyRow(item);
     });
 
-    connect(ui.tree, &QTreeWidget::itemEntered,
-            this, [this](QTreeWidgetItem* /* item */, int column)
+    connect(ui.tree, &QTreeWidget::itemEntered, this, [this](QTreeWidgetItem* /* item */, int column)
     {
         current_column_ = column;
     });

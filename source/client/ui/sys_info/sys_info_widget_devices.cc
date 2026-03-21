@@ -41,17 +41,14 @@ SysInfoWidgetDevices::SysInfoWidgetDevices(QWidget* parent)
         copyColumn(ui.tree->currentItem(), current_column_);
     });
 
-    connect(ui.tree, &QTreeWidget::customContextMenuRequested,
-            this, &SysInfoWidgetDevices::onContextMenu);
+    connect(ui.tree, &QTreeWidget::customContextMenuRequested, this, &SysInfoWidgetDevices::onContextMenu);
 
-    connect(ui.tree, &QTreeWidget::itemDoubleClicked,
-            this, [this](QTreeWidgetItem* item, int /* column */)
+    connect(ui.tree, &QTreeWidget::itemDoubleClicked, this, [this](QTreeWidgetItem* item, int /* column */)
     {
         copyRow(item);
     });
 
-    connect(ui.tree, &QTreeWidget::itemEntered,
-            this, [this](QTreeWidgetItem* /* item */, int column)
+    connect(ui.tree, &QTreeWidget::itemEntered, this, [this](QTreeWidgetItem* /* item */, int column)
     {
         current_column_ = column;
     });

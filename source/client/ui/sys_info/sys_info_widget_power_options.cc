@@ -296,19 +296,14 @@ QString SysInfoWidgetPowerOptions::batteryStatusToString(
     {
         case proto::system_info::PowerOptions::BATTERY_STATUS_HIGH:
             return tr("High");
-
         case proto::system_info::PowerOptions::BATTERY_STATUS_LOW:
             return tr("Low");
-
         case proto::system_info::PowerOptions::BATTERY_STATUS_CRITICAL:
             return tr("Critical");
-
         case proto::system_info::PowerOptions::BATTERY_STATUS_CHARGING:
             return tr("Charging");
-
         case proto::system_info::PowerOptions::BATTERY_STATUS_NO_BATTERY:
             return tr("No Battery");
-
         default:
             return tr("Unknown");
     }

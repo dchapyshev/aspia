@@ -136,25 +136,18 @@ QString SysInfoWidgetServices::statusToString(proto::system_info::Services::Serv
     {
         case proto::system_info::Services::Service::STATUS_CONTINUE_PENDING:
             return tr("Continue Pending");
-
         case proto::system_info::Services::Service::STATUS_PAUSE_PENDING:
             return tr("Pause Pending");
-
         case proto::system_info::Services::Service::STATUS_PAUSED:
             return tr("Paused");
-
         case proto::system_info::Services::Service::STATUS_RUNNING:
             return tr("Running");
-
         case proto::system_info::Services::Service::STATUS_START_PENDING:
             return tr("Start Pending");
-
         case proto::system_info::Services::Service::STATUS_STOP_PENDING:
             return tr("Stop Pending");
-
         case proto::system_info::Services::Service::STATUS_STOPPED:
             return tr("Stopped");
-
         default:
             return tr("Unknown");
     }
@@ -169,19 +162,14 @@ QString SysInfoWidgetServices::startupTypeToString(
     {
         case proto::system_info::Services::Service::STARTUP_TYPE_AUTO_START:
             return tr("Auto Start");
-
         case proto::system_info::Services::Service::STARTUP_TYPE_DEMAND_START:
             return tr("Demand Start");
-
         case proto::system_info::Services::Service::STARTUP_TYPE_DISABLED:
             return tr("Disabled");
-
         case proto::system_info::Services::Service::STARTUP_TYPE_BOOT_START:
             return tr("Boot Start");
-
         case proto::system_info::Services::Service::STARTUP_TYPE_SYSTEM_START:
             return tr("System Start");
-
         default:
             return tr("Unknown");
     }

@@ -136,27 +136,21 @@ void SysInfoWidgetLicenses::setSystemInfo(const proto::system_info::SystemInfo& 
                 case proto::system_info::Licenses::License::Field::TYPE_LICENSE_TYPE:
                     title = tr("License Type");
                     break;
-
                 case proto::system_info::Licenses::License::Field::TYPE_LICENSE_VERSION:
                     title = tr("License Version");
                     break;
-
                 case proto::system_info::Licenses::License::Field::TYPE_ORGANIZATION:
                     title = tr("Organization");
                     break;
-
                 case proto::system_info::Licenses::License::Field::TYPE_OWNER:
                     title = tr("Owner");
                     break;
-
                 case proto::system_info::Licenses::License::Field::TYPE_PRODUCT_ID:
                     title = tr("Product ID");
                     break;
-
                 case proto::system_info::Licenses::License::Field::TYPE_PRODUCT_KEY:
                     title = tr("Product Key");
                     break;
-
                 default:
                     title = tr("Unknown Field");
                     break;

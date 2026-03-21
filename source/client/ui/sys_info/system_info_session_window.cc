@@ -129,11 +129,8 @@ SystemInfoSessionWindow::SystemInfoSessionWindow(
                 this, &SystemInfoSessionWindow::sig_systemInfoRequired);
     }
 
-    CategoryItem* summary_category = new CategoryItem(
-        CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/computer.svg",
-        tr("Summary"),
-        common::kSystemInfo_Summary);
+    CategoryItem* summary_category = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
+        ":/img/computer.svg", tr("Summary"), common::kSystemInfo_Summary);
 
     //----------------------------------------------------------------------------------------------
     // HARDWARE
@@ -142,35 +139,20 @@ SystemInfoSessionWindow::SystemInfoSessionWindow(
     CategoryItem* hardware_category = new CategoryItem(
         CategoryItem::Type::ROOT_ITEM, ":/img/folder.svg", tr("Hardware"));
 
-    CategoryItem* devices = new CategoryItem(
-        CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/network-card.svg",
-        tr("Devices"),
-        common::kSystemInfo_Devices);
+    CategoryItem* devices = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
+        ":/img/network-card.svg", tr("Devices"), common::kSystemInfo_Devices);
 
-    CategoryItem* video_adapters = new CategoryItem(
-        CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/video-card.svg",
-        tr("Video Adapters"),
-        common::kSystemInfo_VideoAdapters);
+    CategoryItem* video_adapters = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
+        ":/img/video-card.svg", tr("Video Adapters"), common::kSystemInfo_VideoAdapters);
 
-    CategoryItem* monitors = new CategoryItem(
-        CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/imac.svg",
-        tr("Monitors"),
-        common::kSystemInfo_Monitors);
+    CategoryItem* monitors = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
+        ":/img/imac.svg", tr("Monitors"), common::kSystemInfo_Monitors);
 
-    CategoryItem* printers = new CategoryItem(
-        CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/printer.svg",
-        tr("Printers"),
-        common::kSystemInfo_Printers);
+    CategoryItem* printers = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
+        ":/img/printer.svg", tr("Printers"), common::kSystemInfo_Printers);
 
-    CategoryItem* power_options = new CategoryItem(
-        CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/electrical.svg",
-        tr("Power Options"),
-        common::kSystemInfo_PowerOptions);
+    CategoryItem* power_options = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
+        ":/img/electrical.svg", tr("Power Options"), common::kSystemInfo_PowerOptions);
 
     hardware_category->addChild(devices);
     hardware_category->addChild(video_adapters);
@@ -185,35 +167,20 @@ SystemInfoSessionWindow::SystemInfoSessionWindow(
     CategoryItem* software_category = new CategoryItem(
         CategoryItem::Type::ROOT_ITEM, ":/img/folder.svg", tr("Software"));
 
-    CategoryItem* applications = new CategoryItem(
-        CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/software.svg",
-        tr("Applications"),
-        common::kSystemInfo_Applications);
+    CategoryItem* applications = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
+        ":/img/software.svg", tr("Applications"), common::kSystemInfo_Applications);
 
-    CategoryItem* drivers = new CategoryItem(
-        CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/network-card.svg",
-        tr("Drivers"),
-        common::kSystemInfo_Drivers);
+    CategoryItem* drivers = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
+        ":/img/network-card.svg", tr("Drivers"), common::kSystemInfo_Drivers);
 
-    CategoryItem* services = new CategoryItem(
-        CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/gear.svg",
-        tr("Services"),
-        common::kSystemInfo_Services);
+    CategoryItem* services = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
+        ":/img/gear.svg", tr("Services"), common::kSystemInfo_Services);
 
-    CategoryItem* processes = new CategoryItem(
-        CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/heart-monitor.svg",
-        tr("Processes"),
-        common::kSystemInfo_Processes);
+    CategoryItem* processes = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
+        ":/img/heart-monitor.svg", tr("Processes"), common::kSystemInfo_Processes);
 
-    CategoryItem* licenses = new CategoryItem(
-        CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/certificate.svg",
-        tr("Licenses"),
-        common::kSystemInfo_Licenses);
+    CategoryItem* licenses = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
+        ":/img/certificate.svg", tr("Licenses"), common::kSystemInfo_Licenses);
 
     software_category->addChild(applications);
     software_category->addChild(drivers);
@@ -228,35 +195,20 @@ SystemInfoSessionWindow::SystemInfoSessionWindow(
     CategoryItem* network_category = new CategoryItem(
         CategoryItem::Type::ROOT_ITEM, ":/img/folder.svg", tr("Network"));
 
-    CategoryItem* network_adapters = new CategoryItem(
-        CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/network-card.svg",
-        tr("Network Adapters"),
-        common::kSystemInfo_NetworkAdapters);
+    CategoryItem* network_adapters = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
+        ":/img/network-card.svg", tr("Network Adapters"), common::kSystemInfo_NetworkAdapters);
 
-    CategoryItem* routes = new CategoryItem(
-        CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/flow-chart.svg",
-        tr("Routes"),
-        common::kSystemInfo_Routes);
+    CategoryItem* routes = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
+        ":/img/flow-chart.svg", tr("Routes"), common::kSystemInfo_Routes);
 
-    CategoryItem* connections = new CategoryItem(
-        CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/connected.svg",
-        tr("Connections"),
-        common::kSystemInfo_Connections);
+    CategoryItem* connections = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
+        ":/img/connected.svg", tr("Connections"), common::kSystemInfo_Connections);
 
-    CategoryItem* network_shares = new CategoryItem(
-        CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/nas.svg",
-        tr("Network Shares"),
-        common::kSystemInfo_NetworkShares);
+    CategoryItem* network_shares = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
+        ":/img/nas.svg", tr("Network Shares"), common::kSystemInfo_NetworkShares);
 
-    CategoryItem* open_files = new CategoryItem(
-        CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/nas.svg",
-        tr("Open Files"),
-        common::kSystemInfo_OpenFiles);
+    CategoryItem* open_files = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
+        ":/img/nas.svg", tr("Open Files"), common::kSystemInfo_OpenFiles);
 
     network_category->addChild(network_adapters);
     network_category->addChild(routes);
@@ -271,29 +223,17 @@ SystemInfoSessionWindow::SystemInfoSessionWindow(
     CategoryItem* os_category = new CategoryItem(
         CategoryItem::Type::ROOT_ITEM, ":/img/folder.svg", tr("Operating System"));
 
-    CategoryItem* env_vars = new CategoryItem(
-        CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/day-view.svg",
-        tr("Environment Variables"),
-        common::kSystemInfo_EnvironmentVariables);
+    CategoryItem* env_vars = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
+        ":/img/day-view.svg", tr("Environment Variables"), common::kSystemInfo_EnvironmentVariables);
 
-    CategoryItem* event_logs = new CategoryItem(
-        CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/log.svg",
-        tr("Event Logs"),
-        common::kSystemInfo_EventLogs);
+    CategoryItem* event_logs = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
+        ":/img/log.svg", tr("Event Logs"), common::kSystemInfo_EventLogs);
 
-    CategoryItem* local_users = new CategoryItem(
-        CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/user.svg",
-        tr("Users"),
-        common::kSystemInfo_LocalUsers);
+    CategoryItem* local_users = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
+        ":/img/user.svg", tr("Users"), common::kSystemInfo_LocalUsers);
 
-    CategoryItem* local_user_groups = new CategoryItem(
-        CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/user-account.svg",
-        tr("User Groups"),
-        common::kSystemInfo_LocalUserGroups);
+    CategoryItem* local_user_groups = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
+        ":/img/user-account.svg", tr("User Groups"), common::kSystemInfo_LocalUserGroups);
 
     os_category->addChild(env_vars);
     os_category->addChild(event_logs);
@@ -318,10 +258,7 @@ SystemInfoSessionWindow::SystemInfoSessionWindow(
     connect(ui->action_save, &QAction::triggered, this, [this]()
     {
         QString file_path =
-            QFileDialog::getSaveFileName(this,
-                                         tr("HTML File"),
-                                         QDir::homePath(),
-                                         tr("HTML File (*.html)"));
+            QFileDialog::getSaveFileName(this, tr("HTML File"), QDir::homePath(), tr("HTML File (*.html)"));
         if (file_path.isEmpty())
             return;
 
@@ -331,10 +268,8 @@ SystemInfoSessionWindow::SystemInfoSessionWindow(
                             file_path,
                             &error_string))
         {
-            QMessageBox::warning(this,
-                                 tr("Warning"),
-                                 tr("Failed to save file: %1").arg(error_string),
-                                 QMessageBox::Ok);
+            QMessageBox::warning(
+                this, tr("Warning"), tr("Failed to save file: %1").arg(error_string), QMessageBox::Ok);
         }
     });
 

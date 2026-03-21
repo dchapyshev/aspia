@@ -81,10 +81,7 @@ void tableHeader(QXmlStreamWriter* writer, const QTreeWidget* tree)
 }
 
 //--------------------------------------------------------------------------------------------------
-void tableRow(QXmlStreamWriter* writer,
-              const QTreeWidget* tree,
-              const QTreeWidgetItem* item,
-              int padding)
+void tableRow(QXmlStreamWriter* writer, const QTreeWidget* tree, const QTreeWidgetItem* item, int padding)
 {
     writer->writeStartElement("tr");
 

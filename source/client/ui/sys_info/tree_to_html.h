@@ -26,10 +26,7 @@ class QTreeWidget;
 namespace client {
 
 QString treeToHtmlString(const QTreeWidget* tree);
-
-bool treeToHtmlFile(const QTreeWidget* tree,
-                    const QString& file_path,
-                    QString* error_string = nullptr);
+bool treeToHtmlFile(const QTreeWidget* tree, const QString& file_path, QString* error_string = nullptr);
 
 } // namespace client
 

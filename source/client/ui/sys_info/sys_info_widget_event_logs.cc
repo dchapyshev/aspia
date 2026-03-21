@@ -92,8 +92,7 @@ SysInfoWidgetEventLogs::SysInfoWidgetEventLogs(QWidget* parent)
         copyRow(item);
     });
 
-    connect(ui.tree, &QTreeWidget::itemEntered,
-            this, [this](QTreeWidgetItem* /* item */, int column)
+    connect(ui.tree, &QTreeWidget::itemEntered, this, [this](QTreeWidgetItem* /* item */, int column)
     {
         current_column_ = column;
     });
@@ -308,19 +307,14 @@ QString SysInfoWidgetEventLogs::levelToString(proto::system_info::EventLogs::Eve
     {
         case proto::system_info::EventLogs::Event::LEVEL_INFORMATION:
             return tr("Information");
-
         case proto::system_info::EventLogs::Event::LEVEL_WARNING:
             return tr("Warning");
-
         case proto::system_info::EventLogs::Event::LEVEL_ERROR:
             return tr("Error");
-
         case proto::system_info::EventLogs::Event::LEVEL_AUDIT_SUCCESS:
             return tr("Audit Success");
-
         case proto::system_info::EventLogs::Event::LEVEL_AUDIT_FAILURE:
             return tr("Audit Failure");
-
         default:
             return tr("Unknown");
     }

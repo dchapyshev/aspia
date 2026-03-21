@@ -291,10 +291,8 @@ QString SysInfoWidgetMonitors::inputSignalTypeToString(
     {
         case proto::system_info::Monitors::Monitor::INPUT_SIGNAL_TYPE_DIGITAL:
             return tr("Digital");
-
         case proto::system_info::Monitors::Monitor::INPUT_SIGNAL_TYPE_ANALOG:
             return tr("Analog");
-
         default:
             return tr("Unknown");
     }
