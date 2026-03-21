@@ -39,6 +39,7 @@ const int kUpdateIntervalMs = 10;
 const int kMaxPeers = 1;
 const int kChannelCount = 256;
 const int kPoolReservedSize = 64;
+const int kMtu = 1200;
 
 // ENet hot-path allocations (per packet, x64 sizes + 16-byte AllocHeader):
 //   ENetPacket:          ~48 bytes  -> 64  total -> bucket[0] (64)
@@ -61,6 +62,15 @@ int calculateSpeed(int last_speed, const std::chrono::milliseconds& duration, qi
     return static_cast<int>(
         (kAlpha * ((1000.0 / static_cast<double>(duration.count())) * static_cast<double>(bytes))) +
         ((1.0 - kAlpha) * static_cast<double>(last_speed)));
+}
+
+//--------------------------------------------------------------------------------------------------
+ENetHost* createHost(const ENetAddress* address)
+{
+    ENetHost* host = enet_host_create(address, kMaxPeers, kChannelCount, 0, 0);
+    if (host)
+        host->mtu = kMtu;
+    return host;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -111,7 +121,7 @@ void UdpChannel::setReadySocket(qintptr socket)
     fake_address.host = ENET_HOST_ANY;
     fake_address.port = 0;
 
-    host_.reset(enet_host_create(&fake_address, kMaxPeers, kChannelCount, 0, 0));
+    host_.reset(createHost(&fake_address));
     if (!host_)
     {
         LOG(ERROR) << "Unable to create ENet host";
@@ -151,7 +161,7 @@ void UdpChannel::bind(quint16* port)
     address.host = ENET_HOST_ANY;
     address.port = *port;
 
-    host_.reset(enet_host_create(&address, kMaxPeers, kChannelCount, 0, 0));
+    host_.reset(createHost(&address));
     if (!host_)
     {
         LOG(ERROR) << "Unable to create ENet host on port" << *port;
@@ -186,7 +196,7 @@ void UdpChannel::connectTo(const QString& address, quint16 port)
 
     mode_ = Mode::CONNECT;
 
-    host_.reset(enet_host_create(nullptr, kMaxPeers, kChannelCount, 0, 0));
+    host_.reset(createHost(nullptr));
     if (!host_)
     {
         LOG(ERROR) << "Failed to create ENet host";
