@@ -41,6 +41,7 @@
 #include "host/desktop_manager.h"
 #include "host/file_client.h"
 #include "host/host_storage.h"
+#include "host/host_utils.h"
 #include "host/router_manager.h"
 #include "host/service.h"
 #include "host/system_info_client.h"
