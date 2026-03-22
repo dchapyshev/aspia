@@ -239,28 +239,28 @@ void DesktopAgentClient::readMouseEvent(const proto::desktop::MouseEvent& mouse_
 void DesktopAgentClient::readKeyEvent(const proto::desktop::KeyEvent& key_event)
 {
     if (sessionType() == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
-        emit sig_injectKeyEvent(incoming_message_->key_event());
+        emit sig_injectKeyEvent(key_event);
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopAgentClient::readTouchEvent(const proto::desktop::TouchEvent& touch_event)
 {
     if (sessionType() == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
-        emit sig_injectTouchEvent(incoming_message_->touch_event());
+        emit sig_injectTouchEvent(touch_event);
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopAgentClient::readTextEvent(const proto::desktop::TextEvent& text_event)
 {
     if (sessionType() == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
-        emit sig_injectTextEvent(incoming_message_->text_event());
+        emit sig_injectTextEvent(text_event);
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopAgentClient::readClipboardEvent(const proto::desktop::ClipboardEvent& clipboard_event)
 {
     if (sessionType() == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
-        emit sig_injectClipboardEvent(incoming_message_->clipboard_event());
+        emit sig_injectClipboardEvent(clipboard_event);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -484,7 +484,7 @@ void DesktopAgentClient::readSystemInfoExtension(const std::string& data)
     proto::system_info::SystemInfo system_info;
     createSystemInfo(system_info_request, &system_info);
 
-    proto::desktop::ClientToSession message;
+    proto::desktop::SessionToClient message;
     proto::desktop::Extension* desktop_extension = message.mutable_extension();
     desktop_extension->set_name(common::kSystemInfoExtension);
     desktop_extension->set_data(system_info.SerializeAsString());
