@@ -483,12 +483,18 @@ void ClientDesktop::readCapabilities(const proto::desktop::Capabilities& capabil
 {
     LOG(INFO) << "Received:" << capabilities;
 
+    if (!capabilities.video_encodings())
+    {
+        LOG(ERROR) << "No supported video encodings";
+        return;
+    }
+
     // We notify the window about changes in the list of extensions and video encodings.
     // A window can disable/enable some of its capabilities in accordance with this information.
     emit sig_capabilities(capabilities);
 
     // If current video encoding not supported.
-    if (!(capabilities.video_encodings() & static_cast<quint32>(desktop_config_.video_encoding())))
+    if (!(capabilities.video_encodings() & desktop_config_.video_encoding()))
     {
         LOG(ERROR) << "Current video encoding not supported";
 
