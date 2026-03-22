@@ -43,8 +43,6 @@ list(APPEND SOURCE_BASE
     numeric_utils.h
     power_controller.cc
     power_controller.h
-    process_handle.cc
-    process_handle.h
     scoped_clear_last_error.cc
     scoped_clear_last_error.h
     serialization.cc

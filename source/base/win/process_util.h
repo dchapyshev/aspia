@@ -21,8 +21,6 @@
 
 #include <QString>
 
-#include "base/win/scoped_object.h"
-
 namespace base {
 
 bool isProcessElevated();
@@ -34,13 +32,6 @@ enum class ProcessExecuteMode
 
 bool createProcess(const QString& program, const QString& arguments,
     ProcessExecuteMode mode = ProcessExecuteMode::NORMAL);
-
-bool copyProcessToken(DWORD desired_access, ScopedHandle* token_out);
-
-// Creates a copy of the current process with SE_TCB_NAME privilege enabled.
-bool createPrivilegedToken(ScopedHandle* token_out);
-
-bool isProcessStartedFromService();
 
 } // namespace base
 
