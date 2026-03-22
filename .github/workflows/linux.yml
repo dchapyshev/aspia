@@ -40,13 +40,13 @@ jobs:
     steps:
       # Step 1
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           submodules: false
 
       # Step 2
       - name: Checkout Submodule
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: dchapyshev/vcpkg4aspia
           path: vcpkg4aspia
@@ -97,7 +97,7 @@ jobs:
 
       # Step 4
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: build-${{ matrix.os }}-${{ matrix.arch }}-${{ matrix.build_type }}
           path: |
