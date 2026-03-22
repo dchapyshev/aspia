@@ -21,15 +21,20 @@
 
 #include <QObject>
 
+#include "base/serialization.h"
 #include "base/desktop/capture_scheduler.h"
 #include "base/desktop/power_save_blocker.h"
 #include "base/desktop/screen_capturer.h"
 
 namespace base {
 class AudioCapturerWrapper;
+class AudioEncoder;
+class CursorEncoder;
 class DesktopEnvironment;
 class DesktopResizer;
 class IpcChannel;
+class ScaleReducer;
+class VideoEncoder;
 } // namespace base
 
 namespace common {
@@ -61,11 +66,6 @@ public:
 
     void start(const QString& ipc_channel_name);
 
-signals:
-    void sig_screenListChanged(
-        const base::ScreenCapturer::ScreenList& list, base::ScreenCapturer::ScreenId current);
-    void sig_screenTypeChanged(base::ScreenCapturer::ScreenType type, const QString& name);
-
 private slots:
     void onIpcConnected();
     void onIpcDisconnected();
@@ -79,8 +79,14 @@ private slots:
     void onInjectKeyEvent(const proto::desktop::KeyEvent& event);
     void onInjectTextEvent(const proto::desktop::TextEvent& event);
     void onInjectTouchEvent(const proto::desktop::TouchEvent& event);
+    void onClipboardEvent(const proto::desktop::ClipboardEvent& event);
 
-    void onSelectScreen(base::ScreenCapturer::ScreenId screen_id, const QSize& resolution);
+    void onSelectScreen(const proto::desktop::Screen& screen);
+    void onScreenListChanged(
+        const base::ScreenCapturer::ScreenList& list, base::ScreenCapturer::ScreenId current);
+    void onScreenTypeChanged(base::ScreenCapturer::ScreenType type, const QString& name);
+    void onPreferredSizeChanged();
+    void onKeyFrameRequested();
 
     void onCaptureScreen();
     void onOverflowCheck();
@@ -89,6 +95,10 @@ private:
     void startClient(const QString& ipc_channel_name);
     void selectCapturer(base::ScreenCapturer::Error last_error);
     base::ScreenCapturer::ScreenId defaultScreen();
+    void selectScreen(base::ScreenCapturer::ScreenId screen_id, const QSize& resolution);
+    void encodeScreen(const base::Frame* frame);
+    void encodeCursor(const base::MouseCursor* cursor);
+    void encodeAudio(const proto::desktop::AudioPacket& packet);
 
     // Control channel between service and agent.
     base::IpcChannel* ipc_channel_ = nullptr;
@@ -108,9 +118,20 @@ private:
 
     int screen_count_ = 0;
     QPoint last_cursor_pos_;
+    QSize source_size_;
+    QSize preferred_size_;
+    QSize forced_size_;
+    quint64 frame_count_ = 0;
 
     QTimer* capture_timer_ = nullptr;
     base::CaptureScheduler capture_scheduler_;
+
+    std::unique_ptr<base::ScaleReducer> scale_reducer_;
+    std::unique_ptr<base::VideoEncoder> video_encoder_;
+    std::unique_ptr<base::CursorEncoder> cursor_encoder_;
+    std::unique_ptr<base::AudioEncoder> audio_encoder_;
+
+    base::Serializer<proto::desktop::SessionToClient> outgoing_message_;
 
     bool is_paused_ = false;
     bool is_mouse_locked_ = false;

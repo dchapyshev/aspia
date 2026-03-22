@@ -147,20 +147,6 @@ QRect alignRect(const QRect& rect)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-// static
-std::unique_ptr<VideoEncoder> VideoEncoder::createVP8()
-{
-    return std::unique_ptr<VideoEncoder>(new VideoEncoder(proto::desktop::VIDEO_ENCODING_VP8));
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
-std::unique_ptr<VideoEncoder> VideoEncoder::createVP9()
-{
-    return std::unique_ptr<VideoEncoder>(new VideoEncoder(proto::desktop::VIDEO_ENCODING_VP9));
-}
-
-//--------------------------------------------------------------------------------------------------
 VideoEncoder::VideoEncoder(proto::desktop::VideoEncoding encoding)
     : encoding_(encoding)
 {

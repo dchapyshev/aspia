@@ -36,12 +36,10 @@ class Frame;
 class VideoEncoder
 {
 public:
+    explicit VideoEncoder(proto::desktop::VideoEncoding encoding);
     ~VideoEncoder() = default;
 
     static const size_t kInitialEncodeBufferSize;
-
-    static std::unique_ptr<VideoEncoder> createVP8();
-    static std::unique_ptr<VideoEncoder> createVP9();
 
     bool encode(const Frame* frame, proto::desktop::VideoPacket* packet);
 
@@ -57,8 +55,6 @@ public:
     quint32 maxQuantizer() const;
 
 private:
-    explicit VideoEncoder(proto::desktop::VideoEncoding encoding);
-
     void createActiveMap(const QSize& size);
     bool createVp8Codec(const QSize& size);
     bool createVp9Codec(const QSize& size);

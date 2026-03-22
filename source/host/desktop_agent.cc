@@ -25,6 +25,10 @@
 #include "base/logging.h"
 #include "base/power_controller.h"
 #include "base/audio/audio_capturer_wrapper.h"
+#include "base/codec/audio_encoder.h"
+#include "base/codec/cursor_encoder.h"
+#include "base/codec/scale_reducer.h"
+#include "base/codec/video_encoder.h"
 #include "base/desktop/desktop_resizer.h"
 #include "base/desktop/desktop_environment.h"
 #include "base/desktop/mouse_cursor.h"
@@ -33,6 +37,7 @@
 #include "host/desktop_agent_client.h"
 #include "host/system_settings.h"
 #include "common/clipboard_monitor.h"
+#include "common/desktop_session_constants.h"
 #include "proto/desktop_internal.h"
 
 #if defined(Q_OS_WINDOWS)
@@ -146,6 +151,7 @@ DesktopAgent::DesktopAgent(QObject* parent)
       desktop_environment_(base::DesktopEnvironment::create(this)),
       preferred_capturer_(static_cast<base::ScreenCapturer::Type>(SystemSettings().preferredVideoCapturer())),
       capture_timer_(new QTimer(this)),
+      scale_reducer_(std::make_unique<base::ScaleReducer>(base::ScaleReducer::Quality::HIGH)),
       overflow_timer_(new QTimer(this)),
       default_fps_(defaultCaptureFps()),
       min_fps_(minCaptureFps()),
@@ -270,6 +276,12 @@ void DesktopAgent::onClientConfigured()
     {
         const DesktopAgentClient::Config& config = client->config();
 
+        if (config.video_encoding == proto::desktop::VIDEO_ENCODING_VP8)
+            merged_config.video_encoding = proto::desktop::VIDEO_ENCODING_VP8;
+
+        if (config.audio_encoding == proto::desktop::AUDIO_ENCODING_OPUS)
+            merged_config.audio_encoding = proto::desktop::AUDIO_ENCODING_OPUS;
+
         // If at least one client has disabled font smoothing, then the font smoothing will be
         // disabled for everyone.
         merged_config.disable_font_smoothing =
@@ -290,6 +302,7 @@ void DesktopAgent::onClientConfigured()
         merged_config.lock_at_disconnect = merged_config.lock_at_disconnect || config.lock_at_disconnect;
         merged_config.clear_clipboard = merged_config.clear_clipboard || config.clear_clipboard;
         merged_config.cursor_position = merged_config.cursor_position || config.cursor_position;
+        merged_config.cursor_shape = merged_config.cursor_shape || config.cursor_shape;
     }
 
     LOG(INFO) << "Merged configuration (wallpaper:" << merged_config.disable_wallpaper
@@ -299,6 +312,33 @@ void DesktopAgent::onClientConfigured()
               << "lock_at_disconnect:" << merged_config.lock_at_disconnect
               << "clear_clipboard:" << merged_config.clear_clipboard
               << "cursor_position:" << merged_config.cursor_position;
+
+    if (merged_config.video_encoding != proto::desktop::VIDEO_ENCODING_VP8 &&
+        merged_config.video_encoding != proto::desktop::VIDEO_ENCODING_VP9)
+    {
+        LOG(ERROR) << "Unsupported video encoding:" << merged_config.video_encoding;
+        return;
+    }
+
+    video_encoder_ = std::make_unique<base::VideoEncoder>(merged_config.video_encoding);
+
+    switch (merged_config.audio_encoding)
+    {
+        case proto::desktop::AUDIO_ENCODING_OPUS:
+            audio_encoder_ = std::make_unique<base::AudioEncoder>();
+            break;
+
+        default:
+            audio_encoder_.reset();
+            break;
+    }
+
+    cursor_encoder_.reset();
+    if (merged_config.cursor_shape)
+    {
+        LOG(INFO) << "Cursor shape enabled. Init cursor encoder";
+        cursor_encoder_ = std::make_unique<base::CursorEncoder>();
+    }
 
     if (desktop_environment_)
     {
@@ -328,7 +368,11 @@ void DesktopAgent::onClientFinished()
     clients_.removeOne(client);
 
     if (!clients_.isEmpty())
+    {
+        onClientConfigured();
+        onPreferredSizeChanged();
         return;
+    }
 
     LOG(INFO) << "Last desktop client disconnected";
     capture_timer_->stop();
@@ -353,7 +397,16 @@ void DesktopAgent::onInjectMouseEvent(const proto::desktop::MouseEvent& event)
 {
     if (is_paused_ || is_mouse_locked_ || !input_injector_)
         return;
-    input_injector_->injectMouseEvent(event);
+
+    int pos_x = int(double(event.x() * 100) / scale_reducer_->scaleFactorX());
+    int pos_y = int(double(event.y() * 100) / scale_reducer_->scaleFactorY());
+
+    proto::desktop::MouseEvent out_event;
+    out_event.set_mask(event.mask());
+    out_event.set_x(pos_x);
+    out_event.set_y(pos_y);
+
+    input_injector_->injectMouseEvent(out_event);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -381,7 +434,16 @@ void DesktopAgent::onInjectTouchEvent(const proto::desktop::TouchEvent& event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopAgent::onSelectScreen(base::ScreenCapturer::ScreenId screen_id, const QSize& resolution)
+void DesktopAgent::onClipboardEvent(const proto::desktop::ClipboardEvent& event)
+{
+    outgoing_message_.newMessage().mutable_clipboard_event()->CopyFrom(event);
+    const QByteArray& buffer = outgoing_message_.serialize();
+    for (auto* client : std::as_const(clients_))
+        client->onClipboardData(buffer);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopAgent::onSelectScreen(const proto::desktop::Screen& screen)
 {
     if (!screen_capturer_)
     {
@@ -389,51 +451,112 @@ void DesktopAgent::onSelectScreen(base::ScreenCapturer::ScreenId screen_id, cons
         return;
     }
 
-    if (screen_id == screen_capturer_->currentScreen() && !resolution.isEmpty() && screen_resizer_)
-    {
-        LOG(INFO) << "Change resolution for screen" << screen_id << "to:" << resolution;
-        if (!screen_resizer_->setResolution(screen_id, resolution))
-        {
-            LOG(ERROR) << "setResolution failed";
-            return;
-        }
-    }
-    else
-    {
-        LOG(INFO) << "Select screen:" << screen_id;
-        if (!screen_capturer_->selectScreen(screen_id))
-        {
-            LOG(ERROR) << "ScreenCapturer::selectScreen failed";
-            return;
-        }
+    base::ScreenCapturer::ScreenId screen_id = static_cast<base::ScreenCapturer::ScreenId>(screen.id());
+    QSize resolution = base::parse(screen.resolution());
 
-        last_screen_id_ = screen_id;
-    }
+    selectScreen(screen_id, resolution);
+}
 
-    base::ScreenCapturer::ScreenList screen_list;
-    if (!screen_capturer_->screenList(&screen_list))
+//--------------------------------------------------------------------------------------------------
+void DesktopAgent::onScreenListChanged(
+    const base::ScreenCapturer::ScreenList& list, base::ScreenCapturer::ScreenId current)
+{
+    proto::desktop::ScreenList screen_list;
+    screen_list.set_current_screen(current);
+
+    for (const auto& resolition_item : list.resolutions)
     {
-        LOG(ERROR) << "ScreenCapturer::screenList failed";
-        return;
+        proto::desktop::Size* resolution = screen_list.add_resolution();
+        resolution->set_width(resolition_item.width());
+        resolution->set_height(resolition_item.height());
     }
 
-    if (screen_resizer_)
+    for (const auto& screen_item : list.screens)
     {
-        screen_list.resolutions = screen_resizer_->supportedResolutions(screen_id);
-        if (screen_list.resolutions.isEmpty())
-            LOG(INFO) << "No supported resolutions";
+        proto::desktop::Screen* screen = screen_list.add_screen();
+        screen->set_id(screen_item.id);
+        screen->set_title(screen_item.title.toStdString());
 
-        for (const auto& resolition : std::as_const(screen_list.resolutions))
-            LOG(INFO) << "Supported resolution:" << resolition;
+        proto::desktop::Point* position = screen->mutable_position();
+        position->set_x(screen_item.position.x());
+        position->set_y(screen_item.position.y());
+
+        proto::desktop::Size* resolution = screen->mutable_resolution();
+        resolution->set_width(screen_item.resolution.width());
+        resolution->set_height(screen_item.resolution.height());
+
+        proto::desktop::Point* dpi = screen->mutable_dpi();
+        dpi->set_x(screen_item.dpi.x());
+        dpi->set_y(screen_item.dpi.y());
+
+        if (screen_item.is_primary)
+            screen_list.set_primary_screen(screen_item.id);
     }
 
-    for (const auto& screen : std::as_const(screen_list.screens))
+    proto::desktop::Extension* extension = outgoing_message_.newMessage().mutable_extension();
+    extension->set_name(common::kSelectScreenExtension);
+    extension->set_data(screen_list.SerializeAsString());
+
+    const QByteArray& buffer = outgoing_message_.serialize();
+    for (auto* client : std::as_const(clients_))
+        client->onScreenListData(buffer);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopAgent::onScreenTypeChanged(base::ScreenCapturer::ScreenType type, const QString& name)
+{
+    proto::desktop::ScreenType screen_type;
+    screen_type.set_name(name.toStdString());
+
+    switch (type)
     {
-        LOG(INFO) << "Screen #" << screen.id << "(position:" << screen.position
-                  << "resolution:" << screen.resolution << "DPI:" << screen.dpi << ")";
+        case base::ScreenCapturer::ScreenType::DESKTOP:
+            screen_type.set_type(proto::desktop::ScreenType::TYPE_DESKTOP);
+            break;
+        case base::ScreenCapturer::ScreenType::LOCK:
+            screen_type.set_type(proto::desktop::ScreenType::TYPE_LOCK);
+            break;
+        case base::ScreenCapturer::ScreenType::LOGIN:
+            screen_type.set_type(proto::desktop::ScreenType::TYPE_LOGIN);
+            break;
+        case base::ScreenCapturer::ScreenType::OTHER:
+            screen_type.set_type(proto::desktop::ScreenType::TYPE_OTHER);
+            break;
+        default:
+            screen_type.set_type(proto::desktop::ScreenType::TYPE_UNKNOWN);
+            break;
     }
 
-    emit sig_screenListChanged(screen_list, screen_id);
+    proto::desktop::Extension* extension = outgoing_message_.newMessage().mutable_extension();
+    extension->set_name(common::kScreenTypeExtension);
+    extension->set_data(screen_type.SerializeAsString());
+
+    const QByteArray& buffer = outgoing_message_.serialize();
+    for (auto* client : std::as_const(clients_))
+        client->onScreenTypeData(buffer);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopAgent::onPreferredSizeChanged()
+{
+    QList<QSize> sizes;
+
+    for (auto* client : std::as_const(clients_))
+        sizes.emplace_back(client->preferredSize());
+
+    QSize max_size = *std::max_element(sizes.begin(), sizes.end(), [](const QSize& a, const QSize& b)
+    {
+        return a.width() * a.height() < b.width() * b.height();
+    });
+
+    preferred_size_ = max_size;
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopAgent::onKeyFrameRequested()
+{
+    if (video_encoder_)
+        video_encoder_->setKeyFrameRequired(true);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -455,8 +578,12 @@ void DesktopAgent::onCaptureScreen()
 
     if (is_paused_)
     {
+        proto::desktop::VideoPacket* video_packet = outgoing_message_.newMessage().mutable_video_packet();
+        video_packet->set_error_code(proto::desktop::VIDEO_ERROR_CODE_PAUSED);
+
+        const QByteArray& buffer = outgoing_message_.serialize();
         for (auto* client : std::as_const(clients_))
-            client->onScreenCaptureError(proto::desktop::VIDEO_ERROR_CODE_PAUSED);
+            client->onScreenData(buffer);
 
         capture_timer_->start(capture_scheduler_.nextCaptureDelay());
         return;
@@ -473,7 +600,7 @@ void DesktopAgent::onCaptureScreen()
         screen_resizer_ = base::DesktopResizer::create();
 
         screen_count_ = count;
-        onSelectScreen(defaultScreen(), QSize());
+        selectScreen(defaultScreen(), QSize());
     }
 
     base::ScreenCapturer::Error error;
@@ -504,24 +631,22 @@ void DesktopAgent::onCaptureScreen()
                 return;
         }
 
+        proto::desktop::VideoPacket* video_packet = outgoing_message_.newMessage().mutable_video_packet();
+        video_packet->set_error_code(error_code);
+
+        const QByteArray& buffer = outgoing_message_.serialize();
         for (auto* client : std::as_const(clients_))
-            client->onScreenCaptureError(error_code);
+            client->onScreenData(buffer);
     }
     else
     {
         if (input_injector_)
             input_injector_->setScreenOffset(frame->topLeft());
 
-        for (auto* client : std::as_const(clients_))
-            client->onScreenCaptureData(frame);
+        encodeScreen(frame);
     }
 
-    const base::MouseCursor* cursor = screen_capturer_->captureCursor();
-    if (cursor)
-    {
-        for (auto* client : std::as_const(clients_))
-            client->onCursorCaptureData(cursor);
-    }
+    encodeCursor(screen_capturer_->captureCursor());
 
     if (is_cursor_position_)
     {
@@ -532,8 +657,16 @@ void DesktopAgent::onCaptureScreen()
 
         if (delta_x > 1 || delta_y > 1)
         {
+            int pos_x = int(double(cursor_pos.x()) * scale_reducer_->scaleFactorX() / 100.0);
+            int pos_y = int(double(cursor_pos.y()) * scale_reducer_->scaleFactorY() / 100.0);
+
+            proto::desktop::CursorPosition* position = outgoing_message_.newMessage().mutable_cursor_position();
+            position->set_x(pos_x);
+            position->set_y(pos_y);
+
+            const QByteArray& buffer = outgoing_message_.serialize();
             for (auto* client : std::as_const(clients_))
-                client->onCursorPositionChanged(cursor_pos);
+                client->onCursorPositionData(buffer);
             last_cursor_pos_ = cursor_pos;
         }
     }
@@ -597,6 +730,28 @@ void DesktopAgent::onOverflowCheck()
 
     if (current_fps != next_fps)
         capture_scheduler_.setFps(next_fps);
+
+    auto scaled_size = [](const QSize& size, double factor) -> QSize
+    {
+        return QSize(double(size.width()) * factor, double(size.height()) * factor);
+    };
+
+    QSize forced_size = forced_size_;
+
+    if (pressure_score_ >= 90)
+        forced_size = scaled_size(source_size_, 0.7);
+    else if (pressure_score_ >= 80)
+        forced_size = scaled_size(source_size_, 0.8);
+    else if (pressure_score_ >= 70)
+        forced_size = scaled_size(source_size_, 0.9);
+    else
+        forced_size = QSize();
+
+    if (forced_size != forced_size_)
+    {
+        LOG(INFO) << "Forced size changed from" << forced_size_ << "to" << forced_size;
+        forced_size_ = forced_size;
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -615,19 +770,14 @@ void DesktopAgent::startClient(const QString& ipc_channel_name)
     connect(client, &DesktopAgentClient::sig_injectClipboardEvent,
             clipboard_, &common::ClipboardMonitor::injectClipboardEvent);
     connect(clipboard_, &common::ClipboardMonitor::sig_clipboardEvent,
-            client, &DesktopAgentClient::onClipboardEvent);
+            this, &DesktopAgent::onClipboardEvent);
 
-    connect(this, &DesktopAgent::sig_screenTypeChanged, client, &DesktopAgentClient::onScreenTypeChanged);
-    connect(this, &DesktopAgent::sig_screenListChanged, client, &DesktopAgentClient::onScreenListChanged);
     connect(client, &DesktopAgentClient::sig_selectScreen, this, &DesktopAgent::onSelectScreen);
+    connect(client, &DesktopAgentClient::sig_preferredSizeChanged, this, &DesktopAgent::onPreferredSizeChanged);
+    connect(client, &DesktopAgentClient::sig_keyFrameRequested, this, &DesktopAgent::onKeyFrameRequested);
 
     connect(audio_capturer_, &base::AudioCapturerWrapper::sig_audioCaptured,
-            client, &DesktopAgentClient::onAudioCaptureData, Qt::QueuedConnection);
-
-    // We can connect via a queue here to prevent possible screen capture from starting while the
-    // screen capture is in progress.
-    connect(client, &DesktopAgentClient::sig_captureScreen,
-            this, &DesktopAgent::onCaptureScreen, Qt::QueuedConnection);
+            this, &DesktopAgent::encodeAudio, Qt::QueuedConnection);
 
     connect(client, &DesktopAgentClient::sig_configured, this, &DesktopAgent::onClientConfigured);
     connect(client, &DesktopAgentClient::sig_finished, this, &DesktopAgent::onClientFinished);
@@ -670,7 +820,7 @@ void DesktopAgent::selectCapturer(base::ScreenCapturer::Error last_error)
     LOG(INFO) << "Selected screen capturer:" << screen_capturer_->type();
 
     connect(screen_capturer_, &base::ScreenCapturer::sig_screenTypeChanged,
-            this, &DesktopAgent::sig_screenTypeChanged);
+            this, &DesktopAgent::onScreenTypeChanged);
 
     connect(screen_capturer_, &base::ScreenCapturer::sig_desktopChanged, this, [this]()
     {
@@ -686,7 +836,7 @@ void DesktopAgent::selectCapturer(base::ScreenCapturer::Error last_error)
     if (last_screen_id_ != base::ScreenCapturer::kInvalidScreenId)
     {
         LOG(INFO) << "Restore selected screen:" << last_screen_id_;
-        onSelectScreen(last_screen_id_, QSize());
+        selectScreen(last_screen_id_, QSize());
     }
 }
 
@@ -717,6 +867,159 @@ base::ScreenCapturer::ScreenId DesktopAgent::defaultScreen()
 
     LOG(INFO) << "Primary screen NOT found";
     return base::ScreenCapturer::kFullDesktopScreenId;
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopAgent::selectScreen(base::ScreenCapturer::ScreenId screen_id, const QSize& resolution)
+{
+    if (screen_id == screen_capturer_->currentScreen() && !resolution.isEmpty() && screen_resizer_)
+    {
+        LOG(INFO) << "Change resolution for screen" << screen_id << "to:" << resolution;
+        if (!screen_resizer_->setResolution(screen_id, resolution))
+        {
+            LOG(ERROR) << "setResolution failed";
+            return;
+        }
+    }
+    else
+    {
+        LOG(INFO) << "Select screen:" << screen_id;
+        if (!screen_capturer_->selectScreen(screen_id))
+        {
+            LOG(ERROR) << "ScreenCapturer::selectScreen failed";
+            return;
+        }
+
+        last_screen_id_ = screen_id;
+    }
+
+    base::ScreenCapturer::ScreenList screen_list;
+    if (!screen_capturer_->screenList(&screen_list))
+    {
+        LOG(ERROR) << "ScreenCapturer::screenList failed";
+        return;
+    }
+
+    if (screen_resizer_)
+    {
+        screen_list.resolutions = screen_resizer_->supportedResolutions(screen_id);
+        if (screen_list.resolutions.isEmpty())
+            LOG(INFO) << "No supported resolutions";
+
+        for (const auto& resolition : std::as_const(screen_list.resolutions))
+            LOG(INFO) << "Supported resolution:" << resolition;
+    }
+
+    for (const auto& screen : std::as_const(screen_list.screens))
+    {
+        LOG(INFO) << "Screen #" << screen.id << "(position:" << screen.position
+                  << "resolution:" << screen.resolution << "DPI:" << screen.dpi << ")";
+    }
+
+    onScreenListChanged(screen_list, screen_id);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopAgent::encodeScreen(const base::Frame* frame)
+{
+    if (!frame)
+        return;
+
+    if (frame->constUpdatedRegion().isEmpty() && frame_count_ > 0)
+        return;
+
+    ++frame_count_;
+
+    if (source_size_ != frame->size())
+    {
+        // Every time we change the resolution, we have to reset the preferred size.
+        source_size_ = frame->size();
+        preferred_size_ = QSize(0, 0);
+        forced_size_ = QSize(0, 0);
+    }
+
+    QSize current_size = preferred_size_;
+
+    // If the preferred size is larger than the original, then we use the original size.
+    if (current_size.width() > source_size_.width() || current_size.height() > source_size_.height())
+        current_size = source_size_;
+
+    // If we don't have a preferred size, then we use the original frame size.
+    if (current_size.isEmpty())
+        current_size = source_size_;
+
+    if (!forced_size_.isEmpty())
+    {
+        int forced = forced_size_.width() * forced_size_.height();
+        int current = current_size.width() * current_size.height();
+
+        if (forced < current)
+            current_size = forced_size_;
+    }
+
+    const base::Frame* scaled_frame = scale_reducer_->scaleFrame(frame, current_size);
+    if (!scaled_frame)
+    {
+        LOG(ERROR) << "No scaled frame";
+        return;
+    }
+
+    proto::desktop::SessionToClient& message = outgoing_message_.newMessage();
+    proto::desktop::VideoPacket* packet = message.mutable_video_packet();
+
+    // Encode the frame into a video packet.
+    if (!video_encoder_->encode(scaled_frame, packet))
+    {
+        LOG(ERROR) << "Unable to encode video packet";
+        return;
+    }
+
+    if (packet->has_format())
+    {
+        proto::desktop::VideoPacketFormat* format = packet->mutable_format();
+
+        // In video packets that contain the format, we pass the screen capture type.
+        format->set_capturer_type(frame->capturerType());
+
+        // Real screen size.
+        proto::desktop::Size* screen_size = format->mutable_screen_size();
+        screen_size->set_width(frame->size().width());
+        screen_size->set_height(frame->size().height());
+
+        LOG(INFO) << "Video packet has format:" << *format;
+    }
+
+    const QByteArray& buffer = outgoing_message_.serialize();
+    for (auto* client : std::as_const(clients_))
+        client->onScreenData(buffer);
+
+    video_encoder_->setEncodeBuffer(std::move(*message.mutable_video_packet()->mutable_data()));
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopAgent::encodeCursor(const base::MouseCursor* cursor)
+{
+    if (!cursor || !cursor_encoder_)
+        return;
+
+    proto::desktop::SessionToClient& message = outgoing_message_.newMessage();
+    if (!cursor_encoder_->encode(*cursor, message.mutable_cursor_shape()))
+        return;
+
+    const QByteArray& buffer = outgoing_message_.serialize();
+    for (auto* client : std::as_const(clients_))
+        client->onCursorData(buffer);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopAgent::encodeAudio(const proto::desktop::AudioPacket& packet)
+{
+    if (!audio_encoder_->encode(packet, outgoing_message_.newMessage().mutable_audio_packet()))
+        return;
+
+    const QByteArray& buffer = outgoing_message_.serialize();
+    for (auto* client : std::as_const(clients_))
+        client->onAudioData(buffer);
 }
 
 } // namespace host

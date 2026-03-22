@@ -20,22 +20,14 @@
 #define HOST_DESKTOP_AGENT_CLIENT_H
 
 #include <QObject>
-#include <memory>
 
 #include "base/serialization.h"
-#include "base/desktop/screen_capturer.h"
 #include "proto/desktop_internal.h"
 #include "proto/desktop_session.h"
 #include "proto/task_manager.h"
 
 namespace base {
-class AudioEncoder;
-class CursorEncoder;
-class Frame;
 class IpcChannel;
-class MouseCursor;
-class ScaleReducer;
-class VideoEncoder;
 } // namespace base
 
 namespace host {
@@ -52,6 +44,8 @@ public:
 
     struct Config
     {
+        proto::desktop::VideoEncoding video_encoding = proto::desktop::VIDEO_ENCODING_VP9;
+        proto::desktop::AudioEncoding audio_encoding = proto::desktop::AUDIO_ENCODING_UNKNOWN;
         bool disable_font_smoothing = false;
         bool disable_wallpaper = true;
         bool disable_effects = true;
@@ -59,20 +53,21 @@ public:
         bool lock_at_disconnect = false;
         bool clear_clipboard = true;
         bool cursor_position = false;
+        bool cursor_shape = false;
     };
 
     proto::peer::SessionType sessionType() const { return session_type_; }
     proto::desktop::Overflow::State overflowState() const { return overflow_state_; }
+    const QSize& preferredSize() const { return preferred_size_; }
     const Config& config() const { return config_; }
 
-    void onScreenCaptureData(const base::Frame* frame);
-    void onScreenCaptureError(proto::desktop::VideoErrorCode error_code);
-    void onScreenListChanged(const base::ScreenCapturer::ScreenList& list, base::ScreenCapturer::ScreenId current);
-    void onScreenTypeChanged(base::ScreenCapturer::ScreenType type, const QString& name);
-    void onCursorPositionChanged(const QPoint& cursor_position);
-    void onClipboardEvent(const proto::desktop::ClipboardEvent& event);
-    void onCursorCaptureData(const base::MouseCursor* cursor);
-    void onAudioCaptureData(const proto::desktop::AudioPacket& audio_packet);
+    void onScreenData(const QByteArray& buffer);
+    void onScreenListData(const QByteArray& buffer);
+    void onScreenTypeData(const QByteArray& buffer);
+    void onCursorPositionData(const QByteArray& buffer);
+    void onClipboardData(const QByteArray& buffer);
+    void onCursorData(const QByteArray& buffer);
+    void onAudioData(const QByteArray& buffer);
 
 public slots:
     void start(const QString& ipc_channel_name);
@@ -83,10 +78,9 @@ signals:
     void sig_injectMouseEvent(const proto::desktop::MouseEvent& event);
     void sig_injectTouchEvent(const proto::desktop::TouchEvent& event);
     void sig_injectClipboardEvent(const proto::desktop::ClipboardEvent& event);
-
-    void sig_captureScreen();
-    void sig_selectScreen(base::ScreenCapturer::ScreenId screen_id, const QSize& resolution);
-
+    void sig_selectScreen(const proto::desktop::Screen& screen);
+    void sig_preferredSizeChanged(const QSize& size);
+    void sig_keyFrameRequested();
     void sig_configured();
     void sig_finished();
 
@@ -101,7 +95,6 @@ private slots:
 private:
     void readSessionMessage(const QByteArray& buffer);
     void sendSessionMessage(const QByteArray& buffer);
-    void sendSessionMessage();
 
     void readMouseEvent(const proto::desktop::MouseEvent& mouse_event);
     void readKeyEvent(const proto::desktop::KeyEvent& key_event);
@@ -123,33 +116,20 @@ private:
     void sendCapabilities();
 
     base::IpcChannel* ipc_channel_ = nullptr;
+    base::Parser<proto::desktop::ClientToSession> incoming_message_;
 
+    proto::desktop::Overflow::State overflow_state_ = proto::desktop::Overflow::STATE_NONE;
     proto::peer::SessionType session_type_ = proto::peer::SESSION_TYPE_UNKNOWN;
     Config config_;
 
-    std::unique_ptr<base::ScaleReducer> scale_reducer_;
-    std::unique_ptr<base::VideoEncoder> video_encoder_;
-    std::unique_ptr<base::CursorEncoder> cursor_encoder_;
-    std::unique_ptr<base::AudioEncoder> audio_encoder_;
-
-    proto::desktop::Overflow::State overflow_state_ = proto::desktop::Overflow::STATE_NONE;
-    int pressure_score_ = 0; // 0..100
-
-    QSize source_size_;
     QSize preferred_size_;
-    QSize forced_size_;
 
     bool is_video_paused_ = false;
     bool is_audio_paused_ = false;
 
-    quint64 frame_count_ = 0;
-
 #if defined(Q_OS_WINDOWS)
     TaskManager* task_manager_ = nullptr;
 #endif // defined(Q_OS_WINDOWS)
-
-    base::Parser<proto::desktop::ClientToSession> incoming_message_;
-    base::Serializer<proto::desktop::SessionToClient> outgoing_message_;
 
     Q_DISABLE_COPY_MOVE(DesktopAgentClient)
 };

@@ -23,12 +23,6 @@
 #include "base/logging.h"
 #include "base/numeric_utils.h"
 #include "base/power_controller.h"
-#include "base/codec/audio_encoder.h"
-#include "base/codec/cursor_encoder.h"
-#include "base/codec/scale_reducer.h"
-#include "base/codec/video_encoder.h"
-#include "base/desktop/frame.h"
-#include "base/desktop/screen_capturer.h"
 #include "base/ipc/ipc_channel.h"
 #include "common/desktop_session_constants.h"
 #include "host/host_storage.h"
@@ -50,7 +44,6 @@ DesktopAgentClient::DesktopAgentClient(QObject* parent)
       ipc_channel_(new base::IpcChannel(this))
 {
     LOG(INFO) << "Ctor";
-
     connect(ipc_channel_, &base::IpcChannel::sig_connected, this, &DesktopAgentClient::onIpcConnected);
     connect(ipc_channel_, &base::IpcChannel::sig_disconnected, this, &DesktopAgentClient::onIpcDisconnected);
     connect(ipc_channel_, &base::IpcChannel::sig_errorOccurred, this, &DesktopAgentClient::onIpcErrorOccurred);
@@ -64,227 +57,55 @@ DesktopAgentClient::~DesktopAgentClient()
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::onScreenCaptureData(const base::Frame* frame)
+void DesktopAgentClient::onScreenData(const QByteArray& buffer)
 {
-    if (is_video_paused_ || !video_encoder_ || !frame)
-        return;
-
-    if (frame->constUpdatedRegion().isEmpty() && frame_count_ > 0)
-        return;
-
-    ++frame_count_;
-
-    if (source_size_ != frame->size())
-    {
-        // Every time we change the resolution, we have to reset the preferred size.
-        source_size_ = frame->size();
-        preferred_size_ = QSize(0, 0);
-        forced_size_ = QSize(0, 0);
-    }
-
-    QSize current_size = preferred_size_;
-
-    // If the preferred size is larger than the original, then we use the original size.
-    if (current_size.width() > source_size_.width() || current_size.height() > source_size_.height())
-    {
-        current_size = source_size_;
-    }
-
-    // If we don't have a preferred size, then we use the original frame size.
-    if (current_size.isEmpty())
-        current_size = source_size_;
-
-    if (!forced_size_.isEmpty())
-    {
-        int forced = forced_size_.width() * forced_size_.height();
-        int current = current_size.width() * current_size.height();
-
-        if (forced < current)
-            current_size = forced_size_;
-    }
-
-    const base::Frame* scaled_frame = scale_reducer_->scaleFrame(frame, current_size);
-    if (!scaled_frame)
-    {
-        LOG(ERROR) << "No scaled frame";
-        return;
-    }
-
-    proto::desktop::SessionToClient& message = outgoing_message_.newMessage();
-    proto::desktop::VideoPacket* packet = message.mutable_video_packet();
-
-    // Encode the frame into a video packet.
-    if (!video_encoder_->encode(scaled_frame, packet))
-    {
-        LOG(ERROR) << "Unable to encode video packet";
-        return;
-    }
-
-    if (packet->has_format())
-    {
-        proto::desktop::VideoPacketFormat* format = packet->mutable_format();
-
-        // In video packets that contain the format, we pass the screen capture type.
-        format->set_capturer_type(frame->capturerType());
-
-        // Real screen size.
-        proto::desktop::Size* screen_size = format->mutable_screen_size();
-        screen_size->set_width(frame->size().width());
-        screen_size->set_height(frame->size().height());
-
-        LOG(INFO) << "Video packet has format:" << *format;
-    }
-
-    sendSessionMessage();
-    video_encoder_->setEncodeBuffer(std::move(*message.mutable_video_packet()->mutable_data()));
+    if (!is_video_paused_)
+        sendSessionMessage(buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::onScreenCaptureError(proto::desktop::VideoErrorCode error_code)
+void DesktopAgentClient::onScreenListData(const QByteArray& buffer)
 {
-    proto::desktop::VideoPacket* video_packet = outgoing_message_.newMessage().mutable_video_packet();
-    video_packet->set_error_code(error_code);
-    sendSessionMessage();
+    sendSessionMessage(buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::onScreenListChanged(
-    const base::ScreenCapturer::ScreenList& list, base::ScreenCapturer::ScreenId current)
+void DesktopAgentClient::onScreenTypeData(const QByteArray& buffer)
 {
-    proto::desktop::ScreenList screen_list;
-    screen_list.set_current_screen(current);
-
-    for (const auto& resolition_item : list.resolutions)
-    {
-        proto::desktop::Size* resolution = screen_list.add_resolution();
-        resolution->set_width(resolition_item.width());
-        resolution->set_height(resolition_item.height());
-    }
-
-    for (const auto& screen_item : list.screens)
-    {
-        proto::desktop::Screen* screen = screen_list.add_screen();
-        screen->set_id(screen_item.id);
-        screen->set_title(screen_item.title.toStdString());
-
-        proto::desktop::Point* position = screen->mutable_position();
-        position->set_x(screen_item.position.x());
-        position->set_y(screen_item.position.y());
-
-        proto::desktop::Size* resolution = screen->mutable_resolution();
-        resolution->set_width(screen_item.resolution.width());
-        resolution->set_height(screen_item.resolution.height());
-
-        proto::desktop::Point* dpi = screen->mutable_dpi();
-        dpi->set_x(screen_item.dpi.x());
-        dpi->set_y(screen_item.dpi.y());
-
-        if (screen_item.is_primary)
-            screen_list.set_primary_screen(screen_item.id);
-    }
-
-    proto::desktop::Extension* extension = outgoing_message_.newMessage().mutable_extension();
-    extension->set_name(common::kSelectScreenExtension);
-    extension->set_data(screen_list.SerializeAsString());
-    sendSessionMessage();
+    sendSessionMessage(buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::onScreenTypeChanged(base::ScreenCapturer::ScreenType type, const QString& name)
+void DesktopAgentClient::onCursorPositionData(const QByteArray& buffer)
 {
-    proto::desktop::ScreenType screen_type;
-    screen_type.set_name(name.toStdString());
-
-    switch (type)
-    {
-        case base::ScreenCapturer::ScreenType::DESKTOP:
-            screen_type.set_type(proto::desktop::ScreenType::TYPE_DESKTOP);
-            break;
-
-        case base::ScreenCapturer::ScreenType::LOCK:
-            screen_type.set_type(proto::desktop::ScreenType::TYPE_LOCK);
-            break;
-
-        case base::ScreenCapturer::ScreenType::LOGIN:
-            screen_type.set_type(proto::desktop::ScreenType::TYPE_LOGIN);
-            break;
-
-        case base::ScreenCapturer::ScreenType::OTHER:
-            screen_type.set_type(proto::desktop::ScreenType::TYPE_OTHER);
-            break;
-
-        default:
-            screen_type.set_type(proto::desktop::ScreenType::TYPE_UNKNOWN);
-            break;
-    }
-
-    proto::desktop::Extension* extension = outgoing_message_.newMessage().mutable_extension();
-    extension->set_name(common::kScreenTypeExtension);
-    extension->set_data(screen_type.SerializeAsString());
-    sendSessionMessage();
+    if (config_.cursor_position)
+        sendSessionMessage(buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::onCursorPositionChanged(const QPoint& cursor_position)
+void DesktopAgentClient::onClipboardData(const QByteArray& buffer)
 {
-    if (!scale_reducer_)
-    {
-        LOG(ERROR) << "Scale reducer is not initialized!";
-        return;
-    }
-
-    if (!config_.cursor_position)
-        return;
-
-    int pos_x = static_cast<int>(
-        static_cast<double>(cursor_position.x()) * scale_reducer_->scaleFactorX() / 100.0);
-    int pos_y = static_cast<int>(
-        static_cast<double>(cursor_position.y()) * scale_reducer_->scaleFactorY() / 100.0);
-
-    proto::desktop::CursorPosition* position = outgoing_message_.newMessage().mutable_cursor_position();
-    position->set_x(pos_x);
-    position->set_y(pos_y);
-
-    sendSessionMessage();
+    if (sessionType() == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
+        sendSessionMessage(buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::onClipboardEvent(const proto::desktop::ClipboardEvent& event)
+void DesktopAgentClient::onCursorData(const QByteArray& buffer)
 {
-    if (sessionType() != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
-        return;
-
-    outgoing_message_.newMessage().mutable_clipboard_event()->CopyFrom(event);
-    sendSessionMessage();
+    if (config_.cursor_shape)
+        sendSessionMessage(buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::onCursorCaptureData(const base::MouseCursor* cursor)
+void DesktopAgentClient::onAudioData(const QByteArray& buffer)
 {
-    if (!cursor || !cursor_encoder_)
-        return;
-
-    proto::desktop::SessionToClient& message = outgoing_message_.newMessage();
-
-    if (!cursor_encoder_->encode(*cursor, message.mutable_cursor_shape()))
-        return;
-
-    sendSessionMessage();
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::onAudioCaptureData(const proto::desktop::AudioPacket& audio_packet)
-{
-    if (is_audio_paused_ || !audio_encoder_)
+    if (is_audio_paused_ || config_.audio_encoding != proto::desktop::AUDIO_ENCODING_OPUS)
         return;
 
     if (overflow_state_ == proto::desktop::Overflow::STATE_CRITICAL)
         return;
 
-    if (!audio_encoder_->encode(audio_packet, outgoing_message_.newMessage().mutable_audio_packet()))
-        return;
-
-    sendSessionMessage();
+    sendSessionMessage(buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -364,12 +185,13 @@ void DesktopAgentClient::onIpcMessageReceived(quint32 channel_id, const QByteArr
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::onTaskManagerMessage(const proto::task_manager::HostToClient& message)
+void DesktopAgentClient::onTaskManagerMessage(const proto::task_manager::HostToClient& extension_message)
 {
-    proto::desktop::Extension* extension = outgoing_message_.newMessage().mutable_extension();
+    proto::desktop::SessionToClient message;
+    proto::desktop::Extension* extension = message.mutable_extension();
     extension->set_name(common::kTaskManagerExtension);
-    extension->set_data(message.SerializeAsString());
-    sendSessionMessage();
+    extension->set_data(extension_message.SerializeAsString());
+    sendSessionMessage(base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -407,85 +229,38 @@ void DesktopAgentClient::sendSessionMessage(const QByteArray& buffer)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::sendSessionMessage()
-{
-    sendSessionMessage(outgoing_message_.serialize());
-}
-
-//--------------------------------------------------------------------------------------------------
 void DesktopAgentClient::readMouseEvent(const proto::desktop::MouseEvent& mouse_event)
 {
-    if (sessionType() != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
-    {
-        LOG(ERROR) << "Mouse event for non-desktop-manage session";
-        return;
-    }
-
-    if (!scale_reducer_)
-    {
-        LOG(ERROR) << "Scale reducer is NOT initialized";
-        return;
-    }
-
-    int pos_x = static_cast<int>(
-        static_cast<double>(mouse_event.x() * 100) / scale_reducer_->scaleFactorX());
-    int pos_y = static_cast<int>(
-        static_cast<double>(mouse_event.y() * 100) / scale_reducer_->scaleFactorY());
-
-    proto::desktop::MouseEvent out_mouse_event;
-    out_mouse_event.set_mask(mouse_event.mask());
-    out_mouse_event.set_x(pos_x);
-    out_mouse_event.set_y(pos_y);
-
-    emit sig_injectMouseEvent(out_mouse_event);
+    if (sessionType() == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
+        emit sig_injectMouseEvent(mouse_event);
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopAgentClient::readKeyEvent(const proto::desktop::KeyEvent& key_event)
 {
-    if (sessionType() != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
-    {
-        LOG(ERROR) << "Key event for non-desktop-manage session";
-        return;
-    }
-
-    emit sig_injectKeyEvent(incoming_message_->key_event());
+    if (sessionType() == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
+        emit sig_injectKeyEvent(incoming_message_->key_event());
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopAgentClient::readTouchEvent(const proto::desktop::TouchEvent& touch_event)
 {
-    if (sessionType() != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
-    {
-        LOG(ERROR) << "Touch event for non-desktop-manage session";
-        return;
-    }
-
-    emit sig_injectTouchEvent(incoming_message_->touch_event());
+    if (sessionType() == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
+        emit sig_injectTouchEvent(incoming_message_->touch_event());
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopAgentClient::readTextEvent(const proto::desktop::TextEvent& text_event)
 {
-    if (sessionType() != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
-    {
-        LOG(ERROR) << "Text event for non-desktop-manage session";
-        return;
-    }
-
-    emit sig_injectTextEvent(incoming_message_->text_event());
+    if (sessionType() == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
+        emit sig_injectTextEvent(incoming_message_->text_event());
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopAgentClient::readClipboardEvent(const proto::desktop::ClipboardEvent& clipboard_event)
 {
-    if (sessionType() != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
-    {
-        LOG(ERROR) << "Clipboard event for non-desktop-manage session";
-        return;
-    }
-
-    emit sig_injectClipboardEvent(incoming_message_->clipboard_event());
+    if (sessionType() == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
+        emit sig_injectClipboardEvent(incoming_message_->clipboard_event());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -516,49 +291,8 @@ void DesktopAgentClient::readExtension(const proto::desktop::Extension& extensio
 //--------------------------------------------------------------------------------------------------
 void DesktopAgentClient::readConfig(const proto::desktop::Config& config)
 {
-    switch (config.video_encoding())
-    {
-        case proto::desktop::VIDEO_ENCODING_VP8:
-            video_encoder_ = base::VideoEncoder::createVP8();
-            break;
-
-        case proto::desktop::VIDEO_ENCODING_VP9:
-            video_encoder_ = base::VideoEncoder::createVP9();
-            break;
-
-        default:
-            // No supported video encoding.
-            LOG(ERROR) << "Unsupported video encoding:" << config.video_encoding();
-            break;
-    }
-
-    if (!video_encoder_)
-    {
-        LOG(ERROR) << "Video encoder not initialized!";
-        return;
-    }
-
-    switch (config.audio_encoding())
-    {
-        case proto::desktop::AUDIO_ENCODING_OPUS:
-            audio_encoder_ = std::make_unique<base::AudioEncoder>();
-            break;
-
-        default:
-            LOG(ERROR) << "Unsupported audio encoding:" << config.audio_encoding();
-            audio_encoder_.reset();
-            break;
-    }
-
-    cursor_encoder_.reset();
-    if (config.flags() & proto::desktop::ENABLE_CURSOR_SHAPE)
-    {
-        LOG(INFO) << "Cursor shape enabled. Init cursor encoder";
-        cursor_encoder_ = std::make_unique<base::CursorEncoder>();
-    }
-
-    scale_reducer_ = std::make_unique<base::ScaleReducer>(base::ScaleReducer::Quality::HIGH);
-
+    config_.video_encoding = config.video_encoding();
+    config_.audio_encoding = config.audio_encoding();
     config_.disable_font_smoothing = (config.flags() & proto::desktop::DISABLE_FONT_SMOOTHING);
     config_.disable_effects = (config.flags() & proto::desktop::DISABLE_EFFECTS);
     config_.disable_wallpaper = (config.flags() & proto::desktop::DISABLE_WALLPAPER);
@@ -566,9 +300,10 @@ void DesktopAgentClient::readConfig(const proto::desktop::Config& config)
     config_.lock_at_disconnect = (config.flags() & proto::desktop::LOCK_AT_DISCONNECT);
     config_.clear_clipboard = (config.flags() & proto::desktop::CLEAR_CLIPBOARD);
     config_.cursor_position = (config.flags() & proto::desktop::CURSOR_POSITION);
+    config_.cursor_shape = (config.flags() & proto::desktop::ENABLE_CURSOR_SHAPE);
 
     LOG(INFO) << "Config changed (encoding:" << config.video_encoding()
-              << "cursor_shape:" << (cursor_encoder_ != nullptr)
+              << "cursor_shape:" << config_.cursor_shape
               << "font_smoothing:" << config_.disable_font_smoothing
               << "effects:" << config_.disable_effects
               << "wallpaper:" << config_.disable_wallpaper
@@ -576,7 +311,6 @@ void DesktopAgentClient::readConfig(const proto::desktop::Config& config)
               << "lock_at_disconnect:" << config_.lock_at_disconnect
               << "clear_clipboard:" << config_.clear_clipboard
               << "cursor_position:" << config_.cursor_position << ")";
-
     emit sig_configured();
 }
 
@@ -584,8 +318,7 @@ void DesktopAgentClient::readConfig(const proto::desktop::Config& config)
 void DesktopAgentClient::readKeyFrameExtension(const std::string& /* data */)
 {
     LOG(INFO) << "Key frame requested by client";
-    if (video_encoder_)
-        video_encoder_->setKeyFrameRequired(true);
+    emit sig_keyFrameRequested();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -599,12 +332,7 @@ void DesktopAgentClient::readSelectScreenExtension(const std::string& data)
     }
 
     LOG(INFO) << "Received:" << screen;
-
-    base::ScreenCapturer::ScreenId screen_id = static_cast<base::ScreenCapturer::ScreenId>(screen.id());
-    QSize resolution = base::parse(screen.resolution());
-
-    emit sig_selectScreen(screen_id, resolution);
-    preferred_size_ = QSize(0, 0);
+    emit sig_selectScreen(screen);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -628,7 +356,7 @@ void DesktopAgentClient::readPreferredSizeExtension(const std::string& data)
 
     LOG(INFO) << "Preferred size changed:" << preferred_size;
     preferred_size_ = base::parse(preferred_size);
-    emit sig_captureScreen();
+    emit sig_preferredSizeChanged(preferred_size_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -645,15 +373,7 @@ void DesktopAgentClient::readVideoPauseExtension(const std::string& data)
     LOG(INFO) << "Video paused:" << is_video_paused_;
 
     if (!is_video_paused_)
-    {
-        if (!video_encoder_)
-        {
-            LOG(ERROR) << "Video encoder not initialized";
-            return;
-        }
-
-        video_encoder_->setKeyFrameRequired(true);
-    }
+        emit sig_keyFrameRequested();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -691,18 +411,12 @@ void DesktopAgentClient::readPowerControlExtension(const std::string& data)
     switch (power_control.action())
     {
         case proto::desktop::PowerControl::ACTION_SHUTDOWN:
-        {
-            if (!base::PowerController::shutdown())
-                LOG(ERROR) << "Unable to shutdown";
-        }
-        break;
+            base::PowerController::shutdown();
+            break;
 
         case proto::desktop::PowerControl::ACTION_REBOOT:
-        {
-            if (!base::PowerController::reboot())
-                LOG(ERROR) << "Unable to reboot";
-        }
-        break;
+            base::PowerController::reboot();
+            break;
 
         case proto::desktop::PowerControl::ACTION_REBOOT_SAFE_MODE:
         {
@@ -732,18 +446,12 @@ void DesktopAgentClient::readPowerControlExtension(const std::string& data)
         break;
 
         case proto::desktop::PowerControl::ACTION_LOGOFF:
-        {
-            if (!base::PowerController::logoff())
-                LOG(ERROR) << "base::PowerController::logoff failed";
-        }
-        break;
+            base::PowerController::logoff();
+            break;
 
         case proto::desktop::PowerControl::ACTION_LOCK:
-        {
-            if (!base::PowerController::lock())
-                LOG(ERROR) << "base::PowerController::lock failed";
-        }
-        break;
+            base::PowerController::lock();
+            break;
 
         default:
             LOG(ERROR) << "Unhandled power control action:" << power_control.action();
@@ -756,14 +464,8 @@ void DesktopAgentClient::readRemoteUpdateExtension(const std::string& /* data */
 {
 #if defined(Q_OS_WINDOWS)
     LOG(INFO) << "Remote update requested";
-
-    if (sessionType() != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
-    {
-        LOG(ERROR) << "Update can only be launched from a desktop manage session";
-        return;
-    }
-
-    launchUpdater(base::currentProcessSessionId());
+    if (sessionType() == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
+        launchUpdater(base::currentProcessSessionId());
 #endif // defined(Q_OS_WINDOWS)
 }
 
@@ -782,11 +484,12 @@ void DesktopAgentClient::readSystemInfoExtension(const std::string& data)
     proto::system_info::SystemInfo system_info;
     createSystemInfo(system_info_request, &system_info);
 
-    proto::desktop::Extension* desktop_extension = outgoing_message_.newMessage().mutable_extension();
+    proto::desktop::ClientToSession message;
+    proto::desktop::Extension* desktop_extension = message.mutable_extension();
     desktop_extension->set_name(common::kSystemInfoExtension);
     desktop_extension->set_data(system_info.SerializeAsString());
 
-    sendSessionMessage();
+    sendSessionMessage(base::serialize(message));
 #endif // defined(Q_OS_WINDOWS)
 }
 
@@ -795,7 +498,6 @@ void DesktopAgentClient::readTaskManagerExtension(const std::string& data)
 {
 #if defined(Q_OS_WINDOWS)
     proto::task_manager::ClientToHost message;
-
     if (!message.ParseFromString(data))
     {
         LOG(ERROR) << "Unable to parse task manager extension data";
@@ -816,40 +518,11 @@ void DesktopAgentClient::readTaskManagerExtension(const std::string& data)
 //--------------------------------------------------------------------------------------------------
 void DesktopAgentClient::readOverflow(proto::desktop::Overflow::State state)
 {
-    if (state != overflow_state_)
-    {
-        LOG(INFO) << "Overflow state:" << state << "pressure score:" << pressure_score_;
-        overflow_state_ = state;
-    }
+    if (state == overflow_state_)
+        return;
 
-    auto scaled_size = [](const QSize& size, double factor) -> QSize
-    {
-        return QSize(double(size.width()) * factor, double(size.height()) * factor);
-    };
-
-    QSize forced_size = forced_size_;
-
-    if (state == proto::desktop::Overflow::STATE_CRITICAL)
-        pressure_score_ = std::min(100, pressure_score_ + 20);
-    else if (state == proto::desktop::Overflow::STATE_WARNING)
-        pressure_score_ = std::min(100, pressure_score_ + 8);
-    else if (state == proto::desktop::Overflow::STATE_NONE)
-        pressure_score_ = std::max(0, pressure_score_ - 3);
-
-    if (pressure_score_ >= 90)
-        forced_size = scaled_size(source_size_, 0.7);
-    else if (pressure_score_ >= 80)
-        forced_size = scaled_size(source_size_, 0.8);
-    else if (pressure_score_ >= 70)
-        forced_size = scaled_size(source_size_, 0.9);
-    else
-        forced_size = QSize();
-
-    if (forced_size != forced_size_)
-    {
-        LOG(INFO) << "Forced size changed from" << forced_size_ << "to" << forced_size;
-        forced_size_ = forced_size;
-    }
+    LOG(INFO) << "Overflow state changed from" << overflow_state_ << "to" << state;
+    overflow_state_ = state;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -869,7 +542,8 @@ void DesktopAgentClient::sendCapabilities()
     }
 
     // Create a capabilities.
-    proto::desktop::Capabilities* capabilities = outgoing_message_.newMessage().mutable_capabilities();
+    proto::desktop::SessionToClient message;
+    proto::desktop::Capabilities* capabilities = message.mutable_capabilities();
 
     // Add supported extensions and video encodings.
     capabilities->set_extensions(extensions);
@@ -901,11 +575,8 @@ void DesktopAgentClient::sendCapabilities()
 #warning Not implemented
 #endif
 
-    LOG(INFO) << "Sending config request (extensions:" << capabilities->extensions()
-              << "video_encodings:" << capabilities->video_encodings()
-              << "audio_encodings:" << capabilities->audio_encodings()
-              << "OS:" << capabilities->os_type() << ")";
-    sendSessionMessage();
+    LOG(INFO) << "Sending:" << *capabilities;
+    sendSessionMessage(base::serialize(message));
 }
 
 } // namespace host
