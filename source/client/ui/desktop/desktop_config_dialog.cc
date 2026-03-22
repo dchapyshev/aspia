@@ -22,7 +22,6 @@
 #include <QTimer>
 
 #include "base/logging.h"
-#include "client/config_factory.h"
 #include "ui_desktop_config_dialog.h"
 
 namespace client {
@@ -40,8 +39,6 @@ DesktopConfigDialog::DesktopConfigDialog(proto::peer::SessionType session_type,
     QPushButton* cancel_button = ui->button_box->button(QDialogButtonBox::StandardButton::Cancel);
     if (cancel_button)
         cancel_button->setText(tr("Cancel"));
-
-    ConfigFactory::fixupDesktopConfig(&config_);
 
     QComboBox* combo_codec = ui->combo_codec;
 

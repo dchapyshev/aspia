@@ -166,19 +166,9 @@ void ClientDesktop::onClipboardEvent(const proto::desktop::ClipboardEvent& event
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientDesktop::setDesktopConfig(const proto::desktop::Config& desktop_config)
+void ClientDesktop::onDesktopConfigChanged(const proto::desktop::Config& config)
 {
-    LOG(INFO) << "setDesktopConfig called";
-    desktop_config_ = desktop_config;
-
-    ConfigFactory::fixupDesktopConfig(&desktop_config_);
-
-    // If the session is not already running, then we do not need to send the configuration.
-    if (!started_)
-    {
-        LOG(INFO) << "Session not started yet";
-        return;
-    }
+    desktop_config_ = config;
 
     if (!(desktop_config_.flags() & proto::desktop::ENABLE_CURSOR_SHAPE))
     {
@@ -188,14 +178,14 @@ void ClientDesktop::setDesktopConfig(const proto::desktop::Config& desktop_confi
 
     input_event_filter_.setClipboardEnabled(desktop_config_.flags() & proto::desktop::ENABLE_CLIPBOARD);
 
+    LOG(INFO) << "Send:" << config;
     outgoing_message_.newMessage().mutable_config()->CopyFrom(desktop_config_);
-
-    LOG(INFO) << "Send new config to host";
     sendSessionMessage(outgoing_message_.serialize());
+    sendSessionListRequest();
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientDesktop::setCurrentScreen(const proto::desktop::Screen& screen)
+void ClientDesktop::onCurrentScreenChanged(const proto::desktop::Screen& screen)
 {
     LOG(INFO) << "Current screen changed:" << screen.id();
 
@@ -207,7 +197,7 @@ void ClientDesktop::setCurrentScreen(const proto::desktop::Screen& screen)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientDesktop::setPreferredSize(int width, int height)
+void ClientDesktop::onPreferredSizeChanged(int width, int height)
 {
     LOG(INFO) << "Preferred size changed:" << width << "x" << height;
 
@@ -223,7 +213,7 @@ void ClientDesktop::setPreferredSize(int width, int height)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientDesktop::setVideoPause(bool enable)
+void ClientDesktop::onVideoPauseChanged(bool enable)
 {
     LOG(INFO) << "Video pause changed:" << enable;
 
@@ -249,7 +239,7 @@ void ClientDesktop::setVideoPause(bool enable)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientDesktop::setAudioPause(bool enable)
+void ClientDesktop::onAudioPauseChanged(bool enable)
 {
     LOG(INFO) << "Audio pause changed:" << enable;
 
@@ -275,7 +265,7 @@ void ClientDesktop::setAudioPause(bool enable)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientDesktop::setVideoRecording(bool enable, const QString& file_path)
+void ClientDesktop::onRecordingChanged(bool enable, const QString& file_path)
 {
     proto::desktop::ClientToService message;
     proto::desktop::VideoRecording* video_recording = message.mutable_video_recording();
@@ -481,32 +471,10 @@ void ClientDesktop::onSwitchSession(quint32 session_id)
 //--------------------------------------------------------------------------------------------------
 void ClientDesktop::readCapabilities(const proto::desktop::Capabilities& capabilities)
 {
-    LOG(INFO) << "Received:" << capabilities;
-
-    if (!capabilities.video_encodings())
-    {
-        LOG(ERROR) << "No supported video encodings";
-        return;
-    }
-
     // We notify the window about changes in the list of extensions and video encodings.
     // A window can disable/enable some of its capabilities in accordance with this information.
+    LOG(INFO) << "Received:" << capabilities;
     emit sig_capabilities(capabilities);
-
-    // If current video encoding not supported.
-    if (!(capabilities.video_encodings() & desktop_config_.video_encoding()))
-    {
-        LOG(ERROR) << "Current video encoding not supported";
-
-        // We tell the window about the need to change the encoding.
-        emit sig_configRequired();
-    }
-    else
-    {
-        // Everything is fine, we send the current configuration.
-        setDesktopConfig(desktop_config_);
-        sendSessionListRequest();
-    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -690,29 +658,17 @@ void ClientDesktop::readCursorShape(const proto::desktop::CursorShape& cursor_sh
 void ClientDesktop::readCursorPosition(const proto::desktop::CursorPosition& cursor_position)
 {
     if (!(desktop_config_.flags() & proto::desktop::CURSOR_POSITION))
-    {
-        LOG(ERROR) << "Cursor position received not disabled in client";
         return;
-    }
 
     ++cursor_pos_count_;
-
     emit sig_cursorPositionChanged(cursor_position);
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClientDesktop::readClipboardEvent(const proto::desktop::ClipboardEvent& event)
 {
-    if (!clipboard_monitor_)
-    {
-        LOG(ERROR) << "Clipboard received not disabled in client";
-        return;
-    }
-
-    if (!input_event_filter_.readClipboardEvent(event))
-        return;
-
-    clipboard_monitor_->injectClipboardEvent(event);
+    if (clipboard_monitor_ && input_event_filter_.readClipboardEvent(event))
+        clipboard_monitor_->injectClipboardEvent(event);
 }
 
 //--------------------------------------------------------------------------------------------------

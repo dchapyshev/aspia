@@ -19,7 +19,6 @@
 #include "client/config_factory.h"
 
 #include "base/logging.h"
-#include "base/serialization.h"
 
 namespace client {
 
@@ -62,8 +61,6 @@ void ConfigFactory::setDefaultDesktopManageConfig(proto::desktop::Config* config
     config->set_flags(kDefaultFlags);
     config->set_video_encoding(kDefaultVideoEncoding);
     config->set_audio_encoding(kDefaultAudioEncoding);
-
-    fixupDesktopConfig(config);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -78,18 +75,6 @@ void ConfigFactory::setDefaultDesktopViewConfig(proto::desktop::Config* config)
     config->set_flags(kDefaultFlags);
     config->set_video_encoding(kDefaultVideoEncoding);
     config->set_audio_encoding(kDefaultAudioEncoding);
-
-    fixupDesktopConfig(config);
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
-void ConfigFactory::fixupDesktopConfig(proto::desktop::Config* config)
-{
-    DCHECK(config);
-
-    if (config->audio_encoding() == proto::desktop::AUDIO_ENCODING_DEFAULT)
-        config->set_audio_encoding(kDefaultAudioEncoding);
 }
 
 } // namespace client

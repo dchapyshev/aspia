@@ -108,10 +108,10 @@ DesktopSessionWindow::DesktopSessionWindow(proto::peer::SessionType session_type
     desktop_->enableRemoteCursorPosition(desktop_config_.flags() & proto::desktop::CURSOR_POSITION);
 
     connect(toolbar_, &DesktopToolBar::sig_keyCombination, desktop_, &DesktopWidget::executeKeyCombination);
-    connect(toolbar_, &DesktopToolBar::sig_settingsButton, this, &DesktopSessionWindow::changeSettings);
-    connect(toolbar_, &DesktopToolBar::sig_switchToAutosize, this, &DesktopSessionWindow::autosizeWindow);
-    connect(toolbar_, &DesktopToolBar::sig_takeScreenshot, this, &DesktopSessionWindow::takeScreenshot);
-    connect(toolbar_, &DesktopToolBar::sig_scaleChanged, this, &DesktopSessionWindow::scaleDesktop);
+    connect(toolbar_, &DesktopToolBar::sig_settingsButton, this, &DesktopSessionWindow::onSettings);
+    connect(toolbar_, &DesktopToolBar::sig_switchToAutosize, this, &DesktopSessionWindow::onAutosizeWindow);
+    connect(toolbar_, &DesktopToolBar::sig_takeScreenshot, this, &DesktopSessionWindow::onTakeScreenshot);
+    connect(toolbar_, &DesktopToolBar::sig_scaleChanged, this, &DesktopSessionWindow::onScaleDesktop);
     connect(toolbar_, &DesktopToolBar::sig_minimizeSession, this, [this]()
     {
         LOG(INFO) << "Minimize from full screen";
@@ -282,8 +282,6 @@ Client* DesktopSessionWindow::createClient()
 
     connect(client, &ClientDesktop::sig_showSessionWindow, this, &DesktopSessionWindow::onShowWindow,
             Qt::QueuedConnection);
-    connect(client, &ClientDesktop::sig_configRequired, this, &DesktopSessionWindow::onConfigRequired,
-            Qt::QueuedConnection);
     connect(client, &ClientDesktop::sig_capabilities, this, &DesktopSessionWindow::onCapabilitiesChanged,
             Qt::QueuedConnection);
     connect(client, &ClientDesktop::sig_screenListChanged, this, &DesktopSessionWindow::onScreenListChanged,
@@ -314,17 +312,17 @@ Client* DesktopSessionWindow::createClient()
     },
     Qt::QueuedConnection);
 
-    connect(this, &DesktopSessionWindow::sig_desktopConfigChanged, client, &ClientDesktop::setDesktopConfig,
+    connect(this, &DesktopSessionWindow::sig_desktopConfigChanged, client, &ClientDesktop::onDesktopConfigChanged,
             Qt::QueuedConnection);
-    connect(this, &DesktopSessionWindow::sig_screenSelected, client, &ClientDesktop::setCurrentScreen,
+    connect(this, &DesktopSessionWindow::sig_screenSelected, client, &ClientDesktop::onCurrentScreenChanged,
             Qt::QueuedConnection);
-    connect(this, &DesktopSessionWindow::sig_preferredSizeChanged, client, &ClientDesktop::setPreferredSize,
+    connect(this, &DesktopSessionWindow::sig_preferredSizeChanged, client, &ClientDesktop::onPreferredSizeChanged,
             Qt::QueuedConnection);
-    connect(this, &DesktopSessionWindow::sig_videoPaused, client, &ClientDesktop::setVideoPause,
+    connect(this, &DesktopSessionWindow::sig_videoPaused, client, &ClientDesktop::onVideoPauseChanged,
             Qt::QueuedConnection);
-    connect(this, &DesktopSessionWindow::sig_audioPaused, client, &ClientDesktop::setAudioPause,
+    connect(this, &DesktopSessionWindow::sig_audioPaused, client, &ClientDesktop::onAudioPauseChanged,
             Qt::QueuedConnection);
-    connect(this, &DesktopSessionWindow::sig_videoRecording, client, &ClientDesktop::setVideoRecording,
+    connect(this, &DesktopSessionWindow::sig_videoRecording, client, &ClientDesktop::onRecordingChanged,
             Qt::QueuedConnection);
     connect(this, &DesktopSessionWindow::sig_keyEvent, client, &ClientDesktop::onKeyEvent,
             Qt::QueuedConnection);
@@ -346,8 +344,6 @@ Client* DesktopSessionWindow::createClient()
     connect(toolbar_, &DesktopToolBar::sig_switchSession, client, &ClientDesktop::onSwitchSession,
             Qt::QueuedConnection);
 
-    client->setDesktopConfig(desktop_config_);
-
     return client;
 }
 
@@ -355,47 +351,9 @@ Client* DesktopSessionWindow::createClient()
 void DesktopSessionWindow::onShowWindow()
 {
     LOG(INFO) << "Show window";
-
     showNormal();
     activateWindow();
-
     toolbar_->enableTextChat(true);
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopSessionWindow::onConfigRequired()
-{
-    LOG(INFO) << "Config required";
-
-    if (!(video_encodings_ & common::kSupportedVideoEncodings))
-    {
-        LOG(INFO) << "No supported video encodings";
-        QMessageBox::warning(this,
-                             tr("Warning"),
-                             tr("There are no supported video encodings."),
-                             QMessageBox::Ok);
-        close();
-    }
-    else
-    {
-        LOG(INFO) << "Current video encoding not supported by host";
-        QMessageBox::warning(this,
-                             tr("Warning"),
-                             tr("The current video encoding is not supported by the host. "
-                                "Please specify a different video encoding."),
-                             QMessageBox::Ok);
-
-        DesktopConfigDialog* dialog = new DesktopConfigDialog(
-            session_type_, desktop_config_, video_encodings_, this);
-        dialog->setAttribute(Qt::WA_DeleteOnClose);
-
-        connect(dialog, &DesktopConfigDialog::sig_configChanged,
-                this, &DesktopSessionWindow::onConfigChanged);
-        connect(dialog, &DesktopConfigDialog::rejected, this, &DesktopSessionWindow::close);
-
-        dialog->show();
-        dialog->activateWindow();
-    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -454,6 +412,40 @@ void DesktopSessionWindow::onCapabilitiesChanged(const proto::desktop::Capabilit
         else
             LOG(ERROR) << "Unknown flag" << name << "with value" << value;
     }
+
+    if (!(video_encodings_ & common::kSupportedVideoEncodings))
+    {
+        LOG(INFO) << "No supported video encodings";
+        QMessageBox::warning(this,
+                             tr("Warning"),
+                             tr("There are no supported video encodings."),
+                             QMessageBox::Ok);
+        close();
+        return;
+    }
+    else if (!(video_encodings_ & desktop_config_.video_encoding()))
+    {
+        LOG(INFO) << "Current video encoding not supported by host";
+        QMessageBox::warning(this,
+                             tr("Warning"),
+                             tr("The current video encoding is not supported by the host. "
+                                "Please specify a different video encoding."),
+                             QMessageBox::Ok);
+
+        DesktopConfigDialog* dialog = new DesktopConfigDialog(
+            session_type_, desktop_config_, video_encodings_, this);
+        dialog->setAttribute(Qt::WA_DeleteOnClose);
+
+        connect(dialog, &DesktopConfigDialog::sig_configChanged,
+                this, &DesktopSessionWindow::onConfigChanged);
+        connect(dialog, &DesktopConfigDialog::rejected, this, &DesktopSessionWindow::close);
+
+        dialog->show();
+        dialog->activateWindow();
+        return;
+    }
+
+    emit sig_desktopConfigChanged(desktop_config_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -477,12 +469,8 @@ void DesktopSessionWindow::onCursorPositionChanged(const proto::desktop::CursorP
 
     const QSize& frame_size = frame->size();
 
-    int pos_x = static_cast<int>(
-        static_cast<double>(desktop_->width() * cursor_position.x()) /
-        static_cast<double>(frame_size.width()));
-    int pos_y = static_cast<int>(
-        static_cast<double>(desktop_->height() * cursor_position.y()) /
-        static_cast<double>(frame_size.height()));
+    int pos_x = int(double(desktop_->width() * cursor_position.x()) / double(frame_size.width()));
+    int pos_y = int(double(desktop_->height() * cursor_position.y()) / double(frame_size.height()));
 
     desktop_->setCursorPosition(QPoint(pos_x, pos_y));
     desktop_->update();
@@ -530,8 +518,7 @@ void DesktopSessionWindow::onFrameError(proto::desktop::VideoErrorCode error_cod
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionWindow::onFrameChanged(
-    const QSize& screen_size, std::shared_ptr<base::Frame> frame)
+void DesktopSessionWindow::onFrameChanged(const QSize& screen_size, std::shared_ptr<base::Frame> frame)
 {
     screen_size_ = screen_size;
     LOG(INFO) << "Screen size changed:" << screen_size_;
@@ -539,12 +526,12 @@ void DesktopSessionWindow::onFrameChanged(
     bool has_old_frame = desktop_->desktopFrame() != nullptr;
 
     desktop_->setDesktopFrame(frame);
-    scaleDesktop();
+    onScaleDesktop();
 
     if (!has_old_frame)
     {
         LOG(INFO) << "Resize window (first frame)";
-        autosizeWindow();
+        onAutosizeWindow();
 
         // If the parameters indicate that it is necessary to record the connection session, then we
         // start recording.
@@ -591,15 +578,13 @@ void DesktopSessionWindow::onMouseCursorChanged(std::shared_ptr<base::MouseCurso
 
     if (local_dpi != remote_dpi)
     {
-        double scale_factor_x =
-            static_cast<double>(local_dpi.x()) / static_cast<double>(remote_dpi.x());
-        double scale_factor_y =
-            static_cast<double>(local_dpi.y()) / static_cast<double>(remote_dpi.y());
+        double scale_factor_x = double(local_dpi.x()) / double(remote_dpi.x());
+        double scale_factor_y = double(local_dpi.y()) / double(remote_dpi.y());
 
-        width = std::max(static_cast<int>(static_cast<double>(width) * scale_factor_x), 1);
-        height = std::max(static_cast<int>(static_cast<double>(height) * scale_factor_y), 1);
-        hotspot_x = static_cast<int>(static_cast<double>(hotspot_x) * scale_factor_x);
-        hotspot_y = static_cast<int>(static_cast<double>(hotspot_y) * scale_factor_y);
+        width = std::max(int(double(width) * scale_factor_x), 1);
+        height = std::max(int(double(height) * scale_factor_y), 1);
+        hotspot_x = int(double(hotspot_x) * scale_factor_x);
+        hotspot_y = int(double(hotspot_y) * scale_factor_y);
 
         QImage scaled_image =
             image.scaled(width, height, Qt::KeepAspectRatio, Qt::SmoothTransformation);
@@ -689,7 +674,7 @@ void DesktopSessionWindow::resizeEvent(QResizeEvent* event)
         new_pos.setX(window_width - panel_width);
 
     toolbar_->move(new_pos);
-    scaleDesktop();
+    onScaleDesktop();
 
     QWidget::resizeEvent(event);
 }
@@ -997,7 +982,7 @@ void DesktopSessionWindow::onMouseEvent(const proto::desktop::MouseEvent& event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionWindow::changeSettings()
+void DesktopSessionWindow::onSettings()
 {
     LOG(INFO) << "Create desktop config dialog";
 
@@ -1036,7 +1021,7 @@ void DesktopSessionWindow::onConfigChanged(const proto::desktop::Config& desktop
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionWindow::autosizeWindow()
+void DesktopSessionWindow::onAutosizeWindow()
 {
     if (screen_size_.isEmpty())
     {
@@ -1053,11 +1038,10 @@ void DesktopSessionWindow::autosizeWindow()
     {
         QSize remote_screen_size = scaledSize(screen_size_, toolbar_->scale());
 
-        LOG(INFO) << "Show normal (screen_size=" << screen_size_
-                  << "local_screen_rect=" << local_screen_rect
-                  << "window_size=" << window_size
-                  << "remote_screen_size=" << remote_screen_size
-                  << ")";
+        LOG(INFO) << "Show normal (screen_size:" << screen_size_
+                  << "local_screen_rect:" << local_screen_rect
+                  << "window_size:" << window_size
+                  << "remote_screen_size:" << remote_screen_size << ")";
         showNormal();
 
         resize(remote_screen_size);
@@ -1066,15 +1050,15 @@ void DesktopSessionWindow::autosizeWindow()
     }
     else
     {
-        LOG(INFO) << "Show maximized (screen_size=" << screen_size_
-                  << "local_screen_rect=" << local_screen_rect
-                  << "window_size=" << window_size << ")";
+        LOG(INFO) << "Show maximized (screen_size:" << screen_size_
+                  << "local_screen_rect:" << local_screen_rect
+                  << "window_size:" << window_size << ")";
         showMaximized();
     }
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionWindow::takeScreenshot()
+void DesktopSessionWindow::onTakeScreenshot()
 {
     QString selected_filter;
     QString file_path = QFileDialog::getSaveFileName(this,
@@ -1120,7 +1104,7 @@ void DesktopSessionWindow::takeScreenshot()
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionWindow::scaleDesktop()
+void DesktopSessionWindow::onScaleDesktop()
 {
     if (screen_size_.isEmpty())
     {
@@ -1174,7 +1158,6 @@ void DesktopSessionWindow::onScrollTimer()
     if (scroll_delta_.x() != 0)
     {
         QScrollBar* scrollbar = scroll_area_->horizontalScrollBar();
-
         int pos = scrollbar->sliderPosition() + scroll_delta_.x();
 
         pos = std::max(pos, scrollbar->minimum());
@@ -1186,7 +1169,6 @@ void DesktopSessionWindow::onScrollTimer()
     if (scroll_delta_.y() != 0)
     {
         QScrollBar* scrollbar = scroll_area_->verticalScrollBar();
-
         int pos = scrollbar->sliderPosition() + scroll_delta_.y();
 
         pos = std::max(pos, scrollbar->minimum());
@@ -1211,7 +1193,6 @@ void DesktopSessionWindow::onPasteKeystrokes()
 
         proto::desktop::TextEvent event;
         event.set_text(text.toStdString());
-
         emit sig_textEvent(event);
     }
     else

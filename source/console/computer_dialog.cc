@@ -23,7 +23,6 @@
 
 #include "base/logging.h"
 #include "base/crypto/secure_memory.h"
-#include "client/config_factory.h"
 #include "common/ui/session_type.h"
 #include "console/computer_dialog_desktop.h"
 #include "console/computer_dialog_general.h"
@@ -59,11 +58,6 @@ ComputerDialog::ComputerDialog(QWidget* parent,
     QPushButton* cancel_button = ui.button_box->button(QDialogButtonBox::StandardButton::Cancel);
     if (cancel_button)
         cancel_button->setText(tr("Cancel"));
-
-    client::ConfigFactory::fixupDesktopConfig(
-        computer_.mutable_session_config()->mutable_desktop_manage());
-    client::ConfigFactory::fixupDesktopConfig(
-        computer_.mutable_session_config()->mutable_desktop_view());
 
     if (mode_ == Mode::COPY)
     {

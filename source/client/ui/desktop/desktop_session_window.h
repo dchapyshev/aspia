@@ -56,7 +56,6 @@ public:
 
 public slots:
     void onShowWindow();
-    void onConfigRequired();
     void onCapabilitiesChanged(const proto::desktop::Capabilities& capabilities);
     void onScreenListChanged(const proto::desktop::ScreenList& screen_list);
     void onScreenTypeChanged(const proto::desktop::ScreenType& screen_type);
@@ -101,11 +100,11 @@ protected:
 
 private slots:
     void onMouseEvent(const proto::desktop::MouseEvent& event);
-    void changeSettings();
+    void onSettings();
     void onConfigChanged(const proto::desktop::Config& config);
-    void autosizeWindow();
-    void takeScreenshot();
-    void scaleDesktop();
+    void onAutosizeWindow();
+    void onTakeScreenshot();
+    void onScaleDesktop();
     void onResizeTimer();
     void onScrollTimer();
     void onPasteKeystrokes();

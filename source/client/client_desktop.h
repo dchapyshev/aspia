@@ -91,12 +91,12 @@ public:
     };
 
 public slots:
-    void setDesktopConfig(const proto::desktop::Config& config);
-    void setCurrentScreen(const proto::desktop::Screen& screen);
-    void setPreferredSize(int width, int height);
-    void setVideoPause(bool enable);
-    void setAudioPause(bool enable);
-    void setVideoRecording(bool enable, const QString& file_path);
+    void onDesktopConfigChanged(const proto::desktop::Config& config);
+    void onCurrentScreenChanged(const proto::desktop::Screen& screen);
+    void onPreferredSizeChanged(int width, int height);
+    void onVideoPauseChanged(bool enable);
+    void onAudioPauseChanged(bool enable);
+    void onRecordingChanged(bool enable, const QString& file_path);
     void onKeyEvent(const proto::desktop::KeyEvent& event);
     void onTextEvent(const proto::desktop::TextEvent& event);
     void onMouseEvent(const proto::desktop::MouseEvent& event);
@@ -108,7 +108,6 @@ public slots:
     void onSwitchSession(quint32 session_id);
 
 signals:
-    void sig_configRequired();
     void sig_capabilities(const proto::desktop::Capabilities& capabilities);
     void sig_screenListChanged(const proto::desktop::ScreenList& screen_list);
     void sig_screenTypeChanged(const proto::desktop::ScreenType& screen_type);

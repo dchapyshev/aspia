@@ -32,9 +32,6 @@ public:
     static void setDefaultDesktopManageConfig(proto::desktop::Config* config);
     static void setDefaultDesktopViewConfig(proto::desktop::Config* config);
 
-    // Corrects invalid values in the configuration if they are.
-    static void fixupDesktopConfig(proto::desktop::Config* config);
-
 private:
     Q_DISABLE_COPY_MOVE(ConfigFactory)
 };
