@@ -33,7 +33,7 @@ public:
     static std::unique_ptr<FrameAligned> create(const QSize& size, size_t alignment);
 
 private:
-    FrameAligned(const QSize& size, quint8* data);
+    FrameAligned(const QSize& size, int stride, quint8* data);
 
     Q_DISABLE_COPY_MOVE(FrameAligned)
 };

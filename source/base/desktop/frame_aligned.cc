@@ -23,8 +23,8 @@
 namespace base {
 
 //--------------------------------------------------------------------------------------------------
-FrameAligned::FrameAligned(const QSize& size, quint8* data)
-    : Frame(size, size.width() * kBytesPerPixel, data)
+FrameAligned::FrameAligned(const QSize& size, int stride, quint8* data)
+    : Frame(size, stride, data)
 {
     // Nothing
 }
@@ -39,12 +39,16 @@ FrameAligned::~FrameAligned()
 // static
 std::unique_ptr<FrameAligned> FrameAligned::create(const QSize& size, size_t alignment)
 {
+    // Round up stride to the alignment boundary so that every row starts at an aligned address.
+    int stride = (size.width() * kBytesPerPixel + static_cast<int>(alignment) - 1)
+        & ~(static_cast<int>(alignment) - 1);
+
     quint8* data = reinterpret_cast<quint8*>(
-        alignedAlloc(calcMemorySize(size, kBytesPerPixel), alignment));
+        alignedAlloc(static_cast<size_t>(stride) * static_cast<size_t>(size.height()), alignment));
     if (!data)
         return nullptr;
 
-    return std::unique_ptr<FrameAligned>(new FrameAligned(size, data));
+    return std::unique_ptr<FrameAligned>(new FrameAligned(size, stride, data));
 }
 
 } // namespace base
