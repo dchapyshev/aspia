@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_CODEC_VIDEO_DECODER_VPX_H
-#define BASE_CODEC_VIDEO_DECODER_VPX_H
+#ifndef BASE_CODEC_VIDEO_DECODER_H
+#define BASE_CODEC_VIDEO_DECODER_H
 
 #include "base/codec/scoped_vpx_codec.h"
 #include "proto/desktop_session.h"
@@ -26,24 +26,20 @@ namespace base {
 
 class Frame;
 
-class VideoDecoderVPX
+class VideoDecoder
 {
 public:
-    ~VideoDecoderVPX();
-
-    static std::unique_ptr<VideoDecoderVPX> createVP8();
-    static std::unique_ptr<VideoDecoderVPX> createVP9();
+    explicit VideoDecoder(proto::desktop::VideoEncoding encoding);
+    ~VideoDecoder();
 
     bool decode(const proto::desktop::VideoPacket& packet, Frame* frame);
 
 private:
-    explicit VideoDecoderVPX(proto::desktop::VideoEncoding encoding);
-
     ScopedVpxCodec codec_;
 
-    Q_DISABLE_COPY_MOVE(VideoDecoderVPX)
+    Q_DISABLE_COPY_MOVE(VideoDecoder)
 };
 
 } // namespace base
 
-#endif // BASE_CODEC_VIDEO_DECODER_VPX_H
+#endif // BASE_CODEC_VIDEO_DECODER_H

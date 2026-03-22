@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_CODEC_VIDEO_ENCODER_VPX_H
-#define BASE_CODEC_VIDEO_ENCODER_VPX_H
+#ifndef BASE_CODEC_VIDEO_ENCODER_H
+#define BASE_CODEC_VIDEO_ENCODER_H
 
 #include <QByteArray>
 #include <QSize>
@@ -33,15 +33,15 @@ namespace base {
 
 class Frame;
 
-class VideoEncoderVPX
+class VideoEncoder
 {
 public:
-    ~VideoEncoderVPX() = default;
+    ~VideoEncoder() = default;
 
     static const size_t kInitialEncodeBufferSize;
 
-    static std::unique_ptr<VideoEncoderVPX> createVP8();
-    static std::unique_ptr<VideoEncoderVPX> createVP9();
+    static std::unique_ptr<VideoEncoder> createVP8();
+    static std::unique_ptr<VideoEncoder> createVP9();
 
     bool encode(const Frame* frame, proto::desktop::VideoPacket* packet);
 
@@ -57,7 +57,7 @@ public:
     quint32 maxQuantizer() const;
 
 private:
-    explicit VideoEncoderVPX(proto::desktop::VideoEncoding encoding);
+    explicit VideoEncoder(proto::desktop::VideoEncoding encoding);
 
     void createActiveMap(const QSize& size);
     bool createVp8Codec(const QSize& size);
@@ -82,9 +82,9 @@ private:
     std::unique_ptr<vpx_image_t> image_;
     QByteArray image_buffer_;
 
-    Q_DISABLE_COPY_MOVE(VideoEncoderVPX)
+    Q_DISABLE_COPY_MOVE(VideoEncoder)
 };
 
 } // namespace base
 
-#endif // BASE_CODEC_VIDEO_ENCODER_VPX_H
+#endif // BASE_CODEC_VIDEO_ENCODER_H

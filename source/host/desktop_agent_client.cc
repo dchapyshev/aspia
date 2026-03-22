@@ -26,7 +26,7 @@
 #include "base/codec/audio_encoder.h"
 #include "base/codec/cursor_encoder.h"
 #include "base/codec/scale_reducer.h"
-#include "base/codec/video_encoder_vpx.h"
+#include "base/codec/video_encoder.h"
 #include "base/desktop/frame.h"
 #include "base/desktop/screen_capturer.h"
 #include "base/ipc/ipc_channel.h"
@@ -522,11 +522,11 @@ void DesktopAgentClient::readConfig(const proto::desktop::Config& config)
     switch (config.video_encoding())
     {
         case proto::desktop::VIDEO_ENCODING_VP8:
-            video_encoder_ = base::VideoEncoderVPX::createVP8();
+            video_encoder_ = base::VideoEncoder::createVP8();
             break;
 
         case proto::desktop::VIDEO_ENCODING_VP9:
-            video_encoder_ = base::VideoEncoderVPX::createVP9();
+            video_encoder_ = base::VideoEncoder::createVP9();
             break;
 
         default:

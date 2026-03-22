@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/codec/video_encoder_vpx.h"
+#include "base/codec/video_encoder.h"
 
 #include "base/logging.h"
 #include "base/desktop/frame.h"
@@ -148,20 +148,20 @@ QRect alignRect(const QRect& rect)
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::unique_ptr<VideoEncoderVPX> VideoEncoderVPX::createVP8()
+std::unique_ptr<VideoEncoder> VideoEncoder::createVP8()
 {
-    return std::unique_ptr<VideoEncoderVPX>(new VideoEncoderVPX(proto::desktop::VIDEO_ENCODING_VP8));
+    return std::unique_ptr<VideoEncoder>(new VideoEncoder(proto::desktop::VIDEO_ENCODING_VP8));
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::unique_ptr<VideoEncoderVPX> VideoEncoderVPX::createVP9()
+std::unique_ptr<VideoEncoder> VideoEncoder::createVP9()
 {
-    return std::unique_ptr<VideoEncoderVPX>(new VideoEncoderVPX(proto::desktop::VIDEO_ENCODING_VP9));
+    return std::unique_ptr<VideoEncoder>(new VideoEncoder(proto::desktop::VIDEO_ENCODING_VP9));
 }
 
 //--------------------------------------------------------------------------------------------------
-VideoEncoderVPX::VideoEncoderVPX(proto::desktop::VideoEncoding encoding)
+VideoEncoder::VideoEncoder(proto::desktop::VideoEncoding encoding)
     : encoding_(encoding)
 {
     encode_buffer_.reserve(kInitialEncodeBufferSize);
@@ -171,10 +171,10 @@ VideoEncoderVPX::VideoEncoderVPX(proto::desktop::VideoEncoding encoding)
 
 //--------------------------------------------------------------------------------------------------
 // static
-const size_t VideoEncoderVPX::kInitialEncodeBufferSize = 1 * 1024 * 1024; // 1 MB
+const size_t VideoEncoder::kInitialEncodeBufferSize = 1 * 1024 * 1024; // 1 MB
 
 //--------------------------------------------------------------------------------------------------
-bool VideoEncoderVPX::encode(const Frame* frame, proto::desktop::VideoPacket* packet)
+bool VideoEncoder::encode(const Frame* frame, proto::desktop::VideoPacket* packet)
 {
     packet->set_encoding(encoding_);
 
@@ -289,7 +289,7 @@ bool VideoEncoderVPX::encode(const Frame* frame, proto::desktop::VideoPacket* pa
 }
 
 //--------------------------------------------------------------------------------------------------
-bool VideoEncoderVPX::setMinQuantizer(quint32 min_quantizer)
+bool VideoEncoder::setMinQuantizer(quint32 min_quantizer)
 {
     if (min_quantizer < 10 || min_quantizer > 50)
     {
@@ -316,13 +316,13 @@ bool VideoEncoderVPX::setMinQuantizer(quint32 min_quantizer)
 }
 
 //--------------------------------------------------------------------------------------------------
-quint32 VideoEncoderVPX::minQuantizer() const
+quint32 VideoEncoder::minQuantizer() const
 {
     return config_.rc_min_quantizer;
 }
 
 //--------------------------------------------------------------------------------------------------
-bool VideoEncoderVPX::setMaxQuantizer(quint32 max_quantizer)
+bool VideoEncoder::setMaxQuantizer(quint32 max_quantizer)
 {
     if (max_quantizer < 10 || max_quantizer > 60)
     {
@@ -349,13 +349,13 @@ bool VideoEncoderVPX::setMaxQuantizer(quint32 max_quantizer)
 }
 
 //--------------------------------------------------------------------------------------------------
-quint32 VideoEncoderVPX::maxQuantizer() const
+quint32 VideoEncoder::maxQuantizer() const
 {
     return config_.rc_max_quantizer;
 }
 
 //--------------------------------------------------------------------------------------------------
-void VideoEncoderVPX::createActiveMap(const QSize& size)
+void VideoEncoder::createActiveMap(const QSize& size)
 {
     active_map_.cols = static_cast<unsigned int>(
         (size.width() + kMacroBlockSize - 1) / kMacroBlockSize);
@@ -369,7 +369,7 @@ void VideoEncoderVPX::createActiveMap(const QSize& size)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool VideoEncoderVPX::createVp8Codec(const QSize& size)
+bool VideoEncoder::createVp8Codec(const QSize& size)
 {
     codec_.reset(new vpx_codec_ctx_t());
 
@@ -440,7 +440,7 @@ bool VideoEncoderVPX::createVp8Codec(const QSize& size)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool VideoEncoderVPX::createVp9Codec(const QSize& size)
+bool VideoEncoder::createVp9Codec(const QSize& size)
 {
     codec_.reset(new vpx_codec_ctx_t());
 
@@ -509,7 +509,7 @@ bool VideoEncoderVPX::createVp9Codec(const QSize& size)
 }
 
 //--------------------------------------------------------------------------------------------------
-void VideoEncoderVPX::prepareImageAndActiveMap(
+void VideoEncoder::prepareImageAndActiveMap(
     bool is_key_frame, const Frame* frame, proto::desktop::VideoPacket* packet)
 {
     QRect image_rect(QPoint(0, 0), QSize(static_cast<int>(image_->w), static_cast<int>(image_->h)));
@@ -578,7 +578,7 @@ void VideoEncoderVPX::prepareImageAndActiveMap(
 }
 
 //--------------------------------------------------------------------------------------------------
-void VideoEncoderVPX::addRectToActiveMap(const QRect& rect)
+void VideoEncoder::addRectToActiveMap(const QRect& rect)
 {
     int left = rect.left() / kMacroBlockSize;
     int top = rect.top() / kMacroBlockSize;
@@ -597,7 +597,7 @@ void VideoEncoderVPX::addRectToActiveMap(const QRect& rect)
 }
 
 //--------------------------------------------------------------------------------------------------
-void VideoEncoderVPX::clearActiveMap()
+void VideoEncoder::clearActiveMap()
 {
     memset(active_map_buffer_.data(), 0, active_map_buffer_.size());
 }

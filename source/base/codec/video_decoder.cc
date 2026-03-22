@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/codec/video_decoder_vpx.h"
+#include "base/codec/video_decoder.h"
 
 #include <QThread>
 
@@ -77,21 +77,7 @@ bool convertImage(const proto::desktop::VideoPacket& packet, vpx_image_t* image,
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-// static
-std::unique_ptr<VideoDecoderVPX> VideoDecoderVPX::createVP8()
-{
-    return std::unique_ptr<VideoDecoderVPX>(new VideoDecoderVPX(proto::desktop::VIDEO_ENCODING_VP8));
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
-std::unique_ptr<VideoDecoderVPX> VideoDecoderVPX::createVP9()
-{
-    return std::unique_ptr<VideoDecoderVPX>(new VideoDecoderVPX(proto::desktop::VIDEO_ENCODING_VP9));
-}
-
-//--------------------------------------------------------------------------------------------------
-VideoDecoderVPX::VideoDecoderVPX(proto::desktop::VideoEncoding encoding)
+VideoDecoder::VideoDecoder(proto::desktop::VideoEncoding encoding)
 {
     quint32 thread_count = QThread::idealThreadCount();
     if (thread_count >= 8)
@@ -131,13 +117,13 @@ VideoDecoderVPX::VideoDecoderVPX(proto::desktop::VideoEncoding encoding)
 }
 
 //--------------------------------------------------------------------------------------------------
-VideoDecoderVPX::~VideoDecoderVPX()
+VideoDecoder::~VideoDecoder()
 {
     LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
-bool VideoDecoderVPX::decode(const proto::desktop::VideoPacket& packet, Frame* frame)
+bool VideoDecoder::decode(const proto::desktop::VideoPacket& packet, Frame* frame)
 {
     // Do the actual decoding.
     vpx_codec_err_t ret =
