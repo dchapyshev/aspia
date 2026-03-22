@@ -557,7 +557,7 @@ void DesktopAgentClient::readConfig(const proto::desktop::Config& config)
         cursor_encoder_ = std::make_unique<base::CursorEncoder>();
     }
 
-    scale_reducer_ = std::make_unique<base::ScaleReducer>();
+    scale_reducer_ = std::make_unique<base::ScaleReducer>(base::ScaleReducer::Quality::HIGH);
 
     config_.disable_font_smoothing = (config.flags() & proto::desktop::DISABLE_FONT_SMOOTHING);
     config_.disable_effects = (config.flags() & proto::desktop::DISABLE_EFFECTS);

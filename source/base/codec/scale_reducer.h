@@ -30,7 +30,9 @@ class Frame;
 class ScaleReducer
 {
 public:
-    ScaleReducer();
+    enum class Quality { LOW, NORMAL, HIGH };
+
+    explicit ScaleReducer(Quality quality);
     ~ScaleReducer();
 
     const Frame* scaleFrame(const Frame* source_frame, const QSize& target_size);
@@ -41,6 +43,7 @@ public:
 private:
     QRect scaledRect(const QRect& source_rect);
 
+    int filtering_ = 0;
     std::unique_ptr<Frame> target_frame_;
     QSize source_size_;
     QSize target_size_;

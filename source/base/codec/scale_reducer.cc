@@ -26,9 +26,21 @@
 namespace base {
 
 //--------------------------------------------------------------------------------------------------
-ScaleReducer::ScaleReducer()
+ScaleReducer::ScaleReducer(Quality quality)
 {
     LOG(INFO) << "Ctor";
+    switch (quality)
+    {
+        case Quality::HIGH:
+            filtering_ = libyuv::kFilterBox;
+            break;
+        case Quality::NORMAL:
+            filtering_ = libyuv::kFilterBilinear;
+            break;
+        case Quality::LOW:
+            filtering_ = libyuv::kFilterLinear;
+            break;
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -90,7 +102,7 @@ const Frame* ScaleReducer::scaleFrame(const Frame* source_frame, const QSize& ta
                           target_frame_->stride(),
                           target_size.width(),
                           target_size.height(),
-                          libyuv::kFilterBox);
+                          static_cast<libyuv::FilterMode>(filtering_));
     }
     else
     {
@@ -114,7 +126,7 @@ const Frame* ScaleReducer::scaleFrame(const Frame* source_frame, const QSize& ta
                                   target_rect.y(),
                                   target_rect.width(),
                                   target_rect.height(),
-                                  libyuv::kFilterBox);
+                                  static_cast<libyuv::FilterMode>(filtering_));
 
             *updated_region += target_rect;
         }
