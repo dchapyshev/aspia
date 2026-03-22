@@ -60,7 +60,7 @@ bool DxgiFrame::prepare(const QSize& size, ScreenCapturer::ScreenId source_id)
     {
         std::unique_ptr<Frame> frame;
 
-        frame = FrameAligned::create(size, PixelFormat::ARGB(), 32);
+        frame = FrameAligned::create(size, 32);
         if (!frame)
         {
             LOG(ERROR) << "DxgiFrame cannot create a new Frame";
@@ -75,7 +75,7 @@ bool DxgiFrame::prepare(const QSize& size, ScreenCapturer::ScreenId source_id)
         // capturer per monitor design. So once the new frame is created, we should
         // clear it to avoid the legacy image to be remained on it. See
         // http://crbug.com/708766.
-        DCHECK_EQ(frame->stride(), frame_size.width() * frame->format().bytesPerPixel());
+        DCHECK_EQ(frame->stride(), frame_size.width() * Frame::kBytesPerPixel);
         memset(frame->frameData(), 0, static_cast<size_t>(frame->stride() * frame_size.height()));
 
         frame_.reset(frame.release());

@@ -30,11 +30,10 @@ class FrameAligned final : public Frame
 public:
     ~FrameAligned() final;
 
-    static std::unique_ptr<FrameAligned> create(
-        const QSize& size, const PixelFormat& format, size_t alignment);
+    static std::unique_ptr<FrameAligned> create(const QSize& size, size_t alignment);
 
 private:
-    FrameAligned(const QSize& size, const PixelFormat& format, quint8* data);
+    FrameAligned(const QSize& size, quint8* data);
 
     Q_DISABLE_COPY_MOVE(FrameAligned)
 };

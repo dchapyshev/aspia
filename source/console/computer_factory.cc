@@ -20,16 +20,9 @@
 
 #include "base/logging.h"
 #include "base/serialization.h"
-#include "base/desktop/pixel_format.h"
 #include "build/build_config.h"
 
 namespace console {
-
-namespace {
-
-const int kDefCompressRatio = 8;
-
-} // namespace
 
 //--------------------------------------------------------------------------------------------------
 void ComputerFactory::setDefaultDesktopManageConfig(proto::desktop::Config* config)
@@ -44,8 +37,6 @@ void ComputerFactory::setDefaultDesktopManageConfig(proto::desktop::Config* conf
     config->set_flags(kDefaultFlags);
     config->set_video_encoding(proto::desktop::VIDEO_ENCODING_VP8);
     config->set_audio_encoding(proto::desktop::AUDIO_ENCODING_OPUS);
-    config->set_compress_ratio(kDefCompressRatio);
-    config->mutable_pixel_format()->CopyFrom(base::serialize(base::PixelFormat::RGB332()));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -59,8 +50,6 @@ void ComputerFactory::setDefaultDesktopViewConfig(proto::desktop::Config* config
     config->set_flags(kDefaultFlags);
     config->set_video_encoding(proto::desktop::VIDEO_ENCODING_VP8);
     config->set_audio_encoding(proto::desktop::AUDIO_ENCODING_OPUS);
-    config->set_compress_ratio(kDefCompressRatio);
-    config->mutable_pixel_format()->CopyFrom(base::serialize(base::PixelFormat::RGB332()));
 }
 
 //--------------------------------------------------------------------------------------------------

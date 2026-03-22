@@ -23,8 +23,8 @@
 namespace base {
 
 //--------------------------------------------------------------------------------------------------
-FrameDib::FrameDib(const QSize& size, const PixelFormat& format, int stride, quint8* data, HBITMAP bitmap)
-    : Frame(size, format, stride, data),
+FrameDib::FrameDib(const QSize& size, int stride, quint8* data, HBITMAP bitmap)
+    : Frame(size, stride, data),
       bitmap_(bitmap)
 {
     // Nothing
@@ -32,64 +32,23 @@ FrameDib::FrameDib(const QSize& size, const PixelFormat& format, int stride, qui
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::unique_ptr<FrameDib> FrameDib::create(const QSize& size, const PixelFormat& format, HDC hdc)
+std::unique_ptr<FrameDib> FrameDib::create(const QSize& size, HDC hdc)
 {
-    const int bytes_per_row = size.width() * format.bytesPerPixel();
-    const size_t buffer_size = calcMemorySize(size, format.bytesPerPixel());
+    const int bytes_per_row = size.width() * kBytesPerPixel;
+    const size_t buffer_size = calcMemorySize(size, kBytesPerPixel);
 
-    struct BitmapInfo
-    {
-        BITMAPINFOHEADER header;
-        union
-        {
-            struct
-            {
-                quint32 red;
-                quint32 green;
-                quint32 blue;
-            } mask;
-            RGBQUAD color[256];
-        } u;
-    };
-
-    BitmapInfo bmi;
+    BITMAPINFO bmi;
     memset(&bmi, 0, sizeof(bmi));
 
-    bmi.header.biSize      = sizeof(bmi.header);
-    bmi.header.biBitCount  = format.bitsPerPixel();
-    bmi.header.biSizeImage = static_cast<DWORD>(buffer_size);
-    bmi.header.biPlanes    = 1;
-    bmi.header.biWidth     = size.width();
-    bmi.header.biHeight    = -size.height();
-
-    if (format.bitsPerPixel() == 32 || format.bitsPerPixel() == 16)
-    {
-        bmi.header.biCompression = BI_BITFIELDS;
-
-        bmi.u.mask.red   = format.redMax()   << format.redShift();
-        bmi.u.mask.green = format.greenMax() << format.greenShift();
-        bmi.u.mask.blue  = format.blueMax()  << format.blueShift();
-    }
-    else
-    {
-        bmi.header.biCompression = BI_RGB;
-
-        for (quint32 i = 0; i < 256; ++i)
-        {
-            const quint32 red   = (i >> format.redShift())   & format.redMax();
-            const quint32 green = (i >> format.greenShift()) & format.greenMax();
-            const quint32 blue  = (i >> format.blueShift())  & format.blueMax();
-
-            bmi.u.color[i].rgbRed   = static_cast<quint8>(red   * 0xFF / format.redMax());
-            bmi.u.color[i].rgbGreen = static_cast<quint8>(green * 0xFF / format.greenMax());
-            bmi.u.color[i].rgbBlue  = static_cast<quint8>(blue  * 0xFF / format.blueMax());
-        }
-    }
+    bmi.bmiHeader.biSize      = sizeof(bmi.bmiHeader);
+    bmi.bmiHeader.biBitCount  = kBytesPerPixel * 8;
+    bmi.bmiHeader.biSizeImage = static_cast<DWORD>(buffer_size);
+    bmi.bmiHeader.biPlanes    = 1;
+    bmi.bmiHeader.biWidth     = size.width();
+    bmi.bmiHeader.biHeight    = -size.height();
 
     void* data = nullptr;
-
-    HBITMAP bitmap = CreateDIBSection(hdc, reinterpret_cast<LPBITMAPINFO>(&bmi), DIB_RGB_COLORS,
-        &data, nullptr, 0);
+    HBITMAP bitmap = CreateDIBSection(hdc, &bmi, DIB_RGB_COLORS, &data, nullptr, 0);
     if (!bitmap)
     {
         LOG(ERROR) << "CreateDIBSection failed";
@@ -97,7 +56,7 @@ std::unique_ptr<FrameDib> FrameDib::create(const QSize& size, const PixelFormat&
     }
 
     return std::unique_ptr<FrameDib>(new FrameDib(
-        size, format, bytes_per_row, reinterpret_cast<quint8*>(data), bitmap));
+        size, bytes_per_row, reinterpret_cast<quint8*>(data), bitmap));
 }
 
 } // namespace base

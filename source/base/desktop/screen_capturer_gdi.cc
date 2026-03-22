@@ -145,8 +145,7 @@ const Frame* ScreenCapturerGdi::captureFrame(Error* error)
         DCHECK(desktop_dc_);
         DCHECK(memory_dc_);
 
-        std::unique_ptr<Frame> frame = FrameDib::create(
-            screen_rect_.size(), PixelFormat::ARGB(), memory_dc_);
+        std::unique_ptr<Frame> frame = FrameDib::create(screen_rect_.size(), memory_dc_);
         if (!frame)
         {
             LOG(ERROR) << "Failed to create frame buffer";

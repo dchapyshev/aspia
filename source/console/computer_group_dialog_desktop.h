@@ -40,7 +40,6 @@ public:
 
 private slots:
     void onCodecChanged(int item_index);
-    void onCompressionRatioChanged(int value);
 
 private:
     Ui::ComputerGroupDialogDesktop ui;

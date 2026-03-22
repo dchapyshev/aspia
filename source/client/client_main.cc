@@ -58,68 +58,9 @@ bool parseCodecValue(const QString& value, proto::desktop::Config& config)
         {
             config.set_video_encoding(proto::desktop::VIDEO_ENCODING_VP9);
         }
-        else if (value == "zstd")
-        {
-            config.set_video_encoding(proto::desktop::VIDEO_ENCODING_ZSTD);
-        }
         else
         {
-            onInvalidValue("codec", "vp8, vp9, zstd");
-            return false;
-        }
-    }
-
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool parseColorDepthValue(const QString& value, proto::desktop::Config& config)
-{
-    if (!value.isEmpty())
-    {
-        if (value == "32")
-        {
-            *config.mutable_pixel_format() = base::serialize(base::PixelFormat::ARGB());
-        }
-        else if (value == "16")
-        {
-            *config.mutable_pixel_format() = base::serialize(base::PixelFormat::RGB565());
-        }
-        else if (value == "8")
-        {
-            *config.mutable_pixel_format() = base::serialize(base::PixelFormat::RGB332());
-        }
-        else if (value == "6")
-        {
-            *config.mutable_pixel_format() = base::serialize(base::PixelFormat::RGB222());
-        }
-        else if (value == "3")
-        {
-            *config.mutable_pixel_format() = base::serialize(base::PixelFormat::RGB111());
-        }
-        else
-        {
-            onInvalidValue("color-depth", "3, 6, 8, 16, 32");
-            return false;
-        }
-    }
-
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool parseCompressRatioValue(const QString& value, proto::desktop::Config& config)
-{
-    if (!value.isEmpty())
-    {
-        quint32 compress_ratio = value.toUInt();
-        if (compress_ratio >= 1 && compress_ratio <= 22)
-        {
-            config.set_compress_ratio(compress_ratio);
-        }
-        else
-        {
-            onInvalidValue("compress-ratio", "1-22");
+            onInvalidValue("codec", "vp8, vp9");
             return false;
         }
     }
@@ -571,21 +512,6 @@ int clientMain(int argc, char* argv[])
             {
                 LOG(ERROR) << "Unable to parse codec value";
                 return 1;
-            }
-
-            if (desktop_config->video_encoding() == proto::desktop::VIDEO_ENCODING_ZSTD)
-            {
-                if (!parseColorDepthValue(parser.value(color_depth_option), *desktop_config))
-                {
-                    LOG(ERROR) << "Unable to parse color depth value";
-                    return 1;
-                }
-
-                if (!parseCompressRatioValue(parser.value(compress_ratio_option), *desktop_config))
-                {
-                    LOG(ERROR) << "Unable to parse compress ratio value";
-                    return 1;
-                }
             }
 
             if (!parseAudioValue(parser.value(audio_option), *desktop_config))

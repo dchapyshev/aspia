@@ -491,7 +491,7 @@ bool DxgiDuplicatorController::ensureFrameCaptured(
     }
     else
     {
-        frame.reset(FrameAligned::create(desktopSize(), PixelFormat::ARGB(), 32).release());
+        frame.reset(FrameAligned::create(desktopSize(), 32).release());
     }
 
     const TimePoint start_ms = Clock::now();

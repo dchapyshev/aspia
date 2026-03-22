@@ -20,7 +20,6 @@
 
 #include "base/logging.h"
 #include "base/serialization.h"
-#include "base/desktop/pixel_format.h"
 
 namespace client {
 
@@ -28,10 +27,6 @@ namespace {
 
 const proto::desktop::VideoEncoding kDefaultVideoEncoding = proto::desktop::VIDEO_ENCODING_VP8;
 const proto::desktop::AudioEncoding kDefaultAudioEncoding = proto::desktop::AUDIO_ENCODING_OPUS;
-
-const int kDefCompressRatio = 8;
-const int kMinCompressRatio = 1;
-const int kMaxCompressRatio = 22;
 
 } // namespace
 
@@ -67,8 +62,6 @@ void ConfigFactory::setDefaultDesktopManageConfig(proto::desktop::Config* config
     config->set_flags(kDefaultFlags);
     config->set_video_encoding(kDefaultVideoEncoding);
     config->set_audio_encoding(kDefaultAudioEncoding);
-    config->set_compress_ratio(kDefCompressRatio);
-    config->mutable_pixel_format()->CopyFrom(base::serialize(base::PixelFormat::RGB332()));
 
     fixupDesktopConfig(config);
 }
@@ -85,8 +78,6 @@ void ConfigFactory::setDefaultDesktopViewConfig(proto::desktop::Config* config)
     config->set_flags(kDefaultFlags);
     config->set_video_encoding(kDefaultVideoEncoding);
     config->set_audio_encoding(kDefaultAudioEncoding);
-    config->set_compress_ratio(kDefCompressRatio);
-    config->mutable_pixel_format()->CopyFrom(base::serialize(base::PixelFormat::RGB332()));
 
     fixupDesktopConfig(config);
 }
@@ -96,9 +87,6 @@ void ConfigFactory::setDefaultDesktopViewConfig(proto::desktop::Config* config)
 void ConfigFactory::fixupDesktopConfig(proto::desktop::Config* config)
 {
     DCHECK(config);
-
-    if (config->compress_ratio() < kMinCompressRatio || config->compress_ratio() > kMaxCompressRatio)
-        config->set_compress_ratio(kDefCompressRatio);
 
     if (config->audio_encoding() == proto::desktop::AUDIO_ENCODING_DEFAULT)
         config->set_audio_encoding(kDefaultAudioEncoding);

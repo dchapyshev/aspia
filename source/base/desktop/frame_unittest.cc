@@ -27,7 +27,7 @@ namespace {
 std::unique_ptr<Frame> createTestFrame(const QRect& rect, int pixels_value)
 {
     QSize size = rect.size();
-    auto frame = FrameAligned::create(size, PixelFormat::ARGB(), 32);
+    auto frame = FrameAligned::create(size, 32);
     frame->setTopLeft(rect.topLeft());
     memset(frame->frameData(),
            pixels_value,

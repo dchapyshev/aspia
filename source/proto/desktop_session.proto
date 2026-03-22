@@ -42,19 +42,6 @@ message Rect
     int32 height = 4;
 }
 
-message PixelFormat
-{
-    uint32 bits_per_pixel = 1;
-
-    uint32 red_max   = 2;
-    uint32 green_max = 3;
-    uint32 blue_max  = 4;
-
-    uint32 red_shift   = 5;
-    uint32 green_shift = 6;
-    uint32 blue_shift  = 7;
-}
-
 message KeyEvent
 {
     // The keyboard (Caps/Num) lock states.
@@ -211,7 +198,7 @@ message CursorPosition
 enum VideoEncoding
 {
     VIDEO_ENCODING_UNKNOWN = 0;
-    VIDEO_ENCODING_ZSTD    = 1;
+    // Field 1 (ZSTD) is deprecated.
     VIDEO_ENCODING_VP8     = 2;
     VIDEO_ENCODING_VP9     = 4;
 }
@@ -219,7 +206,7 @@ enum VideoEncoding
 message VideoPacketFormat
 {
     Rect video_rect          = 1;
-    PixelFormat pixel_format = 2;
+    // Field 2 (pixel format) is deprecated.
     Size screen_size         = 3;
     uint32 capturer_type     = 4;
 }
@@ -413,9 +400,9 @@ message Config
 {
     uint32 flags                 = 1;
     VideoEncoding video_encoding = 2;
-    PixelFormat pixel_format     = 3;
+    // Field 3 (pixel format) is deprecated.
     // Field 4 is deprecated.
-    uint32 compress_ratio        = 5;
+    // Field 5 (compress ratio) is deprecated.
     // Field 6 is deprecated.
     AudioEncoding audio_encoding = 7;
 }

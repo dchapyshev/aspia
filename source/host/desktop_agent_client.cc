@@ -27,7 +27,6 @@
 #include "base/codec/cursor_encoder.h"
 #include "base/codec/scale_reducer.h"
 #include "base/codec/video_encoder_vpx.h"
-#include "base/codec/video_encoder_zstd.h"
 #include "base/desktop/frame.h"
 #include "base/desktop/screen_capturer.h"
 #include "base/ipc/ipc_channel.h"
@@ -528,11 +527,6 @@ void DesktopAgentClient::readConfig(const proto::desktop::Config& config)
 
         case proto::desktop::VIDEO_ENCODING_VP9:
             video_encoder_ = base::VideoEncoderVPX::createVP9();
-            break;
-
-        case proto::desktop::VIDEO_ENCODING_ZSTD:
-            video_encoder_ = base::VideoEncoderZstd::create(
-                base::parse(config.pixel_format()), static_cast<int>(config.compress_ratio()));
             break;
 
         default:

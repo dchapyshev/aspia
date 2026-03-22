@@ -22,25 +22,10 @@
 #include <QTimer>
 
 #include "base/logging.h"
-#include "base/serialization.h"
-#include "base/desktop/pixel_format.h"
 #include "client/config_factory.h"
 #include "ui_desktop_config_dialog.h"
 
 namespace client {
-
-namespace {
-
-enum ColorDepth
-{
-    COLOR_DEPTH_ARGB,
-    COLOR_DEPTH_RGB565,
-    COLOR_DEPTH_RGB332,
-    COLOR_DEPTH_RGB222,
-    COLOR_DEPTH_RGB111
-};
-
-} // namespace
 
 //--------------------------------------------------------------------------------------------------
 DesktopConfigDialog::DesktopConfigDialog(proto::peer::SessionType session_type,
@@ -66,43 +51,12 @@ DesktopConfigDialog::DesktopConfigDialog(proto::peer::SessionType session_type,
     if (video_encodings & proto::desktop::VIDEO_ENCODING_VP8)
         combo_codec->addItem("VP8", proto::desktop::VIDEO_ENCODING_VP8);
 
-    if (video_encodings & proto::desktop::VIDEO_ENCODING_ZSTD)
-        combo_codec->addItem("ZSTD", proto::desktop::VIDEO_ENCODING_ZSTD);
-
     int current_codec = combo_codec->findData(config_.video_encoding());
     if (current_codec == -1)
         current_codec = 0;
 
     combo_codec->setCurrentIndex(current_codec);
     onCodecChanged(current_codec);
-
-    QComboBox* combo_color_depth = ui->combobox_color_depth;
-    combo_color_depth->addItem(tr("True color (32 bit)"), COLOR_DEPTH_ARGB);
-    combo_color_depth->addItem(tr("High color (16 bit)"), COLOR_DEPTH_RGB565);
-    combo_color_depth->addItem(tr("256 colors (8 bit)"), COLOR_DEPTH_RGB332);
-    combo_color_depth->addItem(tr("64 colors (6 bit)"), COLOR_DEPTH_RGB222);
-    combo_color_depth->addItem(tr("8 colors (3 bit)"), COLOR_DEPTH_RGB111);
-
-    base::PixelFormat pixel_format = base::parse(config_.pixel_format());
-    ColorDepth color_depth = COLOR_DEPTH_ARGB;
-
-    if (pixel_format.isEqual(base::PixelFormat::ARGB()))
-        color_depth = COLOR_DEPTH_ARGB;
-    else if (pixel_format.isEqual(base::PixelFormat::RGB565()))
-        color_depth = COLOR_DEPTH_RGB565;
-    else if (pixel_format.isEqual(base::PixelFormat::RGB332()))
-        color_depth = COLOR_DEPTH_RGB332;
-    else if (pixel_format.isEqual(base::PixelFormat::RGB222()))
-        color_depth = COLOR_DEPTH_RGB222;
-    else if (pixel_format.isEqual(base::PixelFormat::RGB111()))
-        color_depth = COLOR_DEPTH_RGB111;
-
-    int current_color_depth = combo_color_depth->findData(QVariant(color_depth));
-    if (current_color_depth != -1)
-        combo_color_depth->setCurrentIndex(current_color_depth);
-
-    ui->slider_compress_ratio->setValue(static_cast<int>(config_.compress_ratio()));
-    onCompressionRatioChanged(static_cast<int>(config_.compress_ratio()));
 
     if (config_.audio_encoding() != proto::desktop::AUDIO_ENCODING_UNKNOWN)
         ui->checkbox_audio->setChecked(true);
@@ -146,9 +100,6 @@ DesktopConfigDialog::DesktopConfigDialog(proto::peer::SessionType session_type,
 
     connect(combo_codec, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &DesktopConfigDialog::onCodecChanged);
-
-    connect(ui->slider_compress_ratio, &QSlider::valueChanged,
-            this, &DesktopConfigDialog::onCompressionRatioChanged);
 
     connect(ui->button_box, &QDialogButtonBox::clicked,
             this, &DesktopConfigDialog::onButtonBoxClicked);
@@ -242,22 +193,6 @@ void DesktopConfigDialog::onCodecChanged(int item_index)
     proto::desktop::VideoEncoding encoding =
         static_cast<proto::desktop::VideoEncoding>(ui->combo_codec->itemData(item_index).toInt());
     LOG(INFO) << "[ACTION] Codec changed:" << encoding;
-
-    bool has_pixel_format = (encoding == proto::desktop::VIDEO_ENCODING_ZSTD);
-
-    ui->label_color_depth->setEnabled(has_pixel_format);
-    ui->combobox_color_depth->setEnabled(has_pixel_format);
-    ui->label_compress_ratio->setEnabled(has_pixel_format);
-    ui->slider_compress_ratio->setEnabled(has_pixel_format);
-    ui->label_fast->setEnabled(has_pixel_format);
-    ui->label_best->setEnabled(has_pixel_format);
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopConfigDialog::onCompressionRatioChanged(int value)
-{
-    LOG(INFO) << "[ACTION] Compression ratio changed:" << value;
-    ui->label_compress_ratio->setText(tr("Compression ratio: %1").arg(value));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -271,41 +206,6 @@ void DesktopConfigDialog::onButtonBoxClicked(QAbstractButton* button)
             static_cast<proto::desktop::VideoEncoding>(ui->combo_codec->currentData().toInt());
 
         config_.set_video_encoding(video_encoding);
-
-        if (video_encoding == proto::desktop::VIDEO_ENCODING_ZSTD)
-        {
-            base::PixelFormat pixel_format;
-
-            switch (ui->combobox_color_depth->currentData().toInt())
-            {
-                case COLOR_DEPTH_ARGB:
-                    pixel_format = base::PixelFormat::ARGB();
-                    break;
-
-                case COLOR_DEPTH_RGB565:
-                    pixel_format = base::PixelFormat::RGB565();
-                    break;
-
-                case COLOR_DEPTH_RGB332:
-                    pixel_format = base::PixelFormat::RGB332();
-                    break;
-
-                case COLOR_DEPTH_RGB222:
-                    pixel_format = base::PixelFormat::RGB222();
-                    break;
-
-                case COLOR_DEPTH_RGB111:
-                    pixel_format = base::PixelFormat::RGB111();
-                    break;
-
-                default:
-                    DLOG(FATAL) << "Unexpected color depth";
-                    break;
-            }
-
-            config_.mutable_pixel_format()->CopyFrom(base::serialize(pixel_format));
-            config_.set_compress_ratio(static_cast<quint32>(ui->slider_compress_ratio->value()));
-        }
 
         if (ui->checkbox_audio->isChecked())
             config_.set_audio_encoding(proto::desktop::AUDIO_ENCODING_OPUS);

@@ -155,37 +155,6 @@ TEST(serialization_test, size_zero)
 }
 
 // ============================================================================
-// Free functions: PixelFormat serialize/parse
-// ============================================================================
-
-TEST(serialization_test, pixel_format_roundtrip)
-{
-    PixelFormat original(32, 255, 255, 255, 16, 8, 0);
-    proto::desktop::PixelFormat proto_fmt = serialize(original);
-    PixelFormat restored = parse(proto_fmt);
-
-    EXPECT_EQ(restored.bitsPerPixel(), original.bitsPerPixel());
-    EXPECT_EQ(restored.redMax(), original.redMax());
-    EXPECT_EQ(restored.greenMax(), original.greenMax());
-    EXPECT_EQ(restored.blueMax(), original.blueMax());
-    EXPECT_EQ(restored.redShift(), original.redShift());
-    EXPECT_EQ(restored.greenShift(), original.greenShift());
-    EXPECT_EQ(restored.blueShift(), original.blueShift());
-}
-
-TEST(serialization_test, pixel_format_16bit)
-{
-    PixelFormat original(16, 31, 63, 31, 11, 5, 0);
-    proto::desktop::PixelFormat proto_fmt = serialize(original);
-    PixelFormat restored = parse(proto_fmt);
-
-    EXPECT_EQ(restored.bitsPerPixel(), 16);
-    EXPECT_EQ(restored.redMax(), 31);
-    EXPECT_EQ(restored.greenMax(), 63);
-    EXPECT_EQ(restored.blueMax(), 31);
-}
-
-// ============================================================================
 // SerializerImpl
 // ============================================================================
 

@@ -19,6 +19,8 @@
 #ifndef BASE_DESKTOP_DESKTOP_RESIZER_WIN_H
 #define BASE_DESKTOP_DESKTOP_RESIZER_WIN_H
 
+#include <QMap>
+
 #include "base/desktop/desktop_resizer.h"
 
 namespace base {

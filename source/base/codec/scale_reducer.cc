@@ -42,7 +42,6 @@ const Frame* ScaleReducer::scaleFrame(const Frame* source_frame, const QSize& ta
 {
     DCHECK(source_frame);
     DCHECK(!source_frame->constUpdatedRegion().isEmpty());
-    DCHECK(source_frame->format() == PixelFormat::ARGB());
 
     const QSize& source_size = source_frame->size();
     if (source_size.width() == 0 || source_size.height() == 0)
@@ -74,7 +73,7 @@ const Frame* ScaleReducer::scaleFrame(const Frame* source_frame, const QSize& ta
 
     if (!target_frame_)
     {
-        target_frame_ = FrameAligned::create(target_size, PixelFormat::ARGB(), 32);
+        target_frame_ = FrameAligned::create(target_size, 32);
         if (!target_frame_)
         {
             LOG(ERROR) << "Unable to create target frame";

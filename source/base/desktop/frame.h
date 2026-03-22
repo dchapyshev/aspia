@@ -21,16 +21,13 @@
 
 #include <QRegion>
 
-#include "base/desktop/pixel_format.h"
-
 namespace base {
-
-class SharedMemory;
 
 class Frame
 {
 public:
     static const float kStandardDPI;
+    static const int kBytesPerPixel;
 
     virtual ~Frame() = default;
 
@@ -38,7 +35,6 @@ public:
     quint8* frameDataAtPos(int x, int y) const;
     quint8* frameData() const { return data_; }
     const QSize& size() const { return size_; }
-    const PixelFormat& format() const { return format_; }
     int stride() const { return stride_; }
     bool contains(int x, int y) const;
 
@@ -66,10 +62,7 @@ public:
     void copyFrameInfoFrom(const Frame& other);
 
 protected:
-    Frame(const QSize& size,
-          const PixelFormat& format,
-          int stride,
-          quint8* data);
+    Frame(const QSize& size, int stride, quint8* data);
 
     static size_t calcMemorySize(const QSize& size, int bytes_per_pixel);
 
@@ -77,7 +70,6 @@ protected:
     // guarantee that the buffer is not deleted before the frame is deleted.
     quint8* data_;
     QSize size_;
-    PixelFormat format_;
     int stride_;
 
 private:

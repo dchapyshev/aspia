@@ -45,10 +45,13 @@ static volatile Registrator registrator;
 const float Frame::kStandardDPI = 96.0;
 
 //--------------------------------------------------------------------------------------------------
-Frame::Frame(const QSize& size, const PixelFormat& format, int stride, quint8* data)
+// static
+const int Frame::kBytesPerPixel = 4;
+
+//--------------------------------------------------------------------------------------------------
+Frame::Frame(const QSize& size, int stride, quint8* data)
     : data_(data),
       size_(size),
-      format_(format),
       stride_(stride)
 {
     DCHECK(size_.width() >= 0);
@@ -67,7 +70,7 @@ void Frame::copyPixelsFrom(const quint8* src_buffer, int src_stride, const QRect
     DCHECK(QRect(QPoint(0, 0), size()).contains(dest_rect));
 
     quint8* dest = frameDataAtPos(dest_rect.topLeft());
-    size_t bytes_per_row = static_cast<size_t>(format_.bytesPerPixel() * dest_rect.width());
+    size_t bytes_per_row = static_cast<size_t>(kBytesPerPixel * dest_rect.width());
 
     for (int y = 0; y < dest_rect.height(); ++y)
     {
@@ -121,7 +124,7 @@ quint8* Frame::frameDataAtPos(const QPoint& pos) const
 //--------------------------------------------------------------------------------------------------
 quint8* Frame::frameDataAtPos(int x, int y) const
 {
-    return frameData() + stride() * y + format_.bytesPerPixel() * x;
+    return frameData() + stride() * y + kBytesPerPixel * x;
 }
 
 //--------------------------------------------------------------------------------------------------
