@@ -169,8 +169,7 @@ const Frame* ScreenCapturerX11::captureFrame(Error* error)
 
     if (!queue_.currentFrame())
     {
-        std::unique_ptr<Frame> frame = FrameAligned::create(
-            selected_monitor_rect_.size(), PixelFormat::ARGB(), 32);
+        std::unique_ptr<Frame> frame = FrameAligned::create(selected_monitor_rect_.size(), 32);
         if (!frame)
         {
             LOG(ERROR) << "Unable to create frame";
