@@ -20,19 +20,21 @@
 #define BASE_CODEC_VIDEO_DECODER_VPX_H
 
 #include "base/codec/scoped_vpx_codec.h"
-#include "base/codec/video_decoder.h"
+#include "proto/desktop_session.h"
 
 namespace base {
 
-class VideoDecoderVPX final : public VideoDecoder
+class Frame;
+
+class VideoDecoderVPX
 {
 public:
-    ~VideoDecoderVPX() final;
+    ~VideoDecoderVPX();
 
     static std::unique_ptr<VideoDecoderVPX> createVP8();
     static std::unique_ptr<VideoDecoderVPX> createVP9();
 
-    bool decode(const proto::desktop::VideoPacket& packet, Frame* frame) final;
+    bool decode(const proto::desktop::VideoPacket& packet, Frame* frame);
 
 private:
     explicit VideoDecoderVPX(proto::desktop::VideoEncoding encoding);

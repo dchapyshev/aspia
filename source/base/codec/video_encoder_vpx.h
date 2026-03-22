@@ -20,9 +20,10 @@
 #define BASE_CODEC_VIDEO_ENCODER_VPX_H
 
 #include <QByteArray>
+#include <QSize>
 
 #include "base/codec/scoped_vpx_codec.h"
-#include "base/codec/video_encoder.h"
+#include "proto/desktop_session.h"
 
 #define VPX_CODEC_DISABLE_COMPAT 1
 #include <vpx/vpx_encoder.h>
@@ -30,15 +31,25 @@
 
 namespace base {
 
-class VideoEncoderVPX final : public VideoEncoder
+class Frame;
+
+class VideoEncoderVPX
 {
 public:
-    ~VideoEncoderVPX() final = default;
+    ~VideoEncoderVPX() = default;
+
+    static const size_t kInitialEncodeBufferSize;
 
     static std::unique_ptr<VideoEncoderVPX> createVP8();
     static std::unique_ptr<VideoEncoderVPX> createVP9();
 
-    bool encode(const Frame* frame, proto::desktop::VideoPacket* packet) final;
+    bool encode(const Frame* frame, proto::desktop::VideoPacket* packet);
+
+    proto::desktop::VideoEncoding encoding() const { return encoding_; }
+
+    void setKeyFrameRequired(bool enable) { key_frame_required_ = enable; }
+    bool isKeyFrameRequired() const { return key_frame_required_; }
+    void setEncodeBuffer(std::string&& buffer) { encode_buffer_ = std::move(buffer); }
 
     bool setMinQuantizer(quint32 min_quantizer);
     quint32 minQuantizer() const;
@@ -55,6 +66,11 @@ private:
         bool is_key_frame, const Frame* frame, proto::desktop::VideoPacket* packet);
     void addRectToActiveMap(const QRect& rect);
     void clearActiveMap();
+
+    const proto::desktop::VideoEncoding encoding_;
+    QSize last_size_;
+    bool key_frame_required_ = false;
+    std::string encode_buffer_;
 
     vpx_codec_enc_cfg_t config_;
     ScopedVpxCodec codec_;

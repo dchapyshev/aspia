@@ -162,29 +162,38 @@ std::unique_ptr<VideoEncoderVPX> VideoEncoderVPX::createVP9()
 
 //--------------------------------------------------------------------------------------------------
 VideoEncoderVPX::VideoEncoderVPX(proto::desktop::VideoEncoding encoding)
-    : VideoEncoder(encoding)
+    : encoding_(encoding)
 {
+    encode_buffer_.reserve(kInitialEncodeBufferSize);
     memset(&config_, 0, sizeof(config_));
     memset(&active_map_, 0, sizeof(active_map_));
 }
 
 //--------------------------------------------------------------------------------------------------
+// static
+const size_t VideoEncoderVPX::kInitialEncodeBufferSize = 1 * 1024 * 1024; // 1 MB
+
+//--------------------------------------------------------------------------------------------------
 bool VideoEncoderVPX::encode(const Frame* frame, proto::desktop::VideoPacket* packet)
 {
-    fillPacketInfo(frame, packet);
+    packet->set_encoding(encoding_);
 
     bool is_key_frame = isKeyFrameRequired();
 
-    if (packet->has_format())
+    if (last_size_ != frame->size())
     {
-        const QSize& frame_size = frame->size();
+        last_size_ = frame->size();
 
-        createImage(frame_size, &image_, &image_buffer_);
-        createActiveMap(frame_size);
+        proto::desktop::Rect* video_rect = packet->mutable_format()->mutable_video_rect();
+        video_rect->set_width(last_size_.width());
+        video_rect->set_height(last_size_.height());
+
+        createImage(last_size_, &image_, &image_buffer_);
+        createActiveMap(last_size_);
 
         if (encoding() == proto::desktop::VIDEO_ENCODING_VP8)
         {
-            if (!createVp8Codec(frame_size))
+            if (!createVp8Codec(last_size_))
             {
                 LOG(ERROR) << "Unable to create VP8 codec";
                 return false;
@@ -194,7 +203,7 @@ bool VideoEncoderVPX::encode(const Frame* frame, proto::desktop::VideoPacket* pa
         {
             DCHECK_EQ(encoding(), proto::desktop::VIDEO_ENCODING_VP9);
 
-            if (!createVp9Codec(frame_size))
+            if (!createVp9Codec(last_size_))
             {
                 LOG(ERROR) << "Unable to create VP9 codec";
                 return false;
@@ -219,14 +228,13 @@ bool VideoEncoderVPX::encode(const Frame* frame, proto::desktop::VideoPacket* pa
         return false;
     }
 
-    std::string* encode_buffer = encodeBuffer();
-    if (encode_buffer->capacity())
+    if (encode_buffer_.capacity())
     {
-        encode_buffer->resize(encode_buffer->capacity());
+        encode_buffer_.resize(encode_buffer_.capacity());
 
         vpx_fixed_buf_t buffer;
-        buffer.buf = encode_buffer->data();
-        buffer.sz = encode_buffer->size();
+        buffer.buf = encode_buffer_.data();
+        buffer.sz = encode_buffer_.size();
 
         ret = vpx_codec_set_cx_data_buf(codec_.get(), &buffer, 0, 0);
         if (ret != VPX_CODEC_OK)
@@ -263,15 +271,15 @@ bool VideoEncoderVPX::encode(const Frame* frame, proto::desktop::VideoPacket* pa
         {
             size_t frame_size = pkt->data.frame.sz;
 
-            if (encode_buffer->capacity() < frame_size)
-                encode_buffer->reserve(frame_size);
+            if (encode_buffer_.capacity() < frame_size)
+                encode_buffer_.reserve(frame_size);
 
-            encode_buffer->resize(frame_size);
+            encode_buffer_.resize(frame_size);
 
-            if (encode_buffer->data() != pkt->data.frame.buf)
-                memcpy(encode_buffer->data(), pkt->data.frame.buf, frame_size);
+            if (encode_buffer_.data() != pkt->data.frame.buf)
+                memcpy(encode_buffer_.data(), pkt->data.frame.buf, frame_size);
 
-            packet->set_data(std::move(*encode_buffer));
+            packet->set_data(std::move(encode_buffer_));
             break;
         }
     }
