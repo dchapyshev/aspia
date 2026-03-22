@@ -199,6 +199,9 @@ list(APPEND SOURCE_BASE_CODEC
     codec/zstd_compress.cc
     codec/zstd_compress.h)
 
+list(APPEND SOURCE_BASE_CODEC_TESTS
+    codec/scale_reducer_unittest.cc)
+
 list(APPEND SOURCE_BASE_CRYPTO
     crypto/big_num.cc
     crypto/big_num.h
@@ -540,7 +543,7 @@ endif()
 
 source_group("" FILES ${SOURCE_BASE} ${SOURCE_BASE_TESTS})
 source_group(audio FILES ${SOURCE_BASE_AUDIO})
-source_group(codec FILES ${SOURCE_BASE_CODEC})
+source_group(codec FILES ${SOURCE_BASE_CODEC} ${SOURCE_BASE_CODEC_TESTS})
 source_group(crypto FILES ${SOURCE_BASE_CRYPTO} ${SOURCE_BASE_CRYPTO_TESTS})
 source_group(desktop FILES ${SOURCE_BASE_DESKTOP} ${SOURCE_BASE_DESKTOP_TESTS})
 source_group(files FILES ${SOURCE_BASE_FILES})
@@ -613,6 +616,7 @@ endif()
 
 add_executable(aspia_base_tests
     ${SOURCE_BASE_TESTS}
+    ${SOURCE_BASE_CODEC_TESTS}
     ${SOURCE_BASE_CRYPTO_TESTS}
     ${SOURCE_BASE_DESKTOP_TESTS}
     ${SOURCE_BASE_DESKTOP_WIN_TESTS}
