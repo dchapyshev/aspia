@@ -120,7 +120,7 @@ signals:
     void sig_drawFrame();
     void sig_mouseCursorChanged(std::shared_ptr<base::MouseCursor> mouse_cursor);
     void sig_sessionListChanged(const proto::desktop::SessionList& sessions);
-    void sig_configChanged(const proto::desktop::Config& config);
+    void sig_videoEncodingChanged(proto::desktop::VideoEncoding encoding);
 
 protected:
     // Client implementation.

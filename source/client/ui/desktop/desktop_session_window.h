@@ -102,6 +102,7 @@ private slots:
     void onMouseEvent(const proto::desktop::MouseEvent& event);
     void onSettings();
     void onConfigChanged(const proto::desktop::Config& config);
+    void onVideoEncodingChanged(proto::desktop::VideoEncoding encoding);
     void onAutosizeWindow();
     void onTakeScreenshot();
     void onScaleDesktop();

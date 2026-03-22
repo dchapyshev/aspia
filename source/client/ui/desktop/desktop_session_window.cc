@@ -304,11 +304,8 @@ Client* DesktopSessionWindow::createClient()
             Qt::QueuedConnection);
     connect(client, &ClientDesktop::sig_sessionListChanged, this, &DesktopSessionWindow::onSessionListChanged,
             Qt::QueuedConnection);
-    connect(client, &ClientDesktop::sig_configChanged, this, [this](const proto::desktop::Config& config)
-    {
-        desktop_config_ = config;
-    },
-    Qt::QueuedConnection);
+    connect(client, &ClientDesktop::sig_videoEncodingChanged, this, &DesktopSessionWindow::onVideoEncodingChanged,
+            Qt::QueuedConnection);
 
     connect(this, &DesktopSessionWindow::sig_desktopConfigChanged, client, &ClientDesktop::onDesktopConfigChanged,
             Qt::QueuedConnection);
@@ -1016,6 +1013,12 @@ void DesktopSessionWindow::onConfigChanged(const proto::desktop::Config& desktop
     desktop_->enableRemoteCursorPosition(desktop_config_.flags() & proto::desktop::CURSOR_POSITION);
     if (!(desktop_config_.flags() & proto::desktop::ENABLE_CURSOR_SHAPE))
         desktop_->setCursorShape(QPixmap(), QPoint());
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopSessionWindow::onVideoEncodingChanged(proto::desktop::VideoEncoding encoding)
+{
+    desktop_config_.set_video_encoding(encoding);
 }
 
 //--------------------------------------------------------------------------------------------------

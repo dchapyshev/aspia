@@ -496,8 +496,9 @@ void ClientDesktop::readVideoPacket(const proto::desktop::VideoPacket& packet)
 
         if (desktop_config_.video_encoding() != video_encoding_)
         {
+            // The host can change the encoding at its own discretion.
             desktop_config_.set_video_encoding(video_encoding_);
-            emit sig_configChanged(desktop_config_);
+            emit sig_videoEncodingChanged(video_encoding_);
         }
     }
 
