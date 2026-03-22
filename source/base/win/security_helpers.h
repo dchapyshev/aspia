@@ -22,9 +22,31 @@
 #include <QString>
 #include <qt_windows.h>
 
-#include "base/typed_buffer.h"
+#include <cstdint>
+#include <memory>
 
 namespace base {
+
+template <typename T>
+struct TypedBufferDeleter
+{
+    void operator()(T* p) const
+    {
+        delete[] reinterpret_cast<uint8_t*>(p);
+    }
+};
+
+template <typename T>
+using TypedBuffer = std::unique_ptr<T, TypedBufferDeleter<T>>;
+
+template <typename T>
+TypedBuffer<T> makeTypedBuffer(size_t length)
+{
+    if (length == 0)
+        return TypedBuffer<T>();
+
+    return TypedBuffer<T>(reinterpret_cast<T*>(new uint8_t[length]));
+}
 
 using ScopedAcl = TypedBuffer<ACL>;
 using ScopedSd = TypedBuffer<SECURITY_DESCRIPTOR>;

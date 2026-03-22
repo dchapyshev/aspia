@@ -65,7 +65,6 @@ list(APPEND SOURCE_BASE
     thread_local_pool.h
     translations.cc
     translations.h
-    typed_buffer.h
     version_constants.cc
     version_constants.h
     xml_settings.cc

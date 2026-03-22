@@ -50,11 +50,11 @@ bool makeScopedAbsoluteSd(const ScopedSd& relative_sd, ScopedSd* absolute_sd, Sc
     }
 
     // Allocate buffers.
-    ScopedSd local_absolute_sd(absolute_sd_size);
-    ScopedAcl local_dacl(dacl_size);
-    ScopedSid local_group(group_size);
-    ScopedSid local_owner(owner_size);
-    ScopedAcl local_sacl(sacl_size);
+    ScopedSd local_absolute_sd = makeTypedBuffer<SECURITY_DESCRIPTOR>(absolute_sd_size);
+    ScopedAcl local_dacl = makeTypedBuffer<ACL>(dacl_size);
+    ScopedSid local_group = makeTypedBuffer<SID>(group_size);
+    ScopedSid local_owner = makeTypedBuffer<SID>(owner_size);
+    ScopedAcl local_sacl = makeTypedBuffer<ACL>(sacl_size);
 
     // Do the conversion.
     if (!MakeAbsoluteSD(relative_sd.get(), local_absolute_sd.get(), &absolute_sd_size,
@@ -65,11 +65,11 @@ bool makeScopedAbsoluteSd(const ScopedSd& relative_sd, ScopedSd* absolute_sd, Sc
         return false;
     }
 
-    absolute_sd->swap(local_absolute_sd);
-    dacl->swap(local_dacl);
-    group->swap(local_group);
-    owner->swap(local_owner);
-    sacl->swap(local_sacl);
+    *absolute_sd = std::move(local_absolute_sd);
+    *dacl = std::move(local_dacl);
+    *group = std::move(local_group);
+    *owner = std::move(local_owner);
+    *sacl = std::move(local_sacl);
 
     return true;
 }
@@ -144,7 +144,7 @@ ScopedSd convertSddlToSd(const QString& sddl)
         return ScopedSd();
     }
 
-    ScopedSd sd(length);
+    ScopedSd sd = makeTypedBuffer<SECURITY_DESCRIPTOR>(length);
     memcpy(sd.get(), raw_sd, length);
 
     return sd;
