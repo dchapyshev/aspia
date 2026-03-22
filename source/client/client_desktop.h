@@ -100,7 +100,7 @@ public slots:
     void onKeyEvent(const proto::desktop::KeyEvent& event);
     void onTextEvent(const proto::desktop::TextEvent& event);
     void onMouseEvent(const proto::desktop::MouseEvent& event);
-    void onPowerControl(proto::desktop::PowerControl::Action action);
+    void onPowerControl(proto::desktop::PowerControl_Action action);
     void onRemoteUpdate();
     void onSystemInfoRequest(const proto::system_info::SystemInfoRequest& request);
     void onTaskManager(const proto::task_manager::ClientToHost& message);
@@ -121,6 +121,7 @@ signals:
     void sig_drawFrame();
     void sig_mouseCursorChanged(std::shared_ptr<base::MouseCursor> mouse_cursor);
     void sig_sessionListChanged(const proto::desktop::SessionList& sessions);
+    void sig_configChanged(const proto::desktop::Config& config);
 
 protected:
     // Client implementation.

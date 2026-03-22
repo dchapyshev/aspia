@@ -140,18 +140,18 @@ void DesktopAgentClient::onIpcDisconnected()
 //--------------------------------------------------------------------------------------------------
 void DesktopAgentClient::onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer)
 {
-    quint16 tcp_channel_id = base::lowWord(channel_id);
+    quint16 net_channel_id = base::lowWord(channel_id);
     quint16 ipc_channel_id = base::highWord(channel_id);
 
     if (ipc_channel_id == proto::desktop::IPC_CHANNEL_ID_SESSION)
     {
-        if (tcp_channel_id > std::numeric_limits<quint8>::max())
+        if (net_channel_id > std::numeric_limits<quint8>::max())
         {
             LOG(ERROR) << "Too big TCP channel ID number";
             return;
         }
 
-        if (tcp_channel_id == proto::peer::CHANNEL_ID_0)
+        if (net_channel_id == proto::peer::CHANNEL_ID_0)
             readSessionMessage(buffer);
     }
     else if (ipc_channel_id == proto::desktop::IPC_CHANNEL_ID_SERVICE)

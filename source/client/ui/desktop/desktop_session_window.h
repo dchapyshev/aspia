@@ -80,7 +80,7 @@ signals:
     void sig_keyEvent(const proto::desktop::KeyEvent& event);
     void sig_textEvent(const proto::desktop::TextEvent& event);
     void sig_mouseEvent(const proto::desktop::MouseEvent& event);
-    void sig_powerControl(proto::desktop::PowerControl::Action action);
+    void sig_powerControl(proto::desktop::PowerControl_Action action);
     void sig_remoteUpdate();
     void sig_systemInfoRequested(const proto::system_info::SystemInfoRequest& request);
     void sig_taskManager(const proto::task_manager::ClientToHost& message);

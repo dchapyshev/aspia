@@ -308,6 +308,11 @@ Client* DesktopSessionWindow::createClient()
             Qt::QueuedConnection);
     connect(client, &ClientDesktop::sig_sessionListChanged, this, &DesktopSessionWindow::onSessionListChanged,
             Qt::QueuedConnection);
+    connect(client, &ClientDesktop::sig_configChanged, this, [this](const proto::desktop::Config& config)
+    {
+        desktop_config_ = config;
+    },
+    Qt::QueuedConnection);
 
     connect(this, &DesktopSessionWindow::sig_desktopConfigChanged, client, &ClientDesktop::setDesktopConfig,
             Qt::QueuedConnection);
@@ -1020,8 +1025,7 @@ void DesktopSessionWindow::changeSettings()
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionWindow::onConfigChanged(const proto::desktop::Config& desktop_config)
 {
-    LOG(INFO) << "Desktop config changed";
-
+    LOG(INFO) << "Desktop config changed:" << desktop_config;
     desktop_config_ = desktop_config;
 
     emit sig_desktopConfigChanged(desktop_config);
