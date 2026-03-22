@@ -66,10 +66,8 @@ const Frame* ScaleReducer::scaleFrame(const Frame* source_frame, const QSize& ta
     {
         *const_cast<Frame*>(source_frame)->updatedRegion() += QRect(QPoint(0, 0), source_size);
 
-        scale_x_ = static_cast<double>(target_size.width() * 100.0) /
-            static_cast<double>(source_size.width());
-        scale_y_ = static_cast<double>(target_size.height() * 100.0) /
-            static_cast<double>(source_size.height());
+        scale_x_ = double(target_size.width() * 100.0) / double(source_size.width());
+        scale_y_ = double(target_size.height() * 100.0) / double(source_size.height());
         source_size_ = source_size;
         target_size_ = target_size;
         target_frame_.reset();
