@@ -162,7 +162,7 @@ void slowBlit(XImage* x_image, uint8_t* src_pos, const QRect& rect, Frame* frame
     int bits_per_pixel = x_image->bits_per_pixel;
 
     uint8_t* dst_pos = frame->frameData() + frame->stride() * dst_y;
-    dst_pos += dst_x * frame->format().bytesPerPixel();
+    dst_pos += dst_x * Frame::kBytesPerPixel;
 
     // TODO(hclam): Optimize, perhaps using MMX code or by converting to YUV directly.
     // TODO(sergeyu): This code doesn't handle XImage byte order properly and won't work with 24bpp
