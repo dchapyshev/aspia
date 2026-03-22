@@ -132,10 +132,7 @@ void DesktopAgentClient::onScreenCaptureData(const base::Frame* frame)
         screen_size->set_width(frame->size().width());
         screen_size->set_height(frame->size().height());
 
-        LOG(INFO) << "Video packet has format ("
-                  << "capturer:" << static_cast<base::ScreenCapturer::Type>(frame->capturerType())
-                  << "screen:" << *screen_size
-                  << "video:" << format->video_rect() << ")";
+        LOG(INFO) << "Video packet has format:" << *format;
     }
 
     sendSessionMessage();
