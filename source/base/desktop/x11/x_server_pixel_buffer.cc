@@ -127,10 +127,10 @@ void fastBlit(XImage* x_image, uint8_t* src_pos, const QRect& rect, Frame* frame
     int dst_y = rect.top() - frame->topLeft().y();
 
     quint8* dst_pos = frame->frameData() + frame->stride() * dst_y;
-    dst_pos += dst_x * frame->format().bytesPerPixel();
+    dst_pos += dst_x * Frame::kBytesPerPixel;
 
     int height = rect.height();
-    int row_bytes = rect.width() * frame->format().bytesPerPixel();
+    int row_bytes = rect.width() * Frame::kBytesPerPixel;
 
     for (int y = 0; y < height; ++y)
     {
