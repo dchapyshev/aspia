@@ -18,6 +18,7 @@
 
 #include "client/ui/desktop/desktop_widget.h"
 
+#include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/desktop/frame_qimage.h"
 #include "common/keycode_converter.h"
@@ -102,21 +103,6 @@ bool isCapsLockActivated()
 bool isModifierKey(int key)
 {
     return key == Qt::Key_Control || key == Qt::Key_Alt || key == Qt::Key_Shift || key == Qt::Key_Meta;
-}
-
-//--------------------------------------------------------------------------------------------------
-QImage imageFromSvgResource(const QString& path, const QSize& size)
-{
-    QSvgRenderer renderer(path);
-    if (!renderer.isValid())
-        return QImage();
-
-    QImage image(size, QImage::Format_ARGB32_Premultiplied);
-    image.fill(Qt::transparent);
-    QPainter painter(&image);
-    renderer.render(&painter);
-
-    return image;
 }
 
 } // namespace
@@ -220,11 +206,10 @@ void DesktopWidget::setCursorShape(QPixmap&& cursor_shape, const QPoint& hotspot
     if (remote_cursor_shape_.isNull())
     {
         setCursor(QCursor(Qt::ArrowCursor));
+        return;
     }
-    else
-    {
-        setCursor(QCursor(remote_cursor_shape_, hotspot.x(), hotspot.y()));
-    }
+
+    setCursor(QCursor(remote_cursor_shape_, hotspot.x(), hotspot.y()));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -517,7 +502,7 @@ void DesktopWidget::paintEvent(QPaintEvent* /* event */)
         painter_.fillRect(title_rect, QColor(207, 207, 207));
         painter_.fillRect(message_rect, QColor(255, 255, 255));
 
-        QImage icon = imageFromSvgResource(":/img/computer.svg", QSize(24, 24));
+        QImage icon = base::GuiApplication::svgImage(":/img/computer.svg", QSize(24, 24));
         QPoint icon_pos(title_rect.x() + 8, title_rect.y() + (kTitleHeight / 2) - (icon.height() / 2));
 
         title_rect.setLeft(icon_pos.x() + icon.width() + 8);
@@ -533,15 +518,12 @@ void DesktopWidget::paintEvent(QPaintEvent* /* event */)
             case proto::desktop::VIDEO_ERROR_CODE_PAUSED:
                 message = tr("The session was paused by a remote user");
                 break;
-
             case proto::desktop::VIDEO_ERROR_CODE_TEMPORARY:
                 message = tr("The session is temporarily unavailable");
                 break;
-
             case proto::desktop::VIDEO_ERROR_CODE_PERMANENT:
                 message = tr("The session is permanently unavailable");
                 break;
-
             default:
                 message = tr("Error while receiving video stream: %1").arg(last_error_code_);
                 break;
