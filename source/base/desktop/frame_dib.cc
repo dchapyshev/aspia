@@ -35,14 +35,15 @@ FrameDib::FrameDib(const QSize& size, int stride, quint8* data, HBITMAP bitmap)
 std::unique_ptr<FrameDib> FrameDib::create(const QSize& size, HDC hdc)
 {
     const int bytes_per_row = size.width() * kBytesPerPixel;
-    const size_t buffer_size = calcMemorySize(size, kBytesPerPixel);
+    const DWORD buffer_size = static_cast<DWORD>(
+        ((size.width() + 128 * 2) * (size.height() + 128 * 2)) * kBytesPerPixel);
 
     BITMAPINFO bmi;
     memset(&bmi, 0, sizeof(bmi));
 
     bmi.bmiHeader.biSize      = sizeof(bmi.bmiHeader);
     bmi.bmiHeader.biBitCount  = kBytesPerPixel * 8;
-    bmi.bmiHeader.biSizeImage = static_cast<DWORD>(buffer_size);
+    bmi.bmiHeader.biSizeImage = buffer_size;
     bmi.bmiHeader.biPlanes    = 1;
     bmi.bmiHeader.biWidth     = size.width();
     bmi.bmiHeader.biHeight    = -size.height();

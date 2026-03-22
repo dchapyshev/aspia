@@ -64,8 +64,6 @@ public:
 protected:
     Frame(const QSize& size, int stride, quint8* data);
 
-    static size_t calcMemorySize(const QSize& size, int bytes_per_pixel);
-
     // Ownership of the buffers is defined by the classes that inherit from this class. They must
     // guarantee that the buffer is not deleted before the frame is deleted.
     quint8* data_;

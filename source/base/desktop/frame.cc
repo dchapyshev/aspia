@@ -136,12 +136,4 @@ void Frame::copyFrameInfoFrom(const Frame& other)
     capturer_type_ = other.capturer_type_;
 }
 
-//--------------------------------------------------------------------------------------------------
-// static
-size_t Frame::calcMemorySize(const QSize& size, int bytes_per_pixel)
-{
-    return static_cast<size_t>(
-        ((size.width() + 128 * 2) * (size.height() + 128 * 2)) * bytes_per_pixel);
-}
-
 } // namespace base
