@@ -20,7 +20,7 @@
 
 #include "base/gui_application.h"
 #include "base/logging.h"
-#include "base/desktop/frame_qimage.h"
+#include "base/desktop/frame.h"
 #include "common/keycode_converter.h"
 
 #include <QApplication>
@@ -130,9 +130,8 @@ DesktopWidget::DesktopWidget(QWidget* parent)
 
             if (frame_)
             {
-                QImage* source_image = static_cast<base::FrameQImage*>(frame_.get())->image();
                 error_image_ = std::make_unique<QImage>(
-                    source_image->convertToFormat(QImage::Format_Grayscale8));
+                    frame_image_.convertToFormat(QImage::Format_Grayscale8));
             }
         }
 
@@ -166,9 +165,24 @@ base::Frame* DesktopWidget::desktopFrame()
 }
 
 //--------------------------------------------------------------------------------------------------
+const QImage& DesktopWidget::desktopImage()
+{
+    return frame_image_;
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopWidget::setDesktopFrame(std::shared_ptr<base::Frame> frame)
 {
     frame_ = std::move(frame);
+    if (!frame_)
+    {
+        frame_image_ = QImage();
+        return;
+    }
+
+    const QSize& frame_size = frame_->size();
+    frame_image_ = QImage(frame_->frameData(), frame_size.width(), frame_size.height(),
+                          frame_->stride(), QImage::Format_RGB32);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -450,10 +464,9 @@ void DesktopWidget::paintEvent(QPaintEvent* /* event */)
 #endif
     if (current_error_code_ == proto::desktop::VIDEO_ERROR_CODE_OK)
     {
-        base::FrameQImage* frame = reinterpret_cast<base::FrameQImage*>(frame_.get());
-        if (frame)
+        if (!frame_image_.isNull())
         {
-            painter_.drawImage(rect(), frame->constImage());
+            painter_.drawImage(rect(), frame_image_);
 
             if (enable_remote_cursor_pos_)
             {

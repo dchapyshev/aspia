@@ -35,7 +35,7 @@
 
 #include "base/logging.h"
 #include "base/version_constants.h"
-#include "base/desktop/frame_qimage.h"
+#include "base/desktop/frame.h"
 #include "base/desktop/mouse_cursor.h"
 #include "client/client_desktop.h"
 #include "client/ui/chat/chat_session_window.h"
@@ -1073,8 +1073,8 @@ void DesktopSessionWindow::onTakeScreenshot()
         return;
     }
 
-    base::FrameQImage* frame = static_cast<base::FrameQImage*>(desktop_->desktopFrame());
-    if (!frame)
+    const QImage& image = desktop_->desktopImage();
+    if (image.isNull())
     {
         LOG(INFO) << "No desktop frame";
         return;
@@ -1093,7 +1093,7 @@ void DesktopSessionWindow::onTakeScreenshot()
         return;
     }
 
-    if (!frame->constImage().save(file_path, format))
+    if (!image.save(file_path, format))
     {
         LOG(ERROR) << "Unable to save image";
         QMessageBox::warning(this, tr("Warning"), tr("Could not save image"), QMessageBox::Ok);

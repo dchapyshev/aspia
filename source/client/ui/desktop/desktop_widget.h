@@ -53,6 +53,7 @@ public:
     ~DesktopWidget() final;
 
     base::Frame* desktopFrame();
+    const QImage& desktopImage();
     void setDesktopFrame(std::shared_ptr<base::Frame> frame);
     void setDesktopFrameError(proto::desktop::VideoErrorCode error_code);
     void drawDesktopFrame();
@@ -116,6 +117,8 @@ private:
     std::unique_ptr<QImage> error_image_;
 
     std::shared_ptr<base::Frame> frame_;
+    QImage frame_image_;
+
     bool enable_key_sequenses_ = true;
     bool enable_remote_cursor_pos_ = false;
 

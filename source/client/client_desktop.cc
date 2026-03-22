@@ -27,9 +27,8 @@
 #include "base/codec/video_decoder.h"
 #include "base/codec/webm_file_writer.h"
 #include "base/codec/webm_video_encoder.h"
-#include "base/desktop/frame_qimage.h"
+#include "base/desktop/frame_aligned.h"
 #include "base/desktop/mouse_cursor.h"
-#include "client/config_factory.h"
 #include "common/desktop_session_constants.h"
 
 namespace client {
@@ -540,7 +539,7 @@ void ClientDesktop::readVideoPacket(const proto::desktop::VideoPacket& packet)
         }
 
         video_capturer_type_ = format.capturer_type();
-        desktop_frame_ = base::FrameQImage::create(video_size);
+        desktop_frame_ = base::FrameAligned::create(video_size, 32);
 
         emit sig_frameChanged(screen_size, desktop_frame_);
     }
