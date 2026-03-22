@@ -224,11 +224,9 @@ DesktopSessionWindow::DesktopSessionWindow(proto::peer::SessionType session_type
             case proto::peer::SESSION_TYPE_FILE_TRANSFER:
                 session_window = new FileTransferSessionWindow();
                 break;
-
             case proto::peer::SESSION_TYPE_TEXT_CHAT:
                 session_window = new ChatSessionWindow();
                 break;
-
             default:
                 NOTREACHED();
                 break;
