@@ -1204,6 +1204,18 @@
         <translation>&amp;Language</translation>
     </message>
     <message>
+        <source>&amp;Theme</source>
+        <translation>&amp;Thème</translation>
+    </message>
+    <message>
+        <source>Light</source>
+        <translation>Clair</translation>
+    </message>
+    <message>
+        <source>Dark</source>
+        <translation>Sombre</translation>
+    </message>
+    <message>
         <location filename="../console/main_window.ui" line="155"/>
         <source>Tools</source>
         <translation>Outils</translation>

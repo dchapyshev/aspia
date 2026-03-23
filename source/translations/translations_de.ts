@@ -1208,6 +1208,18 @@
         <translation>&amp;Sprache</translation>
     </message>
     <message>
+        <source>&amp;Theme</source>
+        <translation>&amp;Thema</translation>
+    </message>
+    <message>
+        <source>Light</source>
+        <translation>Hell</translation>
+    </message>
+    <message>
+        <source>Dark</source>
+        <translation>Dunkel</translation>
+    </message>
+    <message>
         <location filename="../console/main_window.ui" line="155"/>
         <source>Tools</source>
         <translation type="unfinished"></translation>

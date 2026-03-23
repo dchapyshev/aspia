@@ -1170,6 +1170,18 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>&amp;Theme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Light</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Dark</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../console/main_window.ui" line="155"/>
         <source>Tools</source>
         <translation type="unfinished"></translation>

@@ -1244,6 +1244,18 @@
         <translation>&amp;Taal</translation>
     </message>
     <message>
+        <source>&amp;Theme</source>
+        <translation>&amp;Thema</translation>
+    </message>
+    <message>
+        <source>Light</source>
+        <translation>Licht</translation>
+    </message>
+    <message>
+        <source>Dark</source>
+        <translation>Donker</translation>
+    </message>
+    <message>
         <location filename="../console/main_window.ui" line="155"/>
         <source>Tools</source>
         <translation>Gereedschappen</translation>
