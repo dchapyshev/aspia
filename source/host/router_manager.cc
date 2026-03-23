@@ -286,15 +286,16 @@ void RouterManager::onNewPeerConnected()
             if (stun_info.version() != 1)
             {
                 LOG(INFO) << "Unsupported stun server version";
-                return;
             }
+            else
+            {
+                connection.stun_host = QString::fromStdString(stun_info.host());
+                connection.stun_port = stun_info.port();
 
-            connection.stun_host = QString::fromStdString(stun_info.host());
-            connection.stun_port = stun_info.port();
-
-            // An empty string means that the router address should be used.
-            if (connection.stun_host.isEmpty())
-                connection.stun_host = address_;
+                // An empty string means that the router address should be used.
+                if (connection.stun_host.isEmpty())
+                    connection.stun_host = address_;
+            }
         }
 
         if (offer.has_peer_info())
