@@ -70,19 +70,14 @@ message DirectUdpReply
     bytes iv          = 3;
 }
 
-message StartUdpHandshake
-{
-    uint32 dummy = 1;
-}
-
 // Use CHANNEL_ID_CONTROL to send.
 message ClientToHost
 {
-    DirectUdpRequest direct_udp_request = 1;
+    DirectUdpReply direct_udp_reply = 1;
 }
 
 // Use CHANNEL_ID_CONTROL to send.
 message HostToClient
 {
-    DirectUdpReply direct_udp_reply = 1;
+    DirectUdpRequest direct_udp_request = 1;
 }

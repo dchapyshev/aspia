@@ -64,22 +64,20 @@ RouterManager::~RouterManager()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool RouterManager::hasPendingConnections() const
+bool RouterManager::hasReadyConnections() const
 {
     return !channels_.isEmpty();
 }
 
 //--------------------------------------------------------------------------------------------------
-base::TcpChannel* RouterManager::nextPendingConnection()
+std::optional<RouterManager::ReadyConnection> RouterManager::nextReadyConnection()
 {
     if (channels_.isEmpty())
-        return nullptr;
+        return std::nullopt;
 
-    base::TcpChannel* channel = channels_.front();
-    channel->setParent(nullptr);
-
-    channels_.pop_front();
-    return channel;
+    ReadyConnection ready = channels_.takeFirst();
+    ready.tcp_channel->setParent(nullptr);
+    return ready;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -247,24 +245,6 @@ void RouterManager::onTcpMessageReceived(quint8 /* channel_id */, const QByteArr
         {
             base::ServerAuthenticator* authenticator = new base::ServerAuthenticator();
             authenticator->setUserList(user_list_);
-
-            if (connection_offer.has_stun_info())
-            {
-                const proto::router::StunServerInfo& stun_info = connection_offer.stun_info();
-                if (stun_info.version() != 1)
-                {
-                    LOG(INFO) << "Unsupported stun server version";
-                    return;
-                }
-
-                stun_host_ = QString::fromStdString(stun_info.host());
-                stun_port_ = stun_info.port();
-
-                // An empty string means that the router address should be used.
-                if (stun_host_.isEmpty())
-                    stun_host_ = address_;
-            }
-
             peer_manager_->addConnectionOffer(connection_offer, authenticator);
         }
         else
@@ -286,10 +266,42 @@ void RouterManager::onTcpMessageReceived(quint8 /* channel_id */, const QByteArr
 void RouterManager::onNewPeerConnected()
 {
     LOG(INFO) << "New peer connected";
-    channels_ = peer_manager_->takePendingConnections();
+    CHECK(peer_manager_);
 
-    for (const auto& channel : std::as_const(channels_))
-        channel->setParent(this);
+    while (peer_manager_->hasPendingConnections())
+    {
+        auto ready = peer_manager_->takePendingConnection();
+
+        const proto::router::ConnectionOffer& offer = ready.second;
+        base::TcpChannel* tcp_channel = ready.first;
+
+        tcp_channel->setParent(this);
+
+        ReadyConnection connection;
+        connection.tcp_channel = ready.first;
+
+        if (offer.has_stun_info())
+        {
+            const proto::router::StunServerInfo& stun_info = offer.stun_info();
+            if (stun_info.version() != 1)
+            {
+                LOG(INFO) << "Unsupported stun server version";
+                return;
+            }
+
+            connection.stun_host = QString::fromStdString(stun_info.host());
+            connection.stun_port = stun_info.port();
+
+            // An empty string means that the router address should be used.
+            if (connection.stun_host.isEmpty())
+                connection.stun_host = address_;
+        }
+
+        if (offer.has_peer_info())
+            connection.peer_equals = offer.peer_info().is_address_equals();
+
+        channels_.emplace_back(std::move(connection));
+    }
 
     emit sig_clientConnected();
 }

@@ -19,8 +19,11 @@
 #ifndef HOST_SERVICE_H
 #define HOST_SERVICE_H
 
+#include <QTime>
+
 #include "base/service.h"
 #include "host/system_settings.h"
+#include "proto/router_peer.h"
 
 class QFileSystemWatcher;
 class QTimer;
@@ -92,8 +95,17 @@ private slots:
     void onRemoveHost(quint32 flags);
 
 private:
-    void startConfirmation(base::TcpChannel* tcp_channel);
-    void startClient(base::TcpChannel* tcp_channel);
+    struct PendingConfirmation
+    {
+        base::TcpChannel* tcp_channel = nullptr;
+        QTime start_time;
+        QString stun_host;
+        quint16 stun_port = 0;
+        bool peer_equals = false;
+    };
+
+    void startConfirmation(PendingConfirmation& pending);
+    void startClient(const PendingConfirmation& pending);
     void addFirewallRules();
     void deleteFirewallRules();
     void reloadUserList();
@@ -112,7 +124,7 @@ private:
     DesktopManager* desktop_manager_ = nullptr;
     UserSession* user_session_ = nullptr;
 
-    QList<std::pair<base::TcpChannel*, QTime>> pending_confirmation_;
+    QList<PendingConfirmation> pending_confirmation_;
     QList<Client*> clients_;
 
     common::UpdateChecker* update_checker_ = nullptr;

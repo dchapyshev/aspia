@@ -22,10 +22,12 @@
 #include <QObject>
 #include <QVersionNumber>
 
+#include "base/crypto/key_pair.h"
 #include "base/net/tcp_channel.h"
 #include "proto/peer.h"
 
 namespace base {
+class StunPeer;
 class UdpChannel;
 } // namespace base
 
@@ -39,7 +41,7 @@ public:
     Client(base::TcpChannel* tcp_channel, QObject* parent);
     virtual ~Client();
 
-    void start();
+    void start(const QString& stun_host, quint16 stun_port, bool peer_equals);
 
     quint32 clientId() const;
     proto::peer::SessionType sessionType() const;
@@ -50,6 +52,15 @@ public:
     QString architecture() const;
     QString userName() const;
     qint64 pendingBytes() const;
+
+    enum class UdpConnectPhase
+    {
+        NONE,
+        DIRECT_LAN,         // Bind in LAN (peer_address_equals == true).
+        HOLE_PUNCHING,      // First STUN attempt, auto-detect white IP / NAT.
+        HOLE_PUNCHING_RETRY // Second STUN attempt, always use ready socket.
+    };
+    Q_ENUM(UdpConnectPhase)
 
 signals:
     void sig_started();
@@ -70,13 +81,21 @@ private slots:
     void onUdpMessageReceived(quint8 udp_channel_id, const QByteArray& buffer);
 
 private:
-    void readDirectUdpRequest(const proto::peer::DirectUdpRequest& request);
-    void connectToUdp(const QString& address, quint16 port, quint32 encryptions,
-        const QByteArray& public_key, const QByteArray& iv);
+    void startUdpHolePunching();
+    void startDirectUdp(qintptr socket, const QString& address, quint16 port);
 
     base::TcpChannel* tcp_channel_ = nullptr;
     base::UdpChannel* udp_channel_ = nullptr;
     bool udp_ready_ = false;
+
+    base::StunPeer* stun_peer_ = nullptr;
+    base::KeyPair udp_key_pair_;
+    QByteArray udp_iv_;
+
+    UdpConnectPhase udp_phase_ = UdpConnectPhase::NONE;
+    bool peer_equals_ = false;
+    QString stun_host_;
+    quint16 stun_port_ = 0;
 
     Q_DISABLE_COPY_MOVE(Client)
 };

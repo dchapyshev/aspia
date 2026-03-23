@@ -24,13 +24,11 @@
 
 #include "client/client_session_state.h"
 #include "client/router_manager.h"
-#include "base/crypto/key_pair.h"
 #include "base/net/tcp_channel.h"
 
 class QTimer;
 
 namespace base {
-class StunPeer;
 class UdpChannel;
 } // namespace base
 
@@ -71,15 +69,6 @@ public:
     };
     Q_ENUM(Status)
 
-    enum class UdpConnectPhase
-    {
-        NONE,
-        DIRECT_LAN,         // Bind in LAN (peer_address_equals == true).
-        HOLE_PUNCHING,      // First STUN attempt, auto-detect white IP / NAT.
-        HOLE_PUNCHING_RETRY // Second STUN attempt, always use ready socket.
-    };
-    Q_ENUM(UdpConnectPhase)
-
 signals:
     void sig_statusChanged(client::Client::Status status, const QVariant& data = QVariant());
     void sig_showSessionWindow();
@@ -114,14 +103,15 @@ private slots:
     void onUdpMessageReceived(quint8 channel_id, const QByteArray& buffer);
     void onRouterConnected(const QVersionNumber& router_version);
     void onHostAwaiting();
-    void onHostConnected(bool peer_address_equals, const QString& stun_host, quint16 stun_port);
+    void onHostConnected();
     void onRouterErrorOccurred(const client::RouterManager::Error& error);
 
 private:
     void delayedReconnect();
     void tcpChannelReady();
-    void startUdpHolePunching();
-    void startDirectUdp(qintptr socket, const QString& address, quint16 port);
+    void readDirectUdpRequest(const proto::peer::DirectUdpRequest& request);
+    void connectToUdp(const QString& address, quint16 port, quint32 encryptions,
+                      const QByteArray& public_key, const QByteArray& iv);
 
     bool is_legacy_mode_ = false;
     QTimer* timeout_timer_ = nullptr;
@@ -129,13 +119,6 @@ private:
     RouterManager* router_controller_ = nullptr;
     base::TcpChannel* tcp_channel_ = nullptr;
     base::UdpChannel* udp_channel_ = nullptr;
-    base::StunPeer* stun_peer_ = nullptr;
-    base::KeyPair udp_key_pair_;
-    QByteArray udp_iv_;
-
-    UdpConnectPhase udp_phase_ = UdpConnectPhase::NONE;
-    QString stun_host_;
-    quint16 stun_port_ = 0;
 
     std::shared_ptr<SessionState> session_state_;
 

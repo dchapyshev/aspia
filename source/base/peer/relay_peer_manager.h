@@ -42,7 +42,11 @@ public:
     ~RelayPeerManager() final;
 
     void addConnectionOffer(const proto::router::ConnectionOffer& offer, Authenticator* authenticator);
-    QQueue<TcpChannel*> takePendingConnections();
+
+    using ReadyConnection = std::pair<TcpChannel*, proto::router::ConnectionOffer>;
+
+    bool hasPendingConnections() const;
+    ReadyConnection takePendingConnection();
 
 signals:
     void sig_newPeerConnected();
@@ -55,7 +59,7 @@ private:
     void cleanup();
 
     QList<RelayPeer*> pending_;
-    QQueue<TcpChannel*> channels_;
+    QQueue<ReadyConnection> ready_;
 
     Q_DISABLE_COPY_MOVE(RelayPeerManager)
 };

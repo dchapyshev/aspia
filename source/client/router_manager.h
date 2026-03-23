@@ -73,7 +73,7 @@ public:
 signals:
     void sig_routerConnected(const QVersionNumber& version);
     void sig_hostAwaiting();
-    void sig_hostConnected(bool peer_address_equals, const QString& stun_host, quint16 stun_port);
+    void sig_hostConnected();
     void sig_errorOccurred(const client::RouterManager::Error& error);
 
 private slots:
@@ -91,10 +91,6 @@ private:
     QTimer* status_request_timer_ = nullptr;
     base::RelayPeer* relay_peer_ = nullptr;
     RouterConfig router_config_;
-
-    bool is_peer_address_equals_ = false;
-    QString stun_host_;
-    quint16 stun_port_ = 0;
 
     base::HostId host_id_ = base::kInvalidHostId;
     bool wait_for_host_ = false;

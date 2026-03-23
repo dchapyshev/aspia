@@ -203,17 +203,7 @@ void RouterManager::onTcpMessageReceived(quint8 /* channel_id */, const QByteArr
                     LOG(INFO) << "Unsupported stun server version";
                     return;
                 }
-
-                stun_host_ = QString::fromStdString(stun_info.host());
-                stun_port_ = stun_info.port();
-
-                // An empty string means that the router address should be used.
-                if (stun_host_.isEmpty())
-                    stun_host_ = router_config_.address;
             }
-
-            if (connection_offer.has_peer_info())
-                is_peer_address_equals_ = connection_offer.peer_info().is_address_equals();
         }
     }
     else if (message.has_host_status())
@@ -250,7 +240,7 @@ void RouterManager::onRelayConnectionReady()
     host_channel_ = relay_peer_->takeChannel();
     host_channel_->setParent(this);
 
-    emit sig_hostConnected(is_peer_address_equals_, stun_host_, stun_port_);
+    emit sig_hostConnected();
 
     relay_peer_->disconnect();
     relay_peer_->deleteLater();

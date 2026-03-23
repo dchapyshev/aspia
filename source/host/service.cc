@@ -204,7 +204,12 @@ void Service::onNewDirectConnection()
     CHECK(tcp_server_);
 
     while (tcp_server_->hasReadyConnections())
-        startConfirmation(tcp_server_->nextReadyConnection());
+    {
+        PendingConfirmation pending;
+        pending.tcp_channel = tcp_server_->nextReadyConnection();
+        pending.start_time = QTime::currentTime();
+        startConfirmation(pending);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -213,8 +218,20 @@ void Service::onNewRelayConnection()
     LOG(INFO) << "New RELAY connection";
     CHECK(router_manager_);
 
-    while (router_manager_->hasPendingConnections())
-        startConfirmation(router_manager_->nextPendingConnection());
+    while (router_manager_->hasReadyConnections())
+    {
+        std::optional<RouterManager::ReadyConnection> connection = router_manager_->nextReadyConnection();
+        if (!connection.has_value())
+            continue;
+
+        PendingConfirmation pending;
+        pending.tcp_channel = connection->tcp_channel;
+        pending.start_time = QTime::currentTime();
+        pending.stun_host = connection->stun_host;
+        pending.stun_port = connection->stun_port;
+        pending.peer_equals = connection->peer_equals;
+        startConfirmation(pending);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -222,7 +239,7 @@ void Service::onConfirmationReply(quint32 request_id, bool accept)
 {
     for (auto it = pending_confirmation_.begin(), it_end = pending_confirmation_.end(); it != it_end; ++it)
     {
-        base::TcpChannel* tcp_channel = it->first;
+        base::TcpChannel* tcp_channel = it->tcp_channel;
 
         if (tcp_channel->instanceId() != request_id)
             continue;
@@ -230,7 +247,7 @@ void Service::onConfirmationReply(quint32 request_id, bool accept)
         LOG(INFO) << "TCP channel" << request_id << "is" << (accept ? "accepted" : "rejected");
 
         if (accept)
-            startClient(tcp_channel);
+            startClient(*it);
         else
             tcp_channel->deleteLater();
 
@@ -370,11 +387,11 @@ void Service::onRepeatedTasks()
     // delete them.
     for (auto it = pending_confirmation_.begin(); it != pending_confirmation_.end(); ++it)
     {
-        QTime time = it->second;
+        QTime time = it->start_time;
 
         if (time.secsTo(current_time) > 60)
         {
-            base::TcpChannel* tcp_channel = it->first;
+            base::TcpChannel* tcp_channel = it->tcp_channel;
             tcp_channel->deleteLater();
             it = pending_confirmation_.erase(it);
         }
@@ -661,11 +678,12 @@ void Service::onRemoveHost(quint32 flags)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Service::startConfirmation(base::TcpChannel* tcp_channel)
+void Service::startConfirmation(PendingConfirmation& pending)
 {
     LOG(INFO) << "TCP channel is ready";
-    CHECK(tcp_channel);
+    CHECK(pending.tcp_channel);
 
+    base::TcpChannel* tcp_channel = pending.tcp_channel;
     tcp_channel->setParent(this);
 
     const QVersionNumber& host_version = base::kCurrentVersion;
@@ -682,19 +700,20 @@ void Service::startConfirmation(base::TcpChannel* tcp_channel)
     SystemSettings settings;
 
     proto::user::ConfirmationRequest request;
-    request.set_id(tcp_channel->instanceId());
+    request.set_id(pending.tcp_channel->instanceId());
     request.set_session_type(session_type);
     request.set_computer_name(tcp_channel->peerComputerName().toStdString());
     request.set_user_name(tcp_channel->peerUserName().toStdString());
     request.set_timeout(settings.autoConfirmationInterval().count());
 
-    pending_confirmation_.emplace_back(tcp_channel, QTime::currentTime());
+    pending_confirmation_.emplace_back(std::move(pending));
     user_session_->onClientConfirmation(request);
 }
 
 //--------------------------------------------------------------------------------------------------
-void Service::startClient(base::TcpChannel* tcp_channel)
+void Service::startClient(const PendingConfirmation& pending)
 {
+    base::TcpChannel* tcp_channel = pending.tcp_channel;
     CHECK(tcp_channel);
 
     static const int kReadBufferSize = 2 * 1024 * 1024; // 2 Mb.
@@ -765,7 +784,7 @@ void Service::startClient(base::TcpChannel* tcp_channel)
     }
 
     clients_.append(client_to_start);
-    client_to_start->start();
+    client_to_start->start(pending.stun_host, pending.stun_port, pending.peer_equals);
 }
 
 //--------------------------------------------------------------------------------------------------

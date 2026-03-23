@@ -51,12 +51,21 @@ void RelayPeerManager::addConnectionOffer(
 }
 
 //--------------------------------------------------------------------------------------------------
-QQueue<TcpChannel*> RelayPeerManager::takePendingConnections()
+bool RelayPeerManager::hasPendingConnections() const
 {
-    for (const auto& channel : std::as_const(channels_))
-        channel->setParent(nullptr);
+    return !ready_.isEmpty();
+}
 
-    return std::move(channels_);
+//--------------------------------------------------------------------------------------------------
+RelayPeerManager::ReadyConnection RelayPeerManager::takePendingConnection()
+{
+    if (ready_.isEmpty())
+        return ReadyConnection(nullptr, proto::router::ConnectionOffer());
+
+    ReadyConnection ready = ready_.takeFirst();
+    ready.first->setParent(nullptr);
+
+    return ready;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -72,7 +81,7 @@ void RelayPeerManager::onRelayConnectionReady()
         TcpChannel* channel = peer->takeChannel();
         channel->setParent(this);
 
-        channels_.emplace_back(channel);
+        ready_.emplace_back(channel, peer->connectionOffer());
         emit sig_newPeerConnected();
     }
 

@@ -21,6 +21,8 @@
 
 #include <QQueue>
 
+#include <optional>
+
 #include "base/shared_pointer.h"
 #include "base/net/tcp_channel.h"
 #include "base/peer/host_id.h"
@@ -47,11 +49,16 @@ public:
     quint16 port() const { return port_; }
     const QByteArray& publicKey() const { return public_key_; }
 
-    const QString& stunHost() const { return stun_host_; }
-    quint16 stunPort() const { return stun_port_; }
+    struct ReadyConnection
+    {
+        base::TcpChannel* tcp_channel = nullptr;
+        QString stun_host;
+        quint16 stun_port = 0;
+        bool peer_equals = false;
+    };
 
-    bool hasPendingConnections() const;
-    base::TcpChannel* nextPendingConnection();
+    bool hasReadyConnections() const;
+    std::optional<ReadyConnection> nextReadyConnection();
 
 public slots:
     void start();
@@ -86,9 +93,6 @@ private:
     quint16 port_ = 0;
     QByteArray public_key_;
 
-    QString stun_host_;
-    quint16 stun_port_;
-
     QTimer* password_expire_timer_ = nullptr;
     QString one_time_password_;
     quint32 one_time_sessions_ = 0;
@@ -98,7 +102,7 @@ private:
     base::HostId host_id_ = base::kInvalidHostId;
     proto::user::RouterState router_state_;
 
-    QQueue<base::TcpChannel*> channels_;
+    QQueue<ReadyConnection> channels_;
 
     Q_DISABLE_COPY_MOVE(RouterManager)
 };
