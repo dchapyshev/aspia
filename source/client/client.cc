@@ -537,6 +537,12 @@ void Client::tcpChannelReady()
 //--------------------------------------------------------------------------------------------------
 void Client::readDirectUdpRequest(const proto::peer::DirectUdpRequest& request)
 {
+    if (qEnvironmentVariableIsSet("ASPIA_DISABLE_UDP"))
+    {
+        LOG(INFO) << "UDP is disable by environment variable";
+        return;
+    }
+
     QStringList address_list;
 
     for (int i = 0; i < request.address_size(); ++i)
