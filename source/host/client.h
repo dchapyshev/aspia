@@ -41,7 +41,7 @@ public:
     Client(base::TcpChannel* tcp_channel, QObject* parent);
     virtual ~Client();
 
-    void start(const QString& stun_host, quint16 stun_port, bool peer_equals);
+    void start(bool direct, const QString& stun_host, quint16 stun_port, bool peer_equals);
 
     quint32 clientId() const;
     proto::peer::SessionType sessionType() const;
@@ -93,6 +93,7 @@ private:
     QByteArray udp_iv_;
 
     UdpConnectPhase udp_phase_ = UdpConnectPhase::NONE;
+    bool direct_ = false;
     bool peer_equals_ = false;
     QString stun_host_;
     quint16 stun_port_ = 0;

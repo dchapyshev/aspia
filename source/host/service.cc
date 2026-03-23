@@ -209,6 +209,7 @@ void Service::onNewDirectConnection()
         PendingConfirmation pending;
         pending.tcp_channel = tcp_server_->nextReadyConnection();
         pending.start_time = QTime::currentTime();
+        pending.direct = true;
         startConfirmation(pending);
     }
 }
@@ -231,6 +232,7 @@ void Service::onNewRelayConnection()
         pending.stun_host = connection->stun_host;
         pending.stun_port = connection->stun_port;
         pending.peer_equals = connection->peer_equals;
+        pending.direct = false;
         startConfirmation(pending);
     }
 }
@@ -785,7 +787,7 @@ void Service::startClient(const PendingConfirmation& pending)
     }
 
     clients_.append(client_to_start);
-    client_to_start->start(pending.stun_host, pending.stun_port, pending.peer_equals);
+    client_to_start->start(pending.direct, pending.stun_host, pending.stun_port, pending.peer_equals);
 }
 
 //--------------------------------------------------------------------------------------------------

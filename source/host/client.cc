@@ -60,27 +60,27 @@ Client::~Client()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::start(const QString& stun_host, quint16 stun_port, bool peer_equals)
+void Client::start(bool direct, const QString& stun_host, quint16 stun_port, bool peer_equals)
 {
+    direct_ = direct;
     peer_equals_ = peer_equals;
     stun_host_ = stun_host;
     stun_port_ = stun_port;
 
     onStart();
 
-    if (stun_host.isEmpty() || !stun_port)
-        return;
-
-    if (peer_equals_)
+    if (direct || peer_equals)
     {
         udp_phase_ = UdpConnectPhase::DIRECT_LAN;
         startDirectUdp(-1, QString(), 0);
+        return;
     }
-    else
-    {
-        udp_phase_ = UdpConnectPhase::HOLE_PUNCHING;
-        startUdpHolePunching();
-    }
+
+    if (stun_host.isEmpty() || !stun_port)
+        return;
+
+    udp_phase_ = UdpConnectPhase::HOLE_PUNCHING;
+    startUdpHolePunching();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -272,10 +272,18 @@ void Client::onUdpErrorOccurred()
     switch (udp_phase_)
     {
         case UdpConnectPhase::DIRECT_LAN:
+        {
+            if (direct_)
+            {
+                udp_phase_ = UdpConnectPhase::NONE;
+                return;
+            }
+
             LOG(INFO) << "Direct LAN UDP failed, trying hole punching";
             udp_phase_ = UdpConnectPhase::HOLE_PUNCHING;
             startUdpHolePunching();
-            break;
+        }
+        break;
 
         case UdpConnectPhase::HOLE_PUNCHING:
             LOG(INFO) << "First UDP hole punching attempt failed, retrying";
