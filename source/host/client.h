@@ -65,6 +65,7 @@ public:
 signals:
     void sig_started();
     void sig_finished();
+    void sig_connectionChanged();
 
 protected:
     void send(quint8 channel_id, const QByteArray& buffer);

@@ -59,6 +59,7 @@ public:
 public slots:
     void onClientStarted();
     void onClientFinished();
+    void onClientConnectionChanged();
     void onClientSwitchSession(base::SessionId session_id);
     void onUserPause(bool enable);
     void onUserLockMouse(bool enable);

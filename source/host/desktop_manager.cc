@@ -285,6 +285,15 @@ void DesktopManager::onClientFinished()
 }
 
 //--------------------------------------------------------------------------------------------------
+void DesktopManager::onClientConnectionChanged()
+{
+    proto::desktop::ServiceToAgent message;
+    proto::desktop::AgentControl* control = message.mutable_control();
+    control->set_command_name("connection_changed");
+    sendMessage(base::serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopManager::onClientSwitchSession(base::SessionId session_id)
 {
     if (!client_count_ || session_id == session_id_)

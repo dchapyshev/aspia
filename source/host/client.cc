@@ -246,6 +246,7 @@ void Client::onUdpReady()
     CHECK(udp_channel_);
     udp_ready_ = true;
     udp_channel_->setPaused(false);
+    emit sig_connectionChanged();
 }
 
 //--------------------------------------------------------------------------------------------------

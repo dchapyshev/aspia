@@ -236,6 +236,8 @@ void DesktopAgent::onIpcMessageReceived(quint32 /* ipc_channel_id */, const QByt
         const proto::desktop::AgentControl& control = message.control();
         const std::string& command_name = control.command_name();
 
+        LOG(INFO) << "Command:" << command_name;
+
         if (command_name == "start_client")
         {
             CHECK(control.has_utf8_string());
@@ -255,6 +257,12 @@ void DesktopAgent::onIpcMessageReceived(quint32 /* ipc_channel_id */, const QByt
         {
             CHECK(control.has_boolean());
             is_keyboard_locked_ = control.boolean();
+        }
+        else if (command_name == "connection_changed")
+        {
+            // When changing the connection (for example, when switching from TCP to UDP), a keyframe,
+            // resetting the cursor cache, etc. are required.
+            onClientConfigured();
         }
         else
         {
