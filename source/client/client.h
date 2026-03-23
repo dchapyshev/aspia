@@ -74,9 +74,9 @@ public:
     enum class UdpConnectPhase
     {
         NONE,
-        DIRECT_LAN,
-        HOLE_PUNCHING,
-        HOLE_PUNCHING_RETRY
+        DIRECT_LAN,         // Bind in LAN (peer_address_equals == true).
+        HOLE_PUNCHING,      // First STUN attempt, auto-detect white IP / NAT.
+        HOLE_PUNCHING_RETRY // Second STUN attempt, always use ready socket.
     };
     Q_ENUM(UdpConnectPhase)
 

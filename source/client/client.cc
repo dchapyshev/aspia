@@ -503,7 +503,7 @@ void Client::onUdpErrorOccurred()
             break;
 
         case UdpConnectPhase::HOLE_PUNCHING:
-            LOG(INFO) << "First hole punching attempt failed, retrying";
+            LOG(INFO) << "First UDP hole punching attempt failed, retrying";
             udp_phase_ = UdpConnectPhase::HOLE_PUNCHING_RETRY;
             startUdpHolePunching();
             break;
@@ -656,20 +656,26 @@ void Client::startUdpHolePunching()
     connect(stun_peer_, &base::StunPeer::sig_channelReady, this,
         [this](const QString& external_address, quint16 external_port)
     {
-        LOG(INFO) << "External endpoint received:" << external_address << ':' << external_port;
+        LOG(INFO) << "External UDP endpoint received:" << external_address << ':' << external_port
+                  << " (phase:" << udp_phase_ << ")";
         CHECK(stun_peer_);
 
-        QStringList local_ip_list = base::NetUtils::localIpList();
         bool is_white_ip = false;
 
-        for (const auto& local_ip : std::as_const(local_ip_list))
+        // On HOLE_PUNCHING_RETRY we always use the ready socket (previous bind attempt
+        // already failed for white IP, or previous ready_socket attempt failed for NAT).
+        if (udp_phase_ != UdpConnectPhase::HOLE_PUNCHING_RETRY)
         {
-            if (!base::NetUtils::isAddressEqual(external_address, local_ip))
-                continue;
+            QStringList local_ip_list = base::NetUtils::localIpList();
+            for (const auto& local_ip : std::as_const(local_ip_list))
+            {
+                if (!base::NetUtils::isAddressEqual(external_address, local_ip))
+                    continue;
 
-            // The peer has a white external address (without NAT).
-            is_white_ip = true;
-            break;
+                // The peer has a white external address (without NAT).
+                is_white_ip = true;
+                break;
+            }
         }
 
         qintptr socket = -1;
@@ -678,9 +684,15 @@ void Client::startUdpHolePunching()
 
         if (!is_white_ip)
         {
+            // Use the STUN socket with the discovered external endpoint.
             socket = stun_peer_->takeSocket();
             address = external_address;
             port = external_port;
+            LOG(INFO) << "Using ready UDP socket (NAT or forced retry)";
+        }
+        else
+        {
+            LOG(INFO) << "White IP detected, using bind for UDP";
         }
 
         stun_peer_->disconnect();
