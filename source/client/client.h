@@ -71,6 +71,15 @@ public:
     };
     Q_ENUM(Status)
 
+    enum class UdpConnectPhase
+    {
+        NONE,
+        DIRECT_LAN,
+        HOLE_PUNCHING,
+        HOLE_PUNCHING_RETRY
+    };
+    Q_ENUM(UdpConnectPhase)
+
 signals:
     void sig_statusChanged(client::Client::Status status, const QVariant& data = QVariant());
     void sig_showSessionWindow();
@@ -110,7 +119,7 @@ private slots:
 
 private:
     void delayedReconnect();
-    void channelReady();
+    void tcpChannelReady();
     void startUdpHolePunching();
     void startDirectUdp(qintptr socket, const QString& address, quint16 port);
 
@@ -124,6 +133,7 @@ private:
     base::KeyPair udp_key_pair_;
     QByteArray udp_iv_;
 
+    UdpConnectPhase udp_phase_ = UdpConnectPhase::NONE;
     QString stun_host_;
     quint16 stun_port_ = 0;
 

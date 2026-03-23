@@ -316,7 +316,7 @@ int Client::speedUdpTx()
 void Client::onTcpConnected()
 {
     LOG(INFO) << "Connection established";
-    channelReady();
+    tcpChannelReady();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -476,20 +476,47 @@ void Client::onUdpReady()
 //--------------------------------------------------------------------------------------------------
 void Client::onUdpErrorOccurred()
 {
-    LOG(INFO) << "UDP channel is disconnected";
+    LOG(INFO) << "UDP channel error (phase:" << udp_phase_ << ")";
     CHECK(udp_channel_);
 
-    base::UdpChannel::Mode previous_mode = udp_channel_->mode();
+    bool was_connected = udp_ready_;
 
     udp_ready_ = false;
     udp_channel_->disconnect();
     udp_channel_->deleteLater();
     udp_channel_ = nullptr;
 
-    // If we previously tried to establish a direct connection, then the next attempt will be UDP
-    // hole punching.
-    if (previous_mode == base::UdpChannel::Mode::BIND)
-        startUdpHolePunching();
+    // If the UDP was already working and then dropped, we stay on TCP without retrying.
+    if (was_connected)
+    {
+        udp_phase_ = UdpConnectPhase::NONE;
+        return;
+    }
+
+    // Fallback chain depending on the current phase.
+    switch (udp_phase_)
+    {
+        case UdpConnectPhase::DIRECT_LAN:
+            LOG(INFO) << "Direct LAN UDP failed, trying hole punching";
+            udp_phase_ = UdpConnectPhase::HOLE_PUNCHING;
+            startUdpHolePunching();
+            break;
+
+        case UdpConnectPhase::HOLE_PUNCHING:
+            LOG(INFO) << "First hole punching attempt failed, retrying";
+            udp_phase_ = UdpConnectPhase::HOLE_PUNCHING_RETRY;
+            startUdpHolePunching();
+            break;
+
+        case UdpConnectPhase::HOLE_PUNCHING_RETRY:
+            LOG(INFO) << "All UDP attempts exhausted, staying on TCP";
+            udp_phase_ = UdpConnectPhase::NONE;
+            break;
+
+        default:
+            udp_phase_ = UdpConnectPhase::NONE;
+            break;
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -532,17 +559,19 @@ void Client::onHostConnected(bool peer_address_equals, const QString& stun_host,
     connect(tcp_channel_, &base::TcpChannel::sig_errorOccurred, this, &Client::onTcpErrorOccurred);
     connect(tcp_channel_, &base::TcpChannel::sig_messageReceived, this, &Client::onTcpMessageReceived);
 
-    channelReady();
+    tcpChannelReady();
 
     stun_host_ = stun_host;
     stun_port_ = stun_port;
 
     if (peer_address_equals)
     {
+        udp_phase_ = UdpConnectPhase::DIRECT_LAN;
         startDirectUdp(-1, QString(), 0);
     }
     else
     {
+        udp_phase_ = UdpConnectPhase::HOLE_PUNCHING;
         startUdpHolePunching();
     }
 
@@ -580,7 +609,7 @@ void Client::delayedReconnect()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::channelReady()
+void Client::tcpChannelReady()
 {
     session_state_->setReconnecting(false);
     reconnect_timer_->stop();
@@ -630,23 +659,58 @@ void Client::startUdpHolePunching()
         LOG(INFO) << "External endpoint received:" << external_address << ':' << external_port;
         CHECK(stun_peer_);
 
-        qintptr socket = stun_peer_->takeSocket();
+        QStringList local_ip_list = base::NetUtils::localIpList();
+        bool is_white_ip = false;
+
+        for (const auto& local_ip : std::as_const(local_ip_list))
+        {
+            if (!base::NetUtils::isAddressEqual(external_address, local_ip))
+                continue;
+
+            // The peer has a white external address (without NAT).
+            is_white_ip = true;
+            break;
+        }
+
+        qintptr socket = -1;
+        QString address;
+        quint16 port = 0;
+
+        if (!is_white_ip)
+        {
+            socket = stun_peer_->takeSocket();
+            address = external_address;
+            port = external_port;
+        }
 
         stun_peer_->disconnect();
         stun_peer_->deleteLater();
         stun_peer_ = nullptr;
 
-        startDirectUdp(socket, external_address, external_port);
+        startDirectUdp(socket, address, port);
     });
 
     connect(stun_peer_, &base::StunPeer::sig_errorOccurred, this, [this]()
     {
-        LOG(ERROR) << "Error in stun peer";
+        LOG(ERROR) << "STUN error (phase:" << udp_phase_ << ")";
         CHECK(stun_peer_);
 
         stun_peer_->disconnect();
         stun_peer_->deleteLater();
         stun_peer_ = nullptr;
+
+        // STUN failed, advance to next phase.
+        if (udp_phase_ == UdpConnectPhase::HOLE_PUNCHING)
+        {
+            LOG(INFO) << "STUN failed, retrying hole punching";
+            udp_phase_ = UdpConnectPhase::HOLE_PUNCHING_RETRY;
+            startUdpHolePunching();
+        }
+        else
+        {
+            LOG(INFO) << "STUN failed twice, staying on TCP";
+            udp_phase_ = UdpConnectPhase::NONE;
+        }
     });
 
     stun_peer_->start(stun_host_, stun_port_);
