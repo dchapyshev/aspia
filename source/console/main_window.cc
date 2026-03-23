@@ -20,9 +20,11 @@
 
 #include <QActionGroup>
 #include <QCloseEvent>
+#include <QCoreApplication>
 #include <QDesktopServices>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QStyle>
 #include <QSystemTrayIcon>
 
 #include "base/logging.h"
@@ -41,10 +43,20 @@
 #include "console/fast_connect_dialog.h"
 #include "console/import_export_util.h"
 #include "console/mru_action.h"
-#include "console/update_settings_dialog.h"
 #include "console/settings.h"
+#include "console/theme_manager.h"
+#include "console/update_settings_dialog.h"
 
 namespace console {
+
+namespace {
+
+QString translateThemeName(const char* source_text)
+{
+    return QCoreApplication::translate("ConsoleMainWindow", source_text);
+}
+
+} // namespace
 
 //--------------------------------------------------------------------------------------------------
 MainWindow::MainWindow(const QString& file_path)
@@ -57,6 +69,10 @@ MainWindow::MainWindow(const QString& file_path)
 
     ui.setupUi(this);
     createLanguageMenu(settings.locale());
+
+    const QString current_theme = settings.theme();
+    createThemeMenu(current_theme);
+    applyTheme(current_theme);
 
     bool large_icons = settings.largeIcons();
     ui.tool_bar->setIconSize(large_icons ? QSize(32, 32) : QSize(24, 24));
@@ -158,6 +174,7 @@ MainWindow::MainWindow(const QString& file_path)
     connect(ui.tab_widget, &QTabWidget::currentChanged, this, &MainWindow::onCurrentTabChanged);
     connect(ui.tab_widget, &QTabWidget::tabCloseRequested, this, &MainWindow::onCloseTab);
     connect(ui.menu_language, &QMenu::triggered, this, &MainWindow::onLanguageChanged);
+    connect(ui.menu_theme, &QMenu::triggered, this, &MainWindow::onThemeChanged);
     connect(ui.action_large_icons, &QAction::toggled, this, [this](bool enable)
     {
         ui.tool_bar->setIconSize(enable ? QSize(32, 32) : QSize(24, 24));
@@ -1290,6 +1307,7 @@ void MainWindow::onLanguageChanged(QAction* action)
     application->setLocale(new_locale);
 
     ui.retranslateUi(this);
+    retranslateThemeMenu();
 
     for (int i = 0; i < ui.tab_widget->count(); ++i)
         static_cast<AddressBookTab*>(ui.tab_widget->widget(i))->retranslateUi();
@@ -1495,6 +1513,68 @@ void MainWindow::createLanguageMenu(const QString& current_locale)
 
         ui.menu_language->addAction(action_language);
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void MainWindow::createThemeMenu(const QString& current_theme)
+{
+    const QStringList available_themes = ThemeManager::instance()->availableThemes();
+    QActionGroup* theme_group = new QActionGroup(this);
+
+    theme_group->setExclusive(true);
+
+    for (const QString& theme_id : available_themes)
+    {
+        QAction* action = new QAction(themeName(theme_id), this);
+        action->setCheckable(true);
+        action->setData(theme_id);
+        action->setActionGroup(theme_group);
+        action->setChecked(theme_id == current_theme);
+        ui.menu_theme->addAction(action);
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+QString MainWindow::themeName(const QString& theme_id) const
+{
+    if (theme_id == QStringLiteral("dark"))
+        return translateThemeName("Dark");
+
+    return translateThemeName("Light");
+}
+
+//--------------------------------------------------------------------------------------------------
+void MainWindow::retranslateThemeMenu()
+{
+    for (QAction* action : ui.menu_theme->actions())
+    {
+        const QString theme_id = action->data().toString();
+        if (!theme_id.isEmpty())
+            action->setText(themeName(theme_id));
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void MainWindow::applyTheme(const QString& theme_id)
+{
+    ThemeManager::instance()->applyTheme(Application::instance(), theme_id);
+
+    if (style())
+        ui.menu_theme->setIcon(style()->standardIcon(QStyle::SP_DesktopIcon));
+}
+
+//--------------------------------------------------------------------------------------------------
+void MainWindow::onThemeChanged(QAction* action)
+{
+    if (!action)
+        return;
+
+    const QString theme_id = action->data().toString();
+    if (theme_id.isEmpty())
+        return;
+
+    applyTheme(theme_id);
+    Settings().setTheme(theme_id);
 }
 
 //--------------------------------------------------------------------------------------------------

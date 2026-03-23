@@ -84,6 +84,8 @@ list(APPEND SOURCE_CONSOLE
     open_address_book_dialog.ui
     settings.cc
     settings.h
+    theme_manager.cc
+    theme_manager.h
     statusbar.cc
     statusbar.h
     update_settings_dialog.cc

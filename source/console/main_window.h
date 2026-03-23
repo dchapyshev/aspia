@@ -96,11 +96,15 @@ private slots:
     void onComputerDoubleClicked(const proto::address_book::Computer& computer);
     void onTabContextMenu(const QPoint& pos);
     void onLanguageChanged(QAction* action);
+    void onThemeChanged(QAction* action);
     void onRecentOpenTriggered(QAction* action);
     void onShowHideToTray();
 
 private:
     void createLanguageMenu(const QString& current_locale);
+    void createThemeMenu(const QString& current_theme);
+    QString themeName(const QString& theme_id) const;
+    void retranslateThemeMenu();
     void rebuildMruMenu();
     void showTrayIcon(bool show);
     void addAddressBookTab(AddressBookTab* tab);
@@ -111,6 +115,7 @@ private:
                            const QString& display_name,
                            const std::optional<client::RouterConfig>& router_config);
     void connectToRouter();
+    void applyTheme(const QString& theme_id);
 
     Ui::ConsoleMainWindow ui;
     Mru mru_;

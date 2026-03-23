@@ -97,6 +97,9 @@ public:
     bool largeIcons() const;
     void setLargeIcons(bool enable);
 
+    QString theme() const;
+    void setTheme(const QString& theme_id);
+
 private:
     QSettings settings_;
     Q_DISABLE_COPY_MOVE(Settings)

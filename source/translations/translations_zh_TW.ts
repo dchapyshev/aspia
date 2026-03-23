@@ -1210,6 +1210,18 @@
         <translation>語言(&amp;L)</translation>
     </message>
     <message>
+        <source>&amp;Theme</source>
+        <translation>主題(&amp;T)</translation>
+    </message>
+    <message>
+        <source>Light</source>
+        <translation>淺色</translation>
+    </message>
+    <message>
+        <source>Dark</source>
+        <translation>深色</translation>
+    </message>
+    <message>
         <location filename="../console/main_window.ui" line="155"/>
         <source>Tools</source>
         <translation>工具</translation>
