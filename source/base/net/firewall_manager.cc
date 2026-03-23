@@ -139,6 +139,39 @@ bool FirewallManager::addTcpRule(const QString& rule_name,
 }
 
 //--------------------------------------------------------------------------------------------------
+bool FirewallManager::addTcpRule(const QString& rule_name, const QString& description)
+{
+    deleteRuleByName(rule_name);
+
+    Microsoft::WRL::ComPtr<INetFwRule> rule;
+
+    _com_error error = CoCreateInstance(CLSID_NetFwRule, nullptr, CLSCTX_ALL, IID_PPV_ARGS(&rule));
+    if (FAILED(error.Error()))
+    {
+        LOG(ERROR) << "CoCreateInstance failed:" << error;
+        return false;
+    }
+
+    rule->put_Name(_bstr_t(qUtf16Printable(rule_name)));
+    rule->put_Description(_bstr_t(qUtf16Printable(description)));
+    rule->put_ApplicationName(_bstr_t(qUtf16Printable(application_path_)));
+    rule->put_Protocol(NET_FW_IP_PROTOCOL_TCP);
+    rule->put_Direction(NET_FW_RULE_DIR_IN);
+    rule->put_Enabled(VARIANT_TRUE);
+    rule->put_Profiles(NET_FW_PROFILE2_ALL);
+    rule->put_Action(NET_FW_ACTION_ALLOW);
+
+    error = firewall_rules_->Add(rule.Get());
+    if (FAILED(error.Error()))
+    {
+        LOG(ERROR) << "Add failed:" << error;
+        return false;
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
 bool FirewallManager::addUdpRule(const QString& rule_name,
                                  const QString& description,
                                  quint16 port)
@@ -164,6 +197,39 @@ bool FirewallManager::addUdpRule(const QString& rule_name,
     rule->put_Direction(NET_FW_RULE_DIR_IN);
     rule->put_Enabled(VARIANT_TRUE);
     rule->put_LocalPorts(_bstr_t(std::to_wstring(port).c_str()));
+    rule->put_Profiles(NET_FW_PROFILE2_ALL);
+    rule->put_Action(NET_FW_ACTION_ALLOW);
+
+    error = firewall_rules_->Add(rule.Get());
+    if (FAILED(error.Error()))
+    {
+        LOG(ERROR) << "Add failed:" << error;
+        return false;
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool FirewallManager::addUdpRule(const QString& rule_name, const QString& description)
+{
+    deleteRuleByName(rule_name);
+
+    Microsoft::WRL::ComPtr<INetFwRule> rule;
+
+    _com_error error = CoCreateInstance(CLSID_NetFwRule, nullptr, CLSCTX_ALL, IID_PPV_ARGS(&rule));
+    if (FAILED(error.Error()))
+    {
+        LOG(ERROR) << "CoCreateInstance failed:" << error;
+        return false;
+    }
+
+    rule->put_Name(_bstr_t(qUtf16Printable(rule_name)));
+    rule->put_Description(_bstr_t(qUtf16Printable(description)));
+    rule->put_ApplicationName(_bstr_t(qUtf16Printable(application_path_)));
+    rule->put_Protocol(NET_FW_IP_PROTOCOL_UDP);
+    rule->put_Direction(NET_FW_RULE_DIR_IN);
+    rule->put_Enabled(VARIANT_TRUE);
     rule->put_Profiles(NET_FW_PROFILE2_ALL);
     rule->put_Action(NET_FW_ACTION_ALLOW);
 

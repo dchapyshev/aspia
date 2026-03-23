@@ -62,7 +62,8 @@ namespace host {
 
 namespace {
 
-constexpr char kFirewallRuleName[] = "Aspia Host Service";
+constexpr char kFirewallTcpRuleName[] = "Aspia Host Service (TCP)";
+constexpr char kFirewallUdpRuleName[] = "Aspia Host Service (UDP)";
 constexpr char kFirewallRuleDecription[] = "Allow incoming TCP connections";
 
 } // namespace
@@ -798,15 +799,19 @@ void Service::addFirewallRules()
         return;
     }
 
-    quint16 tcp_port = settings_.tcpPort();
-
-    if (!firewall.addTcpRule(kFirewallRuleName, kFirewallRuleDecription, tcp_port))
+    if (!firewall.addTcpRule(kFirewallTcpRuleName, kFirewallRuleDecription))
     {
-        LOG(ERROR) << "Unable to add firewall rule for port" << tcp_port;
+        LOG(ERROR) << "Unable to add firewall rule for TCP";
         return;
     }
 
-    LOG(INFO) << "Rule is added to the firewall (TCP" << tcp_port << ")";
+    if (!firewall.addUdpRule(kFirewallUdpRuleName, kFirewallRuleDecription))
+    {
+        LOG(ERROR) << "Unable to add firewall rule for UDP";
+        return;
+    }
+
+    LOG(INFO) << "Rules is added to the firewall";
 #endif // defined(Q_OS_WINDOWS)
 }
 
@@ -821,8 +826,9 @@ void Service::deleteFirewallRules()
         return;
     }
 
-    LOG(INFO) << "Delete firewall rule";
-    firewall.deleteRuleByName(kFirewallRuleName);
+    LOG(INFO) << "Delete firewall rules";
+    firewall.deleteRuleByName(kFirewallTcpRuleName);
+    firewall.deleteRuleByName(kFirewallUdpRuleName);
 #endif // defined(Q_OS_WINDOWS)
 }
 
