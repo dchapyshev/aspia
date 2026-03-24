@@ -135,18 +135,14 @@ GuiApplication::GuiApplication(int& argc, char* argv[])
         small_icon_size = kMaxSmallIconSize;
 
     QStyle* base_style = nullptr;
+    is_native_style_ = true;
 
 #if defined(Q_OS_WINDOWS)
     base_style = QStyleFactory::create("windows11");
 #elif defined(Q_OS_MACOS)
     base_style = QStyleFactory::create("macos");
 #endif
-
-    if (base_style)
-    {
-        is_native_style_ = true;
-    }
-    else
+    if (!base_style)
     {
         base_style = QStyleFactory::create("Fusion");
         is_native_style_ = false;
@@ -382,6 +378,8 @@ void GuiApplication::applyTheme(const QString& theme_id)
         setPalette(createDarkPalette());
     else
         setPalette(QPalette());
+
+    emit sig_themeChanged();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -462,13 +460,11 @@ void GuiApplication::sendMessage(const QByteArray& message)
     for (int i = 0; i < kReconnectTryCount; ++i)
     {
         socket.connectToServer(server_name_);
-
         if (socket.waitForConnected(kConnectTimeoutMs))
             break;
 
         if (i == kReconnectTryCount - 1)
             break;
-
         QThread::msleep(kReconnectIntervalMs);
     }
 
@@ -525,10 +521,8 @@ void GuiApplication::onNewConnection()
     {
         if (socket->state() == QLocalSocket::UnconnectedState)
             return;
-
         if (socket->bytesAvailable() >= static_cast<int>(sizeof(quint32)))
             break;
-
         socket->waitForReadyRead();
     }
 

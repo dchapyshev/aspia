@@ -99,7 +99,7 @@ private slots:
     void onThemeChanged(QAction* action);
     void onRecentOpenTriggered(QAction* action);
     void onShowHideToTray();
-    void onUpdateTheme();
+    void onAfterThemeChanged();
 
 private:
     void createLanguageMenu(const QString& current_locale);
@@ -115,7 +115,6 @@ private:
                            const QString& display_name,
                            const std::optional<client::RouterConfig>& router_config);
     void connectToRouter();
-    void applyTheme(const QString& theme_id);
 
     Ui::ConsoleMainWindow ui;
     Mru mru_;

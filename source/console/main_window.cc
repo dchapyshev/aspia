@@ -62,7 +62,7 @@ MainWindow::MainWindow(const QString& file_path)
 
     const QString current_theme = settings.theme();
     createThemeMenu(current_theme);
-    applyTheme(current_theme);
+    base::GuiApplication::instance()->applyTheme(current_theme);
 
     bool large_icons = settings.largeIcons();
     ui.tool_bar->setIconSize(large_icons ? QSize(32, 32) : QSize(24, 24));
@@ -80,7 +80,7 @@ MainWindow::MainWindow(const QString& file_path)
     restoreState(settings.windowState());
 
     connect(base::GuiApplication::instance(), &base::GuiApplication::sig_themeChanged,
-            this, &MainWindow::onUpdateTheme);
+            this, &MainWindow::onAfterThemeChanged);
 
     ui.action_show_tray_icon->setChecked(settings.alwaysShowTrayIcon());
     ui.action_minimize_to_tray->setChecked(settings.minimizeToTray());
@@ -1374,7 +1374,7 @@ void MainWindow::onShowHideToTray()
 }
 
 //--------------------------------------------------------------------------------------------------
-void MainWindow::onUpdateTheme()
+void MainWindow::onAfterThemeChanged()
 {
     ui.status_bar->refresh();
 }
@@ -1541,12 +1541,6 @@ void MainWindow::retranslateThemeMenu()
 }
 
 //--------------------------------------------------------------------------------------------------
-void MainWindow::applyTheme(const QString& theme_id)
-{
-    base::GuiApplication::instance()->applyTheme(theme_id);
-}
-
-//--------------------------------------------------------------------------------------------------
 void MainWindow::onThemeChanged(QAction* action)
 {
     if (!action)
@@ -1556,9 +1550,8 @@ void MainWindow::onThemeChanged(QAction* action)
     if (theme_id.isEmpty())
         return;
 
-    applyTheme(theme_id);
+    base::GuiApplication::instance()->applyTheme(theme_id);
     Settings().setTheme(theme_id);
-    onUpdateTheme();
 }
 
 //--------------------------------------------------------------------------------------------------
