@@ -61,6 +61,8 @@ message DirectUdpRequest
     uint32 encryptions      = 3;
     bytes public_key        = 4;
     bytes iv                = 5;
+    string stun_host        = 6;
+    uint32 stun_port        = 7;
 }
 
 message DirectUdpReply
@@ -68,6 +70,8 @@ message DirectUdpReply
     uint32 encryption = 1;
     bytes public_key  = 2;
     bytes iv          = 3;
+    string address    = 4;
+    uint32 port       = 5;
 }
 
 // Use CHANNEL_ID_CONTROL to send.

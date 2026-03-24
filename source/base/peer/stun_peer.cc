@@ -18,20 +18,11 @@
 
 #include "base/peer/stun_peer.h"
 
-#include <QHostAddress>
 #include <QHostInfo>
 #include <QSocketNotifier>
 #include <QTimer>
 
-#ifdef Q_OS_WIN
-#include <winsock2.h>
-#include <ws2tcpip.h>
-#else
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <unistd.h>
-#include <fcntl.h>
-#endif
+#include <enet/enet.h>
 
 #include "base/location.h"
 #include "base/logging.h"
@@ -42,98 +33,16 @@
 
 namespace base {
 
-namespace {
-
-//--------------------------------------------------------------------------------------------------
-void closeNativeSocket(qintptr descriptor)
-{
-#if defined(Q_OS_WINDOWS)
-    closesocket(static_cast<SOCKET>(descriptor));
-#else
-    ::close(static_cast<int>(descriptor));
-#endif
-}
-
-//--------------------------------------------------------------------------------------------------
-qintptr createUdpSocket()
-{
-#if defined(Q_OS_WINDOWS)
-    SOCKET sock = ::socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
-    if (sock == INVALID_SOCKET)
-        return -1;
-
-    u_long non_blocking = 1;
-    if (ioctlsocket(sock, FIONBIO, &non_blocking) != 0)
-    {
-        closesocket(sock);
-        return -1;
-    }
-
-    return static_cast<qintptr>(sock);
-#else
-    int sock = ::socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
-    if (sock < 0)
-        return -1;
-
-    if (fcntl(sock, F_SETFL, fcntl(sock, F_GETFL, 0) | O_NONBLOCK) < 0)
-    {
-        ::close(sock);
-        return -1;
-    }
-
-    return static_cast<qintptr>(sock);
-#endif
-}
-
-//--------------------------------------------------------------------------------------------------
-int sendUdp(qintptr socket, const char* buffer, qint64 size)
-{
-#if defined(Q_OS_WINDOWS)
-    return ::send(static_cast<SOCKET>(socket), buffer, int(size), 0);
-#else
-    return ::send(static_cast<int>(socket), buffer, int(size), 0);
-#endif
-}
-
-//--------------------------------------------------------------------------------------------------
-int recvUdp(qintptr socket, char* buffer, qint64 size)
-{
-#if defined(Q_OS_WINDOWS)
-    return ::recv(static_cast<SOCKET>(socket), buffer, int(size), 0);
-#else
-    return ::recv(static_cast<int>(socket), buffer, int(size), 0);
-#endif
-}
-
-//--------------------------------------------------------------------------------------------------
-bool connectSocket(qintptr descriptor, const QHostAddress& address, quint16 port)
-{
-    sockaddr_in addr = {};
-    addr.sin_family = AF_INET;
-    addr.sin_port = htons(port);
-    addr.sin_addr.s_addr = htonl(address.toIPv4Address());
-
-#if defined(Q_OS_WINDOWS)
-    return ::connect(static_cast<SOCKET>(descriptor),
-                     reinterpret_cast<const sockaddr*>(&addr),
-                     sizeof(addr)) == 0;
-#else
-    return ::connect(static_cast<int>(descriptor),
-                     reinterpret_cast<const sockaddr*>(&addr),
-                     sizeof(addr)) == 0;
-#endif
-}
-
-} // namespace
-
 //--------------------------------------------------------------------------------------------------
 StunPeer::StunPeer(QObject* parent)
     : QObject(parent),
-      timer_(new QTimer(this))
+      timer_(new QTimer(this)),
+      read_notifier_(new QSocketNotifier(QSocketNotifier::Read, this))
 {
     LOG(INFO) << "Ctor";
     timer_->setSingleShot(true);
     connect(timer_, &QTimer::timeout, this, &StunPeer::onAttempt);
+    connect(read_notifier_, &QSocketNotifier::activated, this, &StunPeer::onReadyRead);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -144,7 +53,7 @@ StunPeer::~StunPeer()
 
     if (ready_socket_ != -1)
     {
-        closeNativeSocket(ready_socket_);
+        enet_socket_destroy(ready_socket_);
         ready_socket_ = -1;
     }
 }
@@ -189,7 +98,7 @@ void StunPeer::doStart()
               << ", attempt" << number_of_attempts_ << ")";
 
     timer_->start(std::chrono::seconds(3));
-    lookup_id_ = QHostInfo::lookupHost(stun_host_, this, SLOT(onHostResolved(QHostInfo)));
+    lookup_id_ = QHostInfo::lookupHost(stun_host_, this, &StunPeer::onHostResolved);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -203,12 +112,11 @@ void StunPeer::doStop()
         lookup_id_ = -1;
     }
 
-    delete read_notifier_;
-    read_notifier_ = nullptr;
+    read_notifier_->setEnabled(false);
 
     if (socket_ != -1)
     {
-        closeNativeSocket(socket_);
+        enet_socket_destroy(socket_);
         socket_ = -1;
     }
 }
@@ -228,7 +136,6 @@ void StunPeer::onHostResolved(const QHostInfo& host_info)
     const QList<QHostAddress>& addresses = host_info.addresses();
     if (addresses.isEmpty())
     {
-        LOG(ERROR) << "DNS lookup returned no addresses";
         onErrorOccurred(FROM_HERE);
         return;
     }
@@ -254,23 +161,36 @@ void StunPeer::onHostResolved(const QHostInfo& host_info)
     LOG(INFO) << "Resolved" << stun_host_ << "to" << selected;
 
     // Create raw UDP socket.
-    socket_ = createUdpSocket();
-    if (socket_ == -1)
+    socket_ = enet_socket_create(ENET_SOCKET_TYPE_DATAGRAM);
+    if (socket_ == ENET_SOCKET_NULL)
     {
-        LOG(ERROR) << "Failed to create UDP socket";
         onErrorOccurred(FROM_HERE);
         return;
     }
 
-    // Connect to the STUN server.
-    if (!connectSocket(socket_, selected, stun_port_))
+    if (enet_socket_set_option(socket_, ENET_SOCKOPT_NONBLOCK, 1) != 0)
     {
-        LOG(ERROR) << "Failed to connect to" << selected << ":" << stun_port_;
         onErrorOccurred(FROM_HERE);
         return;
     }
 
-    LOG(INFO) << "Connected to" << selected << ":" << stun_port_;
+    // Bind to any available port. Do NOT connect() the socket - a connected UDP socket can only
+    // send/receive to/from the connected peer, and enet needs the socket unconnected to communicate
+    // with arbitrary addresses.
+    ENetAddress address;
+    address.host = ENET_HOST_ANY;
+    address.port = 0;
+
+    if (enet_socket_bind(socket_, &address) != 0)
+    {
+        onErrorOccurred(FROM_HERE);
+        return;
+    }
+
+    // Remember the resolved address for sendto().
+    stun_address_ = selected;
+
+    LOG(INFO) << "Bound UDP socket, STUN server:" << selected << ":" << stun_port_;
 
     // Send the STUN request.
     transaction_id_ = Random::number32();
@@ -283,22 +203,33 @@ void StunPeer::onHostResolved(const QHostInfo& host_info)
     QByteArray buffer = base::serialize(message);
     if (buffer.isEmpty())
     {
-        LOG(ERROR) << "Failed to serialize STUN request";
         onErrorOccurred(FROM_HERE);
         return;
     }
 
-    int sent = sendUdp(socket_, buffer.constData(), buffer.size());
+    ENetAddress enet_address;
+    enet_address.port = stun_port_;
+
+    if (enet_address_set_host(&enet_address, stun_address_.toString().toLocal8Bit().constData()) != 0)
+    {
+        onErrorOccurred(FROM_HERE);
+        return;
+    }
+
+    ENetBuffer enet_buffer;
+    enet_buffer.data = const_cast<char*>(buffer.constData());
+    enet_buffer.dataLength = static_cast<size_t>(buffer.size());
+
+    int sent = enet_socket_send(socket_, &enet_address, &enet_buffer, 1);
     if (sent != buffer.size())
     {
-        LOG(ERROR) << "Failed to send STUN request";
         onErrorOccurred(FROM_HERE);
         return;
     }
 
     // Set up read notification.
-    read_notifier_ = new QSocketNotifier(socket_, QSocketNotifier::Read, this);
-    connect(read_notifier_, &QSocketNotifier::activated, this, &StunPeer::onReadyRead);
+    read_notifier_->setSocket(socket_);
+    read_notifier_->setEnabled(true);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -307,7 +238,11 @@ void StunPeer::onReadyRead()
     static const int kMaxRecvSize = 1024;
     char recv_buffer[kMaxRecvSize];
 
-    int received = recvUdp(socket_, recv_buffer, kMaxRecvSize);
+    ENetBuffer enet_buffer;
+    enet_buffer.data = recv_buffer;
+    enet_buffer.dataLength = static_cast<size_t>(kMaxRecvSize);
+
+    int received = enet_socket_receive(socket_, nullptr, &enet_buffer, 1);
     if (received <= 0)
     {
         LOG(ERROR) << "Failed to receive STUN response";
@@ -356,11 +291,9 @@ void StunPeer::onReadyRead()
     ready_socket_ = socket_;
     socket_ = -1;
 
-    // Clean up the notifier (it references the socket we just gave away).
-    delete read_notifier_;
-    read_notifier_ = nullptr;
-
+    read_notifier_->setEnabled(false);
     timer_->stop();
+
     emit sig_channelReady(ip_address, static_cast<quint16>(port));
 }
 

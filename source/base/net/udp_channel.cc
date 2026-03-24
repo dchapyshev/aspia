@@ -110,7 +110,7 @@ UdpChannel::~UdpChannel()
 }
 
 //--------------------------------------------------------------------------------------------------
-void UdpChannel::setReadySocket(qintptr socket)
+void UdpChannel::bind(qintptr socket)
 {
     if (host_ || mode_ != Mode::UNKNOWN)
         return;
@@ -142,9 +142,7 @@ void UdpChannel::setReadySocket(qintptr socket)
     host_->socket = socket;
     host_->address = address;
 
-    update_timer_id_ = startTimer(kUpdateIntervalMs, Qt::PreciseTimer);
-    notifier_->setSocket(host_->socket);
-    notifier_->setEnabled(true);
+    start();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -183,9 +181,7 @@ void UdpChannel::bind(quint16* port)
         *port = bound_address.port;
     }
 
-    update_timer_id_ = startTimer(kUpdateIntervalMs, Qt::PreciseTimer);
-    notifier_->setSocket(host_->socket);
-    notifier_->setEnabled(true);
+    start();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -223,10 +219,90 @@ void UdpChannel::connectTo(const QString& address, quint16 port)
     }
 
     enet_host_flush(host_.get());
+    start();
+}
 
-    update_timer_id_ = startTimer(kUpdateIntervalMs, Qt::PreciseTimer);
-    notifier_->setSocket(host_->socket);
-    notifier_->setEnabled(true);
+//--------------------------------------------------------------------------------------------------
+void UdpChannel::connectTo(qintptr socket, const QString& address, quint16 port)
+{
+    if (host_ || mode_ != Mode::UNKNOWN)
+        return;
+
+    mode_ = Mode::READY_SOCKET;
+
+    ENetAddress fake_address;
+    fake_address.host = ENET_HOST_ANY;
+    fake_address.port = 0;
+
+    host_.reset(createHost(&fake_address));
+    if (!host_)
+    {
+        LOG(ERROR) << "Unable to create ENet host";
+        onErrorOccurred(FROM_HERE);
+        return;
+    }
+
+    enet_socket_destroy(host_->socket);
+
+    ENetAddress bound_address;
+    if (enet_socket_get_address(socket, &bound_address) < 0)
+    {
+        LOG(ERROR) << "Unable to get socket address";
+        onErrorOccurred(FROM_HERE);
+        return;
+    }
+
+    host_->socket = socket;
+    host_->address = bound_address;
+
+    // Send punch hole packets to open our NAT for the peer.
+    sendPunchHole(bound_address);
+
+    // Initiate ENet connection to peer. ENet retries automatically, so even if the peer's NAT hasn't
+    // opened yet, subsequent attempts will succeed after the peer sends its punch hole packets.
+    ENetAddress enet_address;
+    enet_address.port = port;
+
+    if (enet_address_set_host(&enet_address, address.toLocal8Bit().constData()) != 0)
+    {
+        LOG(ERROR) << "enet_address_set_host failed";
+        onErrorOccurred(FROM_HERE);
+        return;
+    }
+
+    LOG(INFO) << "Initiating ENet connection to peer:" << address << ":" << port;
+
+    peer_.reset(enet_host_connect(host_.get(), &enet_address, kChannelCount, 0));
+    if (!peer_)
+    {
+        LOG(ERROR) << "Failed to initiate ENet connection";
+        onErrorOccurred(FROM_HERE);
+        return;
+    }
+
+    enet_host_flush(host_.get());
+    start();
+}
+
+//--------------------------------------------------------------------------------------------------
+void UdpChannel::setPeerAddress(const QString& address, quint16 port)
+{
+    if (!host_)
+    {
+        LOG(ERROR) << "Host not created";
+        return;
+    }
+
+    ENetAddress enet_address;
+    enet_address.port = port;
+
+    if (enet_address_set_host(&enet_address, address.toLocal8Bit().constData()) != 0)
+    {
+        LOG(ERROR) << "enet_address_set_host failed";
+        return;
+    }
+
+    sendPunchHole(enet_address);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -394,6 +470,14 @@ void UdpChannel::timerEvent(QTimerEvent* event)
 }
 
 //--------------------------------------------------------------------------------------------------
+void UdpChannel::start()
+{
+    update_timer_id_ = startTimer(kUpdateIntervalMs, Qt::PreciseTimer);
+    notifier_->setSocket(host_->socket);
+    notifier_->setEnabled(true);
+}
+
+//--------------------------------------------------------------------------------------------------
 void UdpChannel::close()
 {
     if (update_timer_id_ != 0)
@@ -406,6 +490,20 @@ void UdpChannel::close()
     host_.reset();
     packet_pool_.clear();
     connected_ = false;
+}
+
+//--------------------------------------------------------------------------------------------------
+void UdpChannel::sendPunchHole(const ENetAddress& address)
+{
+    static const char kData[] = "PUNCH_HOLE_PACKET";
+    static const int kCount = 5;
+
+    ENetBuffer buffer;
+    buffer.data = const_cast<char*>(kData);
+    buffer.dataLength = sizeof(kData);
+
+    for (int i = 0; i < kCount; ++i)
+        enet_socket_send(host_->socket, &address, &buffer, 1);
 }
 
 //--------------------------------------------------------------------------------------------------

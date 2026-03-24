@@ -22,6 +22,9 @@
 #include <QObject>
 #include <QVariant>
 
+#include <memory>
+#include <optional>
+
 #include "client/client_session_state.h"
 #include "client/router_manager.h"
 #include "base/net/tcp_channel.h"
@@ -29,6 +32,7 @@
 class QTimer;
 
 namespace base {
+class StunPeer;
 class UdpChannel;
 } // namespace base
 
@@ -107,11 +111,21 @@ private slots:
     void onRouterErrorOccurred(const client::RouterManager::Error& error);
 
 private:
+    struct PendingUdp
+    {
+        QString address;
+        quint16 port = 0;
+        quint32 encryptions = 0;
+        QByteArray public_key;
+        QByteArray iv;
+    };
+
     void delayedReconnect();
     void tcpChannelReady();
     void readDirectUdpRequest(const proto::peer::DirectUdpRequest& request);
-    void connectToUdp(const QString& address, quint16 port, quint32 encryptions,
-                      const QByteArray& public_key, const QByteArray& iv);
+    void connectToUdp(const PendingUdp& context, qintptr socket = -1,
+        const QString& external_address = QString(), quint16 external_port = 0);
+    void startUdpHolePunching(const PendingUdp& context, const QString& stun_host, quint16 stun_port);
 
     bool is_legacy_mode_ = false;
     QTimer* timeout_timer_ = nullptr;
@@ -119,7 +133,9 @@ private:
     RouterManager* router_controller_ = nullptr;
     base::TcpChannel* tcp_channel_ = nullptr;
     base::UdpChannel* udp_channel_ = nullptr;
+    base::StunPeer* stun_peer_ = nullptr;
 
+    std::optional<PendingUdp> pending_udp_context_;
     std::shared_ptr<SessionState> session_state_;
 
     enum class State { CREATED, STARTED, STOPPPED };

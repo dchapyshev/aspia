@@ -33,6 +33,7 @@
 #include "base/net/tcp_channel_legacy.h"
 #include "base/net/udp_channel.h"
 #include "base/peer/client_authenticator.h"
+#include "base/peer/stun_peer.h"
 
 #if defined(Q_OS_MACOS)
 #include "base/mac/app_nap_blocker.h"
@@ -632,13 +633,31 @@ void Client::readDirectUdpRequest(const proto::peer::DirectUdpRequest& request)
         return;
     }
 
-    LOG(INFO) << "Client UDP endpoint:" << address << ':' << port;
-    connectToUdp(address, static_cast<quint16>(port), request.encryptions(), public_key, iv);
+    QString stun_host = QString::fromStdString(request.stun_host());
+    quint16 stun_port = static_cast<quint16>(request.stun_port());
+
+    PendingUdp context;
+    context.address = address;
+    context.port = static_cast<quint16>(port);
+    context.encryptions = request.encryptions();
+    context.public_key = public_key;
+    context.iv = iv;
+
+    if (!stun_host.isEmpty() && stun_port)
+    {
+        LOG(INFO) << "Starting STUN:" << stun_host << ":" << stun_port;
+        startUdpHolePunching(context, stun_host, stun_port);
+    }
+    else
+    {
+        LOG(INFO) << "Starting direct UDP (host:" << address << ":" << port << ")";
+        connectToUdp(context);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::connectToUdp(const QString& address, quint16 port, quint32 encryptions,
-                          const QByteArray& host_public_key, const QByteArray& host_iv)
+void Client::connectToUdp(
+    const PendingUdp& context, qintptr socket, const QString& external_address, quint16 external_port)
 {
     if (udp_channel_)
     {
@@ -662,7 +681,7 @@ void Client::connectToUdp(const QString& address, quint16 port, quint32 encrypti
         return;
     }
 
-    QByteArray session_key = client_key_pair.sessionKey(host_public_key);
+    QByteArray session_key = client_key_pair.sessionKey(context.public_key);
     if (session_key.isEmpty())
     {
         LOG(ERROR) << "Failed to derive UDP session key";
@@ -670,9 +689,9 @@ void Client::connectToUdp(const QString& address, quint16 port, quint32 encrypti
     }
 
     quint32 encryption = proto::key_exchange::ENCRYPTION_UNKNOWN;
-    if (encryptions & proto::key_exchange::ENCRYPTION_AES256_GCM)
+    if (context.encryptions & proto::key_exchange::ENCRYPTION_AES256_GCM)
         encryption = proto::key_exchange::ENCRYPTION_AES256_GCM;
-    else if (encryptions & proto::key_exchange::ENCRYPTION_CHACHA20_POLY1305)
+    else if (context.encryptions & proto::key_exchange::ENCRYPTION_CHACHA20_POLY1305)
         encryption = proto::key_exchange::ENCRYPTION_CHACHA20_POLY1305;
 
     if (encryption == proto::key_exchange::ENCRYPTION_UNKNOWN)
@@ -687,12 +706,12 @@ void Client::connectToUdp(const QString& address, quint16 port, quint32 encrypti
     if (encryption == proto::key_exchange::ENCRYPTION_AES256_GCM)
     {
         encryptor = base::MessageEncryptor::createForAes256Gcm(session_key, client_iv);
-        decryptor = base::MessageDecryptor::createForAes256Gcm(session_key, host_iv);
+        decryptor = base::MessageDecryptor::createForAes256Gcm(session_key, context.iv);
     }
     else
     {
         encryptor = base::MessageEncryptor::createForChaCha20Poly1305(session_key, client_iv);
-        decryptor = base::MessageDecryptor::createForChaCha20Poly1305(session_key, host_iv);
+        decryptor = base::MessageDecryptor::createForChaCha20Poly1305(session_key, context.iv);
     }
 
     if (!encryptor || !decryptor)
@@ -709,15 +728,74 @@ void Client::connectToUdp(const QString& address, quint16 port, quint32 encrypti
     connect(udp_channel_, &base::UdpChannel::sig_errorOccurred, this, &Client::onUdpErrorOccurred);
     connect(udp_channel_, &base::UdpChannel::sig_messageReceived, this, &Client::onUdpMessageReceived);
 
-    udp_channel_->connectTo(address, port);
+    if (socket != -1)
+        udp_channel_->connectTo(socket, context.address, context.port);
+    else
+        udp_channel_->connectTo(context.address, context.port);
 
     // Send reply with client's public key and IV.
-    proto::peer::ClientToHost reply;
-    proto::peer::DirectUdpReply* udp_reply = reply.mutable_direct_udp_reply();
-    udp_reply->set_encryption(encryption);
-    udp_reply->set_public_key(client_key_pair.publicKey().toStdString());
-    udp_reply->set_iv(client_iv.toStdString());
-    tcp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, base::serialize(reply));
+    proto::peer::ClientToHost message;
+    proto::peer::DirectUdpReply* reply = message.mutable_direct_udp_reply();
+    reply->set_encryption(encryption);
+    reply->set_public_key(client_key_pair.publicKey().toStdString());
+    reply->set_iv(client_iv.toStdString());
+
+    if (!external_address.isEmpty())
+    {
+        reply->set_address(external_address.toStdString());
+        reply->set_port(external_port);
+    }
+
+    tcp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, base::serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void Client::startUdpHolePunching(const PendingUdp& context, const QString& stun_host, quint16 stun_port)
+{
+    pending_udp_context_ = context;
+
+    if (stun_peer_)
+    {
+        stun_peer_->disconnect();
+        stun_peer_->deleteLater();
+        stun_peer_ = nullptr;
+    }
+
+    stun_peer_ = new base::StunPeer(this);
+
+    connect(stun_peer_, &base::StunPeer::sig_channelReady, this,
+        [this](const QString& external_address, quint16 external_port)
+    {
+        LOG(INFO) << "Client STUN completed:" << external_address << ":" << external_port;
+        CHECK(pending_udp_context_.has_value());
+
+        qintptr socket = stun_peer_->takeSocket();
+
+        stun_peer_->disconnect();
+        stun_peer_->deleteLater();
+        stun_peer_ = nullptr;
+
+        PendingUdp request = std::move(*pending_udp_context_);
+        pending_udp_context_.reset();
+
+        connectToUdp(request, socket, external_address, external_port);
+    });
+
+    connect(stun_peer_, &base::StunPeer::sig_errorOccurred, this, [this]()
+    {
+        LOG(ERROR) << "Client STUN failed, falling back to direct connect";
+        CHECK(pending_udp_context_.has_value());
+
+        stun_peer_->disconnect();
+        stun_peer_->deleteLater();
+        stun_peer_ = nullptr;
+
+        // Fall back to direct connect without hole punching.
+        connectToUdp(*pending_udp_context_);
+        pending_udp_context_.reset();
+    });
+
+    stun_peer_->start(stun_host, stun_port);
 }
 
 } // namespace client

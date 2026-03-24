@@ -179,64 +179,9 @@ void Client::onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray& buffe
     }
 
     if (message.has_direct_udp_reply())
-    {
-        const proto::peer::DirectUdpReply& udp_reply = message.direct_udp_reply();
-
-        LOG(INFO) << "Direct UDP reply is received";
-
-        if (!udp_channel_ || !udp_key_pair_.isValid())
-        {
-            LOG(ERROR) << "UDP reply received but no UDP channel or key pair";
-            return;
-        }
-
-        QByteArray host_public_key = QByteArray::fromStdString(udp_reply.public_key());
-        QByteArray host_iv = QByteArray::fromStdString(udp_reply.iv());
-        quint32 encryption = udp_reply.encryption();
-
-        QByteArray session_key = udp_key_pair_.sessionKey(host_public_key);
-        if (session_key.isEmpty())
-        {
-            LOG(ERROR) << "Failed to derive UDP session key";
-            return;
-        }
-
-        std::unique_ptr<base::MessageEncryptor> encryptor;
-        std::unique_ptr<base::MessageDecryptor> decryptor;
-
-        if (encryption == proto::key_exchange::ENCRYPTION_AES256_GCM)
-        {
-            encryptor = base::MessageEncryptor::createForAes256Gcm(session_key, udp_iv_);
-            decryptor = base::MessageDecryptor::createForAes256Gcm(session_key, host_iv);
-        }
-        else if (encryption == proto::key_exchange::ENCRYPTION_CHACHA20_POLY1305)
-        {
-            encryptor = base::MessageEncryptor::createForChaCha20Poly1305(session_key, udp_iv_);
-            decryptor = base::MessageDecryptor::createForChaCha20Poly1305(session_key, host_iv);
-        }
-        else
-        {
-            LOG(ERROR) << "Unknown UDP encryption type:" << encryption;
-            return;
-        }
-
-        if (!encryptor || !decryptor)
-        {
-            LOG(ERROR) << "Failed to create UDP encryptor/decryptor";
-            return;
-        }
-
-        udp_channel_->setEncryptor(std::move(encryptor));
-        udp_channel_->setDecryptor(std::move(decryptor));
-
-        // Key pair is no longer needed.
-        udp_key_pair_ = base::KeyPair();
-        udp_iv_.clear();
-    }
+        readDirectUdpReply(message.direct_udp_reply());
     else
-    {
         LOG(WARNING) << "Unhandled control message";
-    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -325,7 +270,7 @@ void Client::startUdpHolePunching()
         [this](const QString& external_address, quint16 external_port)
     {
         LOG(INFO) << "External UDP endpoint received:" << external_address << ':' << external_port
-                          << " (phase:" << udp_phase_ << ")";
+                  << " (phase:" << udp_phase_ << ")";
         CHECK(stun_peer_);
 
         bool is_white_ip = false;
@@ -360,7 +305,8 @@ void Client::startUdpHolePunching()
         }
         else
         {
-            LOG(INFO) << "White IP detected, using bind for UDP";
+            address = external_address;
+            LOG(INFO) << "White IP detected, using bind for UDP (address:" << address << ")";
         }
 
         stun_peer_->disconnect();
@@ -409,19 +355,21 @@ void Client::startDirectUdp(qintptr socket, const QString& address, quint16 port
     connect(udp_channel_, &base::UdpChannel::sig_messageReceived, this, &Client::onUdpMessageReceived);
 
     if (socket != -1)
-        udp_channel_->setReadySocket(socket);
+        udp_channel_->bind(socket);
     else
         udp_channel_->bind(&port);
 
-    udp_key_pair_ = base::KeyPair::create(base::KeyPair::Type::X25519);
-    if (!udp_key_pair_.isValid())
+    PendingUdp context;
+
+    context.key_pair = base::KeyPair::create(base::KeyPair::Type::X25519);
+    if (!context.key_pair.isValid())
     {
         LOG(ERROR) << "Failed to create UDP key pair";
         return;
     }
 
-    udp_iv_ = base::Random::byteArray(12);
-    if (udp_iv_.isEmpty())
+    context.iv = base::Random::byteArray(12);
+    if (context.iv.isEmpty())
     {
         LOG(ERROR) << "Unable to create IV for UDP";
         return;
@@ -446,11 +394,86 @@ void Client::startDirectUdp(qintptr socket, const QString& address, quint16 port
 
     request->set_port(port);
     request->set_encryptions(kSupportedEncryptios);
-    request->set_public_key(udp_key_pair_.publicKey().toStdString());
-    request->set_iv(udp_iv_.toStdString());
+    request->set_public_key(context.key_pair.publicKey().toStdString());
+    request->set_iv(context.iv.toStdString());
+
+    pending_udp_context_ = std::move(context);
+
+    // If the request contains data for connecting to STUN, then this is a connection via STUN;
+    // otherwise, this is an attempt at a direct connection.
+    if (!stun_host_.isEmpty() && stun_port_)
+    {
+        request->set_stun_host(stun_host_.toStdString());
+        request->set_stun_port(stun_port_);
+    }
 
     LOG(INFO) << "Sending direct UDP request";
     tcp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, base::serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void Client::readDirectUdpReply(const proto::peer::DirectUdpReply& reply)
+{
+    LOG(INFO) << "Direct UDP reply is received";
+
+    if (!udp_channel_ || !pending_udp_context_.has_value())
+    {
+        LOG(ERROR) << "UDP reply received but no UDP channel or pending UDP data";
+        return;
+    }
+
+    PendingUdp context = std::move(*pending_udp_context_);
+    pending_udp_context_.reset();
+
+    QByteArray host_public_key = QByteArray::fromStdString(reply.public_key());
+    QByteArray host_iv = QByteArray::fromStdString(reply.iv());
+    quint32 encryption = reply.encryption();
+
+    QByteArray session_key = context.key_pair.sessionKey(host_public_key);
+    if (session_key.isEmpty())
+    {
+        LOG(ERROR) << "Failed to derive UDP session key";
+        return;
+    }
+
+    std::unique_ptr<base::MessageEncryptor> encryptor;
+    std::unique_ptr<base::MessageDecryptor> decryptor;
+
+    if (encryption == proto::key_exchange::ENCRYPTION_AES256_GCM)
+    {
+        encryptor = base::MessageEncryptor::createForAes256Gcm(session_key, context.iv);
+        decryptor = base::MessageDecryptor::createForAes256Gcm(session_key, host_iv);
+    }
+    else if (encryption == proto::key_exchange::ENCRYPTION_CHACHA20_POLY1305)
+    {
+        encryptor = base::MessageEncryptor::createForChaCha20Poly1305(session_key, context.iv);
+        decryptor = base::MessageDecryptor::createForChaCha20Poly1305(session_key, host_iv);
+    }
+    else
+    {
+        LOG(ERROR) << "Unknown UDP encryption type:" << encryption;
+        return;
+    }
+
+    if (!encryptor || !decryptor)
+    {
+        LOG(ERROR) << "Failed to create UDP encryptor/decryptor";
+        return;
+    }
+
+    udp_channel_->setEncryptor(std::move(encryptor));
+    udp_channel_->setDecryptor(std::move(decryptor));
+
+    // These values contain the CLIENT's external address and port, which were obtained via STUN.
+    // If this data is missing, this is a direct connection attempt.
+    QString client_address = QString::fromStdString(reply.address());
+    quint16 client_port = static_cast<quint16>(reply.port());
+
+    if (!client_address.isEmpty() && client_port)
+    {
+        LOG(INFO) << "Setting client's external address:" << client_address << ':' << client_port;
+        udp_channel_->setPeerAddress(client_address, client_port);
+    }
 }
 
 } // namespace host

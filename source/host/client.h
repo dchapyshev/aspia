@@ -22,6 +22,8 @@
 #include <QObject>
 #include <QVersionNumber>
 
+#include <optional>
+
 #include "base/crypto/key_pair.h"
 #include "base/net/tcp_channel.h"
 #include "proto/peer.h"
@@ -84,14 +86,20 @@ private slots:
 private:
     void startUdpHolePunching();
     void startDirectUdp(qintptr socket, const QString& address, quint16 port);
+    void readDirectUdpReply(const proto::peer::DirectUdpReply& reply);
 
     base::TcpChannel* tcp_channel_ = nullptr;
     base::UdpChannel* udp_channel_ = nullptr;
     bool udp_ready_ = false;
 
+    struct PendingUdp
+    {
+        base::KeyPair key_pair;
+        QByteArray iv;
+    };
+
     base::StunPeer* stun_peer_ = nullptr;
-    base::KeyPair udp_key_pair_;
-    QByteArray udp_iv_;
+    std::optional<PendingUdp> pending_udp_context_;
 
     UdpConnectPhase udp_phase_ = UdpConnectPhase::NONE;
     bool direct_ = false;

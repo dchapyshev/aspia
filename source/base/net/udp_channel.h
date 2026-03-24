@@ -27,6 +27,7 @@
 class QSocketNotifier;
 class QTimer;
 
+typedef struct _ENetAddress ENetAddress;
 typedef struct _ENetHost ENetHost;
 typedef struct _ENetPeer ENetPeer;
 typedef struct _ENetPacket ENetPacket;
@@ -54,9 +55,11 @@ public:
     };
     Q_ENUM(Mode)
 
-    void setReadySocket(qintptr socket);
+    void bind(qintptr socket);
     void bind(quint16* port);
     void connectTo(const QString& address, quint16 port);
+    void connectTo(qintptr socket, const QString& address, quint16 port);
+    void setPeerAddress(const QString& address, quint16 port);
     void send(quint8 channel_id, const QByteArray& buffer);
 
     void setPaused(bool enable);
@@ -105,7 +108,9 @@ private:
 
     enum MessageType { USER_DATA = 0 };
 
+    void start();
     void close();
+    void sendPunchHole(const ENetAddress& address);
     void processEvents();
     void onErrorOccurred(const Location& location);
     void addWriteTask(quint8 channel_id, const QByteArray& data);

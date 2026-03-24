@@ -19,6 +19,7 @@
 #ifndef BASE_PEER_STUN_PEER_H
 #define BASE_PEER_STUN_PEER_H
 
+#include <QHostAddress>
 #include <QObject>
 
 class QHostInfo;
@@ -64,6 +65,7 @@ private:
     QSocketNotifier* read_notifier_ = nullptr;
     quint32 transaction_id_ = 0;
     int lookup_id_ = -1;
+    QHostAddress stun_address_;  // Resolved STUN server IPv4 address.
 
     qintptr ready_socket_ = -1;
 
