@@ -51,7 +51,7 @@ public slots:
 signals:
     void sig_connectToService();
     void sig_disconnectFromService();
-    void sig_updateCredentials(proto::user::CredentialsRequest::Type type);
+    void sig_updateCredentials(proto::user::CredentialsRequest_Type type);
     void sig_oneTimeSessions(quint32 sessions);
     void sig_killClient(quint32 id);
     void sig_connectConfirmation(quint32 id, bool accept);

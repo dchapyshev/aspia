@@ -30,6 +30,7 @@
 #include <QPainter>
 #include <QStyleFactory>
 #include <QStyleHints>
+#include <QTimer>
 #include <QSvgRenderer>
 
 #include "base/logging.h"
@@ -72,6 +73,11 @@ public:
           small_icon_size_(small_icon_size)
     {
         // Nothing
+    }
+
+    void changeBaseStyle(QStyle* style)
+    {
+        setBaseStyle(style);
     }
 
     int pixelMetric(
@@ -125,35 +131,20 @@ GuiApplication::GuiApplication(int& argc, char* argv[])
 
     translations_ = std::make_unique<Translations>();
 
-    int small_icon_size = kDefaultSmallIconSize;
+    small_icon_size_ = kDefaultSmallIconSize;
 
     if (qEnvironmentVariableIsSet("ASPIA_SMALL_ICON_SIZE"))
-        small_icon_size = qEnvironmentVariableIntValue("ASPIA_SMALL_ICON_SIZE");
+        small_icon_size_ = qEnvironmentVariableIntValue("ASPIA_SMALL_ICON_SIZE");
 
-    if (small_icon_size < kMinSmallIconSize)
-        small_icon_size = kMinSmallIconSize;
-    else if (small_icon_size > kMaxSmallIconSize)
-        small_icon_size = kMaxSmallIconSize;
+    if (small_icon_size_ < kMinSmallIconSize)
+        small_icon_size_ = kMinSmallIconSize;
+    else if (small_icon_size_ > kMaxSmallIconSize)
+        small_icon_size_ = kMaxSmallIconSize;
 
-    QStyle* base_style = nullptr;
-    is_native_style_ = false;
-
-#if defined(Q_OS_WINDOWS)
-    if (QOperatingSystemVersion::current() >= QOperatingSystemVersion::Windows11)
-    {
-        base_style = QStyleFactory::create("windows11");
-        if (base_style)
-            is_native_style_ = true;
-    }
-#elif defined(Q_OS_MACOS)
-    base_style = QStyleFactory::create("macos");
-    if (base_style)
-        is_native_style_ = true;
-#endif
-    if (!base_style)
-        base_style = QStyleFactory::create("Fusion");
-
-    setStyle(new CustomStyle(base_style, small_icon_size));
+    // Create the proxy style once. The base style will be changed in applyTheme()
+    // via changeBaseStyle() without calling setStyle() again.
+    bool is_system_dark = (styleHints()->colorScheme() == Qt::ColorScheme::Dark);
+    setStyle(new CustomStyle(createBaseStyle(is_system_dark), small_icon_size_));
 
 #if defined(Q_OS_WINDOWS)
     message_window_ = std::make_unique<base::MessageWindow>();
@@ -363,28 +354,12 @@ QStringList GuiApplication::availableThemes() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void GuiApplication::applyTheme(const QString& theme_id)
+void GuiApplication::setTheme(const QString& theme_id)
 {
-    if (theme_id == "auto")
+    QTimer::singleShot(0, this, [this, theme_id]()
     {
-        styleHints()->setColorScheme(Qt::ColorScheme::Unknown);
-        setPalette(QPalette());
-        emit sig_themeChanged();
-        return;
-    }
-
-    bool is_dark = (theme_id == "dark");
-
-    styleHints()->setColorScheme(is_dark ? Qt::ColorScheme::Dark : Qt::ColorScheme::Light);
-
-    // Native styles (windows11, macos) handle dark/light mode via colorScheme.
-    // Non-native styles (windowsvista, Fusion) require a custom palette for dark mode.
-    if (!is_native_style_ && is_dark)
-        setPalette(createDarkPalette());
-    else
-        setPalette(QPalette());
-
-    emit sig_themeChanged();
+        applyTheme(theme_id);
+    });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -396,6 +371,77 @@ QString GuiApplication::themeName(const QString& theme_id)
     else if (theme_id == "light")
         return tr("Light");
     return tr("Auto");
+}
+
+//--------------------------------------------------------------------------------------------------
+void GuiApplication::applyTheme(const QString& theme_id)
+{
+    // Determine if the effective theme is dark.
+    bool is_dark = false;
+    if (theme_id == "dark")
+        is_dark = true;
+    else if (theme_id == "auto")
+        is_dark = (styleHints()->colorScheme() == Qt::ColorScheme::Dark);
+
+    // Reset palette before changing style to avoid stale shadow/border colors.
+    setPalette(QPalette());
+
+    // Change the base style inside the existing proxy (no setStyle() call to avoid crashes).
+    static_cast<CustomStyle*>(style())->changeBaseStyle(createBaseStyle(is_dark));
+
+    if (theme_id == "auto")
+    {
+        styleHints()->setColorScheme(Qt::ColorScheme::Unknown);
+        setPalette(QPalette());
+    }
+    else
+    {
+        styleHints()->setColorScheme(is_dark ? Qt::ColorScheme::Dark : Qt::ColorScheme::Light);
+
+        // Native styles (windows11, macos) handle dark/light mode via colorScheme.
+        // Non-native styles (Fusion) require a custom palette for dark mode.
+        if (!is_native_style_ && is_dark)
+            setPalette(createDarkPalette());
+        else
+            setPalette(QPalette());
+    }
+
+    emit sig_themeChanged();
+}
+
+//--------------------------------------------------------------------------------------------------
+QStyle* GuiApplication::createBaseStyle(bool is_dark)
+{
+    QStyle* base_style = nullptr;
+    is_native_style_ = false;
+
+#if defined(Q_OS_WINDOWS)
+    if (QOperatingSystemVersion::current() >= QOperatingSystemVersion::Windows11)
+    {
+        base_style = QStyleFactory::create("windows11");
+        if (base_style)
+            is_native_style_ = true;
+    }
+    else
+    {
+        // On Windows 7/8/10 use windowsvista for light theme, Fusion for dark theme.
+        if (!is_dark)
+        {
+            base_style = QStyleFactory::create("windowsvista");
+            if (base_style)
+                is_native_style_ = true;
+        }
+    }
+#elif defined(Q_OS_MACOS)
+    base_style = QStyleFactory::create("macos");
+    if (base_style)
+        is_native_style_ = true;
+#endif
+
+    if (!base_style)
+        base_style = QStyleFactory::create("Fusion");
+
+    return base_style;
 }
 
 //--------------------------------------------------------------------------------------------------

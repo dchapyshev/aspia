@@ -75,7 +75,7 @@ Application::Application(int& argc, char* argv[])
     }
 
     setLocale(settings.locale());
-    applyTheme(settings.theme());
+    setTheme(settings.theme());
 }
 
 //--------------------------------------------------------------------------------------------------

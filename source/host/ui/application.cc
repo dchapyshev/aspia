@@ -110,7 +110,7 @@ Application::Application(int& argc, char* argv[])
         user_settings.setLocale(DEFAULT_LOCALE);
     }
 
-    applyTheme(user_settings.theme());
+    setTheme(user_settings.theme());
     setLocale(user_settings.locale());
 }
 

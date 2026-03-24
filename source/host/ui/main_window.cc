@@ -505,7 +505,7 @@ void MainWindow::onThemeChanged(QAction* action)
     if (theme_id.isEmpty())
         return;
 
-    base::GuiApplication::instance()->applyTheme(theme_id);
+    base::GuiApplication::instance()->setTheme(theme_id);
 
     UserSettings user_settings;
     user_settings.setTheme(theme_id);
@@ -766,14 +766,17 @@ void MainWindow::onOneTimeSessionsChanged()
 void MainWindow::createLanguageMenu(const QString& current_locale)
 {
     Application::LocaleList locale_list = base::GuiApplication::instance()->localeList();
-    QActionGroup* language_group = new QActionGroup(this);
+    if (locale_list.isEmpty())
+        return;
+
+    std::unique_ptr<QActionGroup> language_group = std::make_unique<QActionGroup>(this);
 
     for (const auto& locale : std::as_const(locale_list))
     {
         common::LanguageAction* action_language =
             new common::LanguageAction(locale.first, locale.second, this);
 
-        action_language->setActionGroup(language_group);
+        action_language->setActionGroup(language_group.release());
         action_language->setCheckable(true);
 
         if (current_locale == locale.first)

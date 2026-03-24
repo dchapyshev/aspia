@@ -58,7 +58,7 @@ public:
     bool hasLocale(const QString& locale);
 
     QStringList availableThemes() const;
-    void applyTheme(const QString& theme_id);
+    void setTheme(const QString& theme_id);
     static QString themeName(const QString& theme_id);
 
     static QByteArray svgByteArray(const QString& svg_file_path);
@@ -82,6 +82,8 @@ private slots:
     void onNewConnection();
 
 private:
+    void applyTheme(const QString& theme_id);
+    QStyle* createBaseStyle(bool is_dark);
     static QPalette createDarkPalette();
 
     QString lock_file_name_;
@@ -94,6 +96,7 @@ private:
     std::unique_ptr<Translations> translations_;
 
     bool is_native_style_ = false;
+    int small_icon_size_ = 20;
 
 #if defined(Q_OS_WINDOWS)
     std::unique_ptr<base::MessageWindow> message_window_;
