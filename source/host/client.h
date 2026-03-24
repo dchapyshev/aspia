@@ -73,13 +73,13 @@ signals:
     void sig_started();
     void sig_finished();
     void sig_connectionChanged();
-    void sig_bandwidthChanged(qint64 bytes_per_second);
 
 protected:
     void send(quint8 channel_id, const QByteArray& buffer);
 
     virtual void onStart() = 0;
     virtual void onMessage(quint8 channel_id, const QByteArray& buffer) = 0;
+    virtual void onBandwidthChanged(qint64 bandwidth) { /* Nothing */ };
 
 private slots:
     void onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code);

@@ -90,6 +90,7 @@ private slots:
 
     void onCaptureScreen();
     void onOverflowCheck();
+    void onBandwidthChanged();
 
 private:
     void startClient(const QString& ipc_channel_name);

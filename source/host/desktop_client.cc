@@ -183,6 +183,15 @@ void DesktopClient::onMessage(quint8 net_channel_id, const QByteArray& buffer)
 }
 
 //--------------------------------------------------------------------------------------------------
+void DesktopClient::onBandwidthChanged(qint64 bandwidth)
+{
+    proto::desktop::ServiceToAgentClient message;
+    proto::desktop::BandwidthChange* bandwidth_change = message.mutable_bandwidth_change();
+    bandwidth_change->set_bandwidth(bandwidth);
+    sendIpcServiceMessage(base::serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopClient::onIpcNewConnection()
 {
     CHECK(ipc_server_);

@@ -73,10 +73,17 @@ message Overflow
     State state    = 1;
 }
 
+// Service to desktop agent.
+message BandwidthChange
+{
+    int64 bandwidth = 1;
+}
+
 message ServiceToAgentClient
 {
-    Description description = 1;
-    Overflow overflow       = 2;
+    Description description          = 1;
+    Overflow overflow                = 2;
+    BandwidthChange bandwidth_change = 3;
 }
 
 message ServiceToAgent

@@ -782,6 +782,22 @@ void DesktopAgent::onOverflowCheck()
 }
 
 //--------------------------------------------------------------------------------------------------
+void DesktopAgent::onBandwidthChanged()
+{
+    qint64 minimal_bandwidth = std::numeric_limits<qint64>::max();
+
+    for (auto* client : std::as_const(clients_))
+    {
+        qint64 bandwidth = client->bandwidth();
+
+        if (bandwidth != 0 && bandwidth < minimal_bandwidth)
+            minimal_bandwidth = bandwidth;
+    }
+
+    // TODO: Change FPS.
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopAgent::startClient(const QString& ipc_channel_name)
 {
     CHECK(ipc_channel_);
@@ -801,6 +817,7 @@ void DesktopAgent::startClient(const QString& ipc_channel_name)
 
     connect(client, &DesktopAgentClient::sig_selectScreen, this, &DesktopAgent::onSelectScreen);
     connect(client, &DesktopAgentClient::sig_preferredSizeChanged, this, &DesktopAgent::onPreferredSizeChanged);
+    connect(client, &DesktopAgentClient::sig_bandwidthChanged, this, &DesktopAgent::onBandwidthChanged);
     connect(client, &DesktopAgentClient::sig_keyFrameRequested, this, &DesktopAgent::onKeyFrameRequested);
 
     connect(client, &DesktopAgentClient::sig_configured, this, &DesktopAgent::onClientConfigured);

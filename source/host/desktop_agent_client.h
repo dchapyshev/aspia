@@ -60,6 +60,7 @@ public:
     proto::peer::SessionType sessionType() const { return session_type_; }
     proto::desktop::Overflow::State overflowState() const { return overflow_state_; }
     const QSize& preferredSize() const { return preferred_size_; }
+    qint64 bandwidth() const { return bandwidth_; }
     const Config& config() const { return config_; }
 
     void onScreenData(const QByteArray& buffer);
@@ -81,6 +82,7 @@ signals:
     void sig_injectClipboardEvent(const proto::desktop::ClipboardEvent& event);
     void sig_selectScreen(const proto::desktop::Screen& screen);
     void sig_preferredSizeChanged(const QSize& size);
+    void sig_bandwidthChanged(qint64 bandwidth);
     void sig_keyFrameRequested();
     void sig_configured();
     void sig_finished();
@@ -124,6 +126,7 @@ private:
     Config config_;
 
     QSize preferred_size_;
+    qint64 bandwidth_ = 0;
 
     bool is_video_paused_ = false;
     bool is_audio_paused_ = false;

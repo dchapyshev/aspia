@@ -569,7 +569,7 @@ void Client::onBandwidthProbeAck()
     LOG(INFO) << "RTT:" << rtt.count() << "bandwidth:" << bandwidth << "B/s";
 
     bandwidth_ = bandwidth;
-    emit sig_bandwidthChanged(bandwidth);
+    onBandwidthChanged(bandwidth);
 }
 
 } // namespace host
