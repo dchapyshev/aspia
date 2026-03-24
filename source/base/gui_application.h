@@ -82,7 +82,6 @@ private slots:
     void onNewConnection();
 
 private:
-    void applyTheme(const QString& theme_id);
     QStyle* createBaseStyle(bool is_dark);
     static QPalette createDarkPalette();
 

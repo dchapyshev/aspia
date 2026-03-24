@@ -30,7 +30,6 @@
 #include <QPainter>
 #include <QStyleFactory>
 #include <QStyleHints>
-#include <QTimer>
 #include <QSvgRenderer>
 
 #include "base/logging.h"
@@ -50,7 +49,7 @@ namespace base {
 
 namespace {
 
-const int kDefaultSmallIconSize = 20;
+const int kDefaultSmallIconSize = 24;
 const int kMinSmallIconSize = 16;
 const int kMaxSmallIconSize = 48;
 
@@ -73,11 +72,6 @@ public:
           small_icon_size_(small_icon_size)
     {
         // Nothing
-    }
-
-    void changeBaseStyle(QStyle* style)
-    {
-        setBaseStyle(style);
     }
 
     int pixelMetric(
@@ -141,10 +135,7 @@ GuiApplication::GuiApplication(int& argc, char* argv[])
     else if (small_icon_size_ > kMaxSmallIconSize)
         small_icon_size_ = kMaxSmallIconSize;
 
-    // Create the proxy style once. The base style will be changed in applyTheme()
-    // via changeBaseStyle() without calling setStyle() again.
-    bool is_system_dark = (styleHints()->colorScheme() == Qt::ColorScheme::Dark);
-    setStyle(new CustomStyle(createBaseStyle(is_system_dark), small_icon_size_));
+    setStyle(new CustomStyle(nullptr, small_icon_size_));
 
 #if defined(Q_OS_WINDOWS)
     message_window_ = std::make_unique<base::MessageWindow>();
@@ -356,26 +347,6 @@ QStringList GuiApplication::availableThemes() const
 //--------------------------------------------------------------------------------------------------
 void GuiApplication::setTheme(const QString& theme_id)
 {
-    QTimer::singleShot(0, this, [this, theme_id]()
-    {
-        applyTheme(theme_id);
-    });
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
-QString GuiApplication::themeName(const QString& theme_id)
-{
-    if (theme_id == "dark")
-        return tr("Dark");
-    else if (theme_id == "light")
-        return tr("Light");
-    return tr("Auto");
-}
-
-//--------------------------------------------------------------------------------------------------
-void GuiApplication::applyTheme(const QString& theme_id)
-{
     // Determine if the effective theme is dark.
     bool is_dark = false;
     if (theme_id == "dark")
@@ -387,7 +358,7 @@ void GuiApplication::applyTheme(const QString& theme_id)
     setPalette(QPalette());
 
     // Change the base style inside the existing proxy (no setStyle() call to avoid crashes).
-    static_cast<CustomStyle*>(style())->changeBaseStyle(createBaseStyle(is_dark));
+    static_cast<CustomStyle*>(style())->setBaseStyle(createBaseStyle(is_dark));
 
     if (theme_id == "auto")
     {
@@ -410,91 +381,14 @@ void GuiApplication::applyTheme(const QString& theme_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-QStyle* GuiApplication::createBaseStyle(bool is_dark)
-{
-    QStyle* base_style = nullptr;
-    is_native_style_ = false;
-
-#if defined(Q_OS_WINDOWS)
-    if (QOperatingSystemVersion::current() >= QOperatingSystemVersion::Windows11)
-    {
-        base_style = QStyleFactory::create("windows11");
-        if (base_style)
-            is_native_style_ = true;
-    }
-    else
-    {
-        // On Windows 7/8/10 use windowsvista for light theme, Fusion for dark theme.
-        if (!is_dark)
-        {
-            base_style = QStyleFactory::create("windowsvista");
-            if (base_style)
-                is_native_style_ = true;
-        }
-    }
-#elif defined(Q_OS_MACOS)
-    base_style = QStyleFactory::create("macos");
-    if (base_style)
-        is_native_style_ = true;
-#endif
-
-    if (!base_style)
-        base_style = QStyleFactory::create("Fusion");
-
-    return base_style;
-}
-
-//--------------------------------------------------------------------------------------------------
 // static
-QPalette GuiApplication::createDarkPalette()
+QString GuiApplication::themeName(const QString& theme_id)
 {
-    QPalette palette;
-
-    // Window and base colors.
-    palette.setColor(QPalette::Window, QColor(53, 53, 53));
-    palette.setColor(QPalette::WindowText, Qt::white);
-    palette.setColor(QPalette::Base, QColor(35, 35, 35));
-    palette.setColor(QPalette::AlternateBase, QColor(53, 53, 53));
-    palette.setColor(QPalette::Button, QColor(53, 53, 53));
-    palette.setColor(QPalette::ButtonText, Qt::white);
-
-    // Text colors.
-    palette.setColor(QPalette::Text, Qt::white);
-    palette.setColor(QPalette::BrightText, Qt::red);
-    palette.setColor(QPalette::PlaceholderText, QColor(127, 127, 127));
-
-    // Tooltip colors.
-    palette.setColor(QPalette::ToolTipBase, QColor(53, 53, 53));
-    palette.setColor(QPalette::ToolTipText, Qt::white);
-
-    // Link colors.
-    palette.setColor(QPalette::Link, QColor(42, 130, 218));
-    palette.setColor(QPalette::LinkVisited, QColor(128, 90, 220));
-
-    // Selection and accent colors.
-    palette.setColor(QPalette::Highlight, QColor(42, 130, 218));
-    palette.setColor(QPalette::HighlightedText, Qt::black);
-    palette.setColor(QPalette::Accent, QColor(42, 130, 218));
-
-    // 3D border colors (used by Fusion and classic styles).
-    palette.setColor(QPalette::Light, QColor(80, 80, 80));
-    palette.setColor(QPalette::Midlight, QColor(67, 67, 67));
-    palette.setColor(QPalette::Mid, QColor(42, 42, 42));
-    palette.setColor(QPalette::Dark, QColor(30, 30, 30));
-    palette.setColor(QPalette::Shadow, QColor(20, 20, 20));
-
-    // Disabled state.
-    palette.setColor(QPalette::Disabled, QPalette::WindowText, QColor(127, 127, 127));
-    palette.setColor(QPalette::Disabled, QPalette::Text, QColor(127, 127, 127));
-    palette.setColor(QPalette::Disabled, QPalette::ButtonText, QColor(127, 127, 127));
-    palette.setColor(QPalette::Disabled, QPalette::Base, QColor(42, 42, 42));
-    palette.setColor(QPalette::Disabled, QPalette::Button, QColor(42, 42, 42));
-    palette.setColor(QPalette::Disabled, QPalette::Highlight, QColor(80, 80, 80));
-    palette.setColor(QPalette::Disabled, QPalette::HighlightedText, QColor(127, 127, 127));
-    palette.setColor(QPalette::Disabled, QPalette::Link, QColor(127, 127, 127));
-    palette.setColor(QPalette::Disabled, QPalette::PlaceholderText, QColor(80, 80, 80));
-
-    return palette;
+    if (theme_id == "dark")
+        return tr("Dark");
+    else if (theme_id == "light")
+        return tr("Light");
+    return tr("Auto");
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -612,6 +506,94 @@ void GuiApplication::onNewConnection()
     socket->waitForDisconnected(kDisconnectTimeoutMs);
 
     emit sig_messageReceived(message);
+}
+
+//--------------------------------------------------------------------------------------------------
+QStyle* GuiApplication::createBaseStyle(bool is_dark)
+{
+    QStyle* base_style = nullptr;
+    is_native_style_ = false;
+
+#if defined(Q_OS_WINDOWS)
+    if (QOperatingSystemVersion::current() >= QOperatingSystemVersion::Windows11)
+    {
+        base_style = QStyleFactory::create("windows11");
+        if (base_style)
+            is_native_style_ = true;
+    }
+    else
+    {
+        // On Windows 7/8/10 use windowsvista for light theme, Fusion for dark theme.
+        if (!is_dark)
+        {
+            base_style = QStyleFactory::create("windowsvista");
+            if (base_style)
+                is_native_style_ = true;
+        }
+    }
+#elif defined(Q_OS_MACOS)
+    base_style = QStyleFactory::create("macos");
+    if (base_style)
+        is_native_style_ = true;
+#endif
+
+    if (!base_style)
+        base_style = QStyleFactory::create("Fusion");
+
+    return base_style;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QPalette GuiApplication::createDarkPalette()
+{
+    QPalette palette;
+
+    // Window and base colors.
+    palette.setColor(QPalette::Window, QColor(53, 53, 53));
+    palette.setColor(QPalette::WindowText, Qt::white);
+    palette.setColor(QPalette::Base, QColor(35, 35, 35));
+    palette.setColor(QPalette::AlternateBase, QColor(53, 53, 53));
+    palette.setColor(QPalette::Button, QColor(53, 53, 53));
+    palette.setColor(QPalette::ButtonText, Qt::white);
+
+    // Text colors.
+    palette.setColor(QPalette::Text, Qt::white);
+    palette.setColor(QPalette::BrightText, Qt::red);
+    palette.setColor(QPalette::PlaceholderText, QColor(127, 127, 127));
+
+    // Tooltip colors.
+    palette.setColor(QPalette::ToolTipBase, QColor(53, 53, 53));
+    palette.setColor(QPalette::ToolTipText, Qt::white);
+
+    // Link colors.
+    palette.setColor(QPalette::Link, QColor(42, 130, 218));
+    palette.setColor(QPalette::LinkVisited, QColor(128, 90, 220));
+
+    // Selection and accent colors.
+    palette.setColor(QPalette::Highlight, QColor(42, 130, 218));
+    palette.setColor(QPalette::HighlightedText, Qt::black);
+    palette.setColor(QPalette::Accent, QColor(42, 130, 218));
+
+    // 3D border colors (used by Fusion and classic styles).
+    palette.setColor(QPalette::Light, QColor(80, 80, 80));
+    palette.setColor(QPalette::Midlight, QColor(67, 67, 67));
+    palette.setColor(QPalette::Mid, QColor(42, 42, 42));
+    palette.setColor(QPalette::Dark, QColor(30, 30, 30));
+    palette.setColor(QPalette::Shadow, QColor(20, 20, 20));
+
+    // Disabled state.
+    palette.setColor(QPalette::Disabled, QPalette::WindowText, QColor(127, 127, 127));
+    palette.setColor(QPalette::Disabled, QPalette::Text, QColor(127, 127, 127));
+    palette.setColor(QPalette::Disabled, QPalette::ButtonText, QColor(127, 127, 127));
+    palette.setColor(QPalette::Disabled, QPalette::Base, QColor(42, 42, 42));
+    palette.setColor(QPalette::Disabled, QPalette::Button, QColor(42, 42, 42));
+    palette.setColor(QPalette::Disabled, QPalette::Highlight, QColor(80, 80, 80));
+    palette.setColor(QPalette::Disabled, QPalette::HighlightedText, QColor(127, 127, 127));
+    palette.setColor(QPalette::Disabled, QPalette::Link, QColor(127, 127, 127));
+    palette.setColor(QPalette::Disabled, QPalette::PlaceholderText, QColor(80, 80, 80));
+
+    return palette;
 }
 
 } // namespace base
