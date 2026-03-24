@@ -1022,6 +1022,9 @@ void DesktopAgent::encodeCursor(const base::MouseCursor* cursor)
 //--------------------------------------------------------------------------------------------------
 void DesktopAgent::encodeAudio(const proto::desktop::AudioPacket& packet)
 {
+    if (!audio_encoder_)
+        return;
+
     if (!audio_encoder_->encode(packet, outgoing_message_.newMessage().mutable_audio_packet()))
         return;
 
