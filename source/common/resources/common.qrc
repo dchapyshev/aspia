@@ -113,5 +113,6 @@
         <file>tools.svg</file>
         <file>chat.svg</file>
         <file>browse-page.svg</file>
+        <file>web.svg</file>
     </qresource>
 </RCC>

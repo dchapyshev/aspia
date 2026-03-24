@@ -336,7 +336,7 @@ void Settings::setLargeIcons(bool enable)
 //--------------------------------------------------------------------------------------------------
 QString Settings::theme() const
 {
-    return settings_.value(kThemeParam, QStringLiteral("light")).toString();
+    return settings_.value(kThemeParam, "auto").toString();
 }
 
 //--------------------------------------------------------------------------------------------------

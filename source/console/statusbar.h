@@ -36,12 +36,17 @@ public:
     explicit StatusBar(QWidget* parent);
     ~StatusBar() final = default;
 
+    void refresh();
     void setCurrentComputerGroup(const proto::address_book::ComputerGroup& computer_group);
     void clear();
 
     void setUpdateState(bool enable);
 
 private:
+    QString label1_text_;
+    QString label2_text_;
+    QString label3_text_;
+
     QTimer* animation_timer_;
     int animation_index_ = 0;
     QLabel* status_label_ = nullptr;

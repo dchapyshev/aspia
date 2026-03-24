@@ -138,12 +138,16 @@
        <normaloff>:/img/language.svg</normaloff>:/img/language.svg</iconset>
      </property>
     </widget>
-    <addaction name="menu_language"/>
     <widget class="QMenu" name="menu_theme">
      <property name="title">
       <string>&amp;Theme</string>
      </property>
+     <property name="icon">
+      <iconset resource="../common/resources/common.qrc">
+       <normaloff>:/img/web.svg</normaloff>:/img/web.svg</iconset>
+     </property>
     </widget>
+    <addaction name="menu_language"/>
     <addaction name="menu_theme"/>
     <addaction name="separator"/>
     <addaction name="action_toolbar"/>

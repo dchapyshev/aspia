@@ -99,11 +99,11 @@ private slots:
     void onThemeChanged(QAction* action);
     void onRecentOpenTriggered(QAction* action);
     void onShowHideToTray();
+    void onUpdateTheme();
 
 private:
     void createLanguageMenu(const QString& current_locale);
     void createThemeMenu(const QString& current_theme);
-    QString themeName(const QString& theme_id) const;
     void retranslateThemeMenu();
     void rebuildMruMenu();
     void showTrayIcon(bool show);

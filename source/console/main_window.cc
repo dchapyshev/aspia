@@ -20,13 +20,13 @@
 
 #include <QActionGroup>
 #include <QCloseEvent>
-#include <QCoreApplication>
 #include <QDesktopServices>
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QStyle>
 #include <QSystemTrayIcon>
 
+#include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/version_constants.h"
 #include "client/ui/chat/chat_session_window.h"
@@ -48,15 +48,6 @@
 #include "console/update_settings_dialog.h"
 
 namespace console {
-
-namespace {
-
-QString translateThemeName(const char* source_text)
-{
-    return QCoreApplication::translate("ConsoleMainWindow", source_text);
-}
-
-} // namespace
 
 //--------------------------------------------------------------------------------------------------
 MainWindow::MainWindow(const QString& file_path)
@@ -88,6 +79,9 @@ MainWindow::MainWindow(const QString& file_path)
 
     restoreGeometry(settings.windowGeometry());
     restoreState(settings.windowState());
+
+    connect(base::GuiApplication::instance(), &base::GuiApplication::sig_themeChanged,
+            this, &MainWindow::onUpdateTheme);
 
     ui.action_show_tray_icon->setChecked(settings.alwaysShowTrayIcon());
     ui.action_minimize_to_tray->setChecked(settings.minimizeToTray());
@@ -194,23 +188,18 @@ MainWindow::MainWindow(const QString& file_path)
         case proto::peer::SESSION_TYPE_DESKTOP_MANAGE:
             ui.action_desktop_manage->setChecked(true);
             break;
-
         case proto::peer::SESSION_TYPE_DESKTOP_VIEW:
             ui.action_desktop_view->setChecked(true);
             break;
-
         case proto::peer::SESSION_TYPE_FILE_TRANSFER:
             ui.action_file_transfer->setChecked(true);
             break;
-
         case proto::peer::SESSION_TYPE_SYSTEM_INFO:
             ui.action_system_info->setChecked(true);
             break;
-
         case proto::peer::SESSION_TYPE_TEXT_CHAT:
             ui.action_text_chat->setChecked(true);
             break;
-
         default:
             break;
     }
@@ -1386,6 +1375,12 @@ void MainWindow::onShowHideToTray()
 }
 
 //--------------------------------------------------------------------------------------------------
+void MainWindow::onUpdateTheme()
+{
+    ui.status_bar->refresh();
+}
+
+//--------------------------------------------------------------------------------------------------
 void MainWindow::changeEvent(QEvent* event)
 {
     if (event->type() == QEvent::WindowStateChange && ui.action_minimize_to_tray->isChecked())
@@ -1525,7 +1520,7 @@ void MainWindow::createThemeMenu(const QString& current_theme)
 
     for (const QString& theme_id : available_themes)
     {
-        QAction* action = new QAction(themeName(theme_id), this);
+        QAction* action = new QAction(ThemeManager::themeName(theme_id), this);
         action->setCheckable(true);
         action->setData(theme_id);
         action->setActionGroup(theme_group);
@@ -1535,22 +1530,13 @@ void MainWindow::createThemeMenu(const QString& current_theme)
 }
 
 //--------------------------------------------------------------------------------------------------
-QString MainWindow::themeName(const QString& theme_id) const
-{
-    if (theme_id == QStringLiteral("dark"))
-        return translateThemeName("Dark");
-
-    return translateThemeName("Light");
-}
-
-//--------------------------------------------------------------------------------------------------
 void MainWindow::retranslateThemeMenu()
 {
     for (QAction* action : ui.menu_theme->actions())
     {
         const QString theme_id = action->data().toString();
         if (!theme_id.isEmpty())
-            action->setText(themeName(theme_id));
+            action->setText(ThemeManager::themeName(theme_id));
     }
 }
 
@@ -1558,9 +1544,6 @@ void MainWindow::retranslateThemeMenu()
 void MainWindow::applyTheme(const QString& theme_id)
 {
     ThemeManager::instance()->applyTheme(Application::instance(), theme_id);
-
-    if (style())
-        ui.menu_theme->setIcon(style()->standardIcon(QStyle::SP_DesktopIcon));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1575,6 +1558,7 @@ void MainWindow::onThemeChanged(QAction* action)
 
     applyTheme(theme_id);
     Settings().setTheme(theme_id);
+    onUpdateTheme();
 }
 
 //--------------------------------------------------------------------------------------------------

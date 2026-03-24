@@ -54,17 +54,13 @@ StatusBar::StatusBar(QWidget* parent)
 }
 
 //--------------------------------------------------------------------------------------------------
-void StatusBar::setCurrentComputerGroup(
-    const proto::address_book::ComputerGroup& computer_group)
+void StatusBar::refresh()
 {
     clear();
 
-    QString child_groups = tr("%n child group(s)", "", computer_group.computer_group_size());
-    QString child_computers = tr("%n child computer(s)", "", computer_group.computer_size());
-
-    QLabel* first_label = new QLabel(QString::fromStdString(computer_group.name()), this);
-    QLabel* second_label = new QLabel(child_groups, this);
-    QLabel* third_label = new QLabel(child_computers, this);
+    QLabel* first_label = new QLabel(label1_text_, this);
+    QLabel* second_label = new QLabel(label2_text_, this);
+    QLabel* third_label = new QLabel(label3_text_, this);
 
     status_label_ = new QLabel(QString(), this);
 
@@ -81,6 +77,20 @@ void StatusBar::setCurrentComputerGroup(
     addWidget(status_label_);
 
     status_label_->setVisible(false);
+}
+
+//--------------------------------------------------------------------------------------------------
+void StatusBar::setCurrentComputerGroup(
+    const proto::address_book::ComputerGroup& computer_group)
+{
+    QString child_groups = tr("%n child group(s)", "", computer_group.computer_group_size());
+    QString child_computers = tr("%n child computer(s)", "", computer_group.computer_size());
+
+    label1_text_ = QString::fromStdString(computer_group.name());
+    label2_text_ = tr("%n child group(s)", "", computer_group.computer_group_size());
+    label3_text_ = tr("%n child computer(s)", "", computer_group.computer_size());
+
+    refresh();
 }
 
 //--------------------------------------------------------------------------------------------------

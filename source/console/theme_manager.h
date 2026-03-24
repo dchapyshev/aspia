@@ -31,19 +31,14 @@ namespace console {
 
 class ThemeManager
 {
-public:
-    struct Theme
-    {
-        QString id;
-        QString style_name;
-        QPalette palette;
-    };
+    Q_DECLARE_TR_FUNCTIONS(ThemeManager)
 
+public:
     static ThemeManager* instance();
 
     QStringList availableThemes() const;
-    Theme getTheme(const QString& theme_id) const;
     void applyTheme(QApplication* app, const QString& theme_id);
+    static QString themeName(const QString& theme_id);
 
 private:
     class CustomStyleProxy final : public QProxyStyle
@@ -70,11 +65,12 @@ private:
     ThemeManager() = default;
 
     QPalette createDarkPalette() const;
-    QPalette createSystemPalette() const;
-    QStyle* createLightStyle() const;
+    void ensureStyleCreated(QApplication* app);
 
     int saved_icon_size_ = 20;
     bool icon_size_saved_ = false;
+    bool style_created_ = false;
+    bool is_native_style_ = false;
 
     Q_DISABLE_COPY_MOVE(ThemeManager)
 };
