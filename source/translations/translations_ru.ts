@@ -1300,6 +1300,18 @@
         <translation>&amp;Язык</translation>
     </message>
     <message>
+        <source>&amp;Theme</source>
+        <translation>&amp;Тема</translation>
+    </message>
+    <message>
+        <source>Light</source>
+        <translation>Светлая</translation>
+    </message>
+    <message>
+        <source>Dark</source>
+        <translation>Темная</translation>
+    </message>
+    <message>
         <location filename="../console/main_window.ui" line="155"/>
         <source>Tools</source>
         <translation>Инструменты</translation>

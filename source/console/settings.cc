@@ -49,6 +49,7 @@ const QString kComputerGroupDialogGeometryParam = "ComputerGroupDialogGeometry";
 const QString kShowIconsInMenusParam = "ShowIconsInMenus";
 const QString kAddressBookDialogGeometryParam = "AddressBookDialogGeometry";
 const QString kLargeIconsParam = "LargeIcons";
+const QString kThemeParam = "Theme";
 
 } // namespace
 
@@ -330,6 +331,18 @@ bool Settings::largeIcons() const
 void Settings::setLargeIcons(bool enable)
 {
     settings_.setValue(kLargeIconsParam, enable);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString Settings::theme() const
+{
+    return settings_.value(kThemeParam, QStringLiteral("light")).toString();
+}
+
+//--------------------------------------------------------------------------------------------------
+void Settings::setTheme(const QString& theme_id)
+{
+    settings_.setValue(kThemeParam, theme_id);
 }
 
 } // namespace console

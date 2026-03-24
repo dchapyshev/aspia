@@ -139,6 +139,13 @@
      </property>
     </widget>
     <addaction name="menu_language"/>
+    <widget class="QMenu" name="menu_theme">
+     <property name="title">
+      <string>&amp;Theme</string>
+     </property>
+    </widget>
+    <addaction name="menu_theme"/>
+    <addaction name="separator"/>
     <addaction name="action_toolbar"/>
     <addaction name="action_statusbar"/>
     <addaction name="action_large_icons"/>
