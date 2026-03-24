@@ -21,6 +21,7 @@
 
 #include <QApplication>
 #include <QPalette>
+#include <QProxyStyle>
 
 #include "base/thread.h"
 #include "base/translations.h"
@@ -56,6 +57,10 @@ public:
     void setLocale(const QString& locale);
     bool hasLocale(const QString& locale);
 
+    QStringList availableThemes() const;
+    void applyTheme(const QString& theme_id);
+    static QString themeName(const QString& theme_id);
+
     static QByteArray svgByteArray(const QString& svg_file_path);
     static QPixmap svgPixmap(const QString& svg_file_path, const QSize& size = QSize(24, 24));
     static QIcon svgIcon(const QString& svg_file_path, const QSize& size = QSize(24, 24));
@@ -77,6 +82,8 @@ private slots:
     void onNewConnection();
 
 private:
+    static QPalette createDarkPalette();
+
     QString lock_file_name_;
     QString server_name_;
 
@@ -85,6 +92,8 @@ private:
 
     base::Thread io_thread_;
     std::unique_ptr<Translations> translations_;
+
+    bool is_native_style_ = false;
 
 #if defined(Q_OS_WINDOWS)
     std::unique_ptr<base::MessageWindow> message_window_;

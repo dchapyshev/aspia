@@ -27,7 +27,8 @@
 #include <QLocalSocket>
 #include <QLockFile>
 #include <QPainter>
-#include <QProxyStyle>
+#include <QStyleFactory>
+#include <QStyleHints>
 #include <QSvgRenderer>
 
 #include "base/logging.h"
@@ -65,13 +66,15 @@ const char kOkMessage[] = "OK";
 class CustomStyle final : public QProxyStyle
 {
 public:
-    explicit CustomStyle(int small_icon_size)
-        : small_icon_size_(small_icon_size)
+    explicit CustomStyle(QStyle* base_style, int small_icon_size)
+        : QProxyStyle(base_style),
+          small_icon_size_(small_icon_size)
     {
         // Nothing
     }
 
-    int pixelMetric(PixelMetric metric, const QStyleOption* option, const QWidget* widget) const final
+    int pixelMetric(
+        PixelMetric metric, const QStyleOption* option, const QWidget* widget) const final
     {
         if (metric == QStyle::PM_SmallIconSize)
             return small_icon_size_;
@@ -131,7 +134,25 @@ GuiApplication::GuiApplication(int& argc, char* argv[])
     else if (small_icon_size > kMaxSmallIconSize)
         small_icon_size = kMaxSmallIconSize;
 
-    setStyle(new CustomStyle(small_icon_size));
+    QStyle* base_style = nullptr;
+
+#if defined(Q_OS_WINDOWS)
+    base_style = QStyleFactory::create("windows11");
+#elif defined(Q_OS_MACOS)
+    base_style = QStyleFactory::create("macos");
+#endif
+
+    if (base_style)
+    {
+        is_native_style_ = true;
+    }
+    else
+    {
+        base_style = QStyleFactory::create("Fusion");
+        is_native_style_ = false;
+    }
+
+    setStyle(new CustomStyle(base_style, small_icon_size));
 
 #if defined(Q_OS_WINDOWS)
     message_window_ = std::make_unique<base::MessageWindow>();
@@ -332,6 +353,99 @@ QIcon GuiApplication::svgIcon(const QString& svg_file_path, const QSize& size)
 QImage GuiApplication::svgImage(const QString &svg_file_path, const QSize &size)
 {
     return svgPixmap(svg_file_path, size).toImage();
+}
+
+//--------------------------------------------------------------------------------------------------
+QStringList GuiApplication::availableThemes() const
+{
+    return { "auto", "light", "dark" };
+}
+
+//--------------------------------------------------------------------------------------------------
+void GuiApplication::applyTheme(const QString& theme_id)
+{
+    if (theme_id == "auto")
+    {
+        // Let the system decide the color scheme.
+        styleHints()->setColorScheme(Qt::ColorScheme::Unknown);
+        setPalette(QPalette());
+        return;
+    }
+
+    bool is_dark = (theme_id == "dark");
+
+    styleHints()->setColorScheme(is_dark ? Qt::ColorScheme::Dark : Qt::ColorScheme::Light);
+
+    // Native styles (windows11, macos) handle dark/light mode via colorScheme.
+    // Fusion requires a custom palette for dark mode.
+    if (!is_native_style_ && is_dark)
+        setPalette(createDarkPalette());
+    else
+        setPalette(QPalette());
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QString GuiApplication::themeName(const QString& theme_id)
+{
+    if (theme_id == "dark")
+        return tr("Dark");
+    else if (theme_id == "light")
+        return tr("Light");
+    return tr("Auto");
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QPalette GuiApplication::createDarkPalette()
+{
+    QPalette palette;
+
+    // Window and base colors.
+    palette.setColor(QPalette::Window, QColor(53, 53, 53));
+    palette.setColor(QPalette::WindowText, Qt::white);
+    palette.setColor(QPalette::Base, QColor(35, 35, 35));
+    palette.setColor(QPalette::AlternateBase, QColor(53, 53, 53));
+    palette.setColor(QPalette::Button, QColor(53, 53, 53));
+    palette.setColor(QPalette::ButtonText, Qt::white);
+
+    // Text colors.
+    palette.setColor(QPalette::Text, Qt::white);
+    palette.setColor(QPalette::BrightText, Qt::red);
+    palette.setColor(QPalette::PlaceholderText, QColor(127, 127, 127));
+
+    // Tooltip colors.
+    palette.setColor(QPalette::ToolTipBase, QColor(53, 53, 53));
+    palette.setColor(QPalette::ToolTipText, Qt::white);
+
+    // Link colors.
+    palette.setColor(QPalette::Link, QColor(42, 130, 218));
+    palette.setColor(QPalette::LinkVisited, QColor(128, 90, 220));
+
+    // Selection and accent colors.
+    palette.setColor(QPalette::Highlight, QColor(42, 130, 218));
+    palette.setColor(QPalette::HighlightedText, Qt::black);
+    palette.setColor(QPalette::Accent, QColor(42, 130, 218));
+
+    // 3D border colors (used by Fusion and classic styles).
+    palette.setColor(QPalette::Light, QColor(80, 80, 80));
+    palette.setColor(QPalette::Midlight, QColor(67, 67, 67));
+    palette.setColor(QPalette::Mid, QColor(42, 42, 42));
+    palette.setColor(QPalette::Dark, QColor(30, 30, 30));
+    palette.setColor(QPalette::Shadow, QColor(20, 20, 20));
+
+    // Disabled state.
+    palette.setColor(QPalette::Disabled, QPalette::WindowText, QColor(127, 127, 127));
+    palette.setColor(QPalette::Disabled, QPalette::Text, QColor(127, 127, 127));
+    palette.setColor(QPalette::Disabled, QPalette::ButtonText, QColor(127, 127, 127));
+    palette.setColor(QPalette::Disabled, QPalette::Base, QColor(42, 42, 42));
+    palette.setColor(QPalette::Disabled, QPalette::Button, QColor(42, 42, 42));
+    palette.setColor(QPalette::Disabled, QPalette::Highlight, QColor(80, 80, 80));
+    palette.setColor(QPalette::Disabled, QPalette::HighlightedText, QColor(127, 127, 127));
+    palette.setColor(QPalette::Disabled, QPalette::Link, QColor(127, 127, 127));
+    palette.setColor(QPalette::Disabled, QPalette::PlaceholderText, QColor(80, 80, 80));
+
+    return palette;
 }
 
 //--------------------------------------------------------------------------------------------------

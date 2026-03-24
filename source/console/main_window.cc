@@ -44,7 +44,6 @@
 #include "console/import_export_util.h"
 #include "console/mru_action.h"
 #include "console/settings.h"
-#include "console/theme_manager.h"
 #include "console/update_settings_dialog.h"
 
 namespace console {
@@ -1513,14 +1512,15 @@ void MainWindow::createLanguageMenu(const QString& current_locale)
 //--------------------------------------------------------------------------------------------------
 void MainWindow::createThemeMenu(const QString& current_theme)
 {
-    const QStringList available_themes = ThemeManager::instance()->availableThemes();
+    base::GuiApplication* app = base::GuiApplication::instance();
+    const QStringList available_themes = app->availableThemes();
     QActionGroup* theme_group = new QActionGroup(this);
 
     theme_group->setExclusive(true);
 
     for (const QString& theme_id : available_themes)
     {
-        QAction* action = new QAction(ThemeManager::themeName(theme_id), this);
+        QAction* action = new QAction(base::GuiApplication::themeName(theme_id), this);
         action->setCheckable(true);
         action->setData(theme_id);
         action->setActionGroup(theme_group);
@@ -1536,14 +1536,14 @@ void MainWindow::retranslateThemeMenu()
     {
         const QString theme_id = action->data().toString();
         if (!theme_id.isEmpty())
-            action->setText(ThemeManager::themeName(theme_id));
+            action->setText(base::GuiApplication::themeName(theme_id));
     }
 }
 
 //--------------------------------------------------------------------------------------------------
 void MainWindow::applyTheme(const QString& theme_id)
 {
-    ThemeManager::instance()->applyTheme(Application::instance(), theme_id);
+    base::GuiApplication::instance()->applyTheme(theme_id);
 }
 
 //--------------------------------------------------------------------------------------------------
