@@ -149,14 +149,25 @@
     <addaction name="separator"/>
     <addaction name="action_about"/>
    </widget>
-   <widget class="QMenu" name="menu_language">
+   <widget class="QMenu" name="menuView">
     <property name="title">
-     <string>Language</string>
+     <string>View</string>
     </property>
-    <addaction name="separator"/>
+    <widget class="QMenu" name="menu_language">
+     <property name="title">
+      <string>Language</string>
+     </property>
+    </widget>
+    <widget class="QMenu" name="menu_theme">
+     <property name="title">
+      <string>Theme</string>
+     </property>
+    </widget>
+    <addaction name="menu_language"/>
+    <addaction name="menu_theme"/>
    </widget>
    <addaction name="menu_aspia"/>
-   <addaction name="menu_language"/>
+   <addaction name="menuView"/>
    <addaction name="menu_help"/>
   </widget>
   <action name="action_help">

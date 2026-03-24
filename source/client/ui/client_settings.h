@@ -35,6 +35,9 @@ public:
     QString locale() const;
     void setLocale(const QString& locale);
 
+    QString theme() const;
+    void setTheme(const QString& theme);
+
     QStringList addressList() const;
     void setAddressList(const QStringList& list);
 

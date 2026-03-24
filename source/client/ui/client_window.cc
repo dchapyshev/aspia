@@ -58,6 +58,11 @@ ClientWindow::ClientWindow(QWidget* parent)
     ui.setupUi(this);
 
     createLanguageMenu(settings.locale());
+
+    const QString current_theme = settings.theme();
+    createThemeMenu(current_theme);
+    base::GuiApplication::instance()->applyTheme(current_theme);
+
     reloadSessionTypes();
 
     QComboBox* combo_address = ui.combo_address;
@@ -68,6 +73,7 @@ ClientWindow::ClientWindow(QWidget* parent)
     connect(combo_address->lineEdit(), &QLineEdit::returnPressed, this, &ClientWindow::connectToHost);
 
     connect(ui.menu_language, &QMenu::triggered, this, &ClientWindow::onLanguageChanged);
+    connect(ui.menu_theme, &QMenu::triggered, this, &ClientWindow::onThemeChanged);
     connect(ui.action_settings, &QAction::triggered, this, &ClientWindow::onSettings);
     connect(ui.action_help, &QAction::triggered, this, &ClientWindow::onHelp);
     connect(ui.action_about, &QAction::triggered, this, &ClientWindow::onAbout);
@@ -130,9 +136,9 @@ ClientWindow::ClientWindow(QWidget* parent)
 #endif
 
     connect(base::GuiApplication::instance(), &base::GuiApplication::sig_themeChanged,
-            this, &ClientWindow::onThemeChanged);
+            this, &ClientWindow::onAfterThemeChanged);
 
-    onThemeChanged();
+    onAfterThemeChanged();
     combo_address->setFocus();
 
     setFixedHeight(sizeHint().height());
@@ -198,6 +204,14 @@ void ClientWindow::onLanguageChanged(QAction* action)
     application->setLocale(new_locale);
 
     ui.retranslateUi(this);
+
+    for (QAction* theme_action : ui.menu_theme->actions())
+    {
+        const QString theme_id = theme_action->data().toString();
+        if (!theme_id.isEmpty())
+            theme_action->setText(base::GuiApplication::themeName(theme_id));
+    }
+
     reloadSessionTypes();
 }
 
@@ -420,7 +434,23 @@ void ClientWindow::onCheckUpdates()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientWindow::onThemeChanged()
+void ClientWindow::onThemeChanged(QAction* action)
+{
+    if (!action)
+        return;
+
+    const QString theme_id = action->data().toString();
+    if (theme_id.isEmpty())
+        return;
+
+    base::GuiApplication::instance()->applyTheme(theme_id);
+
+    ClientSettings settings;
+    settings.setTheme(theme_id);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientWindow::onAfterThemeChanged()
 {
     static const QString kComboboxStyle =
         "QComboBox {"
@@ -487,6 +517,26 @@ void ClientWindow::createLanguageMenu(const QString& current_locale)
             action_language->setChecked(true);
 
         ui.menu_language->addAction(action_language);
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientWindow::createThemeMenu(const QString& current_theme)
+{
+    base::GuiApplication* app = base::GuiApplication::instance();
+    const QStringList available_themes = app->availableThemes();
+    QActionGroup* theme_group = new QActionGroup(this);
+
+    theme_group->setExclusive(true);
+
+    for (const QString& theme_id : available_themes)
+    {
+        QAction* action = new QAction(base::GuiApplication::themeName(theme_id), this);
+        action->setCheckable(true);
+        action->setData(theme_id);
+        action->setActionGroup(theme_group);
+        action->setChecked(theme_id == current_theme);
+        ui.menu_theme->addAction(action);
     }
 }
 

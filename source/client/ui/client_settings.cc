@@ -29,6 +29,7 @@ namespace client {
 namespace {
 
 const QString kLocaleParam = "Locale";
+const QString kThemeParam = "Theme";
 const QString kAddressListParam = "AddressList";
 const QString kSessionTypeParam = "SessionType";
 const QString kDesktopManageConfigParam = "DesktopManageConfig";
@@ -58,6 +59,18 @@ QString ClientSettings::locale() const
 void ClientSettings::setLocale(const QString& locale)
 {
     settings_.setValue(kLocaleParam, locale);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString ClientSettings::theme() const
+{
+    return settings_.value(kThemeParam, "auto").toString();
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientSettings::setTheme(const QString& theme)
+{
+    settings_.setValue(kThemeParam, theme);
 }
 
 //--------------------------------------------------------------------------------------------------

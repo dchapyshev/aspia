@@ -45,6 +45,8 @@ protected:
 private slots:
     void onUpdateCheckedFinished(const QByteArray& result);
     void onLanguageChanged(QAction* action);
+    void onThemeChanged(QAction* action);
+    void onAfterThemeChanged();
     void onSettings();
     void onHelp();
     void onAbout();
@@ -52,10 +54,10 @@ private slots:
     void sessionConfigButtonPressed();
     void connectToHost();
     void onCheckUpdates();
-    void onThemeChanged();
 
 private:
     void createLanguageMenu(const QString& current_locale);
+    void createThemeMenu(const QString& current_theme);
     void reloadSessionTypes();
 
     Ui::ClientWindow ui;
