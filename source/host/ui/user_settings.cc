@@ -28,6 +28,7 @@ namespace host {
 namespace {
 
 const QString kLocaleParam = "Locale";
+const QString kThemeParam = "Theme";
 const QString kOneTimeSessionsParam = "OneTimeSessions";
 
 } // namespace
@@ -70,6 +71,18 @@ QString UserSettings::locale() const
 void UserSettings::setLocale(const QString& locale)
 {
     settings_.setValue(kLocaleParam, locale);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString UserSettings::theme() const
+{
+    return settings_.value(kThemeParam, "auto").toString();
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserSettings::setTheme(const QString& theme)
+{
+    settings_.setValue(kThemeParam, theme);
 }
 
 //--------------------------------------------------------------------------------------------------

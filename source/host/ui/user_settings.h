@@ -36,6 +36,9 @@ public:
     QString locale() const;
     void setLocale(const QString& locale);
 
+    QString theme() const;
+    void setTheme(const QString& theme);
+
     quint32 oneTimeSessions() const;
     void setOneTimeSessions(quint32 sessions);
 

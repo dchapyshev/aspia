@@ -254,12 +254,6 @@ border-radius: 2px;
     <addaction name="separator"/>
     <addaction name="action_about"/>
    </widget>
-   <widget class="QMenu" name="menu_language">
-    <property name="title">
-     <string>Language</string>
-    </property>
-    <addaction name="separator"/>
-   </widget>
    <widget class="QMenu" name="menu_access">
     <property name="title">
      <string>Access</string>
@@ -270,8 +264,15 @@ border-radius: 2px;
     <addaction name="action_system_info"/>
     <addaction name="action_text_chat"/>
    </widget>
+   <widget class="QMenu" name="menuView">
+    <property name="title">
+     <string>View</string>
+    </property>
+    <addaction name="action_language"/>
+    <addaction name="action_theme"/>
+   </widget>
    <addaction name="menu_aspia"/>
-   <addaction name="menu_language"/>
+   <addaction name="menuView"/>
    <addaction name="menu_access"/>
    <addaction name="menu_help"/>
   </widget>
@@ -364,6 +365,16 @@ border-radius: 2px;
    </property>
    <property name="menuRole">
     <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="action_language">
+   <property name="text">
+    <string>Language</string>
+   </property>
+  </action>
+  <action name="action_theme">
+   <property name="text">
+    <string>Theme</string>
    </property>
   </action>
  </widget>

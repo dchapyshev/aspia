@@ -75,7 +75,8 @@ private slots:
 
     void realClose();
     void onLanguageChanged(QAction* action);
-    void onThemeChanged();
+    void onThemeChanged(QAction* action);
+    void onAfterThemeChanged();
     void onShowChat();
     void onSettings();
     void onShowHide();
@@ -88,6 +89,7 @@ private slots:
 
 private:
     void createLanguageMenu(const QString& current_locale);
+    void createThemeMenu(const QString& current_theme);
     void updateStatusBar();
     void updateTrayIconTooltip();
     quint32 calcOneTimeSessions();
@@ -101,6 +103,9 @@ private:
     QMenu tray_menu_;
     QPointer<NotifierWindow> notifier_;
     common::ChatWidget* chat_widget_ = nullptr;
+
+    QMenu* language_menu_ = nullptr;
+    QMenu* theme_menu_ = nullptr;
 
     common::StatusDialog* status_dialog_ = nullptr;
     proto::user::RouterState::State last_state_ = proto::user::RouterState::DISABLED;
