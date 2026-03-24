@@ -104,9 +104,6 @@ private:
     QPointer<NotifierWindow> notifier_;
     common::ChatWidget* chat_widget_ = nullptr;
 
-    QMenu* language_menu_ = nullptr;
-    QMenu* theme_menu_ = nullptr;
-
     common::StatusDialog* status_dialog_ = nullptr;
     proto::user::RouterState::State last_state_ = proto::user::RouterState::DISABLED;
 

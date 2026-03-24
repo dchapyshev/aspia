@@ -25,6 +25,7 @@
 #include <QIcon>
 #include <QLocalServer>
 #include <QLocalSocket>
+#include <QOperatingSystemVersion>
 #include <QLockFile>
 #include <QPainter>
 #include <QStyleFactory>
@@ -135,18 +136,22 @@ GuiApplication::GuiApplication(int& argc, char* argv[])
         small_icon_size = kMaxSmallIconSize;
 
     QStyle* base_style = nullptr;
-    is_native_style_ = true;
+    is_native_style_ = false;
 
 #if defined(Q_OS_WINDOWS)
-    base_style = QStyleFactory::create("windows11");
+    if (QOperatingSystemVersion::current() >= QOperatingSystemVersion::Windows11)
+    {
+        base_style = QStyleFactory::create("windows11");
+        if (base_style)
+            is_native_style_ = true;
+    }
 #elif defined(Q_OS_MACOS)
     base_style = QStyleFactory::create("macos");
+    if (base_style)
+        is_native_style_ = true;
 #endif
     if (!base_style)
-    {
         base_style = QStyleFactory::create("Fusion");
-        is_native_style_ = false;
-    }
 
     setStyle(new CustomStyle(base_style, small_icon_size));
 
@@ -362,9 +367,9 @@ void GuiApplication::applyTheme(const QString& theme_id)
 {
     if (theme_id == "auto")
     {
-        // Let the system decide the color scheme.
         styleHints()->setColorScheme(Qt::ColorScheme::Unknown);
         setPalette(QPalette());
+        emit sig_themeChanged();
         return;
     }
 
@@ -373,7 +378,7 @@ void GuiApplication::applyTheme(const QString& theme_id)
     styleHints()->setColorScheme(is_dark ? Qt::ColorScheme::Dark : Qt::ColorScheme::Light);
 
     // Native styles (windows11, macos) handle dark/light mode via colorScheme.
-    // Fusion requires a custom palette for dark mode.
+    // Non-native styles (windowsvista, Fusion) require a custom palette for dark mode.
     if (!is_native_style_ && is_dark)
         setPalette(createDarkPalette());
     else
