@@ -19,6 +19,7 @@
 #include "host/client.h"
 
 #include <QHostAddress>
+#include <QTimer>
 
 #include "base/logging.h"
 #include "base/serialization.h"
@@ -33,10 +34,19 @@
 
 namespace host {
 
+namespace {
+
+const qint64 kProbeIntervalMs = 30000;   // Check every 30 seconds.
+const qint64 kIdleThresholdMs = 5000;    // Consider idle after 5 seconds of no sends.
+const qint64 kProbeDataSize = 64 * 1024; // 64 KB probe payload.
+
+} // namespace
+
 //--------------------------------------------------------------------------------------------------
 Client::Client(base::TcpChannel* tcp_channel, QObject* parent)
     : QObject(parent),
-      tcp_channel_(tcp_channel)
+      tcp_channel_(tcp_channel),
+      probe_timer_(new QTimer(this))
 {
     LOG(INFO) << "Ctor";
     CHECK(tcp_channel_);
@@ -50,7 +60,11 @@ Client::Client(base::TcpChannel* tcp_channel, QObject* parent)
         tcp_channel_->setPaused(false);
         if (udp_channel_)
             udp_channel_->setPaused(false);
+
+        startBandwidthProbing();
     });
+
+    connect(probe_timer_, &QTimer::timeout, this, &Client::sendBandwidthProbe);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -144,6 +158,8 @@ qint64 Client::pendingBytes() const
 //--------------------------------------------------------------------------------------------------
 void Client::send(quint8 channel_id, const QByteArray& buffer)
 {
+    last_send_time_ = Clock::now();
+
     if (udp_ready_)
     {
         udp_channel_->send(channel_id, buffer);
@@ -180,6 +196,8 @@ void Client::onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray& buffe
 
     if (message.has_direct_udp_reply())
         readDirectUdpReply(message.direct_udp_reply());
+    else if (message.has_bandwidth_probe_ack())
+        onBandwidthProbeAck();
     else
         LOG(WARNING) << "Unhandled control message";
 }
@@ -191,6 +209,8 @@ void Client::onUdpReady()
     CHECK(udp_channel_);
     udp_ready_ = true;
     udp_channel_->setPaused(false);
+
+    startBandwidthProbing();
     emit sig_connectionChanged();
 }
 
@@ -199,6 +219,8 @@ void Client::onUdpErrorOccurred()
 {
     LOG(INFO) << "UDP channel error (phase:" << udp_phase_ << ")";
     CHECK(udp_channel_);
+
+    probe_pending_ = false;
 
     bool was_connected = udp_ready_;
 
@@ -251,7 +273,23 @@ void Client::onUdpErrorOccurred()
 //--------------------------------------------------------------------------------------------------
 void Client::onUdpMessageReceived(quint8 udp_channel_id, const QByteArray& buffer)
 {
-    onMessage(udp_channel_id, buffer);
+    if (udp_channel_id != proto::peer::CHANNEL_ID_CONTROL)
+    {
+        onMessage(udp_channel_id, buffer);
+        return;
+    }
+
+    proto::peer::ClientToHost message;
+    if (!base::parse(buffer, &message))
+    {
+        LOG(ERROR) << "Unable to parse control message";
+        return;
+    }
+
+    if (message.has_bandwidth_probe_ack())
+        onBandwidthProbeAck();
+    else
+        LOG(WARNING) << "Unhandled control message";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -474,6 +512,64 @@ void Client::readDirectUdpReply(const proto::peer::DirectUdpReply& reply)
         LOG(INFO) << "Setting client's external address:" << client_address << ':' << client_port;
         udp_channel_->setPeerAddress(client_address, client_port);
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void Client::startBandwidthProbing()
+{
+    last_send_time_ = Clock::now();
+    probe_pending_ = false;
+    bandwidth_ = 0;
+    probe_timer_->start(kProbeIntervalMs);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Client::sendBandwidthProbe()
+{
+    if (probe_pending_)
+        return;
+
+    auto idle_duration = std::chrono::duration_cast<std::chrono::milliseconds>(
+        Clock::now() - last_send_time_);
+
+    if (idle_duration.count() < kIdleThresholdMs)
+        return;
+
+    LOG(INFO) << "Sending bandwidth probe (" << kProbeDataSize << " bytes)";
+
+    std::string payload;
+    payload.resize(kProbeDataSize);
+
+    for (size_t i = 0; i < payload.size(); ++i)
+        payload[i] = static_cast<char>(i & 0xFF);
+
+    proto::peer::HostToClient message;
+    proto::peer::BandwidthProbe* probe = message.mutable_bandwidth_probe();
+    probe->set_payload(std::move(payload));
+
+    probe_send_time_ = Clock::now();
+    probe_pending_ = true;
+
+    send(proto::peer::CHANNEL_ID_CONTROL, base::serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void Client::onBandwidthProbeAck()
+{
+    if (!probe_pending_)
+        return;
+
+    probe_pending_ = false;
+
+    auto rtt = std::chrono::duration_cast<Milliseconds>(Clock::now() - probe_send_time_);
+    if (rtt.count() <= 0)
+        return;
+
+    qint64 bandwidth = (kProbeDataSize * 1000) / rtt.count();
+    LOG(INFO) << "RTT:" << rtt.count() << "bandwidth:" << bandwidth << "B/s";
+
+    bandwidth_ = bandwidth;
+    emit sig_bandwidthChanged(bandwidth);
 }
 
 } // namespace host

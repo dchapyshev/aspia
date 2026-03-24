@@ -74,14 +74,26 @@ message DirectUdpReply
     uint32 port       = 5;
 }
 
+message BandwidthProbe
+{
+    bytes payload = 1;
+}
+
+message BandwidthProbeAck
+{
+    int64 dummy = 1;
+}
+
 // Use CHANNEL_ID_CONTROL to send.
 message ClientToHost
 {
-    DirectUdpReply direct_udp_reply = 1;
+    DirectUdpReply direct_udp_reply       = 1;
+    BandwidthProbeAck bandwidth_probe_ack = 2;
 }
 
 // Use CHANNEL_ID_CONTROL to send.
 message HostToClient
 {
     DirectUdpRequest direct_udp_request = 1;
+    BandwidthProbe bandwidth_probe      = 2;
 }

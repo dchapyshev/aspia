@@ -399,9 +399,21 @@ void Client::onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer)
         }
 
         if (message.has_direct_udp_request())
+        {
             readDirectUdpRequest(message.direct_udp_request());
+        }
+        else if (message.has_bandwidth_probe())
+        {
+            proto::peer::ClientToHost message;
+            proto::peer::BandwidthProbeAck* ask = message.mutable_bandwidth_probe_ack();
+            ask->set_dummy(1);
+
+            tcp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, base::serialize(message));
+        }
         else
+        {
             LOG(WARNING) << "Unhandled control message";
+        }
     }
     else
     {
@@ -433,11 +445,39 @@ void Client::onUdpErrorOccurred()
 void Client::onUdpMessageReceived(quint8 channel_id, const QByteArray& buffer)
 {
     if (channel_id == proto::peer::CHANNEL_ID_0)
+    {
         onSessionMessageReceived(buffer);
+    }
     else if (channel_id == proto::peer::CHANNEL_ID_1)
+    {
         onServiceMessageReceived(buffer);
+    }
+    else if (channel_id == proto::peer::CHANNEL_ID_CONTROL)
+    {
+        proto::peer::HostToClient message;
+        if (!base::parse(buffer, &message))
+        {
+            LOG(ERROR) << "Unable to parse UDP control message";
+            return;
+        }
+
+        if (message.has_bandwidth_probe())
+        {
+            proto::peer::ClientToHost message;
+            proto::peer::BandwidthProbeAck* ask = message.mutable_bandwidth_probe_ack();
+            ask->set_dummy(1);
+
+            udp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, base::serialize(message));
+        }
+        else
+        {
+            LOG(WARNING) << "Unhandled UDP control message";
+        }
+    }
     else
+    {
         LOG(WARNING) << "Unhandled incoming message from channel" << channel_id;
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

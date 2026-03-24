@@ -22,11 +22,14 @@
 #include <QObject>
 #include <QVersionNumber>
 
+#include <chrono>
 #include <optional>
 
 #include "base/crypto/key_pair.h"
 #include "base/net/tcp_channel.h"
 #include "proto/peer.h"
+
+class QTimer;
 
 namespace base {
 class StunPeer;
@@ -64,10 +67,13 @@ public:
     };
     Q_ENUM(UdpConnectPhase)
 
+    qint64 bandwidth() const { return bandwidth_; }
+
 signals:
     void sig_started();
     void sig_finished();
     void sig_connectionChanged();
+    void sig_bandwidthChanged(qint64 bytes_per_second);
 
 protected:
     void send(quint8 channel_id, const QByteArray& buffer);
@@ -87,6 +93,9 @@ private:
     void startUdpHolePunching();
     void startDirectUdp(qintptr socket, const QString& address, quint16 port);
     void readDirectUdpReply(const proto::peer::DirectUdpReply& reply);
+    void startBandwidthProbing();
+    void sendBandwidthProbe();
+    void onBandwidthProbeAck();
 
     base::TcpChannel* tcp_channel_ = nullptr;
     base::UdpChannel* udp_channel_ = nullptr;
@@ -106,6 +115,17 @@ private:
     bool peer_equals_ = false;
     QString stun_host_;
     quint16 stun_port_ = 0;
+
+    // Bandwidth probing.
+    using Clock = std::chrono::steady_clock;
+    using TimePoint = std::chrono::time_point<Clock>;
+    using Milliseconds = std::chrono::milliseconds;
+
+    QTimer* probe_timer_ = nullptr;
+    TimePoint last_send_time_;
+    TimePoint probe_send_time_;
+    bool probe_pending_ = false;
+    qint64 bandwidth_ = 0;
 
     Q_DISABLE_COPY_MOVE(Client)
 };
