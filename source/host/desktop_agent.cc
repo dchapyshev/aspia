@@ -930,7 +930,7 @@ void DesktopAgent::selectScreen(base::ScreenCapturer::ScreenId screen_id, const 
 //--------------------------------------------------------------------------------------------------
 void DesktopAgent::encodeScreen(const base::Frame* frame)
 {
-    if (!frame)
+    if (!frame || !video_encoder_)
         return;
 
     if (frame->constUpdatedRegion().isEmpty() && frame_count_ > 0)

@@ -58,10 +58,7 @@ ClientWindow::ClientWindow(QWidget* parent)
     ui.setupUi(this);
 
     createLanguageMenu(settings.locale());
-
-    const QString current_theme = settings.theme();
-    createThemeMenu(current_theme);
-    base::GuiApplication::instance()->applyTheme(current_theme);
+    createThemeMenu(settings.theme());
 
     reloadSessionTypes();
 

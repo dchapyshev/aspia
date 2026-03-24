@@ -99,10 +99,7 @@ MainWindow::MainWindow(QWidget* parent)
     connect(ui.menu_access, &QMenu::triggered, this, &MainWindow::onOneTimeSessionsChanged);
 
     createLanguageMenu(user_settings.locale());
-
-    const QString current_theme = user_settings.theme();
-    createThemeMenu(current_theme);
-    base::GuiApplication::instance()->applyTheme(current_theme);
+    createThemeMenu(user_settings.theme());
 
     onSettingsChanged();
 

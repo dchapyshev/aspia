@@ -59,10 +59,7 @@ MainWindow::MainWindow(const QString& file_path)
 
     ui.setupUi(this);
     createLanguageMenu(settings.locale());
-
-    const QString current_theme = settings.theme();
-    createThemeMenu(current_theme);
-    base::GuiApplication::instance()->applyTheme(current_theme);
+    createThemeMenu(settings.theme());
 
     bool large_icons = settings.largeIcons();
     ui.tool_bar->setIconSize(large_icons ? QSize(32, 32) : QSize(24, 24));
