@@ -54,6 +54,7 @@ public:
         bool clear_clipboard = true;
         bool cursor_position = false;
         bool cursor_shape = false;
+        bool clipboard = false;
     };
 
     proto::peer::SessionType sessionType() const { return session_type_; }

@@ -147,7 +147,6 @@ DesktopAgent::DesktopAgent(QObject* parent)
     : QObject(parent),
       ipc_channel_(new base::IpcChannel(this)),
       clipboard_(new common::ClipboardMonitor(this)),
-      audio_capturer_(new base::AudioCapturerWrapper(this)),
       desktop_environment_(base::DesktopEnvironment::create(this)),
       preferred_capturer_(static_cast<base::ScreenCapturer::Type>(SystemSettings().preferredVideoCapturer())),
       capture_timer_(new QTimer(this)),
@@ -203,7 +202,6 @@ void DesktopAgent::onIpcConnected()
 {
     overflow_timer_->start();
     clipboard_->start();
-    audio_capturer_->start();
     ipc_channel_->setPaused(false);
 }
 
@@ -311,6 +309,7 @@ void DesktopAgent::onClientConfigured()
         merged_config.clear_clipboard = merged_config.clear_clipboard || config.clear_clipboard;
         merged_config.cursor_position = merged_config.cursor_position || config.cursor_position;
         merged_config.cursor_shape = merged_config.cursor_shape || config.cursor_shape;
+        merged_config.clipboard = merged_config.clipboard || config.clipboard;
     }
 
     LOG(INFO) << "Merged configuration (wallpaper:" << merged_config.disable_wallpaper
@@ -319,7 +318,9 @@ void DesktopAgent::onClientConfigured()
               << "block_input:" << merged_config.block_input
               << "lock_at_disconnect:" << merged_config.lock_at_disconnect
               << "clear_clipboard:" << merged_config.clear_clipboard
-              << "cursor_position:" << merged_config.cursor_position;
+              << "cursor_position:" << merged_config.cursor_position
+              << "cursor_shape:" << merged_config.cursor_shape
+              << "clipboard:" << merged_config.clipboard << ")";
 
     if (merged_config.video_encoding != proto::desktop::VIDEO_ENCODING_VP8 &&
         merged_config.video_encoding != proto::desktop::VIDEO_ENCODING_VP9)
@@ -333,12 +334,30 @@ void DesktopAgent::onClientConfigured()
     switch (merged_config.audio_encoding)
     {
         case proto::desktop::AUDIO_ENCODING_OPUS:
+        {
             audio_encoder_ = std::make_unique<base::AudioEncoder>();
-            break;
+
+            if (!audio_capturer_)
+            {
+                audio_capturer_ = new base::AudioCapturerWrapper(this);
+                connect(audio_capturer_, &base::AudioCapturerWrapper::sig_audioCaptured,
+                        this, &DesktopAgent::encodeAudio, Qt::QueuedConnection);
+                audio_capturer_->start();
+            }
+        }
+        break;
 
         default:
+        {
+            if (audio_capturer_)
+            {
+                audio_capturer_->disconnect();
+                audio_capturer_->deleteLater();
+                audio_capturer_ = nullptr;
+            }
             audio_encoder_.reset();
-            break;
+        }
+        break;
     }
 
     cursor_encoder_.reset();
@@ -783,9 +802,6 @@ void DesktopAgent::startClient(const QString& ipc_channel_name)
     connect(client, &DesktopAgentClient::sig_selectScreen, this, &DesktopAgent::onSelectScreen);
     connect(client, &DesktopAgentClient::sig_preferredSizeChanged, this, &DesktopAgent::onPreferredSizeChanged);
     connect(client, &DesktopAgentClient::sig_keyFrameRequested, this, &DesktopAgent::onKeyFrameRequested);
-
-    connect(audio_capturer_, &base::AudioCapturerWrapper::sig_audioCaptured,
-            this, &DesktopAgent::encodeAudio, Qt::QueuedConnection);
 
     connect(client, &DesktopAgentClient::sig_configured, this, &DesktopAgent::onClientConfigured);
     connect(client, &DesktopAgentClient::sig_finished, this, &DesktopAgent::onClientFinished);

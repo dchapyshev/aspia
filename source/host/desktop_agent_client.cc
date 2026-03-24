@@ -301,6 +301,7 @@ void DesktopAgentClient::readConfig(const proto::desktop::Config& config)
     config_.clear_clipboard = (config.flags() & proto::desktop::CLEAR_CLIPBOARD);
     config_.cursor_position = (config.flags() & proto::desktop::CURSOR_POSITION);
     config_.cursor_shape = (config.flags() & proto::desktop::ENABLE_CURSOR_SHAPE);
+    config_.clipboard = (config.flags() & proto::desktop::ENABLE_CLIPBOARD);
 
     LOG(INFO) << "Config changed (encoding:" << config.video_encoding()
               << "cursor_shape:" << config_.cursor_shape
@@ -310,7 +311,9 @@ void DesktopAgentClient::readConfig(const proto::desktop::Config& config)
               << "block_input:" << config_.block_input
               << "lock_at_disconnect:" << config_.lock_at_disconnect
               << "clear_clipboard:" << config_.clear_clipboard
-              << "cursor_position:" << config_.cursor_position << ")";
+              << "cursor_position:" << config_.cursor_position
+              << "cursor_shape:" << config_.cursor_shape
+              << "clipboard:" << config_.clipboard << ")";
     emit sig_configured();
 }
 
