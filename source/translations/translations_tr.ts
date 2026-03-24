@@ -3954,43 +3954,43 @@
 <context>
     <name>client::ClientWindow</name>
     <message>
-        <location filename="../client/ui/client_window.cc" line="86"/>
+        <location filename="../client/ui/client_window.cc" line="83"/>
         <source>Confirmation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="87"/>
+        <location filename="../client/ui/client_window.cc" line="84"/>
         <source>Are you sure you want to clear your connection history?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="90"/>
+        <location filename="../client/ui/client_window.cc" line="87"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="91"/>
+        <location filename="../client/ui/client_window.cc" line="88"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="236"/>
+        <location filename="../client/ui/client_window.cc" line="233"/>
         <source>Aspia Client</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="334"/>
-        <location filename="../client/ui/client_window.cc" line="352"/>
+        <location filename="../client/ui/client_window.cc" line="331"/>
+        <location filename="../client/ui/client_window.cc" line="349"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="335"/>
+        <location filename="../client/ui/client_window.cc" line="332"/>
         <source>An invalid computer address was entered.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="353"/>
+        <location filename="../client/ui/client_window.cc" line="350"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7147,166 +7147,166 @@
 <context>
     <name>console::MainWindow</name>
     <message>
-        <location filename="../console/main_window.cc" line="216"/>
-        <location filename="../console/main_window.cc" line="605"/>
-        <location filename="../console/main_window.cc" line="616"/>
-        <location filename="../console/main_window.cc" line="628"/>
-        <location filename="../console/main_window.cc" line="682"/>
-        <location filename="../console/main_window.cc" line="695"/>
-        <location filename="../console/main_window.cc" line="1726"/>
+        <location filename="../console/main_window.cc" line="213"/>
+        <location filename="../console/main_window.cc" line="602"/>
+        <location filename="../console/main_window.cc" line="613"/>
+        <location filename="../console/main_window.cc" line="625"/>
+        <location filename="../console/main_window.cc" line="679"/>
+        <location filename="../console/main_window.cc" line="692"/>
+        <location filename="../console/main_window.cc" line="1723"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="217"/>
+        <location filename="../console/main_window.cc" line="214"/>
         <source>Pinned address book file &quot;%1&quot; was not found.&lt;br/&gt;This file will be unpinned.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="297"/>
-        <location filename="../console/main_window.cc" line="641"/>
-        <location filename="../console/main_window.cc" line="703"/>
+        <location filename="../console/main_window.cc" line="294"/>
+        <location filename="../console/main_window.cc" line="638"/>
+        <location filename="../console/main_window.cc" line="700"/>
         <source>Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="298"/>
+        <location filename="../console/main_window.cc" line="295"/>
         <source>Address Book &quot;%1&quot; is already open.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="330"/>
+        <location filename="../console/main_window.cc" line="327"/>
         <source>Open Address Book</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="332"/>
+        <location filename="../console/main_window.cc" line="329"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="590"/>
+        <location filename="../console/main_window.cc" line="587"/>
         <source>Open File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="592"/>
-        <location filename="../console/main_window.cc" line="669"/>
+        <location filename="../console/main_window.cc" line="589"/>
+        <location filename="../console/main_window.cc" line="666"/>
         <source>JSON files (*.json)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="606"/>
+        <location filename="../console/main_window.cc" line="603"/>
         <source>Could not open file for reading.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="617"/>
+        <location filename="../console/main_window.cc" line="614"/>
         <source>Import file is empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="667"/>
+        <location filename="../console/main_window.cc" line="664"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="683"/>
+        <location filename="../console/main_window.cc" line="680"/>
         <source>Could not open file for writing.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="696"/>
+        <location filename="../console/main_window.cc" line="693"/>
         <source>Unable to write file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="704"/>
+        <location filename="../console/main_window.cc" line="701"/>
         <source>Export completed successfully.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="967"/>
-        <location filename="../console/main_window.cc" line="1314"/>
-        <location filename="../console/main_window.cc" line="1405"/>
+        <location filename="../console/main_window.cc" line="964"/>
+        <location filename="../console/main_window.cc" line="1311"/>
+        <location filename="../console/main_window.cc" line="1402"/>
         <source>Confirmation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="968"/>
-        <location filename="../console/main_window.cc" line="1406"/>
+        <location filename="../console/main_window.cc" line="965"/>
+        <location filename="../console/main_window.cc" line="1403"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="972"/>
-        <location filename="../console/main_window.cc" line="1318"/>
-        <location filename="../console/main_window.cc" line="1410"/>
+        <location filename="../console/main_window.cc" line="969"/>
+        <location filename="../console/main_window.cc" line="1315"/>
+        <location filename="../console/main_window.cc" line="1407"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="973"/>
-        <location filename="../console/main_window.cc" line="1319"/>
-        <location filename="../console/main_window.cc" line="1411"/>
+        <location filename="../console/main_window.cc" line="970"/>
+        <location filename="../console/main_window.cc" line="1316"/>
+        <location filename="../console/main_window.cc" line="1408"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="974"/>
-        <location filename="../console/main_window.cc" line="1412"/>
+        <location filename="../console/main_window.cc" line="971"/>
+        <location filename="../console/main_window.cc" line="1409"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1207"/>
+        <location filename="../console/main_window.cc" line="1204"/>
         <source>Close other tabs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1214"/>
+        <location filename="../console/main_window.cc" line="1211"/>
         <source>Close tab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1215"/>
-        <location filename="../console/main_window.cc" line="1220"/>
+        <location filename="../console/main_window.cc" line="1212"/>
+        <location filename="../console/main_window.cc" line="1217"/>
         <source>Pin tab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1315"/>
+        <location filename="../console/main_window.cc" line="1312"/>
         <source>The list of recently opened address books will be cleared. Continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1352"/>
+        <location filename="../console/main_window.cc" line="1349"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1367"/>
+        <location filename="../console/main_window.cc" line="1364"/>
         <source>Show</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="747"/>
-        <location filename="../console/main_window.cc" line="1592"/>
+        <location filename="../console/main_window.cc" line="744"/>
+        <location filename="../console/main_window.cc" line="1589"/>
         <source>Aspia Console</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="629"/>
+        <location filename="../console/main_window.cc" line="626"/>
         <source>Failed to parse JSON document: %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="642"/>
+        <location filename="../console/main_window.cc" line="639"/>
         <source>Import completed successfully.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1727"/>
+        <location filename="../console/main_window.cc" line="1724"/>
         <source>Connection by ID is specified in the properties of the computer, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7665,101 +7665,101 @@
 <context>
     <name>host::MainWindow</name>
     <message>
-        <location filename="../host/ui/main_window.cc" line="331"/>
+        <location filename="../host/ui/main_window.cc" line="328"/>
         <source>Not available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="437"/>
-        <location filename="../host/ui/main_window.cc" line="693"/>
-        <location filename="../host/ui/main_window.cc" line="898"/>
+        <location filename="../host/ui/main_window.cc" line="434"/>
+        <location filename="../host/ui/main_window.cc" line="690"/>
+        <location filename="../host/ui/main_window.cc" line="895"/>
         <source>Aspia Host</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="238"/>
-        <location filename="../host/ui/main_window.cc" line="672"/>
+        <location filename="../host/ui/main_window.cc" line="235"/>
+        <location filename="../host/ui/main_window.cc" line="669"/>
         <source>Show</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="677"/>
+        <location filename="../host/ui/main_window.cc" line="674"/>
         <source>Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="710"/>
+        <location filename="../host/ui/main_window.cc" line="707"/>
         <source>Confirmation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="711"/>
+        <location filename="../host/ui/main_window.cc" line="708"/>
         <source>If you exit from Aspia, it will not be possible to connect to this computer until you turn on the computer or Aspia again manually. Do you really want to exit the application?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="381"/>
-        <location filename="../host/ui/main_window.cc" line="820"/>
+        <location filename="../host/ui/main_window.cc" line="378"/>
+        <location filename="../host/ui/main_window.cc" line="817"/>
         <source>Router is disabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="825"/>
+        <location filename="../host/ui/main_window.cc" line="822"/>
         <source>Connecting to a router...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="830"/>
+        <location filename="../host/ui/main_window.cc" line="827"/>
         <source>Connected to a router</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="835"/>
+        <location filename="../host/ui/main_window.cc" line="832"/>
         <source>Connection error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="389"/>
+        <location filename="../host/ui/main_window.cc" line="386"/>
         <source>Connected to a router %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="393"/>
+        <location filename="../host/ui/main_window.cc" line="390"/>
         <source>Failed to connect to router %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="385"/>
+        <location filename="../host/ui/main_window.cc" line="382"/>
         <source>Connecting to a router %1...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="433"/>
+        <location filename="../host/ui/main_window.cc" line="430"/>
         <source>User &quot;%1&quot; (%2) started screen recording.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="435"/>
+        <location filename="../host/ui/main_window.cc" line="432"/>
         <source>User &quot;%1&quot; (%2) stopped screen recording.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="716"/>
+        <location filename="../host/ui/main_window.cc" line="713"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="717"/>
+        <location filename="../host/ui/main_window.cc" line="714"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="899"/>
+        <location filename="../host/ui/main_window.cc" line="896"/>
         <source>ID: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="895"/>
+        <location filename="../host/ui/main_window.cc" line="892"/>
         <source>IP addresses:</source>
         <translation type="unfinished"></translation>
     </message>
