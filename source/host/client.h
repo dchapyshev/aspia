@@ -61,9 +61,8 @@ public:
     enum class UdpConnectPhase
     {
         NONE,
-        DIRECT_LAN,         // Bind in LAN (peer_address_equals == true).
-        HOLE_PUNCHING,      // First STUN attempt, auto-detect white IP / NAT.
-        HOLE_PUNCHING_RETRY // Second STUN attempt, always use ready socket.
+        DIRECT_LAN,   // Bind in LAN (peer_address_equals == true).
+        HOLE_PUNCHING // STUN-based hole punching (up to kMaxHolePunchingAttempts).
     };
     Q_ENUM(UdpConnectPhase)
 
@@ -111,6 +110,7 @@ private:
     std::optional<PendingUdp> pending_udp_context_;
 
     UdpConnectPhase udp_phase_ = UdpConnectPhase::NONE;
+    int hole_punching_attempt_ = 0;
     bool direct_ = false;
     bool peer_equals_ = false;
     QString stun_host_;

@@ -39,6 +39,8 @@ namespace {
 const qint64 kProbeIntervalMs = 30000;   // Check every 30 seconds.
 const qint64 kIdleThresholdMs = 5000;    // Consider idle after 5 seconds of no sends.
 const qint64 kProbeDataSize = 64 * 1024; // 64 KB probe payload.
+const int kMaxHolePunchingAttempts = 32;
+const int kHolePunchingRetryDelayMs = 2000; // 2 seconds between retry attempts.
 
 } // namespace
 
@@ -58,9 +60,6 @@ Client::Client(base::TcpChannel* tcp_channel, QObject* parent)
     connect(this, &Client::sig_started, this, [this]()
     {
         tcp_channel_->setPaused(false);
-        if (udp_channel_)
-            udp_channel_->setPaused(false);
-
         startBandwidthProbing();
     });
 
@@ -254,15 +253,20 @@ void Client::onUdpErrorOccurred()
         break;
 
         case UdpConnectPhase::HOLE_PUNCHING:
-            LOG(INFO) << "First UDP hole punching attempt failed, retrying";
-            udp_phase_ = UdpConnectPhase::HOLE_PUNCHING_RETRY;
-            startUdpHolePunching();
-            break;
-
-        case UdpConnectPhase::HOLE_PUNCHING_RETRY:
-            LOG(INFO) << "All UDP attempts exhausted, staying on TCP";
-            udp_phase_ = UdpConnectPhase::NONE;
-            break;
+        {
+            if (hole_punching_attempt_ < kMaxHolePunchingAttempts)
+            {
+                LOG(INFO) << "UDP hole punching attempt" << hole_punching_attempt_
+                          << "failed, retrying in" << kHolePunchingRetryDelayMs << "ms";
+                QTimer::singleShot(kHolePunchingRetryDelayMs, this, &Client::startUdpHolePunching);
+            }
+            else
+            {
+                LOG(INFO) << "All UDP attempts exhausted, staying on TCP";
+                udp_phase_ = UdpConnectPhase::NONE;
+            }
+        }
+        break;
 
         default:
             udp_phase_ = UdpConnectPhase::NONE;
@@ -301,7 +305,11 @@ void Client::startUdpHolePunching()
         return;
     }
 
-    LOG(INFO) << "Stun server data:" << stun_host_ << ':' << stun_port_;
+    ++hole_punching_attempt_;
+
+    LOG(INFO) << "Stun server data:" << stun_host_ << ':' << stun_port_
+              << " (attempt" << hole_punching_attempt_ << ")";
+
     stun_peer_ = new base::StunPeer(this);
 
     connect(stun_peer_, &base::StunPeer::sig_channelReady, this,
@@ -313,9 +321,9 @@ void Client::startUdpHolePunching()
 
         bool is_white_ip = false;
 
-        // On HOLE_PUNCHING_RETRY we always use the ready socket (previous bind attempt
+        // On retry attempts we always use the ready socket (previous bind attempt
         // already failed for white IP, or previous ready_socket attempt failed for NAT).
-        if (udp_phase_ != UdpConnectPhase::HOLE_PUNCHING_RETRY)
+        if (hole_punching_attempt_ <= 1)
         {
             QStringList local_ip_list = base::NetUtils::localIpList();
             for (const auto& local_ip : std::as_const(local_ip_list))
@@ -363,16 +371,16 @@ void Client::startUdpHolePunching()
         stun_peer_->deleteLater();
         stun_peer_ = nullptr;
 
-        // STUN failed, advance to next phase.
-        if (udp_phase_ == UdpConnectPhase::HOLE_PUNCHING)
+        // STUN failed, retry if attempts remain.
+        if (hole_punching_attempt_ < kMaxHolePunchingAttempts)
         {
-            LOG(INFO) << "STUN failed, retrying hole punching";
-            udp_phase_ = UdpConnectPhase::HOLE_PUNCHING_RETRY;
-            startUdpHolePunching();
+            LOG(INFO) << "STUN failed (attempt" << hole_punching_attempt_
+                      << "), retrying in" << kHolePunchingRetryDelayMs << "ms";
+            QTimer::singleShot(kHolePunchingRetryDelayMs, this, &Client::startUdpHolePunching);
         }
         else
         {
-            LOG(INFO) << "STUN failed twice, staying on TCP";
+            LOG(INFO) << "All STUN attempts exhausted, staying on TCP";
             udp_phase_ = UdpConnectPhase::NONE;
         }
     });
