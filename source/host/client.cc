@@ -655,15 +655,32 @@ void Client::onUdpBandwidthProbeAck()
 //--------------------------------------------------------------------------------------------------
 void Client::checkBandwidth()
 {
-    if (tcp_probe_.bandwidth == 0)
+    // No measurements yet.
+    if (tcp_probe_.bandwidth == 0 && udp_probe_.bandwidth == 0)
         return;
 
+    // Only TCP measured - report TCP bandwidth.
     if (udp_probe_.bandwidth == 0)
     {
         onBandwidthChanged(tcp_probe_.bandwidth);
         return;
     }
 
+    // Only UDP measured (TCP probe hasn't arrived yet) - activate UDP without comparison.
+    if (tcp_probe_.bandwidth == 0)
+    {
+        if (!udp_ready_ && udp_connected_)
+        {
+            LOG(INFO) << "Switching traffic to UDP";
+            udp_ready_ = true;
+            emit sig_connectionChanged();
+        }
+
+        onBandwidthChanged(udp_probe_.bandwidth);
+        return;
+    }
+
+    // Both measured - compare.
     if (udp_probe_.bandwidth * 2 >= tcp_probe_.bandwidth)
     {
         if (!udp_ready_)
