@@ -57,6 +57,7 @@ public:
     QString architecture() const;
     QString userName() const;
     qint64 pendingBytes() const;
+    qint64 bandwidth() const;
 
     enum class UdpConnectPhase
     {
@@ -65,8 +66,6 @@ public:
         HOLE_PUNCHING // STUN-based hole punching (up to kMaxHolePunchingAttempts).
     };
     Q_ENUM(UdpConnectPhase)
-
-    qint64 bandwidth() const { return bandwidth_; }
 
 signals:
     void sig_started();
@@ -93,8 +92,11 @@ private:
     void startDirectUdp(qintptr socket, const QString& address, quint16 port);
     void readDirectUdpReply(const proto::peer::DirectUdpReply& reply);
     void startBandwidthProbing();
-    void sendBandwidthProbe();
-    void onBandwidthProbeAck();
+    void sendTcpBandwidthProbe();
+    void sendUdpBandwidthProbe();
+    void onTcpBandwidthProbeAck();
+    void onUdpBandwidthProbeAck();
+    static QByteArray makeBandwidthProbeData();
 
     base::TcpChannel* tcp_channel_ = nullptr;
     base::UdpChannel* udp_channel_ = nullptr;
@@ -121,11 +123,17 @@ private:
     using TimePoint = std::chrono::time_point<Clock>;
     using Milliseconds = std::chrono::milliseconds;
 
+    struct BandwidthProbe
+    {
+        TimePoint send_time;
+        bool pending = false;
+        qint64 bandwidth = 0;
+    };
+
     QTimer* probe_timer_ = nullptr;
     TimePoint last_send_time_;
-    TimePoint probe_send_time_;
-    bool probe_pending_ = false;
-    qint64 bandwidth_ = 0;
+    BandwidthProbe tcp_probe_;
+    BandwidthProbe udp_probe_;
 
     Q_DISABLE_COPY_MOVE(Client)
 };

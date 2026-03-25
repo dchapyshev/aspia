@@ -41,6 +41,7 @@ const qint64 kIdleThresholdMs = 5000;    // Consider idle after 5 seconds of no 
 const qint64 kProbeDataSize = 64 * 1024; // 64 KB probe payload.
 const int kMaxHolePunchingAttempts = 32;
 const int kHolePunchingRetryDelayMs = 2000; // 2 seconds between retry attempts.
+const int kInitialProbeTimeoutMs = 5000;   // 5 seconds to wait for initial probe ACK.
 
 } // namespace
 
@@ -63,7 +64,20 @@ Client::Client(base::TcpChannel* tcp_channel, QObject* parent)
         startBandwidthProbing();
     });
 
-    connect(probe_timer_, &QTimer::timeout, this, &Client::sendBandwidthProbe);
+    connect(probe_timer_, &QTimer::timeout, this, [this]()
+    {
+        auto idle_duration = std::chrono::duration_cast<Milliseconds>(Clock::now() - last_send_time_);
+        if (idle_duration.count() < kIdleThresholdMs)
+            return;
+
+        if (udp_ready_)
+        {
+            sendUdpBandwidthProbe();
+            return;
+        }
+
+        sendTcpBandwidthProbe();
+    });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -155,6 +169,12 @@ qint64 Client::pendingBytes() const
 }
 
 //--------------------------------------------------------------------------------------------------
+qint64 Client::bandwidth() const
+{
+    return udp_ready_ ? udp_probe_.bandwidth : tcp_probe_.bandwidth;
+}
+
+//--------------------------------------------------------------------------------------------------
 void Client::send(quint8 channel_id, const QByteArray& buffer)
 {
     last_send_time_ = Clock::now();
@@ -196,7 +216,7 @@ void Client::onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray& buffe
     if (message.has_direct_udp_reply())
         readDirectUdpReply(message.direct_udp_reply());
     else if (message.has_bandwidth_probe_ack())
-        onBandwidthProbeAck();
+        onTcpBandwidthProbeAck();
     else
         LOG(WARNING) << "Unhandled control message";
 }
@@ -204,13 +224,25 @@ void Client::onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray& buffe
 //--------------------------------------------------------------------------------------------------
 void Client::onUdpReady()
 {
-    LOG(INFO) << "UDP channel is connected";
+    LOG(INFO) << "UDP channel is connected, sending bandwidth probe";
     CHECK(udp_channel_);
-    udp_ready_ = true;
-    udp_channel_->setPaused(false);
 
-    startBandwidthProbing();
-    emit sig_connectionChanged();
+    // Do NOT set udp_ready_ yet. Send a bandwidth probe over UDP first. When the ACK arrives (see
+    // onUdpBandwidthProbeAck), we know the channel works and have an initial bandwidth measurement
+    // then we switch to UDP.
+    udp_channel_->setPaused(false);
+    sendUdpBandwidthProbe();
+
+    // If the probe ACK does not arrive within the timeout, treat UDP as broken.
+    QTimer::singleShot(kInitialProbeTimeoutMs, this, [this]()
+    {
+        if (udp_ready_ || !udp_channel_)
+            return;
+
+        LOG(WARNING) << "UDP bandwidth probe timed out, channel is not usable";
+        udp_probe_.pending = false;
+        onUdpErrorOccurred();
+    });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -219,10 +251,9 @@ void Client::onUdpErrorOccurred()
     LOG(INFO) << "UDP channel error (phase:" << udp_phase_ << ")";
     CHECK(udp_channel_);
 
-    probe_pending_ = false;
-
     bool was_connected = udp_ready_;
 
+    udp_probe_.pending = false;
     udp_ready_ = false;
     udp_channel_->disconnect();
     udp_channel_->deleteLater();
@@ -291,9 +322,20 @@ void Client::onUdpMessageReceived(quint8 udp_channel_id, const QByteArray& buffe
     }
 
     if (message.has_bandwidth_probe_ack())
-        onBandwidthProbeAck();
+    {
+        onUdpBandwidthProbeAck();
+
+        if (udp_ready_)
+            return;
+
+        LOG(INFO) << "UDP probe confirmed, switching traffic to UDP";
+        udp_ready_ = true;
+        emit sig_connectionChanged();
+    }
     else
+    {
         LOG(WARNING) << "Unhandled control message";
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -523,31 +565,10 @@ void Client::readDirectUdpReply(const proto::peer::DirectUdpReply& reply)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::startBandwidthProbing()
+QByteArray Client::makeBandwidthProbeData()
 {
-    last_send_time_ = Clock::now();
-    probe_pending_ = false;
-    bandwidth_ = 0;
-    probe_timer_->start(kProbeIntervalMs);
-}
-
-//--------------------------------------------------------------------------------------------------
-void Client::sendBandwidthProbe()
-{
-    if (probe_pending_)
-        return;
-
-    auto idle_duration = std::chrono::duration_cast<std::chrono::milliseconds>(
-        Clock::now() - last_send_time_);
-
-    if (idle_duration.count() < kIdleThresholdMs)
-        return;
-
-    LOG(INFO) << "Sending bandwidth probe (" << kProbeDataSize << " bytes)";
-
     std::string payload;
     payload.resize(kProbeDataSize);
-
     for (size_t i = 0; i < payload.size(); ++i)
         payload[i] = static_cast<char>(i & 0xFF);
 
@@ -555,29 +576,81 @@ void Client::sendBandwidthProbe()
     proto::peer::BandwidthProbe* probe = message.mutable_bandwidth_probe();
     probe->set_payload(std::move(payload));
 
-    probe_send_time_ = Clock::now();
-    probe_pending_ = true;
-
-    send(proto::peer::CHANNEL_ID_CONTROL, base::serialize(message));
+    return base::serialize(message);
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::onBandwidthProbeAck()
+void Client::startBandwidthProbing()
 {
-    if (!probe_pending_)
+    last_send_time_ = TimePoint();
+    probe_timer_->start(kProbeIntervalMs);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Client::sendTcpBandwidthProbe()
+{
+    if (tcp_probe_.pending)
         return;
 
-    probe_pending_ = false;
+    LOG(INFO) << "Sending bandwidth probe" << kProbeDataSize << "bytes via TCP";
 
-    auto rtt = std::chrono::duration_cast<Milliseconds>(Clock::now() - probe_send_time_);
+    tcp_probe_.send_time = Clock::now();
+    tcp_probe_.pending = true;
+
+    tcp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, makeBandwidthProbeData());
+}
+
+//--------------------------------------------------------------------------------------------------
+void Client::sendUdpBandwidthProbe()
+{
+    if (!udp_channel_ || udp_probe_.pending)
+        return;
+
+    LOG(INFO) << "Sending bandwidth probe" << kProbeDataSize << "bytes via UDP";
+
+    udp_probe_.send_time = Clock::now();
+    udp_probe_.pending = true;
+
+    udp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, makeBandwidthProbeData());
+}
+
+//--------------------------------------------------------------------------------------------------
+void Client::onTcpBandwidthProbeAck()
+{
+    if (!tcp_probe_.pending)
+        return;
+
+    tcp_probe_.pending = false;
+
+    auto rtt = std::chrono::duration_cast<Milliseconds>(Clock::now() - tcp_probe_.send_time);
     if (rtt.count() <= 0)
         return;
 
-    qint64 bandwidth = (kProbeDataSize * 1000) / rtt.count();
-    LOG(INFO) << "RTT:" << rtt.count() << "bandwidth:" << bandwidth << "B/s";
+    tcp_probe_.bandwidth = (kProbeDataSize * 1000) / rtt.count();
+    LOG(INFO) << "TCP RTT:" << rtt.count() << "ms, bandwidth:" << (tcp_probe_.bandwidth / 1024) << "kB/s";
 
-    bandwidth_ = bandwidth;
-    onBandwidthChanged(bandwidth);
+    if (udp_ready_)
+        return;
+
+    onBandwidthChanged(tcp_probe_.bandwidth);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Client::onUdpBandwidthProbeAck()
+{
+    if (!udp_probe_.pending)
+        return;
+
+    udp_probe_.pending = false;
+
+    auto rtt = std::chrono::duration_cast<Milliseconds>(Clock::now() - udp_probe_.send_time);
+    if (rtt.count() <= 0)
+        return;
+
+    udp_probe_.bandwidth = (kProbeDataSize * 1000) / rtt.count();
+    LOG(INFO) << "UDP RTT:" << rtt.count() << "ms, bandwidth:" << (udp_probe_.bandwidth / 1024) << "kB/s";
+
+    onBandwidthChanged(udp_probe_.bandwidth);
 }
 
 } // namespace host

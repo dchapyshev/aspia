@@ -426,7 +426,6 @@ void Client::onUdpReady()
 {
     LOG(INFO) << "UDP channel is ready";
     CHECK(udp_channel_);
-    udp_ready_ = true;
     udp_channel_->setPaused(false);
 }
 
@@ -468,6 +467,9 @@ void Client::onUdpMessageReceived(quint8 channel_id, const QByteArray& buffer)
             ask->set_dummy(1);
 
             udp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, base::serialize(message));
+
+            if (!udp_ready_)
+                udp_ready_ = true;
         }
         else
         {
