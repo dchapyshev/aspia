@@ -788,7 +788,9 @@ void DesktopAgent::onOverflowCheck()
 
     QSize forced_size = forced_size_;
 
-    if (bandwidth_ > 0 && bandwidth_ < 100 * 1024) // < 100 KB/s
+    if (bandwidth_ > 0 && bandwidth_ < 50 * 1024) // < 50 KB/s
+        forced_size = scaled_size(source_size_, 0.6);
+    else if (bandwidth_ > 0 && bandwidth_ < 100 * 1024) // < 100 KB/s
         forced_size = scaled_size(source_size_, 0.7);
     else if (pressure_score_ >= 90)
         forced_size = scaled_size(source_size_, 0.7);
