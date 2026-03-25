@@ -43,7 +43,15 @@ class Client : public QObject
     Q_OBJECT
 
 public:
-    Client(base::TcpChannel* tcp_channel, QObject* parent);
+    enum Feature
+    {
+        FEATURE_NONE      = 0,
+        FEATURE_UDP       = 1,
+        FEATURE_BANDWIDTH = 2
+    };
+    Q_DECLARE_FLAGS(Features, Feature)
+
+    Client(base::TcpChannel* tcp_channel, Features features, QObject* parent);
     virtual ~Client();
 
     void start(bool direct, const QString& stun_host, quint16 stun_port, bool peer_equals);
@@ -103,6 +111,7 @@ private:
     void checkBandwidth();
     static QByteArray makeBandwidthProbeData();
 
+    Features features_ = FEATURE_NONE;
     base::TcpChannel* tcp_channel_ = nullptr;
     base::UdpChannel* udp_channel_ = nullptr;
     bool udp_connected_ = false;
@@ -140,5 +149,7 @@ private:
 };
 
 } // namespace host
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(host::Client::Features)
 
 #endif // HOST_CLIENT_H

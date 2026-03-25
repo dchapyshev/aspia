@@ -26,7 +26,7 @@ namespace host {
 
 //--------------------------------------------------------------------------------------------------
 ChatClient::ChatClient(base::TcpChannel* tcp_channel, QObject* parent)
-    : Client(tcp_channel, parent)
+    : Client(tcp_channel, FEATURE_NONE, parent)
 {
     LOG(INFO) << "Ctor";
 }

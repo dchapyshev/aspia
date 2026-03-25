@@ -159,7 +159,7 @@ QString agentFilePath()
 
 //--------------------------------------------------------------------------------------------------
 FileClient::FileClient(base::TcpChannel* tcp_channel, base::SessionId session_id, QObject* parent)
-    : Client(tcp_channel, parent),
+    : Client(tcp_channel, FEATURE_UDP, parent),
       session_id_(session_id),
       attach_timer_(new QTimer(this))
 {

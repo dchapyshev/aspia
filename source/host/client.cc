@@ -47,8 +47,9 @@ const int kUdpConnectTimeoutMs = 5000;   // 5 seconds to wait for UDP connection
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-Client::Client(base::TcpChannel* tcp_channel, QObject* parent)
+Client::Client(base::TcpChannel* tcp_channel, Features features, QObject* parent)
     : QObject(parent),
+      features_(features),
       tcp_channel_(tcp_channel),
       probe_timer_(new QTimer(this))
 {
@@ -91,8 +92,13 @@ void Client::start(bool direct, const QString& stun_host, quint16 stun_port, boo
     stun_host_ = stun_host;
     stun_port_ = stun_port;
 
-    startBandwidthProbing();
     onStart();
+
+    if (features_ & FEATURE_BANDWIDTH)
+        startBandwidthProbing();
+
+    if (!(features_ & FEATURE_UDP))
+        return;
 
     if (direct || peer_equals)
     {
