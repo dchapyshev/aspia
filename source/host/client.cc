@@ -38,7 +38,7 @@ namespace {
 
 const qint64 kProbeIntervalMs = 30000;   // Check every 30 seconds.
 const qint64 kIdleThresholdMs = 5000;    // Consider idle after 5 seconds of no sends.
-const qint64 kProbeDataSize = 64 * 1024; // 64 KB probe payload.
+const qint64 kProbeDataSize = 32 * 1024; // 32 KB probe payload.
 const int kMaxHolePunchingAttempts = 32;
 const int kHolePunchingRetryDelayMs = 2000; // 2 seconds between retry attempts.
 const int kInitialProbeTimeoutMs = 5000;   // 5 seconds to wait for initial probe ACK.
