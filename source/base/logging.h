@@ -578,6 +578,48 @@ private:
     Q_DISABLE_COPY_MOVE(ErrorLogMessage)
 };
 
+// LogContext provides per-instance identification for log messages.
+// Use LOG_DECLARE_CONTEXT in your class, then use CLOG() instead of LOG().
+//
+// Usage:
+//   // In .h file (private section):
+//   LOG_DECLARE_CONTEXT(Client);
+//
+//   // In .cc file (logging):
+//   CLOG(INFO) << "UDP ready";
+//   // Output: ... host::Client::onUdpReady : 231 [Client#1] UDP ready
+//
+// Each class has its own counter starting from 1:
+//   [Client#1], [Client#2], [StunPeer#1], [StunPeer#2], ...
+//
+class LogContext
+{
+public:
+    explicit LogContext(const QString& prefix)
+        : prefix_(prefix)
+    {
+        // Nothing.
+    }
+
+    const QString& prefix() const { return prefix_; }
+
+    template<typename ClassTag>
+    static LogContext forClass(const char* class_name)
+    {
+        static int counter = 0;
+        return LogContext(QStringLiteral("[%1#%2]").arg(QLatin1String(class_name)).arg(++counter));
+    }
+
+private:
+    QString prefix_;
+};
+
+#define LOG_DECLARE_CONTEXT(ClassName) \
+    base::LogContext log_ctx_ { base::LogContext::forClass<ClassName>(#ClassName) }
+
+#define CLOG(severity) \
+    LAZY_STREAM(LOG_STREAM(severity) << log_ctx_.prefix(), LOG_IS_ON(severity))
+
 class ScopedLogging
 {
 public:
