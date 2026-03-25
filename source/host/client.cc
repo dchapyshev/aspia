@@ -36,9 +36,9 @@ namespace host {
 
 namespace {
 
-const qint64 kProbeIntervalMs = 30000;   // Check every 30 seconds.
+const qint64 kProbeIntervalMs = 5000;   // Check every 5 seconds.
 const qint64 kIdleThresholdMs = 5000;    // Consider idle after 5 seconds of no sends.
-const qint64 kProbeDataSize = 32 * 1024; // 32 KB probe payload.
+const qint64 kProbeDataSize = 16 * 1024; // 16 KB probe payload.
 const int kMaxHolePunchingAttempts = 32;
 const int kHolePunchingRetryDelayMs = 2000; // 2 seconds between retry attempts.
 const int kInitialProbeTimeoutMs = 5000;   // 5 seconds to wait for initial probe ACK.
@@ -66,17 +66,14 @@ Client::Client(base::TcpChannel* tcp_channel, QObject* parent)
 
     connect(probe_timer_, &QTimer::timeout, this, [this]()
     {
-        auto idle_duration = std::chrono::duration_cast<Milliseconds>(Clock::now() - last_send_time_);
+        TimePoint current_time = Clock::now();
+
+        auto idle_duration = std::chrono::duration_cast<Milliseconds>(current_time - last_send_time_);
         if (idle_duration.count() < kIdleThresholdMs)
             return;
 
-        if (udp_ready_)
-        {
-            sendUdpBandwidthProbe();
-            return;
-        }
-
-        sendTcpBandwidthProbe();
+        sendUdpBandwidthProbe(current_time);
+        sendTcpBandwidthProbe(current_time);
     });
 }
 
@@ -95,8 +92,6 @@ void Client::start(bool direct, const QString& stun_host, quint16 stun_port, boo
     stun_port_ = stun_port;
 
     startBandwidthProbing();
-    sendTcpBandwidthProbe();
-
     onStart();
 
     if (direct || peer_equals)
@@ -234,7 +229,10 @@ void Client::onUdpReady()
     // onUdpBandwidthProbeAck), we know the channel works and have an initial bandwidth measurement
     // then we switch to UDP.
     udp_channel_->setPaused(false);
-    sendUdpBandwidthProbe();
+    udp_connected_ = true;
+    udp_ready_ = false;
+
+    sendUdpBandwidthProbe(Clock::now());
 
     // If the probe ACK does not arrive within the timeout, treat UDP as broken.
     QTimer::singleShot(kInitialProbeTimeoutMs, this, [this]()
@@ -256,8 +254,12 @@ void Client::onUdpErrorOccurred()
 
     bool was_connected = udp_ready_;
 
+    udp_probe_.send_time = TimePoint();
+    udp_probe_.bandwidth = 0;
     udp_probe_.pending = false;
+    udp_connected_ = false;
     udp_ready_ = false;
+
     udp_channel_->disconnect();
     udp_channel_->deleteLater();
     udp_channel_ = nullptr;
@@ -325,20 +327,9 @@ void Client::onUdpMessageReceived(quint8 udp_channel_id, const QByteArray& buffe
     }
 
     if (message.has_bandwidth_probe_ack())
-    {
         onUdpBandwidthProbeAck();
-
-        if (udp_ready_)
-            return;
-
-        LOG(INFO) << "UDP probe confirmed, switching traffic to UDP";
-        udp_ready_ = true;
-        emit sig_connectionChanged();
-    }
     else
-    {
         LOG(WARNING) << "Unhandled control message";
-    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -600,28 +591,24 @@ void Client::startBandwidthProbing()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::sendTcpBandwidthProbe()
+void Client::sendTcpBandwidthProbe(const TimePoint& time)
 {
     if (tcp_probe_.pending)
         return;
 
-    LOG(INFO) << "Sending bandwidth probe" << kProbeDataSize << "bytes via TCP";
-
-    tcp_probe_.send_time = Clock::now();
+    tcp_probe_.send_time = time;
     tcp_probe_.pending = true;
 
     tcp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, makeBandwidthProbeData());
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::sendUdpBandwidthProbe()
+void Client::sendUdpBandwidthProbe(const TimePoint& time)
 {
-    if (!udp_channel_ || udp_probe_.pending)
+    if (!udp_channel_ || !udp_connected_ || udp_probe_.pending)
         return;
 
-    LOG(INFO) << "Sending bandwidth probe" << kProbeDataSize << "bytes via UDP";
-
-    udp_probe_.send_time = Clock::now();
+    udp_probe_.send_time = time;
     udp_probe_.pending = true;
 
     udp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, makeBandwidthProbeData());
@@ -632,7 +619,6 @@ void Client::onTcpBandwidthProbeAck()
 {
     if (!tcp_probe_.pending)
         return;
-
     tcp_probe_.pending = false;
 
     auto rtt = std::chrono::duration_cast<Milliseconds>(Clock::now() - tcp_probe_.send_time);
@@ -641,11 +627,7 @@ void Client::onTcpBandwidthProbeAck()
 
     tcp_probe_.bandwidth = (kProbeDataSize * 1000) / rtt.count();
     LOG(INFO) << "TCP RTT:" << rtt.count() << "ms, bandwidth:" << (tcp_probe_.bandwidth / 1024) << "kB/s";
-
-    if (udp_ready_)
-        return;
-
-    onBandwidthChanged(tcp_probe_.bandwidth);
+    checkBandwidth();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -653,7 +635,6 @@ void Client::onUdpBandwidthProbeAck()
 {
     if (!udp_probe_.pending)
         return;
-
     udp_probe_.pending = false;
 
     auto rtt = std::chrono::duration_cast<Milliseconds>(Clock::now() - udp_probe_.send_time);
@@ -662,8 +643,42 @@ void Client::onUdpBandwidthProbeAck()
 
     udp_probe_.bandwidth = (kProbeDataSize * 1000) / rtt.count();
     LOG(INFO) << "UDP RTT:" << rtt.count() << "ms, bandwidth:" << (udp_probe_.bandwidth / 1024) << "kB/s";
+    checkBandwidth();
+}
 
-    onBandwidthChanged(udp_probe_.bandwidth);
+//--------------------------------------------------------------------------------------------------
+void Client::checkBandwidth()
+{
+    if (tcp_probe_.bandwidth == 0)
+        return;
+
+    if (udp_probe_.bandwidth == 0)
+    {
+        onBandwidthChanged(tcp_probe_.bandwidth);
+        return;
+    }
+
+    if (udp_probe_.bandwidth * 2 >= tcp_probe_.bandwidth)
+    {
+        if (!udp_ready_)
+        {
+            LOG(INFO) << "Switching traffic to UDP";
+            udp_ready_ = true;
+            emit sig_connectionChanged();
+        }
+
+        onBandwidthChanged(udp_probe_.bandwidth);
+        return;
+    }
+
+    if (udp_ready_)
+    {
+        LOG(INFO) << "Switching traffic to TCP";
+        udp_ready_ = false;
+        emit sig_connectionChanged();
+    }
+
+    onBandwidthChanged(tcp_probe_.bandwidth);
 }
 
 } // namespace host

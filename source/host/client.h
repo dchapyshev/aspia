@@ -88,18 +88,24 @@ private slots:
     void onUdpMessageReceived(quint8 udp_channel_id, const QByteArray& buffer);
 
 private:
+    using Clock = std::chrono::steady_clock;
+    using TimePoint = std::chrono::time_point<Clock>;
+    using Milliseconds = std::chrono::milliseconds;
+
     void startUdpHolePunching();
     void startDirectUdp(qintptr socket, const QString& address, quint16 port);
     void readDirectUdpReply(const proto::peer::DirectUdpReply& reply);
     void startBandwidthProbing();
-    void sendTcpBandwidthProbe();
-    void sendUdpBandwidthProbe();
+    void sendTcpBandwidthProbe(const TimePoint& time);
+    void sendUdpBandwidthProbe(const TimePoint& time);
     void onTcpBandwidthProbeAck();
     void onUdpBandwidthProbeAck();
+    void checkBandwidth();
     static QByteArray makeBandwidthProbeData();
 
     base::TcpChannel* tcp_channel_ = nullptr;
     base::UdpChannel* udp_channel_ = nullptr;
+    bool udp_connected_ = false;
     bool udp_ready_ = false;
 
     struct PendingUdp
@@ -117,11 +123,6 @@ private:
     bool peer_equals_ = false;
     QString stun_host_;
     quint16 stun_port_ = 0;
-
-    // Bandwidth probing.
-    using Clock = std::chrono::steady_clock;
-    using TimePoint = std::chrono::time_point<Clock>;
-    using Milliseconds = std::chrono::milliseconds;
 
     struct BandwidthProbe
     {
