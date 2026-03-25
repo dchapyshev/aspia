@@ -42,6 +42,7 @@ const qint64 kProbeDataSize = 64 * 1024; // 64 KB probe payload.
 const int kMaxHolePunchingAttempts = 32;
 const int kHolePunchingRetryDelayMs = 2000; // 2 seconds between retry attempts.
 const int kInitialProbeTimeoutMs = 5000;   // 5 seconds to wait for initial probe ACK.
+const int kUdpConnectTimeoutMs = 5000;   // 5 seconds to wait for UDP connection after setPeerAddress.
 
 } // namespace
 
@@ -250,7 +251,7 @@ void Client::onUdpReady()
 //--------------------------------------------------------------------------------------------------
 void Client::onUdpErrorOccurred()
 {
-    LOG(INFO) << "UDP channel error (phase:" << udp_phase_ << ")";
+    LOG(INFO) << "UDP channel error (" << udp_phase_ << ")";
     CHECK(udp_channel_);
 
     bool was_connected = udp_ready_;
@@ -352,7 +353,7 @@ void Client::startUdpHolePunching()
     ++hole_punching_attempt_;
 
     LOG(INFO) << "Stun server data:" << stun_host_ << ':' << stun_port_
-              << " (attempt" << hole_punching_attempt_ << ")";
+              << "(attempt" << hole_punching_attempt_ << ")";
 
     stun_peer_ = new base::StunPeer(this);
 
@@ -360,7 +361,7 @@ void Client::startUdpHolePunching()
         [this](const QString& external_address, quint16 external_port)
     {
         LOG(INFO) << "External UDP endpoint received:" << external_address << ':' << external_port
-                  << " (phase:" << udp_phase_ << ")";
+                  << "(" << udp_phase_ << ")";
         CHECK(stun_peer_);
 
         bool is_white_ip = false;
@@ -408,7 +409,7 @@ void Client::startUdpHolePunching()
 
     connect(stun_peer_, &base::StunPeer::sig_errorOccurred, this, [this]()
     {
-        LOG(ERROR) << "STUN error (phase:" << udp_phase_ << ")";
+        LOG(ERROR) << "STUN error (" << udp_phase_ << ")";
         CHECK(stun_peer_);
 
         stun_peer_->disconnect();
@@ -563,6 +564,16 @@ void Client::readDirectUdpReply(const proto::peer::DirectUdpReply& reply)
     {
         LOG(INFO) << "Setting client's external address:" << client_address << ':' << client_port;
         udp_channel_->setPeerAddress(client_address, client_port);
+
+        // If ENet connection is not established within the deadline, treat as failure.
+        QTimer::singleShot(kUdpConnectTimeoutMs, this, [this]()
+        {
+            if (!udp_channel_ || udp_ready_)
+                return;
+
+            LOG(WARNING) << "UDP connection timed out after setPeerAddress";
+            onUdpErrorOccurred();
+        });
     }
 }
 

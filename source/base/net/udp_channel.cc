@@ -504,7 +504,7 @@ void UdpChannel::close()
 void UdpChannel::sendPunchHole(const ENetAddress& address)
 {
     static const char kData[] = "PUNCH_HOLE_PACKET";
-    static const int kCount = 10;
+    static const int kCount = 5;
 
     ENetBuffer buffer;
     buffer.data = const_cast<char*>(kData);
