@@ -625,13 +625,14 @@ void Client::onTcpBandwidthProbeAck()
 {
     if (!tcp_probe_.pending)
         return;
-    tcp_probe_.pending = false;
 
     auto rtt = std::chrono::duration_cast<Milliseconds>(Clock::now() - tcp_probe_.send_time);
     if (rtt.count() <= 0)
-        return;
+        rtt = Milliseconds(1);
 
     tcp_probe_.bandwidth = (kProbeDataSize * 1000) / rtt.count();
+    tcp_probe_.pending = false;
+
     LOG(INFO) << "TCP RTT:" << rtt.count() << "ms, bandwidth:" << (tcp_probe_.bandwidth / 1024) << "kB/s";
     checkBandwidth();
 }
@@ -641,13 +642,14 @@ void Client::onUdpBandwidthProbeAck()
 {
     if (!udp_probe_.pending)
         return;
-    udp_probe_.pending = false;
 
     auto rtt = std::chrono::duration_cast<Milliseconds>(Clock::now() - udp_probe_.send_time);
     if (rtt.count() <= 0)
-        return;
+        rtt = Milliseconds(1);
 
     udp_probe_.bandwidth = (kProbeDataSize * 1000) / rtt.count();
+    udp_probe_.pending = false;
+
     LOG(INFO) << "UDP RTT:" << rtt.count() << "ms, bandwidth:" << (udp_probe_.bandwidth / 1024) << "kB/s";
     checkBandwidth();
 }
