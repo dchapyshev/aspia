@@ -712,10 +712,11 @@ void DesktopAgent::onOverflowCheck()
             state = client->overflowState();
     }
 
-    // Calculate FPS limit based on measured bandwidth.
-    int bandwidth_fps_limit = max_fps_;
+    // When bandwidth is unknown, use a conservative limit.
+    int bandwidth_fps_limit = 20;
     if (bandwidth_ > 0)
     {
+        // Calculate FPS limit based on measured bandwidth.
         if (bandwidth_ < 100 * 1024)        // < 100 KB/s
             bandwidth_fps_limit = min_fps_;
         else if (bandwidth_ < 300 * 1024)   // < 300 KB/s
@@ -726,6 +727,8 @@ void DesktopAgent::onOverflowCheck()
             bandwidth_fps_limit = 20;
         else if (bandwidth_ < 2048 * 1024)  // < 2 MB/s
             bandwidth_fps_limit = 24;
+        else
+            bandwidth_fps_limit = max_fps_;
     }
 
     int effective_max_fps = std::min(max_fps_, bandwidth_fps_limit);
