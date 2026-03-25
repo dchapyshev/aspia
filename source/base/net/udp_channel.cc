@@ -255,9 +255,6 @@ void UdpChannel::connectTo(qintptr socket, const QString& address, quint16 port)
     host_->socket = socket;
     host_->address = bound_address;
 
-    // Send punch hole packets to open our NAT for the peer.
-    sendPunchHole(bound_address);
-
     // Initiate ENet connection to peer. ENet retries automatically, so even if the peer's NAT hasn't
     // opened yet, subsequent attempts will succeed after the peer sends its punch hole packets.
     ENetAddress enet_address;
@@ -269,6 +266,9 @@ void UdpChannel::connectTo(qintptr socket, const QString& address, quint16 port)
         onErrorOccurred(FROM_HERE);
         return;
     }
+
+    // Send punch hole packets to open our NAT for the peer.
+    sendPunchHole(enet_address);
 
     LOG(INFO) << "Initiating ENet connection to peer:" << address << ":" << port;
 
