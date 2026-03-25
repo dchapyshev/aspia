@@ -140,6 +140,8 @@ private:
 
     Mode mode_ = Mode::UNKNOWN;
 
+    qint64 write_task_size_ = 0;
+
     qint64 total_tx_ = 0;
     qint64 total_rx_ = 0;
 
