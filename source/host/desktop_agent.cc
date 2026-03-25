@@ -794,6 +794,12 @@ void DesktopAgent::onBandwidthChanged()
             minimal_bandwidth = bandwidth;
     }
 
+    if (minimal_bandwidth == std::numeric_limits<qint64>::max())
+    {
+        // No client has received any bandwidth yet.
+        return;
+    }
+
     // TODO: Change FPS.
 }
 
