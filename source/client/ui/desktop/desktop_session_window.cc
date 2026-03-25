@@ -81,7 +81,7 @@ DesktopSessionWindow::DesktopSessionWindow(proto::peer::SessionType session_type
 {
     LOG(INFO) << "Ctor";
 
-    setMinimumSize(400, 300);
+    setMinimumSize(500, 400);
 
     desktop_ = new DesktopWidget(this);
 
