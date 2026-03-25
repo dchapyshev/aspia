@@ -55,7 +55,7 @@ namespace host {
 namespace {
 
 constexpr int kDefaultScreenCaptureFps = 24;
-constexpr int kMinScreenCaptureFps = 14;
+constexpr int kMinScreenCaptureFps = 8;
 constexpr int kMaxScreenCaptureFpsHighEnd = 30;
 constexpr int kMaxScreenCaptureFpsLowEnd = 20;
 
@@ -712,10 +712,33 @@ void DesktopAgent::onOverflowCheck()
             state = client->overflowState();
     }
 
+    // Calculate FPS limit based on measured bandwidth.
+    int bandwidth_fps_limit = max_fps_;
+    if (bandwidth_ > 0)
+    {
+        if (bandwidth_ < 100 * 1024)        // < 100 KB/s
+            bandwidth_fps_limit = min_fps_;
+        else if (bandwidth_ < 300 * 1024)   // < 300 KB/s
+            bandwidth_fps_limit = 16;
+        else if (bandwidth_ < 500 * 1024)   // < 500 KB/s
+            bandwidth_fps_limit = 18;
+        else if (bandwidth_ < 1024 * 1024)  // < 1 MB/s
+            bandwidth_fps_limit = 20;
+        else if (bandwidth_ < 2048 * 1024)  // < 2 MB/s
+            bandwidth_fps_limit = 24;
+    }
+
+    int effective_max_fps = std::min(max_fps_, bandwidth_fps_limit);
+
     int current_fps = capture_scheduler_.fps();
     int next_fps = current_fps;
 
-    if (state == proto::desktop::Overflow::STATE_CRITICAL)
+    // If the current FPS exceeds the bandwidth limit, reduce immediately.
+    if (current_fps > effective_max_fps)
+    {
+        next_fps = effective_max_fps;
+    }
+    else if (state == proto::desktop::Overflow::STATE_CRITICAL)
     {
         pressure_score_ = std::min(100, pressure_score_ + 20);
         stable_seconds_ = 0;
@@ -739,7 +762,7 @@ void DesktopAgent::onOverflowCheck()
 
         if (stable_seconds_ >= 15 && cooldown_seconds_ == 0)
         {
-            int max_fps = max_fps_;
+            int max_fps = effective_max_fps;
 
             if (pressure_score_ >= 80)
                 max_fps = min_fps_;
@@ -750,7 +773,7 @@ void DesktopAgent::onOverflowCheck()
             else if (pressure_score_ >= 20)
                 max_fps = 22;
 
-            if (current_fps < std::min(max_fps, max_fps_))
+            if (current_fps < std::min(max_fps, effective_max_fps))
                 next_fps = current_fps + 1;
         }
     }
@@ -765,7 +788,9 @@ void DesktopAgent::onOverflowCheck()
 
     QSize forced_size = forced_size_;
 
-    if (pressure_score_ >= 90)
+    if (bandwidth_ > 0 && bandwidth_ < 100 * 1024) // < 100 KB/s
+        forced_size = scaled_size(source_size_, 0.7);
+    else if (pressure_score_ >= 90)
         forced_size = scaled_size(source_size_, 0.7);
     else if (pressure_score_ >= 80)
         forced_size = scaled_size(source_size_, 0.8);
@@ -800,7 +825,8 @@ void DesktopAgent::onBandwidthChanged()
         return;
     }
 
-    // TODO: Change FPS.
+    LOG(INFO) << "Bandwidth changed:" << minimal_bandwidth;
+    bandwidth_ = minimal_bandwidth;
 }
 
 //--------------------------------------------------------------------------------------------------

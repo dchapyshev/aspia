@@ -61,7 +61,6 @@ Client::Client(base::TcpChannel* tcp_channel, QObject* parent)
     connect(this, &Client::sig_started, this, [this]()
     {
         tcp_channel_->setPaused(false);
-        startBandwidthProbing();
     });
 
     connect(probe_timer_, &QTimer::timeout, this, [this]()
@@ -93,6 +92,9 @@ void Client::start(bool direct, const QString& stun_host, quint16 stun_port, boo
     peer_equals_ = peer_equals;
     stun_host_ = stun_host;
     stun_port_ = stun_port;
+
+    startBandwidthProbing();
+    sendTcpBandwidthProbe();
 
     onStart();
 

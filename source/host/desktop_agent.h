@@ -146,6 +146,7 @@ private:
     int pressure_score_ = 0; // 0..100
     int stable_seconds_ = 0;
     int cooldown_seconds_ = 0;
+    qint64 bandwidth_ = 0;
 
     const int default_fps_ = 0;
     const int min_fps_ = 0;
