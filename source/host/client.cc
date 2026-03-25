@@ -73,8 +73,8 @@ Client::Client(base::TcpChannel* tcp_channel, Features features, QObject* parent
         if (idle_duration.count() < kIdleThresholdMs)
             return;
 
-        sendUdpBandwidthProbe(current_time);
         sendTcpBandwidthProbe(current_time);
+        sendUdpBandwidthProbe(current_time);
     });
 }
 
@@ -668,8 +668,7 @@ void Client::checkBandwidth()
         return;
     }
 
-    // Only UDP measured (TCP probe hasn't arrived yet) - activate UDP without comparison.
-    if (tcp_probe_.bandwidth == 0)
+    auto switch_to_udp = [this]()
     {
         if (!udp_ready_ && udp_connected_)
         {
@@ -679,20 +678,25 @@ void Client::checkBandwidth()
         }
 
         onBandwidthChanged(udp_probe_.bandwidth);
+    };
+
+    // Only UDP measured (TCP probe hasn't arrived yet) - activate UDP without comparison.
+    if (tcp_probe_.bandwidth == 0)
+    {
+        switch_to_udp();
         return;
     }
 
-    // Both measured - compare.
+    // Both measured - compare. If both are above 3000 kB/s, prefer UDP.
+    if (udp_probe_.bandwidth > 3000 * 1024 && tcp_probe_.bandwidth > 3000 * 1024)
+    {
+        switch_to_udp();
+        return;
+    }
+
     if (udp_probe_.bandwidth * 2 >= tcp_probe_.bandwidth)
     {
-        if (!udp_ready_)
-        {
-            LOG(INFO) << "Switching traffic to UDP";
-            udp_ready_ = true;
-            emit sig_connectionChanged();
-        }
-
-        onBandwidthChanged(udp_probe_.bandwidth);
+        switch_to_udp();
         return;
     }
 
