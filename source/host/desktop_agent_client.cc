@@ -175,7 +175,7 @@ void DesktopAgentClient::onIpcMessageReceived(quint32 channel_id, const QByteArr
         else if (message.has_bandwidth_change())
         {
             bandwidth_ = message.bandwidth_change().bandwidth();
-            emit sig_bandwidthChanged(bandwidth_);
+            LOG(INFO) << "Bandwidth changed:" << bandwidth_;
         }
         else
         {

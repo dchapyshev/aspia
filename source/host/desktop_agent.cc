@@ -705,27 +705,36 @@ void DesktopAgent::onCaptureScreen()
 void DesktopAgent::onOverflowCheck()
 {
     proto::desktop::Overflow::State state = proto::desktop::Overflow::STATE_NONE;
+    qint64 minimal_bandwidth = std::numeric_limits<qint64>::max();
 
     for (auto* client : std::as_const(clients_))
     {
         if (client->overflowState() > state)
             state = client->overflowState();
+
+        qint64 bandwidth = client->bandwidth();
+        if (bandwidth != 0 && bandwidth < minimal_bandwidth)
+            minimal_bandwidth = bandwidth;
     }
+
+    qint64 bandwidth = 0;
+    if (minimal_bandwidth != std::numeric_limits<qint64>::max())
+        bandwidth = minimal_bandwidth;
 
     // When bandwidth is unknown, use a conservative limit.
     int bandwidth_fps_limit = 20;
-    if (bandwidth_ > 0)
+    if (bandwidth > 0)
     {
         // Calculate FPS limit based on measured bandwidth.
-        if (bandwidth_ < 100 * 1024)        // < 100 KB/s
+        if (bandwidth < 100 * 1024)        // < 100 KB/s
             bandwidth_fps_limit = min_fps_;
-        else if (bandwidth_ < 300 * 1024)   // < 300 KB/s
+        else if (bandwidth < 300 * 1024)   // < 300 KB/s
             bandwidth_fps_limit = 16;
-        else if (bandwidth_ < 500 * 1024)   // < 500 KB/s
+        else if (bandwidth < 500 * 1024)   // < 500 KB/s
             bandwidth_fps_limit = 18;
-        else if (bandwidth_ < 1024 * 1024)  // < 1 MB/s
+        else if (bandwidth < 1024 * 1024)  // < 1 MB/s
             bandwidth_fps_limit = 20;
-        else if (bandwidth_ < 2048 * 1024)  // < 2 MB/s
+        else if (bandwidth < 2048 * 1024)  // < 2 MB/s
             bandwidth_fps_limit = 24;
         else
             bandwidth_fps_limit = max_fps_;
@@ -791,9 +800,9 @@ void DesktopAgent::onOverflowCheck()
 
     QSize forced_size = forced_size_;
 
-    if (bandwidth_ > 0 && bandwidth_ < 50 * 1024) // < 50 KB/s
+    if (bandwidth > 0 && bandwidth < 50 * 1024) // < 50 KB/s
         forced_size = scaled_size(source_size_, 0.6);
-    else if (bandwidth_ > 0 && bandwidth_ < 100 * 1024) // < 100 KB/s
+    else if (bandwidth > 0 && bandwidth < 100 * 1024) // < 100 KB/s
         forced_size = scaled_size(source_size_, 0.7);
     else if (pressure_score_ >= 90)
         forced_size = scaled_size(source_size_, 0.7);
@@ -809,29 +818,6 @@ void DesktopAgent::onOverflowCheck()
         LOG(INFO) << "Forced size changed from" << forced_size_ << "to" << forced_size;
         forced_size_ = forced_size;
     }
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopAgent::onBandwidthChanged()
-{
-    qint64 minimal_bandwidth = std::numeric_limits<qint64>::max();
-
-    for (auto* client : std::as_const(clients_))
-    {
-        qint64 bandwidth = client->bandwidth();
-
-        if (bandwidth != 0 && bandwidth < minimal_bandwidth)
-            minimal_bandwidth = bandwidth;
-    }
-
-    if (minimal_bandwidth == std::numeric_limits<qint64>::max())
-    {
-        // No client has received any bandwidth yet.
-        return;
-    }
-
-    LOG(INFO) << "Bandwidth changed:" << minimal_bandwidth;
-    bandwidth_ = minimal_bandwidth;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -854,7 +840,6 @@ void DesktopAgent::startClient(const QString& ipc_channel_name)
 
     connect(client, &DesktopAgentClient::sig_selectScreen, this, &DesktopAgent::onSelectScreen);
     connect(client, &DesktopAgentClient::sig_preferredSizeChanged, this, &DesktopAgent::onPreferredSizeChanged);
-    connect(client, &DesktopAgentClient::sig_bandwidthChanged, this, &DesktopAgent::onBandwidthChanged);
     connect(client, &DesktopAgentClient::sig_keyFrameRequested, this, &DesktopAgent::onKeyFrameRequested);
 
     connect(client, &DesktopAgentClient::sig_configured, this, &DesktopAgent::onClientConfigured);

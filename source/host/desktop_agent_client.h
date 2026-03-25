@@ -82,7 +82,6 @@ signals:
     void sig_injectClipboardEvent(const proto::desktop::ClipboardEvent& event);
     void sig_selectScreen(const proto::desktop::Screen& screen);
     void sig_preferredSizeChanged(const QSize& size);
-    void sig_bandwidthChanged(qint64 bandwidth);
     void sig_keyFrameRequested();
     void sig_configured();
     void sig_finished();
