@@ -30,7 +30,7 @@ enum ChannelId
     CHANNEL_ID_3       = 3; // Depends on session implementation.
     CHANNEL_ID_4       = 4; // Depends on session implementation.
     CHANNEL_ID_5       = 5; // Depends on session implementation.
-    CHANNEL_ID_CONTROL = 255;
+    CHANNEL_ID_CONTROL = 254;
 }
 
 enum SessionType
