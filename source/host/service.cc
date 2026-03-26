@@ -734,6 +734,9 @@ void Service::startClient(const PendingConfirmation& pending)
         DesktopClient* client = new DesktopClient(tcp_channel, this);
         client_to_start = client;
 
+        client->setFeature(Client::FEATURE_UDP, true);
+        client->setFeature(Client::FEATURE_BANDWIDTH, true);
+
         connect(client, &Client::sig_finished, this, &Service::onClientFinished);
 
         connect(client, &Client::sig_started, desktop_manager_, &DesktopManager::onClientStarted);
@@ -753,6 +756,8 @@ void Service::startClient(const PendingConfirmation& pending)
     {
         FileClient* client = new FileClient(tcp_channel, user_session_->sessionId(), this);
         client_to_start = client;
+
+        client->setFeature(Client::FEATURE_UDP, true);
 
         connect(client, &Client::sig_finished, this, &Service::onClientFinished);
         connect(client, &Client::sig_started, user_session_, &UserSession::onClientStarted);
@@ -786,6 +791,9 @@ void Service::startClient(const PendingConfirmation& pending)
         tcp_channel->deleteLater();
         return;
     }
+
+    if (!settings_.isUdpAllowed())
+        client_to_start->setFeature(Client::FEATURE_UDP, false);
 
     clients_.append(client_to_start);
     client_to_start->start(pending.direct, pending.stun_host, pending.stun_port, pending.peer_equals);

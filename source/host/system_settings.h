@@ -112,6 +112,9 @@ public:
     int updateCheckFrequency() const;
     void setUpdateCheckFrequency(int days);
 
+    bool isUdpAllowed() const;
+    void setUdpAllowed(bool enable);
+
 private:
     mutable QSettings settings_;
 

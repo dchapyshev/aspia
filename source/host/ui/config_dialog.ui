@@ -64,6 +64,13 @@
            </widget>
           </item>
           <item row="1" column="0" colspan="3">
+           <widget class="QCheckBox" name="checkbox_allow_udp">
+            <property name="text">
+             <string>Allow UDP connections</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0" colspan="3">
            <layout class="QHBoxLayout" name="horizontalLayout_2">
             <item>
              <widget class="QLabel" name="label_video_capturer">

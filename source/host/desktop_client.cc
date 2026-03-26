@@ -37,7 +37,7 @@ namespace host {
 
 //--------------------------------------------------------------------------------------------------
 DesktopClient::DesktopClient(base::TcpChannel* tcp_channel, QObject* parent)
-    : Client(tcp_channel, FEATURE_UDP | FEATURE_BANDWIDTH, parent),
+    : Client(tcp_channel, parent),
       dettach_time_(QTime::currentTime()),
       fake_capture_timer_(new QTimer(this)),
       overflow_timer_(new QTimer(this))

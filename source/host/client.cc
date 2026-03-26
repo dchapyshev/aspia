@@ -46,9 +46,8 @@ const int kUdpConnectTimeoutMs = 5000;   // 5 seconds to wait for UDP connection
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-Client::Client(base::TcpChannel* tcp_channel, Features features, QObject* parent)
+Client::Client(base::TcpChannel* tcp_channel, QObject* parent)
     : QObject(parent),
-      features_(features),
       tcp_channel_(tcp_channel),
       probe_timer_(new QTimer(this))
 {
@@ -175,6 +174,15 @@ qint64 Client::pendingBytes() const
 qint64 Client::bandwidth() const
 {
     return udp_ready_ ? udp_probe_.bandwidth : tcp_probe_.bandwidth;
+}
+
+//--------------------------------------------------------------------------------------------------
+void Client::setFeature(Feature feature, bool enable)
+{
+    if (enable)
+        features_ |= feature;
+    else
+        features_ &= ~feature;
 }
 
 //--------------------------------------------------------------------------------------------------

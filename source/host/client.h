@@ -44,6 +44,9 @@ class Client : public QObject
     Q_OBJECT
 
 public:
+    Client(base::TcpChannel* tcp_channel, QObject* parent);
+    virtual ~Client();
+
     enum Feature
     {
         FEATURE_NONE      = 0,
@@ -52,10 +55,8 @@ public:
     };
     Q_DECLARE_FLAGS(Features, Feature)
 
-    Client(base::TcpChannel* tcp_channel, Features features, QObject* parent);
-    virtual ~Client();
-
     void start(bool direct, const QString& stun_host, quint16 stun_port, bool peer_equals);
+    void setFeature(Feature feature, bool enable);
 
     quint32 clientId() const;
     proto::peer::SessionType sessionType() const;
