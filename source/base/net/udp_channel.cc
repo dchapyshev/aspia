@@ -371,45 +371,15 @@ void UdpChannel::addWriteTask(quint8 channel_id, const QByteArray& data)
         return;
     }
 
-    bool schedule_write = write_queue_.empty();
-
-    write_queue_.emplace_back(channel_id, std::move(packet));
-
-    if (schedule_write)
-        doWrite();
-}
-
-//--------------------------------------------------------------------------------------------------
-void UdpChannel::doWrite()
-{
-    if (write_queue_.empty())
-        return;
-
-    Task& task = write_queue_.front();
-    ScopedENetPacket packet = std::move(task.second);
-    quint8 channel_id = task.first;
-
-    // Add current task bytes.
-    write_task_size_ = packet->dataLength;
+    pending_bytes_ += packet->dataLength;
     addTxBytes(packet->dataLength);
 
-    write_queue_.pop_front();
-
-    // This callback is called when a packet is removed.
     packet->userData = this;
     packet->freeCallback = [](ENetPacket* packet)
     {
         UdpChannel* self = reinterpret_cast<UdpChannel*>(packet->userData);
-
-        // No current task.
-        self->write_task_size_ = 0;
-
-        // Call releasePacket to take back the allocated memory from this packet.
+        self->pending_bytes_ -= packet->dataLength;
         self->releasePacket(packet);
-
-        // Since the packet has been removed, the sending task is complete.
-        // Let's start the next sending task.
-        self->doWrite();
     };
 
     if (enet_peer_send(peer_.get(), channel_id, packet.release()) != 0)
@@ -439,12 +409,7 @@ void UdpChannel::setDecryptor(std::unique_ptr<DatagramDecryptor> decryptor)
 //--------------------------------------------------------------------------------------------------
 qint64 UdpChannel::pendingBytes() const
 {
-    qint64 result = write_task_size_;
-
-    for (const auto& task : std::as_const(write_queue_))
-        result += task.second->dataLength;
-
-    return result;
+    return pending_bytes_;
 }
 
 //--------------------------------------------------------------------------------------------------

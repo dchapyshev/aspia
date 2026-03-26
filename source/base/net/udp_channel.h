@@ -99,8 +99,6 @@ private:
     using TimePoint = std::chrono::time_point<Clock>;
     using Milliseconds = std::chrono::milliseconds;
     using Seconds = std::chrono::seconds;
-    using Task = std::pair<quint8, ScopedENetPacket>;
-
     struct Header
     {
         quint64 counter;
@@ -119,7 +117,6 @@ private:
     void processEvents();
     void onErrorOccurred(const Location& location);
     void addWriteTask(quint8 channel_id, const QByteArray& data);
-    void doWrite();
     void onMessageReceived(quint8 channel_id, ScopedENetPacket packet);
     void onReadyCheck();
     void addTxBytes(qint64 bytes_count);
@@ -137,18 +134,16 @@ private:
 
     quint64 send_counter_ = 0;
     AntiReplayWindow replay_window_;
+    qint64 pending_bytes_ = 0;
 
     std::deque<ScopedENetPacket> packet_pool_;
-    std::deque<Task> write_queue_;
-    std::deque<Task> read_pending_;
+    std::deque<std::pair<quint8, ScopedENetPacket>> read_pending_;
     QByteArray decrypt_buffer_;
 
     bool connected_ = false;
     bool paused_ = true;
 
     Mode mode_ = Mode::UNKNOWN;
-
-    qint64 write_task_size_ = 0;
 
     qint64 total_tx_ = 0;
     qint64 total_rx_ = 0;
