@@ -459,14 +459,10 @@ message FileTransferError
     string error_id    = 3;
 }
 
-message ClipboardFileRequest
+message ClipboardFileTransfer
 {
     FileTransferRequest request = 1;
-    FileTransferCancel cancel   = 2;
-}
-
-message ClipboardFileResponse
-{
-    FileTransferData data   = 1;
-    FileTransferError error = 2;
+    FileTransferData data       = 2;
+    FileTransferCancel cancel   = 3;
+    FileTransferError error     = 4;
 }
