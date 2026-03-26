@@ -207,6 +207,10 @@ list(APPEND SOURCE_BASE_CRYPTO
     crypto/data_cryptor_chacha20_poly1305.h
     crypto/data_cryptor_fake.cc
     crypto/data_cryptor_fake.h
+    crypto/datagram_decryptor.cc
+    crypto/datagram_decryptor.h
+    crypto/datagram_encryptor.cc
+    crypto/datagram_encryptor.h
     crypto/generic_hash.cc
     crypto/generic_hash.h
     crypto/key_pair.cc
@@ -247,6 +251,7 @@ list(APPEND SOURCE_BASE_CRYPTO_TESTS
     crypto/big_num_unittest.cc
     crypto/cryptor_unittest.cc
     crypto/data_cryptor_unittest.cc
+    crypto/datagram_cryptor_unittest.cc
     crypto/generic_hash_unittest.cc
     crypto/key_pair_unittest.cc
     crypto/large_number_increment_unittest.cc
