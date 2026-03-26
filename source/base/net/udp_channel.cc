@@ -307,28 +307,7 @@ void UdpChannel::setPeerAddress(const QString& address, quint16 port)
 }
 
 //--------------------------------------------------------------------------------------------------
-void UdpChannel::send(quint8 channel_id, const QByteArray& buffer)
-{
-    addWriteTask(channel_id, buffer);
-}
-
-//--------------------------------------------------------------------------------------------------
-void UdpChannel::setPaused(bool enable)
-{
-    if (paused_ == enable)
-        return;
-
-    paused_ = enable;
-    if (paused_)
-        return;
-
-    for (auto& task : read_pending_)
-        onMessageReceived(task.first, std::move(task.second));
-    read_pending_.clear();
-}
-
-//--------------------------------------------------------------------------------------------------
-void UdpChannel::addWriteTask(quint8 channel_id, const QByteArray& data)
+void UdpChannel::send(quint8 channel_id, const QByteArray& buffer, bool reliable)
 {
     if (!encryptor_)
     {
@@ -336,7 +315,7 @@ void UdpChannel::addWriteTask(quint8 channel_id, const QByteArray& data)
         return;
     }
 
-    qint64 target_data_size = encryptor_->encryptedDataSize(data.size());
+    qint64 target_data_size = encryptor_->encryptedDataSize(buffer.size());
     if (target_data_size > kMaxMessageSize)
     {
         CLOG(ERROR) << "Too big outgoing message:" << target_data_size;
@@ -344,7 +323,11 @@ void UdpChannel::addWriteTask(quint8 channel_id, const QByteArray& data)
         return;
     }
 
-    ScopedENetPacket packet = acquirePacket(sizeof(Header) + target_data_size, ENET_PACKET_FLAG_RELIABLE);
+    quint32 flags = 0;
+    if (reliable)
+        flags |= ENET_PACKET_FLAG_RELIABLE;
+
+    ScopedENetPacket packet = acquirePacket(sizeof(Header) + target_data_size, flags);
     if (!packet)
     {
         onErrorOccurred(FROM_HERE);
@@ -354,17 +337,15 @@ void UdpChannel::addWriteTask(quint8 channel_id, const QByteArray& data)
     ++send_counter_;
 
     Header header;
+    memset(&header, 0, sizeof(Header));
+
     header.counter = send_counter_;
-    header.reserved1 = 0;
     header.type = USER_DATA;
-    header.reserved2 = 0;
-    header.reserved3 = 0;
-    header.reserved4 = 0;
 
     memcpy(packet->data, &header, sizeof(Header));
 
-    if (!encryptor_->encrypt(send_counter_, data.constData(), data.size(), &header, sizeof(Header),
-        packet->data + sizeof(Header)))
+    if (!encryptor_->encrypt(send_counter_, buffer.constData(), buffer.size(), &header, sizeof(Header),
+                             packet->data + sizeof(Header)))
     {
         CLOG(ERROR) << "Failed to encrypt outgoing message";
         onErrorOccurred(FROM_HERE);
@@ -390,6 +371,21 @@ void UdpChannel::addWriteTask(quint8 channel_id, const QByteArray& data)
     }
 
     enet_host_flush(host_.get());
+}
+
+//--------------------------------------------------------------------------------------------------
+void UdpChannel::setPaused(bool enable)
+{
+    if (paused_ == enable)
+        return;
+
+    paused_ = enable;
+    if (paused_)
+        return;
+
+    for (auto& task : read_pending_)
+        onMessageReceived(task.first, std::move(task.second));
+    read_pending_.clear();
 }
 
 //--------------------------------------------------------------------------------------------------

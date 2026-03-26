@@ -224,7 +224,7 @@ void Client::sendSessionMessage(const QByteArray& message)
 
     if (udp_ready_)
     {
-        udp_channel_->send(proto::peer::CHANNEL_ID_0, message);
+        udp_channel_->send(proto::peer::CHANNEL_ID_0, message, true);
         return;
     }
 
@@ -242,7 +242,7 @@ void Client::sendServiceMessage(const QByteArray& message)
 
     if (udp_ready_)
     {
-        udp_channel_->send(proto::peer::CHANNEL_ID_1, message);
+        udp_channel_->send(proto::peer::CHANNEL_ID_1, message, true);
         return;
     }
 
@@ -465,7 +465,7 @@ void Client::onUdpMessageReceived(quint8 channel_id, const QByteArray& buffer)
             proto::peer::BandwidthProbeAck* ask = message.mutable_bandwidth_probe_ack();
             ask->set_dummy(1);
 
-            udp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, base::serialize(message));
+            udp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, base::serialize(message), true);
 
             if (!udp_ready_)
                 udp_ready_ = true;

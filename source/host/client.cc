@@ -199,7 +199,7 @@ void Client::send(quint8 channel_id, const QByteArray& buffer)
 
     if (udp_state_ == UdpState::READY)
     {
-        udp_channel_->send(channel_id, buffer);
+        udp_channel_->send(channel_id, buffer, true);
         return;
     }
 
@@ -629,7 +629,7 @@ void Client::sendUdpBandwidthProbe(const TimePoint& time)
     udp_probe_.send_time = time;
     udp_probe_.pending = true;
 
-    udp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, makeBandwidthProbeData());
+    udp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, makeBandwidthProbeData(), true);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -63,7 +63,7 @@ public:
     void connectTo(const QString& address, quint16 port);
     void connectTo(qintptr socket, const QString& address, quint16 port);
     void setPeerAddress(const QString& address, quint16 port);
-    void send(quint8 channel_id, const QByteArray& buffer);
+    void send(quint8 channel_id, const QByteArray& buffer, bool reliable);
 
     void setPaused(bool enable);
 
@@ -116,7 +116,6 @@ private:
     void sendPunchHole(const ENetAddress& address);
     void processEvents();
     void onErrorOccurred(const Location& location);
-    void addWriteTask(quint8 channel_id, const QByteArray& data);
     void onMessageReceived(quint8 channel_id, ScopedENetPacket packet);
     void onReadyCheck();
     void addTxBytes(qint64 bytes_count);
