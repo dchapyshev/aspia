@@ -97,7 +97,7 @@ private slots:
 
 private:
     void readSessionMessage(const QByteArray& buffer);
-    void sendSessionMessage(const QByteArray& buffer);
+    void sendSessionMessage(const QByteArray& buffer, bool reliable);
 
     void readMouseEvent(const proto::desktop::MouseEvent& mouse_event);
     void readKeyEvent(const proto::desktop::KeyEvent& key_event);

@@ -59,40 +59,40 @@ DesktopAgentClient::~DesktopAgentClient()
 void DesktopAgentClient::onScreenData(const QByteArray& buffer)
 {
     if (!is_video_paused_)
-        sendSessionMessage(buffer);
+        sendSessionMessage(buffer, false);
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopAgentClient::onScreenListData(const QByteArray& buffer)
 {
-    sendSessionMessage(buffer);
+    sendSessionMessage(buffer, true);
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopAgentClient::onScreenTypeData(const QByteArray& buffer)
 {
-    sendSessionMessage(buffer);
+    sendSessionMessage(buffer, true);
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopAgentClient::onCursorPositionData(const QByteArray& buffer)
 {
     if (config_.cursor_position)
-        sendSessionMessage(buffer);
+        sendSessionMessage(buffer, false);
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopAgentClient::onClipboardData(const QByteArray& buffer)
 {
     if (sessionType() == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
-        sendSessionMessage(buffer);
+        sendSessionMessage(buffer, true);
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopAgentClient::onCursorData(const QByteArray& buffer)
 {
     if (config_.cursor_shape)
-        sendSessionMessage(buffer);
+        sendSessionMessage(buffer, true);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -104,7 +104,7 @@ void DesktopAgentClient::onAudioData(const QByteArray& buffer)
     if (overflow_state_ == proto::desktop::Overflow::STATE_CRITICAL)
         return;
 
-    sendSessionMessage(buffer);
+    sendSessionMessage(buffer, false);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -195,7 +195,7 @@ void DesktopAgentClient::onTaskManagerMessage(const proto::task_manager::HostToC
     proto::desktop::Extension* extension = message.mutable_extension();
     extension->set_name(common::kTaskManagerExtension);
     extension->set_data(extension_message.SerializeAsString());
-    sendSessionMessage(base::serialize(message));
+    sendSessionMessage(base::serialize(message), true);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -226,10 +226,10 @@ void DesktopAgentClient::readSessionMessage(const QByteArray& buffer)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::sendSessionMessage(const QByteArray& buffer)
+void DesktopAgentClient::sendSessionMessage(const QByteArray& buffer, bool reliable)
 {
     quint32 channel_id = base::makeUint32(proto::desktop::IPC_CHANNEL_ID_SESSION, proto::peer::CHANNEL_ID_0);
-    ipc_channel_->send(channel_id, buffer);
+    ipc_channel_->send(channel_id, buffer, reliable);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -496,7 +496,7 @@ void DesktopAgentClient::readSystemInfoExtension(const std::string& data)
     desktop_extension->set_name(common::kSystemInfoExtension);
     desktop_extension->set_data(system_info.SerializeAsString());
 
-    sendSessionMessage(base::serialize(message));
+    sendSessionMessage(base::serialize(message), true);
 #endif // defined(Q_OS_WINDOWS)
 }
 
@@ -583,7 +583,7 @@ void DesktopAgentClient::sendCapabilities()
 #endif
 
     CLOG(INFO) << "Sending:" << *capabilities;
-    sendSessionMessage(base::serialize(message));
+    sendSessionMessage(base::serialize(message), true);
 }
 
 } // namespace host
