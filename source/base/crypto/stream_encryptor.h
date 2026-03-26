@@ -35,8 +35,6 @@ public:
 
     enum class Type
     {
-        UNKNOWN,
-        FAKE,
         AES256_GCM,
         CHACHA20_POLY1305
     };
