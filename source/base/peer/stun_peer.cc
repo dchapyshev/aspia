@@ -25,7 +25,6 @@
 #include <enet/enet.h>
 
 #include "base/location.h"
-#include "base/logging.h"
 #include "base/serialization.h"
 #include "base/crypto/random.h"
 #include "base/net/net_utils.h"
@@ -39,7 +38,7 @@ StunPeer::StunPeer(QObject* parent)
       timer_(new QTimer(this)),
       read_notifier_(new QSocketNotifier(QSocketNotifier::Read, this))
 {
-    LOG(INFO) << "Ctor";
+    CLOG(INFO) << "Ctor";
     timer_->setSingleShot(true);
     connect(timer_, &QTimer::timeout, this, &StunPeer::onAttempt);
     connect(read_notifier_, &QSocketNotifier::activated, this, &StunPeer::onReadyRead);
@@ -48,7 +47,7 @@ StunPeer::StunPeer(QObject* parent)
 //--------------------------------------------------------------------------------------------------
 StunPeer::~StunPeer()
 {
-    LOG(INFO) << "Dtor";
+    CLOG(INFO) << "Dtor";
     doStop();
 
     if (ready_socket_ != -1)
@@ -94,8 +93,8 @@ void StunPeer::doStart()
 {
     ++number_of_attempts_;
 
-    LOG(INFO) << "Stun peer starting (" << stun_host_ << ":" << stun_port_
-              << ", attempt" << number_of_attempts_ << ")";
+    CLOG(INFO) << "Stun peer starting (" << stun_host_ << ":" << stun_port_
+               << ", attempt" << number_of_attempts_ << ")";
 
     timer_->start(std::chrono::seconds(3));
     lookup_id_ = QHostInfo::lookupHost(stun_host_, this, &StunPeer::onHostResolved);
@@ -128,7 +127,7 @@ void StunPeer::onHostResolved(const QHostInfo& host_info)
 
     if (host_info.error() != QHostInfo::NoError)
     {
-        LOG(ERROR) << "DNS lookup failed:" << host_info.errorString();
+        CLOG(ERROR) << "DNS lookup failed:" << host_info.errorString();
         onErrorOccurred(FROM_HERE);
         return;
     }
@@ -153,12 +152,12 @@ void StunPeer::onHostResolved(const QHostInfo& host_info)
 
     if (selected.isNull())
     {
-        LOG(ERROR) << "No IPv4 address found for" << stun_host_;
+        CLOG(ERROR) << "No IPv4 address found for" << stun_host_;
         onErrorOccurred(FROM_HERE);
         return;
     }
 
-    LOG(INFO) << "Resolved" << stun_host_ << "to" << selected;
+    CLOG(INFO) << "Resolved" << stun_host_ << "to" << selected;
 
     // Create raw UDP socket.
     socket_ = enet_socket_create(ENET_SOCKET_TYPE_DATAGRAM);
@@ -190,7 +189,7 @@ void StunPeer::onHostResolved(const QHostInfo& host_info)
     // Remember the resolved address for sendto().
     stun_address_ = selected;
 
-    LOG(INFO) << "Bound UDP socket, STUN server:" << selected << ":" << stun_port_;
+    CLOG(INFO) << "Bound UDP socket, STUN server:" << selected << ":" << stun_port_;
 
     // Send the STUN request.
     transaction_id_ = Random::number32();
@@ -245,7 +244,7 @@ void StunPeer::onReadyRead()
     int received = enet_socket_receive(socket_, nullptr, &enet_buffer, 1);
     if (received <= 0)
     {
-        LOG(ERROR) << "Failed to receive STUN response";
+        CLOG(ERROR) << "Failed to receive STUN response";
         onErrorOccurred(FROM_HERE);
         return;
     }
@@ -273,7 +272,7 @@ void StunPeer::onReadyRead()
     QString ip_address = QString::fromStdString(endpoint.ip_address());
     quint32 port = static_cast<quint32>(endpoint.port());
 
-    LOG(INFO) << "External endpoint:" << ip_address << ":" << port;
+    CLOG(INFO) << "External endpoint:" << ip_address << ":" << port;
 
     if (!NetUtils::isValidIpAddress(ip_address))
     {
@@ -300,7 +299,7 @@ void StunPeer::onReadyRead()
 //--------------------------------------------------------------------------------------------------
 void StunPeer::onErrorOccurred(const Location& location)
 {
-    LOG(ERROR) << "STUN error occurred" << location;
+    CLOG(ERROR) << "STUN error occurred" << location;
     timer_->stop();
     emit sig_errorOccurred();
 }

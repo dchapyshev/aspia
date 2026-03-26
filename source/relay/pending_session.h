@@ -24,6 +24,7 @@
 
 #include <asio/ip/tcp.hpp>
 
+#include "base/logging.h"
 #include "base/shared_pointer.h"
 #include "proto/relay_peer.h"
 
@@ -89,6 +90,7 @@ private:
     QByteArray secret_;
     quint32 key_id_ = static_cast<quint32>(-1);
 
+    LOG_DECLARE_CONTEXT(PendingSession);
     Q_DISABLE_COPY_MOVE(PendingSession)
 };
 

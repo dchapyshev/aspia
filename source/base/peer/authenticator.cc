@@ -19,7 +19,6 @@
 #include "base/peer/authenticator.h"
 
 #include "base/location.h"
-#include "base/logging.h"
 #include "base/serialization.h"
 
 namespace base {
@@ -37,7 +36,7 @@ Authenticator::Authenticator(QObject* parent)
     : QObject(parent),
       timer_(new QTimer(this))
 {
-    LOG(INFO) << "Ctor";
+    CLOG(INFO) << "Ctor";
 
     timer_->setSingleShot(true);
     connect(timer_, &QTimer::timeout, this, [this]()
@@ -49,7 +48,7 @@ Authenticator::Authenticator(QObject* parent)
 //--------------------------------------------------------------------------------------------------
 Authenticator::~Authenticator()
 {
-    LOG(INFO) << "Dtor";
+    CLOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -57,7 +56,7 @@ void Authenticator::start()
 {
     if (state() != State::STOPPED)
     {
-        LOG(ERROR) << "Trying to start an already running authenticator";
+        CLOG(ERROR) << "Trying to start an already running authenticator";
         return;
     }
 
@@ -68,9 +67,9 @@ void Authenticator::start()
     timer_->start(kTimeout);
 
     if (onStarted())
-        LOG(INFO) << "Authentication started";
+        CLOG(INFO) << "Authentication started";
     else
-        LOG(ERROR) << "Unable to start authentication";
+        CLOG(ERROR) << "Unable to start authentication";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -99,14 +98,14 @@ void Authenticator::finish(const Location& location, ErrorCode error_code)
     else
         state_ = State::FAILED;
 
-    LOG(INFO) << "Authenticator finished:" << error_code << "(" << location << ")";
+    CLOG(INFO) << "Authenticator finished:" << error_code << "(" << location << ")";
     emit sig_finished(error_code);
 }
 
 //--------------------------------------------------------------------------------------------------
 void Authenticator::setPeerVersion(const proto::peer::Version& version)
 {
-    LOG(INFO) << "Version changed from" << peer_version_ << "to" << version;
+    CLOG(INFO) << "Version changed from" << peer_version_ << "to" << version;
     peer_version_ = base::parse(version);
 }
 

@@ -24,6 +24,8 @@
 #include <deque>
 #include <memory>
 
+#include "base/logging.h"
+
 class QSocketNotifier;
 class QTimer;
 
@@ -153,6 +155,7 @@ private:
     qint64 bytes_rx_ = 0;
     int speed_rx_ = 0;
 
+    LOG_DECLARE_CONTEXT(UdpChannel);
     Q_DISABLE_COPY_MOVE(UdpChannel)
 };
 

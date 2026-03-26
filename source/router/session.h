@@ -23,6 +23,7 @@
 #include <QObject>
 #include <QVersionNumber>
 
+#include "base/logging.h"
 #include "base/net/tcp_channel.h"
 #include "proto/router.h"
 
@@ -56,6 +57,8 @@ signals:
     void sig_finished(qint64 session_id);
 
 protected:
+    LOG_DECLARE_CONTEXT(Session);
+
     void sendMessage(const QByteArray& message);
     virtual void onSessionMessage(const QByteArray& buffer) = 0;
 

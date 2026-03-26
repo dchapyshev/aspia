@@ -77,54 +77,54 @@ bool verifyNg(std::string_view N, std::string_view g)
 ClientAuthenticator::ClientAuthenticator(QObject* parent)
     : Authenticator(parent)
 {
-    LOG(INFO) << "Ctor";
+    CLOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
 ClientAuthenticator::~ClientAuthenticator()
 {
-    LOG(INFO) << "Dtor";
+    CLOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClientAuthenticator::setPeerPublicKey(const QByteArray& public_key)
 {
-    LOG(INFO) << "Public key assigned:" << public_key.size();
+    CLOG(INFO) << "Public key assigned:" << public_key.size();
     peer_public_key_ = public_key;
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClientAuthenticator::setIdentify(proto::key_exchange::Identify identify)
 {
-    LOG(INFO) << "Identify assigned:" << identify;
+    CLOG(INFO) << "Identify assigned:" << identify;
     identify_ = identify;
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClientAuthenticator::setUserName(const QString& username)
 {
-    LOG(INFO) << "User name assigned:" << username;
+    CLOG(INFO) << "User name assigned:" << username;
     username_ = username;
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClientAuthenticator::setPassword(const QString& password)
 {
-    LOG(INFO) << "Password assigned";
+    CLOG(INFO) << "Password assigned";
     password_ = password;
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClientAuthenticator::setSessionType(quint32 session_type)
 {
-    LOG(INFO) << "Session type assigned:" << session_type;
+    CLOG(INFO) << "Session type assigned:" << session_type;
     session_type_ = session_type;
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClientAuthenticator::setDisplayName(const QString& display_name)
 {
-    LOG(INFO) << "Display name assigned:" << display_name;
+    CLOG(INFO) << "Display name assigned:" << display_name;
     display_name_ = display_name;
 }
 
@@ -193,31 +193,31 @@ void ClientAuthenticator::onWritten()
     {
         case InternalState::SEND_CLIENT_HELLO:
         {
-            LOG(INFO) << "Sended: ClientHello";
+            CLOG(INFO) << "Sended: ClientHello";
             internal_state_ = InternalState::READ_SERVER_HELLO;
         }
         break;
 
         case InternalState::SEND_IDENTIFY:
         {
-            LOG(INFO) << "Sended: Identify";
+            CLOG(INFO) << "Sended: Identify";
             internal_state_ = InternalState::READ_SERVER_KEY_EXCHANGE;
         }
         break;
 
         case InternalState::SEND_CLIENT_KEY_EXCHANGE:
         {
-            LOG(INFO) << "Sended: ClientKeyExchange";
+            CLOG(INFO) << "Sended: ClientKeyExchange";
             internal_state_ = InternalState::READ_SESSION_CHALLENGE;
 
-            LOG(INFO) << "Session key is ready";
+            CLOG(INFO) << "Session key is ready";
             emit sig_keyChanged();
         }
         break;
 
         case InternalState::SEND_SESSION_RESPONSE:
         {
-            LOG(INFO) << "Sended: SessionResponse";
+            CLOG(INFO) << "Sended: SessionResponse";
             finish(FROM_HERE, ErrorCode::SUCCESS);
         }
         break;
@@ -301,14 +301,14 @@ void ClientAuthenticator::sendClientHello()
 
     QByteArray message = base::serialize(client_hello);
 
-    LOG(INFO) << "Sending: ClientHello (" << message.size() << ")";
+    CLOG(INFO) << "Sending: ClientHello (" << message.size() << ")";
     emit sig_outgoingMessage(message);
 }
 
 //--------------------------------------------------------------------------------------------------
 bool ClientAuthenticator::readServerHello(const QByteArray& buffer)
 {
-    LOG(INFO) << "Received: ServerHello (" << buffer.size() << ")";
+    CLOG(INFO) << "Received: ServerHello (" << buffer.size() << ")";
 
     proto::key_exchange::ServerHello server_hello;
     if (!parse(buffer, &server_hello))
@@ -317,7 +317,7 @@ bool ClientAuthenticator::readServerHello(const QByteArray& buffer)
         return false;
     }
 
-    LOG(INFO) << "Encryption:" << server_hello.encryption();
+    CLOG(INFO) << "Encryption:" << server_hello.encryption();
 
     encryption_ = server_hello.encryption();
     switch (encryption_)
@@ -341,7 +341,7 @@ bool ClientAuthenticator::readServerHello(const QByteArray& buffer)
 
     if (!session_key_.isEmpty())
     {
-        LOG(INFO) << "Session key is ready";
+        CLOG(INFO) << "Session key is ready";
         emit sig_keyChanged();
     }
 
@@ -356,14 +356,14 @@ void ClientAuthenticator::sendIdentify()
 
     QByteArray message = base::serialize(identify);
 
-    LOG(INFO) << "Sending: Identify (" << message.size() << ")";
+    CLOG(INFO) << "Sending: Identify (" << message.size() << ")";
     emit sig_outgoingMessage(message);
 }
 
 //--------------------------------------------------------------------------------------------------
 bool ClientAuthenticator::readServerKeyExchange(const QByteArray& buffer)
 {
-    LOG(INFO) << "Received: ServerKeyExchange (" << buffer.size() << ")";
+    CLOG(INFO) << "Received: ServerKeyExchange (" << buffer.size() << ")";
 
     proto::key_exchange::SrpServerKeyExchange server_key_exchange;
     if (!parse(buffer, &server_key_exchange))
@@ -374,8 +374,8 @@ bool ClientAuthenticator::readServerKeyExchange(const QByteArray& buffer)
 
     if (server_key_exchange.salt().empty() || server_key_exchange.b().empty())
     {
-        LOG(ERROR) << "Salt size:" << server_key_exchange.salt().size();
-        LOG(ERROR) << "B size:" << server_key_exchange.b().size();
+        CLOG(ERROR) << "Salt size:" << server_key_exchange.salt().size();
+        CLOG(ERROR) << "B size:" << server_key_exchange.b().size();
 
         finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
         return false;
@@ -399,7 +399,7 @@ bool ClientAuthenticator::readServerKeyExchange(const QByteArray& buffer)
 
     if (!SrpMath::verify_B_mod_N(B_, N_))
     {
-        LOG(ERROR) << "Invalid B or N";
+        CLOG(ERROR) << "Invalid B or N";
         return false;
     }
 
@@ -408,7 +408,7 @@ bool ClientAuthenticator::readServerKeyExchange(const QByteArray& buffer)
     BigNum key = SrpMath::calcClientKey(N_, B_, g_, x, a_, u);
     if (!key.isValid())
     {
-        LOG(ERROR) << "Empty encryption key generated";
+        CLOG(ERROR) << "Empty encryption key generated";
         return false;
     }
 
@@ -432,14 +432,14 @@ void ClientAuthenticator::sendClientKeyExchange()
 
     QByteArray message = base::serialize(client_key_exchange);
 
-    LOG(INFO) << "Sending: ClientKeyExchange (" << message.size() << ")";
+    CLOG(INFO) << "Sending: ClientKeyExchange (" << message.size() << ")";
     emit sig_outgoingMessage(message);
 }
 
 //--------------------------------------------------------------------------------------------------
 bool ClientAuthenticator::readSessionChallenge(const QByteArray& buffer)
 {
-    LOG(INFO) << "Received: SessionChallenge (" << buffer.size() << ")";
+    CLOG(INFO) << "Received: SessionChallenge (" << buffer.size() << ")";
 
     proto::key_exchange::SessionChallenge challenge;
     if (!parse(buffer, &challenge))
@@ -460,9 +460,9 @@ bool ClientAuthenticator::readSessionChallenge(const QByteArray& buffer)
     setPeerDisplayName(QString::fromStdString(challenge.display_name()));
     setPeerVersion(challenge.version());
 
-    LOG(INFO) << "Server (version:" << peerVersion().toString() << "name:" << peerComputerName()
-              << "os:" << peerOsName() << "cores:" << challenge.cpu_cores()
-              << "arch:" << peerArch() << "display_name:" << peerDisplayName() << ")";
+    CLOG(INFO) << "Server (version:" << peerVersion().toString() << "name:" << peerComputerName()
+               << "os:" << peerOsName() << "cores:" << challenge.cpu_cores()
+               << "arch:" << peerArch() << "display_name:" << peerDisplayName() << ")";
 
     if (peerVersion() < kMinimumSupportedVersion)
     {
@@ -493,7 +493,7 @@ void ClientAuthenticator::sendSessionResponse()
 
     QByteArray message = base::serialize(response);
 
-    LOG(INFO) << "Sending: SessionResponse (" << message.size() << ")";
+    CLOG(INFO) << "Sending: SessionResponse (" << message.size() << ")";
     emit sig_outgoingMessage(message);
 }
 

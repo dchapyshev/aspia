@@ -22,7 +22,6 @@
 
 #include "base/asio_event_dispatcher.h"
 #include "base/location.h"
-#include "base/logging.h"
 
 #include <asio/read.hpp>
 #include <asio/write.hpp>
@@ -166,7 +165,7 @@ void IpcChannel::setPaused(bool enable)
             break;
     }
 
-    DCHECK_EQ(read_header_.message_size, 0);
+    CDCHECK_EQ(read_header_.message_size, 0);
     doReadHeader();
 }
 
@@ -196,7 +195,7 @@ bool IpcChannel::connectAttempt()
 {
     if (channel_name_.isEmpty())
     {
-        LOG(ERROR) << "Empty channel name";
+        CLOG(ERROR) << "Empty channel name";
         return false;
     }
 
@@ -217,8 +216,8 @@ bool IpcChannel::connectAttempt()
 
         if (error_code != ERROR_PIPE_BUSY)
         {
-            LOG(ERROR) << "Failed to connect to the named pipe:" << SystemError::toString(error_code)
-            << "(channel" << channel_name_ << ")";
+            CLOG(ERROR) << "Failed to connect to the named pipe:" << SystemError::toString(error_code)
+                        << "(channel" << channel_name_ << ")";
             return false;
         }
 
@@ -233,7 +232,7 @@ bool IpcChannel::connectAttempt()
     stream_.assign(handle.release(), error_code);
     if (error_code)
     {
-        LOG(ERROR) << "Failed to assign handle:" << error_code;
+        CLOG(ERROR) << "Failed to assign handle:" << error_code;
         return false;
     }
 #else
@@ -242,7 +241,7 @@ bool IpcChannel::connectAttempt()
     stream_.connect(endpoint, error_code);
     if (error_code)
     {
-        LOG(ERROR) << "Unable to connect:" << error_code;
+        CLOG(ERROR) << "Unable to connect:" << error_code;
         return false;
     }
 #endif
@@ -256,7 +255,7 @@ void IpcChannel::scheduleConnectAttempt(const std::chrono::milliseconds& delay, 
 {
     if (count > 30)
     {
-        LOG(ERROR) << "Connection timeout (channel" << channel_name_ << ")";
+        CLOG(ERROR) << "Connection timeout (channel" << channel_name_ << ")";
         emit sig_errorOccurred();
         return;
     }
@@ -290,7 +289,7 @@ void IpcChannel::disconnectFrom()
 //--------------------------------------------------------------------------------------------------
 void IpcChannel::onErrorOccurred(const Location& location, const std::error_code& error_code)
 {
-    LOG(ERROR) << "Error in IPC channel" << channel_name_ << ":" << error_code << "(from" << location << ")";
+    CLOG(ERROR) << "Error in IPC channel" << channel_name_ << ":" << error_code << "(from" << location << ")";
     disconnectFrom();
     emit sig_disconnected();
 }
@@ -331,7 +330,7 @@ void IpcChannel::doWriteHeader()
             return;
         }
 
-        DCHECK_EQ(bytes_transferred, sizeof(write_header_.message_size));
+        CDCHECK_EQ(bytes_transferred, sizeof(write_header_.message_size));
         doWriteData();
     });
 }
@@ -339,7 +338,7 @@ void IpcChannel::doWriteHeader()
 //--------------------------------------------------------------------------------------------------
 void IpcChannel::doWriteData()
 {
-    DCHECK(!write_queue_.empty());
+    CDCHECK(!write_queue_.empty());
 
     const QByteArray& buffer = write_queue_.front().data();
 
@@ -356,8 +355,8 @@ void IpcChannel::doWriteData()
             return;
         }
 
-        DCHECK_EQ(bytes_transferred, write_header_.message_size);
-        DCHECK(!write_queue_.empty());
+        CDCHECK_EQ(bytes_transferred, write_header_.message_size);
+        CDCHECK(!write_queue_.empty());
 
         // Delete the sent message from the queue.
         write_queue_.pop_front();
@@ -388,7 +387,7 @@ void IpcChannel::doReadHeader()
             return;
         }
 
-        DCHECK_EQ(bytes_transferred, sizeof(read_header_));
+        CDCHECK_EQ(bytes_transferred, sizeof(read_header_));
 
         if (!read_header_.message_size || read_header_.message_size > kMaxMessageSize)
         {
@@ -426,7 +425,7 @@ void IpcChannel::doReadData()
             return;
         }
 
-        DCHECK_EQ(bytes_transferred, read_header_.message_size);
+        CDCHECK_EQ(bytes_transferred, read_header_.message_size);
 
         if (is_paused_)
         {
@@ -442,7 +441,7 @@ void IpcChannel::doReadData()
             return;
         }
 
-        DCHECK_EQ(read_header_.message_size, 0);
+        CDCHECK_EQ(read_header_.message_size, 0);
         doReadHeader();
     });
 }

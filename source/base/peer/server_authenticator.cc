@@ -43,23 +43,23 @@ constexpr size_t kIvSize = 12;
 ServerAuthenticator::ServerAuthenticator(QObject* parent)
     : Authenticator(parent)
 {
-    LOG(INFO) << "Ctor";
+    CLOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
 ServerAuthenticator::~ServerAuthenticator()
 {
-    LOG(INFO) << "Dtor";
+    CLOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
 void ServerAuthenticator::setUserList(SharedPointer<UserListBase> user_list)
 {
     user_list_ = std::move(user_list);
-    DCHECK(user_list_);
+    CDCHECK(user_list_);
 
-    LOG(INFO) << "User list is assigned (count:" << user_list_->list().size() << "seed key:"
-              << user_list_->seedKey().size() << ")";
+    CLOG(INFO) << "User list is assigned (count:" << user_list_->list().size() << "seed key:"
+               << user_list_->seedKey().size() << ")";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -68,27 +68,27 @@ bool ServerAuthenticator::setPrivateKey(const QByteArray& private_key)
     // The method must be called before calling start().
     if (state() != State::STOPPED)
     {
-        LOG(ERROR) << "Authenticator not in stopped state";
+        CLOG(ERROR) << "Authenticator not in stopped state";
         return false;
     }
 
     if (private_key.isEmpty())
     {
-        LOG(ERROR) << "An empty private key is not valid";
+        CLOG(ERROR) << "An empty private key is not valid";
         return false;
     }
 
     key_pair_ = KeyPair::fromPrivateKey(private_key);
     if (!key_pair_.isValid())
     {
-        LOG(ERROR) << "Failed to load private key. Perhaps the key is incorrect";
+        CLOG(ERROR) << "Failed to load private key. Perhaps the key is incorrect";
         return false;
     }
 
     encrypt_iv_ = Random::byteArray(kIvSize);
     if (encrypt_iv_.isEmpty())
     {
-        LOG(ERROR) << "An empty IV is not valid";
+        CLOG(ERROR) << "An empty IV is not valid";
         return false;
     }
 
@@ -101,7 +101,7 @@ bool ServerAuthenticator::setAnonymousAccess(AnonymousAccess anonymous_access, q
     // The method must be called before calling start().
     if (state() != State::STOPPED)
     {
-        LOG(ERROR) << "Authenticator not in stopped state";
+        CLOG(ERROR) << "Authenticator not in stopped state";
         return false;
     }
 
@@ -109,14 +109,14 @@ bool ServerAuthenticator::setAnonymousAccess(AnonymousAccess anonymous_access, q
     {
         if (!key_pair_.isValid())
         {
-            LOG(ERROR) << "When anonymous access is enabled, a private key must be installed";
+            CLOG(ERROR) << "When anonymous access is enabled, a private key must be installed";
             return false;
         }
 
         if (!session_types)
         {
-            LOG(ERROR) << "When anonymous access is enabled, there must be at least one "
-                          "session for anonymous access";
+            CLOG(ERROR) << "When anonymous access is enabled, there must be at least one "
+                           "session for anonymous access";
             return false;
         }
 
@@ -206,11 +206,11 @@ void ServerAuthenticator::onWritten()
     {
         case InternalState::SEND_SERVER_HELLO:
         {
-            LOG(INFO) << "Sended: ServerHello";
+            CLOG(INFO) << "Sended: ServerHello";
 
             if (!session_key_.isEmpty())
             {
-                LOG(INFO) << "Session key is ready";
+                CLOG(INFO) << "Session key is ready";
                 emit sig_keyChanged();
             }
 
@@ -238,14 +238,14 @@ void ServerAuthenticator::onWritten()
 
         case InternalState::SEND_SERVER_KEY_EXCHANGE:
         {
-            LOG(INFO) << "Sended: ServerKeyExchange";
+            CLOG(INFO) << "Sended: ServerKeyExchange";
             internal_state_ = InternalState::READ_CLIENT_KEY_EXCHANGE;
         }
         break;
 
         case InternalState::SEND_SESSION_CHALLENGE:
         {
-            LOG(INFO) << "Sended: SessionChallenge";
+            CLOG(INFO) << "Sended: SessionChallenge";
             internal_state_ = InternalState::READ_SESSION_RESPONSE;
         }
         break;
@@ -259,7 +259,7 @@ void ServerAuthenticator::onWritten()
 //--------------------------------------------------------------------------------------------------
 void ServerAuthenticator::onClientHello(const QByteArray& buffer)
 {
-    LOG(INFO) << "Received: ClientHello (" << buffer.size() << ")";
+    CLOG(INFO) << "Received: ClientHello (" << buffer.size() << ")";
 
     proto::key_exchange::ClientHello client_hello;
     if (!parse(buffer, &client_hello))
@@ -270,15 +270,15 @@ void ServerAuthenticator::onClientHello(const QByteArray& buffer)
 
     const quint32 encryption = client_hello.encryption();
 
-    LOG(INFO) << "Supported by client:";
+    CLOG(INFO) << "Supported by client:";
 
     if (encryption & proto::key_exchange::ENCRYPTION_AES256_GCM)
-        LOG(INFO) << "ENCRYPTION_AES256_GCM";
+        CLOG(INFO) << "ENCRYPTION_AES256_GCM";
 
     if (encryption & proto::key_exchange::ENCRYPTION_CHACHA20_POLY1305)
-        LOG(INFO) << "ENCRYPTION_CHACHA20_POLY1305";
+        CLOG(INFO) << "ENCRYPTION_CHACHA20_POLY1305";
 
-    LOG(INFO) << "Identify: " << client_hello.identify();
+    CLOG(INFO) << "Identify: " << client_hello.identify();
 
     if (!(encryption & proto::key_exchange::ENCRYPTION_AES256_GCM) &&
         !(encryption & proto::key_exchange::ENCRYPTION_CHACHA20_POLY1305))
@@ -343,7 +343,7 @@ void ServerAuthenticator::onClientHello(const QByteArray& buffer)
                 return;
             }
 
-            DCHECK(!encrypt_iv_.isEmpty());
+            CDCHECK(!encrypt_iv_.isEmpty());
             server_hello.set_iv(encrypt_iv_.toStdString());
         }
     }
@@ -356,13 +356,13 @@ void ServerAuthenticator::onClientHello(const QByteArray& buffer)
 
     if ((encryption & proto::key_exchange::ENCRYPTION_AES256_GCM) && has_aes_ni)
     {
-        LOG(INFO) << "Both sides have hardware support AES. Using AES256 GCM";
+        CLOG(INFO) << "Both sides have hardware support AES. Using AES256 GCM";
         // If both sides of the connection support AES, then method AES256 GCM is the fastest option.
         server_hello.set_encryption(proto::key_exchange::ENCRYPTION_AES256_GCM);
     }
     else
     {
-        LOG(INFO) << "Using ChaCha20+Poly1305";
+        CLOG(INFO) << "Using ChaCha20+Poly1305";
         // Otherwise, we use ChaCha20+Poly1305. This works faster in the absence of hardware
         // support AES.
         server_hello.set_encryption(proto::key_exchange::ENCRYPTION_CHACHA20_POLY1305);
@@ -374,14 +374,14 @@ void ServerAuthenticator::onClientHello(const QByteArray& buffer)
 
     QByteArray message = base::serialize(server_hello);
 
-    LOG(INFO) << "Sending: ServerHello (" << message.size() << ")";
+    CLOG(INFO) << "Sending: ServerHello (" << message.size() << ")";
     emit sig_outgoingMessage(message);
 }
 
 //--------------------------------------------------------------------------------------------------
 void ServerAuthenticator::onIdentify(const QByteArray& buffer)
 {
-    LOG(INFO) << "Received: Identify (" << buffer.size() << ")";
+    CLOG(INFO) << "Received: Identify (" << buffer.size() << ")";
 
     proto::key_exchange::SrpIdentify identify;
     if (!parse(buffer, &identify))
@@ -397,7 +397,7 @@ void ServerAuthenticator::onIdentify(const QByteArray& buffer)
         return;
     }
 
-    LOG(INFO) << "Username:" << user_name_;
+    CLOG(INFO) << "Username:" << user_name_;
 
     do
     {
@@ -411,23 +411,23 @@ void ServerAuthenticator::onIdentify(const QByteArray& buffer)
         }
         else
         {
-            LOG(INFO) << "UserList is nullptr";
+            CLOG(INFO) << "UserList is nullptr";
         }
 
         if (seed_key.isEmpty())
         {
-            LOG(INFO) << "Empty seed key. Using random 64 bytes";
+            CLOG(INFO) << "Empty seed key. Using random 64 bytes";
             seed_key = base::Random::byteArray(64);
         }
 
         if (user.isValid())
         {
-            LOG(INFO) << "User" << user_name_ << "is found (enabled:"
-                      << ((user.flags & User::ENABLED) != 0) << ")";
+            CLOG(INFO) << "User" << user_name_ << "is found (enabled:"
+                       << ((user.flags & User::ENABLED) != 0) << ")";
         }
         else
         {
-            LOG(INFO) << "User" << user_name_ << "is NOT found";
+            CLOG(INFO) << "User" << user_name_ << "is NOT found";
         }
 
         if (user.isValid() && (user.flags & User::ENABLED))
@@ -445,7 +445,7 @@ void ServerAuthenticator::onIdentify(const QByteArray& buffer)
             }
             else
             {
-                LOG(ERROR) << "User" << user.name << "has an invalid SRP group";
+                CLOG(ERROR) << "User" << user.name << "has an invalid SRP group";
             }
         }
 
@@ -484,14 +484,14 @@ void ServerAuthenticator::onIdentify(const QByteArray& buffer)
 
     QByteArray message = base::serialize(server_key_exchange);
 
-    LOG(INFO) << "Sending: ServerKeyExchange (" << message.size() << ")";
+    CLOG(INFO) << "Sending: ServerKeyExchange (" << message.size() << ")";
     emit sig_outgoingMessage(message);
 }
 
 //--------------------------------------------------------------------------------------------------
 void ServerAuthenticator::onClientKeyExchange(const QByteArray& buffer)
 {
-    LOG(INFO) << "Received: ClientKeyExchange (" << buffer.size() << ")";
+    CLOG(INFO) << "Received: ClientKeyExchange (" << buffer.size() << ")";
 
     proto::key_exchange::SrpClientKeyExchange client_key_exchange;
     if (!parse(buffer, &client_key_exchange))
@@ -539,7 +539,7 @@ void ServerAuthenticator::onClientKeyExchange(const QByteArray& buffer)
         }
     }
 
-    LOG(INFO) << "Session key is ready";
+    CLOG(INFO) << "Session key is ready";
     emit sig_keyChanged();
 
     internal_state_ = InternalState::SEND_SESSION_CHALLENGE;
@@ -565,14 +565,14 @@ void ServerAuthenticator::doSessionChallenge()
 
     QByteArray message = base::serialize(session_challenge);
 
-    LOG(INFO) << "Sending: SessionChallenge (" << message.size() << ")";
+    CLOG(INFO) << "Sending: SessionChallenge (" << message.size() << ")";
     emit sig_outgoingMessage(message);
 }
 
 //--------------------------------------------------------------------------------------------------
 void ServerAuthenticator::onSessionResponse(const QByteArray& buffer)
 {
-    LOG(INFO) << "Received: SessionResponse (" << buffer.size() << ")";
+    CLOG(INFO) << "Received: SessionResponse (" << buffer.size() << ")";
 
     proto::key_exchange::SessionResponse response;
     if (!parse(buffer, &response))
@@ -587,10 +587,10 @@ void ServerAuthenticator::onSessionResponse(const QByteArray& buffer)
     setPeerDisplayName(QString::fromStdString(response.display_name()));
     setPeerVersion(response.version());
 
-    LOG(INFO) << "Client (session_type:" << response.session_type()
-              << "version:" << peerVersion().toString() << "name:" << peerComputerName()
-              << "os:" << peerOsName() << "cores:" << response.cpu_cores()
-              << "arch:" << peerArch() << "display_name:" << peerDisplayName() << ")";
+    CLOG(INFO) << "Client (session_type:" << response.session_type()
+               << "version:" << peerVersion().toString() << "name:" << peerComputerName()
+               << "os:" << peerOsName() << "cores:" << response.cpu_cores()
+               << "arch:" << peerArch() << "display_name:" << peerDisplayName() << ")";
 
     if (peerVersion() < kMinimumSupportedVersion)
     {
@@ -621,7 +621,7 @@ QByteArray ServerAuthenticator::createSrpKey()
 {
     if (!SrpMath::verify_A_mod_N(A_, N_))
     {
-        LOG(ERROR) << "SrpMath::verify_A_mod_N failed";
+        CLOG(ERROR) << "SrpMath::verify_A_mod_N failed";
         return QByteArray();
     }
 

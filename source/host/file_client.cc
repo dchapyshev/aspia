@@ -163,12 +163,12 @@ FileClient::FileClient(base::TcpChannel* tcp_channel, base::SessionId session_id
       session_id_(session_id),
       attach_timer_(new QTimer(this))
 {
-    LOG(INFO) << "Ctor";
+    CLOG(INFO) << "Ctor";
 
     attach_timer_->setSingleShot(true);
     connect(attach_timer_, &QTimer::timeout, this, [this]()
     {
-        LOG(ERROR) << "Timeout at the start of the session process";
+        CLOG(ERROR) << "Timeout at the start of the session process";
         onError(FROM_HERE);
     });
 }
@@ -176,24 +176,24 @@ FileClient::FileClient(base::TcpChannel* tcp_channel, base::SessionId session_id
 //--------------------------------------------------------------------------------------------------
 FileClient::~FileClient()
 {
-    LOG(INFO) << "Dtor";
+    CLOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
 void FileClient::onIpcNewConnection()
 {
-    LOG(INFO) << "IPC channel for file transfer session is connected";
+    CLOG(INFO) << "IPC channel for file transfer session is connected";
 
     if (!ipc_server_)
     {
-        LOG(ERROR) << "No IPC server instance!";
+        CLOG(ERROR) << "No IPC server instance!";
         onError(FROM_HERE);
         return;
     }
 
     if (!ipc_server_->hasPendingConnections())
     {
-        LOG(ERROR) << "No pending connections in IPC server";
+        CLOG(ERROR) << "No pending connections in IPC server";
         onError(FROM_HERE);
         return;
     }
@@ -234,7 +234,7 @@ void FileClient::onStart()
 {
     if (session_id_ == 0)
     {
-        LOG(ERROR) << "Invalid session id:" << session_id_;
+        CLOG(ERROR) << "Invalid session id:" << session_id_;
         onError(FROM_HERE);
         return;
     }
@@ -245,7 +245,7 @@ void FileClient::onStart()
     base::ScopedHandle session_token;
     if (!createLoggedOnUserToken(session_id_, &session_token))
     {
-        LOG(WARNING) << "createSessionToken failed";
+        CLOG(WARNING) << "createSessionToken failed";
 
         // There is no logged in user. The session starts, but responds to all client requests with
         // an error.
@@ -256,14 +256,14 @@ void FileClient::onStart()
     base::SessionInfo session_info(session_id_);
     if (!session_info.isValid())
     {
-        LOG(ERROR) << "Unable to get session info";
+        CLOG(ERROR) << "Unable to get session info";
         onError(FROM_HERE);
         return;
     }
 
     if (session_info.isUserLocked())
     {
-        LOG(WARNING) << "User session is locked";
+        CLOG(WARNING) << "User session is locked";
 
         // There is a logged in user, but his session is blocked. The session starts, but responds
         // to all client requests with an error.
@@ -273,20 +273,20 @@ void FileClient::onStart()
 
     if (!startIpcServer(ipc_channel_id))
     {
-        LOG(ERROR) << "Unable to start IPC server";
+        CLOG(ERROR) << "Unable to start IPC server";
         onError(FROM_HERE);
         return;
     }
 
     QString command_line = agentFilePath() + " --channel_id " + ipc_channel_id;
 
-    LOG(INFO) << "Starting agent process with command line:" << command_line;
+    CLOG(INFO) << "Starting agent process with command line:" << command_line;
 
     base::ScopedHandle process_handle;
     base::ScopedHandle thread_handle;
     if (!startProcessWithToken(session_token, command_line, &process_handle, &thread_handle))
     {
-        LOG(ERROR) << "startProcessWithToken failed";
+        CLOG(ERROR) << "startProcessWithToken failed";
         onError(FROM_HERE);
         return;
     }
@@ -295,7 +295,7 @@ void FileClient::onStart()
     std::filesystem::directory_iterator it("/usr/share/xsessions/", ignored_error);
     if (it == std::filesystem::end(it))
     {
-        LOG(ERROR) << "No X11 sessions";
+        CLOG(ERROR) << "No X11 sessions";
         onError(FROM_HERE);
         return;
     }
@@ -303,7 +303,7 @@ void FileClient::onStart()
     std::unique_ptr<FILE, decltype(&pclose)> pipe(popen("who", "r"), pclose);
     if (!pipe)
     {
-        LOG(ERROR) << "Unable to open pipe";
+        CLOG(ERROR) << "Unable to open pipe";
         onError(FROM_HERE);
         return;
     }
@@ -321,7 +321,7 @@ void FileClient::onStart()
 
         if (!startIpcServer(ipc_channel_id))
         {
-            LOG(ERROR) << "Unable to start IPC server";
+            CLOG(ERROR) << "Unable to start IPC server";
             onError(FROM_HERE);
             return;
         }
@@ -330,7 +330,7 @@ void FileClient::onStart()
         QByteArray command_line = QString("sudo -u %1 %2 --channel_id=%3 &")
                                       .arg(user_name, agentFilePath(), ipc_channel_id).toLocal8Bit();
 
-        LOG(INFO) << "Start file transfer session agent:" << command_line;
+        CLOG(INFO) << "Start file transfer session agent:" << command_line;
 
         char sh_name[] = "sh";
         char sh_arguments[] = "-c";
@@ -339,7 +339,7 @@ void FileClient::onStart()
         pid_t pid;
         if (posix_spawn(&pid, "/bin/sh", nullptr, nullptr, argv, environ) != 0)
         {
-            LOG(ERROR) << "Unable to start process";
+            CLOG(ERROR) << "Unable to start process";
             onError(FROM_HERE);
             return;
         }
@@ -350,7 +350,7 @@ void FileClient::onStart()
     return;
 #endif
 
-    LOG(INFO) << "Wait for starting agent process";
+    CLOG(INFO) << "Wait for starting agent process";
     attach_timer_->start(std::chrono::seconds(10));
 }
 
@@ -367,7 +367,7 @@ void FileClient::onMessage(quint8 tcp_channel_id, const QByteArray& buffer)
 
     if (!ipc_channel_)
     {
-        LOG(ERROR) << "IPC channel is not connected";
+        CLOG(ERROR) << "IPC channel is not connected";
         onError(FROM_HERE);
         return;
     }
@@ -378,11 +378,11 @@ void FileClient::onMessage(quint8 tcp_channel_id, const QByteArray& buffer)
 //--------------------------------------------------------------------------------------------------
 bool FileClient::startIpcServer(const QString& ipc_channel_name)
 {
-    LOG(INFO) << "Starting IPC server for file transfer session";
+    CLOG(INFO) << "Starting IPC server for file transfer session";
 
     if (ipc_server_)
     {
-        LOG(ERROR) << "IPC server is already started";
+        CLOG(ERROR) << "IPC server is already started";
         return false;
     }
 
@@ -393,18 +393,18 @@ bool FileClient::startIpcServer(const QString& ipc_channel_name)
 
     if (!ipc_server_->start(ipc_channel_name))
     {
-        LOG(ERROR) << "Failed to start IPC server (name:" << ipc_channel_name << ")";
+        CLOG(ERROR) << "Failed to start IPC server (name:" << ipc_channel_name << ")";
         return false;
     }
 
-    LOG(INFO) << "IPC server is started";
+    CLOG(INFO) << "IPC server is started";
     return true;
 }
 
 //--------------------------------------------------------------------------------------------------
 void FileClient::onStarted(const base::Location& location, bool has_user)
 {
-    LOG(INFO) << "File client is started (has user:" << has_user << "from:" << location << ")";
+    CLOG(INFO) << "File client is started (has user:" << has_user << "from:" << location << ")";
     has_logged_on_user_ = has_user;
 
     attach_timer_->stop();
@@ -421,7 +421,7 @@ void FileClient::onStarted(const base::Location& location, bool has_user)
 //--------------------------------------------------------------------------------------------------
 void FileClient::onError(const base::Location& location)
 {
-    LOG(ERROR) << "Error occurred (from" << location << ")";
+    CLOG(ERROR) << "Error occurred (from" << location << ")";
 
     attach_timer_->stop();
 

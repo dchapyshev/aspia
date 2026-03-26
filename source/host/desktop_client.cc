@@ -42,7 +42,7 @@ DesktopClient::DesktopClient(base::TcpChannel* tcp_channel, QObject* parent)
       fake_capture_timer_(new QTimer(this)),
       overflow_timer_(new QTimer(this))
 {
-    LOG(INFO) << "Ctor";
+    CLOG(INFO) << "Ctor";
 
 #if defined(Q_OS_WINDOWS)
     connect(base::Application::instance(), &base::Application::sig_sessionEvent,
@@ -53,7 +53,7 @@ DesktopClient::DesktopClient(base::TcpChannel* tcp_channel, QObject* parent)
     {
         if (dettach_time_.secsTo(QTime::currentTime()) > 15)
         {
-            LOG(WARNING) << "Timeout when desktop client starting";
+            CLOG(WARNING) << "Timeout when desktop client starting";
             emit sig_finished();
             return;
         }
@@ -72,7 +72,7 @@ DesktopClient::DesktopClient(base::TcpChannel* tcp_channel, QObject* parent)
 
     if (!qEnvironmentVariableIsSet("ASPIA_NO_OVERFLOW_DETECTION"))
     {
-        LOG(INFO) << "Overflow detection enabled";
+        CLOG(INFO) << "Overflow detection enabled";
         overflow_timer_->start();
     }
 }
@@ -80,7 +80,7 @@ DesktopClient::DesktopClient(base::TcpChannel* tcp_channel, QObject* parent)
 //--------------------------------------------------------------------------------------------------
 DesktopClient::~DesktopClient()
 {
-    LOG(INFO) << "Dtor";
+    CLOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -92,8 +92,8 @@ bool DesktopClient::isAttached() const
 //--------------------------------------------------------------------------------------------------
 QString DesktopClient::attach()
 {
-    CHECK(!ipc_channel_);
-    CHECK(!ipc_server_);
+    CCHECK(!ipc_channel_);
+    CCHECK(!ipc_server_);
 
     ipc_server_ = new base::IpcServer(this);
 
@@ -104,7 +104,7 @@ QString DesktopClient::attach()
 
     if (!ipc_server_->start(channel_name))
     {
-        LOG(ERROR) << "Unable to start IPC server";
+        CLOG(ERROR) << "Unable to start IPC server";
         emit sig_finished();
         return QString();
     }
@@ -148,7 +148,7 @@ void DesktopClient::onMessage(quint8 net_channel_id, const QByteArray& buffer)
 
         if (!base::parse(buffer, &message))
         {
-            LOG(ERROR) << "Unable to parse service message";
+            CLOG(ERROR) << "Unable to parse service message";
             return;
         }
 
@@ -158,12 +158,12 @@ void DesktopClient::onMessage(quint8 net_channel_id, const QByteArray& buffer)
         }
         else if (message.has_switch_session())
         {
-            LOG(INFO) << "Received:" << message.switch_session();
+            CLOG(INFO) << "Received:" << message.switch_session();
 
             base::SessionId session_id = message.switch_session().session_id();
             if (session_id == base::kInvalidSessionId || session_id == base::kServiceSessionId)
             {
-                LOG(ERROR) << "Invalid session id:" << session_id;
+                CLOG(ERROR) << "Invalid session id:" << session_id;
                 return;
             }
 
@@ -178,7 +178,7 @@ void DesktopClient::onMessage(quint8 net_channel_id, const QByteArray& buffer)
     }
     else
     {
-        LOG(ERROR) << "Unhandled message from channel" << net_channel_id;
+        CLOG(ERROR) << "Unhandled message from channel" << net_channel_id;
     }
 }
 
@@ -194,12 +194,12 @@ void DesktopClient::onBandwidthChanged(qint64 bandwidth)
 //--------------------------------------------------------------------------------------------------
 void DesktopClient::onIpcNewConnection()
 {
-    CHECK(ipc_server_);
-    CHECK(!ipc_channel_);
+    CCHECK(ipc_server_);
+    CCHECK(!ipc_channel_);
 
     if (!ipc_server_->hasPendingConnections())
     {
-        LOG(ERROR) << "No pending IPC connections";
+        CLOG(ERROR) << "No pending IPC connections";
         emit sig_finished();
         return;
     }
@@ -215,8 +215,8 @@ void DesktopClient::onIpcNewConnection()
     connect(ipc_channel_, &base::IpcChannel::sig_messageReceived, this, &DesktopClient::onIpcMessageReceived);
 
     proto::peer::SessionType session_type = sessionType();
-    CHECK(session_type == proto::peer::SESSION_TYPE_DESKTOP_MANAGE ||
-          session_type == proto::peer::SESSION_TYPE_DESKTOP_VIEW);
+    CCHECK(session_type == proto::peer::SESSION_TYPE_DESKTOP_MANAGE ||
+           session_type == proto::peer::SESSION_TYPE_DESKTOP_VIEW);
 
     proto::desktop::ServiceToAgentClient message;
     proto::desktop::Description* description = message.mutable_description();
@@ -238,7 +238,7 @@ void DesktopClient::onIpcNewConnection()
 //--------------------------------------------------------------------------------------------------
 void DesktopClient::onIpcErrorOccurred()
 {
-    LOG(ERROR) << "Error in IPC server";
+    CLOG(ERROR) << "Error in IPC server";
     emit sig_finished();
 }
 
@@ -264,7 +264,7 @@ void DesktopClient::onIpcDisconnected()
     if (!ipc_channel_)
         return;
 
-    LOG(INFO) << "IPC channel disconnected";
+    CLOG(INFO) << "IPC channel disconnected";
     dettach();
 }
 
@@ -284,7 +284,7 @@ void DesktopClient::onOverflowCheck()
 
     if (state != last_state_)
     {
-        LOG(INFO) << "Overflow state:" << state << "pending:" << pending;
+        CLOG(INFO) << "Overflow state:" << state << "pending:" << pending;
         last_state_ = state;
     }
 
@@ -334,7 +334,7 @@ void DesktopClient::sendSessionList()
         session->set_is_active(session_info.connectState() == base::SessionInfo::ConnectState::ACTIVE);
     }
 
-    LOG(INFO) << "Send:" << *session_list;
+    CLOG(INFO) << "Send:" << *session_list;
     send(proto::peer::CHANNEL_ID_1, base::serialize(message));
 #endif // defined(Q_OS_WINDOWS)
 }

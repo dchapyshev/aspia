@@ -23,6 +23,7 @@
 
 #include <asio/ip/tcp.hpp>
 
+#include "base/logging.h"
 #include "base/shared_pointer.h"
 #include "base/net/tcp_channel.h"
 #include "proto/router.h"
@@ -56,8 +57,7 @@ private:
     void onConnected();
     void onErrorOccurred(const Location& location, const std::error_code& error_code);
 
-    static QByteArray authenticationMessage(
-        const proto::router::RelayKey& key, const std::string& secret);
+    QByteArray authenticationMessage(const proto::router::RelayKey& key, const std::string& secret);
 
     std::unique_ptr<Authenticator> authenticator_;
     proto::router::ConnectionOffer connection_offer_;
@@ -73,6 +73,7 @@ private:
 
     TcpChannel* pending_channel_ = nullptr;
 
+    LOG_DECLARE_CONTEXT(RelayPeer);
     Q_DISABLE_COPY_MOVE(RelayPeer)
 };
 

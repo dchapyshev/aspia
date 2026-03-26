@@ -31,13 +31,13 @@ namespace host {
 SystemInfoClient::SystemInfoClient(base::TcpChannel* tcp_channel, QObject* parent)
     : Client(tcp_channel, FEATURE_NONE, parent)
 {
-    LOG(INFO) << "Ctor";
+    CLOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
 SystemInfoClient::~SystemInfoClient()
 {
-    LOG(INFO) << "Dtor";
+    CLOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -53,7 +53,7 @@ void SystemInfoClient::onMessage(quint8 channel_id, const QByteArray& buffer)
     proto::system_info::SystemInfoRequest request;
     if (!base::parse(buffer, &request))
     {
-        LOG(ERROR) << "Unable to parse system info request";
+        CLOG(ERROR) << "Unable to parse system info request";
         return;
     }
 

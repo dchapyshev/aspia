@@ -24,6 +24,8 @@
 
 #include <chrono>
 
+#include "base/logging.h"
+
 namespace base {
 
 class TcpChannel : public QObject
@@ -124,6 +126,8 @@ signals:
     void sig_messageWritten(quint8 channel_id);
 
 protected:
+    LOG_DECLARE_CONTEXT(TcpChannel);
+
     friend class TcpServerLegacy;
     friend class TcpServer;
     friend class RelayPeer;

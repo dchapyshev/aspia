@@ -25,7 +25,6 @@
 #include <enet/enet.h>
 
 #include "base/location.h"
-#include "base/logging.h"
 #include "base/thread_local_pool.h"
 #include "base/crypto/message_decryptor.h"
 #include "base/crypto/message_encryptor.h"
@@ -124,7 +123,7 @@ void UdpChannel::bind(qintptr socket)
     host_.reset(createHost(&fake_address));
     if (!host_)
     {
-        LOG(ERROR) << "Unable to create ENet host";
+        CLOG(ERROR) << "Unable to create ENet host";
         onErrorOccurred(FROM_HERE);
         return;
     }
@@ -134,7 +133,7 @@ void UdpChannel::bind(qintptr socket)
     ENetAddress address;
     if (enet_socket_get_address(socket, &address) < 0)
     {
-        LOG(ERROR) << "Unable to get socket address";
+        CLOG(ERROR) << "Unable to get socket address";
         onErrorOccurred(FROM_HERE);
         return;
     }
@@ -162,7 +161,7 @@ void UdpChannel::bind(quint16* port)
     host_.reset(createHost(&address));
     if (!host_)
     {
-        LOG(ERROR) << "Unable to create ENet host on port" << *port;
+        CLOG(ERROR) << "Unable to create ENet host on port" << *port;
         onErrorOccurred(FROM_HERE);
         return;
     }
@@ -173,7 +172,7 @@ void UdpChannel::bind(quint16* port)
         ENetAddress bound_address;
         if (enet_socket_get_address(host_->socket, &bound_address) != 0)
         {
-            LOG(ERROR) << "Unable to get bound port";
+            CLOG(ERROR) << "Unable to get bound port";
             onErrorOccurred(FROM_HERE);
             return;
         }
@@ -195,7 +194,7 @@ void UdpChannel::connectTo(const QString& address, quint16 port)
     host_.reset(createHost(nullptr));
     if (!host_)
     {
-        LOG(ERROR) << "Failed to create ENet host";
+        CLOG(ERROR) << "Failed to create ENet host";
         onErrorOccurred(FROM_HERE);
         return;
     }
@@ -205,7 +204,7 @@ void UdpChannel::connectTo(const QString& address, quint16 port)
 
     if (enet_address_set_host(&enet_address, address.toLocal8Bit().constData()) != 0)
     {
-        LOG(ERROR) << "Failed to resolve address:" << address;
+        CLOG(ERROR) << "Failed to resolve address:" << address;
         onErrorOccurred(FROM_HERE);
         return;
     }
@@ -213,7 +212,7 @@ void UdpChannel::connectTo(const QString& address, quint16 port)
     peer_.reset(enet_host_connect(host_.get(), &enet_address, kChannelCount, 0));
     if (!peer_)
     {
-        LOG(ERROR) << "Failed to initiate ENet connection";
+        CLOG(ERROR) << "Failed to initiate ENet connection";
         onErrorOccurred(FROM_HERE);
         return;
     }
@@ -237,7 +236,7 @@ void UdpChannel::connectTo(qintptr socket, const QString& address, quint16 port)
     host_.reset(createHost(&fake_address));
     if (!host_)
     {
-        LOG(ERROR) << "Unable to create ENet host";
+        CLOG(ERROR) << "Unable to create ENet host";
         onErrorOccurred(FROM_HERE);
         return;
     }
@@ -247,7 +246,7 @@ void UdpChannel::connectTo(qintptr socket, const QString& address, quint16 port)
     ENetAddress bound_address;
     if (enet_socket_get_address(socket, &bound_address) < 0)
     {
-        LOG(ERROR) << "Unable to get socket address";
+        CLOG(ERROR) << "Unable to get socket address";
         onErrorOccurred(FROM_HERE);
         return;
     }
@@ -260,7 +259,7 @@ void UdpChannel::connectTo(qintptr socket, const QString& address, quint16 port)
 
     if (enet_address_set_host(&enet_address, address.toLocal8Bit().constData()) != 0)
     {
-        LOG(ERROR) << "enet_address_set_host failed";
+        CLOG(ERROR) << "enet_address_set_host failed";
         onErrorOccurred(FROM_HERE);
         return;
     }
@@ -270,14 +269,14 @@ void UdpChannel::connectTo(qintptr socket, const QString& address, quint16 port)
     // external address so that both NATs create mappings allowing the traffic through.
     sendPunchHole(enet_address);
 
-    LOG(INFO) << "Initiating ENet connection to peer:" << address << ":" << port;
+    CLOG(INFO) << "Initiating ENet connection to peer:" << address << ":" << port;
 
     // ENet retries CONNECT automatically, so even if the peer's NAT hasn't opened yet,
     // subsequent attempts will succeed after the peer sends its punch hole packets.
     peer_.reset(enet_host_connect(host_.get(), &enet_address, kChannelCount, 0));
     if (!peer_)
     {
-        LOG(ERROR) << "Failed to initiate ENet connection";
+        CLOG(ERROR) << "Failed to initiate ENet connection";
         onErrorOccurred(FROM_HERE);
         return;
     }
@@ -291,7 +290,7 @@ void UdpChannel::setPeerAddress(const QString& address, quint16 port)
 {
     if (!host_)
     {
-        LOG(ERROR) << "Host not created";
+        CLOG(ERROR) << "Host not created";
         return;
     }
 
@@ -300,7 +299,7 @@ void UdpChannel::setPeerAddress(const QString& address, quint16 port)
 
     if (enet_address_set_host(&enet_address, address.toLocal8Bit().constData()) != 0)
     {
-        LOG(ERROR) << "enet_address_set_host failed";
+        CLOG(ERROR) << "enet_address_set_host failed";
         return;
     }
 
@@ -340,7 +339,7 @@ void UdpChannel::addWriteTask(quint8 channel_id, const QByteArray& data)
     qint64 target_data_size = encryptor_->encryptedDataSize(data.size());
     if (target_data_size > kMaxMessageSize)
     {
-        LOG(ERROR) << "Too big outgoing message:" << target_data_size;
+        CLOG(ERROR) << "Too big outgoing message:" << target_data_size;
         onErrorOccurred(FROM_HERE);
         return;
     }
@@ -363,7 +362,7 @@ void UdpChannel::addWriteTask(quint8 channel_id, const QByteArray& data)
     if (!encryptor_->encrypt(data.constData(), data.size(), &header, sizeof(Header),
         packet->data + sizeof(Header)))
     {
-        LOG(ERROR) << "Failed to encrypt outgoing message";
+        CLOG(ERROR) << "Failed to encrypt outgoing message";
         onErrorOccurred(FROM_HERE);
         return;
     }
@@ -411,7 +410,7 @@ void UdpChannel::doWrite()
 
     if (enet_peer_send(peer_.get(), channel_id, packet.release()) != 0)
     {
-        LOG(ERROR) << "enet_peer_send failed";
+        CLOG(ERROR) << "enet_peer_send failed";
         onErrorOccurred(FROM_HERE);
         return;
     }
@@ -529,7 +528,7 @@ void UdpChannel::processEvents()
         {
             case ENET_EVENT_TYPE_CONNECT:
             {
-                LOG(INFO) << "Peer connected";
+                CLOG(INFO) << "Peer connected";
                 if (!peer_)
                     peer_.reset(event.peer);
 
@@ -571,7 +570,7 @@ void UdpChannel::processEvents()
 
     if (result < 0)
     {
-        LOG(ERROR) << "enet_host_service failed";
+        CLOG(ERROR) << "enet_host_service failed";
         onErrorOccurred(FROM_HERE);
     }
 }
@@ -579,7 +578,7 @@ void UdpChannel::processEvents()
 //--------------------------------------------------------------------------------------------------
 void UdpChannel::onErrorOccurred(const Location& location)
 {
-    LOG(ERROR) << "Error occurred from" << location.toString();
+    CLOG(ERROR) << "Error occurred from" << location.toString();
     close();
     emit sig_errorOccurred();
 }
@@ -603,7 +602,7 @@ void UdpChannel::onMessageReceived(quint8 channel_id, ScopedENetPacket packet)
 
     if (packet->dataLength > kMaxMessageSize)
     {
-        LOG(ERROR) << "Too big incoming message:" << packet->dataLength;
+        CLOG(ERROR) << "Too big incoming message:" << packet->dataLength;
         onErrorOccurred(FROM_HERE);
         return;
     }
@@ -620,7 +619,7 @@ void UdpChannel::onMessageReceived(quint8 channel_id, ScopedENetPacket packet)
     if (!decryptor_->decrypt(packet->data + sizeof(Header), packet->dataLength - sizeof(Header),
         &header, sizeof(Header), decrypt_buffer_.data()))
     {
-        LOG(ERROR) << "Failed to decrypt incoming message";
+        CLOG(ERROR) << "Failed to decrypt incoming message";
         onErrorOccurred(FROM_HERE);
         return;
     }
@@ -635,7 +634,7 @@ void UdpChannel::onReadyCheck()
     if (!connected_ || !encryptor_ || !decryptor_)
         return;
 
-    LOG(INFO) << "UDP channel is ready";
+    CLOG(INFO) << "UDP channel is ready";
     emit sig_ready();
 }
 
@@ -670,7 +669,7 @@ UdpChannel::ScopedENetPacket UdpChannel::acquirePacket(qint64 size, quint32 flag
     ScopedENetPacket packet(enet_packet_create(nullptr, size, flags));
     if (!packet)
     {
-        LOG(ERROR) << "Failed to create ENet packet";
+        CLOG(ERROR) << "Failed to create ENet packet";
         return nullptr;
     }
 

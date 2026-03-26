@@ -25,9 +25,10 @@
 #include <memory>
 #include <optional>
 
+#include "base/logging.h"
+#include "base/net/tcp_channel.h"
 #include "client/client_session_state.h"
 #include "client/router_manager.h"
-#include "base/net/tcp_channel.h"
 
 class QTimer;
 
@@ -78,6 +79,8 @@ signals:
     void sig_showSessionWindow();
 
 protected:
+    LOG_DECLARE_CONTEXT(Client);
+
     // Indicates that the session is started.
     // When calling this method, the client implementation should display a session window.
     virtual void onSessionStarted() = 0;

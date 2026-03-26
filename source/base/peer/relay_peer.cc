@@ -22,7 +22,6 @@
 
 #include "base/asio_event_dispatcher.h"
 #include "base/location.h"
-#include "base/logging.h"
 #include "base/serialization.h"
 #include "base/crypto/generic_hash.h"
 #include "base/crypto/key_pair.h"
@@ -64,13 +63,13 @@ RelayPeer::RelayPeer(Authenticator* authenticator, QObject* parent)
       socket_(io_context_),
       resolver_(io_context_)
 {
-    LOG(INFO) << "Ctor";
+    CLOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
 RelayPeer::~RelayPeer()
 {
-    LOG(INFO) << "Dtor";
+    CLOG(INFO) << "Dtor";
 
     // Mark guard before releasing resources so that any pending ASIO handlers
     // (already completed but not yet dispatched) will see the object is gone.
@@ -92,8 +91,8 @@ void RelayPeer::start(const proto::router::ConnectionOffer& offer)
 
     QString host = QString::fromStdString(credentials.host());
 
-    LOG(INFO) << "Start resolving for" << host << ":" << credentials.port()
-              << "(legacy" << offer.peer_info().is_legacy() << ")";
+    CLOG(INFO) << "Start resolving for" << host << ":" << credentials.port()
+               << "(legacy" << offer.peer_info().is_legacy() << ")";
 
     auto guard = alive_guard_;
     resolver_.async_resolve(host.toLocal8Bit().data(), std::to_string(credentials.port()),
@@ -109,8 +108,8 @@ void RelayPeer::start(const proto::router::ConnectionOffer& offer)
             return;
         }
 
-        LOG(INFO) << "Resolved endpoints:" << endpointsToString(endpoints);
-        LOG(INFO) << "Start connecting...";
+        CLOG(INFO) << "Resolved endpoints:" << endpointsToString(endpoints);
+        CLOG(INFO) << "Start connecting...";
 
         asio::async_connect(socket_, endpoints,
             [this, guard](const std::error_code& error_code, const asio::ip::tcp::endpoint& endpoint)
@@ -126,7 +125,7 @@ void RelayPeer::start(const proto::router::ConnectionOffer& offer)
                 return;
             }
 
-            LOG(INFO) << "Connected to:" << endpoint.address().to_string();
+            CLOG(INFO) << "Connected to:" << endpoint.address().to_string();
             onConnected();
         });
     });
@@ -215,7 +214,7 @@ void RelayPeer::onConnected()
 
             connect(pending_channel_, &TcpChannel::sig_authenticated, this, [this]()
             {
-                LOG(INFO) << "Authentication finished";
+                CLOG(INFO) << "Authentication finished";
 
                 // Disconnect all connected signals between the RelayPeer and channel.
                 disconnect(pending_channel_, nullptr, this, nullptr);
@@ -227,7 +226,7 @@ void RelayPeer::onConnected()
             connect(pending_channel_, &TcpChannel::sig_errorOccurred,
                     this, [this](TcpChannel::ErrorCode error_code)
             {
-                LOG(ERROR) << "Authentication failed:" << error_code;
+                CLOG(ERROR) << "Authentication failed:" << error_code;
 
                 // Disconnect all connected signals between the RelayPeer and channel.
                 disconnect(pending_channel_, nullptr, this, nullptr);
@@ -236,7 +235,7 @@ void RelayPeer::onConnected()
                 emit sig_connectionError();
             });
 
-            LOG(INFO) << "Start authentication";
+            CLOG(INFO) << "Start authentication";
             pending_channel_->doAuthentication();
         });
     });
@@ -245,56 +244,55 @@ void RelayPeer::onConnected()
 //--------------------------------------------------------------------------------------------------
 void RelayPeer::onErrorOccurred(const Location& location, const std::error_code& error_code)
 {
-    LOG(ERROR) << "Failed to connect to relay server:" << error_code << "(" << location << ")";
+    CLOG(ERROR) << "Failed to connect to relay server:" << error_code << "(" << location << ")";
     is_finished_ = true;
     emit sig_connectionError();
 }
 
 //--------------------------------------------------------------------------------------------------
-// static
 QByteArray RelayPeer::authenticationMessage(const proto::router::RelayKey& key, const std::string& secret)
 {
     if (key.type() != proto::router::RelayKey::TYPE_X25519)
     {
-        LOG(ERROR) << "Unsupported key type:" << key.type();
+        CLOG(ERROR) << "Unsupported key type:" << key.type();
         return QByteArray();
     }
 
     if (key.encryption() != proto::router::RelayKey::ENCRYPTION_CHACHA20_POLY1305)
     {
-        LOG(ERROR) << "Unsupported encryption type:" << key.encryption();
+        CLOG(ERROR) << "Unsupported encryption type:" << key.encryption();
         return QByteArray();
     }
 
     if (key.public_key().empty())
     {
-        LOG(ERROR) << "Empty public key";
+        CLOG(ERROR) << "Empty public key";
         return QByteArray();
     }
 
     if (key.iv().empty())
     {
-        LOG(ERROR) << "Empty IV";
+        CLOG(ERROR) << "Empty IV";
         return QByteArray();
     }
 
     if (secret.empty())
     {
-        LOG(ERROR) << "Empty secret";
+        CLOG(ERROR) << "Empty secret";
         return QByteArray();
     }
 
     KeyPair key_pair = KeyPair::create(KeyPair::Type::X25519);
     if (!key_pair.isValid())
     {
-        LOG(ERROR) << "KeyPair::create failed";
+        CLOG(ERROR) << "KeyPair::create failed";
         return QByteArray();
     }
 
     QByteArray temp = key_pair.sessionKey(QByteArray::fromStdString(key.public_key()));
     if (temp.isEmpty())
     {
-        LOG(ERROR) << "Failed to create session key";
+        CLOG(ERROR) << "Failed to create session key";
         return QByteArray();
     }
 
@@ -304,7 +302,7 @@ QByteArray RelayPeer::authenticationMessage(const proto::router::RelayKey& key, 
         MessageEncryptor::createForChaCha20Poly1305(session_key, QByteArray::fromStdString(key.iv()));
     if (!encryptor)
     {
-        LOG(ERROR) << "createForChaCha20Poly1305 failed";
+        CLOG(ERROR) << "createForChaCha20Poly1305 failed";
         return QByteArray();
     }
 
@@ -312,7 +310,7 @@ QByteArray RelayPeer::authenticationMessage(const proto::router::RelayKey& key, 
     encrypted_secret.resize(encryptor->encryptedDataSize(secret.size()));
     if (!encryptor->encrypt(secret.data(), secret.size(), encrypted_secret.data()))
     {
-        LOG(ERROR) << "encrypt failed";
+        CLOG(ERROR) << "encrypt failed";
         return QByteArray();
     }
 

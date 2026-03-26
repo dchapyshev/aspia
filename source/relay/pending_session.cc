@@ -21,10 +21,9 @@
 #include <QtEndian>
 #include <QTimer>
 
-#include "base/location.h"
-#include "base/logging.h"
-
 #include <asio/read.hpp>
+
+#include "base/location.h"
 
 namespace relay {
 
@@ -53,7 +52,7 @@ PendingSession::PendingSession(asio::ip::tcp::socket&& socket, QObject* parent)
         asio::ip::tcp::endpoint endpoint = socket_.remote_endpoint(error_code);
         if (error_code)
         {
-            LOG(ERROR) << "Unable to get endpoint for pending session:" << error_code;
+            CLOG(ERROR) << "Unable to get endpoint for pending session:" << error_code;
         }
         else
         {
@@ -63,7 +62,7 @@ PendingSession::PendingSession(asio::ip::tcp::socket&& socket, QObject* parent)
     }
     catch (const std::error_code& error_code)
     {
-        LOG(ERROR) << "Unable to get address for pending session:" << error_code;
+        CLOG(ERROR) << "Unable to get address for pending session:" << error_code;
     }
 }
 
@@ -83,7 +82,7 @@ PendingSession::~PendingSession()
 //--------------------------------------------------------------------------------------------------
 void PendingSession::start()
 {
-    LOG(INFO) << "Starting pending session";
+    CLOG(INFO) << "Starting pending session";
     start_time_ = Clock::now();
 
     asio::ip::tcp::no_delay option(true);
@@ -91,7 +90,7 @@ void PendingSession::start()
 
     socket_.set_option(option, error_code);
     if (error_code)
-        LOG(ERROR) << "Failed to disable Nagle's algorithm:" << error_code;
+        CLOG(ERROR) << "Failed to disable Nagle's algorithm:" << error_code;
 
     timer_->start(kTimeout);
     PendingSession::doReadMessage(this);
@@ -202,7 +201,7 @@ void PendingSession::doReadMessage(PendingSession* session)
 //--------------------------------------------------------------------------------------------------
 void PendingSession::onErrorOccurred(const base::Location& location, const std::error_code& error_code)
 {
-    LOG(ERROR) << "Connection error:" << error_code << "from" << location;
+    CLOG(ERROR) << "Connection error:" << error_code << "from" << location;
     emit sig_failed();
 }
 

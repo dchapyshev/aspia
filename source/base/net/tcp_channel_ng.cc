@@ -89,7 +89,7 @@ TcpChannelNG::TcpChannelNG(
       socket_(std::move(socket)),
       authenticator_(authenticator)
 {
-    DCHECK(socket_.is_open());
+    CDCHECK(socket_.is_open());
     init();
     setConnected(true);
 }
@@ -112,7 +112,7 @@ void TcpChannelNG::doAuthentication()
         return;
     }
 
-    LOG(INFO) << "Start authentication";
+    CLOG(INFO) << "Start authentication";
     authenticator_->start();
     setPaused(false);
 }
@@ -129,7 +129,7 @@ QString TcpChannelNG::peerAddress() const
         asio::ip::tcp::endpoint endpoint = socket_.remote_endpoint(error_code);
         if (error_code)
         {
-            LOG(ERROR) << "Unable to get peer address:" << error_code;
+            CLOG(ERROR) << "Unable to get peer address:" << error_code;
             return QString();
         }
 
@@ -156,7 +156,7 @@ QString TcpChannelNG::peerAddress() const
     }
     catch (const std::error_code& error_code)
     {
-        LOG(ERROR) << "Unable to get peer address:" << error_code;
+        CLOG(ERROR) << "Unable to get peer address:" << error_code;
         return QString();
     }
 }
@@ -170,7 +170,7 @@ void TcpChannelNG::connectTo(const QString& address, quint16 port)
     std::string host = address.toLocal8Bit().toStdString();
     std::string service = std::to_string(port);
 
-    LOG(INFO) << "Start resolving for" << host << ":" << service;
+    CLOG(INFO) << "Start resolving for" << host << ":" << service;
 
     auto guard = alive_guard_;
     resolver_->async_resolve(host, service,
@@ -187,7 +187,7 @@ void TcpChannelNG::connectTo(const QString& address, quint16 port)
             return;
         }
 
-        LOG(INFO) << "Resolved endpoints:" << endpointsToString(endpoints);
+        CLOG(INFO) << "Resolved endpoints:" << endpointsToString(endpoints);
 
         asio::async_connect(socket_, endpoints,
             [](const std::error_code& error_code, const asio::ip::tcp::endpoint& next)
@@ -214,7 +214,7 @@ void TcpChannelNG::connectTo(const QString& address, quint16 port)
                 return;
             }
 
-            LOG(INFO) << "Connected to endpoint:" << endpoint.address().to_string() << ":" << endpoint.port();
+            CLOG(INFO) << "Connected to endpoint:" << endpoint.address().to_string() << ":" << endpoint.port();
 
             setConnected(true);
             emit sig_connected();
@@ -266,11 +266,11 @@ bool TcpChannelNG::setReadBufferSize(int size)
     socket_.set_option(option, error_code);
     if (error_code)
     {
-        LOG(ERROR) << "Failed to set read buffer size:" << error_code;
+        CLOG(ERROR) << "Failed to set read buffer size:" << error_code;
         return false;
     }
 
-    LOG(INFO) << "Read buffer size is changed:" << size;
+    CLOG(INFO) << "Read buffer size is changed:" << size;
     return true;
 }
 
@@ -283,11 +283,11 @@ bool TcpChannelNG::setWriteBufferSize(int size)
     socket_.set_option(option, error_code);
     if (error_code)
     {
-        LOG(ERROR) << "Failed to set write buffer size:" << error_code;
+        CLOG(ERROR) << "Failed to set write buffer size:" << error_code;
         return false;
     }
 
-    LOG(INFO) << "Write buffer size is changed:" << size;
+    CLOG(INFO) << "Write buffer size is changed:" << size;
     return true;
 }
 
@@ -307,7 +307,7 @@ void TcpChannelNG::init()
 {
     static_assert(sizeof(Header) == 8, "Header must be 8 bytes without padding");
 
-    CHECK(authenticator_);
+    CCHECK(authenticator_);
     authenticator_->setParent(this);
 
     write_queue_.reserve(kWriteQueueReservedSize);
@@ -336,7 +336,7 @@ void TcpChannelNG::init()
         }
         else
         {
-            DCHECK_EQ(authenticator_->encryption(), proto::key_exchange::ENCRYPTION_CHACHA20_POLY1305);
+            CDCHECK_EQ(authenticator_->encryption(), proto::key_exchange::ENCRYPTION_CHACHA20_POLY1305);
 
             encryptor_ = MessageEncryptor::createForChaCha20Poly1305(
                 authenticator_->sessionKey(), authenticator_->encryptIv());
@@ -422,17 +422,17 @@ void TcpChannelNG::setConnected(bool connected)
     asio::ip::tcp::no_delay no_delay_option(true);
     socket_.set_option(no_delay_option, error_code);
     if (!error_code)
-        LOG(INFO) << "Nagle's algorithm is disabled";
+        CLOG(INFO) << "Nagle's algorithm is disabled";
 
     asio::socket_base::receive_buffer_size receive_option;
     socket_.get_option(receive_option, error_code);
     if (!error_code)
-        LOG(INFO) << "Read buffer size:" << receive_option.value();
+        CLOG(INFO) << "Read buffer size:" << receive_option.value();
 
     asio::socket_base::send_buffer_size send_option;
     socket_.get_option(send_option, error_code);
     if (!error_code)
-        LOG(INFO) << "Write buffer size:" << send_option.value();
+        CLOG(INFO) << "Write buffer size:" << send_option.value();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -455,14 +455,14 @@ void TcpChannelNG::onErrorOccurred(const Location& location, const std::error_co
     else if (error_code == asio::error::network_down)
         error = ErrorCode::NETWORK_ERROR;
 
-    LOG(ERROR) << "Asio error:" << error_code;
+    CLOG(ERROR) << "Asio error:" << error_code;
     onErrorOccurred(location, error);
 }
 
 //--------------------------------------------------------------------------------------------------
 void TcpChannelNG::onErrorOccurred(const Location& location, ErrorCode error_code)
 {
-    LOG(ERROR) << "Connection finished:" << error_code << "from" << location;
+    CLOG(ERROR) << "Connection finished:" << error_code << "from" << location;
     setConnected(false);
     emit sig_errorOccurred(error_code);
 }
@@ -478,7 +478,7 @@ void TcpChannelNG::onMessageReceived()
 
     if (read_buffer_.size() > kMaxMessageSize || read_buffer_.size() != read_header_.length)
     {
-        LOG(INFO) << "Invalid message length:" << read_header_.length;
+        CLOG(INFO) << "Invalid message length:" << read_header_.length;
         onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
         return;
     }
@@ -587,7 +587,7 @@ void TcpChannelNG::doWrite()
 
     if (write_buffer_.size() > kMaxMessageSize)
     {
-        LOG(ERROR) << "Too big outgoing message:" << target_data_size;
+        CLOG(ERROR) << "Too big outgoing message:" << target_data_size;
         onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
         return;
     }
@@ -632,7 +632,7 @@ void TcpChannelNG::doWrite()
         }
 
         addTxBytes(bytes_transferred); // Update TX statistics.
-        DCHECK(!write_queue_.empty());
+        CDCHECK(!write_queue_.empty());
 
         const WriteTask& task = write_queue_.front();
         quint8 type = task.type();
@@ -686,7 +686,7 @@ void TcpChannelNG::doReadHeader()
 
         if (read_header_.length > kMaxMessageSize)
         {
-            LOG(ERROR) << "Too big incoming message:" << read_header_.length;
+            CLOG(ERROR) << "Too big incoming message:" << read_header_.length;
             onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
             return;
         }
@@ -721,7 +721,7 @@ void TcpChannelNG::doReadData()
         }
 
         addRxBytes(bytes_transferred); // Update RX statistics.
-        DCHECK_EQ(bytes_transferred, read_buffer_.size());
+        CDCHECK_EQ(bytes_transferred, read_buffer_.size());
 
         if (paused_)
         {
@@ -754,7 +754,7 @@ void TcpChannelNG::onKeepAliveTimer()
     else
     {
         // No response came within the specified period of time. We forcibly terminate the connection.
-        DCHECK_EQ(keep_alive_timer_type_, KEEP_ALIVE_TIMEOUT);
+        CDCHECK_EQ(keep_alive_timer_type_, KEEP_ALIVE_TIMEOUT);
         onErrorOccurred(FROM_HERE, ErrorCode::SOCKET_TIMEOUT);
     }
 }

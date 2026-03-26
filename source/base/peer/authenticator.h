@@ -22,6 +22,7 @@
 #include <QTimer>
 #include <QVersionNumber>
 
+#include "base/logging.h"
 #include "proto/key_exchange.h"
 
 namespace base {
@@ -84,6 +85,8 @@ signals:
     void sig_finished(base::Authenticator::ErrorCode error_code);
 
 protected:
+    LOG_DECLARE_CONTEXT(Authenticator);
+
     [[nodiscard]] virtual bool onStarted() = 0;
     virtual void onReceived(const QByteArray& buffer) = 0;
     virtual void onWritten() = 0;

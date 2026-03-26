@@ -21,7 +21,6 @@
 #include <QHostAddress>
 #include <QTimer>
 
-#include "base/logging.h"
 #include "base/version_constants.h"
 #include "base/serialization.h"
 #include "base/crypto/key_pair.h"
@@ -55,12 +54,12 @@ Client::Client(QObject* parent)
       timeout_timer_(new QTimer(this)),
       reconnect_timer_(new QTimer(this))
 {
-    LOG(INFO) << "Ctor";
+    CLOG(INFO) << "Ctor";
 
     timeout_timer_->setSingleShot(true);
     connect(timeout_timer_, &QTimer::timeout, this, [this]()
     {
-        LOG(INFO) << "Reconnect timeout";
+        CLOG(INFO) << "Reconnect timeout";
 
         if (session_state_->isConnectionByHostId() && !is_connected_to_router_)
             emit sig_statusChanged(Status::WAIT_FOR_ROUTER_TIMEOUT);
@@ -72,7 +71,7 @@ Client::Client(QObject* parent)
 
         if (tcp_channel_)
         {
-            LOG(INFO) << "Destroy channel";
+            CLOG(INFO) << "Destroy channel";
             tcp_channel_->disconnect();
             tcp_channel_->deleteLater();
             tcp_channel_ = nullptr;
@@ -80,7 +79,7 @@ Client::Client(QObject* parent)
 
         if (router_controller_)
         {
-            LOG(INFO) << "Destroy router controller";
+            CLOG(INFO) << "Destroy router controller";
             router_controller_->disconnect();
             router_controller_->deleteLater();
             router_controller_ = nullptr;
@@ -90,7 +89,7 @@ Client::Client(QObject* parent)
     reconnect_timer_->setSingleShot(true);
     connect(reconnect_timer_, &QTimer::timeout, this, [this]()
     {
-        LOG(INFO) << "Reconnecting...";
+        CLOG(INFO) << "Reconnecting...";
         state_ = State::CREATED;
         start();
     });
@@ -103,7 +102,7 @@ Client::Client(QObject* parent)
 //--------------------------------------------------------------------------------------------------
 Client::~Client()
 {
-    LOG(INFO) << "Dtor";
+    CLOG(INFO) << "Dtor";
 
     state_ = State::STOPPPED;
     emit sig_statusChanged(Status::STOPPED);
@@ -118,13 +117,13 @@ void Client::start()
 {
     if (state_ != State::CREATED)
     {
-        LOG(ERROR) << "Client already started before";
+        CLOG(ERROR) << "Client already started before";
         return;
     }
 
     if (!session_state_)
     {
-        LOG(ERROR) << "Session state not installed";
+        CLOG(ERROR) << "Session state not installed";
         return;
     }
 
@@ -144,11 +143,11 @@ void Client::start()
 
     if (base::isHostId(config.address_or_id))
     {
-        LOG(INFO) << "Starting RELAY connection";
+        CLOG(INFO) << "Starting RELAY connection";
 
         if (!config.router_config.has_value())
         {
-            LOG(FATAL) << "No router config. Continuation is impossible";
+            CLOG(FATAL) << "No router config. Continuation is impossible";
             return;
         }
 
@@ -176,7 +175,7 @@ void Client::start()
     }
     else
     {
-        LOG(INFO) << "Starting DIRECT connection";
+        CLOG(INFO) << "Starting DIRECT connection";
 
         if (!session_state_->isReconnecting())
         {
@@ -210,7 +209,7 @@ void Client::start()
 //--------------------------------------------------------------------------------------------------
 void Client::setSessionState(std::shared_ptr<SessionState> session_state)
 {
-    LOG(INFO) << "Session state installed";
+    CLOG(INFO) << "Session state installed";
     session_state_ = session_state;
 }
 
@@ -219,7 +218,7 @@ void Client::sendSessionMessage(const QByteArray& message)
 {
     if (!tcp_channel_)
     {
-        LOG(ERROR) << "sendMessage called but channel not initialized";
+        CLOG(ERROR) << "sendMessage called but channel not initialized";
         return;
     }
 
@@ -237,7 +236,7 @@ void Client::sendServiceMessage(const QByteArray& message)
 {
     if (!tcp_channel_)
     {
-        LOG(ERROR) << "sendMessage called but channel not initialized";
+        CLOG(ERROR) << "sendMessage called but channel not initialized";
         return;
     }
 
@@ -317,7 +316,7 @@ int Client::speedUdpTx()
 //--------------------------------------------------------------------------------------------------
 void Client::onTcpConnected()
 {
-    LOG(INFO) << "Connection established";
+    CLOG(INFO) << "Connection established";
     tcpChannelReady();
 }
 
@@ -330,7 +329,7 @@ void Client::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code)
         if (error_code == base::TcpChannel::ErrorCode::REMOTE_HOST_CLOSED && !is_legacy_mode_ &&
             !base::isHostId(session_state_->config().address_or_id) && !tcp_channel_->isAuthenticated())
         {
-            LOG(INFO) << "Host may be out of date. Trying to connect in legacy mode";
+            CLOG(INFO) << "Host may be out of date. Trying to connect in legacy mode";
             emit sig_statusChanged(Status::LEGACY_HOST);
 
             tcp_channel_->disconnect();
@@ -344,7 +343,7 @@ void Client::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code)
         }
     }
 
-    LOG(INFO) << "Connection terminated:" << error_code;
+    CLOG(INFO) << "Connection terminated:" << error_code;
 
     // Show an error to the user.
     emit sig_statusChanged(Status::HOST_DISCONNECTED, QVariant::fromValue(error_code));
@@ -359,7 +358,7 @@ void Client::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code)
     if (!session_state_->isAutoReconnect())
         return;
 
-    LOG(INFO) << "Reconnect to host is enabled";
+    CLOG(INFO) << "Reconnect to host is enabled";
     session_state_->setReconnecting(true);
 
     timeout_timer_->start(std::chrono::minutes(5));
@@ -394,7 +393,7 @@ void Client::onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer)
         proto::peer::HostToClient message;
         if (!base::parse(buffer, &message))
         {
-            LOG(ERROR) << "Unable to parse control message";
+            CLOG(ERROR) << "Unable to parse control message";
             return;
         }
 
@@ -412,28 +411,28 @@ void Client::onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer)
         }
         else
         {
-            LOG(WARNING) << "Unhandled control message";
+            CLOG(WARNING) << "Unhandled control message";
         }
     }
     else
     {
-        LOG(ERROR) << "Unhandled incoming message from channel:" << channel_id;
+        CLOG(ERROR) << "Unhandled incoming message from channel:" << channel_id;
     }
 }
 
 //--------------------------------------------------------------------------------------------------
 void Client::onUdpReady()
 {
-    LOG(INFO) << "UDP channel is ready";
-    CHECK(udp_channel_);
+    CLOG(INFO) << "UDP channel is ready";
+    CCHECK(udp_channel_);
     udp_channel_->setPaused(false);
 }
 
 //--------------------------------------------------------------------------------------------------
 void Client::onUdpErrorOccurred()
 {
-    LOG(WARNING) << "UDP channel error";
-    CHECK(udp_channel_);
+    CLOG(WARNING) << "UDP channel error";
+    CCHECK(udp_channel_);
     udp_ready_ = false;
     udp_channel_->disconnect();
     udp_channel_->deleteLater();
@@ -456,7 +455,7 @@ void Client::onUdpMessageReceived(quint8 channel_id, const QByteArray& buffer)
         proto::peer::HostToClient message;
         if (!base::parse(buffer, &message))
         {
-            LOG(ERROR) << "Unable to parse UDP control message";
+            CLOG(ERROR) << "Unable to parse UDP control message";
             return;
         }
 
@@ -473,19 +472,19 @@ void Client::onUdpMessageReceived(quint8 channel_id, const QByteArray& buffer)
         }
         else
         {
-            LOG(WARNING) << "Unhandled UDP control message";
+            CLOG(WARNING) << "Unhandled UDP control message";
         }
     }
     else
     {
-        LOG(WARNING) << "Unhandled incoming message from channel" << channel_id;
+        CLOG(WARNING) << "Unhandled incoming message from channel" << channel_id;
     }
 }
 
 //--------------------------------------------------------------------------------------------------
 void Client::onRouterConnected(const QVersionNumber& router_version)
 {
-    LOG(INFO) << "Router connected";
+    CLOG(INFO) << "Router connected";
     session_state_->setRouterVersion(router_version);
     emit sig_statusChanged(Status::ROUTER_CONNECTED);
     is_connected_to_router_ = true;
@@ -494,15 +493,15 @@ void Client::onRouterConnected(const QVersionNumber& router_version)
 //--------------------------------------------------------------------------------------------------
 void Client::onHostAwaiting()
 {
-    LOG(INFO) << "Host awaiting";
+    CLOG(INFO) << "Host awaiting";
     emit sig_statusChanged(Status::WAIT_FOR_HOST);
 }
 
 //--------------------------------------------------------------------------------------------------
 void Client::onHostConnected()
 {
-    LOG(INFO) << "Host connected";
-    CHECK(router_controller_);
+    CLOG(INFO) << "Host connected";
+    CCHECK(router_controller_);
 
     tcp_channel_ = router_controller_->takeChannel();
     tcp_channel_->setParent(this);
@@ -522,11 +521,11 @@ void Client::onHostConnected()
 //--------------------------------------------------------------------------------------------------
 void Client::onRouterErrorOccurred(const RouterManager::Error& error)
 {
-    CHECK(router_controller_);
+    CCHECK(router_controller_);
 
     emit sig_statusChanged(Status::ROUTER_ERROR, QVariant::fromValue(error));
 
-    LOG(INFO) << "Post task to destroy router controller";
+    CLOG(INFO) << "Post task to destroy router controller";
     router_controller_->disconnect();
     router_controller_->deleteLater();
     router_controller_ = nullptr;
@@ -558,7 +557,7 @@ void Client::tcpChannelReady()
     const QVersionNumber& client_version = base::kCurrentVersion;
     if (host_version > client_version)
     {
-        LOG(ERROR) << "Version mismatch. Host:" << host_version << "Client:" << client_version;
+        CLOG(ERROR) << "Version mismatch. Host:" << host_version << "Client:" << client_version;
         emit sig_statusChanged(Status::VERSION_MISMATCH);
         return;
     }
@@ -582,7 +581,7 @@ void Client::readDirectUdpRequest(const proto::peer::DirectUdpRequest& request)
 {
     if (qEnvironmentVariableIsSet("ASPIA_DISABLE_UDP"))
     {
-        LOG(INFO) << "UDP is disable by environment variable";
+        CLOG(INFO) << "UDP is disable by environment variable";
         return;
     }
 
@@ -598,28 +597,28 @@ void Client::readDirectUdpRequest(const proto::peer::DirectUdpRequest& request)
 
     if (address_list.isEmpty())
     {
-        LOG(ERROR) << "No valid addresses";
+        CLOG(ERROR) << "No valid addresses";
         return;
     }
 
     quint32 port = request.port();
     if (!base::NetUtils::isValidPort(port))
     {
-        LOG(ERROR) << "Invalid port:" << port;
+        CLOG(ERROR) << "Invalid port:" << port;
         return;
     }
 
     QByteArray public_key = QByteArray::fromStdString(request.public_key());
     if (public_key.isEmpty())
     {
-        LOG(ERROR) << "Empty public key";
+        CLOG(ERROR) << "Empty public key";
         return;
     }
 
     QByteArray iv = QByteArray::fromStdString(request.iv());
     if (iv.isEmpty())
     {
-        LOG(ERROR) << "Empty IV";
+        CLOG(ERROR) << "Empty IV";
         return;
     }
 
@@ -654,7 +653,7 @@ void Client::readDirectUdpRequest(const proto::peer::DirectUdpRequest& request)
                 if (client_subnet != host_subnet)
                     continue;
 
-                LOG(INFO) << "Common subnet was found for the host and client";
+                CLOG(INFO) << "Common subnet was found for the host and client";
                 address = host_address;
                 is_found = true;
                 break;
@@ -671,7 +670,7 @@ void Client::readDirectUdpRequest(const proto::peer::DirectUdpRequest& request)
 
     if (address.isEmpty())
     {
-        LOG(WARNING) << "No suitable address was found for direct connection";
+        CLOG(WARNING) << "No suitable address was found for direct connection";
         return;
     }
 
@@ -687,12 +686,12 @@ void Client::readDirectUdpRequest(const proto::peer::DirectUdpRequest& request)
 
     if (!stun_host.isEmpty() && stun_port)
     {
-        LOG(INFO) << "Starting STUN:" << stun_host << ":" << stun_port;
+        CLOG(INFO) << "Starting STUN:" << stun_host << ":" << stun_port;
         startUdpHolePunching(context, stun_host, stun_port);
     }
     else
     {
-        LOG(INFO) << "Starting direct UDP (host:" << address << ":" << port << ")";
+        CLOG(INFO) << "Starting direct UDP (host:" << address << ":" << port << ")";
         connectToUdp(context);
     }
 }
@@ -712,21 +711,21 @@ void Client::connectToUdp(
     base::KeyPair client_key_pair = base::KeyPair::create(base::KeyPair::Type::X25519);
     if (!client_key_pair.isValid())
     {
-        LOG(ERROR) << "Failed to create host UDP key pair";
+        CLOG(ERROR) << "Failed to create host UDP key pair";
         return;
     }
 
     QByteArray client_iv = base::Random::byteArray(12);
     if (client_iv.isEmpty())
     {
-        LOG(ERROR) << "Unable to create IV for UDP";
+        CLOG(ERROR) << "Unable to create IV for UDP";
         return;
     }
 
     QByteArray session_key = client_key_pair.sessionKey(context.public_key);
     if (session_key.isEmpty())
     {
-        LOG(ERROR) << "Failed to derive UDP session key";
+        CLOG(ERROR) << "Failed to derive UDP session key";
         return;
     }
 
@@ -738,7 +737,7 @@ void Client::connectToUdp(
 
     if (encryption == proto::key_exchange::ENCRYPTION_UNKNOWN)
     {
-        LOG(ERROR) << "No supported UDP encryption";
+        CLOG(ERROR) << "No supported UDP encryption";
         return;
     }
 
@@ -758,7 +757,7 @@ void Client::connectToUdp(
 
     if (!encryptor || !decryptor)
     {
-        LOG(ERROR) << "Failed to create UDP encryptor/decryptor";
+        CLOG(ERROR) << "Failed to create UDP encryptor/decryptor";
         return;
     }
 
@@ -808,8 +807,8 @@ void Client::startUdpHolePunching(const PendingUdp& context, const QString& stun
     connect(stun_peer_, &base::StunPeer::sig_channelReady, this,
         [this](const QString& external_address, quint16 external_port)
     {
-        LOG(INFO) << "Client STUN completed:" << external_address << ":" << external_port;
-        CHECK(pending_udp_context_.has_value());
+        CLOG(INFO) << "Client STUN completed:" << external_address << ":" << external_port;
+        CCHECK(pending_udp_context_.has_value());
 
         qintptr socket = stun_peer_->takeSocket();
 
@@ -825,8 +824,8 @@ void Client::startUdpHolePunching(const PendingUdp& context, const QString& stun
 
     connect(stun_peer_, &base::StunPeer::sig_errorOccurred, this, [this]()
     {
-        LOG(ERROR) << "Client STUN failed, falling back to direct connect";
-        CHECK(pending_udp_context_.has_value());
+        CLOG(ERROR) << "Client STUN failed, falling back to direct connect";
+        CCHECK(pending_udp_context_.has_value());
 
         stun_peer_->disconnect();
         stun_peer_->deleteLater();

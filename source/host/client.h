@@ -25,6 +25,7 @@
 #include <chrono>
 #include <optional>
 
+#include "base/logging.h"
 #include "base/crypto/key_pair.h"
 #include "base/net/tcp_channel.h"
 #include "proto/peer.h"
@@ -81,6 +82,8 @@ signals:
     void sig_connectionChanged();
 
 protected:
+    LOG_DECLARE_CONTEXT(Client);
+
     void send(quint8 channel_id, const QByteArray& buffer);
 
     virtual void onStart() = 0;

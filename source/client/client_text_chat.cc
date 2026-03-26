@@ -27,13 +27,13 @@ namespace client {
 ClientChat::ClientChat(QObject* parent)
     : Client(parent)
 {
-    LOG(INFO) << "Ctor";
+    CLOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
 ClientChat::~ClientChat()
 {
-    LOG(INFO) << "Dtor";
+    CLOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -45,7 +45,7 @@ void ClientChat::onChatMessage(const proto::chat::Chat& chat)
 //--------------------------------------------------------------------------------------------------
 void ClientChat::onSessionStarted()
 {
-    LOG(INFO) << "Text chat session started";
+    CLOG(INFO) << "Text chat session started";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -54,7 +54,7 @@ void ClientChat::onSessionMessageReceived(const QByteArray& buffer)
     proto::chat::Chat chat;
     if (!base::parse(buffer, &chat))
     {
-        LOG(ERROR) << "Unable to parse text chat message";
+        CLOG(ERROR) << "Unable to parse text chat message";
         return;
     }
 

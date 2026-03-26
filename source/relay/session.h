@@ -24,6 +24,7 @@
 
 #include <asio/ip/tcp.hpp>
 
+#include "base/logging.h"
 #include "base/shared_pointer.h"
 #include "base/peer/host_id.h"
 
@@ -81,6 +82,7 @@ private:
     asio::ip::tcp::socket socket_[kNumberOfSides];
     std::array<quint8, kBufferSize> buffer_[kNumberOfSides];
 
+    LOG_DECLARE_CONTEXT(Session);
     Q_DISABLE_COPY_MOVE(Session)
 };
 

@@ -19,7 +19,6 @@
 #include "relay/session.h"
 
 #include "base/location.h"
-#include "base/logging.h"
 #include "base/serialization.h"
 #include "proto/relay_peer.h"
 
@@ -64,14 +63,14 @@ Session::~Session()
         socket_[i].close(ignored_code);
     }
 
-    LOG(INFO) << "Session stopped. Duration:" << duration(Clock::now()).count() << ","
-              << "transferred:" << bytesTransferred();
+    CLOG(INFO) << "Session stopped. Duration:" << duration(Clock::now()).count() << ","
+               << "transferred:" << bytesTransferred();
 }
 
 //--------------------------------------------------------------------------------------------------
 void Session::start()
 {
-    LOG(INFO) << "Starting peers session";
+    CLOG(INFO) << "Starting peers session";
 
     start_time_ = Clock::now();
 
@@ -142,7 +141,7 @@ void Session::doReadSome(Session* session, int source)
 //--------------------------------------------------------------------------------------------------
 void Session::onErrorOccurred(const base::Location& location, const std::error_code& error_code)
 {
-    LOG(INFO) << "Connection finished:" << error_code << "from" << location;
+    CLOG(INFO) << "Connection finished:" << error_code << "from" << location;
     emit sig_finished();
 }
 

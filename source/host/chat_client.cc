@@ -28,13 +28,13 @@ namespace host {
 ChatClient::ChatClient(base::TcpChannel* tcp_channel, QObject* parent)
     : Client(tcp_channel, FEATURE_NONE, parent)
 {
-    LOG(INFO) << "Ctor";
+    CLOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
 ChatClient::~ChatClient()
 {
-    LOG(INFO) << "Dtor";
+    CLOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -46,7 +46,7 @@ void ChatClient::onSendChat(const proto::chat::Chat& chat)
 //--------------------------------------------------------------------------------------------------
 void ChatClient::onSendStatus(proto::chat::Status_Code code)
 {
-    LOG(INFO) << "Send text chat status:" << code;
+    CLOG(INFO) << "Send text chat status:" << code;
 
     proto::chat::Chat text_chat;
     proto::chat::Status* text_chat_status = text_chat.mutable_chat_status();
@@ -69,7 +69,7 @@ void ChatClient::onMessage(quint8 channel_id, const QByteArray& buffer)
     proto::chat::Chat chat;
     if (!base::parse(buffer, &chat))
     {
-        LOG(ERROR) << "Unable to parse chat message";
+        CLOG(ERROR) << "Unable to parse chat message";
         return;
     }
 

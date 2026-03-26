@@ -28,20 +28,20 @@ ClientFileTransfer::ClientFileTransfer(QObject* parent)
     : Client(parent),
       local_worker_(new common::FileWorker(this))
 {
-    LOG(INFO) << "Ctor";
+    CLOG(INFO) << "Ctor";
     qRegisterMetaType<common::FileTask>();
 }
 
 //--------------------------------------------------------------------------------------------------
 ClientFileTransfer::~ClientFileTransfer()
 {
-    LOG(INFO) << "Dtor";
+    CLOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClientFileTransfer::onSessionStarted()
 {
-    LOG(INFO) << "File transfer session started";
+    CLOG(INFO) << "File transfer session started";
 
     local_task_factory_ = new common::FileTaskFactory(common::FileTask::Target::LOCAL, this);
 
@@ -61,13 +61,13 @@ void ClientFileTransfer::onSessionMessageReceived(const QByteArray& buffer)
 
     if (!base::parse(buffer, &reply))
     {
-        LOG(ERROR) << "Invalid message from host";
+        CLOG(ERROR) << "Invalid message from host";
         return;
     }
 
     if (reply.error_code() == proto::file_transfer::ERROR_CODE_NO_LOGGED_ON_USER)
     {
-        LOG(INFO) << "No logged in user on host side";
+        CLOG(INFO) << "No logged in user on host side";
         emit sig_errorOccurred(reply.error_code());
     }
     else if (!remote_task_queue_.isEmpty())
@@ -170,7 +170,7 @@ void ClientFileTransfer::onRenameRequest(common::FileTask::Target target,
 //--------------------------------------------------------------------------------------------------
 void ClientFileTransfer::onRemoveRequest(FileRemover* remover)
 {
-    DCHECK(!remover_);
+    CDCHECK(!remover_);
     remover_ = remover;
 
     connect(remover_, &FileRemover::sig_doTask, this, &ClientFileTransfer::onTask);
@@ -182,7 +182,7 @@ void ClientFileTransfer::onRemoveRequest(FileRemover* remover)
 //--------------------------------------------------------------------------------------------------
 void ClientFileTransfer::onTransferRequest(FileTransfer* transfer)
 {
-    DCHECK(!transfer_);
+    CDCHECK(!transfer_);
     transfer_ = transfer;
 
     connect(transfer_, &FileTransfer::sig_doTask, this, &ClientFileTransfer::onTask);
@@ -216,7 +216,7 @@ common::FileTaskFactory* ClientFileTransfer::taskFactory(common::FileTask::Targe
         task_factory = remote_task_factory_;
     }
 
-    DCHECK(task_factory);
+    CDCHECK(task_factory);
     return task_factory;
 }
 

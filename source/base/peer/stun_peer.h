@@ -22,6 +22,8 @@
 #include <QHostAddress>
 #include <QObject>
 
+#include "base/logging.h"
+
 class QHostInfo;
 class QSocketNotifier;
 class QTimer;
@@ -69,6 +71,7 @@ private:
 
     qintptr ready_socket_ = -1;
 
+    LOG_DECLARE_CONTEXT(StunPeer);
     Q_DISABLE_COPY_MOVE(StunPeer)
 };
 

@@ -21,7 +21,6 @@
 #include <QHostAddress>
 #include <QTimer>
 
-#include "base/logging.h"
 #include "base/serialization.h"
 #include "base/crypto/key_pair.h"
 #include "base/crypto/message_decryptor.h"
@@ -53,8 +52,8 @@ Client::Client(base::TcpChannel* tcp_channel, Features features, QObject* parent
       tcp_channel_(tcp_channel),
       probe_timer_(new QTimer(this))
 {
-    LOG(INFO) << "Ctor";
-    CHECK(tcp_channel_);
+    CLOG(INFO) << "Ctor";
+    CCHECK(tcp_channel_);
 
     tcp_channel_->setParent(this);
 
@@ -195,8 +194,8 @@ void Client::send(quint8 channel_id, const QByteArray& buffer)
 //--------------------------------------------------------------------------------------------------
 void Client::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code)
 {
-    LOG(ERROR) << "TCP error:" << error_code;
-    CHECK(tcp_channel_);
+    CLOG(ERROR) << "TCP error:" << error_code;
+    CCHECK(tcp_channel_);
     tcp_channel_->disconnect();
     emit sig_finished();
 }
@@ -213,7 +212,7 @@ void Client::onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray& buffe
     proto::peer::ClientToHost message;
     if (!base::parse(buffer, &message))
     {
-        LOG(ERROR) << "Unable to parse control message";
+        CLOG(ERROR) << "Unable to parse control message";
         return;
     }
 
@@ -222,14 +221,14 @@ void Client::onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray& buffe
     else if (message.has_bandwidth_probe_ack())
         onTcpBandwidthProbeAck();
     else
-        LOG(WARNING) << "Unhandled control message";
+        CLOG(WARNING) << "Unhandled control message";
 }
 
 //--------------------------------------------------------------------------------------------------
 void Client::onUdpReady()
 {
-    LOG(INFO) << "UDP channel is connected, sending bandwidth probe";
-    CHECK(udp_channel_);
+    CLOG(INFO) << "UDP channel is connected, sending bandwidth probe";
+    CCHECK(udp_channel_);
 
     // Do NOT set udp_ready_ yet. Send a bandwidth probe over UDP first. When the ACK arrives (see
     // onUdpBandwidthProbeAck), we know the channel works and have an initial bandwidth measurement
@@ -246,7 +245,7 @@ void Client::onUdpReady()
         if (udp_ready_ || !udp_channel_)
             return;
 
-        LOG(WARNING) << "UDP bandwidth probe timed out, channel is not usable";
+        CLOG(WARNING) << "UDP bandwidth probe timed out, channel is not usable";
         udp_probe_.pending = false;
         onUdpErrorOccurred();
     });
@@ -255,8 +254,8 @@ void Client::onUdpReady()
 //--------------------------------------------------------------------------------------------------
 void Client::onUdpErrorOccurred()
 {
-    LOG(INFO) << "UDP channel error (" << udp_phase_ << ")";
-    CHECK(udp_channel_);
+    CLOG(INFO) << "UDP channel error (" << udp_phase_ << ")";
+    CCHECK(udp_channel_);
 
     bool was_connected = udp_ready_;
 
@@ -288,7 +287,7 @@ void Client::onUdpErrorOccurred()
                 return;
             }
 
-            LOG(INFO) << "Direct LAN UDP failed, trying hole punching";
+            CLOG(INFO) << "Direct LAN UDP failed, trying hole punching";
             udp_phase_ = UdpConnectPhase::HOLE_PUNCHING;
             startUdpHolePunching();
         }
@@ -298,13 +297,13 @@ void Client::onUdpErrorOccurred()
         {
             if (hole_punching_attempt_ < kMaxHolePunchingAttempts)
             {
-                LOG(INFO) << "UDP hole punching attempt" << hole_punching_attempt_
+                CLOG(INFO) << "UDP hole punching attempt" << hole_punching_attempt_
                           << "failed, retrying in" << kHolePunchingRetryDelayMs << "ms";
                 QTimer::singleShot(kHolePunchingRetryDelayMs, this, &Client::startUdpHolePunching);
             }
             else
             {
-                LOG(INFO) << "All UDP attempts exhausted, staying on TCP";
+                CLOG(INFO) << "All UDP attempts exhausted, staying on TCP";
                 udp_phase_ = UdpConnectPhase::NONE;
             }
         }
@@ -328,14 +327,14 @@ void Client::onUdpMessageReceived(quint8 udp_channel_id, const QByteArray& buffe
     proto::peer::ClientToHost message;
     if (!base::parse(buffer, &message))
     {
-        LOG(ERROR) << "Unable to parse control message";
+        CLOG(ERROR) << "Unable to parse control message";
         return;
     }
 
     if (message.has_bandwidth_probe_ack())
         onUdpBandwidthProbeAck();
     else
-        LOG(WARNING) << "Unhandled control message";
+        CLOG(WARNING) << "Unhandled control message";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -343,13 +342,13 @@ void Client::startUdpHolePunching()
 {
     if (stun_host_.isEmpty() || !stun_port_)
     {
-        LOG(ERROR) << "No stun server data";
+        CLOG(ERROR) << "No stun server data";
         return;
     }
 
     ++hole_punching_attempt_;
 
-    LOG(INFO) << "Stun server data:" << stun_host_ << ':' << stun_port_
+    CLOG(INFO) << "Stun server data:" << stun_host_ << ':' << stun_port_
               << "(attempt" << hole_punching_attempt_ << ")";
 
     stun_peer_ = new base::StunPeer(this);
@@ -357,9 +356,9 @@ void Client::startUdpHolePunching()
     connect(stun_peer_, &base::StunPeer::sig_channelReady, this,
         [this](const QString& external_address, quint16 external_port)
     {
-        LOG(INFO) << "External UDP endpoint received:" << external_address << ':' << external_port
+        CLOG(INFO) << "External UDP endpoint received:" << external_address << ':' << external_port
                   << "(" << udp_phase_ << ")";
-        CHECK(stun_peer_);
+        CCHECK(stun_peer_);
 
         bool is_white_ip = false;
 
@@ -389,12 +388,12 @@ void Client::startUdpHolePunching()
             socket = stun_peer_->takeSocket();
             address = external_address;
             port = external_port;
-            LOG(INFO) << "Using ready UDP socket (NAT or forced retry)";
+            CLOG(INFO) << "Using ready UDP socket (NAT or forced retry)";
         }
         else
         {
             address = external_address;
-            LOG(INFO) << "White IP detected, using bind for UDP (address:" << address << ")";
+            CLOG(INFO) << "White IP detected, using bind for UDP (address:" << address << ")";
         }
 
         stun_peer_->disconnect();
@@ -406,8 +405,8 @@ void Client::startUdpHolePunching()
 
     connect(stun_peer_, &base::StunPeer::sig_errorOccurred, this, [this]()
     {
-        LOG(ERROR) << "STUN error (" << udp_phase_ << ")";
-        CHECK(stun_peer_);
+        CLOG(ERROR) << "STUN error (" << udp_phase_ << ")";
+        CCHECK(stun_peer_);
 
         stun_peer_->disconnect();
         stun_peer_->deleteLater();
@@ -416,13 +415,13 @@ void Client::startUdpHolePunching()
         // STUN failed, retry if attempts remain.
         if (hole_punching_attempt_ < kMaxHolePunchingAttempts)
         {
-            LOG(INFO) << "STUN failed (attempt" << hole_punching_attempt_
+            CLOG(INFO) << "STUN failed (attempt" << hole_punching_attempt_
                       << "), retrying in" << kHolePunchingRetryDelayMs << "ms";
             QTimer::singleShot(kHolePunchingRetryDelayMs, this, &Client::startUdpHolePunching);
         }
         else
         {
-            LOG(INFO) << "All STUN attempts exhausted, staying on TCP";
+            CLOG(INFO) << "All STUN attempts exhausted, staying on TCP";
             udp_phase_ = UdpConnectPhase::NONE;
         }
     });
@@ -433,8 +432,8 @@ void Client::startUdpHolePunching()
 //--------------------------------------------------------------------------------------------------
 void Client::startDirectUdp(qintptr socket, const QString& address, quint16 port)
 {
-    LOG(INFO) << "Starting direct UDP...";
-    CHECK(!udp_channel_);
+    CLOG(INFO) << "Starting direct UDP...";
+    CCHECK(!udp_channel_);
 
     udp_channel_ = new base::UdpChannel(this);
 
@@ -452,14 +451,14 @@ void Client::startDirectUdp(qintptr socket, const QString& address, quint16 port
     context.key_pair = base::KeyPair::create(base::KeyPair::Type::X25519);
     if (!context.key_pair.isValid())
     {
-        LOG(ERROR) << "Failed to create UDP key pair";
+        CLOG(ERROR) << "Failed to create UDP key pair";
         return;
     }
 
     context.iv = base::Random::byteArray(12);
     if (context.iv.isEmpty())
     {
-        LOG(ERROR) << "Unable to create IV for UDP";
+        CLOG(ERROR) << "Unable to create IV for UDP";
         return;
     }
 
@@ -495,18 +494,18 @@ void Client::startDirectUdp(qintptr socket, const QString& address, quint16 port
         request->set_stun_port(stun_port_);
     }
 
-    LOG(INFO) << "Sending direct UDP request";
+    CLOG(INFO) << "Sending direct UDP request";
     tcp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
 void Client::readDirectUdpReply(const proto::peer::DirectUdpReply& reply)
 {
-    LOG(INFO) << "Direct UDP reply is received";
+    CLOG(INFO) << "Direct UDP reply is received";
 
     if (!udp_channel_ || !pending_udp_context_.has_value())
     {
-        LOG(ERROR) << "UDP reply received but no UDP channel or pending UDP data";
+        CLOG(ERROR) << "UDP reply received but no UDP channel or pending UDP data";
         return;
     }
 
@@ -520,7 +519,7 @@ void Client::readDirectUdpReply(const proto::peer::DirectUdpReply& reply)
     QByteArray session_key = context.key_pair.sessionKey(host_public_key);
     if (session_key.isEmpty())
     {
-        LOG(ERROR) << "Failed to derive UDP session key";
+        CLOG(ERROR) << "Failed to derive UDP session key";
         return;
     }
 
@@ -539,13 +538,13 @@ void Client::readDirectUdpReply(const proto::peer::DirectUdpReply& reply)
     }
     else
     {
-        LOG(ERROR) << "Unknown UDP encryption type:" << encryption;
+        CLOG(ERROR) << "Unknown UDP encryption type:" << encryption;
         return;
     }
 
     if (!encryptor || !decryptor)
     {
-        LOG(ERROR) << "Failed to create UDP encryptor/decryptor";
+        CLOG(ERROR) << "Failed to create UDP encryptor/decryptor";
         return;
     }
 
@@ -559,7 +558,7 @@ void Client::readDirectUdpReply(const proto::peer::DirectUdpReply& reply)
 
     if (!client_address.isEmpty() && client_port)
     {
-        LOG(INFO) << "Setting client's external address:" << client_address << ':' << client_port;
+        CLOG(INFO) << "Setting client's external address:" << client_address << ':' << client_port;
         udp_channel_->setPeerAddress(client_address, client_port);
 
         // If ENet connection is not established within the deadline, treat as failure.
@@ -568,7 +567,7 @@ void Client::readDirectUdpReply(const proto::peer::DirectUdpReply& reply)
             if (!udp_channel_ || udp_ready_)
                 return;
 
-            LOG(WARNING) << "UDP connection timed out after setPeerAddress";
+            CLOG(WARNING) << "UDP connection timed out after setPeerAddress";
             onUdpErrorOccurred();
         });
     }
@@ -633,7 +632,7 @@ void Client::onTcpBandwidthProbeAck()
     tcp_probe_.bandwidth = (kProbeDataSize * 1000) / rtt.count();
     tcp_probe_.pending = false;
 
-    LOG(INFO) << "TCP RTT:" << rtt.count() << "ms, bandwidth:" << (tcp_probe_.bandwidth / 1024) << "kB/s";
+    CLOG(INFO) << "TCP RTT:" << rtt.count() << "ms, bandwidth:" << (tcp_probe_.bandwidth / 1024) << "kB/s";
     checkBandwidth();
 }
 
@@ -650,7 +649,7 @@ void Client::onUdpBandwidthProbeAck()
     udp_probe_.bandwidth = (kProbeDataSize * 1000) / rtt.count();
     udp_probe_.pending = false;
 
-    LOG(INFO) << "UDP RTT:" << rtt.count() << "ms, bandwidth:" << (udp_probe_.bandwidth / 1024) << "kB/s";
+    CLOG(INFO) << "UDP RTT:" << rtt.count() << "ms, bandwidth:" << (udp_probe_.bandwidth / 1024) << "kB/s";
     checkBandwidth();
 }
 
@@ -672,7 +671,7 @@ void Client::checkBandwidth()
     {
         if (!udp_ready_ && udp_connected_)
         {
-            LOG(INFO) << "Switching traffic to UDP";
+            CLOG(INFO) << "Switching traffic to UDP";
             udp_ready_ = true;
             emit sig_connectionChanged();
         }
@@ -702,7 +701,7 @@ void Client::checkBandwidth()
 
     if (udp_ready_)
     {
-        LOG(INFO) << "Switching traffic to TCP";
+        CLOG(INFO) << "Switching traffic to TCP";
         udp_ready_ = false;
         emit sig_connectionChanged();
     }

@@ -29,6 +29,7 @@
 #include <asio/local/stream_protocol.hpp>
 #endif
 
+#include "base/logging.h"
 #include "base/session_id.h"
 
 namespace base {
@@ -138,6 +139,7 @@ private:
     Header read_header_;
     QByteArray read_buffer_;
 
+    LOG_DECLARE_CONTEXT(IpcChannel);
     Q_DISABLE_COPY_MOVE(IpcChannel)
 };
 

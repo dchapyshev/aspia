@@ -20,7 +20,6 @@
 
 #include <QThread>
 
-#include "base/logging.h"
 #include "base/numeric_utils.h"
 #include "base/power_controller.h"
 #include "base/ipc/ipc_channel.h"
@@ -43,7 +42,7 @@ DesktopAgentClient::DesktopAgentClient(QObject* parent)
     : QObject(parent),
       ipc_channel_(new base::IpcChannel(this))
 {
-    LOG(INFO) << "Ctor";
+    CLOG(INFO) << "Ctor";
     connect(ipc_channel_, &base::IpcChannel::sig_connected, this, &DesktopAgentClient::onIpcConnected);
     connect(ipc_channel_, &base::IpcChannel::sig_disconnected, this, &DesktopAgentClient::onIpcDisconnected);
     connect(ipc_channel_, &base::IpcChannel::sig_errorOccurred, this, &DesktopAgentClient::onIpcErrorOccurred);
@@ -53,7 +52,7 @@ DesktopAgentClient::DesktopAgentClient(QObject* parent)
 //--------------------------------------------------------------------------------------------------
 DesktopAgentClient::~DesktopAgentClient()
 {
-    LOG(INFO) << "Dtor";
+    CLOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -117,14 +116,14 @@ void DesktopAgentClient::start(const QString& ipc_channel_name)
 //--------------------------------------------------------------------------------------------------
 void DesktopAgentClient::onIpcConnected()
 {
-    LOG(INFO) << "IPC channel is connected";
+    CLOG(INFO) << "IPC channel is connected";
     ipc_channel_->setPaused(false);
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopAgentClient::onIpcErrorOccurred()
 {
-    LOG(ERROR) << "Unable to connect to IPC server";
+    CLOG(ERROR) << "Unable to connect to IPC server";
     ipc_channel_->disconnect();
     emit sig_finished();
 }
@@ -132,7 +131,7 @@ void DesktopAgentClient::onIpcErrorOccurred()
 //--------------------------------------------------------------------------------------------------
 void DesktopAgentClient::onIpcDisconnected()
 {
-    LOG(INFO) << "IPC channel is disconnected";
+    CLOG(INFO) << "IPC channel is disconnected";
     ipc_channel_->disconnect();
     emit sig_finished();
 }
@@ -147,7 +146,7 @@ void DesktopAgentClient::onIpcMessageReceived(quint32 channel_id, const QByteArr
     {
         if (net_channel_id > std::numeric_limits<quint8>::max())
         {
-            LOG(ERROR) << "Too big TCP channel ID number";
+            CLOG(ERROR) << "Too big TCP channel ID number";
             return;
         }
 
@@ -159,7 +158,7 @@ void DesktopAgentClient::onIpcMessageReceived(quint32 channel_id, const QByteArr
         proto::desktop::ServiceToAgentClient message;
         if (!base::parse(buffer, &message))
         {
-            LOG(ERROR) << "Unable to parse ServiceToDesktop message";
+            CLOG(ERROR) << "Unable to parse ServiceToDesktop message";
             return;
         }
 
@@ -175,16 +174,16 @@ void DesktopAgentClient::onIpcMessageReceived(quint32 channel_id, const QByteArr
         else if (message.has_bandwidth_change())
         {
             bandwidth_ = message.bandwidth_change().bandwidth();
-            LOG(INFO) << "Bandwidth changed:" << bandwidth_;
+            CLOG(INFO) << "Bandwidth changed:" << bandwidth_;
         }
         else
         {
-            LOG(WARNING) << "Unhandled message from service";
+            CLOG(WARNING) << "Unhandled message from service";
         }
     }
     else
     {
-        LOG(WARNING) << "Unhandled message from channel:" << ipc_channel_id;
+        CLOG(WARNING) << "Unhandled message from channel:" << ipc_channel_id;
     }
 }
 
@@ -203,7 +202,7 @@ void DesktopAgentClient::readSessionMessage(const QByteArray& buffer)
 {
     if (!incoming_message_.parse(buffer))
     {
-        LOG(ERROR) << "Invalid message from client";
+        CLOG(ERROR) << "Invalid message from client";
         return;
     }
 
@@ -222,7 +221,7 @@ void DesktopAgentClient::readSessionMessage(const QByteArray& buffer)
     else if (incoming_message_->has_config())
         readConfig(incoming_message_->config());
     else
-        LOG(ERROR) << "Unhandled message from client";
+        CLOG(ERROR) << "Unhandled message from client";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -289,7 +288,7 @@ void DesktopAgentClient::readExtension(const proto::desktop::Extension& extensio
     else if (extension.name() == common::kSystemInfoExtension)
         readSystemInfoExtension(extension.data());
     else
-        LOG(ERROR) << "Unknown extension:" << extension.name();
+        CLOG(ERROR) << "Unknown extension:" << extension.name();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -307,24 +306,24 @@ void DesktopAgentClient::readConfig(const proto::desktop::Config& config)
     config_.cursor_shape = (config.flags() & proto::desktop::ENABLE_CURSOR_SHAPE);
     config_.clipboard = (config.flags() & proto::desktop::ENABLE_CLIPBOARD);
 
-    LOG(INFO) << "Config changed (encoding:" << config.video_encoding()
-              << "cursor_shape:" << config_.cursor_shape
-              << "font_smoothing:" << config_.disable_font_smoothing
-              << "effects:" << config_.disable_effects
-              << "wallpaper:" << config_.disable_wallpaper
-              << "block_input:" << config_.block_input
-              << "lock_at_disconnect:" << config_.lock_at_disconnect
-              << "clear_clipboard:" << config_.clear_clipboard
-              << "cursor_position:" << config_.cursor_position
-              << "cursor_shape:" << config_.cursor_shape
-              << "clipboard:" << config_.clipboard << ")";
+    CLOG(INFO) << "Config changed (encoding:" << config.video_encoding()
+               << "cursor_shape:" << config_.cursor_shape
+               << "font_smoothing:" << config_.disable_font_smoothing
+               << "effects:" << config_.disable_effects
+               << "wallpaper:" << config_.disable_wallpaper
+               << "block_input:" << config_.block_input
+               << "lock_at_disconnect:" << config_.lock_at_disconnect
+               << "clear_clipboard:" << config_.clear_clipboard
+               << "cursor_position:" << config_.cursor_position
+               << "cursor_shape:" << config_.cursor_shape
+               << "clipboard:" << config_.clipboard << ")";
     emit sig_configured();
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopAgentClient::readKeyFrameExtension(const std::string& /* data */)
 {
-    LOG(INFO) << "Key frame requested by client";
+    CLOG(INFO) << "Key frame requested by client";
     emit sig_keyFrameRequested();
 }
 
@@ -334,11 +333,11 @@ void DesktopAgentClient::readSelectScreenExtension(const std::string& data)
     proto::desktop::Screen screen;
     if (!screen.ParseFromString(data))
     {
-        LOG(ERROR) << "Unable to parse select screen extension data";
+        CLOG(ERROR) << "Unable to parse select screen extension data";
         return;
     }
 
-    LOG(INFO) << "Received:" << screen;
+    CLOG(INFO) << "Received:" << screen;
     emit sig_selectScreen(screen);
 }
 
@@ -348,7 +347,7 @@ void DesktopAgentClient::readPreferredSizeExtension(const std::string& data)
     proto::desktop::Size preferred_size;
     if (!preferred_size.ParseFromString(data))
     {
-        LOG(ERROR) << "Unable to parse preferred size extension data";
+        CLOG(ERROR) << "Unable to parse preferred size extension data";
         return;
     }
 
@@ -357,11 +356,11 @@ void DesktopAgentClient::readPreferredSizeExtension(const std::string& data)
     if (preferred_size.width() < 0 || preferred_size.width() > kMaxScreenSize ||
         preferred_size.height() < 0 || preferred_size.height() > kMaxScreenSize)
     {
-        LOG(ERROR) << "Invalid preferred size:" << preferred_size;
+        CLOG(ERROR) << "Invalid preferred size:" << preferred_size;
         return;
     }
 
-    LOG(INFO) << "Preferred size changed:" << preferred_size;
+    CLOG(INFO) << "Preferred size changed:" << preferred_size;
     preferred_size_ = base::parse(preferred_size);
     emit sig_preferredSizeChanged(preferred_size_);
 }
@@ -372,12 +371,12 @@ void DesktopAgentClient::readVideoPauseExtension(const std::string& data)
     proto::desktop::Pause pause;
     if (!pause.ParseFromString(data))
     {
-        LOG(ERROR) << "Unable to parse video pause extension data";
+        CLOG(ERROR) << "Unable to parse video pause extension data";
         return;
     }
 
     is_video_paused_ = pause.enable();
-    LOG(INFO) << "Video paused:" << is_video_paused_;
+    CLOG(INFO) << "Video paused:" << is_video_paused_;
 
     if (!is_video_paused_)
         emit sig_keyFrameRequested();
@@ -389,12 +388,12 @@ void DesktopAgentClient::readAudioPauseExtension(const std::string& data)
     proto::desktop::Pause pause;
     if (!pause.ParseFromString(data))
     {
-        LOG(ERROR) << "Unable to parse pause extension data";
+        CLOG(ERROR) << "Unable to parse pause extension data";
         return;
     }
 
     is_audio_paused_ = pause.enable();
-    LOG(INFO) << "Audio paused:" << is_audio_paused_;
+    CLOG(INFO) << "Audio paused:" << is_audio_paused_;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -402,18 +401,18 @@ void DesktopAgentClient::readPowerControlExtension(const std::string& data)
 {
     if (sessionType() != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
     {
-        LOG(ERROR) << "Power management is only accessible from a desktop manage session";
+        CLOG(ERROR) << "Power management is only accessible from a desktop manage session";
         return;
     }
 
     proto::desktop::PowerControl power_control;
     if (!power_control.ParseFromString(data))
     {
-        LOG(ERROR) << "Unable to parse power control extension data";
+        CLOG(ERROR) << "Unable to parse power control extension data";
         return;
     }
 
-    LOG(INFO) << "Received:" << power_control;
+    CLOG(INFO) << "Received:" << power_control;
 
     switch (power_control.action())
     {
@@ -430,24 +429,24 @@ void DesktopAgentClient::readPowerControlExtension(const std::string& data)
 #if defined(Q_OS_WINDOWS)
             if (!base::SafeModeUtil::setSafeModeService(Service::kName, true))
             {
-                LOG(ERROR) << "Failed to add service to start in safe mode";
+                CLOG(ERROR) << "Failed to add service to start in safe mode";
                 return;
             }
 
-            LOG(INFO) << "Service added successfully to start in safe mode";
+            CLOG(INFO) << "Service added successfully to start in safe mode";
 
             HostStorage storage;
             storage.setBootToSafeMode(true);
 
             if (!base::SafeModeUtil::setSafeMode(true))
             {
-                LOG(ERROR) << "Failed to enable boot in Safe Mode";
+                CLOG(ERROR) << "Failed to enable boot in Safe Mode";
                 return;
             }
 
-            LOG(INFO) << "Safe Mode boot enabled successfully";
+            CLOG(INFO) << "Safe Mode boot enabled successfully";
             if (!base::PowerController::reboot())
-                LOG(ERROR) << "Unable to reboot";
+                CLOG(ERROR) << "Unable to reboot";
 #endif // defined(Q_OS_WINDOWS)
         }
         break;
@@ -461,7 +460,7 @@ void DesktopAgentClient::readPowerControlExtension(const std::string& data)
             break;
 
         default:
-            LOG(ERROR) << "Unhandled power control action:" << power_control.action();
+            CLOG(ERROR) << "Unhandled power control action:" << power_control.action();
             break;
     }
 }
@@ -470,7 +469,7 @@ void DesktopAgentClient::readPowerControlExtension(const std::string& data)
 void DesktopAgentClient::readRemoteUpdateExtension(const std::string& /* data */)
 {
 #if defined(Q_OS_WINDOWS)
-    LOG(INFO) << "Remote update requested";
+    CLOG(INFO) << "Remote update requested";
     if (sessionType() == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
         launchUpdater(base::currentProcessSessionId());
 #endif // defined(Q_OS_WINDOWS)
@@ -485,7 +484,7 @@ void DesktopAgentClient::readSystemInfoExtension(const std::string& data)
     if (!data.empty())
     {
         if (!system_info_request.ParseFromString(data))
-            LOG(ERROR) << "Unable to parse system info request";
+            CLOG(ERROR) << "Unable to parse system info request";
     }
 
     proto::system_info::SystemInfo system_info;
@@ -507,7 +506,7 @@ void DesktopAgentClient::readTaskManagerExtension(const std::string& data)
     proto::task_manager::ClientToHost message;
     if (!message.ParseFromString(data))
     {
-        LOG(ERROR) << "Unable to parse task manager extension data";
+        CLOG(ERROR) << "Unable to parse task manager extension data";
         return;
     }
 
@@ -528,7 +527,7 @@ void DesktopAgentClient::readOverflow(proto::desktop::Overflow::State state)
     if (state == overflow_state_)
         return;
 
-    LOG(INFO) << "Overflow state changed from" << overflow_state_ << "to" << state;
+    CLOG(INFO) << "Overflow state changed from" << overflow_state_ << "to" << state;
     overflow_state_ = state;
 }
 
@@ -582,7 +581,7 @@ void DesktopAgentClient::sendCapabilities()
 #warning Not implemented
 #endif
 
-    LOG(INFO) << "Sending:" << *capabilities;
+    CLOG(INFO) << "Sending:" << *capabilities;
     sendSessionMessage(base::serialize(message));
 }
 

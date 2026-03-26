@@ -89,7 +89,7 @@ TcpChannelLegacy::TcpChannelLegacy(
       socket_(std::move(socket)),
       authenticator_(authenticator)
 {
-    DCHECK(socket_.is_open());
+    CDCHECK(socket_.is_open());
     init();
     setConnected(true);
 }
@@ -112,7 +112,7 @@ void TcpChannelLegacy::doAuthentication()
         return;
     }
 
-    LOG(INFO) << "Start authentication";
+    CLOG(INFO) << "Start authentication";
     authenticator_->start();
     setPaused(false);
 }
@@ -129,7 +129,7 @@ QString TcpChannelLegacy::peerAddress() const
         asio::ip::tcp::endpoint endpoint = socket_.remote_endpoint(error_code);
         if (error_code)
         {
-            LOG(ERROR) << "Unable to get peer address:" << error_code;
+            CLOG(ERROR) << "Unable to get peer address:" << error_code;
             return QString();
         }
 
@@ -156,7 +156,7 @@ QString TcpChannelLegacy::peerAddress() const
     }
     catch (const std::error_code& error_code)
     {
-        LOG(ERROR) << "Unable to get peer address:" << error_code;
+        CLOG(ERROR) << "Unable to get peer address:" << error_code;
         return QString();
     }
 }
@@ -170,7 +170,7 @@ void TcpChannelLegacy::connectTo(const QString& address, quint16 port)
     std::string host = address.toLocal8Bit().toStdString();
     std::string service = std::to_string(port);
 
-    LOG(INFO) << "Start resolving for" << host << ":" << service;
+    CLOG(INFO) << "Start resolving for" << host << ":" << service;
 
     auto guard = alive_guard_;
     resolver_->async_resolve(host, service,
@@ -187,7 +187,7 @@ void TcpChannelLegacy::connectTo(const QString& address, quint16 port)
             return;
         }
 
-        LOG(INFO) << "Resolved endpoints:" << endpointsToString(endpoints);
+        CLOG(INFO) << "Resolved endpoints:" << endpointsToString(endpoints);
 
         asio::async_connect(socket_, endpoints,
             [](const std::error_code& error_code, const asio::ip::tcp::endpoint& next)
@@ -215,8 +215,8 @@ void TcpChannelLegacy::connectTo(const QString& address, quint16 port)
                 return;
             }
 
-            LOG(INFO) << "Connected to endpoint:" << endpoint.address().to_string() << ":"
-                      << endpoint.port();
+            CLOG(INFO) << "Connected to endpoint:" << endpoint.address().to_string() << ":"
+                       << endpoint.port();
 
             setConnected(true);
             emit sig_connected();
@@ -271,7 +271,7 @@ bool TcpChannelLegacy::setReadBufferSize(int size)
     socket_.set_option(new_option, error_code);
     if (error_code)
     {
-        LOG(ERROR) << "Failed to set read buffer size:" << error_code;
+        CLOG(ERROR) << "Failed to set read buffer size:" << error_code;
         return false;
     }
 
@@ -279,19 +279,19 @@ bool TcpChannelLegacy::setReadBufferSize(int size)
     socket_.get_option(current_option, error_code);
     if (error_code)
     {
-        LOG(ERROR) << "Failed to get read buffer size:" << error_code;
+        CLOG(ERROR) << "Failed to get read buffer size:" << error_code;
         return false;
     }
 
     // The operating system may adjust the buffer size at its discretion.
     if (current_option.value() != size)
     {
-        LOG(WARNING) << "Read buffer size set successfully, but actual size:"
-                     << current_option.value() << "expected:" << size;
+        CLOG(WARNING) << "Read buffer size set successfully, but actual size:"
+                      << current_option.value() << "expected:" << size;
     }
     else
     {
-        LOG(INFO) << "Read buffer size is changed:" << size;
+        CLOG(INFO) << "Read buffer size is changed:" << size;
     }
 
     return true;
@@ -306,7 +306,7 @@ bool TcpChannelLegacy::setWriteBufferSize(int size)
     socket_.set_option(new_option, error_code);
     if (error_code)
     {
-        LOG(ERROR) << "Failed to set write buffer size:" << error_code;
+        CLOG(ERROR) << "Failed to set write buffer size:" << error_code;
         return false;
     }
 
@@ -314,18 +314,18 @@ bool TcpChannelLegacy::setWriteBufferSize(int size)
     socket_.get_option(current_option, error_code);
     if (error_code)
     {
-        LOG(ERROR) << "Failed to set write buffer size:" << error_code;
+        CLOG(ERROR) << "Failed to set write buffer size:" << error_code;
         return false;
     }
 
     if (current_option.value() != size)
     {
-        LOG(WARNING) << "Write buffer size set successfully, but actual size:"
-                     << current_option.value() << "expected:" << size;
+        CLOG(WARNING) << "Write buffer size set successfully, but actual size:"
+                      << current_option.value() << "expected:" << size;
     }
     else
     {
-        LOG(INFO) << "Write buffer size is changed:" << size;
+        CLOG(INFO) << "Write buffer size is changed:" << size;
     }
 
     return true;
@@ -396,28 +396,28 @@ void TcpChannelLegacy::setConnected(bool connected)
     asio::error_code error_code;
     socket_.set_option(no_delay_option, error_code);
     if (error_code)
-        LOG(ERROR) << "Failed to disable Nagle's algorithm:" << error_code;
+        CLOG(ERROR) << "Failed to disable Nagle's algorithm:" << error_code;
     else
-        LOG(INFO) << "Nagle's algorithm is disabled";
+        CLOG(INFO) << "Nagle's algorithm is disabled";
 
     asio::socket_base::receive_buffer_size receive_option;
     socket_.get_option(receive_option, error_code);
     if (error_code)
-        LOG(ERROR) << "Failed to get read buffer size:" << error_code;
+        CLOG(ERROR) << "Failed to get read buffer size:" << error_code;
     else
-        LOG(INFO) << "Read buffer size:" << receive_option.value();
+        CLOG(INFO) << "Read buffer size:" << receive_option.value();
 
     asio::socket_base::send_buffer_size send_option;
     socket_.get_option(send_option, error_code);
     if (error_code)
-        LOG(ERROR) << "Failed to get write buffer size:" << error_code;
+        CLOG(ERROR) << "Failed to get write buffer size:" << error_code;
     else
-        LOG(INFO) << "Write buffer size:" << send_option.value();
+        CLOG(INFO) << "Write buffer size:" << send_option.value();
 
     keep_alive_counter_.resize(sizeof(quint32));
     memset(keep_alive_counter_.data(), 0, keep_alive_counter_.size());
 
-    LOG(INFO) << "Starting keep alive timer";
+    CLOG(INFO) << "Starting keep alive timer";
 
     keep_alive_timer_type_ = KEEP_ALIVE_INTERVAL;
     keep_alive_timer_->start(kKeepAliveInterval);
@@ -441,7 +441,7 @@ void TcpChannelLegacy::onKeyChanged()
     }
     else
     {
-        DCHECK_EQ(authenticator_->encryption(), proto::key_exchange::ENCRYPTION_CHACHA20_POLY1305);
+        CDCHECK_EQ(authenticator_->encryption(), proto::key_exchange::ENCRYPTION_CHACHA20_POLY1305);
 
         encryptor_ = MessageEncryptor::createForChaCha20Poly1305(
             authenticator_->sessionKey(), authenticator_->encryptIv());
@@ -500,7 +500,7 @@ void TcpChannelLegacy::onAuthenticatorFinished(Authenticator::ErrorCode error_co
     }
 
     is_channel_id_supported_ = true;
-    LOG(INFO) << "Support for channel id is enabled";
+    CLOG(INFO) << "Support for channel id is enabled";
 
     version_       = authenticator_->peerVersion();
     os_name_       = authenticator_->peerOsName();
@@ -538,18 +538,18 @@ void TcpChannelLegacy::onErrorOccurred(const Location& location, const std::erro
     else if (error_code == asio::error::network_down)
         error = ErrorCode::NETWORK_ERROR;
 
-    LOG(ERROR) << "Asio error:" << error_code;
+    CLOG(ERROR) << "Asio error:" << error_code;
     onErrorOccurred(location, error);
 }
 
 //--------------------------------------------------------------------------------------------------
 void TcpChannelLegacy::onErrorOccurred(const Location& location, ErrorCode error_code)
 {
-    LOG(ERROR) << "Connection finished with error" << error_code << "from" << location;
+    CLOG(ERROR) << "Connection finished with error" << error_code << "from" << location;
 
     if (authenticator_ && error_code == ErrorCode::CRYPTO_ERROR)
     {
-        LOG(ERROR) << "Invalid key or username/password";
+        CLOG(ERROR) << "Invalid key or username/password";
         error_code = ErrorCode::ACCESS_DENIED;
     }
 
@@ -685,7 +685,7 @@ void TcpChannelLegacy::doWrite()
 
         if (target_data_size > kMaxMessageSize)
         {
-            LOG(ERROR) << "Too big outgoing message:" << target_data_size;
+            CLOG(ERROR) << "Too big outgoing message:" << target_data_size;
             onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
             return;
         }
@@ -725,7 +725,7 @@ void TcpChannelLegacy::doWrite()
     }
     else
     {
-        DCHECK_EQ(task.type(), WriteTask::Type::SERVICE_DATA);
+        CDCHECK_EQ(task.type(), WriteTask::Type::SERVICE_DATA);
 
         resizeBuffer(&write_buffer_, source_buffer.size());
 
@@ -749,7 +749,7 @@ void TcpChannelLegacy::doWrite()
             return;
         }
 
-        DCHECK(!write_queue_.empty());
+        CDCHECK(!write_queue_.empty());
 
         // Update TX statistics.
         addTxBytes(bytes_transferred);
@@ -802,7 +802,7 @@ void TcpChannelLegacy::doReadSize()
 
             if (message_size > kMaxMessageSize)
             {
-                LOG(ERROR) << "Too big incoming message:" << message_size;
+                CLOG(ERROR) << "Too big incoming message:" << message_size;
                 onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
                 return;
             }
@@ -847,12 +847,12 @@ void TcpChannelLegacy::doReadUserData(size_t length)
             return;
         }
 
-        DCHECK_EQ(state_, ReadState::READ_USER_DATA);
+        CDCHECK_EQ(state_, ReadState::READ_USER_DATA);
 
         // Update RX statistics.
         addRxBytes(bytes_transferred);
 
-        DCHECK_EQ(bytes_transferred, read_buffer_.size());
+        CDCHECK_EQ(bytes_transferred, read_buffer_.size());
 
         if (paused_)
         {
@@ -894,9 +894,9 @@ void TcpChannelLegacy::doReadServiceHeader()
             return;
         }
 
-        DCHECK_EQ(state_, ReadState::READ_SERVICE_HEADER);
-        DCHECK_EQ(read_buffer_.size(), sizeof(ServiceHeader));
-        DCHECK_EQ(bytes_transferred, read_buffer_.size());
+        CDCHECK_EQ(state_, ReadState::READ_SERVICE_HEADER);
+        CDCHECK_EQ(read_buffer_.size(), sizeof(ServiceHeader));
+        CDCHECK_EQ(bytes_transferred, read_buffer_.size());
 
         // Update RX statistics.
         addRxBytes(bytes_transferred);
@@ -904,7 +904,7 @@ void TcpChannelLegacy::doReadServiceHeader()
         ServiceHeader* header = reinterpret_cast<ServiceHeader*>(read_buffer_.data());
         if (header->length > kMaxMessageSize)
         {
-            LOG(INFO) << "Too big service message:" << header->length;
+            CLOG(INFO) << "Too big service message:" << header->length;
             onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
             return;
         }
@@ -931,9 +931,9 @@ void TcpChannelLegacy::doReadServiceHeader()
 //--------------------------------------------------------------------------------------------------
 void TcpChannelLegacy::doReadServiceData(size_t length)
 {
-    DCHECK_EQ(read_buffer_.size(), sizeof(ServiceHeader));
-    DCHECK_EQ(state_, ReadState::READ_SERVICE_HEADER);
-    DCHECK_GT(length, 0u);
+    CDCHECK_EQ(read_buffer_.size(), sizeof(ServiceHeader));
+    CDCHECK_EQ(state_, ReadState::READ_SERVICE_HEADER);
+    CDCHECK_GT(length, 0u);
 
     read_buffer_.resize(read_buffer_.size() + static_cast<qsizetype>(length));
 
@@ -957,8 +957,8 @@ void TcpChannelLegacy::doReadServiceData(size_t length)
             return;
         }
 
-        DCHECK_EQ(state_, ReadState::READ_SERVICE_DATA);
-        DCHECK_GT(read_buffer_.size(), sizeof(ServiceHeader));
+        CDCHECK_EQ(state_, ReadState::READ_SERVICE_DATA);
+        CDCHECK_GT(read_buffer_.size(), sizeof(ServiceHeader));
 
         // Update RX statistics.
         addRxBytes(bytes_transferred);
@@ -966,8 +966,8 @@ void TcpChannelLegacy::doReadServiceData(size_t length)
         // Incoming buffer contains a service header.
         ServiceHeader* header = reinterpret_cast<ServiceHeader*>(read_buffer_.data());
 
-        DCHECK_EQ(bytes_transferred, read_buffer_.size() - sizeof(ServiceHeader));
-        DCHECK_LE(header->length, kMaxMessageSize);
+        CDCHECK_EQ(bytes_transferred, read_buffer_.size() - sizeof(ServiceHeader));
+        CDCHECK_LE(header->length, kMaxMessageSize);
 
         if (header->type == KEEP_ALIVE)
         {
@@ -1004,7 +1004,7 @@ void TcpChannelLegacy::doReadServiceData(size_t length)
                 // The user can disable keep alive. Restart the timer only if keep alive is enabled.
                 if (keep_alive_timer_->isActive())
                 {
-                    DCHECK(!keep_alive_counter_.isEmpty());
+                    CDCHECK(!keep_alive_counter_.isEmpty());
 
                     // Increase the counter of sent packets.
                     largeNumberIncrement(&keep_alive_counter_);
@@ -1039,7 +1039,7 @@ void TcpChannelLegacy::onKeepAliveTimer()
     }
     else
     {
-        DCHECK_EQ(keep_alive_timer_type_, KEEP_ALIVE_TIMEOUT);
+        CDCHECK_EQ(keep_alive_timer_type_, KEEP_ALIVE_TIMEOUT);
 
         // No response came within the specified period of time. We forcibly terminate the connection.
         onErrorOccurred(FROM_HERE, ErrorCode::SOCKET_TIMEOUT);
@@ -1073,14 +1073,14 @@ void TcpChannelLegacy::sendKeepAlive(quint8 flags, const void* data, size_t size
 //--------------------------------------------------------------------------------------------------
 asio::mutable_buffer TcpChannelLegacy::VariableSizeReader::buffer()
 {
-    DCHECK_LT(pos_, std::size(buffer_));
+    CDCHECK_LT(pos_, std::size(buffer_));
     return asio::mutable_buffer(&buffer_[pos_], sizeof(quint8));
 }
 
 //--------------------------------------------------------------------------------------------------
 std::optional<size_t> TcpChannelLegacy::VariableSizeReader::messageSize()
 {
-    DCHECK_LT(pos_, std::size(buffer_));
+    CDCHECK_LT(pos_, std::size(buffer_));
 
     if (pos_ == 3 || !(buffer_[pos_] & 0x80))
     {

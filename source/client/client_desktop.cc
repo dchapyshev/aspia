@@ -59,19 +59,19 @@ size_t calculateAvgSize(size_t last_avg_size, size_t bytes)
 ClientDesktop::ClientDesktop(QObject* parent)
     : Client(parent)
 {
-    LOG(INFO) << "Ctor";
+    CLOG(INFO) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
 ClientDesktop::~ClientDesktop()
 {
-    LOG(INFO) << "Dtor";
+    CLOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClientDesktop::onSessionStarted()
 {
-    LOG(INFO) << "Desktop session started";
+    CLOG(INFO) << "Desktop session started";
 
     start_time_ = Clock::now();
     key_frame_received_ = false;
@@ -92,7 +92,7 @@ void ClientDesktop::onSessionMessageReceived(const QByteArray& buffer)
 {
     if (!incoming_message_.parse(buffer))
     {
-        LOG(ERROR) << "Invalid session message from host";
+        CLOG(ERROR) << "Invalid session message from host";
         return;
     }
 
@@ -127,7 +127,7 @@ void ClientDesktop::onSessionMessageReceived(const QByteArray& buffer)
     else
     {
         // Unknown messages are ignored.
-        LOG(ERROR) << "Unhandled session message from host";
+        CLOG(ERROR) << "Unhandled session message from host";
     }
 }
 
@@ -138,19 +138,19 @@ void ClientDesktop::onServiceMessageReceived(const QByteArray& buffer)
 
     if (!base::parse(buffer, &message))
     {
-        LOG(ERROR) << "Unable to parse service message";
+        CLOG(ERROR) << "Unable to parse service message";
         return;
     }
 
     if (message.has_session_list())
     {
-        LOG(INFO) << "Received:" << message.session_list();
+        CLOG(INFO) << "Received:" << message.session_list();
         emit sig_sessionListChanged(message.session_list());
     }
     else
     {
         // Unknown messages are ignored.
-        LOG(ERROR) << "Unhandled service message from host";
+        CLOG(ERROR) << "Unhandled service message from host";
     }
 }
 
@@ -171,13 +171,13 @@ void ClientDesktop::onDesktopConfigChanged(const proto::desktop::Config& config)
 
     if (!(desktop_config_.flags() & proto::desktop::ENABLE_CURSOR_SHAPE))
     {
-        LOG(INFO) << "Cursor shape disabled";
+        CLOG(INFO) << "Cursor shape disabled";
         cursor_decoder_.reset();
     }
 
     input_event_filter_.setClipboardEnabled(desktop_config_.flags() & proto::desktop::ENABLE_CLIPBOARD);
 
-    LOG(INFO) << "Send:" << config;
+    CLOG(INFO) << "Send:" << config;
     outgoing_message_.newMessage().mutable_config()->CopyFrom(desktop_config_);
     sendSessionMessage(outgoing_message_.serialize());
     sendSessionListRequest();
@@ -186,7 +186,7 @@ void ClientDesktop::onDesktopConfigChanged(const proto::desktop::Config& config)
 //--------------------------------------------------------------------------------------------------
 void ClientDesktop::onCurrentScreenChanged(const proto::desktop::Screen& screen)
 {
-    LOG(INFO) << "Current screen changed:" << screen.id();
+    CLOG(INFO) << "Current screen changed:" << screen.id();
 
     proto::desktop::Extension* extension = outgoing_message_.newMessage().mutable_extension();
     extension->set_name(common::kSelectScreenExtension);
@@ -198,7 +198,7 @@ void ClientDesktop::onCurrentScreenChanged(const proto::desktop::Screen& screen)
 //--------------------------------------------------------------------------------------------------
 void ClientDesktop::onPreferredSizeChanged(int width, int height)
 {
-    LOG(INFO) << "Preferred size changed:" << width << "x" << height;
+    CLOG(INFO) << "Preferred size changed:" << width << "x" << height;
 
     proto::desktop::Size preferred_size;
     preferred_size.set_width(width);
@@ -214,7 +214,7 @@ void ClientDesktop::onPreferredSizeChanged(int width, int height)
 //--------------------------------------------------------------------------------------------------
 void ClientDesktop::onVideoPauseChanged(bool enable)
 {
-    LOG(INFO) << "Video pause changed:" << enable;
+    CLOG(INFO) << "Video pause changed:" << enable;
 
     if (enable)
     {
@@ -240,7 +240,7 @@ void ClientDesktop::onVideoPauseChanged(bool enable)
 //--------------------------------------------------------------------------------------------------
 void ClientDesktop::onAudioPauseChanged(bool enable)
 {
-    LOG(INFO) << "Audio pause changed:" << enable;
+    CLOG(INFO) << "Audio pause changed:" << enable;
 
     if (enable)
     {
@@ -271,7 +271,7 @@ void ClientDesktop::onRecordingChanged(bool enable, const QString& file_path)
 
     if (enable)
     {
-        LOG(INFO) << "Video recording is enabled:" << file_path;
+        CLOG(INFO) << "Video recording is enabled:" << file_path;
 
         video_recording->set_action(proto::desktop::VideoRecording::ACTION_STARTED);
 
@@ -296,7 +296,7 @@ void ClientDesktop::onRecordingChanged(bool enable, const QString& file_path)
     }
     else
     {
-        LOG(INFO) << "Video recording is disabled";
+        CLOG(INFO) << "Video recording is disabled";
 
         video_recording->set_action(proto::desktop::VideoRecording::ACTION_STOPPED);
 
@@ -347,7 +347,7 @@ void ClientDesktop::onPowerControl(proto::desktop::PowerControl::Action action)
 {
     if (sessionState()->sessionType() != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
     {
-        LOG(INFO) << "Power control supported only for desktop manage session";
+        CLOG(INFO) << "Power control supported only for desktop manage session";
         return;
     }
 
@@ -463,7 +463,7 @@ void ClientDesktop::onSwitchSession(quint32 session_id)
     proto::desktop::SwitchSession* switch_session = message.mutable_switch_session();
     switch_session->set_session_id(session_id);
 
-    LOG(INFO) << "Send:" << *switch_session;
+    CLOG(INFO) << "Send:" << *switch_session;
     sendServiceMessage(base::serialize(message));
 }
 
@@ -472,7 +472,7 @@ void ClientDesktop::readCapabilities(const proto::desktop::Capabilities& capabil
 {
     // We notify the window about changes in the list of extensions and video encodings.
     // A window can disable/enable some of its capabilities in accordance with this information.
-    LOG(INFO) << "Received:" << capabilities;
+    CLOG(INFO) << "Received:" << capabilities;
     emit sig_capabilities(capabilities);
 }
 
@@ -482,14 +482,14 @@ void ClientDesktop::readVideoPacket(const proto::desktop::VideoPacket& packet)
     proto::desktop::VideoErrorCode error_code = packet.error_code();
     if (error_code != proto::desktop::VIDEO_ERROR_CODE_OK)
     {
-        LOG(ERROR) << "Video error detected:" << error_code;
+        CLOG(ERROR) << "Video error detected:" << error_code;
         emit sig_frameError(error_code);
         return;
     }
 
     if (video_encoding_ != packet.encoding())
     {
-        LOG(INFO) << "Video encoding changed from" << video_encoding_ << "to" << packet.encoding();
+        CLOG(INFO) << "Video encoding changed from" << video_encoding_ << "to" << packet.encoding();
         video_decoder_ = std::make_unique<base::VideoDecoder>(packet.encoding());
         video_encoding_ = packet.encoding();
 
@@ -503,7 +503,7 @@ void ClientDesktop::readVideoPacket(const proto::desktop::VideoPacket& packet)
 
     if (!video_decoder_)
     {
-        LOG(ERROR) << "Video decoder is not initialized";
+        CLOG(ERROR) << "Video decoder is not initialized";
         return;
     }
 
@@ -511,7 +511,7 @@ void ClientDesktop::readVideoPacket(const proto::desktop::VideoPacket& packet)
     {
         const proto::desktop::VideoPacketFormat& format = packet.format();
 
-        LOG(INFO) << "Video packet has format:" << format;
+        CLOG(INFO) << "Video packet has format:" << format;
         key_frame_received_ = true;
 
         QSize video_size = QSize(format.video_rect().width(), format.video_rect().height());
@@ -522,7 +522,7 @@ void ClientDesktop::readVideoPacket(const proto::desktop::VideoPacket& packet)
         if (video_size.width()  <= 0 || video_size.width()  >= kMaxValue ||
             video_size.height() <= 0 || video_size.height() >= kMaxValue)
         {
-            LOG(ERROR) << "Wrong video frame size:" << video_size;
+            CLOG(ERROR) << "Wrong video frame size:" << video_size;
             return;
         }
 
@@ -533,7 +533,7 @@ void ClientDesktop::readVideoPacket(const proto::desktop::VideoPacket& packet)
             if (screen_size.width() <= 0 || screen_size.width() >= kMaxValue ||
                 screen_size.height() <= 0 || screen_size.height() >= kMaxValue)
             {
-                LOG(ERROR) << "Wrong screen size:" << screen_size;
+                CLOG(ERROR) << "Wrong screen size:" << screen_size;
                 return;
             }
         }
@@ -550,19 +550,19 @@ void ClientDesktop::readVideoPacket(const proto::desktop::VideoPacket& packet)
     if (!key_frame_received_)
     {
         // Until a keyframe is not received, we drop all video packets.
-        LOG(INFO) << "Video packet is dropped";
+        CLOG(INFO) << "Video packet is dropped";
         return;
     }
 
     if (!desktop_frame_)
     {
-        LOG(ERROR) << "The desktop frame is not initialized";
+        CLOG(ERROR) << "The desktop frame is not initialized";
         return;
     }
 
     if (!video_decoder_->decode(packet, desktop_frame_.get()))
     {
-        LOG(ERROR) << "Unable to decode video packet";
+        CLOG(ERROR) << "Unable to decode video packet";
         key_frame_received_ = false;
         sendKeyFrameRequest();
         return;
@@ -588,7 +588,7 @@ void ClientDesktop::readAudioPacket(const proto::desktop::AudioPacket& packet)
 
     if (!audio_player_)
     {
-        LOG(ERROR) << "Audio packet received but audio player not initialized";
+        CLOG(ERROR) << "Audio packet received but audio player not initialized";
         return;
     }
 
@@ -596,18 +596,18 @@ void ClientDesktop::readAudioPacket(const proto::desktop::AudioPacket& packet)
     {
         if (packet.encoding() != proto::desktop::AUDIO_ENCODING_OPUS)
         {
-            LOG(WARNING) << "Unsupported audio encoding:" << packet.encoding();
+            CLOG(WARNING) << "Unsupported audio encoding:" << packet.encoding();
             return;
         }
         audio_decoder_ = std::make_unique<base::AudioDecoder>();
         audio_encoding_ = packet.encoding();
 
-        LOG(INFO) << "Audio encoding changed to:" << audio_encoding_;
+        CLOG(INFO) << "Audio encoding changed to:" << audio_encoding_;
     }
 
     if (!audio_decoder_)
     {
-        LOG(INFO) << "Audio decoder not initialized now";
+        CLOG(INFO) << "Audio decoder not initialized now";
         return;
     }
 
@@ -629,13 +629,13 @@ void ClientDesktop::readCursorShape(const proto::desktop::CursorShape& cursor_sh
 {
     if (sessionState()->sessionType() != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
     {
-        LOG(ERROR) << "Cursor shape received not session type not desktop manage";
+        CLOG(ERROR) << "Cursor shape received not session type not desktop manage";
         return;
     }
 
     if (!(desktop_config_.flags() & proto::desktop::ENABLE_CURSOR_SHAPE))
     {
-        LOG(ERROR) << "Cursor shape received not disabled in client";
+        CLOG(ERROR) << "Cursor shape received not disabled in client";
         return;
     }
 
@@ -643,7 +643,7 @@ void ClientDesktop::readCursorShape(const proto::desktop::CursorShape& cursor_sh
 
     if (!cursor_decoder_)
     {
-        LOG(INFO) << "Cursor decoder initialization";
+        CLOG(INFO) << "Cursor decoder initialization";
         cursor_decoder_ = std::make_unique<base::CursorDecoder>();
     }
 
@@ -680,7 +680,7 @@ void ClientDesktop::readExtension(const proto::desktop::Extension& extension)
 
         if (!message.ParseFromString(extension.data()))
         {
-            LOG(ERROR) << "Unable to parse task manager extension data";
+            CLOG(ERROR) << "Unable to parse task manager extension data";
             return;
         }
 
@@ -692,11 +692,11 @@ void ClientDesktop::readExtension(const proto::desktop::Extension& extension)
 
         if (!screen_list.ParseFromString(extension.data()))
         {
-            LOG(ERROR) << "Unable to parse select screen extension data";
+            CLOG(ERROR) << "Unable to parse select screen extension data";
             return;
         }
 
-        LOG(INFO) << "Screen list receive:" << screen_list;
+        CLOG(INFO) << "Screen list receive:" << screen_list;
         emit sig_screenListChanged(screen_list);
     }
     else if (extension.name() == common::kScreenTypeExtension)
@@ -705,11 +705,11 @@ void ClientDesktop::readExtension(const proto::desktop::Extension& extension)
 
         if (!screen_type.ParseFromString(extension.data()))
         {
-            LOG(ERROR) << "Unable to parse screen type extension data";
+            CLOG(ERROR) << "Unable to parse screen type extension data";
             return;
         }
 
-        LOG(INFO) << "Screen type received:" << screen_type;
+        CLOG(INFO) << "Screen type received:" << screen_type;
         emit sig_screenTypeChanged(screen_type);
     }
     else if (extension.name() == common::kSystemInfoExtension)
@@ -718,7 +718,7 @@ void ClientDesktop::readExtension(const proto::desktop::Extension& extension)
 
         if (!system_info.ParseFromString(extension.data()))
         {
-            LOG(ERROR) << "Unable to parse system info extension data";
+            CLOG(ERROR) << "Unable to parse system info extension data";
             return;
         }
 
@@ -726,7 +726,7 @@ void ClientDesktop::readExtension(const proto::desktop::Extension& extension)
     }
     else
     {
-        LOG(ERROR) << "Unknown extension:" << extension.name();
+        CLOG(ERROR) << "Unknown extension:" << extension.name();
     }
 }
 

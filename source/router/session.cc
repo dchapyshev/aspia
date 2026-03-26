@@ -18,7 +18,6 @@
 
 #include "router/session.h"
 
-#include "base/logging.h"
 #include "base/net/tcp_channel.h"
 
 namespace router {
@@ -41,7 +40,7 @@ Session::Session(base::TcpChannel* channel, QObject* parent)
       session_id_(createSessionId()),
       tcp_channel_(channel)
 {
-    DCHECK(tcp_channel_);
+    CDCHECK(tcp_channel_);
     tcp_channel_->setParent(this);
     address_.setAddress(tcp_channel_->peerAddress());
 
@@ -115,7 +114,7 @@ void Session::sendMessage(const QByteArray& message)
 //--------------------------------------------------------------------------------------------------
 void Session::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code)
 {
-    LOG(INFO) << "Network error:" << error_code;
+    CLOG(INFO) << "Network error:" << error_code;
     emit sig_finished(session_id_);
 }
 
@@ -128,7 +127,7 @@ void Session::onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer)
     }
     else
     {
-        LOG(ERROR) << "Unhandled incoming message from channel:" << channel_id;
+        CLOG(ERROR) << "Unhandled incoming message from channel:" << channel_id;
     }
 }
 

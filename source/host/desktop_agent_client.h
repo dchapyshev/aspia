@@ -21,6 +21,7 @@
 
 #include <QObject>
 
+#include "base/logging.h"
 #include "base/serialization.h"
 #include "proto/desktop_internal.h"
 #include "proto/desktop_session.h"
@@ -134,6 +135,7 @@ private:
     TaskManager* task_manager_ = nullptr;
 #endif // defined(Q_OS_WINDOWS)
 
+    LOG_DECLARE_CONTEXT(DesktopAgentClient);
     Q_DISABLE_COPY_MOVE(DesktopAgentClient)
 };
 
