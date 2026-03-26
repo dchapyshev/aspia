@@ -1073,14 +1073,14 @@ void TcpChannelLegacy::sendKeepAlive(quint8 flags, const void* data, size_t size
 //--------------------------------------------------------------------------------------------------
 asio::mutable_buffer TcpChannelLegacy::VariableSizeReader::buffer()
 {
-    CDCHECK_LT(pos_, std::size(buffer_));
+    DCHECK_LT(pos_, std::size(buffer_));
     return asio::mutable_buffer(&buffer_[pos_], sizeof(quint8));
 }
 
 //--------------------------------------------------------------------------------------------------
 std::optional<size_t> TcpChannelLegacy::VariableSizeReader::messageSize()
 {
-    CDCHECK_LT(pos_, std::size(buffer_));
+    DCHECK_LT(pos_, std::size(buffer_));
 
     if (pos_ == 3 || !(buffer_[pos_] & 0x80))
     {
