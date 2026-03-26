@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_CRYPTO_MESSAGE_DECRYPTOR_H
-#define BASE_CRYPTO_MESSAGE_DECRYPTOR_H
+#ifndef BASE_CRYPTO_STREAM_DECRYPTOR_H
+#define BASE_CRYPTO_STREAM_DECRYPTOR_H
 
 #include <QByteArray>
 #include <QObject>
@@ -26,12 +26,12 @@
 
 namespace base {
 
-class MessageDecryptor
+class StreamDecryptor
 {
     Q_GADGET
 
 public:
-    ~MessageDecryptor();
+    ~StreamDecryptor();
 
     enum class Type
     {
@@ -42,10 +42,10 @@ public:
     };
     Q_ENUM(Type)
 
-    static std::unique_ptr<MessageDecryptor> createForAes256Gcm(
+    static std::unique_ptr<StreamDecryptor> createForAes256Gcm(
         const QByteArray& key, const QByteArray& iv);
 
-    static std::unique_ptr<MessageDecryptor> createForChaCha20Poly1305(
+    static std::unique_ptr<StreamDecryptor> createForChaCha20Poly1305(
         const QByteArray& key, const QByteArray& iv);
 
     Type type() const { return type_; }
@@ -55,15 +55,15 @@ public:
     bool decrypt(const void* in, qint64 in_size, const void* aad, qint64 aad_size, void* out);
 
 private:
-    MessageDecryptor(MessageDecryptor::Type type, EVP_CIPHER_CTX_ptr ctx, const QByteArray& iv);
+    StreamDecryptor(StreamDecryptor::Type type, EVP_CIPHER_CTX_ptr ctx, const QByteArray& iv);
 
     const Type type_;
     EVP_CIPHER_CTX_ptr ctx_;
     QByteArray iv_;
 
-    Q_DISABLE_COPY_MOVE(MessageDecryptor)
+    Q_DISABLE_COPY_MOVE(StreamDecryptor)
 };
 
 } // namespace base
 
-#endif // BASE_CRYPTO_MESSAGE_DECRYPTOR_H
+#endif // BASE_CRYPTO_STREAM_DECRYPTOR_H

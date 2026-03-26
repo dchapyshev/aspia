@@ -25,7 +25,7 @@
 #include "base/serialization.h"
 #include "base/crypto/generic_hash.h"
 #include "base/crypto/key_pair.h"
-#include "base/crypto/message_encryptor.h"
+#include "base/crypto/stream_encryptor.h"
 #include "base/net/tcp_channel_legacy.h"
 #include "base/net/tcp_channel_ng.h"
 #include "base/peer/authenticator.h"
@@ -298,8 +298,8 @@ QByteArray RelayPeer::authenticationMessage(const proto::router::RelayKey& key, 
 
     QByteArray session_key = base::GenericHash::hash(base::GenericHash::Type::BLAKE2s256, temp);
 
-    std::unique_ptr<MessageEncryptor> encryptor =
-        MessageEncryptor::createForChaCha20Poly1305(session_key, QByteArray::fromStdString(key.iv()));
+    std::unique_ptr<StreamEncryptor> encryptor =
+        StreamEncryptor::createForChaCha20Poly1305(session_key, QByteArray::fromStdString(key.iv()));
     if (!encryptor)
     {
         CLOG(ERROR) << "createForChaCha20Poly1305 failed";

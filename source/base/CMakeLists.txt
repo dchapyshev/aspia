@@ -217,10 +217,10 @@ list(APPEND SOURCE_BASE_CRYPTO
     crypto/key_pair.h
     crypto/large_number_increment.cc
     crypto/large_number_increment.h
-    crypto/message_decryptor.cc
-    crypto/message_decryptor.h
-    crypto/message_encryptor.cc
-    crypto/message_encryptor.h
+    crypto/stream_decryptor.cc
+    crypto/stream_decryptor.h
+    crypto/stream_encryptor.cc
+    crypto/stream_encryptor.h
     crypto/openssl_util.cc
     crypto/openssl_util.h
     crypto/os_crypt.h

@@ -37,8 +37,8 @@ typedef struct _ENetPacket ENetPacket;
 namespace base {
 
 class Location;
-class MessageDecryptor;
-class MessageEncryptor;
+class StreamDecryptor;
+class StreamEncryptor;
 
 class UdpChannel final : public QObject
 {
@@ -66,8 +66,8 @@ public:
 
     void setPaused(bool enable);
 
-    void setEncryptor(std::unique_ptr<MessageEncryptor> encryptor);
-    void setDecryptor(std::unique_ptr<MessageDecryptor> decryptor);
+    void setEncryptor(std::unique_ptr<StreamEncryptor> encryptor);
+    void setDecryptor(std::unique_ptr<StreamDecryptor> decryptor);
 
     qint64 pendingBytes() const;
 
@@ -129,8 +129,8 @@ private:
     ScopedENetPeer peer_;
     int update_timer_id_ = 0;
 
-    std::unique_ptr<MessageEncryptor> encryptor_;
-    std::unique_ptr<MessageDecryptor> decryptor_;
+    std::unique_ptr<StreamEncryptor> encryptor_;
+    std::unique_ptr<StreamDecryptor> decryptor_;
 
     std::deque<ScopedENetPacket> packet_pool_;
     std::deque<Task> write_queue_;

@@ -28,8 +28,8 @@
 #include "base/location.h"
 #include "base/logging.h"
 #include "base/crypto/large_number_increment.h"
-#include "base/crypto/message_decryptor.h"
-#include "base/crypto/message_encryptor.h"
+#include "base/crypto/stream_decryptor.h"
+#include "base/crypto/stream_encryptor.h"
 
 namespace base {
 
@@ -434,18 +434,18 @@ void TcpChannelLegacy::onKeyChanged()
 
     if (authenticator_->encryption() == proto::key_exchange::ENCRYPTION_AES256_GCM)
     {
-        encryptor_ = MessageEncryptor::createForAes256Gcm(
+        encryptor_ = StreamEncryptor::createForAes256Gcm(
             authenticator_->sessionKey(), authenticator_->encryptIv());
-        decryptor_ = MessageDecryptor::createForAes256Gcm(
+        decryptor_ = StreamDecryptor::createForAes256Gcm(
             authenticator_->sessionKey(), authenticator_->decryptIv());
     }
     else
     {
         CDCHECK_EQ(authenticator_->encryption(), proto::key_exchange::ENCRYPTION_CHACHA20_POLY1305);
 
-        encryptor_ = MessageEncryptor::createForChaCha20Poly1305(
+        encryptor_ = StreamEncryptor::createForChaCha20Poly1305(
             authenticator_->sessionKey(), authenticator_->encryptIv());
-        decryptor_ = MessageDecryptor::createForChaCha20Poly1305(
+        decryptor_ = StreamDecryptor::createForChaCha20Poly1305(
             authenticator_->sessionKey(), authenticator_->decryptIv());
     }
 

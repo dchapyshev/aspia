@@ -26,7 +26,7 @@
 namespace base {
 
 // AEAD decryptor for datagrams with explicit counter-based nonce construction. Unlike
-// MessageDecryptor, this class does not maintain internal IV state. The caller provides a counter
+// StreamDecryptor, this class does not maintain internal IV state. The caller provides a counter
 // for each packet, and the nonce is computed as base_iv XOR counter (WireGuard-style).
 class DatagramDecryptor
 {

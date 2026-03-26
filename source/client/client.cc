@@ -24,8 +24,8 @@
 #include "base/version_constants.h"
 #include "base/serialization.h"
 #include "base/crypto/key_pair.h"
-#include "base/crypto/message_decryptor.h"
-#include "base/crypto/message_encryptor.h"
+#include "base/crypto/stream_decryptor.h"
+#include "base/crypto/stream_encryptor.h"
 #include "base/crypto/random.h"
 #include "base/net/net_utils.h"
 #include "base/net/tcp_channel_ng.h"
@@ -741,18 +741,18 @@ void Client::connectToUdp(
         return;
     }
 
-    std::unique_ptr<base::MessageEncryptor> encryptor;
-    std::unique_ptr<base::MessageDecryptor> decryptor;
+    std::unique_ptr<base::StreamEncryptor> encryptor;
+    std::unique_ptr<base::StreamDecryptor> decryptor;
 
     if (encryption == proto::key_exchange::ENCRYPTION_AES256_GCM)
     {
-        encryptor = base::MessageEncryptor::createForAes256Gcm(session_key, client_iv);
-        decryptor = base::MessageDecryptor::createForAes256Gcm(session_key, context.iv);
+        encryptor = base::StreamEncryptor::createForAes256Gcm(session_key, client_iv);
+        decryptor = base::StreamDecryptor::createForAes256Gcm(session_key, context.iv);
     }
     else
     {
-        encryptor = base::MessageEncryptor::createForChaCha20Poly1305(session_key, client_iv);
-        decryptor = base::MessageDecryptor::createForChaCha20Poly1305(session_key, context.iv);
+        encryptor = base::StreamEncryptor::createForChaCha20Poly1305(session_key, client_iv);
+        decryptor = base::StreamDecryptor::createForChaCha20Poly1305(session_key, context.iv);
     }
 
     if (!encryptor || !decryptor)

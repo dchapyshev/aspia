@@ -26,8 +26,8 @@
 
 #include "base/location.h"
 #include "base/thread_local_pool.h"
-#include "base/crypto/message_decryptor.h"
-#include "base/crypto/message_encryptor.h"
+#include "base/crypto/stream_decryptor.h"
+#include "base/crypto/stream_encryptor.h"
 
 namespace base {
 
@@ -419,14 +419,14 @@ void UdpChannel::doWrite()
 }
 
 //--------------------------------------------------------------------------------------------------
-void UdpChannel::setEncryptor(std::unique_ptr<MessageEncryptor> encryptor)
+void UdpChannel::setEncryptor(std::unique_ptr<StreamEncryptor> encryptor)
 {
     encryptor_ = std::move(encryptor);
     onReadyCheck();
 }
 
 //--------------------------------------------------------------------------------------------------
-void UdpChannel::setDecryptor(std::unique_ptr<MessageDecryptor> decryptor)
+void UdpChannel::setDecryptor(std::unique_ptr<StreamDecryptor> decryptor)
 {
     decryptor_ = std::move(decryptor);
     onReadyCheck();

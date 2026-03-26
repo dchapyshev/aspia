@@ -33,8 +33,8 @@
 namespace base {
 
 class Location;
-class MessageEncryptor;
-class MessageDecryptor;
+class StreamEncryptor;
+class StreamDecryptor;
 class TcpServer;
 
 class TcpChannelLegacy final : public TcpChannel
@@ -228,8 +228,8 @@ private:
     bool paused_ = true;
 
     Authenticator* authenticator_ = nullptr;
-    std::unique_ptr<MessageEncryptor> encryptor_;
-    std::unique_ptr<MessageDecryptor> decryptor_;
+    std::unique_ptr<StreamEncryptor> encryptor_;
+    std::unique_ptr<StreamDecryptor> decryptor_;
 
     QQueue<WriteTask> write_queue_;
     VariableSizeWriter variable_size_writer_;

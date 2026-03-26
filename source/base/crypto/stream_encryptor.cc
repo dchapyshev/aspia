@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/crypto/message_encryptor.h"
+#include "base/crypto/stream_encryptor.h"
 
 #include "base/logging.h"
 #include "base/crypto/large_number_increment.h"
@@ -34,8 +34,8 @@ const qint64 kTagSize = 16; // 128 bits, 16 bytes.
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-MessageEncryptor::MessageEncryptor(
-    MessageEncryptor::Type type, EVP_CIPHER_CTX_ptr ctx, const QByteArray& iv)
+StreamEncryptor::StreamEncryptor(
+    StreamEncryptor::Type type, EVP_CIPHER_CTX_ptr ctx, const QByteArray& iv)
     : type_(type),
       ctx_(std::move(ctx)),
       iv_(iv)
@@ -45,11 +45,11 @@ MessageEncryptor::MessageEncryptor(
 }
 
 //--------------------------------------------------------------------------------------------------
-MessageEncryptor::~MessageEncryptor() = default;
+StreamEncryptor::~StreamEncryptor() = default;
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::unique_ptr<MessageEncryptor> MessageEncryptor::createForAes256Gcm(
+std::unique_ptr<StreamEncryptor> StreamEncryptor::createForAes256Gcm(
     const QByteArray& key, const QByteArray& iv)
 {
     if (key.size() != kKeySize || iv.size() != kIVSize)
@@ -65,13 +65,13 @@ std::unique_ptr<MessageEncryptor> MessageEncryptor::createForAes256Gcm(
         return nullptr;
     }
 
-    return std::unique_ptr<MessageEncryptor>(new MessageEncryptor(
-        MessageEncryptor::Type::AES256_GCM, std::move(ctx), iv));
+    return std::unique_ptr<StreamEncryptor>(new StreamEncryptor(
+        StreamEncryptor::Type::AES256_GCM, std::move(ctx), iv));
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::unique_ptr<MessageEncryptor> MessageEncryptor::createForChaCha20Poly1305(
+std::unique_ptr<StreamEncryptor> StreamEncryptor::createForChaCha20Poly1305(
     const QByteArray& key, const QByteArray& iv)
 {
     if (key.size() != kKeySize || iv.size() != kIVSize)
@@ -88,24 +88,24 @@ std::unique_ptr<MessageEncryptor> MessageEncryptor::createForChaCha20Poly1305(
         return nullptr;
     }
 
-    return std::unique_ptr<MessageEncryptor>(new MessageEncryptor(
-        MessageEncryptor::Type::CHACHA20_POLY1305, std::move(ctx), iv));
+    return std::unique_ptr<StreamEncryptor>(new StreamEncryptor(
+        StreamEncryptor::Type::CHACHA20_POLY1305, std::move(ctx), iv));
 }
 
 //--------------------------------------------------------------------------------------------------
-qint64 MessageEncryptor::encryptedDataSize(qint64 in_size)
+qint64 StreamEncryptor::encryptedDataSize(qint64 in_size)
 {
     return in_size + kTagSize;
 }
 
 //--------------------------------------------------------------------------------------------------
-bool MessageEncryptor::encrypt(const void* in, qint64 in_size, void* out)
+bool StreamEncryptor::encrypt(const void* in, qint64 in_size, void* out)
 {
     return encrypt(in, in_size, nullptr, 0, out);
 }
 
 //--------------------------------------------------------------------------------------------------
-bool MessageEncryptor::encrypt(const void* in, qint64 in_size, const void* aad, qint64 aad_size, void* out)
+bool StreamEncryptor::encrypt(const void* in, qint64 in_size, const void* aad, qint64 aad_size, void* out)
 {
     if (EVP_EncryptInit_ex(ctx_.get(), nullptr, nullptr, nullptr,
         reinterpret_cast<const quint8*>(iv_.data())) != 1)

@@ -22,7 +22,7 @@
 
 #include "base/asio_event_dispatcher.h"
 #include "base/logging.h"
-#include "base/crypto/message_decryptor.h"
+#include "base/crypto/stream_decryptor.h"
 #include "relay/pending_session.h"
 #include "relay/session.h"
 #include "relay/settings.h"
@@ -43,8 +43,8 @@ QByteArray decryptSecret(const proto::relay::PeerToRelay& message, const Session
         return QByteArray();
     }
 
-    std::unique_ptr<base::MessageDecryptor> decryptor =
-        base::MessageDecryptor::createForChaCha20Poly1305(key.first, key.second);
+    std::unique_ptr<base::StreamDecryptor> decryptor =
+        base::StreamDecryptor::createForChaCha20Poly1305(key.first, key.second);
     if (!decryptor)
     {
         LOG(ERROR) << "Decryptor not created";

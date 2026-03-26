@@ -16,15 +16,15 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/crypto/message_encryptor.h"
-#include "base/crypto/message_decryptor.h"
+#include "base/crypto/stream_encryptor.h"
+#include "base/crypto/stream_decryptor.h"
 
 #include <gtest/gtest.h>
 
 namespace base {
 
-void testVector(MessageEncryptor* client_encryptor, MessageDecryptor* client_decryptor,
-                MessageEncryptor* host_encryptor, MessageDecryptor* host_decryptor)
+void testVector(StreamEncryptor* client_encryptor, StreamDecryptor* client_decryptor,
+                StreamEncryptor* host_encryptor, StreamDecryptor* host_decryptor)
 {
     QByteArray message_for_host = QByteArray::fromHex(
         "6006ee8029610876ec2facd5fc9ce6bd6dc03d4a5ddb4d6c28f2ff048d4f7eb7bcf5048c901a4adaa7fd8aa65bc95ca1d9f21ced474a45e9c6e7344184d6d715");
@@ -79,7 +79,7 @@ void testVector(MessageEncryptor* client_encryptor, MessageDecryptor* client_dec
     ASSERT_EQ(decrypted_msg_for_client, message_for_client);
 }
 
-void wrongKey(MessageEncryptor* client_encryptor, MessageDecryptor* host_decryptor)
+void wrongKey(StreamEncryptor* client_encryptor, StreamDecryptor* host_decryptor)
 {
     QByteArray message_for_host = QByteArray::fromHex(
         "6006ee8029610876ec2facd5fc9ce6bd6dc03d4a5ddb4d6c28f2ff048d4f7eb7bcf5048c901a4adaa7fd");
@@ -107,7 +107,7 @@ void wrongKey(MessageEncryptor* client_encryptor, MessageDecryptor* host_decrypt
     ASSERT_FALSE(ret);
 }
 
-void wrongAad(MessageEncryptor* encryptor, MessageDecryptor* decryptor)
+void wrongAad(StreamEncryptor* encryptor, StreamDecryptor* decryptor)
 {
     const QByteArray message = QByteArray::fromHex(
         "6006ee8029610876ec2facd5fc9ce6bd6dc03d4a5ddb4d6c28f2ff048d4f7eb7");
@@ -148,20 +148,20 @@ TEST(CryptorAes256GcmTest, TestVector)
     EXPECT_EQ(encrypt_iv.size(), 12);
     EXPECT_EQ(decrypt_iv.size(), 12);
 
-    std::unique_ptr<MessageEncryptor> client_encryptor =
-        MessageEncryptor::createForAes256Gcm(key, encrypt_iv);
+    std::unique_ptr<StreamEncryptor> client_encryptor =
+        StreamEncryptor::createForAes256Gcm(key, encrypt_iv);
     ASSERT_NE(client_encryptor, nullptr);
 
-    std::unique_ptr<MessageDecryptor> client_decryptor =
-        MessageDecryptor::createForAes256Gcm(key, decrypt_iv);
+    std::unique_ptr<StreamDecryptor> client_decryptor =
+        StreamDecryptor::createForAes256Gcm(key, decrypt_iv);
     ASSERT_NE(client_decryptor, nullptr);
 
-    std::unique_ptr<MessageEncryptor> host_encryptor =
-        MessageEncryptor::createForAes256Gcm(key, decrypt_iv);
+    std::unique_ptr<StreamEncryptor> host_encryptor =
+        StreamEncryptor::createForAes256Gcm(key, decrypt_iv);
     ASSERT_NE(host_encryptor, nullptr);
 
-    std::unique_ptr<MessageDecryptor> host_decryptor =
-        MessageDecryptor::createForAes256Gcm(key, encrypt_iv);
+    std::unique_ptr<StreamDecryptor> host_decryptor =
+        StreamDecryptor::createForAes256Gcm(key, encrypt_iv);
     ASSERT_NE(host_encryptor, nullptr);
 
     for (int i = 0; i < 100; ++i)
@@ -182,12 +182,12 @@ TEST(CryptorAes256GcmTest, WrongKey)
     EXPECT_EQ(client_key.size(), 32);
     EXPECT_EQ(iv.size(), 12);
 
-    std::unique_ptr<MessageEncryptor> client_encryptor =
-        MessageEncryptor::createForAes256Gcm(client_key, iv);
+    std::unique_ptr<StreamEncryptor> client_encryptor =
+        StreamEncryptor::createForAes256Gcm(client_key, iv);
     ASSERT_NE(client_encryptor, nullptr);
 
-    std::unique_ptr<MessageDecryptor> host_decryptor =
-        MessageDecryptor::createForAes256Gcm(host_key, iv);
+    std::unique_ptr<StreamDecryptor> host_decryptor =
+        StreamDecryptor::createForAes256Gcm(host_key, iv);
     ASSERT_NE(host_decryptor, nullptr);
 
     wrongKey(client_encryptor.get(), host_decryptor.get());
@@ -199,10 +199,10 @@ TEST(CryptorAes256GcmTest, WrongAad)
         QByteArray::fromHex("5ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014");
     const QByteArray iv = QByteArray::fromHex("ee7eb0e6fb24d445597f3e6f");
 
-    std::unique_ptr<MessageEncryptor> encryptor = MessageEncryptor::createForAes256Gcm(key, iv);
+    std::unique_ptr<StreamEncryptor> encryptor = StreamEncryptor::createForAes256Gcm(key, iv);
     ASSERT_NE(encryptor, nullptr);
 
-    std::unique_ptr<MessageDecryptor> decryptor = MessageDecryptor::createForAes256Gcm(key, iv);
+    std::unique_ptr<StreamDecryptor> decryptor = StreamDecryptor::createForAes256Gcm(key, iv);
     ASSERT_NE(decryptor, nullptr);
 
     wrongAad(encryptor.get(), decryptor.get());
@@ -219,20 +219,20 @@ TEST(CryptorChaCha20Poly1305Test, TestVector)
     EXPECT_EQ(encrypt_iv.size(), 12);
     EXPECT_EQ(decrypt_iv.size(), 12);
 
-    std::unique_ptr<MessageEncryptor> client_encryptor =
-        MessageEncryptor::createForChaCha20Poly1305(key, encrypt_iv);
+    std::unique_ptr<StreamEncryptor> client_encryptor =
+        StreamEncryptor::createForChaCha20Poly1305(key, encrypt_iv);
     ASSERT_NE(client_encryptor, nullptr);
 
-    std::unique_ptr<MessageDecryptor> client_decryptor =
-        MessageDecryptor::createForChaCha20Poly1305(key, decrypt_iv);
+    std::unique_ptr<StreamDecryptor> client_decryptor =
+        StreamDecryptor::createForChaCha20Poly1305(key, decrypt_iv);
     ASSERT_NE(client_decryptor, nullptr);
 
-    std::unique_ptr<MessageEncryptor> host_encryptor =
-        MessageEncryptor::createForChaCha20Poly1305(key, decrypt_iv);
+    std::unique_ptr<StreamEncryptor> host_encryptor =
+        StreamEncryptor::createForChaCha20Poly1305(key, decrypt_iv);
     ASSERT_NE(host_encryptor, nullptr);
 
-    std::unique_ptr<MessageDecryptor> host_decryptor =
-        MessageDecryptor::createForChaCha20Poly1305(key, encrypt_iv);
+    std::unique_ptr<StreamDecryptor> host_decryptor =
+        StreamDecryptor::createForChaCha20Poly1305(key, encrypt_iv);
     ASSERT_NE(host_encryptor, nullptr);
 
     for (int i = 0; i < 100; ++i)
@@ -253,12 +253,12 @@ TEST(CryptorChaCha20Poly1305Test, WrongKey)
     EXPECT_EQ(client_key.size(), 32);
     EXPECT_EQ(iv.size(), 12);
 
-    std::unique_ptr<MessageEncryptor> client_encryptor =
-        MessageEncryptor::createForAes256Gcm(client_key, iv);
+    std::unique_ptr<StreamEncryptor> client_encryptor =
+        StreamEncryptor::createForAes256Gcm(client_key, iv);
     ASSERT_NE(client_encryptor, nullptr);
 
-    std::unique_ptr<MessageDecryptor> host_decryptor =
-        MessageDecryptor::createForAes256Gcm(host_key, iv);
+    std::unique_ptr<StreamDecryptor> host_decryptor =
+        StreamDecryptor::createForAes256Gcm(host_key, iv);
     ASSERT_NE(host_decryptor, nullptr);
 
     wrongKey(client_encryptor.get(), host_decryptor.get());
@@ -270,12 +270,12 @@ TEST(CryptorChaCha20Poly1305Test, WrongAad)
         QByteArray::fromHex("5ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014");
     const QByteArray iv = QByteArray::fromHex("ee7eb0e6fb24d445597f3e6f");
 
-    std::unique_ptr<MessageEncryptor> encryptor =
-        MessageEncryptor::createForChaCha20Poly1305(key, iv);
+    std::unique_ptr<StreamEncryptor> encryptor =
+        StreamEncryptor::createForChaCha20Poly1305(key, iv);
     ASSERT_NE(encryptor, nullptr);
 
-    std::unique_ptr<MessageDecryptor> decryptor =
-        MessageDecryptor::createForChaCha20Poly1305(key, iv);
+    std::unique_ptr<StreamDecryptor> decryptor =
+        StreamDecryptor::createForChaCha20Poly1305(key, iv);
     ASSERT_NE(decryptor, nullptr);
 
     wrongAad(encryptor.get(), decryptor.get());
