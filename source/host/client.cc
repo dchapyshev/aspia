@@ -91,10 +91,16 @@ void Client::start(bool direct, const QString& stun_host, quint16 stun_port, boo
     stun_host_ = stun_host;
     stun_port_ = stun_port;
 
-    onStart();
+    CLOG(INFO) << "Starting (direct:" << direct << "equals:" << peer_equals
+               << "stun:" << stun_host << ":" << stun_port << "features:" << features_ << ")";
 
     if (features_ & FEATURE_BANDWIDTH)
+    {
         startBandwidthProbing();
+        sendTcpBandwidthProbe(Clock::now());
+    }
+
+    onStart();
 
     if (!(features_ & FEATURE_UDP))
         return;
