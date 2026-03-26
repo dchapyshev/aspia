@@ -102,10 +102,12 @@ private:
 
     struct Header
     {
+        quint64 counter;
+        quint32 reserved1;
         quint8 type;
-        quint8 reserved1;
         quint8 reserved2;
         quint8 reserved3;
+        quint8 reserved4;
     };
 
     enum MessageType { USER_DATA = 0 };
@@ -131,6 +133,8 @@ private:
 
     std::unique_ptr<StreamEncryptor> encryptor_;
     std::unique_ptr<StreamDecryptor> decryptor_;
+
+    quint64 send_counter_ = 0;
 
     std::deque<ScopedENetPacket> packet_pool_;
     std::deque<Task> write_queue_;

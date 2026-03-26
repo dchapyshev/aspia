@@ -351,11 +351,15 @@ void UdpChannel::addWriteTask(quint8 channel_id, const QByteArray& data)
         return;
     }
 
+    ++send_counter_;
+
     Header header;
-    header.type = USER_DATA;
+    header.counter = send_counter_;
     header.reserved1 = 0;
+    header.type = USER_DATA;
     header.reserved2 = 0;
     header.reserved3 = 0;
+    header.reserved4 = 0;
 
     memcpy(packet->data, &header, sizeof(Header));
 
