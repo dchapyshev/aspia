@@ -249,7 +249,7 @@ endif()
 
 list(APPEND SOURCE_BASE_CRYPTO_TESTS
     crypto/big_num_unittest.cc
-    crypto/cryptor_unittest.cc
+    crypto/stream_cryptor_unittest.cc
     crypto/data_cryptor_unittest.cc
     crypto/datagram_cryptor_unittest.cc
     crypto/generic_hash_unittest.cc
