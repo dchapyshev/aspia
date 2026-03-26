@@ -397,6 +397,8 @@ endif()
 list(APPEND SOURCE_BASE_NET
     net/adapter_enumerator.cc
     net/adapter_enumerator.h
+    net/anti_replay_window.cc
+    net/anti_replay_window.h
     net/address.cc
     net/address.h
     net/curl_util.cc
@@ -429,7 +431,8 @@ if (WIN32)
 endif()
 
 list(APPEND SOURCE_BASE_NET_TESTS
-    net/address_unittest.cc)
+    net/address_unittest.cc
+    net/anti_replay_window_unittest.cc)
 
 list(APPEND SOURCE_BASE_PEER
     peer/authenticator.cc
