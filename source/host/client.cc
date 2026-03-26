@@ -21,6 +21,7 @@
 #include <QHostAddress>
 #include <QTimer>
 
+#include "base/location.h"
 #include "base/serialization.h"
 #include "base/crypto/key_pair.h"
 #include "base/crypto/message_decryptor.h"
@@ -173,7 +174,7 @@ qint64 Client::pendingBytes() const
 //--------------------------------------------------------------------------------------------------
 qint64 Client::bandwidth() const
 {
-    return udp_ready_ ? udp_probe_.bandwidth : tcp_probe_.bandwidth;
+    return udp_state_ == UdpState::READY ? udp_probe_.bandwidth : tcp_probe_.bandwidth;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -190,7 +191,7 @@ void Client::send(quint8 channel_id, const QByteArray& buffer)
 {
     last_send_time_ = Clock::now();
 
-    if (udp_ready_)
+    if (udp_state_ == UdpState::READY)
     {
         udp_channel_->send(channel_id, buffer);
         return;
@@ -242,15 +243,14 @@ void Client::onUdpReady()
     // onUdpBandwidthProbeAck), we know the channel works and have an initial bandwidth measurement
     // then we switch to UDP.
     udp_channel_->setPaused(false);
-    udp_connected_ = true;
-    udp_ready_ = false;
+    setUdpState(FROM_HERE, UdpState::CONNECTED);
 
     sendUdpBandwidthProbe(Clock::now());
 
     // If the probe ACK does not arrive within the timeout, treat UDP as broken.
     QTimer::singleShot(kInitialProbeTimeoutMs, this, [this]()
     {
-        if (udp_ready_ || !udp_channel_)
+        if (udp_state_ == UdpState::PROBED || udp_state_ == UdpState::READY)
             return;
 
         CLOG(WARNING) << "UDP bandwidth probe timed out, channel is not usable";
@@ -265,13 +265,12 @@ void Client::onUdpErrorOccurred()
     CLOG(INFO) << "UDP channel error (" << udp_phase_ << ")";
     CCHECK(udp_channel_);
 
-    bool was_connected = udp_ready_;
+    bool was_connected = udp_state_ == UdpState::READY;
 
+    setUdpState(FROM_HERE, UdpState::DISCONNECTED);
     udp_probe_.send_time = TimePoint();
     udp_probe_.bandwidth = 0;
     udp_probe_.pending = false;
-    udp_connected_ = false;
-    udp_ready_ = false;
 
     udp_channel_->disconnect();
     udp_channel_->deleteLater();
@@ -572,7 +571,7 @@ void Client::readDirectUdpReply(const proto::peer::DirectUdpReply& reply)
         // If ENet connection is not established within the deadline, treat as failure.
         QTimer::singleShot(kUdpConnectTimeoutMs, this, [this]()
         {
-            if (!udp_channel_ || udp_ready_)
+            if (!udp_channel_ || udp_state_ == UdpState::PROBED || udp_state_ == UdpState::READY)
                 return;
 
             CLOG(WARNING) << "UDP connection timed out after setPeerAddress";
@@ -618,7 +617,7 @@ void Client::sendTcpBandwidthProbe(const TimePoint& time)
 //--------------------------------------------------------------------------------------------------
 void Client::sendUdpBandwidthProbe(const TimePoint& time)
 {
-    if (!udp_channel_ || !udp_connected_ || udp_probe_.pending)
+    if (!udp_channel_ || udp_state_ == UdpState::DISCONNECTED || udp_probe_.pending)
         return;
 
     udp_probe_.send_time = time;
@@ -664,57 +663,46 @@ void Client::onUdpBandwidthProbeAck()
 //--------------------------------------------------------------------------------------------------
 void Client::checkBandwidth()
 {
-    // No measurements yet.
-    if (tcp_probe_.bandwidth == 0 && udp_probe_.bandwidth == 0)
+    if (udp_probe_.bandwidth != 0 && udp_state_ == UdpState::CONNECTED)
+        setUdpState(FROM_HERE, UdpState::PROBED);
+
+    if (tcp_probe_.bandwidth == 0)
         return;
 
-    // Only TCP measured - report TCP bandwidth.
     if (udp_probe_.bandwidth == 0)
     {
         onBandwidthChanged(tcp_probe_.bandwidth);
         return;
     }
 
-    auto switch_to_udp = [this]()
+    if (udp_probe_.bandwidth > 1000 * 1024 || udp_probe_.bandwidth * 2 >= tcp_probe_.bandwidth)
     {
-        if (!udp_ready_ && udp_connected_)
+        if (udp_state_ == UdpState::PROBED)
         {
             CLOG(INFO) << "Switching traffic to UDP";
-            udp_ready_ = true;
+            setUdpState(FROM_HERE, UdpState::READY);
             emit sig_connectionChanged();
         }
 
         onBandwidthChanged(udp_probe_.bandwidth);
-    };
-
-    // Only UDP measured (TCP probe hasn't arrived yet) - activate UDP without comparison.
-    if (tcp_probe_.bandwidth == 0)
-    {
-        switch_to_udp();
         return;
     }
 
-    // Both measured - compare. If both are above 3000 kB/s, prefer UDP.
-    if (udp_probe_.bandwidth > 3000 * 1024 && tcp_probe_.bandwidth > 3000 * 1024)
-    {
-        switch_to_udp();
-        return;
-    }
-
-    if (udp_probe_.bandwidth * 2 >= tcp_probe_.bandwidth)
-    {
-        switch_to_udp();
-        return;
-    }
-
-    if (udp_ready_)
+    if (udp_state_ == UdpState::READY)
     {
         CLOG(INFO) << "Switching traffic to TCP";
-        udp_ready_ = false;
+        setUdpState(FROM_HERE, UdpState::PROBED);
         emit sig_connectionChanged();
     }
 
     onBandwidthChanged(tcp_probe_.bandwidth);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Client::setUdpState(const base::Location& location, UdpState state)
+{
+    CLOG(INFO) << "UDP state changed from" << udp_state_ << "to" << state << "(" << location << ")";
+    udp_state_ = state;
 }
 
 } // namespace host

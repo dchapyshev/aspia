@@ -33,6 +33,7 @@
 class QTimer;
 
 namespace base {
+class Location;
 class StunPeer;
 class UdpChannel;
 } // namespace base
@@ -77,6 +78,15 @@ public:
     };
     Q_ENUM(UdpConnectPhase)
 
+    enum class UdpState
+    {
+        DISCONNECTED,
+        CONNECTED,
+        PROBED,
+        READY
+    };
+    Q_ENUM(UdpState)
+
 signals:
     void sig_started();
     void sig_finished();
@@ -113,13 +123,13 @@ private:
     void onTcpBandwidthProbeAck();
     void onUdpBandwidthProbeAck();
     void checkBandwidth();
+    void setUdpState(const base::Location& location, UdpState state);
     static QByteArray makeBandwidthProbeData();
 
     Features features_ = FEATURE_NONE;
     base::TcpChannel* tcp_channel_ = nullptr;
     base::UdpChannel* udp_channel_ = nullptr;
-    bool udp_connected_ = false;
-    bool udp_ready_ = false;
+    UdpState udp_state_ = UdpState::DISCONNECTED;
 
     struct PendingUdp
     {
