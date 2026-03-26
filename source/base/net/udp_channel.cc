@@ -26,8 +26,8 @@
 
 #include "base/location.h"
 #include "base/thread_local_pool.h"
-#include "base/crypto/stream_decryptor.h"
-#include "base/crypto/stream_encryptor.h"
+#include "base/crypto/datagram_decryptor.h"
+#include "base/crypto/datagram_encryptor.h"
 
 namespace base {
 
@@ -363,7 +363,7 @@ void UdpChannel::addWriteTask(quint8 channel_id, const QByteArray& data)
 
     memcpy(packet->data, &header, sizeof(Header));
 
-    if (!encryptor_->encrypt(data.constData(), data.size(), &header, sizeof(Header),
+    if (!encryptor_->encrypt(send_counter_, data.constData(), data.size(), &header, sizeof(Header),
         packet->data + sizeof(Header)))
     {
         CLOG(ERROR) << "Failed to encrypt outgoing message";
@@ -423,14 +423,14 @@ void UdpChannel::doWrite()
 }
 
 //--------------------------------------------------------------------------------------------------
-void UdpChannel::setEncryptor(std::unique_ptr<StreamEncryptor> encryptor)
+void UdpChannel::setEncryptor(std::unique_ptr<DatagramEncryptor> encryptor)
 {
     encryptor_ = std::move(encryptor);
     onReadyCheck();
 }
 
 //--------------------------------------------------------------------------------------------------
-void UdpChannel::setDecryptor(std::unique_ptr<StreamDecryptor> decryptor)
+void UdpChannel::setDecryptor(std::unique_ptr<DatagramDecryptor> decryptor)
 {
     decryptor_ = std::move(decryptor);
     onReadyCheck();
@@ -614,17 +614,22 @@ void UdpChannel::onMessageReceived(quint8 channel_id, ScopedENetPacket packet)
     Header header;
     memcpy(&header, packet->data, sizeof(Header));
 
+    if (!replay_window_.check(header.counter))
+    {
+        CLOG(WARNING) << "Dropped replayed or too-old packet with counter:" << header.counter;
+        return;
+    }
+
     qint64 size = decryptor_->decryptedDataSize(packet->dataLength - sizeof(Header));
     if (decrypt_buffer_.capacity() < size)
         decrypt_buffer_.reserve(size);
 
     decrypt_buffer_.resize(size);
 
-    if (!decryptor_->decrypt(packet->data + sizeof(Header), packet->dataLength - sizeof(Header),
-        &header, sizeof(Header), decrypt_buffer_.data()))
+    if (!decryptor_->decrypt(header.counter, packet->data + sizeof(Header),
+        packet->dataLength - sizeof(Header), &header, sizeof(Header), decrypt_buffer_.data()))
     {
-        CLOG(ERROR) << "Failed to decrypt incoming message";
-        onErrorOccurred(FROM_HERE);
+        CLOG(WARNING) << "Failed to decrypt incoming message (counter:" << header.counter << ")";
         return;
     }
 

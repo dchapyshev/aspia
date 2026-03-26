@@ -25,6 +25,7 @@
 #include <memory>
 
 #include "base/logging.h"
+#include "base/net/anti_replay_window.h"
 
 class QSocketNotifier;
 class QTimer;
@@ -36,9 +37,9 @@ typedef struct _ENetPacket ENetPacket;
 
 namespace base {
 
+class DatagramDecryptor;
+class DatagramEncryptor;
 class Location;
-class StreamDecryptor;
-class StreamEncryptor;
 
 class UdpChannel final : public QObject
 {
@@ -66,8 +67,8 @@ public:
 
     void setPaused(bool enable);
 
-    void setEncryptor(std::unique_ptr<StreamEncryptor> encryptor);
-    void setDecryptor(std::unique_ptr<StreamDecryptor> decryptor);
+    void setEncryptor(std::unique_ptr<DatagramEncryptor> encryptor);
+    void setDecryptor(std::unique_ptr<DatagramDecryptor> decryptor);
 
     qint64 pendingBytes() const;
 
@@ -131,10 +132,11 @@ private:
     ScopedENetPeer peer_;
     int update_timer_id_ = 0;
 
-    std::unique_ptr<StreamEncryptor> encryptor_;
-    std::unique_ptr<StreamDecryptor> decryptor_;
+    std::unique_ptr<DatagramEncryptor> encryptor_;
+    std::unique_ptr<DatagramDecryptor> decryptor_;
 
     quint64 send_counter_ = 0;
+    AntiReplayWindow replay_window_;
 
     std::deque<ScopedENetPacket> packet_pool_;
     std::deque<Task> write_queue_;
