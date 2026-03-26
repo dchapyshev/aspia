@@ -170,12 +170,12 @@ void IpcChannel::setPaused(bool enable)
 }
 
 //--------------------------------------------------------------------------------------------------
-void IpcChannel::send(quint32 channel_id, const QByteArray& buffer)
+void IpcChannel::send(quint32 channel_id, const QByteArray& buffer, bool reliable)
 {
     const bool schedule_write = write_queue_.empty();
 
     // Add the buffer to the queue for sending.
-    write_queue_.emplace_back(channel_id, buffer);
+    write_queue_.emplace_back(channel_id, buffer, reliable);
 
     if (schedule_write)
         doWriteHeader();
@@ -297,19 +297,18 @@ void IpcChannel::onErrorOccurred(const Location& location, const std::error_code
 //--------------------------------------------------------------------------------------------------
 void IpcChannel::onMessageReceived()
 {
-    emit sig_messageReceived(read_header_.channel_id, read_buffer_);
-
-    read_header_.message_size = 0;
-    read_header_.channel_id = 0;
+    emit sig_messageReceived(read_header_.channel_id, read_buffer_, !!read_header_.reliable);
+    memset(&read_header_, 0, sizeof(Header));
 }
 
 //--------------------------------------------------------------------------------------------------
 void IpcChannel::doWriteHeader()
 {
-    WriteTask task = write_queue_.front();
+    const WriteTask& task = write_queue_.front();
 
     write_header_.message_size = task.data().size();
     write_header_.channel_id = task.channelId();
+    write_header_.reliable = task.reliable() ? 1 : 0;
 
     if (!write_header_.message_size || write_header_.message_size > kMaxMessageSize)
     {

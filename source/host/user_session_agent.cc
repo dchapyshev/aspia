@@ -176,7 +176,8 @@ void UserSessionAgent::onIpcErrorOccurred()
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionAgent::onIpcMessageReceived(quint32 /* ipc_channel_id */, const QByteArray& buffer)
+void UserSessionAgent::onIpcMessageReceived(
+    quint32 /* ipc_channel_id */, const QByteArray& buffer, bool /* reliable */)
 {
     if (!incoming_message_.parse(buffer))
     {

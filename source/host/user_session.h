@@ -95,7 +95,7 @@ private slots:
     void onUserSessionEvent(quint32 status, quint32 session_id);
     void onIpcNewConnection();
     void onIpcDisconnected();
-    void onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer);
+    void onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer, bool reliable);
     void onDettachTimeout();
     void onStartupUserCheck();
 

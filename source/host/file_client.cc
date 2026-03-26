@@ -218,7 +218,8 @@ void FileClient::onIpcErrorOccurred()
 }
 
 //--------------------------------------------------------------------------------------------------
-void FileClient::onIpcMessageReceived(quint32 /* ipc_channel_id */, const QByteArray& buffer)
+void FileClient::onIpcMessageReceived(
+    quint32 /* ipc_channel_id */, const QByteArray& buffer, bool /* reliable */)
 {
     send(proto::peer::CHANNEL_ID_0, buffer);
 }

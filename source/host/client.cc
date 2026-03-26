@@ -193,13 +193,13 @@ void Client::setFeature(Feature feature, bool enable)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::send(quint8 channel_id, const QByteArray& buffer)
+void Client::send(quint8 channel_id, const QByteArray& buffer, bool reliable)
 {
     last_send_time_ = Clock::now();
 
     if (udp_state_ == UdpState::READY)
     {
-        udp_channel_->send(channel_id, buffer, true);
+        udp_channel_->send(channel_id, buffer, reliable);
         return;
     }
 

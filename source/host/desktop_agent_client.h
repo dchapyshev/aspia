@@ -91,7 +91,7 @@ private slots:
     void onIpcConnected();
     void onIpcErrorOccurred();
     void onIpcDisconnected();
-    void onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer);
+    void onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer, bool reliable);
 
     void onTaskManagerMessage(const proto::task_manager::HostToClient& message);
 

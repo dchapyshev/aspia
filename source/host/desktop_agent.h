@@ -70,7 +70,7 @@ private slots:
     void onIpcConnected();
     void onIpcDisconnected();
     void onIpcErrorOccurred();
-    void onIpcMessageReceived(quint32 ipc_channel_id, const QByteArray& buffer);
+    void onIpcMessageReceived(quint32 ipc_channel_id, const QByteArray& buffer, bool reliable);
 
     void onClientConfigured();
     void onClientFinished();

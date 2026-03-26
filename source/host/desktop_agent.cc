@@ -220,7 +220,8 @@ void DesktopAgent::onIpcErrorOccurred()
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopAgent::onIpcMessageReceived(quint32 /* ipc_channel_id */, const QByteArray& buffer)
+void DesktopAgent::onIpcMessageReceived(
+    quint32 /* ipc_channel_id */, const QByteArray& buffer, bool /* reliable */)
 {
     proto::desktop::ServiceToAgent message;
     if (!base::parse(buffer, &message))

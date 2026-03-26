@@ -51,7 +51,7 @@ public:
     bool isPaused() const;
     void setPaused(bool enable);
 
-    void send(quint32 channel_id, const QByteArray& buffer);
+    void send(quint32 channel_id, const QByteArray& buffer, bool reliable = true);
 
     quint32 instanceId() const { return instance_id_; }
     const QString& channelName() const { return channel_name_; }
@@ -61,7 +61,7 @@ signals:
     void sig_connected();
     void sig_disconnected();
     void sig_errorOccurred();
-    void sig_messageReceived(quint32 channel_id, const QByteArray& buffer);
+    void sig_messageReceived(quint32 channel_id, const QByteArray& buffer, bool reliable);
 
 private:
     friend class IpcServer;
@@ -89,9 +89,10 @@ private:
     class WriteTask
     {
     public:
-        WriteTask(quint32 channel_id, const QByteArray& data)
+        WriteTask(quint32 channel_id, const QByteArray& data, bool reliable)
             : channel_id_(channel_id),
-              data_(data)
+              data_(data),
+              reliable_(reliable)
         {
             // Nothing
         }
@@ -102,16 +103,20 @@ private:
         quint32 channelId() const { return channel_id_; }
         const QByteArray& data() const { return data_; }
         QByteArray& data() { return data_; }
+        bool reliable() const { return reliable_; }
 
     private:
         quint32 channel_id_;
         QByteArray data_;
+        bool reliable_;
     };
 
     struct Header
     {
         quint32 message_size;
         quint32 channel_id;
+        quint32 reliable;
+        quint32 reserved;
     };
 
     enum class ReadState

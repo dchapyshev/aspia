@@ -137,7 +137,8 @@ void DesktopAgentClient::onIpcDisconnected()
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer)
+void DesktopAgentClient::onIpcMessageReceived(
+    quint32 channel_id, const QByteArray& buffer, bool /* reliable */)
 {
     quint16 net_channel_id = base::lowWord(channel_id);
     quint16 ipc_channel_id = base::highWord(channel_id);

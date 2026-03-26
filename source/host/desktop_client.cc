@@ -243,14 +243,14 @@ void DesktopClient::onIpcErrorOccurred()
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopClient::onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer)
+void DesktopClient::onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer, bool reliable)
 {
     quint16 net_channel_id = base::lowWord(channel_id);
     quint16 ipc_channel_id = base::highWord(channel_id);
 
     if (ipc_channel_id == proto::desktop::IPC_CHANNEL_ID_SESSION)
     {
-        send(net_channel_id, buffer);
+        send(net_channel_id, buffer, reliable);
     }
     else
     {

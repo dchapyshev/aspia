@@ -95,7 +95,7 @@ signals:
 protected:
     LOG_DECLARE_CONTEXT(Client);
 
-    void send(quint8 channel_id, const QByteArray& buffer);
+    void send(quint8 channel_id, const QByteArray& buffer, bool reliable = true);
 
     virtual void onStart() = 0;
     virtual void onMessage(quint8 channel_id, const QByteArray& buffer) = 0;

@@ -519,7 +519,8 @@ void UserSession::onIpcDisconnected()
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSession::onIpcMessageReceived(quint32 /* ipc_channel_id */, const QByteArray& buffer)
+void UserSession::onIpcMessageReceived(
+    quint32 /* ipc_channel_id */, const QByteArray& buffer, bool /* reliable */)
 {
     if (!incoming_message_.parse(buffer))
     {
