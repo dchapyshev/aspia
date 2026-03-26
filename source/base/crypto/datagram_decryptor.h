@@ -51,11 +51,11 @@ public:
 private:
     DatagramDecryptor(EVP_CIPHER_CTX_ptr ctx, const QByteArray& iv);
 
-    // Builds a 12-byte nonce by XOR-ing the counter into the last 8 bytes of base_iv.
-    QByteArray buildNonce(quint64 counter) const;
+    // Builds a 12-byte nonce on the stack by XOR-ing the counter into base_iv.
+    void buildNonce(quint64 counter, quint8* out_nonce) const;
 
     EVP_CIPHER_CTX_ptr ctx_;
-    QByteArray base_iv_;
+    quint8 base_iv_[12];
 
     Q_DISABLE_COPY_MOVE(DatagramDecryptor)
 };

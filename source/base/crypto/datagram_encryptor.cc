@@ -34,12 +34,12 @@ const qint64 kTagSize = 16; // 128 bits, 16 bytes.
 
 //--------------------------------------------------------------------------------------------------
 DatagramEncryptor::DatagramEncryptor(EVP_CIPHER_CTX_ptr ctx, const QByteArray& iv)
-    : ctx_(std::move(ctx)),
-      base_iv_(iv)
+    : ctx_(std::move(ctx))
 {
     DCHECK_EQ(EVP_CIPHER_CTX_key_length(ctx_.get()), kKeySize);
     DCHECK_EQ(EVP_CIPHER_CTX_iv_length(ctx_.get()), kIVSize);
-    DCHECK_EQ(base_iv_.size(), kIVSize);
+    DCHECK_EQ(iv.size(), kIVSize);
+    memcpy(base_iv_, iv.data(), kIVSize);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -104,10 +104,10 @@ bool DatagramEncryptor::encrypt(quint64 counter, const void* in, qint64 in_size,
 bool DatagramEncryptor::encrypt(quint64 counter, const void* in, qint64 in_size,
     const void* aad, qint64 aad_size, void* out)
 {
-    QByteArray nonce = buildNonce(counter);
+    quint8 nonce[kIVSize];
+    buildNonce(counter, nonce);
 
-    if (EVP_EncryptInit_ex(ctx_.get(), nullptr, nullptr, nullptr,
-        reinterpret_cast<const quint8*>(nonce.data())) != 1)
+    if (EVP_EncryptInit_ex(ctx_.get(), nullptr, nullptr, nullptr, nonce) != 1)
     {
         LOG(ERROR) << "EVP_EncryptInit_ex failed";
         return false;
@@ -148,19 +148,15 @@ bool DatagramEncryptor::encrypt(quint64 counter, const void* in, qint64 in_size,
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray DatagramEncryptor::buildNonce(quint64 counter) const
+void DatagramEncryptor::buildNonce(quint64 counter, quint8* out_nonce) const
 {
-    QByteArray nonce(base_iv_);
+    memcpy(out_nonce, base_iv_, kIVSize);
 
     // XOR the 64-bit counter into the last 8 bytes of the 12-byte nonce.
-    // First 4 bytes of base_iv remain unchanged.
-    quint8* nonce_data = reinterpret_cast<quint8*>(nonce.data());
     for (int i = 0; i < 8; ++i)
     {
-        nonce_data[4 + i] ^= static_cast<quint8>(counter >> (56 - i * 8));
+        out_nonce[4 + i] ^= static_cast<quint8>(counter >> (56 - i * 8));
     }
-
-    return nonce;
 }
 
 } // namespace base
