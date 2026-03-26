@@ -496,7 +496,9 @@ void LogMessage::init(std::string_view file, int line, std::string_view function
 {
     stream_ << severityName(severity_)
             << QDateTime::currentDateTime().toString("yyyy/MM/dd hh:mm:ss.zzz")
+#if !defined(NDEBUG) || defined(DCHECK_ALWAYS_ON)
             << QThread::currentThreadId()
+#endif
             << function.data() << ":" << line << "]";
 }
 

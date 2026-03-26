@@ -606,7 +606,7 @@ public:
     template<typename ClassTag>
     static LogContext forClass(const char* class_name)
     {
-        static int counter = 0;
+        static thread_local unsigned long long counter = 0;
         return LogContext(QStringLiteral("[%1#%2]").arg(QLatin1String(class_name)).arg(++counter));
     }
 
@@ -619,6 +619,43 @@ private:
 
 #define CLOG(severity) \
     LAZY_STREAM(LOG_STREAM(severity) << log_ctx_.prefix(), LOG_IS_ON(severity))
+
+#define CCHECK(condition) \
+    LAZY_STREAM(::base::LogMessage(__FILE__, __LINE__, __FUNCTION__, #condition).stream() \
+                << log_ctx_.prefix(), !(condition))
+
+#if DCHECK_IS_ON()
+#define CDCHECK(condition) \
+    LAZY_STREAM(LOG_STREAM(DCHECK) << log_ctx_.prefix(), !(condition)) \
+    << "Check failed: " #condition ". "
+
+#define CDCHECK_OP(name, op, val1, val2)                                                         \
+    switch (0) case 0: default:                                                                  \
+    if (::base::CheckOpResult true_if_passed =                                                   \
+        ::base::check##name##Impl((val1), (val2), #val1 " " #op " " #val2));                     \
+    else                                                                                         \
+        ::base::LogMessage(__FILE__, __LINE__, __FUNCTION__, ::base::LOG_DCHECK,                 \
+                           true_if_passed.message()).stream() << log_ctx_.prefix()
+
+#define CDCHECK_EQ(val1, val2) CDCHECK_OP(EQ, ==, val1, val2)
+#define CDCHECK_NE(val1, val2) CDCHECK_OP(NE, !=, val1, val2)
+#define CDCHECK_LE(val1, val2) CDCHECK_OP(LE, <=, val1, val2)
+#define CDCHECK_LT(val1, val2) CDCHECK_OP(LT, < , val1, val2)
+#define CDCHECK_GE(val1, val2) CDCHECK_OP(GE, >=, val1, val2)
+#define CDCHECK_GT(val1, val2) CDCHECK_OP(GT, > , val1, val2)
+#else
+#define CDCHECK(condition) EAT_STREAM_PARAMETERS << !(condition)
+#define CDCHECK_OP(name, op, val1, val2)                                                         \
+    EAT_STREAM_PARAMETERS << (::base::makeCheckOpValueString(::base::g_swallow_stream, val1),    \
+                              ::base::makeCheckOpValueString(::base::g_swallow_stream, val2),    \
+                              (val1)op(val2))
+#define CDCHECK_EQ(val1, val2) CDCHECK_OP(EQ, ==, val1, val2)
+#define CDCHECK_NE(val1, val2) CDCHECK_OP(NE, !=, val1, val2)
+#define CDCHECK_LE(val1, val2) CDCHECK_OP(LE, <=, val1, val2)
+#define CDCHECK_LT(val1, val2) CDCHECK_OP(LT, < , val1, val2)
+#define CDCHECK_GE(val1, val2) CDCHECK_OP(GE, >=, val1, val2)
+#define CDCHECK_GT(val1, val2) CDCHECK_OP(GT, > , val1, val2)
+#endif
 
 class ScopedLogging
 {
