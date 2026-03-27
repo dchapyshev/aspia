@@ -24,7 +24,6 @@ namespace common {
 
 const char kSelectScreenExtension[] = "select_screen";
 const char kPreferredSizeExtension[] = "preferred_size";
-const char kVideoRecordingExtension[] = "video_recording";
 const char kPowerControlExtension[] = "power_control";
 const char kRemoteUpdateExtension[] = "remote_update";
 const char kSystemInfoExtension[] = "system_info";
@@ -36,17 +35,17 @@ const char kKeyFrameExtension[] = "key_frame";
 
 #if defined(Q_OS_WINDOWS)
 const char kSupportedExtensionsForManage[] =
-    "select_screen;preferred_size;power_control;remote_update;system_info;video_recording;"
+    "select_screen;preferred_size;power_control;remote_update;system_info;"
     "task_manager;video_pause;audio_pause;screen_type;key_frame";
 
 const char kSupportedExtensionsForView[] =
-    "select_screen;preferred_size;system_info;video_recording;video_pause;audio_pause;screen_type;key_frame";
+    "select_screen;preferred_size;system_info;video_pause;audio_pause;screen_type;key_frame";
 #else
 const char kSupportedExtensionsForManage[] =
-    "select_screen;preferred_size;video_recording;video_pause;audio_pause;key_frame";
+    "select_screen;preferred_size;video_pause;audio_pause;key_frame";
 
 const char kSupportedExtensionsForView[] =
-    "select_screen;preferred_size;video_recording;video_pause;audio_pause;key_frame";
+    "select_screen;preferred_size;video_pause;audio_pause;key_frame";
 #endif
 
 const quint32 kSupportedVideoEncodings =
