@@ -39,7 +39,7 @@ ClientFileTransfer::~ClientFileTransfer()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientFileTransfer::onSessionStarted()
+void ClientFileTransfer::onStarted()
 {
     CLOG(INFO) << "File transfer session started";
 
@@ -55,8 +55,11 @@ void ClientFileTransfer::onSessionStarted()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientFileTransfer::onSessionMessageReceived(const QByteArray& buffer)
+void ClientFileTransfer::onMessageReceived(quint8 channel_id, const QByteArray& buffer)
 {
+    if (channel_id != proto::peer::CHANNEL_ID_0)
+        return;
+
     proto::file_transfer::Reply reply;
 
     if (!base::parse(buffer, &reply))
@@ -85,12 +88,6 @@ void ClientFileTransfer::onSessionMessageReceived(const QByteArray& buffer)
     {
         emit sig_errorOccurred(proto::file_transfer::ERROR_CODE_UNKNOWN);
     }
-}
-
-//--------------------------------------------------------------------------------------------------
-void ClientFileTransfer::onServiceMessageReceived(const QByteArray& /* buffer */)
-{
-    // Not used yet.
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -198,7 +195,7 @@ void ClientFileTransfer::doNextRemoteTask()
         return;
 
     // Send a request to the remote computer.
-    sendSessionMessage(serializer_.serialize(remote_task_queue_.front().request()));
+    sendMessage(proto::peer::CHANNEL_ID_0, serializer_.serialize(remote_task_queue_.front().request()));
 }
 
 //--------------------------------------------------------------------------------------------------

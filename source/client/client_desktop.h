@@ -124,9 +124,8 @@ signals:
 
 protected:
     // Client implementation.
-    void onSessionStarted() final;
-    void onSessionMessageReceived(const QByteArray& buffer) final;
-    void onServiceMessageReceived(const QByteArray& buffer) final;
+    void onStarted() final;
+    void onMessageReceived(quint8 channel_id, const QByteArray& buffer) final;
 
 private slots:
     void onClipboardEvent(const proto::desktop::ClipboardEvent& event);

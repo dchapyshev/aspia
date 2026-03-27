@@ -19,6 +19,7 @@
 list(APPEND SOURCE_PROTO
     address_book.proto
     chat.proto
+    desktop_clipboard.proto
     desktop_internal.proto
     desktop_service.proto
     desktop_session.proto

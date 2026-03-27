@@ -39,18 +39,21 @@ ClientChat::~ClientChat()
 //--------------------------------------------------------------------------------------------------
 void ClientChat::onChatMessage(const proto::chat::Chat& chat)
 {
-    sendSessionMessage(base::serialize(chat));
+    sendMessage(proto::peer::CHANNEL_ID_0, base::serialize(chat));
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientChat::onSessionStarted()
+void ClientChat::onStarted()
 {
     CLOG(INFO) << "Text chat session started";
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientChat::onSessionMessageReceived(const QByteArray& buffer)
+void ClientChat::onMessageReceived(quint8 channel_id, const QByteArray& buffer)
 {
+    if (channel_id != proto::peer::CHANNEL_ID_0)
+        return;
+
     proto::chat::Chat chat;
     if (!base::parse(buffer, &chat))
     {
@@ -59,12 +62,6 @@ void ClientChat::onSessionMessageReceived(const QByteArray& buffer)
     }
 
     emit sig_chatMessage(chat);
-}
-
-//--------------------------------------------------------------------------------------------------
-void ClientChat::onServiceMessageReceived(const QByteArray& /* buffer */)
-{
-    // Not used yet.
 }
 
 } // namespace client

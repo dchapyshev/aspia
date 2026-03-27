@@ -83,13 +83,11 @@ protected:
 
     // Indicates that the session is started.
     // When calling this method, the client implementation should display a session window.
-    virtual void onSessionStarted() = 0;
-    virtual void onSessionMessageReceived(const QByteArray& buffer) = 0;
-    virtual void onServiceMessageReceived(const QByteArray& buffer) = 0;
+    virtual void onStarted() = 0;
+    virtual void onMessageReceived(quint8 channel_id, const QByteArray& buffer) = 0;
 
     // Sends outgoing message.
-    void sendSessionMessage(const QByteArray& message);
-    void sendServiceMessage(const QByteArray& message);
+    void sendMessage(quint8 channel_id, const QByteArray& message);
 
     // Methods for obtaining network metrics.
     qint64 totalTcpRx() const;
@@ -100,6 +98,7 @@ protected:
     qint64 totalUdpTx() const;
     int speedUdpRx();
     int speedUdpTx();
+    bool isLegacy() const;
 
 private slots:
     void onTcpConnected();

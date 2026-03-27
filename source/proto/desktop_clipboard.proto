@@ -1,0 +1,80 @@
+//
+// Aspia Project
+// Copyright (C) 2016-2026 Dmitry Chapyshev <dmitry@aspia.ru>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
+//
+
+syntax = "proto3";
+
+option optimize_for = LITE_RUNTIME;
+
+package proto.desktop;
+
+message ClipboardEvent
+{
+    message FileList
+    {
+        message File
+        {
+            string path       = 1;
+            bool is_dir       = 2;
+            int64 file_size   = 3;
+            int64 create_time = 4;
+            int64 access_time = 5;
+            int64 modify_time = 6;
+        }
+
+        repeated File file = 1;
+    }
+
+    string mime_type = 1;
+    bytes data = 2;
+}
+
+message FileTransferRequest
+{
+    uint64 transfer_id = 1;
+    int32 file_index   = 2;
+    uint64 offset      = 3;
+}
+
+message FileTransferData
+{
+    uint64 transfer_id = 1;
+    int32 file_index   = 2;
+    bytes data         = 3;
+    bool is_last       = 4;
+}
+
+message FileTransferCancel
+{
+    uint64 transfer_id = 1;
+}
+
+message FileTransferError
+{
+    uint64 transfer_id = 1;
+    int32 file_index   = 2;
+    string error_id    = 3;
+}
+
+message ClipboardMessage
+{
+    ClipboardEvent event        = 1;
+    FileTransferRequest request = 2;
+    FileTransferData data       = 3;
+    FileTransferCancel cancel   = 4;
+    FileTransferError error     = 5;
+}

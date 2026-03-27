@@ -214,8 +214,14 @@ void Client::setSessionState(std::shared_ptr<SessionState> session_state)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::sendSessionMessage(const QByteArray& message)
+void Client::sendMessage(quint8 channel_id, const QByteArray& message)
 {
+    if (channel_id == proto::peer::CHANNEL_ID_CONTROL)
+    {
+        LOG(ERROR) << "Attempt to send with CONTROL channel id";
+        return;
+    }
+
     if (!tcp_channel_)
     {
         CLOG(ERROR) << "sendMessage called but channel not initialized";
@@ -224,29 +230,11 @@ void Client::sendSessionMessage(const QByteArray& message)
 
     if (udp_ready_)
     {
-        udp_channel_->send(proto::peer::CHANNEL_ID_0, message, true);
+        udp_channel_->send(channel_id, message, true);
         return;
     }
 
-    tcp_channel_->send(proto::peer::CHANNEL_ID_0, message);
-}
-
-//--------------------------------------------------------------------------------------------------
-void Client::sendServiceMessage(const QByteArray& message)
-{
-    if (!tcp_channel_)
-    {
-        CLOG(ERROR) << "sendMessage called but channel not initialized";
-        return;
-    }
-
-    if (udp_ready_)
-    {
-        udp_channel_->send(proto::peer::CHANNEL_ID_1, message, true);
-        return;
-    }
-
-    tcp_channel_->send(proto::peer::CHANNEL_ID_1, message);
+    tcp_channel_->send(channel_id, message);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -311,6 +299,12 @@ int Client::speedUdpTx()
     if (!udp_channel_)
         return 0;
     return udp_channel_->speedTx();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Client::isLegacy() const
+{
+    return is_legacy_mode_;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -380,15 +374,7 @@ void Client::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code)
 //--------------------------------------------------------------------------------------------------
 void Client::onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer)
 {
-    if (channel_id == proto::peer::CHANNEL_ID_0)
-    {
-        onSessionMessageReceived(buffer);
-    }
-    else if (channel_id == proto::peer::CHANNEL_ID_1)
-    {
-        onServiceMessageReceived(buffer);
-    }
-    else if (channel_id == proto::peer::CHANNEL_ID_CONTROL)
+    if (channel_id == proto::peer::CHANNEL_ID_CONTROL)
     {
         proto::peer::HostToClient message;
         if (!base::parse(buffer, &message))
@@ -416,7 +402,7 @@ void Client::onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer)
     }
     else
     {
-        CLOG(ERROR) << "Unhandled incoming message from channel:" << channel_id;
+        onMessageReceived(channel_id, buffer);
     }
 }
 
@@ -442,15 +428,7 @@ void Client::onUdpErrorOccurred()
 //--------------------------------------------------------------------------------------------------
 void Client::onUdpMessageReceived(quint8 channel_id, const QByteArray& buffer)
 {
-    if (channel_id == proto::peer::CHANNEL_ID_0)
-    {
-        onSessionMessageReceived(buffer);
-    }
-    else if (channel_id == proto::peer::CHANNEL_ID_1)
-    {
-        onServiceMessageReceived(buffer);
-    }
-    else if (channel_id == proto::peer::CHANNEL_ID_CONTROL)
+    if (channel_id == proto::peer::CHANNEL_ID_CONTROL)
     {
         proto::peer::HostToClient message;
         if (!base::parse(buffer, &message))
@@ -477,7 +455,7 @@ void Client::onUdpMessageReceived(quint8 channel_id, const QByteArray& buffer)
     }
     else
     {
-        CLOG(WARNING) << "Unhandled incoming message from channel" << channel_id;
+        onMessageReceived(channel_id, buffer);
     }
 }
 
@@ -566,7 +544,7 @@ void Client::tcpChannelReady()
 
     // Signal that everything is ready to start the session (connection established,
     // authentication passed).
-    onSessionStarted();
+    onStarted();
 
     emit sig_showSessionWindow();
 

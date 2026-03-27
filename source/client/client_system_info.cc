@@ -39,20 +39,22 @@ ClientSystemInfo::~ClientSystemInfo()
 //--------------------------------------------------------------------------------------------------
 void ClientSystemInfo::onSystemInfoRequest(const proto::system_info::SystemInfoRequest& request)
 {
-    sendSessionMessage(base::serialize(request));
+    sendMessage(proto::peer::CHANNEL_ID_0, base::serialize(request));
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSystemInfo::onSessionStarted()
+void ClientSystemInfo::onStarted()
 {
     CLOG(INFO) << "System info session started";
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSystemInfo::onSessionMessageReceived(const QByteArray& buffer)
+void ClientSystemInfo::onMessageReceived(quint8 channel_id, const QByteArray& buffer)
 {
-    proto::system_info::SystemInfo system_info;
+    if (channel_id != proto::peer::CHANNEL_ID_0)
+        return;
 
+    proto::system_info::SystemInfo system_info;
     if (!base::parse(buffer, &system_info))
     {
         CLOG(ERROR) << "Unable to parse system info";
@@ -60,12 +62,6 @@ void ClientSystemInfo::onSessionMessageReceived(const QByteArray& buffer)
     }
 
     emit sig_systemInfo(system_info);
-}
-
-//--------------------------------------------------------------------------------------------------
-void ClientSystemInfo::onServiceMessageReceived(const QByteArray& /* buffer */)
-{
-    // Not used yet.
 }
 
 } // namespace client

@@ -20,6 +20,8 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
+import "desktop_clipboard.proto";
+
 package proto.desktop;
 
 message Point
@@ -132,27 +134,6 @@ message TouchEvent
     // for START, END, and CANCEL events the size of this field will typically be 1, but for MOVE
     // events it is likely to have multiple points.
     repeated TouchEventPoint touch_points = 2;
-}
-
-message ClipboardEvent
-{
-    message FileList
-    {
-        message File
-        {
-            string path       = 1;
-            bool is_dir       = 2;
-            int64 file_size   = 3;
-            int64 create_time = 4;
-            int64 access_time = 5;
-            int64 modify_time = 6;
-        }
-
-        repeated File file = 1;
-    }
-
-    string mime_type = 1;
-    bytes data = 2;
 }
 
 message CursorShape
@@ -428,41 +409,4 @@ message ClientToSession
     Extension extension            = 6;
     Config config                  = 7;
     AudioPacket audio_packet       = 8;
-}
-
-// Messages for clipboard file transfer (CHANNEL_ID_2).
-
-message FileTransferRequest
-{
-    uint64 transfer_id = 1;
-    int32 file_index   = 2;
-    uint64 offset      = 3;
-}
-
-message FileTransferData
-{
-    uint64 transfer_id = 1;
-    int32 file_index   = 2;
-    bytes data         = 3;
-    bool is_last       = 4;
-}
-
-message FileTransferCancel
-{
-    uint64 transfer_id = 1;
-}
-
-message FileTransferError
-{
-    uint64 transfer_id = 1;
-    int32 file_index   = 2;
-    string error_id    = 3;
-}
-
-message ClipboardFileTransfer
-{
-    FileTransferRequest request = 1;
-    FileTransferData data       = 2;
-    FileTransferCancel cancel   = 3;
-    FileTransferError error     = 4;
 }
