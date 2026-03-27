@@ -36,7 +36,6 @@
 #include "base/ipc/ipc_server.h"
 #include "host/desktop_agent_client.h"
 #include "host/system_settings.h"
-#include "common/clipboard_monitor.h"
 #include "common/desktop_session_constants.h"
 #include "proto/desktop_internal.h"
 
@@ -146,7 +145,6 @@ int minCaptureFps()
 DesktopAgent::DesktopAgent(QObject* parent)
     : QObject(parent),
       ipc_channel_(new base::IpcChannel(this)),
-      clipboard_(new common::ClipboardMonitor(this)),
       desktop_environment_(base::DesktopEnvironment::create(this)),
       preferred_capturer_(static_cast<base::ScreenCapturer::Type>(SystemSettings().preferredVideoCapturer())),
       capture_timer_(new QTimer(this)),
@@ -201,7 +199,6 @@ void DesktopAgent::start(const QString& ipc_channel_name)
 void DesktopAgent::onIpcConnected()
 {
     overflow_timer_->start();
-    clipboard_->start();
     ipc_channel_->setPaused(false);
 }
 
@@ -289,11 +286,6 @@ void DesktopAgent::onClientConfigured()
         if (config.audio_encoding == proto::desktop::AUDIO_ENCODING_OPUS)
             merged_config.audio_encoding = proto::desktop::AUDIO_ENCODING_OPUS;
 
-        // If at least one client has disabled font smoothing, then the font smoothing will be
-        // disabled for everyone.
-        merged_config.disable_font_smoothing =
-            merged_config.disable_font_smoothing || config.disable_font_smoothing;
-
         // If at least one client has disabled effects, then the effects will be disabled for
         // everyone.
         merged_config.disable_effects = merged_config.disable_effects || config.disable_effects;
@@ -307,21 +299,16 @@ void DesktopAgent::onClientConfigured()
         merged_config.block_input = merged_config.block_input || config.block_input;
 
         merged_config.lock_at_disconnect = merged_config.lock_at_disconnect || config.lock_at_disconnect;
-        merged_config.clear_clipboard = merged_config.clear_clipboard || config.clear_clipboard;
         merged_config.cursor_position = merged_config.cursor_position || config.cursor_position;
         merged_config.cursor_shape = merged_config.cursor_shape || config.cursor_shape;
-        merged_config.clipboard = merged_config.clipboard || config.clipboard;
     }
 
     LOG(INFO) << "Merged configuration (wallpaper:" << merged_config.disable_wallpaper
               << "effects:" << merged_config.disable_effects
-              << "font_smoothing:" << merged_config.disable_font_smoothing
               << "block_input:" << merged_config.block_input
               << "lock_at_disconnect:" << merged_config.lock_at_disconnect
-              << "clear_clipboard:" << merged_config.clear_clipboard
               << "cursor_position:" << merged_config.cursor_position
-              << "cursor_shape:" << merged_config.cursor_shape
-              << "clipboard:" << merged_config.clipboard << ")";
+              << "cursor_shape:" << merged_config.cursor_shape << ")";
 
     if (merged_config.video_encoding != proto::desktop::VIDEO_ENCODING_VP8 &&
         merged_config.video_encoding != proto::desktop::VIDEO_ENCODING_VP9)
@@ -372,7 +359,6 @@ void DesktopAgent::onClientConfigured()
     {
         desktop_environment_->setWallpaper(!merged_config.disable_wallpaper);
         desktop_environment_->setEffects(!merged_config.disable_effects);
-        desktop_environment_->setFontSmoothing(!merged_config.disable_font_smoothing);
     }
 
     if (input_injector_)
@@ -380,7 +366,6 @@ void DesktopAgent::onClientConfigured()
 
     is_cursor_position_ = merged_config.cursor_position;
     is_lock_at_disconnect_ = merged_config.lock_at_disconnect;
-    is_clear_clipboard_ = merged_config.clear_clipboard;
 
     capture_timer_->start(0);
 }
@@ -404,12 +389,6 @@ void DesktopAgent::onClientFinished()
 
     LOG(INFO) << "Last desktop client disconnected";
     capture_timer_->stop();
-
-    if (is_clear_clipboard_)
-    {
-        LOG(INFO) << "Clearing clipboard";
-        clipboard_->clearClipboard();
-    }
 
     if (is_lock_at_disconnect_)
     {
@@ -459,15 +438,6 @@ void DesktopAgent::onInjectTouchEvent(const proto::desktop::TouchEvent& event)
     if (is_paused_ || is_mouse_locked_ || is_keyboard_locked_ || !input_injector_)
         return;
     input_injector_->injectTouchEvent(event);
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopAgent::onClipboardEvent(const proto::desktop::ClipboardEvent& event)
-{
-    outgoing_message_.newMessage().mutable_clipboard_event()->CopyFrom(event);
-    const QByteArray& buffer = outgoing_message_.serialize();
-    for (auto* client : std::as_const(clients_))
-        client->onClipboardData(buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -833,16 +803,9 @@ void DesktopAgent::startClient(const QString& ipc_channel_name)
     connect(client, &DesktopAgentClient::sig_injectKeyEvent, this, &DesktopAgent::onInjectKeyEvent);
     connect(client, &DesktopAgentClient::sig_injectTextEvent, this, &DesktopAgent::onInjectTextEvent);
     connect(client, &DesktopAgentClient::sig_injectTouchEvent, this, &DesktopAgent::onInjectTouchEvent);
-
-    connect(client, &DesktopAgentClient::sig_injectClipboardEvent,
-            clipboard_, &common::ClipboardMonitor::injectClipboardEvent);
-    connect(clipboard_, &common::ClipboardMonitor::sig_clipboardEvent,
-            this, &DesktopAgent::onClipboardEvent);
-
     connect(client, &DesktopAgentClient::sig_selectScreen, this, &DesktopAgent::onSelectScreen);
     connect(client, &DesktopAgentClient::sig_preferredSizeChanged, this, &DesktopAgent::onPreferredSizeChanged);
     connect(client, &DesktopAgentClient::sig_keyFrameRequested, this, &DesktopAgent::onKeyFrameRequested);
-
     connect(client, &DesktopAgentClient::sig_configured, this, &DesktopAgent::onClientConfigured);
     connect(client, &DesktopAgentClient::sig_finished, this, &DesktopAgent::onClientFinished);
 

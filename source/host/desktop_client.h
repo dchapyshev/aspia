@@ -47,9 +47,13 @@ public:
     QString attach();
     void dettach();
 
+public slots:
+    void onClipboardData(const QByteArray& buffer);
+
 signals:
     void sig_switchSession(base::SessionId session_id);
     void sig_recordingChanged(bool started);
+    void sig_clipboardData(const QByteArray& buffer);
 
 protected:
     void onStart() final;
@@ -74,6 +78,7 @@ private:
     QTimer* overflow_timer_ = nullptr;
 
     proto::desktop::Overflow::State last_state_ = proto::desktop::Overflow::STATE_NONE;
+    proto::desktop::Config config_;
 
     Q_DISABLE_COPY_MOVE(DesktopClient)
 };

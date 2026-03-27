@@ -127,6 +127,18 @@ void DesktopClient::dettach()
 }
 
 //--------------------------------------------------------------------------------------------------
+void DesktopClient::onClipboardData(const QByteArray& buffer)
+{
+    if (sessionType() != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
+        return;
+
+    if (!(config_.flags() & proto::desktop::ENABLE_CLIPBOARD))
+        return;
+
+    send(proto::peer::CHANNEL_ID_2, buffer);
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopClient::onStart()
 {
     emit sig_started();
@@ -135,24 +147,31 @@ void DesktopClient::onStart()
 //--------------------------------------------------------------------------------------------------
 void DesktopClient::onMessage(quint8 net_channel_id, const QByteArray& buffer)
 {
-    if (net_channel_id == proto::peer::CHANNEL_ID_0)
+    if (net_channel_id == proto::peer::CHANNEL_ID_0) // Session data
     {
         quint32 channel_id = base::makeUint32(proto::desktop::IPC_CHANNEL_ID_SESSION, net_channel_id);
 
         if (ipc_channel_)
             ipc_channel_->send(channel_id, buffer);
     }
-    else if (net_channel_id == proto::peer::CHANNEL_ID_1)
+    else if (net_channel_id == proto::peer::CHANNEL_ID_1) // Service data
     {
         proto::desktop::ClientToService message;
-
         if (!base::parse(buffer, &message))
         {
             CLOG(ERROR) << "Unable to parse service message";
             return;
         }
 
-        if (message.has_session_list_request())
+        if (message.has_config())
+        {
+            config_ = message.config();
+
+            proto::desktop::ServiceToAgentClient message;
+            message.mutable_config()->CopyFrom(config_);
+            sendIpcServiceMessage(base::serialize(message));
+        }
+        else if (message.has_session_list_request())
         {
             sendSessionList();
         }
@@ -175,6 +194,11 @@ void DesktopClient::onMessage(quint8 net_channel_id, const QByteArray& buffer)
                 message.video_recording().action() == proto::desktop::VideoRecording::ACTION_STARTED;
             emit sig_recordingChanged(is_started);
         }
+    }
+    else if (net_channel_id == proto::peer::CHANNEL_ID_2) // Clipboard data
+    {
+        if (sessionType() == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
+            emit sig_clipboardData(buffer);
     }
     else
     {
@@ -254,7 +278,7 @@ void DesktopClient::onIpcMessageReceived(quint32 channel_id, const QByteArray& b
     }
     else
     {
-        // TODO: Handle service message.
+        // Nothing.
     }
 }
 

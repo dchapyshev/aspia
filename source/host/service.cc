@@ -749,6 +749,8 @@ void Service::startClient(const PendingConfirmation& pending)
 
         connect(client, &DesktopClient::sig_switchSession, user_session_, &UserSession::onClientSwitchSession);
         connect(client, &DesktopClient::sig_recordingChanged, user_session_, &UserSession::onClientRecording);
+        connect(client, &DesktopClient::sig_clipboardData, user_session_, &UserSession::onClientClipboard);
+        connect(user_session_, &UserSession::sig_clipboardData, client, &DesktopClient::onClipboardData);
 
         connect(desktop_manager_, &DesktopManager::sig_dettached, client, &DesktopClient::dettach);
     }

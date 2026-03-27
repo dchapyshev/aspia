@@ -396,10 +396,6 @@ void DesktopSessionWindow::onCapabilitiesChanged(const proto::desktop::Capabilit
             disable_feature_desktop_effects_ = value;
         else if (name == common::kFlagDisableDesktopWallpaper)
             disable_feature_desktop_wallpaper_ = value;
-        else if (name == common::kFlagDisableFontSmoothing)
-            disable_feature_font_smoothing_ = value;
-        else if (name == common::kFlagDisableClearClipboard)
-            disable_feature_clear_clipboard_ = value;
         else if (name == common::kFlagDisableLockAtDisconnect)
             disable_feature_lock_at_disconnect_ = value;
         else if (name == common::kFlagDisableBlockInput)
@@ -643,8 +639,6 @@ void DesktopSessionWindow::onInternalReset()
     disable_feature_cursor_position_ = false;
     disable_feature_desktop_effects_ = false;
     disable_feature_desktop_wallpaper_ = false;
-    disable_feature_font_smoothing_ = false;
-    disable_feature_clear_clipboard_ = false;
     disable_feature_lock_at_disconnect_ = false;
     disable_feature_block_input_ = false;
 
@@ -991,8 +985,6 @@ void DesktopSessionWindow::onSettings()
     dialog->enableCursorPositionFeature(!disable_feature_cursor_position_);
     dialog->enableDesktopEffectsFeature(!disable_feature_desktop_effects_);
     dialog->enableDesktopWallpaperFeature(!disable_feature_desktop_wallpaper_);
-    dialog->enableFontSmoothingFeature(!disable_feature_font_smoothing_);
-    dialog->enableClearClipboardFeature(!disable_feature_clear_clipboard_);
     dialog->enableLockAtDisconnectFeature(!disable_feature_lock_at_disconnect_);
     dialog->enableBlockInputFeature(!disable_feature_block_input_);
 

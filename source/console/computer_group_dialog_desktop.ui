@@ -150,13 +150,6 @@
             </property>
            </widget>
           </item>
-          <item>
-           <widget class="QCheckBox" name="checkbox_font_smoothing">
-            <property name="text">
-             <string>Disable font smoothing</string>
-            </property>
-           </widget>
-          </item>
          </layout>
         </widget>
        </item>
@@ -172,13 +165,6 @@
           <string>Other</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout">
-          <item>
-           <widget class="QCheckBox" name="checkbox_clear_clipboard">
-            <property name="text">
-             <string>Clear clipboard at disconnect</string>
-            </property>
-           </widget>
-          </item>
           <item>
            <widget class="QCheckBox" name="checkbox_lock_at_disconnect">
             <property name="text">

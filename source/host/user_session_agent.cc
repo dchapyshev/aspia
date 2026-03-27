@@ -21,6 +21,7 @@
 #include "base/logging.h"
 #include "base/ipc/ipc_channel.h"
 #include "host/host_storage.h"
+#include "common/clipboard_monitor.h"
 
 namespace host {
 
@@ -36,7 +37,6 @@ UserSessionAgent::UserSessionAgent(QObject* parent)
     : QObject(parent)
 {
     LOG(INFO) << "Ctor";
-
 #if defined(Q_OS_WINDOWS)
     // 0x100-0x1FF Application reserved last shutdown range.
     if (!SetProcessShutdownParameters(0x100, SHUTDOWN_NORETRY))
@@ -67,7 +67,7 @@ void UserSessionAgent::onConnectToService()
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionAgent::onUpdateCredentials(proto::user::CredentialsRequest::Type type)
+void UserSessionAgent::onUpdateCredentials(proto::user::CredentialsRequest_Type type)
 {
     LOG(INFO) << "Update credentials request:" << type;
     proto::user::CredentialsRequest* request =
@@ -177,8 +177,24 @@ void UserSessionAgent::onIpcErrorOccurred()
 
 //--------------------------------------------------------------------------------------------------
 void UserSessionAgent::onIpcMessageReceived(
-    quint32 /* ipc_channel_id */, const QByteArray& buffer, bool /* reliable */)
+    quint32 ipc_channel_id, const QByteArray& buffer, bool /* reliable */)
 {
+    if (ipc_channel_id == 1)
+    {
+        proto::desktop::ClipboardMessage message;
+        if (!base::parse(buffer, &message))
+        {
+            LOG(ERROR) << "Unable to parse clipboard message";
+            return;
+        }
+
+        if (message.has_event())
+            clipboard_->injectClipboardEvent(message.event());
+        else
+            LOG(ERROR) << "Unhandled clipboard message";
+        return;
+    }
+
     if (!incoming_message_.parse(buffer))
     {
         LOG(ERROR) << "Invalid message from service";
@@ -196,24 +212,11 @@ void UserSessionAgent::onIpcMessageReceived(
     }
     else if (incoming_message_->has_connect_event())
     {
-        LOG(INFO) << "Connect event received";
-        clients_.emplace_back(incoming_message_->connect_event());
-        emit sig_clientListChanged(clients_);
+        onConnectEvent(incoming_message_->connect_event());
     }
     else if (incoming_message_->has_disconnect_event())
     {
-        LOG(INFO) << "Disconnect event received";
-
-        for (auto it = clients_.begin(), it_end = clients_.end(); it != it_end; ++it)
-        {
-            if (it->client_id == incoming_message_->disconnect_event().client_id())
-            {
-                clients_.erase(it);
-                break;
-            }
-        }
-
-        emit sig_clientListChanged(clients_);
+        onDisconnectEvent(incoming_message_->disconnect_event());
     }
     else if (incoming_message_->has_credentials())
     {
@@ -250,15 +253,74 @@ void UserSessionAgent::onIpcMessageReceived(
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionAgent::sendMessage()
+void UserSessionAgent::onConnectEvent(const proto::user::ConnectEvent& event)
 {
-    if (!ipc_channel_)
+    LOG(INFO) << "Connect event received";
+    clients_.emplace_back(incoming_message_->connect_event());
+
+    if (event.session_type() == proto::peer::SESSION_TYPE_DESKTOP_MANAGE && !clipboard_)
     {
-        LOG(WARNING) << "IPC channel is not connected";
-        return;
+        clipboard_ = new common::ClipboardMonitor(this);
+
+        connect(clipboard_, &common::ClipboardMonitor::sig_clipboardEvent,
+                this, &UserSessionAgent::onClipboardEvent);
+
+        clipboard_->start();
     }
 
-    ipc_channel_->send(0, outgoing_message_.serialize());
+    emit sig_clientListChanged(clients_);
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserSessionAgent::onDisconnectEvent(const proto::user::DisconnectEvent& event)
+{
+    LOG(INFO) << "Disconnect event received";
+
+    for (auto it = clients_.begin(), it_end = clients_.end(); it != it_end; ++it)
+    {
+        if (it->client_id == event.client_id())
+        {
+            clients_.erase(it);
+            break;
+        }
+    }
+
+    bool has_desktop_manage = false;
+
+    for (const auto& client : std::as_const(clients_))
+    {
+        if (client.session_type == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
+            has_desktop_manage = true;
+    }
+
+    if (!has_desktop_manage && clipboard_)
+    {
+        clipboard_->clearClipboard();
+        clipboard_->disconnect(this);
+        clipboard_->deleteLater();
+        clipboard_ = nullptr;
+    }
+
+    emit sig_clientListChanged(clients_);
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserSessionAgent::onClipboardEvent(const proto::desktop::ClipboardEvent& event)
+{
+    if (!ipc_channel_)
+        return;
+
+    proto::desktop::ClipboardMessage message;
+    message.mutable_event()->CopyFrom(event);
+
+    ipc_channel_->send(1, base::serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserSessionAgent::sendMessage()
+{
+    if (ipc_channel_)
+        ipc_channel_->send(0, outgoing_message_.serialize());
 }
 
 } // namespace host

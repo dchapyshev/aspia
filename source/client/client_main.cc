@@ -207,52 +207,6 @@ bool parseDesktopWallpaperValue(const QString& value, proto::desktop::Config& co
 }
 
 //--------------------------------------------------------------------------------------------------
-bool parseFontSmoothingValue(const QString& value, proto::desktop::Config& config)
-{
-    if (!value.isEmpty())
-    {
-        if (value == "0")
-        {
-            config.set_flags(config.flags() | proto::desktop::DISABLE_FONT_SMOOTHING);
-        }
-        else if (value == "1")
-        {
-            config.set_flags(config.flags() & ~static_cast<quint32>(proto::desktop::DISABLE_FONT_SMOOTHING));
-        }
-        else
-        {
-            onInvalidValue("font-smoothing", "0, 1");
-            return false;
-        }
-    }
-
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool parseClearClipboardValue(const QString& value, proto::desktop::Config& config)
-{
-    if (!value.isEmpty())
-    {
-        if (value == "0")
-        {
-            config.set_flags(config.flags() & ~static_cast<quint32>(proto::desktop::CLEAR_CLIPBOARD));
-        }
-        else if (value == "1")
-        {
-            config.set_flags(config.flags() | proto::desktop::CLEAR_CLIPBOARD);
-        }
-        else
-        {
-            onInvalidValue("clear-clipboard", "0, 1");
-            return false;
-        }
-    }
-
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
 bool parseLockAtDisconnectValue(const QString& value, proto::desktop::Config& config)
 {
     if (!value.isEmpty())
@@ -356,16 +310,8 @@ int clientMain(int argc, char* argv[])
         "desktop-manage");
 
     QCommandLineOption codec_option("codec",
-        QApplication::translate("Client", "Type of codec. Possible values: vp8, vp9, zstd."),
+        QApplication::translate("Client", "Type of codec. Possible values: vp8, vp9."),
         "codec");
-
-    QCommandLineOption color_depth_option("color-depth",
-        QApplication::translate("Client", "Color depth. Possible values: 3, 6, 8, 16, 32."),
-        "color-depth");
-
-    QCommandLineOption compress_ratio_option("compress-ratio",
-        QApplication::translate("Client", "Compression ratio. Possible values: 1-22."),
-        "compress-ratio");
 
     QCommandLineOption audio_option("audio",
         QApplication::translate("Client", "Enable or disable audio. Possible values: 0 or 1."),
@@ -390,14 +336,6 @@ int clientMain(int argc, char* argv[])
     QCommandLineOption desktop_wallpaper_option("desktop-wallpaper",
         QApplication::translate("Client", "Enable or disable desktop wallpaper. Possible values: 0 or 1."),
         "desktop-wallpaper");
-
-    QCommandLineOption font_smoothing_option("font-smoothing",
-        QApplication::translate("Client", "Enable or disable font smoothing. Possible values: 0 or 1."),
-        "font-smoothing");
-
-    QCommandLineOption clear_clipboard_option("clear-clipboard",
-        QApplication::translate("Client", "Clear clipboard at disconnect. Possible values: 0 or 1."),
-        "clear-clipboard");
 
     QCommandLineOption lock_at_disconnect_option("lock-at-disconnect",
         QApplication::translate("Client", "Lock computer at disconnect. Possible values: 0 or 1."),
@@ -436,16 +374,12 @@ int clientMain(int argc, char* argv[])
     parser.addOption(display_name_option);
     parser.addOption(session_type_option);
     parser.addOption(codec_option);
-    parser.addOption(color_depth_option);
-    parser.addOption(compress_ratio_option);
     parser.addOption(audio_option);
     parser.addOption(cursor_shape_option);
     parser.addOption(cursor_position_option);
     parser.addOption(clipboard_option);
     parser.addOption(desktop_effects_option);
     parser.addOption(desktop_wallpaper_option);
-    parser.addOption(font_smoothing_option);
-    parser.addOption(clear_clipboard_option);
     parser.addOption(lock_at_disconnect_option);
     parser.addOption(block_remote_input_option);
     parser.addOption(router_address_option);
@@ -547,18 +481,6 @@ int clientMain(int argc, char* argv[])
             if (!parseDesktopWallpaperValue(parser.value(desktop_wallpaper_option), *desktop_config))
             {
                 LOG(ERROR) << "Unable to parse desktop wallpaper value";
-                return 1;
-            }
-
-            if (!parseFontSmoothingValue(parser.value(font_smoothing_option), *desktop_config))
-            {
-                LOG(ERROR) << "Unable to parse font smoothing value";
-                return 1;
-            }
-
-            if (!parseClearClipboardValue(parser.value(clear_clipboard_option), *desktop_config))
-            {
-                LOG(ERROR) << "Unable to parse clear clipboard value";
                 return 1;
             }
 

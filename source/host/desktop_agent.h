@@ -37,13 +37,8 @@ class ScaleReducer;
 class VideoEncoder;
 } // namespace base
 
-namespace common {
-class ClipboardMonitor;
-} // namespace common
-
 namespace proto::desktop {
 class AudioPacket;
-class ClipboardEvent;
 class KeyEvent;
 class MouseEvent;
 class Screen;
@@ -79,7 +74,6 @@ private slots:
     void onInjectKeyEvent(const proto::desktop::KeyEvent& event);
     void onInjectTextEvent(const proto::desktop::TextEvent& event);
     void onInjectTouchEvent(const proto::desktop::TouchEvent& event);
-    void onClipboardEvent(const proto::desktop::ClipboardEvent& event);
 
     void onSelectScreen(const proto::desktop::Screen& screen);
     void onScreenListChanged(
@@ -106,7 +100,6 @@ private:
     QList<DesktopAgentClient*> clients_;
 
     base::PowerSaveBlocker power_save_blocker_;
-    common::ClipboardMonitor* clipboard_ = nullptr;
     InputInjector* input_injector_ = nullptr;
     base::ScreenCapturer* screen_capturer_ = nullptr;
     base::AudioCapturerWrapper* audio_capturer_ = nullptr;
@@ -138,7 +131,6 @@ private:
     bool is_keyboard_locked_ = false;
     bool is_cursor_position_ = false;
     bool is_lock_at_disconnect_ = false;
-    bool is_clear_clipboard_ = false;
 
     QTimer* overflow_timer_ = nullptr;
 

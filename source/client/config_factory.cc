@@ -55,8 +55,7 @@ void ConfigFactory::setDefaultDesktopManageConfig(proto::desktop::Config* config
 
     static const quint32 kDefaultFlags =
         proto::desktop::ENABLE_CLIPBOARD | proto::desktop::ENABLE_CURSOR_SHAPE |
-        proto::desktop::DISABLE_EFFECTS | proto::desktop::DISABLE_WALLPAPER |
-        proto::desktop::CLEAR_CLIPBOARD;
+        proto::desktop::DISABLE_EFFECTS | proto::desktop::DISABLE_WALLPAPER;
 
     config->set_flags(kDefaultFlags);
     config->set_video_encoding(kDefaultVideoEncoding);

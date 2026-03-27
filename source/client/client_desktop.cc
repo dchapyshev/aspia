@@ -202,9 +202,19 @@ void ClientDesktop::onDesktopConfigChanged(const proto::desktop::Config& config)
     input_event_filter_.setClipboardEnabled(desktop_config_.flags() & proto::desktop::ENABLE_CLIPBOARD);
 
     CLOG(INFO) << "Send:" << config;
-    outgoing_message_.newMessage().mutable_config()->CopyFrom(desktop_config_);
-    sendMessage(proto::peer::CHANNEL_ID_0, outgoing_message_.serialize());
-    sendSessionListRequest();
+
+    if (isLegacy())
+    {
+        outgoing_message_.newMessage().mutable_config()->CopyFrom(desktop_config_);
+        sendMessage(proto::peer::CHANNEL_ID_0, outgoing_message_.serialize());
+    }
+    else
+    {
+        proto::desktop::ClientToService message;
+        message.mutable_config()->CopyFrom(desktop_config_);
+        sendMessage(proto::peer::CHANNEL_ID_1, base::serialize(message));
+        sendSessionListRequest();
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

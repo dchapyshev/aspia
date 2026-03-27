@@ -48,8 +48,6 @@ extern const char kFlagDisableCursorShape[];
 extern const char kFlagDisableCursorPosition[];
 extern const char kFlagDisableDesktopEffects[];
 extern const char kFlagDisableDesktopWallpaper[];
-extern const char kFlagDisableFontSmoothing[];
-extern const char kFlagDisableClearClipboard[];
 extern const char kFlagDisableLockAtDisconnect[];
 extern const char kFlagDisableBlockInput[];
 

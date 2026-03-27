@@ -78,6 +78,7 @@ public slots:
     void onClientFinished();
     void onClientChat(quint32 client_id, const proto::chat::Chat& chat);
     void onClientRecording(bool started);
+    void onClientClipboard(const QByteArray& buffer);
 
 signals:
     void sig_attached();
@@ -90,6 +91,7 @@ signals:
     void sig_lockMouseChanged(bool enable);
     void sig_lockKeyboardChanged(bool enable);
     void sig_pauseChanged(bool enable);
+    void sig_clipboardData(const QByteArray& buffer);
 
 private slots:
     void onUserSessionEvent(quint32 status, quint32 session_id);

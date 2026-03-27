@@ -370,11 +370,11 @@ enum ConfigFlags
     ENABLE_CLIPBOARD       = 2;
     DISABLE_EFFECTS        = 4;
     DISABLE_WALLPAPER      = 8;
-    DISABLE_FONT_SMOOTHING = 16;
+    // DISABLE_FONT_SMOOTHING (16) is deprecated.
     BLOCK_REMOTE_INPUT     = 32;
     LOCK_AT_DISCONNECT     = 64;
     CURSOR_POSITION        = 128;
-    CLEAR_CLIPBOARD        = 256;
+    // CLEAR_CLIPBOARD (256) is deprecated.
 }
 
 message Config
@@ -407,6 +407,6 @@ message ClientToSession
     TextEvent text_event           = 4;
     ClipboardEvent clipboard_event = 5;
     Extension extension            = 6;
-    Config config                  = 7;
+    Config config                  = 7; // Deprecated (only for legacy hosts).
     AudioPacket audio_packet       = 8;
 }

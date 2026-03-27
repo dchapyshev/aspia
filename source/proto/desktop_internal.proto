@@ -23,6 +23,7 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
+import "desktop_session.proto";
 import "peer.proto";
 
 package proto.desktop;
@@ -70,7 +71,7 @@ message Overflow
         STATE_CRITICAL = 3;
     }
 
-    State state    = 1;
+    State state = 1;
 }
 
 // Service to desktop agent.
@@ -82,8 +83,9 @@ message BandwidthChange
 message ServiceToAgentClient
 {
     Description description          = 1;
-    Overflow overflow                = 2;
-    BandwidthChange bandwidth_change = 3;
+    Config config                    = 2;
+    Overflow overflow                = 3;
+    BandwidthChange bandwidth_change = 4;
 }
 
 message ServiceToAgent

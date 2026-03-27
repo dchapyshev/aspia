@@ -60,8 +60,6 @@ const char kFlagDisableCursorShape[] = "disable_cursor_shape";
 const char kFlagDisableCursorPosition[] = "disable_cursor_position";
 const char kFlagDisableDesktopEffects[] = "disable_desktop_effects";
 const char kFlagDisableDesktopWallpaper[] = "disable_desktop_wallpaper";
-const char kFlagDisableFontSmoothing[] = "disable_font_smoothing";
-const char kFlagDisableClearClipboard[] = "disable_clear_clipboard";
 const char kFlagDisableLockAtDisconnect[] = "disable_lock_at_disconnect";
 const char kFlagDisableBlockInput[] = "disable_block_input";
 

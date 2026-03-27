@@ -102,16 +102,12 @@ void ComputerGroupDialogDesktop::restoreSettings(
 
         if (desktop_config.flags() & proto::desktop::ENABLE_CLIPBOARD)
             ui.checkbox_clipboard->setChecked(true);
-
-        if (desktop_config.flags() & proto::desktop::CLEAR_CLIPBOARD)
-            ui.checkbox_clear_clipboard->setChecked(true);
     }
     else
     {
         ui.groupbox_other->hide();
         ui.checkbox_cursor_shape->hide();
         ui.checkbox_clipboard->hide();
-        ui.checkbox_clear_clipboard->hide();
     }
 
     if (desktop_config.flags() & proto::desktop::CURSOR_POSITION)
@@ -122,9 +118,6 @@ void ComputerGroupDialogDesktop::restoreSettings(
 
     if (desktop_config.flags() & proto::desktop::DISABLE_WALLPAPER)
         ui.checkbox_desktop_wallpaper->setChecked(true);
-
-    if (desktop_config.flags() & proto::desktop::DISABLE_FONT_SMOOTHING)
-        ui.checkbox_font_smoothing->setChecked(true);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -172,17 +165,11 @@ void ComputerGroupDialogDesktop::saveSettings(
     if (ui.checkbox_desktop_wallpaper->isChecked())
         flags |= proto::desktop::DISABLE_WALLPAPER;
 
-    if (ui.checkbox_font_smoothing->isChecked())
-        flags |= proto::desktop::DISABLE_FONT_SMOOTHING;
-
     if (ui.checkbox_block_remote_input->isChecked())
         flags |= proto::desktop::BLOCK_REMOTE_INPUT;
 
     if (ui.checkbox_lock_at_disconnect->isChecked())
         flags |= proto::desktop::LOCK_AT_DISCONNECT;
-
-    if (ui.checkbox_clear_clipboard->isChecked())
-        flags |= proto::desktop::CLEAR_CLIPBOARD;
 
     desktop_config->set_flags(flags);
 }

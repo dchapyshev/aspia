@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>284</width>
-    <height>520</height>
+    <height>466</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -107,13 +107,6 @@
         </property>
        </widget>
       </item>
-      <item>
-       <widget class="QCheckBox" name="checkbox_font_smoothing">
-        <property name="text">
-         <string>Disable font smoothing</string>
-        </property>
-       </widget>
-      </item>
      </layout>
     </widget>
    </item>
@@ -129,13 +122,6 @@
       <string>Other</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_3">
-      <item>
-       <widget class="QCheckBox" name="checkbox_clear_clipboard">
-        <property name="text">
-         <string>Clear clipboard at disconnect</string>
-        </property>
-       </widget>
-      </item>
       <item>
        <widget class="QCheckBox" name="checkbox_lock_at_disconnect">
         <property name="text">

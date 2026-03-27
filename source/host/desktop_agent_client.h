@@ -47,15 +47,12 @@ public:
     {
         proto::desktop::VideoEncoding video_encoding = proto::desktop::VIDEO_ENCODING_VP9;
         proto::desktop::AudioEncoding audio_encoding = proto::desktop::AUDIO_ENCODING_UNKNOWN;
-        bool disable_font_smoothing = false;
         bool disable_wallpaper = true;
         bool disable_effects = true;
         bool block_input = false;
         bool lock_at_disconnect = false;
-        bool clear_clipboard = true;
         bool cursor_position = false;
         bool cursor_shape = false;
-        bool clipboard = false;
     };
 
     proto::peer::SessionType sessionType() const { return session_type_; }
@@ -68,7 +65,6 @@ public:
     void onScreenListData(const QByteArray& buffer);
     void onScreenTypeData(const QByteArray& buffer);
     void onCursorPositionData(const QByteArray& buffer);
-    void onClipboardData(const QByteArray& buffer);
     void onCursorData(const QByteArray& buffer);
     void onAudioData(const QByteArray& buffer);
 
@@ -80,7 +76,6 @@ signals:
     void sig_injectTextEvent(const proto::desktop::TextEvent& event);
     void sig_injectMouseEvent(const proto::desktop::MouseEvent& event);
     void sig_injectTouchEvent(const proto::desktop::TouchEvent& event);
-    void sig_injectClipboardEvent(const proto::desktop::ClipboardEvent& event);
     void sig_selectScreen(const proto::desktop::Screen& screen);
     void sig_preferredSizeChanged(const QSize& size);
     void sig_keyFrameRequested();
@@ -103,7 +98,6 @@ private:
     void readKeyEvent(const proto::desktop::KeyEvent& key_event);
     void readTouchEvent(const proto::desktop::TouchEvent& touch_event);
     void readTextEvent(const proto::desktop::TextEvent& text_event);
-    void readClipboardEvent(const proto::desktop::ClipboardEvent& clipboard_event);
     void readExtension(const proto::desktop::Extension& extension);
     void readConfig(const proto::desktop::Config& config);
     void readKeyFrameExtension(const std::string& data);

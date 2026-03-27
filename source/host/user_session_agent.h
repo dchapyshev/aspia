@@ -29,6 +29,14 @@ namespace base {
 class IpcChannel;
 } // namespace base
 
+namespace common {
+class ClipboardMonitor;
+} // namespace common
+
+namespace proto::desktop {
+class ClipboardEvent;
+} // namespace proto::desktop
+
 namespace host {
 
 class UserSessionAgent final : public QObject
@@ -68,7 +76,7 @@ public:
 
 public slots:
     void onConnectToService();
-    void onUpdateCredentials(proto::user::CredentialsRequest::Type type);
+    void onUpdateCredentials(proto::user::CredentialsRequest_Type type);
     void onOneTimeSessions(quint32 sessions);
     void onStopClient(quint32 client_id);
     void onConnectConfirmation(quint32 request_id, bool accept);
@@ -91,10 +99,14 @@ private slots:
     void onIpcDisconnected();
     void onIpcErrorOccurred();
     void onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer, bool reliable);
+    void onConnectEvent(const proto::user::ConnectEvent& event);
+    void onDisconnectEvent(const proto::user::DisconnectEvent& event);
+    void onClipboardEvent(const proto::desktop::ClipboardEvent& event);
 
 private:
     void sendMessage();
 
+    common::ClipboardMonitor* clipboard_ = nullptr;
     base::IpcChannel* ipc_channel_ = nullptr;
 
     base::Parser<proto::user::ServiceToUser> incoming_message_;

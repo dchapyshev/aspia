@@ -82,13 +82,6 @@ void DesktopAgentClient::onCursorPositionData(const QByteArray& buffer)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::onClipboardData(const QByteArray& buffer)
-{
-    if (sessionType() == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
-        sendSessionMessage(buffer, true);
-}
-
-//--------------------------------------------------------------------------------------------------
 void DesktopAgentClient::onCursorData(const QByteArray& buffer)
 {
     if (config_.cursor_shape)
@@ -168,6 +161,10 @@ void DesktopAgentClient::onIpcMessageReceived(
             session_type_ = message.description().session_type();
             sendCapabilities();
         }
+        else if (message.has_config())
+        {
+            readConfig(message.config());
+        }
         else if (message.has_overflow())
         {
             readOverflow(message.overflow().state());
@@ -215,12 +212,8 @@ void DesktopAgentClient::readSessionMessage(const QByteArray& buffer)
         readTouchEvent(incoming_message_->touch_event());
     else if (incoming_message_->has_text_event())
         readTextEvent(incoming_message_->text_event());
-    else if (incoming_message_->has_clipboard_event())
-        readClipboardEvent(incoming_message_->clipboard_event());
     else if (incoming_message_->has_extension())
         readExtension(incoming_message_->extension());
-    else if (incoming_message_->has_config())
-        readConfig(incoming_message_->config());
     else
         CLOG(ERROR) << "Unhandled message from client";
 }
@@ -261,13 +254,6 @@ void DesktopAgentClient::readTextEvent(const proto::desktop::TextEvent& text_eve
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::readClipboardEvent(const proto::desktop::ClipboardEvent& clipboard_event)
-{
-    if (sessionType() == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
-        emit sig_injectClipboardEvent(clipboard_event);
-}
-
-//--------------------------------------------------------------------------------------------------
 void DesktopAgentClient::readExtension(const proto::desktop::Extension& extension)
 {
     if (extension.name() == common::kKeyFrameExtension)
@@ -297,27 +283,21 @@ void DesktopAgentClient::readConfig(const proto::desktop::Config& config)
 {
     config_.video_encoding = config.video_encoding();
     config_.audio_encoding = config.audio_encoding();
-    config_.disable_font_smoothing = (config.flags() & proto::desktop::DISABLE_FONT_SMOOTHING);
     config_.disable_effects = (config.flags() & proto::desktop::DISABLE_EFFECTS);
     config_.disable_wallpaper = (config.flags() & proto::desktop::DISABLE_WALLPAPER);
     config_.block_input = (config.flags() & proto::desktop::BLOCK_REMOTE_INPUT);
     config_.lock_at_disconnect = (config.flags() & proto::desktop::LOCK_AT_DISCONNECT);
-    config_.clear_clipboard = (config.flags() & proto::desktop::CLEAR_CLIPBOARD);
     config_.cursor_position = (config.flags() & proto::desktop::CURSOR_POSITION);
     config_.cursor_shape = (config.flags() & proto::desktop::ENABLE_CURSOR_SHAPE);
-    config_.clipboard = (config.flags() & proto::desktop::ENABLE_CLIPBOARD);
 
     CLOG(INFO) << "Config changed (encoding:" << config.video_encoding()
                << "cursor_shape:" << config_.cursor_shape
-               << "font_smoothing:" << config_.disable_font_smoothing
                << "effects:" << config_.disable_effects
                << "wallpaper:" << config_.disable_wallpaper
                << "block_input:" << config_.block_input
                << "lock_at_disconnect:" << config_.lock_at_disconnect
-               << "clear_clipboard:" << config_.clear_clipboard
                << "cursor_position:" << config_.cursor_position
-               << "cursor_shape:" << config_.cursor_shape
-               << "clipboard:" << config_.clipboard << ")";
+               << "cursor_shape:" << config_.cursor_shape << ")";
     emit sig_configured();
 }
 

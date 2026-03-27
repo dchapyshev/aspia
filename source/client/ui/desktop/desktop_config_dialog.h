@@ -47,8 +47,6 @@ public:
     void enableCursorPositionFeature(bool enable);
     void enableDesktopEffectsFeature(bool enable);
     void enableDesktopWallpaperFeature(bool enable);
-    void enableFontSmoothingFeature(bool enable);
-    void enableClearClipboardFeature(bool enable);
     void enableLockAtDisconnectFeature(bool enable);
     void enableBlockInputFeature(bool enable);
 

@@ -391,6 +391,13 @@ void UserSession::onClientRecording(bool started)
 }
 
 //--------------------------------------------------------------------------------------------------
+void UserSession::onClientClipboard(const QByteArray& buffer)
+{
+    if (ipc_channel_ && !buffer.isEmpty())
+        ipc_channel_->send(1, buffer);
+}
+
+//--------------------------------------------------------------------------------------------------
 void UserSession::onUserSessionEvent(quint32 status, quint32 session_id)
 {
 #if defined(Q_OS_WINDOWS)
@@ -520,8 +527,14 @@ void UserSession::onIpcDisconnected()
 
 //--------------------------------------------------------------------------------------------------
 void UserSession::onIpcMessageReceived(
-    quint32 /* ipc_channel_id */, const QByteArray& buffer, bool /* reliable */)
+    quint32 ipc_channel_id, const QByteArray& buffer, bool /* reliable */)
 {
+    if (ipc_channel_id == 1)
+    {
+        emit sig_clipboardData(buffer);
+        return;
+    }
+
     if (!incoming_message_.parse(buffer))
     {
         LOG(ERROR) << "Invalid message from UI";

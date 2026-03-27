@@ -20,6 +20,8 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
+import "desktop_session.proto";
+
 package proto.desktop;
 
 message SwitchSession
@@ -67,7 +69,8 @@ message ServiceToClient
 
 message ClientToService
 {
-    SessionListRequest session_list_request = 1;
-    SwitchSession switch_session            = 2;
-    VideoRecording video_recording          = 3;
+    Config config                           = 1;
+    SessionListRequest session_list_request = 2;
+    SwitchSession switch_session            = 3;
+    VideoRecording video_recording          = 4;
 }

@@ -71,16 +71,12 @@ DesktopConfigDialog::DesktopConfigDialog(proto::peer::SessionType session_type,
 
         if (config_.flags() & proto::desktop::ENABLE_CLIPBOARD)
             ui->checkbox_clipboard->setChecked(true);
-
-        if (config_.flags() & proto::desktop::CLEAR_CLIPBOARD)
-            ui->checkbox_clear_clipboard->setChecked(true);
     }
     else
     {
         ui->groupbox_other->hide();
         ui->checkbox_cursor_shape->hide();
         ui->checkbox_clipboard->hide();
-        ui->checkbox_clear_clipboard->hide();
     }
 
     if (config_.flags() & proto::desktop::CURSOR_POSITION)
@@ -91,9 +87,6 @@ DesktopConfigDialog::DesktopConfigDialog(proto::peer::SessionType session_type,
 
     if (config_.flags() & proto::desktop::DISABLE_WALLPAPER)
         ui->checkbox_desktop_wallpaper->setChecked(true);
-
-    if (config_.flags() & proto::desktop::DISABLE_FONT_SMOOTHING)
-        ui->checkbox_font_smoothing->setChecked(true);
 
     connect(combo_codec, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &DesktopConfigDialog::onCodecChanged);
@@ -157,20 +150,6 @@ void DesktopConfigDialog::enableDesktopWallpaperFeature(bool enable)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopConfigDialog::enableFontSmoothingFeature(bool enable)
-{
-    LOG(INFO) << "enableFontSmoothingFeature:" << enable;
-    ui->checkbox_font_smoothing->setEnabled(enable);
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopConfigDialog::enableClearClipboardFeature(bool enable)
-{
-    LOG(INFO) << "enableClearClipboardFeature:" << enable;
-    ui->checkbox_clear_clipboard->setEnabled(enable);
-}
-
-//--------------------------------------------------------------------------------------------------
 void DesktopConfigDialog::enableLockAtDisconnectFeature(bool enable)
 {
     LOG(INFO) << "enableLockAtDisconnectFeature:" << enable;
@@ -226,17 +205,11 @@ void DesktopConfigDialog::onButtonBoxClicked(QAbstractButton* button)
         if (ui->checkbox_desktop_wallpaper->isChecked())
             flags |= proto::desktop::DISABLE_WALLPAPER;
 
-        if (ui->checkbox_font_smoothing->isChecked())
-            flags |= proto::desktop::DISABLE_FONT_SMOOTHING;
-
         if (ui->checkbox_block_remote_input->isChecked())
             flags |= proto::desktop::BLOCK_REMOTE_INPUT;
 
         if (ui->checkbox_lock_at_disconnect->isChecked())
             flags |= proto::desktop::LOCK_AT_DISCONNECT;
-
-        if (ui->checkbox_clear_clipboard->isChecked())
-            flags |= proto::desktop::CLEAR_CLIPBOARD;
 
         config_.set_flags(flags);
 

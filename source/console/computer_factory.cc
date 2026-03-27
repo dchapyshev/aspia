@@ -19,7 +19,6 @@
 #include "console/computer_factory.h"
 
 #include "base/logging.h"
-#include "base/serialization.h"
 #include "build/build_config.h"
 
 namespace console {
@@ -31,8 +30,7 @@ void ComputerFactory::setDefaultDesktopManageConfig(proto::desktop::Config* conf
 
     static const quint32 kDefaultFlags =
         proto::desktop::ENABLE_CLIPBOARD | proto::desktop::ENABLE_CURSOR_SHAPE |
-        proto::desktop::DISABLE_EFFECTS | proto::desktop::DISABLE_WALLPAPER |
-        proto::desktop::CLEAR_CLIPBOARD;
+        proto::desktop::DISABLE_EFFECTS | proto::desktop::DISABLE_WALLPAPER;
 
     config->set_flags(kDefaultFlags);
     config->set_video_encoding(proto::desktop::VIDEO_ENCODING_VP8);
