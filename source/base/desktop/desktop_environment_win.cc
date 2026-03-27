@@ -96,16 +96,6 @@ void DesktopEnvironmentWin::disableWallpaper()
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopEnvironmentWin::disableFontSmoothing()
-{
-    LOG(INFO) << "Disable font smoothing";
-    ScopedUserImpersonator impersonator;
-
-    SystemParametersInfoW(SPI_SETFONTSMOOTHING, FALSE, nullptr, SPIF_SENDCHANGE);
-    font_smoothing_changed_ = true;
-}
-
-//--------------------------------------------------------------------------------------------------
 void DesktopEnvironmentWin::disableEffects()
 {
     LOG(INFO) << "Disable desktop effects";
@@ -159,12 +149,6 @@ void DesktopEnvironmentWin::revertAll()
     {
         SystemParametersInfoW(SPI_SETDESKWALLPAPER, 0, SETWALLPAPER_DEFAULT, SPIF_SENDCHANGE);
         wallpaper_changed_ = false;
-    }
-
-    if (font_smoothing_changed_)
-    {
-        SystemParametersInfoW(SPI_SETFONTSMOOTHING, TRUE, nullptr, SPIF_SENDCHANGE);
-        font_smoothing_changed_ = false;
     }
 
     if (drag_full_windows_)

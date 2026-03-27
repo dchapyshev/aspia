@@ -33,13 +33,11 @@ public:
 
 protected:
     void disableWallpaper() final;
-    void disableFontSmoothing() final;
     void disableEffects() final;
     void revertAll() final;
 
 private:
     bool wallpaper_changed_ = false;
-    bool font_smoothing_changed_ = false;
     bool drop_shadow_changed_ = false;
     bool animation_changed_ = false;
     bool drag_full_windows_ = false;

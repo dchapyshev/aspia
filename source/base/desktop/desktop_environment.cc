@@ -87,31 +87,6 @@ void DesktopEnvironment::setWallpaper(bool enable)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopEnvironment::setFontSmoothing(bool enable)
-{
-    static const bool kDefaultValue = true;
-
-    bool has_changes = false;
-    if (font_smoothing_.has_value())
-    {
-        has_changes = true;
-    }
-    else
-    {
-        if (enable != kDefaultValue)
-            has_changes = true;
-    }
-
-    if (has_changes)
-    {
-        font_smoothing_.emplace(enable);
-
-        revertAll();
-        applyNewSettings();
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
 void DesktopEnvironment::setEffects(bool enable)
 {
     static const bool kDefaultValue = true;
@@ -147,9 +122,6 @@ void DesktopEnvironment::applyNewSettings()
 {
     if (wallpaper_.has_value() && !*wallpaper_)
         disableWallpaper();
-
-    if (font_smoothing_.has_value() && !*font_smoothing_)
-        disableFontSmoothing();
 
     if (effects_.has_value() && !*effects_)
         disableEffects();

@@ -36,14 +36,12 @@ public:
     static DesktopEnvironment* create(QObject* parent = nullptr);
 
     void setWallpaper(bool enable);
-    void setFontSmoothing(bool enable);
     void setEffects(bool enable);
 
     void onDesktopChanged();
 
 protected:
     virtual void disableWallpaper() = 0;
-    virtual void disableFontSmoothing() = 0;
     virtual void disableEffects() = 0;
     virtual void revertAll() = 0;
 
@@ -51,7 +49,6 @@ private:
     void applyNewSettings();
 
     std::optional<bool> wallpaper_;
-    std::optional<bool> font_smoothing_;
     std::optional<bool> effects_;
 
     Q_DISABLE_COPY_MOVE(DesktopEnvironment)
