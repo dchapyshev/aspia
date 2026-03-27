@@ -300,8 +300,7 @@ void UserSessionAgent::onDisconnectEvent(const proto::user::DisconnectEvent& eve
 
     if (!has_desktop_manage && clipboard_)
     {
-        if (!qEnvironmentVariableIsSet("ASPIA_NO_CLEAR_CLIPBOARD"))
-            clipboard_->clearClipboard();
+        clipboard_->clearClipboard();
         clipboard_->disconnect(this);
         clipboard_->deleteLater();
         clipboard_ = nullptr;
