@@ -79,10 +79,13 @@ void ClientDesktop::onStarted()
 
     input_event_filter_.setSessionType(sessionState()->sessionType());
 
-    clipboard_monitor_ = new common::ClipboardMonitor(this);
-    connect(clipboard_monitor_, &common::ClipboardMonitor::sig_clipboardEvent,
-            this, &ClientDesktop::onClipboardEvent);
-    clipboard_monitor_->start();
+    if (sessionState()->sessionType() == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
+    {
+        clipboard_monitor_ = new common::ClipboardMonitor(this);
+        connect(clipboard_monitor_, &common::ClipboardMonitor::sig_clipboardEvent,
+                this, &ClientDesktop::onClipboardEvent);
+        clipboard_monitor_->start();
+    }
 
     audio_player_ = base::AudioPlayer::create();
 }
@@ -116,6 +119,7 @@ void ClientDesktop::onMessageReceived(quint8 channel_id, const QByteArray& buffe
         }
         else if (incoming_message_->has_clipboard_event())
         {
+            // Deprecated: only for legacy hosts.
             readClipboardEvent(incoming_message_->clipboard_event());
         }
         else if (incoming_message_->has_capabilities())
@@ -163,7 +167,7 @@ void ClientDesktop::onMessageReceived(quint8 channel_id, const QByteArray& buffe
 
         if (message.has_event())
         {
-            readClipboardEvent(incoming_message_->clipboard_event());
+            readClipboardEvent(message.event());
         }
         else
         {
@@ -179,13 +183,18 @@ void ClientDesktop::onClipboardEvent(const proto::desktop::ClipboardEvent& event
     if (!input_event_filter_.sendClipboardEvent(event))
         return;
 
-    outgoing_message_.newMessage().mutable_clipboard_event()->CopyFrom(event);
-
-    quint8 channel_id = proto::peer::CHANNEL_ID_2;
     if (isLegacy())
-        channel_id = proto::peer::CHANNEL_ID_0;
-
-    sendMessage(channel_id, outgoing_message_.serialize());
+    {
+        // Deprecated: only for legacy hosts.
+        outgoing_message_.newMessage().mutable_clipboard_event()->CopyFrom(event);
+        sendMessage(proto::peer::CHANNEL_ID_0, outgoing_message_.serialize());
+    }
+    else
+    {
+        proto::desktop::ClipboardMessage message;
+        message.mutable_event()->CopyFrom(event);
+        sendMessage(proto::peer::CHANNEL_ID_2, base::serialize(message));
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

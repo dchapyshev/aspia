@@ -28,6 +28,12 @@ import "peer.proto";
 
 package proto.user;
 
+enum ChannelId
+{
+    CHANNEL_ID_USER      = 0;
+    CHANNEL_ID_CLIPBOARD = 1;
+}
+
 // Host UI to service.
 message CredentialsRequest
 {

@@ -394,7 +394,7 @@ void UserSession::onClientRecording(bool started)
 void UserSession::onClientClipboard(const QByteArray& buffer)
 {
     if (ipc_channel_ && !buffer.isEmpty())
-        ipc_channel_->send(1, buffer);
+        ipc_channel_->send(proto::user::CHANNEL_ID_CLIPBOARD, buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -529,7 +529,7 @@ void UserSession::onIpcDisconnected()
 void UserSession::onIpcMessageReceived(
     quint32 ipc_channel_id, const QByteArray& buffer, bool /* reliable */)
 {
-    if (ipc_channel_id == 1)
+    if (ipc_channel_id == proto::user::CHANNEL_ID_CLIPBOARD)
     {
         emit sig_clipboardData(buffer);
         return;
@@ -810,7 +810,7 @@ void UserSession::sendMessage()
         return;
     }
 
-    ipc_channel_->send(0, outgoing_message_.serialize());
+    ipc_channel_->send(proto::user::CHANNEL_ID_USER, outgoing_message_.serialize());
 }
 
 } // namespace host

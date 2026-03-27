@@ -555,7 +555,6 @@ void DesktopAgentClient::sendCapabilities()
     add_flag(common::kFlagDisableDesktopEffects, true);
     add_flag(common::kFlagDisableDesktopWallpaper, true);
     add_flag(common::kFlagDisableLockAtDisconnect, true);
-    add_flag(common::kFlagDisableFontSmoothing, true);
 #elif defined(Q_OS_MACOS)
     capabilities->set_os_type(proto::DesktopCapabilities::OS_TYPE_MACOSX);
 #else

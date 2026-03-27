@@ -179,7 +179,7 @@ void UserSessionAgent::onIpcErrorOccurred()
 void UserSessionAgent::onIpcMessageReceived(
     quint32 ipc_channel_id, const QByteArray& buffer, bool /* reliable */)
 {
-    if (ipc_channel_id == 1)
+    if (ipc_channel_id == proto::user::CHANNEL_ID_CLIPBOARD)
     {
         proto::desktop::ClipboardMessage message;
         if (!base::parse(buffer, &message))
@@ -189,9 +189,14 @@ void UserSessionAgent::onIpcMessageReceived(
         }
 
         if (message.has_event())
-            clipboard_->injectClipboardEvent(message.event());
+        {
+            if (clipboard_)
+                clipboard_->injectClipboardEvent(message.event());
+        }
         else
+        {
             LOG(ERROR) << "Unhandled clipboard message";
+        }
         return;
     }
 
@@ -295,7 +300,8 @@ void UserSessionAgent::onDisconnectEvent(const proto::user::DisconnectEvent& eve
 
     if (!has_desktop_manage && clipboard_)
     {
-        clipboard_->clearClipboard();
+        if (!qEnvironmentVariableIsSet("ASPIA_NO_CLEAR_CLIPBOARD"))
+            clipboard_->clearClipboard();
         clipboard_->disconnect(this);
         clipboard_->deleteLater();
         clipboard_ = nullptr;
@@ -313,14 +319,14 @@ void UserSessionAgent::onClipboardEvent(const proto::desktop::ClipboardEvent& ev
     proto::desktop::ClipboardMessage message;
     message.mutable_event()->CopyFrom(event);
 
-    ipc_channel_->send(1, base::serialize(message));
+    ipc_channel_->send(proto::user::CHANNEL_ID_CLIPBOARD, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
 void UserSessionAgent::sendMessage()
 {
     if (ipc_channel_)
-        ipc_channel_->send(0, outgoing_message_.serialize());
+        ipc_channel_->send(proto::user::CHANNEL_ID_USER, outgoing_message_.serialize());
 }
 
 } // namespace host
