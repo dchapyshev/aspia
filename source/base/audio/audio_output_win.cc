@@ -78,6 +78,8 @@ AudioOutputWin::~AudioOutputWin()
     // Ensure the thread is stopped even if a restart is in progress.
     is_restarting_ = false;
     stop();
+    stopThread();
+    releaseCOMObjects();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -131,19 +133,32 @@ bool AudioOutputWin::stop()
         LOG(WARNING) << "No output stream is active";
         if (!is_restarting_)
             stopThread();
-        releaseCOMObjects();
-        is_initialized_ = false;
         return true;
     }
 
-    if (!stopStreaming())
-        return false;
+    // Stop audio streaming.
+    _com_error error = audio_client_->Stop();
+    if (FAILED(error.Error()))
+    {
+        LOG(ERROR) << "IAudioClient::Stop failed:" << error;
+    }
+
+    error = audio_client_->Reset();
+    if (FAILED(error.Error()))
+    {
+        LOG(ERROR) << "IAudioClient::Reset failed:" << error;
+    }
+
+    UINT32 num_queued_frames = 0;
+    audio_client_->GetCurrentPadding(&num_queued_frames);
+    DCHECK_EQ(0u, num_queued_frames);
+
+    is_active_ = false;
 
     // Stop and destroy the audio thread but only when a restart attempt is not ongoing.
     if (!is_restarting_)
         stopThread();
 
-    is_initialized_ = false;
     return true;
 }
 
