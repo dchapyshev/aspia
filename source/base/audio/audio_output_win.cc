@@ -70,7 +70,7 @@ bool AudioOutputWin::start()
         return false;
     }
 
-    is_restarting_ = false;
+    restarting_ = false;
     started_ = false;
 
     // Create the event which the audio engine will signal each time a buffer becomes ready to be
@@ -99,7 +99,7 @@ bool AudioOutputWin::start()
     if (!startStreaming())
     {
         LOG(ERROR) << "Unable to start streaming";
-        stopThread();
+        stop();
         return false;
     }
 
@@ -108,13 +108,23 @@ bool AudioOutputWin::start()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool AudioOutputWin::stop()
+void AudioOutputWin::stop()
 {
-    is_restarting_ = false;
+    restarting_ = false;
     started_ = false;
-    stopThread();
+
+    if (audio_thread_ && audio_thread_->isRunning())
+    {
+        SetEvent(stop_event_);
+        audio_thread_->wait();
+        audio_thread_.reset();
+    }
+
     stopStreaming();
-    return true;
+
+    audio_samples_event_.reset();
+    restart_event_.reset();
+    stop_event_.reset();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -170,7 +180,7 @@ void AudioOutputWin::threadRun()
     if (streaming && error)
     {
         LOG(ERROR) << "WASAPI streaming failed";
-        is_restarting_ = false;
+        restarting_ = false;
 
         // Stop audio streaming since something has gone wrong in our main thread loop.
         // A stop() call is still required to join the thread.
@@ -194,9 +204,9 @@ bool AudioOutputWin::handleDataRequest()
     {
         // Trigger a restart if not already in progress. This serves as a safety net in case
         // OnSessionDisconnected was not called or did not initiate a restart.
-        if (!is_restarting_)
+        if (!restarting_)
         {
-            is_restarting_ = true;
+            restarting_ = true;
             SetEvent(restart_event_);
         }
         return true;
@@ -245,26 +255,15 @@ bool AudioOutputWin::handleDataRequest()
 bool AudioOutputWin::handleRestartEvent()
 {
     DCHECK(audio_thread_);
-    DCHECK(is_restarting_);
+    DCHECK(restarting_);
 
-    is_restarting_ = false;
+    restarting_ = false;
     stopStreaming();
 
     if (!initStreaming())
         return false;
 
     return startStreaming();
-}
-
-//--------------------------------------------------------------------------------------------------
-void AudioOutputWin::stopThread()
-{
-    if (!audio_thread_ || !audio_thread_->isRunning())
-        return;
-
-    SetEvent(stop_event_);
-    audio_thread_->wait();
-    audio_thread_.reset();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -282,31 +281,41 @@ void AudioOutputWin::stopStreaming()
             LOG(ERROR) << "IAudioClient::Reset failed:" << error;
     }
 
-    if (audio_session_control_.Get())
+    if (audio_session_control_)
     {
         audio_session_control_->UnregisterAudioSessionNotification(this);
         audio_session_control_.Reset();
     }
 
-    if (audio_render_client_.Get())
-        audio_render_client_.Reset();
+    audio_render_client_.Reset();
+    audio_client_.Reset();
 
-    if (audio_client_)
-        audio_client_.Reset();
+    if (device_enumerator_)
+    {
+        device_enumerator_->UnregisterEndpointNotificationCallback(this);
+        device_enumerator_.Reset();
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
 bool AudioOutputWin::initStreaming()
 {
+    Microsoft::WRL::ComPtr<IMMDeviceEnumerator> device_enumerator(createDeviceEnumerator());
+    if (!device_enumerator)
+    {
+        LOG(ERROR) << "createDeviceEnumerator failed";
+        return false;
+    }
+
     Microsoft::WRL::ComPtr<IMMDevice> device(createDevice());
-    if (!device.Get())
+    if (!device)
     {
         LOG(ERROR) << "createDevice failed";
         return false;
     }
 
     Microsoft::WRL::ComPtr<IAudioClient> audio_client = createClient(device.Get());
-    if (!audio_client.Get())
+    if (!audio_client)
     {
         LOG(ERROR) << "createClient failed";
         return false;
@@ -351,7 +360,7 @@ bool AudioOutputWin::initStreaming()
     // interface enables us to write output data to a rendering endpoint buffer.
     Microsoft::WRL::ComPtr<IAudioRenderClient> audio_render_client =
         createRenderClient(audio_client.Get());
-    if (!audio_render_client.Get())
+    if (!audio_render_client)
     {
         LOG(ERROR) << "createRenderClient failed";
         return false;
@@ -362,7 +371,7 @@ bool AudioOutputWin::initStreaming()
     // monitor events in the session.
     Microsoft::WRL::ComPtr<IAudioSessionControl> audio_session_control =
         createAudioSessionControl(audio_client.Get());
-    if (!audio_session_control.Get())
+    if (!audio_session_control)
     {
         LOG(ERROR) << "createAudioSessionControl failed";
         return false;
@@ -371,16 +380,29 @@ bool AudioOutputWin::initStreaming()
     // The Sndvol program displays volume and mute controls for sessions that are in the active and
     // inactive states.
     AudioSessionState state;
-    if (FAILED(audio_session_control->GetState(&state)))
+    _com_error error = audio_session_control->GetState(&state);
+    if (FAILED(error.Error()))
+    {
+        LOG(ERROR) << "IAudioSessionControl::GetState failed:" << error;
         return false;
+    }
 
     LOG(INFO) << "Audio session state:" << sessionStateToString(state);
 
     // Register the client to receive notifications of session events, including changes in the
     // stream state.
-    if (FAILED(audio_session_control->RegisterAudioSessionNotification(this)))
+    error = audio_session_control->RegisterAudioSessionNotification(this);
+    if (FAILED(error.Error()))
     {
-        LOG(ERROR) << "IAudioSessionControl::RegisterAudioSessionNotification failed";
+        LOG(ERROR) << "IAudioSessionControl::RegisterAudioSessionNotification failed:" << error;
+        return false;
+    }
+
+    error = device_enumerator->RegisterEndpointNotificationCallback(this);
+    if (FAILED(error.Error()))
+    {
+        LOG(ERROR) << "IMMDeviceEnumerator::RegisterEndpointNotificationCallback failed:" << error;
+        audio_session_control->UnregisterAudioSessionNotification(this);
         return false;
     }
 
@@ -388,6 +410,7 @@ bool AudioOutputWin::initStreaming()
         LOG(ERROR) << "Failed to prepare output endpoint with silence";
 
     // Store valid COM interfaces.
+    device_enumerator_ = device_enumerator;
     audio_client_ = audio_client;
     audio_render_client_ = audio_render_client;
     audio_session_control_ = audio_session_control;
@@ -438,7 +461,13 @@ HRESULT AudioOutputWin::QueryInterface(REFIID iid, void** object)
     {
         *object = static_cast<IAudioSessionEvents*>(this);
         return S_OK;
-    };
+    }
+
+    if (iid == __uuidof(IMMNotificationClient))
+    {
+        *object = static_cast<IMMNotificationClient*>(this);
+        return S_OK;
+    }
 
     *object = nullptr;
     return E_NOINTERFACE;
@@ -455,7 +484,7 @@ HRESULT AudioOutputWin::OnSessionDisconnected(AudioSessionDisconnectReason disco
 {
     LOG(INFO) << "Session disconnected, reason:" << static_cast<int>(disconnect_reason);
 
-    if (is_restarting_)
+    if (restarting_)
     {
         LOG(WARNING) << "Ignoring since restart is already active";
         return S_OK;
@@ -467,7 +496,7 @@ HRESULT AudioOutputWin::OnSessionDisconnected(AudioSessionDisconnectReason disco
         case DisconnectReasonFormatChanged:
             // Restart for any disconnect reason. If the device is permanently gone, initStreaming() will
             // fail during restart and the thread will exit cleanly through the error path.
-            is_restarting_ = true;
+            restarting_ = true;
             SetEvent(restart_event_);
             break;
 
@@ -509,6 +538,58 @@ HRESULT AudioOutputWin::OnChannelVolumeChanged(
 //--------------------------------------------------------------------------------------------------
 HRESULT AudioOutputWin::OnGroupingParamChanged(
     LPCGUID /* new_grouping_param */, LPCGUID /* event_context */)
+{
+    return S_OK;
+}
+
+//--------------------------------------------------------------------------------------------------
+HRESULT AudioOutputWin::OnDefaultDeviceChanged(EDataFlow flow, ERole role, LPCWSTR pwstrDeviceId)
+{
+    if (flow == eRender && role == eConsole)
+    {
+        if (!pwstrDeviceId)
+        {
+            LOG(INFO) << "No available output devices";
+            return S_OK;
+        }
+
+        if (restarting_)
+        {
+            LOG(INFO) << "Ignoring since restart is already active";
+            return S_OK;
+        }
+
+        LOG(INFO) << "Default audio output device changed";
+
+        if (pwstrDeviceId[0])
+        {
+            restarting_ = true;
+            SetEvent(restart_event_);
+        }
+    }
+    return S_OK;
+}
+
+//--------------------------------------------------------------------------------------------------
+HRESULT AudioOutputWin::OnDeviceAdded(LPCWSTR)
+{
+    return S_OK;
+}
+
+//--------------------------------------------------------------------------------------------------
+HRESULT AudioOutputWin::OnDeviceRemoved(LPCWSTR)
+{
+    return S_OK;
+}
+
+//--------------------------------------------------------------------------------------------------
+HRESULT AudioOutputWin::OnDeviceStateChanged(LPCWSTR, DWORD)
+{
+    return S_OK;
+}
+
+//--------------------------------------------------------------------------------------------------
+HRESULT AudioOutputWin::OnPropertyValueChanged(LPCWSTR, const PROPERTYKEY)
 {
     return S_OK;
 }

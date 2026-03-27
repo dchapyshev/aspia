@@ -29,13 +29,15 @@
 
 #include <Audioclient.h>
 #include <audiopolicy.h>
+#include <mmdeviceapi.h>
 #include <wrl/client.h>
 
 namespace base {
 
 class AudioOutputWin final
     : public AudioOutput,
-      public IAudioSessionEvents
+      public IAudioSessionEvents,
+      public IMMNotificationClient
 {
     Q_OBJECT
 
@@ -45,13 +47,12 @@ public:
 
     // AudioOutput implementation.
     bool start() final;
-    bool stop() final;
+    void stop() final;
 
 private:
     void threadRun();
     bool handleDataRequest();
     bool handleRestartEvent();
-    void stopThread();
     void stopStreaming();
     bool initStreaming();
     bool startStreaming();
@@ -72,9 +73,17 @@ private:
     HRESULT __stdcall OnChannelVolumeChanged(DWORD channel_count, float new_channel_volumes[], DWORD changed_channel, LPCGUID event_context) final;
     HRESULT __stdcall OnGroupingParamChanged(LPCGUID new_grouping_param, LPCGUID event_context) final;
 
-    bool started_ = false;
-    std::atomic_bool is_restarting_ = false;
+    // IMMNotificationClient
+    HRESULT __stdcall OnDefaultDeviceChanged(EDataFlow flow, ERole role, LPCWSTR pwstrDeviceId) final;
+    HRESULT __stdcall OnDeviceAdded(LPCWSTR) final;
+    HRESULT __stdcall OnDeviceRemoved(LPCWSTR) final;
+    HRESULT __stdcall OnDeviceStateChanged(LPCWSTR, DWORD) final;
+    HRESULT __stdcall OnPropertyValueChanged(LPCWSTR, const PROPERTYKEY) final;
 
+    bool started_ = false;
+    std::atomic_bool restarting_ = false;
+
+    Microsoft::WRL::ComPtr<IMMDeviceEnumerator> device_enumerator_;
     Microsoft::WRL::ComPtr<IAudioClient> audio_client_;
     Microsoft::WRL::ComPtr<IAudioRenderClient> audio_render_client_;
     Microsoft::WRL::ComPtr<IAudioSessionControl> audio_session_control_;

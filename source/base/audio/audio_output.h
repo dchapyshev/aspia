@@ -43,7 +43,7 @@ public:
     static std::unique_ptr<AudioOutput> create(const NeedMoreDataCB& need_more_data_cb);
 
     virtual bool start() = 0;
-    virtual bool stop() = 0;
+    virtual void stop() = 0;
 
 protected:
     explicit AudioOutput(const NeedMoreDataCB& need_more_data_cb);
