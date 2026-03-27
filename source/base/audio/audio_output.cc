@@ -72,6 +72,13 @@ void AudioOutput::onDataRequest(qint16* audio_samples, size_t audio_samples_coun
             memset(audio_samples, 0, audio_samples_count * sizeof(qint16));
             return;
         }
+
+        // Zero-fill the remainder if the callback returned fewer bytes than requested.
+        if (num_bytes < kBytesPer10ms)
+        {
+            quint8* chunk_start = reinterpret_cast<quint8*>(audio_samples + (i * kSamplesPer10ms));
+            memset(chunk_start + num_bytes, 0, kBytesPer10ms - num_bytes);
+        }
     }
 
     // Fill the remaining samples with silence when the buffer size is not a multiple of 10ms.

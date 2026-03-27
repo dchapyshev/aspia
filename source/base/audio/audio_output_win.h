@@ -49,13 +49,10 @@ public:
 
 private:
     void threadRun();
-    bool init();
     bool handleDataRequest();
     bool handleRestartEvent();
-    bool stopStreaming();
+    void stopStreaming();
     bool startStreaming();
-    void stopThread();
-    void releaseCOMObjects();
 
     // IUnknown (required by IAudioSessionEvents and IMMNotificationClient).
     ULONG __stdcall AddRef() final;
@@ -73,8 +70,7 @@ private:
     HRESULT __stdcall OnChannelVolumeChanged(DWORD channel_count, float new_channel_volumes[], DWORD changed_channel, LPCGUID event_context) final;
     HRESULT __stdcall OnGroupingParamChanged(LPCGUID new_grouping_param, LPCGUID event_context) final;
 
-    bool is_initialized_ = false;
-    bool is_active_ = false;
+    bool started_ = false;
     std::atomic_bool is_restarting_ = false;
 
     Microsoft::WRL::ComPtr<IAudioClient> audio_client_;

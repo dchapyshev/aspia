@@ -52,6 +52,23 @@ AudioOutputWin::AudioOutputWin(const NeedMoreDataCB& need_more_data_cb)
     : AudioOutput(need_more_data_cb)
 {
     LOG(INFO) << "Ctor";
+}
+
+//--------------------------------------------------------------------------------------------------
+AudioOutputWin::~AudioOutputWin()
+{
+    LOG(INFO) << "Dtor";
+    stop();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool AudioOutputWin::start()
+{
+    if (started_)
+    {
+        LOG(WARNING) << "Already started";
+        return true;
+    }
 
     // Create the event which the audio engine will signal each time a buffer becomes ready to be
     // processed by the client.
@@ -67,94 +84,33 @@ AudioOutputWin::AudioOutputWin(const NeedMoreDataCB& need_more_data_cb)
     restart_event_.reset(CreateEventW(nullptr, false, false, nullptr));
     DCHECK(restart_event_.isValid());
 
-    is_initialized_ = init();
-}
-
-//--------------------------------------------------------------------------------------------------
-AudioOutputWin::~AudioOutputWin()
-{
-    LOG(INFO) << "Dtor";
-    stop();
-    releaseCOMObjects();
-}
-
-//--------------------------------------------------------------------------------------------------
-bool AudioOutputWin::start()
-{
-    if (!is_initialized_)
-        return false;
-
-    if (is_active_)
+    if (!startStreaming())
     {
-        LOG(WARNING) << "Already started";
-        return true;
-    }
-
-    if (is_restarting_)
-    {
-        LOG(WARNING) << "Cannot start while restart is in progress";
+        LOG(ERROR) << "Unable to start streaming";
         return false;
     }
-
-    if (!fillRenderEndpointBufferWithSilence(audio_client_.Get(), audio_render_client_.Get()))
-    {
-        LOG(ERROR) << "Failed to prepare output endpoint with silence";
-    }
-
-    num_frames_written_ = endpoint_buffer_size_frames_;
 
     audio_thread_ = std::make_unique<AudioThread>(this);
     audio_thread_->start();
 
-    _com_error error = audio_client_->Start();
-    if (FAILED(error.Error()))
-    {
-        stopThread();
-        LOG(ERROR) << "IAudioClient::Start failed:" << error;
-        return false;
-    }
-
-    is_active_ = true;
+    started_ = true;
     return true;
 }
 
 //--------------------------------------------------------------------------------------------------
 bool AudioOutputWin::stop()
 {
-    if (!is_initialized_)
-        return true;
-
-    // Clear the restart flag so that stopThread() can proceed.
     is_restarting_ = false;
+    started_ = false;
 
-    if (!is_active_)
+    if (audio_thread_ && audio_thread_->isRunning())
     {
-        LOG(WARNING) << "No output stream is active";
-        stopThread();
-        return true;
+        SetEvent(stop_event_);
+        audio_thread_->wait();
+        audio_thread_.reset();
     }
 
-    // Stop audio streaming.
-    _com_error error = audio_client_->Stop();
-    if (FAILED(error.Error()))
-    {
-        LOG(ERROR) << "IAudioClient::Stop failed:" << error;
-    }
-
-    error = audio_client_->Reset();
-    if (FAILED(error.Error()))
-    {
-        LOG(ERROR) << "IAudioClient::Reset failed:" << error;
-    }
-
-    UINT32 num_queued_frames = 0;
-    audio_client_->GetCurrentPadding(&num_queued_frames);
-    DCHECK_EQ(0u, num_queued_frames);
-
-    is_active_ = false;
-
-    stopThread();
-
+    stopStreaming();
     return true;
 }
 
@@ -212,25 +168,119 @@ void AudioOutputWin::threadRun()
     {
         LOG(ERROR) << "WASAPI streaming failed";
         is_restarting_ = false;
-        is_active_ = false;
-        is_initialized_ = false;
+        started_ = false;
 
-        // Stop audio streaming since something has gone wrong in our main thread loop. Note that,
-        // we are still in a "started" state, hence a stop() call is required to join the thread
-        // properly.
+        // Stop audio streaming since something has gone wrong in our main thread loop.
+        // A stop() call is still required to join the thread.
         if (audio_client_)
         {
             _com_error error = audio_client_->Stop();
             if (FAILED(error.Error()))
                 LOG(ERROR) << "IAudioClient::Stop failed:" << error;
         }
-
-        releaseCOMObjects();
     }
 }
 
 //--------------------------------------------------------------------------------------------------
-bool AudioOutputWin::init()
+bool AudioOutputWin::handleDataRequest()
+{
+    // Get the padding value which indicates the amount of valid unread data that the endpoint
+    // buffer currently contains.
+    UINT32 num_unread_frames = 0;
+    _com_error error = audio_client_->GetCurrentPadding(&num_unread_frames);
+    if (error.Error() == AUDCLNT_E_DEVICE_INVALIDATED)
+    {
+        // Trigger a restart if not already in progress. This serves as a safety net in case
+        // OnSessionDisconnected was not called or did not initiate a restart.
+        if (!is_restarting_)
+        {
+            is_restarting_ = true;
+            SetEvent(restart_event_);
+        }
+        return true;
+    }
+
+    if (FAILED(error.Error()))
+    {
+        LOG(ERROR) << "IAudioClient::GetCurrentPadding failed:" << error;
+        return false;
+    }
+
+    // Contains how much new data we can write to the buffer without the risk of overwriting
+    // previously written data that the audio engine has not yet read from the buffer. I.e., it is
+    // the maximum buffer size we can request when calling IAudioRenderClient::GetBuffer().
+    UINT32 num_requested_frames = endpoint_buffer_size_frames_ - num_unread_frames;
+    if (num_requested_frames == 0)
+        return true;
+
+    // Request all available space in the rendering endpoint buffer into which the client can later
+    // write an audio packet.
+    quint8* audio_data;
+    error = audio_render_client_->GetBuffer(num_requested_frames, &audio_data);
+    if (FAILED(error.Error()))
+    {
+        LOG(ERROR) << "IAudioRenderClient::GetBuffer failed:" << error;
+        return false;
+    }
+
+    // Get audio data and write it to the allocated buffer in |audio_data|. The playout latency is
+    // not updated for each callback.
+    onDataRequest(reinterpret_cast<qint16*>(audio_data), num_requested_frames * kChannels);
+
+    // Release the buffer space acquired in IAudioRenderClient::GetBuffer.
+    error = audio_render_client_->ReleaseBuffer(num_requested_frames, 0);
+    if (FAILED(error.Error()))
+    {
+        LOG(ERROR) << "IAudioRenderClient::ReleaseBuffer failed:" << error;
+        return false;
+    }
+
+    num_frames_written_ += num_requested_frames;
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool AudioOutputWin::handleRestartEvent()
+{
+    DCHECK(audio_thread_);
+    DCHECK(is_restarting_);
+
+    is_restarting_ = false;
+
+    stopStreaming();
+    return startStreaming();
+}
+
+//--------------------------------------------------------------------------------------------------
+void AudioOutputWin::stopStreaming()
+{
+    if (audio_client_)
+    {
+        // Stop audio streaming.
+        _com_error error = audio_client_->Stop();
+        if (FAILED(error.Error()))
+            LOG(ERROR) << "IAudioClient::Stop failed:" << error;
+
+        error = audio_client_->Reset();
+        if (FAILED(error.Error()))
+            LOG(ERROR) << "IAudioClient::Reset failed:" << error;
+    }
+
+    if (audio_session_control_.Get())
+    {
+        audio_session_control_->UnregisterAudioSessionNotification(this);
+        audio_session_control_.Reset();
+    }
+
+    if (audio_render_client_.Get())
+        audio_render_client_.Reset();
+
+    if (audio_client_)
+        audio_client_.Reset();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool AudioOutputWin::startStreaming()
 {
     Microsoft::WRL::ComPtr<IMMDevice> device(createDevice());
     if (!device.Get())
@@ -318,191 +368,23 @@ bool AudioOutputWin::init()
         return false;
     }
 
+    if (!fillRenderEndpointBufferWithSilence(audio_client.Get(), audio_render_client.Get()))
+        LOG(ERROR) << "Failed to prepare output endpoint with silence";
+
+    _com_error error = audio_client->Start();
+    if (FAILED(error.Error()))
+    {
+        LOG(ERROR) << "IAudioClient::Start failed:" << error;
+        audio_session_control->UnregisterAudioSessionNotification(this);
+        return false;
+    }
+
     // Store valid COM interfaces.
     audio_client_ = audio_client;
     audio_render_client_ = audio_render_client;
     audio_session_control_ = audio_session_control;
-
-    is_initialized_ = true;
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool AudioOutputWin::handleDataRequest()
-{
-    // Get the padding value which indicates the amount of valid unread data that the endpoint
-    // buffer currently contains.
-    UINT32 num_unread_frames = 0;
-    _com_error error = audio_client_->GetCurrentPadding(&num_unread_frames);
-    if (error.Error() == AUDCLNT_E_DEVICE_INVALIDATED)
-    {
-        // Trigger a restart if not already in progress. This serves as a safety net in case
-        // OnSessionDisconnected was not called or did not initiate a restart.
-        if (!is_restarting_)
-        {
-            is_restarting_ = true;
-            SetEvent(restart_event_);
-        }
-        return true;
-    }
-
-    if (FAILED(error.Error()))
-    {
-        LOG(ERROR) << "IAudioClient::GetCurrentPadding failed:" << error;
-        return false;
-    }
-
-    // Contains how much new data we can write to the buffer without the risk of overwriting
-    // previously written data that the audio engine has not yet read from the buffer. I.e., it is
-    // the maximum buffer size we can request when calling IAudioRenderClient::GetBuffer().
-    UINT32 num_requested_frames = endpoint_buffer_size_frames_ - num_unread_frames;
-    if (num_requested_frames == 0)
-        return true;
-
-    // Request all available space in the rendering endpoint buffer into which the client can later
-    // write an audio packet.
-    quint8* audio_data;
-    error = audio_render_client_->GetBuffer(num_requested_frames, &audio_data);
-    if (FAILED(error.Error()))
-    {
-        LOG(ERROR) << "IAudioRenderClient::GetBuffer failed:" << error;
-        return false;
-    }
-
-    // Get audio data and write it to the allocated buffer in |audio_data|. The playout latency is
-    // not updated for each callback.
-    onDataRequest(reinterpret_cast<qint16*>(audio_data), num_requested_frames * kChannels);
-
-    // Release the buffer space acquired in IAudioRenderClient::GetBuffer.
-    error = audio_render_client_->ReleaseBuffer(num_requested_frames, 0);
-    if (FAILED(error.Error()))
-    {
-        LOG(ERROR) << "IAudioRenderClient::ReleaseBuffer failed:" << error;
-        return false;
-    }
-
-    num_frames_written_ += num_requested_frames;
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool AudioOutputWin::handleRestartEvent()
-{
-    DCHECK(audio_thread_);
-    DCHECK(is_restarting_);
-
-    is_restarting_ = false;
-
-    if (!is_initialized_ || !is_active_)
-        return true;
-
-    if (!stopStreaming())
-    {
-        LOG(ERROR) << "stopStreaming failed";
-        return false;
-    }
-
-    if (!init())
-    {
-        LOG(ERROR) << "init failed";
-        return false;
-    }
-
-    if (!startStreaming())
-    {
-        LOG(ERROR) << "startStreaming failed";
-        return false;
-    }
-
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool AudioOutputWin::stopStreaming()
-{
-    // Stop audio streaming.
-    _com_error error = audio_client_->Stop();
-    if (FAILED(error.Error()))
-    {
-        LOG(ERROR) << "IAudioClient::Stop failed:" << error;
-    }
-
-    error = audio_client_->Reset();
-    if (FAILED(error.Error()))
-    {
-        LOG(ERROR) << "IAudioClient::Reset failed:" << error;
-    }
-
-    // Extra safety check to ensure that the buffers are cleared. If the buffers are not cleared
-    // correctly, the next call to start() would fail with AUDCLNT_E_BUFFER_ERROR at
-    // IAudioRenderClient::GetBuffer().
-    UINT32 num_queued_frames = 0;
-    audio_client_->GetCurrentPadding(&num_queued_frames);
-    DCHECK_EQ(0u, num_queued_frames);
-
-    // Release all allocated COM interfaces to allow for a restart without intermediate destruction.
-    releaseCOMObjects();
-
-    is_active_ = false;
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool AudioOutputWin::startStreaming()
-{
-    if (!fillRenderEndpointBufferWithSilence(audio_client_.Get(), audio_render_client_.Get()))
-    {
-        LOG(ERROR) << "Failed to prepare output endpoint with silence";
-    }
-
     num_frames_written_ = endpoint_buffer_size_frames_;
-
-    _com_error error = audio_client_->Start();
-    if (FAILED(error.Error()))
-    {
-        LOG(ERROR) << "IAudioClient::Start failed:" << error;
-        return false;
-    }
-
-    is_active_ = true;
     return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-void AudioOutputWin::stopThread()
-{
-    DCHECK(!is_restarting_);
-
-    if (!audio_thread_)
-        return;
-
-    if (audio_thread_->isRunning())
-    {
-        SetEvent(stop_event_);
-        audio_thread_->wait();
-    }
-
-    audio_thread_.reset();
-
-    // Ensure that we don't quit the main thread loop immediately next time start() is called.
-    ResetEvent(stop_event_);
-    ResetEvent(restart_event_);
-}
-
-//--------------------------------------------------------------------------------------------------
-void AudioOutputWin::releaseCOMObjects()
-{
-    if (audio_session_control_.Get())
-    {
-        audio_session_control_->UnregisterAudioSessionNotification(this);
-        audio_session_control_.Reset();
-    }
-
-    if (audio_render_client_.Get())
-        audio_render_client_.Reset();
-
-    if (audio_client_)
-        audio_client_.Reset();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -552,8 +434,8 @@ HRESULT AudioOutputWin::OnSessionDisconnected(AudioSessionDisconnectReason disco
         return S_OK;
     }
 
-    // Restart for any disconnect reason. If the device is permanently gone, init() will fail
-    // during restart and the thread will exit cleanly through the error path.
+    // Restart for any disconnect reason. If the device is permanently gone, startStreaming() will
+    // fail during restart and the thread will exit cleanly through the error path.
     is_restarting_ = true;
     SetEvent(restart_event_);
     return S_OK;
