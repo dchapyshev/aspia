@@ -74,11 +74,7 @@ AudioOutputWin::AudioOutputWin(const NeedMoreDataCB& need_more_data_cb)
 AudioOutputWin::~AudioOutputWin()
 {
     LOG(INFO) << "Dtor";
-
-    // Ensure the thread is stopped even if a restart is in progress.
-    is_restarting_ = false;
     stop();
-    stopThread();
     releaseCOMObjects();
 }
 
@@ -128,11 +124,13 @@ bool AudioOutputWin::stop()
     if (!is_initialized_)
         return true;
 
+    // Clear the restart flag so that stopThread() can proceed.
+    is_restarting_ = false;
+
     if (!is_active_)
     {
         LOG(WARNING) << "No output stream is active";
-        if (!is_restarting_)
-            stopThread();
+        stopThread();
         return true;
     }
 
@@ -155,9 +153,7 @@ bool AudioOutputWin::stop()
 
     is_active_ = false;
 
-    // Stop and destroy the audio thread but only when a restart attempt is not ongoing.
-    if (!is_restarting_)
-        stopThread();
+    stopThread();
 
     return true;
 }
@@ -340,9 +336,13 @@ bool AudioOutputWin::handleDataRequest()
     _com_error error = audio_client_->GetCurrentPadding(&num_unread_frames);
     if (error.Error() == AUDCLNT_E_DEVICE_INVALIDATED)
     {
-        // Avoid breaking the thread loop implicitly by returning false and return true instead for
-        // AUDCLNT_E_DEVICE_INVALIDATED even it is a valid error message. We will use notifications
-        // about device changes instead to stop data callbacks and attempt to restart streaming.
+        // Trigger a restart if not already in progress. This serves as a safety net in case
+        // OnSessionDisconnected was not called or did not initiate a restart.
+        if (!is_restarting_)
+        {
+            is_restarting_ = true;
+            SetEvent(restart_event_);
+        }
         return true;
     }
 
@@ -544,22 +544,18 @@ HRESULT AudioOutputWin::OnStateChanged(AudioSessionState /* new_state */)
 //--------------------------------------------------------------------------------------------------
 HRESULT AudioOutputWin::OnSessionDisconnected(AudioSessionDisconnectReason disconnect_reason)
 {
+    LOG(INFO) << "Session disconnected, reason:" << static_cast<int>(disconnect_reason);
+
     if (is_restarting_)
     {
-        LOG(ERROR) << "Ignoring since restart is already active";
+        LOG(WARNING) << "Ignoring since restart is already active";
         return S_OK;
     }
 
-    // Internal test method which can be used in tests to emulate a restart signal. It simply sets
-    // the same event which is normally triggered by session and device notifications. Hence, the
-    // emulated restart sequence covers most parts of a real sequence expect the actual device
-    // switch.
-    if (disconnect_reason == DisconnectReasonDeviceRemoval ||
-        disconnect_reason == DisconnectReasonFormatChanged)
-    {
-        is_restarting_ = true;
-        SetEvent(restart_event_);
-    }
+    // Restart for any disconnect reason. If the device is permanently gone, init() will fail
+    // during restart and the thread will exit cleanly through the error path.
+    is_restarting_ = true;
+    SetEvent(restart_event_);
     return S_OK;
 }
 

@@ -73,6 +73,14 @@ void AudioOutput::onDataRequest(qint16* audio_samples, size_t audio_samples_coun
             return;
         }
     }
+
+    // Fill the remaining samples with silence when the buffer size is not a multiple of 10ms.
+    const size_t filled_samples = rounds * kSamplesPer10ms;
+    if (filled_samples < audio_samples_count)
+    {
+        memset(audio_samples + filled_samples, 0,
+               (audio_samples_count - filled_samples) * sizeof(qint16));
+    }
 }
 
 } // namespace base
