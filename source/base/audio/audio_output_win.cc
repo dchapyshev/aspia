@@ -74,6 +74,9 @@ AudioOutputWin::AudioOutputWin(const NeedMoreDataCB& need_more_data_cb)
 AudioOutputWin::~AudioOutputWin()
 {
     LOG(INFO) << "Dtor";
+
+    // Ensure the thread is stopped even if a restart is in progress.
+    is_restarting_ = false;
     stop();
 }
 
@@ -83,8 +86,17 @@ bool AudioOutputWin::start()
     if (!is_initialized_)
         return false;
 
+    if (is_active_)
+    {
+        LOG(WARNING) << "Already started";
+        return true;
+    }
+
     if (is_restarting_)
-        CHECK(audio_thread_);
+    {
+        LOG(WARNING) << "Cannot start while restart is in progress";
+        return false;
+    }
 
     if (!fillRenderEndpointBufferWithSilence(audio_client_.Get(), audio_render_client_.Get()))
     {
@@ -93,18 +105,8 @@ bool AudioOutputWin::start()
 
     num_frames_written_ = endpoint_buffer_size_frames_;
 
-    if (!audio_thread_)
-    {
-        audio_thread_ = std::make_unique<AudioThread>(this);
-        audio_thread_->start();
-
-        if (!audio_thread_->isRunning())
-        {
-            stopThread();
-            LOG(ERROR) << "Failed to start audio thread";
-            return false;
-        }
-    }
+    audio_thread_ = std::make_unique<AudioThread>(this);
+    audio_thread_->start();
 
     _com_error error = audio_client_->Start();
     if (FAILED(error.Error()))
@@ -126,38 +128,22 @@ bool AudioOutputWin::stop()
 
     if (!is_active_)
     {
-        LOG(ERROR) << "No output stream is active";
+        LOG(WARNING) << "No output stream is active";
+        if (!is_restarting_)
+            stopThread();
         releaseCOMObjects();
         is_initialized_ = false;
         return true;
     }
 
-    // Stop audio streaming.
-    _com_error error = audio_client_->Stop();
-    if (FAILED(error.Error()))
-    {
-        LOG(ERROR) << "IAudioClient::Stop failed:" << error;
-    }
+    if (!stopStreaming())
+        return false;
 
     // Stop and destroy the audio thread but only when a restart attempt is not ongoing.
     if (!is_restarting_)
         stopThread();
 
-    error = audio_client_->Reset();
-    if (FAILED(error.Error()))
-    {
-        LOG(ERROR) << "IAudioClient::Reset failed:" << error;
-    }
-
-    // Extra safety check to ensure that the buffers are cleared. If the buffers are not cleared
-    // correctly, the next call to start() would fail with AUDCLNT_E_BUFFER_ERROR at
-    // IAudioRenderClient::GetBuffer().
-    UINT32 num_queued_frames = 0;
-    audio_client_->GetCurrentPadding(&num_queued_frames);
-    DCHECK_EQ(0u, num_queued_frames);
-
-    // Release all allocated COM interfaces to allow for a restart without intermediate destruction.
-    releaseCOMObjects();
+    is_initialized_ = false;
     return true;
 }
 
@@ -216,13 +202,19 @@ void AudioOutputWin::threadRun()
         LOG(ERROR) << "WASAPI streaming failed";
         is_restarting_ = false;
         is_active_ = false;
+        is_initialized_ = false;
 
         // Stop audio streaming since something has gone wrong in our main thread loop. Note that,
         // we are still in a "started" state, hence a stop() call is required to join the thread
         // properly.
-        _com_error error = audio_client_->Stop();
-        if (FAILED(error.Error()))
-            LOG(ERROR) << "IAudioClient::Stop failed:" << error;
+        if (audio_client_)
+        {
+            _com_error error = audio_client_->Stop();
+            if (FAILED(error.Error()))
+                LOG(ERROR) << "IAudioClient::Stop failed:" << error;
+        }
+
+        releaseCOMObjects();
     }
 }
 
@@ -319,6 +311,8 @@ bool AudioOutputWin::init()
     audio_client_ = audio_client;
     audio_render_client_ = audio_render_client;
     audio_session_control_ = audio_session_control;
+
+    is_initialized_ = true;
     return true;
 }
 
@@ -382,12 +376,14 @@ bool AudioOutputWin::handleRestartEvent()
     DCHECK(audio_thread_);
     DCHECK(is_restarting_);
 
+    is_restarting_ = false;
+
     if (!is_initialized_ || !is_active_)
         return true;
 
-    if (!stop())
+    if (!stopStreaming())
     {
-        LOG(ERROR) << "stop failed";
+        LOG(ERROR) << "stopStreaming failed";
         return false;
     }
 
@@ -397,12 +393,63 @@ bool AudioOutputWin::handleRestartEvent()
         return false;
     }
 
-    if (!start())
+    if (!startStreaming())
     {
-        LOG(ERROR) << "start failed";
+        LOG(ERROR) << "startStreaming failed";
         return false;
     }
 
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool AudioOutputWin::stopStreaming()
+{
+    // Stop audio streaming.
+    _com_error error = audio_client_->Stop();
+    if (FAILED(error.Error()))
+    {
+        LOG(ERROR) << "IAudioClient::Stop failed:" << error;
+    }
+
+    error = audio_client_->Reset();
+    if (FAILED(error.Error()))
+    {
+        LOG(ERROR) << "IAudioClient::Reset failed:" << error;
+    }
+
+    // Extra safety check to ensure that the buffers are cleared. If the buffers are not cleared
+    // correctly, the next call to start() would fail with AUDCLNT_E_BUFFER_ERROR at
+    // IAudioRenderClient::GetBuffer().
+    UINT32 num_queued_frames = 0;
+    audio_client_->GetCurrentPadding(&num_queued_frames);
+    DCHECK_EQ(0u, num_queued_frames);
+
+    // Release all allocated COM interfaces to allow for a restart without intermediate destruction.
+    releaseCOMObjects();
+
+    is_active_ = false;
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool AudioOutputWin::startStreaming()
+{
+    if (!fillRenderEndpointBufferWithSilence(audio_client_.Get(), audio_render_client_.Get()))
+    {
+        LOG(ERROR) << "Failed to prepare output endpoint with silence";
+    }
+
+    num_frames_written_ = endpoint_buffer_size_frames_;
+
+    _com_error error = audio_client_->Start();
+    if (FAILED(error.Error()))
+    {
+        LOG(ERROR) << "IAudioClient::Start failed:" << error;
+        return false;
+    }
+
+    is_active_ = true;
     return true;
 }
 
@@ -430,14 +477,17 @@ void AudioOutputWin::stopThread()
 //--------------------------------------------------------------------------------------------------
 void AudioOutputWin::releaseCOMObjects()
 {
-    if (audio_client_)
-        audio_client_.Reset();
-
     if (audio_session_control_.Get())
+    {
+        audio_session_control_->UnregisterAudioSessionNotification(this);
         audio_session_control_.Reset();
+    }
 
     if (audio_render_client_.Get())
         audio_render_client_.Reset();
+
+    if (audio_client_)
+        audio_client_.Reset();
 }
 
 //--------------------------------------------------------------------------------------------------

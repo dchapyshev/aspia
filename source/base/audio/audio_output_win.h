@@ -52,6 +52,8 @@ private:
     bool init();
     bool handleDataRequest();
     bool handleRestartEvent();
+    bool stopStreaming();
+    bool startStreaming();
     void stopThread();
     void releaseCOMObjects();
 
