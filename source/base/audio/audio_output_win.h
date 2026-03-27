@@ -51,7 +51,9 @@ private:
     void threadRun();
     bool handleDataRequest();
     bool handleRestartEvent();
+    void stopThread();
     void stopStreaming();
+    bool initStreaming();
     bool startStreaming();
 
     // IUnknown (required by IAudioSessionEvents and IMMNotificationClient).

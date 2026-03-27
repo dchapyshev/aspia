@@ -67,8 +67,11 @@ bool AudioOutputWin::start()
     if (started_)
     {
         LOG(WARNING) << "Already started";
-        return true;
+        return false;
     }
+
+    is_restarting_ = false;
+    started_ = false;
 
     // Create the event which the audio engine will signal each time a buffer becomes ready to be
     // processed by the client.
@@ -84,14 +87,21 @@ bool AudioOutputWin::start()
     restart_event_.reset(CreateEventW(nullptr, false, false, nullptr));
     DCHECK(restart_event_.isValid());
 
-    if (!startStreaming())
+    if (!initStreaming())
     {
-        LOG(ERROR) << "Unable to start streaming";
+        LOG(ERROR) << "Unable to init streaming";
         return false;
     }
 
     audio_thread_ = std::make_unique<AudioThread>(this);
     audio_thread_->start();
+
+    if (!startStreaming())
+    {
+        LOG(ERROR) << "Unable to start streaming";
+        stopThread();
+        return false;
+    }
 
     started_ = true;
     return true;
@@ -102,14 +112,7 @@ bool AudioOutputWin::stop()
 {
     is_restarting_ = false;
     started_ = false;
-
-    if (audio_thread_ && audio_thread_->isRunning())
-    {
-        SetEvent(stop_event_);
-        audio_thread_->wait();
-        audio_thread_.reset();
-    }
-
+    stopThread();
     stopStreaming();
     return true;
 }
@@ -168,7 +171,6 @@ void AudioOutputWin::threadRun()
     {
         LOG(ERROR) << "WASAPI streaming failed";
         is_restarting_ = false;
-        started_ = false;
 
         // Stop audio streaming since something has gone wrong in our main thread loop.
         // A stop() call is still required to join the thread.
@@ -246,9 +248,23 @@ bool AudioOutputWin::handleRestartEvent()
     DCHECK(is_restarting_);
 
     is_restarting_ = false;
-
     stopStreaming();
+
+    if (!initStreaming())
+        return false;
+
     return startStreaming();
+}
+
+//--------------------------------------------------------------------------------------------------
+void AudioOutputWin::stopThread()
+{
+    if (!audio_thread_ || !audio_thread_->isRunning())
+        return;
+
+    SetEvent(stop_event_);
+    audio_thread_->wait();
+    audio_thread_.reset();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -280,7 +296,7 @@ void AudioOutputWin::stopStreaming()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool AudioOutputWin::startStreaming()
+bool AudioOutputWin::initStreaming()
 {
     Microsoft::WRL::ComPtr<IMMDevice> device(createDevice());
     if (!device.Get())
@@ -371,19 +387,30 @@ bool AudioOutputWin::startStreaming()
     if (!fillRenderEndpointBufferWithSilence(audio_client.Get(), audio_render_client.Get()))
         LOG(ERROR) << "Failed to prepare output endpoint with silence";
 
-    _com_error error = audio_client->Start();
-    if (FAILED(error.Error()))
-    {
-        LOG(ERROR) << "IAudioClient::Start failed:" << error;
-        audio_session_control->UnregisterAudioSessionNotification(this);
-        return false;
-    }
-
     // Store valid COM interfaces.
     audio_client_ = audio_client;
     audio_render_client_ = audio_render_client;
     audio_session_control_ = audio_session_control;
     num_frames_written_ = endpoint_buffer_size_frames_;
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool AudioOutputWin::startStreaming()
+{
+    if (!audio_client_)
+    {
+        LOG(ERROR) << "Audio client is not initialized";
+        return false;
+    }
+
+    _com_error error = audio_client_->Start();
+    if (FAILED(error.Error()))
+    {
+        LOG(ERROR) << "IAudioClient::Start failed:" << error;
+        return false;
+    }
+
     return true;
 }
 
@@ -434,10 +461,20 @@ HRESULT AudioOutputWin::OnSessionDisconnected(AudioSessionDisconnectReason disco
         return S_OK;
     }
 
-    // Restart for any disconnect reason. If the device is permanently gone, startStreaming() will
-    // fail during restart and the thread will exit cleanly through the error path.
-    is_restarting_ = true;
-    SetEvent(restart_event_);
+    switch (disconnect_reason)
+    {
+        case DisconnectReasonDeviceRemoval:
+        case DisconnectReasonFormatChanged:
+            // Restart for any disconnect reason. If the device is permanently gone, initStreaming() will
+            // fail during restart and the thread will exit cleanly through the error path.
+            is_restarting_ = true;
+            SetEvent(restart_event_);
+            break;
+
+        default:
+            break;
+    }
+
     return S_OK;
 }
 

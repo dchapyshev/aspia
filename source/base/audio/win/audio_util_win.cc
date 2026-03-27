@@ -26,31 +26,13 @@
 namespace base {
 
 //--------------------------------------------------------------------------------------------------
-Microsoft::WRL::ComPtr<IMMDeviceEnumerator> createDeviceEnumerator(bool allow_reinitialize)
+Microsoft::WRL::ComPtr<IMMDeviceEnumerator> createDeviceEnumerator()
 {
     Microsoft::WRL::ComPtr<IMMDeviceEnumerator> device_enumerator;
     _com_error error = CoCreateInstance(__uuidof(MMDeviceEnumerator), nullptr, CLSCTX_ALL,
                                         IID_PPV_ARGS(&device_enumerator));
     if (FAILED(error.Error()))
-    {
         LOG(ERROR) << "CoCreateInstance failed:" << error;
-    }
-
-    if (error.Error() == CO_E_NOTINITIALIZED && allow_reinitialize)
-    {
-        LOG(ERROR) << "CoCreateInstance failed with CO_E_NOTINITIALIZED";
-
-        error = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
-        if (FAILED(error.Error()))
-        {
-            error = CoCreateInstance(__uuidof(MMDeviceEnumerator), nullptr,
-                                     CLSCTX_ALL, IID_PPV_ARGS(&device_enumerator));
-            if (FAILED(error.Error()))
-            {
-                LOG(ERROR) << "CoCreateInstance failed:" << error;
-            }
-        }
-    }
 
     return device_enumerator;
 }
@@ -63,11 +45,11 @@ Microsoft::WRL::ComPtr<IMMDevice> createDevice()
     Microsoft::WRL::ComPtr<IMMDevice> audio_endpoint_device;
 
     // Create the IMMDeviceEnumerator interface.
-    Microsoft::WRL::ComPtr<IMMDeviceEnumerator> device_enum(createDeviceEnumerator(true));
+    Microsoft::WRL::ComPtr<IMMDeviceEnumerator> device_enum(createDeviceEnumerator());
     if (!device_enum.Get())
     {
         LOG(ERROR) << "createDeviceEnumerator failed";
-        return audio_endpoint_device;
+        return nullptr;
     }
 
     // Get the default audio endpoint for the specified data-flow direction and // role. Note that,
@@ -81,15 +63,21 @@ Microsoft::WRL::ComPtr<IMMDevice> createDevice()
     if (FAILED(error.Error()))
     {
         LOG(ERROR) << "IMMDeviceEnumerator::GetDefaultAudioEndpoint failed:" << error;
+        return nullptr;
     }
 
     // Verify that the audio endpoint device is active, i.e., that the audio
     // adapter that connects to the endpoint device is present and enabled.
-    if (SUCCEEDED(error.Error()) && !audio_endpoint_device.Get() &&
-        !isDeviceActive(audio_endpoint_device.Get()))
+    if (!audio_endpoint_device.Get())
+    {
+        LOG(ERROR) << "Unable to get active endpoint device";
+        return nullptr;
+    }
+
+    if (!isDeviceActive(audio_endpoint_device.Get()))
     {
         LOG(ERROR) << "Selected endpoint device is not active";
-        audio_endpoint_device.Reset();
+        return nullptr;
     }
 
     return audio_endpoint_device;

@@ -28,7 +28,7 @@
 
 namespace base {
 
-Microsoft::WRL::ComPtr<IMMDeviceEnumerator> createDeviceEnumerator(bool allow_reinitialize);
+Microsoft::WRL::ComPtr<IMMDeviceEnumerator> createDeviceEnumerator();
 Microsoft::WRL::ComPtr<IMMDevice> createDevice();
 Microsoft::WRL::ComPtr<IAudioClient> createClient(IMMDevice* audio_device);
 Microsoft::WRL::ComPtr<IAudioRenderClient> createRenderClient(IAudioClient* client);
