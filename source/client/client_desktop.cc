@@ -711,7 +711,6 @@ void ClientDesktop::readExtension(const proto::desktop::Extension& extension)
     if (extension.name() == common::kTaskManagerExtension)
     {
         proto::task_manager::HostToClient message;
-
         if (!message.ParseFromString(extension.data()))
         {
             CLOG(ERROR) << "Unable to parse task manager extension data";
@@ -723,7 +722,6 @@ void ClientDesktop::readExtension(const proto::desktop::Extension& extension)
     else if (extension.name() == common::kSelectScreenExtension)
     {
         proto::desktop::ScreenList screen_list;
-
         if (!screen_list.ParseFromString(extension.data()))
         {
             CLOG(ERROR) << "Unable to parse select screen extension data";
@@ -736,7 +734,6 @@ void ClientDesktop::readExtension(const proto::desktop::Extension& extension)
     else if (extension.name() == common::kScreenTypeExtension)
     {
         proto::desktop::ScreenType screen_type;
-
         if (!screen_type.ParseFromString(extension.data()))
         {
             CLOG(ERROR) << "Unable to parse screen type extension data";
@@ -749,7 +746,6 @@ void ClientDesktop::readExtension(const proto::desktop::Extension& extension)
     else if (extension.name() == common::kSystemInfoExtension)
     {
         proto::system_info::SystemInfo system_info;
-
         if (!system_info.ParseFromString(extension.data()))
         {
             CLOG(ERROR) << "Unable to parse system info extension data";
