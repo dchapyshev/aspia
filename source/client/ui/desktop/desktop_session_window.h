@@ -62,7 +62,7 @@ public slots:
     void onSystemInfoChanged(const proto::system_info::SystemInfo& system_info);
     void onTaskManagerChanged(const proto::task_manager::HostToClient& message);
     void onMetricsChanged(const client::ClientDesktop::Metrics& metrics);
-    void onFrameError(proto::desktop::VideoErrorCode error_code);
+    void onFrameError(proto::video::ErrorCode error_code);
     void onFrameChanged(const QSize& screen_size, std::shared_ptr<base::Frame> frame);
     void onDrawFrame();
     void onMouseCursorChanged(std::shared_ptr<base::MouseCursor> mouse_cursor);
@@ -100,7 +100,7 @@ private slots:
     void onMouseEvent(const proto::desktop::MouseEvent& event);
     void onSettings();
     void onConfigChanged(const proto::desktop::Config& config);
-    void onVideoEncodingChanged(proto::desktop::VideoEncoding encoding);
+    void onVideoEncodingChanged(proto::video::Encoding encoding);
     void onAutosizeWindow();
     void onTakeScreenshot();
     void onScaleDesktop();

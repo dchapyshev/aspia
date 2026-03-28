@@ -279,8 +279,8 @@ void DesktopAgent::onClientConfigured()
     {
         const DesktopAgentClient::Config& config = client->config();
 
-        if (config.video_encoding == proto::desktop::VIDEO_ENCODING_VP8)
-            merged_config.video_encoding = proto::desktop::VIDEO_ENCODING_VP8;
+        if (config.video_encoding == proto::video::ENCODING_VP8)
+            merged_config.video_encoding = proto::video::ENCODING_VP8;
 
         if (config.audio_encoding == proto::audio::ENCODING_OPUS)
             merged_config.audio_encoding = proto::audio::ENCODING_OPUS;
@@ -309,8 +309,8 @@ void DesktopAgent::onClientConfigured()
               << "cursor_position:" << merged_config.cursor_position
               << "cursor_shape:" << merged_config.cursor_shape << ")";
 
-    if (merged_config.video_encoding != proto::desktop::VIDEO_ENCODING_VP8 &&
-        merged_config.video_encoding != proto::desktop::VIDEO_ENCODING_VP9)
+    if (merged_config.video_encoding != proto::video::ENCODING_VP8 &&
+        merged_config.video_encoding != proto::video::ENCODING_VP9)
     {
         LOG(ERROR) << "Unsupported video encoding:" << merged_config.video_encoding;
         return;
@@ -567,8 +567,8 @@ void DesktopAgent::onCaptureScreen()
 
     if (is_paused_)
     {
-        proto::desktop::VideoPacket* video_packet = video_message_.newMessage().mutable_packet();
-        video_packet->set_error_code(proto::desktop::VIDEO_ERROR_CODE_PAUSED);
+        proto::video::Packet* video_packet = video_message_.newMessage().mutable_packet();
+        video_packet->set_error_code(proto::video::ERROR_CODE_PAUSED);
 
         const QByteArray& buffer = video_message_.serialize();
         for (auto* client : std::as_const(clients_))
@@ -596,17 +596,17 @@ void DesktopAgent::onCaptureScreen()
     const base::Frame* frame = screen_capturer_->captureFrame(&error);
     if (!frame)
     {
-        proto::desktop::VideoErrorCode error_code;
+        proto::video::ErrorCode error_code;
 
         switch (error)
         {
             case base::ScreenCapturer::Error::TEMPORARY:
-                error_code = proto::desktop::VIDEO_ERROR_CODE_TEMPORARY;
+                error_code = proto::video::ERROR_CODE_TEMPORARY;
                 break;
 
             case base::ScreenCapturer::Error::PERMANENT:
             {
-                error_code = proto::desktop::VIDEO_ERROR_CODE_PERMANENT;
+                error_code = proto::video::ERROR_CODE_PERMANENT;
 
                 QTimer::singleShot(0, this, [this]()
                 {
@@ -620,7 +620,7 @@ void DesktopAgent::onCaptureScreen()
                 return;
         }
 
-        proto::desktop::VideoPacket* video_packet = video_message_.newMessage().mutable_packet();
+        proto::video::Packet* video_packet = video_message_.newMessage().mutable_packet();
         video_packet->set_error_code(error_code);
 
         const QByteArray& buffer = video_message_.serialize();
@@ -982,8 +982,8 @@ void DesktopAgent::encodeScreen(const base::Frame* frame)
         return;
     }
 
-    proto::desktop::VideoData& message = video_message_.newMessage();
-    proto::desktop::VideoPacket* packet = message.mutable_packet();
+    proto::video::Data& message = video_message_.newMessage();
+    proto::video::Packet* packet = message.mutable_packet();
 
     // Encode the frame into a video packet.
     if (!video_encoder_->encode(scaled_frame, packet))
@@ -994,13 +994,13 @@ void DesktopAgent::encodeScreen(const base::Frame* frame)
 
     if (packet->has_format())
     {
-        proto::desktop::VideoPacketFormat* format = packet->mutable_format();
+        proto::video::PacketFormat* format = packet->mutable_format();
 
         // In video packets that contain the format, we pass the screen capture type.
         format->set_capturer_type(frame->capturerType());
 
         // Real screen size.
-        proto::desktop::Size* screen_size = format->mutable_screen_size();
+        proto::video::Size* screen_size = format->mutable_screen_size();
         screen_size->set_width(frame->size().width());
         screen_size->set_height(frame->size().height());
 

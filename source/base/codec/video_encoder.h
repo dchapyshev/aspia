@@ -36,14 +36,14 @@ class Frame;
 class VideoEncoder
 {
 public:
-    explicit VideoEncoder(proto::desktop::VideoEncoding encoding);
+    explicit VideoEncoder(proto::video::Encoding encoding);
     ~VideoEncoder() = default;
 
     static const size_t kInitialEncodeBufferSize;
 
-    bool encode(const Frame* frame, proto::desktop::VideoPacket* packet);
+    bool encode(const Frame* frame, proto::video::Packet* packet);
 
-    proto::desktop::VideoEncoding encoding() const { return encoding_; }
+    proto::video::Encoding encoding() const { return encoding_; }
 
     void setKeyFrameRequired(bool enable) { key_frame_required_ = enable; }
     bool isKeyFrameRequired() const { return key_frame_required_; }
@@ -59,11 +59,11 @@ private:
     bool createVp8Codec(const QSize& size);
     bool createVp9Codec(const QSize& size);
     void prepareImageAndActiveMap(
-        bool is_key_frame, const Frame* frame, proto::desktop::VideoPacket* packet);
+        bool is_key_frame, const Frame* frame, proto::video::Packet* packet);
     void addRectToActiveMap(const QRect& rect);
     void clearActiveMap();
 
-    const proto::desktop::VideoEncoding encoding_;
+    const proto::video::Encoding encoding_;
     QSize last_size_;
     bool key_frame_required_ = false;
     std::string encode_buffer_;

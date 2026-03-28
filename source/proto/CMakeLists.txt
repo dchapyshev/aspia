@@ -22,7 +22,6 @@ list(APPEND SOURCE_PROTO
     desktop_audio.proto
     desktop_channel.proto
     desktop_clipboard.proto
-    desktop_common.proto
     desktop_control.proto
     desktop_cursor.proto
     desktop_input.proto

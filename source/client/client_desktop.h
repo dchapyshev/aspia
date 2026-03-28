@@ -116,12 +116,12 @@ signals:
     void sig_systemInfo(const proto::system_info::SystemInfo& system_info);
     void sig_taskManager(const proto::task_manager::HostToClient& message);
     void sig_metrics(const client::ClientDesktop::Metrics& metrics);
-    void sig_frameError(proto::desktop::VideoErrorCode error_code);
+    void sig_frameError(proto::video::ErrorCode error_code);
     void sig_frameChanged(const QSize& screen_size, std::shared_ptr<base::Frame> frame);
     void sig_drawFrame();
     void sig_mouseCursorChanged(std::shared_ptr<base::MouseCursor> mouse_cursor);
     void sig_sessionListChanged(const proto::desktop::SessionList& sessions);
-    void sig_videoEncodingChanged(proto::desktop::VideoEncoding encoding);
+    void sig_videoEncodingChanged(proto::video::Encoding encoding);
 
 protected:
     // Client implementation.
@@ -133,7 +133,7 @@ private slots:
 
 private:
     void readCapabilities(const proto::desktop::Capabilities& capabilities);
-    void readVideoPacket(const proto::desktop::VideoPacket& packet);
+    void readVideoPacket(const proto::video::Packet& packet);
     void readAudioPacket(const proto::audio::Packet& packet);
     void readCursorShape(const proto::desktop::CursorShape& cursor_shape);
     void readCursorPosition(const proto::desktop::CursorPosition& cursor_position);
@@ -148,7 +148,7 @@ private:
     std::shared_ptr<base::Frame> desktop_frame_;
     proto::desktop::Config desktop_config_;
 
-    proto::desktop::VideoEncoding video_encoding_ = proto::desktop::VIDEO_ENCODING_UNKNOWN;
+    proto::video::Encoding video_encoding_ = proto::video::ENCODING_UNKNOWN;
     proto::audio::Encoding audio_encoding_ = proto::audio::ENCODING_UNKNOWN;
 
     std::unique_ptr<base::VideoDecoder> video_decoder_;

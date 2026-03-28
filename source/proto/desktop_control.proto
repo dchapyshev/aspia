@@ -101,8 +101,8 @@ message VideoRecording
 
 message Config
 {
-    uint32 flags                 = 1;
-    VideoEncoding video_encoding = 2;
+    uint32 flags                  = 1;
+    video.Encoding video_encoding = 2;
     // Field 3 (pixel format) is deprecated.
     // Field 4 is deprecated.
     // Field 5 (compress ratio) is deprecated.

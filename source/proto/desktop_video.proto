@@ -20,20 +20,32 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
-import "desktop_common.proto";
+package proto.video;
 
-package proto.desktop;
-
-// Identifies how the image was encoded.
-enum VideoEncoding
+message Size
 {
-    VIDEO_ENCODING_UNKNOWN = 0;
-    // Field 1 (ZSTD) is deprecated.
-    VIDEO_ENCODING_VP8     = 2;
-    VIDEO_ENCODING_VP9     = 4;
+    int32 width  = 1;
+    int32 height = 2;
 }
 
-message VideoPacketFormat
+message Rect
+{
+    int32 x      = 1;
+    int32 y      = 2;
+    int32 width  = 3;
+    int32 height = 4;
+}
+
+// Identifies how the image was encoded.
+enum Encoding
+{
+    ENCODING_UNKNOWN = 0;
+    // Field 1 (ZSTD) is deprecated.
+    ENCODING_VP8     = 2;
+    ENCODING_VP9     = 4;
+}
+
+message PacketFormat
 {
     Rect video_rect          = 1;
     // Field 2 (pixel format) is deprecated.
@@ -41,27 +53,27 @@ message VideoPacketFormat
     uint32 capturer_type     = 4;
 }
 
-enum VideoErrorCode
+enum ErrorCode
 {
-    VIDEO_ERROR_CODE_OK        = 0;
-    VIDEO_ERROR_CODE_PAUSED    = 1;
-    VIDEO_ERROR_CODE_TEMPORARY = 2;
-    VIDEO_ERROR_CODE_PERMANENT = 3;
+    ERROR_CODE_OK        = 0;
+    ERROR_CODE_PAUSED    = 1;
+    ERROR_CODE_TEMPORARY = 2;
+    ERROR_CODE_PERMANENT = 3;
 }
 
-enum VideoPacketFlags
+enum PacketFlags
 {
-    VIDEO_PACKET_FLAG_NONE         = 0;
-    VIDEO_PACKET_FLAG_IS_KEY_FRAME = 1;
+    PACKET_FLAG_NONE         = 0;
+    PACKET_FLAG_IS_KEY_FRAME = 1;
 }
 
 // Sent by host to client.
-message VideoPacket
+message Packet
 {
-    VideoEncoding encoding = 1;
+    Encoding encoding = 1;
 
     // If the screen size or the pixel format has changed, the field must be filled.
-    VideoPacketFormat format = 2;
+    PacketFormat format = 2;
 
     // The list of changed rectangles (areas) of the screen.
     repeated Rect dirty_rect = 3;
@@ -71,7 +83,7 @@ message VideoPacket
 
     // If there is no error, then it takes the value VIDEO_ERROR_CODE_OK.
     // If the field has any other value, then all other fields are ignored.
-    VideoErrorCode error_code = 5;
+    ErrorCode error_code = 5;
 
     // Flags for the video packet.
     uint32 flags = 6;
@@ -84,7 +96,7 @@ message KeyFrameRequest
 }
 
 // Sent by client to host.
-message VideoPause
+message Pause
 {
     bool enable  = 1;
     uint32 dummy = 2;
@@ -98,16 +110,16 @@ message PreferredSize
 }
 
 // Client <- Host (channel 3).
-message VideoData
+message Data
 {
-    VideoPacket packet = 1;
+    Packet packet = 1;
 }
 
 // Client -> Host (channel 3).
-message VideoControl
+message Control
 {
-    KeyFrameRequest key_frame_request = 1;
-    VideoPause video_pause            = 2;
-    PreferredSize preferred_size      = 3;
+    KeyFrameRequest key_frame    = 1;
+    PreferredSize preferred_size = 2;
+    Pause pause                  = 3;
 }
 

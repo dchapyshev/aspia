@@ -40,10 +40,10 @@ constexpr int kMaxCommentLength = 2048;
 //--------------------------------------------------------------------------------------------------
 bool isValidVideoEncoding(int video_encoding)
 {
-    switch (static_cast<proto::desktop::VideoEncoding>(video_encoding))
+    switch (static_cast<proto::video::Encoding>(video_encoding))
     {
-        case proto::desktop::VIDEO_ENCODING_VP8:
-        case proto::desktop::VIDEO_ENCODING_VP9:
+        case proto::video::ENCODING_VP8:
+        case proto::video::ENCODING_VP9:
             return true;
 
         default:
@@ -184,7 +184,7 @@ proto::desktop::Config readDesktopConfig(const QJsonObject& json_desktop_config)
     if (!isValidVideoEncoding(video_encoding))
     {
         LOG(ERROR) << "Invalid video encoding:" << video_encoding;
-        video_encoding = static_cast<int>(proto::desktop::VIDEO_ENCODING_VP8);
+        video_encoding = static_cast<int>(proto::video::ENCODING_VP8);
     }
 
     int audio_encoding = json_desktop_config["audio_encoding"].toInt();
@@ -196,7 +196,7 @@ proto::desktop::Config readDesktopConfig(const QJsonObject& json_desktop_config)
 
     proto::desktop::Config desktop_config;
     desktop_config.set_flags(flags);
-    desktop_config.set_video_encoding(static_cast<proto::desktop::VideoEncoding>(video_encoding));
+    desktop_config.set_video_encoding(static_cast<proto::video::Encoding>(video_encoding));
     desktop_config.set_audio_encoding(static_cast<proto::audio::Encoding>(audio_encoding));
 
     return desktop_config;

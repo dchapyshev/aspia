@@ -60,25 +60,6 @@ QVersionNumber parse(const proto::peer::Version& version)
 }
 
 //--------------------------------------------------------------------------------------------------
-proto::desktop::Rect serialize(const QRect& rect)
-{
-    proto::desktop::Rect result;
-
-    result.set_x(rect.x());
-    result.set_y(rect.y());
-    result.set_width(rect.width());
-    result.set_height(rect.height());
-
-    return result;
-}
-
-//--------------------------------------------------------------------------------------------------
-QRect parse(const proto::desktop::Rect& rect)
-{
-    return QRect(QPoint(rect.x(), rect.y()), QSize(rect.width(), rect.height()));
-}
-
-//--------------------------------------------------------------------------------------------------
 proto::desktop::Point serialize(const QPoint& point)
 {
     proto::desktop::Point result;
@@ -110,6 +91,25 @@ proto::desktop::Size serialize(const QSize& size)
 QSize parse(const proto::desktop::Size& size)
 {
     return QSize(size.width(), size.height());
+}
+
+//--------------------------------------------------------------------------------------------------
+proto::video::Rect serialize(const QRect& rect)
+{
+    proto::video::Rect result;
+
+    result.set_x(rect.x());
+    result.set_y(rect.y());
+    result.set_width(rect.width());
+    result.set_height(rect.height());
+
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+QRect parse(const proto::video::Rect& rect)
+{
+    return QRect(QPoint(rect.x(), rect.y()), QSize(rect.width(), rect.height()));
 }
 
 } // namespace base

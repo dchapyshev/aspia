@@ -52,11 +52,11 @@ bool parseCodecValue(const QString& value, proto::desktop::Config& config)
     {
         if (value == "vp8")
         {
-            config.set_video_encoding(proto::desktop::VIDEO_ENCODING_VP8);
+            config.set_video_encoding(proto::video::ENCODING_VP8);
         }
         else if (value == "vp9")
         {
-            config.set_video_encoding(proto::desktop::VIDEO_ENCODING_VP9);
+            config.set_video_encoding(proto::video::ENCODING_VP9);
         }
         else
         {

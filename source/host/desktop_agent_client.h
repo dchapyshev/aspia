@@ -47,7 +47,7 @@ public:
 
     struct Config
     {
-        proto::desktop::VideoEncoding video_encoding = proto::desktop::VIDEO_ENCODING_VP9;
+        proto::video::Encoding video_encoding = proto::video::ENCODING_VP9;
         proto::audio::Encoding audio_encoding = proto::audio::ENCODING_UNKNOWN;
         bool disable_wallpaper = true;
         bool disable_effects = true;
@@ -100,8 +100,8 @@ private:
     void readKeyEvent(const proto::desktop::KeyEvent& key_event);
     void readTouchEvent(const proto::desktop::TouchEvent& touch_event);
     void readTextEvent(const proto::desktop::TextEvent& text_event);
-    void readPreferredSize(const proto::desktop::PreferredSize& size);
-    void readVideoPause(const proto::desktop::VideoPause& pause);
+    void readPreferredSize(const proto::video::PreferredSize& size);
+    void readVideoPause(const proto::video::Pause& pause);
     void readAudioPause(const proto::audio::Pause& pause);
     void readConfig(const proto::desktop::Config& config);
     void readPowerControl(const proto::desktop::PowerControl& control);

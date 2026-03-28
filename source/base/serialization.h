@@ -24,6 +24,7 @@
 #include <QVersionNumber>
 
 #include "proto/desktop_screen.h"
+#include "proto/desktop_video.h"
 #include "proto/peer.h"
 
 #include <google/protobuf/message_lite.h>
@@ -41,14 +42,14 @@ bool parse(const QByteArray& buffer, T* message)
 proto::peer::Version serialize(const QVersionNumber& version);
 QVersionNumber parse(const proto::peer::Version& version);
 
-proto::desktop::Rect serialize(const QRect& rect);
-QRect parse(const proto::desktop::Rect& rect);
+proto::desktop::Size serialize(const QSize& size);
+QSize parse(const proto::desktop::Size& size);
 
 proto::desktop::Point serialize(const QPoint& point);
 QPoint parse(const proto::desktop::Point& point);
 
-proto::desktop::Size serialize(const QSize& size);
-QSize parse(const proto::desktop::Size& size);
+proto::video::Rect serialize(const QRect& rect);
+QRect parse(const proto::video::Rect& rect);
 
 class SerializerImpl
 {

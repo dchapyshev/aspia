@@ -29,10 +29,10 @@ class Frame;
 class VideoDecoder
 {
 public:
-    explicit VideoDecoder(proto::desktop::VideoEncoding encoding);
+    explicit VideoDecoder(proto::video::Encoding encoding);
     ~VideoDecoder();
 
-    bool decode(const proto::desktop::VideoPacket& packet, Frame* frame);
+    bool decode(const proto::video::Packet& packet, Frame* frame);
 
 private:
     ScopedVpxCodec codec_;

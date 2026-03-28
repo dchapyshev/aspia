@@ -93,7 +93,7 @@ TEST(serialization_test, version_large_values)
 TEST(serialization_test, rect_roundtrip)
 {
     QRect original(10, 20, 1920, 1080);
-    proto::desktop::Rect proto_rect = serialize(original);
+    proto::video::Rect proto_rect = serialize(original);
     QRect restored = parse(proto_rect);
     EXPECT_EQ(restored, original);
 }
@@ -101,7 +101,7 @@ TEST(serialization_test, rect_roundtrip)
 TEST(serialization_test, rect_negative_coords)
 {
     QRect original(-100, -200, 640, 480);
-    proto::desktop::Rect proto_rect = serialize(original);
+    proto::video::Rect proto_rect = serialize(original);
     QRect restored = parse(proto_rect);
     EXPECT_EQ(restored, original);
 }
@@ -109,7 +109,7 @@ TEST(serialization_test, rect_negative_coords)
 TEST(serialization_test, rect_zero)
 {
     QRect original(0, 0, 0, 0);
-    proto::desktop::Rect proto_rect = serialize(original);
+    proto::video::Rect proto_rect = serialize(original);
     QRect restored = parse(proto_rect);
     EXPECT_EQ(restored, original);
 }

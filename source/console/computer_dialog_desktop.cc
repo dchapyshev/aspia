@@ -60,8 +60,8 @@ void ComputerDialogDesktop::restoreSettings(
     }
 
     QComboBox* combo_codec = ui.combo_codec;
-    combo_codec->addItem("VP9", proto::desktop::VIDEO_ENCODING_VP9);
-    combo_codec->addItem("VP8", proto::desktop::VIDEO_ENCODING_VP8);
+    combo_codec->addItem("VP9", proto::video::ENCODING_VP9);
+    combo_codec->addItem("VP8", proto::video::ENCODING_VP8);
 
     int current_codec = combo_codec->findData(desktop_config.video_encoding());
     if (current_codec == -1)
@@ -122,8 +122,8 @@ void ComputerDialogDesktop::saveSettings(
         computer->mutable_inherit()->set_desktop_view(ui.checkbox_inherit_config->isChecked());
         desktop_config = computer->mutable_session_config()->mutable_desktop_view();
     }
-    proto::desktop::VideoEncoding video_encoding =
-        static_cast<proto::desktop::VideoEncoding>(ui.combo_codec->currentData().toInt());
+    proto::video::Encoding video_encoding =
+        static_cast<proto::video::Encoding>(ui.combo_codec->currentData().toInt());
 
     desktop_config->set_video_encoding(video_encoding);
 
@@ -161,8 +161,8 @@ void ComputerDialogDesktop::saveSettings(
 //--------------------------------------------------------------------------------------------------
 void ComputerDialogDesktop::onCodecChanged(int item_index)
 {
-    proto::desktop::VideoEncoding encoding =
-        static_cast<proto::desktop::VideoEncoding>(ui.combo_codec->itemData(item_index).toInt());
+    proto::video::Encoding encoding =
+        static_cast<proto::video::Encoding>(ui.combo_codec->itemData(item_index).toInt());
     LOG(INFO) << "[ACTION] Video encoding changed:" << encoding;
 }
 

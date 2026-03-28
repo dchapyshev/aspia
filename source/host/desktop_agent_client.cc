@@ -214,19 +214,19 @@ void DesktopAgentClient::readSessionMessage(quint8 channel_id, const QByteArray&
     }
     else if (channel_id == proto::desktop::CHANNEL_ID_VIDEO)
     {
-        proto::desktop::VideoControl message;
+        proto::video::Control message;
         if (!base::parse(buffer, &message))
         {
             CLOG(ERROR) << "Unable to parse video control message";
             return;
         }
 
-        if (message.has_key_frame_request())
+        if (message.has_key_frame())
             emit sig_keyFrameRequested();
         else if (message.has_preferred_size())
             readPreferredSize(message.preferred_size());
-        else if (message.has_video_pause())
-            readVideoPause(message.video_pause());
+        else if (message.has_pause())
+            readVideoPause(message.pause());
     }
     else if (channel_id == proto::desktop::CHANNEL_ID_SCREEN)
     {
@@ -324,7 +324,7 @@ void DesktopAgentClient::readTextEvent(const proto::desktop::TextEvent& text_eve
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::readPreferredSize(const proto::desktop::PreferredSize& size)
+void DesktopAgentClient::readPreferredSize(const proto::video::PreferredSize& size)
 {
     static const int kMaxScreenSize = std::numeric_limits<qint16>::max();
 
@@ -342,7 +342,7 @@ void DesktopAgentClient::readPreferredSize(const proto::desktop::PreferredSize& 
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::readVideoPause(const proto::desktop::VideoPause& pause)
+void DesktopAgentClient::readVideoPause(const proto::video::Pause& pause)
 {
     is_video_paused_ = pause.enable();
     CLOG(INFO) << "Video paused:" << is_video_paused_;

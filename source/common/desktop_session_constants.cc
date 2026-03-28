@@ -40,8 +40,7 @@ const char kSupportedExtensionsForManage[] = "select_screen";
 const char kSupportedExtensionsForView[] = "select_screen";
 #endif
 
-const quint32 kSupportedVideoEncodings =
-    proto::desktop::VIDEO_ENCODING_VP8 | proto::desktop::VIDEO_ENCODING_VP9;
+const quint32 kSupportedVideoEncodings = proto::video::ENCODING_VP8 | proto::video::ENCODING_VP9;
 const quint32 kSupportedAudioEncodings = proto::audio::ENCODING_OPUS;
 
 const char kFlagDisablePasteAsKeystrokes[] = "disable_paste_as_keystrokes";

@@ -96,7 +96,7 @@ void ClientDesktop::onMessageReceived(quint8 channel_id, const QByteArray& buffe
 {
     if (channel_id == proto::desktop::CHANNEL_ID_VIDEO)
     {
-        proto::desktop::VideoData message;
+        proto::video::Data message;
         if (!base::parse(buffer, &message))
         {
             CLOG(ERROR) << "Unable to parse video message";
@@ -324,7 +324,7 @@ void ClientDesktop::onPreferredSizeChanged(int width, int height)
 
     if (isLegacy())
     {
-        proto::desktop::PreferredSize preferred_size;
+        proto::video::PreferredSize preferred_size;
         preferred_size.set_width(width);
         preferred_size.set_height(height);
 
@@ -336,8 +336,8 @@ void ClientDesktop::onPreferredSizeChanged(int width, int height)
     }
     else
     {
-        proto::desktop::VideoControl message;
-        proto::desktop::PreferredSize* preferred_size = message.mutable_preferred_size();
+        proto::video::Control message;
+        proto::video::PreferredSize* preferred_size = message.mutable_preferred_size();
         preferred_size->set_width(width);
         preferred_size->set_height(height);
         sendMessage(proto::desktop::CHANNEL_ID_VIDEO, base::serialize(message));
@@ -362,7 +362,7 @@ void ClientDesktop::onVideoPauseChanged(bool enable)
 
     if (isLegacy())
     {
-        proto::desktop::VideoPause pause;
+        proto::video::Pause pause;
         pause.set_enable(enable);
 
         proto::desktop::ClientToSession message;
@@ -373,10 +373,10 @@ void ClientDesktop::onVideoPauseChanged(bool enable)
     }
     else
     {
-        proto::desktop::VideoControl message;
-        proto::desktop::VideoPause* video_pause = message.mutable_video_pause();
-        video_pause->set_enable(enable);
-        video_pause->set_dummy(1);
+        proto::video::Control message;
+        proto::video::Pause* pause = message.mutable_pause();
+        pause->set_enable(enable);
+        pause->set_dummy(1);
         sendMessage(proto::desktop::CHANNEL_ID_VIDEO, base::serialize(message));
     }
 }
@@ -441,7 +441,7 @@ void ClientDesktop::onRecordingChanged(bool enable, const QString& file_path)
             if (!webm_video_encoder_ || !webm_file_writer_ || !desktop_frame_)
                 return;
 
-            proto::desktop::VideoPacket packet;
+            proto::video::Packet packet;
 
             if (webm_video_encoder_->encode(*desktop_frame_, &packet))
                 webm_file_writer_->addVideoPacket(packet);
@@ -681,10 +681,10 @@ void ClientDesktop::readCapabilities(const proto::desktop::Capabilities& capabil
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientDesktop::readVideoPacket(const proto::desktop::VideoPacket& packet)
+void ClientDesktop::readVideoPacket(const proto::video::Packet& packet)
 {
-    proto::desktop::VideoErrorCode error_code = packet.error_code();
-    if (error_code != proto::desktop::VIDEO_ERROR_CODE_OK)
+    proto::video::ErrorCode error_code = packet.error_code();
+    if (error_code != proto::video::ERROR_CODE_OK)
     {
         CLOG(ERROR) << "Video error detected:" << error_code;
         emit sig_frameError(error_code);
@@ -713,7 +713,7 @@ void ClientDesktop::readVideoPacket(const proto::desktop::VideoPacket& packet)
 
     if (packet.has_format())
     {
-        const proto::desktop::VideoPacketFormat& format = packet.format();
+        const proto::video::PacketFormat& format = packet.format();
 
         CLOG(INFO) << "Video packet has format:" << format;
         key_frame_received_ = true;
@@ -732,7 +732,7 @@ void ClientDesktop::readVideoPacket(const proto::desktop::VideoPacket& packet)
 
         if (format.has_screen_size())
         {
-            screen_size = base::parse(format.screen_size());
+            screen_size = QSize(format.screen_size().width(), format.screen_size().height());
 
             if (screen_size.width() <= 0 || screen_size.width() >= kMaxValue ||
                 screen_size.height() <= 0 || screen_size.height() >= kMaxValue)
@@ -748,7 +748,7 @@ void ClientDesktop::readVideoPacket(const proto::desktop::VideoPacket& packet)
         emit sig_frameChanged(screen_size, desktop_frame_);
     }
 
-    if (packet.flags() & proto::desktop::VIDEO_PACKET_FLAG_IS_KEY_FRAME)
+    if (packet.flags() & proto::video::PACKET_FLAG_IS_KEY_FRAME)
         key_frame_received_ = true;
 
     if (!key_frame_received_)
@@ -948,8 +948,8 @@ void ClientDesktop::sendKeyFrameRequest()
         return;
     }
 
-    proto::desktop::VideoControl message;
-    message.mutable_key_frame_request()->set_dummy(1);
+    proto::video::Control message;
+    message.mutable_key_frame()->set_dummy(1);
     sendMessage(proto::desktop::CHANNEL_ID_VIDEO, base::serialize(message));
 }
 

@@ -124,7 +124,7 @@ DesktopWidget::DesktopWidget(QWidget* parent)
 
     connect(error_timer_, &QTimer::timeout, this, [this]()
     {
-        if (last_error_code_ != proto::desktop::VIDEO_ERROR_CODE_OK)
+        if (last_error_code_ != proto::video::ERROR_CODE_OK)
         {
             current_error_code_ = last_error_code_;
 
@@ -186,7 +186,7 @@ void DesktopWidget::setDesktopFrame(std::shared_ptr<base::Frame> frame)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopWidget::setDesktopFrameError(proto::desktop::VideoErrorCode error_code)
+void DesktopWidget::setDesktopFrameError(proto::video::ErrorCode error_code)
 {
     if (last_error_code_ == error_code)
         return;
@@ -202,11 +202,11 @@ void DesktopWidget::drawDesktopFrame()
 {
     error_timer_->stop();
 
-    if (current_error_code_ != proto::desktop::VIDEO_ERROR_CODE_OK)
+    if (current_error_code_ != proto::video::ERROR_CODE_OK)
         error_image_.reset();
 
-    last_error_code_ = proto::desktop::VIDEO_ERROR_CODE_OK;
-    current_error_code_ = proto::desktop::VIDEO_ERROR_CODE_OK;
+    last_error_code_ = proto::video::ERROR_CODE_OK;
+    current_error_code_ = proto::video::ERROR_CODE_OK;
 
     update();
 }
@@ -462,7 +462,7 @@ void DesktopWidget::paintEvent(QPaintEvent* /* event */)
     // SmoothPixmapTransform causes too much CPU load in MacOSX.
     painter_.setRenderHint(QPainter::SmoothPixmapTransform);
 #endif
-    if (current_error_code_ == proto::desktop::VIDEO_ERROR_CODE_OK)
+    if (current_error_code_ == proto::video::ERROR_CODE_OK)
     {
         if (!frame_image_.isNull())
         {
@@ -528,13 +528,13 @@ void DesktopWidget::paintEvent(QPaintEvent* /* event */)
         QString message;
         switch (last_error_code_)
         {
-            case proto::desktop::VIDEO_ERROR_CODE_PAUSED:
+            case proto::video::ERROR_CODE_PAUSED:
                 message = tr("The session was paused by a remote user");
                 break;
-            case proto::desktop::VIDEO_ERROR_CODE_TEMPORARY:
+            case proto::video::ERROR_CODE_TEMPORARY:
                 message = tr("The session is temporarily unavailable");
                 break;
-            case proto::desktop::VIDEO_ERROR_CODE_PERMANENT:
+            case proto::video::ERROR_CODE_PERMANENT:
                 message = tr("The session is permanently unavailable");
                 break;
             default:

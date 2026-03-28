@@ -42,11 +42,11 @@ DesktopConfigDialog::DesktopConfigDialog(proto::peer::SessionType session_type,
 
     QComboBox* combo_codec = ui->combo_codec;
 
-    if (video_encodings & proto::desktop::VIDEO_ENCODING_VP9)
-        combo_codec->addItem("VP9", proto::desktop::VIDEO_ENCODING_VP9);
+    if (video_encodings & proto::video::ENCODING_VP9)
+        combo_codec->addItem("VP9", proto::video::ENCODING_VP9);
 
-    if (video_encodings & proto::desktop::VIDEO_ENCODING_VP8)
-        combo_codec->addItem("VP8", proto::desktop::VIDEO_ENCODING_VP8);
+    if (video_encodings & proto::video::ENCODING_VP8)
+        combo_codec->addItem("VP8", proto::video::ENCODING_VP8);
 
     int current_codec = combo_codec->findData(config_.video_encoding());
     if (current_codec == -1)
@@ -166,8 +166,8 @@ void DesktopConfigDialog::enableBlockInputFeature(bool enable)
 //--------------------------------------------------------------------------------------------------
 void DesktopConfigDialog::onCodecChanged(int item_index)
 {
-    proto::desktop::VideoEncoding encoding =
-        static_cast<proto::desktop::VideoEncoding>(ui->combo_codec->itemData(item_index).toInt());
+    proto::video::Encoding encoding =
+        static_cast<proto::video::Encoding>(ui->combo_codec->itemData(item_index).toInt());
     LOG(INFO) << "[ACTION] Codec changed:" << encoding;
 }
 
@@ -178,8 +178,8 @@ void DesktopConfigDialog::onButtonBoxClicked(QAbstractButton* button)
     {
         LOG(INFO) << "[ACTION] Accepted by user";
 
-        proto::desktop::VideoEncoding video_encoding =
-            static_cast<proto::desktop::VideoEncoding>(ui->combo_codec->currentData().toInt());
+        proto::video::Encoding video_encoding =
+            static_cast<proto::video::Encoding>(ui->combo_codec->currentData().toInt());
 
         config_.set_video_encoding(video_encoding);
 

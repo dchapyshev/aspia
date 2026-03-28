@@ -59,9 +59,9 @@ DesktopClient::DesktopClient(base::TcpChannel* tcp_channel, QObject* parent)
             return;
         }
 
-        proto::desktop::VideoData message;
-        proto::desktop::VideoPacket* packet = message.mutable_packet();
-        packet->set_error_code(proto::desktop::VIDEO_ERROR_CODE_TEMPORARY);
+        proto::video::Data message;
+        proto::video::Packet* packet = message.mutable_packet();
+        packet->set_error_code(proto::video::ERROR_CODE_TEMPORARY);
         send(proto::desktop::CHANNEL_ID_VIDEO, base::serialize(message));
     });
 

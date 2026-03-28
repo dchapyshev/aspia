@@ -480,7 +480,7 @@ void DesktopSessionWindow::onMetricsChanged(const client::ClientDesktop::Metrics
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionWindow::onFrameError(proto::desktop::VideoErrorCode error_code)
+void DesktopSessionWindow::onFrameError(proto::video::ErrorCode error_code)
 {
     desktop_->setDesktopFrameError(error_code);
     desktop_->update();
@@ -986,7 +986,7 @@ void DesktopSessionWindow::onConfigChanged(const proto::desktop::Config& desktop
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionWindow::onVideoEncodingChanged(proto::desktop::VideoEncoding encoding)
+void DesktopSessionWindow::onVideoEncodingChanged(proto::video::Encoding encoding)
 {
     desktop_config_.set_video_encoding(encoding);
 }

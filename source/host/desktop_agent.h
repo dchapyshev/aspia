@@ -128,7 +128,7 @@ private:
 
     base::Serializer<proto::desktop::ScreenData> screen_message_;
     base::Serializer<proto::desktop::CursorData> cursor_message_;
-    base::Serializer<proto::desktop::VideoData> video_message_;
+    base::Serializer<proto::video::Data> video_message_;
     base::Serializer<proto::audio::Data> audio_message_;
 
     bool is_paused_ = false;

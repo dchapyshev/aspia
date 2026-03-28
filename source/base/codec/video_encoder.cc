@@ -147,7 +147,7 @@ QRect alignRect(const QRect& rect)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-VideoEncoder::VideoEncoder(proto::desktop::VideoEncoding encoding)
+VideoEncoder::VideoEncoder(proto::video::Encoding encoding)
     : encoding_(encoding)
 {
     encode_buffer_.reserve(kInitialEncodeBufferSize);
@@ -160,7 +160,7 @@ VideoEncoder::VideoEncoder(proto::desktop::VideoEncoding encoding)
 const size_t VideoEncoder::kInitialEncodeBufferSize = 1 * 1024 * 1024; // 1 MB
 
 //--------------------------------------------------------------------------------------------------
-bool VideoEncoder::encode(const Frame* frame, proto::desktop::VideoPacket* packet)
+bool VideoEncoder::encode(const Frame* frame, proto::video::Packet* packet)
 {
     packet->set_encoding(encoding_);
 
@@ -170,14 +170,14 @@ bool VideoEncoder::encode(const Frame* frame, proto::desktop::VideoPacket* packe
     {
         last_size_ = frame->size();
 
-        proto::desktop::Rect* video_rect = packet->mutable_format()->mutable_video_rect();
+        proto::video::Rect* video_rect = packet->mutable_format()->mutable_video_rect();
         video_rect->set_width(last_size_.width());
         video_rect->set_height(last_size_.height());
 
         createImage(last_size_, &image_, &image_buffer_);
         createActiveMap(last_size_);
 
-        if (encoding() == proto::desktop::VIDEO_ENCODING_VP8)
+        if (encoding() == proto::video::ENCODING_VP8)
         {
             if (!createVp8Codec(last_size_))
             {
@@ -187,7 +187,7 @@ bool VideoEncoder::encode(const Frame* frame, proto::desktop::VideoPacket* packe
         }
         else
         {
-            DCHECK_EQ(encoding(), proto::desktop::VIDEO_ENCODING_VP9);
+            DCHECK_EQ(encoding(), proto::video::ENCODING_VP9);
 
             if (!createVp9Codec(last_size_))
             {
@@ -200,7 +200,7 @@ bool VideoEncoder::encode(const Frame* frame, proto::desktop::VideoPacket* packe
     }
 
     if (is_key_frame)
-        packet->set_flags(proto::desktop::VIDEO_PACKET_FLAG_IS_KEY_FRAME);
+        packet->set_flags(proto::video::PACKET_FLAG_IS_KEY_FRAME);
 
     // Convert the updated capture data ready for encode.
     // Update active map based on updated region.
@@ -496,14 +496,14 @@ bool VideoEncoder::createVp9Codec(const QSize& size)
 
 //--------------------------------------------------------------------------------------------------
 void VideoEncoder::prepareImageAndActiveMap(
-    bool is_key_frame, const Frame* frame, proto::desktop::VideoPacket* packet)
+    bool is_key_frame, const Frame* frame, proto::video::Packet* packet)
 {
     QRect image_rect(QPoint(0, 0), QSize(static_cast<int>(image_->w), static_cast<int>(image_->h)));
     QRegion updated_region;
 
     if (!is_key_frame)
     {
-        const int padding = ((encoding() == proto::desktop::VIDEO_ENCODING_VP9) ? 8 : 3);
+        const int padding = ((encoding() == proto::video::ENCODING_VP9) ? 8 : 3);
 
         for (const auto& rect : frame->constUpdatedRegion())
         {
@@ -555,7 +555,7 @@ void VideoEncoder::prepareImageAndActiveMap(
 
         addRectToActiveMap(rect);
 
-        proto::desktop::Rect* dirty_rect = packet->add_dirty_rect();
+        proto::video::Rect* dirty_rect = packet->add_dirty_rect();
         dirty_rect->set_x(rect.x());
         dirty_rect->set_y(rect.y());
         dirty_rect->set_width(width);

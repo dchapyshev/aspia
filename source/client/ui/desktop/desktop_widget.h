@@ -56,7 +56,7 @@ public:
     base::Frame* desktopFrame();
     const QImage& desktopImage();
     void setDesktopFrame(std::shared_ptr<base::Frame> frame);
-    void setDesktopFrameError(proto::desktop::VideoErrorCode error_code);
+    void setDesktopFrameError(proto::video::ErrorCode error_code);
     void drawDesktopFrame();
     void setCursorShape(QPixmap&& cursor_shape, const QPoint& hotspot);
     void setCursorPosition(const QPoint& cursor_position);
@@ -113,8 +113,8 @@ private:
 #endif // defined(Q_OS_MACOS)
 
     QTimer* error_timer_ = nullptr;
-    proto::desktop::VideoErrorCode last_error_code_ = proto::desktop::VIDEO_ERROR_CODE_OK;
-    proto::desktop::VideoErrorCode current_error_code_ = proto::desktop::VIDEO_ERROR_CODE_OK;
+    proto::video::ErrorCode last_error_code_ = proto::video::ERROR_CODE_OK;
+    proto::video::ErrorCode current_error_code_ = proto::video::ERROR_CODE_OK;
     std::unique_ptr<QImage> error_image_;
 
     std::shared_ptr<base::Frame> frame_;

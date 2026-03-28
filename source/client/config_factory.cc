@@ -24,7 +24,7 @@ namespace client {
 
 namespace {
 
-const proto::desktop::VideoEncoding kDefaultVideoEncoding = proto::desktop::VIDEO_ENCODING_VP8;
+const proto::video::Encoding kDefaultVideoEncoding = proto::video::ENCODING_VP8;
 const proto::audio::Encoding kDefaultAudioEncoding = proto::audio::ENCODING_OPUS;
 
 } // namespace

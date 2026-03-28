@@ -42,7 +42,7 @@ WebmFileWriter::~WebmFileWriter()
 }
 
 //--------------------------------------------------------------------------------------------------
-void WebmFileWriter::addVideoPacket(const proto::desktop::VideoPacket& packet)
+void WebmFileWriter::addVideoPacket(const proto::video::Packet& packet)
 {
     if (packet.encoding() != last_video_encoding_ || packet.has_format())
     {
@@ -50,8 +50,8 @@ void WebmFileWriter::addVideoPacket(const proto::desktop::VideoPacket& packet)
 
         switch (packet.encoding())
         {
-            case proto::desktop::VIDEO_ENCODING_VP8:
-            case proto::desktop::VIDEO_ENCODING_VP9:
+            case proto::video::ENCODING_VP8:
+            case proto::video::ENCODING_VP9:
                 break;
 
             default:
@@ -76,7 +76,7 @@ void WebmFileWriter::addVideoPacket(const proto::desktop::VideoPacket& packet)
         }
 
         const char* video_codec_id = mkvmuxer::Tracks::kVp8CodecId;
-        if (packet.encoding() == proto::desktop::VIDEO_ENCODING_VP9)
+        if (packet.encoding() == proto::video::ENCODING_VP9)
             video_codec_id = mkvmuxer::Tracks::kVp9CodecId;
 
         if (!muxer_->addVideoTrack(packet.format().video_rect().width(),
@@ -210,7 +210,7 @@ bool WebmFileWriter::init()
 //--------------------------------------------------------------------------------------------------
 void WebmFileWriter::close()
 {
-    last_video_encoding_ = proto::desktop::VIDEO_ENCODING_UNKNOWN;
+    last_video_encoding_ = proto::video::ENCODING_UNKNOWN;
     video_start_time_.reset();
     audio_start_time_.reset();
 

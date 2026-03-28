@@ -36,7 +36,7 @@ namespace base {
 namespace {
 
 //--------------------------------------------------------------------------------------------------
-bool convertImage(const proto::desktop::VideoPacket& packet, vpx_image_t* image, Frame* frame)
+bool convertImage(const proto::video::Packet& packet, vpx_image_t* image, Frame* frame)
 {
     if (image->fmt != VPX_IMG_FMT_I420)
         return false;
@@ -77,7 +77,7 @@ bool convertImage(const proto::desktop::VideoPacket& packet, vpx_image_t* image,
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-VideoDecoder::VideoDecoder(proto::desktop::VideoEncoding encoding)
+VideoDecoder::VideoDecoder(proto::video::Encoding encoding)
 {
     quint32 thread_count = QThread::idealThreadCount();
     if (thread_count >= 8)
@@ -99,11 +99,11 @@ VideoDecoder::VideoDecoder(proto::desktop::VideoEncoding encoding)
 
     switch (encoding)
     {
-        case proto::desktop::VIDEO_ENCODING_VP8:
+        case proto::video::ENCODING_VP8:
             algo = vpx_codec_vp8_dx();
             break;
 
-        case proto::desktop::VIDEO_ENCODING_VP9:
+        case proto::video::ENCODING_VP9:
             algo = vpx_codec_vp9_dx();
             break;
 
@@ -123,7 +123,7 @@ VideoDecoder::~VideoDecoder()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool VideoDecoder::decode(const proto::desktop::VideoPacket& packet, Frame* frame)
+bool VideoDecoder::decode(const proto::video::Packet& packet, Frame* frame)
 {
     // Do the actual decoding.
     vpx_codec_err_t ret =
