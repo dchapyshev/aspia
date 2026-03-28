@@ -32,21 +32,13 @@ const char kTaskManagerExtension[] = "task_manager";
 const char kVideoPauseExtension[] = "video_pause";
 const char kAudioPauseExtension[] = "audio_pause";
 const char kScreenTypeExtension[] = "screen_type";
-const char kKeyFrameExtension[] = "key_frame";
 
 #if defined(Q_OS_WINDOWS)
-const char kSupportedExtensionsForManage[] =
-    "select_screen;preferred_size;power_control;remote_update;system_info;"
-    "task_manager;video_pause;audio_pause;screen_type;key_frame";
-
-const char kSupportedExtensionsForView[] =
-    "select_screen;preferred_size;system_info;video_pause;audio_pause;screen_type;key_frame";
+const char kSupportedExtensionsForManage[] = "select_screen;power_control;remote_update;system_info;task_manager";
+const char kSupportedExtensionsForView[] = "select_screen;system_info";
 #else
-const char kSupportedExtensionsForManage[] =
-    "select_screen;preferred_size;video_pause;audio_pause;key_frame";
-
-const char kSupportedExtensionsForView[] =
-    "select_screen;preferred_size;video_pause;audio_pause;key_frame";
+const char kSupportedExtensionsForManage[] = "select_screen";
+const char kSupportedExtensionsForView[] = "select_screen";
 #endif
 
 const quint32 kSupportedVideoEncodings =

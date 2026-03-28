@@ -459,19 +459,19 @@ void DesktopAgent::onSelectScreen(const proto::desktop::Screen& screen)
 void DesktopAgent::onScreenListChanged(
     const base::ScreenCapturer::ScreenList& list, base::ScreenCapturer::ScreenId current)
 {
-    proto::desktop::ScreenList screen_list;
-    screen_list.set_current_screen(current);
+    proto::desktop::ScreenList* screen_list = screen_message_.newMessage().mutable_screen_list();
+    screen_list->set_current_screen(current);
 
     for (const auto& resolition_item : list.resolutions)
     {
-        proto::desktop::Size* resolution = screen_list.add_resolution();
+        proto::desktop::Size* resolution = screen_list->add_resolution();
         resolution->set_width(resolition_item.width());
         resolution->set_height(resolition_item.height());
     }
 
     for (const auto& screen_item : list.screens)
     {
-        proto::desktop::Screen* screen = screen_list.add_screen();
+        proto::desktop::Screen* screen = screen_list->add_screen();
         screen->set_id(screen_item.id);
         screen->set_title(screen_item.title.toStdString());
 
@@ -488,14 +488,10 @@ void DesktopAgent::onScreenListChanged(
         dpi->set_y(screen_item.dpi.y());
 
         if (screen_item.is_primary)
-            screen_list.set_primary_screen(screen_item.id);
+            screen_list->set_primary_screen(screen_item.id);
     }
 
-    proto::desktop::ExtensionData message;
-    message.set_name(common::kSelectScreenExtension);
-    message.set_data(screen_list.SerializeAsString());
-
-    QByteArray buffer = base::serialize(message);
+    const QByteArray& buffer = screen_message_.serialize();
     for (auto* client : std::as_const(clients_))
         client->onScreenListData(buffer);
 }
@@ -503,33 +499,29 @@ void DesktopAgent::onScreenListChanged(
 //--------------------------------------------------------------------------------------------------
 void DesktopAgent::onScreenTypeChanged(base::ScreenCapturer::ScreenType type, const QString& name)
 {
-    proto::desktop::ScreenType screen_type;
-    screen_type.set_name(name.toStdString());
+    proto::desktop::ScreenType* screen_type = screen_message_.newMessage().mutable_screen_type();
+    screen_type->set_name(name.toStdString());
 
     switch (type)
     {
         case base::ScreenCapturer::ScreenType::DESKTOP:
-            screen_type.set_type(proto::desktop::ScreenType::TYPE_DESKTOP);
+            screen_type->set_type(proto::desktop::ScreenType::TYPE_DESKTOP);
             break;
         case base::ScreenCapturer::ScreenType::LOCK:
-            screen_type.set_type(proto::desktop::ScreenType::TYPE_LOCK);
+            screen_type->set_type(proto::desktop::ScreenType::TYPE_LOCK);
             break;
         case base::ScreenCapturer::ScreenType::LOGIN:
-            screen_type.set_type(proto::desktop::ScreenType::TYPE_LOGIN);
+            screen_type->set_type(proto::desktop::ScreenType::TYPE_LOGIN);
             break;
         case base::ScreenCapturer::ScreenType::OTHER:
-            screen_type.set_type(proto::desktop::ScreenType::TYPE_OTHER);
+            screen_type->set_type(proto::desktop::ScreenType::TYPE_OTHER);
             break;
         default:
-            screen_type.set_type(proto::desktop::ScreenType::TYPE_UNKNOWN);
+            screen_type->set_type(proto::desktop::ScreenType::TYPE_UNKNOWN);
             break;
     }
 
-    proto::desktop::ExtensionData message;
-    message.set_name(common::kScreenTypeExtension);
-    message.set_data(screen_type.SerializeAsString());
-
-    QByteArray buffer = base::serialize(message);
+    const QByteArray& buffer = screen_message_.serialize();
     for (auto* client : std::as_const(clients_))
         client->onScreenTypeData(buffer);
 }

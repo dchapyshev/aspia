@@ -216,6 +216,36 @@ void DesktopAgentClient::readSessionMessage(quint8 channel_id, const QByteArray&
         else if (message.has_text())
             readTextEvent(message.text());
     }
+    else if (channel_id == proto::desktop::CHANNEL_ID_SCREEN)
+    {
+        proto::desktop::ScreenControl message;
+        if (!base::parse(buffer, &message))
+        {
+            CLOG(ERROR) << "Unable to parse screen control message";
+            return;
+        }
+
+        if (message.has_screen())
+            emit sig_selectScreen(message.screen());
+        else if (message.has_key_frame_request())
+            emit sig_keyFrameRequested();
+        else if (message.has_preferred_size())
+            readPreferredSize(message.preferred_size());
+        else if (message.has_video_pause())
+            readVideoPause(message.video_pause());
+    }
+    else if (channel_id == proto::desktop::CHANNEL_ID_AUDIO)
+    {
+        proto::desktop::AudioControl message;
+        if (!base::parse(buffer, &message))
+        {
+            CLOG(ERROR) << "Unable to parse audio control message";
+            return;
+        }
+
+        if (message.has_pause())
+            readAudioPause(message.pause());
+    }
     else if (channel_id == proto::desktop::CHANNEL_ID_EXTENSION)
     {
         proto::desktop::ExtensionData message;
@@ -265,20 +295,44 @@ void DesktopAgentClient::readTextEvent(const proto::desktop::TextEvent& text_eve
 }
 
 //--------------------------------------------------------------------------------------------------
+void DesktopAgentClient::readPreferredSize(const proto::desktop::PreferredSize& size)
+{
+    static const int kMaxScreenSize = std::numeric_limits<qint16>::max();
+
+    if (size.width() < 0 || size.width() > kMaxScreenSize ||
+        size.height() < 0 || size.height() > kMaxScreenSize)
+    {
+        CLOG(ERROR) << "Invalid preferred size:" << size;
+        return;
+    }
+
+    CLOG(INFO) << "Preferred size changed:" << size;
+    preferred_size_.setWidth(size.width());
+    preferred_size_.setHeight(size.height());
+    emit sig_preferredSizeChanged(preferred_size_);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopAgentClient::readVideoPause(const proto::desktop::VideoPause& pause)
+{
+    is_video_paused_ = pause.enable();
+    CLOG(INFO) << "Video paused:" << is_video_paused_;
+    if (!is_video_paused_)
+        emit sig_keyFrameRequested();
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopAgentClient::readAudioPause(const proto::desktop::AudioPause& pause)
+{
+    is_audio_paused_ = pause.enable();
+    CLOG(INFO) << "Audio paused:" << is_audio_paused_;
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopAgentClient::readExtension(const proto::desktop::ExtensionData& extension)
 {
-    if (extension.name() == common::kKeyFrameExtension)
-        readKeyFrameExtension(extension.data());
-    else if (extension.name() == common::kTaskManagerExtension)
+    if (extension.name() == common::kTaskManagerExtension)
         readTaskManagerExtension(extension.data());
-    else if (extension.name() == common::kSelectScreenExtension)
-        readSelectScreenExtension(extension.data());
-    else if (extension.name() == common::kPreferredSizeExtension)
-        readPreferredSizeExtension(extension.data());
-    else if (extension.name() == common::kVideoPauseExtension)
-        readVideoPauseExtension(extension.data());
-    else if (extension.name() == common::kAudioPauseExtension)
-        readAudioPauseExtension(extension.data());
     else if (extension.name() == common::kPowerControlExtension)
         readPowerControlExtension(extension.data());
     else if (extension.name() == common::kRemoteUpdateExtension)
@@ -310,82 +364,6 @@ void DesktopAgentClient::readConfig(const proto::desktop::Config& config)
                << "cursor_position:" << config_.cursor_position
                << "cursor_shape:" << config_.cursor_shape << ")";
     emit sig_configured();
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::readKeyFrameExtension(const std::string& /* data */)
-{
-    CLOG(INFO) << "Key frame requested by client";
-    emit sig_keyFrameRequested();
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::readSelectScreenExtension(const std::string& data)
-{
-    proto::desktop::Screen screen;
-    if (!screen.ParseFromString(data))
-    {
-        CLOG(ERROR) << "Unable to parse select screen extension data";
-        return;
-    }
-
-    CLOG(INFO) << "Received:" << screen;
-    emit sig_selectScreen(screen);
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::readPreferredSizeExtension(const std::string& data)
-{
-    proto::desktop::Size preferred_size;
-    if (!preferred_size.ParseFromString(data))
-    {
-        CLOG(ERROR) << "Unable to parse preferred size extension data";
-        return;
-    }
-
-    static const int kMaxScreenSize = std::numeric_limits<qint16>::max();
-
-    if (preferred_size.width() < 0 || preferred_size.width() > kMaxScreenSize ||
-        preferred_size.height() < 0 || preferred_size.height() > kMaxScreenSize)
-    {
-        CLOG(ERROR) << "Invalid preferred size:" << preferred_size;
-        return;
-    }
-
-    CLOG(INFO) << "Preferred size changed:" << preferred_size;
-    preferred_size_ = base::parse(preferred_size);
-    emit sig_preferredSizeChanged(preferred_size_);
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::readVideoPauseExtension(const std::string& data)
-{
-    proto::desktop::Pause pause;
-    if (!pause.ParseFromString(data))
-    {
-        CLOG(ERROR) << "Unable to parse video pause extension data";
-        return;
-    }
-
-    is_video_paused_ = pause.enable();
-    CLOG(INFO) << "Video paused:" << is_video_paused_;
-
-    if (!is_video_paused_)
-        emit sig_keyFrameRequested();
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::readAudioPauseExtension(const std::string& data)
-{
-    proto::desktop::Pause pause;
-    if (!pause.ParseFromString(data))
-    {
-        CLOG(ERROR) << "Unable to parse pause extension data";
-        return;
-    }
-
-    is_audio_paused_ = pause.enable();
-    CLOG(INFO) << "Audio paused:" << is_audio_paused_;
 }
 
 //--------------------------------------------------------------------------------------------------

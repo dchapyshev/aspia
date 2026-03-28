@@ -20,54 +20,7 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
-import "desktop_screen.proto";
-
 package proto.desktop;
-
-// Extension name: "screen_type"
-// Sent by host to client.
-message ScreenType
-{
-    enum Type
-    {
-        TYPE_UNKNOWN = 0;
-        TYPE_DESKTOP = 1;
-        TYPE_LOCK    = 2;
-        TYPE_LOGIN   = 3;
-        TYPE_OTHER   = 4;
-    }
-
-    Type type   = 1;
-    string name = 2;
-}
-
-// Extension name: "select_screen"
-// Sent by client to host for screen or screen resolution selection.
-message Screen
-{
-    int64 id        = 1;
-    string title    = 2;
-    Point position  = 3;
-    Size resolution = 4;
-    Point dpi       = 5;
-}
-
-// Extension name: "select_screen"
-// Sent by host to client. Contains a list of screens on the host.
-message ScreenList
-{
-    repeated Screen screen   = 1; // List of screens on the remote computer.
-    int64 current_screen     = 2; // ID of current screen.
-    int64 primary_screen     = 3; // ID of primary screen.
-    repeated Size resolution = 4; // List of resolutions for current screen.
-}
-
-// Extension name: "video_pause", "audio_pause"
-// Sent by client to host.
-message Pause
-{
-    bool enable = 1;
-}
 
 // Extension name: "power_control"
 // Sent by client to host.

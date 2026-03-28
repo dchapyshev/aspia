@@ -133,10 +133,74 @@ message VideoPacket
     uint32 flags = 6;
 }
 
+// Sent by client to host for screen or screen resolution selection.
+message Screen
+{
+    int64 id        = 1;
+    string title    = 2;
+    Point position  = 3;
+    Size resolution = 4;
+    Point dpi       = 5;
+}
+
+// Sent by host to client. Contains a list of screens on the host.
+message ScreenList
+{
+    repeated Screen screen   = 1; // List of screens on the remote computer.
+    int64 current_screen     = 2; // ID of current screen.
+    int64 primary_screen     = 3; // ID of primary screen.
+    repeated Size resolution = 4; // List of resolutions for current screen.
+}
+
+message KeyFrameRequest
+{
+    uint32 dummy = 1;
+}
+
+message PreferredSize
+{
+    int32 width = 1;
+    int32 height = 2;
+}
+
+// Sent by host to client.
+message ScreenType
+{
+    enum Type
+    {
+        TYPE_UNKNOWN = 0;
+        TYPE_DESKTOP = 1;
+        TYPE_LOCK    = 2;
+        TYPE_LOGIN   = 3;
+        TYPE_OTHER   = 4;
+    }
+
+    Type type   = 1;
+    string name = 2;
+}
+
+// Sent by client to host.
+message VideoPause
+{
+    bool enable  = 1;
+    uint32 dummy = 2;
+}
+
 // Client <- Host (channel 2).
 message ScreenData
 {
     VideoPacket video_packet       = 1;
     CursorShape cursor_shape       = 2;
     CursorPosition cursor_position = 3;
+    ScreenList screen_list         = 4;
+    ScreenType screen_type         = 5;
+}
+
+// Client -> Host (channel 2).
+message ScreenControl
+{
+    KeyFrameRequest key_frame_request = 1;
+    Screen screen                     = 2;
+    PreferredSize preferred_size      = 3;
+    VideoPause video_pause            = 4;
 }

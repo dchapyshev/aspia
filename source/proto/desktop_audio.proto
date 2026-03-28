@@ -68,8 +68,20 @@ message AudioPacket
     Channels channels               = 6;
 }
 
-// Client <-> Host (channel 5).
+message AudioPause
+{
+    bool enable  = 1;
+    uint32 dummy = 2;
+}
+
+// Client <- Host (channel 5).
 message AudioData
 {
     AudioPacket packet = 1;
+}
+
+// Client -> Host (channel 5).
+message AudioControl
+{
+    AudioPause pause = 1;
 }

@@ -98,13 +98,11 @@ private:
     void readKeyEvent(const proto::desktop::KeyEvent& key_event);
     void readTouchEvent(const proto::desktop::TouchEvent& touch_event);
     void readTextEvent(const proto::desktop::TextEvent& text_event);
+    void readPreferredSize(const proto::desktop::PreferredSize& size);
+    void readVideoPause(const proto::desktop::VideoPause& pause);
+    void readAudioPause(const proto::desktop::AudioPause& pause);
     void readExtension(const proto::desktop::ExtensionData& extension);
     void readConfig(const proto::desktop::Config& config);
-    void readKeyFrameExtension(const std::string& data);
-    void readSelectScreenExtension(const std::string& data);
-    void readPreferredSizeExtension(const std::string& data);
-    void readVideoPauseExtension(const std::string& data);
-    void readAudioPauseExtension(const std::string& data);
     void readPowerControlExtension(const std::string& data);
     void readRemoteUpdateExtension(const std::string& data);
     void readSystemInfoExtension(const std::string& data);

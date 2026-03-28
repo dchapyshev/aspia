@@ -110,6 +110,10 @@ void ClientDesktop::onMessageReceived(quint8 channel_id, const QByteArray& buffe
             readCursorShape(message.cursor_shape());
         else if (message.has_cursor_position())
             readCursorPosition(message.cursor_position());
+        else if (message.has_screen_list())
+            emit sig_screenListChanged(message.screen_list());
+        else if (message.has_screen_type())
+            emit sig_screenTypeChanged(message.screen_type());
         else
             LOG(WARNING) << "Unhandled screen message";
     }
@@ -277,10 +281,9 @@ void ClientDesktop::onCurrentScreenChanged(const proto::desktop::Screen& screen)
     }
     else
     {
-        proto::desktop::ExtensionData message;
-        message.set_name(common::kSelectScreenExtension);
-        message.set_data(screen.SerializeAsString());
-        sendMessage(proto::desktop::CHANNEL_ID_EXTENSION, base::serialize(message));
+        proto::desktop::ScreenControl message;
+        message.mutable_screen()->CopyFrom(screen);
+        sendMessage(proto::desktop::CHANNEL_ID_SCREEN, base::serialize(message));
     }
 }
 
@@ -289,12 +292,12 @@ void ClientDesktop::onPreferredSizeChanged(int width, int height)
 {
     CLOG(INFO) << "Preferred size changed:" << width << "x" << height;
 
-    proto::desktop::Size preferred_size;
-    preferred_size.set_width(width);
-    preferred_size.set_height(height);
-
     if (isLegacy())
     {
+        proto::desktop::PreferredSize preferred_size;
+        preferred_size.set_width(width);
+        preferred_size.set_height(height);
+
         proto::desktop::ClientToSession message;
         proto::desktop::ExtensionData* extension = message.mutable_extension();
         extension->set_name(common::kPreferredSizeExtension);
@@ -303,10 +306,11 @@ void ClientDesktop::onPreferredSizeChanged(int width, int height)
     }
     else
     {
-        proto::desktop::ExtensionData message;
-        message.set_name(common::kPreferredSizeExtension);
-        message.set_data(preferred_size.SerializeAsString());
-        sendMessage(proto::desktop::CHANNEL_ID_EXTENSION, base::serialize(message));
+        proto::desktop::ScreenControl message;
+        proto::desktop::PreferredSize* preferred_size = message.mutable_preferred_size();
+        preferred_size->set_width(width);
+        preferred_size->set_height(height);
+        sendMessage(proto::desktop::CHANNEL_ID_SCREEN, base::serialize(message));
     }
 }
 
@@ -326,11 +330,11 @@ void ClientDesktop::onVideoPauseChanged(bool enable)
         ++video_resume_count_;
     }
 
-    proto::desktop::Pause pause;
-    pause.set_enable(enable);
-
     if (isLegacy())
     {
+        proto::desktop::VideoPause pause;
+        pause.set_enable(enable);
+
         proto::desktop::ClientToSession message;
         proto::desktop::ExtensionData* extension = message.mutable_extension();
         extension->set_name(common::kVideoPauseExtension);
@@ -339,10 +343,11 @@ void ClientDesktop::onVideoPauseChanged(bool enable)
     }
     else
     {
-        proto::desktop::ExtensionData message;
-        message.set_name(common::kVideoPauseExtension);
-        message.set_data(pause.SerializeAsString());
-        sendMessage(proto::desktop::CHANNEL_ID_EXTENSION, base::serialize(message));
+        proto::desktop::ScreenControl message;
+        proto::desktop::VideoPause* video_pause = message.mutable_video_pause();
+        video_pause->set_enable(enable);
+        video_pause->set_dummy(1);
+        sendMessage(proto::desktop::CHANNEL_ID_SCREEN, base::serialize(message));
     }
 }
 
@@ -362,11 +367,11 @@ void ClientDesktop::onAudioPauseChanged(bool enable)
         ++audio_resume_count_;
     }
 
-    proto::desktop::Pause pause;
-    pause.set_enable(enable);
-
     if (isLegacy())
     {
+        proto::desktop::AudioPause pause;
+        pause.set_enable(enable);
+
         proto::desktop::ClientToSession message;
         proto::desktop::ExtensionData* extension = message.mutable_extension();
         extension->set_name(common::kAudioPauseExtension);
@@ -375,10 +380,11 @@ void ClientDesktop::onAudioPauseChanged(bool enable)
     }
     else
     {
-        proto::desktop::ExtensionData message;
-        message.set_name(common::kAudioPauseExtension);
-        message.set_data(pause.SerializeAsString());
-        sendMessage(proto::desktop::CHANNEL_ID_EXTENSION, base::serialize(message));
+        proto::desktop::AudioControl message;
+        proto::desktop::AudioPause* pause = message.mutable_pause();
+        pause->set_enable(enable);
+        pause->set_dummy(1);
+        sendMessage(proto::desktop::CHANNEL_ID_AUDIO, base::serialize(message));
     }
 }
 
@@ -939,9 +945,9 @@ void ClientDesktop::sendKeyFrameRequest()
         return;
     }
 
-    proto::desktop::ExtensionData message;
-    message.set_name(common::kKeyFrameExtension);
-    sendMessage(proto::desktop::CHANNEL_ID_EXTENSION, base::serialize(message));
+    proto::desktop::ScreenControl message;
+    message.mutable_key_frame_request()->set_dummy(1);
+    sendMessage(proto::desktop::CHANNEL_ID_SCREEN, base::serialize(message));
 }
 
 } // namespace client
