@@ -122,7 +122,7 @@ void ClientDesktop::onMessageReceived(quint8 channel_id, const QByteArray& buffe
     }
     else if (channel_id == proto::desktop::CHANNEL_ID_SCREEN)
     {
-        proto::desktop::ScreenData message;
+        proto::screen::Data message;
         if (!base::parse(buffer, &message))
         {
             CLOG(ERROR) << "Unable to parse screen message";
@@ -297,7 +297,7 @@ void ClientDesktop::onDesktopConfigChanged(const proto::desktop::Config& config)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientDesktop::onCurrentScreenChanged(const proto::desktop::Screen& screen)
+void ClientDesktop::onCurrentScreenChanged(const proto::screen::Screen& screen)
 {
     CLOG(INFO) << "Current screen changed:" << screen.id();
 
@@ -311,7 +311,7 @@ void ClientDesktop::onCurrentScreenChanged(const proto::desktop::Screen& screen)
     }
     else
     {
-        proto::desktop::ScreenControl message;
+        proto::screen::Control message;
         message.mutable_screen()->CopyFrom(screen);
         sendMessage(proto::desktop::CHANNEL_ID_SCREEN, base::serialize(message));
     }
@@ -891,7 +891,7 @@ void ClientDesktop::readExtension(const proto::desktop::Extension& extension)
     }
     else if (extension.name() == common::kSelectScreenExtension)
     {
-        proto::desktop::ScreenList screen_list;
+        proto::screen::ScreenList screen_list;
         if (!screen_list.ParseFromString(extension.data()))
         {
             CLOG(ERROR) << "Unable to parse select screen extension data";
@@ -903,7 +903,7 @@ void ClientDesktop::readExtension(const proto::desktop::Extension& extension)
     }
     else if (extension.name() == common::kScreenTypeExtension)
     {
-        proto::desktop::ScreenType screen_type;
+        proto::screen::ScreenType screen_type;
         if (!screen_type.ParseFromString(extension.data()))
         {
             CLOG(ERROR) << "Unable to parse screen type extension data";

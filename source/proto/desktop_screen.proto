@@ -20,7 +20,7 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
-package proto.desktop;
+package proto.screen;
 
 message Point
 {
@@ -70,14 +70,14 @@ message ScreenType
 }
 
 // Client <- Host (channel 2).
-message ScreenData
+message Data
 {
     ScreenList screen_list = 1;
     ScreenType screen_type = 2;
 }
 
 // Client -> Host (channel 2).
-message ScreenControl
+message Control
 {
     Screen screen = 1;
 }

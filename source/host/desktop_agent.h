@@ -43,7 +43,6 @@ class VideoEncoder;
 namespace proto::desktop {
 class KeyEvent;
 class MouseEvent;
-class Screen;
 class TextEvent;
 class TouchEvent;
 } // namespace proto::desktop
@@ -77,7 +76,7 @@ private slots:
     void onInjectTextEvent(const proto::desktop::TextEvent& event);
     void onInjectTouchEvent(const proto::desktop::TouchEvent& event);
 
-    void onSelectScreen(const proto::desktop::Screen& screen);
+    void onSelectScreen(const proto::screen::Screen& screen);
     void onScreenListChanged(
         const base::ScreenCapturer::ScreenList& list, base::ScreenCapturer::ScreenId current);
     void onScreenTypeChanged(base::ScreenCapturer::ScreenType type, const QString& name);
@@ -126,7 +125,7 @@ private:
     std::unique_ptr<base::CursorEncoder> cursor_encoder_;
     std::unique_ptr<base::AudioEncoder> audio_encoder_;
 
-    base::Serializer<proto::desktop::ScreenData> screen_message_;
+    base::Serializer<proto::screen::Data> screen_message_;
     base::Serializer<proto::cursor::Data> cursor_message_;
     base::Serializer<proto::video::Data> video_message_;
     base::Serializer<proto::audio::Data> audio_message_;

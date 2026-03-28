@@ -121,7 +121,7 @@ TEST(serialization_test, rect_zero)
 TEST(serialization_test, point_roundtrip)
 {
     QPoint original(123, 456);
-    proto::desktop::Point proto_point = serialize(original);
+    proto::screen::Point proto_point = serialize(original);
     QPoint restored = parse(proto_point);
     EXPECT_EQ(restored, original);
 }
@@ -129,7 +129,7 @@ TEST(serialization_test, point_roundtrip)
 TEST(serialization_test, point_negative)
 {
     QPoint original(-50, -75);
-    proto::desktop::Point proto_point = serialize(original);
+    proto::screen::Point proto_point = serialize(original);
     QPoint restored = parse(proto_point);
     EXPECT_EQ(restored, original);
 }
@@ -141,7 +141,7 @@ TEST(serialization_test, point_negative)
 TEST(serialization_test, size_roundtrip)
 {
     QSize original(1920, 1080);
-    proto::desktop::Size proto_size = serialize(original);
+    proto::screen::Size proto_size = serialize(original);
     QSize restored = parse(proto_size);
     EXPECT_EQ(restored, original);
 }
@@ -149,7 +149,7 @@ TEST(serialization_test, size_roundtrip)
 TEST(serialization_test, size_zero)
 {
     QSize original(0, 0);
-    proto::desktop::Size proto_size = serialize(original);
+    proto::screen::Size proto_size = serialize(original);
     QSize restored = parse(proto_size);
     EXPECT_EQ(restored, original);
 }

@@ -45,7 +45,7 @@ public:
     void enableCtrlAltDelFeature(bool enable);
     void enablePasteAsKeystrokesFeature(bool enable);
 
-    void setScreenList(const proto::desktop::ScreenList& screen_list);
+    void setScreenList(const proto::screen::ScreenList& screen_list);
     void setSessionList(const proto::desktop::SessionList& session_list);
     void startRecording(bool enable);
 
@@ -63,7 +63,7 @@ signals:
     void sig_switchToFullscreen(bool fullscreen);
     void sig_switchToAutosize();
     void sig_settingsButton();
-    void sig_screenSelected(const proto::desktop::Screen& screen);
+    void sig_screenSelected(const proto::screen::Screen& screen);
     void sig_scaleChanged();
     void sig_autoScrollChanged(bool enabled);
     void sig_keyCombinationsChanged(bool enabled);

@@ -94,7 +94,7 @@ public:
 
 public slots:
     void onDesktopConfigChanged(const proto::desktop::Config& config);
-    void onCurrentScreenChanged(const proto::desktop::Screen& screen);
+    void onCurrentScreenChanged(const proto::screen::Screen& screen);
     void onPreferredSizeChanged(int width, int height);
     void onVideoPauseChanged(bool enable);
     void onAudioPauseChanged(bool enable);
@@ -110,8 +110,8 @@ public slots:
 
 signals:
     void sig_capabilities(const proto::desktop::Capabilities& capabilities);
-    void sig_screenListChanged(const proto::desktop::ScreenList& screen_list);
-    void sig_screenTypeChanged(const proto::desktop::ScreenType& screen_type);
+    void sig_screenListChanged(const proto::screen::ScreenList& screen_list);
+    void sig_screenTypeChanged(const proto::screen::ScreenType& screen_type);
     void sig_cursorPositionChanged(const proto::cursor::Position& position);
     void sig_systemInfo(const proto::system_info::SystemInfo& system_info);
     void sig_taskManager(const proto::task_manager::HostToClient& message);

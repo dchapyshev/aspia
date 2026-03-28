@@ -424,7 +424,7 @@ void DesktopSessionWindow::onCapabilitiesChanged(const proto::desktop::Capabilit
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionWindow::onScreenListChanged(const proto::desktop::ScreenList& screen_list)
+void DesktopSessionWindow::onScreenListChanged(const proto::screen::ScreenList& screen_list)
 {
     toolbar_->setScreenList(screen_list);
 }

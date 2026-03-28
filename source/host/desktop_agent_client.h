@@ -78,7 +78,7 @@ signals:
     void sig_injectTextEvent(const proto::desktop::TextEvent& event);
     void sig_injectMouseEvent(const proto::desktop::MouseEvent& event);
     void sig_injectTouchEvent(const proto::desktop::TouchEvent& event);
-    void sig_selectScreen(const proto::desktop::Screen& screen);
+    void sig_selectScreen(const proto::screen::Screen& screen);
     void sig_preferredSizeChanged(const QSize& size);
     void sig_keyFrameRequested();
     void sig_configured();

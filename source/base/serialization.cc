@@ -60,9 +60,9 @@ QVersionNumber parse(const proto::peer::Version& version)
 }
 
 //--------------------------------------------------------------------------------------------------
-proto::desktop::Point serialize(const QPoint& point)
+proto::screen::Point serialize(const QPoint& point)
 {
-    proto::desktop::Point result;
+    proto::screen::Point result;
 
     result.set_x(point.x());
     result.set_y(point.y());
@@ -71,15 +71,15 @@ proto::desktop::Point serialize(const QPoint& point)
 }
 
 //--------------------------------------------------------------------------------------------------
-QPoint parse(const proto::desktop::Point& point)
+QPoint parse(const proto::screen::Point& point)
 {
     return QPoint(point.x(), point.y());
 }
 
 //--------------------------------------------------------------------------------------------------
-proto::desktop::Size serialize(const QSize& size)
+proto::screen::Size serialize(const QSize& size)
 {
-    proto::desktop::Size result;
+    proto::screen::Size result;
 
     result.set_width(size.width());
     result.set_height(size.height());
@@ -88,7 +88,7 @@ proto::desktop::Size serialize(const QSize& size)
 }
 
 //--------------------------------------------------------------------------------------------------
-QSize parse(const proto::desktop::Size& size)
+QSize parse(const proto::screen::Size& size)
 {
     return QSize(size.width(), size.height());
 }

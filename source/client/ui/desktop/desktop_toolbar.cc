@@ -283,7 +283,7 @@ void DesktopToolBar::enablePasteAsKeystrokesFeature(bool enable)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopToolBar::setScreenList(const proto::desktop::ScreenList& screen_list)
+void DesktopToolBar::setScreenList(const proto::screen::ScreenList& screen_list)
 {
     LOG(INFO) << "Setting up a new list of screens (screens:" << screen_list.screen_size()
               << "resolutions:" << screen_list.resolution_size() << ")";
@@ -299,7 +299,7 @@ void DesktopToolBar::setScreenList(const proto::desktop::ScreenList& screen_list
 
     for (int i = 0; i < screen_list.screen_size(); ++i)
     {
-        const proto::desktop::Screen& screen = screen_list.screen(i);
+        const proto::screen::Screen& screen = screen_list.screen(i);
 
         if (screen_list.current_screen() == screen.id())
         {
@@ -315,7 +315,7 @@ void DesktopToolBar::setScreenList(const proto::desktop::ScreenList& screen_list
     {
         for (int i = 0; i < screen_list.screen_size(); ++i)
         {
-            const proto::desktop::Screen& screen = screen_list.screen(i);
+            const proto::screen::Screen& screen = screen_list.screen(i);
             bool is_primary = screen.id() == screen_list.primary_screen();
 
             SelectScreenAction* action =
@@ -723,7 +723,7 @@ void DesktopToolBar::onChangeResolutionAction(QAction* action)
 
     LOG(INFO) << "[ACTION] Resolution selected:" << resolution;
 
-    proto::desktop::Screen screen;
+    proto::screen::Screen screen;
     screen.set_id(current_screen_id_);
     screen.mutable_resolution()->set_width(resolution.width());
     screen.mutable_resolution()->set_height(resolution.height());
@@ -734,7 +734,7 @@ void DesktopToolBar::onChangeResolutionAction(QAction* action)
 //--------------------------------------------------------------------------------------------------
 void DesktopToolBar::onChangeScreenAction(QAction* action)
 {
-    const proto::desktop::Screen& screen = static_cast<SelectScreenAction*>(action)->screen();
+    const proto::screen::Screen& screen = static_cast<SelectScreenAction*>(action)->screen();
     LOG(INFO) << "[ACTION] Screen selected (id=" << screen.id() << "title=" << screen.title() << ")";
     emit sig_screenSelected(screen);
 }

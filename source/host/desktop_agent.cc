@@ -440,7 +440,7 @@ void DesktopAgent::onInjectTouchEvent(const proto::desktop::TouchEvent& event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopAgent::onSelectScreen(const proto::desktop::Screen& screen)
+void DesktopAgent::onSelectScreen(const proto::screen::Screen& screen)
 {
     if (!screen_capturer_)
     {
@@ -458,31 +458,31 @@ void DesktopAgent::onSelectScreen(const proto::desktop::Screen& screen)
 void DesktopAgent::onScreenListChanged(
     const base::ScreenCapturer::ScreenList& list, base::ScreenCapturer::ScreenId current)
 {
-    proto::desktop::ScreenList* screen_list = screen_message_.newMessage().mutable_screen_list();
+    proto::screen::ScreenList* screen_list = screen_message_.newMessage().mutable_screen_list();
     screen_list->set_current_screen(current);
 
     for (const auto& resolition_item : list.resolutions)
     {
-        proto::desktop::Size* resolution = screen_list->add_resolution();
+        proto::screen::Size* resolution = screen_list->add_resolution();
         resolution->set_width(resolition_item.width());
         resolution->set_height(resolition_item.height());
     }
 
     for (const auto& screen_item : list.screens)
     {
-        proto::desktop::Screen* screen = screen_list->add_screen();
+        proto::screen::Screen* screen = screen_list->add_screen();
         screen->set_id(screen_item.id);
         screen->set_title(screen_item.title.toStdString());
 
-        proto::desktop::Point* position = screen->mutable_position();
+        proto::screen::Point* position = screen->mutable_position();
         position->set_x(screen_item.position.x());
         position->set_y(screen_item.position.y());
 
-        proto::desktop::Size* resolution = screen->mutable_resolution();
+        proto::screen::Size* resolution = screen->mutable_resolution();
         resolution->set_width(screen_item.resolution.width());
         resolution->set_height(screen_item.resolution.height());
 
-        proto::desktop::Point* dpi = screen->mutable_dpi();
+        proto::screen::Point* dpi = screen->mutable_dpi();
         dpi->set_x(screen_item.dpi.x());
         dpi->set_y(screen_item.dpi.y());
 
@@ -498,25 +498,25 @@ void DesktopAgent::onScreenListChanged(
 //--------------------------------------------------------------------------------------------------
 void DesktopAgent::onScreenTypeChanged(base::ScreenCapturer::ScreenType type, const QString& name)
 {
-    proto::desktop::ScreenType* screen_type = screen_message_.newMessage().mutable_screen_type();
+    proto::screen::ScreenType* screen_type = screen_message_.newMessage().mutable_screen_type();
     screen_type->set_name(name.toStdString());
 
     switch (type)
     {
         case base::ScreenCapturer::ScreenType::DESKTOP:
-            screen_type->set_type(proto::desktop::ScreenType::TYPE_DESKTOP);
+            screen_type->set_type(proto::screen::ScreenType::TYPE_DESKTOP);
             break;
         case base::ScreenCapturer::ScreenType::LOCK:
-            screen_type->set_type(proto::desktop::ScreenType::TYPE_LOCK);
+            screen_type->set_type(proto::screen::ScreenType::TYPE_LOCK);
             break;
         case base::ScreenCapturer::ScreenType::LOGIN:
-            screen_type->set_type(proto::desktop::ScreenType::TYPE_LOGIN);
+            screen_type->set_type(proto::screen::ScreenType::TYPE_LOGIN);
             break;
         case base::ScreenCapturer::ScreenType::OTHER:
-            screen_type->set_type(proto::desktop::ScreenType::TYPE_OTHER);
+            screen_type->set_type(proto::screen::ScreenType::TYPE_OTHER);
             break;
         default:
-            screen_type->set_type(proto::desktop::ScreenType::TYPE_UNKNOWN);
+            screen_type->set_type(proto::screen::ScreenType::TYPE_UNKNOWN);
             break;
     }
 

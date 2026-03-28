@@ -230,7 +230,7 @@ void DesktopAgentClient::readSessionMessage(quint8 channel_id, const QByteArray&
     }
     else if (channel_id == proto::desktop::CHANNEL_ID_SCREEN)
     {
-        proto::desktop::ScreenControl message;
+        proto::screen::Control message;
         if (!base::parse(buffer, &message))
         {
             CLOG(ERROR) << "Unable to parse screen control message";
