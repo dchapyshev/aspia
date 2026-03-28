@@ -79,14 +79,14 @@ void DesktopAgentClient::onScreenTypeData(const QByteArray& buffer)
 void DesktopAgentClient::onCursorPositionData(const QByteArray& buffer)
 {
     if (config_.cursor_position)
-        sendSessionMessage(proto::desktop::CHANNEL_ID_SCREEN, buffer, false);
+        sendSessionMessage(proto::desktop::CHANNEL_ID_CURSOR, buffer, false);
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopAgentClient::onCursorData(const QByteArray& buffer)
 {
     if (config_.cursor_shape)
-        sendSessionMessage(proto::desktop::CHANNEL_ID_SCREEN, buffer, true);
+        sendSessionMessage(proto::desktop::CHANNEL_ID_CURSOR, buffer, true);
 }
 
 //--------------------------------------------------------------------------------------------------

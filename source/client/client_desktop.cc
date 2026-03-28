@@ -106,6 +106,20 @@ void ClientDesktop::onMessageReceived(quint8 channel_id, const QByteArray& buffe
         if (message.has_packet())
             readVideoPacket(message.packet());
     }
+    else if (channel_id == proto::desktop::CHANNEL_ID_CURSOR)
+    {
+        proto::desktop::CursorData message;
+        if (!base::parse(buffer, &message))
+        {
+            CLOG(ERROR) << "Unable to parse cursor message";
+            return;
+        }
+
+        if (message.has_shape())
+            readCursorShape(message.shape());
+        else if (message.has_position())
+            readCursorPosition(message.position());
+    }
     else if (channel_id == proto::desktop::CHANNEL_ID_SCREEN)
     {
         proto::desktop::ScreenData message;
@@ -115,11 +129,7 @@ void ClientDesktop::onMessageReceived(quint8 channel_id, const QByteArray& buffe
             return;
         }
 
-        if (message.has_cursor_shape())
-            readCursorShape(message.cursor_shape());
-        else if (message.has_cursor_position())
-            readCursorPosition(message.cursor_position());
-        else if (message.has_screen_list())
+        if (message.has_screen_list())
             emit sig_screenListChanged(message.screen_list());
         else if (message.has_screen_type())
             emit sig_screenTypeChanged(message.screen_type());

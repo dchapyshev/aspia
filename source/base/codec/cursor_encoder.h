@@ -23,7 +23,7 @@
 
 #include "base/codec/scoped_zstd_stream.h"
 #include "base/desktop/mouse_cursor.h"
-#include "proto/desktop_screen.h"
+#include "proto/desktop_cursor.h"
 
 namespace base {
 

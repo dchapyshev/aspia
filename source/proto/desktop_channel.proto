@@ -28,10 +28,11 @@ enum ChannelId
     CHANNEL_ID_CONTROL      = 1;
     CHANNEL_ID_SCREEN       = 2;
     CHANNEL_ID_VIDEO        = 3;
-    CHANNEL_ID_INPUT        = 4;
-    CHANNEL_ID_CLIPBOARD    = 5;
-    CHANNEL_ID_AUDIO        = 6;
-    CHANNEL_ID_POWER        = 7;
-    CHANNEL_ID_SYSTEM_INFO  = 8;
-    CHANNEL_ID_TASK_MANAGER = 9;
+    CHANNEL_ID_CURSOR       = 4;
+    CHANNEL_ID_INPUT        = 5;
+    CHANNEL_ID_CLIPBOARD    = 6;
+    CHANNEL_ID_AUDIO        = 7;
+    CHANNEL_ID_POWER        = 8;
+    CHANNEL_ID_SYSTEM_INFO  = 9;
+    CHANNEL_ID_TASK_MANAGER = 10;
 }

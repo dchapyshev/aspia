@@ -24,6 +24,7 @@ list(APPEND SOURCE_PROTO
     desktop_clipboard.proto
     desktop_common.proto
     desktop_control.proto
+    desktop_cursor.proto
     desktop_input.proto
     desktop_internal.proto
     desktop_legacy.proto

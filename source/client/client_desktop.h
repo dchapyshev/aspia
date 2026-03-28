@@ -26,6 +26,7 @@
 #include "common/clipboard_monitor.h"
 #include "proto/desktop_legacy.h"
 #include "proto/desktop_control.h"
+#include "proto/desktop_cursor.h"
 #include "proto/desktop_power.h"
 #include "proto/system_info.h"
 #include "proto/task_manager.h"

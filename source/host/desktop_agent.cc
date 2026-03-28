@@ -649,11 +649,11 @@ void DesktopAgent::onCaptureScreen()
             int pos_x = int(double(cursor_pos.x()) * scale_reducer_->scaleFactorX() / 100.0);
             int pos_y = int(double(cursor_pos.y()) * scale_reducer_->scaleFactorY() / 100.0);
 
-            proto::desktop::CursorPosition* position = screen_message_.newMessage().mutable_cursor_position();
+            proto::desktop::CursorPosition* position = cursor_message_.newMessage().mutable_position();
             position->set_x(pos_x);
             position->set_y(pos_y);
 
-            const QByteArray& buffer = screen_message_.serialize();
+            const QByteArray& buffer = cursor_message_.serialize();
             for (auto* client : std::as_const(clients_))
                 client->onCursorPositionData(buffer);
             last_cursor_pos_ = cursor_pos;
@@ -1020,11 +1020,11 @@ void DesktopAgent::encodeCursor(const base::MouseCursor* cursor)
     if (!cursor || !cursor_encoder_)
         return;
 
-    proto::desktop::ScreenData& message = screen_message_.newMessage();
-    if (!cursor_encoder_->encode(*cursor, message.mutable_cursor_shape()))
+    proto::desktop::CursorData& message = cursor_message_.newMessage();
+    if (!cursor_encoder_->encode(*cursor, message.mutable_shape()))
         return;
 
-    const QByteArray& buffer = screen_message_.serialize();
+    const QByteArray& buffer = cursor_message_.serialize();
     for (auto* client : std::as_const(clients_))
         client->onCursorData(buffer);
 }

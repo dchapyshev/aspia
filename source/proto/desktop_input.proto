@@ -114,7 +114,7 @@ message TouchEvent
     repeated TouchEventPoint touch_points = 2;
 }
 
-// Client -> Host (channel 4).
+// Client -> Host (channel 5).
 message InputData
 {
     MouseEvent mouse = 1;

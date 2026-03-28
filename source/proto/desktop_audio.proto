@@ -74,13 +74,13 @@ message AudioPause
     uint32 dummy = 2;
 }
 
-// Client <- Host (channel 6).
+// Client <- Host (channel 7).
 message AudioData
 {
     AudioPacket packet = 1;
 }
 
-// Client -> Host (channel 6).
+// Client -> Host (channel 7).
 message AudioControl
 {
     AudioPause pause = 1;

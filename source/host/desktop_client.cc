@@ -62,7 +62,7 @@ DesktopClient::DesktopClient(base::TcpChannel* tcp_channel, QObject* parent)
         proto::desktop::VideoData message;
         proto::desktop::VideoPacket* packet = message.mutable_packet();
         packet->set_error_code(proto::desktop::VIDEO_ERROR_CODE_TEMPORARY);
-        send(proto::desktop::CHANNEL_ID_SCREEN, base::serialize(message));
+        send(proto::desktop::CHANNEL_ID_VIDEO, base::serialize(message));
     });
 
     fake_capture_timer_->setInterval(std::chrono::milliseconds(30));

@@ -24,45 +24,6 @@ import "desktop_common.proto";
 
 package proto.desktop;
 
-message CursorShape
-{
-    enum Flags
-    {
-        UNKNOWN     = 0;
-        RESET_CACHE = 64;
-        CACHE       = 128;
-    }
-
-    // We use only the first byte in this field.
-    // If bit 7 is set to 1, then bits 0-4 contain the cursor index in the cache.
-    // If bit 7 is not set, then the cursor image is received.
-    // If bit 6 is set to 1, then the command to reset the contents of the cache
-    // is received, and bits 0-4 contain a new cache size.
-    // Bit 5 is reserved.
-    uint32 flags = 1;
-
-    // Width, height (in screen pixels) of the cursor.
-    int32 width  = 2;
-    int32 height = 3;
-
-    // X,Y coordinates (relative to upper-left corner) of the cursor hotspot.
-    int32 hotspot_x = 4;
-    int32 hotspot_y = 5;
-
-    // Cursor pixmap data in 32-bit BGRA format compressed with Zstd.
-    bytes data = 6;
-
-    // Screen DPI for current cursor.
-    int32 dpi_x = 7;
-    int32 dpi_y = 8;
-}
-
-message CursorPosition
-{
-    int32 x = 1;
-    int32 y = 2;
-}
-
 // Sent by client to host for screen or screen resolution selection.
 message Screen
 {
@@ -101,10 +62,8 @@ message ScreenType
 // Client <- Host (channel 2).
 message ScreenData
 {
-    CursorShape cursor_shape       = 1;
-    CursorPosition cursor_position = 2;
-    ScreenList screen_list         = 3;
-    ScreenType screen_type         = 4;
+    ScreenList screen_list = 1;
+    ScreenType screen_type = 2;
 }
 
 // Client -> Host (channel 2).
