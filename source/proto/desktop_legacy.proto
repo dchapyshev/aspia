@@ -27,7 +27,7 @@ import "desktop_cursor.proto";
 import "desktop_input.proto";
 import "desktop_video.proto";
 
-package proto.desktop;
+package proto.legacy;
 
 message Extension
 {

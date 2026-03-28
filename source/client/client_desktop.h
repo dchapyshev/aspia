@@ -138,7 +138,7 @@ private:
     void readCursorShape(const proto::cursor::Shape& shape);
     void readCursorPosition(const proto::cursor::Position& position);
     void readClipboardEvent(const proto::clipboard::Event& event);
-    void readExtension(const proto::desktop::Extension& extension);
+    void readExtension(const proto::legacy::Extension& extension);
     void sendSessionListRequest();
     void sendKeyFrameRequest();
 

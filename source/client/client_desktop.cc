@@ -209,7 +209,7 @@ void ClientDesktop::onMessageReceived(quint8 channel_id, const QByteArray& buffe
     }
     else if (channel_id == proto::desktop::CHANNEL_ID_LEGACY)
     {
-        proto::desktop::SessionToClient message;
+        proto::legacy::SessionToClient message;
         if (!base::parse(buffer, &message))
         {
             CLOG(ERROR) << "Invalid session message from host";
@@ -254,7 +254,7 @@ void ClientDesktop::onClipboardEvent(const proto::clipboard::Event& event)
 
     if (isLegacy())
     {
-        proto::desktop::ClientToSession message;
+        proto::legacy::ClientToSession message;
         message.mutable_clipboard_event()->CopyFrom(event);
         sendMessage(proto::desktop::CHANNEL_ID_LEGACY, base::serialize(message));
     }
@@ -283,7 +283,7 @@ void ClientDesktop::onDesktopConfigChanged(const proto::control::Config& config)
 
     if (isLegacy())
     {
-        proto::desktop::ClientToSession message;
+        proto::legacy::ClientToSession message;
         message.mutable_config()->CopyFrom(desktop_config_);
         sendMessage(proto::desktop::CHANNEL_ID_LEGACY, base::serialize(message));
     }
@@ -303,8 +303,8 @@ void ClientDesktop::onCurrentScreenChanged(const proto::screen::Screen& screen)
 
     if (isLegacy())
     {
-        proto::desktop::ClientToSession message;
-        proto::desktop::Extension* extension = message.mutable_extension();
+        proto::legacy::ClientToSession message;
+        proto::legacy::Extension* extension = message.mutable_extension();
         extension->set_name(common::kSelectScreenExtension);
         extension->set_data(screen.SerializeAsString());
         sendMessage(proto::desktop::CHANNEL_ID_LEGACY, base::serialize(message));
@@ -328,8 +328,8 @@ void ClientDesktop::onPreferredSizeChanged(int width, int height)
         preferred_size.set_width(width);
         preferred_size.set_height(height);
 
-        proto::desktop::ClientToSession message;
-        proto::desktop::Extension* extension = message.mutable_extension();
+        proto::legacy::ClientToSession message;
+        proto::legacy::Extension* extension = message.mutable_extension();
         extension->set_name(common::kPreferredSizeExtension);
         extension->set_data(preferred_size.SerializeAsString());
         sendMessage(proto::desktop::CHANNEL_ID_LEGACY, base::serialize(message));
@@ -365,8 +365,8 @@ void ClientDesktop::onVideoPauseChanged(bool enable)
         proto::video::Pause pause;
         pause.set_enable(enable);
 
-        proto::desktop::ClientToSession message;
-        proto::desktop::Extension* extension = message.mutable_extension();
+        proto::legacy::ClientToSession message;
+        proto::legacy::Extension* extension = message.mutable_extension();
         extension->set_name(common::kVideoPauseExtension);
         extension->set_data(pause.SerializeAsString());
         sendMessage(proto::desktop::CHANNEL_ID_LEGACY, base::serialize(message));
@@ -402,8 +402,8 @@ void ClientDesktop::onAudioPauseChanged(bool enable)
         proto::audio::Pause pause;
         pause.set_enable(enable);
 
-        proto::desktop::ClientToSession message;
-        proto::desktop::Extension* extension = message.mutable_extension();
+        proto::legacy::ClientToSession message;
+        proto::legacy::Extension* extension = message.mutable_extension();
         extension->set_name(common::kAudioPauseExtension);
         extension->set_data(pause.SerializeAsString());
         sendMessage(proto::desktop::CHANNEL_ID_LEGACY, base::serialize(message));
@@ -475,7 +475,7 @@ void ClientDesktop::onKeyEvent(const proto::input::KeyEvent& event)
 
     if (isLegacy())
     {
-        proto::desktop::ClientToSession message;
+        proto::legacy::ClientToSession message;
         message.mutable_key_event()->CopyFrom(event);
         sendMessage(proto::desktop::CHANNEL_ID_LEGACY, base::serialize(message));
     }
@@ -495,7 +495,7 @@ void ClientDesktop::onTextEvent(const proto::input::TextEvent& event)
 
     if (isLegacy())
     {
-        proto::desktop::ClientToSession message;
+        proto::legacy::ClientToSession message;
         message.mutable_text_event()->CopyFrom(event);
         sendMessage(proto::desktop::CHANNEL_ID_LEGACY, base::serialize(message));
     }
@@ -515,7 +515,7 @@ void ClientDesktop::onMouseEvent(const proto::input::MouseEvent& event)
 
     if (isLegacy())
     {
-        proto::desktop::ClientToSession message;
+        proto::legacy::ClientToSession message;
         message.mutable_mouse_event()->CopyFrom(event);
         sendMessage(proto::desktop::CHANNEL_ID_LEGACY, base::serialize(message));
     }
@@ -538,8 +538,8 @@ void ClientDesktop::onPowerControl(proto::power::Control::Action action)
 
     if (isLegacy())
     {
-        proto::desktop::ClientToSession message;
-        proto::desktop::Extension* extension = message.mutable_extension();
+        proto::legacy::ClientToSession message;
+        proto::legacy::Extension* extension = message.mutable_extension();
         proto::power::Control power_control;
         power_control.set_action(action);
         extension->set_name(common::kPowerControlExtension);
@@ -560,8 +560,8 @@ void ClientDesktop::onSystemInfoRequest(const proto::system_info::SystemInfoRequ
 {
     if (isLegacy())
     {
-        proto::desktop::ClientToSession message;
-        proto::desktop::Extension* extension = message.mutable_extension();
+        proto::legacy::ClientToSession message;
+        proto::legacy::Extension* extension = message.mutable_extension();
         extension->set_name(common::kSystemInfoExtension);
         extension->set_data(request.SerializeAsString());
         sendMessage(proto::desktop::CHANNEL_ID_LEGACY, base::serialize(message));
@@ -577,8 +577,8 @@ void ClientDesktop::onTaskManager(const proto::task_manager::ClientToHost& task_
 {
     if (isLegacy())
     {
-        proto::desktop::ClientToSession message;
-        proto::desktop::Extension* extension = message.mutable_extension();
+        proto::legacy::ClientToSession message;
+        proto::legacy::Extension* extension = message.mutable_extension();
         extension->set_name(common::kTaskManagerExtension);
         extension->set_data(task_manager.SerializeAsString());
         sendMessage(proto::desktop::CHANNEL_ID_LEGACY, base::serialize(message));
@@ -876,7 +876,7 @@ void ClientDesktop::readClipboardEvent(const proto::clipboard::Event& event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientDesktop::readExtension(const proto::desktop::Extension& extension)
+void ClientDesktop::readExtension(const proto::legacy::Extension& extension)
 {
     if (extension.name() == common::kTaskManagerExtension)
     {
