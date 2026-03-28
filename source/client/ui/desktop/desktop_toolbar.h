@@ -20,7 +20,7 @@
 #define CLIENT_UI_DESKTOP_DESKTOP_TOOLBAR_H
 
 #include "proto/desktop_control.h"
-#include "proto/desktop_extension.h"
+#include "proto/desktop_power.h"
 #include "proto/peer.h"
 #include "ui_desktop_toolbar.h"
 
@@ -38,7 +38,6 @@ public:
     void enablePowerControl(bool enable);
     void enableSystemInfo(bool enable);
     void enableTextChat(bool enable);
-    void enableRemoteUpdate(bool enable);
     void enableTaskManager(bool enable);
     void enableVideoPauseFeature(bool enable);
     void enableAudioPauseFeature(bool enable);
@@ -46,7 +45,6 @@ public:
     void enablePasteAsKeystrokesFeature(bool enable);
 
     void setScreenList(const proto::desktop::ScreenList& screen_list);
-    void setScreenType(const proto::desktop::ScreenType& screen_type);
     void setSessionList(const proto::desktop::SessionList& session_list);
     void startRecording(bool enable);
 
@@ -71,7 +69,6 @@ signals:
     void sig_takeScreenshot();
     void sig_startSession(proto::peer::SessionType session_type);
     void sig_powerControl(proto::desktop::PowerControl_Action action, bool wait);
-    void sig_startRemoteUpdate();
     void sig_startSystemInfo();
     void sig_startTaskManager();
     void sig_startStatistics();
@@ -112,7 +109,6 @@ private:
 
     const proto::peer::SessionType session_type_;
     bool is_recording_started_ = false;
-    bool is_remote_update_enabled_ = false;
 
     QSize current_resolution_;
     qint64 current_screen_id_ = -1;

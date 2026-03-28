@@ -26,7 +26,6 @@ namespace common {
 extern const char kSelectScreenExtension[]; // Deprecated.
 extern const char kPreferredSizeExtension[]; // Deprecated.
 extern const char kPowerControlExtension[];
-extern const char kRemoteUpdateExtension[];
 extern const char kSystemInfoExtension[];
 extern const char kTaskManagerExtension[];
 extern const char kVideoPauseExtension[]; // Deprecated.

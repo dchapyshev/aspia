@@ -153,9 +153,6 @@ DesktopSessionWindow::DesktopSessionWindow(proto::peer::SessionType session_type
         emit sig_powerControl(action);
     });
 
-    connect(toolbar_, &DesktopToolBar::sig_startRemoteUpdate,
-            this, &DesktopSessionWindow::sig_remoteUpdate);
-
     connect(toolbar_, &DesktopToolBar::sig_startSystemInfo, this, [this]()
     {
         if (!system_info_)
@@ -284,8 +281,6 @@ Client* DesktopSessionWindow::createClient()
             Qt::QueuedConnection);
     connect(client, &ClientDesktop::sig_screenListChanged, this, &DesktopSessionWindow::onScreenListChanged,
             Qt::QueuedConnection);
-    connect(client, &ClientDesktop::sig_screenTypeChanged, this, &DesktopSessionWindow::onScreenTypeChanged,
-            Qt::QueuedConnection);
     connect(client, &ClientDesktop::sig_cursorPositionChanged, this, &DesktopSessionWindow::onCursorPositionChanged,
             Qt::QueuedConnection);
     connect(client, &ClientDesktop::sig_systemInfo, this, &DesktopSessionWindow::onSystemInfoChanged,
@@ -327,8 +322,6 @@ Client* DesktopSessionWindow::createClient()
             Qt::QueuedConnection);
     connect(this, &DesktopSessionWindow::sig_powerControl, client, &ClientDesktop::onPowerControl,
             Qt::QueuedConnection);
-    connect(this, &DesktopSessionWindow::sig_remoteUpdate, client, &ClientDesktop::onRemoteUpdate,
-            Qt::QueuedConnection);
     connect(this, &DesktopSessionWindow::sig_systemInfoRequested, client, &ClientDesktop::onSystemInfoRequest,
             Qt::QueuedConnection);
     connect(this, &DesktopSessionWindow::sig_taskManager, client, &ClientDesktop::onTaskManager,
@@ -358,15 +351,6 @@ void DesktopSessionWindow::onCapabilitiesChanged(const proto::desktop::Capabilit
 
     // The list of extensions is passed as a string. Extensions are separated by a semicolon.
     QStringList extensions = QString::fromStdString(capabilities.extensions()).split(';', Qt::SkipEmptyParts);
-
-    // By default, remote update is disabled.
-    toolbar_->enableRemoteUpdate(false);
-
-    if (extensions.contains(common::kRemoteUpdateExtension))
-    {
-        if (base::kCurrentVersion > sessionState()->hostVersion())
-            toolbar_->enableRemoteUpdate(true);
-    }
 
     toolbar_->enablePowerControl(extensions.contains(common::kPowerControlExtension));
     toolbar_->enableScreenSelect(extensions.contains(common::kSelectScreenExtension));
@@ -443,12 +427,6 @@ void DesktopSessionWindow::onCapabilitiesChanged(const proto::desktop::Capabilit
 void DesktopSessionWindow::onScreenListChanged(const proto::desktop::ScreenList& screen_list)
 {
     toolbar_->setScreenList(screen_list);
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopSessionWindow::onScreenTypeChanged(const proto::desktop::ScreenType& screen_type)
-{
-    toolbar_->setScreenType(screen_type);
 }
 
 //--------------------------------------------------------------------------------------------------

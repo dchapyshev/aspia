@@ -24,8 +24,9 @@
 #include "client/client.h"
 #include "client/input_event_filter.h"
 #include "common/clipboard_monitor.h"
-#include "proto/desktop_extension.h"
+#include "proto/desktop_legacy.h"
 #include "proto/desktop_control.h"
+#include "proto/desktop_power.h"
 #include "proto/system_info.h"
 #include "proto/task_manager.h"
 
@@ -101,7 +102,6 @@ public slots:
     void onTextEvent(const proto::desktop::TextEvent& event);
     void onMouseEvent(const proto::desktop::MouseEvent& event);
     void onPowerControl(proto::desktop::PowerControl_Action action);
-    void onRemoteUpdate();
     void onSystemInfoRequest(const proto::system_info::SystemInfoRequest& request);
     void onTaskManager(const proto::task_manager::ClientToHost& message);
     void onMetricsRequest();
@@ -137,7 +137,7 @@ private:
     void readCursorShape(const proto::desktop::CursorShape& cursor_shape);
     void readCursorPosition(const proto::desktop::CursorPosition& cursor_position);
     void readClipboardEvent(const proto::desktop::ClipboardEvent& event);
-    void readExtension(const proto::desktop::ExtensionData& extension);
+    void readExtension(const proto::desktop::Extension& extension);
     void sendSessionListRequest();
     void sendKeyFrameRequest();
 

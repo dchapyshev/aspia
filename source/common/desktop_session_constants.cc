@@ -26,7 +26,6 @@ namespace common {
 const char kSelectScreenExtension[] = "select_screen";
 const char kPreferredSizeExtension[] = "preferred_size";
 const char kPowerControlExtension[] = "power_control";
-const char kRemoteUpdateExtension[] = "remote_update";
 const char kSystemInfoExtension[] = "system_info";
 const char kTaskManagerExtension[] = "task_manager";
 const char kVideoPauseExtension[] = "video_pause";
@@ -34,7 +33,7 @@ const char kAudioPauseExtension[] = "audio_pause";
 const char kScreenTypeExtension[] = "screen_type";
 
 #if defined(Q_OS_WINDOWS)
-const char kSupportedExtensionsForManage[] = "select_screen;power_control;remote_update;system_info;task_manager";
+const char kSupportedExtensionsForManage[] = "select_screen;power_control;system_info;task_manager";
 const char kSupportedExtensionsForView[] = "select_screen;system_info";
 #else
 const char kSupportedExtensionsForManage[] = "select_screen";

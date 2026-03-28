@@ -93,11 +93,6 @@ DesktopToolBar::DesktopToolBar(proto::peer::SessionType session_type, QWidget* p
         LOG(INFO) << "[ACTION] Auto-scroll changed:" << enabled;
         emit sig_autoScrollChanged(enabled);
     });
-    connect(ui.action_update, &QAction::triggered, this, [this]()
-    {
-        LOG(INFO) << "[ACTION] Remote update requested";
-        emit sig_startRemoteUpdate();
-    });
     connect(ui.action_system_info, &QAction::triggered, this, [this]()
     {
         LOG(INFO) << "[ACTION] System info requested";
@@ -243,16 +238,6 @@ void DesktopToolBar::enableTextChat(bool enable)
     LOG(INFO) << "enableTextChat:" << enable;
     ui.action_text_chat->setVisible(enable);
     ui.action_text_chat->setEnabled(enable);
-    updateSize();
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopToolBar::enableRemoteUpdate(bool enable)
-{
-    LOG(INFO) << "enableRemoteUpdate:" << enable;
-    is_remote_update_enabled_ = enable;
-    ui.action_update->setVisible(enable);
-    ui.action_update->setEnabled(enable);
     updateSize();
 }
 
@@ -415,20 +400,6 @@ void DesktopToolBar::setScreenList(const proto::desktop::ScreenList& screen_list
         }
     }
 
-    updateSize();
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopToolBar::setScreenType(const proto::desktop::ScreenType& screen_type)
-{
-    if (!is_remote_update_enabled_)
-        return;
-
-    bool show_update_button = screen_type.type() == proto::desktop::ScreenType::TYPE_DESKTOP;
-
-    LOG(INFO) << "Show update button:" << show_update_button
-              << "(type:" << screen_type.type() << "name:" << screen_type.name() << ")";
-    ui.action_update->setVisible(show_update_button);
     updateSize();
 }
 

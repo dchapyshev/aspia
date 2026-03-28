@@ -22,7 +22,6 @@ option optimize_for = LITE_RUNTIME;
 
 package proto.desktop;
 
-// Extension name: "power_control"
 // Sent by client to host.
 message PowerControl
 {
@@ -39,9 +38,8 @@ message PowerControl
     Action action = 1;
 }
 
-// Client <-> Host (channel 6).
-message ExtensionData
+// Client -> Host (channel 6).
+message PowerData
 {
-    string name = 1;
-    bytes data  = 2;
+    PowerControl power_control = 1;
 }

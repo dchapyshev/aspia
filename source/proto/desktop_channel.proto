@@ -24,11 +24,13 @@ package proto.desktop;
 
 enum ChannelId
 {
-    CHANNEL_ID_LEGACY    = 0;
-    CHANNEL_ID_CONTROL   = 1;
-    CHANNEL_ID_SCREEN    = 2;
-    CHANNEL_ID_INPUT     = 3;
-    CHANNEL_ID_CLIPBOARD = 4;
-    CHANNEL_ID_AUDIO     = 5;
-    CHANNEL_ID_EXTENSION = 6;
+    CHANNEL_ID_LEGACY       = 0;
+    CHANNEL_ID_CONTROL      = 1;
+    CHANNEL_ID_SCREEN       = 2;
+    CHANNEL_ID_INPUT        = 3;
+    CHANNEL_ID_CLIPBOARD    = 4;
+    CHANNEL_ID_AUDIO        = 5;
+    CHANNEL_ID_POWER        = 6;
+    CHANNEL_ID_SYSTEM_INFO  = 7;
+    CHANNEL_ID_TASK_MANAGER = 8;
 }

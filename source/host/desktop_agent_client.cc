@@ -34,7 +34,6 @@
 #include "base/win/safe_mode_util.h"
 #include "host/win/system_info.h"
 #include "host/win/task_manager.h"
-#include "host/win/updater_launcher.h"
 #endif // defined(Q_OS_WINDOWS)
 
 namespace host {
@@ -67,13 +66,13 @@ void DesktopAgentClient::onScreenData(const QByteArray& buffer)
 //--------------------------------------------------------------------------------------------------
 void DesktopAgentClient::onScreenListData(const QByteArray& buffer)
 {
-    sendSessionMessage(proto::desktop::CHANNEL_ID_EXTENSION, buffer, true);
+    sendSessionMessage(proto::desktop::CHANNEL_ID_SCREEN, buffer, true);
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopAgentClient::onScreenTypeData(const QByteArray& buffer)
 {
-    sendSessionMessage(proto::desktop::CHANNEL_ID_EXTENSION, buffer, true);
+    sendSessionMessage(proto::desktop::CHANNEL_ID_SCREEN, buffer, true);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -187,12 +186,9 @@ void DesktopAgentClient::onIpcMessageReceived(
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::onTaskManagerMessage(const proto::task_manager::HostToClient& extension_message)
+void DesktopAgentClient::onTaskManagerMessage(const proto::task_manager::HostToClient& message)
 {
-    proto::desktop::ExtensionData message;
-    message.set_name(common::kTaskManagerExtension);
-    message.set_data(extension_message.SerializeAsString());
-    sendSessionMessage(proto::desktop::CHANNEL_ID_EXTENSION, base::serialize(message), true);
+    sendSessionMessage(proto::desktop::CHANNEL_ID_TASK_MANAGER, base::serialize(message), true);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -246,16 +242,39 @@ void DesktopAgentClient::readSessionMessage(quint8 channel_id, const QByteArray&
         if (message.has_pause())
             readAudioPause(message.pause());
     }
-    else if (channel_id == proto::desktop::CHANNEL_ID_EXTENSION)
+    else if (channel_id == proto::desktop::CHANNEL_ID_POWER)
     {
-        proto::desktop::ExtensionData message;
+        proto::desktop::PowerData message;
         if (!base::parse(buffer, &message))
         {
-            CLOG(ERROR) << "Unable to parse extension message";
+            CLOG(ERROR) << "Unable to parse power message";
             return;
         }
 
-        readExtension(message);
+        if (message.has_power_control())
+            readPowerControl(message.power_control());
+    }
+    else if (channel_id == proto::desktop::CHANNEL_ID_TASK_MANAGER)
+    {
+        proto::task_manager::ClientToHost message;
+        if (!base::parse(buffer, &message))
+        {
+            CLOG(ERROR) << "Unable to parse task manager message";
+            return;
+        }
+
+        readTaskManager(message);
+    }
+    else if (channel_id == proto::desktop::CHANNEL_ID_SYSTEM_INFO)
+    {
+        proto::system_info::SystemInfoRequest request;
+        if (!base::parse(buffer, &request))
+        {
+            CLOG(ERROR) << "Unable to parse system info message";
+            return;
+        }
+
+        readSystemInfo(request);
     }
 }
 
@@ -329,21 +348,6 @@ void DesktopAgentClient::readAudioPause(const proto::desktop::AudioPause& pause)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::readExtension(const proto::desktop::ExtensionData& extension)
-{
-    if (extension.name() == common::kTaskManagerExtension)
-        readTaskManagerExtension(extension.data());
-    else if (extension.name() == common::kPowerControlExtension)
-        readPowerControlExtension(extension.data());
-    else if (extension.name() == common::kRemoteUpdateExtension)
-        readRemoteUpdateExtension(extension.data());
-    else if (extension.name() == common::kSystemInfoExtension)
-        readSystemInfoExtension(extension.data());
-    else
-        CLOG(ERROR) << "Unknown extension:" << extension.name();
-}
-
-//--------------------------------------------------------------------------------------------------
 void DesktopAgentClient::readConfig(const proto::desktop::Config& config)
 {
     config_.video_encoding = config.video_encoding();
@@ -367,7 +371,7 @@ void DesktopAgentClient::readConfig(const proto::desktop::Config& config)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::readPowerControlExtension(const std::string& data)
+void DesktopAgentClient::readPowerControl(const proto::desktop::PowerControl& control)
 {
     if (sessionType() != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
     {
@@ -375,16 +379,9 @@ void DesktopAgentClient::readPowerControlExtension(const std::string& data)
         return;
     }
 
-    proto::desktop::PowerControl power_control;
-    if (!power_control.ParseFromString(data))
-    {
-        CLOG(ERROR) << "Unable to parse power control extension data";
-        return;
-    }
+    CLOG(INFO) << "Received:" << control;
 
-    CLOG(INFO) << "Received:" << power_control;
-
-    switch (power_control.action())
+    switch (control.action())
     {
         case proto::desktop::PowerControl::ACTION_SHUTDOWN:
             base::PowerController::shutdown();
@@ -430,62 +427,31 @@ void DesktopAgentClient::readPowerControlExtension(const std::string& data)
             break;
 
         default:
-            CLOG(ERROR) << "Unhandled power control action:" << power_control.action();
+            CLOG(ERROR) << "Unhandled power control action:" << control.action();
             break;
     }
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::readRemoteUpdateExtension(const std::string& /* data */)
+void DesktopAgentClient::readSystemInfo(const proto::system_info::SystemInfoRequest& request)
 {
 #if defined(Q_OS_WINDOWS)
-    CLOG(INFO) << "Remote update requested";
-    if (sessionType() == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
-        launchUpdater(base::currentProcessSessionId());
+    proto::system_info::SystemInfo reply;
+    createSystemInfo(request, &reply);
+    sendSessionMessage(proto::desktop::CHANNEL_ID_SYSTEM_INFO, base::serialize(reply), true);
 #endif // defined(Q_OS_WINDOWS)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::readSystemInfoExtension(const std::string& data)
+void DesktopAgentClient::readTaskManager(const proto::task_manager::ClientToHost& message)
 {
 #if defined(Q_OS_WINDOWS)
-    proto::system_info::SystemInfoRequest system_info_request;
-
-    if (!data.empty())
-    {
-        if (!system_info_request.ParseFromString(data))
-            CLOG(ERROR) << "Unable to parse system info request";
-    }
-
-    proto::system_info::SystemInfo system_info;
-    createSystemInfo(system_info_request, &system_info);
-
-    proto::desktop::ExtensionData message;
-    message.set_name(common::kSystemInfoExtension);
-    message.set_data(system_info.SerializeAsString());
-
-    sendSessionMessage(proto::desktop::CHANNEL_ID_EXTENSION, base::serialize(message), true);
-#endif // defined(Q_OS_WINDOWS)
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::readTaskManagerExtension(const std::string& data)
-{
-#if defined(Q_OS_WINDOWS)
-    proto::task_manager::ClientToHost message;
-    if (!message.ParseFromString(data))
-    {
-        CLOG(ERROR) << "Unable to parse task manager extension data";
-        return;
-    }
-
     if (!task_manager_)
     {
         task_manager_ = new TaskManager(this);
         connect(task_manager_, &TaskManager::sig_taskManagerMessage,
                 this, &DesktopAgentClient::onTaskManagerMessage);
     }
-
     task_manager_->readMessage(message);
 #endif // defined(Q_OS_WINDOWS)
 }

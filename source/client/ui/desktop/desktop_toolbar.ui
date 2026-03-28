@@ -76,7 +76,6 @@
      <addaction name="action_task_manager"/>
      <addaction name="action_system_info"/>
      <addaction name="separator"/>
-     <addaction name="action_update"/>
      <addaction name="action_menu"/>
      <addaction name="separator"/>
      <addaction name="action_minimize"/>
@@ -270,18 +269,6 @@
   <action name="action_lock">
    <property name="text">
     <string>Lock</string>
-   </property>
-  </action>
-  <action name="action_update">
-   <property name="icon">
-    <iconset resource="../../../common/resources/common.qrc">
-     <normaloff>:/img/restart.svg</normaloff>:/img/restart.svg</iconset>
-   </property>
-   <property name="text">
-    <string>Remote Update</string>
-   </property>
-   <property name="visible">
-    <bool>false</bool>
    </property>
   </action>
   <action name="action_system_info">

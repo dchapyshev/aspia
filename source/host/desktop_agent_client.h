@@ -22,9 +22,10 @@
 #include <QObject>
 
 #include "base/logging.h"
-#include "proto/desktop_extension.h"
 #include "proto/desktop_input.h"
 #include "proto/desktop_internal.h"
+#include "proto/desktop_power.h"
+#include "proto/system_info.h"
 #include "proto/task_manager.h"
 
 namespace base {
@@ -101,12 +102,10 @@ private:
     void readPreferredSize(const proto::desktop::PreferredSize& size);
     void readVideoPause(const proto::desktop::VideoPause& pause);
     void readAudioPause(const proto::desktop::AudioPause& pause);
-    void readExtension(const proto::desktop::ExtensionData& extension);
     void readConfig(const proto::desktop::Config& config);
-    void readPowerControlExtension(const std::string& data);
-    void readRemoteUpdateExtension(const std::string& data);
-    void readSystemInfoExtension(const std::string& data);
-    void readTaskManagerExtension(const std::string& data);
+    void readPowerControl(const proto::desktop::PowerControl& control);
+    void readSystemInfo(const proto::system_info::SystemInfoRequest& request);
+    void readTaskManager(const proto::task_manager::ClientToHost& message);
     void readOverflow(proto::desktop::Overflow::State state);
     void sendCapabilities();
 

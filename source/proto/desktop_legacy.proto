@@ -23,11 +23,16 @@ option optimize_for = LITE_RUNTIME;
 import "desktop_audio.proto";
 import "desktop_clipboard.proto";
 import "desktop_control.proto";
-import "desktop_extension.proto";
 import "desktop_input.proto";
 import "desktop_screen.proto";
 
 package proto.desktop;
+
+message Extension
+{
+    string name = 1;
+    bytes data  = 2;
+}
 
 // Client <- Host (channel 0).
 message SessionToClient
@@ -36,7 +41,7 @@ message SessionToClient
     AudioPacket audio_packet       = 2;
     CursorShape cursor_shape       = 3;
     ClipboardEvent clipboard_event = 4;
-    ExtensionData extension        = 5;
+    Extension extension            = 5;
     Capabilities capabilities      = 6;
     CursorPosition cursor_position = 7;
 }
@@ -49,7 +54,7 @@ message ClientToSession
     TouchEvent touch_event         = 3;
     TextEvent text_event           = 4;
     ClipboardEvent clipboard_event = 5;
-    ExtensionData extension        = 6;
+    Extension extension            = 6;
     Config config                  = 7;
     AudioPacket audio_packet       = 8;
 }

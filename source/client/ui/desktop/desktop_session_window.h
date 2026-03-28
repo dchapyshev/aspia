@@ -58,7 +58,6 @@ public slots:
     void onShowWindow();
     void onCapabilitiesChanged(const proto::desktop::Capabilities& capabilities);
     void onScreenListChanged(const proto::desktop::ScreenList& screen_list);
-    void onScreenTypeChanged(const proto::desktop::ScreenType& screen_type);
     void onCursorPositionChanged(const proto::desktop::CursorPosition& cursor_position);
     void onSystemInfoChanged(const proto::system_info::SystemInfo& system_info);
     void onTaskManagerChanged(const proto::task_manager::HostToClient& message);
@@ -80,7 +79,6 @@ signals:
     void sig_textEvent(const proto::desktop::TextEvent& event);
     void sig_mouseEvent(const proto::desktop::MouseEvent& event);
     void sig_powerControl(proto::desktop::PowerControl_Action action);
-    void sig_remoteUpdate();
     void sig_systemInfoRequested(const proto::system_info::SystemInfoRequest& request);
     void sig_taskManager(const proto::task_manager::ClientToHost& message);
     void sig_metricsRequested();
