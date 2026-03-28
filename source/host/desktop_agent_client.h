@@ -74,10 +74,10 @@ public slots:
     void start(const QString& ipc_channel_name);
 
 signals:
-    void sig_injectKeyEvent(const proto::desktop::KeyEvent& event);
-    void sig_injectTextEvent(const proto::desktop::TextEvent& event);
-    void sig_injectMouseEvent(const proto::desktop::MouseEvent& event);
-    void sig_injectTouchEvent(const proto::desktop::TouchEvent& event);
+    void sig_injectKeyEvent(const proto::input::KeyEvent& event);
+    void sig_injectTextEvent(const proto::input::TextEvent& event);
+    void sig_injectMouseEvent(const proto::input::MouseEvent& event);
+    void sig_injectTouchEvent(const proto::input::TouchEvent& event);
     void sig_selectScreen(const proto::screen::Screen& screen);
     void sig_preferredSizeChanged(const QSize& size);
     void sig_keyFrameRequested();
@@ -96,10 +96,10 @@ private:
     void readSessionMessage(quint8 channel_id, const QByteArray& buffer);
     void sendSessionMessage(quint8 channel_id, const QByteArray& buffer, bool reliable);
 
-    void readMouseEvent(const proto::desktop::MouseEvent& mouse_event);
-    void readKeyEvent(const proto::desktop::KeyEvent& key_event);
-    void readTouchEvent(const proto::desktop::TouchEvent& touch_event);
-    void readTextEvent(const proto::desktop::TextEvent& text_event);
+    void readMouseEvent(const proto::input::MouseEvent& mouse_event);
+    void readKeyEvent(const proto::input::KeyEvent& key_event);
+    void readTouchEvent(const proto::input::TouchEvent& touch_event);
+    void readTextEvent(const proto::input::TextEvent& text_event);
     void readPreferredSize(const proto::video::PreferredSize& size);
     void readVideoPause(const proto::video::Pause& pause);
     void readAudioPause(const proto::audio::Pause& pause);

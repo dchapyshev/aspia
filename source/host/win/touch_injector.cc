@@ -46,7 +46,7 @@ void appendMapValuesToVector(
 }
 
 void convertToPointerTouchInfoImpl(
-    const proto::desktop::TouchEventPoint& touch_point, OWN_POINTER_TOUCH_INFO* pointer_touch_info)
+    const proto::input::TouchEventPoint& touch_point, OWN_POINTER_TOUCH_INFO* pointer_touch_info)
 {
     pointer_touch_info->touchMask = OWN_TOUCH_MASK_CONTACTAREA | OWN_TOUCH_MASK_ORIENTATION;
     pointer_touch_info->touchFlags = TOUCH_FLAG_NONE;
@@ -90,7 +90,7 @@ void convertToPointerTouchInfoImpl(
 // The caller should set memset(0) the struct and set
 // pointer_touch_info->pointerInfo.pointerFlags.
 void convertToPointerTouchInfo(
-    const proto::desktop::TouchEventPoint& touch_point, OWN_POINTER_TOUCH_INFO* pointer_touch_info)
+    const proto::input::TouchEventPoint& touch_point, OWN_POINTER_TOUCH_INFO* pointer_touch_info)
 {
     // TODO(zijiehe): Use GetFullscreenTopLeft() once
     // https://chromium-review.googlesource.com/c/581951/ is submitted.
@@ -101,7 +101,7 @@ void convertToPointerTouchInfo(
         return;
     }
 
-    proto::desktop::TouchEventPoint point(touch_point);
+    proto::input::TouchEventPoint point(touch_point);
     point.set_x(point.x() + top_left.x());
     point.set_y(point.y() + top_left.y());
 
@@ -153,23 +153,23 @@ TouchInjector::~TouchInjector()
 }
 
 //--------------------------------------------------------------------------------------------------
-void TouchInjector::injectTouchEvent(const proto::desktop::TouchEvent& event)
+void TouchInjector::injectTouchEvent(const proto::input::TouchEvent& event)
 {
     if (!initialized_)
         return;
 
     switch (event.event_type())
     {
-        case proto::desktop::TouchEvent::TOUCH_POINT_START:
+        case proto::input::TouchEvent::TOUCH_POINT_START:
             addNewTouchPoints(event);
             break;
-        case proto::desktop::TouchEvent::TOUCH_POINT_MOVE:
+        case proto::input::TouchEvent::TOUCH_POINT_MOVE:
             moveTouchPoints(event);
             break;
-        case proto::desktop::TouchEvent::TOUCH_POINT_END:
+        case proto::input::TouchEvent::TOUCH_POINT_END:
             endTouchPoints(event);
             break;
-        case proto::desktop::TouchEvent::TOUCH_POINT_CANCEL:
+        case proto::input::TouchEvent::TOUCH_POINT_CANCEL:
             cancelTouchPoints(event);
             break;
         default:
@@ -179,15 +179,15 @@ void TouchInjector::injectTouchEvent(const proto::desktop::TouchEvent& event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void TouchInjector::addNewTouchPoints(const proto::desktop::TouchEvent& event)
+void TouchInjector::addNewTouchPoints(const proto::input::TouchEvent& event)
 {
-    DCHECK_EQ(event.event_type(), proto::desktop::TouchEvent::TOUCH_POINT_START);
+    DCHECK_EQ(event.event_type(), proto::input::TouchEvent::TOUCH_POINT_START);
 
     QVector<OWN_POINTER_TOUCH_INFO> touches;
     // Must inject already touching points as move events.
     appendMapValuesToVector(&touches_in_contact_, &touches);
 
-    for (const proto::desktop::TouchEventPoint& touch_point : event.touch_points())
+    for (const proto::input::TouchEventPoint& touch_point : event.touch_points())
     {
         OWN_POINTER_TOUCH_INFO pointer_touch_info;
         memset(&pointer_touch_info, 0, sizeof(pointer_touch_info));
@@ -210,11 +210,11 @@ void TouchInjector::addNewTouchPoints(const proto::desktop::TouchEvent& event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void TouchInjector::moveTouchPoints(const proto::desktop::TouchEvent& event)
+void TouchInjector::moveTouchPoints(const proto::input::TouchEvent& event)
 {
-    DCHECK_EQ(event.event_type(), proto::desktop::TouchEvent::TOUCH_POINT_MOVE);
+    DCHECK_EQ(event.event_type(), proto::input::TouchEvent::TOUCH_POINT_MOVE);
 
-    for (const proto::desktop::TouchEventPoint& touch_point : event.touch_points())
+    for (const proto::input::TouchEventPoint& touch_point : event.touch_points())
     {
         OWN_POINTER_TOUCH_INFO* pointer_touch_info = &touches_in_contact_[touch_point.id()];
         memset(pointer_touch_info, 0, sizeof(*pointer_touch_info));
@@ -235,12 +235,12 @@ void TouchInjector::moveTouchPoints(const proto::desktop::TouchEvent& event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void TouchInjector::endTouchPoints(const proto::desktop::TouchEvent& event)
+void TouchInjector::endTouchPoints(const proto::input::TouchEvent& event)
 {
-    DCHECK_EQ(event.event_type(), proto::desktop::TouchEvent::TOUCH_POINT_END);
+    DCHECK_EQ(event.event_type(), proto::input::TouchEvent::TOUCH_POINT_END);
 
     QVector<OWN_POINTER_TOUCH_INFO> touches;
-    for (const proto::desktop::TouchEventPoint& touch_point : event.touch_points())
+    for (const proto::input::TouchEventPoint& touch_point : event.touch_points())
     {
         OWN_POINTER_TOUCH_INFO pointer_touch_info = touches_in_contact_[touch_point.id()];
         pointer_touch_info.pointerInfo.pointerFlags = OWN_POINTER_FLAG_UP;
@@ -258,12 +258,12 @@ void TouchInjector::endTouchPoints(const proto::desktop::TouchEvent& event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void TouchInjector::cancelTouchPoints(const proto::desktop::TouchEvent& event)
+void TouchInjector::cancelTouchPoints(const proto::input::TouchEvent& event)
 {
-    DCHECK_EQ(event.event_type(), proto::desktop::TouchEvent::TOUCH_POINT_CANCEL);
+    DCHECK_EQ(event.event_type(), proto::input::TouchEvent::TOUCH_POINT_CANCEL);
 
     QVector<OWN_POINTER_TOUCH_INFO> touches;
-    for (const proto::desktop::TouchEventPoint& touch_point : event.touch_points())
+    for (const proto::input::TouchEventPoint& touch_point : event.touch_points())
     {
         OWN_POINTER_TOUCH_INFO pointer_touch_info = touches_in_contact_[touch_point.id()];
         pointer_touch_info.pointerInfo.pointerFlags =

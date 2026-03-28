@@ -34,13 +34,13 @@ public:
     ~TouchInjector();
 
     bool isInitialized() const { return initialized_; }
-    void injectTouchEvent(const proto::desktop::TouchEvent& event);
+    void injectTouchEvent(const proto::input::TouchEvent& event);
 
 private:
-    void addNewTouchPoints(const proto::desktop::TouchEvent& event);
-    void moveTouchPoints(const proto::desktop::TouchEvent& event);
-    void endTouchPoints(const proto::desktop::TouchEvent& event);
-    void cancelTouchPoints(const proto::desktop::TouchEvent& event);
+    void addNewTouchPoints(const proto::input::TouchEvent& event);
+    void moveTouchPoints(const proto::input::TouchEvent& event);
+    void endTouchPoints(const proto::input::TouchEvent& event);
+    void cancelTouchPoints(const proto::input::TouchEvent& event);
 
     HMODULE user32_library_ = nullptr;
     InitializeTouchInjectionFunction initialize_touch_injection_ = nullptr;

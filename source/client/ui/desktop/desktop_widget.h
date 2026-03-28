@@ -77,8 +77,8 @@ public slots:
     void userLeftFromWindow();
 
 signals:
-    void sig_mouseEvent(const proto::desktop::MouseEvent& event);
-    void sig_keyEvent(const proto::desktop::KeyEvent& event);
+    void sig_mouseEvent(const proto::input::MouseEvent& event);
+    void sig_keyEvent(const proto::input::KeyEvent& event);
 
 protected:
     // QWidget implementation.

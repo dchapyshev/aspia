@@ -468,7 +468,7 @@ void ClientDesktop::onRecordingChanged(bool enable, const QString& file_path)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientDesktop::onKeyEvent(const proto::desktop::KeyEvent& event)
+void ClientDesktop::onKeyEvent(const proto::input::KeyEvent& event)
 {
     if (!input_event_filter_.keyEvent(event))
         return;
@@ -481,14 +481,14 @@ void ClientDesktop::onKeyEvent(const proto::desktop::KeyEvent& event)
     }
     else
     {
-        proto::desktop::InputData message;
+        proto::input::InputData message;
         message.mutable_key()->CopyFrom(event);
         sendMessage(proto::desktop::CHANNEL_ID_INPUT, base::serialize(message));
     }
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientDesktop::onTextEvent(const proto::desktop::TextEvent& event)
+void ClientDesktop::onTextEvent(const proto::input::TextEvent& event)
 {
     if (!input_event_filter_.textEvent(event))
         return;
@@ -501,14 +501,14 @@ void ClientDesktop::onTextEvent(const proto::desktop::TextEvent& event)
     }
     else
     {
-        proto::desktop::InputData message;
+        proto::input::InputData message;
         message.mutable_text()->CopyFrom(event);
         sendMessage(proto::desktop::CHANNEL_ID_INPUT, base::serialize(message));
     }
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientDesktop::onMouseEvent(const proto::desktop::MouseEvent& event)
+void ClientDesktop::onMouseEvent(const proto::input::MouseEvent& event)
 {
     if (!input_event_filter_.mouseEvent(event))
         return;
@@ -521,7 +521,7 @@ void ClientDesktop::onMouseEvent(const proto::desktop::MouseEvent& event)
     }
     else
     {
-        proto::desktop::InputData message;
+        proto::input::InputData message;
         message.mutable_mouse()->CopyFrom(event);
         sendMessage(proto::desktop::CHANNEL_ID_INPUT, base::serialize(message));
     }

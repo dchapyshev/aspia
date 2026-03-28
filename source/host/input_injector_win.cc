@@ -222,9 +222,9 @@ void InputInjectorWin::setBlockInput(bool enable)
 }
 
 //--------------------------------------------------------------------------------------------------
-void InputInjectorWin::injectKeyEvent(const proto::desktop::KeyEvent& event)
+void InputInjectorWin::injectKeyEvent(const proto::input::KeyEvent& event)
 {
-    if (event.flags() & proto::desktop::KeyEvent::PRESSED)
+    if (event.flags() & proto::input::KeyEvent::PRESSED)
     {
         pressed_keys_.insert(event.usb_keycode());
 
@@ -256,7 +256,7 @@ void InputInjectorWin::injectKeyEvent(const proto::desktop::KeyEvent& event)
     beforeInput();
 
     bool prev_state = GetKeyState(VK_CAPITAL) != 0;
-    bool curr_state = (event.flags() & proto::desktop::KeyEvent::CAPSLOCK) != 0;
+    bool curr_state = (event.flags() & proto::input::KeyEvent::CAPSLOCK) != 0;
 
     if (prev_state != curr_state)
     {
@@ -265,7 +265,7 @@ void InputInjectorWin::injectKeyEvent(const proto::desktop::KeyEvent& event)
     }
 
     prev_state = GetKeyState(VK_NUMLOCK) != 0;
-    curr_state = (event.flags() & proto::desktop::KeyEvent::NUMLOCK) != 0;
+    curr_state = (event.flags() & proto::input::KeyEvent::NUMLOCK) != 0;
 
     if (prev_state != curr_state)
     {
@@ -275,14 +275,14 @@ void InputInjectorWin::injectKeyEvent(const proto::desktop::KeyEvent& event)
 
     DWORD flags = KEYEVENTF_SCANCODE;
 
-    if (!(event.flags() & proto::desktop::KeyEvent::PRESSED))
+    if (!(event.flags() & proto::input::KeyEvent::PRESSED))
         flags |= KEYEVENTF_KEYUP;
 
     sendKeyboardScancode(static_cast<WORD>(scancode), flags);
 }
 
 //--------------------------------------------------------------------------------------------------
-void InputInjectorWin::injectTextEvent(const proto::desktop::TextEvent& event)
+void InputInjectorWin::injectTextEvent(const proto::input::TextEvent& event)
 {
     QString text = QString::fromStdString(event.text());
     if (text.isEmpty())
@@ -306,7 +306,7 @@ void InputInjectorWin::injectTextEvent(const proto::desktop::TextEvent& event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void InputInjectorWin::injectMouseEvent(const proto::desktop::MouseEvent& event)
+void InputInjectorWin::injectMouseEvent(const proto::input::MouseEvent& event)
 {
     beforeInput();
 
@@ -335,8 +335,8 @@ void InputInjectorWin::injectMouseEvent(const proto::desktop::MouseEvent& event)
     // If the host is configured to swap left & right buttons.
     bool swap_buttons = !!GetSystemMetrics(SM_SWAPBUTTON);
 
-    bool prev = (last_mouse_mask_ & proto::desktop::MouseEvent::LEFT_BUTTON) != 0;
-    bool curr = (mask & proto::desktop::MouseEvent::LEFT_BUTTON) != 0;
+    bool prev = (last_mouse_mask_ & proto::input::MouseEvent::LEFT_BUTTON) != 0;
+    bool curr = (mask & proto::input::MouseEvent::LEFT_BUTTON) != 0;
     if (curr != prev)
     {
         if (!swap_buttons)
@@ -345,15 +345,15 @@ void InputInjectorWin::injectMouseEvent(const proto::desktop::MouseEvent& event)
             flags |= (curr ? MOUSEEVENTF_RIGHTDOWN : MOUSEEVENTF_RIGHTUP);
     }
 
-    prev = (last_mouse_mask_ & proto::desktop::MouseEvent::MIDDLE_BUTTON) != 0;
-    curr = (mask & proto::desktop::MouseEvent::MIDDLE_BUTTON) != 0;
+    prev = (last_mouse_mask_ & proto::input::MouseEvent::MIDDLE_BUTTON) != 0;
+    curr = (mask & proto::input::MouseEvent::MIDDLE_BUTTON) != 0;
     if (curr != prev)
     {
         flags |= (curr ? MOUSEEVENTF_MIDDLEDOWN : MOUSEEVENTF_MIDDLEUP);
     }
 
-    prev = (last_mouse_mask_ & proto::desktop::MouseEvent::RIGHT_BUTTON) != 0;
-    curr = (mask & proto::desktop::MouseEvent::RIGHT_BUTTON) != 0;
+    prev = (last_mouse_mask_ & proto::input::MouseEvent::RIGHT_BUTTON) != 0;
+    curr = (mask & proto::input::MouseEvent::RIGHT_BUTTON) != 0;
     if (curr != prev)
     {
         if (!swap_buttons)
@@ -362,28 +362,28 @@ void InputInjectorWin::injectMouseEvent(const proto::desktop::MouseEvent& event)
             flags |= (curr ? MOUSEEVENTF_LEFTDOWN : MOUSEEVENTF_LEFTUP);
     }
 
-    prev = (last_mouse_mask_ & proto::desktop::MouseEvent::BACK_BUTTON) != 0;
-    curr = (mask & proto::desktop::MouseEvent::BACK_BUTTON) != 0;
+    prev = (last_mouse_mask_ & proto::input::MouseEvent::BACK_BUTTON) != 0;
+    curr = (mask & proto::input::MouseEvent::BACK_BUTTON) != 0;
     if (curr != prev)
     {
         flags |= (curr ? MOUSEEVENTF_XDOWN : MOUSEEVENTF_XUP);
         mouse_data = XBUTTON1;
     }
 
-    prev = (last_mouse_mask_ & proto::desktop::MouseEvent::FORWARD_BUTTON) != 0;
-    curr = (mask & proto::desktop::MouseEvent::FORWARD_BUTTON) != 0;
+    prev = (last_mouse_mask_ & proto::input::MouseEvent::FORWARD_BUTTON) != 0;
+    curr = (mask & proto::input::MouseEvent::FORWARD_BUTTON) != 0;
     if (curr != prev)
     {
         flags |= (curr ? MOUSEEVENTF_XDOWN : MOUSEEVENTF_XUP);
         mouse_data = XBUTTON2;
     }
 
-    if (mask & proto::desktop::MouseEvent::WHEEL_UP)
+    if (mask & proto::input::MouseEvent::WHEEL_UP)
     {
         flags |= MOUSEEVENTF_WHEEL;
         mouse_data = static_cast<DWORD>(WHEEL_DELTA);
     }
-    else if (mask & proto::desktop::MouseEvent::WHEEL_DOWN)
+    else if (mask & proto::input::MouseEvent::WHEEL_DOWN)
     {
         flags |= MOUSEEVENTF_WHEEL;
         mouse_data = static_cast<DWORD>(-WHEEL_DELTA);
@@ -408,7 +408,7 @@ void InputInjectorWin::injectMouseEvent(const proto::desktop::MouseEvent& event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void InputInjectorWin::injectTouchEvent(const proto::desktop::TouchEvent& event)
+void InputInjectorWin::injectTouchEvent(const proto::input::TouchEvent& event)
 {
     touch_injector_.injectTouchEvent(event);
 }

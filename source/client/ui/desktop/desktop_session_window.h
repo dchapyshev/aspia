@@ -75,9 +75,9 @@ signals:
     void sig_videoPaused(bool enable);
     void sig_audioPaused(bool enable);
     void sig_videoRecording(bool enable, const QString& file_path);
-    void sig_keyEvent(const proto::desktop::KeyEvent& event);
-    void sig_textEvent(const proto::desktop::TextEvent& event);
-    void sig_mouseEvent(const proto::desktop::MouseEvent& event);
+    void sig_keyEvent(const proto::input::KeyEvent& event);
+    void sig_textEvent(const proto::input::TextEvent& event);
+    void sig_mouseEvent(const proto::input::MouseEvent& event);
     void sig_powerControl(proto::desktop::PowerControl_Action action);
     void sig_systemInfoRequested(const proto::system_info::SystemInfoRequest& request);
     void sig_taskManager(const proto::task_manager::ClientToHost& message);
@@ -97,7 +97,7 @@ protected:
     bool eventFilter(QObject* object, QEvent* event) final;
 
 private slots:
-    void onMouseEvent(const proto::desktop::MouseEvent& event);
+    void onMouseEvent(const proto::input::MouseEvent& event);
     void onSettings();
     void onConfigChanged(const proto::desktop::Config& config);
     void onVideoEncodingChanged(proto::video::Encoding encoding);

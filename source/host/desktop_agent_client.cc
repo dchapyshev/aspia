@@ -196,7 +196,7 @@ void DesktopAgentClient::readSessionMessage(quint8 channel_id, const QByteArray&
 {
     if (channel_id == proto::desktop::CHANNEL_ID_INPUT)
     {
-        proto::desktop::InputData message;
+        proto::input::InputData message;
         if (!base::parse(buffer, &message))
         {
             CLOG(ERROR) << "Unable to parse input message";
@@ -296,28 +296,28 @@ void DesktopAgentClient::sendSessionMessage(quint8 net_channel_id, const QByteAr
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::readMouseEvent(const proto::desktop::MouseEvent& mouse_event)
+void DesktopAgentClient::readMouseEvent(const proto::input::MouseEvent& mouse_event)
 {
     if (sessionType() == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
         emit sig_injectMouseEvent(mouse_event);
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::readKeyEvent(const proto::desktop::KeyEvent& key_event)
+void DesktopAgentClient::readKeyEvent(const proto::input::KeyEvent& key_event)
 {
     if (sessionType() == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
         emit sig_injectKeyEvent(key_event);
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::readTouchEvent(const proto::desktop::TouchEvent& touch_event)
+void DesktopAgentClient::readTouchEvent(const proto::input::TouchEvent& touch_event)
 {
     if (sessionType() == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
         emit sig_injectTouchEvent(touch_event);
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::readTextEvent(const proto::desktop::TextEvent& text_event)
+void DesktopAgentClient::readTextEvent(const proto::input::TextEvent& text_event)
 {
     if (sessionType() == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
         emit sig_injectTextEvent(text_event);

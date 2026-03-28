@@ -399,7 +399,7 @@ void DesktopAgent::onClientFinished()
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopAgent::onInjectMouseEvent(const proto::desktop::MouseEvent& event)
+void DesktopAgent::onInjectMouseEvent(const proto::input::MouseEvent& event)
 {
     if (is_paused_ || is_mouse_locked_ || !input_injector_)
         return;
@@ -407,7 +407,7 @@ void DesktopAgent::onInjectMouseEvent(const proto::desktop::MouseEvent& event)
     int pos_x = int(double(event.x() * 100) / scale_reducer_->scaleFactorX());
     int pos_y = int(double(event.y() * 100) / scale_reducer_->scaleFactorY());
 
-    proto::desktop::MouseEvent out_event;
+    proto::input::MouseEvent out_event;
     out_event.set_mask(event.mask());
     out_event.set_x(pos_x);
     out_event.set_y(pos_y);
@@ -416,7 +416,7 @@ void DesktopAgent::onInjectMouseEvent(const proto::desktop::MouseEvent& event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopAgent::onInjectKeyEvent(const proto::desktop::KeyEvent& event)
+void DesktopAgent::onInjectKeyEvent(const proto::input::KeyEvent& event)
 {
     if (is_paused_ || is_keyboard_locked_ || !input_injector_)
         return;
@@ -424,7 +424,7 @@ void DesktopAgent::onInjectKeyEvent(const proto::desktop::KeyEvent& event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopAgent::onInjectTextEvent(const proto::desktop::TextEvent& event)
+void DesktopAgent::onInjectTextEvent(const proto::input::TextEvent& event)
 {
     if (is_paused_ || is_keyboard_locked_ || !input_injector_)
         return;
@@ -432,7 +432,7 @@ void DesktopAgent::onInjectTextEvent(const proto::desktop::TextEvent& event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopAgent::onInjectTouchEvent(const proto::desktop::TouchEvent& event)
+void DesktopAgent::onInjectTouchEvent(const proto::input::TouchEvent& event)
 {
     if (is_paused_ || is_mouse_locked_ || is_keyboard_locked_ || !input_injector_)
         return;

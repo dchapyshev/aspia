@@ -40,10 +40,10 @@ public:
 
     virtual void setScreenOffset(const QPoint& offset) = 0;
     virtual void setBlockInput(bool enable) = 0;
-    virtual void injectKeyEvent(const proto::desktop::KeyEvent& event) = 0;
-    virtual void injectTextEvent(const proto::desktop::TextEvent& event) = 0;
-    virtual void injectMouseEvent(const proto::desktop::MouseEvent& event) = 0;
-    virtual void injectTouchEvent(const proto::desktop::TouchEvent& event) = 0;
+    virtual void injectKeyEvent(const proto::input::KeyEvent& event) = 0;
+    virtual void injectTextEvent(const proto::input::TextEvent& event) = 0;
+    virtual void injectMouseEvent(const proto::input::MouseEvent& event) = 0;
+    virtual void injectTouchEvent(const proto::input::TouchEvent& event) = 0;
 };
 
 } // namespace host

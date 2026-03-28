@@ -34,9 +34,9 @@ public:
     void setSessionType(proto::peer::SessionType session_type);
     void setClipboardEnabled(bool enable);
 
-    bool mouseEvent(const proto::desktop::MouseEvent& event);
-    bool keyEvent(const proto::desktop::KeyEvent& event);
-    bool textEvent(const proto::desktop::TextEvent& event);
+    bool mouseEvent(const proto::input::MouseEvent& event);
+    bool keyEvent(const proto::input::KeyEvent& event);
+    bool textEvent(const proto::input::TextEvent& event);
 
     bool readClipboardEvent(const proto::clipboard::Event& event);
     bool sendClipboardEvent(const proto::clipboard::Event& event);

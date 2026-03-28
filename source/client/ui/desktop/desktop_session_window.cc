@@ -34,7 +34,6 @@
 #include <QWindow>
 
 #include "base/logging.h"
-#include "base/version_constants.h"
 #include "base/desktop/frame.h"
 #include "base/desktop/mouse_cursor.h"
 #include "client/client_desktop.h"
@@ -866,7 +865,7 @@ bool DesktopSessionWindow::eventFilter(QObject* object, QEvent* event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionWindow::onMouseEvent(const proto::desktop::MouseEvent& event)
+void DesktopSessionWindow::onMouseEvent(const proto::input::MouseEvent& event)
 {
     QPoint pos(event.x(), event.y());
 
@@ -931,7 +930,7 @@ void DesktopSessionWindow::onMouseEvent(const proto::desktop::MouseEvent& event)
         double scale_y = (scaled_size.height() * 100) / static_cast<double>(source_size.height());
         double scale = std::min(scale_x, scale_y);
 
-        proto::desktop::MouseEvent out_event;
+        proto::input::MouseEvent out_event;
 
         out_event.set_mask(event.mask());
         out_event.set_x(static_cast<int>(static_cast<double>(pos.x() * 100) / scale));
@@ -1162,7 +1161,7 @@ void DesktopSessionWindow::onPasteKeystrokes()
             return;
         }
 
-        proto::desktop::TextEvent event;
+        proto::input::TextEvent event;
         event.set_text(text.toStdString());
         emit sig_textEvent(event);
     }

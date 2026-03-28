@@ -43,7 +43,7 @@ void InputEventFilter::setClipboardEnabled(bool enable)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool InputEventFilter::mouseEvent(const proto::desktop::MouseEvent& event)
+bool InputEventFilter::mouseEvent(const proto::input::MouseEvent& event)
 {
     if (session_type_ != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
         return false;
@@ -54,7 +54,7 @@ bool InputEventFilter::mouseEvent(const proto::desktop::MouseEvent& event)
     if (delta_x > 1 || delta_y > 1 || event.mask() != last_mask_)
     {
         static const quint32 kWheelMask =
-            proto::desktop::MouseEvent::WHEEL_DOWN | proto::desktop::MouseEvent::WHEEL_UP;
+            proto::input::MouseEvent::WHEEL_DOWN | proto::input::MouseEvent::WHEEL_UP;
 
         last_pos_x_ = event.x();
         last_pos_y_ = event.y();
@@ -72,7 +72,7 @@ bool InputEventFilter::mouseEvent(const proto::desktop::MouseEvent& event)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool InputEventFilter::keyEvent(const proto::desktop::KeyEvent& event)
+bool InputEventFilter::keyEvent(const proto::input::KeyEvent& event)
 {
     if (session_type_ != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
         return false;
@@ -82,7 +82,7 @@ bool InputEventFilter::keyEvent(const proto::desktop::KeyEvent& event)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool InputEventFilter::textEvent(const proto::desktop::TextEvent& event)
+bool InputEventFilter::textEvent(const proto::input::TextEvent& event)
 {
     if (session_type_ != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
         return false;

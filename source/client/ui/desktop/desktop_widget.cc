@@ -41,7 +41,7 @@ namespace client {
 namespace {
 
 constexpr quint32 kWheelMask =
-    proto::desktop::MouseEvent::WHEEL_DOWN | proto::desktop::MouseEvent::WHEEL_UP;
+    proto::input::MouseEvent::WHEEL_DOWN | proto::input::MouseEvent::WHEEL_UP;
 
 QSet<quint32> g_local_pressed_keys;
 
@@ -264,19 +264,19 @@ void DesktopWidget::doMouseEvent(QEvent::Type event_type,
         mask = 0;
 
         if (buttons & Qt::LeftButton)
-            mask |= proto::desktop::MouseEvent::LEFT_BUTTON;
+            mask |= proto::input::MouseEvent::LEFT_BUTTON;
 
         if (buttons & Qt::MiddleButton)
-            mask |= proto::desktop::MouseEvent::MIDDLE_BUTTON;
+            mask |= proto::input::MouseEvent::MIDDLE_BUTTON;
 
         if (buttons & Qt::RightButton)
-            mask |= proto::desktop::MouseEvent::RIGHT_BUTTON;
+            mask |= proto::input::MouseEvent::RIGHT_BUTTON;
 
         if (buttons & Qt::BackButton)
-            mask |= proto::desktop::MouseEvent::BACK_BUTTON;
+            mask |= proto::input::MouseEvent::BACK_BUTTON;
 
         if (buttons & Qt::ForwardButton)
-            mask |= proto::desktop::MouseEvent::FORWARD_BUTTON;
+            mask |= proto::input::MouseEvent::FORWARD_BUTTON;
     }
 
     int wheel_steps = 0;
@@ -285,12 +285,12 @@ void DesktopWidget::doMouseEvent(QEvent::Type event_type,
     {
         if (delta.y() < 0)
         {
-            mask |= proto::desktop::MouseEvent::WHEEL_DOWN;
+            mask |= proto::input::MouseEvent::WHEEL_DOWN;
             wheel_steps = -delta.y() / QWheelEvent::DefaultDeltasPerStep;
         }
         else
         {
-            mask |= proto::desktop::MouseEvent::WHEEL_UP;
+            mask |= proto::input::MouseEvent::WHEEL_UP;
             wheel_steps = delta.y() / QWheelEvent::DefaultDeltasPerStep;
         }
 
@@ -303,7 +303,7 @@ void DesktopWidget::doMouseEvent(QEvent::Type event_type,
         prev_pos_ = pos;
         prev_mask_ = mask & ~kWheelMask;
 
-        proto::desktop::MouseEvent event;
+        proto::input::MouseEvent event;
         event.set_x(pos.x());
         event.set_y(pos.y());
         event.set_mask(mask);
@@ -330,10 +330,10 @@ void DesktopWidget::doKeyEvent(QKeyEvent* event)
     if (!enable_key_sequenses_ && isModifierKey(key))
         return;
 
-    quint32 flags = ((event->type() == QEvent::KeyPress) ? proto::desktop::KeyEvent::PRESSED : 0);
+    quint32 flags = ((event->type() == QEvent::KeyPress) ? proto::input::KeyEvent::PRESSED : 0);
 
-    flags |= (isCapsLockActivated() ? proto::desktop::KeyEvent::CAPSLOCK : 0);
-    flags |= (isNumLockActivated() ? proto::desktop::KeyEvent::NUMLOCK : 0);
+    flags |= (isCapsLockActivated() ? proto::input::KeyEvent::CAPSLOCK : 0);
+    flags |= (isNumLockActivated() ? proto::input::KeyEvent::NUMLOCK : 0);
 
     quint32 usb_keycode;
 
@@ -363,8 +363,8 @@ void DesktopWidget::executeKeyCombination(QKeyCombination key_sequence)
 
     quint32 flags = 0;
 
-    flags |= (isCapsLockActivated() ? proto::desktop::KeyEvent::CAPSLOCK : 0);
-    flags |= (isNumLockActivated() ? proto::desktop::KeyEvent::NUMLOCK : 0);
+    flags |= (isCapsLockActivated() ? proto::input::KeyEvent::CAPSLOCK : 0);
+    flags |= (isNumLockActivated() ? proto::input::KeyEvent::NUMLOCK : 0);
 
     int combined_key_sequence = key_sequence.toCombined();
 
@@ -373,8 +373,8 @@ void DesktopWidget::executeKeyCombination(QKeyCombination key_sequence)
     if (key == common::KeycodeConverter::invalidUsbKeycode())
         return;
 
-    proto::desktop::KeyEvent event;
-    event.set_flags(flags | proto::desktop::KeyEvent::PRESSED);
+    proto::input::KeyEvent event;
+    event.set_flags(flags | proto::input::KeyEvent::PRESSED);
 
     if (combined_key_sequence & Qt::AltModifier)
     {
@@ -608,12 +608,12 @@ void DesktopWidget::focusOutEvent(QFocusEvent* event)
 //--------------------------------------------------------------------------------------------------
 void DesktopWidget::executeKeyEvent(quint32 usb_keycode, quint32 flags)
 {
-    if (flags & proto::desktop::KeyEvent::PRESSED)
+    if (flags & proto::input::KeyEvent::PRESSED)
         remote_pressed_keys_.insert(usb_keycode);
     else
         remote_pressed_keys_.remove(usb_keycode);
 
-    proto::desktop::KeyEvent event;
+    proto::input::KeyEvent event;
     event.set_usb_keycode(usb_keycode);
     event.set_flags(flags);
 
@@ -668,7 +668,7 @@ void DesktopWidget::releaseMouseButtons()
     if (prev_mask_ == 0)
         return;
 
-    proto::desktop::MouseEvent mouse_event;
+    proto::input::MouseEvent mouse_event;
     mouse_event.set_x(prev_pos_.x());
     mouse_event.set_y(prev_pos_.y());
 
@@ -683,10 +683,10 @@ void DesktopWidget::releaseKeyboardButtons()
         return;
 
     quint32 flags = 0;
-    flags |= (isCapsLockActivated() ? proto::desktop::KeyEvent::CAPSLOCK : 0);
-    flags |= (isNumLockActivated() ? proto::desktop::KeyEvent::NUMLOCK : 0);
+    flags |= (isCapsLockActivated() ? proto::input::KeyEvent::CAPSLOCK : 0);
+    flags |= (isNumLockActivated() ? proto::input::KeyEvent::NUMLOCK : 0);
 
-    proto::desktop::KeyEvent key_event;
+    proto::input::KeyEvent key_event;
     key_event.set_flags(flags);
 
     auto it = remote_pressed_keys_.begin();
@@ -709,7 +709,7 @@ LRESULT CALLBACK DesktopWidget::keyboardHookProc(INT code, WPARAM wparam, LPARAM
         if (hook->vkCode != VK_CAPITAL && hook->vkCode != VK_NUMLOCK)
         {
             quint32 flags = ((wparam == WM_KEYDOWN || wparam == WM_SYSKEYDOWN) ?
-                proto::desktop::KeyEvent::PRESSED : 0);
+                proto::input::KeyEvent::PRESSED : 0);
             quint32 scan_code = hook->scanCode;
 
             if (hook->flags & LLKHF_EXTENDED)
@@ -728,12 +728,12 @@ LRESULT CALLBACK DesktopWidget::keyboardHookProc(INT code, WPARAM wparam, LPARAM
 
                 if (is_foreground && self->enable_key_sequenses_)
                 {
-                    flags |= (isCapsLockActivated() ? proto::desktop::KeyEvent::CAPSLOCK : 0);
-                    flags |= (isNumLockActivated() ? proto::desktop::KeyEvent::NUMLOCK : 0);
+                    flags |= (isCapsLockActivated() ? proto::input::KeyEvent::CAPSLOCK : 0);
+                    flags |= (isNumLockActivated() ? proto::input::KeyEvent::NUMLOCK : 0);
 
                     self->executeKeyEvent(usb_keycode, flags);
 
-                    if (flags & proto::desktop::KeyEvent::PRESSED)
+                    if (flags & proto::input::KeyEvent::PRESSED)
                         return TRUE;
 
                     auto result = g_local_pressed_keys.find(usb_keycode);
@@ -744,7 +744,7 @@ LRESULT CALLBACK DesktopWidget::keyboardHookProc(INT code, WPARAM wparam, LPARAM
                 }
                 else
                 {
-                    if (flags & proto::desktop::KeyEvent::PRESSED)
+                    if (flags & proto::input::KeyEvent::PRESSED)
                         g_local_pressed_keys.insert(usb_keycode);
                     else
                         g_local_pressed_keys.remove(usb_keycode);
@@ -769,9 +769,9 @@ CGEventRef DesktopWidget::keyboardFilterProc(
     if (self_widget && focus_widget && self_widget == focus_widget &&
         self_widget->enable_key_sequenses_)
     {
-        quint32 flags = ((type == kCGEventKeyDown) ? proto::desktop::KeyEvent::PRESSED : 0);
-        flags |= (isCapsLockActivated() ? proto::desktop::KeyEvent::CAPSLOCK : 0);
-        flags |= (isNumLockActivated() ? proto::desktop::KeyEvent::NUMLOCK : 0);
+        quint32 flags = ((type == kCGEventKeyDown) ? proto::input::KeyEvent::PRESSED : 0);
+        flags |= (isCapsLockActivated() ? proto::input::KeyEvent::CAPSLOCK : 0);
+        flags |= (isNumLockActivated() ? proto::input::KeyEvent::NUMLOCK : 0);
 
         CGKeyCode key_code = CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode);
 

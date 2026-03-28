@@ -50,10 +50,10 @@ message SessionToClient
 // Client -> Host (channel 0).
 message ClientToSession
 {
-    MouseEvent mouse_event          = 1;
-    KeyEvent key_event              = 2;
-    TouchEvent touch_event          = 3;
-    TextEvent text_event            = 4;
+    input.MouseEvent mouse_event    = 1;
+    input.KeyEvent key_event        = 2;
+    input.TouchEvent touch_event    = 3;
+    input.TextEvent text_event      = 4;
     clipboard.Event clipboard_event = 5;
     Extension extension             = 6;
     Config config                   = 7;

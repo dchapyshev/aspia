@@ -99,9 +99,9 @@ public slots:
     void onVideoPauseChanged(bool enable);
     void onAudioPauseChanged(bool enable);
     void onRecordingChanged(bool enable, const QString& file_path);
-    void onKeyEvent(const proto::desktop::KeyEvent& event);
-    void onTextEvent(const proto::desktop::TextEvent& event);
-    void onMouseEvent(const proto::desktop::MouseEvent& event);
+    void onKeyEvent(const proto::input::KeyEvent& event);
+    void onTextEvent(const proto::input::TextEvent& event);
+    void onMouseEvent(const proto::input::MouseEvent& event);
     void onPowerControl(proto::desktop::PowerControl_Action action);
     void onSystemInfoRequest(const proto::system_info::SystemInfoRequest& request);
     void onTaskManager(const proto::task_manager::ClientToHost& message);

@@ -27,6 +27,7 @@
 #include "base/desktop/screen_capturer.h"
 #include "proto/desktop_audio.h"
 #include "proto/desktop_cursor.h"
+#include "proto/desktop_input.h"
 #include "proto/desktop_video.h"
 
 namespace base {
@@ -39,13 +40,6 @@ class IpcChannel;
 class ScaleReducer;
 class VideoEncoder;
 } // namespace base
-
-namespace proto::desktop {
-class KeyEvent;
-class MouseEvent;
-class TextEvent;
-class TouchEvent;
-} // namespace proto::desktop
 
 namespace host {
 
@@ -71,10 +65,10 @@ private slots:
     void onClientConfigured();
     void onClientFinished();
 
-    void onInjectMouseEvent(const proto::desktop::MouseEvent& event);
-    void onInjectKeyEvent(const proto::desktop::KeyEvent& event);
-    void onInjectTextEvent(const proto::desktop::TextEvent& event);
-    void onInjectTouchEvent(const proto::desktop::TouchEvent& event);
+    void onInjectMouseEvent(const proto::input::MouseEvent& event);
+    void onInjectKeyEvent(const proto::input::KeyEvent& event);
+    void onInjectTextEvent(const proto::input::TextEvent& event);
+    void onInjectTouchEvent(const proto::input::TouchEvent& event);
 
     void onSelectScreen(const proto::screen::Screen& screen);
     void onScreenListChanged(
