@@ -112,7 +112,7 @@ signals:
     void sig_capabilities(const proto::desktop::Capabilities& capabilities);
     void sig_screenListChanged(const proto::desktop::ScreenList& screen_list);
     void sig_screenTypeChanged(const proto::desktop::ScreenType& screen_type);
-    void sig_cursorPositionChanged(const proto::desktop::CursorPosition& cursor_position);
+    void sig_cursorPositionChanged(const proto::cursor::Position& position);
     void sig_systemInfo(const proto::system_info::SystemInfo& system_info);
     void sig_taskManager(const proto::task_manager::HostToClient& message);
     void sig_metrics(const client::ClientDesktop::Metrics& metrics);
@@ -135,8 +135,8 @@ private:
     void readCapabilities(const proto::desktop::Capabilities& capabilities);
     void readVideoPacket(const proto::video::Packet& packet);
     void readAudioPacket(const proto::audio::Packet& packet);
-    void readCursorShape(const proto::desktop::CursorShape& cursor_shape);
-    void readCursorPosition(const proto::desktop::CursorPosition& cursor_position);
+    void readCursorShape(const proto::cursor::Shape& shape);
+    void readCursorPosition(const proto::cursor::Position& position);
     void readClipboardEvent(const proto::clipboard::Event& event);
     void readExtension(const proto::desktop::Extension& extension);
     void sendSessionListRequest();

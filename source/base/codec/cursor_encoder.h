@@ -33,10 +33,10 @@ public:
     CursorEncoder();
     ~CursorEncoder();
 
-    bool encode(const MouseCursor& mouse_cursor, proto::desktop::CursorShape* cursor_shape);
+    bool encode(const MouseCursor& mouse_cursor, proto::cursor::Shape* cursor_shape);
 
 private:
-    bool compressCursor(const MouseCursor& mouse_cursor, proto::desktop::CursorShape* cursor_shape) const;
+    bool compressCursor(const MouseCursor& mouse_cursor, proto::cursor::Shape* cursor_shape) const;
 
     ScopedZstdCStream stream_;
     QVector<quint32> cache_;

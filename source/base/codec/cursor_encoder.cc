@@ -36,7 +36,7 @@ constexpr int kCompressionRatio = 12;
 constexpr quint32 kHashingSeed = 5381;
 
 //--------------------------------------------------------------------------------------------------
-quint8* outputBuffer(proto::desktop::CursorShape* cursor_shape, size_t size)
+quint8* outputBuffer(proto::cursor::Shape* cursor_shape, size_t size)
 {
     cursor_shape->mutable_data()->resize(size);
     return reinterpret_cast<quint8*>(cursor_shape->mutable_data()->data());
@@ -65,7 +65,7 @@ CursorEncoder::~CursorEncoder()
 
 //--------------------------------------------------------------------------------------------------
 bool CursorEncoder::compressCursor(
-    const MouseCursor& mouse_cursor, proto::desktop::CursorShape* cursor_shape) const
+    const MouseCursor& mouse_cursor, proto::cursor::Shape* cursor_shape) const
 {
     if (!cursor_shape)
     {
@@ -124,7 +124,7 @@ bool CursorEncoder::compressCursor(
 }
 
 //--------------------------------------------------------------------------------------------------
-bool CursorEncoder::encode(const MouseCursor& mouse_cursor, proto::desktop::CursorShape* cursor_shape)
+bool CursorEncoder::encode(const MouseCursor& mouse_cursor, proto::cursor::Shape* cursor_shape)
 {
     const QSize& size = mouse_cursor.size();
     const int kMaxSize = std::numeric_limits<qint16>::max() / 2;
@@ -148,7 +148,7 @@ bool CursorEncoder::encode(const MouseCursor& mouse_cursor, proto::desktop::Curs
         if (cache_[index] == hash)
         {
             // Cursor found in cache.
-            cursor_shape->set_flags(proto::desktop::CursorShape::CACHE | (index & 0x1F));
+            cursor_shape->set_flags(proto::cursor::Shape::CACHE | (index & 0x1F));
             return true;
         }
     }
@@ -178,7 +178,7 @@ bool CursorEncoder::encode(const MouseCursor& mouse_cursor, proto::desktop::Curs
 
         // If the cache is empty, then set the cache reset flag on the client side and pass the
         // maximum cache size.
-        cursor_shape->set_flags(proto::desktop::CursorShape::RESET_CACHE | (kCacheSize & 0x1F));
+        cursor_shape->set_flags(proto::cursor::Shape::RESET_CACHE | (kCacheSize & 0x1F));
     }
 
     // Add the cursor to the cache.

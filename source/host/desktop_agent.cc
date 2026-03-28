@@ -649,7 +649,7 @@ void DesktopAgent::onCaptureScreen()
             int pos_x = int(double(cursor_pos.x()) * scale_reducer_->scaleFactorX() / 100.0);
             int pos_y = int(double(cursor_pos.y()) * scale_reducer_->scaleFactorY() / 100.0);
 
-            proto::desktop::CursorPosition* position = cursor_message_.newMessage().mutable_position();
+            proto::cursor::Position* position = cursor_message_.newMessage().mutable_position();
             position->set_x(pos_x);
             position->set_y(pos_y);
 
@@ -1020,7 +1020,7 @@ void DesktopAgent::encodeCursor(const base::MouseCursor* cursor)
     if (!cursor || !cursor_encoder_)
         return;
 
-    proto::desktop::CursorData& message = cursor_message_.newMessage();
+    proto::cursor::Data& message = cursor_message_.newMessage();
     if (!cursor_encoder_->encode(*cursor, message.mutable_shape()))
         return;
 

@@ -20,9 +20,9 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
-package proto.desktop;
+package proto.cursor;
 
-message CursorShape
+message Shape
 {
     enum Flags
     {
@@ -55,15 +55,15 @@ message CursorShape
     int32 dpi_y = 8;
 }
 
-message CursorPosition
+message Position
 {
     int32 x = 1;
     int32 y = 2;
 }
 
 // Client <- Host (channel 4).
-message CursorData
+message Data
 {
-    CursorShape shape       = 1;
-    CursorPosition position = 2;
+    Shape shape       = 1;
+    Position position = 2;
 }

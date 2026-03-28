@@ -43,7 +43,7 @@ CursorDecoder::~CursorDecoder()
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray CursorDecoder::decompressCursor(const proto::desktop::CursorShape& cursor_shape) const
+QByteArray CursorDecoder::decompressCursor(const proto::cursor::Shape& cursor_shape) const
 {
     const std::string& data = cursor_shape.data();
 
@@ -89,11 +89,11 @@ QByteArray CursorDecoder::decompressCursor(const proto::desktop::CursorShape& cu
 }
 
 //--------------------------------------------------------------------------------------------------
-std::shared_ptr<MouseCursor> CursorDecoder::decode(const proto::desktop::CursorShape& cursor_shape)
+std::shared_ptr<MouseCursor> CursorDecoder::decode(const proto::cursor::Shape& cursor_shape)
 {
     int cache_index;
 
-    if (cursor_shape.flags() & proto::desktop::CursorShape::CACHE)
+    if (cursor_shape.flags() & proto::cursor::Shape::CACHE)
     {
         if (!cache_size_.has_value())
         {
@@ -134,7 +134,7 @@ std::shared_ptr<MouseCursor> CursorDecoder::decode(const proto::desktop::CursorS
         std::unique_ptr<MouseCursor> mouse_cursor =
             std::make_unique<MouseCursor>(std::move(image), size, hotspot, dpi);
 
-        if (cursor_shape.flags() & proto::desktop::CursorShape::RESET_CACHE)
+        if (cursor_shape.flags() & proto::cursor::Shape::RESET_CACHE)
         {
             qsizetype cache_size = cursor_shape.flags() & 0x1F;
 

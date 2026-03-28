@@ -430,7 +430,7 @@ void DesktopSessionWindow::onScreenListChanged(const proto::desktop::ScreenList&
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionWindow::onCursorPositionChanged(const proto::desktop::CursorPosition& cursor_position)
+void DesktopSessionWindow::onCursorPositionChanged(const proto::cursor::Position& position)
 {
     base::Frame* frame = desktop_->desktopFrame();
     if (!frame)
@@ -438,8 +438,8 @@ void DesktopSessionWindow::onCursorPositionChanged(const proto::desktop::CursorP
 
     const QSize& frame_size = frame->size();
 
-    int pos_x = int(double(desktop_->width() * cursor_position.x()) / double(frame_size.width()));
-    int pos_y = int(double(desktop_->height() * cursor_position.y()) / double(frame_size.height()));
+    int pos_x = int(double(desktop_->width() * position.x()) / double(frame_size.width()));
+    int pos_y = int(double(desktop_->height() * position.y()) / double(frame_size.height()));
 
     desktop_->setCursorPosition(QPoint(pos_x, pos_y));
     desktop_->update();

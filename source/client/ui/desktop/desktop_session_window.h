@@ -58,7 +58,7 @@ public slots:
     void onShowWindow();
     void onCapabilitiesChanged(const proto::desktop::Capabilities& capabilities);
     void onScreenListChanged(const proto::desktop::ScreenList& screen_list);
-    void onCursorPositionChanged(const proto::desktop::CursorPosition& cursor_position);
+    void onCursorPositionChanged(const proto::cursor::Position& position);
     void onSystemInfoChanged(const proto::system_info::SystemInfo& system_info);
     void onTaskManagerChanged(const proto::task_manager::HostToClient& message);
     void onMetricsChanged(const client::ClientDesktop::Metrics& metrics);

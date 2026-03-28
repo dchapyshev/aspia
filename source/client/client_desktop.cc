@@ -108,7 +108,7 @@ void ClientDesktop::onMessageReceived(quint8 channel_id, const QByteArray& buffe
     }
     else if (channel_id == proto::desktop::CHANNEL_ID_CURSOR)
     {
-        proto::desktop::CursorData message;
+        proto::cursor::Data message;
         if (!base::parse(buffer, &message))
         {
             CLOG(ERROR) << "Unable to parse cursor message";
@@ -829,7 +829,7 @@ void ClientDesktop::readAudioPacket(const proto::audio::Packet& packet)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientDesktop::readCursorShape(const proto::desktop::CursorShape& cursor_shape)
+void ClientDesktop::readCursorShape(const proto::cursor::Shape& shape)
 {
     if (sessionState()->sessionType() != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
     {
@@ -851,7 +851,7 @@ void ClientDesktop::readCursorShape(const proto::desktop::CursorShape& cursor_sh
         cursor_decoder_ = std::make_unique<base::CursorDecoder>();
     }
 
-    std::shared_ptr<base::MouseCursor> mouse_cursor = cursor_decoder_->decode(cursor_shape);
+    std::shared_ptr<base::MouseCursor> mouse_cursor = cursor_decoder_->decode(shape);
     if (!mouse_cursor)
         return;
 
@@ -859,13 +859,13 @@ void ClientDesktop::readCursorShape(const proto::desktop::CursorShape& cursor_sh
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientDesktop::readCursorPosition(const proto::desktop::CursorPosition& cursor_position)
+void ClientDesktop::readCursorPosition(const proto::cursor::Position& position)
 {
     if (!(desktop_config_.flags() & proto::desktop::CURSOR_POSITION))
         return;
 
     ++cursor_pos_count_;
-    emit sig_cursorPositionChanged(cursor_position);
+    emit sig_cursorPositionChanged(position);
 }
 
 //--------------------------------------------------------------------------------------------------
