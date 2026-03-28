@@ -39,7 +39,7 @@ public:
     ~WebmFileWriter();
 
     void addVideoPacket(const proto::desktop::VideoPacket& packet);
-    void addAudioPacket(const proto::desktop::AudioPacket& packet);
+    void addAudioPacket(const proto::audio::Packet& packet);
 
 private:
     bool init();

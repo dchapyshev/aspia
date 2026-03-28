@@ -138,7 +138,7 @@ void ClientDesktop::onMessageReceived(quint8 channel_id, const QByteArray& buffe
     }
     else if (channel_id == proto::desktop::CHANNEL_ID_AUDIO)
     {
-        proto::desktop::AudioData message;
+        proto::audio::Data message;
         if (!base::parse(buffer, &message))
         {
             CLOG(ERROR) << "Unable to parse audio message";
@@ -399,7 +399,7 @@ void ClientDesktop::onAudioPauseChanged(bool enable)
 
     if (isLegacy())
     {
-        proto::desktop::AudioPause pause;
+        proto::audio::Pause pause;
         pause.set_enable(enable);
 
         proto::desktop::ClientToSession message;
@@ -410,8 +410,8 @@ void ClientDesktop::onAudioPauseChanged(bool enable)
     }
     else
     {
-        proto::desktop::AudioControl message;
-        proto::desktop::AudioPause* pause = message.mutable_pause();
+        proto::audio::Control message;
+        proto::audio::Pause* pause = message.mutable_pause();
         pause->set_enable(enable);
         pause->set_dummy(1);
         sendMessage(proto::desktop::CHANNEL_ID_AUDIO, base::serialize(message));
@@ -785,7 +785,7 @@ void ClientDesktop::readVideoPacket(const proto::desktop::VideoPacket& packet)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientDesktop::readAudioPacket(const proto::desktop::AudioPacket& packet)
+void ClientDesktop::readAudioPacket(const proto::audio::Packet& packet)
 {
     if (webm_file_writer_)
         webm_file_writer_->addAudioPacket(packet);
@@ -798,7 +798,7 @@ void ClientDesktop::readAudioPacket(const proto::desktop::AudioPacket& packet)
 
     if (packet.encoding() != audio_encoding_)
     {
-        if (packet.encoding() != proto::desktop::AUDIO_ENCODING_OPUS)
+        if (packet.encoding() != proto::audio::ENCODING_OPUS)
         {
             CLOG(WARNING) << "Unsupported audio encoding:" << packet.encoding();
             return;
@@ -823,7 +823,7 @@ void ClientDesktop::readAudioPacket(const proto::desktop::AudioPacket& packet)
 
     ++audio_packet_count_;
 
-    std::unique_ptr<proto::desktop::AudioPacket> decoded_packet = audio_decoder_->decode(packet);
+    std::unique_ptr<proto::audio::Packet> decoded_packet = audio_decoder_->decode(packet);
     if (decoded_packet)
         audio_player_->addPacket(std::move(decoded_packet));
 }

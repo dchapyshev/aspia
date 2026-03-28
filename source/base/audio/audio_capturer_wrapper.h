@@ -37,7 +37,7 @@ public:
     void start();
 
 signals:
-    void sig_audioCaptured(const proto::desktop::AudioPacket& packet);
+    void sig_audioCaptured(const proto::audio::Packet& packet);
 
 private slots:
     void onBeforeThreadRunning();

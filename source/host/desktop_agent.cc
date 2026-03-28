@@ -282,8 +282,8 @@ void DesktopAgent::onClientConfigured()
         if (config.video_encoding == proto::desktop::VIDEO_ENCODING_VP8)
             merged_config.video_encoding = proto::desktop::VIDEO_ENCODING_VP8;
 
-        if (config.audio_encoding == proto::desktop::AUDIO_ENCODING_OPUS)
-            merged_config.audio_encoding = proto::desktop::AUDIO_ENCODING_OPUS;
+        if (config.audio_encoding == proto::audio::ENCODING_OPUS)
+            merged_config.audio_encoding = proto::audio::ENCODING_OPUS;
 
         // If at least one client has disabled effects, then the effects will be disabled for
         // everyone.
@@ -320,7 +320,7 @@ void DesktopAgent::onClientConfigured()
 
     switch (merged_config.audio_encoding)
     {
-        case proto::desktop::AUDIO_ENCODING_OPUS:
+        case proto::audio::ENCODING_OPUS:
         {
             audio_encoder_ = std::make_unique<base::AudioEncoder>();
 
@@ -1030,7 +1030,7 @@ void DesktopAgent::encodeCursor(const base::MouseCursor* cursor)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopAgent::encodeAudio(const proto::desktop::AudioPacket& packet)
+void DesktopAgent::encodeAudio(const proto::audio::Packet& packet)
 {
     if (!audio_encoder_)
         return;

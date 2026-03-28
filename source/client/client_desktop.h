@@ -134,7 +134,7 @@ private slots:
 private:
     void readCapabilities(const proto::desktop::Capabilities& capabilities);
     void readVideoPacket(const proto::desktop::VideoPacket& packet);
-    void readAudioPacket(const proto::desktop::AudioPacket& packet);
+    void readAudioPacket(const proto::audio::Packet& packet);
     void readCursorShape(const proto::desktop::CursorShape& cursor_shape);
     void readCursorPosition(const proto::desktop::CursorPosition& cursor_position);
     void readClipboardEvent(const proto::desktop::ClipboardEvent& event);
@@ -149,7 +149,7 @@ private:
     proto::desktop::Config desktop_config_;
 
     proto::desktop::VideoEncoding video_encoding_ = proto::desktop::VIDEO_ENCODING_UNKNOWN;
-    proto::desktop::AudioEncoding audio_encoding_ = proto::desktop::AUDIO_ENCODING_UNKNOWN;
+    proto::audio::Encoding audio_encoding_ = proto::audio::ENCODING_UNKNOWN;
 
     std::unique_ptr<base::VideoDecoder> video_decoder_;
     std::unique_ptr<base::CursorDecoder> cursor_decoder_;

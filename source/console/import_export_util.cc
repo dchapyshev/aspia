@@ -54,11 +54,11 @@ bool isValidVideoEncoding(int video_encoding)
 //--------------------------------------------------------------------------------------------------
 bool isValidAudioEncoding(int audio_encoding)
 {
-    switch (static_cast<proto::desktop::AudioEncoding>(audio_encoding))
+    switch (static_cast<proto::audio::Encoding>(audio_encoding))
     {
-        case proto::desktop::AUDIO_ENCODING_UNKNOWN:
-        case proto::desktop::AUDIO_ENCODING_DEFAULT:
-        case proto::desktop::AUDIO_ENCODING_OPUS:
+        case proto::audio::ENCODING_UNKNOWN:
+        case proto::audio::ENCODING_DEFAULT:
+        case proto::audio::ENCODING_OPUS:
             return true;
 
         default:
@@ -191,13 +191,13 @@ proto::desktop::Config readDesktopConfig(const QJsonObject& json_desktop_config)
     if (!isValidAudioEncoding(audio_encoding))
     {
         LOG(ERROR) << "Invalid audio encoding:" << audio_encoding;
-        audio_encoding = static_cast<int>(proto::desktop::AUDIO_ENCODING_OPUS);
+        audio_encoding = static_cast<int>(proto::audio::ENCODING_OPUS);
     }
 
     proto::desktop::Config desktop_config;
     desktop_config.set_flags(flags);
     desktop_config.set_video_encoding(static_cast<proto::desktop::VideoEncoding>(video_encoding));
-    desktop_config.set_audio_encoding(static_cast<proto::desktop::AudioEncoding>(audio_encoding));
+    desktop_config.set_audio_encoding(static_cast<proto::audio::Encoding>(audio_encoding));
 
     return desktop_config;
 }

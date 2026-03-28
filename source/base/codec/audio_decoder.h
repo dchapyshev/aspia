@@ -33,12 +33,12 @@ public:
     AudioDecoder();
     ~AudioDecoder();
 
-    std::unique_ptr<proto::desktop::AudioPacket> decode(const proto::desktop::AudioPacket& packet);
+    std::unique_ptr<proto::audio::Packet> decode(const proto::audio::Packet& packet);
 
 private:
     void initDecoder();
     void destroyDecoder();
-    bool resetForPacket(const proto::desktop::AudioPacket& packet);
+    bool resetForPacket(const proto::audio::Packet& packet);
 
     int sampling_rate_ = 0;
     int channels_ = 0;

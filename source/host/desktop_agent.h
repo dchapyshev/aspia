@@ -41,7 +41,6 @@ class VideoEncoder;
 } // namespace base
 
 namespace proto::desktop {
-class AudioPacket;
 class KeyEvent;
 class MouseEvent;
 class Screen;
@@ -95,7 +94,7 @@ private:
     void selectScreen(base::ScreenCapturer::ScreenId screen_id, const QSize& resolution);
     void encodeScreen(const base::Frame* frame);
     void encodeCursor(const base::MouseCursor* cursor);
-    void encodeAudio(const proto::desktop::AudioPacket& packet);
+    void encodeAudio(const proto::audio::Packet& packet);
 
     // Control channel between service and agent.
     base::IpcChannel* ipc_channel_ = nullptr;
@@ -130,7 +129,7 @@ private:
     base::Serializer<proto::desktop::ScreenData> screen_message_;
     base::Serializer<proto::desktop::CursorData> cursor_message_;
     base::Serializer<proto::desktop::VideoData> video_message_;
-    base::Serializer<proto::desktop::AudioData> audio_message_;
+    base::Serializer<proto::audio::Data> audio_message_;
 
     bool is_paused_ = false;
     bool is_mouse_locked_ = false;

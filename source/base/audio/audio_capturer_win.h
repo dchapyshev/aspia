@@ -70,7 +70,7 @@ private:
 
     PacketCapturedCallback callback_;
 
-    proto::desktop::AudioPacket::SamplingRate sampling_rate_;
+    proto::audio::Packet::SamplingRate sampling_rate_;
     QTimer* capture_timer_ = nullptr;
     std::chrono::milliseconds audio_device_period_;
     AudioVolumeFilterWin volume_filter_;

@@ -107,7 +107,7 @@ message Config
     // Field 4 is deprecated.
     // Field 5 (compress ratio) is deprecated.
     // Field 6 is deprecated.
-    AudioEncoding audio_encoding = 7;
+    audio.Encoding audio_encoding = 7;
 }
 
 // Client <- Host (channel 1).

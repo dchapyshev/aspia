@@ -23,10 +23,9 @@
 #endif // defined(Q_OS_WINDOWS)
 
 #if defined(Q_OS_LINUX)
+#include "base/logging.h"
 #include "base/audio/audio_capturer_linux.h"
 #endif // defined(Q_OS_LINUX)
-
-#include "base/logging.h"
 
 namespace base {
 
@@ -36,10 +35,10 @@ bool AudioCapturer::isValidSampleRate(int sample_rate)
 {
     switch (sample_rate)
     {
-        case proto::desktop::AudioPacket::SAMPLING_RATE_44100:
-        case proto::desktop::AudioPacket::SAMPLING_RATE_48000:
-        case proto::desktop::AudioPacket::SAMPLING_RATE_96000:
-        case proto::desktop::AudioPacket::SAMPLING_RATE_192000:
+        case proto::audio::Packet::SAMPLING_RATE_44100:
+        case proto::audio::Packet::SAMPLING_RATE_48000:
+        case proto::audio::Packet::SAMPLING_RATE_96000:
+        case proto::audio::Packet::SAMPLING_RATE_192000:
             return true;
 
         default:

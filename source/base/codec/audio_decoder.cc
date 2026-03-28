@@ -32,8 +32,7 @@ const std::chrono::milliseconds kMaxFrameSizeMs { 120 };
 // Hosts will never generate more than 100 frames in a single packet.
 const int kMaxFramesPerPacket = 100;
 
-const proto::desktop::AudioPacket::SamplingRate kSamplingRate =
-    proto::desktop::AudioPacket::SAMPLING_RATE_48000;
+const proto::audio::Packet::SamplingRate kSamplingRate = proto::audio::Packet::SAMPLING_RATE_48000;
 
 } // namespace
 
@@ -70,7 +69,7 @@ void AudioDecoder::destroyDecoder()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool AudioDecoder::resetForPacket(const proto::desktop::AudioPacket& packet)
+bool AudioDecoder::resetForPacket(const proto::audio::Packet& packet)
 {
     if (packet.channels() != channels_ || packet.sampling_rate() != sampling_rate_)
     {
@@ -94,9 +93,9 @@ bool AudioDecoder::resetForPacket(const proto::desktop::AudioPacket& packet)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::unique_ptr<proto::desktop::AudioPacket> AudioDecoder::decode(const proto::desktop::AudioPacket& packet)
+std::unique_ptr<proto::audio::Packet> AudioDecoder::decode(const proto::audio::Packet& packet)
 {
-    if (packet.encoding() != proto::desktop::AUDIO_ENCODING_OPUS)
+    if (packet.encoding() != proto::audio::ENCODING_OPUS)
     {
         LOG(ERROR) << "Received an audio packet with encoding" << packet.encoding()
                    << "when an OPUS packet was expected";
@@ -113,10 +112,10 @@ std::unique_ptr<proto::desktop::AudioPacket> AudioDecoder::decode(const proto::d
         return nullptr;
 
     // Create a new packet of decoded data.
-    std::unique_ptr<proto::desktop::AudioPacket> decoded_packet(new proto::desktop::AudioPacket());
-    decoded_packet->set_encoding(proto::desktop::AUDIO_ENCODING_RAW);
+    std::unique_ptr<proto::audio::Packet> decoded_packet(new proto::audio::Packet());
+    decoded_packet->set_encoding(proto::audio::ENCODING_RAW);
     decoded_packet->set_sampling_rate(kSamplingRate);
-    decoded_packet->set_bytes_per_sample(proto::desktop::AudioPacket::BYTES_PER_SAMPLE_2);
+    decoded_packet->set_bytes_per_sample(proto::audio::Packet::BYTES_PER_SAMPLE_2);
     decoded_packet->set_channels(packet.channels());
 
     int max_frame_samples = static_cast<int>(

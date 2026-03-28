@@ -75,11 +75,11 @@ bool parseAudioValue(const QString& value, proto::desktop::Config& config)
     {
         if (value == "0")
         {
-            config.set_audio_encoding(proto::desktop::AUDIO_ENCODING_UNKNOWN);
+            config.set_audio_encoding(proto::audio::ENCODING_UNKNOWN);
         }
         else if (value == "1")
         {
-            config.set_audio_encoding(proto::desktop::AUDIO_ENCODING_OPUS);
+            config.set_audio_encoding(proto::audio::ENCODING_OPUS);
         }
         else
         {

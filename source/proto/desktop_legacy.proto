@@ -39,7 +39,7 @@ message Extension
 message SessionToClient
 {
     VideoPacket video_packet       = 1;
-    AudioPacket audio_packet       = 2;
+    audio.Packet audio_packet      = 2;
     CursorShape cursor_shape       = 3;
     ClipboardEvent clipboard_event = 4;
     Extension extension            = 5;
@@ -57,5 +57,5 @@ message ClientToSession
     ClipboardEvent clipboard_event = 5;
     Extension extension            = 6;
     Config config                  = 7;
-    AudioPacket audio_packet       = 8;
+    audio.Packet audio_packet      = 8;
 }

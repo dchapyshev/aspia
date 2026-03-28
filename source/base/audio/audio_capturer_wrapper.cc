@@ -62,7 +62,7 @@ void AudioCapturerWrapper::onBeforeThreadRunning()
         return;
     }
 
-    capturer_->start([this](std::unique_ptr<proto::desktop::AudioPacket> packet)
+    capturer_->start([this](std::unique_ptr<proto::audio::Packet> packet)
     {
         emit sig_audioCaptured(*packet);
     });

@@ -92,7 +92,7 @@ void DesktopAgentClient::onCursorData(const QByteArray& buffer)
 //--------------------------------------------------------------------------------------------------
 void DesktopAgentClient::onAudioData(const QByteArray& buffer)
 {
-    if (is_audio_paused_ || config_.audio_encoding != proto::desktop::AUDIO_ENCODING_OPUS)
+    if (is_audio_paused_ || config_.audio_encoding != proto::audio::ENCODING_OPUS)
         return;
 
     if (overflow_state_ == proto::desktop::Overflow::STATE_CRITICAL)
@@ -242,7 +242,7 @@ void DesktopAgentClient::readSessionMessage(quint8 channel_id, const QByteArray&
     }
     else if (channel_id == proto::desktop::CHANNEL_ID_AUDIO)
     {
-        proto::desktop::AudioControl message;
+        proto::audio::Control message;
         if (!base::parse(buffer, &message))
         {
             CLOG(ERROR) << "Unable to parse audio control message";
@@ -351,7 +351,7 @@ void DesktopAgentClient::readVideoPause(const proto::desktop::VideoPause& pause)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::readAudioPause(const proto::desktop::AudioPause& pause)
+void DesktopAgentClient::readAudioPause(const proto::audio::Pause& pause)
 {
     is_audio_paused_ = pause.enable();
     CLOG(INFO) << "Audio paused:" << is_audio_paused_;

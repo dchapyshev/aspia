@@ -25,9 +25,9 @@
 #include <mutex>
 #include <queue>
 
-namespace proto::desktop {
-class AudioPacket;
-} // namespace proto::desktop
+namespace proto::audio {
+class Packet;
+} // namespace proto::audio
 
 namespace base {
 
@@ -39,7 +39,7 @@ public:
     ~AudioPlayer();
 
     static std::unique_ptr<AudioPlayer> create();
-    void addPacket(std::unique_ptr<proto::desktop::AudioPacket> packet);
+    void addPacket(std::unique_ptr<proto::audio::Packet> packet);
 
 private:
     AudioPlayer();
@@ -48,10 +48,10 @@ private:
 
     std::unique_ptr<AudioOutput> output_;
 
-    std::queue<std::unique_ptr<proto::desktop::AudioPacket>> incoming_queue_;
+    std::queue<std::unique_ptr<proto::audio::Packet>> incoming_queue_;
     std::mutex incoming_queue_lock_;
 
-    std::queue<std::unique_ptr<proto::desktop::AudioPacket>> work_queue_;
+    std::queue<std::unique_ptr<proto::audio::Packet>> work_queue_;
     size_t source_pos_ = 0;
 
     Q_DISABLE_COPY_MOVE(AudioPlayer)

@@ -35,20 +35,19 @@ public:
     ~AudioEncoder();
 
     // AudioEncoder interface.
-    bool encode(const proto::desktop::AudioPacket& input_packet,
-                proto::desktop::AudioPacket* output_packet);
+    bool encode(const proto::audio::Packet& input_packet, proto::audio::Packet* output_packet);
     int bitrate();
     bool setBitrate(int bitrate);
 
 private:
     void initEncoder();
     void destroyEncoder();
-    bool resetForPacket(const proto::desktop::AudioPacket& packet);
+    bool resetForPacket(const proto::audio::Packet& packet);
     void fetchBytesToResample(int resampler_frame_delay, AudioBus* audio_bus);
 
     int bitrate_ = 96 * 1024; // Output 96 kb/s bitrate.
     int sampling_rate_ = 0;
-    proto::desktop::AudioPacket::Channels channels_ = proto::desktop::AudioPacket::CHANNELS_STEREO;
+    proto::audio::Packet::Channels channels_ = proto::audio::Packet::CHANNELS_STEREO;
     OpusEncoder* encoder_ = nullptr;
 
     int frame_size_ = 0;

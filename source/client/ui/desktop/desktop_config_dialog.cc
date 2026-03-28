@@ -55,7 +55,7 @@ DesktopConfigDialog::DesktopConfigDialog(proto::peer::SessionType session_type,
     combo_codec->setCurrentIndex(current_codec);
     onCodecChanged(current_codec);
 
-    if (config_.audio_encoding() != proto::desktop::AUDIO_ENCODING_UNKNOWN)
+    if (config_.audio_encoding() != proto::audio::ENCODING_UNKNOWN)
         ui->checkbox_audio->setChecked(true);
 
     if (session_type == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
@@ -184,9 +184,9 @@ void DesktopConfigDialog::onButtonBoxClicked(QAbstractButton* button)
         config_.set_video_encoding(video_encoding);
 
         if (ui->checkbox_audio->isChecked())
-            config_.set_audio_encoding(proto::desktop::AUDIO_ENCODING_OPUS);
+            config_.set_audio_encoding(proto::audio::ENCODING_OPUS);
         else
-            config_.set_audio_encoding(proto::desktop::AUDIO_ENCODING_UNKNOWN);
+            config_.set_audio_encoding(proto::audio::ENCODING_UNKNOWN);
 
         quint32 flags = 0;
 

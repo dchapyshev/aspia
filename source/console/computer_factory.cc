@@ -34,7 +34,7 @@ void ComputerFactory::setDefaultDesktopManageConfig(proto::desktop::Config* conf
 
     config->set_flags(kDefaultFlags);
     config->set_video_encoding(proto::desktop::VIDEO_ENCODING_VP8);
-    config->set_audio_encoding(proto::desktop::AUDIO_ENCODING_OPUS);
+    config->set_audio_encoding(proto::audio::ENCODING_OPUS);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -47,7 +47,7 @@ void ComputerFactory::setDefaultDesktopViewConfig(proto::desktop::Config* config
 
     config->set_flags(kDefaultFlags);
     config->set_video_encoding(proto::desktop::VIDEO_ENCODING_VP8);
-    config->set_audio_encoding(proto::desktop::AUDIO_ENCODING_OPUS);
+    config->set_audio_encoding(proto::audio::ENCODING_OPUS);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -20,17 +20,17 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
-package proto.desktop;
+package proto.audio;
 
-enum AudioEncoding
+enum Encoding
 {
-    AUDIO_ENCODING_UNKNOWN = 0;
-    AUDIO_ENCODING_DEFAULT = 1;
-    AUDIO_ENCODING_RAW     = 2;
-    AUDIO_ENCODING_OPUS    = 3;
+    ENCODING_UNKNOWN = 0;
+    ENCODING_DEFAULT = 1;
+    ENCODING_RAW     = 2;
+    ENCODING_OPUS    = 3;
 }
 
-message AudioPacket
+message Packet
 {
     enum SamplingRate
     {
@@ -62,26 +62,26 @@ message AudioPacket
 
     int32 timestamp                 = 1;
     repeated bytes data             = 2;
-    AudioEncoding encoding          = 3;
+    Encoding encoding               = 3;
     SamplingRate sampling_rate      = 4;
     BytesPerSample bytes_per_sample = 5;
     Channels channels               = 6;
 }
 
-message AudioPause
+message Pause
 {
     bool enable  = 1;
     uint32 dummy = 2;
 }
 
 // Client <- Host (channel 7).
-message AudioData
+message Data
 {
-    AudioPacket packet = 1;
+    Packet packet = 1;
 }
 
 // Client -> Host (channel 7).
-message AudioControl
+message Control
 {
-    AudioPause pause = 1;
+    Pause pause = 1;
 }

@@ -70,7 +70,7 @@ void ComputerDialogDesktop::restoreSettings(
     combo_codec->setCurrentIndex(current_codec);
     onCodecChanged(current_codec);
 
-    if (desktop_config.audio_encoding() != proto::desktop::AUDIO_ENCODING_UNKNOWN)
+    if (desktop_config.audio_encoding() != proto::audio::ENCODING_UNKNOWN)
         ui.checkbox_audio->setChecked(true);
 
     if (session_type == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
@@ -130,9 +130,9 @@ void ComputerDialogDesktop::saveSettings(
     quint32 flags = 0;
 
     if (ui.checkbox_audio->isChecked())
-        desktop_config->set_audio_encoding(proto::desktop::AUDIO_ENCODING_OPUS);
+        desktop_config->set_audio_encoding(proto::audio::ENCODING_OPUS);
     else
-        desktop_config->set_audio_encoding(proto::desktop::AUDIO_ENCODING_UNKNOWN);
+        desktop_config->set_audio_encoding(proto::audio::ENCODING_UNKNOWN);
 
     if (ui.checkbox_cursor_shape->isChecked() && ui.checkbox_cursor_shape->isEnabled())
         flags |= proto::desktop::ENABLE_CURSOR_SHAPE;
