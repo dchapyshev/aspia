@@ -70,7 +70,8 @@ message FileTransferError
     string error_id    = 3;
 }
 
-message ClipboardMessage
+// Client <-> Host (channel 4).
+message ClipboardData
 {
     ClipboardEvent event        = 1;
     FileTransferRequest request = 2;

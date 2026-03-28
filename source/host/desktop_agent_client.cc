@@ -22,10 +22,12 @@
 
 #include "base/numeric_utils.h"
 #include "base/power_controller.h"
+#include "base/serialization.h"
 #include "base/ipc/ipc_channel.h"
 #include "common/desktop_session_constants.h"
 #include "host/host_storage.h"
 #include "host/service.h"
+#include "proto/desktop_channel.h"
 #include "proto/peer.h"
 
 #if defined(Q_OS_WINDOWS)
@@ -59,33 +61,33 @@ DesktopAgentClient::~DesktopAgentClient()
 void DesktopAgentClient::onScreenData(const QByteArray& buffer)
 {
     if (!is_video_paused_)
-        sendSessionMessage(buffer, false);
+        sendSessionMessage(proto::desktop::CHANNEL_ID_SCREEN, buffer, false);
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopAgentClient::onScreenListData(const QByteArray& buffer)
 {
-    sendSessionMessage(buffer, true);
+    sendSessionMessage(proto::desktop::CHANNEL_ID_EXTENSION, buffer, true);
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopAgentClient::onScreenTypeData(const QByteArray& buffer)
 {
-    sendSessionMessage(buffer, true);
+    sendSessionMessage(proto::desktop::CHANNEL_ID_EXTENSION, buffer, true);
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopAgentClient::onCursorPositionData(const QByteArray& buffer)
 {
     if (config_.cursor_position)
-        sendSessionMessage(buffer, false);
+        sendSessionMessage(proto::desktop::CHANNEL_ID_SCREEN, buffer, false);
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopAgentClient::onCursorData(const QByteArray& buffer)
 {
     if (config_.cursor_shape)
-        sendSessionMessage(buffer, true);
+        sendSessionMessage(proto::desktop::CHANNEL_ID_SCREEN, buffer, true);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -97,7 +99,7 @@ void DesktopAgentClient::onAudioData(const QByteArray& buffer)
     if (overflow_state_ == proto::desktop::Overflow::STATE_CRITICAL)
         return;
 
-    sendSessionMessage(buffer, false);
+    sendSessionMessage(proto::desktop::CHANNEL_ID_AUDIO, buffer, false);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -144,8 +146,7 @@ void DesktopAgentClient::onIpcMessageReceived(
             return;
         }
 
-        if (net_channel_id == proto::peer::CHANNEL_ID_0)
-            readSessionMessage(buffer);
+        readSessionMessage(net_channel_id, buffer);
     }
     else if (ipc_channel_id == proto::desktop::IPC_CHANNEL_ID_SERVICE)
     {
@@ -188,40 +189,50 @@ void DesktopAgentClient::onIpcMessageReceived(
 //--------------------------------------------------------------------------------------------------
 void DesktopAgentClient::onTaskManagerMessage(const proto::task_manager::HostToClient& extension_message)
 {
-    proto::desktop::SessionToClient message;
-    proto::desktop::Extension* extension = message.mutable_extension();
-    extension->set_name(common::kTaskManagerExtension);
-    extension->set_data(extension_message.SerializeAsString());
-    sendSessionMessage(base::serialize(message), true);
+    proto::desktop::ExtensionData message;
+    message.set_name(common::kTaskManagerExtension);
+    message.set_data(extension_message.SerializeAsString());
+    sendSessionMessage(proto::desktop::CHANNEL_ID_EXTENSION, base::serialize(message), true);
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::readSessionMessage(const QByteArray& buffer)
+void DesktopAgentClient::readSessionMessage(quint8 channel_id, const QByteArray& buffer)
 {
-    if (!incoming_message_.parse(buffer))
+    if (channel_id == proto::desktop::CHANNEL_ID_INPUT)
     {
-        CLOG(ERROR) << "Invalid message from client";
-        return;
-    }
+        proto::desktop::InputData message;
+        if (!base::parse(buffer, &message))
+        {
+            CLOG(ERROR) << "Unable to parse input message";
+            return;
+        }
 
-    if (incoming_message_->has_mouse_event())
-        readMouseEvent(incoming_message_->mouse_event());
-    else if (incoming_message_->has_key_event())
-        readKeyEvent(incoming_message_->key_event());
-    else if (incoming_message_->has_touch_event())
-        readTouchEvent(incoming_message_->touch_event());
-    else if (incoming_message_->has_text_event())
-        readTextEvent(incoming_message_->text_event());
-    else if (incoming_message_->has_extension())
-        readExtension(incoming_message_->extension());
-    else
-        CLOG(ERROR) << "Unhandled message from client";
+        if (message.has_mouse())
+            readMouseEvent(message.mouse());
+        else if (message.has_touch())
+            readTouchEvent(message.touch());
+        else if (message.has_key())
+            readKeyEvent(message.key());
+        else if (message.has_text())
+            readTextEvent(message.text());
+    }
+    else if (channel_id == proto::desktop::CHANNEL_ID_EXTENSION)
+    {
+        proto::desktop::ExtensionData message;
+        if (!base::parse(buffer, &message))
+        {
+            CLOG(ERROR) << "Unable to parse extension message";
+            return;
+        }
+
+        readExtension(message);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::sendSessionMessage(const QByteArray& buffer, bool reliable)
+void DesktopAgentClient::sendSessionMessage(quint8 net_channel_id, const QByteArray& buffer, bool reliable)
 {
-    quint32 channel_id = base::makeUint32(proto::desktop::IPC_CHANNEL_ID_SESSION, proto::peer::CHANNEL_ID_0);
+    quint32 channel_id = base::makeUint32(proto::desktop::IPC_CHANNEL_ID_SESSION, net_channel_id);
     ipc_channel_->send(channel_id, buffer, reliable);
 }
 
@@ -254,11 +265,11 @@ void DesktopAgentClient::readTextEvent(const proto::desktop::TextEvent& text_eve
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::readExtension(const proto::desktop::Extension& extension)
+void DesktopAgentClient::readExtension(const proto::desktop::ExtensionData& extension)
 {
     if (extension.name() == common::kKeyFrameExtension)
         readKeyFrameExtension(extension.data());
-    if (extension.name() == common::kTaskManagerExtension)
+    else if (extension.name() == common::kTaskManagerExtension)
         readTaskManagerExtension(extension.data());
     else if (extension.name() == common::kSelectScreenExtension)
         readSelectScreenExtension(extension.data());
@@ -471,12 +482,11 @@ void DesktopAgentClient::readSystemInfoExtension(const std::string& data)
     proto::system_info::SystemInfo system_info;
     createSystemInfo(system_info_request, &system_info);
 
-    proto::desktop::SessionToClient message;
-    proto::desktop::Extension* desktop_extension = message.mutable_extension();
-    desktop_extension->set_name(common::kSystemInfoExtension);
-    desktop_extension->set_data(system_info.SerializeAsString());
+    proto::desktop::ExtensionData message;
+    message.set_name(common::kSystemInfoExtension);
+    message.set_data(system_info.SerializeAsString());
 
-    sendSessionMessage(base::serialize(message), true);
+    sendSessionMessage(proto::desktop::CHANNEL_ID_EXTENSION, base::serialize(message), true);
 #endif // defined(Q_OS_WINDOWS)
 }
 
@@ -529,7 +539,7 @@ void DesktopAgentClient::sendCapabilities()
     }
 
     // Create a capabilities.
-    proto::desktop::SessionToClient message;
+    proto::desktop::ServiceToClient message;
     proto::desktop::Capabilities* capabilities = message.mutable_capabilities();
 
     // Add supported extensions and video encodings.
@@ -562,7 +572,7 @@ void DesktopAgentClient::sendCapabilities()
 #endif
 
     CLOG(INFO) << "Sending:" << *capabilities;
-    sendSessionMessage(base::serialize(message), true);
+    sendSessionMessage(proto::desktop::CHANNEL_ID_CONTROL, base::serialize(message), true);
 }
 
 } // namespace host

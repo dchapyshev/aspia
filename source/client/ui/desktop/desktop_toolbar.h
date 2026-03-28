@@ -19,8 +19,8 @@
 #ifndef CLIENT_UI_DESKTOP_DESKTOP_TOOLBAR_H
 #define CLIENT_UI_DESKTOP_DESKTOP_TOOLBAR_H
 
-#include "proto/desktop_session.h"
-#include "proto/desktop_service.h"
+#include "proto/desktop_control.h"
+#include "proto/desktop_extension.h"
 #include "proto/peer.h"
 #include "ui_desktop_toolbar.h"
 
@@ -70,7 +70,7 @@ signals:
     void sig_keyCombinationsChanged(bool enabled);
     void sig_takeScreenshot();
     void sig_startSession(proto::peer::SessionType session_type);
-    void sig_powerControl(proto::desktop::PowerControl::Action action, bool wait);
+    void sig_powerControl(proto::desktop::PowerControl_Action action, bool wait);
     void sig_startRemoteUpdate();
     void sig_startSystemInfo();
     void sig_startTaskManager();

@@ -30,6 +30,8 @@
 #include "base/desktop/frame_aligned.h"
 #include "base/desktop/mouse_cursor.h"
 #include "common/desktop_session_constants.h"
+#include "proto/desktop_channel.h"
+#include "proto/desktop_legacy.h"
 
 namespace client {
 
@@ -93,59 +95,49 @@ void ClientDesktop::onStarted()
 //--------------------------------------------------------------------------------------------------
 void ClientDesktop::onMessageReceived(quint8 channel_id, const QByteArray& buffer)
 {
-    if (channel_id == proto::peer::CHANNEL_ID_0) // Session data
+    if (channel_id == proto::desktop::CHANNEL_ID_SCREEN)
     {
-        if (!incoming_message_.parse(buffer))
+        proto::desktop::ScreenData message;
+        if (!base::parse(buffer, &message))
         {
-            CLOG(ERROR) << "Invalid session message from host";
+            CLOG(ERROR) << "Unable to parse screen message";
             return;
         }
 
-        if (incoming_message_->has_video_packet() || incoming_message_->has_cursor_shape())
-        {
-            if (incoming_message_->has_video_packet())
-                readVideoPacket(incoming_message_->video_packet());
-
-            if (incoming_message_->has_cursor_shape())
-                readCursorShape(incoming_message_->cursor_shape());
-        }
-        else if (incoming_message_->has_audio_packet())
-        {
-            readAudioPacket(incoming_message_->audio_packet());
-        }
-        else if (incoming_message_->has_cursor_position())
-        {
-            readCursorPosition(incoming_message_->cursor_position());
-        }
-        else if (incoming_message_->has_clipboard_event())
-        {
-            // Deprecated: only for legacy hosts.
-            readClipboardEvent(incoming_message_->clipboard_event());
-        }
-        else if (incoming_message_->has_capabilities())
-        {
-            readCapabilities(incoming_message_->capabilities());
-        }
-        else if (incoming_message_->has_extension())
-        {
-            readExtension(incoming_message_->extension());
-        }
+        if (message.has_video_packet())
+            readVideoPacket(message.video_packet());
+        else if (message.has_cursor_shape())
+            readCursorShape(message.cursor_shape());
+        else if (message.has_cursor_position())
+            readCursorPosition(message.cursor_position());
         else
-        {
-            // Unknown messages are ignored.
-            CLOG(ERROR) << "Unhandled session message from host";
-        }
+            LOG(WARNING) << "Unhandled screen message";
     }
-    else if (channel_id == proto::peer::CHANNEL_ID_1) // Service data
+    else if (channel_id == proto::desktop::CHANNEL_ID_AUDIO)
+    {
+        proto::desktop::AudioData message;
+        if (!base::parse(buffer, &message))
+        {
+            CLOG(ERROR) << "Unable to parse audio message";
+            return;
+        }
+
+        readAudioPacket(message.packet());
+    }
+    else if (channel_id == proto::desktop::CHANNEL_ID_CONTROL)
     {
         proto::desktop::ServiceToClient message;
         if (!base::parse(buffer, &message))
         {
-            CLOG(ERROR) << "Unable to parse service message";
+            CLOG(ERROR) << "Unable to parse control message";
             return;
         }
 
-        if (message.has_session_list())
+        if (message.has_capabilities())
+        {
+            readCapabilities(message.capabilities());
+        }
+        else if (message.has_session_list())
         {
             CLOG(INFO) << "Received:" << message.session_list();
             emit sig_sessionListChanged(message.session_list());
@@ -156,9 +148,9 @@ void ClientDesktop::onMessageReceived(quint8 channel_id, const QByteArray& buffe
             CLOG(ERROR) << "Unhandled service message from host";
         }
     }
-    else if (channel_id == proto::peer::CHANNEL_ID_2) // Clipboard data
+    else if (channel_id == proto::desktop::CHANNEL_ID_CLIPBOARD)
     {
-        proto::desktop::ClipboardMessage message;
+        proto::desktop::ClipboardData message;
         if (!base::parse(buffer, &message))
         {
             CLOG(ERROR) << "Unable to parse clipboard message";
@@ -166,13 +158,56 @@ void ClientDesktop::onMessageReceived(quint8 channel_id, const QByteArray& buffe
         }
 
         if (message.has_event())
-        {
             readClipboardEvent(message.event());
-        }
         else
-        {
-            // Unknown messages are ignored.
             CLOG(ERROR) << "Unhandled clipboard message from host";
+    }
+    else if (channel_id == proto::desktop::CHANNEL_ID_EXTENSION)
+    {
+        proto::desktop::ExtensionData message;
+        if (!base::parse(buffer, &message))
+        {
+            CLOG(ERROR) << "Unable to parse extension message";
+            return;
+        }
+
+        readExtension(message);
+    }
+    else if (channel_id == proto::desktop::CHANNEL_ID_LEGACY)
+    {
+        proto::desktop::SessionToClient message;
+        if (!base::parse(buffer, &message))
+        {
+            CLOG(ERROR) << "Invalid session message from host";
+            return;
+        }
+
+        if (message.has_video_packet() || message.has_cursor_shape())
+        {
+            if (message.has_video_packet())
+                readVideoPacket(message.video_packet());
+            if (message.has_cursor_shape())
+                readCursorShape(message.cursor_shape());
+        }
+        else if (message.has_audio_packet())
+        {
+            readAudioPacket(message.audio_packet());
+        }
+        else if (message.has_cursor_position())
+        {
+            readCursorPosition(message.cursor_position());
+        }
+        else if (message.has_clipboard_event())
+        {
+            readClipboardEvent(message.clipboard_event());
+        }
+        else if (message.has_capabilities())
+        {
+            readCapabilities(message.capabilities());
+        }
+        else if (message.has_extension())
+        {
+            readExtension(message.extension());
         }
     }
 }
@@ -185,15 +220,15 @@ void ClientDesktop::onClipboardEvent(const proto::desktop::ClipboardEvent& event
 
     if (isLegacy())
     {
-        // Deprecated: only for legacy hosts.
-        outgoing_message_.newMessage().mutable_clipboard_event()->CopyFrom(event);
-        sendMessage(proto::peer::CHANNEL_ID_0, outgoing_message_.serialize());
+        proto::desktop::ClientToSession message;
+        message.mutable_clipboard_event()->CopyFrom(event);
+        sendMessage(proto::desktop::CHANNEL_ID_LEGACY, base::serialize(message));
     }
     else
     {
-        proto::desktop::ClipboardMessage message;
+        proto::desktop::ClipboardData message;
         message.mutable_event()->CopyFrom(event);
-        sendMessage(proto::peer::CHANNEL_ID_2, base::serialize(message));
+        sendMessage(proto::desktop::CHANNEL_ID_CLIPBOARD, base::serialize(message));
     }
 }
 
@@ -214,14 +249,15 @@ void ClientDesktop::onDesktopConfigChanged(const proto::desktop::Config& config)
 
     if (isLegacy())
     {
-        outgoing_message_.newMessage().mutable_config()->CopyFrom(desktop_config_);
-        sendMessage(proto::peer::CHANNEL_ID_0, outgoing_message_.serialize());
+        proto::desktop::ClientToSession message;
+        message.mutable_config()->CopyFrom(desktop_config_);
+        sendMessage(proto::desktop::CHANNEL_ID_LEGACY, base::serialize(message));
     }
     else
     {
         proto::desktop::ClientToService message;
         message.mutable_config()->CopyFrom(desktop_config_);
-        sendMessage(proto::peer::CHANNEL_ID_1, base::serialize(message));
+        sendMessage(proto::desktop::CHANNEL_ID_CONTROL, base::serialize(message));
         sendSessionListRequest();
     }
 }
@@ -231,11 +267,21 @@ void ClientDesktop::onCurrentScreenChanged(const proto::desktop::Screen& screen)
 {
     CLOG(INFO) << "Current screen changed:" << screen.id();
 
-    proto::desktop::Extension* extension = outgoing_message_.newMessage().mutable_extension();
-    extension->set_name(common::kSelectScreenExtension);
-    extension->set_data(screen.SerializeAsString());
-
-    sendMessage(proto::peer::CHANNEL_ID_0, outgoing_message_.serialize());
+    if (isLegacy())
+    {
+        proto::desktop::ClientToSession message;
+        proto::desktop::ExtensionData* extension = message.mutable_extension();
+        extension->set_name(common::kSelectScreenExtension);
+        extension->set_data(screen.SerializeAsString());
+        sendMessage(proto::desktop::CHANNEL_ID_LEGACY, base::serialize(message));
+    }
+    else
+    {
+        proto::desktop::ExtensionData message;
+        message.set_name(common::kSelectScreenExtension);
+        message.set_data(screen.SerializeAsString());
+        sendMessage(proto::desktop::CHANNEL_ID_EXTENSION, base::serialize(message));
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -247,11 +293,21 @@ void ClientDesktop::onPreferredSizeChanged(int width, int height)
     preferred_size.set_width(width);
     preferred_size.set_height(height);
 
-    proto::desktop::Extension* extension = outgoing_message_.newMessage().mutable_extension();
-    extension->set_name(common::kPreferredSizeExtension);
-    extension->set_data(preferred_size.SerializeAsString());
-
-    sendMessage(proto::peer::CHANNEL_ID_0, outgoing_message_.serialize());
+    if (isLegacy())
+    {
+        proto::desktop::ClientToSession message;
+        proto::desktop::ExtensionData* extension = message.mutable_extension();
+        extension->set_name(common::kPreferredSizeExtension);
+        extension->set_data(preferred_size.SerializeAsString());
+        sendMessage(proto::desktop::CHANNEL_ID_LEGACY, base::serialize(message));
+    }
+    else
+    {
+        proto::desktop::ExtensionData message;
+        message.set_name(common::kPreferredSizeExtension);
+        message.set_data(preferred_size.SerializeAsString());
+        sendMessage(proto::desktop::CHANNEL_ID_EXTENSION, base::serialize(message));
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -273,11 +329,21 @@ void ClientDesktop::onVideoPauseChanged(bool enable)
     proto::desktop::Pause pause;
     pause.set_enable(enable);
 
-    proto::desktop::Extension* extension = outgoing_message_.newMessage().mutable_extension();
-    extension->set_name(common::kVideoPauseExtension);
-    extension->set_data(pause.SerializeAsString());
-
-    sendMessage(proto::peer::CHANNEL_ID_0, outgoing_message_.serialize());
+    if (isLegacy())
+    {
+        proto::desktop::ClientToSession message;
+        proto::desktop::ExtensionData* extension = message.mutable_extension();
+        extension->set_name(common::kVideoPauseExtension);
+        extension->set_data(pause.SerializeAsString());
+        sendMessage(proto::desktop::CHANNEL_ID_LEGACY, base::serialize(message));
+    }
+    else
+    {
+        proto::desktop::ExtensionData message;
+        message.set_name(common::kVideoPauseExtension);
+        message.set_data(pause.SerializeAsString());
+        sendMessage(proto::desktop::CHANNEL_ID_EXTENSION, base::serialize(message));
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -299,11 +365,21 @@ void ClientDesktop::onAudioPauseChanged(bool enable)
     proto::desktop::Pause pause;
     pause.set_enable(enable);
 
-    proto::desktop::Extension* extension = outgoing_message_.newMessage().mutable_extension();
-    extension->set_name(common::kAudioPauseExtension);
-    extension->set_data(pause.SerializeAsString());
-
-    sendMessage(proto::peer::CHANNEL_ID_0, outgoing_message_.serialize());
+    if (isLegacy())
+    {
+        proto::desktop::ClientToSession message;
+        proto::desktop::ExtensionData* extension = message.mutable_extension();
+        extension->set_name(common::kAudioPauseExtension);
+        extension->set_data(pause.SerializeAsString());
+        sendMessage(proto::desktop::CHANNEL_ID_LEGACY, base::serialize(message));
+    }
+    else
+    {
+        proto::desktop::ExtensionData message;
+        message.set_name(common::kAudioPauseExtension);
+        message.set_data(pause.SerializeAsString());
+        sendMessage(proto::desktop::CHANNEL_ID_EXTENSION, base::serialize(message));
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -352,7 +428,7 @@ void ClientDesktop::onRecordingChanged(bool enable, const QString& file_path)
         webm_file_writer_.reset();
     }
 
-    sendMessage(proto::peer::CHANNEL_ID_1, base::serialize(message));
+    sendMessage(proto::desktop::CHANNEL_ID_CONTROL, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -361,8 +437,18 @@ void ClientDesktop::onKeyEvent(const proto::desktop::KeyEvent& event)
     if (!input_event_filter_.keyEvent(event))
         return;
 
-    outgoing_message_.newMessage().mutable_key_event()->CopyFrom(event);
-    sendMessage(proto::peer::CHANNEL_ID_0, outgoing_message_.serialize());
+    if (isLegacy())
+    {
+        proto::desktop::ClientToSession message;
+        message.mutable_key_event()->CopyFrom(event);
+        sendMessage(proto::desktop::CHANNEL_ID_LEGACY, base::serialize(message));
+    }
+    else
+    {
+        proto::desktop::InputData message;
+        message.mutable_key()->CopyFrom(event);
+        sendMessage(proto::desktop::CHANNEL_ID_INPUT, base::serialize(message));
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -371,8 +457,18 @@ void ClientDesktop::onTextEvent(const proto::desktop::TextEvent& event)
     if (!input_event_filter_.textEvent(event))
         return;
 
-    outgoing_message_.newMessage().mutable_text_event()->CopyFrom(event);
-    sendMessage(proto::peer::CHANNEL_ID_0, outgoing_message_.serialize());
+    if (isLegacy())
+    {
+        proto::desktop::ClientToSession message;
+        message.mutable_text_event()->CopyFrom(event);
+        sendMessage(proto::desktop::CHANNEL_ID_LEGACY, base::serialize(message));
+    }
+    else
+    {
+        proto::desktop::InputData message;
+        message.mutable_text()->CopyFrom(event);
+        sendMessage(proto::desktop::CHANNEL_ID_INPUT, base::serialize(message));
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -381,8 +477,18 @@ void ClientDesktop::onMouseEvent(const proto::desktop::MouseEvent& event)
     if (!input_event_filter_.mouseEvent(event))
         return;
 
-    outgoing_message_.newMessage().mutable_mouse_event()->CopyFrom(event);
-    sendMessage(proto::peer::CHANNEL_ID_0, outgoing_message_.serialize());
+    if (isLegacy())
+    {
+        proto::desktop::ClientToSession message;
+        message.mutable_mouse_event()->CopyFrom(event);
+        sendMessage(proto::desktop::CHANNEL_ID_LEGACY, base::serialize(message));
+    }
+    else
+    {
+        proto::desktop::InputData message;
+        message.mutable_mouse()->CopyFrom(event);
+        sendMessage(proto::desktop::CHANNEL_ID_INPUT, base::serialize(message));
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -394,38 +500,84 @@ void ClientDesktop::onPowerControl(proto::desktop::PowerControl::Action action)
         return;
     }
 
-    proto::desktop::Extension* extension = outgoing_message_.newMessage().mutable_extension();
-    proto::desktop::PowerControl power_control;
-    power_control.set_action(action);
-    extension->set_name(common::kPowerControlExtension);
-    extension->set_data(power_control.SerializeAsString());
+    if (isLegacy())
+    {
+        proto::desktop::ClientToSession message;
+        proto::desktop::ExtensionData* extension = message.mutable_extension();
+        proto::desktop::PowerControl power_control;
+        power_control.set_action(action);
+        extension->set_name(common::kPowerControlExtension);
+        extension->set_data(power_control.SerializeAsString());
 
-    sendMessage(proto::peer::CHANNEL_ID_0, outgoing_message_.serialize());
+        sendMessage(proto::desktop::CHANNEL_ID_LEGACY, base::serialize(message));
+    }
+    else
+    {
+        proto::desktop::ExtensionData message;
+        proto::desktop::PowerControl power_control;
+        power_control.set_action(action);
+        message.set_name(common::kPowerControlExtension);
+        message.set_data(power_control.SerializeAsString());
+
+        sendMessage(proto::desktop::CHANNEL_ID_EXTENSION, base::serialize(message));
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClientDesktop::onRemoteUpdate()
 {
-    outgoing_message_.newMessage().mutable_extension()->set_name(common::kRemoteUpdateExtension);
-    sendMessage(proto::peer::CHANNEL_ID_0, outgoing_message_.serialize());
+    if (isLegacy())
+    {
+        proto::desktop::ClientToSession message;
+        message.mutable_extension()->set_name(common::kRemoteUpdateExtension);
+        sendMessage(proto::desktop::CHANNEL_ID_LEGACY, base::serialize(message));
+    }
+    else
+    {
+        proto::desktop::ExtensionData message;
+        message.set_name(common::kRemoteUpdateExtension);
+        sendMessage(proto::desktop::CHANNEL_ID_EXTENSION, base::serialize(message));
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClientDesktop::onSystemInfoRequest(const proto::system_info::SystemInfoRequest& request)
 {
-    proto::desktop::Extension* extension = outgoing_message_.newMessage().mutable_extension();
-    extension->set_name(common::kSystemInfoExtension);
-    extension->set_data(request.SerializeAsString());
-    sendMessage(proto::peer::CHANNEL_ID_0, outgoing_message_.serialize());
+    if (isLegacy())
+    {
+        proto::desktop::ClientToSession message;
+        proto::desktop::ExtensionData* extension = message.mutable_extension();
+        extension->set_name(common::kSystemInfoExtension);
+        extension->set_data(request.SerializeAsString());
+        sendMessage(proto::desktop::CHANNEL_ID_LEGACY, base::serialize(message));
+    }
+    else
+    {
+        proto::desktop::ExtensionData message;
+        message.set_name(common::kSystemInfoExtension);
+        message.set_data(request.SerializeAsString());
+        sendMessage(proto::desktop::CHANNEL_ID_EXTENSION, base::serialize(message));
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientDesktop::onTaskManager(const proto::task_manager::ClientToHost& message)
+void ClientDesktop::onTaskManager(const proto::task_manager::ClientToHost& task_manager)
 {
-    proto::desktop::Extension* extension = outgoing_message_.newMessage().mutable_extension();
-    extension->set_name(common::kTaskManagerExtension);
-    extension->set_data(message.SerializeAsString());
-    sendMessage(proto::peer::CHANNEL_ID_0, outgoing_message_.serialize());
+    if (isLegacy())
+    {
+        proto::desktop::ClientToSession message;
+        proto::desktop::ExtensionData* extension = message.mutable_extension();
+        extension->set_name(common::kTaskManagerExtension);
+        extension->set_data(task_manager.SerializeAsString());
+        sendMessage(proto::desktop::CHANNEL_ID_LEGACY, base::serialize(message));
+    }
+    else
+    {
+        proto::desktop::ExtensionData message;
+        message.set_name(common::kTaskManagerExtension);
+        message.set_data(task_manager.SerializeAsString());
+        sendMessage(proto::desktop::CHANNEL_ID_EXTENSION, base::serialize(message));
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -507,7 +659,7 @@ void ClientDesktop::onSwitchSession(quint32 session_id)
     switch_session->set_session_id(session_id);
 
     CLOG(INFO) << "Send:" << *switch_session;
-    sendMessage(proto::peer::CHANNEL_ID_1, base::serialize(message));
+    sendMessage(proto::desktop::CHANNEL_ID_CONTROL, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -715,7 +867,7 @@ void ClientDesktop::readClipboardEvent(const proto::desktop::ClipboardEvent& eve
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientDesktop::readExtension(const proto::desktop::Extension& extension)
+void ClientDesktop::readExtension(const proto::desktop::ExtensionData& extension)
 {
     if (extension.name() == common::kTaskManagerExtension)
     {
@@ -775,15 +927,21 @@ void ClientDesktop::sendSessionListRequest()
     proto::desktop::ClientToService message;
     proto::desktop::SessionListRequest* request = message.mutable_session_list_request();
     request->set_dummy(1);
-    sendMessage(proto::peer::CHANNEL_ID_1, base::serialize(message));
+    sendMessage(proto::desktop::CHANNEL_ID_CONTROL, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClientDesktop::sendKeyFrameRequest()
 {
-    proto::desktop::Extension* extension = outgoing_message_.newMessage().mutable_extension();
-    extension->set_name(common::kKeyFrameExtension);
-    sendMessage(proto::peer::CHANNEL_ID_0, outgoing_message_.serialize());
+    if (isLegacy())
+    {
+        // Not supported.
+        return;
+    }
+
+    proto::desktop::ExtensionData message;
+    message.set_name(common::kKeyFrameExtension);
+    sendMessage(proto::desktop::CHANNEL_ID_EXTENSION, base::serialize(message));
 }
 
 } // namespace client

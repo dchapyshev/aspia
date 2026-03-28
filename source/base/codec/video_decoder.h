@@ -20,7 +20,7 @@
 #define BASE_CODEC_VIDEO_DECODER_H
 
 #include "base/codec/scoped_vpx_codec.h"
-#include "proto/desktop_session.h"
+#include "proto/desktop_screen.h"
 
 namespace base {
 

@@ -19,7 +19,8 @@
 #ifndef CLIENT_INPUT_EVENT_FILTER_H
 #define CLIENT_INPUT_EVENT_FILTER_H
 
-#include "proto/desktop_session.h"
+#include "proto/desktop_clipboard.h"
+#include "proto/desktop_input.h"
 #include "proto/peer.h"
 
 namespace client {

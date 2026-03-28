@@ -1,0 +1,124 @@
+//
+// Aspia Project
+// Copyright (C) 2016-2026 Dmitry Chapyshev <dmitry@aspia.ru>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
+//
+
+syntax = "proto3";
+
+option optimize_for = LITE_RUNTIME;
+
+package proto.desktop;
+
+message KeyEvent
+{
+    // The keyboard (Caps/Num) lock states.
+    enum Flags
+    {
+        UNKNOWN  = 0;
+        CAPSLOCK = 1;
+        NUMLOCK  = 2;
+        PRESSED  = 4;
+    }
+
+    uint32 usb_keycode = 1;
+    uint32 flags = 2;
+}
+
+message TextEvent
+{
+    string text = 1;
+}
+
+message MouseEvent
+{
+    enum ButtonMask
+    {
+        EMPTY          = 0;
+        LEFT_BUTTON    = 1;
+        MIDDLE_BUTTON  = 2;
+        RIGHT_BUTTON   = 4;
+        WHEEL_UP       = 8;
+        WHEEL_DOWN     = 16;
+        BACK_BUTTON    = 32;
+        FORWARD_BUTTON = 64;
+    }
+
+    uint32 mask = 1; // Button mask.
+    int32 x = 2;     // x position.
+    int32 y = 3;     // y position.
+}
+
+message TouchEventPoint
+{
+    // The ID for the touch point.
+    uint32 id = 1;
+
+    // The absolute position of the touch point. These values on-the-wire are host physical pixel
+    // coordinates: the top-left monitor on the system always starts from (0, 0).
+    float x = 2;
+    float y = 3;
+
+    // The size of the touch point, used to aid hit-testing. Scaled to match the size on host.
+    float radius_x = 4;
+    float radius_y = 5;
+
+    // Angle in degrees from the y-axis of the touch point.
+    float angle = 6;
+
+    // The pressure of the touch point. The value should be in [0.0, 1.0].
+    float pressure = 7;
+}
+
+message TouchEvent
+{
+    // A START event means that this event reports all the touch points that were just added, e.g. a
+    // finger started touching the display.
+    // A MOVE event means that the touch points that have been STARTed moved, e.g. multiple fingers
+    // on the screen moved.
+    // An END event means that the touch points that have been STARTed ended. e.g. a finger went off
+    // the screen.
+    // A CANCEL event means that the touch points that have been STARTed were canceled, e.g. a finger
+    // went off the screen.
+    // Cancel event is simlar to END but slighly different. For example, Android
+    // MotionEvent's ACTION_CANCEL documentation mentions that a cancel should be
+    // treated as an ACTION_UP (END) event but might not perform the exact same
+    // actions as a normal ACTION_UP event.
+    enum TouchEventType
+    {
+        TOUCH_POINT_UNKNOWN = 0;
+        TOUCH_POINT_START   = 1;
+        TOUCH_POINT_MOVE    = 2;
+        TOUCH_POINT_END     = 3;
+        TOUCH_POINT_CANCEL  = 4;
+    };
+
+    TouchEventType event_type = 1;
+
+    // Only the changed touch points are added to this field.
+    // Given the existing touch point APIs (e.g. Android and PPAPI)
+    // for START, END, and CANCEL events the size of this field will typically be 1, but for MOVE
+    // events it is likely to have multiple points.
+    repeated TouchEventPoint touch_points = 2;
+}
+
+// Client -> Host (channel 3).
+message InputData
+{
+    MouseEvent mouse = 1;
+    KeyEvent key     = 2;
+    TouchEvent touch = 3;
+    TextEvent text   = 4;
+}

@@ -18,7 +18,8 @@
 
 #include "common/desktop_session_constants.h"
 
-#include "proto/desktop_session.h"
+#include "proto/desktop_audio.h"
+#include "proto/desktop_screen.h"
 
 namespace common {
 

@@ -16,40 +16,19 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_AUDIO_AUDIO_CAPTURER_WRAPPER_H
-#define BASE_AUDIO_AUDIO_CAPTURER_WRAPPER_H
+syntax = "proto3";
 
-#include "base/thread.h"
-#include "proto/desktop_audio.h"
+option optimize_for = LITE_RUNTIME;
 
-namespace base {
+package proto.desktop;
 
-class AudioCapturer;
-
-class AudioCapturerWrapper final : public QObject
+enum ChannelId
 {
-    Q_OBJECT
-
-public:
-    explicit AudioCapturerWrapper(QObject* parent = nullptr);
-    ~AudioCapturerWrapper() final;
-
-    void start();
-
-signals:
-    void sig_audioCaptured(const proto::desktop::AudioPacket& packet);
-
-private slots:
-    void onBeforeThreadRunning();
-    void onAfterThreadRunning();
-
-private:
-    Thread thread_;
-    std::unique_ptr<AudioCapturer> capturer_;
-
-    Q_DISABLE_COPY_MOVE(AudioCapturerWrapper)
-};
-
-} // namespace base
-
-#endif // BASE_AUDIO_AUDIO_CAPTURER_WRAPPER_H
+    CHANNEL_ID_LEGACY    = 0;
+    CHANNEL_ID_CONTROL   = 1;
+    CHANNEL_ID_SCREEN    = 2;
+    CHANNEL_ID_INPUT     = 3;
+    CHANNEL_ID_CLIPBOARD = 4;
+    CHANNEL_ID_AUDIO     = 5;
+    CHANNEL_ID_EXTENSION = 6;
+}

@@ -181,7 +181,7 @@ void UserSessionAgent::onIpcMessageReceived(
 {
     if (ipc_channel_id == proto::user::CHANNEL_ID_CLIPBOARD)
     {
-        proto::desktop::ClipboardMessage message;
+        proto::desktop::ClipboardData message;
         if (!base::parse(buffer, &message))
         {
             LOG(ERROR) << "Unable to parse clipboard message";
@@ -315,7 +315,7 @@ void UserSessionAgent::onClipboardEvent(const proto::desktop::ClipboardEvent& ev
     if (!ipc_channel_)
         return;
 
-    proto::desktop::ClipboardMessage message;
+    proto::desktop::ClipboardData message;
     message.mutable_event()->CopyFrom(event);
 
     ipc_channel_->send(proto::user::CHANNEL_ID_CLIPBOARD, base::serialize(message));

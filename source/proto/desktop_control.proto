@@ -20,9 +20,46 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
-import "desktop_session.proto";
+import "desktop_audio.proto";
+import "desktop_screen.proto";
 
 package proto.desktop;
+
+message Capabilities
+{
+    enum OsType
+    {
+        OS_TYPE_WINDOWS = 0;
+        OS_TYPE_LINUX   = 1;
+        OS_TYPE_MACOSX  = 2;
+    }
+
+    message Flag
+    {
+        string name = 1;
+        bool value  = 2;
+    }
+
+    string extensions      = 1;
+    uint32 video_encodings = 2;
+    uint32 audio_encodings = 3;
+    OsType os_type         = 4;
+    repeated Flag flag     = 5;
+}
+
+enum ConfigFlags
+{
+    NO_FLAGS               = 0;
+    ENABLE_CURSOR_SHAPE    = 1;
+    ENABLE_CLIPBOARD       = 2;
+    DISABLE_EFFECTS        = 4;
+    DISABLE_WALLPAPER      = 8;
+    // DISABLE_FONT_SMOOTHING (16) is deprecated.
+    BLOCK_REMOTE_INPUT     = 32;
+    LOCK_AT_DISCONNECT     = 64;
+    CURSOR_POSITION        = 128;
+    // CLEAR_CLIPBOARD (256) is deprecated.
+}
 
 message SwitchSession
 {
@@ -62,11 +99,25 @@ message VideoRecording
     Action action = 1;
 }
 
-message ServiceToClient
+message Config
 {
-    SessionList session_list = 1;
+    uint32 flags                 = 1;
+    VideoEncoding video_encoding = 2;
+    // Field 3 (pixel format) is deprecated.
+    // Field 4 is deprecated.
+    // Field 5 (compress ratio) is deprecated.
+    // Field 6 is deprecated.
+    AudioEncoding audio_encoding = 7;
 }
 
+// Client <- Host (channel 1).
+message ServiceToClient
+{
+    Capabilities capabilities = 1;
+    SessionList session_list  = 2;
+}
+
+// Client -> Host (channel 1).
 message ClientToService
 {
     Config config                           = 1;

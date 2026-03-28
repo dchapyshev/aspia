@@ -26,7 +26,8 @@
 #include "base/serialization.h"
 #include "base/ipc/ipc_channel.h"
 #include "base/ipc/ipc_server.h"
-#include "proto/desktop_service.h"
+#include "proto/desktop_channel.h"
+#include "proto/desktop_screen.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/session_enumerator.h"
@@ -58,10 +59,10 @@ DesktopClient::DesktopClient(base::TcpChannel* tcp_channel, QObject* parent)
             return;
         }
 
-        proto::desktop::SessionToClient message;
+        proto::desktop::ScreenData message;
         proto::desktop::VideoPacket* packet = message.mutable_video_packet();
         packet->set_error_code(proto::desktop::VIDEO_ERROR_CODE_TEMPORARY);
-        send(proto::peer::CHANNEL_ID_0, base::serialize(message));
+        send(proto::desktop::CHANNEL_ID_SCREEN, base::serialize(message));
     });
 
     fake_capture_timer_->setInterval(std::chrono::milliseconds(30));
@@ -135,7 +136,7 @@ void DesktopClient::onClipboardData(const QByteArray& buffer)
     if (!(config_.flags() & proto::desktop::ENABLE_CLIPBOARD))
         return;
 
-    send(proto::peer::CHANNEL_ID_2, buffer);
+    send(proto::desktop::CHANNEL_ID_CLIPBOARD, buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -147,14 +148,7 @@ void DesktopClient::onStart()
 //--------------------------------------------------------------------------------------------------
 void DesktopClient::onMessage(quint8 net_channel_id, const QByteArray& buffer)
 {
-    if (net_channel_id == proto::peer::CHANNEL_ID_0) // Session data
-    {
-        quint32 channel_id = base::makeUint32(proto::desktop::IPC_CHANNEL_ID_SESSION, net_channel_id);
-
-        if (ipc_channel_)
-            ipc_channel_->send(channel_id, buffer);
-    }
-    else if (net_channel_id == proto::peer::CHANNEL_ID_1) // Service data
+    if (net_channel_id == proto::desktop::CHANNEL_ID_CONTROL)
     {
         proto::desktop::ClientToService message;
         if (!base::parse(buffer, &message))
@@ -195,14 +189,16 @@ void DesktopClient::onMessage(quint8 net_channel_id, const QByteArray& buffer)
             emit sig_recordingChanged(is_started);
         }
     }
-    else if (net_channel_id == proto::peer::CHANNEL_ID_2) // Clipboard data
+    else if (net_channel_id == proto::desktop::CHANNEL_ID_CLIPBOARD)
     {
         if (sessionType() == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
             emit sig_clipboardData(buffer);
     }
     else
     {
-        CLOG(ERROR) << "Unhandled message from channel" << net_channel_id;
+        quint32 channel_id = base::makeUint32(proto::desktop::IPC_CHANNEL_ID_SESSION, net_channel_id);
+        if (ipc_channel_)
+            ipc_channel_->send(channel_id, buffer);
     }
 }
 
@@ -359,7 +355,7 @@ void DesktopClient::sendSessionList()
     }
 
     CLOG(INFO) << "Send:" << *session_list;
-    send(proto::peer::CHANNEL_ID_1, base::serialize(message));
+    send(proto::desktop::CHANNEL_ID_CONTROL, base::serialize(message));
 #endif // defined(Q_OS_WINDOWS)
 }
 

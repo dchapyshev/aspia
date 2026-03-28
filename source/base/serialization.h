@@ -23,7 +23,7 @@
 #include <QRect>
 #include <QVersionNumber>
 
-#include "proto/desktop_session.h"
+#include "proto/desktop_screen.h"
 #include "proto/peer.h"
 
 #include <google/protobuf/message_lite.h>

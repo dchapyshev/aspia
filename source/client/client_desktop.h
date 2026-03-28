@@ -24,8 +24,8 @@
 #include "client/client.h"
 #include "client/input_event_filter.h"
 #include "common/clipboard_monitor.h"
-#include "proto/desktop_session.h"
-#include "proto/desktop_service.h"
+#include "proto/desktop_extension.h"
+#include "proto/desktop_control.h"
 #include "proto/system_info.h"
 #include "proto/task_manager.h"
 
@@ -137,7 +137,7 @@ private:
     void readCursorShape(const proto::desktop::CursorShape& cursor_shape);
     void readCursorPosition(const proto::desktop::CursorPosition& cursor_position);
     void readClipboardEvent(const proto::desktop::ClipboardEvent& event);
-    void readExtension(const proto::desktop::Extension& extension);
+    void readExtension(const proto::desktop::ExtensionData& extension);
     void sendSessionListRequest();
     void sendKeyFrameRequest();
 
@@ -146,9 +146,6 @@ private:
 
     std::shared_ptr<base::Frame> desktop_frame_;
     proto::desktop::Config desktop_config_;
-
-    base::Parser<proto::desktop::SessionToClient> incoming_message_;
-    base::Serializer<proto::desktop::ClientToSession> outgoing_message_;
 
     proto::desktop::VideoEncoding video_encoding_ = proto::desktop::VIDEO_ENCODING_UNKNOWN;
     proto::desktop::AudioEncoding audio_encoding_ = proto::desktop::AUDIO_ENCODING_UNKNOWN;

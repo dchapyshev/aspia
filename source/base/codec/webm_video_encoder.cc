@@ -22,7 +22,7 @@
 
 #include "base/logging.h"
 #include "base/desktop/frame.h"
-#include "proto/desktop_session.h"
+#include "proto/desktop_screen.h"
 
 #include <libyuv/convert.h>
 

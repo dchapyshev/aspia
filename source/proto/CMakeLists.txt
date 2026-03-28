@@ -19,10 +19,15 @@
 list(APPEND SOURCE_PROTO
     address_book.proto
     chat.proto
+    desktop_audio.proto
+    desktop_channel.proto
     desktop_clipboard.proto
+    desktop_control.proto
+    desktop_extension.proto
+    desktop_input.proto
     desktop_internal.proto
-    desktop_service.proto
-    desktop_session.proto
+    desktop_legacy.proto
+    desktop_screen.proto
     file_transfer.proto
     key_exchange.proto
     peer.proto

@@ -22,9 +22,9 @@
 #include <QObject>
 
 #include "base/logging.h"
-#include "base/serialization.h"
+#include "proto/desktop_extension.h"
+#include "proto/desktop_input.h"
 #include "proto/desktop_internal.h"
-#include "proto/desktop_session.h"
 #include "proto/task_manager.h"
 
 namespace base {
@@ -91,14 +91,14 @@ private slots:
     void onTaskManagerMessage(const proto::task_manager::HostToClient& message);
 
 private:
-    void readSessionMessage(const QByteArray& buffer);
-    void sendSessionMessage(const QByteArray& buffer, bool reliable);
+    void readSessionMessage(quint8 channel_id, const QByteArray& buffer);
+    void sendSessionMessage(quint8 channel_id, const QByteArray& buffer, bool reliable);
 
     void readMouseEvent(const proto::desktop::MouseEvent& mouse_event);
     void readKeyEvent(const proto::desktop::KeyEvent& key_event);
     void readTouchEvent(const proto::desktop::TouchEvent& touch_event);
     void readTextEvent(const proto::desktop::TextEvent& text_event);
-    void readExtension(const proto::desktop::Extension& extension);
+    void readExtension(const proto::desktop::ExtensionData& extension);
     void readConfig(const proto::desktop::Config& config);
     void readKeyFrameExtension(const std::string& data);
     void readSelectScreenExtension(const std::string& data);
@@ -113,7 +113,6 @@ private:
     void sendCapabilities();
 
     base::IpcChannel* ipc_channel_ = nullptr;
-    base::Parser<proto::desktop::ClientToSession> incoming_message_;
 
     proto::desktop::Overflow::State overflow_state_ = proto::desktop::Overflow::STATE_NONE;
     proto::peer::SessionType session_type_ = proto::peer::SESSION_TYPE_UNKNOWN;

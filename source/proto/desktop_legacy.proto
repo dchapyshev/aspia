@@ -1,0 +1,55 @@
+//
+// Aspia Project
+// Copyright (C) 2016-2026 Dmitry Chapyshev <dmitry@aspia.ru>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
+//
+
+syntax = "proto3";
+
+option optimize_for = LITE_RUNTIME;
+
+import "desktop_audio.proto";
+import "desktop_clipboard.proto";
+import "desktop_control.proto";
+import "desktop_extension.proto";
+import "desktop_input.proto";
+import "desktop_screen.proto";
+
+package proto.desktop;
+
+// Client <- Host (channel 0).
+message SessionToClient
+{
+    VideoPacket video_packet       = 1;
+    AudioPacket audio_packet       = 2;
+    CursorShape cursor_shape       = 3;
+    ClipboardEvent clipboard_event = 4;
+    ExtensionData extension        = 5;
+    Capabilities capabilities      = 6;
+    CursorPosition cursor_position = 7;
+}
+
+// Client -> Host (channel 0).
+message ClientToSession
+{
+    MouseEvent mouse_event         = 1;
+    KeyEvent key_event             = 2;
+    TouchEvent touch_event         = 3;
+    TextEvent text_event           = 4;
+    ClipboardEvent clipboard_event = 5;
+    ExtensionData extension        = 6;
+    Config config                  = 7;
+    AudioPacket audio_packet       = 8;
+}

@@ -21,7 +21,7 @@
 
 #include <QAction>
 
-#include "proto/desktop_session.h"
+#include "proto/desktop_extension.h"
 
 namespace client {
 

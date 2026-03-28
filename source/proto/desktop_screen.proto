@@ -1,0 +1,142 @@
+//
+// Aspia Project
+// Copyright (C) 2016-2026 Dmitry Chapyshev <dmitry@aspia.ru>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
+//
+
+syntax = "proto3";
+
+option optimize_for = LITE_RUNTIME;
+
+package proto.desktop;
+
+message Point
+{
+    int32 x = 1;
+    int32 y = 2;
+}
+
+message Size
+{
+    int32 width  = 1;
+    int32 height = 2;
+}
+
+message Rect
+{
+    int32 x      = 1;
+    int32 y      = 2;
+    int32 width  = 3;
+    int32 height = 4;
+}
+
+message CursorShape
+{
+    enum Flags
+    {
+        UNKNOWN     = 0;
+        RESET_CACHE = 64;
+        CACHE       = 128;
+    }
+
+    // We use only the first byte in this field.
+    // If bit 7 is set to 1, then bits 0-4 contain the cursor index in the cache.
+    // If bit 7 is not set, then the cursor image is received.
+    // If bit 6 is set to 1, then the command to reset the contents of the cache
+    // is received, and bits 0-4 contain a new cache size.
+    // Bit 5 is reserved.
+    uint32 flags = 1;
+
+    // Width, height (in screen pixels) of the cursor.
+    int32 width  = 2;
+    int32 height = 3;
+
+    // X,Y coordinates (relative to upper-left corner) of the cursor hotspot.
+    int32 hotspot_x = 4;
+    int32 hotspot_y = 5;
+
+    // Cursor pixmap data in 32-bit BGRA format compressed with Zstd.
+    bytes data = 6;
+
+    // Screen DPI for current cursor.
+    int32 dpi_x = 7;
+    int32 dpi_y = 8;
+}
+
+message CursorPosition
+{
+    int32 x = 1;
+    int32 y = 2;
+}
+
+// Identifies how the image was encoded.
+enum VideoEncoding
+{
+    VIDEO_ENCODING_UNKNOWN = 0;
+    // Field 1 (ZSTD) is deprecated.
+    VIDEO_ENCODING_VP8     = 2;
+    VIDEO_ENCODING_VP9     = 4;
+}
+
+message VideoPacketFormat
+{
+    Rect video_rect          = 1;
+    // Field 2 (pixel format) is deprecated.
+    Size screen_size         = 3;
+    uint32 capturer_type     = 4;
+}
+
+enum VideoErrorCode
+{
+    VIDEO_ERROR_CODE_OK        = 0;
+    VIDEO_ERROR_CODE_PAUSED    = 1;
+    VIDEO_ERROR_CODE_TEMPORARY = 2;
+    VIDEO_ERROR_CODE_PERMANENT = 3;
+}
+
+enum VideoPacketFlags
+{
+    VIDEO_PACKET_FLAG_NONE         = 0;
+    VIDEO_PACKET_FLAG_IS_KEY_FRAME = 1;
+}
+
+message VideoPacket
+{
+    VideoEncoding encoding = 1;
+
+    // If the screen size or the pixel format has changed, the field must be filled.
+    VideoPacketFormat format = 2;
+
+    // The list of changed rectangles (areas) of the screen.
+    repeated Rect dirty_rect = 3;
+
+    // Video packet data.
+    bytes data = 4;
+
+    // If there is no error, then it takes the value VIDEO_ERROR_CODE_OK.
+    // If the field has any other value, then all other fields are ignored.
+    VideoErrorCode error_code = 5;
+
+    // Flags for the video packet.
+    uint32 flags = 6;
+}
+
+// Client <- Host (channel 2).
+message ScreenData
+{
+    VideoPacket video_packet       = 1;
+    CursorShape cursor_shape       = 2;
+    CursorPosition cursor_position = 3;
+}

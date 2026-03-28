@@ -21,7 +21,7 @@
 
 #include <QSettings>
 
-#include "proto/desktop_session.h"
+#include "proto/desktop_control.h"
 #include "proto/peer.h"
 
 namespace client {
