@@ -28,7 +28,7 @@
 #include <memory>
 
 #include "proto/desktop_input.h"
-#include "proto/desktop_screen.h"
+#include "proto/desktop_video.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/scoped_user_object.h"

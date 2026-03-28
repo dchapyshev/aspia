@@ -21,7 +21,7 @@ syntax = "proto3";
 option optimize_for = LITE_RUNTIME;
 
 import "desktop_audio.proto";
-import "desktop_screen.proto";
+import "desktop_video.proto";
 
 package proto.desktop;
 

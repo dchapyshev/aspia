@@ -38,7 +38,7 @@ message PowerControl
     Action action = 1;
 }
 
-// Client -> Host (channel 6).
+// Client -> Host (channel 7).
 message PowerData
 {
     PowerControl power_control = 1;

@@ -16,30 +16,28 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_CODEC_VIDEO_DECODER_H
-#define BASE_CODEC_VIDEO_DECODER_H
+syntax = "proto3";
 
-#include "base/codec/scoped_vpx_codec.h"
-#include "proto/desktop_video.h"
+option optimize_for = LITE_RUNTIME;
 
-namespace base {
+package proto.desktop;
 
-class Frame;
-
-class VideoDecoder
+message Point
 {
-public:
-    explicit VideoDecoder(proto::desktop::VideoEncoding encoding);
-    ~VideoDecoder();
+    int32 x = 1;
+    int32 y = 2;
+}
 
-    bool decode(const proto::desktop::VideoPacket& packet, Frame* frame);
+message Size
+{
+    int32 width  = 1;
+    int32 height = 2;
+}
 
-private:
-    ScopedVpxCodec codec_;
-
-    Q_DISABLE_COPY_MOVE(VideoDecoder)
-};
-
-} // namespace base
-
-#endif // BASE_CODEC_VIDEO_DECODER_H
+message Rect
+{
+    int32 x      = 1;
+    int32 y      = 2;
+    int32 width  = 3;
+    int32 height = 4;
+}

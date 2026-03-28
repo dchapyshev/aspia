@@ -27,7 +27,7 @@
 #include "base/ipc/ipc_channel.h"
 #include "base/ipc/ipc_server.h"
 #include "proto/desktop_channel.h"
-#include "proto/desktop_screen.h"
+#include "proto/desktop_video.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/session_enumerator.h"
@@ -59,8 +59,8 @@ DesktopClient::DesktopClient(base::TcpChannel* tcp_channel, QObject* parent)
             return;
         }
 
-        proto::desktop::ScreenData message;
-        proto::desktop::VideoPacket* packet = message.mutable_video_packet();
+        proto::desktop::VideoData message;
+        proto::desktop::VideoPacket* packet = message.mutable_packet();
         packet->set_error_code(proto::desktop::VIDEO_ERROR_CODE_TEMPORARY);
         send(proto::desktop::CHANNEL_ID_SCREEN, base::serialize(message));
     });

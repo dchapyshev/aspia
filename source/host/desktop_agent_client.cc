@@ -57,10 +57,10 @@ DesktopAgentClient::~DesktopAgentClient()
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::onScreenData(const QByteArray& buffer)
+void DesktopAgentClient::onVideoData(const QByteArray& buffer)
 {
     if (!is_video_paused_)
-        sendSessionMessage(proto::desktop::CHANNEL_ID_SCREEN, buffer, false);
+        sendSessionMessage(proto::desktop::CHANNEL_ID_VIDEO, buffer, false);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -212,6 +212,22 @@ void DesktopAgentClient::readSessionMessage(quint8 channel_id, const QByteArray&
         else if (message.has_text())
             readTextEvent(message.text());
     }
+    else if (channel_id == proto::desktop::CHANNEL_ID_VIDEO)
+    {
+        proto::desktop::VideoControl message;
+        if (!base::parse(buffer, &message))
+        {
+            CLOG(ERROR) << "Unable to parse video control message";
+            return;
+        }
+
+        if (message.has_key_frame_request())
+            emit sig_keyFrameRequested();
+        else if (message.has_preferred_size())
+            readPreferredSize(message.preferred_size());
+        else if (message.has_video_pause())
+            readVideoPause(message.video_pause());
+    }
     else if (channel_id == proto::desktop::CHANNEL_ID_SCREEN)
     {
         proto::desktop::ScreenControl message;
@@ -223,12 +239,6 @@ void DesktopAgentClient::readSessionMessage(quint8 channel_id, const QByteArray&
 
         if (message.has_screen())
             emit sig_selectScreen(message.screen());
-        else if (message.has_key_frame_request())
-            emit sig_keyFrameRequested();
-        else if (message.has_preferred_size())
-            readPreferredSize(message.preferred_size());
-        else if (message.has_video_pause())
-            readVideoPause(message.video_pause());
     }
     else if (channel_id == proto::desktop::CHANNEL_ID_AUDIO)
     {

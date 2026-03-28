@@ -25,6 +25,7 @@ import "desktop_clipboard.proto";
 import "desktop_control.proto";
 import "desktop_input.proto";
 import "desktop_screen.proto";
+import "desktop_video.proto";
 
 package proto.desktop;
 

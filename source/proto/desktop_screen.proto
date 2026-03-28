@@ -20,27 +20,9 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
+import "desktop_common.proto";
+
 package proto.desktop;
-
-message Point
-{
-    int32 x = 1;
-    int32 y = 2;
-}
-
-message Size
-{
-    int32 width  = 1;
-    int32 height = 2;
-}
-
-message Rect
-{
-    int32 x      = 1;
-    int32 y      = 2;
-    int32 width  = 3;
-    int32 height = 4;
-}
 
 message CursorShape
 {
@@ -81,58 +63,6 @@ message CursorPosition
     int32 y = 2;
 }
 
-// Identifies how the image was encoded.
-enum VideoEncoding
-{
-    VIDEO_ENCODING_UNKNOWN = 0;
-    // Field 1 (ZSTD) is deprecated.
-    VIDEO_ENCODING_VP8     = 2;
-    VIDEO_ENCODING_VP9     = 4;
-}
-
-message VideoPacketFormat
-{
-    Rect video_rect          = 1;
-    // Field 2 (pixel format) is deprecated.
-    Size screen_size         = 3;
-    uint32 capturer_type     = 4;
-}
-
-enum VideoErrorCode
-{
-    VIDEO_ERROR_CODE_OK        = 0;
-    VIDEO_ERROR_CODE_PAUSED    = 1;
-    VIDEO_ERROR_CODE_TEMPORARY = 2;
-    VIDEO_ERROR_CODE_PERMANENT = 3;
-}
-
-enum VideoPacketFlags
-{
-    VIDEO_PACKET_FLAG_NONE         = 0;
-    VIDEO_PACKET_FLAG_IS_KEY_FRAME = 1;
-}
-
-message VideoPacket
-{
-    VideoEncoding encoding = 1;
-
-    // If the screen size or the pixel format has changed, the field must be filled.
-    VideoPacketFormat format = 2;
-
-    // The list of changed rectangles (areas) of the screen.
-    repeated Rect dirty_rect = 3;
-
-    // Video packet data.
-    bytes data = 4;
-
-    // If there is no error, then it takes the value VIDEO_ERROR_CODE_OK.
-    // If the field has any other value, then all other fields are ignored.
-    VideoErrorCode error_code = 5;
-
-    // Flags for the video packet.
-    uint32 flags = 6;
-}
-
 // Sent by client to host for screen or screen resolution selection.
 message Screen
 {
@@ -152,17 +82,6 @@ message ScreenList
     repeated Size resolution = 4; // List of resolutions for current screen.
 }
 
-message KeyFrameRequest
-{
-    uint32 dummy = 1;
-}
-
-message PreferredSize
-{
-    int32 width = 1;
-    int32 height = 2;
-}
-
 // Sent by host to client.
 message ScreenType
 {
@@ -179,28 +98,17 @@ message ScreenType
     string name = 2;
 }
 
-// Sent by client to host.
-message VideoPause
-{
-    bool enable  = 1;
-    uint32 dummy = 2;
-}
-
 // Client <- Host (channel 2).
 message ScreenData
 {
-    VideoPacket video_packet       = 1;
-    CursorShape cursor_shape       = 2;
-    CursorPosition cursor_position = 3;
-    ScreenList screen_list         = 4;
-    ScreenType screen_type         = 5;
+    CursorShape cursor_shape       = 1;
+    CursorPosition cursor_position = 2;
+    ScreenList screen_list         = 3;
+    ScreenType screen_type         = 4;
 }
 
 // Client -> Host (channel 2).
 message ScreenControl
 {
-    KeyFrameRequest key_frame_request = 1;
-    Screen screen                     = 2;
-    PreferredSize preferred_size      = 3;
-    VideoPause video_pause            = 4;
+    Screen screen = 1;
 }

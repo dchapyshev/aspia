@@ -94,7 +94,19 @@ void ClientDesktop::onStarted()
 //--------------------------------------------------------------------------------------------------
 void ClientDesktop::onMessageReceived(quint8 channel_id, const QByteArray& buffer)
 {
-    if (channel_id == proto::desktop::CHANNEL_ID_SCREEN)
+    if (channel_id == proto::desktop::CHANNEL_ID_VIDEO)
+    {
+        proto::desktop::VideoData message;
+        if (!base::parse(buffer, &message))
+        {
+            CLOG(ERROR) << "Unable to parse video message";
+            return;
+        }
+
+        if (message.has_packet())
+            readVideoPacket(message.packet());
+    }
+    else if (channel_id == proto::desktop::CHANNEL_ID_SCREEN)
     {
         proto::desktop::ScreenData message;
         if (!base::parse(buffer, &message))
@@ -103,9 +115,7 @@ void ClientDesktop::onMessageReceived(quint8 channel_id, const QByteArray& buffe
             return;
         }
 
-        if (message.has_video_packet())
-            readVideoPacket(message.video_packet());
-        else if (message.has_cursor_shape())
+        if (message.has_cursor_shape())
             readCursorShape(message.cursor_shape());
         else if (message.has_cursor_position())
             readCursorPosition(message.cursor_position());
@@ -316,11 +326,11 @@ void ClientDesktop::onPreferredSizeChanged(int width, int height)
     }
     else
     {
-        proto::desktop::ScreenControl message;
+        proto::desktop::VideoControl message;
         proto::desktop::PreferredSize* preferred_size = message.mutable_preferred_size();
         preferred_size->set_width(width);
         preferred_size->set_height(height);
-        sendMessage(proto::desktop::CHANNEL_ID_SCREEN, base::serialize(message));
+        sendMessage(proto::desktop::CHANNEL_ID_VIDEO, base::serialize(message));
     }
 }
 
@@ -353,11 +363,11 @@ void ClientDesktop::onVideoPauseChanged(bool enable)
     }
     else
     {
-        proto::desktop::ScreenControl message;
+        proto::desktop::VideoControl message;
         proto::desktop::VideoPause* video_pause = message.mutable_video_pause();
         video_pause->set_enable(enable);
         video_pause->set_dummy(1);
-        sendMessage(proto::desktop::CHANNEL_ID_SCREEN, base::serialize(message));
+        sendMessage(proto::desktop::CHANNEL_ID_VIDEO, base::serialize(message));
     }
 }
 
@@ -928,9 +938,9 @@ void ClientDesktop::sendKeyFrameRequest()
         return;
     }
 
-    proto::desktop::ScreenControl message;
+    proto::desktop::VideoControl message;
     message.mutable_key_frame_request()->set_dummy(1);
-    sendMessage(proto::desktop::CHANNEL_ID_SCREEN, base::serialize(message));
+    sendMessage(proto::desktop::CHANNEL_ID_VIDEO, base::serialize(message));
 }
 
 } // namespace client

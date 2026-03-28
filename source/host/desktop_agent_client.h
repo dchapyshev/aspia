@@ -25,6 +25,7 @@
 #include "proto/desktop_input.h"
 #include "proto/desktop_internal.h"
 #include "proto/desktop_power.h"
+#include "proto/desktop_screen.h"
 #include "proto/system_info.h"
 #include "proto/task_manager.h"
 
@@ -62,7 +63,7 @@ public:
     qint64 bandwidth() const { return bandwidth_; }
     const Config& config() const { return config_; }
 
-    void onScreenData(const QByteArray& buffer);
+    void onVideoData(const QByteArray& buffer);
     void onScreenListData(const QByteArray& buffer);
     void onScreenTypeData(const QByteArray& buffer);
     void onCursorPositionData(const QByteArray& buffer);

@@ -26,6 +26,7 @@
 #include "base/desktop/power_save_blocker.h"
 #include "base/desktop/screen_capturer.h"
 #include "proto/desktop_audio.h"
+#include "proto/desktop_video.h"
 
 namespace base {
 class AudioCapturerWrapper;
@@ -126,6 +127,7 @@ private:
     std::unique_ptr<base::AudioEncoder> audio_encoder_;
 
     base::Serializer<proto::desktop::ScreenData> screen_message_;
+    base::Serializer<proto::desktop::VideoData> video_message_;
     base::Serializer<proto::desktop::AudioData> audio_message_;
 
     bool is_paused_ = false;

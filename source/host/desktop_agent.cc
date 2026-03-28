@@ -36,7 +36,6 @@
 #include "base/ipc/ipc_server.h"
 #include "host/desktop_agent_client.h"
 #include "host/system_settings.h"
-#include "common/desktop_session_constants.h"
 #include "proto/desktop_internal.h"
 
 #if defined(Q_OS_WINDOWS)
@@ -568,12 +567,12 @@ void DesktopAgent::onCaptureScreen()
 
     if (is_paused_)
     {
-        proto::desktop::VideoPacket* video_packet = screen_message_.newMessage().mutable_video_packet();
+        proto::desktop::VideoPacket* video_packet = video_message_.newMessage().mutable_packet();
         video_packet->set_error_code(proto::desktop::VIDEO_ERROR_CODE_PAUSED);
 
-        const QByteArray& buffer = screen_message_.serialize();
+        const QByteArray& buffer = video_message_.serialize();
         for (auto* client : std::as_const(clients_))
-            client->onScreenData(buffer);
+            client->onVideoData(buffer);
 
         capture_timer_->start(capture_scheduler_.nextCaptureDelay());
         return;
@@ -621,12 +620,12 @@ void DesktopAgent::onCaptureScreen()
                 return;
         }
 
-        proto::desktop::VideoPacket* video_packet = screen_message_.newMessage().mutable_video_packet();
+        proto::desktop::VideoPacket* video_packet = video_message_.newMessage().mutable_packet();
         video_packet->set_error_code(error_code);
 
-        const QByteArray& buffer = screen_message_.serialize();
+        const QByteArray& buffer = video_message_.serialize();
         for (auto* client : std::as_const(clients_))
-            client->onScreenData(buffer);
+            client->onVideoData(buffer);
     }
     else
     {
@@ -983,8 +982,8 @@ void DesktopAgent::encodeScreen(const base::Frame* frame)
         return;
     }
 
-    proto::desktop::ScreenData& message = screen_message_.newMessage();
-    proto::desktop::VideoPacket* packet = message.mutable_video_packet();
+    proto::desktop::VideoData& message = video_message_.newMessage();
+    proto::desktop::VideoPacket* packet = message.mutable_packet();
 
     // Encode the frame into a video packet.
     if (!video_encoder_->encode(scaled_frame, packet))
@@ -1008,11 +1007,11 @@ void DesktopAgent::encodeScreen(const base::Frame* frame)
         LOG(INFO) << "Video packet has format:" << *format;
     }
 
-    const QByteArray& buffer = screen_message_.serialize();
+    const QByteArray& buffer = video_message_.serialize();
     for (auto* client : std::as_const(clients_))
-        client->onScreenData(buffer);
+        client->onVideoData(buffer);
 
-    video_encoder_->setEncodeBuffer(std::move(*message.mutable_video_packet()->mutable_data()));
+    video_encoder_->setEncodeBuffer(std::move(*message.mutable_packet()->mutable_data()));
 }
 
 //--------------------------------------------------------------------------------------------------

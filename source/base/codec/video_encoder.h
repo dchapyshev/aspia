@@ -23,7 +23,7 @@
 #include <QSize>
 
 #include "base/codec/scoped_vpx_codec.h"
-#include "proto/desktop_screen.h"
+#include "proto/desktop_video.h"
 
 #define VPX_CODEC_DISABLE_COMPAT 1
 #include <vpx/vpx_encoder.h>
