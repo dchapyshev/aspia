@@ -92,7 +92,7 @@ bool InputEventFilter::textEvent(const proto::desktop::TextEvent& event)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool InputEventFilter::readClipboardEvent(const proto::desktop::ClipboardEvent& event)
+bool InputEventFilter::readClipboardEvent(const proto::clipboard::Event& event)
 {
     if (session_type_ != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
         return false;
@@ -105,7 +105,7 @@ bool InputEventFilter::readClipboardEvent(const proto::desktop::ClipboardEvent& 
 }
 
 //--------------------------------------------------------------------------------------------------
-bool InputEventFilter::sendClipboardEvent(const proto::desktop::ClipboardEvent& event)
+bool InputEventFilter::sendClipboardEvent(const proto::clipboard::Event& event)
 {
     if (session_type_ != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
         return false;

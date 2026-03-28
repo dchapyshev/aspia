@@ -32,10 +32,10 @@ class FileObject final : public IDataObject
 public:
     virtual ~FileObject() final;
 
-    static FileObject* create(const proto::desktop::ClipboardEvent::FileList& files);
+    static FileObject* create(const proto::clipboard::Event::FileList& files);
 
 private:
-    explicit FileObject(const proto::desktop::ClipboardEvent::FileList& files);
+    explicit FileObject(const proto::clipboard::Event::FileList& files);
 
     // IUnknown
     HRESULT __stdcall QueryInterface(REFIID iid, void** object) final;
@@ -57,7 +57,7 @@ private:
     UINT file_group_descriptor_ = 0;
     UINT file_contents_ = 0;
 
-    proto::desktop::ClipboardEvent::FileList files_;
+    proto::clipboard::Event::FileList files_;
     std::unique_ptr<FileStream> stream_;
 };
 

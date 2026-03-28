@@ -173,7 +173,7 @@ void ClientDesktop::onMessageReceived(quint8 channel_id, const QByteArray& buffe
     }
     else if (channel_id == proto::desktop::CHANNEL_ID_CLIPBOARD)
     {
-        proto::desktop::ClipboardData message;
+        proto::clipboard::Data message;
         if (!base::parse(buffer, &message))
         {
             CLOG(ERROR) << "Unable to parse clipboard message";
@@ -247,7 +247,7 @@ void ClientDesktop::onMessageReceived(quint8 channel_id, const QByteArray& buffe
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientDesktop::onClipboardEvent(const proto::desktop::ClipboardEvent& event)
+void ClientDesktop::onClipboardEvent(const proto::clipboard::Event& event)
 {
     if (!input_event_filter_.sendClipboardEvent(event))
         return;
@@ -260,7 +260,7 @@ void ClientDesktop::onClipboardEvent(const proto::desktop::ClipboardEvent& event
     }
     else
     {
-        proto::desktop::ClipboardData message;
+        proto::clipboard::Data message;
         message.mutable_event()->CopyFrom(event);
         sendMessage(proto::desktop::CHANNEL_ID_CLIPBOARD, base::serialize(message));
     }
@@ -869,7 +869,7 @@ void ClientDesktop::readCursorPosition(const proto::desktop::CursorPosition& cur
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientDesktop::readClipboardEvent(const proto::desktop::ClipboardEvent& event)
+void ClientDesktop::readClipboardEvent(const proto::clipboard::Event& event)
 {
     if (clipboard_monitor_ && input_event_filter_.readClipboardEvent(event))
         clipboard_monitor_->injectClipboardEvent(event);

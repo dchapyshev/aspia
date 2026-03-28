@@ -38,8 +38,8 @@ public:
     bool keyEvent(const proto::desktop::KeyEvent& event);
     bool textEvent(const proto::desktop::TextEvent& event);
 
-    bool readClipboardEvent(const proto::desktop::ClipboardEvent& event);
-    bool sendClipboardEvent(const proto::desktop::ClipboardEvent& event);
+    bool readClipboardEvent(const proto::clipboard::Event& event);
+    bool sendClipboardEvent(const proto::clipboard::Event& event);
 
     int sendMouseCount() const { return send_mouse_count_; }
     int dropMouseCount() const { return drop_mouse_count_; }

@@ -45,7 +45,7 @@ bool unixTimeToFileTime(qint64 unix_time, FILETIME* file_time)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-FileObject::FileObject(const proto::desktop::ClipboardEvent::FileList& files)
+FileObject::FileObject(const proto::clipboard::Event::FileList& files)
     : files_(files)
 {
     file_group_descriptor_ = RegisterClipboardFormat(CFSTR_FILEDESCRIPTOR);
@@ -71,7 +71,7 @@ FileObject::~FileObject()
 
 //--------------------------------------------------------------------------------------------------
 // static
-FileObject* FileObject::create(const proto::desktop::ClipboardEvent::FileList& files)
+FileObject* FileObject::create(const proto::clipboard::Event::FileList& files)
 {
     std::unique_ptr<FileObject> object(new FileObject(files));
 
@@ -132,7 +132,7 @@ HRESULT FileObject::GetData(FORMATETC* pFormatEtc, STGMEDIUM* pMedium)
 
         for (quint64 i = 0; i < item_count; ++i)
         {
-            const proto::desktop::ClipboardEvent::FileList::File& file = files_.file(static_cast<int>(i));
+            const proto::clipboard::Event::FileList::File& file = files_.file(static_cast<int>(i));
             const QString file_path = QString::fromStdString(file.path());
             FILEDESCRIPTORW* current = &file_descriptor[i];
 
@@ -194,7 +194,7 @@ HRESULT FileObject::GetData(FORMATETC* pFormatEtc, STGMEDIUM* pMedium)
             return DV_E_LINDEX;
         }
 
-        const proto::desktop::ClipboardEvent::FileList::File& file = files_.file(index);
+        const proto::clipboard::Event::FileList::File& file = files_.file(index);
         if (file.is_dir())
         {
             LOG(ERROR) << "Directory index passed:" << index;

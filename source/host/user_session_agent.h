@@ -33,9 +33,9 @@ namespace common {
 class ClipboardMonitor;
 } // namespace common
 
-namespace proto::desktop {
-class ClipboardEvent;
-} // namespace proto::desktop
+namespace proto::clipboard {
+class Event;
+} // namespace proto::clipboard
 
 namespace host {
 
@@ -101,7 +101,7 @@ private slots:
     void onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer, bool reliable);
     void onConnectEvent(const proto::user::ConnectEvent& event);
     void onDisconnectEvent(const proto::user::DisconnectEvent& event);
-    void onClipboardEvent(const proto::desktop::ClipboardEvent& event);
+    void onClipboardEvent(const proto::clipboard::Event& event);
 
 private:
     void sendMessage();

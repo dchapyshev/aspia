@@ -20,9 +20,9 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
-package proto.desktop;
+package proto.clipboard;
 
-message ClipboardEvent
+message Event
 {
     message FileList
     {
@@ -71,9 +71,9 @@ message FileTransferError
 }
 
 // Client <-> Host (channel 6).
-message ClipboardData
+message Data
 {
-    ClipboardEvent event        = 1;
+    Event event                 = 1;
     FileTransferRequest request = 2;
     FileTransferData data       = 3;
     FileTransferCancel cancel   = 4;

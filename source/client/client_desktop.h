@@ -129,7 +129,7 @@ protected:
     void onMessageReceived(quint8 channel_id, const QByteArray& buffer) final;
 
 private slots:
-    void onClipboardEvent(const proto::desktop::ClipboardEvent& event);
+    void onClipboardEvent(const proto::clipboard::Event& event);
 
 private:
     void readCapabilities(const proto::desktop::Capabilities& capabilities);
@@ -137,7 +137,7 @@ private:
     void readAudioPacket(const proto::audio::Packet& packet);
     void readCursorShape(const proto::desktop::CursorShape& cursor_shape);
     void readCursorPosition(const proto::desktop::CursorPosition& cursor_position);
-    void readClipboardEvent(const proto::desktop::ClipboardEvent& event);
+    void readClipboardEvent(const proto::clipboard::Event& event);
     void readExtension(const proto::desktop::Extension& extension);
     void sendSessionListRequest();
     void sendKeyFrameRequest();

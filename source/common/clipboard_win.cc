@@ -117,7 +117,7 @@ bool fileInfo(const QString& path, FileInfo* file_info)
 }
 
 //--------------------------------------------------------------------------------------------------
-void addDirectoryContent(const QString& path, proto::desktop::ClipboardEvent::FileList* files)
+void addDirectoryContent(const QString& path, proto::clipboard::Event::FileList* files)
 {
     QStack<QString> stack;
     stack.push(path);
@@ -149,7 +149,7 @@ void addDirectoryContent(const QString& path, proto::desktop::ClipboardEvent::Fi
             QString full_path = current_path + '\\' + name;
             bool is_directory = (find_data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0;
 
-            proto::desktop::ClipboardEvent::FileList::File* file = files->add_file();
+            proto::clipboard::Event::FileList::File* file = files->add_file();
 
             file->set_path(full_path.toStdString());
             file->set_is_dir(is_directory);
@@ -372,7 +372,7 @@ void ClipboardWin::onClipboardFiles()
         }
     }
 
-    proto::desktop::ClipboardEvent::FileList file_list;
+    proto::clipboard::Event::FileList file_list;
 
     for (const auto& path : std::as_const(files))
     {
@@ -380,7 +380,7 @@ void ClipboardWin::onClipboardFiles()
         if (!fileInfo(path, &file_info))
             continue;
 
-        proto::desktop::ClipboardEvent::FileList::File* file = file_list.add_file();
+        proto::clipboard::Event::FileList::File* file = file_list.add_file();
         file->set_path(path.toStdString());
         file->set_is_dir(file_info.is_directory);
         file->set_file_size(file_info.file_size);
@@ -441,7 +441,7 @@ void ClipboardWin::setDataText(const QByteArray& data)
 //--------------------------------------------------------------------------------------------------
 void ClipboardWin::setDataFiles(const QByteArray& data)
 {
-    proto::desktop::ClipboardEvent::FileList files;
+    proto::clipboard::Event::FileList files;
 
     if (!base::parse(data, &files))
     {

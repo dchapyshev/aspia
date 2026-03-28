@@ -40,7 +40,7 @@ void Clipboard::start()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Clipboard::injectClipboardEvent(const proto::desktop::ClipboardEvent& event)
+void Clipboard::injectClipboardEvent(const proto::clipboard::Event& event)
 {
     QString mime_type = QString::fromStdString(event.mime_type());
 
@@ -70,7 +70,7 @@ void Clipboard::onData(const QString& mime_type, const QByteArray& data)
     if (last_data_ == data)
         return;
 
-    proto::desktop::ClipboardEvent event;
+    proto::clipboard::Event event;
     event.set_mime_type(mime_type.toStdString());
     event.set_data(data.toStdString());
 
