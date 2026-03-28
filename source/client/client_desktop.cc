@@ -528,7 +528,7 @@ void ClientDesktop::onMouseEvent(const proto::input::MouseEvent& event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientDesktop::onPowerControl(proto::desktop::PowerControl::Action action)
+void ClientDesktop::onPowerControl(proto::power::Control::Action action)
 {
     if (sessionState()->sessionType() != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
     {
@@ -540,7 +540,7 @@ void ClientDesktop::onPowerControl(proto::desktop::PowerControl::Action action)
     {
         proto::desktop::ClientToSession message;
         proto::desktop::Extension* extension = message.mutable_extension();
-        proto::desktop::PowerControl power_control;
+        proto::power::Control power_control;
         power_control.set_action(action);
         extension->set_name(common::kPowerControlExtension);
         extension->set_data(power_control.SerializeAsString());
@@ -549,7 +549,7 @@ void ClientDesktop::onPowerControl(proto::desktop::PowerControl::Action action)
     }
     else
     {
-        proto::desktop::PowerData message;
+        proto::power::Data message;
         message.mutable_power_control()->set_action(action);
         sendMessage(proto::desktop::CHANNEL_ID_POWER, base::serialize(message));
     }

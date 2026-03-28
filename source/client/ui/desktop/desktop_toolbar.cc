@@ -597,7 +597,7 @@ void DesktopToolBar::onPowerControl(QAction* action)
         if (message_box.exec() == QMessageBox::Yes)
         {
             LOG(INFO) << "[ACTION] Shutdown accepted by user";
-            emit sig_powerControl(proto::desktop::PowerControl::ACTION_SHUTDOWN, false);
+            emit sig_powerControl(proto::power::Control::ACTION_SHUTDOWN, false);
         }
         else
         {
@@ -628,7 +628,7 @@ void DesktopToolBar::onPowerControl(QAction* action)
             settings.setWaitForHost(wait);
 
             LOG(INFO) << "[ACTION] Reboot accepted by user (wait=" << wait << ")";
-            emit sig_powerControl(proto::desktop::PowerControl::ACTION_REBOOT, wait);
+            emit sig_powerControl(proto::power::Control::ACTION_REBOOT, wait);
         }
         else
         {
@@ -659,7 +659,7 @@ void DesktopToolBar::onPowerControl(QAction* action)
             settings.setWaitForHost(wait);
 
             LOG(INFO) << "[ACTION] Reboot (safe mode) accepted by user (wait=" << wait << ")";
-            emit sig_powerControl(proto::desktop::PowerControl::ACTION_REBOOT_SAFE_MODE, wait);
+            emit sig_powerControl(proto::power::Control::ACTION_REBOOT_SAFE_MODE, wait);
         }
         else
         {
@@ -680,7 +680,7 @@ void DesktopToolBar::onPowerControl(QAction* action)
         if (message_box.exec() == QMessageBox::Yes)
         {
             LOG(INFO) << "[ACTION] Logoff accepted by user";
-            emit sig_powerControl(proto::desktop::PowerControl::ACTION_LOGOFF, false);
+            emit sig_powerControl(proto::power::Control::ACTION_LOGOFF, false);
         }
         else
         {
@@ -701,7 +701,7 @@ void DesktopToolBar::onPowerControl(QAction* action)
         if (message_box.exec() == QMessageBox::Yes)
         {
             LOG(INFO) << "[ACTION] Lock accepted by user";
-            emit sig_powerControl(proto::desktop::PowerControl::ACTION_LOCK, false);
+            emit sig_powerControl(proto::power::Control::ACTION_LOCK, false);
         }
         else
         {

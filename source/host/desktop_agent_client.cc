@@ -254,7 +254,7 @@ void DesktopAgentClient::readSessionMessage(quint8 channel_id, const QByteArray&
     }
     else if (channel_id == proto::desktop::CHANNEL_ID_POWER)
     {
-        proto::desktop::PowerData message;
+        proto::power::Data message;
         if (!base::parse(buffer, &message))
         {
             CLOG(ERROR) << "Unable to parse power message";
@@ -381,7 +381,7 @@ void DesktopAgentClient::readConfig(const proto::desktop::Config& config)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::readPowerControl(const proto::desktop::PowerControl& control)
+void DesktopAgentClient::readPowerControl(const proto::power::Control& control)
 {
     if (sessionType() != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
     {
@@ -393,15 +393,15 @@ void DesktopAgentClient::readPowerControl(const proto::desktop::PowerControl& co
 
     switch (control.action())
     {
-        case proto::desktop::PowerControl::ACTION_SHUTDOWN:
+        case proto::power::Control::ACTION_SHUTDOWN:
             base::PowerController::shutdown();
             break;
 
-        case proto::desktop::PowerControl::ACTION_REBOOT:
+        case proto::power::Control::ACTION_REBOOT:
             base::PowerController::reboot();
             break;
 
-        case proto::desktop::PowerControl::ACTION_REBOOT_SAFE_MODE:
+        case proto::power::Control::ACTION_REBOOT_SAFE_MODE:
         {
 #if defined(Q_OS_WINDOWS)
             if (!base::SafeModeUtil::setSafeModeService(Service::kName, true))
@@ -428,11 +428,11 @@ void DesktopAgentClient::readPowerControl(const proto::desktop::PowerControl& co
         }
         break;
 
-        case proto::desktop::PowerControl::ACTION_LOGOFF:
+        case proto::power::Control::ACTION_LOGOFF:
             base::PowerController::logoff();
             break;
 
-        case proto::desktop::PowerControl::ACTION_LOCK:
+        case proto::power::Control::ACTION_LOCK:
             base::PowerController::lock();
             break;
 

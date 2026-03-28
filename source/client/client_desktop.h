@@ -102,7 +102,7 @@ public slots:
     void onKeyEvent(const proto::input::KeyEvent& event);
     void onTextEvent(const proto::input::TextEvent& event);
     void onMouseEvent(const proto::input::MouseEvent& event);
-    void onPowerControl(proto::desktop::PowerControl_Action action);
+    void onPowerControl(proto::power::Control_Action action);
     void onSystemInfoRequest(const proto::system_info::SystemInfoRequest& request);
     void onTaskManager(const proto::task_manager::ClientToHost& message);
     void onMetricsRequest();

@@ -20,10 +20,10 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
-package proto.desktop;
+package proto.power;
 
 // Sent by client to host.
-message PowerControl
+message Control
 {
     enum Action
     {
@@ -39,7 +39,7 @@ message PowerControl
 }
 
 // Client -> Host (channel 8).
-message PowerData
+message Data
 {
-    PowerControl power_control = 1;
+    Control power_control = 1;
 }

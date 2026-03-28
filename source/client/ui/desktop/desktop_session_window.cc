@@ -136,12 +136,12 @@ DesktopSessionWindow::DesktopSessionWindow(proto::peer::SessionType session_type
             this, &DesktopSessionWindow::sig_screenSelected);
 
     connect(toolbar_, &DesktopToolBar::sig_powerControl,
-            this, [this](proto::desktop::PowerControl::Action action, bool wait)
+            this, [this](proto::power::Control::Action action, bool wait)
     {
         switch (action)
         {
-            case proto::desktop::PowerControl::ACTION_REBOOT:
-            case proto::desktop::PowerControl::ACTION_REBOOT_SAFE_MODE:
+            case proto::power::Control::ACTION_REBOOT:
+            case proto::power::Control::ACTION_REBOOT_SAFE_MODE:
                 sessionState()->setAutoReconnect(wait);
                 break;
 

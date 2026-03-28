@@ -78,7 +78,7 @@ signals:
     void sig_keyEvent(const proto::input::KeyEvent& event);
     void sig_textEvent(const proto::input::TextEvent& event);
     void sig_mouseEvent(const proto::input::MouseEvent& event);
-    void sig_powerControl(proto::desktop::PowerControl_Action action);
+    void sig_powerControl(proto::power::Control_Action action);
     void sig_systemInfoRequested(const proto::system_info::SystemInfoRequest& request);
     void sig_taskManager(const proto::task_manager::ClientToHost& message);
     void sig_metricsRequested();

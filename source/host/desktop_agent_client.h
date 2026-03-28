@@ -104,7 +104,7 @@ private:
     void readVideoPause(const proto::video::Pause& pause);
     void readAudioPause(const proto::audio::Pause& pause);
     void readConfig(const proto::desktop::Config& config);
-    void readPowerControl(const proto::desktop::PowerControl& control);
+    void readPowerControl(const proto::power::Control& control);
     void readSystemInfo(const proto::system_info::SystemInfoRequest& request);
     void readTaskManager(const proto::task_manager::ClientToHost& message);
     void readOverflow(proto::desktop::Overflow::State state);
