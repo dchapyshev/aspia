@@ -93,7 +93,7 @@ public:
     };
 
 public slots:
-    void onDesktopConfigChanged(const proto::desktop::Config& config);
+    void onDesktopConfigChanged(const proto::control::Config& config);
     void onCurrentScreenChanged(const proto::screen::Screen& screen);
     void onPreferredSizeChanged(int width, int height);
     void onVideoPauseChanged(bool enable);
@@ -109,7 +109,7 @@ public slots:
     void onSwitchSession(quint32 session_id);
 
 signals:
-    void sig_capabilities(const proto::desktop::Capabilities& capabilities);
+    void sig_capabilities(const proto::control::Capabilities& capabilities);
     void sig_screenListChanged(const proto::screen::ScreenList& screen_list);
     void sig_screenTypeChanged(const proto::screen::ScreenType& screen_type);
     void sig_cursorPositionChanged(const proto::cursor::Position& position);
@@ -120,7 +120,7 @@ signals:
     void sig_frameChanged(const QSize& screen_size, std::shared_ptr<base::Frame> frame);
     void sig_drawFrame();
     void sig_mouseCursorChanged(std::shared_ptr<base::MouseCursor> mouse_cursor);
-    void sig_sessionListChanged(const proto::desktop::SessionList& sessions);
+    void sig_sessionListChanged(const proto::control::SessionList& sessions);
     void sig_videoEncodingChanged(proto::video::Encoding encoding);
 
 protected:
@@ -132,7 +132,7 @@ private slots:
     void onClipboardEvent(const proto::clipboard::Event& event);
 
 private:
-    void readCapabilities(const proto::desktop::Capabilities& capabilities);
+    void readCapabilities(const proto::control::Capabilities& capabilities);
     void readVideoPacket(const proto::video::Packet& packet);
     void readAudioPacket(const proto::audio::Packet& packet);
     void readCursorShape(const proto::cursor::Shape& shape);
@@ -146,7 +146,7 @@ private:
     bool key_frame_received_ = false;
 
     std::shared_ptr<base::Frame> desktop_frame_;
-    proto::desktop::Config desktop_config_;
+    proto::control::Config desktop_config_;
 
     proto::video::Encoding video_encoding_ = proto::video::ENCODING_UNKNOWN;
     proto::audio::Encoding audio_encoding_ = proto::audio::ENCODING_UNKNOWN;

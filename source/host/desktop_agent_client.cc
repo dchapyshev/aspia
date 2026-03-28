@@ -358,16 +358,16 @@ void DesktopAgentClient::readAudioPause(const proto::audio::Pause& pause)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::readConfig(const proto::desktop::Config& config)
+void DesktopAgentClient::readConfig(const proto::control::Config& config)
 {
     config_.video_encoding = config.video_encoding();
     config_.audio_encoding = config.audio_encoding();
-    config_.disable_effects = (config.flags() & proto::desktop::DISABLE_EFFECTS);
-    config_.disable_wallpaper = (config.flags() & proto::desktop::DISABLE_WALLPAPER);
-    config_.block_input = (config.flags() & proto::desktop::BLOCK_REMOTE_INPUT);
-    config_.lock_at_disconnect = (config.flags() & proto::desktop::LOCK_AT_DISCONNECT);
-    config_.cursor_position = (config.flags() & proto::desktop::CURSOR_POSITION);
-    config_.cursor_shape = (config.flags() & proto::desktop::ENABLE_CURSOR_SHAPE);
+    config_.disable_effects = (config.flags() & proto::control::DISABLE_EFFECTS);
+    config_.disable_wallpaper = (config.flags() & proto::control::DISABLE_WALLPAPER);
+    config_.block_input = (config.flags() & proto::control::BLOCK_REMOTE_INPUT);
+    config_.lock_at_disconnect = (config.flags() & proto::control::LOCK_AT_DISCONNECT);
+    config_.cursor_position = (config.flags() & proto::control::CURSOR_POSITION);
+    config_.cursor_shape = (config.flags() & proto::control::ENABLE_CURSOR_SHAPE);
 
     CLOG(INFO) << "Config changed (encoding:" << config.video_encoding()
                << "cursor_shape:" << config_.cursor_shape
@@ -493,8 +493,8 @@ void DesktopAgentClient::sendCapabilities()
     }
 
     // Create a capabilities.
-    proto::desktop::ServiceToClient message;
-    proto::desktop::Capabilities* capabilities = message.mutable_capabilities();
+    proto::control::HostToClient message;
+    proto::control::Capabilities* capabilities = message.mutable_capabilities();
 
     // Add supported extensions and video encodings.
     capabilities->set_extensions(extensions);
@@ -502,13 +502,13 @@ void DesktopAgentClient::sendCapabilities()
     capabilities->set_audio_encodings(common::kSupportedAudioEncodings);
 
 #if defined(Q_OS_WINDOWS)
-    capabilities->set_os_type(proto::desktop::Capabilities::OS_TYPE_WINDOWS);
+    capabilities->set_os_type(proto::control::Capabilities::OS_TYPE_WINDOWS);
 #elif defined(Q_OS_LINUX)
-    capabilities->set_os_type(proto::desktop::Capabilities::OS_TYPE_LINUX);
+    capabilities->set_os_type(proto::control::Capabilities::OS_TYPE_LINUX);
 
     auto add_flag = [capabilities](const char* name, bool value)
     {
-        proto::desktop::Capabilities::Flag* flag = capabilities->add_flag();
+        proto::control::Capabilities::Flag* flag = capabilities->add_flag();
         flag->set_name(name);
         flag->set_value(value);
     };
@@ -520,7 +520,7 @@ void DesktopAgentClient::sendCapabilities()
     add_flag(common::kFlagDisableDesktopWallpaper, true);
     add_flag(common::kFlagDisableLockAtDisconnect, true);
 #elif defined(Q_OS_MACOS)
-    capabilities->set_os_type(proto::DesktopCapabilities::OS_TYPE_MACOSX);
+    capabilities->set_os_type(proto::control::Capabilities::OS_TYPE_MACOSX);
 #else
 #warning Not implemented
 #endif

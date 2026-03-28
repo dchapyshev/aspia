@@ -72,7 +72,7 @@ QSize scaledSize(const QSize& source_size, int scale)
 
 //--------------------------------------------------------------------------------------------------
 DesktopSessionWindow::DesktopSessionWindow(proto::peer::SessionType session_type,
-                                           const proto::desktop::Config& desktop_config,
+                                           const proto::control::Config& desktop_config,
                                            QWidget* parent)
     : SessionWindow(nullptr, parent),
       session_type_(session_type),
@@ -104,7 +104,7 @@ DesktopSessionWindow::DesktopSessionWindow(proto::peer::SessionType session_type
     connect(scroll_timer_, &QTimer::timeout, this, &DesktopSessionWindow::onScrollTimer);
 
     desktop_->enableKeyCombinations(toolbar_->sendKeyCombinations());
-    desktop_->enableRemoteCursorPosition(desktop_config_.flags() & proto::desktop::CURSOR_POSITION);
+    desktop_->enableRemoteCursorPosition(desktop_config_.flags() & proto::control::CURSOR_POSITION);
 
     connect(toolbar_, &DesktopToolBar::sig_keyCombination, desktop_, &DesktopWidget::executeKeyCombination);
     connect(toolbar_, &DesktopToolBar::sig_settingsButton, this, &DesktopSessionWindow::onSettings);
@@ -344,7 +344,7 @@ void DesktopSessionWindow::onShowWindow()
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionWindow::onCapabilitiesChanged(const proto::desktop::Capabilities& capabilities)
+void DesktopSessionWindow::onCapabilitiesChanged(const proto::control::Capabilities& capabilities)
 {
     video_encodings_ = capabilities.video_encodings();
 
@@ -357,11 +357,11 @@ void DesktopSessionWindow::onCapabilitiesChanged(const proto::desktop::Capabilit
     toolbar_->enableTaskManager(extensions.contains(common::kTaskManagerExtension));
     toolbar_->enableVideoPauseFeature(extensions.contains(common::kVideoPauseExtension));
     toolbar_->enableAudioPauseFeature(extensions.contains(common::kAudioPauseExtension));
-    toolbar_->enableCtrlAltDelFeature(capabilities.os_type() == proto::desktop::Capabilities::OS_TYPE_WINDOWS);
+    toolbar_->enableCtrlAltDelFeature(capabilities.os_type() == proto::control::Capabilities::OS_TYPE_WINDOWS);
 
     for (int i = 0; i < capabilities.flag_size(); ++i)
     {
-        const proto::desktop::Capabilities::Flag& flag = capabilities.flag(i);
+        const proto::control::Capabilities::Flag& flag = capabilities.flag(i);
         const std::string& name = flag.name();
         bool value = flag.value();
 
@@ -568,7 +568,7 @@ void DesktopSessionWindow::onMouseCursorChanged(std::shared_ptr<base::MouseCurso
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionWindow::onSessionListChanged(const proto::desktop::SessionList& sessions)
+void DesktopSessionWindow::onSessionListChanged(const proto::control::SessionList& sessions)
 {
     toolbar_->setSessionList(sessions);
 }
@@ -972,15 +972,15 @@ void DesktopSessionWindow::onSettings()
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopSessionWindow::onConfigChanged(const proto::desktop::Config& desktop_config)
+void DesktopSessionWindow::onConfigChanged(const proto::control::Config& desktop_config)
 {
     LOG(INFO) << "Desktop config changed:" << desktop_config;
     desktop_config_ = desktop_config;
 
     emit sig_desktopConfigChanged(desktop_config);
 
-    desktop_->enableRemoteCursorPosition(desktop_config_.flags() & proto::desktop::CURSOR_POSITION);
-    if (!(desktop_config_.flags() & proto::desktop::ENABLE_CURSOR_SHAPE))
+    desktop_->enableRemoteCursorPosition(desktop_config_.flags() & proto::control::CURSOR_POSITION);
+    if (!(desktop_config_.flags() & proto::control::ENABLE_CURSOR_SHAPE))
         desktop_->setCursorShape(QPixmap(), QPoint());
 }
 

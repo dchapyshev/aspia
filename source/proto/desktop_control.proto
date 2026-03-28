@@ -23,7 +23,7 @@ option optimize_for = LITE_RUNTIME;
 import "desktop_audio.proto";
 import "desktop_video.proto";
 
-package proto.desktop;
+package proto.control;
 
 message Capabilities
 {
@@ -111,14 +111,14 @@ message Config
 }
 
 // Client <- Host (channel 1).
-message ServiceToClient
+message HostToClient
 {
     Capabilities capabilities = 1;
     SessionList session_list  = 2;
 }
 
 // Client -> Host (channel 1).
-message ClientToService
+message ClientToHost
 {
     Config config                           = 1;
     SessionListRequest session_list_request = 2;

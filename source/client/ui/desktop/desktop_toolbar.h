@@ -46,7 +46,7 @@ public:
     void enablePasteAsKeystrokesFeature(bool enable);
 
     void setScreenList(const proto::screen::ScreenList& screen_list);
-    void setSessionList(const proto::desktop::SessionList& session_list);
+    void setSessionList(const proto::control::SessionList& session_list);
     void startRecording(bool enable);
 
     int scale() const { return scale_; }

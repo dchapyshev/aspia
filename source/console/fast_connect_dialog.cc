@@ -300,7 +300,7 @@ void FastConnectDialog::onButtonBoxClicked(QAbstractButton* button)
     {
         case proto::peer::SESSION_TYPE_DESKTOP_MANAGE:
         {
-            proto::desktop::Config desktop_config;
+            proto::control::Config desktop_config;
 
             if (ui.checkbox_use_session_params->isChecked())
                 desktop_config = default_config_.session_config().desktop_manage();
@@ -314,7 +314,7 @@ void FastConnectDialog::onButtonBoxClicked(QAbstractButton* button)
 
         case proto::peer::SESSION_TYPE_DESKTOP_VIEW:
         {
-            proto::desktop::Config desktop_config;
+            proto::control::Config desktop_config;
 
             if (ui.checkbox_use_session_params->isChecked())
                 desktop_config = default_config_.session_config().desktop_view();

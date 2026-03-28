@@ -44,11 +44,11 @@ public:
     proto::peer::SessionType sessionType() const;
     void setSessionType(proto::peer::SessionType session_type);
 
-    proto::desktop::Config desktopManageConfig() const;
-    void setDesktopManageConfig(const proto::desktop::Config& config);
+    proto::control::Config desktopManageConfig() const;
+    void setDesktopManageConfig(const proto::control::Config& config);
 
-    proto::desktop::Config desktopViewConfig() const;
-    void setDesktopViewConfig(const proto::desktop::Config& config);
+    proto::control::Config desktopViewConfig() const;
+    void setDesktopViewConfig(const proto::control::Config& config);
 
     bool checkUpdates() const;
     void setCheckUpdates(bool check);

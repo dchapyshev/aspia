@@ -53,8 +53,8 @@ private:
     {
         QStringList history;
         proto::peer::SessionType session_type;
-        proto::desktop::Config desktop_manage_config;
-        proto::desktop::Config desktop_view_config;
+        proto::control::Config desktop_manage_config;
+        proto::control::Config desktop_view_config;
     };
 
     Ui::FastConnectDialog ui;

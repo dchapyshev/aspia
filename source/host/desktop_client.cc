@@ -133,7 +133,7 @@ void DesktopClient::onClipboardData(const QByteArray& buffer)
     if (sessionType() != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
         return;
 
-    if (!(config_.flags() & proto::desktop::ENABLE_CLIPBOARD))
+    if (!(config_.flags() & proto::control::ENABLE_CLIPBOARD))
         return;
 
     send(proto::desktop::CHANNEL_ID_CLIPBOARD, buffer);
@@ -150,7 +150,7 @@ void DesktopClient::onMessage(quint8 net_channel_id, const QByteArray& buffer)
 {
     if (net_channel_id == proto::desktop::CHANNEL_ID_CONTROL)
     {
-        proto::desktop::ClientToService message;
+        proto::control::ClientToHost message;
         if (!base::parse(buffer, &message))
         {
             CLOG(ERROR) << "Unable to parse service message";
@@ -185,7 +185,7 @@ void DesktopClient::onMessage(quint8 net_channel_id, const QByteArray& buffer)
         else if (message.has_video_recording())
         {
             bool is_started =
-                message.video_recording().action() == proto::desktop::VideoRecording::ACTION_STARTED;
+                message.video_recording().action() == proto::control::VideoRecording::ACTION_STARTED;
             emit sig_recordingChanged(is_started);
         }
     }
@@ -326,8 +326,8 @@ void DesktopClient::sendIpcServiceMessage(const QByteArray& buffer)
 void DesktopClient::sendSessionList()
 {
 #if defined(Q_OS_WINDOWS)
-    proto::desktop::ServiceToClient message;
-    proto::desktop::SessionList* session_list = message.mutable_session_list();
+    proto::control::HostToClient message;
+    proto::control::SessionList* session_list = message.mutable_session_list();
 
     base::SessionId console_session_id = base::activeConsoleSessionId();
     base::SessionId current_session_id = 0;
@@ -346,7 +346,7 @@ void DesktopClient::sendSessionList()
         if (!session_info.isValid())
             continue;
 
-        proto::desktop::Session* session = session_list->add_session();
+        proto::control::Session* session = session_list->add_session();
         session->set_session_id(session_info.sessionId());
         session->set_user_name(session_info.userName().toStdString());
         session->set_domain_name(session_info.domain().toStdString());

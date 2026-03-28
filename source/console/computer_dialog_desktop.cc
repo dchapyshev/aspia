@@ -44,7 +44,7 @@ ComputerDialogDesktop::ComputerDialogDesktop(int type, QWidget* parent)
 void ComputerDialogDesktop::restoreSettings(
     proto::peer::SessionType session_type, const proto::address_book::Computer& computer)
 {
-    proto::desktop::Config desktop_config;
+    proto::control::Config desktop_config;
 
     if (session_type == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
     {
@@ -75,16 +75,16 @@ void ComputerDialogDesktop::restoreSettings(
 
     if (session_type == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
     {
-        if (desktop_config.flags() & proto::desktop::LOCK_AT_DISCONNECT)
+        if (desktop_config.flags() & proto::control::LOCK_AT_DISCONNECT)
             ui.checkbox_lock_at_disconnect->setChecked(true);
 
-        if (desktop_config.flags() & proto::desktop::BLOCK_REMOTE_INPUT)
+        if (desktop_config.flags() & proto::control::BLOCK_REMOTE_INPUT)
             ui.checkbox_block_remote_input->setChecked(true);
 
-        if (desktop_config.flags() & proto::desktop::ENABLE_CURSOR_SHAPE)
+        if (desktop_config.flags() & proto::control::ENABLE_CURSOR_SHAPE)
             ui.checkbox_cursor_shape->setChecked(true);
 
-        if (desktop_config.flags() & proto::desktop::ENABLE_CLIPBOARD)
+        if (desktop_config.flags() & proto::control::ENABLE_CLIPBOARD)
             ui.checkbox_clipboard->setChecked(true);
     }
     else
@@ -94,13 +94,13 @@ void ComputerDialogDesktop::restoreSettings(
         ui.checkbox_clipboard->hide();
     }
 
-    if (desktop_config.flags() & proto::desktop::CURSOR_POSITION)
+    if (desktop_config.flags() & proto::control::CURSOR_POSITION)
         ui.checkbox_cursor_position->setChecked(true);
 
-    if (desktop_config.flags() & proto::desktop::DISABLE_EFFECTS)
+    if (desktop_config.flags() & proto::control::DISABLE_EFFECTS)
         ui.checkbox_desktop_effects->setChecked(true);
 
-    if (desktop_config.flags() & proto::desktop::DISABLE_WALLPAPER)
+    if (desktop_config.flags() & proto::control::DISABLE_WALLPAPER)
         ui.checkbox_desktop_wallpaper->setChecked(true);
 }
 
@@ -108,7 +108,7 @@ void ComputerDialogDesktop::restoreSettings(
 void ComputerDialogDesktop::saveSettings(
     proto::peer::SessionType session_type, proto::address_book::Computer* computer)
 {
-    proto::desktop::Config* desktop_config;
+    proto::control::Config* desktop_config;
 
     if (session_type == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
     {
@@ -135,25 +135,25 @@ void ComputerDialogDesktop::saveSettings(
         desktop_config->set_audio_encoding(proto::audio::ENCODING_UNKNOWN);
 
     if (ui.checkbox_cursor_shape->isChecked() && ui.checkbox_cursor_shape->isEnabled())
-        flags |= proto::desktop::ENABLE_CURSOR_SHAPE;
+        flags |= proto::control::ENABLE_CURSOR_SHAPE;
 
     if (ui.checkbox_cursor_position->isChecked())
-        flags |= proto::desktop::CURSOR_POSITION;
+        flags |= proto::control::CURSOR_POSITION;
 
     if (ui.checkbox_clipboard->isChecked() && ui.checkbox_clipboard->isEnabled())
-        flags |= proto::desktop::ENABLE_CLIPBOARD;
+        flags |= proto::control::ENABLE_CLIPBOARD;
 
     if (ui.checkbox_desktop_effects->isChecked())
-        flags |= proto::desktop::DISABLE_EFFECTS;
+        flags |= proto::control::DISABLE_EFFECTS;
 
     if (ui.checkbox_desktop_wallpaper->isChecked())
-        flags |= proto::desktop::DISABLE_WALLPAPER;
+        flags |= proto::control::DISABLE_WALLPAPER;
 
     if (ui.checkbox_block_remote_input->isChecked())
-        flags |= proto::desktop::BLOCK_REMOTE_INPUT;
+        flags |= proto::control::BLOCK_REMOTE_INPUT;
 
     if (ui.checkbox_lock_at_disconnect->isChecked())
-        flags |= proto::desktop::LOCK_AT_DISCONNECT;
+        flags |= proto::control::LOCK_AT_DISCONNECT;
 
     desktop_config->set_flags(flags);
 }

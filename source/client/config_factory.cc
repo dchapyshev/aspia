@@ -31,31 +31,31 @@ const proto::audio::Encoding kDefaultAudioEncoding = proto::audio::ENCODING_OPUS
 
 //--------------------------------------------------------------------------------------------------
 // static
-proto::desktop::Config ConfigFactory::defaultDesktopManageConfig()
+proto::control::Config ConfigFactory::defaultDesktopManageConfig()
 {
-    proto::desktop::Config config;
+    proto::control::Config config;
     setDefaultDesktopManageConfig(&config);
     return config;
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
-proto::desktop::Config ConfigFactory::defaultDesktopViewConfig()
+proto::control::Config ConfigFactory::defaultDesktopViewConfig()
 {
-    proto::desktop::Config config;
+    proto::control::Config config;
     setDefaultDesktopViewConfig(&config);
     return config;
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
-void ConfigFactory::setDefaultDesktopManageConfig(proto::desktop::Config* config)
+void ConfigFactory::setDefaultDesktopManageConfig(proto::control::Config* config)
 {
     DCHECK(config);
 
     static const quint32 kDefaultFlags =
-        proto::desktop::ENABLE_CLIPBOARD | proto::desktop::ENABLE_CURSOR_SHAPE |
-        proto::desktop::DISABLE_EFFECTS | proto::desktop::DISABLE_WALLPAPER;
+        proto::control::ENABLE_CLIPBOARD | proto::control::ENABLE_CURSOR_SHAPE |
+        proto::control::DISABLE_EFFECTS | proto::control::DISABLE_WALLPAPER;
 
     config->set_flags(kDefaultFlags);
     config->set_video_encoding(kDefaultVideoEncoding);
@@ -64,12 +64,12 @@ void ConfigFactory::setDefaultDesktopManageConfig(proto::desktop::Config* config
 
 //--------------------------------------------------------------------------------------------------
 // static
-void ConfigFactory::setDefaultDesktopViewConfig(proto::desktop::Config* config)
+void ConfigFactory::setDefaultDesktopViewConfig(proto::control::Config* config)
 {
     DCHECK(config);
 
     static const quint32 kDefaultFlags =
-        proto::desktop::DISABLE_EFFECTS | proto::desktop::DISABLE_WALLPAPER;
+        proto::control::DISABLE_EFFECTS | proto::control::DISABLE_WALLPAPER;
 
     config->set_flags(kDefaultFlags);
     config->set_video_encoding(kDefaultVideoEncoding);

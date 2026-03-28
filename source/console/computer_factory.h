@@ -26,8 +26,8 @@ namespace console {
 class ComputerFactory
 {
 public:
-    static void setDefaultDesktopManageConfig(proto::desktop::Config* config);
-    static void setDefaultDesktopViewConfig(proto::desktop::Config* config);
+    static void setDefaultDesktopManageConfig(proto::control::Config* config);
+    static void setDefaultDesktopViewConfig(proto::control::Config* config);
     static proto::address_book::Computer defaultComputer();
 
 private:

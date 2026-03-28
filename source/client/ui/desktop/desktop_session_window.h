@@ -47,7 +47,7 @@ class DesktopSessionWindow final : public SessionWindow
 
 public:
     DesktopSessionWindow(proto::peer::SessionType session_type,
-                    const proto::desktop::Config& desktop_config,
+                    const proto::control::Config& desktop_config,
                     QWidget* parent = nullptr);
     ~DesktopSessionWindow() final;
 
@@ -56,7 +56,7 @@ public:
 
 public slots:
     void onShowWindow();
-    void onCapabilitiesChanged(const proto::desktop::Capabilities& capabilities);
+    void onCapabilitiesChanged(const proto::control::Capabilities& capabilities);
     void onScreenListChanged(const proto::screen::ScreenList& screen_list);
     void onCursorPositionChanged(const proto::cursor::Position& position);
     void onSystemInfoChanged(const proto::system_info::SystemInfo& system_info);
@@ -66,10 +66,10 @@ public slots:
     void onFrameChanged(const QSize& screen_size, std::shared_ptr<base::Frame> frame);
     void onDrawFrame();
     void onMouseCursorChanged(std::shared_ptr<base::MouseCursor> mouse_cursor);
-    void onSessionListChanged(const proto::desktop::SessionList& sessions);
+    void onSessionListChanged(const proto::control::SessionList& sessions);
 
 signals:
-    void sig_desktopConfigChanged(const proto::desktop::Config& config);
+    void sig_desktopConfigChanged(const proto::control::Config& config);
     void sig_screenSelected(const proto::screen::Screen& screen);
     void sig_preferredSizeChanged(int width, int height);
     void sig_videoPaused(bool enable);
@@ -99,7 +99,7 @@ protected:
 private slots:
     void onMouseEvent(const proto::input::MouseEvent& event);
     void onSettings();
-    void onConfigChanged(const proto::desktop::Config& config);
+    void onConfigChanged(const proto::control::Config& config);
     void onVideoEncodingChanged(proto::video::Encoding encoding);
     void onAutosizeWindow();
     void onTakeScreenshot();
@@ -111,7 +111,7 @@ private slots:
 
 private:
     const proto::peer::SessionType session_type_;
-    proto::desktop::Config desktop_config_;
+    proto::control::Config desktop_config_;
 
     quint32 video_encodings_ = 0;
 

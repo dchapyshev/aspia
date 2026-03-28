@@ -103,7 +103,7 @@ private:
     void readPreferredSize(const proto::video::PreferredSize& size);
     void readVideoPause(const proto::video::Pause& pause);
     void readAudioPause(const proto::audio::Pause& pause);
-    void readConfig(const proto::desktop::Config& config);
+    void readConfig(const proto::control::Config& config);
     void readPowerControl(const proto::power::Control& control);
     void readSystemInfo(const proto::system_info::SystemInfoRequest& request);
     void readTaskManager(const proto::task_manager::ClientToHost& message);

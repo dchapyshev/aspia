@@ -24,13 +24,13 @@
 namespace console {
 
 //--------------------------------------------------------------------------------------------------
-void ComputerFactory::setDefaultDesktopManageConfig(proto::desktop::Config* config)
+void ComputerFactory::setDefaultDesktopManageConfig(proto::control::Config* config)
 {
     DCHECK(config);
 
     static const quint32 kDefaultFlags =
-        proto::desktop::ENABLE_CLIPBOARD | proto::desktop::ENABLE_CURSOR_SHAPE |
-        proto::desktop::DISABLE_EFFECTS | proto::desktop::DISABLE_WALLPAPER;
+        proto::control::ENABLE_CLIPBOARD | proto::control::ENABLE_CURSOR_SHAPE |
+        proto::control::DISABLE_EFFECTS | proto::control::DISABLE_WALLPAPER;
 
     config->set_flags(kDefaultFlags);
     config->set_video_encoding(proto::video::ENCODING_VP8);
@@ -38,12 +38,12 @@ void ComputerFactory::setDefaultDesktopManageConfig(proto::desktop::Config* conf
 }
 
 //--------------------------------------------------------------------------------------------------
-void ComputerFactory::setDefaultDesktopViewConfig(proto::desktop::Config* config)
+void ComputerFactory::setDefaultDesktopViewConfig(proto::control::Config* config)
 {
     DCHECK(config);
 
     static const quint32 kDefaultFlags =
-        proto::desktop::DISABLE_EFFECTS | proto::desktop::DISABLE_WALLPAPER;
+        proto::control::DISABLE_EFFECTS | proto::control::DISABLE_WALLPAPER;
 
     config->set_flags(kDefaultFlags);
     config->set_video_encoding(proto::video::ENCODING_VP8);

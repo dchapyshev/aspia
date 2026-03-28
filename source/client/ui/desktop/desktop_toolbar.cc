@@ -404,7 +404,7 @@ void DesktopToolBar::setScreenList(const proto::screen::ScreenList& screen_list)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopToolBar::setSessionList(const proto::desktop::SessionList& session_list)
+void DesktopToolBar::setSessionList(const proto::control::SessionList& session_list)
 {
     LOG(INFO) << "Received:" << session_list;
 
@@ -422,7 +422,7 @@ void DesktopToolBar::setSessionList(const proto::desktop::SessionList& session_l
     {
         for (int i = 0; i < session_list.session_size(); ++i)
         {
-            const proto::desktop::Session& session = session_list.session(i);
+            const proto::control::Session& session = session_list.session(i);
             if (session.session_id() != session_list.console_session_id() && !session.is_active())
                 continue;
 

@@ -46,7 +46,7 @@ void onInvalidValue(const QString& arg, const QString& values)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool parseCodecValue(const QString& value, proto::desktop::Config& config)
+bool parseCodecValue(const QString& value, proto::control::Config& config)
 {
     if (!value.isEmpty())
     {
@@ -69,7 +69,7 @@ bool parseCodecValue(const QString& value, proto::desktop::Config& config)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool parseAudioValue(const QString& value, proto::desktop::Config& config)
+bool parseAudioValue(const QString& value, proto::control::Config& config)
 {
     if (!value.isEmpty())
     {
@@ -92,17 +92,17 @@ bool parseAudioValue(const QString& value, proto::desktop::Config& config)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool parseCursorShapeValue(const QString& value, proto::desktop::Config& config)
+bool parseCursorShapeValue(const QString& value, proto::control::Config& config)
 {
     if (!value.isEmpty())
     {
         if (value == "0")
         {
-            config.set_flags(config.flags() & ~static_cast<quint32>(proto::desktop::ENABLE_CURSOR_SHAPE));
+            config.set_flags(config.flags() & ~static_cast<quint32>(proto::control::ENABLE_CURSOR_SHAPE));
         }
         else if (value == "1")
         {
-            config.set_flags(config.flags() | proto::desktop::ENABLE_CURSOR_SHAPE);
+            config.set_flags(config.flags() | proto::control::ENABLE_CURSOR_SHAPE);
         }
         else
         {
@@ -115,17 +115,17 @@ bool parseCursorShapeValue(const QString& value, proto::desktop::Config& config)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool parseCursorPositionValue(const QString& value, proto::desktop::Config& config)
+bool parseCursorPositionValue(const QString& value, proto::control::Config& config)
 {
     if (!value.isEmpty())
     {
         if (value == "0")
         {
-            config.set_flags(config.flags() & ~static_cast<quint32>(proto::desktop::CURSOR_POSITION));
+            config.set_flags(config.flags() & ~static_cast<quint32>(proto::control::CURSOR_POSITION));
         }
         else if (value == "1")
         {
-            config.set_flags(config.flags() | proto::desktop::CURSOR_POSITION);
+            config.set_flags(config.flags() | proto::control::CURSOR_POSITION);
         }
         else
         {
@@ -138,17 +138,17 @@ bool parseCursorPositionValue(const QString& value, proto::desktop::Config& conf
 }
 
 //--------------------------------------------------------------------------------------------------
-bool parseClipboardValue(const QString& value, proto::desktop::Config& config)
+bool parseClipboardValue(const QString& value, proto::control::Config& config)
 {
     if (!value.isEmpty())
     {
         if (value == "0")
         {
-            config.set_flags(config.flags() & ~static_cast<quint32>(proto::desktop::ENABLE_CLIPBOARD));
+            config.set_flags(config.flags() & ~static_cast<quint32>(proto::control::ENABLE_CLIPBOARD));
         }
         else if (value == "1")
         {
-            config.set_flags(config.flags() | proto::desktop::ENABLE_CLIPBOARD);
+            config.set_flags(config.flags() | proto::control::ENABLE_CLIPBOARD);
         }
         else
         {
@@ -161,17 +161,17 @@ bool parseClipboardValue(const QString& value, proto::desktop::Config& config)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool parseDesktopEffectsValue(const QString& value, proto::desktop::Config& config)
+bool parseDesktopEffectsValue(const QString& value, proto::control::Config& config)
 {
     if (!value.isEmpty())
     {
         if (value == "0")
         {
-            config.set_flags(config.flags() | proto::desktop::DISABLE_EFFECTS);
+            config.set_flags(config.flags() | proto::control::DISABLE_EFFECTS);
         }
         else if (value == "1")
         {
-            config.set_flags(config.flags() & ~static_cast<quint32>(proto::desktop::DISABLE_EFFECTS));
+            config.set_flags(config.flags() & ~static_cast<quint32>(proto::control::DISABLE_EFFECTS));
         }
         else
         {
@@ -184,17 +184,17 @@ bool parseDesktopEffectsValue(const QString& value, proto::desktop::Config& conf
 }
 
 //--------------------------------------------------------------------------------------------------
-bool parseDesktopWallpaperValue(const QString& value, proto::desktop::Config& config)
+bool parseDesktopWallpaperValue(const QString& value, proto::control::Config& config)
 {
     if (!value.isEmpty())
     {
         if (value == "0")
         {
-            config.set_flags(config.flags() | proto::desktop::DISABLE_WALLPAPER);
+            config.set_flags(config.flags() | proto::control::DISABLE_WALLPAPER);
         }
         else if (value == "1")
         {
-            config.set_flags(config.flags() & ~static_cast<quint32>(proto::desktop::DISABLE_WALLPAPER));
+            config.set_flags(config.flags() & ~static_cast<quint32>(proto::control::DISABLE_WALLPAPER));
         }
         else
         {
@@ -207,17 +207,17 @@ bool parseDesktopWallpaperValue(const QString& value, proto::desktop::Config& co
 }
 
 //--------------------------------------------------------------------------------------------------
-bool parseLockAtDisconnectValue(const QString& value, proto::desktop::Config& config)
+bool parseLockAtDisconnectValue(const QString& value, proto::control::Config& config)
 {
     if (!value.isEmpty())
     {
         if (value == "0")
         {
-            config.set_flags(config.flags() & ~static_cast<quint32>(proto::desktop::LOCK_AT_DISCONNECT));
+            config.set_flags(config.flags() & ~static_cast<quint32>(proto::control::LOCK_AT_DISCONNECT));
         }
         else if (value == "1")
         {
-            config.set_flags(config.flags() | proto::desktop::LOCK_AT_DISCONNECT);
+            config.set_flags(config.flags() | proto::control::LOCK_AT_DISCONNECT);
         }
         else
         {
@@ -230,17 +230,17 @@ bool parseLockAtDisconnectValue(const QString& value, proto::desktop::Config& co
 }
 
 //--------------------------------------------------------------------------------------------------
-bool parseBlockRemoteInputValue(const QString& value, proto::desktop::Config& config)
+bool parseBlockRemoteInputValue(const QString& value, proto::control::Config& config)
 {
     if (!value.isEmpty())
     {
         if (value == "0")
         {
-            config.set_flags(config.flags() & ~static_cast<quint32>(proto::desktop::BLOCK_REMOTE_INPUT));
+            config.set_flags(config.flags() & ~static_cast<quint32>(proto::control::BLOCK_REMOTE_INPUT));
         }
         else if (value == "1")
         {
-            config.set_flags(config.flags() | proto::desktop::BLOCK_REMOTE_INPUT);
+            config.set_flags(config.flags() | proto::control::BLOCK_REMOTE_INPUT);
         }
         else
         {
@@ -394,7 +394,7 @@ int clientMain(int argc, char* argv[])
     {
         LOG(INFO) << "Command line start";
 
-        std::optional<proto::desktop::Config> desktop_config;
+        std::optional<proto::control::Config> desktop_config;
         client::Config config;
 
         config.address_or_id = parser.value(address_option);

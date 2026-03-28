@@ -28,7 +28,7 @@ namespace client {
 
 //--------------------------------------------------------------------------------------------------
 DesktopConfigDialog::DesktopConfigDialog(proto::peer::SessionType session_type,
-    const proto::desktop::Config& config, quint32 video_encodings, QWidget* parent)
+    const proto::control::Config& config, quint32 video_encodings, QWidget* parent)
     : QDialog(parent),
       ui(std::make_unique<Ui::DesktopConfigDialog>()),
       config_(config)
@@ -60,16 +60,16 @@ DesktopConfigDialog::DesktopConfigDialog(proto::peer::SessionType session_type,
 
     if (session_type == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
     {
-        if (config_.flags() & proto::desktop::LOCK_AT_DISCONNECT)
+        if (config_.flags() & proto::control::LOCK_AT_DISCONNECT)
             ui->checkbox_lock_at_disconnect->setChecked(true);
 
-        if (config_.flags() & proto::desktop::BLOCK_REMOTE_INPUT)
+        if (config_.flags() & proto::control::BLOCK_REMOTE_INPUT)
             ui->checkbox_block_remote_input->setChecked(true);
 
-        if (config_.flags() & proto::desktop::ENABLE_CURSOR_SHAPE)
+        if (config_.flags() & proto::control::ENABLE_CURSOR_SHAPE)
             ui->checkbox_cursor_shape->setChecked(true);
 
-        if (config_.flags() & proto::desktop::ENABLE_CLIPBOARD)
+        if (config_.flags() & proto::control::ENABLE_CLIPBOARD)
             ui->checkbox_clipboard->setChecked(true);
     }
     else
@@ -79,13 +79,13 @@ DesktopConfigDialog::DesktopConfigDialog(proto::peer::SessionType session_type,
         ui->checkbox_clipboard->hide();
     }
 
-    if (config_.flags() & proto::desktop::CURSOR_POSITION)
+    if (config_.flags() & proto::control::CURSOR_POSITION)
         ui->checkbox_enable_cursor_pos->setChecked(true);
 
-    if (config_.flags() & proto::desktop::DISABLE_EFFECTS)
+    if (config_.flags() & proto::control::DISABLE_EFFECTS)
         ui->checkbox_desktop_effects->setChecked(true);
 
-    if (config_.flags() & proto::desktop::DISABLE_WALLPAPER)
+    if (config_.flags() & proto::control::DISABLE_WALLPAPER)
         ui->checkbox_desktop_wallpaper->setChecked(true);
 
     connect(combo_codec, QOverload<int>::of(&QComboBox::currentIndexChanged),
@@ -191,25 +191,25 @@ void DesktopConfigDialog::onButtonBoxClicked(QAbstractButton* button)
         quint32 flags = 0;
 
         if (ui->checkbox_cursor_shape->isChecked() && ui->checkbox_cursor_shape->isEnabled())
-            flags |= proto::desktop::ENABLE_CURSOR_SHAPE;
+            flags |= proto::control::ENABLE_CURSOR_SHAPE;
 
         if (ui->checkbox_enable_cursor_pos->isChecked())
-            flags |= proto::desktop::CURSOR_POSITION;
+            flags |= proto::control::CURSOR_POSITION;
 
         if (ui->checkbox_clipboard->isChecked() && ui->checkbox_clipboard->isEnabled())
-            flags |= proto::desktop::ENABLE_CLIPBOARD;
+            flags |= proto::control::ENABLE_CLIPBOARD;
 
         if (ui->checkbox_desktop_effects->isChecked())
-            flags |= proto::desktop::DISABLE_EFFECTS;
+            flags |= proto::control::DISABLE_EFFECTS;
 
         if (ui->checkbox_desktop_wallpaper->isChecked())
-            flags |= proto::desktop::DISABLE_WALLPAPER;
+            flags |= proto::control::DISABLE_WALLPAPER;
 
         if (ui->checkbox_block_remote_input->isChecked())
-            flags |= proto::desktop::BLOCK_REMOTE_INPUT;
+            flags |= proto::control::BLOCK_REMOTE_INPUT;
 
         if (ui->checkbox_lock_at_disconnect->isChecked())
-            flags |= proto::desktop::LOCK_AT_DISCONNECT;
+            flags |= proto::control::LOCK_AT_DISCONNECT;
 
         config_.set_flags(flags);
 

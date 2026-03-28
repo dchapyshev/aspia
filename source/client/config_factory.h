@@ -26,11 +26,11 @@ namespace client {
 class ConfigFactory
 {
 public:
-    static proto::desktop::Config defaultDesktopManageConfig();
-    static proto::desktop::Config defaultDesktopViewConfig();
+    static proto::control::Config defaultDesktopManageConfig();
+    static proto::control::Config defaultDesktopViewConfig();
 
-    static void setDefaultDesktopManageConfig(proto::desktop::Config* config);
-    static void setDefaultDesktopViewConfig(proto::desktop::Config* config);
+    static void setDefaultDesktopManageConfig(proto::control::Config* config);
+    static void setDefaultDesktopViewConfig(proto::control::Config* config);
 
 private:
     Q_DISABLE_COPY_MOVE(ConfigFactory)

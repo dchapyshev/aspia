@@ -149,7 +149,7 @@ void ClientDesktop::onMessageReceived(quint8 channel_id, const QByteArray& buffe
     }
     else if (channel_id == proto::desktop::CHANNEL_ID_CONTROL)
     {
-        proto::desktop::ServiceToClient message;
+        proto::control::HostToClient message;
         if (!base::parse(buffer, &message))
         {
             CLOG(ERROR) << "Unable to parse control message";
@@ -267,17 +267,17 @@ void ClientDesktop::onClipboardEvent(const proto::clipboard::Event& event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientDesktop::onDesktopConfigChanged(const proto::desktop::Config& config)
+void ClientDesktop::onDesktopConfigChanged(const proto::control::Config& config)
 {
     desktop_config_ = config;
 
-    if (!(desktop_config_.flags() & proto::desktop::ENABLE_CURSOR_SHAPE))
+    if (!(desktop_config_.flags() & proto::control::ENABLE_CURSOR_SHAPE))
     {
         CLOG(INFO) << "Cursor shape disabled";
         cursor_decoder_.reset();
     }
 
-    input_event_filter_.setClipboardEnabled(desktop_config_.flags() & proto::desktop::ENABLE_CLIPBOARD);
+    input_event_filter_.setClipboardEnabled(desktop_config_.flags() & proto::control::ENABLE_CLIPBOARD);
 
     CLOG(INFO) << "Send:" << config;
 
@@ -289,7 +289,7 @@ void ClientDesktop::onDesktopConfigChanged(const proto::desktop::Config& config)
     }
     else
     {
-        proto::desktop::ClientToService message;
+        proto::control::ClientToHost message;
         message.mutable_config()->CopyFrom(desktop_config_);
         sendMessage(proto::desktop::CHANNEL_ID_CONTROL, base::serialize(message));
         sendSessionListRequest();
@@ -421,14 +421,14 @@ void ClientDesktop::onAudioPauseChanged(bool enable)
 //--------------------------------------------------------------------------------------------------
 void ClientDesktop::onRecordingChanged(bool enable, const QString& file_path)
 {
-    proto::desktop::ClientToService message;
-    proto::desktop::VideoRecording* video_recording = message.mutable_video_recording();
+    proto::control::ClientToHost message;
+    proto::control::VideoRecording* video_recording = message.mutable_video_recording();
 
     if (enable)
     {
         CLOG(INFO) << "Video recording is enabled:" << file_path;
 
-        video_recording->set_action(proto::desktop::VideoRecording::ACTION_STARTED);
+        video_recording->set_action(proto::control::VideoRecording::ACTION_STARTED);
 
         webm_file_writer_ =
             std::make_unique<base::WebmFileWriter>(file_path, sessionState()->computerName());
@@ -453,7 +453,7 @@ void ClientDesktop::onRecordingChanged(bool enable, const QString& file_path)
     {
         CLOG(INFO) << "Video recording is disabled";
 
-        video_recording->set_action(proto::desktop::VideoRecording::ACTION_STOPPED);
+        video_recording->set_action(proto::control::VideoRecording::ACTION_STOPPED);
 
         if (webm_video_encode_timer_)
         {
@@ -663,8 +663,8 @@ void ClientDesktop::onMetricsRequest()
 //--------------------------------------------------------------------------------------------------
 void ClientDesktop::onSwitchSession(quint32 session_id)
 {
-    proto::desktop::ClientToService message;
-    proto::desktop::SwitchSession* switch_session = message.mutable_switch_session();
+    proto::control::ClientToHost message;
+    proto::control::SwitchSession* switch_session = message.mutable_switch_session();
     switch_session->set_session_id(session_id);
 
     CLOG(INFO) << "Send:" << *switch_session;
@@ -672,7 +672,7 @@ void ClientDesktop::onSwitchSession(quint32 session_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientDesktop::readCapabilities(const proto::desktop::Capabilities& capabilities)
+void ClientDesktop::readCapabilities(const proto::control::Capabilities& capabilities)
 {
     // We notify the window about changes in the list of extensions and video encodings.
     // A window can disable/enable some of its capabilities in accordance with this information.
@@ -837,7 +837,7 @@ void ClientDesktop::readCursorShape(const proto::cursor::Shape& shape)
         return;
     }
 
-    if (!(desktop_config_.flags() & proto::desktop::ENABLE_CURSOR_SHAPE))
+    if (!(desktop_config_.flags() & proto::control::ENABLE_CURSOR_SHAPE))
     {
         CLOG(ERROR) << "Cursor shape received not disabled in client";
         return;
@@ -861,7 +861,7 @@ void ClientDesktop::readCursorShape(const proto::cursor::Shape& shape)
 //--------------------------------------------------------------------------------------------------
 void ClientDesktop::readCursorPosition(const proto::cursor::Position& position)
 {
-    if (!(desktop_config_.flags() & proto::desktop::CURSOR_POSITION))
+    if (!(desktop_config_.flags() & proto::control::CURSOR_POSITION))
         return;
 
     ++cursor_pos_count_;
@@ -933,8 +933,8 @@ void ClientDesktop::readExtension(const proto::desktop::Extension& extension)
 //--------------------------------------------------------------------------------------------------
 void ClientDesktop::sendSessionListRequest()
 {
-    proto::desktop::ClientToService message;
-    proto::desktop::SessionListRequest* request = message.mutable_session_list_request();
+    proto::control::ClientToHost message;
+    proto::control::SessionListRequest* request = message.mutable_session_list_request();
     request->set_dummy(1);
     sendMessage(proto::desktop::CHANNEL_ID_CONTROL, base::serialize(message));
 }
