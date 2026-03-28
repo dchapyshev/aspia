@@ -70,14 +70,14 @@ message ScreenType
 }
 
 // Client <- Host (channel 2).
-message Data
+message HostToClient
 {
     ScreenList screen_list = 1;
     ScreenType screen_type = 2;
 }
 
 // Client -> Host (channel 2).
-message Control
+message ClientToHost
 {
     Screen screen = 1;
 }

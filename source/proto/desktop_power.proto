@@ -39,7 +39,7 @@ message Control
 }
 
 // Client -> Host (channel 8).
-message Data
+message ClientToHost
 {
     Control power_control = 1;
 }

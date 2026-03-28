@@ -96,7 +96,7 @@ void ClientDesktop::onMessageReceived(quint8 channel_id, const QByteArray& buffe
 {
     if (channel_id == proto::desktop::CHANNEL_ID_VIDEO)
     {
-        proto::video::Data message;
+        proto::video::HostToClient message;
         if (!base::parse(buffer, &message))
         {
             CLOG(ERROR) << "Unable to parse video message";
@@ -108,7 +108,7 @@ void ClientDesktop::onMessageReceived(quint8 channel_id, const QByteArray& buffe
     }
     else if (channel_id == proto::desktop::CHANNEL_ID_CURSOR)
     {
-        proto::cursor::Data message;
+        proto::cursor::HostToClient message;
         if (!base::parse(buffer, &message))
         {
             CLOG(ERROR) << "Unable to parse cursor message";
@@ -122,7 +122,7 @@ void ClientDesktop::onMessageReceived(quint8 channel_id, const QByteArray& buffe
     }
     else if (channel_id == proto::desktop::CHANNEL_ID_SCREEN)
     {
-        proto::screen::Data message;
+        proto::screen::HostToClient message;
         if (!base::parse(buffer, &message))
         {
             CLOG(ERROR) << "Unable to parse screen message";
@@ -138,7 +138,7 @@ void ClientDesktop::onMessageReceived(quint8 channel_id, const QByteArray& buffe
     }
     else if (channel_id == proto::desktop::CHANNEL_ID_AUDIO)
     {
-        proto::audio::Data message;
+        proto::audio::HostToClient message;
         if (!base::parse(buffer, &message))
         {
             CLOG(ERROR) << "Unable to parse audio message";
@@ -173,7 +173,7 @@ void ClientDesktop::onMessageReceived(quint8 channel_id, const QByteArray& buffe
     }
     else if (channel_id == proto::desktop::CHANNEL_ID_CLIPBOARD)
     {
-        proto::clipboard::Data message;
+        proto::clipboard::Message message;
         if (!base::parse(buffer, &message))
         {
             CLOG(ERROR) << "Unable to parse clipboard message";
@@ -260,7 +260,7 @@ void ClientDesktop::onClipboardEvent(const proto::clipboard::Event& event)
     }
     else
     {
-        proto::clipboard::Data message;
+        proto::clipboard::Message message;
         message.mutable_event()->CopyFrom(event);
         sendMessage(proto::desktop::CHANNEL_ID_CLIPBOARD, base::serialize(message));
     }
@@ -311,7 +311,7 @@ void ClientDesktop::onCurrentScreenChanged(const proto::screen::Screen& screen)
     }
     else
     {
-        proto::screen::Control message;
+        proto::screen::ClientToHost message;
         message.mutable_screen()->CopyFrom(screen);
         sendMessage(proto::desktop::CHANNEL_ID_SCREEN, base::serialize(message));
     }
@@ -336,7 +336,7 @@ void ClientDesktop::onPreferredSizeChanged(int width, int height)
     }
     else
     {
-        proto::video::Control message;
+        proto::video::ClientToHost message;
         proto::video::PreferredSize* preferred_size = message.mutable_preferred_size();
         preferred_size->set_width(width);
         preferred_size->set_height(height);
@@ -373,7 +373,7 @@ void ClientDesktop::onVideoPauseChanged(bool enable)
     }
     else
     {
-        proto::video::Control message;
+        proto::video::ClientToHost message;
         proto::video::Pause* pause = message.mutable_pause();
         pause->set_enable(enable);
         pause->set_dummy(1);
@@ -410,7 +410,7 @@ void ClientDesktop::onAudioPauseChanged(bool enable)
     }
     else
     {
-        proto::audio::Control message;
+        proto::audio::ClientToHost message;
         proto::audio::Pause* pause = message.mutable_pause();
         pause->set_enable(enable);
         pause->set_dummy(1);
@@ -481,7 +481,7 @@ void ClientDesktop::onKeyEvent(const proto::input::KeyEvent& event)
     }
     else
     {
-        proto::input::InputData message;
+        proto::input::ClientToHost message;
         message.mutable_key()->CopyFrom(event);
         sendMessage(proto::desktop::CHANNEL_ID_INPUT, base::serialize(message));
     }
@@ -501,7 +501,7 @@ void ClientDesktop::onTextEvent(const proto::input::TextEvent& event)
     }
     else
     {
-        proto::input::InputData message;
+        proto::input::ClientToHost message;
         message.mutable_text()->CopyFrom(event);
         sendMessage(proto::desktop::CHANNEL_ID_INPUT, base::serialize(message));
     }
@@ -521,7 +521,7 @@ void ClientDesktop::onMouseEvent(const proto::input::MouseEvent& event)
     }
     else
     {
-        proto::input::InputData message;
+        proto::input::ClientToHost message;
         message.mutable_mouse()->CopyFrom(event);
         sendMessage(proto::desktop::CHANNEL_ID_INPUT, base::serialize(message));
     }
@@ -549,7 +549,7 @@ void ClientDesktop::onPowerControl(proto::power::Control::Action action)
     }
     else
     {
-        proto::power::Data message;
+        proto::power::ClientToHost message;
         message.mutable_power_control()->set_action(action);
         sendMessage(proto::desktop::CHANNEL_ID_POWER, base::serialize(message));
     }
@@ -948,7 +948,7 @@ void ClientDesktop::sendKeyFrameRequest()
         return;
     }
 
-    proto::video::Control message;
+    proto::video::ClientToHost message;
     message.mutable_key_frame()->set_dummy(1);
     sendMessage(proto::desktop::CHANNEL_ID_VIDEO, base::serialize(message));
 }

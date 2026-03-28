@@ -110,13 +110,13 @@ message PreferredSize
 }
 
 // Client <- Host (channel 3).
-message Data
+message HostToClient
 {
     Packet packet = 1;
 }
 
 // Client -> Host (channel 3).
-message Control
+message ClientToHost
 {
     KeyFrameRequest key_frame    = 1;
     PreferredSize preferred_size = 2;

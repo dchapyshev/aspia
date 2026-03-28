@@ -115,7 +115,7 @@ message TouchEvent
 }
 
 // Client -> Host (channel 5).
-message InputData
+message ClientToHost
 {
     MouseEvent mouse = 1;
     KeyEvent key     = 2;

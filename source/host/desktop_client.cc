@@ -59,7 +59,7 @@ DesktopClient::DesktopClient(base::TcpChannel* tcp_channel, QObject* parent)
             return;
         }
 
-        proto::video::Data message;
+        proto::video::HostToClient message;
         proto::video::Packet* packet = message.mutable_packet();
         packet->set_error_code(proto::video::ERROR_CODE_TEMPORARY);
         send(proto::desktop::CHANNEL_ID_VIDEO, base::serialize(message));

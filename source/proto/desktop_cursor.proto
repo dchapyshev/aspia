@@ -62,7 +62,7 @@ message Position
 }
 
 // Client <- Host (channel 4).
-message Data
+message HostToClient
 {
     Shape shape       = 1;
     Position position = 2;

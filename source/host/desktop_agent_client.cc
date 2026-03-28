@@ -196,7 +196,7 @@ void DesktopAgentClient::readSessionMessage(quint8 channel_id, const QByteArray&
 {
     if (channel_id == proto::desktop::CHANNEL_ID_INPUT)
     {
-        proto::input::InputData message;
+        proto::input::ClientToHost message;
         if (!base::parse(buffer, &message))
         {
             CLOG(ERROR) << "Unable to parse input message";
@@ -214,7 +214,7 @@ void DesktopAgentClient::readSessionMessage(quint8 channel_id, const QByteArray&
     }
     else if (channel_id == proto::desktop::CHANNEL_ID_VIDEO)
     {
-        proto::video::Control message;
+        proto::video::ClientToHost message;
         if (!base::parse(buffer, &message))
         {
             CLOG(ERROR) << "Unable to parse video control message";
@@ -230,7 +230,7 @@ void DesktopAgentClient::readSessionMessage(quint8 channel_id, const QByteArray&
     }
     else if (channel_id == proto::desktop::CHANNEL_ID_SCREEN)
     {
-        proto::screen::Control message;
+        proto::screen::ClientToHost message;
         if (!base::parse(buffer, &message))
         {
             CLOG(ERROR) << "Unable to parse screen control message";
@@ -242,7 +242,7 @@ void DesktopAgentClient::readSessionMessage(quint8 channel_id, const QByteArray&
     }
     else if (channel_id == proto::desktop::CHANNEL_ID_AUDIO)
     {
-        proto::audio::Control message;
+        proto::audio::ClientToHost message;
         if (!base::parse(buffer, &message))
         {
             CLOG(ERROR) << "Unable to parse audio control message";
@@ -254,7 +254,7 @@ void DesktopAgentClient::readSessionMessage(quint8 channel_id, const QByteArray&
     }
     else if (channel_id == proto::desktop::CHANNEL_ID_POWER)
     {
-        proto::power::Data message;
+        proto::power::ClientToHost message;
         if (!base::parse(buffer, &message))
         {
             CLOG(ERROR) << "Unable to parse power message";

@@ -982,7 +982,7 @@ void DesktopAgent::encodeScreen(const base::Frame* frame)
         return;
     }
 
-    proto::video::Data& message = video_message_.newMessage();
+    proto::video::HostToClient& message = video_message_.newMessage();
     proto::video::Packet* packet = message.mutable_packet();
 
     // Encode the frame into a video packet.
@@ -1020,7 +1020,7 @@ void DesktopAgent::encodeCursor(const base::MouseCursor* cursor)
     if (!cursor || !cursor_encoder_)
         return;
 
-    proto::cursor::Data& message = cursor_message_.newMessage();
+    proto::cursor::HostToClient& message = cursor_message_.newMessage();
     if (!cursor_encoder_->encode(*cursor, message.mutable_shape()))
         return;
 

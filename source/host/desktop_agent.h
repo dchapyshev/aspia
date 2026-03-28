@@ -119,10 +119,10 @@ private:
     std::unique_ptr<base::CursorEncoder> cursor_encoder_;
     std::unique_ptr<base::AudioEncoder> audio_encoder_;
 
-    base::Serializer<proto::screen::Data> screen_message_;
-    base::Serializer<proto::cursor::Data> cursor_message_;
-    base::Serializer<proto::video::Data> video_message_;
-    base::Serializer<proto::audio::Data> audio_message_;
+    base::Serializer<proto::screen::HostToClient> screen_message_;
+    base::Serializer<proto::cursor::HostToClient> cursor_message_;
+    base::Serializer<proto::video::HostToClient> video_message_;
+    base::Serializer<proto::audio::HostToClient> audio_message_;
 
     bool is_paused_ = false;
     bool is_mouse_locked_ = false;

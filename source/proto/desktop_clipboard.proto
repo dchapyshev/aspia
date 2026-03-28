@@ -71,7 +71,7 @@ message FileTransferError
 }
 
 // Client <-> Host (channel 6).
-message Data
+message Message
 {
     Event event                 = 1;
     FileTransferRequest request = 2;

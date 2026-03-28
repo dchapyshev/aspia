@@ -75,13 +75,13 @@ message Pause
 }
 
 // Client <- Host (channel 7).
-message Data
+message HostToClient
 {
     Packet packet = 1;
 }
 
 // Client -> Host (channel 7).
-message Control
+message ClientToHost
 {
     Pause pause = 1;
 }
