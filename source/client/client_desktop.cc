@@ -320,33 +320,24 @@ void ClientDesktop::onCurrentScreenChanged(const proto::screen::Screen& screen)
 //--------------------------------------------------------------------------------------------------
 void ClientDesktop::onPreferredSizeChanged(int width, int height)
 {
+    if (isLegacy())
+        return;
+
     CLOG(INFO) << "Preferred size changed:" << width << "x" << height;
 
-    if (isLegacy())
-    {
-        proto::video::PreferredSize preferred_size;
-        preferred_size.set_width(width);
-        preferred_size.set_height(height);
-
-        proto::legacy::ClientToSession message;
-        proto::legacy::Extension* extension = message.mutable_extension();
-        extension->set_name(common::kPreferredSizeExtension);
-        extension->set_data(preferred_size.SerializeAsString());
-        sendMessage(proto::desktop::CHANNEL_ID_LEGACY, base::serialize(message));
-    }
-    else
-    {
-        proto::video::ClientToHost message;
-        proto::video::PreferredSize* preferred_size = message.mutable_preferred_size();
-        preferred_size->set_width(width);
-        preferred_size->set_height(height);
-        sendMessage(proto::desktop::CHANNEL_ID_VIDEO, base::serialize(message));
-    }
+    proto::video::ClientToHost message;
+    proto::video::PreferredSize* preferred_size = message.mutable_preferred_size();
+    preferred_size->set_width(width);
+    preferred_size->set_height(height);
+    sendMessage(proto::desktop::CHANNEL_ID_VIDEO, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClientDesktop::onVideoPauseChanged(bool enable)
 {
+    if (isLegacy())
+        return;
+
     CLOG(INFO) << "Video pause changed:" << enable;
 
     if (enable)
@@ -360,30 +351,19 @@ void ClientDesktop::onVideoPauseChanged(bool enable)
         ++video_resume_count_;
     }
 
-    if (isLegacy())
-    {
-        proto::video::Pause pause;
-        pause.set_enable(enable);
-
-        proto::legacy::ClientToSession message;
-        proto::legacy::Extension* extension = message.mutable_extension();
-        extension->set_name(common::kVideoPauseExtension);
-        extension->set_data(pause.SerializeAsString());
-        sendMessage(proto::desktop::CHANNEL_ID_LEGACY, base::serialize(message));
-    }
-    else
-    {
-        proto::video::ClientToHost message;
-        proto::video::Pause* pause = message.mutable_pause();
-        pause->set_enable(enable);
-        pause->set_dummy(1);
-        sendMessage(proto::desktop::CHANNEL_ID_VIDEO, base::serialize(message));
-    }
+    proto::video::ClientToHost message;
+    proto::video::Pause* pause = message.mutable_pause();
+    pause->set_enable(enable);
+    pause->set_dummy(1);
+    sendMessage(proto::desktop::CHANNEL_ID_VIDEO, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClientDesktop::onAudioPauseChanged(bool enable)
 {
+    if (isLegacy())
+        return;
+
     CLOG(INFO) << "Audio pause changed:" << enable;
 
     if (enable)
@@ -397,25 +377,11 @@ void ClientDesktop::onAudioPauseChanged(bool enable)
         ++audio_resume_count_;
     }
 
-    if (isLegacy())
-    {
-        proto::audio::Pause pause;
-        pause.set_enable(enable);
-
-        proto::legacy::ClientToSession message;
-        proto::legacy::Extension* extension = message.mutable_extension();
-        extension->set_name(common::kAudioPauseExtension);
-        extension->set_data(pause.SerializeAsString());
-        sendMessage(proto::desktop::CHANNEL_ID_LEGACY, base::serialize(message));
-    }
-    else
-    {
-        proto::audio::ClientToHost message;
-        proto::audio::Pause* pause = message.mutable_pause();
-        pause->set_enable(enable);
-        pause->set_dummy(1);
-        sendMessage(proto::desktop::CHANNEL_ID_AUDIO, base::serialize(message));
-    }
+    proto::audio::ClientToHost message;
+    proto::audio::Pause* pause = message.mutable_pause();
+    pause->set_enable(enable);
+    pause->set_dummy(1);
+    sendMessage(proto::desktop::CHANNEL_ID_AUDIO, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -463,6 +429,9 @@ void ClientDesktop::onRecordingChanged(bool enable, const QString& file_path)
         webm_video_encoder_.reset();
         webm_file_writer_.reset();
     }
+
+    if (isLegacy())
+        return;
 
     sendMessage(proto::desktop::CHANNEL_ID_CONTROL, base::serialize(message));
 }
@@ -878,6 +847,9 @@ void ClientDesktop::readClipboardEvent(const proto::clipboard::Event& event)
 //--------------------------------------------------------------------------------------------------
 void ClientDesktop::readExtension(const proto::legacy::Extension& extension)
 {
+    if (!isLegacy())
+        return;
+
     if (extension.name() == common::kTaskManagerExtension)
     {
         proto::task_manager::HostToClient message;
@@ -943,10 +915,7 @@ void ClientDesktop::sendSessionListRequest()
 void ClientDesktop::sendKeyFrameRequest()
 {
     if (isLegacy())
-    {
-        // Not supported.
         return;
-    }
 
     proto::video::ClientToHost message;
     message.mutable_key_frame()->set_dummy(1);
