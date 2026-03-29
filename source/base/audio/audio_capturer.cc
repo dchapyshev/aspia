@@ -27,6 +27,10 @@
 #include "base/audio/audio_capturer_linux.h"
 #endif // defined(Q_OS_LINUX)
 
+#if defined(Q_OS_MACOS)
+#include "base/logging.h"
+#endif // defined(Q_OS_MACOS)
+
 namespace base {
 
 //--------------------------------------------------------------------------------------------------

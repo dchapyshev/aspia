@@ -39,12 +39,6 @@ void DesktopEnvironmentLinux::disableWallpaper()
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopEnvironmentLinux::disableFontSmoothing()
-{
-    NOTIMPLEMENTED();
-}
-
-//--------------------------------------------------------------------------------------------------
 void DesktopEnvironmentLinux::disableEffects()
 {
     NOTIMPLEMENTED();

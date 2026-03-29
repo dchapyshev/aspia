@@ -39,12 +39,6 @@ void DesktopEnvironmentMac::disableWallpaper()
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopEnvironmentMac::disableFontSmoothing()
-{
-    NOTIMPLEMENTED();
-}
-
-//--------------------------------------------------------------------------------------------------
 void DesktopEnvironmentMac::disableEffects()
 {
     NOTIMPLEMENTED();

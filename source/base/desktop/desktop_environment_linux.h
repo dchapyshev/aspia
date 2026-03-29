@@ -31,7 +31,6 @@ public:
 
 protected:
     void disableWallpaper() final;
-    void disableFontSmoothing() final;
     void disableEffects() final;
     void revertAll() final;
 
