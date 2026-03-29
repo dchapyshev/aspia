@@ -29,7 +29,7 @@ InputInjectorMac::InputInjectorMac() = default;
 InputInjectorMac::~InputInjectorMac() = default;
 
 //--------------------------------------------------------------------------------------------------
-void InputInjectorMac::setScreenOffset(const base::Point& /* offset */)
+void InputInjectorMac::setScreenOffset(const QPoint& /* offset */)
 {
     NOTIMPLEMENTED();
 }
@@ -41,19 +41,19 @@ void InputInjectorMac::setBlockInput(bool /* enable */)
 }
 
 //--------------------------------------------------------------------------------------------------
-void InputInjectorMac::injectKeyEvent(const proto::KeyEvent& /* event */)
+void InputInjectorMac::injectKeyEvent(const proto::input::KeyEvent& /* event */)
 {
     NOTIMPLEMENTED();
 }
 
 //--------------------------------------------------------------------------------------------------
-void InputInjectorMac::injectMouseEvent(const proto::MouseEvent& /* event */)
+void InputInjectorMac::injectMouseEvent(const proto::input::MouseEvent& /* event */)
 {
     NOTIMPLEMENTED();
 }
 
 //--------------------------------------------------------------------------------------------------
-void InputInjectorX11::injectTouchEvent(const proto::TouchEvent& /* event */)
+void InputInjectorX11::injectTouchEvent(const proto::input::TouchEvent& /* event */)
 {
     NOTIMPLEMENTED();
 }

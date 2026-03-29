@@ -103,7 +103,7 @@ void InputInjectorX11::setBlockInput(bool /* enable */)
 }
 
 //--------------------------------------------------------------------------------------------------
-void InputInjectorX11::injectKeyEvent(const proto::desktop::KeyEvent& event)
+void InputInjectorX11::injectKeyEvent(const proto::input::KeyEvent& event)
 {
     int keycode = common::KeycodeConverter::usbKeycodeToNativeKeycode(event.usb_keycode());
     if (keycode == common::KeycodeConverter::invalidNativeKeycode())
@@ -112,7 +112,7 @@ void InputInjectorX11::injectKeyEvent(const proto::desktop::KeyEvent& event)
         return;
     }
 
-    bool is_pressed = (event.flags() & proto::desktop::KeyEvent::PRESSED) != 0;
+    bool is_pressed = (event.flags() & proto::input::KeyEvent::PRESSED) != 0;
     if (is_pressed)
     {
         if (pressed_keys_.contains(keycode))
@@ -128,8 +128,8 @@ void InputInjectorX11::injectKeyEvent(const proto::desktop::KeyEvent& event)
 
         if (!isLockKey(keycode))
         {
-            bool capsLock = (event.flags() & proto::desktop::KeyEvent::CAPSLOCK) != 0;
-            bool numLock = (event.flags() & proto::desktop::KeyEvent::NUMLOCK) != 0;
+            bool capsLock = (event.flags() & proto::input::KeyEvent::CAPSLOCK) != 0;
+            bool numLock = (event.flags() & proto::input::KeyEvent::NUMLOCK) != 0;
             setLockStates(capsLock, numLock);
         }
 
@@ -157,22 +157,22 @@ void InputInjectorX11::injectKeyEvent(const proto::desktop::KeyEvent& event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void InputInjectorX11::injectTextEvent(const proto::desktop::TextEvent& /* event */)
+void InputInjectorX11::injectTextEvent(const proto::input::TextEvent& /* event */)
 {
     NOTIMPLEMENTED();
 }
 
 //--------------------------------------------------------------------------------------------------
-void InputInjectorX11::injectMouseEvent(const proto::desktop::MouseEvent& event)
+void InputInjectorX11::injectMouseEvent(const proto::input::MouseEvent& event)
 {
     QPoint pos(event.x(), event.y());
     pos += screen_offset_;
 
-    bool left_button_pressed = (event.mask() & proto::desktop::MouseEvent::LEFT_BUTTON) != 0;
-    bool middle_button_pressed = (event.mask() & proto::desktop::MouseEvent::MIDDLE_BUTTON) != 0;
-    bool right_button_pressed = (event.mask() & proto::desktop::MouseEvent::RIGHT_BUTTON) != 0;
-    bool back_button_pressed = (event.mask() & proto::desktop::MouseEvent::BACK_BUTTON) != 0;
-    bool forward_button_pressed = (event.mask() & proto::desktop::MouseEvent::FORWARD_BUTTON) != 0;
+    bool left_button_pressed = (event.mask() & proto::input::MouseEvent::LEFT_BUTTON) != 0;
+    bool middle_button_pressed = (event.mask() & proto::input::MouseEvent::MIDDLE_BUTTON) != 0;
+    bool right_button_pressed = (event.mask() & proto::input::MouseEvent::RIGHT_BUTTON) != 0;
+    bool back_button_pressed = (event.mask() & proto::input::MouseEvent::BACK_BUTTON) != 0;
+    bool forward_button_pressed = (event.mask() & proto::input::MouseEvent::FORWARD_BUTTON) != 0;
 
     bool inject_motion = true;
 
@@ -231,9 +231,9 @@ void InputInjectorX11::injectMouseEvent(const proto::desktop::MouseEvent& event)
 
     int wheel_movement = 0;
 
-    if (event.mask() & proto::desktop::MouseEvent::WHEEL_UP)
+    if (event.mask() & proto::input::MouseEvent::WHEEL_UP)
         wheel_movement = 120;
-    else if (event.mask() & proto::desktop::MouseEvent::WHEEL_DOWN)
+    else if (event.mask() & proto::input::MouseEvent::WHEEL_DOWN)
         wheel_movement = -120;
 
     if (wheel_movement != 0)
@@ -258,7 +258,7 @@ void InputInjectorX11::injectMouseEvent(const proto::desktop::MouseEvent& event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void InputInjectorX11::injectTouchEvent(const proto::desktop::TouchEvent& /* event */)
+void InputInjectorX11::injectTouchEvent(const proto::input::TouchEvent& /* event */)
 {
     NOTIMPLEMENTED();
 }

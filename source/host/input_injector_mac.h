@@ -30,11 +30,11 @@ public:
     ~InputInjectorMac();
 
     // InputInjector implementation.
-    void setScreenOffset(const base::Point& offset) final;
+    void setScreenOffset(const QPoint& offset) final;
     void setBlockInput(bool enable) final;
-    void injectKeyEvent(const proto::KeyEvent& event) final;
-    void injectMouseEvent(const proto::MouseEvent& event) final;
-    void injectTouchEvent(const proto::TouchEvent& event) final;
+    void injectKeyEvent(const proto::input::KeyEvent& event) final;
+    void injectMouseEvent(const proto::input::MouseEvent& event) final;
+    void injectTouchEvent(const proto::input::TouchEvent& event) final;
 
 private:
     Q_DISABLE_COPY(InputInjectorMac)
