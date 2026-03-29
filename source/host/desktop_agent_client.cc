@@ -32,8 +32,6 @@
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/safe_mode_util.h"
-#include "host/win/system_info.h"
-#include "host/win/task_manager.h"
 #endif // defined(Q_OS_WINDOWS)
 
 namespace host {
@@ -186,12 +184,6 @@ void DesktopAgentClient::onIpcMessageReceived(
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::onTaskManagerMessage(const proto::task_manager::HostToClient& message)
-{
-    sendSessionMessage(proto::desktop::CHANNEL_ID_TASK_MANAGER, base::serialize(message), true);
-}
-
-//--------------------------------------------------------------------------------------------------
 void DesktopAgentClient::readSessionMessage(quint8 channel_id, const QByteArray& buffer)
 {
     if (channel_id == proto::desktop::CHANNEL_ID_INPUT)
@@ -263,28 +255,6 @@ void DesktopAgentClient::readSessionMessage(quint8 channel_id, const QByteArray&
 
         if (message.has_power_control())
             readPowerControl(message.power_control());
-    }
-    else if (channel_id == proto::desktop::CHANNEL_ID_TASK_MANAGER)
-    {
-        proto::task_manager::ClientToHost message;
-        if (!base::parse(buffer, &message))
-        {
-            CLOG(ERROR) << "Unable to parse task manager message";
-            return;
-        }
-
-        readTaskManager(message);
-    }
-    else if (channel_id == proto::desktop::CHANNEL_ID_SYSTEM_INFO)
-    {
-        proto::system_info::SystemInfoRequest request;
-        if (!base::parse(buffer, &request))
-        {
-            CLOG(ERROR) << "Unable to parse system info message";
-            return;
-        }
-
-        readSystemInfo(request);
     }
 }
 
@@ -440,30 +410,6 @@ void DesktopAgentClient::readPowerControl(const proto::power::Control& control)
             CLOG(ERROR) << "Unhandled power control action:" << control.action();
             break;
     }
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::readSystemInfo(const proto::system_info::SystemInfoRequest& request)
-{
-#if defined(Q_OS_WINDOWS)
-    proto::system_info::SystemInfo reply;
-    createSystemInfo(request, &reply);
-    sendSessionMessage(proto::desktop::CHANNEL_ID_SYSTEM_INFO, base::serialize(reply), true);
-#endif // defined(Q_OS_WINDOWS)
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::readTaskManager(const proto::task_manager::ClientToHost& message)
-{
-#if defined(Q_OS_WINDOWS)
-    if (!task_manager_)
-    {
-        task_manager_ = new TaskManager(this);
-        connect(task_manager_, &TaskManager::sig_taskManagerMessage,
-                this, &DesktopAgentClient::onTaskManagerMessage);
-    }
-    task_manager_->readMessage(message);
-#endif // defined(Q_OS_WINDOWS)
 }
 
 //--------------------------------------------------------------------------------------------------

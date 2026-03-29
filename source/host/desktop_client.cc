@@ -32,6 +32,8 @@
 #if defined(Q_OS_WINDOWS)
 #include "base/win/session_enumerator.h"
 #include "base/win/session_info.h"
+#include "host/win/system_info.h"
+#include "host/win/task_manager.h"
 #endif // defined(Q_OS_WINDOWS)
 
 namespace host {
@@ -210,6 +212,28 @@ void DesktopClient::onMessage(quint8 net_channel_id, const QByteArray& buffer)
 
         emit sig_userMessage(net_channel_id, buffer);
     }
+    else if (net_channel_id == proto::desktop::CHANNEL_ID_SYSTEM_INFO)
+    {
+        proto::system_info::SystemInfoRequest request;
+        if (!base::parse(buffer, &request))
+        {
+            CLOG(ERROR) << "Unable to parse system info message";
+            return;
+        }
+
+        readSystemInfo(request);
+    }
+    else if (net_channel_id == proto::desktop::CHANNEL_ID_TASK_MANAGER)
+    {
+        proto::task_manager::ClientToHost message;
+        if (!base::parse(buffer, &message))
+        {
+            CLOG(ERROR) << "Unable to parse task manager message";
+            return;
+        }
+
+        readTaskManager(message);
+    }
     else
     {
         quint32 channel_id = base::makeUint32(proto::desktop::IPC_CHANNEL_ID_SESSION, net_channel_id);
@@ -331,6 +355,12 @@ void DesktopClient::onOverflowCheck()
 }
 
 //--------------------------------------------------------------------------------------------------
+void DesktopClient::onTaskManagerMessage(const proto::task_manager::HostToClient& message)
+{
+    send(proto::desktop::CHANNEL_ID_TASK_MANAGER, base::serialize(message), true);
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopClient::sendIpcServiceMessage(const QByteArray& buffer)
 {
     quint32 channel_id = base::makeUint32(proto::desktop::IPC_CHANNEL_ID_SERVICE, 0);
@@ -372,6 +402,30 @@ void DesktopClient::sendSessionList()
 
     CLOG(INFO) << "Send:" << *session_list;
     send(proto::desktop::CHANNEL_ID_CONTROL, base::serialize(message));
+#endif // defined(Q_OS_WINDOWS)
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopClient::readSystemInfo(const proto::system_info::SystemInfoRequest& request)
+{
+#if defined(Q_OS_WINDOWS)
+    proto::system_info::SystemInfo reply;
+    createSystemInfo(request, &reply);
+    send(proto::desktop::CHANNEL_ID_SYSTEM_INFO, base::serialize(reply), true);
+#endif // defined(Q_OS_WINDOWS)
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopClient::readTaskManager(const proto::task_manager::ClientToHost& message)
+{
+#if defined(Q_OS_WINDOWS)
+    if (!task_manager_)
+    {
+        task_manager_ = new TaskManager(this);
+        connect(task_manager_, &TaskManager::sig_taskManagerMessage,
+                this, &DesktopClient::onTaskManagerMessage);
+    }
+    task_manager_->readMessage(message);
 #endif // defined(Q_OS_WINDOWS)
 }
 

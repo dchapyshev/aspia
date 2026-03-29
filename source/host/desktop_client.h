@@ -25,6 +25,8 @@
 #include "base/session_id.h"
 #include "host/client.h"
 #include "proto/desktop_internal.h"
+#include "proto/system_info.h"
+#include "proto/task_manager.h"
 
 class QTimer;
 
@@ -34,6 +36,8 @@ class IpcServer;
 } // namespace base
 
 namespace host {
+
+class TaskManager;
 
 class DesktopClient final : public Client
 {
@@ -65,10 +69,13 @@ private slots:
     void onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer, bool reliable);
     void onIpcDisconnected();
     void onOverflowCheck();
+    void onTaskManagerMessage(const proto::task_manager::HostToClient& message);
 
 private:
     void sendIpcServiceMessage(const QByteArray& buffer);
     void sendSessionList();
+    void readSystemInfo(const proto::system_info::SystemInfoRequest& request);
+    void readTaskManager(const proto::task_manager::ClientToHost& message);
 
     QTime dettach_time_;
     base::IpcServer* ipc_server_ = nullptr;
@@ -78,6 +85,10 @@ private:
 
     proto::desktop::Overflow::State last_state_ = proto::desktop::Overflow::STATE_NONE;
     proto::control::Config config_;
+
+#if defined(Q_OS_WINDOWS)
+    TaskManager* task_manager_ = nullptr;
+#endif // defined(Q_OS_WINDOWS)
 
     Q_DISABLE_COPY_MOVE(DesktopClient)
 };

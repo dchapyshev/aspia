@@ -26,16 +26,12 @@
 #include "proto/desktop_internal.h"
 #include "proto/desktop_power.h"
 #include "proto/desktop_screen.h"
-#include "proto/system_info.h"
-#include "proto/task_manager.h"
 
 namespace base {
 class IpcChannel;
 } // namespace base
 
 namespace host {
-
-class TaskManager;
 
 class DesktopAgentClient final : public QObject
 {
@@ -90,8 +86,6 @@ private slots:
     void onIpcDisconnected();
     void onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer, bool reliable);
 
-    void onTaskManagerMessage(const proto::task_manager::HostToClient& message);
-
 private:
     void readSessionMessage(quint8 channel_id, const QByteArray& buffer);
     void sendSessionMessage(quint8 channel_id, const QByteArray& buffer, bool reliable);
@@ -105,8 +99,6 @@ private:
     void readAudioPause(const proto::audio::Pause& pause);
     void readConfig(const proto::control::Config& config);
     void readPowerControl(const proto::power::Control& control);
-    void readSystemInfo(const proto::system_info::SystemInfoRequest& request);
-    void readTaskManager(const proto::task_manager::ClientToHost& message);
     void readOverflow(proto::desktop::Overflow::State state);
     void sendCapabilities();
 
@@ -121,10 +113,6 @@ private:
 
     bool is_video_paused_ = false;
     bool is_audio_paused_ = false;
-
-#if defined(Q_OS_WINDOWS)
-    TaskManager* task_manager_ = nullptr;
-#endif // defined(Q_OS_WINDOWS)
 
     LOG_DECLARE_CONTEXT(DesktopAgentClient);
     Q_DISABLE_COPY_MOVE(DesktopAgentClient)
