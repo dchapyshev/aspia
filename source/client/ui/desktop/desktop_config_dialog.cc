@@ -73,8 +73,8 @@ DesktopConfigDialog::DesktopConfigDialog(proto::peer::SessionType session_type,
     }
 
     ui->checkbox_enable_cursor_pos->setChecked(config_.cursor_position());
-    ui->checkbox_desktop_effects->setChecked(!config_.desktop_effects());
-    ui->checkbox_desktop_wallpaper->setChecked(!config_.desktop_wallpaper());
+    ui->checkbox_desktop_effects->setChecked(!config_.effects());
+    ui->checkbox_desktop_wallpaper->setChecked(!config_.wallpaper());
 
     connect(combo_codec, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &DesktopConfigDialog::onCodecChanged);
@@ -179,8 +179,8 @@ void DesktopConfigDialog::onButtonBoxClicked(QAbstractButton* button)
         config_.set_cursor_shape(ui->checkbox_cursor_shape->isChecked() && ui->checkbox_cursor_shape->isEnabled());
         config_.set_cursor_position(ui->checkbox_enable_cursor_pos->isChecked());
         config_.set_clipboard(ui->checkbox_clipboard->isChecked() && ui->checkbox_clipboard->isEnabled());
-        config_.set_desktop_effects(!ui->checkbox_desktop_effects->isChecked());
-        config_.set_desktop_wallpaper(!ui->checkbox_desktop_wallpaper->isChecked());
+        config_.set_effects(!ui->checkbox_desktop_effects->isChecked());
+        config_.set_wallpaper(!ui->checkbox_desktop_wallpaper->isChecked());
         config_.set_block_input(ui->checkbox_block_remote_input->isChecked());
         config_.set_lock_at_disconnect(ui->checkbox_lock_at_disconnect->isChecked());
 

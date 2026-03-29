@@ -167,11 +167,11 @@ bool parseDesktopEffectsValue(const QString& value, proto::control::Config& conf
     {
         if (value == "0")
         {
-            config.set_desktop_effects(false);
+            config.set_effects(false);
         }
         else if (value == "1")
         {
-            config.set_desktop_effects(true);
+            config.set_effects(true);
         }
         else
         {
@@ -190,11 +190,11 @@ bool parseDesktopWallpaperValue(const QString& value, proto::control::Config& co
     {
         if (value == "0")
         {
-            config.set_desktop_wallpaper(false);
+            config.set_wallpaper(false);
         }
         else if (value == "1")
         {
-            config.set_desktop_wallpaper(true);
+            config.set_wallpaper(true);
         }
         else
         {

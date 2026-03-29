@@ -57,8 +57,8 @@ void ConfigFactory::setDefaultDesktopManageConfig(proto::control::Config* config
     config->set_cursor_shape(true);
     config->set_cursor_position(false);
     config->set_clipboard(true);
-    config->set_desktop_effects(false);
-    config->set_desktop_wallpaper(false);
+    config->set_effects(false);
+    config->set_wallpaper(false);
     config->set_block_input(false);
     config->set_lock_at_disconnect(false);
 }
@@ -73,8 +73,8 @@ void ConfigFactory::setDefaultDesktopViewConfig(proto::control::Config* config)
     config->set_cursor_shape(false);
     config->set_cursor_position(false);
     config->set_clipboard(false);
-    config->set_desktop_effects(false);
-    config->set_desktop_wallpaper(false);
+    config->set_effects(false);
+    config->set_wallpaper(false);
     config->set_block_input(false);
     config->set_lock_at_disconnect(false);
 }

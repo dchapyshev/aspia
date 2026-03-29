@@ -81,8 +81,8 @@ message Config
     bool cursor_shape             = 3;
     bool cursor_position          = 4;
     bool clipboard                = 5;
-    bool desktop_effects          = 6;
-    bool desktop_wallpaper        = 7;
+    bool effects                  = 6;
+    bool wallpaper                = 7;
     bool block_input              = 8;
     bool lock_at_disconnect       = 9;
 }

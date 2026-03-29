@@ -279,8 +279,8 @@ void DesktopAgent::onClientConfigured()
     merged_config.set_cursor_shape(false);
     merged_config.set_cursor_position(false);
     merged_config.set_clipboard(false);
-    merged_config.set_desktop_effects(false);
-    merged_config.set_desktop_wallpaper(false);
+    merged_config.set_effects(false);
+    merged_config.set_wallpaper(false);
     merged_config.set_block_input(false);
     merged_config.set_lock_at_disconnect(false);
 
@@ -296,11 +296,11 @@ void DesktopAgent::onClientConfigured()
 
         // If at least one client has disabled effects, then the effects will be disabled for
         // everyone.
-        merged_config.set_desktop_effects(merged_config.desktop_effects() && config.desktop_effects());
+        merged_config.set_effects(merged_config.effects() && config.effects());
 
         // If at least one client has disabled the wallpaper, then the effects will be disabled for
         // everyone.
-        merged_config.set_desktop_wallpaper(merged_config.desktop_wallpaper() || config.desktop_wallpaper());
+        merged_config.set_wallpaper(merged_config.wallpaper() || config.wallpaper());
 
         // If at least one client has enabled input block, then the block will be enabled for
         // everyone.
@@ -360,8 +360,8 @@ void DesktopAgent::onClientConfigured()
 
     if (desktop_environment_)
     {
-        desktop_environment_->setWallpaper(merged_config.desktop_wallpaper());
-        desktop_environment_->setEffects(merged_config.desktop_effects());
+        desktop_environment_->setWallpaper(merged_config.wallpaper());
+        desktop_environment_->setEffects(merged_config.effects());
     }
 
     if (input_injector_)

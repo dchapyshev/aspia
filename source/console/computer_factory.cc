@@ -84,8 +84,8 @@ proto::control::Config ComputerFactory::toClientConfig(const proto::address_book
     client_config.set_cursor_shape(flags & proto::address_book::ENABLE_CURSOR_SHAPE);
     client_config.set_cursor_position(flags & proto::address_book::CURSOR_POSITION);
     client_config.set_clipboard(flags & proto::address_book::ENABLE_CLIPBOARD);
-    client_config.set_desktop_effects(!(flags & proto::address_book::DISABLE_EFFECTS));
-    client_config.set_desktop_wallpaper(!(flags & proto::address_book::DISABLE_WALLPAPER));
+    client_config.set_effects(!(flags & proto::address_book::DISABLE_EFFECTS));
+    client_config.set_wallpaper(!(flags & proto::address_book::DISABLE_WALLPAPER));
     client_config.set_block_input(flags & proto::address_book::BLOCK_REMOTE_INPUT);
     client_config.set_lock_at_disconnect(flags & proto::address_book::LOCK_AT_DISCONNECT);
 

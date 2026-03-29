@@ -319,9 +319,9 @@ void ClientDesktop::onDesktopConfigChanged(const proto::control::Config& config)
             flags |= proto::legacy::ENABLE_CURSOR_SHAPE;
         if (config.clipboard())
             flags |= proto::legacy::ENABLE_CLIPBOARD;
-        if (!config.desktop_effects())
+        if (!config.effects())
             flags |= proto::legacy::DISABLE_EFFECTS;
-        if (!config.desktop_wallpaper())
+        if (!config.wallpaper())
             flags |= proto::legacy::DISABLE_WALLPAPER;
         if (config.block_input())
             flags |= proto::legacy::BLOCK_REMOTE_INPUT;
