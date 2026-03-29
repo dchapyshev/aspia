@@ -40,11 +40,10 @@ message Capabilities
         bool value  = 2;
     }
 
-    string extensions      = 1;
-    uint32 video_encodings = 2;
-    uint32 audio_encodings = 3;
-    OsType os_type         = 4;
-    repeated Flag flag     = 5;
+    uint32 video_encodings = 1;
+    uint32 audio_encodings = 2;
+    OsType os_type         = 3;
+    repeated Flag flag     = 4;
 }
 
 enum ConfigFlags

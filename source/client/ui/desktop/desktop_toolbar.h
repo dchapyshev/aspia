@@ -40,8 +40,6 @@ public:
     void enableSystemInfo(bool enable);
     void enableTextChat(bool enable);
     void enableTaskManager(bool enable);
-    void enableVideoPauseFeature(bool enable);
-    void enableAudioPauseFeature(bool enable);
     void enableCtrlAltDelFeature(bool enable);
     void enablePasteAsKeystrokesFeature(bool enable);
 

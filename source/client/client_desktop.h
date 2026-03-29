@@ -132,6 +132,7 @@ private slots:
     void onClipboardEvent(const proto::clipboard::Event& event);
 
 private:
+    void readLegacyCapabilities(const proto::legacy::Capabilities& capabilities);
     void readCapabilities(const proto::control::Capabilities& capabilities);
     void readVideoPacket(const proto::video::Packet& packet);
     void readAudioPacket(const proto::audio::Packet& packet);

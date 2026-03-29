@@ -265,7 +265,7 @@ void ClientDesktop::onMessageReceived(quint8 channel_id, const QByteArray& buffe
         }
         else if (message.has_capabilities())
         {
-            readCapabilities(message.capabilities());
+            readLegacyCapabilities(message.capabilities());
         }
         else if (message.has_extension())
         {
@@ -666,6 +666,87 @@ void ClientDesktop::onSwitchSession(quint32 session_id)
 
     CLOG(INFO) << "Send:" << *switch_session;
     sendMessage(proto::desktop::CHANNEL_ID_CONTROL, base::serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientDesktop::readLegacyCapabilities(const proto::legacy::Capabilities& legacy_capabilities)
+{
+    CLOG(INFO) << "Received:" << legacy_capabilities;
+
+    proto::control::Capabilities capabilities;
+
+    // Copy direct fields.
+    capabilities.set_video_encodings(legacy_capabilities.video_encodings());
+    capabilities.set_audio_encodings(legacy_capabilities.audio_encodings());
+    capabilities.set_os_type(
+        static_cast<proto::control::Capabilities::OsType>(legacy_capabilities.os_type()));
+
+    auto add_flag = [&capabilities](const char* name, bool value)
+    {
+        proto::control::Capabilities::Flag* flag = capabilities.add_flag();
+        flag->set_name(name);
+        flag->set_value(value);
+    };
+
+    // Convert legacy "disable_*" flags (inverted logic) to new positive flags.
+    // If a disable flag is absent in the legacy message, the feature is considered enabled.
+    bool paste_as_keystrokes = true;
+    bool audio = true;
+    bool clipboard = true;
+    bool cursor_shape = true;
+    bool cursor_position = true;
+    bool desktop_effects = true;
+    bool desktop_wallpaper = true;
+    bool lock_at_disconnect = true;
+    bool block_input = true;
+
+    for (int i = 0; i < legacy_capabilities.flag_size(); ++i)
+    {
+        const proto::legacy::Capabilities::Flag& flag = legacy_capabilities.flag(i);
+        const std::string& name = flag.name();
+        bool value = flag.value();
+
+        if (name == common::kFlagDisablePasteAsKeystrokes)
+            paste_as_keystrokes = !value;
+        else if (name == common::kFlagDisableAudio)
+            audio = !value;
+        else if (name == common::kFlagDisableClipboard)
+            clipboard = !value;
+        else if (name == common::kFlagDisableCursorShape)
+            cursor_shape = !value;
+        else if (name == common::kFlagDisableCursorPosition)
+            cursor_position = !value;
+        else if (name == common::kFlagDisableDesktopEffects)
+            desktop_effects = !value;
+        else if (name == common::kFlagDisableDesktopWallpaper)
+            desktop_wallpaper = !value;
+        else if (name == common::kFlagDisableLockAtDisconnect)
+            lock_at_disconnect = !value;
+        else if (name == common::kFlagDisableBlockInput)
+            block_input = !value;
+    }
+
+    add_flag(common::kFlagPasteAsKeystrokes, paste_as_keystrokes);
+    add_flag(common::kFlagAudio, audio);
+    add_flag(common::kFlagClipboard, clipboard);
+    add_flag(common::kFlagCursorShape, cursor_shape);
+    add_flag(common::kFlagCursorPosition, cursor_position);
+    add_flag(common::kFlagDesktopEffects, desktop_effects);
+    add_flag(common::kFlagDesktopWallpaper, desktop_wallpaper);
+    add_flag(common::kFlagLockAtDisconnect, lock_at_disconnect);
+    add_flag(common::kFlagBlockInput, block_input);
+
+    // Convert legacy extensions string (semicolon-separated) to new flags.
+    QString extensions = QString::fromStdString(legacy_capabilities.extensions());
+    QStringList extension_list = extensions.split(';', Qt::SkipEmptyParts);
+
+    add_flag(common::kFlagSelectScreen, extension_list.contains(common::kSelectScreenExtension));
+    add_flag(common::kFlagPowerControl, extension_list.contains(common::kPowerControlExtension));
+    add_flag(common::kFlagSystemInfo, extension_list.contains(common::kSystemInfoExtension));
+    add_flag(common::kFlagTaskManager, extension_list.contains(common::kTaskManagerExtension));
+
+    CLOG(INFO) << "Converted:" << capabilities;
+    emit sig_capabilities(capabilities);
 }
 
 //--------------------------------------------------------------------------------------------------

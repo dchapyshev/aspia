@@ -479,32 +479,13 @@ void DesktopAgentClient::readOverflow(proto::desktop::Overflow::State state)
 //--------------------------------------------------------------------------------------------------
 void DesktopAgentClient::sendCapabilities()
 {
-    const char* extensions;
-
-    // Supported extensions are different for managing and viewing the desktop.
-    if (sessionType() == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
-    {
-        extensions = common::kSupportedExtensionsForManage;
-    }
-    else
-    {
-        DCHECK_EQ(sessionType(), proto::peer::SESSION_TYPE_DESKTOP_VIEW);
-        extensions = common::kSupportedExtensionsForView;
-    }
-
     // Create a capabilities.
     proto::control::HostToClient message;
     proto::control::Capabilities* capabilities = message.mutable_capabilities();
 
     // Add supported extensions and video encodings.
-    capabilities->set_extensions(extensions);
     capabilities->set_video_encodings(common::kSupportedVideoEncodings);
     capabilities->set_audio_encodings(common::kSupportedAudioEncodings);
-
-#if defined(Q_OS_WINDOWS)
-    capabilities->set_os_type(proto::control::Capabilities::OS_TYPE_WINDOWS);
-#elif defined(Q_OS_LINUX)
-    capabilities->set_os_type(proto::control::Capabilities::OS_TYPE_LINUX);
 
     auto add_flag = [capabilities](const char* name, bool value)
     {
@@ -513,12 +494,20 @@ void DesktopAgentClient::sendCapabilities()
         flag->set_value(value);
     };
 
-    add_flag(common::kFlagDisablePasteAsKeystrokes, true);
-    add_flag(common::kFlagDisableAudio, true);
-    add_flag(common::kFlagDisableBlockInput, true);
-    add_flag(common::kFlagDisableDesktopEffects, true);
-    add_flag(common::kFlagDisableDesktopWallpaper, true);
-    add_flag(common::kFlagDisableLockAtDisconnect, true);
+#if defined(Q_OS_WINDOWS)
+    capabilities->set_os_type(proto::control::Capabilities::OS_TYPE_WINDOWS);
+    add_flag(common::kFlagPasteAsKeystrokes, true);
+    add_flag(common::kFlagAudio, true);
+    add_flag(common::kFlagBlockInput, true);
+    add_flag(common::kFlagDesktopEffects, true);
+    add_flag(common::kFlagDesktopWallpaper, true);
+    add_flag(common::kFlagLockAtDisconnect, true);
+    add_flag(common::kFlagPowerControl, true);
+    add_flag(common::kFlagSelectScreen, true);
+    add_flag(common::kFlagSystemInfo, true);
+    add_flag(common::kFlagTaskManager, true);
+#elif defined(Q_OS_LINUX)
+    capabilities->set_os_type(proto::control::Capabilities::OS_TYPE_LINUX);
 #elif defined(Q_OS_MACOS)
     capabilities->set_os_type(proto::control::Capabilities::OS_TYPE_MACOSX);
 #else

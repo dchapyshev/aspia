@@ -35,16 +35,38 @@ message Extension
     bytes data  = 2;
 }
 
+message Capabilities
+{
+    enum OsType
+    {
+        OS_TYPE_WINDOWS = 0;
+        OS_TYPE_LINUX   = 1;
+        OS_TYPE_MACOSX  = 2;
+    }
+
+    message Flag
+    {
+        string name = 1;
+        bool value  = 2;
+    }
+
+    string extensions      = 1;
+    uint32 video_encodings = 2;
+    uint32 audio_encodings = 3;
+    OsType os_type         = 4;
+    repeated Flag flag     = 5;
+}
+
 // Client <- Host (channel 0).
 message SessionToClient
 {
-    video.Packet video_packet         = 1;
-    audio.Packet audio_packet         = 2;
-    cursor.Shape cursor_shape         = 3;
-    clipboard.Event clipboard_event   = 4;
-    Extension extension               = 5;
-    control.Capabilities capabilities = 6;
-    cursor.Position cursor_position   = 7;
+    video.Packet video_packet       = 1;
+    audio.Packet audio_packet       = 2;
+    cursor.Shape cursor_shape       = 3;
+    clipboard.Event clipboard_event = 4;
+    Extension extension             = 5;
+    Capabilities capabilities       = 6;
+    cursor.Position cursor_position = 7;
 }
 
 // Client -> Host (channel 0).

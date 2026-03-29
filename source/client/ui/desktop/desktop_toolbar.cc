@@ -251,22 +251,6 @@ void DesktopToolBar::enableTaskManager(bool enable)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopToolBar::enableVideoPauseFeature(bool enable)
-{
-    LOG(INFO) << "enableVideoPauseFeature:" << enable;
-    ui.action_pause_video->setVisible(enable);
-    ui.action_pause_video->setEnabled(enable);
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopToolBar::enableAudioPauseFeature(bool enable)
-{
-    LOG(INFO) << "enableAudioPauseFeature:" << enable;
-    ui.action_pause_audio->setVisible(enable);
-    ui.action_pause_audio->setEnabled(enable);
-}
-
-//--------------------------------------------------------------------------------------------------
 void DesktopToolBar::enableCtrlAltDelFeature(bool enable)
 {
     LOG(INFO) << "enableCtrlAltDelFeature:" << enable;

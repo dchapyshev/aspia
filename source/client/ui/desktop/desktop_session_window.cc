@@ -347,17 +347,8 @@ void DesktopSessionWindow::onShowWindow()
 void DesktopSessionWindow::onCapabilitiesChanged(const proto::control::Capabilities& capabilities)
 {
     video_encodings_ = capabilities.video_encodings();
-
-    // The list of extensions is passed as a string. Extensions are separated by a semicolon.
-    QStringList extensions = QString::fromStdString(capabilities.extensions()).split(';', Qt::SkipEmptyParts);
-
-    toolbar_->enablePowerControl(extensions.contains(common::kPowerControlExtension));
-    toolbar_->enableScreenSelect(extensions.contains(common::kSelectScreenExtension));
-    toolbar_->enableSystemInfo(extensions.contains(common::kSystemInfoExtension));
-    toolbar_->enableTaskManager(extensions.contains(common::kTaskManagerExtension));
-    toolbar_->enableVideoPauseFeature(extensions.contains(common::kVideoPauseExtension));
-    toolbar_->enableAudioPauseFeature(extensions.contains(common::kAudioPauseExtension));
-    toolbar_->enableCtrlAltDelFeature(capabilities.os_type() == proto::control::Capabilities::OS_TYPE_WINDOWS);
+    toolbar_->enableCtrlAltDelFeature(
+        capabilities.os_type() == proto::control::Capabilities::OS_TYPE_WINDOWS);
 
     for (int i = 0; i < capabilities.flag_size(); ++i)
     {
@@ -365,24 +356,32 @@ void DesktopSessionWindow::onCapabilitiesChanged(const proto::control::Capabilit
         const std::string& name = flag.name();
         bool value = flag.value();
 
-        if (name == common::kFlagDisablePasteAsKeystrokes)
-            toolbar_->enablePasteAsKeystrokesFeature(!value);
-        else if (name == common::kFlagDisableAudio)
-            disable_feature_audio_ = value;
-        else if (name == common::kFlagDisableClipboard)
-            disable_feature_clipboard_ = value;
-        else if (name == common::kFlagDisableCursorShape)
-            disable_feature_cursor_shape_ = value;
-        else if (name == common::kFlagDisableCursorPosition)
-            disable_feature_cursor_position_ = value;
-        else if (name == common::kFlagDisableDesktopEffects)
-            disable_feature_desktop_effects_ = value;
-        else if (name == common::kFlagDisableDesktopWallpaper)
-            disable_feature_desktop_wallpaper_ = value;
-        else if (name == common::kFlagDisableLockAtDisconnect)
-            disable_feature_lock_at_disconnect_ = value;
-        else if (name == common::kFlagDisableBlockInput)
-            disable_feature_block_input_ = value;
+        if (name == common::kFlagPasteAsKeystrokes)
+            toolbar_->enablePasteAsKeystrokesFeature(value);
+        else if (name == common::kFlagAudio)
+            disable_feature_audio_ = !value;
+        else if (name == common::kFlagClipboard)
+            disable_feature_clipboard_ = !value;
+        else if (name == common::kFlagCursorShape)
+            disable_feature_cursor_shape_ = !value;
+        else if (name == common::kFlagCursorPosition)
+            disable_feature_cursor_position_ = !value;
+        else if (name == common::kFlagDesktopEffects)
+            disable_feature_desktop_effects_ = !value;
+        else if (name == common::kFlagDesktopWallpaper)
+            disable_feature_desktop_wallpaper_ = !value;
+        else if (name == common::kFlagLockAtDisconnect)
+            disable_feature_lock_at_disconnect_ = !value;
+        else if (name == common::kFlagBlockInput)
+            disable_feature_block_input_ = !value;
+        else if (name == common::kFlagPowerControl)
+            toolbar_->enablePowerControl(value);
+        else if (name == common::kFlagSelectScreen)
+            toolbar_->enableScreenSelect(value);
+        else if (name == common::kFlagSystemInfo)
+            toolbar_->enableSystemInfo(value);
+        else if (name == common::kFlagTaskManager)
+            toolbar_->enableTaskManager(value);
         else
             LOG(ERROR) << "Unknown flag" << name << "with value" << value;
     }

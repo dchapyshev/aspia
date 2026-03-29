@@ -23,6 +23,7 @@
 
 namespace common {
 
+// Deprectaed.
 const char kSelectScreenExtension[] = "select_screen";
 const char kPreferredSizeExtension[] = "preferred_size";
 const char kPowerControlExtension[] = "power_control";
@@ -32,6 +33,7 @@ const char kVideoPauseExtension[] = "video_pause";
 const char kAudioPauseExtension[] = "audio_pause";
 const char kScreenTypeExtension[] = "screen_type";
 
+// Deprectaed.
 #if defined(Q_OS_WINDOWS)
 const char kSupportedExtensionsForManage[] = "select_screen;power_control;system_info;task_manager";
 const char kSupportedExtensionsForView[] = "select_screen;system_info";
@@ -40,9 +42,7 @@ const char kSupportedExtensionsForManage[] = "select_screen";
 const char kSupportedExtensionsForView[] = "select_screen";
 #endif
 
-const quint32 kSupportedVideoEncodings = proto::video::ENCODING_VP8 | proto::video::ENCODING_VP9;
-const quint32 kSupportedAudioEncodings = proto::audio::ENCODING_OPUS;
-
+// Deprectaed.
 const char kFlagDisablePasteAsKeystrokes[] = "disable_paste_as_keystrokes";
 const char kFlagDisableAudio[] = "disable_audio";
 const char kFlagDisableClipboard[] = "disable_clipboard";
@@ -52,5 +52,23 @@ const char kFlagDisableDesktopEffects[] = "disable_desktop_effects";
 const char kFlagDisableDesktopWallpaper[] = "disable_desktop_wallpaper";
 const char kFlagDisableLockAtDisconnect[] = "disable_lock_at_disconnect";
 const char kFlagDisableBlockInput[] = "disable_block_input";
+
+// New generation.
+const quint32 kSupportedVideoEncodings = proto::video::ENCODING_VP8 | proto::video::ENCODING_VP9;
+const quint32 kSupportedAudioEncodings = proto::audio::ENCODING_OPUS;
+
+const char kFlagPasteAsKeystrokes[] = "paste_as_keystrokes";
+const char kFlagAudio[] = "audio";
+const char kFlagClipboard[] = "clipboard";
+const char kFlagCursorShape[] = "cursor_shape";
+const char kFlagCursorPosition[] = "cursor_position";
+const char kFlagDesktopEffects[] = "desktop_effects";
+const char kFlagDesktopWallpaper[] = "desktop_wallpaper";
+const char kFlagLockAtDisconnect[] = "lock_at_disconnect";
+const char kFlagBlockInput[] = "block_input";
+const char kFlagPowerControl[] = "power_control";
+const char kFlagSelectScreen[] = "select_screen";
+const char kFlagSystemInfo[] = "system_info";
+const char kFlagTaskManager[] = "task_manager";
 
 } // namespace common

@@ -25,28 +25,42 @@ namespace common {
 
 extern const char kSelectScreenExtension[]; // Deprecated.
 extern const char kPreferredSizeExtension[]; // Deprecated.
-extern const char kPowerControlExtension[];
-extern const char kSystemInfoExtension[];
-extern const char kTaskManagerExtension[];
+extern const char kPowerControlExtension[]; // Deprecated.
+extern const char kSystemInfoExtension[]; // Deprecated.
+extern const char kTaskManagerExtension[]; // Deprecated.
 extern const char kVideoPauseExtension[]; // Deprecated.
 extern const char kAudioPauseExtension[]; // Deprecated.
 extern const char kScreenTypeExtension[]; // Deprecated.
 
-extern const char kSupportedExtensionsForManage[];
-extern const char kSupportedExtensionsForView[];
+extern const char kSupportedExtensionsForManage[]; // Deprecated.
+extern const char kSupportedExtensionsForView[]; // Deprecated.
 
 extern const quint32 kSupportedVideoEncodings;
 extern const quint32 kSupportedAudioEncodings;
 
-extern const char kFlagDisablePasteAsKeystrokes[];
-extern const char kFlagDisableAudio[];
-extern const char kFlagDisableClipboard[];
-extern const char kFlagDisableCursorShape[];
-extern const char kFlagDisableCursorPosition[];
-extern const char kFlagDisableDesktopEffects[];
-extern const char kFlagDisableDesktopWallpaper[];
-extern const char kFlagDisableLockAtDisconnect[];
-extern const char kFlagDisableBlockInput[];
+extern const char kFlagDisablePasteAsKeystrokes[]; // Deprecated.
+extern const char kFlagDisableAudio[]; // Deprecated.
+extern const char kFlagDisableClipboard[]; // Deprecated.
+extern const char kFlagDisableCursorShape[]; // Deprecated.
+extern const char kFlagDisableCursorPosition[]; // Deprecated.
+extern const char kFlagDisableDesktopEffects[]; // Deprecated.
+extern const char kFlagDisableDesktopWallpaper[]; // Deprecated.
+extern const char kFlagDisableLockAtDisconnect[]; // Deprecated.
+extern const char kFlagDisableBlockInput[]; // Deprecated.
+
+extern const char kFlagPasteAsKeystrokes[];
+extern const char kFlagAudio[];
+extern const char kFlagClipboard[];
+extern const char kFlagCursorShape[];
+extern const char kFlagCursorPosition[];
+extern const char kFlagDesktopEffects[];
+extern const char kFlagDesktopWallpaper[];
+extern const char kFlagLockAtDisconnect[];
+extern const char kFlagBlockInput[];
+extern const char kFlagPowerControl[];
+extern const char kFlagSelectScreen[];
+extern const char kFlagSystemInfo[];
+extern const char kFlagTaskManager[];
 
 } // namespace common
 
