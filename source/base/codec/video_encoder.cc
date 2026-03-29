@@ -230,13 +230,17 @@ bool VideoEncoder::encode(const Frame* frame, proto::video::Packet* packet)
         }
     }
 
+    vpx_enc_frame_flags_t flags = 0;
+    if (is_key_frame)
+        flags |= VPX_EFLAG_FORCE_KF;
+
     // Do the actual encoding.
     ret = vpx_codec_encode(codec_.get(),
                            image_.get(),
                            0, // pts
                            static_cast<unsigned long>(
                                std::chrono::microseconds(kTargetFrameInterval).count()),
-                           0, // flags
+                           flags,
                            VPX_DL_REALTIME);
     if (ret != VPX_CODEC_OK)
     {
