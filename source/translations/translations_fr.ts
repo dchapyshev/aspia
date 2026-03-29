@@ -325,32 +325,32 @@
         <translation>Valeur incorrecte pour &quot;%1&quot;. Valeurs possibles: %2.</translation>
     </message>
     <message>
-        <location filename="../client/client_main.cc" line="329"/>
+        <location filename="../client/client_main.cc" line="283"/>
         <source>Remote computer address.</source>
         <translation>Adresse de l ordinateur distant.</translation>
     </message>
     <message>
-        <location filename="../client/client_main.cc" line="333"/>
+        <location filename="../client/client_main.cc" line="287"/>
         <source>Remote computer port.</source>
         <translation>Port de l ordinateur distant.</translation>
     </message>
     <message>
-        <location filename="../client/client_main.cc" line="338"/>
+        <location filename="../client/client_main.cc" line="292"/>
         <source>Name of host.</source>
         <translation>Nom de l hôte.</translation>
     </message>
     <message>
-        <location filename="../client/client_main.cc" line="342"/>
+        <location filename="../client/client_main.cc" line="296"/>
         <source>Name of user.</source>
         <translation>Nom de l utilisateur.</translation>
     </message>
     <message>
-        <location filename="../client/client_main.cc" line="346"/>
+        <location filename="../client/client_main.cc" line="300"/>
         <source>Password of user.</source>
         <translation>Mot de passe de l utilisateur.</translation>
     </message>
     <message>
-        <location filename="../client/client_main.cc" line="350"/>
+        <location filename="../client/client_main.cc" line="304"/>
         <source>Display name when connected</source>
         <translation type="unfinished"></translation>
     </message>
@@ -359,108 +359,108 @@
         <translation type="vanished">Type de session. Valeurs possibles: Gestion du bureau, Vue du bureau, Transfert de fichier, Informations système, fenêtre de dialogue.</translation>
     </message>
     <message>
-        <location filename="../client/client_main.cc" line="359"/>
         <source>Type of codec. Possible values: vp8, vp9, zstd.</source>
-        <translation>Type de codec. Valeurs possibles: vp8, vp9, zstd.</translation>
+        <translation type="vanished">Type de codec. Valeurs possibles: vp8, vp9, zstd.</translation>
     </message>
     <message>
-        <location filename="../client/client_main.cc" line="363"/>
         <source>Color depth. Possible values: 3, 6, 8, 16, 32.</source>
-        <translation>Profondeur de couleur. Valeurs possibles: 3, 6, 8, 16, 32.</translation>
+        <translation type="vanished">Profondeur de couleur. Valeurs possibles: 3, 6, 8, 16, 32.</translation>
     </message>
     <message>
-        <location filename="../client/client_main.cc" line="367"/>
         <source>Compression ratio. Possible values: 1-22.</source>
-        <translation>Taux de compression. Valeurs possibles: 1-22.</translation>
+        <translation type="vanished">Taux de compression. Valeurs possibles: 1-22.</translation>
     </message>
     <message>
-        <location filename="../client/client_main.cc" line="371"/>
+        <location filename="../client/client_main.cc" line="317"/>
         <source>Enable or disable audio. Possible values: 0 or 1.</source>
         <translation>Active ou désactive le son. Valeurs possibles: 0 ou 1.</translation>
     </message>
     <message>
-        <location filename="../client/client_main.cc" line="375"/>
+        <location filename="../client/client_main.cc" line="321"/>
         <source>Enable or disable cursor shape. Possible values: 0 or 1.</source>
         <translation>Active ou désactive la forme du curseur. Valeurs possibles: 0 ou 1.</translation>
     </message>
     <message>
-        <location filename="../client/client_main.cc" line="379"/>
+        <location filename="../client/client_main.cc" line="325"/>
         <source>Enable or disable cursor position. Possible values: 0 or 1.</source>
         <translation>Active ou désactive la position du curseur. Valeurs possibles: 0 ou 1.</translation>
     </message>
     <message>
-        <location filename="../client/client_main.cc" line="383"/>
+        <location filename="../client/client_main.cc" line="329"/>
         <source>Enable or disable clipboard. Possible values: 0 or 1.</source>
         <translation>Active ou désactive le presse-papiers. Valeurs possibles: 0 ou 1.</translation>
     </message>
     <message>
-        <location filename="../client/client_main.cc" line="387"/>
+        <location filename="../client/client_main.cc" line="333"/>
         <source>Enable or disable desktop effects. Possible values: 0 or 1.</source>
         <translation>Active ou désactive les effets de bureau. Valeurs possibles: 0 ou 1.</translation>
     </message>
     <message>
-        <location filename="../client/client_main.cc" line="391"/>
+        <location filename="../client/client_main.cc" line="337"/>
         <source>Enable or disable desktop wallpaper. Possible values: 0 or 1.</source>
         <translation>Active ou désactive le fond d&apos;écran. Valeurs possibles: 0 ou 1.</translation>
     </message>
     <message>
-        <location filename="../client/client_main.cc" line="395"/>
         <source>Enable or disable font smoothing. Possible values: 0 or 1.</source>
-        <translation>Active ou désactive le lissage des polices. Valeurs possibles: 0 ou 1.</translation>
+        <translation type="vanished">Active ou désactive le lissage des polices. Valeurs possibles: 0 ou 1.</translation>
     </message>
     <message>
-        <location filename="../client/client_main.cc" line="399"/>
         <source>Clear clipboard at disconnect. Possible values: 0 or 1.</source>
-        <translation>Efface le presse-papiers lors de la déconnexion. Valeurs possibles: 0 ou 1.</translation>
+        <translation type="vanished">Efface le presse-papiers lors de la déconnexion. Valeurs possibles: 0 ou 1.</translation>
     </message>
     <message>
-        <location filename="../client/client_main.cc" line="403"/>
+        <location filename="../client/client_main.cc" line="341"/>
         <source>Lock computer at disconnect. Possible values: 0 or 1.</source>
         <translation>Verrouiller l ordinateur lors de la déconnexion. Valeurs possibles: 0 ou 1.</translation>
     </message>
     <message>
-        <location filename="../client/client_main.cc" line="407"/>
+        <location filename="../client/client_main.cc" line="345"/>
         <source>Block remote input. Possible values: 0 or 1.</source>
         <translation>Blocage de l accès à distance. Valeurs possibles: 0 ou 1.</translation>
     </message>
     <message>
-        <location filename="../client/client_main.cc" line="411"/>
+        <location filename="../client/client_main.cc" line="349"/>
         <source>Router address.</source>
         <translation>Adresse du routeur.</translation>
     </message>
     <message>
-        <location filename="../client/client_main.cc" line="415"/>
+        <location filename="../client/client_main.cc" line="353"/>
         <source>Router port.</source>
         <translation>Port du routeur.</translation>
     </message>
     <message>
-        <location filename="../client/client_main.cc" line="420"/>
+        <location filename="../client/client_main.cc" line="358"/>
         <source>Router name of user.</source>
         <translation>Nom d utilisateur du routeur.</translation>
     </message>
     <message>
-        <location filename="../client/client_main.cc" line="424"/>
+        <location filename="../client/client_main.cc" line="362"/>
         <source>Router password of user.</source>
         <translation>Mot de passe de l utilisateur du routeur.</translation>
     </message>
     <message>
-        <location filename="../client/client_main.cc" line="428"/>
+        <location filename="../client/client_main.cc" line="366"/>
         <source>Aspia Client</source>
         <translation>Client Aspia</translation>
     </message>
     <message>
         <location filename="../client/client_main.cc" line="43"/>
-        <location filename="../client/client_main.cc" line="600"/>
+        <location filename="../client/client_main.cc" line="522"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../client/client_main.cc" line="354"/>
+        <location filename="../client/client_main.cc" line="308"/>
         <source>Session type. Possible values: desktop-manage, desktop-view, file-transfer, system-info, text-chat, port-forwarding.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/client_main.cc" line="601"/>
+        <location filename="../client/client_main.cc" line="313"/>
+        <source>Type of codec. Possible values: vp8, vp9.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/client_main.cc" line="523"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation>l ID de l hôte a été saisi, mais le routeur n&apos;a pas été configuré. Vous devez configurer votre routeur avant de vous connecter.</translation>
     </message>
@@ -616,7 +616,7 @@
         <translation>Codec</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_desktop.ui" line="192"/>
+        <location filename="../console/computer_dialog_desktop.ui" line="178"/>
         <source>Block remote input</source>
         <translation>Blocage de la session à distance</translation>
     </message>
@@ -683,23 +683,21 @@
         <translation>Désactiver le fond d écran</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_desktop.ui" line="156"/>
         <source>Disable font smoothing</source>
-        <translation>Désactiver le lissage des polices</translation>
+        <translation type="vanished">Désactiver le lissage des polices</translation>
     </message>
     <message>
         <location filename="../console/computer_dialog_desktop.ui" line="124"/>
-        <location filename="../console/computer_dialog_desktop.ui" line="172"/>
+        <location filename="../console/computer_dialog_desktop.ui" line="165"/>
         <source>Other</source>
         <translation>Autre</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_desktop.ui" line="178"/>
         <source>Clear clipboard at disconnect</source>
-        <translation>Effacer le presse-papiers lors de la déconnexion</translation>
+        <translation type="vanished">Effacer le presse-papiers lors de la déconnexion</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_desktop.ui" line="185"/>
+        <location filename="../console/computer_dialog_desktop.ui" line="171"/>
         <source>Lock computer at disconnect</source>
         <translation>Verrouiller l ordinateur lors de la déconnexion</translation>
     </message>
@@ -854,13 +852,12 @@
         <translation>Désactiver le fond d écran</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_desktop.ui" line="156"/>
         <source>Disable font smoothing</source>
-        <translation>Désactiver le lissage des polices</translation>
+        <translation type="vanished">Désactiver le lissage des polices</translation>
     </message>
     <message>
         <location filename="../console/computer_group_dialog_desktop.ui" line="124"/>
-        <location filename="../console/computer_group_dialog_desktop.ui" line="172"/>
+        <location filename="../console/computer_group_dialog_desktop.ui" line="165"/>
         <source>Other</source>
         <translation>Autre</translation>
     </message>
@@ -875,17 +872,16 @@
         <translation>Hérite de la configuration du parent</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_desktop.ui" line="178"/>
         <source>Clear clipboard at disconnect</source>
-        <translation>Effacer le presse-papiers lors de la déconnexion</translation>
+        <translation type="vanished">Effacer le presse-papiers lors de la déconnexion</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_desktop.ui" line="185"/>
+        <location filename="../console/computer_group_dialog_desktop.ui" line="171"/>
         <source>Lock computer at disconnect</source>
         <translation>Verrouiller l ordinateur lors de la déconnexion</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_desktop.ui" line="192"/>
+        <location filename="../console/computer_group_dialog_desktop.ui" line="178"/>
         <source>Block remote input</source>
         <translation>Blocage de la session à distance</translation>
     </message>
@@ -1546,7 +1542,7 @@
         <translation>Apparence</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_config_dialog.ui" line="149"/>
+        <location filename="../client/ui/desktop/desktop_config_dialog.ui" line="135"/>
         <source>Block remote input</source>
         <translation>Blocage de l accès à distance</translation>
     </message>
@@ -1598,22 +1594,20 @@
         <translation>Désactiver le fond d écran</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_config_dialog.ui" line="113"/>
         <source>Disable font smoothing</source>
-        <translation>Désactiver le lissage des polices</translation>
+        <translation type="vanished">Désactiver le lissage des polices</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_config_dialog.ui" line="129"/>
+        <location filename="../client/ui/desktop/desktop_config_dialog.ui" line="122"/>
         <source>Other</source>
         <translation>Autre</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_config_dialog.ui" line="135"/>
         <source>Clear clipboard at disconnect</source>
-        <translation>Effacer le presse-papiers lors de la déconnexion</translation>
+        <translation type="vanished">Effacer le presse-papiers lors de la déconnexion</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_config_dialog.ui" line="142"/>
+        <location filename="../client/ui/desktop/desktop_config_dialog.ui" line="128"/>
         <source>Lock computer at disconnect</source>
         <translation>Verrouiller l ordinateur lors de la déconnexion</translation>
     </message>
@@ -1621,198 +1615,197 @@
 <context>
     <name>DesktopToolBar</name>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="118"/>
-        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="121"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="117"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="120"/>
         <source>Lock toolbar</source>
         <translation>Verrouiller la barre d&apos;outils</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="130"/>
-        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="133"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="129"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="132"/>
         <source>Session configuration</source>
         <translation>Configuration de la session</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="142"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="141"/>
         <source>Auto size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="145"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="144"/>
         <source>Automatic window size</source>
         <translation>Taille automatique de la fenêtre</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="157"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="156"/>
         <source>Full screen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="160"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="159"/>
         <source>Switch to full screen mode or back</source>
         <translation>Passer en mode plein écran ou revenir en arrière</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="171"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="170"/>
         <source>Automatic scrolling</source>
         <translation>Défilement automatique</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="180"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="179"/>
         <source>Ctrl+Alt+Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="183"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="182"/>
         <source>Send Ctrl+Alt+Delete</source>
         <translation>Envoyer Ctrl+Alt+Delete</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="192"/>
-        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="195"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="191"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="194"/>
         <source>Advanced menu</source>
         <translation>Menu avancé</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="200"/>
-        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="203"/>
-        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="206"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="199"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="202"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="205"/>
         <source>Save screenshot...</source>
         <translation>Enregistrer la capture d&apos;écran...</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="215"/>
-        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="218"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="214"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="217"/>
         <source>File transfer</source>
         <translation>Transfert de fichier</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="226"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="225"/>
         <source>Scale</source>
         <translation>Échelle</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="237"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="236"/>
         <source>Send key combinations</source>
         <translation>Envoyer des combinaisons de touches</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="246"/>
-        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="249"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="245"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="248"/>
         <source>Power control</source>
         <translation>Contrôle de l alimentation</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="257"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="256"/>
         <source>Shutdown</source>
         <translation>Arrêt</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="262"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="261"/>
         <source>Reboot</source>
         <translation>Redémarrer</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="267"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="266"/>
         <source>Logoff</source>
         <translation>Déconnexion</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="272"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="271"/>
         <source>Lock</source>
         <translation>Verrouiller</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="281"/>
         <source>Remote Update</source>
-        <translation>Mise à jour à distance</translation>
+        <translation type="vanished">Mise à jour à distance</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="293"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="280"/>
         <source>System Information</source>
         <translation>Informations système</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="305"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="292"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="308"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="295"/>
         <source>Close session</source>
         <translation>Clôturer la session</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="367"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="354"/>
         <source>Fit window</source>
         <translation>Ajuster la fenêtre</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="376"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="363"/>
         <source>Minimize</source>
         <translation>Réduire</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="379"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="366"/>
         <source>Minimize window</source>
         <translation>Réduire la fenêtre</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="384"/>
-        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="387"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="371"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="374"/>
         <source>Statistics</source>
         <translation>Statistiques</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="392"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="379"/>
         <source>Reboot (Safe mode)</source>
         <translation>Redémarrer (mode sans échec)</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="395"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="382"/>
         <source>Reboot in safe mode</source>
         <translation>Redémarrer en mode sans échec</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="400"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="387"/>
         <source>Paste clipboard as keystrokes</source>
         <translation>Coller le presse-papiers sous forme de frappes</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="409"/>
-        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="412"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="396"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="399"/>
         <source>Text Chat</source>
         <translation>Fenêtre de dialogues</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="420"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="407"/>
         <source>Recording settings...</source>
         <translation>Paramètres d enregistrement...</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="429"/>
-        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="432"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="416"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="419"/>
         <source>Start recording</source>
         <translation>Démarrer l enregistrement</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="441"/>
-        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="444"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="428"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="431"/>
         <source>Task Manager</source>
         <translation>Gestionnaire de tâches</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="458"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="445"/>
         <source>Pause video when minimizing</source>
         <translation>Mise en pause de la vidéo lors de la réduction</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="469"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="456"/>
         <source>Pause audio when minimizing</source>
         <translation>Mise en pause de l audio lors de la réduction</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="481"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="468"/>
         <source>Switch Session</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4470,34 +4463,34 @@
 <context>
     <name>client::DesktopSessionWindow</name>
     <message>
-        <location filename="../client/ui/desktop/desktop_session_window.cc" line="415"/>
-        <location filename="../client/ui/desktop/desktop_session_window.cc" line="425"/>
-        <location filename="../client/ui/desktop/desktop_session_window.cc" line="1099"/>
+        <location filename="../client/ui/desktop/desktop_session_window.cc" line="394"/>
+        <location filename="../client/ui/desktop/desktop_session_window.cc" line="404"/>
+        <location filename="../client/ui/desktop/desktop_session_window.cc" line="1068"/>
         <source>Warning</source>
         <translation type="unfinished">Attention</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_session_window.cc" line="416"/>
+        <location filename="../client/ui/desktop/desktop_session_window.cc" line="395"/>
         <source>There are no supported video encodings.</source>
         <translation type="unfinished">Aucun encodage vidéo n est pris en charge.</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_session_window.cc" line="426"/>
+        <location filename="../client/ui/desktop/desktop_session_window.cc" line="405"/>
         <source>The current video encoding is not supported by the host. Please specify a different video encoding.</source>
         <translation type="unfinished">L encodage vidéo actuel n est pas pris en charge par l hôte. Veuillez spécifier un autre encodage vidéo.</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_session_window.cc" line="1066"/>
+        <location filename="../client/ui/desktop/desktop_session_window.cc" line="1035"/>
         <source>Save File</source>
         <translation type="unfinished">Enregistrer le fichier</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_session_window.cc" line="1068"/>
+        <location filename="../client/ui/desktop/desktop_session_window.cc" line="1037"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation type="unfinished">PNG Image (*.png);;BMP Image (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_session_window.cc" line="1099"/>
+        <location filename="../client/ui/desktop/desktop_session_window.cc" line="1068"/>
         <source>Could not save image</source>
         <translation type="unfinished">Impossible d&apos;enregistrer l&apos;image</translation>
     </message>
@@ -4505,90 +4498,90 @@
 <context>
     <name>client::DesktopToolBar</name>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="382"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="367"/>
         <source>Resolution selection</source>
         <translation>Choix de la résolution</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="462"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="433"/>
         <source>Session %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="464"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="435"/>
         <source>Session %1 (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="494"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="465"/>
         <source>Stop recording</source>
         <translation>Arrêter l enregistrement</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="499"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="470"/>
         <source>Start recording</source>
         <translation>Démarrer l enregistrement</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="619"/>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="640"/>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="671"/>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="702"/>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="723"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="590"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="611"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="642"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="673"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="694"/>
         <source>Confirmation</source>
         <translation>Confirmation</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="620"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="591"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>Êtes-vous sûr de vouloir arrêter l ordinateur distant?</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="623"/>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="644"/>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="675"/>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="706"/>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="727"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="594"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="615"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="646"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="677"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="698"/>
         <source>Yes</source>
         <translation>Oui</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="624"/>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="645"/>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="676"/>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="707"/>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="728"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="595"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="616"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="647"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="678"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="699"/>
         <source>No</source>
         <translation>Non</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="641"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="612"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Êtes-vous sûr de vouloir redémarrer l ordinateur distant?</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="650"/>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="681"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="621"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="652"/>
         <source>Wait for host</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="672"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="643"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation>Êtes-vous sûr de vouloir redémarrer l ordinateur distant en mode sans échec?</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="703"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="674"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Êtes-vous sûr de vouloir mettre fin à la session de l utilisateur sur l ordinateur distant?</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="724"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="695"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Êtes-vous sûr de vouloir verrouiller la session de l utilisateur sur l ordinateur distant?</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="828"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="799"/>
         <source>Scale</source>
         <translation>Échelle</translation>
     </message>
@@ -8729,6 +8722,16 @@
         <translation>Montrer</translation>
     </message>
     <message>
+        <location filename="../host/ui/main_window.cc" line="430"/>
+        <source>Screen recording has started.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../host/ui/main_window.cc" line="432"/>
+        <source>Screen recording stopped.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../host/ui/main_window.cc" line="674"/>
         <source>Hide</source>
         <translation>Cacher</translation>
@@ -8780,14 +8783,12 @@
         <translation>Connexion à un routeur %1...</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="430"/>
         <source>User &quot;%1&quot; (%2) started screen recording.</source>
-        <translation>L&apos;utilisateur &quot;%1&quot; (%2) a commencé l&apos;enregistrement de l&apos;écran.</translation>
+        <translation type="vanished">L&apos;utilisateur &quot;%1&quot; (%2) a commencé l&apos;enregistrement de l&apos;écran.</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="432"/>
         <source>User &quot;%1&quot; (%2) stopped screen recording.</source>
-        <translation>L&apos;utilisateur &quot;%1&quot; (%2) a arrêté l&apos;enregistrement de l&apos;écran.</translation>
+        <translation type="vanished">L&apos;utilisateur &quot;%1&quot; (%2) a arrêté l&apos;enregistrement de l&apos;écran.</translation>
     </message>
     <message>
         <location filename="../host/ui/main_window.cc" line="713"/>
