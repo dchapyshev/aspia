@@ -130,7 +130,7 @@ void DesktopClient::dettach()
 //--------------------------------------------------------------------------------------------------
 void DesktopClient::onUserMessage(quint8 channel_id, const QByteArray& buffer)
 {
-    if (channel_id == proto::desktop::CHANNEL_ID_CLIPBOARD)
+    if (channel_id == proto::desktop::CHANNEL_ID_CLIPBOARD || channel_id == proto::desktop::CHANNEL_ID_FILE)
     {
         if (sessionType() != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
             return;
@@ -188,10 +188,26 @@ void DesktopClient::onMessage(quint8 net_channel_id, const QByteArray& buffer)
     }
     else if (net_channel_id == proto::desktop::CHANNEL_ID_CLIPBOARD)
     {
+        if (sessionType() != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
+            return;
+
+        if (!(config_.flags() & proto::control::ENABLE_CLIPBOARD))
+            return;
+
         emit sig_userMessage(net_channel_id, buffer);
     }
     else if (net_channel_id == proto::desktop::CHANNEL_ID_USER)
     {
+        emit sig_userMessage(net_channel_id, buffer);
+    }
+    else if (net_channel_id == proto::desktop::CHANNEL_ID_FILE)
+    {
+        if (sessionType() != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
+            return;
+
+        if (!(config_.flags() & proto::control::ENABLE_CLIPBOARD))
+            return;
+
         emit sig_userMessage(net_channel_id, buffer);
     }
     else

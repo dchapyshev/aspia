@@ -20,21 +20,49 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
-package proto.desktop;
+package proto.file;
 
-enum ChannelId
+message Request
 {
-    CHANNEL_ID_LEGACY       = 0;
-    CHANNEL_ID_CONTROL      = 1;
-    CHANNEL_ID_SCREEN       = 2;
-    CHANNEL_ID_VIDEO        = 3;
-    CHANNEL_ID_CURSOR       = 4;
-    CHANNEL_ID_INPUT        = 5;
-    CHANNEL_ID_CLIPBOARD    = 6;
-    CHANNEL_ID_AUDIO        = 7;
-    CHANNEL_ID_POWER        = 8;
-    CHANNEL_ID_USER         = 9;
-    CHANNEL_ID_FILE         = 10;
-    CHANNEL_ID_SYSTEM_INFO  = 11;
-    CHANNEL_ID_TASK_MANAGER = 12;
+    uint64 transfer_id = 1;
+    int32 file_index   = 2;
+    uint64 offset      = 3;
+}
+
+message Data
+{
+    uint64 transfer_id = 1;
+    int32 file_index   = 2;
+    bytes data         = 3;
+    bool is_last       = 4;
+}
+
+message Cancel
+{
+    uint64 transfer_id = 1;
+}
+
+message Error
+{
+    uint64 transfer_id = 1;
+    int32 file_index   = 2;
+    string error_id    = 3;
+}
+
+// Client -> Host (channel 10).
+message ClientToHost
+{
+    Request request = 1;
+    Data data       = 2;
+    Cancel cancel   = 3;
+    Error error     = 4;
+}
+
+// Client <- Host (channel 10).
+message HostToClient
+{
+    Request request = 1;
+    Data data       = 2;
+    Cancel cancel   = 3;
+    Error error     = 4;
 }

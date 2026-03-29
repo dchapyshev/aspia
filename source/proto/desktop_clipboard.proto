@@ -43,33 +43,6 @@ message Event
     bytes data = 2;
 }
 
-message FileTransferRequest
-{
-    uint64 transfer_id = 1;
-    int32 file_index   = 2;
-    uint64 offset      = 3;
-}
-
-message FileTransferData
-{
-    uint64 transfer_id = 1;
-    int32 file_index   = 2;
-    bytes data         = 3;
-    bool is_last       = 4;
-}
-
-message FileTransferCancel
-{
-    uint64 transfer_id = 1;
-}
-
-message FileTransferError
-{
-    uint64 transfer_id = 1;
-    int32 file_index   = 2;
-    string error_id    = 3;
-}
-
 // Client -> Host (channel 6).
 message ClientToHost
 {

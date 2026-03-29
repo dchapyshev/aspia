@@ -24,6 +24,7 @@
 #include "host/host_storage.h"
 #include "common/clipboard_monitor.h"
 #include "proto/desktop_channel.h"
+#include "proto/desktop_file.h"
 #include "proto/desktop_user.h"
 
 namespace host {
@@ -220,6 +221,32 @@ void UserSessionAgent::onIpcMessageReceived(quint32 channel_id, const QByteArray
                     message.video_recording().action() == proto::user::VideoRecording::ACTION_STARTED;
                 LOG(INFO) << "Video recording state changed:" << started;
                 emit sig_recordingStateChanged(started);
+            }
+        }
+        else if (net_channel_id == proto::desktop::CHANNEL_ID_FILE)
+        {
+            proto::file::ClientToHost message;
+            if (!base::parse(buffer, &message))
+            {
+                LOG(ERROR) << "Unable to parse file message";
+                return;
+            }
+
+            if (message.has_request())
+            {
+                // TODO
+            }
+            else if (message.has_data())
+            {
+                // TODO
+            }
+            else if (message.has_cancel())
+            {
+                // TODO
+            }
+            else if (message.has_error())
+            {
+                // TODO
             }
         }
         return;
