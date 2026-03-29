@@ -25,14 +25,8 @@
 #include "base/serialization.h"
 #include "base/ipc/ipc_channel.h"
 #include "common/desktop_session_constants.h"
-#include "host/host_storage.h"
-#include "host/service.h"
 #include "proto/desktop_channel.h"
 #include "proto/peer.h"
-
-#if defined(Q_OS_WINDOWS)
-#include "base/win/safe_mode_util.h"
-#endif // defined(Q_OS_WINDOWS)
 
 namespace host {
 
@@ -363,41 +357,6 @@ void DesktopAgentClient::readPowerControl(const proto::power::Control& control)
 
     switch (control.action())
     {
-        case proto::power::Control::ACTION_SHUTDOWN:
-            base::PowerController::shutdown();
-            break;
-
-        case proto::power::Control::ACTION_REBOOT:
-            base::PowerController::reboot();
-            break;
-
-        case proto::power::Control::ACTION_REBOOT_SAFE_MODE:
-        {
-#if defined(Q_OS_WINDOWS)
-            if (!base::SafeModeUtil::setSafeModeService(Service::kName, true))
-            {
-                CLOG(ERROR) << "Failed to add service to start in safe mode";
-                return;
-            }
-
-            CLOG(INFO) << "Service added successfully to start in safe mode";
-
-            HostStorage storage;
-            storage.setBootToSafeMode(true);
-
-            if (!base::SafeModeUtil::setSafeMode(true))
-            {
-                CLOG(ERROR) << "Failed to enable boot in Safe Mode";
-                return;
-            }
-
-            CLOG(INFO) << "Safe Mode boot enabled successfully";
-            if (!base::PowerController::reboot())
-                CLOG(ERROR) << "Unable to reboot";
-#endif // defined(Q_OS_WINDOWS)
-        }
-        break;
-
         case proto::power::Control::ACTION_LOGOFF:
             base::PowerController::logoff();
             break;

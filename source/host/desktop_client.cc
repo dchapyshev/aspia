@@ -22,6 +22,7 @@
 
 #include "base/application.h"
 #include "base/logging.h"
+#include "base/power_controller.h"
 #include "base/numeric_utils.h"
 #include "base/serialization.h"
 #include "base/ipc/ipc_channel.h"
@@ -30,8 +31,11 @@
 #include "proto/desktop_video.h"
 
 #if defined(Q_OS_WINDOWS)
+#include "base/win/safe_mode_util.h"
 #include "base/win/session_enumerator.h"
 #include "base/win/session_info.h"
+#include "host/host_storage.h"
+#include "host/service.h"
 #include "host/win/system_info.h"
 #include "host/win/task_manager.h"
 #endif // defined(Q_OS_WINDOWS)
@@ -211,6 +215,17 @@ void DesktopClient::onMessage(quint8 net_channel_id, const QByteArray& buffer)
             return;
 
         emit sig_userMessage(net_channel_id, buffer);
+    }
+    else if (net_channel_id == proto::desktop::CHANNEL_ID_POWER)
+    {
+        proto::power::ClientToHost message;
+        if (!base::parse(buffer, &message))
+        {
+            CLOG(ERROR) << "Unable to parse power message";
+            return;
+        }
+
+        readPowerControl(message.power_control());
     }
     else if (net_channel_id == proto::desktop::CHANNEL_ID_SYSTEM_INFO)
     {
@@ -403,6 +418,71 @@ void DesktopClient::sendSessionList()
     CLOG(INFO) << "Send:" << *session_list;
     send(proto::desktop::CHANNEL_ID_CONTROL, base::serialize(message));
 #endif // defined(Q_OS_WINDOWS)
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopClient::readPowerControl(const proto::power::Control& control)
+{
+    if (sessionType() != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
+        return;
+
+    CLOG(INFO) << "Received:" << control;
+
+    switch (control.action())
+    {
+        case proto::power::Control::ACTION_SHUTDOWN:
+            base::PowerController::shutdown();
+            break;
+
+        case proto::power::Control::ACTION_REBOOT:
+            base::PowerController::reboot();
+            break;
+
+        case proto::power::Control::ACTION_REBOOT_SAFE_MODE:
+        {
+#if defined(Q_OS_WINDOWS)
+            if (!base::SafeModeUtil::setSafeModeService(Service::kName, true))
+            {
+                CLOG(ERROR) << "Failed to add service to start in safe mode";
+                return;
+            }
+
+            CLOG(INFO) << "Service added successfully to start in safe mode";
+
+            HostStorage storage;
+            storage.setBootToSafeMode(true);
+
+            if (!base::SafeModeUtil::setSafeMode(true))
+            {
+                CLOG(ERROR) << "Failed to enable boot in Safe Mode";
+                return;
+            }
+
+            CLOG(INFO) << "Safe Mode boot enabled successfully";
+            if (!base::PowerController::reboot())
+                CLOG(ERROR) << "Unable to reboot";
+#endif // defined(Q_OS_WINDOWS)
+        }
+        break;
+
+        case proto::power::Control::ACTION_LOGOFF:
+        case proto::power::Control::ACTION_LOCK:
+        {
+            proto::power::ClientToHost message;
+            message.mutable_power_control()->CopyFrom(control);
+
+            quint32 channel_id = base::makeUint32(
+                proto::desktop::IPC_CHANNEL_ID_SESSION, proto::desktop::CHANNEL_ID_POWER);
+
+            if (ipc_channel_)
+                ipc_channel_->send(channel_id, base::serialize(message));
+        }
+        break;
+
+        default:
+            CLOG(ERROR) << "Unhandled power control action:" << control.action();
+            break;
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
