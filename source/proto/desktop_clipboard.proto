@@ -70,12 +70,14 @@ message FileTransferError
     string error_id    = 3;
 }
 
-// Client <-> Host (channel 6).
-message Message
+// Client -> Host (channel 6).
+message ClientToHost
 {
-    Event event                 = 1;
-    FileTransferRequest request = 2;
-    FileTransferData data       = 3;
-    FileTransferCancel cancel   = 4;
-    FileTransferError error     = 5;
+    Event event = 1;
+}
+
+// Client -> Host (channel 6).
+message HostToClient
+{
+    Event event = 1;
 }

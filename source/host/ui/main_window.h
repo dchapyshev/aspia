@@ -70,7 +70,7 @@ private slots:
     void onCredentialsChanged(const proto::user::Credentials& credentials);
     void onRouterStateChanged(const proto::user::RouterState& state);
     void onConfirmationRequest(const proto::user::ConfirmationRequest& request);
-    void onRecordingStateChanged(const QString& computer, const QString& user, bool started);
+    void onRecordingStateChanged(bool started);
     void onChat(const proto::chat::Chat& chat);
 
     void realClose();

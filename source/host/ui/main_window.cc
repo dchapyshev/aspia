@@ -421,15 +421,15 @@ void MainWindow::onConfirmationRequest(const proto::user::ConfirmationRequest& r
 }
 
 //--------------------------------------------------------------------------------------------------
-void MainWindow::onRecordingStateChanged(const QString& computer, const QString& user, bool started)
+void MainWindow::onRecordingStateChanged(bool started)
 {
-    LOG(INFO) << "Video recording state changed (user:" << user << "started:" << started << ")";
+    LOG(INFO) << "Video recording state changed:" << started;
     QString message;
 
     if (started)
-        message = tr("User \"%1\" (%2) started screen recording.").arg(user, computer);
+        message = tr("Screen recording has started.");
     else
-        message = tr("User \"%1\" (%2) stopped screen recording.").arg(user, computer);
+        message = tr("Screen recording stopped.");
 
     tray_icon_.showMessage(tr("Aspia Host"), message, QIcon(":/img/aspia-host.ico"), 1200);
 }

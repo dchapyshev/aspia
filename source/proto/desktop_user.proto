@@ -20,21 +20,21 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
-package proto.desktop;
+package proto.user;
 
-enum ChannelId
+message VideoRecording
 {
-    CHANNEL_ID_LEGACY       = 0;
-    CHANNEL_ID_CONTROL      = 1;
-    CHANNEL_ID_SCREEN       = 2;
-    CHANNEL_ID_VIDEO        = 3;
-    CHANNEL_ID_CURSOR       = 4;
-    CHANNEL_ID_INPUT        = 5;
-    CHANNEL_ID_CLIPBOARD    = 6;
-    CHANNEL_ID_AUDIO        = 7;
-    CHANNEL_ID_POWER        = 8;
-    CHANNEL_ID_USER         = 9;
-    CHANNEL_ID_COPY_FILE    = 10;
-    CHANNEL_ID_SYSTEM_INFO  = 11;
-    CHANNEL_ID_TASK_MANAGER = 12;
+    enum Action
+    {
+        ACTION_UNKNOWN = 0;
+        ACTION_STARTED = 1;
+        ACTION_STOPPED = 2;
+    }
+
+    Action action = 1;
+}
+
+message ClientToHost
+{
+    VideoRecording video_recording = 1;
 }

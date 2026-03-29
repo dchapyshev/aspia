@@ -87,18 +87,6 @@ message SessionListRequest
     uint32 dummy = 1; // Always set to 1.
 }
 
-message VideoRecording
-{
-    enum Action
-    {
-        ACTION_UNKNOWN = 0;
-        ACTION_STARTED = 1;
-        ACTION_STOPPED = 2;
-    }
-
-    Action action = 1;
-}
-
 message Config
 {
     uint32 flags                  = 1;
@@ -123,5 +111,4 @@ message ClientToHost
     Config config                           = 1;
     SessionListRequest session_list_request = 2;
     SwitchSession switch_session            = 3;
-    VideoRecording video_recording          = 4;
 }

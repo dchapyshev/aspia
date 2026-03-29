@@ -128,15 +128,18 @@ void DesktopClient::dettach()
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopClient::onClipboardData(const QByteArray& buffer)
+void DesktopClient::onUserMessage(quint8 channel_id, const QByteArray& buffer)
 {
-    if (sessionType() != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
-        return;
+    if (channel_id == proto::desktop::CHANNEL_ID_CLIPBOARD)
+    {
+        if (sessionType() != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
+            return;
 
-    if (!(config_.flags() & proto::control::ENABLE_CLIPBOARD))
-        return;
+        if (!(config_.flags() & proto::control::ENABLE_CLIPBOARD))
+            return;
+    }
 
-    send(proto::desktop::CHANNEL_ID_CLIPBOARD, buffer);
+    send(channel_id, buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -182,17 +185,14 @@ void DesktopClient::onMessage(quint8 net_channel_id, const QByteArray& buffer)
 
             emit sig_switchSession(session_id);
         }
-        else if (message.has_video_recording())
-        {
-            bool is_started =
-                message.video_recording().action() == proto::control::VideoRecording::ACTION_STARTED;
-            emit sig_recordingChanged(is_started);
-        }
     }
     else if (net_channel_id == proto::desktop::CHANNEL_ID_CLIPBOARD)
     {
-        if (sessionType() == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
-            emit sig_clipboardData(buffer);
+        emit sig_userMessage(net_channel_id, buffer);
+    }
+    else if (net_channel_id == proto::desktop::CHANNEL_ID_USER)
+    {
+        emit sig_userMessage(net_channel_id, buffer);
     }
     else
     {

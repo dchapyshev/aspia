@@ -25,6 +25,7 @@
 #include "base/application.h"
 #include "base/location.h"
 #include "base/logging.h"
+#include "base/numeric_utils.h"
 #include "base/ipc/ipc_channel.h"
 #include "base/ipc/ipc_server.h"
 #include "host/client.h"
@@ -375,26 +376,13 @@ void UserSession::onClientChat(quint32 client_id, const proto::chat::Chat& chat)
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSession::onClientRecording(bool started)
+void UserSession::onClientMessage(quint8 net_channel_id, const QByteArray& buffer)
 {
-    Client* client = dynamic_cast<Client*>(sender());
-    CHECK(client);
+    if (!ipc_channel_ || buffer.isEmpty())
+        return;
 
-    QString computer_name = client->computerName();
-    QString user_name = client->userName();
-
-    proto::user::RecordingState* state = outgoing_message_.newMessage().mutable_recording_state();
-    state->set_computer_name(computer_name.toStdString());
-    state->set_user_name(user_name.toStdString());
-    state->set_started(started);
-    sendMessage();
-}
-
-//--------------------------------------------------------------------------------------------------
-void UserSession::onClientClipboard(const QByteArray& buffer)
-{
-    if (ipc_channel_ && !buffer.isEmpty())
-        ipc_channel_->send(proto::user::CHANNEL_ID_CLIPBOARD, buffer);
+    quint32 channel_id = base::makeUint32(proto::user::CHANNEL_ID_NETWORK, net_channel_id);
+    ipc_channel_->send(channel_id, buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -526,12 +514,14 @@ void UserSession::onIpcDisconnected()
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSession::onIpcMessageReceived(
-    quint32 ipc_channel_id, const QByteArray& buffer, bool /* reliable */)
+void UserSession::onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer, bool /* reliable */)
 {
-    if (ipc_channel_id == proto::user::CHANNEL_ID_CLIPBOARD)
+    quint16 net_channel_id = base::lowWord(channel_id);
+    quint16 ipc_channel_id = base::highWord(channel_id);
+
+    if (ipc_channel_id == proto::user::CHANNEL_ID_NETWORK)
     {
-        emit sig_clipboardData(buffer);
+        emit sig_userMessage(net_channel_id, buffer);
         return;
     }
 
@@ -810,7 +800,7 @@ void UserSession::sendMessage()
         return;
     }
 
-    ipc_channel_->send(proto::user::CHANNEL_ID_USER, outgoing_message_.serialize());
+    ipc_channel_->send(proto::user::CHANNEL_ID_SERVICE, outgoing_message_.serialize());
 }
 
 } // namespace host

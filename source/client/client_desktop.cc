@@ -31,6 +31,7 @@
 #include "base/desktop/mouse_cursor.h"
 #include "common/desktop_session_constants.h"
 #include "proto/desktop_channel.h"
+#include "proto/desktop_user.h"
 
 namespace client {
 
@@ -173,7 +174,7 @@ void ClientDesktop::onMessageReceived(quint8 channel_id, const QByteArray& buffe
     }
     else if (channel_id == proto::desktop::CHANNEL_ID_CLIPBOARD)
     {
-        proto::clipboard::Message message;
+        proto::clipboard::HostToClient message;
         if (!base::parse(buffer, &message))
         {
             CLOG(ERROR) << "Unable to parse clipboard message";
@@ -260,7 +261,7 @@ void ClientDesktop::onClipboardEvent(const proto::clipboard::Event& event)
     }
     else
     {
-        proto::clipboard::Message message;
+        proto::clipboard::ClientToHost message;
         message.mutable_event()->CopyFrom(event);
         sendMessage(proto::desktop::CHANNEL_ID_CLIPBOARD, base::serialize(message));
     }
@@ -387,14 +388,14 @@ void ClientDesktop::onAudioPauseChanged(bool enable)
 //--------------------------------------------------------------------------------------------------
 void ClientDesktop::onRecordingChanged(bool enable, const QString& file_path)
 {
-    proto::control::ClientToHost message;
-    proto::control::VideoRecording* video_recording = message.mutable_video_recording();
+    proto::user::ClientToHost message;
+    proto::user::VideoRecording* video_recording = message.mutable_video_recording();
 
     if (enable)
     {
         CLOG(INFO) << "Video recording is enabled:" << file_path;
 
-        video_recording->set_action(proto::control::VideoRecording::ACTION_STARTED);
+        video_recording->set_action(proto::user::VideoRecording::ACTION_STARTED);
 
         webm_file_writer_ =
             std::make_unique<base::WebmFileWriter>(file_path, sessionState()->computerName());
@@ -419,7 +420,7 @@ void ClientDesktop::onRecordingChanged(bool enable, const QString& file_path)
     {
         CLOG(INFO) << "Video recording is disabled";
 
-        video_recording->set_action(proto::control::VideoRecording::ACTION_STOPPED);
+        video_recording->set_action(proto::user::VideoRecording::ACTION_STOPPED);
 
         if (webm_video_encode_timer_)
         {
@@ -433,7 +434,7 @@ void ClientDesktop::onRecordingChanged(bool enable, const QString& file_path)
     if (isLegacy())
         return;
 
-    sendMessage(proto::desktop::CHANNEL_ID_CONTROL, base::serialize(message));
+    sendMessage(proto::desktop::CHANNEL_ID_USER, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------

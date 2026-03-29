@@ -48,12 +48,11 @@ public:
     void dettach();
 
 public slots:
-    void onClipboardData(const QByteArray& buffer);
+    void onUserMessage(quint8 channel_id, const QByteArray& buffer);
 
 signals:
     void sig_switchSession(base::SessionId session_id);
-    void sig_recordingChanged(bool started);
-    void sig_clipboardData(const QByteArray& buffer);
+    void sig_userMessage(quint8 channel_id, const QByteArray& buffer);
 
 protected:
     void onStart() final;

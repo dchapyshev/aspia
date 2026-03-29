@@ -91,7 +91,7 @@ signals:
     void sig_credentialsChanged(const proto::user::Credentials& credentials);
     void sig_routerStateChanged(const proto::user::RouterState& state);
     void sig_confirmationRequest(const proto::user::ConfirmationRequest& request);
-    void sig_recordingStateChanged(const QString& computer, const QString& user, bool started);
+    void sig_recordingStateChanged(bool started);
     void sig_chat(const proto::chat::Chat& chat);
 
 private slots:
@@ -104,7 +104,8 @@ private slots:
     void onClipboardEvent(const proto::clipboard::Event& event);
 
 private:
-    void sendMessage();
+    void sendServiceMessage();
+    void sendNetworkMessage(quint8 net_channel_id, const QByteArray& buffer);
 
     common::ClipboardMonitor* clipboard_ = nullptr;
     base::IpcChannel* ipc_channel_ = nullptr;

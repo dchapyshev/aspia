@@ -29,6 +29,7 @@ list(APPEND SOURCE_PROTO
     desktop_legacy.proto
     desktop_power.proto
     desktop_screen.proto
+    desktop_user.proto
     desktop_video.proto
     file_transfer.proto
     key_exchange.proto

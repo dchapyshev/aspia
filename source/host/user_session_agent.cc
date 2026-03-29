@@ -19,9 +19,12 @@
 #include "host/user_session_agent.h"
 
 #include "base/logging.h"
+#include "base/numeric_utils.h"
 #include "base/ipc/ipc_channel.h"
 #include "host/host_storage.h"
 #include "common/clipboard_monitor.h"
+#include "proto/desktop_channel.h"
+#include "proto/desktop_user.h"
 
 namespace host {
 
@@ -73,7 +76,7 @@ void UserSessionAgent::onUpdateCredentials(proto::user::CredentialsRequest_Type 
     proto::user::CredentialsRequest* request =
         outgoing_message_.newMessage().mutable_credentials_request();
     request->set_type(type);
-    sendMessage();
+    sendServiceMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -83,7 +86,7 @@ void UserSessionAgent::onOneTimeSessions(quint32 sessions)
     proto::user::OneTimeSessions* one_time_sessions =
         outgoing_message_.newMessage().mutable_one_time_sessions();
     one_time_sessions->set_sessions(sessions);
-    sendMessage();
+    sendServiceMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -93,7 +96,7 @@ void UserSessionAgent::onStopClient(quint32 client_id)
     proto::user::ServiceControl* control = outgoing_message_.newMessage().mutable_control();
     control->set_command_name("stop_client");
     control->set_unsigned_integer(client_id);
-    sendMessage();
+    sendServiceMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -104,7 +107,7 @@ void UserSessionAgent::onConnectConfirmation(quint32 id, bool accept)
         outgoing_message_.newMessage().mutable_confirmation_reply();
     confirmation->set_id(id);
     confirmation->set_accept(accept);
-    sendMessage();
+    sendServiceMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -114,7 +117,7 @@ void UserSessionAgent::onMouseLock(bool enable)
     proto::user::ServiceControl* control = outgoing_message_.newMessage().mutable_control();
     control->set_command_name("lock_mouse");
     control->set_boolean(enable);
-    sendMessage();
+    sendServiceMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -124,7 +127,7 @@ void UserSessionAgent::onKeyboardLock(bool enable)
     proto::user::ServiceControl* control = outgoing_message_.newMessage().mutable_control();
     control->set_command_name("lock_keyboard");
     control->set_boolean(enable);
-    sendMessage();
+    sendServiceMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -134,7 +137,7 @@ void UserSessionAgent::onPause(bool enable)
     proto::user::ServiceControl* control = outgoing_message_.newMessage().mutable_control();
     control->set_command_name("pause");
     control->set_boolean(enable);
-    sendMessage();
+    sendServiceMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -142,7 +145,7 @@ void UserSessionAgent::onChat(const proto::chat::Chat& chat)
 {
     LOG(INFO) << "Text chat message";
     outgoing_message_.newMessage().mutable_chat()->CopyFrom(chat);
-    sendMessage();
+    sendServiceMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -176,26 +179,48 @@ void UserSessionAgent::onIpcErrorOccurred()
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionAgent::onIpcMessageReceived(
-    quint32 ipc_channel_id, const QByteArray& buffer, bool /* reliable */)
+void UserSessionAgent::onIpcMessageReceived(quint32 channel_id, const QByteArray& buffer, bool /* reliable */)
 {
-    if (ipc_channel_id == proto::user::CHANNEL_ID_CLIPBOARD)
-    {
-        proto::clipboard::Message message;
-        if (!base::parse(buffer, &message))
-        {
-            LOG(ERROR) << "Unable to parse clipboard message";
-            return;
-        }
+    quint16 net_channel_id = base::lowWord(channel_id);
+    quint16 ipc_channel_id = base::highWord(channel_id);
 
-        if (message.has_event())
+    if (ipc_channel_id == proto::user::CHANNEL_ID_NETWORK)
+    {
+        if (net_channel_id == proto::desktop::CHANNEL_ID_CLIPBOARD)
         {
-            if (clipboard_)
-                clipboard_->injectClipboardEvent(message.event());
+            proto::clipboard::ClientToHost message;
+            if (!base::parse(buffer, &message))
+            {
+                LOG(ERROR) << "Unable to parse clipboard message";
+                return;
+            }
+
+            if (message.has_event())
+            {
+                if (clipboard_)
+                    clipboard_->injectClipboardEvent(message.event());
+            }
+            else
+            {
+                LOG(ERROR) << "Unhandled clipboard message";
+            }
         }
-        else
+        else if (net_channel_id == proto::desktop::CHANNEL_ID_USER)
         {
-            LOG(ERROR) << "Unhandled clipboard message";
+            proto::user::ClientToHost message;
+            if (!base::parse(buffer, &message))
+            {
+                LOG(ERROR) << "Unable to parse user message";
+                return;
+            }
+
+            if (message.has_video_recording())
+            {
+                bool started =
+                    message.video_recording().action() == proto::user::VideoRecording::ACTION_STARTED;
+                LOG(INFO) << "Video recording state changed:" << started;
+                emit sig_recordingStateChanged(started);
+            }
         }
         return;
     }
@@ -238,18 +263,6 @@ void UserSessionAgent::onIpcMessageReceived(
     else if (incoming_message_->has_chat())
     {
         emit sig_chat(incoming_message_->chat());
-    }
-    else if (incoming_message_->has_recording_state())
-    {
-        const proto::user::RecordingState& recording_state =
-            incoming_message_->recording_state();
-
-        LOG(INFO) << "Video recording state changed (" << recording_state  << ")";
-
-        emit sig_recordingStateChanged(
-            QString::fromStdString(recording_state.computer_name()),
-            QString::fromStdString(recording_state.user_name()),
-            recording_state.started());
     }
     else
     {
@@ -315,17 +328,29 @@ void UserSessionAgent::onClipboardEvent(const proto::clipboard::Event& event)
     if (!ipc_channel_)
         return;
 
-    proto::clipboard::Message message;
+    proto::clipboard::HostToClient message;
     message.mutable_event()->CopyFrom(event);
-
-    ipc_channel_->send(proto::user::CHANNEL_ID_CLIPBOARD, base::serialize(message));
+    sendNetworkMessage(proto::desktop::CHANNEL_ID_CLIPBOARD, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionAgent::sendMessage()
+void UserSessionAgent::sendServiceMessage()
 {
-    if (ipc_channel_)
-        ipc_channel_->send(proto::user::CHANNEL_ID_USER, outgoing_message_.serialize());
+    if (!ipc_channel_)
+        return;
+
+    quint32 channel_id = base::makeUint32(proto::user::CHANNEL_ID_SERVICE, 0);
+    ipc_channel_->send(channel_id, outgoing_message_.serialize());
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserSessionAgent::sendNetworkMessage(quint8 net_channel_id, const QByteArray &buffer)
+{
+    if (!ipc_channel_)
+        return;
+
+    quint32 channel_id = base::makeUint32(proto::user::CHANNEL_ID_NETWORK, net_channel_id);
+    ipc_channel_->send(channel_id, outgoing_message_.serialize());
 }
 
 } // namespace host
