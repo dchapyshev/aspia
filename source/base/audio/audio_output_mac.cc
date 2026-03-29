@@ -79,12 +79,12 @@ bool AudioOutputMac::start()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool AudioOutputMac::stop()
+void AudioOutputMac::stop()
 {
     std::unique_lock lock(lock_);
 
     if (!playout_initialized_)
-        return true;
+        return;
 
     if (playing_ && is_device_alive_)
     {
@@ -131,7 +131,6 @@ bool AudioOutputMac::stop()
 
     playout_initialized_ = false;
     playing_ = false;
-    return true;
 }
 
 //--------------------------------------------------------------------------------------------------

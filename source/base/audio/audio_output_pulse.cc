@@ -93,13 +93,13 @@ bool AudioOutputPulse::start()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool AudioOutputPulse::stop()
+void AudioOutputPulse::stop()
 {
     if (!playout_initialized_)
-        return true;
+        return;
 
     if (!play_stream_)
-        return false;
+        return;
 
     timer_->stop();
     playout_initialized_ = false;
@@ -119,7 +119,7 @@ bool AudioOutputPulse::stop()
             {
                 LOG(ERROR) << "Failed to disconnect play stream:"
                            << LATE(pa_context_errno)(pa_context_);
-                return false;
+                return;
             }
 
             LOG(INFO) << "Disconnected playback";
@@ -132,7 +132,6 @@ bool AudioOutputPulse::stop()
     play_buffer_.reset();
 
     LOG(INFO) << "Audio playout stopped";
-    return true;
 }
 
 //--------------------------------------------------------------------------------------------------

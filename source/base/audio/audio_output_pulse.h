@@ -41,7 +41,7 @@ public:
 
     // AudioOutput implementation.
     bool start() final;
-    bool stop() final;
+    void stop() final;
 
 private:
     static void paContextStateCallback(pa_context* context, void* self);

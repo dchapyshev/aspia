@@ -44,7 +44,7 @@ public:
 
     // AudioOutput implementation.
     bool start() final;
-    bool stop() final;
+    void stop() final;
 
 private:
     bool initDevice();
