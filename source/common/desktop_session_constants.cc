@@ -34,15 +34,6 @@ const char kAudioPauseExtension[] = "audio_pause";
 const char kScreenTypeExtension[] = "screen_type";
 
 // Deprectaed.
-#if defined(Q_OS_WINDOWS)
-const char kSupportedExtensionsForManage[] = "select_screen;power_control;system_info;task_manager";
-const char kSupportedExtensionsForView[] = "select_screen;system_info";
-#else
-const char kSupportedExtensionsForManage[] = "select_screen";
-const char kSupportedExtensionsForView[] = "select_screen";
-#endif
-
-// Deprectaed.
 const char kFlagDisablePasteAsKeystrokes[] = "disable_paste_as_keystrokes";
 const char kFlagDisableAudio[] = "disable_audio";
 const char kFlagDisableClipboard[] = "disable_clipboard";

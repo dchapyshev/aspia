@@ -32,12 +32,6 @@ extern const char kVideoPauseExtension[]; // Deprecated.
 extern const char kAudioPauseExtension[]; // Deprecated.
 extern const char kScreenTypeExtension[]; // Deprecated.
 
-extern const char kSupportedExtensionsForManage[]; // Deprecated.
-extern const char kSupportedExtensionsForView[]; // Deprecated.
-
-extern const quint32 kSupportedVideoEncodings;
-extern const quint32 kSupportedAudioEncodings;
-
 extern const char kFlagDisablePasteAsKeystrokes[]; // Deprecated.
 extern const char kFlagDisableAudio[]; // Deprecated.
 extern const char kFlagDisableClipboard[]; // Deprecated.
@@ -47,6 +41,9 @@ extern const char kFlagDisableDesktopEffects[]; // Deprecated.
 extern const char kFlagDisableDesktopWallpaper[]; // Deprecated.
 extern const char kFlagDisableLockAtDisconnect[]; // Deprecated.
 extern const char kFlagDisableBlockInput[]; // Deprecated.
+
+extern const quint32 kSupportedVideoEncodings;
+extern const quint32 kSupportedAudioEncodings;
 
 extern const char kFlagPasteAsKeystrokes[];
 extern const char kFlagAudio[];
