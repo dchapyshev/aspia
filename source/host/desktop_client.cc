@@ -141,7 +141,7 @@ void DesktopClient::onUserMessage(quint8 channel_id, const QByteArray& buffer)
         if (sessionType() != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
             return;
 
-        if (!(config_.flags() & proto::control::ENABLE_CLIPBOARD))
+        if (!config_.clipboard())
             return;
     }
 
@@ -197,7 +197,7 @@ void DesktopClient::onMessage(quint8 net_channel_id, const QByteArray& buffer)
         if (sessionType() != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
             return;
 
-        if (!(config_.flags() & proto::control::ENABLE_CLIPBOARD))
+        if (!config_.clipboard())
             return;
 
         emit sig_userMessage(net_channel_id, buffer);
@@ -211,7 +211,7 @@ void DesktopClient::onMessage(quint8 net_channel_id, const QByteArray& buffer)
         if (sessionType() != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
             return;
 
-        if (!(config_.flags() & proto::control::ENABLE_CLIPBOARD))
+        if (!config_.clipboard())
             return;
 
         emit sig_userMessage(net_channel_id, buffer);

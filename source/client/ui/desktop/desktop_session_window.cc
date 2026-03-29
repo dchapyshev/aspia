@@ -104,7 +104,7 @@ DesktopSessionWindow::DesktopSessionWindow(proto::peer::SessionType session_type
     connect(scroll_timer_, &QTimer::timeout, this, &DesktopSessionWindow::onScrollTimer);
 
     desktop_->enableKeyCombinations(toolbar_->sendKeyCombinations());
-    desktop_->enableRemoteCursorPosition(desktop_config_.flags() & proto::control::CURSOR_POSITION);
+    desktop_->enableRemoteCursorPosition(desktop_config_.cursor_position());
 
     connect(toolbar_, &DesktopToolBar::sig_keyCombination, desktop_, &DesktopWidget::executeKeyCombination);
     connect(toolbar_, &DesktopToolBar::sig_settingsButton, this, &DesktopSessionWindow::onSettings);
@@ -978,8 +978,8 @@ void DesktopSessionWindow::onConfigChanged(const proto::control::Config& desktop
 
     emit sig_desktopConfigChanged(desktop_config);
 
-    desktop_->enableRemoteCursorPosition(desktop_config_.flags() & proto::control::CURSOR_POSITION);
-    if (!(desktop_config_.flags() & proto::control::ENABLE_CURSOR_SHAPE))
+    desktop_->enableRemoteCursorPosition(desktop_config_.cursor_position());
+    if (!desktop_config_.cursor_shape())
         desktop_->setCursorShape(QPixmap(), QPoint());
 }
 

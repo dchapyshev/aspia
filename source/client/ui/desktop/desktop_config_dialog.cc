@@ -60,17 +60,10 @@ DesktopConfigDialog::DesktopConfigDialog(proto::peer::SessionType session_type,
 
     if (session_type == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
     {
-        if (config_.flags() & proto::control::LOCK_AT_DISCONNECT)
-            ui->checkbox_lock_at_disconnect->setChecked(true);
-
-        if (config_.flags() & proto::control::BLOCK_REMOTE_INPUT)
-            ui->checkbox_block_remote_input->setChecked(true);
-
-        if (config_.flags() & proto::control::ENABLE_CURSOR_SHAPE)
-            ui->checkbox_cursor_shape->setChecked(true);
-
-        if (config_.flags() & proto::control::ENABLE_CLIPBOARD)
-            ui->checkbox_clipboard->setChecked(true);
+        ui->checkbox_lock_at_disconnect->setChecked(config_.lock_at_disconnect());
+        ui->checkbox_block_remote_input->setChecked(config_.block_input());
+        ui->checkbox_cursor_shape->setChecked(config_.cursor_shape());
+        ui->checkbox_clipboard->setChecked(config_.clipboard());
     }
     else
     {
@@ -79,14 +72,9 @@ DesktopConfigDialog::DesktopConfigDialog(proto::peer::SessionType session_type,
         ui->checkbox_clipboard->hide();
     }
 
-    if (config_.flags() & proto::control::CURSOR_POSITION)
-        ui->checkbox_enable_cursor_pos->setChecked(true);
-
-    if (config_.flags() & proto::control::DISABLE_EFFECTS)
-        ui->checkbox_desktop_effects->setChecked(true);
-
-    if (config_.flags() & proto::control::DISABLE_WALLPAPER)
-        ui->checkbox_desktop_wallpaper->setChecked(true);
+    ui->checkbox_enable_cursor_pos->setChecked(config_.cursor_position());
+    ui->checkbox_desktop_effects->setChecked(!config_.desktop_effects());
+    ui->checkbox_desktop_wallpaper->setChecked(!config_.desktop_wallpaper());
 
     connect(combo_codec, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &DesktopConfigDialog::onCodecChanged);
@@ -188,30 +176,13 @@ void DesktopConfigDialog::onButtonBoxClicked(QAbstractButton* button)
         else
             config_.set_audio_encoding(proto::audio::ENCODING_UNKNOWN);
 
-        quint32 flags = 0;
-
-        if (ui->checkbox_cursor_shape->isChecked() && ui->checkbox_cursor_shape->isEnabled())
-            flags |= proto::control::ENABLE_CURSOR_SHAPE;
-
-        if (ui->checkbox_enable_cursor_pos->isChecked())
-            flags |= proto::control::CURSOR_POSITION;
-
-        if (ui->checkbox_clipboard->isChecked() && ui->checkbox_clipboard->isEnabled())
-            flags |= proto::control::ENABLE_CLIPBOARD;
-
-        if (ui->checkbox_desktop_effects->isChecked())
-            flags |= proto::control::DISABLE_EFFECTS;
-
-        if (ui->checkbox_desktop_wallpaper->isChecked())
-            flags |= proto::control::DISABLE_WALLPAPER;
-
-        if (ui->checkbox_block_remote_input->isChecked())
-            flags |= proto::control::BLOCK_REMOTE_INPUT;
-
-        if (ui->checkbox_lock_at_disconnect->isChecked())
-            flags |= proto::control::LOCK_AT_DISCONNECT;
-
-        config_.set_flags(flags);
+        config_.set_cursor_shape(ui->checkbox_cursor_shape->isChecked() && ui->checkbox_cursor_shape->isEnabled());
+        config_.set_cursor_position(ui->checkbox_enable_cursor_pos->isChecked());
+        config_.set_clipboard(ui->checkbox_clipboard->isChecked() && ui->checkbox_clipboard->isEnabled());
+        config_.set_desktop_effects(!ui->checkbox_desktop_effects->isChecked());
+        config_.set_desktop_wallpaper(!ui->checkbox_desktop_wallpaper->isChecked());
+        config_.set_block_input(ui->checkbox_block_remote_input->isChecked());
+        config_.set_lock_at_disconnect(ui->checkbox_lock_at_disconnect->isChecked());
 
         emit sig_configChanged(config_);
         accept();

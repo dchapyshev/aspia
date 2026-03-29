@@ -70,21 +70,21 @@ void DesktopAgentClient::onScreenTypeData(const QByteArray& buffer)
 //--------------------------------------------------------------------------------------------------
 void DesktopAgentClient::onCursorPositionData(const QByteArray& buffer)
 {
-    if (config_.cursor_position)
+    if (config_.cursor_position())
         sendSessionMessage(proto::desktop::CHANNEL_ID_CURSOR, buffer, false);
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopAgentClient::onCursorData(const QByteArray& buffer)
 {
-    if (config_.cursor_shape)
+    if (config_.cursor_shape())
         sendSessionMessage(proto::desktop::CHANNEL_ID_CURSOR, buffer, true);
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopAgentClient::onAudioData(const QByteArray& buffer)
 {
-    if (is_audio_paused_ || config_.audio_encoding != proto::audio::ENCODING_OPUS)
+    if (is_audio_paused_ || config_.audio_encoding() != proto::audio::ENCODING_OPUS)
         return;
 
     if (overflow_state_ == proto::desktop::Overflow::STATE_CRITICAL)
@@ -324,23 +324,8 @@ void DesktopAgentClient::readAudioPause(const proto::audio::Pause& pause)
 //--------------------------------------------------------------------------------------------------
 void DesktopAgentClient::readConfig(const proto::control::Config& config)
 {
-    config_.video_encoding = config.video_encoding();
-    config_.audio_encoding = config.audio_encoding();
-    config_.disable_effects = (config.flags() & proto::control::DISABLE_EFFECTS);
-    config_.disable_wallpaper = (config.flags() & proto::control::DISABLE_WALLPAPER);
-    config_.block_input = (config.flags() & proto::control::BLOCK_REMOTE_INPUT);
-    config_.lock_at_disconnect = (config.flags() & proto::control::LOCK_AT_DISCONNECT);
-    config_.cursor_position = (config.flags() & proto::control::CURSOR_POSITION);
-    config_.cursor_shape = (config.flags() & proto::control::ENABLE_CURSOR_SHAPE);
-
-    CLOG(INFO) << "Config changed (encoding:" << config.video_encoding()
-               << "cursor_shape:" << config_.cursor_shape
-               << "effects:" << config_.disable_effects
-               << "wallpaper:" << config_.disable_wallpaper
-               << "block_input:" << config_.block_input
-               << "lock_at_disconnect:" << config_.lock_at_disconnect
-               << "cursor_position:" << config_.cursor_position
-               << "cursor_shape:" << config_.cursor_shape << ")";
+    config_ = config;
+    CLOG(INFO) << "Config changed:" << config;
     emit sig_configured();
 }
 

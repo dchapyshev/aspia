@@ -22,7 +22,6 @@ option optimize_for = LITE_RUNTIME;
 
 import "desktop_audio.proto";
 import "desktop_clipboard.proto";
-import "desktop_control.proto";
 import "desktop_cursor.proto";
 import "desktop_input.proto";
 import "desktop_video.proto";
@@ -57,6 +56,31 @@ message Capabilities
     repeated Flag flag     = 5;
 }
 
+enum ConfigFlags
+{
+    NO_FLAGS               = 0;
+    ENABLE_CURSOR_SHAPE    = 1;
+    ENABLE_CLIPBOARD       = 2;
+    DISABLE_EFFECTS        = 4;
+    DISABLE_WALLPAPER      = 8;
+    // DISABLE_FONT_SMOOTHING (16) is deprecated.
+    BLOCK_REMOTE_INPUT     = 32;
+    LOCK_AT_DISCONNECT     = 64;
+    CURSOR_POSITION        = 128;
+    // CLEAR_CLIPBOARD (256) is deprecated.
+}
+
+message Config
+{
+    uint32 flags                  = 1;
+    video.Encoding video_encoding = 2;
+    // Field 3 (pixel format) is deprecated.
+    // Field 4 is deprecated.
+    // Field 5 (compress ratio) is deprecated.
+    // Field 6 is deprecated.
+    audio.Encoding audio_encoding = 7;
+}
+
 // Client <- Host (channel 0).
 message SessionToClient
 {
@@ -78,6 +102,6 @@ message ClientToSession
     input.TextEvent text_event      = 4;
     clipboard.Event clipboard_event = 5;
     Extension extension             = 6;
-    control.Config config           = 7;
+    Config config                   = 7;
     audio.Packet audio_packet       = 8;
 }

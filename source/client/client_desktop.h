@@ -46,8 +46,6 @@ class WebmVideoEncoder;
 
 namespace client {
 
-class AudioRenderer;
-
 class ClientDesktop final : public Client
 {
     Q_OBJECT

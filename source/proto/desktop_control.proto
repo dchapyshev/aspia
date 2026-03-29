@@ -32,6 +32,8 @@ message Capabilities
         OS_TYPE_WINDOWS = 0;
         OS_TYPE_LINUX   = 1;
         OS_TYPE_MACOSX  = 2;
+        OS_TYPE_ANDROID = 3;
+        OS_TYPE_IOS     = 4;
     }
 
     message Flag
@@ -44,20 +46,6 @@ message Capabilities
     uint32 audio_encodings = 2;
     OsType os_type         = 3;
     repeated Flag flag     = 4;
-}
-
-enum ConfigFlags
-{
-    NO_FLAGS               = 0;
-    ENABLE_CURSOR_SHAPE    = 1;
-    ENABLE_CLIPBOARD       = 2;
-    DISABLE_EFFECTS        = 4;
-    DISABLE_WALLPAPER      = 8;
-    // DISABLE_FONT_SMOOTHING (16) is deprecated.
-    BLOCK_REMOTE_INPUT     = 32;
-    LOCK_AT_DISCONNECT     = 64;
-    CURSOR_POSITION        = 128;
-    // CLEAR_CLIPBOARD (256) is deprecated.
 }
 
 message SwitchSession
@@ -88,13 +76,15 @@ message SessionListRequest
 
 message Config
 {
-    uint32 flags                  = 1;
-    video.Encoding video_encoding = 2;
-    // Field 3 (pixel format) is deprecated.
-    // Field 4 is deprecated.
-    // Field 5 (compress ratio) is deprecated.
-    // Field 6 is deprecated.
-    audio.Encoding audio_encoding = 7;
+    video.Encoding video_encoding = 1;
+    audio.Encoding audio_encoding = 2;
+    bool cursor_shape             = 3;
+    bool cursor_position          = 4;
+    bool clipboard                = 5;
+    bool desktop_effects          = 6;
+    bool desktop_wallpaper        = 7;
+    bool block_input              = 8;
+    bool lock_at_disconnect       = 9;
 }
 
 // Client <- Host (channel 1).

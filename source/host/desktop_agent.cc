@@ -273,52 +273,56 @@ void DesktopAgent::onIpcMessageReceived(
 //--------------------------------------------------------------------------------------------------
 void DesktopAgent::onClientConfigured()
 {
-    DesktopAgentClient::Config merged_config;
+    proto::control::Config merged_config;
+    merged_config.set_video_encoding(proto::video::ENCODING_VP9);
+    merged_config.set_audio_encoding(proto::audio::ENCODING_UNKNOWN);
+    merged_config.set_cursor_shape(false);
+    merged_config.set_cursor_position(false);
+    merged_config.set_clipboard(false);
+    merged_config.set_desktop_effects(false);
+    merged_config.set_desktop_wallpaper(false);
+    merged_config.set_block_input(false);
+    merged_config.set_lock_at_disconnect(false);
 
     for (auto* client : std::as_const(clients_))
     {
-        const DesktopAgentClient::Config& config = client->config();
+        const proto::control::Config& config = client->config();
 
-        if (config.video_encoding == proto::video::ENCODING_VP8)
-            merged_config.video_encoding = proto::video::ENCODING_VP8;
+        if (config.video_encoding() == proto::video::ENCODING_VP8)
+            merged_config.set_video_encoding(proto::video::ENCODING_VP8);
 
-        if (config.audio_encoding == proto::audio::ENCODING_OPUS)
-            merged_config.audio_encoding = proto::audio::ENCODING_OPUS;
+        if (config.audio_encoding() == proto::audio::ENCODING_OPUS)
+            merged_config.set_audio_encoding(proto::audio::ENCODING_OPUS);
 
         // If at least one client has disabled effects, then the effects will be disabled for
         // everyone.
-        merged_config.disable_effects = merged_config.disable_effects || config.disable_effects;
+        merged_config.set_desktop_effects(merged_config.desktop_effects() && config.desktop_effects());
 
         // If at least one client has disabled the wallpaper, then the effects will be disabled for
         // everyone.
-        merged_config.disable_wallpaper = merged_config.disable_wallpaper || config.disable_wallpaper;
+        merged_config.set_desktop_wallpaper(merged_config.desktop_wallpaper() || config.desktop_wallpaper());
 
         // If at least one client has enabled input block, then the block will be enabled for
         // everyone.
-        merged_config.block_input = merged_config.block_input || config.block_input;
+        merged_config.set_block_input(merged_config.block_input() || config.block_input());
 
-        merged_config.lock_at_disconnect = merged_config.lock_at_disconnect || config.lock_at_disconnect;
-        merged_config.cursor_position = merged_config.cursor_position || config.cursor_position;
-        merged_config.cursor_shape = merged_config.cursor_shape || config.cursor_shape;
+        merged_config.set_lock_at_disconnect(merged_config.lock_at_disconnect() || config.lock_at_disconnect());
+        merged_config.set_cursor_position(merged_config.cursor_position() || config.cursor_position());
+        merged_config.set_cursor_shape(merged_config.cursor_shape() || config.cursor_shape());
     }
 
-    LOG(INFO) << "Merged configuration (wallpaper:" << merged_config.disable_wallpaper
-              << "effects:" << merged_config.disable_effects
-              << "block_input:" << merged_config.block_input
-              << "lock_at_disconnect:" << merged_config.lock_at_disconnect
-              << "cursor_position:" << merged_config.cursor_position
-              << "cursor_shape:" << merged_config.cursor_shape << ")";
+    LOG(INFO) << "Merged configuration:" << merged_config;
 
-    if (merged_config.video_encoding != proto::video::ENCODING_VP8 &&
-        merged_config.video_encoding != proto::video::ENCODING_VP9)
+    if (merged_config.video_encoding() != proto::video::ENCODING_VP8 &&
+        merged_config.video_encoding() != proto::video::ENCODING_VP9)
     {
-        LOG(ERROR) << "Unsupported video encoding:" << merged_config.video_encoding;
+        LOG(ERROR) << "Unsupported video encoding:" << merged_config.video_encoding();
         return;
     }
 
-    video_encoder_ = std::make_unique<base::VideoEncoder>(merged_config.video_encoding);
+    video_encoder_ = std::make_unique<base::VideoEncoder>(merged_config.video_encoding());
 
-    switch (merged_config.audio_encoding)
+    switch (merged_config.audio_encoding())
     {
         case proto::audio::ENCODING_OPUS:
         {
@@ -348,7 +352,7 @@ void DesktopAgent::onClientConfigured()
     }
 
     cursor_encoder_.reset();
-    if (merged_config.cursor_shape)
+    if (merged_config.cursor_shape())
     {
         LOG(INFO) << "Cursor shape enabled. Init cursor encoder";
         cursor_encoder_ = std::make_unique<base::CursorEncoder>();
@@ -356,15 +360,15 @@ void DesktopAgent::onClientConfigured()
 
     if (desktop_environment_)
     {
-        desktop_environment_->setWallpaper(!merged_config.disable_wallpaper);
-        desktop_environment_->setEffects(!merged_config.disable_effects);
+        desktop_environment_->setWallpaper(merged_config.desktop_wallpaper());
+        desktop_environment_->setEffects(merged_config.desktop_effects());
     }
 
     if (input_injector_)
-        input_injector_->setBlockInput(merged_config.block_input);
+        input_injector_->setBlockInput(merged_config.block_input());
 
-    is_cursor_position_ = merged_config.cursor_position;
-    is_lock_at_disconnect_ = merged_config.lock_at_disconnect;
+    is_cursor_position_ = merged_config.cursor_position();
+    is_lock_at_disconnect_ = merged_config.lock_at_disconnect();
 
     capture_timer_->start(0);
 }

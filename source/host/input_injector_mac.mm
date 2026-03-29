@@ -47,13 +47,19 @@ void InputInjectorMac::injectKeyEvent(const proto::input::KeyEvent& /* event */)
 }
 
 //--------------------------------------------------------------------------------------------------
+void InputInjectorMac::injectTextEvent(const proto::input::TextEvent& /* event */)
+{
+    NOTIMPLEMENTED();
+}
+
+//--------------------------------------------------------------------------------------------------
 void InputInjectorMac::injectMouseEvent(const proto::input::MouseEvent& /* event */)
 {
     NOTIMPLEMENTED();
 }
 
 //--------------------------------------------------------------------------------------------------
-void InputInjectorX11::injectTouchEvent(const proto::input::TouchEvent& /* event */)
+void InputInjectorMac::injectTouchEvent(const proto::input::TouchEvent& /* event */)
 {
     NOTIMPLEMENTED();
 }

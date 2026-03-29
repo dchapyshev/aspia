@@ -20,7 +20,8 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
-import "desktop_control.proto";
+import "desktop_audio.proto";
+import "desktop_video.proto";
 import "peer.proto";
 
 package proto.address_book;
@@ -33,10 +34,29 @@ enum EncryptionType
     ENCRYPTION_TYPE_CHACHA20_POLY1305  = 3;
 }
 
+enum DesktopConfigFlags
+{
+    NO_FLAGS            = 0;
+    ENABLE_CURSOR_SHAPE = 1;
+    ENABLE_CLIPBOARD    = 2;
+    DISABLE_EFFECTS     = 4;
+    DISABLE_WALLPAPER   = 8;
+    BLOCK_REMOTE_INPUT  = 32;
+    LOCK_AT_DISCONNECT  = 64;
+    CURSOR_POSITION     = 128;
+}
+
+message DesktopConfig
+{
+    uint32 flags                  = 1;
+    video.Encoding video_encoding = 2;
+    audio.Encoding audio_encoding = 7;
+}
+
 message SessionConfig
 {
-    control.Config desktop_manage = 1;
-    control.Config desktop_view   = 2;
+    DesktopConfig desktop_manage = 1;
+    DesktopConfig desktop_view   = 2;
 }
 
 message InheritConfig

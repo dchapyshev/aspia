@@ -303,7 +303,8 @@ void FastConnectDialog::onButtonBoxClicked(QAbstractButton* button)
             proto::control::Config desktop_config;
 
             if (ui.checkbox_use_session_params->isChecked())
-                desktop_config = default_config_.session_config().desktop_manage();
+                desktop_config = ComputerFactory::toClientConfig(
+                    default_config_.session_config().desktop_manage());
             else
                 desktop_config = state_.desktop_manage_config;
 
@@ -317,7 +318,8 @@ void FastConnectDialog::onButtonBoxClicked(QAbstractButton* button)
             proto::control::Config desktop_config;
 
             if (ui.checkbox_use_session_params->isChecked())
-                desktop_config = default_config_.session_config().desktop_view();
+                desktop_config = ComputerFactory::toClientConfig(
+                    default_config_.session_config().desktop_view());
             else
                 desktop_config = state_.desktop_view_config;
 

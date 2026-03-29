@@ -24,13 +24,13 @@
 namespace console {
 
 //--------------------------------------------------------------------------------------------------
-void ComputerFactory::setDefaultDesktopManageConfig(proto::control::Config* config)
+void ComputerFactory::setDefaultDesktopManageConfig(proto::address_book::DesktopConfig* config)
 {
     DCHECK(config);
 
     static const quint32 kDefaultFlags =
-        proto::control::ENABLE_CLIPBOARD | proto::control::ENABLE_CURSOR_SHAPE |
-        proto::control::DISABLE_EFFECTS | proto::control::DISABLE_WALLPAPER;
+        proto::address_book::ENABLE_CLIPBOARD | proto::address_book::ENABLE_CURSOR_SHAPE |
+        proto::address_book::DISABLE_EFFECTS | proto::address_book::DISABLE_WALLPAPER;
 
     config->set_flags(kDefaultFlags);
     config->set_video_encoding(proto::video::ENCODING_VP8);
@@ -38,12 +38,12 @@ void ComputerFactory::setDefaultDesktopManageConfig(proto::control::Config* conf
 }
 
 //--------------------------------------------------------------------------------------------------
-void ComputerFactory::setDefaultDesktopViewConfig(proto::control::Config* config)
+void ComputerFactory::setDefaultDesktopViewConfig(proto::address_book::DesktopConfig* config)
 {
     DCHECK(config);
 
     static const quint32 kDefaultFlags =
-        proto::control::DISABLE_EFFECTS | proto::control::DISABLE_WALLPAPER;
+        proto::address_book::DISABLE_EFFECTS | proto::address_book::DISABLE_WALLPAPER;
 
     config->set_flags(kDefaultFlags);
     config->set_video_encoding(proto::video::ENCODING_VP8);
@@ -68,6 +68,28 @@ proto::address_book::Computer ComputerFactory::defaultComputer()
     setDefaultDesktopViewConfig(computer.mutable_session_config()->mutable_desktop_view());
 
     return computer;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+proto::control::Config ComputerFactory::toClientConfig(const proto::address_book::DesktopConfig& config)
+{
+    proto::control::Config client_config;
+
+    client_config.set_video_encoding(config.video_encoding());
+    client_config.set_audio_encoding(config.audio_encoding());
+
+    const quint32 flags = config.flags();
+
+    client_config.set_cursor_shape(flags & proto::address_book::ENABLE_CURSOR_SHAPE);
+    client_config.set_cursor_position(flags & proto::address_book::CURSOR_POSITION);
+    client_config.set_clipboard(flags & proto::address_book::ENABLE_CLIPBOARD);
+    client_config.set_desktop_effects(!(flags & proto::address_book::DISABLE_EFFECTS));
+    client_config.set_desktop_wallpaper(!(flags & proto::address_book::DISABLE_WALLPAPER));
+    client_config.set_block_input(flags & proto::address_book::BLOCK_REMOTE_INPUT);
+    client_config.set_lock_at_disconnect(flags & proto::address_book::LOCK_AT_DISCONNECT);
+
+    return client_config;
 }
 
 } // namespace console

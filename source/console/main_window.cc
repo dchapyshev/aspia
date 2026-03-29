@@ -40,6 +40,7 @@
 #include "common/ui/update_dialog.h"
 #include "console/address_book_tab.h"
 #include "console/application.h"
+#include "console/computer_factory.h"
 #include "console/fast_connect_dialog.h"
 #include "console/import_export_util.h"
 #include "console/mru_action.h"
@@ -1747,15 +1748,15 @@ void MainWindow::connectToComputer(const proto::address_book::Computer& computer
     {
         case proto::peer::SESSION_TYPE_DESKTOP_MANAGE:
         {
-            session_window = new client::DesktopSessionWindow(
-                config.session_type, computer.session_config().desktop_manage());
+            session_window = new client::DesktopSessionWindow(config.session_type,
+                ComputerFactory::toClientConfig(computer.session_config().desktop_manage()));
         }
         break;
 
         case proto::peer::SESSION_TYPE_DESKTOP_VIEW:
         {
-            session_window = new client::DesktopSessionWindow(
-                config.session_type, computer.session_config().desktop_view());
+            session_window = new client::DesktopSessionWindow(config.session_type,
+                ComputerFactory::toClientConfig(computer.session_config().desktop_view()));
         }
         break;
 

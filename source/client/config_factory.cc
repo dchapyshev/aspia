@@ -52,14 +52,15 @@ proto::control::Config ConfigFactory::defaultDesktopViewConfig()
 void ConfigFactory::setDefaultDesktopManageConfig(proto::control::Config* config)
 {
     DCHECK(config);
-
-    static const quint32 kDefaultFlags =
-        proto::control::ENABLE_CLIPBOARD | proto::control::ENABLE_CURSOR_SHAPE |
-        proto::control::DISABLE_EFFECTS | proto::control::DISABLE_WALLPAPER;
-
-    config->set_flags(kDefaultFlags);
     config->set_video_encoding(kDefaultVideoEncoding);
     config->set_audio_encoding(kDefaultAudioEncoding);
+    config->set_cursor_shape(true);
+    config->set_cursor_position(false);
+    config->set_clipboard(true);
+    config->set_desktop_effects(false);
+    config->set_desktop_wallpaper(false);
+    config->set_block_input(false);
+    config->set_lock_at_disconnect(false);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -67,13 +68,15 @@ void ConfigFactory::setDefaultDesktopManageConfig(proto::control::Config* config
 void ConfigFactory::setDefaultDesktopViewConfig(proto::control::Config* config)
 {
     DCHECK(config);
-
-    static const quint32 kDefaultFlags =
-        proto::control::DISABLE_EFFECTS | proto::control::DISABLE_WALLPAPER;
-
-    config->set_flags(kDefaultFlags);
     config->set_video_encoding(kDefaultVideoEncoding);
     config->set_audio_encoding(kDefaultAudioEncoding);
+    config->set_cursor_shape(false);
+    config->set_cursor_position(false);
+    config->set_clipboard(false);
+    config->set_desktop_effects(false);
+    config->set_desktop_wallpaper(false);
+    config->set_block_input(false);
+    config->set_lock_at_disconnect(false);
 }
 
 } // namespace client

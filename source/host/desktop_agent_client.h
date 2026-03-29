@@ -41,23 +41,11 @@ public:
     explicit DesktopAgentClient(QObject* parent = nullptr);
     ~DesktopAgentClient() final;
 
-    struct Config
-    {
-        proto::video::Encoding video_encoding = proto::video::ENCODING_VP9;
-        proto::audio::Encoding audio_encoding = proto::audio::ENCODING_UNKNOWN;
-        bool disable_wallpaper = true;
-        bool disable_effects = true;
-        bool block_input = false;
-        bool lock_at_disconnect = false;
-        bool cursor_position = false;
-        bool cursor_shape = false;
-    };
-
     proto::peer::SessionType sessionType() const { return session_type_; }
     proto::desktop::Overflow::State overflowState() const { return overflow_state_; }
     const QSize& preferredSize() const { return preferred_size_; }
     qint64 bandwidth() const { return bandwidth_; }
-    const Config& config() const { return config_; }
+    const proto::control::Config& config() const { return config_; }
 
     void onVideoData(const QByteArray& buffer);
     void onScreenListData(const QByteArray& buffer);
@@ -106,7 +94,7 @@ private:
 
     proto::desktop::Overflow::State overflow_state_ = proto::desktop::Overflow::STATE_NONE;
     proto::peer::SessionType session_type_ = proto::peer::SESSION_TYPE_UNKNOWN;
-    Config config_;
+    proto::control::Config config_;
 
     QSize preferred_size_;
     qint64 bandwidth_ = 0;

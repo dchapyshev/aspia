@@ -20,15 +20,18 @@
 #define CONSOLE_COMPUTER_FACTORY_H
 
 #include "proto/address_book.h"
+#include "proto/desktop_control.h"
 
 namespace console {
 
 class ComputerFactory
 {
 public:
-    static void setDefaultDesktopManageConfig(proto::control::Config* config);
-    static void setDefaultDesktopViewConfig(proto::control::Config* config);
+    static void setDefaultDesktopManageConfig(proto::address_book::DesktopConfig* config);
+    static void setDefaultDesktopViewConfig(proto::address_book::DesktopConfig* config);
     static proto::address_book::Computer defaultComputer();
+
+    static proto::control::Config toClientConfig(const proto::address_book::DesktopConfig& config);
 
 private:
     Q_DISABLE_COPY_MOVE(ComputerFactory)

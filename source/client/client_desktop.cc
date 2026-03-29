@@ -299,20 +299,41 @@ void ClientDesktop::onDesktopConfigChanged(const proto::control::Config& config)
 {
     desktop_config_ = config;
 
-    if (!(desktop_config_.flags() & proto::control::ENABLE_CURSOR_SHAPE))
+    if (!desktop_config_.cursor_shape())
     {
         CLOG(INFO) << "Cursor shape disabled";
         cursor_decoder_.reset();
     }
 
-    input_event_filter_.setClipboardEnabled(desktop_config_.flags() & proto::control::ENABLE_CLIPBOARD);
+    input_event_filter_.setClipboardEnabled(desktop_config_.clipboard());
 
     CLOG(INFO) << "Send:" << config;
 
     if (isLegacy())
     {
         proto::legacy::ClientToSession message;
-        message.mutable_config()->CopyFrom(desktop_config_);
+        proto::legacy::Config* legacy_config = message.mutable_config();
+
+        quint32 flags = proto::legacy::NO_FLAGS;
+        if (config.cursor_shape())
+            flags |= proto::legacy::ENABLE_CURSOR_SHAPE;
+        if (config.clipboard())
+            flags |= proto::legacy::ENABLE_CLIPBOARD;
+        if (!config.desktop_effects())
+            flags |= proto::legacy::DISABLE_EFFECTS;
+        if (!config.desktop_wallpaper())
+            flags |= proto::legacy::DISABLE_WALLPAPER;
+        if (config.block_input())
+            flags |= proto::legacy::BLOCK_REMOTE_INPUT;
+        if (config.lock_at_disconnect())
+            flags |= proto::legacy::LOCK_AT_DISCONNECT;
+        if (config.cursor_position())
+            flags |= proto::legacy::CURSOR_POSITION;
+
+        legacy_config->set_flags(flags);
+        legacy_config->set_video_encoding(config.video_encoding());
+        legacy_config->set_audio_encoding(config.audio_encoding());
+
         sendMessage(proto::desktop::CHANNEL_ID_LEGACY, base::serialize(message));
     }
     else
@@ -915,7 +936,7 @@ void ClientDesktop::readCursorShape(const proto::cursor::Shape& shape)
         return;
     }
 
-    if (!(desktop_config_.flags() & proto::control::ENABLE_CURSOR_SHAPE))
+    if (!desktop_config_.cursor_shape())
     {
         CLOG(ERROR) << "Cursor shape received not disabled in client";
         return;
@@ -939,7 +960,7 @@ void ClientDesktop::readCursorShape(const proto::cursor::Shape& shape)
 //--------------------------------------------------------------------------------------------------
 void ClientDesktop::readCursorPosition(const proto::cursor::Position& position)
 {
-    if (!(desktop_config_.flags() & proto::control::CURSOR_POSITION))
+    if (!desktop_config_.cursor_position())
         return;
 
     ++cursor_pos_count_;

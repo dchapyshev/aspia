@@ -176,7 +176,7 @@ proto::address_book::InheritConfig readInheritConfig(
 }
 
 //--------------------------------------------------------------------------------------------------
-proto::control::Config readDesktopConfig(const QJsonObject& json_desktop_config)
+proto::address_book::DesktopConfig readDesktopConfig(const QJsonObject& json_desktop_config)
 {
     int flags = json_desktop_config["flags"].toInt();
 
@@ -194,7 +194,7 @@ proto::control::Config readDesktopConfig(const QJsonObject& json_desktop_config)
         audio_encoding = static_cast<int>(proto::audio::ENCODING_OPUS);
     }
 
-    proto::control::Config desktop_config;
+    proto::address_book::DesktopConfig desktop_config;
     desktop_config.set_flags(flags);
     desktop_config.set_video_encoding(static_cast<proto::video::Encoding>(video_encoding));
     desktop_config.set_audio_encoding(static_cast<proto::audio::Encoding>(audio_encoding));
@@ -206,10 +206,10 @@ proto::control::Config readDesktopConfig(const QJsonObject& json_desktop_config)
 proto::address_book::SessionConfig readSessionConfig(const QJsonObject& json_session_config)
 {
     QJsonObject json_desktop_manage = json_session_config["desktop_manage"].toObject();
-    proto::control::Config desktop_manage = readDesktopConfig(json_desktop_manage);
+    proto::address_book::DesktopConfig desktop_manage = readDesktopConfig(json_desktop_manage);
 
     QJsonObject json_desktop_view = json_session_config["desktop_view"].toObject();
-    proto::control::Config desktop_view = readDesktopConfig(json_desktop_view);
+    proto::address_book::DesktopConfig desktop_view = readDesktopConfig(json_desktop_view);
 
     proto::address_book::SessionConfig session_config;
     session_config.mutable_desktop_manage()->CopyFrom(desktop_manage);
@@ -357,7 +357,7 @@ int readComputerGroup(
 }
 
 //--------------------------------------------------------------------------------------------------
-QJsonObject writeDesktopConfig(const proto::control::Config& desktop_config)
+QJsonObject writeDesktopConfig(const proto::address_book::DesktopConfig& desktop_config)
 {
     QJsonObject json_desktop_config;
 

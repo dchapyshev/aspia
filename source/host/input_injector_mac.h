@@ -33,6 +33,7 @@ public:
     void setScreenOffset(const QPoint& offset) final;
     void setBlockInput(bool enable) final;
     void injectKeyEvent(const proto::input::KeyEvent& event) final;
+    void injectTextEvent(const proto::input::TextEvent& event) final;
     void injectMouseEvent(const proto::input::MouseEvent& event) final;
     void injectTouchEvent(const proto::input::TouchEvent& event) final;
 
