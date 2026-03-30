@@ -75,7 +75,7 @@ void DesktopAgentClient::onCursorPositionData(const QByteArray& buffer)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::onCursorData(const QByteArray& buffer)
+void DesktopAgentClient::onCursorShapeData(const QByteArray& buffer)
 {
     if (config_.cursor_shape())
         sendSessionMessage(proto::desktop::CHANNEL_ID_CURSOR, buffer, true);

@@ -51,7 +51,7 @@ public:
     void onScreenListData(const QByteArray& buffer);
     void onScreenTypeData(const QByteArray& buffer);
     void onCursorPositionData(const QByteArray& buffer);
-    void onCursorData(const QByteArray& buffer);
+    void onCursorShapeData(const QByteArray& buffer);
     void onAudioData(const QByteArray& buffer);
 
 public slots:

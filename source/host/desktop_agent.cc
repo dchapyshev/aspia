@@ -1030,7 +1030,7 @@ void DesktopAgent::encodeCursor(const base::MouseCursor* cursor)
 
     const QByteArray& buffer = cursor_message_.serialize();
     for (auto* client : std::as_const(clients_))
-        client->onCursorData(buffer);
+        client->onCursorShapeData(buffer);
 }
 
 //--------------------------------------------------------------------------------------------------
