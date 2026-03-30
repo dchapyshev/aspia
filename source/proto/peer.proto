@@ -81,7 +81,7 @@ message BandwidthProbe
 
 message BandwidthProbeAck
 {
-    int64 dummy = 1;
+    int64 dummy = 1; // Always set to 1.
 }
 
 message Control

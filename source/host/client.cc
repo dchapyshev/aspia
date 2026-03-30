@@ -88,8 +88,13 @@ Client::Client(base::TcpChannel* tcp_channel, QObject* parent)
         if (idle_duration.count() < kIdleThresholdMs)
             return;
 
+        if (udp_state_ == UdpState::READY)
+        {
+            sendUdpBandwidthProbe(current_time);
+            return;
+        }
+
         sendTcpBandwidthProbe(current_time);
-        sendUdpBandwidthProbe(current_time);
     });
 }
 
@@ -718,27 +723,14 @@ void Client::checkBandwidth()
         return;
     }
 
-    if (udp_probe_.bandwidth > 1000 * 1024 || udp_probe_.bandwidth * 2 >= tcp_probe_.bandwidth)
+    if (udp_state_ == UdpState::PROBED)
     {
-        if (udp_state_ == UdpState::PROBED)
-        {
-            CLOG(INFO) << "Switching traffic to UDP";
-            setUdpState(FROM_HERE, UdpState::READY);
-            emit sig_channelChanged();
-        }
-
-        onBandwidthChanged(udp_probe_.bandwidth);
-        return;
-    }
-
-    if (udp_state_ == UdpState::READY)
-    {
-        CLOG(INFO) << "Switching traffic to TCP";
-        setUdpState(FROM_HERE, UdpState::PROBED);
+        CLOG(INFO) << "Switching traffic to UDP";
+        setUdpState(FROM_HERE, UdpState::READY);
         emit sig_channelChanged();
     }
 
-    onBandwidthChanged(tcp_probe_.bandwidth);
+    onBandwidthChanged(udp_probe_.bandwidth);
 }
 
 //--------------------------------------------------------------------------------------------------
