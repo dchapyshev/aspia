@@ -867,7 +867,7 @@ void ClientDesktop::readVideoPacket(const proto::video::Packet& packet)
         key_frame_received_ = false;
         sendKeyFrameRequest();
 
-        reliability_score_ = std::min(reliability_score_ + 30, 100);
+        reliability_score_ = std::min(reliability_score_ + 50, 100);
         checkReliabilityThresholds();
         return;
     }
