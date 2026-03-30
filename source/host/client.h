@@ -126,7 +126,6 @@ private:
     void onControl(const proto::peer::Control& control);
     void checkBandwidth();
     void setUdpState(const base::Location& location, UdpState state);
-    static QByteArray makeBandwidthProbeData();
 
     Features features_ = FEATURE_NONE;
     base::TcpChannel* tcp_channel_ = nullptr;

@@ -45,6 +45,21 @@ const int kInitialProbeTimeoutMs = 5000;   // 5 seconds to wait for initial prob
 const int kUdpConnectTimeoutMs = 5000;   // 5 seconds to wait for UDP connection after setPeerAddress.
 const int kUdpReconnectDelayMs = 5000;  // 5 seconds before attempting UDP reconnection.
 
+//--------------------------------------------------------------------------------------------------
+QByteArray makeBandwidthProbeData()
+{
+    std::string payload;
+    payload.resize(kProbeDataSize);
+    for (size_t i = 0; i < payload.size(); ++i)
+        payload[i] = static_cast<char>(i & 0xFF);
+
+    proto::peer::HostToClient message;
+    proto::peer::BandwidthProbe* probe = message.mutable_bandwidth_probe();
+    probe->set_payload(std::move(payload));
+
+    return base::serialize(message);
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -607,21 +622,6 @@ void Client::readDirectUdpReply(const proto::peer::DirectUdpReply& reply)
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray Client::makeBandwidthProbeData()
-{
-    std::string payload;
-    payload.resize(kProbeDataSize);
-    for (size_t i = 0; i < payload.size(); ++i)
-        payload[i] = static_cast<char>(i & 0xFF);
-
-    proto::peer::HostToClient message;
-    proto::peer::BandwidthProbe* probe = message.mutable_bandwidth_probe();
-    probe->set_payload(std::move(payload));
-
-    return base::serialize(message);
-}
-
-//--------------------------------------------------------------------------------------------------
 void Client::startBandwidthProbing()
 {
     last_send_time_ = TimePoint();
@@ -665,7 +665,7 @@ void Client::onTcpBandwidthProbeAck()
     tcp_probe_.bandwidth = (kProbeDataSize * 1000) / rtt.count();
     tcp_probe_.pending = false;
 
-    CLOG(INFO) << "TCP RTT:" << rtt.count() << "ms, bandwidth:" << (tcp_probe_.bandwidth / 1024) << "kB/s";
+    CLOG(INFO) << "TCP RTT:" << rtt.count() << "ms bandwidth:" << (tcp_probe_.bandwidth / 1024) << "kB/s";
     checkBandwidth();
 }
 
@@ -682,7 +682,7 @@ void Client::onUdpBandwidthProbeAck()
     udp_probe_.bandwidth = (kProbeDataSize * 1000) / rtt.count();
     udp_probe_.pending = false;
 
-    CLOG(INFO) << "UDP RTT:" << rtt.count() << "ms, bandwidth:" << (udp_probe_.bandwidth / 1024) << "kB/s";
+    CLOG(INFO) << "UDP RTT:" << rtt.count() << "ms bandwidth:" << (udp_probe_.bandwidth / 1024) << "kB/s";
     checkBandwidth();
 }
 
@@ -744,7 +744,7 @@ void Client::checkBandwidth()
 //--------------------------------------------------------------------------------------------------
 void Client::setUdpState(const base::Location& location, UdpState state)
 {
-    CLOG(INFO) << "UDP state changed from" << udp_state_ << "to" << state << "(" << location << ")";
+    CLOG(INFO) << "UDP state changed:" << udp_state_ << "->" << state << "(" << location << ")";
     udp_state_ = state;
 }
 
