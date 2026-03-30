@@ -79,13 +79,30 @@ bool convertImage(const proto::video::Packet& packet, vpx_image_t* image, Frame*
 //--------------------------------------------------------------------------------------------------
 VideoDecoder::VideoDecoder(proto::video::Encoding encoding)
 {
-    quint32 thread_count = QThread::idealThreadCount();
-    if (thread_count >= 8)
-        thread_count = 4;
-    else if (thread_count >= 4)
-        thread_count = 2;
-    else
-        thread_count = 1;
+    const int cpu_count = std::max(1, QThread::idealThreadCount());
+    quint32 thread_count;
+    vpx_codec_iface_t* algo;
+
+    switch (encoding)
+    {
+        case proto::video::ENCODING_VP8:
+            // VP8 does not support tile-based decoding, multithreading is only used for loop
+            // filter, so more than 2 threads provide no benefit.
+            thread_count = (cpu_count >= 4) ? 2 : 1;
+            algo = vpx_codec_vp8_dx();
+            break;
+
+        case proto::video::ENCODING_VP9:
+            // VP9 supports tile-based parallel decoding. Use half of the available cores,
+            // clamped to [2, 8] range to balance performance and CPU usage.
+            thread_count = std::clamp(cpu_count / 2, 2, 8);
+            algo = vpx_codec_vp9_dx();
+            break;
+
+        default:
+            LOG(FATAL) << "Unsupported video encoding:" << encoding;
+            return;
+    }
 
     LOG(INFO) << "VPX(" << encoding << ") Ctor (thread_count=" << thread_count << ")";
     codec_.reset(new vpx_codec_ctx_t());
@@ -94,23 +111,6 @@ VideoDecoder::VideoDecoder(proto::video::Encoding encoding)
     config.w = 0;
     config.h = 0;
     config.threads = thread_count;
-
-    vpx_codec_iface_t* algo;
-
-    switch (encoding)
-    {
-        case proto::video::ENCODING_VP8:
-            algo = vpx_codec_vp8_dx();
-            break;
-
-        case proto::video::ENCODING_VP9:
-            algo = vpx_codec_vp9_dx();
-            break;
-
-        default:
-            LOG(FATAL) << "Unsupported video encoding:" << encoding;
-            return;
-    }
 
     int ret = vpx_codec_dec_init(codec_.get(), algo, &config, 0);
     CHECK_EQ(ret, VPX_CODEC_OK);
