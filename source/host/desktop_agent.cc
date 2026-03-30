@@ -778,7 +778,7 @@ void DesktopAgent::onOverflowCheck()
 
     if (forced_size != forced_size_)
     {
-        LOG(INFO) << "Forced size changed from" << forced_size_ << "to" << forced_size;
+        LOG(INFO) << "Forced size changed:" << forced_size_ << "->" << forced_size;
         forced_size_ = forced_size;
     }
 
@@ -800,7 +800,7 @@ void DesktopAgent::onOverflowCheck()
 
     if (desired_encoding != video_encoding_ && video_encoder_)
     {
-        LOG(INFO) << "Switching video encoding from" << video_encoding_ << "to" << desired_encoding;
+        LOG(INFO) << "Switching video encoding:" << video_encoding_ << "->" << desired_encoding;
         video_encoding_ = desired_encoding;
         video_encoder_ = std::make_unique<base::VideoEncoder>(video_encoding_);
     }

@@ -405,7 +405,7 @@ bool FileClient::startIpcServer(const QString& ipc_channel_name)
 //--------------------------------------------------------------------------------------------------
 void FileClient::onStarted(const base::Location& location, bool has_user)
 {
-    CLOG(INFO) << "File client is started (has user:" << has_user << "from:" << location << ")";
+    CLOG(INFO) << "File client is started (has user:" << has_user << location << ")";
     has_logged_on_user_ = has_user;
 
     attach_timer_->stop();

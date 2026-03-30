@@ -124,7 +124,7 @@ void OnlineCheckerDirect::Instance::onTcpErrorOccurred(base::TcpChannel::ErrorCo
 //--------------------------------------------------------------------------------------------------
 void OnlineCheckerDirect::Instance::onFinished(const base::Location& location, bool online)
 {
-    LOG(INFO) << "Finished from:" << location;
+    LOG(INFO) << "Finished:" << location;
 
     if (finished_)
         return;
