@@ -642,6 +642,7 @@ void ClientDesktop::onMetricsRequest()
     metrics.audio_resume_count = audio_resume_count_;
 
     metrics.video_capturer_type = video_capturer_type_;
+    metrics.video_encoder_type = video_encoding_;
     metrics.fps = fps_;
     metrics.send_mouse = input_event_filter_.sendMouseCount();
     metrics.drop_mouse = input_event_filter_.dropMouseCount();
