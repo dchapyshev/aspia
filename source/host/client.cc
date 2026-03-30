@@ -207,9 +207,6 @@ void Client::send(quint8 channel_id, const QByteArray& buffer, bool reliable)
 
     if (udp_state_ == UdpState::READY)
     {
-        if (force_reliable_)
-            reliable = true;
-
         udp_channel_->send(channel_id, buffer, reliable);
         return;
     }
@@ -246,8 +243,6 @@ void Client::onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray& buffe
         readDirectUdpReply(message.direct_udp_reply());
     else if (message.has_bandwidth_probe_ack())
         onTcpBandwidthProbeAck();
-    else if (message.has_control())
-        onControl(message.control());
     else
         CLOG(WARNING) << "Unhandled control message";
 }
@@ -364,8 +359,6 @@ void Client::onUdpMessageReceived(quint8 udp_channel_id, const QByteArray& buffe
 
     if (message.has_bandwidth_probe_ack())
         onUdpBandwidthProbeAck();
-    else if (message.has_control())
-        onControl(message.control());
     else
         CLOG(WARNING) << "Unhandled control message";
 }
@@ -689,23 +682,6 @@ void Client::onUdpBandwidthProbeAck()
 
     CLOG(INFO) << "UDP RTT:" << rtt.count() << "ms bandwidth:" << (udp_probe_.bandwidth / 1024) << "kB/s";
     checkBandwidth();
-}
-
-//--------------------------------------------------------------------------------------------------
-void Client::onControl(const proto::peer::Control& control)
-{
-    if (control.name() == "reliable")
-    {
-        if (force_reliable_ != control.value())
-        {
-            CLOG(INFO) << "Force reliable changed:" << force_reliable_ << "->" << control.value();
-            force_reliable_ = control.value();
-        }
-    }
-    else
-    {
-        CLOG(WARNING) << "Unknown UDP control flag:" << control.name();
-    }
 }
 
 //--------------------------------------------------------------------------------------------------

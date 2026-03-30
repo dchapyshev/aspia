@@ -238,22 +238,6 @@ void Client::sendMessage(quint8 channel_id, const QByteArray& message)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::setForceReliable(bool enable)
-{
-    if (!tcp_channel_)
-    {
-        CLOG(ERROR) << "setForceReliable called but channel not initialized";
-        return;
-    }
-
-    proto::peer::ClientToHost message;
-    proto::peer::Control* control = message.mutable_control();
-    control->set_name("reliable");
-    control->set_value(enable);
-    tcp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, base::serialize(message));
-}
-
-//--------------------------------------------------------------------------------------------------
 qint64 Client::totalTcpRx() const
 {
     if (!tcp_channel_)

@@ -193,6 +193,10 @@ void DesktopClient::onMessage(quint8 net_channel_id, const QByteArray& buffer)
 
             emit sig_switchSession(session_id);
         }
+        else if (message.has_feedback())
+        {
+            readFeedback(message.feedback());
+        }
     }
     else if (net_channel_id == proto::desktop::CHANNEL_ID_CLIPBOARD)
     {
@@ -332,6 +336,9 @@ void DesktopClient::onIpcMessageReceived(quint32 channel_id, const QByteArray& b
     quint16 net_channel_id = base::lowWord(channel_id);
     quint16 ipc_channel_id = base::highWord(channel_id);
 
+    if (force_reliable_)
+        reliable = true;
+
     if (ipc_channel_id == proto::desktop::IPC_CHANNEL_ID_SESSION)
         send(net_channel_id, buffer, reliable);
 }
@@ -430,6 +437,29 @@ void DesktopClient::sendSessionList()
     CLOG(INFO) << "Send:" << *session_list;
     send(proto::desktop::CHANNEL_ID_CONTROL, base::serialize(message));
 #endif // defined(Q_OS_WINDOWS)
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopClient::readFeedback(const proto::control::Feedback& feedback)
+{
+    if (feedback.command_name() == "reliable")
+    {
+        if (feedback.value_case() != proto::control::Feedback::kBoolean)
+        {
+            CLOG(WARNING) << "Feedback 'reliable' expects boolean value";
+            return;
+        }
+
+        if (force_reliable_ != feedback.boolean())
+        {
+            CLOG(INFO) << "Force reliable changed:" << force_reliable_ << "->" << feedback.boolean();
+            force_reliable_ = feedback.boolean();
+        }
+    }
+    else
+    {
+        CLOG(WARNING) << "Unknown feedback command:" << feedback.command_name();
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

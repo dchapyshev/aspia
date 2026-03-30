@@ -123,7 +123,6 @@ private:
     void sendUdpBandwidthProbe(const TimePoint& time);
     void onTcpBandwidthProbeAck();
     void onUdpBandwidthProbeAck();
-    void onControl(const proto::peer::Control& control);
     void checkBandwidth();
     void setUdpState(const base::Location& location, UdpState state);
 
@@ -159,7 +158,6 @@ private:
     TimePoint last_send_time_;
     BandwidthProbe tcp_probe_;
     BandwidthProbe udp_probe_;
-    bool force_reliable_ = false;
 
     Q_DISABLE_COPY_MOVE(Client)
 };

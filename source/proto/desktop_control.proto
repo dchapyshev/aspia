@@ -54,7 +54,7 @@ message SessionList
     uint32 console_session_id = 3;
 }
 
-message SessionListRequest
+message SessionsRequest
 {
     uint32 dummy = 1; // Always set to 1.
 }
@@ -71,6 +71,19 @@ message Config
     bool lock_at_disconnect = 8;
 }
 
+message Feedback
+{
+    string command_name = 1;
+
+    oneof value
+    {
+        int64 signed_integer    = 2;
+        uint64 unsigned_integer = 3;
+        bool boolean            = 4;
+        string utf8_string      = 5;
+    }
+}
+
 // Client <- Host (channel 1).
 message HostToClient
 {
@@ -81,8 +94,9 @@ message HostToClient
 // Client -> Host (channel 1).
 message ClientToHost
 {
-    Capabilities capabilities               = 1;
-    Config config                           = 2;
-    SessionListRequest session_list_request = 3;
-    SwitchSession switch_session            = 4;
+    Capabilities capabilities        = 1;
+    Config config                    = 2;
+    SessionsRequest sessions_request = 3;
+    SwitchSession switch_session     = 4;
+    Feedback feedback                = 5;
 }

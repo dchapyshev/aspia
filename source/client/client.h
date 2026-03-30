@@ -89,9 +89,6 @@ protected:
     // Sends outgoing message.
     void sendMessage(quint8 channel_id, const QByteArray& message);
 
-    // Requests the host to switch UDP video delivery to reliable/unreliable mode.
-    void setForceReliable(bool enable);
-
     // Methods for obtaining network metrics.
     qint64 totalTcpRx() const;
     qint64 totalTcpTx() const;

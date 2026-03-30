@@ -84,18 +84,11 @@ message BandwidthProbeAck
     int64 dummy = 1; // Always set to 1.
 }
 
-message Control
-{
-    string name = 1;
-    bool value  = 2;
-}
-
 // Use CHANNEL_ID_CONTROL to send.
 message ClientToHost
 {
     DirectUdpReply direct_udp_reply       = 1;
     BandwidthProbeAck bandwidth_probe_ack = 2;
-    Control control                       = 3;
 }
 
 // Use CHANNEL_ID_CONTROL to send.

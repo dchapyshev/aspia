@@ -143,6 +143,7 @@ private:
     void sendSessionListRequest();
     void sendConfig(const proto::control::Config& config);
     void sendKeyFrameRequest();
+    void setForceReliable(bool enable);
 
     QTimer* repeated_timer_ = nullptr;
 

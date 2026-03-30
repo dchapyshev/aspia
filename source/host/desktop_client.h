@@ -79,6 +79,7 @@ private:
     void sendIpcSessionMessage(quint8 net_channel_id, const QByteArray& buffer);
     void sendIpcServiceMessage(const QByteArray& buffer);
     void sendSessionList();
+    void readFeedback(const proto::control::Feedback& feedback);
     void readPowerControl(const proto::power::Control& control);
     void readSystemInfo(const proto::system_info::SystemInfoRequest& request);
     void readTaskManager(const proto::task_manager::ClientToHost& message);
@@ -92,6 +93,8 @@ private:
     proto::desktop::Overflow::State last_state_ = proto::desktop::Overflow::STATE_NONE;
     std::optional<proto::control::Capabilities> capabilities_;
     std::optional<proto::control::Config> config_;
+
+    bool force_reliable_ = false;
 
 #if defined(Q_OS_WINDOWS)
     TaskManager* task_manager_ = nullptr;

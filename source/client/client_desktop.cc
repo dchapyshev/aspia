@@ -1106,4 +1106,17 @@ void ClientDesktop::sendKeyFrameRequest()
     sendMessage(proto::desktop::CHANNEL_ID_VIDEO, base::serialize(message));
 }
 
+//--------------------------------------------------------------------------------------------------
+void ClientDesktop::setForceReliable(bool enable)
+{
+    if (isLegacy())
+        return;
+
+    proto::control::ClientToHost message;
+    proto::control::Feedback* feedback = message.mutable_feedback();
+    feedback->set_command_name("reliable");
+    feedback->set_boolean(enable);
+    sendMessage(proto::desktop::CHANNEL_ID_CONTROL, base::serialize(message));
+}
+
 } // namespace client
