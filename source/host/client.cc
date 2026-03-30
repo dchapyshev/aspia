@@ -249,7 +249,7 @@ void Client::onUdpReady()
     // If the probe ACK does not arrive within the timeout, treat UDP as broken.
     QTimer::singleShot(kInitialProbeTimeoutMs, this, [this]()
     {
-        if (udp_state_ == UdpState::PROBED || udp_state_ == UdpState::READY)
+        if (udp_state_ != UdpState::CONNECTED)
             return;
 
         CLOG(WARNING) << "UDP bandwidth probe timed out, channel is not usable";

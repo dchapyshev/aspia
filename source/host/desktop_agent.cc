@@ -786,7 +786,7 @@ void DesktopAgent::onOverflowCheck()
         return;
 
     proto::video::Encoding desired_encoding = video_encoding_;
-    const qint64 kVp9SwitchingThreshold = 1 * 1024 * 1024; // 1 MB/s
+    const qint64 kVp9SwitchingThreshold = 1.5 * 1024 * 1024; // 1.5 MB/s
 
     if (bandwidth < kVp9SwitchingThreshold && vp9_supported_)
     {

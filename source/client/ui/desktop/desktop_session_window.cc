@@ -378,8 +378,6 @@ void DesktopSessionWindow::onCapabilitiesChanged(const proto::control::Capabilit
             toolbar_->enableSystemInfo(value);
         else if (name == common::kFlagTaskManager)
             toolbar_->enableTaskManager(value);
-        else
-            LOG(ERROR) << "Unknown flag" << name << "with value" << value;
     }
 }
 
