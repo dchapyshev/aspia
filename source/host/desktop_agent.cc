@@ -781,6 +781,29 @@ void DesktopAgent::onOverflowCheck()
         LOG(INFO) << "Forced size changed from" << forced_size_ << "to" << forced_size;
         forced_size_ = forced_size;
     }
+
+    if (bandwidth <= 0) // Not measured yet.
+        return;
+
+    proto::video::Encoding desired_encoding = video_encoding_;
+    const qint64 kVp9SwitchingThreshold = 1 * 1024 * 1024; // 1 MB/s
+
+    if (bandwidth < kVp9SwitchingThreshold && vp9_supported_)
+    {
+        // For low bandwidth connections, VP9 provides better compression.
+        desired_encoding = proto::video::ENCODING_VP9;
+    }
+    else if (bandwidth >= kVp9SwitchingThreshold && vp8_supported_)
+    {
+        desired_encoding = proto::video::ENCODING_VP8;
+    }
+
+    if (desired_encoding != video_encoding_ && video_encoder_)
+    {
+        LOG(INFO) << "Switching video encoding from" << video_encoding_ << "to" << desired_encoding;
+        video_encoding_ = desired_encoding;
+        video_encoder_ = std::make_unique<base::VideoEncoder>(video_encoding_);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
