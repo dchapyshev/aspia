@@ -24,7 +24,9 @@
 #include <libyuv/convert.h>
 #include <libyuv/cpu_id.h>
 
-#include <thread>
+#include <QThread>
+
+#include <algorithm>
 
 namespace base {
 
@@ -61,12 +63,6 @@ void setCommonCodecParameters(vpx_codec_enc_cfg_t* config, const QSize& size)
     // frames, so take the hit of an "unnecessary" key-frame every 10,000 frames.
     config->kf_min_dist = 10000;
     config->kf_max_dist = 10000;
-
-    // Using 2 threads gives a great boost in performance for most systems with
-    // adequate processing power. NB: Going to multiple threads on low end
-    // windows systems can really hurt performance.
-    // http://crbug.com/99179
-    config->g_threads = (std::thread::hardware_concurrency() + 1) / 2;
 
     // Do not drop any frames at encoder.
     config->rc_dropframe_thresh = 0;
@@ -375,6 +371,10 @@ bool VideoEncoder::createVp8Codec(const QSize& size)
 
     setCommonCodecParameters(&config_, size);
 
+    // VP8 does not scale well beyond 2 threads (token partitions limit parallelism).
+    const int cpu_count = std::max(1, QThread::idealThreadCount());
+    config_.g_threads = std::min(cpu_count, 2);
+
     // Value of 2 means using the real time profile. This is basically a redundant option since we
     // explicitly select real time mode when doing encoding.
     config_.g_profile = 2;
@@ -446,6 +446,12 @@ bool VideoEncoder::createVp9Codec(const QSize& size)
 
     setCommonCodecParameters(&config_, size);
 
+    // VP9 supports tile-based parallel encoding. Use half of the available cores,
+    // clamped to [2, 4] range to balance performance and CPU usage.
+    const int cpu_count = std::max(1, QThread::idealThreadCount());
+    const int thread_count = std::clamp(cpu_count / 2, 2, 4);
+    config_.g_threads = thread_count;
+
     // Configure VP9 for I420 source frames.
     config_.g_profile = kVp9I420ProfileNumber;
     config_.rc_min_quantizer = 10;
@@ -459,6 +465,24 @@ bool VideoEncoder::createVp9Codec(const QSize& size)
     if (ret != VPX_CODEC_OK)
     {
         LOG(ERROR) << "vpx_codec_enc_init failed:" << ret;
+        return false;
+    }
+
+    // Set tile columns to match thread count: log2(thread_count).
+    // 2 threads -> 1, 4 threads -> 2.
+    const int tile_columns = (thread_count >= 4) ? 2 : 1;
+    ret = vpx_codec_control(codec_.get(), VP9E_SET_TILE_COLUMNS, tile_columns);
+    if (ret != VPX_CODEC_OK)
+    {
+        LOG(ERROR) << "vpx_codec_control(VP9E_SET_TILE_COLUMNS) failed:" << ret;
+        return false;
+    }
+
+    // Enable row-based multithreading for additional parallelism within tile columns.
+    ret = vpx_codec_control(codec_.get(), VP9E_SET_ROW_MT, 1);
+    if (ret != VPX_CODEC_OK)
+    {
+        LOG(ERROR) << "vpx_codec_control(VP9E_SET_ROW_MT) failed:" << ret;
         return false;
     }
 
