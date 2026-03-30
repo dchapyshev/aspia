@@ -20,32 +20,17 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
-import "desktop_audio.proto";
-import "desktop_video.proto";
-
 package proto.control;
 
 message Capabilities
 {
-    enum OsType
-    {
-        OS_TYPE_WINDOWS = 0;
-        OS_TYPE_LINUX   = 1;
-        OS_TYPE_MACOSX  = 2;
-        OS_TYPE_ANDROID = 3;
-        OS_TYPE_IOS     = 4;
-    }
-
     message Flag
     {
         string name = 1;
         bool value  = 2;
     }
 
-    uint32 video_encodings = 1;
-    uint32 audio_encodings = 2;
-    OsType os_type         = 3;
-    repeated Flag flag     = 4;
+    repeated Flag flag = 1;
 }
 
 message SwitchSession
@@ -76,15 +61,14 @@ message SessionListRequest
 
 message Config
 {
-    video.Encoding video_encoding = 1;
-    audio.Encoding audio_encoding = 2;
-    bool cursor_shape             = 3;
-    bool cursor_position          = 4;
-    bool clipboard                = 5;
-    bool effects                  = 6;
-    bool wallpaper                = 7;
-    bool block_input              = 8;
-    bool lock_at_disconnect       = 9;
+    bool audio              = 1;
+    bool cursor_shape       = 2;
+    bool cursor_position    = 3;
+    bool clipboard          = 4;
+    bool effects            = 5;
+    bool wallpaper          = 6;
+    bool block_input        = 7;
+    bool lock_at_disconnect = 8;
 }
 
 // Client <- Host (channel 1).
@@ -97,7 +81,8 @@ message HostToClient
 // Client -> Host (channel 1).
 message ClientToHost
 {
-    Config config                           = 1;
-    SessionListRequest session_list_request = 2;
-    SwitchSession switch_session            = 3;
+    Capabilities capabilities               = 1;
+    Config config                           = 2;
+    SessionListRequest session_list_request = 3;
+    SwitchSession switch_session            = 4;
 }

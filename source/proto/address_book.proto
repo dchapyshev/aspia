@@ -21,7 +21,6 @@ syntax = "proto3";
 option optimize_for = LITE_RUNTIME;
 
 import "desktop_audio.proto";
-import "desktop_video.proto";
 import "peer.proto";
 
 package proto.address_book;
@@ -49,7 +48,6 @@ enum DesktopConfigFlags
 message DesktopConfig
 {
     uint32 flags                  = 1;
-    video.Encoding video_encoding = 2;
     audio.Encoding audio_encoding = 7;
 }
 

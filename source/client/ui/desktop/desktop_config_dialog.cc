@@ -28,7 +28,7 @@ namespace client {
 
 //--------------------------------------------------------------------------------------------------
 DesktopConfigDialog::DesktopConfigDialog(proto::peer::SessionType session_type,
-    const proto::control::Config& config, quint32 video_encodings, QWidget* parent)
+    const proto::control::Config& config, QWidget* parent)
     : QDialog(parent),
       ui(std::make_unique<Ui::DesktopConfigDialog>()),
       config_(config)
@@ -40,23 +40,7 @@ DesktopConfigDialog::DesktopConfigDialog(proto::peer::SessionType session_type,
     if (cancel_button)
         cancel_button->setText(tr("Cancel"));
 
-    QComboBox* combo_codec = ui->combo_codec;
-
-    if (video_encodings & proto::video::ENCODING_VP9)
-        combo_codec->addItem("VP9", proto::video::ENCODING_VP9);
-
-    if (video_encodings & proto::video::ENCODING_VP8)
-        combo_codec->addItem("VP8", proto::video::ENCODING_VP8);
-
-    int current_codec = combo_codec->findData(config_.video_encoding());
-    if (current_codec == -1)
-        current_codec = 0;
-
-    combo_codec->setCurrentIndex(current_codec);
-    onCodecChanged(current_codec);
-
-    if (config_.audio_encoding() != proto::audio::ENCODING_UNKNOWN)
-        ui->checkbox_audio->setChecked(true);
+    ui->checkbox_audio->setChecked(config_.audio());
 
     if (session_type == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
     {
@@ -75,9 +59,6 @@ DesktopConfigDialog::DesktopConfigDialog(proto::peer::SessionType session_type,
     ui->checkbox_enable_cursor_pos->setChecked(config_.cursor_position());
     ui->checkbox_desktop_effects->setChecked(!config_.effects());
     ui->checkbox_desktop_wallpaper->setChecked(!config_.wallpaper());
-
-    connect(combo_codec, QOverload<int>::of(&QComboBox::currentIndexChanged),
-            this, &DesktopConfigDialog::onCodecChanged);
 
     connect(ui->button_box, &QDialogButtonBox::clicked,
             this, &DesktopConfigDialog::onButtonBoxClicked);
@@ -152,30 +133,13 @@ void DesktopConfigDialog::enableBlockInputFeature(bool enable)
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopConfigDialog::onCodecChanged(int item_index)
-{
-    proto::video::Encoding encoding =
-        static_cast<proto::video::Encoding>(ui->combo_codec->itemData(item_index).toInt());
-    LOG(INFO) << "[ACTION] Codec changed:" << encoding;
-}
-
-//--------------------------------------------------------------------------------------------------
 void DesktopConfigDialog::onButtonBoxClicked(QAbstractButton* button)
 {
     if (ui->button_box->standardButton(button) == QDialogButtonBox::Ok)
     {
         LOG(INFO) << "[ACTION] Accepted by user";
 
-        proto::video::Encoding video_encoding =
-            static_cast<proto::video::Encoding>(ui->combo_codec->currentData().toInt());
-
-        config_.set_video_encoding(video_encoding);
-
-        if (ui->checkbox_audio->isChecked())
-            config_.set_audio_encoding(proto::audio::ENCODING_OPUS);
-        else
-            config_.set_audio_encoding(proto::audio::ENCODING_UNKNOWN);
-
+        config_.set_audio(ui->checkbox_audio->isChecked());
         config_.set_cursor_shape(ui->checkbox_cursor_shape->isChecked() && ui->checkbox_cursor_shape->isEnabled());
         config_.set_cursor_position(ui->checkbox_enable_cursor_pos->isChecked());
         config_.set_clipboard(ui->checkbox_clipboard->isChecked() && ui->checkbox_clipboard->isEnabled());

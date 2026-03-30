@@ -104,6 +104,11 @@ private:
     base::ScreenCapturer::Type preferred_capturer_  = base::ScreenCapturer::Type::DEFAULT;
     base::ScreenCapturer::ScreenId last_screen_id_ = base::ScreenCapturer::kInvalidScreenId;
 
+    bool vp8_supported_ = false;
+    bool vp9_supported_ = false;
+
+    proto::video::Encoding video_encoding_ = proto::video::ENCODING_VP8;
+
     int screen_count_ = 0;
     QPoint last_cursor_pos_;
     QSize source_size_;

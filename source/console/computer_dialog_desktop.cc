@@ -28,12 +28,8 @@ ComputerDialogDesktop::ComputerDialogDesktop(int type, QWidget* parent)
 {
     ui.setupUi(this);
 
-    connect(ui.combo_codec, QOverload<int>::of(&QComboBox::currentIndexChanged),
-            this, &ComputerDialogDesktop::onCodecChanged);
-
     connect(ui.checkbox_inherit_config, &QCheckBox::toggled, this, [this](bool checked)
     {
-        ui.groupbox_codec->setEnabled(!checked);
         ui.groupbox_features->setEnabled(!checked);
         ui.groupbox_appearance->setEnabled(!checked);
         ui.groupbox_other->setEnabled(!checked);
@@ -58,17 +54,6 @@ void ComputerDialogDesktop::restoreSettings(
         ui.checkbox_inherit_config->setChecked(computer.inherit().desktop_view());
         desktop_config = computer.session_config().desktop_view();
     }
-
-    QComboBox* combo_codec = ui.combo_codec;
-    combo_codec->addItem("VP9", proto::video::ENCODING_VP9);
-    combo_codec->addItem("VP8", proto::video::ENCODING_VP8);
-
-    int current_codec = combo_codec->findData(desktop_config.video_encoding());
-    if (current_codec == -1)
-        current_codec = 0;
-
-    combo_codec->setCurrentIndex(current_codec);
-    onCodecChanged(current_codec);
 
     if (desktop_config.audio_encoding() != proto::audio::ENCODING_UNKNOWN)
         ui.checkbox_audio->setChecked(true);
@@ -122,10 +107,6 @@ void ComputerDialogDesktop::saveSettings(
         computer->mutable_inherit()->set_desktop_view(ui.checkbox_inherit_config->isChecked());
         desktop_config = computer->mutable_session_config()->mutable_desktop_view();
     }
-    proto::video::Encoding video_encoding =
-        static_cast<proto::video::Encoding>(ui.combo_codec->currentData().toInt());
-
-    desktop_config->set_video_encoding(video_encoding);
 
     quint32 flags = 0;
 
@@ -156,14 +137,6 @@ void ComputerDialogDesktop::saveSettings(
         flags |= proto::address_book::LOCK_AT_DISCONNECT;
 
     desktop_config->set_flags(flags);
-}
-
-//--------------------------------------------------------------------------------------------------
-void ComputerDialogDesktop::onCodecChanged(int item_index)
-{
-    proto::video::Encoding encoding =
-        static_cast<proto::video::Encoding>(ui.combo_codec->itemData(item_index).toInt());
-    LOG(INFO) << "[ACTION] Video encoding changed:" << encoding;
 }
 
 } // namespace console

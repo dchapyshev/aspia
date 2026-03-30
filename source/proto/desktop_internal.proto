@@ -23,7 +23,6 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
-import "desktop_control.proto";
 import "peer.proto";
 
 package proto.desktop;
@@ -83,9 +82,8 @@ message BandwidthChange
 message ServiceToAgentClient
 {
     Description description          = 1;
-    control.Config config            = 2;
-    Overflow overflow                = 3;
-    BandwidthChange bandwidth_change = 4;
+    Overflow overflow                = 2;
+    BandwidthChange bandwidth_change = 3;
 }
 
 message ServiceToAgent

@@ -141,7 +141,7 @@ void DesktopClient::onUserMessage(quint8 channel_id, const QByteArray& buffer)
         if (sessionType() != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
             return;
 
-        if (!config_.clipboard())
+        if (!config_.has_value() || !config_->clipboard())
             return;
     }
 
@@ -169,10 +169,12 @@ void DesktopClient::onMessage(quint8 net_channel_id, const QByteArray& buffer)
         if (message.has_config())
         {
             config_ = message.config();
-
-            proto::desktop::ServiceToAgentClient message;
-            message.mutable_config()->CopyFrom(config_);
-            sendIpcServiceMessage(base::serialize(message));
+            sendIpcSessionMessage(net_channel_id, buffer);
+        }
+        else if (message.has_capabilities())
+        {
+            capabilities_ = message.capabilities();
+            sendIpcSessionMessage(net_channel_id, buffer);
         }
         else if (message.has_session_list_request())
         {
@@ -197,7 +199,7 @@ void DesktopClient::onMessage(quint8 net_channel_id, const QByteArray& buffer)
         if (sessionType() != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
             return;
 
-        if (!config_.clipboard())
+        if (!config_.has_value() || !config_->clipboard())
             return;
 
         emit sig_userMessage(net_channel_id, buffer);
@@ -211,7 +213,7 @@ void DesktopClient::onMessage(quint8 net_channel_id, const QByteArray& buffer)
         if (sessionType() != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
             return;
 
-        if (!config_.clipboard())
+        if (!config_.has_value() || !config_->clipboard())
             return;
 
         emit sig_userMessage(net_channel_id, buffer);
@@ -306,6 +308,13 @@ void DesktopClient::onIpcNewConnection()
 
     sendIpcServiceMessage(base::serialize(message));
 
+    if (capabilities_.has_value())
+    {
+        proto::control::ClientToHost message;
+        message.mutable_capabilities()->CopyFrom(*capabilities_);
+        sendIpcSessionMessage(proto::desktop::CHANNEL_ID_CONTROL, base::serialize(message));
+    }
+
     fake_capture_timer_->stop();
     ipc_channel_->setPaused(false);
 }
@@ -373,6 +382,15 @@ void DesktopClient::onOverflowCheck()
 void DesktopClient::onTaskManagerMessage(const proto::task_manager::HostToClient& message)
 {
     send(proto::desktop::CHANNEL_ID_TASK_MANAGER, base::serialize(message), true);
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopClient::sendIpcSessionMessage(quint8 net_channel_id, const QByteArray& buffer)
+{
+    quint32 channel_id = base::makeUint32(proto::desktop::IPC_CHANNEL_ID_SESSION, net_channel_id);
+
+    if (ipc_channel_)
+        ipc_channel_->send(channel_id, buffer);
 }
 
 //--------------------------------------------------------------------------------------------------

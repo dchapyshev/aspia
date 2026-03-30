@@ -171,6 +171,9 @@
    </property>
   </action>
   <action name="action_cad">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="../../../common/resources/common.qrc">
      <normaloff>:/img/ctrl-alt-del.svg</normaloff>:/img/ctrl-alt-del.svg</iconset>
@@ -180,6 +183,9 @@
    </property>
    <property name="toolTip">
     <string>Send Ctrl+Alt+Delete</string>
+   </property>
+   <property name="visible">
+    <bool>false</bool>
    </property>
   </action>
   <action name="action_menu">

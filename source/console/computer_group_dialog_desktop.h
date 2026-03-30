@@ -38,9 +38,6 @@ public:
     void saveSettings(proto::peer::SessionType session_type,
         proto::address_book::ComputerGroupConfig* group_config);
 
-private slots:
-    void onCodecChanged(int item_index);
-
 private:
     Ui::ComputerGroupDialogDesktop ui;
     Q_DISABLE_COPY_MOVE(ComputerGroupDialogDesktop)

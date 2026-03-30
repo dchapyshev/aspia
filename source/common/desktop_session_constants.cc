@@ -18,9 +18,6 @@
 
 #include "common/desktop_session_constants.h"
 
-#include "proto/desktop_audio.h"
-#include "proto/desktop_video.h"
-
 namespace common {
 
 // Deprectaed.
@@ -44,12 +41,13 @@ const char kFlagDisableDesktopWallpaper[] = "disable_desktop_wallpaper";
 const char kFlagDisableLockAtDisconnect[] = "disable_lock_at_disconnect";
 const char kFlagDisableBlockInput[] = "disable_block_input";
 
-// New generation.
-const quint32 kSupportedVideoEncodings = proto::video::ENCODING_VP8 | proto::video::ENCODING_VP9;
-const quint32 kSupportedAudioEncodings = proto::audio::ENCODING_OPUS;
-
+const char kFlagVideoVP8[] = "vp8";
+const char kFlagVideoVP9[] = "vp9";
+const char kFlagAudioOpus[] = "opus";
+const char kFlagOSWindows[] = "windows";
+const char kFlagOSMacOS[] = "macos";
+const char kFlagOSLinux[] = "linux";
 const char kFlagPasteAsKeystrokes[] = "paste_as_keystrokes";
-const char kFlagAudio[] = "audio";
 const char kFlagClipboard[] = "clipboard";
 const char kFlagCursorShape[] = "cursor_shape";
 const char kFlagCursorPosition[] = "cursor_position";

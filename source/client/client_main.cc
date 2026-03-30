@@ -46,40 +46,17 @@ void onInvalidValue(const QString& arg, const QString& values)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool parseCodecValue(const QString& value, proto::control::Config& config)
-{
-    if (!value.isEmpty())
-    {
-        if (value == "vp8")
-        {
-            config.set_video_encoding(proto::video::ENCODING_VP8);
-        }
-        else if (value == "vp9")
-        {
-            config.set_video_encoding(proto::video::ENCODING_VP9);
-        }
-        else
-        {
-            onInvalidValue("codec", "vp8, vp9");
-            return false;
-        }
-    }
-
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
 bool parseAudioValue(const QString& value, proto::control::Config& config)
 {
     if (!value.isEmpty())
     {
         if (value == "0")
         {
-            config.set_audio_encoding(proto::audio::ENCODING_UNKNOWN);
+            config.set_audio(false);
         }
         else if (value == "1")
         {
-            config.set_audio_encoding(proto::audio::ENCODING_OPUS);
+            config.set_audio(true);
         }
         else
         {
@@ -309,10 +286,6 @@ int clientMain(int argc, char* argv[])
                                 "desktop-view, file-transfer, system-info, text-chat, port-forwarding."),
         "desktop-manage");
 
-    QCommandLineOption codec_option("codec",
-        QApplication::translate("Client", "Type of codec. Possible values: vp8, vp9."),
-        "codec");
-
     QCommandLineOption audio_option("audio",
         QApplication::translate("Client", "Enable or disable audio. Possible values: 0 or 1."),
         "audio");
@@ -373,7 +346,6 @@ int clientMain(int argc, char* argv[])
     parser.addOption(password_option);
     parser.addOption(display_name_option);
     parser.addOption(session_type_option);
-    parser.addOption(codec_option);
     parser.addOption(audio_option);
     parser.addOption(cursor_shape_option);
     parser.addOption(cursor_position_option);
@@ -442,12 +414,6 @@ int clientMain(int argc, char* argv[])
 
         if (desktop_config.has_value())
         {
-            if (!parseCodecValue(parser.value(codec_option), *desktop_config))
-            {
-                LOG(ERROR) << "Unable to parse codec value";
-                return 1;
-            }
-
             if (!parseAudioValue(parser.value(audio_option), *desktop_config))
             {
                 LOG(ERROR) << "Unable to parse audio value";

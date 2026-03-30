@@ -37,9 +37,6 @@ public:
         const proto::address_book::Computer& computer);
     void saveSettings(proto::peer::SessionType session_type, proto::address_book::Computer* computer);
 
-private slots:
-    void onCodecChanged(int item_index);
-
 private:
     Ui::ComputerDialogDesktop ui;
     Q_DISABLE_COPY_MOVE(ComputerDialogDesktop)

@@ -270,10 +270,7 @@ void ClientWindow::sessionConfigButtonPressed()
     {
         case proto::peer::SESSION_TYPE_DESKTOP_MANAGE:
         {
-            DesktopConfigDialog dialog(session_type,
-                                       settings.desktopManageConfig(),
-                                       common::kSupportedVideoEncodings,
-                                       this);
+            DesktopConfigDialog dialog(session_type, settings.desktopManageConfig(), this);
 
             if (dialog.exec() == DesktopConfigDialog::Accepted)
                 settings.setDesktopManageConfig(dialog.config());
@@ -282,10 +279,7 @@ void ClientWindow::sessionConfigButtonPressed()
 
         case proto::peer::SESSION_TYPE_DESKTOP_VIEW:
         {
-            DesktopConfigDialog dialog(session_type,
-                                       settings.desktopViewConfig(),
-                                       common::kSupportedVideoEncodings,
-                                       this);
+            DesktopConfigDialog dialog(session_type, settings.desktopViewConfig(), this);
 
             if (dialog.exec() == DesktopConfigDialog::Accepted)
                 settings.setDesktopViewConfig(dialog.config());

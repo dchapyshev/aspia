@@ -21,11 +21,16 @@
 
 #include <QObject>
 
+#include <optional>
+
 #include "base/logging.h"
+#include "proto/desktop_audio.h"
+#include "proto/desktop_control.h"
 #include "proto/desktop_input.h"
 #include "proto/desktop_internal.h"
 #include "proto/desktop_power.h"
 #include "proto/desktop_screen.h"
+#include "proto/desktop_video.h"
 
 namespace base {
 class IpcChannel;
@@ -45,7 +50,11 @@ public:
     proto::desktop::Overflow::State overflowState() const { return overflow_state_; }
     const QSize& preferredSize() const { return preferred_size_; }
     qint64 bandwidth() const { return bandwidth_; }
-    const proto::control::Config& config() const { return config_; }
+    std::optional<proto::control::Config> config() const { return config_; }
+
+    bool isVp8Supported() const { return vp8_supported_; }
+    bool isVp9Supported() const { return vp9_supported_; }
+    bool isOpusSupported() const { return opus_supported_; }
 
     void onVideoData(const QByteArray& buffer);
     void onScreenListData(const QByteArray& buffer);
@@ -85,6 +94,7 @@ private:
     void readPreferredSize(const proto::video::PreferredSize& size);
     void readVideoPause(const proto::video::Pause& pause);
     void readAudioPause(const proto::audio::Pause& pause);
+    void readCapabilities(const proto::control::Capabilities& capabilities);
     void readConfig(const proto::control::Config& config);
     void readPowerControl(const proto::power::Control& control);
     void readOverflow(proto::desktop::Overflow::State state);
@@ -94,7 +104,11 @@ private:
 
     proto::desktop::Overflow::State overflow_state_ = proto::desktop::Overflow::STATE_NONE;
     proto::peer::SessionType session_type_ = proto::peer::SESSION_TYPE_UNKNOWN;
-    proto::control::Config config_;
+    std::optional<proto::control::Config> config_;
+
+    bool vp8_supported_ = false;
+    bool vp9_supported_ = false;
+    bool opus_supported_ = false;
 
     QSize preferred_size_;
     qint64 bandwidth_ = 0;

@@ -22,8 +22,11 @@
 #include <QObject>
 #include <QTime>
 
+#include <optional>
+
 #include "base/session_id.h"
 #include "host/client.h"
+#include "proto/desktop_control.h"
 #include "proto/desktop_internal.h"
 #include "proto/desktop_power.h"
 #include "proto/system_info.h"
@@ -73,6 +76,7 @@ private slots:
     void onTaskManagerMessage(const proto::task_manager::HostToClient& message);
 
 private:
+    void sendIpcSessionMessage(quint8 net_channel_id, const QByteArray& buffer);
     void sendIpcServiceMessage(const QByteArray& buffer);
     void sendSessionList();
     void readPowerControl(const proto::power::Control& control);
@@ -86,7 +90,8 @@ private:
     QTimer* overflow_timer_ = nullptr;
 
     proto::desktop::Overflow::State last_state_ = proto::desktop::Overflow::STATE_NONE;
-    proto::control::Config config_;
+    std::optional<proto::control::Capabilities> capabilities_;
+    std::optional<proto::control::Config> config_;
 
 #if defined(Q_OS_WINDOWS)
     TaskManager* task_manager_ = nullptr;

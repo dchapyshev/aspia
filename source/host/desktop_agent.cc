@@ -274,81 +274,78 @@ void DesktopAgent::onIpcMessageReceived(
 void DesktopAgent::onClientConfigured()
 {
     proto::control::Config merged_config;
-    merged_config.set_video_encoding(proto::video::ENCODING_VP9);
-    merged_config.set_audio_encoding(proto::audio::ENCODING_UNKNOWN);
-    merged_config.set_cursor_shape(false);
-    merged_config.set_cursor_position(false);
-    merged_config.set_clipboard(false);
-    merged_config.set_effects(false);
-    merged_config.set_wallpaper(false);
-    merged_config.set_block_input(false);
-    merged_config.set_lock_at_disconnect(false);
+    merged_config.set_effects(true);
+    merged_config.set_wallpaper(true);
+
+    bool has_configured = false;
+    bool opus_supported = true;
+    bool vp8_supported = true;
+    bool vp9_supported = true;
 
     for (auto* client : std::as_const(clients_))
     {
-        const proto::control::Config& config = client->config();
+        std::optional<proto::control::Config> config = client->config();
+        if (!config.has_value()) // Not configured yet.
+            continue;
 
-        if (config.video_encoding() == proto::video::ENCODING_VP8)
-            merged_config.set_video_encoding(proto::video::ENCODING_VP8);
+        has_configured = true;
 
-        if (config.audio_encoding() == proto::audio::ENCODING_OPUS)
-            merged_config.set_audio_encoding(proto::audio::ENCODING_OPUS);
+        // If at least one client does not support a codec, it must be disabled.
+        if (!client->isVp8Supported())
+            vp8_supported = false;
+        if (!client->isVp9Supported())
+            vp9_supported = false;
+        if (!client->isOpusSupported())
+            opus_supported = false;
 
-        // If at least one client has disabled effects, then the effects will be disabled for
-        // everyone.
-        merged_config.set_effects(merged_config.effects() && config.effects());
-
-        // If at least one client has disabled the wallpaper, then the effects will be disabled for
-        // everyone.
-        merged_config.set_wallpaper(merged_config.wallpaper() || config.wallpaper());
-
-        // If at least one client has enabled input block, then the block will be enabled for
-        // everyone.
-        merged_config.set_block_input(merged_config.block_input() || config.block_input());
-
-        merged_config.set_lock_at_disconnect(merged_config.lock_at_disconnect() || config.lock_at_disconnect());
-        merged_config.set_cursor_position(merged_config.cursor_position() || config.cursor_position());
-        merged_config.set_cursor_shape(merged_config.cursor_shape() || config.cursor_shape());
+        merged_config.set_audio(merged_config.audio() || config->audio());
+        merged_config.set_effects(merged_config.effects() && config->effects());
+        merged_config.set_wallpaper(merged_config.wallpaper() && config->wallpaper());
+        merged_config.set_block_input(merged_config.block_input() || config->block_input());
+        merged_config.set_lock_at_disconnect(merged_config.lock_at_disconnect() || config->lock_at_disconnect());
+        merged_config.set_cursor_position(merged_config.cursor_position() || config->cursor_position());
+        merged_config.set_cursor_shape(merged_config.cursor_shape() || config->cursor_shape());
     }
 
-    LOG(INFO) << "Merged configuration:" << merged_config;
+    if (!has_configured)
+        return;
 
-    if (merged_config.video_encoding() != proto::video::ENCODING_VP8 &&
-        merged_config.video_encoding() != proto::video::ENCODING_VP9)
+    if (!vp8_supported && !vp9_supported)
     {
-        LOG(ERROR) << "Unsupported video encoding:" << merged_config.video_encoding();
+        LOG(ERROR) << "No supported video encodings";
+        base::Application::quit();
         return;
     }
 
-    video_encoder_ = std::make_unique<base::VideoEncoder>(merged_config.video_encoding());
+    vp8_supported_ = vp8_supported;
+    vp9_supported_ = vp9_supported;
 
-    switch (merged_config.audio_encoding())
+    LOG(INFO) << "Merged configuration:" << merged_config << "vp8:" << vp8_supported_
+              << "vp9:" << vp9_supported_ << "opus:" << opus_supported;
+
+    video_encoder_ = std::make_unique<base::VideoEncoder>(video_encoding_);
+
+    if (merged_config.audio() && opus_supported)
     {
-        case proto::audio::ENCODING_OPUS:
-        {
-            audio_encoder_ = std::make_unique<base::AudioEncoder>();
+        audio_encoder_ = std::make_unique<base::AudioEncoder>();
 
-            if (!audio_capturer_)
-            {
-                audio_capturer_ = new base::AudioCapturerWrapper(this);
-                connect(audio_capturer_, &base::AudioCapturerWrapper::sig_audioCaptured,
-                        this, &DesktopAgent::encodeAudio, Qt::QueuedConnection);
-                audio_capturer_->start();
-            }
-        }
-        break;
-
-        default:
+        if (!audio_capturer_)
         {
-            if (audio_capturer_)
-            {
-                audio_capturer_->disconnect();
-                audio_capturer_->deleteLater();
-                audio_capturer_ = nullptr;
-            }
-            audio_encoder_.reset();
+            audio_capturer_ = new base::AudioCapturerWrapper(this);
+            connect(audio_capturer_, &base::AudioCapturerWrapper::sig_audioCaptured,
+                    this, &DesktopAgent::encodeAudio, Qt::QueuedConnection);
+            audio_capturer_->start();
         }
-        break;
+    }
+    else
+    {
+        if (audio_capturer_)
+        {
+            audio_capturer_->disconnect();
+            audio_capturer_->deleteLater();
+            audio_capturer_ = nullptr;
+        }
+        audio_encoder_.reset();
     }
 
     cursor_encoder_.reset();

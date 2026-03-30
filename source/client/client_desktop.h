@@ -120,7 +120,6 @@ signals:
     void sig_drawFrame();
     void sig_mouseCursorChanged(std::shared_ptr<base::MouseCursor> mouse_cursor);
     void sig_sessionListChanged(const proto::control::SessionList& sessions);
-    void sig_videoEncodingChanged(proto::video::Encoding encoding);
 
 protected:
     // Client implementation.
@@ -140,6 +139,7 @@ private:
     void readClipboardEvent(const proto::clipboard::Event& event);
     void readExtension(const proto::legacy::Extension& extension);
     void sendSessionListRequest();
+    void sendConfig(const proto::control::Config& config);
     void sendKeyFrameRequest();
 
     bool started_ = false;

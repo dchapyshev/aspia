@@ -298,8 +298,6 @@ Client* DesktopSessionWindow::createClient()
             Qt::QueuedConnection);
     connect(client, &ClientDesktop::sig_sessionListChanged, this, &DesktopSessionWindow::onSessionListChanged,
             Qt::QueuedConnection);
-    connect(client, &ClientDesktop::sig_videoEncodingChanged, this, &DesktopSessionWindow::onVideoEncodingChanged,
-            Qt::QueuedConnection);
 
     connect(this, &DesktopSessionWindow::sig_desktopConfigChanged, client, &ClientDesktop::onDesktopConfigChanged,
             Qt::QueuedConnection);
@@ -346,34 +344,32 @@ void DesktopSessionWindow::onShowWindow()
 //--------------------------------------------------------------------------------------------------
 void DesktopSessionWindow::onCapabilitiesChanged(const proto::control::Capabilities& capabilities)
 {
-    video_encodings_ = capabilities.video_encodings();
-    toolbar_->enableCtrlAltDelFeature(
-        capabilities.os_type() == proto::control::Capabilities::OS_TYPE_WINDOWS);
-
     for (int i = 0; i < capabilities.flag_size(); ++i)
     {
         const proto::control::Capabilities::Flag& flag = capabilities.flag(i);
         const std::string& name = flag.name();
         bool value = flag.value();
 
-        if (name == common::kFlagPasteAsKeystrokes)
+        if (name == common::kFlagOSWindows)
+            toolbar_->enableCtrlAltDelFeature(true);
+        else if (name == common::kFlagPasteAsKeystrokes)
             toolbar_->enablePasteAsKeystrokesFeature(value);
-        else if (name == common::kFlagAudio)
-            disable_feature_audio_ = !value;
+        else if (name == common::kFlagAudioOpus)
+            feature_audio_ = value;
         else if (name == common::kFlagClipboard)
-            disable_feature_clipboard_ = !value;
+            feature_clipboard_ = value;
         else if (name == common::kFlagCursorShape)
-            disable_feature_cursor_shape_ = !value;
+            feature_cursor_shape_ = value;
         else if (name == common::kFlagCursorPosition)
-            disable_feature_cursor_position_ = !value;
+            feature_cursor_position_ = value;
         else if (name == common::kFlagDesktopEffects)
-            disable_feature_desktop_effects_ = !value;
+            feature_desktop_effects_ = value;
         else if (name == common::kFlagDesktopWallpaper)
-            disable_feature_desktop_wallpaper_ = !value;
+            feature_desktop_wallpaper_ = value;
         else if (name == common::kFlagLockAtDisconnect)
-            disable_feature_lock_at_disconnect_ = !value;
+            feature_lock_at_disconnect_ = value;
         else if (name == common::kFlagBlockInput)
-            disable_feature_block_input_ = !value;
+            feature_block_input_ = value;
         else if (name == common::kFlagPowerControl)
             toolbar_->enablePowerControl(value);
         else if (name == common::kFlagSelectScreen)
@@ -385,40 +381,6 @@ void DesktopSessionWindow::onCapabilitiesChanged(const proto::control::Capabilit
         else
             LOG(ERROR) << "Unknown flag" << name << "with value" << value;
     }
-
-    if (!(video_encodings_ & common::kSupportedVideoEncodings))
-    {
-        LOG(INFO) << "No supported video encodings";
-        QMessageBox::warning(this,
-                             tr("Warning"),
-                             tr("There are no supported video encodings."),
-                             QMessageBox::Ok);
-        close();
-        return;
-    }
-    else if (!(video_encodings_ & desktop_config_.video_encoding()))
-    {
-        LOG(INFO) << "Current video encoding not supported by host";
-        QMessageBox::warning(this,
-                             tr("Warning"),
-                             tr("The current video encoding is not supported by the host. "
-                                "Please specify a different video encoding."),
-                             QMessageBox::Ok);
-
-        DesktopConfigDialog* dialog = new DesktopConfigDialog(
-            session_type_, desktop_config_, video_encodings_, this);
-        dialog->setAttribute(Qt::WA_DeleteOnClose);
-
-        connect(dialog, &DesktopConfigDialog::sig_configChanged,
-                this, &DesktopSessionWindow::onConfigChanged);
-        connect(dialog, &DesktopConfigDialog::rejected, this, &DesktopSessionWindow::close);
-
-        dialog->show();
-        dialog->activateWindow();
-        return;
-    }
-
-    emit sig_desktopConfigChanged(desktop_config_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -595,8 +557,6 @@ void DesktopSessionWindow::onInternalReset()
         statistics_dialog_->close();
     }
 
-    video_encodings_ = 0;
-
     if (resize_timer_)
         resize_timer_->stop();
     screen_size_ = QSize();
@@ -609,14 +569,14 @@ void DesktopSessionWindow::onInternalReset()
     enable_audio_pause_ = true;
     audio_pause_last_ = false;
 
-    disable_feature_audio_ = false;
-    disable_feature_clipboard_ = false;
-    disable_feature_cursor_shape_ = false;
-    disable_feature_cursor_position_ = false;
-    disable_feature_desktop_effects_ = false;
-    disable_feature_desktop_wallpaper_ = false;
-    disable_feature_lock_at_disconnect_ = false;
-    disable_feature_block_input_ = false;
+    feature_audio_ = false;
+    feature_clipboard_ = false;
+    feature_cursor_shape_ = false;
+    feature_cursor_position_ = false;
+    feature_desktop_effects_ = false;
+    feature_desktop_wallpaper_ = false;
+    feature_lock_at_disconnect_ = false;
+    feature_block_input_ = false;
 
     wheel_angle_ = QPoint();
 
@@ -951,18 +911,17 @@ void DesktopSessionWindow::onSettings()
 {
     LOG(INFO) << "Create desktop config dialog";
 
-    DesktopConfigDialog* dialog = new DesktopConfigDialog(
-        session_type_, desktop_config_, video_encodings_, this);
+    DesktopConfigDialog* dialog = new DesktopConfigDialog(session_type_, desktop_config_, this);
     dialog->setAttribute(Qt::WA_DeleteOnClose);
 
-    dialog->enableAudioFeature(!disable_feature_audio_);
-    dialog->enableClipboardFeature(!disable_feature_clipboard_);
-    dialog->enableCursorShapeFeature(!disable_feature_cursor_shape_);
-    dialog->enableCursorPositionFeature(!disable_feature_cursor_position_);
-    dialog->enableDesktopEffectsFeature(!disable_feature_desktop_effects_);
-    dialog->enableDesktopWallpaperFeature(!disable_feature_desktop_wallpaper_);
-    dialog->enableLockAtDisconnectFeature(!disable_feature_lock_at_disconnect_);
-    dialog->enableBlockInputFeature(!disable_feature_block_input_);
+    dialog->enableAudioFeature(feature_audio_);
+    dialog->enableClipboardFeature(feature_clipboard_);
+    dialog->enableCursorShapeFeature(feature_cursor_shape_);
+    dialog->enableCursorPositionFeature(feature_cursor_position_);
+    dialog->enableDesktopEffectsFeature(feature_desktop_effects_);
+    dialog->enableDesktopWallpaperFeature(feature_desktop_wallpaper_);
+    dialog->enableLockAtDisconnectFeature(feature_lock_at_disconnect_);
+    dialog->enableBlockInputFeature(feature_block_input_);
 
     connect(dialog, &DesktopConfigDialog::sig_configChanged, this, &DesktopSessionWindow::onConfigChanged);
 
@@ -981,12 +940,6 @@ void DesktopSessionWindow::onConfigChanged(const proto::control::Config& desktop
     desktop_->enableRemoteCursorPosition(desktop_config_.cursor_position());
     if (!desktop_config_.cursor_shape())
         desktop_->setCursorShape(QPixmap(), QPoint());
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopSessionWindow::onVideoEncodingChanged(proto::video::Encoding encoding)
-{
-    desktop_config_.set_video_encoding(encoding);
 }
 
 //--------------------------------------------------------------------------------------------------

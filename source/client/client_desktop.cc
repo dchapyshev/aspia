@@ -91,6 +91,25 @@ void ClientDesktop::onStarted()
     }
 
     audio_player_ = base::AudioPlayer::create();
+
+    if (isLegacy())
+        return;
+
+    proto::control::ClientToHost message;
+    proto::control::Capabilities* capabilities = message.mutable_capabilities();
+
+    auto add_flag = [capabilities](const char* name, bool value)
+    {
+        proto::control::Capabilities::Flag* flag = capabilities->add_flag();
+        flag->set_name(name);
+        flag->set_value(value);
+    };
+
+    add_flag(common::kFlagVideoVP8, true);
+    add_flag(common::kFlagVideoVP9, true);
+    add_flag(common::kFlagAudioOpus, true);
+
+    sendMessage(proto::desktop::CHANNEL_ID_CONTROL, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -306,43 +325,7 @@ void ClientDesktop::onDesktopConfigChanged(const proto::control::Config& config)
     }
 
     input_event_filter_.setClipboardEnabled(desktop_config_.clipboard());
-
-    CLOG(INFO) << "Send:" << config;
-
-    if (isLegacy())
-    {
-        proto::legacy::ClientToSession message;
-        proto::legacy::Config* legacy_config = message.mutable_config();
-
-        quint32 flags = proto::legacy::NO_FLAGS;
-        if (config.cursor_shape())
-            flags |= proto::legacy::ENABLE_CURSOR_SHAPE;
-        if (config.clipboard())
-            flags |= proto::legacy::ENABLE_CLIPBOARD;
-        if (!config.effects())
-            flags |= proto::legacy::DISABLE_EFFECTS;
-        if (!config.wallpaper())
-            flags |= proto::legacy::DISABLE_WALLPAPER;
-        if (config.block_input())
-            flags |= proto::legacy::BLOCK_REMOTE_INPUT;
-        if (config.lock_at_disconnect())
-            flags |= proto::legacy::LOCK_AT_DISCONNECT;
-        if (config.cursor_position())
-            flags |= proto::legacy::CURSOR_POSITION;
-
-        legacy_config->set_flags(flags);
-        legacy_config->set_video_encoding(config.video_encoding());
-        legacy_config->set_audio_encoding(config.audio_encoding());
-
-        sendMessage(proto::desktop::CHANNEL_ID_LEGACY, base::serialize(message));
-    }
-    else
-    {
-        proto::control::ClientToHost message;
-        message.mutable_config()->CopyFrom(desktop_config_);
-        sendMessage(proto::desktop::CHANNEL_ID_CONTROL, base::serialize(message));
-        sendSessionListRequest();
-    }
+    sendConfig(desktop_config_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -696,12 +679,6 @@ void ClientDesktop::readLegacyCapabilities(const proto::legacy::Capabilities& le
 
     proto::control::Capabilities capabilities;
 
-    // Copy direct fields.
-    capabilities.set_video_encodings(legacy_capabilities.video_encodings());
-    capabilities.set_audio_encodings(legacy_capabilities.audio_encodings());
-    capabilities.set_os_type(
-        static_cast<proto::control::Capabilities::OsType>(legacy_capabilities.os_type()));
-
     auto add_flag = [&capabilities](const char* name, bool value)
     {
         proto::control::Capabilities::Flag* flag = capabilities.add_flag();
@@ -709,10 +686,22 @@ void ClientDesktop::readLegacyCapabilities(const proto::legacy::Capabilities& le
         flag->set_value(value);
     };
 
+    if (legacy_capabilities.os_type() == proto::legacy::Capabilities::OS_TYPE_WINDOWS)
+        add_flag(common::kFlagOSWindows, true);
+
+    quint32 video_encodings = legacy_capabilities.video_encodings();
+    if (video_encodings & proto::video::ENCODING_VP8)
+        add_flag(common::kFlagVideoVP8, true);
+    if (video_encodings & proto::video::ENCODING_VP9)
+        add_flag(common::kFlagVideoVP9, true);
+
+    quint32 audio_encodings = legacy_capabilities.audio_encodings();
+    if (audio_encodings & proto::audio::ENCODING_OPUS)
+        add_flag(common::kFlagAudioOpus, true);
+
     // Convert legacy "disable_*" flags (inverted logic) to new positive flags.
     // If a disable flag is absent in the legacy message, the feature is considered enabled.
     bool paste_as_keystrokes = true;
-    bool audio = true;
     bool clipboard = true;
     bool cursor_shape = true;
     bool cursor_position = true;
@@ -729,8 +718,6 @@ void ClientDesktop::readLegacyCapabilities(const proto::legacy::Capabilities& le
 
         if (name == common::kFlagDisablePasteAsKeystrokes)
             paste_as_keystrokes = !value;
-        else if (name == common::kFlagDisableAudio)
-            audio = !value;
         else if (name == common::kFlagDisableClipboard)
             clipboard = !value;
         else if (name == common::kFlagDisableCursorShape)
@@ -748,7 +735,6 @@ void ClientDesktop::readLegacyCapabilities(const proto::legacy::Capabilities& le
     }
 
     add_flag(common::kFlagPasteAsKeystrokes, paste_as_keystrokes);
-    add_flag(common::kFlagAudio, audio);
     add_flag(common::kFlagClipboard, clipboard);
     add_flag(common::kFlagCursorShape, cursor_shape);
     add_flag(common::kFlagCursorPosition, cursor_position);
@@ -777,6 +763,7 @@ void ClientDesktop::readCapabilities(const proto::control::Capabilities& capabil
     // A window can disable/enable some of its capabilities in accordance with this information.
     CLOG(INFO) << "Received:" << capabilities;
     emit sig_capabilities(capabilities);
+    sendConfig(desktop_config_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -795,13 +782,6 @@ void ClientDesktop::readVideoPacket(const proto::video::Packet& packet)
         CLOG(INFO) << "Video encoding changed from" << video_encoding_ << "to" << packet.encoding();
         video_decoder_ = std::make_unique<base::VideoDecoder>(packet.encoding());
         video_encoding_ = packet.encoding();
-
-        if (desktop_config_.video_encoding() != video_encoding_)
-        {
-            // The host can change the encoding at its own discretion.
-            desktop_config_.set_video_encoding(video_encoding_);
-            emit sig_videoEncodingChanged(video_encoding_);
-        }
     }
 
     if (!video_decoder_)
@@ -1039,6 +1019,48 @@ void ClientDesktop::sendSessionListRequest()
     proto::control::SessionListRequest* request = message.mutable_session_list_request();
     request->set_dummy(1);
     sendMessage(proto::desktop::CHANNEL_ID_CONTROL, base::serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientDesktop::sendConfig(const proto::control::Config& config)
+{
+    CLOG(INFO) << "Send:" << config;
+
+    if (isLegacy())
+    {
+        proto::legacy::ClientToSession message;
+        proto::legacy::Config* legacy_config = message.mutable_config();
+
+        quint32 flags = proto::legacy::NO_FLAGS;
+        if (config.cursor_shape())
+            flags |= proto::legacy::ENABLE_CURSOR_SHAPE;
+        if (config.clipboard())
+            flags |= proto::legacy::ENABLE_CLIPBOARD;
+        if (!config.effects())
+            flags |= proto::legacy::DISABLE_EFFECTS;
+        if (!config.wallpaper())
+            flags |= proto::legacy::DISABLE_WALLPAPER;
+        if (config.block_input())
+            flags |= proto::legacy::BLOCK_REMOTE_INPUT;
+        if (config.lock_at_disconnect())
+            flags |= proto::legacy::LOCK_AT_DISCONNECT;
+        if (config.cursor_position())
+            flags |= proto::legacy::CURSOR_POSITION;
+
+        legacy_config->set_flags(flags);
+        legacy_config->set_video_encoding(proto::video::ENCODING_VP8);
+        legacy_config->set_audio_encoding(
+            config.audio() ? proto::audio::ENCODING_OPUS : proto::audio::ENCODING_UNKNOWN);
+
+        sendMessage(proto::desktop::CHANNEL_ID_LEGACY, base::serialize(message));
+    }
+    else
+    {
+        proto::control::ClientToHost message;
+        message.mutable_config()->CopyFrom(desktop_config_);
+        sendMessage(proto::desktop::CHANNEL_ID_CONTROL, base::serialize(message));
+        sendSessionListRequest();
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

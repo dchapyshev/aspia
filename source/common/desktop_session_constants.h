@@ -42,11 +42,13 @@ extern const char kFlagDisableDesktopWallpaper[]; // Deprecated.
 extern const char kFlagDisableLockAtDisconnect[]; // Deprecated.
 extern const char kFlagDisableBlockInput[]; // Deprecated.
 
-extern const quint32 kSupportedVideoEncodings;
-extern const quint32 kSupportedAudioEncodings;
-
+extern const char kFlagVideoVP8[];
+extern const char kFlagVideoVP9[];
+extern const char kFlagAudioOpus[];
+extern const char kFlagOSWindows[];
+extern const char kFlagOSMacOS[];
+extern const char kFlagOSLinux[];
 extern const char kFlagPasteAsKeystrokes[];
-extern const char kFlagAudio[];
 extern const char kFlagClipboard[];
 extern const char kFlagCursorShape[];
 extern const char kFlagCursorPosition[];

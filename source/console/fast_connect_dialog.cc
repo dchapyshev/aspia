@@ -30,7 +30,6 @@
 #include "client/ui/desktop/desktop_session_window.h"
 #include "client/ui/file_transfer/file_transfer_session_window.h"
 #include "client/ui/sys_info/system_info_session_window.h"
-#include "common/desktop_session_constants.h"
 #include "common/ui/session_type.h"
 #include "console/computer_factory.h"
 #include "console/settings.h"
@@ -180,10 +179,7 @@ void FastConnectDialog::sessionConfigButtonPressed()
     {
         case proto::peer::SESSION_TYPE_DESKTOP_MANAGE:
         {
-            client::DesktopConfigDialog dialog(session_type,
-                                               state_.desktop_manage_config,
-                                               common::kSupportedVideoEncodings,
-                                               this);
+            client::DesktopConfigDialog dialog(session_type, state_.desktop_manage_config, this);
 
             if (dialog.exec() == client::DesktopConfigDialog::Accepted)
                 state_.desktop_manage_config = dialog.config();
@@ -192,10 +188,7 @@ void FastConnectDialog::sessionConfigButtonPressed()
 
         case proto::peer::SESSION_TYPE_DESKTOP_VIEW:
         {
-            client::DesktopConfigDialog dialog(session_type,
-                                               state_.desktop_view_config,
-                                               common::kSupportedVideoEncodings,
-                                               this);
+            client::DesktopConfigDialog dialog(session_type, state_.desktop_view_config, this);
 
             if (dialog.exec() == client::DesktopConfigDialog::Accepted)
                 state_.desktop_view_config = dialog.config();

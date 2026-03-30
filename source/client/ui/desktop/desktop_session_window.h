@@ -100,7 +100,6 @@ private slots:
     void onMouseEvent(const proto::input::MouseEvent& event);
     void onSettings();
     void onConfigChanged(const proto::control::Config& config);
-    void onVideoEncodingChanged(proto::video::Encoding encoding);
     void onAutosizeWindow();
     void onTakeScreenshot();
     void onScaleDesktop();
@@ -112,8 +111,6 @@ private slots:
 private:
     const proto::peer::SessionType session_type_;
     proto::control::Config desktop_config_;
-
-    quint32 video_encodings_ = 0;
 
     QHBoxLayout* layout_ = nullptr;
     QScrollArea* scroll_area_ = nullptr;
@@ -140,14 +137,14 @@ private:
     bool enable_audio_pause_ = true;
     bool audio_pause_last_ = false;
 
-    bool disable_feature_audio_ = false;
-    bool disable_feature_clipboard_ = false;
-    bool disable_feature_cursor_shape_ = false;
-    bool disable_feature_cursor_position_ = false;
-    bool disable_feature_desktop_effects_ = false;
-    bool disable_feature_desktop_wallpaper_ = false;
-    bool disable_feature_lock_at_disconnect_ = false;
-    bool disable_feature_block_input_ = false;
+    bool feature_audio_ = false;
+    bool feature_clipboard_ = false;
+    bool feature_cursor_shape_ = false;
+    bool feature_cursor_position_ = false;
+    bool feature_desktop_effects_ = false;
+    bool feature_desktop_wallpaper_ = false;
+    bool feature_lock_at_disconnect_ = false;
+    bool feature_block_input_ = false;
 
     QPoint wheel_angle_;
 

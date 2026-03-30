@@ -22,13 +22,6 @@
 
 namespace client {
 
-namespace {
-
-const proto::video::Encoding kDefaultVideoEncoding = proto::video::ENCODING_VP8;
-const proto::audio::Encoding kDefaultAudioEncoding = proto::audio::ENCODING_OPUS;
-
-} // namespace
-
 //--------------------------------------------------------------------------------------------------
 // static
 proto::control::Config ConfigFactory::defaultDesktopManageConfig()
@@ -52,8 +45,7 @@ proto::control::Config ConfigFactory::defaultDesktopViewConfig()
 void ConfigFactory::setDefaultDesktopManageConfig(proto::control::Config* config)
 {
     DCHECK(config);
-    config->set_video_encoding(kDefaultVideoEncoding);
-    config->set_audio_encoding(kDefaultAudioEncoding);
+    config->set_audio(true);
     config->set_cursor_shape(true);
     config->set_cursor_position(false);
     config->set_clipboard(true);
@@ -68,8 +60,7 @@ void ConfigFactory::setDefaultDesktopManageConfig(proto::control::Config* config
 void ConfigFactory::setDefaultDesktopViewConfig(proto::control::Config* config)
 {
     DCHECK(config);
-    config->set_video_encoding(kDefaultVideoEncoding);
-    config->set_audio_encoding(kDefaultAudioEncoding);
+    config->set_audio(true);
     config->set_cursor_shape(false);
     config->set_cursor_position(false);
     config->set_clipboard(false);

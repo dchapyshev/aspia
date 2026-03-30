@@ -33,7 +33,6 @@ void ComputerFactory::setDefaultDesktopManageConfig(proto::address_book::Desktop
         proto::address_book::DISABLE_EFFECTS | proto::address_book::DISABLE_WALLPAPER;
 
     config->set_flags(kDefaultFlags);
-    config->set_video_encoding(proto::video::ENCODING_VP8);
     config->set_audio_encoding(proto::audio::ENCODING_OPUS);
 }
 
@@ -46,7 +45,6 @@ void ComputerFactory::setDefaultDesktopViewConfig(proto::address_book::DesktopCo
         proto::address_book::DISABLE_EFFECTS | proto::address_book::DISABLE_WALLPAPER;
 
     config->set_flags(kDefaultFlags);
-    config->set_video_encoding(proto::video::ENCODING_VP8);
     config->set_audio_encoding(proto::audio::ENCODING_OPUS);
 }
 
@@ -75,9 +73,7 @@ proto::address_book::Computer ComputerFactory::defaultComputer()
 proto::control::Config ComputerFactory::toClientConfig(const proto::address_book::DesktopConfig& config)
 {
     proto::control::Config client_config;
-
-    client_config.set_video_encoding(config.video_encoding());
-    client_config.set_audio_encoding(config.audio_encoding());
+    client_config.set_audio(config.audio_encoding() == proto::audio::ENCODING_OPUS);
 
     const quint32 flags = config.flags();
 

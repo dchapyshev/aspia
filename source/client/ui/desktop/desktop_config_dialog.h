@@ -38,7 +38,7 @@ class DesktopConfigDialog final : public QDialog
 
 public:
     DesktopConfigDialog(proto::peer::SessionType session_type, const proto::control::Config& config,
-        quint32 video_encodings, QWidget* parent = nullptr);
+                        QWidget* parent = nullptr);
     ~DesktopConfigDialog() final;
 
     void enableAudioFeature(bool enable);
@@ -56,7 +56,6 @@ signals:
     void sig_configChanged(const proto::control::Config& config);
 
 private slots:
-    void onCodecChanged(int item_index);
     void onButtonBoxClicked(QAbstractButton* button);
 
 private:

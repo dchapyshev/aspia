@@ -70,21 +70,21 @@ void DesktopAgentClient::onScreenTypeData(const QByteArray& buffer)
 //--------------------------------------------------------------------------------------------------
 void DesktopAgentClient::onCursorPositionData(const QByteArray& buffer)
 {
-    if (config_.cursor_position())
+    if (config_.has_value() && config_->cursor_position())
         sendSessionMessage(proto::desktop::CHANNEL_ID_CURSOR, buffer, false);
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopAgentClient::onCursorShapeData(const QByteArray& buffer)
 {
-    if (config_.cursor_shape())
+    if (config_.has_value() && config_->cursor_shape())
         sendSessionMessage(proto::desktop::CHANNEL_ID_CURSOR, buffer, true);
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopAgentClient::onAudioData(const QByteArray& buffer)
 {
-    if (is_audio_paused_ || config_.audio_encoding() != proto::audio::ENCODING_OPUS)
+    if (is_audio_paused_ || !config_.has_value() || !config_->audio())
         return;
 
     if (overflow_state_ == proto::desktop::Overflow::STATE_CRITICAL)
@@ -151,11 +151,6 @@ void DesktopAgentClient::onIpcMessageReceived(
         if (message.has_description())
         {
             session_type_ = message.description().session_type();
-            sendCapabilities();
-        }
-        else if (message.has_config())
-        {
-            readConfig(message.config());
         }
         else if (message.has_overflow())
         {
@@ -250,6 +245,20 @@ void DesktopAgentClient::readSessionMessage(quint8 channel_id, const QByteArray&
         if (message.has_power_control())
             readPowerControl(message.power_control());
     }
+    else if (channel_id == proto::desktop::CHANNEL_ID_CONTROL)
+    {
+        proto::control::ClientToHost message;
+        if (!base::parse(buffer, &message))
+        {
+            CLOG(ERROR) << "Unable to parse control message";
+            return;
+        }
+
+        if (message.has_capabilities())
+            readCapabilities(message.capabilities());
+        else if (message.has_config())
+            readConfig(message.config());
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -322,6 +331,29 @@ void DesktopAgentClient::readAudioPause(const proto::audio::Pause& pause)
 }
 
 //--------------------------------------------------------------------------------------------------
+void DesktopAgentClient::readCapabilities(const proto::control::Capabilities& capabilities)
+{
+    CLOG(INFO) << "Capabilities changed:" << capabilities;
+
+    auto has_flag = [](const proto::control::Capabilities& capabilities, const char* name) -> bool
+    {
+        for (int i = 0; i < capabilities.flag_size(); ++i)
+        {
+            const proto::control::Capabilities::Flag& flag = capabilities.flag(i);
+            if (flag.name() == name)
+                return flag.value();
+        }
+        return false;
+    };
+
+    vp8_supported_ = has_flag(capabilities, common::kFlagVideoVP8);
+    vp9_supported_ = has_flag(capabilities, common::kFlagVideoVP9);
+    opus_supported_ = has_flag(capabilities, common::kFlagAudioOpus);
+
+    sendCapabilities();
+}
+
+//--------------------------------------------------------------------------------------------------
 void DesktopAgentClient::readConfig(const proto::control::Config& config)
 {
     config_ = config;
@@ -373,10 +405,6 @@ void DesktopAgentClient::sendCapabilities()
     proto::control::HostToClient message;
     proto::control::Capabilities* capabilities = message.mutable_capabilities();
 
-    // Add supported extensions and video encodings.
-    capabilities->set_video_encodings(common::kSupportedVideoEncodings);
-    capabilities->set_audio_encodings(common::kSupportedAudioEncodings);
-
     auto add_flag = [capabilities](const char* name, bool value)
     {
         proto::control::Capabilities::Flag* flag = capabilities->add_flag();
@@ -384,10 +412,13 @@ void DesktopAgentClient::sendCapabilities()
         flag->set_value(value);
     };
 
+    add_flag(common::kFlagVideoVP8, true);
+    add_flag(common::kFlagVideoVP9, true);
+
 #if defined(Q_OS_WINDOWS)
-    capabilities->set_os_type(proto::control::Capabilities::OS_TYPE_WINDOWS);
+    add_flag(common::kFlagOSWindows, true);
+    add_flag(common::kFlagAudioOpus, true);
     add_flag(common::kFlagPasteAsKeystrokes, true);
-    add_flag(common::kFlagAudio, true);
     add_flag(common::kFlagBlockInput, true);
     add_flag(common::kFlagDesktopEffects, true);
     add_flag(common::kFlagDesktopWallpaper, true);
@@ -397,9 +428,9 @@ void DesktopAgentClient::sendCapabilities()
     add_flag(common::kFlagSystemInfo, true);
     add_flag(common::kFlagTaskManager, true);
 #elif defined(Q_OS_LINUX)
-    capabilities->set_os_type(proto::control::Capabilities::OS_TYPE_LINUX);
+    add_flag(common::kFlagOSLinux, true);
 #elif defined(Q_OS_MACOS)
-    capabilities->set_os_type(proto::control::Capabilities::OS_TYPE_MACOSX);
+    add_flag(common::kFlagOSMacOS, true);
 #else
 #warning Not implemented
 #endif
