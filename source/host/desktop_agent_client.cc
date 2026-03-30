@@ -414,10 +414,13 @@ void DesktopAgentClient::sendCapabilities()
 
     add_flag(common::kFlagVideoVP8, true);
     add_flag(common::kFlagVideoVP9, true);
+    add_flag(common::kFlagClipboard, true);
 
 #if defined(Q_OS_WINDOWS)
     add_flag(common::kFlagOSWindows, true);
     add_flag(common::kFlagAudioOpus, true);
+    add_flag(common::kFlagCursorPosition, true);
+    add_flag(common::kFlagCursorShape, true);
     add_flag(common::kFlagPasteAsKeystrokes, true);
     add_flag(common::kFlagBlockInput, true);
     add_flag(common::kFlagDesktopEffects, true);
