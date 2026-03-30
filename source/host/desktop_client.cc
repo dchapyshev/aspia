@@ -176,7 +176,7 @@ void DesktopClient::onMessage(quint8 net_channel_id, const QByteArray& buffer)
             capabilities_ = message.capabilities();
             sendIpcSessionMessage(net_channel_id, buffer);
         }
-        else if (message.has_session_list_request())
+        else if (message.has_sessions_request())
         {
             sendSessionList();
         }

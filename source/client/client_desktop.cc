@@ -1048,7 +1048,7 @@ void ClientDesktop::readExtension(const proto::legacy::Extension& extension)
 void ClientDesktop::sendSessionListRequest()
 {
     proto::control::ClientToHost message;
-    proto::control::SessionListRequest* request = message.mutable_session_list_request();
+    proto::control::SessionsRequest* request = message.mutable_sessions_request();
     request->set_dummy(1);
     sendMessage(proto::desktop::CHANNEL_ID_CONTROL, base::serialize(message));
 }
