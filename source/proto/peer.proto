@@ -86,13 +86,13 @@ message BandwidthProbeAck
 
 message UdpControl
 {
-    enum Code
+    message Flag
     {
-        CODE_NONE           = 0;
-        CODE_FORCE_RELIABLE = 1;
+        string name = 1;
+        bool value  = 2;
     }
 
-    Code code = 1;
+    repeated Flag flag = 1;
 }
 
 // Use CHANNEL_ID_CONTROL to send.
