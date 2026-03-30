@@ -127,15 +127,13 @@ void StatisticsDialog::setMetrics(const ClientDesktop::Metrics& metrics)
                     sizeToString(metrics.max_audio_packet) + " / " + sizeToString(metrics.avg_audio_packet));
                 break;
             case 11:
-                item->setText(1, capturerToString(metrics.video_capturer_type));
+                item->setText(1, capturerToString(metrics.video_capturer_type) + " / " +
+                    encoderToString(metrics.video_encoder_type));
                 break;
             case 12:
-                item->setText(1, encoderToString(metrics.video_encoder_type));
-                break;
-            case 13:
                 item->setText(1, QString::number(metrics.fps));
                 break;
-            case 14:
+            case 13:
             {
                 int total_mouse = metrics.send_mouse + metrics.drop_mouse;
                 int percentage = 0;
@@ -147,26 +145,26 @@ void StatisticsDialog::setMetrics(const ClientDesktop::Metrics& metrics)
                     QString("%1 (%2 %)").arg(metrics.drop_mouse).arg(percentage));
             }
             break;
-            case 15:
+            case 14:
                 item->setText(1, QString::number(metrics.send_key));
                 break;
-            case 16:
+            case 15:
                 item->setText(1, QString::number(metrics.send_text));
                 break;
-            case 17:
+            case 16:
                 item->setText(1, QString::number(metrics.read_clipboard) + " / " +
                     QString::number(metrics.send_clipboard));
                 break;
-            case 18:
+            case 17:
                 item->setText(1, QString::number(metrics.cursor_shape_count));
                 break;
-            case 19:
+            case 18:
                 item->setText(1, QString::number(metrics.cursor_taken_from_cache));
                 break;
-            case 20:
+            case 19:
                 item->setText(1, QString::number(metrics.cursor_cached));
                 break;
-            case 21:
+            case 20:
                 item->setText(1, QString::number(metrics.cursor_pos_count));
                 break;
         }

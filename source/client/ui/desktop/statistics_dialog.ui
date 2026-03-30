@@ -101,12 +101,7 @@
      </item>
      <item>
       <property name="text">
-       <string notr="true">Video Capturer</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string notr="true">Video Encoder</string>
+       <string notr="true">Video Capturer/Encoder</string>
       </property>
      </item>
      <item>
