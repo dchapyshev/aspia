@@ -783,6 +783,7 @@ void ClientDesktop::readVideoPacket(const proto::video::Packet& packet)
         CLOG(INFO) << "Video encoding changed from" << video_encoding_ << "to" << packet.encoding();
         video_decoder_ = std::make_unique<base::VideoDecoder>(packet.encoding());
         video_encoding_ = packet.encoding();
+        key_frame_received_ = false;
     }
 
     if (!video_decoder_)

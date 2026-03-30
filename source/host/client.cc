@@ -333,6 +333,9 @@ void Client::onUdpMessageReceived(quint8 udp_channel_id, const QByteArray& buffe
 {
     if (udp_channel_id != proto::peer::CHANNEL_ID_CONTROL)
     {
+        if (udp_state_ != UdpState::READY)
+            return;
+
         onMessage(udp_channel_id, buffer);
         return;
     }

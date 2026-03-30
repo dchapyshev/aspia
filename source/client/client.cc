@@ -455,6 +455,9 @@ void Client::onUdpMessageReceived(quint8 channel_id, const QByteArray& buffer)
     }
     else
     {
+        if (!udp_ready_)
+            return;
+
         onMessageReceived(channel_id, buffer);
     }
 }
