@@ -56,7 +56,7 @@ public:
     bool isVp9Supported() const { return vp9_supported_; }
     bool isOpusSupported() const { return opus_supported_; }
 
-    void onVideoData(const QByteArray& buffer);
+    void onVideoData(const QByteArray& buffer, bool is_key_frame);
     void onScreenListData(const QByteArray& buffer);
     void onScreenTypeData(const QByteArray& buffer);
     void onCursorPositionData(const QByteArray& buffer);

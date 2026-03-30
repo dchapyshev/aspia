@@ -334,6 +334,9 @@ void DesktopClient::onIpcMessageReceived(quint32 channel_id, const QByteArray& b
 
     if (ipc_channel_id == proto::desktop::IPC_CHANNEL_ID_SESSION)
     {
+        if (force_reliable_)
+            reliable = true;
+
         send(net_channel_id, buffer, reliable);
     }
     else

@@ -90,7 +90,7 @@ public:
 signals:
     void sig_started();
     void sig_finished();
-    void sig_connectionChanged();
+    void sig_channelChanged();
 
 protected:
     LOG_DECLARE_CONTEXT(Client);
@@ -114,6 +114,7 @@ private:
     using TimePoint = std::chrono::time_point<Clock>;
     using Milliseconds = std::chrono::milliseconds;
 
+    void connectToUdp();
     void startUdpHolePunching();
     void startDirectUdp(qintptr socket, const QString& address, quint16 port);
     void readDirectUdpReply(const proto::peer::DirectUdpReply& reply);

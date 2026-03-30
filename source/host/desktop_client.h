@@ -88,6 +88,7 @@ private:
     base::IpcChannel* ipc_channel_ = nullptr;
     QTimer* fake_capture_timer_ = nullptr;
     QTimer* overflow_timer_ = nullptr;
+    bool force_reliable_ = false;
 
     proto::desktop::Overflow::State last_state_ = proto::desktop::Overflow::STATE_NONE;
     std::optional<proto::control::Capabilities> capabilities_;

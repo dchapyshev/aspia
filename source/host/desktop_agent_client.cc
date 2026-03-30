@@ -49,10 +49,10 @@ DesktopAgentClient::~DesktopAgentClient()
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::onVideoData(const QByteArray& buffer)
+void DesktopAgentClient::onVideoData(const QByteArray& buffer, bool is_key_frame)
 {
     if (!is_video_paused_)
-        sendSessionMessage(proto::desktop::CHANNEL_ID_VIDEO, buffer, false);
+        sendSessionMessage(proto::desktop::CHANNEL_ID_VIDEO, buffer, is_key_frame);
 }
 
 //--------------------------------------------------------------------------------------------------

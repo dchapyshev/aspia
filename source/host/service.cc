@@ -741,7 +741,7 @@ void Service::startClient(const PendingConfirmation& pending)
 
         connect(client, &Client::sig_started, desktop_manager_, &DesktopManager::onClientStarted);
         connect(client, &Client::sig_finished, desktop_manager_, &DesktopManager::onClientFinished);
-        connect(client, &Client::sig_connectionChanged, desktop_manager_, &DesktopManager::onClientConnectionChanged);
+        connect(client, &Client::sig_channelChanged, desktop_manager_, &DesktopManager::onClientChannelChanged);
         connect(client, &DesktopClient::sig_switchSession, desktop_manager_, &DesktopManager::onClientSwitchSession);
 
         connect(client, &Client::sig_started, user_session_, &UserSession::onClientStarted);

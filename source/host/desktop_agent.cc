@@ -253,7 +253,7 @@ void DesktopAgent::onIpcMessageReceived(
             CHECK(control.has_boolean());
             is_keyboard_locked_ = control.boolean();
         }
-        else if (command_name == "connection_changed")
+        else if (command_name == "channel_changed")
         {
             // When changing the connection (for example, when switching from TCP to UDP), a keyframe,
             // resetting the cursor cache, etc. are required.
@@ -573,7 +573,7 @@ void DesktopAgent::onCaptureScreen()
 
         const QByteArray& buffer = video_message_.serialize();
         for (auto* client : std::as_const(clients_))
-            client->onVideoData(buffer);
+            client->onVideoData(buffer, false);
 
         capture_timer_->start(capture_scheduler_.nextCaptureDelay());
         return;
@@ -626,7 +626,7 @@ void DesktopAgent::onCaptureScreen()
 
         const QByteArray& buffer = video_message_.serialize();
         for (auto* client : std::as_const(clients_))
-            client->onVideoData(buffer);
+            client->onVideoData(buffer, false);
     }
     else
     {
@@ -689,7 +689,7 @@ void DesktopAgent::onOverflowCheck()
     if (bandwidth > 0)
     {
         // Calculate FPS limit based on measured bandwidth.
-        if (bandwidth < 100 * 1024)        // < 100 KB/s
+        if (bandwidth < 150 * 1024)        // < 150 KB/s
             bandwidth_fps_limit = min_fps_;
         else if (bandwidth < 300 * 1024)   // < 300 KB/s
             bandwidth_fps_limit = 16;
@@ -765,7 +765,7 @@ void DesktopAgent::onOverflowCheck()
 
     if (bandwidth > 0 && bandwidth < 30 * 1024) // < 30 KB/s
         forced_size = scaled_size(source_size_, 0.6);
-    else if (bandwidth > 0 && bandwidth < 100 * 1024) // < 100 KB/s
+    else if (bandwidth > 0 && bandwidth < 150 * 1024) // < 150 KB/s
         forced_size = scaled_size(source_size_, 0.7);
     else if (pressure_score_ >= 90)
         forced_size = scaled_size(source_size_, 0.7);
@@ -1031,9 +1031,11 @@ void DesktopAgent::encodeScreen(const base::Frame* frame)
         LOG(INFO) << "Video packet has format:" << *format;
     }
 
+    bool is_key_frame = packet->flags() & proto::video::PACKET_FLAG_IS_KEY_FRAME;
+
     const QByteArray& buffer = video_message_.serialize();
     for (auto* client : std::as_const(clients_))
-        client->onVideoData(buffer);
+        client->onVideoData(buffer, is_key_frame);
 
     video_encoder_->setEncodeBuffer(std::move(*message.mutable_packet()->mutable_data()));
 }

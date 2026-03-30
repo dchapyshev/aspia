@@ -43,6 +43,7 @@ const int kMaxHolePunchingAttempts = 32;
 const int kHolePunchingRetryDelayMs = 2000; // 2 seconds between retry attempts.
 const int kInitialProbeTimeoutMs = 5000;   // 5 seconds to wait for initial probe ACK.
 const int kUdpConnectTimeoutMs = 5000;   // 5 seconds to wait for UDP connection after setPeerAddress.
+const int kUdpReconnectDelayMs = 5000;  // 5 seconds before attempting UDP reconnection.
 
 } // namespace
 
@@ -102,21 +103,8 @@ void Client::start(bool direct, const QString& stun_host, quint16 stun_port, boo
 
     onStart();
 
-    if (!(features_ & FEATURE_UDP))
-        return;
-
-    if (direct || peer_equals)
-    {
-        udp_phase_ = UdpConnectPhase::DIRECT_LAN;
-        startDirectUdp(-1, QString(), 0);
-        return;
-    }
-
-    if (stun_host.isEmpty() || !stun_port)
-        return;
-
-    udp_phase_ = UdpConnectPhase::HOLE_PUNCHING;
-    startUdpHolePunching();
+    if (features_ & FEATURE_UDP)
+        connectToUdp();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -282,10 +270,15 @@ void Client::onUdpErrorOccurred()
     udp_channel_->deleteLater();
     udp_channel_ = nullptr;
 
-    // If the UDP was already working and then dropped, we stay on TCP without retrying.
+    // If the UDP was already working and then dropped, switch to TCP and try to reconnect.
     if (was_connected)
     {
+        CLOG(INFO) << "UDP was connected, switching to TCP and scheduling reconnect";
         udp_phase_ = UdpConnectPhase::NONE;
+        hole_punching_attempt_ = 0;
+        emit sig_channelChanged();
+
+        QTimer::singleShot(kUdpReconnectDelayMs, this, &Client::connectToUdp);
         return;
     }
 
@@ -333,9 +326,6 @@ void Client::onUdpMessageReceived(quint8 udp_channel_id, const QByteArray& buffe
 {
     if (udp_channel_id != proto::peer::CHANNEL_ID_CONTROL)
     {
-        if (udp_state_ != UdpState::READY)
-            return;
-
         onMessage(udp_channel_id, buffer);
         return;
     }
@@ -351,6 +341,26 @@ void Client::onUdpMessageReceived(quint8 udp_channel_id, const QByteArray& buffe
         onUdpBandwidthProbeAck();
     else
         CLOG(WARNING) << "Unhandled control message";
+}
+
+//--------------------------------------------------------------------------------------------------
+void Client::connectToUdp()
+{
+    if (udp_state_ != UdpState::DISCONNECTED || udp_channel_)
+        return;
+
+    if (direct_ || peer_equals_)
+    {
+        udp_phase_ = UdpConnectPhase::DIRECT_LAN;
+        startDirectUdp(-1, QString(), 0);
+        return;
+    }
+
+    if (stun_host_.isEmpty() || !stun_port_)
+        return;
+
+    udp_phase_ = UdpConnectPhase::HOLE_PUNCHING;
+    startUdpHolePunching();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -690,7 +700,7 @@ void Client::checkBandwidth()
         {
             CLOG(INFO) << "Switching traffic to UDP";
             setUdpState(FROM_HERE, UdpState::READY);
-            emit sig_connectionChanged();
+            emit sig_channelChanged();
         }
 
         onBandwidthChanged(udp_probe_.bandwidth);
@@ -701,7 +711,7 @@ void Client::checkBandwidth()
     {
         CLOG(INFO) << "Switching traffic to TCP";
         setUdpState(FROM_HERE, UdpState::PROBED);
-        emit sig_connectionChanged();
+        emit sig_channelChanged();
     }
 
     onBandwidthChanged(tcp_probe_.bandwidth);

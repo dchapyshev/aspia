@@ -84,11 +84,23 @@ message BandwidthProbeAck
     int64 dummy = 1;
 }
 
+message UdpControl
+{
+    enum Code
+    {
+        CODE_NONE           = 0;
+        CODE_FORCE_RELIABLE = 1;
+    }
+
+    Code code = 1;
+}
+
 // Use CHANNEL_ID_CONTROL to send.
 message ClientToHost
 {
     DirectUdpReply direct_udp_reply       = 1;
     BandwidthProbeAck bandwidth_probe_ack = 2;
+    UdpControl udp_control                = 3;
 }
 
 // Use CHANNEL_ID_CONTROL to send.

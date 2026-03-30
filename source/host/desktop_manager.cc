@@ -285,11 +285,11 @@ void DesktopManager::onClientFinished()
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopManager::onClientConnectionChanged()
+void DesktopManager::onClientChannelChanged()
 {
     proto::desktop::ServiceToAgent message;
     proto::desktop::AgentControl* control = message.mutable_control();
-    control->set_command_name("connection_changed");
+    control->set_command_name("channel_changed");
     sendMessage(base::serialize(message));
 }
 
