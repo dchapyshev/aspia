@@ -60,9 +60,13 @@ size_t calculateAvgSize(size_t last_avg_size, size_t bytes)
 
 //--------------------------------------------------------------------------------------------------
 ClientDesktop::ClientDesktop(QObject* parent)
-    : Client(parent)
+    : Client(parent),
+      repeated_timer_(new QTimer(this))
 {
     CLOG(INFO) << "Ctor";
+
+    repeated_timer_->setInterval(1000);
+    connect(repeated_timer_, &QTimer::timeout, this, &ClientDesktop::onRepeatedTimer);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -79,6 +83,8 @@ void ClientDesktop::onStarted()
     start_time_ = Clock::now();
     key_frame_received_ = false;
     started_ = true;
+
+    repeated_timer_->start();
 
     input_event_filter_.setSessionType(sessionState()->sessionType());
 
@@ -290,26 +296,6 @@ void ClientDesktop::onMessageReceived(quint8 channel_id, const QByteArray& buffe
         {
             readExtension(message.extension());
         }
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-void ClientDesktop::onClipboardEvent(const proto::clipboard::Event& event)
-{
-    if (!input_event_filter_.sendClipboardEvent(event))
-        return;
-
-    if (isLegacy())
-    {
-        proto::legacy::ClientToSession message;
-        message.mutable_clipboard_event()->CopyFrom(event);
-        sendMessage(proto::desktop::CHANNEL_ID_LEGACY, base::serialize(message));
-    }
-    else
-    {
-        proto::clipboard::ClientToHost message;
-        message.mutable_event()->CopyFrom(event);
-        sendMessage(proto::desktop::CHANNEL_ID_CLIPBOARD, base::serialize(message));
     }
 }
 
@@ -674,6 +660,36 @@ void ClientDesktop::onSwitchSession(quint32 session_id)
 }
 
 //--------------------------------------------------------------------------------------------------
+void ClientDesktop::onClipboardEvent(const proto::clipboard::Event& event)
+{
+    if (!input_event_filter_.sendClipboardEvent(event))
+        return;
+
+    if (isLegacy())
+    {
+        proto::legacy::ClientToSession message;
+        message.mutable_clipboard_event()->CopyFrom(event);
+        sendMessage(proto::desktop::CHANNEL_ID_LEGACY, base::serialize(message));
+    }
+    else
+    {
+        proto::clipboard::ClientToHost message;
+        message.mutable_event()->CopyFrom(event);
+        sendMessage(proto::desktop::CHANNEL_ID_CLIPBOARD, base::serialize(message));
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientDesktop::onRepeatedTimer()
+{
+    if (reliability_score_ > 0)
+    {
+        --reliability_score_;
+        checkReliabilityThresholds();
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
 void ClientDesktop::readLegacyCapabilities(const proto::legacy::Capabilities& legacy_capabilities)
 {
     CLOG(INFO) << "Received:" << legacy_capabilities;
@@ -850,6 +866,9 @@ void ClientDesktop::readVideoPacket(const proto::video::Packet& packet)
         CLOG(ERROR) << "Unable to decode video packet";
         key_frame_received_ = false;
         sendKeyFrameRequest();
+
+        reliability_score_ = std::min(reliability_score_ + 30, 100);
+        checkReliabilityThresholds();
         return;
     }
 
@@ -1074,6 +1093,23 @@ void ClientDesktop::sendKeyFrameRequest()
     proto::video::ClientToHost message;
     message.mutable_key_frame()->set_dummy(1);
     sendMessage(proto::desktop::CHANNEL_ID_VIDEO, base::serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientDesktop::checkReliabilityThresholds()
+{
+    if (reliability_score_ > 50 && !force_reliable_active_)
+    {
+        CLOG(INFO) << "Reliability score:" << reliability_score_ << ", requesting force reliable";
+        setForceReliable(true);
+        force_reliable_active_ = true;
+    }
+    else if (reliability_score_ < 10 && force_reliable_active_)
+    {
+        CLOG(INFO) << "Reliability score:" << reliability_score_ << ", disabling force reliable";
+        setForceReliable(false);
+        force_reliable_active_ = false;
+    }
 }
 
 } // namespace client

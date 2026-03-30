@@ -129,6 +129,7 @@ protected:
 
 private slots:
     void onClipboardEvent(const proto::clipboard::Event& event);
+    void onRepeatedTimer();
 
 private:
     void readLegacyCapabilities(const proto::legacy::Capabilities& capabilities);
@@ -142,6 +143,9 @@ private:
     void sendSessionListRequest();
     void sendConfig(const proto::control::Config& config);
     void sendKeyFrameRequest();
+    void checkReliabilityThresholds();
+
+    QTimer* repeated_timer_ = nullptr;
 
     bool started_ = false;
     bool key_frame_received_ = false;
@@ -186,6 +190,9 @@ private:
     int fps_ = 0;
     int cursor_shape_count_ = 0;
     int cursor_pos_count_ = 0;
+
+    int reliability_score_ = 0;
+    bool force_reliable_active_ = false;
 
     Q_DISABLE_COPY_MOVE(ClientDesktop)
 };
