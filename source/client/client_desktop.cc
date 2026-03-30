@@ -682,10 +682,16 @@ void ClientDesktop::onClipboardEvent(const proto::clipboard::Event& event)
 //--------------------------------------------------------------------------------------------------
 void ClientDesktop::onRepeatedTimer()
 {
-    if (reliability_score_ > 0)
+    if (force_reliable_active_ && reliable_hold_seconds_ > 0)
     {
-        --reliability_score_;
-        checkReliabilityThresholds();
+        --reliable_hold_seconds_;
+        if (reliable_hold_seconds_ == 0 && reliable_disable_count_ < 2)
+        {
+            ++reliable_disable_count_;
+            CLOG(INFO) << "Disabling force reliable (disable count:" << reliable_disable_count_ << ")";
+            setForceReliable(false);
+            force_reliable_active_ = false;
+        }
     }
 }
 
@@ -867,8 +873,13 @@ void ClientDesktop::readVideoPacket(const proto::video::Packet& packet)
         key_frame_received_ = false;
         sendKeyFrameRequest();
 
-        reliability_score_ = std::min(reliability_score_ + 50, 100);
-        checkReliabilityThresholds();
+        if (!force_reliable_active_ && reliable_disable_count_ < 2)
+        {
+            CLOG(INFO) << "Enabling force reliable (disable count:" << reliable_disable_count_ << ")";
+            setForceReliable(true);
+            force_reliable_active_ = true;
+        }
+        reliable_hold_seconds_ = 60;
         return;
     }
 
@@ -1093,23 +1104,6 @@ void ClientDesktop::sendKeyFrameRequest()
     proto::video::ClientToHost message;
     message.mutable_key_frame()->set_dummy(1);
     sendMessage(proto::desktop::CHANNEL_ID_VIDEO, base::serialize(message));
-}
-
-//--------------------------------------------------------------------------------------------------
-void ClientDesktop::checkReliabilityThresholds()
-{
-    if (reliability_score_ > 50 && !force_reliable_active_)
-    {
-        CLOG(INFO) << "Reliability score:" << reliability_score_ << ", requesting force reliable";
-        setForceReliable(true);
-        force_reliable_active_ = true;
-    }
-    else if (reliability_score_ < 10 && force_reliable_active_)
-    {
-        CLOG(INFO) << "Reliability score:" << reliability_score_ << ", disabling force reliable";
-        setForceReliable(false);
-        force_reliable_active_ = false;
-    }
 }
 
 } // namespace client

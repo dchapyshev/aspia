@@ -143,7 +143,6 @@ private:
     void sendSessionListRequest();
     void sendConfig(const proto::control::Config& config);
     void sendKeyFrameRequest();
-    void checkReliabilityThresholds();
 
     QTimer* repeated_timer_ = nullptr;
 
@@ -191,8 +190,9 @@ private:
     int cursor_shape_count_ = 0;
     int cursor_pos_count_ = 0;
 
-    int reliability_score_ = 0;
     bool force_reliable_active_ = false;
+    int reliable_hold_seconds_ = 0;
+    int reliable_disable_count_ = 0;
 
     Q_DISABLE_COPY_MOVE(ClientDesktop)
 };
