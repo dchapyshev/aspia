@@ -422,7 +422,7 @@ void FileClient::onStarted(const base::Location& location, bool has_user)
 //--------------------------------------------------------------------------------------------------
 void FileClient::onError(const base::Location& location)
 {
-    CLOG(ERROR) << "Error occurred (from" << location << ")";
+    CLOG(ERROR) << "Error occurred (" << location << ")";
 
     attach_timer_->stop();
 
