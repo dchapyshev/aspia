@@ -123,7 +123,7 @@ private:
     void sendUdpBandwidthProbe(const TimePoint& time);
     void onTcpBandwidthProbeAck();
     void onUdpBandwidthProbeAck();
-    void onUdpControl(const proto::peer::UdpControl& control);
+    void onControl(const proto::peer::Control& control);
     void checkBandwidth();
     void setUdpState(const base::Location& location, UdpState state);
     static QByteArray makeBandwidthProbeData();

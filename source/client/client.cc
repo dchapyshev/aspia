@@ -247,9 +247,9 @@ void Client::setForceReliable(bool enable)
     }
 
     proto::peer::ClientToHost message;
-    proto::peer::UdpControl::Flag* flag = message.mutable_udp_control()->add_flag();
-    flag->set_name("reliable");
-    flag->set_value(enable);
+    proto::peer::Control* control = message.mutable_control();
+    control->set_name("reliable");
+    control->set_value(enable);
     tcp_channel_->send(proto::peer::CHANNEL_ID_CONTROL, base::serialize(message));
 }
 

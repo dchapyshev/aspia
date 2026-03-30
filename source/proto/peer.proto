@@ -84,15 +84,10 @@ message BandwidthProbeAck
     int64 dummy = 1;
 }
 
-message UdpControl
+message Control
 {
-    message Flag
-    {
-        string name = 1;
-        bool value  = 2;
-    }
-
-    repeated Flag flag = 1;
+    string name = 1;
+    bool value  = 2;
 }
 
 // Use CHANNEL_ID_CONTROL to send.
@@ -100,7 +95,7 @@ message ClientToHost
 {
     DirectUdpReply direct_udp_reply       = 1;
     BandwidthProbeAck bandwidth_probe_ack = 2;
-    UdpControl udp_control                = 3;
+    Control control                       = 3;
 }
 
 // Use CHANNEL_ID_CONTROL to send.

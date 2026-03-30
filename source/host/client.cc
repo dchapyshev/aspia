@@ -226,8 +226,8 @@ void Client::onTcpMessageReceived(quint8 tcp_channel_id, const QByteArray& buffe
         readDirectUdpReply(message.direct_udp_reply());
     else if (message.has_bandwidth_probe_ack())
         onTcpBandwidthProbeAck();
-    else if (message.has_udp_control())
-        onUdpControl(message.udp_control());
+    else if (message.has_control())
+        onControl(message.control());
     else
         CLOG(WARNING) << "Unhandled control message";
 }
@@ -344,8 +344,8 @@ void Client::onUdpMessageReceived(quint8 udp_channel_id, const QByteArray& buffe
 
     if (message.has_bandwidth_probe_ack())
         onUdpBandwidthProbeAck();
-    else if (message.has_udp_control())
-        onUdpControl(message.udp_control());
+    else if (message.has_control())
+        onControl(message.control());
     else
         CLOG(WARNING) << "Unhandled control message";
 }
@@ -687,23 +687,19 @@ void Client::onUdpBandwidthProbeAck()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::onUdpControl(const proto::peer::UdpControl& control)
+void Client::onControl(const proto::peer::Control& control)
 {
-    for (int i = 0; i < control.flag_size(); ++i)
+    if (control.name() == "reliable")
     {
-        const proto::peer::UdpControl::Flag& flag = control.flag(i);
-        if (flag.name() == "reliable")
+        if (force_reliable_ != control.value())
         {
-            if (force_reliable_ != flag.value())
-            {
-                CLOG(INFO) << "Force reliable changed:" << force_reliable_ << "->" << flag.value();
-                force_reliable_ = flag.value();
-            }
+            CLOG(INFO) << "Force reliable changed:" << force_reliable_ << "->" << control.value();
+            force_reliable_ = control.value();
         }
-        else
-        {
-            CLOG(WARNING) << "Unknown UDP control flag:" << flag.name();
-        }
+    }
+    else
+    {
+        CLOG(WARNING) << "Unknown UDP control flag:" << control.name();
     }
 }
 
