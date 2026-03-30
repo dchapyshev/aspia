@@ -394,7 +394,7 @@ bool FileClient::startIpcServer(const QString& ipc_channel_name)
 
     if (!ipc_server_->start(ipc_channel_name))
     {
-        CLOG(ERROR) << "Failed to start IPC server (name:" << ipc_channel_name << ")";
+        CLOG(ERROR) << "Failed to start IPC server:" << ipc_channel_name;
         return false;
     }
 
