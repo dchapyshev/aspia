@@ -131,12 +131,7 @@
      </item>
      <item>
       <property name="text">
-       <string notr="true">Cursor Shape Count</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string notr="true">Cursor Shape From Cache</string>
+       <string notr="true">Cursor Shape Count/Cache</string>
       </property>
      </item>
      <item>
