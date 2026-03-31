@@ -59,9 +59,10 @@ size_t calculateAvgSize(size_t last_avg_size, size_t bytes)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-ClientDesktop::ClientDesktop(QObject* parent)
+ClientDesktop::ClientDesktop(const proto::control::Config& desktop_config, QObject* parent)
     : Client(parent),
-      repeated_timer_(new QTimer(this))
+      repeated_timer_(new QTimer(this)),
+      desktop_config_(desktop_config)
 {
     CLOG(INFO) << "Ctor";
 

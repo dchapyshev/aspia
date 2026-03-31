@@ -51,7 +51,7 @@ class ClientDesktop final : public Client
     Q_OBJECT
 
 public:
-    explicit ClientDesktop(QObject* parent = nullptr);
+    explicit ClientDesktop(const proto::control::Config& desktop_config, QObject* parent = nullptr);
     ~ClientDesktop() final;
 
     struct Metrics

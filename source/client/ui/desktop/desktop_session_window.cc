@@ -272,7 +272,7 @@ Client* DesktopSessionWindow::createClient()
 {
     LOG(INFO) << "Create client";
 
-    ClientDesktop* client = new ClientDesktop();
+    ClientDesktop* client = new ClientDesktop(desktop_config_);
 
     connect(client, &ClientDesktop::sig_showSessionWindow, this, &DesktopSessionWindow::onShowWindow,
             Qt::QueuedConnection);
