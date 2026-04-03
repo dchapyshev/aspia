@@ -47,7 +47,7 @@ void ClipboardFileTransfer::setLocalFileList(const proto::clipboard::Event::File
 //--------------------------------------------------------------------------------------------------
 void ClipboardFileTransfer::onFileDataRequest(const proto::file::Request& request)
 {
-    uint64_t transfer_id = request.transfer_id();
+    quint64 transfer_id = request.transfer_id();
     int file_index = request.file_index();
 
     if (file_index < 0 || file_index >= local_files_.file_size())
@@ -105,16 +105,14 @@ void ClipboardFileTransfer::onFileDataRequest(const proto::file::Request& reques
 //--------------------------------------------------------------------------------------------------
 void ClipboardFileTransfer::onFileDataCancel(const proto::file::Cancel& cancel)
 {
-    LOG(INFO) << "Transfer cancelled:" << cancel.transfer_id();
+    LOG(INFO) << "Transfer cancelled:" << cancel;
     outgoing_transfers_.erase(cancel.transfer_id());
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClipboardFileTransfer::onFileDataError(const proto::file::Error& error)
 {
-    LOG(ERROR) << "File transfer error:" << QString::fromStdString(error.error_id())
-               << "transfer:" << error.transfer_id()
-               << "file:" << error.file_index();
+    LOG(ERROR) << "File transfer error:" << error;
 
     outgoing_transfers_.erase(error.transfer_id());
 
@@ -125,7 +123,7 @@ void ClipboardFileTransfer::onFileDataError(const proto::file::Error& error)
 //--------------------------------------------------------------------------------------------------
 void ClipboardFileTransfer::requestFileData(int file_index)
 {
-    uint64_t transfer_id = nextTransferId();
+    quint64 transfer_id = nextTransferId();
 
     proto::file::Request request;
     request.set_transfer_id(transfer_id);
@@ -143,7 +141,7 @@ void ClipboardFileTransfer::onFileDataReceived(const proto::file::Data& data)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClipboardFileTransfer::sendNextChunk(uint64_t transfer_id)
+void ClipboardFileTransfer::sendNextChunk(quint64 transfer_id)
 {
     auto it = outgoing_transfers_.find(transfer_id);
     if (it == outgoing_transfers_.end())
@@ -176,7 +174,7 @@ void ClipboardFileTransfer::sendNextChunk(uint64_t transfer_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-uint64_t ClipboardFileTransfer::nextTransferId()
+quint64 ClipboardFileTransfer::nextTransferId()
 {
     return next_transfer_id_.fetch_add(1);
 }

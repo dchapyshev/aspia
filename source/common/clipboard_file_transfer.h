@@ -71,17 +71,17 @@ private:
 
     struct OutgoingTransfer
     {
-        uint64_t transfer_id = 0;
+        quint64 transfer_id = 0;
         int file_index = 0;
         std::unique_ptr<QFile> file;
     };
 
-    void sendNextChunk(uint64_t transfer_id);
-    uint64_t nextTransferId();
+    void sendNextChunk(quint64 transfer_id);
+    quint64 nextTransferId();
 
     proto::clipboard::Event::FileList local_files_;
-    std::map<uint64_t, OutgoingTransfer> outgoing_transfers_;
-    std::atomic<uint64_t> next_transfer_id_{ 1 };
+    std::map<quint64, OutgoingTransfer> outgoing_transfers_;
+    std::atomic<quint64> next_transfer_id_{ 1 };
 
     Q_DISABLE_COPY_MOVE(ClipboardFileTransfer)
 };
