@@ -182,13 +182,14 @@ void ClipboardFileTransfer::sendNextChunk(quint64 transfer_id)
 
     OutgoingTransfer& transfer = it->second;
 
-    QByteArray buffer = transfer.file->read(kChunkSize);
-    bool at_end = transfer.file->atEnd() || buffer.isEmpty();
+    qint64 bytes_read = transfer.file->read(read_buffer_.data(), kChunkSize);
+    bool at_end = (bytes_read <= 0) || transfer.file->atEnd();
 
     proto::file::Data* data = outgoing_message_.newMessage().mutable_data();
     data->set_transfer_id(transfer_id);
     data->set_file_index(transfer.file_index);
-    data->set_data(buffer.toStdString());
+    if (bytes_read > 0)
+        data->set_data(read_buffer_.data(), bytes_read);
     data->set_is_last(at_end);
     sendMessage();
 

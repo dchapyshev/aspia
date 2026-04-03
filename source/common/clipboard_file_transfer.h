@@ -22,6 +22,7 @@
 #include <QFile>
 #include <QObject>
 
+#include <array>
 #include <map>
 #include <memory>
 
@@ -77,6 +78,7 @@ private:
     QVector<LocalFileEntry> local_files_;
     std::map<quint64, OutgoingTransfer> outgoing_transfers_;
     quint64 next_transfer_id_ = 1;
+    std::array<char, kChunkSize> read_buffer_;
     base::Parser<proto::file::Message> incoming_message_;
     base::Serializer<proto::file::Message> outgoing_message_;
 
