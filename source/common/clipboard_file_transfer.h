@@ -57,13 +57,22 @@ signals:
     void sig_fileDataChunk(int file_index, const QByteArray& data, bool is_last);
 
 private:
+    // Each chunk is 256 KB. The sender keeps up to kWindowSize chunks "in flight" (sent but not yet
+    // acknowledged by the receiver). When the receiver processes a chunk, it sends an ack (Request
+    // with the same transfer_id). Each ack decrements in_flight and allows the sender to push the
+    // next chunk. This limits the amount of data sitting in send buffers to kWindowSize * kChunkSize
+    // (2 MB by default), preventing the send queue from growing unbounded on slow connections while
+    // still keeping the pipe full enough to achieve high throughput.
     static constexpr int kChunkSize = 256 * 1024; // 256 KB
+    static constexpr int kWindowSize = 8;
 
     struct OutgoingTransfer
     {
         quint64 transfer_id = 0;
         int file_index = 0;
         std::unique_ptr<QFile> file;
+        int in_flight = 0;      // Number of sent chunks waiting for ack.
+        bool eof_reached = false; // True after the last chunk has been sent.
     };
 
     void onFileDataRequest(const proto::file::Request& request);
@@ -71,7 +80,12 @@ private:
     void onFileDataCancel(const proto::file::Cancel& cancel);
     void onFileDataError(const proto::file::Error& error);
 
-    void sendNextChunk(quint64 transfer_id);
+    // Sends chunks until the window is full (in_flight == kWindowSize) or EOF is reached.
+    void fillWindow(quint64 transfer_id);
+
+    // Reads one chunk from the file and sends it. Returns true if more data remains, false on EOF.
+    bool sendNextChunk(quint64 transfer_id);
+
     void sendMessage();
     quint64 nextTransferId();
 

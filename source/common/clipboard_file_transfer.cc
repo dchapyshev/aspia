@@ -69,14 +69,28 @@ void ClipboardFileTransfer::onFileDataRequest(const proto::file::Request& reques
     quint64 transfer_id = request.transfer_id();
     int file_index = request.file_index();
 
-    // If transfer already exists, this is a "continue" request - send next chunk.
-    auto existing = outgoing_transfers_.find(transfer_id);
-    if (existing != outgoing_transfers_.end())
+    auto it = outgoing_transfers_.find(transfer_id);
+    if (it != outgoing_transfers_.end())
     {
-        sendNextChunk(transfer_id);
+        // Ack from the receiver: they consumed one chunk, so we decrement in_flight.
+        // If the file has been fully read (eof_reached) and all acks have arrived (in_flight == 0),
+        // the transfer is complete and can be cleaned up. Otherwise, fillWindow() will push the
+        // next chunk to keep the sliding window full.
+        OutgoingTransfer& transfer = it->second;
+        --transfer.in_flight;
+
+        if (transfer.eof_reached && transfer.in_flight <= 0)
+        {
+            outgoing_transfers_.erase(it);
+        }
+        else
+        {
+            fillWindow(transfer_id);
+        }
         return;
     }
 
+    // Initial request - open the file and fill the window with up to kWindowSize chunks.
     if (file_index < 0 || file_index >= local_files_.size())
     {
         LOG(ERROR) << "Invalid file_index:" << file_index;
@@ -126,7 +140,7 @@ void ClipboardFileTransfer::onFileDataRequest(const proto::file::Request& reques
     transfer.file = std::move(file);
 
     outgoing_transfers_[transfer_id] = std::move(transfer);
-    sendNextChunk(transfer_id);
+    fillWindow(transfer_id);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -163,22 +177,41 @@ void ClipboardFileTransfer::onFileDataReceived(const proto::file::Data& data)
     QByteArray chunk = QByteArray::fromStdString(data.data());
     emit sig_fileDataChunk(data.file_index(), chunk, data.is_last());
 
-    // Request next chunk from sender.
     if (!data.is_last())
     {
-        proto::file::Request* request = outgoing_message_.newMessage().mutable_request();
-        request->set_transfer_id(data.transfer_id());
-        request->set_file_index(data.file_index());
+        // Send ack (Request with the same transfer_id) back to the sender. The sender treats this
+        // as confirmation that one chunk has been consumed, decrements in_flight, and sends the
+        // next chunk from the file. No ack is sent for the last chunk because the sender already
+        // knows the transfer is finishing and will clean up after all in-flight acks arrive.
+        proto::file::Request* ack = outgoing_message_.newMessage().mutable_request();
+        ack->set_transfer_id(data.transfer_id());
+        ack->set_file_index(data.file_index());
         sendMessage();
     }
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClipboardFileTransfer::sendNextChunk(quint64 transfer_id)
+void ClipboardFileTransfer::fillWindow(quint64 transfer_id)
 {
     auto it = outgoing_transfers_.find(transfer_id);
     if (it == outgoing_transfers_.end())
         return;
+
+    OutgoingTransfer& transfer = it->second;
+
+    while (transfer.in_flight < kWindowSize && !transfer.eof_reached)
+    {
+        if (!sendNextChunk(transfer_id))
+            break;
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+bool ClipboardFileTransfer::sendNextChunk(quint64 transfer_id)
+{
+    auto it = outgoing_transfers_.find(transfer_id);
+    if (it == outgoing_transfers_.end())
+        return false;
 
     OutgoingTransfer& transfer = it->second;
 
@@ -194,7 +227,15 @@ void ClipboardFileTransfer::sendNextChunk(quint64 transfer_id)
     sendMessage();
 
     if (at_end)
-        outgoing_transfers_.erase(it);
+    {
+        transfer.eof_reached = true;
+        if (transfer.in_flight == 0)
+            outgoing_transfers_.erase(it);
+        return false;
+    }
+
+    ++transfer.in_flight;
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
