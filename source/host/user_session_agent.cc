@@ -371,13 +371,13 @@ void UserSessionAgent::sendServiceMessage()
 }
 
 //--------------------------------------------------------------------------------------------------
-void UserSessionAgent::sendNetworkMessage(quint8 net_channel_id, const QByteArray &buffer)
+void UserSessionAgent::sendNetworkMessage(quint8 net_channel_id, const QByteArray& buffer)
 {
     if (!ipc_channel_)
         return;
 
     quint32 channel_id = base::makeUint32(proto::user::CHANNEL_ID_NETWORK, net_channel_id);
-    ipc_channel_->send(channel_id, outgoing_message_.serialize());
+    ipc_channel_->send(channel_id, buffer);
 }
 
 } // namespace host
