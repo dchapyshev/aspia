@@ -23,8 +23,9 @@
 namespace common {
 
 //--------------------------------------------------------------------------------------------------
-FileStream::FileStream()
-    : data_event_(CreateEventW(nullptr, FALSE, FALSE, nullptr))
+FileStream::FileStream(qint64 file_size)
+    : file_size_(file_size),
+      data_event_(CreateEventW(nullptr, FALSE, FALSE, nullptr))
 {
     if (!data_event_.isValid())
     {
@@ -72,6 +73,7 @@ HRESULT FileStream::QueryInterface(REFIID iid, void** object)
     if (iid == IID_IUnknown || iid == IID_IStream)
     {
         *object = static_cast<IStream*>(this);
+        AddRef();
         return S_OK;
     }
 
@@ -90,6 +92,8 @@ ULONG FileStream::AddRef()
 ULONG FileStream::Release()
 {
     ULONG new_ref = InterlockedDecrement(&ref_count_);
+    if (new_ref == 0)
+        delete this;
     return new_ref;
 }
 
@@ -102,12 +106,7 @@ HRESULT FileStream::Read(void* pv, ULONG cb, ULONG* pcbRead)
     {
         lock_.lock();
 
-        if (is_terminated_)
-        {
-            lock_.unlock();
-            return S_FALSE;
-        }
-        else if (!buffer_.isEmpty())
+        if (!buffer_.isEmpty())
         {
             qsizetype to_copy = std::min(qsizetype(cb - total_read), buffer_.size());
             memcpy(reinterpret_cast<char*>(pv) + total_read, buffer_.data(), to_copy);
@@ -117,15 +116,44 @@ HRESULT FileStream::Read(void* pv, ULONG cb, ULONG* pcbRead)
 
             lock_.unlock();
         }
+        else if (is_terminated_)
+        {
+            lock_.unlock();
+            break;
+        }
         else
         {
             lock_.unlock();
 
-            DWORD ret = WaitForSingleObject(data_event_, INFINITE);
-            if (ret != WAIT_OBJECT_0)
+            // Use MsgWaitForMultipleObjects to pump messages while waiting.
+            // This prevents deadlock when Read() is called on the STA thread
+            // via OLE marshaling: without message pumping, the thread would block
+            // and could not process Qt queued connections that deliver file data.
+            HANDLE event = data_event_;
+
+            for (;;)
             {
-                PLOG(ERROR) << "WaitForSingleObject failed:" << ret;
-                return S_FALSE;
+                DWORD ret = MsgWaitForMultipleObjects(
+                    1, &event, FALSE, INFINITE, QS_ALLINPUT);
+
+                if (ret == WAIT_OBJECT_0)
+                {
+                    break;
+                }
+                else if (ret == WAIT_OBJECT_0 + 1)
+                {
+                    MSG msg;
+                    while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
+                    {
+                        TranslateMessage(&msg);
+                        DispatchMessage(&msg);
+                    }
+                }
+                else
+                {
+                    PLOG(ERROR) << "MsgWaitForMultipleObjects failed:" << ret;
+                    return S_FALSE;
+                }
             }
         }
     }
@@ -201,6 +229,7 @@ HRESULT FileStream::Stat(STATSTG* pstatstg, DWORD grfStatFlag)
 
     memset(pstatstg, 0, sizeof(STATSTG));
     pstatstg->type = STGTY_STREAM;
+    pstatstg->cbSize.QuadPart = static_cast<ULONGLONG>(file_size_);
 
     return S_OK;
 }

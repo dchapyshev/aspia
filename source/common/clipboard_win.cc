@@ -198,8 +198,17 @@ ClipboardWin::~ClipboardWin()
         return;
     }
 
+    // Release clipboard object before uninitializing OLE.
+    if (file_object_)
+    {
+        OleSetClipboard(nullptr);
+        file_object_.reset();
+    }
+
     RemoveClipboardFormatListener(window_->hwnd());
     window_.reset();
+
+    OleUninitialize();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -225,6 +234,13 @@ void ClipboardWin::init()
     if (!AddClipboardFormatListener(window_->hwnd()))
     {
         PLOG(ERROR) << "AddClipboardFormatListener failed";
+        return;
+    }
+
+    _com_error error = OleInitialize(nullptr);
+    if (FAILED(error.Error()))
+    {
+        PLOG(ERROR) << "OleInitialize failed";
         return;
     }
 }
@@ -373,6 +389,41 @@ void ClipboardWin::onClipboardFiles()
         }
     }
 
+    // Find common parent directory for all selected files.
+    QString common_parent;
+
+    for (const auto& path : std::as_const(files))
+    {
+        int last_sep = path.lastIndexOf('\\');
+        if (last_sep < 0)
+            last_sep = path.lastIndexOf('/');
+
+        QString parent = (last_sep >= 0) ? path.left(last_sep + 1) : QString();
+
+        if (common_parent.isNull())
+        {
+            common_parent = parent;
+        }
+        else
+        {
+            int len = std::min(common_parent.size(), parent.size());
+            int i = 0;
+
+            while (i < len && common_parent[i].toLower() == parent[i].toLower())
+                ++i;
+
+            // Cut back to last separator.
+            common_parent = common_parent.left(i);
+            int last = common_parent.lastIndexOf('\\');
+            if (last < 0)
+                last = common_parent.lastIndexOf('/');
+            if (last >= 0)
+                common_parent = common_parent.left(last + 1);
+            else
+                common_parent.clear();
+        }
+    }
+
     proto::clipboard::Event::FileList file_list;
 
     for (const auto& path : std::as_const(files))
@@ -395,8 +446,25 @@ void ClipboardWin::onClipboardFiles()
             addDirectoryContent(path, &file_list);
     }
 
+    // Keep absolute paths for local file reading.
     emit sig_localFileListChanged(file_list);
-    onData(kMimeTypeFileList, base::serialize(file_list));
+
+    // Send relative paths over network (for FILEDESCRIPTOR on the receiving side).
+    proto::clipboard::Event::FileList relative_file_list;
+    relative_file_list.CopyFrom(file_list);
+
+    for (int i = 0; i < relative_file_list.file_size(); ++i)
+    {
+        proto::clipboard::Event::FileList::File* file = relative_file_list.mutable_file(i);
+        QString path = QString::fromStdString(file->path());
+
+        if (!common_parent.isEmpty() && path.startsWith(common_parent, Qt::CaseInsensitive))
+            path = path.mid(common_parent.size());
+
+        file->set_path(path.toStdString());
+    }
+
+    onData(kMimeTypeFileList, base::serialize(relative_file_list));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -462,37 +530,32 @@ void ClipboardWin::setDataFiles(const QByteArray& data)
         it.value()->terminate();
     active_streams_.clear();
 
-    _com_error error = OleInitialize(nullptr);
-    if (FAILED(error.Error()))
+    // Release OLE clipboard reference to the old FileObject before destroying it.
+    // Otherwise, OLE holds a dangling pointer and crashes on access.
+    if (file_object_)
     {
-        LOG(ERROR) << "OleInitialize failed:" << error;
+        OleSetClipboard(nullptr);
+        file_object_.reset();
+    }
+
+    file_object_.reset(FileObject::create(files,
+        [this](int file_index, FileStream* stream)
+        {
+            onFileDataRequested(file_index, stream);
+        }));
+
+    if (!file_object_)
+    {
+        LOG(ERROR) << "Invalid file object";
         return;
     }
 
-    do
+    _com_error error = OleSetClipboard(file_object_.get());
+    if (FAILED(error.Error()))
     {
-        file_object_.reset(FileObject::create(files,
-            [this](int file_index, FileStream* stream)
-            {
-                onFileDataRequested(file_index, stream);
-            }));
-
-        if (!file_object_)
-        {
-            LOG(ERROR) << "Invalid file object";
-            break;
-        }
-
-        error = OleSetClipboard(file_object_.get());
-        if (FAILED(error.Error()))
-        {
-            LOG(ERROR) << "OleSetClipboard failed:" << error;
-            break;
-        }
+        LOG(ERROR) << "OleSetClipboard failed:" << error;
+        return;
     }
-    while (false);
-
-    OleUninitialize();
 }
 
 //--------------------------------------------------------------------------------------------------

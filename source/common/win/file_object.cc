@@ -96,6 +96,7 @@ HRESULT FileObject::QueryInterface(REFIID iid, void** object)
     if (iid == IID_IDataObject || iid == IID_IUnknown)
     {
         *object = static_cast<IDataObject*>(this);
+        AddRef();
         return S_OK;
     }
 
@@ -206,7 +207,7 @@ HRESULT FileObject::GetData(FORMATETC* pFormatEtc, STGMEDIUM* pMedium)
 
         LOG(INFO) << "File content requested:" << QString::fromStdString(file.path());
 
-        FileStream* stream = new FileStream();
+        FileStream* stream = new FileStream(file.file_size());
         streams_[index] = stream;
 
         pMedium->tymed = TYMED_ISTREAM;

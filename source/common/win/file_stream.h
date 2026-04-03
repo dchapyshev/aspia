@@ -31,7 +31,7 @@ namespace common {
 class FileStream final : public IStream
 {
 public:
-    FileStream();
+    explicit FileStream(qint64 file_size = 0);
     virtual ~FileStream() final;
 
     void addData(const QByteArray& data);
@@ -59,6 +59,7 @@ private:
     HRESULT __stdcall Clone(IStream** ppstm) final;
 
     LONG ref_count_ = 1;
+    qint64 file_size_ = 0;
 
     base::ScopedHandle data_event_;
     QByteArray buffer_;
