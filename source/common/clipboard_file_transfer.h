@@ -26,7 +26,7 @@
 #include <map>
 #include <memory>
 
-#include "proto/desktop_clipboard.h"
+#include "common/clipboard.h"
 #include "proto/desktop_file.h"
 
 namespace common {
@@ -40,7 +40,7 @@ public:
     ~ClipboardFileTransfer() final;
 
     // Sender side: store local file list for later reading.
-    void setLocalFileList(const proto::clipboard::Event::FileList& files);
+    void setLocalFileList(const QVector<LocalFileEntry>& files);
 
     // Sender side: handle incoming request for file data.
     void onFileDataRequest(const proto::file::Request& request);
@@ -79,7 +79,7 @@ private:
     void sendNextChunk(quint64 transfer_id);
     quint64 nextTransferId();
 
-    proto::clipboard::Event::FileList local_files_;
+    QVector<LocalFileEntry> local_files_;
     std::map<quint64, OutgoingTransfer> outgoing_transfers_;
     std::atomic<quint64> next_transfer_id_{ 1 };
 

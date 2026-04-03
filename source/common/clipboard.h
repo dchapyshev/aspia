@@ -20,10 +20,21 @@
 #define COMMON_CLIPBOARD_H
 
 #include <QObject>
+#include <QVector>
 
 #include "proto/desktop_clipboard.h"
 
 namespace common {
+
+struct LocalFileEntry
+{
+    QString path;
+    bool is_dir = false;
+    qint64 file_size = 0;
+    qint64 create_time = 0;
+    qint64 access_time = 0;
+    qint64 modify_time = 0;
+};
 
 class Clipboard : public QObject
 {
@@ -46,7 +57,7 @@ public slots:
 signals:
     void sig_clipboardEvent(const proto::clipboard::Event& event);
     void sig_fileDataRequest(int file_index);
-    void sig_localFileListChanged(const proto::clipboard::Event::FileList& files);
+    void sig_localFileListChanged(const QVector<LocalFileEntry>& files);
 
 protected:
     virtual void init() = 0;

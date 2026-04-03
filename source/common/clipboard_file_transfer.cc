@@ -38,7 +38,7 @@ ClipboardFileTransfer::~ClipboardFileTransfer()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClipboardFileTransfer::setLocalFileList(const proto::clipboard::Event::FileList& files)
+void ClipboardFileTransfer::setLocalFileList(const QVector<LocalFileEntry>& files)
 {
     outgoing_transfers_.clear();
     local_files_ = files;
@@ -50,7 +50,7 @@ void ClipboardFileTransfer::onFileDataRequest(const proto::file::Request& reques
     quint64 transfer_id = request.transfer_id();
     int file_index = request.file_index();
 
-    if (file_index < 0 || file_index >= local_files_.file_size())
+    if (file_index < 0 || file_index >= local_files_.size())
     {
         LOG(ERROR) << "Invalid file_index:" << file_index;
 
@@ -62,9 +62,9 @@ void ClipboardFileTransfer::onFileDataRequest(const proto::file::Request& reques
         return;
     }
 
-    const auto& file_entry = local_files_.file(file_index);
+    const LocalFileEntry& file_entry = local_files_[file_index];
 
-    if (file_entry.is_dir())
+    if (file_entry.is_dir)
     {
         // Directories have no content to send.
         proto::file::Data data;
@@ -75,7 +75,7 @@ void ClipboardFileTransfer::onFileDataRequest(const proto::file::Request& reques
         return;
     }
 
-    QString path = QString::fromStdString(file_entry.path());
+    QString path = file_entry.path;
     auto file = std::make_unique<QFile>(path);
 
     if (!file->open(QFile::ReadOnly))

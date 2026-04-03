@@ -41,7 +41,7 @@ public:
 signals:
     void sig_clipboardEvent(const proto::clipboard::Event& event);
     void sig_fileDataRequest(int file_index);
-    void sig_localFileListChanged(const proto::clipboard::Event::FileList& files);
+    void sig_localFileListChanged(const QVector<common::LocalFileEntry>& files);
 
     void sig_injectClipboardEventPrivate(const proto::clipboard::Event& event);
     void sig_clearClipboardPrivate();

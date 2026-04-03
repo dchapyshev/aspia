@@ -38,6 +38,40 @@ namespace common {
 namespace {
 
 //--------------------------------------------------------------------------------------------------
+int lastSeparator(const QString& path)
+{
+    int pos = path.lastIndexOf('\\');
+    return (pos >= 0) ? pos : path.lastIndexOf('/');
+}
+
+//--------------------------------------------------------------------------------------------------
+QString commonParentDir(const QStringList& paths)
+{
+    if (paths.isEmpty())
+        return QString();
+
+    int sep = lastSeparator(paths.first());
+    QString result = (sep >= 0) ? paths.first().left(sep + 1) : QString();
+
+    for (int n = 1; n < paths.size(); ++n)
+    {
+        int len = std::min(result.size(), paths[n].size());
+        int i = 0;
+
+        while (i < len && result[i].toLower() == paths[n][i].toLower())
+            ++i;
+
+        sep = lastSeparator(result.left(i));
+        result = (sep >= 0) ? result.left(sep + 1) : QString();
+
+        if (result.isEmpty())
+            break;
+    }
+
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
 struct FileInfo
 {
     bool is_directory = false;
@@ -118,7 +152,7 @@ bool fileInfo(const QString& path, FileInfo* file_info)
 }
 
 //--------------------------------------------------------------------------------------------------
-void addDirectoryContent(const QString& path, proto::clipboard::Event::FileList* files)
+void addDirectoryContent(const QString& path, QVector<LocalFileEntry>* entries)
 {
     QStack<QString> stack;
     stack.push(path);
@@ -150,13 +184,12 @@ void addDirectoryContent(const QString& path, proto::clipboard::Event::FileList*
             QString full_path = current_path + '\\' + name;
             bool is_directory = (find_data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0;
 
-            proto::clipboard::Event::FileList::File* file = files->add_file();
-
-            file->set_path(full_path.toStdString());
-            file->set_is_dir(is_directory);
-            file->set_create_time(fileTimeToUnixTime(find_data.ftCreationTime));
-            file->set_access_time(fileTimeToUnixTime(find_data.ftLastAccessTime));
-            file->set_modify_time(fileTimeToUnixTime(find_data.ftLastWriteTime));
+            LocalFileEntry entry;
+            entry.path = full_path;
+            entry.is_dir = is_directory;
+            entry.create_time = fileTimeToUnixTime(find_data.ftCreationTime);
+            entry.access_time = fileTimeToUnixTime(find_data.ftLastAccessTime);
+            entry.modify_time = fileTimeToUnixTime(find_data.ftLastWriteTime);
 
             if (is_directory)
             {
@@ -168,9 +201,10 @@ void addDirectoryContent(const QString& path, proto::clipboard::Event::FileList*
                 size.HighPart = find_data.nFileSizeHigh;
                 size.LowPart = find_data.nFileSizeLow;
 
-                file->set_file_size(static_cast<qint64>(size.QuadPart));
+                entry.file_size = static_cast<qint64>(size.QuadPart);
             }
 
+            entries->append(entry);
         }
         while (FindNextFileW(find_handle, &find_data));
 
@@ -389,42 +423,8 @@ void ClipboardWin::onClipboardFiles()
         }
     }
 
-    // Find common parent directory for all selected files.
-    QString common_parent;
-
-    for (const auto& path : std::as_const(files))
-    {
-        int last_sep = path.lastIndexOf('\\');
-        if (last_sep < 0)
-            last_sep = path.lastIndexOf('/');
-
-        QString parent = (last_sep >= 0) ? path.left(last_sep + 1) : QString();
-
-        if (common_parent.isNull())
-        {
-            common_parent = parent;
-        }
-        else
-        {
-            int len = std::min(common_parent.size(), parent.size());
-            int i = 0;
-
-            while (i < len && common_parent[i].toLower() == parent[i].toLower())
-                ++i;
-
-            // Cut back to last separator.
-            common_parent = common_parent.left(i);
-            int last = common_parent.lastIndexOf('\\');
-            if (last < 0)
-                last = common_parent.lastIndexOf('/');
-            if (last >= 0)
-                common_parent = common_parent.left(last + 1);
-            else
-                common_parent.clear();
-        }
-    }
-
-    proto::clipboard::Event::FileList file_list;
+    QVector<LocalFileEntry> entries;
+    QString common_parent = commonParentDir(files);
 
     for (const auto& path : std::as_const(files))
     {
@@ -432,39 +432,47 @@ void ClipboardWin::onClipboardFiles()
         if (!fileInfo(path, &file_info))
             continue;
 
-        proto::clipboard::Event::FileList::File* file = file_list.add_file();
-        file->set_path(path.toStdString());
-        file->set_is_dir(file_info.is_directory);
-        file->set_file_size(file_info.file_size);
-        file->set_create_time(file_info.create_time);
-        file->set_access_time(file_info.access_time);
-        file->set_modify_time(file_info.modify_time);
+        LocalFileEntry entry;
+        entry.path = path;
+        entry.is_dir = file_info.is_directory;
+        entry.file_size = file_info.file_size;
+        entry.create_time = file_info.create_time;
+        entry.access_time = file_info.access_time;
+        entry.modify_time = file_info.modify_time;
+        entries.append(entry);
 
         // When copying, only top-level paths are copied to the clipboard. If the directory has
         // nested elements, they must be added separately.
         if (file_info.is_directory)
-            addDirectoryContent(path, &file_list);
+            addDirectoryContent(path, &entries);
     }
 
-    // Keep absolute paths for local file reading.
-    emit sig_localFileListChanged(file_list);
+    // Store local file list for file data requests.
+    emit sig_localFileListChanged(entries);
 
-    // Send relative paths over network (for FILEDESCRIPTOR on the receiving side).
-    proto::clipboard::Event::FileList relative_file_list;
-    relative_file_list.CopyFrom(file_list);
+    // Build proto with relative paths and send clipboard event through normal clipboard path.
+    proto::clipboard::Event::FileList file_list;
 
-    for (int i = 0; i < relative_file_list.file_size(); ++i)
+    for (const auto& entry : std::as_const(entries))
     {
-        proto::clipboard::Event::FileList::File* file = relative_file_list.mutable_file(i);
-        QString path = QString::fromStdString(file->path());
+        proto::clipboard::Event::FileList::File* file = file_list.add_file();
 
-        if (!common_parent.isEmpty() && path.startsWith(common_parent, Qt::CaseInsensitive))
-            path = path.mid(common_parent.size());
+        QString relative_path = entry.path;
+        if (!common_parent.isEmpty() &&
+            relative_path.startsWith(common_parent, Qt::CaseInsensitive))
+        {
+            relative_path = relative_path.mid(common_parent.size());
+        }
 
-        file->set_path(path.toStdString());
+        file->set_path(relative_path.toStdString());
+        file->set_is_dir(entry.is_dir);
+        file->set_file_size(entry.file_size);
+        file->set_create_time(entry.create_time);
+        file->set_access_time(entry.access_time);
+        file->set_modify_time(entry.modify_time);
     }
 
-    onData(kMimeTypeFileList, base::serialize(relative_file_list));
+    onData(kMimeTypeFileList, base::serialize(file_list));
 }
 
 //--------------------------------------------------------------------------------------------------
