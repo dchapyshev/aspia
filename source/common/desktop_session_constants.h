@@ -60,6 +60,7 @@ extern const char kFlagPowerControl[];
 extern const char kFlagSelectScreen[];
 extern const char kFlagSystemInfo[];
 extern const char kFlagTaskManager[];
+extern const char kFlagFileClipboard[];
 
 } // namespace common
 

@@ -59,5 +59,6 @@ const char kFlagPowerControl[] = "power_control";
 const char kFlagSelectScreen[] = "select_screen";
 const char kFlagSystemInfo[] = "system_info";
 const char kFlagTaskManager[] = "task_manager";
+const char kFlagFileClipboard[] = "file_clipboard";
 
 } // namespace common
