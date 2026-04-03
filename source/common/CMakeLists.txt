@@ -105,6 +105,8 @@ if (WIN32)
         ui/taskbar_progress.h)
 
     list(APPEND SOURCE_COMMON_WIN
+        clipboard_file_transfer.cc
+        clipboard_file_transfer.h
         win/file_object.cc
         win/file_object.h
         win/file_stream.cc
