@@ -22,7 +22,6 @@
 #include <QFile>
 #include <QObject>
 
-#include <atomic>
 #include <map>
 #include <memory>
 
@@ -81,7 +80,7 @@ private:
 
     QVector<LocalFileEntry> local_files_;
     std::map<quint64, OutgoingTransfer> outgoing_transfers_;
-    std::atomic<quint64> next_transfer_id_{ 1 };
+    quint64 next_transfer_id_ = 1;
 
     Q_DISABLE_COPY_MOVE(ClipboardFileTransfer)
 };

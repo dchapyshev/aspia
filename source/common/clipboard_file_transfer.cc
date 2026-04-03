@@ -18,8 +18,6 @@
 
 #include "common/clipboard_file_transfer.h"
 
-#include <QTimer>
-
 #include "base/logging.h"
 
 namespace common {
@@ -49,6 +47,14 @@ void ClipboardFileTransfer::onFileDataRequest(const proto::file::Request& reques
 {
     quint64 transfer_id = request.transfer_id();
     int file_index = request.file_index();
+
+    // If transfer already exists, this is a "continue" request - send next chunk.
+    auto existing = outgoing_transfers_.find(transfer_id);
+    if (existing != outgoing_transfers_.end())
+    {
+        sendNextChunk(transfer_id);
+        return;
+    }
 
     if (file_index < 0 || file_index >= local_files_.size())
     {
@@ -138,6 +144,15 @@ void ClipboardFileTransfer::onFileDataReceived(const proto::file::Data& data)
 {
     QByteArray chunk = QByteArray::fromStdString(data.data());
     emit sig_fileDataChunk(data.file_index(), chunk, data.is_last());
+
+    // Request next chunk from sender.
+    if (!data.is_last())
+    {
+        proto::file::Request request;
+        request.set_transfer_id(data.transfer_id());
+        request.set_file_index(data.file_index());
+        emit sig_sendRequest(request);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -161,22 +176,13 @@ void ClipboardFileTransfer::sendNextChunk(quint64 transfer_id)
     emit sig_sendData(data);
 
     if (at_end)
-    {
         outgoing_transfers_.erase(it);
-    }
-    else
-    {
-        QTimer::singleShot(0, this, [this, transfer_id]()
-        {
-            sendNextChunk(transfer_id);
-        });
-    }
 }
 
 //--------------------------------------------------------------------------------------------------
 quint64 ClipboardFileTransfer::nextTransferId()
 {
-    return next_transfer_id_.fetch_add(1);
+    return next_transfer_id_++;
 }
 
 } // namespace common
