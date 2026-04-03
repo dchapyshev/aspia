@@ -88,6 +88,7 @@ void ClientDesktop::onStarted()
     repeated_timer_->start();
 
     input_event_filter_.setSessionType(sessionState()->sessionType());
+    input_event_filter_.setClipboardEnabled(desktop_config_.clipboard());
 
     if (sessionState()->sessionType() == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
     {
