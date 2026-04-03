@@ -45,8 +45,10 @@ bool unixTimeToFileTime(qint64 unix_time, FILETIME* file_time)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-FileObject::FileObject(const proto::clipboard::Event::FileList& files)
-    : files_(files)
+FileObject::FileObject(const proto::clipboard::Event::FileList& files,
+                       FileDataRequestCallback callback)
+    : file_data_request_callback_(std::move(callback)),
+      files_(files)
 {
     file_group_descriptor_ = RegisterClipboardFormat(CFSTR_FILEDESCRIPTOR);
     if (!file_group_descriptor_)
@@ -71,9 +73,10 @@ FileObject::~FileObject()
 
 //--------------------------------------------------------------------------------------------------
 // static
-FileObject* FileObject::create(const proto::clipboard::Event::FileList& files)
+FileObject* FileObject::create(const proto::clipboard::Event::FileList& files,
+                               FileDataRequestCallback callback)
 {
-    std::unique_ptr<FileObject> object(new FileObject(files));
+    std::unique_ptr<FileObject> object(new FileObject(files, std::move(callback)));
 
     if (!object->file_group_descriptor_ || !object->file_contents_)
     {
@@ -201,15 +204,17 @@ HRESULT FileObject::GetData(FORMATETC* pFormatEtc, STGMEDIUM* pMedium)
             return DV_E_LINDEX;
         }
 
-        LOG(INFO) << "File to copy:" << QString::fromStdString(file.path());
+        LOG(INFO) << "File content requested:" << QString::fromStdString(file.path());
 
-        // TODO
-
-        stream_ = std::make_unique<FileStream>();
+        FileStream* stream = new FileStream();
+        streams_[index] = stream;
 
         pMedium->tymed = TYMED_ISTREAM;
         pMedium->pUnkForRelease = nullptr;
-        pMedium->pstm = stream_.get();
+        pMedium->pstm = stream;
+
+        if (file_data_request_callback_)
+            file_data_request_callback_(index, stream);
 
         return S_OK;
     }

@@ -36,6 +36,12 @@ FileStream::FileStream()
 //--------------------------------------------------------------------------------------------------
 FileStream::~FileStream()
 {
+    terminate();
+}
+
+//--------------------------------------------------------------------------------------------------
+void FileStream::terminate()
+{
     {
         std::scoped_lock lock(lock_);
         is_terminated_ = true;

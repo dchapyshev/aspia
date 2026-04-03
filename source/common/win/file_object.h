@@ -19,8 +19,11 @@
 #ifndef COMMON_WIN_FILE_OBJECT_H
 #define COMMON_WIN_FILE_OBJECT_H
 
+#include <functional>
 #include <memory>
 #include <shlobj.h>
+
+#include <QMap>
 
 #include "common/win/file_stream.h"
 #include "proto/desktop_clipboard.h"
@@ -30,12 +33,16 @@ namespace common {
 class FileObject final : public IDataObject
 {
 public:
+    using FileDataRequestCallback = std::function<void(int file_index, FileStream* stream)>;
+
     virtual ~FileObject() final;
 
-    static FileObject* create(const proto::clipboard::Event::FileList& files);
+    static FileObject* create(const proto::clipboard::Event::FileList& files,
+                              FileDataRequestCallback callback);
 
 private:
-    explicit FileObject(const proto::clipboard::Event::FileList& files);
+    FileObject(const proto::clipboard::Event::FileList& files,
+               FileDataRequestCallback callback);
 
     // IUnknown
     HRESULT __stdcall QueryInterface(REFIID iid, void** object) final;
@@ -57,8 +64,9 @@ private:
     UINT file_group_descriptor_ = 0;
     UINT file_contents_ = 0;
 
+    FileDataRequestCallback file_data_request_callback_;
     proto::clipboard::Event::FileList files_;
-    std::unique_ptr<FileStream> stream_;
+    QMap<int, FileStream*> streams_;
 };
 
 } // namespace common

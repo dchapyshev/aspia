@@ -35,6 +35,7 @@ public:
     virtual ~FileStream() final;
 
     void addData(const QByteArray& data);
+    void terminate();
 
 private:
     // IUnknown
