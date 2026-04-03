@@ -37,12 +37,12 @@ public:
     void addData(const QByteArray& data);
     void terminate();
 
-private:
     // IUnknown
     HRESULT __stdcall QueryInterface(REFIID iid, void** object) final;
     ULONG __stdcall AddRef() final;
     ULONG __stdcall Release() final;
 
+private:
     // IStream
     HRESULT __stdcall Read(void* pv, ULONG cb, ULONG* pcbRead) final;
     HRESULT __stdcall Seek(

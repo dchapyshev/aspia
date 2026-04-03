@@ -232,6 +232,14 @@ ClipboardWin::~ClipboardWin()
         return;
     }
 
+    // Terminate and release any active streams.
+    for (auto it = active_streams_.begin(); it != active_streams_.end(); ++it)
+    {
+        it.value()->terminate();
+        it.value()->Release();
+    }
+    active_streams_.clear();
+
     // Release clipboard object before uninitializing OLE.
     if (file_object_)
     {
@@ -535,7 +543,10 @@ void ClipboardWin::setDataFiles(const QByteArray& data)
 
     // Terminate any active streams from previous FileObject.
     for (auto it = active_streams_.begin(); it != active_streams_.end(); ++it)
+    {
         it.value()->terminate();
+        it.value()->Release();
+    }
     active_streams_.clear();
 
     // Release OLE clipboard reference to the old FileObject before destroying it.
@@ -569,6 +580,7 @@ void ClipboardWin::setDataFiles(const QByteArray& data)
 //--------------------------------------------------------------------------------------------------
 void ClipboardWin::onFileDataRequested(int file_index, FileStream* stream)
 {
+    stream->AddRef();
     active_streams_[file_index] = stream;
     emit sig_fileDataRequest(file_index);
 }
@@ -591,6 +603,7 @@ void ClipboardWin::addFileData(int file_index, const QByteArray& data, bool is_l
     if (is_last)
     {
         stream->terminate();
+        stream->Release();
         active_streams_.erase(it);
     }
 }

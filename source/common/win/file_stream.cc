@@ -93,7 +93,15 @@ ULONG FileStream::Release()
 {
     ULONG new_ref = InterlockedDecrement(&ref_count_);
     if (new_ref == 0)
+    {
         delete this;
+    }
+    else if (new_ref == 1)
+    {
+        // COM/Explorer released its reference, only ClipboardWin's reference remains.
+        // Terminate to unblock Read() so Explorer's cancel dialog can finish.
+        terminate();
+    }
     return new_ref;
 }
 
@@ -102,7 +110,7 @@ HRESULT FileStream::Read(void* pv, ULONG cb, ULONG* pcbRead)
 {
     ULONG total_read = 0;
 
-    while (total_read < cb)
+    for (;;)
     {
         lock_.lock();
 
@@ -112,48 +120,54 @@ HRESULT FileStream::Read(void* pv, ULONG cb, ULONG* pcbRead)
             memcpy(reinterpret_cast<char*>(pv) + total_read, buffer_.data(), to_copy);
 
             buffer_.remove(0, to_copy);
-            total_read += to_copy;
+            total_read += static_cast<ULONG>(to_copy);
 
             lock_.unlock();
+
+            // Return immediately after reading available data. This allows the caller
+            // (Explorer) to check for cancellation between Read() calls. IStream::Read()
+            // is allowed to return fewer bytes than requested.
+            break;
         }
-        else if (is_terminated_)
+
+        if (is_terminated_)
         {
             lock_.unlock();
             break;
         }
-        else
+
+        lock_.unlock();
+
+        // Use MsgWaitForMultipleObjects to pump messages while waiting.
+        // This prevents deadlock when Read() is called on the STA thread
+        // via OLE marshaling: without message pumping, the thread would block
+        // and could not process Qt queued connections that deliver file data.
+        HANDLE event = data_event_;
+
+        for (;;)
         {
-            lock_.unlock();
+            DWORD ret = MsgWaitForMultipleObjects(
+                1, &event, FALSE, INFINITE, QS_ALLINPUT);
 
-            // Use MsgWaitForMultipleObjects to pump messages while waiting.
-            // This prevents deadlock when Read() is called on the STA thread
-            // via OLE marshaling: without message pumping, the thread would block
-            // and could not process Qt queued connections that deliver file data.
-            HANDLE event = data_event_;
-
-            for (;;)
+            if (ret == WAIT_OBJECT_0)
             {
-                DWORD ret = MsgWaitForMultipleObjects(
-                    1, &event, FALSE, INFINITE, QS_ALLINPUT);
-
-                if (ret == WAIT_OBJECT_0)
+                break;
+            }
+            else if (ret == WAIT_OBJECT_0 + 1)
+            {
+                MSG msg;
+                while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
                 {
-                    break;
+                    TranslateMessage(&msg);
+                    DispatchMessage(&msg);
                 }
-                else if (ret == WAIT_OBJECT_0 + 1)
-                {
-                    MSG msg;
-                    while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
-                    {
-                        TranslateMessage(&msg);
-                        DispatchMessage(&msg);
-                    }
-                }
-                else
-                {
-                    PLOG(ERROR) << "MsgWaitForMultipleObjects failed:" << ret;
-                    return S_FALSE;
-                }
+            }
+            else
+            {
+                PLOG(ERROR) << "MsgWaitForMultipleObjects failed:" << ret;
+                if (pcbRead)
+                    *pcbRead = total_read;
+                return S_FALSE;
             }
         }
     }
