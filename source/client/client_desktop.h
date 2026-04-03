@@ -193,6 +193,7 @@ private:
     int cursor_shape_count_ = 0;
     int cursor_pos_count_ = 0;
 
+    bool file_clipboard_supported_ = false;
     bool force_reliable_active_ = false;
     int reliable_hold_seconds_ = 0;
     int reliable_disable_count_ = 0;

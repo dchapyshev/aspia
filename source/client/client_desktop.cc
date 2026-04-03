@@ -712,6 +712,13 @@ void ClientDesktop::onClipboardEvent(const proto::clipboard::Event& event)
     if (!input_event_filter_.sendClipboardEvent(event))
         return;
 
+    if (event.mime_type() == common::Clipboard::kMimeTypeFileList.toStdString() &&
+        !file_clipboard_supported_)
+    {
+        CLOG(WARNING) << "File clipboard is not supported by remote side, skipping file list";
+        return;
+    }
+
     if (isLegacy())
     {
         proto::legacy::ClientToSession message;
@@ -832,6 +839,17 @@ void ClientDesktop::readCapabilities(const proto::control::Capabilities& capabil
     // We notify the window about changes in the list of extensions and video encodings.
     // A window can disable/enable some of its capabilities in accordance with this information.
     CLOG(INFO) << "Received:" << capabilities;
+
+    for (int i = 0; i < capabilities.flag_size(); ++i)
+    {
+        const proto::control::Capabilities::Flag& flag = capabilities.flag(i);
+        if (flag.name() == common::kFlagFileClipboard)
+        {
+            file_clipboard_supported_ = flag.value();
+            break;
+        }
+    }
+
     emit sig_capabilities(capabilities);
     sendConfig(desktop_config_);
 }
@@ -1029,6 +1047,13 @@ void ClientDesktop::readCursorPosition(const proto::cursor::Position& position)
 //--------------------------------------------------------------------------------------------------
 void ClientDesktop::readClipboardEvent(const proto::clipboard::Event& event)
 {
+    if (event.mime_type() == common::Clipboard::kMimeTypeFileList.toStdString() &&
+        !file_clipboard_supported_)
+    {
+        CLOG(WARNING) << "File clipboard is not supported by remote side, ignoring file list";
+        return;
+    }
+
     if (clipboard_monitor_ && input_event_filter_.readClipboardEvent(event))
         clipboard_monitor_->injectClipboardEvent(event);
 }

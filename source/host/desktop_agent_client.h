@@ -55,6 +55,7 @@ public:
     bool isVp8Supported() const { return vp8_supported_; }
     bool isVp9Supported() const { return vp9_supported_; }
     bool isOpusSupported() const { return opus_supported_; }
+    bool isFileClipboardSupported() const { return file_clipboard_supported_; }
 
     void onVideoData(const QByteArray& buffer, bool is_key_frame);
     void onScreenListData(const QByteArray& buffer);
@@ -109,6 +110,7 @@ private:
     bool vp8_supported_ = false;
     bool vp9_supported_ = false;
     bool opus_supported_ = false;
+    bool file_clipboard_supported_ = false;
 
     QSize preferred_size_;
     qint64 bandwidth_ = 0;
