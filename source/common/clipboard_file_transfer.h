@@ -25,6 +25,7 @@
 #include <map>
 #include <memory>
 
+#include "base/serialization.h"
 #include "common/clipboard.h"
 #include "proto/desktop_file.h"
 
@@ -41,26 +42,15 @@ public:
     // Sender side: store local file list for later reading.
     void setLocalFileList(const QVector<LocalFileEntry>& files);
 
-    // Sender side: handle incoming request for file data.
-    void onFileDataRequest(const proto::file::Request& request);
-
-    // Sender side: handle cancellation from receiver.
-    void onFileDataCancel(const proto::file::Cancel& cancel);
-
-    // Sender side: handle error from receiver.
-    void onFileDataError(const proto::file::Error& error);
+    // Handle incoming message from the other side.
+    void onIncomingMessage(const QByteArray& buffer);
 
     // Receiver side: request file data for a specific file index.
     void requestFileData(int file_index);
 
-    // Receiver side: handle incoming file data.
-    void onFileDataReceived(const proto::file::Data& data);
-
 signals:
-    void sig_sendRequest(const proto::file::Request& request);
-    void sig_sendData(const proto::file::Data& data);
-    void sig_sendCancel(const proto::file::Cancel& cancel);
-    void sig_sendError(const proto::file::Error& error);
+    // Serialized proto::file::Message ready to send over the network.
+    void sig_sendMessage(const QByteArray& buffer);
 
     // Emitted when file data chunk is available for delivery to FileStream.
     void sig_fileDataChunk(int file_index, const QByteArray& data, bool is_last);
@@ -75,12 +65,20 @@ private:
         std::unique_ptr<QFile> file;
     };
 
+    void onFileDataRequest(const proto::file::Request& request);
+    void onFileDataReceived(const proto::file::Data& data);
+    void onFileDataCancel(const proto::file::Cancel& cancel);
+    void onFileDataError(const proto::file::Error& error);
+
     void sendNextChunk(quint64 transfer_id);
+    void sendMessage();
     quint64 nextTransferId();
 
     QVector<LocalFileEntry> local_files_;
     std::map<quint64, OutgoingTransfer> outgoing_transfers_;
     quint64 next_transfer_id_ = 1;
+    base::Parser<proto::file::Message> incoming_message_;
+    base::Serializer<proto::file::Message> outgoing_message_;
 
     Q_DISABLE_COPY_MOVE(ClipboardFileTransfer)
 };

@@ -104,36 +104,10 @@ void ClientDesktop::onStarted()
         connect(clipboard_monitor_, &common::ClipboardMonitor::sig_fileDataRequest,
                 clipboard_file_transfer_, &common::ClipboardFileTransfer::requestFileData);
 
-        connect(clipboard_file_transfer_, &common::ClipboardFileTransfer::sig_sendRequest,
-                this, [this](const proto::file::Request& request)
+        connect(clipboard_file_transfer_, &common::ClipboardFileTransfer::sig_sendMessage,
+                this, [this](const QByteArray& buffer)
         {
-            proto::file::ClientToHost message;
-            message.mutable_request()->CopyFrom(request);
-            sendMessage(proto::desktop::CHANNEL_ID_FILE, base::serialize(message));
-        });
-
-        connect(clipboard_file_transfer_, &common::ClipboardFileTransfer::sig_sendData,
-                this, [this](const proto::file::Data& data)
-        {
-            proto::file::ClientToHost message;
-            message.mutable_data()->CopyFrom(data);
-            sendMessage(proto::desktop::CHANNEL_ID_FILE, base::serialize(message));
-        });
-
-        connect(clipboard_file_transfer_, &common::ClipboardFileTransfer::sig_sendCancel,
-                this, [this](const proto::file::Cancel& cancel)
-        {
-            proto::file::ClientToHost message;
-            message.mutable_cancel()->CopyFrom(cancel);
-            sendMessage(proto::desktop::CHANNEL_ID_FILE, base::serialize(message));
-        });
-
-        connect(clipboard_file_transfer_, &common::ClipboardFileTransfer::sig_sendError,
-                this, [this](const proto::file::Error& error)
-        {
-            proto::file::ClientToHost message;
-            message.mutable_error()->CopyFrom(error);
-            sendMessage(proto::desktop::CHANNEL_ID_FILE, base::serialize(message));
+            sendMessage(proto::desktop::CHANNEL_ID_FILE, buffer);
         });
 
         connect(clipboard_file_transfer_, &common::ClipboardFileTransfer::sig_fileDataChunk,
@@ -267,24 +241,8 @@ void ClientDesktop::onMessageReceived(quint8 channel_id, const QByteArray& buffe
     }
     else if (channel_id == proto::desktop::CHANNEL_ID_FILE)
     {
-        proto::file::HostToClient message;
-        if (!base::parse(buffer, &message))
-        {
-            LOG(ERROR) << "Unable to parse file message";
-            return;
-        }
-
         if (clipboard_file_transfer_)
-        {
-            if (message.has_request())
-                clipboard_file_transfer_->onFileDataRequest(message.request());
-            else if (message.has_data())
-                clipboard_file_transfer_->onFileDataReceived(message.data());
-            else if (message.has_cancel())
-                clipboard_file_transfer_->onFileDataCancel(message.cancel());
-            else if (message.has_error())
-                clipboard_file_transfer_->onFileDataError(message.error());
-        }
+            clipboard_file_transfer_->onIncomingMessage(buffer);
     }
     else if (channel_id == proto::desktop::CHANNEL_ID_TASK_MANAGER)
     {

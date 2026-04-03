@@ -49,17 +49,8 @@ message Error
     string error_id    = 3;
 }
 
-// Client -> Host (channel 10).
-message ClientToHost
-{
-    Request request = 1;
-    Data data       = 2;
-    Cancel cancel   = 3;
-    Error error     = 4;
-}
-
-// Client <- Host (channel 10).
-message HostToClient
+// Bidirectional file transfer message (channel 10).
+message Message
 {
     Request request = 1;
     Data data       = 2;

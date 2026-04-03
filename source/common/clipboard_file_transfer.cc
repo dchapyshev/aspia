@@ -43,6 +43,27 @@ void ClipboardFileTransfer::setLocalFileList(const QVector<LocalFileEntry>& file
 }
 
 //--------------------------------------------------------------------------------------------------
+void ClipboardFileTransfer::onIncomingMessage(const QByteArray& buffer)
+{
+    if (!incoming_message_.parse(buffer))
+    {
+        LOG(ERROR) << "Unable to parse file message";
+        return;
+    }
+
+    const proto::file::Message& message = incoming_message_.message();
+
+    if (message.has_request())
+        onFileDataRequest(message.request());
+    else if (message.has_data())
+        onFileDataReceived(message.data());
+    else if (message.has_cancel())
+        onFileDataCancel(message.cancel());
+    else if (message.has_error())
+        onFileDataError(message.error());
+}
+
+//--------------------------------------------------------------------------------------------------
 void ClipboardFileTransfer::onFileDataRequest(const proto::file::Request& request)
 {
     quint64 transfer_id = request.transfer_id();
@@ -60,11 +81,11 @@ void ClipboardFileTransfer::onFileDataRequest(const proto::file::Request& reques
     {
         LOG(ERROR) << "Invalid file_index:" << file_index;
 
-        proto::file::Error error;
-        error.set_transfer_id(transfer_id);
-        error.set_file_index(file_index);
-        error.set_error_id("invalid_file_index");
-        emit sig_sendError(error);
+        proto::file::Error* error = outgoing_message_.newMessage().mutable_error();
+        error->set_transfer_id(transfer_id);
+        error->set_file_index(file_index);
+        error->set_error_id("invalid_file_index");
+        sendMessage();
         return;
     }
 
@@ -73,11 +94,11 @@ void ClipboardFileTransfer::onFileDataRequest(const proto::file::Request& reques
     if (file_entry.is_dir)
     {
         // Directories have no content to send.
-        proto::file::Data data;
-        data.set_transfer_id(transfer_id);
-        data.set_file_index(file_index);
-        data.set_is_last(true);
-        emit sig_sendData(data);
+        proto::file::Data* data = outgoing_message_.newMessage().mutable_data();
+        data->set_transfer_id(transfer_id);
+        data->set_file_index(file_index);
+        data->set_is_last(true);
+        sendMessage();
         return;
     }
 
@@ -88,11 +109,11 @@ void ClipboardFileTransfer::onFileDataRequest(const proto::file::Request& reques
     {
         LOG(ERROR) << "Failed to open file:" << path;
 
-        proto::file::Error error;
-        error.set_transfer_id(transfer_id);
-        error.set_file_index(file_index);
-        error.set_error_id("open_failed");
-        emit sig_sendError(error);
+        proto::file::Error* error = outgoing_message_.newMessage().mutable_error();
+        error->set_transfer_id(transfer_id);
+        error->set_file_index(file_index);
+        error->set_error_id("open_failed");
+        sendMessage();
         return;
     }
 
@@ -129,14 +150,11 @@ void ClipboardFileTransfer::onFileDataError(const proto::file::Error& error)
 //--------------------------------------------------------------------------------------------------
 void ClipboardFileTransfer::requestFileData(int file_index)
 {
-    quint64 transfer_id = nextTransferId();
-
-    proto::file::Request request;
-    request.set_transfer_id(transfer_id);
-    request.set_file_index(file_index);
-    request.set_offset(0);
-
-    emit sig_sendRequest(request);
+    proto::file::Request* request = outgoing_message_.newMessage().mutable_request();
+    request->set_transfer_id(nextTransferId());
+    request->set_file_index(file_index);
+    request->set_offset(0);
+    sendMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -148,10 +166,10 @@ void ClipboardFileTransfer::onFileDataReceived(const proto::file::Data& data)
     // Request next chunk from sender.
     if (!data.is_last())
     {
-        proto::file::Request request;
-        request.set_transfer_id(data.transfer_id());
-        request.set_file_index(data.file_index());
-        emit sig_sendRequest(request);
+        proto::file::Request* request = outgoing_message_.newMessage().mutable_request();
+        request->set_transfer_id(data.transfer_id());
+        request->set_file_index(data.file_index());
+        sendMessage();
     }
 }
 
@@ -167,16 +185,21 @@ void ClipboardFileTransfer::sendNextChunk(quint64 transfer_id)
     QByteArray buffer = transfer.file->read(kChunkSize);
     bool at_end = transfer.file->atEnd() || buffer.isEmpty();
 
-    proto::file::Data data;
-    data.set_transfer_id(transfer_id);
-    data.set_file_index(transfer.file_index);
-    data.set_data(buffer.toStdString());
-    data.set_is_last(at_end);
-
-    emit sig_sendData(data);
+    proto::file::Data* data = outgoing_message_.newMessage().mutable_data();
+    data->set_transfer_id(transfer_id);
+    data->set_file_index(transfer.file_index);
+    data->set_data(buffer.toStdString());
+    data->set_is_last(at_end);
+    sendMessage();
 
     if (at_end)
         outgoing_transfers_.erase(it);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClipboardFileTransfer::sendMessage()
+{
+    emit sig_sendMessage(outgoing_message_.serialize());
 }
 
 //--------------------------------------------------------------------------------------------------
