@@ -30,6 +30,7 @@ class IpcChannel;
 } // namespace base
 
 namespace common {
+class ClipboardFileTransfer;
 class ClipboardMonitor;
 } // namespace common
 
@@ -108,6 +109,7 @@ private:
     void sendNetworkMessage(quint8 net_channel_id, const QByteArray& buffer);
 
     common::ClipboardMonitor* clipboard_ = nullptr;
+    common::ClipboardFileTransfer* clipboard_file_transfer_ = nullptr;
     base::IpcChannel* ipc_channel_ = nullptr;
 
     base::Parser<proto::user::ServiceToUser> incoming_message_;

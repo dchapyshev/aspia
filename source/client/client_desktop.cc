@@ -94,6 +94,53 @@ void ClientDesktop::onStarted()
         clipboard_monitor_ = new common::ClipboardMonitor(this);
         connect(clipboard_monitor_, &common::ClipboardMonitor::sig_clipboardEvent,
                 this, &ClientDesktop::onClipboardEvent);
+
+        clipboard_file_transfer_ = new common::ClipboardFileTransfer(this);
+
+        connect(clipboard_monitor_, &common::ClipboardMonitor::sig_localFileListChanged,
+                clipboard_file_transfer_, &common::ClipboardFileTransfer::setLocalFileList);
+
+        connect(clipboard_monitor_, &common::ClipboardMonitor::sig_fileDataRequest,
+                clipboard_file_transfer_, &common::ClipboardFileTransfer::requestFileData);
+
+        connect(clipboard_file_transfer_, &common::ClipboardFileTransfer::sig_sendRequest,
+                this, [this](const proto::file::Request& request)
+        {
+            proto::file::ClientToHost message;
+            message.mutable_request()->CopyFrom(request);
+            sendMessage(proto::desktop::CHANNEL_ID_FILE, base::serialize(message));
+        });
+
+        connect(clipboard_file_transfer_, &common::ClipboardFileTransfer::sig_sendData,
+                this, [this](const proto::file::Data& data)
+        {
+            proto::file::ClientToHost message;
+            message.mutable_data()->CopyFrom(data);
+            sendMessage(proto::desktop::CHANNEL_ID_FILE, base::serialize(message));
+        });
+
+        connect(clipboard_file_transfer_, &common::ClipboardFileTransfer::sig_sendCancel,
+                this, [this](const proto::file::Cancel& cancel)
+        {
+            proto::file::ClientToHost message;
+            message.mutable_cancel()->CopyFrom(cancel);
+            sendMessage(proto::desktop::CHANNEL_ID_FILE, base::serialize(message));
+        });
+
+        connect(clipboard_file_transfer_, &common::ClipboardFileTransfer::sig_sendError,
+                this, [this](const proto::file::Error& error)
+        {
+            proto::file::ClientToHost message;
+            message.mutable_error()->CopyFrom(error);
+            sendMessage(proto::desktop::CHANNEL_ID_FILE, base::serialize(message));
+        });
+
+        connect(clipboard_file_transfer_, &common::ClipboardFileTransfer::sig_fileDataChunk,
+                this, [this](int file_index, const QByteArray& data, bool is_last)
+        {
+            clipboard_monitor_->addFileData(file_index, data, is_last);
+        });
+
         clipboard_monitor_->start();
     }
 
@@ -115,6 +162,10 @@ void ClientDesktop::onStarted()
     add_flag(common::kFlagVideoVP8, true);
     add_flag(common::kFlagVideoVP9, true);
     add_flag(common::kFlagAudioOpus, true);
+
+#if defined(Q_OS_WINDOWS)
+    add_flag(common::kFlagFileClipboard, true);
+#endif
 
     sendMessage(proto::desktop::CHANNEL_ID_CONTROL, base::serialize(message));
 }
@@ -222,21 +273,16 @@ void ClientDesktop::onMessageReceived(quint8 channel_id, const QByteArray& buffe
             return;
         }
 
-        if (message.has_request())
+        if (clipboard_file_transfer_)
         {
-            // TODO
-        }
-        else if (message.has_data())
-        {
-            // TODO
-        }
-        else if (message.has_cancel())
-        {
-            // TODO
-        }
-        else if (message.has_error())
-        {
-            // TODO
+            if (message.has_request())
+                clipboard_file_transfer_->onFileDataRequest(message.request());
+            else if (message.has_data())
+                clipboard_file_transfer_->onFileDataReceived(message.data());
+            else if (message.has_cancel())
+                clipboard_file_transfer_->onFileDataCancel(message.cancel());
+            else if (message.has_error())
+                clipboard_file_transfer_->onFileDataError(message.error());
         }
     }
     else if (channel_id == proto::desktop::CHANNEL_ID_TASK_MANAGER)

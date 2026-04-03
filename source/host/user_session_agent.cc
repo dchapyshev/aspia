@@ -22,6 +22,7 @@
 #include "base/numeric_utils.h"
 #include "base/ipc/ipc_channel.h"
 #include "host/host_storage.h"
+#include "common/clipboard_file_transfer.h"
 #include "common/clipboard_monitor.h"
 #include "proto/desktop_channel.h"
 #include "proto/desktop_file.h"
@@ -232,21 +233,16 @@ void UserSessionAgent::onIpcMessageReceived(quint32 channel_id, const QByteArray
                 return;
             }
 
-            if (message.has_request())
+            if (clipboard_file_transfer_)
             {
-                // TODO
-            }
-            else if (message.has_data())
-            {
-                // TODO
-            }
-            else if (message.has_cancel())
-            {
-                // TODO
-            }
-            else if (message.has_error())
-            {
-                // TODO
+                if (message.has_request())
+                    clipboard_file_transfer_->onFileDataRequest(message.request());
+                else if (message.has_data())
+                    clipboard_file_transfer_->onFileDataReceived(message.data());
+                else if (message.has_cancel())
+                    clipboard_file_transfer_->onFileDataCancel(message.cancel());
+                else if (message.has_error())
+                    clipboard_file_transfer_->onFileDataError(message.error());
             }
         }
         return;
@@ -310,6 +306,52 @@ void UserSessionAgent::onConnectEvent(const proto::user::ConnectEvent& event)
         connect(clipboard_, &common::ClipboardMonitor::sig_clipboardEvent,
                 this, &UserSessionAgent::onClipboardEvent);
 
+        clipboard_file_transfer_ = new common::ClipboardFileTransfer(this);
+
+        connect(clipboard_, &common::ClipboardMonitor::sig_localFileListChanged,
+                clipboard_file_transfer_, &common::ClipboardFileTransfer::setLocalFileList);
+
+        connect(clipboard_, &common::ClipboardMonitor::sig_fileDataRequest,
+                clipboard_file_transfer_, &common::ClipboardFileTransfer::requestFileData);
+
+        connect(clipboard_file_transfer_, &common::ClipboardFileTransfer::sig_sendRequest,
+                this, [this](const proto::file::Request& request)
+        {
+            proto::file::HostToClient message;
+            message.mutable_request()->CopyFrom(request);
+            sendNetworkMessage(proto::desktop::CHANNEL_ID_FILE, base::serialize(message));
+        });
+
+        connect(clipboard_file_transfer_, &common::ClipboardFileTransfer::sig_sendData,
+                this, [this](const proto::file::Data& data)
+        {
+            proto::file::HostToClient message;
+            message.mutable_data()->CopyFrom(data);
+            sendNetworkMessage(proto::desktop::CHANNEL_ID_FILE, base::serialize(message));
+        });
+
+        connect(clipboard_file_transfer_, &common::ClipboardFileTransfer::sig_sendCancel,
+                this, [this](const proto::file::Cancel& cancel)
+        {
+            proto::file::HostToClient message;
+            message.mutable_cancel()->CopyFrom(cancel);
+            sendNetworkMessage(proto::desktop::CHANNEL_ID_FILE, base::serialize(message));
+        });
+
+        connect(clipboard_file_transfer_, &common::ClipboardFileTransfer::sig_sendError,
+                this, [this](const proto::file::Error& error)
+        {
+            proto::file::HostToClient message;
+            message.mutable_error()->CopyFrom(error);
+            sendNetworkMessage(proto::desktop::CHANNEL_ID_FILE, base::serialize(message));
+        });
+
+        connect(clipboard_file_transfer_, &common::ClipboardFileTransfer::sig_fileDataChunk,
+                this, [this](int file_index, const QByteArray& data, bool is_last)
+        {
+            clipboard_->addFileData(file_index, data, is_last);
+        });
+
         clipboard_->start();
     }
 
@@ -344,6 +386,12 @@ void UserSessionAgent::onDisconnectEvent(const proto::user::DisconnectEvent& eve
         clipboard_->disconnect(this);
         clipboard_->deleteLater();
         clipboard_ = nullptr;
+
+        if (clipboard_file_transfer_)
+        {
+            clipboard_file_transfer_->deleteLater();
+            clipboard_file_transfer_ = nullptr;
+        }
     }
 
     emit sig_clientListChanged(clients_);

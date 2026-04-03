@@ -23,6 +23,7 @@
 #include "base/desktop/mouse_cursor.h"
 #include "client/client.h"
 #include "client/input_event_filter.h"
+#include "common/clipboard_file_transfer.h"
 #include "common/clipboard_monitor.h"
 #include "proto/desktop_legacy.h"
 #include "proto/desktop_control.h"
@@ -161,6 +162,7 @@ private:
     std::unique_ptr<base::AudioDecoder> audio_decoder_;
     std::unique_ptr<base::AudioPlayer> audio_player_;
     common::ClipboardMonitor* clipboard_monitor_ = nullptr;
+    common::ClipboardFileTransfer* clipboard_file_transfer_ = nullptr;
 
     InputEventFilter input_event_filter_;
 
