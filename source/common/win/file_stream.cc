@@ -112,7 +112,26 @@ HRESULT FileStream::Read(void* pv, ULONG cb, ULONG* pcbRead)
 
     for (;;)
     {
+        // Pump pending messages BEFORE checking the buffer. When the sliding window keeps
+        // the buffer full, Read() would otherwise return data immediately without ever
+        // pumping messages. This would prevent COM marshaled calls (like IStream::Release
+        // from Explorer's cancel) from being processed, making cancel unresponsive.
+        {
+            MSG msg;
+            while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
+            {
+                TranslateMessage(&msg);
+                DispatchMessage(&msg);
+            }
+        }
+
         lock_.lock();
+
+        if (is_terminated_)
+        {
+            lock_.unlock();
+            break;
+        }
 
         if (!buffer_.isEmpty())
         {
@@ -130,25 +149,20 @@ HRESULT FileStream::Read(void* pv, ULONG cb, ULONG* pcbRead)
             break;
         }
 
-        if (is_terminated_)
-        {
-            lock_.unlock();
-            break;
-        }
-
         lock_.unlock();
 
-        // Use MsgWaitForMultipleObjects to pump messages while waiting.
-        // This prevents deadlock when Read() is called on the STA thread
-        // via OLE marshaling: without message pumping, the thread would block
-        // and could not process Qt queued connections that deliver file data.
+        // Wait for data or termination with a timeout. MsgWaitForMultipleObjects pumps
+        // messages while waiting - required on the STA thread so that Qt queued connections
+        // (delivering file data via addData) and COM calls can be processed.
+        // The 250ms timeout ensures we periodically return to the outer loop even if no
+        // messages or events arrive, so is_terminated_ is re-checked. This prevents Read()
+        // from blocking indefinitely if the data flow stalls (e.g., due to TCP queue
+        // congestion with video frames).
         HANDLE event = data_event_;
 
         for (;;)
         {
-            DWORD ret = MsgWaitForMultipleObjects(
-                1, &event, FALSE, INFINITE, QS_ALLINPUT);
-
+            DWORD ret = MsgWaitForMultipleObjects(1, &event, FALSE, 250, QS_ALLINPUT);
             if (ret == WAIT_OBJECT_0)
             {
                 break;
@@ -161,6 +175,11 @@ HRESULT FileStream::Read(void* pv, ULONG cb, ULONG* pcbRead)
                     TranslateMessage(&msg);
                     DispatchMessage(&msg);
                 }
+            }
+            else if (ret == WAIT_TIMEOUT)
+            {
+                // Timeout - break to outer loop to re-check buffer and is_terminated_.
+                break;
             }
             else
             {
@@ -179,64 +198,59 @@ HRESULT FileStream::Read(void* pv, ULONG cb, ULONG* pcbRead)
 }
 
 //--------------------------------------------------------------------------------------------------
-HRESULT FileStream::Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER* plibNewPosition)
+HRESULT FileStream::Seek(
+    LARGE_INTEGER /* dlibMove */, DWORD /* dwOrigin */, ULARGE_INTEGER* /* plibNewPosition */)
 {
-    NOTIMPLEMENTED();
     return STG_E_INVALIDFUNCTION;
 }
 
 //--------------------------------------------------------------------------------------------------
-HRESULT FileStream::Write(const void* pv, ULONG cb, ULONG* pcbWritten)
+HRESULT FileStream::Write(const void* /* pv */, ULONG /* cb */, ULONG* /* pcbWritten */)
 {
-    NOTIMPLEMENTED();
     return STG_E_ACCESSDENIED;
 }
 
 //--------------------------------------------------------------------------------------------------
-HRESULT FileStream::SetSize(ULARGE_INTEGER libNewSize)
+HRESULT FileStream::SetSize(ULARGE_INTEGER /* libNewSize */)
 {
-    NOTIMPLEMENTED();
     return E_NOTIMPL;
 }
 
 //--------------------------------------------------------------------------------------------------
 HRESULT FileStream::CopyTo(
-    IStream* pstm, ULARGE_INTEGER cb, ULARGE_INTEGER* pcbRead, ULARGE_INTEGER* pcbWritten)
+    IStream* /* pstm */, ULARGE_INTEGER /* cb */, ULARGE_INTEGER* /* pcbRead */, ULARGE_INTEGER* /* pcbWritten */)
 {
-    NOTIMPLEMENTED();
     return E_NOTIMPL;
 }
 
 //--------------------------------------------------------------------------------------------------
-HRESULT FileStream::Commit(DWORD grfCommitFlags)
+HRESULT FileStream::Commit(DWORD /* grfCommitFlags */)
 {
-    NOTIMPLEMENTED();
     return E_NOTIMPL;
 }
 
 //--------------------------------------------------------------------------------------------------
 HRESULT FileStream::Revert()
 {
-    NOTIMPLEMENTED();
     return E_NOTIMPL;
 }
 
 //--------------------------------------------------------------------------------------------------
-HRESULT FileStream::LockRegion(ULARGE_INTEGER libOffset, ULARGE_INTEGER cb, DWORD dwLockType)
+HRESULT FileStream::LockRegion(
+    ULARGE_INTEGER /* libOffset */, ULARGE_INTEGER /* cb */, DWORD /* dwLockType */)
 {
-    NOTIMPLEMENTED();
     return E_NOTIMPL;
 }
 
 //--------------------------------------------------------------------------------------------------
-HRESULT FileStream::UnlockRegion(ULARGE_INTEGER libOffset, ULARGE_INTEGER cb, DWORD dwLockType)
+HRESULT FileStream::UnlockRegion(
+    ULARGE_INTEGER /* libOffset */, ULARGE_INTEGER /* cb */, DWORD /* dwLockType */)
 {
-    NOTIMPLEMENTED();
     return E_NOTIMPL;
 }
 
 //--------------------------------------------------------------------------------------------------
-HRESULT FileStream::Stat(STATSTG* pstatstg, DWORD grfStatFlag)
+HRESULT FileStream::Stat(STATSTG* pstatstg, DWORD /* grfStatFlag */)
 {
     if (!pstatstg)
         return STG_E_INVALIDPOINTER;
@@ -249,9 +263,8 @@ HRESULT FileStream::Stat(STATSTG* pstatstg, DWORD grfStatFlag)
 }
 
 //--------------------------------------------------------------------------------------------------
-HRESULT FileStream::Clone(IStream** ppstm)
+HRESULT FileStream::Clone(IStream** /* ppstm */)
 {
-    NOTIMPLEMENTED();
     return E_NOTIMPL;
 }
 

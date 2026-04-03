@@ -580,6 +580,15 @@ void ClipboardWin::setDataFiles(const QByteArray& data)
 //--------------------------------------------------------------------------------------------------
 void ClipboardWin::onFileDataRequested(int file_index, FileStream* stream)
 {
+    // Clean up any previous stream for this file_index (e.g., from a cancelled transfer).
+    auto it = active_streams_.find(file_index);
+    if (it != active_streams_.end())
+    {
+        it.value()->terminate();
+        it.value()->Release();
+        active_streams_.erase(it);
+    }
+
     stream->AddRef();
     active_streams_[file_index] = stream;
     emit sig_fileDataRequest(file_index);
