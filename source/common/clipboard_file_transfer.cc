@@ -106,7 +106,7 @@ void ClipboardFileTransfer::onFileDataRequest(const proto::file::Request& reques
 void ClipboardFileTransfer::onFileDataCancel(const proto::file::Cancel& cancel)
 {
     LOG(INFO) << "Transfer cancelled:" << cancel.transfer_id();
-    outgoing_transfers_.remove(cancel.transfer_id());
+    outgoing_transfers_.erase(cancel.transfer_id());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -116,7 +116,7 @@ void ClipboardFileTransfer::onFileDataError(const proto::file::Error& error)
                << "transfer:" << error.transfer_id()
                << "file:" << error.file_index();
 
-    outgoing_transfers_.remove(error.transfer_id());
+    outgoing_transfers_.erase(error.transfer_id());
 
     // Terminate the stream for the affected file so Read() unblocks.
     emit sig_fileDataChunk(error.file_index(), QByteArray(), true);
@@ -149,7 +149,7 @@ void ClipboardFileTransfer::sendNextChunk(uint64_t transfer_id)
     if (it == outgoing_transfers_.end())
         return;
 
-    OutgoingTransfer& transfer = it.value();
+    OutgoingTransfer& transfer = it->second;
 
     QByteArray buffer = transfer.file->read(kChunkSize);
     bool at_end = transfer.file->atEnd() || buffer.isEmpty();

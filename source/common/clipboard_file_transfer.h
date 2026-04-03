@@ -20,10 +20,10 @@
 #define COMMON_CLIPBOARD_FILE_TRANSFER_H
 
 #include <QFile>
-#include <QMap>
 #include <QObject>
 
 #include <atomic>
+#include <map>
 #include <memory>
 
 #include "proto/desktop_clipboard.h"
@@ -80,7 +80,7 @@ private:
     uint64_t nextTransferId();
 
     proto::clipboard::Event::FileList local_files_;
-    QMap<uint64_t, OutgoingTransfer> outgoing_transfers_;
+    std::map<uint64_t, OutgoingTransfer> outgoing_transfers_;
     std::atomic<uint64_t> next_transfer_id_{ 1 };
 
     Q_DISABLE_COPY_MOVE(ClipboardFileTransfer)
