@@ -41,8 +41,12 @@ public slots:
     void injectClipboardEvent(const proto::clipboard::Event& event);
     void clearClipboard();
 
+    virtual void addFileData(int file_index, const QByteArray& data, bool is_last);
+
 signals:
     void sig_clipboardEvent(const proto::clipboard::Event& event);
+    void sig_fileDataRequest(int file_index);
+    void sig_localFileListChanged(const proto::clipboard::Event::FileList& files);
 
 protected:
     virtual void init() = 0;

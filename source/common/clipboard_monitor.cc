@@ -82,6 +82,12 @@ void ClipboardMonitor::clearClipboard()
 }
 
 //--------------------------------------------------------------------------------------------------
+void ClipboardMonitor::addFileData(int file_index, const QByteArray& data, bool is_last)
+{
+    emit sig_addFileDataPrivate(file_index, data, is_last);
+}
+
+//--------------------------------------------------------------------------------------------------
 void ClipboardMonitor::onBeforeThreadRunning()
 {
     LOG(INFO) << "Thread starting";
@@ -106,6 +112,18 @@ void ClipboardMonitor::onBeforeThreadRunning()
 
     connect(this, &ClipboardMonitor::sig_clearClipboardPrivate,
             clipboard_.get(), &Clipboard::clearClipboard,
+            Qt::QueuedConnection);
+
+    connect(clipboard_.get(), &Clipboard::sig_fileDataRequest,
+            this, &ClipboardMonitor::sig_fileDataRequest,
+            Qt::QueuedConnection);
+
+    connect(clipboard_.get(), &Clipboard::sig_localFileListChanged,
+            this, &ClipboardMonitor::sig_localFileListChanged,
+            Qt::QueuedConnection);
+
+    connect(this, &ClipboardMonitor::sig_addFileDataPrivate,
+            clipboard_.get(), &Clipboard::addFileData,
             Qt::QueuedConnection);
 
     clipboard_->start();

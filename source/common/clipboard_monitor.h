@@ -36,11 +36,16 @@ public:
 
     void injectClipboardEvent(const proto::clipboard::Event& event);
     void clearClipboard();
+    void addFileData(int file_index, const QByteArray& data, bool is_last);
 
 signals:
     void sig_clipboardEvent(const proto::clipboard::Event& event);
+    void sig_fileDataRequest(int file_index);
+    void sig_localFileListChanged(const proto::clipboard::Event::FileList& files);
+
     void sig_injectClipboardEventPrivate(const proto::clipboard::Event& event);
     void sig_clearClipboardPrivate();
+    void sig_addFileDataPrivate(int file_index, const QByteArray& data, bool is_last);
 
 private slots:
     void onBeforeThreadRunning();

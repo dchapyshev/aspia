@@ -31,6 +31,7 @@
 #include "base/win/scoped_hglobal.h"
 #include "base/win/scoped_object.h"
 #include "common/win/file_object.h"
+#include "common/win/file_stream.h"
 
 namespace common {
 
@@ -394,6 +395,7 @@ void ClipboardWin::onClipboardFiles()
             addDirectoryContent(path, &file_list);
     }
 
+    emit sig_localFileListChanged(file_list);
     onData(kMimeTypeFileList, base::serialize(file_list));
 }
 
@@ -455,6 +457,11 @@ void ClipboardWin::setDataFiles(const QByteArray& data)
         return;
     }
 
+    // Terminate any active streams from previous FileObject.
+    for (auto it = active_streams_.begin(); it != active_streams_.end(); ++it)
+        it.value()->terminate();
+    active_streams_.clear();
+
     _com_error error = OleInitialize(nullptr);
     if (FAILED(error.Error()))
     {
@@ -464,7 +471,12 @@ void ClipboardWin::setDataFiles(const QByteArray& data)
 
     do
     {
-        file_object_.reset(FileObject::create(files));
+        file_object_.reset(FileObject::create(files,
+            [this](int file_index, FileStream* stream)
+            {
+                onFileDataRequested(file_index, stream);
+            }));
+
         if (!file_object_)
         {
             LOG(ERROR) << "Invalid file object";
@@ -481,6 +493,35 @@ void ClipboardWin::setDataFiles(const QByteArray& data)
     while (false);
 
     OleUninitialize();
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClipboardWin::onFileDataRequested(int file_index, FileStream* stream)
+{
+    active_streams_[file_index] = stream;
+    emit sig_fileDataRequest(file_index);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClipboardWin::addFileData(int file_index, const QByteArray& data, bool is_last)
+{
+    auto it = active_streams_.find(file_index);
+    if (it == active_streams_.end())
+    {
+        LOG(ERROR) << "No active stream for file_index:" << file_index;
+        return;
+    }
+
+    FileStream* stream = it.value();
+
+    if (!data.isEmpty())
+        stream->addData(data);
+
+    if (is_last)
+    {
+        stream->terminate();
+        active_streams_.erase(it);
+    }
 }
 
 } // namespace common

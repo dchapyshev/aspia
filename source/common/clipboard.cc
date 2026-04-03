@@ -77,4 +77,10 @@ void Clipboard::onData(const QString& mime_type, const QByteArray& data)
     emit sig_clipboardEvent(event);
 }
 
+//--------------------------------------------------------------------------------------------------
+void Clipboard::addFileData(int /* file_index */, const QByteArray& /* data */, bool /* is_last */)
+{
+    // Default implementation does nothing. Overridden in ClipboardWin.
+}
+
 } // namespace common

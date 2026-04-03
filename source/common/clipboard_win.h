@@ -21,6 +21,8 @@
 
 #include <qt_windows.h>
 
+#include <QMap>
+
 #include "common/clipboard.h"
 
 namespace base {
@@ -30,6 +32,7 @@ class MessageWindow;
 namespace common {
 
 class FileObject;
+class FileStream;
 
 class ClipboardWin final : public Clipboard
 {
@@ -38,6 +41,9 @@ class ClipboardWin final : public Clipboard
 public:
     explicit ClipboardWin(QObject* parent = nullptr);
     ~ClipboardWin() final;
+
+    // Clipboard implementation.
+    void addFileData(int file_index, const QByteArray& data, bool is_last) final;
 
 protected:
     // Clipboard implementation.
@@ -50,6 +56,7 @@ private:
     void onClipboardFiles();
     void setDataText(const QByteArray& data);
     void setDataFiles(const QByteArray& data);
+    void onFileDataRequested(int file_index, FileStream* stream);
 
     // Handles messages received by |window_|.
     bool onMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT& result);
@@ -57,6 +64,7 @@ private:
     // Used to subscribe to WM_CLIPBOARDUPDATE messages.
     std::unique_ptr<base::MessageWindow> window_;
     std::unique_ptr<FileObject> file_object_;
+    QMap<int, FileStream*> active_streams_;
 
     Q_DISABLE_COPY_MOVE(ClipboardWin)
 };
