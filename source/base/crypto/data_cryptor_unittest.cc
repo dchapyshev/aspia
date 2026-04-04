@@ -43,7 +43,7 @@ TEST(DataCryptorChaCha20Poly1305Test, TestVector)
     ret = cryptor->decrypt(encrypted_message, &decrypted_message);
     ASSERT_TRUE(ret);
     ASSERT_EQ(decrypted_message.size(), message.size());
-    ASSERT_EQ(decrypted_message, message.toStdString());
+    ASSERT_EQ(decrypted_message, message);
 }
 
 TEST(DataCryptorChaCha20Poly1305Test, WrongKey)
@@ -56,7 +56,7 @@ TEST(DataCryptorChaCha20Poly1305Test, WrongKey)
     std::unique_ptr<DataCryptor> cryptor2 = std::make_unique<DataCryptorChaCha20Poly1305>(wrong_key);
 
     QByteArray encrypted_message;
-    bool ret = cryptor1->encrypt(message.toStdString(), &encrypted_message);
+    bool ret = cryptor1->encrypt(message, &encrypted_message);
     ASSERT_TRUE(ret);
     ASSERT_EQ(encrypted_message.size(), message.size() + 28);
 

@@ -18,6 +18,7 @@
 
 #include <QAbstractEventDispatcher>
 #include <QCoreApplication>
+#include <QElapsedTimer>
 #include <QHostInfo>
 #include <QTimer>
 #include <QTcpServer>

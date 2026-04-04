@@ -22,9 +22,10 @@
 #include <google/protobuf/io/printer.h>
 
 #include <fstream>
+#include <string_view>
 
 //--------------------------------------------------------------------------------------------------
-std::string qualifiedCppTypeName(const std::string& full_name)
+std::string qualifiedCppTypeName(std::string_view full_name)
 {
     std::string result;
 
@@ -43,8 +44,8 @@ std::string qualifiedCppEnumTypeName(const google::protobuf::EnumDescriptor* des
     if (descriptor->containing_type() == nullptr)
         return qualifiedCppTypeName(descriptor->full_name());
 
-    const std::string package = descriptor->file()->package();
-    const std::string full_name = descriptor->full_name();
+    const std::string package(descriptor->file()->package());
+    const std::string full_name(descriptor->full_name());
 
     // Build the C++ namespace prefix from the package (dots -> ::)
     std::string ns_prefix;
@@ -104,9 +105,9 @@ std::string makeIncludeGuardMacro(const std::string& file_name)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string makeGetterName(const std::string& name)
+std::string makeGetterName(std::string_view name)
 {
-    std::string getter = name;
+    std::string getter(name);
     std::transform(getter.begin(), getter.end(), getter.begin(), ::tolower);
     return getter;
 }
@@ -127,7 +128,7 @@ void generateEnumOperator(
         const auto* val = descriptor->value(i);
         std::string full_enum_scope = qualifiedCppTypeName(
             descriptor->containing_type() ? descriptor->containing_type()->full_name() : descriptor->full_name());
-        std::string full_enum_const = full_enum_scope + "::" + val->name();
+        std::string full_enum_const = full_enum_scope + "::" + std::string(val->name());
 
         source.Print("        case $CONST$:\n", "CONST", full_enum_const);
         source.Print("            return out << \"$CONST$\";\n", "CONST", val->name());
@@ -153,8 +154,8 @@ void generateMessageOperator(
     {
         const google::protobuf::FieldDescriptor* field = descriptor->field(i);
 
-        std::string field_name = field->name();
-        std::string getter_name = makeGetterName(field->name());
+        std::string field_name(field->name());
+        std::string getter_name = makeGetterName(field_name);
 
         if (field->is_repeated())
         {
@@ -259,13 +260,13 @@ bool MetatypeGenerator::Generate(const google::protobuf::FileDescriptor* file,
                                  google::protobuf::compiler::GeneratorContext* context,
                                  std::string* error) const
 {
-    std::string header_name = file->name();
+    std::string header_name(file->name());
     header_name.replace(header_name.rfind(".proto"), 6, ".h");
 
-    std::string source_name = file->name();
+    std::string source_name(file->name());
     source_name.replace(source_name.rfind(".proto"), 6, ".cc");
 
-    std::string pb_header = file->name();
+    std::string pb_header(file->name());
     pb_header.replace(pb_header.rfind(".proto"), 6, ".pb.h");
 
     std::vector<const google::protobuf::Descriptor*> messages;
@@ -296,7 +297,7 @@ bool MetatypeGenerator::Generate(const google::protobuf::FileDescriptor* file,
     // Add includes for imported files
     for (int i = 0; i < file->dependency_count(); ++i)
     {
-        std::string dep = file->dependency(i)->name();
+        std::string dep(file->dependency(i)->name());
         dep.replace(dep.rfind(".proto"), 6, ".h");
         header.Print("#include \"proto/$DEP$\" // IWYU pragma: export\n", "DEP", dep);
     }
