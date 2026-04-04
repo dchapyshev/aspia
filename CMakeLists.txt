@@ -63,6 +63,26 @@ endif()
 
 set(CMAKE_SKIP_BUILD_RPATH ON)
 
+if (NOT WIN32)
+    find_package(ICU REQUIRED COMPONENTS uc i18n data)
+    # Workaround: vcpkg ICU wrapper fails to set IMPORTED_LOCATION on ICU::uc
+    # due to nested invocations through the vcpkg dependency provider (CMake 4.x).
+    if (TARGET ICU::uc)
+        get_target_property(_icu_uc_loc ICU::uc IMPORTED_LOCATION_RELEASE)
+        if (NOT _icu_uc_loc)
+            set_target_properties(ICU::uc PROPERTIES
+                IMPORTED_LOCATION "${ICU_UC_LIBRARY_RELEASE}"
+                IMPORTED_LOCATION_RELEASE "${ICU_UC_LIBRARY_RELEASE}"
+                IMPORTED_LOCATION_DEBUG "${ICU_UC_LIBRARY_DEBUG}"
+                IMPORTED_LINK_INTERFACE_LANGUAGES "CXX"
+                IMPORTED_LINK_INTERFACE_LANGUAGES_RELEASE "CXX"
+                IMPORTED_LINK_INTERFACE_LANGUAGES_DEBUG "CXX")
+            set_property(TARGET ICU::uc APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
+            set_property(TARGET ICU::uc APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
+        endif()
+    endif()
+endif()
+
 find_package(Qt6 CONFIG REQUIRED Core Gui Network PrintSupport Sql Widgets Xml LinguistTools Svg)
 find_package(Qt6DeviceDiscoverySupportPrivate CONFIG REQUIRED)
 find_package(Qt6FbSupportPrivate CONFIG REQUIRED)
@@ -70,6 +90,7 @@ find_package(Qt6FbSupportPrivate CONFIG REQUIRED)
 find_package(asio CONFIG REQUIRED)
 find_package(CURL CONFIG REQUIRED)
 find_package(GTest CONFIG REQUIRED)
+find_package(JPEG REQUIRED)
 find_package(libyuv CONFIG REQUIRED)
 find_package(OpenSSL REQUIRED)
 find_package(Opus CONFIG REQUIRED)
