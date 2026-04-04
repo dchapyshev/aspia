@@ -70,14 +70,14 @@ endif()
 if (LINUX)
     set(QT_PLATFORM_LIBS
         Qt6::EglFSDeviceIntegrationPrivate Qt6::EglFSDeviceIntegrationPrivate_resources_1
-        Qt6::OpenGL Qt6::OpenGLPrivate
+        Qt6::OpenGL
         Qt6::InputSupportPrivate
         Qt6::XcbQpaPrivate)
 endif()
 
 if (APPLE)
     set(QT_PLATFORM_LIBS
-        Qt6::OpenGL Qt6::OpenGLPrivate
+        Qt6::OpenGL
         Qt6::QMacStylePlugin)
 endif()
 
