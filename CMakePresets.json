@@ -80,14 +80,11 @@
         }
       },
       "cacheVariables": {
-        "VCPKG_TARGET_TRIPLET": "arm64-osx"
+        "VCPKG_TARGET_TRIPLET": "arm64-osx",
+        "CMAKE_PROGRAM_PATH": "/opt/homebrew/bin"
       },
       "environment": {
         "VCPKG_TRIPLET": "arm64-osx"
-      },
-      "cacheVariables": {
-        "VCPKG_TARGET_TRIPLET": "arm64-osx",
-        "CMAKE_PROGRAM_PATH": "/opt/homebrew/bin"
       }
     },
     {
@@ -107,14 +104,11 @@
         }
       },
       "cacheVariables": {
-        "VCPKG_TARGET_TRIPLET": "x64-osx"
+        "VCPKG_TARGET_TRIPLET": "x64-osx",
+        "CMAKE_PROGRAM_PATH": "/opt/homebrew/bin"
       },
       "environment": {
         "VCPKG_TRIPLET": "x64-osx"
-      },
-      "cacheVariables": {
-        "VCPKG_TARGET_TRIPLET": "x64-osx",
-        "CMAKE_PROGRAM_PATH": "/opt/homebrew/bin"
       }
     },
     {
