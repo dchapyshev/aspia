@@ -130,26 +130,29 @@ void ComputerGroupDialogDesktop::saveSettings(
     else
         desktop_config->set_audio_encoding(proto::audio::ENCODING_UNKNOWN);
 
-    if (ui.checkbox_cursor_shape->isChecked() && ui.checkbox_cursor_shape->isEnabled())
-        flags |= proto::address_book::ENABLE_CURSOR_SHAPE;
+    if (session_type == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
+    {
+        if (ui.checkbox_cursor_shape->isChecked())
+            flags |= proto::address_book::ENABLE_CURSOR_SHAPE;
+
+        if (ui.checkbox_clipboard->isChecked())
+            flags |= proto::address_book::ENABLE_CLIPBOARD;
+
+        if (ui.checkbox_block_remote_input->isChecked())
+            flags |= proto::address_book::BLOCK_REMOTE_INPUT;
+
+        if (ui.checkbox_lock_at_disconnect->isChecked())
+            flags |= proto::address_book::LOCK_AT_DISCONNECT;
+    }
 
     if (ui.checkbox_cursor_position->isChecked())
         flags |= proto::address_book::CURSOR_POSITION;
-
-    if (ui.checkbox_clipboard->isChecked() && ui.checkbox_clipboard->isEnabled())
-        flags |= proto::address_book::ENABLE_CLIPBOARD;
 
     if (ui.checkbox_desktop_effects->isChecked())
         flags |= proto::address_book::DISABLE_EFFECTS;
 
     if (ui.checkbox_desktop_wallpaper->isChecked())
         flags |= proto::address_book::DISABLE_WALLPAPER;
-
-    if (ui.checkbox_block_remote_input->isChecked())
-        flags |= proto::address_book::BLOCK_REMOTE_INPUT;
-
-    if (ui.checkbox_lock_at_disconnect->isChecked())
-        flags |= proto::address_book::LOCK_AT_DISCONNECT;
 
     desktop_config->set_flags(flags);
 }
