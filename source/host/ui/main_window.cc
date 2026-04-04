@@ -860,7 +860,8 @@ void MainWindow::updateStatusBar()
 //--------------------------------------------------------------------------------------------------
 void MainWindow::updateTrayIconTooltip()
 {
-    QString ip;
+    QString ipv4;
+    QString ipv6;
 
     QList<QNetworkInterface> interfaces = QNetworkInterface::allInterfaces();
     for (int i = 0; i < interfaces.count(); ++i)
@@ -885,11 +886,19 @@ void MainWindow::updateTrayIconTooltip()
         QList<QNetworkAddressEntry> addresses = iface.addressEntries();
         for (int j = 0; j < addresses.count(); ++j)
         {
-            QHostAddress address = addresses[j].ip();
-            if (address.isGlobal())
-                ip += address.toString() + '\n';
+            const QNetworkAddressEntry& entry = addresses[j];
+            QHostAddress address = entry.ip();
+            if (address.isLoopback() || address.isLinkLocal())
+                continue;
+
+            if (address.protocol() == QAbstractSocket::IPv4Protocol)
+                ipv4 += address.toString() + '\n';
+            else if (address.protocol() == QAbstractSocket::IPv6Protocol && !entry.isTemporary())
+                ipv6 += address.toString() + '\n';
         }
     }
+
+    QString ip = ipv4 + ipv6;
 
     if (!ip.isEmpty())
         ip.prepend(tr("IP addresses:") + '\n');
