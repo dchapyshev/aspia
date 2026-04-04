@@ -34,9 +34,11 @@ jobs:
           - os: win11
             arch: x86
             triplet: x86-windows-static
+            msvc_arch: amd64_x86
           - os: win11
             arch: x64
             triplet: x64-windows-static
+            msvc_arch: amd64
 
     steps:
       # Step 1
@@ -60,7 +62,7 @@ jobs:
         uses: ilammy/msvc-dev-cmd@v1
         if: matrix.arch != 'amd64_arm64'
         with:
-          arch: ${{ matrix.arch }}
+          arch: ${{ matrix.msvc_arch }}
           toolset: 14.44
 
       # Step 4
