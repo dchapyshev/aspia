@@ -7,15 +7,21 @@
   },
   "configurePresets": [
     {
-      "name": "ninja-vcpkg-ci",
+      "name": "ninja-vcpkg-base",
+      "hidden": true,
       "binaryDir": "${sourceDir}/builds/${presetName}",
       "generator": "Ninja Multi-Config",
+      "environment": {
+        "VCPKG_ROOT": "${sourceDir}/vcpkg4aspia",
+        "VCPKG_BINARY_SOURCES": "default,readwrite",
+        "VCPKG_INSTALLED_DIR": "${sourceDir}/builds/${presetName}/vcpkg_installed"
+      },
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
         "CMAKE_WARN_DEPRECATED": "OFF",
         "CMAKE_TOOLCHAIN_FILE": {
           "type": "FILEPATH",
-          "value": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
+          "value": "${sourceDir}/vcpkg4aspia/scripts/buildsystems/vcpkg.cmake"
         },
         "VCPKG_TARGET_TRIPLET": {
           "type": "STRING",
@@ -28,21 +34,15 @@
       }
     },
     {
-      "name": "ninja-vcpkg-local-base",
-      "hidden": true,
+      "name": "ninja-vcpkg-ci",
       "inherits": [
-        "ninja-vcpkg-ci"
-      ],
-      "environment": {
-        "VCPKG_ROOT": "${sourceDir}/vcpkg",
-        "VCPKG_BINARY_SOURCES": "default,readwrite",
-        "VCPKG_INSTALLED_DIR": "${sourceDir}/builds/${presetName}/vcpkg_installed"
-      }
+        "ninja-vcpkg-base"
+      ]
     },
     {
       "name": "ninja-vcpkg-local-unix",
       "inherits": [
-        "ninja-vcpkg-local-base"
+        "ninja-vcpkg-base"
       ],
       "environment": {
         "VCPKG_DOWNLOADS": "/opt/vcpkg/downloads"
@@ -51,7 +51,7 @@
     {
       "name": "ninja-vcpkg-local-mac-arm64",
       "inherits": [
-        "ninja-vcpkg-local-unix"
+        "ninja-vcpkg-base"
       ],
       "architecture": {
         "value": "arm64",
@@ -69,6 +69,7 @@
       },
       "environment": {
         "VCPKG_TRIPLET": "arm64-osx",
+        "VCPKG_DOWNLOADS": "/opt/vcpkg/downloads",
         "VCPKG_DEFAULT_BINARY_CACHE": "/opt/vcpkg/bincache-$env{VCPKG_TRIPLET}"
       }
     },
@@ -76,7 +77,7 @@
       "name": "ninja-vcpkg-local-win-x86",
       "description": "Run x86 Native Tools Command Prompt for VS 2022 and then run 'C:/Users/v3133/AppData/Local/Programs/Microsoft VS Code/Code.exe'",
       "inherits": [
-        "ninja-vcpkg-local-base"
+        "ninja-vcpkg-base"
       ],
       "architecture": {
         "value": "x86",
@@ -113,7 +114,7 @@
       "name": "ninja-vcpkg-local-win-x64",
       "description": "Run x64 Native Tools Command Prompt for VS 2022 and then run 'C:/Users/v3133/AppData/Local/Programs/Microsoft VS Code/Code.exe'",
       "inherits": [
-        "ninja-vcpkg-local-base"
+        "ninja-vcpkg-base"
       ],
       "architecture": {
         "value": "x64",

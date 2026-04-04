@@ -16,7 +16,6 @@ concurrency:
 
 env:
   VCPKG_INSTALLED_DIR: ${{ github.workspace }}/builds/ninja-vcpkg-ci/vcpkg_installed
-  VCPKG_ROOT_PROJECT: ${{ github.workspace }}/vcpkg4aspia
   VCPKG_BINARY_SOURCES: 'default,readwrite'
 
 jobs:
@@ -42,16 +41,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
         with:
-          submodules: false
+          submodules: true
 
       # Step 2
-      - name: Checkout Submodule
-        uses: actions/checkout@v6
-        with:
-          repository: dchapyshev/vcpkg4aspia
-          path: vcpkg4aspia
-
-      # Step 3
       - name: Dependencies, Build, Tests (Linux/Bash)
         env:
           # This vars used inside CMake
@@ -60,7 +52,6 @@ jobs:
           VCPKG_DEFAULT_HOST_TRIPLET: ${{ matrix.triplet }}
           VCPKG_DOWNLOADS: /home/shared/vcpkg/downloads
         run: |
-          export VCPKG_ROOT=$VCPKG_ROOT_PROJECT
           env
 
           if [ -z "${{ matrix.triplet }}" ]; then

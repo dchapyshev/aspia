@@ -16,7 +16,6 @@ concurrency:
 
 env:
   VCPKG_INSTALLED_DIR: ${{ github.workspace }}/builds/ninja-vcpkg-ci/vcpkg_installed
-  VCPKG_ROOT_PROJECT: ${{ github.workspace }}/vcpkg4aspia
   VCPKG_BINARY_SOURCES: 'default,readwrite'
 
 jobs:
@@ -45,16 +44,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
         with:
-          submodules: false
+          submodules: true
 
       # Step 2
-      - name: Checkout Submodule
-        uses: actions/checkout@v6
-        with:
-          repository: dchapyshev/vcpkg4aspia
-          path: vcpkg4aspia
-
-      # Step 3
       # On Windows runners, let's ensure to have the Developer Command Prompt
       # environment setup correctly. As used here the Developer Command Prompt
       # created is targeting x86 and using the default the Windows SDK.
@@ -74,8 +66,6 @@ jobs:
           VCPKG_DEFAULT_HOST_TRIPLET: ${{ matrix.triplet }}
           VCPKG_DOWNLOADS: C:\vcpkg\downloads
         run: |
-          # Reuired to prevent override by MSVC for e.g. on Win
-          $env:VCPKG_ROOT=$env:VCPKG_ROOT_PROJECT
           Get-ChildItem env:
 
           if (!$env:VCPKG_TRIPLET) { echo "VCPKG_TRIPLET is empty"; exit 1; }
