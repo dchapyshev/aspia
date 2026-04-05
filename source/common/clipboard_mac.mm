@@ -22,7 +22,7 @@
 
 #include "base/logging.h"
 #include "base/serialization.h"
-#include "common/mac/file_promise_provider.h"
+#include "common/mac/file_data_provider.h"
 #include "common/mac/file_promise_writer.h"
 
 #import <Cocoa/Cocoa.h>
@@ -179,8 +179,8 @@ ClipboardMac::~ClipboardMac()
         it.value()->terminate();
     active_writers_.clear();
 
-    // Release the file promise provider (cancels pending operations).
-    file_promise_provider_.reset();
+    // Release the file data provider (cleans up temp directory).
+    file_data_provider_.reset();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -193,6 +193,12 @@ void ClipboardMac::init()
 //--------------------------------------------------------------------------------------------------
 void ClipboardMac::setData(const QString& mime_type, const QByteArray& data)
 {
+    // Guard: prevent checkForChanges() from reading our own pasteboard writes.
+    // NSPasteboard IPC calls (writeObjects:, clearContents) may pump the run loop
+    // internally, causing the QTimer to fire mid-write and trigger a re-read
+    // that would call provideDataForType: prematurely.
+    is_setting_data_ = true;
+
     if (mime_type == kMimeTypeTextUtf8)
     {
         setDataText(data);
@@ -205,6 +211,8 @@ void ClipboardMac::setData(const QString& mime_type, const QByteArray& data)
     {
         LOG(WARNING) << "Unhandled mime type:" << mime_type;
     }
+
+    is_setting_data_ = false;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -216,6 +224,10 @@ void ClipboardMac::startTimer()
 //--------------------------------------------------------------------------------------------------
 void ClipboardMac::checkForChanges()
 {
+    // Skip if we are currently writing to the pasteboard (see setData guard).
+    if (is_setting_data_)
+        return;
+
     NSPasteboard* pasteboard = [NSPasteboard generalPasteboard];
     NSInteger change_count = [pasteboard changeCount];
 
@@ -348,36 +360,43 @@ void ClipboardMac::setDataFiles(const QByteArray& data)
     }
 
     // Terminate any active writers from previous provider.
-    for (auto it = active_writers_.begin(); it != active_writers_.end(); ++it)
-        it.value()->terminate();
-    active_writers_.clear();
+    {
+        std::scoped_lock lock(writers_mutex_);
+        for (auto it = active_writers_.begin(); it != active_writers_.end(); ++it)
+            it.value()->terminate();
+        active_writers_.clear();
+    }
 
     // Release the old provider before creating a new one.
-    file_promise_provider_.reset();
+    file_data_provider_.reset();
 
-    file_promise_provider_.reset(FilePromiseProvider::create(files,
+    file_data_provider_.reset(FileDataProvider::create(files,
         [this](int file_index, FilePromiseWriter* writer)
         {
             onFileDataRequested(file_index, writer);
         }));
 
-    if (!file_promise_provider_)
+    if (!file_data_provider_)
     {
-        LOG(ERROR) << "Invalid file promise provider";
+        LOG(ERROR) << "Invalid file data provider";
         return;
     }
 
-    NSPasteboard* pasteboard = [NSPasteboard generalPasteboard];
-    [pasteboard clearContents];
-    [pasteboard writeObjects:file_promise_provider_->providers()];
-
-    current_change_count_ = [pasteboard changeCount];
+    // writeToPasteboard creates empty temp files, registers NSFilePresenters, and
+    // writes file URLs to the pasteboard. This is instant — no network transfer.
+    // Data is downloaded on-demand when the user actually pastes in Finder
+    // (via relinquishPresentedItemToReader:).
+    file_data_provider_->writeToPasteboard();
+    current_change_count_ = [[NSPasteboard generalPasteboard] changeCount];
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClipboardMac::onFileDataRequested(int file_index, FilePromiseWriter* writer)
 {
-    // Clean up any previous writer for this file_index.
+    // Called from NSFilePresenter's operation queue (background thread).
+    // Protect active_writers_ since addFileData runs on the clipboard thread.
+    std::scoped_lock lock(writers_mutex_);
+
     auto it = active_writers_.find(file_index);
     if (it != active_writers_.end())
     {
@@ -392,6 +411,8 @@ void ClipboardMac::onFileDataRequested(int file_index, FilePromiseWriter* writer
 //--------------------------------------------------------------------------------------------------
 void ClipboardMac::addFileData(int file_index, const QByteArray& data, bool is_last)
 {
+    std::scoped_lock lock(writers_mutex_);
+
     auto it = active_writers_.find(file_index);
     if (it == active_writers_.end())
     {

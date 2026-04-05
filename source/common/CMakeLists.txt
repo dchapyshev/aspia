@@ -69,8 +69,8 @@ if (APPLE)
         file_platform_util_mac.mm)
 
     list(APPEND SOURCE_COMMON_MAC
-        mac/file_promise_provider.mm
-        mac/file_promise_provider.h
+        mac/file_data_provider.mm
+        mac/file_data_provider.h
         mac/file_promise_writer.mm
         mac/file_promise_writer.h)
 endif()

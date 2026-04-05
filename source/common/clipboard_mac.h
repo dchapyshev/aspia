@@ -19,6 +19,8 @@
 #ifndef COMMON_CLIPBOARD_MAC_H
 #define COMMON_CLIPBOARD_MAC_H
 
+#include <mutex>
+
 #include <QMap>
 #include <QTimer>
 
@@ -26,7 +28,7 @@
 
 namespace common {
 
-class FilePromiseProvider;
+class FileDataProvider;
 class FilePromiseWriter;
 
 class ClipboardMac final : public Clipboard
@@ -56,8 +58,10 @@ private:
 
     QTimer* timer_ = nullptr;
     int current_change_count_ = 0;
+    bool is_setting_data_ = false;
 
-    std::unique_ptr<FilePromiseProvider> file_promise_provider_;
+    std::unique_ptr<FileDataProvider> file_data_provider_;
+    std::mutex writers_mutex_;
     QMap<int, FilePromiseWriter*> active_writers_;
 
     Q_DISABLE_COPY(ClipboardMac)
