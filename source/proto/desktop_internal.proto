@@ -23,8 +23,6 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
-import "peer.proto";
-
 package proto.desktop;
 
 enum IpcChannelId

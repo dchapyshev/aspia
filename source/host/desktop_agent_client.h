@@ -46,7 +46,6 @@ public:
     explicit DesktopAgentClient(QObject* parent = nullptr);
     ~DesktopAgentClient() final;
 
-    proto::peer::SessionType sessionType() const { return session_type_; }
     proto::desktop::Overflow::State overflowState() const { return overflow_state_; }
     const QSize& preferredSize() const { return preferred_size_; }
     qint64 bandwidth() const { return bandwidth_; }
@@ -100,7 +99,6 @@ private:
     base::IpcChannel* ipc_channel_ = nullptr;
 
     proto::desktop::Overflow::State overflow_state_ = proto::desktop::Overflow::STATE_NONE;
-    proto::peer::SessionType session_type_ = proto::peer::SESSION_TYPE_UNKNOWN;
     std::optional<proto::control::Config> config_;
 
     bool vp8_supported_ = false;
