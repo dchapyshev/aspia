@@ -18,31 +18,28 @@
 
 #include "client/ui/client_window.h"
 
+#include <QActionGroup>
+#include <QDesktopServices>
+#include <QLineEdit>
+#include <QMessageBox>
+#include <QTabBar>
+#include <QUrl>
+#include <QTimer>
+
 #include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/version_constants.h"
-#include "base/net/address.h"
-#include "build/build_config.h"
-#include "client/router_config_storage.h"
 #include "client/ui/application.h"
 #include "client/ui/client_settings.h"
 #include "client/ui/client_settings_dialog.h"
-#include "client/ui/chat/chat_session_window.h"
-#include "client/ui/desktop/desktop_config_dialog.h"
-#include "client/ui/desktop/desktop_session_window.h"
-#include "client/ui/file_transfer/file_transfer_session_window.h"
-#include "client/ui/sys_info/system_info_session_window.h"
+#include "client/ui/client_tab.h"
+#include "client/ui/local_tab.h"
+#include "client/ui/router_tab.h"
 #include "client/ui/update_settings_dialog.h"
 #include "common/update_checker.h"
 #include "common/ui/about_dialog.h"
 #include "common/ui/language_action.h"
-#include "common/ui/session_type.h"
 #include "common/ui/update_dialog.h"
-
-#include <QActionGroup>
-#include <QDesktopServices>
-#include <QMessageBox>
-#include <QUrl>
 
 namespace client {
 
@@ -56,17 +53,23 @@ ClientWindow::ClientWindow(QWidget* parent)
 
     ui.setupUi(this);
 
+    // Create search field in toolbar.
+    QWidget* spacer = new QWidget(this);
+    spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    ui.toolbar->insertWidget(ui.action_settings, spacer);
+
+    search_field_ = new QLineEdit(this);
+    search_field_->setPlaceholderText(tr("Search..."));
+    search_field_->setClearButtonEnabled(true);
+    search_field_->setMaximumWidth(250);
+    search_action_ = ui.toolbar->insertWidget(ui.action_settings, search_field_);
+    search_action_->setVisible(false);
+
+    // Insert separator before global actions.
+    ui.toolbar->insertSeparator(ui.action_settings);
+
     createLanguageMenu(settings.locale());
     createThemeMenu(settings.theme());
-
-    reloadSessionTypes();
-
-    QComboBox* combo_address = ui.combo_address;
-
-    combo_address->addItems(settings.addressList());
-    combo_address->setCurrentIndex(0);
-
-    connect(combo_address->lineEdit(), &QLineEdit::returnPressed, this, &ClientWindow::connectToHost);
 
     connect(ui.menu_language, &QMenu::triggered, this, &ClientWindow::onLanguageChanged);
     connect(ui.menu_theme, &QMenu::triggered, this, &ClientWindow::onThemeChanged);
@@ -74,39 +77,13 @@ ClientWindow::ClientWindow(QWidget* parent)
     connect(ui.action_help, &QAction::triggered, this, &ClientWindow::onHelp);
     connect(ui.action_about, &QAction::triggered, this, &ClientWindow::onAbout);
     connect(ui.action_exit, &QAction::triggered, this, &ClientWindow::close);
-    connect(ui.action_clear_history, &QAction::triggered, this, [this]()
-    {
-        LOG(INFO) << "[ACTION] Clear history";
 
-        QMessageBox messagebox(this);
-        messagebox.setWindowTitle(tr("Confirmation"));
-        messagebox.setText(tr("Are you sure you want to clear your connection history?"));
-        messagebox.setIcon(QMessageBox::Question);
-        messagebox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-        messagebox.button(QMessageBox::Yes)->setText(tr("Yes"));
-        messagebox.button(QMessageBox::No)->setText(tr("No"));
+    // Tab management.
+    connect(ui.tabs, &QTabWidget::currentChanged, this, &ClientWindow::onCurrentTabChanged);
+    connect(ui.tabs, &QTabWidget::tabCloseRequested, this, &ClientWindow::onCloseTab);
 
-        if (messagebox.exec() == QMessageBox::Yes)
-        {
-            LOG(INFO) << "[ACTION] Accepted by user";
-
-            ClientSettings settings;
-            settings.setAddressList(QStringList());
-            ui.combo_address->clear();
-        }
-        else
-        {
-            LOG(INFO) << "[ACTION] Rejected by user";
-        }
-    });
-
-    connect(ui.combo_session_type, QOverload<int>::of(&QComboBox::currentIndexChanged),
-            this, &ClientWindow::sessionTypeChanged);
-
-    connect(ui.button_session_config, &QPushButton::clicked,
-            this, &ClientWindow::sessionConfigButtonPressed);
-
-    connect(ui.button_connect, &QPushButton::clicked, this, &ClientWindow::connectToHost);
+    // Search field.
+    connect(search_field_, &QLineEdit::textChanged, this, &ClientWindow::onSearchTextChanged);
 
 #if defined(Q_OS_WINDOWS)
     connect(ui.action_check_for_updates, &QAction::triggered, this, &ClientWindow::onCheckUpdates);
@@ -133,11 +110,11 @@ ClientWindow::ClientWindow(QWidget* parent)
 
     connect(base::GuiApplication::instance(), &base::GuiApplication::sig_themeChanged,
             this, &ClientWindow::onAfterThemeChanged);
-
     onAfterThemeChanged();
-    combo_address->setFocus();
 
-    setFixedHeight(sizeHint().height());
+    // Create default tabs.
+    addTab(new LocalTab(this), tr("Local"), QIcon(":/img/folder.svg"));
+    addTab(new RouterTab(this), tr("Router"), QIcon(":/img/clouds.svg"));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -207,8 +184,6 @@ void ClientWindow::onLanguageChanged(QAction* action)
         if (!theme_id.isEmpty())
             theme_action->setText(base::GuiApplication::themeName(theme_id));
     }
-
-    reloadSessionTypes();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -230,173 +205,6 @@ void ClientWindow::onAbout()
 {
     LOG(INFO) << "[ACTION] About button";
     common::AboutDialog(tr("Aspia Client"), this).exec();
-}
-
-//--------------------------------------------------------------------------------------------------
-void ClientWindow::sessionTypeChanged(int item_index)
-{
-    proto::peer::SessionType session_type = static_cast<proto::peer::SessionType>(
-        ui.combo_session_type->itemData(item_index).toInt());
-
-    LOG(INFO) << "[ACTION] Session type changed:" << session_type;
-
-    switch (session_type)
-    {
-        case proto::peer::SESSION_TYPE_DESKTOP:
-            ui.button_session_config->setEnabled(true);
-            break;
-
-        default:
-            ui.button_session_config->setEnabled(false);
-            break;
-    }
-
-    ClientSettings settings;
-    settings.setSessionType(session_type);
-}
-
-//--------------------------------------------------------------------------------------------------
-void ClientWindow::sessionConfigButtonPressed()
-{
-    LOG(INFO) << "[ACTION] Session config button";
-
-    proto::peer::SessionType session_type = static_cast<proto::peer::SessionType>(
-        ui.combo_session_type->currentData().toInt());
-    ClientSettings settings;
-
-    switch (session_type)
-    {
-        case proto::peer::SESSION_TYPE_DESKTOP:
-        {
-            DesktopConfigDialog dialog(settings.desktopConfig(), this);
-
-            if (dialog.exec() == DesktopConfigDialog::Accepted)
-                settings.setDesktopConfig(dialog.config());
-        }
-        break;
-
-        default:
-            break;
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-void ClientWindow::connectToHost()
-{
-    LOG(INFO) << "[ACTION] Connect to host";
-
-    RouterConfig router_config = RouterConfigStorage().routerConfig();
-    Config config;
-
-    QComboBox* combo_address = ui.combo_address;
-    QString current_address = combo_address->currentText();
-
-    bool host_id_entered = true;
-
-    for (int i = 0; i < current_address.length(); ++i)
-    {
-        if (!current_address[i].isDigit())
-        {
-            host_id_entered = false;
-            break;
-        }
-    }
-
-    if (!host_id_entered)
-    {
-        LOG(INFO) << "Direct connection selected";
-
-        base::Address address = base::Address::fromString(current_address, DEFAULT_HOST_TCP_PORT);
-        if (!address.isValid())
-        {
-            LOG(ERROR) << "Invalid computer address";
-            QMessageBox::warning(this,
-                                 tr("Warning"),
-                                 tr("An invalid computer address was entered."),
-                                 QMessageBox::Ok);
-            combo_address->setFocus();
-            return;
-        }
-
-        config.address_or_id = address.host();
-        config.port = address.port();
-    }
-    else
-    {
-        LOG(INFO) << "Relay connection selected";
-
-        if (!router_config.isValid())
-        {
-            LOG(ERROR) << "Router not configured";
-            QMessageBox::warning(this,
-                                 tr("Warning"),
-                                 tr("A host ID was entered, but the router was not configured. "
-                                    "You need to configure your router before connecting."),
-                                 QMessageBox::Ok);
-            return;
-        }
-
-        config.address_or_id = current_address;
-    }
-
-    int current_index = combo_address->findText(current_address);
-    if (current_index != -1)
-        combo_address->removeItem(current_index);
-
-    combo_address->insertItem(0, current_address);
-    combo_address->setCurrentIndex(0);
-
-    QStringList address_list;
-    for (int i = 0; i < std::min(combo_address->count(), 15); ++i)
-        address_list.append(combo_address->itemText(i));
-
-    ClientSettings settings;
-    settings.setAddressList(address_list);
-
-    if (host_id_entered)
-        config.router_config = std::move(router_config);
-
-    config.session_type = static_cast<proto::peer::SessionType>(
-        ui.combo_session_type->currentData().toInt());
-    config.display_name = settings.displayName();
-
-    SessionWindow* session_window = nullptr;
-
-    switch (config.session_type)
-    {
-        case proto::peer::SESSION_TYPE_DESKTOP:
-            session_window = new DesktopSessionWindow(settings.desktopConfig());
-            break;
-
-        case proto::peer::SESSION_TYPE_FILE_TRANSFER:
-            session_window = new FileTransferSessionWindow();
-            break;
-
-        case proto::peer::SESSION_TYPE_SYSTEM_INFO:
-            session_window = new SystemInfoSessionWindow();
-            break;
-
-        case proto::peer::SESSION_TYPE_TEXT_CHAT:
-            session_window = new ChatSessionWindow();
-            break;
-
-        default:
-            NOTREACHED();
-            break;
-    }
-
-    if (!session_window)
-    {
-        LOG(ERROR) << "Session window not created";
-        return;
-    }
-
-    session_window->setAttribute(Qt::WA_DeleteOnClose);
-    if (!session_window->connectToHost(config))
-    {
-        LOG(ERROR) << "Unable to connect to host";
-        session_window->close();
-    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -428,51 +236,52 @@ void ClientWindow::onThemeChanged(QAction* action)
 //--------------------------------------------------------------------------------------------------
 void ClientWindow::onAfterThemeChanged()
 {
-    static const QString kComboboxStyle =
-        "QComboBox {"
-            "border: 1px solid #CDCDCD;"
-            "border-radius: 3px;"
-            "padding: 3px;"
-        "}"
-        "QComboBox::drop-down {"
-            "subcontrol-origin: padding;"
-            "subcontrol-position: top right;"
-            "border-left-width: 1px;"
-            "border-left-color: #E1E8EE;"
-            "border-left-style: solid;"
-            "border-top-right-radius: 3px;"
-            "border-bottom-right-radius: 3px;"
-            "width: 25px;"
-        "}"
-        "QComboBox::drop-down::hover {"
-            "background: #E9E9E9;"
-        "}"
-        "QComboBox::drop-down::pressed {"
-            "background: #CDCDCD;"
-        "}"
-        "QComboBox::down-arrow {"
-            "image: url(:/img/expand-arrow.svg);"
-            "background-repeat: no-repeat;"
-            "background-position: center center;"
-            "width: 10px;"
-            "height: 10px;"
-        "}";
 
-    ui.combo_address->setStyleSheet(kComboboxStyle);
-    ui.combo_session_type->setStyleSheet(kComboboxStyle);
+}
 
-    static const QString kLabelStyle = "QLabel { font: bold 11px; }";
+//--------------------------------------------------------------------------------------------------
+void ClientWindow::onCurrentTabChanged(int index)
+{
+    if (active_tab_)
+    {
+        active_tab_->onDeactivated(ui.toolbar, ui.statusbar);
+        active_tab_ = nullptr;
+    }
 
-    ui.label_address->setStyleSheet(kLabelStyle);
-    ui.label_session_type->setStyleSheet(kLabelStyle);
+    if (index == -1)
+        return;
 
-    ui.button_session_config->setStyleSheet("QPushButton { padding: 4px 4px 4px 4px; }");
+    ClientTab* tab = tabAt(index);
+    if (!tab)
+        return;
 
-    ui.button_connect->setStyleSheet("QPushButton {"
-                                         "font: bold 11px;"
-                                         "padding: 5px 25px 5px 25px;"
-                                     "}");
-    reloadSessionTypes();
+    active_tab_ = tab;
+    active_tab_->onActivated(ui.toolbar, ui.statusbar);
+    updateSearchFieldVisibility();
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientWindow::onCloseTab(int index)
+{
+    ClientTab* tab = tabAt(index);
+    if (!tab || !tab->isClosable())
+        return;
+
+    if (tab == active_tab_)
+    {
+        tab->onDeactivated(ui.toolbar, ui.statusbar);
+        active_tab_ = nullptr;
+    }
+
+    ui.tabs->removeTab(index);
+    delete tab;
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientWindow::onSearchTextChanged(const QString& text)
+{
+    if (active_tab_)
+        active_tab_->onSearchTextChanged(text);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -520,32 +329,49 @@ void ClientWindow::createThemeMenu(const QString& current_theme)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientWindow::reloadSessionTypes()
+void ClientWindow::addTab(ClientTab* tab, const QString& title, const QIcon& icon)
 {
-    ClientSettings settings;
-    proto::peer::SessionType current_session_type = settings.sessionType();
-    QComboBox* combobox = ui.combo_session_type;
+    int index = ui.tabs->addTab(tab, icon, title);
 
-    auto add_session = [=](proto::peer::SessionType session_type)
+    if (!tab->isClosable())
+        hideCloseButtonForTab(index);
+
+    connect(tab, &ClientTab::sig_titleChanged, this, [this, tab](const QString& new_title)
     {
-        combobox->addItem(common::sessionIcon(session_type),
-                          common::sessionName(session_type),
-                          QVariant(session_type));
-    };
+        int tab_index = ui.tabs->indexOf(tab);
+        if (tab_index != -1)
+            ui.tabs->setTabText(tab_index, new_title);
+    });
+}
 
-    combobox->clear();
+//--------------------------------------------------------------------------------------------------
+void ClientWindow::hideCloseButtonForTab(int index)
+{
+    // Hide close button on both sides for cross-platform compatibility.
+    QWidget* close_button = ui.tabs->tabBar()->tabButton(index, QTabBar::RightSide);
+    if (close_button)
+        close_button->hide();
 
-    add_session(proto::peer::SESSION_TYPE_DESKTOP);
-    add_session(proto::peer::SESSION_TYPE_FILE_TRANSFER);
-    add_session(proto::peer::SESSION_TYPE_SYSTEM_INFO);
-    add_session(proto::peer::SESSION_TYPE_TEXT_CHAT);
+    close_button = ui.tabs->tabBar()->tabButton(index, QTabBar::LeftSide);
+    if (close_button)
+        close_button->hide();
+}
 
-    int item_index = combobox->findData(QVariant(current_session_type));
-    if (item_index != -1)
-    {
-        combobox->setCurrentIndex(item_index);
-        sessionTypeChanged(item_index);
-    }
+//--------------------------------------------------------------------------------------------------
+ClientTab* ClientWindow::tabAt(int index)
+{
+    return dynamic_cast<ClientTab*>(ui.tabs->widget(index));
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientWindow::updateSearchFieldVisibility()
+{
+    bool show_search = active_tab_ && active_tab_->hasSearchField();
+
+    if (!show_search && search_field_->isVisible())
+        search_field_->clear();
+
+    search_action_->setVisible(show_search);
 }
 
 } // namespace client

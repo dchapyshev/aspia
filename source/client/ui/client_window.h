@@ -24,11 +24,15 @@
 
 #include "ui_client_window.h"
 
+class QLineEdit;
+
 namespace common {
 class UpdateChecker;
 } // namespace common
 
 namespace client {
+
+class ClientTab;
 
 class ClientWindow final : public QMainWindow
 {
@@ -50,18 +54,25 @@ private slots:
     void onSettings();
     void onHelp();
     void onAbout();
-    void sessionTypeChanged(int item_index);
-    void sessionConfigButtonPressed();
-    void connectToHost();
     void onCheckUpdates();
+    void onCurrentTabChanged(int index);
+    void onCloseTab(int index);
+    void onSearchTextChanged(const QString& text);
 
 private:
     void createLanguageMenu(const QString& current_locale);
     void createThemeMenu(const QString& current_theme);
-    void reloadSessionTypes();
+    void addTab(ClientTab* tab, const QString& title, const QIcon& icon);
+    void hideCloseButtonForTab(int index);
+    ClientTab* tabAt(int index);
+    void updateSearchFieldVisibility();
 
     Ui::ClientWindow ui;
     std::unique_ptr<common::UpdateChecker> update_checker_;
+
+    QLineEdit* search_field_ = nullptr;
+    QAction* search_action_ = nullptr;
+    ClientTab* active_tab_ = nullptr;
 
     Q_DISABLE_COPY_MOVE(ClientWindow)
 };

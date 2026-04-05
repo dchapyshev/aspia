@@ -71,9 +71,18 @@ list(APPEND SOURCE_CLIENT_CORE_UI
     ui/authorization_dialog.cc
     ui/authorization_dialog.h
     ui/authorization_dialog.ui
+    ui/client_tab.cc
+    ui/client_tab.h
     ui/client_window.cc
     ui/client_window.h
     ui/client_window.ui
+    ui/local_tab.cc
+    ui/local_tab.h
+    ui/local_tab.ui
+    ui/router_tab.cc
+    ui/router_tab.h
+    ui/session_tab.cc
+    ui/session_tab.h
     ui/client_settings.cc
     ui/client_settings.h
     ui/client_settings_dialog.cc
