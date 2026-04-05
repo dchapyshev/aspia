@@ -19,11 +19,15 @@
 #ifndef COMMON_CLIPBOARD_MAC_H
 #define COMMON_CLIPBOARD_MAC_H
 
+#include <QMap>
 #include <QTimer>
 
 #include "common/clipboard.h"
 
 namespace common {
+
+class FilePromiseProvider;
+class FilePromiseWriter;
 
 class ClipboardMac final : public Clipboard
 {
@@ -32,6 +36,9 @@ class ClipboardMac final : public Clipboard
 public:
     explicit ClipboardMac(QObject* parent = nullptr);
     ~ClipboardMac();
+
+    // Clipboard implementation.
+    void addFileData(int file_index, const QByteArray& data, bool is_last) final;
 
 protected:
     // Clipboard implementation.
@@ -44,9 +51,14 @@ private:
     void onClipboardText();
     void onClipboardFiles();
     void setDataText(const QByteArray& data);
+    void setDataFiles(const QByteArray& data);
+    void onFileDataRequested(int file_index, FilePromiseWriter* writer);
 
     QTimer* timer_ = nullptr;
     int current_change_count_ = 0;
+
+    std::unique_ptr<FilePromiseProvider> file_promise_provider_;
+    QMap<int, FilePromiseWriter*> active_writers_;
 
     Q_DISABLE_COPY(ClipboardMac)
 };

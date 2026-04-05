@@ -22,6 +22,8 @@
 
 #include "base/logging.h"
 #include "base/serialization.h"
+#include "common/mac/file_promise_provider.h"
+#include "common/mac/file_promise_writer.h"
 
 #import <Cocoa/Cocoa.h>
 
@@ -163,11 +165,23 @@ ClipboardMac::ClipboardMac(QObject* parent)
     : Clipboard(parent),
       timer_(new QTimer(this))
 {
+    LOG(INFO) << "Ctor";
     connect(timer_, &QTimer::timeout, this, &ClipboardMac::checkForChanges);
 }
 
 //--------------------------------------------------------------------------------------------------
-ClipboardMac::~ClipboardMac() = default;
+ClipboardMac::~ClipboardMac()
+{
+    LOG(INFO) << "Dtor";
+
+    // Terminate any active writers.
+    for (auto it = active_writers_.begin(); it != active_writers_.end(); ++it)
+        it.value()->terminate();
+    active_writers_.clear();
+
+    // Release the file promise provider (cancels pending operations).
+    file_promise_provider_.reset();
+}
 
 //--------------------------------------------------------------------------------------------------
 void ClipboardMac::init()
@@ -185,7 +199,7 @@ void ClipboardMac::setData(const QString& mime_type, const QByteArray& data)
     }
     else if (mime_type == kMimeTypeFileList)
     {
-        // TODO: implement setDataFiles (incoming file transfer, Step 3-4).
+        setDataFiles(data);
     }
     else
     {
@@ -314,6 +328,82 @@ void ClipboardMac::setDataText(const QByteArray& data)
     [pasteboard writeObjects:@[ text ]];
 
     current_change_count_ = [[NSPasteboard generalPasteboard] changeCount];
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClipboardMac::setDataFiles(const QByteArray& data)
+{
+    proto::clipboard::Event::FileList files;
+
+    if (!base::parse(data, &files))
+    {
+        LOG(ERROR) << "Unable to parse file list";
+        return;
+    }
+
+    if (!files.file_size())
+    {
+        LOG(ERROR) << "Empty file list";
+        return;
+    }
+
+    // Terminate any active writers from previous provider.
+    for (auto it = active_writers_.begin(); it != active_writers_.end(); ++it)
+        it.value()->terminate();
+    active_writers_.clear();
+
+    // Release the old provider before creating a new one.
+    file_promise_provider_.reset();
+
+    file_promise_provider_.reset(FilePromiseProvider::create(files,
+        [this](int file_index, FilePromiseWriter* writer)
+        {
+            onFileDataRequested(file_index, writer);
+        }));
+
+    if (!file_promise_provider_)
+    {
+        LOG(ERROR) << "Invalid file promise provider";
+        return;
+    }
+
+    NSPasteboard* pasteboard = [NSPasteboard generalPasteboard];
+    [pasteboard clearContents];
+    [pasteboard writeObjects:file_promise_provider_->providers()];
+
+    current_change_count_ = [pasteboard changeCount];
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClipboardMac::onFileDataRequested(int file_index, FilePromiseWriter* writer)
+{
+    // Clean up any previous writer for this file_index.
+    auto it = active_writers_.find(file_index);
+    if (it != active_writers_.end())
+    {
+        it.value()->terminate();
+        active_writers_.erase(it);
+    }
+
+    active_writers_[file_index] = writer;
+    emit sig_fileDataRequest(file_index);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClipboardMac::addFileData(int file_index, const QByteArray& data, bool is_last)
+{
+    auto it = active_writers_.find(file_index);
+    if (it == active_writers_.end())
+    {
+        LOG(ERROR) << "No active writer for file_index:" << file_index;
+        return;
+    }
+
+    FilePromiseWriter* writer = it.value();
+    writer->addData(data, is_last);
+
+    if (is_last)
+        active_writers_.erase(it);
 }
 
 } // namespace common
