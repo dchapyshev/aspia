@@ -32,7 +32,6 @@ bool isDebuggerPresent()
 #if defined(Q_OS_WINDOWS)
     return !!IsDebuggerPresent();
 #else
-#warning Platform support not implemented
     return false;
 #endif
 }
@@ -42,8 +41,6 @@ void debugPrint(const char* str)
 {
 #if defined(Q_OS_WINDOWS)
     OutputDebugStringA(str);
-#else
-#warning Platform support not implemented
 #endif
 }
 
