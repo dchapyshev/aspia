@@ -70,9 +70,9 @@ private:
     proto::clipboard::Event::FileList files_;
 
 #ifdef __OBJC__
-    FilePromiseDelegate* delegate_ = nil;
-    NSArray* providers_ = nil;
-    NSOperationQueue* operation_queue_ = nil;
+    FilePromiseDelegate* delegate_ = nullptr;
+    NSArray* providers_ = nullptr;
+    NSOperationQueue* operation_queue_ = nullptr;
 #else
     void* delegate_ = nullptr;
     void* providers_ = nullptr;
