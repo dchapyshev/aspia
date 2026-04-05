@@ -28,6 +28,8 @@
 	<string>3.0.0</string>
     <key>NSAppleEventsUsageDescription</key>
     <string></string>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>Aspia Client needs access to the local network to connect to remote computers.</string>
 	<key>CSResourcesFileMapped</key>
 	<true/>
 	<key>NSHumanReadableCopyright</key>

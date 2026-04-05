@@ -28,6 +28,8 @@
 	<string>3.0.0</string>
     <key>NSAppleEventsUsageDescription</key>
     <string></string>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>Aspia Console needs access to the local network to discover and manage remote computers.</string>
 	<key>CSResourcesFileMapped</key>
 	<true/>
 	<key>NSHumanReadableCopyright</key>
