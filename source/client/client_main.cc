@@ -402,8 +402,7 @@ int clientMain(int argc, char* argv[])
         else
         {
             LOG(ERROR) << "Unknown session type specified:" << session_type;
-            onInvalidValue("session-type",
-                "desktop-manage, desktop-view, file-transfer, system-info, text-chat, port-forwarding");
+            onInvalidValue("session-type", "desktop, file-transfer, system-info, text-chat");
             return 1;
         }
 
