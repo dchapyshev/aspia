@@ -41,6 +41,9 @@ protected:
 private:
     void startTimer();
     void checkForChanges();
+    void onClipboardText();
+    void onClipboardFiles();
+    void setDataText(const QByteArray& data);
 
     QTimer* timer_ = nullptr;
     int current_change_count_ = 0;
