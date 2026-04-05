@@ -82,8 +82,8 @@
 }
 
 - (void)filePromiseProvider:(NSFilePromiseProvider*)filePromiseProvider
-           writePromiseTo:(NSURL*)url
-        completionHandler:(void (^)(NSError* _Nullable))completionHandler
+          writePromiseToURL:(NSURL*)url
+          completionHandler:(void (^)(NSError* _Nullable))completionHandler
 {
     int index = [filePromiseProvider.userInfo intValue];
 

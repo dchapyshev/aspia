@@ -28,9 +28,11 @@
 #ifdef __OBJC__
 @class FilePromiseDelegate;
 @class NSArray;
+@class NSOperationQueue;
 #else
 typedef void FilePromiseDelegate;
 typedef void NSArray;
+typedef void NSOperationQueue;
 #endif
 
 namespace common {
