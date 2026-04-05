@@ -147,11 +147,7 @@ void DesktopAgentClient::onIpcMessageReceived(
             return;
         }
 
-        if (message.has_description())
-        {
-            session_type_ = message.description().session_type();
-        }
-        else if (message.has_overflow())
+        if (message.has_overflow())
         {
             readOverflow(message.overflow().state());
         }

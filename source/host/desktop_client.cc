@@ -286,19 +286,6 @@ void DesktopClient::onIpcNewConnection()
     connect(ipc_channel_, &base::IpcChannel::sig_disconnected, this, &DesktopClient::onIpcDisconnected);
     connect(ipc_channel_, &base::IpcChannel::sig_messageReceived, this, &DesktopClient::onIpcMessageReceived);
 
-    proto::desktop::ServiceToAgentClient message;
-    proto::desktop::Description* description = message.mutable_description();
-
-    description->set_session_type(proto::peer::SESSION_TYPE_DESKTOP);
-    *description->mutable_version() = base::serialize(version());
-    description->set_os_name(osName().toStdString());
-    description->set_computer_name(computerName().toStdString());
-    description->set_display_name(displayName().toStdString());
-    description->set_architecture(architecture().toStdString());
-    description->set_user_name(userName().toStdString());
-
-    sendIpcServiceMessage(base::serialize(message));
-
     if (capabilities_.has_value())
     {
         proto::control::ClientToHost message;

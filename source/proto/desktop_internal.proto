@@ -33,18 +33,6 @@ enum IpcChannelId
     IPC_CHANNEL_ID_SESSION = 1;
 }
 
-// Service to desktop agent client.
-message Description
-{
-    peer.SessionType session_type = 1;
-    peer.Version version          = 2;
-    string os_name                = 3;
-    string computer_name          = 4;
-    string display_name           = 5;
-    string architecture           = 6;
-    string user_name              = 7;
-}
-
 // Service to desktop agent.
 message AgentControl
 {
@@ -81,9 +69,8 @@ message BandwidthChange
 
 message ServiceToAgentClient
 {
-    Description description          = 1;
-    Overflow overflow                = 2;
-    BandwidthChange bandwidth_change = 3;
+    Overflow overflow                = 1;
+    BandwidthChange bandwidth_change = 2;
 }
 
 message ServiceToAgent
