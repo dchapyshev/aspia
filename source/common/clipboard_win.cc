@@ -472,6 +472,9 @@ void ClipboardWin::onClipboardFiles()
             relative_path = relative_path.mid(common_parent.size());
         }
 
+        // Normalize path separators to '/' for cross-platform compatibility.
+        relative_path.replace('\\', '/');
+
         file->set_path(relative_path.toStdString());
         file->set_is_dir(entry.is_dir);
         file->set_file_size(entry.file_size);

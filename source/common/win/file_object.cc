@@ -137,7 +137,11 @@ HRESULT FileObject::GetData(FORMATETC* pFormatEtc, STGMEDIUM* pMedium)
         for (quint64 i = 0; i < item_count; ++i)
         {
             const proto::clipboard::Event::FileList::File& file = files_.file(static_cast<int>(i));
-            const QString file_path = QString::fromStdString(file.path());
+            QString file_path = QString::fromStdString(file.path());
+
+            // Convert '/' to native Windows separator for Explorer compatibility.
+            file_path.replace('/', '\\');
+
             FILEDESCRIPTORW* current = &file_descriptor[i];
 
             StringCchCopyW(current->cFileName, std::size(current->cFileName), qUtf16Printable(file_path));
