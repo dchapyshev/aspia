@@ -152,8 +152,11 @@ QByteArray deriveKey(const QString& password, const QByteArray& salt)
     return base::PasswordHash::hash(base::PasswordHash::SCRYPT, password, salt);
 }
 
+const int kVerifierSize = 32;
+
 const char kKeyEncryptionType[] = "encryption_type";
 const char kKeyHashingSalt[] = "hashing_salt";
+const char kKeyVerifier[] = "verifier";
 const char kKeyRouterEnabled[] = "router_enabled";
 const char kKeyRouterAddress[] = "router_address";
 const char kKeyRouterPort[] = "router_port";
@@ -341,6 +344,21 @@ BookDatabase BookDatabase::create(EncryptionType encryption_type, const QString&
             break;
         }
 
+        // Store verifier (random data, encrypted if encryption is enabled).
+        {
+            QByteArray verifier = base::Random::byteArray(kVerifierSize);
+            QByteArray stored_verifier = encryptBlob(encryption_key, verifier);
+
+            query.prepare("INSERT INTO config (key, value) VALUES (?, ?)");
+            query.addBindValue(kKeyVerifier);
+            query.addBindValue(stored_verifier);
+            if (!query.exec())
+            {
+                LOG(ERROR) << "Unable to execute query:" << query.lastError();
+                break;
+            }
+        }
+
         success = true;
     }
     while (false);
@@ -426,6 +444,24 @@ BookDatabase BookDatabase::open(const QString& password)
 
             QByteArray salt = query.value(0).toByteArray();
             encryption_key = deriveKey(password, salt);
+
+            // Verify password by attempting to decrypt the verifier.
+            query.prepare("SELECT value FROM config WHERE key=?");
+            query.addBindValue(kKeyVerifier);
+
+            if (!query.exec() || !query.next())
+            {
+                LOG(ERROR) << "Unable to read verifier:" << query.lastError();
+                return BookDatabase();
+            }
+
+            QByteArray encrypted_verifier = query.value(0).toByteArray();
+            QByteArray decrypted_verifier = decryptBlob(encryption_key, encrypted_verifier);
+            if (decrypted_verifier.isEmpty())
+            {
+                LOG(ERROR) << "Invalid password: verifier decryption failed";
+                return BookDatabase();
+            }
         }
     }
 
@@ -1076,6 +1112,8 @@ bool BookDatabase::reencryptAll(const QByteArray& old_key, const QByteArray& new
                 return true;
             };
 
+            if (!reencryptConfig(kKeyVerifier))
+                break;
             if (!reencryptConfig(kKeyRouterAddress))
                 break;
             if (!reencryptConfig(kKeyRouterUsername))
