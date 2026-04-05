@@ -90,8 +90,7 @@ proto::address_book::Computer ComputerItem::computerToConnect()
     {
         proto::address_book::InheritConfig* inherit = computer.mutable_inherit();
         inherit->set_credentials(false);
-        inherit->set_desktop_manage(false);
-        inherit->set_desktop_view(false);
+        inherit->set_desktop(false);
     }
 
     ComputerGroupItem* group_item = parentComputerGroupItem();
@@ -106,16 +105,10 @@ proto::address_book::Computer ComputerItem::computerToConnect()
             computer.set_password(default_config.password());
         }
 
-        if (inherit.desktop_manage())
+        if (inherit.desktop())
         {
-            computer.mutable_session_config()->mutable_desktop_manage()->CopyFrom(
-                default_config.session_config().desktop_manage());
-        }
-
-        if (inherit.desktop_view())
-        {
-            computer.mutable_session_config()->mutable_desktop_view()->CopyFrom(
-                default_config.session_config().desktop_view());
+            computer.mutable_session_config()->mutable_desktop()->CopyFrom(
+                default_config.session_config().desktop());
         }
     }
 

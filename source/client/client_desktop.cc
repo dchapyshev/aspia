@@ -31,7 +31,6 @@
 #include "base/desktop/mouse_cursor.h"
 #include "common/desktop_session_constants.h"
 #include "proto/desktop_channel.h"
-#include "proto/desktop_file.h"
 #include "proto/desktop_user.h"
 
 namespace client {
@@ -87,37 +86,33 @@ void ClientDesktop::onStarted()
 
     repeated_timer_->start();
 
-    input_event_filter_.setSessionType(sessionState()->sessionType());
     input_event_filter_.setClipboardEnabled(desktop_config_.clipboard());
 
-    if (sessionState()->sessionType() == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
+    clipboard_monitor_ = new common::ClipboardMonitor(this);
+    connect(clipboard_monitor_, &common::ClipboardMonitor::sig_clipboardEvent,
+            this, &ClientDesktop::onClipboardEvent);
+
+    clipboard_file_transfer_ = new common::ClipboardFileTransfer(this);
+
+    connect(clipboard_monitor_, &common::ClipboardMonitor::sig_localFileListChanged,
+            clipboard_file_transfer_, &common::ClipboardFileTransfer::setLocalFileList);
+
+    connect(clipboard_monitor_, &common::ClipboardMonitor::sig_fileDataRequest,
+            clipboard_file_transfer_, &common::ClipboardFileTransfer::requestFileData);
+
+    connect(clipboard_file_transfer_, &common::ClipboardFileTransfer::sig_sendMessage,
+            this, [this](const QByteArray& buffer)
     {
-        clipboard_monitor_ = new common::ClipboardMonitor(this);
-        connect(clipboard_monitor_, &common::ClipboardMonitor::sig_clipboardEvent,
-                this, &ClientDesktop::onClipboardEvent);
+        sendMessage(proto::desktop::CHANNEL_ID_FILE, buffer);
+    });
 
-        clipboard_file_transfer_ = new common::ClipboardFileTransfer(this);
+    connect(clipboard_file_transfer_, &common::ClipboardFileTransfer::sig_fileDataChunk,
+            this, [this](int file_index, const QByteArray& data, bool is_last)
+    {
+        clipboard_monitor_->addFileData(file_index, data, is_last);
+    });
 
-        connect(clipboard_monitor_, &common::ClipboardMonitor::sig_localFileListChanged,
-                clipboard_file_transfer_, &common::ClipboardFileTransfer::setLocalFileList);
-
-        connect(clipboard_monitor_, &common::ClipboardMonitor::sig_fileDataRequest,
-                clipboard_file_transfer_, &common::ClipboardFileTransfer::requestFileData);
-
-        connect(clipboard_file_transfer_, &common::ClipboardFileTransfer::sig_sendMessage,
-                this, [this](const QByteArray& buffer)
-        {
-            sendMessage(proto::desktop::CHANNEL_ID_FILE, buffer);
-        });
-
-        connect(clipboard_file_transfer_, &common::ClipboardFileTransfer::sig_fileDataChunk,
-                this, [this](int file_index, const QByteArray& data, bool is_last)
-        {
-            clipboard_monitor_->addFileData(file_index, data, is_last);
-        });
-
-        clipboard_monitor_->start();
-    }
+    clipboard_monitor_->start();
 
     audio_player_ = base::AudioPlayer::create();
 
@@ -523,12 +518,6 @@ void ClientDesktop::onMouseEvent(const proto::input::MouseEvent& event)
 //--------------------------------------------------------------------------------------------------
 void ClientDesktop::onPowerControl(proto::power::Control::Action action)
 {
-    if (sessionState()->sessionType() != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
-    {
-        CLOG(INFO) << "Power control supported only for desktop manage session";
-        return;
-    }
-
     if (isLegacy())
     {
         proto::legacy::ClientToSession message;
@@ -966,12 +955,6 @@ void ClientDesktop::readAudioPacket(const proto::audio::Packet& packet)
 //--------------------------------------------------------------------------------------------------
 void ClientDesktop::readCursorShape(const proto::cursor::Shape& shape)
 {
-    if (sessionState()->sessionType() != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
-    {
-        CLOG(ERROR) << "Cursor shape received not session type not desktop manage";
-        return;
-    }
-
     if (!desktop_config_.cursor_shape())
     {
         CLOG(ERROR) << "Cursor shape received not disabled in client";

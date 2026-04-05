@@ -33,9 +33,8 @@ public:
     ComputerDialogDesktop(int type, QWidget* parent);
     ~ComputerDialogDesktop() final = default;
 
-    void restoreSettings(proto::peer::SessionType session_type,
-        const proto::address_book::Computer& computer);
-    void saveSettings(proto::peer::SessionType session_type, proto::address_book::Computer* computer);
+    void restoreSettings(const proto::address_book::Computer& computer);
+    void saveSettings(proto::address_book::Computer* computer);
 
 private:
     Ui::ComputerDialogDesktop ui;

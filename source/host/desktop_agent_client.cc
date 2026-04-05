@@ -26,7 +26,6 @@
 #include "base/ipc/ipc_channel.h"
 #include "common/desktop_session_constants.h"
 #include "proto/desktop_channel.h"
-#include "proto/peer.h"
 
 namespace host {
 
@@ -185,13 +184,13 @@ void DesktopAgentClient::readSessionMessage(quint8 channel_id, const QByteArray&
         }
 
         if (message.has_mouse())
-            readMouseEvent(message.mouse());
+            emit sig_injectMouseEvent(message.mouse());
         else if (message.has_touch())
-            readTouchEvent(message.touch());
+            emit sig_injectTouchEvent(message.touch());
         else if (message.has_key())
-            readKeyEvent(message.key());
+            emit sig_injectKeyEvent(message.key());
         else if (message.has_text())
-            readTextEvent(message.text());
+            emit sig_injectTextEvent(message.text());
     }
     else if (channel_id == proto::desktop::CHANNEL_ID_VIDEO)
     {
@@ -269,34 +268,6 @@ void DesktopAgentClient::sendSessionMessage(quint8 net_channel_id, const QByteAr
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::readMouseEvent(const proto::input::MouseEvent& mouse_event)
-{
-    if (sessionType() == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
-        emit sig_injectMouseEvent(mouse_event);
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::readKeyEvent(const proto::input::KeyEvent& key_event)
-{
-    if (sessionType() == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
-        emit sig_injectKeyEvent(key_event);
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::readTouchEvent(const proto::input::TouchEvent& touch_event)
-{
-    if (sessionType() == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
-        emit sig_injectTouchEvent(touch_event);
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopAgentClient::readTextEvent(const proto::input::TextEvent& text_event)
-{
-    if (sessionType() == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
-        emit sig_injectTextEvent(text_event);
-}
-
-//--------------------------------------------------------------------------------------------------
 void DesktopAgentClient::readPreferredSize(const proto::video::PreferredSize& size)
 {
     static const int kMaxScreenSize = std::numeric_limits<qint16>::max();
@@ -365,14 +336,7 @@ void DesktopAgentClient::readConfig(const proto::control::Config& config)
 //--------------------------------------------------------------------------------------------------
 void DesktopAgentClient::readPowerControl(const proto::power::Control& control)
 {
-    if (sessionType() != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
-    {
-        CLOG(ERROR) << "Power management is only accessible from a desktop manage session";
-        return;
-    }
-
     CLOG(INFO) << "Received:" << control;
-
     switch (control.action())
     {
         case proto::power::Control::ACTION_LOGOFF:

@@ -79,8 +79,7 @@ private slots:
     void onCheckUpdates();
     void onAbout();
     void onFastConnect();
-    void onDesktopManageConnect();
-    void onDesktopViewConnect();
+    void onDesktopConnect();
     void onFileTransferConnect();
     void onSystemInfoConnect();
     void onTextChatConnect();

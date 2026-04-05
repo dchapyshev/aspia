@@ -32,8 +32,7 @@ const QString kLocaleParam = "Locale";
 const QString kThemeParam = "Theme";
 const QString kAddressListParam = "AddressList";
 const QString kSessionTypeParam = "SessionType";
-const QString kDesktopManageConfigParam = "DesktopManageConfig";
-const QString kDesktopViewConfigParam = "DesktopViewConfig";
+const QString kDesktopConfigParam = "DesktopConfig";
 const QString kCheckUpdatesParam = "CheckUpdates";
 const QString kUpdateServerParam = "UpdateServer";
 const QString kOneTimePasswordCheckedParam = "OneTimePasswordChecked";
@@ -89,7 +88,7 @@ void ClientSettings::setAddressList(const QStringList& list)
 proto::peer::SessionType ClientSettings::sessionType() const
 {
     return static_cast<proto::peer::SessionType>(
-        settings_.value(kSessionTypeParam, proto::peer::SESSION_TYPE_DESKTOP_MANAGE).toUInt());
+        settings_.value(kSessionTypeParam, proto::peer::SESSION_TYPE_DESKTOP).toUInt());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -99,9 +98,9 @@ void ClientSettings::setSessionType(proto::peer::SessionType session_type)
 }
 
 //--------------------------------------------------------------------------------------------------
-proto::control::Config ClientSettings::desktopManageConfig() const
+proto::control::Config ClientSettings::desktopConfig() const
 {
-    QByteArray buffer = settings_.value(kDesktopManageConfigParam).toByteArray();
+    QByteArray buffer = settings_.value(kDesktopConfigParam).toByteArray();
     if (!buffer.isEmpty())
     {
         proto::control::Config config;
@@ -109,41 +108,17 @@ proto::control::Config ClientSettings::desktopManageConfig() const
             return config;
     }
 
-    return ConfigFactory::defaultDesktopManageConfig();
+    return ConfigFactory::defaultDesktopConfig();
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSettings::setDesktopManageConfig(const proto::control::Config& config)
+void ClientSettings::setDesktopConfig(const proto::control::Config& config)
 {
     QByteArray buffer;
     buffer.resize(static_cast<int>(config.ByteSizeLong()));
 
     config.SerializeWithCachedSizesToArray(reinterpret_cast<quint8*>(buffer.data()));
-    settings_.setValue(kDesktopManageConfigParam, buffer);
-}
-
-//--------------------------------------------------------------------------------------------------
-proto::control::Config ClientSettings::desktopViewConfig() const
-{
-    QByteArray buffer = settings_.value(kDesktopViewConfigParam).toByteArray();
-    if (!buffer.isEmpty())
-    {
-        proto::control::Config config;
-        if (config.ParseFromArray(buffer.data(), buffer.size()))
-            return config;
-    }
-
-    return ConfigFactory::defaultDesktopViewConfig();
-}
-
-//--------------------------------------------------------------------------------------------------
-void ClientSettings::setDesktopViewConfig(const proto::control::Config& config)
-{
-    QByteArray buffer;
-    buffer.resize(static_cast<int>(config.ByteSizeLong()));
-
-    config.SerializeWithCachedSizesToArray(reinterpret_cast<quint8*>(buffer.data()));
-    settings_.setValue(kDesktopViewConfigParam, buffer);
+    settings_.setValue(kDesktopConfigParam, buffer);
 }
 
 //--------------------------------------------------------------------------------------------------

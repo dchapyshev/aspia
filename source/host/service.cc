@@ -411,8 +411,7 @@ void Service::onUserSessionAttached()
         proto::peer::SessionType session_type = client->sessionType();
         switch (session_type)
         {
-            case proto::peer::SESSION_TYPE_DESKTOP_MANAGE:
-            case proto::peer::SESSION_TYPE_DESKTOP_VIEW:
+            case proto::peer::SESSION_TYPE_DESKTOP:
             case proto::peer::SESSION_TYPE_FILE_TRANSFER:
             {
                 QString computer_name = client->computerName();
@@ -728,8 +727,7 @@ void Service::startClient(const PendingConfirmation& pending)
     auto session_type = static_cast<proto::peer::SessionType>(tcp_channel->peerSessionType());
     Client* client_to_start = nullptr;
 
-    if (session_type == proto::peer::SESSION_TYPE_DESKTOP_MANAGE ||
-        session_type == proto::peer::SESSION_TYPE_DESKTOP_VIEW)
+    if (session_type == proto::peer::SESSION_TYPE_DESKTOP)
     {
         DesktopClient* client = new DesktopClient(tcp_channel, this);
         client_to_start = client;

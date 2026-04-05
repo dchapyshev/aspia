@@ -32,9 +32,8 @@
 namespace client {
 
 //--------------------------------------------------------------------------------------------------
-DesktopToolBar::DesktopToolBar(proto::peer::SessionType session_type, QWidget* parent)
-    : QFrame(parent),
-      session_type_(session_type)
+DesktopToolBar::DesktopToolBar(QWidget* parent)
+    : QFrame(parent)
 {
     LOG(INFO) << "Ctor";
     ui.setupUi(this);
@@ -71,12 +70,7 @@ DesktopToolBar::DesktopToolBar(proto::peer::SessionType session_type, QWidget* p
 
     scale_ = settings.scale();
 
-    // Sending key combinations is available only in desktop management.
-    if (session_type == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
-        ui.action_send_key_combinations->setChecked(settings.sendKeyCombinations());
-    else
-        ui.action_send_key_combinations->setChecked(false);
-
+    ui.action_send_key_combinations->setChecked(settings.sendKeyCombinations());
     ui.action_pause_video->setChecked(settings.pauseVideoWhenMinimizing());
     ui.action_pause_audio->setChecked(settings.pauseAudioWhenMinimizing());
 
@@ -119,17 +113,9 @@ DesktopToolBar::DesktopToolBar(proto::peer::SessionType session_type, QWidget* p
         emit sig_closeSession();
     });
 
-    createAdditionalMenu(session_type);
+    createAdditionalMenu();
 
-    if (session_type == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
-    {
-        connect(ui.action_cad, &QAction::triggered, this, &DesktopToolBar::onCtrlAltDel);
-    }
-    else
-    {
-        DCHECK(session_type == proto::peer::SESSION_TYPE_DESKTOP_VIEW);
-        ui.action_cad->setVisible(false);
-    }
+    connect(ui.action_cad, &QAction::triggered, this, &DesktopToolBar::onCtrlAltDel);
 
     connect(ui.action_file_transfer, &QAction::triggered, this, [this]()
     {
@@ -172,10 +158,7 @@ DesktopToolBar::~DesktopToolBar()
     settings.setToolBarPinned(ui.action_pin->isChecked());
     settings.setPauseVideoWhenMinimizing(ui.action_pause_video->isChecked());
     settings.setPauseAudioWhenMinimizing(ui.action_pause_audio->isChecked());
-
-    // Save the parameter only for desktop management.
-    if (session_type_ == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
-        settings.setSendKeyCombinations(ui.action_send_key_combinations->isChecked());
+    settings.setSendKeyCombinations(ui.action_send_key_combinations->isChecked());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -762,7 +745,7 @@ void DesktopToolBar::onShowRecordSettings()
 }
 
 //--------------------------------------------------------------------------------------------------
-void DesktopToolBar::createAdditionalMenu(proto::peer::SessionType session_type)
+void DesktopToolBar::createAdditionalMenu()
 {
     LOG(INFO) << "Create additional menu";
 
@@ -788,13 +771,9 @@ void DesktopToolBar::createAdditionalMenu(proto::peer::SessionType session_type)
     updateScaleMenu();
 
     additional_menu_->addAction(ui.action_autoscroll);
-
-    if (session_type == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
-        additional_menu_->addAction(ui.action_send_key_combinations);
-
+    additional_menu_->addAction(ui.action_send_key_combinations);
     additional_menu_->addAction(ui.action_pause_video);
     additional_menu_->addAction(ui.action_pause_audio);
-
     additional_menu_->addSeparator();
     additional_menu_->addAction(ui.action_screenshot);
     additional_menu_->addSeparator();
@@ -809,16 +788,11 @@ void DesktopToolBar::createAdditionalMenu(proto::peer::SessionType session_type)
     QToolButton* button = qobject_cast<QToolButton*>(ui.toolbar->widgetForAction(ui.action_menu));
     button->setPopupMode(QToolButton::InstantPopup);
 
-    // Now we connect all the necessary signals and slots.
-    if (session_type == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
+    connect(ui.action_send_key_combinations, &QAction::triggered, this, [this](bool enable)
     {
-        connect(ui.action_send_key_combinations, &QAction::triggered,
-                this, [this](bool enable)
-        {
-            LOG(INFO) << "[ACTION] Send key combinations changed:" << enable;
-            emit sig_keyCombinationsChanged(enable);
-        });
-    }
+        LOG(INFO) << "[ACTION] Send key combinations changed:" << enable;
+        emit sig_keyCombinationsChanged(enable);
+    });
 
     connect(ui.action_paste_clipboard_as_keystrokes, &QAction::triggered,
             this, &DesktopToolBar::sig_pasteAsKeystrokes);

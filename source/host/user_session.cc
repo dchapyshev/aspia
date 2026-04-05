@@ -313,8 +313,7 @@ void UserSession::onClientStarted()
 
     switch (session_type)
     {
-        case proto::peer::SESSION_TYPE_DESKTOP_MANAGE:
-        case proto::peer::SESSION_TYPE_DESKTOP_VIEW:
+        case proto::peer::SESSION_TYPE_DESKTOP:
         {
             ++desktop_client_count_;
             sendConnectEvent(client_id, session_type, computer_name, display_name);
@@ -339,8 +338,7 @@ void UserSession::onClientFinished()
     proto::peer::SessionType session_type = client->sessionType();
     switch (session_type)
     {
-        case proto::peer::SESSION_TYPE_DESKTOP_MANAGE:
-        case proto::peer::SESSION_TYPE_DESKTOP_VIEW:
+        case proto::peer::SESSION_TYPE_DESKTOP:
         {
             sendDisconnectEvent(client->clientId());
 

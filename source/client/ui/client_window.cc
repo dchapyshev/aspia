@@ -33,7 +33,6 @@
 #include "client/ui/file_transfer/file_transfer_session_window.h"
 #include "client/ui/sys_info/system_info_session_window.h"
 #include "client/ui/update_settings_dialog.h"
-#include "common/desktop_session_constants.h"
 #include "common/update_checker.h"
 #include "common/ui/about_dialog.h"
 #include "common/ui/language_action.h"
@@ -243,8 +242,7 @@ void ClientWindow::sessionTypeChanged(int item_index)
 
     switch (session_type)
     {
-        case proto::peer::SESSION_TYPE_DESKTOP_MANAGE:
-        case proto::peer::SESSION_TYPE_DESKTOP_VIEW:
+        case proto::peer::SESSION_TYPE_DESKTOP:
             ui.button_session_config->setEnabled(true);
             break;
 
@@ -268,21 +266,12 @@ void ClientWindow::sessionConfigButtonPressed()
 
     switch (session_type)
     {
-        case proto::peer::SESSION_TYPE_DESKTOP_MANAGE:
+        case proto::peer::SESSION_TYPE_DESKTOP:
         {
-            DesktopConfigDialog dialog(session_type, settings.desktopManageConfig(), this);
+            DesktopConfigDialog dialog(settings.desktopConfig(), this);
 
             if (dialog.exec() == DesktopConfigDialog::Accepted)
-                settings.setDesktopManageConfig(dialog.config());
-        }
-        break;
-
-        case proto::peer::SESSION_TYPE_DESKTOP_VIEW:
-        {
-            DesktopConfigDialog dialog(session_type, settings.desktopViewConfig(), this);
-
-            if (dialog.exec() == DesktopConfigDialog::Accepted)
-                settings.setDesktopViewConfig(dialog.config());
+                settings.setDesktopConfig(dialog.config());
         }
         break;
 
@@ -375,12 +364,8 @@ void ClientWindow::connectToHost()
 
     switch (config.session_type)
     {
-        case proto::peer::SESSION_TYPE_DESKTOP_MANAGE:
-            session_window = new DesktopSessionWindow(config.session_type, settings.desktopManageConfig());
-            break;
-
-        case proto::peer::SESSION_TYPE_DESKTOP_VIEW:
-            session_window = new DesktopSessionWindow(config.session_type, settings.desktopViewConfig());
+        case proto::peer::SESSION_TYPE_DESKTOP:
+            session_window = new DesktopSessionWindow(settings.desktopConfig());
             break;
 
         case proto::peer::SESSION_TYPE_FILE_TRANSFER:
@@ -550,8 +535,7 @@ void ClientWindow::reloadSessionTypes()
 
     combobox->clear();
 
-    add_session(proto::peer::SESSION_TYPE_DESKTOP_MANAGE);
-    add_session(proto::peer::SESSION_TYPE_DESKTOP_VIEW);
+    add_session(proto::peer::SESSION_TYPE_DESKTOP);
     add_session(proto::peer::SESSION_TYPE_FILE_TRANSFER);
     add_session(proto::peer::SESSION_TYPE_SYSTEM_INFO);
     add_session(proto::peer::SESSION_TYPE_TEXT_CHAT);

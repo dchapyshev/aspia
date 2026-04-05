@@ -169,8 +169,7 @@ proto::address_book::ComputerGroupConfig ComputerGroupItem::defaultConfig()
 {
     proto::address_book::ComputerGroupConfig result;
     bool has_credentials = false;
-    bool has_desktop_manage = false;
-    bool has_desktop_view = false;
+    bool has_desktop = false;
 
     for (auto item = this; item != nullptr; item = dynamic_cast<ComputerGroupItem*>(item->parent()))
     {
@@ -189,39 +188,22 @@ proto::address_book::ComputerGroupConfig ComputerGroupItem::defaultConfig()
             has_credentials = true;
         }
 
-        if (!inherit.desktop_manage() && !has_desktop_manage)
+        if (!inherit.desktop() && !has_desktop)
         {
-            if (group_config.session_config().has_desktop_manage())
+            if (group_config.session_config().has_desktop())
             {
-                result.mutable_session_config()->mutable_desktop_manage()->CopyFrom(
-                    group_config.session_config().desktop_manage());
+                result.mutable_session_config()->mutable_desktop()->CopyFrom(
+                    group_config.session_config().desktop());
             }
 
-            has_desktop_manage = true;
-        }
-
-        if (!inherit.desktop_view() && !has_desktop_view)
-        {
-            if (group_config.session_config().has_desktop_view())
-            {
-                result.mutable_session_config()->mutable_desktop_view()->CopyFrom(
-                    group_config.session_config().desktop_view());
-            }
-
-            has_desktop_view = true;
+            has_desktop = true;
         }
     }
 
-    if (!result.session_config().has_desktop_manage())
+    if (!result.session_config().has_desktop())
     {
-        ComputerFactory::setDefaultDesktopManageConfig(
-            result.mutable_session_config()->mutable_desktop_manage());
-    }
-
-    if (!result.session_config().has_desktop_view())
-    {
-        ComputerFactory::setDefaultDesktopViewConfig(
-            result.mutable_session_config()->mutable_desktop_view());
+        ComputerFactory::setDefaultDesktopConfig(
+            result.mutable_session_config()->mutable_desktop());
     }
 
     return result;

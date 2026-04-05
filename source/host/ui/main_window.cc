@@ -90,8 +90,7 @@ MainWindow::MainWindow(QWidget* parent)
 
     quint32 one_time_sessions = user_settings.oneTimeSessions();
 
-    ui.action_desktop_manage->setChecked(one_time_sessions & proto::peer::SESSION_TYPE_DESKTOP_MANAGE);
-    ui.action_desktop_view->setChecked(one_time_sessions & proto::peer::SESSION_TYPE_DESKTOP_VIEW);
+    ui.action_desktop_manage->setChecked(one_time_sessions & proto::peer::SESSION_TYPE_DESKTOP);
     ui.action_file_transfer->setChecked(one_time_sessions & proto::peer::SESSION_TYPE_FILE_TRANSFER);
     ui.action_system_info->setChecked(one_time_sessions & proto::peer::SESSION_TYPE_SYSTEM_INFO);
     ui.action_text_chat->setChecked(one_time_sessions & proto::peer::SESSION_TYPE_TEXT_CHAT);
@@ -917,10 +916,7 @@ quint32 MainWindow::calcOneTimeSessions()
     quint32 sessions = 0;
 
     if (ui.action_desktop_manage->isChecked())
-        sessions |= proto::peer::SESSION_TYPE_DESKTOP_MANAGE;
-
-    if (ui.action_desktop_view->isChecked())
-        sessions |= proto::peer::SESSION_TYPE_DESKTOP_VIEW;
+        sessions |= proto::peer::SESSION_TYPE_DESKTOP;
 
     if (ui.action_file_transfer->isChecked())
         sessions |= proto::peer::SESSION_TYPE_FILE_TRANSFER;

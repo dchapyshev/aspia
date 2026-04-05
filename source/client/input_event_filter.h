@@ -21,7 +21,6 @@
 
 #include "proto/desktop_clipboard.h"
 #include "proto/desktop_input.h"
-#include "proto/peer.h"
 
 namespace client {
 
@@ -31,7 +30,6 @@ public:
     InputEventFilter();
     ~InputEventFilter();
 
-    void setSessionType(proto::peer::SessionType session_type);
     void setClipboardEnabled(bool enable);
 
     bool mouseEvent(const proto::input::MouseEvent& event);
@@ -49,7 +47,6 @@ public:
     int sendClipboardCount() const { return send_clipboard_count_; }
 
 private:
-    proto::peer::SessionType session_type_ = proto::peer::SESSION_TYPE_UNKNOWN;
     bool clipboard_enabled_ = false;
 
     qint32 last_pos_x_ = 0;

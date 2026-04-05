@@ -29,11 +29,8 @@ const char* sessionTypeToString(proto::peer::SessionType session_type)
 {
     switch (session_type)
     {
-        case proto::peer::SESSION_TYPE_DESKTOP_MANAGE:
+        case proto::peer::SESSION_TYPE_DESKTOP:
             return QT_TRANSLATE_NOOP("SessionType", "Desktop Manage");
-
-        case proto::peer::SESSION_TYPE_DESKTOP_VIEW:
-            return QT_TRANSLATE_NOOP("SessionType", "Desktop View");
 
         case proto::peer::SESSION_TYPE_FILE_TRANSFER:
             return QT_TRANSLATE_NOOP("SessionType", "File Transfer");
@@ -54,11 +51,8 @@ const char* sessionTypeToShortString(proto::peer::SessionType session_type)
 {
     switch (session_type)
     {
-        case proto::peer::SESSION_TYPE_DESKTOP_MANAGE:
+        case proto::peer::SESSION_TYPE_DESKTOP:
             return QT_TRANSLATE_NOOP("SessionType", "Manage");
-
-        case proto::peer::SESSION_TYPE_DESKTOP_VIEW:
-            return QT_TRANSLATE_NOOP("SessionType", "View");
 
         case proto::peer::SESSION_TYPE_FILE_TRANSFER:
             return QT_TRANSLATE_NOOP("SessionType", "Files");
@@ -93,11 +87,8 @@ QIcon sessionIcon(proto::peer::SessionType session_type)
 {
     switch (session_type)
     {
-        case proto::peer::SESSION_TYPE_DESKTOP_MANAGE:
+        case proto::peer::SESSION_TYPE_DESKTOP:
             return QIcon(":/img/workstation.svg");
-
-        case proto::peer::SESSION_TYPE_DESKTOP_VIEW:
-            return QIcon(":/img/computer.svg");
 
         case proto::peer::SESSION_TYPE_FILE_TRANSFER:
             return QIcon(":/img/file-explorer.svg");

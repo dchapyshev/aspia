@@ -56,16 +56,10 @@ FastConnectDialog::FastConnectDialog(QWidget* parent,
 
     readState();
 
-    if (!default_config_.session_config().has_desktop_manage())
+    if (!default_config_.session_config().has_desktop())
     {
-        ComputerFactory::setDefaultDesktopManageConfig(
-            default_config_.mutable_session_config()->mutable_desktop_manage());
-    }
-
-    if (!default_config_.session_config().has_desktop_view())
-    {
-        ComputerFactory::setDefaultDesktopViewConfig(
-            default_config_.mutable_session_config()->mutable_desktop_view());
+        ComputerFactory::setDefaultDesktopConfig(
+            default_config_.mutable_session_config()->mutable_desktop());
     }
 
     QComboBox* combo_address = ui.combo_address;
@@ -80,8 +74,7 @@ FastConnectDialog::FastConnectDialog(QWidget* parent,
                                        QVariant(session_type));
     };
 
-    add_session(proto::peer::SESSION_TYPE_DESKTOP_MANAGE);
-    add_session(proto::peer::SESSION_TYPE_DESKTOP_VIEW);
+    add_session(proto::peer::SESSION_TYPE_DESKTOP);
     add_session(proto::peer::SESSION_TYPE_FILE_TRANSFER);
     add_session(proto::peer::SESSION_TYPE_SYSTEM_INFO);
     add_session(proto::peer::SESSION_TYPE_TEXT_CHAT);
@@ -156,8 +149,7 @@ void FastConnectDialog::sessionTypeChanged(int item_index)
 
     switch (state_.session_type)
     {
-        case proto::peer::SESSION_TYPE_DESKTOP_MANAGE:
-        case proto::peer::SESSION_TYPE_DESKTOP_VIEW:
+        case proto::peer::SESSION_TYPE_DESKTOP:
             ui.button_session_config->setEnabled(true);
             break;
 
@@ -177,21 +169,12 @@ void FastConnectDialog::sessionConfigButtonPressed()
 
     switch (session_type)
     {
-        case proto::peer::SESSION_TYPE_DESKTOP_MANAGE:
+        case proto::peer::SESSION_TYPE_DESKTOP:
         {
-            client::DesktopConfigDialog dialog(session_type, state_.desktop_manage_config, this);
+            client::DesktopConfigDialog dialog(state_.desktop_config, this);
 
             if (dialog.exec() == client::DesktopConfigDialog::Accepted)
-                state_.desktop_manage_config = dialog.config();
-        }
-        break;
-
-        case proto::peer::SESSION_TYPE_DESKTOP_VIEW:
-        {
-            client::DesktopConfigDialog dialog(session_type, state_.desktop_view_config, this);
-
-            if (dialog.exec() == client::DesktopConfigDialog::Accepted)
-                state_.desktop_view_config = dialog.config();
+                state_.desktop_config = dialog.config();
         }
         break;
 
@@ -291,33 +274,17 @@ void FastConnectDialog::onButtonBoxClicked(QAbstractButton* button)
 
     switch (client_config.session_type)
     {
-        case proto::peer::SESSION_TYPE_DESKTOP_MANAGE:
+        case proto::peer::SESSION_TYPE_DESKTOP:
         {
             proto::control::Config desktop_config;
 
             if (ui.checkbox_use_session_params->isChecked())
                 desktop_config = ComputerFactory::toClientConfig(
-                    default_config_.session_config().desktop_manage());
+                    default_config_.session_config().desktop());
             else
-                desktop_config = state_.desktop_manage_config;
+                desktop_config = state_.desktop_config;
 
-            session_window = new client::DesktopSessionWindow(
-                state_.session_type, desktop_config);
-        }
-        break;
-
-        case proto::peer::SESSION_TYPE_DESKTOP_VIEW:
-        {
-            proto::control::Config desktop_config;
-
-            if (ui.checkbox_use_session_params->isChecked())
-                desktop_config = ComputerFactory::toClientConfig(
-                    default_config_.session_config().desktop_view());
-            else
-                desktop_config = state_.desktop_view_config;
-
-            session_window = new client::DesktopSessionWindow(
-                state_.session_type, desktop_config);
+            session_window = new client::DesktopSessionWindow(desktop_config);
         }
         break;
 
@@ -362,39 +329,23 @@ void FastConnectDialog::readState()
     stream.setVersion(QDataStream::Qt_5_15);
 
     int session_type = 0;
-    QByteArray desktop_manage_config;
-    QByteArray desktop_view_config;
+    QByteArray desktop_config;
     QByteArray port_forwarding_config;
     bool creds_from_address_book = false;
     bool session_params_from_address_book = false;
 
-    stream >> state_.history >> session_type >> desktop_manage_config >> desktop_view_config
-        >> creds_from_address_book >> session_params_from_address_book >> port_forwarding_config;
+    stream >> state_.history >> session_type >> desktop_config >> creds_from_address_book
+           >> session_params_from_address_book >> port_forwarding_config;
 
     if (session_type != 0)
         state_.session_type = static_cast<proto::peer::SessionType>(session_type);
     else
-        state_.session_type = proto::peer::SESSION_TYPE_DESKTOP_MANAGE;
+        state_.session_type = proto::peer::SESSION_TYPE_DESKTOP;
 
-    if (!desktop_manage_config.isEmpty())
-    {
-        state_.desktop_manage_config.ParseFromArray(
-            desktop_manage_config.data(), desktop_manage_config.size());
-    }
+    if (!desktop_config.isEmpty())
+        state_.desktop_config.ParseFromArray(desktop_config.data(), desktop_config.size());
     else
-    {
-        state_.desktop_manage_config = client::ConfigFactory::defaultDesktopManageConfig();
-    }
-
-    if (!desktop_view_config.isEmpty())
-    {
-        state_.desktop_view_config.ParseFromArray(
-            desktop_view_config.data(), desktop_view_config.size());
-    }
-    else
-    {
-        state_.desktop_view_config = client::ConfigFactory::defaultDesktopViewConfig();
-    }
+        state_.desktop_config = client::ConfigFactory::defaultDesktopConfig();
 
     ui.checkbox_use_creds->setChecked(creds_from_address_book);
     ui.checkbox_use_session_params->setChecked(session_params_from_address_book);
@@ -407,18 +358,16 @@ void FastConnectDialog::writeState()
 
     {
         int session_type = static_cast<int>(state_.session_type);
-        QByteArray desktop_manage_config =
-            QByteArray::fromStdString(state_.desktop_manage_config.SerializeAsString());
-        QByteArray desktop_view_config =
-            QByteArray::fromStdString(state_.desktop_view_config.SerializeAsString());
+        QByteArray desktop_config =
+            QByteArray::fromStdString(state_.desktop_config.SerializeAsString());
         bool creds_from_address_book = ui.checkbox_use_creds->isChecked();
         bool session_params_from_address_book = ui.checkbox_use_session_params->isChecked();
 
         QDataStream stream(&buffer, QIODevice::WriteOnly);
         stream.setVersion(QDataStream::Qt_5_15);
 
-        stream << state_.history << session_type << desktop_manage_config << desktop_view_config
-               << creds_from_address_book << session_params_from_address_book;
+        stream << state_.history << session_type << desktop_config << creds_from_address_book
+               << session_params_from_address_book;
     }
 
     Settings().setFastConnectConfig(address_book_guid_, buffer);

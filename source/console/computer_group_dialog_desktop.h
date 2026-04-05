@@ -33,10 +33,8 @@ public:
     ComputerGroupDialogDesktop(int type, bool is_root_group, QWidget* parent);
     ~ComputerGroupDialogDesktop() final;
 
-    void restoreSettings(proto::peer::SessionType session_type,
-        const proto::address_book::ComputerGroupConfig& group_config);
-    void saveSettings(proto::peer::SessionType session_type,
-        proto::address_book::ComputerGroupConfig* group_config);
+    void restoreSettings(const proto::address_book::ComputerGroupConfig& group_config);
+    void saveSettings(proto::address_book::ComputerGroupConfig* group_config);
 
 private:
     Ui::ComputerGroupDialogDesktop ui;

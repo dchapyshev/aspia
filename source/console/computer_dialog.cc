@@ -37,8 +37,7 @@ enum ItemType
 {
     ITEM_TYPE_PARENT,
     ITEM_TYPE_GENERAL,
-    ITEM_TYPE_DESKTOP_MANAGE,
-    ITEM_TYPE_DESKTOP_VIEW
+    ITEM_TYPE_DESKTOP
 };
 
 } // namespace
@@ -81,33 +80,24 @@ ComputerDialog::ComputerDialog(QWidget* parent,
     ui.tree->addTopLevelItem(general_item);
     ui.tree->addTopLevelItem(sessions_item);
 
-    QTreeWidgetItem* desktop_manage_item = new QTreeWidgetItem(ITEM_TYPE_DESKTOP_MANAGE);
-    desktop_manage_item->setIcon(0, common::sessionIcon(proto::peer::SESSION_TYPE_DESKTOP_MANAGE));
-    desktop_manage_item->setText(0, common::sessionShortName(proto::peer::SESSION_TYPE_DESKTOP_MANAGE));
+    QTreeWidgetItem* desktop_item = new QTreeWidgetItem(ITEM_TYPE_DESKTOP);
+    desktop_item->setIcon(0, common::sessionIcon(proto::peer::SESSION_TYPE_DESKTOP));
+    desktop_item->setText(0, common::sessionShortName(proto::peer::SESSION_TYPE_DESKTOP));
 
-    QTreeWidgetItem* desktop_view_item = new QTreeWidgetItem(ITEM_TYPE_DESKTOP_VIEW);
-    desktop_view_item->setIcon(0, common::sessionIcon(proto::peer::SESSION_TYPE_DESKTOP_VIEW));
-    desktop_view_item->setText(0, common::sessionShortName(proto::peer::SESSION_TYPE_DESKTOP_VIEW));
-
-    sessions_item->addChild(desktop_manage_item);
-    sessions_item->addChild(desktop_view_item);
+    sessions_item->addChild(desktop_item);
 
     ComputerDialogParent* parent_tab =
         new ComputerDialogParent(ITEM_TYPE_PARENT, ui.widget);
     ComputerDialogGeneral* general_tab =
         new ComputerDialogGeneral(ITEM_TYPE_GENERAL, ui.widget);
-    ComputerDialogDesktop* desktop_manage_tab =
-        new ComputerDialogDesktop(ITEM_TYPE_DESKTOP_MANAGE, ui.widget);
-    ComputerDialogDesktop* desktop_view_tab =
-        new ComputerDialogDesktop(ITEM_TYPE_DESKTOP_VIEW, ui.widget);
+    ComputerDialogDesktop* desktop_tab =
+        new ComputerDialogDesktop(ITEM_TYPE_DESKTOP, ui.widget);
 
     general_tab->restoreSettings(parent_name, computer_);
-    desktop_manage_tab->restoreSettings(proto::peer::SESSION_TYPE_DESKTOP_MANAGE, computer_);
-    desktop_view_tab->restoreSettings(proto::peer::SESSION_TYPE_DESKTOP_VIEW, computer_);
+    desktop_tab->restoreSettings(computer_);
 
     tabs_.append(general_tab);
-    tabs_.append(desktop_manage_tab);
-    tabs_.append(desktop_view_tab);
+    tabs_.append(desktop_tab);
     tabs_.append(parent_tab);
 
     QSize min_size;
@@ -231,15 +221,10 @@ bool ComputerDialog::saveChanges()
             if (!general_tab->saveSettings(&computer_))
                 return false;
         }
-        else if (type == ITEM_TYPE_DESKTOP_MANAGE)
+        else if (type == ITEM_TYPE_DESKTOP)
         {
             ComputerDialogDesktop* desktop_tab = static_cast<ComputerDialogDesktop*>(tab);
-            desktop_tab->saveSettings(proto::peer::SESSION_TYPE_DESKTOP_MANAGE, &computer_);
-        }
-        else if (type == ITEM_TYPE_DESKTOP_VIEW)
-        {
-            ComputerDialogDesktop* desktop_tab = static_cast<ComputerDialogDesktop*>(tab);
-            desktop_tab->saveSettings(proto::peer::SESSION_TYPE_DESKTOP_VIEW, &computer_);
+            desktop_tab->saveSettings(&computer_);
         }
     }
 

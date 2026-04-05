@@ -53,15 +53,13 @@ message DesktopConfig
 
 message SessionConfig
 {
-    DesktopConfig desktop_manage = 1;
-    DesktopConfig desktop_view   = 2;
+    DesktopConfig desktop = 1;
 }
 
 message InheritConfig
 {
-    bool credentials     = 1;
-    bool desktop_manage  = 2;
-    bool desktop_view    = 3;
+    bool credentials = 1;
+    bool desktop     = 2;
 }
 
 message Computer

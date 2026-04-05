@@ -60,7 +60,7 @@
      <x>0</x>
      <y>0</y>
      <width>891</width>
-     <height>21</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_file">
@@ -108,8 +108,7 @@
     <property name="title">
      <string>&amp;Session Type</string>
     </property>
-    <addaction name="action_desktop_manage"/>
-    <addaction name="action_desktop_view"/>
+    <addaction name="action_desktop"/>
     <addaction name="action_file_transfer"/>
     <addaction name="action_text_chat"/>
     <addaction name="action_system_info"/>
@@ -211,8 +210,7 @@
    <addaction name="action_modify_computer"/>
    <addaction name="action_delete_computer"/>
    <addaction name="separator"/>
-   <addaction name="action_desktop_manage"/>
-   <addaction name="action_desktop_view"/>
+   <addaction name="action_desktop"/>
    <addaction name="action_file_transfer"/>
    <addaction name="action_text_chat"/>
    <addaction name="action_system_info"/>
@@ -362,7 +360,7 @@
     <string>Delete Computer</string>
    </property>
   </action>
-  <action name="action_desktop_manage">
+  <action name="action_desktop">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -375,18 +373,6 @@
    </property>
    <property name="text">
     <string>Desktop &amp;Manage</string>
-   </property>
-  </action>
-  <action name="action_desktop_view">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="../common/resources/common.qrc">
-     <normaloff>:/img/computer.svg</normaloff>:/img/computer.svg</iconset>
-   </property>
-   <property name="text">
-    <string>Desktop &amp;View</string>
    </property>
   </action>
   <action name="action_file_transfer">
@@ -434,7 +420,7 @@
     <string>Address Book Properties</string>
    </property>
   </action>
-  <action name="action_desktop_manage_connect">
+  <action name="action_desktop_connect">
    <property name="icon">
     <iconset resource="../common/resources/common.qrc">
      <normaloff>:/img/workstation.svg</normaloff>:/img/workstation.svg</iconset>
@@ -444,18 +430,6 @@
    </property>
    <property name="toolTip">
     <string>Desktop Manage</string>
-   </property>
-  </action>
-  <action name="action_desktop_view_connect">
-   <property name="icon">
-    <iconset resource="../common/resources/common.qrc">
-     <normaloff>:/img/computer.svg</normaloff>:/img/computer.svg</iconset>
-   </property>
-   <property name="text">
-    <string>Desktop View</string>
-   </property>
-   <property name="toolTip">
-    <string>Desktop View</string>
    </property>
   </action>
   <action name="action_file_transfer_connect">

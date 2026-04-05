@@ -32,7 +32,7 @@ class DesktopToolBar final : public QFrame
     Q_OBJECT
 
 public:
-    DesktopToolBar(proto::peer::SessionType session_type, QWidget* parent);
+    explicit DesktopToolBar(QWidget* parent);
     ~DesktopToolBar() final;
 
     void enableScreenSelect(bool enable);
@@ -98,7 +98,7 @@ private slots:
     void onShowRecordSettings();
 
 private:
-    void createAdditionalMenu(proto::peer::SessionType session_type);
+    void createAdditionalMenu();
     void showFullScreenButtons(bool show);
     void updateScaleMenu();
     void updateSize();
@@ -106,7 +106,6 @@ private:
 
     Ui::DesktopToolBar ui;
 
-    const proto::peer::SessionType session_type_;
     bool is_recording_started_ = false;
 
     QSize current_resolution_;

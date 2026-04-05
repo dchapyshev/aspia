@@ -52,8 +52,7 @@ enum ItemType
 {
     ITEM_TYPE_PARENT,
     ITEM_TYPE_GENERAL,
-    ITEM_TYPE_DESKTOP_MANAGE,
-    ITEM_TYPE_DESKTOP_VIEW
+    ITEM_TYPE_DESKTOP
 };
 
 //--------------------------------------------------------------------------------------------------
@@ -233,46 +232,33 @@ AddressBookDialog::AddressBookDialog(QWidget* parent,
     ui.tree_category->addTopLevelItem(general_item);
     ui.tree_category->addTopLevelItem(sessions_item);
 
-    QTreeWidgetItem* desktop_manage_item = new QTreeWidgetItem(ITEM_TYPE_DESKTOP_MANAGE);
-    desktop_manage_item->setIcon(0, common::sessionIcon(proto::peer::SESSION_TYPE_DESKTOP_MANAGE));
-    desktop_manage_item->setText(0, common::sessionShortName(proto::peer::SESSION_TYPE_DESKTOP_MANAGE));
+    QTreeWidgetItem* desktop_item = new QTreeWidgetItem(ITEM_TYPE_DESKTOP);
+    desktop_item->setIcon(0, common::sessionIcon(proto::peer::SESSION_TYPE_DESKTOP));
+    desktop_item->setText(0, common::sessionShortName(proto::peer::SESSION_TYPE_DESKTOP));
 
-    QTreeWidgetItem* desktop_view_item = new QTreeWidgetItem(ITEM_TYPE_DESKTOP_VIEW);
-    desktop_view_item->setIcon(0, common::sessionIcon(proto::peer::SESSION_TYPE_DESKTOP_VIEW));
-    desktop_view_item->setText(0, common::sessionShortName(proto::peer::SESSION_TYPE_DESKTOP_VIEW));
-
-    sessions_item->addChild(desktop_manage_item);
-    sessions_item->addChild(desktop_view_item);
+    sessions_item->addChild(desktop_item);
 
     ComputerGroupDialogParent* parent_tab =
         new ComputerGroupDialogParent(ITEM_TYPE_PARENT, true, ui.widget);
     ComputerGroupDialogGeneral* general_tab =
         new ComputerGroupDialogGeneral(ITEM_TYPE_GENERAL, true, ui.widget);
-    ComputerGroupDialogDesktop* desktop_manage_tab =
-        new ComputerGroupDialogDesktop(ITEM_TYPE_DESKTOP_MANAGE, true, ui.widget);
-    ComputerGroupDialogDesktop* desktop_view_tab =
-        new ComputerGroupDialogDesktop(ITEM_TYPE_DESKTOP_VIEW, true, ui.widget);
+    ComputerGroupDialogDesktop* desktop_tab =
+        new ComputerGroupDialogDesktop(ITEM_TYPE_DESKTOP, true, ui.widget);
 
     if (!data_->root_group().has_config())
     {
         proto::address_book::ComputerGroupConfig* group_config =
             data_->mutable_root_group()->mutable_config();
 
-        ComputerFactory::setDefaultDesktopManageConfig(
-            group_config->mutable_session_config()->mutable_desktop_manage());
-        ComputerFactory::setDefaultDesktopViewConfig(
-            group_config->mutable_session_config()->mutable_desktop_view());
+        ComputerFactory::setDefaultDesktopConfig(
+            group_config->mutable_session_config()->mutable_desktop());
     }
 
     general_tab->restoreSettings(data_->root_group().config());
-    desktop_manage_tab->restoreSettings(
-        proto::peer::SESSION_TYPE_DESKTOP_MANAGE, data_->root_group().config());
-    desktop_view_tab->restoreSettings(
-        proto::peer::SESSION_TYPE_DESKTOP_VIEW, data_->root_group().config());
+    desktop_tab->restoreSettings(data_->root_group().config());
 
     tabs_.emplace_back(general_tab);
-    tabs_.emplace_back(desktop_manage_tab);
-    tabs_.emplace_back(desktop_view_tab);
+    tabs_.emplace_back(desktop_tab);
     tabs_.emplace_back(parent_tab);
 
     QSize min_size;
@@ -609,21 +595,11 @@ bool AddressBookDialog::saveChanges()
             if (!general_tab->saveSettings(data_->mutable_root_group()->mutable_config()))
                 return false;
         }
-        else if (type == ITEM_TYPE_DESKTOP_MANAGE)
+        else if (type == ITEM_TYPE_DESKTOP)
         {
             ComputerGroupDialogDesktop* desktop_tab =
                 static_cast<ComputerGroupDialogDesktop*>(tab);
-
-            desktop_tab->saveSettings(proto::peer::SESSION_TYPE_DESKTOP_MANAGE,
-                data_->mutable_root_group()->mutable_config());
-        }
-        else if (type == ITEM_TYPE_DESKTOP_VIEW)
-        {
-            ComputerGroupDialogDesktop* desktop_tab =
-                static_cast<ComputerGroupDialogDesktop*>(tab);
-
-            desktop_tab->saveSettings(proto::peer::SESSION_TYPE_DESKTOP_VIEW,
-                data_->mutable_root_group()->mutable_config());
+            desktop_tab->saveSettings(data_->mutable_root_group()->mutable_config());
         }
     }
 

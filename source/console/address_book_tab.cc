@@ -441,15 +441,12 @@ void AddressBookTab::addComputerGroup()
         std::make_unique<proto::address_book::ComputerGroup>();
     proto::address_book::ComputerGroupConfig* group_config = computer_group->mutable_config();
 
-    ComputerFactory::setDefaultDesktopManageConfig(
-        group_config->mutable_session_config()->mutable_desktop_manage());
-    ComputerFactory::setDefaultDesktopViewConfig(
-        group_config->mutable_session_config()->mutable_desktop_view());
+    ComputerFactory::setDefaultDesktopConfig(
+        group_config->mutable_session_config()->mutable_desktop());
 
     proto::address_book::InheritConfig* inherit = group_config->mutable_inherit();
     inherit->set_credentials(true);
-    inherit->set_desktop_manage(true);
-    inherit->set_desktop_view(true);
+    inherit->set_desktop(true);
 
     ComputerGroupDialog dialog(this,
                                ComputerGroupDialog::CreateComputerGroup,
@@ -601,15 +598,12 @@ void AddressBookTab::modifyComputerGroup()
     {
         proto::address_book::ComputerGroupConfig* group_config = computer_group->mutable_config();
 
-        ComputerFactory::setDefaultDesktopManageConfig(
-            group_config->mutable_session_config()->mutable_desktop_manage());
-        ComputerFactory::setDefaultDesktopViewConfig(
-            group_config->mutable_session_config()->mutable_desktop_view());
+        ComputerFactory::setDefaultDesktopConfig(
+            group_config->mutable_session_config()->mutable_desktop());
 
         proto::address_book::InheritConfig* inherit = group_config->mutable_inherit();
         inherit->set_credentials(true);
-        inherit->set_desktop_manage(true);
-        inherit->set_desktop_view(true);
+        inherit->set_desktop(true);
     }
 
     ComputerGroupDialog dialog(this,

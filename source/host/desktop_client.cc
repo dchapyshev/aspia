@@ -138,9 +138,6 @@ void DesktopClient::onUserMessage(quint8 channel_id, const QByteArray& buffer)
 {
     if (channel_id == proto::desktop::CHANNEL_ID_CLIPBOARD || channel_id == proto::desktop::CHANNEL_ID_FILE)
     {
-        if (sessionType() != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
-            return;
-
         if (!config_.has_value() || !config_->clipboard())
             return;
     }
@@ -200,9 +197,6 @@ void DesktopClient::onMessage(quint8 net_channel_id, const QByteArray& buffer)
     }
     else if (net_channel_id == proto::desktop::CHANNEL_ID_CLIPBOARD)
     {
-        if (sessionType() != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
-            return;
-
         if (!config_.has_value() || !config_->clipboard())
             return;
 
@@ -214,9 +208,6 @@ void DesktopClient::onMessage(quint8 net_channel_id, const QByteArray& buffer)
     }
     else if (net_channel_id == proto::desktop::CHANNEL_ID_FILE)
     {
-        if (sessionType() != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
-            return;
-
         if (!config_.has_value() || !config_->clipboard())
             return;
 
@@ -295,14 +286,10 @@ void DesktopClient::onIpcNewConnection()
     connect(ipc_channel_, &base::IpcChannel::sig_disconnected, this, &DesktopClient::onIpcDisconnected);
     connect(ipc_channel_, &base::IpcChannel::sig_messageReceived, this, &DesktopClient::onIpcMessageReceived);
 
-    proto::peer::SessionType session_type = sessionType();
-    CCHECK(session_type == proto::peer::SESSION_TYPE_DESKTOP_MANAGE ||
-           session_type == proto::peer::SESSION_TYPE_DESKTOP_VIEW);
-
     proto::desktop::ServiceToAgentClient message;
     proto::desktop::Description* description = message.mutable_description();
 
-    description->set_session_type(session_type);
+    description->set_session_type(proto::peer::SESSION_TYPE_DESKTOP);
     *description->mutable_version() = base::serialize(version());
     description->set_os_name(osName().toStdString());
     description->set_computer_name(computerName().toStdString());
@@ -465,11 +452,7 @@ void DesktopClient::readFeedback(const proto::control::Feedback& feedback)
 //--------------------------------------------------------------------------------------------------
 void DesktopClient::readPowerControl(const proto::power::Control& control)
 {
-    if (sessionType() != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
-        return;
-
     CLOG(INFO) << "Received:" << control;
-
     switch (control.action())
     {
         case proto::power::Control::ACTION_SHUTDOWN:

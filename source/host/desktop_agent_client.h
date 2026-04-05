@@ -88,10 +88,6 @@ private:
     void readSessionMessage(quint8 channel_id, const QByteArray& buffer);
     void sendSessionMessage(quint8 channel_id, const QByteArray& buffer, bool reliable);
 
-    void readMouseEvent(const proto::input::MouseEvent& mouse_event);
-    void readKeyEvent(const proto::input::KeyEvent& key_event);
-    void readTouchEvent(const proto::input::TouchEvent& touch_event);
-    void readTextEvent(const proto::input::TextEvent& text_event);
     void readPreferredSize(const proto::video::PreferredSize& size);
     void readVideoPause(const proto::video::Pause& pause);
     void readAudioPause(const proto::audio::Pause& pause);

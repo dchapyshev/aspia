@@ -24,7 +24,7 @@
 namespace console {
 
 //--------------------------------------------------------------------------------------------------
-void ComputerFactory::setDefaultDesktopManageConfig(proto::address_book::DesktopConfig* config)
+void ComputerFactory::setDefaultDesktopConfig(proto::address_book::DesktopConfig* config)
 {
     DCHECK(config);
 
@@ -37,33 +37,19 @@ void ComputerFactory::setDefaultDesktopManageConfig(proto::address_book::Desktop
 }
 
 //--------------------------------------------------------------------------------------------------
-void ComputerFactory::setDefaultDesktopViewConfig(proto::address_book::DesktopConfig* config)
-{
-    DCHECK(config);
-
-    static const quint32 kDefaultFlags =
-        proto::address_book::DISABLE_EFFECTS | proto::address_book::DISABLE_WALLPAPER;
-
-    config->set_flags(kDefaultFlags);
-    config->set_audio_encoding(proto::audio::ENCODING_OPUS);
-}
-
-//--------------------------------------------------------------------------------------------------
 // static
 proto::address_book::Computer ComputerFactory::defaultComputer()
 {
     proto::address_book::Computer computer;
 
-    computer.set_session_type(proto::peer::SESSION_TYPE_DESKTOP_MANAGE);
+    computer.set_session_type(proto::peer::SESSION_TYPE_DESKTOP);
     computer.set_port(DEFAULT_HOST_TCP_PORT);
 
     proto::address_book::InheritConfig* inherit = computer.mutable_inherit();
     inherit->set_credentials(false);
-    inherit->set_desktop_manage(true);
-    inherit->set_desktop_view(true);
+    inherit->set_desktop(true);
 
-    setDefaultDesktopManageConfig(computer.mutable_session_config()->mutable_desktop_manage());
-    setDefaultDesktopViewConfig(computer.mutable_session_config()->mutable_desktop_view());
+    setDefaultDesktopConfig(computer.mutable_session_config()->mutable_desktop());
 
     return computer;
 }

@@ -92,18 +92,15 @@ int readHost(const QJsonObject& host, proto::address_book::ComputerGroup* group)
         computer->set_name(computer_name.toStdString());
         computer->set_comment(comment.toStdString());
         computer->set_address(std::string()); // Empty address
-        computer->set_session_type(proto::peer::SESSION_TYPE_DESKTOP_MANAGE);
+        computer->set_session_type(proto::peer::SESSION_TYPE_DESKTOP);
         computer->set_port(DEFAULT_HOST_TCP_PORT);
 
         proto::address_book::InheritConfig* inherit = computer->mutable_inherit();
         inherit->set_credentials(true);
-        inherit->set_desktop_manage(true);
-        inherit->set_desktop_view(true);
+        inherit->set_desktop(true);
 
-        ComputerFactory::setDefaultDesktopManageConfig(
-            computer->mutable_session_config()->mutable_desktop_manage());
-        ComputerFactory::setDefaultDesktopViewConfig(
-            computer->mutable_session_config()->mutable_desktop_view());
+        ComputerFactory::setDefaultDesktopConfig(
+            computer->mutable_session_config()->mutable_desktop());
 
         qint64 current_time = QDateTime::currentSecsSinceEpoch();
         computer->set_create_time(current_time);
@@ -127,18 +124,15 @@ int readHost(const QJsonObject& host, proto::address_book::ComputerGroup* group)
         computer->set_name(computer_name.toStdString());
         computer->set_comment(comment.toStdString());
         computer->set_address(host_id.toStdString());
-        computer->set_session_type(proto::peer::SESSION_TYPE_DESKTOP_MANAGE);
+        computer->set_session_type(proto::peer::SESSION_TYPE_DESKTOP);
         computer->set_port(DEFAULT_HOST_TCP_PORT);
 
         proto::address_book::InheritConfig* inherit = computer->mutable_inherit();
         inherit->set_credentials(true);
-        inherit->set_desktop_manage(true);
-        inherit->set_desktop_view(true);
+        inherit->set_desktop(true);
 
-        ComputerFactory::setDefaultDesktopManageConfig(
-            computer->mutable_session_config()->mutable_desktop_manage());
-        ComputerFactory::setDefaultDesktopViewConfig(
-            computer->mutable_session_config()->mutable_desktop_view());
+        ComputerFactory::setDefaultDesktopConfig(
+            computer->mutable_session_config()->mutable_desktop());
 
         qint64 current_time = QDateTime::currentSecsSinceEpoch();
         computer->set_create_time(current_time);
@@ -156,8 +150,7 @@ proto::address_book::InheritConfig readInheritConfig(
 {
     proto::address_book::InheritConfig inherit_config;
     inherit_config.set_credentials(json_inherit_config["credentials"].toBool(true));
-    inherit_config.set_desktop_manage(json_inherit_config["desktop_manage"].toBool(true));
-    inherit_config.set_desktop_view(json_inherit_config["desktop_view"].toBool(true));
+    inherit_config.set_desktop(json_inherit_config["desktop"].toBool(true));
     return inherit_config;
 }
 
@@ -183,15 +176,11 @@ proto::address_book::DesktopConfig readDesktopConfig(const QJsonObject& json_des
 //--------------------------------------------------------------------------------------------------
 proto::address_book::SessionConfig readSessionConfig(const QJsonObject& json_session_config)
 {
-    QJsonObject json_desktop_manage = json_session_config["desktop_manage"].toObject();
-    proto::address_book::DesktopConfig desktop_manage = readDesktopConfig(json_desktop_manage);
-
-    QJsonObject json_desktop_view = json_session_config["desktop_view"].toObject();
-    proto::address_book::DesktopConfig desktop_view = readDesktopConfig(json_desktop_view);
+    QJsonObject json_desktop = json_session_config["desktop"].toObject();
+    proto::address_book::DesktopConfig desktop = readDesktopConfig(json_desktop);
 
     proto::address_book::SessionConfig session_config;
-    session_config.mutable_desktop_manage()->CopyFrom(desktop_manage);
-    session_config.mutable_desktop_view()->CopyFrom(desktop_view);
+    session_config.mutable_desktop()->CopyFrom(desktop);
 
     return session_config;
 }
@@ -283,7 +272,7 @@ void readComputer(const QJsonObject& json_computer, proto::address_book::Compute
     computer->set_port(port);
     computer->set_username(username.toStdString());
     computer->set_password(password.toStdString());
-    computer->set_session_type(proto::peer::SESSION_TYPE_DESKTOP_MANAGE);
+    computer->set_session_type(proto::peer::SESSION_TYPE_DESKTOP);
     computer->mutable_session_config()->CopyFrom(session_config);
     computer->mutable_inherit()->CopyFrom(inherit);
 }
@@ -349,10 +338,7 @@ QJsonObject writeDesktopConfig(const proto::address_book::DesktopConfig& desktop
 QJsonObject writeSessionConfig(const proto::address_book::SessionConfig& session_config)
 {
     QJsonObject json_session_config;
-
-    json_session_config.insert("desktop_manage", writeDesktopConfig(session_config.desktop_manage()));
-    json_session_config.insert("desktop_view", writeDesktopConfig(session_config.desktop_view()));
-
+    json_session_config.insert("desktop", writeDesktopConfig(session_config.desktop()));
     return json_session_config;
 }
 
@@ -360,11 +346,8 @@ QJsonObject writeSessionConfig(const proto::address_book::SessionConfig& session
 QJsonObject writeInheritConfig(const proto::address_book::InheritConfig& inherit)
 {
     QJsonObject json_inherit;
-
     json_inherit.insert("credentials", inherit.credentials());
-    json_inherit.insert("desktop_manage", inherit.desktop_manage());
-    json_inherit.insert("desktop_view", inherit.desktop_view());
-
+    json_inherit.insert("desktop", inherit.desktop());
     return json_inherit;
 }
 

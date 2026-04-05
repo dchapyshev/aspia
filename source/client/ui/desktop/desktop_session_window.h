@@ -46,9 +46,7 @@ class DesktopSessionWindow final : public SessionWindow
     Q_OBJECT
 
 public:
-    DesktopSessionWindow(proto::peer::SessionType session_type,
-                    const proto::control::Config& desktop_config,
-                    QWidget* parent = nullptr);
+    DesktopSessionWindow(const proto::control::Config& desktop_config, QWidget* parent = nullptr);
     ~DesktopSessionWindow() final;
 
     // SessionWindow implementation.
@@ -109,7 +107,6 @@ private slots:
     void onShowHidePanel();
 
 private:
-    const proto::peer::SessionType session_type_;
     proto::control::Config desktop_config_;
 
     QHBoxLayout* layout_ = nullptr;

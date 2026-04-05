@@ -27,8 +27,7 @@
 namespace client {
 
 //--------------------------------------------------------------------------------------------------
-DesktopConfigDialog::DesktopConfigDialog(proto::peer::SessionType session_type,
-    const proto::control::Config& config, QWidget* parent)
+DesktopConfigDialog::DesktopConfigDialog(const proto::control::Config& config, QWidget* parent)
     : QDialog(parent),
       ui(std::make_unique<Ui::DesktopConfigDialog>()),
       config_(config)
@@ -41,27 +40,15 @@ DesktopConfigDialog::DesktopConfigDialog(proto::peer::SessionType session_type,
         cancel_button->setText(tr("Cancel"));
 
     ui->checkbox_audio->setChecked(config_.audio());
-
-    if (session_type == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
-    {
-        ui->checkbox_lock_at_disconnect->setChecked(config_.lock_at_disconnect());
-        ui->checkbox_block_remote_input->setChecked(config_.block_input());
-        ui->checkbox_cursor_shape->setChecked(config_.cursor_shape());
-        ui->checkbox_clipboard->setChecked(config_.clipboard());
-    }
-    else
-    {
-        ui->groupbox_other->hide();
-        ui->checkbox_cursor_shape->hide();
-        ui->checkbox_clipboard->hide();
-    }
-
+    ui->checkbox_lock_at_disconnect->setChecked(config_.lock_at_disconnect());
+    ui->checkbox_block_remote_input->setChecked(config_.block_input());
+    ui->checkbox_cursor_shape->setChecked(config_.cursor_shape());
+    ui->checkbox_clipboard->setChecked(config_.clipboard());
     ui->checkbox_enable_cursor_pos->setChecked(config_.cursor_position());
     ui->checkbox_desktop_effects->setChecked(!config_.effects());
     ui->checkbox_desktop_wallpaper->setChecked(!config_.wallpaper());
 
-    connect(ui->button_box, &QDialogButtonBox::clicked,
-            this, &DesktopConfigDialog::onButtonBoxClicked);
+    connect(ui->button_box, &QDialogButtonBox::clicked, this, &DesktopConfigDialog::onButtonBoxClicked);
 
     QTimer::singleShot(0, this, [this]()
     {

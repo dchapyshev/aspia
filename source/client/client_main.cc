@@ -282,8 +282,8 @@ int clientMain(int argc, char* argv[])
         "display-name");
 
     QCommandLineOption session_type_option("session-type",
-        QApplication::translate("Client", "Session type. Possible values: desktop-manage, "
-                                "desktop-view, file-transfer, system-info, text-chat, port-forwarding."),
+        QApplication::translate("Client", "Session type. Possible values: desktop, "
+                                "file-transfer, system-info, text-chat."),
         "desktop-manage");
 
     QCommandLineOption audio_option("audio",
@@ -382,15 +382,10 @@ int clientMain(int argc, char* argv[])
 
         QString session_type = parser.value(session_type_option);
 
-        if (session_type == "desktop-manage")
+        if (session_type == "desktop")
         {
-            config.session_type = proto::peer::SESSION_TYPE_DESKTOP_MANAGE;
-            desktop_config = client::ConfigFactory::defaultDesktopManageConfig();
-        }
-        else if (session_type == "desktop-view")
-        {
-            config.session_type = proto::peer::SESSION_TYPE_DESKTOP_VIEW;
-            desktop_config = client::ConfigFactory::defaultDesktopViewConfig();
+            config.session_type = proto::peer::SESSION_TYPE_DESKTOP;
+            desktop_config = client::ConfigFactory::defaultDesktopConfig();
         }
         else if (session_type == "file-transfer")
         {
@@ -504,12 +499,8 @@ int clientMain(int argc, char* argv[])
 
         switch (config.session_type)
         {
-            case proto::peer::SESSION_TYPE_DESKTOP_MANAGE:
-                session_window = new client::DesktopSessionWindow(config.session_type, *desktop_config);
-                break;
-
-            case proto::peer::SESSION_TYPE_DESKTOP_VIEW:
-                session_window = new client::DesktopSessionWindow(config.session_type, *desktop_config);
+            case proto::peer::SESSION_TYPE_DESKTOP:
+                session_window = new client::DesktopSessionWindow(*desktop_config);
                 break;
 
             case proto::peer::SESSION_TYPE_FILE_TRANSFER:

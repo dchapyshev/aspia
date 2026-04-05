@@ -37,8 +37,7 @@ class DesktopConfigDialog final : public QDialog
     Q_OBJECT
 
 public:
-    DesktopConfigDialog(proto::peer::SessionType session_type, const proto::control::Config& config,
-                        QWidget* parent = nullptr);
+    explicit DesktopConfigDialog(const proto::control::Config& config, QWidget* parent = nullptr);
     ~DesktopConfigDialog() final;
 
     void enableAudioFeature(bool enable);

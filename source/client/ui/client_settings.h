@@ -44,11 +44,8 @@ public:
     proto::peer::SessionType sessionType() const;
     void setSessionType(proto::peer::SessionType session_type);
 
-    proto::control::Config desktopManageConfig() const;
-    void setDesktopManageConfig(const proto::control::Config& config);
-
-    proto::control::Config desktopViewConfig() const;
-    void setDesktopViewConfig(const proto::control::Config& config);
+    proto::control::Config desktopConfig() const;
+    void setDesktopConfig(const proto::control::Config& config);
 
     bool checkUpdates() const;
     void setCheckUpdates(bool check);

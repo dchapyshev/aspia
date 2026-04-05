@@ -71,11 +71,9 @@ QSize scaledSize(const QSize& source_size, int scale)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-DesktopSessionWindow::DesktopSessionWindow(proto::peer::SessionType session_type,
-                                           const proto::control::Config& desktop_config,
-                                           QWidget* parent)
+DesktopSessionWindow::DesktopSessionWindow(
+    const proto::control::Config& desktop_config, QWidget* parent)
     : SessionWindow(nullptr, parent),
-      session_type_(session_type),
       desktop_config_(desktop_config)
 {
     LOG(INFO) << "Ctor";
@@ -94,7 +92,7 @@ DesktopSessionWindow::DesktopSessionWindow(proto::peer::SessionType session_type
     layout_->setContentsMargins(0, 0, 0, 0);
     layout_->addWidget(scroll_area_);
 
-    toolbar_ = new DesktopToolBar(session_type_, scroll_area_);
+    toolbar_ = new DesktopToolBar(scroll_area_);
     toolbar_->installEventFilter(this);
 
     resize_timer_ = new QTimer(this);
@@ -909,7 +907,7 @@ void DesktopSessionWindow::onSettings()
 {
     LOG(INFO) << "Create desktop config dialog";
 
-    DesktopConfigDialog* dialog = new DesktopConfigDialog(session_type_, desktop_config_, this);
+    DesktopConfigDialog* dialog = new DesktopConfigDialog(desktop_config_, this);
     dialog->setAttribute(Qt::WA_DeleteOnClose);
 
     dialog->enableAudioFeature(feature_audio_);

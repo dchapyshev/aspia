@@ -208,7 +208,7 @@ void Settings::setAlwaysShowTrayIcon(bool enable)
 proto::peer::SessionType Settings::sessionType() const
 {
     return static_cast<proto::peer::SessionType>(
-        settings_.value(kSessionTypeParam, proto::peer::SESSION_TYPE_DESKTOP_MANAGE).toInt());
+        settings_.value(kSessionTypeParam, proto::peer::SESSION_TYPE_DESKTOP).toInt());
 }
 
 //--------------------------------------------------------------------------------------------------

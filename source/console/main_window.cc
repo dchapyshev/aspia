@@ -137,12 +137,7 @@ MainWindow::MainWindow(const QString& file_path)
     connect(ui.action_fast_connect, &QAction::triggered, this, &MainWindow::onFastConnect);
     connect(ui.action_router_manage, &QAction::triggered, this, &MainWindow::connectToRouter);
 
-    connect(ui.action_desktop_manage_connect, &QAction::triggered,
-            this, &MainWindow::onDesktopManageConnect);
-
-    connect(ui.action_desktop_view_connect, &QAction::triggered,
-            this, &MainWindow::onDesktopViewConnect);
-
+    connect(ui.action_desktop_connect, &QAction::triggered, this, &MainWindow::onDesktopConnect);
     connect(ui.action_file_transfer_connect, &QAction::triggered,
             this, &MainWindow::onFileTransferConnect);
 
@@ -174,19 +169,15 @@ MainWindow::MainWindow(const QString& file_path)
 
     QActionGroup* session_type_group = new QActionGroup(this);
 
-    session_type_group->addAction(ui.action_desktop_manage);
-    session_type_group->addAction(ui.action_desktop_view);
+    session_type_group->addAction(ui.action_desktop);
     session_type_group->addAction(ui.action_file_transfer);
     session_type_group->addAction(ui.action_system_info);
     session_type_group->addAction(ui.action_text_chat);
 
     switch (settings.sessionType())
     {
-        case proto::peer::SESSION_TYPE_DESKTOP_MANAGE:
-            ui.action_desktop_manage->setChecked(true);
-            break;
-        case proto::peer::SESSION_TYPE_DESKTOP_VIEW:
-            ui.action_desktop_view->setChecked(true);
+        case proto::peer::SESSION_TYPE_DESKTOP:
+            ui.action_desktop->setChecked(true);
             break;
         case proto::peer::SESSION_TYPE_FILE_TRANSFER:
             ui.action_file_transfer->setChecked(true);
@@ -756,9 +747,9 @@ void MainWindow::onFastConnect()
 }
 
 //--------------------------------------------------------------------------------------------------
-void MainWindow::onDesktopManageConnect()
+void MainWindow::onDesktopConnect()
 {
-    LOG(INFO) << "[ACTION] Connect to desktop manage session";
+    LOG(INFO) << "[ACTION] Connect to desktop session";
 
     AddressBookTab* tab = currentAddressBookTab();
     if (tab)
@@ -767,33 +758,7 @@ void MainWindow::onDesktopManageConnect()
         if (computer_item)
         {
             proto::address_book::Computer computer = computer_item->computerToConnect();
-            computer.set_session_type(proto::peer::SESSION_TYPE_DESKTOP_MANAGE);
-            connectToComputer(computer, tab->displayName(), tab->routerConfig());
-        }
-        else
-        {
-            LOG(ERROR) << "No active computer";
-        }
-    }
-    else
-    {
-        LOG(ERROR) << "No active tab";
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-void MainWindow::onDesktopViewConnect()
-{
-    LOG(INFO) << "[ACTION] Connect to desktop view session";
-
-    AddressBookTab* tab = currentAddressBookTab();
-    if (tab)
-    {
-        ComputerItem* computer_item = tab->currentComputer();
-        if (computer_item)
-        {
-            proto::address_book::Computer computer = computer_item->computerToConnect();
-            computer.set_session_type(proto::peer::SESSION_TYPE_DESKTOP_VIEW);
+            computer.set_session_type(proto::peer::SESSION_TYPE_DESKTOP);
             connectToComputer(computer, tab->displayName(), tab->routerConfig());
         }
         else
@@ -1107,8 +1072,7 @@ void MainWindow::onComputerContextMenu(ComputerItem* computer_item, const QPoint
 
     if (computer_item)
     {
-        menu.addAction(ui.action_desktop_manage_connect);
-        menu.addAction(ui.action_desktop_view_connect);
+        menu.addAction(ui.action_desktop_connect);
         menu.addAction(ui.action_file_transfer_connect);
         menu.addAction(ui.action_text_chat_connect);
         menu.addAction(ui.action_system_info_connect);
@@ -1144,13 +1108,9 @@ void MainWindow::onComputerDoubleClicked(const proto::address_book::Computer& co
 
     proto::address_book::Computer computer_to_connect(computer);
 
-    if (ui.action_desktop_manage->isChecked())
+    if (ui.action_desktop->isChecked())
     {
-        computer_to_connect.set_session_type(proto::peer::SESSION_TYPE_DESKTOP_MANAGE);
-    }
-    else if (ui.action_desktop_view->isChecked())
-    {
-        computer_to_connect.set_session_type(proto::peer::SESSION_TYPE_DESKTOP_VIEW);
+        computer_to_connect.set_session_type(proto::peer::SESSION_TYPE_DESKTOP);
     }
     else if (ui.action_file_transfer->isChecked())
     {
@@ -1438,10 +1398,8 @@ void MainWindow::closeEvent(QCloseEvent* event)
     settings.setRecentOpen(mru_.recentOpen());
     settings.setPinnedFiles(mru_.pinnedFiles());
 
-    if (ui.action_desktop_manage->isChecked())
-        settings.setSessionType(proto::peer::SESSION_TYPE_DESKTOP_MANAGE);
-    else if (ui.action_desktop_view->isChecked())
-        settings.setSessionType(proto::peer::SESSION_TYPE_DESKTOP_VIEW);
+    if (ui.action_desktop->isChecked())
+        settings.setSessionType(proto::peer::SESSION_TYPE_DESKTOP);
     else if (ui.action_file_transfer->isChecked())
         settings.setSessionType(proto::peer::SESSION_TYPE_FILE_TRANSFER);
     else if (ui.action_system_info->isChecked())
@@ -1746,17 +1704,10 @@ void MainWindow::connectToComputer(const proto::address_book::Computer& computer
 
     switch (config.session_type)
     {
-        case proto::peer::SESSION_TYPE_DESKTOP_MANAGE:
+        case proto::peer::SESSION_TYPE_DESKTOP:
         {
-            session_window = new client::DesktopSessionWindow(config.session_type,
-                ComputerFactory::toClientConfig(computer.session_config().desktop_manage()));
-        }
-        break;
-
-        case proto::peer::SESSION_TYPE_DESKTOP_VIEW:
-        {
-            session_window = new client::DesktopSessionWindow(config.session_type,
-                ComputerFactory::toClientConfig(computer.session_config().desktop_view()));
+            session_window = new client::DesktopSessionWindow(
+                ComputerFactory::toClientConfig(computer.session_config().desktop()));
         }
         break;
 

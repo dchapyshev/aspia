@@ -37,47 +37,27 @@ ComputerDialogDesktop::ComputerDialogDesktop(int type, QWidget* parent)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ComputerDialogDesktop::restoreSettings(
-    proto::peer::SessionType session_type, const proto::address_book::Computer& computer)
+void ComputerDialogDesktop::restoreSettings(const proto::address_book::Computer& computer)
 {
     proto::address_book::DesktopConfig desktop_config;
 
-    if (session_type == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
-    {
-        ui.checkbox_inherit_config->setChecked(computer.inherit().desktop_manage());
-        desktop_config = computer.session_config().desktop_manage();
-    }
-    else
-    {
-        DCHECK_EQ(session_type, proto::peer::SESSION_TYPE_DESKTOP_VIEW);
-
-        ui.checkbox_inherit_config->setChecked(computer.inherit().desktop_view());
-        desktop_config = computer.session_config().desktop_view();
-    }
+    ui.checkbox_inherit_config->setChecked(computer.inherit().desktop());
+    desktop_config = computer.session_config().desktop();
 
     if (desktop_config.audio_encoding() != proto::audio::ENCODING_UNKNOWN)
         ui.checkbox_audio->setChecked(true);
 
-    if (session_type == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
-    {
-        if (desktop_config.flags() & proto::address_book::LOCK_AT_DISCONNECT)
-            ui.checkbox_lock_at_disconnect->setChecked(true);
+    if (desktop_config.flags() & proto::address_book::LOCK_AT_DISCONNECT)
+        ui.checkbox_lock_at_disconnect->setChecked(true);
 
-        if (desktop_config.flags() & proto::address_book::BLOCK_REMOTE_INPUT)
-            ui.checkbox_block_remote_input->setChecked(true);
+    if (desktop_config.flags() & proto::address_book::BLOCK_REMOTE_INPUT)
+        ui.checkbox_block_remote_input->setChecked(true);
 
-        if (desktop_config.flags() & proto::address_book::ENABLE_CURSOR_SHAPE)
-            ui.checkbox_cursor_shape->setChecked(true);
+    if (desktop_config.flags() & proto::address_book::ENABLE_CURSOR_SHAPE)
+        ui.checkbox_cursor_shape->setChecked(true);
 
-        if (desktop_config.flags() & proto::address_book::ENABLE_CLIPBOARD)
-            ui.checkbox_clipboard->setChecked(true);
-    }
-    else
-    {
-        ui.groupbox_other->hide();
-        ui.checkbox_cursor_shape->hide();
-        ui.checkbox_clipboard->hide();
-    }
+    if (desktop_config.flags() & proto::address_book::ENABLE_CLIPBOARD)
+        ui.checkbox_clipboard->setChecked(true);
 
     if (desktop_config.flags() & proto::address_book::CURSOR_POSITION)
         ui.checkbox_cursor_position->setChecked(true);
@@ -90,23 +70,12 @@ void ComputerDialogDesktop::restoreSettings(
 }
 
 //--------------------------------------------------------------------------------------------------
-void ComputerDialogDesktop::saveSettings(
-    proto::peer::SessionType session_type, proto::address_book::Computer* computer)
+void ComputerDialogDesktop::saveSettings(proto::address_book::Computer* computer)
 {
     proto::address_book::DesktopConfig* desktop_config;
 
-    if (session_type == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
-    {
-        computer->mutable_inherit()->set_desktop_manage(ui.checkbox_inherit_config->isChecked());
-        desktop_config = computer->mutable_session_config()->mutable_desktop_manage();
-    }
-    else
-    {
-        DCHECK_EQ(session_type, proto::peer::SESSION_TYPE_DESKTOP_VIEW);
-
-        computer->mutable_inherit()->set_desktop_view(ui.checkbox_inherit_config->isChecked());
-        desktop_config = computer->mutable_session_config()->mutable_desktop_view();
-    }
+    computer->mutable_inherit()->set_desktop(ui.checkbox_inherit_config->isChecked());
+    desktop_config = computer->mutable_session_config()->mutable_desktop();
 
     quint32 flags = 0;
 
@@ -115,20 +84,17 @@ void ComputerDialogDesktop::saveSettings(
     else
         desktop_config->set_audio_encoding(proto::audio::ENCODING_UNKNOWN);
 
-    if (session_type == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
-    {
-        if (ui.checkbox_cursor_shape->isChecked())
-            flags |= proto::address_book::ENABLE_CURSOR_SHAPE;
+    if (ui.checkbox_cursor_shape->isChecked())
+        flags |= proto::address_book::ENABLE_CURSOR_SHAPE;
 
-        if (ui.checkbox_clipboard->isChecked())
-            flags |= proto::address_book::ENABLE_CLIPBOARD;
+    if (ui.checkbox_clipboard->isChecked())
+        flags |= proto::address_book::ENABLE_CLIPBOARD;
 
-        if (ui.checkbox_block_remote_input->isChecked())
-            flags |= proto::address_book::BLOCK_REMOTE_INPUT;
+    if (ui.checkbox_block_remote_input->isChecked())
+        flags |= proto::address_book::BLOCK_REMOTE_INPUT;
 
-        if (ui.checkbox_lock_at_disconnect->isChecked())
-            flags |= proto::address_book::LOCK_AT_DISCONNECT;
-    }
+    if (ui.checkbox_lock_at_disconnect->isChecked())
+        flags |= proto::address_book::LOCK_AT_DISCONNECT;
 
     if (ui.checkbox_cursor_position->isChecked())
         flags |= proto::address_book::CURSOR_POSITION;

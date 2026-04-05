@@ -29,13 +29,6 @@ InputEventFilter::InputEventFilter() = default;
 InputEventFilter::~InputEventFilter() = default;
 
 //--------------------------------------------------------------------------------------------------
-void InputEventFilter::setSessionType(proto::peer::SessionType session_type)
-{
-    LOG(INFO) << "Session type changed:" << session_type;
-    session_type_ = session_type;
-}
-
-//--------------------------------------------------------------------------------------------------
 void InputEventFilter::setClipboardEnabled(bool enable)
 {
     LOG(INFO) << "Clipboard enabled:" << enable;
@@ -45,9 +38,6 @@ void InputEventFilter::setClipboardEnabled(bool enable)
 //--------------------------------------------------------------------------------------------------
 bool InputEventFilter::mouseEvent(const proto::input::MouseEvent& event)
 {
-    if (session_type_ != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
-        return false;
-
     qint32 delta_x = std::abs(event.x() - last_pos_x_);
     qint32 delta_y = std::abs(event.y() - last_pos_y_);
 
@@ -74,9 +64,6 @@ bool InputEventFilter::mouseEvent(const proto::input::MouseEvent& event)
 //--------------------------------------------------------------------------------------------------
 bool InputEventFilter::keyEvent(const proto::input::KeyEvent& event)
 {
-    if (session_type_ != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
-        return false;
-
     ++send_key_count_;
     return true;
 }
@@ -84,9 +71,6 @@ bool InputEventFilter::keyEvent(const proto::input::KeyEvent& event)
 //--------------------------------------------------------------------------------------------------
 bool InputEventFilter::textEvent(const proto::input::TextEvent& event)
 {
-    if (session_type_ != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
-        return false;
-
     ++send_text_count_;
     return true;
 }
@@ -94,9 +78,6 @@ bool InputEventFilter::textEvent(const proto::input::TextEvent& event)
 //--------------------------------------------------------------------------------------------------
 bool InputEventFilter::readClipboardEvent(const proto::clipboard::Event& event)
 {
-    if (session_type_ != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
-        return false;
-
     if (!clipboard_enabled_)
         return false;
 
@@ -107,9 +88,6 @@ bool InputEventFilter::readClipboardEvent(const proto::clipboard::Event& event)
 //--------------------------------------------------------------------------------------------------
 bool InputEventFilter::sendClipboardEvent(const proto::clipboard::Event& event)
 {
-    if (session_type_ != proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
-        return false;
-
     if (!clipboard_enabled_)
         return false;
 

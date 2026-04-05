@@ -283,7 +283,7 @@ void UserSessionAgent::onConnectEvent(const proto::user::ConnectEvent& event)
     LOG(INFO) << "Connect event received";
     clients_.emplace_back(incoming_message_->connect_event());
 
-    if (event.session_type() == proto::peer::SESSION_TYPE_DESKTOP_MANAGE && !clipboard_)
+    if (!clipboard_)
     {
         clipboard_ = new common::ClipboardMonitor(this);
 
@@ -330,15 +330,15 @@ void UserSessionAgent::onDisconnectEvent(const proto::user::DisconnectEvent& eve
         }
     }
 
-    bool has_desktop_manage = false;
+    bool has_desktop = false;
 
     for (const auto& client : std::as_const(clients_))
     {
-        if (client.session_type == proto::peer::SESSION_TYPE_DESKTOP_MANAGE)
-            has_desktop_manage = true;
+        if (client.session_type == proto::peer::SESSION_TYPE_DESKTOP)
+            has_desktop = true;
     }
 
-    if (!has_desktop_manage && clipboard_)
+    if (!has_desktop && clipboard_)
     {
         clipboard_->clearClipboard();
         clipboard_->disconnect(this);

@@ -76,8 +76,7 @@ UserDialog::UserDialog(const base::User& user, const QStringList& exist_names, Q
         ui.tree_sessions->addTopLevelItem(item);
     };
 
-    add_session(proto::peer::SESSION_TYPE_DESKTOP_MANAGE);
-    add_session(proto::peer::SESSION_TYPE_DESKTOP_VIEW);
+    add_session(proto::peer::SESSION_TYPE_DESKTOP);
     add_session(proto::peer::SESSION_TYPE_FILE_TRANSFER);
     add_session(proto::peer::SESSION_TYPE_SYSTEM_INFO);
     add_session(proto::peer::SESSION_TYPE_TEXT_CHAT);

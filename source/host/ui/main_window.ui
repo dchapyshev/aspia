@@ -233,7 +233,7 @@ border-radius: 2px;
      <x>0</x>
      <y>0</y>
      <width>297</width>
-     <height>21</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_aspia">
@@ -259,7 +259,6 @@ border-radius: 2px;
      <string>Access</string>
     </property>
     <addaction name="action_desktop_manage"/>
-    <addaction name="action_desktop_view"/>
     <addaction name="action_file_transfer"/>
     <addaction name="action_system_info"/>
     <addaction name="action_text_chat"/>
