@@ -67,6 +67,12 @@ if (APPLE)
         clipboard_mac.mm
         clipboard_mac.h
         file_platform_util_mac.mm)
+
+    list(APPEND SOURCE_COMMON_MAC
+        mac/file_promise_provider.mm
+        mac/file_promise_provider.h
+        mac/file_promise_writer.mm
+        mac/file_promise_writer.h)
 endif()
 
 list(APPEND SOURCE_COMMON_UI
@@ -125,10 +131,15 @@ if (WIN32)
     source_group(win FILES ${SOURCE_COMMON_WIN})
 endif()
 
+if (APPLE)
+    source_group(mac FILES ${SOURCE_COMMON_MAC})
+endif()
+
 add_library(aspia_common STATIC
     ${SOURCE_COMMON}
     ${SOURCE_COMMON_UI}
     ${SOURCE_COMMON_WIN}
+    ${SOURCE_COMMON_MAC}
     ${SOURCE_COMMON_RESOURCES})
 target_link_libraries(aspia_common PRIVATE
     aspia_base
