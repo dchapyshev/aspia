@@ -69,6 +69,7 @@ private:
     void updateSearchFieldVisibility();
     void installTabActions(ClientTab* tab);
     void removeTabActions();
+    void updateSeparatorVisibility();
     QMenu* menuForActionGroup(ClientTab::ActionGroup group) const;
 
     Ui::ClientWindow ui;

@@ -387,19 +387,20 @@ void ClientWindow::installTabActions(ClientTab* tab)
     {
         const ClientTab::ActionGroupEntry& entry = groups[i];
 
-        // Add separator before each group (except the first).
-        if (i > 0)
-        {
-            QAction* separator = ui.toolbar->insertSeparator(before);
-            tab_toolbar_actions_.append(separator);
-        }
-
-        // Add actions to toolbar.
+        // Add actions to toolbar and connect visibility tracking.
         for (QAction* action : entry.second)
         {
             ui.toolbar->insertAction(before, action);
             tab_toolbar_actions_.append(action);
+
+            connect(action, &QAction::changed, this, &ClientWindow::updateSeparatorVisibility);
         }
+
+        // Add separator after each group.
+        QAction* separator = new QAction(this);
+        separator->setSeparator(true);
+        ui.toolbar->insertAction(before, separator);
+        tab_toolbar_actions_.append(separator);
 
         // Add actions to corresponding menu.
         QMenu* menu = menuForActionGroup(entry.first);
@@ -412,6 +413,8 @@ void ClientWindow::installTabActions(ClientTab* tab)
             tab_menu_actions_.append({ menu, entry.second });
         }
     }
+
+    updateSeparatorVisibility();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -419,7 +422,15 @@ void ClientWindow::removeTabActions()
 {
     // Remove from toolbar.
     for (QAction* action : std::as_const(tab_toolbar_actions_))
+    {
+        if (!action->isSeparator())
+            disconnect(action, &QAction::changed, this, &ClientWindow::updateSeparatorVisibility);
+
         ui.toolbar->removeAction(action);
+
+        if (action->isSeparator())
+            delete action;
+    }
 
     tab_toolbar_actions_.clear();
 
@@ -439,6 +450,31 @@ void ClientWindow::removeTabActions()
     }
 
     tab_menu_actions_.clear();
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientWindow::updateSeparatorVisibility()
+{
+    for (int i = 0; i < tab_toolbar_actions_.size(); ++i)
+    {
+        if (!tab_toolbar_actions_[i]->isSeparator())
+            continue;
+
+        // Separator is visible if there is at least one visible action in the group before it.
+        bool has_visible = false;
+        for (int j = i - 1; j >= 0; --j)
+        {
+            if (tab_toolbar_actions_[j]->isSeparator())
+                break;
+            if (tab_toolbar_actions_[j]->isVisible())
+            {
+                has_visible = true;
+                break;
+            }
+        }
+
+        tab_toolbar_actions_[i]->setVisible(has_visible);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
