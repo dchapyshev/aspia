@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/book_database.h"
+#include "client/local_database.h"
 
 #include "base/crypto/data_cryptor.h"
 #include "base/logging.h"
@@ -138,9 +138,9 @@ bool createTables(QSqlDatabase& db)
 
 //--------------------------------------------------------------------------------------------------
 // static
-BookDatabase& BookDatabase::instance()
+LocalDatabase& LocalDatabase::instance()
 {
-    static thread_local BookDatabase database;
+    static thread_local LocalDatabase database;
 
     if (!database.valid_)
         database.valid_ = database.openDatabase();
@@ -150,7 +150,7 @@ BookDatabase& BookDatabase::instance()
 
 //--------------------------------------------------------------------------------------------------
 // static
-QString BookDatabase::filePath()
+QString LocalDatabase::filePath()
 {
     QString dir_path = databaseDirectory();
     if (dir_path.isEmpty())
@@ -160,13 +160,13 @@ QString BookDatabase::filePath()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool BookDatabase::isValid() const
+bool LocalDatabase::isValid() const
 {
     return valid_;
 }
 
 //--------------------------------------------------------------------------------------------------
-QList<ComputerData> BookDatabase::computerList(qint64 group_id) const
+QList<ComputerData> LocalDatabase::computerList(qint64 group_id) const
 {
     if (!isValid())
     {
@@ -193,7 +193,7 @@ QList<ComputerData> BookDatabase::computerList(qint64 group_id) const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool BookDatabase::addComputer(ComputerData& computer)
+bool LocalDatabase::addComputer(ComputerData& computer)
 {
     if (!isValid())
     {
@@ -239,7 +239,7 @@ bool BookDatabase::addComputer(ComputerData& computer)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool BookDatabase::modifyComputer(const ComputerData& computer)
+bool LocalDatabase::modifyComputer(const ComputerData& computer)
 {
     if (!isValid())
     {
@@ -280,7 +280,7 @@ bool BookDatabase::modifyComputer(const ComputerData& computer)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool BookDatabase::removeComputer(qint64 computer_id)
+bool LocalDatabase::removeComputer(qint64 computer_id)
 {
     if (!isValid())
     {
@@ -302,7 +302,7 @@ bool BookDatabase::removeComputer(qint64 computer_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::optional<ComputerData> BookDatabase::findComputer(qint64 computer_id) const
+std::optional<ComputerData> LocalDatabase::findComputer(qint64 computer_id) const
 {
     if (!isValid())
     {
@@ -328,7 +328,7 @@ std::optional<ComputerData> BookDatabase::findComputer(qint64 computer_id) const
 }
 
 //--------------------------------------------------------------------------------------------------
-QList<ComputerData> BookDatabase::searchComputers(const QString& query_text) const
+QList<ComputerData> LocalDatabase::searchComputers(const QString& query_text) const
 {
     if (!isValid())
     {
@@ -372,7 +372,7 @@ QList<ComputerData> BookDatabase::searchComputers(const QString& query_text) con
 }
 
 //--------------------------------------------------------------------------------------------------
-QList<ComputerGroupData> BookDatabase::groupList(qint64 parent_id) const
+QList<ComputerGroupData> LocalDatabase::groupList(qint64 parent_id) const
 {
     if (!isValid())
     {
@@ -398,7 +398,7 @@ QList<ComputerGroupData> BookDatabase::groupList(qint64 parent_id) const
 }
 
 //--------------------------------------------------------------------------------------------------
-QList<ComputerGroupData> BookDatabase::allGroups() const
+QList<ComputerGroupData> LocalDatabase::allGroups() const
 {
     if (!isValid())
     {
@@ -421,7 +421,7 @@ QList<ComputerGroupData> BookDatabase::allGroups() const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool BookDatabase::addGroup(ComputerGroupData& group)
+bool LocalDatabase::addGroup(ComputerGroupData& group)
 {
     if (!isValid())
     {
@@ -454,7 +454,7 @@ bool BookDatabase::addGroup(ComputerGroupData& group)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool BookDatabase::modifyGroup(const ComputerGroupData& group)
+bool LocalDatabase::modifyGroup(const ComputerGroupData& group)
 {
     if (!isValid())
     {
@@ -486,7 +486,7 @@ bool BookDatabase::modifyGroup(const ComputerGroupData& group)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool BookDatabase::removeGroup(qint64 group_id)
+bool LocalDatabase::removeGroup(qint64 group_id)
 {
     if (!isValid())
     {
@@ -508,7 +508,7 @@ bool BookDatabase::removeGroup(qint64 group_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::optional<ComputerGroupData> BookDatabase::findGroup(qint64 group_id) const
+std::optional<ComputerGroupData> LocalDatabase::findGroup(qint64 group_id) const
 {
     if (!isValid())
     {
@@ -533,7 +533,7 @@ std::optional<ComputerGroupData> BookDatabase::findGroup(qint64 group_id) const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool BookDatabase::openDatabase()
+bool LocalDatabase::openDatabase()
 {
     QString dir_path = databaseDirectory();
     if (dir_path.isEmpty())

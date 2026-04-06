@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_BOOK_DATA_H
-#define CLIENT_BOOK_DATA_H
+#ifndef CLIENT_LOCAL_DATA_H
+#define CLIENT_LOCAL_DATA_H
 
 #include <QString>
 
@@ -45,4 +45,4 @@ struct ComputerGroupData
 
 } // namespace client
 
-#endif // CLIENT_BOOK_DATA_H
+#endif // CLIENT_LOCAL_DATA_H

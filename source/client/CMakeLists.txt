@@ -17,9 +17,9 @@
 #
 
 list(APPEND SOURCE_CLIENT_CORE
-    book_data.h
-    book_database.cc
-    book_database.h
+    local_data.h
+    local_database.cc
+    local_database.h
     client.cc
     client.h
     client_config.cc

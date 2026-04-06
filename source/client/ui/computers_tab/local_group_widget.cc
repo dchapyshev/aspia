@@ -19,7 +19,7 @@
 #include "client/ui/computers_tab/local_group_widget.h"
 
 #include "base/logging.h"
-#include "client/book_database.h"
+#include "client/local_database.h"
 #include "client/ui/computers_tab/content_tree_item.h"
 
 namespace client {
@@ -60,7 +60,7 @@ void LocalGroupWidget::showGroup(qint64 group_id)
 {
     ui.tree_computer->clear();
 
-    QList<ComputerData> computers = BookDatabase::instance().computerList(group_id);
+    QList<ComputerData> computers = LocalDatabase::instance().computerList(group_id);
 
     for (const ComputerData& computer : std::as_const(computers))
         new LocalComputerItem(computer, ui.tree_computer);

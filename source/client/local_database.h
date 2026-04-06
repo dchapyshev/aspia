@@ -16,24 +16,24 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_BOOK_DATABASE_H
-#define CLIENT_BOOK_DATABASE_H
+#ifndef CLIENT_LOCAL_DATABASE_H
+#define CLIENT_LOCAL_DATABASE_H
 
 #include <QList>
 #include <QString>
 
 #include <optional>
 
-#include "client/book_data.h"
+#include "client/local_data.h"
 
 namespace client {
 
-class BookDatabase
+class LocalDatabase
 {
 public:
-    ~BookDatabase() = default;
+    ~LocalDatabase() = default;
 
-    static BookDatabase& instance();
+    static LocalDatabase& instance();
     static QString filePath();
     bool isValid() const;
 
@@ -56,7 +56,7 @@ public:
     std::optional<ComputerGroupData> findGroup(qint64 group_id) const;
 
 private:
-    BookDatabase() = default;
+    LocalDatabase() = default;
 
     bool openDatabase();
 
@@ -65,4 +65,4 @@ private:
 
 } // namespace client
 
-#endif // CLIENT_BOOK_DATABASE_H
+#endif // CLIENT_LOCAL_DATABASE_H

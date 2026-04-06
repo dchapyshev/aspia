@@ -18,7 +18,7 @@
 
 #include "client/ui/computers_tab/content_tree_item.h"
 
-#include "client/book_data.h"
+#include "client/local_data.h"
 
 #include <QIcon>
 

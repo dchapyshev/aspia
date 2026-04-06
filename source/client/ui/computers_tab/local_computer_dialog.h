@@ -21,7 +21,7 @@
 
 #include <QDialog>
 
-#include "client/book_data.h"
+#include "client/local_data.h"
 #include "ui_local_computer_dialog.h"
 
 namespace client {
