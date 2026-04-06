@@ -201,7 +201,7 @@ bool LocalDatabase::addComputer(ComputerData& computer)
         return false;
     }
 
-    if (computer.address.isEmpty() || computer.name.isEmpty() || computer.id < 0 || computer.group_id < 0)
+    if (computer.name.isEmpty() || computer.address.isEmpty() || computer.group_id < 0)
     {
         LOG(ERROR) << "Invalid parameters";
         return false;

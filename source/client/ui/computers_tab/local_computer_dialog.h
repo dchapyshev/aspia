@@ -21,7 +21,6 @@
 
 #include <QDialog>
 
-#include "client/local_data.h"
 #include "ui_local_computer_dialog.h"
 
 namespace client {
@@ -31,13 +30,8 @@ class LocalComputerDialog : public QDialog
     Q_OBJECT
 
 public:
-    enum class Mode { ADD, EDIT };
-
-    LocalComputerDialog(Mode mode, QWidget* parent = nullptr);
+    LocalComputerDialog(qint64 computer_id, qint64 group_id, QWidget* parent = nullptr);
     ~LocalComputerDialog() override;
-
-    void setComputer(const ComputerData& computer);
-    ComputerData computer() const;
 
 private slots:
     void onShowPasswordButtonToggled(bool checked);
@@ -45,7 +39,6 @@ private slots:
 
 private:
     Ui::LocalComputerDialog ui;
-    Mode mode_;
     qint64 computer_id_ = -1;
     qint64 group_id_ = 0;
 

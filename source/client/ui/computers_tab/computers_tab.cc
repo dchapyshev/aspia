@@ -160,18 +160,18 @@ void ComputersTab::onAddComputerAction()
 {
     LOG(INFO) << "[ACTION] Add computer";
 
-    LocalComputerDialog dialog(LocalComputerDialog::Mode::ADD, this);
+    LocalGroupItem* item = static_cast<LocalGroupItem*>(ui.tree_group->currentItem());
+    if (!item)
+    {
+        LOG(INFO) << "No current local group item";
+        return;
+    }
+
+    LocalComputerDialog dialog(-1, item->groupId(), this);
     if (dialog.exec() == LocalComputerDialog::Rejected)
     {
         LOG(INFO) << "[ACTION] Rejected by user";
         return;
-    }
-
-    ComputerData data = dialog.computer();
-    if (!LocalDatabase::instance().addComputer(data))
-    {
-        QMessageBox::warning(this, tr("Warning"), tr("Unable to add computer"));
-        LOG(INFO) << "Unable to add computer to database";
     }
 }
 
@@ -187,26 +187,26 @@ void ComputersTab::onGroupItemClicked(QTreeWidgetItem* item, int /* column */)
 
     switch (group_item->itemType())
     {
-    case GroupTreeItem::Type::LOCAL_GROUP:
-    {
-        current_group_id_ = group_item->groupId();
-        local_group_widget_->showGroup(current_group_id_);
-        switchContent(local_group_widget_);
-    }
-    break;
+        case GroupTreeItem::Type::LOCAL_GROUP:
+        {
+            current_group_id_ = group_item->groupId();
+            local_group_widget_->showGroup(current_group_id_);
+            switchContent(local_group_widget_);
+        }
+        break;
 
-    case GroupTreeItem::Type::ROUTER:
-    {
-        switchContent(router_widget_);
-    }
-    break;
+        case GroupTreeItem::Type::ROUTER:
+        {
+            switchContent(router_widget_);
+        }
+        break;
 
-    case GroupTreeItem::Type::ROUTER_GROUP:
-    {
-        router_group_widget_->showGroup(group_item->groupId());
-        switchContent(router_group_widget_);
-    }
-    break;
+        case GroupTreeItem::Type::ROUTER_GROUP:
+        {
+            router_group_widget_->showGroup(group_item->groupId());
+            switchContent(router_group_widget_);
+        }
+        break;
     }
 }
 

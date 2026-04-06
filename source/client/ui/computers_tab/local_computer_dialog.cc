@@ -19,6 +19,8 @@
 #include "client/ui/computers_tab/local_computer_dialog.h"
 
 #include "base/logging.h"
+#include "client/local_data.h"
+#include "client/local_database.h"
 
 #include <QAbstractButton>
 #include <QMessageBox>
@@ -27,18 +29,38 @@
 namespace client {
 
 //--------------------------------------------------------------------------------------------------
-LocalComputerDialog::LocalComputerDialog(Mode mode, QWidget* parent)
+LocalComputerDialog::LocalComputerDialog(qint64 computer_id, qint64 group_id, QWidget* parent)
     : QDialog(parent),
-      mode_(mode)
+      computer_id_(computer_id)
 {
     LOG(INFO) << "Ctor";
 
     ui.setupUi(this);
 
-    if (mode == Mode::ADD)
-        setWindowTitle(tr("Add Computer"));
-    else
+    if (computer_id_ != -1)
+    {
         setWindowTitle(tr("Edit Computer"));
+
+        std::optional<ComputerData> computer = LocalDatabase::instance().findComputer(computer_id_);
+        if (computer.has_value())
+        {
+            ui.edit_name->setText(computer->name);
+            ui.edit_address->setText(computer->address);
+            ui.edit_username->setText(computer->username);
+            ui.edit_password->setText(computer->password);
+            ui.edit_comment->setPlainText(computer->comment);
+            group_id_ = computer->group_id;
+        }
+        else
+        {
+            LOG(ERROR) << "Unable to find computer with id" << computer_id_;
+        }
+    }
+    else
+    {
+        setWindowTitle(tr("Add Computer"));
+        group_id_ = group_id;
+    }
 
     connect(ui.button_show_password, &QToolButton::toggled,
             this, &LocalComputerDialog::onShowPasswordButtonToggled);
@@ -53,33 +75,6 @@ LocalComputerDialog::LocalComputerDialog(Mode mode, QWidget* parent)
 LocalComputerDialog::~LocalComputerDialog()
 {
     LOG(INFO) << "Dtor";
-}
-
-//--------------------------------------------------------------------------------------------------
-void LocalComputerDialog::setComputer(const ComputerData& computer)
-{
-    computer_id_ = computer.id;
-    group_id_ = computer.group_id;
-
-    ui.edit_name->setText(computer.name);
-    ui.edit_address->setText(computer.address);
-    ui.edit_username->setText(computer.username);
-    ui.edit_password->setText(computer.password);
-    ui.edit_comment->setPlainText(computer.comment);
-}
-
-//--------------------------------------------------------------------------------------------------
-ComputerData LocalComputerDialog::computer() const
-{
-    ComputerData computer;
-    computer.id = computer_id_;
-    computer.group_id = group_id_;
-    computer.name = ui.edit_name->text();
-    computer.address = ui.edit_address->text();
-    computer.username = ui.edit_username->text();
-    computer.password = ui.edit_password->text();
-    computer.comment = ui.edit_comment->toPlainText();
-    return computer;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -119,6 +114,36 @@ void LocalComputerDialog::onButtonBoxClicked(QAbstractButton* button)
         QMessageBox::warning(this, tr("Warning"), tr("Address cannot be empty."));
         ui.edit_address->setFocus();
         return;
+    }
+
+    ComputerData computer;
+    computer.id = computer_id_;
+    computer.group_id = group_id_;
+    computer.name = ui.edit_name->text();
+    computer.address = ui.edit_address->text();
+    computer.username = ui.edit_username->text();
+    computer.password = ui.edit_password->text();
+    computer.comment = ui.edit_comment->toPlainText();
+
+    LocalDatabase& db = LocalDatabase::instance();
+
+    if (computer_id_ == -1)
+    {
+        if (!db.addComputer(computer))
+        {
+            QMessageBox::warning(this, tr("Warning"), tr("Unable to add computer"));
+            LOG(INFO) << "Unable to add computer to database";
+            return;
+        }
+    }
+    else
+    {
+        if (!db.modifyComputer(computer))
+        {
+            QMessageBox::warning(this, tr("Warning"), tr("Unable to modify computer"));
+            LOG(INFO) << "Unable to modify computer in database";
+            return;
+        }
     }
 
     accept();
