@@ -202,11 +202,8 @@ list(APPEND SOURCE_BASE_CODEC_TESTS
 list(APPEND SOURCE_BASE_CRYPTO
     crypto/big_num.cc
     crypto/big_num.h
+    crypto/data_cryptor.cc
     crypto/data_cryptor.h
-    crypto/data_cryptor_chacha20_poly1305.cc
-    crypto/data_cryptor_chacha20_poly1305.h
-    crypto/data_cryptor_fake.cc
-    crypto/data_cryptor_fake.h
     crypto/datagram_decryptor.cc
     crypto/datagram_decryptor.h
     crypto/datagram_encryptor.cc

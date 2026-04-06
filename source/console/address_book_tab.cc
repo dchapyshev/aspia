@@ -25,8 +25,7 @@
 
 #include "base/logging.h"
 #include "base/serialization.h"
-#include "base/crypto/data_cryptor_chacha20_poly1305.h"
-#include "base/crypto/data_cryptor_fake.h"
+#include "base/crypto/data_cryptor.h"
 #include "base/crypto/password_hash.h"
 #include "base/crypto/secure_memory.h"
 #include "client/online_checker/online_checker.h"
@@ -237,13 +236,11 @@ AddressBookTab* AddressBookTab::openFromFile(const QString& file_path, QWidget* 
 
     proto::address_book::Data address_book_data;
 
-    std::unique_ptr<base::DataCryptor> cryptor;
     QByteArray key;
 
     switch (address_book_file.encryption_type())
     {
         case proto::address_book::ENCRYPTION_TYPE_NONE:
-            cryptor = std::make_unique<base::DataCryptorFake>();
             break;
 
         case proto::address_book::ENCRYPTION_TYPE_CHACHA20_POLY1305:
@@ -256,25 +253,19 @@ AddressBookTab* AddressBookTab::openFromFile(const QString& file_path, QWidget* 
                 base::PasswordHash::SCRYPT,
                 dialog.password(),
                 QByteArray::fromStdString(address_book_file.hashing_salt()));
-
-            cryptor = std::make_unique<base::DataCryptorChaCha20Poly1305>(key);
         }
         break;
 
         default:
             LOG(ERROR) << "Unexpected encryption type:" << address_book_file.encryption_type();
-            break;
+            showOpenError(parent, tr("The address book file is encrypted with an unsupported encryption type."));
+            return nullptr;
     }
 
-    if (!cryptor)
-    {
-        LOG(ERROR) << "Unsupported encryption type";
-        showOpenError(parent, tr("The address book file is encrypted with an unsupported encryption type."));
-        return nullptr;
-    }
+    base::DataCryptor cryptor(key);
 
     QByteArray decrypted_data;
-    if (!cryptor->decrypt(address_book_file.data(), &decrypted_data))
+    if (!cryptor.decrypt(address_book_file.data(), &decrypted_data))
     {
         LOG(ERROR) << "Unable to decrypt address book";
         showOpenError(parent, tr("Unable to decrypt the address book with the specified password."));
@@ -1178,25 +1169,10 @@ bool AddressBookTab::saveToFile(const QString& file_path)
     LOG(INFO) << "Save address book to file:" << file_path;
 
     QByteArray serialized_data = base::serialize(data_);
-    std::unique_ptr<base::DataCryptor> cryptor;
-
-    switch (file_.encryption_type())
-    {
-        case proto::address_book::ENCRYPTION_TYPE_NONE:
-            cryptor = std::make_unique<base::DataCryptorFake>();
-            break;
-
-        case proto::address_book::ENCRYPTION_TYPE_CHACHA20_POLY1305:
-            cryptor = std::make_unique<base::DataCryptorChaCha20Poly1305>(key_);
-            break;
-
-        default:
-            LOG(FATAL) << "Unknown encryption type:" << file_.encryption_type();
-            return false;
-    }
+    base::DataCryptor cryptor(key_);
 
     QByteArray encrypted_data;
-    CHECK(cryptor->encrypt(serialized_data, &encrypted_data));
+    CHECK(cryptor.encrypt(serialized_data, &encrypted_data));
     base::memZero(&serialized_data);
 
     file_.set_data(encrypted_data.data(), encrypted_data.size());

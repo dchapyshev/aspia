@@ -19,6 +19,7 @@
 #ifndef BASE_CRYPTO_DATA_CRYPTOR_H
 #define BASE_CRYPTO_DATA_CRYPTOR_H
 
+#include <QByteArray>
 #include <QByteArrayView>
 
 namespace base {
@@ -26,10 +27,23 @@ namespace base {
 class DataCryptor
 {
 public:
-    virtual ~DataCryptor() = default;
+    DataCryptor();
+    explicit DataCryptor(const QByteArray& key);
+    ~DataCryptor();
 
-    virtual bool encrypt(QByteArrayView in, QByteArray* out) = 0;
-    virtual bool decrypt(QByteArrayView in, QByteArray* out) = 0;
+    void setKey(const QByteArray& key);
+    QByteArray key() const;
+    bool hasKey() const;
+
+    bool encrypt(QByteArrayView in, QByteArray* out);
+    bool decrypt(QByteArrayView in, QByteArray* out);
+
+    static DataCryptor& instance();
+
+private:
+    QByteArray key_;
+
+    Q_DISABLE_COPY_MOVE(DataCryptor)
 };
 
 } // namespace base

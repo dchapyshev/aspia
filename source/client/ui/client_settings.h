@@ -63,9 +63,8 @@ public:
     bool isRouterEnabled() const;
     void setRouterEnabled(bool enabled);
 
-    RouterConfig routerConfig(const QByteArray& encryption_key = QByteArray()) const;
-    void setRouterConfig(const RouterConfig& config,
-                         const QByteArray& encryption_key = QByteArray());
+    RouterConfig routerConfig() const;
+    void setRouterConfig(const RouterConfig& config);
 
 private:
     QSettings settings_;

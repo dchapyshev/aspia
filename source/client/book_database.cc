@@ -18,8 +18,7 @@
 
 #include "client/book_database.h"
 
-#include "base/crypto/data_cryptor_chacha20_poly1305.h"
-#include "base/crypto/secure_memory.h"
+#include "base/crypto/data_cryptor.h"
 #include "base/logging.h"
 
 #include <QDir>
@@ -30,68 +29,51 @@
 #include <QStandardPaths>
 #include <QVariant>
 
-
 namespace client {
 
 namespace {
 
 //--------------------------------------------------------------------------------------------------
-QByteArray encryptBlob(const QByteArray& key, const QByteArray& data)
+ComputerData readComputer(const QSqlQuery& query)
 {
-    if (key.isEmpty())
-        return data;
+    base::DataCryptor& cryptor = base::DataCryptor::instance();
 
-    base::DataCryptorChaCha20Poly1305 cryptor(key);
-    QByteArray out;
-    if (!cryptor.encrypt(data, &out))
-    {
-        LOG(ERROR) << "Failed to encrypt data";
-        return QByteArray();
-    }
-    return out;
-}
-
-//--------------------------------------------------------------------------------------------------
-QByteArray decryptBlob(const QByteArray& key, const QByteArray& data)
-{
-    if (key.isEmpty())
-        return data;
-
-    if (data.isEmpty())
-        return data;
-
-    base::DataCryptorChaCha20Poly1305 cryptor(key);
-    QByteArray out;
-    if (!cryptor.decrypt(data, &out))
-    {
-        LOG(ERROR) << "Failed to decrypt data";
-        return QByteArray();
-    }
-    return out;
-}
-
-//--------------------------------------------------------------------------------------------------
-ComputerData readComputer(const QSqlQuery& query, const QByteArray& key)
-{
     ComputerData computer;
     computer.id = query.value(0).toLongLong();
     computer.group_id = query.value(1).toLongLong();
     computer.name = query.value(2).toString();
-    computer.comment = QString::fromUtf8(decryptBlob(key, query.value(3).toByteArray()));
-    computer.address = QString::fromUtf8(decryptBlob(key, query.value(4).toByteArray()));
-    computer.username = QString::fromUtf8(decryptBlob(key, query.value(5).toByteArray()));
-    computer.password = QString::fromUtf8(decryptBlob(key, query.value(6).toByteArray()));
+
+    QByteArray out;
+
+    cryptor.decrypt(query.value(3).toByteArray(), &out);
+    computer.comment = QString::fromUtf8(out);
+
+    cryptor.decrypt(query.value(4).toByteArray(), &out);
+    computer.address = QString::fromUtf8(out);
+
+    cryptor.decrypt(query.value(5).toByteArray(), &out);
+    computer.username = QString::fromUtf8(out);
+
+    cryptor.decrypt(query.value(6).toByteArray(), &out);
+    computer.password = QString::fromUtf8(out);
+
     return computer;
 }
 
 //--------------------------------------------------------------------------------------------------
-ComputerGroupData readGroup(const QSqlQuery& query, const QByteArray& key)
+ComputerGroupData readGroup(const QSqlQuery& query)
 {
+    base::DataCryptor& cryptor = base::DataCryptor::instance();
+
     ComputerGroupData group;
     group.id = query.value(0).toLongLong();
     group.parent_id = query.value(1).toLongLong();
     group.name = query.value(2).toString();
-    group.comment = QString::fromUtf8(decryptBlob(key, query.value(3).toByteArray()));
+
+    QByteArray out;
+    cryptor.decrypt(query.value(3).toByteArray(), &out);
+    group.comment = QString::fromUtf8(out);
+
     group.expanded = query.value(4).toBool();
     return group;
 }
@@ -146,22 +128,15 @@ const char BookDatabase::kConnectionName[] = "book";
 BookDatabase::BookDatabase() = default;
 
 //--------------------------------------------------------------------------------------------------
-BookDatabase::BookDatabase(const QByteArray& encryption_key)
-    : encryption_key_(encryption_key),
-      valid_(true)
+BookDatabase::BookDatabase(bool valid)
+    : valid_(valid)
 {
     // Nothing
 }
 
 //--------------------------------------------------------------------------------------------------
-BookDatabase::~BookDatabase()
-{
-    base::memZero(&encryption_key_);
-}
-
-//--------------------------------------------------------------------------------------------------
 // static
-BookDatabase BookDatabase::open(const QByteArray& encryption_key)
+BookDatabase BookDatabase::open()
 {
     QString dir_path = databaseDirectory();
     if (dir_path.isEmpty())
@@ -231,7 +206,7 @@ BookDatabase BookDatabase::open(const QByteArray& encryption_key)
             LOG(WARNING) << "Unable to enable foreign keys:" << query.lastError();
     }
 
-    return BookDatabase(encryption_key);
+    return BookDatabase(true);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -273,7 +248,7 @@ QList<ComputerData> BookDatabase::computerList(qint64 group_id) const
 
     QList<ComputerData> computers;
     while (query.next())
-        computers.append(readComputer(query, encryption_key_));
+        computers.append(readComputer(query));
 
     return computers;
 }
@@ -293,15 +268,26 @@ bool BookDatabase::addComputer(ComputerData& computer)
         return false;
     }
 
+    base::DataCryptor& cryptor = base::DataCryptor::instance();
+    QByteArray out;
+
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
     query.prepare("INSERT INTO computers (id, group_id, name, comment, address, username, password) "
                   "VALUES (NULL, ?, ?, ?, ?, ?, ?)");
     query.addBindValue(computer.group_id);
     query.addBindValue(computer.name);
-    query.addBindValue(encryptData(computer.comment.toUtf8()));
-    query.addBindValue(encryptData(computer.address.toUtf8()));
-    query.addBindValue(encryptData(computer.username.toUtf8()));
-    query.addBindValue(encryptData(computer.password.toUtf8()));
+
+    cryptor.encrypt(computer.comment.toUtf8(), &out);
+    query.addBindValue(out);
+
+    cryptor.encrypt(computer.address.toUtf8(), &out);
+    query.addBindValue(out);
+
+    cryptor.encrypt(computer.username.toUtf8(), &out);
+    query.addBindValue(out);
+
+    cryptor.encrypt(computer.password.toUtf8(), &out);
+    query.addBindValue(out);
 
     if (!query.exec())
     {
@@ -322,15 +308,27 @@ bool BookDatabase::modifyComputer(const ComputerData& computer)
         return false;
     }
 
+    base::DataCryptor& cryptor = base::DataCryptor::instance();
+    QByteArray out;
+
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
     query.prepare("UPDATE computers SET group_id=?, name=?, comment=?, address=?, username=?, password=? "
                   "WHERE id=?");
     query.addBindValue(computer.group_id);
     query.addBindValue(computer.name);
-    query.addBindValue(encryptData(computer.comment.toUtf8()));
-    query.addBindValue(encryptData(computer.address.toUtf8()));
-    query.addBindValue(encryptData(computer.username.toUtf8()));
-    query.addBindValue(encryptData(computer.password.toUtf8()));
+
+    cryptor.encrypt(computer.comment.toUtf8(), &out);
+    query.addBindValue(out);
+
+    cryptor.encrypt(computer.address.toUtf8(), &out);
+    query.addBindValue(out);
+
+    cryptor.encrypt(computer.username.toUtf8(), &out);
+    query.addBindValue(out);
+
+    cryptor.encrypt(computer.password.toUtf8(), &out);
+    query.addBindValue(out);
+
     query.addBindValue(computer.id);
 
     if (!query.exec())
@@ -387,7 +385,7 @@ std::optional<ComputerData> BookDatabase::findComputer(qint64 computer_id) const
     if (!query.next())
         return std::nullopt;
 
-    return readComputer(query, encryption_key_);
+    return readComputer(query);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -403,7 +401,14 @@ QList<ComputerData> BookDatabase::searchComputers(const QString& query_text) con
     // For unencrypted databases, we can search by name, address, and comment.
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
 
-    if (encryption_key_.isEmpty())
+    if (base::DataCryptor::instance().hasKey())
+    {
+        query.prepare("SELECT id, group_id, name, comment, address, username, password "
+                      "FROM computers WHERE name LIKE ?");
+
+        query.addBindValue(QString("%%1%").arg(query_text));
+    }
+    else
     {
         query.prepare("SELECT id, group_id, name, comment, address, username, password "
                       "FROM computers WHERE name LIKE ? OR address LIKE ? OR comment LIKE ?");
@@ -412,13 +417,6 @@ QList<ComputerData> BookDatabase::searchComputers(const QString& query_text) con
         query.addBindValue(pattern);
         query.addBindValue(pattern);
         query.addBindValue(pattern);
-    }
-    else
-    {
-        query.prepare("SELECT id, group_id, name, comment, address, username, password "
-                      "FROM computers WHERE name LIKE ?");
-
-        query.addBindValue(QString("%%1%").arg(query_text));
     }
 
     if (!query.exec())
@@ -429,7 +427,7 @@ QList<ComputerData> BookDatabase::searchComputers(const QString& query_text) con
 
     QList<ComputerData> computers;
     while (query.next())
-        computers.append(readComputer(query, encryption_key_));
+        computers.append(readComputer(query));
 
     return computers;
 }
@@ -455,7 +453,7 @@ QList<ComputerGroupData> BookDatabase::groupList(qint64 parent_id) const
 
     QList<ComputerGroupData> groups;
     while (query.next())
-        groups.append(readGroup(query, encryption_key_));
+        groups.append(readGroup(query));
 
     return groups;
 }
@@ -478,7 +476,7 @@ QList<ComputerGroupData> BookDatabase::allGroups() const
 
     QList<ComputerGroupData> groups;
     while (query.next())
-        groups.append(readGroup(query, encryption_key_));
+        groups.append(readGroup(query));
 
     return groups;
 }
@@ -492,12 +490,18 @@ bool BookDatabase::addGroup(ComputerGroupData& group)
         return false;
     }
 
+    base::DataCryptor& cryptor = base::DataCryptor::instance();
+    QByteArray out;
+
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
     query.prepare("INSERT INTO groups (id, parent_id, name, comment, expanded) "
                   "VALUES (NULL, ?, ?, ?, ?)");
     query.addBindValue(group.parent_id);
     query.addBindValue(group.name);
-    query.addBindValue(encryptData(group.comment.toUtf8()));
+
+    cryptor.encrypt(group.comment.toUtf8(), &out);
+    query.addBindValue(out);
+
     query.addBindValue(group.expanded ? 1 : 0);
 
     if (!query.exec())
@@ -519,11 +523,17 @@ bool BookDatabase::modifyGroup(const ComputerGroupData& group)
         return false;
     }
 
+    base::DataCryptor& cryptor = base::DataCryptor::instance();
+    QByteArray out;
+
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
     query.prepare("UPDATE groups SET parent_id=?, name=?, comment=?, expanded=? WHERE id=?");
     query.addBindValue(group.parent_id);
     query.addBindValue(group.name);
-    query.addBindValue(encryptData(group.comment.toUtf8()));
+
+    cryptor.encrypt(group.comment.toUtf8(), &out);
+    query.addBindValue(out);
+
     query.addBindValue(group.expanded ? 1 : 0);
     query.addBindValue(group.id);
 
@@ -580,30 +590,7 @@ std::optional<ComputerGroupData> BookDatabase::findGroup(qint64 group_id) const
     if (!query.next())
         return std::nullopt;
 
-    return readGroup(query, encryption_key_);
-}
-
-//--------------------------------------------------------------------------------------------------
-bool BookDatabase::setEncryption(const QByteArray& encryption_key)
-{
-    if (!isValid())
-    {
-        LOG(ERROR) << "Database is not valid";
-        return false;
-    }
-
-    QByteArray old_key = encryption_key_;
-
-    if (!reencryptAll(old_key, encryption_key))
-    {
-        LOG(ERROR) << "Failed to re-encrypt data";
-        return false;
-    }
-
-    encryption_key_ = encryption_key;
-
-    base::memZero(&old_key);
-    return true;
+    return readGroup(query);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -618,120 +605,6 @@ QString BookDatabase::databaseDirectory()
     }
 
     return dir_path;
-}
-
-//--------------------------------------------------------------------------------------------------
-QByteArray BookDatabase::encryptData(const QByteArray& data) const
-{
-    return encryptBlob(encryption_key_, data);
-}
-
-//--------------------------------------------------------------------------------------------------
-QByteArray BookDatabase::decryptData(const QByteArray& encrypted) const
-{
-    return decryptBlob(encryption_key_, encrypted);
-}
-
-//--------------------------------------------------------------------------------------------------
-bool BookDatabase::reencryptAll(const QByteArray& old_key, const QByteArray& new_key)
-{
-    QSqlDatabase db = QSqlDatabase::database(kConnectionName, false);
-    if (!db.isValid())
-        return false;
-
-    if (!db.transaction())
-    {
-        LOG(ERROR) << "Unable to execute transaction:" << db.lastError();
-        return false;
-    }
-
-    bool success = false;
-
-    do
-    {
-        // Re-encrypt computers.
-        {
-            QSqlQuery select_query(db);
-            if (!select_query.exec(
-                "SELECT id, comment, address, username, password FROM computers"))
-            {
-                LOG(ERROR) << "Unable to read computers:" << select_query.lastError();
-                break;
-            }
-
-            QSqlQuery update_query(db);
-            update_query.prepare(
-                "UPDATE computers SET comment=?, address=?, username=?, password=? WHERE id=?");
-
-            while (select_query.next())
-            {
-                qint64 id = select_query.value(0).toLongLong();
-                QByteArray comment = decryptBlob(old_key, select_query.value(1).toByteArray());
-                QByteArray address = decryptBlob(old_key, select_query.value(2).toByteArray());
-                QByteArray username = decryptBlob(old_key, select_query.value(3).toByteArray());
-                QByteArray pw = decryptBlob(old_key, select_query.value(4).toByteArray());
-
-                update_query.addBindValue(encryptBlob(new_key, comment));
-                update_query.addBindValue(encryptBlob(new_key, address));
-                update_query.addBindValue(encryptBlob(new_key, username));
-                update_query.addBindValue(encryptBlob(new_key, pw));
-                update_query.addBindValue(id);
-
-                if (!update_query.exec())
-                {
-                    LOG(ERROR) << "Unable to re-encrypt computer:" << update_query.lastError();
-                    goto rollback;
-                }
-            }
-        }
-
-        // Re-encrypt groups.
-        {
-            QSqlQuery select_query(db);
-            if (!select_query.exec("SELECT id, comment FROM groups"))
-            {
-                LOG(ERROR) << "Unable to read groups:" << select_query.lastError();
-                break;
-            }
-
-            QSqlQuery update_query(db);
-            update_query.prepare("UPDATE groups SET comment=? WHERE id=?");
-
-            while (select_query.next())
-            {
-                qint64 id = select_query.value(0).toLongLong();
-                QByteArray comment = decryptBlob(old_key, select_query.value(1).toByteArray());
-
-                update_query.addBindValue(encryptBlob(new_key, comment));
-                update_query.addBindValue(id);
-
-                if (!update_query.exec())
-                {
-                    LOG(ERROR) << "Unable to re-encrypt group:" << update_query.lastError();
-                    goto rollback;
-                }
-            }
-        }
-
-        success = true;
-    }
-    while (false);
-
-rollback:
-    if (!success)
-    {
-        db.rollback();
-        return false;
-    }
-
-    if (!db.commit())
-    {
-        LOG(ERROR) << "Unable to commit transaction:" << db.lastError();
-        db.rollback();
-        return false;
-    }
-
-    return true;
 }
 
 } // namespace client

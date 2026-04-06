@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/crypto/data_cryptor_chacha20_poly1305.h"
+#include "base/crypto/data_cryptor.h"
 
 #include <gtest/gtest.h>
 
@@ -24,46 +24,61 @@
 
 namespace base {
 
-TEST(DataCryptorChaCha20Poly1305Test, TestVector)
+TEST(DataCryptorTest, EncryptDecrypt)
 {
     const QByteArray key = QByteArray::fromHex("1ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014");
     const QByteArray message =
         QByteArray::fromHex("5ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014"
                 "5ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014");
 
-    std::unique_ptr<DataCryptor> cryptor = std::make_unique<DataCryptorChaCha20Poly1305>(key);
+    DataCryptor cryptor(key);
 
     QByteArray encrypted_message;
-    bool ret = cryptor->encrypt(message, &encrypted_message);
+    bool ret = cryptor.encrypt(message, &encrypted_message);
     ASSERT_TRUE(ret);
     ASSERT_EQ(encrypted_message.size(), message.size() + 28);
 
     QByteArray decrypted_message;
 
-    ret = cryptor->decrypt(encrypted_message, &decrypted_message);
+    ret = cryptor.decrypt(encrypted_message, &decrypted_message);
     ASSERT_TRUE(ret);
     ASSERT_EQ(decrypted_message.size(), message.size());
     ASSERT_EQ(decrypted_message, message);
 }
 
-TEST(DataCryptorChaCha20Poly1305Test, WrongKey)
+TEST(DataCryptorTest, WrongKey)
 {
     const QByteArray key = QByteArray::fromHex("1ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014");
     const QByteArray wrong_key = QByteArray::fromHex("2ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014");
     const QByteArray message = QByteArray::fromHex("3da8b455bd39746dc50145ce26794165a808ec425684e9384c27c2249951256812125683");
 
-    std::unique_ptr<DataCryptor> cryptor1 = std::make_unique<DataCryptorChaCha20Poly1305>(key);
-    std::unique_ptr<DataCryptor> cryptor2 = std::make_unique<DataCryptorChaCha20Poly1305>(wrong_key);
+    DataCryptor cryptor1(key);
+    DataCryptor cryptor2(wrong_key);
 
     QByteArray encrypted_message;
-    bool ret = cryptor1->encrypt(message, &encrypted_message);
+    bool ret = cryptor1.encrypt(message, &encrypted_message);
     ASSERT_TRUE(ret);
     ASSERT_EQ(encrypted_message.size(), message.size() + 28);
 
     QByteArray decrypted_message;
 
-    ret = cryptor2->decrypt(encrypted_message, &decrypted_message);
+    ret = cryptor2.decrypt(encrypted_message, &decrypted_message);
     ASSERT_FALSE(ret);
+}
+
+TEST(DataCryptorTest, Passthrough)
+{
+    DataCryptor cryptor;
+
+    const QByteArray message = QByteArray::fromHex("5ce26794165a808ec425684e9384c27c");
+
+    QByteArray encrypted;
+    ASSERT_TRUE(cryptor.encrypt(message, &encrypted));
+    ASSERT_EQ(encrypted, message);
+
+    QByteArray decrypted;
+    ASSERT_TRUE(cryptor.decrypt(encrypted, &decrypted));
+    ASSERT_EQ(decrypted, message);
 }
 
 } // namespace base

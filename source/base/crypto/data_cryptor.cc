@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/crypto/data_cryptor_chacha20_poly1305.h"
+#include "base/crypto/data_cryptor.h"
 
 #include "base/logging.h"
 #include "base/crypto/openssl_util.h"
@@ -29,10 +29,10 @@ namespace base {
 
 namespace {
 
-static const size_t kKeySize = 32; // 256 bits, 32 bytes.
-static const size_t kIVSize = 12; // 96 bits, 12 bytes.
-static const size_t kTagSize = 16; // 128 bits, 16 bytes.
-static const size_t kHeaderSize = kIVSize + kTagSize;
+const size_t kKeySize = 32; // 256 bits, 32 bytes.
+const size_t kIVSize = 12; // 96 bits, 12 bytes.
+const size_t kTagSize = 16; // 128 bits, 16 bytes.
+const size_t kHeaderSize = kIVSize + kTagSize;
 
 //--------------------------------------------------------------------------------------------------
 EVP_CIPHER_CTX_ptr createCipher(const QByteArray& key, const char* iv, int type)
@@ -84,21 +84,49 @@ EVP_CIPHER_CTX_ptr createCipher(const QByteArray& key, const char* iv, int type)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-DataCryptorChaCha20Poly1305::DataCryptorChaCha20Poly1305(const QByteArray& key)
+DataCryptor::DataCryptor() = default;
+
+//--------------------------------------------------------------------------------------------------
+DataCryptor::DataCryptor(const QByteArray& key)
     : key_(key)
 {
     // Nothing
 }
 
 //--------------------------------------------------------------------------------------------------
-DataCryptorChaCha20Poly1305::~DataCryptorChaCha20Poly1305()
+DataCryptor::~DataCryptor()
 {
     memZero(&key_);
 }
 
 //--------------------------------------------------------------------------------------------------
-bool DataCryptorChaCha20Poly1305::encrypt(QByteArrayView in, QByteArray* out)
+void DataCryptor::setKey(const QByteArray& key)
 {
+    memZero(&key_);
+    key_ = key;
+}
+
+//--------------------------------------------------------------------------------------------------
+QByteArray DataCryptor::key() const
+{
+    return key_;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool DataCryptor::hasKey() const
+{
+    return !key_.isEmpty();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool DataCryptor::encrypt(QByteArrayView in, QByteArray* out)
+{
+    if (key_.isEmpty())
+    {
+        out->assign(in);
+        return true;
+    }
+
     if (in.empty())
     {
         LOG(ERROR) << "Empty buffer passed";
@@ -153,8 +181,14 @@ bool DataCryptorChaCha20Poly1305::encrypt(QByteArrayView in, QByteArray* out)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool DataCryptorChaCha20Poly1305::decrypt(QByteArrayView in, QByteArray* out)
+bool DataCryptor::decrypt(QByteArrayView in, QByteArray* out)
 {
+    if (key_.isEmpty())
+    {
+        out->assign(in);
+        return true;
+    }
+
     if (in.size() <= kHeaderSize)
     {
         LOG(ERROR) << "Header missed";
@@ -201,6 +235,14 @@ bool DataCryptorChaCha20Poly1305::decrypt(QByteArrayView in, QByteArray* out)
     }
 
     return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+DataCryptor& DataCryptor::instance()
+{
+    static thread_local DataCryptor cryptor;
+    return cryptor;
 }
 
 } // namespace base

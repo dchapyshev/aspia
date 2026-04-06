@@ -19,7 +19,6 @@
 #ifndef CLIENT_BOOK_DATABASE_H
 #define CLIENT_BOOK_DATABASE_H
 
-#include <QByteArray>
 #include <QList>
 #include <QString>
 
@@ -33,9 +32,9 @@ class BookDatabase
 {
 public:
     BookDatabase();
-    ~BookDatabase();
+    ~BookDatabase() = default;
 
-    static BookDatabase open(const QByteArray& encryption_key = QByteArray());
+    static BookDatabase open();
     static QString filePath();
     bool isValid() const;
 
@@ -57,21 +56,12 @@ public:
     bool removeGroup(qint64 group_id);
     std::optional<ComputerGroupData> findGroup(qint64 group_id) const;
 
-    // Encryption.
-    bool setEncryption(const QByteArray& encryption_key);
-
 private:
-    explicit BookDatabase(const QByteArray& encryption_key);
+    explicit BookDatabase(bool valid);
 
     static const char kConnectionName[];
     static QString databaseDirectory();
 
-    QByteArray encryptData(const QByteArray& data) const;
-    QByteArray decryptData(const QByteArray& encrypted) const;
-
-    bool reencryptAll(const QByteArray& old_key, const QByteArray& new_key);
-
-    QByteArray encryption_key_;
     bool valid_ = false;
 };
 

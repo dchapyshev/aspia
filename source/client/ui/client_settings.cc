@@ -18,7 +18,7 @@
 
 #include "client/ui/client_settings.h"
 
-#include "base/crypto/data_cryptor_chacha20_poly1305.h"
+#include "base/crypto/data_cryptor.h"
 #include "base/logging.h"
 #include "base/xml_settings.h"
 #include "build/build_config.h"
@@ -188,76 +188,54 @@ void ClientSettings::setRouterEnabled(bool enabled)
 }
 
 //--------------------------------------------------------------------------------------------------
-RouterConfig ClientSettings::routerConfig(const QByteArray& encryption_key) const
+RouterConfig ClientSettings::routerConfig() const
 {
     RouterConfig config;
     config.port = static_cast<quint16>(settings_.value(kRouterPortParam, 0).toUInt());
 
-    QByteArray address = settings_.value(kRouterAddressParam).toByteArray();
-    QByteArray username = settings_.value(kRouterUsernameParam).toByteArray();
-    QByteArray password = settings_.value(kRouterPasswordParam).toByteArray();
+    base::DataCryptor& cryptor = base::DataCryptor::instance();
+    QByteArray out;
 
-    if (encryption_key.isEmpty())
-    {
-        config.address = QString::fromUtf8(address);
-        config.username = QString::fromUtf8(username);
-        config.password = QString::fromUtf8(password);
-    }
+    if (cryptor.decrypt(settings_.value(kRouterAddressParam).toByteArray(), &out))
+        config.address = QString::fromUtf8(out);
     else
-    {
-        base::DataCryptorChaCha20Poly1305 cryptor(encryption_key);
-        QByteArray out;
+        LOG(ERROR) << "Failed to decrypt router address";
 
-        if (cryptor.decrypt(address, &out))
-            config.address = QString::fromUtf8(out);
-        else
-            LOG(ERROR) << "Failed to decrypt router address";
+    if (cryptor.decrypt(settings_.value(kRouterUsernameParam).toByteArray(), &out))
+        config.username = QString::fromUtf8(out);
+    else
+        LOG(ERROR) << "Failed to decrypt router username";
 
-        if (cryptor.decrypt(username, &out))
-            config.username = QString::fromUtf8(out);
-        else
-            LOG(ERROR) << "Failed to decrypt router username";
-
-        if (cryptor.decrypt(password, &out))
-            config.password = QString::fromUtf8(out);
-        else
-            LOG(ERROR) << "Failed to decrypt router password";
-    }
+    if (cryptor.decrypt(settings_.value(kRouterPasswordParam).toByteArray(), &out))
+        config.password = QString::fromUtf8(out);
+    else
+        LOG(ERROR) << "Failed to decrypt router password";
 
     return config;
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSettings::setRouterConfig(const RouterConfig& config, const QByteArray& encryption_key)
+void ClientSettings::setRouterConfig(const RouterConfig& config)
 {
     settings_.setValue(kRouterPortParam, config.port);
 
-    if (encryption_key.isEmpty())
-    {
-        settings_.setValue(kRouterAddressParam, config.address.toUtf8());
-        settings_.setValue(kRouterUsernameParam, config.username.toUtf8());
-        settings_.setValue(kRouterPasswordParam, config.password.toUtf8());
-    }
+    base::DataCryptor& cryptor = base::DataCryptor::instance();
+    QByteArray out;
+
+    if (cryptor.encrypt(config.address.toUtf8(), &out))
+        settings_.setValue(kRouterAddressParam, out);
     else
-    {
-        base::DataCryptorChaCha20Poly1305 cryptor(encryption_key);
-        QByteArray out;
+        LOG(ERROR) << "Failed to encrypt router address";
 
-        if (cryptor.encrypt(config.address.toUtf8(), &out))
-            settings_.setValue(kRouterAddressParam, out);
-        else
-            LOG(ERROR) << "Failed to encrypt router address";
+    if (cryptor.encrypt(config.username.toUtf8(), &out))
+        settings_.setValue(kRouterUsernameParam, out);
+    else
+        LOG(ERROR) << "Failed to encrypt router username";
 
-        if (cryptor.encrypt(config.username.toUtf8(), &out))
-            settings_.setValue(kRouterUsernameParam, out);
-        else
-            LOG(ERROR) << "Failed to encrypt router username";
-
-        if (cryptor.encrypt(config.password.toUtf8(), &out))
-            settings_.setValue(kRouterPasswordParam, out);
-        else
-            LOG(ERROR) << "Failed to encrypt router password";
-    }
+    if (cryptor.encrypt(config.password.toUtf8(), &out))
+        settings_.setValue(kRouterPasswordParam, out);
+    else
+        LOG(ERROR) << "Failed to encrypt router password";
 }
 
 } // namespace client
