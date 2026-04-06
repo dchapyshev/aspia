@@ -30,58 +30,11 @@
 #include <QStandardPaths>
 #include <QVariant>
 
-#include <atomic>
 #include <utility>
 
 namespace client {
 
 namespace {
-
-std::atomic<int> g_connection_counter{ 0 };
-
-//--------------------------------------------------------------------------------------------------
-QString nextConnectionName()
-{
-    return QString("book_%1").arg(g_connection_counter.fetch_add(1));
-}
-
-//--------------------------------------------------------------------------------------------------
-QSqlDatabase databaseByName(const QString& connection_name)
-{
-    if (connection_name.isEmpty())
-        return QSqlDatabase();
-
-    return QSqlDatabase::database(connection_name, false);
-}
-
-//--------------------------------------------------------------------------------------------------
-QSqlDatabase ensureOpenDatabase(const QString& file_path, const QString& connection_name)
-{
-    QSqlDatabase db = databaseByName(connection_name);
-    if (db.isValid())
-    {
-        if (!db.isOpen() && !db.open())
-        {
-            LOG(ERROR) << "QSqlDatabase::open failed:" << db.lastError();
-            return QSqlDatabase();
-        }
-
-        return db;
-    }
-
-    db = QSqlDatabase::addDatabase("QSQLITE", connection_name);
-    db.setDatabaseName(file_path);
-
-    if (!db.open())
-    {
-        LOG(ERROR) << "QSqlDatabase::open failed:" << db.lastError();
-        db = QSqlDatabase();
-        QSqlDatabase::removeDatabase(connection_name);
-        return QSqlDatabase();
-    }
-
-    return db;
-}
 
 //--------------------------------------------------------------------------------------------------
 QByteArray encryptBlob(const QByteArray& key, const QByteArray& data)
@@ -188,22 +141,25 @@ bool createTables(QSqlDatabase& db)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
+const char BookDatabase::kConnectionName[] = "book";
+
+//--------------------------------------------------------------------------------------------------
 BookDatabase::BookDatabase() = default;
 
 //--------------------------------------------------------------------------------------------------
-BookDatabase::BookDatabase(const QString& connection_name, const QByteArray& encryption_key)
+BookDatabase::BookDatabase(const QByteArray& encryption_key)
     : encryption_key_(encryption_key),
-      connection_name_(connection_name)
+      valid_(true)
 {
-    DCHECK(!connection_name_.isEmpty());
+    // Nothing
 }
 
 //--------------------------------------------------------------------------------------------------
 BookDatabase::BookDatabase(BookDatabase&& other) noexcept
     : encryption_key_(std::move(other.encryption_key_)),
-      connection_name_(std::move(other.connection_name_))
+      valid_(other.valid_)
 {
-    other.connection_name_.clear();
+    other.valid_ = false;
     other.encryption_key_.clear();
 }
 
@@ -215,10 +171,10 @@ BookDatabase& BookDatabase::operator=(BookDatabase&& other) noexcept
         base::memZero(&encryption_key_);
 
         encryption_key_ = std::move(other.encryption_key_);
-        connection_name_ = std::move(other.connection_name_);
+        valid_ = other.valid_;
     }
 
-    other.connection_name_.clear();
+    other.valid_ = false;
     other.encryption_key_.clear();
     return *this;
 }
@@ -270,17 +226,25 @@ BookDatabase BookDatabase::open(const QByteArray& encryption_key)
 
     LOG(INFO) << (need_create ? "Creating" : "Opening") << "book database:" << file_path;
 
-    QString connection_name = nextConnectionName();
-    QSqlDatabase db = ensureOpenDatabase(file_path, connection_name);
-    if (!db.isValid() || !db.isOpen())
+    QSqlDatabase db = QSqlDatabase::database(kConnectionName, false);
+    if (!db.isValid())
+    {
+        db = QSqlDatabase::addDatabase("QSQLITE", kConnectionName);
+        db.setDatabaseName(file_path);
+    }
+
+    if (!db.isOpen() && !db.open())
+    {
+        LOG(ERROR) << "QSqlDatabase::open failed:" << db.lastError();
         return BookDatabase();
+    }
 
     if (need_create)
     {
         if (!createTables(db))
         {
             db.close();
-            QSqlDatabase::removeDatabase(connection_name);
+            QSqlDatabase::removeDatabase(kConnectionName);
             QFile::remove(file_path);
             return BookDatabase();
         }
@@ -293,7 +257,7 @@ BookDatabase BookDatabase::open(const QByteArray& encryption_key)
             LOG(WARNING) << "Unable to enable foreign keys:" << query.lastError();
     }
 
-    return BookDatabase(connection_name, encryption_key);
+    return BookDatabase(encryption_key);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -310,8 +274,7 @@ QString BookDatabase::filePath()
 //--------------------------------------------------------------------------------------------------
 bool BookDatabase::isValid() const
 {
-    const QSqlDatabase db = databaseByName(connection_name_);
-    return db.isValid() && db.isOpen();
+    return valid_;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -323,7 +286,7 @@ QList<ComputerData> BookDatabase::computerList(qint64 group_id) const
         return {};
     }
 
-    QSqlQuery query(databaseByName(connection_name_));
+    QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
     query.prepare("SELECT id, group_id, name, comment, address, username, password "
                   "FROM computers WHERE group_id=?");
     query.addBindValue(group_id);
@@ -356,7 +319,7 @@ bool BookDatabase::addComputer(ComputerData& computer)
         return false;
     }
 
-    QSqlQuery query(databaseByName(connection_name_));
+    QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
     query.prepare("INSERT INTO computers (id, group_id, name, comment, address, username, password) "
                   "VALUES (NULL, ?, ?, ?, ?, ?, ?)");
     query.addBindValue(computer.group_id);
@@ -385,7 +348,7 @@ bool BookDatabase::modifyComputer(const ComputerData& computer)
         return false;
     }
 
-    QSqlQuery query(databaseByName(connection_name_));
+    QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
     query.prepare("UPDATE computers SET group_id=?, name=?, comment=?, address=?, username=?, password=? "
                   "WHERE id=?");
     query.addBindValue(computer.group_id);
@@ -414,7 +377,7 @@ bool BookDatabase::removeComputer(qint64 computer_id)
         return false;
     }
 
-    QSqlQuery query(databaseByName(connection_name_));
+    QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
     query.prepare("DELETE FROM computers WHERE id=?");
     query.addBindValue(computer_id);
 
@@ -436,7 +399,7 @@ std::optional<ComputerData> BookDatabase::findComputer(qint64 computer_id) const
         return std::nullopt;
     }
 
-    QSqlQuery query(databaseByName(connection_name_));
+    QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
     query.prepare("SELECT id, group_id, name, comment, address, username, password "
                   "FROM computers WHERE id=?");
     query.addBindValue(computer_id);
@@ -464,7 +427,7 @@ QList<ComputerData> BookDatabase::searchComputers(const QString& query_text) con
 
     // For encrypted databases, we can only search by name (which is stored as plaintext).
     // For unencrypted databases, we can search by name, address, and comment.
-    QSqlQuery query(databaseByName(connection_name_));
+    QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
 
     if (encryption_key_.isEmpty())
     {
@@ -506,7 +469,7 @@ QList<ComputerGroupData> BookDatabase::groupList(qint64 parent_id) const
         return {};
     }
 
-    QSqlQuery query(databaseByName(connection_name_));
+    QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
     query.prepare("SELECT id, parent_id, name, comment, expanded FROM groups WHERE parent_id=?");
     query.addBindValue(parent_id);
 
@@ -532,7 +495,7 @@ QList<ComputerGroupData> BookDatabase::allGroups() const
         return {};
     }
 
-    QSqlQuery query(databaseByName(connection_name_));
+    QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
     if (!query.exec("SELECT id, parent_id, name, comment, expanded FROM groups"))
     {
         LOG(ERROR) << "Unable to get all groups:" << query.lastError();
@@ -555,7 +518,7 @@ bool BookDatabase::addGroup(ComputerGroupData& group)
         return false;
     }
 
-    QSqlQuery query(databaseByName(connection_name_));
+    QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
     query.prepare("INSERT INTO groups (id, parent_id, name, comment, expanded) "
                   "VALUES (NULL, ?, ?, ?, ?)");
     query.addBindValue(group.parent_id);
@@ -582,7 +545,7 @@ bool BookDatabase::modifyGroup(const ComputerGroupData& group)
         return false;
     }
 
-    QSqlQuery query(databaseByName(connection_name_));
+    QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
     query.prepare("UPDATE groups SET parent_id=?, name=?, comment=?, expanded=? WHERE id=?");
     query.addBindValue(group.parent_id);
     query.addBindValue(group.name);
@@ -608,7 +571,7 @@ bool BookDatabase::removeGroup(qint64 group_id)
         return false;
     }
 
-    QSqlQuery query(databaseByName(connection_name_));
+    QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
     query.prepare("DELETE FROM groups WHERE id=?");
     query.addBindValue(group_id);
 
@@ -630,7 +593,7 @@ std::optional<ComputerGroupData> BookDatabase::findGroup(qint64 group_id) const
         return std::nullopt;
     }
 
-    QSqlQuery query(databaseByName(connection_name_));
+    QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
     query.prepare("SELECT id, parent_id, name, comment, expanded FROM groups WHERE id=?");
     query.addBindValue(group_id);
 
@@ -698,7 +661,7 @@ QByteArray BookDatabase::decryptData(const QByteArray& encrypted) const
 //--------------------------------------------------------------------------------------------------
 bool BookDatabase::reencryptAll(const QByteArray& old_key, const QByteArray& new_key)
 {
-    QSqlDatabase db = databaseByName(connection_name_);
+    QSqlDatabase db = QSqlDatabase::database(kConnectionName, false);
     if (!db.isValid())
         return false;
 

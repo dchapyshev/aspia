@@ -63,8 +63,9 @@ public:
     bool setEncryption(const QByteArray& encryption_key);
 
 private:
-    explicit BookDatabase(const QString& connection_name, const QByteArray& encryption_key);
+    explicit BookDatabase(const QByteArray& encryption_key);
 
+    static const char kConnectionName[];
     static QString databaseDirectory();
 
     QByteArray encryptData(const QByteArray& data) const;
@@ -73,7 +74,7 @@ private:
     bool reencryptAll(const QByteArray& old_key, const QByteArray& new_key);
 
     QByteArray encryption_key_;
-    QString connection_name_;
+    bool valid_ = false;
 
     Q_DISABLE_COPY(BookDatabase)
 };
