@@ -118,16 +118,9 @@ bool createTables(QSqlDatabase& db)
                     "\"address\" BLOB NOT NULL DEFAULT X'',"
                     "\"username\" BLOB NOT NULL DEFAULT X'',"
                     "\"password\" BLOB NOT NULL DEFAULT X'',"
-                    "PRIMARY KEY(\"id\" AUTOINCREMENT),"
-                    "FOREIGN KEY(\"group_id\") REFERENCES \"groups\"(\"id\") ON DELETE CASCADE)"))
+                    "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
     {
         LOG(ERROR) << "Unable to create computers table:" << query.lastError();
-        return false;
-    }
-
-    if (!query.exec("PRAGMA foreign_keys = ON"))
-    {
-        LOG(ERROR) << "Unable to enable foreign keys:" << query.lastError();
         return false;
     }
 
@@ -595,14 +588,6 @@ bool LocalDatabase::openDatabase()
             return false;
         }
     }
-    else
-    {
-        // Enable foreign keys for existing database.
-        QSqlQuery query(db);
-        if (!query.exec("PRAGMA foreign_keys = ON"))
-            LOG(WARNING) << "Unable to enable foreign keys:" << query.lastError();
-    }
-
     return true;
 }
 
