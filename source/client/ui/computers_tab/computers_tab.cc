@@ -259,12 +259,14 @@ void ComputersTab::onAddGroupAction()
         return;
     }
 
-    LocalGroupDialog dialog(-1, item->parentId(), this);
+    LocalGroupDialog dialog(-1, item->groupId(), this);
     if (dialog.exec() == LocalGroupDialog::Rejected)
     {
         LOG(INFO) << "[ACTION] Rejected by user";
         return;
     }
+
+    reloadGroups(item->groupId());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -285,6 +287,8 @@ void ComputersTab::onEditGroupAction()
         LOG(INFO) << "[ACTION] Rejected by user";
         return;
     }
+
+    reloadGroups(item->groupId());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -315,12 +319,16 @@ void ComputersTab::onDeleteGroupAction()
         return;
     }
 
+    qint64 parent_id = item->parentId();
+
     if (!LocalDatabase::instance().removeGroup(item->groupId()))
     {
         QMessageBox::warning(this, tr("Warning"), tr("Unable to remove group"));
         LOG(INFO) << "Unable to remove group with id" << item->groupId();
         return;
     }
+
+    reloadGroups(parent_id);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -377,6 +385,54 @@ void ComputersTab::loadGroups(qint64 parent_id, QTreeWidgetItem* parent_item)
         // Load child groups recursively.
         loadGroups(group.id, item);
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void ComputersTab::reloadGroups(qint64 selected_group_id)
+{
+    // Remove all child items under local root.
+    while (local_root_->childCount() > 0)
+        delete local_root_->child(0);
+
+    // Reload from database.
+    loadGroups(0, local_root_);
+    local_root_->setExpanded(true);
+
+    // Find and select the requested group.
+    QTreeWidgetItem* selected = nullptr;
+    if (selected_group_id != 0)
+        selected = findGroupItem(selected_group_id, local_root_);
+
+    if (!selected)
+        selected = local_root_;
+
+    // Expand parents up to the selected item.
+    for (QTreeWidgetItem* p = selected->parent(); p; p = p->parent())
+        p->setExpanded(true);
+
+    selected->setExpanded(true);
+    ui.tree_group->setCurrentItem(selected);
+
+    current_group_id_ = static_cast<GroupTreeItem*>(selected)->groupId();
+    local_group_widget_->showGroup(current_group_id_);
+    updateActionsState();
+}
+
+//--------------------------------------------------------------------------------------------------
+QTreeWidgetItem* ComputersTab::findGroupItem(qint64 group_id, QTreeWidgetItem* parent) const
+{
+    for (int i = 0; i < parent->childCount(); ++i)
+    {
+        QTreeWidgetItem* child = parent->child(i);
+        if (static_cast<GroupTreeItem*>(child)->groupId() == group_id)
+            return child;
+
+        QTreeWidgetItem* found = findGroupItem(group_id, child);
+        if (found)
+            return found;
+    }
+
+    return nullptr;
 }
 
 //--------------------------------------------------------------------------------------------------

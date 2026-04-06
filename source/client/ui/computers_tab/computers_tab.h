@@ -59,6 +59,8 @@ private slots:
 
 private:
     void loadGroups(qint64 parent_id, QTreeWidgetItem* parent_item);
+    void reloadGroups(qint64 selected_group_id = 0);
+    QTreeWidgetItem* findGroupItem(qint64 group_id, QTreeWidgetItem* parent) const;
     void switchContent(ContentWidget* new_widget);
     void updateActionsState();
 
