@@ -22,6 +22,7 @@
 #include <QByteArray>
 #include <QMainWindow>
 
+#include "client/ui/client_tab.h"
 #include "ui_client_window.h"
 
 class QLineEdit;
@@ -66,6 +67,9 @@ private:
     void hideCloseButtonForTab(int index);
     ClientTab* tabAt(int index);
     void updateSearchFieldVisibility();
+    void installTabActions(ClientTab* tab);
+    void removeTabActions();
+    QMenu* menuForActionGroup(ClientTab::ActionGroup group) const;
 
     Ui::ClientWindow ui;
     std::unique_ptr<common::UpdateChecker> update_checker_;
@@ -73,6 +77,8 @@ private:
     QLineEdit* search_field_ = nullptr;
     QAction* search_action_ = nullptr;
     ClientTab* active_tab_ = nullptr;
+    QList<QAction*> tab_toolbar_actions_;
+    QList<QPair<QMenu*, QList<QAction*>>> tab_menu_actions_;
 
     Q_DISABLE_COPY_MOVE(ClientWindow)
 };

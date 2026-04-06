@@ -18,8 +18,6 @@
 
 #include "client/ui/client_tab.h"
 
-#include <QToolBar>
-
 namespace client {
 
 //--------------------------------------------------------------------------------------------------
@@ -58,26 +56,15 @@ void ClientTab::onSearchTextChanged(const QString& /* text */)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientTab::addToolbarAction(QToolBar* toolbar, QAction* action, QAction* before)
+const QList<ClientTab::ActionGroupEntry>& ClientTab::actionGroups() const
 {
-    toolbar->insertAction(before, action);
-    toolbar_actions_.append(action);
+    return action_groups_;
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientTab::addToolbarSeparator(QToolBar* toolbar, QAction* before)
+void ClientTab::addActions(ActionGroup group, const QList<QAction*>& actions)
 {
-    QAction* separator = toolbar->insertSeparator(before);
-    toolbar_actions_.append(separator);
-}
-
-//--------------------------------------------------------------------------------------------------
-void ClientTab::removeAllToolbarActions(QToolBar* toolbar)
-{
-    for (QAction* action : std::as_const(toolbar_actions_))
-        toolbar->removeAction(action);
-
-    toolbar_actions_.clear();
+    action_groups_.append({ group, actions });
 }
 
 } // namespace client

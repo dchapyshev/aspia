@@ -20,7 +20,6 @@
 
 #include <QMessageBox>
 #include <QStatusBar>
-#include <QToolBar>
 
 #include "base/logging.h"
 #include "client/local_database.h"
@@ -89,6 +88,10 @@ ComputersTab::ComputersTab(QWidget* parent)
     connect(action_edit_group_, &QAction::triggered, this, &ComputersTab::onEditGroupAction);
     connect(action_delete_group_, &QAction::triggered, this, &ComputersTab::onDeleteGroupAction);
 
+    // Register actions for toolbar and menus.
+    addActions(ActionGroup::EDIT, { action_add_group_, action_edit_group_, action_delete_group_ });
+    addActions(ActionGroup::EDIT, { action_add_computer_, action_edit_computer_, action_delete_computer_ });
+
     if (!LocalDatabase::instance().isValid())
     {
         LOG(ERROR) << "Failed to open or create book database";
@@ -111,33 +114,15 @@ ComputersTab::~ComputersTab()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ComputersTab::onActivated(QToolBar* toolbar, QStatusBar* statusbar)
+void ComputersTab::onActivated(QStatusBar* statusbar)
 {
-    // Find the first global action to insert before it.
-    QAction* before = nullptr;
-    QList<QAction*> actions = toolbar->actions();
-    if (!actions.isEmpty())
-        before = actions.first();
-
-    addToolbarAction(toolbar, action_add_group_, before);
-    addToolbarAction(toolbar, action_edit_group_, before);
-    addToolbarAction(toolbar, action_delete_group_, before);
-
-    addToolbarSeparator(toolbar, before);
-
-    addToolbarAction(toolbar, action_add_computer_, before);
-    addToolbarAction(toolbar, action_edit_computer_, before);
-    addToolbarAction(toolbar, action_delete_computer_, before);
-
-    // Update statusbar.
     int count = current_content_ ? current_content_->itemCount() : 0;
     statusbar->showMessage(tr("Computers: %1").arg(count));
 }
 
 //--------------------------------------------------------------------------------------------------
-void ComputersTab::onDeactivated(QToolBar* toolbar, QStatusBar* statusbar)
+void ComputersTab::onDeactivated(QStatusBar* statusbar)
 {
-    removeAllToolbarActions(toolbar);
     statusbar->clearMessage();
 }
 

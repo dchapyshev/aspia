@@ -39,13 +39,13 @@ SessionTab::SessionTab(const QString& title, QWidget* parent)
 SessionTab::~SessionTab() = default;
 
 //--------------------------------------------------------------------------------------------------
-void SessionTab::onActivated(QToolBar* /* toolbar */, QStatusBar* /* statusbar */)
+void SessionTab::onActivated(QStatusBar* /* statusbar */)
 {
     // Nothing
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionTab::onDeactivated(QToolBar* /* toolbar */, QStatusBar* /* statusbar */)
+void SessionTab::onDeactivated(QStatusBar* /* statusbar */)
 {
     // Nothing
 }

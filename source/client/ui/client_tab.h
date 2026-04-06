@@ -21,10 +21,10 @@
 
 #include <QAction>
 #include <QList>
+#include <QPair>
 #include <QWidget>
 
 class QStatusBar;
-class QToolBar;
 
 namespace client {
 
@@ -35,30 +35,35 @@ class ClientTab : public QWidget
 public:
     enum class Type { COMPUTERS, SESSION };
 
+    enum class ActionGroup
+    {
+        EDIT
+    };
+
     explicit ClientTab(Type type, QWidget* parent = nullptr);
     ~ClientTab() override;
 
     Type tabType() const;
     bool isClosable() const;
 
-    virtual void onActivated(QToolBar* toolbar, QStatusBar* statusbar) = 0;
-    virtual void onDeactivated(QToolBar* toolbar, QStatusBar* statusbar) = 0;
+    virtual void onActivated(QStatusBar* statusbar) = 0;
+    virtual void onDeactivated(QStatusBar* statusbar) = 0;
 
     virtual bool hasSearchField() const;
     virtual void onSearchTextChanged(const QString& text);
+
+    using ActionGroupEntry = QPair<ActionGroup, QList<QAction*>>;
+    const QList<ActionGroupEntry>& actionGroups() const;
 
 signals:
     void sig_titleChanged(const QString& title);
 
 protected:
-    void addToolbarAction(QToolBar* toolbar, QAction* action, QAction* before);
-    void addToolbarSeparator(QToolBar* toolbar, QAction* before);
-    void removeAllToolbarActions(QToolBar* toolbar);
-
-    QList<QAction*> toolbar_actions_;
+    void addActions(ActionGroup group, const QList<QAction*>& actions);
 
 private:
     Type type_;
+    QList<ActionGroupEntry> action_groups_;
 
     Q_DISABLE_COPY_MOVE(ClientTab)
 };

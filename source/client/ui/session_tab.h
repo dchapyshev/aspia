@@ -21,6 +21,8 @@
 
 #include "client/ui/client_tab.h"
 
+class QStatusBar;
+
 namespace client {
 
 class SessionTab : public ClientTab
@@ -31,8 +33,8 @@ public:
     explicit SessionTab(const QString& title, QWidget* parent = nullptr);
     ~SessionTab() override;
 
-    void onActivated(QToolBar* toolbar, QStatusBar* statusbar) override;
-    void onDeactivated(QToolBar* toolbar, QStatusBar* statusbar) override;
+    void onActivated(QStatusBar* statusbar) override;
+    void onDeactivated(QStatusBar* statusbar) override;
 
 private:
     Q_DISABLE_COPY_MOVE(SessionTab)

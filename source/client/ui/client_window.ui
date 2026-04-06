@@ -82,6 +82,11 @@
     <addaction name="separator"/>
     <addaction name="action_about"/>
    </widget>
+   <widget class="QMenu" name="menu_edit">
+    <property name="title">
+     <string>Edit</string>
+    </property>
+   </widget>
    <widget class="QMenu" name="menu_view">
     <property name="title">
      <string>View</string>
@@ -117,6 +122,7 @@
     <addaction name="action_sys_info"/>
    </widget>
    <addaction name="menu_aspia"/>
+   <addaction name="menu_edit"/>
    <addaction name="menu_view"/>
    <addaction name="menuSession_Type"/>
    <addaction name="menu_help"/>

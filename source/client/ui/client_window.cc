@@ -239,7 +239,8 @@ void ClientWindow::onCurrentTabChanged(int index)
 {
     if (active_tab_)
     {
-        active_tab_->onDeactivated(ui.toolbar, ui.statusbar);
+        removeTabActions();
+        active_tab_->onDeactivated(ui.statusbar);
         active_tab_ = nullptr;
     }
 
@@ -251,7 +252,8 @@ void ClientWindow::onCurrentTabChanged(int index)
         return;
 
     active_tab_ = tab;
-    active_tab_->onActivated(ui.toolbar, ui.statusbar);
+    installTabActions(active_tab_);
+    active_tab_->onActivated(ui.statusbar);
     updateSearchFieldVisibility();
 }
 
@@ -264,7 +266,8 @@ void ClientWindow::onCloseTab(int index)
 
     if (tab == active_tab_)
     {
-        tab->onDeactivated(ui.toolbar, ui.statusbar);
+        removeTabActions();
+        tab->onDeactivated(ui.statusbar);
         active_tab_ = nullptr;
     }
 
@@ -367,6 +370,88 @@ void ClientWindow::updateSearchFieldVisibility()
         search_field_->clear();
 
     search_action_->setVisible(show_search);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientWindow::installTabActions(ClientTab* tab)
+{
+    const QList<ClientTab::ActionGroupEntry>& groups = tab->actionGroups();
+
+    // Find the first static toolbar action to insert before it.
+    QAction* before = nullptr;
+    QList<QAction*> toolbar_actions = ui.toolbar->actions();
+    if (!toolbar_actions.isEmpty())
+        before = toolbar_actions.first();
+
+    for (int i = 0; i < groups.size(); ++i)
+    {
+        const ClientTab::ActionGroupEntry& entry = groups[i];
+
+        // Add separator before each group (except the first).
+        if (i > 0)
+        {
+            QAction* separator = ui.toolbar->insertSeparator(before);
+            tab_toolbar_actions_.append(separator);
+        }
+
+        // Add actions to toolbar.
+        for (QAction* action : entry.second)
+        {
+            ui.toolbar->insertAction(before, action);
+            tab_toolbar_actions_.append(action);
+        }
+
+        // Add actions to corresponding menu.
+        QMenu* menu = menuForActionGroup(entry.first);
+        if (menu)
+        {
+            if (!menu->isEmpty())
+                menu->addSeparator();
+
+            menu->addActions(entry.second);
+            tab_menu_actions_.append({ menu, entry.second });
+        }
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientWindow::removeTabActions()
+{
+    // Remove from toolbar.
+    for (QAction* action : std::as_const(tab_toolbar_actions_))
+        ui.toolbar->removeAction(action);
+
+    tab_toolbar_actions_.clear();
+
+    // Remove from menus.
+    for (const auto& [menu, actions] : std::as_const(tab_menu_actions_))
+    {
+        for (QAction* action : actions)
+            menu->removeAction(action);
+
+        // Remove trailing separators.
+        QList<QAction*> remaining = menu->actions();
+        while (!remaining.isEmpty() && remaining.last()->isSeparator())
+        {
+            menu->removeAction(remaining.last());
+            remaining.removeLast();
+        }
+    }
+
+    tab_menu_actions_.clear();
+}
+
+//--------------------------------------------------------------------------------------------------
+QMenu* ClientWindow::menuForActionGroup(ClientTab::ActionGroup group) const
+{
+    switch (group)
+    {
+        case ClientTab::ActionGroup::EDIT:
+            return ui.menu_edit;
+
+        default:
+            return nullptr;
+    }
 }
 
 } // namespace client

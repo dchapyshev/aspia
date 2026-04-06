@@ -42,8 +42,8 @@ public:
     explicit ComputersTab(QWidget* parent = nullptr);
     ~ComputersTab() override;
 
-    void onActivated(QToolBar* toolbar, QStatusBar* statusbar) override;
-    void onDeactivated(QToolBar* toolbar, QStatusBar* statusbar) override;
+    void onActivated(QStatusBar* statusbar) override;
+    void onDeactivated(QStatusBar* statusbar) override;
     bool hasSearchField() const override;
     void onSearchTextChanged(const QString& text) override;
 
