@@ -71,6 +71,12 @@
           <iconset resource="../../../common/resources/common.qrc">
            <normaloff>:/img/show-password.svg</normaloff>:/img/show-password.svg</iconset>
          </property>
+         <property name="iconSize">
+          <size>
+           <width>24</width>
+           <height>24</height>
+          </size>
+         </property>
          <property name="checkable">
           <bool>true</bool>
          </property>
