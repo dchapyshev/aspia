@@ -230,6 +230,9 @@ list(APPEND SOURCE_CLIENT_CORE_UI_CHAT
     ui/chat/chat_session_window.ui)
 
 list(APPEND SOURCE_CLIENT_CORE_UI_COMPUTERS_TAB
+    ui/computers_tab/local_computer_dialog.cc
+    ui/computers_tab/local_computer_dialog.h
+    ui/computers_tab/local_computer_dialog.ui
     ui/computers_tab/computers_tab.cc
     ui/computers_tab/computers_tab.h
     ui/computers_tab/computers_tab.ui

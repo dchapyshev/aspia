@@ -45,7 +45,12 @@ ComputersTab::ComputersTab(QWidget* parent)
     // Create toolbar actions.
     action_add_group_ = new QAction(QIcon(":/img/add-folder.svg"), tr("Add Group"), this);
     action_add_computer_ = new QAction(QIcon(":/img/add-computer.svg"), tr("Add Computer"), this);
-    action_delete_ = new QAction(QIcon(":/img/recycle-bin.svg"), tr("Delete"), this);
+
+    action_delete_group_ = new QAction(QIcon(":/img/remove-folder.svg"), tr("Delete Group"), this);
+    action_delete_computer_ = new QAction(QIcon(":/img/remove-computer.svg"), tr("Delete Computer"), this);
+
+    action_edit_group_ = new QAction(QIcon(":/img/change-folder.svg"), tr("Edit Group"), this);
+    action_edit_computer_ = new QAction(QIcon(":/img/change-computer.svg"), tr("Edit Computer"), this);
 
     // Create root groups in the tree.
     local_root_ = new LocalGroupItem(0, tr("Local"), ui.tree_group);
@@ -99,8 +104,12 @@ void ComputersTab::onActivated(QToolBar* toolbar, QStatusBar* statusbar)
         before = actions.first();
 
     addToolbarAction(toolbar, action_add_group_, before);
+    addToolbarAction(toolbar, action_edit_group_, before);
+    addToolbarAction(toolbar, action_delete_group_, before);
+
     addToolbarAction(toolbar, action_add_computer_, before);
-    addToolbarAction(toolbar, action_delete_, before);
+    addToolbarAction(toolbar, action_edit_computer_, before);
+    addToolbarAction(toolbar, action_delete_computer_, before);
 
     // Update statusbar.
     int count = current_content_ ? current_content_->itemCount() : 0;

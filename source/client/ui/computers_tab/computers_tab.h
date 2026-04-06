@@ -62,7 +62,10 @@ private:
 
     QAction* action_add_group_ = nullptr;
     QAction* action_add_computer_ = nullptr;
-    QAction* action_delete_ = nullptr;
+    QAction* action_delete_group_ = nullptr;
+    QAction* action_delete_computer_ = nullptr;
+    QAction* action_edit_group_ = nullptr;
+    QAction* action_edit_computer_ = nullptr;
 
     ContentWidget* current_content_ = nullptr;
     ContentWidget* previous_content_ = nullptr;
