@@ -27,7 +27,7 @@ ClientTab::ClientTab(Type type, QWidget* parent)
     : QWidget(parent),
       type_(type)
 {
-    // Nothing
+    setAutoFillBackground(true);
 }
 
 //--------------------------------------------------------------------------------------------------

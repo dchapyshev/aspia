@@ -77,6 +77,9 @@ ComputersTab::ComputersTab(QWidget* parent)
 
     switchContent(local_group_widget_);
 
+    // Connect signals.
+    connect(ui.tree_group, &QTreeWidget::itemClicked, this, &ComputersTab::onGroupItemClicked);
+
     if (!database_.isValid())
     {
         LOG(ERROR) << "Failed to open or create book database";
@@ -88,9 +91,6 @@ ComputersTab::ComputersTab(QWidget* parent)
 
     // Show computers in root group by default.
     local_group_widget_->showGroup(0);
-
-    // Connect signals.
-    connect(ui.tree_group, &QTreeWidget::itemClicked, this, &ComputersTab::onGroupItemClicked);
 }
 
 //--------------------------------------------------------------------------------------------------
