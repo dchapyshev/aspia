@@ -20,6 +20,7 @@
 #define CLIENT_UI_COMPUTERS_TAB_ROUTER_WIDGET_H
 
 #include "client/ui/computers_tab/content_widget.h"
+#include "ui_router_widget.h"
 
 namespace client {
 
@@ -34,6 +35,8 @@ public:
     int itemCount() const override;
 
 private:
+    Ui::RouterWidget ui;
+
     Q_DISABLE_COPY_MOVE(RouterWidget)
 };
 

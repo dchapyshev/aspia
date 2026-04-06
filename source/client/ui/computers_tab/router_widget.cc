@@ -20,9 +20,6 @@
 
 #include "base/logging.h"
 
-#include <QLabel>
-#include <QVBoxLayout>
-
 namespace client {
 
 //--------------------------------------------------------------------------------------------------
@@ -31,13 +28,7 @@ RouterWidget::RouterWidget(QWidget* parent)
 {
     LOG(INFO) << "Ctor";
 
-    QVBoxLayout* layout = new QVBoxLayout(this);
-    layout->setContentsMargins(0, 0, 0, 0);
-
-    QLabel* label = new QLabel(tr("Router"), this);
-    label->setAlignment(Qt::AlignCenter);
-
-    layout->addWidget(label);
+    ui.setupUi(this);
 }
 
 //--------------------------------------------------------------------------------------------------

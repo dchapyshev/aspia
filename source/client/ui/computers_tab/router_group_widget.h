@@ -20,8 +20,7 @@
 #define CLIENT_UI_COMPUTERS_TAB_ROUTER_GROUP_WIDGET_H
 
 #include "client/ui/computers_tab/content_widget.h"
-
-class QTreeWidget;
+#include "ui_router_group_widget.h"
 
 namespace client {
 
@@ -40,7 +39,7 @@ signals:
     void sig_computerDoubleClicked(qint64 computer_id);
 
 private:
-    QTreeWidget* tree_computer_ = nullptr;
+    Ui::RouterGroupWidget ui;
 
     Q_DISABLE_COPY_MOVE(RouterGroupWidget)
 };

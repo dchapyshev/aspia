@@ -20,8 +20,7 @@
 #define CLIENT_UI_COMPUTERS_TAB_LOCAL_GROUP_WIDGET_H
 
 #include "client/ui/computers_tab/content_widget.h"
-
-class QTreeWidget;
+#include "ui_local_group_widget.h"
 
 namespace client {
 
@@ -42,7 +41,7 @@ signals:
     void sig_computerDoubleClicked(qint64 computer_id);
 
 private:
-    QTreeWidget* tree_computer_ = nullptr;
+    Ui::LocalGroupWidget ui;
     BookDatabase* database_ = nullptr;
 
     Q_DISABLE_COPY_MOVE(LocalGroupWidget)

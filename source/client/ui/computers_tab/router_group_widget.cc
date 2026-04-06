@@ -21,10 +21,6 @@
 #include "base/logging.h"
 #include "client/ui/computers_tab/content_tree_item.h"
 
-#include <QHeaderView>
-#include <QTreeWidget>
-#include <QVBoxLayout>
-
 namespace client {
 
 //--------------------------------------------------------------------------------------------------
@@ -33,23 +29,9 @@ RouterGroupWidget::RouterGroupWidget(QWidget* parent)
 {
     LOG(INFO) << "Ctor";
 
-    QVBoxLayout* layout = new QVBoxLayout(this);
-    layout->setContentsMargins(0, 0, 0, 0);
+    ui.setupUi(this);
 
-    tree_computer_ = new QTreeWidget(this);
-    tree_computer_->setContextMenuPolicy(Qt::CustomContextMenu);
-    tree_computer_->setSelectionBehavior(QAbstractItemView::SelectRows);
-    tree_computer_->setIndentation(0);
-    tree_computer_->setSortingEnabled(true);
-    tree_computer_->setColumnCount(3);
-
-    QStringList headers;
-    headers << tr("Name") << tr("Address / ID") << tr("Comment");
-    tree_computer_->setHeaderLabels(headers);
-
-    layout->addWidget(tree_computer_);
-
-    connect(tree_computer_, &QTreeWidget::itemDoubleClicked,
+    connect(ui.tree_computer, &QTreeWidget::itemDoubleClicked,
             this, [this](QTreeWidgetItem* item, int /* column */)
     {
         if (!item)
@@ -70,13 +52,13 @@ RouterGroupWidget::~RouterGroupWidget()
 void RouterGroupWidget::showGroup(qint64 /* group_id */)
 {
     // TODO: Load computers from router.
-    tree_computer_->clear();
+    ui.tree_computer->clear();
 }
 
 //--------------------------------------------------------------------------------------------------
 int RouterGroupWidget::itemCount() const
 {
-    return tree_computer_->topLevelItemCount();
+    return ui.tree_computer->topLevelItemCount();
 }
 
 } // namespace client

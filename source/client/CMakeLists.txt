@@ -241,10 +241,13 @@ list(APPEND SOURCE_CLIENT_CORE_UI_COMPUTERS_TAB
     ui/computers_tab/group_tree_item.h
     ui/computers_tab/local_group_widget.cc
     ui/computers_tab/local_group_widget.h
+    ui/computers_tab/local_group_widget.ui
     ui/computers_tab/router_widget.cc
     ui/computers_tab/router_widget.h
+    ui/computers_tab/router_widget.ui
     ui/computers_tab/router_group_widget.cc
     ui/computers_tab/router_group_widget.h
+    ui/computers_tab/router_group_widget.ui
     ui/computers_tab/search_widget.cc
     ui/computers_tab/search_widget.h)
 
