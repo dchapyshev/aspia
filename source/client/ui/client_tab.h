@@ -33,7 +33,7 @@ class ClientTab : public QWidget
     Q_OBJECT
 
 public:
-    enum class Type { LOCAL, ROUTER, SESSION };
+    enum class Type { COMPUTERS, SESSION };
 
     explicit ClientTab(Type type, QWidget* parent = nullptr);
     ~ClientTab() override;

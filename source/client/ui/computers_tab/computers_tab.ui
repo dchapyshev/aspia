@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>LocalTab</class>
- <widget class="QWidget" name="LocalTab">
+ <class>ComputersTab</class>
+ <widget class="QWidget" name="ComputersTab">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -50,43 +50,13 @@
        </property>
       </column>
      </widget>
-     <widget class="QTreeWidget" name="tree_computer">
+     <widget class="QStackedWidget" name="content_stack">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
         <horstretch>1</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
-      <property name="contextMenuPolicy">
-       <enum>Qt::ContextMenuPolicy::CustomContextMenu</enum>
-      </property>
-      <property name="selectionBehavior">
-       <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
-      </property>
-      <property name="indentation">
-       <number>0</number>
-      </property>
-      <property name="sortingEnabled">
-       <bool>true</bool>
-      </property>
-      <property name="columnCount">
-       <number>3</number>
-      </property>
-      <column>
-       <property name="text">
-        <string>Name</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Address / ID</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Comment</string>
-       </property>
-      </column>
      </widget>
     </widget>
    </item>

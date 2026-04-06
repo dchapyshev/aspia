@@ -1,0 +1,214 @@
+//
+// Aspia Project
+// Copyright (C) 2016-2026 Dmitry Chapyshev <dmitry@aspia.ru>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
+//
+
+#include "client/ui/computers_tab/computers_tab.h"
+
+#include "base/logging.h"
+#include "client/ui/computers_tab/content_widget.h"
+#include "client/ui/computers_tab/group_tree_item.h"
+#include "client/ui/computers_tab/local_group_widget.h"
+#include "client/ui/computers_tab/router_widget.h"
+#include "client/ui/computers_tab/router_group_widget.h"
+#include "client/ui/computers_tab/search_widget.h"
+
+#include <QStatusBar>
+#include <QToolBar>
+
+namespace client {
+
+//--------------------------------------------------------------------------------------------------
+ComputersTab::ComputersTab(QWidget* parent)
+    : ClientTab(Type::COMPUTERS, parent)
+{
+    LOG(INFO) << "Ctor";
+
+    ui.setupUi(this);
+
+    // Open or create database.
+    if (BookDatabase::isEncrypted())
+    {
+        // TODO: Ask for password.
+        database_ = BookDatabase::open();
+    }
+    else
+    {
+        database_ = BookDatabase::open();
+        if (!database_.isValid())
+            database_ = BookDatabase::create(BookDatabase::EncryptionType::NONE);
+    }
+
+    // Create toolbar actions.
+    action_add_group_ = new QAction(QIcon(":/img/add-folder.svg"), tr("Add Group"), this);
+    action_add_computer_ = new QAction(QIcon(":/img/add-computer.svg"), tr("Add Computer"), this);
+    action_delete_ = new QAction(QIcon(":/img/recycle-bin.svg"), tr("Delete"), this);
+
+    // Create root groups in the tree.
+    local_root_ = new LocalGroupItem(0, tr("Local"), ui.tree_group);
+    local_root_->setExpanded(true);
+
+    remote_root_ = new RouterItem(tr("Remote"), ui.tree_group);
+    remote_root_->setExpanded(true);
+
+    // Create content widgets.
+    local_group_widget_ = new LocalGroupWidget(&database_, this);
+    router_widget_ = new RouterWidget(this);
+    router_group_widget_ = new RouterGroupWidget(this);
+    search_widget_ = new SearchWidget(&database_, this);
+
+    ui.content_stack->addWidget(local_group_widget_);
+    ui.content_stack->addWidget(router_widget_);
+    ui.content_stack->addWidget(router_group_widget_);
+    ui.content_stack->addWidget(search_widget_);
+
+    switchContent(local_group_widget_);
+
+    if (!database_.isValid())
+    {
+        LOG(ERROR) << "Failed to open or create book database";
+        return;
+    }
+
+    // Load groups from database under Local root.
+    loadGroups(0, local_root_);
+
+    // Show computers in root group by default.
+    local_group_widget_->showGroup(0);
+
+    // Connect signals.
+    connect(ui.tree_group, &QTreeWidget::itemClicked, this, &ComputersTab::onGroupItemClicked);
+}
+
+//--------------------------------------------------------------------------------------------------
+ComputersTab::~ComputersTab()
+{
+    LOG(INFO) << "Dtor";
+}
+
+//--------------------------------------------------------------------------------------------------
+void ComputersTab::onActivated(QToolBar* toolbar, QStatusBar* statusbar)
+{
+    // Find the first global action to insert before it.
+    QAction* before = nullptr;
+    QList<QAction*> actions = toolbar->actions();
+    if (!actions.isEmpty())
+        before = actions.first();
+
+    addToolbarAction(toolbar, action_add_group_, before);
+    addToolbarAction(toolbar, action_add_computer_, before);
+    addToolbarAction(toolbar, action_delete_, before);
+
+    // Update statusbar.
+    int count = current_content_ ? current_content_->itemCount() : 0;
+    statusbar->showMessage(tr("Computers: %1").arg(count));
+}
+
+//--------------------------------------------------------------------------------------------------
+void ComputersTab::onDeactivated(QToolBar* toolbar, QStatusBar* statusbar)
+{
+    removeAllToolbarActions(toolbar);
+    statusbar->clearMessage();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool ComputersTab::hasSearchField() const
+{
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void ComputersTab::onSearchTextChanged(const QString& text)
+{
+    if (text.isEmpty())
+    {
+        // Return to the previous content widget.
+        if (previous_content_)
+        {
+            switchContent(previous_content_);
+            previous_content_ = nullptr;
+        }
+    }
+    else
+    {
+        // Save the current content widget before switching to search.
+        if (current_content_ != search_widget_)
+            previous_content_ = current_content_;
+
+        switchContent(search_widget_);
+        search_widget_->search(text);
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void ComputersTab::loadGroups(qint64 parent_id, QTreeWidgetItem* parent_item)
+{
+    QList<ComputerGroupData> groups = database_.groupList(parent_id);
+
+    for (const ComputerGroupData& group : std::as_const(groups))
+    {
+        LocalGroupItem* item = new LocalGroupItem(group.id, group.name, parent_item);
+        item->setExpanded(group.expanded);
+
+        // Load child groups recursively.
+        loadGroups(group.id, item);
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void ComputersTab::onGroupItemClicked(QTreeWidgetItem* item, int /* column */)
+{
+    if (!item)
+        return;
+
+    GroupTreeItem* group_item = static_cast<GroupTreeItem*>(item);
+
+    switch (group_item->itemType())
+    {
+        case GroupTreeItem::Type::LOCAL_GROUP:
+        {
+            current_group_id_ = group_item->groupId();
+            local_group_widget_->showGroup(current_group_id_);
+            switchContent(local_group_widget_);
+        }
+        break;
+
+        case GroupTreeItem::Type::ROUTER:
+        {
+            switchContent(router_widget_);
+        }
+        break;
+
+        case GroupTreeItem::Type::ROUTER_GROUP:
+        {
+            router_group_widget_->showGroup(group_item->groupId());
+            switchContent(router_group_widget_);
+        }
+        break;
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void ComputersTab::switchContent(ContentWidget* new_widget)
+{
+    if (!new_widget || new_widget == current_content_)
+        return;
+
+    current_content_ = new_widget;
+    ui.content_stack->setCurrentWidget(new_widget);
+}
+
+} // namespace client

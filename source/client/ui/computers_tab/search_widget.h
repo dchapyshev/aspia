@@ -16,28 +16,39 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_UI_ROUTER_TAB_H
-#define CLIENT_UI_ROUTER_TAB_H
+#ifndef CLIENT_UI_COMPUTERS_TAB_SEARCH_WIDGET_H
+#define CLIENT_UI_COMPUTERS_TAB_SEARCH_WIDGET_H
 
-#include "client/ui/client_tab.h"
+#include "client/ui/computers_tab/content_widget.h"
+
+class QTreeWidget;
 
 namespace client {
 
-class RouterTab : public ClientTab
+class BookDatabase;
+
+class SearchWidget : public ContentWidget
 {
     Q_OBJECT
 
 public:
-    explicit RouterTab(QWidget* parent = nullptr);
-    ~RouterTab() override;
+    explicit SearchWidget(BookDatabase* database, QWidget* parent = nullptr);
+    ~SearchWidget() override;
 
-    void onActivated(QToolBar* toolbar, QStatusBar* statusbar) override;
-    void onDeactivated(QToolBar* toolbar, QStatusBar* statusbar) override;
+    void search(const QString& query);
+    void clear();
+    int itemCount() const override;
+
+signals:
+    void sig_computerDoubleClicked(qint64 computer_id);
 
 private:
-    Q_DISABLE_COPY_MOVE(RouterTab)
+    QTreeWidget* tree_computer_ = nullptr;
+    BookDatabase* database_ = nullptr;
+
+    Q_DISABLE_COPY_MOVE(SearchWidget)
 };
 
 } // namespace client
 
-#endif // CLIENT_UI_ROUTER_TAB_H
+#endif // CLIENT_UI_COMPUTERS_TAB_SEARCH_WIDGET_H

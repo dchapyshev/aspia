@@ -16,7 +16,9 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/ui/router_tab.h"
+#include "client/ui/computers_tab/router_widget.h"
+
+#include "base/logging.h"
 
 #include <QLabel>
 #include <QVBoxLayout>
@@ -24,30 +26,30 @@
 namespace client {
 
 //--------------------------------------------------------------------------------------------------
-RouterTab::RouterTab(QWidget* parent)
-    : ClientTab(Type::ROUTER, parent)
+RouterWidget::RouterWidget(QWidget* parent)
+    : ContentWidget(Type::ROUTER, parent)
 {
-    QVBoxLayout* layout = new QVBoxLayout(this);
+    LOG(INFO) << "Ctor";
 
-    QLabel* label = new QLabel(tr("Router functionality is under development"), this);
+    QVBoxLayout* layout = new QVBoxLayout(this);
+    layout->setContentsMargins(0, 0, 0, 0);
+
+    QLabel* label = new QLabel(tr("Router"), this);
     label->setAlignment(Qt::AlignCenter);
 
     layout->addWidget(label);
 }
 
 //--------------------------------------------------------------------------------------------------
-RouterTab::~RouterTab() = default;
-
-//--------------------------------------------------------------------------------------------------
-void RouterTab::onActivated(QToolBar* /* toolbar */, QStatusBar* /* statusbar */)
+RouterWidget::~RouterWidget()
 {
-    // Nothing
+    LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterTab::onDeactivated(QToolBar* /* toolbar */, QStatusBar* /* statusbar */)
+int RouterWidget::itemCount() const
 {
-    // Nothing
+    return 0;
 }
 
 } // namespace client

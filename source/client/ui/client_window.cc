@@ -33,8 +33,7 @@
 #include "client/ui/client_settings.h"
 #include "client/ui/client_settings_dialog.h"
 #include "client/ui/client_tab.h"
-#include "client/ui/local_tab.h"
-#include "client/ui/router_tab.h"
+#include "client/ui/computers_tab/computers_tab.h"
 #include "client/ui/update_settings_dialog.h"
 #include "common/update_checker.h"
 #include "common/ui/about_dialog.h"
@@ -53,20 +52,17 @@ ClientWindow::ClientWindow(QWidget* parent)
 
     ui.setupUi(this);
 
-    // Create search field in toolbar.
+    // Create search field at the far right of the toolbar.
     QWidget* spacer = new QWidget(this);
     spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-    ui.toolbar->insertWidget(ui.action_settings, spacer);
+    ui.toolbar->addWidget(spacer);
 
     search_field_ = new QLineEdit(this);
     search_field_->setPlaceholderText(tr("Search..."));
     search_field_->setClearButtonEnabled(true);
     search_field_->setMaximumWidth(250);
-    search_action_ = ui.toolbar->insertWidget(ui.action_settings, search_field_);
+    search_action_ = ui.toolbar->addWidget(search_field_);
     search_action_->setVisible(false);
-
-    // Insert separator before global actions.
-    ui.toolbar->insertSeparator(ui.action_settings);
 
     createLanguageMenu(settings.locale());
     createThemeMenu(settings.theme());
@@ -113,8 +109,7 @@ ClientWindow::ClientWindow(QWidget* parent)
     onAfterThemeChanged();
 
     // Create default tabs.
-    addTab(new LocalTab(this), tr("Local"), QIcon(":/img/folder.svg"));
-    addTab(new RouterTab(this), tr("Router"), QIcon(":/img/clouds.svg"));
+    addTab(new ComputersTab(this), tr("Computers"), QIcon(":/img/computer.svg"));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -189,21 +184,21 @@ void ClientWindow::onLanguageChanged(QAction* action)
 //--------------------------------------------------------------------------------------------------
 void ClientWindow::onSettings()
 {
-    LOG(INFO) << "[ACTION] Settings button";
+    LOG(INFO) << "[ACTION] Settings clicked";
     ClientSettingsDialog(this).exec();
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClientWindow::onHelp()
 {
-    LOG(INFO) << "[ACTION] Help button";
+    LOG(INFO) << "[ACTION] Help clicked";
     QDesktopServices::openUrl(QUrl("https://aspia.org/help"));
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClientWindow::onAbout()
 {
-    LOG(INFO) << "[ACTION] About button";
+    LOG(INFO) << "[ACTION] About clicked";
     common::AboutDialog(tr("Aspia Client"), this).exec();
 }
 

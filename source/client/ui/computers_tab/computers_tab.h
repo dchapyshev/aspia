@@ -16,24 +16,32 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_UI_LOCAL_TAB_H
-#define CLIENT_UI_LOCAL_TAB_H
+#ifndef CLIENT_UI_COMPUTERS_TAB_COMPUTERS_TAB_H
+#define CLIENT_UI_COMPUTERS_TAB_COMPUTERS_TAB_H
 
 #include "client/book_database.h"
 #include "client/ui/client_tab.h"
-#include "ui_local_tab.h"
+#include "ui_computers_tab.h"
 
 class QTreeWidgetItem;
 
 namespace client {
 
-class LocalTab : public ClientTab
+class ContentWidget;
+class LocalGroupItem;
+class LocalGroupWidget;
+class RouterItem;
+class RouterWidget;
+class RouterGroupWidget;
+class SearchWidget;
+
+class ComputersTab : public ClientTab
 {
     Q_OBJECT
 
 public:
-    explicit LocalTab(QWidget* parent = nullptr);
-    ~LocalTab() override;
+    explicit ComputersTab(QWidget* parent = nullptr);
+    ~ComputersTab() override;
 
     void onActivated(QToolBar* toolbar, QStatusBar* statusbar) override;
     void onDeactivated(QToolBar* toolbar, QStatusBar* statusbar) override;
@@ -42,22 +50,30 @@ public:
 
 private:
     void loadGroups(qint64 parent_id, QTreeWidgetItem* parent_item);
-    void updateComputerList(qint64 group_id);
-    void showComputerList(const QList<ComputerData>& computers);
     void onGroupItemClicked(QTreeWidgetItem* item, int column);
+    void switchContent(ContentWidget* new_widget);
 
-    Ui::LocalTab ui;
+    Ui::ComputersTab ui;
     BookDatabase database_;
     qint64 current_group_id_ = 0;
+
+    LocalGroupItem* local_root_ = nullptr;
+    RouterItem* remote_root_ = nullptr;
 
     QAction* action_add_group_ = nullptr;
     QAction* action_add_computer_ = nullptr;
     QAction* action_delete_ = nullptr;
-    QAction* separator_before_global_ = nullptr;
 
-    Q_DISABLE_COPY_MOVE(LocalTab)
+    ContentWidget* current_content_ = nullptr;
+    ContentWidget* previous_content_ = nullptr;
+    LocalGroupWidget* local_group_widget_ = nullptr;
+    RouterWidget* router_widget_ = nullptr;
+    RouterGroupWidget* router_group_widget_ = nullptr;
+    SearchWidget* search_widget_ = nullptr;
+
+    Q_DISABLE_COPY_MOVE(ComputersTab)
 };
 
 } // namespace client
 
-#endif // CLIENT_UI_LOCAL_TAB_H
+#endif // CLIENT_UI_COMPUTERS_TAB_COMPUTERS_TAB_H
