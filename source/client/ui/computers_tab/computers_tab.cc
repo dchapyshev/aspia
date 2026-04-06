@@ -23,6 +23,7 @@
 #include <QToolBar>
 
 #include "base/logging.h"
+#include "client/book_database.h"
 #include "client/ui/computers_tab/content_tree_item.h"
 #include "client/ui/computers_tab/content_widget.h"
 #include "client/ui/computers_tab/group_tree_item.h"
@@ -42,9 +43,6 @@ ComputersTab::ComputersTab(QWidget* parent)
 
     ui.setupUi(this);
 
-    // Open or create database.
-    database_ = BookDatabase::open();
-
     // Create toolbar actions.
     action_add_group_ = new QAction(QIcon(":/img/add-folder.svg"), tr("Add Group"), this);
     action_add_computer_ = new QAction(QIcon(":/img/add-computer.svg"), tr("Add Computer"), this);
@@ -63,10 +61,10 @@ ComputersTab::ComputersTab(QWidget* parent)
     remote_root_->setExpanded(true);
 
     // Create content widgets.
-    local_group_widget_ = new LocalGroupWidget(&database_, this);
+    local_group_widget_ = new LocalGroupWidget(this);
     router_widget_ = new RouterWidget(this);
     router_group_widget_ = new RouterGroupWidget(this);
-    search_widget_ = new SearchWidget(&database_, this);
+    search_widget_ = new SearchWidget(this);
 
     ui.content_stack->addWidget(local_group_widget_);
     ui.content_stack->addWidget(router_widget_);
@@ -79,7 +77,7 @@ ComputersTab::ComputersTab(QWidget* parent)
     connect(ui.tree_group, &QTreeWidget::itemClicked, this, &ComputersTab::onGroupItemClicked);
     connect(action_add_computer_, &QAction::triggered, this, &ComputersTab::onAddComputerAction);
 
-    if (!database_.isValid())
+    if (!BookDatabase::instance().isValid())
     {
         LOG(ERROR) << "Failed to open or create book database";
         return;
@@ -170,7 +168,7 @@ void ComputersTab::onAddComputerAction()
     }
 
     ComputerData data = dialog.computer();
-    if (!database_.addComputer(data))
+    if (!BookDatabase::instance().addComputer(data))
     {
         QMessageBox::warning(this, tr("Warning"), tr("Unable to add computer"));
         LOG(INFO) << "Unable to add computer to database";
@@ -215,7 +213,7 @@ void ComputersTab::onGroupItemClicked(QTreeWidgetItem* item, int /* column */)
 //--------------------------------------------------------------------------------------------------
 void ComputersTab::loadGroups(qint64 parent_id, QTreeWidgetItem* parent_item)
 {
-    QList<ComputerGroupData> groups = database_.groupList(parent_id);
+    QList<ComputerGroupData> groups = BookDatabase::instance().groupList(parent_id);
 
     for (const ComputerGroupData& group : std::as_const(groups))
     {

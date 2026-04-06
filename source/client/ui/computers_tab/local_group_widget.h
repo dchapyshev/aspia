@@ -25,14 +25,12 @@
 
 namespace client {
 
-class BookDatabase;
-
 class LocalGroupWidget : public ContentWidget
 {
     Q_OBJECT
 
 public:
-    explicit LocalGroupWidget(BookDatabase* database, QWidget* parent = nullptr);
+    explicit LocalGroupWidget(QWidget* parent = nullptr);
     ~LocalGroupWidget() override;
 
     LocalComputerItem* currentComputer();
@@ -44,7 +42,6 @@ signals:
 
 private:
     Ui::LocalGroupWidget ui;
-    BookDatabase* database_ = nullptr;
 
     Q_DISABLE_COPY_MOVE(LocalGroupWidget)
 };

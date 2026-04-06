@@ -33,6 +33,21 @@ namespace client {
 
 namespace {
 
+const char kConnectionName[] = "book";
+
+//--------------------------------------------------------------------------------------------------
+QString databaseDirectory()
+{
+    QString dir_path = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation);
+    if (dir_path.isEmpty())
+    {
+        LOG(ERROR) << "Unable to get application data directory";
+        return QString();
+    }
+
+    return dir_path;
+}
+
 //--------------------------------------------------------------------------------------------------
 ComputerData readComputer(const QSqlQuery& query)
 {
@@ -122,91 +137,15 @@ bool createTables(QSqlDatabase& db)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-const char BookDatabase::kConnectionName[] = "book";
-
-//--------------------------------------------------------------------------------------------------
-BookDatabase::BookDatabase() = default;
-
-//--------------------------------------------------------------------------------------------------
-BookDatabase::BookDatabase(bool valid)
-    : valid_(valid)
-{
-    // Nothing
-}
-
-//--------------------------------------------------------------------------------------------------
 // static
-BookDatabase BookDatabase::open()
+BookDatabase& BookDatabase::instance()
 {
-    QString dir_path = databaseDirectory();
-    if (dir_path.isEmpty())
-    {
-        LOG(ERROR) << "Invalid directory path";
-        return BookDatabase();
-    }
+    static thread_local BookDatabase database;
 
-    // Ensure directory exists.
-    QFileInfo dir_info(dir_path);
-    if (dir_info.exists())
-    {
-        if (!dir_info.isDir())
-        {
-            LOG(ERROR) << "Unable to create directory for database. Need to delete file:" << dir_path;
-            return BookDatabase();
-        }
-    }
-    else
-    {
-        if (!QDir().mkpath(dir_path))
-        {
-            LOG(ERROR) << "Unable to create directory for database";
-            return BookDatabase();
-        }
-    }
+    if (!database.valid_)
+        database.valid_ = database.openDatabase();
 
-    QString file_path = filePath();
-    if (file_path.isEmpty())
-    {
-        LOG(ERROR) << "Invalid file path";
-        return BookDatabase();
-    }
-
-    bool need_create = !QFileInfo::exists(file_path);
-
-    LOG(INFO) << (need_create ? "Creating" : "Opening") << "book database:" << file_path;
-
-    QSqlDatabase db = QSqlDatabase::database(kConnectionName, false);
-    if (!db.isValid())
-    {
-        db = QSqlDatabase::addDatabase("QSQLITE", kConnectionName);
-        db.setDatabaseName(file_path);
-    }
-
-    if (!db.isOpen() && !db.open())
-    {
-        LOG(ERROR) << "QSqlDatabase::open failed:" << db.lastError();
-        return BookDatabase();
-    }
-
-    if (need_create)
-    {
-        if (!createTables(db))
-        {
-            db.close();
-            QSqlDatabase::removeDatabase(kConnectionName);
-            QFile::remove(file_path);
-            return BookDatabase();
-        }
-    }
-    else
-    {
-        // Enable foreign keys for existing database.
-        QSqlQuery query(db);
-        if (!query.exec("PRAGMA foreign_keys = ON"))
-            LOG(WARNING) << "Unable to enable foreign keys:" << query.lastError();
-    }
-
-    return BookDatabase(true);
+    return database;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -594,17 +533,77 @@ std::optional<ComputerGroupData> BookDatabase::findGroup(qint64 group_id) const
 }
 
 //--------------------------------------------------------------------------------------------------
-// static
-QString BookDatabase::databaseDirectory()
+bool BookDatabase::openDatabase()
 {
-    QString dir_path = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation);
+    QString dir_path = databaseDirectory();
     if (dir_path.isEmpty())
     {
-        LOG(ERROR) << "Unable to get application data directory";
-        return QString();
+        LOG(ERROR) << "Invalid directory path";
+        return false;
     }
 
-    return dir_path;
+    // Ensure directory exists.
+    QFileInfo dir_info(dir_path);
+    if (dir_info.exists())
+    {
+        if (!dir_info.isDir())
+        {
+            LOG(ERROR) << "Unable to create directory for database. Need to delete file:" << dir_path;
+            return false;
+        }
+    }
+    else
+    {
+        if (!QDir().mkpath(dir_path))
+        {
+            LOG(ERROR) << "Unable to create directory for database";
+            return false;
+        }
+    }
+
+    QString file_path = filePath();
+    if (file_path.isEmpty())
+    {
+        LOG(ERROR) << "Invalid file path";
+        return false;
+    }
+
+    bool need_create = !QFileInfo::exists(file_path);
+
+    LOG(INFO) << (need_create ? "Creating" : "Opening") << "book database:" << file_path;
+
+    QSqlDatabase db = QSqlDatabase::database(kConnectionName, false);
+    if (!db.isValid())
+    {
+        db = QSqlDatabase::addDatabase("QSQLITE", kConnectionName);
+        db.setDatabaseName(file_path);
+    }
+
+    if (!db.isOpen() && !db.open())
+    {
+        LOG(ERROR) << "QSqlDatabase::open failed:" << db.lastError();
+        return false;
+    }
+
+    if (need_create)
+    {
+        if (!createTables(db))
+        {
+            db.close();
+            QSqlDatabase::removeDatabase(kConnectionName);
+            QFile::remove(file_path);
+            return false;
+        }
+    }
+    else
+    {
+        // Enable foreign keys for existing database.
+        QSqlQuery query(db);
+        if (!query.exec("PRAGMA foreign_keys = ON"))
+            LOG(WARNING) << "Unable to enable foreign keys:" << query.lastError();
+    }
+
+    return true;
 }
 
 } // namespace client

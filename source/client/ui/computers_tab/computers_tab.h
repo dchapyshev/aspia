@@ -19,7 +19,6 @@
 #ifndef CLIENT_UI_COMPUTERS_TAB_COMPUTERS_TAB_H
 #define CLIENT_UI_COMPUTERS_TAB_COMPUTERS_TAB_H
 
-#include "client/book_database.h"
 #include "client/ui/client_tab.h"
 #include "ui_computers_tab.h"
 
@@ -58,7 +57,6 @@ private:
     void updateActionsState();
 
     Ui::ComputersTab ui;
-    BookDatabase database_;
     qint64 current_group_id_ = 0;
 
     LocalGroupItem* local_root_ = nullptr;

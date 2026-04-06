@@ -29,9 +29,8 @@
 namespace client {
 
 //--------------------------------------------------------------------------------------------------
-SearchWidget::SearchWidget(BookDatabase* database, QWidget* parent)
-    : ContentWidget(Type::SEARCH, parent),
-      database_(database)
+SearchWidget::SearchWidget(QWidget* parent)
+    : ContentWidget(Type::SEARCH, parent)
 {
     LOG(INFO) << "Ctor";
 
@@ -73,7 +72,7 @@ void SearchWidget::search(const QString& query)
 {
     tree_computer_->clear();
 
-    QList<ComputerData> results = database_->searchComputers(query);
+    QList<ComputerData> results = BookDatabase::instance().searchComputers(query);
 
     for (const ComputerData& computer : std::as_const(results))
         new SearchComputerItem(computer, tree_computer_);

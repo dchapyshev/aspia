@@ -25,14 +25,12 @@ class QTreeWidget;
 
 namespace client {
 
-class BookDatabase;
-
 class SearchWidget : public ContentWidget
 {
     Q_OBJECT
 
 public:
-    explicit SearchWidget(BookDatabase* database, QWidget* parent = nullptr);
+    explicit SearchWidget(QWidget* parent = nullptr);
     ~SearchWidget() override;
 
     void search(const QString& query);
@@ -44,7 +42,6 @@ signals:
 
 private:
     QTreeWidget* tree_computer_ = nullptr;
-    BookDatabase* database_ = nullptr;
 
     Q_DISABLE_COPY_MOVE(SearchWidget)
 };

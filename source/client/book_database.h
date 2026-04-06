@@ -31,10 +31,9 @@ namespace client {
 class BookDatabase
 {
 public:
-    BookDatabase();
     ~BookDatabase() = default;
 
-    static BookDatabase open();
+    static BookDatabase& instance();
     static QString filePath();
     bool isValid() const;
 
@@ -57,10 +56,9 @@ public:
     std::optional<ComputerGroupData> findGroup(qint64 group_id) const;
 
 private:
-    explicit BookDatabase(bool valid);
+    BookDatabase() = default;
 
-    static const char kConnectionName[];
-    static QString databaseDirectory();
+    bool openDatabase();
 
     bool valid_ = false;
 };

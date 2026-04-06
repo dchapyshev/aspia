@@ -25,9 +25,8 @@
 namespace client {
 
 //--------------------------------------------------------------------------------------------------
-LocalGroupWidget::LocalGroupWidget(BookDatabase* database, QWidget* parent)
-    : ContentWidget(Type::LOCAL_GROUP, parent),
-      database_(database)
+LocalGroupWidget::LocalGroupWidget(QWidget* parent)
+    : ContentWidget(Type::LOCAL_GROUP, parent)
 {
     LOG(INFO) << "Ctor";
 
@@ -61,7 +60,7 @@ void LocalGroupWidget::showGroup(qint64 group_id)
 {
     ui.tree_computer->clear();
 
-    QList<ComputerData> computers = database_->computerList(group_id);
+    QList<ComputerData> computers = BookDatabase::instance().computerList(group_id);
 
     for (const ComputerData& computer : std::as_const(computers))
         new LocalComputerItem(computer, ui.tree_computer);
