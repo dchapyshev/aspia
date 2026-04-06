@@ -18,6 +18,8 @@
 
 #include "client/ui/client_settings.h"
 
+#include "base/crypto/data_cryptor_chacha20_poly1305.h"
+#include "base/logging.h"
 #include "base/xml_settings.h"
 #include "build/build_config.h"
 #include "client/config_factory.h"
@@ -30,7 +32,6 @@ namespace {
 
 const QString kLocaleParam = "Locale";
 const QString kThemeParam = "Theme";
-const QString kAddressListParam = "AddressList";
 const QString kSessionTypeParam = "SessionType";
 const QString kDesktopConfigParam = "DesktopConfig";
 const QString kCheckUpdatesParam = "CheckUpdates";
@@ -38,6 +39,11 @@ const QString kUpdateServerParam = "UpdateServer";
 const QString kOneTimePasswordCheckedParam = "OneTimePasswordChecked";
 const QString kRouterManagerStateParam = "RouterManagerState";
 const QString kDisplayNameParam = "DisplayName";
+const QString kRouterEnabledParam = "RouterEnabled";
+const QString kRouterAddressParam = "RouterAddress";
+const QString kRouterPortParam = "RouterPort";
+const QString kRouterUsernameParam = "RouterUsername";
+const QString kRouterPasswordParam = "RouterPassword";
 
 } // namespace
 
@@ -70,18 +76,6 @@ QString ClientSettings::theme() const
 void ClientSettings::setTheme(const QString& theme)
 {
     settings_.setValue(kThemeParam, theme);
-}
-
-//--------------------------------------------------------------------------------------------------
-QStringList ClientSettings::addressList() const
-{
-    return settings_.value(kAddressListParam).toStringList();
-}
-
-//--------------------------------------------------------------------------------------------------
-void ClientSettings::setAddressList(const QStringList& list)
-{
-    settings_.setValue(kAddressListParam, list);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -179,6 +173,91 @@ QString ClientSettings::displayName() const
 void ClientSettings::setDisplayName(const QString& display_name)
 {
     settings_.setValue(kDisplayNameParam, display_name);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool ClientSettings::isRouterEnabled() const
+{
+    return settings_.value(kRouterEnabledParam, false).toBool();
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientSettings::setRouterEnabled(bool enabled)
+{
+    settings_.setValue(kRouterEnabledParam, enabled);
+}
+
+//--------------------------------------------------------------------------------------------------
+RouterConfig ClientSettings::routerConfig(const QByteArray& encryption_key) const
+{
+    RouterConfig config;
+    config.port = static_cast<quint16>(settings_.value(kRouterPortParam, 0).toUInt());
+
+    QByteArray address = settings_.value(kRouterAddressParam).toByteArray();
+    QByteArray username = settings_.value(kRouterUsernameParam).toByteArray();
+    QByteArray password = settings_.value(kRouterPasswordParam).toByteArray();
+
+    if (encryption_key.isEmpty())
+    {
+        config.address = QString::fromUtf8(address);
+        config.username = QString::fromUtf8(username);
+        config.password = QString::fromUtf8(password);
+    }
+    else
+    {
+        base::DataCryptorChaCha20Poly1305 cryptor(encryption_key);
+        QByteArray out;
+
+        if (cryptor.decrypt(address, &out))
+            config.address = QString::fromUtf8(out);
+        else
+            LOG(ERROR) << "Failed to decrypt router address";
+
+        if (cryptor.decrypt(username, &out))
+            config.username = QString::fromUtf8(out);
+        else
+            LOG(ERROR) << "Failed to decrypt router username";
+
+        if (cryptor.decrypt(password, &out))
+            config.password = QString::fromUtf8(out);
+        else
+            LOG(ERROR) << "Failed to decrypt router password";
+    }
+
+    return config;
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientSettings::setRouterConfig(const RouterConfig& config, const QByteArray& encryption_key)
+{
+    settings_.setValue(kRouterPortParam, config.port);
+
+    if (encryption_key.isEmpty())
+    {
+        settings_.setValue(kRouterAddressParam, config.address.toUtf8());
+        settings_.setValue(kRouterUsernameParam, config.username.toUtf8());
+        settings_.setValue(kRouterPasswordParam, config.password.toUtf8());
+    }
+    else
+    {
+        base::DataCryptorChaCha20Poly1305 cryptor(encryption_key);
+        QByteArray out;
+
+        if (cryptor.encrypt(config.address.toUtf8(), &out))
+            settings_.setValue(kRouterAddressParam, out);
+        else
+            LOG(ERROR) << "Failed to encrypt router address";
+
+        if (cryptor.encrypt(config.username.toUtf8(), &out))
+            settings_.setValue(kRouterUsernameParam, out);
+        else
+            LOG(ERROR) << "Failed to encrypt router username";
+
+        if (cryptor.encrypt(config.password.toUtf8(), &out))
+            settings_.setValue(kRouterPasswordParam, out);
+        else
+            LOG(ERROR) << "Failed to encrypt router password";
+    }
 }
 
 } // namespace client

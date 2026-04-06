@@ -26,7 +26,6 @@
 #include <optional>
 
 #include "client/book_data.h"
-#include "client/router_config.h"
 
 namespace client {
 
@@ -38,13 +37,8 @@ public:
     BookDatabase& operator=(BookDatabase&& other) noexcept;
     ~BookDatabase();
 
-    enum class EncryptionType { NONE, CHACHA20_POLY1305 };
-
-    static BookDatabase create(EncryptionType encryption_type,
-                               const QString& password = QString());
-    static BookDatabase open(const QString& password = QString());
+    static BookDatabase open(const QByteArray& encryption_key = QByteArray());
     static QString filePath();
-    static bool isEncrypted();
     bool isValid() const;
 
     // Computers.
@@ -65,23 +59,13 @@ public:
     bool removeGroup(qint64 group_id);
     std::optional<ComputerGroupData> findGroup(qint64 group_id) const;
 
-    // Configuration.
-    EncryptionType encryptionType() const;
-    bool setEncryption(EncryptionType encryption_type, const QString& password = QString());
-    bool isRouterEnabled() const;
-    void setRouterEnabled(bool enabled);
-    RouterConfig routerConfig() const;
-    void setRouterConfig(const RouterConfig& config);
-    QString displayName() const;
-    void setDisplayName(const QString& name);
+    // Encryption.
+    bool setEncryption(const QByteArray& encryption_key);
 
 private:
     explicit BookDatabase(const QString& connection_name, const QByteArray& encryption_key);
 
     static QString databaseDirectory();
-
-    QByteArray configValue(const QString& key) const;
-    bool setConfigValue(const QString& key, const QByteArray& value);
 
     QByteArray encryptData(const QByteArray& data) const;
     QByteArray decryptData(const QByteArray& encrypted) const;

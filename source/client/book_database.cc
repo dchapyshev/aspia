@@ -19,8 +19,6 @@
 #include "client/book_database.h"
 
 #include "base/crypto/data_cryptor_chacha20_poly1305.h"
-#include "base/crypto/password_hash.h"
-#include "base/crypto/random.h"
 #include "base/crypto/secure_memory.h"
 #include "base/logging.h"
 
@@ -147,22 +145,45 @@ ComputerGroupData readGroup(const QSqlQuery& query, const QByteArray& key)
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray deriveKey(const QString& password, const QByteArray& salt)
+bool createTables(QSqlDatabase& db)
 {
-    return base::PasswordHash::hash(base::PasswordHash::SCRYPT, password, salt);
+    QSqlQuery query(db);
+
+    if (!query.exec("CREATE TABLE IF NOT EXISTS \"groups\" ("
+                    "\"id\" INTEGER UNIQUE,"
+                    "\"parent_id\" INTEGER NOT NULL DEFAULT 0,"
+                    "\"name\" TEXT NOT NULL DEFAULT '',"
+                    "\"comment\" BLOB NOT NULL DEFAULT X'',"
+                    "\"expanded\" INTEGER NOT NULL DEFAULT 0,"
+                    "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
+    {
+        LOG(ERROR) << "Unable to create groups table:" << query.lastError();
+        return false;
+    }
+
+    if (!query.exec("CREATE TABLE IF NOT EXISTS \"computers\" ("
+                    "\"id\" INTEGER UNIQUE,"
+                    "\"group_id\" INTEGER NOT NULL DEFAULT 0,"
+                    "\"name\" TEXT NOT NULL DEFAULT '',"
+                    "\"comment\" BLOB NOT NULL DEFAULT X'',"
+                    "\"address\" BLOB NOT NULL DEFAULT X'',"
+                    "\"username\" BLOB NOT NULL DEFAULT X'',"
+                    "\"password\" BLOB NOT NULL DEFAULT X'',"
+                    "PRIMARY KEY(\"id\" AUTOINCREMENT),"
+                    "FOREIGN KEY(\"group_id\") REFERENCES \"groups\"(\"id\") ON DELETE CASCADE)"))
+    {
+        LOG(ERROR) << "Unable to create computers table:" << query.lastError();
+        return false;
+    }
+
+    if (!query.exec("PRAGMA foreign_keys = ON"))
+    {
+        LOG(ERROR) << "Unable to enable foreign keys:" << query.lastError();
+        return false;
+    }
+
+    return true;
 }
-
-const int kVerifierSize = 32;
-
-const char kKeyEncryptionType[] = "encryption_type";
-const char kKeyHashingSalt[] = "hashing_salt";
-const char kKeyVerifier[] = "verifier";
-const char kKeyRouterEnabled[] = "router_enabled";
-const char kKeyRouterAddress[] = "router_address";
-const char kKeyRouterPort[] = "router_port";
-const char kKeyRouterUsername[] = "router_username";
-const char kKeyRouterPassword[] = "router_password";
-const char kKeyDisplayName[] = "display_name";
 
 } // namespace
 
@@ -210,7 +231,7 @@ BookDatabase::~BookDatabase()
 
 //--------------------------------------------------------------------------------------------------
 // static
-BookDatabase BookDatabase::create(EncryptionType encryption_type, const QString& password)
+BookDatabase BookDatabase::open(const QByteArray& encryption_key)
 {
     QString dir_path = databaseDirectory();
     if (dir_path.isEmpty())
@@ -219,6 +240,7 @@ BookDatabase BookDatabase::create(EncryptionType encryption_type, const QString&
         return BookDatabase();
     }
 
+    // Ensure directory exists.
     QFileInfo dir_info(dir_path);
     if (dir_info.exists())
     {
@@ -244,225 +266,31 @@ BookDatabase BookDatabase::create(EncryptionType encryption_type, const QString&
         return BookDatabase();
     }
 
-    if (QFileInfo::exists(file_path))
-    {
-        LOG(ERROR) << "Database file already exists";
+    bool need_create = !QFileInfo::exists(file_path);
+
+    LOG(INFO) << (need_create ? "Creating" : "Opening") << "book database:" << file_path;
+
+    QString connection_name = nextConnectionName();
+    QSqlDatabase db = ensureOpenDatabase(file_path, connection_name);
+    if (!db.isValid() || !db.isOpen())
         return BookDatabase();
-    }
 
-    QByteArray encryption_key;
-    QByteArray salt;
-
-    if (encryption_type == EncryptionType::CHACHA20_POLY1305)
+    if (need_create)
     {
-        if (password.isEmpty())
+        if (!createTables(db))
         {
-            LOG(ERROR) << "Password is required for encrypted database";
+            db.close();
+            QSqlDatabase::removeDatabase(connection_name);
+            QFile::remove(file_path);
             return BookDatabase();
         }
-
-        salt = base::Random::byteArray(base::PasswordHash::kBytesSize);
-        encryption_key = deriveKey(password, salt);
     }
-
-    QString connection_name = nextConnectionName();
-    QSqlDatabase db = ensureOpenDatabase(file_path, connection_name);
-    if (!db.isValid() || !db.isOpen())
-        return BookDatabase();
-
-    if (!db.transaction())
+    else
     {
-        LOG(ERROR) << "Unable to execute transaction:" << db.lastError();
-        return BookDatabase();
-    }
-
-    bool success = false;
-
-    do
-    {
-        QSqlQuery query(db);
-
-        if (!query.exec("CREATE TABLE IF NOT EXISTS \"groups\" ("
-                        "\"id\" INTEGER UNIQUE,"
-                        "\"parent_id\" INTEGER NOT NULL DEFAULT 0,"
-                        "\"name\" TEXT NOT NULL DEFAULT '',"
-                        "\"comment\" BLOB NOT NULL DEFAULT X'',"
-                        "\"expanded\" INTEGER NOT NULL DEFAULT 0,"
-                        "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
-        {
-            LOG(ERROR) << "Unable to execute query:" << query.lastError();
-            break;
-        }
-
-        if (!query.exec("CREATE TABLE IF NOT EXISTS \"computers\" ("
-                        "\"id\" INTEGER UNIQUE,"
-                        "\"group_id\" INTEGER NOT NULL DEFAULT 0,"
-                        "\"name\" TEXT NOT NULL DEFAULT '',"
-                        "\"comment\" BLOB NOT NULL DEFAULT X'',"
-                        "\"address\" BLOB NOT NULL DEFAULT X'',"
-                        "\"username\" BLOB NOT NULL DEFAULT X'',"
-                        "\"password\" BLOB NOT NULL DEFAULT X'',"
-                        "PRIMARY KEY(\"id\" AUTOINCREMENT),"
-                        "FOREIGN KEY(\"group_id\") REFERENCES \"groups\"(\"id\") ON DELETE CASCADE)"))
-        {
-            LOG(ERROR) << "Unable to execute query:" << query.lastError();
-            break;
-        }
-
-        if (!query.exec("CREATE TABLE IF NOT EXISTS \"config\" ("
-                        "\"key\" TEXT NOT NULL UNIQUE,"
-                        "\"value\" BLOB NOT NULL DEFAULT X'',"
-                        "PRIMARY KEY(\"key\"))"))
-        {
-            LOG(ERROR) << "Unable to execute query:" << query.lastError();
-            break;
-        }
-
-        if (!query.exec("PRAGMA foreign_keys = ON"))
-        {
-            LOG(ERROR) << "Unable to enable foreign keys:" << query.lastError();
-            break;
-        }
-
-        // Store encryption type.
-        query.prepare("INSERT INTO config (key, value) VALUES (?, ?)");
-        query.addBindValue(kKeyEncryptionType);
-        query.addBindValue(QByteArray::number(static_cast<int>(encryption_type)));
-        if (!query.exec())
-        {
-            LOG(ERROR) << "Unable to execute query:" << query.lastError();
-            break;
-        }
-
-        // Store hashing salt.
-        query.prepare("INSERT INTO config (key, value) VALUES (?, ?)");
-        query.addBindValue(kKeyHashingSalt);
-        query.addBindValue(salt);
-        if (!query.exec())
-        {
-            LOG(ERROR) << "Unable to execute query:" << query.lastError();
-            break;
-        }
-
-        // Store verifier (random data, encrypted if encryption is enabled).
-        {
-            QByteArray verifier = base::Random::byteArray(kVerifierSize);
-            QByteArray stored_verifier = encryptBlob(encryption_key, verifier);
-
-            query.prepare("INSERT INTO config (key, value) VALUES (?, ?)");
-            query.addBindValue(kKeyVerifier);
-            query.addBindValue(stored_verifier);
-            if (!query.exec())
-            {
-                LOG(ERROR) << "Unable to execute query:" << query.lastError();
-                break;
-            }
-        }
-
-        success = true;
-    }
-    while (false);
-
-    if (!success)
-    {
-        db.rollback();
-        return BookDatabase();
-    }
-
-    if (!db.commit())
-    {
-        LOG(ERROR) << "Unable to commit transaction:" << db.lastError();
-        db.rollback();
-        return BookDatabase();
-    }
-
-    return BookDatabase(connection_name, encryption_key);
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
-BookDatabase BookDatabase::open(const QString& password)
-{
-    QString file_path = filePath();
-    if (file_path.isEmpty())
-    {
-        LOG(ERROR) << "Invalid file path";
-        return BookDatabase();
-    }
-
-    if (!QFileInfo::exists(file_path))
-    {
-        LOG(ERROR) << "Database file does not exist:" << file_path;
-        return BookDatabase();
-    }
-
-    LOG(INFO) << "Opening book database:" << file_path;
-
-    QString connection_name = nextConnectionName();
-    QSqlDatabase db = ensureOpenDatabase(file_path, connection_name);
-    if (!db.isValid() || !db.isOpen())
-        return BookDatabase();
-
-    // Enable foreign keys.
-    {
+        // Enable foreign keys for existing database.
         QSqlQuery query(db);
         if (!query.exec("PRAGMA foreign_keys = ON"))
             LOG(WARNING) << "Unable to enable foreign keys:" << query.lastError();
-    }
-
-    // Read encryption type.
-    QByteArray encryption_key;
-    {
-        QSqlQuery query(db);
-        query.prepare("SELECT value FROM config WHERE key=?");
-        query.addBindValue(kKeyEncryptionType);
-
-        if (!query.exec() || !query.next())
-        {
-            LOG(ERROR) << "Unable to read encryption type:" << query.lastError();
-            return BookDatabase();
-        }
-
-        int type = query.value(0).toByteArray().toInt();
-        if (type == static_cast<int>(EncryptionType::CHACHA20_POLY1305))
-        {
-            if (password.isEmpty())
-            {
-                LOG(ERROR) << "Password is required for encrypted database";
-                return BookDatabase();
-            }
-
-            // Read salt.
-            query.prepare("SELECT value FROM config WHERE key=?");
-            query.addBindValue(kKeyHashingSalt);
-
-            if (!query.exec() || !query.next())
-            {
-                LOG(ERROR) << "Unable to read hashing salt:" << query.lastError();
-                return BookDatabase();
-            }
-
-            QByteArray salt = query.value(0).toByteArray();
-            encryption_key = deriveKey(password, salt);
-
-            // Verify password by attempting to decrypt the verifier.
-            query.prepare("SELECT value FROM config WHERE key=?");
-            query.addBindValue(kKeyVerifier);
-
-            if (!query.exec() || !query.next())
-            {
-                LOG(ERROR) << "Unable to read verifier:" << query.lastError();
-                return BookDatabase();
-            }
-
-            QByteArray encrypted_verifier = query.value(0).toByteArray();
-            QByteArray decrypted_verifier = decryptBlob(encryption_key, encrypted_verifier);
-            if (decrypted_verifier.isEmpty())
-            {
-                LOG(ERROR) << "Invalid password: verifier decryption failed";
-                return BookDatabase();
-            }
-        }
     }
 
     return BookDatabase(connection_name, encryption_key);
@@ -477,35 +305,6 @@ QString BookDatabase::filePath()
         return QString();
 
     return dir_path + "/book.db3";
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
-bool BookDatabase::isEncrypted()
-{
-    QString file_path = filePath();
-    if (file_path.isEmpty() || !QFileInfo::exists(file_path))
-        return false;
-
-    QString connection_name = nextConnectionName();
-    QSqlDatabase db = ensureOpenDatabase(file_path, connection_name);
-    if (!db.isValid() || !db.isOpen())
-        return false;
-
-    QSqlQuery query(db);
-    query.prepare("SELECT value FROM config WHERE key=?");
-    query.addBindValue(kKeyEncryptionType);
-
-    bool encrypted = false;
-    if (query.exec() && query.next())
-    {
-        int type = query.value(0).toByteArray().toInt();
-        encrypted = (type != static_cast<int>(EncryptionType::NONE));
-    }
-
-    db.close();
-    QSqlDatabase::removeDatabase(connection_name);
-    return encrypted;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -842,19 +641,7 @@ std::optional<ComputerGroupData> BookDatabase::findGroup(qint64 group_id) const
 }
 
 //--------------------------------------------------------------------------------------------------
-BookDatabase::EncryptionType BookDatabase::encryptionType() const
-{
-    QByteArray value = configValue(kKeyEncryptionType);
-    int type = value.toInt();
-
-    if (type == static_cast<int>(EncryptionType::CHACHA20_POLY1305))
-        return EncryptionType::CHACHA20_POLY1305;
-
-    return EncryptionType::NONE;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool BookDatabase::setEncryption(EncryptionType encryption_type, const QString& password)
+bool BookDatabase::setEncryption(const QByteArray& encryption_key)
 {
     if (!isValid())
     {
@@ -863,79 +650,17 @@ bool BookDatabase::setEncryption(EncryptionType encryption_type, const QString& 
     }
 
     QByteArray old_key = encryption_key_;
-    QByteArray new_key;
-    QByteArray new_salt;
 
-    if (encryption_type == EncryptionType::CHACHA20_POLY1305)
-    {
-        if (password.isEmpty())
-        {
-            LOG(ERROR) << "Password is required for encrypted database";
-            return false;
-        }
-
-        new_salt = base::Random::byteArray(base::PasswordHash::kBytesSize);
-        new_key = deriveKey(password, new_salt);
-    }
-
-    if (!reencryptAll(old_key, new_key))
+    if (!reencryptAll(old_key, encryption_key))
     {
         LOG(ERROR) << "Failed to re-encrypt data";
         return false;
     }
 
-    encryption_key_ = new_key;
-
-    setConfigValue(kKeyEncryptionType, QByteArray::number(static_cast<int>(encryption_type)));
-    setConfigValue(kKeyHashingSalt, new_salt);
+    encryption_key_ = encryption_key;
 
     base::memZero(&old_key);
     return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool BookDatabase::isRouterEnabled() const
-{
-    QByteArray value = configValue(kKeyRouterEnabled);
-    return value.toInt() != 0;
-}
-
-//--------------------------------------------------------------------------------------------------
-void BookDatabase::setRouterEnabled(bool enabled)
-{
-    setConfigValue(kKeyRouterEnabled, QByteArray::number(enabled ? 1 : 0));
-}
-
-//--------------------------------------------------------------------------------------------------
-RouterConfig BookDatabase::routerConfig() const
-{
-    RouterConfig config;
-    config.address = QString::fromUtf8(decryptData(configValue(kKeyRouterAddress)));
-    config.port = static_cast<quint16>(configValue(kKeyRouterPort).toUInt());
-    config.username = QString::fromUtf8(decryptData(configValue(kKeyRouterUsername)));
-    config.password = QString::fromUtf8(decryptData(configValue(kKeyRouterPassword)));
-    return config;
-}
-
-//--------------------------------------------------------------------------------------------------
-void BookDatabase::setRouterConfig(const RouterConfig& config)
-{
-    setConfigValue(kKeyRouterAddress, encryptData(config.address.toUtf8()));
-    setConfigValue(kKeyRouterPort, QByteArray::number(config.port));
-    setConfigValue(kKeyRouterUsername, encryptData(config.username.toUtf8()));
-    setConfigValue(kKeyRouterPassword, encryptData(config.password.toUtf8()));
-}
-
-//--------------------------------------------------------------------------------------------------
-QString BookDatabase::displayName() const
-{
-    return QString::fromUtf8(configValue(kKeyDisplayName));
-}
-
-//--------------------------------------------------------------------------------------------------
-void BookDatabase::setDisplayName(const QString& name)
-{
-    setConfigValue(kKeyDisplayName, name.toUtf8());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -950,48 +675,6 @@ QString BookDatabase::databaseDirectory()
     }
 
     return dir_path;
-}
-
-//--------------------------------------------------------------------------------------------------
-QByteArray BookDatabase::configValue(const QString& key) const
-{
-    if (!isValid())
-    {
-        LOG(ERROR) << "Database is not valid";
-        return QByteArray();
-    }
-
-    QSqlQuery query(databaseByName(connection_name_));
-    query.prepare("SELECT value FROM config WHERE key=?");
-    query.addBindValue(key);
-
-    if (!query.exec() || !query.next())
-        return QByteArray();
-
-    return query.value(0).toByteArray();
-}
-
-//--------------------------------------------------------------------------------------------------
-bool BookDatabase::setConfigValue(const QString& key, const QByteArray& value)
-{
-    if (!isValid())
-    {
-        LOG(ERROR) << "Database is not valid";
-        return false;
-    }
-
-    QSqlQuery query(databaseByName(connection_name_));
-    query.prepare("INSERT OR REPLACE INTO config (key, value) VALUES (?, ?)");
-    query.addBindValue(key);
-    query.addBindValue(value);
-
-    if (!query.exec())
-    {
-        LOG(ERROR) << "Unable to execute query:" << query.lastError();
-        return false;
-    }
-
-    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1085,41 +768,6 @@ bool BookDatabase::reencryptAll(const QByteArray& old_key, const QByteArray& new
                     goto rollback;
                 }
             }
-        }
-
-        // Re-encrypt router config.
-        {
-            auto reencryptConfig = [&](const char* key_name) -> bool
-            {
-                QSqlQuery query(db);
-                query.prepare("SELECT value FROM config WHERE key=?");
-                query.addBindValue(key_name);
-
-                if (!query.exec() || !query.next())
-                    return true; // Key doesn't exist, skip.
-
-                QByteArray value = decryptBlob(old_key, query.value(0).toByteArray());
-
-                query.prepare("INSERT OR REPLACE INTO config (key, value) VALUES (?, ?)");
-                query.addBindValue(key_name);
-                query.addBindValue(encryptBlob(new_key, value));
-
-                if (!query.exec())
-                {
-                    LOG(ERROR) << "Unable to re-encrypt config key:" << query.lastError();
-                    return false;
-                }
-                return true;
-            };
-
-            if (!reencryptConfig(kKeyVerifier))
-                break;
-            if (!reencryptConfig(kKeyRouterAddress))
-                break;
-            if (!reencryptConfig(kKeyRouterUsername))
-                break;
-            if (!reencryptConfig(kKeyRouterPassword))
-                break;
         }
 
         success = true;

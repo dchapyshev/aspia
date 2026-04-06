@@ -40,17 +40,7 @@ ComputersTab::ComputersTab(QWidget* parent)
     ui.setupUi(this);
 
     // Open or create database.
-    if (BookDatabase::isEncrypted())
-    {
-        // TODO: Ask for password.
-        database_ = BookDatabase::open();
-    }
-    else
-    {
-        database_ = BookDatabase::open();
-        if (!database_.isValid())
-            database_ = BookDatabase::create(BookDatabase::EncryptionType::NONE);
-    }
+    database_ = BookDatabase::open();
 
     // Create toolbar actions.
     action_add_group_ = new QAction(QIcon(":/img/add-folder.svg"), tr("Add Group"), this);

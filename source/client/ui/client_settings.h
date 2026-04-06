@@ -21,6 +21,7 @@
 
 #include <QSettings>
 
+#include "client/router_config.h"
 #include "proto/desktop_control.h"
 #include "proto/peer.h"
 
@@ -37,9 +38,6 @@ public:
 
     QString theme() const;
     void setTheme(const QString& theme);
-
-    QStringList addressList() const;
-    void setAddressList(const QStringList& list);
 
     proto::peer::SessionType sessionType() const;
     void setSessionType(proto::peer::SessionType session_type);
@@ -61,6 +59,13 @@ public:
 
     QString displayName() const;
     void setDisplayName(const QString& display_name);
+
+    bool isRouterEnabled() const;
+    void setRouterEnabled(bool enabled);
+
+    RouterConfig routerConfig(const QByteArray& encryption_key = QByteArray()) const;
+    void setRouterConfig(const RouterConfig& config,
+                         const QByteArray& encryption_key = QByteArray());
 
 private:
     QSettings settings_;
