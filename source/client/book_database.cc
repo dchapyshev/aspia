@@ -30,7 +30,6 @@
 #include <QStandardPaths>
 #include <QVariant>
 
-#include <utility>
 
 namespace client {
 
@@ -152,31 +151,6 @@ BookDatabase::BookDatabase(const QByteArray& encryption_key)
       valid_(true)
 {
     // Nothing
-}
-
-//--------------------------------------------------------------------------------------------------
-BookDatabase::BookDatabase(BookDatabase&& other) noexcept
-    : encryption_key_(std::move(other.encryption_key_)),
-      valid_(other.valid_)
-{
-    other.valid_ = false;
-    other.encryption_key_.clear();
-}
-
-//--------------------------------------------------------------------------------------------------
-BookDatabase& BookDatabase::operator=(BookDatabase&& other) noexcept
-{
-    if (this != &other)
-    {
-        base::memZero(&encryption_key_);
-
-        encryption_key_ = std::move(other.encryption_key_);
-        valid_ = other.valid_;
-    }
-
-    other.valid_ = false;
-    other.encryption_key_.clear();
-    return *this;
 }
 
 //--------------------------------------------------------------------------------------------------

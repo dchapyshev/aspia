@@ -33,8 +33,6 @@ class BookDatabase
 {
 public:
     BookDatabase();
-    BookDatabase(BookDatabase&& other) noexcept;
-    BookDatabase& operator=(BookDatabase&& other) noexcept;
     ~BookDatabase();
 
     static BookDatabase open(const QByteArray& encryption_key = QByteArray());
@@ -75,8 +73,6 @@ private:
 
     QByteArray encryption_key_;
     bool valid_ = false;
-
-    Q_DISABLE_COPY(BookDatabase)
 };
 
 } // namespace client
