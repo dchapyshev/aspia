@@ -48,10 +48,14 @@ public:
     bool hasSearchField() const override;
     void onSearchTextChanged(const QString& text) override;
 
+private slots:
+    void onAddComputerAction();
+    void onGroupItemClicked(QTreeWidgetItem* item, int column);
+
 private:
     void loadGroups(qint64 parent_id, QTreeWidgetItem* parent_item);
-    void onGroupItemClicked(QTreeWidgetItem* item, int column);
     void switchContent(ContentWidget* new_widget);
+    void updateActionsState();
 
     Ui::ComputersTab ui;
     BookDatabase database_;
@@ -69,6 +73,7 @@ private:
 
     ContentWidget* current_content_ = nullptr;
     ContentWidget* previous_content_ = nullptr;
+
     LocalGroupWidget* local_group_widget_ = nullptr;
     RouterWidget* router_widget_ = nullptr;
     RouterGroupWidget* router_group_widget_ = nullptr;

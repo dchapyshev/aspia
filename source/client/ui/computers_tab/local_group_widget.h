@@ -19,6 +19,7 @@
 #ifndef CLIENT_UI_COMPUTERS_TAB_LOCAL_GROUP_WIDGET_H
 #define CLIENT_UI_COMPUTERS_TAB_LOCAL_GROUP_WIDGET_H
 
+#include "client/ui/computers_tab/content_tree_item.h"
 #include "client/ui/computers_tab/content_widget.h"
 #include "ui_local_group_widget.h"
 
@@ -34,6 +35,7 @@ public:
     explicit LocalGroupWidget(BookDatabase* database, QWidget* parent = nullptr);
     ~LocalGroupWidget() override;
 
+    LocalComputerItem* currentComputer();
     void showGroup(qint64 group_id);
     int itemCount() const override;
 

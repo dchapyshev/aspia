@@ -51,6 +51,12 @@ LocalGroupWidget::~LocalGroupWidget()
 }
 
 //--------------------------------------------------------------------------------------------------
+LocalComputerItem* LocalGroupWidget::currentComputer()
+{
+    return static_cast<LocalComputerItem*>(ui.tree_computer->currentItem());
+}
+
+//--------------------------------------------------------------------------------------------------
 void LocalGroupWidget::showGroup(qint64 group_id)
 {
     ui.tree_computer->clear();

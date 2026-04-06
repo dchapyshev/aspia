@@ -18,16 +18,19 @@
 
 #include "client/ui/computers_tab/computers_tab.h"
 
+#include <QMessageBox>
+#include <QStatusBar>
+#include <QToolBar>
+
 #include "base/logging.h"
+#include "client/ui/computers_tab/content_tree_item.h"
 #include "client/ui/computers_tab/content_widget.h"
 #include "client/ui/computers_tab/group_tree_item.h"
+#include "client/ui/computers_tab/local_computer_dialog.h"
 #include "client/ui/computers_tab/local_group_widget.h"
 #include "client/ui/computers_tab/router_widget.h"
 #include "client/ui/computers_tab/router_group_widget.h"
 #include "client/ui/computers_tab/search_widget.h"
-
-#include <QStatusBar>
-#include <QToolBar>
 
 namespace client {
 
@@ -74,6 +77,7 @@ ComputersTab::ComputersTab(QWidget* parent)
 
     // Connect signals.
     connect(ui.tree_group, &QTreeWidget::itemClicked, this, &ComputersTab::onGroupItemClicked);
+    connect(action_add_computer_, &QAction::triggered, this, &ComputersTab::onAddComputerAction);
 
     if (!database_.isValid())
     {
@@ -86,6 +90,7 @@ ComputersTab::ComputersTab(QWidget* parent)
 
     // Show computers in root group by default.
     local_group_widget_->showGroup(0);
+    updateActionsState();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -153,6 +158,61 @@ void ComputersTab::onSearchTextChanged(const QString& text)
 }
 
 //--------------------------------------------------------------------------------------------------
+void ComputersTab::onAddComputerAction()
+{
+    LOG(INFO) << "[ACTION] Add computer";
+
+    LocalComputerDialog dialog(LocalComputerDialog::Mode::ADD, this);
+    if (dialog.exec() == LocalComputerDialog::Rejected)
+    {
+        LOG(INFO) << "[ACTION] Rejected by user";
+        return;
+    }
+
+    ComputerData data = dialog.computer();
+    if (!database_.addComputer(data))
+    {
+        QMessageBox::warning(this, tr("Warning"), tr("Unable to add computer"));
+        LOG(INFO) << "Unable to add computer to database";
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void ComputersTab::onGroupItemClicked(QTreeWidgetItem* item, int /* column */)
+{
+    updateActionsState();
+
+    if (!item)
+        return;
+
+    GroupTreeItem* group_item = static_cast<GroupTreeItem*>(item);
+
+    switch (group_item->itemType())
+    {
+    case GroupTreeItem::Type::LOCAL_GROUP:
+    {
+        current_group_id_ = group_item->groupId();
+        local_group_widget_->showGroup(current_group_id_);
+        switchContent(local_group_widget_);
+    }
+    break;
+
+    case GroupTreeItem::Type::ROUTER:
+    {
+        switchContent(router_widget_);
+    }
+    break;
+
+    case GroupTreeItem::Type::ROUTER_GROUP:
+    {
+        router_group_widget_->showGroup(group_item->groupId());
+        switchContent(router_group_widget_);
+    }
+    break;
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
 void ComputersTab::loadGroups(qint64 parent_id, QTreeWidgetItem* parent_item)
 {
     QList<ComputerGroupData> groups = database_.groupList(parent_id);
@@ -168,39 +228,6 @@ void ComputersTab::loadGroups(qint64 parent_id, QTreeWidgetItem* parent_item)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ComputersTab::onGroupItemClicked(QTreeWidgetItem* item, int /* column */)
-{
-    if (!item)
-        return;
-
-    GroupTreeItem* group_item = static_cast<GroupTreeItem*>(item);
-
-    switch (group_item->itemType())
-    {
-        case GroupTreeItem::Type::LOCAL_GROUP:
-        {
-            current_group_id_ = group_item->groupId();
-            local_group_widget_->showGroup(current_group_id_);
-            switchContent(local_group_widget_);
-        }
-        break;
-
-        case GroupTreeItem::Type::ROUTER:
-        {
-            switchContent(router_widget_);
-        }
-        break;
-
-        case GroupTreeItem::Type::ROUTER_GROUP:
-        {
-            router_group_widget_->showGroup(group_item->groupId());
-            switchContent(router_group_widget_);
-        }
-        break;
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
 void ComputersTab::switchContent(ContentWidget* new_widget)
 {
     if (!new_widget || new_widget == current_content_)
@@ -208,6 +235,35 @@ void ComputersTab::switchContent(ContentWidget* new_widget)
 
     current_content_ = new_widget;
     ui.content_stack->setCurrentWidget(new_widget);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ComputersTab::updateActionsState()
+{
+    GroupTreeItem* group_item = static_cast<GroupTreeItem*>(ui.tree_group->currentItem());
+
+    if (group_item && group_item->itemType() == GroupTreeItem::Type::LOCAL_GROUP)
+    {
+        action_add_group_->setVisible(true);
+        action_delete_group_->setVisible(group_item->groupId() != 0);
+        action_edit_group_->setVisible(true);
+
+        LocalComputerItem* computer_item = local_group_widget_->currentComputer();
+
+        action_add_computer_->setVisible(true);
+        action_delete_computer_->setVisible(computer_item != nullptr);
+        action_edit_computer_->setVisible(computer_item != nullptr);
+    }
+    else
+    {
+        action_add_group_->setVisible(false);
+        action_delete_group_->setVisible(false);
+        action_edit_group_->setVisible(false);
+
+        action_add_computer_->setVisible(false);
+        action_delete_computer_->setVisible(false);
+        action_edit_computer_->setVisible(false);
+    }
 }
 
 } // namespace client

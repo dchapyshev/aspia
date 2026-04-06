@@ -350,6 +350,12 @@ bool BookDatabase::addComputer(ComputerData& computer)
         return false;
     }
 
+    if (computer.address.isEmpty() || computer.name.isEmpty() || computer.id < 0 || computer.group_id < 0)
+    {
+        LOG(ERROR) << "Invalid parameters";
+        return false;
+    }
+
     QSqlQuery query(databaseByName(connection_name_));
     query.prepare("INSERT INTO computers (id, group_id, name, comment, address, username, password) "
                   "VALUES (NULL, ?, ?, ?, ?, ?, ?)");

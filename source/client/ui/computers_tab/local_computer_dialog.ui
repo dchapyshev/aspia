@@ -22,7 +22,7 @@
      <item row="0" column="0">
       <widget class="QLabel" name="label_name">
        <property name="text">
-        <string>Name</string>
+        <string>Name:</string>
        </property>
       </widget>
      </item>
@@ -32,7 +32,7 @@
      <item row="1" column="0">
       <widget class="QLabel" name="label_address">
        <property name="text">
-        <string>Address</string>
+        <string>Address:</string>
        </property>
       </widget>
      </item>
@@ -42,7 +42,7 @@
      <item row="2" column="0">
       <widget class="QLabel" name="label_username">
        <property name="text">
-        <string>Username</string>
+        <string>Username:</string>
        </property>
       </widget>
      </item>
@@ -52,7 +52,7 @@
      <item row="3" column="0">
       <widget class="QLabel" name="label_password">
        <property name="text">
-        <string>Password</string>
+        <string>Password:</string>
        </property>
       </widget>
      </item>
@@ -85,7 +85,7 @@
      <item>
       <widget class="QLabel" name="label_comment">
        <property name="text">
-        <string>Comment</string>
+        <string>Comment:</string>
        </property>
       </widget>
      </item>
