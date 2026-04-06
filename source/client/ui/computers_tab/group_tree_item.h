@@ -23,6 +23,8 @@
 
 namespace client {
 
+struct GroupData;
+
 class GroupTreeItem : public QTreeWidgetItem
 {
 public:
@@ -43,8 +45,15 @@ private:
 class LocalGroupItem : public GroupTreeItem
 {
 public:
-    LocalGroupItem(qint64 group_id, const QString& name, QTreeWidget* parent);
-    LocalGroupItem(qint64 group_id, const QString& name, QTreeWidgetItem* parent);
+    LocalGroupItem(const GroupData& group, QTreeWidget* parent);
+    LocalGroupItem(const GroupData& group, QTreeWidgetItem* parent);
+
+    qint64 parentId() const;
+    QString groupName() const;
+
+private:
+    qint64 parent_id_;
+    QString group_name_;
 };
 
 class RouterItem : public GroupTreeItem

@@ -20,6 +20,8 @@
 
 #include <QIcon>
 
+#include "client/local_data.h"
+
 namespace client {
 
 //--------------------------------------------------------------------------------------------------
@@ -53,19 +55,35 @@ qint64 GroupTreeItem::groupId() const
 }
 
 //--------------------------------------------------------------------------------------------------
-LocalGroupItem::LocalGroupItem(qint64 group_id, const QString& name, QTreeWidget* parent)
-    : GroupTreeItem(Type::LOCAL_GROUP, group_id, parent)
+LocalGroupItem::LocalGroupItem(const GroupData& group, QTreeWidget* parent)
+    : GroupTreeItem(Type::LOCAL_GROUP, group.id, parent),
+      parent_id_(group.parent_id),
+      group_name_(group.name)
 {
-    setText(0, name);
+    setText(0, group.name);
     setIcon(0, QIcon(":/img/folder.svg"));
 }
 
 //--------------------------------------------------------------------------------------------------
-LocalGroupItem::LocalGroupItem(qint64 group_id, const QString& name, QTreeWidgetItem* parent)
-    : GroupTreeItem(Type::LOCAL_GROUP, group_id, parent)
+LocalGroupItem::LocalGroupItem(const GroupData& group, QTreeWidgetItem* parent)
+    : GroupTreeItem(Type::LOCAL_GROUP, group.id, parent),
+      parent_id_(group.parent_id),
+      group_name_(group.name)
 {
-    setText(0, name);
+    setText(0, group.name);
     setIcon(0, QIcon(":/img/folder.svg"));
+}
+
+//--------------------------------------------------------------------------------------------------
+qint64 LocalGroupItem::parentId() const
+{
+    return parent_id_;
+}
+
+//--------------------------------------------------------------------------------------------------
+QString LocalGroupItem::groupName() const
+{
+    return group_name_;
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -76,11 +76,11 @@ ComputerData readComputer(const QSqlQuery& query)
 }
 
 //--------------------------------------------------------------------------------------------------
-ComputerGroupData readGroup(const QSqlQuery& query)
+GroupData readGroup(const QSqlQuery& query)
 {
     base::DataCryptor& cryptor = base::DataCryptor::instance();
 
-    ComputerGroupData group;
+    GroupData group;
     group.id = query.value(0).toLongLong();
     group.parent_id = query.value(1).toLongLong();
     group.name = query.value(2).toString();
@@ -365,7 +365,7 @@ QList<ComputerData> LocalDatabase::searchComputers(const QString& query_text) co
 }
 
 //--------------------------------------------------------------------------------------------------
-QList<ComputerGroupData> LocalDatabase::groupList(qint64 parent_id) const
+QList<GroupData> LocalDatabase::groupList(qint64 parent_id) const
 {
     if (!isValid())
     {
@@ -383,7 +383,7 @@ QList<ComputerGroupData> LocalDatabase::groupList(qint64 parent_id) const
         return {};
     }
 
-    QList<ComputerGroupData> groups;
+    QList<GroupData> groups;
     while (query.next())
         groups.append(readGroup(query));
 
@@ -391,7 +391,7 @@ QList<ComputerGroupData> LocalDatabase::groupList(qint64 parent_id) const
 }
 
 //--------------------------------------------------------------------------------------------------
-QList<ComputerGroupData> LocalDatabase::allGroups() const
+QList<GroupData> LocalDatabase::allGroups() const
 {
     if (!isValid())
     {
@@ -406,7 +406,7 @@ QList<ComputerGroupData> LocalDatabase::allGroups() const
         return {};
     }
 
-    QList<ComputerGroupData> groups;
+    QList<GroupData> groups;
     while (query.next())
         groups.append(readGroup(query));
 
@@ -414,7 +414,7 @@ QList<ComputerGroupData> LocalDatabase::allGroups() const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool LocalDatabase::addGroup(ComputerGroupData& group)
+bool LocalDatabase::addGroup(GroupData& group)
 {
     if (!isValid())
     {
@@ -447,7 +447,7 @@ bool LocalDatabase::addGroup(ComputerGroupData& group)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool LocalDatabase::modifyGroup(const ComputerGroupData& group)
+bool LocalDatabase::modifyGroup(const GroupData& group)
 {
     if (!isValid())
     {
@@ -501,7 +501,7 @@ bool LocalDatabase::removeGroup(qint64 group_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::optional<ComputerGroupData> LocalDatabase::findGroup(qint64 group_id) const
+std::optional<GroupData> LocalDatabase::findGroup(qint64 group_id) const
 {
     if (!isValid())
     {

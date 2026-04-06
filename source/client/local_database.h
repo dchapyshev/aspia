@@ -48,12 +48,12 @@ public:
     QList<ComputerData> searchComputers(const QString& query) const;
 
     // Groups.
-    QList<ComputerGroupData> groupList(qint64 parent_id) const;
-    QList<ComputerGroupData> allGroups() const;
-    bool addGroup(ComputerGroupData& group);
-    bool modifyGroup(const ComputerGroupData& group);
+    QList<GroupData> groupList(qint64 parent_id) const;
+    QList<GroupData> allGroups() const;
+    bool addGroup(GroupData& group);
+    bool modifyGroup(const GroupData& group);
     bool removeGroup(qint64 group_id);
-    std::optional<ComputerGroupData> findGroup(qint64 group_id) const;
+    std::optional<GroupData> findGroup(qint64 group_id) const;
 
 private:
     LocalDatabase() = default;

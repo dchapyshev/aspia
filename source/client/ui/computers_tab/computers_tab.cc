@@ -28,6 +28,7 @@
 #include "client/ui/computers_tab/content_widget.h"
 #include "client/ui/computers_tab/group_tree_item.h"
 #include "client/ui/computers_tab/local_computer_dialog.h"
+#include "client/ui/computers_tab/local_group_dialog.h"
 #include "client/ui/computers_tab/local_group_widget.h"
 #include "client/ui/computers_tab/router_widget.h"
 #include "client/ui/computers_tab/router_group_widget.h"
@@ -53,8 +54,13 @@ ComputersTab::ComputersTab(QWidget* parent)
     action_edit_group_ = new QAction(QIcon(":/img/change-folder.svg"), tr("Edit Group"), this);
     action_edit_computer_ = new QAction(QIcon(":/img/change-computer.svg"), tr("Edit Computer"), this);
 
+    GroupData local_root_data;
+    local_root_data.id = 0;
+    local_root_data.parent_id = 0;
+    local_root_data.name = tr("Local");
+
     // Create root groups in the tree.
-    local_root_ = new LocalGroupItem(0, tr("Local"), ui.tree_group);
+    local_root_ = new LocalGroupItem(local_root_data, ui.tree_group);
     local_root_->setExpanded(true);
 
     remote_root_ = new RouterItem(tr("Remote"), ui.tree_group);
@@ -244,19 +250,77 @@ void ComputersTab::onDeleteComputerAction()
 //--------------------------------------------------------------------------------------------------
 void ComputersTab::onAddGroupAction()
 {
+    LOG(INFO) << "[ACTION] Add group";
 
+    LocalGroupItem* item = static_cast<LocalGroupItem*>(ui.tree_group->currentItem());
+    if (!item)
+    {
+        LOG(INFO) << "No current local group item";
+        return;
+    }
+
+    LocalGroupDialog dialog(-1, item->parentId(), this);
+    if (dialog.exec() == LocalGroupDialog::Rejected)
+    {
+        LOG(INFO) << "[ACTION] Rejected by user";
+        return;
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
 void ComputersTab::onEditGroupAction()
 {
+    LOG(INFO) << "[ACTION] Edit group";
 
+    LocalGroupItem* item = static_cast<LocalGroupItem*>(ui.tree_group->currentItem());
+    if (!item)
+    {
+        LOG(INFO) << "No current local group item";
+        return;
+    }
+
+    LocalGroupDialog dialog(item->groupId(), item->parentId(), this);
+    if (dialog.exec() == LocalGroupDialog::Rejected)
+    {
+        LOG(INFO) << "[ACTION] Rejected by user";
+        return;
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
 void ComputersTab::onDeleteGroupAction()
 {
+    LOG(INFO) << "[ACTION] Delete group";
 
+    LocalGroupItem* item = static_cast<LocalGroupItem*>(ui.tree_group->currentItem());
+    if (!item)
+    {
+        LOG(INFO) << "No current local group item";
+        return;
+    }
+
+    if (item->groupId() == 0) // Root group.
+        return;
+
+    QString message = tr("Are you sure you want to delete group \"%1\"?").arg(item->groupName());
+
+    QMessageBox messagebox(QMessageBox::Question, tr("Confirmation"), message,
+                           QMessageBox::Yes | QMessageBox::No, this);
+    messagebox.button(QMessageBox::Yes)->setText(tr("Yes"));
+    messagebox.button(QMessageBox::No)->setText(tr("No"));
+
+    if (messagebox.exec() == QMessageBox::No)
+    {
+        LOG(INFO) << "Action is rejected by user";
+        return;
+    }
+
+    if (!LocalDatabase::instance().removeGroup(item->groupId()))
+    {
+        QMessageBox::warning(this, tr("Warning"), tr("Unable to remove group"));
+        LOG(INFO) << "Unable to remove group with id" << item->groupId();
+        return;
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -303,11 +367,11 @@ void ComputersTab::onCurrentComputerChanged(qint64 computer_id)
 //--------------------------------------------------------------------------------------------------
 void ComputersTab::loadGroups(qint64 parent_id, QTreeWidgetItem* parent_item)
 {
-    QList<ComputerGroupData> groups = LocalDatabase::instance().groupList(parent_id);
+    QList<GroupData> groups = LocalDatabase::instance().groupList(parent_id);
 
-    for (const ComputerGroupData& group : std::as_const(groups))
+    for (const GroupData& group : std::as_const(groups))
     {
-        LocalGroupItem* item = new LocalGroupItem(group.id, group.name, parent_item);
+        LocalGroupItem* item = new LocalGroupItem(group, parent_item);
         item->setExpanded(group.expanded);
 
         // Load child groups recursively.
