@@ -65,6 +65,13 @@ void ClientTab::addToolbarAction(QToolBar* toolbar, QAction* action, QAction* be
 }
 
 //--------------------------------------------------------------------------------------------------
+void ClientTab::addToolbarSeparator(QToolBar* toolbar, QAction* before)
+{
+    QAction* separator = toolbar->insertSeparator(before);
+    toolbar_actions_.append(separator);
+}
+
+//--------------------------------------------------------------------------------------------------
 void ClientTab::removeAllToolbarActions(QToolBar* toolbar)
 {
     for (QAction* action : std::as_const(toolbar_actions_))

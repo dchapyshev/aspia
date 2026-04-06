@@ -123,6 +123,8 @@ void ComputersTab::onActivated(QToolBar* toolbar, QStatusBar* statusbar)
     addToolbarAction(toolbar, action_edit_group_, before);
     addToolbarAction(toolbar, action_delete_group_, before);
 
+    addToolbarSeparator(toolbar, before);
+
     addToolbarAction(toolbar, action_add_computer_, before);
     addToolbarAction(toolbar, action_edit_computer_, before);
     addToolbarAction(toolbar, action_delete_computer_, before);

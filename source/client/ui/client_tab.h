@@ -52,6 +52,7 @@ signals:
 
 protected:
     void addToolbarAction(QToolBar* toolbar, QAction* action, QAction* before);
+    void addToolbarSeparator(QToolBar* toolbar, QAction* before);
     void removeAllToolbarActions(QToolBar* toolbar);
 
     QList<QAction*> toolbar_actions_;
