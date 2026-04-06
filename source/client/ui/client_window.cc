@@ -108,6 +108,9 @@ ClientWindow::ClientWindow(QWidget* parent)
             this, &ClientWindow::onAfterThemeChanged);
     onAfterThemeChanged();
 
+    // Hide dynamic menus until a tab populates them.
+    ui.menu_edit->menuAction()->setVisible(false);
+
     // Create default tabs.
     addTab(new ComputersTab(this), tr("Computers"), QIcon(":/img/computer.svg"));
 }
@@ -411,6 +414,8 @@ void ClientWindow::installTabActions(ClientTab* tab)
 
             menu->addActions(entry.second);
             tab_menu_actions_.append({ menu, entry.second });
+
+            menu->menuAction()->setVisible(true);
         }
     }
 
@@ -447,6 +452,10 @@ void ClientWindow::removeTabActions()
             menu->removeAction(remaining.last());
             remaining.removeLast();
         }
+
+        // Hide menu if it has no actions left.
+        if (menu->isEmpty())
+            menu->menuAction()->setVisible(false);
     }
 
     tab_menu_actions_.clear();
@@ -455,6 +464,7 @@ void ClientWindow::removeTabActions()
 //--------------------------------------------------------------------------------------------------
 void ClientWindow::updateSeparatorVisibility()
 {
+    // Update toolbar separator visibility.
     for (int i = 0; i < tab_toolbar_actions_.size(); ++i)
     {
         if (!tab_toolbar_actions_[i]->isSeparator())
@@ -474,6 +484,33 @@ void ClientWindow::updateSeparatorVisibility()
         }
 
         tab_toolbar_actions_[i]->setVisible(has_visible);
+    }
+
+    // Update menu visibility: hide menu if none of its tab actions are visible.
+    QSet<QMenu*> menus;
+    for (const auto& [menu, actions] : std::as_const(tab_menu_actions_))
+        menus.insert(menu);
+
+    for (QMenu* menu : std::as_const(menus))
+    {
+        bool has_visible = false;
+        for (const auto& [m, actions] : std::as_const(tab_menu_actions_))
+        {
+            if (m != menu)
+                continue;
+            for (QAction* action : actions)
+            {
+                if (action->isVisible())
+                {
+                    has_visible = true;
+                    break;
+                }
+            }
+            if (has_visible)
+                break;
+        }
+
+        menu->menuAction()->setVisible(has_visible);
     }
 }
 
