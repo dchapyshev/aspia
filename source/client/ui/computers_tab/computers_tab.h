@@ -49,7 +49,13 @@ public:
 
 private slots:
     void onAddComputerAction();
-    void onGroupItemClicked(QTreeWidgetItem* item, int column);
+    void onEditComputerAction();
+    void onDeleteComputerAction();
+    void onAddGroupAction();
+    void onEditGroupAction();
+    void onDeleteGroupAction();
+    void onCurrentGroupChanged(QTreeWidgetItem* current, QTreeWidgetItem* previous);
+    void onCurrentComputerChanged(qint64 computer_id);
 
 private:
     void loadGroups(qint64 parent_id, QTreeWidgetItem* parent_item);

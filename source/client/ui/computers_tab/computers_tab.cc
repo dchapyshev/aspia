@@ -74,8 +74,14 @@ ComputersTab::ComputersTab(QWidget* parent)
     switchContent(local_group_widget_);
 
     // Connect signals.
-    connect(ui.tree_group, &QTreeWidget::itemClicked, this, &ComputersTab::onGroupItemClicked);
+    connect(ui.tree_group, &QTreeWidget::currentItemChanged, this, &ComputersTab::onCurrentGroupChanged);
+    connect(local_group_widget_, &LocalGroupWidget::sig_currentComputerChanged, this, &ComputersTab::onCurrentComputerChanged);
     connect(action_add_computer_, &QAction::triggered, this, &ComputersTab::onAddComputerAction);
+    connect(action_edit_computer_, &QAction::triggered, this, &ComputersTab::onEditComputerAction);
+    connect(action_delete_computer_, &QAction::triggered, this, &ComputersTab::onDeleteComputerAction);
+    connect(action_add_group_, &QAction::triggered, this, &ComputersTab::onAddGroupAction);
+    connect(action_edit_group_, &QAction::triggered, this, &ComputersTab::onEditGroupAction);
+    connect(action_delete_group_, &QAction::triggered, this, &ComputersTab::onDeleteGroupAction);
 
     if (!LocalDatabase::instance().isValid())
     {
@@ -87,6 +93,7 @@ ComputersTab::ComputersTab(QWidget* parent)
     loadGroups(0, local_root_);
 
     // Show computers in root group by default.
+    ui.tree_group->setCurrentItem(local_root_);
     local_group_widget_->showGroup(0);
     updateActionsState();
 }
@@ -173,17 +180,94 @@ void ComputersTab::onAddComputerAction()
         LOG(INFO) << "[ACTION] Rejected by user";
         return;
     }
+
+    local_group_widget_->showGroup(current_group_id_);
 }
 
 //--------------------------------------------------------------------------------------------------
-void ComputersTab::onGroupItemClicked(QTreeWidgetItem* item, int /* column */)
+void ComputersTab::onEditComputerAction()
+{
+    LOG(INFO) << "[ACTION] Edit computer";
+
+    LocalComputerItem* item = local_group_widget_->currentComputer();
+    if (!item)
+    {
+        LOG(INFO) << "No current local item";
+        return;
+    }
+
+    LocalComputerDialog dialog(item->computerId(), item->groupId(), this);
+    if (dialog.exec() == LocalComputerDialog::Rejected)
+    {
+        LOG(INFO) << "[ACTION] Rejected by user";
+        return;
+    }
+
+    local_group_widget_->showGroup(current_group_id_);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ComputersTab::onDeleteComputerAction()
+{
+    LOG(INFO) << "[ACTION] Delete computer";
+
+    LocalComputerItem* item = local_group_widget_->currentComputer();
+    if (!item)
+    {
+        LOG(INFO) << "No current local item";
+        return;
+    }
+
+    QString message = tr("Are you sure you want to delete computer \"%1\"?").arg(item->computerName());
+
+    QMessageBox messagebox(QMessageBox::Question, tr("Confirmation"), message,
+                            QMessageBox::Yes | QMessageBox::No, this);
+    messagebox.button(QMessageBox::Yes)->setText(tr("Yes"));
+    messagebox.button(QMessageBox::No)->setText(tr("No"));
+
+    if (messagebox.exec() == QMessageBox::No)
+    {
+        LOG(INFO) << "Action is rejected by user";
+        return;
+    }
+
+    if (!LocalDatabase::instance().removeComputer(item->computerId()))
+    {
+        QMessageBox::warning(this, tr("Warning"), tr("Unable to remove computer"));
+        LOG(INFO) << "Unable to remove computer with id" << item->computerId();
+        return;
+    }
+
+    local_group_widget_->showGroup(current_group_id_);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ComputersTab::onAddGroupAction()
+{
+
+}
+
+//--------------------------------------------------------------------------------------------------
+void ComputersTab::onEditGroupAction()
+{
+
+}
+
+//--------------------------------------------------------------------------------------------------
+void ComputersTab::onDeleteGroupAction()
+{
+
+}
+
+//--------------------------------------------------------------------------------------------------
+void ComputersTab::onCurrentGroupChanged(QTreeWidgetItem* current, QTreeWidgetItem* /* previous */)
 {
     updateActionsState();
 
-    if (!item)
+    if (!current)
         return;
 
-    GroupTreeItem* group_item = static_cast<GroupTreeItem*>(item);
+    GroupTreeItem* group_item = static_cast<GroupTreeItem*>(current);
 
     switch (group_item->itemType())
     {
@@ -208,6 +292,12 @@ void ComputersTab::onGroupItemClicked(QTreeWidgetItem* item, int /* column */)
         }
         break;
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void ComputersTab::onCurrentComputerChanged(qint64 computer_id)
+{
+    updateActionsState();
 }
 
 //--------------------------------------------------------------------------------------------------

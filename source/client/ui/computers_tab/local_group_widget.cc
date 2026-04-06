@@ -41,6 +41,20 @@ LocalGroupWidget::LocalGroupWidget(QWidget* parent)
         ContentTreeItem* computer_item = static_cast<ContentTreeItem*>(item);
         emit sig_computerDoubleClicked(computer_item->computerId());
     });
+
+    connect(ui.tree_computer, &QTreeWidget::currentItemChanged,
+            this, [this](QTreeWidgetItem* current, QTreeWidgetItem* /* previous */)
+    {
+        qint64 computer_id = -1;
+
+        if (current)
+        {
+            LocalComputerItem* computer_item = static_cast<LocalComputerItem*>(current);
+            computer_id = computer_item->computerId();
+        }
+
+        emit sig_currentComputerChanged(computer_id);
+    });
 }
 
 //--------------------------------------------------------------------------------------------------

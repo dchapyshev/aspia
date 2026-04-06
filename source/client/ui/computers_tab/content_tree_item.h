@@ -32,6 +32,8 @@ public:
 
     Type itemType() const;
     qint64 computerId() const;
+    qint64 groupId() const;
+    QString computerName() const;
 
 protected:
     ContentTreeItem(Type type, const ComputerData& computer, QTreeWidget* parent);
@@ -39,6 +41,8 @@ protected:
 private:
     Type type_;
     qint64 computer_id_;
+    qint64 group_id_;
+    QString computer_name_;
 };
 
 class LocalComputerItem : public ContentTreeItem

@@ -36,7 +36,9 @@ const int kColumnComment = 2;
 ContentTreeItem::ContentTreeItem(Type type, const ComputerData& computer, QTreeWidget* parent)
     : QTreeWidgetItem(parent),
       type_(type),
-      computer_id_(computer.id)
+      computer_id_(computer.id),
+      group_id_(computer.group_id),
+      computer_name_(computer.name)
 {
     setText(kColumnName, computer.name);
     setText(kColumnAddress, computer.address);
@@ -54,6 +56,18 @@ ContentTreeItem::Type ContentTreeItem::itemType() const
 qint64 ContentTreeItem::computerId() const
 {
     return computer_id_;
+}
+
+//--------------------------------------------------------------------------------------------------
+qint64 ContentTreeItem::groupId() const
+{
+    return group_id_;
+}
+
+//--------------------------------------------------------------------------------------------------
+QString ContentTreeItem::computerName() const
+{
+    return computer_name_;
 }
 
 //--------------------------------------------------------------------------------------------------
