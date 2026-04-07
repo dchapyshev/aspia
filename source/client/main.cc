@@ -27,7 +27,7 @@
 #include "build/build_config.h"
 #include "build/version.h"
 #include "client/config_factory.h"
-#include "client/router_config_storage.h"
+#include "client/ui/settings.h"
 #include "client/ui/application.h"
 #include "client/ui/main_window.h"
 #include "client/ui/chat/chat_session_window.h"
@@ -461,7 +461,7 @@ int clientMain(int argc, char* argv[])
         {
             LOG(INFO) << "Relay connection selected";
 
-            client::RouterConfig router_config = client::RouterConfigStorage().routerConfig();
+            client::RouterConfig router_config = client::Settings().routerConfig();
 
             if (parser.isSet(router_address_option))
             {

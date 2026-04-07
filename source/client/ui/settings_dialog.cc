@@ -22,7 +22,6 @@
 #include "base/net/address.h"
 #include "base/peer/user.h"
 #include "build/build_config.h"
-#include "client/router_config_storage.h"
 #include "client/ui/settings.h"
 
 #include <QMessageBox>
@@ -42,8 +41,9 @@ SettingsDialog::SettingsDialog(QWidget* parent)
     if (cancel_button)
         cancel_button->setText(tr("Cancel"));
 
-    RouterConfigStorage config_storage;
-    RouterConfig config = config_storage.routerConfig();
+    Settings settings;
+
+    RouterConfig config = settings.routerConfig();
 
     base::Address address(DEFAULT_ROUTER_TCP_PORT);
     address.setHost(config.address);
@@ -54,10 +54,9 @@ SettingsDialog::SettingsDialog(QWidget* parent)
     ui.edit_username->setText(config.username);
     ui.edit_password->setText(config.password);
 
-    Settings settings;
     ui.edit_display_name->setText(settings.displayName());
 
-    if (!config_storage.isEnabled())
+    if (!settings.isRouterEnabled())
     {
         ui.checkbox_enable_router->setChecked(false);
 
@@ -177,11 +176,9 @@ void SettingsDialog::onButtonBoxClicked(QAbstractButton* button)
         config.username = std::move(username);
         config.password = std::move(password);
 
-        RouterConfigStorage config_storage;
-        config_storage.setEnabled(ui.checkbox_enable_router->isChecked());
-        config_storage.setRouterConfig(config);
-
         Settings settings;
+        settings.setRouterEnabled(ui.checkbox_enable_router->isChecked());
+        settings.setRouterConfig(config);
         settings.setDisplayName(ui.edit_display_name->text());
 
         accept();
