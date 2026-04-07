@@ -34,7 +34,6 @@
 #include "client/ui/settings_dialog.h"
 #include "client/ui/client_tab.h"
 #include "client/ui/computers_tab/computers_tab.h"
-#include "client/ui/update_settings_dialog.h"
 #include "common/update_checker.h"
 #include "common/ui/about_dialog.h"
 #include "common/ui/language_action.h"
@@ -83,11 +82,6 @@ MainWindow::MainWindow(QWidget* parent)
 
 #if defined(Q_OS_WINDOWS)
     connect(ui.action_check_for_updates, &QAction::triggered, this, &MainWindow::onCheckUpdates);
-    connect(ui.action_update_settings, &QAction::triggered, this, [this]()
-    {
-        LOG(INFO) << "[ACTION] Update settings dialog";
-        UpdateSettingsDialog(this).exec();
-    });
 
     if (settings.checkUpdates())
     {
@@ -101,7 +95,6 @@ MainWindow::MainWindow(QWidget* parent)
     }
 #else
     ui.action_check_for_updates->setVisible(false);
-    ui.action_update_settings->setVisible(false);
 #endif
 
     connect(base::GuiApplication::instance(), &base::GuiApplication::sig_themeChanged,

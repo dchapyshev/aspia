@@ -18,15 +18,16 @@
 
 #include "client/ui/settings_dialog.h"
 
+#include <QAbstractButton>
+#include <QMessageBox>
+#include <QPushButton>
+#include <QTimer>
+
 #include "base/logging.h"
 #include "base/net/address.h"
 #include "base/peer/user.h"
 #include "build/build_config.h"
 #include "client/ui/settings.h"
-
-#include <QMessageBox>
-#include <QPushButton>
-#include <QTimer>
 
 namespace client {
 
@@ -84,8 +85,38 @@ SettingsDialog::SettingsDialog(QWidget* parent)
         ui.edit_password->setEnabled(checked);
     });
 
-    connect(ui.buttonbox, &QDialogButtonBox::clicked,
-            this, &SettingsDialog::onButtonBoxClicked);
+    // Update tab.
+#if defined(Q_OS_WINDOWS)
+    ui.checkbox_check_updates->setChecked(settings.checkUpdates());
+    ui.edit_update_server->setText(settings.updateServer());
+
+    if (settings.updateServer() == DEFAULT_UPDATE_SERVER)
+    {
+        ui.checkbox_custom_server->setChecked(false);
+        ui.edit_update_server->setEnabled(false);
+    }
+    else
+    {
+        ui.checkbox_custom_server->setChecked(true);
+        ui.edit_update_server->setEnabled(true);
+    }
+
+    connect(ui.checkbox_custom_server, &QCheckBox::toggled, this, [this](bool checked)
+    {
+        LOG(INFO) << "[ACTION] Custom server checkbox:" << checked;
+        ui.edit_update_server->setEnabled(checked);
+
+        if (!checked)
+            ui.edit_update_server->setText(DEFAULT_UPDATE_SERVER);
+    });
+#else
+    // Hide the update tab on non-Windows platforms.
+    int update_tab_index = ui.tabbar->indexOf(ui.tab_update);
+    if (update_tab_index != -1)
+        ui.tabbar->removeTab(update_tab_index);
+#endif
+
+    connect(ui.buttonbox, &QDialogButtonBox::clicked, this, &SettingsDialog::onButtonBoxClicked);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -180,6 +211,11 @@ void SettingsDialog::onButtonBoxClicked(QAbstractButton* button)
         settings.setRouterEnabled(ui.checkbox_enable_router->isChecked());
         settings.setRouterConfig(config);
         settings.setDisplayName(ui.edit_display_name->text());
+
+#if defined(Q_OS_WINDOWS)
+        settings.setCheckUpdates(ui.checkbox_check_updates->isChecked());
+        settings.setUpdateServer(ui.edit_update_server->text());
+#endif
 
         accept();
     }

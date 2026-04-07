@@ -82,9 +82,7 @@ list(APPEND SOURCE_CLIENT_CORE_UI
     ui/settings_dialog.ui
     ui/session_window.cc
     ui/session_window.h
-    ui/update_settings_dialog.cc
-    ui/update_settings_dialog.h
-    ui/update_settings_dialog.ui)
+)
 
 list(APPEND SOURCE_CLIENT_CORE_UI_DESKTOP
     ui/desktop/desktop_config_dialog.cc
