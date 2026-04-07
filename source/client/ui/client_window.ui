@@ -116,10 +116,6 @@
     <property name="title">
      <string>Session Type</string>
     </property>
-    <addaction name="action_desktop"/>
-    <addaction name="action_file_transfer"/>
-    <addaction name="action_chat"/>
-    <addaction name="action_sys_info"/>
    </widget>
    <addaction name="menu_aspia"/>
    <addaction name="menu_edit"/>
@@ -139,10 +135,6 @@
    </attribute>
    <addaction name="action_settings"/>
    <addaction name="separator"/>
-   <addaction name="action_desktop"/>
-   <addaction name="action_file_transfer"/>
-   <addaction name="action_chat"/>
-   <addaction name="action_sys_info"/>
    <addaction name="separator"/>
    <addaction name="action_help"/>
    <addaction name="action_exit"/>
@@ -192,54 +184,6 @@
   <action name="action_update_settings">
    <property name="text">
     <string>Update Settings</string>
-   </property>
-  </action>
-  <action name="action_desktop">
-   <property name="icon">
-    <iconset resource="../../common/resources/common.qrc">
-     <normaloff>:/img/workstation.svg</normaloff>:/img/workstation.svg</iconset>
-   </property>
-   <property name="text">
-    <string>Desktop Manage</string>
-   </property>
-   <property name="menuRole">
-    <enum>QAction::MenuRole::NoRole</enum>
-   </property>
-  </action>
-  <action name="action_file_transfer">
-   <property name="icon">
-    <iconset resource="../../common/resources/common.qrc">
-     <normaloff>:/img/file-explorer.svg</normaloff>:/img/file-explorer.svg</iconset>
-   </property>
-   <property name="text">
-    <string>File Transfer</string>
-   </property>
-   <property name="menuRole">
-    <enum>QAction::MenuRole::NoRole</enum>
-   </property>
-  </action>
-  <action name="action_chat">
-   <property name="icon">
-    <iconset resource="../../common/resources/common.qrc">
-     <normaloff>:/img/chat.svg</normaloff>:/img/chat.svg</iconset>
-   </property>
-   <property name="text">
-    <string>Chat</string>
-   </property>
-   <property name="menuRole">
-    <enum>QAction::MenuRole::NoRole</enum>
-   </property>
-  </action>
-  <action name="action_sys_info">
-   <property name="icon">
-    <iconset resource="../../common/resources/common.qrc">
-     <normaloff>:/img/system-information.svg</normaloff>:/img/system-information.svg</iconset>
-   </property>
-   <property name="text">
-    <string>System Information</string>
-   </property>
-   <property name="menuRole">
-    <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
  </widget>
