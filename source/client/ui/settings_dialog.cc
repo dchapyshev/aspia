@@ -110,10 +110,7 @@ SettingsDialog::SettingsDialog(QWidget* parent)
             ui.edit_update_server->setText(DEFAULT_UPDATE_SERVER);
     });
 #else
-    // Hide the update tab on non-Windows platforms.
-    int update_tab_index = ui.tabbar->indexOf(ui.tab_update);
-    if (update_tab_index != -1)
-        ui.tabbar->removeTab(update_tab_index);
+    ui.tabbar->setTabVisible(ui.tabbar->indexOf(ui.tab_update), false);
 #endif
 
     connect(ui.buttonbox, &QDialogButtonBox::clicked, this, &SettingsDialog::onButtonBoxClicked);
