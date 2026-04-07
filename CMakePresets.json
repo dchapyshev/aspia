@@ -187,56 +187,6 @@
       "name": "ci-debug",
       "configurePreset": "ci",
       "configuration": "Debug"
-    },
-    {
-      "name": "local-win-x86-release",
-      "configurePreset": "local-win-x86",
-      "configuration": "Release"
-    },
-    {
-      "name": "local-win-x86-debug",
-      "configurePreset": "local-win-x86",
-      "configuration": "Debug"
-    },
-    {
-      "name": "local-win-arm64-release",
-      "configurePreset": "local-win-arm64",
-      "configuration": "Release"
-    },
-    {
-      "name": "local-win-arm64-debug",
-      "configurePreset": "local-win-arm64",
-      "configuration": "Debug"
-    },
-    {
-      "name": "local-win-x64-release",
-      "configurePreset": "local-win-x64",
-      "configuration": "Release"
-    },
-    {
-      "name": "local-win-x64-debug",
-      "configurePreset": "local-win-x64",
-      "configuration": "Debug"
-    },
-    {
-      "name": "local-linux-x64-release",
-      "configurePreset": "local-linux-x64",
-      "configuration": "Release"
-    },
-    {
-      "name": "local-linux-x64-debug",
-      "configurePreset": "local-linux-x64",
-      "configuration": "Debug"
-    },
-    {
-      "name": "local-linux-arm64-release",
-      "configurePreset": "local-linux-arm64",
-      "configuration": "Release"
-    },
-    {
-      "name": "local-linux-arm64-debug",
-      "configurePreset": "local-linux-arm64",
-      "configuration": "Debug"
     }
   ],
   "testPresets": [
