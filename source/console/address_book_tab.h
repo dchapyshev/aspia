@@ -22,7 +22,7 @@
 #include <optional>
 #include <memory>
 
-#include "client/router_config.h"
+#include "client/config.h"
 #include "client/online_checker/online_checker.h"
 #include "proto/address_book.h"
 #include "ui_address_book_tab.h"

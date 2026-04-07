@@ -21,7 +21,7 @@
 
 #include <QDialog>
 
-#include "client/client_config.h"
+#include "client/config.h"
 #include "proto/address_book.h"
 #include "proto/desktop_control.h"
 #include "ui_fast_connect_dialog.h"
