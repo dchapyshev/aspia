@@ -103,6 +103,7 @@ MainWindow::MainWindow(QWidget* parent)
 
     // Hide dynamic menus until a tab populates them.
     ui.menu_edit->menuAction()->setVisible(false);
+    ui.menu_session_type->menuAction()->setVisible(false);
 
     // Create default tabs.
     addTab(new ComputersTab(this), tr("Computers"), QIcon(":/img/computer.svg"));
@@ -514,6 +515,9 @@ QMenu* MainWindow::menuForActionGroup(ClientTab::ActionGroup group) const
     {
         case ClientTab::ActionGroup::EDIT:
             return ui.menu_edit;
+
+        case ClientTab::ActionGroup::SESSION_TYPE:
+            return ui.menu_session_type;
 
         default:
             return nullptr;

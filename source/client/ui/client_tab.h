@@ -37,7 +37,8 @@ public:
 
     enum class ActionGroup
     {
-        EDIT
+        EDIT,
+        SESSION_TYPE
     };
 
     explicit ClientTab(Type type, QWidget* parent = nullptr);

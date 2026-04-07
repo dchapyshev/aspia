@@ -71,11 +71,17 @@ private:
     RouterItem* remote_root_ = nullptr;
 
     QAction* action_add_group_ = nullptr;
-    QAction* action_add_computer_ = nullptr;
     QAction* action_delete_group_ = nullptr;
-    QAction* action_delete_computer_ = nullptr;
     QAction* action_edit_group_ = nullptr;
+
+    QAction* action_add_computer_ = nullptr;
+    QAction* action_delete_computer_ = nullptr;
     QAction* action_edit_computer_ = nullptr;
+
+    QAction* action_desktop_ = nullptr;
+    QAction* action_file_transfer_ = nullptr;
+    QAction* action_chat_ = nullptr;
+    QAction* action_system_info_ = nullptr;
 
     ContentWidget* current_content_ = nullptr;
     ContentWidget* previous_content_ = nullptr;

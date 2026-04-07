@@ -18,11 +18,13 @@
 
 #include "client/ui/computers_tab/computers_tab.h"
 
+#include <QActionGroup>
 #include <QMessageBox>
 #include <QStatusBar>
 
 #include "base/logging.h"
 #include "client/local_database.h"
+#include "client/ui/settings.h"
 #include "client/ui/computers_tab/content_tree_item.h"
 #include "client/ui/computers_tab/content_widget.h"
 #include "client/ui/computers_tab/group_tree_item.h"
@@ -45,13 +47,48 @@ ComputersTab::ComputersTab(QWidget* parent)
 
     // Create toolbar actions.
     action_add_group_ = new QAction(QIcon(":/img/add-folder.svg"), tr("Add Group"), this);
-    action_add_computer_ = new QAction(QIcon(":/img/add-computer.svg"), tr("Add Computer"), this);
-
     action_delete_group_ = new QAction(QIcon(":/img/remove-folder.svg"), tr("Delete Group"), this);
-    action_delete_computer_ = new QAction(QIcon(":/img/remove-computer.svg"), tr("Delete Computer"), this);
-
     action_edit_group_ = new QAction(QIcon(":/img/change-folder.svg"), tr("Edit Group"), this);
+
+    action_add_computer_ = new QAction(QIcon(":/img/add-computer.svg"), tr("Add Computer"), this);
+    action_delete_computer_ = new QAction(QIcon(":/img/remove-computer.svg"), tr("Delete Computer"), this);
     action_edit_computer_ = new QAction(QIcon(":/img/change-computer.svg"), tr("Edit Computer"), this);
+
+    action_desktop_ = new QAction(QIcon(":/img/workstation.svg"), tr("Desktop Manage"), this);
+    action_file_transfer_ = new QAction(QIcon(":/img/file-explorer.svg"), tr("File Transfer"), this);
+    action_chat_ = new QAction(QIcon(":/img/chat.svg"), tr("Chat"), this);
+    action_system_info_ = new QAction(QIcon(":/img/system-information.svg"), tr("System Information"), this);
+
+    action_desktop_->setCheckable(true);
+    action_file_transfer_->setCheckable(true);
+    action_chat_->setCheckable(true);
+    action_system_info_->setCheckable(true);
+
+    QActionGroup* session_type_group = new QActionGroup(this);
+    session_type_group->addAction(action_desktop_);
+    session_type_group->addAction(action_file_transfer_);
+    session_type_group->addAction(action_chat_);
+    session_type_group->addAction(action_system_info_);
+
+    Settings settings;
+
+    switch (settings.sessionType())
+    {
+        case proto::peer::SESSION_TYPE_DESKTOP:
+            action_desktop_->setChecked(true);
+            break;
+        case proto::peer::SESSION_TYPE_FILE_TRANSFER:
+            action_file_transfer_->setChecked(true);
+            break;
+        case proto::peer::SESSION_TYPE_TEXT_CHAT:
+            action_chat_->setChecked(true);
+            break;
+        case proto::peer::SESSION_TYPE_SYSTEM_INFO:
+            action_system_info_->setChecked(true);
+            break;
+        default:
+            break;
+    }
 
     GroupData local_root_data;
     local_root_data.id = 0;
@@ -91,6 +128,7 @@ ComputersTab::ComputersTab(QWidget* parent)
     // Register actions for toolbar and menus.
     addActions(ActionGroup::EDIT, { action_add_group_, action_edit_group_, action_delete_group_ });
     addActions(ActionGroup::EDIT, { action_add_computer_, action_edit_computer_, action_delete_computer_ });
+    addActions(ActionGroup::SESSION_TYPE, { action_desktop_, action_file_transfer_, action_chat_, action_system_info_ });
 
     if (!LocalDatabase::instance().isValid())
     {
@@ -111,6 +149,17 @@ ComputersTab::ComputersTab(QWidget* parent)
 ComputersTab::~ComputersTab()
 {
     LOG(INFO) << "Dtor";
+
+    Settings settings;
+
+    if (action_desktop_->isChecked())
+        settings.setSessionType(proto::peer::SESSION_TYPE_DESKTOP);
+    else if (action_file_transfer_->isChecked())
+        settings.setSessionType(proto::peer::SESSION_TYPE_FILE_TRANSFER);
+    else if (action_chat_->isChecked())
+        settings.setSessionType(proto::peer::SESSION_TYPE_TEXT_CHAT);
+    else if (action_system_info_->isChecked())
+        settings.setSessionType(proto::peer::SESSION_TYPE_SYSTEM_INFO);
 }
 
 //--------------------------------------------------------------------------------------------------

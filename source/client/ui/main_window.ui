@@ -110,7 +110,7 @@
     <addaction name="menu_language"/>
     <addaction name="menu_theme"/>
    </widget>
-   <widget class="QMenu" name="menuSession_Type">
+   <widget class="QMenu" name="menu_session_type">
     <property name="title">
      <string>Session Type</string>
     </property>
@@ -118,7 +118,7 @@
    <addaction name="menu_aspia"/>
    <addaction name="menu_edit"/>
    <addaction name="menu_view"/>
-   <addaction name="menuSession_Type"/>
+   <addaction name="menu_session_type"/>
    <addaction name="menu_help"/>
   </widget>
   <widget class="QToolBar" name="toolbar">
@@ -132,7 +132,6 @@
     <bool>false</bool>
    </attribute>
    <addaction name="action_settings"/>
-   <addaction name="separator"/>
    <addaction name="separator"/>
    <addaction name="action_help"/>
    <addaction name="action_exit"/>
