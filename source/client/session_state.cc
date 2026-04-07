@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/client_session_state.h"
+#include "client/session_state.h"
 
 #include "base/peer/host_id.h"
 

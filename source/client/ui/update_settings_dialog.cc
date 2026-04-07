@@ -22,7 +22,7 @@
 
 #include "base/logging.h"
 #include "build/build_config.h"
-#include "client/ui/client_settings.h"
+#include "client/ui/settings.h"
 
 namespace client {
 
@@ -37,7 +37,7 @@ UpdateSettingsDialog::UpdateSettingsDialog(QWidget* parent)
     if (cancel_button)
         cancel_button->setText(tr("Cancel"));
 
-    ClientSettings settings;
+    Settings settings;
 
     ui.checkbox_check_updates->setChecked(settings.checkUpdates());
     ui.edit_server->setText(settings.updateServer());
@@ -68,7 +68,7 @@ UpdateSettingsDialog::UpdateSettingsDialog(QWidget* parent)
         {
             LOG(INFO) << "[ACTION] Accepted by user";
 
-            ClientSettings settings;
+            Settings settings;
             settings.setCheckUpdates(ui.checkbox_check_updates->isChecked());
             settings.setUpdateServer(ui.edit_server->text());
         }

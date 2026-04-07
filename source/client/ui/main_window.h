@@ -16,14 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_UI_CLIENT_WINDOW_H
-#define CLIENT_UI_CLIENT_WINDOW_H
+#ifndef CLIENT_UI_MAIN_WINDOW_H
+#define CLIENT_UI_MAIN_WINDOW_H
 
 #include <QByteArray>
 #include <QMainWindow>
 
 #include "client/ui/client_tab.h"
-#include "ui_client_window.h"
+#include "ui_main_window.h"
 
 class QLineEdit;
 
@@ -35,13 +35,13 @@ namespace client {
 
 class ClientTab;
 
-class ClientWindow final : public QMainWindow
+class MainWindow final : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit ClientWindow(QWidget* parent = nullptr);
-    ~ClientWindow() final;
+    explicit MainWindow(QWidget* parent = nullptr);
+    ~MainWindow() final;
 
 protected:
     // QMainWindow implementation.
@@ -72,7 +72,7 @@ private:
     void updateSeparatorVisibility();
     QMenu* menuForActionGroup(ClientTab::ActionGroup group) const;
 
-    Ui::ClientWindow ui;
+    Ui::MainWindow ui;
     std::unique_ptr<common::UpdateChecker> update_checker_;
 
     QLineEdit* search_field_ = nullptr;
@@ -81,9 +81,9 @@ private:
     QList<QAction*> tab_toolbar_actions_;
     QList<QPair<QMenu*, QList<QAction*>>> tab_menu_actions_;
 
-    Q_DISABLE_COPY_MOVE(ClientWindow)
+    Q_DISABLE_COPY_MOVE(MainWindow)
 };
 
 } // namespace client
 
-#endif // CLIENT_UI_CLIENT_WINDOW_H
+#endif // CLIENT_UI_MAIN_WINDOW_H

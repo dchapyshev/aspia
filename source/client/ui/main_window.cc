@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/ui/client_window.h"
+#include "client/ui/main_window.h"
 
 #include <QActionGroup>
 #include <QDesktopServices>
@@ -30,8 +30,8 @@
 #include "base/logging.h"
 #include "base/version_constants.h"
 #include "client/ui/application.h"
-#include "client/ui/client_settings.h"
-#include "client/ui/client_settings_dialog.h"
+#include "client/ui/settings.h"
+#include "client/ui/settings_dialog.h"
 #include "client/ui/client_tab.h"
 #include "client/ui/computers_tab/computers_tab.h"
 #include "client/ui/update_settings_dialog.h"
@@ -43,12 +43,12 @@
 namespace client {
 
 //--------------------------------------------------------------------------------------------------
-ClientWindow::ClientWindow(QWidget* parent)
+MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent)
 {
     LOG(INFO) << "Ctor";
 
-    ClientSettings settings;
+    Settings settings;
 
     ui.setupUi(this);
 
@@ -67,22 +67,22 @@ ClientWindow::ClientWindow(QWidget* parent)
     createLanguageMenu(settings.locale());
     createThemeMenu(settings.theme());
 
-    connect(ui.menu_language, &QMenu::triggered, this, &ClientWindow::onLanguageChanged);
-    connect(ui.menu_theme, &QMenu::triggered, this, &ClientWindow::onThemeChanged);
-    connect(ui.action_settings, &QAction::triggered, this, &ClientWindow::onSettings);
-    connect(ui.action_help, &QAction::triggered, this, &ClientWindow::onHelp);
-    connect(ui.action_about, &QAction::triggered, this, &ClientWindow::onAbout);
-    connect(ui.action_exit, &QAction::triggered, this, &ClientWindow::close);
+    connect(ui.menu_language, &QMenu::triggered, this, &MainWindow::onLanguageChanged);
+    connect(ui.menu_theme, &QMenu::triggered, this, &MainWindow::onThemeChanged);
+    connect(ui.action_settings, &QAction::triggered, this, &MainWindow::onSettings);
+    connect(ui.action_help, &QAction::triggered, this, &MainWindow::onHelp);
+    connect(ui.action_about, &QAction::triggered, this, &MainWindow::onAbout);
+    connect(ui.action_exit, &QAction::triggered, this, &MainWindow::close);
 
     // Tab management.
-    connect(ui.tabs, &QTabWidget::currentChanged, this, &ClientWindow::onCurrentTabChanged);
-    connect(ui.tabs, &QTabWidget::tabCloseRequested, this, &ClientWindow::onCloseTab);
+    connect(ui.tabs, &QTabWidget::currentChanged, this, &MainWindow::onCurrentTabChanged);
+    connect(ui.tabs, &QTabWidget::tabCloseRequested, this, &MainWindow::onCloseTab);
 
     // Search field.
-    connect(search_field_, &QLineEdit::textChanged, this, &ClientWindow::onSearchTextChanged);
+    connect(search_field_, &QLineEdit::textChanged, this, &MainWindow::onSearchTextChanged);
 
 #if defined(Q_OS_WINDOWS)
-    connect(ui.action_check_for_updates, &QAction::triggered, this, &ClientWindow::onCheckUpdates);
+    connect(ui.action_check_for_updates, &QAction::triggered, this, &MainWindow::onCheckUpdates);
     connect(ui.action_update_settings, &QAction::triggered, this, [this]()
     {
         LOG(INFO) << "[ACTION] Update settings dialog";
@@ -94,7 +94,7 @@ ClientWindow::ClientWindow(QWidget* parent)
         update_checker_ = std::make_unique<common::UpdateChecker>(settings.updateServer(), "client");
 
         connect(update_checker_.get(), &common::UpdateChecker::sig_checkedFinished,
-                this, &ClientWindow::onUpdateCheckedFinished);
+                this, &MainWindow::onUpdateCheckedFinished);
 
         LOG(INFO) << "Start update checker";
         update_checker_->start();
@@ -105,7 +105,7 @@ ClientWindow::ClientWindow(QWidget* parent)
 #endif
 
     connect(base::GuiApplication::instance(), &base::GuiApplication::sig_themeChanged,
-            this, &ClientWindow::onAfterThemeChanged);
+            this, &MainWindow::onAfterThemeChanged);
     onAfterThemeChanged();
 
     // Hide dynamic menus until a tab populates them.
@@ -116,20 +116,20 @@ ClientWindow::ClientWindow(QWidget* parent)
 }
 
 //--------------------------------------------------------------------------------------------------
-ClientWindow::~ClientWindow()
+MainWindow::~MainWindow()
 {
     LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientWindow::closeEvent(QCloseEvent* /* event */)
+void MainWindow::closeEvent(QCloseEvent* /* event */)
 {
     LOG(INFO) << "Close event detected";
     QApplication::quit();
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientWindow::onUpdateCheckedFinished(const QByteArray& result)
+void MainWindow::onUpdateCheckedFinished(const QByteArray& result)
 {
     if (result.isEmpty())
     {
@@ -163,14 +163,14 @@ void ClientWindow::onUpdateCheckedFinished(const QByteArray& result)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientWindow::onLanguageChanged(QAction* action)
+void MainWindow::onLanguageChanged(QAction* action)
 {
     QString new_locale = static_cast<common::LanguageAction*>(action)->locale();
     client::Application* application = client::Application::instance();
 
     LOG(INFO) << "[ACTION] Language changed:" << new_locale.toStdString();
 
-    ClientSettings settings;
+    Settings settings;
     settings.setLocale(new_locale);
     application->setLocale(new_locale);
 
@@ -185,38 +185,38 @@ void ClientWindow::onLanguageChanged(QAction* action)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientWindow::onSettings()
+void MainWindow::onSettings()
 {
     LOG(INFO) << "[ACTION] Settings clicked";
-    ClientSettingsDialog(this).exec();
+    SettingsDialog(this).exec();
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientWindow::onHelp()
+void MainWindow::onHelp()
 {
     LOG(INFO) << "[ACTION] Help clicked";
     QDesktopServices::openUrl(QUrl("https://aspia.org/help"));
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientWindow::onAbout()
+void MainWindow::onAbout()
 {
     LOG(INFO) << "[ACTION] About clicked";
     common::AboutDialog(tr("Aspia Client"), this).exec();
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientWindow::onCheckUpdates()
+void MainWindow::onCheckUpdates()
 {
     LOG(INFO) << "[ACTION] Check updates";
 #if defined(Q_OS_WINDOWS)
-    ClientSettings settings;
+    Settings settings;
     common::UpdateDialog(settings.updateServer(), "client", this).exec();
 #endif
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientWindow::onThemeChanged(QAction* action)
+void MainWindow::onThemeChanged(QAction* action)
 {
     if (!action)
         return;
@@ -227,18 +227,18 @@ void ClientWindow::onThemeChanged(QAction* action)
 
     base::GuiApplication::instance()->setTheme(theme_id);
 
-    ClientSettings settings;
+    Settings settings;
     settings.setTheme(theme_id);
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientWindow::onAfterThemeChanged()
+void MainWindow::onAfterThemeChanged()
 {
 
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientWindow::onCurrentTabChanged(int index)
+void MainWindow::onCurrentTabChanged(int index)
 {
     if (active_tab_)
     {
@@ -261,7 +261,7 @@ void ClientWindow::onCurrentTabChanged(int index)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientWindow::onCloseTab(int index)
+void MainWindow::onCloseTab(int index)
 {
     ClientTab* tab = tabAt(index);
     if (!tab || !tab->isClosable())
@@ -279,14 +279,14 @@ void ClientWindow::onCloseTab(int index)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientWindow::onSearchTextChanged(const QString& text)
+void MainWindow::onSearchTextChanged(const QString& text)
 {
     if (active_tab_)
         active_tab_->onSearchTextChanged(text);
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientWindow::createLanguageMenu(const QString& current_locale)
+void MainWindow::createLanguageMenu(const QString& current_locale)
 {
     Application::LocaleList locale_list = base::GuiApplication::instance()->localeList();
     if (locale_list.isEmpty())
@@ -310,7 +310,7 @@ void ClientWindow::createLanguageMenu(const QString& current_locale)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientWindow::createThemeMenu(const QString& current_theme)
+void MainWindow::createThemeMenu(const QString& current_theme)
 {
     base::GuiApplication* app = base::GuiApplication::instance();
     const QStringList available_themes = app->availableThemes();
@@ -330,7 +330,7 @@ void ClientWindow::createThemeMenu(const QString& current_theme)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientWindow::addTab(ClientTab* tab, const QString& title, const QIcon& icon)
+void MainWindow::addTab(ClientTab* tab, const QString& title, const QIcon& icon)
 {
     int index = ui.tabs->addTab(tab, icon, title);
 
@@ -346,7 +346,7 @@ void ClientWindow::addTab(ClientTab* tab, const QString& title, const QIcon& ico
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientWindow::hideCloseButtonForTab(int index)
+void MainWindow::hideCloseButtonForTab(int index)
 {
     // Hide close button on both sides for cross-platform compatibility.
     QWidget* close_button = ui.tabs->tabBar()->tabButton(index, QTabBar::RightSide);
@@ -359,13 +359,13 @@ void ClientWindow::hideCloseButtonForTab(int index)
 }
 
 //--------------------------------------------------------------------------------------------------
-ClientTab* ClientWindow::tabAt(int index)
+ClientTab* MainWindow::tabAt(int index)
 {
     return dynamic_cast<ClientTab*>(ui.tabs->widget(index));
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientWindow::updateSearchFieldVisibility()
+void MainWindow::updateSearchFieldVisibility()
 {
     bool show_search = active_tab_ && active_tab_->hasSearchField();
 
@@ -376,7 +376,7 @@ void ClientWindow::updateSearchFieldVisibility()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientWindow::installTabActions(ClientTab* tab)
+void MainWindow::installTabActions(ClientTab* tab)
 {
     const QList<ClientTab::ActionGroupEntry>& groups = tab->actionGroups();
 
@@ -396,7 +396,7 @@ void ClientWindow::installTabActions(ClientTab* tab)
             ui.toolbar->insertAction(before, action);
             tab_toolbar_actions_.append(action);
 
-            connect(action, &QAction::changed, this, &ClientWindow::updateSeparatorVisibility);
+            connect(action, &QAction::changed, this, &MainWindow::updateSeparatorVisibility);
         }
 
         // Add separator after each group.
@@ -423,13 +423,13 @@ void ClientWindow::installTabActions(ClientTab* tab)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientWindow::removeTabActions()
+void MainWindow::removeTabActions()
 {
     // Remove from toolbar.
     for (QAction* action : std::as_const(tab_toolbar_actions_))
     {
         if (!action->isSeparator())
-            disconnect(action, &QAction::changed, this, &ClientWindow::updateSeparatorVisibility);
+            disconnect(action, &QAction::changed, this, &MainWindow::updateSeparatorVisibility);
 
         ui.toolbar->removeAction(action);
 
@@ -462,7 +462,7 @@ void ClientWindow::removeTabActions()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientWindow::updateSeparatorVisibility()
+void MainWindow::updateSeparatorVisibility()
 {
     // Update toolbar separator visibility.
     for (int i = 0; i < tab_toolbar_actions_.size(); ++i)
@@ -515,7 +515,7 @@ void ClientWindow::updateSeparatorVisibility()
 }
 
 //--------------------------------------------------------------------------------------------------
-QMenu* ClientWindow::menuForActionGroup(ClientTab::ActionGroup group) const
+QMenu* MainWindow::menuForActionGroup(ClientTab::ActionGroup group) const
 {
     switch (group)
     {

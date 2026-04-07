@@ -16,14 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/ui/client_settings_dialog.h"
+#include "client/ui/settings_dialog.h"
 
 #include "base/logging.h"
 #include "base/net/address.h"
 #include "base/peer/user.h"
 #include "build/build_config.h"
 #include "client/router_config_storage.h"
-#include "client/ui/client_settings.h"
+#include "client/ui/settings.h"
 
 #include <QMessageBox>
 #include <QPushButton>
@@ -32,7 +32,7 @@
 namespace client {
 
 //--------------------------------------------------------------------------------------------------
-ClientSettingsDialog::ClientSettingsDialog(QWidget* parent)
+SettingsDialog::SettingsDialog(QWidget* parent)
     : QDialog(parent)
 {
     LOG(INFO) << "Ctor";
@@ -54,7 +54,7 @@ ClientSettingsDialog::ClientSettingsDialog(QWidget* parent)
     ui.edit_username->setText(config.username);
     ui.edit_password->setText(config.password);
 
-    ClientSettings settings;
+    Settings settings;
     ui.edit_display_name->setText(settings.displayName());
 
     if (!config_storage.isEnabled())
@@ -86,24 +86,24 @@ ClientSettingsDialog::ClientSettingsDialog(QWidget* parent)
     });
 
     connect(ui.buttonbox, &QDialogButtonBox::clicked,
-            this, &ClientSettingsDialog::onButtonBoxClicked);
+            this, &SettingsDialog::onButtonBoxClicked);
 }
 
 //--------------------------------------------------------------------------------------------------
-ClientSettingsDialog::~ClientSettingsDialog()
+SettingsDialog::~SettingsDialog()
 {
     LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSettingsDialog::closeEvent(QCloseEvent* event)
+void SettingsDialog::closeEvent(QCloseEvent* event)
 {
     LOG(INFO) << "Close event detected";
     QDialog::closeEvent(event);
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSettingsDialog::onButtonBoxClicked(QAbstractButton* button)
+void SettingsDialog::onButtonBoxClicked(QAbstractButton* button)
 {
     QDialogButtonBox::StandardButton standard_button = ui.buttonbox->standardButton(button);
     if (standard_button != QDialogButtonBox::Ok)
@@ -181,7 +181,7 @@ void ClientSettingsDialog::onButtonBoxClicked(QAbstractButton* button)
         config_storage.setEnabled(ui.checkbox_enable_router->isChecked());
         config_storage.setRouterConfig(config);
 
-        ClientSettings settings;
+        Settings settings;
         settings.setDisplayName(ui.edit_display_name->text());
 
         accept();
@@ -191,7 +191,7 @@ void ClientSettingsDialog::onButtonBoxClicked(QAbstractButton* button)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSettingsDialog::showError(const QString& message)
+void SettingsDialog::showError(const QString& message)
 {
     QMessageBox(QMessageBox::Warning, tr("Warning"), message, QMessageBox::Ok, this).exec();
 }

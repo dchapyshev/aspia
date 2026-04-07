@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/ui/client_settings.h"
+#include "client/ui/settings.h"
 
 #include "base/crypto/data_cryptor.h"
 #include "base/logging.h"
@@ -48,51 +48,51 @@ const QString kRouterPasswordParam = "RouterPassword";
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-ClientSettings::ClientSettings()
+Settings::Settings()
     : settings_(base::XmlSettings::format(), QSettings::UserScope, "aspia", "client")
 {
     // Nothing
 }
 
 //--------------------------------------------------------------------------------------------------
-QString ClientSettings::locale() const
+QString Settings::locale() const
 {
     return settings_.value(kLocaleParam, QLocale::system().bcp47Name()).toString();
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSettings::setLocale(const QString& locale)
+void Settings::setLocale(const QString& locale)
 {
     settings_.setValue(kLocaleParam, locale);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString ClientSettings::theme() const
+QString Settings::theme() const
 {
     return settings_.value(kThemeParam, "auto").toString();
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSettings::setTheme(const QString& theme)
+void Settings::setTheme(const QString& theme)
 {
     settings_.setValue(kThemeParam, theme);
 }
 
 //--------------------------------------------------------------------------------------------------
-proto::peer::SessionType ClientSettings::sessionType() const
+proto::peer::SessionType Settings::sessionType() const
 {
     return static_cast<proto::peer::SessionType>(
         settings_.value(kSessionTypeParam, proto::peer::SESSION_TYPE_DESKTOP).toUInt());
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSettings::setSessionType(proto::peer::SessionType session_type)
+void Settings::setSessionType(proto::peer::SessionType session_type)
 {
     settings_.setValue(kSessionTypeParam, static_cast<quint32>(session_type));
 }
 
 //--------------------------------------------------------------------------------------------------
-proto::control::Config ClientSettings::desktopConfig() const
+proto::control::Config Settings::desktopConfig() const
 {
     QByteArray buffer = settings_.value(kDesktopConfigParam).toByteArray();
     if (!buffer.isEmpty())
@@ -106,7 +106,7 @@ proto::control::Config ClientSettings::desktopConfig() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSettings::setDesktopConfig(const proto::control::Config& config)
+void Settings::setDesktopConfig(const proto::control::Config& config)
 {
     QByteArray buffer;
     buffer.resize(static_cast<int>(config.ByteSizeLong()));
@@ -116,79 +116,79 @@ void ClientSettings::setDesktopConfig(const proto::control::Config& config)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool ClientSettings::checkUpdates() const
+bool Settings::checkUpdates() const
 {
     return settings_.value(kCheckUpdatesParam, true).toBool();
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSettings::setCheckUpdates(bool check)
+void Settings::setCheckUpdates(bool check)
 {
     settings_.setValue(kCheckUpdatesParam, check);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString ClientSettings::updateServer() const
+QString Settings::updateServer() const
 {
     return settings_.value(kUpdateServerParam, DEFAULT_UPDATE_SERVER).toString().toLower();
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSettings::setUpdateServer(const QString& server)
+void Settings::setUpdateServer(const QString& server)
 {
     settings_.setValue(kUpdateServerParam, server.toLower());
 }
 
 //--------------------------------------------------------------------------------------------------
-bool ClientSettings::isOneTimePasswordChecked() const
+bool Settings::isOneTimePasswordChecked() const
 {
     return settings_.value(kOneTimePasswordCheckedParam, false).toBool();
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSettings::setOneTimePasswordChecked(bool check)
+void Settings::setOneTimePasswordChecked(bool check)
 {
     settings_.setValue(kOneTimePasswordCheckedParam, check);
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray ClientSettings::routerManagerState() const
+QByteArray Settings::routerManagerState() const
 {
     return settings_.value(kRouterManagerStateParam, false).toByteArray();
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSettings::setRouterManagerState(const QByteArray& state)
+void Settings::setRouterManagerState(const QByteArray& state)
 {
     settings_.setValue(kRouterManagerStateParam, state);
 }
 
 //--------------------------------------------------------------------------------------------------
-QString ClientSettings::displayName() const
+QString Settings::displayName() const
 {
     return settings_.value(kDisplayNameParam).toString();
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSettings::setDisplayName(const QString& display_name)
+void Settings::setDisplayName(const QString& display_name)
 {
     settings_.setValue(kDisplayNameParam, display_name);
 }
 
 //--------------------------------------------------------------------------------------------------
-bool ClientSettings::isRouterEnabled() const
+bool Settings::isRouterEnabled() const
 {
     return settings_.value(kRouterEnabledParam, false).toBool();
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSettings::setRouterEnabled(bool enabled)
+void Settings::setRouterEnabled(bool enabled)
 {
     settings_.setValue(kRouterEnabledParam, enabled);
 }
 
 //--------------------------------------------------------------------------------------------------
-RouterConfig ClientSettings::routerConfig() const
+RouterConfig Settings::routerConfig() const
 {
     RouterConfig config;
     config.port = static_cast<quint16>(settings_.value(kRouterPortParam, 0).toUInt());
@@ -215,7 +215,7 @@ RouterConfig ClientSettings::routerConfig() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientSettings::setRouterConfig(const RouterConfig& config)
+void Settings::setRouterConfig(const RouterConfig& config)
 {
     settings_.setValue(kRouterPortParam, config.port);
 

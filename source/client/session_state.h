@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_CLIENT_SESSION_STATE_H
-#define CLIENT_CLIENT_SESSION_STATE_H
+#ifndef CLIENT_SESSION_STATE_H
+#define CLIENT_SESSION_STATE_H
 
 #include <QVersionNumber>
 

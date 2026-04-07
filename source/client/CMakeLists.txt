@@ -28,8 +28,8 @@ list(APPEND SOURCE_CLIENT_CORE
     client_desktop.h
     client_file_transfer.cc
     client_file_transfer.h
-    client_main.cc
-    client_main.h
+    main.cc
+    main.h
     client_system_info.cc
     client_system_info.h
     client_text_chat.cc
@@ -54,8 +54,8 @@ list(APPEND SOURCE_CLIENT_CORE
     router_config_storage.h
     router_manager.cc
     router_manager.h
-    client_session_state.cc
-    client_session_state.h)
+    session_state.cc
+    session_state.h)
 
 list(APPEND SOURCE_CLIENT_CORE_ONLINE_CHECKER
     online_checker/online_checker.cc
@@ -73,16 +73,16 @@ list(APPEND SOURCE_CLIENT_CORE_UI
     ui/authorization_dialog.ui
     ui/client_tab.cc
     ui/client_tab.h
-    ui/client_window.cc
-    ui/client_window.h
-    ui/client_window.ui
+    ui/main_window.cc
+    ui/main_window.h
+    ui/main_window.ui
     ui/session_tab.cc
     ui/session_tab.h
-    ui/client_settings.cc
-    ui/client_settings.h
-    ui/client_settings_dialog.cc
-    ui/client_settings_dialog.h
-    ui/client_settings_dialog.ui
+    ui/settings.cc
+    ui/settings.h
+    ui/settings_dialog.cc
+    ui/settings_dialog.h
+    ui/settings_dialog.ui
     ui/session_window.cc
     ui/session_window.h
     ui/update_settings_dialog.cc

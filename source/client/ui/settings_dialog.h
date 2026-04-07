@@ -16,10 +16,10 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_UI_CLIENT_SETTINGS_DIALOG_H
-#define CLIENT_UI_CLIENT_SETTINGS_DIALOG_H
+#ifndef CLIENT_UI_SETTINGS_DIALOG_H
+#define CLIENT_UI_SETTINGS_DIALOG_H
 
-#include "ui_client_settings_dialog.h"
+#include "ui_settings_dialog.h"
 
 #include <QDialog>
 
@@ -27,13 +27,13 @@ class QAbstractButton;
 
 namespace client {
 
-class ClientSettingsDialog final : public QDialog
+class SettingsDialog final : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit ClientSettingsDialog(QWidget* parent = nullptr);
-    ~ClientSettingsDialog() final;
+    explicit SettingsDialog(QWidget* parent = nullptr);
+    ~SettingsDialog() final;
 
 protected:
     void closeEvent(QCloseEvent* event) final;
@@ -44,9 +44,9 @@ private slots:
 private:
     void showError(const QString& message);
 
-    Ui::ClientSettingsDialog ui;
+    Ui::SettingsDialog ui;
 };
 
 } // namespace client
 
-#endif // CLIENT_UI_CLIENT_SETTINGS_DIALOG_H
+#endif // CLIENT_UI_SETTINGS_DIALOG_H

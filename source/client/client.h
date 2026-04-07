@@ -27,7 +27,7 @@
 
 #include "base/logging.h"
 #include "base/net/tcp_channel.h"
-#include "client/client_session_state.h"
+#include "client/session_state.h"
 #include "client/router_manager.h"
 
 class QTimer;

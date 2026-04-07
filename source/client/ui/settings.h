@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_UI_CLIENT_SETTINGS_H
-#define CLIENT_UI_CLIENT_SETTINGS_H
+#ifndef CLIENT_UI_SETTINGS_H
+#define CLIENT_UI_SETTINGS_H
 
 #include <QSettings>
 
@@ -27,11 +27,11 @@
 
 namespace client {
 
-class ClientSettings
+class Settings
 {
 public:
-    ClientSettings();
-    ~ClientSettings() = default;
+    Settings();
+    ~Settings() = default;
 
     QString locale() const;
     void setLocale(const QString& locale);
@@ -68,9 +68,9 @@ public:
 
 private:
     QSettings settings_;
-    Q_DISABLE_COPY_MOVE(ClientSettings)
+    Q_DISABLE_COPY_MOVE(Settings)
 };
 
 } // namespace client
 
-#endif // CLIENT_UI_CLIENT_SETTINGS_H
+#endif // CLIENT_UI_SETTINGS_H

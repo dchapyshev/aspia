@@ -23,7 +23,7 @@
 #include "client/client.h"
 #include "client/client_config.h"
 #include "client/router_manager.h"
-#include "client/client_session_state.h"
+#include "client/session_state.h"
 
 #include <QWidget>
 

@@ -21,7 +21,7 @@
 #include "base/logging.h"
 #include "build/build_config.h"
 #include "build/version.h"
-#include "client/ui/client_settings.h"
+#include "client/ui/settings.h"
 
 #include <QIcon>
 
@@ -38,7 +38,7 @@ Application::Application(int& argc, char* argv[])
     setApplicationVersion(ASPIA_VERSION_STRING);
     setWindowIcon(QIcon(":/img/aspia-client.ico"));
 
-    ClientSettings settings;
+    Settings settings;
 
     if (!hasLocale(settings.locale()))
     {

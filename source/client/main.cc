@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/client_main.h"
+#include "client/main.h"
 
 #include <QCommandLineParser>
 #include <QMessageBox>
@@ -29,7 +29,7 @@
 #include "client/config_factory.h"
 #include "client/router_config_storage.h"
 #include "client/ui/application.h"
-#include "client/ui/client_window.h"
+#include "client/ui/main_window.h"
 #include "client/ui/chat/chat_session_window.h"
 #include "client/ui/desktop/desktop_session_window.h"
 #include "client/ui/file_transfer/file_transfer_session_window.h"
@@ -360,7 +360,7 @@ int clientMain(int argc, char* argv[])
     parser.addOption(router_password_option);
     parser.process(application);
 
-    std::unique_ptr<client::ClientWindow> client_window;
+    std::unique_ptr<client::MainWindow> main_window;
 
     if (parser.isSet(address_option))
     {
@@ -536,9 +536,9 @@ int clientMain(int argc, char* argv[])
     {
         LOG(INFO) << "Normal start";
 
-        client_window.reset(new client::ClientWindow());
-        client_window->show();
-        client_window->activateWindow();
+        main_window.reset(new client::MainWindow());
+        main_window->show();
+        main_window->activateWindow();
     }
 
     return application.exec();

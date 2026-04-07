@@ -33,7 +33,7 @@
 #include "base/peer/user.h"
 #include "base/gui_application.h"
 #include "client/router.h"
-#include "client/ui/client_settings.h"
+#include "client/ui/settings.h"
 #include "client/ui/router_manager/router_user_dialog.h"
 #include "common/ui/status_dialog.h"
 #include "ui_router_manager_window.h"
@@ -399,7 +399,7 @@ RouterManagerWindow::RouterManagerWindow(QWidget* parent)
         current_active_conn_column_ = column;
     });
 
-    ClientSettings settings;
+    Settings settings;
     restoreState(settings.routerManagerState());
 
     QTimer* update_timer = new QTimer(this);
@@ -415,7 +415,7 @@ RouterManagerWindow::~RouterManagerWindow()
 {
     LOG(INFO) << "Dtor";
 
-    ClientSettings settings;
+    Settings settings;
     settings.setRouterManagerState(saveState());
 }
 

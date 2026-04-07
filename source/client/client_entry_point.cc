@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/client_main.h"
+#include "client/main.h"
 
 //--------------------------------------------------------------------------------------------------
 int main(int argc, char *argv[])

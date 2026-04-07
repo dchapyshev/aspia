@@ -18,7 +18,7 @@
 
 #include "client/ui/authorization_dialog.h"
 
-#include "client/ui/client_settings.h"
+#include "client/ui/settings.h"
 #include "base/logging.h"
 
 #include <QMessageBox>
@@ -37,7 +37,7 @@ AuthorizationDialog::AuthorizationDialog(QWidget* parent)
     if (cancel_button)
         cancel_button->setText(tr("Cancel"));
 
-    ClientSettings settings;
+    Settings settings;
 
     bool is_one_time_password_checked = settings.isOneTimePasswordChecked();
     ui.checkbox_one_time_password->setChecked(is_one_time_password_checked);
@@ -60,7 +60,7 @@ AuthorizationDialog::~AuthorizationDialog()
 {
     LOG(INFO) << "Dtor";
 
-    ClientSettings settings;
+    Settings settings;
     settings.setOneTimePasswordChecked(ui.checkbox_one_time_password->isChecked());
 }
 
