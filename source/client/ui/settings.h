@@ -21,7 +21,7 @@
 
 #include <QSettings>
 
-#include "client/router_config.h"
+#include "client/config.h"
 #include "proto/desktop_control.h"
 #include "proto/peer.h"
 

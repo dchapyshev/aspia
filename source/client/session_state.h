@@ -21,7 +21,7 @@
 
 #include <QVersionNumber>
 
-#include "client/client_config.h"
+#include "client/config.h"
 
 #include <mutex>
 

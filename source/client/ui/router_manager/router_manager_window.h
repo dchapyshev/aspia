@@ -23,7 +23,7 @@
 #include <QVersionNumber>
 
 #include "base/net/tcp_channel.h"
-#include "client/router_config.h"
+#include "client/config.h"
 #include "proto/router_admin.h"
 
 namespace Ui {

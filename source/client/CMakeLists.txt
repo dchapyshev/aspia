@@ -22,8 +22,8 @@ list(APPEND SOURCE_CLIENT_CORE
     local_database.h
     client.cc
     client.h
-    client_config.cc
-    client_config.h
+    config.cc
+    config.h
     client_desktop.cc
     client_desktop.h
     client_file_transfer.cc
@@ -48,8 +48,6 @@ list(APPEND SOURCE_CLIENT_CORE
     input_event_filter.h
     router.cc
     router.h
-    router_config.cc
-    router_config.h
 
     router_manager.cc
     router_manager.h

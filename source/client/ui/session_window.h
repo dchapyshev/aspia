@@ -21,7 +21,7 @@
 
 #include "base/net/tcp_channel.h"
 #include "client/client.h"
-#include "client/client_config.h"
+#include "client/config.h"
 #include "client/router_manager.h"
 #include "client/session_state.h"
 

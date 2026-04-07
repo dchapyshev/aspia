@@ -24,7 +24,7 @@
 
 #include "base/net/tcp_channel.h"
 #include "base/peer/host_id.h"
-#include "client/router_config.h"
+#include "client/config.h"
 
 namespace base {
 class Location;

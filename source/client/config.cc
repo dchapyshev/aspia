@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/router_config.h"
+#include "client/config.h"
 
 #include "build/build_config.h"
 
@@ -37,5 +37,16 @@ bool RouterConfig::isValid() const
 {
     return !address.isEmpty() && port && !username.isEmpty() && !password.isEmpty();
 }
+
+//--------------------------------------------------------------------------------------------------
+Config::Config()
+    : port(DEFAULT_HOST_TCP_PORT),
+      session_type(proto::peer::SESSION_TYPE_DESKTOP)
+{
+    // Nothing
+}
+
+//--------------------------------------------------------------------------------------------------
+Config::~Config() = default;
 
 } // namespace client

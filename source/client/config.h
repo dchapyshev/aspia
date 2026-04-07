@@ -16,15 +16,38 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_CLIENT_CONFIG_H
-#define CLIENT_CLIENT_CONFIG_H
+#ifndef CLIENT_CONFIG_H
+#define CLIENT_CONFIG_H
 
-#include "client/router_config.h"
+#include <QList>
+#include <QString>
+
 #include "proto/peer.h"
 
 #include <optional>
 
 namespace client {
+
+struct RouterConfig
+{
+    RouterConfig();
+    ~RouterConfig();
+
+    RouterConfig(const RouterConfig& other) = default;
+    RouterConfig& operator=(const RouterConfig& other) = default;
+
+    RouterConfig(RouterConfig&& other) noexcept = default;
+    RouterConfig& operator=(RouterConfig&& other) noexcept = default;
+
+    bool isValid() const;
+
+    QString address;
+    quint16 port;
+    QString username;
+    QString password;
+};
+
+using RouterConfigList = QList<RouterConfig>;
 
 struct Config
 {
@@ -44,4 +67,4 @@ struct Config
 
 } // namespace client
 
-#endif // CLIENT_CLIENT_CONFIG_H
+#endif // CLIENT_CONFIG_H
