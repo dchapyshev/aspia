@@ -27,7 +27,6 @@ RouterWidget::RouterWidget(QWidget* parent)
     : ContentWidget(Type::ROUTER, parent)
 {
     LOG(INFO) << "Ctor";
-
     ui.setupUi(this);
 }
 
@@ -41,6 +40,18 @@ RouterWidget::~RouterWidget()
 int RouterWidget::itemCount() const
 {
     return 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+QByteArray RouterWidget::saveState()
+{
+    return QByteArray();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::restoreState(const QByteArray& /* state */)
+{
+
 }
 
 } // namespace client

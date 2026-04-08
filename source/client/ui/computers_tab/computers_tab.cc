@@ -39,7 +39,7 @@ namespace client {
 
 //--------------------------------------------------------------------------------------------------
 ComputersTab::ComputersTab(QWidget* parent)
-    : ClientTab(Type::COMPUTERS, parent)
+    : ClientTab(Type::COMPUTERS, "computers", parent)
 {
     LOG(INFO) << "Ctor";
 
@@ -160,6 +160,62 @@ ComputersTab::~ComputersTab()
         settings.setSessionType(proto::peer::SESSION_TYPE_TEXT_CHAT);
     else if (action_system_info_->isChecked())
         settings.setSessionType(proto::peer::SESSION_TYPE_SYSTEM_INFO);
+}
+
+//--------------------------------------------------------------------------------------------------
+QByteArray ComputersTab::saveState()
+{
+    QByteArray buffer;
+
+    {
+        QDataStream stream(&buffer, QIODevice::WriteOnly);
+        stream.setVersion(QDataStream::Qt_5_15);
+
+        stream << local_group_widget_->saveState();
+        stream << router_widget_->saveState();
+        stream << router_group_widget_->saveState();
+        stream << ui.splitter->saveState();
+    }
+
+    return buffer;
+}
+
+//--------------------------------------------------------------------------------------------------
+void ComputersTab::restoreState(const QByteArray& state)
+{
+    QDataStream stream(state);
+    stream.setVersion(QDataStream::Qt_5_15);
+
+    QByteArray local_group_state;
+    QByteArray router_state;
+    QByteArray router_group_state;
+    QByteArray splitter_state;
+
+    stream >> local_group_state;
+    stream >> router_state;
+    stream >> router_group_state;
+    stream >> splitter_state;
+
+    if (!local_group_state.isEmpty())
+        local_group_widget_->restoreState(local_group_state);
+
+    if (!router_state.isEmpty())
+        router_widget_->restoreState(router_state);
+
+    if (!router_group_state.isEmpty())
+        router_group_widget_->restoreState(router_group_state);
+
+    if (!splitter_state.isEmpty())
+    {
+        ui.splitter->restoreState(splitter_state);
+    }
+    else
+    {
+        QList<int> sizes;
+        sizes.emplace_back(200);
+        sizes.emplace_back(width() - 200);
+        ui.splitter->setSizes(sizes);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

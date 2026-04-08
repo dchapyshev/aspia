@@ -61,4 +61,16 @@ int RouterGroupWidget::itemCount() const
     return ui.tree_computer->topLevelItemCount();
 }
 
+//--------------------------------------------------------------------------------------------------
+QByteArray RouterGroupWidget::saveState()
+{
+    return QByteArray();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterGroupWidget::restoreState(const QByteArray& /* state */)
+{
+
+}
+
 } // namespace client

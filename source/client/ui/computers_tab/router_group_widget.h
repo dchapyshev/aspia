@@ -34,6 +34,8 @@ public:
 
     void showGroup(qint64 group_id);
     int itemCount() const override;
+    QByteArray saveState() override;
+    void restoreState(const QByteArray& state) override;
 
 signals:
     void sig_computerDoubleClicked(qint64 computer_id);

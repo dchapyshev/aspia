@@ -33,6 +33,8 @@ public:
     ~RouterWidget() override;
 
     int itemCount() const override;
+    QByteArray saveState() override;
+    void restoreState(const QByteArray& state) override;
 
 private:
     Ui::RouterWidget ui;

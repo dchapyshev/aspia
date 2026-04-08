@@ -36,10 +36,15 @@ public:
     LocalComputerItem* currentComputer();
     void showGroup(qint64 group_id);
     int itemCount() const override;
+    QByteArray saveState() override;
+    void restoreState(const QByteArray& state) override;
 
 signals:
     void sig_computerDoubleClicked(qint64 computer_id);
     void sig_currentComputerChanged(qint64 computer_id);
+
+private slots:
+    void onHeaderContextMenu(const QPoint& pos);
 
 private:
     Ui::LocalGroupWidget ui;

@@ -30,20 +30,25 @@ namespace client {
 
 namespace {
 
-const QString kLocaleParam = "Locale";
-const QString kThemeParam = "Theme";
-const QString kSessionTypeParam = "SessionType";
-const QString kDesktopConfigParam = "DesktopConfig";
-const QString kCheckUpdatesParam = "CheckUpdates";
-const QString kUpdateServerParam = "UpdateServer";
-const QString kOneTimePasswordCheckedParam = "OneTimePasswordChecked";
-const QString kRouterManagerStateParam = "RouterManagerState";
-const QString kDisplayNameParam = "DisplayName";
-const QString kRouterEnabledParam = "RouterEnabled";
-const QString kRouterAddressParam = "RouterAddress";
-const QString kRouterPortParam = "RouterPort";
-const QString kRouterUsernameParam = "RouterUsername";
-const QString kRouterPasswordParam = "RouterPassword";
+const QString kLocaleParam = "locale";
+const QString kThemeParam = "theme";
+const QString kSessionTypeParam = "session_type";
+const QString kDesktopConfigParam = "desktop_config";
+const QString kCheckUpdatesParam = "check_updates";
+const QString kUpdateServerParam = "update_server";
+const QString kOneTimePasswordCheckedParam = "one_time_password_checked";
+const QString kRouterManagerStateParam = "router_manager_state";
+const QString kDisplayNameParam = "display_name";
+const QString kRouterEnabledParam = "router_enabled";
+const QString kRouterAddressParam = "router_address";
+const QString kRouterPortParam = "router_port";
+const QString kRouterUsernameParam = "router_username";
+const QString kRouterPasswordParam = "router_password";
+const QString kWindowGeometryParam = "window_geometry";
+const QString kWindowStateParam = "window_state";
+const QString kToolbarParam = "toolbar";
+const QString kStatusbarParam = "statusbar";
+const QString kTabStateParam = "tab_state";
 
 } // namespace
 
@@ -236,6 +241,66 @@ void Settings::setRouterConfig(const RouterConfig& config)
         settings_.setValue(kRouterPasswordParam, out);
     else
         LOG(ERROR) << "Failed to encrypt router password";
+}
+
+//--------------------------------------------------------------------------------------------------
+QByteArray Settings::windowGeometry() const
+{
+    return settings_.value(kWindowGeometryParam).toByteArray();
+}
+
+//--------------------------------------------------------------------------------------------------
+void Settings::setWindowGeometry(const QByteArray& geometry)
+{
+    settings_.setValue(kWindowGeometryParam, geometry);
+}
+
+//--------------------------------------------------------------------------------------------------
+QByteArray Settings::windowState() const
+{
+    return settings_.value(kWindowStateParam).toByteArray();
+}
+
+//--------------------------------------------------------------------------------------------------
+void Settings::setWindowState(const QByteArray& state)
+{
+    settings_.setValue(kWindowStateParam, state);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Settings::isToolBarEnabled() const
+{
+    return settings_.value(kToolbarParam, true).toBool();
+}
+
+//--------------------------------------------------------------------------------------------------
+void Settings::setToolBarEnabled(bool enable)
+{
+    settings_.setValue(kToolbarParam, enable);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Settings::isStatusBarEnabled() const
+{
+    return settings_.value(kStatusbarParam, true).toBool();
+}
+
+//--------------------------------------------------------------------------------------------------
+void Settings::setStatusBarEnabled(bool enable)
+{
+    settings_.setValue(kStatusbarParam, enable);
+}
+
+//--------------------------------------------------------------------------------------------------
+QByteArray Settings::tabState(const QString& name) const
+{
+    return settings_.value(kTabStateParam + "/" + name).toByteArray();
+}
+
+//--------------------------------------------------------------------------------------------------
+void Settings::setTabState(const QString& name, const QByteArray& state)
+{
+    settings_.setValue(kTabStateParam + "/" + name, state);
 }
 
 } // namespace client

@@ -67,12 +67,22 @@ MainWindow::MainWindow(QWidget* parent)
     createLanguageMenu(settings.locale());
     createThemeMenu(settings.theme());
 
+    restoreGeometry(settings.windowGeometry());
+    restoreState(settings.windowState());
+
+    ui.action_toolbar->setChecked(settings.isToolBarEnabled());
+    ui.action_statusbar->setChecked(settings.isStatusBarEnabled());
+    ui.statusbar->setVisible(settings.isStatusBarEnabled());
+
     connect(ui.menu_language, &QMenu::triggered, this, &MainWindow::onLanguageChanged);
     connect(ui.menu_theme, &QMenu::triggered, this, &MainWindow::onThemeChanged);
     connect(ui.action_settings, &QAction::triggered, this, &MainWindow::onSettings);
     connect(ui.action_help, &QAction::triggered, this, &MainWindow::onHelp);
     connect(ui.action_about, &QAction::triggered, this, &MainWindow::onAbout);
     connect(ui.action_exit, &QAction::triggered, this, &MainWindow::close);
+    connect(ui.toolbar, &QToolBar::visibilityChanged, ui.action_toolbar, &QAction::setChecked);
+    connect(ui.action_toolbar, &QAction::toggled, ui.toolbar, &QToolBar::setVisible);
+    connect(ui.action_statusbar, &QAction::toggled, ui.statusbar, &QStatusBar::setVisible);
 
     // Tab management.
     connect(ui.tabs, &QTabWidget::currentChanged, this, &MainWindow::onCurrentTabChanged);
@@ -116,6 +126,20 @@ MainWindow::~MainWindow()
 void MainWindow::closeEvent(QCloseEvent* /* event */)
 {
     LOG(INFO) << "Close event detected";
+
+    Settings settings;
+    settings.setWindowGeometry(saveGeometry());
+    settings.setWindowState(saveState());
+    settings.setToolBarEnabled(ui.action_toolbar->isChecked());
+    settings.setStatusBarEnabled(ui.action_statusbar->isChecked());
+
+    for (int i = 0; i < ui.tabs->count(); ++i)
+    {
+        ClientTab* tab = dynamic_cast<ClientTab*>(ui.tabs->widget(i));
+        if (tab)
+            settings.setTabState(tab->objectName(), tab->saveState());
+    }
+
     QApplication::quit();
 }
 
@@ -255,6 +279,9 @@ void MainWindow::onCloseTab(int index)
         active_tab_ = nullptr;
     }
 
+    Settings settings;
+    settings.setTabState(tab->objectName(), tab->saveState());
+
     ui.tabs->removeTab(index);
     delete tab;
 }
@@ -317,6 +344,9 @@ void MainWindow::addTab(ClientTab* tab, const QString& title, const QIcon& icon)
 
     if (!tab->isClosable())
         hideCloseButtonForTab(index);
+
+    Settings settings;
+    tab->restoreState(settings.tabState(tab->objectName()));
 
     connect(tab, &ClientTab::sig_titleChanged, this, [this, tab](const QString& new_title)
     {

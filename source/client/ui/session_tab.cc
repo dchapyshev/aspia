@@ -25,7 +25,7 @@ namespace client {
 
 //--------------------------------------------------------------------------------------------------
 SessionTab::SessionTab(const QString& title, QWidget* parent)
-    : ClientTab(Type::SESSION, parent)
+    : ClientTab(Type::SESSION, "session", parent)
 {
     QVBoxLayout* layout = new QVBoxLayout(this);
 

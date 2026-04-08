@@ -90,4 +90,16 @@ int SearchWidget::itemCount() const
     return tree_computer_->topLevelItemCount();
 }
 
+//--------------------------------------------------------------------------------------------------
+QByteArray SearchWidget::saveState()
+{
+    return QByteArray();
+}
+
+//--------------------------------------------------------------------------------------------------
+void SearchWidget::restoreState(const QByteArray& /* state */)
+{
+
+}
+
 } // namespace client

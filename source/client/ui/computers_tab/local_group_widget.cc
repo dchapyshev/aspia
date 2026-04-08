@@ -18,11 +18,35 @@
 
 #include "client/ui/computers_tab/local_group_widget.h"
 
+#include <QIODevice>
+#include <QMenu>
+
 #include "base/logging.h"
 #include "client/local_database.h"
 #include "client/ui/computers_tab/content_tree_item.h"
 
 namespace client {
+
+namespace {
+
+class ColumnAction : public QAction
+{
+public:
+    ColumnAction(const QString& text, int index, QObject* parent)
+        : QAction(text, parent),
+        index_(index)
+    {
+        setCheckable(true);
+    }
+
+    int columnIndex() const { return index_; }
+
+private:
+    const int index_;
+    Q_DISABLE_COPY_MOVE(ColumnAction)
+};
+
+} // namespace
 
 //--------------------------------------------------------------------------------------------------
 LocalGroupWidget::LocalGroupWidget(QWidget* parent)
@@ -31,6 +55,11 @@ LocalGroupWidget::LocalGroupWidget(QWidget* parent)
     LOG(INFO) << "Ctor";
 
     ui.setupUi(this);
+
+    ui.tree_computer->header()->setContextMenuPolicy(Qt::CustomContextMenu);
+
+    connect(ui.tree_computer->header(), &QHeaderView::customContextMenuRequested,
+            this, &LocalGroupWidget::onHeaderContextMenu);
 
     connect(ui.tree_computer, &QTreeWidget::itemDoubleClicked,
             this, [this](QTreeWidgetItem* item, int /* column */)
@@ -84,6 +113,54 @@ void LocalGroupWidget::showGroup(qint64 group_id)
 int LocalGroupWidget::itemCount() const
 {
     return ui.tree_computer->topLevelItemCount();
+}
+
+//--------------------------------------------------------------------------------------------------
+QByteArray LocalGroupWidget::saveState()
+{
+    QByteArray buffer;
+
+    {
+        QDataStream stream(&buffer, QIODevice::WriteOnly);
+        stream.setVersion(QDataStream::Qt_5_15);
+
+        stream << ui.tree_computer->header()->saveState();
+    }
+
+    return buffer;
+}
+
+//--------------------------------------------------------------------------------------------------
+void LocalGroupWidget::restoreState(const QByteArray& state)
+{
+    QDataStream stream(state);
+    stream.setVersion(QDataStream::Qt_5_15);
+
+    QByteArray columns_state;
+    stream >> columns_state;
+
+    if (!columns_state.isEmpty())
+        ui.tree_computer->header()->restoreState(columns_state);
+}
+
+//--------------------------------------------------------------------------------------------------
+void LocalGroupWidget::onHeaderContextMenu(const QPoint &pos)
+{
+    QHeaderView* header = ui.tree_computer->header();
+    QMenu menu;
+
+    for (int i = 1; i < header->count(); ++i)
+    {
+        ColumnAction* action = new ColumnAction(ui.tree_computer->headerItem()->text(i), i, &menu);
+        action->setChecked(!header->isSectionHidden(i));
+        menu.addAction(action);
+    }
+
+    ColumnAction* action = dynamic_cast<ColumnAction*>(menu.exec(header->viewport()->mapToGlobal(pos)));
+    if (!action)
+        return;
+
+    header->setSectionHidden(action->columnIndex(), !action->isChecked());
 }
 
 } // namespace client

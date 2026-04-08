@@ -66,6 +66,21 @@ public:
     RouterConfig routerConfig() const;
     void setRouterConfig(const RouterConfig& config);
 
+    QByteArray windowGeometry() const;
+    void setWindowGeometry(const QByteArray& geometry);
+
+    QByteArray windowState() const;
+    void setWindowState(const QByteArray& state);
+
+    bool isToolBarEnabled() const;
+    void setToolBarEnabled(bool enable);
+
+    bool isStatusBarEnabled() const;
+    void setStatusBarEnabled(bool enable);
+
+    QByteArray tabState(const QString& name) const;
+    void setTabState(const QString& name, const QByteArray& state);
+
 private:
     QSettings settings_;
     Q_DISABLE_COPY_MOVE(Settings)

@@ -41,11 +41,14 @@ public:
         SESSION_TYPE
     };
 
-    explicit ClientTab(Type type, QWidget* parent = nullptr);
+    explicit ClientTab(Type type, const QString& object_name, QWidget* parent = nullptr);
     ~ClientTab() override;
 
     Type tabType() const;
     bool isClosable() const;
+
+    virtual QByteArray saveState() = 0;
+    virtual void restoreState(const QByteArray& state) = 0;
 
     virtual void onActivated(QStatusBar* statusbar) = 0;
     virtual void onDeactivated(QStatusBar* statusbar) = 0;

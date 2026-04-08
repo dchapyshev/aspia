@@ -21,11 +21,12 @@
 namespace client {
 
 //--------------------------------------------------------------------------------------------------
-ClientTab::ClientTab(Type type, QWidget* parent)
+ClientTab::ClientTab(Type type, const QString& object_name, QWidget* parent)
     : QWidget(parent),
       type_(type)
 {
     setAutoFillBackground(true);
+    setObjectName(object_name);
 }
 
 //--------------------------------------------------------------------------------------------------

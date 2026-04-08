@@ -36,6 +36,8 @@ public:
     void search(const QString& query);
     void clear();
     int itemCount() const override;
+    QByteArray saveState() override;
+    void restoreState(const QByteArray& state) override;
 
 signals:
     void sig_computerDoubleClicked(qint64 computer_id);
