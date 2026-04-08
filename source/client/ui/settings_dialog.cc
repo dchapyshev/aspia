@@ -86,6 +86,17 @@ SettingsDialog::SettingsDialog(QWidget* parent)
         ui.edit_password->setEnabled(checked);
     });
 
+    // Desktop tab.
+    proto::control::Config desktop_config = settings.desktopConfig();
+    ui.checkbox_audio->setChecked(desktop_config.audio());
+    ui.checkbox_clipboard->setChecked(desktop_config.clipboard());
+    ui.checkbox_cursor_shape->setChecked(desktop_config.cursor_shape());
+    ui.checkbox_enable_cursor_pos->setChecked(desktop_config.cursor_position());
+    ui.checkbox_desktop_effects->setChecked(!desktop_config.effects());
+    ui.checkbox_desktop_wallpaper->setChecked(!desktop_config.wallpaper());
+    ui.checkbox_lock_at_disconnect->setChecked(desktop_config.lock_at_disconnect());
+    ui.checkbox_block_remote_input->setChecked(desktop_config.block_input());
+
     // Update tab.
 #if defined(Q_OS_WINDOWS)
     ui.checkbox_check_updates->setChecked(settings.checkUpdates());
@@ -215,6 +226,17 @@ void SettingsDialog::onButtonBoxClicked(QAbstractButton* button)
         settings.setRouterEnabled(ui.checkbox_enable_router->isChecked());
         settings.setRouterConfig(config);
         settings.setDisplayName(ui.edit_display_name->text());
+
+        proto::control::Config desktop_config;
+        desktop_config.set_audio(ui.checkbox_audio->isChecked());
+        desktop_config.set_clipboard(ui.checkbox_clipboard->isChecked());
+        desktop_config.set_cursor_shape(ui.checkbox_cursor_shape->isChecked());
+        desktop_config.set_cursor_position(ui.checkbox_enable_cursor_pos->isChecked());
+        desktop_config.set_effects(!ui.checkbox_desktop_effects->isChecked());
+        desktop_config.set_wallpaper(!ui.checkbox_desktop_wallpaper->isChecked());
+        desktop_config.set_lock_at_disconnect(ui.checkbox_lock_at_disconnect->isChecked());
+        desktop_config.set_block_input(ui.checkbox_block_remote_input->isChecked());
+        settings.setDesktopConfig(desktop_config);
 
 #if defined(Q_OS_WINDOWS)
         settings.setCheckUpdates(ui.checkbox_check_updates->isChecked());

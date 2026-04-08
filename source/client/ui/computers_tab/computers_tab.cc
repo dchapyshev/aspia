@@ -508,6 +508,21 @@ void ComputersTab::updateActionsState()
         action_delete_computer_->setVisible(false);
         action_edit_computer_->setVisible(false);
     }
+
+    if (group_item && group_item->itemType() == GroupTreeItem::Type::ROUTER)
+    {
+        action_desktop_->setVisible(false);
+        action_file_transfer_->setVisible(false);
+        action_chat_->setVisible(false);
+        action_system_info_->setVisible(false);
+    }
+    else
+    {
+        action_desktop_->setVisible(true);
+        action_file_transfer_->setVisible(true);
+        action_chat_->setVisible(true);
+        action_system_info_->setVisible(true);
+    }
 }
 
 } // namespace client

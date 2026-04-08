@@ -2271,7 +2271,7 @@
         <translation>密碼</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="103"/>
+        <location filename="../client/ui/main_window.ui" line="101"/>
         <location filename="../host/ui/main_window.ui" line="277"/>
         <source>Theme</source>
         <translation type="unfinished"></translation>
@@ -2323,13 +2323,13 @@
         <translation>說明</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="90"/>
+        <location filename="../client/ui/main_window.ui" line="88"/>
         <location filename="../host/ui/main_window.ui" line="268"/>
         <source>View</source>
         <translation>檢視</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="94"/>
+        <location filename="../client/ui/main_window.ui" line="92"/>
         <location filename="../host/ui/main_window.ui" line="272"/>
         <source>Language</source>
         <translation>語言</translation>
@@ -2340,13 +2340,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="173"/>
+        <location filename="../client/ui/main_window.ui" line="171"/>
         <location filename="../host/ui/main_window.ui" line="290"/>
         <source>Exit</source>
         <translation>離開</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="146"/>
+        <location filename="../client/ui/main_window.ui" line="144"/>
         <location filename="../host/ui/main_window.ui" line="295"/>
         <source>Online Help...</source>
         <translation>線上說明...</translation>
@@ -2357,36 +2357,35 @@
         <translation type="unfinished">Aspia Client</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="85"/>
+        <location filename="../client/ui/main_window.ui" line="83"/>
         <source>Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="115"/>
+        <location filename="../client/ui/main_window.ui" line="113"/>
         <source>Session Type</source>
         <translation type="unfinished">工作階段類型</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="126"/>
+        <location filename="../client/ui/main_window.ui" line="124"/>
         <source>toolBar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="155"/>
+        <location filename="../client/ui/main_window.ui" line="153"/>
         <location filename="../host/ui/main_window.ui" line="303"/>
         <source>About</source>
         <translation>關於</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="164"/>
+        <location filename="../client/ui/main_window.ui" line="162"/>
         <location filename="../host/ui/main_window.ui" line="308"/>
         <source>Settings...</source>
         <translation>設定...</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="182"/>
         <source>Check for updates...</source>
-        <translation type="unfinished">檢查更新...</translation>
+        <translation type="obsolete">檢查更新...</translation>
     </message>
     <message>
         <location filename="../host/ui/main_window.ui" line="313"/>
@@ -3081,36 +3080,97 @@
     </message>
     <message>
         <location filename="../client/ui/settings_dialog.ui" line="116"/>
+        <source>Desktop</source>
+        <translation type="unfinished">桌面</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_dialog.ui" line="128"/>
+        <source>Features</source>
+        <translation type="unfinished">功能</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_dialog.ui" line="134"/>
+        <source>Enable audio</source>
+        <translation type="unfinished">啟用音訊</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_dialog.ui" line="141"/>
+        <source>Enable clipboard</source>
+        <translation type="unfinished">啟用剪貼簿</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_dialog.ui" line="148"/>
+        <source>Show shape of remote cursor</source>
+        <translation type="unfinished">顯示遠端游標形狀</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_dialog.ui" line="155"/>
+        <source>Show position of remote cursor</source>
+        <translation type="unfinished">顯示遠端游標位置</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_dialog.ui" line="171"/>
+        <source>Appearance</source>
+        <translation type="unfinished">視覺效果</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_dialog.ui" line="177"/>
+        <source>Disable desktop effects</source>
+        <translation type="unfinished">停用桌面特效</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_dialog.ui" line="184"/>
+        <source>Disable desktop wallpaper</source>
+        <translation type="unfinished">停用桌布</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_dialog.ui" line="206"/>
+        <source>Lock computer at disconnect</source>
+        <translation type="unfinished">在中斷連線時鎖定電腦</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_dialog.ui" line="213"/>
+        <source>Block remote input</source>
+        <translation type="unfinished">阻止遠端輸入</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_dialog.ui" line="237"/>
         <source>Update</source>
         <translation type="unfinished">更新</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="122"/>
+        <location filename="../client/ui/settings_dialog.ui" line="243"/>
         <source>Check for updates on startup</source>
         <translation type="unfinished">啟動時檢查更新</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="129"/>
+        <location filename="../client/ui/settings_dialog.ui" line="250"/>
         <source>Use custom update server</source>
         <translation type="unfinished">使用自訂更新伺服器</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="138"/>
+        <location filename="../client/ui/settings_dialog.ui" line="259"/>
         <source>Server:</source>
         <translation type="unfinished">伺服器：</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="164"/>
+        <location filename="../client/ui/settings_dialog.ui" line="200"/>
+        <location filename="../client/ui/settings_dialog.ui" line="309"/>
         <source>Other</source>
         <translation type="unfinished">其他</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="172"/>
+        <location filename="../client/ui/settings_dialog.ui" line="299"/>
+        <source>Check for updates</source>
+        <translation type="unfinished">檢查更新</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_dialog.ui" line="317"/>
         <source>Display name when connected:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="182"/>
+        <location filename="../client/ui/settings_dialog.ui" line="327"/>
         <source>Enter a name or leave the field empty</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5513,17 +5573,17 @@
 <context>
     <name>client::MainWindow</name>
     <message>
-        <location filename="../client/ui/main_window.cc" line="60"/>
+        <location filename="../client/ui/main_window.cc" line="61"/>
         <source>Search...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.cc" line="109"/>
+        <location filename="../client/ui/main_window.cc" line="106"/>
         <source>Computers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.cc" line="199"/>
+        <location filename="../client/ui/main_window.cc" line="196"/>
         <source>Aspia Client</source>
         <translation type="unfinished">Aspia Client</translation>
     </message>
@@ -6509,27 +6569,27 @@
 <context>
     <name>client::SettingsDialog</name>
     <message>
-        <location filename="../client/ui/settings_dialog.cc" line="43"/>
+        <location filename="../client/ui/settings_dialog.cc" line="44"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.cc" line="158"/>
+        <location filename="../client/ui/settings_dialog.cc" line="176"/>
         <source>An invalid router address was entered.</source>
         <translation type="unfinished">輸入的路由器位址無效。</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.cc" line="177"/>
+        <location filename="../client/ui/settings_dialog.cc" line="195"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.cc" line="194"/>
+        <location filename="../client/ui/settings_dialog.cc" line="212"/>
         <source>Password cannot be empty.</source>
         <translation type="unfinished">密碼不能為空。</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.cc" line="226"/>
+        <location filename="../client/ui/settings_dialog.cc" line="255"/>
         <source>Warning</source>
         <translation type="unfinished">警告</translation>
     </message>

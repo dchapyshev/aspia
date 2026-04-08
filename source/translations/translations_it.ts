@@ -2301,7 +2301,7 @@
         <translation>Password</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="103"/>
+        <location filename="../client/ui/main_window.ui" line="101"/>
         <location filename="../host/ui/main_window.ui" line="277"/>
         <source>Theme</source>
         <translation type="unfinished"></translation>
@@ -2348,7 +2348,7 @@
         <translation>Aiuto</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="94"/>
+        <location filename="../client/ui/main_window.ui" line="92"/>
         <location filename="../host/ui/main_window.ui" line="272"/>
         <source>Language</source>
         <translation>Lingua</translation>
@@ -2359,13 +2359,13 @@
         <translation>Accesso</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="173"/>
+        <location filename="../client/ui/main_window.ui" line="171"/>
         <location filename="../host/ui/main_window.ui" line="290"/>
         <source>Exit</source>
         <translation>Uscita</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="146"/>
+        <location filename="../client/ui/main_window.ui" line="144"/>
         <location filename="../host/ui/main_window.ui" line="295"/>
         <source>Online Help...</source>
         <translation>Aiuto in linea...</translation>
@@ -2376,36 +2376,31 @@
         <translation type="unfinished">Aspia Client</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="85"/>
+        <location filename="../client/ui/main_window.ui" line="83"/>
         <source>Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="115"/>
+        <location filename="../client/ui/main_window.ui" line="113"/>
         <source>Session Type</source>
         <translation type="unfinished">Tipo Sessione</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="126"/>
+        <location filename="../client/ui/main_window.ui" line="124"/>
         <source>toolBar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="155"/>
+        <location filename="../client/ui/main_window.ui" line="153"/>
         <location filename="../host/ui/main_window.ui" line="303"/>
         <source>About</source>
         <translation>Informazioni</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="164"/>
+        <location filename="../client/ui/main_window.ui" line="162"/>
         <location filename="../host/ui/main_window.ui" line="308"/>
         <source>Settings...</source>
         <translation>Impostazioni...</translation>
-    </message>
-    <message>
-        <location filename="../client/ui/main_window.ui" line="182"/>
-        <source>Check for updates...</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../host/ui/main_window.ui" line="313"/>
@@ -2418,7 +2413,7 @@
         <translation>Router disabilitato</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="90"/>
+        <location filename="../client/ui/main_window.ui" line="88"/>
         <location filename="../host/ui/main_window.ui" line="268"/>
         <source>View</source>
         <translation>Visualizza</translation>
@@ -3107,36 +3102,97 @@
     </message>
     <message>
         <location filename="../client/ui/settings_dialog.ui" line="116"/>
+        <source>Desktop</source>
+        <translation type="unfinished">Desktop</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_dialog.ui" line="128"/>
+        <source>Features</source>
+        <translation type="unfinished">Caratteristiche</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_dialog.ui" line="134"/>
+        <source>Enable audio</source>
+        <translation type="unfinished">Abilita audio</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_dialog.ui" line="141"/>
+        <source>Enable clipboard</source>
+        <translation type="unfinished">Abilita appunti</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_dialog.ui" line="148"/>
+        <source>Show shape of remote cursor</source>
+        <translation type="unfinished">Visualizza cursore remoto</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_dialog.ui" line="155"/>
+        <source>Show position of remote cursor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_dialog.ui" line="171"/>
+        <source>Appearance</source>
+        <translation type="unfinished">Aspetto</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_dialog.ui" line="177"/>
+        <source>Disable desktop effects</source>
+        <translation type="unfinished">Disabilita effetti desktop</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_dialog.ui" line="184"/>
+        <source>Disable desktop wallpaper</source>
+        <translation type="unfinished">Disabilita sfondo desktop</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_dialog.ui" line="206"/>
+        <source>Lock computer at disconnect</source>
+        <translation type="unfinished">Blocca il computer alla disconnessione</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_dialog.ui" line="213"/>
+        <source>Block remote input</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_dialog.ui" line="237"/>
         <source>Update</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="122"/>
+        <location filename="../client/ui/settings_dialog.ui" line="243"/>
         <source>Check for updates on startup</source>
         <translation type="unfinished">Controlla presenza aggiornamenti all&apos;avvio</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="129"/>
+        <location filename="../client/ui/settings_dialog.ui" line="250"/>
         <source>Use custom update server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="138"/>
+        <location filename="../client/ui/settings_dialog.ui" line="259"/>
         <source>Server:</source>
         <translation type="unfinished">Server:</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="164"/>
+        <location filename="../client/ui/settings_dialog.ui" line="200"/>
+        <location filename="../client/ui/settings_dialog.ui" line="309"/>
         <source>Other</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="172"/>
+        <location filename="../client/ui/settings_dialog.ui" line="299"/>
+        <source>Check for updates</source>
+        <translation type="unfinished">Controlla aggiornamenti</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_dialog.ui" line="317"/>
         <source>Display name when connected:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="182"/>
+        <location filename="../client/ui/settings_dialog.ui" line="327"/>
         <source>Enter a name or leave the field empty</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5476,17 +5532,17 @@
 <context>
     <name>client::MainWindow</name>
     <message>
-        <location filename="../client/ui/main_window.cc" line="60"/>
+        <location filename="../client/ui/main_window.cc" line="61"/>
         <source>Search...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.cc" line="109"/>
+        <location filename="../client/ui/main_window.cc" line="106"/>
         <source>Computers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.cc" line="199"/>
+        <location filename="../client/ui/main_window.cc" line="196"/>
         <source>Aspia Client</source>
         <translation type="unfinished">Aspia Client</translation>
     </message>
@@ -6435,27 +6491,27 @@
 <context>
     <name>client::SettingsDialog</name>
     <message>
-        <location filename="../client/ui/settings_dialog.cc" line="43"/>
+        <location filename="../client/ui/settings_dialog.cc" line="44"/>
         <source>Cancel</source>
         <translation type="unfinished">Annulla</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.cc" line="158"/>
+        <location filename="../client/ui/settings_dialog.cc" line="176"/>
         <source>An invalid router address was entered.</source>
         <translation type="unfinished">E&apos; stato inserito un indirizzo del router non valido.</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.cc" line="177"/>
+        <location filename="../client/ui/settings_dialog.cc" line="195"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation type="unfinished">Il nome utente non può essere vuoto e può contenere solo lettere, numeri e caratteri _, -, .</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.cc" line="194"/>
+        <location filename="../client/ui/settings_dialog.cc" line="212"/>
         <source>Password cannot be empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.cc" line="226"/>
+        <location filename="../client/ui/settings_dialog.cc" line="255"/>
         <source>Warning</source>
         <translation type="unfinished">Attenzione</translation>
     </message>
