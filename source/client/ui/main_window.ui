@@ -75,8 +75,6 @@
     <property name="title">
      <string>Help</string>
     </property>
-    <addaction name="action_check_for_updates"/>
-    <addaction name="separator"/>
     <addaction name="action_help"/>
     <addaction name="action_about"/>
    </widget>
@@ -171,15 +169,6 @@
    </property>
    <property name="text">
     <string>Exit</string>
-   </property>
-  </action>
-  <action name="action_check_for_updates">
-   <property name="icon">
-    <iconset resource="../../common/resources/common.qrc">
-     <normaloff>:/img/restart.svg</normaloff>:/img/restart.svg</iconset>
-   </property>
-   <property name="text">
-    <string>Check for updates...</string>
    </property>
   </action>
  </widget>

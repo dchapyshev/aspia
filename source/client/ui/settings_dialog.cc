@@ -28,6 +28,7 @@
 #include "base/peer/user.h"
 #include "build/build_config.h"
 #include "client/ui/settings.h"
+#include "common/ui/update_dialog.h"
 
 namespace client {
 
@@ -108,6 +109,12 @@ SettingsDialog::SettingsDialog(QWidget* parent)
 
         if (!checked)
             ui.edit_update_server->setText(DEFAULT_UPDATE_SERVER);
+    });
+
+    connect(ui.button_check_for_updates, &QPushButton::clicked, this, [this]()
+    {
+        LOG(INFO) << "[ACTION] Check for updates";
+        common::UpdateDialog(ui.edit_update_server->text(), "client", this).exec();
     });
 #else
     ui.tabbar->setTabVisible(ui.tabbar->indexOf(ui.tab_update), false);

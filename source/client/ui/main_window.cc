@@ -35,6 +35,7 @@
 #include "client/ui/client_tab.h"
 #include "client/ui/computers_tab/computers_tab.h"
 #include "common/update_checker.h"
+#include "common/update_info.h"
 #include "common/ui/about_dialog.h"
 #include "common/ui/language_action.h"
 #include "common/ui/update_dialog.h"
@@ -81,8 +82,6 @@ MainWindow::MainWindow(QWidget* parent)
     connect(search_field_, &QLineEdit::textChanged, this, &MainWindow::onSearchTextChanged);
 
 #if defined(Q_OS_WINDOWS)
-    connect(ui.action_check_for_updates, &QAction::triggered, this, &MainWindow::onCheckUpdates);
-
     if (settings.checkUpdates())
     {
         update_checker_ = std::make_unique<common::UpdateChecker>(settings.updateServer(), "client");
@@ -93,8 +92,6 @@ MainWindow::MainWindow(QWidget* parent)
         LOG(INFO) << "Start update checker";
         update_checker_->start();
     }
-#else
-    ui.action_check_for_updates->setVisible(false);
 #endif
 
     connect(base::GuiApplication::instance(), &base::GuiApplication::sig_themeChanged,
@@ -197,16 +194,6 @@ void MainWindow::onAbout()
 {
     LOG(INFO) << "[ACTION] About clicked";
     common::AboutDialog(tr("Aspia Client"), this).exec();
-}
-
-//--------------------------------------------------------------------------------------------------
-void MainWindow::onCheckUpdates()
-{
-    LOG(INFO) << "[ACTION] Check updates";
-#if defined(Q_OS_WINDOWS)
-    Settings settings;
-    common::UpdateDialog(settings.updateServer(), "client", this).exec();
-#endif
 }
 
 //--------------------------------------------------------------------------------------------------

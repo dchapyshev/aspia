@@ -55,7 +55,6 @@ private slots:
     void onSettings();
     void onHelp();
     void onAbout();
-    void onCheckUpdates();
     void onCurrentTabChanged(int index);
     void onCloseTab(int index);
     void onSearchTextChanged(const QString& text);
