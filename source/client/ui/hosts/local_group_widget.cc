@@ -23,11 +23,14 @@
 
 #include "base/logging.h"
 #include "client/local_database.h"
-#include "client/ui/hosts/content_tree_item.h"
 
 namespace client {
 
 namespace {
+
+const int kColumnName = 0;
+const int kColumnAddress = 1;
+const int kColumnComment = 2;
 
 class ColumnAction : public QAction
 {
@@ -67,8 +70,8 @@ LocalGroupWidget::LocalGroupWidget(QWidget* parent)
         if (!item)
             return;
 
-        ContentTreeItem* computer_item = static_cast<ContentTreeItem*>(item);
-        emit sig_computerDoubleClicked(computer_item->computerId());
+        Item* computer_item = static_cast<Item*>(item);
+        emit sig_doubleClicked(computer_item->computerId());
     });
 
     connect(ui.tree_computer, &QTreeWidget::currentItemChanged,
@@ -78,24 +81,24 @@ LocalGroupWidget::LocalGroupWidget(QWidget* parent)
 
         if (current)
         {
-            LocalComputerItem* computer_item = static_cast<LocalComputerItem*>(current);
+            Item* computer_item = static_cast<Item*>(current);
             computer_id = computer_item->computerId();
         }
 
-        emit sig_currentComputerChanged(computer_id);
+        emit sig_currentChanged(computer_id);
     });
 
     connect(ui.tree_computer, &QTreeWidget::customContextMenuRequested,
             this, [this](const QPoint& pos)
     {
         qint64 computer_id = 0;
-        LocalComputerItem* item = static_cast<LocalComputerItem*>(ui.tree_computer->itemAt(pos));
+        Item* item = static_cast<Item*>(ui.tree_computer->itemAt(pos));
         if (item)
         {
             ui.tree_computer->setCurrentItem(item);
             computer_id = item->computerId();
         }
-        emit sig_computerContextMenu(computer_id, ui.tree_computer->viewport()->mapToGlobal(pos));
+        emit sig_contextMenu(computer_id, ui.tree_computer->viewport()->mapToGlobal(pos));
     });
 }
 
@@ -106,9 +109,9 @@ LocalGroupWidget::~LocalGroupWidget()
 }
 
 //--------------------------------------------------------------------------------------------------
-LocalComputerItem* LocalGroupWidget::currentComputer()
+LocalGroupWidget::Item* LocalGroupWidget::currentItem()
 {
-    return static_cast<LocalComputerItem*>(ui.tree_computer->currentItem());
+    return static_cast<Item*>(ui.tree_computer->currentItem());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -119,7 +122,7 @@ void LocalGroupWidget::showGroup(qint64 group_id)
     QList<ComputerData> computers = LocalDatabase::instance().computerList(group_id);
 
     for (const ComputerData& computer : std::as_const(computers))
-        new LocalComputerItem(computer, ui.tree_computer);
+        new Item(computer, ui.tree_computer);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -174,6 +177,19 @@ void LocalGroupWidget::onHeaderContextMenu(const QPoint &pos)
         return;
 
     header->setSectionHidden(action->columnIndex(), !action->isChecked());
+}
+
+//--------------------------------------------------------------------------------------------------
+LocalGroupWidget::Item::Item(const ComputerData& computer, QTreeWidget* parent)
+    : QTreeWidgetItem(parent),
+      computer_id_(computer.id),
+      group_id_(computer.group_id),
+      computer_name_(computer.name)
+{
+    setText(kColumnName, computer.name);
+    setText(kColumnAddress, computer.address);
+    setText(kColumnComment, computer.comment);
+    setIcon(kColumnName, QIcon(":/img/computer.svg"));
 }
 
 } // namespace client

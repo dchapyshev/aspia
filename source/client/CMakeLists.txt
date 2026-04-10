@@ -234,8 +234,6 @@ list(APPEND SOURCE_CLIENT_CORE_UI_HOSTS_TAB
     ui/hosts/hosts_tab.cc
     ui/hosts/hosts_tab.h
     ui/hosts/hosts_tab.ui
-    ui/hosts/content_tree_item.cc
-    ui/hosts/content_tree_item.h
     ui/hosts/content_widget.cc
     ui/hosts/content_widget.h
     ui/hosts/sidebar.cc

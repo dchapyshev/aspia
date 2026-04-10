@@ -37,9 +37,6 @@ public:
     QByteArray saveState() override;
     void restoreState(const QByteArray& state) override;
 
-signals:
-    void sig_computerDoubleClicked(qint64 computer_id);
-
 private:
     Ui::RouterGroupWidget ui;
 

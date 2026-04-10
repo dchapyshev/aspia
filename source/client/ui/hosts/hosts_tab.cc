@@ -28,7 +28,6 @@
 #include "build/build_config.h"
 #include "client/local_database.h"
 #include "client/ui/settings.h"
-#include "client/ui/hosts/content_tree_item.h"
 #include "client/ui/hosts/content_widget.h"
 #include "client/ui/hosts/local_computer_dialog.h"
 #include "client/ui/hosts/sidebar.h"
@@ -122,9 +121,9 @@ HostsTab::HostsTab(QWidget* parent)
     // Connect signals.
     connect(ui.sidebar, &Sidebar::sig_switchContent, this, &HostsTab::onSwitchContent);
     connect(ui.sidebar, &Sidebar::sig_contextMenu, this, &HostsTab::onSidebarContextMenu);
-    connect(local_group_widget_, &LocalGroupWidget::sig_currentComputerChanged, this, &HostsTab::onCurrentComputerChanged);
-    connect(local_group_widget_, &LocalGroupWidget::sig_computerDoubleClicked, this, &HostsTab::onLocalConnect);
-    connect(local_group_widget_, &LocalGroupWidget::sig_computerContextMenu, this, &HostsTab::onLocalComputerContextMenu);
+    connect(local_group_widget_, &LocalGroupWidget::sig_currentChanged, this, &HostsTab::onCurrentComputerChanged);
+    connect(local_group_widget_, &LocalGroupWidget::sig_doubleClicked, this, &HostsTab::onLocalConnect);
+    connect(local_group_widget_, &LocalGroupWidget::sig_contextMenu, this, &HostsTab::onLocalComputerContextMenu);
     connect(action_add_computer_, &QAction::triggered, this, &HostsTab::onAddComputerAction);
     connect(action_edit_computer_, &QAction::triggered, this, &HostsTab::onEditComputerAction);
     connect(action_copy_computer_, &QAction::triggered, this, &HostsTab::onCopyComputerAction);
@@ -277,7 +276,7 @@ void HostsTab::onEditComputerAction()
 {
     LOG(INFO) << "[ACTION] Edit computer";
 
-    LocalComputerItem* item = local_group_widget_->currentComputer();
+    LocalGroupWidget::Item* item = local_group_widget_->currentItem();
     if (!item)
     {
         LOG(INFO) << "No current local item";
@@ -299,7 +298,7 @@ void HostsTab::onCopyComputerAction()
 {
     LOG(INFO) << "[ACTION] Copy computer";
 
-    LocalComputerItem* item = local_group_widget_->currentComputer();
+    LocalGroupWidget::Item* item = local_group_widget_->currentItem();
     if (!item)
     {
         LOG(INFO) << "No current local item";
@@ -335,7 +334,7 @@ void HostsTab::onDeleteComputerAction()
 {
     LOG(INFO) << "[ACTION] Delete computer";
 
-    LocalComputerItem* item = local_group_widget_->currentComputer();
+    LocalGroupWidget::Item* item = local_group_widget_->currentItem();
     if (!item)
     {
         LOG(INFO) << "No current local item";
@@ -543,7 +542,7 @@ void HostsTab::onConnectAction(QAction* action)
 
     if (current_content_ == local_group_widget_)
     {
-        LocalComputerItem* item = local_group_widget_->currentComputer();
+        LocalGroupWidget::Item* item = local_group_widget_->currentItem();
         if (!item)
             return;
 
@@ -657,7 +656,7 @@ void HostsTab::updateActionsState()
         action_delete_group_->setVisible(sidebar_item->groupId() != 0);
         action_edit_group_->setVisible(true);
 
-        LocalComputerItem* computer_item = local_group_widget_->currentComputer();
+        LocalGroupWidget::Item* computer_item = local_group_widget_->currentItem();
 
         action_add_computer_->setVisible(true);
         action_delete_computer_->setVisible(computer_item != nullptr);

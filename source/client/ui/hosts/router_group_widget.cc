@@ -19,7 +19,6 @@
 #include "client/ui/hosts/router_group_widget.h"
 
 #include "base/logging.h"
-#include "client/ui/hosts/content_tree_item.h"
 
 namespace client {
 
@@ -28,18 +27,7 @@ RouterGroupWidget::RouterGroupWidget(QWidget* parent)
     : ContentWidget(Type::ROUTER_GROUP, parent)
 {
     LOG(INFO) << "Ctor";
-
     ui.setupUi(this);
-
-    connect(ui.tree_computer, &QTreeWidget::itemDoubleClicked,
-            this, [this](QTreeWidgetItem* item, int /* column */)
-    {
-        if (!item)
-            return;
-
-        ContentTreeItem* computer_item = static_cast<ContentTreeItem*>(item);
-        emit sig_computerDoubleClicked(computer_item->computerId());
-    });
 }
 
 //--------------------------------------------------------------------------------------------------

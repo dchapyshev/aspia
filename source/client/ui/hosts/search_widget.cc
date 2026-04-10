@@ -20,7 +20,6 @@
 
 #include "base/logging.h"
 #include "client/local_database.h"
-#include "client/ui/hosts/content_tree_item.h"
 
 #include <QHeaderView>
 #include <QTreeWidget>
@@ -49,16 +48,6 @@ SearchWidget::SearchWidget(QWidget* parent)
     tree_computer_->setHeaderLabels(headers);
 
     layout->addWidget(tree_computer_);
-
-    connect(tree_computer_, &QTreeWidget::itemDoubleClicked,
-            this, [this](QTreeWidgetItem* item, int /* column */)
-    {
-        if (!item)
-            return;
-
-        ContentTreeItem* computer_item = static_cast<ContentTreeItem*>(item);
-        emit sig_computerDoubleClicked(computer_item->computerId());
-    });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -72,10 +61,10 @@ void SearchWidget::search(const QString& query)
 {
     tree_computer_->clear();
 
-    QList<ComputerData> results = LocalDatabase::instance().searchComputers(query);
+    //QList<ComputerData> results = LocalDatabase::instance().searchComputers(query);
 
-    for (const ComputerData& computer : std::as_const(results))
-        new SearchComputerItem(computer, tree_computer_);
+    //for (const ComputerData& computer : std::as_const(results))
+    //    new SearchComputerItem(computer, tree_computer_);
 }
 
 //--------------------------------------------------------------------------------------------------

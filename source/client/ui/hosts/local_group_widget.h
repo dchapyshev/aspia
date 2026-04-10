@@ -22,11 +22,12 @@
 #include <QDrag>
 #include <QMimeData>
 
-#include "client/ui/hosts/content_tree_item.h"
 #include "client/ui/hosts/content_widget.h"
 #include "ui_local_group_widget.h"
 
 namespace client {
+
+struct ComputerData;
 
 class LocalGroupWidget : public ContentWidget
 {
@@ -36,7 +37,22 @@ public:
     explicit LocalGroupWidget(QWidget* parent = nullptr);
     ~LocalGroupWidget() override;
 
-    LocalComputerItem* currentComputer();
+    class Item : public QTreeWidgetItem
+    {
+    public:
+        Item(const ComputerData& computer, QTreeWidget* parent);
+
+        qint64 computerId() const { return computer_id_; }
+        qint64 groupId() const { return group_id_; }
+        QString computerName() const { return computer_name_; }
+
+    private:
+        qint64 computer_id_;
+        qint64 group_id_;
+        QString computer_name_;
+    };
+
+    Item* currentItem();
     void showGroup(qint64 group_id);
     int itemCount() const override;
     QByteArray saveState() override;
@@ -48,19 +64,16 @@ public:
         ComputerMimeData() = default;
         virtual ~ComputerMimeData() final = default;
 
-        void setComputerItem(LocalComputerItem* computer_item, const QString& mime_type)
+        void setComputerItem(Item* computer_item, const QString& mime_type)
         {
             computer_item_ = computer_item;
             setData(mime_type, QByteArray());
         }
 
-        LocalComputerItem* computerItem() const
-        {
-            return computer_item_;
-        }
+        Item* computerItem() const { return computer_item_; }
 
     private:
-        LocalComputerItem* computer_item_ = nullptr;
+        Item* computer_item_ = nullptr;
     };
 
     class ComputerDrag final : public QDrag
@@ -72,7 +85,7 @@ public:
             // Nothing
         }
 
-        void setComputerItem(LocalComputerItem* computer_item, const QString& mime_type)
+        void setComputerItem(Item* computer_item, const QString& mime_type)
         {
             ComputerMimeData* mime_data = new ComputerMimeData();
             mime_data->setComputerItem(computer_item, mime_type);
@@ -81,9 +94,9 @@ public:
     };
 
 signals:
-    void sig_computerDoubleClicked(qint64 computer_id);
-    void sig_currentComputerChanged(qint64 computer_id);
-    void sig_computerContextMenu(qint64 computer_id, const QPoint& pos);
+    void sig_doubleClicked(qint64 computer_id);
+    void sig_currentChanged(qint64 computer_id);
+    void sig_contextMenu(qint64 computer_id, const QPoint& pos);
 
 private slots:
     void onHeaderContextMenu(const QPoint& pos);
