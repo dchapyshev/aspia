@@ -16,59 +16,40 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/ui/computers_tab/router_group_widget.h"
+#include "client/ui/hosts/router_widget.h"
 
 #include "base/logging.h"
-#include "client/ui/computers_tab/content_tree_item.h"
 
 namespace client {
 
 //--------------------------------------------------------------------------------------------------
-RouterGroupWidget::RouterGroupWidget(QWidget* parent)
-    : ContentWidget(Type::ROUTER_GROUP, parent)
+RouterWidget::RouterWidget(QWidget* parent)
+    : ContentWidget(Type::ROUTER, parent)
 {
     LOG(INFO) << "Ctor";
-
     ui.setupUi(this);
-
-    connect(ui.tree_computer, &QTreeWidget::itemDoubleClicked,
-            this, [this](QTreeWidgetItem* item, int /* column */)
-    {
-        if (!item)
-            return;
-
-        ContentTreeItem* computer_item = static_cast<ContentTreeItem*>(item);
-        emit sig_computerDoubleClicked(computer_item->computerId());
-    });
 }
 
 //--------------------------------------------------------------------------------------------------
-RouterGroupWidget::~RouterGroupWidget()
+RouterWidget::~RouterWidget()
 {
     LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterGroupWidget::showGroup(qint64 /* group_id */)
+int RouterWidget::itemCount() const
 {
-    // TODO: Load computers from router.
-    ui.tree_computer->clear();
+    return 0;
 }
 
 //--------------------------------------------------------------------------------------------------
-int RouterGroupWidget::itemCount() const
-{
-    return ui.tree_computer->topLevelItemCount();
-}
-
-//--------------------------------------------------------------------------------------------------
-QByteArray RouterGroupWidget::saveState()
+QByteArray RouterWidget::saveState()
 {
     return QByteArray();
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterGroupWidget::restoreState(const QByteArray& /* state */)
+void RouterWidget::restoreState(const QByteArray& /* state */)
 {
 
 }

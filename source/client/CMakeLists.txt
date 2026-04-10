@@ -224,33 +224,33 @@ list(APPEND SOURCE_CLIENT_CORE_UI_CHAT
     ui/chat/chat_session_window.h
     ui/chat/chat_session_window.ui)
 
-list(APPEND SOURCE_CLIENT_CORE_UI_COMPUTERS_TAB
-    ui/computers_tab/local_computer_dialog.cc
-    ui/computers_tab/local_computer_dialog.h
-    ui/computers_tab/local_computer_dialog.ui
-    ui/computers_tab/local_group_dialog.cc
-    ui/computers_tab/local_group_dialog.h
-    ui/computers_tab/local_group_dialog.ui
-    ui/computers_tab/computers_tab.cc
-    ui/computers_tab/computers_tab.h
-    ui/computers_tab/computers_tab.ui
-    ui/computers_tab/content_tree_item.cc
-    ui/computers_tab/content_tree_item.h
-    ui/computers_tab/content_widget.cc
-    ui/computers_tab/content_widget.h
-    ui/computers_tab/sidebar.cc
-    ui/computers_tab/sidebar.h
-    ui/computers_tab/local_group_widget.cc
-    ui/computers_tab/local_group_widget.h
-    ui/computers_tab/local_group_widget.ui
-    ui/computers_tab/router_widget.cc
-    ui/computers_tab/router_widget.h
-    ui/computers_tab/router_widget.ui
-    ui/computers_tab/router_group_widget.cc
-    ui/computers_tab/router_group_widget.h
-    ui/computers_tab/router_group_widget.ui
-    ui/computers_tab/search_widget.cc
-    ui/computers_tab/search_widget.h)
+list(APPEND SOURCE_CLIENT_CORE_UI_HOSTS_TAB
+    ui/hosts/local_computer_dialog.cc
+    ui/hosts/local_computer_dialog.h
+    ui/hosts/local_computer_dialog.ui
+    ui/hosts/local_group_dialog.cc
+    ui/hosts/local_group_dialog.h
+    ui/hosts/local_group_dialog.ui
+    ui/hosts/hosts_tab.cc
+    ui/hosts/hosts_tab.h
+    ui/hosts/hosts_tab.ui
+    ui/hosts/content_tree_item.cc
+    ui/hosts/content_tree_item.h
+    ui/hosts/content_widget.cc
+    ui/hosts/content_widget.h
+    ui/hosts/sidebar.cc
+    ui/hosts/sidebar.h
+    ui/hosts/local_group_widget.cc
+    ui/hosts/local_group_widget.h
+    ui/hosts/local_group_widget.ui
+    ui/hosts/router_widget.cc
+    ui/hosts/router_widget.h
+    ui/hosts/router_widget.ui
+    ui/hosts/router_group_widget.cc
+    ui/hosts/router_group_widget.h
+    ui/hosts/router_group_widget.ui
+    ui/hosts/search_widget.cc
+    ui/hosts/search_widget.h)
 
 source_group("" FILES ${SOURCE_CLIENT_CORE})
 source_group(online_checker FILES ${SOURCE_CLIENT_CORE_ONLINE_CHECKER})
@@ -260,7 +260,7 @@ source_group(ui\\file_transfer FILES ${SOURCE_CLIENT_CORE_UI_FILE_TRANSFER})
 source_group(ui\\router_manager FILES ${SOURCE_CLIENT_CORE_UI_ROUTER_MANAGER})
 source_group(ui\\sys_info FILES ${SOURCE_CLIENT_CORE_UI_SYS_INFO})
 source_group(ui\\chat FILES ${SOURCE_CLIENT_CORE_UI_CHAT})
-source_group(ui\\computers_tab FILES ${SOURCE_CLIENT_CORE_UI_COMPUTERS_TAB})
+source_group(ui\\hosts FILES ${SOURCE_CLIENT_CORE_UI_HOSTS_TAB})
 
 add_library(aspia_client_core STATIC
     ${SOURCE_CLIENT_CORE}
@@ -271,7 +271,7 @@ add_library(aspia_client_core STATIC
     ${SOURCE_CLIENT_CORE_UI_ROUTER_MANAGER}
     ${SOURCE_CLIENT_CORE_UI_SYS_INFO}
     ${SOURCE_CLIENT_CORE_UI_CHAT}
-    ${SOURCE_CLIENT_CORE_UI_COMPUTERS_TAB})
+    ${SOURCE_CLIENT_CORE_UI_HOSTS_TAB})
 target_link_libraries(aspia_client_core PRIVATE
     aspia_base
     aspia_common

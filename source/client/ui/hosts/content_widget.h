@@ -16,25 +16,34 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/ui/computers_tab/content_widget.h"
+#ifndef CLIENT_UI_HOSTS_CONTENT_WIDGET_H
+#define CLIENT_UI_HOSTS_CONTENT_WIDGET_H
+
+#include <QWidget>
 
 namespace client {
 
-//--------------------------------------------------------------------------------------------------
-ContentWidget::ContentWidget(Type type, QWidget* parent)
-    : QWidget(parent),
-      type_(type)
+class ContentWidget : public QWidget
 {
-    // Nothing
-}
+    Q_OBJECT
 
-//--------------------------------------------------------------------------------------------------
-ContentWidget::~ContentWidget() = default;
+public:
+    enum class Type { LOCAL_GROUP, ROUTER, ROUTER_GROUP, SEARCH };
 
-//--------------------------------------------------------------------------------------------------
-ContentWidget::Type ContentWidget::contentType() const
-{
-    return type_;
-}
+    explicit ContentWidget(Type type, QWidget* parent = nullptr);
+    ~ContentWidget() override;
+
+    Type contentType() const;
+    virtual int itemCount() const = 0;
+    virtual QByteArray saveState()  = 0;
+    virtual void restoreState(const QByteArray& state) = 0;
+
+private:
+    Type type_;
+
+    Q_DISABLE_COPY_MOVE(ContentWidget)
+};
 
 } // namespace client
+
+#endif // CLIENT_UI_HOSTS_CONTENT_WIDGET_H

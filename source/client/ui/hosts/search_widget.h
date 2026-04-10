@@ -16,34 +16,38 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_UI_COMPUTERS_TAB_CONTENT_WIDGET_H
-#define CLIENT_UI_COMPUTERS_TAB_CONTENT_WIDGET_H
+#ifndef CLIENT_UI_HOSTS_SEARCH_WIDGET_H
+#define CLIENT_UI_HOSTS_SEARCH_WIDGET_H
 
-#include <QWidget>
+#include "client/ui/hosts/content_widget.h"
+
+class QTreeWidget;
 
 namespace client {
 
-class ContentWidget : public QWidget
+class SearchWidget : public ContentWidget
 {
     Q_OBJECT
 
 public:
-    enum class Type { LOCAL_GROUP, ROUTER, ROUTER_GROUP, SEARCH };
+    explicit SearchWidget(QWidget* parent = nullptr);
+    ~SearchWidget() override;
 
-    explicit ContentWidget(Type type, QWidget* parent = nullptr);
-    ~ContentWidget() override;
+    void search(const QString& query);
+    void clear();
+    int itemCount() const override;
+    QByteArray saveState() override;
+    void restoreState(const QByteArray& state) override;
 
-    Type contentType() const;
-    virtual int itemCount() const = 0;
-    virtual QByteArray saveState()  = 0;
-    virtual void restoreState(const QByteArray& state) = 0;
+signals:
+    void sig_computerDoubleClicked(qint64 computer_id);
 
 private:
-    Type type_;
+    QTreeWidget* tree_computer_ = nullptr;
 
-    Q_DISABLE_COPY_MOVE(ContentWidget)
+    Q_DISABLE_COPY_MOVE(SearchWidget)
 };
 
 } // namespace client
 
-#endif // CLIENT_UI_COMPUTERS_TAB_CONTENT_WIDGET_H
+#endif // CLIENT_UI_HOSTS_SEARCH_WIDGET_H

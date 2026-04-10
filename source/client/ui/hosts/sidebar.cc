@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/ui/computers_tab/sidebar.h"
+#include "client/ui/hosts/sidebar.h"
 
 #include <QHeaderView>
 #include <QVBoxLayout>

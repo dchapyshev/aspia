@@ -35,7 +35,7 @@
 #include "client/ui/settings_dialog.h"
 #include "client/ui/client_tab.h"
 #include "client/ui/chat/chat_session_window.h"
-#include "client/ui/computers_tab/computers_tab.h"
+#include "client/ui/hosts/hosts_tab.h"
 #include "client/ui/desktop/desktop_session_window.h"
 #include "client/ui/file_transfer/file_transfer_session_window.h"
 #include "client/ui/sys_info/system_info_session_window.h"
@@ -117,11 +117,11 @@ MainWindow::MainWindow(QWidget* parent)
     ui.menu_edit->menuAction()->setVisible(false);
     ui.menu_session_type->menuAction()->setVisible(false);
 
-    ComputersTab* computers = new ComputersTab(this);
-    connect(computers, &ComputersTab::sig_connect, this, &MainWindow::onConnect);
+    HostsTab* hosts = new HostsTab(this);
+    connect(hosts, &HostsTab::sig_connect, this, &MainWindow::onConnect);
 
     // Create default tabs.
-    addTab(computers, tr("Computers"), QIcon(":/img/computer.svg"));
+    addTab(hosts, tr("Hosts"), QIcon(":/img/computer.svg"));
 }
 
 //--------------------------------------------------------------------------------------------------

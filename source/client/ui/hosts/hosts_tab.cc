@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/ui/computers_tab/computers_tab.h"
+#include "client/ui/hosts/hosts_tab.h"
 
 #include <QActionGroup>
 #include <QMenu>
@@ -28,21 +28,21 @@
 #include "build/build_config.h"
 #include "client/local_database.h"
 #include "client/ui/settings.h"
-#include "client/ui/computers_tab/content_tree_item.h"
-#include "client/ui/computers_tab/content_widget.h"
-#include "client/ui/computers_tab/local_computer_dialog.h"
-#include "client/ui/computers_tab/sidebar.h"
-#include "client/ui/computers_tab/local_group_dialog.h"
-#include "client/ui/computers_tab/local_group_widget.h"
-#include "client/ui/computers_tab/router_widget.h"
-#include "client/ui/computers_tab/router_group_widget.h"
-#include "client/ui/computers_tab/search_widget.h"
+#include "client/ui/hosts/content_tree_item.h"
+#include "client/ui/hosts/content_widget.h"
+#include "client/ui/hosts/local_computer_dialog.h"
+#include "client/ui/hosts/sidebar.h"
+#include "client/ui/hosts/local_group_dialog.h"
+#include "client/ui/hosts/local_group_widget.h"
+#include "client/ui/hosts/router_widget.h"
+#include "client/ui/hosts/router_group_widget.h"
+#include "client/ui/hosts/search_widget.h"
 
 namespace client {
 
 //--------------------------------------------------------------------------------------------------
-ComputersTab::ComputersTab(QWidget* parent)
-    : ClientTab(Type::COMPUTERS, "computers", parent)
+HostsTab::HostsTab(QWidget* parent)
+    : ClientTab(Type::HOSTS, "hosts", parent)
 {
     LOG(INFO) << "Ctor";
 
@@ -120,19 +120,19 @@ ComputersTab::ComputersTab(QWidget* parent)
     ui.content_stack->addWidget(search_widget_);
 
     // Connect signals.
-    connect(ui.sidebar, &Sidebar::sig_switchContent, this, &ComputersTab::onSwitchContent);
-    connect(ui.sidebar, &Sidebar::sig_contextMenu, this, &ComputersTab::onSidebarContextMenu);
-    connect(local_group_widget_, &LocalGroupWidget::sig_currentComputerChanged, this, &ComputersTab::onCurrentComputerChanged);
-    connect(local_group_widget_, &LocalGroupWidget::sig_computerDoubleClicked, this, &ComputersTab::onLocalConnect);
-    connect(local_group_widget_, &LocalGroupWidget::sig_computerContextMenu, this, &ComputersTab::onLocalComputerContextMenu);
-    connect(action_add_computer_, &QAction::triggered, this, &ComputersTab::onAddComputerAction);
-    connect(action_edit_computer_, &QAction::triggered, this, &ComputersTab::onEditComputerAction);
-    connect(action_copy_computer_, &QAction::triggered, this, &ComputersTab::onCopyComputerAction);
-    connect(action_delete_computer_, &QAction::triggered, this, &ComputersTab::onDeleteComputerAction);
-    connect(action_add_group_, &QAction::triggered, this, &ComputersTab::onAddGroupAction);
-    connect(action_edit_group_, &QAction::triggered, this, &ComputersTab::onEditGroupAction);
-    connect(action_delete_group_, &QAction::triggered, this, &ComputersTab::onDeleteGroupAction);
-    connect(session_connect_group, &QActionGroup::triggered, this, &ComputersTab::onConnectAction);
+    connect(ui.sidebar, &Sidebar::sig_switchContent, this, &HostsTab::onSwitchContent);
+    connect(ui.sidebar, &Sidebar::sig_contextMenu, this, &HostsTab::onSidebarContextMenu);
+    connect(local_group_widget_, &LocalGroupWidget::sig_currentComputerChanged, this, &HostsTab::onCurrentComputerChanged);
+    connect(local_group_widget_, &LocalGroupWidget::sig_computerDoubleClicked, this, &HostsTab::onLocalConnect);
+    connect(local_group_widget_, &LocalGroupWidget::sig_computerContextMenu, this, &HostsTab::onLocalComputerContextMenu);
+    connect(action_add_computer_, &QAction::triggered, this, &HostsTab::onAddComputerAction);
+    connect(action_edit_computer_, &QAction::triggered, this, &HostsTab::onEditComputerAction);
+    connect(action_copy_computer_, &QAction::triggered, this, &HostsTab::onCopyComputerAction);
+    connect(action_delete_computer_, &QAction::triggered, this, &HostsTab::onDeleteComputerAction);
+    connect(action_add_group_, &QAction::triggered, this, &HostsTab::onAddGroupAction);
+    connect(action_edit_group_, &QAction::triggered, this, &HostsTab::onEditGroupAction);
+    connect(action_delete_group_, &QAction::triggered, this, &HostsTab::onDeleteGroupAction);
+    connect(session_connect_group, &QActionGroup::triggered, this, &HostsTab::onConnectAction);
 
     // Register actions for toolbar and menus.
     addActions(ActionGroup::EDIT, { action_add_group_, action_edit_group_, action_delete_group_ });
@@ -145,7 +145,7 @@ ComputersTab::ComputersTab(QWidget* parent)
 }
 
 //--------------------------------------------------------------------------------------------------
-ComputersTab::~ComputersTab()
+HostsTab::~HostsTab()
 {
     LOG(INFO) << "Dtor";
     Settings settings;
@@ -153,7 +153,7 @@ ComputersTab::~ComputersTab()
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray ComputersTab::saveState()
+QByteArray HostsTab::saveState()
 {
     QByteArray buffer;
 
@@ -171,7 +171,7 @@ QByteArray ComputersTab::saveState()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ComputersTab::restoreState(const QByteArray& state)
+void HostsTab::restoreState(const QByteArray& state)
 {
     QDataStream stream(state);
     stream.setVersion(QDataStream::Qt_5_15);
@@ -209,26 +209,26 @@ void ComputersTab::restoreState(const QByteArray& state)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ComputersTab::onActivated(QStatusBar* statusbar)
+void HostsTab::onActivated(QStatusBar* statusbar)
 {
     int count = current_content_ ? current_content_->itemCount() : 0;
     statusbar->showMessage(tr("Computers: %1").arg(count));
 }
 
 //--------------------------------------------------------------------------------------------------
-void ComputersTab::onDeactivated(QStatusBar* statusbar)
+void HostsTab::onDeactivated(QStatusBar* statusbar)
 {
     statusbar->clearMessage();
 }
 
 //--------------------------------------------------------------------------------------------------
-bool ComputersTab::hasSearchField() const
+bool HostsTab::hasSearchField() const
 {
     return true;
 }
 
 //--------------------------------------------------------------------------------------------------
-void ComputersTab::onSearchTextChanged(const QString& text)
+void HostsTab::onSearchTextChanged(const QString& text)
 {
     if (text.isEmpty())
     {
@@ -251,7 +251,7 @@ void ComputersTab::onSearchTextChanged(const QString& text)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ComputersTab::onAddComputerAction()
+void HostsTab::onAddComputerAction()
 {
     LOG(INFO) << "[ACTION] Add computer";
 
@@ -273,7 +273,7 @@ void ComputersTab::onAddComputerAction()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ComputersTab::onEditComputerAction()
+void HostsTab::onEditComputerAction()
 {
     LOG(INFO) << "[ACTION] Edit computer";
 
@@ -295,7 +295,7 @@ void ComputersTab::onEditComputerAction()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ComputersTab::onCopyComputerAction()
+void HostsTab::onCopyComputerAction()
 {
     LOG(INFO) << "[ACTION] Copy computer";
 
@@ -331,7 +331,7 @@ void ComputersTab::onCopyComputerAction()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ComputersTab::onDeleteComputerAction()
+void HostsTab::onDeleteComputerAction()
 {
     LOG(INFO) << "[ACTION] Delete computer";
 
@@ -366,7 +366,7 @@ void ComputersTab::onDeleteComputerAction()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ComputersTab::onAddGroupAction()
+void HostsTab::onAddGroupAction()
 {
     LOG(INFO) << "[ACTION] Add group";
 
@@ -389,7 +389,7 @@ void ComputersTab::onAddGroupAction()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ComputersTab::onEditGroupAction()
+void HostsTab::onEditGroupAction()
 {
     LOG(INFO) << "[ACTION] Edit group";
 
@@ -417,7 +417,7 @@ void ComputersTab::onEditGroupAction()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ComputersTab::onDeleteGroupAction()
+void HostsTab::onDeleteGroupAction()
 {
     LOG(INFO) << "[ACTION] Delete group";
 
@@ -460,7 +460,7 @@ void ComputersTab::onDeleteGroupAction()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ComputersTab::onSwitchContent(Sidebar::Item::Type type)
+void HostsTab::onSwitchContent(Sidebar::Item::Type type)
 {
     updateActionsState();
 
@@ -489,7 +489,7 @@ void ComputersTab::onSwitchContent(Sidebar::Item::Type type)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ComputersTab::onSidebarContextMenu(Sidebar::Item::Type type, const QPoint& pos)
+void HostsTab::onSidebarContextMenu(Sidebar::Item::Type type, const QPoint& pos)
 {
     QMenu menu;
 
@@ -517,13 +517,13 @@ void ComputersTab::onSidebarContextMenu(Sidebar::Item::Type type, const QPoint& 
 }
 
 //--------------------------------------------------------------------------------------------------
-void ComputersTab::onCurrentComputerChanged(qint64 computer_id)
+void HostsTab::onCurrentComputerChanged(qint64 computer_id)
 {
     updateActionsState();
 }
 
 //--------------------------------------------------------------------------------------------------
-void ComputersTab::onConnectAction(QAction* action)
+void HostsTab::onConnectAction(QAction* action)
 {
     Config config;
 
@@ -583,7 +583,7 @@ void ComputersTab::onConnectAction(QAction* action)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ComputersTab::onLocalConnect(qint64 computer_id)
+void HostsTab::onLocalConnect(qint64 computer_id)
 {
     std::optional<ComputerData> computer = LocalDatabase::instance().findComputer(computer_id);
     if (!computer.has_value())
@@ -613,7 +613,7 @@ void ComputersTab::onLocalConnect(qint64 computer_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ComputersTab::onLocalComputerContextMenu(qint64 computer_id, const QPoint& pos)
+void HostsTab::onLocalComputerContextMenu(qint64 computer_id, const QPoint& pos)
 {
     QMenu menu;
 
@@ -637,7 +637,7 @@ void ComputersTab::onLocalComputerContextMenu(qint64 computer_id, const QPoint& 
 }
 
 //--------------------------------------------------------------------------------------------------
-void ComputersTab::switchContent(ContentWidget* new_widget)
+void HostsTab::switchContent(ContentWidget* new_widget)
 {
     if (!new_widget || new_widget == current_content_)
         return;
@@ -647,7 +647,7 @@ void ComputersTab::switchContent(ContentWidget* new_widget)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ComputersTab::updateActionsState()
+void HostsTab::updateActionsState()
 {
     Sidebar::Item* sidebar_item = ui.sidebar->currentItem();
 
@@ -693,7 +693,7 @@ void ComputersTab::updateActionsState()
 }
 
 //--------------------------------------------------------------------------------------------------
-proto::peer::SessionType ComputersTab::defaultSessionType() const
+proto::peer::SessionType HostsTab::defaultSessionType() const
 {
     if (action_desktop_->isChecked())
         return proto::peer::SESSION_TYPE_DESKTOP;

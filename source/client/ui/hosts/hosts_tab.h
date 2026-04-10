@@ -16,12 +16,12 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_UI_COMPUTERS_TAB_COMPUTERS_TAB_H
-#define CLIENT_UI_COMPUTERS_TAB_COMPUTERS_TAB_H
+#ifndef CLIENT_UI_HOSTS_HOSTS_TAB_H
+#define CLIENT_UI_HOSTS_HOSTS_TAB_H
 
 #include "client/config.h"
 #include "client/ui/client_tab.h"
-#include "ui_computers_tab.h"
+#include "ui_hosts_tab.h"
 
 class QTreeWidgetItem;
 
@@ -33,13 +33,13 @@ class RouterWidget;
 class RouterGroupWidget;
 class SearchWidget;
 
-class ComputersTab : public ClientTab
+class HostsTab : public ClientTab
 {
     Q_OBJECT
 
 public:
-    explicit ComputersTab(QWidget* parent = nullptr);
-    ~ComputersTab() override;
+    explicit HostsTab(QWidget* parent = nullptr);
+    ~HostsTab() override;
 
     QByteArray saveState() override;
     void restoreState(const QByteArray& state) override;
@@ -71,7 +71,7 @@ private:
     void updateActionsState();
     proto::peer::SessionType defaultSessionType() const;
 
-    Ui::ComputersTab ui;
+    Ui::HostsTab ui;
 
     QAction* action_add_group_ = nullptr;
     QAction* action_delete_group_ = nullptr;
@@ -100,9 +100,9 @@ private:
     RouterGroupWidget* router_group_widget_ = nullptr;
     SearchWidget* search_widget_ = nullptr;
 
-    Q_DISABLE_COPY_MOVE(ComputersTab)
+    Q_DISABLE_COPY_MOVE(HostsTab)
 };
 
 } // namespace client
 
-#endif // CLIENT_UI_COMPUTERS_TAB_COMPUTERS_TAB_H
+#endif // CLIENT_UI_HOSTS_HOSTS_TAB_H

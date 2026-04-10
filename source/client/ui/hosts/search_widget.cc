@@ -16,11 +16,11 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/ui/computers_tab/search_widget.h"
+#include "client/ui/hosts/search_widget.h"
 
 #include "base/logging.h"
 #include "client/local_database.h"
-#include "client/ui/computers_tab/content_tree_item.h"
+#include "client/ui/hosts/content_tree_item.h"
 
 #include <QHeaderView>
 #include <QTreeWidget>

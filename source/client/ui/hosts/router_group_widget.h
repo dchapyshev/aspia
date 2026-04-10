@@ -16,25 +16,23 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_UI_COMPUTERS_TAB_SEARCH_WIDGET_H
-#define CLIENT_UI_COMPUTERS_TAB_SEARCH_WIDGET_H
+#ifndef CLIENT_UI_HOSTS_ROUTER_GROUP_WIDGET_H
+#define CLIENT_UI_HOSTS_ROUTER_GROUP_WIDGET_H
 
-#include "client/ui/computers_tab/content_widget.h"
-
-class QTreeWidget;
+#include "client/ui/hosts/content_widget.h"
+#include "ui_router_group_widget.h"
 
 namespace client {
 
-class SearchWidget : public ContentWidget
+class RouterGroupWidget : public ContentWidget
 {
     Q_OBJECT
 
 public:
-    explicit SearchWidget(QWidget* parent = nullptr);
-    ~SearchWidget() override;
+    explicit RouterGroupWidget(QWidget* parent = nullptr);
+    ~RouterGroupWidget() override;
 
-    void search(const QString& query);
-    void clear();
+    void showGroup(qint64 group_id);
     int itemCount() const override;
     QByteArray saveState() override;
     void restoreState(const QByteArray& state) override;
@@ -43,11 +41,11 @@ signals:
     void sig_computerDoubleClicked(qint64 computer_id);
 
 private:
-    QTreeWidget* tree_computer_ = nullptr;
+    Ui::RouterGroupWidget ui;
 
-    Q_DISABLE_COPY_MOVE(SearchWidget)
+    Q_DISABLE_COPY_MOVE(RouterGroupWidget)
 };
 
 } // namespace client
 
-#endif // CLIENT_UI_COMPUTERS_TAB_SEARCH_WIDGET_H
+#endif // CLIENT_UI_HOSTS_ROUTER_GROUP_WIDGET_H

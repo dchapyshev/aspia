@@ -16,34 +16,35 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_UI_COMPUTERS_TAB_LOCAL_GROUP_DIALOG_H
-#define CLIENT_UI_COMPUTERS_TAB_LOCAL_GROUP_DIALOG_H
+#ifndef CLIENT_UI_HOSTS_LOCAL_COMPUTER_DIALOG_H
+#define CLIENT_UI_HOSTS_LOCAL_COMPUTER_DIALOG_H
 
 #include <QDialog>
 
-#include "ui_local_group_dialog.h"
+#include "ui_local_computer_dialog.h"
 
 namespace client {
 
-class LocalGroupDialog : public QDialog
+class LocalComputerDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    LocalGroupDialog(qint64 group_id, qint64 parent_id, QWidget* parent = nullptr);
-    ~LocalGroupDialog() override;
+    LocalComputerDialog(qint64 computer_id, qint64 group_id, QWidget* parent = nullptr);
+    ~LocalComputerDialog() override;
 
 private slots:
+    void onShowPasswordButtonToggled(bool checked);
     void onButtonBoxClicked(QAbstractButton* button);
 
 private:
-    Ui::LocalGroupDialog ui;
-    qint64 group_id_ = -1;
-    qint64 parent_id_ = 0;
+    Ui::LocalComputerDialog ui;
+    qint64 computer_id_ = -1;
+    qint64 group_id_ = 0;
 
-    Q_DISABLE_COPY_MOVE(LocalGroupDialog)
+    Q_DISABLE_COPY_MOVE(LocalComputerDialog)
 };
 
 } // namespace client
 
-#endif // CLIENT_UI_COMPUTERS_TAB_LOCAL_GROUP_DIALOG_H
+#endif // CLIENT_UI_HOSTS_LOCAL_COMPUTER_DIALOG_H

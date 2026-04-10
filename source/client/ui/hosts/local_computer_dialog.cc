@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/ui/computers_tab/local_computer_dialog.h"
+#include "client/ui/hosts/local_computer_dialog.h"
 
 #include "base/logging.h"
 #include "client/local_data.h"

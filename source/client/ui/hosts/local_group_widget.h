@@ -16,14 +16,14 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_UI_COMPUTERS_TAB_LOCAL_GROUP_WIDGET_H
-#define CLIENT_UI_COMPUTERS_TAB_LOCAL_GROUP_WIDGET_H
+#ifndef CLIENT_UI_HOSTS_LOCAL_GROUP_WIDGET_H
+#define CLIENT_UI_HOSTS_LOCAL_GROUP_WIDGET_H
 
 #include <QDrag>
 #include <QMimeData>
 
-#include "client/ui/computers_tab/content_tree_item.h"
-#include "client/ui/computers_tab/content_widget.h"
+#include "client/ui/hosts/content_tree_item.h"
+#include "client/ui/hosts/content_widget.h"
 #include "ui_local_group_widget.h"
 
 namespace client {
@@ -96,4 +96,4 @@ private:
 
 } // namespace client
 
-#endif // CLIENT_UI_COMPUTERS_TAB_LOCAL_GROUP_WIDGET_H
+#endif // CLIENT_UI_HOSTS_LOCAL_GROUP_WIDGET_H

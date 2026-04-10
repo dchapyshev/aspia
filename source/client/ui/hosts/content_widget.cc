@@ -16,35 +16,25 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_UI_COMPUTERS_TAB_LOCAL_COMPUTER_DIALOG_H
-#define CLIENT_UI_COMPUTERS_TAB_LOCAL_COMPUTER_DIALOG_H
-
-#include <QDialog>
-
-#include "ui_local_computer_dialog.h"
+#include "client/ui/hosts/content_widget.h"
 
 namespace client {
 
-class LocalComputerDialog : public QDialog
+//--------------------------------------------------------------------------------------------------
+ContentWidget::ContentWidget(Type type, QWidget* parent)
+    : QWidget(parent),
+      type_(type)
 {
-    Q_OBJECT
+    // Nothing
+}
 
-public:
-    LocalComputerDialog(qint64 computer_id, qint64 group_id, QWidget* parent = nullptr);
-    ~LocalComputerDialog() override;
+//--------------------------------------------------------------------------------------------------
+ContentWidget::~ContentWidget() = default;
 
-private slots:
-    void onShowPasswordButtonToggled(bool checked);
-    void onButtonBoxClicked(QAbstractButton* button);
-
-private:
-    Ui::LocalComputerDialog ui;
-    qint64 computer_id_ = -1;
-    qint64 group_id_ = 0;
-
-    Q_DISABLE_COPY_MOVE(LocalComputerDialog)
-};
+//--------------------------------------------------------------------------------------------------
+ContentWidget::Type ContentWidget::contentType() const
+{
+    return type_;
+}
 
 } // namespace client
-
-#endif // CLIENT_UI_COMPUTERS_TAB_LOCAL_COMPUTER_DIALOG_H

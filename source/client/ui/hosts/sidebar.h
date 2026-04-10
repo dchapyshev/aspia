@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_UI_COMPUTERS_TAB_SIDEBAR_H
-#define CLIENT_UI_COMPUTERS_TAB_SIDEBAR_H
+#ifndef CLIENT_UI_HOSTS_SIDEBAR_H
+#define CLIENT_UI_HOSTS_SIDEBAR_H
 
 #include <QTreeWidget>
 #include <QWidget>
@@ -105,4 +105,4 @@ private:
 
 } // namespace client
 
-#endif // CLIENT_UI_COMPUTERS_TAB_SIDEBAR_H
+#endif // CLIENT_UI_HOSTS_SIDEBAR_H

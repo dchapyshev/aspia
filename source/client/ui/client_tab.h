@@ -33,7 +33,7 @@ class ClientTab : public QWidget
     Q_OBJECT
 
 public:
-    enum class Type { COMPUTERS, SESSION };
+    enum class Type { HOSTS, SESSION };
 
     enum class ActionGroup
     {

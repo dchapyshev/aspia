@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>ComputersTab</class>
- <widget class="QWidget" name="ComputersTab">
+ <class>HostsTab</class>
+ <widget class="QWidget" name="HostsTab">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -52,7 +52,7 @@
   <customwidget>
    <class>client::Sidebar</class>
    <extends>QWidget</extends>
-   <header>client/ui/computers_tab/sidebar.h</header>
+   <header>client/ui/hosts/sidebar.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

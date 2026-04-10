@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_UI_COMPUTERS_TAB_CONTENT_TREE_ITEM_H
-#define CLIENT_UI_COMPUTERS_TAB_CONTENT_TREE_ITEM_H
+#ifndef CLIENT_UI_HOSTS_CONTENT_TREE_ITEM_H
+#define CLIENT_UI_HOSTS_CONTENT_TREE_ITEM_H
 
 #include <QTreeWidgetItem>
 
@@ -65,4 +65,4 @@ public:
 
 } // namespace client
 
-#endif // CLIENT_UI_COMPUTERS_TAB_CONTENT_TREE_ITEM_H
+#endif // CLIENT_UI_HOSTS_CONTENT_TREE_ITEM_H

@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/ui/computers_tab/content_tree_item.h"
+#include "client/ui/hosts/content_tree_item.h"
 
 #include "client/local_data.h"
 
