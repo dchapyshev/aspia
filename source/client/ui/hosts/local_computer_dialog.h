@@ -23,6 +23,8 @@
 
 #include "ui_local_computer_dialog.h"
 
+class QStandardItem;
+
 namespace client {
 
 class LocalComputerDialog : public QDialog
@@ -38,6 +40,9 @@ private slots:
     void onButtonBoxClicked(QAbstractButton* button);
 
 private:
+    void addGroupItems(qint64 parent_id, QStandardItem* parent_item);
+    void selectGroup(qint64 group_id);
+
     Ui::LocalComputerDialog ui;
     qint64 computer_id_ = -1;
     qint64 group_id_ = 0;

@@ -238,6 +238,7 @@ list(APPEND SOURCE_CLIENT_CORE_UI_HOSTS_TAB
     ui/hosts/content_widget.h
     ui/hosts/sidebar.cc
     ui/hosts/sidebar.h
+    ui/hosts/tree_combo_box.h
     ui/hosts/local_group_widget.cc
     ui/hosts/local_group_widget.h
     ui/hosts/local_group_widget.ui

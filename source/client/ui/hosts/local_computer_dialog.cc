@@ -25,8 +25,16 @@
 #include <QAbstractButton>
 #include <QMessageBox>
 #include <QPushButton>
+#include <QStandardItemModel>
+#include <QTreeView>
 
 namespace client {
+
+namespace {
+
+const int kGroupIdRole = Qt::UserRole + 1;
+
+} // namespace
 
 //--------------------------------------------------------------------------------------------------
 LocalComputerDialog::LocalComputerDialog(qint64 computer_id, qint64 group_id, QWidget* parent)
@@ -61,6 +69,26 @@ LocalComputerDialog::LocalComputerDialog(qint64 computer_id, qint64 group_id, QW
         setWindowTitle(tr("Add Computer"));
         group_id_ = group_id;
     }
+
+    // Build group tree model.
+    QStandardItemModel* model = new QStandardItemModel(this);
+
+    QStandardItem* root = new QStandardItem(QIcon(":/img/folder.svg"), tr("Local"));
+    root->setData(static_cast<qint64>(0), kGroupIdRole);
+    model->appendRow(root);
+
+    addGroupItems(0, root);
+
+    // Set up tree view for combo box popup.
+    QTreeView* tree_view = new QTreeView(this);
+    tree_view->setHeaderHidden(true);
+
+    ui.combo_group->setModel(model);
+    ui.combo_group->setView(tree_view);
+
+    tree_view->expandAll();
+
+    selectGroup(group_id_);
 
     connect(ui.button_show_password, &QToolButton::toggled,
             this, &LocalComputerDialog::onShowPasswordButtonToggled);
@@ -118,7 +146,7 @@ void LocalComputerDialog::onButtonBoxClicked(QAbstractButton* button)
 
     ComputerData computer;
     computer.id = computer_id_;
-    computer.group_id = group_id_;
+    computer.group_id = ui.combo_group->currentData(kGroupIdRole).toLongLong();
     computer.name = ui.edit_name->text();
     computer.address = ui.edit_address->text();
     computer.username = ui.edit_username->text();
@@ -147,6 +175,39 @@ void LocalComputerDialog::onButtonBoxClicked(QAbstractButton* button)
     }
 
     accept();
+}
+
+//--------------------------------------------------------------------------------------------------
+void LocalComputerDialog::addGroupItems(qint64 parent_id, QStandardItem* parent_item)
+{
+    QIcon folder_icon(":/img/folder.svg");
+    QList<GroupData> groups = LocalDatabase::instance().groupList(parent_id);
+
+    for (const GroupData& group : std::as_const(groups))
+    {
+        QStandardItem* item = new QStandardItem(folder_icon, group.name);
+        item->setData(group.id, kGroupIdRole);
+        parent_item->appendRow(item);
+
+        addGroupItems(group.id, item);
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void LocalComputerDialog::selectGroup(qint64 group_id)
+{
+    QAbstractItemModel* model = ui.combo_group->model();
+
+    QModelIndexList matches = model->match(
+        model->index(0, 0), kGroupIdRole, QVariant::fromValue(group_id), 1,
+        Qt::MatchExactly | Qt::MatchRecursive);
+
+    if (!matches.isEmpty())
+    {
+        QModelIndex index = matches.first();
+        ui.combo_group->setRootModelIndex(index.parent());
+        ui.combo_group->setCurrentIndex(index.row());
+    }
 }
 
 } // namespace client

@@ -16,39 +16,35 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_UI_HOSTS_LOCAL_GROUP_DIALOG_H
-#define CLIENT_UI_HOSTS_LOCAL_GROUP_DIALOG_H
+#ifndef CLIENT_UI_HOSTS_TREE_COMBO_BOX_H
+#define CLIENT_UI_HOSTS_TREE_COMBO_BOX_H
 
-#include <QDialog>
-
-#include "ui_local_group_dialog.h"
-
-class QStandardItem;
+#include <QComboBox>
+#include <QTreeView>
 
 namespace client {
 
-class LocalGroupDialog : public QDialog
+class TreeComboBox : public QComboBox
 {
     Q_OBJECT
 
 public:
-    LocalGroupDialog(qint64 group_id, qint64 parent_id, QWidget* parent = nullptr);
-    ~LocalGroupDialog() override;
+    explicit TreeComboBox(QWidget* parent = nullptr)
+        : QComboBox(parent)
+    {
+        // Nothing
+    }
 
-private slots:
-    void onButtonBoxClicked(QAbstractButton* button);
+    void showPopup() override
+    {
+        setRootModelIndex(QModelIndex());
+        QComboBox::showPopup();
 
-private:
-    void addGroupItems(qint64 parent_id, QStandardItem* parent_item, qint64 exclude_id);
-    void selectGroup(qint64 group_id);
-
-    Ui::LocalGroupDialog ui;
-    qint64 group_id_ = -1;
-    qint64 parent_id_ = 0;
-
-    Q_DISABLE_COPY_MOVE(LocalGroupDialog)
+        if (QTreeView* tv = qobject_cast<QTreeView*>(view()))
+            tv->expandAll();
+    }
 };
 
 } // namespace client
 
-#endif // CLIENT_UI_HOSTS_LOCAL_GROUP_DIALOG_H
+#endif // CLIENT_UI_HOSTS_TREE_COMBO_BOX_H
