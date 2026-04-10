@@ -125,7 +125,7 @@ bool ComputerDialogGeneral::saveSettings(proto::address_book::Computer* computer
     else if (name.length() < kMinNameLength)
     {
         LOG(ERROR) << "Name can not be empty";
-        showError(tr("Name can not be empty."));
+        showError(tr("Name cannot be empty."));
         ui.edit_name->setFocus();
         return false;
     }

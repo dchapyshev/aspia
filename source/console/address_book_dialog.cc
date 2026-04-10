@@ -445,7 +445,7 @@ bool AddressBookDialog::saveChanges()
     }
     else if (name.length() < kMinNameLength)
     {
-        showError(tr("Name can not be empty."));
+        showError(tr("Name cannot be empty."));
         return false;
     }
 

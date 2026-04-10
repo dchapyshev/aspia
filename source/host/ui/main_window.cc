@@ -378,11 +378,11 @@ void MainWindow::onRouterStateChanged(const proto::user::RouterState& state)
             break;
 
         case proto::user::RouterState::CONNECTING:
-            status = tr("Connecting to a router %1...").arg(router);
+            status = tr("Connecting to router %1...").arg(router);
             break;
 
         case proto::user::RouterState::CONNECTED:
-            status = tr("Connected to a router %1").arg(router);
+            status = tr("Connected to router %1").arg(router);
             break;
 
         case proto::user::RouterState::FAILED:
@@ -821,12 +821,12 @@ void MainWindow::updateStatusBar()
             break;
 
         case proto::user::RouterState::CONNECTING:
-            message = tr("Connecting to a router...");
+            message = tr("Connecting to router...");
             icon = ":/img/replay.svg";
             break;
 
         case proto::user::RouterState::CONNECTED:
-            message = tr("Connected to a router");
+            message = tr("Connected to router");
             icon = ":/img/done.svg";
             break;
 

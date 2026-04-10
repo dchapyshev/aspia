@@ -30,7 +30,7 @@ const char* sessionTypeToString(proto::peer::SessionType session_type)
     switch (session_type)
     {
         case proto::peer::SESSION_TYPE_DESKTOP:
-            return QT_TRANSLATE_NOOP("SessionType", "Desktop Manage");
+            return QT_TRANSLATE_NOOP("SessionType", "Desktop Management");
 
         case proto::peer::SESSION_TYPE_FILE_TRANSFER:
             return QT_TRANSLATE_NOOP("SessionType", "File Transfer");

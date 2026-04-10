@@ -648,7 +648,7 @@ void TaskManagerWindow::onEndProcess()
     {
         QMessageBox message_box(QMessageBox::Question,
                                 tr("Confirmation"),
-                                tr("Are you really want to end \"%1\" process?")
+                                tr("Do you really want to end \"%1\" process?")
                                     .arg(current_item->text(PROC_COL_NAME)),
                                 QMessageBox::Yes | QMessageBox::No,
                                 this);
@@ -705,7 +705,7 @@ void TaskManagerWindow::onDisconnectUser()
     {
         QMessageBox message_box(QMessageBox::Question,
                                 tr("Confirmation"),
-                                tr("Are you really want to disconnect user \"%1\" session?")
+                                tr("Do you really want to disconnect user \"%1\" session?")
                                     .arg(current_item->text(USER_COL_NAME)),
                                 QMessageBox::Yes | QMessageBox::No,
                                 this);
@@ -735,7 +735,7 @@ void TaskManagerWindow::onLogoffUser()
     {
         QMessageBox message_box(QMessageBox::Question,
                                 tr("Confirmation"),
-                                tr("Are you really want to end user \"%1\" session?")
+                                tr("Do you really want to end user \"%1\" session?")
                                     .arg(current_item->text(USER_COL_NAME)),
                                 QMessageBox::Yes | QMessageBox::No,
                                 this);

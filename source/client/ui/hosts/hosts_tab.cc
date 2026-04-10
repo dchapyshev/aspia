@@ -60,7 +60,7 @@ HostsTab::HostsTab(QWidget* parent)
     action_edit_computer_ = new QAction(QIcon(":/img/change-computer.svg"), tr("Edit Computer"), this);
     action_copy_computer_ = new QAction(QIcon(":/img/copy-computer.svg"), tr("Copy Computer"), this);
 
-    action_desktop_ = new QAction(QIcon(":/img/workstation.svg"), tr("Desktop Manage"), this);
+    action_desktop_ = new QAction(QIcon(":/img/workstation.svg"), tr("Desktop Management"), this);
     action_file_transfer_ = new QAction(QIcon(":/img/file-explorer.svg"), tr("File Transfer"), this);
     action_chat_ = new QAction(QIcon(":/img/chat.svg"), tr("Chat"), this);
     action_system_info_ = new QAction(QIcon(":/img/system-information.svg"), tr("System Information"), this);
@@ -76,7 +76,7 @@ HostsTab::HostsTab(QWidget* parent)
     session_type_group->addAction(action_chat_);
     session_type_group->addAction(action_system_info_);
 
-    action_desktop_connect_ = new QAction(QIcon(":/img/workstation.svg"), tr("Desktop Manage"), this);
+    action_desktop_connect_ = new QAction(QIcon(":/img/workstation.svg"), tr("Desktop Management"), this);
     action_file_transfer_connect_ = new QAction(QIcon(":/img/file-explorer.svg"), tr("File Transfer"), this);
     action_chat_connect_ = new QAction(QIcon(":/img/chat.svg"), tr("Chat"), this);
     action_system_info_connect_ = new QAction(QIcon(":/img/system-information.svg"), tr("System Information"), this);

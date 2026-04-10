@@ -321,7 +321,7 @@ border-radius: 2px;
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Desktop Manage</string>
+    <string>Desktop Management</string>
    </property>
   </action>
   <action name="action_desktop_view">
