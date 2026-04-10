@@ -63,9 +63,9 @@
      <height>26</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menu_aspia">
+   <widget class="QMenu" name="menu_file">
     <property name="title">
-     <string notr="true">Aspia</string>
+     <string notr="true">File</string>
     </property>
     <addaction name="action_settings"/>
     <addaction name="separator"/>
@@ -116,7 +116,7 @@
      <string>Session Type</string>
     </property>
    </widget>
-   <addaction name="menu_aspia"/>
+   <addaction name="menu_file"/>
    <addaction name="menu_edit"/>
    <addaction name="menu_view"/>
    <addaction name="menu_session_type"/>

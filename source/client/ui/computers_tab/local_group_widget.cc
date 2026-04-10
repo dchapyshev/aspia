@@ -84,6 +84,19 @@ LocalGroupWidget::LocalGroupWidget(QWidget* parent)
 
         emit sig_currentComputerChanged(computer_id);
     });
+
+    connect(ui.tree_computer, &QTreeWidget::customContextMenuRequested,
+            this, [this](const QPoint& pos)
+    {
+        qint64 computer_id = 0;
+        LocalComputerItem* item = static_cast<LocalComputerItem*>(ui.tree_computer->itemAt(pos));
+        if (item)
+        {
+            ui.tree_computer->setCurrentItem(item);
+            computer_id = item->computerId();
+        }
+        emit sig_computerContextMenu(computer_id, ui.tree_computer->viewport()->mapToGlobal(pos));
+    });
 }
 
 //--------------------------------------------------------------------------------------------------

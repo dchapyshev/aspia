@@ -42,6 +42,7 @@ public:
 signals:
     void sig_computerDoubleClicked(qint64 computer_id);
     void sig_currentComputerChanged(qint64 computer_id);
+    void sig_computerContextMenu(qint64 computer_id, const QPoint& pos);
 
 private slots:
     void onHeaderContextMenu(const QPoint& pos);

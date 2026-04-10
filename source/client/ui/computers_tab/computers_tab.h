@@ -56,14 +56,17 @@ signals:
 private slots:
     void onAddComputerAction();
     void onEditComputerAction();
+    void onCopyComputerAction();
     void onDeleteComputerAction();
     void onAddGroupAction();
     void onEditGroupAction();
     void onDeleteGroupAction();
     void onCurrentGroupChanged(QTreeWidgetItem* current, QTreeWidgetItem* previous);
+    void onGroupContextMenu(const QPoint& pos);
     void onCurrentComputerChanged(qint64 computer_id);
     void onConnectAction(QAction* action);
     void onLocalConnect(qint64 computer_id);
+    void onLocalComputerContextMenu(qint64 computer_id, const QPoint& pos);
 
 private:
     void loadGroups(qint64 parent_id, QTreeWidgetItem* parent_item);
@@ -86,6 +89,7 @@ private:
     QAction* action_add_computer_ = nullptr;
     QAction* action_delete_computer_ = nullptr;
     QAction* action_edit_computer_ = nullptr;
+    QAction* action_copy_computer_ = nullptr;
 
     QAction* action_desktop_ = nullptr;
     QAction* action_file_transfer_ = nullptr;

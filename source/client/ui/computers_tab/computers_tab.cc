@@ -19,6 +19,7 @@
 #include "client/ui/computers_tab/computers_tab.h"
 
 #include <QActionGroup>
+#include <QMenu>
 #include <QMessageBox>
 #include <QStatusBar>
 
@@ -55,6 +56,7 @@ ComputersTab::ComputersTab(QWidget* parent)
     action_add_computer_ = new QAction(QIcon(":/img/add-computer.svg"), tr("Add Computer"), this);
     action_delete_computer_ = new QAction(QIcon(":/img/remove-computer.svg"), tr("Delete Computer"), this);
     action_edit_computer_ = new QAction(QIcon(":/img/change-computer.svg"), tr("Edit Computer"), this);
+    action_copy_computer_ = new QAction(QIcon(":/img/copy-computer.svg"), tr("Copy Computer"), this);
 
     action_desktop_ = new QAction(QIcon(":/img/workstation.svg"), tr("Desktop Manage"), this);
     action_file_transfer_ = new QAction(QIcon(":/img/file-explorer.svg"), tr("File Transfer"), this);
@@ -130,10 +132,13 @@ ComputersTab::ComputersTab(QWidget* parent)
 
     // Connect signals.
     connect(ui.tree_group, &QTreeWidget::currentItemChanged, this, &ComputersTab::onCurrentGroupChanged);
+    connect(ui.tree_group, &QTreeWidget::customContextMenuRequested, this, &ComputersTab::onGroupContextMenu);
     connect(local_group_widget_, &LocalGroupWidget::sig_currentComputerChanged, this, &ComputersTab::onCurrentComputerChanged);
     connect(local_group_widget_, &LocalGroupWidget::sig_computerDoubleClicked, this, &ComputersTab::onLocalConnect);
+    connect(local_group_widget_, &LocalGroupWidget::sig_computerContextMenu, this, &ComputersTab::onLocalComputerContextMenu);
     connect(action_add_computer_, &QAction::triggered, this, &ComputersTab::onAddComputerAction);
     connect(action_edit_computer_, &QAction::triggered, this, &ComputersTab::onEditComputerAction);
+    connect(action_copy_computer_, &QAction::triggered, this, &ComputersTab::onCopyComputerAction);
     connect(action_delete_computer_, &QAction::triggered, this, &ComputersTab::onDeleteComputerAction);
     connect(action_add_group_, &QAction::triggered, this, &ComputersTab::onAddGroupAction);
     connect(action_edit_group_, &QAction::triggered, this, &ComputersTab::onEditGroupAction);
@@ -142,7 +147,7 @@ ComputersTab::ComputersTab(QWidget* parent)
 
     // Register actions for toolbar and menus.
     addActions(ActionGroup::EDIT, { action_add_group_, action_edit_group_, action_delete_group_ });
-    addActions(ActionGroup::EDIT, { action_add_computer_, action_edit_computer_, action_delete_computer_ });
+    addActions(ActionGroup::EDIT, { action_add_computer_, action_edit_computer_, action_copy_computer_, action_delete_computer_ });
     addActions(ActionGroup::SESSION_TYPE, { action_desktop_, action_file_transfer_, action_chat_, action_system_info_ });
 
     if (!LocalDatabase::instance().isValid())
@@ -308,6 +313,40 @@ void ComputersTab::onEditComputerAction()
 }
 
 //--------------------------------------------------------------------------------------------------
+void ComputersTab::onCopyComputerAction()
+{
+    LOG(INFO) << "[ACTION] Copy computer";
+
+    LocalComputerItem* item = local_group_widget_->currentComputer();
+    if (!item)
+    {
+        LOG(INFO) << "No current local item";
+        return;
+    }
+
+    LocalDatabase& db = LocalDatabase::instance();
+
+    std::optional<ComputerData> computer = db.findComputer(item->computerId());
+    if (!computer.has_value())
+    {
+        QMessageBox::warning(this, tr("Warning"), tr("Failed to retrieve computer information from the local database."));
+        return;
+    }
+
+    computer->name += " " + tr("(copy)");
+
+    if (!db.addComputer(*computer))
+    {
+        QMessageBox::warning(this, tr("Warning"), tr("Failed to add the computer to the local database."));
+        return;
+    }
+
+    local_group_widget_->showGroup(current_group_id_);
+    LocalComputerDialog(computer->id, computer->group_id, this).exec();
+    local_group_widget_->showGroup(current_group_id_);
+}
+
+//--------------------------------------------------------------------------------------------------
 void ComputersTab::onDeleteComputerAction()
 {
     LOG(INFO) << "[ACTION] Delete computer";
@@ -462,6 +501,38 @@ void ComputersTab::onCurrentGroupChanged(QTreeWidgetItem* current, QTreeWidgetIt
 }
 
 //--------------------------------------------------------------------------------------------------
+void ComputersTab::onGroupContextMenu(const QPoint& pos)
+{
+    GroupTreeItem* item = static_cast<GroupTreeItem*>(ui.tree_group->itemAt(pos));
+    if (!item)
+        return;
+
+    QMenu menu;
+
+    if (item->itemType() == GroupTreeItem::Type::LOCAL_GROUP)
+    {
+        menu.addAction(action_edit_group_);
+        menu.addAction(action_delete_group_);
+        menu.addSeparator();
+        menu.addAction(action_add_group_);
+    }
+    else if (item->itemType() == GroupTreeItem::Type::ROUTER_GROUP)
+    {
+        // TODO
+    }
+    else if (item->itemType() == GroupTreeItem::Type::ROUTER)
+    {
+        // TODO
+    }
+    else
+    {
+        return;
+    }
+
+    menu.exec(ui.tree_group->viewport()->mapToGlobal(pos));
+}
+
+//--------------------------------------------------------------------------------------------------
 void ComputersTab::onCurrentComputerChanged(qint64 computer_id)
 {
     updateActionsState();
@@ -558,6 +629,30 @@ void ComputersTab::onLocalConnect(qint64 computer_id)
 }
 
 //--------------------------------------------------------------------------------------------------
+void ComputersTab::onLocalComputerContextMenu(qint64 computer_id, const QPoint& pos)
+{
+    QMenu menu;
+
+    if (computer_id)
+    {
+        menu.addAction(action_desktop_connect_);
+        menu.addAction(action_file_transfer_connect_);
+        menu.addAction(action_chat_connect_);
+        menu.addAction(action_system_info_connect_);
+        menu.addSeparator();
+        menu.addAction(action_edit_computer_);
+        menu.addAction(action_copy_computer_);
+        menu.addAction(action_delete_computer_);
+    }
+    else
+    {
+        menu.addAction(action_add_computer_);
+    }
+
+    menu.exec(pos);
+}
+
+//--------------------------------------------------------------------------------------------------
 void ComputersTab::loadGroups(qint64 parent_id, QTreeWidgetItem* parent_item)
 {
     QList<GroupData> groups = LocalDatabase::instance().groupList(parent_id);
@@ -646,6 +741,7 @@ void ComputersTab::updateActionsState()
         action_add_computer_->setVisible(true);
         action_delete_computer_->setVisible(computer_item != nullptr);
         action_edit_computer_->setVisible(computer_item != nullptr);
+        action_copy_computer_->setVisible(computer_item != nullptr);
     }
     else
     {
@@ -656,6 +752,7 @@ void ComputersTab::updateActionsState()
         action_add_computer_->setVisible(false);
         action_delete_computer_->setVisible(false);
         action_edit_computer_->setVisible(false);
+        action_copy_computer_->setVisible(false);
     }
 
     if (group_item && group_item->itemType() == GroupTreeItem::Type::ROUTER)
