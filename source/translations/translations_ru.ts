@@ -431,7 +431,7 @@
     <message>
         <location filename="../client/main.cc" line="285"/>
         <source>Session type. Possible values: desktop, file-transfer, system-info, text-chat.</source>
-        <translation type="unfinished"></translation>
+        <translation>Тип сессии. Возможные значения: desktop, file-transfer, system-info, text-chat.</translation>
     </message>
     <message>
         <location filename="../client/main.cc" line="314"/>
@@ -1387,6 +1387,12 @@
         <translation>Управление &amp;рабочим столом</translation>
     </message>
     <message>
+        <location filename="../console/main_window.ui" line="429"/>
+        <location filename="../console/main_window.ui" line="432"/>
+        <source>Desktop Management</source>
+        <translation>Управление рабочим столом</translation>
+    </message>
+    <message>
         <source>Desktop &amp;View</source>
         <translation type="vanished">&amp;Просмотр рабочего стола</translation>
     </message>
@@ -1416,10 +1422,8 @@
         <translation>Свойства адресной книги</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="429"/>
-        <location filename="../console/main_window.ui" line="432"/>
         <source>Desktop Manage</source>
-        <translation>Управление рабочим столом</translation>
+        <translation type="vanished">Управление рабочим столом</translation>
     </message>
     <message>
         <source>Desktop View</source>
@@ -2349,70 +2353,80 @@
 <context>
     <name>LocalComputerDialog</name>
     <message>
-        <location filename="../client/ui/computers_tab/local_computer_dialog.ui" line="14"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.ui" line="14"/>
         <source>Computer</source>
-        <translation type="unfinished">Компьютер</translation>
+        <translation>Компьютер</translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/local_computer_dialog.ui" line="25"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.ui" line="25"/>
+        <source>Group:</source>
+        <translation>Группа:</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/local_computer_dialog.ui" line="35"/>
         <source>Name:</source>
-        <translation type="unfinished">Имя:</translation>
+        <translation>Имя:</translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/local_computer_dialog.ui" line="35"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.ui" line="45"/>
         <source>Address:</source>
-        <translation type="unfinished">Адрес:</translation>
+        <translation>Адрес:</translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/local_computer_dialog.ui" line="45"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.ui" line="55"/>
         <source>Username:</source>
-        <translation type="unfinished"></translation>
+        <translation>Имя пользователя:</translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/local_computer_dialog.ui" line="55"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.ui" line="65"/>
         <source>Password:</source>
-        <translation type="unfinished">Пароль:</translation>
+        <translation>Пароль:</translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/local_computer_dialog.ui" line="94"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.ui" line="104"/>
         <source>Comment:</source>
-        <translation type="unfinished">Комментарий:</translation>
+        <translation>Комментарий:</translation>
     </message>
 </context>
 <context>
     <name>LocalGroupDialog</name>
     <message>
-        <location filename="../client/ui/computers_tab/local_group_dialog.ui" line="14"/>
+        <location filename="../client/ui/hosts/local_group_dialog.ui" line="14"/>
         <source>Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Группа</translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/local_group_dialog.ui" line="25"/>
+        <location filename="../client/ui/hosts/local_group_dialog.ui" line="25"/>
+        <source>Parent Group:</source>
+        <translation>Родительская группа:</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/local_group_dialog.ui" line="35"/>
         <source>Name:</source>
-        <translation type="unfinished">Имя:</translation>
+        <translation>Имя:</translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/local_group_dialog.ui" line="39"/>
+        <location filename="../client/ui/hosts/local_group_dialog.ui" line="49"/>
         <source>Comment:</source>
-        <translation type="unfinished">Комментарий:</translation>
+        <translation>Комментарий:</translation>
     </message>
 </context>
 <context>
     <name>LocalGroupWidget</name>
     <message>
-        <location filename="../client/ui/computers_tab/local_group_widget.ui" line="45"/>
+        <location filename="../client/ui/hosts/local_group_widget.ui" line="45"/>
         <source>Name</source>
-        <translation type="unfinished">Имя</translation>
+        <translation>Имя</translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/local_group_widget.ui" line="50"/>
+        <location filename="../client/ui/hosts/local_group_widget.ui" line="50"/>
         <source>Address</source>
-        <translation type="unfinished">Адрес</translation>
+        <translation>Адрес</translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/local_group_widget.ui" line="55"/>
+        <location filename="../client/ui/hosts/local_group_widget.ui" line="55"/>
         <source>Comment</source>
-        <translation type="unfinished">Комментарий</translation>
+        <translation>Комментарий</translation>
     </message>
 </context>
 <context>
@@ -2466,13 +2480,24 @@
         <translation>Тема</translation>
     </message>
     <message>
+        <location filename="../client/ui/main_window.ui" line="127"/>
+        <location filename="../client/ui/main_window.ui" line="185"/>
+        <source>Tool Bar</source>
+        <translation>Панель инструментов</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/main_window.ui" line="150"/>
         <location filename="../host/ui/main_window.ui" line="298"/>
         <source>F1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="324"/>
         <source>Desktop Manage</source>
+        <translation type="vanished">Управление рабочим столом</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/main_window.ui" line="324"/>
+        <source>Desktop Management</source>
         <translation>Управление рабочим столом</translation>
     </message>
     <message>
@@ -2529,13 +2554,13 @@
         <translation>Доступ</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="171"/>
+        <location filename="../client/ui/main_window.ui" line="177"/>
         <location filename="../host/ui/main_window.ui" line="290"/>
         <source>Exit</source>
         <translation>Выход</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="144"/>
+        <location filename="../client/ui/main_window.ui" line="147"/>
         <location filename="../host/ui/main_window.ui" line="295"/>
         <source>Online Help...</source>
         <translation>Онлайн справка...</translation>
@@ -2543,31 +2568,36 @@
     <message>
         <location filename="../client/ui/main_window.ui" line="14"/>
         <source>Aspia Client</source>
-        <translation type="unfinished">Клиент Aspia</translation>
+        <translation>Клиент Aspia</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/main_window.ui" line="68"/>
+        <source>File</source>
+        <translation>Файл</translation>
     </message>
     <message>
         <location filename="../client/ui/main_window.ui" line="83"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Правка</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="113"/>
+        <location filename="../client/ui/main_window.ui" line="116"/>
         <source>Session Type</source>
-        <translation type="unfinished">Тип сессии</translation>
+        <translation>Тип сессии</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="124"/>
-        <source>toolBar</source>
-        <translation type="unfinished"></translation>
+        <location filename="../client/ui/main_window.ui" line="193"/>
+        <source>Status Bar</source>
+        <translation>Строка состояния</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="153"/>
+        <location filename="../client/ui/main_window.ui" line="159"/>
         <location filename="../host/ui/main_window.ui" line="303"/>
         <source>About</source>
         <translation>О программе</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="162"/>
+        <location filename="../client/ui/main_window.ui" line="168"/>
         <location filename="../host/ui/main_window.ui" line="308"/>
         <source>Settings...</source>
         <translation>Параметры...</translation>
@@ -2954,19 +2984,19 @@
 <context>
     <name>RouterGroupWidget</name>
     <message>
-        <location filename="../client/ui/computers_tab/router_group_widget.ui" line="45"/>
+        <location filename="../client/ui/hosts/router_group_widget.ui" line="45"/>
         <source>Name</source>
-        <translation type="unfinished">Имя</translation>
+        <translation>Имя</translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/router_group_widget.ui" line="50"/>
+        <location filename="../client/ui/hosts/router_group_widget.ui" line="50"/>
         <source>Address / ID</source>
-        <translation type="unfinished">Адрес / ID</translation>
+        <translation>Адрес / ID</translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/router_group_widget.ui" line="55"/>
+        <location filename="../client/ui/hosts/router_group_widget.ui" line="55"/>
         <source>Comment</source>
-        <translation type="unfinished">Комментарий</translation>
+        <translation>Комментарий</translation>
     </message>
 </context>
 <context>
@@ -3193,9 +3223,9 @@
 <context>
     <name>RouterWidget</name>
     <message>
-        <location filename="../client/ui/computers_tab/router_widget.ui" line="29"/>
+        <location filename="../client/ui/hosts/router_widget.ui" line="29"/>
         <source>Router</source>
-        <translation type="unfinished">Маршрутизатор</translation>
+        <translation>Маршрутизатор</translation>
     </message>
 </context>
 <context>
@@ -3298,13 +3328,17 @@
 <context>
     <name>SessionType</name>
     <message>
-        <location filename="../common/ui/session_type.cc" line="33"/>
         <source>Desktop Manage</source>
-        <translation>Управление рабочим столом</translation>
+        <translation type="vanished">Управление рабочим столом</translation>
     </message>
     <message>
         <source>Desktop View</source>
         <translation type="vanished">Просмотр рабочего стола</translation>
+    </message>
+    <message>
+        <location filename="../common/ui/session_type.cc" line="33"/>
+        <source>Desktop Management</source>
+        <translation>Управление рабочим столом</translation>
     </message>
     <message>
         <location filename="../common/ui/session_type.cc" line="36"/>
@@ -3359,133 +3393,133 @@
     <message>
         <location filename="../client/ui/settings_dialog.ui" line="14"/>
         <source>Settings</source>
-        <translation type="unfinished">Параметры</translation>
+        <translation>Параметры</translation>
     </message>
     <message>
         <location filename="../client/ui/settings_dialog.ui" line="24"/>
         <source>Router</source>
-        <translation type="unfinished">Маршрутизатор</translation>
+        <translation>Маршрутизатор</translation>
     </message>
     <message>
         <location filename="../client/ui/settings_dialog.ui" line="30"/>
         <source>Use a router</source>
-        <translation type="unfinished">Использовать маршрутизатор</translation>
+        <translation>Использовать маршрутизатор</translation>
     </message>
     <message>
         <location filename="../client/ui/settings_dialog.ui" line="39"/>
         <source>Address:</source>
-        <translation type="unfinished">Адрес:</translation>
+        <translation>Адрес:</translation>
     </message>
     <message>
         <location filename="../client/ui/settings_dialog.ui" line="53"/>
         <source>User Name:</source>
-        <translation type="unfinished">Имя пользователя:</translation>
+        <translation>Имя пользователя:</translation>
     </message>
     <message>
         <location filename="../client/ui/settings_dialog.ui" line="67"/>
         <source>Password:</source>
-        <translation type="unfinished">Пароль:</translation>
+        <translation>Пароль:</translation>
     </message>
     <message>
         <location filename="../client/ui/settings_dialog.ui" line="99"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
-        <translation type="unfinished">Маршрутизатор необходим для подключения к компьютеру при невозможности прямого подключения (обхода NAT). Aspia не предоставляет публичного маршрутизатора, но вы можете установить свой собственный. Загрузить маршрутизатор вы можете на &lt;a href=&quot;https://aspia.org&quot;&gt;официальном сайте&lt;/a&gt;.</translation>
+        <translation>Маршрутизатор необходим для подключения к компьютеру при невозможности прямого подключения (обхода NAT). Aspia не предоставляет публичного маршрутизатора, но вы можете установить свой собственный. Загрузить маршрутизатор вы можете на &lt;a href=&quot;https://aspia.org&quot;&gt;официальном сайте&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../client/ui/settings_dialog.ui" line="116"/>
         <source>Desktop</source>
-        <translation type="unfinished">Рабочий стол</translation>
+        <translation>Рабочий стол</translation>
     </message>
     <message>
         <location filename="../client/ui/settings_dialog.ui" line="128"/>
         <source>Features</source>
-        <translation type="unfinished">Возможности</translation>
+        <translation>Возможности</translation>
     </message>
     <message>
         <location filename="../client/ui/settings_dialog.ui" line="134"/>
         <source>Enable audio</source>
-        <translation type="unfinished">Включить звук</translation>
+        <translation>Включить звук</translation>
     </message>
     <message>
         <location filename="../client/ui/settings_dialog.ui" line="141"/>
         <source>Enable clipboard</source>
-        <translation type="unfinished">Включить буфер обмена</translation>
+        <translation>Включить буфер обмена</translation>
     </message>
     <message>
         <location filename="../client/ui/settings_dialog.ui" line="148"/>
         <source>Show shape of remote cursor</source>
-        <translation type="unfinished">Показывать форму удаленного курсора</translation>
+        <translation>Показывать форму удаленного курсора</translation>
     </message>
     <message>
         <location filename="../client/ui/settings_dialog.ui" line="155"/>
         <source>Show position of remote cursor</source>
-        <translation type="unfinished">Показывать положение удаленного курсора</translation>
+        <translation>Показывать положение удаленного курсора</translation>
     </message>
     <message>
         <location filename="../client/ui/settings_dialog.ui" line="171"/>
         <source>Appearance</source>
-        <translation type="unfinished">Внешний вид</translation>
+        <translation>Внешний вид</translation>
     </message>
     <message>
         <location filename="../client/ui/settings_dialog.ui" line="177"/>
         <source>Disable desktop effects</source>
-        <translation type="unfinished">Отключить эффекты рабочего стола</translation>
+        <translation>Отключить эффекты рабочего стола</translation>
     </message>
     <message>
         <location filename="../client/ui/settings_dialog.ui" line="184"/>
         <source>Disable desktop wallpaper</source>
-        <translation type="unfinished">Отключить обои рабочего стола</translation>
+        <translation>Отключить обои рабочего стола</translation>
     </message>
     <message>
         <location filename="../client/ui/settings_dialog.ui" line="206"/>
         <source>Lock computer at disconnect</source>
-        <translation type="unfinished">Блокировать компьютер при отключении</translation>
+        <translation>Блокировать компьютер при отключении</translation>
     </message>
     <message>
         <location filename="../client/ui/settings_dialog.ui" line="213"/>
         <source>Block remote input</source>
-        <translation type="unfinished">Блокировать удаленный ввод</translation>
+        <translation>Блокировать удаленный ввод</translation>
     </message>
     <message>
         <location filename="../client/ui/settings_dialog.ui" line="237"/>
         <source>Update</source>
-        <translation type="unfinished"></translation>
+        <translation>Обновление</translation>
     </message>
     <message>
         <location filename="../client/ui/settings_dialog.ui" line="243"/>
         <source>Check for updates on startup</source>
-        <translation type="unfinished">Проверять обновления при запуске</translation>
+        <translation>Проверять обновления при запуске</translation>
     </message>
     <message>
         <location filename="../client/ui/settings_dialog.ui" line="250"/>
         <source>Use custom update server</source>
-        <translation type="unfinished">Использовать свой сервер обновлений</translation>
+        <translation>Использовать свой сервер обновлений</translation>
     </message>
     <message>
         <location filename="../client/ui/settings_dialog.ui" line="259"/>
         <source>Server:</source>
-        <translation type="unfinished">Сервер:</translation>
+        <translation>Сервер:</translation>
     </message>
     <message>
         <location filename="../client/ui/settings_dialog.ui" line="200"/>
         <location filename="../client/ui/settings_dialog.ui" line="309"/>
         <source>Other</source>
-        <translation type="unfinished">Разное</translation>
+        <translation>Разное</translation>
     </message>
     <message>
         <location filename="../client/ui/settings_dialog.ui" line="299"/>
         <source>Check for updates</source>
-        <translation type="unfinished">Проверить обновления</translation>
+        <translation>Проверить обновления</translation>
     </message>
     <message>
         <location filename="../client/ui/settings_dialog.ui" line="317"/>
         <source>Display name when connected:</source>
-        <translation type="unfinished">Имя отображаемое при подключении:</translation>
+        <translation>Имя отображаемое при подключении:</translation>
     </message>
     <message>
         <location filename="../client/ui/settings_dialog.ui" line="327"/>
         <source>Enter a name or leave the field empty</source>
-        <translation type="unfinished">Введите имя или оставьте поле пустым</translation>
+        <translation>Введите имя или оставьте поле пустым</translation>
     </message>
 </context>
 <context>
@@ -5267,113 +5301,48 @@
 <context>
     <name>client::ComputersTab</name>
     <message>
-        <location filename="../client/ui/computers_tab/computers_tab.cc" line="49"/>
-        <source>Add Group</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/computers_tab/computers_tab.cc" line="50"/>
-        <source>Delete Group</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/computers_tab/computers_tab.cc" line="51"/>
-        <source>Edit Group</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/computers_tab/computers_tab.cc" line="53"/>
         <source>Add Computer</source>
-        <translation type="unfinished">Добавить компьютер</translation>
+        <translation type="obsolete">Добавить компьютер</translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/computers_tab.cc" line="54"/>
         <source>Delete Computer</source>
-        <translation type="unfinished">Удалить компьютер</translation>
+        <translation type="obsolete">Удалить компьютер</translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/computers_tab.cc" line="55"/>
-        <source>Edit Computer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/computers_tab/computers_tab.cc" line="57"/>
         <source>Desktop Manage</source>
-        <translation type="unfinished">Управление рабочим столом</translation>
+        <translation type="obsolete">Управление рабочим столом</translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/computers_tab.cc" line="58"/>
         <source>File Transfer</source>
-        <translation type="unfinished">Передача файлов</translation>
+        <translation type="obsolete">Передача файлов</translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/computers_tab.cc" line="59"/>
         <source>Chat</source>
-        <translation type="unfinished">Чат</translation>
+        <translation type="obsolete">Чат</translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/computers_tab.cc" line="60"/>
         <source>System Information</source>
-        <translation type="unfinished">Информация о системе</translation>
+        <translation type="obsolete">Информация о системе</translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/computers_tab.cc" line="96"/>
-        <source>Local</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/computers_tab/computers_tab.cc" line="102"/>
-        <source>Remote</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/computers_tab/computers_tab.cc" line="169"/>
-        <source>Computers: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/computers_tab/computers_tab.cc" line="263"/>
         <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
-        <translation type="unfinished">Вы действительно хотите удалить компьютер &quot;%1&quot;?</translation>
+        <translation type="obsolete">Вы действительно хотите удалить компьютер &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/computers_tab.cc" line="265"/>
-        <location filename="../client/ui/computers_tab/computers_tab.cc" line="347"/>
         <source>Confirmation</source>
-        <translation type="unfinished">Подтверждение</translation>
+        <translation type="obsolete">Подтверждение</translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/computers_tab.cc" line="267"/>
-        <location filename="../client/ui/computers_tab/computers_tab.cc" line="349"/>
         <source>Yes</source>
-        <translation type="unfinished">Да</translation>
+        <translation type="obsolete">Да</translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/computers_tab.cc" line="268"/>
-        <location filename="../client/ui/computers_tab/computers_tab.cc" line="350"/>
         <source>No</source>
-        <translation type="unfinished">Нет</translation>
+        <translation type="obsolete">Нет</translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/computers_tab.cc" line="278"/>
-        <location filename="../client/ui/computers_tab/computers_tab.cc" line="362"/>
         <source>Warning</source>
-        <translation type="unfinished">Предупреждение</translation>
-    </message>
-    <message>
-        <location filename="../client/ui/computers_tab/computers_tab.cc" line="278"/>
-        <source>Unable to remove computer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/computers_tab/computers_tab.cc" line="345"/>
-        <source>Are you sure you want to delete group &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/computers_tab/computers_tab.cc" line="362"/>
-        <source>Unable to remove group</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Предупреждение</translation>
     </message>
 </context>
 <context>
@@ -5943,79 +5912,241 @@
     </message>
 </context>
 <context>
+    <name>client::HostsTab</name>
+    <message>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="54"/>
+        <source>Add Group</source>
+        <translation>Добавить группу</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="55"/>
+        <source>Delete Group</source>
+        <translation>Удалить группу</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="56"/>
+        <source>Edit Group</source>
+        <translation>Изменить группу</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="58"/>
+        <source>Add Computer</source>
+        <translation>Добавить компьютер</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="59"/>
+        <source>Delete Computer</source>
+        <translation>Удалить компьютер</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="60"/>
+        <source>Edit Computer</source>
+        <translation>Изменить компьютер</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="61"/>
+        <source>Copy Computer</source>
+        <translation>Копировать компьютер</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="63"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="79"/>
+        <source>Desktop Management</source>
+        <translation>Управление рабочим столом</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="64"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="80"/>
+        <source>File Transfer</source>
+        <translation>Передача файлов</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="65"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="81"/>
+        <source>Chat</source>
+        <translation>Чат</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="66"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="82"/>
+        <source>System Information</source>
+        <translation>Информация о системе</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="214"/>
+        <source>Computers: %1</source>
+        <translation>Компьютеров: %1</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="313"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="321"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="359"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="452"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="553"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="561"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="590"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="598"/>
+        <source>Warning</source>
+        <translation>Предупреждение</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="313"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="554"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="591"/>
+        <source>Failed to retrieve computer information from the local database.</source>
+        <translation>Не удалось получить информацию о компьютере из локальной базы данных.</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="317"/>
+        <source>(copy)</source>
+        <translation>(копия)</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="321"/>
+        <source>Failed to add the computer to the local database.</source>
+        <translation>Не удалось добавить компьютер в локальную базу данных.</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="344"/>
+        <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
+        <translation>Вы действительно хотите удалить компьютер &quot;%1&quot;?</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="346"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="437"/>
+        <source>Confirmation</source>
+        <translation>Подтверждение</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="348"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="439"/>
+        <source>Yes</source>
+        <translation>Да</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="349"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="440"/>
+        <source>No</source>
+        <translation>Нет</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="359"/>
+        <source>Unable to remove computer</source>
+        <translation>Не удалось удалить компьютер</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="435"/>
+        <source>Are you sure you want to delete group &quot;%1&quot;?</source>
+        <translation>Вы уверены, что хотите удалить группу &quot;%1&quot;?</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="452"/>
+        <source>Unable to remove group</source>
+        <translation>Не удалось удалить группу</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="561"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="598"/>
+        <source>The computer has an incorrect address.</source>
+        <translation>Компьютер имеет неверный адрес.</translation>
+    </message>
+</context>
+<context>
     <name>client::LocalComputerDialog</name>
     <message>
-        <location filename="../client/ui/computers_tab/local_computer_dialog.cc" line="42"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="43"/>
         <source>Edit Computer</source>
-        <translation type="unfinished"></translation>
+        <translation>Изменить компьютер</translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/local_computer_dialog.cc" line="61"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="62"/>
         <source>Add Computer</source>
-        <translation type="unfinished">Добавить компьютер</translation>
+        <translation>Добавить компьютер</translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/local_computer_dialog.cc" line="107"/>
-        <location filename="../client/ui/computers_tab/local_computer_dialog.cc" line="114"/>
-        <location filename="../client/ui/computers_tab/local_computer_dialog.cc" line="134"/>
-        <location filename="../client/ui/computers_tab/local_computer_dialog.cc" line="143"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="66"/>
+        <source>Local</source>
+        <translation>Локальные</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="111"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="118"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="131"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="153"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="162"/>
         <source>Warning</source>
-        <translation type="unfinished">Предупреждение</translation>
+        <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/local_computer_dialog.cc" line="107"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="111"/>
         <source>Name cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Имя не может быть пустым.</translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/local_computer_dialog.cc" line="114"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="118"/>
         <source>Address cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Адрес не может быть пустым.</translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/local_computer_dialog.cc" line="134"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="132"/>
+        <source>A computer with this name already exists in the selected group.</source>
+        <translation>Компьютер с таким именем уже существует в выбранной группе.</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="153"/>
         <source>Unable to add computer</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось добавить компьютер</translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/local_computer_dialog.cc" line="143"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="162"/>
         <source>Unable to modify computer</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось изменить компьютер</translation>
     </message>
 </context>
 <context>
     <name>client::LocalGroupDialog</name>
     <message>
-        <location filename="../client/ui/computers_tab/local_group_dialog.cc" line="42"/>
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="43"/>
         <source>Edit Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Изменить группу</translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/local_group_dialog.cc" line="58"/>
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="59"/>
         <source>Add Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Добавить группу</translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/local_group_dialog.cc" line="83"/>
-        <location filename="../client/ui/computers_tab/local_group_dialog.cc" line="100"/>
-        <location filename="../client/ui/computers_tab/local_group_dialog.cc" line="109"/>
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="63"/>
+        <source>Local</source>
+        <translation>Локальные</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="87"/>
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="100"/>
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="119"/>
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="128"/>
         <source>Warning</source>
-        <translation type="unfinished">Предупреждение</translation>
+        <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/local_group_dialog.cc" line="83"/>
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="87"/>
         <source>Name cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Имя не может быть пустым.</translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/local_group_dialog.cc" line="100"/>
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="101"/>
+        <source>A group with this name already exists in the selected parent group.</source>
+        <translation>Группа с таким именем уже существует в выбранной родительской группе.</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="119"/>
         <source>Unable to add group</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось добавить группу</translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/local_group_dialog.cc" line="109"/>
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="128"/>
         <source>Unable to modify group</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось изменить группу</translation>
     </message>
 </context>
 <context>
@@ -6028,19 +6159,29 @@
 <context>
     <name>client::MainWindow</name>
     <message>
-        <location filename="../client/ui/main_window.cc" line="61"/>
+        <location filename="../client/ui/main_window.cc" line="66"/>
         <source>Search...</source>
-        <translation type="unfinished"></translation>
+        <translation>Поиск...</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.cc" line="106"/>
-        <source>Computers</source>
-        <translation type="unfinished"></translation>
+        <location filename="../client/ui/main_window.cc" line="124"/>
+        <source>Hosts</source>
+        <translation>Хосты</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.cc" line="196"/>
+        <location filename="../client/ui/main_window.cc" line="309"/>
+        <source>Warning</source>
+        <translation>Предупреждение</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/main_window.cc" line="310"/>
+        <source>Connection by ID is specified in the properties of the computer, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
+        <translation>В свойствах компьютера указано подключение по ID, но маршутизатор не настроен. Проверьте параметры маршрутизатора в свойствах адресной книги.</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/main_window.cc" line="228"/>
         <source>Aspia Client</source>
-        <translation type="unfinished">Клиент Aspia</translation>
+        <translation>Клиент Aspia</translation>
     </message>
 </context>
 <context>
@@ -6783,19 +6924,19 @@
 <context>
     <name>client::SearchWidget</name>
     <message>
-        <location filename="../client/ui/computers_tab/search_widget.cc" line="48"/>
+        <location filename="../client/ui/hosts/search_widget.cc" line="47"/>
         <source>Name</source>
-        <translation type="unfinished">Имя</translation>
+        <translation>Имя</translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/search_widget.cc" line="48"/>
+        <location filename="../client/ui/hosts/search_widget.cc" line="47"/>
         <source>Address / ID</source>
-        <translation type="unfinished">Адрес / ID</translation>
+        <translation>Адрес / ID</translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/search_widget.cc" line="48"/>
+        <location filename="../client/ui/hosts/search_widget.cc" line="47"/>
         <source>Comment</source>
-        <translation type="unfinished">Комментарий</translation>
+        <translation>Комментарий</translation>
     </message>
 </context>
 <context>
@@ -7101,27 +7242,40 @@
     <message>
         <location filename="../client/ui/settings_dialog.cc" line="44"/>
         <source>Cancel</source>
-        <translation type="unfinished">Отмена</translation>
+        <translation>Отмена</translation>
     </message>
     <message>
         <location filename="../client/ui/settings_dialog.cc" line="176"/>
         <source>An invalid router address was entered.</source>
-        <translation type="unfinished"></translation>
+        <translation>Был введен неверный адрес маршрутизатора.</translation>
     </message>
     <message>
         <location filename="../client/ui/settings_dialog.cc" line="195"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation type="unfinished"></translation>
+        <translation>Имя пользователя не может быть пустым и может содержать только буквы, цифры и символы _, -, .</translation>
     </message>
     <message>
         <location filename="../client/ui/settings_dialog.cc" line="212"/>
         <source>Password cannot be empty.</source>
-        <translation type="unfinished">Пароль не может быть пустым.</translation>
+        <translation>Пароль не может быть пустым.</translation>
     </message>
     <message>
         <location filename="../client/ui/settings_dialog.cc" line="255"/>
         <source>Warning</source>
-        <translation type="unfinished">Предупреждение</translation>
+        <translation>Предупреждение</translation>
+    </message>
+</context>
+<context>
+    <name>client::Sidebar</name>
+    <message>
+        <location filename="../client/ui/hosts/sidebar.cc" line="48"/>
+        <source>Local</source>
+        <translation>Локальные</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/sidebar.cc" line="54"/>
+        <source>Remote</source>
+        <translation>Удаленные</translation>
     </message>
 </context>
 <context>
@@ -9245,14 +9399,28 @@
         <translation>Подтверждение</translation>
     </message>
     <message>
+        <location filename="../client/ui/desktop/task_manager_window.cc" line="651"/>
+        <source>Do you really want to end &quot;%1&quot; process?</source>
+        <translation>Вы действительно хотите завершить процесс &quot;%1&quot;?</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/desktop/task_manager_window.cc" line="708"/>
+        <source>Do you really want to disconnect user &quot;%1&quot; session?</source>
+        <translation>Вы действительно хотите отключить сессию пользователя &quot;%1&quot;?</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/desktop/task_manager_window.cc" line="738"/>
+        <source>Do you really want to end user &quot;%1&quot; session?</source>
+        <translation>Вы действительно хотите завершить сессию пользователя &quot;%1&quot;?</translation>
+    </message>
+    <message>
         <location filename="../client/ui/desktop/task_manager_window.cc" line="962"/>
         <source>Update Speed</source>
         <translation>Скорость обновления</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/task_manager_window.cc" line="651"/>
         <source>Are you really want to end &quot;%1&quot; process?</source>
-        <translation>Вы действительно хотите завершить процесс &quot;%1&quot;?</translation>
+        <translation type="vanished">Вы действительно хотите завершить процесс &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../client/ui/desktop/task_manager_window.cc" line="655"/>
@@ -9269,14 +9437,12 @@
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/task_manager_window.cc" line="708"/>
         <source>Are you really want to disconnect user &quot;%1&quot; session?</source>
-        <translation>Вы действительно хотите отключить сессию пользователя &quot;%1&quot;?</translation>
+        <translation type="vanished">Вы действительно хотите отключить сессию пользователя &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/task_manager_window.cc" line="738"/>
         <source>Are you really want to end user &quot;%1&quot; session?</source>
-        <translation>Вы действительно хотите завершить сессию пользователя &quot;%1&quot;?</translation>
+        <translation type="vanished">Вы действительно хотите завершить сессию пользователя &quot;%1&quot;?</translation>
     </message>
     <message>
         <location filename="../client/ui/desktop/task_manager_window.cc" line="956"/>
@@ -9935,8 +10101,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="448"/>
         <source>Name can not be empty.</source>
+        <translation type="vanished">Имя не может быть пустым.</translation>
+    </message>
+    <message>
+        <location filename="../console/address_book_dialog.cc" line="448"/>
+        <source>Name cannot be empty.</source>
         <translation>Имя не может быть пустым.</translation>
     </message>
     <message numerus="yes">
@@ -10228,8 +10398,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_general.cc" line="128"/>
         <source>Name can not be empty.</source>
+        <translation type="vanished">Имя не может быть пустым.</translation>
+    </message>
+    <message>
+        <location filename="../console/computer_dialog_general.cc" line="128"/>
+        <source>Name cannot be empty.</source>
         <translation>Имя не может быть пустым.</translation>
     </message>
     <message>
@@ -10298,6 +10472,11 @@
         <translation>Сессии</translation>
     </message>
     <message>
+        <location filename="../console/computer_group_dialog.cc" line="232"/>
+        <source>Name cannot be empty.</source>
+        <translation>Имя не может быть пустым.</translation>
+    </message>
+    <message>
         <source>Manage</source>
         <translation type="vanished">Управление</translation>
     </message>
@@ -10331,9 +10510,8 @@
         </translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog.cc" line="232"/>
         <source>Name can not be empty.</source>
-        <translation>Имя не может быть пустым.</translation>
+        <translation type="vanished">Имя не может быть пустым.</translation>
     </message>
     <message numerus="yes">
         <location filename="../console/computer_group_dialog.cc" line="241"/>
@@ -11083,9 +11261,8 @@
         <translation>Недоступен</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="385"/>
         <source>Connected to a router %1</source>
-        <translation>Подключено к маршрутизатору %1</translation>
+        <translation type="vanished">Подключено к маршрутизатору %1</translation>
     </message>
     <message>
         <source>User &quot;%1&quot; (%2) started screen recording.</source>
@@ -11100,6 +11277,16 @@
         <location filename="../host/ui/main_window.cc" line="713"/>
         <source>No</source>
         <translation>Нет</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/main_window.cc" line="824"/>
+        <source>Connecting to router...</source>
+        <translation>Подключение к маршрутизатору...</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/main_window.cc" line="829"/>
+        <source>Connected to router</source>
+        <translation>Подключено к маршрутизатору</translation>
     </message>
     <message>
         <location filename="../host/ui/main_window.cc" line="834"/>
@@ -11132,19 +11319,16 @@
         <translation type="vanished">Пользователь &quot;%1&quot; (%2) остановил запись экрана.</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="824"/>
         <source>Connecting to a router...</source>
-        <translation>Подключение к маршрутизатору...</translation>
+        <translation type="vanished">Подключение к маршрутизатору...</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="381"/>
         <source>Connecting to a router %1...</source>
-        <translation>Подключение к маршрутизатору %1...</translation>
+        <translation type="vanished">Подключение к маршрутизатору %1...</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="829"/>
         <source>Connected to a router</source>
-        <translation>Подключено к маршрутизатору</translation>
+        <translation type="vanished">Подключено к маршрутизатору</translation>
     </message>
     <message>
         <location filename="../host/ui/main_window.cc" line="673"/>
@@ -11155,6 +11339,16 @@
         <location filename="../host/ui/main_window.cc" line="429"/>
         <source>Screen recording has started.</source>
         <translation>Запись экрана запущена.</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/main_window.cc" line="381"/>
+        <source>Connecting to router %1...</source>
+        <translation>Подключение к маршрутизатору %1...</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/main_window.cc" line="385"/>
+        <source>Connected to router %1</source>
+        <translation>Подключено к маршрутизатору %1</translation>
     </message>
     <message>
         <location filename="../host/ui/main_window.cc" line="431"/>

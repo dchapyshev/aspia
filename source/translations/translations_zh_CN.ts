@@ -1280,10 +1280,8 @@
         <translation>通讯录属性</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="429"/>
-        <location filename="../console/main_window.ui" line="432"/>
         <source>Desktop Manage</source>
-        <translation>桌面管理</translation>
+        <translation type="vanished">桌面管理</translation>
     </message>
     <message>
         <source>Desktop View</source>
@@ -1388,6 +1386,12 @@
         <location filename="../console/main_window.ui" line="489"/>
         <source>Show tray icon</source>
         <translation>显示托盘图标</translation>
+    </message>
+    <message>
+        <location filename="../console/main_window.ui" line="429"/>
+        <location filename="../console/main_window.ui" line="432"/>
+        <source>Desktop Management</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../console/main_window.ui" line="497"/>
@@ -2137,32 +2141,37 @@
 <context>
     <name>LocalComputerDialog</name>
     <message>
-        <location filename="../client/ui/computers_tab/local_computer_dialog.ui" line="14"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.ui" line="14"/>
         <source>Computer</source>
         <translation type="unfinished">计算机</translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/local_computer_dialog.ui" line="25"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.ui" line="25"/>
+        <source>Group:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/local_computer_dialog.ui" line="35"/>
         <source>Name:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/local_computer_dialog.ui" line="35"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.ui" line="45"/>
         <source>Address:</source>
         <translation type="unfinished">地址：</translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/local_computer_dialog.ui" line="45"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.ui" line="55"/>
         <source>Username:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/local_computer_dialog.ui" line="55"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.ui" line="65"/>
         <source>Password:</source>
         <translation type="unfinished">密码：</translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/local_computer_dialog.ui" line="94"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.ui" line="104"/>
         <source>Comment:</source>
         <translation type="unfinished">描述：</translation>
     </message>
@@ -2170,17 +2179,22 @@
 <context>
     <name>LocalGroupDialog</name>
     <message>
-        <location filename="../client/ui/computers_tab/local_group_dialog.ui" line="14"/>
+        <location filename="../client/ui/hosts/local_group_dialog.ui" line="14"/>
         <source>Group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/local_group_dialog.ui" line="25"/>
+        <location filename="../client/ui/hosts/local_group_dialog.ui" line="25"/>
+        <source>Parent Group:</source>
+        <translation type="unfinished">父级：</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/local_group_dialog.ui" line="35"/>
         <source>Name:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/local_group_dialog.ui" line="39"/>
+        <location filename="../client/ui/hosts/local_group_dialog.ui" line="49"/>
         <source>Comment:</source>
         <translation type="unfinished">描述：</translation>
     </message>
@@ -2188,17 +2202,17 @@
 <context>
     <name>LocalGroupWidget</name>
     <message>
-        <location filename="../client/ui/computers_tab/local_group_widget.ui" line="45"/>
+        <location filename="../client/ui/hosts/local_group_widget.ui" line="45"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/local_group_widget.ui" line="50"/>
+        <location filename="../client/ui/hosts/local_group_widget.ui" line="50"/>
         <source>Address</source>
         <translation type="unfinished">地址</translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/local_group_widget.ui" line="55"/>
+        <location filename="../client/ui/hosts/local_group_widget.ui" line="55"/>
         <source>Comment</source>
         <translation type="unfinished">描述</translation>
     </message>
@@ -2234,14 +2248,25 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../client/ui/main_window.ui" line="127"/>
+        <location filename="../client/ui/main_window.ui" line="185"/>
+        <source>Tool Bar</source>
+        <translation type="unfinished">工具栏</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/main_window.ui" line="150"/>
         <location filename="../host/ui/main_window.ui" line="298"/>
         <source>F1</source>
         <translation type="unfinished">F1</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.ui" line="324"/>
         <source>Desktop Manage</source>
-        <translation type="unfinished">桌面管理</translation>
+        <translation type="obsolete">桌面管理</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/main_window.ui" line="324"/>
+        <source>Desktop Management</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../host/ui/main_window.ui" line="335"/>
@@ -2297,13 +2322,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="171"/>
+        <location filename="../client/ui/main_window.ui" line="177"/>
         <location filename="../host/ui/main_window.ui" line="290"/>
         <source>Exit</source>
         <translation>退出</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="144"/>
+        <location filename="../client/ui/main_window.ui" line="147"/>
         <location filename="../host/ui/main_window.ui" line="295"/>
         <source>Online Help...</source>
         <translation>在线帮助...</translation>
@@ -2314,28 +2339,33 @@
         <translation type="unfinished">Aspia 客户端</translation>
     </message>
     <message>
+        <location filename="../client/ui/main_window.ui" line="68"/>
+        <source>File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../client/ui/main_window.ui" line="83"/>
         <source>Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="113"/>
+        <location filename="../client/ui/main_window.ui" line="116"/>
         <source>Session Type</source>
         <translation type="unfinished">会话类型</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="124"/>
-        <source>toolBar</source>
-        <translation type="unfinished"></translation>
+        <location filename="../client/ui/main_window.ui" line="193"/>
+        <source>Status Bar</source>
+        <translation type="unfinished">状态栏</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="153"/>
+        <location filename="../client/ui/main_window.ui" line="159"/>
         <location filename="../host/ui/main_window.ui" line="303"/>
         <source>About</source>
         <translation>关于</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="162"/>
+        <location filename="../client/ui/main_window.ui" line="168"/>
         <location filename="../host/ui/main_window.ui" line="308"/>
         <source>Settings...</source>
         <translation>设置...</translation>
@@ -2550,17 +2580,17 @@
 <context>
     <name>RouterGroupWidget</name>
     <message>
-        <location filename="../client/ui/computers_tab/router_group_widget.ui" line="45"/>
+        <location filename="../client/ui/hosts/router_group_widget.ui" line="45"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/router_group_widget.ui" line="50"/>
+        <location filename="../client/ui/hosts/router_group_widget.ui" line="50"/>
         <source>Address / ID</source>
         <translation type="unfinished">地址 / ID</translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/router_group_widget.ui" line="55"/>
+        <location filename="../client/ui/hosts/router_group_widget.ui" line="55"/>
         <source>Comment</source>
         <translation type="unfinished">描述</translation>
     </message>
@@ -2769,7 +2799,7 @@
 <context>
     <name>RouterWidget</name>
     <message>
-        <location filename="../client/ui/computers_tab/router_widget.ui" line="29"/>
+        <location filename="../client/ui/hosts/router_widget.ui" line="29"/>
         <source>Router</source>
         <translation type="unfinished">路由器</translation>
     </message>
@@ -2874,13 +2904,17 @@
 <context>
     <name>SessionType</name>
     <message>
-        <location filename="../common/ui/session_type.cc" line="33"/>
         <source>Desktop Manage</source>
-        <translation>桌面管理</translation>
+        <translation type="vanished">桌面管理</translation>
     </message>
     <message>
         <source>Desktop View</source>
         <translation type="vanished">桌面查看</translation>
+    </message>
+    <message>
+        <location filename="../common/ui/session_type.cc" line="33"/>
+        <source>Desktop Management</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../common/ui/session_type.cc" line="36"/>
@@ -4774,113 +4808,44 @@
 <context>
     <name>client::ComputersTab</name>
     <message>
-        <location filename="../client/ui/computers_tab/computers_tab.cc" line="49"/>
-        <source>Add Group</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/computers_tab/computers_tab.cc" line="50"/>
-        <source>Delete Group</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/computers_tab/computers_tab.cc" line="51"/>
-        <source>Edit Group</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/computers_tab/computers_tab.cc" line="53"/>
         <source>Add Computer</source>
-        <translation type="unfinished">添加计算机</translation>
+        <translation type="obsolete">添加计算机</translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/computers_tab.cc" line="54"/>
         <source>Delete Computer</source>
-        <translation type="unfinished">删除计算机</translation>
+        <translation type="obsolete">删除计算机</translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/computers_tab.cc" line="55"/>
-        <source>Edit Computer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/computers_tab/computers_tab.cc" line="57"/>
         <source>Desktop Manage</source>
-        <translation type="unfinished">桌面管理</translation>
+        <translation type="obsolete">桌面管理</translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/computers_tab.cc" line="58"/>
         <source>File Transfer</source>
-        <translation type="unfinished">文件传输</translation>
+        <translation type="obsolete">文件传输</translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/computers_tab.cc" line="59"/>
-        <source>Chat</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/computers_tab/computers_tab.cc" line="60"/>
         <source>System Information</source>
-        <translation type="unfinished">系统信息</translation>
+        <translation type="obsolete">系统信息</translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/computers_tab.cc" line="96"/>
-        <source>Local</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/computers_tab/computers_tab.cc" line="102"/>
-        <source>Remote</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/computers_tab/computers_tab.cc" line="169"/>
-        <source>Computers: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/computers_tab/computers_tab.cc" line="263"/>
         <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
-        <translation type="unfinished">确定要删除计算机吗 &quot;%1&quot;?</translation>
+        <translation type="obsolete">确定要删除计算机吗 &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/computers_tab.cc" line="265"/>
-        <location filename="../client/ui/computers_tab/computers_tab.cc" line="347"/>
         <source>Confirmation</source>
-        <translation type="unfinished">确认</translation>
+        <translation type="obsolete">确认</translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/computers_tab.cc" line="267"/>
-        <location filename="../client/ui/computers_tab/computers_tab.cc" line="349"/>
         <source>Yes</source>
-        <translation type="unfinished">是</translation>
+        <translation type="obsolete">是</translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/computers_tab.cc" line="268"/>
-        <location filename="../client/ui/computers_tab/computers_tab.cc" line="350"/>
         <source>No</source>
-        <translation type="unfinished">否</translation>
+        <translation type="obsolete">否</translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/computers_tab.cc" line="278"/>
-        <location filename="../client/ui/computers_tab/computers_tab.cc" line="362"/>
         <source>Warning</source>
-        <translation type="unfinished">警告</translation>
-    </message>
-    <message>
-        <location filename="../client/ui/computers_tab/computers_tab.cc" line="278"/>
-        <source>Unable to remove computer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/computers_tab/computers_tab.cc" line="345"/>
-        <source>Are you sure you want to delete group &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/computers_tab/computers_tab.cc" line="362"/>
-        <source>Unable to remove group</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">警告</translation>
     </message>
 </context>
 <context>
@@ -5406,42 +5371,193 @@
     </message>
 </context>
 <context>
-    <name>client::LocalComputerDialog</name>
+    <name>client::HostsTab</name>
     <message>
-        <location filename="../client/ui/computers_tab/local_computer_dialog.cc" line="42"/>
-        <source>Edit Computer</source>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="54"/>
+        <source>Add Group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/local_computer_dialog.cc" line="61"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="55"/>
+        <source>Delete Group</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="56"/>
+        <source>Edit Group</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="58"/>
         <source>Add Computer</source>
         <translation type="unfinished">添加计算机</translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/local_computer_dialog.cc" line="107"/>
-        <location filename="../client/ui/computers_tab/local_computer_dialog.cc" line="114"/>
-        <location filename="../client/ui/computers_tab/local_computer_dialog.cc" line="134"/>
-        <location filename="../client/ui/computers_tab/local_computer_dialog.cc" line="143"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="59"/>
+        <source>Delete Computer</source>
+        <translation type="unfinished">删除计算机</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="60"/>
+        <source>Edit Computer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="61"/>
+        <source>Copy Computer</source>
+        <translation type="unfinished">复制计算机</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="63"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="79"/>
+        <source>Desktop Management</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="64"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="80"/>
+        <source>File Transfer</source>
+        <translation type="unfinished">文件传输</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="65"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="81"/>
+        <source>Chat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="66"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="82"/>
+        <source>System Information</source>
+        <translation type="unfinished">系统信息</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="214"/>
+        <source>Computers: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="313"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="321"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="359"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="452"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="553"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="561"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="590"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="598"/>
         <source>Warning</source>
         <translation type="unfinished">警告</translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/local_computer_dialog.cc" line="107"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="313"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="554"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="591"/>
+        <source>Failed to retrieve computer information from the local database.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="317"/>
+        <source>(copy)</source>
+        <translation type="unfinished">(copy)</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="321"/>
+        <source>Failed to add the computer to the local database.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="344"/>
+        <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
+        <translation type="unfinished">确定要删除计算机吗 &quot;%1&quot;?</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="346"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="437"/>
+        <source>Confirmation</source>
+        <translation type="unfinished">确认</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="348"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="439"/>
+        <source>Yes</source>
+        <translation type="unfinished">是</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="349"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="440"/>
+        <source>No</source>
+        <translation type="unfinished">否</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="359"/>
+        <source>Unable to remove computer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="435"/>
+        <source>Are you sure you want to delete group &quot;%1&quot;?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="452"/>
+        <source>Unable to remove group</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="561"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="598"/>
+        <source>The computer has an incorrect address.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>client::LocalComputerDialog</name>
+    <message>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="43"/>
+        <source>Edit Computer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="62"/>
+        <source>Add Computer</source>
+        <translation type="unfinished">添加计算机</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="66"/>
+        <source>Local</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="111"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="118"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="131"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="153"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="162"/>
+        <source>Warning</source>
+        <translation type="unfinished">警告</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="111"/>
         <source>Name cannot be empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/local_computer_dialog.cc" line="114"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="118"/>
         <source>Address cannot be empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/local_computer_dialog.cc" line="134"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="132"/>
+        <source>A computer with this name already exists in the selected group.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="153"/>
         <source>Unable to add computer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/local_computer_dialog.cc" line="143"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="162"/>
         <source>Unable to modify computer</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5449,34 +5565,45 @@
 <context>
     <name>client::LocalGroupDialog</name>
     <message>
-        <location filename="../client/ui/computers_tab/local_group_dialog.cc" line="42"/>
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="43"/>
         <source>Edit Group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/local_group_dialog.cc" line="58"/>
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="59"/>
         <source>Add Group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/local_group_dialog.cc" line="83"/>
-        <location filename="../client/ui/computers_tab/local_group_dialog.cc" line="100"/>
-        <location filename="../client/ui/computers_tab/local_group_dialog.cc" line="109"/>
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="63"/>
+        <source>Local</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="87"/>
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="100"/>
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="119"/>
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="128"/>
         <source>Warning</source>
         <translation type="unfinished">警告</translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/local_group_dialog.cc" line="83"/>
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="87"/>
         <source>Name cannot be empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/local_group_dialog.cc" line="100"/>
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="101"/>
+        <source>A group with this name already exists in the selected parent group.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="119"/>
         <source>Unable to add group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/local_group_dialog.cc" line="109"/>
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="128"/>
         <source>Unable to modify group</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5484,17 +5611,27 @@
 <context>
     <name>client::MainWindow</name>
     <message>
-        <location filename="../client/ui/main_window.cc" line="61"/>
+        <location filename="../client/ui/main_window.cc" line="66"/>
         <source>Search...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.cc" line="106"/>
-        <source>Computers</source>
-        <translation type="unfinished"></translation>
+        <location filename="../client/ui/main_window.cc" line="124"/>
+        <source>Hosts</source>
+        <translation type="unfinished">主机</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.cc" line="196"/>
+        <location filename="../client/ui/main_window.cc" line="309"/>
+        <source>Warning</source>
+        <translation type="unfinished">警告</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/main_window.cc" line="310"/>
+        <source>Connection by ID is specified in the properties of the computer, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
+        <translation type="unfinished">在计算机的属性中指定了按ID连接，但未配置路由器。 在地址簿的属性中检查路由器的参数。</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/main_window.cc" line="228"/>
         <source>Aspia Client</source>
         <translation type="unfinished">Aspia 客户端</translation>
     </message>
@@ -6104,17 +6241,17 @@
 <context>
     <name>client::SearchWidget</name>
     <message>
-        <location filename="../client/ui/computers_tab/search_widget.cc" line="48"/>
+        <location filename="../client/ui/hosts/search_widget.cc" line="47"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/search_widget.cc" line="48"/>
+        <location filename="../client/ui/hosts/search_widget.cc" line="47"/>
         <source>Address / ID</source>
         <translation type="unfinished">地址 / ID</translation>
     </message>
     <message>
-        <location filename="../client/ui/computers_tab/search_widget.cc" line="48"/>
+        <location filename="../client/ui/hosts/search_widget.cc" line="47"/>
         <source>Comment</source>
         <translation type="unfinished">描述</translation>
     </message>
@@ -6380,6 +6517,19 @@
         <location filename="../client/ui/settings_dialog.cc" line="255"/>
         <source>Warning</source>
         <translation type="unfinished">警告</translation>
+    </message>
+</context>
+<context>
+    <name>client::Sidebar</name>
+    <message>
+        <location filename="../client/ui/hosts/sidebar.cc" line="48"/>
+        <source>Local</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/sidebar.cc" line="54"/>
+        <source>Remote</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -8260,7 +8410,7 @@
     </message>
     <message>
         <location filename="../client/ui/desktop/task_manager_window.cc" line="651"/>
-        <source>Are you really want to end &quot;%1&quot; process?</source>
+        <source>Do you really want to end &quot;%1&quot; process?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -8279,12 +8429,12 @@
     </message>
     <message>
         <location filename="../client/ui/desktop/task_manager_window.cc" line="708"/>
-        <source>Are you really want to disconnect user &quot;%1&quot; session?</source>
+        <source>Do you really want to disconnect user &quot;%1&quot; session?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../client/ui/desktop/task_manager_window.cc" line="738"/>
-        <source>Are you really want to end user &quot;%1&quot; session?</source>
+        <source>Do you really want to end user &quot;%1&quot; session?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -8724,9 +8874,13 @@
         </translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="448"/>
         <source>Name can not be empty.</source>
-        <translation>名称不能为空。</translation>
+        <translation type="vanished">名称不能为空。</translation>
+    </message>
+    <message>
+        <location filename="../console/address_book_dialog.cc" line="448"/>
+        <source>Name cannot be empty.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
         <location filename="../console/address_book_dialog.cc" line="455"/>
@@ -8972,9 +9126,13 @@
         </translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_general.cc" line="128"/>
         <source>Name can not be empty.</source>
-        <translation>名称不能为空。</translation>
+        <translation type="vanished">名称不能为空。</translation>
+    </message>
+    <message>
+        <location filename="../console/computer_dialog_general.cc" line="128"/>
+        <source>Name cannot be empty.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../console/computer_dialog_general.cc" line="139"/>
@@ -9017,6 +9175,11 @@
         <translation type="unfinished">会话</translation>
     </message>
     <message>
+        <location filename="../console/computer_group_dialog.cc" line="232"/>
+        <source>Name cannot be empty.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Manage</source>
         <translation type="obsolete">管理</translation>
     </message>
@@ -9040,9 +9203,8 @@
         </translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog.cc" line="232"/>
         <source>Name can not be empty.</source>
-        <translation>名称不能为空。</translation>
+        <translation type="vanished">名称不能为空。</translation>
     </message>
     <message numerus="yes">
         <location filename="../console/computer_group_dialog.cc" line="241"/>
@@ -9723,6 +9885,16 @@
         <translation>无法使用</translation>
     </message>
     <message>
+        <location filename="../host/ui/main_window.cc" line="381"/>
+        <source>Connecting to router %1...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../host/ui/main_window.cc" line="385"/>
+        <source>Connected to router %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../host/ui/main_window.cc" line="712"/>
         <source>Yes</source>
         <translation type="unfinished">是</translation>
@@ -9731,6 +9903,16 @@
         <location filename="../host/ui/main_window.cc" line="713"/>
         <source>No</source>
         <translation type="unfinished">否</translation>
+    </message>
+    <message>
+        <location filename="../host/ui/main_window.cc" line="824"/>
+        <source>Connecting to router...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../host/ui/main_window.cc" line="829"/>
+        <source>Connected to router</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../host/ui/main_window.cc" line="834"/>
@@ -9769,24 +9951,20 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="824"/>
         <source>Connecting to a router...</source>
-        <translation>正在连接到路由器...</translation>
+        <translation type="vanished">正在连接到路由器...</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="385"/>
         <source>Connected to a router %1</source>
-        <translation>已连接到路由器 %1</translation>
+        <translation type="vanished">已连接到路由器 %1</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="829"/>
         <source>Connected to a router</source>
-        <translation>已连接到路由器</translation>
+        <translation type="vanished">已连接到路由器</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="381"/>
         <source>Connecting to a router %1...</source>
-        <translation>正在连接到路由器 %1 ...</translation>
+        <translation type="vanished">正在连接到路由器 %1 ...</translation>
     </message>
     <message>
         <location filename="../host/ui/main_window.cc" line="673"/>
