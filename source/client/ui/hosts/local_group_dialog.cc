@@ -89,10 +89,25 @@ void LocalGroupDialog::onButtonBoxClicked(QAbstractButton* button)
         return;
     }
 
+    QString name = ui.edit_name->text();
+    qint64 parent_id = ui.combo_parent_group->currentGroupId();
+
+    QList<GroupData> groups = LocalDatabase::instance().groupList(parent_id);
+    for (const GroupData& existing : std::as_const(groups))
+    {
+        if (existing.id != group_id_ && existing.name == name)
+        {
+            QMessageBox::warning(this, tr("Warning"),
+                tr("A group with this name already exists in the selected parent group."));
+            ui.edit_name->setFocus();
+            return;
+        }
+    }
+
     GroupData group;
     group.id = group_id_;
-    group.parent_id = ui.combo_parent_group->currentGroupId();
-    group.name = ui.edit_name->text();
+    group.parent_id = parent_id;
+    group.name = name;
     group.comment = ui.edit_comment->toPlainText();
 
     LocalDatabase& db = LocalDatabase::instance();

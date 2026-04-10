@@ -120,9 +120,24 @@ void LocalComputerDialog::onButtonBoxClicked(QAbstractButton* button)
         return;
     }
 
+    QString name = ui.edit_name->text();
+    qint64 group_id = ui.combo_group->currentGroupId();
+
+    QList<ComputerData> computers = LocalDatabase::instance().computerList(group_id);
+    for (const ComputerData& existing : std::as_const(computers))
+    {
+        if (existing.id != computer_id_ && existing.name == name)
+        {
+            QMessageBox::warning(this, tr("Warning"),
+                tr("A computer with this name already exists in the selected group."));
+            ui.edit_name->setFocus();
+            return;
+        }
+    }
+
     ComputerData computer;
     computer.id = computer_id_;
-    computer.group_id = ui.combo_group->currentGroupId();
+    computer.group_id = group_id;
     computer.name = ui.edit_name->text();
     computer.address = ui.edit_address->text();
     computer.username = ui.edit_username->text();
