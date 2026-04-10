@@ -19,6 +19,9 @@
 #ifndef CLIENT_UI_COMPUTERS_TAB_LOCAL_GROUP_WIDGET_H
 #define CLIENT_UI_COMPUTERS_TAB_LOCAL_GROUP_WIDGET_H
 
+#include <QDrag>
+#include <QMimeData>
+
 #include "client/ui/computers_tab/content_tree_item.h"
 #include "client/ui/computers_tab/content_widget.h"
 #include "ui_local_group_widget.h"
@@ -38,6 +41,44 @@ public:
     int itemCount() const override;
     QByteArray saveState() override;
     void restoreState(const QByteArray& state) override;
+
+    class ComputerMimeData final : public QMimeData
+    {
+    public:
+        ComputerMimeData() = default;
+        virtual ~ComputerMimeData() final = default;
+
+        void setComputerItem(LocalComputerItem* computer_item, const QString& mime_type)
+        {
+            computer_item_ = computer_item;
+            setData(mime_type, QByteArray());
+        }
+
+        LocalComputerItem* computerItem() const
+        {
+            return computer_item_;
+        }
+
+    private:
+        LocalComputerItem* computer_item_ = nullptr;
+    };
+
+    class ComputerDrag final : public QDrag
+    {
+    public:
+        explicit ComputerDrag(QObject* drag_source = nullptr)
+            : QDrag(drag_source)
+        {
+            // Nothing
+        }
+
+        void setComputerItem(LocalComputerItem* computer_item, const QString& mime_type)
+        {
+            ComputerMimeData* mime_data = new ComputerMimeData();
+            mime_data->setComputerItem(computer_item, mime_type);
+            setMimeData(mime_data);
+        }
+    };
 
 signals:
     void sig_computerDoubleClicked(qint64 computer_id);

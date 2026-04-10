@@ -238,8 +238,8 @@ list(APPEND SOURCE_CLIENT_CORE_UI_COMPUTERS_TAB
     ui/computers_tab/content_tree_item.h
     ui/computers_tab/content_widget.cc
     ui/computers_tab/content_widget.h
-    ui/computers_tab/group_tree_item.cc
-    ui/computers_tab/group_tree_item.h
+    ui/computers_tab/sidebar.cc
+    ui/computers_tab/sidebar.h
     ui/computers_tab/local_group_widget.cc
     ui/computers_tab/local_group_widget.h
     ui/computers_tab/local_group_widget.ui

@@ -30,8 +30,8 @@
 #include "client/ui/settings.h"
 #include "client/ui/computers_tab/content_tree_item.h"
 #include "client/ui/computers_tab/content_widget.h"
-#include "client/ui/computers_tab/group_tree_item.h"
 #include "client/ui/computers_tab/local_computer_dialog.h"
+#include "client/ui/computers_tab/sidebar.h"
 #include "client/ui/computers_tab/local_group_dialog.h"
 #include "client/ui/computers_tab/local_group_widget.h"
 #include "client/ui/computers_tab/router_widget.h"
@@ -45,6 +45,9 @@ ComputersTab::ComputersTab(QWidget* parent)
     : ClientTab(Type::COMPUTERS, "computers", parent)
 {
     LOG(INFO) << "Ctor";
+
+    if (!LocalDatabase::instance().isValid())
+        LOG(ERROR) << "Failed to open or create book database";
 
     ui.setupUi(this);
 
@@ -105,18 +108,6 @@ ComputersTab::ComputersTab(QWidget* parent)
             break;
     }
 
-    GroupData local_root_data;
-    local_root_data.id = 0;
-    local_root_data.parent_id = 0;
-    local_root_data.name = tr("Local");
-
-    // Create root groups in the tree.
-    local_root_ = new LocalGroupItem(local_root_data, ui.tree_group);
-    local_root_->setExpanded(true);
-
-    remote_root_ = new RouterItem(tr("Remote"), ui.tree_group);
-    remote_root_->setExpanded(true);
-
     // Create content widgets.
     local_group_widget_ = new LocalGroupWidget(this);
     router_widget_ = new RouterWidget(this);
@@ -128,11 +119,9 @@ ComputersTab::ComputersTab(QWidget* parent)
     ui.content_stack->addWidget(router_group_widget_);
     ui.content_stack->addWidget(search_widget_);
 
-    switchContent(local_group_widget_);
-
     // Connect signals.
-    connect(ui.tree_group, &QTreeWidget::currentItemChanged, this, &ComputersTab::onCurrentGroupChanged);
-    connect(ui.tree_group, &QTreeWidget::customContextMenuRequested, this, &ComputersTab::onGroupContextMenu);
+    connect(ui.sidebar, &Sidebar::sig_switchContent, this, &ComputersTab::onSwitchContent);
+    connect(ui.sidebar, &Sidebar::sig_contextMenu, this, &ComputersTab::onSidebarContextMenu);
     connect(local_group_widget_, &LocalGroupWidget::sig_currentComputerChanged, this, &ComputersTab::onCurrentComputerChanged);
     connect(local_group_widget_, &LocalGroupWidget::sig_computerDoubleClicked, this, &ComputersTab::onLocalConnect);
     connect(local_group_widget_, &LocalGroupWidget::sig_computerContextMenu, this, &ComputersTab::onLocalComputerContextMenu);
@@ -150,15 +139,8 @@ ComputersTab::ComputersTab(QWidget* parent)
     addActions(ActionGroup::EDIT, { action_add_computer_, action_edit_computer_, action_copy_computer_, action_delete_computer_ });
     addActions(ActionGroup::SESSION_TYPE, { action_desktop_, action_file_transfer_, action_chat_, action_system_info_ });
 
-    if (!LocalDatabase::instance().isValid())
-        LOG(ERROR) << "Failed to open or create book database";
-
-    // Load groups from database under Local root.
-    loadGroups(0, local_root_);
-
-    // Show computers in root group by default.
-    ui.tree_group->setCurrentItem(local_root_);
-    local_group_widget_->showGroup(0);
+    local_group_widget_->showGroup(ui.sidebar->currentGroupId());
+    switchContent(local_group_widget_);
     updateActionsState();
 }
 
@@ -273,7 +255,7 @@ void ComputersTab::onAddComputerAction()
 {
     LOG(INFO) << "[ACTION] Add computer";
 
-    LocalGroupItem* item = static_cast<LocalGroupItem*>(ui.tree_group->currentItem());
+    Sidebar::Item* item = ui.sidebar->currentItem();
     if (!item)
     {
         LOG(INFO) << "No current local group item";
@@ -287,7 +269,7 @@ void ComputersTab::onAddComputerAction()
         return;
     }
 
-    local_group_widget_->showGroup(current_group_id_);
+    local_group_widget_->showGroup(ui.sidebar->currentGroupId());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -309,7 +291,7 @@ void ComputersTab::onEditComputerAction()
         return;
     }
 
-    local_group_widget_->showGroup(current_group_id_);
+    local_group_widget_->showGroup(ui.sidebar->currentGroupId());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -341,9 +323,11 @@ void ComputersTab::onCopyComputerAction()
         return;
     }
 
-    local_group_widget_->showGroup(current_group_id_);
+    qint64 current_group_id = ui.sidebar->currentGroupId();
+
+    local_group_widget_->showGroup(current_group_id);
     LocalComputerDialog(computer->id, computer->group_id, this).exec();
-    local_group_widget_->showGroup(current_group_id_);
+    local_group_widget_->showGroup(current_group_id);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -378,7 +362,7 @@ void ComputersTab::onDeleteComputerAction()
         return;
     }
 
-    local_group_widget_->showGroup(current_group_id_);
+    local_group_widget_->showGroup(ui.sidebar->currentGroupId());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -386,7 +370,7 @@ void ComputersTab::onAddGroupAction()
 {
     LOG(INFO) << "[ACTION] Add group";
 
-    LocalGroupItem* item = static_cast<LocalGroupItem*>(ui.tree_group->currentItem());
+    Sidebar::Item* item = ui.sidebar->currentItem();
     if (!item)
     {
         LOG(INFO) << "No current local group item";
@@ -400,7 +384,8 @@ void ComputersTab::onAddGroupAction()
         return;
     }
 
-    reloadGroups(item->groupId());
+    ui.sidebar->reloadGroups(item->groupId());
+    updateActionsState();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -408,21 +393,27 @@ void ComputersTab::onEditGroupAction()
 {
     LOG(INFO) << "[ACTION] Edit group";
 
-    LocalGroupItem* item = static_cast<LocalGroupItem*>(ui.tree_group->currentItem());
+    Sidebar::Item* item = ui.sidebar->currentItem();
     if (!item)
     {
         LOG(INFO) << "No current local group item";
         return;
     }
 
-    LocalGroupDialog dialog(item->groupId(), item->parentId(), this);
+    if (item->itemType() != Sidebar::Item::LOCAL_GROUP)
+        return;
+
+    Sidebar::LocalGroup* local_group = static_cast<Sidebar::LocalGroup*>(item);
+
+    LocalGroupDialog dialog(local_group->groupId(), local_group->parentId(), this);
     if (dialog.exec() == LocalGroupDialog::Rejected)
     {
         LOG(INFO) << "[ACTION] Rejected by user";
         return;
     }
 
-    reloadGroups(item->groupId());
+    ui.sidebar->reloadGroups(item->groupId());
+    updateActionsState();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -430,17 +421,19 @@ void ComputersTab::onDeleteGroupAction()
 {
     LOG(INFO) << "[ACTION] Delete group";
 
-    LocalGroupItem* item = static_cast<LocalGroupItem*>(ui.tree_group->currentItem());
+    Sidebar::Item* item = ui.sidebar->currentItem();
     if (!item)
     {
         LOG(INFO) << "No current local group item";
         return;
     }
 
-    if (item->groupId() == 0) // Root group.
+    if (item->itemType() != Sidebar::Item::Type::LOCAL_GROUP || item->groupId() == 0) // Root group.
         return;
 
-    QString message = tr("Are you sure you want to delete group \"%1\"?").arg(item->groupName());
+    Sidebar::LocalGroup* local_group = static_cast<Sidebar::LocalGroup*>(item);
+
+    QString message = tr("Are you sure you want to delete group \"%1\"?").arg(local_group->groupName());
 
     QMessageBox messagebox(QMessageBox::Question, tr("Confirmation"), message,
                            QMessageBox::Yes | QMessageBox::No, this);
@@ -453,47 +446,42 @@ void ComputersTab::onDeleteGroupAction()
         return;
     }
 
-    qint64 parent_id = item->parentId();
+    qint64 parent_id = local_group->parentId();
 
-    if (!LocalDatabase::instance().removeGroup(item->groupId()))
+    if (!LocalDatabase::instance().removeGroup(local_group->groupId()))
     {
         QMessageBox::warning(this, tr("Warning"), tr("Unable to remove group"));
-        LOG(INFO) << "Unable to remove group with id" << item->groupId();
+        LOG(INFO) << "Unable to remove group with id" << local_group->groupId();
         return;
     }
 
-    reloadGroups(parent_id);
+    ui.sidebar->reloadGroups(parent_id);
+    updateActionsState();
 }
 
 //--------------------------------------------------------------------------------------------------
-void ComputersTab::onCurrentGroupChanged(QTreeWidgetItem* current, QTreeWidgetItem* /* previous */)
+void ComputersTab::onSwitchContent(Sidebar::Item::Type type)
 {
     updateActionsState();
 
-    if (!current)
-        return;
-
-    GroupTreeItem* group_item = static_cast<GroupTreeItem*>(current);
-
-    switch (group_item->itemType())
+    switch (type)
     {
-        case GroupTreeItem::Type::LOCAL_GROUP:
+        case Sidebar::Item::Type::LOCAL_GROUP:
         {
-            current_group_id_ = group_item->groupId();
-            local_group_widget_->showGroup(current_group_id_);
+            local_group_widget_->showGroup(ui.sidebar->currentGroupId());
             switchContent(local_group_widget_);
         }
         break;
 
-        case GroupTreeItem::Type::ROUTER:
+        case Sidebar::Item::Type::ROUTER:
         {
             switchContent(router_widget_);
         }
         break;
 
-        case GroupTreeItem::Type::ROUTER_GROUP:
+        case Sidebar::Item::Type::ROUTER_GROUP:
         {
-            router_group_widget_->showGroup(group_item->groupId());
+            router_group_widget_->showGroup(ui.sidebar->currentGroupId());
             switchContent(router_group_widget_);
         }
         break;
@@ -501,26 +489,22 @@ void ComputersTab::onCurrentGroupChanged(QTreeWidgetItem* current, QTreeWidgetIt
 }
 
 //--------------------------------------------------------------------------------------------------
-void ComputersTab::onGroupContextMenu(const QPoint& pos)
+void ComputersTab::onSidebarContextMenu(Sidebar::Item::Type type, const QPoint& pos)
 {
-    GroupTreeItem* item = static_cast<GroupTreeItem*>(ui.tree_group->itemAt(pos));
-    if (!item)
-        return;
-
     QMenu menu;
 
-    if (item->itemType() == GroupTreeItem::Type::LOCAL_GROUP)
+    if (type == Sidebar::Item::Type::LOCAL_GROUP)
     {
         menu.addAction(action_edit_group_);
         menu.addAction(action_delete_group_);
         menu.addSeparator();
         menu.addAction(action_add_group_);
     }
-    else if (item->itemType() == GroupTreeItem::Type::ROUTER_GROUP)
+    else if (type == Sidebar::Item::Type::ROUTER_GROUP)
     {
         // TODO
     }
-    else if (item->itemType() == GroupTreeItem::Type::ROUTER)
+    else if (type == Sidebar::Item::Type::ROUTER)
     {
         // TODO
     }
@@ -529,7 +513,7 @@ void ComputersTab::onGroupContextMenu(const QPoint& pos)
         return;
     }
 
-    menu.exec(ui.tree_group->viewport()->mapToGlobal(pos));
+    menu.exec(pos);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -653,69 +637,6 @@ void ComputersTab::onLocalComputerContextMenu(qint64 computer_id, const QPoint& 
 }
 
 //--------------------------------------------------------------------------------------------------
-void ComputersTab::loadGroups(qint64 parent_id, QTreeWidgetItem* parent_item)
-{
-    QList<GroupData> groups = LocalDatabase::instance().groupList(parent_id);
-
-    for (const GroupData& group : std::as_const(groups))
-    {
-        LocalGroupItem* item = new LocalGroupItem(group, parent_item);
-        item->setExpanded(group.expanded);
-
-        // Load child groups recursively.
-        loadGroups(group.id, item);
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-void ComputersTab::reloadGroups(qint64 selected_group_id)
-{
-    // Remove all child items under local root.
-    while (local_root_->childCount() > 0)
-        delete local_root_->child(0);
-
-    // Reload from database.
-    loadGroups(0, local_root_);
-    local_root_->setExpanded(true);
-
-    // Find and select the requested group.
-    QTreeWidgetItem* selected = nullptr;
-    if (selected_group_id != 0)
-        selected = findGroupItem(selected_group_id, local_root_);
-
-    if (!selected)
-        selected = local_root_;
-
-    // Expand parents up to the selected item.
-    for (QTreeWidgetItem* p = selected->parent(); p; p = p->parent())
-        p->setExpanded(true);
-
-    selected->setExpanded(true);
-    ui.tree_group->setCurrentItem(selected);
-
-    current_group_id_ = static_cast<GroupTreeItem*>(selected)->groupId();
-    local_group_widget_->showGroup(current_group_id_);
-    updateActionsState();
-}
-
-//--------------------------------------------------------------------------------------------------
-QTreeWidgetItem* ComputersTab::findGroupItem(qint64 group_id, QTreeWidgetItem* parent) const
-{
-    for (int i = 0; i < parent->childCount(); ++i)
-    {
-        QTreeWidgetItem* child = parent->child(i);
-        if (static_cast<GroupTreeItem*>(child)->groupId() == group_id)
-            return child;
-
-        QTreeWidgetItem* found = findGroupItem(group_id, child);
-        if (found)
-            return found;
-    }
-
-    return nullptr;
-}
-
-//--------------------------------------------------------------------------------------------------
 void ComputersTab::switchContent(ContentWidget* new_widget)
 {
     if (!new_widget || new_widget == current_content_)
@@ -728,12 +649,12 @@ void ComputersTab::switchContent(ContentWidget* new_widget)
 //--------------------------------------------------------------------------------------------------
 void ComputersTab::updateActionsState()
 {
-    GroupTreeItem* group_item = static_cast<GroupTreeItem*>(ui.tree_group->currentItem());
+    Sidebar::Item* sidebar_item = ui.sidebar->currentItem();
 
-    if (group_item && group_item->itemType() == GroupTreeItem::Type::LOCAL_GROUP)
+    if (sidebar_item && sidebar_item->itemType() == Sidebar::Item::Type::LOCAL_GROUP)
     {
         action_add_group_->setVisible(true);
-        action_delete_group_->setVisible(group_item->groupId() != 0);
+        action_delete_group_->setVisible(sidebar_item->groupId() != 0);
         action_edit_group_->setVisible(true);
 
         LocalComputerItem* computer_item = local_group_widget_->currentComputer();
@@ -755,7 +676,7 @@ void ComputersTab::updateActionsState()
         action_copy_computer_->setVisible(false);
     }
 
-    if (group_item && group_item->itemType() == GroupTreeItem::Type::ROUTER)
+    if (sidebar_item && sidebar_item->itemType() == Sidebar::Item::ROUTER)
     {
         action_desktop_->setVisible(false);
         action_file_transfer_->setVisible(false);

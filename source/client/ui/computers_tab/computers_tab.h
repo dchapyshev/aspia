@@ -28,9 +28,7 @@ class QTreeWidgetItem;
 namespace client {
 
 class ContentWidget;
-class LocalGroupItem;
 class LocalGroupWidget;
-class RouterItem;
 class RouterWidget;
 class RouterGroupWidget;
 class SearchWidget;
@@ -61,26 +59,19 @@ private slots:
     void onAddGroupAction();
     void onEditGroupAction();
     void onDeleteGroupAction();
-    void onCurrentGroupChanged(QTreeWidgetItem* current, QTreeWidgetItem* previous);
-    void onGroupContextMenu(const QPoint& pos);
+    void onSwitchContent(client::Sidebar::Item::Type type);
+    void onSidebarContextMenu(client::Sidebar::Item::Type type, const QPoint& pos);
     void onCurrentComputerChanged(qint64 computer_id);
     void onConnectAction(QAction* action);
     void onLocalConnect(qint64 computer_id);
     void onLocalComputerContextMenu(qint64 computer_id, const QPoint& pos);
 
 private:
-    void loadGroups(qint64 parent_id, QTreeWidgetItem* parent_item);
-    void reloadGroups(qint64 selected_group_id = 0);
-    QTreeWidgetItem* findGroupItem(qint64 group_id, QTreeWidgetItem* parent) const;
     void switchContent(ContentWidget* new_widget);
     void updateActionsState();
     proto::peer::SessionType defaultSessionType() const;
 
     Ui::ComputersTab ui;
-    qint64 current_group_id_ = 0;
-
-    LocalGroupItem* local_root_ = nullptr;
-    RouterItem* remote_root_ = nullptr;
 
     QAction* action_add_group_ = nullptr;
     QAction* action_delete_group_ = nullptr;
