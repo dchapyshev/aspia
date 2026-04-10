@@ -23,6 +23,8 @@
 #include <QStatusBar>
 
 #include "base/logging.h"
+#include "base/net/address.h"
+#include "build/build_config.h"
 #include "client/local_database.h"
 #include "client/ui/settings.h"
 #include "client/ui/computers_tab/content_tree_item.h"
@@ -69,6 +71,17 @@ ComputersTab::ComputersTab(QWidget* parent)
     session_type_group->addAction(action_file_transfer_);
     session_type_group->addAction(action_chat_);
     session_type_group->addAction(action_system_info_);
+
+    action_desktop_connect_ = new QAction(QIcon(":/img/workstation.svg"), tr("Desktop Manage"), this);
+    action_file_transfer_connect_ = new QAction(QIcon(":/img/file-explorer.svg"), tr("File Transfer"), this);
+    action_chat_connect_ = new QAction(QIcon(":/img/chat.svg"), tr("Chat"), this);
+    action_system_info_connect_ = new QAction(QIcon(":/img/system-information.svg"), tr("System Information"), this);
+
+    QActionGroup* session_connect_group = new QActionGroup(this);
+    session_connect_group->addAction(action_desktop_connect_);
+    session_connect_group->addAction(action_file_transfer_connect_);
+    session_connect_group->addAction(action_chat_connect_);
+    session_connect_group->addAction(action_system_info_connect_);
 
     Settings settings;
 
@@ -118,12 +131,14 @@ ComputersTab::ComputersTab(QWidget* parent)
     // Connect signals.
     connect(ui.tree_group, &QTreeWidget::currentItemChanged, this, &ComputersTab::onCurrentGroupChanged);
     connect(local_group_widget_, &LocalGroupWidget::sig_currentComputerChanged, this, &ComputersTab::onCurrentComputerChanged);
+    connect(local_group_widget_, &LocalGroupWidget::sig_computerDoubleClicked, this, &ComputersTab::onLocalConnect);
     connect(action_add_computer_, &QAction::triggered, this, &ComputersTab::onAddComputerAction);
     connect(action_edit_computer_, &QAction::triggered, this, &ComputersTab::onEditComputerAction);
     connect(action_delete_computer_, &QAction::triggered, this, &ComputersTab::onDeleteComputerAction);
     connect(action_add_group_, &QAction::triggered, this, &ComputersTab::onAddGroupAction);
     connect(action_edit_group_, &QAction::triggered, this, &ComputersTab::onEditGroupAction);
     connect(action_delete_group_, &QAction::triggered, this, &ComputersTab::onDeleteGroupAction);
+    connect(session_connect_group, &QActionGroup::triggered, this, &ComputersTab::onConnectAction);
 
     // Register actions for toolbar and menus.
     addActions(ActionGroup::EDIT, { action_add_group_, action_edit_group_, action_delete_group_ });
@@ -131,10 +146,7 @@ ComputersTab::ComputersTab(QWidget* parent)
     addActions(ActionGroup::SESSION_TYPE, { action_desktop_, action_file_transfer_, action_chat_, action_system_info_ });
 
     if (!LocalDatabase::instance().isValid())
-    {
         LOG(ERROR) << "Failed to open or create book database";
-        return;
-    }
 
     // Load groups from database under Local root.
     loadGroups(0, local_root_);
@@ -149,17 +161,8 @@ ComputersTab::ComputersTab(QWidget* parent)
 ComputersTab::~ComputersTab()
 {
     LOG(INFO) << "Dtor";
-
     Settings settings;
-
-    if (action_desktop_->isChecked())
-        settings.setSessionType(proto::peer::SESSION_TYPE_DESKTOP);
-    else if (action_file_transfer_->isChecked())
-        settings.setSessionType(proto::peer::SESSION_TYPE_FILE_TRANSFER);
-    else if (action_chat_->isChecked())
-        settings.setSessionType(proto::peer::SESSION_TYPE_TEXT_CHAT);
-    else if (action_system_info_->isChecked())
-        settings.setSessionType(proto::peer::SESSION_TYPE_SYSTEM_INFO);
+    settings.setSessionType(defaultSessionType());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -465,6 +468,96 @@ void ComputersTab::onCurrentComputerChanged(qint64 computer_id)
 }
 
 //--------------------------------------------------------------------------------------------------
+void ComputersTab::onConnectAction(QAction* action)
+{
+    Config config;
+
+    if (action == action_desktop_connect_)
+        config.session_type = proto::peer::SESSION_TYPE_DESKTOP;
+    else if (action == action_file_transfer_connect_)
+        config.session_type = proto::peer::SESSION_TYPE_FILE_TRANSFER;
+    else if (action == action_chat_connect_)
+        config.session_type = proto::peer::SESSION_TYPE_TEXT_CHAT;
+    else if (action == action_system_info_connect_)
+        config.session_type = proto::peer::SESSION_TYPE_SYSTEM_INFO;
+    else
+        return;
+
+    Settings settings;
+    config.display_name = settings.displayName();
+
+    if (current_content_ == local_group_widget_)
+    {
+        LocalComputerItem* item = local_group_widget_->currentComputer();
+        if (!item)
+            return;
+
+        std::optional<ComputerData> computer =
+            LocalDatabase::instance().findComputer(item->computerId());
+        if (!computer.has_value())
+        {
+            QMessageBox::warning(this, tr("Warning"),
+                tr("Failed to retrieve computer information from the local database."));
+            return;
+        }
+
+        base::Address address = base::Address::fromString(computer->address, DEFAULT_HOST_TCP_PORT);
+        if (!address.isValid())
+        {
+            QMessageBox::warning(this, tr("Warning"), tr("The computer has an incorrect address."));
+            return;
+        }
+
+        config.address_or_id = address.host();
+        config.port = address.port();
+        config.computer_name = computer->name;
+        config.username = computer->username;
+        config.password = computer->password;
+    }
+    else if (current_content_ == router_group_widget_)
+    {
+        config.router_config = settings.routerConfig();
+        // TODO
+    }
+    else
+    {
+        return;
+    }
+
+    emit sig_connect(config);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ComputersTab::onLocalConnect(qint64 computer_id)
+{
+    std::optional<ComputerData> computer = LocalDatabase::instance().findComputer(computer_id);
+    if (!computer.has_value())
+    {
+        QMessageBox::warning(this, tr("Warning"),
+            tr("Failed to retrieve computer information from the local database."));
+        return;
+    }
+
+    base::Address address = base::Address::fromString(computer->address, DEFAULT_HOST_TCP_PORT);
+    if (!address.isValid())
+    {
+        QMessageBox::warning(this, tr("Warning"), tr("The computer has an incorrect address."));
+        return;
+    }
+
+    Config config;
+    config.address_or_id = address.host();
+    config.port = address.port();
+    config.session_type = defaultSessionType();
+    config.display_name = Settings().displayName();
+    config.computer_name = computer->name;
+    config.username = computer->username;
+    config.password = computer->password;
+
+    emit sig_connect(config);
+}
+
+//--------------------------------------------------------------------------------------------------
 void ComputersTab::loadGroups(qint64 parent_id, QTreeWidgetItem* parent_item)
 {
     QList<GroupData> groups = LocalDatabase::instance().groupList(parent_id);
@@ -579,6 +672,21 @@ void ComputersTab::updateActionsState()
         action_chat_->setVisible(true);
         action_system_info_->setVisible(true);
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+proto::peer::SessionType ComputersTab::defaultSessionType() const
+{
+    if (action_desktop_->isChecked())
+        return proto::peer::SESSION_TYPE_DESKTOP;
+    else if (action_file_transfer_->isChecked())
+        return proto::peer::SESSION_TYPE_FILE_TRANSFER;
+    else if (action_chat_->isChecked())
+        return proto::peer::SESSION_TYPE_TEXT_CHAT;
+    else if (action_system_info_->isChecked())
+        return proto::peer::SESSION_TYPE_SYSTEM_INFO;
+    else
+        return proto::peer::SESSION_TYPE_UNKNOWN;
 }
 
 } // namespace client

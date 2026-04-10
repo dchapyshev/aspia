@@ -19,6 +19,7 @@
 #ifndef CLIENT_UI_COMPUTERS_TAB_COMPUTERS_TAB_H
 #define CLIENT_UI_COMPUTERS_TAB_COMPUTERS_TAB_H
 
+#include "client/config.h"
 #include "client/ui/client_tab.h"
 #include "ui_computers_tab.h"
 
@@ -49,6 +50,9 @@ public:
     bool hasSearchField() const override;
     void onSearchTextChanged(const QString& text) override;
 
+signals:
+    void sig_connect(const client::Config& config);
+
 private slots:
     void onAddComputerAction();
     void onEditComputerAction();
@@ -58,6 +62,8 @@ private slots:
     void onDeleteGroupAction();
     void onCurrentGroupChanged(QTreeWidgetItem* current, QTreeWidgetItem* previous);
     void onCurrentComputerChanged(qint64 computer_id);
+    void onConnectAction(QAction* action);
+    void onLocalConnect(qint64 computer_id);
 
 private:
     void loadGroups(qint64 parent_id, QTreeWidgetItem* parent_item);
@@ -65,6 +71,7 @@ private:
     QTreeWidgetItem* findGroupItem(qint64 group_id, QTreeWidgetItem* parent) const;
     void switchContent(ContentWidget* new_widget);
     void updateActionsState();
+    proto::peer::SessionType defaultSessionType() const;
 
     Ui::ComputersTab ui;
     qint64 current_group_id_ = 0;
@@ -84,6 +91,11 @@ private:
     QAction* action_file_transfer_ = nullptr;
     QAction* action_chat_ = nullptr;
     QAction* action_system_info_ = nullptr;
+
+    QAction* action_desktop_connect_ = nullptr;
+    QAction* action_file_transfer_connect_ = nullptr;
+    QAction* action_chat_connect_ = nullptr;
+    QAction* action_system_info_connect_ = nullptr;
 
     ContentWidget* current_content_ = nullptr;
     ContentWidget* previous_content_ = nullptr;

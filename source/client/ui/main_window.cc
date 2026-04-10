@@ -29,11 +29,16 @@
 #include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/version_constants.h"
+#include "base/peer/host_id.h"
 #include "client/ui/application.h"
 #include "client/ui/settings.h"
 #include "client/ui/settings_dialog.h"
 #include "client/ui/client_tab.h"
+#include "client/ui/chat/chat_session_window.h"
 #include "client/ui/computers_tab/computers_tab.h"
+#include "client/ui/desktop/desktop_session_window.h"
+#include "client/ui/file_transfer/file_transfer_session_window.h"
+#include "client/ui/sys_info/system_info_session_window.h"
 #include "common/update_checker.h"
 #include "common/update_info.h"
 #include "common/ui/about_dialog.h"
@@ -112,8 +117,11 @@ MainWindow::MainWindow(QWidget* parent)
     ui.menu_edit->menuAction()->setVisible(false);
     ui.menu_session_type->menuAction()->setVisible(false);
 
+    ComputersTab* computers = new ComputersTab(this);
+    connect(computers, &ComputersTab::sig_connect, this, &MainWindow::onConnect);
+
     // Create default tabs.
-    addTab(new ComputersTab(this), tr("Computers"), QIcon(":/img/computer.svg"));
+    addTab(computers, tr("Computers"), QIcon(":/img/computer.svg"));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -291,6 +299,51 @@ void MainWindow::onSearchTextChanged(const QString& text)
 {
     if (active_tab_)
         active_tab_->onSearchTextChanged(text);
+}
+
+//--------------------------------------------------------------------------------------------------
+void MainWindow::onConnect(const Config& config)
+{
+    if (base::isHostId(config.address_or_id) && !config.router_config.has_value())
+    {
+        QMessageBox::warning(this, tr("Warning"),
+            tr("Connection by ID is specified in the properties of the computer, "
+               "but the router is not configured. Check the parameters of the "
+               "router in the properties of the address book."));
+        return;
+    }
+
+    client::SessionWindow* session_window = nullptr;
+
+    switch (config.session_type)
+    {
+        case proto::peer::SESSION_TYPE_DESKTOP:
+            session_window = new client::DesktopSessionWindow(Settings().desktopConfig());
+            break;
+
+        case proto::peer::SESSION_TYPE_FILE_TRANSFER:
+            session_window = new client::FileTransferSessionWindow();
+            break;
+
+        case proto::peer::SESSION_TYPE_SYSTEM_INFO:
+            session_window = new client::SystemInfoSessionWindow();
+            break;
+
+        case proto::peer::SESSION_TYPE_TEXT_CHAT:
+            session_window = new client::ChatSessionWindow();
+            break;
+
+        default:
+            NOTREACHED();
+            break;
+    }
+
+    if (!session_window)
+        return;
+
+    session_window->setAttribute(Qt::WA_DeleteOnClose);
+    if (!session_window->connectToHost(config))
+        session_window->close();
 }
 
 //--------------------------------------------------------------------------------------------------

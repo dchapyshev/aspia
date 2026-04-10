@@ -34,6 +34,7 @@ class UpdateChecker;
 namespace client {
 
 class ClientTab;
+struct Config;
 
 class MainWindow final : public QMainWindow
 {
@@ -58,6 +59,7 @@ private slots:
     void onCurrentTabChanged(int index);
     void onCloseTab(int index);
     void onSearchTextChanged(const QString& text);
+    void onConnect(const client::Config& config);
 
 private:
     void createLanguageMenu(const QString& current_locale);
