@@ -16,35 +16,37 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_UI_HOSTS_TREE_COMBO_BOX_H
-#define CLIENT_UI_HOSTS_TREE_COMBO_BOX_H
+#ifndef CLIENT_UI_HOSTS_GROUP_COMBO_BOX_H
+#define CLIENT_UI_HOSTS_GROUP_COMBO_BOX_H
 
 #include <QComboBox>
 #include <QTreeView>
 
+class QStandardItem;
+
 namespace client {
 
-class TreeComboBox : public QComboBox
+class GroupComboBox : public QComboBox
 {
     Q_OBJECT
 
 public:
-    explicit TreeComboBox(QWidget* parent = nullptr)
-        : QComboBox(parent)
-    {
-        // Nothing
-    }
+    static const int kGroupIdRole = Qt::UserRole + 1;
 
-    void showPopup() override
-    {
-        setRootModelIndex(QModelIndex());
-        QComboBox::showPopup();
+    explicit GroupComboBox(QWidget* parent = nullptr);
 
-        if (QTreeView* tv = qobject_cast<QTreeView*>(view()))
-            tv->expandAll();
-    }
+    void loadGroups(const QString& root_name, qint64 exclude_id = -1);
+    void selectGroup(qint64 group_id);
+    qint64 currentGroupId() const;
+
+    void showPopup() override;
+
+private:
+    void addGroupItems(qint64 parent_id, QStandardItem* parent_item, qint64 exclude_id);
+
+    Q_DISABLE_COPY_MOVE(GroupComboBox)
 };
 
 } // namespace client
 
-#endif // CLIENT_UI_HOSTS_TREE_COMBO_BOX_H
+#endif // CLIENT_UI_HOSTS_GROUP_COMBO_BOX_H
