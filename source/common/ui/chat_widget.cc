@@ -29,7 +29,6 @@
 #include <QJsonObject>
 #include <QKeyEvent>
 #include <QMenu>
-#include <QMessageBox>
 #include <QSaveFile>
 #include <QScrollBar>
 #include <QStandardPaths>

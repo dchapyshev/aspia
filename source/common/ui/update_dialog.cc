@@ -20,7 +20,6 @@
 
 #include <QCloseEvent>
 #include <QDir>
-#include <QMessageBox>
 #include <QTemporaryFile>
 #include <QTimer>
 
@@ -130,7 +129,7 @@ void UpdateDialog::onUpdateNow()
 
     if (common::MessageBox::question(this,
             QString("%1<br/><b>%2</b><br/><b>%3</b><br/>%4")
-                .arg(message1, message2, message3, question)) == QMessageBox::Yes)
+                .arg(message1, message2, message3, question)) == common::MessageBox::Yes)
     {
         LOG(INFO) << "[ACTION] Update confirmed by user";
 

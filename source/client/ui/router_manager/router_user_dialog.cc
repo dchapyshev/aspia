@@ -25,7 +25,6 @@
 
 #include <QAbstractButton>
 #include <QPushButton>
-#include <QMessageBox>
 
 namespace client {
 
@@ -197,13 +196,13 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
 
             QString question = tr("Do you want to enter a different password?");
 
-            common::MessageBox message_box(QMessageBox::Warning,
+            common::MessageBox message_box(common::MessageBox::Warning,
                                     tr("Warning"),
                                     QString("<b>%1</b><br/>%2<br/>%3").arg(unsafe, safe, question),
-                                    QMessageBox::Yes | QMessageBox::No,
+                                    common::MessageBox::Yes | common::MessageBox::No,
                                     this);
 
-            if (message_box.exec() == QMessageBox::Yes)
+            if (message_box.exec() == common::MessageBox::Yes)
             {
                 ui.edit_password->clear();
                 ui.edit_password_retry->clear();

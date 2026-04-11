@@ -22,7 +22,6 @@
 #include "common/ui/message_box.h"
 
 #include <QLineEdit>
-#include <QMessageBox>
 #include <QTreeView>
 #include <QToolTip>
 

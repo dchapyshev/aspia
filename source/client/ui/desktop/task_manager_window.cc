@@ -22,7 +22,6 @@
 #include <QActionGroup>
 #include <QLabel>
 #include <QMenu>
-#include <QMessageBox>
 #include <QTimer>
 
 #include "common/ui/message_box.h"
@@ -649,7 +648,7 @@ void TaskManagerWindow::onEndProcess()
     {
         if (common::MessageBox::question(this,
                 tr("Do you really want to end \"%1\" process?")
-                    .arg(current_item->text(PROC_COL_NAME))) == QMessageBox::Yes)
+                    .arg(current_item->text(PROC_COL_NAME))) == common::MessageBox::Yes)
         {
             LOG(INFO) << "[ACTION] Accepted by user";
             sendEndProcessRequest(current_item->processId());
@@ -699,7 +698,7 @@ void TaskManagerWindow::onDisconnectUser()
     {
         if (common::MessageBox::question(this,
                 tr("Do you really want to disconnect user \"%1\" session?")
-                    .arg(current_item->text(USER_COL_NAME))) == QMessageBox::Yes)
+                    .arg(current_item->text(USER_COL_NAME))) == common::MessageBox::Yes)
         {
             LOG(INFO) << "[ACTION] Accepted by user";
             sendUserRequest(
@@ -722,7 +721,7 @@ void TaskManagerWindow::onLogoffUser()
     {
         if (common::MessageBox::question(this,
                 tr("Do you really want to end user \"%1\" session?")
-                    .arg(current_item->text(USER_COL_NAME))) == QMessageBox::Yes)
+                    .arg(current_item->text(USER_COL_NAME))) == common::MessageBox::Yes)
         {
             LOG(INFO) << "[ACTION] Accepted by user";
             sendUserRequest(

@@ -20,9 +20,9 @@
 
 #include <QAbstractButton>
 #include <QDateTime>
-#include <QMessageBox>
 
 #include "base/gui_application.h"
+#include "common/ui/message_box.h"
 #include "base/logging.h"
 #include "common/ui/session_type.h"
 #include "console/computer_group_dialog_desktop.h"
@@ -196,7 +196,7 @@ void ComputerGroupDialog::onTabChanged(QTreeWidgetItem* current)
 //--------------------------------------------------------------------------------------------------
 void ComputerGroupDialog::showError(const QString& message)
 {
-    QMessageBox(QMessageBox::Warning, tr("Warning"), message, QMessageBox::Ok, this).exec();
+    common::MessageBox::warning(this, message);
 }
 
 //--------------------------------------------------------------------------------------------------

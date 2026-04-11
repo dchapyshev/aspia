@@ -22,7 +22,6 @@
 #include <QCloseEvent>
 #include <QDesktopServices>
 #include <QDir>
-#include <QMessageBox>
 #include <QNetworkInterface>
 #include <QProcess>
 #include <QTimer>
@@ -707,7 +706,7 @@ void MainWindow::onExit()
     if (common::MessageBox::question(this,
             tr("If you exit from Aspia, it will not be possible to connect to this computer until "
                "you turn on the computer or Aspia again manually. Do you really want to exit the "
-               "application?")) == QMessageBox::Yes)
+               "application?")) == common::MessageBox::Yes)
     {
         LOG(INFO) << "[ACTION] User confirmed exit";
         if (!notifier_)

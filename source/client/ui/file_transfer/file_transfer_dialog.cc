@@ -20,11 +20,11 @@
 
 #include <QCloseEvent>
 #include <QPushButton>
-#include <QMessageBox>
 
 #include "base/gui_application.h"
 #include "base/logging.h"
 #include "client/ui/file_transfer/file_error_code.h"
+#include "common/ui/message_box.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "common/ui/taskbar_button.h"
@@ -141,10 +141,10 @@ void FileTransferDialog::errorOccurred(const FileTransfer::Error& error)
         taskbar_progress_->pause();
 #endif
 
-    QMessageBox* dialog = new QMessageBox(this);
+    common::MessageBox* dialog = new common::MessageBox(this);
 
     dialog->setWindowTitle(tr("Warning"));
-    dialog->setIcon(QMessageBox::Warning);
+    dialog->setIcon(common::MessageBox::Warning);
     dialog->setText(errorToMessage(error));
 
     QAbstractButton* skip_button = nullptr;
@@ -155,21 +155,21 @@ void FileTransferDialog::errorOccurred(const FileTransfer::Error& error)
     const quint32 available_actions = error.availableActions();
 
     if (available_actions & FileTransfer::Error::ACTION_SKIP)
-        skip_button = dialog->addButton(tr("Skip"), QMessageBox::ButtonRole::ActionRole);
+        skip_button = dialog->addButton(tr("Skip"), common::MessageBox::ButtonRole::ActionRole);
 
     if (available_actions & FileTransfer::Error::ACTION_SKIP_ALL)
-        skip_all_button = dialog->addButton(tr("Skip All"), QMessageBox::ButtonRole::ActionRole);
+        skip_all_button = dialog->addButton(tr("Skip All"), common::MessageBox::ButtonRole::ActionRole);
 
     if (available_actions & FileTransfer::Error::ACTION_REPLACE)
-        replace_button = dialog->addButton(tr("Replace"), QMessageBox::ButtonRole::ActionRole);
+        replace_button = dialog->addButton(tr("Replace"), common::MessageBox::ButtonRole::ActionRole);
 
     if (available_actions & FileTransfer::Error::ACTION_REPLACE_ALL)
-        replace_all_button = dialog->addButton(tr("Replace All"), QMessageBox::ButtonRole::ActionRole);
+        replace_all_button = dialog->addButton(tr("Replace All"), common::MessageBox::ButtonRole::ActionRole);
 
     if (available_actions & FileTransfer::Error::ACTION_ABORT)
-        dialog->addButton(tr("Abort"), QMessageBox::ButtonRole::ActionRole);
+        dialog->addButton(tr("Abort"), common::MessageBox::ButtonRole::ActionRole);
 
-    connect(dialog, &QMessageBox::buttonClicked, this, [=, this](QAbstractButton* button)
+    connect(dialog, &common::MessageBox::buttonClicked, this, [=, this](QAbstractButton* button)
     {
         if (button != nullptr)
         {
@@ -201,7 +201,7 @@ void FileTransferDialog::errorOccurred(const FileTransfer::Error& error)
         emit sig_action(error.type(), FileTransfer::Error::ACTION_ABORT);
     });
 
-    connect(dialog, &QMessageBox::finished, dialog, &QMessageBox::deleteLater);
+    connect(dialog, &common::MessageBox::finished, dialog, &common::MessageBox::deleteLater);
 
     dialog->exec();
 

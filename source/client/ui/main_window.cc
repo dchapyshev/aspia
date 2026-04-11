@@ -21,7 +21,6 @@
 #include <QActionGroup>
 #include <QDesktopServices>
 #include <QLineEdit>
-#include <QMessageBox>
 #include <QTabBar>
 #include <QUrl>
 #include <QTimer>

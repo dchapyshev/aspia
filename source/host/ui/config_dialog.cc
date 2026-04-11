@@ -21,7 +21,6 @@
 #include <QCollator>
 #include <QFileDialog>
 #include <QMenu>
-#include <QMessageBox>
 #include <QTimer>
 #include <QTranslator>
 
@@ -437,7 +436,7 @@ void ConfigDialog::onDeleteUser()
 
     if (common::MessageBox::question(this,
             tr("Are you sure you want to delete user \"%1\"?")
-                .arg(user_item->text(0))) == QMessageBox::Yes)
+                .arg(user_item->text(0))) == common::MessageBox::Yes)
     {
         LOG(INFO) << "[ACTION] Accepted by user";
         delete user_item;

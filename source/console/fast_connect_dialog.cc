@@ -18,7 +18,6 @@
 
 #include "console/fast_connect_dialog.h"
 
-#include <QMessageBox>
 #include <QTimer>
 
 #include "base/logging.h"
@@ -88,7 +87,7 @@ FastConnectDialog::FastConnectDialog(QWidget* parent,
     connect(ui.button_clear, &QPushButton::clicked, this, [this]()
     {
         if (common::MessageBox::question(this,
-                tr("The list of entered addresses will be cleared. Continue?")) == QMessageBox::Yes)
+                tr("The list of entered addresses will be cleared. Continue?")) == common::MessageBox::Yes)
         {
             ui.combo_address->clear();
             state_.history.clear();

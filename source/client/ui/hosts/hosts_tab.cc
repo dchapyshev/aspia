@@ -20,7 +20,6 @@
 
 #include <QActionGroup>
 #include <QMenu>
-#include <QMessageBox>
 #include <QStatusBar>
 
 #include "common/ui/message_box.h"
@@ -352,7 +351,7 @@ void HostsTab::onDeleteComputerAction()
 
     QString message = tr("Are you sure you want to delete computer \"%1\"?").arg(item->computerName());
 
-    if (common::MessageBox::question(this, message) == QMessageBox::No)
+    if (common::MessageBox::question(this, message) == common::MessageBox::No)
     {
         LOG(INFO) << "Action is rejected by user";
         return;
@@ -438,7 +437,7 @@ void HostsTab::onDeleteGroupAction()
 
     QString message = tr("Are you sure you want to delete group \"%1\"?").arg(local_group->groupName());
 
-    if (common::MessageBox::question(this, message) == QMessageBox::No)
+    if (common::MessageBox::question(this, message) == common::MessageBox::No)
     {
         LOG(INFO) << "Action is rejected by user";
         return;

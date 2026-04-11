@@ -21,7 +21,6 @@
 #include <QAbstractButton>
 #include <QFile>
 #include <QFileInfo>
-#include <QMessageBox>
 
 #include "common/ui/message_box.h"
 #include "base/logging.h"
@@ -127,13 +126,13 @@ bool SettingsUtil::copySettings(const QString& source_path,
     {
         if (!silent)
         {
-            common::MessageBox message_box(QMessageBox::Warning,
+            common::MessageBox message_box(common::MessageBox::Warning,
                 tr("Warning"),
                 tr("The existing settings will be overwritten. Continue?"),
-                QMessageBox::Yes | QMessageBox::No,
+                common::MessageBox::Yes | common::MessageBox::No,
                 parent);
 
-            if (message_box.exec() == QMessageBox::No)
+            if (message_box.exec() == common::MessageBox::No)
             {
                 LOG(INFO) << "Copy settings canceled by user";
                 return false;

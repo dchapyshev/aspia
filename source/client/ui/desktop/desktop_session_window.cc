@@ -23,7 +23,6 @@
 #include <QClipboard>
 #include <QFileDialog>
 #include <QHBoxLayout>
-#include <QMessageBox>
 #include <QPalette>
 #include <QResizeEvent>
 #include <QPropertyAnimation>

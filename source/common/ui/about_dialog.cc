@@ -22,7 +22,6 @@
 #include <QFile>
 #include <QFileDialog>
 #include <QMenu>
-#include <QMessageBox>
 #include <QSysInfo>
 #include <QTextStream>
 

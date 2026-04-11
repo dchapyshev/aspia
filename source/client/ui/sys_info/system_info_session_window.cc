@@ -21,7 +21,6 @@
 #include <QClipboard>
 #include <QDateTime>
 #include <QFileDialog>
-#include <QMessageBox>
 #include <QPrinter>
 #include <QPrintDialog>
 #include <QTextDocument>

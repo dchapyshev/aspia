@@ -26,7 +26,6 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QMenu>
-#include <QMessageBox>
 #include <QTimer>
 
 #include "base/logging.h"
@@ -1104,7 +1103,7 @@ void RouterManagerWindow::onDisconnectRelay()
 
     if (common::MessageBox::question(this,
             tr("Are you sure you want to disconnect session \"%1\"?")
-                .arg(QString::fromStdString(tree_item->session.computer_name()))) == QMessageBox::No)
+                .arg(QString::fromStdString(tree_item->session.computer_name()))) == common::MessageBox::No)
     {
         return;
     }
@@ -1118,7 +1117,7 @@ void RouterManagerWindow::onDisconnectAllRelays()
     LOG(INFO) << "[ACTION] Disconnect all relays";
 
     if (common::MessageBox::question(this,
-            tr("Are you sure you want to disconnect all relays?")) == QMessageBox::No)
+            tr("Are you sure you want to disconnect all relays?")) == common::MessageBox::No)
     {
         LOG(INFO) << "[ACTION] Rejected by user";
         return;
@@ -1149,7 +1148,7 @@ void RouterManagerWindow::onDisconnectHost()
 
     if (common::MessageBox::question(this,
             tr("Are you sure you want to disconnect session \"%1\"?")
-                .arg(QString::fromStdString(tree_item->session.computer_name()))) == QMessageBox::No)
+                .arg(QString::fromStdString(tree_item->session.computer_name()))) == common::MessageBox::No)
     {
         LOG(INFO) << "[ACTION] Rejected by user";
         return;
@@ -1176,15 +1175,15 @@ void RouterManagerWindow::onRemoveHost()
     message_box.setText(tr("Deleting a host will result in all its configuration for connecting "
                           "to the router being deleted. This operation is irreversible. After deleting, the host "
                           "will no longer connect to the router. Are you sure you want to do this?"));
-    message_box.setIcon(QMessageBox::Question);
-    message_box.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    message_box.setIcon(common::MessageBox::Question);
+    message_box.setStandardButtons(common::MessageBox::Yes | common::MessageBox::No);
 
     QCheckBox* check_box = new QCheckBox(&message_box);
     check_box->setText(tr("Try to uninstall the application (result is not guaranteed)"));
 
     message_box.setCheckBox(check_box);
 
-    if (message_box.exec() == QMessageBox::No)
+    if (message_box.exec() == common::MessageBox::No)
     {
         LOG(INFO) << "[ACTION] Rejected by user";
         return;
@@ -1205,7 +1204,7 @@ void RouterManagerWindow::onDisconnectAllHosts()
     LOG(INFO) << "[ACTION] Disconnect all hosts";
 
     if (common::MessageBox::question(this,
-            tr("Are you sure you want to disconnect all hosts?")) == QMessageBox::No)
+            tr("Are you sure you want to disconnect all hosts?")) == common::MessageBox::No)
     {
         LOG(INFO) << "[ACTION] Rejected by user";
         return;
@@ -1305,7 +1304,7 @@ void RouterManagerWindow::onDeleteUser()
     }
 
     if (common::MessageBox::question(this,
-            tr("Are you sure you want to delete user \"%1\"?").arg(tree_item->text(0))) == QMessageBox::Yes)
+            tr("Are you sure you want to delete user \"%1\"?").arg(tree_item->text(0))) == common::MessageBox::Yes)
     {
         LOG(INFO) << "[ACTION] Accepted by user";
         emit sig_deleteUser(entry_id);

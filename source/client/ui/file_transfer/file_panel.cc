@@ -23,7 +23,6 @@
 #include <QLineEdit>
 #include <QKeyEvent>
 #include <QMenu>
-#include <QMessageBox>
 
 #include "common/ui/message_box.h"
 #include "base/logging.h"
@@ -423,7 +422,7 @@ void FilePanel::removeSelected()
         return;
 
     if (common::MessageBox::question(this,
-            tr("Are you sure you want to delete the selected items?")) != QMessageBox::Yes)
+            tr("Are you sure you want to delete the selected items?")) != common::MessageBox::Yes)
         return;
 
     emit sig_removeItems(this, items);

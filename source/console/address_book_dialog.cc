@@ -19,7 +19,6 @@
 #include "console/address_book_dialog.h"
 
 #include <QAbstractButton>
-#include <QMessageBox>
 #include <QUuid>
 
 #include "base/logging.h"
@@ -416,7 +415,7 @@ void AddressBookDialog::setPasswordChanged()
 //--------------------------------------------------------------------------------------------------
 void AddressBookDialog::showError(const QString& message)
 {
-    QMessageBox(QMessageBox::Warning, tr("Warning"), message, QMessageBox::Ok, this).exec();
+    common::MessageBox::warning(this, message);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -508,14 +507,14 @@ bool AddressBookDialog::saveChanges()
 
                     QString question = tr("Do you want to enter a different password?");
 
-                    common::MessageBox message_box(QMessageBox::Warning,
+                    common::MessageBox message_box(common::MessageBox::Warning,
                                             tr("Warning"),
                                             QString("<b>%1</b><br/>%2<br/>%3").arg(unsafe, safe, question),
-                                            QMessageBox::Yes | QMessageBox::No,
+                                            common::MessageBox::Yes | common::MessageBox::No,
                                             this);
 
 
-                    if (message_box.exec() == QMessageBox::Yes)
+                    if (message_box.exec() == common::MessageBox::Yes)
                     {
                         ui.edit_password->clear();
                         ui.edit_password_repeat->clear();

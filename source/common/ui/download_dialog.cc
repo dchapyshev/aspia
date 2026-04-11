@@ -20,7 +20,6 @@
 
 #include <QAbstractButton>
 #include <QFile>
-#include <QMessageBox>
 
 #include "base/gui_application.h"
 #include "base/logging.h"

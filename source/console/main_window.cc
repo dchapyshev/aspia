@@ -22,7 +22,6 @@
 #include <QCloseEvent>
 #include <QDesktopServices>
 #include <QFileDialog>
-#include <QMessageBox>
 #include <QStyle>
 #include <QSystemTrayIcon>
 
@@ -905,13 +904,13 @@ void MainWindow::onCloseTab(int index)
         switch (common::MessageBox::question(this,
                     tr("Address book \"%1\" has been changed. Save changes?")
                         .arg(tab->addressBookName()),
-                    QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel))
+                    common::MessageBox::Yes | common::MessageBox::No | common::MessageBox::Cancel))
         {
-            case QMessageBox::Yes:
+            case common::MessageBox::Yes:
                 tab->save();
                 break;
 
-            case QMessageBox::Cancel:
+            case common::MessageBox::Cancel:
                 return;
 
             default:
@@ -1237,7 +1236,7 @@ void MainWindow::onRecentOpenTriggered(QAction* action)
         (action == ui.action_remember_last && !action->isChecked()))
     {
         if (common::MessageBox::question(this,
-                tr("The list of recently opened address books will be cleared. Continue?")) == QMessageBox::Yes)
+                tr("The list of recently opened address books will be cleared. Continue?")) == common::MessageBox::Yes)
         {
             mru_.clearRecentOpen();
             rebuildMruMenu();
@@ -1323,13 +1322,13 @@ void MainWindow::closeEvent(QCloseEvent* event)
             switch (common::MessageBox::question(this,
                         tr("Address book \"%1\" has been changed. Save changes?")
                             .arg(tab->addressBookName()),
-                        QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel))
+                        common::MessageBox::Yes | common::MessageBox::No | common::MessageBox::Cancel))
             {
-                case QMessageBox::Yes:
+                case common::MessageBox::Yes:
                     tab->save();
                     break;
 
-                case QMessageBox::Cancel:
+                case common::MessageBox::Cancel:
                     event->ignore();
                     return;
 

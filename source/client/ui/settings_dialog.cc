@@ -19,11 +19,11 @@
 #include "client/ui/settings_dialog.h"
 
 #include <QAbstractButton>
-#include <QMessageBox>
 #include <QPushButton>
 #include <QTimer>
 
 #include "base/logging.h"
+#include "common/ui/message_box.h"
 #include "base/net/address.h"
 #include "base/peer/user.h"
 #include "base/gui_application.h"
@@ -263,7 +263,7 @@ void SettingsDialog::onRemoveRouter()
 //--------------------------------------------------------------------------------------------------
 void SettingsDialog::showError(const QString& message)
 {
-    QMessageBox(QMessageBox::Warning, tr("Warning"), message, QMessageBox::Ok, this).exec();
+    common::MessageBox::warning(this, message);
 }
 
 //--------------------------------------------------------------------------------------------------
