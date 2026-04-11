@@ -92,6 +92,8 @@ list(APPEND SOURCE_COMMON_UI
     ui/chat_widget.cc
     ui/chat_widget.h
     ui/chat_widget.ui
+    ui/dialog_button_box.cc
+    ui/dialog_button_box.h
     ui/download_dialog.cc
     ui/download_dialog.h
     ui/download_dialog.ui
