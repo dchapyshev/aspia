@@ -35,9 +35,6 @@ public:
     explicit AboutDialog(const QString& application_name, QWidget* parent = nullptr);
     ~AboutDialog() final;
 
-private slots:
-    void onServiceContextMenu(const QPoint& pos);
-
 private:
     std::unique_ptr<Ui::AboutDialog> ui;
 

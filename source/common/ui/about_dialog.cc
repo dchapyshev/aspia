@@ -19,15 +19,10 @@
 #include "common/ui/about_dialog.h"
 
 #include <QDesktopServices>
-#include <QFile>
-#include <QFileDialog>
-#include <QMenu>
 #include <QSysInfo>
-#include <QTextStream>
 
 #include "build/version.h"
 #include "base/logging.h"
-#include "common/ui/msg_box.h"
 #include "ui_about_dialog.h"
 
 #include <asio/version.hpp>
@@ -151,27 +146,44 @@ AboutDialog::AboutDialog(const QString& application_name, QWidget* parent)
 
     ui->text_edit->setHtml(html);
 
-    QListWidget* list = ui->list_service;
+    QTextBrowser* service = ui->text_service;
 
-    list->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(list, &QListWidget::customContextMenuRequested,
-            this, &AboutDialog::onServiceContextMenu);
+    connect(service, &QTextBrowser::anchorClicked, this, [](const QUrl& url)
+    {
+        QDesktopServices::openUrl(url);
+    });
 
-    list->addItem(tr("Path: %1").arg(QApplication::applicationFilePath()));
-    list->addItem(tr("Compilation date: %1").arg(__DATE__));
-    list->addItem(tr("Compilation time: %1").arg(__TIME__));
+    QString service_html;
+
+    service_html += "<html><body>";
+
+    service_html += "<p><b>" + tr("Application:") + "</b><br>"
+        + QString("&bull; %1<br>").arg(tr("Path: %1").arg(QApplication::applicationFilePath()))
+        + QString("&bull; %1<br>").arg(tr("Logging directory: %1")
+            .arg(QString("<a href='file:///%1'>%1</a>").arg(base::loggingDirectory())))
+        + QString("&bull; %1").arg(tr("Logging file: %1")
+            .arg(QString("<a href='file:///%1'>%1</a>").arg(base::loggingFile())))
+        + "</p>";
 
 #if defined(GIT_CURRENT_BRANCH) && defined(GIT_COMMIT_HASH)
-    list->addItem(tr("Git branch: %1").arg(GIT_CURRENT_BRANCH));
-    list->addItem(tr("Git commit: %1").arg(GIT_COMMIT_HASH));
+    service_html += "<p><b>" + tr("Build Information:") + "</b><br>"
+        + QString("&bull; %1<br>").arg(tr("Git branch: %1")
+            .arg(QString("<a href='%1/tree/%2'>%2</a>").arg(kGitHubLink, GIT_CURRENT_BRANCH)))
+        + QString("&bull; %1").arg(tr("Git commit: %1")
+            .arg(QString("<a href='%1/commit/%2'>%2</a>").arg(kGitHubLink, GIT_COMMIT_HASH)))
+        + "</p>";
 #endif
 
-    list->addItem(tr("Logging directory: %1").arg(base::loggingDirectory()));
-    list->addItem(tr("Logging file: %1").arg(base::loggingFile()));
+    service_html += "<p><b>" + tr("Compilation:") + "</b><br>"
+        + QString("&bull; %1<br>").arg(tr("Compilation date: %1").arg(__DATE__))
+        + QString("&bull; %1").arg(tr("Compilation time: %1").arg(__TIME__))
+        + "</p>";
 
-    auto add_version = [list](const char* name, const QString& version)
+    QStringList versions;
+
+    auto add_version = [&versions](const char* name, const QString& version)
     {
-        list->addItem(tr("%1 version: %2").arg(name, version));
+        versions.append(QString("&bull; %1: %2").arg(name, version));
     };
 
     add_version("asio", QString("%1.%2.%3")
@@ -193,6 +205,12 @@ AboutDialog::AboutDialog(const QString& application_name, QWidget* parent)
     add_version("sqlite", SQLITE_VERSION);
     add_version("zstd", ZSTD_versionString());
 
+    service_html += "<p><b>" + tr("Version Information:") + "</b><br>"
+        + versions.join("<br>") + "</p>";
+    service_html += "</body></html>";
+
+    service->setHtml(service_html);
+
     connect(ui->push_button_donate, &QPushButton::clicked, this, []()
     {
         LOG(INFO) << "[ACTION] Donate button clicked";
@@ -210,53 +228,6 @@ AboutDialog::AboutDialog(const QString& application_name, QWidget* parent)
 AboutDialog::~AboutDialog()
 {
     LOG(INFO) << "Dtor";
-}
-
-//--------------------------------------------------------------------------------------------------
-void AboutDialog::onServiceContextMenu(const QPoint& pos)
-{
-    LOG(INFO) << "[ACTION] Service context menu";
-
-    QMenu menu;
-
-    QAction* save_action = menu.addAction(tr("Save to file..."));
-
-    if (menu.exec(ui->list_service->viewport()->mapToGlobal(pos)) == save_action)
-    {
-        LOG(INFO) << "[ACTION] Save action";
-
-        QString selected_filter;
-        QString file_path = QFileDialog::getSaveFileName(this,
-                                                         tr("Save File"),
-                                                         QString(),
-                                                         tr("TXT files (*.txt)"),
-                                                         &selected_filter);
-        if (file_path.isEmpty() || selected_filter.isEmpty())
-        {
-            LOG(INFO) << "File path not selected";
-            return;
-        }
-
-        LOG(INFO) << "Selected file path:" << file_path.toStdString();
-
-        QFile file(file_path);
-        if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
-        {
-            LOG(ERROR) << "Unable to open file:" << file.errorString().toStdString();
-            common::MsgBox::warning(this,
-                                 tr("Could not open file for writing."));
-            return;
-        }
-
-        QListWidget* list = ui->list_service;
-        QTextStream stream(&file);
-
-        for (int i = 0; i < list->count(); ++i)
-        {
-            QListWidgetItem* item = list->item(i);
-            stream << item->text() << Qt::endl;
-        }
-    }
 }
 
 } // namespace common

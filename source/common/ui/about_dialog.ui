@@ -91,7 +91,14 @@ li.checked::marker { content: &quot;\2612&quot;; }
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
-        <widget class="QListWidget" name="list_service"/>
+        <widget class="QTextBrowser" name="text_service">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+        <property name="openLinks">
+         <bool>false</bool>
+        </property>
+       </widget>
        </item>
       </layout>
      </widget>

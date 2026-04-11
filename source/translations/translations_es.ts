@@ -19,12 +19,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.ui" line="105"/>
+        <location filename="../common/ui/about_dialog.ui" line="112"/>
         <source>Donate!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.ui" line="129"/>
+        <location filename="../common/ui/about_dialog.ui" line="136"/>
         <source>Close</source>
         <translation type="unfinished">Fechar</translation>
     </message>
@@ -4710,24 +4710,24 @@
         <translation type="obsolete">Advertencia</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="324"/>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="555"/>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="609"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="330"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="561"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="615"/>
         <source>Failed to retrieve computer information from the local database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="328"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="334"/>
         <source>(copy)</source>
         <translation type="unfinished">(copiar)</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="332"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="338"/>
         <source>Failed to add the computer to the local database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="355"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="361"/>
         <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
         <translation type="unfinished">¿Está seguro de que desea eliminar el ordenador &quot;%1&quot;?</translation>
     </message>
@@ -4736,23 +4736,23 @@
         <translation type="obsolete">Confirmación</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="365"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="371"/>
         <source>Unable to remove computer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="441"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="447"/>
         <source>Are you sure you want to delete group &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="453"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="459"/>
         <source>Unable to remove group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="562"/>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="616"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="568"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="622"/>
         <source>The computer has an incorrect address.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4900,12 +4900,12 @@
         <translation type="obsolete">Advertencia</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.cc" line="274"/>
+        <location filename="../client/ui/main_window.cc" line="283"/>
         <source>Connection by ID is specified in the properties of the computer, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation type="unfinished">La conexión por ID se especifica en las propiedades del ordenador, pero la ruta no está configurada. Verifique los parámetros de la ruta en las propiedades del libro de direcciones.</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.cc" line="208"/>
+        <location filename="../client/ui/main_window.cc" line="217"/>
         <source>Aspia Client</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6913,128 +6913,123 @@
 <context>
     <name>common::AboutDialog</name>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="111"/>
+        <location filename="../common/ui/about_dialog.cc" line="106"/>
         <source>Version: %1 (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="116"/>
+        <location filename="../common/ui/about_dialog.cc" line="111"/>
         <source>Aspia is free software released under GNU General Public License 3.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="117"/>
+        <location filename="../common/ui/about_dialog.cc" line="112"/>
         <source>You can get a copy of license here:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="122"/>
+        <location filename="../common/ui/about_dialog.cc" line="117"/>
         <source>You can also get a translation of GNU GPL license here:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="126"/>
+        <location filename="../common/ui/about_dialog.cc" line="121"/>
         <source>Links:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="127"/>
+        <location filename="../common/ui/about_dialog.cc" line="122"/>
         <source>Home page:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="128"/>
+        <location filename="../common/ui/about_dialog.cc" line="123"/>
         <source>GitHub page:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="131"/>
+        <location filename="../common/ui/about_dialog.cc" line="126"/>
         <source>Developers:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="133"/>
+        <location filename="../common/ui/about_dialog.cc" line="128"/>
         <source>Translators:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="135"/>
+        <location filename="../common/ui/about_dialog.cc" line="130"/>
         <source>Third-party components:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="137"/>
+        <location filename="../common/ui/about_dialog.cc" line="132"/>
         <source>Graphics and images:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="138"/>
+        <location filename="../common/ui/about_dialog.cc" line="133"/>
         <source>Icons by %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../common/ui/about_dialog.cc" line="160"/>
-        <source>Path: %1</source>
+        <source>Application:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../common/ui/about_dialog.cc" line="161"/>
-        <source>Compilation date: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../common/ui/about_dialog.cc" line="162"/>
-        <source>Compilation time: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../common/ui/about_dialog.cc" line="165"/>
-        <source>Git branch: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../common/ui/about_dialog.cc" line="166"/>
-        <source>Git commit: %1</source>
+        <source>Path: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../common/ui/about_dialog.cc" line="169"/>
-        <source>Logging directory: %1</source>
+        <source>Build Information:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/ui/about_dialog.cc" line="177"/>
+        <source>Compilation:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/ui/about_dialog.cc" line="178"/>
+        <source>Compilation date: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/ui/about_dialog.cc" line="179"/>
+        <source>Compilation time: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/ui/about_dialog.cc" line="208"/>
+        <source>Version Information:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../common/ui/about_dialog.cc" line="170"/>
+        <source>Git branch: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/ui/about_dialog.cc" line="172"/>
+        <source>Git commit: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/ui/about_dialog.cc" line="162"/>
+        <source>Logging directory: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/ui/about_dialog.cc" line="164"/>
         <source>Logging file: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../common/ui/about_dialog.cc" line="174"/>
-        <source>%1 version: %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../common/ui/about_dialog.cc" line="222"/>
-        <source>Save to file...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../common/ui/about_dialog.cc" line="230"/>
-        <source>Save File</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../common/ui/about_dialog.cc" line="232"/>
-        <source>TXT files (*.txt)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Warning</source>
         <translation type="obsolete">Advertencia</translation>
-    </message>
-    <message>
-        <location filename="../common/ui/about_dialog.cc" line="247"/>
-        <source>Could not open file for writing.</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
