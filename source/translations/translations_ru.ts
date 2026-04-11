@@ -5973,80 +5973,80 @@
         <translation>Информация о системе</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="214"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="222"/>
         <source>Computers: %1</source>
         <translation>Компьютеров: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="313"/>
         <location filename="../client/ui/hosts/hosts_tab.cc" line="321"/>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="359"/>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="452"/>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="553"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="329"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="367"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="460"/>
         <location filename="../client/ui/hosts/hosts_tab.cc" line="561"/>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="590"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="569"/>
         <location filename="../client/ui/hosts/hosts_tab.cc" line="598"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="606"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="313"/>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="554"/>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="591"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="321"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="562"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="599"/>
         <source>Failed to retrieve computer information from the local database.</source>
         <translation>Не удалось получить информацию о компьютере из локальной базы данных.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="317"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="325"/>
         <source>(copy)</source>
         <translation>(копия)</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="321"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="329"/>
         <source>Failed to add the computer to the local database.</source>
         <translation>Не удалось добавить компьютер в локальную базу данных.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="344"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="352"/>
         <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
         <translation>Вы действительно хотите удалить компьютер &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="346"/>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="437"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="354"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="445"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="348"/>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="439"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="356"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="447"/>
         <source>Yes</source>
         <translation>Да</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="349"/>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="440"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="357"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="448"/>
         <source>No</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="359"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="367"/>
         <source>Unable to remove computer</source>
         <translation>Не удалось удалить компьютер</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="435"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="443"/>
         <source>Are you sure you want to delete group &quot;%1&quot;?</source>
         <translation>Вы уверены, что хотите удалить группу &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="452"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="460"/>
         <source>Unable to remove group</source>
         <translation>Не удалось удалить группу</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="561"/>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="598"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="569"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="606"/>
         <source>The computer has an incorrect address.</source>
         <translation>Компьютер имеет неверный адрес.</translation>
     </message>
@@ -6054,51 +6054,81 @@
 <context>
     <name>client::LocalComputerDialog</name>
     <message>
-        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="43"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="54"/>
         <source>Edit Computer</source>
         <translation>Изменить компьютер</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="62"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="73"/>
         <source>Add Computer</source>
         <translation>Добавить компьютер</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="66"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="77"/>
         <source>Local</source>
         <translation>Локальные</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="111"/>
-        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="118"/>
-        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="131"/>
-        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="153"/>
-        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="162"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="123"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="130"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="141"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="150"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="161"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="176"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="198"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="207"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="111"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="123"/>
         <source>Name cannot be empty.</source>
         <translation>Имя не может быть пустым.</translation>
     </message>
-    <message>
-        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="118"/>
-        <source>Address cannot be empty.</source>
-        <translation>Адрес не может быть пустым.</translation>
+    <message numerus="yes">
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="131"/>
+        <source>Too long name. The maximum length of the name is %n characters.</source>
+        <translation>
+            <numerusform>Слишком длинное имя. Максимальная длина имени %n символ.</numerusform>
+            <numerusform>Слишком длинное имя. Максимальная длина имени %n символа.</numerusform>
+            <numerusform>Слишком длинное имя. Максимальная длина имени %n символов.</numerusform>
+        </translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="132"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="141"/>
+        <source>An invalid computer address was entered.</source>
+        <translation>Введен некорректный адрес компьютера.</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="151"/>
+        <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
+        <translation>Имя пользователя не может быть пустым и может содержать только буквы, цифры и символы &quot;_&quot;, &quot;-&quot;, &quot;.&quot; .</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="162"/>
+        <source>Too long comment. The maximum length of the comment is %n characters.</source>
+        <translation>
+            <numerusform>Слишком длинный комментарий. Максимальная длина комментария %n символ.</numerusform>
+            <numerusform>Слишком длинный комментарий. Максимальная длина комментария %n символа.</numerusform>
+            <numerusform>Слишком длинный комментарий. Максимальная длина комментария %n символов.</numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>Address cannot be empty.</source>
+        <translation type="vanished">Адрес не может быть пустым.</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="177"/>
         <source>A computer with this name already exists in the selected group.</source>
         <translation>Компьютер с таким именем уже существует в выбранной группе.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="153"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="198"/>
         <source>Unable to add computer</source>
         <translation>Не удалось добавить компьютер</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="162"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="207"/>
         <source>Unable to modify computer</source>
         <translation>Не удалось изменить компьютер</translation>
     </message>
@@ -6106,45 +6136,65 @@
 <context>
     <name>client::LocalGroupDialog</name>
     <message>
-        <location filename="../client/ui/hosts/local_group_dialog.cc" line="43"/>
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="51"/>
         <source>Edit Group</source>
         <translation>Изменить группу</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_group_dialog.cc" line="59"/>
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="67"/>
         <source>Add Group</source>
         <translation>Добавить группу</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_group_dialog.cc" line="63"/>
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="71"/>
         <source>Local</source>
         <translation>Локальные</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_group_dialog.cc" line="87"/>
-        <location filename="../client/ui/hosts/local_group_dialog.cc" line="100"/>
-        <location filename="../client/ui/hosts/local_group_dialog.cc" line="119"/>
-        <location filename="../client/ui/hosts/local_group_dialog.cc" line="128"/>
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="96"/>
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="103"/>
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="114"/>
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="129"/>
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="148"/>
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="157"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_group_dialog.cc" line="87"/>
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="96"/>
         <source>Name cannot be empty.</source>
         <translation>Имя не может быть пустым.</translation>
     </message>
+    <message numerus="yes">
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="104"/>
+        <source>Too long name. The maximum length of the name is %n characters.</source>
+        <translation>
+            <numerusform>Слишком длинное имя. Максимальная длина имени %n символ.</numerusform>
+            <numerusform>Слишком длинное имя. Максимальная длина имени %n символа.</numerusform>
+            <numerusform>Слишком длинное имя. Максимальная длина имени %n символов.</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="115"/>
+        <source>Too long comment. The maximum length of the comment is %n characters.</source>
+        <translation>
+            <numerusform>Слишком длинный комментарий. Максимальная длина комментария %n символ.</numerusform>
+            <numerusform>Слишком длинный комментарий. Максимальная длина комментария %n символа.</numerusform>
+            <numerusform>Слишком длинный комментарий. Максимальная длина комментария %n символов.</numerusform>
+        </translation>
+    </message>
     <message>
-        <location filename="../client/ui/hosts/local_group_dialog.cc" line="101"/>
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="130"/>
         <source>A group with this name already exists in the selected parent group.</source>
         <translation>Группа с таким именем уже существует в выбранной родительской группе.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_group_dialog.cc" line="119"/>
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="148"/>
         <source>Unable to add group</source>
         <translation>Не удалось добавить группу</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_group_dialog.cc" line="128"/>
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="157"/>
         <source>Unable to modify group</source>
         <translation>Не удалось изменить группу</translation>
     </message>
@@ -7268,14 +7318,42 @@
 <context>
     <name>client::Sidebar</name>
     <message>
-        <location filename="../client/ui/hosts/sidebar.cc" line="48"/>
+        <location filename="../client/ui/hosts/sidebar.cc" line="58"/>
         <source>Local</source>
         <translation>Локальные</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/sidebar.cc" line="54"/>
+        <location filename="../client/ui/hosts/sidebar.cc" line="64"/>
         <source>Remote</source>
         <translation>Удаленные</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/sidebar.cc" line="317"/>
+        <location filename="../client/ui/hosts/sidebar.cc" line="327"/>
+        <location filename="../client/ui/hosts/sidebar.cc" line="383"/>
+        <location filename="../client/ui/hosts/sidebar.cc" line="403"/>
+        <source>Warning</source>
+        <translation>Предупреждение</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/sidebar.cc" line="318"/>
+        <source>A group with this name already exists in the selected parent group.</source>
+        <translation>Группа с таким именем уже существует в выбранной родительской группе.</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/sidebar.cc" line="328"/>
+        <source>Failed to move the group.</source>
+        <translation>Не удалось переместить группу.</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/sidebar.cc" line="384"/>
+        <source>A computer with this name already exists in the selected group.</source>
+        <translation>Компьютер с таким именем уже существует в выбранной группе.</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/sidebar.cc" line="404"/>
+        <source>Failed to move the computer to the selected group.</source>
+        <translation>Не удалось переместить компьютер в выбранную группу.</translation>
     </message>
 </context>
 <context>
