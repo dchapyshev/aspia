@@ -92,6 +92,8 @@ private:
     QAction* action_chat_connect_ = nullptr;
     QAction* action_system_info_connect_ = nullptr;
 
+    QAction* action_router_users_ = nullptr;
+
     ContentWidget* current_content_ = nullptr;
     ContentWidget* previous_content_ = nullptr;
 
