@@ -18,7 +18,6 @@
 
 #include "client/ui/main_window.h"
 
-#include <QActionGroup>
 #include <QDesktopServices>
 #include <QLineEdit>
 #include <QTabBar>
@@ -30,7 +29,6 @@
 #include "base/logging.h"
 #include "base/version_constants.h"
 #include "base/peer/host_id.h"
-#include "client/ui/application.h"
 #include "client/ui/settings.h"
 #include "client/ui/settings_dialog.h"
 #include "client/ui/client_tab.h"
@@ -42,7 +40,6 @@
 #include "common/update_checker.h"
 #include "common/update_info.h"
 #include "common/ui/about_dialog.h"
-#include "common/ui/language_action.h"
 #include "common/ui/update_dialog.h"
 
 namespace client {
@@ -69,9 +66,6 @@ MainWindow::MainWindow(QWidget* parent)
     search_action_ = ui.toolbar->addWidget(search_field_);
     search_action_->setVisible(false);
 
-    createLanguageMenu(settings.locale());
-    createThemeMenu(settings.theme());
-
     restoreGeometry(settings.windowGeometry());
     restoreState(settings.windowState());
 
@@ -79,8 +73,6 @@ MainWindow::MainWindow(QWidget* parent)
     ui.action_statusbar->setChecked(settings.isStatusBarEnabled());
     ui.statusbar->setVisible(settings.isStatusBarEnabled());
 
-    connect(ui.menu_language, &QMenu::triggered, this, &MainWindow::onLanguageChanged);
-    connect(ui.menu_theme, &QMenu::triggered, this, &MainWindow::onThemeChanged);
     connect(ui.action_settings, &QAction::triggered, this, &MainWindow::onSettings);
     connect(ui.action_help, &QAction::triggered, this, &MainWindow::onHelp);
     connect(ui.action_about, &QAction::triggered, this, &MainWindow::onAbout);
@@ -186,32 +178,11 @@ void MainWindow::onUpdateCheckedFinished(const QByteArray& result)
 }
 
 //--------------------------------------------------------------------------------------------------
-void MainWindow::onLanguageChanged(QAction* action)
-{
-    QString new_locale = static_cast<common::LanguageAction*>(action)->locale();
-    client::Application* application = client::Application::instance();
-
-    LOG(INFO) << "[ACTION] Language changed:" << new_locale.toStdString();
-
-    Settings settings;
-    settings.setLocale(new_locale);
-    application->setLocale(new_locale);
-
-    ui.retranslateUi(this);
-
-    for (QAction* theme_action : ui.menu_theme->actions())
-    {
-        const QString theme_id = theme_action->data().toString();
-        if (!theme_id.isEmpty())
-            theme_action->setText(base::GuiApplication::themeName(theme_id));
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
 void MainWindow::onSettings()
 {
     LOG(INFO) << "[ACTION] Settings clicked";
     SettingsDialog(this).exec();
+    ui.retranslateUi(this);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -226,22 +197,6 @@ void MainWindow::onAbout()
 {
     LOG(INFO) << "[ACTION] About clicked";
     common::AboutDialog(tr("Aspia Client"), this).exec();
-}
-
-//--------------------------------------------------------------------------------------------------
-void MainWindow::onThemeChanged(QAction* action)
-{
-    if (!action)
-        return;
-
-    const QString theme_id = action->data().toString();
-    if (theme_id.isEmpty())
-        return;
-
-    base::GuiApplication::instance()->setTheme(theme_id);
-
-    Settings settings;
-    settings.setTheme(theme_id);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -344,50 +299,6 @@ void MainWindow::onConnect(const Config& config)
     session_window->setAttribute(Qt::WA_DeleteOnClose);
     if (!session_window->connectToHost(config))
         session_window->close();
-}
-
-//--------------------------------------------------------------------------------------------------
-void MainWindow::createLanguageMenu(const QString& current_locale)
-{
-    Application::LocaleList locale_list = base::GuiApplication::instance()->localeList();
-    if (locale_list.isEmpty())
-        return;
-
-    QActionGroup* language_group = new QActionGroup(this);
-
-    for (const auto& locale : std::as_const(locale_list))
-    {
-        common::LanguageAction* action_language =
-            new common::LanguageAction(locale.first, locale.second, this);
-
-        action_language->setActionGroup(language_group);
-        action_language->setCheckable(true);
-
-        if (current_locale == locale.first)
-            action_language->setChecked(true);
-
-        ui.menu_language->addAction(action_language);
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-void MainWindow::createThemeMenu(const QString& current_theme)
-{
-    base::GuiApplication* app = base::GuiApplication::instance();
-    const QStringList available_themes = app->availableThemes();
-    QActionGroup* theme_group = new QActionGroup(this);
-
-    theme_group->setExclusive(true);
-
-    for (const QString& theme_id : available_themes)
-    {
-        QAction* action = new QAction(base::GuiApplication::themeName(theme_id), this);
-        action->setCheckable(true);
-        action->setData(theme_id);
-        action->setActionGroup(theme_group);
-        action->setChecked(theme_id == current_theme);
-        ui.menu_theme->addAction(action);
-    }
 }
 
 //--------------------------------------------------------------------------------------------------

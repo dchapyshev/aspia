@@ -50,8 +50,6 @@ protected:
 
 private slots:
     void onUpdateCheckedFinished(const QByteArray& result);
-    void onLanguageChanged(QAction* action);
-    void onThemeChanged(QAction* action);
     void onAfterThemeChanged();
     void onSettings();
     void onHelp();
@@ -62,8 +60,6 @@ private slots:
     void onConnect(const client::Config& config);
 
 private:
-    void createLanguageMenu(const QString& current_locale);
-    void createThemeMenu(const QString& current_theme);
     void addTab(ClientTab* tab, const QString& title, const QIcon& icon);
     void hideCloseButtonForTab(int index);
     ClientTab* tabAt(int index);

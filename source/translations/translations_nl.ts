@@ -2238,19 +2238,18 @@
         <translation>Wachtwoord</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="101"/>
         <location filename="../host/ui/main_window.ui" line="277"/>
         <source>Theme</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="127"/>
-        <location filename="../client/ui/main_window.ui" line="185"/>
+        <location filename="../client/ui/main_window.ui" line="106"/>
+        <location filename="../client/ui/main_window.ui" line="164"/>
         <source>Tool Bar</source>
         <translation type="unfinished">Werkbalk</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="150"/>
+        <location filename="../client/ui/main_window.ui" line="129"/>
         <location filename="../host/ui/main_window.ui" line="298"/>
         <source>F1</source>
         <translation type="unfinished">F1</translation>
@@ -2303,7 +2302,6 @@
         <translation type="unfinished">Weergave</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="92"/>
         <location filename="../host/ui/main_window.ui" line="272"/>
         <source>Language</source>
         <translation>Taal</translation>
@@ -2314,13 +2312,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="177"/>
+        <location filename="../client/ui/main_window.ui" line="156"/>
         <location filename="../host/ui/main_window.ui" line="290"/>
         <source>Exit</source>
         <translation>Exit</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="147"/>
+        <location filename="../client/ui/main_window.ui" line="126"/>
         <location filename="../host/ui/main_window.ui" line="295"/>
         <source>Online Help...</source>
         <translation>Online Hulp...</translation>
@@ -2341,23 +2339,23 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="116"/>
+        <location filename="../client/ui/main_window.ui" line="95"/>
         <source>Session Type</source>
         <translation type="unfinished">Sessie Type</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="193"/>
+        <location filename="../client/ui/main_window.ui" line="172"/>
         <source>Status Bar</source>
         <translation type="unfinished">Status Balk</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="159"/>
+        <location filename="../client/ui/main_window.ui" line="138"/>
         <location filename="../host/ui/main_window.ui" line="303"/>
         <source>About</source>
         <translation>Over</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="168"/>
+        <location filename="../client/ui/main_window.ui" line="147"/>
         <location filename="../host/ui/main_window.ui" line="308"/>
         <source>Settings...</source>
         <translation>Instellingen...</translation>
@@ -2975,7 +2973,7 @@
         <translation type="unfinished">Instellingen</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="24"/>
+        <location filename="../client/ui/settings_dialog.ui" line="93"/>
         <source>Router</source>
         <translation type="unfinished">Router</translation>
     </message>
@@ -2996,128 +2994,142 @@
         <translation type="obsolete">Wachtwoord:</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="91"/>
+        <location filename="../client/ui/settings_dialog.ui" line="160"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="108"/>
+        <location filename="../client/ui/settings_dialog.ui" line="177"/>
         <source>Desktop</source>
         <translation type="unfinished">Bureablad</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="120"/>
+        <location filename="../client/ui/settings_dialog.ui" line="189"/>
         <source>Features</source>
         <translation type="unfinished">Features</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="126"/>
+        <location filename="../client/ui/settings_dialog.ui" line="195"/>
         <source>Enable audio</source>
         <translation type="unfinished">Geluid inschakelen</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="133"/>
+        <location filename="../client/ui/settings_dialog.ui" line="202"/>
         <source>Enable clipboard</source>
         <translation type="unfinished">Klembord inschakelen</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="140"/>
+        <location filename="../client/ui/settings_dialog.ui" line="209"/>
         <source>Show shape of remote cursor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="147"/>
+        <location filename="../client/ui/settings_dialog.ui" line="216"/>
         <source>Show position of remote cursor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="163"/>
+        <location filename="../client/ui/settings_dialog.ui" line="232"/>
         <source>Appearance</source>
         <translation type="unfinished">Uiterlijk</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="169"/>
+        <location filename="../client/ui/settings_dialog.ui" line="238"/>
         <source>Disable desktop effects</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="176"/>
+        <location filename="../client/ui/settings_dialog.ui" line="245"/>
         <source>Disable desktop wallpaper</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="198"/>
+        <location filename="../client/ui/settings_dialog.ui" line="267"/>
         <source>Lock computer at disconnect</source>
         <translation type="unfinished">Computer vergrendelen bij verbroken verbinding</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="205"/>
+        <location filename="../client/ui/settings_dialog.ui" line="274"/>
         <source>Block remote input</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="229"/>
+        <location filename="../client/ui/settings_dialog.ui" line="298"/>
         <source>Update</source>
         <translation type="unfinished">Update</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="235"/>
+        <location filename="../client/ui/settings_dialog.ui" line="304"/>
         <source>Check for updates on startup</source>
         <translation type="unfinished">Controleer op update bij opstarten</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="242"/>
+        <location filename="../client/ui/settings_dialog.ui" line="311"/>
         <source>Use custom update server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="251"/>
+        <location filename="../client/ui/settings_dialog.ui" line="320"/>
         <source>Server:</source>
         <translation type="unfinished">Server:</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="192"/>
-        <location filename="../client/ui/settings_dialog.ui" line="301"/>
+        <location filename="../client/ui/settings_dialog.ui" line="261"/>
         <source>Other</source>
         <translation type="unfinished">Overige</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="40"/>
+        <location filename="../client/ui/settings_dialog.ui" line="24"/>
+        <source>General</source>
+        <translation type="unfinished">Basis</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_dialog.ui" line="32"/>
+        <source>Language:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_dialog.ui" line="46"/>
+        <source>Theme:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_dialog.ui" line="109"/>
         <source>Address</source>
         <translation type="unfinished">Adres</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="45"/>
+        <location filename="../client/ui/settings_dialog.ui" line="114"/>
         <source>User Name</source>
         <translation type="unfinished">Gebruikers Naam</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="55"/>
+        <location filename="../client/ui/settings_dialog.ui" line="124"/>
         <source>Add...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="62"/>
+        <location filename="../client/ui/settings_dialog.ui" line="131"/>
         <source>Edit...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="69"/>
+        <location filename="../client/ui/settings_dialog.ui" line="138"/>
         <source>Remove</source>
         <translation type="unfinished">Verwijderen</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="291"/>
+        <location filename="../client/ui/settings_dialog.ui" line="360"/>
         <source>Check for updates</source>
         <translation type="unfinished">Controleer op updates</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="309"/>
+        <location filename="../client/ui/settings_dialog.ui" line="60"/>
         <source>Display name when connected:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="319"/>
+        <location filename="../client/ui/settings_dialog.ui" line="70"/>
         <source>Enter a name or leave the field empty</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5399,7 +5411,12 @@
         <translation type="unfinished">Systeem Informatie</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="222"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="110"/>
+        <source>Users</source>
+        <translation type="unfinished">Gebruikers</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="225"/>
         <source>Computers: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5408,24 +5425,24 @@
         <translation type="obsolete">Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="321"/>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="552"/>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="591"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="324"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="555"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="609"/>
         <source>Failed to retrieve computer information from the local database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="325"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="328"/>
         <source>(copy)</source>
         <translation type="unfinished">(kopieer)</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="329"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="332"/>
         <source>Failed to add the computer to the local database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="352"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="355"/>
         <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
         <translation type="unfinished">Weet U zeker dat U de computer &quot;%1&quot; wilt verwijderen?</translation>
     </message>
@@ -5442,23 +5459,23 @@
         <translation type="obsolete">Nee</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="362"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="365"/>
         <source>Unable to remove computer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="438"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="441"/>
         <source>Are you sure you want to delete group &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="450"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="453"/>
         <source>Unable to remove group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="559"/>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="598"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="562"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="616"/>
         <source>The computer has an incorrect address.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5592,12 +5609,12 @@
 <context>
     <name>client::MainWindow</name>
     <message>
-        <location filename="../client/ui/main_window.cc" line="66"/>
+        <location filename="../client/ui/main_window.cc" line="63"/>
         <source>Search...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.cc" line="124"/>
+        <location filename="../client/ui/main_window.cc" line="116"/>
         <source>Hosts</source>
         <translation type="unfinished">Hosts</translation>
     </message>
@@ -5606,12 +5623,12 @@
         <translation type="obsolete">Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.cc" line="310"/>
+        <location filename="../client/ui/main_window.cc" line="265"/>
         <source>Connection by ID is specified in the properties of the computer, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation type="unfinished">Verbinding maken met ID is ingesteld in de eigenschappen van de computer,  maar de router is niet geconfigureerd. Controleer de parameters van de router in de eigenschappen van het adres boek.</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.cc" line="228"/>
+        <location filename="../client/ui/main_window.cc" line="199"/>
         <source>Aspia Client</source>
         <translation type="unfinished">Aspia Client</translation>
     </message>
@@ -6421,7 +6438,7 @@
         <translation type="obsolete">Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.cc" line="256"/>
+        <location filename="../client/ui/settings_dialog.cc" line="286"/>
         <source>Are you sure you want to delete router &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6429,13 +6446,8 @@
 <context>
     <name>client::Sidebar</name>
     <message>
-        <location filename="../client/ui/hosts/sidebar.cc" line="58"/>
+        <location filename="../client/ui/hosts/sidebar.cc" line="60"/>
         <source>Local</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/hosts/sidebar.cc" line="64"/>
-        <source>Remote</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -6443,22 +6455,22 @@
         <translation type="obsolete">Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/sidebar.cc" line="318"/>
+        <location filename="../client/ui/hosts/sidebar.cc" line="354"/>
         <source>A group with this name already exists in the selected parent group.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/sidebar.cc" line="328"/>
+        <location filename="../client/ui/hosts/sidebar.cc" line="364"/>
         <source>Failed to move the group.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/sidebar.cc" line="384"/>
+        <location filename="../client/ui/hosts/sidebar.cc" line="420"/>
         <source>A computer with this name already exists in the selected group.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/sidebar.cc" line="404"/>
+        <location filename="../client/ui/hosts/sidebar.cc" line="440"/>
         <source>Failed to move the computer to the selected group.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8766,107 +8778,107 @@
 <context>
     <name>common::MsgBox</name>
     <message>
-        <location filename="../common/ui/msg_box.cc" line="54"/>
+        <location filename="../common/ui/msg_box.cc" line="51"/>
         <source>OK</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/msg_box.cc" line="55"/>
+        <location filename="../common/ui/msg_box.cc" line="52"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/msg_box.cc" line="56"/>
+        <location filename="../common/ui/msg_box.cc" line="53"/>
         <source>Yes</source>
         <translation type="unfinished">Ya</translation>
     </message>
     <message>
-        <location filename="../common/ui/msg_box.cc" line="57"/>
+        <location filename="../common/ui/msg_box.cc" line="54"/>
         <source>No</source>
         <translation type="unfinished">Nee</translation>
     </message>
     <message>
-        <location filename="../common/ui/msg_box.cc" line="58"/>
+        <location filename="../common/ui/msg_box.cc" line="55"/>
         <source>Apply</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/msg_box.cc" line="59"/>
+        <location filename="../common/ui/msg_box.cc" line="56"/>
         <source>Close</source>
         <translation type="unfinished">Sluiten</translation>
     </message>
     <message>
-        <location filename="../common/ui/msg_box.cc" line="60"/>
+        <location filename="../common/ui/msg_box.cc" line="57"/>
         <source>Save</source>
         <translation type="unfinished">Opslaan</translation>
     </message>
     <message>
-        <location filename="../common/ui/msg_box.cc" line="61"/>
+        <location filename="../common/ui/msg_box.cc" line="58"/>
         <source>Discard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/msg_box.cc" line="62"/>
+        <location filename="../common/ui/msg_box.cc" line="59"/>
         <source>Reset</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/msg_box.cc" line="63"/>
+        <location filename="../common/ui/msg_box.cc" line="60"/>
         <source>Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/msg_box.cc" line="64"/>
+        <location filename="../common/ui/msg_box.cc" line="61"/>
         <source>Abort</source>
         <translation type="unfinished">Afbreken</translation>
     </message>
     <message>
-        <location filename="../common/ui/msg_box.cc" line="65"/>
+        <location filename="../common/ui/msg_box.cc" line="62"/>
         <source>Retry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/msg_box.cc" line="66"/>
+        <location filename="../common/ui/msg_box.cc" line="63"/>
         <source>Ignore</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/msg_box.cc" line="67"/>
+        <location filename="../common/ui/msg_box.cc" line="64"/>
         <source>Restore Defaults</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/msg_box.cc" line="68"/>
+        <location filename="../common/ui/msg_box.cc" line="65"/>
         <source>Save All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/msg_box.cc" line="69"/>
+        <location filename="../common/ui/msg_box.cc" line="66"/>
         <source>Open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/msg_box.cc" line="70"/>
+        <location filename="../common/ui/msg_box.cc" line="67"/>
         <source>Yes to All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/msg_box.cc" line="71"/>
+        <location filename="../common/ui/msg_box.cc" line="68"/>
         <source>No to All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/msg_box.cc" line="88"/>
+        <location filename="../common/ui/msg_box.cc" line="85"/>
         <source>Warning</source>
         <translation type="unfinished">Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../common/ui/msg_box.cc" line="96"/>
+        <location filename="../common/ui/msg_box.cc" line="93"/>
         <source>Information</source>
         <translation type="unfinished">Informatie</translation>
     </message>
     <message>
-        <location filename="../common/ui/msg_box.cc" line="104"/>
+        <location filename="../common/ui/msg_box.cc" line="101"/>
         <source>Confirmation</source>
         <translation type="unfinished">Bevestiging</translation>
     </message>

@@ -22,11 +22,13 @@
 #include <QPushButton>
 #include <QTimer>
 
+#include "base/gui_application.h"
 #include "base/logging.h"
 #include "common/ui/msg_box.h"
 #include "base/net/address.h"
 #include "base/peer/user.h"
 #include "build/build_config.h"
+#include "client/ui/application.h"
 #include "client/ui/router_dialog.h"
 #include "client/ui/settings.h"
 #include "common/ui/update_dialog.h"
@@ -67,7 +69,25 @@ SettingsDialog::SettingsDialog(QWidget* parent)
 
     updateRouterButtons();
 
-    // Other tab.
+    // General tab.
+    QString current_locale = settings.locale();
+    Application::LocaleList locale_list = base::GuiApplication::instance()->localeList();
+    for (const auto& locale : std::as_const(locale_list))
+    {
+        ui.combo_language->addItem(locale.second, locale.first);
+        if (locale.first == current_locale)
+            ui.combo_language->setCurrentIndex(ui.combo_language->count() - 1);
+    }
+
+    QString current_theme = settings.theme();
+    QStringList available_themes = base::GuiApplication::instance()->availableThemes();
+    for (const QString& theme_id : std::as_const(available_themes))
+    {
+        ui.combo_theme->addItem(base::GuiApplication::themeName(theme_id), theme_id);
+        if (theme_id == current_theme)
+            ui.combo_theme->setCurrentIndex(ui.combo_theme->count() - 1);
+    }
+
     ui.edit_display_name->setText(settings.displayName());
 
     // Desktop tab.
@@ -163,6 +183,17 @@ void SettingsDialog::onButtonBoxClicked(QAbstractButton* button)
 
         Settings settings;
         settings.setRouterConfigs(routers);
+
+        // Save language.
+        QString new_locale = ui.combo_language->currentData().toString();
+        settings.setLocale(new_locale);
+        client::Application::instance()->setLocale(new_locale);
+
+        // Save theme.
+        QString new_theme = ui.combo_theme->currentData().toString();
+        settings.setTheme(new_theme);
+        base::GuiApplication::instance()->setTheme(new_theme);
+
         settings.setDisplayName(ui.edit_display_name->text());
 
         proto::control::Config desktop_config;
@@ -220,8 +251,7 @@ void SettingsDialog::onEditRouter()
     if (!item)
         return;
 
-    base::Address addr =
-        base::Address::fromString(item->text(0), DEFAULT_ROUTER_TCP_PORT);
+    base::Address addr = base::Address::fromString(item->text(0), DEFAULT_ROUTER_TCP_PORT);
 
     RouterConfig config;
     config.address = addr.host();
