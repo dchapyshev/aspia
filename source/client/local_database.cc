@@ -57,17 +57,11 @@ ComputerData readComputer(const QSqlQuery& query)
     computer.id = query.value(0).toLongLong();
     computer.group_id = query.value(1).toLongLong();
     computer.name = query.value(2).toString();
+    computer.comment = query.value(3).toString();
+    computer.address = query.value(4).toString();
+    computer.username = query.value(5).toString();
 
     QByteArray out;
-
-    cryptor.decrypt(query.value(3).toByteArray(), &out);
-    computer.comment = QString::fromUtf8(out);
-
-    cryptor.decrypt(query.value(4).toByteArray(), &out);
-    computer.address = QString::fromUtf8(out);
-
-    cryptor.decrypt(query.value(5).toByteArray(), &out);
-    computer.username = QString::fromUtf8(out);
 
     cryptor.decrypt(query.value(6).toByteArray(), &out);
     computer.password = QString::fromUtf8(out);
@@ -78,17 +72,11 @@ ComputerData readComputer(const QSqlQuery& query)
 //--------------------------------------------------------------------------------------------------
 GroupData readGroup(const QSqlQuery& query)
 {
-    base::DataCryptor& cryptor = base::DataCryptor::instance();
-
     GroupData group;
     group.id = query.value(0).toLongLong();
     group.parent_id = query.value(1).toLongLong();
     group.name = query.value(2).toString();
-
-    QByteArray out;
-    cryptor.decrypt(query.value(3).toByteArray(), &out);
-    group.comment = QString::fromUtf8(out);
-
+    group.comment = query.value(3).toString();
     group.expanded = query.value(4).toBool();
     return group;
 }
@@ -102,7 +90,7 @@ bool createTables(QSqlDatabase& db)
                     "\"id\" INTEGER UNIQUE,"
                     "\"parent_id\" INTEGER NOT NULL DEFAULT 0,"
                     "\"name\" TEXT NOT NULL DEFAULT '',"
-                    "\"comment\" BLOB NOT NULL DEFAULT X'',"
+                    "\"comment\" TEXT NOT NULL DEFAULT '',"
                     "\"expanded\" INTEGER NOT NULL DEFAULT 0,"
                     "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
     {
@@ -114,9 +102,9 @@ bool createTables(QSqlDatabase& db)
                     "\"id\" INTEGER UNIQUE,"
                     "\"group_id\" INTEGER NOT NULL DEFAULT 0,"
                     "\"name\" TEXT NOT NULL DEFAULT '',"
-                    "\"comment\" BLOB NOT NULL DEFAULT X'',"
-                    "\"address\" BLOB NOT NULL DEFAULT X'',"
-                    "\"username\" BLOB NOT NULL DEFAULT X'',"
+                    "\"comment\" TEXT NOT NULL DEFAULT '',"
+                    "\"address\" TEXT NOT NULL DEFAULT '',"
+                    "\"username\" TEXT NOT NULL DEFAULT '',"
                     "\"password\" BLOB NOT NULL DEFAULT X'',"
                     "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
     {
@@ -208,15 +196,9 @@ bool LocalDatabase::addComputer(ComputerData& computer)
                   "VALUES (NULL, ?, ?, ?, ?, ?, ?)");
     query.addBindValue(computer.group_id);
     query.addBindValue(computer.name);
-
-    cryptor.encrypt(computer.comment.toUtf8(), &out);
-    query.addBindValue(out);
-
-    cryptor.encrypt(computer.address.toUtf8(), &out);
-    query.addBindValue(out);
-
-    cryptor.encrypt(computer.username.toUtf8(), &out);
-    query.addBindValue(out);
+    query.addBindValue(computer.comment);
+    query.addBindValue(computer.address);
+    query.addBindValue(computer.username);
 
     cryptor.encrypt(computer.password.toUtf8(), &out);
     query.addBindValue(out);
@@ -248,15 +230,9 @@ bool LocalDatabase::modifyComputer(const ComputerData& computer)
                   "WHERE id=?");
     query.addBindValue(computer.group_id);
     query.addBindValue(computer.name);
-
-    cryptor.encrypt(computer.comment.toUtf8(), &out);
-    query.addBindValue(out);
-
-    cryptor.encrypt(computer.address.toUtf8(), &out);
-    query.addBindValue(out);
-
-    cryptor.encrypt(computer.username.toUtf8(), &out);
-    query.addBindValue(out);
+    query.addBindValue(computer.comment);
+    query.addBindValue(computer.address);
+    query.addBindValue(computer.username);
 
     cryptor.encrypt(computer.password.toUtf8(), &out);
     query.addBindValue(out);
@@ -329,27 +305,14 @@ QList<ComputerData> LocalDatabase::searchComputers(const QString& query_text) co
         return {};
     }
 
-    // For encrypted databases, we can only search by name (which is stored as plaintext).
-    // For unencrypted databases, we can search by name, address, and comment.
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
+    query.prepare("SELECT id, group_id, name, comment, address, username, password "
+                  "FROM computers WHERE name LIKE ? OR address LIKE ? OR comment LIKE ?");
 
-    if (base::DataCryptor::instance().hasKey())
-    {
-        query.prepare("SELECT id, group_id, name, comment, address, username, password "
-                      "FROM computers WHERE name LIKE ?");
-
-        query.addBindValue(QString("%%1%").arg(query_text));
-    }
-    else
-    {
-        query.prepare("SELECT id, group_id, name, comment, address, username, password "
-                      "FROM computers WHERE name LIKE ? OR address LIKE ? OR comment LIKE ?");
-
-        QString pattern = QString("%%1%").arg(query_text);
-        query.addBindValue(pattern);
-        query.addBindValue(pattern);
-        query.addBindValue(pattern);
-    }
+    QString pattern = QString("%%1%").arg(query_text);
+    query.addBindValue(pattern);
+    query.addBindValue(pattern);
+    query.addBindValue(pattern);
 
     if (!query.exec())
     {
@@ -422,18 +385,12 @@ bool LocalDatabase::addGroup(GroupData& group)
         return false;
     }
 
-    base::DataCryptor& cryptor = base::DataCryptor::instance();
-    QByteArray out;
-
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
     query.prepare("INSERT INTO groups (id, parent_id, name, comment, expanded) "
                   "VALUES (NULL, ?, ?, ?, ?)");
     query.addBindValue(group.parent_id);
     query.addBindValue(group.name);
-
-    cryptor.encrypt(group.comment.toUtf8(), &out);
-    query.addBindValue(out);
-
+    query.addBindValue(group.comment);
     query.addBindValue(group.expanded ? 1 : 0);
 
     if (!query.exec())
@@ -455,17 +412,11 @@ bool LocalDatabase::modifyGroup(const GroupData& group)
         return false;
     }
 
-    base::DataCryptor& cryptor = base::DataCryptor::instance();
-    QByteArray out;
-
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
     query.prepare("UPDATE groups SET parent_id=?, name=?, comment=?, expanded=? WHERE id=?");
     query.addBindValue(group.parent_id);
     query.addBindValue(group.name);
-
-    cryptor.encrypt(group.comment.toUtf8(), &out);
-    query.addBindValue(out);
-
+    query.addBindValue(group.comment);
     query.addBindValue(group.expanded ? 1 : 0);
     query.addBindValue(group.id);
 
