@@ -47,6 +47,7 @@ public:
     void onDeactivated(QStatusBar* statusbar) override;
     bool hasSearchField() const override;
     void onSearchTextChanged(const QString& text) override;
+    void reloadRouters();
 
 signals:
     void sig_connect(const client::Config& config);

@@ -190,8 +190,17 @@ void MainWindow::onUpdateCheckedFinished(const QByteArray& result)
 void MainWindow::onSettings()
 {
     LOG(INFO) << "[ACTION] Settings clicked";
-    SettingsDialog(this).exec();
-    ui.retranslateUi(this);
+    if (SettingsDialog(this).exec() == QDialog::Accepted)
+    {
+        ui.retranslateUi(this);
+
+        for (int i = 0; i < ui.tabs->count(); ++i)
+        {
+            HostsTab* hosts = dynamic_cast<HostsTab*>(ui.tabs->widget(i));
+            if (hosts)
+                hosts->reloadRouters();
+        }
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

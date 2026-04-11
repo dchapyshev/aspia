@@ -238,6 +238,12 @@ bool HostsTab::hasSearchField() const
 }
 
 //--------------------------------------------------------------------------------------------------
+void HostsTab::reloadRouters()
+{
+    ui.sidebar->reloadRouters();
+}
+
+//--------------------------------------------------------------------------------------------------
 void HostsTab::onSearchTextChanged(const QString& text)
 {
     if (text.isEmpty())
