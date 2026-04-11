@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/ui/settings.h"
+#include "client/settings.h"
 
 #include "base/crypto/data_cryptor.h"
 #include "base/logging.h"
@@ -197,16 +197,8 @@ RouterConfigList Settings::routerConfigs()
         RouterConfig config;
         config.name = settings_.value(kRouterNameParam).toString();
         config.port = static_cast<quint16>(settings_.value(kRouterPortParam, 0).toUInt());
-
-        if (cryptor.decrypt(settings_.value(kRouterAddressParam).toByteArray(), &out))
-            config.address = QString::fromUtf8(out);
-        else
-            LOG(ERROR) << "Failed to decrypt router address";
-
-        if (cryptor.decrypt(settings_.value(kRouterUsernameParam).toByteArray(), &out))
-            config.username = QString::fromUtf8(out);
-        else
-            LOG(ERROR) << "Failed to decrypt router username";
+        config.address = settings_.value(kRouterAddressParam).toString();
+        config.username = settings_.value(kRouterUsernameParam).toString();
 
         if (cryptor.decrypt(settings_.value(kRouterPasswordParam).toByteArray(), &out))
             config.password = QString::fromUtf8(out);
@@ -234,16 +226,8 @@ void Settings::setRouterConfigs(const RouterConfigList& configs)
 
         settings_.setValue(kRouterNameParam, config.name);
         settings_.setValue(kRouterPortParam, config.port);
-
-        if (cryptor.encrypt(config.address.toUtf8(), &out))
-            settings_.setValue(kRouterAddressParam, out);
-        else
-            LOG(ERROR) << "Failed to encrypt router address";
-
-        if (cryptor.encrypt(config.username.toUtf8(), &out))
-            settings_.setValue(kRouterUsernameParam, out);
-        else
-            LOG(ERROR) << "Failed to encrypt router username";
+        settings_.setValue(kRouterAddressParam, config.address);
+        settings_.setValue(kRouterUsernameParam, config.username);
 
         if (cryptor.encrypt(config.password.toUtf8(), &out))
             settings_.setValue(kRouterPasswordParam, out);

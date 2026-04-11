@@ -48,11 +48,12 @@ list(APPEND SOURCE_CLIENT_CORE
     input_event_filter.h
     router.cc
     router.h
-
     router_manager.cc
     router_manager.h
     session_state.cc
-    session_state.h)
+    session_state.h
+    settings.cc
+    settings.h)
 
 list(APPEND SOURCE_CLIENT_CORE_ONLINE_CHECKER
     online_checker/online_checker.cc
@@ -75,8 +76,6 @@ list(APPEND SOURCE_CLIENT_CORE_UI
     ui/main_window.ui
     ui/session_tab.cc
     ui/session_tab.h
-    ui/settings.cc
-    ui/settings.h
     ui/router_dialog.cc
     ui/router_dialog.h
     ui/router_dialog.ui

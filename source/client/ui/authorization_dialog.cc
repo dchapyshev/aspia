@@ -20,7 +20,7 @@
 
 #include "common/ui/msg_box.h"
 #include "base/logging.h"
-#include "client/ui/settings.h"
+#include "client/settings.h"
 #include <QTimer>
 
 namespace client {

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_UI_SETTINGS_H
-#define CLIENT_UI_SETTINGS_H
+#ifndef CLIENT_SETTINGS_H
+#define CLIENT_SETTINGS_H
 
 #include <QSettings>
 
@@ -88,4 +88,4 @@ private:
 
 } // namespace client
 
-#endif // CLIENT_UI_SETTINGS_H
+#endif // CLIENT_SETTINGS_H

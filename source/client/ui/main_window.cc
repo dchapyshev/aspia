@@ -29,7 +29,7 @@
 #include "base/logging.h"
 #include "base/version_constants.h"
 #include "base/peer/host_id.h"
-#include "client/ui/settings.h"
+#include "client/settings.h"
 #include "client/ui/settings_dialog.h"
 #include "client/ui/client_tab.h"
 #include "client/ui/chat/chat_session_window.h"

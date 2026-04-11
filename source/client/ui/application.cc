@@ -21,7 +21,7 @@
 #include "base/logging.h"
 #include "build/build_config.h"
 #include "build/version.h"
-#include "client/ui/settings.h"
+#include "client/settings.h"
 
 #include <QIcon>
 

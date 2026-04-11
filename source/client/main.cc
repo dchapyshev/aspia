@@ -26,7 +26,7 @@
 #include "build/build_config.h"
 #include "build/version.h"
 #include "client/config_factory.h"
-#include "client/ui/settings.h"
+#include "client/settings.h"
 #include "common/ui/msg_box.h"
 #include "client/ui/application.h"
 #include "client/ui/main_window.h"

@@ -27,7 +27,7 @@
 #include "base/net/address.h"
 #include "build/build_config.h"
 #include "client/local_database.h"
-#include "client/ui/settings.h"
+#include "client/settings.h"
 #include "client/ui/hosts/content_widget.h"
 #include "client/ui/hosts/local_computer_dialog.h"
 #include "client/ui/hosts/sidebar.h"

@@ -28,9 +28,9 @@
 #include "base/net/address.h"
 #include "base/peer/user.h"
 #include "build/build_config.h"
+#include "client/settings.h"
 #include "client/ui/application.h"
 #include "client/ui/router_dialog.h"
-#include "client/ui/settings.h"
 #include "common/ui/update_dialog.h"
 
 namespace client {

@@ -33,7 +33,7 @@
 #include "client/local_data.h"
 #include "client/local_database.h"
 #include "client/ui/hosts/local_group_widget.h"
-#include "client/ui/settings.h"
+#include "client/settings.h"
 #include "common/ui/msg_box.h"
 
 namespace client {
