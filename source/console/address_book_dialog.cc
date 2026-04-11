@@ -22,13 +22,13 @@
 #include <QMessageBox>
 #include <QUuid>
 
-#include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/crypto/password_hash.h"
 #include "base/crypto/random.h"
 #include "base/net/address.h"
 #include "base/peer/user.h"
 #include "build/build_config.h"
+#include "common/ui/message_box.h"
 #include "common/ui/session_type.h"
 #include "console/computer_factory.h"
 #include "console/computer_group_dialog_desktop.h"
@@ -508,12 +508,12 @@ bool AddressBookDialog::saveChanges()
 
                     QString question = tr("Do you want to enter a different password?");
 
-                    QMessageBox message_box(QMessageBox::Warning,
+                    common::MessageBox message_box(QMessageBox::Warning,
                                             tr("Warning"),
                                             QString("<b>%1</b><br/>%2<br/>%3").arg(unsafe, safe, question),
                                             QMessageBox::Yes | QMessageBox::No,
                                             this);
-                    base::GuiApplication::translateMessageBox(&message_box);
+
 
                     if (message_box.exec() == QMessageBox::Yes)
                     {

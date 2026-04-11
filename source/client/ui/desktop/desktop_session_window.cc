@@ -35,6 +35,7 @@
 
 #include "base/logging.h"
 #include "base/desktop/frame.h"
+#include "common/ui/message_box.h"
 #include "base/desktop/mouse_cursor.h"
 #include "client/client_desktop.h"
 #include "client/ui/chat/chat_session_window.h"
@@ -1013,7 +1014,7 @@ void DesktopSessionWindow::onTakeScreenshot()
     if (!image.save(file_path, format))
     {
         LOG(ERROR) << "Unable to save image";
-        QMessageBox::warning(this, tr("Warning"), tr("Could not save image"), QMessageBox::Ok);
+        common::MessageBox::warning(this, tr("Could not save image"));
     }
     else
     {

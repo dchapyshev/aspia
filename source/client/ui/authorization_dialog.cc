@@ -19,10 +19,9 @@
 #include "client/ui/authorization_dialog.h"
 
 #include "base/gui_application.h"
+#include "common/ui/message_box.h"
 #include "base/logging.h"
 #include "client/ui/settings.h"
-
-#include <QMessageBox>
 #include <QTimer>
 
 namespace client {
@@ -165,10 +164,7 @@ void AuthorizationDialog::onButtonBoxClicked(QAbstractButton* button)
             if (ui.edit_username->text().isEmpty())
             {
                 LOG(ERROR) << "Empty user name";
-                QMessageBox::warning(this,
-                                     tr("Warning"),
-                                     tr("Username cannot be empty."),
-                                     QMessageBox::Ok);
+                common::MessageBox::warning(this, tr("Username cannot be empty."));
                 return;
             }
         }
@@ -176,10 +172,7 @@ void AuthorizationDialog::onButtonBoxClicked(QAbstractButton* button)
         if (ui.edit_password->text().isEmpty())
         {
             LOG(ERROR) << "Empty password";
-            QMessageBox::warning(this,
-                                 tr("Warning"),
-                                 tr("Password cannot be empty."),
-                                 QMessageBox::Ok);
+            common::MessageBox::warning(this, tr("Password cannot be empty."));
             return;
         }
 

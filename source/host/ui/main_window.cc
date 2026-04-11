@@ -29,6 +29,7 @@
 #include <QUrl>
 
 #include "base/gui_application.h"
+#include "common/ui/message_box.h"
 #include "base/logging.h"
 #include "base/net/address.h"
 #include "base/peer/host_id.h"
@@ -703,16 +704,10 @@ void MainWindow::onExit()
 
     LOG(INFO) << "[ACTION] Exit";
 
-    QMessageBox message_box(QMessageBox::Question,
-        tr("Confirmation"),
-        tr("If you exit from Aspia, it will not be possible to connect to this computer until "
-           "you turn on the computer or Aspia again manually. Do you really want to exit the "
-           "application?"),
-        QMessageBox::Yes | QMessageBox::No,
-        this);
-    base::GuiApplication::translateMessageBox(&message_box);
-
-    if (message_box.exec() == QMessageBox::Yes)
+    if (common::MessageBox::question(this,
+            tr("If you exit from Aspia, it will not be possible to connect to this computer until "
+               "you turn on the computer or Aspia again manually. Do you really want to exit the "
+               "application?")) == QMessageBox::Yes)
     {
         LOG(INFO) << "[ACTION] User confirmed exit";
         if (!notifier_)

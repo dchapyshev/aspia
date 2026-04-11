@@ -19,11 +19,11 @@
 #include "host/ui/check_password_dialog.h"
 
 #include <QAbstractButton>
-#include <QMessageBox>
 #include <QPushButton>
 #include <QTimer>
 
 #include "base/gui_application.h"
+#include "common/ui/message_box.h"
 #include "base/logging.h"
 #include "host/system_settings.h"
 
@@ -67,10 +67,7 @@ void CheckPasswordDialog::onButtonBoxClicked(QAbstractButton* button)
         {
             LOG(INFO) << "Invalid password entered";
 
-            QMessageBox::warning(this,
-                                 tr("Warning"),
-                                 tr("You entered an incorrect password."),
-                                 QMessageBox::Ok);
+            common::MessageBox::warning(this, tr("You entered an incorrect password."));
             ui.edit_pass->selectAll();
             ui.edit_pass->setFocus();
             return;

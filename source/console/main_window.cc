@@ -26,7 +26,6 @@
 #include <QStyle>
 #include <QSystemTrayIcon>
 
-#include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/version_constants.h"
 #include "client/ui/chat/chat_session_window.h"
@@ -36,6 +35,7 @@
 #include "client/ui/router_manager/router_manager_window.h"
 #include "common/update_checker.h"
 #include "common/ui/about_dialog.h"
+#include "common/ui/message_box.h"
 #include "common/ui/language_action.h"
 #include "common/ui/update_dialog.h"
 #include "console/address_book_tab.h"
@@ -201,11 +201,9 @@ MainWindow::MainWindow(const QString& file_path)
         }
         else
         {
-            QMessageBox::warning(this,
-                                 tr("Warning"),
-                                 tr("Pinned address book file \"%1\" was not found.<br/>"
-                                    "This file will be unpinned.").arg(file),
-                                 QMessageBox::Ok);
+            common::MessageBox::warning(this,
+                tr("Pinned address book file \"%1\" was not found.<br/>"
+                   "This file will be unpinned.").arg(file));
             mru_.unpinFile(file);
         }
     }
@@ -282,10 +280,8 @@ void MainWindow::openAddressBook(const QString& file_path)
             if (file_path.compare(tab->filePath(), Qt::CaseSensitive) == 0)
 #endif // defined(Q_OS_WINDOWS)
             {
-                QMessageBox::information(this,
-                                         tr("Information"),
-                                         tr("Address Book \"%1\" is already open.").arg(file_path),
-                                         QMessageBox::Ok);
+                common::MessageBox::information(this,
+                    tr("Address Book \"%1\" is already open.").arg(file_path));
 
                 ui.tab_widget->setCurrentIndex(i);
                 return;
@@ -590,10 +586,7 @@ void MainWindow::onImportComputers()
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
         LOG(ERROR) << "Unable to open file:" << file.errorString();
-        QMessageBox::warning(this,
-                             tr("Warning"),
-                             tr("Could not open file for reading."),
-                             QMessageBox::Ok);
+        common::MessageBox::warning(this, tr("Could not open file for reading."));
         return;
     }
 
@@ -601,10 +594,7 @@ void MainWindow::onImportComputers()
     if (json_buffer.isEmpty())
     {
         LOG(ERROR) << "Empty file";
-        QMessageBox::warning(this,
-                             tr("Warning"),
-                             tr("Import file is empty."),
-                             QMessageBox::Ok);
+        common::MessageBox::warning(this, tr("Import file is empty."));
         return;
     }
 
@@ -613,10 +603,8 @@ void MainWindow::onImportComputers()
     if (parse_error.error != QJsonParseError::NoError)
     {
         LOG(ERROR) << "Unable to parse JSON document:" << parse_error.errorString();
-        QMessageBox::warning(this,
-                             tr("Warning"),
-                             tr("Failed to parse JSON document: %1.").arg(parse_error.errorString()),
-                             QMessageBox::Ok);
+        common::MessageBox::warning(this,
+            tr("Failed to parse JSON document: %1.").arg(parse_error.errorString()));
         return;
     }
 
@@ -626,10 +614,7 @@ void MainWindow::onImportComputers()
     tab->setChanged(true);
 
     LOG(INFO) << "File imported";
-    QMessageBox::information(this,
-                             tr("Information"),
-                             tr("Import completed successfully."),
-                             QMessageBox::Ok);
+    common::MessageBox::information(this, tr("Import completed successfully."));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -667,10 +652,7 @@ void MainWindow::onExportComputers()
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
     {
         LOG(ERROR) << "Unable to open file:" << file.errorString();
-        QMessageBox::warning(this,
-                             tr("Warning"),
-                             tr("Could not open file for writing."),
-                             QMessageBox::Ok);
+        common::MessageBox::warning(this, tr("Could not open file for writing."));
         return;
     }
 
@@ -680,18 +662,12 @@ void MainWindow::onExportComputers()
     if (written <= 0)
     {
         LOG(ERROR) << "Unable to write file:" << file.errorString();
-        QMessageBox::warning(this,
-                             tr("Warning"),
-                             tr("Unable to write file."),
-                             QMessageBox::Ok);
+        common::MessageBox::warning(this, tr("Unable to write file."));
         return;
     }
 
     LOG(INFO) << "File exported";
-    QMessageBox::information(this,
-                             tr("Information"),
-                             tr("Export completed successfully."),
-                             QMessageBox::Ok);
+    common::MessageBox::information(this, tr("Export completed successfully."));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -926,15 +902,10 @@ void MainWindow::onCloseTab(int index)
 
     if (tab->isChanged())
     {
-        QMessageBox message_box(QMessageBox::Question,
-                                tr("Confirmation"),
-                                tr("Address book \"%1\" has been changed. Save changes?")
-                                    .arg(tab->addressBookName()),
-                                QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
-                                this);
-        base::GuiApplication::translateMessageBox(&message_box);
-
-        switch (message_box.exec())
+        switch (common::MessageBox::question(this,
+                    tr("Address book \"%1\" has been changed. Save changes?")
+                        .arg(tab->addressBookName()),
+                    QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel))
         {
             case QMessageBox::Yes:
                 tab->save();
@@ -1265,15 +1236,8 @@ void MainWindow::onRecentOpenTriggered(QAction* action)
     if (action == ui.action_clear_mru ||
         (action == ui.action_remember_last && !action->isChecked()))
     {
-        QMessageBox message_box(
-            QMessageBox::Question,
-            tr("Confirmation"),
-            tr("The list of recently opened address books will be cleared. Continue?"),
-            QMessageBox::Yes | QMessageBox::No,
-            this);
-        base::GuiApplication::translateMessageBox(&message_box);
-
-        if (message_box.exec() == QMessageBox::Yes)
+        if (common::MessageBox::question(this,
+                tr("The list of recently opened address books will be cleared. Continue?")) == QMessageBox::Yes)
         {
             mru_.clearRecentOpen();
             rebuildMruMenu();
@@ -1356,15 +1320,10 @@ void MainWindow::closeEvent(QCloseEvent* event)
         AddressBookTab* tab = dynamic_cast<AddressBookTab*>(ui.tab_widget->widget(i));
         if (tab && tab->isChanged())
         {
-            QMessageBox message_box(QMessageBox::Question,
-                                    tr("Confirmation"),
-                                    tr("Address book \"%1\" has been changed. Save changes?")
-                                        .arg(tab->addressBookName()),
-                                    QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
-                                    this);
-            base::GuiApplication::translateMessageBox(&message_box);
-
-            switch (message_box.exec())
+            switch (common::MessageBox::question(this,
+                        tr("Address book \"%1\" has been changed. Save changes?")
+                            .arg(tab->addressBookName()),
+                        QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel))
             {
                 case QMessageBox::Yes:
                     tab->save();
@@ -1676,12 +1635,10 @@ void MainWindow::connectToComputer(const proto::address_book::Computer& computer
 
     if (host_id_entered && !router_config.has_value())
     {
-        QMessageBox::warning(this,
-                             tr("Warning"),
-                             tr("Connection by ID is specified in the properties of the computer, "
-                                "but the router is not configured. Check the parameters of the "
-                                "router in the properties of the address book."),
-                             QMessageBox::Ok);
+        common::MessageBox::warning(this,
+            tr("Connection by ID is specified in the properties of the computer, "
+               "but the router is not configured. Check the parameters of the "
+               "router in the properties of the address book."));
         return;
     }
 

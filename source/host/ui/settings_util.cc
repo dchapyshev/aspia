@@ -23,7 +23,7 @@
 #include <QFileInfo>
 #include <QMessageBox>
 
-#include "base/gui_application.h"
+#include "common/ui/message_box.h"
 #include "base/logging.h"
 #include "base/xml_settings.h"
 #include "host/system_settings.h"
@@ -42,10 +42,8 @@ bool SettingsUtil::importFromFile(const QString& path, bool silent, QWidget* par
 
     if (!silent && result)
     {
-        QMessageBox::information(parent,
-                                 tr("Information"),
-                                 tr("The configuration was successfully imported."),
-                                 QMessageBox::Ok);
+        common::MessageBox::information(parent,
+            tr("The configuration was successfully imported."));
     }
 
     return result;
@@ -63,10 +61,8 @@ bool SettingsUtil::exportToFile(const QString& path, bool silent, QWidget* paren
 
     if (!silent && result)
     {
-        QMessageBox::information(parent,
-                                 tr("Information"),
-                                 tr("The configuration was successfully exported."),
-                                 QMessageBox::Ok);
+        common::MessageBox::information(parent,
+            tr("The configuration was successfully exported."));
     }
 
     return result;
@@ -85,10 +81,7 @@ bool SettingsUtil::copySettings(const QString& source_path,
 
         if (!silent)
         {
-            QMessageBox::warning(parent,
-                                 tr("Warning"),
-                                 tr("Source settings file does not exist."),
-                                 QMessageBox::Ok);
+            common::MessageBox::warning(parent, tr("Source settings file does not exist."));
         }
 
         return false;
@@ -106,10 +99,7 @@ bool SettingsUtil::copySettings(const QString& source_path,
 
         if (!silent)
         {
-            QMessageBox::warning(parent,
-                                 tr("Warning"),
-                                 tr("Unable to open the source file."),
-                                 QMessageBox::Ok);
+            common::MessageBox::warning(parent, tr("Unable to open the source file."));
         }
 
         return false;
@@ -122,11 +112,8 @@ bool SettingsUtil::copySettings(const QString& source_path,
 
         if (!silent)
         {
-            QMessageBox::warning(
-                parent,
-                tr("Warning"),
-                tr("Unable to read the source file: the file is damaged or has an unknown format."),
-                QMessageBox::Ok);
+            common::MessageBox::warning(parent,
+                tr("Unable to read the source file: the file is damaged or has an unknown format."));
         }
 
         return false;
@@ -140,12 +127,11 @@ bool SettingsUtil::copySettings(const QString& source_path,
     {
         if (!silent)
         {
-            QMessageBox message_box(QMessageBox::Warning,
+            common::MessageBox message_box(QMessageBox::Warning,
                 tr("Warning"),
                 tr("The existing settings will be overwritten. Continue?"),
                 QMessageBox::Yes | QMessageBox::No,
                 parent);
-            base::GuiApplication::translateMessageBox(&message_box);
 
             if (message_box.exec() == QMessageBox::No)
             {
@@ -168,10 +154,7 @@ bool SettingsUtil::copySettings(const QString& source_path,
 
         if (!silent)
         {
-            QMessageBox::warning(parent,
-                                 tr("Warning"),
-                                 tr("Unable to open the target file."),
-                                 QMessageBox::Ok);
+            common::MessageBox::warning(parent, tr("Unable to open the target file."));
         }
 
         return false;
@@ -183,10 +166,7 @@ bool SettingsUtil::copySettings(const QString& source_path,
 
         if (!silent)
         {
-            QMessageBox::warning(parent,
-                                 tr("Warning"),
-                                 tr("Unable to write the target file."),
-                                 QMessageBox::Ok);
+            common::MessageBox::warning(parent, tr("Unable to write the target file."));
         }
 
         return false;

@@ -22,6 +22,7 @@
 #include <QMouseEvent>
 
 #include "base/gui_application.h"
+#include "common/ui/message_box.h"
 #include "base/logging.h"
 #include "common/ui/session_type.h"
 #include "proto/peer.h"
@@ -147,11 +148,9 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
             if (!base::User::isValidUserName(username))
             {
                 LOG(ERROR) << "Invalid user name:" << username;
-                QMessageBox::warning(this,
-                                     tr("Warning"),
-                                     tr("The user name can not be empty and can contain only alphabet"
-                                        " characters, numbers and ""_"", ""-"", ""."", ""@"" characters."),
-                                     QMessageBox::Ok);
+                common::MessageBox::warning(this,
+                    tr("The user name can not be empty and can contain only alphabet"
+                       " characters, numbers and ""_"", ""-"", ""."", ""@"" characters."));
                 ui.edit_username->selectAll();
                 ui.edit_username->setFocus();
                 return;
@@ -160,10 +159,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
             if (exist_names_.contains(username, Qt::CaseInsensitive))
             {
                 LOG(ERROR) << "User name already exists:" << username;
-                QMessageBox::warning(this,
-                                     tr("Warning"),
-                                     tr("The username you entered already exists."),
-                                     QMessageBox::Ok);
+                common::MessageBox::warning(this, tr("The username you entered already exists."));
                 ui.edit_username->selectAll();
                 ui.edit_username->setFocus();
                 return;
@@ -172,10 +168,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
             if (password != ui.edit_password_repeat->text())
             {
                 LOG(ERROR) << "Passwords do not match";
-                QMessageBox::warning(this,
-                                     tr("Warning"),
-                                     tr("The passwords you entered do not match."),
-                                     QMessageBox::Ok);
+                common::MessageBox::warning(this, tr("The passwords you entered do not match."));
                 ui.edit_password->selectAll();
                 ui.edit_password->setFocus();
                 return;
@@ -184,11 +177,9 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
             if (!base::User::isValidPassword(password))
             {
                 LOG(ERROR) << "Invalid password";
-                QMessageBox::warning(this,
-                                     tr("Warning"),
-                                     tr("Password can not be empty and should not exceed %n characters.",
-                                        "", base::User::kMaxPasswordLength),
-                                     QMessageBox::Ok);
+                common::MessageBox::warning(this,
+                    tr("Password can not be empty and should not exceed %n characters.",
+                       "", base::User::kMaxPasswordLength));
                 ui.edit_password->selectAll();
                 ui.edit_password->setFocus();
                 return;
@@ -206,12 +197,11 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
 
                 QString question = tr("Do you want to enter a different password?");
 
-                QMessageBox message_box(QMessageBox::Warning,
+                common::MessageBox message_box(QMessageBox::Warning,
                     tr("Warning"),
                     QString("<b>%1</b><br/>%2<br/>%3").arg(unsafe, safe, question),
                     QMessageBox::Yes | QMessageBox::No,
                     this);
-                base::GuiApplication::translateMessageBox(&message_box);
 
                 if (message_box.exec() == QMessageBox::Yes)
                 {
@@ -226,10 +216,8 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
             if (!user_.isValid())
             {
                 LOG(ERROR) << "Unable to create user";
-                QMessageBox::warning(this,
-                                     tr("Warning"),
-                                     tr("Unknown internal error when creating or modifying a user."),
-                                     QMessageBox::Ok);
+                common::MessageBox::warning(this,
+                    tr("Unknown internal error when creating or modifying a user."));
                 return;
             }
         }

@@ -29,7 +29,6 @@
 class QDialogButtonBox;
 class QLocalServer;
 class QLockFile;
-class QMessageBox;
 
 namespace base {
 #if defined(Q_OS_WINDOWS)
@@ -69,7 +68,6 @@ public:
     static QImage svgImage(const QString& svg_file_path, const QSize& size);
 
     static void translateButtonBox(QDialogButtonBox* button_box);
-    static void translateMessageBox(QMessageBox* message_box);
 
 public slots:
     void sendMessage(const QByteArray& message);

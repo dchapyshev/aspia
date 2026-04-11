@@ -23,13 +23,13 @@
 #include <QMessageBox>
 #include <QTimer>
 
-#include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/crypto/data_cryptor.h"
 #include "base/crypto/password_hash.h"
 #include "base/crypto/secure_memory.h"
 #include "client/online_checker/online_checker.h"
+#include "common/ui/message_box.h"
 #include "console/address_book_dialog.h"
 #include "console/computer_dialog.h"
 #include "console/computer_factory.h"
@@ -669,14 +669,7 @@ void AddressBookTab::removeComputerGroup()
         tr("Are you sure you want to delete computer group \"%1\" and all child items?")
         .arg(QString::fromStdString(current_item->computerGroup()->name()));
 
-    QMessageBox message_box(QMessageBox::Question,
-                            tr("Confirmation"),
-                            message,
-                            QMessageBox::Yes | QMessageBox::No,
-                            this);
-    base::GuiApplication::translateMessageBox(&message_box);
-
-    if (message_box.exec() == QMessageBox::Yes)
+    if (common::MessageBox::question(this, message) == QMessageBox::Yes)
     {
         LOG(INFO) << "[ACTION] Computer group removing confirmed by user";
         cleanupComputerGroup(current_item->computerGroup());
@@ -706,14 +699,7 @@ void AddressBookTab::removeComputer()
     QString message = tr("Are you sure you want to delete computer \"%1\"?")
         .arg(QString::fromStdString(current_item->computer()->name()));
 
-    QMessageBox message_box(QMessageBox::Question,
-                            tr("Confirmation"),
-                            message,
-                            QMessageBox::Yes | QMessageBox::No,
-                            this);
-    base::GuiApplication::translateMessageBox(&message_box);
-
-    if (message_box.exec() == QMessageBox::Yes)
+    if (common::MessageBox::question(this, message) == QMessageBox::Yes)
     {
         LOG(INFO) << "[ACTION] Computer removing confirmed by user";
         ComputerGroupItem* parent_group = current_item->parentComputerGroupItem();
@@ -1254,7 +1240,7 @@ QString AddressBookTab::parentName(ComputerGroupItem* item)
 // static
 void AddressBookTab::showOpenError(QWidget* parent, const QString& message)
 {
-    QMessageBox dialog(parent);
+    common::MessageBox dialog(parent);
 
     dialog.setIcon(QMessageBox::Warning);
     dialog.setWindowTitle(tr("Warning"));
@@ -1269,7 +1255,7 @@ void AddressBookTab::showOpenError(QWidget* parent, const QString& message)
 // static
 void AddressBookTab::showSaveError(QWidget* parent, const QString& message)
 {
-    QMessageBox dialog(parent);
+    common::MessageBox dialog(parent);
 
     dialog.setIcon(QMessageBox::Warning);
     dialog.setWindowTitle(tr("Warning"));

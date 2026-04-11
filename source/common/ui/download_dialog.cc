@@ -24,6 +24,7 @@
 
 #include "base/gui_application.h"
 #include "base/logging.h"
+#include "common/ui/message_box.h"
 
 namespace common {
 
@@ -65,10 +66,8 @@ DownloadDialog::~DownloadDialog()
 void DownloadDialog::onFileDownloaderError(int error_code)
 {
     LOG(ERROR) << "Error while downloading update:" << error_code;
-    QMessageBox::warning(this,
-                         tr("Warning"),
-                         tr("An error occurred while downloading the update: %1").arg(error_code),
-                         QMessageBox::Ok);
+    common::MessageBox::warning(this,
+                         tr("An error occurred while downloading the update: %1").arg(error_code));
     reject();
     close();
 }

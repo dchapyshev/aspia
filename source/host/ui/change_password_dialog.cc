@@ -19,11 +19,11 @@
 #include "host/ui/change_password_dialog.h"
 
 #include <QAbstractButton>
-#include <QMessageBox>
 #include <QPushButton>
 #include <QTimer>
 
 #include "base/gui_application.h"
+#include "common/ui/message_box.h"
 #include "base/logging.h"
 #include "host/system_settings.h"
 
@@ -92,10 +92,7 @@ void ChangePasswordDialog::onButtonBoxClicked(QAbstractButton* button)
             if (new_password.isEmpty())
             {
                 LOG(ERROR) << "Password cannot be empty";
-                QMessageBox::warning(this,
-                                     tr("Warning"),
-                                     tr("Password cannot be empty."),
-                                     QMessageBox::Ok);
+                common::MessageBox::warning(this, tr("Password cannot be empty."));
                 ui.edit_new_pass->selectAll();
                 ui.edit_new_pass->setFocus();
                 return;
@@ -104,10 +101,7 @@ void ChangePasswordDialog::onButtonBoxClicked(QAbstractButton* button)
             if (new_password != new_password_repeat)
             {
                 LOG(ERROR) << "Password entered do not match";
-                QMessageBox::warning(this,
-                                     tr("Warning"),
-                                     tr("The passwords entered do not match."),
-                                     QMessageBox::Ok);
+                common::MessageBox::warning(this, tr("The passwords entered do not match."));
                 ui.edit_new_pass->selectAll();
                 ui.edit_new_pass->setFocus();
                 return;
@@ -124,10 +118,7 @@ void ChangePasswordDialog::onButtonBoxClicked(QAbstractButton* button)
             if (old_password.isEmpty())
             {
                 LOG(ERROR) << "Old password not entered";
-                QMessageBox::warning(this,
-                                     tr("Warning"),
-                                     tr("You must enter your old password."),
-                                     QMessageBox::Ok);
+                common::MessageBox::warning(this, tr("You must enter your old password."));
                 ui.edit_old_pass->setFocus();
                 return;
             }
@@ -135,10 +126,7 @@ void ChangePasswordDialog::onButtonBoxClicked(QAbstractButton* button)
             if (!SystemSettings::isValidPassword(old_password))
             {
                 LOG(ERROR) << "Incorrect password entered";
-                QMessageBox::warning(this,
-                                     tr("Warning"),
-                                     tr("You entered an incorrect old password."),
-                                     QMessageBox::Ok);
+                common::MessageBox::warning(this, tr("You entered an incorrect old password."));
                 ui.edit_old_pass->selectAll();
                 ui.edit_old_pass->setFocus();
                 return;
@@ -147,10 +135,7 @@ void ChangePasswordDialog::onButtonBoxClicked(QAbstractButton* button)
             if (new_password.isEmpty())
             {
                 LOG(ERROR) << "New password cannot be empty";
-                QMessageBox::warning(this,
-                                     tr("Warning"),
-                                     tr("New password cannot be empty."),
-                                     QMessageBox::Ok);
+                common::MessageBox::warning(this, tr("New password cannot be empty."));
                 ui.edit_new_pass->setFocus();
                 return;
             }
@@ -158,10 +143,7 @@ void ChangePasswordDialog::onButtonBoxClicked(QAbstractButton* button)
             if (new_password != new_password_repeat)
             {
                 LOG(ERROR) << "Password entered do not match";
-                QMessageBox::warning(this,
-                                     tr("Warning"),
-                                     tr("The passwords entered do not match."),
-                                     QMessageBox::Ok);
+                common::MessageBox::warning(this, tr("The passwords entered do not match."));
                 ui.edit_new_pass->selectAll();
                 ui.edit_new_pass->setFocus();
                 return;

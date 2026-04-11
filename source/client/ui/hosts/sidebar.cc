@@ -24,7 +24,6 @@
 #include <QDragMoveEvent>
 #include <QDropEvent>
 #include <QHeaderView>
-#include <QMessageBox>
 #include <QMouseEvent>
 #include <QUuid>
 #include <QVBoxLayout>
@@ -33,6 +32,7 @@
 #include "client/local_data.h"
 #include "client/local_database.h"
 #include "client/ui/hosts/local_group_widget.h"
+#include "common/ui/message_box.h"
 
 namespace client {
 
@@ -314,7 +314,7 @@ bool Sidebar::onDrop(QDropEvent* event)
         {
             if (existing.id != source_group->groupId() && existing.name == source_group->groupName())
             {
-                QMessageBox::warning(tree_widget_, tr("Warning"),
+                common::MessageBox::warning(tree_widget_,
                     tr("A group with this name already exists in the selected parent group."));
                 restoreSelection();
                 return true;
@@ -324,7 +324,7 @@ bool Sidebar::onDrop(QDropEvent* event)
         // Update the group's parent in the database.
         if (!LocalDatabase::instance().moveGroup(source_group->groupId(), target_item->groupId()))
         {
-            QMessageBox::warning(tree_widget_, tr("Warning"),
+            common::MessageBox::warning(tree_widget_,
                 tr("Failed to move the group."));
             restoreSelection();
             return true;
@@ -380,7 +380,7 @@ bool Sidebar::onDrop(QDropEvent* event)
         {
             if (existing.name == computer_item->computerName())
             {
-                QMessageBox::warning(tree_widget_, tr("Warning"),
+                common::MessageBox::warning(tree_widget_,
                     tr("A computer with this name already exists in the selected group."));
                 restoreSelection();
                 return true;
@@ -400,7 +400,7 @@ bool Sidebar::onDrop(QDropEvent* event)
 
         if (!LocalDatabase::instance().modifyComputer(*computer))
         {
-            QMessageBox::warning(tree_widget_, tr("Warning"),
+            common::MessageBox::warning(tree_widget_,
                 tr("Failed to move the computer to the selected group."));
             restoreSelection();
             return true;

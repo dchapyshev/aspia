@@ -1,0 +1,50 @@
+//
+// Aspia Project
+// Copyright (C) 2016-2026 Dmitry Chapyshev <dmitry@aspia.ru>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
+//
+
+#ifndef COMMON_UI_MESSAGE_BOX_H
+#define COMMON_UI_MESSAGE_BOX_H
+
+#include <QMessageBox>
+
+namespace common {
+
+class MessageBox : public QMessageBox
+{
+    Q_OBJECT
+
+public:
+    MessageBox(QWidget* parent = nullptr);
+    MessageBox(Icon icon,
+               const QString& title,
+               const QString& text,
+               StandardButtons buttons = NoButton,
+               QWidget* parent = nullptr);
+    ~MessageBox() override;
+
+    int exec() override;
+
+    static int warning(QWidget* parent, const QString& text, StandardButtons buttons = Ok);
+    static int information(QWidget* parent, const QString& text, StandardButtons buttons = Ok);
+    static int question(QWidget* parent, const QString& text, StandardButtons buttons = Yes | No);
+
+    Q_DISABLE_COPY_MOVE(MessageBox)
+};
+
+} // namespace common
+
+#endif // COMMON_UI_MESSAGE_BOX_H

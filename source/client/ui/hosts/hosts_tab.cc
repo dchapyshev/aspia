@@ -23,7 +23,7 @@
 #include <QMessageBox>
 #include <QStatusBar>
 
-#include "base/gui_application.h"
+#include "common/ui/message_box.h"
 #include "base/logging.h"
 #include "base/net/address.h"
 #include "build/build_config.h"
@@ -319,7 +319,7 @@ void HostsTab::onCopyComputerAction()
     std::optional<ComputerData> computer = db.findComputer(item->computerId());
     if (!computer.has_value())
     {
-        QMessageBox::warning(this, tr("Warning"), tr("Failed to retrieve computer information from the local database."));
+        common::MessageBox::warning(this, tr("Failed to retrieve computer information from the local database."));
         return;
     }
 
@@ -327,7 +327,7 @@ void HostsTab::onCopyComputerAction()
 
     if (!db.addComputer(*computer))
     {
-        QMessageBox::warning(this, tr("Warning"), tr("Failed to add the computer to the local database."));
+        common::MessageBox::warning(this, tr("Failed to add the computer to the local database."));
         return;
     }
 
@@ -352,11 +352,7 @@ void HostsTab::onDeleteComputerAction()
 
     QString message = tr("Are you sure you want to delete computer \"%1\"?").arg(item->computerName());
 
-    QMessageBox messagebox(QMessageBox::Question, tr("Confirmation"), message,
-                            QMessageBox::Yes | QMessageBox::No, this);
-    base::GuiApplication::translateMessageBox(&messagebox);
-
-    if (messagebox.exec() == QMessageBox::No)
+    if (common::MessageBox::question(this, message) == QMessageBox::No)
     {
         LOG(INFO) << "Action is rejected by user";
         return;
@@ -364,7 +360,7 @@ void HostsTab::onDeleteComputerAction()
 
     if (!LocalDatabase::instance().removeComputer(item->computerId()))
     {
-        QMessageBox::warning(this, tr("Warning"), tr("Unable to remove computer"));
+        common::MessageBox::warning(this, tr("Unable to remove computer"));
         LOG(INFO) << "Unable to remove computer with id" << item->computerId();
         return;
     }
@@ -442,11 +438,7 @@ void HostsTab::onDeleteGroupAction()
 
     QString message = tr("Are you sure you want to delete group \"%1\"?").arg(local_group->groupName());
 
-    QMessageBox messagebox(QMessageBox::Question, tr("Confirmation"), message,
-                           QMessageBox::Yes | QMessageBox::No, this);
-    base::GuiApplication::translateMessageBox(&messagebox);
-
-    if (messagebox.exec() == QMessageBox::No)
+    if (common::MessageBox::question(this, message) == QMessageBox::No)
     {
         LOG(INFO) << "Action is rejected by user";
         return;
@@ -456,7 +448,7 @@ void HostsTab::onDeleteGroupAction()
 
     if (!LocalDatabase::instance().removeGroup(local_group->groupId()))
     {
-        QMessageBox::warning(this, tr("Warning"), tr("Unable to remove group"));
+        common::MessageBox::warning(this, tr("Unable to remove group"));
         LOG(INFO) << "Unable to remove group with id" << local_group->groupId();
         return;
     }
@@ -557,7 +549,7 @@ void HostsTab::onConnectAction(QAction* action)
             LocalDatabase::instance().findComputer(item->computerId());
         if (!computer.has_value())
         {
-            QMessageBox::warning(this, tr("Warning"),
+            common::MessageBox::warning(this,
                 tr("Failed to retrieve computer information from the local database."));
             return;
         }
@@ -565,7 +557,7 @@ void HostsTab::onConnectAction(QAction* action)
         base::Address address = base::Address::fromString(computer->address, DEFAULT_HOST_TCP_PORT);
         if (!address.isValid())
         {
-            QMessageBox::warning(this, tr("Warning"), tr("The computer has an incorrect address."));
+            common::MessageBox::warning(this, tr("The computer has an incorrect address."));
             return;
         }
 
@@ -596,7 +588,7 @@ void HostsTab::onLocalConnect(qint64 computer_id)
     std::optional<ComputerData> computer = LocalDatabase::instance().findComputer(computer_id);
     if (!computer.has_value())
     {
-        QMessageBox::warning(this, tr("Warning"),
+        common::MessageBox::warning(this,
             tr("Failed to retrieve computer information from the local database."));
         return;
     }
@@ -604,7 +596,7 @@ void HostsTab::onLocalConnect(qint64 computer_id)
     base::Address address = base::Address::fromString(computer->address, DEFAULT_HOST_TCP_PORT);
     if (!address.isValid())
     {
-        QMessageBox::warning(this, tr("Warning"), tr("The computer has an incorrect address."));
+        common::MessageBox::warning(this, tr("The computer has an incorrect address."));
         return;
     }
 

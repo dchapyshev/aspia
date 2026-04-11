@@ -426,12 +426,12 @@
     </message>
     <message>
         <location filename="../client/main.cc" line="43"/>
-        <location filename="../client/main.cc" line="485"/>
+        <location filename="../client/main.cc" line="482"/>
         <source>Warning</source>
         <translation type="unfinished">Warnung</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="486"/>
+        <location filename="../client/main.cc" line="483"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2316,29 +2316,6 @@
     </message>
 </context>
 <context>
-    <name>RouterDialog</name>
-    <message>
-        <location filename="../client/ui/router_dialog.ui" line="14"/>
-        <source>Router</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/router_dialog.ui" line="25"/>
-        <source>Address:</source>
-        <translation type="unfinished">Adresse:</translation>
-    </message>
-    <message>
-        <location filename="../client/ui/router_dialog.ui" line="39"/>
-        <source>User Name:</source>
-        <translation type="unfinished">Benutzername:</translation>
-    </message>
-    <message>
-        <location filename="../client/ui/router_dialog.ui" line="53"/>
-        <source>Password:</source>
-        <translation type="unfinished">Kennwort:</translation>
-    </message>
-</context>
-<context>
     <name>RouterGroupWidget</name>
     <message>
         <location filename="../client/ui/hosts/router_group_widget.ui" line="45"/>
@@ -2715,140 +2692,123 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../client/ui/settings_dialog.ui" line="30"/>
+        <source>Use a router</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_dialog.ui" line="39"/>
         <source>Address:</source>
-        <translation type="obsolete">Adresse:</translation>
+        <translation type="unfinished">Adresse:</translation>
     </message>
     <message>
+        <location filename="../client/ui/settings_dialog.ui" line="53"/>
         <source>User Name:</source>
-        <translation type="obsolete">Benutzername:</translation>
+        <translation type="unfinished">Benutzername:</translation>
     </message>
     <message>
+        <location filename="../client/ui/settings_dialog.ui" line="67"/>
         <source>Password:</source>
-        <translation type="obsolete">Kennwort:</translation>
+        <translation type="unfinished">Kennwort:</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="91"/>
+        <location filename="../client/ui/settings_dialog.ui" line="99"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="108"/>
+        <location filename="../client/ui/settings_dialog.ui" line="116"/>
         <source>Desktop</source>
         <translation type="unfinished">Desktop</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="120"/>
+        <location filename="../client/ui/settings_dialog.ui" line="128"/>
         <source>Features</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="126"/>
+        <location filename="../client/ui/settings_dialog.ui" line="134"/>
         <source>Enable audio</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="133"/>
+        <location filename="../client/ui/settings_dialog.ui" line="141"/>
         <source>Enable clipboard</source>
         <translation type="unfinished">Zwischenablage erlauben</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="140"/>
+        <location filename="../client/ui/settings_dialog.ui" line="148"/>
         <source>Show shape of remote cursor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="147"/>
+        <location filename="../client/ui/settings_dialog.ui" line="155"/>
         <source>Show position of remote cursor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="163"/>
+        <location filename="../client/ui/settings_dialog.ui" line="171"/>
         <source>Appearance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="169"/>
+        <location filename="../client/ui/settings_dialog.ui" line="177"/>
         <source>Disable desktop effects</source>
         <translation type="unfinished">Desktop-Effekte deaktivieren</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="176"/>
+        <location filename="../client/ui/settings_dialog.ui" line="184"/>
         <source>Disable desktop wallpaper</source>
         <translation type="unfinished">Desktop-Hintergrundbild deaktivieren</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="198"/>
+        <location filename="../client/ui/settings_dialog.ui" line="206"/>
         <source>Lock computer at disconnect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="205"/>
+        <location filename="../client/ui/settings_dialog.ui" line="213"/>
         <source>Block remote input</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="229"/>
+        <location filename="../client/ui/settings_dialog.ui" line="237"/>
         <source>Update</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="235"/>
+        <location filename="../client/ui/settings_dialog.ui" line="243"/>
         <source>Check for updates on startup</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="242"/>
+        <location filename="../client/ui/settings_dialog.ui" line="250"/>
         <source>Use custom update server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="251"/>
+        <location filename="../client/ui/settings_dialog.ui" line="259"/>
         <source>Server:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="192"/>
-        <location filename="../client/ui/settings_dialog.ui" line="301"/>
+        <location filename="../client/ui/settings_dialog.ui" line="200"/>
+        <location filename="../client/ui/settings_dialog.ui" line="309"/>
         <source>Other</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="40"/>
-        <source>Address</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/settings_dialog.ui" line="45"/>
-        <source>User Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/settings_dialog.ui" line="55"/>
-        <source>Add...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/settings_dialog.ui" line="62"/>
-        <source>Edit...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/settings_dialog.ui" line="69"/>
-        <source>Remove</source>
-        <translation type="unfinished">Löschen</translation>
-    </message>
-    <message>
-        <location filename="../client/ui/settings_dialog.ui" line="291"/>
+        <location filename="../client/ui/settings_dialog.ui" line="299"/>
         <source>Check for updates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="309"/>
+        <location filename="../client/ui/settings_dialog.ui" line="317"/>
         <source>Display name when connected:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="319"/>
+        <location filename="../client/ui/settings_dialog.ui" line="327"/>
         <source>Enter a name or leave the field empty</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4098,108 +4058,18 @@
 <context>
     <name>base::GuiApplication</name>
     <message>
-        <location filename="../base/gui_application.cc" line="390"/>
+        <location filename="../base/gui_application.cc" line="388"/>
         <source>Dark</source>
         <translation type="unfinished">Dunkel</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="392"/>
+        <location filename="../base/gui_application.cc" line="390"/>
         <source>Light</source>
         <translation type="unfinished">Hell</translation>
     </message>
     <message>
-        <location filename="../base/gui_application.cc" line="393"/>
+        <location filename="../base/gui_application.cc" line="391"/>
         <source>Auto</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../base/gui_application.cc" line="611"/>
-        <source>OK</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../base/gui_application.cc" line="612"/>
-        <source>Cancel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../base/gui_application.cc" line="613"/>
-        <source>Yes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../base/gui_application.cc" line="614"/>
-        <source>No</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../base/gui_application.cc" line="615"/>
-        <source>Apply</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../base/gui_application.cc" line="616"/>
-        <source>Close</source>
-        <translation type="unfinished">Schließen</translation>
-    </message>
-    <message>
-        <location filename="../base/gui_application.cc" line="617"/>
-        <source>Save</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../base/gui_application.cc" line="618"/>
-        <source>Discard</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../base/gui_application.cc" line="619"/>
-        <source>Reset</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../base/gui_application.cc" line="620"/>
-        <source>Help</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../base/gui_application.cc" line="621"/>
-        <source>Abort</source>
-        <translation type="unfinished">Abbrechen</translation>
-    </message>
-    <message>
-        <location filename="../base/gui_application.cc" line="622"/>
-        <source>Retry</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../base/gui_application.cc" line="623"/>
-        <source>Ignore</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../base/gui_application.cc" line="624"/>
-        <source>Restore Defaults</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../base/gui_application.cc" line="625"/>
-        <source>Save All</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../base/gui_application.cc" line="626"/>
-        <source>Open</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../base/gui_application.cc" line="627"/>
-        <source>Yes to All</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../base/gui_application.cc" line="628"/>
-        <source>No to All</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4321,18 +4191,23 @@
 <context>
     <name>client::AuthorizationDialog</name>
     <message>
-        <location filename="../client/ui/authorization_dialog.cc" line="169"/>
-        <location filename="../client/ui/authorization_dialog.cc" line="180"/>
+        <location filename="../client/ui/authorization_dialog.cc" line="38"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/authorization_dialog.cc" line="170"/>
+        <location filename="../client/ui/authorization_dialog.cc" line="181"/>
         <source>Warning</source>
         <translation type="unfinished">Warnung</translation>
     </message>
     <message>
-        <location filename="../client/ui/authorization_dialog.cc" line="170"/>
+        <location filename="../client/ui/authorization_dialog.cc" line="171"/>
         <source>Username cannot be empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/authorization_dialog.cc" line="181"/>
+        <location filename="../client/ui/authorization_dialog.cc" line="182"/>
         <source>Password cannot be empty.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4388,6 +4263,14 @@
     <message>
         <source>Warning</source>
         <translation type="obsolete">Warnung</translation>
+    </message>
+</context>
+<context>
+    <name>client::DesktopConfigDialog</name>
+    <message>
+        <location filename="../client/ui/desktop/desktop_config_dialog.cc" line="40"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4674,37 +4557,42 @@
 <context>
     <name>client::FileRemoveDialog</name>
     <message>
-        <location filename="../client/ui/file_transfer/file_remove_dialog.cc" line="93"/>
+        <location filename="../client/ui/file_transfer/file_remove_dialog.cc" line="46"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/file_transfer/file_remove_dialog.cc" line="94"/>
         <source>Deleting: %1</source>
         <translation type="unfinished">Löschen: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_remove_dialog.cc" line="120"/>
+        <location filename="../client/ui/file_transfer/file_remove_dialog.cc" line="121"/>
         <source>An error occurred while retrieving the list of files: %1</source>
         <translation type="unfinished">Beim Abrufen der Dateiliste ist ein Fehler aufgetreten: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_remove_dialog.cc" line="125"/>
+        <location filename="../client/ui/file_transfer/file_remove_dialog.cc" line="126"/>
         <source>Failed to delete &quot;%1&quot;: %2.</source>
         <translation type="unfinished">Fehler beim Löschen &quot;%1&quot;: %2.</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_remove_dialog.cc" line="130"/>
+        <location filename="../client/ui/file_transfer/file_remove_dialog.cc" line="131"/>
         <source>Warning</source>
         <translation type="unfinished">Warnung</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_remove_dialog.cc" line="138"/>
+        <location filename="../client/ui/file_transfer/file_remove_dialog.cc" line="139"/>
         <source>Skip</source>
         <translation type="unfinished">Überspringen</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_remove_dialog.cc" line="141"/>
+        <location filename="../client/ui/file_transfer/file_remove_dialog.cc" line="142"/>
         <source>Skip All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_remove_dialog.cc" line="144"/>
+        <location filename="../client/ui/file_transfer/file_remove_dialog.cc" line="145"/>
         <source>Abort</source>
         <translation type="unfinished">Abbrechen</translation>
     </message>
@@ -4712,117 +4600,122 @@
 <context>
     <name>client::FileTransferDialog</name>
     <message>
-        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="97"/>
+        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="45"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="98"/>
         <source>Current Task: Copying items.</source>
         <translation type="unfinished">Aktuelle Aufgabe: Elemente kopieren.</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="109"/>
+        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="110"/>
         <source>From: %1</source>
         <translation type="unfinished">Von: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="112"/>
+        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="113"/>
         <source>To: %1</source>
         <translation type="unfinished">Zu: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="146"/>
+        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="147"/>
         <source>Warning</source>
         <translation type="unfinished">Warnung</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="158"/>
+        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="159"/>
         <source>Skip</source>
         <translation type="unfinished">Überspringen</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="161"/>
+        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="162"/>
         <source>Skip All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="164"/>
+        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="165"/>
         <source>Replace</source>
         <translation type="unfinished">Ersetzen</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="167"/>
+        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="168"/>
         <source>Replace All</source>
         <translation type="unfinished">Alle ersetzen</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="170"/>
+        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="171"/>
         <source>Abort</source>
         <translation type="unfinished">Abbrechen</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="316"/>
+        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="317"/>
         <source>TB/s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="321"/>
+        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="322"/>
         <source>GB/s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="326"/>
+        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="327"/>
         <source>MB/s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="331"/>
+        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="332"/>
         <source>kB/s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="336"/>
+        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="337"/>
         <source>B/s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="133"/>
+        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="134"/>
         <source>Speed: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="246"/>
+        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="247"/>
         <source>Current Task: Cancel transfer of files.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="261"/>
+        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="262"/>
         <source>An error occurred while building the file queue for copying</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="266"/>
+        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="267"/>
         <source>Failed to create directory &quot;%1&quot;: %2</source>
         <translation type="unfinished">Fehler beim Erstellen des Verzeichnisses &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="273"/>
+        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="274"/>
         <source>Failed to create file &quot;%1&quot;: %2</source>
         <translation type="unfinished">Fehler beim Erstellen der Datei &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="279"/>
+        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="280"/>
         <source>Failed to open file &quot;%1&quot;: %2</source>
         <translation type="unfinished">Fehler beim Öffnen der Datei &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="285"/>
+        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="286"/>
         <source>Failed to write file &quot;%1&quot;: %2</source>
         <translation type="unfinished">Fehler beim Schreiben der Datei &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="291"/>
+        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="292"/>
         <source>Failed to read file &quot;%1&quot;: %2</source>
         <translation type="unfinished">Fehler beim Lesen der Datei &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="297"/>
+        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="298"/>
         <source>Unknown error type while copying files</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4923,15 +4816,15 @@
         <location filename="../client/ui/hosts/hosts_tab.cc" line="460"/>
         <location filename="../client/ui/hosts/hosts_tab.cc" line="561"/>
         <location filename="../client/ui/hosts/hosts_tab.cc" line="569"/>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="600"/>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="608"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="598"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="606"/>
         <source>Warning</source>
         <translation type="unfinished">Warnung</translation>
     </message>
     <message>
         <location filename="../client/ui/hosts/hosts_tab.cc" line="321"/>
         <location filename="../client/ui/hosts/hosts_tab.cc" line="562"/>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="601"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="599"/>
         <source>Failed to retrieve computer information from the local database.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4985,7 +4878,7 @@
     </message>
     <message>
         <location filename="../client/ui/hosts/hosts_tab.cc" line="569"/>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="608"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="606"/>
         <source>The computer has an incorrect address.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4993,39 +4886,39 @@
 <context>
     <name>client::LocalComputerDialog</name>
     <message>
-        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="57"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="54"/>
         <source>Edit Computer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="76"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="73"/>
         <source>Add Computer</source>
         <translation type="unfinished">Computer hinzufügen</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="80"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="77"/>
         <source>Local</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="126"/>
-        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="133"/>
-        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="144"/>
-        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="153"/>
-        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="164"/>
-        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="179"/>
-        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="201"/>
-        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="210"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="123"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="130"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="141"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="150"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="161"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="176"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="198"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="207"/>
         <source>Warning</source>
         <translation type="unfinished">Warnung</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="126"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="123"/>
         <source>Name cannot be empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="134"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="131"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation type="unfinished">
             <numerusform>Zu langer Name. Die maximale Länge des Namens beträgt %n Zeichen.</numerusform>
@@ -5033,17 +4926,17 @@
         </translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="144"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="141"/>
         <source>An invalid computer address was entered.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="154"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="151"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and &quot;_&quot;, &quot;-&quot;, &quot;.&quot; characters.</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="165"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="162"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation type="unfinished">
             <numerusform>Zu langer Kommentar. Die maximale Länge des Kommentars beträgt %n Zeichen.</numerusform>
@@ -5051,17 +4944,17 @@
         </translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="180"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="177"/>
         <source>A computer with this name already exists in the selected group.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="201"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="198"/>
         <source>Unable to add computer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="210"/>
+        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="207"/>
         <source>Unable to modify computer</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5069,37 +4962,37 @@
 <context>
     <name>client::LocalGroupDialog</name>
     <message>
-        <location filename="../client/ui/hosts/local_group_dialog.cc" line="54"/>
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="51"/>
         <source>Edit Group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_group_dialog.cc" line="70"/>
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="67"/>
         <source>Add Group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_group_dialog.cc" line="74"/>
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="71"/>
         <source>Local</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_group_dialog.cc" line="99"/>
-        <location filename="../client/ui/hosts/local_group_dialog.cc" line="106"/>
-        <location filename="../client/ui/hosts/local_group_dialog.cc" line="117"/>
-        <location filename="../client/ui/hosts/local_group_dialog.cc" line="132"/>
-        <location filename="../client/ui/hosts/local_group_dialog.cc" line="151"/>
-        <location filename="../client/ui/hosts/local_group_dialog.cc" line="160"/>
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="96"/>
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="103"/>
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="114"/>
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="129"/>
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="148"/>
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="157"/>
         <source>Warning</source>
         <translation type="unfinished">Warnung</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_group_dialog.cc" line="99"/>
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="96"/>
         <source>Name cannot be empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/hosts/local_group_dialog.cc" line="107"/>
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="104"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation type="unfinished">
             <numerusform>Zu langer Name. Die maximale Länge des Namens beträgt %n Zeichen.</numerusform>
@@ -5107,7 +5000,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/hosts/local_group_dialog.cc" line="118"/>
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="115"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation type="unfinished">
             <numerusform>Zu langer Kommentar. Die maximale Länge des Kommentars beträgt %n Zeichen.</numerusform>
@@ -5115,17 +5008,17 @@
         </translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_group_dialog.cc" line="133"/>
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="130"/>
         <source>A group with this name already exists in the selected parent group.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_group_dialog.cc" line="151"/>
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="148"/>
         <source>Unable to add group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_group_dialog.cc" line="160"/>
+        <location filename="../client/ui/hosts/local_group_dialog.cc" line="157"/>
         <source>Unable to modify group</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5213,32 +5106,14 @@
 <context>
     <name>client::RecordSettingsDialog</name>
     <message>
-        <location filename="../client/ui/desktop/record_settings_dialog.cc" line="51"/>
+        <location filename="../client/ui/desktop/record_settings_dialog.cc" line="38"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/desktop/record_settings_dialog.cc" line="52"/>
         <source>Choose path</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>client::RouterDialog</name>
-    <message>
-        <location filename="../client/ui/router_dialog.cc" line="96"/>
-        <source>An invalid router address was entered.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/router_dialog.cc" line="106"/>
-        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation type="unfinished">Der Benutzername darf nicht leer sein und darf nur Buchstaben, Zahlen und folgende Zeichen: &quot;_&quot;,&quot;-&quot;,&quot;.&quot; beinhalten.</translation>
-    </message>
-    <message>
-        <location filename="../client/ui/router_dialog.cc" line="117"/>
-        <source>Password cannot be empty.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/router_dialog.cc" line="145"/>
-        <source>Warning</source>
-        <translation type="unfinished">Warnung</translation>
     </message>
 </context>
 <context>
@@ -5606,32 +5481,37 @@
 <context>
     <name>client::RouterUserDialog</name>
     <message>
-        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="140"/>
-        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="156"/>
-        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="170"/>
-        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="185"/>
-        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="208"/>
-        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="237"/>
+        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="41"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="141"/>
+        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="157"/>
+        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="171"/>
+        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="186"/>
+        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="209"/>
+        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="238"/>
         <source>Warning</source>
         <translation type="unfinished">Warnung</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="141"/>
+        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="142"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="157"/>
+        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="158"/>
         <source>The username you entered already exists.</source>
         <translation type="unfinished">Der eingegebene Benutzername existiert bereits.</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="171"/>
+        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="172"/>
         <source>The passwords you entered do not match.</source>
         <translation type="unfinished">Die eingegebenen Kennwörter stimmen nicht überein.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="186"/>
+        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="187"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -5639,12 +5519,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="198"/>
+        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="199"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="201"/>
+        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="202"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -5652,37 +5532,37 @@
         </translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="205"/>
+        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="206"/>
         <source>Do you want to enter a different password?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="212"/>
+        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="213"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="213"/>
+        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="214"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="238"/>
+        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="239"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="288"/>
+        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="289"/>
         <source>Double-click to change</source>
         <translation type="unfinished">Doppelklicken, um zu ändern</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="313"/>
+        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="314"/>
         <source>Administrator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="317"/>
+        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="318"/>
         <source>Client</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5915,11 +5795,27 @@
 <context>
     <name>client::SettingsDialog</name>
     <message>
-        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation type="obsolete">Der Benutzername darf nicht leer sein und darf nur Buchstaben, Zahlen und folgende Zeichen: &quot;_&quot;,&quot;-&quot;,&quot;.&quot; beinhalten.</translation>
+        <location filename="../client/ui/settings_dialog.cc" line="44"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.cc" line="266"/>
+        <location filename="../client/ui/settings_dialog.cc" line="176"/>
+        <source>An invalid router address was entered.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_dialog.cc" line="195"/>
+        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
+        <translation type="unfinished">Der Benutzername darf nicht leer sein und darf nur Buchstaben, Zahlen und folgende Zeichen: &quot;_&quot;,&quot;-&quot;,&quot;.&quot; beinhalten.</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_dialog.cc" line="212"/>
+        <source>Password cannot be empty.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_dialog.cc" line="255"/>
         <source>Warning</source>
         <translation type="unfinished">Warnung</translation>
     </message>
@@ -7570,12 +7466,17 @@
 <context>
     <name>common::DownloadDialog</name>
     <message>
-        <location filename="../common/ui/download_dialog.cc" line="69"/>
+        <location filename="../common/ui/download_dialog.cc" line="41"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/ui/download_dialog.cc" line="71"/>
         <source>Warning</source>
         <translation type="unfinished">Warnung</translation>
     </message>
     <message>
-        <location filename="../common/ui/download_dialog.cc" line="70"/>
+        <location filename="../common/ui/download_dialog.cc" line="72"/>
         <source>An error occurred while downloading the update: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7583,8 +7484,9 @@
 <context>
     <name>common::StatusDialog</name>
     <message>
+        <location filename="../common/ui/status_dialog.cc" line="40"/>
         <source>Close</source>
-        <translation type="obsolete">Schließen</translation>
+        <translation type="unfinished">Schließen</translation>
     </message>
 </context>
 <context>
@@ -7671,37 +7573,42 @@
 <context>
     <name>console::AddressBookDialog</name>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="112"/>
+        <location filename="../console/address_book_dialog.cc" line="113"/>
         <source>Without Encryption</source>
         <translation type="unfinished">Ohne Verschlüsselung</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="114"/>
+        <location filename="../console/address_book_dialog.cc" line="115"/>
         <source>ChaCha20 + Poly1305 (256-bit key)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="143"/>
+        <location filename="../console/address_book_dialog.cc" line="144"/>
         <source>Double-click to change</source>
         <translation type="unfinished">Doppelklicken, um zu ändern</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="126"/>
+        <location filename="../console/address_book_dialog.cc" line="127"/>
         <source>Address Book</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="225"/>
+        <location filename="../console/address_book_dialog.cc" line="100"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../console/address_book_dialog.cc" line="226"/>
         <source>General</source>
         <translation type="unfinished">Allgemeines</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="229"/>
+        <location filename="../console/address_book_dialog.cc" line="230"/>
         <source>Sessions</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/address_book_dialog.cc" line="441"/>
+        <location filename="../console/address_book_dialog.cc" line="442"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation type="unfinished">
             <numerusform>Zu langer Name. Die maximale Länge des Namens beträgt %n Zeichen.</numerusform>
@@ -7709,12 +7616,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="447"/>
+        <location filename="../console/address_book_dialog.cc" line="448"/>
         <source>Name cannot be empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/address_book_dialog.cc" line="454"/>
+        <location filename="../console/address_book_dialog.cc" line="455"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation type="unfinished">
             <numerusform>Zu langer Kommentar. Die maximale Länge des Kommentars beträgt %n Zeichen.</numerusform>
@@ -7722,7 +7629,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/address_book_dialog.cc" line="462"/>
+        <location filename="../console/address_book_dialog.cc" line="463"/>
         <source>Too long display name. The maximum length of the display name is %n characters.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -7730,12 +7637,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="488"/>
+        <location filename="../console/address_book_dialog.cc" line="489"/>
         <source>The passwords you entered do not match.</source>
         <translation type="unfinished">Die eingegebenen Kennwörter stimmen nicht überein.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/address_book_dialog.cc" line="494"/>
+        <location filename="../console/address_book_dialog.cc" line="495"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -7743,12 +7650,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="502"/>
+        <location filename="../console/address_book_dialog.cc" line="503"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/address_book_dialog.cc" line="505"/>
+        <location filename="../console/address_book_dialog.cc" line="506"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -7756,13 +7663,13 @@
         </translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="509"/>
+        <location filename="../console/address_book_dialog.cc" line="510"/>
         <source>Do you want to enter a different password?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="419"/>
-        <location filename="../console/address_book_dialog.cc" line="512"/>
+        <location filename="../console/address_book_dialog.cc" line="420"/>
+        <location filename="../console/address_book_dialog.cc" line="513"/>
         <source>Warning</source>
         <translation type="unfinished">Warnung</translation>
     </message>
@@ -7775,27 +7682,27 @@
         <translation type="obsolete">Desktopansicht</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="516"/>
+        <location filename="../console/address_book_dialog.cc" line="517"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="517"/>
+        <location filename="../console/address_book_dialog.cc" line="518"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="551"/>
+        <location filename="../console/address_book_dialog.cc" line="552"/>
         <source>An invalid router address was entered.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="562"/>
+        <location filename="../console/address_book_dialog.cc" line="563"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation type="unfinished">Der Benutzername darf nicht leer sein und darf nur Buchstaben, Zahlen und folgende Zeichen: &quot;_&quot;,&quot;-&quot;,&quot;.&quot; beinhalten.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="571"/>
+        <location filename="../console/address_book_dialog.cc" line="572"/>
         <source>Router password cannot be empty.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7915,17 +7822,22 @@
 <context>
     <name>console::ComputerDialog</name>
     <message>
-        <location filename="../console/computer_dialog.cc" line="62"/>
+        <location filename="../console/computer_dialog.cc" line="59"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../console/computer_dialog.cc" line="63"/>
         <source>(copy)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog.cc" line="73"/>
+        <location filename="../console/computer_dialog.cc" line="74"/>
         <source>General</source>
         <translation type="unfinished">Allgemeines</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog.cc" line="77"/>
+        <location filename="../console/computer_dialog.cc" line="78"/>
         <source>Sessions</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7980,17 +7892,22 @@
 <context>
     <name>console::ComputerGroupDialog</name>
     <message>
-        <location filename="../console/computer_group_dialog.cc" line="77"/>
+        <location filename="../console/computer_group_dialog.cc" line="62"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../console/computer_group_dialog.cc" line="78"/>
         <source>General</source>
         <translation type="unfinished">Allgemeines</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog.cc" line="81"/>
+        <location filename="../console/computer_group_dialog.cc" line="82"/>
         <source>Sessions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog.cc" line="231"/>
+        <location filename="../console/computer_group_dialog.cc" line="232"/>
         <source>Name cannot be empty.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8003,7 +7920,7 @@
         <translation type="obsolete">Desktopansicht</translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/computer_group_dialog.cc" line="222"/>
+        <location filename="../console/computer_group_dialog.cc" line="223"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation type="unfinished">
             <numerusform>Zu langer Name. Die maximale Länge des Namens beträgt %n Zeichen.</numerusform>
@@ -8011,7 +7928,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/computer_group_dialog.cc" line="240"/>
+        <location filename="../console/computer_group_dialog.cc" line="241"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation type="unfinished">
             <numerusform>Zu langer Kommentar. Die maximale Länge des Kommentars beträgt %n Zeichen.</numerusform>
@@ -8019,7 +7936,7 @@
         </translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog.cc" line="199"/>
+        <location filename="../console/computer_group_dialog.cc" line="200"/>
         <source>Warning</source>
         <translation type="unfinished">Warnung</translation>
     </message>
@@ -8064,38 +7981,43 @@
 <context>
     <name>console::FastConnectDialog</name>
     <message>
-        <location filename="../console/fast_connect_dialog.cc" line="91"/>
+        <location filename="../console/fast_connect_dialog.cc" line="55"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../console/fast_connect_dialog.cc" line="92"/>
         <source>Confirmation</source>
         <translation type="unfinished">Bestätigung</translation>
     </message>
     <message>
-        <location filename="../console/fast_connect_dialog.cc" line="92"/>
+        <location filename="../console/fast_connect_dialog.cc" line="93"/>
         <source>The list of entered addresses will be cleared. Continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/fast_connect_dialog.cc" line="95"/>
+        <location filename="../console/fast_connect_dialog.cc" line="96"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/fast_connect_dialog.cc" line="96"/>
+        <location filename="../console/fast_connect_dialog.cc" line="97"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/fast_connect_dialog.cc" line="215"/>
-        <location filename="../console/fast_connect_dialog.cc" line="234"/>
+        <location filename="../console/fast_connect_dialog.cc" line="216"/>
+        <location filename="../console/fast_connect_dialog.cc" line="235"/>
         <source>Warning</source>
         <translation type="unfinished">Warnung</translation>
     </message>
     <message>
-        <location filename="../console/fast_connect_dialog.cc" line="216"/>
+        <location filename="../console/fast_connect_dialog.cc" line="217"/>
         <source>Connection by ID is specified but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/fast_connect_dialog.cc" line="235"/>
+        <location filename="../console/fast_connect_dialog.cc" line="236"/>
         <source>An invalid computer address was entered.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8278,12 +8200,17 @@
 <context>
     <name>console::OpenAddressBookDialog</name>
     <message>
-        <location filename="../console/open_address_book_dialog.cc" line="48"/>
+        <location filename="../console/open_address_book_dialog.cc" line="36"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../console/open_address_book_dialog.cc" line="49"/>
         <source>Without Encryption</source>
         <translation type="unfinished">Ohne Verschlüsselung</translation>
     </message>
     <message>
-        <location filename="../console/open_address_book_dialog.cc" line="52"/>
+        <location filename="../console/open_address_book_dialog.cc" line="53"/>
         <source>ChaCha20 + Poly1305 (256-bit key)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8315,40 +8242,53 @@
     </message>
 </context>
 <context>
+    <name>console::UpdateSettingsDialog</name>
+    <message>
+        <location filename="../console/update_settings_dialog.cc" line="38"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>host::ChangePasswordDialog</name>
     <message>
-        <location filename="../host/ui/change_password_dialog.cc" line="96"/>
-        <location filename="../host/ui/change_password_dialog.cc" line="108"/>
-        <location filename="../host/ui/change_password_dialog.cc" line="128"/>
-        <location filename="../host/ui/change_password_dialog.cc" line="139"/>
-        <location filename="../host/ui/change_password_dialog.cc" line="151"/>
-        <location filename="../host/ui/change_password_dialog.cc" line="162"/>
+        <location filename="../host/ui/change_password_dialog.cc" line="41"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../host/ui/change_password_dialog.cc" line="97"/>
+        <location filename="../host/ui/change_password_dialog.cc" line="109"/>
+        <location filename="../host/ui/change_password_dialog.cc" line="129"/>
+        <location filename="../host/ui/change_password_dialog.cc" line="140"/>
+        <location filename="../host/ui/change_password_dialog.cc" line="152"/>
+        <location filename="../host/ui/change_password_dialog.cc" line="163"/>
         <source>Warning</source>
         <translation type="unfinished">Warnung</translation>
     </message>
     <message>
-        <location filename="../host/ui/change_password_dialog.cc" line="97"/>
+        <location filename="../host/ui/change_password_dialog.cc" line="98"/>
         <source>Password cannot be empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/change_password_dialog.cc" line="129"/>
+        <location filename="../host/ui/change_password_dialog.cc" line="130"/>
         <source>You must enter your old password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/change_password_dialog.cc" line="140"/>
+        <location filename="../host/ui/change_password_dialog.cc" line="141"/>
         <source>You entered an incorrect old password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/change_password_dialog.cc" line="152"/>
+        <location filename="../host/ui/change_password_dialog.cc" line="153"/>
         <source>New password cannot be empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/change_password_dialog.cc" line="109"/>
-        <location filename="../host/ui/change_password_dialog.cc" line="163"/>
+        <location filename="../host/ui/change_password_dialog.cc" line="110"/>
+        <location filename="../host/ui/change_password_dialog.cc" line="164"/>
         <source>The passwords entered do not match.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8356,12 +8296,17 @@
 <context>
     <name>host::CheckPasswordDialog</name>
     <message>
-        <location filename="../host/ui/check_password_dialog.cc" line="71"/>
+        <location filename="../host/ui/check_password_dialog.cc" line="40"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../host/ui/check_password_dialog.cc" line="72"/>
         <source>Warning</source>
         <translation type="unfinished">Warnung</translation>
     </message>
     <message>
-        <location filename="../host/ui/check_password_dialog.cc" line="72"/>
+        <location filename="../host/ui/check_password_dialog.cc" line="73"/>
         <source>You entered an incorrect password.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8369,28 +8314,28 @@
 <context>
     <name>host::ConfigDialog</name>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="161"/>
+        <location filename="../host/ui/config_dialog.cc" line="165"/>
         <source>Default</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="438"/>
+        <location filename="../host/ui/config_dialog.cc" line="442"/>
         <source>Confirmation</source>
         <translation>Bestätigung</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="439"/>
+        <location filename="../host/ui/config_dialog.cc" line="443"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>Möchten Sie den Benutzer &quot;%1&quot; wirklich löschen?</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="538"/>
+        <location filename="../host/ui/config_dialog.cc" line="542"/>
         <source>Import</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="538"/>
-        <location filename="../host/ui/config_dialog.cc" line="555"/>
+        <location filename="../host/ui/config_dialog.cc" line="542"/>
+        <location filename="../host/ui/config_dialog.cc" line="559"/>
         <source>JSON-files (*.json)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8399,142 +8344,152 @@
         <translation type="vanished">Servicekonfiguration geändert. Damit die Änderungen wirksam werden, müssen Sie den Dienst neu starten. Den Dienst jetzt neu?</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="555"/>
+        <location filename="../host/ui/config_dialog.cc" line="559"/>
         <source>Export</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="580"/>
+        <location filename="../host/ui/config_dialog.cc" line="584"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
         <translation>Die Konfiguration kann nicht geschrieben werden. Stellen Sie sicher, dass Sie über ausreichende Schreibrechte verfügen.</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="480"/>
-        <location filename="../host/ui/config_dialog.cc" line="517"/>
-        <location filename="../host/ui/config_dialog.cc" line="583"/>
-        <location filename="../host/ui/config_dialog.cc" line="595"/>
-        <location filename="../host/ui/config_dialog.cc" line="608"/>
+        <location filename="../host/ui/config_dialog.cc" line="484"/>
+        <location filename="../host/ui/config_dialog.cc" line="521"/>
+        <location filename="../host/ui/config_dialog.cc" line="587"/>
+        <location filename="../host/ui/config_dialog.cc" line="599"/>
+        <location filename="../host/ui/config_dialog.cc" line="612"/>
         <source>Warning</source>
         <translation>Warnung</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="123"/>
+        <location filename="../host/ui/config_dialog.cc" line="107"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.cc" line="110"/>
+        <source>Apply</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../host/ui/config_dialog.cc" line="127"/>
         <source>Once a day</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="124"/>
+        <location filename="../host/ui/config_dialog.cc" line="128"/>
         <source>Once a week</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="125"/>
+        <location filename="../host/ui/config_dialog.cc" line="129"/>
         <source>Once a month</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="202"/>
+        <location filename="../host/ui/config_dialog.cc" line="206"/>
         <source>On reboot</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="203"/>
+        <location filename="../host/ui/config_dialog.cc" line="207"/>
         <source>Every 5 minutes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="204"/>
+        <location filename="../host/ui/config_dialog.cc" line="208"/>
         <source>Every 30 minutes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="205"/>
+        <location filename="../host/ui/config_dialog.cc" line="209"/>
         <source>Every 1 hour</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="206"/>
+        <location filename="../host/ui/config_dialog.cc" line="210"/>
         <source>Every 6 hours</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="207"/>
+        <location filename="../host/ui/config_dialog.cc" line="211"/>
         <source>Every 12 hours</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="208"/>
+        <location filename="../host/ui/config_dialog.cc" line="212"/>
         <source>Every 24 hours</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="219"/>
+        <location filename="../host/ui/config_dialog.cc" line="223"/>
         <source>Letters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="238"/>
+        <location filename="../host/ui/config_dialog.cc" line="242"/>
         <source>Never</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="239"/>
+        <location filename="../host/ui/config_dialog.cc" line="243"/>
         <source>15 seconds</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="240"/>
+        <location filename="../host/ui/config_dialog.cc" line="244"/>
         <source>30 seconds</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="241"/>
+        <location filename="../host/ui/config_dialog.cc" line="245"/>
         <source>45 seconds</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="242"/>
+        <location filename="../host/ui/config_dialog.cc" line="246"/>
         <source>60 seconds</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="250"/>
+        <location filename="../host/ui/config_dialog.cc" line="254"/>
         <source>Accept connection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="252"/>
+        <location filename="../host/ui/config_dialog.cc" line="256"/>
         <source>Reject connection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="443"/>
+        <location filename="../host/ui/config_dialog.cc" line="447"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="444"/>
+        <location filename="../host/ui/config_dialog.cc" line="448"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="481"/>
-        <location filename="../host/ui/config_dialog.cc" line="518"/>
+        <location filename="../host/ui/config_dialog.cc" line="485"/>
+        <location filename="../host/ui/config_dialog.cc" line="522"/>
         <source>An error occurred while processing the password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="596"/>
+        <location filename="../host/ui/config_dialog.cc" line="600"/>
         <source>Incorrect router address entered.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="609"/>
+        <location filename="../host/ui/config_dialog.cc" line="613"/>
         <source>Incorrect router public key entered.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="784"/>
+        <location filename="../host/ui/config_dialog.cc" line="788"/>
         <source>Remove</source>
         <translation>Löschen</translation>
     </message>
@@ -8563,17 +8518,17 @@
         <translation type="vanished">Nicht installiert</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="779"/>
+        <location filename="../host/ui/config_dialog.cc" line="783"/>
         <source>Install</source>
         <translation>Installieren</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="216"/>
+        <location filename="../host/ui/config_dialog.cc" line="220"/>
         <source>Letters and digits</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="221"/>
+        <location filename="../host/ui/config_dialog.cc" line="225"/>
         <source>Digits</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8605,17 +8560,27 @@
 <context>
     <name>host::ConnectConfirmDialog</name>
     <message>
-        <location filename="../host/ui/connect_confirm_dialog.cc" line="63"/>
+        <location filename="../host/ui/connect_confirm_dialog.cc" line="45"/>
+        <source>Yes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../host/ui/connect_confirm_dialog.cc" line="49"/>
+        <source>No</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../host/ui/connect_confirm_dialog.cc" line="68"/>
         <source>User %1 (%2) is trying to connect to your computer with %3 session type.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/connect_confirm_dialog.cc" line="65"/>
+        <location filename="../host/ui/connect_confirm_dialog.cc" line="70"/>
         <source>Allow the connection?</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../host/ui/connect_confirm_dialog.cc" line="140"/>
+        <location filename="../host/ui/connect_confirm_dialog.cc" line="145"/>
         <source>The connection will be automatically accepted after %n seconds.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -8623,7 +8588,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../host/ui/connect_confirm_dialog.cc" line="145"/>
+        <location filename="../host/ui/connect_confirm_dialog.cc" line="150"/>
         <source>The connection will be automatically rejected after %n seconds.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -8779,32 +8744,37 @@
 <context>
     <name>host::UserDialog</name>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="151"/>
-        <location filename="../host/ui/user_dialog.cc" line="164"/>
-        <location filename="../host/ui/user_dialog.cc" line="176"/>
-        <location filename="../host/ui/user_dialog.cc" line="188"/>
-        <location filename="../host/ui/user_dialog.cc" line="210"/>
-        <location filename="../host/ui/user_dialog.cc" line="231"/>
+        <location filename="../host/ui/user_dialog.cc" line="41"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../host/ui/user_dialog.cc" line="152"/>
+        <location filename="../host/ui/user_dialog.cc" line="165"/>
+        <location filename="../host/ui/user_dialog.cc" line="177"/>
+        <location filename="../host/ui/user_dialog.cc" line="189"/>
+        <location filename="../host/ui/user_dialog.cc" line="211"/>
+        <location filename="../host/ui/user_dialog.cc" line="232"/>
         <source>Warning</source>
         <translation>Warnung</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="152"/>
+        <location filename="../host/ui/user_dialog.cc" line="153"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="165"/>
+        <location filename="../host/ui/user_dialog.cc" line="166"/>
         <source>The username you entered already exists.</source>
         <translation>Der eingegebene Benutzername existiert bereits.</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="177"/>
+        <location filename="../host/ui/user_dialog.cc" line="178"/>
         <source>The passwords you entered do not match.</source>
         <translation>Die eingegebenen Kennwörter stimmen nicht überein.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../host/ui/user_dialog.cc" line="189"/>
+        <location filename="../host/ui/user_dialog.cc" line="190"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -8812,12 +8782,12 @@
         </translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="200"/>
+        <location filename="../host/ui/user_dialog.cc" line="201"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../host/ui/user_dialog.cc" line="203"/>
+        <location filename="../host/ui/user_dialog.cc" line="204"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -8825,27 +8795,27 @@
         </translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="207"/>
+        <location filename="../host/ui/user_dialog.cc" line="208"/>
         <source>Do you want to enter a different password?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="214"/>
+        <location filename="../host/ui/user_dialog.cc" line="215"/>
         <source>Yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="215"/>
+        <location filename="../host/ui/user_dialog.cc" line="216"/>
         <source>No</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="232"/>
+        <location filename="../host/ui/user_dialog.cc" line="233"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="289"/>
+        <location filename="../host/ui/user_dialog.cc" line="290"/>
         <source>Double-click to change</source>
         <translation>Doppelklicken, um zu ändern</translation>
     </message>

@@ -32,6 +32,7 @@
 #include "base/logging.h"
 #include "base/peer/user.h"
 #include "base/gui_application.h"
+#include "common/ui/message_box.h"
 #include "client/router.h"
 #include "client/ui/settings.h"
 #include "client/ui/router_manager/router_user_dialog.h"
@@ -696,7 +697,7 @@ void RouterManagerWindow::onSessionResult(std::shared_ptr<proto::router::Session
                 break;
         }
 
-        QMessageBox::warning(this, tr("Warning"), tr(message), QMessageBox::Ok);
+        common::MessageBox::warning(this, tr(message));
     }
 
     onRefreshSessionList();
@@ -735,7 +736,7 @@ void RouterManagerWindow::onUserResult(std::shared_ptr<proto::router::UserResult
                 break;
         }
 
-        QMessageBox::warning(this, tr("Warning"), tr(message), QMessageBox::Ok);
+        common::MessageBox::warning(this, tr(message));
     }
 
     onRefreshUserList();
@@ -1101,15 +1102,9 @@ void RouterManagerWindow::onDisconnectRelay()
         return;
     }
 
-    QMessageBox message_box(QMessageBox::Question,
-                            tr("Confirmation"),
-                            tr("Are you sure you want to disconnect session \"%1\"?")
-                                .arg(QString::fromStdString(tree_item->session.computer_name())),
-                            QMessageBox::Yes | QMessageBox::No,
-                            this);
-    base::GuiApplication::translateMessageBox(&message_box);
-
-    if (message_box.exec() == QMessageBox::No)
+    if (common::MessageBox::question(this,
+            tr("Are you sure you want to disconnect session \"%1\"?")
+                .arg(QString::fromStdString(tree_item->session.computer_name()))) == QMessageBox::No)
     {
         return;
     }
@@ -1122,14 +1117,8 @@ void RouterManagerWindow::onDisconnectAllRelays()
 {
     LOG(INFO) << "[ACTION] Disconnect all relays";
 
-    QMessageBox message_box(QMessageBox::Question,
-                            tr("Confirmation"),
-                            tr("Are you sure you want to disconnect all relays?"),
-                            QMessageBox::Yes | QMessageBox::No,
-                            this);
-    base::GuiApplication::translateMessageBox(&message_box);
-
-    if (message_box.exec() == QMessageBox::No)
+    if (common::MessageBox::question(this,
+            tr("Are you sure you want to disconnect all relays?")) == QMessageBox::No)
     {
         LOG(INFO) << "[ACTION] Rejected by user";
         return;
@@ -1158,15 +1147,9 @@ void RouterManagerWindow::onDisconnectHost()
         return;
     }
 
-    QMessageBox message_box(QMessageBox::Question,
-                            tr("Confirmation"),
-                            tr("Are you sure you want to disconnect session \"%1\"?")
-                                .arg(QString::fromStdString(tree_item->session.computer_name())),
-                            QMessageBox::Yes | QMessageBox::No,
-                            this);
-    base::GuiApplication::translateMessageBox(&message_box);
-
-    if (message_box.exec() == QMessageBox::No)
+    if (common::MessageBox::question(this,
+            tr("Are you sure you want to disconnect session \"%1\"?")
+                .arg(QString::fromStdString(tree_item->session.computer_name()))) == QMessageBox::No)
     {
         LOG(INFO) << "[ACTION] Rejected by user";
         return;
@@ -1188,14 +1171,13 @@ void RouterManagerWindow::onRemoveHost()
         return;
     }
 
-    QMessageBox message_box(this);
+    common::MessageBox message_box(this);
     message_box.setWindowTitle(tr("Confirmation"));
     message_box.setText(tr("Deleting a host will result in all its configuration for connecting "
                           "to the router being deleted. This operation is irreversible. After deleting, the host "
                           "will no longer connect to the router. Are you sure you want to do this?"));
     message_box.setIcon(QMessageBox::Question);
     message_box.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-    base::GuiApplication::translateMessageBox(&message_box);
 
     QCheckBox* check_box = new QCheckBox(&message_box);
     check_box->setText(tr("Try to uninstall the application (result is not guaranteed)"));
@@ -1222,14 +1204,8 @@ void RouterManagerWindow::onDisconnectAllHosts()
 {
     LOG(INFO) << "[ACTION] Disconnect all hosts";
 
-    QMessageBox message_box(QMessageBox::Question,
-                            tr("Confirmation"),
-                            tr("Are you sure you want to disconnect all hosts?"),
-                            QMessageBox::Yes | QMessageBox::No,
-                            this);
-    base::GuiApplication::translateMessageBox(&message_box);
-
-    if (message_box.exec() == QMessageBox::No)
+    if (common::MessageBox::question(this,
+            tr("Are you sure you want to disconnect all hosts?")) == QMessageBox::No)
     {
         LOG(INFO) << "[ACTION] Rejected by user";
         return;
@@ -1324,18 +1300,12 @@ void RouterManagerWindow::onDeleteUser()
     if (entry_id == 1)
     {
         LOG(INFO) << "Unable to delete built-in user";
-        QMessageBox::warning(this, tr("Warning"), tr("You cannot delete a built-in user."));
+        common::MessageBox::warning(this, tr("You cannot delete a built-in user."));
         return;
     }
 
-    QMessageBox message_box(QMessageBox::Question,
-                            tr("Confirmation"),
-                            tr("Are you sure you want to delete user \"%1\"?").arg(tree_item->text(0)),
-                            QMessageBox::Yes | QMessageBox::No,
-                            this);
-    base::GuiApplication::translateMessageBox(&message_box);
-
-    if (message_box.exec() == QMessageBox::Yes)
+    if (common::MessageBox::question(this,
+            tr("Are you sure you want to delete user \"%1\"?").arg(tree_item->text(0))) == QMessageBox::Yes)
     {
         LOG(INFO) << "[ACTION] Accepted by user";
         emit sig_deleteUser(entry_id);
@@ -1385,7 +1355,7 @@ void RouterManagerWindow::saveHostsToFile()
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
     {
         LOG(INFO) << "Unable to open file:" << file.errorString();
-        QMessageBox::warning(this, tr("Warning"), tr("Could not open file for writing."), QMessageBox::Ok);
+        common::MessageBox::warning(this, tr("Could not open file for writing."));
         return;
     }
 
@@ -1433,7 +1403,7 @@ void RouterManagerWindow::saveHostsToFile()
     if (written <= 0)
     {
         LOG(INFO) << "Unable to write file:" << file.errorString();
-        QMessageBox::warning(this, tr("Warning"), tr("Unable to write file."), QMessageBox::Ok);
+        common::MessageBox::warning(this, tr("Unable to write file."));
         return;
     }
 }
@@ -1456,7 +1426,7 @@ void RouterManagerWindow::saveRelaysToFile()
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
     {
         LOG(INFO) << "Unable to open file:" << file.errorString();
-        QMessageBox::warning(this, tr("Warning"), tr("Could not open file for writing."), QMessageBox::Ok);
+        common::MessageBox::warning(this, tr("Could not open file for writing."));
         return;
     }
 
@@ -1523,7 +1493,7 @@ void RouterManagerWindow::saveRelaysToFile()
     if (written <= 0)
     {
         LOG(INFO) << "Unable to write file:" << file.errorString();
-        QMessageBox::warning(this, tr("Warning"), tr("Unable to write file."), QMessageBox::Ok);
+        common::MessageBox::warning(this, tr("Unable to write file."));
         return;
     }
 }

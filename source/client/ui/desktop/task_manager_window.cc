@@ -25,7 +25,7 @@
 #include <QMessageBox>
 #include <QTimer>
 
-#include "base/gui_application.h"
+#include "common/ui/message_box.h"
 #include "base/logging.h"
 #include "client/ui/desktop/task_manager_settings.h"
 
@@ -647,15 +647,9 @@ void TaskManagerWindow::onEndProcess()
     ProcessItem* current_item = static_cast<ProcessItem*>(ui.tree_processes->currentItem());
     if (current_item)
     {
-        QMessageBox message_box(QMessageBox::Question,
-                                tr("Confirmation"),
-                                tr("Do you really want to end \"%1\" process?")
-                                    .arg(current_item->text(PROC_COL_NAME)),
-                                QMessageBox::Yes | QMessageBox::No,
-                                this);
-        base::GuiApplication::translateMessageBox(&message_box);
-
-        if (message_box.exec() == QMessageBox::Yes)
+        if (common::MessageBox::question(this,
+                tr("Do you really want to end \"%1\" process?")
+                    .arg(current_item->text(PROC_COL_NAME))) == QMessageBox::Yes)
         {
             LOG(INFO) << "[ACTION] Accepted by user";
             sendEndProcessRequest(current_item->processId());
@@ -703,15 +697,9 @@ void TaskManagerWindow::onDisconnectUser()
     UserItem* current_item = static_cast<UserItem*>(ui.tree_users->currentItem());
     if (current_item)
     {
-        QMessageBox message_box(QMessageBox::Question,
-                                tr("Confirmation"),
-                                tr("Do you really want to disconnect user \"%1\" session?")
-                                    .arg(current_item->text(USER_COL_NAME)),
-                                QMessageBox::Yes | QMessageBox::No,
-                                this);
-        base::GuiApplication::translateMessageBox(&message_box);
-
-        if (message_box.exec() == QMessageBox::Yes)
+        if (common::MessageBox::question(this,
+                tr("Do you really want to disconnect user \"%1\" session?")
+                    .arg(current_item->text(USER_COL_NAME))) == QMessageBox::Yes)
         {
             LOG(INFO) << "[ACTION] Accepted by user";
             sendUserRequest(
@@ -732,15 +720,9 @@ void TaskManagerWindow::onLogoffUser()
     UserItem* current_item = static_cast<UserItem*>(ui.tree_users->currentItem());
     if (current_item)
     {
-        QMessageBox message_box(QMessageBox::Question,
-                                tr("Confirmation"),
-                                tr("Do you really want to end user \"%1\" session?")
-                                    .arg(current_item->text(USER_COL_NAME)),
-                                QMessageBox::Yes | QMessageBox::No,
-                                this);
-        base::GuiApplication::translateMessageBox(&message_box);
-
-        if (message_box.exec() == QMessageBox::Yes)
+        if (common::MessageBox::question(this,
+                tr("Do you really want to end user \"%1\" session?")
+                    .arg(current_item->text(USER_COL_NAME))) == QMessageBox::Yes)
         {
             LOG(INFO) << "[ACTION] Accepted by user";
             sendUserRequest(

@@ -38,6 +38,7 @@
 
 #include "base/logging.h"
 #include "common/ui/chat_incoming_message.h"
+#include "common/ui/message_box.h"
 #include "common/ui/chat_outgoing_message.h"
 #include "common/ui/chat_status_message.h"
 #include "ui_chat_widget.h"
@@ -512,11 +513,9 @@ void ChatWidget::onSendMessage()
     if (message.length() > kMaxMessageLength)
     {
         LOG(ERROR) << "Too long message:" << message.length();
-        QMessageBox::warning(this,
-                             tr("Warning"),
+        common::MessageBox::warning(this,
                              tr("The message is too long. The maximum message length is %n "
-                                "characters.", "", kMaxMessageLength),
-                             QMessageBox::Ok);
+                                "characters.", "", kMaxMessageLength));
         return;
     }
 
@@ -579,10 +578,8 @@ void ChatWidget::onSaveChat()
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
     {
         LOG(ERROR) << "Unable to open file:" << file.errorString();
-        QMessageBox::warning(this,
-                             tr("Warning"),
-                             tr("Could not open file for writing."),
-                             QMessageBox::Ok);
+        common::MessageBox::warning(this,
+                             tr("Could not open file for writing."));
         return;
     }
 

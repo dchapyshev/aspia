@@ -25,7 +25,7 @@
 #include <QMenu>
 #include <QMessageBox>
 
-#include "base/gui_application.h"
+#include "common/ui/message_box.h"
 #include "base/logging.h"
 #include "client/file_remover.h"
 #include "client/ui/file_transfer/address_bar_model.h"
@@ -422,14 +422,8 @@ void FilePanel::removeSelected()
     if (items.isEmpty())
         return;
 
-    QMessageBox message_box(QMessageBox::Question,
-                            tr("Confirmation"),
-                            tr("Are you sure you want to delete the selected items?"),
-                            QMessageBox::Yes | QMessageBox::No,
-                            this);
-    base::GuiApplication::translateMessageBox(&message_box);
-
-    if (message_box.exec() != QMessageBox::Yes)
+    if (common::MessageBox::question(this,
+            tr("Are you sure you want to delete the selected items?")) != QMessageBox::Yes)
         return;
 
     emit sig_removeItems(this, items);
@@ -458,7 +452,7 @@ void FilePanel::sendSelected()
 //--------------------------------------------------------------------------------------------------
 void FilePanel::showError(const QString& message)
 {
-    QMessageBox::warning(this, tr("Warning"), message, QMessageBox::Ok);
+    common::MessageBox::warning(this, message);
 }
 
 } // namespace client
