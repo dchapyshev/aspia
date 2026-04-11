@@ -22,15 +22,32 @@
 
 namespace common {
 
-namespace {
+//--------------------------------------------------------------------------------------------------
+MsgBox::MsgBox(QWidget* parent)
+    : QMessageBox(parent)
+{
+    // Nothing
+}
 
 //--------------------------------------------------------------------------------------------------
-void translateButtons(QMessageBox* message_box)
+MsgBox::MsgBox(Icon icon, const QString& title, const QString& text, StandardButtons buttons, QWidget* parent)
+    : QMessageBox(icon, title, text, buttons, parent)
 {
-    static const struct {
+    // Nothing
+}
+
+//--------------------------------------------------------------------------------------------------
+MsgBox::~MsgBox() = default;
+
+//--------------------------------------------------------------------------------------------------
+int MsgBox::exec()
+{
+    static const struct
+    {
         QMessageBox::StandardButton button;
         const char* text;
-    } kButtons[] = {
+    } kButtons[] =
+    {
         { QMessageBox::Ok,              QT_TR_NOOP("OK")                },
         { QMessageBox::Cancel,          QT_TR_NOOP("Cancel")            },
         { QMessageBox::Yes,             QT_TR_NOOP("Yes")               },
@@ -53,39 +70,11 @@ void translateButtons(QMessageBox* message_box)
 
     for (const auto& entry : kButtons)
     {
-        QAbstractButton* button = message_box->button(entry.button);
-        if (button)
-            button->setText(MsgBox::tr(entry.text));
+        QAbstractButton* btn = button(entry.button);
+        if (btn)
+            btn->setText(tr(entry.text));
     }
-}
 
-} // namespace
-
-//--------------------------------------------------------------------------------------------------
-MsgBox::MsgBox(QWidget* parent)
-    : QMessageBox(parent)
-{
-    // Nothing
-}
-
-//--------------------------------------------------------------------------------------------------
-MsgBox::MsgBox(Icon icon,
-                       const QString& title,
-                       const QString& text,
-                       StandardButtons buttons,
-                       QWidget* parent)
-    : QMessageBox(icon, title, text, buttons, parent)
-{
-    // Nothing
-}
-
-//--------------------------------------------------------------------------------------------------
-MsgBox::~MsgBox() = default;
-
-//--------------------------------------------------------------------------------------------------
-int MsgBox::exec()
-{
-    translateButtons(this);
     return QMessageBox::exec();
 }
 

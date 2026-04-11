@@ -253,8 +253,12 @@ void SettingsDialog::onRemoveRouter()
     if (!item)
         return;
 
-    delete item;
-    updateRouterButtons();
+    if (common::MsgBox::question(this, tr("Are you sure you want to delete router \"%1\"?")
+            .arg(item->text(0))) == common::MsgBox::Yes)
+    {
+        delete item;
+        updateRouterButtons();
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -324,32 +324,32 @@
 <context>
     <name>Client</name>
     <message>
-        <location filename="../client/main.cc" line="44"/>
+        <location filename="../client/main.cc" line="42"/>
         <source>Incorrect value for &quot;%1&quot;. Possible values: %2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="260"/>
+        <location filename="../client/main.cc" line="257"/>
         <source>Remote computer address.</source>
         <translation>远程计算机地址。</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="264"/>
+        <location filename="../client/main.cc" line="261"/>
         <source>Remote computer port.</source>
         <translation>远程计算机端口。</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="269"/>
+        <location filename="../client/main.cc" line="266"/>
         <source>Name of host.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="273"/>
+        <location filename="../client/main.cc" line="270"/>
         <source>Name of user.</source>
         <translation>用户名。</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="277"/>
+        <location filename="../client/main.cc" line="274"/>
         <source>Password of user.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -358,92 +358,90 @@
         <translation type="vanished">会话类型。 可能的值：桌面管理，桌面视图，文件传输。</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="281"/>
+        <location filename="../client/main.cc" line="278"/>
         <source>Display name when connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="290"/>
+        <location filename="../client/main.cc" line="287"/>
         <source>Enable or disable audio. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="294"/>
+        <location filename="../client/main.cc" line="291"/>
         <source>Enable or disable cursor shape. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="298"/>
+        <location filename="../client/main.cc" line="295"/>
         <source>Enable or disable cursor position. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="302"/>
+        <location filename="../client/main.cc" line="299"/>
         <source>Enable or disable clipboard. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="306"/>
+        <location filename="../client/main.cc" line="303"/>
         <source>Enable or disable desktop effects. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="310"/>
+        <location filename="../client/main.cc" line="307"/>
         <source>Enable or disable desktop wallpaper. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="285"/>
+        <location filename="../client/main.cc" line="282"/>
         <source>Session type. Possible values: desktop, file-transfer, system-info, text-chat.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="314"/>
+        <location filename="../client/main.cc" line="311"/>
         <source>Lock computer at disconnect. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="318"/>
+        <location filename="../client/main.cc" line="315"/>
         <source>Block remote input. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="322"/>
+        <location filename="../client/main.cc" line="319"/>
         <source>Router address.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="326"/>
+        <location filename="../client/main.cc" line="323"/>
         <source>Router port.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="331"/>
+        <location filename="../client/main.cc" line="328"/>
         <source>Router name of user.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="335"/>
+        <location filename="../client/main.cc" line="332"/>
         <source>Router password of user.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="339"/>
+        <location filename="../client/main.cc" line="336"/>
         <source>Aspia Client</source>
         <translation>Aspia 客户端</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="43"/>
-        <location filename="../client/main.cc" line="482"/>
         <source>Warning</source>
-        <translation>警告</translation>
+        <translation type="vanished">警告</translation>
     </message>
     <message>
         <source>Incorrect session type entered.</source>
         <translation type="vanished">输入了错误的会话类型。</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="483"/>
+        <location filename="../client/main.cc" line="482"/>
         <source>A host ID was entered, but the router was not configured. You need to configure your router before connecting.</source>
         <translation type="unfinished">输入了主机ID，但未配置路由器。 连接之前，您需要配置路由器。</translation>
     </message>
@@ -2085,18 +2083,16 @@
 <context>
     <name>Host</name>
     <message>
-        <location filename="../host/ui/host_main.cc" line="143"/>
-        <location filename="../host/ui/host_main.cc" line="160"/>
         <source>Warning</source>
-        <translation>警告</translation>
+        <translation type="vanished">警告</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_main.cc" line="144"/>
+        <location filename="../host/ui/host_main.cc" line="142"/>
         <source>Application integrity check failed. Components are missing or damaged.</source>
         <translation>应用程序完整性检查失败。 组件丢失或损坏。</translation>
     </message>
     <message>
-        <location filename="../host/ui/host_main.cc" line="161"/>
+        <location filename="../host/ui/host_main.cc" line="156"/>
         <source>Export and import parameters can not be specified together.</source>
         <translation>不能同时指定导出和导入参数。</translation>
     </message>
@@ -2578,6 +2574,29 @@
     </message>
 </context>
 <context>
+    <name>RouterDialog</name>
+    <message>
+        <location filename="../client/ui/router_dialog.ui" line="14"/>
+        <source>Router</source>
+        <translation type="unfinished">路由器</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/router_dialog.ui" line="25"/>
+        <source>Address:</source>
+        <translation type="unfinished">地址：</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/router_dialog.ui" line="39"/>
+        <source>User Name:</source>
+        <translation type="unfinished">用户名：</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/router_dialog.ui" line="53"/>
+        <source>Password:</source>
+        <translation type="unfinished">密码：</translation>
+    </message>
+</context>
+<context>
     <name>RouterGroupWidget</name>
     <message>
         <location filename="../client/ui/hosts/router_group_widget.ui" line="45"/>
@@ -2969,123 +2988,144 @@
         <translation type="unfinished">路由器</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="30"/>
         <source>Use a router</source>
-        <translation type="unfinished">使用路由器</translation>
+        <translation type="obsolete">使用路由器</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="39"/>
         <source>Address:</source>
-        <translation type="unfinished">地址：</translation>
+        <translation type="obsolete">地址：</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="53"/>
         <source>User Name:</source>
-        <translation type="unfinished">用户名：</translation>
+        <translation type="obsolete">用户名：</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="67"/>
         <source>Password:</source>
-        <translation type="unfinished">密码：</translation>
+        <translation type="obsolete">密码：</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="99"/>
+        <location filename="../client/ui/settings_dialog.ui" line="91"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="116"/>
+        <location filename="../client/ui/settings_dialog.ui" line="108"/>
         <source>Desktop</source>
         <translation type="unfinished">桌面</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="128"/>
+        <location filename="../client/ui/settings_dialog.ui" line="120"/>
         <source>Features</source>
         <translation type="unfinished">特性</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="134"/>
+        <location filename="../client/ui/settings_dialog.ui" line="126"/>
         <source>Enable audio</source>
         <translation type="unfinished">启用声音</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="141"/>
+        <location filename="../client/ui/settings_dialog.ui" line="133"/>
         <source>Enable clipboard</source>
         <translation type="unfinished">启用剪贴板</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="148"/>
+        <location filename="../client/ui/settings_dialog.ui" line="140"/>
         <source>Show shape of remote cursor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="155"/>
+        <location filename="../client/ui/settings_dialog.ui" line="147"/>
         <source>Show position of remote cursor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="171"/>
+        <location filename="../client/ui/settings_dialog.ui" line="163"/>
         <source>Appearance</source>
         <translation type="unfinished">视觉效果</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="177"/>
+        <location filename="../client/ui/settings_dialog.ui" line="169"/>
         <source>Disable desktop effects</source>
         <translation type="unfinished">禁用桌面效果</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="184"/>
+        <location filename="../client/ui/settings_dialog.ui" line="176"/>
         <source>Disable desktop wallpaper</source>
         <translation type="unfinished">禁用桌面壁纸</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="206"/>
+        <location filename="../client/ui/settings_dialog.ui" line="198"/>
         <source>Lock computer at disconnect</source>
         <translation type="unfinished">锁定计算机以断开连接</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="213"/>
+        <location filename="../client/ui/settings_dialog.ui" line="205"/>
         <source>Block remote input</source>
         <translation type="unfinished">阻止远程输入</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="237"/>
+        <location filename="../client/ui/settings_dialog.ui" line="229"/>
         <source>Update</source>
         <translation type="unfinished">更新</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="243"/>
+        <location filename="../client/ui/settings_dialog.ui" line="235"/>
         <source>Check for updates on startup</source>
         <translation type="unfinished">启动时检查更新</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="250"/>
+        <location filename="../client/ui/settings_dialog.ui" line="242"/>
         <source>Use custom update server</source>
         <translation type="unfinished">使用自定义更新服务器</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="259"/>
+        <location filename="../client/ui/settings_dialog.ui" line="251"/>
         <source>Server:</source>
         <translation type="unfinished">服务器：</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="200"/>
-        <location filename="../client/ui/settings_dialog.ui" line="309"/>
+        <location filename="../client/ui/settings_dialog.ui" line="192"/>
+        <location filename="../client/ui/settings_dialog.ui" line="301"/>
         <source>Other</source>
         <translation type="unfinished">其它</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="299"/>
+        <location filename="../client/ui/settings_dialog.ui" line="40"/>
+        <source>Address</source>
+        <translation type="unfinished">地址</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_dialog.ui" line="45"/>
+        <source>User Name</source>
+        <translation type="unfinished">用户名</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_dialog.ui" line="55"/>
+        <source>Add...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_dialog.ui" line="62"/>
+        <source>Edit...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_dialog.ui" line="69"/>
+        <source>Remove</source>
+        <translation type="unfinished">移除</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_dialog.ui" line="291"/>
         <source>Check for updates</source>
         <translation type="unfinished">检查更新</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="317"/>
+        <location filename="../client/ui/settings_dialog.ui" line="309"/>
         <source>Display name when connected:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="327"/>
+        <location filename="../client/ui/settings_dialog.ui" line="319"/>
         <source>Enter a name or leave the field empty</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3093,68 +3133,59 @@
 <context>
     <name>SettingsUtil</name>
     <message>
-        <location filename="../host/ui/settings_util.cc" line="45"/>
-        <location filename="../host/ui/settings_util.cc" line="66"/>
         <source>Information</source>
-        <translation>信息</translation>
+        <translation type="vanished">信息</translation>
     </message>
     <message>
-        <location filename="../host/ui/settings_util.cc" line="46"/>
+        <location filename="../host/ui/settings_util.cc" line="45"/>
         <source>The configuration was successfully imported.</source>
         <translation>配置已成功导入。</translation>
     </message>
     <message>
-        <location filename="../host/ui/settings_util.cc" line="67"/>
+        <location filename="../host/ui/settings_util.cc" line="64"/>
         <source>The configuration was successfully exported.</source>
         <translation>配置已成功导出。</translation>
     </message>
     <message>
-        <location filename="../host/ui/settings_util.cc" line="88"/>
-        <location filename="../host/ui/settings_util.cc" line="109"/>
-        <location filename="../host/ui/settings_util.cc" line="126"/>
-        <location filename="../host/ui/settings_util.cc" line="143"/>
-        <location filename="../host/ui/settings_util.cc" line="172"/>
-        <location filename="../host/ui/settings_util.cc" line="187"/>
+        <location filename="../host/ui/settings_util.cc" line="130"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../host/ui/settings_util.cc" line="89"/>
+        <location filename="../host/ui/settings_util.cc" line="83"/>
         <source>Source settings file does not exist.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/settings_util.cc" line="110"/>
+        <location filename="../host/ui/settings_util.cc" line="101"/>
         <source>Unable to open the source file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/settings_util.cc" line="127"/>
+        <location filename="../host/ui/settings_util.cc" line="115"/>
         <source>Unable to read the source file: the file is damaged or has an unknown format.</source>
         <translation>无法读取源文件：文件已损坏或格式未知。</translation>
     </message>
     <message>
-        <location filename="../host/ui/settings_util.cc" line="144"/>
+        <location filename="../host/ui/settings_util.cc" line="131"/>
         <source>The existing settings will be overwritten. Continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/settings_util.cc" line="147"/>
         <source>Yes</source>
-        <translation type="unfinished">是</translation>
+        <translation type="obsolete">是</translation>
     </message>
     <message>
-        <location filename="../host/ui/settings_util.cc" line="148"/>
         <source>No</source>
-        <translation type="unfinished">否</translation>
+        <translation type="obsolete">否</translation>
     </message>
     <message>
-        <location filename="../host/ui/settings_util.cc" line="173"/>
+        <location filename="../host/ui/settings_util.cc" line="156"/>
         <source>Unable to open the target file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/settings_util.cc" line="188"/>
+        <location filename="../host/ui/settings_util.cc" line="168"/>
         <source>Unable to write the target file.</source>
         <translation>无法写入目标文件。</translation>
     </message>
@@ -4619,12 +4650,11 @@
 <context>
     <name>client::AddressBar</name>
     <message>
-        <location filename="../client/ui/file_transfer/address_bar.cc" line="56"/>
         <source>Warning</source>
-        <translation>警告</translation>
+        <translation type="vanished">警告</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/address_bar.cc" line="57"/>
+        <location filename="../client/ui/file_transfer/address_bar.cc" line="56"/>
         <source>An incorrect path to the folder was entered.</source>
         <translation>输入的文件夹路径不正确。</translation>
     </message>
@@ -4734,23 +4764,16 @@
 <context>
     <name>client::AuthorizationDialog</name>
     <message>
-        <location filename="../client/ui/authorization_dialog.cc" line="38"/>
-        <source>Cancel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/authorization_dialog.cc" line="170"/>
-        <location filename="../client/ui/authorization_dialog.cc" line="181"/>
         <source>Warning</source>
-        <translation>警告</translation>
+        <translation type="vanished">警告</translation>
     </message>
     <message>
-        <location filename="../client/ui/authorization_dialog.cc" line="171"/>
+        <location filename="../client/ui/authorization_dialog.cc" line="164"/>
         <source>Username cannot be empty.</source>
         <translation>用户名不能为空。</translation>
     </message>
     <message>
-        <location filename="../client/ui/authorization_dialog.cc" line="182"/>
+        <location filename="../client/ui/authorization_dialog.cc" line="172"/>
         <source>Password cannot be empty.</source>
         <translation>密码不能为空。</translation>
     </message>
@@ -4849,14 +4872,6 @@
     </message>
 </context>
 <context>
-    <name>client::DesktopConfigDialog</name>
-    <message>
-        <location filename="../client/ui/desktop/desktop_config_dialog.cc" line="40"/>
-        <source>Cancel</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>client::DesktopPanel</name>
     <message>
         <source>Monitor selection</source>
@@ -4906,9 +4921,8 @@
 <context>
     <name>client::DesktopSessionWindow</name>
     <message>
-        <location filename="../client/ui/desktop/desktop_session_window.cc" line="1016"/>
         <source>Warning</source>
-        <translation type="unfinished">警告</translation>
+        <translation type="obsolete">警告</translation>
     </message>
     <message>
         <source>There are no supported video encodings.</source>
@@ -4962,65 +4976,52 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="557"/>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="578"/>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="609"/>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="640"/>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="661"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="572"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="601"/>
         <source>Confirmation</source>
         <translation type="unfinished">确认</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="558"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="557"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation type="unfinished">确定要关闭远程计算机吗？</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="561"/>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="582"/>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="613"/>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="644"/>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="665"/>
         <source>Yes</source>
-        <translation type="unfinished">是</translation>
+        <translation type="obsolete">是</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="562"/>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="583"/>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="614"/>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="645"/>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="666"/>
         <source>No</source>
-        <translation type="unfinished">否</translation>
+        <translation type="obsolete">否</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="579"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="573"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation type="unfinished">确定要重新启动远程计算机吗？</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="588"/>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="619"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="580"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="609"/>
         <source>Wait for host</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="610"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="602"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="641"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="630"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation type="unfinished">确定要结束远程计算机上的用户会话吗？</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="662"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="645"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation type="unfinished">确定要锁定远程计算机上的用户会话吗？</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="766"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="744"/>
         <source>Scale</source>
         <translation type="unfinished">缩放</translation>
     </message>
@@ -5104,9 +5105,8 @@
 <context>
     <name>client::FilePanel</name>
     <message>
-        <location filename="../client/ui/file_transfer/file_panel.cc" line="461"/>
         <source>Warning</source>
-        <translation>警告</translation>
+        <translation type="vanished">警告</translation>
     </message>
     <message>
         <location filename="../client/ui/file_transfer/file_panel.cc" line="104"/>
@@ -5161,65 +5161,57 @@
         <translation>创建文件夹 （&amp;C）</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_panel.cc" line="425"/>
         <source>Confirmation</source>
-        <translation>确认</translation>
+        <translation type="vanished">确认</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_panel.cc" line="426"/>
+        <location filename="../client/ui/file_transfer/file_panel.cc" line="425"/>
         <source>Are you sure you want to delete the selected items?</source>
         <translation>是否确定要删除所选项目？</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_panel.cc" line="429"/>
         <source>Yes</source>
-        <translation type="unfinished">是</translation>
+        <translation type="obsolete">是</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_panel.cc" line="430"/>
         <source>No</source>
-        <translation type="unfinished">否</translation>
+        <translation type="obsolete">否</translation>
     </message>
 </context>
 <context>
     <name>client::FileRemoveDialog</name>
     <message>
-        <location filename="../client/ui/file_transfer/file_remove_dialog.cc" line="46"/>
-        <source>Cancel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/file_transfer/file_remove_dialog.cc" line="94"/>
+        <location filename="../client/ui/file_transfer/file_remove_dialog.cc" line="90"/>
         <source>Deleting: %1</source>
         <translation>正在删除: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_remove_dialog.cc" line="121"/>
+        <location filename="../client/ui/file_transfer/file_remove_dialog.cc" line="117"/>
         <source>An error occurred while retrieving the list of files: %1</source>
         <translation>检索文件列表时出错：%1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_remove_dialog.cc" line="126"/>
+        <location filename="../client/ui/file_transfer/file_remove_dialog.cc" line="122"/>
         <source>Failed to delete &quot;%1&quot;: %2.</source>
         <translation>删除失败 &quot;%1&quot;: %2.</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_remove_dialog.cc" line="131"/>
+        <location filename="../client/ui/file_transfer/file_remove_dialog.cc" line="127"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_remove_dialog.cc" line="139"/>
+        <location filename="../client/ui/file_transfer/file_remove_dialog.cc" line="135"/>
         <source>Skip</source>
         <translation>跳过</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_remove_dialog.cc" line="142"/>
+        <location filename="../client/ui/file_transfer/file_remove_dialog.cc" line="138"/>
         <source>Skip All</source>
         <translation>跳过所有</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_remove_dialog.cc" line="145"/>
+        <location filename="../client/ui/file_transfer/file_remove_dialog.cc" line="141"/>
         <source>Abort</source>
         <translation>终止</translation>
     </message>
@@ -5227,122 +5219,117 @@
 <context>
     <name>client::FileTransferDialog</name>
     <message>
-        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="45"/>
-        <source>Cancel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="98"/>
+        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="94"/>
         <source>Current Task: Copying items.</source>
         <translation>当前任务：正在复制项目。</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="110"/>
+        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="106"/>
         <source>From: %1</source>
         <translation>从: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="113"/>
+        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="109"/>
         <source>To: %1</source>
         <translation>到: %1</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="147"/>
+        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="143"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="159"/>
+        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="155"/>
         <source>Skip</source>
         <translation>跳过</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="162"/>
+        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="158"/>
         <source>Skip All</source>
         <translation>跳过所有</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="165"/>
+        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="161"/>
         <source>Replace</source>
         <translation>替换</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="168"/>
+        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="164"/>
         <source>Replace All</source>
         <translation>替换所有</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="171"/>
+        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="167"/>
         <source>Abort</source>
         <translation>终止</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="317"/>
+        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="313"/>
         <source>TB/s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="322"/>
+        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="318"/>
         <source>GB/s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="327"/>
+        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="323"/>
         <source>MB/s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="332"/>
+        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="328"/>
         <source>kB/s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="337"/>
+        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="333"/>
         <source>B/s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="134"/>
+        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="130"/>
         <source>Speed: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="247"/>
+        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="243"/>
         <source>Current Task: Cancel transfer of files.</source>
         <translation>当前任务：取消文件传输。</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="262"/>
+        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="258"/>
         <source>An error occurred while building the file queue for copying</source>
         <translation>生成用于复制的文件队列时出错</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="267"/>
+        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="263"/>
         <source>Failed to create directory &quot;%1&quot;: %2</source>
         <translation>创建目录失败 &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="274"/>
+        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="270"/>
         <source>Failed to create file &quot;%1&quot;: %2</source>
         <translation>未能创建文件 &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="280"/>
+        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="276"/>
         <source>Failed to open file &quot;%1&quot;: %2</source>
         <translation>无法打开文件 &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="286"/>
+        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="282"/>
         <source>Failed to write file &quot;%1&quot;: %2</source>
         <translation>无法写入文件 &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="292"/>
+        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="288"/>
         <source>Failed to read file &quot;%1&quot;: %2</source>
         <translation>读取文件失败 &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="298"/>
+        <location filename="../client/ui/file_transfer/file_transfer_dialog.cc" line="294"/>
         <source>Unknown error type while copying files</source>
         <translation>复制文件时出现未知错误类型</translation>
     </message>
@@ -5360,12 +5347,11 @@
         <translation type="unfinished">远程计算机</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_transfer_session_window.cc" line="125"/>
         <source>Warning</source>
-        <translation type="unfinished">警告</translation>
+        <translation type="obsolete">警告</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_transfer_session_window.cc" line="126"/>
+        <location filename="../client/ui/file_transfer/file_transfer_session_window.cc" line="125"/>
         <source>Session error: %1</source>
         <translation type="unfinished">会话错误: %1</translation>
     </message>
@@ -5437,21 +5423,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="321"/>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="329"/>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="367"/>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="460"/>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="561"/>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="569"/>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="598"/>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="606"/>
         <source>Warning</source>
-        <translation type="unfinished">警告</translation>
+        <translation type="obsolete">警告</translation>
     </message>
     <message>
         <location filename="../client/ui/hosts/hosts_tab.cc" line="321"/>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="562"/>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="599"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="552"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="591"/>
         <source>Failed to retrieve computer information from the local database.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5471,41 +5449,35 @@
         <translation type="unfinished">确定要删除计算机吗 &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="354"/>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="445"/>
         <source>Confirmation</source>
-        <translation type="unfinished">确认</translation>
+        <translation type="obsolete">确认</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="356"/>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="447"/>
         <source>Yes</source>
-        <translation type="unfinished">是</translation>
+        <translation type="obsolete">是</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="357"/>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="448"/>
         <source>No</source>
-        <translation type="unfinished">否</translation>
+        <translation type="obsolete">否</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="367"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="362"/>
         <source>Unable to remove computer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="443"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="438"/>
         <source>Are you sure you want to delete group &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="460"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="450"/>
         <source>Unable to remove group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="569"/>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="606"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="559"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="598"/>
         <source>The computer has an incorrect address.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5528,16 +5500,8 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="123"/>
-        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="130"/>
-        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="141"/>
-        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="150"/>
-        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="161"/>
-        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="176"/>
-        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="198"/>
-        <location filename="../client/ui/hosts/local_computer_dialog.cc" line="207"/>
         <source>Warning</source>
-        <translation type="unfinished">警告</translation>
+        <translation type="obsolete">警告</translation>
     </message>
     <message>
         <location filename="../client/ui/hosts/local_computer_dialog.cc" line="123"/>
@@ -5602,14 +5566,8 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_group_dialog.cc" line="96"/>
-        <location filename="../client/ui/hosts/local_group_dialog.cc" line="103"/>
-        <location filename="../client/ui/hosts/local_group_dialog.cc" line="114"/>
-        <location filename="../client/ui/hosts/local_group_dialog.cc" line="129"/>
-        <location filename="../client/ui/hosts/local_group_dialog.cc" line="148"/>
-        <location filename="../client/ui/hosts/local_group_dialog.cc" line="157"/>
         <source>Warning</source>
-        <translation type="unfinished">警告</translation>
+        <translation type="obsolete">警告</translation>
     </message>
     <message>
         <location filename="../client/ui/hosts/local_group_dialog.cc" line="96"/>
@@ -5659,9 +5617,8 @@
         <translation type="unfinished">主机</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.cc" line="309"/>
         <source>Warning</source>
-        <translation type="unfinished">警告</translation>
+        <translation type="obsolete">警告</translation>
     </message>
     <message>
         <location filename="../client/ui/main_window.cc" line="310"/>
@@ -5777,14 +5734,27 @@
 <context>
     <name>client::RecordSettingsDialog</name>
     <message>
-        <location filename="../client/ui/desktop/record_settings_dialog.cc" line="38"/>
-        <source>Cancel</source>
+        <location filename="../client/ui/desktop/record_settings_dialog.cc" line="48"/>
+        <source>Choose path</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>client::RouterDialog</name>
+    <message>
+        <location filename="../client/ui/router_dialog.cc" line="93"/>
+        <source>An invalid router address was entered.</source>
+        <translation type="unfinished">输入了无效的路由器地址。</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/router_dialog.cc" line="103"/>
+        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/record_settings_dialog.cc" line="52"/>
-        <source>Choose path</source>
-        <translation type="unfinished"></translation>
+        <location filename="../client/ui/router_dialog.cc" line="114"/>
+        <source>Password cannot be empty.</source>
+        <translation type="unfinished">密码不能为空。</translation>
     </message>
 </context>
 <context>
@@ -5964,100 +5934,100 @@
         <translation type="unfinished">添加</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1128"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1120"/>
         <source>Are you sure you want to disconnect all relays?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1196"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1175"/>
         <source>Deleting a host will result in all its configuration for connecting to the router being deleted. This operation is irreversible. After deleting, the host will no longer connect to the router. Are you sure you want to do this?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1205"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1182"/>
         <source>Try to uninstall the application (result is not guaranteed)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1383"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1454"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1346"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1417"/>
         <source>Save File</source>
         <translation type="unfinished">保存文件</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1383"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1454"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1346"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1417"/>
         <source>JSON files (*.json)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1394"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1465"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1357"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1428"/>
         <source>Could not open file for writing.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1442"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1532"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1405"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1495"/>
         <source>Unable to write file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1610"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1573"/>
         <source>%n seconds</source>
         <translation type="unfinished">
             <numerusform>%n 秒</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1611"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1574"/>
         <source>%n minutes</source>
         <translation type="unfinished">
             <numerusform>%n 分钟</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1612"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1575"/>
         <source>%n hours</source>
         <translation type="unfinished">
             <numerusform>%n 小时</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1616"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1579"/>
         <source>%n days</source>
         <translation type="unfinished">
             <numerusform>%n 天</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1642"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1605"/>
         <source>TB</source>
         <translation type="unfinished">TB</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1644"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1607"/>
         <source>GB</source>
         <translation type="unfinished">GB</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1646"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1609"/>
         <source>MB</source>
         <translation type="unfinished">MB</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1648"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1611"/>
         <source>kB</source>
         <translation type="unfinished">kB</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1650"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1613"/>
         <source>B</source>
         <translation type="unfinished">B</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1106"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1165"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1105"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1150"/>
         <source>Are you sure you want to disconnect session &quot;%1&quot;?</source>
         <translation>您确定要断开会话 &quot;%1&quot;?</translation>
     </message>
@@ -6095,15 +6065,8 @@
         <translation>未知错误类型。</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="699"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="738"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1332"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1394"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1442"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1465"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1532"/>
         <source>Warning</source>
-        <translation>警告</translation>
+        <translation type="vanished">警告</translation>
     </message>
     <message>
         <location filename="../client/ui/router_manager/router_manager_window.cc" line="728"/>
@@ -6116,47 +6079,30 @@
         <translation>指定名称的用户已存在。</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1105"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1127"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1164"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1195"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1230"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1337"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1174"/>
         <source>Confirmation</source>
         <translation>确认</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1110"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1131"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1169"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1201"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1234"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1341"/>
         <source>Yes</source>
-        <translation type="unfinished">是</translation>
+        <translation type="obsolete">是</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1111"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1132"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1170"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1202"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1235"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1342"/>
         <source>No</source>
-        <translation type="unfinished">否</translation>
+        <translation type="obsolete">否</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1231"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1207"/>
         <source>Are you sure you want to disconnect all hosts?</source>
         <translation>您确定要断开所有主机的连接吗？</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1332"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1302"/>
         <source>You cannot delete a built-in user.</source>
         <translation>您不能删除内置用户。</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1338"/>
+        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1307"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>您确定要删除用户 &quot;%1&quot;吗？</translation>
     </message>
@@ -6192,86 +6138,74 @@
 <context>
     <name>client::RouterUserDialog</name>
     <message>
-        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="41"/>
-        <source>Cancel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="141"/>
-        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="157"/>
-        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="171"/>
-        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="186"/>
-        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="209"/>
-        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="238"/>
+        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="197"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="142"/>
+        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="137"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="158"/>
+        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="151"/>
         <source>The username you entered already exists.</source>
         <translation>您输入的用户名已经存在。</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="172"/>
+        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="163"/>
         <source>The passwords you entered do not match.</source>
         <translation>您输入的密码不匹配。</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="187"/>
+        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="176"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation>
             <numerusform>密码不能为空，并且不能超过 %n 个字符。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="199"/>
+        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="187"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>您输入的密码不符合安全性要求！</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="202"/>
+        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="190"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>密码必须包含小写和大写字母，数字，并且不得短于 %n 个字符。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="206"/>
+        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="194"/>
         <source>Do you want to enter a different password?</source>
         <translation>您要输入其他密码吗？</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="213"/>
         <source>Yes</source>
-        <translation type="unfinished">是</translation>
+        <translation type="obsolete">是</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="214"/>
         <source>No</source>
-        <translation type="unfinished">否</translation>
+        <translation type="obsolete">否</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="239"/>
+        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="224"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>创建或修改用户时发生未知的内部错误。</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="289"/>
+        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="273"/>
         <source>Double-click to change</source>
         <translation>双击更改</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="314"/>
+        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="298"/>
         <source>Administrator</source>
         <translation>管理员</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="318"/>
+        <location filename="../client/ui/router_manager/router_user_dialog.cc" line="302"/>
         <source>Client</source>
         <translation>客户端</translation>
     </message>
@@ -6532,29 +6466,21 @@
 <context>
     <name>client::SettingsDialog</name>
     <message>
-        <location filename="../client/ui/settings_dialog.cc" line="44"/>
-        <source>Cancel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/settings_dialog.cc" line="176"/>
         <source>An invalid router address was entered.</source>
-        <translation type="unfinished">输入了无效的路由器地址。</translation>
+        <translation type="obsolete">输入了无效的路由器地址。</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.cc" line="195"/>
-        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/settings_dialog.cc" line="212"/>
         <source>Password cannot be empty.</source>
-        <translation type="unfinished">密码不能为空。</translation>
+        <translation type="obsolete">密码不能为空。</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.cc" line="255"/>
         <source>Warning</source>
-        <translation type="unfinished">警告</translation>
+        <translation type="obsolete">警告</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_dialog.cc" line="256"/>
+        <source>Are you sure you want to delete router &quot;%1&quot;?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -6570,12 +6496,8 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/sidebar.cc" line="317"/>
-        <location filename="../client/ui/hosts/sidebar.cc" line="327"/>
-        <location filename="../client/ui/hosts/sidebar.cc" line="383"/>
-        <location filename="../client/ui/hosts/sidebar.cc" line="403"/>
         <source>Warning</source>
-        <translation type="unfinished">警告</translation>
+        <translation type="obsolete">警告</translation>
     </message>
     <message>
         <location filename="../client/ui/hosts/sidebar.cc" line="318"/>
@@ -8179,9 +8101,8 @@
         <translation type="unfinished">HTML 文件 (*.html)</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_session_window.cc" line="272"/>
         <source>Warning</source>
-        <translation type="unfinished">警告</translation>
+        <translation type="obsolete">警告</translation>
     </message>
     <message>
         <location filename="../client/ui/sys_info/system_info_session_window.cc" line="272"/>
@@ -8463,58 +8384,49 @@
 <context>
     <name>client::TaskManagerWindow</name>
     <message>
-        <location filename="../client/ui/desktop/task_manager_window.cc" line="962"/>
+        <location filename="../client/ui/desktop/task_manager_window.cc" line="941"/>
         <source>Update Speed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/task_manager_window.cc" line="650"/>
-        <location filename="../client/ui/desktop/task_manager_window.cc" line="707"/>
-        <location filename="../client/ui/desktop/task_manager_window.cc" line="737"/>
         <source>Confirmation</source>
-        <translation type="unfinished">确认</translation>
+        <translation type="obsolete">确认</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/task_manager_window.cc" line="651"/>
+        <location filename="../client/ui/desktop/task_manager_window.cc" line="650"/>
         <source>Do you really want to end &quot;%1&quot; process?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/task_manager_window.cc" line="655"/>
-        <location filename="../client/ui/desktop/task_manager_window.cc" line="712"/>
-        <location filename="../client/ui/desktop/task_manager_window.cc" line="742"/>
         <source>Yes</source>
-        <translation type="unfinished">是</translation>
+        <translation type="obsolete">是</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/task_manager_window.cc" line="656"/>
-        <location filename="../client/ui/desktop/task_manager_window.cc" line="713"/>
-        <location filename="../client/ui/desktop/task_manager_window.cc" line="743"/>
         <source>No</source>
-        <translation type="unfinished">否</translation>
+        <translation type="obsolete">否</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/task_manager_window.cc" line="708"/>
+        <location filename="../client/ui/desktop/task_manager_window.cc" line="700"/>
         <source>Do you really want to disconnect user &quot;%1&quot; session?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/task_manager_window.cc" line="738"/>
+        <location filename="../client/ui/desktop/task_manager_window.cc" line="723"/>
         <source>Do you really want to end user &quot;%1&quot; session?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/task_manager_window.cc" line="944"/>
+        <location filename="../client/ui/desktop/task_manager_window.cc" line="923"/>
         <source>Processes: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/task_manager_window.cc" line="956"/>
+        <location filename="../client/ui/desktop/task_manager_window.cc" line="935"/>
         <source>Physical memory: %1%</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/task_manager_window.cc" line="950"/>
+        <location filename="../client/ui/desktop/task_manager_window.cc" line="929"/>
         <source>CPU loading: %1%</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8564,6 +8476,30 @@
     <message>
         <source>An error occurred while installing the update: %1</source>
         <translation type="obsolete">安装更新时出错：%1</translation>
+    </message>
+    <message>
+        <source>Yes</source>
+        <translation type="obsolete">是</translation>
+    </message>
+    <message>
+        <source>No</source>
+        <translation type="obsolete">否</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation type="obsolete">关闭</translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="obsolete">保存</translation>
+    </message>
+    <message>
+        <source>Help</source>
+        <translation type="obsolete">帮助</translation>
+    </message>
+    <message>
+        <source>Abort</source>
+        <translation type="obsolete">终止</translation>
     </message>
 </context>
 <context>
@@ -8688,12 +8624,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="247"/>
         <source>Warning</source>
-        <translation type="unfinished">警告</translation>
+        <translation type="obsolete">警告</translation>
     </message>
     <message>
-        <location filename="../common/ui/about_dialog.cc" line="248"/>
+        <location filename="../common/ui/about_dialog.cc" line="247"/>
         <source>Could not open file for writing.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8741,58 +8676,250 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/chat_widget.cc" line="516"/>
-        <location filename="../common/ui/chat_widget.cc" line="583"/>
         <source>Warning</source>
-        <translation type="unfinished">警告</translation>
+        <translation type="obsolete">警告</translation>
     </message>
     <message numerus="yes">
-        <location filename="../common/ui/chat_widget.cc" line="517"/>
+        <location filename="../common/ui/chat_widget.cc" line="516"/>
         <source>The message is too long. The maximum message length is %n characters.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../common/ui/chat_widget.cc" line="566"/>
+        <location filename="../common/ui/chat_widget.cc" line="564"/>
         <source>Save File</source>
         <translation type="unfinished">保存文件</translation>
     </message>
     <message>
-        <location filename="../common/ui/chat_widget.cc" line="568"/>
+        <location filename="../common/ui/chat_widget.cc" line="566"/>
         <source>TXT files (*.txt)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../common/ui/chat_widget.cc" line="584"/>
+        <location filename="../common/ui/chat_widget.cc" line="581"/>
         <source>Could not open file for writing.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>common::DialogButtonBox</name>
+    <message>
+        <location filename="../common/ui/dialog_button_box.cc" line="82"/>
+        <source>OK</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/ui/dialog_button_box.cc" line="83"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/ui/dialog_button_box.cc" line="84"/>
+        <source>Yes</source>
+        <translation type="unfinished">是</translation>
+    </message>
+    <message>
+        <location filename="../common/ui/dialog_button_box.cc" line="85"/>
+        <source>No</source>
+        <translation type="unfinished">否</translation>
+    </message>
+    <message>
+        <location filename="../common/ui/dialog_button_box.cc" line="86"/>
+        <source>Apply</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/ui/dialog_button_box.cc" line="87"/>
+        <source>Close</source>
+        <translation type="unfinished">关闭</translation>
+    </message>
+    <message>
+        <location filename="../common/ui/dialog_button_box.cc" line="88"/>
+        <source>Save</source>
+        <translation type="unfinished">保存</translation>
+    </message>
+    <message>
+        <location filename="../common/ui/dialog_button_box.cc" line="89"/>
+        <source>Discard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/ui/dialog_button_box.cc" line="90"/>
+        <source>Reset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/ui/dialog_button_box.cc" line="91"/>
+        <source>Help</source>
+        <translation type="unfinished">帮助</translation>
+    </message>
+    <message>
+        <location filename="../common/ui/dialog_button_box.cc" line="92"/>
+        <source>Abort</source>
+        <translation type="unfinished">终止</translation>
+    </message>
+    <message>
+        <location filename="../common/ui/dialog_button_box.cc" line="93"/>
+        <source>Retry</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/ui/dialog_button_box.cc" line="94"/>
+        <source>Ignore</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/ui/dialog_button_box.cc" line="95"/>
+        <source>Restore Defaults</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/ui/dialog_button_box.cc" line="96"/>
+        <source>Save All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/ui/dialog_button_box.cc" line="97"/>
+        <source>Open</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/ui/dialog_button_box.cc" line="98"/>
+        <source>Yes to All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/ui/dialog_button_box.cc" line="99"/>
+        <source>No to All</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>common::DownloadDialog</name>
     <message>
-        <location filename="../common/ui/download_dialog.cc" line="41"/>
-        <source>Cancel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../common/ui/download_dialog.cc" line="71"/>
         <source>Warning</source>
-        <translation>警告</translation>
+        <translation type="vanished">警告</translation>
     </message>
     <message>
-        <location filename="../common/ui/download_dialog.cc" line="72"/>
+        <location filename="../common/ui/download_dialog.cc" line="66"/>
         <source>An error occurred while downloading the update: %1</source>
         <translation>下载更新时出错：%1</translation>
     </message>
 </context>
 <context>
-    <name>common::StatusDialog</name>
+    <name>common::MsgBox</name>
     <message>
-        <location filename="../common/ui/status_dialog.cc" line="40"/>
+        <location filename="../common/ui/msg_box.cc" line="54"/>
+        <source>OK</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/ui/msg_box.cc" line="55"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/ui/msg_box.cc" line="56"/>
+        <source>Yes</source>
+        <translation type="unfinished">是</translation>
+    </message>
+    <message>
+        <location filename="../common/ui/msg_box.cc" line="57"/>
+        <source>No</source>
+        <translation type="unfinished">否</translation>
+    </message>
+    <message>
+        <location filename="../common/ui/msg_box.cc" line="58"/>
+        <source>Apply</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/ui/msg_box.cc" line="59"/>
         <source>Close</source>
         <translation type="unfinished">关闭</translation>
+    </message>
+    <message>
+        <location filename="../common/ui/msg_box.cc" line="60"/>
+        <source>Save</source>
+        <translation type="unfinished">保存</translation>
+    </message>
+    <message>
+        <location filename="../common/ui/msg_box.cc" line="61"/>
+        <source>Discard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/ui/msg_box.cc" line="62"/>
+        <source>Reset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/ui/msg_box.cc" line="63"/>
+        <source>Help</source>
+        <translation type="unfinished">帮助</translation>
+    </message>
+    <message>
+        <location filename="../common/ui/msg_box.cc" line="64"/>
+        <source>Abort</source>
+        <translation type="unfinished">终止</translation>
+    </message>
+    <message>
+        <location filename="../common/ui/msg_box.cc" line="65"/>
+        <source>Retry</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/ui/msg_box.cc" line="66"/>
+        <source>Ignore</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/ui/msg_box.cc" line="67"/>
+        <source>Restore Defaults</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/ui/msg_box.cc" line="68"/>
+        <source>Save All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/ui/msg_box.cc" line="69"/>
+        <source>Open</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/ui/msg_box.cc" line="70"/>
+        <source>Yes to All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/ui/msg_box.cc" line="71"/>
+        <source>No to All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../common/ui/msg_box.cc" line="88"/>
+        <source>Warning</source>
+        <translation type="unfinished">警告</translation>
+    </message>
+    <message>
+        <location filename="../common/ui/msg_box.cc" line="96"/>
+        <source>Information</source>
+        <translation type="unfinished">信息</translation>
+    </message>
+    <message>
+        <location filename="../common/ui/msg_box.cc" line="104"/>
+        <source>Confirmation</source>
+        <translation type="unfinished">确认</translation>
+    </message>
+</context>
+<context>
+    <name>common::StatusDialog</name>
+    <message>
+        <source>Close</source>
+        <translation type="obsolete">关闭</translation>
     </message>
 </context>
 <context>
@@ -8826,18 +8953,18 @@
         <translation>取消检查更新。请稍候。</translation>
     </message>
     <message>
-        <location filename="../common/ui/update_dialog.cc" line="207"/>
+        <location filename="../common/ui/update_dialog.cc" line="198"/>
         <source>Unknown</source>
         <translation>未知</translation>
     </message>
     <message>
-        <location filename="../common/ui/update_dialog.cc" line="208"/>
+        <location filename="../common/ui/update_dialog.cc" line="199"/>
         <source>Error retrieving update information.</source>
         <translation>检索更新信息时出错。</translation>
     </message>
     <message>
-        <location filename="../common/ui/update_dialog.cc" line="218"/>
-        <location filename="../common/ui/update_dialog.cc" line="241"/>
+        <location filename="../common/ui/update_dialog.cc" line="209"/>
+        <location filename="../common/ui/update_dialog.cc" line="232"/>
         <source>No updates available.</source>
         <translation>没有可用的更新。</translation>
     </message>
@@ -8862,27 +8989,23 @@
         <translation>继续吗？</translation>
     </message>
     <message>
-        <location filename="../common/ui/update_dialog.cc" line="131"/>
         <source>Confirmation</source>
-        <translation>确认</translation>
+        <translation type="vanished">确认</translation>
     </message>
     <message>
-        <location filename="../common/ui/update_dialog.cc" line="136"/>
         <source>Yes</source>
-        <translation type="unfinished">是</translation>
+        <translation type="obsolete">是</translation>
     </message>
     <message>
-        <location filename="../common/ui/update_dialog.cc" line="137"/>
         <source>No</source>
-        <translation type="unfinished">否</translation>
+        <translation type="obsolete">否</translation>
     </message>
     <message>
-        <location filename="../common/ui/update_dialog.cc" line="148"/>
         <source>Warning</source>
-        <translation>警告</translation>
+        <translation type="vanished">警告</translation>
     </message>
     <message>
-        <location filename="../common/ui/update_dialog.cc" line="149"/>
+        <location filename="../common/ui/update_dialog.cc" line="141"/>
         <source>An error occurred while installing the update: %1</source>
         <translation>安装更新时出错：%1</translation>
     </message>
@@ -8890,37 +9013,32 @@
 <context>
     <name>console::AddressBookDialog</name>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="113"/>
+        <location filename="../console/address_book_dialog.cc" line="109"/>
         <source>Without Encryption</source>
         <translation>没有加密</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="115"/>
+        <location filename="../console/address_book_dialog.cc" line="111"/>
         <source>ChaCha20 + Poly1305 (256-bit key)</source>
         <translation>ChaCha20 + Poly1305 (256-bit key)</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="144"/>
+        <location filename="../console/address_book_dialog.cc" line="140"/>
         <source>Double-click to change</source>
         <translation>双击可更改</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="127"/>
+        <location filename="../console/address_book_dialog.cc" line="123"/>
         <source>Address Book</source>
         <translation>通讯录</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="100"/>
-        <source>Cancel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/address_book_dialog.cc" line="226"/>
+        <location filename="../console/address_book_dialog.cc" line="222"/>
         <source>General</source>
         <translation type="unfinished">常规</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="230"/>
+        <location filename="../console/address_book_dialog.cc" line="226"/>
         <source>Sessions</source>
         <translation type="unfinished">会话</translation>
     </message>
@@ -8933,7 +9051,7 @@
         <translation type="obsolete">查看</translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/address_book_dialog.cc" line="442"/>
+        <location filename="../console/address_book_dialog.cc" line="438"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>名称太长。名称的最大长度为 %n 个字符。</numerusform>
@@ -8944,56 +9062,55 @@
         <translation type="vanished">名称不能为空。</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="448"/>
+        <location filename="../console/address_book_dialog.cc" line="444"/>
         <source>Name cannot be empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/address_book_dialog.cc" line="455"/>
+        <location filename="../console/address_book_dialog.cc" line="451"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>描述太长。描述的最大长度为 %n 个字符。</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/address_book_dialog.cc" line="463"/>
+        <location filename="../console/address_book_dialog.cc" line="459"/>
         <source>Too long display name. The maximum length of the display name is %n characters.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="489"/>
+        <location filename="../console/address_book_dialog.cc" line="485"/>
         <source>The passwords you entered do not match.</source>
         <translation>您输入的密码不匹配。</translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/address_book_dialog.cc" line="495"/>
+        <location filename="../console/address_book_dialog.cc" line="491"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation>
             <numerusform>密码不能为空，并且不能超过 %n 个字符。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="503"/>
+        <location filename="../console/address_book_dialog.cc" line="499"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>您输入的密码不符合安全要求！</translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/address_book_dialog.cc" line="506"/>
+        <location filename="../console/address_book_dialog.cc" line="502"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>密码必须包含大小写字符、数字，并且不得少于 %n 个字符。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="510"/>
+        <location filename="../console/address_book_dialog.cc" line="506"/>
         <source>Do you want to enter a different password?</source>
         <translation>您想输入其他密码吗？</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="420"/>
-        <location filename="../console/address_book_dialog.cc" line="513"/>
+        <location filename="../console/address_book_dialog.cc" line="509"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
@@ -9006,27 +9123,25 @@
         <translation type="obsolete">桌面查看</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="517"/>
         <source>Yes</source>
-        <translation type="unfinished">是</translation>
+        <translation type="obsolete">是</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="518"/>
         <source>No</source>
-        <translation type="unfinished">否</translation>
+        <translation type="obsolete">否</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="552"/>
+        <location filename="../console/address_book_dialog.cc" line="547"/>
         <source>An invalid router address was entered.</source>
         <translation>输入了无效的路由器地址。</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="563"/>
+        <location filename="../console/address_book_dialog.cc" line="558"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
         <translation>用户名不能为空，只能包含字母，数字和_，-、。 字符。</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="572"/>
+        <location filename="../console/address_book_dialog.cc" line="567"/>
         <source>Router password cannot be empty.</source>
         <translation>路由器密码不能为空。</translation>
     </message>
@@ -9069,76 +9184,70 @@
         <translation>您确定要删除计算机组 &quot;%1&quot; 和所有子项吗？</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="672"/>
-        <location filename="../console/address_book_tab.cc" line="710"/>
         <source>Confirmation</source>
-        <translation>确认</translation>
+        <translation type="vanished">确认</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="676"/>
-        <location filename="../console/address_book_tab.cc" line="714"/>
         <source>Yes</source>
-        <translation type="unfinished">是</translation>
+        <translation type="obsolete">是</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="677"/>
-        <location filename="../console/address_book_tab.cc" line="715"/>
         <source>No</source>
-        <translation type="unfinished">否</translation>
+        <translation type="obsolete">否</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="706"/>
+        <location filename="../console/address_book_tab.cc" line="698"/>
         <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
         <translation>确定要删除计算机吗 &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="1060"/>
+        <location filename="../console/address_book_tab.cc" line="1044"/>
         <source>Online</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="1062"/>
+        <location filename="../console/address_book_tab.cc" line="1046"/>
         <source>Offline</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="1187"/>
+        <location filename="../console/address_book_tab.cc" line="1171"/>
         <source>Save Address Book</source>
         <translation>保存通讯录</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="1189"/>
+        <location filename="../console/address_book_tab.cc" line="1173"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Aspia 通讯录 (*.aab)</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="1204"/>
+        <location filename="../console/address_book_tab.cc" line="1188"/>
         <source>Unable to create or open address book file.</source>
         <translation>无法创建或打开通讯录文件。</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="1218"/>
+        <location filename="../console/address_book_tab.cc" line="1202"/>
         <source>Unable to write address book file.</source>
         <translation>无法写入通讯录文件。</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="1249"/>
+        <location filename="../console/address_book_tab.cc" line="1233"/>
         <source>Root Group</source>
         <translation>根组</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="1261"/>
-        <location filename="../console/address_book_tab.cc" line="1276"/>
+        <location filename="../console/address_book_tab.cc" line="1245"/>
+        <location filename="../console/address_book_tab.cc" line="1260"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="1263"/>
+        <location filename="../console/address_book_tab.cc" line="1247"/>
         <source>Could not open address book</source>
         <translation>无法打开通讯录</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="1278"/>
+        <location filename="../console/address_book_tab.cc" line="1262"/>
         <source>Failed to save address book</source>
         <translation>保存通讯录失败</translation>
     </message>
@@ -9147,21 +9256,16 @@
     <name>console::ComputerDialog</name>
     <message>
         <location filename="../console/computer_dialog.cc" line="59"/>
-        <source>Cancel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/computer_dialog.cc" line="63"/>
         <source>(copy)</source>
         <translation>(copy)</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog.cc" line="74"/>
+        <location filename="../console/computer_dialog.cc" line="70"/>
         <source>General</source>
         <translation>常规</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog.cc" line="78"/>
+        <location filename="../console/computer_dialog.cc" line="74"/>
         <source>Sessions</source>
         <translation>会话</translation>
     </message>
@@ -9218,30 +9322,24 @@
         <translation>输入了无效的计算机地址。</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_general.cc" line="208"/>
         <source>Warning</source>
-        <translation>警告</translation>
+        <translation type="vanished">警告</translation>
     </message>
 </context>
 <context>
     <name>console::ComputerGroupDialog</name>
     <message>
-        <location filename="../console/computer_group_dialog.cc" line="62"/>
-        <source>Cancel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/computer_group_dialog.cc" line="78"/>
+        <location filename="../console/computer_group_dialog.cc" line="74"/>
         <source>General</source>
         <translation type="unfinished">常规</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog.cc" line="82"/>
+        <location filename="../console/computer_group_dialog.cc" line="78"/>
         <source>Sessions</source>
         <translation type="unfinished">会话</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog.cc" line="232"/>
+        <location filename="../console/computer_group_dialog.cc" line="228"/>
         <source>Name cannot be empty.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -9262,7 +9360,7 @@
         <translation type="obsolete">桌面查看</translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/computer_group_dialog.cc" line="223"/>
+        <location filename="../console/computer_group_dialog.cc" line="219"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
         <translation>
             <numerusform>名字太长，名称的最大长度为 %n 个字符。</numerusform>
@@ -9273,16 +9371,15 @@
         <translation type="vanished">名称不能为空。</translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/computer_group_dialog.cc" line="241"/>
+        <location filename="../console/computer_group_dialog.cc" line="237"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation>
             <numerusform>描述太长， 描述的最大长度为 %n 个字符。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog.cc" line="200"/>
         <source>Warning</source>
-        <translation>警告</translation>
+        <translation type="vanished">警告</translation>
     </message>
 </context>
 <context>
@@ -9311,51 +9408,40 @@
         <translation type="obsolete">输入了无效的计算机地址。</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_general.cc" line="140"/>
         <source>Warning</source>
-        <translation type="unfinished">警告</translation>
+        <translation type="obsolete">警告</translation>
     </message>
 </context>
 <context>
     <name>console::FastConnectDialog</name>
     <message>
-        <location filename="../console/fast_connect_dialog.cc" line="55"/>
-        <source>Cancel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/fast_connect_dialog.cc" line="92"/>
         <source>Confirmation</source>
-        <translation>确认</translation>
+        <translation type="vanished">确认</translation>
     </message>
     <message>
-        <location filename="../console/fast_connect_dialog.cc" line="93"/>
+        <location filename="../console/fast_connect_dialog.cc" line="88"/>
         <source>The list of entered addresses will be cleared. Continue?</source>
         <translation>输入的地址列表将被清除，是否继续？</translation>
     </message>
     <message>
-        <location filename="../console/fast_connect_dialog.cc" line="96"/>
         <source>Yes</source>
-        <translation type="unfinished">是</translation>
+        <translation type="obsolete">是</translation>
     </message>
     <message>
-        <location filename="../console/fast_connect_dialog.cc" line="97"/>
         <source>No</source>
-        <translation type="unfinished">否</translation>
+        <translation type="obsolete">否</translation>
     </message>
     <message>
-        <location filename="../console/fast_connect_dialog.cc" line="216"/>
-        <location filename="../console/fast_connect_dialog.cc" line="235"/>
         <source>Warning</source>
-        <translation>警告</translation>
+        <translation type="vanished">警告</translation>
     </message>
     <message>
-        <location filename="../console/fast_connect_dialog.cc" line="217"/>
+        <location filename="../console/fast_connect_dialog.cc" line="205"/>
         <source>Connection by ID is specified but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation>已指定按ID连接，但未配置路由器。 在地址簿的属性中检查路由器的参数。</translation>
     </message>
     <message>
-        <location filename="../console/fast_connect_dialog.cc" line="236"/>
+        <location filename="../console/fast_connect_dialog.cc" line="221"/>
         <source>An invalid computer address was entered.</source>
         <translation>输入了无效的计算机地址。</translation>
     </message>
@@ -9363,166 +9449,141 @@
 <context>
     <name>console::MainWindow</name>
     <message>
-        <location filename="../console/main_window.cc" line="205"/>
-        <location filename="../console/main_window.cc" line="594"/>
-        <location filename="../console/main_window.cc" line="605"/>
-        <location filename="../console/main_window.cc" line="617"/>
-        <location filename="../console/main_window.cc" line="671"/>
-        <location filename="../console/main_window.cc" line="684"/>
-        <location filename="../console/main_window.cc" line="1685"/>
         <source>Warning</source>
-        <translation>警告</translation>
+        <translation type="vanished">警告</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="206"/>
+        <location filename="../console/main_window.cc" line="204"/>
         <source>Pinned address book file &quot;%1&quot; was not found.&lt;br/&gt;This file will be unpinned.</source>
         <translation>找不到固定的通讯录文件&quot;%1&quot;。&lt;br/&gt;该文件将被取消固定。</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="286"/>
-        <location filename="../console/main_window.cc" line="630"/>
-        <location filename="../console/main_window.cc" line="692"/>
         <source>Information</source>
-        <translation>信息</translation>
+        <translation type="vanished">信息</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="287"/>
+        <location filename="../console/main_window.cc" line="283"/>
         <source>Address Book &quot;%1&quot; is already open.</source>
         <translation>通讯录&quot;%1&quot;已打开。</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="319"/>
+        <location filename="../console/main_window.cc" line="314"/>
         <source>Open Address Book</source>
         <translation>打开通讯录</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="321"/>
+        <location filename="../console/main_window.cc" line="316"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Aspia 通讯录 (*.aab)</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="579"/>
+        <location filename="../console/main_window.cc" line="574"/>
         <source>Open File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="581"/>
-        <location filename="../console/main_window.cc" line="658"/>
+        <location filename="../console/main_window.cc" line="576"/>
+        <location filename="../console/main_window.cc" line="642"/>
         <source>JSON files (*.json)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="595"/>
+        <location filename="../console/main_window.cc" line="588"/>
         <source>Could not open file for reading.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="606"/>
+        <location filename="../console/main_window.cc" line="596"/>
         <source>Import file is empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="656"/>
+        <location filename="../console/main_window.cc" line="640"/>
         <source>Save File</source>
         <translation type="unfinished">保存文件</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="672"/>
+        <location filename="../console/main_window.cc" line="654"/>
         <source>Could not open file for writing.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="685"/>
+        <location filename="../console/main_window.cc" line="664"/>
         <source>Unable to write file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="693"/>
+        <location filename="../console/main_window.cc" line="669"/>
         <source>Export completed successfully.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="930"/>
-        <location filename="../console/main_window.cc" line="1272"/>
-        <location filename="../console/main_window.cc" line="1363"/>
         <source>Confirmation</source>
-        <translation>确认</translation>
+        <translation type="vanished">确认</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="931"/>
-        <location filename="../console/main_window.cc" line="1364"/>
+        <location filename="../console/main_window.cc" line="905"/>
+        <location filename="../console/main_window.cc" line="1323"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>通讯录&quot;%1&quot;已更改。 保存更改？</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="935"/>
-        <location filename="../console/main_window.cc" line="1276"/>
-        <location filename="../console/main_window.cc" line="1368"/>
         <source>Yes</source>
-        <translation type="unfinished">是</translation>
+        <translation type="obsolete">是</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="936"/>
-        <location filename="../console/main_window.cc" line="1277"/>
-        <location filename="../console/main_window.cc" line="1369"/>
         <source>No</source>
-        <translation type="unfinished">否</translation>
+        <translation type="obsolete">否</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="937"/>
-        <location filename="../console/main_window.cc" line="1370"/>
-        <source>Cancel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/main_window.cc" line="1165"/>
+        <location filename="../console/main_window.cc" line="1133"/>
         <source>Close other tabs</source>
         <translation>关闭其他标签</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1172"/>
+        <location filename="../console/main_window.cc" line="1140"/>
         <source>Close tab</source>
         <translation>关闭标签</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1173"/>
-        <location filename="../console/main_window.cc" line="1178"/>
+        <location filename="../console/main_window.cc" line="1141"/>
+        <location filename="../console/main_window.cc" line="1146"/>
         <source>Pin tab</source>
         <translation>固定标签</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1273"/>
+        <location filename="../console/main_window.cc" line="1239"/>
         <source>The list of recently opened address books will be cleared. Continue?</source>
         <translation>最近打开的通讯录列表将被清除，继续？</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1310"/>
+        <location filename="../console/main_window.cc" line="1270"/>
         <source>Hide</source>
         <translation>隐藏</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1325"/>
+        <location filename="../console/main_window.cc" line="1285"/>
         <source>Show</source>
         <translation>显示</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="736"/>
-        <location filename="../console/main_window.cc" line="1551"/>
+        <location filename="../console/main_window.cc" line="711"/>
+        <location filename="../console/main_window.cc" line="1504"/>
         <source>Aspia Console</source>
         <translation>Aspia 控制台</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="618"/>
+        <location filename="../console/main_window.cc" line="606"/>
         <source>Failed to parse JSON document: %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="631"/>
+        <location filename="../console/main_window.cc" line="616"/>
         <source>Import completed successfully.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1686"/>
+        <location filename="../console/main_window.cc" line="1638"/>
         <source>Connection by ID is specified in the properties of the computer, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation>在计算机的属性中指定了按ID连接，但未配置路由器。 在地址簿的属性中检查路由器的参数。</translation>
     </message>
@@ -9538,17 +9599,12 @@
 <context>
     <name>console::OpenAddressBookDialog</name>
     <message>
-        <location filename="../console/open_address_book_dialog.cc" line="36"/>
-        <source>Cancel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/open_address_book_dialog.cc" line="49"/>
+        <location filename="../console/open_address_book_dialog.cc" line="45"/>
         <source>Without Encryption</source>
         <translation>没有加密</translation>
     </message>
     <message>
-        <location filename="../console/open_address_book_dialog.cc" line="53"/>
+        <location filename="../console/open_address_book_dialog.cc" line="49"/>
         <source>ChaCha20 + Poly1305 (256-bit key)</source>
         <translation>ChaCha20 + Poly1305 (256-bit key)</translation>
     </message>
@@ -9578,53 +9634,34 @@
     </message>
 </context>
 <context>
-    <name>console::UpdateSettingsDialog</name>
-    <message>
-        <location filename="../console/update_settings_dialog.cc" line="38"/>
-        <source>Cancel</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>host::ChangePasswordDialog</name>
     <message>
-        <location filename="../host/ui/change_password_dialog.cc" line="41"/>
-        <source>Cancel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../host/ui/change_password_dialog.cc" line="97"/>
-        <location filename="../host/ui/change_password_dialog.cc" line="109"/>
-        <location filename="../host/ui/change_password_dialog.cc" line="129"/>
-        <location filename="../host/ui/change_password_dialog.cc" line="140"/>
-        <location filename="../host/ui/change_password_dialog.cc" line="152"/>
-        <location filename="../host/ui/change_password_dialog.cc" line="163"/>
         <source>Warning</source>
-        <translation type="unfinished">警告</translation>
+        <translation type="obsolete">警告</translation>
     </message>
     <message>
-        <location filename="../host/ui/change_password_dialog.cc" line="98"/>
+        <location filename="../host/ui/change_password_dialog.cc" line="92"/>
         <source>Password cannot be empty.</source>
         <translation type="unfinished">密码不能为空。</translation>
     </message>
     <message>
-        <location filename="../host/ui/change_password_dialog.cc" line="130"/>
+        <location filename="../host/ui/change_password_dialog.cc" line="118"/>
         <source>You must enter your old password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/change_password_dialog.cc" line="141"/>
+        <location filename="../host/ui/change_password_dialog.cc" line="126"/>
         <source>You entered an incorrect old password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/change_password_dialog.cc" line="153"/>
+        <location filename="../host/ui/change_password_dialog.cc" line="135"/>
         <source>New password cannot be empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/change_password_dialog.cc" line="110"/>
-        <location filename="../host/ui/change_password_dialog.cc" line="164"/>
+        <location filename="../host/ui/change_password_dialog.cc" line="101"/>
+        <location filename="../host/ui/change_password_dialog.cc" line="143"/>
         <source>The passwords entered do not match.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -9632,17 +9669,11 @@
 <context>
     <name>host::CheckPasswordDialog</name>
     <message>
-        <location filename="../host/ui/check_password_dialog.cc" line="40"/>
-        <source>Cancel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../host/ui/check_password_dialog.cc" line="72"/>
         <source>Warning</source>
-        <translation type="unfinished">警告</translation>
+        <translation type="obsolete">警告</translation>
     </message>
     <message>
-        <location filename="../host/ui/check_password_dialog.cc" line="73"/>
+        <location filename="../host/ui/check_password_dialog.cc" line="67"/>
         <source>You entered an incorrect password.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -9650,28 +9681,27 @@
 <context>
     <name>host::ConfigDialog</name>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="442"/>
         <source>Confirmation</source>
-        <translation>确认</translation>
+        <translation type="vanished">确认</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="443"/>
+        <location filename="../host/ui/config_dialog.cc" line="435"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation>您确定要删除用户 &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="542"/>
+        <location filename="../host/ui/config_dialog.cc" line="524"/>
         <source>Import</source>
         <translation>导入</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="165"/>
+        <location filename="../host/ui/config_dialog.cc" line="158"/>
         <source>Default</source>
         <translation>默认</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="542"/>
-        <location filename="../host/ui/config_dialog.cc" line="559"/>
+        <location filename="../host/ui/config_dialog.cc" line="524"/>
+        <location filename="../host/ui/config_dialog.cc" line="541"/>
         <source>JSON-files (*.json)</source>
         <translation>JSON-文件 (*.json)</translation>
     </message>
@@ -9680,152 +9710,135 @@
         <translation type="vanished">服务配置已更改。 为了使更改生效，您必须重新启动服务。 立即重新启动服务？</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="559"/>
+        <location filename="../host/ui/config_dialog.cc" line="541"/>
         <source>Export</source>
         <translation>导出</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="584"/>
+        <location filename="../host/ui/config_dialog.cc" line="566"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
         <translation>该配置无法写入。 确保您具有足够的写权限。</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="484"/>
-        <location filename="../host/ui/config_dialog.cc" line="521"/>
-        <location filename="../host/ui/config_dialog.cc" line="587"/>
-        <location filename="../host/ui/config_dialog.cc" line="599"/>
-        <location filename="../host/ui/config_dialog.cc" line="612"/>
         <source>Warning</source>
-        <translation>警告</translation>
+        <translation type="vanished">警告</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="107"/>
-        <source>Cancel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../host/ui/config_dialog.cc" line="110"/>
-        <source>Apply</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../host/ui/config_dialog.cc" line="127"/>
+        <location filename="../host/ui/config_dialog.cc" line="120"/>
         <source>Once a day</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="128"/>
+        <location filename="../host/ui/config_dialog.cc" line="121"/>
         <source>Once a week</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="129"/>
+        <location filename="../host/ui/config_dialog.cc" line="122"/>
         <source>Once a month</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="206"/>
+        <location filename="../host/ui/config_dialog.cc" line="199"/>
         <source>On reboot</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="207"/>
+        <location filename="../host/ui/config_dialog.cc" line="200"/>
         <source>Every 5 minutes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="208"/>
+        <location filename="../host/ui/config_dialog.cc" line="201"/>
         <source>Every 30 minutes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="209"/>
+        <location filename="../host/ui/config_dialog.cc" line="202"/>
         <source>Every 1 hour</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="210"/>
+        <location filename="../host/ui/config_dialog.cc" line="203"/>
         <source>Every 6 hours</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="211"/>
+        <location filename="../host/ui/config_dialog.cc" line="204"/>
         <source>Every 12 hours</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="212"/>
+        <location filename="../host/ui/config_dialog.cc" line="205"/>
         <source>Every 24 hours</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="223"/>
+        <location filename="../host/ui/config_dialog.cc" line="216"/>
         <source>Letters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="242"/>
+        <location filename="../host/ui/config_dialog.cc" line="235"/>
         <source>Never</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="243"/>
+        <location filename="../host/ui/config_dialog.cc" line="236"/>
         <source>15 seconds</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="244"/>
+        <location filename="../host/ui/config_dialog.cc" line="237"/>
         <source>30 seconds</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="245"/>
+        <location filename="../host/ui/config_dialog.cc" line="238"/>
         <source>45 seconds</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="246"/>
+        <location filename="../host/ui/config_dialog.cc" line="239"/>
         <source>60 seconds</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="254"/>
+        <location filename="../host/ui/config_dialog.cc" line="247"/>
         <source>Accept connection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="256"/>
+        <location filename="../host/ui/config_dialog.cc" line="249"/>
         <source>Reject connection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="447"/>
         <source>Yes</source>
-        <translation type="unfinished">是</translation>
+        <translation type="obsolete">是</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="448"/>
         <source>No</source>
-        <translation type="unfinished">否</translation>
+        <translation type="obsolete">否</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="485"/>
-        <location filename="../host/ui/config_dialog.cc" line="522"/>
+        <location filename="../host/ui/config_dialog.cc" line="470"/>
+        <location filename="../host/ui/config_dialog.cc" line="505"/>
         <source>An error occurred while processing the password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="600"/>
+        <location filename="../host/ui/config_dialog.cc" line="580"/>
         <source>Incorrect router address entered.</source>
         <translation>输入了错误的路由器地址。</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="613"/>
+        <location filename="../host/ui/config_dialog.cc" line="590"/>
         <source>Incorrect router public key entered.</source>
         <translation>输入了错误的路由器公钥。</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="788"/>
+        <location filename="../host/ui/config_dialog.cc" line="764"/>
         <source>Remove</source>
         <translation>移除</translation>
     </message>
@@ -9854,17 +9867,17 @@
         <translation type="vanished">未安装</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="783"/>
+        <location filename="../host/ui/config_dialog.cc" line="759"/>
         <source>Install</source>
         <translation>安装</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="220"/>
+        <location filename="../host/ui/config_dialog.cc" line="213"/>
         <source>Letters and digits</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="225"/>
+        <location filename="../host/ui/config_dialog.cc" line="218"/>
         <source>Digits</source>
         <translation type="unfinished"></translation>
     </message>
@@ -9896,34 +9909,32 @@
 <context>
     <name>host::ConnectConfirmDialog</name>
     <message>
-        <location filename="../host/ui/connect_confirm_dialog.cc" line="45"/>
         <source>Yes</source>
-        <translation type="unfinished">是</translation>
+        <translation type="obsolete">是</translation>
     </message>
     <message>
-        <location filename="../host/ui/connect_confirm_dialog.cc" line="49"/>
         <source>No</source>
-        <translation type="unfinished">否</translation>
+        <translation type="obsolete">否</translation>
     </message>
     <message>
-        <location filename="../host/ui/connect_confirm_dialog.cc" line="68"/>
+        <location filename="../host/ui/connect_confirm_dialog.cc" line="60"/>
         <source>User %1 (%2) is trying to connect to your computer with %3 session type.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/connect_confirm_dialog.cc" line="70"/>
+        <location filename="../host/ui/connect_confirm_dialog.cc" line="62"/>
         <source>Allow the connection?</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../host/ui/connect_confirm_dialog.cc" line="145"/>
+        <location filename="../host/ui/connect_confirm_dialog.cc" line="137"/>
         <source>The connection will be automatically accepted after %n seconds.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../host/ui/connect_confirm_dialog.cc" line="150"/>
+        <location filename="../host/ui/connect_confirm_dialog.cc" line="142"/>
         <source>The connection will be automatically rejected after %n seconds.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -9933,86 +9944,84 @@
 <context>
     <name>host::MainWindow</name>
     <message>
-        <location filename="../host/ui/main_window.cc" line="433"/>
-        <location filename="../host/ui/main_window.cc" line="689"/>
-        <location filename="../host/ui/main_window.cc" line="906"/>
+        <location filename="../host/ui/main_window.cc" line="434"/>
+        <location filename="../host/ui/main_window.cc" line="690"/>
+        <location filename="../host/ui/main_window.cc" line="900"/>
         <source>Aspia Host</source>
         <translation>Aspia 主机</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="234"/>
-        <location filename="../host/ui/main_window.cc" line="668"/>
+        <location filename="../host/ui/main_window.cc" line="235"/>
+        <location filename="../host/ui/main_window.cc" line="669"/>
         <source>Show</source>
         <translation>显示</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="327"/>
+        <location filename="../host/ui/main_window.cc" line="328"/>
         <source>Not available</source>
         <translation>无法使用</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="381"/>
+        <location filename="../host/ui/main_window.cc" line="382"/>
         <source>Connecting to router %1...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="385"/>
+        <location filename="../host/ui/main_window.cc" line="386"/>
         <source>Connected to router %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="712"/>
         <source>Yes</source>
-        <translation type="unfinished">是</translation>
+        <translation type="obsolete">是</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="713"/>
         <source>No</source>
-        <translation type="unfinished">否</translation>
+        <translation type="obsolete">否</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="824"/>
+        <location filename="../host/ui/main_window.cc" line="818"/>
         <source>Connecting to router...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="829"/>
+        <location filename="../host/ui/main_window.cc" line="823"/>
         <source>Connected to router</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="834"/>
+        <location filename="../host/ui/main_window.cc" line="828"/>
         <source>Connection error</source>
         <translation>连接错误</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="907"/>
+        <location filename="../host/ui/main_window.cc" line="901"/>
         <source>ID: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="903"/>
+        <location filename="../host/ui/main_window.cc" line="897"/>
         <source>IP addresses:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="377"/>
-        <location filename="../host/ui/main_window.cc" line="819"/>
+        <location filename="../host/ui/main_window.cc" line="378"/>
+        <location filename="../host/ui/main_window.cc" line="813"/>
         <source>Router is disabled</source>
         <translation>路由器被禁用</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="389"/>
+        <location filename="../host/ui/main_window.cc" line="390"/>
         <source>Failed to connect to router %1</source>
         <translation>连接路由器失败 %1</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="429"/>
+        <location filename="../host/ui/main_window.cc" line="430"/>
         <source>Screen recording has started.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="431"/>
+        <location filename="../host/ui/main_window.cc" line="432"/>
         <source>Screen recording stopped.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -10033,14 +10042,13 @@
         <translation type="vanished">正在连接到路由器 %1 ...</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="673"/>
+        <location filename="../host/ui/main_window.cc" line="674"/>
         <source>Hide</source>
         <translation>隐藏</translation>
     </message>
     <message>
-        <location filename="../host/ui/main_window.cc" line="706"/>
         <source>Confirmation</source>
-        <translation>确认</translation>
+        <translation type="vanished">确认</translation>
     </message>
     <message>
         <location filename="../host/ui/main_window.cc" line="707"/>
@@ -10094,76 +10102,64 @@
 <context>
     <name>host::UserDialog</name>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="41"/>
-        <source>Cancel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../host/ui/user_dialog.cc" line="152"/>
-        <location filename="../host/ui/user_dialog.cc" line="165"/>
-        <location filename="../host/ui/user_dialog.cc" line="177"/>
-        <location filename="../host/ui/user_dialog.cc" line="189"/>
-        <location filename="../host/ui/user_dialog.cc" line="211"/>
-        <location filename="../host/ui/user_dialog.cc" line="232"/>
+        <location filename="../host/ui/user_dialog.cc" line="197"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="153"/>
+        <location filename="../host/ui/user_dialog.cc" line="148"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, ., @ characters.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="166"/>
+        <location filename="../host/ui/user_dialog.cc" line="158"/>
         <source>The username you entered already exists.</source>
         <translation>您输入的用户名已经存在。</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="178"/>
+        <location filename="../host/ui/user_dialog.cc" line="167"/>
         <source>The passwords you entered do not match.</source>
         <translation>您输入的密码不匹配。</translation>
     </message>
     <message numerus="yes">
-        <location filename="../host/ui/user_dialog.cc" line="190"/>
+        <location filename="../host/ui/user_dialog.cc" line="177"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
         <translation>
             <numerusform>密码不能为空，并且不能超过 %n 个字符。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="201"/>
+        <location filename="../host/ui/user_dialog.cc" line="187"/>
         <source>Password you entered does not meet the security requirements!</source>
         <translation>您输入的密码不符合安全性要求！</translation>
     </message>
     <message numerus="yes">
-        <location filename="../host/ui/user_dialog.cc" line="204"/>
+        <location filename="../host/ui/user_dialog.cc" line="190"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
         <translation>
             <numerusform>密码必须包含小写和大写字母，数字，并且不得短于 %n 个字符。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="208"/>
+        <location filename="../host/ui/user_dialog.cc" line="194"/>
         <source>Do you want to enter a different password?</source>
         <translation>您要输入其他密码吗？</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="215"/>
         <source>Yes</source>
-        <translation type="unfinished">是</translation>
+        <translation type="obsolete">是</translation>
+    </message>
+    <message>
+        <source>No</source>
+        <translation type="obsolete">否</translation>
     </message>
     <message>
         <location filename="../host/ui/user_dialog.cc" line="216"/>
-        <source>No</source>
-        <translation type="unfinished">否</translation>
-    </message>
-    <message>
-        <location filename="../host/ui/user_dialog.cc" line="233"/>
         <source>Unknown internal error when creating or modifying a user.</source>
         <translation>创建或修改用户时发生未知的内部错误。</translation>
     </message>
     <message>
-        <location filename="../host/ui/user_dialog.cc" line="290"/>
+        <location filename="../host/ui/user_dialog.cc" line="272"/>
         <source>Double-click to change</source>
         <translation>双击更改</translation>
     </message>
