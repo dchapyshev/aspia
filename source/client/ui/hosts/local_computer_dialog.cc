@@ -19,6 +19,9 @@
 #include "client/ui/hosts/local_computer_dialog.h"
 
 #include "base/logging.h"
+#include "base/net/address.h"
+#include "base/peer/user.h"
+#include "build/build_config.h"
 #include "client/local_data.h"
 #include "client/local_database.h"
 #include "client/ui/hosts/group_combo_box.h"
@@ -132,10 +135,23 @@ void LocalComputerDialog::onButtonBoxClicked(QAbstractButton* button)
         return;
     }
 
-    if (ui.edit_address->text().isEmpty())
+    base::Address address = base::Address::fromString(ui.edit_address->text(), DEFAULT_HOST_TCP_PORT);
+    if (!address.isValid())
     {
-        QMessageBox::warning(this, tr("Warning"), tr("Address cannot be empty."));
+        QMessageBox::warning(this, tr("Warning"), tr("An invalid computer address was entered."));
         ui.edit_address->setFocus();
+        ui.edit_address->selectAll();
+        return;
+    }
+
+    QString username = ui.edit_username->text();
+    if (!username.isEmpty() && !base::User::isValidUserName(username))
+    {
+        QMessageBox::warning(this, tr("Warning"),
+            tr("The user name can not be empty and can contain only"
+               " alphabet characters, numbers and \"_\", \"-\", \".\" characters."));
+        ui.edit_username->setFocus();
+        ui.edit_username->selectAll();
         return;
     }
 
