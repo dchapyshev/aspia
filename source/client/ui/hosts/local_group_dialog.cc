@@ -29,6 +29,14 @@
 
 namespace client {
 
+namespace {
+
+constexpr int kMaxNameLength = 64;
+constexpr int kMinNameLength = 1;
+constexpr int kMaxCommentLength = 2048;
+
+} // namespace
+
 //--------------------------------------------------------------------------------------------------
 LocalGroupDialog::LocalGroupDialog(qint64 group_id, qint64 parent_id, QWidget* parent)
     : QDialog(parent),
@@ -82,14 +90,35 @@ void LocalGroupDialog::onButtonBoxClicked(QAbstractButton* button)
         return;
     }
 
-    if (ui.edit_name->text().isEmpty())
+    QString name = ui.edit_name->text();
+    if (name.length() < kMinNameLength)
     {
         QMessageBox::warning(this, tr("Warning"), tr("Name cannot be empty."));
         ui.edit_name->setFocus();
         return;
     }
 
-    QString name = ui.edit_name->text();
+    if (name.length() > kMaxNameLength)
+    {
+        QMessageBox::warning(this, tr("Warning"),
+            tr("Too long name. The maximum length of the name is %n characters.",
+               "", kMaxNameLength));
+        ui.edit_name->setFocus();
+        ui.edit_name->selectAll();
+        return;
+    }
+
+    QString comment = ui.edit_comment->toPlainText();
+    if (comment.length() > kMaxCommentLength)
+    {
+        QMessageBox::warning(this, tr("Warning"),
+            tr("Too long comment. The maximum length of the comment is %n characters.",
+               "", kMaxCommentLength));
+        ui.edit_comment->setFocus();
+        ui.edit_comment->selectAll();
+        return;
+    }
+
     qint64 parent_id = ui.combo_parent_group->currentGroupId();
 
     QList<GroupData> groups = LocalDatabase::instance().groupList(parent_id);

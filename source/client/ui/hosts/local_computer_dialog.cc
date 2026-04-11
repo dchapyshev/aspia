@@ -29,6 +29,14 @@
 
 namespace client {
 
+namespace {
+
+constexpr int kMaxNameLength = 64;
+constexpr int kMinNameLength = 1;
+constexpr int kMaxCommentLength = 2048;
+
+} // namespace
+
 //--------------------------------------------------------------------------------------------------
 LocalComputerDialog::LocalComputerDialog(qint64 computer_id, qint64 group_id, QWidget* parent)
     : QDialog(parent),
@@ -106,10 +114,21 @@ void LocalComputerDialog::onButtonBoxClicked(QAbstractButton* button)
         return;
     }
 
-    if (ui.edit_name->text().isEmpty())
+    QString name = ui.edit_name->text();
+    if (name.length() < kMinNameLength)
     {
         QMessageBox::warning(this, tr("Warning"), tr("Name cannot be empty."));
         ui.edit_name->setFocus();
+        return;
+    }
+
+    if (name.length() > kMaxNameLength)
+    {
+        QMessageBox::warning(this, tr("Warning"),
+            tr("Too long name. The maximum length of the name is %n characters.",
+               "", kMaxNameLength));
+        ui.edit_name->setFocus();
+        ui.edit_name->selectAll();
         return;
     }
 
@@ -120,7 +139,17 @@ void LocalComputerDialog::onButtonBoxClicked(QAbstractButton* button)
         return;
     }
 
-    QString name = ui.edit_name->text();
+    QString comment = ui.edit_comment->toPlainText();
+    if (comment.length() > kMaxCommentLength)
+    {
+        QMessageBox::warning(this, tr("Warning"),
+            tr("Too long comment. The maximum length of the comment is %n characters.",
+               "", kMaxCommentLength));
+        ui.edit_comment->setFocus();
+        ui.edit_comment->selectAll();
+        return;
+    }
+
     qint64 group_id = ui.combo_group->currentGroupId();
 
     QList<ComputerData> computers = LocalDatabase::instance().computerList(group_id);
