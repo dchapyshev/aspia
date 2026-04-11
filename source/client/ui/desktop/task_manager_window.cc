@@ -25,6 +25,7 @@
 #include <QMessageBox>
 #include <QTimer>
 
+#include "base/gui_application.h"
 #include "base/logging.h"
 #include "client/ui/desktop/task_manager_settings.h"
 
@@ -652,8 +653,7 @@ void TaskManagerWindow::onEndProcess()
                                     .arg(current_item->text(PROC_COL_NAME)),
                                 QMessageBox::Yes | QMessageBox::No,
                                 this);
-        message_box.button(QMessageBox::Yes)->setText(tr("Yes"));
-        message_box.button(QMessageBox::No)->setText(tr("No"));
+        base::GuiApplication::translateMessageBox(&message_box);
 
         if (message_box.exec() == QMessageBox::Yes)
         {
@@ -709,8 +709,7 @@ void TaskManagerWindow::onDisconnectUser()
                                     .arg(current_item->text(USER_COL_NAME)),
                                 QMessageBox::Yes | QMessageBox::No,
                                 this);
-        message_box.button(QMessageBox::Yes)->setText(tr("Yes"));
-        message_box.button(QMessageBox::No)->setText(tr("No"));
+        base::GuiApplication::translateMessageBox(&message_box);
 
         if (message_box.exec() == QMessageBox::Yes)
         {
@@ -739,8 +738,7 @@ void TaskManagerWindow::onLogoffUser()
                                     .arg(current_item->text(USER_COL_NAME)),
                                 QMessageBox::Yes | QMessageBox::No,
                                 this);
-        message_box.button(QMessageBox::Yes)->setText(tr("Yes"));
-        message_box.button(QMessageBox::No)->setText(tr("No"));
+        base::GuiApplication::translateMessageBox(&message_box);
 
         if (message_box.exec() == QMessageBox::Yes)
         {

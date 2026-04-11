@@ -25,6 +25,7 @@
 #include <QMenu>
 #include <QMessageBox>
 
+#include "base/gui_application.h"
 #include "base/logging.h"
 #include "client/file_remover.h"
 #include "client/ui/file_transfer/address_bar_model.h"
@@ -426,8 +427,7 @@ void FilePanel::removeSelected()
                             tr("Are you sure you want to delete the selected items?"),
                             QMessageBox::Yes | QMessageBox::No,
                             this);
-    message_box.button(QMessageBox::Yes)->setText(tr("Yes"));
-    message_box.button(QMessageBox::No)->setText(tr("No"));
+    base::GuiApplication::translateMessageBox(&message_box);
 
     if (message_box.exec() != QMessageBox::Yes)
         return;

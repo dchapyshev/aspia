@@ -24,6 +24,7 @@
 #include <QTimer>
 #include <QToolButton>
 
+#include "base/gui_application.h"
 #include "base/logging.h"
 #include "client/ui/desktop/desktop_settings.h"
 #include "client/ui/desktop/record_settings_dialog.h"
@@ -558,8 +559,7 @@ void DesktopToolBar::onPowerControl(QAction* action)
                                 tr("Are you sure you want to shutdown the remote computer?"),
                                 QMessageBox::Yes | QMessageBox::No,
                                 this);
-        message_box.button(QMessageBox::Yes)->setText(tr("Yes"));
-        message_box.button(QMessageBox::No)->setText(tr("No"));
+        base::GuiApplication::translateMessageBox(&message_box);
 
         if (message_box.exec() == QMessageBox::Yes)
         {
@@ -579,8 +579,7 @@ void DesktopToolBar::onPowerControl(QAction* action)
                                 tr("Are you sure you want to reboot the remote computer?"),
                                 QMessageBox::Yes | QMessageBox::No,
                                 this);
-        message_box.button(QMessageBox::Yes)->setText(tr("Yes"));
-        message_box.button(QMessageBox::No)->setText(tr("No"));
+        base::GuiApplication::translateMessageBox(&message_box);
 
         DesktopSettings settings;
 
@@ -610,8 +609,7 @@ void DesktopToolBar::onPowerControl(QAction* action)
                                 tr("Are you sure you want to reboot the remote computer in Safe Mode?"),
                                 QMessageBox::Yes | QMessageBox::No,
                                 this);
-        message_box.button(QMessageBox::Yes)->setText(tr("Yes"));
-        message_box.button(QMessageBox::No)->setText(tr("No"));
+        base::GuiApplication::translateMessageBox(&message_box);
 
         DesktopSettings settings;
 
@@ -641,8 +639,7 @@ void DesktopToolBar::onPowerControl(QAction* action)
                                 tr("Are you sure you want to end the user session on the remote computer?"),
                                 QMessageBox::Yes | QMessageBox::No,
                                 this);
-        message_box.button(QMessageBox::Yes)->setText(tr("Yes"));
-        message_box.button(QMessageBox::No)->setText(tr("No"));
+        base::GuiApplication::translateMessageBox(&message_box);
 
         if (message_box.exec() == QMessageBox::Yes)
         {
@@ -662,8 +659,7 @@ void DesktopToolBar::onPowerControl(QAction* action)
                                 tr("Are you sure you want to lock the user session on the remote computer?"),
                                 QMessageBox::Yes | QMessageBox::No,
                                 this);
-        message_box.button(QMessageBox::Yes)->setText(tr("Yes"));
-        message_box.button(QMessageBox::No)->setText(tr("No"));
+        base::GuiApplication::translateMessageBox(&message_box);
 
         if (message_box.exec() == QMessageBox::Yes)
         {

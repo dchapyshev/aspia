@@ -513,8 +513,7 @@ bool AddressBookDialog::saveChanges()
                                             QString("<b>%1</b><br/>%2<br/>%3").arg(unsafe, safe, question),
                                             QMessageBox::Yes | QMessageBox::No,
                                             this);
-                    message_box.button(QMessageBox::Yes)->setText(tr("Yes"));
-                    message_box.button(QMessageBox::No)->setText(tr("No"));
+                    base::GuiApplication::translateMessageBox(&message_box);
 
                     if (message_box.exec() == QMessageBox::Yes)
                     {

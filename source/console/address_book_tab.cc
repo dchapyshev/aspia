@@ -23,6 +23,7 @@
 #include <QMessageBox>
 #include <QTimer>
 
+#include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/crypto/data_cryptor.h"
@@ -673,8 +674,7 @@ void AddressBookTab::removeComputerGroup()
                             message,
                             QMessageBox::Yes | QMessageBox::No,
                             this);
-    message_box.button(QMessageBox::Yes)->setText(tr("Yes"));
-    message_box.button(QMessageBox::No)->setText(tr("No"));
+    base::GuiApplication::translateMessageBox(&message_box);
 
     if (message_box.exec() == QMessageBox::Yes)
     {
@@ -711,8 +711,7 @@ void AddressBookTab::removeComputer()
                             message,
                             QMessageBox::Yes | QMessageBox::No,
                             this);
-    message_box.button(QMessageBox::Yes)->setText(tr("Yes"));
-    message_box.button(QMessageBox::No)->setText(tr("No"));
+    base::GuiApplication::translateMessageBox(&message_box);
 
     if (message_box.exec() == QMessageBox::Yes)
     {

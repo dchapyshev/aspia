@@ -23,6 +23,7 @@
 #include <QFileInfo>
 #include <QMessageBox>
 
+#include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/xml_settings.h"
 #include "host/system_settings.h"
@@ -144,8 +145,7 @@ bool SettingsUtil::copySettings(const QString& source_path,
                 tr("The existing settings will be overwritten. Continue?"),
                 QMessageBox::Yes | QMessageBox::No,
                 parent);
-            message_box.button(QMessageBox::Yes)->setText(tr("Yes"));
-            message_box.button(QMessageBox::No)->setText(tr("No"));
+            base::GuiApplication::translateMessageBox(&message_box);
 
             if (message_box.exec() == QMessageBox::No)
             {

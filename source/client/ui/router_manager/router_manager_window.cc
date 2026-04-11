@@ -1107,8 +1107,7 @@ void RouterManagerWindow::onDisconnectRelay()
                                 .arg(QString::fromStdString(tree_item->session.computer_name())),
                             QMessageBox::Yes | QMessageBox::No,
                             this);
-    message_box.button(QMessageBox::Yes)->setText(tr("Yes"));
-    message_box.button(QMessageBox::No)->setText(tr("No"));
+    base::GuiApplication::translateMessageBox(&message_box);
 
     if (message_box.exec() == QMessageBox::No)
     {
@@ -1128,8 +1127,7 @@ void RouterManagerWindow::onDisconnectAllRelays()
                             tr("Are you sure you want to disconnect all relays?"),
                             QMessageBox::Yes | QMessageBox::No,
                             this);
-    message_box.button(QMessageBox::Yes)->setText(tr("Yes"));
-    message_box.button(QMessageBox::No)->setText(tr("No"));
+    base::GuiApplication::translateMessageBox(&message_box);
 
     if (message_box.exec() == QMessageBox::No)
     {
@@ -1166,8 +1164,7 @@ void RouterManagerWindow::onDisconnectHost()
                                 .arg(QString::fromStdString(tree_item->session.computer_name())),
                             QMessageBox::Yes | QMessageBox::No,
                             this);
-    message_box.button(QMessageBox::Yes)->setText(tr("Yes"));
-    message_box.button(QMessageBox::No)->setText(tr("No"));
+    base::GuiApplication::translateMessageBox(&message_box);
 
     if (message_box.exec() == QMessageBox::No)
     {
@@ -1198,8 +1195,7 @@ void RouterManagerWindow::onRemoveHost()
                           "will no longer connect to the router. Are you sure you want to do this?"));
     message_box.setIcon(QMessageBox::Question);
     message_box.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-    message_box.button(QMessageBox::Yes)->setText(tr("Yes"));
-    message_box.button(QMessageBox::No)->setText(tr("No"));
+    base::GuiApplication::translateMessageBox(&message_box);
 
     QCheckBox* check_box = new QCheckBox(&message_box);
     check_box->setText(tr("Try to uninstall the application (result is not guaranteed)"));
@@ -1231,8 +1227,7 @@ void RouterManagerWindow::onDisconnectAllHosts()
                             tr("Are you sure you want to disconnect all hosts?"),
                             QMessageBox::Yes | QMessageBox::No,
                             this);
-    message_box.button(QMessageBox::Yes)->setText(tr("Yes"));
-    message_box.button(QMessageBox::No)->setText(tr("No"));
+    base::GuiApplication::translateMessageBox(&message_box);
 
     if (message_box.exec() == QMessageBox::No)
     {
@@ -1338,8 +1333,7 @@ void RouterManagerWindow::onDeleteUser()
                             tr("Are you sure you want to delete user \"%1\"?").arg(tree_item->text(0)),
                             QMessageBox::Yes | QMessageBox::No,
                             this);
-    message_box.button(QMessageBox::Yes)->setText(tr("Yes"));
-    message_box.button(QMessageBox::No)->setText(tr("No"));
+    base::GuiApplication::translateMessageBox(&message_box);
 
     if (message_box.exec() == QMessageBox::Yes)
     {

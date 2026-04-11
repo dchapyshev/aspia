@@ -932,9 +932,7 @@ void MainWindow::onCloseTab(int index)
                                     .arg(tab->addressBookName()),
                                 QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
                                 this);
-        message_box.button(QMessageBox::Yes)->setText(tr("Yes"));
-        message_box.button(QMessageBox::No)->setText(tr("No"));
-        message_box.button(QMessageBox::Cancel)->setText(tr("Cancel"));
+        base::GuiApplication::translateMessageBox(&message_box);
 
         switch (message_box.exec())
         {
@@ -1273,8 +1271,7 @@ void MainWindow::onRecentOpenTriggered(QAction* action)
             tr("The list of recently opened address books will be cleared. Continue?"),
             QMessageBox::Yes | QMessageBox::No,
             this);
-        message_box.button(QMessageBox::Yes)->setText(tr("Yes"));
-        message_box.button(QMessageBox::No)->setText(tr("No"));
+        base::GuiApplication::translateMessageBox(&message_box);
 
         if (message_box.exec() == QMessageBox::Yes)
         {
@@ -1365,9 +1362,7 @@ void MainWindow::closeEvent(QCloseEvent* event)
                                         .arg(tab->addressBookName()),
                                     QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
                                     this);
-            message_box.button(QMessageBox::Yes)->setText(tr("Yes"));
-            message_box.button(QMessageBox::No)->setText(tr("No"));
-            message_box.button(QMessageBox::Cancel)->setText(tr("Cancel"));
+            base::GuiApplication::translateMessageBox(&message_box);
 
             switch (message_box.exec())
             {

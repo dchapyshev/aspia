@@ -23,6 +23,7 @@
 #include <QMessageBox>
 #include <QStatusBar>
 
+#include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/net/address.h"
 #include "build/build_config.h"
@@ -353,8 +354,7 @@ void HostsTab::onDeleteComputerAction()
 
     QMessageBox messagebox(QMessageBox::Question, tr("Confirmation"), message,
                             QMessageBox::Yes | QMessageBox::No, this);
-    messagebox.button(QMessageBox::Yes)->setText(tr("Yes"));
-    messagebox.button(QMessageBox::No)->setText(tr("No"));
+    base::GuiApplication::translateMessageBox(&messagebox);
 
     if (messagebox.exec() == QMessageBox::No)
     {
@@ -444,8 +444,7 @@ void HostsTab::onDeleteGroupAction()
 
     QMessageBox messagebox(QMessageBox::Question, tr("Confirmation"), message,
                            QMessageBox::Yes | QMessageBox::No, this);
-    messagebox.button(QMessageBox::Yes)->setText(tr("Yes"));
-    messagebox.button(QMessageBox::No)->setText(tr("No"));
+    base::GuiApplication::translateMessageBox(&messagebox);
 
     if (messagebox.exec() == QMessageBox::No)
     {

@@ -440,8 +440,7 @@ void ConfigDialog::onDeleteUser()
                                 .arg(user_item->text(0)),
                             QMessageBox::Yes | QMessageBox::No,
                             this);
-    message_box.button(QMessageBox::Yes)->setText(tr("Yes"));
-    message_box.button(QMessageBox::No)->setText(tr("No"));
+    base::GuiApplication::translateMessageBox(&message_box);
 
     if (message_box.exec() == QMessageBox::Yes)
     {
