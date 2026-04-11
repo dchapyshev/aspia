@@ -71,7 +71,12 @@ public:
     class Router : public Item
     {
     public:
-        explicit Router(const QString& name, QTreeWidget* parent);
+        Router(int router_index, const QString& name, QTreeWidget* parent);
+
+        int routerIndex() const { return router_index_; }
+
+    private:
+        int router_index_;
     };
 
     class RouterGroup : public Item
@@ -120,6 +125,8 @@ public:
 
     void loadGroups(qint64 parent_id, QTreeWidgetItem* parent_item);
     void reloadGroups(qint64 selected_group_id = 0);
+    void loadRouters();
+    void reloadRouters();
     qint64 currentGroupId() const;
     Item* currentItem() const;
 
@@ -151,7 +158,6 @@ private:
     QTreeWidget* tree_widget_ = nullptr;
 
     LocalGroup* local_root_ = nullptr;
-    Router* remote_root_ = nullptr;
 
     qint64 current_group_id_ = 0;
     QString computer_mime_type_;

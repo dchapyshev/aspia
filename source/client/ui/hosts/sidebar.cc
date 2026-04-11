@@ -29,9 +29,11 @@
 #include <QVBoxLayout>
 
 #include "base/logging.h"
+#include "build/build_config.h"
 #include "client/local_data.h"
 #include "client/local_database.h"
 #include "client/ui/hosts/local_group_widget.h"
+#include "client/ui/settings.h"
 #include "common/ui/msg_box.h"
 
 namespace client {
@@ -61,8 +63,7 @@ Sidebar::Sidebar(QWidget* parent)
     local_root_ = new LocalGroup(local_root_data, tree_widget_);
     local_root_->setExpanded(true);
 
-    remote_root_ = new Router(tr("Remote"), tree_widget_);
-    remote_root_->setExpanded(true);
+    loadRouters();
 
     // Setup drag-and-drop.
     tree_widget_->setAcceptDrops(true);
@@ -125,6 +126,41 @@ void Sidebar::reloadGroups(qint64 selected_group_id)
 
     current_group_id_ = static_cast<Item*>(selected)->groupId();
     emit sig_switchContent(Item::LOCAL_GROUP);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Sidebar::loadRouters()
+{
+    Settings settings;
+    RouterConfigList router_configs = settings.routerConfigs();
+
+    for (int i = 0; i < router_configs.size(); ++i)
+    {
+        const RouterConfig& config = router_configs[i];
+
+        QString name;
+        if (config.port != DEFAULT_ROUTER_TCP_PORT)
+            name = QString("%1:%2").arg(config.address).arg(config.port);
+        else
+            name = config.address;
+
+        Router* router = new Router(i, name, tree_widget_);
+        router->setExpanded(true);
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void Sidebar::reloadRouters()
+{
+    // Remove all existing Router items from the tree.
+    for (int i = tree_widget_->topLevelItemCount() - 1; i >= 0; --i)
+    {
+        Item* item = static_cast<Item*>(tree_widget_->topLevelItem(i));
+        if (item->itemType() == Item::ROUTER)
+            delete tree_widget_->takeTopLevelItem(i);
+    }
+
+    loadRouters();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -593,8 +629,9 @@ Sidebar::LocalGroup::LocalGroup(const GroupData& group, QTreeWidgetItem* parent)
 }
 
 //--------------------------------------------------------------------------------------------------
-Sidebar::Router::Router(const QString& name, QTreeWidget* parent)
-    : Item(ROUTER, -1, parent)
+Sidebar::Router::Router(int router_index, const QString& name, QTreeWidget* parent)
+    : Item(ROUTER, -1, parent),
+      router_index_(router_index)
 {
     setText(0, name);
     setIcon(0, QIcon(":/img/stack.svg"));

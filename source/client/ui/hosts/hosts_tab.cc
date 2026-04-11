@@ -568,9 +568,24 @@ void HostsTab::onConnectAction(QAction* action)
     }
     else if (current_content_ == router_group_widget_)
     {
+        Sidebar::Item* sidebar_item = ui.sidebar->currentItem();
+        if (!sidebar_item)
+            return;
+
+        // Find the parent Router item for the current RouterGroup.
+        Sidebar::Item* router_item = sidebar_item;
+        while (router_item && router_item->itemType() != Sidebar::Item::ROUTER)
+            router_item = static_cast<Sidebar::Item*>(router_item->parent());
+
+        if (!router_item)
+            return;
+
+        Sidebar::Router* router = static_cast<Sidebar::Router*>(router_item);
         RouterConfigList router_configs = settings.routerConfigs();
-        if (!router_configs.isEmpty())
-            config.router_config = router_configs.first();
+        int index = router->routerIndex();
+
+        if (index >= 0 && index < router_configs.size())
+            config.router_config = router_configs[index];
         // TODO
     }
     else
