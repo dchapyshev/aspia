@@ -20,7 +20,6 @@
 
 #include <QMouseEvent>
 
-#include "base/gui_application.h"
 #include "common/ui/msg_box.h"
 #include "base/logging.h"
 #include "common/ui/session_type.h"
@@ -36,8 +35,6 @@ UserDialog::UserDialog(const base::User& user, const QStringList& exist_names, Q
 {
     LOG(INFO) << "Ctor";
     ui.setupUi(this);
-
-    base::GuiApplication::translateButtonBox(ui.button_box);
 
     if (user.isValid())
     {

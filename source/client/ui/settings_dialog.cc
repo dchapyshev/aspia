@@ -26,7 +26,6 @@
 #include "common/ui/msg_box.h"
 #include "base/net/address.h"
 #include "base/peer/user.h"
-#include "base/gui_application.h"
 #include "build/build_config.h"
 #include "client/ui/router_dialog.h"
 #include "client/ui/settings.h"
@@ -40,8 +39,6 @@ SettingsDialog::SettingsDialog(QWidget* parent)
 {
     LOG(INFO) << "Ctor";
     ui.setupUi(this);
-
-    base::GuiApplication::translateButtonBox(ui.buttonbox);
 
     Settings settings;
 

@@ -21,7 +21,6 @@
 #include <QAbstractButton>
 #include <QDateTime>
 
-#include "base/gui_application.h"
 #include "common/ui/msg_box.h"
 #include "base/logging.h"
 #include "common/ui/session_type.h"
@@ -57,8 +56,6 @@ ComputerGroupDialog::ComputerGroupDialog(QWidget* parent,
 {
     LOG(INFO) << "Ctor";
     ui.setupUi(this);
-
-    base::GuiApplication::translateButtonBox(ui.button_box);
 
     restoreGeometry(settings_.computerGroupDialogGeometry());
 

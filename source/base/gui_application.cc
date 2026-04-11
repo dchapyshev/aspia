@@ -20,8 +20,6 @@
 
 #include <QAbstractNativeEventFilter>
 #include <QCryptographicHash>
-#include <QDialogButtonBox>
-#include <QPushButton>
 #include <QDataStream>
 #include <QDir>
 #include <QIcon>
@@ -596,44 +594,6 @@ QPalette GuiApplication::createDarkPalette()
     palette.setColor(QPalette::Disabled, QPalette::PlaceholderText, QColor(80, 80, 80));
 
     return palette;
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
-void GuiApplication::translateButtonBox(QDialogButtonBox* button_box)
-{
-    DCHECK(button_box);
-
-    static const struct {
-        QDialogButtonBox::StandardButton button;
-        const char* text;
-    } kButtons[] = {
-        { QDialogButtonBox::Ok,                 QT_TR_NOOP("OK")                 },
-        { QDialogButtonBox::Cancel,             QT_TR_NOOP("Cancel")             },
-        { QDialogButtonBox::Yes,                QT_TR_NOOP("Yes")                },
-        { QDialogButtonBox::No,                 QT_TR_NOOP("No")                 },
-        { QDialogButtonBox::Apply,              QT_TR_NOOP("Apply")              },
-        { QDialogButtonBox::Close,              QT_TR_NOOP("Close")              },
-        { QDialogButtonBox::Save,               QT_TR_NOOP("Save")               },
-        { QDialogButtonBox::Discard,            QT_TR_NOOP("Discard")            },
-        { QDialogButtonBox::Reset,              QT_TR_NOOP("Reset")              },
-        { QDialogButtonBox::Help,               QT_TR_NOOP("Help")               },
-        { QDialogButtonBox::Abort,              QT_TR_NOOP("Abort")              },
-        { QDialogButtonBox::Retry,              QT_TR_NOOP("Retry")              },
-        { QDialogButtonBox::Ignore,             QT_TR_NOOP("Ignore")             },
-        { QDialogButtonBox::RestoreDefaults,    QT_TR_NOOP("Restore Defaults")   },
-        { QDialogButtonBox::SaveAll,            QT_TR_NOOP("Save All")           },
-        { QDialogButtonBox::Open,               QT_TR_NOOP("Open")               },
-        { QDialogButtonBox::YesToAll,           QT_TR_NOOP("Yes to All")         },
-        { QDialogButtonBox::NoToAll,            QT_TR_NOOP("No to All")          },
-    };
-
-    for (const auto& entry : kButtons)
-    {
-        QPushButton* button = button_box->button(entry.button);
-        if (button)
-            button->setText(tr(entry.text));
-    }
 }
 
 } // namespace base

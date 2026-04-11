@@ -21,7 +21,6 @@
 #include <QPushButton>
 #include <QTimer>
 
-#include "base/gui_application.h"
 #include "base/logging.h"
 #include "ui_desktop_config_dialog.h"
 
@@ -35,8 +34,6 @@ DesktopConfigDialog::DesktopConfigDialog(const proto::control::Config& config, Q
 {
     LOG(INFO) << "Ctor";
     ui->setupUi(this);
-
-    base::GuiApplication::translateButtonBox(ui->button_box);
 
     ui->checkbox_audio->setChecked(config_.audio());
     ui->checkbox_lock_at_disconnect->setChecked(config_.lock_at_disconnect());

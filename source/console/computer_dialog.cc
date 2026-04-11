@@ -21,7 +21,6 @@
 #include <QAbstractButton>
 #include <QDateTime>
 
-#include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/crypto/secure_memory.h"
 #include "common/ui/session_type.h"
@@ -54,8 +53,6 @@ ComputerDialog::ComputerDialog(QWidget* parent,
 {
     LOG(INFO) << "Ctor";
     ui.setupUi(this);
-
-    base::GuiApplication::translateButtonBox(ui.button_box);
 
     if (mode_ == Mode::COPY)
     {

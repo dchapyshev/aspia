@@ -56,7 +56,7 @@
     </layout>
    </item>
    <item>
-    <widget class="QDialogButtonBox" name="button_box">
+    <widget class="common::DialogButtonBox" name="button_box">
      <property name="standardButtons">
       <set>QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Ok</set>
      </property>
@@ -69,6 +69,11 @@
    <class>client::GroupComboBox</class>
    <extends>QComboBox</extends>
    <header>client/ui/hosts/group_combo_box.h</header>
+  </customwidget>
+  <customwidget>
+   <class>common::DialogButtonBox</class>
+   <extends>QDialogButtonBox</extends>
+   <header>common/ui/dialog_button_box.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

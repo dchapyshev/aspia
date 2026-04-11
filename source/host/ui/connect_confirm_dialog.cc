@@ -23,7 +23,6 @@
 #include <QScreen>
 #include <QTimer>
 
-#include "base/gui_application.h"
 #include "base/logging.h"
 #include "common/ui/session_type.h"
 
@@ -40,8 +39,6 @@ ConnectConfirmDialog::ConnectConfirmDialog(
 
     ui.setupUi(this);
     setWindowFlag(Qt::WindowStaysOnTopHint);
-
-    base::GuiApplication::translateButtonBox(ui.button_box);
 
     connect(timer_, &QTimer::timeout, this, &ConnectConfirmDialog::onTimeout);
     connect(ui.button_box, &QDialogButtonBox::clicked,

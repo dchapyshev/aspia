@@ -20,7 +20,6 @@
 
 #include <QTimer>
 
-#include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/net/address.h"
 #include "build/build_config.h"
@@ -50,8 +49,6 @@ FastConnectDialog::FastConnectDialog(QWidget* parent,
     LOG(INFO) << "Ctor";
 
     ui.setupUi(this);
-
-    base::GuiApplication::translateButtonBox(ui.button_box);
 
     readState();
 

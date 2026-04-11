@@ -21,7 +21,6 @@
 #include <QAbstractButton>
 #include <QToolButton>
 
-#include "base/gui_application.h"
 #include "common/ui/msg_box.h"
 #include "base/logging.h"
 #include "base/net/address.h"
@@ -36,8 +35,6 @@ RouterDialog::RouterDialog(QWidget* parent)
 {
     LOG(INFO) << "Ctor";
     ui.setupUi(this);
-
-    base::GuiApplication::translateButtonBox(ui.buttonbox);
 
     connect(ui.buttonbox, &QDialogButtonBox::clicked, this, &RouterDialog::onButtonBoxClicked);
     connect(ui.button_show_password, &QToolButton::toggled,

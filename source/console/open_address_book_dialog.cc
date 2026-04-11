@@ -18,7 +18,6 @@
 
 #include "console/open_address_book_dialog.h"
 
-#include "base/gui_application.h"
 #include "base/logging.h"
 
 namespace console {
@@ -31,8 +30,6 @@ OpenAddressBookDialog::OpenAddressBookDialog(QWidget* parent,
 {
     LOG(INFO) << "Ctor";
     ui.setupUi(this);
-
-    base::GuiApplication::translateButtonBox(ui.button_box);
 
     setFixedHeight(sizeHint().height());
 

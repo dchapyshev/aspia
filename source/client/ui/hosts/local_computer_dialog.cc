@@ -21,7 +21,6 @@
 #include <QAbstractButton>
 #include <QPushButton>
 
-#include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/net/address.h"
 #include "base/peer/user.h"
@@ -49,8 +48,6 @@ LocalComputerDialog::LocalComputerDialog(qint64 computer_id, qint64 group_id, QW
     LOG(INFO) << "Ctor";
 
     ui.setupUi(this);
-
-    base::GuiApplication::translateButtonBox(ui.button_box);
 
     if (computer_id_ != -1)
     {

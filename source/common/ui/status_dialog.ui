@@ -22,7 +22,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QDialogButtonBox" name="buttonbox">
+    <widget class="common::DialogButtonBox" name="buttonbox">
      <property name="standardButtons">
       <set>QDialogButtonBox::StandardButton::Close</set>
      </property>
@@ -30,6 +30,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>common::DialogButtonBox</class>
+   <extends>QDialogButtonBox</extends>
+   <header>common/ui/dialog_button_box.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

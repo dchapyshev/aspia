@@ -18,7 +18,6 @@
 
 #include "client/ui/desktop/record_settings_dialog.h"
 
-#include "base/gui_application.h"
 #include "base/logging.h"
 #include "client/ui/desktop/desktop_settings.h"
 
@@ -33,8 +32,6 @@ RecordSettingsDialog::RecordSettingsDialog(QWidget* parent)
 {
     LOG(INFO) << "Ctor";
     ui.setupUi(this);
-
-    base::GuiApplication::translateButtonBox(ui.buttonbox);
 
     DesktopSettings settings;
     ui.checkbox_autostart->setChecked(settings.recordSessions());

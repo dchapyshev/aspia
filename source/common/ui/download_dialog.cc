@@ -21,7 +21,6 @@
 #include <QAbstractButton>
 #include <QFile>
 
-#include "base/gui_application.h"
 #include "base/logging.h"
 #include "common/ui/msg_box.h"
 
@@ -35,8 +34,6 @@ DownloadDialog::DownloadDialog(const QString& url, QFile& file, QWidget* parent)
 {
     LOG(INFO) << "Ctor";
     ui.setupUi(this);
-
-    base::GuiApplication::translateButtonBox(ui.button_box);
 
     connect(ui.button_box, &QDialogButtonBox::clicked, this, [this](QAbstractButton* /* button */)
     {

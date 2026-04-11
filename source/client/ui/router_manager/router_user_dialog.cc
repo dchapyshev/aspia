@@ -18,7 +18,6 @@
 
 #include "client/ui/router_manager/router_user_dialog.h"
 
-#include "base/gui_application.h"
 #include "common/ui/msg_box.h"
 #include "base/logging.h"
 #include "base/peer/user.h"
@@ -36,8 +35,6 @@ RouterUserDialog::RouterUserDialog(const base::User& user, const QStringList& us
 {
     LOG(INFO) << "Ctor";
     ui.setupUi(this);
-
-    base::GuiApplication::translateButtonBox(ui.buttonbox);
 
     if (user_.isValid())
     {

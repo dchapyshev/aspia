@@ -18,7 +18,6 @@
 
 #include "client/ui/authorization_dialog.h"
 
-#include "base/gui_application.h"
 #include "common/ui/msg_box.h"
 #include "base/logging.h"
 #include "client/ui/settings.h"
@@ -32,8 +31,6 @@ AuthorizationDialog::AuthorizationDialog(QWidget* parent)
 {
     LOG(INFO) << "Ctor";
     ui.setupUi(this);
-
-    base::GuiApplication::translateButtonBox(ui.buttonbox);
 
     Settings settings;
 

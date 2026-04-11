@@ -22,7 +22,6 @@
 #include <QPointer>
 #include <QPushButton>
 
-#include "base/gui_application.h"
 #include "base/logging.h"
 #include "client/ui/file_transfer/file_error_code.h"
 #include "common/ui/msg_box.h"
@@ -41,8 +40,6 @@ FileRemoveDialog::FileRemoveDialog(QWidget* parent)
 
     ui.setupUi(this);
     setFixedHeight(sizeHint().height());
-
-    base::GuiApplication::translateButtonBox(ui.button_box);
 
     connect(ui.button_box, &QDialogButtonBox::clicked, this, &FileRemoveDialog::close);
 

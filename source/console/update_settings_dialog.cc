@@ -18,7 +18,6 @@
 
 #include "console/update_settings_dialog.h"
 
-#include "base/gui_application.h"
 #include "base/logging.h"
 #include "build/build_config.h"
 #include "console/settings.h"
@@ -31,8 +30,6 @@ UpdateSettingsDialog::UpdateSettingsDialog(QWidget* parent)
 {
     LOG(INFO) << "Ctor";
     ui.setupUi(this);
-
-    base::GuiApplication::translateButtonBox(ui.button_box);
 
     Settings settings;
 

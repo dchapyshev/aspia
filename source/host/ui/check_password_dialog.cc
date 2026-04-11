@@ -22,7 +22,6 @@
 #include <QPushButton>
 #include <QTimer>
 
-#include "base/gui_application.h"
 #include "common/ui/msg_box.h"
 #include "base/logging.h"
 #include "host/system_settings.h"
@@ -35,8 +34,6 @@ CheckPasswordDialog::CheckPasswordDialog(QWidget* parent)
 {
     LOG(INFO) << "Ctor";
     ui.setupUi(this);
-
-    base::GuiApplication::translateButtonBox(ui.button_box);
 
     connect(ui.button_box, &QDialogButtonBox::clicked,
             this, &CheckPasswordDialog::onButtonBoxClicked);

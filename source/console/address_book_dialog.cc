@@ -21,7 +21,6 @@
 #include <QAbstractButton>
 #include <QUuid>
 
-#include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/crypto/password_hash.h"
 #include "base/crypto/random.h"
@@ -95,8 +94,6 @@ AddressBookDialog::AddressBookDialog(QWidget* parent,
 {
     LOG(INFO) << "Ctor";
     ui.setupUi(this);
-
-    base::GuiApplication::translateButtonBox(ui.button_box);
 
     Settings settings;
     restoreGeometry(settings.addressBookDialogGeometry());

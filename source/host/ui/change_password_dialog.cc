@@ -22,7 +22,6 @@
 #include <QPushButton>
 #include <QTimer>
 
-#include "base/gui_application.h"
 #include "common/ui/msg_box.h"
 #include "base/logging.h"
 #include "host/system_settings.h"
@@ -36,8 +35,6 @@ ChangePasswordDialog::ChangePasswordDialog(Mode mode, QWidget* parent)
 {
     LOG(INFO) << "Ctor (" << static_cast<int>(mode) << ")";
     ui.setupUi(this);
-
-    base::GuiApplication::translateButtonBox(ui.button_box);
 
     if (mode == Mode::CREATE_NEW_PASSWORD)
     {
