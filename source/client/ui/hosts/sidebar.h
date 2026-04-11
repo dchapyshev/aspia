@@ -19,6 +19,9 @@
 #ifndef CLIENT_UI_HOSTS_SIDEBAR_H
 #define CLIENT_UI_HOSTS_SIDEBAR_H
 
+#include <QDrag>
+#include <QMimeData>
+#include <QPoint>
 #include <QTreeWidget>
 #include <QWidget>
 
@@ -77,6 +80,41 @@ public:
         RouterGroup(qint64 group_id, const QString& name, QTreeWidgetItem* parent);
     };
 
+    class GroupMimeData final : public QMimeData
+    {
+    public:
+        GroupMimeData() = default;
+        ~GroupMimeData() final = default;
+
+        void setGroupItem(LocalGroup* group_item, const QString& mime_type)
+        {
+            group_item_ = group_item;
+            setData(mime_type, QByteArray());
+        }
+
+        LocalGroup* groupItem() const { return group_item_; }
+
+    private:
+        LocalGroup* group_item_ = nullptr;
+    };
+
+    class GroupDrag final : public QDrag
+    {
+    public:
+        explicit GroupDrag(QObject* drag_source = nullptr)
+            : QDrag(drag_source)
+        {
+            // Nothing
+        }
+
+        void setGroupItem(LocalGroup* group_item, const QString& mime_type)
+        {
+            GroupMimeData* mime_data = new GroupMimeData();
+            mime_data->setGroupItem(group_item, mime_type);
+            setMimeData(mime_data);
+        }
+    };
+
     void setComputerMimeType(const QString& mime_type);
     bool dragging() const;
 
@@ -85,6 +123,7 @@ public:
     qint64 currentGroupId() const;
     Item* currentItem() const;
 
+protected:
     bool eventFilter(QObject* watched, QEvent* event) override;
 
 signals:
@@ -97,11 +136,16 @@ private slots:
     void onContextMenu(const QPoint& pos);
 
 private:
+    bool onMousePress(QMouseEvent* event);
+    bool onMouseMove(QMouseEvent* event);
+    void startDrag();
+
     bool onDragEnter(QDragEnterEvent* event);
     bool onDragMove(QDragMoveEvent* event);
     bool onDragLeave(QDragLeaveEvent* event);
     bool onDrop(QDropEvent* event);
 
+    bool isAllowedDropTarget(QTreeWidgetItem* target, QTreeWidgetItem* source) const;
     QTreeWidgetItem* findGroupItem(qint64 group_id, QTreeWidgetItem* parent) const;
 
     QTreeWidget* tree_widget_ = nullptr;
@@ -111,8 +155,10 @@ private:
 
     qint64 current_group_id_ = 0;
     QString computer_mime_type_;
+    QString group_mime_type_;
     bool dragging_ = false;
     QTreeWidgetItem* drag_source_item_ = nullptr;
+    QPoint start_pos_;
 
     Q_DISABLE_COPY_MOVE(Sidebar)
 };

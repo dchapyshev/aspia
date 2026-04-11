@@ -52,6 +52,7 @@ public:
     QList<GroupData> allGroups() const;
     bool addGroup(GroupData& group);
     bool modifyGroup(const GroupData& group);
+    bool moveGroup(qint64 group_id, qint64 new_parent_id);
     bool removeGroup(qint64 group_id);
     std::optional<GroupData> findGroup(qint64 group_id) const;
 

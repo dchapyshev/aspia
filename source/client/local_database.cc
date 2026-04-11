@@ -479,6 +479,29 @@ bool LocalDatabase::modifyGroup(const GroupData& group)
 }
 
 //--------------------------------------------------------------------------------------------------
+bool LocalDatabase::moveGroup(qint64 group_id, qint64 new_parent_id)
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return false;
+    }
+
+    QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
+    query.prepare("UPDATE groups SET parent_id=? WHERE id=?");
+    query.addBindValue(new_parent_id);
+    query.addBindValue(group_id);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << query.lastError();
+        return false;
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
 bool LocalDatabase::removeGroup(qint64 group_id)
 {
     if (!isValid())
