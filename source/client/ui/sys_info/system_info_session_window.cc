@@ -27,7 +27,7 @@
 
 #include "base/logging.h"
 #include "base/version_constants.h"
-#include "common/ui/message_box.h"
+#include "common/ui/msg_box.h"
 #include "client/client_system_info.h"
 #include "client/ui/sys_info/sys_info_widget_applications.h"
 #include "client/ui/sys_info/sys_info_widget_connections.h"
@@ -268,7 +268,7 @@ SystemInfoSessionWindow::SystemInfoSessionWindow(
                             file_path,
                             &error_string))
         {
-            common::MessageBox::warning(
+            common::MsgBox::warning(
                 this, tr("Failed to save file: %1").arg(error_string));
         }
     });

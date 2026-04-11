@@ -25,7 +25,7 @@
 #include <QTranslator>
 
 #include "base/gui_application.h"
-#include "common/ui/message_box.h"
+#include "common/ui/msg_box.h"
 #include "base/logging.h"
 #include "base/crypto/password_generator.h"
 #include "base/desktop/screen_capturer.h"
@@ -434,9 +434,9 @@ void ConfigDialog::onDeleteUser()
         return;
     }
 
-    if (common::MessageBox::question(this,
+    if (common::MsgBox::question(this,
             tr("Are you sure you want to delete user \"%1\"?")
-                .arg(user_item->text(0))) == common::MessageBox::Yes)
+                .arg(user_item->text(0))) == common::MsgBox::Yes)
     {
         LOG(INFO) << "[ACTION] Accepted by user";
         delete user_item;
@@ -469,7 +469,7 @@ void ConfigDialog::onPassProtectClicked()
 
             if (!SystemSettings::createPasswordHash(dialog.newPassword(), &hash, &salt))
             {
-                common::MessageBox::warning(this,
+                common::MsgBox::warning(this,
                     tr("An error occurred while processing the password."));
                 return;
             }
@@ -504,7 +504,7 @@ void ConfigDialog::onChangePassClicked()
 
         if (!SystemSettings::createPasswordHash(dialog.newPassword(), &hash, &salt))
         {
-            common::MessageBox::warning(this,
+            common::MsgBox::warning(this,
                 tr("An error occurred while processing the password."));
             return;
         }
@@ -569,7 +569,7 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
                 tr("The configuration can not be written. "
                    "Make sure that you have sufficient rights to write.");
 
-            common::MessageBox::warning(this, message);
+            common::MsgBox::warning(this, message);
             return;
         }
 
@@ -580,7 +580,7 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
                 ui.edit_router_address->text(), DEFAULT_ROUTER_TCP_PORT);
             if (!router_address.isValid())
             {
-                common::MessageBox::warning(this, tr("Incorrect router address entered."));
+                common::MsgBox::warning(this, tr("Incorrect router address entered."));
                 ui.edit_router_address->setFocus();
                 ui.edit_router_address->selectAll();
                 return;
@@ -590,7 +590,7 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
                 QByteArray::fromHex(ui.edit_router_public_key->toPlainText().toUtf8());
             if (router_public_key.size() != 32)
             {
-                common::MessageBox::warning(this, tr("Incorrect router public key entered."));
+                common::MsgBox::warning(this, tr("Incorrect router public key entered."));
                 ui.edit_router_public_key->setFocus();
                 ui.edit_router_public_key->selectAll();
                 return;

@@ -32,7 +32,7 @@
 #include "client/local_data.h"
 #include "client/local_database.h"
 #include "client/ui/hosts/local_group_widget.h"
-#include "common/ui/message_box.h"
+#include "common/ui/msg_box.h"
 
 namespace client {
 
@@ -314,7 +314,7 @@ bool Sidebar::onDrop(QDropEvent* event)
         {
             if (existing.id != source_group->groupId() && existing.name == source_group->groupName())
             {
-                common::MessageBox::warning(tree_widget_,
+                common::MsgBox::warning(tree_widget_,
                     tr("A group with this name already exists in the selected parent group."));
                 restoreSelection();
                 return true;
@@ -324,7 +324,7 @@ bool Sidebar::onDrop(QDropEvent* event)
         // Update the group's parent in the database.
         if (!LocalDatabase::instance().moveGroup(source_group->groupId(), target_item->groupId()))
         {
-            common::MessageBox::warning(tree_widget_,
+            common::MsgBox::warning(tree_widget_,
                 tr("Failed to move the group."));
             restoreSelection();
             return true;
@@ -380,7 +380,7 @@ bool Sidebar::onDrop(QDropEvent* event)
         {
             if (existing.name == computer_item->computerName())
             {
-                common::MessageBox::warning(tree_widget_,
+                common::MsgBox::warning(tree_widget_,
                     tr("A computer with this name already exists in the selected group."));
                 restoreSelection();
                 return true;
@@ -400,7 +400,7 @@ bool Sidebar::onDrop(QDropEvent* event)
 
         if (!LocalDatabase::instance().modifyComputer(*computer))
         {
-            common::MessageBox::warning(tree_widget_,
+            common::MsgBox::warning(tree_widget_,
                 tr("Failed to move the computer to the selected group."));
             restoreSelection();
             return true;

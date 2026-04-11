@@ -21,7 +21,7 @@
 #include <QTimer>
 
 #include "base/logging.h"
-#include "common/ui/message_box.h"
+#include "common/ui/msg_box.h"
 #include "base/peer/user.h"
 
 namespace console {
@@ -137,7 +137,7 @@ void ComputerGroupDialogGeneral::showPasswordButtonToggled(bool checked)
 //--------------------------------------------------------------------------------------------------
 void ComputerGroupDialogGeneral::showError(const QString& message)
 {
-    common::MessageBox::warning(this, message);
+    common::MsgBox::warning(this, message);
 }
 
 } // namespace console

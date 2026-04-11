@@ -96,8 +96,8 @@ list(APPEND SOURCE_COMMON_UI
     ui/download_dialog.h
     ui/download_dialog.ui
     ui/language_action.h
-    ui/message_box.cc
-    ui/message_box.h
+    ui/msg_box.cc
+    ui/msg_box.h
     ui/session_type.cc
     ui/session_type.h
     ui/status_dialog.cc

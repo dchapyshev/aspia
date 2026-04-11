@@ -19,7 +19,7 @@
 #include "client/ui/authorization_dialog.h"
 
 #include "base/gui_application.h"
-#include "common/ui/message_box.h"
+#include "common/ui/msg_box.h"
 #include "base/logging.h"
 #include "client/ui/settings.h"
 #include <QTimer>
@@ -164,7 +164,7 @@ void AuthorizationDialog::onButtonBoxClicked(QAbstractButton* button)
             if (ui.edit_username->text().isEmpty())
             {
                 LOG(ERROR) << "Empty user name";
-                common::MessageBox::warning(this, tr("Username cannot be empty."));
+                common::MsgBox::warning(this, tr("Username cannot be empty."));
                 return;
             }
         }
@@ -172,7 +172,7 @@ void AuthorizationDialog::onButtonBoxClicked(QAbstractButton* button)
         if (ui.edit_password->text().isEmpty())
         {
             LOG(ERROR) << "Empty password";
-            common::MessageBox::warning(this, tr("Password cannot be empty."));
+            common::MsgBox::warning(this, tr("Password cannot be empty."));
             return;
         }
 

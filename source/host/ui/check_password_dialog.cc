@@ -23,7 +23,7 @@
 #include <QTimer>
 
 #include "base/gui_application.h"
-#include "common/ui/message_box.h"
+#include "common/ui/msg_box.h"
 #include "base/logging.h"
 #include "host/system_settings.h"
 
@@ -67,7 +67,7 @@ void CheckPasswordDialog::onButtonBoxClicked(QAbstractButton* button)
         {
             LOG(INFO) << "Invalid password entered";
 
-            common::MessageBox::warning(this, tr("You entered an incorrect password."));
+            common::MsgBox::warning(this, tr("You entered an incorrect password."));
             ui.edit_pass->selectAll();
             ui.edit_pass->setFocus();
             return;

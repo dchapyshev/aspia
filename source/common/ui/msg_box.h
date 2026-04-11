@@ -16,25 +16,22 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef COMMON_UI_MESSAGE_BOX_H
-#define COMMON_UI_MESSAGE_BOX_H
+#ifndef COMMON_UI_MSG_BOX_H
+#define COMMON_UI_MSG_BOX_H
 
 #include <QMessageBox>
 
 namespace common {
 
-class MessageBox : public QMessageBox
+class MsgBox : public QMessageBox
 {
     Q_OBJECT
 
 public:
-    MessageBox(QWidget* parent = nullptr);
-    MessageBox(Icon icon,
-               const QString& title,
-               const QString& text,
-               StandardButtons buttons = NoButton,
-               QWidget* parent = nullptr);
-    ~MessageBox() override;
+    MsgBox(QWidget* parent = nullptr);
+    MsgBox(Icon icon, const QString& title, const QString& text, StandardButtons buttons = NoButton,
+        QWidget* parent = nullptr);
+    ~MsgBox() override;
 
     int exec() override;
 
@@ -42,9 +39,9 @@ public:
     static int information(QWidget* parent, const QString& text, StandardButtons buttons = Ok);
     static int question(QWidget* parent, const QString& text, StandardButtons buttons = Yes | No);
 
-    Q_DISABLE_COPY_MOVE(MessageBox)
+    Q_DISABLE_COPY_MOVE(MsgBox)
 };
 
 } // namespace common
 
-#endif // COMMON_UI_MESSAGE_BOX_H
+#endif // COMMON_UI_MSG_BOX_H

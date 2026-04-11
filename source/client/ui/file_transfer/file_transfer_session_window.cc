@@ -29,7 +29,7 @@
 #include "client/ui/file_transfer/file_manager_settings.h"
 #include "client/ui/file_transfer/file_mime_data.h"
 
-#include "common/ui/message_box.h"
+#include "common/ui/msg_box.h"
 
 namespace client {
 
@@ -121,7 +121,7 @@ void FileTransferSessionWindow::onShowWindow()
 void FileTransferSessionWindow::onErrorOccurred(proto::file_transfer::ErrorCode error_code)
 {
     LOG(ERROR) << "Session error:" << error_code;
-    common::MessageBox::warning(this,
+    common::MsgBox::warning(this,
                                 tr("Session error: %1").arg(fileErrorToString(error_code)));
     close();
 }

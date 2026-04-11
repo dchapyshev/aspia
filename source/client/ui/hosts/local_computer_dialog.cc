@@ -29,7 +29,7 @@
 #include "client/local_data.h"
 #include "client/local_database.h"
 #include "client/ui/hosts/group_combo_box.h"
-#include "common/ui/message_box.h"
+#include "common/ui/msg_box.h"
 
 namespace client {
 
@@ -123,14 +123,14 @@ void LocalComputerDialog::onButtonBoxClicked(QAbstractButton* button)
     QString name = ui.edit_name->text();
     if (name.length() < kMinNameLength)
     {
-        common::MessageBox::warning(this, tr("Name cannot be empty."));
+        common::MsgBox::warning(this, tr("Name cannot be empty."));
         ui.edit_name->setFocus();
         return;
     }
 
     if (name.length() > kMaxNameLength)
     {
-        common::MessageBox::warning(this,
+        common::MsgBox::warning(this,
             tr("Too long name. The maximum length of the name is %n characters.",
                "", kMaxNameLength));
         ui.edit_name->setFocus();
@@ -141,7 +141,7 @@ void LocalComputerDialog::onButtonBoxClicked(QAbstractButton* button)
     base::Address address = base::Address::fromString(ui.edit_address->text(), DEFAULT_HOST_TCP_PORT);
     if (!address.isValid())
     {
-        common::MessageBox::warning(this, tr("An invalid computer address was entered."));
+        common::MsgBox::warning(this, tr("An invalid computer address was entered."));
         ui.edit_address->setFocus();
         ui.edit_address->selectAll();
         return;
@@ -150,7 +150,7 @@ void LocalComputerDialog::onButtonBoxClicked(QAbstractButton* button)
     QString username = ui.edit_username->text();
     if (!username.isEmpty() && !base::User::isValidUserName(username))
     {
-        common::MessageBox::warning(this,
+        common::MsgBox::warning(this,
             tr("The user name can not be empty and can contain only"
                " alphabet characters, numbers and \"_\", \"-\", \".\" characters."));
         ui.edit_username->setFocus();
@@ -161,7 +161,7 @@ void LocalComputerDialog::onButtonBoxClicked(QAbstractButton* button)
     QString comment = ui.edit_comment->toPlainText();
     if (comment.length() > kMaxCommentLength)
     {
-        common::MessageBox::warning(this,
+        common::MsgBox::warning(this,
             tr("Too long comment. The maximum length of the comment is %n characters.",
                "", kMaxCommentLength));
         ui.edit_comment->setFocus();
@@ -176,7 +176,7 @@ void LocalComputerDialog::onButtonBoxClicked(QAbstractButton* button)
     {
         if (existing.id != computer_id_ && existing.name == name)
         {
-            common::MessageBox::warning(this,
+            common::MsgBox::warning(this,
                 tr("A computer with this name already exists in the selected group."));
             ui.edit_name->setFocus();
             return;
@@ -198,7 +198,7 @@ void LocalComputerDialog::onButtonBoxClicked(QAbstractButton* button)
     {
         if (!db.addComputer(computer))
         {
-            common::MessageBox::warning(this, tr("Unable to add computer"));
+            common::MsgBox::warning(this, tr("Unable to add computer"));
             LOG(INFO) << "Unable to add computer to database";
             return;
         }
@@ -207,7 +207,7 @@ void LocalComputerDialog::onButtonBoxClicked(QAbstractButton* button)
     {
         if (!db.modifyComputer(computer))
         {
-            common::MessageBox::warning(this, tr("Unable to modify computer"));
+            common::MsgBox::warning(this, tr("Unable to modify computer"));
             LOG(INFO) << "Unable to modify computer in database";
             return;
         }

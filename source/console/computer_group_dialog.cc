@@ -22,7 +22,7 @@
 #include <QDateTime>
 
 #include "base/gui_application.h"
-#include "common/ui/message_box.h"
+#include "common/ui/msg_box.h"
 #include "base/logging.h"
 #include "common/ui/session_type.h"
 #include "console/computer_group_dialog_desktop.h"
@@ -196,7 +196,7 @@ void ComputerGroupDialog::onTabChanged(QTreeWidgetItem* current)
 //--------------------------------------------------------------------------------------------------
 void ComputerGroupDialog::showError(const QString& message)
 {
-    common::MessageBox::warning(this, message);
+    common::MsgBox::warning(this, message);
 }
 
 //--------------------------------------------------------------------------------------------------

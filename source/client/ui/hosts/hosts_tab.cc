@@ -22,7 +22,7 @@
 #include <QMenu>
 #include <QStatusBar>
 
-#include "common/ui/message_box.h"
+#include "common/ui/msg_box.h"
 #include "base/logging.h"
 #include "base/net/address.h"
 #include "build/build_config.h"
@@ -318,7 +318,7 @@ void HostsTab::onCopyComputerAction()
     std::optional<ComputerData> computer = db.findComputer(item->computerId());
     if (!computer.has_value())
     {
-        common::MessageBox::warning(this, tr("Failed to retrieve computer information from the local database."));
+        common::MsgBox::warning(this, tr("Failed to retrieve computer information from the local database."));
         return;
     }
 
@@ -326,7 +326,7 @@ void HostsTab::onCopyComputerAction()
 
     if (!db.addComputer(*computer))
     {
-        common::MessageBox::warning(this, tr("Failed to add the computer to the local database."));
+        common::MsgBox::warning(this, tr("Failed to add the computer to the local database."));
         return;
     }
 
@@ -351,7 +351,7 @@ void HostsTab::onDeleteComputerAction()
 
     QString message = tr("Are you sure you want to delete computer \"%1\"?").arg(item->computerName());
 
-    if (common::MessageBox::question(this, message) == common::MessageBox::No)
+    if (common::MsgBox::question(this, message) == common::MsgBox::No)
     {
         LOG(INFO) << "Action is rejected by user";
         return;
@@ -359,7 +359,7 @@ void HostsTab::onDeleteComputerAction()
 
     if (!LocalDatabase::instance().removeComputer(item->computerId()))
     {
-        common::MessageBox::warning(this, tr("Unable to remove computer"));
+        common::MsgBox::warning(this, tr("Unable to remove computer"));
         LOG(INFO) << "Unable to remove computer with id" << item->computerId();
         return;
     }
@@ -437,7 +437,7 @@ void HostsTab::onDeleteGroupAction()
 
     QString message = tr("Are you sure you want to delete group \"%1\"?").arg(local_group->groupName());
 
-    if (common::MessageBox::question(this, message) == common::MessageBox::No)
+    if (common::MsgBox::question(this, message) == common::MsgBox::No)
     {
         LOG(INFO) << "Action is rejected by user";
         return;
@@ -447,7 +447,7 @@ void HostsTab::onDeleteGroupAction()
 
     if (!LocalDatabase::instance().removeGroup(local_group->groupId()))
     {
-        common::MessageBox::warning(this, tr("Unable to remove group"));
+        common::MsgBox::warning(this, tr("Unable to remove group"));
         LOG(INFO) << "Unable to remove group with id" << local_group->groupId();
         return;
     }
@@ -548,7 +548,7 @@ void HostsTab::onConnectAction(QAction* action)
             LocalDatabase::instance().findComputer(item->computerId());
         if (!computer.has_value())
         {
-            common::MessageBox::warning(this,
+            common::MsgBox::warning(this,
                 tr("Failed to retrieve computer information from the local database."));
             return;
         }
@@ -556,7 +556,7 @@ void HostsTab::onConnectAction(QAction* action)
         base::Address address = base::Address::fromString(computer->address, DEFAULT_HOST_TCP_PORT);
         if (!address.isValid())
         {
-            common::MessageBox::warning(this, tr("The computer has an incorrect address."));
+            common::MsgBox::warning(this, tr("The computer has an incorrect address."));
             return;
         }
 
@@ -587,7 +587,7 @@ void HostsTab::onLocalConnect(qint64 computer_id)
     std::optional<ComputerData> computer = LocalDatabase::instance().findComputer(computer_id);
     if (!computer.has_value())
     {
-        common::MessageBox::warning(this,
+        common::MsgBox::warning(this,
             tr("Failed to retrieve computer information from the local database."));
         return;
     }
@@ -595,7 +595,7 @@ void HostsTab::onLocalConnect(qint64 computer_id)
     base::Address address = base::Address::fromString(computer->address, DEFAULT_HOST_TCP_PORT);
     if (!address.isValid())
     {
-        common::MessageBox::warning(this, tr("The computer has an incorrect address."));
+        common::MsgBox::warning(this, tr("The computer has an incorrect address."));
         return;
     }
 

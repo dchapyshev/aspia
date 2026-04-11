@@ -20,6 +20,7 @@
 
 #include <QTimer>
 
+#include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/net/address.h"
 #include "build/build_config.h"
@@ -29,7 +30,7 @@
 #include "client/ui/desktop/desktop_session_window.h"
 #include "client/ui/file_transfer/file_transfer_session_window.h"
 #include "client/ui/sys_info/system_info_session_window.h"
-#include "common/ui/message_box.h"
+#include "common/ui/msg_box.h"
 #include "common/ui/session_type.h"
 #include "console/computer_factory.h"
 #include "console/settings.h"
@@ -86,8 +87,8 @@ FastConnectDialog::FastConnectDialog(QWidget* parent,
 
     connect(ui.button_clear, &QPushButton::clicked, this, [this]()
     {
-        if (common::MessageBox::question(this,
-                tr("The list of entered addresses will be cleared. Continue?")) == common::MessageBox::Yes)
+        if (common::MsgBox::question(this,
+                tr("The list of entered addresses will be cleared. Continue?")) == common::MsgBox::Yes)
         {
             ui.combo_address->clear();
             state_.history.clear();
@@ -203,7 +204,7 @@ void FastConnectDialog::onButtonBoxClicked(QAbstractButton* button)
     if (host_id_entered && !router_config_.has_value())
     {
         LOG(ERROR) << "Router not configured";
-        common::MessageBox::warning(this,
+        common::MsgBox::warning(this,
             tr("Connection by ID is specified but the router is not configured. "
                "Check the parameters of the router in the properties of the "
                "address book."));
@@ -220,7 +221,7 @@ void FastConnectDialog::onButtonBoxClicked(QAbstractButton* button)
         if (!address.isValid())
         {
             LOG(ERROR) << "Invalid address entered";
-            common::MessageBox::warning(this, tr("An invalid computer address was entered."));
+            common::MsgBox::warning(this, tr("An invalid computer address was entered."));
             combo_address->setFocus();
             return;
         }

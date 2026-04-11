@@ -28,7 +28,7 @@
 #include <QUrl>
 
 #include "base/gui_application.h"
-#include "common/ui/message_box.h"
+#include "common/ui/msg_box.h"
 #include "base/logging.h"
 #include "base/net/address.h"
 #include "base/peer/host_id.h"
@@ -703,10 +703,10 @@ void MainWindow::onExit()
 
     LOG(INFO) << "[ACTION] Exit";
 
-    if (common::MessageBox::question(this,
+    if (common::MsgBox::question(this,
             tr("If you exit from Aspia, it will not be possible to connect to this computer until "
                "you turn on the computer or Aspia again manually. Do you really want to exit the "
-               "application?")) == common::MessageBox::Yes)
+               "application?")) == common::MsgBox::Yes)
     {
         LOG(INFO) << "[ACTION] User confirmed exit";
         if (!notifier_)

@@ -22,7 +22,7 @@
 #include <QSysInfo>
 
 #include "base/logging.h"
-#include "common/ui/message_box.h"
+#include "common/ui/msg_box.h"
 #include "build/version.h"
 #include "host/host_utils.h"
 #include "host/system_settings.h"
@@ -138,7 +138,7 @@ int hostMain(int argc, char* argv[])
     {
         LOG(ERROR) << "Integrity check failed";
 
-        common::MessageBox::warning(nullptr,
+        common::MsgBox::warning(nullptr,
             QApplication::translate("Host", "Application integrity check failed. Components are "
                                             "missing or damaged."));
         return 1;
@@ -152,7 +152,7 @@ int hostMain(int argc, char* argv[])
 
         if (!parser.isSet(silent_option))
         {
-            common::MessageBox::warning(nullptr,
+            common::MsgBox::warning(nullptr,
                 QApplication::translate("Host", "Export and import parameters can not be specified together."));
         }
 

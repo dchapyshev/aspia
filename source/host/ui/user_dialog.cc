@@ -21,7 +21,7 @@
 #include <QMouseEvent>
 
 #include "base/gui_application.h"
-#include "common/ui/message_box.h"
+#include "common/ui/msg_box.h"
 #include "base/logging.h"
 #include "common/ui/session_type.h"
 #include "proto/peer.h"
@@ -147,7 +147,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
             if (!base::User::isValidUserName(username))
             {
                 LOG(ERROR) << "Invalid user name:" << username;
-                common::MessageBox::warning(this,
+                common::MsgBox::warning(this,
                     tr("The user name can not be empty and can contain only alphabet"
                        " characters, numbers and ""_"", ""-"", ""."", ""@"" characters."));
                 ui.edit_username->selectAll();
@@ -158,7 +158,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
             if (exist_names_.contains(username, Qt::CaseInsensitive))
             {
                 LOG(ERROR) << "User name already exists:" << username;
-                common::MessageBox::warning(this, tr("The username you entered already exists."));
+                common::MsgBox::warning(this, tr("The username you entered already exists."));
                 ui.edit_username->selectAll();
                 ui.edit_username->setFocus();
                 return;
@@ -167,7 +167,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
             if (password != ui.edit_password_repeat->text())
             {
                 LOG(ERROR) << "Passwords do not match";
-                common::MessageBox::warning(this, tr("The passwords you entered do not match."));
+                common::MsgBox::warning(this, tr("The passwords you entered do not match."));
                 ui.edit_password->selectAll();
                 ui.edit_password->setFocus();
                 return;
@@ -176,7 +176,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
             if (!base::User::isValidPassword(password))
             {
                 LOG(ERROR) << "Invalid password";
-                common::MessageBox::warning(this,
+                common::MsgBox::warning(this,
                     tr("Password can not be empty and should not exceed %n characters.",
                        "", base::User::kMaxPasswordLength));
                 ui.edit_password->selectAll();
@@ -196,13 +196,13 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
 
                 QString question = tr("Do you want to enter a different password?");
 
-                common::MessageBox message_box(common::MessageBox::Warning,
+                common::MsgBox message_box(common::MsgBox::Warning,
                     tr("Warning"),
                     QString("<b>%1</b><br/>%2<br/>%3").arg(unsafe, safe, question),
-                    common::MessageBox::Yes | common::MessageBox::No,
+                    common::MsgBox::Yes | common::MsgBox::No,
                     this);
 
-                if (message_box.exec() == common::MessageBox::Yes)
+                if (message_box.exec() == common::MsgBox::Yes)
                 {
                     ui.edit_password->clear();
                     ui.edit_password_repeat->clear();
@@ -215,7 +215,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
             if (!user_.isValid())
             {
                 LOG(ERROR) << "Unable to create user";
-                common::MessageBox::warning(this,
+                common::MsgBox::warning(this,
                     tr("Unknown internal error when creating or modifying a user."));
                 return;
             }

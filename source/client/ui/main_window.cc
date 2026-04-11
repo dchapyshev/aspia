@@ -26,7 +26,7 @@
 #include <QTimer>
 
 #include "base/gui_application.h"
-#include "common/ui/message_box.h"
+#include "common/ui/msg_box.h"
 #include "base/logging.h"
 #include "base/version_constants.h"
 #include "base/peer/host_id.h"
@@ -306,7 +306,7 @@ void MainWindow::onConnect(const Config& config)
 {
     if (base::isHostId(config.address_or_id) && !config.router_config.has_value())
     {
-        common::MessageBox::warning(this,
+        common::MsgBox::warning(this,
             tr("Connection by ID is specified in the properties of the computer, "
                "but the router is not configured. Check the parameters of the "
                "router in the properties of the address book."));

@@ -27,7 +27,7 @@
 
 #include "build/version.h"
 #include "base/logging.h"
-#include "common/ui/message_box.h"
+#include "common/ui/msg_box.h"
 #include "ui_about_dialog.h"
 
 #include <asio/version.hpp>
@@ -243,7 +243,7 @@ void AboutDialog::onServiceContextMenu(const QPoint& pos)
         if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
         {
             LOG(ERROR) << "Unable to open file:" << file.errorString().toStdString();
-            common::MessageBox::warning(this,
+            common::MsgBox::warning(this,
                                  tr("Could not open file for writing."));
             return;
         }

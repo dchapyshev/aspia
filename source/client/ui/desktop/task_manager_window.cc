@@ -24,7 +24,7 @@
 #include <QMenu>
 #include <QTimer>
 
-#include "common/ui/message_box.h"
+#include "common/ui/msg_box.h"
 #include "base/logging.h"
 #include "client/ui/desktop/task_manager_settings.h"
 
@@ -646,9 +646,9 @@ void TaskManagerWindow::onEndProcess()
     ProcessItem* current_item = static_cast<ProcessItem*>(ui.tree_processes->currentItem());
     if (current_item)
     {
-        if (common::MessageBox::question(this,
+        if (common::MsgBox::question(this,
                 tr("Do you really want to end \"%1\" process?")
-                    .arg(current_item->text(PROC_COL_NAME))) == common::MessageBox::Yes)
+                    .arg(current_item->text(PROC_COL_NAME))) == common::MsgBox::Yes)
         {
             LOG(INFO) << "[ACTION] Accepted by user";
             sendEndProcessRequest(current_item->processId());
@@ -696,9 +696,9 @@ void TaskManagerWindow::onDisconnectUser()
     UserItem* current_item = static_cast<UserItem*>(ui.tree_users->currentItem());
     if (current_item)
     {
-        if (common::MessageBox::question(this,
+        if (common::MsgBox::question(this,
                 tr("Do you really want to disconnect user \"%1\" session?")
-                    .arg(current_item->text(USER_COL_NAME))) == common::MessageBox::Yes)
+                    .arg(current_item->text(USER_COL_NAME))) == common::MsgBox::Yes)
         {
             LOG(INFO) << "[ACTION] Accepted by user";
             sendUserRequest(
@@ -719,9 +719,9 @@ void TaskManagerWindow::onLogoffUser()
     UserItem* current_item = static_cast<UserItem*>(ui.tree_users->currentItem());
     if (current_item)
     {
-        if (common::MessageBox::question(this,
+        if (common::MsgBox::question(this,
                 tr("Do you really want to end user \"%1\" session?")
-                    .arg(current_item->text(USER_COL_NAME))) == common::MessageBox::Yes)
+                    .arg(current_item->text(USER_COL_NAME))) == common::MsgBox::Yes)
         {
             LOG(INFO) << "[ACTION] Accepted by user";
             sendUserRequest(

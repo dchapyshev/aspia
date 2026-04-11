@@ -19,7 +19,7 @@
 #include "client/ui/file_transfer/address_bar.h"
 
 #include "client/ui/file_transfer/address_bar_model.h"
-#include "common/ui/message_box.h"
+#include "common/ui/msg_box.h"
 
 #include <QLineEdit>
 #include <QTreeView>
@@ -52,7 +52,7 @@ AddressBar::AddressBar(QWidget* parent)
 
     connect(model_, &AddressBarModel::sig_invalidPathEntered, this, [this]()
     {
-        common::MessageBox::warning(this,
+        common::MsgBox::warning(this,
                              tr("An incorrect path to the folder was entered."));
     });
 

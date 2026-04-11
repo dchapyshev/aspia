@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "common/ui/message_box.h"
+#include "common/ui/msg_box.h"
 
 #include <QAbstractButton>
 
@@ -55,21 +55,21 @@ void translateButtons(QMessageBox* message_box)
     {
         QAbstractButton* button = message_box->button(entry.button);
         if (button)
-            button->setText(MessageBox::tr(entry.text));
+            button->setText(MsgBox::tr(entry.text));
     }
 }
 
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-MessageBox::MessageBox(QWidget* parent)
+MsgBox::MsgBox(QWidget* parent)
     : QMessageBox(parent)
 {
     // Nothing
 }
 
 //--------------------------------------------------------------------------------------------------
-MessageBox::MessageBox(Icon icon,
+MsgBox::MsgBox(Icon icon,
                        const QString& title,
                        const QString& text,
                        StandardButtons buttons,
@@ -80,10 +80,10 @@ MessageBox::MessageBox(Icon icon,
 }
 
 //--------------------------------------------------------------------------------------------------
-MessageBox::~MessageBox() = default;
+MsgBox::~MsgBox() = default;
 
 //--------------------------------------------------------------------------------------------------
-int MessageBox::exec()
+int MsgBox::exec()
 {
     translateButtons(this);
     return QMessageBox::exec();
@@ -91,25 +91,25 @@ int MessageBox::exec()
 
 //--------------------------------------------------------------------------------------------------
 // static
-int MessageBox::warning(QWidget* parent, const QString& text, StandardButtons buttons)
+int MsgBox::warning(QWidget* parent, const QString& text, StandardButtons buttons)
 {
-    MessageBox message_box(QMessageBox::Warning, tr("Warning"), text, buttons, parent);
+    MsgBox message_box(QMessageBox::Warning, tr("Warning"), text, buttons, parent);
     return message_box.exec();
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
-int MessageBox::information(QWidget* parent, const QString& text, StandardButtons buttons)
+int MsgBox::information(QWidget* parent, const QString& text, StandardButtons buttons)
 {
-    MessageBox message_box(QMessageBox::Information, tr("Information"), text, buttons, parent);
+    MsgBox message_box(QMessageBox::Information, tr("Information"), text, buttons, parent);
     return message_box.exec();
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
-int MessageBox::question(QWidget* parent, const QString& text, StandardButtons buttons)
+int MsgBox::question(QWidget* parent, const QString& text, StandardButtons buttons)
 {
-    MessageBox message_box(QMessageBox::Question, tr("Confirmation"), text, buttons, parent);
+    MsgBox message_box(QMessageBox::Question, tr("Confirmation"), text, buttons, parent);
     return message_box.exec();
 }
 

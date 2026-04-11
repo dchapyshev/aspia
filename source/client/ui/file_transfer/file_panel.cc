@@ -24,7 +24,7 @@
 #include <QKeyEvent>
 #include <QMenu>
 
-#include "common/ui/message_box.h"
+#include "common/ui/msg_box.h"
 #include "base/logging.h"
 #include "client/file_remover.h"
 #include "client/ui/file_transfer/address_bar_model.h"
@@ -421,8 +421,8 @@ void FilePanel::removeSelected()
     if (items.isEmpty())
         return;
 
-    if (common::MessageBox::question(this,
-            tr("Are you sure you want to delete the selected items?")) != common::MessageBox::Yes)
+    if (common::MsgBox::question(this,
+            tr("Are you sure you want to delete the selected items?")) != common::MsgBox::Yes)
         return;
 
     emit sig_removeItems(this, items);
@@ -451,7 +451,7 @@ void FilePanel::sendSelected()
 //--------------------------------------------------------------------------------------------------
 void FilePanel::showError(const QString& message)
 {
-    common::MessageBox::warning(this, message);
+    common::MsgBox::warning(this, message);
 }
 
 } // namespace client

@@ -28,7 +28,7 @@
 #include "base/crypto/password_hash.h"
 #include "base/crypto/secure_memory.h"
 #include "client/online_checker/online_checker.h"
-#include "common/ui/message_box.h"
+#include "common/ui/msg_box.h"
 #include "console/address_book_dialog.h"
 #include "console/computer_dialog.h"
 #include "console/computer_factory.h"
@@ -668,7 +668,7 @@ void AddressBookTab::removeComputerGroup()
         tr("Are you sure you want to delete computer group \"%1\" and all child items?")
         .arg(QString::fromStdString(current_item->computerGroup()->name()));
 
-    if (common::MessageBox::question(this, message) == common::MessageBox::Yes)
+    if (common::MsgBox::question(this, message) == common::MsgBox::Yes)
     {
         LOG(INFO) << "[ACTION] Computer group removing confirmed by user";
         cleanupComputerGroup(current_item->computerGroup());
@@ -698,7 +698,7 @@ void AddressBookTab::removeComputer()
     QString message = tr("Are you sure you want to delete computer \"%1\"?")
         .arg(QString::fromStdString(current_item->computer()->name()));
 
-    if (common::MessageBox::question(this, message) == common::MessageBox::Yes)
+    if (common::MsgBox::question(this, message) == common::MsgBox::Yes)
     {
         LOG(INFO) << "[ACTION] Computer removing confirmed by user";
         ComputerGroupItem* parent_group = current_item->parentComputerGroupItem();
@@ -1239,13 +1239,13 @@ QString AddressBookTab::parentName(ComputerGroupItem* item)
 // static
 void AddressBookTab::showOpenError(QWidget* parent, const QString& message)
 {
-    common::MessageBox dialog(parent);
+    common::MsgBox dialog(parent);
 
-    dialog.setIcon(common::MessageBox::Warning);
+    dialog.setIcon(common::MsgBox::Warning);
     dialog.setWindowTitle(tr("Warning"));
     dialog.setInformativeText(message);
     dialog.setText(tr("Could not open address book"));
-    dialog.setStandardButtons(common::MessageBox::Ok);
+    dialog.setStandardButtons(common::MsgBox::Ok);
 
     dialog.exec();
 }
@@ -1254,13 +1254,13 @@ void AddressBookTab::showOpenError(QWidget* parent, const QString& message)
 // static
 void AddressBookTab::showSaveError(QWidget* parent, const QString& message)
 {
-    common::MessageBox dialog(parent);
+    common::MsgBox dialog(parent);
 
-    dialog.setIcon(common::MessageBox::Warning);
+    dialog.setIcon(common::MsgBox::Warning);
     dialog.setWindowTitle(tr("Warning"));
     dialog.setInformativeText(message);
     dialog.setText(tr("Failed to save address book"));
-    dialog.setStandardButtons(common::MessageBox::Ok);
+    dialog.setStandardButtons(common::MsgBox::Ok);
 
     dialog.exec();
 }

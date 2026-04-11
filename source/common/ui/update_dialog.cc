@@ -24,7 +24,7 @@
 #include <QTimer>
 
 #include "base/gui_application.h"
-#include "common/ui/message_box.h"
+#include "common/ui/msg_box.h"
 #include "base/logging.h"
 #include "base/version_constants.h"
 #include "common/ui/download_dialog.h"
@@ -127,9 +127,9 @@ void UpdateDialog::onUpdateNow()
     QString message3 = tr("All unsaved data will be lost.");
     QString question = tr("Continue?");
 
-    if (common::MessageBox::question(this,
+    if (common::MsgBox::question(this,
             QString("%1<br/><b>%2</b><br/><b>%3</b><br/>%4")
-                .arg(message1, message2, message3, question)) == common::MessageBox::Yes)
+                .arg(message1, message2, message3, question)) == common::MsgBox::Yes)
     {
         LOG(INFO) << "[ACTION] Update confirmed by user";
 
@@ -137,7 +137,7 @@ void UpdateDialog::onUpdateNow()
         if (!file.open())
         {
             LOG(ERROR) << "Unable to open file:" << file.errorString();
-            common::MessageBox::warning(this,
+            common::MsgBox::warning(this,
                                        tr("An error occurred while installing the update: %1")
                                            .arg(file.errorString()));
         }

@@ -34,7 +34,7 @@
 #include "client/ui/router_manager/router_manager_window.h"
 #include "common/update_checker.h"
 #include "common/ui/about_dialog.h"
-#include "common/ui/message_box.h"
+#include "common/ui/msg_box.h"
 #include "common/ui/language_action.h"
 #include "common/ui/update_dialog.h"
 #include "console/address_book_tab.h"
@@ -200,7 +200,7 @@ MainWindow::MainWindow(const QString& file_path)
         }
         else
         {
-            common::MessageBox::warning(this,
+            common::MsgBox::warning(this,
                 tr("Pinned address book file \"%1\" was not found.<br/>"
                    "This file will be unpinned.").arg(file));
             mru_.unpinFile(file);
@@ -279,7 +279,7 @@ void MainWindow::openAddressBook(const QString& file_path)
             if (file_path.compare(tab->filePath(), Qt::CaseSensitive) == 0)
 #endif // defined(Q_OS_WINDOWS)
             {
-                common::MessageBox::information(this,
+                common::MsgBox::information(this,
                     tr("Address Book \"%1\" is already open.").arg(file_path));
 
                 ui.tab_widget->setCurrentIndex(i);
@@ -585,7 +585,7 @@ void MainWindow::onImportComputers()
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
         LOG(ERROR) << "Unable to open file:" << file.errorString();
-        common::MessageBox::warning(this, tr("Could not open file for reading."));
+        common::MsgBox::warning(this, tr("Could not open file for reading."));
         return;
     }
 
@@ -593,7 +593,7 @@ void MainWindow::onImportComputers()
     if (json_buffer.isEmpty())
     {
         LOG(ERROR) << "Empty file";
-        common::MessageBox::warning(this, tr("Import file is empty."));
+        common::MsgBox::warning(this, tr("Import file is empty."));
         return;
     }
 
@@ -602,7 +602,7 @@ void MainWindow::onImportComputers()
     if (parse_error.error != QJsonParseError::NoError)
     {
         LOG(ERROR) << "Unable to parse JSON document:" << parse_error.errorString();
-        common::MessageBox::warning(this,
+        common::MsgBox::warning(this,
             tr("Failed to parse JSON document: %1.").arg(parse_error.errorString()));
         return;
     }
@@ -613,7 +613,7 @@ void MainWindow::onImportComputers()
     tab->setChanged(true);
 
     LOG(INFO) << "File imported";
-    common::MessageBox::information(this, tr("Import completed successfully."));
+    common::MsgBox::information(this, tr("Import completed successfully."));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -651,7 +651,7 @@ void MainWindow::onExportComputers()
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
     {
         LOG(ERROR) << "Unable to open file:" << file.errorString();
-        common::MessageBox::warning(this, tr("Could not open file for writing."));
+        common::MsgBox::warning(this, tr("Could not open file for writing."));
         return;
     }
 
@@ -661,12 +661,12 @@ void MainWindow::onExportComputers()
     if (written <= 0)
     {
         LOG(ERROR) << "Unable to write file:" << file.errorString();
-        common::MessageBox::warning(this, tr("Unable to write file."));
+        common::MsgBox::warning(this, tr("Unable to write file."));
         return;
     }
 
     LOG(INFO) << "File exported";
-    common::MessageBox::information(this, tr("Export completed successfully."));
+    common::MsgBox::information(this, tr("Export completed successfully."));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -901,16 +901,16 @@ void MainWindow::onCloseTab(int index)
 
     if (tab->isChanged())
     {
-        switch (common::MessageBox::question(this,
+        switch (common::MsgBox::question(this,
                     tr("Address book \"%1\" has been changed. Save changes?")
                         .arg(tab->addressBookName()),
-                    common::MessageBox::Yes | common::MessageBox::No | common::MessageBox::Cancel))
+                    common::MsgBox::Yes | common::MsgBox::No | common::MsgBox::Cancel))
         {
-            case common::MessageBox::Yes:
+            case common::MsgBox::Yes:
                 tab->save();
                 break;
 
-            case common::MessageBox::Cancel:
+            case common::MsgBox::Cancel:
                 return;
 
             default:
@@ -1235,8 +1235,8 @@ void MainWindow::onRecentOpenTriggered(QAction* action)
     if (action == ui.action_clear_mru ||
         (action == ui.action_remember_last && !action->isChecked()))
     {
-        if (common::MessageBox::question(this,
-                tr("The list of recently opened address books will be cleared. Continue?")) == common::MessageBox::Yes)
+        if (common::MsgBox::question(this,
+                tr("The list of recently opened address books will be cleared. Continue?")) == common::MsgBox::Yes)
         {
             mru_.clearRecentOpen();
             rebuildMruMenu();
@@ -1319,16 +1319,16 @@ void MainWindow::closeEvent(QCloseEvent* event)
         AddressBookTab* tab = dynamic_cast<AddressBookTab*>(ui.tab_widget->widget(i));
         if (tab && tab->isChanged())
         {
-            switch (common::MessageBox::question(this,
+            switch (common::MsgBox::question(this,
                         tr("Address book \"%1\" has been changed. Save changes?")
                             .arg(tab->addressBookName()),
-                        common::MessageBox::Yes | common::MessageBox::No | common::MessageBox::Cancel))
+                        common::MsgBox::Yes | common::MsgBox::No | common::MsgBox::Cancel))
             {
-                case common::MessageBox::Yes:
+                case common::MsgBox::Yes:
                     tab->save();
                     break;
 
-                case common::MessageBox::Cancel:
+                case common::MsgBox::Cancel:
                     event->ignore();
                     return;
 
@@ -1634,7 +1634,7 @@ void MainWindow::connectToComputer(const proto::address_book::Computer& computer
 
     if (host_id_entered && !router_config.has_value())
     {
-        common::MessageBox::warning(this,
+        common::MsgBox::warning(this,
             tr("Connection by ID is specified in the properties of the computer, "
                "but the router is not configured. Check the parameters of the "
                "router in the properties of the address book."));

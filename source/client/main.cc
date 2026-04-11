@@ -27,7 +27,7 @@
 #include "build/version.h"
 #include "client/config_factory.h"
 #include "client/ui/settings.h"
-#include "common/ui/message_box.h"
+#include "common/ui/msg_box.h"
 #include "client/ui/application.h"
 #include "client/ui/main_window.h"
 #include "client/ui/chat/chat_session_window.h"
@@ -38,7 +38,7 @@
 //--------------------------------------------------------------------------------------------------
 void onInvalidValue(const QString& arg, const QString& values)
 {
-    common::MessageBox::warning(nullptr,
+    common::MsgBox::warning(nullptr,
         QApplication::translate("Client", "Incorrect value for \"%1\". Possible values: %2.").arg(arg, values));
 }
 
@@ -482,7 +482,7 @@ int clientMain(int argc, char* argv[])
                 QString message = QApplication::translate("Client",
                     "A host ID was entered, but the router was not configured. You need to "
                     "configure your router before connecting.");
-                common::MessageBox::warning(nullptr, message);
+                common::MsgBox::warning(nullptr, message);
                 return 1;
             }
 

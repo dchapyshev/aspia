@@ -22,7 +22,7 @@
 #include <QToolButton>
 
 #include "base/gui_application.h"
-#include "common/ui/message_box.h"
+#include "common/ui/msg_box.h"
 #include "base/logging.h"
 #include "base/net/address.h"
 #include "base/peer/user.h"
@@ -142,7 +142,7 @@ void RouterDialog::onShowPasswordButtonToggled(bool checked)
 //--------------------------------------------------------------------------------------------------
 void RouterDialog::showError(const QString& message)
 {
-    common::MessageBox::warning(this, message);
+    common::MsgBox::warning(this, message);
 }
 
 } // namespace client

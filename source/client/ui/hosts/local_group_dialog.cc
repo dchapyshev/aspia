@@ -26,7 +26,7 @@
 #include "client/local_data.h"
 #include "client/local_database.h"
 #include "client/ui/hosts/group_combo_box.h"
-#include "common/ui/message_box.h"
+#include "common/ui/msg_box.h"
 
 namespace client {
 
@@ -96,14 +96,14 @@ void LocalGroupDialog::onButtonBoxClicked(QAbstractButton* button)
     QString name = ui.edit_name->text();
     if (name.length() < kMinNameLength)
     {
-        common::MessageBox::warning(this, tr("Name cannot be empty."));
+        common::MsgBox::warning(this, tr("Name cannot be empty."));
         ui.edit_name->setFocus();
         return;
     }
 
     if (name.length() > kMaxNameLength)
     {
-        common::MessageBox::warning(this,
+        common::MsgBox::warning(this,
             tr("Too long name. The maximum length of the name is %n characters.",
                "", kMaxNameLength));
         ui.edit_name->setFocus();
@@ -114,7 +114,7 @@ void LocalGroupDialog::onButtonBoxClicked(QAbstractButton* button)
     QString comment = ui.edit_comment->toPlainText();
     if (comment.length() > kMaxCommentLength)
     {
-        common::MessageBox::warning(this,
+        common::MsgBox::warning(this,
             tr("Too long comment. The maximum length of the comment is %n characters.",
                "", kMaxCommentLength));
         ui.edit_comment->setFocus();
@@ -129,7 +129,7 @@ void LocalGroupDialog::onButtonBoxClicked(QAbstractButton* button)
     {
         if (existing.id != group_id_ && existing.name == name)
         {
-            common::MessageBox::warning(this,
+            common::MsgBox::warning(this,
                 tr("A group with this name already exists in the selected parent group."));
             ui.edit_name->setFocus();
             return;
@@ -148,7 +148,7 @@ void LocalGroupDialog::onButtonBoxClicked(QAbstractButton* button)
     {
         if (!db.addGroup(group))
         {
-            common::MessageBox::warning(this, tr("Unable to add group"));
+            common::MsgBox::warning(this, tr("Unable to add group"));
             LOG(INFO) << "Unable to add group to database";
             return;
         }
@@ -157,7 +157,7 @@ void LocalGroupDialog::onButtonBoxClicked(QAbstractButton* button)
     {
         if (!db.modifyGroup(group))
         {
-            common::MessageBox::warning(this, tr("Unable to modify group"));
+            common::MsgBox::warning(this, tr("Unable to modify group"));
             LOG(INFO) << "Unable to modify group in database";
             return;
         }
