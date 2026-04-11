@@ -41,6 +41,7 @@ struct RouterConfig
 
     bool isValid() const;
 
+    QString name;
     QString address;
     quint16 port;
     QString username;

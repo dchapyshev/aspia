@@ -49,6 +49,7 @@ RouterDialog::RouterDialog(const RouterConfig& config, QWidget* parent)
     address.setHost(config.address);
     address.setPort(config.port);
 
+    ui.edit_name->setText(config.name);
     ui.edit_address->setText(address.toString());
     ui.edit_username->setText(config.username);
     ui.edit_password->setText(config.password);
@@ -64,6 +65,8 @@ RouterDialog::~RouterDialog()
 RouterConfig RouterDialog::routerConfig() const
 {
     RouterConfig config;
+
+    config.name = ui.edit_name->text();
 
     base::Address address =
         base::Address::fromString(ui.edit_address->text(), DEFAULT_ROUTER_TCP_PORT);

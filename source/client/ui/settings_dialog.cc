@@ -35,6 +35,14 @@
 
 namespace client {
 
+namespace {
+
+const int kColumnAddress  = 0;
+const int kColumnName     = 1;
+const int kColumnUserName = 2;
+
+} // namespace
+
 //--------------------------------------------------------------------------------------------------
 SettingsDialog::SettingsDialog(QWidget* parent)
     : QDialog(parent)
@@ -53,13 +61,15 @@ SettingsDialog::SettingsDialog(QWidget* parent)
         address.setPort(config.port);
 
         QTreeWidgetItem* item = new QTreeWidgetItem(ui.tree_routers);
-        item->setText(0, address.toString());
-        item->setText(1, config.username);
-        item->setData(0, Qt::UserRole, config.password);
+        item->setText(kColumnAddress, address.toString());
+        item->setText(kColumnName, config.name);
+        item->setText(kColumnUserName, config.username);
+        item->setData(kColumnAddress, Qt::UserRole, config.password);
     }
 
     ui.tree_routers->header()->setStretchLastSection(true);
-    ui.tree_routers->header()->setSectionResizeMode(0, QHeaderView::Stretch);
+    ui.tree_routers->header()->setSectionResizeMode(kColumnAddress, QHeaderView::Stretch);
+    ui.tree_routers->header()->setSectionResizeMode(kColumnName, QHeaderView::Stretch);
 
     connect(ui.button_add_router, &QPushButton::clicked, this, &SettingsDialog::onAddRouter);
     connect(ui.button_edit_router, &QPushButton::clicked, this, &SettingsDialog::onEditRouter);
@@ -171,13 +181,14 @@ void SettingsDialog::onButtonBoxClicked(QAbstractButton* button)
             QTreeWidgetItem* item = ui.tree_routers->topLevelItem(i);
 
             base::Address address =
-                base::Address::fromString(item->text(0), DEFAULT_ROUTER_TCP_PORT);
+                base::Address::fromString(item->text(kColumnAddress), DEFAULT_ROUTER_TCP_PORT);
 
             RouterConfig config;
+            config.name = item->text(kColumnName);
             config.address = address.host();
             config.port = address.port();
-            config.username = item->text(1);
-            config.password = item->data(0, Qt::UserRole).toString();
+            config.username = item->text(kColumnUserName);
+            config.password = item->data(kColumnAddress, Qt::UserRole).toString();
             routers.append(config);
         }
 
@@ -233,9 +244,10 @@ void SettingsDialog::onAddRouter()
         address.setPort(config.port);
 
         QTreeWidgetItem* item = new QTreeWidgetItem(ui.tree_routers);
-        item->setText(0, address.toString());
-        item->setText(1, config.username);
-        item->setData(0, Qt::UserRole, config.password);
+        item->setText(kColumnAddress, address.toString());
+        item->setText(kColumnName, config.name);
+        item->setText(kColumnUserName, config.username);
+        item->setData(kColumnAddress, Qt::UserRole, config.password);
 
         ui.tree_routers->setCurrentItem(item);
         updateRouterButtons();
@@ -251,13 +263,15 @@ void SettingsDialog::onEditRouter()
     if (!item)
         return;
 
-    base::Address addr = base::Address::fromString(item->text(0), DEFAULT_ROUTER_TCP_PORT);
+    base::Address addr =
+        base::Address::fromString(item->text(kColumnAddress), DEFAULT_ROUTER_TCP_PORT);
 
     RouterConfig config;
+    config.name = item->text(kColumnName);
     config.address = addr.host();
     config.port = addr.port();
-    config.username = item->text(1);
-    config.password = item->data(0, Qt::UserRole).toString();
+    config.username = item->text(kColumnUserName);
+    config.password = item->data(kColumnAddress, Qt::UserRole).toString();
 
     RouterDialog dialog(config, this);
     if (dialog.exec() == QDialog::Accepted)
@@ -268,9 +282,10 @@ void SettingsDialog::onEditRouter()
         address.setHost(config.address);
         address.setPort(config.port);
 
-        item->setText(0, address.toString());
-        item->setText(1, config.username);
-        item->setData(0, Qt::UserRole, config.password);
+        item->setText(kColumnAddress, address.toString());
+        item->setText(kColumnName, config.name);
+        item->setText(kColumnUserName, config.username);
+        item->setData(kColumnAddress, Qt::UserRole, config.password);
     }
 }
 
@@ -283,8 +298,10 @@ void SettingsDialog::onRemoveRouter()
     if (!item)
         return;
 
+    QString display_name = item->text(kColumnName).isEmpty()
+        ? item->text(kColumnAddress) : item->text(kColumnName);
     if (common::MsgBox::question(this, tr("Are you sure you want to delete router \"%1\"?")
-            .arg(item->text(0))) == common::MsgBox::Yes)
+            .arg(display_name)) == common::MsgBox::Yes)
     {
         delete item;
         updateRouterButtons();

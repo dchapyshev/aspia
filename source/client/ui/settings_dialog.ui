@@ -111,6 +111,11 @@
          </column>
          <column>
           <property name="text">
+           <string>Name</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
            <string>User Name</string>
           </property>
          </column>

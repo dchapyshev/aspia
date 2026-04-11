@@ -139,10 +139,18 @@ void Sidebar::loadRouters()
         const RouterConfig& config = router_configs[i];
 
         QString name;
-        if (config.port != DEFAULT_ROUTER_TCP_PORT)
+        if (!config.name.isEmpty())
+        {
+            name = config.name;
+        }
+        else if (config.port != DEFAULT_ROUTER_TCP_PORT)
+        {
             name = QString("%1:%2").arg(config.address).arg(config.port);
+        }
         else
+        {
             name = config.address;
+        }
 
         Router* router = new Router(i, name, tree_widget_);
         router->setExpanded(true);

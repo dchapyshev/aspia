@@ -40,6 +40,7 @@ const QString kOneTimePasswordCheckedParam = "one_time_password_checked";
 const QString kRouterManagerStateParam = "router_manager_state";
 const QString kDisplayNameParam = "display_name";
 const QString kRoutersParam = "routers";
+const QString kRouterNameParam = "name";
 const QString kRouterAddressParam = "address";
 const QString kRouterPortParam = "port";
 const QString kRouterUsernameParam = "username";
@@ -194,6 +195,7 @@ RouterConfigList Settings::routerConfigs()
         settings_.setArrayIndex(i);
 
         RouterConfig config;
+        config.name = settings_.value(kRouterNameParam).toString();
         config.port = static_cast<quint16>(settings_.value(kRouterPortParam, 0).toUInt());
 
         if (cryptor.decrypt(settings_.value(kRouterAddressParam).toByteArray(), &out))
@@ -230,6 +232,7 @@ void Settings::setRouterConfigs(const RouterConfigList& configs)
         settings_.setArrayIndex(i);
         const RouterConfig& config = configs.at(i);
 
+        settings_.setValue(kRouterNameParam, config.name);
         settings_.setValue(kRouterPortParam, config.port);
 
         if (cryptor.encrypt(config.address.toUtf8(), &out))
