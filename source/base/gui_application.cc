@@ -21,6 +21,7 @@
 #include <QAbstractNativeEventFilter>
 #include <QCryptographicHash>
 #include <QDialogButtonBox>
+#include <QMessageBox>
 #include <QPushButton>
 #include <QDataStream>
 #include <QDir>
@@ -631,6 +632,44 @@ void GuiApplication::translateButtonBox(QDialogButtonBox* button_box)
     for (const auto& entry : kButtons)
     {
         QPushButton* button = button_box->button(entry.button);
+        if (button)
+            button->setText(tr(entry.text));
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+void GuiApplication::translateMessageBox(QMessageBox* message_box)
+{
+    DCHECK(message_box);
+
+    static const struct {
+        QMessageBox::StandardButton button;
+        const char* text;
+    } kButtons[] = {
+        { QMessageBox::Ok,              QT_TR_NOOP("OK")              },
+        { QMessageBox::Cancel,          QT_TR_NOOP("Cancel")          },
+        { QMessageBox::Yes,             QT_TR_NOOP("Yes")             },
+        { QMessageBox::No,              QT_TR_NOOP("No")              },
+        { QMessageBox::Apply,           QT_TR_NOOP("Apply")           },
+        { QMessageBox::Close,           QT_TR_NOOP("Close")           },
+        { QMessageBox::Save,            QT_TR_NOOP("Save")            },
+        { QMessageBox::Discard,         QT_TR_NOOP("Discard")         },
+        { QMessageBox::Reset,           QT_TR_NOOP("Reset")           },
+        { QMessageBox::Help,            QT_TR_NOOP("Help")            },
+        { QMessageBox::Abort,           QT_TR_NOOP("Abort")           },
+        { QMessageBox::Retry,           QT_TR_NOOP("Retry")           },
+        { QMessageBox::Ignore,          QT_TR_NOOP("Ignore")          },
+        { QMessageBox::RestoreDefaults, QT_TR_NOOP("Restore Defaults") },
+        { QMessageBox::SaveAll,         QT_TR_NOOP("Save All")        },
+        { QMessageBox::Open,            QT_TR_NOOP("Open")            },
+        { QMessageBox::YesToAll,        QT_TR_NOOP("Yes to All")      },
+        { QMessageBox::NoToAll,         QT_TR_NOOP("No to All")       },
+    };
+
+    for (const auto& entry : kButtons)
+    {
+        QAbstractButton* button = message_box->button(entry.button);
         if (button)
             button->setText(tr(entry.text));
     }
