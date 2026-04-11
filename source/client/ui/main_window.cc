@@ -73,6 +73,10 @@ MainWindow::MainWindow(QWidget* parent)
     ui.action_statusbar->setChecked(settings.isStatusBarEnabled());
     ui.statusbar->setVisible(settings.isStatusBarEnabled());
 
+    bool large_icons = settings.largeIcons();
+    ui.toolbar->setIconSize(large_icons ? QSize(32, 32) : QSize(24, 24));
+    ui.action_large_icons->setChecked(large_icons);
+
     connect(ui.action_settings, &QAction::triggered, this, &MainWindow::onSettings);
     connect(ui.action_help, &QAction::triggered, this, &MainWindow::onHelp);
     connect(ui.action_about, &QAction::triggered, this, &MainWindow::onAbout);
@@ -80,6 +84,11 @@ MainWindow::MainWindow(QWidget* parent)
     connect(ui.toolbar, &QToolBar::visibilityChanged, ui.action_toolbar, &QAction::setChecked);
     connect(ui.action_toolbar, &QAction::toggled, ui.toolbar, &QToolBar::setVisible);
     connect(ui.action_statusbar, &QAction::toggled, ui.statusbar, &QStatusBar::setVisible);
+    connect(ui.action_large_icons, &QAction::toggled, this, [this](bool enable)
+    {
+        ui.toolbar->setIconSize(enable ? QSize(32, 32) : QSize(24, 24));
+        Settings().setLargeIcons(enable);
+    });
 
     // Tab management.
     connect(ui.tabs, &QTabWidget::currentChanged, this, &MainWindow::onCurrentTabChanged);

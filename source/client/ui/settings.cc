@@ -46,6 +46,7 @@ const QString kRouterUsernameParam = "username";
 const QString kRouterPasswordParam = "password";
 const QString kWindowGeometryParam = "window_geometry";
 const QString kWindowStateParam = "window_state";
+const QString kLargeIconsParam = "large_icons";
 const QString kToolbarParam = "toolbar";
 const QString kStatusbarParam = "statusbar";
 const QString kTabStateParam = "tab_state";
@@ -271,6 +272,18 @@ QByteArray Settings::windowState() const
 void Settings::setWindowState(const QByteArray& state)
 {
     settings_.setValue(kWindowStateParam, state);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Settings::largeIcons() const
+{
+    return settings_.value(kLargeIconsParam).toBool();
+}
+
+//--------------------------------------------------------------------------------------------------
+void Settings::setLargeIcons(bool enable)
+{
+    settings_.setValue(kLargeIconsParam, enable);
 }
 
 //--------------------------------------------------------------------------------------------------

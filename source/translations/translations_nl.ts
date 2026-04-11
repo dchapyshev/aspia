@@ -2243,13 +2243,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="106"/>
-        <location filename="../client/ui/main_window.ui" line="164"/>
+        <location filename="../client/ui/main_window.ui" line="108"/>
+        <location filename="../client/ui/main_window.ui" line="166"/>
         <source>Tool Bar</source>
         <translation type="unfinished">Werkbalk</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="129"/>
+        <location filename="../client/ui/main_window.ui" line="131"/>
         <location filename="../host/ui/main_window.ui" line="298"/>
         <source>F1</source>
         <translation type="unfinished">F1</translation>
@@ -2312,13 +2312,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="156"/>
+        <location filename="../client/ui/main_window.ui" line="158"/>
         <location filename="../host/ui/main_window.ui" line="290"/>
         <source>Exit</source>
         <translation>Exit</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="126"/>
+        <location filename="../client/ui/main_window.ui" line="128"/>
         <location filename="../host/ui/main_window.ui" line="295"/>
         <source>Online Help...</source>
         <translation>Online Hulp...</translation>
@@ -2339,23 +2339,28 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="95"/>
+        <location filename="../client/ui/main_window.ui" line="97"/>
         <source>Session Type</source>
         <translation type="unfinished">Sessie Type</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="172"/>
+        <location filename="../client/ui/main_window.ui" line="174"/>
         <source>Status Bar</source>
         <translation type="unfinished">Status Balk</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="138"/>
+        <location filename="../client/ui/main_window.ui" line="182"/>
+        <source>Large icons</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/main_window.ui" line="140"/>
         <location filename="../host/ui/main_window.ui" line="303"/>
         <source>About</source>
         <translation>Over</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="147"/>
+        <location filename="../client/ui/main_window.ui" line="149"/>
         <location filename="../host/ui/main_window.ui" line="308"/>
         <source>Settings...</source>
         <translation>Instellingen...</translation>
@@ -5614,7 +5619,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.cc" line="116"/>
+        <location filename="../client/ui/main_window.cc" line="125"/>
         <source>Hosts</source>
         <translation type="unfinished">Hosts</translation>
     </message>
@@ -5623,12 +5628,12 @@
         <translation type="obsolete">Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.cc" line="265"/>
+        <location filename="../client/ui/main_window.cc" line="274"/>
         <source>Connection by ID is specified in the properties of the computer, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation type="unfinished">Verbinding maken met ID is ingesteld in de eigenschappen van de computer,  maar de router is niet geconfigureerd. Controleer de parameters van de router in de eigenschappen van het adres boek.</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.cc" line="199"/>
+        <location filename="../client/ui/main_window.cc" line="208"/>
         <source>Aspia Client</source>
         <translation type="unfinished">Aspia Client</translation>
     </message>

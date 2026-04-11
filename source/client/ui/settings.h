@@ -69,6 +69,9 @@ public:
     QByteArray windowState() const;
     void setWindowState(const QByteArray& state);
 
+    bool largeIcons() const;
+    void setLargeIcons(bool enable);
+
     bool isToolBarEnabled() const;
     void setToolBarEnabled(bool enable);
 

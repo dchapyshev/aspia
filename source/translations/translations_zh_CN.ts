@@ -2243,13 +2243,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="106"/>
-        <location filename="../client/ui/main_window.ui" line="164"/>
+        <location filename="../client/ui/main_window.ui" line="108"/>
+        <location filename="../client/ui/main_window.ui" line="166"/>
         <source>Tool Bar</source>
         <translation type="unfinished">工具栏</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="129"/>
+        <location filename="../client/ui/main_window.ui" line="131"/>
         <location filename="../host/ui/main_window.ui" line="298"/>
         <source>F1</source>
         <translation type="unfinished">F1</translation>
@@ -2316,13 +2316,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="156"/>
+        <location filename="../client/ui/main_window.ui" line="158"/>
         <location filename="../host/ui/main_window.ui" line="290"/>
         <source>Exit</source>
         <translation>退出</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="126"/>
+        <location filename="../client/ui/main_window.ui" line="128"/>
         <location filename="../host/ui/main_window.ui" line="295"/>
         <source>Online Help...</source>
         <translation>在线帮助...</translation>
@@ -2343,23 +2343,28 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="95"/>
+        <location filename="../client/ui/main_window.ui" line="97"/>
         <source>Session Type</source>
         <translation type="unfinished">会话类型</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="172"/>
+        <location filename="../client/ui/main_window.ui" line="174"/>
         <source>Status Bar</source>
         <translation type="unfinished">状态栏</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="138"/>
+        <location filename="../client/ui/main_window.ui" line="182"/>
+        <source>Large icons</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/main_window.ui" line="140"/>
         <location filename="../host/ui/main_window.ui" line="303"/>
         <source>About</source>
         <translation>关于</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="147"/>
+        <location filename="../client/ui/main_window.ui" line="149"/>
         <location filename="../host/ui/main_window.ui" line="308"/>
         <source>Settings...</source>
         <translation>设置...</translation>
@@ -5629,7 +5634,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.cc" line="116"/>
+        <location filename="../client/ui/main_window.cc" line="125"/>
         <source>Hosts</source>
         <translation type="unfinished">主机</translation>
     </message>
@@ -5638,12 +5643,12 @@
         <translation type="obsolete">警告</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.cc" line="265"/>
+        <location filename="../client/ui/main_window.cc" line="274"/>
         <source>Connection by ID is specified in the properties of the computer, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation type="unfinished">在计算机的属性中指定了按ID连接，但未配置路由器。 在地址簿的属性中检查路由器的参数。</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.cc" line="199"/>
+        <location filename="../client/ui/main_window.cc" line="208"/>
         <source>Aspia Client</source>
         <translation type="unfinished">Aspia 客户端</translation>
     </message>
