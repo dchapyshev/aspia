@@ -118,9 +118,17 @@ HostsTab::HostsTab(QWidget* parent)
     ui.content_stack->addWidget(router_group_widget_);
     ui.content_stack->addWidget(search_widget_);
 
+    // Setup drag-and-drop: pass the computer mime type from LocalGroupWidget to Sidebar.
+    ui.sidebar->setComputerMimeType(local_group_widget_->mimeType());
+
     // Connect signals.
     connect(ui.sidebar, &Sidebar::sig_switchContent, this, &HostsTab::onSwitchContent);
     connect(ui.sidebar, &Sidebar::sig_contextMenu, this, &HostsTab::onSidebarContextMenu);
+    connect(ui.sidebar, &Sidebar::sig_itemDropped, this, [this]()
+    {
+        local_group_widget_->showGroup(ui.sidebar->currentGroupId());
+        updateActionsState();
+    });
     connect(local_group_widget_, &LocalGroupWidget::sig_currentChanged, this, &HostsTab::onCurrentComputerChanged);
     connect(local_group_widget_, &LocalGroupWidget::sig_doubleClicked, this, &HostsTab::onLocalConnect);
     connect(local_group_widget_, &LocalGroupWidget::sig_contextMenu, this, &HostsTab::onLocalComputerContextMenu);

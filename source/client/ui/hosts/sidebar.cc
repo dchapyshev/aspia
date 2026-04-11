@@ -18,12 +18,18 @@
 
 #include "client/ui/hosts/sidebar.h"
 
+#include <QDragEnterEvent>
+#include <QDragLeaveEvent>
+#include <QDragMoveEvent>
+#include <QDropEvent>
 #include <QHeaderView>
+#include <QMessageBox>
 #include <QVBoxLayout>
 
 #include "base/logging.h"
 #include "client/local_data.h"
 #include "client/local_database.h"
+#include "client/ui/hosts/local_group_widget.h"
 
 namespace client {
 
@@ -53,6 +59,13 @@ Sidebar::Sidebar(QWidget* parent)
 
     remote_root_ = new Router(tr("Remote"), tree_widget_);
     remote_root_->setExpanded(true);
+
+    // Setup drag-and-drop.
+    tree_widget_->setAcceptDrops(true);
+    tree_widget_->viewport()->installEventFilter(this);
+
+    QTreeWidgetItem* invisible_root = tree_widget_->invisibleRootItem();
+    invisible_root->setFlags(invisible_root->flags() ^ Qt::ItemIsDropEnabled);
 
     connect(tree_widget_, &QTreeWidget::currentItemChanged, this, &Sidebar::onCurrentItemChanged);
     connect(tree_widget_, &QTreeWidget::customContextMenuRequested, this, &Sidebar::onContextMenu);
@@ -123,10 +136,209 @@ Sidebar::Item* Sidebar::currentItem() const
 }
 
 //--------------------------------------------------------------------------------------------------
+void Sidebar::setComputerMimeType(const QString& mime_type)
+{
+    computer_mime_type_ = mime_type;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Sidebar::dragging() const
+{
+    return dragging_;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Sidebar::eventFilter(QObject* watched, QEvent* event)
+{
+    if (watched == tree_widget_->viewport())
+    {
+        switch (event->type())
+        {
+            case QEvent::DragEnter:
+                return onDragEnter(static_cast<QDragEnterEvent*>(event));
+
+            case QEvent::DragMove:
+                return onDragMove(static_cast<QDragMoveEvent*>(event));
+
+            case QEvent::DragLeave:
+                return onDragLeave(static_cast<QDragLeaveEvent*>(event));
+
+            case QEvent::Drop:
+                return onDrop(static_cast<QDropEvent*>(event));
+
+            default:
+                break;
+        }
+    }
+
+    return QWidget::eventFilter(watched, event);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Sidebar::onDragEnter(QDragEnterEvent* event)
+{
+    const QMimeData* mime_data = event->mimeData();
+
+    if (mime_data->hasFormat(computer_mime_type_))
+    {
+        event->acceptProposedAction();
+        dragging_ = true;
+        drag_source_item_ = tree_widget_->currentItem();
+        return true;
+    }
+
+    return false;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Sidebar::onDragMove(QDragMoveEvent* event)
+{
+    event->ignore();
+
+    const QMimeData* mime_data = event->mimeData();
+    if (!mime_data->hasFormat(computer_mime_type_))
+        return false;
+
+    QTreeWidgetItem* target_tree_item = tree_widget_->itemAt(event->position().toPoint());
+    if (!target_tree_item || target_tree_item == tree_widget_->invisibleRootItem())
+        return true;
+
+    Item* target_item = static_cast<Item*>(target_tree_item);
+    if (target_item->itemType() != Item::LOCAL_GROUP)
+        return true;
+
+    const LocalGroupWidget::ComputerMimeData* computer_mime_data =
+        dynamic_cast<const LocalGroupWidget::ComputerMimeData*>(mime_data);
+    if (!computer_mime_data)
+        return true;
+
+    LocalGroupWidget::Item* computer_item = computer_mime_data->computerItem();
+    if (!computer_item)
+        return true;
+
+    // Don't allow drop to the same group.
+    if (computer_item->groupId() == target_item->groupId())
+        return true;
+
+    tree_widget_->clearSelection();
+    target_tree_item->setSelected(true);
+    event->acceptProposedAction();
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Sidebar::onDragLeave(QDragLeaveEvent* /* event */)
+{
+    dragging_ = false;
+    if (drag_source_item_)
+    {
+        tree_widget_->setCurrentItem(drag_source_item_);
+        drag_source_item_ = nullptr;
+    }
+    return false;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Sidebar::onDrop(QDropEvent* event)
+{
+    dragging_ = false;
+
+    // Restore the original selection by default. On success we switch to the target group.
+    QTreeWidgetItem* saved_item = drag_source_item_;
+    drag_source_item_ = nullptr;
+
+    auto restoreSelection = [&]()
+    {
+        if (saved_item)
+            tree_widget_->setCurrentItem(saved_item);
+    };
+
+    const QMimeData* mime_data = event->mimeData();
+    if (!mime_data || !mime_data->hasFormat(computer_mime_type_))
+        return false;
+
+    const LocalGroupWidget::ComputerMimeData* computer_mime_data =
+        dynamic_cast<const LocalGroupWidget::ComputerMimeData*>(mime_data);
+    if (!computer_mime_data)
+    {
+        restoreSelection();
+        return true;
+    }
+
+    LocalGroupWidget::Item* computer_item = computer_mime_data->computerItem();
+    if (!computer_item)
+    {
+        restoreSelection();
+        return true;
+    }
+
+    QTreeWidgetItem* target_tree_item = tree_widget_->itemAt(event->position().toPoint());
+    if (!target_tree_item || target_tree_item == tree_widget_->invisibleRootItem())
+    {
+        restoreSelection();
+        return true;
+    }
+
+    Item* target_item = static_cast<Item*>(target_tree_item);
+    if (target_item->itemType() != Item::LOCAL_GROUP)
+    {
+        restoreSelection();
+        return true;
+    }
+
+    if (computer_item->groupId() == target_item->groupId())
+    {
+        restoreSelection();
+        return true;
+    }
+
+    // Check if a computer with the same name already exists in the target group.
+    QList<ComputerData> target_computers =
+        LocalDatabase::instance().computerList(target_item->groupId());
+    for (const ComputerData& existing : std::as_const(target_computers))
+    {
+        if (existing.name == computer_item->computerName())
+        {
+            QMessageBox::warning(tree_widget_, tr("Warning"),
+                tr("A computer with this name already exists in the selected group."));
+            restoreSelection();
+            return true;
+        }
+    }
+
+    // Update the computer's group in the database.
+    std::optional<ComputerData> computer =
+        LocalDatabase::instance().findComputer(computer_item->computerId());
+    if (!computer.has_value())
+    {
+        restoreSelection();
+        return true;
+    }
+
+    computer->group_id = target_item->groupId();
+
+    if (!LocalDatabase::instance().modifyComputer(*computer))
+    {
+        QMessageBox::warning(tree_widget_, tr("Warning"),
+            tr("Failed to move the computer to the selected group."));
+        restoreSelection();
+        return true;
+    }
+
+    event->acceptProposedAction();
+    restoreSelection();
+    emit sig_itemDropped();
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
 void Sidebar::onCurrentItemChanged(QTreeWidgetItem* current, QTreeWidgetItem* previous)
 {
     LOG(INFO) << "GROUP ITEM CHANGED";
     if (!current)
+        return;
+
+    if (dragging_)
         return;
 
     Item* item = static_cast<Item*>(current);

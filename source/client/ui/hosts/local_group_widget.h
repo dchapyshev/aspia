@@ -21,6 +21,7 @@
 
 #include <QDrag>
 #include <QMimeData>
+#include <QPoint>
 
 #include "client/ui/hosts/content_widget.h"
 #include "ui_local_group_widget.h"
@@ -58,6 +59,8 @@ public:
     QByteArray saveState() override;
     void restoreState(const QByteArray& state) override;
 
+    QString mimeType() const { return mime_type_; }
+
     class ComputerMimeData final : public QMimeData
     {
     public:
@@ -93,6 +96,9 @@ public:
         }
     };
 
+protected:
+    bool eventFilter(QObject* watched, QEvent* event) override;
+
 signals:
     void sig_doubleClicked(qint64 computer_id);
     void sig_currentChanged(qint64 computer_id);
@@ -102,7 +108,11 @@ private slots:
     void onHeaderContextMenu(const QPoint& pos);
 
 private:
+    void startDrag();
+
     Ui::LocalGroupWidget ui;
+    QString mime_type_;
+    QPoint start_pos_;
 
     Q_DISABLE_COPY_MOVE(LocalGroupWidget)
 };

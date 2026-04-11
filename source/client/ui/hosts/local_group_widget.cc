@@ -18,8 +18,11 @@
 
 #include "client/ui/hosts/local_group_widget.h"
 
+#include <QApplication>
 #include <QIODevice>
 #include <QMenu>
+#include <QMouseEvent>
+#include <QUuid>
 
 #include "base/logging.h"
 #include "client/local_database.h"
@@ -53,11 +56,14 @@ private:
 
 //--------------------------------------------------------------------------------------------------
 LocalGroupWidget::LocalGroupWidget(QWidget* parent)
-    : ContentWidget(Type::LOCAL_GROUP, parent)
+    : ContentWidget(Type::LOCAL_GROUP, parent),
+      mime_type_(QString("application/%1").arg(QUuid::createUuid().toString()))
 {
     LOG(INFO) << "Ctor";
 
     ui.setupUi(this);
+
+    ui.tree_computer->viewport()->installEventFilter(this);
 
     ui.tree_computer->header()->setContextMenuPolicy(Qt::CustomContextMenu);
 
@@ -157,6 +163,52 @@ void LocalGroupWidget::restoreState(const QByteArray& state)
 
     if (!columns_state.isEmpty())
         ui.tree_computer->header()->restoreState(columns_state);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool LocalGroupWidget::eventFilter(QObject* watched, QEvent* event)
+{
+    if (watched == ui.tree_computer->viewport())
+    {
+        if (event->type() == QEvent::MouseButtonPress)
+        {
+            QMouseEvent* mouse_event = static_cast<QMouseEvent*>(event);
+            if (mouse_event->button() == Qt::LeftButton)
+                start_pos_ = mouse_event->pos();
+        }
+        else if (event->type() == QEvent::MouseMove)
+        {
+            QMouseEvent* mouse_event = static_cast<QMouseEvent*>(event);
+            if (mouse_event->buttons() & Qt::LeftButton)
+            {
+                int distance = (mouse_event->pos() - start_pos_).manhattanLength();
+                if (distance > QApplication::startDragDistance())
+                {
+                    startDrag();
+                    return true;
+                }
+            }
+        }
+    }
+
+    return ContentWidget::eventFilter(watched, event);
+}
+
+//--------------------------------------------------------------------------------------------------
+void LocalGroupWidget::startDrag()
+{
+    Item* computer_item = static_cast<Item*>(ui.tree_computer->itemAt(start_pos_));
+    if (computer_item)
+    {
+        ComputerDrag* drag = new ComputerDrag(this);
+
+        drag->setComputerItem(computer_item, mime_type_);
+
+        QIcon icon = computer_item->icon(0);
+        drag->setPixmap(icon.pixmap(icon.actualSize(QSize(16, 16))));
+
+        drag->exec(Qt::MoveAction);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

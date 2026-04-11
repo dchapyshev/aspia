@@ -77,20 +77,31 @@ public:
         RouterGroup(qint64 group_id, const QString& name, QTreeWidgetItem* parent);
     };
 
+    void setComputerMimeType(const QString& mime_type);
+    bool dragging() const;
+
     void loadGroups(qint64 parent_id, QTreeWidgetItem* parent_item);
     void reloadGroups(qint64 selected_group_id = 0);
     qint64 currentGroupId() const;
     Item* currentItem() const;
 
+    bool eventFilter(QObject* watched, QEvent* event) override;
+
 signals:
     void sig_switchContent(client::Sidebar::Item::Type type);
     void sig_contextMenu(client::Sidebar::Item::Type type, const QPoint& pos);
+    void sig_itemDropped();
 
 private slots:
     void onCurrentItemChanged(QTreeWidgetItem* current, QTreeWidgetItem* previous);
     void onContextMenu(const QPoint& pos);
 
 private:
+    bool onDragEnter(QDragEnterEvent* event);
+    bool onDragMove(QDragMoveEvent* event);
+    bool onDragLeave(QDragLeaveEvent* event);
+    bool onDrop(QDropEvent* event);
+
     QTreeWidgetItem* findGroupItem(qint64 group_id, QTreeWidgetItem* parent) const;
 
     QTreeWidget* tree_widget_ = nullptr;
@@ -99,6 +110,9 @@ private:
     Router* remote_root_ = nullptr;
 
     qint64 current_group_id_ = 0;
+    QString computer_mime_type_;
+    bool dragging_ = false;
+    QTreeWidgetItem* drag_source_item_ = nullptr;
 
     Q_DISABLE_COPY_MOVE(Sidebar)
 };
