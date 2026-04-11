@@ -26,6 +26,7 @@
 #include "base/logging.h"
 #include "base/net/address.h"
 #include "base/peer/user.h"
+#include "base/gui_application.h"
 #include "build/build_config.h"
 #include "client/ui/router_dialog.h"
 #include "client/ui/settings.h"
@@ -40,9 +41,7 @@ SettingsDialog::SettingsDialog(QWidget* parent)
     LOG(INFO) << "Ctor";
     ui.setupUi(this);
 
-    QPushButton* cancel_button = ui.buttonbox->button(QDialogButtonBox::StandardButton::Cancel);
-    if (cancel_button)
-        cancel_button->setText(tr("Cancel"));
+    base::GuiApplication::translateButtonBox(ui.buttonbox);
 
     Settings settings;
 
@@ -224,7 +223,8 @@ void SettingsDialog::onEditRouter()
     if (!item)
         return;
 
-    base::Address addr = base::Address::fromString(item->text(0), DEFAULT_ROUTER_TCP_PORT);
+    base::Address addr =
+        base::Address::fromString(item->text(0), DEFAULT_ROUTER_TCP_PORT);
 
     RouterConfig config;
     config.address = addr.host();

@@ -26,6 +26,7 @@
 #include "base/thread.h"
 #include "base/translations.h"
 
+class QDialogButtonBox;
 class QLocalServer;
 class QLockFile;
 
@@ -65,6 +66,8 @@ public:
     static QPixmap svgPixmap(const QString& svg_file_path, const QSize& size = QSize(24, 24));
     static QIcon svgIcon(const QString& svg_file_path, const QSize& size = QSize(24, 24));
     static QImage svgImage(const QString& svg_file_path, const QSize& size);
+
+    static void translateButtonBox(QDialogButtonBox* button_box);
 
 public slots:
     void sendMessage(const QByteArray& message);

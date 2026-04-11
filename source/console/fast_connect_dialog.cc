@@ -21,6 +21,7 @@
 #include <QMessageBox>
 #include <QTimer>
 
+#include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/net/address.h"
 #include "build/build_config.h"
@@ -50,9 +51,7 @@ FastConnectDialog::FastConnectDialog(QWidget* parent,
 
     ui.setupUi(this);
 
-    QPushButton* cancel_button = ui.button_box->button(QDialogButtonBox::StandardButton::Cancel);
-    if (cancel_button)
-        cancel_button->setText(tr("Cancel"));
+    base::GuiApplication::translateButtonBox(ui.button_box);
 
     readState();
 

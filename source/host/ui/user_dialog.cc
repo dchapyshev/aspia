@@ -21,6 +21,7 @@
 #include <QMessageBox>
 #include <QMouseEvent>
 
+#include "base/gui_application.h"
 #include "base/logging.h"
 #include "common/ui/session_type.h"
 #include "proto/peer.h"
@@ -36,9 +37,7 @@ UserDialog::UserDialog(const base::User& user, const QStringList& exist_names, Q
     LOG(INFO) << "Ctor";
     ui.setupUi(this);
 
-    QPushButton* cancel_button = ui.button_box->button(QDialogButtonBox::StandardButton::Cancel);
-    if (cancel_button)
-        cancel_button->setText(tr("Cancel"));
+    base::GuiApplication::translateButtonBox(ui.button_box);
 
     if (user.isValid())
     {

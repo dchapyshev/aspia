@@ -25,6 +25,7 @@
 #include <QTimer>
 #include <QTranslator>
 
+#include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/crypto/password_generator.h"
 #include "base/desktop/screen_capturer.h"
@@ -102,12 +103,7 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     LOG(INFO) << "Ctor";
     ui.setupUi(this);
 
-    QPushButton* cancel_button = ui.button_box->button(QDialogButtonBox::StandardButton::Cancel);
-    if (cancel_button)
-        cancel_button->setText(tr("Cancel"));
-    QPushButton* apply_button = ui.button_box->button(QDialogButtonBox::StandardButton::Apply);
-    if (apply_button)
-        apply_button->setText(tr("Apply"));
+    base::GuiApplication::translateButtonBox(ui.button_box);
 
     //---------------------------------------------------------------------------------------------
     // General Tab

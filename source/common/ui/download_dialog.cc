@@ -20,9 +20,9 @@
 
 #include <QAbstractButton>
 #include <QFile>
-#include <QPushButton>
 #include <QMessageBox>
 
+#include "base/gui_application.h"
 #include "base/logging.h"
 
 namespace common {
@@ -36,9 +36,7 @@ DownloadDialog::DownloadDialog(const QString& url, QFile& file, QWidget* parent)
     LOG(INFO) << "Ctor";
     ui.setupUi(this);
 
-    QPushButton* cancel_button = ui.button_box->button(QDialogButtonBox::StandardButton::Cancel);
-    if (cancel_button)
-        cancel_button->setText(tr("Cancel"));
+    base::GuiApplication::translateButtonBox(ui.button_box);
 
     connect(ui.button_box, &QDialogButtonBox::clicked, this, [this](QAbstractButton* /* button */)
     {

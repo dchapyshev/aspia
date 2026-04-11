@@ -18,6 +18,7 @@
 
 #include "common/ui/status_dialog.h"
 
+#include "base/gui_application.h"
 #include "base/logging.h"
 #include "ui_status_dialog.h"
 
@@ -35,9 +36,7 @@ StatusDialog::StatusDialog(QWidget* parent)
     LOG(INFO) << "Ctor";
     ui->setupUi(this);
 
-    QPushButton* close_button = ui->buttonbox->button(QDialogButtonBox::StandardButton::Close);
-    if (close_button)
-        close_button->setText(tr("Close"));
+    base::GuiApplication::translateButtonBox(ui->buttonbox);
 
     connect(ui->buttonbox, &QDialogButtonBox::clicked, this, [this](QAbstractButton* button)
     {

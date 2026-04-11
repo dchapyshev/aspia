@@ -18,8 +18,9 @@
 
 #include "client/ui/authorization_dialog.h"
 
-#include "client/ui/settings.h"
+#include "base/gui_application.h"
 #include "base/logging.h"
+#include "client/ui/settings.h"
 
 #include <QMessageBox>
 #include <QTimer>
@@ -33,9 +34,7 @@ AuthorizationDialog::AuthorizationDialog(QWidget* parent)
     LOG(INFO) << "Ctor";
     ui.setupUi(this);
 
-    QPushButton* cancel_button = ui.buttonbox->button(QDialogButtonBox::StandardButton::Cancel);
-    if (cancel_button)
-        cancel_button->setText(tr("Cancel"));
+    base::GuiApplication::translateButtonBox(ui.buttonbox);
 
     Settings settings;
 

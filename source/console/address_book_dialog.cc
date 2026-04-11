@@ -22,6 +22,7 @@
 #include <QMessageBox>
 #include <QUuid>
 
+#include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/crypto/password_hash.h"
 #include "base/crypto/random.h"
@@ -95,9 +96,7 @@ AddressBookDialog::AddressBookDialog(QWidget* parent,
     LOG(INFO) << "Ctor";
     ui.setupUi(this);
 
-    QPushButton* cancel_button = ui.button_box->button(QDialogButtonBox::StandardButton::Cancel);
-    if (cancel_button)
-        cancel_button->setText(tr("Cancel"));
+    base::GuiApplication::translateButtonBox(ui.button_box);
 
     Settings settings;
     restoreGeometry(settings.addressBookDialogGeometry());

@@ -22,6 +22,7 @@
 #include <QPushButton>
 #include <QMessageBox>
 
+#include "base/gui_application.h"
 #include "base/logging.h"
 #include "client/ui/file_transfer/file_error_code.h"
 
@@ -40,9 +41,7 @@ FileTransferDialog::FileTransferDialog(QWidget* parent)
     ui.setupUi(this);
     setFixedHeight(sizeHint().height());
 
-    QPushButton* cancel_button = ui.button_box->button(QDialogButtonBox::StandardButton::Cancel);
-    if (cancel_button)
-        cancel_button->setText(tr("Cancel"));
+    base::GuiApplication::translateButtonBox(ui.button_box);
 
     ui.progress_total->setRange(0, 0);
     ui.progress_current->setRange(0, 0);

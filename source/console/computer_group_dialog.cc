@@ -22,6 +22,7 @@
 #include <QDateTime>
 #include <QMessageBox>
 
+#include "base/gui_application.h"
 #include "base/logging.h"
 #include "common/ui/session_type.h"
 #include "console/computer_group_dialog_desktop.h"
@@ -57,9 +58,7 @@ ComputerGroupDialog::ComputerGroupDialog(QWidget* parent,
     LOG(INFO) << "Ctor";
     ui.setupUi(this);
 
-    QPushButton* cancel_button = ui.button_box->button(QDialogButtonBox::StandardButton::Cancel);
-    if (cancel_button)
-        cancel_button->setText(tr("Cancel"));
+    base::GuiApplication::translateButtonBox(ui.button_box);
 
     restoreGeometry(settings_.computerGroupDialogGeometry());
 

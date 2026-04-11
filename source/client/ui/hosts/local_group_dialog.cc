@@ -18,6 +18,7 @@
 
 #include "client/ui/hosts/local_group_dialog.h"
 
+#include "base/gui_application.h"
 #include "base/logging.h"
 #include "client/local_data.h"
 #include "client/local_database.h"
@@ -45,6 +46,8 @@ LocalGroupDialog::LocalGroupDialog(qint64 group_id, qint64 parent_id, QWidget* p
     LOG(INFO) << "Ctor";
 
     ui.setupUi(this);
+
+    base::GuiApplication::translateButtonBox(ui.button_box);
 
     if (group_id_ != -1)
     {

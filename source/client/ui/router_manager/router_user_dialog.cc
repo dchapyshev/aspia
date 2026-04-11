@@ -18,6 +18,7 @@
 
 #include "client/ui/router_manager/router_user_dialog.h"
 
+#include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/peer/user.h"
 
@@ -36,9 +37,7 @@ RouterUserDialog::RouterUserDialog(const base::User& user, const QStringList& us
     LOG(INFO) << "Ctor";
     ui.setupUi(this);
 
-    QPushButton* cancel_button = ui.buttonbox->button(QDialogButtonBox::StandardButton::Cancel);
-    if (cancel_button)
-        cancel_button->setText(tr("Cancel"));
+    base::GuiApplication::translateButtonBox(ui.buttonbox);
 
     if (user_.isValid())
     {

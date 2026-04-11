@@ -20,9 +20,9 @@
 
 #include <QAbstractButton>
 #include <QMessageBox>
-#include <QPushButton>
 #include <QToolButton>
 
+#include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/net/address.h"
 #include "base/peer/user.h"
@@ -37,9 +37,7 @@ RouterDialog::RouterDialog(QWidget* parent)
     LOG(INFO) << "Ctor";
     ui.setupUi(this);
 
-    QPushButton* cancel_button = ui.buttonbox->button(QDialogButtonBox::StandardButton::Cancel);
-    if (cancel_button)
-        cancel_button->setText(tr("Cancel"));
+    base::GuiApplication::translateButtonBox(ui.buttonbox);
 
     connect(ui.buttonbox, &QDialogButtonBox::clicked, this, &RouterDialog::onButtonBoxClicked);
     connect(ui.button_show_password, &QToolButton::toggled,

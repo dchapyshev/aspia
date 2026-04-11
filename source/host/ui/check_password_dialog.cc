@@ -23,8 +23,9 @@
 #include <QPushButton>
 #include <QTimer>
 
-#include "host/system_settings.h"
+#include "base/gui_application.h"
 #include "base/logging.h"
+#include "host/system_settings.h"
 
 namespace host {
 
@@ -35,9 +36,7 @@ CheckPasswordDialog::CheckPasswordDialog(QWidget* parent)
     LOG(INFO) << "Ctor";
     ui.setupUi(this);
 
-    QPushButton* cancel_button = ui.button_box->button(QDialogButtonBox::StandardButton::Cancel);
-    if (cancel_button)
-        cancel_button->setText(tr("Cancel"));
+    base::GuiApplication::translateButtonBox(ui.button_box);
 
     connect(ui.button_box, &QDialogButtonBox::clicked,
             this, &CheckPasswordDialog::onButtonBoxClicked);

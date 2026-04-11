@@ -18,8 +18,7 @@
 
 #include "console/update_settings_dialog.h"
 
-#include <QPushButton>
-
+#include "base/gui_application.h"
 #include "base/logging.h"
 #include "build/build_config.h"
 #include "console/settings.h"
@@ -33,9 +32,7 @@ UpdateSettingsDialog::UpdateSettingsDialog(QWidget* parent)
     LOG(INFO) << "Ctor";
     ui.setupUi(this);
 
-    QPushButton* cancel_button = ui.button_box->button(QDialogButtonBox::StandardButton::Cancel);
-    if (cancel_button)
-        cancel_button->setText(tr("Cancel"));
+    base::GuiApplication::translateButtonBox(ui.button_box);
 
     Settings settings;
 
