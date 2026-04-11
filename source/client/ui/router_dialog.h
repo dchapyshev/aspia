@@ -16,10 +16,11 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_UI_SETTINGS_DIALOG_H
-#define CLIENT_UI_SETTINGS_DIALOG_H
+#ifndef CLIENT_UI_ROUTER_DIALOG_H
+#define CLIENT_UI_ROUTER_DIALOG_H
 
-#include "ui_settings_dialog.h"
+#include "ui_router_dialog.h"
+#include "client/config.h"
 
 #include <QDialog>
 
@@ -27,30 +28,27 @@ class QAbstractButton;
 
 namespace client {
 
-class SettingsDialog final : public QDialog
+class RouterDialog final : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit SettingsDialog(QWidget* parent = nullptr);
-    ~SettingsDialog() final;
+    explicit RouterDialog(QWidget* parent = nullptr);
+    RouterDialog(const RouterConfig& config, QWidget* parent = nullptr);
+    ~RouterDialog() final;
 
-protected:
-    void closeEvent(QCloseEvent* event) final;
+    RouterConfig routerConfig() const;
 
 private slots:
     void onButtonBoxClicked(QAbstractButton* button);
-    void onAddRouter();
-    void onEditRouter();
-    void onRemoveRouter();
+    void onShowPasswordButtonToggled(bool checked);
 
 private:
     void showError(const QString& message);
-    void updateRouterButtons();
 
-    Ui::SettingsDialog ui;
+    Ui::RouterDialog ui;
 };
 
 } // namespace client
 
-#endif // CLIENT_UI_SETTINGS_DIALOG_H
+#endif // CLIENT_UI_ROUTER_DIALOG_H

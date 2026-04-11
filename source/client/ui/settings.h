@@ -60,11 +60,8 @@ public:
     QString displayName() const;
     void setDisplayName(const QString& display_name);
 
-    bool isRouterEnabled() const;
-    void setRouterEnabled(bool enabled);
-
-    RouterConfig routerConfig() const;
-    void setRouterConfig(const RouterConfig& config);
+    RouterConfigList routerConfigs();
+    void setRouterConfigs(const RouterConfigList& configs);
 
     QByteArray windowGeometry() const;
     void setWindowGeometry(const QByteArray& geometry);

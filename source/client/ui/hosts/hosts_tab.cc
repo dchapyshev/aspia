@@ -578,7 +578,9 @@ void HostsTab::onConnectAction(QAction* action)
     }
     else if (current_content_ == router_group_widget_)
     {
-        config.router_config = settings.routerConfig();
+        RouterConfigList router_configs = settings.routerConfigs();
+        if (!router_configs.isEmpty())
+            config.router_config = router_configs.first();
         // TODO
     }
     else

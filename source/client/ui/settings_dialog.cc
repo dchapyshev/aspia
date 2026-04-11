@@ -27,6 +27,7 @@
 #include "base/net/address.h"
 #include "base/peer/user.h"
 #include "build/build_config.h"
+#include "client/ui/router_dialog.h"
 #include "client/ui/settings.h"
 #include "common/ui/update_dialog.h"
 
@@ -45,46 +46,33 @@ SettingsDialog::SettingsDialog(QWidget* parent)
 
     Settings settings;
 
-    RouterConfig config = settings.routerConfig();
-
-    base::Address address(DEFAULT_ROUTER_TCP_PORT);
-    address.setHost(config.address);
-    address.setPort(config.port);
-
-    ui.checkbox_enable_router->setChecked(true);
-    ui.edit_address->setText(address.toString());
-    ui.edit_username->setText(config.username);
-    ui.edit_password->setText(config.password);
-
-    ui.edit_display_name->setText(settings.displayName());
-
-    if (!settings.isRouterEnabled())
+    // Router tab.
+    RouterConfigList routers = settings.routerConfigs();
+    for (const auto& config : std::as_const(routers))
     {
-        ui.checkbox_enable_router->setChecked(false);
+        base::Address address(DEFAULT_ROUTER_TCP_PORT);
+        address.setHost(config.address);
+        address.setPort(config.port);
 
-        ui.label_address->setEnabled(false);
-        ui.edit_address->setEnabled(false);
-
-        ui.label_username->setEnabled(false);
-        ui.edit_username->setEnabled(false);
-
-        ui.label_password->setEnabled(false);
-        ui.edit_password->setEnabled(false);
+        QTreeWidgetItem* item = new QTreeWidgetItem(ui.tree_routers);
+        item->setText(0, address.toString());
+        item->setText(1, config.username);
+        item->setData(0, Qt::UserRole, config.password);
     }
 
-    connect(ui.checkbox_enable_router, &QCheckBox::toggled, this, [this](bool checked)
-    {
-        LOG(INFO) << "[ACTION] Enable router:" << checked;
+    ui.tree_routers->header()->setStretchLastSection(true);
+    ui.tree_routers->header()->setSectionResizeMode(0, QHeaderView::Stretch);
 
-        ui.label_address->setEnabled(checked);
-        ui.edit_address->setEnabled(checked);
+    connect(ui.button_add_router, &QPushButton::clicked, this, &SettingsDialog::onAddRouter);
+    connect(ui.button_edit_router, &QPushButton::clicked, this, &SettingsDialog::onEditRouter);
+    connect(ui.button_remove_router, &QPushButton::clicked, this, &SettingsDialog::onRemoveRouter);
+    connect(ui.tree_routers, &QTreeWidget::doubleClicked, this, &SettingsDialog::onEditRouter);
+    connect(ui.tree_routers, &QTreeWidget::itemSelectionChanged, this, &SettingsDialog::updateRouterButtons);
 
-        ui.label_username->setEnabled(checked);
-        ui.edit_username->setEnabled(checked);
+    updateRouterButtons();
 
-        ui.label_password->setEnabled(checked);
-        ui.edit_password->setEnabled(checked);
-    });
+    // Other tab.
+    ui.edit_display_name->setText(settings.displayName());
 
     // Desktop tab.
     proto::control::Config desktop_config = settings.desktopConfig();
@@ -160,71 +148,25 @@ void SettingsDialog::onButtonBoxClicked(QAbstractButton* button)
     {
         LOG(INFO) << "[ACTION] Accepted by user";
 
-        bool enable_router = ui.checkbox_enable_router->isChecked();
-
-        QString address_text = ui.edit_address->text();
-        base::Address address = base::Address::fromString(address_text, DEFAULT_ROUTER_TCP_PORT);
-        if (!address.isValid())
+        // Save router configs.
+        RouterConfigList routers;
+        for (int i = 0; i < ui.tree_routers->topLevelItemCount(); ++i)
         {
-            if (!enable_router && address_text.isEmpty())
-            {
-                LOG(INFO) << "Router disabled and address is empty";
-            }
-            else
-            {
-                LOG(ERROR) << "Invalid router address entered";
-                showError(tr("An invalid router address was entered."));
-                ui.edit_address->setFocus();
-                ui.edit_address->selectAll();
-                return;
-            }
+            QTreeWidgetItem* item = ui.tree_routers->topLevelItem(i);
+
+            base::Address address =
+                base::Address::fromString(item->text(0), DEFAULT_ROUTER_TCP_PORT);
+
+            RouterConfig config;
+            config.address = address.host();
+            config.port = address.port();
+            config.username = item->text(1);
+            config.password = item->data(0, Qt::UserRole).toString();
+            routers.append(config);
         }
-
-        QString username = ui.edit_username->text();
-        QString password = ui.edit_password->text();
-
-        if (!base::User::isValidUserName(username))
-        {
-            if (!enable_router && username.isEmpty())
-            {
-                LOG(INFO) << "Router disabled and username is empty";
-            }
-            else
-            {
-                LOG(ERROR) << "Invalid user name entered";
-                showError(tr("The user name can not be empty and can contain only"
-                             " alphabet characters, numbers and ""_"", ""-"", ""."" characters."));
-                ui.edit_username->setFocus();
-                ui.edit_username->selectAll();
-                return;
-            }
-        }
-
-        if (!base::User::isValidPassword(password))
-        {
-            if (!enable_router && password.isEmpty())
-            {
-                LOG(INFO) << "Router disabled and password is empty";
-            }
-            else
-            {
-                LOG(ERROR) << "Invalid password entered";
-                showError(tr("Password cannot be empty."));
-                ui.edit_password->setFocus();
-                ui.edit_password->selectAll();
-                return;
-            }
-        }
-
-        RouterConfig config;
-        config.address = address.host();
-        config.port = address.port();
-        config.username = std::move(username);
-        config.password = std::move(password);
 
         Settings settings;
-        settings.setRouterEnabled(ui.checkbox_enable_router->isChecked());
-        settings.setRouterConfig(config);
+        settings.setRouterConfigs(routers);
         settings.setDisplayName(ui.edit_display_name->text());
 
         proto::control::Config desktop_config;
@@ -250,9 +192,86 @@ void SettingsDialog::onButtonBoxClicked(QAbstractButton* button)
 }
 
 //--------------------------------------------------------------------------------------------------
+void SettingsDialog::onAddRouter()
+{
+    LOG(INFO) << "[ACTION] Add router";
+
+    RouterDialog dialog(this);
+    if (dialog.exec() == QDialog::Accepted)
+    {
+        RouterConfig config = dialog.routerConfig();
+
+        base::Address address(DEFAULT_ROUTER_TCP_PORT);
+        address.setHost(config.address);
+        address.setPort(config.port);
+
+        QTreeWidgetItem* item = new QTreeWidgetItem(ui.tree_routers);
+        item->setText(0, address.toString());
+        item->setText(1, config.username);
+        item->setData(0, Qt::UserRole, config.password);
+
+        ui.tree_routers->setCurrentItem(item);
+        updateRouterButtons();
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsDialog::onEditRouter()
+{
+    LOG(INFO) << "[ACTION] Edit router";
+
+    QTreeWidgetItem* item = ui.tree_routers->currentItem();
+    if (!item)
+        return;
+
+    base::Address addr = base::Address::fromString(item->text(0), DEFAULT_ROUTER_TCP_PORT);
+
+    RouterConfig config;
+    config.address = addr.host();
+    config.port = addr.port();
+    config.username = item->text(1);
+    config.password = item->data(0, Qt::UserRole).toString();
+
+    RouterDialog dialog(config, this);
+    if (dialog.exec() == QDialog::Accepted)
+    {
+        config = dialog.routerConfig();
+
+        base::Address address(DEFAULT_ROUTER_TCP_PORT);
+        address.setHost(config.address);
+        address.setPort(config.port);
+
+        item->setText(0, address.toString());
+        item->setText(1, config.username);
+        item->setData(0, Qt::UserRole, config.password);
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsDialog::onRemoveRouter()
+{
+    LOG(INFO) << "[ACTION] Remove router";
+
+    QTreeWidgetItem* item = ui.tree_routers->currentItem();
+    if (!item)
+        return;
+
+    delete item;
+    updateRouterButtons();
+}
+
+//--------------------------------------------------------------------------------------------------
 void SettingsDialog::showError(const QString& message)
 {
     QMessageBox(QMessageBox::Warning, tr("Warning"), message, QMessageBox::Ok, this).exec();
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsDialog::updateRouterButtons()
+{
+    bool has_selection = ui.tree_routers->currentItem() != nullptr;
+    ui.button_edit_router->setEnabled(has_selection);
+    ui.button_remove_router->setEnabled(has_selection);
 }
 
 } // namespace client

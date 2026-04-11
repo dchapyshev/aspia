@@ -461,7 +461,10 @@ int clientMain(int argc, char* argv[])
         {
             LOG(INFO) << "Relay connection selected";
 
-            client::RouterConfig router_config = client::Settings().routerConfig();
+            client::RouterConfig router_config;
+            client::RouterConfigList router_configs = client::Settings().routerConfigs();
+            if (!router_configs.isEmpty())
+                router_config = router_configs.first();
 
             if (parser.isSet(router_address_option))
             {

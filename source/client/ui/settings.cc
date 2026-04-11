@@ -39,11 +39,11 @@ const QString kUpdateServerParam = "update_server";
 const QString kOneTimePasswordCheckedParam = "one_time_password_checked";
 const QString kRouterManagerStateParam = "router_manager_state";
 const QString kDisplayNameParam = "display_name";
-const QString kRouterEnabledParam = "router_enabled";
-const QString kRouterAddressParam = "router_address";
-const QString kRouterPortParam = "router_port";
-const QString kRouterUsernameParam = "router_username";
-const QString kRouterPasswordParam = "router_password";
+const QString kRoutersParam = "routers";
+const QString kRouterAddressParam = "address";
+const QString kRouterPortParam = "port";
+const QString kRouterUsernameParam = "username";
+const QString kRouterPasswordParam = "password";
 const QString kWindowGeometryParam = "window_geometry";
 const QString kWindowStateParam = "window_state";
 const QString kToolbarParam = "toolbar";
@@ -181,66 +181,72 @@ void Settings::setDisplayName(const QString& display_name)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Settings::isRouterEnabled() const
+RouterConfigList Settings::routerConfigs()
 {
-    return settings_.value(kRouterEnabledParam, false).toBool();
-}
-
-//--------------------------------------------------------------------------------------------------
-void Settings::setRouterEnabled(bool enabled)
-{
-    settings_.setValue(kRouterEnabledParam, enabled);
-}
-
-//--------------------------------------------------------------------------------------------------
-RouterConfig Settings::routerConfig() const
-{
-    RouterConfig config;
-    config.port = static_cast<quint16>(settings_.value(kRouterPortParam, 0).toUInt());
-
+    RouterConfigList configs;
     base::DataCryptor& cryptor = base::DataCryptor::instance();
     QByteArray out;
 
-    if (cryptor.decrypt(settings_.value(kRouterAddressParam).toByteArray(), &out))
-        config.address = QString::fromUtf8(out);
-    else
-        LOG(ERROR) << "Failed to decrypt router address";
+    int size = settings_.beginReadArray(kRoutersParam);
+    for (int i = 0; i < size; ++i)
+    {
+        settings_.setArrayIndex(i);
 
-    if (cryptor.decrypt(settings_.value(kRouterUsernameParam).toByteArray(), &out))
-        config.username = QString::fromUtf8(out);
-    else
-        LOG(ERROR) << "Failed to decrypt router username";
+        RouterConfig config;
+        config.port = static_cast<quint16>(settings_.value(kRouterPortParam, 0).toUInt());
 
-    if (cryptor.decrypt(settings_.value(kRouterPasswordParam).toByteArray(), &out))
-        config.password = QString::fromUtf8(out);
-    else
-        LOG(ERROR) << "Failed to decrypt router password";
+        if (cryptor.decrypt(settings_.value(kRouterAddressParam).toByteArray(), &out))
+            config.address = QString::fromUtf8(out);
+        else
+            LOG(ERROR) << "Failed to decrypt router address";
 
-    return config;
+        if (cryptor.decrypt(settings_.value(kRouterUsernameParam).toByteArray(), &out))
+            config.username = QString::fromUtf8(out);
+        else
+            LOG(ERROR) << "Failed to decrypt router username";
+
+        if (cryptor.decrypt(settings_.value(kRouterPasswordParam).toByteArray(), &out))
+            config.password = QString::fromUtf8(out);
+        else
+            LOG(ERROR) << "Failed to decrypt router password";
+
+        configs.append(config);
+    }
+    settings_.endArray();
+
+    return configs;
 }
 
 //--------------------------------------------------------------------------------------------------
-void Settings::setRouterConfig(const RouterConfig& config)
+void Settings::setRouterConfigs(const RouterConfigList& configs)
 {
-    settings_.setValue(kRouterPortParam, config.port);
-
     base::DataCryptor& cryptor = base::DataCryptor::instance();
     QByteArray out;
 
-    if (cryptor.encrypt(config.address.toUtf8(), &out))
-        settings_.setValue(kRouterAddressParam, out);
-    else
-        LOG(ERROR) << "Failed to encrypt router address";
+    settings_.beginWriteArray(kRoutersParam, configs.size());
+    for (int i = 0; i < configs.size(); ++i)
+    {
+        settings_.setArrayIndex(i);
+        const RouterConfig& config = configs.at(i);
 
-    if (cryptor.encrypt(config.username.toUtf8(), &out))
-        settings_.setValue(kRouterUsernameParam, out);
-    else
-        LOG(ERROR) << "Failed to encrypt router username";
+        settings_.setValue(kRouterPortParam, config.port);
 
-    if (cryptor.encrypt(config.password.toUtf8(), &out))
-        settings_.setValue(kRouterPasswordParam, out);
-    else
-        LOG(ERROR) << "Failed to encrypt router password";
+        if (cryptor.encrypt(config.address.toUtf8(), &out))
+            settings_.setValue(kRouterAddressParam, out);
+        else
+            LOG(ERROR) << "Failed to encrypt router address";
+
+        if (cryptor.encrypt(config.username.toUtf8(), &out))
+            settings_.setValue(kRouterUsernameParam, out);
+        else
+            LOG(ERROR) << "Failed to encrypt router username";
+
+        if (cryptor.encrypt(config.password.toUtf8(), &out))
+            settings_.setValue(kRouterPasswordParam, out);
+        else
+            LOG(ERROR) << "Failed to encrypt router password";
+    }
+    settings_.endArray();
 }
 
 //--------------------------------------------------------------------------------------------------

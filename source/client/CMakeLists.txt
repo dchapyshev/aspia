@@ -77,6 +77,9 @@ list(APPEND SOURCE_CLIENT_CORE_UI
     ui/session_tab.h
     ui/settings.cc
     ui/settings.h
+    ui/router_dialog.cc
+    ui/router_dialog.h
+    ui/router_dialog.ui
     ui/settings_dialog.cc
     ui/settings_dialog.h
     ui/settings_dialog.ui
