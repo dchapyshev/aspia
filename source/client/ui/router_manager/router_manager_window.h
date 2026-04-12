@@ -56,10 +56,10 @@ public slots:
     void onWaitForRouter();
     void onWaitForRouterTimeout();
     void onVersionMismatch(const QVersionNumber& router, const QVersionNumber& client);
-    void onSessionList(std::shared_ptr<proto::router::SessionList> session_list);
-    void onSessionResult(std::shared_ptr<proto::router::SessionResult> session_result);
-    void onUserList(std::shared_ptr<proto::router::UserList> user_list);
-    void onUserResult(std::shared_ptr<proto::router::UserResult> user_result);
+    void onSessionList(const proto::router::SessionList& session_list);
+    void onSessionResult(const proto::router::SessionResult& session_result);
+    void onUserList(const proto::router::UserList& user_list);
+    void onUserResult(const proto::router::UserResult& user_result);
 
     static QString delayToString(quint64 delay);
     static QString sizeToString(qint64 size);

@@ -38,11 +38,6 @@
 #include "common/ui/status_dialog.h"
 #include "ui_router_manager_window.h"
 
-Q_DECLARE_METATYPE(std::shared_ptr<proto::router::SessionList>)
-Q_DECLARE_METATYPE(std::shared_ptr<proto::router::SessionResult>)
-Q_DECLARE_METATYPE(std::shared_ptr<proto::router::UserList>)
-Q_DECLARE_METATYPE(std::shared_ptr<proto::router::UserResult>)
-
 namespace client {
 
 namespace {
@@ -567,7 +562,7 @@ void RouterManagerWindow::onVersionMismatch(const QVersionNumber& router, const 
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterManagerWindow::onSessionList(std::shared_ptr<proto::router::SessionList> session_list)
+void RouterManagerWindow::onSessionList(const proto::router::SessionList& session_list)
 {
     QTreeWidget* tree_hosts = ui->tree_hosts;
     QTreeWidget* tree_relay = ui->tree_relay;
@@ -591,7 +586,7 @@ void RouterManagerWindow::onSessionList(std::shared_ptr<proto::router::SessionLi
     {
         HostTreeItem* item = static_cast<HostTreeItem*>(tree_hosts->topLevelItem(i));
 
-        if (!has_session_with_id(*session_list, item->session.session_id()))
+        if (!has_session_with_id(session_list, item->session.session_id()))
              delete item;
     }
 
@@ -600,14 +595,14 @@ void RouterManagerWindow::onSessionList(std::shared_ptr<proto::router::SessionLi
     {
         RelayTreeItem* item = static_cast<RelayTreeItem*>(tree_relay->topLevelItem(i));
 
-        if (!has_session_with_id(*session_list, item->session.session_id()))
+        if (!has_session_with_id(session_list, item->session.session_id()))
              delete item;
     }
 
     // Adding and updating elements in the UI.
-    for (int i = 0; i < session_list->session_size(); ++i)
+    for (int i = 0; i < session_list.session_size(); ++i)
     {
-        const proto::router::Session& session = session_list->session(i);
+        const proto::router::Session& session = session_list.session(i);
 
         switch (session.session_type())
         {
@@ -674,13 +669,13 @@ void RouterManagerWindow::onSessionList(std::shared_ptr<proto::router::SessionLi
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterManagerWindow::onSessionResult(std::shared_ptr<proto::router::SessionResult> session_result)
+void RouterManagerWindow::onSessionResult(const proto::router::SessionResult& session_result)
 {
-    if (session_result->error_code() != proto::router::SessionResult::SUCCESS)
+    if (session_result.error_code() != proto::router::SessionResult::SUCCESS)
     {
         const char* message;
 
-        switch (session_result->error_code())
+        switch (session_result.error_code())
         {
             case proto::router::SessionResult::INVALID_REQUEST:
                 message = QT_TR_NOOP("Invalid request.");
@@ -703,23 +698,23 @@ void RouterManagerWindow::onSessionResult(std::shared_ptr<proto::router::Session
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterManagerWindow::onUserList(std::shared_ptr<proto::router::UserList> user_list)
+void RouterManagerWindow::onUserList(const proto::router::UserList& user_list)
 {
     QTreeWidget* tree_users = ui->tree_users;
     tree_users->clear();
 
-    for (int i = 0; i < user_list->user_size(); ++i)
-        tree_users->addTopLevelItem(new UserTreeItem(user_list->user(i)));
+    for (int i = 0; i < user_list.user_size(); ++i)
+        tree_users->addTopLevelItem(new UserTreeItem(user_list.user(i)));
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterManagerWindow::onUserResult(std::shared_ptr<proto::router::UserResult> user_result)
+void RouterManagerWindow::onUserResult(const proto::router::UserResult& user_result)
 {
-    if (user_result->error_code() != proto::router::UserResult::SUCCESS)
+    if (user_result.error_code() != proto::router::UserResult::SUCCESS)
     {
         const char* message;
 
-        switch (user_result->error_code())
+        switch (user_result.error_code())
         {
             case proto::router::UserResult::INTERNAL_ERROR:
                 message = QT_TR_NOOP("Unknown internal error.");

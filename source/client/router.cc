@@ -337,22 +337,22 @@ void Router::onTcpMessageReceived(quint8 /* channel_id */, const QByteArray& buf
     if (message.has_session_list())
     {
         LOG(INFO) << "Session list received";
-        emit sig_sessionList(std::shared_ptr<proto::router::SessionList>(message.release_session_list()));
+        emit sig_sessionList(message.session_list());
     }
     else if (message.has_session_result())
     {
         LOG(INFO) << "Session result received with code:" << message.session_result().error_code();
-        emit sig_sessionResult(std::shared_ptr<proto::router::SessionResult>(message.release_session_result()));
+        emit sig_sessionResult(message.session_result());
     }
     else if (message.has_user_list())
     {
         LOG(INFO) << "User list received";
-        emit sig_userList(std::shared_ptr<proto::router::UserList>(message.release_user_list()));
+        emit sig_userList(message.user_list());
     }
     else if (message.has_user_result())
     {
         LOG(INFO) << "User result received with code:" << message.user_result().error_code();
-        emit sig_userResult(std::shared_ptr<proto::router::UserResult>(message.release_user_result()));
+        emit sig_userResult(message.user_result());
     }
     else
     {

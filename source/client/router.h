@@ -61,10 +61,10 @@ signals:
     void sig_waitForRouter();
     void sig_waitForRouterTimeout();
     void sig_versionMismatch(const QVersionNumber& router, const QVersionNumber& client);
-    void sig_sessionList(std::shared_ptr<proto::router::SessionList> session_list);
-    void sig_sessionResult(std::shared_ptr<proto::router::SessionResult> session_result);
-    void sig_userList(std::shared_ptr<proto::router::UserList> user_list);
-    void sig_userResult(std::shared_ptr<proto::router::UserResult> user_result);
+    void sig_sessionList(const proto::router::SessionList& session_list);
+    void sig_sessionResult(const proto::router::SessionResult& session_result);
+    void sig_userList(const proto::router::UserList& user_list);
+    void sig_userResult(const proto::router::UserResult& user_result);
 
 private slots:
     void onTcpReady();
