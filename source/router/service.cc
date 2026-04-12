@@ -314,6 +314,47 @@ void Service::onSessionFinished()
 }
 
 //--------------------------------------------------------------------------------------------------
+void Service::onHostIdAssigned(base::HostId host_id)
+{
+    QList<Session*> matched_sessions;
+
+    for (Session* session : std::as_const(sessions_))
+    {
+        SessionHost* host_session = dynamic_cast<SessionHost*>(session);
+        if (host_session)
+        {
+            if (host_session->hostId() == host_id)
+                matched_sessions.append(session);
+            continue;
+        }
+
+        SessionLegacyHost* legacy_host_session = dynamic_cast<SessionLegacyHost*>(session);
+        if (legacy_host_session)
+        {
+            if (legacy_host_session->hasHostId(host_id))
+                matched_sessions.append(session);
+        }
+    }
+
+    if (matched_sessions.size() <= 1)
+        return;
+
+    Session* oldest_session = matched_sessions.first();
+    for (int i = 1; i < matched_sessions.size(); ++i)
+    {
+        if (matched_sessions[i]->startTime() < oldest_session->startTime())
+            oldest_session = matched_sessions[i];
+    }
+
+    LOG(INFO) << "Duplicate host ID " << host_id << " detected. Disconnecting older session (id"
+              << oldest_session->sessionId() << ")";
+
+    oldest_session->disconnect();
+    oldest_session->deleteLater();
+    sessions_.removeOne(oldest_session);
+}
+
+//--------------------------------------------------------------------------------------------------
 bool Service::start()
 {
     if (tcp_server_)
@@ -455,9 +496,19 @@ void Service::addSession(base::TcpChannel* channel, bool is_legacy)
                 break;
 
             if (!is_legacy)
-                session = new SessionHost(channel, this);
+            {
+                SessionHost* host_session = new SessionHost(channel, this);
+                connect(host_session, &SessionHost::sig_hostIdAssigned,
+                        this, &Service::onHostIdAssigned);
+                session = host_session;
+            }
             else
-                session = new SessionLegacyHost(channel, this);
+            {
+                SessionLegacyHost* legacy_host_session = new SessionLegacyHost(channel, this);
+                connect(legacy_host_session, &SessionLegacyHost::sig_hostIdAssigned,
+                        this, &Service::onHostIdAssigned);
+                session = legacy_host_session;
+            }
         }
         break;
 

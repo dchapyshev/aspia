@@ -22,6 +22,7 @@
 #include <QList>
 
 #include "base/service.h"
+#include "base/peer/host_id.h"
 #include "base/net/tcp_server.h"
 #include "base/net/tcp_server_legacy.h"
 #include "router/session.h"
@@ -79,6 +80,7 @@ private slots:
     void onNewConnection();
     void onNewLegacyConnection();
     void onSessionFinished();
+    void onHostIdAssigned(base::HostId host_id);
 
 private:
     bool start();
