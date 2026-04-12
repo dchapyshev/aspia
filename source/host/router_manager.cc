@@ -202,7 +202,7 @@ void RouterManager::onTcpMessageReceived(quint8 /* channel_id */, const QByteArr
 
                 // Send host ID request.
                 LOG(INFO) << "Send ID request to router";
-                tcp_channel_->send(proto::router::CHANNEL_ID_SESSION, base::serialize(out_message));
+                tcp_channel_->send(0, base::serialize(out_message));
                 return;
             }
 
@@ -384,7 +384,7 @@ void RouterManager::hostIdRequest()
 
     // Send host ID request.
     LOG(INFO) << "Send ID request to router";
-    tcp_channel_->send(proto::router::CHANNEL_ID_SESSION, base::serialize(message));
+    tcp_channel_->send(0, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------

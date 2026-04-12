@@ -50,7 +50,7 @@ RouterManager::RouterManager(const RouterConfig& router_config, QObject* parent)
 
         proto::router::ClientToRouter message;
         message.mutable_check_host_status()->set_host_id(host_id_);
-        router_channel_->send(proto::router::CHANNEL_ID_SESSION, base::serialize(message));
+        router_channel_->send(0, base::serialize(message));
     });
 }
 
@@ -269,7 +269,7 @@ void RouterManager::sendConnectionRequest()
 
     proto::router::ClientToRouter message;
     message.mutable_connection_request()->set_host_id(host_id_);
-    router_channel_->send(proto::router::CHANNEL_ID_SESSION, base::serialize(message));
+    router_channel_->send(0, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------

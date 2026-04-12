@@ -206,7 +206,7 @@ void Service::onSessionStatistics(const proto::router::RelayStat& relay_stat)
     outgoing_message_.newMessage().mutable_relay_stat()->CopyFrom(relay_stat);
 
     // Send a message to the router.
-    tcp_channel_->send(proto::router::CHANNEL_ID_SESSION, outgoing_message_.serialize());
+    tcp_channel_->send(0, outgoing_message_.serialize());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -349,7 +349,7 @@ void Service::sendKeyPool(quint32 key_count)
     }
 
     // Send a message to the router.
-    tcp_channel_->send(proto::router::CHANNEL_ID_SESSION, outgoing_message_.serialize());
+    tcp_channel_->send(0, outgoing_message_.serialize());
 }
 
 } // namespace relay
