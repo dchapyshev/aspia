@@ -19,6 +19,7 @@
 #include "client/ui/settings_dialog.h"
 
 #include <QAbstractButton>
+#include <QCoreApplication>
 #include <QPushButton>
 #include <QTimer>
 
@@ -37,9 +38,31 @@ namespace client {
 
 namespace {
 
-const int kColumnAddress  = 0;
-const int kColumnName     = 1;
-const int kColumnUserName = 2;
+const int kColumnAddress     = 0;
+const int kColumnName        = 1;
+const int kColumnSessionType = 2;
+const int kColumnUserName    = 3;
+
+//--------------------------------------------------------------
+QString sessionTypeToString(
+    proto::router::SessionType session_type)
+{
+    switch (session_type)
+    {
+    case proto::router::SESSION_TYPE_ADMIN:
+        return QCoreApplication::translate(
+            "SettingsDialog", "Administrator");
+    case proto::router::SESSION_TYPE_MANAGER:
+        return QCoreApplication::translate(
+            "SettingsDialog", "Manager");
+    case proto::router::SESSION_TYPE_CLIENT:
+        return QCoreApplication::translate(
+            "SettingsDialog", "Client");
+    default:
+        return QCoreApplication::translate(
+            "SettingsDialog", "Unknown");
+    }
+}
 
 } // namespace
 
@@ -60,16 +83,27 @@ SettingsDialog::SettingsDialog(QWidget* parent)
         address.setHost(config.address);
         address.setPort(config.port);
 
-        QTreeWidgetItem* item = new QTreeWidgetItem(ui.tree_routers);
-        item->setText(kColumnAddress, address.toString());
+        QTreeWidgetItem* item =
+            new QTreeWidgetItem(ui.tree_routers);
+        item->setText(kColumnAddress,
+                      address.toString());
         item->setText(kColumnName, config.name);
-        item->setText(kColumnUserName, config.username);
-        item->setData(kColumnAddress, Qt::UserRole, config.password);
+        item->setText(kColumnSessionType,
+            sessionTypeToString(config.session_type));
+        item->setText(kColumnUserName,
+                      config.username);
+        item->setData(kColumnAddress,
+            Qt::UserRole, config.password);
+        item->setData(kColumnAddress,
+            Qt::UserRole + 1, config.session_type);
     }
 
-    ui.tree_routers->header()->setStretchLastSection(true);
-    ui.tree_routers->header()->setSectionResizeMode(kColumnAddress, QHeaderView::Stretch);
-    ui.tree_routers->header()->setSectionResizeMode(kColumnName, QHeaderView::Stretch);
+    ui.tree_routers->header()
+        ->setStretchLastSection(true);
+    ui.tree_routers->header()->setSectionResizeMode(
+        kColumnAddress, QHeaderView::Stretch);
+    ui.tree_routers->header()->setSectionResizeMode(
+        kColumnName, QHeaderView::Stretch);
 
     connect(ui.button_add_router, &QPushButton::clicked, this, &SettingsDialog::onAddRouter);
     connect(ui.button_edit_router, &QPushButton::clicked, this, &SettingsDialog::onEditRouter);
@@ -187,8 +221,15 @@ void SettingsDialog::onButtonBoxClicked(QAbstractButton* button)
             config.name = item->text(kColumnName);
             config.address = address.host();
             config.port = address.port();
-            config.username = item->text(kColumnUserName);
-            config.password = item->data(kColumnAddress, Qt::UserRole).toString();
+            config.session_type =
+                static_cast<proto::router::SessionType>(
+                    item->data(kColumnAddress,
+                        Qt::UserRole + 1).toInt());
+            config.username =
+                item->text(kColumnUserName);
+            config.password =
+                item->data(kColumnAddress,
+                    Qt::UserRole).toString();
             routers.append(config);
         }
 
@@ -243,11 +284,19 @@ void SettingsDialog::onAddRouter()
         address.setHost(config.address);
         address.setPort(config.port);
 
-        QTreeWidgetItem* item = new QTreeWidgetItem(ui.tree_routers);
-        item->setText(kColumnAddress, address.toString());
+        QTreeWidgetItem* item =
+            new QTreeWidgetItem(ui.tree_routers);
+        item->setText(kColumnAddress,
+                      address.toString());
         item->setText(kColumnName, config.name);
-        item->setText(kColumnUserName, config.username);
-        item->setData(kColumnAddress, Qt::UserRole, config.password);
+        item->setText(kColumnSessionType,
+            sessionTypeToString(config.session_type));
+        item->setText(kColumnUserName,
+                      config.username);
+        item->setData(kColumnAddress,
+            Qt::UserRole, config.password);
+        item->setData(kColumnAddress,
+            Qt::UserRole + 1, config.session_type);
 
         ui.tree_routers->setCurrentItem(item);
         updateRouterButtons();
@@ -270,8 +319,14 @@ void SettingsDialog::onEditRouter()
     config.name = item->text(kColumnName);
     config.address = addr.host();
     config.port = addr.port();
+    config.session_type =
+        static_cast<proto::router::SessionType>(
+            item->data(kColumnAddress,
+                Qt::UserRole + 1).toInt());
     config.username = item->text(kColumnUserName);
-    config.password = item->data(kColumnAddress, Qt::UserRole).toString();
+    config.password =
+        item->data(kColumnAddress,
+            Qt::UserRole).toString();
 
     RouterDialog dialog(config, this);
     if (dialog.exec() == QDialog::Accepted)
@@ -282,10 +337,19 @@ void SettingsDialog::onEditRouter()
         address.setHost(config.address);
         address.setPort(config.port);
 
-        item->setText(kColumnAddress, address.toString());
+        item->setText(kColumnAddress,
+                      address.toString());
         item->setText(kColumnName, config.name);
-        item->setText(kColumnUserName, config.username);
-        item->setData(kColumnAddress, Qt::UserRole, config.password);
+        item->setText(kColumnSessionType,
+            sessionTypeToString(
+                config.session_type));
+        item->setText(kColumnUserName,
+                      config.username);
+        item->setData(kColumnAddress,
+            Qt::UserRole, config.password);
+        item->setData(kColumnAddress,
+            Qt::UserRole + 1,
+            config.session_type);
     }
 }
 

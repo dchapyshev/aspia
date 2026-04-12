@@ -45,6 +45,7 @@ const QString kRouterAddressParam = "address";
 const QString kRouterPortParam = "port";
 const QString kRouterUsernameParam = "username";
 const QString kRouterPasswordParam = "password";
+const QString kRouterSessionTypeParam = "session_type";
 const QString kWindowGeometryParam = "window_geometry";
 const QString kWindowStateParam = "window_state";
 const QString kLargeIconsParam = "large_icons";
@@ -198,6 +199,9 @@ RouterConfigList Settings::routerConfigs()
         config.name = settings_.value(kRouterNameParam).toString();
         config.port = static_cast<quint16>(settings_.value(kRouterPortParam, 0).toUInt());
         config.address = settings_.value(kRouterAddressParam).toString();
+        config.session_type = static_cast<proto::router::SessionType>(
+            settings_.value(kRouterSessionTypeParam,
+                            proto::router::SESSION_TYPE_CLIENT).toInt());
         config.username = settings_.value(kRouterUsernameParam).toString();
 
         if (cryptor.decrypt(settings_.value(kRouterPasswordParam).toByteArray(), &out))
@@ -227,6 +231,7 @@ void Settings::setRouterConfigs(const RouterConfigList& configs)
         settings_.setValue(kRouterNameParam, config.name);
         settings_.setValue(kRouterPortParam, config.port);
         settings_.setValue(kRouterAddressParam, config.address);
+        settings_.setValue(kRouterSessionTypeParam, config.session_type);
         settings_.setValue(kRouterUsernameParam, config.username);
 
         if (cryptor.encrypt(config.password.toUtf8(), &out))

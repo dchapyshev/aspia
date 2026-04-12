@@ -116,6 +116,11 @@
          </column>
          <column>
           <property name="text">
+           <string>Access Level</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
            <string>User Name</string>
           </property>
          </column>

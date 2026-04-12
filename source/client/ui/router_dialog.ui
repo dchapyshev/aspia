@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>350</width>
-    <height>170</height>
+    <height>200</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -51,27 +51,37 @@
       </widget>
      </item>
      <item row="2" column="0">
+      <widget class="QLabel" name="label_session_type">
+       <property name="text">
+        <string>Access Level:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QComboBox" name="combo_session_type"/>
+     </item>
+     <item row="3" column="0">
       <widget class="QLabel" name="label_username">
        <property name="text">
         <string>User Name:</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
+     <item row="3" column="1">
       <widget class="QLineEdit" name="edit_username">
        <property name="maxLength">
         <number>64</number>
        </property>
       </widget>
      </item>
-     <item row="3" column="0">
+     <item row="4" column="0">
       <widget class="QLabel" name="label_password">
        <property name="text">
         <string>Password:</string>
        </property>
       </widget>
      </item>
-     <item row="3" column="1">
+     <item row="4" column="1">
       <layout class="QHBoxLayout" name="horizontalLayout_password">
        <item>
         <widget class="QLineEdit" name="edit_password">

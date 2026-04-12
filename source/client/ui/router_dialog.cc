@@ -19,6 +19,7 @@
 #include "client/ui/router_dialog.h"
 
 #include <QAbstractButton>
+#include <QComboBox>
 #include <QToolButton>
 
 #include "common/ui/msg_box.h"
@@ -26,6 +27,7 @@
 #include "base/net/address.h"
 #include "base/peer/user.h"
 #include "build/build_config.h"
+#include "proto/router.h"
 
 namespace client {
 
@@ -35,6 +37,11 @@ RouterDialog::RouterDialog(QWidget* parent)
 {
     LOG(INFO) << "Ctor";
     ui.setupUi(this);
+
+    ui.combo_session_type->addItem(tr("Administrator"), proto::router::SESSION_TYPE_ADMIN);
+    ui.combo_session_type->addItem(tr("Manager"), proto::router::SESSION_TYPE_MANAGER);
+    ui.combo_session_type->addItem(tr("Client"), proto::router::SESSION_TYPE_CLIENT);
+    ui.combo_session_type->setCurrentIndex(2);
 
     connect(ui.buttonbox, &QDialogButtonBox::clicked, this, &RouterDialog::onButtonBoxClicked);
     connect(ui.button_show_password, &QToolButton::toggled,
@@ -51,6 +58,11 @@ RouterDialog::RouterDialog(const RouterConfig& config, QWidget* parent)
 
     ui.edit_name->setText(config.name);
     ui.edit_address->setText(address.toString());
+
+    int session_type_index = ui.combo_session_type->findData(config.session_type);
+    if (session_type_index != -1)
+        ui.combo_session_type->setCurrentIndex(session_type_index);
+
     ui.edit_username->setText(config.username);
     ui.edit_password->setText(config.password);
 }
@@ -72,6 +84,8 @@ RouterConfig RouterDialog::routerConfig() const
         base::Address::fromString(ui.edit_address->text(), DEFAULT_ROUTER_TCP_PORT);
     config.address = address.host();
     config.port = address.port();
+    config.session_type = static_cast<proto::router::SessionType>(
+        ui.combo_session_type->currentData().toInt());
     config.username = ui.edit_username->text();
     config.password = ui.edit_password->text();
 

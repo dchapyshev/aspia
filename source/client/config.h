@@ -23,6 +23,7 @@
 #include <QString>
 
 #include "proto/peer.h"
+#include "proto/router.h"
 
 #include <optional>
 
@@ -44,6 +45,7 @@ struct RouterConfig
     QString name;
     QString address;
     quint16 port;
+    proto::router::SessionType session_type;
     QString username;
     QString password;
 };
