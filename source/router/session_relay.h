@@ -27,6 +27,8 @@ namespace router {
 
 class SessionRelay final : public Session
 {
+    Q_OBJECT
+
 public:
     explicit SessionRelay(base::TcpChannel* channel, QObject* parent = nullptr);
     ~SessionRelay() final;

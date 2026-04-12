@@ -29,7 +29,7 @@
 #include "base/peer/server_authenticator.h"
 #include "host/host_storage.h"
 #include "host/system_settings.h"
-#include "proto/router_peer.h"
+#include "proto/router_host.h"
 
 namespace host {
 
@@ -176,7 +176,7 @@ void RouterManager::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code)
 //--------------------------------------------------------------------------------------------------
 void RouterManager::onTcpMessageReceived(quint8 /* channel_id */, const QByteArray& buffer)
 {
-    proto::router::RouterToPeer in_message;
+    proto::router::RouterToHost in_message;
     if (!base::parse(buffer, &in_message))
     {
         LOG(ERROR) << "Invalid message from router";
@@ -197,7 +197,7 @@ void RouterManager::onTcpMessageReceived(quint8 /* channel_id */, const QByteArr
             {
                 LOG(INFO) << "Host is not in the router's database. Reset ID";
 
-                proto::router::PeerToRouter out_message;
+                proto::router::HostToRouter out_message;
                 out_message.mutable_host_id_request()->set_type(proto::router::HostIdRequest::NEW_ID);
 
                 // Send host ID request.
@@ -240,8 +240,7 @@ void RouterManager::onTcpMessageReceived(quint8 /* channel_id */, const QByteArr
 
         const proto::router::ConnectionOffer& connection_offer = in_message.connection_offer();
 
-        if (connection_offer.error_code() == proto::router::ConnectionOffer::SUCCESS &&
-            connection_offer.peer_role() == proto::router::ConnectionOffer::HOST)
+        if (connection_offer.error_code() == proto::router::ConnectionOffer::SUCCESS)
         {
             base::ServerAuthenticator* authenticator = new base::ServerAuthenticator();
             authenticator->setUserList(user_list_);
@@ -368,7 +367,7 @@ void RouterManager::hostIdRequest()
     HostStorage host_key_storage;
     QByteArray host_key = host_key_storage.hostKey();
 
-    proto::router::PeerToRouter message;
+    proto::router::HostToRouter message;
     proto::router::HostIdRequest* host_id_request = message.mutable_host_id_request();
 
     if (host_key.isEmpty())

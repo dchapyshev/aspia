@@ -20,39 +20,57 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
-import "router.proto";
+import "router_peer.proto";
 
 package proto.router;
 
-message StunServerInfo
+message HostIdRequest
 {
-    uint32 version = 1;
-    string host    = 2;
-    uint32 port    = 3;
+    enum Type
+    {
+        UNKNOWN     = 0;
+        NEW_ID      = 1;
+        EXISTING_ID = 2;
+    }
+
+    Type type = 1;
+    bytes key = 2;
 }
 
-message PeerInfo
-{
-    // If the opposite peer is outdated (version less than 3), then it is set to true.
-    bool is_legacy = 1;
-
-    // If the external address of the peers visible to the router matches, then it is set to true.
-    bool is_address_equals = 2;
-}
-
-message ConnectionOffer
+message HostIdResponse
 {
     enum ErrorCode
     {
-        SUCCESS        = 0;
-        UNKNOWN_ERROR  = 1;
-        PEER_NOT_FOUND = 2;
-        ACCESS_DENIED  = 3;
-        KEY_POOL_EMPTY = 4;
+        SUCCESS       = 0;
+        UNKNOWN       = 1;
+        NO_HOST_FOUND = 2;
     }
 
-    ErrorCode error_code     = 1;
-    RelayCredentials relay   = 2;
-    StunServerInfo stun_info = 3;
-    PeerInfo peer_info       = 4;
+    fixed64 host_id      = 1;
+    bytes key            = 2;
+    ErrorCode error_code = 3;
+}
+
+message RemoveHost
+{
+    enum Flags
+    {
+        NO_FLAGS         = 0;
+        REMOVE_SETTINGS  = 1;
+        TRY_TO_UNINSTALL = 2;
+    }
+
+    uint32 flags = 1;
+}
+
+message RouterToHost
+{
+    HostIdResponse host_id_response  = 1;
+    ConnectionOffer connection_offer = 2;
+    RemoveHost remove_host           = 3;
+}
+
+message HostToRouter
+{
+    HostIdRequest host_id_request = 1;
 }

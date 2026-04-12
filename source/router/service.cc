@@ -28,6 +28,7 @@
 #include "router/session_admin.h"
 #include "router/session_client.h"
 #include "router/session_host.h"
+#include "router/session_legacy_host.h"
 #include "router/session_relay.h"
 #include "router/settings.h"
 #include "router/user_list.h"
@@ -286,7 +287,7 @@ void Service::onNewConnection()
     {
         base::TcpChannel* channel = tcp_server_->nextReadyConnection();
         LOG(INFO) << "New connection:" << channel->peerAddress();
-        addSession(channel);
+        addSession(channel, false);
     }
 }
 
@@ -298,7 +299,7 @@ void Service::onNewLegacyConnection()
     {
         base::TcpChannel* channel = tcp_server_legacy_->nextReadyConnection();
         LOG(INFO) << "New legacy connection:" << channel->peerAddress();
-        addSession(channel);
+        addSession(channel, true);
     }
 }
 
@@ -417,11 +418,18 @@ bool Service::start()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Service::addSession(base::TcpChannel* channel)
+void Service::addSession(base::TcpChannel* channel, bool is_legacy)
 {
     QString address = channel->peerAddress();
     proto::router::SessionType session_type =
         static_cast<proto::router::SessionType>(channel->peerSessionType());
+
+    if (is_legacy && session_type != proto::router::SESSION_TYPE_HOST)
+    {
+        LOG(ERROR) << "Connection is rejected for" << address;
+        channel->deleteLater();
+        return;
+    }
 
     LOG(INFO) << "New session:" << session_type << "(" << address << ")";
 
@@ -445,7 +453,11 @@ void Service::addSession(base::TcpChannel* channel)
         {
             if (!isAddressAllowed(host_white_list_, address))
                 break;
-            session = new SessionHost(channel, this);
+
+            if (!is_legacy)
+                session = new SessionHost(channel, this);
+            else
+                session = new SessionLegacyHost(channel, this);
         }
         break;
 

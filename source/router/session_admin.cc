@@ -22,8 +22,9 @@
 #include "base/serialization.h"
 #include "base/peer/user.h"
 #include "router/database.h"
-#include "router/session_host.h"
 #include "router/service.h"
+#include "router/session_host.h"
+#include "router/session_legacy_host.h"
 #include "router/session_relay.h"
 
 namespace router {
@@ -158,8 +159,17 @@ void SessionAdmin::doSessionListRequest(const proto::router::SessionListRequest&
             {
                 proto::router::HostSessionData session_data;
 
-                for (const auto& host_id : static_cast<SessionHost*>(session)->hostIdList())
-                    session_data.add_host_id(host_id);
+                SessionHost* host_session = dynamic_cast<SessionHost*>(session);
+                if (host_session)
+                {
+                    session_data.add_host_id(host_session->hostId());
+                }
+                else
+                {
+                    SessionLegacyHost* legacy_host_session = static_cast<SessionLegacyHost*>(session);
+                    for (const auto& host_id : legacy_host_session->hostIdList())
+                        session_data.add_host_id(host_id);
+                }
 
                 item->set_session_data(session_data.SerializeAsString());
             }
@@ -168,8 +178,7 @@ void SessionAdmin::doSessionListRequest(const proto::router::SessionListRequest&
         case proto::router::SESSION_TYPE_RELAY:
         {
             proto::router::RelaySessionData session_data;
-            session_data.set_pool_size(
-                Service::instance()->keyCountForRelay(session->sessionId()));
+            session_data.set_pool_size(Service::instance()->keyCountForRelay(session->sessionId()));
 
             const std::optional<proto::router::RelayStat>& in_relay_stat =
                 static_cast<SessionRelay*>(session)->relayStat();
@@ -179,8 +188,7 @@ void SessionAdmin::doSessionListRequest(const proto::router::SessionListRequest&
                     session_data.mutable_relay_stat();
 
                 out_relay_stat->set_uptime(in_relay_stat->uptime());
-                out_relay_stat->mutable_peer_connection()->CopyFrom(
-                    in_relay_stat->peer_connection());
+                out_relay_stat->mutable_peer_connection()->CopyFrom(in_relay_stat->peer_connection());
             }
 
             item->set_session_data(session_data.SerializeAsString());

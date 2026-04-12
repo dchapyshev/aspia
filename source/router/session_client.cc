@@ -25,6 +25,7 @@
 #include "proto/relay_peer.h"
 #include "router/service.h"
 #include "router/session_host.h"
+#include "router/session_legacy_host.h"
 #include "router/session_relay.h"
 
 namespace router {
@@ -51,7 +52,7 @@ void SessionClient::setStunInfo(quint16 port)
 //--------------------------------------------------------------------------------------------------
 void SessionClient::onSessionMessage(const QByteArray& buffer)
 {
-    proto::router::PeerToRouter message;
+    proto::router::ClientToRouter message;
     if (!base::parse(buffer, &message))
     {
         CLOG(ERROR) << "Could not read message from client";
@@ -77,98 +78,105 @@ void SessionClient::readConnectionRequest(const proto::router::ConnectionRequest
 {
     CLOG(INFO) << "New connection request (host_id:" << request.host_id() << ")";
 
-    proto::router::RouterToPeer message;
+    proto::router::RouterToClient message;
     proto::router::ConnectionOffer* offer = message.mutable_connection_offer();
 
-    SessionHost* host = sessionByHostId(request.host_id());
-    if (!host)
+    Session* session = sessionByHostId(request.host_id());
+    if (!session)
     {
         CLOG(ERROR) << "Host with id" << request.host_id() << "NOT found!";
         offer->set_error_code(proto::router::ConnectionOffer::PEER_NOT_FOUND);
+        sendMessage(base::serialize(message));
+        return;
+    }
+
+    CLOG(INFO) << "Host with id" << request.host_id() << "found";
+
+    std::optional<Service::Credentials> credentials = Service::instance()->takeCredentials();
+    if (!credentials.has_value())
+    {
+        CLOG(ERROR) << "Empty key pool";
+        offer->set_error_code(proto::router::ConnectionOffer::KEY_POOL_EMPTY);
+        sendMessage(base::serialize(message));
+        return;
+    }
+
+    SessionRelay* relay = static_cast<SessionRelay*>(Service::instance()->session(credentials->session_id));
+    if (!relay)
+    {
+        CLOG(ERROR) << "No relay with session id" << credentials->session_id;
+        offer->set_error_code(proto::router::ConnectionOffer::KEY_POOL_EMPTY);
+        sendMessage(base::serialize(message));
+        return;
+    }
+
+    const std::optional<SessionRelay::PeerData>& peer_data = relay->peerData();
+    if (!peer_data.has_value())
+    {
+        CLOG(ERROR) << "No peer data for relay with session id" << credentials->session_id;
+        offer->set_error_code(proto::router::ConnectionOffer::KEY_POOL_EMPTY);
+        sendMessage(base::serialize(message));
+        return;
+    }
+
+    offer->set_error_code(proto::router::ConnectionOffer::SUCCESS);
+
+    proto::router::PeerInfo* peer_info = offer->mutable_peer_info();
+    peer_info->set_is_legacy(session->version() < base::kVersion_3_0_0);
+    peer_info->set_is_address_equals(session->address() == address());
+
+    if (stun_port_)
+    {
+        // An empty host string means that the client should use the router's address
+        // as the server's host address. This is done to allow for future expansion,
+        // but is not currently used.
+        proto::router::StunServerInfo* stun_info = offer->mutable_stun_info();
+        stun_info->set_version(1);
+        stun_info->set_host("");
+        stun_info->set_port(stun_port_);
+    }
+
+    proto::router::RelayCredentials* offer_credentials = offer->mutable_relay();
+    offer_credentials->set_host(relay->peerData()->first);
+    offer_credentials->set_port(relay->peerData()->second);
+    offer_credentials->mutable_key()->Swap(&credentials->key);
+
+    proto::relay::PeerToRelay::Secret secret;
+    secret.set_random_data(base::Random::string(16));
+    secret.set_client_address(address().toString().toStdString());
+    secret.set_client_user_name(userName().toStdString());
+    secret.set_host_address(session->address().toString().toStdString());
+    secret.set_host_id(request.host_id());
+
+    offer_credentials->set_secret(secret.SerializeAsString());
+
+    CLOG(INFO) << "Sending connection offer to host";
+    SessionHost* host_session = dynamic_cast<SessionHost*>(session);
+    if (host_session)
+    {
+        host_session->sendConnectionOffer(*offer);
     }
     else
     {
-        CLOG(INFO) << "Host with id" << request.host_id() << "found";
+        SessionLegacyHost* legacy_host_session = static_cast<SessionLegacyHost*>(session);
 
-        std::optional<Service::Credentials> credentials = Service::instance()->takeCredentials();
-        if (!credentials.has_value())
-        {
-            CLOG(ERROR) << "Empty key pool";
-            offer->set_error_code(proto::router::ConnectionOffer::KEY_POOL_EMPTY);
-        }
-        else
-        {
-            SessionRelay* relay = static_cast<SessionRelay*>(
-                Service::instance()->session(credentials->session_id));
-            if (!relay)
-            {
-                CLOG(ERROR) << "No relay with session id" << credentials->session_id;
-                offer->set_error_code(proto::router::ConnectionOffer::KEY_POOL_EMPTY);
-            }
-            else
-            {
-                const std::optional<SessionRelay::PeerData>& peer_data = relay->peerData();
-                if (!peer_data.has_value())
-                {
-                    CLOG(ERROR) << "No peer data for relay with session id" << credentials->session_id;
-                    offer->set_error_code(proto::router::ConnectionOffer::KEY_POOL_EMPTY);
-                }
-                else
-                {
-                    offer->set_error_code(proto::router::ConnectionOffer::SUCCESS);
+        proto::router::legacy::ConnectionOffer legacy_offer;
+        legacy_offer.set_peer_role(proto::router::legacy::ConnectionOffer::HOST);
+        legacy_offer.set_error_code(proto::router::legacy::ConnectionOffer::SUCCESS);
+        legacy_offer.mutable_relay()->CopyFrom(offer->relay());
+        legacy_offer.mutable_host_data()->set_host_id(request.host_id());
 
-                    proto::router::PeerInfo* peer_info = offer->mutable_peer_info();
-                    peer_info->set_is_legacy(host->version() < base::kVersion_3_0_0);
-                    peer_info->set_is_address_equals(host->address() == address());
-
-                    if (stun_port_)
-                    {
-                        // An empty host string means that the client should use the router's address
-                        // as the server's host address. This is done to allow for future expansion,
-                        // but is not currently used.
-                        proto::router::StunServerInfo* stun_info = offer->mutable_stun_info();
-                        stun_info->set_version(1);
-                        stun_info->set_host("");
-                        stun_info->set_port(stun_port_);
-                    }
-
-                    proto::router::HostOfferData* offer_data = offer->mutable_host_data();
-                    offer_data->set_host_id(request.host_id());
-
-                    proto::router::RelayCredentials* offer_credentials = offer->mutable_relay();
-
-                    offer_credentials->set_host(relay->peerData()->first);
-                    offer_credentials->set_port(relay->peerData()->second);
-                    offer_credentials->mutable_key()->Swap(&credentials->key);
-
-                    proto::relay::PeerToRelay::Secret secret;
-                    secret.set_random_data(base::Random::string(16));
-                    secret.set_client_address(address().toString().toStdString());
-                    secret.set_client_user_name(userName().toStdString());
-                    secret.set_host_address(host->address().toString().toStdString());
-                    secret.set_host_id(request.host_id());
-
-                    offer_credentials->set_secret(secret.SerializeAsString());
-
-                    CLOG(INFO) << "Sending connection offer to host";
-                    offer->set_peer_role(proto::router::ConnectionOffer::HOST);
-                    host->sendConnectionOffer(*offer);
-                }
-            }
-        }
+        legacy_host_session->sendConnectionOffer(legacy_offer);
     }
 
     CLOG(INFO) << "Sending connection offer to client";
-    offer->clear_host_data(); // Host data is only needed by the host.
-    offer->set_peer_role(proto::router::ConnectionOffer::CLIENT);
-
     sendMessage(base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
 void SessionClient::readCheckHostStatus(const proto::router::CheckHostStatus& check_host_status)
 {
-    proto::router::RouterToPeer message;
+    proto::router::RouterToClient message;
     proto::router::HostStatus* host_status = message.mutable_host_status();
 
     if (sessionByHostId(check_host_status.host_id()))
@@ -182,16 +190,21 @@ void SessionClient::readCheckHostStatus(const proto::router::CheckHostStatus& ch
 }
 
 //--------------------------------------------------------------------------------------------------
-SessionHost* SessionClient::sessionByHostId(base::HostId host_id)
+Session* SessionClient::sessionByHostId(base::HostId host_id)
 {
     QList<Session*> session_list = Service::instance()->sessions();
 
     for (const auto& session : std::as_const(session_list))
     {
-        if (session->sessionType() == proto::router::SESSION_TYPE_HOST &&
-            static_cast<SessionHost*>(session)->hasHostId(host_id))
+        if (session->sessionType() == proto::router::SESSION_TYPE_HOST)
         {
-            return static_cast<SessionHost*>(session);
+            SessionHost* host_session = dynamic_cast<SessionHost*>(session);
+            if (host_session && host_session->hostId() == host_id)
+                return host_session;
+
+            SessionLegacyHost* legacy_host_session = dynamic_cast<SessionLegacyHost*>(session);
+            if (legacy_host_session && legacy_host_session->hasHostId(host_id))
+                return legacy_host_session;
         }
     }
 

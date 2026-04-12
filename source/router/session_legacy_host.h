@@ -16,27 +16,27 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER_SESSION_HOST_H
-#define ROUTER_SESSION_HOST_H
+#ifndef ROUTER_SESSION_LEGACY_HOST_H
+#define ROUTER_SESSION_LEGACY_HOST_H
 
 #include "base/peer/host_id.h"
-#include "proto/router_host.h"
+#include "proto/router_legacy_host.h"
 #include "router/session.h"
 
 namespace router {
 
-class SessionHost final : public Session
+class SessionLegacyHost final : public Session
 {
     Q_OBJECT
 
 public:
-    explicit SessionHost(base::TcpChannel* channel, QObject* parent = nullptr);
-    ~SessionHost() final;
+    explicit SessionLegacyHost(base::TcpChannel* channel, QObject* parent = nullptr);
+    ~SessionLegacyHost() final;
 
-    base::HostId hostId() const { return host_id_; }
+    const QList<base::HostId>& hostIdList() const { return host_id_list_; }
+    bool hasHostId(base::HostId host_id) const;
 
-    void sendConnectionOffer(const proto::router::ConnectionOffer& offer);
-    void sendRemoveHost(const proto::router::RemoveHost& remove_host);
+    void sendConnectionOffer(const proto::router::legacy::ConnectionOffer& offer);
 
 signals:
     void sig_hostIdAssigned(base::HostId host_id);
@@ -46,13 +46,14 @@ protected:
     void onSessionMessage(const QByteArray& buffer) final;
 
 private:
-    void readHostIdRequest(const proto::router::HostIdRequest& host_id_request);
+    void readHostIdRequest(const proto::router::legacy::HostIdRequest& host_id_request);
+    void readResetHostId(const proto::router::legacy::ResetHostId& reset_host_id);
 
-    base::HostId host_id_ = base::kInvalidHostId;
+    QList<base::HostId> host_id_list_;
 
-    Q_DISABLE_COPY_MOVE(SessionHost)
+    Q_DISABLE_COPY_MOVE(SessionLegacyHost)
 };
 
 } // namespace router
 
-#endif // ROUTER_SESSION_HOST_H
+#endif // ROUTER_SESSION_LEGACY_HOST_H

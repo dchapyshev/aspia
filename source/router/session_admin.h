@@ -26,6 +26,8 @@ namespace router {
 
 class SessionAdmin final : public Session
 {
+    Q_OBJECT
+
 public:
     explicit SessionAdmin(base::TcpChannel* channel, QObject* parent = nullptr);
     ~SessionAdmin() final;

@@ -20,39 +20,40 @@ syntax = "proto3";
 
 option optimize_for = LITE_RUNTIME;
 
-import "router.proto";
+import "router_peer.proto";
 
 package proto.router;
 
-message StunServerInfo
+message ConnectionRequest
 {
-    uint32 version = 1;
-    string host    = 2;
-    uint32 port    = 3;
+    fixed64 host_id = 1;
 }
 
-message PeerInfo
+message CheckHostStatus
 {
-    // If the opposite peer is outdated (version less than 3), then it is set to true.
-    bool is_legacy = 1;
-
-    // If the external address of the peers visible to the router matches, then it is set to true.
-    bool is_address_equals = 2;
+    fixed64 host_id = 1;
 }
 
-message ConnectionOffer
+message HostStatus
 {
-    enum ErrorCode
+    enum Status
     {
-        SUCCESS        = 0;
-        UNKNOWN_ERROR  = 1;
-        PEER_NOT_FOUND = 2;
-        ACCESS_DENIED  = 3;
-        KEY_POOL_EMPTY = 4;
+        STATUS_UNKNOWN = 0;
+        STATUS_OFFLINE = 1;
+        STATUS_ONLINE  = 2;
     }
 
-    ErrorCode error_code     = 1;
-    RelayCredentials relay   = 2;
-    StunServerInfo stun_info = 3;
-    PeerInfo peer_info       = 4;
+    Status status = 1;
+}
+
+message RouterToClient
+{
+    ConnectionOffer connection_offer = 1;
+    HostStatus host_status           = 2;
+}
+
+message ClientToRouter
+{
+    ConnectionRequest connection_request = 1;
+    CheckHostStatus check_host_status    = 2;
 }

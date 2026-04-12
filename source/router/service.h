@@ -82,7 +82,7 @@ private slots:
 
 private:
     bool start();
-    void addSession(base::TcpChannel* channel);
+    void addSession(base::TcpChannel* channel, bool is_legacy);
 
     base::TcpServer* tcp_server_ = nullptr;
     base::TcpServerLegacy* tcp_server_legacy_ = nullptr;

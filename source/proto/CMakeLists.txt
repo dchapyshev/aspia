@@ -38,6 +38,10 @@ list(APPEND SOURCE_PROTO
     relay_peer.proto
     router.proto
     router_admin.proto
+    router_client.proto
+    router_legacy_host.proto
+    router_manager.proto
+    router_host.proto
     router_peer.proto
     router_relay.proto
     stun.proto

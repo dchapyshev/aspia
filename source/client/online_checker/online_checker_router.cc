@@ -23,7 +23,7 @@
 #include "base/serialization.h"
 #include "base/net/tcp_channel_ng.h"
 #include "base/peer/client_authenticator.h"
-#include "proto/router_peer.h"
+#include "proto/router_client.h"
 
 namespace client {
 
@@ -105,7 +105,7 @@ void OnlineCheckerRouter::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_c
 //--------------------------------------------------------------------------------------------------
 void OnlineCheckerRouter::onTcpMessageReceived(quint8 /* channel_id */, const QByteArray& buffer)
 {
-    proto::router::RouterToPeer message;
+    proto::router::RouterToClient message;
     if (!base::parse(buffer, &message))
     {
         LOG(ERROR) << "Invalid message from router";
@@ -144,7 +144,7 @@ void OnlineCheckerRouter::checkNextComputer()
     LOG(INFO) << "Checking status for host id" << computer.host_id
               << "(computer id:" << computer.computer_id << ")";
 
-    proto::router::PeerToRouter message;
+    proto::router::ClientToRouter message;
     message.mutable_check_host_status()->set_host_id(computer.host_id);
     tcp_channel_->send(proto::router::CHANNEL_ID_SESSION, base::serialize(message));
 }

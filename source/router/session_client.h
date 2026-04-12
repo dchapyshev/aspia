@@ -20,7 +20,7 @@
 #define ROUTER_SESSION_CLIENT_H
 
 #include "base/peer/host_id.h"
-#include "proto/router_peer.h"
+#include "proto/router_client.h"
 #include "router/session.h"
 
 namespace router {
@@ -29,6 +29,8 @@ class SessionHost;
 
 class SessionClient final : public Session
 {
+    Q_OBJECT
+
 public:
     explicit SessionClient(base::TcpChannel* channel, QObject* parent = nullptr);
     ~SessionClient() final;
@@ -42,7 +44,7 @@ protected:
 private:
     void readConnectionRequest(const proto::router::ConnectionRequest& request);
     void readCheckHostStatus(const proto::router::CheckHostStatus& check_host_status);
-    SessionHost* sessionByHostId(base::HostId host_id);
+    Session* sessionByHostId(base::HostId host_id);
 
     quint16 stun_port_ = 0;
 

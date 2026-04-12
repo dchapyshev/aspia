@@ -24,7 +24,7 @@
 #include "base/serialization.h"
 #include "base/net/tcp_channel_ng.h"
 #include "base/peer/client_authenticator.h"
-#include "proto/router_peer.h"
+#include "proto/router_client.h"
 
 namespace client {
 
@@ -48,7 +48,7 @@ RouterManager::RouterManager(const RouterConfig& router_config, QObject* parent)
     {
         LOG(INFO) << "Request host status from router (host_id" << host_id_ << ")";
 
-        proto::router::PeerToRouter message;
+        proto::router::ClientToRouter message;
         message.mutable_check_host_status()->set_host_id(host_id_);
         router_channel_->send(proto::router::CHANNEL_ID_SESSION, base::serialize(message));
     });
@@ -132,7 +132,7 @@ void RouterManager::onTcpMessageReceived(quint8 /* channel_id */, const QByteArr
     Error error;
     error.type = ErrorType::ROUTER;
 
-    proto::router::RouterToPeer message;
+    proto::router::RouterToClient message;
     if (!base::parse(buffer, &message))
     {
         LOG(ERROR) << "Invalid message from router";
@@ -151,9 +151,7 @@ void RouterManager::onTcpMessageReceived(quint8 /* channel_id */, const QByteArr
         }
 
         const proto::router::ConnectionOffer& connection_offer = message.connection_offer();
-
-        if (connection_offer.error_code() != proto::router::ConnectionOffer::SUCCESS ||
-            connection_offer.peer_role() != proto::router::ConnectionOffer::CLIENT)
+        if (connection_offer.error_code() != proto::router::ConnectionOffer::SUCCESS)
         {
             switch (connection_offer.error_code())
             {
@@ -269,7 +267,7 @@ void RouterManager::sendConnectionRequest()
 {
     LOG(INFO) << "Sending connection request (host_id" << host_id_ << ")";
 
-    proto::router::PeerToRouter message;
+    proto::router::ClientToRouter message;
     message.mutable_connection_request()->set_host_id(host_id_);
     router_channel_->send(proto::router::CHANNEL_ID_SESSION, base::serialize(message));
 }
