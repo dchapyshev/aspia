@@ -11,7 +11,6 @@ With Aspia, you can create your own NAT traversal infrastructure (using Router a
 Currently supported
 -------------------
 - Remote desktop management
-- Remote desktop view
 - File transfer
 - System information
 - Text chat
