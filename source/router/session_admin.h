@@ -20,11 +20,11 @@
 #define ROUTER_SESSION_ADMIN_H
 
 #include "proto/router_admin.h"
-#include "router/session.h"
+#include "router/session_manager.h"
 
 namespace router {
 
-class SessionAdmin final : public Session
+class SessionAdmin final : public SessionManager
 {
     Q_OBJECT
 
@@ -34,7 +34,7 @@ public:
 
 protected:
     // Session implementation.
-    void onSessionMessage(const QByteArray& buffer) final;
+    void onSessionMessage(quint8 channel_id, const QByteArray& buffer) final;
 
 private:
     void doUserListRequest();

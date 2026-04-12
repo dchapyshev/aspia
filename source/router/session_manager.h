@@ -16,43 +16,29 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef ROUTER_SESSION_HOST_H
-#define ROUTER_SESSION_HOST_H
+#ifndef ROUTER_SESSION_MANAGER_H
+#define ROUTER_SESSION_MANAGER_H
 
-#include "base/peer/host_id.h"
-#include "proto/router_host.h"
-#include "router/session.h"
+#include "router/session_client.h"
 
 namespace router {
 
-class SessionHost final : public Session
+class SessionManager : public SessionClient
 {
     Q_OBJECT
 
 public:
-    explicit SessionHost(base::TcpChannel* channel, QObject* parent = nullptr);
-    ~SessionHost() final;
-
-    base::HostId hostId() const { return host_id_; }
-
-    void sendConnectionOffer(const proto::router::ConnectionOffer& offer);
-    void sendRemoveHost(const proto::router::RemoveHost& remove_host);
-
-signals:
-    void sig_hostIdAssigned(base::HostId host_id);
+    explicit SessionManager(base::TcpChannel* channel, QObject* parent = nullptr);
+    ~SessionManager() override;
 
 protected:
     // Session implementation.
-    void onSessionMessage(quint8 channel_id, const QByteArray& buffer) final;
+    void onSessionMessage(quint8 channel_id, const QByteArray& buffer) override;
 
 private:
-    void readHostIdRequest(const proto::router::HostIdRequest& host_id_request);
-
-    base::HostId host_id_ = base::kInvalidHostId;
-
-    Q_DISABLE_COPY_MOVE(SessionHost)
+    Q_DISABLE_COPY_MOVE(SessionManager)
 };
 
 } // namespace router
 
-#endif // ROUTER_SESSION_HOST_H
+#endif // ROUTER_SESSION_MANAGER_H

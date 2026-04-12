@@ -31,7 +31,7 @@ namespace router {
 
 //--------------------------------------------------------------------------------------------------
 SessionAdmin::SessionAdmin(base::TcpChannel* channel, QObject* parent)
-    : Session(channel, parent)
+    : SessionManager(channel, parent)
 {
     CLOG(INFO) << "Ctor";
 }
@@ -43,10 +43,15 @@ SessionAdmin::~SessionAdmin()
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionAdmin::onSessionMessage(const QByteArray& buffer)
+void SessionAdmin::onSessionMessage(quint8 channel_id, const QByteArray& buffer)
 {
-    proto::router::AdminToRouter message;
+    if (channel_id != CHANNEL_ID_ADMIN)
+    {
+        SessionManager::onSessionMessage(channel_id, buffer);
+        return;
+    }
 
+    proto::router::AdminToRouter message;
     if (!base::parse(buffer, &message))
     {
         CLOG(ERROR) << "Could not read message from manager";
@@ -100,7 +105,7 @@ void SessionAdmin::doUserListRequest()
     for (const auto& user : std::as_const(users))
         list->add_user()->CopyFrom(user.serialize());
 
-    sendMessage(base::serialize(message));
+    sendMessage(CHANNEL_ID_ADMIN, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -129,7 +134,7 @@ void SessionAdmin::doUserRequest(const proto::router::UserRequest& request)
             return;
     }
 
-    sendMessage(base::serialize(message));
+    sendMessage(CHANNEL_ID_ADMIN, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -202,7 +207,7 @@ void SessionAdmin::doSessionListRequest(const proto::router::SessionListRequest&
 
     result->set_error_code(proto::router::SessionList::SUCCESS);
 
-    sendMessage(base::serialize(message));
+    sendMessage(CHANNEL_ID_ADMIN, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -233,7 +238,7 @@ void SessionAdmin::doSessionRequest(const proto::router::SessionRequest& request
         session_result->set_error_code(proto::router::SessionResult::INVALID_REQUEST);
     }
 
-    sendMessage(base::serialize(message));
+    sendMessage(CHANNEL_ID_ADMIN, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------

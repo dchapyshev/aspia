@@ -67,6 +67,7 @@ void Settings::reset()
     setClientWhiteList(WhiteList());
     setHostWhiteList(WhiteList());
     setAdminWhiteList(WhiteList());
+    setManagerWhiteList(WhiteList());
     setRelayWhiteList(WhiteList());
 }
 
@@ -158,6 +159,18 @@ void Settings::setAdminWhiteList(const WhiteList& list)
 Settings::WhiteList Settings::adminWhiteList() const
 {
     return whiteList("admin_white_list");
+}
+
+//--------------------------------------------------------------------------------------------------
+void Settings::setManagerWhiteList(const WhiteList& list)
+{
+    setWhiteList("manager_white_list", list);
+}
+
+//--------------------------------------------------------------------------------------------------
+Settings::WhiteList Settings::managerWhiteList() const
+{
+    return whiteList("manager_white_list");
 }
 
 //--------------------------------------------------------------------------------------------------

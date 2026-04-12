@@ -43,7 +43,7 @@ signals:
 
 protected:
     // Session implementation.
-    void onSessionMessage(const QByteArray& buffer) final;
+    void onSessionMessage(quint8 channel_id, const QByteArray& buffer) final;
 
 private:
     void readHostIdRequest(const proto::router::legacy::HostIdRequest& host_id_request);

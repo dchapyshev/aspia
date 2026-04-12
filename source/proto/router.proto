@@ -22,11 +22,6 @@ option optimize_for = LITE_RUNTIME;
 
 package proto.router;
 
-enum ChannelId
-{
-    CHANNEL_ID_SESSION = 0;
-}
-
 enum SessionType
 {
     SESSION_TYPE_UNKNOWN = 0;
@@ -34,6 +29,7 @@ enum SessionType
     SESSION_TYPE_CLIENT  = 2;
     SESSION_TYPE_HOST    = 4;
     SESSION_TYPE_RELAY   = 8;
+    SESSION_TYPE_MANAGER = 16;
 }
 
 message RelayKey

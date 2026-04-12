@@ -42,7 +42,7 @@ public:
 
 protected:
     // Session implementation.
-    void onSessionMessage(const QByteArray& buffer) final;
+    void onSessionMessage(quint8 channel_id, const QByteArray& buffer) final;
 
 private:
     void readKeyPool(const proto::router::RelayKeyPool& key_pool);

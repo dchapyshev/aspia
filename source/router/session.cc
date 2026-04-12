@@ -106,9 +106,9 @@ std::chrono::seconds Session::duration() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void Session::sendMessage(const QByteArray& message)
+void Session::sendMessage(quint8 channel_id, const QByteArray& message)
 {
-    tcp_channel_->send(proto::router::CHANNEL_ID_SESSION, message);
+    tcp_channel_->send(channel_id, message);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -121,14 +121,7 @@ void Session::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code)
 //--------------------------------------------------------------------------------------------------
 void Session::onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer)
 {
-    if (channel_id == proto::router::CHANNEL_ID_SESSION)
-    {
-        onSessionMessage(buffer);
-    }
-    else
-    {
-        CLOG(ERROR) << "Unhandled incoming message from channel:" << channel_id;
-    }
+    onSessionMessage(channel_id, buffer);
 }
 
 } // namespace router

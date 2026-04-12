@@ -25,21 +25,26 @@
 
 namespace router {
 
-class SessionHost;
-
-class SessionClient final : public Session
+class SessionClient : public Session
 {
     Q_OBJECT
 
 public:
     explicit SessionClient(base::TcpChannel* channel, QObject* parent = nullptr);
-    ~SessionClient() final;
+    ~SessionClient() override;
+
+    enum ChannelId : quint8
+    {
+        CHANNEL_ID_CLIENT = 0,
+        CHANNEL_ID_MANAGER = 1,
+        CHANNEL_ID_ADMIN = 2
+    };
 
     void setStunInfo(quint16 port);
 
 protected:
     // Session implementation.
-    void onSessionMessage(const QByteArray& buffer) final;
+    void onSessionMessage(quint8 channel_id, const QByteArray& buffer) override;
 
 private:
     void readConnectionRequest(const proto::router::ConnectionRequest& request);

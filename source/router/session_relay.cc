@@ -42,18 +42,18 @@ SessionRelay::~SessionRelay()
 void SessionRelay::sendKeyUsed(quint32 key_id)
 {
     outgoing_message_.newMessage().mutable_key_used()->set_key_id(key_id);
-    sendMessage(outgoing_message_.serialize());
+    sendMessage(0, outgoing_message_.serialize());
 }
 
 //--------------------------------------------------------------------------------------------------
 void SessionRelay::disconnectPeerSession(const proto::router::PeerConnectionRequest& request)
 {
     outgoing_message_.newMessage().mutable_peer_connection_request()->CopyFrom(request);
-    sendMessage(outgoing_message_.serialize());
+    sendMessage(0, outgoing_message_.serialize());
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionRelay::onSessionMessage(const QByteArray& buffer)
+void SessionRelay::onSessionMessage(quint8 channel_id, const QByteArray& buffer)
 {
     if (!incoming_message_.parse(buffer))
     {

@@ -29,6 +29,7 @@
 #include "router/session_client.h"
 #include "router/session_host.h"
 #include "router/session_legacy_host.h"
+#include "router/session_manager.h"
 #include "router/session_relay.h"
 #include "router/settings.h"
 #include "router/user_list.h"
@@ -346,7 +347,7 @@ void Service::onHostIdAssigned(base::HostId host_id)
             oldest_session = matched_sessions[i];
     }
 
-    LOG(INFO) << "Duplicate host ID " << host_id << " detected. Disconnecting older session (id"
+    LOG(INFO) << "Duplicate host ID" << host_id << "detected. Disconnecting older session (id"
               << oldest_session->sessionId() << ")";
 
     oldest_session->disconnect();
@@ -395,27 +396,33 @@ bool Service::start()
 
     client_white_list_ = settings.clientWhiteList();
     if (client_white_list_.isEmpty())
-        LOG(INFO) << "Empty client white list. Connections from all clients will be allowed";
+        LOG(INFO) << "Connections from all clients will be allowed";
     else
-        LOG(INFO) << "Client white list is not empty. Allowed clients:" << client_white_list_;
+        LOG(INFO) << "Allowed clients:" << client_white_list_;
 
     host_white_list_ = settings.hostWhiteList();
     if (host_white_list_.isEmpty())
-        LOG(INFO) << "Empty host white list. Connections from all hosts will be allowed";
+        LOG(INFO) << "Connections from all hosts will be allowed";
     else
-        LOG(INFO) << "Host white list is not empty. Allowed hosts:" << host_white_list_;
+        LOG(INFO) << "Allowed hosts:" << host_white_list_;
 
     admin_white_list_ = settings.adminWhiteList();
     if (admin_white_list_.isEmpty())
-        LOG(INFO) << "Empty admin white list. Connections from all admins will be allowed";
+        LOG(INFO) << "Connections from all admins will be allowed";
     else
-        LOG(INFO) << "Admin white list is not empty. Allowed admins:" << admin_white_list_;
+        LOG(INFO) << "Allowed admins:" << admin_white_list_;
+
+    manager_white_list_ = settings.managerWhiteList();
+    if (manager_white_list_.isEmpty())
+        LOG(INFO) << "Connections from all managers will be allowed";
+    else
+        LOG(INFO) << "Allowed managers:" << manager_white_list_;
 
     relay_white_list_ = settings.relayWhiteList();
     if (relay_white_list_.isEmpty())
-        LOG(INFO) << "Empty relay white list. Connections from all relays will be allowed";
+        LOG(INFO) << "Connections from all relays will be allowed";
     else
-        LOG(INFO) << "Relay white list is not empty. Allowed relays:" << relay_white_list_;
+        LOG(INFO) << "Allowed relays:" << relay_white_list_;
 
     QByteArray seed_key = settings.seedKey();
     if (seed_key.isEmpty())
@@ -517,6 +524,14 @@ void Service::addSession(base::TcpChannel* channel, bool is_legacy)
             if (!isAddressAllowed(admin_white_list_, address))
                 break;
             session = new SessionAdmin(channel, this);
+        }
+        break;
+
+        case proto::router::SESSION_TYPE_MANAGER:
+        {
+            if (!isAddressAllowed(manager_white_list_, address))
+                break;
+            session = new SessionManager(channel, this);
         }
         break;
 

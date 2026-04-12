@@ -51,7 +51,7 @@ void SessionHost::sendConnectionOffer(const proto::router::ConnectionOffer& offe
 {
     proto::router::RouterToHost message;
     message.mutable_connection_offer()->CopyFrom(offer);
-    sendMessage(base::serialize(message));
+    sendMessage(0, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -59,11 +59,11 @@ void SessionHost::sendRemoveHost(const proto::router::RemoveHost& remove_host)
 {
     proto::router::RouterToHost message;
     message.mutable_remove_host()->CopyFrom(remove_host);
-    sendMessage(base::serialize(message));
+    sendMessage(0, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionHost::onSessionMessage(const QByteArray& buffer)
+void SessionHost::onSessionMessage(quint8 channel_id, const QByteArray& buffer)
 {
     proto::router::HostToRouter message;
     if (!base::parse(buffer, &message))
@@ -150,7 +150,7 @@ void SessionHost::readHostIdRequest(const proto::router::HostIdRequest& host_id_
             break;
     }
 
-    sendMessage(base::serialize(message));
+    sendMessage(0, base::serialize(message));
 }
 
 } // namespace router

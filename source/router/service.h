@@ -96,6 +96,7 @@ private:
     QStringList client_white_list_;
     QStringList host_white_list_;
     QStringList admin_white_list_;
+    QStringList manager_white_list_;
     QStringList relay_white_list_;
 
     static Service* instance_;

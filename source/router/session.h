@@ -59,8 +59,8 @@ signals:
 protected:
     LOG_DECLARE_CONTEXT(Session);
 
-    void sendMessage(const QByteArray& message);
-    virtual void onSessionMessage(const QByteArray& buffer) = 0;
+    void sendMessage(quint8 channel_id, const QByteArray& message);
+    virtual void onSessionMessage(quint8 channel_id, const QByteArray& buffer) = 0;
 
 private slots:
     void onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code);
