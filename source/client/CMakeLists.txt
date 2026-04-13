@@ -48,6 +48,8 @@ list(APPEND SOURCE_CLIENT_CORE
     input_event_filter.h
     router.cc
     router.h
+    router_connection.cc
+    router_connection.h
     router_manager.cc
     router_manager.h
     session_state.cc

@@ -26,7 +26,9 @@
 #include "base/logging.h"
 #include "base/net/address.h"
 #include "build/build_config.h"
+#include "base/gui_application.h"
 #include "client/local_database.h"
+#include "client/router_connection.h"
 #include "client/settings.h"
 #include "client/ui/hosts/content_widget.h"
 #include "client/ui/hosts/local_computer_dialog.h"
@@ -152,12 +154,21 @@ HostsTab::HostsTab(QWidget* parent)
     local_group_widget_->showGroup(ui.sidebar->currentGroupId());
     switchContent(local_group_widget_);
     updateActionsState();
+
+    Settings router_settings;
+    RouterConfigList configs = router_settings.routerConfigs();
+    for (const RouterConfig& config : std::as_const(configs))
+    {
+        if (config.isValid())
+            createRouterConnection(config);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
 HostsTab::~HostsTab()
 {
     LOG(INFO) << "Dtor";
+    destroyAllRouterConnections();
     Settings settings;
     settings.setSessionType(defaultSessionType());
 }
@@ -240,7 +251,41 @@ bool HostsTab::hasSearchField() const
 //--------------------------------------------------------------------------------------------------
 void HostsTab::reloadRouters()
 {
+    QList<QUuid> old_uuids = ui.sidebar->routerUuids();
+
+    Settings settings;
+    RouterConfigList configs = settings.routerConfigs();
+
+    // Remove connections for routers that no longer exist.
+    for (const QUuid& uuid : std::as_const(old_uuids))
+    {
+        bool found = false;
+        for (const RouterConfig& cfg : std::as_const(configs))
+        {
+            if (cfg.uuid == uuid)
+            {
+                found = true;
+                break;
+            }
+        }
+
+        if (!found)
+            emit sig_destroyRouterConnection(uuid);
+    }
+
     ui.sidebar->reloadRouters();
+
+    // Create new or update existing connections.
+    for (const RouterConfig& config : std::as_const(configs))
+    {
+        if (!config.isValid())
+            continue;
+
+        if (old_uuids.contains(config.uuid))
+            emit sig_updateRouterConfig(config.uuid, config);
+        else
+            createRouterConnection(config);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -591,10 +636,15 @@ void HostsTab::onConnectAction(QAction* action)
 
         Sidebar::Router* router = static_cast<Sidebar::Router*>(router_item);
         RouterConfigList router_configs = settings.routerConfigs();
-        int index = router->routerIndex();
 
-        if (index >= 0 && index < router_configs.size())
-            config.router_config = router_configs[index];
+        for (const RouterConfig& rc : std::as_const(router_configs))
+        {
+            if (rc.uuid == router->uuid())
+            {
+                config.router_config = rc;
+                break;
+            }
+        }
         // TODO
     }
     else
@@ -730,6 +780,60 @@ proto::peer::SessionType HostsTab::defaultSessionType() const
         return proto::peer::SESSION_TYPE_SYSTEM_INFO;
     else
         return proto::peer::SESSION_TYPE_UNKNOWN;
+}
+
+//--------------------------------------------------------------------------------------------------
+void HostsTab::destroyAllRouterConnections()
+{
+    QList<QUuid> uuids = ui.sidebar->routerUuids();
+    for (const QUuid& uuid : std::as_const(uuids))
+        emit sig_destroyRouterConnection(uuid);
+}
+
+//--------------------------------------------------------------------------------------------------
+void HostsTab::createRouterConnection(const RouterConfig& config)
+{
+    RouterConnection* conn = new RouterConnection(config);
+    conn->moveToThread(base::GuiApplication::ioThread());
+
+    QUuid uuid = config.uuid;
+
+    connect(conn, &RouterConnection::sig_statusChanged, this,
+            [this](const QUuid& uuid, RouterConnection::Status status)
+    {
+        Sidebar::Router* router = ui.sidebar->routerByUuid(uuid);
+        if (!router)
+            return;
+
+        switch (status)
+        {
+            case RouterConnection::Status::OFFLINE:
+                router->setStatusText(tr("Offline"));
+                break;
+            case RouterConnection::Status::CONNECTING:
+                router->setStatusText(tr("Connecting"));
+                break;
+            case RouterConnection::Status::ONLINE:
+                router->setStatusText(tr("Online"));
+                break;
+        }
+    }, Qt::QueuedConnection);
+
+    connect(this, &HostsTab::sig_destroyRouterConnection, conn,
+            [conn, uuid](const QUuid& destroy_uuid)
+    {
+        if (destroy_uuid == uuid)
+            conn->deleteLater();
+    }, Qt::QueuedConnection);
+
+    connect(this, &HostsTab::sig_updateRouterConfig, conn,
+            [conn](const QUuid& target_uuid, const RouterConfig& config)
+    {
+        if (target_uuid == conn->uuid())
+            conn->onUpdateConfig(config);
+    }, Qt::QueuedConnection);
+
+    QMetaObject::invokeMethod(conn, &RouterConnection::onConnectToRouter, Qt::QueuedConnection);
 }
 
 } // namespace client

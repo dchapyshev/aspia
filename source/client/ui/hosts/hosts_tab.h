@@ -29,6 +29,7 @@ namespace client {
 
 class ContentWidget;
 class LocalGroupWidget;
+class RouterConnection;
 class RouterWidget;
 class RouterGroupWidget;
 class SearchWidget;
@@ -51,6 +52,8 @@ public:
 
 signals:
     void sig_connect(const client::Config& config);
+    void sig_destroyRouterConnection(const QUuid& uuid);
+    void sig_updateRouterConfig(const QUuid& uuid, const client::RouterConfig& config);
 
 private slots:
     void onAddComputerAction();
@@ -71,6 +74,9 @@ private:
     void switchContent(ContentWidget* new_widget);
     void updateActionsState();
     proto::peer::SessionType defaultSessionType() const;
+
+    void destroyAllRouterConnections();
+    void createRouterConnection(const RouterConfig& config);
 
     Ui::HostsTab ui;
 

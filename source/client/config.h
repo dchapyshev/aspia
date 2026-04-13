@@ -21,6 +21,7 @@
 
 #include <QList>
 #include <QString>
+#include <QUuid>
 
 #include "proto/peer.h"
 #include "proto/router.h"
@@ -41,7 +42,9 @@ struct RouterConfig
     RouterConfig& operator=(RouterConfig&& other) noexcept = default;
 
     bool isValid() const;
+    bool hasSameConnectionParams(const RouterConfig& other) const;
 
+    QUuid uuid;
     QString name;
     QString address;
     quint16 port;

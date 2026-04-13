@@ -24,7 +24,8 @@ namespace client {
 
 //--------------------------------------------------------------------------------------------------
 RouterConfig::RouterConfig()
-    : port(DEFAULT_ROUTER_TCP_PORT),
+    : uuid(QUuid::createUuid()),
+      port(DEFAULT_ROUTER_TCP_PORT),
       session_type(proto::router::SESSION_TYPE_CLIENT)
 {
     // Nothing
@@ -37,6 +38,16 @@ RouterConfig::~RouterConfig() = default;
 bool RouterConfig::isValid() const
 {
     return !address.isEmpty() && port && !username.isEmpty() && !password.isEmpty();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool RouterConfig::hasSameConnectionParams(const RouterConfig& other) const
+{
+    return address == other.address
+        && port == other.port
+        && session_type == other.session_type
+        && username == other.username
+        && password == other.password;
 }
 
 //--------------------------------------------------------------------------------------------------

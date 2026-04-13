@@ -152,7 +152,7 @@ void Sidebar::loadRouters()
             name = config.address;
         }
 
-        Router* router = new Router(i, name, tree_widget_);
+        Router* router = new Router(config.uuid, name, tree_widget_);
         router->setExpanded(true);
     }
 }
@@ -181,6 +181,40 @@ qint64 Sidebar::currentGroupId() const
 Sidebar::Item* Sidebar::currentItem() const
 {
     return static_cast<Item*>(tree_widget_->currentItem());
+}
+
+//--------------------------------------------------------------------------------------------------
+Sidebar::Router* Sidebar::routerByUuid(const QUuid& uuid) const
+{
+    for (int i = 0; i < tree_widget_->topLevelItemCount(); ++i)
+    {
+        Item* item = static_cast<Item*>(tree_widget_->topLevelItem(i));
+        if (item->itemType() != Item::ROUTER)
+            continue;
+
+        Router* router = static_cast<Router*>(item);
+        if (router->uuid() == uuid)
+            return router;
+    }
+
+    return nullptr;
+}
+
+//--------------------------------------------------------------------------------------------------
+QList<QUuid> Sidebar::routerUuids() const
+{
+    QList<QUuid> uuids;
+
+    for (int i = 0; i < tree_widget_->topLevelItemCount(); ++i)
+    {
+        Item* item = static_cast<Item*>(tree_widget_->topLevelItem(i));
+        if (item->itemType() != Item::ROUTER)
+            continue;
+
+        uuids.append(static_cast<Router*>(item)->uuid());
+    }
+
+    return uuids;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -637,12 +671,25 @@ Sidebar::LocalGroup::LocalGroup(const GroupData& group, QTreeWidgetItem* parent)
 }
 
 //--------------------------------------------------------------------------------------------------
-Sidebar::Router::Router(int router_index, const QString& name, QTreeWidget* parent)
+Sidebar::Router::Router(const QUuid& uuid, const QString& name, QTreeWidget* parent)
     : Item(ROUTER, -1, parent),
-      router_index_(router_index)
+      uuid_(uuid),
+      name_(name)
 {
     setText(0, name);
     setIcon(0, QIcon(":/img/stack.svg"));
+}
+
+//--------------------------------------------------------------------------------------------------
+const QUuid& Sidebar::Router::uuid() const
+{
+    return uuid_;
+}
+
+//--------------------------------------------------------------------------------------------------
+void Sidebar::Router::setStatusText(const QString& status)
+{
+    setText(0, QString("%1 (%2)").arg(name_, status));
 }
 
 //--------------------------------------------------------------------------------------------------

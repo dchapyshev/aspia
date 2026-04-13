@@ -40,6 +40,7 @@ const QString kOneTimePasswordCheckedParam = "one_time_password_checked";
 const QString kRouterManagerStateParam = "router_manager_state";
 const QString kDisplayNameParam = "display_name";
 const QString kRoutersParam = "routers";
+const QString kRouterUuidParam = "uuid";
 const QString kRouterNameParam = "name";
 const QString kRouterAddressParam = "address";
 const QString kRouterPortParam = "port";
@@ -196,6 +197,11 @@ RouterConfigList Settings::routerConfigs()
         settings_.setArrayIndex(i);
 
         RouterConfig config;
+
+        QUuid uuid = QUuid::fromString(settings_.value(kRouterUuidParam).toString());
+        if (!uuid.isNull())
+            config.uuid = uuid;
+
         config.name = settings_.value(kRouterNameParam).toString();
         config.port = static_cast<quint16>(settings_.value(kRouterPortParam, 0).toUInt());
         config.address = settings_.value(kRouterAddressParam).toString();
@@ -228,6 +234,7 @@ void Settings::setRouterConfigs(const RouterConfigList& configs)
         settings_.setArrayIndex(i);
         const RouterConfig& config = configs.at(i);
 
+        settings_.setValue(kRouterUuidParam, config.uuid.toString());
         settings_.setValue(kRouterNameParam, config.name);
         settings_.setValue(kRouterPortParam, config.port);
         settings_.setValue(kRouterAddressParam, config.address);
