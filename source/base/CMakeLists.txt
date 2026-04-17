@@ -26,6 +26,7 @@ list(APPEND SOURCE_BASE
     asio_event_dispatcher.cc
     asio_event_dispatcher.h
     bitset.h
+    bucket_pool.h
     cpuid_util.cc
     cpuid_util.h
     debug.cc
@@ -62,7 +63,6 @@ list(APPEND SOURCE_BASE
     system_error.h
     thread.cc
     thread.h
-    thread_local_pool.h
     translations.cc
     translations.h
     version_constants.cc
@@ -96,12 +96,12 @@ list(APPEND SOURCE_BASE_TESTS
     aligned_memory_unittest.cc
     asio_event_dispatcher_unittest.cc
     bitset_unittest.cc
+    bucket_pool_unittest.cc
     edid_unittest.cc
     numeric_utils_unittest.cc
     scoped_clear_last_error_unittest.cc
     serialization_unittest.cc
     shared_pointer_unittest.cc
-    thread_local_pool_unittest.cc
     xml_settings_unittest.cc
     peer/host_id_unittest.cc
     peer/user_unittest.cc

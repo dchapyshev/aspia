@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/thread_local_pool.h"
+#include "base/bucket_pool.h"
 
 #include <gtest/gtest.h>
 
@@ -31,7 +31,7 @@ namespace {
 
 constexpr size_t kMaxFreePerBucket = 32;
 
-constexpr ThreadLocalPoolBucket kBuckets[] = {
+constexpr Bucket kBuckets[] = {
     {   64, kMaxFreePerBucket },
     {  128, kMaxFreePerBucket },
     {  256, kMaxFreePerBucket },
@@ -42,11 +42,11 @@ constexpr ThreadLocalPoolBucket kBuckets[] = {
     { 8192, kMaxFreePerBucket },
 };
 
-using TestPool = ThreadLocalPool<std::size(kBuckets)>;
+using TestPool = BucketPool<std::size(kBuckets)>;
 
 } // namespace
 
-TEST(thread_local_pool_test, allocate_and_deallocate)
+TEST(bucket_pool_test, allocate_and_deallocate)
 {
     TestPool pool(kBuckets);
 
@@ -59,7 +59,7 @@ TEST(thread_local_pool_test, allocate_and_deallocate)
     pool.deallocate(p);
 }
 
-TEST(thread_local_pool_test, allocate_zero)
+TEST(bucket_pool_test, allocate_zero)
 {
     TestPool pool(kBuckets);
 
@@ -68,13 +68,13 @@ TEST(thread_local_pool_test, allocate_zero)
     pool.deallocate(p);
 }
 
-TEST(thread_local_pool_test, deallocate_null)
+TEST(bucket_pool_test, deallocate_null)
 {
     TestPool pool(kBuckets);
     pool.deallocate(nullptr); // Should not crash.
 }
 
-TEST(thread_local_pool_test, reuse_after_deallocate)
+TEST(bucket_pool_test, reuse_after_deallocate)
 {
     TestPool pool(kBuckets);
 
@@ -91,7 +91,7 @@ TEST(thread_local_pool_test, reuse_after_deallocate)
     pool.deallocate(p2);
 }
 
-TEST(thread_local_pool_test, different_sizes_different_buckets)
+TEST(bucket_pool_test, different_sizes_different_buckets)
 {
     TestPool pool(kBuckets);
 
@@ -106,11 +106,11 @@ TEST(thread_local_pool_test, different_sizes_different_buckets)
     pool.deallocate(p_large);
 }
 
-TEST(thread_local_pool_test, oversized_allocation)
+TEST(bucket_pool_test, oversized_allocation)
 {
     TestPool pool(kBuckets);
 
-    // Larger than the biggest bucket — should go directly to malloc.
+    // Larger than the biggest bucket - should go directly to malloc.
     void* p = pool.allocate(16000);
     ASSERT_NE(p, nullptr);
     std::memset(p, 0xCD, 16000);
@@ -122,7 +122,7 @@ TEST(thread_local_pool_test, oversized_allocation)
     pool.deallocate(p2);
 }
 
-TEST(thread_local_pool_test, pool_limit_exceeded)
+TEST(bucket_pool_test, pool_limit_exceeded)
 {
     TestPool pool(kBuckets);
 
@@ -148,7 +148,7 @@ TEST(thread_local_pool_test, pool_limit_exceeded)
     }
 }
 
-TEST(thread_local_pool_test, multiple_buckets_interleaved)
+TEST(bucket_pool_test, multiple_buckets_interleaved)
 {
     TestPool pool(kBuckets);
 
@@ -160,7 +160,7 @@ TEST(thread_local_pool_test, multiple_buckets_interleaved)
     pool.deallocate(a1);
     pool.deallocate(c1);
 
-    // Re-allocate in different order — each should come from its own bucket.
+    // Re-allocate in different order - each should come from its own bucket.
     void* c2 = pool.allocate(300);
     void* a2 = pool.allocate(30);
     void* b2 = pool.allocate(100);
@@ -174,7 +174,7 @@ TEST(thread_local_pool_test, multiple_buckets_interleaved)
     pool.deallocate(c2);
 }
 
-TEST(thread_local_pool_test, data_integrity)
+TEST(bucket_pool_test, data_integrity)
 {
     TestPool pool(kBuckets);
 
@@ -223,12 +223,12 @@ void printResult(const BenchmarkResult& r)
 
 } // namespace
 
-TEST(thread_local_pool_benchmark, malloc_vs_pool)
+TEST(bucket_pool_benchmark, malloc_vs_pool)
 {
     constexpr size_t kIterations = 500000;
     constexpr size_t kAllocSize = 200;
 
-    std::cout << "\n=== ThreadLocalPool benchmark ===" << std::endl;
+    std::cout << "\n=== BucketPool benchmark ===" << std::endl;
     std::cout << "Iterations: " << kIterations
               << ", alloc size: " << kAllocSize << " bytes" << std::endl;
 
@@ -253,7 +253,7 @@ TEST(thread_local_pool_benchmark, malloc_vs_pool)
         printResult(r);
     }
 
-    // --- ThreadLocalPool ---
+    // --- BucketPool ---
     {
         TestPool pool(kBuckets);
 
@@ -269,7 +269,7 @@ TEST(thread_local_pool_benchmark, malloc_vs_pool)
         double ms = std::chrono::duration<double, std::milli>(end - start).count();
 
         BenchmarkResult r;
-        r.name = "ThreadLocalPool ";
+        r.name = "BucketPool      ";
         r.iterations = kIterations;
         r.elapsed_ms = ms;
         r.ops_per_sec = static_cast<double>(kIterations) / (ms / 1000.0);
@@ -310,7 +310,7 @@ TEST(thread_local_pool_benchmark, malloc_vs_pool)
         printResult(r);
     }
 
-    // ThreadLocalPool batch
+    // BucketPool batch
     {
         TestPool pool(kBuckets);
         std::vector<void*> ptrs(kBatchSize);
@@ -329,7 +329,7 @@ TEST(thread_local_pool_benchmark, malloc_vs_pool)
         double ms = std::chrono::duration<double, std::milli>(end - start).count();
 
         BenchmarkResult r;
-        r.name = "ThreadLocalPool  (batch)";
+        r.name = "BucketPool       (batch)";
         r.iterations = kBatchIterations * kBatchSize;
         r.elapsed_ms = ms;
         r.ops_per_sec = static_cast<double>(r.iterations) / (ms / 1000.0);
@@ -370,7 +370,7 @@ TEST(thread_local_pool_benchmark, malloc_vs_pool)
         printResult(r);
     }
 
-    // ThreadLocalPool mixed
+    // BucketPool mixed
     {
         TestPool pool(kBuckets);
 
@@ -389,7 +389,7 @@ TEST(thread_local_pool_benchmark, malloc_vs_pool)
         double ms = std::chrono::duration<double, std::milli>(end - start).count();
 
         BenchmarkResult r;
-        r.name = "ThreadLocalPool  (mixed)";
+        r.name = "BucketPool       (mixed)";
         r.iterations = kMixedIterations * kMixedCount;
         r.elapsed_ms = ms;
         r.ops_per_sec = static_cast<double>(r.iterations) / (ms / 1000.0);

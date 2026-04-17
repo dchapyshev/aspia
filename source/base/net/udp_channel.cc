@@ -23,8 +23,8 @@
 
 #include <enet/enet.h>
 
+#include "base/bucket_pool.h"
 #include "base/location.h"
-#include "base/thread_local_pool.h"
 #include "base/crypto/datagram_decryptor.h"
 #include "base/crypto/datagram_encryptor.h"
 
@@ -57,7 +57,7 @@ const int kMtu = 1200;
 //
 // Cold-path allocations (ENetHost ~12KB, ENetPeer[] ~400*N, ENetChannel[] ~76*N) and messages
 // larger than 1 MB fall through to std::malloc - too infrequent to justify caching.
-constexpr ThreadLocalPoolBucket kENetBuckets[] = {
+constexpr Bucket kENetBuckets[] = {
     { 64,          256 },
     { 128,         512 },
     { 256,          64 },
@@ -75,7 +75,7 @@ constexpr ThreadLocalPoolBucket kENetBuckets[] = {
     { 1024 * 1024,   2 },
 };
 
-using ENetPool = ThreadLocalPool<std::size(kENetBuckets)>;
+using ENetPool = BucketPool<std::size(kENetBuckets)>;
 thread_local ENetPool tls_enet_pool(kENetBuckets);
 
 //--------------------------------------------------------------------------------------------------

@@ -16,33 +16,37 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_THREAD_LOCAL_POOL_H
-#define BASE_THREAD_LOCAL_POOL_H
+#ifndef BASE_BUCKET_POOL_H
+#define BASE_BUCKET_POOL_H
 
 #include <array>
 #include <cstdlib>
 
 namespace base {
 
-// Bucket descriptor for ThreadLocalPool. Pairs up a bucket size with its cache cap. |size| is the
+// Bucket descriptor for BucketPool. Pairs up a bucket size with its cache cap. |size| is the
 // maximum total allocation (including internal header) for the bucket. |max_free| is the maximum
 // cached blocks before releasing to system.
-struct ThreadLocalPoolBucket
+//
+// Declared outside the pool template so that the same type is used across all instantiations
+// (allowing std::size() to deduce BucketCount from the array passed to the constructor).
+struct Bucket
 {
     size_t size;
     size_t max_free;
 };
 
-// Thread-local bucket allocator. Each thread gets its own pool instance, so no locking is needed.
-// Allocations are bucketed by size class. Oversized allocations fall through to std::malloc.
+// Bucket-based memory pool. Not synchronized - wrap the instance in `thread_local` or otherwise
+// guarantee single-threaded access. Allocations are bucketed by size class; oversized allocations
+// fall through to std::malloc.
 //
 // Usage:
-//   constexpr ThreadLocalPoolBucket kBuckets[] = {
+//   constexpr Bucket kBuckets[] = {
 //       { 64,   32 },
 //       { 128,  16 },
 //       { 4096,  4 },
 //   };
-//   using MyPool = ThreadLocalPool<std::size(kBuckets)>;
+//   using MyPool = BucketPool<std::size(kBuckets)>;
 //   thread_local MyPool pool(kBuckets);
 //   void* p = pool.allocate(100);  // returns block from 128-byte bucket
 //   pool.deallocate(p);            // returns block to pool for reuse
@@ -51,17 +55,17 @@ struct ThreadLocalPoolBucket
 //   BucketCount - number of size classes
 //
 template <size_t BucketCount>
-class ThreadLocalPool
+class BucketPool
 {
 public:
     // |buckets| must be sorted by |size| in ascending order.
-    explicit ThreadLocalPool(const ThreadLocalPoolBucket (&buckets)[BucketCount])
+    explicit BucketPool(const Bucket (&buckets)[BucketCount])
     {
         for (size_t i = 0; i < BucketCount; ++i)
             buckets_[i] = buckets[i];
     }
 
-    ~ThreadLocalPool()
+    ~BucketPool()
     {
         for (size_t i = 0; i < BucketCount; ++i)
         {
@@ -126,8 +130,8 @@ public:
         }
     }
 
-    ThreadLocalPool(const ThreadLocalPool&) = delete;
-    ThreadLocalPool& operator=(const ThreadLocalPool&) = delete;
+    BucketPool(const BucketPool&) = delete;
+    BucketPool& operator=(const BucketPool&) = delete;
 
 private:
     static constexpr size_t kNoBucket = static_cast<size_t>(-1);
@@ -153,11 +157,11 @@ private:
         return kNoBucket;
     }
 
-    std::array<ThreadLocalPoolBucket, BucketCount> buckets_ = {};
+    std::array<Bucket, BucketCount> buckets_ = {};
     std::array<FreeBlock*, BucketCount> free_lists_ = {};
     std::array<size_t, BucketCount> free_counts_ = {};
 };
 
 } // namespace base
 
-#endif // BASE_THREAD_LOCAL_POOL_H
+#endif // BASE_BUCKET_POOL_H
