@@ -28,24 +28,28 @@ namespace base {
 // Allocations are bucketed by size class. Oversized allocations fall through to std::malloc.
 //
 // Usage:
-//   thread_local ThreadLocalPool pool;
+//   thread_local ThreadLocalPool pool(bucket_sizes, max_free);
 //   void* p = pool.allocate(100);  // returns block from 128-byte bucket
 //   pool.deallocate(p);            // returns block to pool for reuse
 //
 // Template parameters:
-//   BucketCount     - number of size classes
-//   MaxFreePerBucket - maximum cached blocks per bucket before releasing to system
+//   BucketCount - number of size classes
 //
-template <size_t BucketCount, size_t MaxFreePerBucket>
+template <size_t BucketCount>
 class ThreadLocalPool
 {
 public:
     // |bucket_sizes| must be sorted in ascending order. Each element defines the maximum total
-    // allocation size (including internal header) for that bucket.
-    explicit ThreadLocalPool(const size_t (&bucket_sizes)[BucketCount])
+    // allocation size (including internal header) for that bucket. |max_free| defines the maximum
+    // cached blocks per corresponding bucket before releasing to system.
+    ThreadLocalPool(const size_t (&bucket_sizes)[BucketCount],
+                    const size_t (&max_free)[BucketCount])
     {
         for (size_t i = 0; i < BucketCount; ++i)
+        {
             bucket_sizes_[i] = bucket_sizes[i];
+            max_free_[i] = max_free[i];
+        }
     }
 
     ~ThreadLocalPool()
@@ -100,7 +104,7 @@ public:
             static_cast<char*>(ptr) - sizeof(AllocHeader));
         const size_t bucket = header->bucket;
 
-        if (bucket != kNoBucket && free_counts_[bucket] < MaxFreePerBucket)
+        if (bucket != kNoBucket && free_counts_[bucket] < max_free_[bucket])
         {
             auto* block = reinterpret_cast<FreeBlock*>(header);
             block->next = free_lists_[bucket];
@@ -141,6 +145,7 @@ private:
     }
 
     std::array<size_t, BucketCount> bucket_sizes_ = {};
+    std::array<size_t, BucketCount> max_free_ = {};
     std::array<FreeBlock*, BucketCount> free_lists_ = {};
     std::array<size_t, BucketCount> free_counts_ = {};
 };

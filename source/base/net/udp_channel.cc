@@ -40,18 +40,34 @@ const int kPoolReservedSize = 64;
 const int kMtu = 1200;
 
 // ENet hot-path allocations (per packet, x64 sizes + 16-byte AllocHeader):
-//   ENetPacket:          ~48 bytes  -> 64  total -> bucket[0] (64)
-//   ENetAcknowledgement: ~68 bytes  -> 84  total -> bucket[1] (128)
-//   ENetOutgoingCommand: ~96 bytes  -> 112 total -> bucket[1] (128)
-//   ENetIncomingCommand: ~92 bytes  -> 108 total -> bucket[1] (128)
-//   Packet data buffers: variable          total -> bucket[2..5]
+//   ENetPacket:           ~48 bytes  -> 64  total -> bucket[0] (64)
+//   ENetAcknowledgement:  ~68 bytes  -> 84  total -> bucket[1] (128)
+//   ENetOutgoingCommand:  ~96 bytes  -> 112 total -> bucket[1] (128)
+//   ENetIncomingCommand:  ~92 bytes  -> 108 total -> bucket[1] (128)
+//   Packet data (MTU):    variable          total -> bucket[2..5]
+//   Mid-size messages:    up to 128 KB      total -> bucket[6..11]
+//   Reassembly buffers:   up to 1 MB        total -> bucket[12..14]
 //
-// Cold-path allocations (ENetHost ~12KB, ENetPeer[] ~400*N, ENetChannel[] ~76*N)
-// are too large and infrequent for pooling — they fall through to std::malloc.
-constexpr size_t kENetBucketSizes[] = { 64, 128, 256, 512, 1024, 2048 };
+// Per-bucket cache size reflects expected frequency and per-block memory cost:
+//   small buckets: 64 blocks cached   - very hot, cheap to keep
+//   mid buckets:   8-16 blocks cached - moderately hot
+//   large buckets: 2-4 blocks cached  - rare, expensive per block
+//
+// Cold-path allocations (ENetHost ~12KB, ENetPeer[] ~400*N, ENetChannel[] ~76*N) and messages
+// larger than 1 MB fall through to std::malloc - too infrequent to justify caching.
+constexpr size_t kENetBucketSizes[] = {
+    64, 128, 256, 512, 1024, 2048,
+    4 * 1024, 8 * 1024, 16 * 1024, 32 * 1024, 64 * 1024, 128 * 1024,
+    256 * 1024, 512 * 1024, 1024 * 1024,
+};
+constexpr size_t kENetBucketMaxFree[] = {
+    64, 64, 64, 64, 64, 64,
+    16, 16, 16, 8, 8, 8,
+    4, 4, 2,
+};
 
-using ENetPool = ThreadLocalPool<std::size(kENetBucketSizes), 64>;
-thread_local ENetPool tls_enet_pool(kENetBucketSizes);
+using ENetPool = ThreadLocalPool<std::size(kENetBucketSizes)>;
+thread_local ENetPool tls_enet_pool(kENetBucketSizes, kENetBucketMaxFree);
 
 //--------------------------------------------------------------------------------------------------
 int calculateSpeed(int last_speed, const std::chrono::milliseconds& duration, qint64 bytes)

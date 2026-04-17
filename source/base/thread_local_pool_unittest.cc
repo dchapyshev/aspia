@@ -32,14 +32,18 @@ namespace {
 constexpr size_t kBucketSizes[] = { 64, 128, 256, 512, 1024, 2048, 4096, 8192 };
 constexpr size_t kBucketCount = std::size(kBucketSizes);
 constexpr size_t kMaxFreePerBucket = 32;
+constexpr size_t kMaxFree[kBucketCount] = {
+    kMaxFreePerBucket, kMaxFreePerBucket, kMaxFreePerBucket, kMaxFreePerBucket,
+    kMaxFreePerBucket, kMaxFreePerBucket, kMaxFreePerBucket, kMaxFreePerBucket,
+};
 
-using TestPool = ThreadLocalPool<kBucketCount, kMaxFreePerBucket>;
+using TestPool = ThreadLocalPool<kBucketCount>;
 
 } // namespace
 
 TEST(thread_local_pool_test, allocate_and_deallocate)
 {
-    TestPool pool(kBucketSizes);
+    TestPool pool(kBucketSizes, kMaxFree);
 
     void* p = pool.allocate(100);
     ASSERT_NE(p, nullptr);
@@ -52,7 +56,7 @@ TEST(thread_local_pool_test, allocate_and_deallocate)
 
 TEST(thread_local_pool_test, allocate_zero)
 {
-    TestPool pool(kBucketSizes);
+    TestPool pool(kBucketSizes, kMaxFree);
 
     void* p = pool.allocate(0);
     ASSERT_NE(p, nullptr);
@@ -61,13 +65,13 @@ TEST(thread_local_pool_test, allocate_zero)
 
 TEST(thread_local_pool_test, deallocate_null)
 {
-    TestPool pool(kBucketSizes);
+    TestPool pool(kBucketSizes, kMaxFree);
     pool.deallocate(nullptr); // Should not crash.
 }
 
 TEST(thread_local_pool_test, reuse_after_deallocate)
 {
-    TestPool pool(kBucketSizes);
+    TestPool pool(kBucketSizes, kMaxFree);
 
     // Allocate and free a block, then allocate again. The pool should reuse the block.
     void* p1 = pool.allocate(50);
@@ -84,7 +88,7 @@ TEST(thread_local_pool_test, reuse_after_deallocate)
 
 TEST(thread_local_pool_test, different_sizes_different_buckets)
 {
-    TestPool pool(kBucketSizes);
+    TestPool pool(kBucketSizes, kMaxFree);
 
     void* p_small = pool.allocate(10);
     void* p_large = pool.allocate(1000);
@@ -99,7 +103,7 @@ TEST(thread_local_pool_test, different_sizes_different_buckets)
 
 TEST(thread_local_pool_test, oversized_allocation)
 {
-    TestPool pool(kBucketSizes);
+    TestPool pool(kBucketSizes, kMaxFree);
 
     // Larger than the biggest bucket — should go directly to malloc.
     void* p = pool.allocate(16000);
@@ -115,7 +119,7 @@ TEST(thread_local_pool_test, oversized_allocation)
 
 TEST(thread_local_pool_test, pool_limit_exceeded)
 {
-    TestPool pool(kBucketSizes);
+    TestPool pool(kBucketSizes, kMaxFree);
 
     // Allocate more blocks than kMaxFreePerBucket and free them all.
     constexpr size_t kCount = kMaxFreePerBucket + 16;
@@ -141,7 +145,7 @@ TEST(thread_local_pool_test, pool_limit_exceeded)
 
 TEST(thread_local_pool_test, multiple_buckets_interleaved)
 {
-    TestPool pool(kBucketSizes);
+    TestPool pool(kBucketSizes, kMaxFree);
 
     void* a1 = pool.allocate(30);   // bucket 64
     void* b1 = pool.allocate(100);  // bucket 128
@@ -167,7 +171,7 @@ TEST(thread_local_pool_test, multiple_buckets_interleaved)
 
 TEST(thread_local_pool_test, data_integrity)
 {
-    TestPool pool(kBucketSizes);
+    TestPool pool(kBucketSizes, kMaxFree);
 
     constexpr size_t kSize = 200;
     void* p = pool.allocate(kSize);
@@ -246,7 +250,7 @@ TEST(thread_local_pool_benchmark, malloc_vs_pool)
 
     // --- ThreadLocalPool ---
     {
-        TestPool pool(kBucketSizes);
+        TestPool pool(kBucketSizes, kMaxFree);
 
         auto start = std::chrono::steady_clock::now();
 
@@ -303,7 +307,7 @@ TEST(thread_local_pool_benchmark, malloc_vs_pool)
 
     // ThreadLocalPool batch
     {
-        TestPool pool(kBucketSizes);
+        TestPool pool(kBucketSizes, kMaxFree);
         std::vector<void*> ptrs(kBatchSize);
 
         auto start = std::chrono::steady_clock::now();
@@ -363,7 +367,7 @@ TEST(thread_local_pool_benchmark, malloc_vs_pool)
 
     // ThreadLocalPool mixed
     {
-        TestPool pool(kBucketSizes);
+        TestPool pool(kBucketSizes, kMaxFree);
 
         auto start = std::chrono::steady_clock::now();
 
