@@ -19,7 +19,6 @@
 #include "base/net/udp_channel.h"
 
 #include <QSocketNotifier>
-#include <QTimer>
 #include <QTimerEvent>
 
 #include <enet/enet.h>
@@ -652,7 +651,7 @@ void UdpChannel::releasePacket(ENetPacket* release_packet)
     if (packet_pool_.size() >= kPoolReservedSize)
         return;
 
-    // Create a new package without allocating memory with using the data of the released packet.
+    // Create a new packet without allocating memory with using the data of the released packet.
     ScopedENetPacket packet(enet_packet_create(
         release_packet->data, release_packet->dataLength, ENET_PACKET_FLAG_NO_ALLOCATE));
 
