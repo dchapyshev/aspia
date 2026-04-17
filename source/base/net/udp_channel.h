@@ -99,15 +99,17 @@ private:
     using TimePoint = std::chrono::time_point<Clock>;
     using Milliseconds = std::chrono::milliseconds;
     using Seconds = std::chrono::seconds;
+
+#pragma pack(push, 1)
     struct Header
     {
         quint64 counter;
-        quint32 reserved1;
         quint8 type;
-        quint8 reserved2;
-        quint8 reserved3;
-        quint8 reserved4;
+        quint8 reserved;
     };
+#pragma pack(pop)
+
+    static_assert(sizeof(Header) == 10, "Unexpected header size");
 
     enum MessageType { USER_DATA = 0 };
 
