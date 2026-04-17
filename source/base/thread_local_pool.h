@@ -24,11 +24,26 @@
 
 namespace base {
 
+// Bucket descriptor for ThreadLocalPool. Pairs up a bucket size with its cache cap. |size| is the
+// maximum total allocation (including internal header) for the bucket. |max_free| is the maximum
+// cached blocks before releasing to system.
+struct ThreadLocalPoolBucket
+{
+    size_t size;
+    size_t max_free;
+};
+
 // Thread-local bucket allocator. Each thread gets its own pool instance, so no locking is needed.
 // Allocations are bucketed by size class. Oversized allocations fall through to std::malloc.
 //
 // Usage:
-//   thread_local ThreadLocalPool pool(bucket_sizes, max_free);
+//   constexpr ThreadLocalPoolBucket kBuckets[] = {
+//       { 64,   32 },
+//       { 128,  16 },
+//       { 4096,  4 },
+//   };
+//   using MyPool = ThreadLocalPool<std::size(kBuckets)>;
+//   thread_local MyPool pool(kBuckets);
 //   void* p = pool.allocate(100);  // returns block from 128-byte bucket
 //   pool.deallocate(p);            // returns block to pool for reuse
 //
@@ -39,17 +54,11 @@ template <size_t BucketCount>
 class ThreadLocalPool
 {
 public:
-    // |bucket_sizes| must be sorted in ascending order. Each element defines the maximum total
-    // allocation size (including internal header) for that bucket. |max_free| defines the maximum
-    // cached blocks per corresponding bucket before releasing to system.
-    ThreadLocalPool(const size_t (&bucket_sizes)[BucketCount],
-                    const size_t (&max_free)[BucketCount])
+    // |buckets| must be sorted by |size| in ascending order.
+    explicit ThreadLocalPool(const ThreadLocalPoolBucket (&buckets)[BucketCount])
     {
         for (size_t i = 0; i < BucketCount; ++i)
-        {
-            bucket_sizes_[i] = bucket_sizes[i];
-            max_free_[i] = max_free[i];
-        }
+            buckets_[i] = buckets[i];
     }
 
     ~ThreadLocalPool()
@@ -82,14 +91,14 @@ public:
         }
         else
         {
-            const size_t alloc_size = (bucket != kNoBucket) ? bucket_sizes_[bucket] : total;
+            const size_t alloc_size = (bucket != kNoBucket) ? buckets_[bucket].size : total;
             raw = std::malloc(alloc_size);
             if (!raw)
                 return nullptr;
         }
 
         auto* header = static_cast<AllocHeader*>(raw);
-        header->alloc_size = (bucket != kNoBucket) ? bucket_sizes_[bucket] : total;
+        header->alloc_size = (bucket != kNoBucket) ? buckets_[bucket].size : total;
         header->bucket = bucket;
 
         return header + 1;
@@ -104,7 +113,7 @@ public:
             static_cast<char*>(ptr) - sizeof(AllocHeader));
         const size_t bucket = header->bucket;
 
-        if (bucket != kNoBucket && free_counts_[bucket] < max_free_[bucket])
+        if (bucket != kNoBucket && free_counts_[bucket] < buckets_[bucket].max_free)
         {
             auto* block = reinterpret_cast<FreeBlock*>(header);
             block->next = free_lists_[bucket];
@@ -138,14 +147,13 @@ private:
     {
         for (size_t i = 0; i < BucketCount; ++i)
         {
-            if (total_size <= bucket_sizes_[i])
+            if (total_size <= buckets_[i].size)
                 return i;
         }
         return kNoBucket;
     }
 
-    std::array<size_t, BucketCount> bucket_sizes_ = {};
-    std::array<size_t, BucketCount> max_free_ = {};
+    std::array<ThreadLocalPoolBucket, BucketCount> buckets_ = {};
     std::array<FreeBlock*, BucketCount> free_lists_ = {};
     std::array<size_t, BucketCount> free_counts_ = {};
 };
