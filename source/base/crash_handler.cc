@@ -119,7 +119,7 @@ FrameInfo extractFrameInfo(DWORD64 address)
 
     HANDLE process = GetCurrentProcess();
 
-    char buffer[sizeof(SYMBOL_INFO) + kMaxSymbolNameLength] = { 0 };
+    char buffer[sizeof(SYMBOL_INFO) + kMaxSymbolNameLength] = {};
     SYMBOL_INFO* symbol = reinterpret_cast<SYMBOL_INFO*>(buffer);
     symbol->SizeOfStruct = sizeof(SYMBOL_INFO);
     symbol->MaxNameLen = kMaxSymbolNameLength;
@@ -135,7 +135,7 @@ FrameInfo extractFrameInfo(DWORD64 address)
         info.symbol = "<unknown>";
     }
 
-    IMAGEHLP_LINE64 line = { 0 };
+    IMAGEHLP_LINE64 line = {};
     line.SizeOfStruct = sizeof(IMAGEHLP_LINE64);
     DWORD line_displacement = 0;
     if (SymGetLineFromAddr64(process, address, &line_displacement, &line) && line.FileName)
@@ -145,7 +145,7 @@ FrameInfo extractFrameInfo(DWORD64 address)
         info.source += QString::number(line.LineNumber);
     }
 
-    IMAGEHLP_MODULE64 module_info = { 0 };
+    IMAGEHLP_MODULE64 module_info = {};
     module_info.SizeOfStruct = sizeof(IMAGEHLP_MODULE64);
     if (SymGetModuleInfo64(process, address, &module_info))
         info.module = QString::fromLocal8Bit(module_info.ModuleName);
@@ -220,7 +220,7 @@ QList<FrameInfo> walkStackFromContext(const CONTEXT* context)
 
     CONTEXT local_context = *context;
 
-    STACKFRAME64 frame = { 0 };
+    STACKFRAME64 frame = {};
     DWORD machine_type = 0;
 
 #if defined(_M_X64)
@@ -409,7 +409,7 @@ void setCrashLogFileDescriptor(int fd)
 //--------------------------------------------------------------------------------------------------
 QString captureStackTrace(int skip_frames)
 {
-    void* addresses[kMaxFrames] = { 0 };
+    void* addresses[kMaxFrames] = {};
     const int skip = skip_frames < 0 ? 0 : skip_frames;
     const USHORT captured = CaptureStackBackTrace(
         static_cast<DWORD>(skip), kMaxFrames, addresses, nullptr);
