@@ -18,6 +18,8 @@
 
 #include "base/crash_handler.h"
 
+#include <QDateTime>
+#include <QDir>
 #include <QList>
 #include <QMutex>
 
@@ -28,8 +30,6 @@
 #include <qt_windows.h>
 #include <DbgHelp.h>
 #include <io.h>
-#include <stdlib.h>
-#include <strsafe.h>
 #endif // defined(Q_OS_WINDOWS)
 
 namespace base {
@@ -52,7 +52,7 @@ struct FrameInfo
 QMutex g_dbghelp_lock;
 std::atomic<int> g_crash_log_fd{-1};
 std::atomic<bool> g_symbols_initialized{false};
-wchar_t g_dump_file_prefix[32] = { 0 };
+QString g_dump_file_prefix;
 
 //--------------------------------------------------------------------------------------------------
 const char* exceptionCodeName(DWORD code)
@@ -91,8 +91,7 @@ void initializeSymbols()
     if (!g_symbols_initialized.compare_exchange_strong(expected, true))
         return;
 
-    SymSetOptions(SYMOPT_LOAD_LINES | SYMOPT_DEFERRED_LOADS |
-                  SYMOPT_UNDNAME | SYMOPT_FAIL_CRITICAL_ERRORS);
+    SymSetOptions(SYMOPT_LOAD_LINES | SYMOPT_DEFERRED_LOADS | SYMOPT_UNDNAME | SYMOPT_FAIL_CRITICAL_ERRORS);
     SymInitialize(GetCurrentProcess(), nullptr, TRUE);
 }
 
@@ -206,8 +205,7 @@ QString formatStackTable(const QList<FrameInfo>& frames)
     for (int i = 0; i < frames.size(); ++i)
     {
         const FrameInfo& f = frames[i];
-        QString addr = QString::asprintf("0x%016llX",
-                                         static_cast<unsigned long long>(f.address));
+        QString addr = QString::asprintf("0x%016llX", static_cast<unsigned long long>(f.address));
         result += makeRow(QString::number(i), addr, f.module, f.symbol, f.source);
     }
     return result;
@@ -287,33 +285,15 @@ void writeRawToCrashLog(const QString& str)
 //--------------------------------------------------------------------------------------------------
 void writeMinidump(EXCEPTION_POINTERS* exception_pointers)
 {
-    wchar_t file_dir[MAX_PATH] = { 0 };
-    GetTempPathW(MAX_PATH, file_dir);
-    StringCbCatW(file_dir, sizeof(file_dir), L"\\aspia");
+    const QString dir_path = QDir::tempPath() + "/aspia";
+    QDir().mkpath(dir_path);
 
-    if (!(GetFileAttributesW(file_dir) & FILE_ATTRIBUTE_DIRECTORY))
-        CreateDirectoryW(file_dir, nullptr);
+    const QString time_stamp = QDateTime::currentDateTime().toString("yyyyMMdd-HHmmss.zzz");
+    const QString file_path = QString("%1/%2-%3.dmp").arg(dir_path, g_dump_file_prefix, time_stamp);
 
-    SYSTEMTIME time;
-    GetLocalTime(&time);
-
-    wchar_t file_name[MAX_PATH] = { 0 };
-    StringCbPrintfW(file_name,
-                    sizeof(file_name),
-                    L"%s\\%s-%04d%02d%02d-%02d%02d%02d.%03d.dmp",
-                    file_dir,
-                    g_dump_file_prefix,
-                    time.wYear, time.wMonth, time.wDay,
-                    time.wHour, time.wMinute, time.wSecond,
-                    time.wMilliseconds);
-
-    HANDLE dump_file = CreateFileW(file_name,
-                                   GENERIC_READ | GENERIC_WRITE,
-                                   FILE_SHARE_WRITE | FILE_SHARE_READ,
-                                   nullptr,
-                                   CREATE_ALWAYS,
-                                   0,
-                                   nullptr);
+    HANDLE dump_file = CreateFileW(qUtf16Printable(file_path), GENERIC_READ | GENERIC_WRITE,
+                                   FILE_SHARE_WRITE | FILE_SHARE_READ, nullptr, CREATE_ALWAYS,
+                                   0, nullptr);
 
     if (dump_file == INVALID_HANDLE_VALUE)
         return;
@@ -323,14 +303,8 @@ void writeMinidump(EXCEPTION_POINTERS* exception_pointers)
     exception_information.ExceptionPointers = exception_pointers;
     exception_information.ClientPointers = TRUE;
 
-    MiniDumpWriteDump(GetCurrentProcess(),
-                      GetCurrentProcessId(),
-                      dump_file,
-                      MiniDumpWithFullMemory,
-                      &exception_information,
-                      nullptr,
-                      nullptr);
-
+    MiniDumpWriteDump(GetCurrentProcess(), GetCurrentProcessId(), dump_file, MiniDumpWithFullMemory,
+                      &exception_information, nullptr, nullptr);
     CloseHandle(dump_file);
 }
 
@@ -375,8 +349,7 @@ QString formatCrashHeader(const EXCEPTION_RECORD* exception)
             }
             header += row("Access",
                           QString::asprintf("%s at 0x%016llX",
-                                            op_name,
-                                            static_cast<unsigned long long>(op_addr)));
+                                            op_name, static_cast<unsigned long long>(op_addr)));
         }
     }
 
@@ -411,15 +384,9 @@ LONG WINAPI exceptionFilter(EXCEPTION_POINTERS* exception_pointers)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-void installCrashHandler()
+void installCrashHandler(const QString& dump_file_prefix)
 {
-    wchar_t file_name[MAX_PATH] = { 0 };
-    if (GetModuleFileNameW(nullptr, file_name, _countof(file_name)))
-    {
-        wchar_t prefix[MAX_PATH] = { 0 };
-        _wsplitpath_s(file_name, nullptr, 0, nullptr, 0, prefix, MAX_PATH, nullptr, 0);
-        StringCbCopyW(g_dump_file_prefix, sizeof(g_dump_file_prefix), prefix);
-    }
+    g_dump_file_prefix = dump_file_prefix;
 
     {
         QMutexLocker lock(&g_dbghelp_lock);
@@ -461,7 +428,7 @@ QString captureStackTrace(int skip_frames)
 #else // defined(Q_OS_WINDOWS)
 
 //--------------------------------------------------------------------------------------------------
-void installCrashHandler()
+void installCrashHandler(const QString& /* dump_file_prefix */)
 {
     // TODO: implement for Linux/macOS (sigaction + backtrace()).
 }

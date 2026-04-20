@@ -24,9 +24,10 @@
 namespace base {
 
 // Initializes the symbolizer and installs the platform crash handler.
+// |dump_file_prefix| is used as the leading part of the minidump file name.
 // On Windows an unhandled SEH filter is set that writes a stack trace to the
 // log and produces a minidump file. On other platforms this is a no-op for now.
-void installCrashHandler();
+void installCrashHandler(const QString& dump_file_prefix);
 
 // Provides the active log file descriptor so the crash handler can append
 // crash information to it directly (bypassing Qt locking). Pass -1 to detach.

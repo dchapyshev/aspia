@@ -289,7 +289,7 @@ QString logFilePrefix()
 //--------------------------------------------------------------------------------------------------
 bool initLogging(const LoggingSettings& settings)
 {
-    installCrashHandler();
+    installCrashHandler(logFilePrefix());
 
     {
         QMutexLocker lock(&g_log_file_lock);
