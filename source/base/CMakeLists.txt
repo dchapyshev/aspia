@@ -29,6 +29,8 @@ list(APPEND SOURCE_BASE
     bucket_pool.h
     cpuid_util.cc
     cpuid_util.h
+    crash_handler.cc
+    crash_handler.h
     debug.cc
     debug.h
     edid.cc
@@ -480,8 +482,6 @@ if (WIN32)
         win/file_version_info.h
         win/message_window.cc
         win/message_window.h
-        win/mini_dump_writer.cc
-        win/mini_dump_writer.h
         win/net_share_enumerator.cc
         win/net_share_enumerator.h
         win/power_info.cc

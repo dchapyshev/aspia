@@ -24,11 +24,10 @@
 #include <QMutex>
 #include <QThread>
 
+#include "base/crash_handler.h"
 #include "base/debug.h"
 
 #if defined(Q_OS_WINDOWS)
-#include "base/win/mini_dump_writer.h"
-
 #include <qt_windows.h>
 #include <comdef.h>
 #include <Psapi.h>
@@ -102,6 +101,7 @@ QString defaultLogFileDir()
 //--------------------------------------------------------------------------------------------------
 bool initLoggingUnlocked(const QString& prefix)
 {
+    setCrashLogFileDescriptor(-1);
     g_log_file.close();
 
     if (!(g_logging_destination & LOG_TO_FILE))
@@ -130,6 +130,8 @@ bool initLoggingUnlocked(const QString& prefix)
     g_log_file.setFileName(file_path);
     if (!g_log_file.open(QFile::WriteOnly | QFile::Append | QFile::Text))
         return false;
+
+    setCrashLogFileDescriptor(g_log_file.handle());
 
     if (g_max_log_file_age != 0)
         removeOldFiles(file_dir, g_max_log_file_age);
@@ -287,9 +289,7 @@ QString logFilePrefix()
 //--------------------------------------------------------------------------------------------------
 bool initLogging(const LoggingSettings& settings)
 {
-#if defined(Q_OS_WINDOWS)
-    installFailureHandler();
-#endif // defined(Q_OS_WINDOWS)
+    installCrashHandler();
 
     {
         QMutexLocker lock(&g_log_file_lock);
@@ -329,6 +329,7 @@ void shutdownLogging()
 {
     LOG(INFO) << "Logging finished";
     QMutexLocker lock(&g_log_file_lock);
+    setCrashLogFileDescriptor(-1);
     g_log_file.close();
 }
 
