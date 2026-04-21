@@ -52,7 +52,7 @@ void SessionClient::setStunInfo(quint16 port)
 //--------------------------------------------------------------------------------------------------
 void SessionClient::onSessionMessage(quint8 channel_id, const QByteArray& buffer)
 {
-    if (channel_id != CHANNEL_ID_CLIENT)
+    if (channel_id != proto::router::CHANNEL_ID_CLIENT)
         return;
 
     proto::router::ClientToRouter message;
@@ -89,7 +89,7 @@ void SessionClient::readConnectionRequest(const proto::router::ConnectionRequest
     {
         CLOG(ERROR) << "Host with id" << request.host_id() << "NOT found!";
         offer->set_error_code(proto::router::ConnectionOffer::PEER_NOT_FOUND);
-        sendMessage(CHANNEL_ID_CLIENT, base::serialize(message));
+        sendMessage(proto::router::CHANNEL_ID_CLIENT, base::serialize(message));
         return;
     }
 
@@ -100,7 +100,7 @@ void SessionClient::readConnectionRequest(const proto::router::ConnectionRequest
     {
         CLOG(ERROR) << "Empty key pool";
         offer->set_error_code(proto::router::ConnectionOffer::KEY_POOL_EMPTY);
-        sendMessage(CHANNEL_ID_CLIENT, base::serialize(message));
+        sendMessage(proto::router::CHANNEL_ID_CLIENT, base::serialize(message));
         return;
     }
 
@@ -109,7 +109,7 @@ void SessionClient::readConnectionRequest(const proto::router::ConnectionRequest
     {
         CLOG(ERROR) << "No relay with session id" << credentials->session_id;
         offer->set_error_code(proto::router::ConnectionOffer::KEY_POOL_EMPTY);
-        sendMessage(CHANNEL_ID_CLIENT, base::serialize(message));
+        sendMessage(proto::router::CHANNEL_ID_CLIENT, base::serialize(message));
         return;
     }
 
@@ -118,7 +118,7 @@ void SessionClient::readConnectionRequest(const proto::router::ConnectionRequest
     {
         CLOG(ERROR) << "No peer data for relay with session id" << credentials->session_id;
         offer->set_error_code(proto::router::ConnectionOffer::KEY_POOL_EMPTY);
-        sendMessage(CHANNEL_ID_CLIENT, base::serialize(message));
+        sendMessage(proto::router::CHANNEL_ID_CLIENT, base::serialize(message));
         return;
     }
 
@@ -173,7 +173,7 @@ void SessionClient::readConnectionRequest(const proto::router::ConnectionRequest
     }
 
     CLOG(INFO) << "Sending connection offer to client";
-    sendMessage(CHANNEL_ID_CLIENT, base::serialize(message));
+    sendMessage(proto::router::CHANNEL_ID_CLIENT, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -189,7 +189,7 @@ void SessionClient::readCheckHostStatus(const proto::router::CheckHostStatus& ch
 
     CLOG(INFO) << "Sending host status for host ID" << check_host_status.host_id()
                << ":" << host_status->status();
-    sendMessage(CHANNEL_ID_CLIENT, base::serialize(message));
+    sendMessage(proto::router::CHANNEL_ID_CLIENT, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------

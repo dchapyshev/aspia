@@ -32,6 +32,15 @@ enum SessionType
     SESSION_TYPE_MANAGER = 16;
 }
 
+enum ChannelId
+{
+    CHANNEL_ID_HOST    = 0;
+    CHANNEL_ID_RELAY   = 1;
+    CHANNEL_ID_CLIENT  = 2;
+    CHANNEL_ID_MANAGER = 3;
+    CHANNEL_ID_ADMIN   = 4;
+}
+
 message RelayKey
 {
     enum Type

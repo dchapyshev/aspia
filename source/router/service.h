@@ -59,7 +59,7 @@ public:
 
     static Service* instance();
 
-    QList<Session*> sessions();
+    const QList<Session*>& sessions();
     Session* session(qint64 session_id);
     bool stopSession(qint64 session_id);
 

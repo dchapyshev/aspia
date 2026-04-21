@@ -19,9 +19,11 @@
 #include "client/router_connection.h"
 
 #include "base/logging.h"
+#include "base/serialization.h"
 #include "base/net/tcp_channel_ng.h"
 #include "base/peer/client_authenticator.h"
-#include "proto/router.h"
+#include "proto/router_admin.h"
+#include "proto/router_client.h"
 
 namespace client {
 
@@ -107,6 +109,19 @@ void RouterConnection::onUpdateConfig(const RouterConfig& config)
 }
 
 //--------------------------------------------------------------------------------------------------
+void RouterConnection::onRelayListRequest()
+{
+    if (config_.session_type != proto::router::SESSION_TYPE_ADMIN)
+        return;
+
+    proto::router::AdminToRouter message;
+    proto::router::RelayListRequest* request = message.mutable_relay_list_request();
+    request->set_dummy(1);
+
+    sendMessage(proto::router::CHANNEL_ID_ADMIN, base::serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
 void RouterConnection::onTcpReady()
 {
     LOG(INFO) << "Connected to router " << config_.address << ":" << config_.port;
@@ -129,9 +144,59 @@ void RouterConnection::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterConnection::onTcpMessageReceived(quint8 /* channel_id */, const QByteArray& /* buffer */)
+void RouterConnection::onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer)
 {
-    // TODO: Handle messages based on session type.
+    if (channel_id == proto::router::CHANNEL_ID_ADMIN)
+    {
+        if (config_.session_type != proto::router::SESSION_TYPE_ADMIN)
+        {
+            LOG(ERROR) << "Unexpected message from channel" << channel_id;
+            return;
+        }
+
+        proto::router::RouterToAdmin message;
+        if (!base::parse(buffer, &message))
+        {
+            LOG(ERROR) << "Unable to parse admin message";
+            return;
+        }
+
+        if (message.has_relay_list())
+        {
+            emit sig_relayListReceived(message.relay_list());
+        }
+        else
+        {
+            LOG(WARNING) << "Unhandled admin message";
+            return;
+        }
+    }
+    else if (channel_id == proto::router::CHANNEL_ID_MANAGER)
+    {
+        if (config_.session_type != proto::router::SESSION_TYPE_ADMIN &&
+            config_.session_type != proto::router::SESSION_TYPE_MANAGER)
+        {
+            LOG(ERROR) << "Unexpected message from channel" << channel_id;
+            return;
+        }
+
+        // TODO
+    }
+    else if (channel_id == proto::router::CHANNEL_ID_CLIENT)
+    {
+        proto::router::RouterToClient message;
+        if (!base::parse(buffer, &message))
+        {
+            LOG(ERROR) << "Unable to parse client message";
+            return;
+        }
+
+        // TODO
+    }
+    else
+    {
+        LOG(WARNING) << "Unexpected message from channel" << channel_id;
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -142,6 +207,15 @@ void RouterConnection::setStatus(Status status)
         status_ = status;
         emit sig_statusChanged(config_.uuid, status_);
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterConnection::sendMessage(quint8 channel_id, const QByteArray& data)
+{
+    if (!tcp_channel_)
+        return;
+
+    tcp_channel_->send(channel_id, data);
 }
 
 } // namespace client

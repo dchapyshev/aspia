@@ -104,7 +104,7 @@ Service* Service::instance()
 }
 
 //--------------------------------------------------------------------------------------------------
-QList<Session*> Service::sessions()
+const QList<Session*>& Service::sessions()
 {
     return sessions_;
 }

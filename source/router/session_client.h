@@ -33,13 +33,6 @@ public:
     explicit SessionClient(base::TcpChannel* channel, QObject* parent = nullptr);
     ~SessionClient() override;
 
-    enum ChannelId : quint8
-    {
-        CHANNEL_ID_CLIENT = 0,
-        CHANNEL_ID_MANAGER = 1,
-        CHANNEL_ID_ADMIN = 2
-    };
-
     void setStunInfo(quint16 port);
 
 protected:

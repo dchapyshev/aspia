@@ -849,6 +849,11 @@ void HostsTab::createRouterConnection(const RouterConfig& config)
             conn->onUpdateConfig(config);
     }, Qt::QueuedConnection);
 
+    connect(conn, &RouterConnection::sig_relayListReceived,
+            router_widget_, &RouterWidget::onRelayListReceived, Qt::QueuedConnection);
+    connect(router_widget_, &RouterWidget::sig_relayListRequest,
+            conn, &RouterConnection::onRelayListRequest, Qt::QueuedConnection);
+
     QMetaObject::invokeMethod(conn, &RouterConnection::onConnectToRouter, Qt::QueuedConnection);
 }
 

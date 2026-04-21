@@ -24,6 +24,10 @@
 #include "base/net/tcp_channel.h"
 #include "client/config.h"
 
+namespace proto::router {
+class RelayList;
+} // namespace proto::router
+
 namespace client {
 
 class RouterConnection final : public QObject
@@ -47,12 +51,19 @@ public:
     const QUuid& uuid() const;
 
 public slots:
+    // Generic methods.
     void onConnectToRouter();
     void onDisconnectFromRouter();
     void onUpdateConfig(const client::RouterConfig& config);
 
+    // Administrator methods.
+    void onRelayListRequest();
+
+    // Manager methods.
+
 signals:
     void sig_statusChanged(const QUuid& uuid, client::RouterConnection::Status status);
+    void sig_relayListReceived(const proto::router::RelayList& list);
 
 private slots:
     void onTcpReady();
@@ -61,6 +72,7 @@ private slots:
 
 private:
     void setStatus(Status status);
+    void sendMessage(quint8 channel_id, const QByteArray& data);
 
     RouterConfig config_;
     base::TcpChannel* tcp_channel_ = nullptr;

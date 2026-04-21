@@ -39,13 +39,13 @@ SessionManager::~SessionManager()
 //--------------------------------------------------------------------------------------------------
 void SessionManager::onSessionMessage(quint8 channel_id, const QByteArray& buffer)
 {
-    if (channel_id == CHANNEL_ID_CLIENT)
+    if (channel_id == proto::router::CHANNEL_ID_CLIENT)
     {
         SessionClient::onSessionMessage(channel_id, buffer);
         return;
     }
 
-    if (channel_id != CHANNEL_ID_MANAGER)
+    if (channel_id != proto::router::CHANNEL_ID_MANAGER)
         return;
 
     // TODO

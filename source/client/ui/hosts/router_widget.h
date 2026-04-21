@@ -22,6 +22,10 @@
 #include "client/ui/hosts/content_widget.h"
 #include "ui_router_widget.h"
 
+namespace proto::router {
+class RelayList;
+} // namespace proto::router
+
 namespace client {
 
 class RouterWidget : public ContentWidget
@@ -38,6 +42,12 @@ public:
 
     static QString delayToString(quint64 delay);
     static QString sizeToString(qint64 size);
+
+public slots:
+    void onRelayListReceived(const proto::router::RelayList& relays);
+
+signals:
+    void sig_relayListRequest();
 
 private:
     Ui::RouterWidget ui;

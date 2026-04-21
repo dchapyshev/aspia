@@ -37,6 +37,7 @@ protected:
     void onSessionMessage(quint8 channel_id, const QByteArray& buffer) final;
 
 private:
+    void doRelayListRequest();
     void doUserListRequest();
     void doUserRequest(const proto::router::UserRequest& request);
     void doSessionListRequest(const proto::router::SessionListRequest& request);

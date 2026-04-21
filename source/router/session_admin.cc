@@ -45,7 +45,7 @@ SessionAdmin::~SessionAdmin()
 //--------------------------------------------------------------------------------------------------
 void SessionAdmin::onSessionMessage(quint8 channel_id, const QByteArray& buffer)
 {
-    if (channel_id != CHANNEL_ID_ADMIN)
+    if (channel_id != proto::router::CHANNEL_ID_ADMIN)
     {
         SessionManager::onSessionMessage(channel_id, buffer);
         return;
@@ -58,7 +58,11 @@ void SessionAdmin::onSessionMessage(quint8 channel_id, const QByteArray& buffer)
         return;
     }
 
-    if (message.has_session_list_request())
+    if (message.has_relay_list_request())
+    {
+        doRelayListRequest();
+    }
+    else if (message.has_session_list_request())
     {
         doSessionListRequest(message.session_list_request());
     }
@@ -89,6 +93,34 @@ void SessionAdmin::onSessionMessage(quint8 channel_id, const QByteArray& buffer)
 }
 
 //--------------------------------------------------------------------------------------------------
+void SessionAdmin::doRelayListRequest()
+{
+    const QList<Session*>& sessions = Service::instance()->sessions();
+
+    proto::router::RouterToAdmin message;
+    proto::router::RelayList* result = message.mutable_relay_list();
+    result->set_error_code("success");
+
+    for (const auto& session : sessions)
+    {
+        if (session->sessionType() != proto::router::SESSION_TYPE_RELAY)
+            continue;
+
+        proto::router::RelayInfo* item = result->add_relay();
+        item->set_entry_id(session->sessionId());
+        item->set_timepoint(session->startTime());
+        item->set_ip_address(session->address().toString().toStdString());
+        item->mutable_version()->CopyFrom(base::serialize(session->version()));
+        item->set_os_name(session->osName().toStdString());
+        item->set_computer_name(session->computerName().toStdString());
+        item->set_architecture(session->architecture().toStdString());
+        item->set_pool_size(Service::instance()->keyCountForRelay(session->sessionId()));
+    }
+
+    sendMessage(proto::router::CHANNEL_ID_ADMIN, base::serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
 void SessionAdmin::doUserListRequest()
 {
     Database database = Database::open();
@@ -105,7 +137,7 @@ void SessionAdmin::doUserListRequest()
     for (const auto& user : std::as_const(users))
         list->add_user()->CopyFrom(user.serialize());
 
-    sendMessage(CHANNEL_ID_ADMIN, base::serialize(message));
+    sendMessage(proto::router::CHANNEL_ID_ADMIN, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -134,7 +166,7 @@ void SessionAdmin::doUserRequest(const proto::router::UserRequest& request)
             return;
     }
 
-    sendMessage(CHANNEL_ID_ADMIN, base::serialize(message));
+    sendMessage(proto::router::CHANNEL_ID_ADMIN, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -207,7 +239,7 @@ void SessionAdmin::doSessionListRequest(const proto::router::SessionListRequest&
 
     result->set_error_code(proto::router::SessionList::SUCCESS);
 
-    sendMessage(CHANNEL_ID_ADMIN, base::serialize(message));
+    sendMessage(proto::router::CHANNEL_ID_ADMIN, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -238,7 +270,7 @@ void SessionAdmin::doSessionRequest(const proto::router::SessionRequest& request
         session_result->set_error_code(proto::router::SessionResult::INVALID_REQUEST);
     }
 
-    sendMessage(CHANNEL_ID_ADMIN, base::serialize(message));
+    sendMessage(proto::router::CHANNEL_ID_ADMIN, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------

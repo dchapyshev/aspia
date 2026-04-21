@@ -18,11 +18,64 @@
 
 #include "client/ui/hosts/router_widget.h"
 
+#include <QDateTime>
 #include <QIODevice>
 
 #include "base/logging.h"
+#include "proto/router_admin.h"
 
 namespace client {
+
+namespace {
+
+class RelayTreeItem final : public QTreeWidgetItem
+{
+public:
+    explicit RelayTreeItem(const proto::router::RelayInfo& info)
+    {
+        updateItem(info);
+
+        QString time = QLocale::system().toString(
+            QDateTime::fromSecsSinceEpoch(info.timepoint()), QLocale::ShortFormat);
+
+        setIcon(0, QIcon(":/img/stack.svg"));
+        setText(0, QString::fromStdString(info.ip_address()));
+        setText(1, time);
+
+        const proto::peer::Version& version = info.version();
+
+        setText(3, QString("%1.%2.%3.%4")
+            .arg(version.major()).arg(version.minor()).arg(version.patch()).arg(version.revision()));
+        setText(4, QString::fromStdString(info.computer_name()));
+        setText(5, QString::fromStdString(info.architecture()));
+        setText(6, QString::fromStdString(info.os_name()));
+    }
+
+    void updateItem(const proto::router::RelayInfo& updated_info)
+    {
+        info = updated_info;
+        setText(2, QString::number(info.pool_size()));
+    }
+
+    // QTreeWidgetItem implementation.
+    bool operator<(const QTreeWidgetItem &other) const final
+    {
+        if (treeWidget()->sortColumn() == 1)
+        {
+            const RelayTreeItem* other_item = static_cast<const RelayTreeItem*>(&other);
+            return info.timepoint() < other_item->info.timepoint();
+        }
+
+        return QTreeWidgetItem::operator<(other);
+    }
+
+    proto::router::RelayInfo info;
+
+private:
+    Q_DISABLE_COPY_MOVE(RelayTreeItem)
+};
+
+} // namespace
 
 //--------------------------------------------------------------------------------------------------
 RouterWidget::RouterWidget(QWidget* parent)
@@ -148,6 +201,51 @@ QString RouterWidget::sizeToString(qint64 size)
         units = tr("B"), divider = 1;
 
     return QString("%1 %2").arg(double(size) / double(divider), 0, 'g', 4).arg(units);
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::onRelayListReceived(const proto::router::RelayList& relays)
+{
+    auto has_with_id = [](const proto::router::RelayList& relays, qint64 entry_id)
+    {
+        for (int i = 0; i < relays.relay_size(); ++i)
+        {
+            if (relays.relay(i).entry_id() == entry_id)
+                return true;
+        }
+
+        return false;
+    };
+
+    // Remove from the UI all relays that are not in the list.
+    for (int i = ui.tree_relays->topLevelItemCount() - 1; i >= 0; --i)
+    {
+        RelayTreeItem* item = static_cast<RelayTreeItem*>(ui.tree_relays->topLevelItem(i));
+
+        if (!has_with_id(relays, item->info.entry_id()))
+            delete item;
+    }
+
+    // Adding and updating elements in the UI.
+    for (int i = 0; i < relays.relay_size(); ++i)
+    {
+        const proto::router::RelayInfo& info = relays.relay(i);
+        bool found = false;
+
+        for (int j = 0; j < ui.tree_relays->topLevelItemCount(); ++j)
+        {
+                RelayTreeItem* item = static_cast<RelayTreeItem*>(ui.tree_relays->topLevelItem(j));
+                if (item->info.entry_id() == info.entry_id())
+                {
+                    item->updateItem(info);
+                    found = true;
+                    break;
+                }
+        }
+
+        if (!found)
+            ui.tree_relays->addTopLevelItem(new RelayTreeItem(info));
+    }
 }
 
 } // namespace client
