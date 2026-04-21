@@ -74,8 +74,10 @@ public:
     public:
         Router(const QUuid& uuid, const QString& name, QTreeWidget* parent);
 
+        enum class Status { OFFLINE, CONNECTING, ONLINE };
+
         const QUuid& uuid() const;
-        void setStatusText(const QString& status);
+        void setStatus(Status status);
 
     private:
         QUuid uuid_;

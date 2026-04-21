@@ -113,7 +113,7 @@ HostsTab::HostsTab(QWidget* parent)
     action_edit_user_ = new QAction(QIcon(":/img/user-edit.svg"), tr("Edit User"), this);
     action_delete_user_ = new QAction(QIcon(":/img/user-delete.svg"), tr("Delete User"), this);
 
-    action_reload_ = new QAction(QIcon(":/img/replay.svg"), tr("Update"), this);
+    action_reload_ = new QAction(QIcon(":/img/reload.svg"), tr("Update"), this);
 
     // Create content widgets.
     local_group_widget_ = new LocalGroupWidget(this);
@@ -824,13 +824,13 @@ void HostsTab::createRouterConnection(const RouterConfig& config)
         switch (status)
         {
             case RouterConnection::Status::OFFLINE:
-                router->setStatusText(tr("Offline"));
+                router->setStatus(Sidebar::Router::Status::OFFLINE);
                 break;
             case RouterConnection::Status::CONNECTING:
-                router->setStatusText(tr("Connecting"));
+                router->setStatus(Sidebar::Router::Status::CONNECTING);
                 break;
             case RouterConnection::Status::ONLINE:
-                router->setStatusText(tr("Online"));
+                router->setStatus(Sidebar::Router::Status::ONLINE);
                 break;
         }
     }, Qt::QueuedConnection);

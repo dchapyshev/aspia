@@ -123,5 +123,6 @@
         <file>user-add.svg</file>
         <file>user-delete.svg</file>
         <file>user-edit.svg</file>
+        <file>reload.svg</file>
     </qresource>
 </RCC>

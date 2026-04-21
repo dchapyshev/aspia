@@ -677,7 +677,7 @@ Sidebar::Router::Router(const QUuid& uuid, const QString& name, QTreeWidget* par
       name_(name)
 {
     setText(0, name);
-    setIcon(0, QIcon(":/img/stack.svg"));
+    setIcon(0, QIcon(":/img/router-offline.svg"));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -687,9 +687,15 @@ const QUuid& Sidebar::Router::uuid() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void Sidebar::Router::setStatusText(const QString& status)
+void Sidebar::Router::setStatus(Status status)
 {
-    setText(0, QString("%1 (%2)").arg(name_, status));
+    switch (status)
+    {
+        case Status::OFFLINE:    setIcon(0, QIcon(":/img/router-offline.svg"));    break;
+        case Status::CONNECTING: setIcon(0, QIcon(":/img/router-connecting.svg")); break;
+        case Status::ONLINE:     setIcon(0, QIcon(":/img/router-online.svg"));     break;
+        default: break;
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
