@@ -19,6 +19,10 @@
 #ifndef CLIENT_UI_HOSTS_ROUTER_WIDGET_H
 #define CLIENT_UI_HOSTS_ROUTER_WIDGET_H
 
+#include <QUuid>
+
+#include "client/config.h"
+#include "client/router_connection.h"
 #include "client/ui/hosts/content_widget.h"
 #include "ui_router_widget.h"
 
@@ -33,12 +37,18 @@ class RouterWidget : public ContentWidget
     Q_OBJECT
 
 public:
-    explicit RouterWidget(QWidget* parent = nullptr);
+    explicit RouterWidget(const RouterConfig& config, QWidget* parent = nullptr);
     ~RouterWidget() override;
+
+    const QUuid& uuid() const;
 
     int itemCount() const override;
     QByteArray saveState() override;
     void restoreState(const QByteArray& state) override;
+
+    void connectToRouter();
+    void disconnectFromRouter();
+    void updateConfig(const RouterConfig& config);
 
     static QString delayToString(quint64 delay);
     static QString sizeToString(qint64 size);
@@ -48,9 +58,14 @@ public slots:
 
 signals:
     void sig_relayListRequest();
+    void sig_statusChanged(const QUuid& uuid, client::RouterConnection::Status status);
+    void sig_updateConfig(const client::RouterConfig& config);
 
 private:
     Ui::RouterWidget ui;
+
+    QUuid uuid_;
+    RouterConnection* connection_ = nullptr;
 
     Q_DISABLE_COPY_MOVE(RouterWidget)
 };

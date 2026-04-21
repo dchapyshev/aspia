@@ -21,6 +21,7 @@
 #include <QDateTime>
 #include <QIODevice>
 
+#include "base/gui_application.h"
 #include "base/logging.h"
 #include "proto/router_admin.h"
 
@@ -78,17 +79,68 @@ private:
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-RouterWidget::RouterWidget(QWidget* parent)
-    : ContentWidget(Type::ROUTER, parent)
+RouterWidget::RouterWidget(const RouterConfig& config, QWidget* parent)
+    : ContentWidget(Type::ROUTER, parent),
+      uuid_(config.uuid)
 {
     LOG(INFO) << "Ctor";
     ui.setupUi(this);
+
+    connection_ = new RouterConnection(config);
+    connection_->moveToThread(base::GuiApplication::ioThread());
+
+    connect(connection_, &RouterConnection::sig_statusChanged,
+            this, &RouterWidget::sig_statusChanged, Qt::QueuedConnection);
+    connect(connection_, &RouterConnection::sig_relayListReceived,
+            this, &RouterWidget::onRelayListReceived, Qt::QueuedConnection);
+    connect(this, &RouterWidget::sig_relayListRequest,
+            connection_, &RouterConnection::onRelayListRequest, Qt::QueuedConnection);
+    connect(this, &RouterWidget::sig_updateConfig,
+            connection_, &RouterConnection::onUpdateConfig, Qt::QueuedConnection);
 }
 
 //--------------------------------------------------------------------------------------------------
 RouterWidget::~RouterWidget()
 {
     LOG(INFO) << "Dtor";
+
+    if (connection_)
+    {
+        connection_->deleteLater();
+        connection_ = nullptr;
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+const QUuid& RouterWidget::uuid() const
+{
+    return uuid_;
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::connectToRouter()
+{
+    if (connection_)
+    {
+        QMetaObject::invokeMethod(
+            connection_, &RouterConnection::onConnectToRouter, Qt::QueuedConnection);
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::disconnectFromRouter()
+{
+    if (connection_)
+    {
+        QMetaObject::invokeMethod(
+            connection_, &RouterConnection::onDisconnectFromRouter, Qt::QueuedConnection);
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::updateConfig(const RouterConfig& config)
+{
+    emit sig_updateConfig(config);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -26,9 +26,7 @@
 #include "base/logging.h"
 #include "base/net/address.h"
 #include "build/build_config.h"
-#include "base/gui_application.h"
 #include "client/local_database.h"
-#include "client/router_connection.h"
 #include "client/settings.h"
 #include "client/ui/hosts/content_widget.h"
 #include "client/ui/hosts/local_computer_dialog.h"
@@ -117,12 +115,10 @@ HostsTab::HostsTab(QWidget* parent)
 
     // Create content widgets.
     local_group_widget_ = new LocalGroupWidget(this);
-    router_widget_ = new RouterWidget(this);
     router_group_widget_ = new RouterGroupWidget(this);
     search_widget_ = new SearchWidget(this);
 
     ui.content_stack->addWidget(local_group_widget_);
-    ui.content_stack->addWidget(router_widget_);
     ui.content_stack->addWidget(router_group_widget_);
     ui.content_stack->addWidget(search_widget_);
 
@@ -165,7 +161,7 @@ HostsTab::HostsTab(QWidget* parent)
     for (const RouterConfig& config : std::as_const(configs))
     {
         if (config.isValid())
-            createRouterConnection(config);
+            createRouterWidget(config);
     }
 }
 
@@ -173,7 +169,7 @@ HostsTab::HostsTab(QWidget* parent)
 HostsTab::~HostsTab()
 {
     LOG(INFO) << "Dtor";
-    destroyAllRouterConnections();
+    destroyAllRouterWidgets();
     Settings settings;
     settings.setSessionType(defaultSessionType());
 }
@@ -188,9 +184,22 @@ QByteArray HostsTab::saveState()
         stream.setVersion(QDataStream::Qt_5_15);
 
         stream << local_group_widget_->saveState();
-        stream << router_widget_->saveState();
         stream << router_group_widget_->saveState();
         stream << ui.splitter->saveState();
+
+        QByteArray routers_buffer;
+        {
+            QDataStream routers_stream(&routers_buffer, QIODevice::WriteOnly);
+            routers_stream.setVersion(QDataStream::Qt_5_15);
+
+            routers_stream << quint32(router_widgets_.size());
+            for (auto it = router_widgets_.begin(); it != router_widgets_.end(); ++it)
+            {
+                routers_stream << it.key();
+                routers_stream << it.value()->saveState();
+            }
+        }
+        stream << routers_buffer;
     }
 
     return buffer;
@@ -203,20 +212,17 @@ void HostsTab::restoreState(const QByteArray& state)
     stream.setVersion(QDataStream::Qt_5_15);
 
     QByteArray local_group_state;
-    QByteArray router_state;
     QByteArray router_group_state;
     QByteArray splitter_state;
+    QByteArray routers_buffer;
 
     stream >> local_group_state;
-    stream >> router_state;
     stream >> router_group_state;
     stream >> splitter_state;
+    stream >> routers_buffer;
 
     if (!local_group_state.isEmpty())
         local_group_widget_->restoreState(local_group_state);
-
-    if (!router_state.isEmpty())
-        router_widget_->restoreState(router_state);
 
     if (!router_group_state.isEmpty())
         router_group_widget_->restoreState(router_group_state);
@@ -231,6 +237,31 @@ void HostsTab::restoreState(const QByteArray& state)
         sizes.emplace_back(200);
         sizes.emplace_back(width() - 200);
         ui.splitter->setSizes(sizes);
+    }
+
+    if (!routers_buffer.isEmpty())
+    {
+        QDataStream routers_stream(routers_buffer);
+        routers_stream.setVersion(QDataStream::Qt_5_15);
+
+        quint32 count = 0;
+        routers_stream >> count;
+
+        for (quint32 i = 0; i < count; ++i)
+        {
+            QUuid uuid;
+            QByteArray widget_state;
+
+            routers_stream >> uuid;
+            routers_stream >> widget_state;
+
+            if (widget_state.isEmpty())
+                continue;
+
+            auto it = router_widgets_.find(uuid);
+            if (it != router_widgets_.end())
+                it.value()->restoreState(widget_state);
+        }
     }
 }
 
@@ -256,12 +287,12 @@ bool HostsTab::hasSearchField() const
 //--------------------------------------------------------------------------------------------------
 void HostsTab::reloadRouters()
 {
-    QList<QUuid> old_uuids = ui.sidebar->routerUuids();
+    QList<QUuid> old_uuids = router_widgets_.keys();
 
     Settings settings;
     RouterConfigList configs = settings.routerConfigs();
 
-    // Remove connections for routers that no longer exist.
+    // Remove widgets for routers that no longer exist.
     for (const QUuid& uuid : std::as_const(old_uuids))
     {
         bool found = false;
@@ -275,21 +306,22 @@ void HostsTab::reloadRouters()
         }
 
         if (!found)
-            emit sig_destroyRouterConnection(uuid);
+            destroyRouterWidget(uuid);
     }
 
     ui.sidebar->reloadRouters();
 
-    // Create new or update existing connections.
+    // Create new or update existing widgets.
     for (const RouterConfig& config : std::as_const(configs))
     {
         if (!config.isValid())
             continue;
 
-        if (old_uuids.contains(config.uuid))
-            emit sig_updateRouterConfig(config.uuid, config);
+        auto it = router_widgets_.find(config.uuid);
+        if (it != router_widgets_.end())
+            it.value()->updateConfig(config);
         else
-            createRouterConnection(config);
+            createRouterWidget(config);
     }
 }
 
@@ -533,7 +565,14 @@ void HostsTab::onSwitchContent(Sidebar::Item::Type type)
 
         case Sidebar::Item::Type::ROUTER:
         {
-            switchContent(router_widget_);
+            Sidebar::Item* sidebar_item = ui.sidebar->currentItem();
+            if (!sidebar_item || sidebar_item->itemType() != Sidebar::Item::ROUTER)
+                break;
+
+            Sidebar::Router* router = static_cast<Sidebar::Router*>(sidebar_item);
+            RouterWidget* widget = router_widgets_.value(router->uuid());
+            if (widget)
+                switchContent(widget);
         }
         break;
 
@@ -799,62 +838,66 @@ proto::peer::SessionType HostsTab::defaultSessionType() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::destroyAllRouterConnections()
+void HostsTab::onRouterStatusChanged(const QUuid& uuid, RouterConnection::Status status)
 {
-    QList<QUuid> uuids = ui.sidebar->routerUuids();
-    for (const QUuid& uuid : std::as_const(uuids))
-        emit sig_destroyRouterConnection(uuid);
+    Sidebar::Router* router = ui.sidebar->routerByUuid(uuid);
+    if (!router)
+        return;
+
+    switch (status)
+    {
+        case RouterConnection::Status::OFFLINE:
+            router->setStatus(Sidebar::Router::Status::OFFLINE);
+            break;
+        case RouterConnection::Status::CONNECTING:
+            router->setStatus(Sidebar::Router::Status::CONNECTING);
+            break;
+        case RouterConnection::Status::ONLINE:
+            router->setStatus(Sidebar::Router::Status::ONLINE);
+            break;
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::createRouterConnection(const RouterConfig& config)
+void HostsTab::destroyAllRouterWidgets()
 {
-    RouterConnection* conn = new RouterConnection(config);
-    conn->moveToThread(base::GuiApplication::ioThread());
+    const QList<QUuid> uuids = router_widgets_.keys();
+    for (const QUuid& uuid : uuids)
+        destroyRouterWidget(uuid);
+}
 
-    QUuid uuid = config.uuid;
+//--------------------------------------------------------------------------------------------------
+void HostsTab::destroyRouterWidget(const QUuid& uuid)
+{
+    auto it = router_widgets_.find(uuid);
+    if (it == router_widgets_.end())
+        return;
 
-    connect(conn, &RouterConnection::sig_statusChanged, this,
-            [this](const QUuid& uuid, RouterConnection::Status status)
-    {
-        Sidebar::Router* router = ui.sidebar->routerByUuid(uuid);
-        if (!router)
-            return;
+    RouterWidget* widget = it.value();
+    router_widgets_.erase(it);
 
-        switch (status)
-        {
-            case RouterConnection::Status::OFFLINE:
-                router->setStatus(Sidebar::Router::Status::OFFLINE);
-                break;
-            case RouterConnection::Status::CONNECTING:
-                router->setStatus(Sidebar::Router::Status::CONNECTING);
-                break;
-            case RouterConnection::Status::ONLINE:
-                router->setStatus(Sidebar::Router::Status::ONLINE);
-                break;
-        }
-    }, Qt::QueuedConnection);
+    if (current_content_ == widget)
+        current_content_ = nullptr;
+    if (previous_content_ == widget)
+        previous_content_ = nullptr;
 
-    connect(this, &HostsTab::sig_destroyRouterConnection, conn,
-            [conn, uuid](const QUuid& destroy_uuid)
-    {
-        if (destroy_uuid == uuid)
-            conn->deleteLater();
-    }, Qt::QueuedConnection);
+    ui.content_stack->removeWidget(widget);
+    widget->deleteLater();
+}
 
-    connect(this, &HostsTab::sig_updateRouterConfig, conn,
-            [conn](const QUuid& target_uuid, const RouterConfig& config)
-    {
-        if (target_uuid == conn->uuid())
-            conn->onUpdateConfig(config);
-    }, Qt::QueuedConnection);
+//--------------------------------------------------------------------------------------------------
+RouterWidget* HostsTab::createRouterWidget(const RouterConfig& config)
+{
+    RouterWidget* widget = new RouterWidget(config, this);
 
-    connect(conn, &RouterConnection::sig_relayListReceived,
-            router_widget_, &RouterWidget::onRelayListReceived, Qt::QueuedConnection);
-    connect(router_widget_, &RouterWidget::sig_relayListRequest,
-            conn, &RouterConnection::onRelayListRequest, Qt::QueuedConnection);
+    router_widgets_.insert(config.uuid, widget);
+    ui.content_stack->addWidget(widget);
 
-    QMetaObject::invokeMethod(conn, &RouterConnection::onConnectToRouter, Qt::QueuedConnection);
+    connect(widget, &RouterWidget::sig_statusChanged,
+            this, &HostsTab::onRouterStatusChanged);
+
+    widget->connectToRouter();
+    return widget;
 }
 
 } // namespace client

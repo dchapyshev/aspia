@@ -19,7 +19,11 @@
 #ifndef CLIENT_UI_HOSTS_HOSTS_TAB_H
 #define CLIENT_UI_HOSTS_HOSTS_TAB_H
 
+#include <QHash>
+#include <QUuid>
+
 #include "client/config.h"
+#include "client/router_connection.h"
 #include "client/ui/client_tab.h"
 #include "ui_hosts_tab.h"
 
@@ -29,7 +33,6 @@ namespace client {
 
 class ContentWidget;
 class LocalGroupWidget;
-class RouterConnection;
 class RouterWidget;
 class RouterGroupWidget;
 class SearchWidget;
@@ -52,10 +55,9 @@ public:
 
 signals:
     void sig_connect(const client::Config& config);
-    void sig_destroyRouterConnection(const QUuid& uuid);
-    void sig_updateRouterConfig(const QUuid& uuid, const client::RouterConfig& config);
 
 private slots:
+    void onRouterStatusChanged(const QUuid& uuid, client::RouterConnection::Status status);
     void onAddComputerAction();
     void onEditComputerAction();
     void onCopyComputerAction();
@@ -75,8 +77,9 @@ private:
     void updateActionsState();
     proto::peer::SessionType defaultSessionType() const;
 
-    void destroyAllRouterConnections();
-    void createRouterConnection(const RouterConfig& config);
+    void destroyAllRouterWidgets();
+    void destroyRouterWidget(const QUuid& uuid);
+    RouterWidget* createRouterWidget(const RouterConfig& config);
 
     Ui::HostsTab ui;
 
@@ -109,9 +112,10 @@ private:
     ContentWidget* previous_content_ = nullptr;
 
     LocalGroupWidget* local_group_widget_ = nullptr;
-    RouterWidget* router_widget_ = nullptr;
     RouterGroupWidget* router_group_widget_ = nullptr;
     SearchWidget* search_widget_ = nullptr;
+
+    QHash<QUuid, RouterWidget*> router_widgets_;
 
     Q_DISABLE_COPY_MOVE(HostsTab)
 };
