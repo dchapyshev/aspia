@@ -114,5 +114,14 @@
         <file>chat.svg</file>
         <file>browse-page.svg</file>
         <file>web.svg</file>
+        <file>router-add.svg</file>
+        <file>router-connecting.svg</file>
+        <file>router-delete.svg</file>
+        <file>router-edit.svg</file>
+        <file>router-offilne.svg</file>
+        <file>router-online.svg</file>
+        <file>user-add.svg</file>
+        <file>user-delete.svg</file>
+        <file>user-edit.svg</file>
     </qresource>
 </RCC>

@@ -99,7 +99,11 @@ private:
     QAction* action_chat_connect_ = nullptr;
     QAction* action_system_info_connect_ = nullptr;
 
-    QAction* action_router_users_ = nullptr;
+    QAction* action_add_user_ = nullptr;
+    QAction* action_edit_user_ = nullptr;
+    QAction* action_delete_user_ = nullptr;
+
+    QAction* action_reload_ = nullptr;
 
     ContentWidget* current_content_ = nullptr;
     ContentWidget* previous_content_ = nullptr;

@@ -512,11 +512,20 @@ QMenu* MainWindow::menuForActionGroup(ClientTab::ActionGroup group) const
 {
     switch (group)
     {
+        case ClientTab::ActionGroup::FILE:
+            return ui.menu_file;
+
         case ClientTab::ActionGroup::EDIT:
             return ui.menu_edit;
 
+        case ClientTab::ActionGroup::VIEW:
+            return ui.menu_view;
+
         case ClientTab::ActionGroup::SESSION_TYPE:
             return ui.menu_session_type;
+
+        case ClientTab::ActionGroup::HELP:
+            return ui.menu_help;
 
         default:
             return nullptr;

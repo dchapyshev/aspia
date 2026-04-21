@@ -34,12 +34,7 @@ class ClientTab : public QWidget
 
 public:
     enum class Type { HOSTS, SESSION };
-
-    enum class ActionGroup
-    {
-        EDIT,
-        SESSION_TYPE
-    };
+    enum class ActionGroup { FILE, EDIT, VIEW, SESSION_TYPE, HELP };
 
     explicit ClientTab(Type type, const QString& object_name, QWidget* parent = nullptr);
     ~ClientTab() override;

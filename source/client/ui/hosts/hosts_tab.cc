@@ -109,7 +109,11 @@ HostsTab::HostsTab(QWidget* parent)
             break;
     }
 
-    action_router_users_ = new QAction(QIcon(":/img/user-account.svg"), tr("Users"), this);
+    action_add_user_ = new QAction(QIcon(":/img/user-add.svg"), tr("Add User"), this);
+    action_edit_user_ = new QAction(QIcon(":/img/user-edit.svg"), tr("Edit User"), this);
+    action_delete_user_ = new QAction(QIcon(":/img/user-delete.svg"), tr("Delete User"), this);
+
+    action_reload_ = new QAction(QIcon(":/img/replay.svg"), tr("Update"), this);
 
     // Create content widgets.
     local_group_widget_ = new LocalGroupWidget(this);
@@ -146,9 +150,10 @@ HostsTab::HostsTab(QWidget* parent)
     connect(session_connect_group, &QActionGroup::triggered, this, &HostsTab::onConnectAction);
 
     // Register actions for toolbar and menus.
-    addActions(ActionGroup::EDIT, { action_router_users_ });
+    addActions(ActionGroup::EDIT, { action_add_user_, action_edit_user_, action_delete_user_ });
     addActions(ActionGroup::EDIT, { action_add_group_, action_edit_group_, action_delete_group_ });
     addActions(ActionGroup::EDIT, { action_add_computer_, action_edit_computer_, action_copy_computer_, action_delete_computer_ });
+    addActions(ActionGroup::VIEW, { action_reload_ });
     addActions(ActionGroup::SESSION_TYPE, { action_desktop_, action_file_transfer_, action_chat_, action_system_info_ });
 
     local_group_widget_->showGroup(ui.sidebar->currentGroupId());
@@ -739,7 +744,11 @@ void HostsTab::updateActionsState()
     action_chat_->setVisible(false);
     action_system_info_->setVisible(false);
 
-    action_router_users_->setVisible(false);
+    action_add_user_->setVisible(false);
+    action_edit_user_->setVisible(false);
+    action_delete_user_->setVisible(false);
+
+    action_reload_->setVisible(false);
 
     Sidebar::Item* sidebar_item = ui.sidebar->currentItem();
 
@@ -759,7 +768,11 @@ void HostsTab::updateActionsState()
 
     if (sidebar_item && sidebar_item->itemType() == Sidebar::Item::ROUTER)
     {
-        action_router_users_->setVisible(true);
+        action_add_user_->setVisible(true);
+        action_edit_user_->setVisible(true);
+        action_delete_user_->setVisible(true);
+
+        action_reload_->setVisible(true);
     }
     else
     {
