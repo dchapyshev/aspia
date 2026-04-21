@@ -460,6 +460,8 @@ void HostsTab::onEditGroupAction()
         return;
 
     Sidebar::LocalGroup* local_group = static_cast<Sidebar::LocalGroup*>(item);
+    if (local_group->groupId() == 0)
+        return;
 
     LocalGroupDialog dialog(local_group->groupId(), local_group->parentId(), this);
     if (dialog.exec() == LocalGroupDialog::Rejected)
@@ -546,10 +548,11 @@ void HostsTab::onSidebarContextMenu(Sidebar::Item::Type type, const QPoint& pos)
 
     if (type == Sidebar::Item::Type::LOCAL_GROUP)
     {
+        menu.addAction(action_add_group_);
         menu.addAction(action_edit_group_);
         menu.addAction(action_delete_group_);
         menu.addSeparator();
-        menu.addAction(action_add_group_);
+        menu.addAction(action_add_computer_);
     }
     else if (type == Sidebar::Item::Type::ROUTER_GROUP)
     {
@@ -744,7 +747,7 @@ void HostsTab::updateActionsState()
     {
         action_add_group_->setVisible(true);
         action_delete_group_->setVisible(sidebar_item->groupId() != 0);
-        action_edit_group_->setVisible(true);
+        action_edit_group_->setVisible(sidebar_item->groupId() != 0);
 
         LocalGroupWidget::Item* computer_item = local_group_widget_->currentItem();
 
