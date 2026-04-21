@@ -487,20 +487,14 @@ void MainWindow::updateSeparatorVisibility()
     for (QMenu* menu : std::as_const(menus))
     {
         bool has_visible = false;
-        for (const auto& [m, actions] : std::as_const(tab_menu_actions_))
+        const QList<QAction*> menu_actions = menu->actions();
+        for (QAction* action : menu_actions)
         {
-            if (m != menu)
-                continue;
-            for (QAction* action : actions)
+            if (!action->isSeparator() && action->isVisible())
             {
-                if (action->isVisible())
-                {
-                    has_visible = true;
-                    break;
-                }
-            }
-            if (has_visible)
+                has_visible = true;
                 break;
+            }
         }
 
         menu->menuAction()->setVisible(has_visible);

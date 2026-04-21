@@ -36,6 +36,9 @@ public:
     QByteArray saveState() override;
     void restoreState(const QByteArray& state) override;
 
+    static QString delayToString(quint64 delay);
+    static QString sizeToString(qint64 size);
+
 private:
     Ui::RouterWidget ui;
 

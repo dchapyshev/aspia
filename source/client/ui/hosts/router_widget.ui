@@ -50,7 +50,7 @@
          <property name="orientation">
           <enum>Qt::Orientation::Vertical</enum>
          </property>
-         <widget class="QTreeWidget" name="treeWidget">
+         <widget class="QTreeWidget" name="tree_relays">
           <column>
            <property name="text">
             <string>Address</string>
@@ -87,7 +87,7 @@
            </property>
           </column>
          </widget>
-         <widget class="QTreeWidget" name="treeWidget_2">
+         <widget class="QTreeWidget" name="tree_peers">
           <column>
            <property name="text">
             <string>User Name</string>
