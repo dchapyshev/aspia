@@ -37,10 +37,19 @@ class RouterWidget : public ContentWidget
     Q_OBJECT
 
 public:
+    enum class TabType
+    {
+        RELAYS = 0,
+        USERS  = 1
+    };
+    Q_ENUM(TabType)
+
     explicit RouterWidget(const RouterConfig& config, QWidget* parent = nullptr);
     ~RouterWidget() override;
 
     const QUuid& uuid() const;
+    TabType currentTabType() const;
+    bool hasSelectedUser() const;
 
     int itemCount() const override;
     QByteArray saveState() override;
@@ -64,10 +73,14 @@ signals:
     void sig_modifyUser(const proto::router::User& user);
     void sig_deleteUser(qint64 entry_id);
     void sig_statusChanged(const QUuid& uuid, client::RouterConnection::Status status);
+    void sig_currentTabTypeChanged(const QUuid& uuid, client::RouterWidget::TabType tab);
+    void sig_currentUserChanged(const QUuid& uuid);
     void sig_updateConfig(const client::RouterConfig& config);
 
 private slots:
     void onStatusChanged(const QUuid& uuid, client::RouterConnection::Status status);
+    void onTabChanged(int index);
+    void onCurrentUserChanged();
     void onRelayListReceived(const proto::router::RelayList& relays);
     void onUserListReceived(const proto::router::UserList& list);
     void onUserResultReceived(const proto::router::UserResult& result);

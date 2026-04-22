@@ -807,9 +807,15 @@ void HostsTab::updateActionsState()
 
     if (sidebar_item && sidebar_item->itemType() == Sidebar::Item::ROUTER)
     {
-        action_add_user_->setVisible(true);
-        action_edit_user_->setVisible(true);
-        action_delete_user_->setVisible(true);
+        Sidebar::Router* router = static_cast<Sidebar::Router*>(sidebar_item);
+        RouterWidget* widget = router_widgets_.value(router->uuid());
+
+        bool on_users_tab = widget && widget->currentTabType() == RouterWidget::TabType::USERS;
+        bool has_selection = on_users_tab && widget->hasSelectedUser();
+
+        action_add_user_->setVisible(on_users_tab);
+        action_edit_user_->setVisible(has_selection);
+        action_delete_user_->setVisible(has_selection);
 
         action_reload_->setVisible(true);
     }
@@ -893,8 +899,11 @@ RouterWidget* HostsTab::createRouterWidget(const RouterConfig& config)
     router_widgets_.insert(config.uuid, widget);
     ui.content_stack->addWidget(widget);
 
-    connect(widget, &RouterWidget::sig_statusChanged,
-            this, &HostsTab::onRouterStatusChanged);
+    connect(widget, &RouterWidget::sig_statusChanged, this, &HostsTab::onRouterStatusChanged);
+    connect(widget, &RouterWidget::sig_currentTabTypeChanged,
+            this, [this](const QUuid&, RouterWidget::TabType) { updateActionsState(); });
+    connect(widget, &RouterWidget::sig_currentUserChanged,
+            this, [this](const QUuid&) { updateActionsState(); });
 
     widget->connectToRouter();
     return widget;

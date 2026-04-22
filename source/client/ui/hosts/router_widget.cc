@@ -81,12 +81,14 @@ private:
 
 class UserTreeItem final : public QTreeWidgetItem
 {
+    Q_DECLARE_TR_FUNCTIONS(UserTreeItem)
+
 public:
     explicit UserTreeItem(const proto::router::User& user)
         : user(base::User::parseFrom(user))
     {
         setText(0, QString::fromStdString(user.name()));
-        setText(1, user.flags() & base::User::ENABLED ? QObject::tr("Yes") : QObject::tr("No"));
+        setText(1, user.flags() & base::User::ENABLED ? tr("Yes") : tr("No"));
         setText(2, sessionsToString(user.sessions()));
 
         if (user.flags() & base::User::ENABLED)
@@ -118,11 +120,11 @@ public:
         QStringList list;
 
         if (sessions & proto::router::SESSION_TYPE_ADMIN)
-            list.append(QObject::tr("Administrator"));
+            list.append(tr("Administrator"));
         if (sessions & proto::router::SESSION_TYPE_CLIENT)
-            list.append(QObject::tr("Client"));
+            list.append(tr("Client"));
         if (sessions & proto::router::SESSION_TYPE_MANAGER)
-            list.append(QObject::tr("Manager"));
+            list.append(tr("Manager"));
 
         return list.join(", ");
     }
@@ -167,6 +169,10 @@ RouterWidget::RouterWidget(const RouterConfig& config, QWidget* parent)
             connection_, &RouterConnection::onDeleteUser, Qt::QueuedConnection);
     connect(this, &RouterWidget::sig_updateConfig,
             connection_, &RouterConnection::onUpdateConfig, Qt::QueuedConnection);
+
+    connect(ui.tab, &QTabWidget::currentChanged, this, &RouterWidget::onTabChanged);
+    connect(ui.tree_users, &QTreeWidget::itemSelectionChanged,
+            this, &RouterWidget::onCurrentUserChanged);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -186,6 +192,18 @@ RouterWidget::~RouterWidget()
 const QUuid& RouterWidget::uuid() const
 {
     return uuid_;
+}
+
+//--------------------------------------------------------------------------------------------------
+RouterWidget::TabType RouterWidget::currentTabType() const
+{
+    return static_cast<TabType>(ui.tab->currentIndex());
+}
+
+//--------------------------------------------------------------------------------------------------
+bool RouterWidget::hasSelectedUser() const
+{
+    return ui.tree_users->currentItem() != nullptr;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -336,6 +354,18 @@ void RouterWidget::onUpdateRelayList()
 void RouterWidget::onUpdateUserList()
 {
     emit sig_userListRequest();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::onTabChanged(int index)
+{
+    emit sig_currentTabTypeChanged(uuid_, static_cast<TabType>(index));
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::onCurrentUserChanged()
+{
+    emit sig_currentUserChanged(uuid_);
 }
 
 //--------------------------------------------------------------------------------------------------
