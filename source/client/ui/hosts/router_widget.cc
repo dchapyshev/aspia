@@ -368,6 +368,22 @@ QString RouterWidget::sizeToString(qint64 size)
 }
 
 //--------------------------------------------------------------------------------------------------
+void RouterWidget::reload()
+{
+    switch (currentTabType())
+    {
+        case TabType::RELAYS:
+            onUpdateRelayList();
+            break;
+        case TabType::USERS:
+            onUpdateUserList();
+            break;
+        default:
+            break;
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
 void RouterWidget::onUpdateRelayList()
 {
     emit sig_relayListRequest();

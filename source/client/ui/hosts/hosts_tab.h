@@ -79,6 +79,7 @@ private slots:
     void onAddUserAction();
     void onEditUserAction();
     void onDeleteUserAction();
+    void onReloadAction();
 
 private:
     void switchContent(ContentWidget* new_widget);

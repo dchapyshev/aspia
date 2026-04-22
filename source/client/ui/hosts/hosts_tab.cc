@@ -147,6 +147,7 @@ HostsTab::HostsTab(QWidget* parent)
     connect(action_add_user_, &QAction::triggered, this, &HostsTab::onAddUserAction);
     connect(action_edit_user_, &QAction::triggered, this, &HostsTab::onEditUserAction);
     connect(action_delete_user_, &QAction::triggered, this, &HostsTab::onDeleteUserAction);
+    connect(action_reload_, &QAction::triggered, this, &HostsTab::onReloadAction);
     connect(session_connect_group, &QActionGroup::triggered, this, &HostsTab::onConnectAction);
 
     // Register actions for toolbar and menus.
@@ -556,8 +557,6 @@ void HostsTab::onDeleteGroupAction()
 //--------------------------------------------------------------------------------------------------
 void HostsTab::onSwitchContent(Sidebar::Item::Type type)
 {
-    updateActionsState();
-
     switch (type)
     {
         case Sidebar::Item::Type::LOCAL_GROUP:
@@ -587,6 +586,8 @@ void HostsTab::onSwitchContent(Sidebar::Item::Type type)
         }
         break;
     }
+
+    updateActionsState();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -820,8 +821,6 @@ void HostsTab::updateActionsState()
         action_add_user_->setVisible(on_users_tab);
         action_edit_user_->setVisible(has_selection);
         action_delete_user_->setVisible(has_selection);
-
-        action_reload_->setVisible(true);
     }
     else
     {
@@ -830,6 +829,8 @@ void HostsTab::updateActionsState()
         action_chat_->setVisible(true);
         action_system_info_->setVisible(true);
     }
+
+    action_reload_->setVisible(current_content_ && current_content_->canReload());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -967,6 +968,13 @@ void HostsTab::onDeleteUserAction()
     RouterWidget* widget = router_widgets_.value(router->uuid());
     if (widget)
         widget->onDeleteUser();
+}
+
+//--------------------------------------------------------------------------------------------------
+void HostsTab::onReloadAction()
+{
+    if (current_content_ && current_content_->canReload())
+        current_content_->reload();
 }
 
 } // namespace client
