@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/ui/router_manager/router_user_dialog.h"
+#include "client/ui/hosts/router_user_dialog.h"
 
 #include "common/ui/msg_box.h"
 #include "base/logging.h"
@@ -75,8 +75,9 @@ RouterUserDialog::RouterUserDialog(const base::User& user, const QStringList& us
         ui.tree_sessions->addTopLevelItem(item);
     };
 
-    add_session(proto::router::SESSION_TYPE_CLIENT);
     add_session(proto::router::SESSION_TYPE_ADMIN);
+    add_session(proto::router::SESSION_TYPE_MANAGER);
+    add_session(proto::router::SESSION_TYPE_CLIENT);
 
     connect(ui.buttonbox, &QDialogButtonBox::clicked, this, &RouterUserDialog::onButtonBoxClicked);
     connect(ui.edit_username, &QLineEdit::textEdited, this, [this]()
@@ -296,6 +297,10 @@ QString RouterUserDialog::sessionTypeToString(proto::router::SessionType session
     {
         case proto::router::SESSION_TYPE_ADMIN:
             str = QT_TR_NOOP("Administrator");
+            break;
+
+        case proto::router::SESSION_TYPE_MANAGER:
+            str = QT_TR_NOOP("Manager");
             break;
 
         case proto::router::SESSION_TYPE_CLIENT:

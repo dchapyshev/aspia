@@ -76,6 +76,9 @@ private slots:
     void onLocalConnect(qint64 computer_id);
     void onLocalComputerContextMenu(qint64 computer_id, const QPoint& pos);
     void onUserContextMenu(const QUuid& uuid, const base::User& user, const QPoint& pos);
+    void onAddUserAction();
+    void onEditUserAction();
+    void onDeleteUserAction();
 
 private:
     void switchContent(ContentWidget* new_widget);

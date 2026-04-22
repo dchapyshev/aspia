@@ -144,6 +144,9 @@ HostsTab::HostsTab(QWidget* parent)
     connect(action_add_group_, &QAction::triggered, this, &HostsTab::onAddGroupAction);
     connect(action_edit_group_, &QAction::triggered, this, &HostsTab::onEditGroupAction);
     connect(action_delete_group_, &QAction::triggered, this, &HostsTab::onDeleteGroupAction);
+    connect(action_add_user_, &QAction::triggered, this, &HostsTab::onAddUserAction);
+    connect(action_edit_user_, &QAction::triggered, this, &HostsTab::onEditUserAction);
+    connect(action_delete_user_, &QAction::triggered, this, &HostsTab::onDeleteUserAction);
     connect(session_connect_group, &QActionGroup::triggered, this, &HostsTab::onConnectAction);
 
     // Register actions for toolbar and menus.
@@ -925,6 +928,45 @@ void HostsTab::onUserContextMenu(const QUuid& /* uuid */, const base::User& user
         menu.addAction(action_add_user_);
     }
     menu.exec(pos);
+}
+
+//--------------------------------------------------------------------------------------------------
+void HostsTab::onAddUserAction()
+{
+    Sidebar::Item* sidebar_item = ui.sidebar->currentItem();
+    if (!sidebar_item || sidebar_item->itemType() != Sidebar::Item::ROUTER)
+        return;
+
+    Sidebar::Router* router = static_cast<Sidebar::Router*>(sidebar_item);
+    RouterWidget* widget = router_widgets_.value(router->uuid());
+    if (widget)
+        widget->onAddUser();
+}
+
+//--------------------------------------------------------------------------------------------------
+void HostsTab::onEditUserAction()
+{
+    Sidebar::Item* sidebar_item = ui.sidebar->currentItem();
+    if (!sidebar_item || sidebar_item->itemType() != Sidebar::Item::ROUTER)
+        return;
+
+    Sidebar::Router* router = static_cast<Sidebar::Router*>(sidebar_item);
+    RouterWidget* widget = router_widgets_.value(router->uuid());
+    if (widget)
+        widget->onModifyUser();
+}
+
+//--------------------------------------------------------------------------------------------------
+void HostsTab::onDeleteUserAction()
+{
+    Sidebar::Item* sidebar_item = ui.sidebar->currentItem();
+    if (!sidebar_item || sidebar_item->itemType() != Sidebar::Item::ROUTER)
+        return;
+
+    Sidebar::Router* router = static_cast<Sidebar::Router*>(sidebar_item);
+    RouterWidget* widget = router_widgets_.value(router->uuid());
+    if (widget)
+        widget->onDeleteUser();
 }
 
 } // namespace client

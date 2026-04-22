@@ -149,10 +149,7 @@ list(APPEND SOURCE_CLIENT_CORE_UI_FILE_TRANSFER
 list(APPEND SOURCE_CLIENT_CORE_UI_ROUTER_MANAGER
     ui/router_manager/router_manager_window.cc
     ui/router_manager/router_manager_window.h
-    ui/router_manager/router_manager_window.ui
-    ui/router_manager/router_user_dialog.cc
-    ui/router_manager/router_user_dialog.h
-    ui/router_manager/router_user_dialog.ui)
+    ui/router_manager/router_manager_window.ui)
 
 list(APPEND SOURCE_CLIENT_CORE_UI_SYS_INFO
     ui/sys_info/sys_info_widget.cc
@@ -250,6 +247,9 @@ list(APPEND SOURCE_CLIENT_CORE_UI_HOSTS_TAB
     ui/hosts/router_widget.cc
     ui/hosts/router_widget.h
     ui/hosts/router_widget.ui
+    ui/hosts/router_user_dialog.cc
+    ui/hosts/router_user_dialog.h
+    ui/hosts/router_user_dialog.ui
     ui/hosts/router_group_widget.cc
     ui/hosts/router_group_widget.h
     ui/hosts/router_group_widget.ui

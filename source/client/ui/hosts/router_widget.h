@@ -66,6 +66,9 @@ public:
 public slots:
     void onUpdateRelayList();
     void onUpdateUserList();
+    void onAddUser();
+    void onModifyUser();
+    void onDeleteUser();
 
 signals:
     void sig_relayListRequest();

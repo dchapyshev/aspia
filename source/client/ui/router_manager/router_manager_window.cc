@@ -34,7 +34,7 @@
 #include "common/ui/msg_box.h"
 #include "client/router.h"
 #include "client/settings.h"
-#include "client/ui/router_manager/router_user_dialog.h"
+#include "client/ui/hosts/router_user_dialog.h"
 #include "common/ui/status_dialog.h"
 #include "ui_router_manager_window.h"
 

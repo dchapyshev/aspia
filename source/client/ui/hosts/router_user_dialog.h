@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_UI_ROUTER_MANAGER_ROUTER_USER_DIALOG_H
-#define CLIENT_UI_ROUTER_MANAGER_ROUTER_USER_DIALOG_H
+#ifndef CLIENT_UI_HOSTS_ROUTER_USER_DIALOG_H
+#define CLIENT_UI_HOSTS_ROUTER_USER_DIALOG_H
 
 #include "base/peer/user.h"
 #include "proto/router.h"
@@ -55,4 +55,4 @@ private:
 
 } // namespace client
 
-#endif // CLIENT_UI_ROUTER_MANAGER_ROUTER_USER_DIALOG_H
+#endif // CLIENT_UI_HOSTS_ROUTER_USER_DIALOG_H

@@ -25,6 +25,7 @@
 #include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/peer/user.h"
+#include "client/ui/hosts/router_user_dialog.h"
 #include "common/ui/msg_box.h"
 #include "proto/router_admin.h"
 
@@ -121,10 +122,10 @@ public:
 
         if (sessions & proto::router::SESSION_TYPE_ADMIN)
             list.append(tr("Administrator"));
-        if (sessions & proto::router::SESSION_TYPE_CLIENT)
-            list.append(tr("Client"));
         if (sessions & proto::router::SESSION_TYPE_MANAGER)
             list.append(tr("Manager"));
+        if (sessions & proto::router::SESSION_TYPE_CLIENT)
+            list.append(tr("Client"));
 
         return list.join(", ");
     }
@@ -361,6 +362,86 @@ void RouterWidget::onUpdateUserList()
 }
 
 //--------------------------------------------------------------------------------------------------
+void RouterWidget::onAddUser()
+{
+    QStringList names;
+    for (int i = 0; i < ui.tree_users->topLevelItemCount(); ++i)
+    {
+        UserTreeItem* item = static_cast<UserTreeItem*>(ui.tree_users->topLevelItem(i));
+        names.append(item->user.name);
+    }
+
+    RouterUserDialog dialog(base::User(), names, this);
+    if (dialog.exec() != QDialog::Accepted)
+    {
+        LOG(INFO) << "[ACTION] Add user rejected by user";
+        return;
+    }
+
+    LOG(INFO) << "[ACTION] Add user accepted by user";
+    emit sig_addUser(dialog.user().serialize());
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::onModifyUser()
+{
+    UserTreeItem* tree_item = static_cast<UserTreeItem*>(ui.tree_users->currentItem());
+    if (!tree_item)
+    {
+        LOG(INFO) << "No selected user";
+        return;
+    }
+
+    QStringList names;
+    for (int i = 0; i < ui.tree_users->topLevelItemCount(); ++i)
+    {
+        UserTreeItem* item = static_cast<UserTreeItem*>(ui.tree_users->topLevelItem(i));
+        if (item->text(0).compare(tree_item->text(0), Qt::CaseInsensitive) != 0)
+            names.append(item->user.name);
+    }
+
+    RouterUserDialog dialog(tree_item->user, names, this);
+    if (dialog.exec() != QDialog::Accepted)
+    {
+        LOG(INFO) << "[ACTION] Modify user rejected by user";
+        return;
+    }
+
+    LOG(INFO) << "[ACTION] Modify user accepted by user";
+    emit sig_modifyUser(dialog.user().serialize());
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::onDeleteUser()
+{
+    UserTreeItem* tree_item = static_cast<UserTreeItem*>(ui.tree_users->currentItem());
+    if (!tree_item)
+    {
+        LOG(INFO) << "No selected user";
+        return;
+    }
+
+    qint64 entry_id = tree_item->user.entry_id;
+    if (entry_id == 1)
+    {
+        LOG(INFO) << "Unable to delete built-in user";
+        common::MsgBox::warning(this, tr("You cannot delete a built-in user."));
+        return;
+    }
+
+    if (common::MsgBox::question(this,
+            tr("Are you sure you want to delete user \"%1\"?").arg(tree_item->text(0)))
+        != common::MsgBox::Yes)
+    {
+        LOG(INFO) << "[ACTION] Delete user rejected by user";
+        return;
+    }
+
+    LOG(INFO) << "[ACTION] Delete user accepted by user";
+    emit sig_deleteUser(entry_id);
+}
+
+//--------------------------------------------------------------------------------------------------
 void RouterWidget::onTabChanged(int index)
 {
     emit sig_currentTabTypeChanged(uuid_, static_cast<TabType>(index));
@@ -462,10 +543,27 @@ void RouterWidget::onRelayListReceived(const proto::router::RelayList& relays)
 void RouterWidget::onUserListReceived(const proto::router::UserList& list)
 {
     QTreeWidget* tree_users = ui.tree_users;
+
+    qint64 selected_entry_id = 0;
+    if (UserTreeItem* current = static_cast<UserTreeItem*>(tree_users->currentItem()))
+        selected_entry_id = current->user.entry_id;
+
     tree_users->clear();
 
+    UserTreeItem* to_select = nullptr;
     for (int i = 0; i < list.user_size(); ++i)
-        tree_users->addTopLevelItem(new UserTreeItem(list.user(i)));
+    {
+        UserTreeItem* item = new UserTreeItem(list.user(i));
+        tree_users->addTopLevelItem(item);
+
+        if (item->user.entry_id == selected_entry_id)
+            to_select = item;
+    }
+
+    if (to_select)
+        tree_users->setCurrentItem(to_select);
+    else
+        emit sig_currentUserChanged(uuid_);
 }
 
 //--------------------------------------------------------------------------------------------------
