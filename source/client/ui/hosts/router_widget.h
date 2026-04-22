@@ -54,12 +54,23 @@ public:
     static QString sizeToString(qint64 size);
 
 public slots:
-    void onRelayListReceived(const proto::router::RelayList& relays);
+    void onUpdateRelayList();
+    void onUpdateUserList();
 
 signals:
     void sig_relayListRequest();
+    void sig_userListRequest();
+    void sig_addUser(const proto::router::User& user);
+    void sig_modifyUser(const proto::router::User& user);
+    void sig_deleteUser(qint64 entry_id);
     void sig_statusChanged(const QUuid& uuid, client::RouterConnection::Status status);
     void sig_updateConfig(const client::RouterConfig& config);
+
+private slots:
+    void onStatusChanged(const QUuid& uuid, client::RouterConnection::Status status);
+    void onRelayListReceived(const proto::router::RelayList& relays);
+    void onUserListReceived(const proto::router::UserList& list);
+    void onUserResultReceived(const proto::router::UserResult& result);
 
 private:
     Ui::RouterWidget ui;

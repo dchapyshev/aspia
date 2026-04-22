@@ -26,6 +26,9 @@
 
 namespace proto::router {
 class RelayList;
+class User;
+class UserList;
+class UserResult;
 } // namespace proto::router
 
 namespace client {
@@ -58,12 +61,18 @@ public slots:
 
     // Administrator methods.
     void onRelayListRequest();
+    void onUserListRequest();
+    void onAddUser(const proto::router::User& user);
+    void onModifyUser(const proto::router::User& user);
+    void onDeleteUser(qint64 entry_id);
 
     // Manager methods.
 
 signals:
     void sig_statusChanged(const QUuid& uuid, client::RouterConnection::Status status);
     void sig_relayListReceived(const proto::router::RelayList& list);
+    void sig_userListReceived(const proto::router::UserList& list);
+    void sig_userResultReceived(const proto::router::UserResult& result);
 
 private slots:
     void onTcpReady();

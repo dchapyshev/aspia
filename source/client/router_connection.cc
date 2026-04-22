@@ -112,20 +112,100 @@ void RouterConnection::onUpdateConfig(const RouterConfig& config)
 void RouterConnection::onRelayListRequest()
 {
     if (config_.session_type != proto::router::SESSION_TYPE_ADMIN)
+    {
+        LOG(ERROR) << "No administrator access level";
         return;
+    }
 
     proto::router::AdminToRouter message;
     proto::router::RelayListRequest* request = message.mutable_relay_list_request();
     request->set_dummy(1);
 
+    LOG(INFO) << "Sending relay list request";
+    sendMessage(proto::router::CHANNEL_ID_ADMIN, base::serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterConnection::onUserListRequest()
+{
+    if (config_.session_type != proto::router::SESSION_TYPE_ADMIN)
+    {
+        LOG(ERROR) << "No administrator access level";
+        return;
+    }
+
+    proto::router::AdminToRouter message;
+    message.mutable_user_list_request()->set_dummy(1);
+
+    LOG(INFO) << "Sending user list request";
+    sendMessage(proto::router::CHANNEL_ID_ADMIN, base::serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterConnection::onAddUser(const proto::router::User& user)
+{
+    if (config_.session_type != proto::router::SESSION_TYPE_ADMIN)
+    {
+        LOG(ERROR) << "No administrator access level";
+        return;
+    }
+
+    proto::router::AdminToRouter message;
+    proto::router::UserRequest* request = message.mutable_user_request();
+    request->set_type(proto::router::USER_REQUEST_ADD);
+    request->mutable_user()->CopyFrom(user);
+
+    LOG(INFO) << "Sending user add request (username:" << user.name()
+              << ", entry_id:" << user.entry_id() << ")";
+    sendMessage(proto::router::CHANNEL_ID_ADMIN, base::serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterConnection::onModifyUser(const proto::router::User& user)
+{
+    if (config_.session_type != proto::router::SESSION_TYPE_ADMIN)
+    {
+        LOG(ERROR) << "No administrator access level";
+        return;
+    }
+
+    proto::router::AdminToRouter message;
+    proto::router::UserRequest* request = message.mutable_user_request();
+    request->set_type(proto::router::USER_REQUEST_MODIFY);
+    request->mutable_user()->CopyFrom(user);
+
+    LOG(INFO) << "Sending user modify request (username:" << user.name()
+              << ", entry_id:" << user.entry_id() << ")";
+    sendMessage(proto::router::CHANNEL_ID_ADMIN, base::serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterConnection::onDeleteUser(qint64 entry_id)
+{
+    if (config_.session_type != proto::router::SESSION_TYPE_ADMIN)
+    {
+        LOG(ERROR) << "No administrator access level";
+        return;
+    }
+
+    proto::router::AdminToRouter message;
+    proto::router::UserRequest* request = message.mutable_user_request();
+    request->set_type(proto::router::USER_REQUEST_DELETE);
+    request->mutable_user()->set_entry_id(entry_id);
+
+    LOG(INFO) << "Sending user delete request (entry_id:" << entry_id << ")";
     sendMessage(proto::router::CHANNEL_ID_ADMIN, base::serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
 void RouterConnection::onTcpReady()
 {
+    CHECK(tcp_channel_);
+
     LOG(INFO) << "Connected to router " << config_.address << ":" << config_.port;
     setStatus(Status::ONLINE);
+
+    tcp_channel_->setPaused(false);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -163,7 +243,18 @@ void RouterConnection::onTcpMessageReceived(quint8 channel_id, const QByteArray&
 
         if (message.has_relay_list())
         {
+            LOG(INFO) << "Relay list received";
             emit sig_relayListReceived(message.relay_list());
+        }
+        else if (message.has_user_list())
+        {
+            LOG(INFO) << "User list received";
+            emit sig_userListReceived(message.user_list());
+        }
+        else if (message.has_user_result())
+        {
+            LOG(INFO) << "User result received";
+            emit sig_userResultReceived(message.user_result());
         }
         else
         {
@@ -204,6 +295,7 @@ void RouterConnection::setStatus(Status status)
 {
     if (status_ != status)
     {
+        LOG(INFO) << "Status changed from" << status_ << "to" << status;
         status_ = status;
         emit sig_statusChanged(config_.uuid, status_);
     }

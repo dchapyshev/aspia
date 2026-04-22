@@ -18,11 +18,14 @@
 
 #include "client/ui/hosts/router_widget.h"
 
+#include <QCollator>
 #include <QDateTime>
 #include <QIODevice>
 
 #include "base/gui_application.h"
 #include "base/logging.h"
+#include "base/peer/user.h"
+#include "common/ui/msg_box.h"
 #include "proto/router_admin.h"
 
 namespace client {
@@ -76,6 +79,60 @@ private:
     Q_DISABLE_COPY_MOVE(RelayTreeItem)
 };
 
+class UserTreeItem final : public QTreeWidgetItem
+{
+public:
+    explicit UserTreeItem(const proto::router::User& user)
+        : user(base::User::parseFrom(user))
+    {
+        setText(0, QString::fromStdString(user.name()));
+        setText(1, user.flags() & base::User::ENABLED ? QObject::tr("Yes") : QObject::tr("No"));
+        setText(2, sessionsToString(user.sessions()));
+
+        if (user.flags() & base::User::ENABLED)
+            setIcon(0, QIcon(":/img/user.svg"));
+        else
+            setIcon(0, QIcon(":/img/locked-user.svg"));
+    }
+
+    // QTreeWidgetItem implementation.
+    bool operator<(const QTreeWidgetItem& other) const final
+    {
+        int column = treeWidget()->sortColumn();
+        if (column == 0)
+        {
+            QCollator collator;
+            collator.setCaseSensitivity(Qt::CaseInsensitive);
+            collator.setNumericMode(true);
+
+            return collator.compare(text(0), other.text(0)) <= 0;
+        }
+        else
+        {
+            return QTreeWidgetItem::operator<(other);
+        }
+    }
+
+    QString sessionsToString(quint32 sessions)
+    {
+        QStringList list;
+
+        if (sessions & proto::router::SESSION_TYPE_ADMIN)
+            list.append(QObject::tr("Administrator"));
+        if (sessions & proto::router::SESSION_TYPE_CLIENT)
+            list.append(QObject::tr("Client"));
+        if (sessions & proto::router::SESSION_TYPE_MANAGER)
+            list.append(QObject::tr("Manager"));
+
+        return list.join(", ");
+    }
+
+    base::User user;
+
+private:
+    Q_DISABLE_COPY_MOVE(UserTreeItem)
+};
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -90,11 +147,24 @@ RouterWidget::RouterWidget(const RouterConfig& config, QWidget* parent)
     connection_->moveToThread(base::GuiApplication::ioThread());
 
     connect(connection_, &RouterConnection::sig_statusChanged,
-            this, &RouterWidget::sig_statusChanged, Qt::QueuedConnection);
+            this, &RouterWidget::onStatusChanged, Qt::QueuedConnection);
     connect(connection_, &RouterConnection::sig_relayListReceived,
             this, &RouterWidget::onRelayListReceived, Qt::QueuedConnection);
+    connect(connection_, &RouterConnection::sig_userListReceived,
+            this, &RouterWidget::onUserListReceived, Qt::QueuedConnection);
+    connect(connection_, &RouterConnection::sig_userResultReceived,
+            this, &RouterWidget::onUserResultReceived, Qt::QueuedConnection);
+
     connect(this, &RouterWidget::sig_relayListRequest,
             connection_, &RouterConnection::onRelayListRequest, Qt::QueuedConnection);
+    connect(this, &RouterWidget::sig_userListRequest,
+            connection_, &RouterConnection::onUserListRequest, Qt::QueuedConnection);
+    connect(this, &RouterWidget::sig_addUser,
+            connection_, &RouterConnection::onAddUser, Qt::QueuedConnection);
+    connect(this, &RouterWidget::sig_modifyUser,
+            connection_, &RouterConnection::onModifyUser, Qt::QueuedConnection);
+    connect(this, &RouterWidget::sig_deleteUser,
+            connection_, &RouterConnection::onDeleteUser, Qt::QueuedConnection);
     connect(this, &RouterWidget::sig_updateConfig,
             connection_, &RouterConnection::onUpdateConfig, Qt::QueuedConnection);
 }
@@ -106,6 +176,7 @@ RouterWidget::~RouterWidget()
 
     if (connection_)
     {
+        connection_->disconnect();
         connection_->deleteLater();
         connection_ = nullptr;
     }
@@ -256,6 +327,44 @@ QString RouterWidget::sizeToString(qint64 size)
 }
 
 //--------------------------------------------------------------------------------------------------
+void RouterWidget::onUpdateRelayList()
+{
+    emit sig_relayListRequest();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::onUpdateUserList()
+{
+    emit sig_userListRequest();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::onStatusChanged(const QUuid& uuid, RouterConnection::Status status)
+{
+    if (status == RouterConnection::Status::ONLINE)
+    {
+        onUpdateRelayList();
+        onUpdateUserList();
+
+        ui.tree_relays->setEnabled(true);
+        ui.tree_peers->setEnabled(true);
+        ui.tree_users->setEnabled(true);
+    }
+    else
+    {
+        ui.tree_relays->setEnabled(false);
+        ui.tree_peers->setEnabled(false);
+        ui.tree_users->setEnabled(false);
+
+        ui.tree_relays->clear();
+        ui.tree_peers->clear();
+        ui.tree_users->clear();
+    }
+
+    emit sig_statusChanged(uuid, status);
+}
+
+//--------------------------------------------------------------------------------------------------
 void RouterWidget::onRelayListReceived(const proto::router::RelayList& relays)
 {
     auto has_with_id = [](const proto::router::RelayList& relays, qint64 entry_id)
@@ -286,18 +395,57 @@ void RouterWidget::onRelayListReceived(const proto::router::RelayList& relays)
 
         for (int j = 0; j < ui.tree_relays->topLevelItemCount(); ++j)
         {
-                RelayTreeItem* item = static_cast<RelayTreeItem*>(ui.tree_relays->topLevelItem(j));
-                if (item->info.entry_id() == info.entry_id())
-                {
-                    item->updateItem(info);
-                    found = true;
-                    break;
-                }
+            RelayTreeItem* item = static_cast<RelayTreeItem*>(ui.tree_relays->topLevelItem(j));
+            if (item->info.entry_id() == info.entry_id())
+            {
+                item->updateItem(info);
+                found = true;
+                break;
+            }
         }
 
         if (!found)
             ui.tree_relays->addTopLevelItem(new RelayTreeItem(info));
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::onUserListReceived(const proto::router::UserList& list)
+{
+    QTreeWidget* tree_users = ui.tree_users;
+    tree_users->clear();
+
+    for (int i = 0; i < list.user_size(); ++i)
+        tree_users->addTopLevelItem(new UserTreeItem(list.user(i)));
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::onUserResultReceived(const proto::router::UserResult& result)
+{
+    if (result.error_code() != proto::router::UserResult::SUCCESS)
+    {
+        const char* message;
+
+        switch (result.error_code())
+        {
+            case proto::router::UserResult::INTERNAL_ERROR:
+                message = QT_TR_NOOP("Unknown internal error.");
+                break;
+            case proto::router::UserResult::INVALID_DATA:
+                message = QT_TR_NOOP("Invalid data was passed.");
+                break;
+            case proto::router::UserResult::ALREADY_EXISTS:
+                message = QT_TR_NOOP("A user with the specified name already exists.");
+                break;
+            default:
+                message = QT_TR_NOOP("Unknown error type.");
+                break;
+        }
+
+        common::MsgBox::warning(this, tr(message));
+    }
+
+    onUpdateUserList();
 }
 
 } // namespace client
