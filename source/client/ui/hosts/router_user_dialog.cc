@@ -134,10 +134,8 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
         if (!base::User::isValidUserName(username))
         {
             LOG(ERROR) << "Invalid user name:" << username;
-            common::MsgBox::warning(this,
-                                 tr("The user name can not be empty and can contain only alphabet"
-                                    " characters, numbers and ""_"", ""-"", ""."", ""@"" characters."));
-
+            common::MsgBox::warning(this, tr("The user name can not be empty and can contain only "
+                "alphabet characters, numbers and ""_"", ""-"", ""."", ""@"" characters."));
             ui.edit_username->selectAll();
             ui.edit_username->setFocus();
             return;
@@ -148,9 +146,7 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
             if (username.compare(users_.at(i), Qt::CaseInsensitive) == 0)
             {
                 LOG(ERROR) << "User name already exists:" << username;
-                common::MsgBox::warning(this,
-                                     tr("The username you entered already exists."));
-
+                common::MsgBox::warning(this, tr("The username you entered already exists."));
                 ui.edit_username->selectAll();
                 ui.edit_username->setFocus();
                 return;
@@ -160,9 +156,7 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
         if (ui.edit_password->text() != ui.edit_password_retry->text())
         {
             LOG(INFO) << "Passwords do not match";
-            common::MsgBox::warning(this,
-                                 tr("The passwords you entered do not match."));
-
+            common::MsgBox::warning(this, tr("The passwords you entered do not match."));
             ui.edit_password->selectAll();
             ui.edit_password->setFocus();
             return;
@@ -173,9 +167,8 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
         if (!base::User::isValidPassword(password))
         {
             LOG(INFO) << "Invalid password";
-            common::MsgBox::warning(this,
-                                 tr("Password can not be empty and should not exceed %n characters.",
-                                    "", base::User::kMaxPasswordLength));
+            common::MsgBox::warning(this, tr("Password can not be empty and should not exceed %n characters.",
+                "", base::User::kMaxPasswordLength));
 
             ui.edit_password->selectAll();
             ui.edit_password->setFocus();
@@ -184,13 +177,10 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
 
         if (!base::User::isSafePassword(password))
         {
-            QString unsafe =
-                tr("Password you entered does not meet the security requirements!");
-
-            QString safe =
-                tr("The password must contain lowercase and uppercase characters, "
-                   "numbers and should not be shorter than %n characters.",
-                   "", base::User::kSafePasswordLength);
+            QString unsafe = tr("Password you entered does not meet the security requirements!");
+            QString safe = tr("The password must contain lowercase and uppercase characters, "
+                "numbers and should not be shorter than %n characters.",
+                "", base::User::kSafePasswordLength);
 
             QString question = tr("Do you want to enter a different password?");
 
@@ -199,7 +189,6 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
                                     QString("<b>%1</b><br/>%2<br/>%3").arg(unsafe, safe, question),
                                     common::MsgBox::Yes | common::MsgBox::No,
                                     this);
-
             if (message_box.exec() == common::MsgBox::Yes)
             {
                 ui.edit_password->clear();
@@ -221,8 +210,7 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
         if (!user_.isValid())
         {
             LOG(ERROR) << "Unable to create user";
-            common::MsgBox::warning(this,
-                                 tr("Unknown internal error when creating or modifying a user."));
+            common::MsgBox::warning(this, tr("Unknown internal error when creating or modifying a user."));
             return;
         }
     }

@@ -29,6 +29,10 @@
       <number>0</number>
      </property>
      <widget class="QWidget" name="tab_relays">
+      <attribute name="icon">
+       <iconset resource="../../../common/resources/common.qrc">
+        <normaloff>:/img/stack.svg</normaloff>:/img/stack.svg</iconset>
+      </attribute>
       <attribute name="title">
        <string>Relays</string>
       </attribute>
@@ -60,11 +64,11 @@
           <property name="indentation">
            <number>0</number>
           </property>
-          <property name="sortingEnabled">
-           <bool>true</bool>
-          </property>
           <property name="itemsExpandable">
            <bool>false</bool>
+          </property>
+          <property name="sortingEnabled">
+           <bool>true</bool>
           </property>
           <property name="expandsOnDoubleClick">
            <bool>false</bool>
@@ -171,6 +175,10 @@
       </layout>
      </widget>
      <widget class="QWidget" name="tab_users">
+      <attribute name="icon">
+       <iconset resource="../../../common/resources/common.qrc">
+        <normaloff>:/img/user-account.svg</normaloff>:/img/user-account.svg</iconset>
+      </attribute>
       <attribute name="title">
        <string>Users</string>
       </attribute>
@@ -198,11 +206,11 @@
          <property name="indentation">
           <number>0</number>
          </property>
-         <property name="sortingEnabled">
-          <bool>true</bool>
-         </property>
          <property name="itemsExpandable">
           <bool>false</bool>
+         </property>
+         <property name="sortingEnabled">
+          <bool>true</bool>
          </property>
          <property name="expandsOnDoubleClick">
           <bool>false</bool>
@@ -233,6 +241,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../../../common/resources/common.qrc"/>
+ </resources>
  <connections/>
 </ui>
