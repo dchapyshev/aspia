@@ -21,6 +21,8 @@
 
 #include <QWidget>
 
+class QStatusBar;
+
 namespace client {
 
 class ContentWidget : public QWidget
@@ -34,11 +36,12 @@ public:
     ~ContentWidget() override;
 
     Type contentType() const;
-    virtual int itemCount() const = 0;
     virtual QByteArray saveState()  = 0;
     virtual void restoreState(const QByteArray& state) = 0;
     virtual bool canReload() const { return false; }
     virtual void reload() {}
+    virtual void attachStatusBar(QStatusBar* /* statusbar */) {}
+    virtual void detachStatusBar(QStatusBar* /* statusbar */) {}
 
 private:
     Type type_;

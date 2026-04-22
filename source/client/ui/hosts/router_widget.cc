@@ -21,6 +21,8 @@
 #include <QCollator>
 #include <QDateTime>
 #include <QIODevice>
+#include <QLabel>
+#include <QStatusBar>
 
 #include "base/gui_application.h"
 #include "base/logging.h"
@@ -238,12 +240,6 @@ void RouterWidget::updateConfig(const RouterConfig& config)
 }
 
 //--------------------------------------------------------------------------------------------------
-int RouterWidget::itemCount() const
-{
-    return 0;
-}
-
-//--------------------------------------------------------------------------------------------------
 QByteArray RouterWidget::saveState()
 {
     QByteArray buffer;
@@ -384,6 +380,53 @@ void RouterWidget::reload()
 }
 
 //--------------------------------------------------------------------------------------------------
+void RouterWidget::attachStatusBar(QStatusBar* statusbar)
+{
+    if (!statusbar)
+        return;
+
+    if (!status_label_)
+        status_label_ = new QLabel(this);
+
+    updateStatusLabel();
+
+    statusbar->addWidget(status_label_);
+    status_label_->show();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::detachStatusBar(QStatusBar* statusbar)
+{
+    if (!statusbar || !status_label_)
+        return;
+
+    statusbar->removeWidget(status_label_);
+    status_label_->setParent(this);
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::updateStatusLabel()
+{
+    if (!status_label_)
+        return;
+
+    switch (currentTabType())
+    {
+        case TabType::RELAYS:
+            status_label_->setText(
+                tr("%n relay(s)", "", ui.tree_relays->topLevelItemCount()));
+            break;
+        case TabType::USERS:
+            status_label_->setText(
+                tr("%n user(s)", "", ui.tree_users->topLevelItemCount()));
+            break;
+        default:
+            status_label_->clear();
+            break;
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
 void RouterWidget::onUpdateRelayList()
 {
     emit sig_relayListRequest();
@@ -478,6 +521,7 @@ void RouterWidget::onDeleteUser()
 //--------------------------------------------------------------------------------------------------
 void RouterWidget::onTabChanged(int index)
 {
+    updateStatusLabel();
     emit sig_currentTabTypeChanged(uuid_, static_cast<TabType>(index));
 }
 
@@ -523,6 +567,8 @@ void RouterWidget::onStatusChanged(const QUuid& uuid, RouterConnection::Status s
         ui.tree_relays->clear();
         ui.tree_peers->clear();
         ui.tree_users->clear();
+
+        updateStatusLabel();
     }
 
     emit sig_statusChanged(uuid, status);
@@ -571,6 +617,8 @@ void RouterWidget::onRelayListReceived(const proto::router::RelayList& relays)
         if (!found)
             ui.tree_relays->addTopLevelItem(new RelayTreeItem(info));
     }
+
+    updateStatusLabel();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -598,6 +646,8 @@ void RouterWidget::onUserListReceived(const proto::router::UserList& list)
         tree_users->setCurrentItem(to_select);
     else
         emit sig_currentUserChanged(uuid_);
+
+    updateStatusLabel();
 }
 
 //--------------------------------------------------------------------------------------------------

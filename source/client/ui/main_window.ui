@@ -117,7 +117,11 @@
    <addaction name="action_help"/>
    <addaction name="action_exit"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QStatusBar" name="statusbar">
+   <property name="styleSheet">
+    <string notr="true">QStatusBar QLabel { padding: 3px; }</string>
+   </property>
+  </widget>
   <action name="action_help">
    <property name="icon">
     <iconset resource="../../common/resources/common.qrc">

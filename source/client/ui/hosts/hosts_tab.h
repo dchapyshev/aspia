@@ -51,8 +51,8 @@ public:
 
     QByteArray saveState() override;
     void restoreState(const QByteArray& state) override;
-    void onActivated(QStatusBar* statusbar) override;
-    void onDeactivated(QStatusBar* statusbar) override;
+    void attach(QStatusBar* statusbar) override;
+    void detach(QStatusBar* statusbar) override;
     bool hasSearchField() const override;
     void onSearchTextChanged(const QString& text) override;
     void reloadRouters();
@@ -119,6 +119,8 @@ private:
 
     ContentWidget* current_content_ = nullptr;
     ContentWidget* previous_content_ = nullptr;
+
+    QStatusBar* statusbar_ = nullptr;
 
     LocalGroupWidget* local_group_widget_ = nullptr;
     RouterGroupWidget* router_group_widget_ = nullptr;

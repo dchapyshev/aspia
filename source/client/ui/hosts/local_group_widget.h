@@ -26,6 +26,9 @@
 #include "client/ui/hosts/content_widget.h"
 #include "ui_local_group_widget.h"
 
+class QLabel;
+class QStatusBar;
+
 namespace client {
 
 struct ComputerData;
@@ -55,9 +58,10 @@ public:
 
     Item* currentItem();
     void showGroup(qint64 group_id);
-    int itemCount() const override;
     QByteArray saveState() override;
     void restoreState(const QByteArray& state) override;
+    void attachStatusBar(QStatusBar* statusbar) override;
+    void detachStatusBar(QStatusBar* statusbar) override;
 
     QString mimeType() const { return mime_type_; }
 
@@ -110,9 +114,15 @@ private slots:
 private:
     void startDrag();
 
+    void updateStatusLabels();
+
     Ui::LocalGroupWidget ui;
     QString mime_type_;
     QPoint start_pos_;
+
+    qint64 current_group_id_ = -1;
+    QLabel* status_groups_label_ = nullptr;
+    QLabel* status_computers_label_ = nullptr;
 
     Q_DISABLE_COPY_MOVE(LocalGroupWidget)
 };

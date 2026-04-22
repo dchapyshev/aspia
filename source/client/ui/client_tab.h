@@ -45,8 +45,8 @@ public:
     virtual QByteArray saveState() = 0;
     virtual void restoreState(const QByteArray& state) = 0;
 
-    virtual void onActivated(QStatusBar* statusbar) = 0;
-    virtual void onDeactivated(QStatusBar* statusbar) = 0;
+    virtual void attach(QStatusBar* statusbar) = 0;
+    virtual void detach(QStatusBar* statusbar) = 0;
 
     virtual bool hasSearchField() const;
     virtual void onSearchTextChanged(const QString& text);

@@ -229,7 +229,7 @@ void MainWindow::onCurrentTabChanged(int index)
     if (active_tab_)
     {
         removeTabActions();
-        active_tab_->onDeactivated(ui.statusbar);
+        active_tab_->detach(ui.statusbar);
         active_tab_ = nullptr;
     }
 
@@ -242,7 +242,7 @@ void MainWindow::onCurrentTabChanged(int index)
 
     active_tab_ = tab;
     installTabActions(active_tab_);
-    active_tab_->onActivated(ui.statusbar);
+    active_tab_->attach(ui.statusbar);
     updateSearchFieldVisibility();
 }
 
@@ -256,7 +256,7 @@ void MainWindow::onCloseTab(int index)
     if (tab == active_tab_)
     {
         removeTabActions();
-        tab->onDeactivated(ui.statusbar);
+        tab->detach(ui.statusbar);
         active_tab_ = nullptr;
     }
 

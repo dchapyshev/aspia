@@ -33,8 +33,8 @@ public:
     explicit SessionTab(const QString& title, QWidget* parent = nullptr);
     ~SessionTab() override;
 
-    void onActivated(QStatusBar* statusbar) override;
-    void onDeactivated(QStatusBar* statusbar) override;
+    void attach(QStatusBar* statusbar) override;
+    void detach(QStatusBar* statusbar) override;
 
 private:
     Q_DISABLE_COPY_MOVE(SessionTab)

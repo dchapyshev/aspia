@@ -271,16 +271,19 @@ void HostsTab::restoreState(const QByteArray& state)
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::onActivated(QStatusBar* statusbar)
+void HostsTab::attach(QStatusBar* statusbar)
 {
-    int count = current_content_ ? current_content_->itemCount() : 0;
-    statusbar->showMessage(tr("Computers: %1").arg(count));
+    statusbar_ = statusbar;
+    if (current_content_ && statusbar_)
+        current_content_->attachStatusBar(statusbar_);
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::onDeactivated(QStatusBar* statusbar)
+void HostsTab::detach(QStatusBar* /* statusbar */)
 {
-    statusbar->clearMessage();
+    if (current_content_ && statusbar_)
+        current_content_->detachStatusBar(statusbar_);
+    statusbar_ = nullptr;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -767,8 +770,14 @@ void HostsTab::switchContent(ContentWidget* new_widget)
     if (!new_widget || new_widget == current_content_)
         return;
 
+    if (current_content_ && statusbar_)
+        current_content_->detachStatusBar(statusbar_);
+
     current_content_ = new_widget;
     ui.content_stack->setCurrentWidget(new_widget);
+
+    if (statusbar_)
+        current_content_->attachStatusBar(statusbar_);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -44,12 +44,6 @@ void RouterGroupWidget::showGroup(qint64 /* group_id */)
 }
 
 //--------------------------------------------------------------------------------------------------
-int RouterGroupWidget::itemCount() const
-{
-    return ui.tree_computer->topLevelItemCount();
-}
-
-//--------------------------------------------------------------------------------------------------
 QByteArray RouterGroupWidget::saveState()
 {
     return QByteArray();

@@ -74,12 +74,6 @@ void SearchWidget::clear()
 }
 
 //--------------------------------------------------------------------------------------------------
-int SearchWidget::itemCount() const
-{
-    return tree_computer_->topLevelItemCount();
-}
-
-//--------------------------------------------------------------------------------------------------
 QByteArray SearchWidget::saveState()
 {
     return QByteArray();

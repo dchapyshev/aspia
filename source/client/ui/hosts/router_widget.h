@@ -27,6 +27,9 @@
 #include "client/ui/hosts/content_widget.h"
 #include "ui_router_widget.h"
 
+class QLabel;
+class QStatusBar;
+
 namespace proto::router {
 class RelayList;
 } // namespace proto::router
@@ -52,11 +55,12 @@ public:
     TabType currentTabType() const;
     bool hasSelectedUser() const;
 
-    int itemCount() const override;
     QByteArray saveState() override;
     void restoreState(const QByteArray& state) override;
     bool canReload() const override { return true; }
     void reload() override;
+    void attachStatusBar(QStatusBar* statusbar) override;
+    void detachStatusBar(QStatusBar* statusbar) override;
 
     void connectToRouter();
     void disconnectFromRouter();
@@ -94,10 +98,14 @@ private slots:
     void onUserResultReceived(const proto::router::UserResult& result);
 
 private:
+    void updateStatusLabel();
+
     Ui::RouterWidget ui;
 
     QUuid uuid_;
     RouterConnection* connection_ = nullptr;
+
+    QLabel* status_label_ = nullptr;
 
     Q_DISABLE_COPY_MOVE(RouterWidget)
 };

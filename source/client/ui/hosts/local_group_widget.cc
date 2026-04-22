@@ -20,8 +20,10 @@
 
 #include <QApplication>
 #include <QIODevice>
+#include <QLabel>
 #include <QMenu>
 #include <QMouseEvent>
+#include <QStatusBar>
 #include <QUuid>
 
 #include "base/logging.h"
@@ -123,18 +125,72 @@ LocalGroupWidget::Item* LocalGroupWidget::currentItem()
 //--------------------------------------------------------------------------------------------------
 void LocalGroupWidget::showGroup(qint64 group_id)
 {
+    current_group_id_ = group_id;
+
     ui.tree_computer->clear();
 
     QList<ComputerData> computers = LocalDatabase::instance().computerList(group_id);
 
     for (const ComputerData& computer : std::as_const(computers))
         new Item(computer, ui.tree_computer);
+
+    updateStatusLabels();
 }
 
 //--------------------------------------------------------------------------------------------------
-int LocalGroupWidget::itemCount() const
+void LocalGroupWidget::attachStatusBar(QStatusBar* statusbar)
 {
-    return ui.tree_computer->topLevelItemCount();
+    if (!statusbar)
+        return;
+
+    if (!status_groups_label_)
+        status_groups_label_ = new QLabel(this);
+    if (!status_computers_label_)
+        status_computers_label_ = new QLabel(this);
+
+    updateStatusLabels();
+
+    statusbar->addWidget(status_groups_label_);
+    statusbar->addWidget(status_computers_label_);
+
+    status_groups_label_->show();
+    status_computers_label_->show();
+}
+
+//--------------------------------------------------------------------------------------------------
+void LocalGroupWidget::detachStatusBar(QStatusBar* statusbar)
+{
+    if (!statusbar)
+        return;
+
+    if (status_groups_label_)
+    {
+        statusbar->removeWidget(status_groups_label_);
+        status_groups_label_->setParent(this);
+    }
+
+    if (status_computers_label_)
+    {
+        statusbar->removeWidget(status_computers_label_);
+        status_computers_label_->setParent(this);
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void LocalGroupWidget::updateStatusLabels()
+{
+    int child_groups_count = 0;
+    if (current_group_id_ >= 0)
+        child_groups_count = LocalDatabase::instance().groupList(current_group_id_).size();
+
+    if (status_groups_label_)
+        status_groups_label_->setText(tr("%n child group(s)", "", child_groups_count));
+
+    if (status_computers_label_)
+    {
+        status_computers_label_->setText(
+            tr("%n child computer(s)", "", ui.tree_computer->topLevelItemCount()));
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
