@@ -29,6 +29,10 @@
 
 class QTreeWidgetItem;
 
+namespace base {
+class User;
+} // namespace base
+
 namespace client {
 
 class ContentWidget;
@@ -71,6 +75,7 @@ private slots:
     void onConnectAction(QAction* action);
     void onLocalConnect(qint64 computer_id);
     void onLocalComputerContextMenu(qint64 computer_id, const QPoint& pos);
+    void onUserContextMenu(const QUuid& uuid, const base::User& user, const QPoint& pos);
 
 private:
     void switchContent(ContentWidget* new_widget);

@@ -173,6 +173,10 @@ RouterWidget::RouterWidget(const RouterConfig& config, QWidget* parent)
     connect(ui.tab, &QTabWidget::currentChanged, this, &RouterWidget::onTabChanged);
     connect(ui.tree_users, &QTreeWidget::itemSelectionChanged,
             this, &RouterWidget::onCurrentUserChanged);
+
+    ui.tree_users->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(ui.tree_users, &QTreeWidget::customContextMenuRequested,
+            this, &RouterWidget::onUserContextMenuRequested);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -366,6 +370,21 @@ void RouterWidget::onTabChanged(int index)
 void RouterWidget::onCurrentUserChanged()
 {
     emit sig_currentUserChanged(uuid_);
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::onUserContextMenuRequested(const QPoint& pos)
+{
+    QTreeWidgetItem* item = ui.tree_users->itemAt(pos);
+    if (item)
+        ui.tree_users->setCurrentItem(item);
+
+    base::User user;
+    if (item)
+        user = static_cast<UserTreeItem*>(item)->user;
+
+    QPoint global_pos = ui.tree_users->viewport()->mapToGlobal(pos);
+    emit sig_userContextMenu(uuid_, user, global_pos);
 }
 
 //--------------------------------------------------------------------------------------------------

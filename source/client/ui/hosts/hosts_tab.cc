@@ -25,6 +25,7 @@
 #include "common/ui/msg_box.h"
 #include "base/logging.h"
 #include "base/net/address.h"
+#include "base/peer/user.h"
 #include "build/build_config.h"
 #include "client/local_database.h"
 #include "client/settings.h"
@@ -904,9 +905,26 @@ RouterWidget* HostsTab::createRouterWidget(const RouterConfig& config)
             this, [this](const QUuid&, RouterWidget::TabType) { updateActionsState(); });
     connect(widget, &RouterWidget::sig_currentUserChanged,
             this, [this](const QUuid&) { updateActionsState(); });
+    connect(widget, &RouterWidget::sig_userContextMenu, this, &HostsTab::onUserContextMenu);
 
     widget->connectToRouter();
     return widget;
+}
+
+//--------------------------------------------------------------------------------------------------
+void HostsTab::onUserContextMenu(const QUuid& /* uuid */, const base::User& user, const QPoint& pos)
+{
+    QMenu menu;
+    if (user.isValid())
+    {
+        menu.addAction(action_edit_user_);
+        menu.addAction(action_delete_user_);
+    }
+    else
+    {
+        menu.addAction(action_add_user_);
+    }
+    menu.exec(pos);
 }
 
 } // namespace client

@@ -21,6 +21,7 @@
 
 #include <QUuid>
 
+#include "base/peer/user.h"
 #include "client/config.h"
 #include "client/router_connection.h"
 #include "client/ui/hosts/content_widget.h"
@@ -75,12 +76,14 @@ signals:
     void sig_statusChanged(const QUuid& uuid, client::RouterConnection::Status status);
     void sig_currentTabTypeChanged(const QUuid& uuid, client::RouterWidget::TabType tab);
     void sig_currentUserChanged(const QUuid& uuid);
+    void sig_userContextMenu(const QUuid& uuid, const base::User& user, const QPoint& global_pos);
     void sig_updateConfig(const client::RouterConfig& config);
 
 private slots:
     void onStatusChanged(const QUuid& uuid, client::RouterConnection::Status status);
     void onTabChanged(int index);
     void onCurrentUserChanged();
+    void onUserContextMenuRequested(const QPoint& pos);
     void onRelayListReceived(const proto::router::RelayList& relays);
     void onUserListReceived(const proto::router::UserList& list);
     void onUserResultReceived(const proto::router::UserResult& result);
