@@ -255,6 +255,7 @@ QByteArray RouterWidget::saveState()
         stream << ui.tree_relays->header()->saveState();
         stream << ui.splitter->saveState();
         stream << ui.tree_peers->header()->saveState();
+        stream << ui.tree_users->header()->saveState();
     }
 
     return buffer;
@@ -269,13 +270,19 @@ void RouterWidget::restoreState(const QByteArray& state)
     QByteArray relays_columns_state;
     QByteArray splitter_state;
     QByteArray peers_columns_state;
+    QByteArray users_columns_state;
 
     stream >> relays_columns_state;
     stream >> splitter_state;
     stream >> peers_columns_state;
+    stream >> users_columns_state;
 
     if (!relays_columns_state.isEmpty())
+    {
         ui.tree_relays->header()->restoreState(relays_columns_state);
+        ui.tree_relays->header()->setSectionsClickable(true);
+        ui.tree_relays->header()->setSortIndicatorShown(true);
+    }
 
     if (!splitter_state.isEmpty())
     {
@@ -292,7 +299,18 @@ void RouterWidget::restoreState(const QByteArray& state)
     }
 
     if (!peers_columns_state.isEmpty())
+    {
         ui.tree_peers->header()->restoreState(peers_columns_state);
+        ui.tree_peers->header()->setSectionsClickable(true);
+        ui.tree_peers->header()->setSortIndicatorShown(true);
+    }
+
+    if (!users_columns_state.isEmpty())
+    {
+        ui.tree_users->header()->restoreState(users_columns_state);
+        ui.tree_users->header()->setSectionsClickable(true);
+        ui.tree_users->header()->setSortIndicatorShown(true);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
