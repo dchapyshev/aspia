@@ -70,6 +70,7 @@ public slots:
     void onDeleteUser(qint64 entry_id);
     void onDisconnectHost(qint64 session_id);
     void onDisconnectAllHosts();
+    void onRemoveHost(qint64 session_id, bool try_to_uninstall);
 
     // Manager methods.
 

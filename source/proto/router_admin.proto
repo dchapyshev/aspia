@@ -98,13 +98,13 @@ message SessionResult
     ErrorCode error_code       = 2;
 }
 
-// deprecated
+// deprecated.
 message SessionListRequest
 {
     int64 dummy = 1;
 }
 
-// deprecated
+// deprecated.
 message SessionList
 {
     enum ErrorCode
@@ -119,8 +119,10 @@ message SessionList
 
 message HostRequest
 {
-    string type      = 1; // "disconnect" | "disconnect_all"
-    int64 session_id = 2; // Used only for "disconnect".
+    string type      = 1; // "disconnect" | "disconnect_all" | "remove"
+    int64 session_id = 2; // Used for "disconnect" and "remove".
+    string params    = 3; // Additional parameters separated by ';'.
+                          // For "remove": "try_to_uninstall"
 }
 
 message HostResult
@@ -224,6 +226,7 @@ message UserResult
     ErrorCode error_code = 2;
 }
 
+// deprecated
 message RemoveHostRequest
 {
     enum Flags
@@ -257,6 +260,6 @@ message AdminToRouter
     UserListRequest user_list_request             = 5;
     UserRequest user_request                      = 6;
     PeerConnectionRequest peer_connection_request = 7;
-    RemoveHostRequest remove_host_request         = 8;
+    RemoveHostRequest remove_host_request         = 8; // deprecated
     HostRequest host_request                      = 9;
 }

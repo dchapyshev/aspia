@@ -19,6 +19,7 @@
 #include "client/ui/hosts/router_widget.h"
 
 #include <QApplication>
+#include <QCheckBox>
 #include <QClipboard>
 #include <QCollator>
 #include <QDateTime>
@@ -299,6 +300,8 @@ RouterWidget::RouterWidget(const RouterConfig& config, QWidget* parent)
             connection_, &RouterConnection::onDisconnectHost, Qt::QueuedConnection);
     connect(this, &RouterWidget::sig_disconnectAllHosts,
             connection_, &RouterConnection::onDisconnectAllHosts, Qt::QueuedConnection);
+    connect(this, &RouterWidget::sig_removeHost,
+            connection_, &RouterConnection::onRemoveHost, Qt::QueuedConnection);
     connect(this, &RouterWidget::sig_updateConfig,
             connection_, &RouterConnection::onUpdateConfig, Qt::QueuedConnection);
 
@@ -788,6 +791,39 @@ void RouterWidget::onDisconnectAllHosts()
 
     LOG(INFO) << "[ACTION] Disconnect all hosts accepted by user";
     emit sig_disconnectAllHosts();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::onRemoveHost()
+{
+    HostTreeItem* tree_item = static_cast<HostTreeItem*>(ui.tree_hosts->currentItem());
+    if (!tree_item)
+    {
+        LOG(INFO) << "No selected host";
+        return;
+    }
+
+    common::MsgBox message_box(this);
+    message_box.setWindowTitle(tr("Confirmation"));
+    message_box.setText(tr("Deleting a host will result in all its configuration for connecting "
+                           "to the router being deleted. This operation is irreversible. After "
+                           "deleting, the host will no longer connect to the router. Are you sure "
+                           "you want to do this?"));
+    message_box.setIcon(common::MsgBox::Question);
+    message_box.setStandardButtons(common::MsgBox::Yes | common::MsgBox::No);
+
+    QCheckBox* check_box = new QCheckBox(&message_box);
+    check_box->setText(tr("Try to uninstall the application (result is not guaranteed)"));
+    message_box.setCheckBox(check_box);
+
+    if (message_box.exec() == common::MsgBox::No)
+    {
+        LOG(INFO) << "[ACTION] Remove host rejected by user";
+        return;
+    }
+
+    LOG(INFO) << "[ACTION] Remove host accepted by user";
+    emit sig_removeHost(tree_item->info.entry_id(), check_box->isChecked());
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -114,6 +114,7 @@ HostsTab::HostsTab(QWidget* parent)
 
     action_host_disconnect_ = new QAction(QIcon(":/img/host-disconnect.svg"), tr("Disconnect"), this);
     action_host_disconnect_all_ = new QAction(QIcon(":/img/host-disconnect-all.svg"), tr("Disconnect All"), this);
+    action_host_remove_ = new QAction(QIcon(":/img/remove-computer.svg"), tr("Remove"), this);
 
     action_save_ = new QAction(QIcon(":/img/save.svg"), tr("Save..."), this);
     action_reload_ = new QAction(QIcon(":/img/reload.svg"), tr("Reload"), this);
@@ -155,6 +156,7 @@ HostsTab::HostsTab(QWidget* parent)
     connect(action_save_, &QAction::triggered, this, &HostsTab::onSaveAction);
     connect(action_host_disconnect_, &QAction::triggered, this, &HostsTab::onDisconnectHostAction);
     connect(action_host_disconnect_all_, &QAction::triggered, this, &HostsTab::onDisconnectAllHostsAction);
+    connect(action_host_remove_, &QAction::triggered, this, &HostsTab::onRemoveHostAction);
     connect(session_connect_group, &QActionGroup::triggered, this, &HostsTab::onConnectAction);
 
     // Register actions for toolbar and menus.
@@ -162,7 +164,7 @@ HostsTab::HostsTab(QWidget* parent)
     addActions(ActionRole::EDIT, { action_add_user_, action_edit_user_, action_delete_user_ });
     addActions(ActionRole::EDIT, { action_add_group_, action_edit_group_, action_delete_group_ });
     addActions(ActionRole::EDIT, { action_add_computer_, action_edit_computer_, action_copy_computer_, action_delete_computer_ });
-    addActions(ActionRole::EDIT, { action_host_disconnect_, action_host_disconnect_all_ });
+    addActions(ActionRole::EDIT, { action_host_remove_, action_host_disconnect_, action_host_disconnect_all_ });
     addActions(ActionRole::VIEW, { action_reload_ });
     addActions(ActionRole::SESSION_TYPE, { action_desktop_, action_file_transfer_, action_chat_, action_system_info_ });
 
@@ -814,6 +816,7 @@ void HostsTab::updateActionsState()
     action_save_->setVisible(false);
     action_host_disconnect_->setVisible(false);
     action_host_disconnect_all_->setVisible(false);
+    action_host_remove_->setVisible(false);
 
     Sidebar::Item* sidebar_item = ui.sidebar->currentItem();
 
@@ -847,6 +850,7 @@ void HostsTab::updateActionsState()
 
         action_host_disconnect_->setVisible(on_hosts_tab && widget->hasSelectedHost());
         action_host_disconnect_all_->setVisible(on_hosts_tab && widget->hostCount() > 0);
+        action_host_remove_->setVisible(on_hosts_tab && widget->hasSelectedHost());
     }
     else
     {
@@ -970,6 +974,7 @@ void HostsTab::onHostContextMenu(const QUuid& uuid, const QPoint& pos, int colum
 
     QMenu menu;
     menu.addAction(action_host_disconnect_);
+    menu.addAction(action_host_remove_);
     menu.addSeparator();
 
     QAction* copy_row = menu.addAction(tr("Copy Row"));
@@ -1062,6 +1067,19 @@ void HostsTab::onDisconnectAllHostsAction()
     RouterWidget* widget = router_widgets_.value(router->uuid());
     if (widget)
         widget->onDisconnectAllHosts();
+}
+
+//--------------------------------------------------------------------------------------------------
+void HostsTab::onRemoveHostAction()
+{
+    Sidebar::Item* sidebar_item = ui.sidebar->currentItem();
+    if (!sidebar_item || sidebar_item->itemType() != Sidebar::Item::ROUTER)
+        return;
+
+    Sidebar::Router* router = static_cast<Sidebar::Router*>(sidebar_item);
+    RouterWidget* widget = router_widgets_.value(router->uuid());
+    if (widget)
+        widget->onRemoveHost();
 }
 
 } // namespace client

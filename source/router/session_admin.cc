@@ -378,6 +378,40 @@ void SessionAdmin::doHostRequest(const proto::router::HostRequest& request)
             host_result->set_error_code("internal_error");
         }
     }
+    else if (request.type() == "remove")
+    {
+        qint64 session_id = request.session_id();
+        SessionHost* host_session = dynamic_cast<SessionHost*>(Service::instance()->session(session_id));
+        if (!host_session)
+        {
+            CLOG(ERROR) << "Host with id" << session_id << "is not found";
+            host_result->set_error_code("invalid_entry_id");
+        }
+        else
+        {
+            uint32_t flags = proto::router::RemoveHostRequest::REMOVE_SETTINGS;
+
+            const std::string& params = request.params();
+            size_t start = 0;
+            while (start < params.size())
+            {
+                size_t end = params.find(';', start);
+                if (end == std::string::npos)
+                    end = params.size();
+                std::string token = params.substr(start, end - start);
+                if (token == "try_to_uninstall")
+                    flags |= proto::router::RemoveHostRequest::TRY_TO_UNINSTALL;
+                start = end + 1;
+            }
+
+            proto::router::RemoveHost remove_host;
+            remove_host.set_flags(flags);
+            host_session->sendRemoveHost(remove_host);
+
+            CLOG(INFO) << "Host '" << session_id << "' removed by" << userName();
+            host_result->set_error_code("ok");
+        }
+    }
     else
     {
         CLOG(ERROR) << "Unknown host request type:" << request.type();

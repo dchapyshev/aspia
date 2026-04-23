@@ -88,6 +88,7 @@ public slots:
     void onDeleteUser();
     void onDisconnectHost();
     void onDisconnectAllHosts();
+    void onRemoveHost();
 
 signals:
     void sig_relayListRequest();
@@ -98,6 +99,7 @@ signals:
     void sig_deleteUser(qint64 entry_id);
     void sig_disconnectHost(qint64 session_id);
     void sig_disconnectAllHosts();
+    void sig_removeHost(qint64 session_id, bool try_to_uninstall);
     void sig_statusChanged(const QUuid& uuid, client::RouterConnection::Status status);
     void sig_currentTabTypeChanged(const QUuid& uuid, client::RouterWidget::TabType tab);
     void sig_currentUserChanged(const QUuid& uuid);

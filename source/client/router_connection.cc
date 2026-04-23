@@ -250,6 +250,27 @@ void RouterConnection::onDisconnectAllHosts()
 }
 
 //--------------------------------------------------------------------------------------------------
+void RouterConnection::onRemoveHost(qint64 session_id, bool try_to_uninstall)
+{
+    if (config_.session_type != proto::router::SESSION_TYPE_ADMIN)
+    {
+        LOG(ERROR) << "No administrator access level";
+        return;
+    }
+
+    proto::router::AdminToRouter message;
+    proto::router::HostRequest* request = message.mutable_host_request();
+    request->set_type("remove");
+    request->set_session_id(session_id);
+    if (try_to_uninstall)
+        request->set_params("try_to_uninstall");
+
+    LOG(INFO) << "Sending host remove request (session_id:" << session_id
+              << "try_to_uninstall:" << try_to_uninstall << ")";
+    sendMessage(proto::router::CHANNEL_ID_ADMIN, base::serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
 void RouterConnection::onTcpReady()
 {
     CHECK(tcp_channel_);

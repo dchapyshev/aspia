@@ -84,6 +84,7 @@ private slots:
     void onSaveAction();
     void onDisconnectHostAction();
     void onDisconnectAllHostsAction();
+    void onRemoveHostAction();
 
 private:
     void switchContent(ContentWidget* new_widget);
@@ -124,6 +125,7 @@ private:
 
     QAction* action_host_disconnect_ = nullptr;
     QAction* action_host_disconnect_all_ = nullptr;
+    QAction* action_host_remove_ = nullptr;
 
     ContentWidget* current_content_ = nullptr;
     ContentWidget* previous_content_ = nullptr;
