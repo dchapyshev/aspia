@@ -126,6 +126,23 @@ void RouterConnection::onRelayListRequest()
 }
 
 //--------------------------------------------------------------------------------------------------
+void RouterConnection::onHostListRequest()
+{
+    if (config_.session_type != proto::router::SESSION_TYPE_ADMIN)
+    {
+        LOG(ERROR) << "No administrator access level";
+        return;
+    }
+
+    proto::router::AdminToRouter message;
+    proto::router::HostListRequest* request = message.mutable_host_list_request();
+    request->set_dummy(1);
+
+    LOG(INFO) << "Sending host list request";
+    sendMessage(proto::router::CHANNEL_ID_ADMIN, base::serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
 void RouterConnection::onUserListRequest()
 {
     if (config_.session_type != proto::router::SESSION_TYPE_ADMIN)
@@ -245,6 +262,11 @@ void RouterConnection::onTcpMessageReceived(quint8 channel_id, const QByteArray&
         {
             LOG(INFO) << "Relay list received";
             emit sig_relayListReceived(message.relay_list());
+        }
+        else if (message.has_host_list())
+        {
+            LOG(INFO) << "Host list received";
+            emit sig_hostListReceived(message.host_list());
         }
         else if (message.has_user_list())
         {

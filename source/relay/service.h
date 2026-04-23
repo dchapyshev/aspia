@@ -54,7 +54,7 @@ private slots:
     void onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code);
     void onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer);
     void onSessionStarted();
-    void onSessionStatistics(const proto::router::RelayStat& relay_stat);
+    void onSessionStatistics(const proto::router::RelayStatistics& statistics);
     void onSessionFinished();
 
 private:

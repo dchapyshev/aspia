@@ -62,6 +62,10 @@ void SessionAdmin::onSessionMessage(quint8 channel_id, const QByteArray& buffer)
     {
         doRelayListRequest();
     }
+    else if (message.has_host_list_request())
+    {
+        doHostListRequest();
+    }
     else if (message.has_session_list_request())
     {
         doSessionListRequest(message.session_list_request());
@@ -99,7 +103,7 @@ void SessionAdmin::doRelayListRequest()
 
     proto::router::RouterToAdmin message;
     proto::router::RelayList* result = message.mutable_relay_list();
-    result->set_error_code("success");
+    result->set_error_code("ok");
 
     for (const auto& session : sessions)
     {
@@ -107,6 +111,8 @@ void SessionAdmin::doRelayListRequest()
             continue;
 
         proto::router::RelayInfo* item = result->add_relay();
+
+        // Generic session info.
         item->set_entry_id(session->sessionId());
         item->set_timepoint(session->startTime());
         item->set_ip_address(session->address().toString().toStdString());
@@ -114,7 +120,50 @@ void SessionAdmin::doRelayListRequest()
         item->set_os_name(session->osName().toStdString());
         item->set_computer_name(session->computerName().toStdString());
         item->set_architecture(session->architecture().toStdString());
+
+        // Statistics info.
+        const std::optional<proto::router::RelayStatistics>& statistics =
+            static_cast<SessionRelay*>(session)->statistics();
+        if (statistics.has_value())
+        {
+            item->mutable_statistics()->mutable_peer()->CopyFrom(statistics->peer());
+            item->mutable_statistics()->set_uptime(statistics->uptime());
+        }
+
+        // Other info.
         item->set_pool_size(Service::instance()->keyCountForRelay(session->sessionId()));
+    }
+
+    sendMessage(proto::router::CHANNEL_ID_ADMIN, base::serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void SessionAdmin::doHostListRequest()
+{
+    const QList<Session*>& sessions = Service::instance()->sessions();
+
+    proto::router::RouterToAdmin message;
+    proto::router::HostList* result = message.mutable_host_list();
+    result->set_error_code("ok");
+
+    for (const auto& session : sessions)
+    {
+        if (session->sessionType() != proto::router::SESSION_TYPE_HOST)
+            continue;
+
+        proto::router::HostInfo* item = result->add_host();
+
+        // Generic session info.
+        item->set_entry_id(session->sessionId());
+        item->set_timepoint(session->startTime());
+        item->set_ip_address(session->address().toString().toStdString());
+        item->mutable_version()->CopyFrom(base::serialize(session->version()));
+        item->set_os_name(session->osName().toStdString());
+        item->set_computer_name(session->computerName().toStdString());
+        item->set_architecture(session->architecture().toStdString());
+
+        // Other info.
+        item->set_host_id(static_cast<SessionHost*>(session)->hostId());
     }
 
     sendMessage(proto::router::CHANNEL_ID_ADMIN, base::serialize(message));
@@ -217,15 +266,15 @@ void SessionAdmin::doSessionListRequest(const proto::router::SessionListRequest&
             proto::router::RelaySessionData session_data;
             session_data.set_pool_size(Service::instance()->keyCountForRelay(session->sessionId()));
 
-            const std::optional<proto::router::RelayStat>& in_relay_stat =
-                static_cast<SessionRelay*>(session)->relayStat();
+            const std::optional<proto::router::RelayStatistics>& in_relay_stat =
+                static_cast<SessionRelay*>(session)->statistics();
             if (in_relay_stat.has_value())
             {
                 proto::router::RelaySessionData::RelayStat* out_relay_stat =
                     session_data.mutable_relay_stat();
 
                 out_relay_stat->set_uptime(in_relay_stat->uptime());
-                out_relay_stat->mutable_peer_connection()->CopyFrom(in_relay_stat->peer_connection());
+                out_relay_stat->mutable_peer_connection()->CopyFrom(in_relay_stat->peer());
             }
 
             item->set_session_data(session_data.SerializeAsString());

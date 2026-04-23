@@ -124,5 +124,14 @@
         <file>user-delete.svg</file>
         <file>user-edit.svg</file>
         <file>reload.svg</file>
+        <file>workspace.svg</file>
+        <file>workspace-add.svg</file>
+        <file>workspace-delete.svg</file>
+        <file>workspace-edit.svg</file>
+        <file>workspace-locked.svg</file>
+        <file>workspace-reload.svg</file>
+        <file>workspace-search.svg</file>
+        <file>workspace-settings.svg</file>
+        <file>workspace-unlocked.svg</file>
     </qresource>
 </RCC>

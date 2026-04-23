@@ -43,8 +43,10 @@ class RouterWidget : public ContentWidget
 public:
     enum class TabType
     {
-        RELAYS = 0,
-        USERS  = 1
+        WORKSPACES = 0,
+        HOSTS = 1,
+        RELAYS = 2,
+        USERS  = 3
     };
     Q_ENUM(TabType)
 
@@ -71,6 +73,7 @@ public:
 
 public slots:
     void onUpdateRelayList();
+    void onUpdateHostList();
     void onUpdateUserList();
     void onAddUser();
     void onModifyUser();
@@ -78,6 +81,7 @@ public slots:
 
 signals:
     void sig_relayListRequest();
+    void sig_hostListRequest();
     void sig_userListRequest();
     void sig_addUser(const proto::router::User& user);
     void sig_modifyUser(const proto::router::User& user);
@@ -94,6 +98,7 @@ private slots:
     void onCurrentUserChanged();
     void onUserContextMenuRequested(const QPoint& pos);
     void onRelayListReceived(const proto::router::RelayList& relays);
+    void onHostListReceived(const proto::router::HostList& hosts);
     void onUserListReceived(const proto::router::UserList& list);
     void onUserResultReceived(const proto::router::UserResult& result);
 

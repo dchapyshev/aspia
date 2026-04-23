@@ -58,7 +58,7 @@ public slots:
 
 signals:
     void sig_started();
-    void sig_statistics(const proto::router::RelayStat& relay_stat);
+    void sig_statistics(const proto::router::RelayStatistics& statistics);
     void sig_keyExpired(quint32 key_id);
     void sig_finished();
 

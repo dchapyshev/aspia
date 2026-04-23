@@ -36,7 +36,7 @@ public:
     using PeerData = std::pair<std::string, quint16>;
 
     const std::optional<PeerData>& peerData() const { return peer_data_; }
-    const std::optional<proto::router::RelayStat>& relayStat() const { return relay_stat_; }
+    const std::optional<proto::router::RelayStatistics>& statistics() const { return statistics_; }
     void sendKeyUsed(quint32 key_id);
     void disconnectPeerSession(const proto::router::PeerConnectionRequest& request);
 
@@ -48,7 +48,7 @@ private:
     void readKeyPool(const proto::router::RelayKeyPool& key_pool);
 
     std::optional<PeerData> peer_data_;
-    std::optional<proto::router::RelayStat> relay_stat_;
+    std::optional<proto::router::RelayStatistics> statistics_;
 
     base::Parser<proto::router::RelayToRouter> incoming_message_;
     base::Serializer<proto::router::RouterToRelay> outgoing_message_;

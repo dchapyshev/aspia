@@ -25,6 +25,7 @@
 #include "client/config.h"
 
 namespace proto::router {
+class HostList;
 class RelayList;
 class User;
 class UserList;
@@ -61,6 +62,7 @@ public slots:
 
     // Administrator methods.
     void onRelayListRequest();
+    void onHostListRequest();
     void onUserListRequest();
     void onAddUser(const proto::router::User& user);
     void onModifyUser(const proto::router::User& user);
@@ -71,6 +73,7 @@ public slots:
 signals:
     void sig_statusChanged(const QUuid& uuid, client::RouterConnection::Status status);
     void sig_relayListReceived(const proto::router::RelayList& list);
+    void sig_hostListReceived(const proto::router::HostList& list);
     void sig_userListReceived(const proto::router::UserList& list);
     void sig_userResultReceived(const proto::router::UserResult& result);
 

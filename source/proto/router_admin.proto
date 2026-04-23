@@ -27,6 +27,25 @@ package proto.router;
 
 message RelayInfo
 {
+    message Statistics
+    {
+        repeated PeerConnection peer = 1;
+        int64 uptime = 2;
+    }
+
+    int64 entry_id        = 1;
+    int64 timepoint       = 2;
+    string ip_address     = 3;
+    peer.Version version  = 4;
+    string os_name        = 5;
+    string computer_name  = 6;
+    string architecture   = 7;
+    int64 pool_size       = 8;
+    Statistics statistics = 9;
+}
+
+message HostInfo
+{
     int64 entry_id       = 1;
     int64 timepoint      = 2;
     string ip_address    = 3;
@@ -34,7 +53,7 @@ message RelayInfo
     string os_name       = 5;
     string computer_name = 6;
     string architecture  = 7;
-    int64 pool_size      = 8;
+    uint64 host_id       = 8;
 }
 
 message Session
@@ -102,6 +121,17 @@ message RelayList
 {
     string error_code        = 1;
     repeated RelayInfo relay = 2;
+}
+
+message HostListRequest
+{
+    int64 dummy = 1;
+}
+
+message HostList
+{
+    string error_code      = 1;
+    repeated HostInfo host = 2;
 }
 
 message HostSessionData
@@ -193,19 +223,21 @@ message RemoveHostRequest
 message RouterToAdmin
 {
     RelayList relay_list         = 1;
-    SessionList session_list     = 2;
-    SessionResult session_result = 3;
-    UserList user_list           = 4;
-    UserResult user_result       = 5;
+    HostList host_list           = 2;
+    SessionList session_list     = 3;
+    SessionResult session_result = 4;
+    UserList user_list           = 5;
+    UserResult user_result       = 6;
 }
 
 message AdminToRouter
 {
     RelayListRequest relay_list_request           = 1;
-    SessionListRequest session_list_request       = 2;
-    SessionRequest session_request                = 3;
-    UserListRequest user_list_request             = 4;
-    UserRequest user_request                      = 5;
-    PeerConnectionRequest peer_connection_request = 6;
-    RemoveHostRequest remove_host_request         = 7;
+    HostListRequest host_list_request             = 2;
+    SessionListRequest session_list_request       = 3;
+    SessionRequest session_request                = 4;
+    UserListRequest user_list_request             = 5;
+    UserRequest user_request                      = 6;
+    PeerConnectionRequest peer_connection_request = 7;
+    RemoveHostRequest remove_host_request         = 8;
 }

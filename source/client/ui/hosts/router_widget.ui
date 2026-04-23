@@ -28,6 +28,95 @@
      <property name="currentIndex">
       <number>0</number>
      </property>
+     <widget class="QWidget" name="tab_workspaces">
+      <attribute name="icon">
+       <iconset resource="../../../common/resources/common.qrc">
+        <normaloff>:/img/workspace.svg</normaloff>:/img/workspace.svg</iconset>
+      </attribute>
+      <attribute name="title">
+       <string>Workspaces</string>
+      </attribute>
+     </widget>
+     <widget class="QWidget" name="tab_hosts">
+      <attribute name="icon">
+       <iconset resource="../../../common/resources/common.qrc">
+        <normaloff>:/img/computer.svg</normaloff>:/img/computer.svg</iconset>
+      </attribute>
+      <attribute name="title">
+       <string>Hosts</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_4">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QTreeWidget" name="tree_hosts">
+         <property name="editTriggers">
+          <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
+         </property>
+         <property name="showDropIndicator" stdset="0">
+          <bool>false</bool>
+         </property>
+         <property name="indentation">
+          <number>0</number>
+         </property>
+         <property name="itemsExpandable">
+          <bool>false</bool>
+         </property>
+         <property name="sortingEnabled">
+          <bool>true</bool>
+         </property>
+         <property name="expandsOnDoubleClick">
+          <bool>false</bool>
+         </property>
+         <column>
+          <property name="text">
+           <string>Computer Name</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>IP Address</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Connect Time</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>ID</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Version</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Architecture</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Operating System</string>
+          </property>
+         </column>
+        </widget>
+       </item>
+      </layout>
+     </widget>
      <widget class="QWidget" name="tab_relays">
       <attribute name="icon">
        <iconset resource="../../../common/resources/common.qrc">

@@ -65,9 +65,9 @@ void SessionRelay::onSessionMessage(quint8 channel_id, const QByteArray& buffer)
     {
         readKeyPool(incoming_message_->key_pool());
     }
-    else if (incoming_message_->has_relay_stat())
+    else if (incoming_message_->has_statistics())
     {
-        relay_stat_ = std::move(*incoming_message_->mutable_relay_stat());
+        statistics_ = std::move(*incoming_message_->mutable_statistics());
     }
     else
     {

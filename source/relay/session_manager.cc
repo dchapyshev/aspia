@@ -431,24 +431,24 @@ void SessionManager::onStatTimeout()
 {
     Session::TimePoint now = Session::Clock::now();
 
-    proto::router::RelayStat relay_stat;
-    relay_stat.set_uptime(std::chrono::duration_cast<std::chrono::seconds>(now - start_time_).count());
+    proto::router::RelayStatistics statistics;
+    statistics.set_uptime(std::chrono::duration_cast<std::chrono::seconds>(now - start_time_).count());
 
     for (const auto& session : std::as_const(active_sessions_))
     {
-        proto::router::PeerConnection* peer_connection = relay_stat.add_peer_connection();
-        peer_connection->set_session_id(session->sessionId());
-        peer_connection->set_status(proto::router::PeerConnection::PEER_STATUS_ACTIVE);
-        peer_connection->set_client_address(session->clientAddress().toStdString());
-        peer_connection->set_client_user_name(session->clientUserName().toStdString());
-        peer_connection->set_host_address(session->hostAddress().toStdString());
-        peer_connection->set_host_id(session->hostId());
-        peer_connection->set_bytes_transferred(session->bytesTransferred());
-        peer_connection->set_idle_time(session->idleTime(now).count());
-        peer_connection->set_duration(session->duration(now).count());
+        proto::router::PeerConnection* peer = statistics.add_peer();
+        peer->set_session_id(session->sessionId());
+        peer->set_status(proto::router::PeerConnection::PEER_STATUS_ACTIVE);
+        peer->set_client_address(session->clientAddress().toStdString());
+        peer->set_client_user_name(session->clientUserName().toStdString());
+        peer->set_host_address(session->hostAddress().toStdString());
+        peer->set_host_id(session->hostId());
+        peer->set_bytes_transferred(session->bytesTransferred());
+        peer->set_idle_time(session->idleTime(now).count());
+        peer->set_duration(session->duration(now).count());
     }
 
-    emit sig_statistics(relay_stat);
+    emit sig_statistics(statistics);
 }
 
 //--------------------------------------------------------------------------------------------------
