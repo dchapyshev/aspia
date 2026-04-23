@@ -2129,7 +2129,7 @@
     </message>
     <message>
         <location filename="../client/ui/router_dialog.ui" line="39"/>
-        <source>Name:</source>
+        <source>Display Name:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2638,147 +2638,147 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="46"/>
+        <location filename="../client/ui/settings_dialog.ui" line="42"/>
         <source>Theme:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="93"/>
+        <location filename="../client/ui/settings_dialog.ui" line="85"/>
         <source>Router</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="114"/>
-        <source>Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/settings_dialog.ui" line="119"/>
+        <location filename="../client/ui/settings_dialog.ui" line="120"/>
         <source>Access Level</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="170"/>
+        <location filename="../client/ui/settings_dialog.ui" line="171"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="187"/>
+        <location filename="../client/ui/settings_dialog.ui" line="188"/>
         <source>Desktop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="199"/>
+        <location filename="../client/ui/settings_dialog.ui" line="200"/>
         <source>Features</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="205"/>
+        <location filename="../client/ui/settings_dialog.ui" line="206"/>
         <source>Enable audio</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="212"/>
+        <location filename="../client/ui/settings_dialog.ui" line="213"/>
         <source>Enable clipboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="219"/>
+        <location filename="../client/ui/settings_dialog.ui" line="220"/>
         <source>Show shape of remote cursor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="226"/>
+        <location filename="../client/ui/settings_dialog.ui" line="227"/>
         <source>Show position of remote cursor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="242"/>
+        <location filename="../client/ui/settings_dialog.ui" line="243"/>
         <source>Appearance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="248"/>
+        <location filename="../client/ui/settings_dialog.ui" line="249"/>
         <source>Disable desktop effects</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="255"/>
+        <location filename="../client/ui/settings_dialog.ui" line="256"/>
         <source>Disable desktop wallpaper</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="277"/>
+        <location filename="../client/ui/settings_dialog.ui" line="278"/>
         <source>Lock computer at disconnect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="284"/>
+        <location filename="../client/ui/settings_dialog.ui" line="285"/>
         <source>Block remote input</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="308"/>
+        <location filename="../client/ui/settings_dialog.ui" line="309"/>
         <source>Update</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="314"/>
+        <location filename="../client/ui/settings_dialog.ui" line="315"/>
         <source>Check for updates on startup</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="321"/>
+        <location filename="../client/ui/settings_dialog.ui" line="322"/>
         <source>Use custom update server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="330"/>
+        <location filename="../client/ui/settings_dialog.ui" line="331"/>
         <source>Server:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="271"/>
+        <location filename="../client/ui/settings_dialog.ui" line="272"/>
         <source>Other</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="109"/>
+        <location filename="../client/ui/settings_dialog.ui" line="110"/>
         <source>Address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="124"/>
+        <location filename="../client/ui/settings_dialog.ui" line="115"/>
+        <source>Display Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_dialog.ui" line="125"/>
         <source>User Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="134"/>
+        <location filename="../client/ui/settings_dialog.ui" line="135"/>
         <source>Add...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="141"/>
+        <location filename="../client/ui/settings_dialog.ui" line="142"/>
         <source>Edit...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="148"/>
+        <location filename="../client/ui/settings_dialog.ui" line="149"/>
         <source>Remove</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="370"/>
+        <location filename="../client/ui/settings_dialog.ui" line="371"/>
         <source>Check for updates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="60"/>
+        <location filename="../client/ui/settings_dialog.ui" line="52"/>
         <source>Display name when connected:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="70"/>
+        <location filename="../client/ui/settings_dialog.ui" line="62"/>
         <source>Enter a name or leave the field empty</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5670,7 +5670,7 @@
 <context>
     <name>client::SettingsDialog</name>
     <message>
-        <location filename="../client/ui/settings_dialog.cc" line="333"/>
+        <location filename="../client/ui/settings_dialog.cc" line="332"/>
         <source>Are you sure you want to delete router &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>

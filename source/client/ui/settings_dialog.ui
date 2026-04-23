@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>475</width>
-    <height>279</height>
+    <width>556</width>
+    <height>443</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -23,45 +23,37 @@
       <attribute name="title">
        <string>General</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_general">
+      <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_language">
-         <item>
+        <layout class="QGridLayout" name="gridLayout">
+         <item row="0" column="0">
           <widget class="QLabel" name="label_language">
            <property name="text">
             <string>Language:</string>
            </property>
           </widget>
          </item>
-         <item>
+         <item row="0" column="1">
           <widget class="QComboBox" name="combo_language"/>
          </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_theme">
-         <item>
+         <item row="1" column="0">
           <widget class="QLabel" name="label_theme">
            <property name="text">
             <string>Theme:</string>
            </property>
           </widget>
          </item>
-         <item>
+         <item row="1" column="1">
           <widget class="QComboBox" name="combo_theme"/>
          </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_display_name">
-         <item>
+         <item row="2" column="0">
           <widget class="QLabel" name="label_display_name">
            <property name="text">
             <string>Display name when connected:</string>
            </property>
           </widget>
          </item>
-         <item>
+         <item row="2" column="1">
           <widget class="QLineEdit" name="edit_display_name">
            <property name="maxLength">
             <number>16</number>
@@ -95,14 +87,23 @@
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
         <widget class="QTreeWidget" name="tree_routers">
-         <property name="rootIsDecorated">
-          <bool>false</bool>
+         <property name="editTriggers">
+          <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
          </property>
-         <property name="sortingEnabled">
+         <property name="showDropIndicator" stdset="0">
           <bool>false</bool>
          </property>
          <property name="selectionMode">
           <enum>QAbstractItemView::SelectionMode::SingleSelection</enum>
+         </property>
+         <property name="indentation">
+          <number>0</number>
+         </property>
+         <property name="rootIsDecorated">
+          <bool>false</bool>
+         </property>
+         <property name="sortingEnabled">
+          <bool>true</bool>
          </property>
          <column>
           <property name="text">
@@ -111,7 +112,7 @@
          </column>
          <column>
           <property name="text">
-           <string>Name</string>
+           <string>Display Name</string>
           </property>
          </column>
          <column>

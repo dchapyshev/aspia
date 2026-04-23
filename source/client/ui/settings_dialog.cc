@@ -48,14 +48,14 @@ QString sessionTypeToString(proto::router::SessionType session_type)
 {
     switch (session_type)
     {
-    case proto::router::SESSION_TYPE_ADMIN:
-        return QCoreApplication::translate("SettingsDialog", "Administrator");
-    case proto::router::SESSION_TYPE_MANAGER:
-        return QCoreApplication::translate("SettingsDialog", "Manager");
-    case proto::router::SESSION_TYPE_CLIENT:
-        return QCoreApplication::translate("SettingsDialog", "Client");
-    default:
-        return QCoreApplication::translate("SettingsDialog", "Unknown");
+        case proto::router::SESSION_TYPE_ADMIN:
+            return QCoreApplication::translate("SettingsDialog", "Administrator");
+        case proto::router::SESSION_TYPE_MANAGER:
+            return QCoreApplication::translate("SettingsDialog", "Manager");
+        case proto::router::SESSION_TYPE_CLIENT:
+            return QCoreApplication::translate("SettingsDialog", "Client");
+        default:
+            return QCoreApplication::translate("SettingsDialog", "Unknown");
     }
 }
 
@@ -80,6 +80,7 @@ SettingsDialog::SettingsDialog(QWidget* parent)
 
         QTreeWidgetItem* item = new QTreeWidgetItem(ui.tree_routers);
         item->setText(kColumnAddress, address.toString());
+        item->setIcon(kColumnAddress, QIcon(":/img/stack.svg"));
         item->setText(kColumnName, config.name);
         item->setText(kColumnSessionType, sessionTypeToString(config.session_type));
         item->setText(kColumnUserName, config.username);
@@ -88,10 +89,8 @@ SettingsDialog::SettingsDialog(QWidget* parent)
     }
 
     ui.tree_routers->header()->setStretchLastSection(true);
-    ui.tree_routers->header()->setSectionResizeMode(
-        kColumnAddress, QHeaderView::Stretch);
-    ui.tree_routers->header()->setSectionResizeMode(
-        kColumnName, QHeaderView::Stretch);
+    ui.tree_routers->header()->setSectionResizeMode(kColumnAddress, QHeaderView::Stretch);
+    ui.tree_routers->header()->setSectionResizeMode(kColumnName, QHeaderView::Stretch);
 
     connect(ui.button_add_router, &QPushButton::clicked, this, &SettingsDialog::onAddRouter);
     connect(ui.button_edit_router, &QPushButton::clicked, this, &SettingsDialog::onEditRouter);
@@ -269,6 +268,7 @@ void SettingsDialog::onAddRouter()
 
         QTreeWidgetItem* item = new QTreeWidgetItem(ui.tree_routers);
         item->setText(kColumnAddress, address.toString());
+        item->setIcon(kColumnAddress, QIcon(":/img/stack.svg"));
         item->setText(kColumnName, config.name);
         item->setText(kColumnSessionType, sessionTypeToString(config.session_type));
         item->setText(kColumnUserName, config.username);
@@ -289,8 +289,7 @@ void SettingsDialog::onEditRouter()
     if (!item)
         return;
 
-    base::Address addr =
-        base::Address::fromString(item->text(kColumnAddress), DEFAULT_ROUTER_TCP_PORT);
+    base::Address addr = base::Address::fromString(item->text(kColumnAddress), DEFAULT_ROUTER_TCP_PORT);
 
     RouterConfig config;
     config.name = item->text(kColumnName);
