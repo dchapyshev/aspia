@@ -96,6 +96,7 @@ private slots:
     void onStatusChanged(const QUuid& uuid, client::RouterConnection::Status status);
     void onTabChanged(int index);
     void onCurrentUserChanged();
+    void onCurrentRelayChanged();
     void onUserContextMenuRequested(const QPoint& pos);
     void onRelayListReceived(const proto::router::RelayList& relays);
     void onHostListReceived(const proto::router::HostList& hosts);
@@ -104,6 +105,7 @@ private slots:
 
 private:
     void updateStatusLabel();
+    void updateRelayStatistics();
 
     Ui::RouterWidget ui;
 

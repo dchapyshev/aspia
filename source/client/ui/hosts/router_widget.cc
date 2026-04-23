@@ -82,6 +82,62 @@ private:
     Q_DISABLE_COPY_MOVE(RelayTreeItem)
 };
 
+class PeerTreeItem final : public QTreeWidgetItem
+{
+public:
+    explicit PeerTreeItem(const proto::router::PeerConnection& connection)
+    {
+        updateItem(connection);
+
+        setIcon(0, QIcon(":/img/user.svg"));
+        setText(0, QString::fromStdString(conn.client_user_name()));
+        setText(1, QString::number(conn.host_id()));
+        setText(2, QString::fromStdString(conn.host_address()));
+        setText(3, QString::fromStdString(conn.client_address()));
+    }
+
+    void updateItem(const proto::router::PeerConnection& connection)
+    {
+        conn = connection;
+        setText(4, RouterWidget::sizeToString(conn.bytes_transferred()));
+        setText(5, RouterWidget::delayToString(conn.duration()));
+        setText(6, RouterWidget::delayToString(conn.idle_time()));
+    }
+
+    // QTreeWidgetItem implementation.
+    bool operator<(const QTreeWidgetItem &other) const final
+    {
+        int column = treeWidget()->sortColumn();
+        if (column == 1)
+        {
+            const PeerTreeItem* other_item = static_cast<const PeerTreeItem*>(&other);
+            return conn.host_id() < other_item->conn.host_id();
+        }
+        else if (column == 4)
+        {
+            const PeerTreeItem* other_item = static_cast<const PeerTreeItem*>(&other);
+            return conn.bytes_transferred() < other_item->conn.bytes_transferred();
+        }
+        else if (column == 5)
+        {
+            const PeerTreeItem* other_item = static_cast<const PeerTreeItem*>(&other);
+            return conn.duration() < other_item->conn.duration();
+        }
+        else if (column == 6)
+        {
+            const PeerTreeItem* other_item = static_cast<const PeerTreeItem*>(&other);
+            return conn.idle_time() < other_item->conn.idle_time();
+        }
+
+        return QTreeWidgetItem::operator<(other);
+    }
+
+    proto::router::PeerConnection conn;
+
+private:
+    Q_DISABLE_COPY_MOVE(PeerTreeItem)
+};
+
 class UserTreeItem final : public QTreeWidgetItem
 {
     Q_DECLARE_TR_FUNCTIONS(UserTreeItem)
@@ -180,6 +236,8 @@ RouterWidget::RouterWidget(const RouterConfig& config, QWidget* parent)
     connect(ui.tab, &QTabWidget::currentChanged, this, &RouterWidget::onTabChanged);
     connect(ui.tree_users, &QTreeWidget::itemSelectionChanged,
             this, &RouterWidget::onCurrentUserChanged);
+    connect(ui.tree_relays, &QTreeWidget::itemSelectionChanged,
+            this, &RouterWidget::onCurrentRelayChanged);
 
     ui.tree_users->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(ui.tree_users, &QTreeWidget::customContextMenuRequested,
@@ -631,6 +689,7 @@ void RouterWidget::onRelayListReceived(const proto::router::RelayList& relays)
             ui.tree_relays->addTopLevelItem(new RelayTreeItem(info));
     }
 
+    updateRelayStatistics();
     updateStatusLabel();
 }
 
@@ -696,6 +755,71 @@ void RouterWidget::onUserResultReceived(const proto::router::UserResult& result)
     }
 
     onUpdateUserList();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::onCurrentRelayChanged()
+{
+    ui.tree_peers->clear();
+    updateRelayStatistics();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::updateRelayStatistics()
+{
+    RelayTreeItem* item = static_cast<RelayTreeItem*>(ui.tree_relays->currentItem());
+    if (!item)
+    {
+        ui.tree_peers->setEnabled(false);
+        return;
+    }
+
+    ui.tree_peers->setEnabled(true);
+
+    if (!item->info.has_statistics())
+        return;
+
+    const proto::router::RelayInfo::Statistics& stats = item->info.statistics();
+
+    auto has_with_id = [](const proto::router::RelayInfo::Statistics& stats, quint64 session_id)
+    {
+        for (int i = 0; i < stats.peer_size(); ++i)
+        {
+            if (stats.peer(i).session_id() == session_id)
+                return true;
+        }
+
+        return false;
+    };
+
+    // Remove from the UI all connections that are not in the list.
+    for (int i = ui.tree_peers->topLevelItemCount() - 1; i >= 0; --i)
+    {
+        PeerTreeItem* peer_item = static_cast<PeerTreeItem*>(ui.tree_peers->topLevelItem(i));
+        if (!has_with_id(stats, peer_item->conn.session_id()))
+            delete peer_item;
+    }
+
+    // Adding and updating elements in the UI.
+    for (int i = 0; i < stats.peer_size(); ++i)
+    {
+        const proto::router::PeerConnection& connection = stats.peer(i);
+        bool found = false;
+
+        for (int j = 0; j < ui.tree_peers->topLevelItemCount(); ++j)
+        {
+            PeerTreeItem* peer_item = static_cast<PeerTreeItem*>(ui.tree_peers->topLevelItem(j));
+            if (peer_item->conn.session_id() == connection.session_id())
+            {
+                peer_item->updateItem(connection);
+                found = true;
+                break;
+            }
+        }
+
+        if (!found)
+            ui.tree_peers->addTopLevelItem(new PeerTreeItem(connection));
+    }
 }
 
 } // namespace client
