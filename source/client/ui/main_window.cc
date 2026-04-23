@@ -402,12 +402,43 @@ void MainWindow::installTabActions(ClientTab* tab)
         QMenu* menu = menuForActionGroup(entry.first);
         if (menu)
         {
-            if (!menu->isEmpty())
-                menu->addSeparator();
+            // Find the first static action (the first action that is not one of our
+            // previously inserted dynamic items).
+            QAction* anchor = nullptr;
+            const QList<QAction*> existing = menu->actions();
+            for (QAction* action : existing)
+            {
+                bool is_ours = false;
+                for (const auto& [m, items] : std::as_const(tab_menu_actions_))
+                {
+                    if (m == menu && items.contains(action))
+                    {
+                        is_ours = true;
+                        break;
+                    }
+                }
+                if (!is_ours)
+                {
+                    anchor = action;
+                    break;
+                }
+            }
 
-            menu->addActions(entry.second);
-            tab_menu_actions_.append({ menu, entry.second });
+            QList<QAction*> inserted_items;
+            for (QAction* action : entry.second)
+            {
+                if (anchor)
+                    menu->insertAction(anchor, action);
+                else
+                    menu->addAction(action);
+                inserted_items.append(action);
+            }
 
+            // Separator between this dynamic group and the following items (static or next group).
+            QAction* separator = anchor ? menu->insertSeparator(anchor) : menu->addSeparator();
+            inserted_items.append(separator);
+
+            tab_menu_actions_.append({ menu, inserted_items });
             menu->menuAction()->setVisible(true);
         }
     }
@@ -436,14 +467,10 @@ void MainWindow::removeTabActions()
     for (const auto& [menu, actions] : std::as_const(tab_menu_actions_))
     {
         for (QAction* action : actions)
-            menu->removeAction(action);
-
-        // Remove trailing separators.
-        QList<QAction*> remaining = menu->actions();
-        while (!remaining.isEmpty() && remaining.last()->isSeparator())
         {
-            menu->removeAction(remaining.last());
-            remaining.removeLast();
+            menu->removeAction(action);
+            if (action->isSeparator())
+                delete action;
         }
 
         // Hide menu if it has no actions left.

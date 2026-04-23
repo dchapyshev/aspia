@@ -5065,27 +5065,27 @@
 <context>
     <name>UserTreeItem</name>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="94"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="211"/>
         <source>Yes</source>
         <translation type="unfinished">Так</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="94"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="211"/>
         <source>No</source>
         <translation type="unfinished">Ні</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="126"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="243"/>
         <source>Administrator</source>
         <translation type="unfinished">Адміністратор</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="130"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="247"/>
         <source>Client</source>
         <translation type="unfinished">Клієнт</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="128"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="245"/>
         <source>Manager</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5962,7 +5962,22 @@
     </message>
     <message>
         <location filename="../client/ui/hosts/hosts_tab.cc" line="115"/>
-        <source>Update</source>
+        <source>Disconnect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="116"/>
+        <source>Disconnect All</source>
+        <translation type="unfinished">Відключити всі</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="118"/>
+        <source>Save...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="119"/>
+        <source>Reload</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5974,24 +5989,24 @@
         <translation type="obsolete">Попередження</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="420"/>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="661"/>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="720"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="427"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="668"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="727"/>
         <source>Failed to retrieve computer information from the local database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="424"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="431"/>
         <source>(copy)</source>
         <translation type="unfinished">(копіювати)</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="428"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="435"/>
         <source>Failed to add the computer to the local database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="451"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="458"/>
         <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
         <translation type="unfinished">Ви впевнені, що хочете видалити комп&apos;ютер\&quot;%1\&quot;?</translation>
     </message>
@@ -6008,23 +6023,23 @@
         <translation type="obsolete">Ні</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="461"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="468"/>
         <source>Unable to remove computer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="539"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="546"/>
         <source>Are you sure you want to delete group &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="551"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="558"/>
         <source>Unable to remove group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="668"/>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="727"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="675"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="734"/>
         <source>The computer has an incorrect address.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6916,7 +6931,16 @@
 <context>
     <name>client::RouterWidget</name>
     <message numerus="yes">
-        <location filename="../client/ui/hosts/router_widget.cc" line="367"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="535"/>
+        <source>%n host(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../client/ui/hosts/router_widget.cc" line="538"/>
         <source>%n relay(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -6925,7 +6949,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/hosts/router_widget.cc" line="371"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="541"/>
         <source>%n user(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -6934,7 +6958,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/hosts/router_widget.cc" line="388"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="558"/>
         <source>%n seconds</source>
         <translation type="unfinished">
             <numerusform>%n секунда</numerusform>
@@ -6943,7 +6967,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/hosts/router_widget.cc" line="389"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="559"/>
         <source>%n minutes</source>
         <translation type="unfinished">
             <numerusform>%n хвилина</numerusform>
@@ -6952,7 +6976,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/hosts/router_widget.cc" line="390"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="560"/>
         <source>%n hours</source>
         <translation type="unfinished">
             <numerusform>%n година</numerusform>
@@ -6961,7 +6985,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/hosts/router_widget.cc" line="394"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="564"/>
         <source>%n days</source>
         <translation type="unfinished">
             <numerusform>%n день</numerusform>
@@ -6970,59 +6994,83 @@
         </translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="420"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="590"/>
         <source>TB</source>
         <translation type="unfinished">ТБ</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="422"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="592"/>
         <source>GB</source>
         <translation type="unfinished">ГБ</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="424"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="594"/>
         <source>MB</source>
         <translation type="unfinished">МБ</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="426"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="596"/>
         <source>kB</source>
         <translation type="unfinished">кБ</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="428"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="598"/>
         <source>B</source>
         <translation type="unfinished">Б</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="515"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="685"/>
         <source>You cannot delete a built-in user.</source>
         <translation type="unfinished">Неможливо видалити вбудованого користувача.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="520"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="690"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation type="unfinished">Ви впевнені, що хочете видалити користувача &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="679"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="896"/>
         <source>Unknown internal error.</source>
         <translation type="unfinished">Невідома внутрішня помилка.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="682"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="899"/>
         <source>Invalid data was passed.</source>
         <translation type="unfinished">Передано невірні дані.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="685"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="902"/>
         <source>A user with the specified name already exists.</source>
         <translation type="unfinished">Користувач із вказаним ім&apos;ям вже існує.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="688"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="905"/>
         <source>Unknown error type.</source>
         <translation type="unfinished">Невідомий тип помилки.</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/router_widget.cc" line="922"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="984"/>
+        <source>Save File</source>
+        <translation type="unfinished">Зберегти файл</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/router_widget.cc" line="922"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="984"/>
+        <source>JSON files (*.json)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/router_widget.cc" line="933"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="995"/>
+        <source>Could not open file for writing.</source>
+        <translation type="unfinished">Неможливо відкрити файл для запису.</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/router_widget.cc" line="972"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1059"/>
+        <source>Unable to write file.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
