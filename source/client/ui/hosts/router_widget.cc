@@ -138,6 +138,62 @@ private:
     Q_DISABLE_COPY_MOVE(PeerTreeItem)
 };
 
+class HostTreeItem final : public QTreeWidgetItem
+{
+public:
+    explicit HostTreeItem(const proto::router::HostInfo& info)
+    {
+        updateItem(info);
+
+        QString time = QLocale::system().toString(
+            QDateTime::fromSecsSinceEpoch(info.timepoint()), QLocale::ShortFormat);
+
+        setIcon(0, QIcon(":/img/computer.svg"));
+        setText(0, QString::fromStdString(info.computer_name()));
+        setText(1, QString::fromStdString(info.ip_address()));
+        setText(2, time);
+
+        const proto::peer::Version& version = info.version();
+
+        setText(4, QString("%1.%2.%3.%4")
+            .arg(version.major()).arg(version.minor()).arg(version.patch()).arg(version.revision()));
+        setText(5, QString::fromStdString(info.architecture()));
+        setText(6, QString::fromStdString(info.os_name()));
+    }
+
+    void updateItem(const proto::router::HostInfo& updated_info)
+    {
+        info = updated_info;
+        setText(3, QString::number(info.host_id()));
+    }
+
+    // QTreeWidgetItem implementation.
+    bool operator<(const QTreeWidgetItem& other) const final
+    {
+        int column = treeWidget()->sortColumn();
+        if (column == 0)
+        {
+            QCollator collator;
+            collator.setCaseSensitivity(Qt::CaseInsensitive);
+            collator.setNumericMode(true);
+
+            return collator.compare(text(0), other.text(0)) <= 0;
+        }
+        else if (column == 2)
+        {
+            const HostTreeItem* other_item = static_cast<const HostTreeItem*>(&other);
+            return info.timepoint() < other_item->info.timepoint();
+        }
+
+        return QTreeWidgetItem::operator<(other);
+    }
+
+    proto::router::HostInfo info;
+
+private:
+    Q_DISABLE_COPY_MOVE(HostTreeItem)
+};
+
 class UserTreeItem final : public QTreeWidgetItem
 {
     Q_DECLARE_TR_FUNCTIONS(UserTreeItem)
@@ -314,6 +370,7 @@ QByteArray RouterWidget::saveState()
         stream << ui.splitter->saveState();
         stream << ui.tree_peers->header()->saveState();
         stream << ui.tree_users->header()->saveState();
+        stream << ui.tree_hosts->header()->saveState();
     }
 
     return buffer;
@@ -329,11 +386,13 @@ void RouterWidget::restoreState(const QByteArray& state)
     QByteArray splitter_state;
     QByteArray peers_columns_state;
     QByteArray users_columns_state;
+    QByteArray hosts_columns_state;
 
     stream >> relays_columns_state;
     stream >> splitter_state;
     stream >> peers_columns_state;
     stream >> users_columns_state;
+    stream >> hosts_columns_state;
 
     if (!relays_columns_state.isEmpty())
     {
@@ -368,6 +427,13 @@ void RouterWidget::restoreState(const QByteArray& state)
         ui.tree_users->header()->restoreState(users_columns_state);
         ui.tree_users->header()->setSectionsClickable(true);
         ui.tree_users->header()->setSortIndicatorShown(true);
+    }
+
+    if (!hosts_columns_state.isEmpty())
+    {
+        ui.tree_hosts->header()->restoreState(hosts_columns_state);
+        ui.tree_hosts->header()->setSectionsClickable(true);
+        ui.tree_hosts->header()->setSortIndicatorShown(true);
     }
 }
 
@@ -423,13 +489,14 @@ void RouterWidget::updateStatusLabel()
 
     switch (currentTabType())
     {
+        case TabType::HOSTS:
+            status_label_->setText(tr("%n host(s)", "", ui.tree_hosts->topLevelItemCount()));
+            break;
         case TabType::RELAYS:
-            status_label_->setText(
-                tr("%n relay(s)", "", ui.tree_relays->topLevelItemCount()));
+            status_label_->setText(tr("%n relay(s)", "", ui.tree_relays->topLevelItemCount()));
             break;
         case TabType::USERS:
-            status_label_->setText(
-                tr("%n user(s)", "", ui.tree_users->topLevelItemCount()));
+            status_label_->setText(tr("%n user(s)", "", ui.tree_users->topLevelItemCount()));
             break;
         default:
             status_label_->clear();
@@ -623,20 +690,24 @@ void RouterWidget::onStatusChanged(const QUuid& uuid, RouterConnection::Status s
     if (status == RouterConnection::Status::ONLINE)
     {
         onUpdateRelayList();
+        onUpdateHostList();
         onUpdateUserList();
 
         ui.tree_relays->setEnabled(true);
         ui.tree_peers->setEnabled(true);
+        ui.tree_hosts->setEnabled(true);
         ui.tree_users->setEnabled(true);
     }
     else
     {
         ui.tree_relays->setEnabled(false);
         ui.tree_peers->setEnabled(false);
+        ui.tree_hosts->setEnabled(false);
         ui.tree_users->setEnabled(false);
 
         ui.tree_relays->clear();
         ui.tree_peers->clear();
+        ui.tree_hosts->clear();
         ui.tree_users->clear();
 
         updateStatusLabel();
@@ -696,7 +767,48 @@ void RouterWidget::onRelayListReceived(const proto::router::RelayList& relays)
 //--------------------------------------------------------------------------------------------------
 void RouterWidget::onHostListReceived(const proto::router::HostList& hosts)
 {
-    // TODO
+    auto has_with_id = [](const proto::router::HostList& hosts, qint64 entry_id)
+    {
+        for (int i = 0; i < hosts.host_size(); ++i)
+        {
+            if (hosts.host(i).entry_id() == entry_id)
+                return true;
+        }
+
+        return false;
+    };
+
+    // Remove from the UI all hosts that are not in the list.
+    for (int i = ui.tree_hosts->topLevelItemCount() - 1; i >= 0; --i)
+    {
+        HostTreeItem* item = static_cast<HostTreeItem*>(ui.tree_hosts->topLevelItem(i));
+
+        if (!has_with_id(hosts, item->info.entry_id()))
+            delete item;
+    }
+
+    // Adding and updating elements in the UI.
+    for (int i = 0; i < hosts.host_size(); ++i)
+    {
+        const proto::router::HostInfo& info = hosts.host(i);
+        bool found = false;
+
+        for (int j = 0; j < ui.tree_hosts->topLevelItemCount(); ++j)
+        {
+            HostTreeItem* item = static_cast<HostTreeItem*>(ui.tree_hosts->topLevelItem(j));
+            if (item->info.entry_id() == info.entry_id())
+            {
+                item->updateItem(info);
+                found = true;
+                break;
+            }
+        }
+
+        if (!found)
+            ui.tree_hosts->addTopLevelItem(new HostTreeItem(info));
+    }
+
+    updateStatusLabel();
 }
 
 //--------------------------------------------------------------------------------------------------
