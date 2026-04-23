@@ -80,6 +80,7 @@ private slots:
     void onEditUserAction();
     void onDeleteUserAction();
     void onReloadAction();
+    void onSaveAction();
 
 private:
     void switchContent(ContentWidget* new_widget);

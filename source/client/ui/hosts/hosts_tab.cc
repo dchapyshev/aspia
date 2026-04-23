@@ -152,6 +152,7 @@ HostsTab::HostsTab(QWidget* parent)
     connect(action_edit_user_, &QAction::triggered, this, &HostsTab::onEditUserAction);
     connect(action_delete_user_, &QAction::triggered, this, &HostsTab::onDeleteUserAction);
     connect(action_reload_, &QAction::triggered, this, &HostsTab::onReloadAction);
+    connect(action_save_, &QAction::triggered, this, &HostsTab::onSaveAction);
     connect(session_connect_group, &QActionGroup::triggered, this, &HostsTab::onConnectAction);
 
     // Register actions for toolbar and menus.
@@ -808,6 +809,9 @@ void HostsTab::updateActionsState()
     action_delete_user_->setVisible(false);
 
     action_reload_->setVisible(false);
+    action_save_->setVisible(false);
+    action_host_disconnect_->setVisible(false);
+    action_host_disconnect_all_->setVisible(false);
 
     Sidebar::Item* sidebar_item = ui.sidebar->currentItem();
 
@@ -836,6 +840,11 @@ void HostsTab::updateActionsState()
         action_add_user_->setVisible(on_users_tab);
         action_edit_user_->setVisible(has_selection);
         action_delete_user_->setVisible(has_selection);
+
+        bool on_hosts_tab = widget && widget->currentTabType() == RouterWidget::TabType::HOSTS;
+
+        action_host_disconnect_->setVisible(on_hosts_tab && widget->hasSelectedHost());
+        action_host_disconnect_all_->setVisible(on_hosts_tab && widget->hostCount() > 0);
     }
     else
     {
@@ -846,6 +855,7 @@ void HostsTab::updateActionsState()
     }
 
     action_reload_->setVisible(current_content_ && current_content_->canReload());
+    action_save_->setVisible(current_content_ && current_content_->canSave());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -924,6 +934,8 @@ RouterWidget* HostsTab::createRouterWidget(const RouterConfig& config)
             this, [this](const QUuid&, RouterWidget::TabType) { updateActionsState(); });
     connect(widget, &RouterWidget::sig_currentUserChanged,
             this, [this](const QUuid&) { updateActionsState(); });
+    connect(widget, &RouterWidget::sig_currentHostChanged,
+            this, [this](const QUuid&) { updateActionsState(); });
     connect(widget, &RouterWidget::sig_userContextMenu, this, &HostsTab::onUserContextMenu);
 
     widget->connectToRouter();
@@ -990,6 +1002,13 @@ void HostsTab::onReloadAction()
 {
     if (current_content_ && current_content_->canReload())
         current_content_->reload();
+}
+
+//--------------------------------------------------------------------------------------------------
+void HostsTab::onSaveAction()
+{
+    if (current_content_ && current_content_->canSave())
+        current_content_->save();
 }
 
 } // namespace client

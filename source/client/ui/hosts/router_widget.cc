@@ -20,7 +20,12 @@
 
 #include <QCollator>
 #include <QDateTime>
+#include <QFile>
+#include <QFileDialog>
 #include <QIODevice>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QLabel>
 #include <QStatusBar>
 
@@ -294,6 +299,8 @@ RouterWidget::RouterWidget(const RouterConfig& config, QWidget* parent)
             this, &RouterWidget::onCurrentUserChanged);
     connect(ui.tree_relays, &QTreeWidget::itemSelectionChanged,
             this, &RouterWidget::onCurrentRelayChanged);
+    connect(ui.tree_hosts, &QTreeWidget::itemSelectionChanged,
+            this, &RouterWidget::onCurrentHostChanged);
 
     ui.tree_users->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(ui.tree_users, &QTreeWidget::customContextMenuRequested,
@@ -329,6 +336,18 @@ RouterWidget::TabType RouterWidget::currentTabType() const
 bool RouterWidget::hasSelectedUser() const
 {
     return ui.tree_users->currentItem() != nullptr;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool RouterWidget::hasSelectedHost() const
+{
+    return ui.tree_hosts->currentItem() != nullptr;
+}
+
+//--------------------------------------------------------------------------------------------------
+int RouterWidget::hostCount() const
+{
+    return ui.tree_hosts->topLevelItemCount();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -450,6 +469,29 @@ void RouterWidget::reload()
             break;
         case TabType::USERS:
             onUpdateUserList();
+            break;
+        default:
+            break;
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+bool RouterWidget::canSave() const
+{
+    TabType tab = currentTabType();
+    return tab == TabType::HOSTS || tab == TabType::RELAYS;
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::save()
+{
+    switch (currentTabType())
+    {
+        case TabType::HOSTS:
+            saveHostsToFile();
+            break;
+        case TabType::RELAYS:
+            saveRelaysToFile();
             break;
         default:
             break;
@@ -808,6 +850,7 @@ void RouterWidget::onHostListReceived(const proto::router::HostList& hosts)
             ui.tree_hosts->addTopLevelItem(new HostTreeItem(info));
     }
 
+    emit sig_currentHostChanged(uuid_);
     updateStatusLabel();
 }
 
@@ -870,10 +913,165 @@ void RouterWidget::onUserResultReceived(const proto::router::UserResult& result)
 }
 
 //--------------------------------------------------------------------------------------------------
+void RouterWidget::saveHostsToFile()
+{
+    LOG(INFO) << "[ACTION] Save hosts to file";
+
+    QString selected_filter;
+    QString file_path = QFileDialog::getSaveFileName(
+        this, tr("Save File"), QString(), tr("JSON files (*.json)"), &selected_filter);
+    if (file_path.isEmpty() || selected_filter.isEmpty())
+    {
+        LOG(INFO) << "No selected path";
+        return;
+    }
+
+    QFile file(file_path);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+        LOG(INFO) << "Unable to open file:" << file.errorString();
+        common::MsgBox::warning(this, tr("Could not open file for writing."));
+        return;
+    }
+
+    QJsonArray root_array;
+
+    for (int i = 0; i < ui.tree_hosts->topLevelItemCount(); ++i)
+    {
+        const proto::router::HostInfo& info =
+            static_cast<HostTreeItem*>(ui.tree_hosts->topLevelItem(i))->info;
+
+        QJsonObject host_object;
+
+        host_object.insert("computer_name", QString::fromStdString(info.computer_name()));
+        host_object.insert("operating_system", QString::fromStdString(info.os_name()));
+        host_object.insert("ip_address", QString::fromStdString(info.ip_address()));
+        host_object.insert("architecture", QString::fromStdString(info.architecture()));
+
+        QString version = QString("%1.%2.%3.%4")
+            .arg(info.version().major()).arg(info.version().minor())
+            .arg(info.version().patch()).arg(info.version().revision());
+        host_object.insert("version", version);
+
+        QString time = QLocale::system().toString(QDateTime::fromSecsSinceEpoch(
+            info.timepoint()), QLocale::ShortFormat);
+        host_object.insert("connect_time", time);
+
+        host_object.insert("host_id", QString::number(info.host_id()));
+
+        root_array.append(host_object);
+    }
+
+    QJsonObject root_object;
+    root_object.insert("hosts", root_array);
+
+    qint64 written = file.write(QJsonDocument(root_object).toJson());
+    if (written <= 0)
+    {
+        LOG(INFO) << "Unable to write file:" << file.errorString();
+        common::MsgBox::warning(this, tr("Unable to write file."));
+        return;
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::saveRelaysToFile()
+{
+    LOG(INFO) << "[ACTION] Save relays to file";
+
+    QString selected_filter;
+    QString file_path = QFileDialog::getSaveFileName(
+        this, tr("Save File"), QString(), tr("JSON files (*.json)"), &selected_filter);
+    if (file_path.isEmpty() || selected_filter.isEmpty())
+    {
+        LOG(INFO) << "No selected path";
+        return;
+    }
+
+    QFile file(file_path);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+        LOG(INFO) << "Unable to open file:" << file.errorString();
+        common::MsgBox::warning(this, tr("Could not open file for writing."));
+        return;
+    }
+
+    QJsonArray root_array;
+
+    for (int i = 0; i < ui.tree_relays->topLevelItemCount(); ++i)
+    {
+        const proto::router::RelayInfo& info =
+            static_cast<RelayTreeItem*>(ui.tree_relays->topLevelItem(i))->info;
+
+        QJsonObject relay_object;
+
+        relay_object.insert("computer_name", QString::fromStdString(info.computer_name()));
+        relay_object.insert("operating_system", QString::fromStdString(info.os_name()));
+        relay_object.insert("ip_address", QString::fromStdString(info.ip_address()));
+        relay_object.insert("architecture", QString::fromStdString(info.architecture()));
+
+        QString version = QString("%1.%2.%3.%4")
+            .arg(info.version().major()).arg(info.version().minor())
+            .arg(info.version().patch()).arg(info.version().revision());
+        relay_object.insert("version", version);
+
+        QString time = QLocale::system().toString(QDateTime::fromSecsSinceEpoch(
+            info.timepoint()), QLocale::ShortFormat);
+        relay_object.insert("connect_time", time);
+
+        relay_object.insert("pool_size", QString::number(info.pool_size()));
+
+        if (info.has_statistics())
+        {
+            const proto::router::RelayInfo::Statistics& stats = info.statistics();
+
+            QJsonArray active_array;
+            for (int j = 0; j < stats.peer_size(); ++j)
+            {
+                const proto::router::PeerConnection& conn = stats.peer(j);
+
+                QJsonObject conn_object;
+                conn_object.insert("host_address", QString::fromStdString(conn.host_address()));
+                conn_object.insert("host_id", QString::number(conn.host_id()));
+                conn_object.insert("client_address", QString::fromStdString(conn.client_address()));
+                conn_object.insert("user_name", QString::fromStdString(conn.client_user_name()));
+                conn_object.insert("bytes_transferred", static_cast<long long>(conn.bytes_transferred()));
+                conn_object.insert("duration", static_cast<long long>(conn.duration()));
+                conn_object.insert("idle", static_cast<long long>(conn.idle_time()));
+
+                active_array.append(conn_object);
+            }
+
+            relay_object.insert("connections", active_array);
+            relay_object.insert("uptime", static_cast<long long>(stats.uptime()));
+        }
+
+        root_array.append(relay_object);
+    }
+
+    QJsonObject root_object;
+    root_object.insert("relays", root_array);
+
+    qint64 written = file.write(QJsonDocument(root_object).toJson());
+    if (written <= 0)
+    {
+        LOG(INFO) << "Unable to write file:" << file.errorString();
+        common::MsgBox::warning(this, tr("Unable to write file."));
+        return;
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
 void RouterWidget::onCurrentRelayChanged()
 {
     ui.tree_peers->clear();
     updateRelayStatistics();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::onCurrentHostChanged()
+{
+    emit sig_currentHostChanged(uuid_);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -56,11 +56,15 @@ public:
     const QUuid& uuid() const;
     TabType currentTabType() const;
     bool hasSelectedUser() const;
+    bool hasSelectedHost() const;
+    int hostCount() const;
 
     QByteArray saveState() override;
     void restoreState(const QByteArray& state) override;
     bool canReload() const override { return true; }
     void reload() override;
+    bool canSave() const override;
+    void save() override;
     void attachStatusBar(QStatusBar* statusbar) override;
     void detachStatusBar(QStatusBar* statusbar) override;
 
@@ -89,6 +93,7 @@ signals:
     void sig_statusChanged(const QUuid& uuid, client::RouterConnection::Status status);
     void sig_currentTabTypeChanged(const QUuid& uuid, client::RouterWidget::TabType tab);
     void sig_currentUserChanged(const QUuid& uuid);
+    void sig_currentHostChanged(const QUuid& uuid);
     void sig_userContextMenu(const QUuid& uuid, const base::User& user, const QPoint& global_pos);
     void sig_updateConfig(const client::RouterConfig& config);
 
@@ -97,6 +102,7 @@ private slots:
     void onTabChanged(int index);
     void onCurrentUserChanged();
     void onCurrentRelayChanged();
+    void onCurrentHostChanged();
     void onUserContextMenuRequested(const QPoint& pos);
     void onRelayListReceived(const proto::router::RelayList& relays);
     void onHostListReceived(const proto::router::HostList& hosts);
@@ -106,6 +112,8 @@ private slots:
 private:
     void updateStatusLabel();
     void updateRelayStatistics();
+    void saveHostsToFile();
+    void saveRelaysToFile();
 
     Ui::RouterWidget ui;
 

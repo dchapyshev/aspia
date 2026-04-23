@@ -40,6 +40,8 @@ public:
     virtual void restoreState(const QByteArray& state) = 0;
     virtual bool canReload() const { return false; }
     virtual void reload() {}
+    virtual bool canSave() const { return false; }
+    virtual void save() {}
     virtual void attachStatusBar(QStatusBar* /* statusbar */) {}
     virtual void detachStatusBar(QStatusBar* /* statusbar */) {}
 
