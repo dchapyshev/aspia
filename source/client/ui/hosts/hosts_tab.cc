@@ -112,7 +112,11 @@ HostsTab::HostsTab(QWidget* parent)
     action_edit_user_ = new QAction(QIcon(":/img/user-edit.svg"), tr("Edit User"), this);
     action_delete_user_ = new QAction(QIcon(":/img/user-delete.svg"), tr("Delete User"), this);
 
-    action_reload_ = new QAction(QIcon(":/img/reload.svg"), tr("Update"), this);
+    action_host_disconnect_ = new QAction(QIcon(":/img/host-disconnect.svg"), tr("Disconnect"), this);
+    action_host_disconnect_all_ = new QAction(QIcon(":/img/host-disconnect-all.svg"), tr("Disconnect All"), this);
+
+    action_save_ = new QAction(QIcon(":/img/save.svg"), tr("Save..."), this);
+    action_reload_ = new QAction(QIcon(":/img/reload.svg"), tr("Reload"), this);
 
     // Create content widgets.
     local_group_widget_ = new LocalGroupWidget(this);
@@ -151,11 +155,13 @@ HostsTab::HostsTab(QWidget* parent)
     connect(session_connect_group, &QActionGroup::triggered, this, &HostsTab::onConnectAction);
 
     // Register actions for toolbar and menus.
-    addActions(ActionGroup::EDIT, { action_add_user_, action_edit_user_, action_delete_user_ });
-    addActions(ActionGroup::EDIT, { action_add_group_, action_edit_group_, action_delete_group_ });
-    addActions(ActionGroup::EDIT, { action_add_computer_, action_edit_computer_, action_copy_computer_, action_delete_computer_ });
-    addActions(ActionGroup::VIEW, { action_reload_ });
-    addActions(ActionGroup::SESSION_TYPE, { action_desktop_, action_file_transfer_, action_chat_, action_system_info_ });
+    addActions(ActionRole::FILE, { action_save_ });
+    addActions(ActionRole::EDIT, { action_add_user_, action_edit_user_, action_delete_user_ });
+    addActions(ActionRole::EDIT, { action_add_group_, action_edit_group_, action_delete_group_ });
+    addActions(ActionRole::EDIT, { action_add_computer_, action_edit_computer_, action_copy_computer_, action_delete_computer_ });
+    addActions(ActionRole::EDIT, { action_host_disconnect_, action_host_disconnect_all_ });
+    addActions(ActionRole::VIEW, { action_reload_ });
+    addActions(ActionRole::SESSION_TYPE, { action_desktop_, action_file_transfer_, action_chat_, action_system_info_ });
 
     local_group_widget_->showGroup(ui.sidebar->currentGroupId());
     switchContent(local_group_widget_);

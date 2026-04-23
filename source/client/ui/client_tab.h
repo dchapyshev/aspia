@@ -34,7 +34,7 @@ class ClientTab : public QWidget
 
 public:
     enum class Type { HOSTS, SESSION };
-    enum class ActionGroup { FILE, EDIT, VIEW, SESSION_TYPE, HELP };
+    enum class ActionRole { FILE, EDIT, VIEW, SESSION_TYPE, HELP };
 
     explicit ClientTab(Type type, const QString& object_name, QWidget* parent = nullptr);
     ~ClientTab() override;
@@ -51,14 +51,14 @@ public:
     virtual bool hasSearchField() const;
     virtual void onSearchTextChanged(const QString& text);
 
-    using ActionGroupEntry = QPair<ActionGroup, QList<QAction*>>;
+    using ActionGroupEntry = QPair<ActionRole, QList<QAction*>>;
     const QList<ActionGroupEntry>& actionGroups() const;
 
 signals:
     void sig_titleChanged(const QString& title);
 
 protected:
-    void addActions(ActionGroup group, const QList<QAction*>& actions);
+    void addActions(ActionRole group, const QList<QAction*>& actions);
 
 private:
     Type type_;

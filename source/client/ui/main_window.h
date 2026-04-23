@@ -67,7 +67,7 @@ private:
     void installTabActions(ClientTab* tab);
     void removeTabActions();
     void updateSeparatorVisibility();
-    QMenu* menuForActionGroup(ClientTab::ActionGroup group) const;
+    QMenu* menuForActionGroup(ClientTab::ActionRole group) const;
 
     Ui::MainWindow ui;
     std::unique_ptr<common::UpdateChecker> update_checker_;

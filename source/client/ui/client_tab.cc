@@ -63,7 +63,7 @@ const QList<ClientTab::ActionGroupEntry>& ClientTab::actionGroups() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientTab::addActions(ActionGroup group, const QList<QAction*>& actions)
+void ClientTab::addActions(ActionRole group, const QList<QAction*>& actions)
 {
     action_groups_.append({ group, actions });
 }

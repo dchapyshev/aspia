@@ -133,5 +133,7 @@
         <file>workspace-search.svg</file>
         <file>workspace-settings.svg</file>
         <file>workspace-unlocked.svg</file>
+        <file>host-disconnect.svg</file>
+        <file>host-disconnect-all.svg</file>
     </qresource>
 </RCC>

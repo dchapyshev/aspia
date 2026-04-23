@@ -115,7 +115,11 @@ private:
     QAction* action_edit_user_ = nullptr;
     QAction* action_delete_user_ = nullptr;
 
+    QAction* action_save_ = nullptr;
     QAction* action_reload_ = nullptr;
+
+    QAction* action_host_disconnect_ = nullptr;
+    QAction* action_host_disconnect_all_ = nullptr;
 
     ContentWidget* current_content_ = nullptr;
     ContentWidget* previous_content_ = nullptr;
