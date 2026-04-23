@@ -74,6 +74,10 @@ void SessionAdmin::onSessionMessage(quint8 channel_id, const QByteArray& buffer)
     {
         doSessionRequest(message.session_request());
     }
+    else if (message.has_host_request())
+    {
+        doHostRequest(message.host_request());
+    }
     else if (message.has_user_list_request())
     {
         doUserListRequest();
@@ -317,6 +321,67 @@ void SessionAdmin::doSessionRequest(const proto::router::SessionRequest& request
     {
         CLOG(ERROR) << "Unknown session request:" << request.type();
         session_result->set_error_code(proto::router::SessionResult::INVALID_REQUEST);
+    }
+
+    sendMessage(proto::router::CHANNEL_ID_ADMIN, base::serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void SessionAdmin::doHostRequest(const proto::router::HostRequest& request)
+{
+    proto::router::RouterToAdmin message;
+    proto::router::HostResult* host_result = message.mutable_host_result();
+    host_result->set_type(request.type());
+
+    if (request.type() == "disconnect")
+    {
+        qint64 session_id = request.session_id();
+
+        if (!Service::instance()->stopSession(session_id))
+        {
+            CLOG(ERROR) << "Session not found:" << session_id;
+            host_result->set_error_code("invalid_entry_id");
+        }
+        else
+        {
+            CLOG(INFO) << "Host session '" << session_id << "' disconnected by" << userName();
+            host_result->set_error_code("ok");
+        }
+    }
+    else if (request.type() == "disconnect_all")
+    {
+        const QList<Session*>& sessions = Service::instance()->sessions();
+        QList<qint64> host_session_ids;
+        for (const auto& session : sessions)
+        {
+            if (session->sessionType() == proto::router::SESSION_TYPE_HOST)
+                host_session_ids.append(session->sessionId());
+        }
+
+        bool all_ok = true;
+        for (qint64 session_id : host_session_ids)
+        {
+            if (!Service::instance()->stopSession(session_id))
+            {
+                CLOG(ERROR) << "Failed to stop host session:" << session_id;
+                all_ok = false;
+            }
+        }
+
+        if (all_ok)
+        {
+            CLOG(INFO) << "All host sessions disconnected by" << userName();
+            host_result->set_error_code("ok");
+        }
+        else
+        {
+            host_result->set_error_code("internal_error");
+        }
+    }
+    else
+    {
+        CLOG(ERROR) << "Unknown host request type:" << request.type();
+        host_result->set_error_code("invalid_request");
     }
 
     sendMessage(proto::router::CHANNEL_ID_ADMIN, base::serialize(message));

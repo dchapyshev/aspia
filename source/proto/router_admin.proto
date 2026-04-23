@@ -69,18 +69,21 @@ message Session
     string architecture      = 9;
 }
 
+// deprecated
 enum SessionRequestType
 {
     SESSION_REQUEST_UNKNOWN    = 0;
     SESSION_REQUEST_DISCONNECT = 1;
 }
 
+// deprecated
 message SessionRequest
 {
     SessionRequestType type = 1;
     int64 session_id        = 2;
 }
 
+// deprecated
 message SessionResult
 {
     enum ErrorCode
@@ -95,11 +98,13 @@ message SessionResult
     ErrorCode error_code       = 2;
 }
 
+// deprecated
 message SessionListRequest
 {
     int64 dummy = 1;
 }
 
+// deprecated
 message SessionList
 {
     enum ErrorCode
@@ -110,6 +115,18 @@ message SessionList
 
     ErrorCode error_code     = 1;
     repeated Session session = 2;
+}
+
+message HostRequest
+{
+    string type      = 1; // "disconnect" | "disconnect_all"
+    int64 session_id = 2; // Used only for "disconnect".
+}
+
+message HostResult
+{
+    string type       = 1; // Same as request type.
+    string error_code = 2; // "ok" | "invalid_request" | "internal_error" | "invalid_entry_id"
 }
 
 message RelayListRequest
@@ -224,20 +241,22 @@ message RouterToAdmin
 {
     RelayList relay_list         = 1;
     HostList host_list           = 2;
-    SessionList session_list     = 3;
-    SessionResult session_result = 4;
+    SessionList session_list     = 3; // deprecated
+    SessionResult session_result = 4; // deprecated
     UserList user_list           = 5;
     UserResult user_result       = 6;
+    HostResult host_result       = 7;
 }
 
 message AdminToRouter
 {
     RelayListRequest relay_list_request           = 1;
     HostListRequest host_list_request             = 2;
-    SessionListRequest session_list_request       = 3;
-    SessionRequest session_request                = 4;
+    SessionListRequest session_list_request       = 3; // deprecated
+    SessionRequest session_request                = 4; // deprecated
     UserListRequest user_list_request             = 5;
     UserRequest user_request                      = 6;
     PeerConnectionRequest peer_connection_request = 7;
     RemoveHostRequest remove_host_request         = 8;
+    HostRequest host_request                      = 9;
 }

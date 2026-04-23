@@ -31,6 +31,7 @@ class QLabel;
 class QStatusBar;
 
 namespace proto::router {
+class HostResult;
 class RelayList;
 } // namespace proto::router
 
@@ -85,6 +86,8 @@ public slots:
     void onAddUser();
     void onModifyUser();
     void onDeleteUser();
+    void onDisconnectHost();
+    void onDisconnectAllHosts();
 
 signals:
     void sig_relayListRequest();
@@ -93,6 +96,8 @@ signals:
     void sig_addUser(const proto::router::User& user);
     void sig_modifyUser(const proto::router::User& user);
     void sig_deleteUser(qint64 entry_id);
+    void sig_disconnectHost(qint64 session_id);
+    void sig_disconnectAllHosts();
     void sig_statusChanged(const QUuid& uuid, client::RouterConnection::Status status);
     void sig_currentTabTypeChanged(const QUuid& uuid, client::RouterWidget::TabType tab);
     void sig_currentUserChanged(const QUuid& uuid);
@@ -113,6 +118,7 @@ private slots:
     void onHostListReceived(const proto::router::HostList& hosts);
     void onUserListReceived(const proto::router::UserList& list);
     void onUserResultReceived(const proto::router::UserResult& result);
+    void onHostResultReceived(const proto::router::HostResult& result);
 
 private:
     void updateStatusLabel();

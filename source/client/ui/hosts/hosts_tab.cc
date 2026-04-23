@@ -153,6 +153,8 @@ HostsTab::HostsTab(QWidget* parent)
     connect(action_delete_user_, &QAction::triggered, this, &HostsTab::onDeleteUserAction);
     connect(action_reload_, &QAction::triggered, this, &HostsTab::onReloadAction);
     connect(action_save_, &QAction::triggered, this, &HostsTab::onSaveAction);
+    connect(action_host_disconnect_, &QAction::triggered, this, &HostsTab::onDisconnectHostAction);
+    connect(action_host_disconnect_all_, &QAction::triggered, this, &HostsTab::onDisconnectAllHostsAction);
     connect(session_connect_group, &QActionGroup::triggered, this, &HostsTab::onConnectAction);
 
     // Register actions for toolbar and menus.
@@ -1034,6 +1036,32 @@ void HostsTab::onSaveAction()
 {
     if (current_content_ && current_content_->canSave())
         current_content_->save();
+}
+
+//--------------------------------------------------------------------------------------------------
+void HostsTab::onDisconnectHostAction()
+{
+    Sidebar::Item* sidebar_item = ui.sidebar->currentItem();
+    if (!sidebar_item || sidebar_item->itemType() != Sidebar::Item::ROUTER)
+        return;
+
+    Sidebar::Router* router = static_cast<Sidebar::Router*>(sidebar_item);
+    RouterWidget* widget = router_widgets_.value(router->uuid());
+    if (widget)
+        widget->onDisconnectHost();
+}
+
+//--------------------------------------------------------------------------------------------------
+void HostsTab::onDisconnectAllHostsAction()
+{
+    Sidebar::Item* sidebar_item = ui.sidebar->currentItem();
+    if (!sidebar_item || sidebar_item->itemType() != Sidebar::Item::ROUTER)
+        return;
+
+    Sidebar::Router* router = static_cast<Sidebar::Router*>(sidebar_item);
+    RouterWidget* widget = router_widgets_.value(router->uuid());
+    if (widget)
+        widget->onDisconnectAllHosts();
 }
 
 } // namespace client

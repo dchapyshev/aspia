@@ -43,6 +43,7 @@ private:
     void doUserRequest(const proto::router::UserRequest& request);
     void doSessionListRequest(const proto::router::SessionListRequest& request);
     void doSessionRequest(const proto::router::SessionRequest& request);
+    void doHostRequest(const proto::router::HostRequest& request);
     void doPeerConnectionRequest(const proto::router::PeerConnectionRequest& request);
     void doRemoveHostRequest(const proto::router::RemoveHostRequest& request);
 

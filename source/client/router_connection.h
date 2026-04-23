@@ -26,6 +26,7 @@
 
 namespace proto::router {
 class HostList;
+class HostResult;
 class RelayList;
 class User;
 class UserList;
@@ -67,6 +68,8 @@ public slots:
     void onAddUser(const proto::router::User& user);
     void onModifyUser(const proto::router::User& user);
     void onDeleteUser(qint64 entry_id);
+    void onDisconnectHost(qint64 session_id);
+    void onDisconnectAllHosts();
 
     // Manager methods.
 
@@ -76,6 +79,7 @@ signals:
     void sig_hostListReceived(const proto::router::HostList& list);
     void sig_userListReceived(const proto::router::UserList& list);
     void sig_userResultReceived(const proto::router::UserResult& result);
+    void sig_hostResultReceived(const proto::router::HostResult& result);
 
 private slots:
     void onTcpReady();

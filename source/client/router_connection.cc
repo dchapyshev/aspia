@@ -215,6 +215,41 @@ void RouterConnection::onDeleteUser(qint64 entry_id)
 }
 
 //--------------------------------------------------------------------------------------------------
+void RouterConnection::onDisconnectHost(qint64 session_id)
+{
+    if (config_.session_type != proto::router::SESSION_TYPE_ADMIN)
+    {
+        LOG(ERROR) << "No administrator access level";
+        return;
+    }
+
+    proto::router::AdminToRouter message;
+    proto::router::HostRequest* request = message.mutable_host_request();
+    request->set_type("disconnect");
+    request->set_session_id(session_id);
+
+    LOG(INFO) << "Sending host disconnect request (session_id:" << session_id << ")";
+    sendMessage(proto::router::CHANNEL_ID_ADMIN, base::serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterConnection::onDisconnectAllHosts()
+{
+    if (config_.session_type != proto::router::SESSION_TYPE_ADMIN)
+    {
+        LOG(ERROR) << "No administrator access level";
+        return;
+    }
+
+    proto::router::AdminToRouter message;
+    proto::router::HostRequest* request = message.mutable_host_request();
+    request->set_type("disconnect_all");
+
+    LOG(INFO) << "Sending host disconnect all request";
+    sendMessage(proto::router::CHANNEL_ID_ADMIN, base::serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
 void RouterConnection::onTcpReady()
 {
     CHECK(tcp_channel_);
@@ -277,6 +312,11 @@ void RouterConnection::onTcpMessageReceived(quint8 channel_id, const QByteArray&
         {
             LOG(INFO) << "User result received";
             emit sig_userResultReceived(message.user_result());
+        }
+        else if (message.has_host_result())
+        {
+            LOG(INFO) << "Host result received";
+            emit sig_hostResultReceived(message.host_result());
         }
         else
         {

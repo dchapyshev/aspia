@@ -280,6 +280,8 @@ RouterWidget::RouterWidget(const RouterConfig& config, QWidget* parent)
             this, &RouterWidget::onUserListReceived, Qt::QueuedConnection);
     connect(connection_, &RouterConnection::sig_userResultReceived,
             this, &RouterWidget::onUserResultReceived, Qt::QueuedConnection);
+    connect(connection_, &RouterConnection::sig_hostResultReceived,
+            this, &RouterWidget::onHostResultReceived, Qt::QueuedConnection);
 
     connect(this, &RouterWidget::sig_relayListRequest,
             connection_, &RouterConnection::onRelayListRequest, Qt::QueuedConnection);
@@ -293,6 +295,10 @@ RouterWidget::RouterWidget(const RouterConfig& config, QWidget* parent)
             connection_, &RouterConnection::onModifyUser, Qt::QueuedConnection);
     connect(this, &RouterWidget::sig_deleteUser,
             connection_, &RouterConnection::onDeleteUser, Qt::QueuedConnection);
+    connect(this, &RouterWidget::sig_disconnectHost,
+            connection_, &RouterConnection::onDisconnectHost, Qt::QueuedConnection);
+    connect(this, &RouterWidget::sig_disconnectAllHosts,
+            connection_, &RouterConnection::onDisconnectAllHosts, Qt::QueuedConnection);
     connect(this, &RouterWidget::sig_updateConfig,
             connection_, &RouterConnection::onUpdateConfig, Qt::QueuedConnection);
 
@@ -744,6 +750,47 @@ void RouterWidget::onDeleteUser()
 }
 
 //--------------------------------------------------------------------------------------------------
+void RouterWidget::onDisconnectHost()
+{
+    HostTreeItem* tree_item = static_cast<HostTreeItem*>(ui.tree_hosts->currentItem());
+    if (!tree_item)
+    {
+        LOG(INFO) << "No selected host";
+        return;
+    }
+
+    if (common::MsgBox::question(this, tr("Are you sure you want to disconnect host \"%1\"?")
+        .arg(QString::fromStdString(tree_item->info.computer_name()))) != common::MsgBox::Yes)
+    {
+        LOG(INFO) << "[ACTION] Disconnect host rejected by user";
+        return;
+    }
+
+    LOG(INFO) << "[ACTION] Disconnect host accepted by user";
+    emit sig_disconnectHost(tree_item->info.entry_id());
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::onDisconnectAllHosts()
+{
+    if (ui.tree_hosts->topLevelItemCount() <= 0)
+    {
+        LOG(INFO) << "Host list is empty";
+        return;
+    }
+
+    if (common::MsgBox::question(this,
+            tr("Are you sure you want to disconnect all hosts?")) != common::MsgBox::Yes)
+    {
+        LOG(INFO) << "[ACTION] Disconnect all hosts rejected by user";
+        return;
+    }
+
+    LOG(INFO) << "[ACTION] Disconnect all hosts accepted by user";
+    emit sig_disconnectAllHosts();
+}
+
+//--------------------------------------------------------------------------------------------------
 void RouterWidget::onTabChanged(int index)
 {
     updateStatusLabel();
@@ -967,6 +1014,29 @@ void RouterWidget::onUserResultReceived(const proto::router::UserResult& result)
     }
 
     onUpdateUserList();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::onHostResultReceived(const proto::router::HostResult& result)
+{
+    const std::string& error_code = result.error_code();
+    if (error_code != "ok")
+    {
+        const char* message;
+
+        if (error_code == "invalid_request")
+            message = QT_TR_NOOP("Invalid host request.");
+        else if (error_code == "internal_error")
+            message = QT_TR_NOOP("Unknown internal error.");
+        else if (error_code == "invalid_entry_id")
+            message = QT_TR_NOOP("Invalid entry id.");
+        else
+            message = QT_TR_NOOP("Unknown error type.");
+
+        common::MsgBox::warning(this, tr(message));
+    }
+
+    onUpdateHostList();
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -82,6 +82,8 @@ private slots:
     void onDeleteUserAction();
     void onReloadAction();
     void onSaveAction();
+    void onDisconnectHostAction();
+    void onDisconnectAllHostsAction();
 
 private:
     void switchContent(ContentWidget* new_widget);
