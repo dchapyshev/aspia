@@ -18,6 +18,8 @@
 
 #include "client/ui/hosts/router_widget.h"
 
+#include <QApplication>
+#include <QClipboard>
 #include <QCollator>
 #include <QDateTime>
 #include <QFile>
@@ -305,6 +307,10 @@ RouterWidget::RouterWidget(const RouterConfig& config, QWidget* parent)
     ui.tree_users->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(ui.tree_users, &QTreeWidget::customContextMenuRequested,
             this, &RouterWidget::onUserContextMenuRequested);
+
+    ui.tree_hosts->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(ui.tree_hosts, &QTreeWidget::customContextMenuRequested,
+            this, &RouterWidget::onHostContextMenuRequested);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -348,6 +354,45 @@ bool RouterWidget::hasSelectedHost() const
 int RouterWidget::hostCount() const
 {
     return ui.tree_hosts->topLevelItemCount();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::copyCurrentHostRow()
+{
+    QTreeWidgetItem* item = ui.tree_hosts->currentItem();
+    if (!item)
+        return;
+
+    QString result;
+    const int column_count = item->columnCount();
+    for (int i = 0; i < column_count; ++i)
+    {
+        const QString text = item->text(i);
+        if (!text.isEmpty())
+            result += text + ' ';
+    }
+    result.chop(1);
+
+    if (result.isEmpty())
+        return;
+
+    if (QClipboard* clipboard = QApplication::clipboard())
+        clipboard->setText(result);
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::copyCurrentHostColumn(int column)
+{
+    QTreeWidgetItem* item = ui.tree_hosts->currentItem();
+    if (!item || column < 0)
+        return;
+
+    const QString text = item->text(column);
+    if (text.isEmpty())
+        return;
+
+    if (QClipboard* clipboard = QApplication::clipboard())
+        clipboard->setText(text);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -724,6 +769,18 @@ void RouterWidget::onUserContextMenuRequested(const QPoint& pos)
 
     QPoint global_pos = ui.tree_users->viewport()->mapToGlobal(pos);
     emit sig_userContextMenu(uuid_, user, global_pos);
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::onHostContextMenuRequested(const QPoint& pos)
+{
+    QTreeWidgetItem* item = ui.tree_hosts->itemAt(pos);
+    if (item)
+        ui.tree_hosts->setCurrentItem(item);
+
+    const int column = ui.tree_hosts->indexAt(pos).column();
+    const QPoint global_pos = ui.tree_hosts->viewport()->mapToGlobal(pos);
+    emit sig_hostContextMenu(uuid_, global_pos, column);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -937,6 +937,7 @@ RouterWidget* HostsTab::createRouterWidget(const RouterConfig& config)
     connect(widget, &RouterWidget::sig_currentHostChanged,
             this, [this](const QUuid&) { updateActionsState(); });
     connect(widget, &RouterWidget::sig_userContextMenu, this, &HostsTab::onUserContextMenu);
+    connect(widget, &RouterWidget::sig_hostContextMenu, this, &HostsTab::onHostContextMenu);
 
     widget->connectToRouter();
     return widget;
@@ -956,6 +957,30 @@ void HostsTab::onUserContextMenu(const QUuid& /* uuid */, const base::User& user
         menu.addAction(action_add_user_);
     }
     menu.exec(pos);
+}
+
+//--------------------------------------------------------------------------------------------------
+void HostsTab::onHostContextMenu(const QUuid& uuid, const QPoint& pos, int column)
+{
+    RouterWidget* widget = router_widgets_.value(uuid);
+    if (!widget || !widget->hasSelectedHost())
+        return;
+
+    QMenu menu;
+    menu.addAction(action_host_disconnect_);
+    menu.addSeparator();
+
+    QAction* copy_row = menu.addAction(tr("Copy Row"));
+    QAction* copy_col = menu.addAction(tr("Copy Value"));
+
+    QAction* action = menu.exec(pos);
+    if (!action)
+        return;
+
+    if (action == copy_row)
+        widget->copyCurrentHostRow();
+    else if (action == copy_col)
+        widget->copyCurrentHostColumn(column);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -59,6 +59,9 @@ public:
     bool hasSelectedHost() const;
     int hostCount() const;
 
+    void copyCurrentHostRow();
+    void copyCurrentHostColumn(int column);
+
     QByteArray saveState() override;
     void restoreState(const QByteArray& state) override;
     bool canReload() const override { return true; }
@@ -95,6 +98,7 @@ signals:
     void sig_currentUserChanged(const QUuid& uuid);
     void sig_currentHostChanged(const QUuid& uuid);
     void sig_userContextMenu(const QUuid& uuid, const base::User& user, const QPoint& global_pos);
+    void sig_hostContextMenu(const QUuid& uuid, const QPoint& global_pos, int column);
     void sig_updateConfig(const client::RouterConfig& config);
 
 private slots:
@@ -104,6 +108,7 @@ private slots:
     void onCurrentRelayChanged();
     void onCurrentHostChanged();
     void onUserContextMenuRequested(const QPoint& pos);
+    void onHostContextMenuRequested(const QPoint& pos);
     void onRelayListReceived(const proto::router::RelayList& relays);
     void onHostListReceived(const proto::router::HostList& hosts);
     void onUserListReceived(const proto::router::UserList& list);
