@@ -24,6 +24,8 @@
 #include "base/net/tcp_channel.h"
 #include "client/config.h"
 
+class QTimer;
+
 namespace proto::router {
 class HostList;
 class HostResult;
@@ -96,6 +98,7 @@ private:
 
     RouterConfig config_;
     base::TcpChannel* tcp_channel_ = nullptr;
+    QTimer* reconnect_timer_ = nullptr;
     Status status_ = Status::OFFLINE;
 
     Q_DISABLE_COPY_MOVE(RouterConnection)

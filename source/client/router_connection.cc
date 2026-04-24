@@ -18,6 +18,8 @@
 
 #include "client/router_connection.h"
 
+#include <QTimer>
+
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/net/tcp_channel_ng.h"
@@ -27,12 +29,26 @@
 
 namespace client {
 
+namespace {
+
+const std::chrono::seconds kReconnectTimeout{ 5 };
+
+} // namespace
+
 //--------------------------------------------------------------------------------------------------
 RouterConnection::RouterConnection(const RouterConfig& config, QObject* parent)
     : QObject(parent),
-      config_(config)
+      config_(config),
+      reconnect_timer_(new QTimer(this))
 {
     LOG(INFO) << "Ctor";
+
+    reconnect_timer_->setSingleShot(true);
+    connect(reconnect_timer_, &QTimer::timeout, this, [this]()
+    {
+        LOG(INFO) << "Reconnecting to router" << config_.address << ":" << config_.port;
+        onConnectToRouter();
+    });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -45,10 +61,12 @@ RouterConnection::~RouterConnection()
 //--------------------------------------------------------------------------------------------------
 void RouterConnection::onConnectToRouter()
 {
+    reconnect_timer_->stop();
+
     if (status_ != Status::OFFLINE)
         return;
 
-    LOG(INFO) << "Connecting to router " << config_.address << ":" << config_.port;
+    LOG(INFO) << "Connecting to router" << config_.address << ":" << config_.port;
 
     setStatus(Status::CONNECTING);
 
@@ -73,6 +91,8 @@ void RouterConnection::onConnectToRouter()
 //--------------------------------------------------------------------------------------------------
 void RouterConnection::onDisconnectFromRouter()
 {
+    reconnect_timer_->stop();
+
     if (tcp_channel_)
     {
         tcp_channel_->disconnect();
@@ -296,7 +316,8 @@ void RouterConnection::onTcpReady()
 {
     CHECK(tcp_channel_);
 
-    LOG(INFO) << "Connected to router " << config_.address << ":" << config_.port;
+    LOG(INFO) << "Connected to router" << config_.address << ":" << config_.port;
+    reconnect_timer_->stop();
     setStatus(Status::ONLINE);
 
     tcp_channel_->setPaused(false);
@@ -305,7 +326,7 @@ void RouterConnection::onTcpReady()
 //--------------------------------------------------------------------------------------------------
 void RouterConnection::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code)
 {
-    LOG(INFO) << "Router connection error: " << error_code;
+    LOG(INFO) << "Router connection error:" << error_code;
 
     if (tcp_channel_)
     {
@@ -315,6 +336,9 @@ void RouterConnection::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code
     }
 
     setStatus(Status::OFFLINE);
+
+    LOG(INFO) << "Reconnect scheduled in" << kReconnectTimeout.count() << "seconds";
+    reconnect_timer_->start(kReconnectTimeout);
 }
 
 //--------------------------------------------------------------------------------------------------
