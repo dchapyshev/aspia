@@ -39,7 +39,7 @@ message RelayKeyUsed
 // Sent from relay to router.
 message RelayStatistics
 {
-    repeated PeerConnection peer = 1;
+    repeated Peer peer = 1;
     int64 uptime = 2;
 }
 
@@ -54,5 +54,5 @@ message RelayToRouter
 message RouterToRelay
 {
     RelayKeyUsed key_used = 1;
-    PeerConnectionRequest peer_connection_request = 2;
+    PeerRequest peer_request = 2;
 }

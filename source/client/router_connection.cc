@@ -169,7 +169,7 @@ void RouterConnection::onAddUser(const proto::router::User& user)
 
     proto::router::AdminToRouter message;
     proto::router::UserRequest* request = message.mutable_user_request();
-    request->set_type(proto::router::USER_REQUEST_ADD);
+    request->set_command_name("add");
     request->mutable_user()->CopyFrom(user);
 
     LOG(INFO) << "Sending user add request (username:" << user.name()
@@ -188,7 +188,7 @@ void RouterConnection::onModifyUser(const proto::router::User& user)
 
     proto::router::AdminToRouter message;
     proto::router::UserRequest* request = message.mutable_user_request();
-    request->set_type(proto::router::USER_REQUEST_MODIFY);
+    request->set_command_name("modify");
     request->mutable_user()->CopyFrom(user);
 
     LOG(INFO) << "Sending user modify request (username:" << user.name()
@@ -207,7 +207,7 @@ void RouterConnection::onDeleteUser(qint64 entry_id)
 
     proto::router::AdminToRouter message;
     proto::router::UserRequest* request = message.mutable_user_request();
-    request->set_type(proto::router::USER_REQUEST_DELETE);
+    request->set_command_name("delete");
     request->mutable_user()->set_entry_id(entry_id);
 
     LOG(INFO) << "Sending user delete request (entry_id:" << entry_id << ")";
@@ -281,10 +281,10 @@ void RouterConnection::onDisconnectPeer(qint64 relay_entry_id, quint64 peer_sess
     }
 
     proto::router::AdminToRouter message;
-    proto::router::PeerConnectionRequest* request = message.mutable_peer_connection_request();
+    proto::router::PeerRequest* request = message.mutable_peer_request();
     request->set_relay_session_id(relay_entry_id);
     request->set_peer_session_id(peer_session_id);
-    request->set_type(proto::router::PEER_CONNECTION_REQUEST_DISCONNECT);
+    request->set_command_name("disconnect");
 
     LOG(INFO) << "Sending peer disconnect request (relay_entry_id:" << relay_entry_id
               << "peer_session_id:" << peer_session_id << ")";

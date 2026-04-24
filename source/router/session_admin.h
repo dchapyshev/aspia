@@ -43,11 +43,11 @@ private:
     void doUserRequest(const proto::router::UserRequest& request);
     void doHostRequest(const proto::router::HostRequest& request);
     void doRelayRequest(const proto::router::RelayRequest& request);
-    void doPeerConnectionRequest(const proto::router::PeerConnectionRequest& request);
+    void doPeerRequest(const proto::router::PeerRequest& request);
 
-    proto::router::UserResult::ErrorCode addUser(const proto::router::User& user);
-    proto::router::UserResult::ErrorCode modifyUser(const proto::router::User& user);
-    proto::router::UserResult::ErrorCode deleteUser(const proto::router::User& user);
+    std::string addUser(const proto::router::User& user);
+    std::string modifyUser(const proto::router::User& user);
+    std::string deleteUser(const proto::router::User& user);
 
     Q_DISABLE_COPY_MOVE(SessionAdmin)
 };

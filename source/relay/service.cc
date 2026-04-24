@@ -173,19 +173,17 @@ void Service::onTcpMessageReceived(quint8 /* channel_id */, const QByteArray& bu
             key_deleter->deleteKey();
         });
     }
-    else if (incoming_message_->has_peer_connection_request())
+    else if (incoming_message_->has_peer_request())
     {
-        const proto::router::PeerConnectionRequest& request = incoming_message_->peer_connection_request();
+        const proto::router::PeerRequest& request = incoming_message_->peer_request();
 
-        switch (request.type())
+        if (request.command_name() == "disconnect")
         {
-            case proto::router::PEER_CONNECTION_REQUEST_DISCONNECT:
-                session_manager_->onDisconnectSession(request.peer_session_id());
-                break;
-
-            default:
-                LOG(ERROR) << "Unsupported request type:" << request.type();
-                break;
+            session_manager_->onDisconnectSession(request.peer_session_id());
+        }
+        else
+        {
+            LOG(ERROR) << "Unsupported peer connection request command:" << request.command_name();
         }
     }
     else

@@ -95,7 +95,7 @@ private:
 class PeerTreeItem final : public QTreeWidgetItem
 {
 public:
-    explicit PeerTreeItem(const proto::router::PeerConnection& connection)
+    explicit PeerTreeItem(const proto::router::Peer& connection)
     {
         updateItem(connection);
 
@@ -106,7 +106,7 @@ public:
         setText(3, QString::fromStdString(conn.client_address()));
     }
 
-    void updateItem(const proto::router::PeerConnection& connection)
+    void updateItem(const proto::router::Peer& connection)
     {
         conn = connection;
         setText(4, RouterWidget::sizeToString(conn.bytes_transferred()));
@@ -142,7 +142,7 @@ public:
         return QTreeWidgetItem::operator<(other);
     }
 
-    proto::router::PeerConnection conn;
+    proto::router::Peer conn;
 
 private:
     Q_DISABLE_COPY_MOVE(PeerTreeItem)
@@ -1222,25 +1222,21 @@ void RouterWidget::onUserListReceived(const proto::router::UserList& list)
 //--------------------------------------------------------------------------------------------------
 void RouterWidget::onUserResultReceived(const proto::router::UserResult& result)
 {
-    if (result.error_code() != proto::router::UserResult::SUCCESS)
+    const std::string& error_code = result.error_code();
+    if (error_code != "ok")
     {
         const char* message;
 
-        switch (result.error_code())
-        {
-            case proto::router::UserResult::INTERNAL_ERROR:
-                message = QT_TR_NOOP("Unknown internal error.");
-                break;
-            case proto::router::UserResult::INVALID_DATA:
-                message = QT_TR_NOOP("Invalid data was passed.");
-                break;
-            case proto::router::UserResult::ALREADY_EXISTS:
-                message = QT_TR_NOOP("A user with the specified name already exists.");
-                break;
-            default:
-                message = QT_TR_NOOP("Unknown error type.");
-                break;
-        }
+        if (error_code == "invalid_request")
+            message = QT_TR_NOOP("Invalid user request.");
+        else if (error_code == "internal_error")
+            message = QT_TR_NOOP("Unknown internal error.");
+        else if (error_code == "invalid_data")
+            message = QT_TR_NOOP("Invalid data was passed.");
+        else if (error_code == "already_exists")
+            message = QT_TR_NOOP("A user with the specified name already exists.");
+        else
+            message = QT_TR_NOOP("Unknown error type.");
 
         common::MsgBox::warning(this, tr(message));
     }
@@ -1410,7 +1406,7 @@ void RouterWidget::saveRelaysToFile()
             QJsonArray active_array;
             for (int j = 0; j < stats.peer_size(); ++j)
             {
-                const proto::router::PeerConnection& conn = stats.peer(j);
+                const proto::router::Peer& conn = stats.peer(j);
 
                 QJsonObject conn_object;
                 conn_object.insert("host_address", QString::fromStdString(conn.host_address()));
@@ -1496,7 +1492,7 @@ void RouterWidget::updateRelayStatistics()
     // Adding and updating elements in the UI.
     for (int i = 0; i < stats.peer_size(); ++i)
     {
-        const proto::router::PeerConnection& connection = stats.peer(i);
+        const proto::router::Peer& connection = stats.peer(i);
         bool found = false;
 
         for (int j = 0; j < ui.tree_peers->topLevelItemCount(); ++j)

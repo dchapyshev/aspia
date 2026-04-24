@@ -129,24 +129,24 @@ void SessionHost::readHostIdRequest(const proto::router::HostIdRequest& host_id_
         {
             if (host_id_ != base::kInvalidHostId)
             {
-                host_id_response->set_error_code(proto::router::HostIdResponse::SUCCESS);
+                host_id_response->set_error_code("ok");
                 host_id_response->set_host_id(host_id_);
                 emit sig_hostIdAssigned(host_id_);
             }
             else
             {
-                host_id_response->set_error_code(proto::router::HostIdResponse::UNKNOWN);
+                host_id_response->set_error_code("unknown");
                 CLOG(ERROR) << "Invalid host id";
             }
         }
         break;
 
         case Database::ErrorCode::NO_HOST_FOUND:
-            host_id_response->set_error_code(proto::router::HostIdResponse::NO_HOST_FOUND);
+            host_id_response->set_error_code("no_host_found");
             break;
 
         default:
-            host_id_response->set_error_code(proto::router::HostIdResponse::UNKNOWN);
+            host_id_response->set_error_code("unknown");
             break;
     }
 

@@ -46,9 +46,9 @@ void SessionRelay::sendKeyUsed(quint32 key_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionRelay::disconnectPeerSession(const proto::router::PeerConnectionRequest& request)
+void SessionRelay::disconnectPeerSession(const proto::router::PeerRequest& request)
 {
-    outgoing_message_.newMessage().mutable_peer_connection_request()->CopyFrom(request);
+    outgoing_message_.newMessage().mutable_peer_request()->CopyFrom(request);
     sendMessage(0, outgoing_message_.serialize());
 }
 

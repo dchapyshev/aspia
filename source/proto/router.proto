@@ -79,35 +79,29 @@ message RelayCredentials
     bytes secret = 4;
 }
 
-message PeerConnection
+message Peer
 {
-    enum PeerStatus
+    enum Status
     {
-        PEER_STATUS_UNKNOWN  = 0;
-        PEER_STATUS_ACTIVE   = 1;
-        PEER_STATUS_FINISHED = 2;
+        STATUS_UNKNOWN  = 0;
+        STATUS_ACTIVE   = 1;
+        STATUS_FINISHED = 2;
     }
 
     uint64 session_id       = 1;
-    PeerStatus status       = 2;
+    Status status           = 2;
     string client_address   = 3;
     string client_user_name = 4;
     string host_address     = 5;
-    fixed64 host_id         = 6;
+    uint64 host_id          = 6;
     int64 bytes_transferred = 7;
     int64 duration          = 8;
     int64 idle_time         = 9;
 }
 
-enum PeerConnectionRequestType
+message PeerRequest
 {
-    PEER_CONNECTION_REQUEST_UNKNOWN    = 0;
-    PEER_CONNECTION_REQUEST_DISCONNECT = 1;
-}
-
-message PeerConnectionRequest
-{
-    int64 relay_session_id         = 1;
-    PeerConnectionRequestType type = 2;
-    uint64 peer_session_id         = 3;
+    int64 relay_session_id = 1;
+    string command_name    = 2; // "disconnect"
+    uint64 peer_session_id = 3;
 }

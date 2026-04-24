@@ -38,7 +38,7 @@ public:
     const std::optional<PeerData>& peerData() const { return peer_data_; }
     const std::optional<proto::router::RelayStatistics>& statistics() const { return statistics_; }
     void sendKeyUsed(quint32 key_id);
-    void disconnectPeerSession(const proto::router::PeerConnectionRequest& request);
+    void disconnectPeerSession(const proto::router::PeerRequest& request);
 
 protected:
     // Session implementation.

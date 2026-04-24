@@ -29,7 +29,7 @@ message RelayInfo
 {
     message Statistics
     {
-        repeated PeerConnection peer = 1;
+        repeated Peer peer = 1;
         int64 uptime = 2;
     }
 
@@ -124,61 +124,39 @@ message UserListRequest
 
 message UserList
 {
-    enum ErrorCode
-    {
-        SUCCESS       = 0;
-        UNKNOWN_ERROR = 1;
-    }
-
-    ErrorCode error_code = 1;
-    repeated User user   = 2;
-}
-
-enum UserRequestType
-{
-    USER_REQUEST_UNKNOWN = 0;
-    USER_REQUEST_ADD     = 1;
-    USER_REQUEST_MODIFY  = 2;
-    USER_REQUEST_DELETE  = 3;
+    string error_code  = 1; // "ok" | "internal_error"
+    repeated User user = 2;
 }
 
 message UserRequest
 {
-    UserRequestType type = 1;
-    User user            = 2;
+    string command_name = 1; // "add" | "modify" | "delete"
+    User user           = 2;
 }
 
 message UserResult
 {
-    enum ErrorCode
-    {
-        SUCCESS        = 0;
-        INTERNAL_ERROR = 1;
-        INVALID_DATA   = 2;
-        ALREADY_EXISTS = 3;
-    }
-
-    UserRequestType type = 1;
-    ErrorCode error_code = 2;
+    string command_name = 1; // Same as request command_name.
+    string error_code   = 2; // "ok" | "invalid_request" | "internal_error" | "invalid_data" | "already_exists"
 }
 
 message RouterToAdmin
 {
-    RelayList relay_list         = 1;
-    HostList host_list           = 2;
-    UserList user_list           = 3;
-    UserResult user_result       = 4;
-    HostResult host_result       = 5;
-    RelayResult relay_result     = 6;
+    RelayList relay_list     = 1;
+    RelayResult relay_result = 2;
+    HostList host_list       = 3;
+    HostResult host_result   = 4;
+    UserList user_list       = 5;
+    UserResult user_result   = 6;
 }
 
 message AdminToRouter
 {
-    RelayListRequest relay_list_request           = 1;
-    HostListRequest host_list_request             = 2;
-    UserListRequest user_list_request             = 3;
-    UserRequest user_request                      = 4;
-    PeerConnectionRequest peer_connection_request = 5;
-    HostRequest host_request                      = 6;
-    RelayRequest relay_request                    = 7;
+    RelayListRequest relay_list_request = 1;
+    RelayRequest relay_request          = 2;
+    HostListRequest host_list_request   = 3;
+    HostRequest host_request            = 4;
+    UserListRequest user_list_request   = 5;
+    UserRequest user_request            = 6;
+    PeerRequest peer_request            = 7;
 }

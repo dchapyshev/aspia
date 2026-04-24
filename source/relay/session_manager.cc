@@ -436,9 +436,9 @@ void SessionManager::onStatTimeout()
 
     for (const auto& session : std::as_const(active_sessions_))
     {
-        proto::router::PeerConnection* peer = statistics.add_peer();
+        proto::router::Peer* peer = statistics.add_peer();
         peer->set_session_id(session->sessionId());
-        peer->set_status(proto::router::PeerConnection::PEER_STATUS_ACTIVE);
+        peer->set_status(proto::router::Peer::STATUS_ACTIVE);
         peer->set_client_address(session->clientAddress().toStdString());
         peer->set_client_user_name(session->clientUserName().toStdString());
         peer->set_host_address(session->hostAddress().toStdString());

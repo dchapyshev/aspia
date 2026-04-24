@@ -186,29 +186,29 @@ void RouterManager::onTcpMessageReceived(quint8 /* channel_id */, const QByteArr
     if (in_message.has_host_id_response())
     {
         const proto::router::HostIdResponse& host_id_response = in_message.host_id_response();
+        const std::string& error_code = host_id_response.error_code();
 
-        switch (host_id_response.error_code())
+        if (error_code == "ok")
         {
-            case proto::router::HostIdResponse::SUCCESS:
-                break;
-
+            // Continue below.
+        }
+        else if (error_code == "no_host_found")
+        {
             // The specified host is not in the router's database.
-            case proto::router::HostIdResponse::NO_HOST_FOUND:
-            {
-                LOG(INFO) << "Host is not in the router's database. Reset ID";
+            LOG(INFO) << "Host is not in the router's database. Reset ID";
 
-                proto::router::HostToRouter out_message;
-                out_message.mutable_host_id_request()->set_type(proto::router::HostIdRequest::NEW_ID);
+            proto::router::HostToRouter out_message;
+            out_message.mutable_host_id_request()->set_type(proto::router::HostIdRequest::NEW_ID);
 
-                // Send host ID request.
-                LOG(INFO) << "Send ID request to router";
-                tcp_channel_->send(0, base::serialize(out_message));
-                return;
-            }
-
-            default:
-                LOG(ERROR) << "Unknown error code:" << host_id_response.error_code();
-                return;
+            // Send host ID request.
+            LOG(INFO) << "Send ID request to router";
+            tcp_channel_->send(0, base::serialize(out_message));
+            return;
+        }
+        else
+        {
+            LOG(ERROR) << "Error code from router:" << QString::fromStdString(error_code);
+            return;
         }
 
         host_id_ = host_id_response.host_id();
