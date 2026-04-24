@@ -158,8 +158,16 @@ void SessionAdmin::doHostListRequest()
         item->set_computer_name(session->computerName().toStdString());
         item->set_architecture(session->architecture().toStdString());
 
-        // Other info.
-        item->set_host_id(static_cast<SessionHost*>(session)->hostId());
+        SessionHost* host_session = dynamic_cast<SessionHost*>(session);
+        if (host_session)
+        {
+            item->set_host_id(host_session->hostId());
+        }
+        else
+        {
+            SessionLegacyHost* legacy_host_session = static_cast<SessionLegacyHost*>(session);
+            item->set_host_id(legacy_host_session->hostIdList().first());
+        }
     }
 
     sendMessage(proto::router::CHANNEL_ID_ADMIN, base::serialize(message));
