@@ -77,6 +77,8 @@ public:
         enum class Status { OFFLINE, CONNECTING, ONLINE };
 
         const QUuid& uuid() const;
+        const QString& name() const { return name_; }
+        void setName(const QString& name);
         void setStatus(Status status);
 
     private:

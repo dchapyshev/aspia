@@ -25,6 +25,7 @@
 #include <QDropEvent>
 #include <QHeaderView>
 #include <QMouseEvent>
+#include <QSet>
 #include <QUuid>
 #include <QVBoxLayout>
 
@@ -37,6 +38,22 @@
 #include "common/ui/msg_box.h"
 
 namespace client {
+
+namespace {
+
+//--------------------------------------------------------------------------------------------------
+QString routerDisplayName(const RouterConfig& config)
+{
+    if (!config.name.isEmpty())
+        return config.name;
+
+    if (config.port != DEFAULT_ROUTER_TCP_PORT)
+        return QString("%1:%2").arg(config.address).arg(config.port);
+
+    return config.address;
+}
+
+} // namespace
 
 //--------------------------------------------------------------------------------------------------
 Sidebar::Sidebar(QWidget* parent)
@@ -134,25 +151,9 @@ void Sidebar::loadRouters()
     Settings settings;
     RouterConfigList router_configs = settings.routerConfigs();
 
-    for (int i = 0; i < router_configs.size(); ++i)
+    for (const RouterConfig& config : std::as_const(router_configs))
     {
-        const RouterConfig& config = router_configs[i];
-
-        QString name;
-        if (!config.name.isEmpty())
-        {
-            name = config.name;
-        }
-        else if (config.port != DEFAULT_ROUTER_TCP_PORT)
-        {
-            name = QString("%1:%2").arg(config.address).arg(config.port);
-        }
-        else
-        {
-            name = config.address;
-        }
-
-        Router* router = new Router(config.uuid, name, tree_widget_);
+        Router* router = new Router(config.uuid, routerDisplayName(config), tree_widget_);
         router->setExpanded(true);
     }
 }
@@ -160,15 +161,41 @@ void Sidebar::loadRouters()
 //--------------------------------------------------------------------------------------------------
 void Sidebar::reloadRouters()
 {
-    // Remove all existing Router items from the tree.
+    Settings settings;
+    RouterConfigList router_configs = settings.routerConfigs();
+
+    QSet<QUuid> new_uuids;
+    new_uuids.reserve(router_configs.size());
+    for (const RouterConfig& config : std::as_const(router_configs))
+        new_uuids.insert(config.uuid);
+
+    // Remove only Router items whose uuid no longer exists.
     for (int i = tree_widget_->topLevelItemCount() - 1; i >= 0; --i)
     {
         Item* item = static_cast<Item*>(tree_widget_->topLevelItem(i));
-        if (item->itemType() == Item::ROUTER)
+        if (item->itemType() != Item::ROUTER)
+            continue;
+
+        if (!new_uuids.contains(static_cast<Router*>(item)->uuid()))
             delete tree_widget_->takeTopLevelItem(i);
     }
 
-    loadRouters();
+    // Update existing routers, append new ones at the end.
+    for (const RouterConfig& config : std::as_const(router_configs))
+    {
+        const QString name = routerDisplayName(config);
+
+        Router* router = routerByUuid(config.uuid);
+        if (router)
+        {
+            router->setName(name);
+        }
+        else
+        {
+            Router* new_router = new Router(config.uuid, name, tree_widget_);
+            new_router->setExpanded(true);
+        }
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -684,6 +711,13 @@ Sidebar::Router::Router(const QUuid& uuid, const QString& name, QTreeWidget* par
 const QUuid& Sidebar::Router::uuid() const
 {
     return uuid_;
+}
+
+//--------------------------------------------------------------------------------------------------
+void Sidebar::Router::setName(const QString& name)
+{
+    name_ = name;
+    setText(0, name);
 }
 
 //--------------------------------------------------------------------------------------------------

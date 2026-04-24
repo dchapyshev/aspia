@@ -338,16 +338,9 @@ void HostsTab::reloadRouters()
 
         auto it = router_widgets_.find(config.uuid);
         if (it != router_widgets_.end())
-        {
             it.value()->updateConfig(config);
-            // Sidebar items were recreated above and reset to OFFLINE icon.
-            // Restore the actual status for existing widgets.
-            onRouterStatusChanged(config.uuid, it.value()->status());
-        }
         else
-        {
             createRouterWidget(config);
-        }
     }
 }
 
