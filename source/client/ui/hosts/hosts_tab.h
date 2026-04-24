@@ -96,6 +96,9 @@ private:
     void destroyRouterWidget(const QUuid& uuid);
     RouterWidget* createRouterWidget(const RouterConfig& config);
 
+    void editRouter(const QUuid& uuid);
+    void deleteRouter(const QUuid& uuid);
+
     Ui::HostsTab ui;
 
     QAction* action_add_group_ = nullptr;

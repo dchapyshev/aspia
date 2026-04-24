@@ -26,12 +26,12 @@ package proto.router;
 
 message ConnectionRequest
 {
-    fixed64 host_id = 1;
+    uint64 host_id = 1;
 }
 
 message CheckHostStatus
 {
-    fixed64 host_id = 1;
+    uint64 host_id = 1;
 }
 
 message HostStatus

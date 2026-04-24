@@ -18,6 +18,8 @@
 
 #include "client/ui/hosts/hosts_tab.h"
 
+#include <algorithm>
+
 #include <QActionGroup>
 #include <QMenu>
 #include <QStatusBar>
@@ -37,6 +39,7 @@
 #include "client/ui/hosts/router_widget.h"
 #include "client/ui/hosts/router_group_widget.h"
 #include "client/ui/hosts/search_widget.h"
+#include "client/ui/router_dialog.h"
 
 namespace client {
 
@@ -621,10 +624,25 @@ void HostsTab::onSidebarContextMenu(Sidebar::Item::Type type, const QPoint& pos)
     else if (type == Sidebar::Item::Type::ROUTER_GROUP)
     {
         // TODO
+        return;
     }
     else if (type == Sidebar::Item::Type::ROUTER)
     {
-        // TODO
+        Sidebar::Item* item = ui.sidebar->currentItem();
+        if (!item || item->itemType() != Sidebar::Item::Type::ROUTER)
+            return;
+
+        QUuid uuid = static_cast<Sidebar::Router*>(item)->uuid();
+
+        QAction* edit_action = menu.addAction(QIcon(":/img/router-edit.svg"), tr("Edit Router"));
+        QAction* delete_action = menu.addAction(QIcon(":/img/router-delete.svg"), tr("Delete Router"));
+
+        QAction* result = menu.exec(pos);
+        if (result == edit_action)
+            editRouter(uuid);
+        else if (result == delete_action)
+            deleteRouter(uuid);
+        return;
     }
     else
     {
@@ -957,6 +975,62 @@ RouterWidget* HostsTab::createRouterWidget(const RouterConfig& config)
 
     widget->connectToRouter();
     return widget;
+}
+
+//--------------------------------------------------------------------------------------------------
+void HostsTab::editRouter(const QUuid& uuid)
+{
+    LOG(INFO) << "[ACTION] Edit router" << uuid.toString();
+
+    Settings settings;
+    RouterConfigList configs = settings.routerConfigs();
+
+    auto it = std::find_if(configs.begin(), configs.end(),
+                           [&uuid](const RouterConfig& c) { return c.uuid == uuid; });
+    if (it == configs.end())
+    {
+        LOG(ERROR) << "Router config not found for uuid:" << uuid.toString();
+        return;
+    }
+
+    RouterDialog dialog(*it, this);
+    if (dialog.exec() != QDialog::Accepted)
+        return;
+
+    RouterConfig updated = dialog.routerConfig();
+    updated.uuid = uuid;
+    *it = updated;
+
+    settings.setRouterConfigs(configs);
+    reloadRouters();
+}
+
+//--------------------------------------------------------------------------------------------------
+void HostsTab::deleteRouter(const QUuid& uuid)
+{
+    LOG(INFO) << "[ACTION] Delete router" << uuid.toString();
+
+    Settings settings;
+    RouterConfigList configs = settings.routerConfigs();
+
+    auto it = std::find_if(configs.begin(), configs.end(),
+                           [&uuid](const RouterConfig& c) { return c.uuid == uuid; });
+    if (it == configs.end())
+    {
+        LOG(ERROR) << "Router config not found for uuid:" << uuid.toString();
+        return;
+    }
+
+    QString message = tr("Are you sure you want to delete router \"%1\"?").arg(it->name);
+    if (common::MsgBox::question(this, message) == common::MsgBox::No)
+    {
+        LOG(INFO) << "Action is rejected by user";
+        return;
+    }
+
+    configs.erase(it);
+    settings.setRouterConfigs(configs);
+    reloadRouters();
 }
 
 //--------------------------------------------------------------------------------------------------

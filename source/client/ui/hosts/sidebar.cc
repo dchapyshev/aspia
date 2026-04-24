@@ -639,6 +639,8 @@ void Sidebar::onContextMenu(const QPoint& pos)
     if (!item)
         return;
 
+    tree_widget_->setCurrentItem(item);
+
     emit sig_contextMenu(item->itemType(), tree_widget_->viewport()->mapToGlobal(pos));
 }
 

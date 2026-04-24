@@ -1229,98 +1229,98 @@
         <translation>Інструменти</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="180"/>
-        <location filename="../console/main_window.ui" line="455"/>
+        <location filename="../console/main_window.ui" line="179"/>
+        <location filename="../console/main_window.ui" line="453"/>
         <source>Tool Bar</source>
         <translation>Панель інструментів</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="227"/>
+        <location filename="../console/main_window.ui" line="225"/>
         <source>&amp;New address book</source>
         <translation>&amp;Нова адресна книга</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="230"/>
+        <location filename="../console/main_window.ui" line="228"/>
         <source>Ctrl+N</source>
         <translation>Ctrl+N</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="239"/>
+        <location filename="../console/main_window.ui" line="237"/>
         <source>&amp;Open address book...</source>
         <translation>&amp;Відкрити адресну книгу...</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="242"/>
+        <location filename="../console/main_window.ui" line="240"/>
         <source>Ctrl+O</source>
         <translation>Ctrl+O</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="254"/>
+        <location filename="../console/main_window.ui" line="252"/>
         <source>&amp;Save</source>
         <translation>&amp;Зберегти</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="257"/>
+        <location filename="../console/main_window.ui" line="255"/>
         <source>Ctrl+S</source>
         <translation>Ctrl+S</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="265"/>
+        <location filename="../console/main_window.ui" line="263"/>
         <source>Save &amp;as...</source>
         <translation>Зберегти &amp;як...</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="268"/>
+        <location filename="../console/main_window.ui" line="266"/>
         <source>Ctrl+Alt+S</source>
         <translation>Ctrl+Alt+S</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="276"/>
+        <location filename="../console/main_window.ui" line="274"/>
         <source>&amp;Close</source>
         <translation>&amp;Закрити</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="279"/>
+        <location filename="../console/main_window.ui" line="277"/>
         <source>Ctrl+W</source>
         <translation>Ctrl+W</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="288"/>
+        <location filename="../console/main_window.ui" line="286"/>
         <source>&amp;Exit</source>
         <translation>&amp;Вихід</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="300"/>
+        <location filename="../console/main_window.ui" line="298"/>
         <source>Add Computer Group</source>
         <translation>Додати групу комп&apos;ютерів</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="312"/>
+        <location filename="../console/main_window.ui" line="310"/>
         <source>Modify Computer Group</source>
         <translation>Змінити групу комп&apos;ютерів</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="324"/>
+        <location filename="../console/main_window.ui" line="322"/>
         <source>Delete Computer Group</source>
         <translation>Видалити групу комп&apos;ютерів</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="336"/>
+        <location filename="../console/main_window.ui" line="334"/>
         <source>Add Computer</source>
         <translation>Додати комп&apos;ютер</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="348"/>
+        <location filename="../console/main_window.ui" line="346"/>
         <source>Modify Computer</source>
         <translation>Змінити комп&apos;ютер</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="360"/>
+        <location filename="../console/main_window.ui" line="358"/>
         <source>Delete Computer</source>
         <translation>Видалити комп&apos;ютер</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="375"/>
+        <location filename="../console/main_window.ui" line="373"/>
         <source>Desktop &amp;Manage</source>
         <translation>Робочий стіл і &amp;керування</translation>
     </message>
@@ -1329,27 +1329,27 @@
         <translation type="vanished">Робочий стіл і &amp;перегляд</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="387"/>
+        <location filename="../console/main_window.ui" line="385"/>
         <source>&amp;File Transfer</source>
         <translation>Передача &amp;файлів</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="396"/>
+        <location filename="../console/main_window.ui" line="394"/>
         <source>&amp;Online Help...</source>
         <translation>Онлайн &amp;допомога...</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="399"/>
+        <location filename="../console/main_window.ui" line="397"/>
         <source>F1</source>
         <translation>F1</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="408"/>
+        <location filename="../console/main_window.ui" line="406"/>
         <source>&amp;About</source>
         <translation>Про пр&amp;ограму</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="420"/>
+        <location filename="../console/main_window.ui" line="418"/>
         <source>Address Book Properties</source>
         <translation>Налаштування адресної книги</translation>
     </message>
@@ -1362,163 +1362,162 @@
         <translation type="vanished">Перегляд робочого столу</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="441"/>
-        <location filename="../console/main_window.ui" line="444"/>
+        <location filename="../console/main_window.ui" line="439"/>
+        <location filename="../console/main_window.ui" line="442"/>
         <source>File Transfer</source>
         <translation>Передача файлів</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="466"/>
+        <location filename="../console/main_window.ui" line="464"/>
         <source>Status Bar</source>
         <translation>Рядок стану</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="478"/>
+        <location filename="../console/main_window.ui" line="476"/>
         <source>Fast Connect</source>
         <translation>Швидке підключення</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="481"/>
+        <location filename="../console/main_window.ui" line="479"/>
         <source>F8</source>
         <translation>F8</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="578"/>
         <source>Router Manage</source>
-        <translation>Керування маршрутизатором</translation>
+        <translation type="vanished">Керування маршрутизатором</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="586"/>
+        <location filename="../console/main_window.ui" line="572"/>
         <source>Show icons in menus</source>
         <translation>Показувати значки в меню</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="598"/>
+        <location filename="../console/main_window.ui" line="584"/>
         <source>&amp;System Information</source>
         <translation>&amp;Інформація про систему</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="601"/>
-        <location filename="../console/main_window.ui" line="610"/>
-        <location filename="../console/main_window.ui" line="613"/>
+        <location filename="../console/main_window.ui" line="587"/>
+        <location filename="../console/main_window.ui" line="596"/>
+        <location filename="../console/main_window.ui" line="599"/>
         <source>System Information</source>
         <translation>Інформація про систему</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="625"/>
+        <location filename="../console/main_window.ui" line="611"/>
         <source>&amp;Text Chat</source>
         <translation>Текстовий &amp;чат</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="628"/>
-        <location filename="../console/main_window.ui" line="637"/>
-        <location filename="../console/main_window.ui" line="640"/>
+        <location filename="../console/main_window.ui" line="614"/>
+        <location filename="../console/main_window.ui" line="623"/>
+        <location filename="../console/main_window.ui" line="626"/>
         <source>Text Chat</source>
         <translation>Текстовий чат</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="652"/>
+        <location filename="../console/main_window.ui" line="638"/>
         <source>Update Status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="655"/>
+        <location filename="../console/main_window.ui" line="641"/>
         <source>Update the status of computers in the list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="658"/>
+        <location filename="../console/main_window.ui" line="644"/>
         <source>F5</source>
         <translation type="unfinished">F5</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="670"/>
+        <location filename="../console/main_window.ui" line="656"/>
         <source>Import Computers/Groups</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="673"/>
+        <location filename="../console/main_window.ui" line="659"/>
         <source>Import computers from file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="685"/>
+        <location filename="../console/main_window.ui" line="671"/>
         <source>Export Computer Group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="688"/>
+        <location filename="../console/main_window.ui" line="674"/>
         <source>Export computer group to file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="696"/>
+        <location filename="../console/main_window.ui" line="682"/>
         <source>Large icons</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="489"/>
+        <location filename="../console/main_window.ui" line="487"/>
         <source>Show tray icon</source>
         <translation>Показати піктограму в треї</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="429"/>
-        <location filename="../console/main_window.ui" line="432"/>
+        <location filename="../console/main_window.ui" line="427"/>
+        <location filename="../console/main_window.ui" line="430"/>
         <source>Desktop Management</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="497"/>
+        <location filename="../console/main_window.ui" line="495"/>
         <source>Minimize to tray</source>
         <translation>Згортати в трей</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="502"/>
+        <location filename="../console/main_window.ui" line="500"/>
         <source>Hide</source>
         <translation>Сховати</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="514"/>
+        <location filename="../console/main_window.ui" line="512"/>
         <source>Save all</source>
         <translation>Зберегти все</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="517"/>
+        <location filename="../console/main_window.ui" line="515"/>
         <source>Ctrl+Shift+S</source>
         <translation>Ctrl+Shift+S</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="525"/>
+        <location filename="../console/main_window.ui" line="523"/>
         <source>Close all</source>
         <translation>Закрити все</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="528"/>
+        <location filename="../console/main_window.ui" line="526"/>
         <source>Ctrl+Shift+W</source>
         <translation>Ctrl+Shift+W</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="533"/>
+        <location filename="../console/main_window.ui" line="531"/>
         <source>Check for updates...</source>
         <translation>Перевірити наявність оновлень...</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="538"/>
+        <location filename="../console/main_window.ui" line="536"/>
         <source>Update Settings</source>
         <translation>Налаштування оновлень</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="543"/>
+        <location filename="../console/main_window.ui" line="541"/>
         <source>Clear</source>
         <translation>Очистити</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="554"/>
+        <location filename="../console/main_window.ui" line="552"/>
         <source>Remember latest</source>
         <translation>Пам&apos;ятати останні</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="566"/>
+        <location filename="../console/main_window.ui" line="564"/>
         <source>Copy Computer</source>
         <translation>Скопіювати комп&apos;ютер</translation>
     </message>
@@ -2871,31 +2870,24 @@
 <context>
     <name>RouterManagerWindow</name>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.ui" line="20"/>
         <source>Router Management</source>
-        <translation>Керування маршрутизатором</translation>
+        <translation type="vanished">Керування маршрутизатором</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.ui" line="41"/>
         <source>Hosts</source>
-        <translation>Хости</translation>
+        <translation type="vanished">Хости</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.ui" line="49"/>
-        <location filename="../client/ui/router_manager/router_manager_window.ui" line="168"/>
         <source>Connections count:</source>
-        <translation>Кількість підключень:</translation>
+        <translation type="vanished">Кількість підключень:</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.ui" line="82"/>
-        <location filename="../client/ui/router_manager/router_manager_window.ui" line="200"/>
         <source>Connect Time</source>
-        <translation>Час підключення</translation>
+        <translation type="vanished">Час підключення</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.ui" line="77"/>
         <source>IP Address</source>
-        <translation>IP адреса</translation>
+        <translation type="vanished">IP адреса</translation>
     </message>
     <message>
         <source>Name</source>
@@ -2906,127 +2898,72 @@
         <translation type="vanished">Значення</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.ui" line="92"/>
-        <location filename="../client/ui/router_manager/router_manager_window.ui" line="210"/>
         <source>Version</source>
-        <translation>Версія</translation>
+        <translation type="vanished">Версія</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.ui" line="72"/>
-        <location filename="../client/ui/router_manager/router_manager_window.ui" line="215"/>
         <source>Computer Name</source>
-        <translation>Ім&apos;я комп&apos;ютера</translation>
+        <translation type="vanished">Ім&apos;я комп&apos;ютера</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.ui" line="102"/>
-        <location filename="../client/ui/router_manager/router_manager_window.ui" line="225"/>
         <source>Operating System</source>
-        <translation>Операційна система</translation>
+        <translation type="vanished">Операційна система</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.ui" line="132"/>
         <source>Disconnect</source>
-        <translation>Відключити</translation>
+        <translation type="vanished">Відключити</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.ui" line="87"/>
         <source>ID</source>
-        <translation type="unfinished">ID</translation>
+        <translation type="obsolete">ID</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.ui" line="125"/>
-        <location filename="../client/ui/router_manager/router_manager_window.ui" line="311"/>
-        <source>Save to file...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/router_manager/router_manager_window.ui" line="139"/>
         <source>Disconnect All</source>
-        <translation>Відключити всі</translation>
+        <translation type="vanished">Відключити всі</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.ui" line="146"/>
-        <location filename="../client/ui/router_manager/router_manager_window.ui" line="318"/>
-        <location filename="../client/ui/router_manager/router_manager_window.ui" line="388"/>
         <source>Refresh</source>
-        <translation>Оновити</translation>
+        <translation type="vanished">Оновити</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.ui" line="160"/>
         <source>Relay</source>
-        <translation>Перенаправлення</translation>
+        <translation type="vanished">Перенаправлення</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.ui" line="195"/>
         <source>Address</source>
-        <translation>Адреса</translation>
+        <translation type="vanished">Адреса</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.ui" line="205"/>
         <source>Pool Size</source>
-        <translation>Розмір пула</translation>
+        <translation type="vanished">Розмір пула</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.ui" line="264"/>
-        <source>Host Address</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/router_manager/router_manager_window.ui" line="259"/>
-        <source>Host ID</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/router_manager/router_manager_window.ui" line="97"/>
-        <location filename="../client/ui/router_manager/router_manager_window.ui" line="220"/>
         <source>Architecture</source>
-        <translation type="unfinished">Архітектура</translation>
+        <translation type="obsolete">Архітектура</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.ui" line="269"/>
-        <source>Client Address</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/router_manager/router_manager_window.ui" line="274"/>
-        <source>Transferred</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/router_manager/router_manager_window.ui" line="279"/>
-        <source>Duration</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/router_manager/router_manager_window.ui" line="284"/>
         <source>Idle</source>
-        <translation type="unfinished">Не активний</translation>
+        <translation type="obsolete">Не активний</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.ui" line="332"/>
         <source>Users</source>
-        <translation>Користувачі</translation>
+        <translation type="vanished">Користувачі</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.ui" line="340"/>
         <source>Add</source>
-        <translation type="unfinished">Додати</translation>
+        <translation type="obsolete">Додати</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.ui" line="357"/>
         <source>Modify</source>
-        <translation type="unfinished">Змінити</translation>
+        <translation type="obsolete">Змінити</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.ui" line="374"/>
         <source>Delete</source>
-        <translation type="unfinished">Видалити</translation>
+        <translation type="obsolete">Видалити</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.ui" line="254"/>
-        <location filename="../client/ui/router_manager/router_manager_window.ui" line="421"/>
         <source>User Name</source>
-        <translation>Ім&apos;я користувача</translation>
+        <translation type="vanished">Ім&apos;я користувача</translation>
     </message>
 </context>
 <context>
@@ -3519,22 +3456,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.cc" line="52"/>
+        <location filename="../client/ui/settings_dialog.cc" line="56"/>
         <source>Administrator</source>
         <translation type="unfinished">Адміністратор</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.cc" line="54"/>
+        <location filename="../client/ui/settings_dialog.cc" line="58"/>
         <source>Manager</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.cc" line="56"/>
+        <location filename="../client/ui/settings_dialog.cc" line="60"/>
         <source>Client</source>
         <translation type="unfinished">Клієнт</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.cc" line="58"/>
+        <location filename="../client/ui/settings_dialog.cc" line="62"/>
         <source>Unknown</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5069,27 +5006,27 @@
 <context>
     <name>UserTreeItem</name>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="214"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="216"/>
         <source>Yes</source>
         <translation type="unfinished">Так</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="214"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="216"/>
         <source>No</source>
         <translation type="unfinished">Ні</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="246"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="248"/>
         <source>Administrator</source>
         <translation type="unfinished">Адміністратор</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="250"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="252"/>
         <source>Client</source>
         <translation type="unfinished">Клієнт</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="248"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="250"/>
         <source>Manager</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5891,111 +5828,128 @@
 <context>
     <name>client::HostsTab</name>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="55"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="58"/>
         <source>Add Group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="56"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="59"/>
         <source>Delete Group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="57"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="60"/>
         <source>Edit Group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="59"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="62"/>
         <source>Add Computer</source>
         <translation type="unfinished">Додати комп&apos;ютер</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="60"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="63"/>
         <source>Delete Computer</source>
         <translation type="unfinished">Видалити комп&apos;ютер</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="61"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="64"/>
         <source>Edit Computer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="62"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="65"/>
         <source>Copy Computer</source>
         <translation type="unfinished">Скопіювати комп&apos;ютер</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="64"/>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="80"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="67"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="83"/>
         <source>Desktop Management</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="65"/>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="81"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="68"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="84"/>
         <source>File Transfer</source>
         <translation type="unfinished">Передача файлів</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="66"/>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="82"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="69"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="85"/>
         <source>Chat</source>
         <translation type="unfinished">Чат</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="67"/>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="83"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="70"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="86"/>
         <source>System Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="111"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="114"/>
         <source>Add User</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="112"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="115"/>
         <source>Edit User</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="113"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="116"/>
         <source>Delete User</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="115"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="118"/>
         <source>Disconnect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="116"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="119"/>
         <source>Disconnect All</source>
         <translation type="unfinished">Відключити всі</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="117"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="121"/>
         <source>Remove</source>
         <translation type="unfinished">Видалити</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="119"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="123"/>
         <source>Save...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="120"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="124"/>
         <source>Reload</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="980"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="637"/>
+        <source>Edit Router</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="638"/>
+        <source>Delete Router</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="1024"/>
+        <source>Are you sure you want to delete router &quot;%1&quot;?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="1064"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="1089"/>
         <source>Copy Row</source>
         <translation type="unfinished">Копіювати рядок</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="981"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="1065"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="1090"/>
         <source>Copy Value</source>
         <translation type="unfinished">Копіювати значення</translation>
     </message>
@@ -6008,24 +5962,24 @@
         <translation type="obsolete">Попередження</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="431"/>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="672"/>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="731"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="435"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="691"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="750"/>
         <source>Failed to retrieve computer information from the local database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="435"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="439"/>
         <source>(copy)</source>
         <translation type="unfinished">(копіювати)</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="439"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="443"/>
         <source>Failed to add the computer to the local database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="462"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="466"/>
         <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
         <translation type="unfinished">Ви впевнені, що хочете видалити комп&apos;ютер\&quot;%1\&quot;?</translation>
     </message>
@@ -6042,23 +5996,23 @@
         <translation type="obsolete">Ні</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="472"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="476"/>
         <source>Unable to remove computer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="550"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="554"/>
         <source>Are you sure you want to delete group &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="562"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="566"/>
         <source>Unable to remove group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="679"/>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="738"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="698"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="757"/>
         <source>The computer has an incorrect address.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6469,80 +6423,56 @@
 <context>
     <name>client::RouterManagerWindow</name>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="460"/>
         <source>Connecting to %1:%2...</source>
-        <translation>Підключення до %1:%2...</translation>
+        <translation type="vanished">Підключення до %1:%2...</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="550"/>
-        <source>Timeout waiting for reconnection.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="472"/>
         <source>Connected to: %1:%2 (version %3)</source>
-        <translation>Підключено до: %1:%2 (версія %3)</translation>
+        <translation type="vanished">Підключено до: %1:%2 (версія %3)</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="490"/>
         <source>Violation of the communication protocol.</source>
-        <translation>Порушення протоколу зв&apos;язку.</translation>
+        <translation type="vanished">Порушення протоколу зв&apos;язку.</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="503"/>
         <source>Cryptography error (message encryption or decryption failed).</source>
-        <translation>Помилка шифрування (не вдалося зашифрувати або розшифрувати повідомлення).</translation>
+        <translation type="vanished">Помилка шифрування (не вдалося зашифрувати або розшифрувати повідомлення).</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="506"/>
         <source>An error occurred with the network (e.g., the network cable was accidentally plugged out).</source>
-        <translation>Виникла помилка з мережею (напр., мережевий кабель випадково від&apos;єднано).</translation>
+        <translation type="vanished">Виникла помилка з мережею (напр., мережевий кабель випадково від&apos;єднано).</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="509"/>
         <source>Connection was refused by the peer (or timed out).</source>
-        <translation>З&apos;єднання відхилено піром (або час вийшов).</translation>
+        <translation type="vanished">З&apos;єднання відхилено піром (або час вийшов).</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="512"/>
         <source>Remote host closed the connection.</source>
-        <translation>Віддалений хост закрив з&apos;єднання.</translation>
+        <translation type="vanished">Віддалений хост закрив з&apos;єднання.</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="515"/>
         <source>Host address was not found.</source>
-        <translation>Адресу хоста не знайдено.</translation>
+        <translation type="vanished">Адресу хоста не знайдено.</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="518"/>
         <source>Socket operation timed out.</source>
-        <translation>Вийшов час операції сокета.</translation>
+        <translation type="vanished">Вийшов час операції сокета.</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="521"/>
         <source>Address specified is already in use and was set to be exclusive.</source>
-        <translation>Введена адреса вже використовується і встановлена як унікальна.</translation>
+        <translation type="vanished">Введена адреса вже використовується і встановлена як унікальна.</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="524"/>
         <source>Address specified does not belong to the host.</source>
-        <translation>Введена адреса не належить хосту.</translation>
+        <translation type="vanished">Введена адреса не належить хосту.</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="530"/>
         <source>An unknown error occurred.</source>
-        <translation>Виникла невідома помилка.</translation>
+        <translation type="vanished">Виникла невідома помилка.</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="535"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="561"/>
         <source>Error: %1</source>
-        <translation>Помилка: %1</translation>
-    </message>
-    <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="543"/>
-        <source>Router is unavailable. Waiting for reconnection...</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Помилка: %1</translation>
     </message>
     <message>
         <source>Authentication successfully completed.</source>
@@ -6561,244 +6491,140 @@
         <translation type="vanished">Виникла помилка під час аутентифікації: невірне ім&apos;я користувача або пароль.</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="500"/>
         <source>Specified session type is not allowed for the user.</source>
-        <translation>Обраний тип сесії не дозволений для користувача.</translation>
+        <translation type="vanished">Обраний тип сесії не дозволений для користувача.</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="681"/>
         <source>Invalid request.</source>
-        <translation>Невірний запит.</translation>
+        <translation type="vanished">Невірний запит.</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="684"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="720"/>
         <source>Unknown internal error.</source>
-        <translation>Невідома внутрішня помилка.</translation>
+        <translation type="vanished">Невідома внутрішня помилка.</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="687"/>
         <source>Invalid session ID was passed.</source>
-        <translation>Було передано не коректний ID.</translation>
+        <translation type="vanished">Було передано не коректний ID.</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="750"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="796"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="837"/>
         <source>Disconnect</source>
-        <translation type="unfinished">Відключити</translation>
+        <translation type="obsolete">Відключити</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="754"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="798"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="839"/>
         <source>Disconnect All</source>
-        <translation type="unfinished">Відключити всі</translation>
+        <translation type="obsolete">Відключити всі</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="755"/>
         <source>Remove</source>
-        <translation type="unfinished">Видалити</translation>
+        <translation type="obsolete">Видалити</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="756"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="799"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="913"/>
         <source>Refresh</source>
-        <translation type="unfinished">Оновити</translation>
+        <translation type="obsolete">Оновити</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="760"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="801"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="841"/>
         <source>Copy Row</source>
-        <translation type="unfinished">Копіювати рядок</translation>
+        <translation type="obsolete">Копіювати рядок</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="761"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="802"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="842"/>
         <source>Copy Value</source>
-        <translation type="unfinished">Копіювати значення</translation>
+        <translation type="obsolete">Копіювати значення</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="765"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="804"/>
-        <source>Save to file...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="893"/>
         <source>Modify</source>
-        <translation type="unfinished">Змінити</translation>
+        <translation type="obsolete">Змінити</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="896"/>
         <source>Delete</source>
-        <translation type="unfinished">Видалити</translation>
+        <translation type="obsolete">Видалити</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="910"/>
         <source>Add</source>
-        <translation type="unfinished">Додати</translation>
+        <translation type="obsolete">Додати</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1115"/>
-        <source>Are you sure you want to disconnect all relays?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1170"/>
-        <source>Deleting a host will result in all its configuration for connecting to the router being deleted. This operation is irreversible. After deleting, the host will no longer connect to the router. Are you sure you want to do this?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1177"/>
-        <source>Try to uninstall the application (result is not guaranteed)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1341"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1412"/>
         <source>Save File</source>
-        <translation type="unfinished">Зберегти файл</translation>
+        <translation type="obsolete">Зберегти файл</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1341"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1412"/>
-        <source>JSON files (*.json)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1352"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1423"/>
         <source>Could not open file for writing.</source>
-        <translation type="unfinished">Неможливо відкрити файл для запису.</translation>
-    </message>
-    <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1400"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1490"/>
-        <source>Unable to write file.</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Неможливо відкрити файл для запису.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1568"/>
         <source>%n seconds</source>
-        <translation type="unfinished">
+        <translation type="obsolete">
             <numerusform>%n секунда</numerusform>
             <numerusform>%n секунди</numerusform>
             <numerusform>%n секунд</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1569"/>
         <source>%n minutes</source>
-        <translation type="unfinished">
+        <translation type="obsolete">
             <numerusform>%n хвилина</numerusform>
             <numerusform>%n хвилини</numerusform>
             <numerusform>%n хвилин</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1570"/>
         <source>%n hours</source>
-        <translation type="unfinished">
+        <translation type="obsolete">
             <numerusform>%n година</numerusform>
             <numerusform>%n години</numerusform>
             <numerusform>%n годин</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1574"/>
         <source>%n days</source>
-        <translation type="unfinished">
+        <translation type="obsolete">
             <numerusform>%n день</numerusform>
             <numerusform>%n дні</numerusform>
             <numerusform>%n днів</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1600"/>
         <source>TB</source>
-        <translation type="unfinished">ТБ</translation>
+        <translation type="obsolete">ТБ</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1602"/>
         <source>GB</source>
-        <translation type="unfinished">ГБ</translation>
+        <translation type="obsolete">ГБ</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1604"/>
         <source>MB</source>
-        <translation type="unfinished">МБ</translation>
+        <translation type="obsolete">МБ</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1606"/>
         <source>kB</source>
-        <translation type="unfinished">кБ</translation>
+        <translation type="obsolete">кБ</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1608"/>
         <source>B</source>
-        <translation type="unfinished">Б</translation>
+        <translation type="obsolete">Б</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1100"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1145"/>
         <source>Are you sure you want to disconnect session &quot;%1&quot;?</source>
-        <translation>Ви впевнені, що хочете від&apos;єднати сесію &quot;%1&quot;?</translation>
+        <translation type="vanished">Ви впевнені, що хочете від&apos;єднати сесію &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="322"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1036"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1076"/>
-        <source>Active peers: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="469"/>
-        <source>Connected to %1:%2.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="493"/>
-        <source>An error occurred while authenticating: wrong user name or password.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="496"/>
-        <source>Version of the application you are connecting to is less than the minimum supported version.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="558"/>
-        <source>The Router version is newer than the Client version (%1 &gt; %2). Please update the application.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="690"/>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="729"/>
         <source>Unknown error type.</source>
-        <translation>Невідомий тип помилки.</translation>
+        <translation type="vanished">Невідомий тип помилки.</translation>
     </message>
     <message>
         <source>Warning</source>
         <translation type="vanished">Попередження</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="723"/>
         <source>Invalid data was passed.</source>
-        <translation>Передано невірні дані.</translation>
+        <translation type="vanished">Передано невірні дані.</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="726"/>
         <source>A user with the specified name already exists.</source>
-        <translation>Користувач із вказаним ім&apos;ям вже існує.</translation>
+        <translation type="vanished">Користувач із вказаним ім&apos;ям вже існує.</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1169"/>
         <source>Confirmation</source>
-        <translation>Підтвердження</translation>
+        <translation type="vanished">Підтвердження</translation>
     </message>
     <message>
         <source>Yes</source>
@@ -6809,19 +6635,16 @@
         <translation type="obsolete">Ні</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1202"/>
         <source>Are you sure you want to disconnect all hosts?</source>
-        <translation>Ви впевнені, що хочете від&apos;єднатись від всіх хостів?</translation>
+        <translation type="vanished">Ви впевнені, що хочете від&apos;єднатись від всіх хостів?</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1297"/>
         <source>You cannot delete a built-in user.</source>
-        <translation>Неможливо видалити вбудованого користувача.</translation>
+        <translation type="vanished">Неможливо видалити вбудованого користувача.</translation>
     </message>
     <message>
-        <location filename="../client/ui/router_manager/router_manager_window.cc" line="1302"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
-        <translation>Ви впевнені, що хочете видалити користувача &quot;%1&quot;?</translation>
+        <translation type="vanished">Ви впевнені, що хочете видалити користувача &quot;%1&quot;?</translation>
     </message>
     <message>
         <source>Computer Name</source>
@@ -6950,7 +6773,7 @@
 <context>
     <name>client::RouterWidget</name>
     <message numerus="yes">
-        <location filename="../client/ui/hosts/router_widget.cc" line="589"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="660"/>
         <source>%n host(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -6959,7 +6782,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/hosts/router_widget.cc" line="592"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="663"/>
         <source>%n relay(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -6968,7 +6791,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/hosts/router_widget.cc" line="595"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="666"/>
         <source>%n user(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -6977,7 +6800,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/hosts/router_widget.cc" line="612"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="683"/>
         <source>%n seconds</source>
         <translation type="unfinished">
             <numerusform>%n секунда</numerusform>
@@ -6986,7 +6809,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/hosts/router_widget.cc" line="613"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="684"/>
         <source>%n minutes</source>
         <translation type="unfinished">
             <numerusform>%n хвилина</numerusform>
@@ -6995,7 +6818,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/hosts/router_widget.cc" line="614"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="685"/>
         <source>%n hours</source>
         <translation type="unfinished">
             <numerusform>%n година</numerusform>
@@ -7004,7 +6827,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/hosts/router_widget.cc" line="618"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="689"/>
         <source>%n days</source>
         <translation type="unfinished">
             <numerusform>%n день</numerusform>
@@ -7013,118 +6836,161 @@
         </translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="644"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="715"/>
         <source>TB</source>
         <translation type="unfinished">ТБ</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="646"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="717"/>
         <source>GB</source>
         <translation type="unfinished">ГБ</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="648"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="719"/>
         <source>MB</source>
         <translation type="unfinished">МБ</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="650"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="721"/>
         <source>kB</source>
         <translation type="unfinished">кБ</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="652"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="723"/>
         <source>B</source>
         <translation type="unfinished">Б</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="739"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="810"/>
         <source>You cannot delete a built-in user.</source>
         <translation type="unfinished">Неможливо видалити вбудованого користувача.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="744"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="815"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation type="unfinished">Ви впевнені, що хочете видалити користувача &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="765"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="836"/>
         <source>Are you sure you want to disconnect host &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="786"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="857"/>
         <source>Are you sure you want to disconnect all hosts?</source>
         <translation type="unfinished">Ви впевнені, що хочете від&apos;єднатись від всіх хостів?</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="807"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="878"/>
         <source>Confirmation</source>
         <translation type="unfinished">Підтвердження</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="808"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="879"/>
         <source>Deleting a host will result in all its configuration for connecting to the router being deleted. This operation is irreversible. After deleting, the host will no longer connect to the router. Are you sure you want to do this?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="816"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="887"/>
         <source>Try to uninstall the application (result is not guaranteed)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1036"/>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1066"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="910"/>
+        <source>Are you sure you want to disconnect relay &quot;%1&quot;?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/router_widget.cc" line="931"/>
+        <source>Are you sure you want to disconnect all relays?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1011"/>
+        <source>Disconnect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1013"/>
+        <source>Copy Row</source>
+        <translation type="unfinished">Копіювати рядок</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1014"/>
+        <source>Copy Value</source>
+        <translation type="unfinished">Копіювати значення</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1023"/>
+        <source>Are you sure you want to disconnect peer &quot;%1&quot;?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1231"/>
+        <source>Invalid user request.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1233"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1258"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1281"/>
         <source>Unknown internal error.</source>
         <translation type="unfinished">Невідома внутрішня помилка.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1039"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1235"/>
         <source>Invalid data was passed.</source>
         <translation type="unfinished">Передано невірні дані.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1042"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1237"/>
         <source>A user with the specified name already exists.</source>
         <translation type="unfinished">Користувач із вказаним ім&apos;ям вже існує.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1045"/>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1070"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1239"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1262"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1285"/>
         <source>Unknown error type.</source>
         <translation type="unfinished">Невідомий тип помилки.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1064"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1256"/>
         <source>Invalid host request.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1068"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1260"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1283"/>
         <source>Invalid entry id.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1085"/>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1147"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1279"/>
+        <source>Invalid relay request.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1300"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1362"/>
         <source>Save File</source>
         <translation type="unfinished">Зберегти файл</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1085"/>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1147"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1300"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1362"/>
         <source>JSON files (*.json)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1096"/>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1158"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1311"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1373"/>
         <source>Could not open file for writing.</source>
         <translation type="unfinished">Неможливо відкрити файл для запису.</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1135"/>
-        <location filename="../client/ui/hosts/router_widget.cc" line="1222"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1350"/>
+        <location filename="../client/ui/hosts/router_widget.cc" line="1437"/>
         <source>Unable to write file.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7397,7 +7263,7 @@
         <translation type="obsolete">Попередження</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.cc" line="332"/>
+        <location filename="../client/ui/settings_dialog.cc" line="341"/>
         <source>Are you sure you want to delete router &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7405,7 +7271,7 @@
 <context>
     <name>client::Sidebar</name>
     <message>
-        <location filename="../client/ui/hosts/sidebar.cc" line="60"/>
+        <location filename="../client/ui/hosts/sidebar.cc" line="77"/>
         <source>Local</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7414,22 +7280,22 @@
         <translation type="obsolete">Попередження</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/sidebar.cc" line="396"/>
+        <location filename="../client/ui/hosts/sidebar.cc" line="423"/>
         <source>A group with this name already exists in the selected parent group.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/sidebar.cc" line="406"/>
+        <location filename="../client/ui/hosts/sidebar.cc" line="433"/>
         <source>Failed to move the group.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/sidebar.cc" line="462"/>
+        <location filename="../client/ui/hosts/sidebar.cc" line="489"/>
         <source>A computer with this name already exists in the selected group.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/sidebar.cc" line="482"/>
+        <location filename="../client/ui/hosts/sidebar.cc" line="509"/>
         <source>Failed to move the computer to the selected group.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -10617,68 +10483,68 @@
         <translation type="vanished">Попередження</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="204"/>
+        <location filename="../console/main_window.cc" line="202"/>
         <source>Pinned address book file &quot;%1&quot; was not found.&lt;br/&gt;This file will be unpinned.</source>
         <translation>Закріплений файл адресної книги &quot;%1&quot; не знайдено. &lt;br/&gt; Цей файл буде відкріплено.</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="314"/>
+        <location filename="../console/main_window.cc" line="312"/>
         <source>Open Address Book</source>
         <translation>Відкрити адресну книгу</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="316"/>
+        <location filename="../console/main_window.cc" line="314"/>
         <source>Aspia Address Book (*.aab)</source>
         <translation>Адресна книга Aspia (*.aab)</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="574"/>
+        <location filename="../console/main_window.cc" line="572"/>
         <source>Open File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="576"/>
-        <location filename="../console/main_window.cc" line="642"/>
+        <location filename="../console/main_window.cc" line="574"/>
+        <location filename="../console/main_window.cc" line="640"/>
         <source>JSON files (*.json)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="588"/>
+        <location filename="../console/main_window.cc" line="586"/>
         <source>Could not open file for reading.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="596"/>
+        <location filename="../console/main_window.cc" line="594"/>
         <source>Import file is empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="606"/>
+        <location filename="../console/main_window.cc" line="604"/>
         <source>Failed to parse JSON document: %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="616"/>
+        <location filename="../console/main_window.cc" line="614"/>
         <source>Import completed successfully.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="640"/>
+        <location filename="../console/main_window.cc" line="638"/>
         <source>Save File</source>
         <translation type="unfinished">Зберегти файл</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="654"/>
+        <location filename="../console/main_window.cc" line="652"/>
         <source>Could not open file for writing.</source>
         <translation type="unfinished">Неможливо відкрити файл для запису.</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="664"/>
+        <location filename="../console/main_window.cc" line="662"/>
         <source>Unable to write file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="669"/>
+        <location filename="../console/main_window.cc" line="667"/>
         <source>Export completed successfully.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -10687,8 +10553,8 @@
         <translation type="vanished">Підтвердження</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="905"/>
-        <location filename="../console/main_window.cc" line="1323"/>
+        <location filename="../console/main_window.cc" line="901"/>
+        <location filename="../console/main_window.cc" line="1318"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
         <translation>Адресну книгу &quot;%1&quot; змінено. Зберегти зміни?</translation>
     </message>
@@ -10705,44 +10571,44 @@
         <translation type="obsolete">Відмінити</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1133"/>
+        <location filename="../console/main_window.cc" line="1128"/>
         <source>Close other tabs</source>
         <translation>Закрити інші вкладки</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1140"/>
+        <location filename="../console/main_window.cc" line="1135"/>
         <source>Close tab</source>
         <translation>Закрити вкладку</translation>
     </message>
     <message>
+        <location filename="../console/main_window.cc" line="1136"/>
         <location filename="../console/main_window.cc" line="1141"/>
-        <location filename="../console/main_window.cc" line="1146"/>
         <source>Pin tab</source>
         <translation>Закріпити вкладку</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1239"/>
+        <location filename="../console/main_window.cc" line="1234"/>
         <source>The list of recently opened address books will be cleared. Continue?</source>
         <translation>Список нещодавніх адрес буде очищено. Продовжити?</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1270"/>
+        <location filename="../console/main_window.cc" line="1265"/>
         <source>Hide</source>
         <translation>Сховати</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1285"/>
+        <location filename="../console/main_window.cc" line="1280"/>
         <source>Show</source>
         <translation>Показати</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1638"/>
+        <location filename="../console/main_window.cc" line="1633"/>
         <source>Connection by ID is specified in the properties of the computer, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation>В налаштуваннях комп&apos;ютера було обрано підключення за ID, але маршрутизатор не налаштовано. Перевірте параметри маршрутизатора в налаштуваннях адресної книги.</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="711"/>
-        <location filename="../console/main_window.cc" line="1504"/>
+        <location filename="../console/main_window.cc" line="709"/>
+        <location filename="../console/main_window.cc" line="1499"/>
         <source>Aspia Console</source>
         <translation>Консоль Aspia</translation>
     </message>
@@ -10751,7 +10617,7 @@
         <translation type="vanished">Інформація</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="283"/>
+        <location filename="../console/main_window.cc" line="281"/>
         <source>Address Book &quot;%1&quot; is already open.</source>
         <translation>Адресну книгу &quot;%1&quot; вже відкрито.</translation>
     </message>
