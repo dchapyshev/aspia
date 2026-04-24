@@ -654,25 +654,22 @@ void Service::onSettingsChanged(const QString& /* path */)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Service::onRemoveHost(quint32 flags)
+void Service::onRemoveHost(bool try_to_uninstall)
 {
     LOG(WARNING) << "Received command to remove host!";
 
-    if (flags & proto::router::RemoveHost::REMOVE_SETTINGS)
-    {
-        LOG(INFO) << "Removing settings for connecting to a router";
+    LOG(INFO) << "Removing settings for connecting to a router";
 
-        settings_.setRouterEnabled(false);
-        settings_.setRouterAddress("");
-        settings_.setRouterPublicKey("");
-        settings_.sync();
+    settings_.setRouterEnabled(false);
+    settings_.setRouterAddress("");
+    settings_.setRouterPublicKey("");
+    settings_.sync();
 
-        HostStorage storage;
-        storage.setLastHostId(base::kInvalidHostId);
-        storage.setHostKey("");
-    }
+    HostStorage storage;
+    storage.setLastHostId(base::kInvalidHostId);
+    storage.setHostKey("");
 
-    if (flags & proto::router::RemoveHost::TRY_TO_UNINSTALL)
+    if (try_to_uninstall)
     {
         LOG(INFO) << "Attempting to uninstall the application";
         HostUtils::uninstallApplication();

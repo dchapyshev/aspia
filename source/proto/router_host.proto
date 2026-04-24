@@ -51,23 +51,17 @@ message HostIdResponse
     ErrorCode error_code = 3;
 }
 
-message RemoveHost
+message HostCommand
 {
-    enum Flags
-    {
-        NO_FLAGS         = 0;
-        REMOVE_SETTINGS  = 1;
-        TRY_TO_UNINSTALL = 2;
-    }
-
-    uint32 flags = 1;
+    string command_name = 1;
+    string params       = 2;
 }
 
 message RouterToHost
 {
     HostIdResponse host_id_response  = 1;
     ConnectionOffer connection_offer = 2;
-    RemoveHost remove_host           = 3;
+    HostCommand host_command         = 3;
 }
 
 message HostToRouter

@@ -55,10 +55,10 @@ void SessionHost::sendConnectionOffer(const proto::router::ConnectionOffer& offe
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionHost::sendRemoveHost(const proto::router::RemoveHost& remove_host)
+void SessionHost::sendHostCommand(const proto::router::HostCommand& command)
 {
     proto::router::RouterToHost message;
-    message.mutable_remove_host()->CopyFrom(remove_host);
+    message.mutable_host_command()->CopyFrom(command);
     sendMessage(0, base::serialize(message));
 }
 

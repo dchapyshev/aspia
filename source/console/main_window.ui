@@ -60,7 +60,7 @@
      <x>0</x>
      <y>0</y>
      <width>891</width>
-     <height>26</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_file">
@@ -165,7 +165,6 @@
      <string>Tools</string>
     </property>
     <addaction name="action_fast_connect"/>
-    <addaction name="action_router_manage"/>
    </widget>
    <addaction name="menu_file"/>
    <addaction name="menu_edit"/>
@@ -197,7 +196,6 @@
    <addaction name="action_save_all"/>
    <addaction name="separator"/>
    <addaction name="action_fast_connect"/>
-   <addaction name="action_router_manage"/>
    <addaction name="separator"/>
    <addaction name="action_update_status"/>
    <addaction name="separator"/>
@@ -564,18 +562,6 @@
    </property>
    <property name="text">
     <string>Copy Computer</string>
-   </property>
-  </action>
-  <action name="action_router_manage">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="../common/resources/common.qrc">
-     <normaloff>:/img/stack.svg</normaloff>:/img/stack.svg</iconset>
-   </property>
-   <property name="text">
-    <string>Router Manage</string>
    </property>
   </action>
   <action name="action_show_icons_in_menus">

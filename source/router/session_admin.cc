@@ -66,14 +66,6 @@ void SessionAdmin::onSessionMessage(quint8 channel_id, const QByteArray& buffer)
     {
         doHostListRequest();
     }
-    else if (message.has_session_list_request())
-    {
-        doSessionListRequest(message.session_list_request());
-    }
-    else if (message.has_session_request())
-    {
-        doSessionRequest(message.session_request());
-    }
     else if (message.has_host_request())
     {
         doHostRequest(message.host_request());
@@ -93,10 +85,6 @@ void SessionAdmin::onSessionMessage(quint8 channel_id, const QByteArray& buffer)
     else if (message.has_peer_connection_request())
     {
         doPeerConnectionRequest(message.peer_connection_request());
-    }
-    else if (message.has_remove_host_request())
-    {
-        doRemoveHostRequest(message.remove_host_request());
     }
     else
     {
@@ -227,110 +215,6 @@ void SessionAdmin::doUserRequest(const proto::router::UserRequest& request)
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionAdmin::doSessionListRequest(const proto::router::SessionListRequest& /* request */)
-{
-    QList<Session*> session_list = Service::instance()->sessions();
-
-    proto::router::RouterToAdmin message;
-    proto::router::SessionList* result = message.mutable_session_list();
-
-    for (const auto& session : std::as_const(session_list))
-    {
-        proto::router::Session* item = result->add_session();
-
-        item->set_session_id(session->sessionId());
-        item->set_session_type(session->sessionType());
-        item->set_timepoint(static_cast<quint64>(session->startTime()));
-        item->set_ip_address(session->address().toString().toStdString());
-        item->mutable_version()->CopyFrom(base::serialize(session->version()));
-        item->set_os_name(session->osName().toStdString());
-        item->set_computer_name(session->computerName().toStdString());
-        item->set_architecture(session->architecture().toStdString());
-
-        switch (session->sessionType())
-        {
-            case proto::router::SESSION_TYPE_HOST:
-            {
-                proto::router::HostSessionData session_data;
-
-                SessionHost* host_session = dynamic_cast<SessionHost*>(session);
-                if (host_session)
-                {
-                    session_data.add_host_id(host_session->hostId());
-                }
-                else
-                {
-                    SessionLegacyHost* legacy_host_session = static_cast<SessionLegacyHost*>(session);
-                    for (const auto& host_id : legacy_host_session->hostIdList())
-                        session_data.add_host_id(host_id);
-                }
-
-                item->set_session_data(session_data.SerializeAsString());
-            }
-            break;
-
-        case proto::router::SESSION_TYPE_RELAY:
-        {
-            proto::router::RelaySessionData session_data;
-            session_data.set_pool_size(Service::instance()->keyCountForRelay(session->sessionId()));
-
-            const std::optional<proto::router::RelayStatistics>& in_relay_stat =
-                static_cast<SessionRelay*>(session)->statistics();
-            if (in_relay_stat.has_value())
-            {
-                proto::router::RelaySessionData::RelayStat* out_relay_stat =
-                    session_data.mutable_relay_stat();
-
-                out_relay_stat->set_uptime(in_relay_stat->uptime());
-                out_relay_stat->mutable_peer_connection()->CopyFrom(in_relay_stat->peer());
-            }
-
-            item->set_session_data(session_data.SerializeAsString());
-        }
-        break;
-
-        default:
-            break;
-        }
-    }
-
-    result->set_error_code(proto::router::SessionList::SUCCESS);
-
-    sendMessage(proto::router::CHANNEL_ID_ADMIN, base::serialize(message));
-}
-
-//--------------------------------------------------------------------------------------------------
-void SessionAdmin::doSessionRequest(const proto::router::SessionRequest& request)
-{
-    proto::router::RouterToAdmin message;
-    proto::router::SessionResult* session_result = message.mutable_session_result();
-    session_result->set_type(request.type());
-
-    if (request.type() == proto::router::SESSION_REQUEST_DISCONNECT)
-    {
-        qint64 session_id = request.session_id();
-
-        if (!Service::instance()->stopSession(session_id))
-        {
-            CLOG(ERROR) << "Session not found:" << session_id;
-            session_result->set_error_code(proto::router::SessionResult::INVALID_SESSION_ID);
-        }
-        else
-        {
-            CLOG(INFO) << "Session '" << session_id << "' disconnected by" << userName();
-            session_result->set_error_code(proto::router::SessionResult::SUCCESS);
-        }
-    }
-    else
-    {
-        CLOG(ERROR) << "Unknown session request:" << request.type();
-        session_result->set_error_code(proto::router::SessionResult::INVALID_REQUEST);
-    }
-
-    sendMessage(proto::router::CHANNEL_ID_ADMIN, base::serialize(message));
-}
-
-//--------------------------------------------------------------------------------------------------
 void SessionAdmin::doHostRequest(const proto::router::HostRequest& request)
 {
     proto::router::RouterToAdmin message;
@@ -380,7 +264,7 @@ void SessionAdmin::doHostRequest(const proto::router::HostRequest& request)
             }
             else
             {
-                CLOG(INFO) << "Host session '" << entry_id << "' disconnected by" << userName();
+                CLOG(INFO) << "Host session" << entry_id << "disconnected by" << userName();
                 host_result->set_error_code("ok");
             }
         }
@@ -396,26 +280,12 @@ void SessionAdmin::doHostRequest(const proto::router::HostRequest& request)
         }
         else
         {
-            uint32_t flags = proto::router::RemoveHostRequest::REMOVE_SETTINGS;
+            proto::router::HostCommand command;
+            command.set_command_name(request.command_name());
+            command.set_params(request.params());
+            host_session->sendHostCommand(command);
 
-            const std::string& params = request.params();
-            size_t start = 0;
-            while (start < params.size())
-            {
-                size_t end = params.find(';', start);
-                if (end == std::string::npos)
-                    end = params.size();
-                std::string token = params.substr(start, end - start);
-                if (token == "try_to_uninstall")
-                    flags |= proto::router::RemoveHostRequest::TRY_TO_UNINSTALL;
-                start = end + 1;
-            }
-
-            proto::router::RemoveHost remove_host;
-            remove_host.set_flags(flags);
-            host_session->sendRemoveHost(remove_host);
-
-            CLOG(INFO) << "Host '" << entry_id << "' removed by" << userName();
+            CLOG(INFO) << "Host" << entry_id << "removed by" << userName();
             host_result->set_error_code("ok");
         }
     }
@@ -504,22 +374,6 @@ void SessionAdmin::doPeerConnectionRequest(const proto::router::PeerConnectionRe
     }
 
     relay_session->disconnectPeerSession(request);
-}
-
-//--------------------------------------------------------------------------------------------------
-void SessionAdmin::doRemoveHostRequest(const proto::router::RemoveHostRequest& request)
-{
-    SessionHost* host_session =
-        dynamic_cast<SessionHost*>(Service::instance()->session(request.session_id()));
-    if (!host_session)
-    {
-        CLOG(ERROR) << "Host with id" << request.session_id() << "is not found";
-        return;
-    }
-
-    proto::router::RemoveHost remove_host;
-    remove_host.set_flags(request.flags());
-    host_session->sendRemoveHost(remove_host);
 }
 
 //--------------------------------------------------------------------------------------------------

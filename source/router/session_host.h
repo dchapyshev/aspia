@@ -36,7 +36,7 @@ public:
     base::HostId hostId() const { return host_id_; }
 
     void sendConnectionOffer(const proto::router::ConnectionOffer& offer);
-    void sendRemoveHost(const proto::router::RemoveHost& remove_host);
+    void sendHostCommand(const proto::router::HostCommand& command);
 
 signals:
     void sig_hostIdAssigned(base::HostId host_id);

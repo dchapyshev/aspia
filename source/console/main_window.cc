@@ -31,7 +31,6 @@
 #include "client/ui/desktop/desktop_session_window.h"
 #include "client/ui/file_transfer/file_transfer_session_window.h"
 #include "client/ui/sys_info/system_info_session_window.h"
-#include "client/ui/router_manager/router_manager_window.h"
 #include "common/update_checker.h"
 #include "common/ui/about_dialog.h"
 #include "common/ui/msg_box.h"
@@ -134,7 +133,6 @@ MainWindow::MainWindow(const QString& file_path)
     connect(ui.action_about, &QAction::triggered, this, &MainWindow::onAbout);
     connect(ui.action_exit, &QAction::triggered, this, &MainWindow::close);
     connect(ui.action_fast_connect, &QAction::triggered, this, &MainWindow::onFastConnect);
-    connect(ui.action_router_manage, &QAction::triggered, this, &MainWindow::connectToRouter);
 
     connect(ui.action_desktop_connect, &QAction::triggered, this, &MainWindow::onDesktopConnect);
     connect(ui.action_file_transfer_connect, &QAction::triggered,
@@ -836,7 +834,6 @@ void MainWindow::onCurrentTabChanged(int index)
         ui.action_add_computer_group->setEnabled(false);
         ui.action_add_computer->setEnabled(false);
         ui.action_fast_connect->setEnabled(false);
-        ui.action_router_manage->setEnabled(false);
         ui.action_update_status->setEnabled(false);
         ui.action_import_computers->setEnabled(false);
         ui.action_export_computers->setEnabled(false);
@@ -867,7 +864,6 @@ void MainWindow::onCurrentTabChanged(int index)
     ui.action_close->setEnabled(!mru_.isPinnedFile(tab->filePath()));
 
     ui.action_fast_connect->setEnabled(true);
-    ui.action_router_manage->setEnabled(tab->isRouterEnabled());
 
     proto::address_book::ComputerGroup* computer_group = tab->currentComputerGroup();
     if (computer_group)
@@ -956,7 +952,6 @@ void MainWindow::onAddressBookChanged(bool changed)
 
         // Update tab title.
         ui.tab_widget->setTabText(current_tab_index, tab->addressBookName());
-        ui.action_router_manage->setEnabled(tab->isRouterEnabled());
     }
 }
 
@@ -1685,28 +1680,6 @@ void MainWindow::connectToComputer(const proto::address_book::Computer& computer
     session_window->setAttribute(Qt::WA_DeleteOnClose);
     if (!session_window->connectToHost(config))
         session_window->close();
-}
-
-//--------------------------------------------------------------------------------------------------
-void MainWindow::connectToRouter()
-{
-    AddressBookTab* tab = currentAddressBookTab();
-    if (!tab)
-    {
-        LOG(ERROR) << "No active tab";
-        return;
-    }
-
-    std::optional<client::RouterConfig> router_config = tab->routerConfig();
-    if (!router_config.has_value())
-    {
-        LOG(ERROR) << "No config for router";
-        return;
-    }
-
-    client::RouterManagerWindow* client_window = new client::RouterManagerWindow();
-    client_window->setAttribute(Qt::WA_DeleteOnClose);
-    client_window->connectToRouter(*router_config);
 }
 
 } // namespace console

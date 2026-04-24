@@ -70,7 +70,7 @@ signals:
     void sig_routerStateChanged(const proto::user::RouterState& state);
     void sig_credentialsChanged(base::HostId host_id, const QString& one_time_password);
     void sig_clientConnected();
-    void sig_removeHost(quint32 flags);
+    void sig_removeHost(bool try_to_uninstall);
 
 private slots:
     void onTcpReady();

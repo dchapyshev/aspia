@@ -56,67 +56,6 @@ message HostInfo
     uint64 host_id       = 8;
 }
 
-message Session
-{
-    int64 session_id         = 1;
-    SessionType session_type = 2;
-    bytes session_data       = 3;
-    fixed64 timepoint        = 4;
-    string ip_address        = 5;
-    peer.Version version     = 6;
-    string os_name           = 7;
-    string computer_name     = 8;
-    string architecture      = 9;
-}
-
-// deprecated
-enum SessionRequestType
-{
-    SESSION_REQUEST_UNKNOWN    = 0;
-    SESSION_REQUEST_DISCONNECT = 1;
-}
-
-// deprecated
-message SessionRequest
-{
-    SessionRequestType type = 1;
-    int64 session_id        = 2;
-}
-
-// deprecated
-message SessionResult
-{
-    enum ErrorCode
-    {
-        SUCCESS            = 0;
-        INVALID_REQUEST    = 1;
-        INTERNAL_ERROR     = 2;
-        INVALID_SESSION_ID = 3;
-    }
-
-    SessionRequestType type    = 1;
-    ErrorCode error_code       = 2;
-}
-
-// deprecated.
-message SessionListRequest
-{
-    int64 dummy = 1;
-}
-
-// deprecated.
-message SessionList
-{
-    enum ErrorCode
-    {
-        SUCCESS       = 0;
-        UNKNOWN_ERROR = 1;
-    }
-
-    ErrorCode error_code     = 1;
-    repeated Session session = 2;
-}
-
 message HostRequest
 {
     string command_name = 1; // "disconnect" | "remove"
@@ -165,23 +104,6 @@ message HostList
 {
     string error_code      = 1;
     repeated HostInfo host = 2;
-}
-
-message HostSessionData
-{
-    repeated fixed64 host_id = 1;
-}
-
-message RelaySessionData
-{
-    message RelayStat
-    {
-        repeated PeerConnection peer_connection = 1;
-        int64 uptime = 2;
-    }
-
-    uint64 pool_size = 1;
-    RelayStat relay_stat = 2;
 }
 
 message User
@@ -240,42 +162,23 @@ message UserResult
     ErrorCode error_code = 2;
 }
 
-// deprecated
-message RemoveHostRequest
-{
-    enum Flags
-    {
-        NO_FLAGS         = 0;
-        REMOVE_SETTINGS  = 1;
-        TRY_TO_UNINSTALL = 2;
-    }
-
-    int64 session_id = 1;
-    uint32 flags     = 2;
-}
-
 message RouterToAdmin
 {
     RelayList relay_list         = 1;
     HostList host_list           = 2;
-    SessionList session_list     = 3; // deprecated
-    SessionResult session_result = 4; // deprecated
-    UserList user_list           = 5;
-    UserResult user_result       = 6;
-    HostResult host_result       = 7;
-    RelayResult relay_result     = 8;
+    UserList user_list           = 3;
+    UserResult user_result       = 4;
+    HostResult host_result       = 5;
+    RelayResult relay_result     = 6;
 }
 
 message AdminToRouter
 {
     RelayListRequest relay_list_request           = 1;
     HostListRequest host_list_request             = 2;
-    SessionListRequest session_list_request       = 3; // deprecated
-    SessionRequest session_request                = 4; // deprecated
-    UserListRequest user_list_request             = 5;
-    UserRequest user_request                      = 6;
-    PeerConnectionRequest peer_connection_request = 7;
-    RemoveHostRequest remove_host_request         = 8; // deprecated
-    HostRequest host_request                      = 9;
-    RelayRequest relay_request                    = 10;
+    UserListRequest user_list_request             = 3;
+    UserRequest user_request                      = 4;
+    PeerConnectionRequest peer_connection_request = 5;
+    HostRequest host_request                      = 6;
+    RelayRequest relay_request                    = 7;
 }

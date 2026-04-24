@@ -251,9 +251,24 @@ void RouterManager::onTcpMessageReceived(quint8 /* channel_id */, const QByteArr
             LOG(ERROR) << "Invalid connection offer";
         }
     }
-    else if (in_message.has_remove_host())
+    else if (in_message.has_host_command())
     {
-        emit sig_removeHost(in_message.remove_host().flags());
+        const proto::router::HostCommand& command = in_message.host_command();
+        const std::string& command_name = command.command_name();
+
+        if (command_name == "remove")
+        {
+            const QString params = QString::fromStdString(command.params());
+            const bool try_to_uninstall =
+                params.split(';', Qt::SkipEmptyParts).contains("try_to_uninstall");
+
+            LOG(INFO) << "Remove command received (try_to_uninstall:" << try_to_uninstall << ")";
+            emit sig_removeHost(try_to_uninstall);
+        }
+        else
+        {
+            LOG(ERROR) << "Unknown host command:" << QString::fromStdString(command_name);
+        }
     }
     else
     {

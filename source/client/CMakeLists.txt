@@ -46,8 +46,6 @@ list(APPEND SOURCE_CLIENT_CORE
     file_transfer_queue_builder.h
     input_event_filter.cc
     input_event_filter.h
-    router.cc
-    router.h
     router_connection.cc
     router_connection.h
     router_manager.cc
@@ -145,11 +143,6 @@ list(APPEND SOURCE_CLIENT_CORE_UI_FILE_TRANSFER
     ui/file_transfer/file_transfer_session_window.cc
     ui/file_transfer/file_transfer_session_window.h
     ui/file_transfer/file_transfer_session_window.ui)
-
-list(APPEND SOURCE_CLIENT_CORE_UI_ROUTER_MANAGER
-    ui/router_manager/router_manager_window.cc
-    ui/router_manager/router_manager_window.h
-    ui/router_manager/router_manager_window.ui)
 
 list(APPEND SOURCE_CLIENT_CORE_UI_SYS_INFO
     ui/sys_info/sys_info_widget.cc

@@ -113,7 +113,6 @@ private:
     void connectToComputer(const proto::address_book::Computer& computer,
                            const QString& display_name,
                            const std::optional<client::RouterConfig>& router_config);
-    void connectToRouter();
 
     Ui::ConsoleMainWindow ui;
     Mru mru_;
