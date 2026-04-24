@@ -300,14 +300,10 @@ RouterWidget::RouterWidget(const RouterConfig& config, QWidget* parent)
             connection_, &RouterConnection::onDeleteUser, Qt::QueuedConnection);
     connect(this, &RouterWidget::sig_disconnectHost,
             connection_, &RouterConnection::onDisconnectHost, Qt::QueuedConnection);
-    connect(this, &RouterWidget::sig_disconnectAllHosts,
-            connection_, &RouterConnection::onDisconnectAllHosts, Qt::QueuedConnection);
     connect(this, &RouterWidget::sig_removeHost,
             connection_, &RouterConnection::onRemoveHost, Qt::QueuedConnection);
     connect(this, &RouterWidget::sig_disconnectRelay,
             connection_, &RouterConnection::onDisconnectRelay, Qt::QueuedConnection);
-    connect(this, &RouterWidget::sig_disconnectAllRelays,
-            connection_, &RouterConnection::onDisconnectAllRelays, Qt::QueuedConnection);
     connect(this, &RouterWidget::sig_updateConfig,
             connection_, &RouterConnection::onUpdateConfig, Qt::QueuedConnection);
 
@@ -857,7 +853,7 @@ void RouterWidget::onDisconnectAllHosts()
     }
 
     LOG(INFO) << "[ACTION] Disconnect all hosts accepted by user";
-    emit sig_disconnectAllHosts();
+    emit sig_disconnectHost(-1);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -931,7 +927,7 @@ void RouterWidget::onDisconnectAllRelays()
     }
 
     LOG(INFO) << "[ACTION] Disconnect all relays accepted by user";
-    emit sig_disconnectAllRelays();
+    emit sig_disconnectRelay(-1);
 }
 
 //--------------------------------------------------------------------------------------------------

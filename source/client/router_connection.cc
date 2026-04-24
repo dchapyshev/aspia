@@ -225,27 +225,10 @@ void RouterConnection::onDisconnectHost(qint64 session_id)
 
     proto::router::AdminToRouter message;
     proto::router::HostRequest* request = message.mutable_host_request();
-    request->set_type("disconnect");
-    request->set_session_id(session_id);
+    request->set_command_name("disconnect");
+    request->set_entry_id(session_id);
 
-    LOG(INFO) << "Sending host disconnect request (session_id:" << session_id << ")";
-    sendMessage(proto::router::CHANNEL_ID_ADMIN, base::serialize(message));
-}
-
-//--------------------------------------------------------------------------------------------------
-void RouterConnection::onDisconnectAllHosts()
-{
-    if (config_.session_type != proto::router::SESSION_TYPE_ADMIN)
-    {
-        LOG(ERROR) << "No administrator access level";
-        return;
-    }
-
-    proto::router::AdminToRouter message;
-    proto::router::HostRequest* request = message.mutable_host_request();
-    request->set_type("disconnect_all");
-
-    LOG(INFO) << "Sending host disconnect all request";
+    LOG(INFO) << "Sending host disconnect request (entry_id:" << session_id << ")";
     sendMessage(proto::router::CHANNEL_ID_ADMIN, base::serialize(message));
 }
 
@@ -260,12 +243,12 @@ void RouterConnection::onRemoveHost(qint64 session_id, bool try_to_uninstall)
 
     proto::router::AdminToRouter message;
     proto::router::HostRequest* request = message.mutable_host_request();
-    request->set_type("remove");
-    request->set_session_id(session_id);
+    request->set_command_name("remove");
+    request->set_entry_id(session_id);
     if (try_to_uninstall)
         request->set_params("try_to_uninstall");
 
-    LOG(INFO) << "Sending host remove request (session_id:" << session_id
+    LOG(INFO) << "Sending host remove request (entry_id:" << session_id
               << "try_to_uninstall:" << try_to_uninstall << ")";
     sendMessage(proto::router::CHANNEL_ID_ADMIN, base::serialize(message));
 }
@@ -281,27 +264,10 @@ void RouterConnection::onDisconnectRelay(qint64 session_id)
 
     proto::router::AdminToRouter message;
     proto::router::RelayRequest* request = message.mutable_relay_request();
-    request->set_type("disconnect");
-    request->set_session_id(session_id);
+    request->set_command_name("disconnect");
+    request->set_entry_id(session_id);
 
-    LOG(INFO) << "Sending relay disconnect request (session_id:" << session_id << ")";
-    sendMessage(proto::router::CHANNEL_ID_ADMIN, base::serialize(message));
-}
-
-//--------------------------------------------------------------------------------------------------
-void RouterConnection::onDisconnectAllRelays()
-{
-    if (config_.session_type != proto::router::SESSION_TYPE_ADMIN)
-    {
-        LOG(ERROR) << "No administrator access level";
-        return;
-    }
-
-    proto::router::AdminToRouter message;
-    proto::router::RelayRequest* request = message.mutable_relay_request();
-    request->set_type("disconnect_all");
-
-    LOG(INFO) << "Sending relay disconnect all request";
+    LOG(INFO) << "Sending relay disconnect request (entry_id:" << session_id << ")";
     sendMessage(proto::router::CHANNEL_ID_ADMIN, base::serialize(message));
 }
 

@@ -335,60 +335,63 @@ void SessionAdmin::doHostRequest(const proto::router::HostRequest& request)
 {
     proto::router::RouterToAdmin message;
     proto::router::HostResult* host_result = message.mutable_host_result();
-    host_result->set_type(request.type());
+    host_result->set_command_name(request.command_name());
 
-    if (request.type() == "disconnect")
+    if (request.command_name() == "disconnect")
     {
-        qint64 session_id = request.session_id();
+        qint64 entry_id = request.entry_id();
 
-        if (!Service::instance()->stopSession(session_id))
+        if (entry_id == -1)
         {
-            CLOG(ERROR) << "Session not found:" << session_id;
-            host_result->set_error_code("invalid_entry_id");
-        }
-        else
-        {
-            CLOG(INFO) << "Host session '" << session_id << "' disconnected by" << userName();
-            host_result->set_error_code("ok");
-        }
-    }
-    else if (request.type() == "disconnect_all")
-    {
-        const QList<Session*>& sessions = Service::instance()->sessions();
-        QList<qint64> host_session_ids;
-        for (const auto& session : sessions)
-        {
-            if (session->sessionType() == proto::router::SESSION_TYPE_HOST)
-                host_session_ids.append(session->sessionId());
-        }
-
-        bool all_ok = true;
-        for (qint64 session_id : host_session_ids)
-        {
-            if (!Service::instance()->stopSession(session_id))
+            const QList<Session*>& sessions = Service::instance()->sessions();
+            QList<qint64> host_session_ids;
+            for (const auto& session : sessions)
             {
-                CLOG(ERROR) << "Failed to stop host session:" << session_id;
-                all_ok = false;
+                if (session->sessionType() == proto::router::SESSION_TYPE_HOST)
+                    host_session_ids.append(session->sessionId());
+            }
+
+            bool all_ok = true;
+            for (qint64 id : host_session_ids)
+            {
+                if (!Service::instance()->stopSession(id))
+                {
+                    CLOG(ERROR) << "Failed to stop host session:" << id;
+                    all_ok = false;
+                }
+            }
+
+            if (all_ok)
+            {
+                CLOG(INFO) << "All host sessions disconnected by" << userName();
+                host_result->set_error_code("ok");
+            }
+            else
+            {
+                host_result->set_error_code("internal_error");
             }
         }
-
-        if (all_ok)
-        {
-            CLOG(INFO) << "All host sessions disconnected by" << userName();
-            host_result->set_error_code("ok");
-        }
         else
         {
-            host_result->set_error_code("internal_error");
+            if (!Service::instance()->stopSession(entry_id))
+            {
+                CLOG(ERROR) << "Session not found:" << entry_id;
+                host_result->set_error_code("invalid_entry_id");
+            }
+            else
+            {
+                CLOG(INFO) << "Host session '" << entry_id << "' disconnected by" << userName();
+                host_result->set_error_code("ok");
+            }
         }
     }
-    else if (request.type() == "remove")
+    else if (request.command_name() == "remove")
     {
-        qint64 session_id = request.session_id();
-        SessionHost* host_session = dynamic_cast<SessionHost*>(Service::instance()->session(session_id));
+        qint64 entry_id = request.entry_id();
+        SessionHost* host_session = dynamic_cast<SessionHost*>(Service::instance()->session(entry_id));
         if (!host_session)
         {
-            CLOG(ERROR) << "Host with id" << session_id << "is not found";
+            CLOG(ERROR) << "Host with id" << entry_id << "is not found";
             host_result->set_error_code("invalid_entry_id");
         }
         else
@@ -412,13 +415,13 @@ void SessionAdmin::doHostRequest(const proto::router::HostRequest& request)
             remove_host.set_flags(flags);
             host_session->sendRemoveHost(remove_host);
 
-            CLOG(INFO) << "Host '" << session_id << "' removed by" << userName();
+            CLOG(INFO) << "Host '" << entry_id << "' removed by" << userName();
             host_result->set_error_code("ok");
         }
     }
     else
     {
-        CLOG(ERROR) << "Unknown host request type:" << request.type();
+        CLOG(ERROR) << "Unknown host request command:" << request.command_name();
         host_result->set_error_code("invalid_request");
     }
 
@@ -430,56 +433,59 @@ void SessionAdmin::doRelayRequest(const proto::router::RelayRequest& request)
 {
     proto::router::RouterToAdmin message;
     proto::router::RelayResult* relay_result = message.mutable_relay_result();
-    relay_result->set_type(request.type());
+    relay_result->set_command_name(request.command_name());
 
-    if (request.type() == "disconnect")
+    if (request.command_name() == "disconnect")
     {
-        qint64 session_id = request.session_id();
+        qint64 entry_id = request.entry_id();
 
-        if (!Service::instance()->stopSession(session_id))
+        if (entry_id == -1)
         {
-            CLOG(ERROR) << "Session not found:" << session_id;
-            relay_result->set_error_code("invalid_entry_id");
-        }
-        else
-        {
-            CLOG(INFO) << "Relay session '" << session_id << "' disconnected by" << userName();
-            relay_result->set_error_code("ok");
-        }
-    }
-    else if (request.type() == "disconnect_all")
-    {
-        const QList<Session*>& sessions = Service::instance()->sessions();
-        QList<qint64> relay_session_ids;
-        for (const auto& session : sessions)
-        {
-            if (session->sessionType() == proto::router::SESSION_TYPE_RELAY)
-                relay_session_ids.append(session->sessionId());
-        }
-
-        bool all_ok = true;
-        for (qint64 session_id : relay_session_ids)
-        {
-            if (!Service::instance()->stopSession(session_id))
+            const QList<Session*>& sessions = Service::instance()->sessions();
+            QList<qint64> relay_session_ids;
+            for (const auto& session : sessions)
             {
-                CLOG(ERROR) << "Failed to stop relay session:" << session_id;
-                all_ok = false;
+                if (session->sessionType() == proto::router::SESSION_TYPE_RELAY)
+                    relay_session_ids.append(session->sessionId());
+            }
+
+            bool all_ok = true;
+            for (qint64 id : relay_session_ids)
+            {
+                if (!Service::instance()->stopSession(id))
+                {
+                    CLOG(ERROR) << "Failed to stop relay session:" << id;
+                    all_ok = false;
+                }
+            }
+
+            if (all_ok)
+            {
+                CLOG(INFO) << "All relay sessions disconnected by" << userName();
+                relay_result->set_error_code("ok");
+            }
+            else
+            {
+                relay_result->set_error_code("internal_error");
             }
         }
-
-        if (all_ok)
-        {
-            CLOG(INFO) << "All relay sessions disconnected by" << userName();
-            relay_result->set_error_code("ok");
-        }
         else
         {
-            relay_result->set_error_code("internal_error");
+            if (!Service::instance()->stopSession(entry_id))
+            {
+                CLOG(ERROR) << "Session not found:" << entry_id;
+                relay_result->set_error_code("invalid_entry_id");
+            }
+            else
+            {
+                CLOG(INFO) << "Relay session '" << entry_id << "' disconnected by" << userName();
+                relay_result->set_error_code("ok");
+            }
         }
     }
     else
     {
-        CLOG(ERROR) << "Unknown relay request type:" << request.type();
+        CLOG(ERROR) << "Unknown relay request command:" << request.command_name();
         relay_result->set_error_code("invalid_request");
     }
 

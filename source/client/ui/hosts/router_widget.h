@@ -106,10 +106,8 @@ signals:
     void sig_modifyUser(const proto::router::User& user);
     void sig_deleteUser(qint64 entry_id);
     void sig_disconnectHost(qint64 session_id);
-    void sig_disconnectAllHosts();
     void sig_removeHost(qint64 session_id, bool try_to_uninstall);
     void sig_disconnectRelay(qint64 session_id);
-    void sig_disconnectAllRelays();
     void sig_statusChanged(const QUuid& uuid, client::RouterConnection::Status status);
     void sig_currentTabTypeChanged(const QUuid& uuid, client::RouterWidget::TabType tab);
     void sig_currentUserChanged(const QUuid& uuid);
