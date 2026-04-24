@@ -28,6 +28,7 @@ namespace proto::router {
 class HostList;
 class HostResult;
 class RelayList;
+class RelayResult;
 class User;
 class UserList;
 class UserResult;
@@ -71,6 +72,7 @@ public slots:
     void onDisconnectHost(qint64 session_id);
     void onRemoveHost(qint64 session_id, bool try_to_uninstall);
     void onDisconnectRelay(qint64 session_id);
+    void onDisconnectPeer(qint64 relay_entry_id, quint64 peer_session_id);
 
     // Manager methods.
 

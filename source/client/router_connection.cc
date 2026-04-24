@@ -272,6 +272,26 @@ void RouterConnection::onDisconnectRelay(qint64 session_id)
 }
 
 //--------------------------------------------------------------------------------------------------
+void RouterConnection::onDisconnectPeer(qint64 relay_entry_id, quint64 peer_session_id)
+{
+    if (config_.session_type != proto::router::SESSION_TYPE_ADMIN)
+    {
+        LOG(ERROR) << "No administrator access level";
+        return;
+    }
+
+    proto::router::AdminToRouter message;
+    proto::router::PeerConnectionRequest* request = message.mutable_peer_connection_request();
+    request->set_relay_session_id(relay_entry_id);
+    request->set_peer_session_id(peer_session_id);
+    request->set_type(proto::router::PEER_CONNECTION_REQUEST_DISCONNECT);
+
+    LOG(INFO) << "Sending peer disconnect request (relay_entry_id:" << relay_entry_id
+              << "peer_session_id:" << peer_session_id << ")";
+    sendMessage(proto::router::CHANNEL_ID_ADMIN, base::serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
 void RouterConnection::onTcpReady()
 {
     CHECK(tcp_channel_);

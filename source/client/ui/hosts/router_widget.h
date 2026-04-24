@@ -108,6 +108,7 @@ signals:
     void sig_disconnectHost(qint64 session_id);
     void sig_removeHost(qint64 session_id, bool try_to_uninstall);
     void sig_disconnectRelay(qint64 session_id);
+    void sig_disconnectPeer(qint64 relay_entry_id, quint64 peer_session_id);
     void sig_statusChanged(const QUuid& uuid, client::RouterConnection::Status status);
     void sig_currentTabTypeChanged(const QUuid& uuid, client::RouterWidget::TabType tab);
     void sig_currentUserChanged(const QUuid& uuid);
@@ -127,6 +128,7 @@ private slots:
     void onUserContextMenuRequested(const QPoint& pos);
     void onHostContextMenuRequested(const QPoint& pos);
     void onRelayContextMenuRequested(const QPoint& pos);
+    void onPeerContextMenuRequested(const QPoint& pos);
     void onRelayListReceived(const proto::router::RelayList& relays);
     void onHostListReceived(const proto::router::HostList& hosts);
     void onUserListReceived(const proto::router::UserList& list);

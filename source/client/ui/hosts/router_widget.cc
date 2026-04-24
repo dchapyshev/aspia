@@ -18,6 +18,7 @@
 
 #include "client/ui/hosts/router_widget.h"
 
+#include <QAction>
 #include <QApplication>
 #include <QCheckBox>
 #include <QClipboard>
@@ -30,6 +31,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QLabel>
+#include <QMenu>
 #include <QStatusBar>
 
 #include "base/gui_application.h"
@@ -304,6 +306,8 @@ RouterWidget::RouterWidget(const RouterConfig& config, QWidget* parent)
             connection_, &RouterConnection::onRemoveHost, Qt::QueuedConnection);
     connect(this, &RouterWidget::sig_disconnectRelay,
             connection_, &RouterConnection::onDisconnectRelay, Qt::QueuedConnection);
+    connect(this, &RouterWidget::sig_disconnectPeer,
+            connection_, &RouterConnection::onDisconnectPeer, Qt::QueuedConnection);
     connect(this, &RouterWidget::sig_updateConfig,
             connection_, &RouterConnection::onUpdateConfig, Qt::QueuedConnection);
 
@@ -326,6 +330,10 @@ RouterWidget::RouterWidget(const RouterConfig& config, QWidget* parent)
     ui.tree_relays->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(ui.tree_relays, &QTreeWidget::customContextMenuRequested,
             this, &RouterWidget::onRelayContextMenuRequested);
+
+    ui.tree_peers->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(ui.tree_peers, &QTreeWidget::customContextMenuRequested,
+            this, &RouterWidget::onPeerContextMenuRequested);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -980,6 +988,76 @@ void RouterWidget::onRelayContextMenuRequested(const QPoint& pos)
     const int column = ui.tree_relays->indexAt(pos).column();
     const QPoint global_pos = ui.tree_relays->viewport()->mapToGlobal(pos);
     emit sig_relayContextMenu(uuid_, global_pos, column);
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::onPeerContextMenuRequested(const QPoint& pos)
+{
+    RelayTreeItem* relay_item = static_cast<RelayTreeItem*>(ui.tree_relays->currentItem());
+    if (!relay_item)
+        return;
+
+    QTreeWidgetItem* item = ui.tree_peers->itemAt(pos);
+    if (!item)
+        return;
+
+    ui.tree_peers->setCurrentItem(item);
+
+    PeerTreeItem* peer_item = static_cast<PeerTreeItem*>(item);
+    const int column = ui.tree_peers->indexAt(pos).column();
+    const QPoint global_pos = ui.tree_peers->viewport()->mapToGlobal(pos);
+
+    QMenu menu;
+    QAction* disconnect_action = menu.addAction(tr("Disconnect"));
+    menu.addSeparator();
+    QAction* copy_row_action = menu.addAction(tr("Copy Row"));
+    QAction* copy_value_action = menu.addAction(tr("Copy Value"));
+
+    QAction* selected = menu.exec(global_pos);
+    if (!selected)
+        return;
+
+    if (selected == disconnect_action)
+    {
+        if (common::MsgBox::question(this,
+                tr("Are you sure you want to disconnect peer \"%1\"?")
+                    .arg(QString::fromStdString(peer_item->conn.client_user_name())))
+            != common::MsgBox::Yes)
+        {
+            LOG(INFO) << "[ACTION] Disconnect peer rejected by user";
+            return;
+        }
+
+        LOG(INFO) << "[ACTION] Disconnect peer accepted by user";
+        emit sig_disconnectPeer(relay_item->info.entry_id(), peer_item->conn.session_id());
+    }
+    else if (selected == copy_row_action)
+    {
+        QString result;
+        const int column_count = peer_item->columnCount();
+        for (int i = 0; i < column_count; ++i)
+        {
+            const QString text = peer_item->text(i);
+            if (!text.isEmpty())
+                result += text + ' ';
+        }
+        result.chop(1);
+
+        if (result.isEmpty())
+            return;
+
+        if (QClipboard* clipboard = QApplication::clipboard())
+            clipboard->setText(result);
+    }
+    else if (selected == copy_value_action)
+    {
+        const QString text = peer_item->text(column);
+        if (text.isEmpty())
+            return;
+
+        if (QClipboard* clipboard = QApplication::clipboard())
+            clipboard->setText(text);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
