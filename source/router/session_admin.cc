@@ -78,6 +78,10 @@ void SessionAdmin::onSessionMessage(quint8 channel_id, const QByteArray& buffer)
     {
         doHostRequest(message.host_request());
     }
+    else if (message.has_relay_request())
+    {
+        doRelayRequest(message.relay_request());
+    }
     else if (message.has_user_list_request())
     {
         doUserListRequest();
@@ -416,6 +420,67 @@ void SessionAdmin::doHostRequest(const proto::router::HostRequest& request)
     {
         CLOG(ERROR) << "Unknown host request type:" << request.type();
         host_result->set_error_code("invalid_request");
+    }
+
+    sendMessage(proto::router::CHANNEL_ID_ADMIN, base::serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void SessionAdmin::doRelayRequest(const proto::router::RelayRequest& request)
+{
+    proto::router::RouterToAdmin message;
+    proto::router::RelayResult* relay_result = message.mutable_relay_result();
+    relay_result->set_type(request.type());
+
+    if (request.type() == "disconnect")
+    {
+        qint64 session_id = request.session_id();
+
+        if (!Service::instance()->stopSession(session_id))
+        {
+            CLOG(ERROR) << "Session not found:" << session_id;
+            relay_result->set_error_code("invalid_entry_id");
+        }
+        else
+        {
+            CLOG(INFO) << "Relay session '" << session_id << "' disconnected by" << userName();
+            relay_result->set_error_code("ok");
+        }
+    }
+    else if (request.type() == "disconnect_all")
+    {
+        const QList<Session*>& sessions = Service::instance()->sessions();
+        QList<qint64> relay_session_ids;
+        for (const auto& session : sessions)
+        {
+            if (session->sessionType() == proto::router::SESSION_TYPE_RELAY)
+                relay_session_ids.append(session->sessionId());
+        }
+
+        bool all_ok = true;
+        for (qint64 session_id : relay_session_ids)
+        {
+            if (!Service::instance()->stopSession(session_id))
+            {
+                CLOG(ERROR) << "Failed to stop relay session:" << session_id;
+                all_ok = false;
+            }
+        }
+
+        if (all_ok)
+        {
+            CLOG(INFO) << "All relay sessions disconnected by" << userName();
+            relay_result->set_error_code("ok");
+        }
+        else
+        {
+            relay_result->set_error_code("internal_error");
+        }
+    }
+    else
+    {
+        CLOG(ERROR) << "Unknown relay request type:" << request.type();
+        relay_result->set_error_code("invalid_request");
     }
 
     sendMessage(proto::router::CHANNEL_ID_ADMIN, base::serialize(message));

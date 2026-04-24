@@ -131,6 +131,19 @@ message HostResult
     string error_code = 2; // "ok" | "invalid_request" | "internal_error" | "invalid_entry_id"
 }
 
+message RelayRequest
+{
+    string type      = 1; // "disconnect" | "disconnect_all"
+    int64 session_id = 2; // Used for "disconnect".
+    string params    = 3; // Reserved for future use.
+}
+
+message RelayResult
+{
+    string type       = 1; // Same as request type.
+    string error_code = 2; // "ok" | "invalid_request" | "internal_error" | "invalid_entry_id"
+}
+
 message RelayListRequest
 {
     int64 dummy = 1;
@@ -249,6 +262,7 @@ message RouterToAdmin
     UserList user_list           = 5;
     UserResult user_result       = 6;
     HostResult host_result       = 7;
+    RelayResult relay_result     = 8;
 }
 
 message AdminToRouter
@@ -262,4 +276,5 @@ message AdminToRouter
     PeerConnectionRequest peer_connection_request = 7;
     RemoveHostRequest remove_host_request         = 8; // deprecated
     HostRequest host_request                      = 9;
+    RelayRequest relay_request                    = 10;
 }

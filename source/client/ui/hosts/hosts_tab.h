@@ -77,13 +77,14 @@ private slots:
     void onLocalComputerContextMenu(qint64 computer_id, const QPoint& pos);
     void onUserContextMenu(const QUuid& uuid, const base::User& user, const QPoint& pos);
     void onHostContextMenu(const QUuid& uuid, const QPoint& pos, int column);
+    void onRelayContextMenu(const QUuid& uuid, const QPoint& pos, int column);
     void onAddUserAction();
     void onEditUserAction();
     void onDeleteUserAction();
     void onReloadAction();
     void onSaveAction();
-    void onDisconnectHostAction();
-    void onDisconnectAllHostsAction();
+    void onDisconnectAction();
+    void onDisconnectAllAction();
     void onRemoveHostAction();
 
 private:
@@ -123,8 +124,9 @@ private:
     QAction* action_save_ = nullptr;
     QAction* action_reload_ = nullptr;
 
-    QAction* action_host_disconnect_ = nullptr;
-    QAction* action_host_disconnect_all_ = nullptr;
+    QAction* action_disconnect_ = nullptr;
+    QAction* action_disconnect_all_ = nullptr;
+
     QAction* action_host_remove_ = nullptr;
 
     ContentWidget* current_content_ = nullptr;

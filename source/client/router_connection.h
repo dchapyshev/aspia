@@ -71,6 +71,8 @@ public slots:
     void onDisconnectHost(qint64 session_id);
     void onDisconnectAllHosts();
     void onRemoveHost(qint64 session_id, bool try_to_uninstall);
+    void onDisconnectRelay(qint64 session_id);
+    void onDisconnectAllRelays();
 
     // Manager methods.
 
@@ -81,6 +83,7 @@ signals:
     void sig_userListReceived(const proto::router::UserList& list);
     void sig_userResultReceived(const proto::router::UserResult& result);
     void sig_hostResultReceived(const proto::router::HostResult& result);
+    void sig_relayResultReceived(const proto::router::RelayResult& result);
 
 private slots:
     void onTcpReady();

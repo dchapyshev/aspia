@@ -271,6 +271,41 @@ void RouterConnection::onRemoveHost(qint64 session_id, bool try_to_uninstall)
 }
 
 //--------------------------------------------------------------------------------------------------
+void RouterConnection::onDisconnectRelay(qint64 session_id)
+{
+    if (config_.session_type != proto::router::SESSION_TYPE_ADMIN)
+    {
+        LOG(ERROR) << "No administrator access level";
+        return;
+    }
+
+    proto::router::AdminToRouter message;
+    proto::router::RelayRequest* request = message.mutable_relay_request();
+    request->set_type("disconnect");
+    request->set_session_id(session_id);
+
+    LOG(INFO) << "Sending relay disconnect request (session_id:" << session_id << ")";
+    sendMessage(proto::router::CHANNEL_ID_ADMIN, base::serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterConnection::onDisconnectAllRelays()
+{
+    if (config_.session_type != proto::router::SESSION_TYPE_ADMIN)
+    {
+        LOG(ERROR) << "No administrator access level";
+        return;
+    }
+
+    proto::router::AdminToRouter message;
+    proto::router::RelayRequest* request = message.mutable_relay_request();
+    request->set_type("disconnect_all");
+
+    LOG(INFO) << "Sending relay disconnect all request";
+    sendMessage(proto::router::CHANNEL_ID_ADMIN, base::serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
 void RouterConnection::onTcpReady()
 {
     CHECK(tcp_channel_);
@@ -338,6 +373,11 @@ void RouterConnection::onTcpMessageReceived(quint8 channel_id, const QByteArray&
         {
             LOG(INFO) << "Host result received";
             emit sig_hostResultReceived(message.host_result());
+        }
+        else if (message.has_relay_result())
+        {
+            LOG(INFO) << "Relay result received";
+            emit sig_relayResultReceived(message.relay_result());
         }
         else
         {

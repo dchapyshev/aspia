@@ -33,6 +33,7 @@ class QStatusBar;
 namespace proto::router {
 class HostResult;
 class RelayList;
+class RelayResult;
 } // namespace proto::router
 
 namespace client {
@@ -60,9 +61,13 @@ public:
     bool hasSelectedUser() const;
     bool hasSelectedHost() const;
     int hostCount() const;
+    bool hasSelectedRelay() const;
+    int relayCount() const;
 
     void copyCurrentHostRow();
     void copyCurrentHostColumn(int column);
+    void copyCurrentRelayRow();
+    void copyCurrentRelayColumn(int column);
 
     QByteArray saveState() override;
     void restoreState(const QByteArray& state) override;
@@ -90,6 +95,8 @@ public slots:
     void onDisconnectHost();
     void onDisconnectAllHosts();
     void onRemoveHost();
+    void onDisconnectRelay();
+    void onDisconnectAllRelays();
 
 signals:
     void sig_relayListRequest();
@@ -101,12 +108,16 @@ signals:
     void sig_disconnectHost(qint64 session_id);
     void sig_disconnectAllHosts();
     void sig_removeHost(qint64 session_id, bool try_to_uninstall);
+    void sig_disconnectRelay(qint64 session_id);
+    void sig_disconnectAllRelays();
     void sig_statusChanged(const QUuid& uuid, client::RouterConnection::Status status);
     void sig_currentTabTypeChanged(const QUuid& uuid, client::RouterWidget::TabType tab);
     void sig_currentUserChanged(const QUuid& uuid);
     void sig_currentHostChanged(const QUuid& uuid);
+    void sig_currentRelayChanged(const QUuid& uuid);
     void sig_userContextMenu(const QUuid& uuid, const base::User& user, const QPoint& global_pos);
     void sig_hostContextMenu(const QUuid& uuid, const QPoint& global_pos, int column);
+    void sig_relayContextMenu(const QUuid& uuid, const QPoint& global_pos, int column);
     void sig_updateConfig(const client::RouterConfig& config);
 
 private slots:
@@ -117,11 +128,13 @@ private slots:
     void onCurrentHostChanged();
     void onUserContextMenuRequested(const QPoint& pos);
     void onHostContextMenuRequested(const QPoint& pos);
+    void onRelayContextMenuRequested(const QPoint& pos);
     void onRelayListReceived(const proto::router::RelayList& relays);
     void onHostListReceived(const proto::router::HostList& hosts);
     void onUserListReceived(const proto::router::UserList& list);
     void onUserResultReceived(const proto::router::UserResult& result);
     void onHostResultReceived(const proto::router::HostResult& result);
+    void onRelayResultReceived(const proto::router::RelayResult& result);
 
 private:
     void updateStatusLabel();

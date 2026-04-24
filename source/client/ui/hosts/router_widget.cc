@@ -283,6 +283,8 @@ RouterWidget::RouterWidget(const RouterConfig& config, QWidget* parent)
             this, &RouterWidget::onUserResultReceived, Qt::QueuedConnection);
     connect(connection_, &RouterConnection::sig_hostResultReceived,
             this, &RouterWidget::onHostResultReceived, Qt::QueuedConnection);
+    connect(connection_, &RouterConnection::sig_relayResultReceived,
+            this, &RouterWidget::onRelayResultReceived, Qt::QueuedConnection);
 
     connect(this, &RouterWidget::sig_relayListRequest,
             connection_, &RouterConnection::onRelayListRequest, Qt::QueuedConnection);
@@ -302,6 +304,10 @@ RouterWidget::RouterWidget(const RouterConfig& config, QWidget* parent)
             connection_, &RouterConnection::onDisconnectAllHosts, Qt::QueuedConnection);
     connect(this, &RouterWidget::sig_removeHost,
             connection_, &RouterConnection::onRemoveHost, Qt::QueuedConnection);
+    connect(this, &RouterWidget::sig_disconnectRelay,
+            connection_, &RouterConnection::onDisconnectRelay, Qt::QueuedConnection);
+    connect(this, &RouterWidget::sig_disconnectAllRelays,
+            connection_, &RouterConnection::onDisconnectAllRelays, Qt::QueuedConnection);
     connect(this, &RouterWidget::sig_updateConfig,
             connection_, &RouterConnection::onUpdateConfig, Qt::QueuedConnection);
 
@@ -320,6 +326,10 @@ RouterWidget::RouterWidget(const RouterConfig& config, QWidget* parent)
     ui.tree_hosts->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(ui.tree_hosts, &QTreeWidget::customContextMenuRequested,
             this, &RouterWidget::onHostContextMenuRequested);
+
+    ui.tree_relays->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(ui.tree_relays, &QTreeWidget::customContextMenuRequested,
+            this, &RouterWidget::onRelayContextMenuRequested);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -399,6 +409,57 @@ void RouterWidget::copyCurrentHostRow()
 void RouterWidget::copyCurrentHostColumn(int column)
 {
     QTreeWidgetItem* item = ui.tree_hosts->currentItem();
+    if (!item || column < 0)
+        return;
+
+    const QString text = item->text(column);
+    if (text.isEmpty())
+        return;
+
+    if (QClipboard* clipboard = QApplication::clipboard())
+        clipboard->setText(text);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool RouterWidget::hasSelectedRelay() const
+{
+    return ui.tree_relays->currentItem() != nullptr;
+}
+
+//--------------------------------------------------------------------------------------------------
+int RouterWidget::relayCount() const
+{
+    return ui.tree_relays->topLevelItemCount();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::copyCurrentRelayRow()
+{
+    QTreeWidgetItem* item = ui.tree_relays->currentItem();
+    if (!item)
+        return;
+
+    QString result;
+    const int column_count = item->columnCount();
+    for (int i = 0; i < column_count; ++i)
+    {
+        const QString text = item->text(i);
+        if (!text.isEmpty())
+            result += text + ' ';
+    }
+    result.chop(1);
+
+    if (result.isEmpty())
+        return;
+
+    if (QClipboard* clipboard = QApplication::clipboard())
+        clipboard->setText(result);
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::copyCurrentRelayColumn(int column)
+{
+    QTreeWidgetItem* item = ui.tree_relays->currentItem();
     if (!item || column < 0)
         return;
 
@@ -833,6 +894,47 @@ void RouterWidget::onRemoveHost()
 }
 
 //--------------------------------------------------------------------------------------------------
+void RouterWidget::onDisconnectRelay()
+{
+    RelayTreeItem* tree_item = static_cast<RelayTreeItem*>(ui.tree_relays->currentItem());
+    if (!tree_item)
+    {
+        LOG(INFO) << "No selected relay";
+        return;
+    }
+
+    if (common::MsgBox::question(this, tr("Are you sure you want to disconnect relay \"%1\"?")
+        .arg(QString::fromStdString(tree_item->info.ip_address()))) != common::MsgBox::Yes)
+    {
+        LOG(INFO) << "[ACTION] Disconnect relay rejected by user";
+        return;
+    }
+
+    LOG(INFO) << "[ACTION] Disconnect relay accepted by user";
+    emit sig_disconnectRelay(tree_item->info.entry_id());
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::onDisconnectAllRelays()
+{
+    if (ui.tree_relays->topLevelItemCount() <= 0)
+    {
+        LOG(INFO) << "Relay list is empty";
+        return;
+    }
+
+    if (common::MsgBox::question(this,
+            tr("Are you sure you want to disconnect all relays?")) != common::MsgBox::Yes)
+    {
+        LOG(INFO) << "[ACTION] Disconnect all relays rejected by user";
+        return;
+    }
+
+    LOG(INFO) << "[ACTION] Disconnect all relays accepted by user";
+    emit sig_disconnectAllRelays();
+}
+
+//--------------------------------------------------------------------------------------------------
 void RouterWidget::onTabChanged(int index)
 {
     updateStatusLabel();
@@ -870,6 +972,18 @@ void RouterWidget::onHostContextMenuRequested(const QPoint& pos)
     const int column = ui.tree_hosts->indexAt(pos).column();
     const QPoint global_pos = ui.tree_hosts->viewport()->mapToGlobal(pos);
     emit sig_hostContextMenu(uuid_, global_pos, column);
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::onRelayContextMenuRequested(const QPoint& pos)
+{
+    QTreeWidgetItem* item = ui.tree_relays->itemAt(pos);
+    if (item)
+        ui.tree_relays->setCurrentItem(item);
+
+    const int column = ui.tree_relays->indexAt(pos).column();
+    const QPoint global_pos = ui.tree_relays->viewport()->mapToGlobal(pos);
+    emit sig_relayContextMenu(uuid_, global_pos, column);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1084,6 +1198,29 @@ void RouterWidget::onHostResultReceived(const proto::router::HostResult& result)
 }
 
 //--------------------------------------------------------------------------------------------------
+void RouterWidget::onRelayResultReceived(const proto::router::RelayResult& result)
+{
+    const std::string& error_code = result.error_code();
+    if (error_code != "ok")
+    {
+        const char* message;
+
+        if (error_code == "invalid_request")
+            message = QT_TR_NOOP("Invalid relay request.");
+        else if (error_code == "internal_error")
+            message = QT_TR_NOOP("Unknown internal error.");
+        else if (error_code == "invalid_entry_id")
+            message = QT_TR_NOOP("Invalid entry id.");
+        else
+            message = QT_TR_NOOP("Unknown error type.");
+
+        common::MsgBox::warning(this, tr(message));
+    }
+
+    onUpdateRelayList();
+}
+
+//--------------------------------------------------------------------------------------------------
 void RouterWidget::saveHostsToFile()
 {
     LOG(INFO) << "[ACTION] Save hosts to file";
@@ -1237,6 +1374,7 @@ void RouterWidget::onCurrentRelayChanged()
 {
     ui.tree_peers->clear();
     updateRelayStatistics();
+    emit sig_currentRelayChanged(uuid_);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -112,8 +112,9 @@ HostsTab::HostsTab(QWidget* parent)
     action_edit_user_ = new QAction(QIcon(":/img/user-edit.svg"), tr("Edit User"), this);
     action_delete_user_ = new QAction(QIcon(":/img/user-delete.svg"), tr("Delete User"), this);
 
-    action_host_disconnect_ = new QAction(QIcon(":/img/host-disconnect.svg"), tr("Disconnect"), this);
-    action_host_disconnect_all_ = new QAction(QIcon(":/img/host-disconnect-all.svg"), tr("Disconnect All"), this);
+    action_disconnect_ = new QAction(QIcon(":/img/host-disconnect.svg"), tr("Disconnect"), this);
+    action_disconnect_all_ = new QAction(QIcon(":/img/host-disconnect-all.svg"), tr("Disconnect All"), this);
+
     action_host_remove_ = new QAction(QIcon(":/img/remove-computer.svg"), tr("Remove"), this);
 
     action_save_ = new QAction(QIcon(":/img/save.svg"), tr("Save..."), this);
@@ -154,8 +155,8 @@ HostsTab::HostsTab(QWidget* parent)
     connect(action_delete_user_, &QAction::triggered, this, &HostsTab::onDeleteUserAction);
     connect(action_reload_, &QAction::triggered, this, &HostsTab::onReloadAction);
     connect(action_save_, &QAction::triggered, this, &HostsTab::onSaveAction);
-    connect(action_host_disconnect_, &QAction::triggered, this, &HostsTab::onDisconnectHostAction);
-    connect(action_host_disconnect_all_, &QAction::triggered, this, &HostsTab::onDisconnectAllHostsAction);
+    connect(action_disconnect_, &QAction::triggered, this, &HostsTab::onDisconnectAction);
+    connect(action_disconnect_all_, &QAction::triggered, this, &HostsTab::onDisconnectAllAction);
     connect(action_host_remove_, &QAction::triggered, this, &HostsTab::onRemoveHostAction);
     connect(session_connect_group, &QActionGroup::triggered, this, &HostsTab::onConnectAction);
 
@@ -164,7 +165,7 @@ HostsTab::HostsTab(QWidget* parent)
     addActions(ActionRole::EDIT, { action_add_user_, action_edit_user_, action_delete_user_ });
     addActions(ActionRole::EDIT, { action_add_group_, action_edit_group_, action_delete_group_ });
     addActions(ActionRole::EDIT, { action_add_computer_, action_edit_computer_, action_copy_computer_, action_delete_computer_ });
-    addActions(ActionRole::EDIT, { action_host_remove_, action_host_disconnect_, action_host_disconnect_all_ });
+    addActions(ActionRole::EDIT, { action_host_remove_, action_disconnect_, action_disconnect_all_ });
     addActions(ActionRole::VIEW, { action_reload_ });
     addActions(ActionRole::SESSION_TYPE, { action_desktop_, action_file_transfer_, action_chat_, action_system_info_ });
 
@@ -814,8 +815,8 @@ void HostsTab::updateActionsState()
 
     action_reload_->setVisible(false);
     action_save_->setVisible(false);
-    action_host_disconnect_->setVisible(false);
-    action_host_disconnect_all_->setVisible(false);
+    action_disconnect_->setVisible(false);
+    action_disconnect_all_->setVisible(false);
     action_host_remove_->setVisible(false);
 
     Sidebar::Item* sidebar_item = ui.sidebar->currentItem();
@@ -847,9 +848,15 @@ void HostsTab::updateActionsState()
         action_delete_user_->setVisible(has_selection);
 
         bool on_hosts_tab = widget && widget->currentTabType() == RouterWidget::TabType::HOSTS;
+        bool on_relays_tab = widget && widget->currentTabType() == RouterWidget::TabType::RELAYS;
 
-        action_host_disconnect_->setVisible(on_hosts_tab && widget->hasSelectedHost());
-        action_host_disconnect_all_->setVisible(on_hosts_tab && widget->hostCount() > 0);
+        bool has_target = (on_hosts_tab && widget->hasSelectedHost()) ||
+                          (on_relays_tab && widget->hasSelectedRelay());
+        bool has_any = (on_hosts_tab && widget->hostCount() > 0) ||
+                       (on_relays_tab && widget->relayCount() > 0);
+
+        action_disconnect_->setVisible(has_target);
+        action_disconnect_all_->setVisible(has_any);
         action_host_remove_->setVisible(on_hosts_tab && widget->hasSelectedHost());
     }
     else
@@ -942,8 +949,11 @@ RouterWidget* HostsTab::createRouterWidget(const RouterConfig& config)
             this, [this](const QUuid&) { updateActionsState(); });
     connect(widget, &RouterWidget::sig_currentHostChanged,
             this, [this](const QUuid&) { updateActionsState(); });
+    connect(widget, &RouterWidget::sig_currentRelayChanged,
+            this, [this](const QUuid&) { updateActionsState(); });
     connect(widget, &RouterWidget::sig_userContextMenu, this, &HostsTab::onUserContextMenu);
     connect(widget, &RouterWidget::sig_hostContextMenu, this, &HostsTab::onHostContextMenu);
+    connect(widget, &RouterWidget::sig_relayContextMenu, this, &HostsTab::onRelayContextMenu);
 
     widget->connectToRouter();
     return widget;
@@ -973,7 +983,7 @@ void HostsTab::onHostContextMenu(const QUuid& uuid, const QPoint& pos, int colum
         return;
 
     QMenu menu;
-    menu.addAction(action_host_disconnect_);
+    menu.addAction(action_disconnect_);
     menu.addAction(action_host_remove_);
     menu.addSeparator();
 
@@ -988,6 +998,31 @@ void HostsTab::onHostContextMenu(const QUuid& uuid, const QPoint& pos, int colum
         widget->copyCurrentHostRow();
     else if (action == copy_col)
         widget->copyCurrentHostColumn(column);
+}
+
+//--------------------------------------------------------------------------------------------------
+void HostsTab::onRelayContextMenu(const QUuid& uuid, const QPoint& pos, int column)
+{
+    RouterWidget* widget = router_widgets_.value(uuid);
+    if (!widget || !widget->hasSelectedRelay())
+        return;
+
+    QMenu menu;
+    menu.addAction(action_disconnect_);
+    menu.addAction(action_disconnect_all_);
+    menu.addSeparator();
+
+    QAction* copy_row = menu.addAction(tr("Copy Row"));
+    QAction* copy_col = menu.addAction(tr("Copy Value"));
+
+    QAction* action = menu.exec(pos);
+    if (!action)
+        return;
+
+    if (action == copy_row)
+        widget->copyCurrentRelayRow();
+    else if (action == copy_col)
+        widget->copyCurrentRelayColumn(column);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1044,7 +1079,7 @@ void HostsTab::onSaveAction()
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::onDisconnectHostAction()
+void HostsTab::onDisconnectAction()
 {
     Sidebar::Item* sidebar_item = ui.sidebar->currentItem();
     if (!sidebar_item || sidebar_item->itemType() != Sidebar::Item::ROUTER)
@@ -1052,12 +1087,24 @@ void HostsTab::onDisconnectHostAction()
 
     Sidebar::Router* router = static_cast<Sidebar::Router*>(sidebar_item);
     RouterWidget* widget = router_widgets_.value(router->uuid());
-    if (widget)
-        widget->onDisconnectHost();
+    if (!widget)
+        return;
+
+    switch (widget->currentTabType())
+    {
+        case RouterWidget::TabType::HOSTS:
+            widget->onDisconnectHost();
+            break;
+        case RouterWidget::TabType::RELAYS:
+            widget->onDisconnectRelay();
+            break;
+        default:
+            break;
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
-void HostsTab::onDisconnectAllHostsAction()
+void HostsTab::onDisconnectAllAction()
 {
     Sidebar::Item* sidebar_item = ui.sidebar->currentItem();
     if (!sidebar_item || sidebar_item->itemType() != Sidebar::Item::ROUTER)
@@ -1065,8 +1112,20 @@ void HostsTab::onDisconnectAllHostsAction()
 
     Sidebar::Router* router = static_cast<Sidebar::Router*>(sidebar_item);
     RouterWidget* widget = router_widgets_.value(router->uuid());
-    if (widget)
-        widget->onDisconnectAllHosts();
+    if (!widget)
+        return;
+
+    switch (widget->currentTabType())
+    {
+        case RouterWidget::TabType::HOSTS:
+            widget->onDisconnectAllHosts();
+            break;
+        case RouterWidget::TabType::RELAYS:
+            widget->onDisconnectAllRelays();
+            break;
+        default:
+            break;
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
