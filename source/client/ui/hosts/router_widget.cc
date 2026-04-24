@@ -342,6 +342,12 @@ const QUuid& RouterWidget::uuid() const
 }
 
 //--------------------------------------------------------------------------------------------------
+RouterConnection::Status RouterWidget::status() const
+{
+    return status_;
+}
+
+//--------------------------------------------------------------------------------------------------
 RouterWidget::TabType RouterWidget::currentTabType() const
 {
     return static_cast<TabType>(ui.tab->currentIndex());
@@ -869,6 +875,8 @@ void RouterWidget::onHostContextMenuRequested(const QPoint& pos)
 //--------------------------------------------------------------------------------------------------
 void RouterWidget::onStatusChanged(const QUuid& uuid, RouterConnection::Status status)
 {
+    status_ = status;
+
     if (status == RouterConnection::Status::ONLINE)
     {
         onUpdateRelayList();

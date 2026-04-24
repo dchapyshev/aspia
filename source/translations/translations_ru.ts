@@ -3022,7 +3022,7 @@
     <message>
         <location filename="../client/ui/router_dialog.ui" line="39"/>
         <source>Display Name:</source>
-        <translation>Отображаемое имя</translation>
+        <translation>Отображаемое имя:</translation>
     </message>
     <message>
         <location filename="../client/ui/router_dialog.ui" line="49"/>

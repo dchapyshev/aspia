@@ -55,6 +55,7 @@ public:
     ~RouterWidget() override;
 
     const QUuid& uuid() const;
+    RouterConnection::Status status() const;
     TabType currentTabType() const;
     bool hasSelectedUser() const;
     bool hasSelectedHost() const;
@@ -132,6 +133,7 @@ private:
 
     QUuid uuid_;
     RouterConnection* connection_ = nullptr;
+    RouterConnection::Status status_ = RouterConnection::Status::OFFLINE;
 
     QLabel* status_label_ = nullptr;
 
