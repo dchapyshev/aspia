@@ -357,9 +357,9 @@ RouterWidget::~RouterWidget()
 }
 
 //--------------------------------------------------------------------------------------------------
-const QUuid& RouterWidget::uuid() const
+qint64 RouterWidget::routerId() const
 {
-    return config_.uuid;
+    return config_.id;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -958,13 +958,13 @@ void RouterWidget::onDisconnectAllRelays()
 void RouterWidget::onTabChanged(int index)
 {
     updateStatusLabel();
-    emit sig_currentTabTypeChanged(uuid(), static_cast<TabType>(index));
+    emit sig_currentTabTypeChanged(routerId(), static_cast<TabType>(index));
 }
 
 //--------------------------------------------------------------------------------------------------
 void RouterWidget::onCurrentUserChanged()
 {
-    emit sig_currentUserChanged(uuid());
+    emit sig_currentUserChanged(routerId());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -979,7 +979,7 @@ void RouterWidget::onUserContextMenuRequested(const QPoint& pos)
         user = static_cast<UserTreeItem*>(item)->user;
 
     QPoint global_pos = ui.tree_users->viewport()->mapToGlobal(pos);
-    emit sig_userContextMenu(uuid(), user, global_pos);
+    emit sig_userContextMenu(routerId(), user, global_pos);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -991,7 +991,7 @@ void RouterWidget::onHostContextMenuRequested(const QPoint& pos)
 
     const int column = ui.tree_hosts->indexAt(pos).column();
     const QPoint global_pos = ui.tree_hosts->viewport()->mapToGlobal(pos);
-    emit sig_hostContextMenu(uuid(), global_pos, column);
+    emit sig_hostContextMenu(routerId(), global_pos, column);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1003,7 +1003,7 @@ void RouterWidget::onRelayContextMenuRequested(const QPoint& pos)
 
     const int column = ui.tree_relays->indexAt(pos).column();
     const QPoint global_pos = ui.tree_relays->viewport()->mapToGlobal(pos);
-    emit sig_relayContextMenu(uuid(), global_pos, column);
+    emit sig_relayContextMenu(routerId(), global_pos, column);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1077,7 +1077,7 @@ void RouterWidget::onPeerContextMenuRequested(const QPoint& pos)
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterWidget::onStatusChanged(const QUuid& uuid, RouterConnection::Status status)
+void RouterWidget::onStatusChanged(qint64 router_id, RouterConnection::Status status)
 {
     status_ = status;
 
@@ -1123,11 +1123,11 @@ void RouterWidget::onStatusChanged(const QUuid& uuid, RouterConnection::Status s
         updateStatusLabel();
     }
 
-    emit sig_statusChanged(uuid, status);
+    emit sig_statusChanged(router_id, status);
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterWidget::onConnectionErrorOccurred(const QUuid& /* uuid */, base::TcpChannel::ErrorCode error_code)
+void RouterWidget::onConnectionErrorOccurred(qint64 /* router_id */, base::TcpChannel::ErrorCode error_code)
 {
     status_dialog_->addMessage(tr("Network error: %1.").arg(base::TcpChannel::errorToString(error_code)));
 }
@@ -1224,7 +1224,7 @@ void RouterWidget::onHostListReceived(const proto::router::HostList& hosts)
             ui.tree_hosts->addTopLevelItem(new HostTreeItem(info));
     }
 
-    emit sig_currentHostChanged(uuid());
+    emit sig_currentHostChanged(routerId());
     updateStatusLabel();
 }
 
@@ -1252,7 +1252,7 @@ void RouterWidget::onUserListReceived(const proto::router::UserList& list)
     if (to_select)
         tree_users->setCurrentItem(to_select);
     else
-        emit sig_currentUserChanged(uuid());
+        emit sig_currentUserChanged(routerId());
 
     updateStatusLabel();
 }
@@ -1482,13 +1482,13 @@ void RouterWidget::onCurrentRelayChanged()
 {
     ui.tree_peers->clear();
     updateRelayStatistics();
-    emit sig_currentRelayChanged(uuid());
+    emit sig_currentRelayChanged(routerId());
 }
 
 //--------------------------------------------------------------------------------------------------
 void RouterWidget::onCurrentHostChanged()
 {
-    emit sig_currentHostChanged(uuid());
+    emit sig_currentHostChanged(routerId());
 }
 
 //--------------------------------------------------------------------------------------------------

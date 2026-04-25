@@ -34,7 +34,6 @@
 #include "client/local_data.h"
 #include "client/local_database.h"
 #include "client/ui/hosts/local_group_widget.h"
-#include "client/settings.h"
 #include "common/ui/msg_box.h"
 
 namespace client {
@@ -42,15 +41,15 @@ namespace client {
 namespace {
 
 //--------------------------------------------------------------------------------------------------
-QString routerDisplayName(const RouterConfig& config)
+QString routerDisplayName(const RouterData& router)
 {
-    if (!config.name.isEmpty())
-        return config.name;
+    if (!router.name.isEmpty())
+        return router.name;
 
-    if (config.port != DEFAULT_ROUTER_TCP_PORT)
-        return QString("%1:%2").arg(config.address).arg(config.port);
+    if (router.port != DEFAULT_ROUTER_TCP_PORT)
+        return QString("%1:%2").arg(router.address).arg(router.port);
 
-    return config.address;
+    return router.address;
 }
 
 } // namespace
@@ -148,12 +147,12 @@ void Sidebar::reloadGroups(qint64 selected_group_id)
 //--------------------------------------------------------------------------------------------------
 void Sidebar::loadRouters()
 {
-    Settings settings;
-    RouterConfigList router_configs = settings.routerConfigs();
+    QList<RouterData> routers = LocalDatabase::instance().routerList();
 
-    for (const RouterConfig& config : std::as_const(router_configs))
+    for (const RouterData& router_data : std::as_const(routers))
     {
-        Router* router = new Router(config.uuid, routerDisplayName(config), tree_widget_);
+        Router* router = new Router(
+            router_data.id, routerDisplayName(router_data), tree_widget_);
         router->setExpanded(true);
     }
 }
@@ -161,38 +160,37 @@ void Sidebar::loadRouters()
 //--------------------------------------------------------------------------------------------------
 void Sidebar::reloadRouters()
 {
-    Settings settings;
-    RouterConfigList router_configs = settings.routerConfigs();
+    QList<RouterData> routers = LocalDatabase::instance().routerList();
 
-    QSet<QUuid> new_uuids;
-    new_uuids.reserve(router_configs.size());
-    for (const RouterConfig& config : std::as_const(router_configs))
-        new_uuids.insert(config.uuid);
+    QSet<qint64> new_ids;
+    new_ids.reserve(routers.size());
+    for (const RouterData& router_data : std::as_const(routers))
+        new_ids.insert(router_data.id);
 
-    // Remove only Router items whose uuid no longer exists.
+    // Remove only Router items whose id no longer exists.
     for (int i = tree_widget_->topLevelItemCount() - 1; i >= 0; --i)
     {
         Item* item = static_cast<Item*>(tree_widget_->topLevelItem(i));
         if (item->itemType() != Item::ROUTER)
             continue;
 
-        if (!new_uuids.contains(static_cast<Router*>(item)->uuid()))
+        if (!new_ids.contains(static_cast<Router*>(item)->routerId()))
             delete tree_widget_->takeTopLevelItem(i);
     }
 
     // Update existing routers, append new ones at the end.
-    for (const RouterConfig& config : std::as_const(router_configs))
+    for (const RouterData& router_data : std::as_const(routers))
     {
-        const QString name = routerDisplayName(config);
+        const QString name = routerDisplayName(router_data);
 
-        Router* router = routerByUuid(config.uuid);
+        Router* router = routerById(router_data.id);
         if (router)
         {
             router->setName(name);
         }
         else
         {
-            Router* new_router = new Router(config.uuid, name, tree_widget_);
+            Router* new_router = new Router(router_data.id, name, tree_widget_);
             new_router->setExpanded(true);
         }
     }
@@ -211,7 +209,7 @@ Sidebar::Item* Sidebar::currentItem() const
 }
 
 //--------------------------------------------------------------------------------------------------
-Sidebar::Router* Sidebar::routerByUuid(const QUuid& uuid) const
+Sidebar::Router* Sidebar::routerById(qint64 router_id) const
 {
     for (int i = 0; i < tree_widget_->topLevelItemCount(); ++i)
     {
@@ -220,7 +218,7 @@ Sidebar::Router* Sidebar::routerByUuid(const QUuid& uuid) const
             continue;
 
         Router* router = static_cast<Router*>(item);
-        if (router->uuid() == uuid)
+        if (router->routerId() == router_id)
             return router;
     }
 
@@ -228,9 +226,9 @@ Sidebar::Router* Sidebar::routerByUuid(const QUuid& uuid) const
 }
 
 //--------------------------------------------------------------------------------------------------
-QList<QUuid> Sidebar::routerUuids() const
+QList<qint64> Sidebar::routerIds() const
 {
-    QList<QUuid> uuids;
+    QList<qint64> ids;
 
     for (int i = 0; i < tree_widget_->topLevelItemCount(); ++i)
     {
@@ -238,10 +236,10 @@ QList<QUuid> Sidebar::routerUuids() const
         if (item->itemType() != Item::ROUTER)
             continue;
 
-        uuids.append(static_cast<Router*>(item)->uuid());
+        ids.append(static_cast<Router*>(item)->routerId());
     }
 
-    return uuids;
+    return ids;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -700,9 +698,9 @@ Sidebar::LocalGroup::LocalGroup(const GroupData& group, QTreeWidgetItem* parent)
 }
 
 //--------------------------------------------------------------------------------------------------
-Sidebar::Router::Router(const QUuid& uuid, const QString& name, QTreeWidget* parent)
+Sidebar::Router::Router(qint64 router_id, const QString& name, QTreeWidget* parent)
     : Item(ROUTER, -1, parent),
-      uuid_(uuid),
+      router_id_(router_id),
       name_(name)
 {
     setText(0, name);
@@ -710,9 +708,9 @@ Sidebar::Router::Router(const QUuid& uuid, const QString& name, QTreeWidget* par
 }
 
 //--------------------------------------------------------------------------------------------------
-const QUuid& Sidebar::Router::uuid() const
+qint64 Sidebar::Router::routerId() const
 {
-    return uuid_;
+    return router_id_;
 }
 
 //--------------------------------------------------------------------------------------------------

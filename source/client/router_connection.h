@@ -56,7 +56,7 @@ public:
 
     Status status() const { return status_; }
     const RouterConfig& config() const;
-    const QUuid& uuid() const;
+    qint64 routerId() const;
 
 public slots:
     // Generic methods.
@@ -79,8 +79,8 @@ public slots:
     // Manager methods.
 
 signals:
-    void sig_statusChanged(const QUuid& uuid, client::RouterConnection::Status status);
-    void sig_errorOccurred(const QUuid& uuid, base::TcpChannel::ErrorCode error_code);
+    void sig_statusChanged(qint64 router_id, client::RouterConnection::Status status);
+    void sig_errorOccurred(qint64 router_id, base::TcpChannel::ErrorCode error_code);
     void sig_relayListReceived(const proto::router::RelayList& list);
     void sig_hostListReceived(const proto::router::HostList& list);
     void sig_userListReceived(const proto::router::UserList& list);

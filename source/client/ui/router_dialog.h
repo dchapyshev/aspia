@@ -20,7 +20,6 @@
 #define CLIENT_UI_ROUTER_DIALOG_H
 
 #include "ui_router_dialog.h"
-#include "client/config.h"
 
 #include <QDialog>
 
@@ -33,11 +32,8 @@ class RouterDialog final : public QDialog
     Q_OBJECT
 
 public:
-    explicit RouterDialog(QWidget* parent = nullptr);
-    RouterDialog(const RouterConfig& config, QWidget* parent = nullptr);
+    RouterDialog(qint64 router_id, QWidget* parent = nullptr);
     ~RouterDialog() final;
-
-    RouterConfig routerConfig() const;
 
 private slots:
     void onButtonBoxClicked(QAbstractButton* button);
@@ -47,6 +43,7 @@ private:
     void showError(const QString& message);
 
     Ui::RouterDialog ui;
+    qint64 router_id_ = -1;
 };
 
 } // namespace client

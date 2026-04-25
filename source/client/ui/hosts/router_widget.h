@@ -19,8 +19,6 @@
 #ifndef CLIENT_UI_HOSTS_ROUTER_WIDGET_H
 #define CLIENT_UI_HOSTS_ROUTER_WIDGET_H
 
-#include <QUuid>
-
 #include "base/peer/user.h"
 #include "client/config.h"
 #include "client/router_connection.h"
@@ -59,7 +57,7 @@ public:
     explicit RouterWidget(const RouterConfig& config, QWidget* parent = nullptr);
     ~RouterWidget() override;
 
-    const QUuid& uuid() const;
+    qint64 routerId() const;
     RouterConnection::Status status() const;
     TabType currentTabType() const;
     bool hasSelectedUser() const;
@@ -115,19 +113,19 @@ signals:
     void sig_removeHost(qint64 session_id, bool try_to_uninstall);
     void sig_disconnectRelay(qint64 session_id);
     void sig_disconnectPeer(qint64 relay_entry_id, quint64 peer_session_id);
-    void sig_statusChanged(const QUuid& uuid, client::RouterConnection::Status status);
-    void sig_currentTabTypeChanged(const QUuid& uuid, client::RouterWidget::TabType tab);
-    void sig_currentUserChanged(const QUuid& uuid);
-    void sig_currentHostChanged(const QUuid& uuid);
-    void sig_currentRelayChanged(const QUuid& uuid);
-    void sig_userContextMenu(const QUuid& uuid, const base::User& user, const QPoint& global_pos);
-    void sig_hostContextMenu(const QUuid& uuid, const QPoint& global_pos, int column);
-    void sig_relayContextMenu(const QUuid& uuid, const QPoint& global_pos, int column);
+    void sig_statusChanged(qint64 router_id, client::RouterConnection::Status status);
+    void sig_currentTabTypeChanged(qint64 router_id, client::RouterWidget::TabType tab);
+    void sig_currentUserChanged(qint64 router_id);
+    void sig_currentHostChanged(qint64 router_id);
+    void sig_currentRelayChanged(qint64 router_id);
+    void sig_userContextMenu(qint64 router_id, const base::User& user, const QPoint& global_pos);
+    void sig_hostContextMenu(qint64 router_id, const QPoint& global_pos, int column);
+    void sig_relayContextMenu(qint64 router_id, const QPoint& global_pos, int column);
     void sig_updateConfig(const client::RouterConfig& config);
 
 private slots:
-    void onStatusChanged(const QUuid& uuid, client::RouterConnection::Status status);
-    void onConnectionErrorOccurred(const QUuid& uuid, base::TcpChannel::ErrorCode error_code);
+    void onStatusChanged(qint64 router_id, client::RouterConnection::Status status);
+    void onConnectionErrorOccurred(qint64 router_id, base::TcpChannel::ErrorCode error_code);
     void onTabChanged(int index);
     void onCurrentUserChanged();
     void onCurrentRelayChanged();

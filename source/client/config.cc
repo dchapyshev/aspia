@@ -24,8 +24,7 @@ namespace client {
 
 //--------------------------------------------------------------------------------------------------
 RouterConfig::RouterConfig()
-    : uuid(QUuid::createUuid()),
-      port(DEFAULT_ROUTER_TCP_PORT),
+    : port(DEFAULT_ROUTER_TCP_PORT),
       session_type(proto::router::SESSION_TYPE_CLIENT)
 {
     // Nothing

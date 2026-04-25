@@ -47,6 +47,7 @@ private slots:
 private:
     void showError(const QString& message);
     void updateRouterButtons();
+    void reloadRouterList();
 
     Ui::SettingsDialog ui;
 };

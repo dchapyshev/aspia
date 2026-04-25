@@ -20,7 +20,6 @@
 #define CLIENT_UI_HOSTS_HOSTS_TAB_H
 
 #include <QHash>
-#include <QUuid>
 
 #include "client/config.h"
 #include "client/router_connection.h"
@@ -61,7 +60,7 @@ signals:
     void sig_connect(const client::Config& config);
 
 private slots:
-    void onRouterStatusChanged(const QUuid& uuid, client::RouterConnection::Status status);
+    void onRouterStatusChanged(qint64 router_id, client::RouterConnection::Status status);
     void onAddComputerAction();
     void onEditComputerAction();
     void onCopyComputerAction();
@@ -75,9 +74,9 @@ private slots:
     void onConnectAction(QAction* action);
     void onLocalConnect(qint64 computer_id);
     void onLocalComputerContextMenu(qint64 computer_id, const QPoint& pos);
-    void onUserContextMenu(const QUuid& uuid, const base::User& user, const QPoint& pos);
-    void onHostContextMenu(const QUuid& uuid, const QPoint& pos, int column);
-    void onRelayContextMenu(const QUuid& uuid, const QPoint& pos, int column);
+    void onUserContextMenu(qint64 router_id, const base::User& user, const QPoint& pos);
+    void onHostContextMenu(qint64 router_id, const QPoint& pos, int column);
+    void onRelayContextMenu(qint64 router_id, const QPoint& pos, int column);
     void onAddUserAction();
     void onEditUserAction();
     void onDeleteUserAction();
@@ -93,11 +92,11 @@ private:
     proto::peer::SessionType defaultSessionType() const;
 
     void destroyAllRouterWidgets();
-    void destroyRouterWidget(const QUuid& uuid);
+    void destroyRouterWidget(qint64 router_id);
     RouterWidget* createRouterWidget(const RouterConfig& config);
 
-    void editRouter(const QUuid& uuid);
-    void deleteRouter(const QUuid& uuid);
+    void editRouter(qint64 router_id);
+    void deleteRouter(qint64 router_id);
 
     Ui::HostsTab ui;
 
@@ -141,7 +140,7 @@ private:
     RouterGroupWidget* router_group_widget_ = nullptr;
     SearchWidget* search_widget_ = nullptr;
 
-    QHash<QUuid, RouterWidget*> router_widgets_;
+    QHash<qint64, RouterWidget*> router_widgets_;
 
     Q_DISABLE_COPY_MOVE(HostsTab)
 };

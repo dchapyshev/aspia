@@ -110,9 +110,9 @@ const RouterConfig& RouterConnection::config() const
 }
 
 //--------------------------------------------------------------------------------------------------
-const QUuid& RouterConnection::uuid() const
+qint64 RouterConnection::routerId() const
 {
-    return config_.uuid;
+    return config_.id;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -335,7 +335,7 @@ void RouterConnection::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code
         tcp_channel_ = nullptr;
     }
 
-    emit sig_errorOccurred(config_.uuid, error_code);
+    emit sig_errorOccurred(config_.id, error_code);
 
     setStatus(Status::OFFLINE);
 
@@ -432,7 +432,7 @@ void RouterConnection::setStatus(Status status)
     {
         LOG(INFO) << "Status changed from" << status_ << "to" << status;
         status_ = status;
-        emit sig_statusChanged(config_.uuid, status_);
+        emit sig_statusChanged(config_.id, status_);
     }
 }
 

@@ -26,6 +26,8 @@
 #include "build/build_config.h"
 #include "build/version.h"
 #include "client/config_factory.h"
+#include "client/local_data.h"
+#include "client/local_database.h"
 #include "client/settings.h"
 #include "common/ui/msg_box.h"
 #include "client/ui/application.h"
@@ -459,9 +461,19 @@ int clientMain(int argc, char* argv[])
             LOG(INFO) << "Relay connection selected";
 
             client::RouterConfig router_config;
-            client::RouterConfigList router_configs = client::Settings().routerConfigs();
-            if (!router_configs.isEmpty())
-                router_config = router_configs.first();
+            const QList<client::RouterData> routers = client::LocalDatabase::instance().routerList();
+            if (!routers.isEmpty())
+            {
+                const client::RouterData& first = routers.first();
+                router_config.id = first.id;
+                router_config.name = first.name;
+                router_config.address = first.address;
+                router_config.port = first.port;
+                router_config.session_type =
+                    static_cast<proto::router::SessionType>(first.session_type);
+                router_config.username = first.username;
+                router_config.password = first.password;
+            }
 
             if (parser.isSet(router_address_option))
             {

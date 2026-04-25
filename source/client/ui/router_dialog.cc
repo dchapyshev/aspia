@@ -27,13 +27,16 @@
 #include "base/net/address.h"
 #include "base/peer/user.h"
 #include "build/build_config.h"
+#include "client/local_data.h"
+#include "client/local_database.h"
 #include "proto/router.h"
 
 namespace client {
 
 //--------------------------------------------------------------------------------------------------
-RouterDialog::RouterDialog(QWidget* parent)
-    : QDialog(parent)
+RouterDialog::RouterDialog(qint64 router_id, QWidget* parent)
+    : QDialog(parent),
+      router_id_(router_id)
 {
     LOG(INFO) << "Ctor";
     ui.setupUi(this);
@@ -43,53 +46,40 @@ RouterDialog::RouterDialog(QWidget* parent)
     ui.combo_session_type->addItem(tr("Client"), proto::router::SESSION_TYPE_CLIENT);
     ui.combo_session_type->setCurrentIndex(2);
 
+    if (router_id_ != -1)
+    {
+        std::optional<RouterData> router = LocalDatabase::instance().findRouter(router_id_);
+        if (router.has_value())
+        {
+            base::Address address(DEFAULT_ROUTER_TCP_PORT);
+            address.setHost(router->address);
+            address.setPort(router->port);
+
+            ui.edit_name->setText(router->name);
+            ui.edit_address->setText(address.toString());
+
+            int session_type_index = ui.combo_session_type->findData(router->session_type);
+            if (session_type_index != -1)
+                ui.combo_session_type->setCurrentIndex(session_type_index);
+
+            ui.edit_username->setText(router->username);
+            ui.edit_password->setText(router->password);
+        }
+        else
+        {
+            LOG(ERROR) << "Unable to find router with id" << router_id_;
+        }
+    }
+
     connect(ui.buttonbox, &QDialogButtonBox::clicked, this, &RouterDialog::onButtonBoxClicked);
     connect(ui.button_show_password, &QToolButton::toggled,
             this, &RouterDialog::onShowPasswordButtonToggled);
 }
 
 //--------------------------------------------------------------------------------------------------
-RouterDialog::RouterDialog(const RouterConfig& config, QWidget* parent)
-    : RouterDialog(parent)
-{
-    base::Address address(DEFAULT_ROUTER_TCP_PORT);
-    address.setHost(config.address);
-    address.setPort(config.port);
-
-    ui.edit_name->setText(config.name);
-    ui.edit_address->setText(address.toString());
-
-    int session_type_index = ui.combo_session_type->findData(config.session_type);
-    if (session_type_index != -1)
-        ui.combo_session_type->setCurrentIndex(session_type_index);
-
-    ui.edit_username->setText(config.username);
-    ui.edit_password->setText(config.password);
-}
-
-//--------------------------------------------------------------------------------------------------
 RouterDialog::~RouterDialog()
 {
     LOG(INFO) << "Dtor";
-}
-
-//--------------------------------------------------------------------------------------------------
-RouterConfig RouterDialog::routerConfig() const
-{
-    RouterConfig config;
-
-    config.name = ui.edit_name->text();
-
-    base::Address address =
-        base::Address::fromString(ui.edit_address->text(), DEFAULT_ROUTER_TCP_PORT);
-    config.address = address.host();
-    config.port = address.port();
-    config.session_type = static_cast<proto::router::SessionType>(
-        ui.combo_session_type->currentData().toInt());
-    config.username = ui.edit_username->text();
-    config.password = ui.edit_password->text();
-
-    return config;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -132,6 +122,36 @@ void RouterDialog::onButtonBoxClicked(QAbstractButton* button)
         ui.edit_password->setFocus();
         ui.edit_password->selectAll();
         return;
+    }
+
+    RouterData data;
+    data.id = router_id_;
+    data.name = ui.edit_name->text();
+    data.address = address.host();
+    data.port = address.port();
+    data.session_type = ui.combo_session_type->currentData().toUInt();
+    data.username = username;
+    data.password = password;
+
+    LocalDatabase& db = LocalDatabase::instance();
+
+    if (router_id_ < 0)
+    {
+        if (!db.addRouter(data))
+        {
+            LOG(ERROR) << "Failed to add router to database";
+            showError(tr("Failed to save the router."));
+            return;
+        }
+    }
+    else
+    {
+        if (!db.modifyRouter(data))
+        {
+            LOG(ERROR) << "Failed to modify router in database";
+            showError(tr("Failed to save the router."));
+            return;
+        }
     }
 
     accept();

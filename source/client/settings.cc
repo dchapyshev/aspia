@@ -18,7 +18,6 @@
 
 #include "client/settings.h"
 
-#include "base/crypto/data_cryptor.h"
 #include "base/logging.h"
 #include "base/xml_settings.h"
 #include "build/build_config.h"
@@ -39,14 +38,6 @@ const QString kUpdateServerParam = "update_server";
 const QString kOneTimePasswordCheckedParam = "one_time_password_checked";
 const QString kRouterManagerStateParam = "router_manager_state";
 const QString kDisplayNameParam = "display_name";
-const QString kRoutersParam = "routers";
-const QString kRouterUuidParam = "uuid";
-const QString kRouterNameParam = "name";
-const QString kRouterAddressParam = "address";
-const QString kRouterPortParam = "port";
-const QString kRouterUsernameParam = "username";
-const QString kRouterPasswordParam = "password";
-const QString kRouterSessionTypeParam = "session_type";
 const QString kWindowGeometryParam = "window_geometry";
 const QString kWindowStateParam = "window_state";
 const QString kLargeIconsParam = "large_icons";
@@ -182,71 +173,6 @@ QString Settings::displayName() const
 void Settings::setDisplayName(const QString& display_name)
 {
     settings_.setValue(kDisplayNameParam, display_name);
-}
-
-//--------------------------------------------------------------------------------------------------
-RouterConfigList Settings::routerConfigs()
-{
-    RouterConfigList configs;
-    base::DataCryptor& cryptor = base::DataCryptor::instance();
-    QByteArray out;
-
-    int size = settings_.beginReadArray(kRoutersParam);
-    for (int i = 0; i < size; ++i)
-    {
-        settings_.setArrayIndex(i);
-
-        RouterConfig config;
-
-        QUuid uuid = QUuid::fromString(settings_.value(kRouterUuidParam).toString());
-        if (!uuid.isNull())
-            config.uuid = uuid;
-
-        config.name = settings_.value(kRouterNameParam).toString();
-        config.port = static_cast<quint16>(settings_.value(kRouterPortParam, 0).toUInt());
-        config.address = settings_.value(kRouterAddressParam).toString();
-        config.session_type = static_cast<proto::router::SessionType>(
-            settings_.value(kRouterSessionTypeParam,
-                            proto::router::SESSION_TYPE_CLIENT).toInt());
-        config.username = settings_.value(kRouterUsernameParam).toString();
-
-        if (cryptor.decrypt(settings_.value(kRouterPasswordParam).toByteArray(), &out))
-            config.password = QString::fromUtf8(out);
-        else
-            LOG(ERROR) << "Failed to decrypt router password";
-
-        configs.append(config);
-    }
-    settings_.endArray();
-
-    return configs;
-}
-
-//--------------------------------------------------------------------------------------------------
-void Settings::setRouterConfigs(const RouterConfigList& configs)
-{
-    base::DataCryptor& cryptor = base::DataCryptor::instance();
-    QByteArray out;
-
-    settings_.beginWriteArray(kRoutersParam, configs.size());
-    for (int i = 0; i < configs.size(); ++i)
-    {
-        settings_.setArrayIndex(i);
-        const RouterConfig& config = configs.at(i);
-
-        settings_.setValue(kRouterUuidParam, config.uuid.toString());
-        settings_.setValue(kRouterNameParam, config.name);
-        settings_.setValue(kRouterPortParam, config.port);
-        settings_.setValue(kRouterAddressParam, config.address);
-        settings_.setValue(kRouterSessionTypeParam, config.session_type);
-        settings_.setValue(kRouterUsernameParam, config.username);
-
-        if (cryptor.encrypt(config.password.toUtf8(), &out))
-            settings_.setValue(kRouterPasswordParam, out);
-        else
-            LOG(ERROR) << "Failed to encrypt router password";
-    }
-    settings_.endArray();
 }
 
 //--------------------------------------------------------------------------------------------------

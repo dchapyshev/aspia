@@ -21,7 +21,6 @@
 
 #include <QList>
 #include <QString>
-#include <QUuid>
 
 #include "proto/peer.h"
 #include "proto/router.h"
@@ -44,7 +43,7 @@ struct RouterConfig
     bool isValid() const;
     bool hasSameConnectionParams(const RouterConfig& other) const;
 
-    QUuid uuid;
+    qint64 id = -1;
     QString name;
     QString address;
     quint16 port;
@@ -52,8 +51,6 @@ struct RouterConfig
     QString username;
     QString password;
 };
-
-using RouterConfigList = QList<RouterConfig>;
 
 struct Config
 {

@@ -29,6 +29,8 @@
 #include "base/net/address.h"
 #include "base/peer/user.h"
 #include "build/build_config.h"
+#include "client/local_data.h"
+#include "client/local_database.h"
 #include "client/settings.h"
 #include "client/ui/application.h"
 #include "client/ui/router_dialog.h"
@@ -43,9 +45,7 @@ const int kColumnName        = 1;
 const int kColumnSessionType = 2;
 const int kColumnUserName    = 3;
 
-const int kRolePassword    = Qt::UserRole;
-const int kRoleSessionType = Qt::UserRole + 1;
-const int kRoleUuid        = Qt::UserRole + 2;
+const int kRoleId = Qt::UserRole;
 
 //--------------------------------------------------------------------------------------------------
 QString sessionTypeToString(proto::router::SessionType session_type)
@@ -75,23 +75,7 @@ SettingsDialog::SettingsDialog(QWidget* parent)
     Settings settings;
 
     // Router tab.
-    RouterConfigList routers = settings.routerConfigs();
-    for (const auto& config : std::as_const(routers))
-    {
-        base::Address address(DEFAULT_ROUTER_TCP_PORT);
-        address.setHost(config.address);
-        address.setPort(config.port);
-
-        QTreeWidgetItem* item = new QTreeWidgetItem(ui.tree_routers);
-        item->setText(kColumnAddress, address.toString());
-        item->setIcon(kColumnAddress, QIcon(":/img/stack.svg"));
-        item->setText(kColumnName, config.name);
-        item->setText(kColumnSessionType, sessionTypeToString(config.session_type));
-        item->setText(kColumnUserName, config.username);
-        item->setData(kColumnAddress, kRolePassword, config.password);
-        item->setData(kColumnAddress, kRoleSessionType, config.session_type);
-        item->setData(kColumnAddress, kRoleUuid, config.uuid);
-    }
+    reloadRouterList();
 
     ui.tree_routers->header()->setStretchLastSection(true);
     ui.tree_routers->header()->setSectionResizeMode(kColumnAddress, QHeaderView::Stretch);
@@ -200,31 +184,7 @@ void SettingsDialog::onButtonBoxClicked(QAbstractButton* button)
     {
         LOG(INFO) << "[ACTION] Accepted by user";
 
-        // Save router configs.
-        RouterConfigList routers;
-        for (int i = 0; i < ui.tree_routers->topLevelItemCount(); ++i)
-        {
-            QTreeWidgetItem* item = ui.tree_routers->topLevelItem(i);
-
-            base::Address address =
-                base::Address::fromString(item->text(kColumnAddress), DEFAULT_ROUTER_TCP_PORT);
-
-            RouterConfig config;
-            QUuid uuid = item->data(kColumnAddress, kRoleUuid).toUuid();
-            if (!uuid.isNull())
-                config.uuid = uuid;
-            config.name = item->text(kColumnName);
-            config.address = address.host();
-            config.port = address.port();
-            config.session_type = static_cast<proto::router::SessionType>(
-                item->data(kColumnAddress, kRoleSessionType).toInt());
-            config.username = item->text(kColumnUserName);
-            config.password = item->data(kColumnAddress, kRolePassword).toString();
-            routers.append(config);
-        }
-
         Settings settings;
-        settings.setRouterConfigs(routers);
 
         // Save language.
         QString new_locale = ui.combo_language->currentData().toString();
@@ -265,28 +225,9 @@ void SettingsDialog::onAddRouter()
 {
     LOG(INFO) << "[ACTION] Add router";
 
-    RouterDialog dialog(this);
+    RouterDialog dialog(-1, this);
     if (dialog.exec() == QDialog::Accepted)
-    {
-        RouterConfig config = dialog.routerConfig();
-
-        base::Address address(DEFAULT_ROUTER_TCP_PORT);
-        address.setHost(config.address);
-        address.setPort(config.port);
-
-        QTreeWidgetItem* item = new QTreeWidgetItem(ui.tree_routers);
-        item->setText(kColumnAddress, address.toString());
-        item->setIcon(kColumnAddress, QIcon(":/img/stack.svg"));
-        item->setText(kColumnName, config.name);
-        item->setText(kColumnSessionType, sessionTypeToString(config.session_type));
-        item->setText(kColumnUserName, config.username);
-        item->setData(kColumnAddress, kRolePassword, config.password);
-        item->setData(kColumnAddress, kRoleSessionType, config.session_type);
-        item->setData(kColumnAddress, kRoleUuid, config.uuid);
-
-        ui.tree_routers->setCurrentItem(item);
-        updateRouterButtons();
-    }
+        reloadRouterList();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -298,33 +239,11 @@ void SettingsDialog::onEditRouter()
     if (!item)
         return;
 
-    base::Address addr = base::Address::fromString(item->text(kColumnAddress), DEFAULT_ROUTER_TCP_PORT);
+    qint64 router_id = item->data(kColumnAddress, kRoleId).toLongLong();
 
-    RouterConfig config;
-    config.name = item->text(kColumnName);
-    config.address = addr.host();
-    config.port = addr.port();
-    config.session_type = static_cast<proto::router::SessionType>(
-        item->data(kColumnAddress, kRoleSessionType).toInt());
-    config.username = item->text(kColumnUserName);
-    config.password = item->data(kColumnAddress, kRolePassword).toString();
-
-    RouterDialog dialog(config, this);
+    RouterDialog dialog(router_id, this);
     if (dialog.exec() == QDialog::Accepted)
-    {
-        config = dialog.routerConfig();
-
-        base::Address address(DEFAULT_ROUTER_TCP_PORT);
-        address.setHost(config.address);
-        address.setPort(config.port);
-
-        item->setText(kColumnAddress, address.toString());
-        item->setText(kColumnName, config.name);
-        item->setText(kColumnSessionType, sessionTypeToString(config.session_type));
-        item->setText(kColumnUserName, config.username);
-        item->setData(kColumnAddress, kRolePassword, config.password);
-        item->setData(kColumnAddress, kRoleSessionType, config.session_type);
-    }
+        reloadRouterList();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -339,11 +258,14 @@ void SettingsDialog::onRemoveRouter()
     QString display_name = item->text(kColumnName).isEmpty()
         ? item->text(kColumnAddress) : item->text(kColumnName);
     if (common::MsgBox::question(this, tr("Are you sure you want to delete router \"%1\"?")
-            .arg(display_name)) == common::MsgBox::Yes)
+            .arg(display_name)) != common::MsgBox::Yes)
     {
-        delete item;
-        updateRouterButtons();
+        return;
     }
+
+    qint64 router_id = item->data(kColumnAddress, kRoleId).toLongLong();
+    LocalDatabase::instance().removeRouter(router_id);
+    reloadRouterList();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -358,6 +280,31 @@ void SettingsDialog::updateRouterButtons()
     bool has_selection = ui.tree_routers->currentItem() != nullptr;
     ui.button_edit_router->setEnabled(has_selection);
     ui.button_remove_router->setEnabled(has_selection);
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsDialog::reloadRouterList()
+{
+    ui.tree_routers->clear();
+
+    const QList<RouterData> routers = LocalDatabase::instance().routerList();
+    for (const RouterData& router : std::as_const(routers))
+    {
+        base::Address address(DEFAULT_ROUTER_TCP_PORT);
+        address.setHost(router.address);
+        address.setPort(router.port);
+
+        QTreeWidgetItem* item = new QTreeWidgetItem(ui.tree_routers);
+        item->setText(kColumnAddress, address.toString());
+        item->setIcon(kColumnAddress, QIcon(":/img/stack.svg"));
+        item->setText(kColumnName, router.name);
+        item->setText(kColumnSessionType, sessionTypeToString(
+            static_cast<proto::router::SessionType>(router.session_type)));
+        item->setText(kColumnUserName, router.username);
+        item->setData(kColumnAddress, kRoleId, router.id);
+    }
+
+    updateRouterButtons();
 }
 
 } // namespace client

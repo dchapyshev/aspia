@@ -23,7 +23,6 @@
 #include <QMimeData>
 #include <QPoint>
 #include <QTreeWidget>
-#include <QUuid>
 #include <QWidget>
 
 namespace client {
@@ -72,17 +71,17 @@ public:
     class Router : public Item
     {
     public:
-        Router(const QUuid& uuid, const QString& name, QTreeWidget* parent);
+        Router(qint64 router_id, const QString& name, QTreeWidget* parent);
 
         enum class Status { OFFLINE, CONNECTING, ONLINE };
 
-        const QUuid& uuid() const;
+        qint64 routerId() const;
         const QString& name() const { return name_; }
         void setName(const QString& name);
         void setStatus(Status status);
 
     private:
-        QUuid uuid_;
+        qint64 router_id_;
         QString name_;
     };
 
@@ -136,8 +135,8 @@ public:
     void reloadRouters();
     qint64 currentGroupId() const;
     Item* currentItem() const;
-    Router* routerByUuid(const QUuid& uuid) const;
-    QList<QUuid> routerUuids() const;
+    Router* routerById(qint64 router_id) const;
+    QList<qint64> routerIds() const;
 
 protected:
     bool eventFilter(QObject* watched, QEvent* event) override;
