@@ -335,6 +335,8 @@ void RouterConnection::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code
         tcp_channel_ = nullptr;
     }
 
+    emit sig_errorOccurred(config_.uuid, error_code);
+
     setStatus(Status::OFFLINE);
 
     LOG(INFO) << "Reconnect scheduled in" << kReconnectTimeout.count() << "seconds";

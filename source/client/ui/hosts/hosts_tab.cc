@@ -634,11 +634,18 @@ void HostsTab::onSidebarContextMenu(Sidebar::Item::Type type, const QPoint& pos)
 
         QUuid uuid = static_cast<Sidebar::Router*>(item)->uuid();
 
-        QAction* edit_action = menu.addAction(QIcon(":/img/router-edit.svg"), tr("Edit Router"));
-        QAction* delete_action = menu.addAction(QIcon(":/img/router-delete.svg"), tr("Delete Router"));
+        QAction* status_action = menu.addAction(QIcon(":/img/info.svg"), tr("Status"));
+        QAction* edit_action = menu.addAction(QIcon(":/img/pencil-drawing.svg"), tr("Edit"));
+        QAction* delete_action = menu.addAction(QIcon(":/img/cancel.svg"), tr("Delete"));
 
         QAction* result = menu.exec(pos);
-        if (result == edit_action)
+        if (result == status_action)
+        {
+            RouterWidget* widget = router_widgets_.value(uuid);
+            if (widget)
+                widget->showStatusDialog();
+        }
+        else if (result == edit_action)
             editRouter(uuid);
         else if (result == delete_action)
             deleteRouter(uuid);

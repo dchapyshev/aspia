@@ -80,6 +80,7 @@ public slots:
 
 signals:
     void sig_statusChanged(const QUuid& uuid, client::RouterConnection::Status status);
+    void sig_errorOccurred(const QUuid& uuid, base::TcpChannel::ErrorCode error_code);
     void sig_relayListReceived(const proto::router::RelayList& list);
     void sig_hostListReceived(const proto::router::HostList& list);
     void sig_userListReceived(const proto::router::UserList& list);

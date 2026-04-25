@@ -39,6 +39,7 @@
 #include "base/peer/user.h"
 #include "client/ui/hosts/router_user_dialog.h"
 #include "common/ui/msg_box.h"
+#include "common/ui/status_dialog.h"
 #include "proto/router_admin.h"
 
 namespace client {
@@ -265,16 +266,22 @@ private:
 //--------------------------------------------------------------------------------------------------
 RouterWidget::RouterWidget(const RouterConfig& config, QWidget* parent)
     : ContentWidget(Type::ROUTER, parent),
-      uuid_(config.uuid)
+      config_(config)
 {
     LOG(INFO) << "Ctor";
     ui.setupUi(this);
+
+    status_dialog_ = new common::StatusDialog(this);
+    status_dialog_->setWindowFlag(Qt::WindowStaysOnTopHint);
+    status_dialog_->hide();
 
     connection_ = new RouterConnection(config);
     connection_->moveToThread(base::GuiApplication::ioThread());
 
     connect(connection_, &RouterConnection::sig_statusChanged,
             this, &RouterWidget::onStatusChanged, Qt::QueuedConnection);
+    connect(connection_, &RouterConnection::sig_errorOccurred,
+            this, &RouterWidget::onConnectionErrorOccurred, Qt::QueuedConnection);
     connect(connection_, &RouterConnection::sig_relayListReceived,
             this, &RouterWidget::onRelayListReceived, Qt::QueuedConnection);
     connect(connection_, &RouterConnection::sig_hostListReceived,
@@ -352,7 +359,7 @@ RouterWidget::~RouterWidget()
 //--------------------------------------------------------------------------------------------------
 const QUuid& RouterWidget::uuid() const
 {
-    return uuid_;
+    return config_.uuid;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -498,7 +505,16 @@ void RouterWidget::disconnectFromRouter()
 //--------------------------------------------------------------------------------------------------
 void RouterWidget::updateConfig(const RouterConfig& config)
 {
+    config_ = config;
     emit sig_updateConfig(config);
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::showStatusDialog()
+{
+    status_dialog_->show();
+    status_dialog_->activateWindow();
+    status_dialog_->raise();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -942,13 +958,13 @@ void RouterWidget::onDisconnectAllRelays()
 void RouterWidget::onTabChanged(int index)
 {
     updateStatusLabel();
-    emit sig_currentTabTypeChanged(uuid_, static_cast<TabType>(index));
+    emit sig_currentTabTypeChanged(uuid(), static_cast<TabType>(index));
 }
 
 //--------------------------------------------------------------------------------------------------
 void RouterWidget::onCurrentUserChanged()
 {
-    emit sig_currentUserChanged(uuid_);
+    emit sig_currentUserChanged(uuid());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -963,7 +979,7 @@ void RouterWidget::onUserContextMenuRequested(const QPoint& pos)
         user = static_cast<UserTreeItem*>(item)->user;
 
     QPoint global_pos = ui.tree_users->viewport()->mapToGlobal(pos);
-    emit sig_userContextMenu(uuid_, user, global_pos);
+    emit sig_userContextMenu(uuid(), user, global_pos);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -975,7 +991,7 @@ void RouterWidget::onHostContextMenuRequested(const QPoint& pos)
 
     const int column = ui.tree_hosts->indexAt(pos).column();
     const QPoint global_pos = ui.tree_hosts->viewport()->mapToGlobal(pos);
-    emit sig_hostContextMenu(uuid_, global_pos, column);
+    emit sig_hostContextMenu(uuid(), global_pos, column);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -987,7 +1003,7 @@ void RouterWidget::onRelayContextMenuRequested(const QPoint& pos)
 
     const int column = ui.tree_relays->indexAt(pos).column();
     const QPoint global_pos = ui.tree_relays->viewport()->mapToGlobal(pos);
-    emit sig_relayContextMenu(uuid_, global_pos, column);
+    emit sig_relayContextMenu(uuid(), global_pos, column);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1065,6 +1081,22 @@ void RouterWidget::onStatusChanged(const QUuid& uuid, RouterConnection::Status s
 {
     status_ = status;
 
+    switch (status)
+    {
+        case RouterConnection::Status::CONNECTING:
+            status_dialog_->addMessage(tr("Connecting to router %1:%2...")
+                .arg(config_.address).arg(config_.port));
+            break;
+        case RouterConnection::Status::ONLINE:
+            status_dialog_->addMessage(tr("Connection to router %1:%2 established.")
+                .arg(config_.address).arg(config_.port));
+            break;
+        case RouterConnection::Status::OFFLINE:
+            status_dialog_->addMessage(tr("Disconnected from router %1:%2.")
+                .arg(config_.address).arg(config_.port));
+            break;
+    }
+
     if (status == RouterConnection::Status::ONLINE)
     {
         onUpdateRelayList();
@@ -1092,6 +1124,12 @@ void RouterWidget::onStatusChanged(const QUuid& uuid, RouterConnection::Status s
     }
 
     emit sig_statusChanged(uuid, status);
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::onConnectionErrorOccurred(const QUuid& /* uuid */, base::TcpChannel::ErrorCode error_code)
+{
+    status_dialog_->addMessage(tr("Network error: %1.").arg(base::TcpChannel::errorToString(error_code)));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1186,7 +1224,7 @@ void RouterWidget::onHostListReceived(const proto::router::HostList& hosts)
             ui.tree_hosts->addTopLevelItem(new HostTreeItem(info));
     }
 
-    emit sig_currentHostChanged(uuid_);
+    emit sig_currentHostChanged(uuid());
     updateStatusLabel();
 }
 
@@ -1214,7 +1252,7 @@ void RouterWidget::onUserListReceived(const proto::router::UserList& list)
     if (to_select)
         tree_users->setCurrentItem(to_select);
     else
-        emit sig_currentUserChanged(uuid_);
+        emit sig_currentUserChanged(uuid());
 
     updateStatusLabel();
 }
@@ -1444,13 +1482,13 @@ void RouterWidget::onCurrentRelayChanged()
 {
     ui.tree_peers->clear();
     updateRelayStatistics();
-    emit sig_currentRelayChanged(uuid_);
+    emit sig_currentRelayChanged(uuid());
 }
 
 //--------------------------------------------------------------------------------------------------
 void RouterWidget::onCurrentHostChanged()
 {
-    emit sig_currentHostChanged(uuid_);
+    emit sig_currentHostChanged(uuid());
 }
 
 //--------------------------------------------------------------------------------------------------

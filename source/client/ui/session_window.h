@@ -66,7 +66,6 @@ private:
     void setClientTitle(const Config& config);
     void onErrorOccurred(const QString& message);
 
-    static QString netErrorToString(base::TcpChannel::ErrorCode error_code);
     static QString routerErrorToString(RouterManager::ErrorCode error_code);
 
     std::shared_ptr<SessionState> session_state_;

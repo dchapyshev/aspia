@@ -30,6 +30,10 @@
 class QLabel;
 class QStatusBar;
 
+namespace common {
+class StatusDialog;
+} // namespace common
+
 namespace proto::router {
 class HostResult;
 class RelayList;
@@ -82,6 +86,8 @@ public:
     void disconnectFromRouter();
     void updateConfig(const RouterConfig& config);
 
+    void showStatusDialog();
+
     static QString delayToString(quint64 delay);
     static QString sizeToString(qint64 size);
 
@@ -121,6 +127,7 @@ signals:
 
 private slots:
     void onStatusChanged(const QUuid& uuid, client::RouterConnection::Status status);
+    void onConnectionErrorOccurred(const QUuid& uuid, base::TcpChannel::ErrorCode error_code);
     void onTabChanged(int index);
     void onCurrentUserChanged();
     void onCurrentRelayChanged();
@@ -144,9 +151,11 @@ private:
 
     Ui::RouterWidget ui;
 
-    QUuid uuid_;
+    RouterConfig config_;
     RouterConnection* connection_ = nullptr;
     RouterConnection::Status status_ = RouterConnection::Status::OFFLINE;
+
+    common::StatusDialog* status_dialog_ = nullptr;
 
     QLabel* status_label_ = nullptr;
 

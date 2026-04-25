@@ -167,7 +167,7 @@ void SessionWindow::onStatusChanged(Client::Status status, const QVariant& data)
                 case RouterManager::ErrorType::NETWORK:
                 {
                     onErrorOccurred(tr("Network error when connecting to the router: %1")
-                        .arg(netErrorToString(error.code.network)));
+                        .arg(base::TcpChannel::errorToString(error.code.network)));
                 }
                 break;
 
@@ -219,7 +219,7 @@ void SessionWindow::onStatusChanged(Client::Status status, const QVariant& data)
             if (data.canConvert<base::TcpChannel::ErrorCode>())
             {
                 base::TcpChannel::ErrorCode error_code = data.value<base::TcpChannel::ErrorCode>();
-                onErrorOccurred(netErrorToString(error_code));
+                onErrorOccurred(base::TcpChannel::errorToString(error_code));
             }
             else
             {
@@ -289,78 +289,6 @@ void SessionWindow::onErrorOccurred(const QString& message)
     onInternalReset();
 
     status_dialog_->addMessageAndActivate(message);
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
-QString SessionWindow::netErrorToString(base::TcpChannel::ErrorCode error_code)
-{
-    const char* message;
-
-    switch (error_code)
-    {
-        case base::TcpChannel::ErrorCode::INVALID_PROTOCOL:
-            message = QT_TR_NOOP("Violation of the communication protocol.");
-            break;
-
-        case base::TcpChannel::ErrorCode::ACCESS_DENIED:
-            message = QT_TR_NOOP("Wrong user name or password.");
-            break;
-
-        case base::TcpChannel::ErrorCode::CRYPTO_ERROR:
-            message = QT_TR_NOOP("Cryptography error (message encryption or decryption failed).");
-            break;
-
-        case base::TcpChannel::ErrorCode::SESSION_DENIED:
-            message = QT_TR_NOOP("Specified session type is not allowed for the user.");
-            break;
-
-        case base::TcpChannel::ErrorCode::VERSION_ERROR:
-            message = QT_TR_NOOP("Version of the application you are connecting to is less than "
-                                 "the minimum supported version.");
-            break;
-
-        case base::TcpChannel::ErrorCode::NETWORK_ERROR:
-            message = QT_TR_NOOP("An error occurred with the network (e.g., the network cable was accidentally plugged out).");
-            break;
-
-        case base::TcpChannel::ErrorCode::CONNECTION_REFUSED:
-            message = QT_TR_NOOP("Connection was refused by the peer (or timed out).");
-            break;
-
-        case base::TcpChannel::ErrorCode::REMOTE_HOST_CLOSED:
-            message = QT_TR_NOOP("Remote host closed the connection.");
-            break;
-
-        case base::TcpChannel::ErrorCode::SPECIFIED_HOST_NOT_FOUND:
-            message = QT_TR_NOOP("Host address was not found.");
-            break;
-
-        case base::TcpChannel::ErrorCode::SOCKET_TIMEOUT:
-            message = QT_TR_NOOP("Socket operation timed out.");
-            break;
-
-        case base::TcpChannel::ErrorCode::ADDRESS_IN_USE:
-            message = QT_TR_NOOP("Address specified is already in use and was set to be exclusive.");
-            break;
-
-        case base::TcpChannel::ErrorCode::ADDRESS_NOT_AVAILABLE:
-            message = QT_TR_NOOP("Address specified does not belong to the host.");
-            break;
-
-        default:
-        {
-            if (error_code != base::TcpChannel::ErrorCode::UNKNOWN)
-            {
-                LOG(ERROR) << "Unknown error code:" << static_cast<int>(error_code);
-            }
-
-            message = QT_TR_NOOP("An unknown error occurred.");
-        }
-        break;
-    }
-
-    return tr(message);
 }
 
 //--------------------------------------------------------------------------------------------------

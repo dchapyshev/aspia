@@ -87,6 +87,8 @@ public:
     };
     Q_ENUM(ErrorCode)
 
+    static QString errorToString(ErrorCode error_code);
+
     using Clock = std::chrono::steady_clock;
     using TimePoint = std::chrono::time_point<Clock>;
     using Milliseconds = std::chrono::milliseconds;
