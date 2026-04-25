@@ -56,6 +56,13 @@ public:
     bool removeGroup(qint64 group_id);
     std::optional<GroupData> findGroup(qint64 group_id) const;
 
+    // Routers.
+    QList<RouterData> routerList() const;
+    bool addRouter(RouterData& router);
+    bool modifyRouter(const RouterData& router);
+    bool removeRouter(qint64 router_id);
+    std::optional<RouterData> findRouter(qint64 router_id) const;
+
 private:
     LocalDatabase() = default;
 

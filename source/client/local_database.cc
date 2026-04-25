@@ -82,6 +82,27 @@ GroupData readGroup(const QSqlQuery& query)
 }
 
 //--------------------------------------------------------------------------------------------------
+RouterData readRouter(const QSqlQuery& query)
+{
+    base::DataCryptor& cryptor = base::DataCryptor::instance();
+
+    RouterData router;
+    router.id = query.value(0).toLongLong();
+    router.name = query.value(1).toString();
+    router.address = query.value(2).toString();
+    router.port = static_cast<quint16>(query.value(3).toUInt());
+    router.session_type = query.value(4).toUInt();
+    router.username = query.value(5).toString();
+
+    QByteArray out;
+
+    cryptor.decrypt(query.value(6).toByteArray(), &out);
+    router.password = QString::fromUtf8(out);
+
+    return router;
+}
+
+//--------------------------------------------------------------------------------------------------
 bool createTables(QSqlDatabase& db)
 {
     QSqlQuery query(db);
@@ -109,6 +130,20 @@ bool createTables(QSqlDatabase& db)
                     "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
     {
         LOG(ERROR) << "Unable to create computers table:" << query.lastError();
+        return false;
+    }
+
+    if (!query.exec("CREATE TABLE IF NOT EXISTS \"routers\" ("
+                    "\"id\" INTEGER UNIQUE,"
+                    "\"name\" TEXT NOT NULL DEFAULT '',"
+                    "\"address\" TEXT NOT NULL DEFAULT '',"
+                    "\"port\" INTEGER NOT NULL DEFAULT 0,"
+                    "\"session_type\" INTEGER NOT NULL DEFAULT 0,"
+                    "\"username\" TEXT NOT NULL DEFAULT '',"
+                    "\"password\" BLOB NOT NULL DEFAULT X'',"
+                    "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
+    {
+        LOG(ERROR) << "Unable to create routers table:" << query.lastError();
         return false;
     }
 
@@ -497,6 +532,152 @@ std::optional<GroupData> LocalDatabase::findGroup(qint64 group_id) const
         return std::nullopt;
 
     return readGroup(query);
+}
+
+//--------------------------------------------------------------------------------------------------
+QList<RouterData> LocalDatabase::routerList() const
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return {};
+    }
+
+    QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
+    if (!query.exec("SELECT id, name, address, port, session_type, username, password FROM routers"))
+    {
+        LOG(ERROR) << "Unable to get router list:" << query.lastError();
+        return {};
+    }
+
+    QList<RouterData> routers;
+    while (query.next())
+        routers.append(readRouter(query));
+
+    return routers;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool LocalDatabase::addRouter(RouterData& router)
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return false;
+    }
+
+    if (router.address.isEmpty() || router.port == 0 || router.username.isEmpty())
+    {
+        LOG(ERROR) << "Invalid parameters";
+        return false;
+    }
+
+    base::DataCryptor& cryptor = base::DataCryptor::instance();
+    QByteArray out;
+
+    QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
+    query.prepare("INSERT INTO routers (id, name, address, port, session_type, username, password) "
+                  "VALUES (NULL, ?, ?, ?, ?, ?, ?)");
+    query.addBindValue(router.name);
+    query.addBindValue(router.address);
+    query.addBindValue(router.port);
+    query.addBindValue(router.session_type);
+    query.addBindValue(router.username);
+
+    cryptor.encrypt(router.password.toUtf8(), &out);
+    query.addBindValue(out);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << query.lastError();
+        return false;
+    }
+
+    router.id = query.lastInsertId().toLongLong();
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool LocalDatabase::modifyRouter(const RouterData& router)
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return false;
+    }
+
+    base::DataCryptor& cryptor = base::DataCryptor::instance();
+    QByteArray out;
+
+    QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
+    query.prepare("UPDATE routers SET name=?, address=?, port=?, session_type=?, username=?, password=? "
+                  "WHERE id=?");
+    query.addBindValue(router.name);
+    query.addBindValue(router.address);
+    query.addBindValue(router.port);
+    query.addBindValue(router.session_type);
+    query.addBindValue(router.username);
+
+    cryptor.encrypt(router.password.toUtf8(), &out);
+    query.addBindValue(out);
+
+    query.addBindValue(router.id);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << query.lastError();
+        return false;
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool LocalDatabase::removeRouter(qint64 router_id)
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return false;
+    }
+
+    QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
+    query.prepare("DELETE FROM routers WHERE id=?");
+    query.addBindValue(router_id);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << query.lastError();
+        return false;
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+std::optional<RouterData> LocalDatabase::findRouter(qint64 router_id) const
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return std::nullopt;
+    }
+
+    QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
+    query.prepare("SELECT id, name, address, port, session_type, username, password "
+                  "FROM routers WHERE id=?");
+    query.addBindValue(router_id);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << query.lastError();
+        return std::nullopt;
+    }
+
+    if (!query.next())
+        return std::nullopt;
+
+    return readRouter(query);
 }
 
 //--------------------------------------------------------------------------------------------------
