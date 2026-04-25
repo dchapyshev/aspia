@@ -59,12 +59,14 @@ QString currentTime()
 //--------------------------------------------------------------------------------------------------
 QString historyDirectoryPath(const QString& history_id)
 {
-    QString base_path = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation);
+    QString base_path = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
     if (base_path.isEmpty())
     {
         LOG(ERROR) << "Unable to get app config location";
         return QString();
     }
+
+    base_path += "/aspia";
 
     if (history_id.isEmpty())
         return base_path;

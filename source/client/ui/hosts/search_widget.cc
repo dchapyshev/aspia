@@ -19,7 +19,7 @@
 #include "client/ui/hosts/search_widget.h"
 
 #include "base/logging.h"
-#include "client/local_database.h"
+#include "client/database.h"
 
 #include <QHeaderView>
 #include <QTreeWidget>
@@ -61,7 +61,7 @@ void SearchWidget::search(const QString& query)
 {
     tree_computer_->clear();
 
-    //QList<ComputerData> results = LocalDatabase::instance().searchComputers(query);
+    //QList<ComputerData> results = Database::instance().searchComputers(query);
 
     //for (const ComputerData& computer : std::as_const(results))
     //    new SearchComputerItem(computer, tree_computer_);

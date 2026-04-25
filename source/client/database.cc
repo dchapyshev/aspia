@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/local_database.h"
+#include "client/database.h"
 
 #include "base/crypto/data_cryptor.h"
 #include "base/logging.h"
@@ -33,19 +33,19 @@ namespace client {
 
 namespace {
 
-const char kConnectionName[] = "book";
+const char kConnectionName[] = "client";
 
 //--------------------------------------------------------------------------------------------------
 QString databaseDirectory()
 {
-    QString dir_path = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation);
+    QString dir_path = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
     if (dir_path.isEmpty())
     {
         LOG(ERROR) << "Unable to get application data directory";
         return QString();
     }
 
-    return dir_path;
+    return dir_path + "/aspia";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -154,9 +154,9 @@ bool createTables(QSqlDatabase& db)
 
 //--------------------------------------------------------------------------------------------------
 // static
-LocalDatabase& LocalDatabase::instance()
+Database& Database::instance()
 {
-    static thread_local LocalDatabase database;
+    static thread_local Database database;
 
     if (!database.valid_)
         database.valid_ = database.openDatabase();
@@ -166,23 +166,23 @@ LocalDatabase& LocalDatabase::instance()
 
 //--------------------------------------------------------------------------------------------------
 // static
-QString LocalDatabase::filePath()
+QString Database::filePath()
 {
     QString dir_path = databaseDirectory();
     if (dir_path.isEmpty())
         return QString();
 
-    return dir_path + "/book.db3";
+    return dir_path + "/client.db3";
 }
 
 //--------------------------------------------------------------------------------------------------
-bool LocalDatabase::isValid() const
+bool Database::isValid() const
 {
     return valid_;
 }
 
 //--------------------------------------------------------------------------------------------------
-QList<ComputerData> LocalDatabase::computerList(qint64 group_id) const
+QList<ComputerData> Database::computerList(qint64 group_id) const
 {
     if (!isValid())
     {
@@ -209,7 +209,7 @@ QList<ComputerData> LocalDatabase::computerList(qint64 group_id) const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool LocalDatabase::addComputer(ComputerData& computer)
+bool Database::addComputer(ComputerData& computer)
 {
     if (!isValid())
     {
@@ -249,7 +249,7 @@ bool LocalDatabase::addComputer(ComputerData& computer)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool LocalDatabase::modifyComputer(const ComputerData& computer)
+bool Database::modifyComputer(const ComputerData& computer)
 {
     if (!isValid())
     {
@@ -284,7 +284,7 @@ bool LocalDatabase::modifyComputer(const ComputerData& computer)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool LocalDatabase::removeComputer(qint64 computer_id)
+bool Database::removeComputer(qint64 computer_id)
 {
     if (!isValid())
     {
@@ -306,7 +306,7 @@ bool LocalDatabase::removeComputer(qint64 computer_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::optional<ComputerData> LocalDatabase::findComputer(qint64 computer_id) const
+std::optional<ComputerData> Database::findComputer(qint64 computer_id) const
 {
     if (!isValid())
     {
@@ -332,7 +332,7 @@ std::optional<ComputerData> LocalDatabase::findComputer(qint64 computer_id) cons
 }
 
 //--------------------------------------------------------------------------------------------------
-QList<ComputerData> LocalDatabase::searchComputers(const QString& query_text) const
+QList<ComputerData> Database::searchComputers(const QString& query_text) const
 {
     if (!isValid())
     {
@@ -363,7 +363,7 @@ QList<ComputerData> LocalDatabase::searchComputers(const QString& query_text) co
 }
 
 //--------------------------------------------------------------------------------------------------
-QList<GroupData> LocalDatabase::groupList(qint64 parent_id) const
+QList<GroupData> Database::groupList(qint64 parent_id) const
 {
     if (!isValid())
     {
@@ -389,7 +389,7 @@ QList<GroupData> LocalDatabase::groupList(qint64 parent_id) const
 }
 
 //--------------------------------------------------------------------------------------------------
-QList<GroupData> LocalDatabase::allGroups() const
+QList<GroupData> Database::allGroups() const
 {
     if (!isValid())
     {
@@ -412,7 +412,7 @@ QList<GroupData> LocalDatabase::allGroups() const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool LocalDatabase::addGroup(GroupData& group)
+bool Database::addGroup(GroupData& group)
 {
     if (!isValid())
     {
@@ -439,7 +439,7 @@ bool LocalDatabase::addGroup(GroupData& group)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool LocalDatabase::modifyGroup(const GroupData& group)
+bool Database::modifyGroup(const GroupData& group)
 {
     if (!isValid())
     {
@@ -465,7 +465,7 @@ bool LocalDatabase::modifyGroup(const GroupData& group)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool LocalDatabase::moveGroup(qint64 group_id, qint64 new_parent_id)
+bool Database::moveGroup(qint64 group_id, qint64 new_parent_id)
 {
     if (!isValid())
     {
@@ -488,7 +488,7 @@ bool LocalDatabase::moveGroup(qint64 group_id, qint64 new_parent_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool LocalDatabase::removeGroup(qint64 group_id)
+bool Database::removeGroup(qint64 group_id)
 {
     if (!isValid())
     {
@@ -510,7 +510,7 @@ bool LocalDatabase::removeGroup(qint64 group_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::optional<GroupData> LocalDatabase::findGroup(qint64 group_id) const
+std::optional<GroupData> Database::findGroup(qint64 group_id) const
 {
     if (!isValid())
     {
@@ -535,7 +535,7 @@ std::optional<GroupData> LocalDatabase::findGroup(qint64 group_id) const
 }
 
 //--------------------------------------------------------------------------------------------------
-QList<RouterData> LocalDatabase::routerList() const
+QList<RouterData> Database::routerList() const
 {
     if (!isValid())
     {
@@ -558,7 +558,7 @@ QList<RouterData> LocalDatabase::routerList() const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool LocalDatabase::addRouter(RouterData& router)
+bool Database::addRouter(RouterData& router)
 {
     if (!isValid())
     {
@@ -598,7 +598,7 @@ bool LocalDatabase::addRouter(RouterData& router)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool LocalDatabase::modifyRouter(const RouterData& router)
+bool Database::modifyRouter(const RouterData& router)
 {
     if (!isValid())
     {
@@ -633,7 +633,7 @@ bool LocalDatabase::modifyRouter(const RouterData& router)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool LocalDatabase::removeRouter(qint64 router_id)
+bool Database::removeRouter(qint64 router_id)
 {
     if (!isValid())
     {
@@ -655,7 +655,7 @@ bool LocalDatabase::removeRouter(qint64 router_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::optional<RouterData> LocalDatabase::findRouter(qint64 router_id) const
+std::optional<RouterData> Database::findRouter(qint64 router_id) const
 {
     if (!isValid())
     {
@@ -681,7 +681,7 @@ std::optional<RouterData> LocalDatabase::findRouter(qint64 router_id) const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool LocalDatabase::openDatabase()
+bool Database::openDatabase()
 {
     QString dir_path = databaseDirectory();
     if (dir_path.isEmpty())

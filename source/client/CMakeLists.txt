@@ -18,8 +18,8 @@
 
 list(APPEND SOURCE_CLIENT_CORE
     local_data.h
-    local_database.cc
-    local_database.h
+    database.cc
+    database.h
     client.cc
     client.h
     config.cc

@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_LOCAL_DATABASE_H
-#define CLIENT_LOCAL_DATABASE_H
+#ifndef CLIENT_DATABASE_H
+#define CLIENT_DATABASE_H
 
 #include <QList>
 #include <QString>
@@ -28,12 +28,12 @@
 
 namespace client {
 
-class LocalDatabase
+class Database
 {
 public:
-    ~LocalDatabase() = default;
+    ~Database() = default;
 
-    static LocalDatabase& instance();
+    static Database& instance();
     static QString filePath();
     bool isValid() const;
 
@@ -64,7 +64,7 @@ public:
     std::optional<RouterData> findRouter(qint64 router_id) const;
 
 private:
-    LocalDatabase() = default;
+    Database() = default;
 
     bool openDatabase();
 
@@ -73,4 +73,4 @@ private:
 
 } // namespace client
 
-#endif // CLIENT_LOCAL_DATABASE_H
+#endif // CLIENT_DATABASE_H

@@ -28,7 +28,7 @@
 #include "base/peer/user.h"
 #include "build/build_config.h"
 #include "client/local_data.h"
-#include "client/local_database.h"
+#include "client/database.h"
 #include "proto/router.h"
 
 namespace client {
@@ -48,7 +48,7 @@ RouterDialog::RouterDialog(qint64 router_id, QWidget* parent)
 
     if (router_id_ != -1)
     {
-        std::optional<RouterData> router = LocalDatabase::instance().findRouter(router_id_);
+        std::optional<RouterData> router = Database::instance().findRouter(router_id_);
         if (router.has_value())
         {
             base::Address address(DEFAULT_ROUTER_TCP_PORT);
@@ -133,7 +133,7 @@ void RouterDialog::onButtonBoxClicked(QAbstractButton* button)
     data.username = username;
     data.password = password;
 
-    LocalDatabase& db = LocalDatabase::instance();
+    Database& db = Database::instance();
 
     if (router_id_ < 0)
     {

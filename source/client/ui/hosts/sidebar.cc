@@ -32,7 +32,7 @@
 #include "base/logging.h"
 #include "build/build_config.h"
 #include "client/local_data.h"
-#include "client/local_database.h"
+#include "client/database.h"
 #include "client/ui/hosts/local_group_widget.h"
 #include "common/ui/msg_box.h"
 
@@ -102,7 +102,7 @@ Sidebar::~Sidebar() = default;
 //--------------------------------------------------------------------------------------------------
 void Sidebar::loadGroups(qint64 parent_id, QTreeWidgetItem* parent_item)
 {
-    QList<GroupData> groups = LocalDatabase::instance().groupList(parent_id);
+    QList<GroupData> groups = Database::instance().groupList(parent_id);
 
     for (const GroupData& group : std::as_const(groups))
     {
@@ -147,7 +147,7 @@ void Sidebar::reloadGroups(qint64 selected_group_id)
 //--------------------------------------------------------------------------------------------------
 void Sidebar::loadRouters()
 {
-    QList<RouterData> routers = LocalDatabase::instance().routerList();
+    QList<RouterData> routers = Database::instance().routerList();
 
     for (const RouterData& router_data : std::as_const(routers))
     {
@@ -160,7 +160,7 @@ void Sidebar::loadRouters()
 //--------------------------------------------------------------------------------------------------
 void Sidebar::reloadRouters()
 {
-    QList<RouterData> routers = LocalDatabase::instance().routerList();
+    QList<RouterData> routers = Database::instance().routerList();
 
     QSet<qint64> new_ids;
     new_ids.reserve(routers.size());
@@ -412,7 +412,7 @@ bool Sidebar::onDrop(QDropEvent* event)
         Item* target_item = static_cast<Item*>(target_tree_item);
 
         // Check if a group with the same name already exists in the target group.
-        QList<GroupData> target_groups = LocalDatabase::instance().groupList(target_item->groupId());
+        QList<GroupData> target_groups = Database::instance().groupList(target_item->groupId());
         for (const GroupData& existing : std::as_const(target_groups))
         {
             if (existing.id != source_group->groupId() && existing.name == source_group->groupName())
@@ -425,7 +425,7 @@ bool Sidebar::onDrop(QDropEvent* event)
         }
 
         // Update the group's parent in the database.
-        if (!LocalDatabase::instance().moveGroup(source_group->groupId(), target_item->groupId()))
+        if (!Database::instance().moveGroup(source_group->groupId(), target_item->groupId()))
         {
             common::MsgBox::warning(tree_widget_,
                 tr("Failed to move the group."));
@@ -478,7 +478,7 @@ bool Sidebar::onDrop(QDropEvent* event)
 
         // Check if a computer with the same name already exists in the target group.
         QList<ComputerData> target_computers =
-            LocalDatabase::instance().computerList(target_item->groupId());
+            Database::instance().computerList(target_item->groupId());
         for (const ComputerData& existing : std::as_const(target_computers))
         {
             if (existing.name == computer_item->computerName())
@@ -492,7 +492,7 @@ bool Sidebar::onDrop(QDropEvent* event)
 
         // Update the computer's group in the database.
         std::optional<ComputerData> computer =
-            LocalDatabase::instance().findComputer(computer_item->computerId());
+            Database::instance().findComputer(computer_item->computerId());
         if (!computer.has_value())
         {
             restoreSelection();
@@ -501,7 +501,7 @@ bool Sidebar::onDrop(QDropEvent* event)
 
         computer->group_id = target_item->groupId();
 
-        if (!LocalDatabase::instance().modifyComputer(*computer))
+        if (!Database::instance().modifyComputer(*computer))
         {
             common::MsgBox::warning(tree_widget_,
                 tr("Failed to move the computer to the selected group."));

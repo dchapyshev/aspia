@@ -27,7 +27,7 @@
 #include "build/version.h"
 #include "client/config_factory.h"
 #include "client/local_data.h"
-#include "client/local_database.h"
+#include "client/database.h"
 #include "client/settings.h"
 #include "common/ui/msg_box.h"
 #include "client/ui/application.h"
@@ -461,7 +461,7 @@ int clientMain(int argc, char* argv[])
             LOG(INFO) << "Relay connection selected";
 
             client::RouterConfig router_config;
-            const QList<client::RouterData> routers = client::LocalDatabase::instance().routerList();
+            const QList<client::RouterData> routers = client::Database::instance().routerList();
             if (!routers.isEmpty())
             {
                 const client::RouterData& first = routers.first();

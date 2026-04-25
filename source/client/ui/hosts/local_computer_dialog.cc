@@ -26,7 +26,7 @@
 #include "base/peer/user.h"
 #include "build/build_config.h"
 #include "client/local_data.h"
-#include "client/local_database.h"
+#include "client/database.h"
 #include "client/ui/hosts/group_combo_box.h"
 #include "common/ui/msg_box.h"
 
@@ -53,7 +53,7 @@ LocalComputerDialog::LocalComputerDialog(qint64 computer_id, qint64 group_id, QW
     {
         setWindowTitle(tr("Edit Computer"));
 
-        std::optional<ComputerData> computer = LocalDatabase::instance().findComputer(computer_id_);
+        std::optional<ComputerData> computer = Database::instance().findComputer(computer_id_);
         if (computer.has_value())
         {
             ui.edit_name->setText(computer->name);
@@ -168,7 +168,7 @@ void LocalComputerDialog::onButtonBoxClicked(QAbstractButton* button)
 
     qint64 group_id = ui.combo_group->currentGroupId();
 
-    QList<ComputerData> computers = LocalDatabase::instance().computerList(group_id);
+    QList<ComputerData> computers = Database::instance().computerList(group_id);
     for (const ComputerData& existing : std::as_const(computers))
     {
         if (existing.id != computer_id_ && existing.name == name)
@@ -189,7 +189,7 @@ void LocalComputerDialog::onButtonBoxClicked(QAbstractButton* button)
     computer.password = ui.edit_password->text();
     computer.comment = ui.edit_comment->toPlainText();
 
-    LocalDatabase& db = LocalDatabase::instance();
+    Database& db = Database::instance();
 
     if (computer_id_ == -1)
     {

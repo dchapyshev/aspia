@@ -30,7 +30,7 @@
 #include "base/peer/user.h"
 #include "build/build_config.h"
 #include "client/local_data.h"
-#include "client/local_database.h"
+#include "client/database.h"
 #include "client/settings.h"
 #include "client/ui/application.h"
 #include "client/ui/router_dialog.h"
@@ -264,7 +264,7 @@ void SettingsDialog::onRemoveRouter()
     }
 
     qint64 router_id = item->data(kColumnAddress, kRoleId).toLongLong();
-    LocalDatabase::instance().removeRouter(router_id);
+    Database::instance().removeRouter(router_id);
     reloadRouterList();
 }
 
@@ -287,7 +287,7 @@ void SettingsDialog::reloadRouterList()
 {
     ui.tree_routers->clear();
 
-    const QList<RouterData> routers = LocalDatabase::instance().routerList();
+    const QList<RouterData> routers = Database::instance().routerList();
     for (const RouterData& router : std::as_const(routers))
     {
         base::Address address(DEFAULT_ROUTER_TCP_PORT);

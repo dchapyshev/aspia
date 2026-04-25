@@ -31,7 +31,7 @@
 #include "base/peer/user.h"
 #include "build/build_config.h"
 #include "client/local_data.h"
-#include "client/local_database.h"
+#include "client/database.h"
 #include "client/settings.h"
 #include "client/ui/hosts/content_widget.h"
 #include "client/ui/hosts/local_computer_dialog.h"
@@ -69,7 +69,7 @@ HostsTab::HostsTab(QWidget* parent)
 {
     LOG(INFO) << "Ctor";
 
-    if (!LocalDatabase::instance().isValid())
+    if (!Database::instance().isValid())
         LOG(ERROR) << "Failed to open or create book database";
 
     ui.setupUi(this);
@@ -196,7 +196,7 @@ HostsTab::HostsTab(QWidget* parent)
     switchContent(local_group_widget_);
     updateActionsState();
 
-    const QList<RouterData> routers = LocalDatabase::instance().routerList();
+    const QList<RouterData> routers = Database::instance().routerList();
     for (const RouterData& router : std::as_const(routers))
     {
         RouterConfig config = dataToConfig(router);
@@ -334,7 +334,7 @@ bool HostsTab::hasSearchField() const
 void HostsTab::reloadRouters()
 {
     const QList<qint64> old_ids = router_widgets_.keys();
-    const QList<RouterData> routers = LocalDatabase::instance().routerList();
+    const QList<RouterData> routers = Database::instance().routerList();
 
     // Remove widgets for routers that no longer exist.
     for (qint64 id : std::as_const(old_ids))
@@ -449,7 +449,7 @@ void HostsTab::onCopyComputerAction()
         return;
     }
 
-    LocalDatabase& db = LocalDatabase::instance();
+    Database& db = Database::instance();
 
     std::optional<ComputerData> computer = db.findComputer(item->computerId());
     if (!computer.has_value())
@@ -493,7 +493,7 @@ void HostsTab::onDeleteComputerAction()
         return;
     }
 
-    if (!LocalDatabase::instance().removeComputer(item->computerId()))
+    if (!Database::instance().removeComputer(item->computerId()))
     {
         common::MsgBox::warning(this, tr("Unable to remove computer"));
         LOG(INFO) << "Unable to remove computer with id" << item->computerId();
@@ -583,7 +583,7 @@ void HostsTab::onDeleteGroupAction()
 
     qint64 parent_id = local_group->parentId();
 
-    if (!LocalDatabase::instance().removeGroup(local_group->groupId()))
+    if (!Database::instance().removeGroup(local_group->groupId()))
     {
         common::MsgBox::warning(this, tr("Unable to remove group"));
         LOG(INFO) << "Unable to remove group with id" << local_group->groupId();
@@ -713,7 +713,7 @@ void HostsTab::onConnectAction(QAction* action)
             return;
 
         std::optional<ComputerData> computer =
-            LocalDatabase::instance().findComputer(item->computerId());
+            Database::instance().findComputer(item->computerId());
         if (!computer.has_value())
         {
             common::MsgBox::warning(this,
@@ -750,7 +750,7 @@ void HostsTab::onConnectAction(QAction* action)
 
         Sidebar::Router* router = static_cast<Sidebar::Router*>(router_item);
         std::optional<RouterData> router_data =
-            LocalDatabase::instance().findRouter(router->routerId());
+            Database::instance().findRouter(router->routerId());
         if (router_data)
             config.router_config = dataToConfig(*router_data);
         // TODO
@@ -766,7 +766,7 @@ void HostsTab::onConnectAction(QAction* action)
 //--------------------------------------------------------------------------------------------------
 void HostsTab::onLocalConnect(qint64 computer_id)
 {
-    std::optional<ComputerData> computer = LocalDatabase::instance().findComputer(computer_id);
+    std::optional<ComputerData> computer = Database::instance().findComputer(computer_id);
     if (!computer.has_value())
     {
         common::MsgBox::warning(this,
@@ -1015,7 +1015,7 @@ void HostsTab::deleteRouter(qint64 router_id)
 {
     LOG(INFO) << "[ACTION] Delete router" << router_id;
 
-    LocalDatabase& db = LocalDatabase::instance();
+    Database& db = Database::instance();
     std::optional<RouterData> existing = db.findRouter(router_id);
     if (!existing)
     {

@@ -27,7 +27,7 @@
 #include <QUuid>
 
 #include "base/logging.h"
-#include "client/local_database.h"
+#include "client/database.h"
 
 namespace client {
 
@@ -129,7 +129,7 @@ void LocalGroupWidget::showGroup(qint64 group_id)
 
     ui.tree_computer->clear();
 
-    QList<ComputerData> computers = LocalDatabase::instance().computerList(group_id);
+    QList<ComputerData> computers = Database::instance().computerList(group_id);
 
     for (const ComputerData& computer : std::as_const(computers))
         new Item(computer, ui.tree_computer);
@@ -181,7 +181,7 @@ void LocalGroupWidget::updateStatusLabels()
 {
     int child_groups_count = 0;
     if (current_group_id_ >= 0)
-        child_groups_count = LocalDatabase::instance().groupList(current_group_id_).size();
+        child_groups_count = Database::instance().groupList(current_group_id_).size();
 
     if (status_groups_label_)
         status_groups_label_->setText(tr("%n child group(s)", "", child_groups_count));
