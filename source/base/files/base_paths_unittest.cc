@@ -121,6 +121,14 @@ TEST(BasePathsTest, CurrentApp)
     EXPECT_TRUE(info.isAbsolute());
 }
 
+TEST(BasePathsTest, CurrentAppDir)
+{
+    QString dir = BasePaths::currentAppDir();
+    expectValidDir(dir);
+    EXPECT_TRUE(QDir(dir).exists());
+    EXPECT_EQ(dir, QFileInfo(BasePaths::currentApp()).absolutePath());
+}
+
 // ============================================================================
 // On POSIX systems, all per-user directories must live under the user's home.
 // ============================================================================

@@ -19,6 +19,7 @@
 #include "base/files/base_paths.h"
 
 #include <QDir>
+#include <QFileInfo>
 
 #if defined(Q_OS_WINDOWS)
 #include <qt_windows.h>
@@ -228,6 +229,13 @@ QString BasePaths::currentApp()
     NOTIMPLEMENTED();
     return QString();
 #endif
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QString BasePaths::currentAppDir()
+{
+    return QFileInfo(currentApp()).absolutePath();
 }
 
 } // namespace base

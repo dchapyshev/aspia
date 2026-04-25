@@ -83,6 +83,9 @@ public:
     // Full path to the executable file of the current process.
     static QString currentApp();
 
+    // Directory containing the executable file of the current process.
+    static QString currentAppDir();
+
 private:
     Q_DISABLE_COPY_MOVE(BasePaths)
 };
