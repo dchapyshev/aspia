@@ -27,6 +27,7 @@
 #include "base/service_controller.h"
 #include "base/crypto/key_pair.h"
 #include "base/crypto/random.h"
+#include "base/files/base_paths.h"
 #include "base/files/file_util.h"
 #include "base/peer/user.h"
 #include "build/version.h"
@@ -147,17 +148,7 @@ int generateAndPrintKeys(QTextStream& out)
 //--------------------------------------------------------------------------------------------------
 QString publicKeyDirectory()
 {
-    QString dir_path;
-
-#if defined(Q_OS_WINDOWS)
-    dir_path = "C:/ProgramData/aspia";
-#elif defined(Q_OS_LINUX)
-    dir_path.append("/etc/aspia");
-#else
-    NOTIMPLEMENTED();
-#endif // defined(OS_*)
-
-    return dir_path;
+    return base::BasePaths::appConfigDir();
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -31,11 +31,11 @@
 #include <QMenu>
 #include <QSaveFile>
 #include <QScrollBar>
-#include <QStandardPaths>
 #include <QTextStream>
 #include <QTimer>
 
 #include "base/logging.h"
+#include "base/files/base_paths.h"
 #include "common/ui/chat_incoming_message.h"
 #include "common/ui/msg_box.h"
 #include "common/ui/chat_outgoing_message.h"
@@ -59,14 +59,12 @@ QString currentTime()
 //--------------------------------------------------------------------------------------------------
 QString historyDirectoryPath(const QString& history_id)
 {
-    QString base_path = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
+    QString base_path = base::BasePaths::appUserDataDir();
     if (base_path.isEmpty())
     {
-        LOG(ERROR) << "Unable to get app config location";
+        LOG(ERROR) << "Unable to get app data directory";
         return QString();
     }
-
-    base_path += "/aspia";
 
     if (history_id.isEmpty())
         return base_path;

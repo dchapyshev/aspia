@@ -24,6 +24,7 @@
 #include <QJsonObject>
 
 #include "base/logging.h"
+#include "base/files/base_paths.h"
 #include "router/settings.h"
 
 namespace router {
@@ -33,11 +34,7 @@ namespace {
 //--------------------------------------------------------------------------------------------------
 QString oldConfigFilePath()
 {
-#if defined(Q_OS_WINDOWS)
-    return "C:\\ProgramData\\aspia\\router.json";
-#else
-    return "/etc/aspia/router.json";
-#endif
+    return base::BasePaths::appConfigDir() + "/router.json";
 }
 
 //--------------------------------------------------------------------------------------------------

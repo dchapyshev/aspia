@@ -19,6 +19,7 @@
 #include "router/database.h"
 
 #include "base/logging.h"
+#include "base/files/base_paths.h"
 
 #include <utility>
 
@@ -480,17 +481,7 @@ bool Database::addHost(const QByteArray& key_hash)
 // static
 QString Database::databaseDirectory()
 {
-    QString dir_path;
-
-#if defined(Q_OS_WINDOWS)
-    dir_path = QStringLiteral("C:/ProgramData/aspia");
-#elif defined(Q_OS_LINUX)
-    dir_path = QStringLiteral("/var/lib/aspia");
-#else
-    NOTIMPLEMENTED();
-#endif // defined(OS_*)
-
-    return dir_path;
+    return base::BasePaths::appDataDir();
 }
 
 } // namespace router

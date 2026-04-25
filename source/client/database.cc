@@ -20,13 +20,13 @@
 
 #include "base/crypto/data_cryptor.h"
 #include "base/logging.h"
+#include "base/files/base_paths.h"
 
 #include <QDir>
 #include <QFileInfo>
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
-#include <QStandardPaths>
 #include <QVariant>
 
 namespace client {
@@ -34,19 +34,6 @@ namespace client {
 namespace {
 
 const char kConnectionName[] = "client";
-
-//--------------------------------------------------------------------------------------------------
-QString databaseDirectory()
-{
-    QString dir_path = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
-    if (dir_path.isEmpty())
-    {
-        LOG(ERROR) << "Unable to get application data directory";
-        return QString();
-    }
-
-    return dir_path + "/aspia";
-}
 
 //--------------------------------------------------------------------------------------------------
 ComputerData readComputer(const QSqlQuery& query)
@@ -168,7 +155,7 @@ Database& Database::instance()
 // static
 QString Database::filePath()
 {
-    QString dir_path = databaseDirectory();
+    QString dir_path = base::BasePaths::appUserDataDir();
     if (dir_path.isEmpty())
         return QString();
 
@@ -683,7 +670,7 @@ std::optional<RouterData> Database::findRouter(qint64 router_id) const
 //--------------------------------------------------------------------------------------------------
 bool Database::openDatabase()
 {
-    QString dir_path = databaseDirectory();
+    QString dir_path = base::BasePaths::appUserDataDir();
     if (dir_path.isEmpty())
     {
         LOG(ERROR) << "Invalid directory path";

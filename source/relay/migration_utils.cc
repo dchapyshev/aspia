@@ -24,6 +24,7 @@
 #include <QJsonObject>
 
 #include "base/logging.h"
+#include "base/files/base_paths.h"
 #include "relay/settings.h"
 
 namespace relay {
@@ -33,11 +34,7 @@ namespace {
 //--------------------------------------------------------------------------------------------------
 QString oldConfigFilePath()
 {
-#if defined(Q_OS_WINDOWS)
-    return "C:\\ProgramData\\aspia\\relay.json";
-#else
-    return "/etc/aspia/relay.json";
-#endif
+    return base::BasePaths::appConfigDir() + "/relay.json";
 }
 
 //--------------------------------------------------------------------------------------------------

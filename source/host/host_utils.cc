@@ -28,7 +28,6 @@
 
 #if defined(Q_OS_WINDOWS)
 #include <qt_windows.h>
-#include <ShlObj.h>
 #include <dxgi.h>
 #include <d3d11.h>
 #include <comdef.h>
@@ -43,6 +42,7 @@
 #include "build/version.h"
 #include "base/logging.h"
 #include "base/sys_info.h"
+#include "base/files/base_paths.h"
 #include "base/peer/user_list.h"
 #include "host/host_storage.h"
 #include "host/system_settings.h"
@@ -52,40 +52,21 @@ namespace host {
 namespace {
 
 //--------------------------------------------------------------------------------------------------
-QString configDir()
-{
-#if defined(Q_OS_WINDOWS)
-    wchar_t buffer[MAX_PATH] = { 0 };
-
-    HRESULT hr = SHGetFolderPathW(nullptr, CSIDL_COMMON_APPDATA, nullptr, SHGFP_TYPE_CURRENT, buffer);
-    if (FAILED(hr))
-    {
-        LOG(ERROR) << "SHGetFolderPathW failed";
-        return QString();
-    }
-
-    return QString::fromWCharArray(buffer);
-#else
-    return "/etc/aspia";
-#endif
-}
-
-//--------------------------------------------------------------------------------------------------
 QString hostFilePath()
 {
-    return configDir() + "/aspia/host.json";
+    return base::BasePaths::appConfigDir() + "/host.json";
 }
 
 //--------------------------------------------------------------------------------------------------
 QString hostKeyFilePath()
 {
-    return configDir() + "/aspia/host_key.json";
+    return base::BasePaths::appConfigDir() + "/host_key.json";
 }
 
 //--------------------------------------------------------------------------------------------------
 QString hostIpcFilePath()
 {
-    return configDir() + "/aspia/host_ipc.json";
+    return base::BasePaths::appConfigDir() + "/host_ipc.json";
 }
 
 //--------------------------------------------------------------------------------------------------
