@@ -383,6 +383,11 @@ if (UNIX)
         files/file_descriptor_watcher_posix.h)
 endif()
 
+if (APPLE)
+    list(APPEND SOURCE_BASE_FILES
+        files/base_paths_mac.mm)
+endif()
+
 list(APPEND SOURCE_BASE_FILES_TESTS
     files/base_paths_unittest.cc)
 

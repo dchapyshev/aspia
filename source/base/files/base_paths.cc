@@ -40,6 +40,7 @@
 
 namespace base {
 
+#if !defined(Q_OS_MACOS)
 //--------------------------------------------------------------------------------------------------
 // static
 QString BasePaths::genericConfigDir()
@@ -56,14 +57,14 @@ QString BasePaths::genericConfigDir()
     return QDir::fromNativeSeparators(QString::fromWCharArray(buffer));
 #elif defined(Q_OS_LINUX)
     return "/etc";
-#elif defined(Q_OS_MACOS)
-    return "/Library/Application Support";
 #else
     NOTIMPLEMENTED();
     return QString();
 #endif
 }
+#endif // !defined(Q_OS_MACOS)
 
+#if !defined(Q_OS_MACOS)
 //--------------------------------------------------------------------------------------------------
 // static
 QString BasePaths::genericUserConfigDir()
@@ -90,17 +91,12 @@ QString BasePaths::genericUserConfigDir()
     }
 
     return path;
-#elif defined(Q_OS_MACOS)
-    QString home = BasePaths::userHome();
-    if (home.isEmpty())
-        return QString();
-
-    return home + "/Library/Application Support";
 #else
     NOTIMPLEMENTED();
     return QString();
 #endif
 }
+#endif // !defined(Q_OS_MACOS)
 
 //--------------------------------------------------------------------------------------------------
 // static
@@ -116,6 +112,7 @@ QString BasePaths::appUserConfigDir()
     return genericUserConfigDir() + "/aspia";
 }
 
+#if !defined(Q_OS_MACOS)
 //--------------------------------------------------------------------------------------------------
 // static
 QString BasePaths::genericDataDir()
@@ -124,14 +121,14 @@ QString BasePaths::genericDataDir()
     return genericConfigDir();
 #elif defined(Q_OS_LINUX)
     return "/var/lib";
-#elif defined(Q_OS_MACOS)
-    return "/Library/Application Support";
 #else
     NOTIMPLEMENTED();
     return QString();
 #endif
 }
+#endif // !defined(Q_OS_MACOS)
 
+#if !defined(Q_OS_MACOS)
 //--------------------------------------------------------------------------------------------------
 // static
 QString BasePaths::genericUserDataDir()
@@ -150,17 +147,12 @@ QString BasePaths::genericUserDataDir()
     }
 
     return path;
-#elif defined(Q_OS_MACOS)
-    QString home = BasePaths::userHome();
-    if (home.isEmpty())
-        return QString();
-
-    return home + "/Library/Application Support";
 #else
     NOTIMPLEMENTED();
     return QString();
 #endif
 }
+#endif // !defined(Q_OS_MACOS)
 
 //--------------------------------------------------------------------------------------------------
 // static
