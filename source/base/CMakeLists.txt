@@ -105,8 +105,6 @@ list(APPEND SOURCE_BASE_TESTS
     serialization_unittest.cc
     shared_pointer_unittest.cc
     xml_settings_unittest.cc
-    peer/host_id_unittest.cc
-    peer/user_unittest.cc
     tests_main.cc)
 
 list(APPEND SOURCE_BASE_AUDIO
@@ -372,6 +370,8 @@ if (LINUX)
 endif()
 
 list(APPEND SOURCE_BASE_FILES
+    files/base_paths.cc
+    files/base_paths.h
     files/file_enumerator.cc
     files/file_enumerator.h
     files/file_util.cc
@@ -382,6 +382,9 @@ if (UNIX)
         files/file_descriptor_watcher_posix.cc
         files/file_descriptor_watcher_posix.h)
 endif()
+
+list(APPEND SOURCE_BASE_FILES_TESTS
+    files/base_paths_unittest.cc)
 
 list(APPEND SOURCE_BASE_IPC
     ipc/ipc_channel.cc
@@ -460,6 +463,10 @@ list(APPEND SOURCE_BASE_PEER
     peer/user_list.cc
     peer/user_list.h
     peer/user_list_base.h)
+
+list(APPEND SOURCE_BASE_PEER_TESTS
+    peer/host_id_unittest.cc
+    peer/user_unittest.cc)
 
 if (UNIX)
     list(APPEND SOURCE_BASE_POSIX
@@ -620,7 +627,9 @@ add_executable(aspia_base_tests
     ${SOURCE_BASE_CRYPTO_TESTS}
     ${SOURCE_BASE_DESKTOP_TESTS}
     ${SOURCE_BASE_DESKTOP_WIN_TESTS}
+    ${SOURCE_BASE_FILES_TESTS}
     ${SOURCE_BASE_NET_TESTS}
+    ${SOURCE_BASE_PEER_TESTS}
     ${SOURCE_BASE_WIN_TESTS})
 target_link_libraries(aspia_base_tests PRIVATE
     aspia_base
