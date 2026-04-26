@@ -23,6 +23,7 @@
 
 #include "base/logging.h"
 #include "base/net/address.h"
+#include "base/peer/host_id.h"
 #include "base/peer/user.h"
 #include "build/build_config.h"
 #include "client/local_data.h"
@@ -38,6 +39,18 @@ constexpr int kMaxNameLength = 64;
 constexpr int kMinNameLength = 1;
 constexpr int kMaxCommentLength = 2048;
 
+//--------------------------------------------------------------------------------------------------
+QString routerDisplayName(const RouterData& router)
+{
+    if (!router.name.isEmpty())
+        return router.name;
+
+    if (router.port != DEFAULT_ROUTER_TCP_PORT)
+        return QString("%1:%2").arg(router.address).arg(router.port);
+
+    return router.address;
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -48,6 +61,16 @@ LocalComputerDialog::LocalComputerDialog(qint64 computer_id, qint64 group_id, QW
     LOG(INFO) << "Ctor";
 
     ui.setupUi(this);
+
+    ui.combo_router->addItem(QIcon(":/img/connect.svg"), tr("Without Router"), QVariant::fromValue<qint64>(0));
+
+    QList<RouterData> routers = Database::instance().routerList();
+    for (const RouterData& router : std::as_const(routers))
+    {
+        ui.combo_router->addItem(QIcon(":/img/stack.svg"), routerDisplayName(router), QVariant::fromValue(router.id));
+    }
+
+    qint64 selected_router_id = 0;
 
     if (computer_id_ != -1)
     {
@@ -62,6 +85,7 @@ LocalComputerDialog::LocalComputerDialog(qint64 computer_id, qint64 group_id, QW
             ui.edit_password->setText(computer->password);
             ui.edit_comment->setPlainText(computer->comment);
             group_id_ = computer->group_id;
+            selected_router_id = computer->router_id;
         }
         else
         {
@@ -74,14 +98,29 @@ LocalComputerDialog::LocalComputerDialog(qint64 computer_id, qint64 group_id, QW
         group_id_ = group_id;
     }
 
+    if (selected_router_id != 0)
+    {
+        int found_index = ui.combo_router->findData(QVariant::fromValue(selected_router_id));
+        if (found_index < 0)
+        {
+            LOG(WARNING) << "Computer references missing router id" << selected_router_id;
+            ui.combo_router->addItem(QIcon(":/img/high-importance.svg"), tr("<deleted router>"),
+                                     QVariant::fromValue(selected_router_id));
+            found_index = ui.combo_router->count() - 1;
+        }
+        ui.combo_router->setCurrentIndex(found_index);
+    }
+
+    updateAddressLabel();
+
     ui.combo_group->loadGroups(tr("Local"));
     ui.combo_group->selectGroup(group_id_);
 
     connect(ui.button_show_password, &QToolButton::toggled,
             this, &LocalComputerDialog::onShowPasswordButtonToggled);
-
-    connect(ui.button_box, &QDialogButtonBox::clicked,
-            this, &LocalComputerDialog::onButtonBoxClicked);
+    connect(ui.combo_router, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, &LocalComputerDialog::onRouterChanged);
+    connect(ui.button_box, &QDialogButtonBox::clicked, this, &LocalComputerDialog::onButtonBoxClicked);
 
     ui.edit_name->setFocus();
 }
@@ -106,6 +145,12 @@ void LocalComputerDialog::onShowPasswordButtonToggled(bool checked)
         ui.edit_password->setInputMethodHints(Qt::ImhHiddenText | Qt::ImhSensitiveData |
                                               Qt::ImhNoAutoUppercase | Qt::ImhNoPredictiveText);
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void LocalComputerDialog::onRouterChanged(int /* index */)
+{
+    updateAddressLabel();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -135,13 +180,29 @@ void LocalComputerDialog::onButtonBoxClicked(QAbstractButton* button)
         return;
     }
 
-    base::Address address = base::Address::fromString(ui.edit_address->text(), DEFAULT_HOST_TCP_PORT);
-    if (!address.isValid())
+    qint64 router_id = ui.combo_router->currentData().toLongLong();
+
+    if (router_id == 0)
     {
-        common::MsgBox::warning(this, tr("An invalid computer address was entered."));
-        ui.edit_address->setFocus();
-        ui.edit_address->selectAll();
-        return;
+        base::Address address =
+            base::Address::fromString(ui.edit_address->text(), DEFAULT_HOST_TCP_PORT);
+        if (!address.isValid())
+        {
+            common::MsgBox::warning(this, tr("An invalid computer address was entered."));
+            ui.edit_address->setFocus();
+            ui.edit_address->selectAll();
+            return;
+        }
+    }
+    else
+    {
+        if (!base::isHostId(ui.edit_address->text()))
+        {
+            common::MsgBox::warning(this, tr("An invalid host ID was entered."));
+            ui.edit_address->setFocus();
+            ui.edit_address->selectAll();
+            return;
+        }
     }
 
     QString username = ui.edit_username->text();
@@ -183,6 +244,7 @@ void LocalComputerDialog::onButtonBoxClicked(QAbstractButton* button)
     ComputerData computer;
     computer.id = computer_id_;
     computer.group_id = group_id;
+    computer.router_id = router_id;
     computer.name = ui.edit_name->text();
     computer.address = ui.edit_address->text();
     computer.username = ui.edit_username->text();
@@ -213,5 +275,19 @@ void LocalComputerDialog::onButtonBoxClicked(QAbstractButton* button)
     accept();
 }
 
+//--------------------------------------------------------------------------------------------------
+void LocalComputerDialog::updateAddressLabel()
+{
+    if (ui.combo_router->currentData().toLongLong() == 0)
+    {
+        ui.label_address->setText(tr("Address:"));
+        ui.edit_address->setPlaceholderText(tr("Name or IP address"));
+    }
+    else
+    {
+        ui.label_address->setText(tr("ID:"));
+        ui.edit_address->setPlaceholderText(tr("Host ID"));
+    }
+}
 
 } // namespace client

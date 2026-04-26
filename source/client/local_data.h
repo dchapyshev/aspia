@@ -27,6 +27,7 @@ struct ComputerData
 {
     qint64 id = -1;
     qint64 group_id = 0;
+    qint64 router_id = 0;
     QString name;
     QString comment;
     QString address;

@@ -43,14 +43,15 @@ ComputerData readComputer(const QSqlQuery& query)
     ComputerData computer;
     computer.id = query.value(0).toLongLong();
     computer.group_id = query.value(1).toLongLong();
-    computer.name = query.value(2).toString();
-    computer.comment = query.value(3).toString();
-    computer.address = query.value(4).toString();
-    computer.username = query.value(5).toString();
+    computer.router_id = query.value(2).toLongLong();
+    computer.name = query.value(3).toString();
+    computer.comment = query.value(4).toString();
+    computer.address = query.value(5).toString();
+    computer.username = query.value(6).toString();
 
     QByteArray out;
 
-    cryptor.decrypt(query.value(6).toByteArray(), &out);
+    cryptor.decrypt(query.value(7).toByteArray(), &out);
     computer.password = QString::fromUtf8(out);
 
     return computer;
@@ -109,6 +110,7 @@ bool createTables(QSqlDatabase& db)
     if (!query.exec("CREATE TABLE IF NOT EXISTS \"computers\" ("
                     "\"id\" INTEGER UNIQUE,"
                     "\"group_id\" INTEGER NOT NULL DEFAULT 0,"
+                    "\"router_id\" INTEGER NOT NULL DEFAULT 0,"
                     "\"name\" TEXT NOT NULL DEFAULT '',"
                     "\"comment\" TEXT NOT NULL DEFAULT '',"
                     "\"address\" TEXT NOT NULL DEFAULT '',"
@@ -178,7 +180,7 @@ QList<ComputerData> Database::computerList(qint64 group_id) const
     }
 
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    query.prepare("SELECT id, group_id, name, comment, address, username, password "
+    query.prepare("SELECT id, group_id, router_id, name, comment, address, username, password "
                   "FROM computers WHERE group_id=?");
     query.addBindValue(group_id);
 
@@ -214,9 +216,10 @@ bool Database::addComputer(ComputerData& computer)
     QByteArray out;
 
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    query.prepare("INSERT INTO computers (id, group_id, name, comment, address, username, password) "
-                  "VALUES (NULL, ?, ?, ?, ?, ?, ?)");
+    query.prepare("INSERT INTO computers (id, group_id, router_id, name, comment, address, username, password) "
+                  "VALUES (NULL, ?, ?, ?, ?, ?, ?, ?)");
     query.addBindValue(computer.group_id);
+    query.addBindValue(computer.router_id);
     query.addBindValue(computer.name);
     query.addBindValue(computer.comment);
     query.addBindValue(computer.address);
@@ -248,9 +251,10 @@ bool Database::modifyComputer(const ComputerData& computer)
     QByteArray out;
 
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    query.prepare("UPDATE computers SET group_id=?, name=?, comment=?, address=?, username=?, password=? "
+    query.prepare("UPDATE computers SET group_id=?, router_id=?, name=?, comment=?, address=?, username=?, password=? "
                   "WHERE id=?");
     query.addBindValue(computer.group_id);
+    query.addBindValue(computer.router_id);
     query.addBindValue(computer.name);
     query.addBindValue(computer.comment);
     query.addBindValue(computer.address);
@@ -302,7 +306,7 @@ std::optional<ComputerData> Database::findComputer(qint64 computer_id) const
     }
 
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    query.prepare("SELECT id, group_id, name, comment, address, username, password "
+    query.prepare("SELECT id, group_id, router_id, name, comment, address, username, password "
                   "FROM computers WHERE id=?");
     query.addBindValue(computer_id);
 
@@ -328,7 +332,7 @@ QList<ComputerData> Database::searchComputers(const QString& query_text) const
     }
 
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    query.prepare("SELECT id, group_id, name, comment, address, username, password "
+    query.prepare("SELECT id, group_id, router_id, name, comment, address, username, password "
                   "FROM computers WHERE name LIKE ? OR address LIKE ? OR comment LIKE ?");
 
     QString pattern = QString("%%1%").arg(query_text);

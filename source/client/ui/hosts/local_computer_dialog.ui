@@ -40,33 +40,43 @@
       <widget class="QLineEdit" name="edit_name"/>
      </item>
      <item row="2" column="0">
+      <widget class="QLabel" name="label_router">
+       <property name="text">
+        <string>Router:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QComboBox" name="combo_router"/>
+     </item>
+     <item row="3" column="0">
       <widget class="QLabel" name="label_address">
        <property name="text">
         <string>Address:</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
+     <item row="3" column="1">
       <widget class="QLineEdit" name="edit_address"/>
      </item>
-     <item row="3" column="0">
+     <item row="4" column="0">
       <widget class="QLabel" name="label_username">
        <property name="text">
         <string>Username:</string>
        </property>
       </widget>
      </item>
-     <item row="3" column="1">
+     <item row="4" column="1">
       <widget class="QLineEdit" name="edit_username"/>
      </item>
-     <item row="4" column="0">
+     <item row="5" column="0">
       <widget class="QLabel" name="label_password">
        <property name="text">
         <string>Password:</string>
        </property>
       </widget>
      </item>
-     <item row="4" column="1">
+     <item row="5" column="1">
       <layout class="QHBoxLayout" name="horizontalLayout_password">
        <item>
         <widget class="QLineEdit" name="edit_password">

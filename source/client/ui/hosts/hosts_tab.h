@@ -34,6 +34,7 @@ class User;
 
 namespace client {
 
+struct ComputerData;
 class ContentWidget;
 class LocalGroupWidget;
 class RouterWidget;
@@ -97,6 +98,8 @@ private:
 
     void editRouter(qint64 router_id);
     void deleteRouter(qint64 router_id);
+
+    bool fillConfigFromComputer(Config* config, const ComputerData& computer);
 
     Ui::HostsTab ui;
 

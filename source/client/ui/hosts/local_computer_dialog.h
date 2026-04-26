@@ -35,9 +35,12 @@ public:
 
 private slots:
     void onShowPasswordButtonToggled(bool checked);
+    void onRouterChanged(int index);
     void onButtonBoxClicked(QAbstractButton* button);
 
 private:
+    void updateAddressLabel();
+
     Ui::LocalComputerDialog ui;
     qint64 computer_id_ = -1;
     qint64 group_id_ = 0;

@@ -47,7 +47,7 @@
      </column>
      <column>
       <property name="text">
-       <string>Address</string>
+       <string>Address / ID</string>
       </property>
      </column>
      <column>

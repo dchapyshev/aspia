@@ -28,6 +28,7 @@
 #include "common/ui/msg_box.h"
 #include "base/logging.h"
 #include "base/net/address.h"
+#include "base/peer/host_id.h"
 #include "base/peer/user.h"
 #include "build/build_config.h"
 #include "client/local_data.h"
@@ -721,18 +722,8 @@ void HostsTab::onConnectAction(QAction* action)
             return;
         }
 
-        base::Address address = base::Address::fromString(computer->address, DEFAULT_HOST_TCP_PORT);
-        if (!address.isValid())
-        {
-            common::MsgBox::warning(this, tr("The computer has an incorrect address."));
+        if (!fillConfigFromComputer(&config, *computer))
             return;
-        }
-
-        config.address_or_id = address.host();
-        config.port = address.port();
-        config.computer_name = computer->name;
-        config.username = computer->username;
-        config.password = computer->password;
     }
     else if (current_content_ == router_group_widget_)
     {
@@ -774,21 +765,12 @@ void HostsTab::onLocalConnect(qint64 computer_id)
         return;
     }
 
-    base::Address address = base::Address::fromString(computer->address, DEFAULT_HOST_TCP_PORT);
-    if (!address.isValid())
-    {
-        common::MsgBox::warning(this, tr("The computer has an incorrect address."));
-        return;
-    }
-
     Config config;
-    config.address_or_id = address.host();
-    config.port = address.port();
     config.session_type = defaultSessionType();
     config.display_name = Settings().displayName();
-    config.computer_name = computer->name;
-    config.username = computer->username;
-    config.password = computer->password;
+
+    if (!fillConfigFromComputer(&config, *computer))
+        return;
 
     emit sig_connect(config);
 }
@@ -1214,6 +1196,48 @@ void HostsTab::onRemoveHostAction()
     RouterWidget* widget = router_widgets_.value(router->routerId());
     if (widget)
         widget->onRemoveHost();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool HostsTab::fillConfigFromComputer(Config* config, const ComputerData& computer)
+{
+    if (computer.router_id != 0)
+    {
+        std::optional<RouterData> router = Database::instance().findRouter(computer.router_id);
+        if (!router.has_value())
+        {
+            common::MsgBox::warning(this, tr("The router associated with this computer has been deleted. "
+                "Edit the computer to select another router or switch to direct connection."));
+            return false;
+        }
+
+        if (!base::isHostId(computer.address))
+        {
+            common::MsgBox::warning(this, tr("The computer has an invalid host ID."));
+            return false;
+        }
+
+        config->router_config = dataToConfig(*router);
+        config->address_or_id = computer.address;
+        config->port = 0;
+    }
+    else
+    {
+        base::Address address = base::Address::fromString(computer.address, DEFAULT_HOST_TCP_PORT);
+        if (!address.isValid())
+        {
+            common::MsgBox::warning(this, tr("The computer has an incorrect address."));
+            return false;
+        }
+
+        config->address_or_id = address.host();
+        config->port = address.port();
+    }
+
+    config->computer_name = computer.name;
+    config->username = computer.username;
+    config->password = computer.password;
+    return true;
 }
 
 } // namespace client
