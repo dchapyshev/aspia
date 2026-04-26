@@ -153,6 +153,21 @@ void LocalGroupWidget::showGroup(qint64 group_id)
 }
 
 //--------------------------------------------------------------------------------------------------
+void LocalGroupWidget::setConnectTime(qint64 computer_id, qint64 connect_time)
+{
+    const int count = ui.tree_computer->topLevelItemCount();
+    for (int i = 0; i < count; ++i)
+    {
+        Item* item = static_cast<Item*>(ui.tree_computer->topLevelItem(i));
+        if (item->computerId() == computer_id)
+        {
+            item->setConnectTime(connect_time);
+            break;
+        }
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
 void LocalGroupWidget::attachStatusBar(QStatusBar* statusbar)
 {
     if (!statusbar)
@@ -319,6 +334,13 @@ LocalGroupWidget::Item::Item(const ComputerData& computer, QTreeWidget* parent)
     setText(kColumnModified, formatTimestamp(modify_time_));
     setText(kColumnConnect, formatTimestamp(connect_time_));
     setIcon(kColumnName, QIcon(":/img/computer.svg"));
+}
+
+//--------------------------------------------------------------------------------------------------
+void LocalGroupWidget::Item::setConnectTime(qint64 connect_time)
+{
+    connect_time_ = connect_time;
+    setText(kColumnConnect, formatTimestamp(connect_time_));
 }
 
 //--------------------------------------------------------------------------------------------------

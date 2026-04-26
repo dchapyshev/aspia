@@ -5688,19 +5688,19 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="1011"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="1020"/>
         <source>Are you sure you want to delete router &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="1050"/>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="1075"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="1059"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="1084"/>
         <source>Copy Row</source>
         <translation type="unfinished">Kopieer Rij</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="1051"/>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="1076"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="1060"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="1085"/>
         <source>Copy Value</source>
         <translation type="unfinished">Kopieer Waarde</translation>
     </message>
@@ -5717,24 +5717,24 @@
         <translation type="obsolete">Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="459"/>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="721"/>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="765"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="465"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="729"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="774"/>
         <source>Failed to retrieve computer information from the local database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="463"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="469"/>
         <source>(copy)</source>
         <translation type="unfinished">(kopieer)</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="467"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="473"/>
         <source>Failed to add the computer to the local database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="490"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="496"/>
         <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
         <translation type="unfinished">Weet U zeker dat U de computer &quot;%1&quot; wilt verwijderen?</translation>
     </message>
@@ -5751,47 +5751,47 @@
         <translation type="obsolete">Nee</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="500"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="506"/>
         <source>Unable to remove computer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="578"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="584"/>
         <source>Are you sure you want to delete group &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="590"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="596"/>
         <source>Unable to remove group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="661"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="667"/>
         <source>Status</source>
         <translation type="unfinished">Status</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="662"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="668"/>
         <source>Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="663"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="669"/>
         <source>Delete</source>
         <translation type="unfinished">Verwijderen</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="1212"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="1221"/>
         <source>The router associated with this computer has been deleted. Edit the computer to select another router or switch to direct connection.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="1219"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="1228"/>
         <source>The computer has an invalid host ID.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="1232"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="1241"/>
         <source>The computer has an incorrect address.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5960,7 +5960,7 @@
 <context>
     <name>client::LocalGroupWidget</name>
     <message numerus="yes">
-        <location filename="../client/ui/hosts/local_group_widget.cc" line="202"/>
+        <location filename="../client/ui/hosts/local_group_widget.cc" line="217"/>
         <source>%n child group(s)</source>
         <translation type="unfinished">
             <numerusform>%n onderliggende groep</numerusform>
@@ -5968,7 +5968,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../client/ui/hosts/local_group_widget.cc" line="207"/>
+        <location filename="../client/ui/hosts/local_group_widget.cc" line="222"/>
         <source>%n child computer(s)</source>
         <translation type="unfinished">
             <numerusform>%n onderliggende computer</numerusform>

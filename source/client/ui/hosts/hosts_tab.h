@@ -58,7 +58,7 @@ public:
     void reloadRouters();
 
 signals:
-    void sig_connect(const client::Config& config);
+    void sig_connect(qint64 computer_id, const client::Config& config);
 
 private slots:
     void onRouterStatusChanged(qint64 router_id, client::RouterConnection::Status status);

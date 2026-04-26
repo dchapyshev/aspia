@@ -275,7 +275,7 @@ void MainWindow::onSearchTextChanged(const QString& text)
 }
 
 //--------------------------------------------------------------------------------------------------
-void MainWindow::onConnect(const Config& config)
+void MainWindow::onConnect(qint64 /* computer_id */, const Config& config)
 {
     if (base::isHostId(config.address_or_id) && !config.router_config.has_value())
     {

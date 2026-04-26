@@ -49,6 +49,7 @@ public:
         qint64 computerId() const { return computer_id_; }
         qint64 groupId() const { return group_id_; }
         QString computerName() const { return computer_name_; }
+        void setConnectTime(qint64 connect_time);
 
         bool operator<(const QTreeWidgetItem& other) const final;
 
@@ -63,6 +64,7 @@ public:
 
     Item* currentItem();
     void showGroup(qint64 group_id);
+    void setConnectTime(qint64 computer_id, qint64 connect_time);
     QByteArray saveState() override;
     void restoreState(const QByteArray& state) override;
     void attachStatusBar(QStatusBar* statusbar) override;

@@ -168,6 +168,12 @@ HostsTab::HostsTab(QWidget* parent)
     connect(local_group_widget_, &LocalGroupWidget::sig_currentChanged, this, &HostsTab::onCurrentComputerChanged);
     connect(local_group_widget_, &LocalGroupWidget::sig_doubleClicked, this, &HostsTab::onLocalConnect);
     connect(local_group_widget_, &LocalGroupWidget::sig_contextMenu, this, &HostsTab::onLocalComputerContextMenu);
+    connect(this, &HostsTab::sig_connect, local_group_widget_,
+            [this](qint64 computer_id, const Config& /* config */)
+    {
+        if (computer_id != -1)
+            local_group_widget_->setConnectTime(computer_id, QDateTime::currentSecsSinceEpoch());
+    });
     connect(action_add_computer_, &QAction::triggered, this, &HostsTab::onAddComputerAction);
     connect(action_edit_computer_, &QAction::triggered, this, &HostsTab::onEditComputerAction);
     connect(action_copy_computer_, &QAction::triggered, this, &HostsTab::onCopyComputerAction);
@@ -708,6 +714,8 @@ void HostsTab::onConnectAction(QAction* action)
     Settings settings;
     config.display_name = settings.displayName();
 
+    qint64 source_computer_id = -1;
+
     if (current_content_ == local_group_widget_)
     {
         LocalGroupWidget::Item* item = local_group_widget_->currentItem();
@@ -726,6 +734,7 @@ void HostsTab::onConnectAction(QAction* action)
             return;
 
         Database::instance().setConnectTime(computer->id, QDateTime::currentSecsSinceEpoch());
+        source_computer_id = computer->id;
     }
     else if (current_content_ == router_group_widget_)
     {
@@ -753,7 +762,7 @@ void HostsTab::onConnectAction(QAction* action)
         return;
     }
 
-    emit sig_connect(config);
+    emit sig_connect(source_computer_id, config);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -775,7 +784,7 @@ void HostsTab::onLocalConnect(qint64 computer_id)
 
     Database::instance().setConnectTime(computer_id, QDateTime::currentSecsSinceEpoch());
 
-    emit sig_connect(config);
+    emit sig_connect(computer_id, config);
 }
 
 //--------------------------------------------------------------------------------------------------

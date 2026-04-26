@@ -57,7 +57,7 @@ private slots:
     void onCurrentTabChanged(int index);
     void onCloseTab(int index);
     void onSearchTextChanged(const QString& text);
-    void onConnect(const client::Config& config);
+    void onConnect(qint64 computer_id, const client::Config& config);
 
 private:
     void addTab(ClientTab* tab, const QString& title, const QIcon& icon);
