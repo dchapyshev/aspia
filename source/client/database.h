@@ -40,8 +40,9 @@ public:
     // Computers.
     QList<ComputerData> computerList(qint64 group_id) const;
     bool addComputer(ComputerData& computer);
-    bool modifyComputer(const ComputerData& computer);
+    bool modifyComputer(ComputerData& computer);
     bool removeComputer(qint64 computer_id);
+    bool setConnectTime(qint64 computer_id, qint64 connect_time);
     std::optional<ComputerData> findComputer(qint64 computer_id) const;
 
     // Search.

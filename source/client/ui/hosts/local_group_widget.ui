@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>662</width>
+    <height>424</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -38,7 +38,7 @@
       <bool>true</bool>
      </property>
      <property name="columnCount">
-      <number>3</number>
+      <number>6</number>
      </property>
      <column>
       <property name="text">
@@ -53,6 +53,21 @@
      <column>
       <property name="text">
        <string>Comment</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Created</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Modified</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Last Connect</string>
       </property>
      </column>
     </widget>

@@ -19,6 +19,7 @@
 #ifndef CLIENT_LOCAL_DATA_H
 #define CLIENT_LOCAL_DATA_H
 
+#include <QByteArray>
 #include <QString>
 
 namespace client {
@@ -33,6 +34,10 @@ struct ComputerData
     QString address;
     QString username;
     QString password;
+    qint64 create_time = 0;
+    qint64 modify_time = 0;
+    qint64 connect_time = 0;
+    QByteArray data;
 };
 
 struct GroupData

@@ -22,6 +22,7 @@
 #include <optional>
 
 #include <QActionGroup>
+#include <QDateTime>
 #include <QMenu>
 #include <QStatusBar>
 
@@ -713,8 +714,7 @@ void HostsTab::onConnectAction(QAction* action)
         if (!item)
             return;
 
-        std::optional<ComputerData> computer =
-            Database::instance().findComputer(item->computerId());
+        std::optional<ComputerData> computer = Database::instance().findComputer(item->computerId());
         if (!computer.has_value())
         {
             common::MsgBox::warning(this,
@@ -724,6 +724,8 @@ void HostsTab::onConnectAction(QAction* action)
 
         if (!fillConfigFromComputer(&config, *computer))
             return;
+
+        Database::instance().setConnectTime(computer->id, QDateTime::currentSecsSinceEpoch());
     }
     else if (current_content_ == router_group_widget_)
     {
@@ -760,8 +762,7 @@ void HostsTab::onLocalConnect(qint64 computer_id)
     std::optional<ComputerData> computer = Database::instance().findComputer(computer_id);
     if (!computer.has_value())
     {
-        common::MsgBox::warning(this,
-            tr("Failed to retrieve computer information from the local database."));
+        common::MsgBox::warning(this, tr("Failed to retrieve computer information from the local database."));
         return;
     }
 
@@ -771,6 +772,8 @@ void HostsTab::onLocalConnect(qint64 computer_id)
 
     if (!fillConfigFromComputer(&config, *computer))
         return;
+
+    Database::instance().setConnectTime(computer_id, QDateTime::currentSecsSinceEpoch());
 
     emit sig_connect(config);
 }

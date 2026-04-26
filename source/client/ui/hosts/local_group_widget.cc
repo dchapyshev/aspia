@@ -19,8 +19,10 @@
 #include "client/ui/hosts/local_group_widget.h"
 
 #include <QApplication>
+#include <QDateTime>
 #include <QIODevice>
 #include <QLabel>
+#include <QLocale>
 #include <QMenu>
 #include <QMouseEvent>
 #include <QStatusBar>
@@ -36,6 +38,19 @@ namespace {
 const int kColumnName = 0;
 const int kColumnAddress = 1;
 const int kColumnComment = 2;
+const int kColumnCreated = 3;
+const int kColumnModified = 4;
+const int kColumnConnect = 5;
+
+//--------------------------------------------------------------------------------------------------
+QString formatTimestamp(qint64 unix_seconds)
+{
+    if (unix_seconds <= 0)
+        return QString();
+
+    return QLocale::system().toString(
+        QDateTime::fromSecsSinceEpoch(unix_seconds), QLocale::ShortFormat);
+}
 
 class ColumnAction : public QAction
 {
@@ -292,12 +307,39 @@ LocalGroupWidget::Item::Item(const ComputerData& computer, QTreeWidget* parent)
     : QTreeWidgetItem(parent),
       computer_id_(computer.id),
       group_id_(computer.group_id),
-      computer_name_(computer.name)
+      computer_name_(computer.name),
+      create_time_(computer.create_time),
+      modify_time_(computer.modify_time),
+      connect_time_(computer.connect_time)
 {
     setText(kColumnName, computer.name);
     setText(kColumnAddress, computer.address);
     setText(kColumnComment, computer.comment);
+    setText(kColumnCreated, formatTimestamp(create_time_));
+    setText(kColumnModified, formatTimestamp(modify_time_));
+    setText(kColumnConnect, formatTimestamp(connect_time_));
     setIcon(kColumnName, QIcon(":/img/computer.svg"));
+}
+
+//--------------------------------------------------------------------------------------------------
+bool LocalGroupWidget::Item::operator<(const QTreeWidgetItem& other) const
+{
+    const int column = treeWidget() ? treeWidget()->sortColumn() : 0;
+
+    if (column == kColumnCreated || column == kColumnModified || column == kColumnConnect)
+    {
+        const Item* other_item = dynamic_cast<const Item*>(&other);
+        if (other_item)
+        {
+            if (column == kColumnCreated)
+                return create_time_ < other_item->create_time_;
+            if (column == kColumnModified)
+                return modify_time_ < other_item->modify_time_;
+            return connect_time_ < other_item->connect_time_;
+        }
+    }
+
+    return QTreeWidgetItem::operator<(other);
 }
 
 } // namespace client

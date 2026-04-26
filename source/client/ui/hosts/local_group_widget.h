@@ -50,10 +50,15 @@ public:
         qint64 groupId() const { return group_id_; }
         QString computerName() const { return computer_name_; }
 
+        bool operator<(const QTreeWidgetItem& other) const final;
+
     private:
         qint64 computer_id_;
         qint64 group_id_;
         QString computer_name_;
+        qint64 create_time_;
+        qint64 modify_time_;
+        qint64 connect_time_;
     };
 
     Item* currentItem();

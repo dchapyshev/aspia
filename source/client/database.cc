@@ -22,6 +22,7 @@
 #include "base/logging.h"
 #include "base/files/base_paths.h"
 
+#include <QDateTime>
 #include <QDir>
 #include <QFileInfo>
 #include <QSqlDatabase>
@@ -53,6 +54,11 @@ ComputerData readComputer(const QSqlQuery& query)
 
     cryptor.decrypt(query.value(7).toByteArray(), &out);
     computer.password = QString::fromUtf8(out);
+
+    computer.create_time = query.value(8).toLongLong();
+    computer.modify_time = query.value(9).toLongLong();
+    computer.connect_time = query.value(10).toLongLong();
+    computer.data = query.value(11).toByteArray();
 
     return computer;
 }
@@ -112,10 +118,14 @@ bool createTables(QSqlDatabase& db)
                     "\"group_id\" INTEGER NOT NULL DEFAULT 0,"
                     "\"router_id\" INTEGER NOT NULL DEFAULT 0,"
                     "\"name\" TEXT NOT NULL DEFAULT '',"
-                    "\"comment\" TEXT NOT NULL DEFAULT '',"
+                    "\"comment\" TEXT DEFAULT '',"
                     "\"address\" TEXT NOT NULL DEFAULT '',"
-                    "\"username\" TEXT NOT NULL DEFAULT '',"
-                    "\"password\" BLOB NOT NULL DEFAULT X'',"
+                    "\"username\" TEXT DEFAULT '',"
+                    "\"password\" BLOB DEFAULT X'',"
+                    "\"create_time\" INTEGER NOT NULL DEFAULT 0,"
+                    "\"modify_time\" INTEGER NOT NULL DEFAULT 0,"
+                    "\"connect_time\" INTEGER NOT NULL DEFAULT 0,"
+                    "\"data\" BLOB DEFAULT X'',"
                     "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
     {
         LOG(ERROR) << "Unable to create computers table:" << query.lastError();
@@ -180,7 +190,8 @@ QList<ComputerData> Database::computerList(qint64 group_id) const
     }
 
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    query.prepare("SELECT id, group_id, router_id, name, comment, address, username, password "
+    query.prepare("SELECT id, group_id, router_id, name, comment, address, username, password, "
+                  "create_time, modify_time, connect_time, data "
                   "FROM computers WHERE group_id=?");
     query.addBindValue(group_id);
 
@@ -215,9 +226,15 @@ bool Database::addComputer(ComputerData& computer)
     base::DataCryptor& cryptor = base::DataCryptor::instance();
     QByteArray out;
 
+    const qint64 current_time = QDateTime::currentSecsSinceEpoch();
+    computer.create_time = current_time;
+    computer.modify_time = current_time;
+    computer.connect_time = 0;
+
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    query.prepare("INSERT INTO computers (id, group_id, router_id, name, comment, address, username, password) "
-                  "VALUES (NULL, ?, ?, ?, ?, ?, ?, ?)");
+    query.prepare("INSERT INTO computers (id, group_id, router_id, name, comment, address, username, password, "
+                  "create_time, modify_time, connect_time, data) "
+                  "VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
     query.addBindValue(computer.group_id);
     query.addBindValue(computer.router_id);
     query.addBindValue(computer.name);
@@ -227,6 +244,11 @@ bool Database::addComputer(ComputerData& computer)
 
     cryptor.encrypt(computer.password.toUtf8(), &out);
     query.addBindValue(out);
+
+    query.addBindValue(computer.create_time);
+    query.addBindValue(computer.modify_time);
+    query.addBindValue(computer.connect_time);
+    query.addBindValue(computer.data);
 
     if (!query.exec())
     {
@@ -239,7 +261,7 @@ bool Database::addComputer(ComputerData& computer)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::modifyComputer(const ComputerData& computer)
+bool Database::modifyComputer(ComputerData& computer)
 {
     if (!isValid())
     {
@@ -250,9 +272,11 @@ bool Database::modifyComputer(const ComputerData& computer)
     base::DataCryptor& cryptor = base::DataCryptor::instance();
     QByteArray out;
 
+    computer.modify_time = QDateTime::currentSecsSinceEpoch();
+
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    query.prepare("UPDATE computers SET group_id=?, router_id=?, name=?, comment=?, address=?, username=?, password=? "
-                  "WHERE id=?");
+    query.prepare("UPDATE computers SET group_id=?, router_id=?, name=?, comment=?, address=?, username=?, "
+                  "password=?, modify_time=?, data=? WHERE id=?");
     query.addBindValue(computer.group_id);
     query.addBindValue(computer.router_id);
     query.addBindValue(computer.name);
@@ -263,6 +287,8 @@ bool Database::modifyComputer(const ComputerData& computer)
     cryptor.encrypt(computer.password.toUtf8(), &out);
     query.addBindValue(out);
 
+    query.addBindValue(computer.modify_time);
+    query.addBindValue(computer.data);
     query.addBindValue(computer.id);
 
     if (!query.exec())
@@ -297,6 +323,29 @@ bool Database::removeComputer(qint64 computer_id)
 }
 
 //--------------------------------------------------------------------------------------------------
+bool Database::setConnectTime(qint64 computer_id, qint64 connect_time)
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return false;
+    }
+
+    QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
+    query.prepare("UPDATE computers SET connect_time=? WHERE id=?");
+    query.addBindValue(connect_time);
+    query.addBindValue(computer_id);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << query.lastError();
+        return false;
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
 std::optional<ComputerData> Database::findComputer(qint64 computer_id) const
 {
     if (!isValid())
@@ -306,7 +355,8 @@ std::optional<ComputerData> Database::findComputer(qint64 computer_id) const
     }
 
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    query.prepare("SELECT id, group_id, router_id, name, comment, address, username, password "
+    query.prepare("SELECT id, group_id, router_id, name, comment, address, username, password, "
+                  "create_time, modify_time, connect_time, data "
                   "FROM computers WHERE id=?");
     query.addBindValue(computer_id);
 
@@ -332,8 +382,9 @@ QList<ComputerData> Database::searchComputers(const QString& query_text) const
     }
 
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    query.prepare("SELECT id, group_id, router_id, name, comment, address, username, password "
-                  "FROM computers WHERE name LIKE ? OR address LIKE ? OR comment LIKE ?");
+    query.prepare("SELECT id, group_id, router_id, name, comment, address, username, password, "
+                  "create_time, modify_time, connect_time, data FROM computers "
+                  "WHERE name LIKE ? OR address LIKE ? OR comment LIKE ?");
 
     QString pattern = QString("%%1%").arg(query_text);
     query.addBindValue(pattern);
