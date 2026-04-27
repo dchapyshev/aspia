@@ -23,12 +23,12 @@
 
 #include "base/logging.h"
 #include "base/sys_info.h"
+#include "base/peer/host_id.h"
 #include "build/build_config.h"
 #include "build/version.h"
 #include "client/config_factory.h"
 #include "client/local_data.h"
 #include "client/database.h"
-#include "client/settings.h"
 #include "common/ui/msg_box.h"
 #include "client/ui/application.h"
 #include "client/ui/main_window.h"
@@ -461,28 +461,17 @@ int clientMain(int argc, char* argv[])
             LOG(INFO) << "Relay connection selected";
 
             client::RouterConfig router_config;
-            const QList<client::RouterData> routers = client::Database::instance().routerList();
-            if (!routers.isEmpty())
-            {
-                const client::RouterData& first = routers.first();
-                router_config.id = first.id;
-                router_config.name = first.name;
-                router_config.address = first.address;
-                router_config.port = first.port;
-                router_config.session_type =
-                    static_cast<proto::router::SessionType>(first.session_type);
-                router_config.username = first.username;
-                router_config.password = first.password;
-            }
 
             if (parser.isSet(router_address_option))
             {
                 LOG(INFO) << "Router address option specified";
 
+                router_config.id = 1;
                 router_config.address = parser.value(router_address_option);
                 router_config.port = parser.value(router_port_option).toUShort();
                 router_config.username = parser.value(router_username_option);
                 router_config.password = parser.value(router_password_option);
+                router_config.session_type = proto::router::SESSION_TYPE_CLIENT;
             }
             else
             {
@@ -498,7 +487,9 @@ int clientMain(int argc, char* argv[])
                 return 1;
             }
 
-            config.router_config = router_config;
+            // TODO: Connect to router.
+
+            config.router_id = router_config.id;
         }
         else
         {

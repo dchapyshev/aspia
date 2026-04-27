@@ -18,6 +18,7 @@
 
 #include "client/router_connection.h"
 
+#include <QHash>
 #include <QTimer>
 
 #include "base/logging.h"
@@ -32,6 +33,13 @@ namespace client {
 namespace {
 
 const std::chrono::seconds kReconnectTimeout{ 5 };
+
+//--------------------------------------------------------------------------------------------------
+QHash<qint64, RouterConnection*>& instances()
+{
+    static thread_local QHash<qint64, RouterConnection*> g_instances;
+    return g_instances;
+}
 
 } // namespace
 
@@ -55,12 +63,27 @@ RouterConnection::RouterConnection(const RouterConfig& config, QObject* parent)
 RouterConnection::~RouterConnection()
 {
     LOG(INFO) << "Dtor";
+    instances().remove(config_.id);
     onDisconnectFromRouter();
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+RouterConnection* RouterConnection::instance(qint64 router_id)
+{
+    if (!instances().contains(router_id))
+        return nullptr;
+
+    return instances().value(router_id);
 }
 
 //--------------------------------------------------------------------------------------------------
 void RouterConnection::onConnectToRouter()
 {
+    // We cannot perform registration in the constructor because the constructor is executed in the
+    // GUI thread.
+    instances().insert(config_.id, this);
+
     reconnect_timer_->stop();
 
     if (status_ != Status::OFFLINE)
@@ -113,6 +136,15 @@ const RouterConfig& RouterConnection::config() const
 qint64 RouterConnection::routerId() const
 {
     return config_.id;
+}
+
+//--------------------------------------------------------------------------------------------------
+QVersionNumber RouterConnection::version() const
+{
+    if (!tcp_channel_)
+        return QVersionNumber();
+
+    return tcp_channel_->peerVersion();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -312,6 +344,30 @@ void RouterConnection::onDisconnectPeer(qint64 relay_entry_id, quint64 peer_sess
 }
 
 //--------------------------------------------------------------------------------------------------
+void RouterConnection::onConnectionRequest(qint64 request_id, quint64 host_id)
+{
+    proto::router::ClientToRouter message;
+    proto::router::ConnectionRequest* request = message.mutable_connection_request();
+    request->set_request_id(request_id);
+    request->set_host_id(host_id);
+
+    LOG(INFO) << "Sending connection request:" << *request;
+    sendMessage(proto::router::CHANNEL_ID_CLIENT, base::serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterConnection::onCheckHostStatus(qint64 request_id, quint64 host_id)
+{
+    proto::router::ClientToRouter message;
+    proto::router::CheckHostStatus* request = message.mutable_check_host_status();
+    request->set_request_id(request_id);
+    request->set_host_id(host_id);
+
+    LOG(INFO) << "Sending check host status:" << *request;
+    sendMessage(proto::router::CHANNEL_ID_CLIENT, base::serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
 void RouterConnection::onTcpReady()
 {
     CHECK(tcp_channel_);
@@ -417,7 +473,16 @@ void RouterConnection::onTcpMessageReceived(quint8 channel_id, const QByteArray&
             return;
         }
 
-        // TODO
+        if (message.has_connection_offer())
+        {
+            emit sig_connectionOffer(message.connection_offer());
+        }
+        else if (message.has_host_status())
+        {
+            const proto::router::HostStatus& host_status = message.host_status();
+            bool online = host_status.status() == proto::router::HostStatus::STATUS_ONLINE;
+            emit sig_hostStatus(host_status.request_id(), online);
+        }
     }
     else
     {

@@ -18,7 +18,6 @@
 
 #include "client/ui/hosts/hosts_tab.h"
 
-#include <algorithm>
 #include <optional>
 
 #include <QActionGroup>
@@ -751,10 +750,9 @@ void HostsTab::onConnectAction(QAction* action)
             return;
 
         Sidebar::Router* router = static_cast<Sidebar::Router*>(router_item);
-        std::optional<RouterData> router_data =
-            Database::instance().findRouter(router->routerId());
+        std::optional<RouterData> router_data = Database::instance().findRouter(router->routerId());
         if (router_data)
-            config.router_config = dataToConfig(*router_data);
+            config.router_id = router_data->id;
         // TODO
     }
     else
@@ -1229,7 +1227,7 @@ bool HostsTab::fillConfigFromComputer(Config* config, const ComputerData& comput
             return false;
         }
 
-        config->router_config = dataToConfig(*router);
+        config->router_id = router->id;
         config->address_or_id = computer.address;
         config->port = 0;
     }

@@ -83,6 +83,7 @@ void SessionClient::readConnectionRequest(const proto::router::ConnectionRequest
 
     proto::router::RouterToClient message;
     proto::router::ConnectionOffer* offer = message.mutable_connection_offer();
+    offer->set_request_id(request.request_id());
 
     Session* session = sessionByHostId(request.host_id());
     if (!session)
@@ -181,14 +182,14 @@ void SessionClient::readCheckHostStatus(const proto::router::CheckHostStatus& ch
 {
     proto::router::RouterToClient message;
     proto::router::HostStatus* host_status = message.mutable_host_status();
+    host_status->set_request_id(check_host_status.request_id());
 
     if (sessionByHostId(check_host_status.host_id()))
         host_status->set_status(proto::router::HostStatus::STATUS_ONLINE);
     else
         host_status->set_status(proto::router::HostStatus::STATUS_OFFLINE);
 
-    CLOG(INFO) << "Sending host status for host ID" << check_host_status.host_id()
-               << ":" << host_status->status();
+    CLOG(INFO) << "Sending host status:" << *host_status;
     sendMessage(proto::router::CHANNEL_ID_CLIENT, base::serialize(message));
 }
 

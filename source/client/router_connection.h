@@ -27,6 +27,7 @@
 class QTimer;
 
 namespace proto::router {
+class ConnectionOffer;
 class HostList;
 class HostResult;
 class RelayList;
@@ -54,9 +55,12 @@ public:
     explicit RouterConnection(const RouterConfig& config, QObject* parent = nullptr);
     ~RouterConnection() final;
 
+    static RouterConnection* instance(qint64 router_id);
+
     Status status() const { return status_; }
     const RouterConfig& config() const;
     qint64 routerId() const;
+    QVersionNumber version() const;
 
 public slots:
     // Generic methods.
@@ -77,16 +81,28 @@ public slots:
     void onDisconnectPeer(qint64 relay_entry_id, quint64 peer_session_id);
 
     // Manager methods.
+    // TODO
+
+    // Client methods.
+    void onConnectionRequest(qint64 request_id, quint64 host_id);
+    void onCheckHostStatus(qint64 request_id, quint64 host_id);
 
 signals:
+    // Generic signals.
     void sig_statusChanged(qint64 router_id, client::RouterConnection::Status status);
     void sig_errorOccurred(qint64 router_id, base::TcpChannel::ErrorCode error_code);
+
+    // Administrator signals.
     void sig_relayListReceived(const proto::router::RelayList& list);
     void sig_hostListReceived(const proto::router::HostList& list);
     void sig_userListReceived(const proto::router::UserList& list);
     void sig_userResultReceived(const proto::router::UserResult& result);
     void sig_hostResultReceived(const proto::router::HostResult& result);
     void sig_relayResultReceived(const proto::router::RelayResult& result);
+
+    // Client signals.
+    void sig_connectionOffer(const proto::router::ConnectionOffer& offer);
+    void sig_hostStatus(qint64 request_id, bool online);
 
 private slots:
     void onTcpReady();

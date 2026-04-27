@@ -20,10 +20,6 @@
 
 #include "base/location.h"
 #include "base/logging.h"
-#include "base/serialization.h"
-#include "base/net/tcp_channel_ng.h"
-#include "base/peer/client_authenticator.h"
-#include "proto/router_client.h"
 
 namespace client {
 
@@ -34,18 +30,14 @@ const std::chrono::seconds kTimeout { 30 };
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-OnlineCheckerRouter::OnlineCheckerRouter(const RouterConfig& router_config, QObject* parent)
+OnlineCheckerRouter::OnlineCheckerRouter(const ComputerList& computers, QObject* parent)
     : QObject(parent),
-      router_config_(router_config)
+      computers_(computers)
 {
     LOG(INFO) << "Ctor";
 
     timer_.setSingleShot(true);
-    connect(&timer_, &QTimer::timeout, this, [this]()
-    {
-        onFinished(FROM_HERE);
-    });
-
+    connect(&timer_, &QTimer::timeout, this, [this]() { onFinished(FROM_HERE); });
     timer_.start(kTimeout);
 }
 
@@ -56,75 +48,25 @@ OnlineCheckerRouter::~OnlineCheckerRouter()
 }
 
 //--------------------------------------------------------------------------------------------------
-void OnlineCheckerRouter::start(const ComputerList& computers)
+void OnlineCheckerRouter::start()
 {
-    computers_ = computers;
-
-    if (computers_.empty())
+    if (computers_.isEmpty())
     {
         LOG(INFO) << "No computers in list";
         onFinished(FROM_HERE);
         return;
     }
 
-    LOG(INFO) << "Connecting to router...";
-
-    base::ClientAuthenticator* authenticator = new base::ClientAuthenticator();
-    authenticator->setIdentify(proto::key_exchange::IDENTIFY_SRP);
-    authenticator->setUserName(router_config_.username);
-    authenticator->setPassword(router_config_.password);
-    authenticator->setSessionType(proto::router::SESSION_TYPE_CLIENT);
-
-    tcp_channel_ = new base::TcpChannelNG(authenticator, this);
-
-    connect(tcp_channel_, &base::TcpChannel::sig_authenticated,
-            this, &OnlineCheckerRouter::onTcpReady);
-    connect(tcp_channel_, &base::TcpChannel::sig_errorOccurred,
-            this, &OnlineCheckerRouter::onTcpErrorOccurred);
-    connect(tcp_channel_, &base::TcpChannel::sig_messageReceived,
-            this, &OnlineCheckerRouter::onTcpMessageReceived);
-
-    tcp_channel_->connectTo(router_config_.address, router_config_.port);
-}
-
-//--------------------------------------------------------------------------------------------------
-void OnlineCheckerRouter::onTcpReady()
-{
-    LOG(INFO) << "Connection to the router is established";
-    tcp_channel_->setPaused(false);
     checkNextComputer();
 }
 
 //--------------------------------------------------------------------------------------------------
-void OnlineCheckerRouter::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code)
+void OnlineCheckerRouter::onHostStatus(qint64 request_id, bool online)
 {
-    LOG(INFO) << "Connection to the router is lost (" << error_code << ")";
-    onFinished(FROM_HERE);
-}
-
-//--------------------------------------------------------------------------------------------------
-void OnlineCheckerRouter::onTcpMessageReceived(quint8 /* channel_id */, const QByteArray& buffer)
-{
-    proto::router::RouterToClient message;
-    if (!base::parse(buffer, &message))
-    {
-        LOG(ERROR) << "Invalid message from router";
-        onFinished(FROM_HERE);
+    if (request_id != current_request_id_)
         return;
-    }
 
-    if (!message.has_host_status())
-    {
-        LOG(ERROR) << "HostStatus not present in message";
-        onFinished(FROM_HERE);
-        return;
-    }
-
-    bool online = message.host_status().status() == proto::router::HostStatus::STATUS_ONLINE;
-    const Computer& computer = computers_.front();
-
-    emit sig_checkerResult(computer.computer_id, online);
-
+    emit sig_checkerResult(computers_.front().computer_id, online);
     computers_.pop_front();
     checkNextComputer();
 }
@@ -132,7 +74,7 @@ void OnlineCheckerRouter::onTcpMessageReceived(quint8 /* channel_id */, const QB
 //--------------------------------------------------------------------------------------------------
 void OnlineCheckerRouter::checkNextComputer()
 {
-    if (computers_.empty())
+    if (computers_.isEmpty())
     {
         LOG(INFO) << "No more computers";
         onFinished(FROM_HERE);
@@ -142,24 +84,36 @@ void OnlineCheckerRouter::checkNextComputer()
     const auto& computer = computers_.front();
 
     LOG(INFO) << "Checking status for host id" << computer.host_id
-              << "(computer id:" << computer.computer_id << ")";
+              << "(router_id:" << computer.router_id << "computer_id:" << computer.computer_id << ")";
 
-    proto::router::ClientToRouter message;
-    message.mutable_check_host_status()->set_host_id(computer.host_id);
-    tcp_channel_->send(0, base::serialize(message));
+    RouterConnection* connection = RouterConnection::instance(computer.router_id);
+
+    if (!routers_.contains(computer.router_id) && connection)
+    {
+        connect(connection, &RouterConnection::sig_hostStatus, this, &OnlineCheckerRouter::onHostStatus);
+        routers_.insert(computer.router_id);
+    }
+
+    if (!connection || connection->status() != RouterConnection::Status::ONLINE)
+    {
+        emit sig_checkerResult(computer.computer_id, false);
+        computers_.pop_front();
+
+        QTimer::singleShot(0, this, &OnlineCheckerRouter::checkNextComputer);
+        return;
+    }
+
+    static thread_local qint64 request_id_counter = 100000;
+    ++request_id_counter;
+
+    current_request_id_ = request_id_counter;
+    connection->onCheckHostStatus(current_request_id_, computer.host_id);
 }
 
 //--------------------------------------------------------------------------------------------------
 void OnlineCheckerRouter::onFinished(const base::Location& location)
 {
     LOG(INFO) << "Finished (" << location << ")";
-
-    if (tcp_channel_)
-    {
-        tcp_channel_->disconnect();
-        tcp_channel_->deleteLater();
-        tcp_channel_ = nullptr;
-    }
 
     for (const auto& computer : std::as_const(computers_))
         emit sig_checkerResult(computer.computer_id, false);

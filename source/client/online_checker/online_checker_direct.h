@@ -33,18 +33,18 @@ class OnlineCheckerDirect final : public QObject
     Q_OBJECT
 
 public:
-    explicit OnlineCheckerDirect(QObject* parent = nullptr);
-    ~OnlineCheckerDirect();
-
     struct Computer
     {
-        int computer_id = -1;
+        qint64 computer_id = -1;
         QString address;
         quint16 port = 0;
     };
     using ComputerList = QQueue<Computer>;
 
-    void start(const ComputerList& computers);
+    explicit OnlineCheckerDirect(const ComputerList& computers, QObject* parent = nullptr);
+    ~OnlineCheckerDirect();
+
+    void start();
 
 signals:
     void sig_checkerResult(int computer_id, bool online);

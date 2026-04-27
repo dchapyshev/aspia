@@ -32,7 +32,10 @@
 #include "base/net/tcp_channel_legacy.h"
 #include "base/net/udp_channel.h"
 #include "base/peer/client_authenticator.h"
+#include "base/peer/host_id.h"
+#include "base/peer/relay_peer.h"
 #include "base/peer/stun_peer.h"
+#include "proto/router_peer.h"
 
 #if defined(Q_OS_MACOS)
 #include "base/mac/app_nap_blocker.h"
@@ -46,11 +49,20 @@ auto g_statusType = qRegisterMetaType<client::Client::Status>();
 static const int kReadBufferSize = 2 * 1024 * 1024; // 2 Mb.
 static const int kWriteBufferSize = 2 * 1024 * 1024; // 2 Mb.
 
+//--------------------------------------------------------------------------------------------------
+quint32 makeInstanceId()
+{
+    static qint32 instance_id = 0;
+    ++instance_id;
+    return instance_id;
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
 Client::Client(QObject* parent)
     : QObject(parent),
+      instance_id_(makeInstanceId()),
       timeout_timer_(new QTimer(this)),
       reconnect_timer_(new QTimer(this))
 {
@@ -61,10 +73,7 @@ Client::Client(QObject* parent)
     {
         CLOG(INFO) << "Reconnect timeout";
 
-        if (session_state_->isConnectionByHostId() && !is_connected_to_router_)
-            emit sig_statusChanged(Status::WAIT_FOR_ROUTER_TIMEOUT);
-        else
-            emit sig_statusChanged(Status::WAIT_FOR_HOST_TIMEOUT);
+        emit sig_statusChanged(Status::WAIT_FOR_HOST_TIMEOUT);
 
         session_state_->setReconnecting(false);
         session_state_->setAutoReconnect(false);
@@ -75,14 +84,6 @@ Client::Client(QObject* parent)
             tcp_channel_->disconnect();
             tcp_channel_->deleteLater();
             tcp_channel_ = nullptr;
-        }
-
-        if (router_controller_)
-        {
-            CLOG(INFO) << "Destroy router controller";
-            router_controller_->disconnect();
-            router_controller_->deleteLater();
-            router_controller_ = nullptr;
         }
     });
 
@@ -128,7 +129,6 @@ void Client::start()
     }
 
     state_ = State::STARTED;
-    is_connected_to_router_ = false;
 
     Config config = session_state_->config();
 
@@ -145,22 +145,11 @@ void Client::start()
     {
         CLOG(INFO) << "Starting RELAY connection";
 
-        if (!config.router_config.has_value())
+        if (config.router_id <= 0)
         {
-            CLOG(FATAL) << "No router config. Continuation is impossible";
+            CLOG(FATAL) << "No router id. Continuation is impossible";
             return;
         }
-
-        router_controller_ = new RouterManager(*config.router_config, this);
-
-        connect(router_controller_, &RouterManager::sig_routerConnected,
-                this, &Client::onRouterConnected);
-        connect(router_controller_, &RouterManager::sig_hostAwaiting,
-                this, &Client::onHostAwaiting);
-        connect(router_controller_, &RouterManager::sig_hostConnected,
-                this, &Client::onHostConnected);
-        connect(router_controller_, &RouterManager::sig_errorOccurred,
-                this, &Client::onRouterErrorOccurred);
 
         bool reconnecting = session_state_->isReconnecting();
         if (!reconnecting)
@@ -169,9 +158,32 @@ void Client::start()
             emit sig_statusChanged(Status::STARTED);
         }
 
-        emit sig_statusChanged(Status::ROUTER_CONNECTING);
-        router_controller_->connectTo(
-            base::stringToHostId(config.address_or_id), authenticator.release(), reconnecting);
+        router_ = RouterConnection::instance(config.router_id);
+        if (!router_)
+        {
+            emit sig_statusChanged(Status::NO_ROUTER);
+            return;
+        }
+
+        if (router_->status() != RouterConnection::Status::ONLINE)
+        {
+            emit sig_statusChanged(Status::ROUTER_OFFLINE);
+            return;
+        }
+
+        session_state_->setRouterVersion(router_->version());
+
+        connect(router_, &RouterConnection::sig_connectionOffer,
+                this, &Client::onRouterConnectionOffer, Qt::UniqueConnection);
+        connect(router_, &RouterConnection::sig_statusChanged,
+                this, &Client::onRouterStatusChanged, Qt::UniqueConnection);
+
+        relay_peer_ = new base::RelayPeer(authenticator.release(), this);
+
+        connect(relay_peer_, &base::RelayPeer::sig_connectionError, this, &Client::onRelayConnectionError);
+        connect(relay_peer_, &base::RelayPeer::sig_connectionReady, this, &Client::onRelayConnectionReady);
+
+        router_->onConnectionRequest(instanceId(), base::stringToHostId(config.address_or_id));
     }
     else
     {
@@ -460,60 +472,112 @@ void Client::onUdpMessageReceived(quint8 channel_id, const QByteArray& buffer)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::onRouterConnected(const QVersionNumber& router_version)
+void Client::onRouterConnectionOffer(const proto::router::ConnectionOffer& offer)
 {
-    CLOG(INFO) << "Router connected";
-    session_state_->setRouterVersion(router_version);
-    emit sig_statusChanged(Status::ROUTER_CONNECTED);
-    is_connected_to_router_ = true;
+    if (offer.request_id() != instanceId())
+        return;
+
+    CHECK(relay_peer_);
+    CHECK(router_);
+
+    if (offer.error_code() != proto::router::ConnectionOffer::SUCCESS)
+    {
+        QString error;
+
+        switch (offer.error_code())
+        {
+            case proto::router::ConnectionOffer::PEER_NOT_FOUND:
+                error = tr("The host with the specified ID is not online");
+                break;
+            case proto::router::ConnectionOffer::ACCESS_DENIED:
+                error = tr("Access is denied");
+                break;
+            case proto::router::ConnectionOffer::KEY_POOL_EMPTY:
+                error = tr("There are no relays available or the key pool is empty");
+                break;
+            default:
+                error = tr("Unknown error");
+                break;
+        }
+
+        if (offer.error_code() == proto::router::ConnectionOffer::PEER_NOT_FOUND &&
+            session_state_->isReconnecting())
+        {
+            LOG(INFO) << "Host is OFFLINE. Wait for host";
+
+            router_->disconnect(this);
+            router_ = nullptr;
+
+            relay_peer_->disconnect();
+            relay_peer_->deleteLater();
+            relay_peer_ = nullptr;
+
+            delayedReconnect();
+        }
+        else
+        {
+            emit sig_statusChanged(Status::ROUTER_ERROR, error);
+        }
+        return;
+    }
+
+    relay_peer_->start(offer);
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::onHostAwaiting()
+void Client::onRouterStatusChanged(qint64 router_id, RouterConnection::Status status)
 {
-    CLOG(INFO) << "Host awaiting";
-    emit sig_statusChanged(Status::WAIT_FOR_HOST);
+    if (status == RouterConnection::Status::ONLINE)
+        return;
+
+    CHECK(router_);
+    router_->disconnect(this);
+    router_ = nullptr;
+    emit sig_statusChanged(Status::ROUTER_ERROR, tr("Connection to the router has been lost."));
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::onHostConnected()
+void Client::onRelayConnectionReady()
 {
-    CLOG(INFO) << "Host connected";
-    CCHECK(router_controller_);
+    LOG(INFO) << "Relay connection ready";
+    CHECK(relay_peer_);
 
-    tcp_channel_ = router_controller_->takeChannel();
+    tcp_channel_ = relay_peer_->takeChannel();
     tcp_channel_->setParent(this);
+
+    relay_peer_->disconnect();
+    relay_peer_->deleteLater();
+    relay_peer_ = nullptr;
+
+    if (router_)
+    {
+        router_->disconnect(this);
+        router_ = nullptr;
+    }
 
     connect(tcp_channel_, &base::TcpChannel::sig_errorOccurred, this, &Client::onTcpErrorOccurred);
     connect(tcp_channel_, &base::TcpChannel::sig_messageReceived, this, &Client::onTcpMessageReceived);
 
     tcpChannelReady();
-
-    // Router controller is no longer needed.
-    router_controller_->disconnect();
-    router_controller_->deleteLater();
-    router_controller_ = nullptr;
-    is_connected_to_router_ = false;
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::onRouterErrorOccurred(const RouterManager::Error& error)
+void Client::onRelayConnectionError()
 {
-    CCHECK(router_controller_);
+    LOG(INFO) << "Relay connection error";
+    CHECK(relay_peer_);
 
-    emit sig_statusChanged(Status::ROUTER_ERROR, QVariant::fromValue(error));
+    relay_peer_->disconnect();
+    relay_peer_->deleteLater();
+    relay_peer_ = nullptr;
 
-    CLOG(INFO) << "Post task to destroy router controller";
-    router_controller_->disconnect();
-    router_controller_->deleteLater();
-    router_controller_ = nullptr;
-    is_connected_to_router_ = false;
-
-    if (error.type == RouterManager::ErrorType::NETWORK && session_state_->isReconnecting())
+    if (router_)
     {
-        emit sig_statusChanged(Status::WAIT_FOR_ROUTER);
-        delayedReconnect();
+        router_->disconnect(this);
+        router_ = nullptr;
     }
+
+    emit sig_statusChanged(Status::ROUTER_ERROR, tr("Failed to connect to the relay server"));
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -22,9 +22,6 @@
 #include <QObject>
 #include <QList>
 
-#include <optional>
-
-#include "base/thread.h"
 #include "client/online_checker/online_checker_direct.h"
 #include "client/online_checker/online_checker_router.h"
 
@@ -40,22 +37,20 @@ public:
 
     struct Computer
     {
-        int computer_id = -1;
+        qint64 computer_id = -1;
+        qint64 router_id = -1;
         QString address_or_id;
         quint16 port = 0;
     };
     using ComputerList = QList<Computer>;
 
-    void checkComputers(const std::optional<RouterConfig>& router_config,
-                        const ComputerList& computers);
+    void checkComputers(const ComputerList& computers);
 
 signals:
     void sig_checkerResult(int computer_id, bool online);
     void sig_checkerFinished();
 
 private slots:
-    void onBeforeThreadRunning();
-    void onAfterThreadRunning();
     void onDirectCheckerResult(int computer_id, bool online);
     void onDirectCheckerFinished();
 
@@ -63,12 +58,9 @@ private slots:
     void onRouterCheckerFinished();
 
 private:
-    base::Thread io_thread_;
-
     OnlineCheckerDirect* direct_checker_ = nullptr;
     OnlineCheckerRouter* router_checker_ = nullptr;
 
-    std::optional<RouterConfig> router_config_;
     OnlineCheckerRouter::ComputerList router_computers_;
     OnlineCheckerDirect::ComputerList direct_computers_;
 

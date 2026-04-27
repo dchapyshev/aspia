@@ -277,7 +277,7 @@ void MainWindow::onSearchTextChanged(const QString& text)
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onConnect(qint64 /* computer_id */, const Config& config)
 {
-    if (base::isHostId(config.address_or_id) && !config.router_config.has_value())
+    if (base::isHostId(config.address_or_id) && config.router_id <= 0)
     {
         common::MsgBox::warning(this,
             tr("Connection by ID is specified in the properties of the computer, "

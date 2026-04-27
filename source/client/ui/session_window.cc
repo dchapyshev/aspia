@@ -62,7 +62,7 @@ bool SessionWindow::connectToHost(Config config)
 
         AuthorizationDialog auth_dialog(this);
 
-        auth_dialog.setOneTimePasswordEnabled(config.router_config.has_value());
+        auth_dialog.setOneTimePasswordEnabled(config.router_id > 0);
         auth_dialog.setUserName(config.username);
         auth_dialog.setPassword(config.password);
 
@@ -123,64 +123,17 @@ void SessionWindow::onStatusChanged(Client::Status status, const QVariant& data)
             status_dialog_->close();
             break;
 
-        case Client::Status::ROUTER_CONNECTING:
-        {
-            const std::optional<RouterConfig>& router = session_state_->router();
-            if (router.has_value())
-            {
-                status_dialog_->addMessageAndActivate(
-                    tr("Connecting to router %1:%2...").arg(router->address).arg(router->port));
-            }
-            else
-            {
-                status_dialog_->addMessageAndActivate(tr("Connecting to router..."));
-            }
-        }
-        break;
-
-        case Client::Status::ROUTER_CONNECTED:
-        {
-            const std::optional<RouterConfig>& router = session_state_->router();
-            if (router.has_value())
-            {
-                status_dialog_->addMessageAndActivate(
-                    tr("Connection to router %1:%2 established.").arg(router->address).arg(router->port));
-            }
-            else
-            {
-                status_dialog_->addMessageAndActivate(tr("Connection to router established."));
-            }
-        }
-        break;
-
         case Client::Status::ROUTER_ERROR:
-        {
-            if (!data.canConvert<client::RouterManager::Error>())
-            {
-                LOG(ERROR) << "Unable to convert error type";
-                return;
-            }
+            onErrorOccurred(tr("Error requesting connection via router: %1.").arg(data.toString()));
+            break;
 
-            RouterManager::Error error = data.value<client::RouterManager::Error>();
-            switch (error.type)
-            {
-                case RouterManager::ErrorType::NETWORK:
-                {
-                    onErrorOccurred(tr("Network error when connecting to the router: %1")
-                        .arg(base::TcpChannel::errorToString(error.code.network)));
-                }
-                break;
+        case Client::Status::NO_ROUTER:
+            onErrorOccurred(tr("The specified router is unavailable."));
+            break;
 
-                case RouterManager::ErrorType::ROUTER:
-                    onErrorOccurred(routerErrorToString(error.code.router));
-                    break;
-
-                default:
-                    NOTREACHED();
-                    break;
-            }
-        }
-        break;
+        case Client::Status::ROUTER_OFFLINE:
+            onErrorOccurred(tr("The specified router is offline."));
+            break;
 
         case Client::Status::HOST_CONNECTING:
         {
@@ -228,14 +181,6 @@ void SessionWindow::onStatusChanged(Client::Status status, const QVariant& data)
         }
         break;
 
-        case Client::Status::WAIT_FOR_ROUTER:
-            onErrorOccurred(tr("Router is unavailable yet. Waiting to reconnect..."));
-            break;
-
-        case Client::Status::WAIT_FOR_ROUTER_TIMEOUT:
-            onErrorOccurred(tr("Timeout waiting for reconnection to router."));
-            break;
-
         case Client::Status::WAIT_FOR_HOST:
             onErrorOccurred(tr("Host is unavailable yet. Waiting to reconnect..."));
             break;
@@ -249,10 +194,8 @@ void SessionWindow::onStatusChanged(Client::Status status, const QVariant& data)
             QString host_version = session_state_->hostVersion().toString();
             QString client_version = base::kCurrentVersion.toString();
 
-            onErrorOccurred(
-                tr("The Host version is newer than the Client version (%1 > %2). "
-                   "Please update the application.")
-                    .arg(host_version, client_version));
+            onErrorOccurred(tr("The Host version is newer than the Client version (%1 > %2). "
+                               "Please update the application.").arg(host_version, client_version));
         }
         break;
 
@@ -273,7 +216,7 @@ void SessionWindow::setClientTitle(const Config& config)
 
     if (computer_name.isEmpty())
     {
-        if (config.router_config.has_value())
+        if (config.router_id > 0)
             computer_name = config.address_or_id;
         else
             computer_name = QString("%1:%2").arg(config.address_or_id).arg(config.port);
@@ -289,38 +232,6 @@ void SessionWindow::onErrorOccurred(const QString& message)
     onInternalReset();
 
     status_dialog_->addMessageAndActivate(message);
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
-QString SessionWindow::routerErrorToString(RouterManager::ErrorCode error_code)
-{
-    const char* message;
-
-    switch (error_code)
-    {
-        case RouterManager::ErrorCode::PEER_NOT_FOUND:
-            message = QT_TR_NOOP("The host with the specified ID is not online.");
-            break;
-
-        case RouterManager::ErrorCode::KEY_POOL_EMPTY:
-            message = QT_TR_NOOP("There are no relays available or the key pool is empty.");
-            break;
-
-        case RouterManager::ErrorCode::RELAY_ERROR:
-            message = QT_TR_NOOP("Failed to connect to the relay server.");
-            break;
-
-        case RouterManager::ErrorCode::ACCESS_DENIED:
-            message = QT_TR_NOOP("Access is denied.");
-            break;
-
-        default:
-            message = QT_TR_NOOP("Unknown error.");
-            break;
-    }
-
-    return tr(message);
 }
 
 } // namespace client

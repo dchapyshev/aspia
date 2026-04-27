@@ -39,12 +39,6 @@ const Config& SessionState::config() const
 }
 
 //--------------------------------------------------------------------------------------------------
-const std::optional<RouterConfig>& SessionState::router() const
-{
-    return config_.router_config;
-}
-
-//--------------------------------------------------------------------------------------------------
 bool SessionState::isConnectionByHostId() const
 {
     return base::isHostId(config_.address_or_id);

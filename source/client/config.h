@@ -25,8 +25,6 @@
 #include "proto/peer.h"
 #include "proto/router.h"
 
-#include <optional>
-
 namespace client {
 
 struct RouterConfig
@@ -57,8 +55,7 @@ struct Config
     Config();
     ~Config();
 
-    std::optional<RouterConfig> router_config;
-
+    qint64 router_id;
     QString computer_name;
     QString display_name;
     QString address_or_id;

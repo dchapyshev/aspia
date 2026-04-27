@@ -34,7 +34,6 @@ public:
     ~SessionState();
 
     const Config& config() const;
-    const std::optional<RouterConfig>& router() const;
 
     bool isConnectionByHostId() const;
 

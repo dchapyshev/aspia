@@ -136,8 +136,9 @@ void OnlineCheckerDirect::Instance::onFinished(const base::Location& location, b
 }
 
 //--------------------------------------------------------------------------------------------------
-OnlineCheckerDirect::OnlineCheckerDirect(QObject* parent)
-    : QObject(parent)
+OnlineCheckerDirect::OnlineCheckerDirect(const ComputerList& computers, QObject* parent)
+    : QObject(parent),
+      pending_queue_(computers)
 {
     LOG(INFO) << "Ctor";
 }
@@ -152,10 +153,8 @@ OnlineCheckerDirect::~OnlineCheckerDirect()
 }
 
 //--------------------------------------------------------------------------------------------------
-void OnlineCheckerDirect::start(const ComputerList& computers)
+void OnlineCheckerDirect::start()
 {
-    pending_queue_ = computers;
-
     if (pending_queue_.isEmpty())
     {
         LOG(INFO) << "No computers in list";

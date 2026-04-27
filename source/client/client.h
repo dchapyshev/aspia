@@ -20,6 +20,7 @@
 #define CLIENT_CLIENT_H
 
 #include <QObject>
+#include <QPointer>
 #include <QVariant>
 
 #include <memory>
@@ -28,7 +29,7 @@
 #include "base/logging.h"
 #include "base/net/tcp_channel.h"
 #include "client/session_state.h"
-#include "client/router_manager.h"
+#include "client/router_connection.h"
 
 class QTimer;
 
@@ -50,6 +51,8 @@ public:
     // Starts a session.
     void start();
 
+    qint64 instanceId() const { return instance_id_; }
+
     // Sets an instance of a class that stores session state.
     // The method must be called before calling method start().
     void setSessionState(std::shared_ptr<SessionState> session_state);
@@ -59,14 +62,12 @@ public:
     {
         STARTED,
         STOPPED,
-        ROUTER_CONNECTING,
-        ROUTER_CONNECTED,
+        NO_ROUTER,
+        ROUTER_OFFLINE,
         ROUTER_ERROR,
         HOST_CONNECTING,
         HOST_CONNECTED,
         HOST_DISCONNECTED,
-        WAIT_FOR_ROUTER,
-        WAIT_FOR_ROUTER_TIMEOUT,
         WAIT_FOR_HOST,
         WAIT_FOR_HOST_TIMEOUT,
         VERSION_MISMATCH,
@@ -107,10 +108,10 @@ private slots:
     void onUdpReady();
     void onUdpErrorOccurred();
     void onUdpMessageReceived(quint8 channel_id, const QByteArray& buffer);
-    void onRouterConnected(const QVersionNumber& router_version);
-    void onHostAwaiting();
-    void onHostConnected();
-    void onRouterErrorOccurred(const client::RouterManager::Error& error);
+    void onRouterConnectionOffer(const proto::router::ConnectionOffer& offer);
+    void onRouterStatusChanged(qint64 router_id, client::RouterConnection::Status status);
+    void onRelayConnectionReady();
+    void onRelayConnectionError();
 
 private:
     struct PendingUdp
@@ -129,12 +130,14 @@ private:
         const QString& external_address = QString(), quint16 external_port = 0);
     void startUdpHolePunching(const PendingUdp& context, const QString& stun_host, quint16 stun_port);
 
+    const qint64 instance_id_;
     bool is_legacy_mode_ = false;
     QTimer* timeout_timer_ = nullptr;
     QTimer* reconnect_timer_ = nullptr;
-    RouterManager* router_controller_ = nullptr;
+    QPointer<RouterConnection> router_ = nullptr;
     base::TcpChannel* tcp_channel_ = nullptr;
     base::UdpChannel* udp_channel_ = nullptr;
+    base::RelayPeer* relay_peer_ = nullptr;
     base::StunPeer* stun_peer_ = nullptr;
 
     std::optional<PendingUdp> pending_udp_context_;
@@ -143,7 +146,6 @@ private:
     enum class State { CREATED, STARTED, STOPPPED };
     State state_ = State::CREATED;
 
-    bool is_connected_to_router_ = false;
     bool udp_ready_ = false;
 };
 

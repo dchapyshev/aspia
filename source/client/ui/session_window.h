@@ -22,7 +22,6 @@
 #include "base/net/tcp_channel.h"
 #include "client/client.h"
 #include "client/config.h"
-#include "client/router_manager.h"
 #include "client/session_state.h"
 
 #include <QWidget>
@@ -65,8 +64,6 @@ public slots:
 private:
     void setClientTitle(const Config& config);
     void onErrorOccurred(const QString& message);
-
-    static QString routerErrorToString(RouterManager::ErrorCode error_code);
 
     std::shared_ptr<SessionState> session_state_;
     common::StatusDialog* status_dialog_ = nullptr;

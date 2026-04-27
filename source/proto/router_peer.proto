@@ -51,8 +51,9 @@ message ConnectionOffer
         KEY_POOL_EMPTY = 4;
     }
 
-    ErrorCode error_code     = 1;
-    RelayCredentials relay   = 2;
-    StunServerInfo stun_info = 3;
-    PeerInfo peer_info       = 4;
+    int64 request_id         = 1;
+    ErrorCode error_code     = 2;
+    RelayCredentials relay   = 3;
+    StunServerInfo stun_info = 4;
+    PeerInfo peer_info       = 5;
 }

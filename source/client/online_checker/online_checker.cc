@@ -18,6 +18,7 @@
 
 #include "client/online_checker/online_checker.h"
 
+#include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/peer/host_id.h"
 
@@ -25,32 +26,35 @@ namespace client {
 
 //--------------------------------------------------------------------------------------------------
 OnlineChecker::OnlineChecker(QObject* parent)
-    : QObject(parent),
-      io_thread_(base::Thread::AsioDispatcher)
+    : QObject(parent)
 {
     LOG(INFO) << "Ctor";
-
-    connect(&io_thread_, &base::Thread::sig_beforeRunning, this, &OnlineChecker::onBeforeThreadRunning,
-            Qt::DirectConnection);
-    connect(&io_thread_, &base::Thread::sig_afterRunning, this, &OnlineChecker::onAfterThreadRunning,
-            Qt::DirectConnection);
 }
 
 //--------------------------------------------------------------------------------------------------
 OnlineChecker::~OnlineChecker()
 {
-    LOG(INFO) << "Dtor BEGIN";
-    io_thread_.stop();
-    LOG(INFO) << "Dtor END";
+    LOG(INFO) << "Dtor";
+
+    if (router_checker_)
+    {
+        router_checker_->disconnect();
+        router_checker_->deleteLater();
+        router_checker_ = nullptr;
+    }
+
+    if (direct_checker_)
+    {
+        direct_checker_->disconnect();
+        direct_checker_->deleteLater();
+        direct_checker_ = nullptr;
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
-void OnlineChecker::checkComputers(const std::optional<RouterConfig>& router_config,
-                                   const ComputerList& computers)
+void OnlineChecker::checkComputers(const ComputerList& computers)
 {
     LOG(INFO) << "Start online checker (total computers:" << computers.size() << ")";
-
-    router_config_ = router_config;
 
     for (const auto& computer : computers)
     {
@@ -58,6 +62,7 @@ void OnlineChecker::checkComputers(const std::optional<RouterConfig>& router_con
         {
             OnlineCheckerRouter::Computer router_computer;
             router_computer.computer_id = computer.computer_id;
+            router_computer.router_id = computer.router_id;
             router_computer.host_id = base::stringToHostId(computer.address_or_id);
 
             router_computers_.emplace_back(router_computer);
@@ -73,74 +78,47 @@ void OnlineChecker::checkComputers(const std::optional<RouterConfig>& router_con
         }
     }
 
-    io_thread_.start();
-}
-
-//--------------------------------------------------------------------------------------------------
-void OnlineChecker::onBeforeThreadRunning()
-{
-    LOG(INFO) << "Starting new I/O thread";
-
-    if (router_config_.has_value())
+    if (!router_computers_.isEmpty())
     {
-        if (!router_computers_.empty())
-        {
-            LOG(INFO) << "Computers for ROUTER checking:" << router_computers_.size();
+        router_checker_ = new OnlineCheckerRouter(router_computers_);
+        router_checker_->moveToThread(base::GuiApplication::ioThread());
 
-            router_checker_ = new OnlineCheckerRouter(*router_config_);
+        connect(router_checker_, &OnlineCheckerRouter::sig_checkerResult,
+                this, &OnlineChecker::onRouterCheckerResult,
+                Qt::QueuedConnection);
+        connect(router_checker_, &OnlineCheckerRouter::sig_checkerFinished,
+                this, &OnlineChecker::onRouterCheckerFinished,
+                Qt::QueuedConnection);
 
-            connect(router_checker_, &OnlineCheckerRouter::sig_checkerResult,
-                    this, &OnlineChecker::onRouterCheckerResult,
-                    Qt::DirectConnection);
-            connect(router_checker_, &OnlineCheckerRouter::sig_checkerFinished,
-                    this, &OnlineChecker::onRouterCheckerFinished,
-                    Qt::DirectConnection);
-
-            router_checker_->start(router_computers_);
-        }
-        else
-        {
-            LOG(INFO) << "Computer list for ROUTER is empty";
-            router_finished_ = true;
-        }
+        QMetaObject::invokeMethod(router_checker_, &OnlineCheckerRouter::start, Qt::QueuedConnection);
     }
     else
     {
-        LOG(INFO) << "No router config";
+        LOG(INFO) << "Computer list for ROUTER is empty";
         router_finished_ = true;
     }
 
-    if (!direct_computers_.empty())
+    if (!direct_computers_.isEmpty())
     {
         LOG(INFO) << "Computers for DIRECT checking:" << direct_computers_.size();
 
-        direct_checker_ = new OnlineCheckerDirect();
+        direct_checker_ = new OnlineCheckerDirect(direct_computers_);
+        direct_checker_->moveToThread(base::GuiApplication::ioThread());
 
         connect(direct_checker_, &OnlineCheckerDirect::sig_checkerResult,
                 this, &OnlineChecker::onDirectCheckerResult,
-                Qt::DirectConnection);
+                Qt::QueuedConnection);
         connect(direct_checker_, &OnlineCheckerDirect::sig_checkerFinished,
                 this, &OnlineChecker::onDirectCheckerFinished,
-                Qt::DirectConnection);
+                Qt::QueuedConnection);
 
-        direct_checker_->start(direct_computers_);
+        QMetaObject::invokeMethod(direct_checker_, &OnlineCheckerDirect::start, Qt::QueuedConnection);
     }
     else
     {
         LOG(INFO) << "Computer list for DIRECT is empty";
         direct_finished_ = true;
     }
-}
-
-//--------------------------------------------------------------------------------------------------
-void OnlineChecker::onAfterThreadRunning()
-{
-    LOG(INFO) << "I/O thread stopping...";
-
-    delete direct_checker_;
-    delete router_checker_;
-
-    LOG(INFO) << "I/O thread stopped";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -154,8 +132,7 @@ void OnlineChecker::onDirectCheckerFinished()
 {
     direct_finished_ = true;
 
-    LOG(INFO) << "DIRECT checker finished (r=" << router_finished_
-              << ", d=" << direct_finished_ << ")";
+    LOG(INFO) << "DIRECT checker finished (r:" << router_finished_ << ", d:" << direct_finished_ << ")";
 
     if (direct_finished_ && router_finished_)
         emit sig_checkerFinished();
@@ -172,8 +149,7 @@ void OnlineChecker::onRouterCheckerFinished()
 {
     router_finished_ = true;
 
-    LOG(INFO) << "ROUTER checker finished (r=" << router_finished_
-              << ", d=" << direct_finished_ << ")";
+    LOG(INFO) << "ROUTER checker finished (r:" << router_finished_ << ", d:" << direct_finished_ << ")";
 
     if (direct_finished_ && router_finished_)
         emit sig_checkerFinished();

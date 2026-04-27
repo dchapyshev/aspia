@@ -19,12 +19,12 @@
 #ifndef CLIENT_ONLINE_CHECKER_ONLINE_CHECKER_ROUTER_H
 #define CLIENT_ONLINE_CHECKER_ONLINE_CHECKER_ROUTER_H
 
+#include <QSet>
 #include <QQueue>
 #include <QTimer>
 
-#include "base/net/tcp_channel.h"
 #include "base/peer/host_id.h"
-#include "client/config.h"
+#include "client/router_connection.h"
 
 namespace base {
 class Location;
@@ -37,34 +37,33 @@ class OnlineCheckerRouter final : public QObject
     Q_OBJECT
 
 public:
-    explicit OnlineCheckerRouter(const RouterConfig& router_config, QObject* parent = nullptr);
-    ~OnlineCheckerRouter() final;
-
     struct Computer
     {
-        int computer_id = -1;
+        qint64 computer_id = -1;
+        qint64 router_id = -1;
         base::HostId host_id = base::kInvalidHostId;
     };
     using ComputerList = QQueue<Computer>;
 
-    void start(const ComputerList& computers);
+    explicit OnlineCheckerRouter(const ComputerList& computers, QObject* parent = nullptr);
+    ~OnlineCheckerRouter() final;
+
+    void start();
 
 signals:
     void sig_checkerResult(int computer_id, bool online);
     void sig_checkerFinished();
 
 private slots:
-    void onTcpReady();
-    void onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code);
-    void onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer);
+    void onHostStatus(qint64 request_id, bool online);
 
 private:
     void checkNextComputer();
     void onFinished(const base::Location& location);
 
-    base::TcpChannel* tcp_channel_ = nullptr;
+    qint64 current_request_id_ = 0;
+    QSet<qint64> routers_;
     QTimer timer_;
-    RouterConfig router_config_;
 
     ComputerList computers_;
 };
