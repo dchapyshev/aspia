@@ -527,12 +527,14 @@ void Client::onRouterConnectionOffer(const proto::router::ConnectionOffer& offer
 //--------------------------------------------------------------------------------------------------
 void Client::onRouterStatusChanged(qint64 router_id, RouterConnection::Status status)
 {
+    CHECK(router_);
+
     if (status == RouterConnection::Status::ONLINE)
         return;
 
-    CHECK(router_);
     router_->disconnect(this);
     router_ = nullptr;
+
     emit sig_statusChanged(Status::ROUTER_ERROR, tr("Connection to the router has been lost."));
 }
 

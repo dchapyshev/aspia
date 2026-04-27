@@ -27,9 +27,9 @@
 #include "build/build_config.h"
 #include "build/version.h"
 #include "client/config_factory.h"
-#include "client/local_data.h"
-#include "client/database.h"
 #include "common/ui/msg_box.h"
+#include "common/ui/status_dialog.h"
+#include "client/router_connection.h"
 #include "client/ui/application.h"
 #include "client/ui/main_window.h"
 #include "client/ui/chat/chat_session_window.h"
@@ -45,17 +45,17 @@ void onInvalidValue(const QString& arg, const QString& values)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool parseAudioValue(const QString& value, proto::control::Config& config)
+bool parseAudioValue(const QString& value, proto::control::Config* config)
 {
     if (!value.isEmpty())
     {
         if (value == "0")
         {
-            config.set_audio(false);
+            config->set_audio(false);
         }
         else if (value == "1")
         {
-            config.set_audio(true);
+            config->set_audio(true);
         }
         else
         {
@@ -68,17 +68,17 @@ bool parseAudioValue(const QString& value, proto::control::Config& config)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool parseCursorShapeValue(const QString& value, proto::control::Config& config)
+bool parseCursorShapeValue(const QString& value, proto::control::Config* config)
 {
     if (!value.isEmpty())
     {
         if (value == "0")
         {
-            config.set_cursor_shape(false);
+            config->set_cursor_shape(false);
         }
         else if (value == "1")
         {
-            config.set_cursor_shape(true);
+            config->set_cursor_shape(true);
         }
         else
         {
@@ -91,17 +91,17 @@ bool parseCursorShapeValue(const QString& value, proto::control::Config& config)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool parseCursorPositionValue(const QString& value, proto::control::Config& config)
+bool parseCursorPositionValue(const QString& value, proto::control::Config* config)
 {
     if (!value.isEmpty())
     {
         if (value == "0")
         {
-            config.set_cursor_position(false);
+            config->set_cursor_position(false);
         }
         else if (value == "1")
         {
-            config.set_cursor_position(true);
+            config->set_cursor_position(true);
         }
         else
         {
@@ -114,17 +114,17 @@ bool parseCursorPositionValue(const QString& value, proto::control::Config& conf
 }
 
 //--------------------------------------------------------------------------------------------------
-bool parseClipboardValue(const QString& value, proto::control::Config& config)
+bool parseClipboardValue(const QString& value, proto::control::Config* config)
 {
     if (!value.isEmpty())
     {
         if (value == "0")
         {
-            config.set_clipboard(false);
+            config->set_clipboard(false);
         }
         else if (value == "1")
         {
-            config.set_clipboard(true);
+            config->set_clipboard(true);
         }
         else
         {
@@ -137,17 +137,17 @@ bool parseClipboardValue(const QString& value, proto::control::Config& config)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool parseDesktopEffectsValue(const QString& value, proto::control::Config& config)
+bool parseDesktopEffectsValue(const QString& value, proto::control::Config* config)
 {
     if (!value.isEmpty())
     {
         if (value == "0")
         {
-            config.set_effects(false);
+            config->set_effects(false);
         }
         else if (value == "1")
         {
-            config.set_effects(true);
+            config->set_effects(true);
         }
         else
         {
@@ -160,17 +160,17 @@ bool parseDesktopEffectsValue(const QString& value, proto::control::Config& conf
 }
 
 //--------------------------------------------------------------------------------------------------
-bool parseDesktopWallpaperValue(const QString& value, proto::control::Config& config)
+bool parseDesktopWallpaperValue(const QString& value, proto::control::Config* config)
 {
     if (!value.isEmpty())
     {
         if (value == "0")
         {
-            config.set_wallpaper(false);
+            config->set_wallpaper(false);
         }
         else if (value == "1")
         {
-            config.set_wallpaper(true);
+            config->set_wallpaper(true);
         }
         else
         {
@@ -183,17 +183,17 @@ bool parseDesktopWallpaperValue(const QString& value, proto::control::Config& co
 }
 
 //--------------------------------------------------------------------------------------------------
-bool parseLockAtDisconnectValue(const QString& value, proto::control::Config& config)
+bool parseLockAtDisconnectValue(const QString& value, proto::control::Config* config)
 {
     if (!value.isEmpty())
     {
         if (value == "0")
         {
-            config.set_lock_at_disconnect(false);
+            config->set_lock_at_disconnect(false);
         }
         else if (value == "1")
         {
-            config.set_lock_at_disconnect(true);
+            config->set_lock_at_disconnect(true);
         }
         else
         {
@@ -206,17 +206,17 @@ bool parseLockAtDisconnectValue(const QString& value, proto::control::Config& co
 }
 
 //--------------------------------------------------------------------------------------------------
-bool parseBlockRemoteInputValue(const QString& value, proto::control::Config& config)
+bool parseBlockRemoteInputValue(const QString& value, proto::control::Config* config)
 {
     if (!value.isEmpty())
     {
         if (value == "0")
         {
-            config.set_block_input(false);
+            config->set_block_input(false);
         }
         else if (value == "1")
         {
-            config.set_block_input(true);
+            config->set_block_input(true);
         }
         else
         {
@@ -226,6 +226,105 @@ bool parseBlockRemoteInputValue(const QString& value, proto::control::Config& co
     }
 
     return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool startSession(const client::Config& config, const proto::control::Config& desktop_config)
+{
+    client::SessionWindow* session_window = nullptr;
+
+    switch (config.session_type)
+    {
+        case proto::peer::SESSION_TYPE_DESKTOP:
+            session_window = new client::DesktopSessionWindow(desktop_config);
+            break;
+
+        case proto::peer::SESSION_TYPE_FILE_TRANSFER:
+            session_window = new client::FileTransferSessionWindow();
+            break;
+
+        case proto::peer::SESSION_TYPE_SYSTEM_INFO:
+            session_window = new client::SystemInfoSessionWindow();
+            break;
+
+        case proto::peer::SESSION_TYPE_TEXT_CHAT:
+            session_window = new client::ChatSessionWindow();
+            break;
+
+        default:
+            NOTREACHED();
+            break;
+    }
+
+    if (!session_window)
+    {
+        LOG(ERROR) << "Session window not created";
+        return false;
+    }
+
+    session_window->setAttribute(Qt::WA_DeleteOnClose);
+    if (!session_window->connectToHost(config))
+        LOG(ERROR) << "Unable to connect to host";
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void startRouterSession(const client::Config& config, const client::RouterConfig& router_config,
+    const proto::control::Config& desktop_config)
+{
+    QPointer<common::StatusDialog> status_dialog = new common::StatusDialog();
+    status_dialog->setAttribute(Qt::WA_DeleteOnClose);
+
+    QPointer<client::RouterConnection> router = new client::RouterConnection(router_config);
+    router->moveToThread(base::GuiApplication::ioThread());
+
+    QObject::connect(router, &client::RouterConnection::sig_statusChanged, qApp,
+        [status_dialog, router, config, desktop_config](qint64, client::RouterConnection::Status status)
+    {
+        if (!router || !status_dialog)
+            return;
+
+        const QString& address = router->config().address;
+        const quint16 port = router->config().port;
+
+        switch (status)
+        {
+            case client::RouterConnection::Status::CONNECTING:
+                status_dialog->addMessage(QApplication::translate("Client",
+                    "Connecting to router %1:%2...").arg(address).arg(port));
+                break;
+
+            case client::RouterConnection::Status::ONLINE:
+                status_dialog->addMessage(QApplication::translate("Client",
+                    "Connection to router %1:%2 established.").arg(address).arg(port));
+                router->disconnect(qApp);
+                status_dialog->hide();
+                status_dialog->deleteLater();
+                startSession(config, desktop_config);
+                break;
+
+            case client::RouterConnection::Status::OFFLINE:
+                status_dialog->addMessage(QApplication::translate("Client",
+                    "Disconnected from router %1:%2.").arg(address).arg(port));
+                break;
+        }
+    }, Qt::QueuedConnection);
+
+    QObject::connect(router, &client::RouterConnection::sig_errorOccurred, qApp,
+        [status_dialog](qint64, base::TcpChannel::ErrorCode error_code)
+    {
+        if (!status_dialog)
+            return;
+
+        status_dialog->addMessage(QApplication::translate("Client", "Network error: %1.")
+            .arg(base::TcpChannel::errorToString(error_code)));
+    }, Qt::QueuedConnection);
+
+    status_dialog->show();
+    status_dialog->activateWindow();
+
+    QMetaObject::invokeMethod(router, &client::RouterConnection::onConnectToRouter, Qt::QueuedConnection);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -317,7 +416,7 @@ int clientMain(int argc, char* argv[])
         QApplication::translate("Client", "Block remote input. Possible values: 0 or 1."),
         "block-remote-input");
 
-   QCommandLineOption router_address_option("router-address",
+    QCommandLineOption router_address_option("router-address",
         QApplication::translate("Client", "Router address."),
         "router-address");
 
@@ -365,7 +464,7 @@ int clientMain(int argc, char* argv[])
     {
         LOG(INFO) << "Command line start";
 
-        std::optional<proto::control::Config> desktop_config;
+        proto::control::Config desktop_config = client::ConfigFactory::defaultDesktopConfig();
         client::Config config;
 
         config.address_or_id = parser.value(address_option);
@@ -384,7 +483,54 @@ int clientMain(int argc, char* argv[])
         if (session_type == "desktop")
         {
             config.session_type = proto::peer::SESSION_TYPE_DESKTOP;
-            desktop_config = client::ConfigFactory::defaultDesktopConfig();
+
+            if (!parseAudioValue(parser.value(audio_option), &desktop_config))
+            {
+                LOG(ERROR) << "Unable to parse audio value";
+                return 1;
+            }
+
+            if (!parseCursorShapeValue(parser.value(cursor_shape_option), &desktop_config))
+            {
+                LOG(ERROR) << "Unable to parse cursor shape value";
+                return 1;
+            }
+
+            if (!parseCursorPositionValue(parser.value(cursor_position_option), &desktop_config))
+            {
+                LOG(ERROR) << "Unable to parse cursor position value";
+                return 1;
+            }
+
+            if (!parseClipboardValue(parser.value(clipboard_option), &desktop_config))
+            {
+                LOG(ERROR) << "Unable to parse clipboard value";
+                return 1;
+            }
+
+            if (!parseDesktopEffectsValue(parser.value(desktop_effects_option), &desktop_config))
+            {
+                LOG(ERROR) << "Unable to parse desktop effects value";
+                return 1;
+            }
+
+            if (!parseDesktopWallpaperValue(parser.value(desktop_wallpaper_option), &desktop_config))
+            {
+                LOG(ERROR) << "Unable to parse desktop wallpaper value";
+                return 1;
+            }
+
+            if (!parseLockAtDisconnectValue(parser.value(lock_at_disconnect_option), &desktop_config))
+            {
+                LOG(ERROR) << "Unable to parse lock at disconnect value";
+                return 1;
+            }
+
+            if (!parseBlockRemoteInputValue(parser.value(block_remote_input_option), &desktop_config))
+            {
+                LOG(ERROR) << "Unable to parse block remote input value";
+                return 1;
+            }
         }
         else if (session_type == "file-transfer")
         {
@@ -405,133 +551,44 @@ int clientMain(int argc, char* argv[])
             return 1;
         }
 
-        if (desktop_config.has_value())
-        {
-            if (!parseAudioValue(parser.value(audio_option), *desktop_config))
-            {
-                LOG(ERROR) << "Unable to parse audio value";
-                return 1;
-            }
-
-            if (!parseCursorShapeValue(parser.value(cursor_shape_option), *desktop_config))
-            {
-                LOG(ERROR) << "Unable to parse cursor shape value";
-                return 1;
-            }
-
-            if (!parseCursorPositionValue(parser.value(cursor_position_option), *desktop_config))
-            {
-                LOG(ERROR) << "Unable to parse cursor position value";
-                return 1;
-            }
-
-            if (!parseClipboardValue(parser.value(clipboard_option), *desktop_config))
-            {
-                LOG(ERROR) << "Unable to parse clipboard value";
-                return 1;
-            }
-
-            if (!parseDesktopEffectsValue(parser.value(desktop_effects_option), *desktop_config))
-            {
-                LOG(ERROR) << "Unable to parse desktop effects value";
-                return 1;
-            }
-
-            if (!parseDesktopWallpaperValue(parser.value(desktop_wallpaper_option), *desktop_config))
-            {
-                LOG(ERROR) << "Unable to parse desktop wallpaper value";
-                return 1;
-            }
-
-            if (!parseLockAtDisconnectValue(parser.value(lock_at_disconnect_option), *desktop_config))
-            {
-                LOG(ERROR) << "Unable to parse lock at disconnect value";
-                return 1;
-            }
-
-            if (!parseBlockRemoteInputValue(parser.value(block_remote_input_option), *desktop_config))
-            {
-                LOG(ERROR) << "Unable to parse block remote input value";
-                return 1;
-            }
-        }
-
         if (base::isHostId(config.address_or_id))
         {
             LOG(INFO) << "Relay connection selected";
 
             client::RouterConfig router_config;
 
-            if (parser.isSet(router_address_option))
-            {
-                LOG(INFO) << "Router address option specified";
-
-                router_config.id = 1;
-                router_config.address = parser.value(router_address_option);
-                router_config.port = parser.value(router_port_option).toUShort();
-                router_config.username = parser.value(router_username_option);
-                router_config.password = parser.value(router_password_option);
-                router_config.session_type = proto::router::SESSION_TYPE_CLIENT;
-            }
-            else
+            if (!parser.isSet(router_address_option))
             {
                 LOG(INFO) << "Router address option not specified";
-            }
-
-            if (!router_config.isValid())
-            {
-                QString message = QApplication::translate("Client",
-                    "A host ID was entered, but the router was not configured. You need to "
-                    "configure your router before connecting.");
+                QString message =
+                    QApplication::translate("Client", "Connection parameters to the router are not specified.");
                 common::MsgBox::warning(nullptr, message);
                 return 1;
             }
 
-            // TODO: Connect to router.
+            router_config.id = 1;
+            router_config.address = parser.value(router_address_option);
+            router_config.port = parser.value(router_port_option).toUShort();
+            router_config.username = parser.value(router_username_option);
+            router_config.password = parser.value(router_password_option);
+            router_config.session_type = proto::router::SESSION_TYPE_CLIENT;
+
+            if (!router_config.isValid())
+            {
+                QString message = QApplication::translate("Client", "Incorrect data for connecting to the router.");
+                common::MsgBox::warning(nullptr, message);
+                return 1;
+            }
 
             config.router_id = router_config.id;
+            startRouterSession(config, router_config, desktop_config);
         }
         else
         {
             LOG(INFO) << "Direct connection selected";
-        }
 
-        client::SessionWindow* session_window = nullptr;
-
-        switch (config.session_type)
-        {
-            case proto::peer::SESSION_TYPE_DESKTOP:
-                session_window = new client::DesktopSessionWindow(*desktop_config);
-                break;
-
-            case proto::peer::SESSION_TYPE_FILE_TRANSFER:
-                session_window = new client::FileTransferSessionWindow();
-                break;
-
-            case proto::peer::SESSION_TYPE_SYSTEM_INFO:
-                session_window = new client::SystemInfoSessionWindow();
-                break;
-
-            case proto::peer::SESSION_TYPE_TEXT_CHAT:
-                session_window = new client::ChatSessionWindow();
-                break;
-
-            default:
-                NOTREACHED();
-                break;
-        }
-
-        if (!session_window)
-        {
-            LOG(ERROR) << "Session window not created";
-            return 1;
-        }
-
-        session_window->setAttribute(Qt::WA_DeleteOnClose);
-        if (!session_window->connectToHost(config))
-        {
-            LOG(ERROR) << "Unable to connect to host";
-            return 0;
+            if (!startSession(config, desktop_config))
+                return 1;
         }
     }
     else
