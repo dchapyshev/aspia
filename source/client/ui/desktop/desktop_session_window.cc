@@ -204,6 +204,9 @@ DesktopSessionWindow::DesktopSessionWindow(
             case proto::peer::SESSION_TYPE_TEXT_CHAT:
                 session_window = new ChatSessionWindow();
                 break;
+            case proto::peer::SESSION_TYPE_SYSTEM_INFO:
+                session_window = new SystemInfoSessionWindow();
+                break;
             default:
                 NOTREACHED();
                 break;
