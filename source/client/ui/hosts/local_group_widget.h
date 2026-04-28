@@ -103,6 +103,7 @@ public:
     Item* currentItem();
     void showGroup(qint64 group_id);
     void setConnectTime(qint64 computer_id, qint64 connect_time);
+    void setOnlineCheckEnabled(bool enable);
 
     // ContentWidget implementation.
     QByteArray saveState() override;
@@ -140,6 +141,7 @@ private:
     QPoint start_pos_;
 
     qint64 current_group_id_ = -1;
+    bool online_check_enabled_ = true;
     QLabel* status_groups_label_ = nullptr;
     QLabel* status_computers_label_ = nullptr;
     QLabel* status_check_label_ = nullptr;

@@ -36,6 +36,10 @@ public:
     enum class Type { HOSTS, SESSION };
     enum class ActionRole { FILE, EDIT, VIEW, SESSION_TYPE, HELP };
 
+    // Property name. If set on a QAction to true, the action will be added only to the menu and
+    // skipped on the toolbar (e.g. checkable items without an icon).
+    static inline constexpr const char* kMenuOnlyProperty = "aspiaMenuOnly";
+
     explicit ClientTab(Type type, const QString& object_name, QWidget* parent = nullptr);
     ~ClientTab() override;
 

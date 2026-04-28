@@ -43,6 +43,7 @@ const QString kWindowStateParam = "window_state";
 const QString kLargeIconsParam = "large_icons";
 const QString kToolbarParam = "toolbar";
 const QString kStatusbarParam = "statusbar";
+const QString kOnlineCheckParam = "online_check";
 const QString kTabStateParam = "tab_state";
 
 } // namespace
@@ -233,6 +234,18 @@ bool Settings::isStatusBarEnabled() const
 void Settings::setStatusBarEnabled(bool enable)
 {
     settings_.setValue(kStatusbarParam, enable);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Settings::isOnlineCheckEnabled() const
+{
+    return settings_.value(kOnlineCheckParam, true).toBool();
+}
+
+//--------------------------------------------------------------------------------------------------
+void Settings::setOnlineCheckEnabled(bool enable)
+{
+    settings_.setValue(kOnlineCheckParam, enable);
 }
 
 //--------------------------------------------------------------------------------------------------

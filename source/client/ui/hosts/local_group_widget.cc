@@ -176,7 +176,15 @@ void LocalGroupWidget::showGroup(qint64 group_id)
         new Item(computer, ui.tree_computer);
 
     updateStatusLabels();
-    startOnlineChecker();
+
+    if (online_check_enabled_)
+        startOnlineChecker();
+}
+
+//--------------------------------------------------------------------------------------------------
+void LocalGroupWidget::setOnlineCheckEnabled(bool enable)
+{
+    online_check_enabled_ = enable;
 }
 
 //--------------------------------------------------------------------------------------------------

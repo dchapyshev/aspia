@@ -125,6 +125,11 @@ HostsTab::HostsTab(QWidget* parent)
     action_save_ = new QAction(QIcon(":/img/save.svg"), tr("Save..."), this);
     action_reload_ = new QAction(QIcon(":/img/reload.svg"), tr("Reload"), this);
 
+    action_online_check_ = new QAction(tr("Auto-refresh Status"), this);
+    action_online_check_->setCheckable(true);
+    action_online_check_->setChecked(settings.isOnlineCheckEnabled());
+    action_online_check_->setProperty(ClientTab::kMenuOnlyProperty, true);
+
     // Create content widgets.
     local_group_widget_ = new LocalGroupWidget(this);
     router_group_widget_ = new RouterGroupWidget(this);
@@ -169,6 +174,7 @@ HostsTab::HostsTab(QWidget* parent)
     connect(action_disconnect_, &QAction::triggered, this, &HostsTab::onDisconnectAction);
     connect(action_disconnect_all_, &QAction::triggered, this, &HostsTab::onDisconnectAllAction);
     connect(action_host_remove_, &QAction::triggered, this, &HostsTab::onRemoveHostAction);
+    connect(action_online_check_, &QAction::toggled, this, &HostsTab::onOnlineCheckToggled);
     connect(session_connect_group, &QActionGroup::triggered, this, &HostsTab::onConnectAction);
 
     // Register actions for toolbar and menus.
@@ -177,9 +183,10 @@ HostsTab::HostsTab(QWidget* parent)
     addActions(ActionRole::EDIT, { action_add_group_, action_edit_group_, action_delete_group_ });
     addActions(ActionRole::EDIT, { action_add_computer_, action_edit_computer_, action_copy_computer_, action_delete_computer_ });
     addActions(ActionRole::EDIT, { action_host_remove_, action_disconnect_, action_disconnect_all_ });
-    addActions(ActionRole::VIEW, { action_reload_ });
+    addActions(ActionRole::VIEW, { action_reload_, action_online_check_ });
     addActions(ActionRole::SESSION_TYPE, { action_desktop_, action_file_transfer_, action_chat_, action_system_info_ });
 
+    local_group_widget_->setOnlineCheckEnabled(action_online_check_->isChecked());
     local_group_widget_->showGroup(ui.sidebar->currentGroupId());
     switchContent(local_group_widget_);
     updateActionsState();
@@ -826,11 +833,14 @@ void HostsTab::updateActionsState()
     action_disconnect_->setVisible(false);
     action_disconnect_all_->setVisible(false);
     action_host_remove_->setVisible(false);
+    action_online_check_->setVisible(false);
 
     Sidebar::Item* sidebar_item = ui.sidebar->currentItem();
 
     if (sidebar_item && sidebar_item->itemType() == Sidebar::Item::Type::LOCAL_GROUP)
     {
+        action_online_check_->setVisible(true);
+
         action_add_group_->setVisible(true);
         action_delete_group_->setVisible(sidebar_item->groupId() != 0);
         action_edit_group_->setVisible(sidebar_item->groupId() != 0);
@@ -1181,6 +1191,16 @@ void HostsTab::onRemoveHostAction()
     RouterWidget* widget = router_widgets_.value(router->routerId());
     if (widget)
         widget->onRemoveHost();
+}
+
+//--------------------------------------------------------------------------------------------------
+void HostsTab::onOnlineCheckToggled(bool checked)
+{
+    Settings settings;
+    settings.setOnlineCheckEnabled(checked);
+
+    if (local_group_widget_)
+        local_group_widget_->setOnlineCheckEnabled(checked);
 }
 
 //--------------------------------------------------------------------------------------------------

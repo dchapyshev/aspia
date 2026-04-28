@@ -88,6 +88,7 @@ private slots:
     void onDisconnectAction();
     void onDisconnectAllAction();
     void onRemoveHostAction();
+    void onOnlineCheckToggled(bool checked);
 
 private:
     void switchContent(ContentWidget* new_widget);
@@ -130,6 +131,7 @@ private:
 
     QAction* action_save_ = nullptr;
     QAction* action_reload_ = nullptr;
+    QAction* action_online_check_ = nullptr;
 
     QAction* action_disconnect_ = nullptr;
     QAction* action_disconnect_all_ = nullptr;

@@ -385,20 +385,29 @@ void MainWindow::installTabActions(ClientTab* tab)
     {
         const ClientTab::ActionGroupEntry& entry = groups[i];
 
-        // Add actions to toolbar and connect visibility tracking.
+        // Add actions to toolbar and connect visibility tracking. Actions marked with
+        // kMenuOnlyProperty go only to the menu and are skipped here.
+        bool any_in_toolbar = false;
         for (QAction* action : entry.second)
         {
+            if (action->property(ClientTab::kMenuOnlyProperty).toBool())
+                continue;
+
             ui.toolbar->insertAction(before, action);
             tab_toolbar_actions_.append(action);
 
             connect(action, &QAction::changed, this, &MainWindow::updateSeparatorVisibility);
+            any_in_toolbar = true;
         }
 
-        // Add separator after each group.
-        QAction* separator = new QAction(this);
-        separator->setSeparator(true);
-        ui.toolbar->insertAction(before, separator);
-        tab_toolbar_actions_.append(separator);
+        // Add separator after each group (only if at least one action was added to toolbar).
+        if (any_in_toolbar)
+        {
+            QAction* separator = new QAction(this);
+            separator->setSeparator(true);
+            ui.toolbar->insertAction(before, separator);
+            tab_toolbar_actions_.append(separator);
+        }
 
         // Add actions to corresponding menu.
         QMenu* menu = menuForActionGroup(entry.first);

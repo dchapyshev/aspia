@@ -75,6 +75,9 @@ public:
     bool isStatusBarEnabled() const;
     void setStatusBarEnabled(bool enable);
 
+    bool isOnlineCheckEnabled() const;
+    void setOnlineCheckEnabled(bool enable);
+
     QByteArray tabState(const QString& name) const;
     void setTabState(const QString& name, const QByteArray& state);
 
