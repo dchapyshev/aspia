@@ -22,6 +22,8 @@
 #include <QObject>
 #include <QQueue>
 
+#include "client/config.h"
+
 namespace base {
 class Location;
 } // namespace base
@@ -33,12 +35,7 @@ class OnlineCheckerDirect final : public QObject
     Q_OBJECT
 
 public:
-    struct Computer
-    {
-        qint64 computer_id = -1;
-        QString address;
-    };
-    using ComputerList = QQueue<Computer>;
+    using ComputerList = QQueue<ComputerConfig>;
 
     explicit OnlineCheckerDirect(const ComputerList& computers, QObject* parent = nullptr);
     ~OnlineCheckerDirect();
@@ -46,11 +43,11 @@ public:
     void start();
 
 signals:
-    void sig_checkerResult(int computer_id, bool online);
+    void sig_checkerResult(qint64 computer_id, bool online);
     void sig_checkerFinished();
 
 private:
-    void onChecked(int computer_id, bool online);
+    void onChecked(qint64 computer_id, bool online);
     void onFinished(const base::Location& location);
 
     ComputerList pending_queue_;

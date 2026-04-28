@@ -18,14 +18,16 @@
 
 #include "client/online_checker/online_checker_direct.h"
 
-#include <QPointer>
 #include <QTimer>
 
 #include "base/location.h"
 #include "base/logging.h"
 #include "base/net/address.h"
 #include "base/net/tcp_channel_ng.h"
+#include "base/peer/client_authenticator.h"
 #include "build/build_config.h"
+#include "proto/key_exchange.h"
+#include "proto/peer.h"
 
 namespace client {
 
@@ -39,13 +41,13 @@ const std::chrono::seconds kTimeout { 15 };
 class OnlineCheckerDirect::Instance final : public QObject
 {
 public:
-    Instance(int computer_id, const QString& address, quint16 port, QObject* parent);
+    Instance(const ComputerConfig& computer, QObject* parent);
     ~Instance() final;
 
-    using FinishCallback = std::function<void(int computer_id, bool online)>;
+    using FinishCallback = std::function<void(qint64 computer_id, bool online)>;
 
     void start(FinishCallback finish_callback);
-    int computerId() const { return computer_id_; }
+    qint64 computerId() const { return computer_.id; }
 
 private slots:
     void onTcpConnected();
@@ -54,29 +56,24 @@ private slots:
 private:
     void onFinished(const base::Location& location, bool online);
 
-    const int computer_id_;
-    const QString address_;
-    const quint16 port_;
+    const ComputerConfig computer_;
 
     FinishCallback finish_callback_;
-    QPointer<base::TcpChannel> tcp_channel_;
+    base::TcpChannel* tcp_channel_ = nullptr;
     QTimer timer_;
     bool finished_ = false;
 };
 
 //--------------------------------------------------------------------------------------------------
-OnlineCheckerDirect::Instance::Instance(
-    int computer_id, const QString& address, quint16 port, QObject* parent)
+OnlineCheckerDirect::Instance::Instance(const ComputerConfig& computer, QObject* parent)
     : QObject(parent),
-      computer_id_(computer_id),
-      address_(address),
-      port_(port)
+      computer_(computer)
 {
     timer_.setSingleShot(true);
 
     connect(&timer_, &QTimer::timeout, this, [this]()
     {
-        LOG(INFO) << "Timeout for computer:" << computer_id_;
+        LOG(INFO) << "Timeout for computer:" << computer_.id;
         onFinished(FROM_HERE, false);
     });
 
@@ -96,29 +93,36 @@ void OnlineCheckerDirect::Instance::start(FinishCallback finish_callback)
     finish_callback_ = std::move(finish_callback);
     DCHECK(finish_callback_);
 
-    LOG(INFO) << "Starting connection to" << address_ << ":" << port_
-              << "(computer:" << computer_id_ << ")";
+    base::Address address = base::Address::fromString(computer_.address, DEFAULT_HOST_TCP_PORT);
 
-    tcp_channel_ = new base::TcpChannelNG(nullptr, this);
+    LOG(INFO) << "Starting connection to" << address.host() << ":" << address.port()
+              << "(computer:" << computer_.id << ")";
+
+    base::ClientAuthenticator* authenticator = new base::ClientAuthenticator();
+    authenticator->setIdentify(proto::key_exchange::IDENTIFY_SRP);
+    authenticator->setUserName(computer_.username);
+    authenticator->setPassword(computer_.password);
+    authenticator->setSessionType(proto::peer::SESSION_TYPE_DESKTOP);
+
+    tcp_channel_ = new base::TcpChannelNG(authenticator, this);
 
     connect(tcp_channel_, &base::TcpChannel::sig_connected, this, &Instance::onTcpConnected);
     connect(tcp_channel_, &base::TcpChannel::sig_errorOccurred, this, &Instance::onTcpErrorOccurred);
 
-    tcp_channel_->connectTo(address_, port_);
+    tcp_channel_->connectTo(address.host(), address.port());
 }
 
 //--------------------------------------------------------------------------------------------------
 void OnlineCheckerDirect::Instance::onTcpConnected()
 {
-    LOG(INFO) << "Connection to" << address_ << ":" << port_
-              << "established (computer:" << computer_id_ << ")";
+    LOG(INFO) << "Connection established (computer:" << computer_.id << ")";
     onFinished(FROM_HERE, true);
 }
 
 //--------------------------------------------------------------------------------------------------
 void OnlineCheckerDirect::Instance::onTcpErrorOccurred(base::TcpChannel::ErrorCode /* error_code */)
 {
-    LOG(INFO) << "Connection aborted for computer:" << computer_id_;
+    LOG(INFO) << "Connection aborted for computer:" << computer_.id;
     onFinished(FROM_HERE, false);
 }
 
@@ -133,7 +137,7 @@ void OnlineCheckerDirect::Instance::onFinished(const base::Location& location, b
     finished_ = true;
     timer_.stop();
 
-    finish_callback_(computer_id_, online);
+    finish_callback_(computer_.id, online);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -166,11 +170,10 @@ void OnlineCheckerDirect::start()
     qsizetype count = std::min(pending_queue_.size(), kNumberOfParallelTasks);
     while (count != 0)
     {
-        const Computer& computer = pending_queue_.front();
-        base::Address address = base::Address::fromString(computer.address, DEFAULT_HOST_TCP_PORT);
-        Instance* instance = new Instance(computer.computer_id, address.host(), address.port(), this);
+        const ComputerConfig& computer = pending_queue_.front();
+        Instance* instance = new Instance(computer, this);
 
-        LOG(INFO) << "Instance for" << computer.computer_id << "is created (" << computer.address << ")";
+        LOG(INFO) << "Instance for" << computer.id << "is created (" << computer.address << ")";
         work_queue_.emplace_back(instance);
         pending_queue_.pop_front();
 
@@ -185,18 +188,16 @@ void OnlineCheckerDirect::start()
 }
 
 //--------------------------------------------------------------------------------------------------
-void OnlineCheckerDirect::onChecked(int computer_id, bool online)
+void OnlineCheckerDirect::onChecked(qint64 computer_id, bool online)
 {
     emit sig_checkerResult(computer_id, online);
 
     if (!pending_queue_.isEmpty())
     {
-        const Computer& computer = pending_queue_.front();
-        base::Address address = base::Address::fromString(computer.address, DEFAULT_HOST_TCP_PORT);
-        Instance* instance = new Instance(
-            computer.computer_id, address.host(), address.port(), this);
+        const ComputerConfig& computer = pending_queue_.front();
+        Instance* instance = new Instance(computer, this);
 
-        LOG(INFO) << "Instance for" << computer.computer_id << "is created (" << computer.address << ")";
+        LOG(INFO) << "Instance for" << computer.id << "is created (" << computer.address << ")";
 
         work_queue_.emplace_back(instance);
         work_queue_.back()->start(std::bind(&OnlineCheckerDirect::onChecked, this,

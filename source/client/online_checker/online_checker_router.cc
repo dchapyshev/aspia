@@ -20,6 +20,7 @@
 
 #include "base/location.h"
 #include "base/logging.h"
+#include "base/peer/host_id.h"
 
 namespace client {
 
@@ -66,7 +67,7 @@ void OnlineCheckerRouter::onHostStatus(qint64 request_id, bool online)
     if (request_id != current_request_id_)
         return;
 
-    emit sig_checkerResult(computers_.front().computer_id, online);
+    emit sig_checkerResult(computers_.front().id, online);
     computers_.pop_front();
     checkNextComputer();
 }
@@ -81,10 +82,11 @@ void OnlineCheckerRouter::checkNextComputer()
         return;
     }
 
-    const auto& computer = computers_.front();
+    const ComputerConfig& computer = computers_.front();
+    const base::HostId host_id = base::stringToHostId(computer.address);
 
-    LOG(INFO) << "Checking status for host id" << computer.host_id
-              << "(router_id:" << computer.router_id << "computer_id:" << computer.computer_id << ")";
+    LOG(INFO) << "Checking status for host id" << host_id
+              << "(router_id:" << computer.router_id << "computer_id:" << computer.id << ")";
 
     RouterConnection* connection = RouterConnection::instance(computer.router_id);
 
@@ -96,7 +98,7 @@ void OnlineCheckerRouter::checkNextComputer()
 
     if (!connection || connection->status() != RouterConnection::Status::ONLINE)
     {
-        emit sig_checkerResult(computer.computer_id, false);
+        emit sig_checkerResult(computer.id, false);
         computers_.pop_front();
 
         QTimer::singleShot(0, this, &OnlineCheckerRouter::checkNextComputer);
@@ -107,7 +109,7 @@ void OnlineCheckerRouter::checkNextComputer()
     ++request_id_counter;
 
     current_request_id_ = request_id_counter;
-    connection->onCheckHostStatus(current_request_id_, computer.host_id);
+    connection->onCheckHostStatus(current_request_id_, host_id);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -115,8 +117,8 @@ void OnlineCheckerRouter::onFinished(const base::Location& location)
 {
     LOG(INFO) << "Finished (" << location << ")";
 
-    for (const auto& computer : std::as_const(computers_))
-        emit sig_checkerResult(computer.computer_id, false);
+    for (const ComputerConfig& computer : std::as_const(computers_))
+        emit sig_checkerResult(computer.id, false);
 
     emit sig_checkerFinished();
 }

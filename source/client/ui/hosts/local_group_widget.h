@@ -121,7 +121,7 @@ signals:
 
 private slots:
     void onHeaderContextMenu(const QPoint& pos);
-    void onOnlineCheckerResult(int computer_id, bool online);
+    void onOnlineCheckerResult(qint64 computer_id, bool online);
     void onOnlineCheckerFinished();
 
 private:

@@ -289,7 +289,7 @@ void LocalGroupWidget::onHeaderContextMenu(const QPoint &pos)
 }
 
 //--------------------------------------------------------------------------------------------------
-void LocalGroupWidget::onOnlineCheckerResult(int computer_id, bool online)
+void LocalGroupWidget::onOnlineCheckerResult(qint64 computer_id, bool online)
 {
     for (int i = 0; i < ui.tree_computer->topLevelItemCount(); ++i)
     {
@@ -355,15 +355,8 @@ void LocalGroupWidget::startOnlineChecker()
     for (int i = 0; i < ui.tree_computer->topLevelItemCount(); ++i)
     {
         Item* item = static_cast<Item*>(ui.tree_computer->topLevelItem(i));
-        if (!item)
-            continue;
-
-        OnlineChecker::Computer computer;
-        computer.computer_id = item->computerId();
-        computer.router_id = item->routerId();
-        computer.address_or_id = item->computerAddress();
-
-        computers.emplace_back(std::move(computer));
+        if (item)
+            computers.emplace_back(item->computer());
     }
 
     if (computers.isEmpty())

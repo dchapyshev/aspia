@@ -23,7 +23,7 @@
 #include <QQueue>
 #include <QTimer>
 
-#include "base/peer/host_id.h"
+#include "client/config.h"
 #include "client/router_connection.h"
 
 namespace base {
@@ -37,13 +37,7 @@ class OnlineCheckerRouter final : public QObject
     Q_OBJECT
 
 public:
-    struct Computer
-    {
-        qint64 computer_id = -1;
-        qint64 router_id = -1;
-        base::HostId host_id = base::kInvalidHostId;
-    };
-    using ComputerList = QQueue<Computer>;
+    using ComputerList = QQueue<ComputerConfig>;
 
     explicit OnlineCheckerRouter(const ComputerList& computers, QObject* parent = nullptr);
     ~OnlineCheckerRouter() final;
@@ -51,7 +45,7 @@ public:
     void start();
 
 signals:
-    void sig_checkerResult(int computer_id, bool online);
+    void sig_checkerResult(qint64 computer_id, bool online);
     void sig_checkerFinished();
 
 private slots:

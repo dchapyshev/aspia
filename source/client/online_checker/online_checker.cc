@@ -21,6 +21,7 @@
 #include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/peer/host_id.h"
+#include "client/config.h"
 
 namespace client {
 
@@ -56,25 +57,12 @@ void OnlineChecker::start(const ComputerList& computers)
 {
     LOG(INFO) << "Start online checker (total computers:" << computers.size() << ")";
 
-    for (const auto& computer : computers)
+    for (const ComputerConfig& computer : computers)
     {
-        if (base::isHostId(computer.address_or_id))
-        {
-            OnlineCheckerRouter::Computer router_computer;
-            router_computer.computer_id = computer.computer_id;
-            router_computer.router_id = computer.router_id;
-            router_computer.host_id = base::stringToHostId(computer.address_or_id);
-
-            router_computers_.emplace_back(std::move(router_computer));
-        }
+        if (base::isHostId(computer.address))
+            router_computers_.emplace_back(computer);
         else
-        {
-            OnlineCheckerDirect::Computer direct_computer;
-            direct_computer.computer_id = computer.computer_id;
-            direct_computer.address = computer.address_or_id;
-
-            direct_computers_.emplace_back(std::move(direct_computer));
-        }
+            direct_computers_.emplace_back(computer);
     }
 
     if (!router_computers_.isEmpty())
@@ -121,7 +109,7 @@ void OnlineChecker::start(const ComputerList& computers)
 }
 
 //--------------------------------------------------------------------------------------------------
-void OnlineChecker::onDirectCheckerResult(int computer_id, bool online)
+void OnlineChecker::onDirectCheckerResult(qint64 computer_id, bool online)
 {
     emit sig_checkerResult(computer_id, online);
 }
@@ -138,7 +126,7 @@ void OnlineChecker::onDirectCheckerFinished()
 }
 
 //--------------------------------------------------------------------------------------------------
-void OnlineChecker::onRouterCheckerResult(int computer_id, bool online)
+void OnlineChecker::onRouterCheckerResult(qint64 computer_id, bool online)
 {
     emit sig_checkerResult(computer_id, online);
 }
