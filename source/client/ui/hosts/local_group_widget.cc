@@ -26,6 +26,7 @@
 #include <QMenu>
 #include <QMouseEvent>
 #include <QStatusBar>
+#include <QTimer>
 #include <QUuid>
 
 #include "base/logging.h"
@@ -75,7 +76,8 @@ private:
 //--------------------------------------------------------------------------------------------------
 LocalGroupWidget::LocalGroupWidget(QWidget* parent)
     : ContentWidget(Type::LOCAL_GROUP, parent),
-      mime_type_(QString("application/%1").arg(QUuid::createUuid().toString()))
+      mime_type_(QString("application/%1").arg(QUuid::createUuid().toString())),
+      check_animation_timer_(new QTimer(this))
 {
     LOG(INFO) << "Ctor";
 
@@ -84,6 +86,28 @@ LocalGroupWidget::LocalGroupWidget(QWidget* parent)
     ui.tree_computer->viewport()->installEventFilter(this);
 
     ui.tree_computer->header()->setContextMenuPolicy(Qt::CustomContextMenu);
+
+    connect(check_animation_timer_, &QTimer::timeout, this, [this]()
+    {
+        if (!status_check_label_)
+            return;
+
+        if (check_animation_index_ > 3)
+            check_animation_index_ = 0;
+
+        QString dots;
+        switch (check_animation_index_)
+        {
+            case 0: dots = "   "; break;
+            case 1: dots = ".  "; break;
+            case 2: dots = ".. "; break;
+            case 3: dots = "..."; break;
+            default: break;
+        }
+
+        status_check_label_->setText(tr("Status update") + dots);
+        ++check_animation_index_;
+    });
 
     connect(ui.tree_computer->header(), &QHeaderView::customContextMenuRequested,
             this, &LocalGroupWidget::onHeaderContextMenu);
@@ -214,14 +238,18 @@ void LocalGroupWidget::attach(QStatusBar* statusbar)
         status_groups_label_ = new QLabel(this);
     if (!status_computers_label_)
         status_computers_label_ = new QLabel(this);
+    if (!status_check_label_)
+        status_check_label_ = new QLabel(this);
 
     updateStatusLabels();
 
     statusbar->addWidget(status_groups_label_);
     statusbar->addWidget(status_computers_label_);
+    statusbar->addWidget(status_check_label_);
 
     status_groups_label_->show();
     status_computers_label_->show();
+    status_check_label_->setVisible(false);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -242,6 +270,12 @@ void LocalGroupWidget::detach(QStatusBar* statusbar)
     {
         statusbar->removeWidget(status_computers_label_);
         status_computers_label_->setParent(this);
+    }
+
+    if (status_check_label_)
+    {
+        statusbar->removeWidget(status_check_label_);
+        status_check_label_->setParent(this);
     }
 }
 
@@ -315,6 +349,8 @@ void LocalGroupWidget::onOnlineCheckerFinished()
 
     if (online_checker_)
         online_checker_->deleteLater();
+
+    setReloadAnimation(false);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -381,6 +417,8 @@ void LocalGroupWidget::startOnlineChecker()
             this, &LocalGroupWidget::onOnlineCheckerFinished);
 
     online_checker_->start(computers);
+
+    setReloadAnimation(true);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -394,6 +432,7 @@ void LocalGroupWidget::stopOnlineChecker()
     }
 
     clearOnlineStatuses();
+    setReloadAnimation(false);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -404,6 +443,25 @@ void LocalGroupWidget::clearOnlineStatuses()
     {
         Item* item = static_cast<Item*>(ui.tree_computer->topLevelItem(i));
         item->clearOnlineStatus();
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void LocalGroupWidget::setReloadAnimation(bool enable)
+{
+    if (status_check_label_)
+        status_check_label_->setVisible(enable);
+
+    if (enable)
+    {
+        check_animation_timer_->start(std::chrono::milliseconds(500));
+    }
+    else
+    {
+        check_animation_timer_->stop();
+        check_animation_index_ = 0;
+        if (status_check_label_)
+            status_check_label_->setText(QString());
     }
 }
 

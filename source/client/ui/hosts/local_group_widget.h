@@ -30,6 +30,7 @@
 
 class QLabel;
 class QStatusBar;
+class QTimer;
 
 namespace client {
 
@@ -132,6 +133,7 @@ private:
     void startOnlineChecker();
     void stopOnlineChecker();
     void clearOnlineStatuses();
+    void setReloadAnimation(bool enable);
 
     Ui::LocalGroupWidget ui;
     QString mime_type_;
@@ -140,6 +142,10 @@ private:
     qint64 current_group_id_ = -1;
     QLabel* status_groups_label_ = nullptr;
     QLabel* status_computers_label_ = nullptr;
+    QLabel* status_check_label_ = nullptr;
+
+    QTimer* check_animation_timer_ = nullptr;
+    int check_animation_index_ = 0;
 
     QPointer<OnlineChecker> online_checker_;
 
