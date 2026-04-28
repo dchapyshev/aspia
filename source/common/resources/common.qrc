@@ -136,5 +136,7 @@
         <file>host-disconnect.svg</file>
         <file>host-disconnect-all.svg</file>
         <file>connect.svg</file>
+        <file>computer-offline.svg</file>
+        <file>computer-online.svg</file>
     </qresource>
 </RCC>
