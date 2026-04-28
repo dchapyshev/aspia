@@ -85,9 +85,8 @@ private:
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-SystemInfoSessionWindow::SystemInfoSessionWindow(
-    std::shared_ptr<SessionState> session_state, QWidget* parent)
-    : SessionWindow(session_state, parent),
+SystemInfoSessionWindow::SystemInfoSessionWindow(QWidget* parent)
+    : SessionWindow(parent),
       ui(std::make_unique<Ui::SystemInfoSessionWindow>())
 {
     LOG(INFO) << "Ctor";

@@ -39,8 +39,7 @@ class SystemInfoSessionWindow final : public SessionWindow
     Q_OBJECT
 
 public:
-    explicit SystemInfoSessionWindow(std::shared_ptr<SessionState> session_state = nullptr,
-                                     QWidget* parent = nullptr);
+    explicit SystemInfoSessionWindow(QWidget* parent = nullptr);
     ~SystemInfoSessionWindow() final;
 
     // SessionWindow implementation.

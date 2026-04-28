@@ -104,7 +104,6 @@ public slots:
     void onTextEvent(const proto::input::TextEvent& event);
     void onMouseEvent(const proto::input::MouseEvent& event);
     void onPowerControl(proto::power::Control_Action action);
-    void onSystemInfoRequest(const proto::system_info::SystemInfoRequest& request);
     void onTaskManager(const proto::task_manager::ClientToHost& message);
     void onMetricsRequest();
     void onSwitchSession(quint32 session_id);
@@ -114,7 +113,6 @@ signals:
     void sig_screenListChanged(const proto::screen::ScreenList& screen_list);
     void sig_screenTypeChanged(const proto::screen::ScreenType& screen_type);
     void sig_cursorPositionChanged(const proto::cursor::Position& position);
-    void sig_systemInfo(const proto::system_info::SystemInfo& system_info);
     void sig_taskManager(const proto::task_manager::HostToClient& message);
     void sig_metrics(const client::ClientDesktop::Metrics& metrics);
     void sig_frameError(proto::video::ErrorCode error_code);

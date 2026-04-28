@@ -28,9 +28,8 @@
 namespace client {
 
 //--------------------------------------------------------------------------------------------------
-SessionWindow::SessionWindow(std::shared_ptr<SessionState> session_state, QWidget* parent)
-    : QWidget(parent),
-      session_state_(std::move(session_state))
+SessionWindow::SessionWindow(QWidget* parent)
+    : QWidget(parent)
 {
     LOG(INFO) << "Ctor";
 

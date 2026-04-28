@@ -90,7 +90,7 @@ DesktopToolBar::DesktopToolBar(QWidget* parent)
     connect(ui.action_system_info, &QAction::triggered, this, [this]()
     {
         LOG(INFO) << "[ACTION] System info requested";
-        emit sig_startSystemInfo();
+        emit sig_startSession(proto::peer::SESSION_TYPE_SYSTEM_INFO);
     });
     connect(ui.action_task_manager, &QAction::triggered, this, [this]()
     {

@@ -37,7 +37,7 @@ class SessionWindow : public QWidget
     Q_OBJECT
 
 public:
-    explicit SessionWindow(std::shared_ptr<SessionState> session_state, QWidget* parent = nullptr);
+    explicit SessionWindow(QWidget* parent = nullptr);
     virtual ~SessionWindow() override;
 
     // Connects to a host.

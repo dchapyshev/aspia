@@ -68,7 +68,6 @@ signals:
     void sig_takeScreenshot();
     void sig_startSession(proto::peer::SessionType session_type);
     void sig_powerControl(proto::power::Control_Action action, bool wait);
-    void sig_startSystemInfo();
     void sig_startTaskManager();
     void sig_startStatistics();
     void sig_minimizeSession();

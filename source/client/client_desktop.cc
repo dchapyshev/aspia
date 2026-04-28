@@ -250,17 +250,6 @@ void ClientDesktop::onMessageReceived(quint8 channel_id, const QByteArray& buffe
 
         emit sig_taskManager(message);
     }
-    else if (channel_id == proto::desktop::CHANNEL_ID_SYSTEM_INFO)
-    {
-        proto::system_info::SystemInfo message;
-        if (!base::parse(buffer, &message))
-        {
-            CLOG(ERROR) << "Unable to parse system info extension data";
-            return;
-        }
-
-        emit sig_systemInfo(message);
-    }
     else if (channel_id == proto::desktop::CHANNEL_ID_LEGACY)
     {
         proto::legacy::SessionToClient message;
@@ -534,23 +523,6 @@ void ClientDesktop::onPowerControl(proto::power::Control::Action action)
         proto::power::ClientToHost message;
         message.mutable_power_control()->set_action(action);
         sendMessage(proto::desktop::CHANNEL_ID_POWER, base::serialize(message));
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-void ClientDesktop::onSystemInfoRequest(const proto::system_info::SystemInfoRequest& request)
-{
-    if (isLegacy())
-    {
-        proto::legacy::ClientToSession message;
-        proto::legacy::Extension* extension = message.mutable_extension();
-        extension->set_name(common::kSystemInfoExtension);
-        extension->set_data(request.SerializeAsString());
-        sendMessage(proto::desktop::CHANNEL_ID_LEGACY, base::serialize(message));
-    }
-    else
-    {
-        sendMessage(proto::desktop::CHANNEL_ID_SYSTEM_INFO, base::serialize(request));
     }
 }
 
@@ -1040,17 +1012,6 @@ void ClientDesktop::readExtension(const proto::legacy::Extension& extension)
 
         CLOG(INFO) << "Screen type received:" << screen_type;
         emit sig_screenTypeChanged(screen_type);
-    }
-    else if (extension.name() == common::kSystemInfoExtension)
-    {
-        proto::system_info::SystemInfo system_info;
-        if (!system_info.ParseFromString(extension.data()))
-        {
-            CLOG(ERROR) << "Unable to parse system info extension data";
-            return;
-        }
-
-        emit sig_systemInfo(system_info);
     }
     else
     {

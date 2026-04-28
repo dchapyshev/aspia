@@ -29,7 +29,6 @@
 #include "proto/desktop_control.h"
 #include "proto/desktop_internal.h"
 #include "proto/desktop_power.h"
-#include "proto/system_info.h"
 #include "proto/task_manager.h"
 
 class QTimer;
@@ -81,7 +80,6 @@ private:
     void sendSessionList();
     void readFeedback(const proto::control::Feedback& feedback);
     void readPowerControl(const proto::power::Control& control);
-    void readSystemInfo(const proto::system_info::SystemInfoRequest& request);
     void readTaskManager(const proto::task_manager::ClientToHost& message);
 
     QTime dettach_time_;

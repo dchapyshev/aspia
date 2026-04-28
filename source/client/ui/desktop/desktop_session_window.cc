@@ -73,7 +73,7 @@ QSize scaledSize(const QSize& source_size, int scale)
 //--------------------------------------------------------------------------------------------------
 DesktopSessionWindow::DesktopSessionWindow(
     const proto::control::Config& desktop_config, QWidget* parent)
-    : SessionWindow(nullptr, parent),
+    : SessionWindow(parent),
       desktop_config_(desktop_config)
 {
     LOG(INFO) << "Ctor";
@@ -148,20 +148,6 @@ DesktopSessionWindow::DesktopSessionWindow(
         }
 
         emit sig_powerControl(action);
-    });
-
-    connect(toolbar_, &DesktopToolBar::sig_startSystemInfo, this, [this]()
-    {
-        if (!system_info_)
-        {
-            system_info_ = new SystemInfoSessionWindow(sessionState());
-            system_info_->setAttribute(Qt::WA_DeleteOnClose);
-
-            connect(system_info_, &SystemInfoSessionWindow::sig_systemInfoRequired,
-                    this, &DesktopSessionWindow::sig_systemInfoRequested);
-        }
-
-        system_info_->onShowWindow();
     });
 
     connect(toolbar_, &DesktopToolBar::sig_startTaskManager, this, [this]()
@@ -278,8 +264,6 @@ Client* DesktopSessionWindow::createClient()
             Qt::QueuedConnection);
     connect(client, &ClientDesktop::sig_cursorPositionChanged, this, &DesktopSessionWindow::onCursorPositionChanged,
             Qt::QueuedConnection);
-    connect(client, &ClientDesktop::sig_systemInfo, this, &DesktopSessionWindow::onSystemInfoChanged,
-            Qt::QueuedConnection);
     connect(client, &ClientDesktop::sig_taskManager, this, &DesktopSessionWindow::onTaskManagerChanged,
             Qt::QueuedConnection);
     connect(client, &ClientDesktop::sig_metrics, this, &DesktopSessionWindow::onMetricsChanged,
@@ -314,8 +298,6 @@ Client* DesktopSessionWindow::createClient()
     connect(this, &DesktopSessionWindow::sig_mouseEvent, client, &ClientDesktop::onMouseEvent,
             Qt::QueuedConnection);
     connect(this, &DesktopSessionWindow::sig_powerControl, client, &ClientDesktop::onPowerControl,
-            Qt::QueuedConnection);
-    connect(this, &DesktopSessionWindow::sig_systemInfoRequested, client, &ClientDesktop::onSystemInfoRequest,
             Qt::QueuedConnection);
     connect(this, &DesktopSessionWindow::sig_taskManager, client, &ClientDesktop::onTaskManager,
             Qt::QueuedConnection);
@@ -397,13 +379,6 @@ void DesktopSessionWindow::onCursorPositionChanged(const proto::cursor::Position
 
     desktop_->setCursorPosition(QPoint(pos_x, pos_y));
     desktop_->update();
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopSessionWindow::onSystemInfoChanged(const proto::system_info::SystemInfo& system_info)
-{
-    if (system_info_)
-        system_info_->onSystemInfoChanged(system_info);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -532,12 +507,6 @@ void DesktopSessionWindow::onSessionListChanged(const proto::control::SessionLis
 void DesktopSessionWindow::onInternalReset()
 {
     LOG(INFO) << "Internal reset";
-
-    if (system_info_)
-    {
-        LOG(INFO) << "Close System Info window";
-        system_info_->close();
-    }
 
     if (task_manager_)
     {
@@ -692,12 +661,6 @@ void DesktopSessionWindow::focusOutEvent(QFocusEvent* event)
 void DesktopSessionWindow::closeEvent(QCloseEvent* event)
 {
     LOG(INFO) << "Close event";
-
-    if (system_info_)
-    {
-        LOG(INFO) << "Close System Info window";
-        system_info_->close();
-    }
 
     if (task_manager_)
     {

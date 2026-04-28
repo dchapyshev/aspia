@@ -57,7 +57,6 @@ public slots:
     void onCapabilitiesChanged(const proto::control::Capabilities& capabilities);
     void onScreenListChanged(const proto::screen::ScreenList& screen_list);
     void onCursorPositionChanged(const proto::cursor::Position& position);
-    void onSystemInfoChanged(const proto::system_info::SystemInfo& system_info);
     void onTaskManagerChanged(const proto::task_manager::HostToClient& message);
     void onMetricsChanged(const client::ClientDesktop::Metrics& metrics);
     void onFrameError(proto::video::ErrorCode error_code);
@@ -77,7 +76,6 @@ signals:
     void sig_textEvent(const proto::input::TextEvent& event);
     void sig_mouseEvent(const proto::input::MouseEvent& event);
     void sig_powerControl(proto::power::Control_Action action);
-    void sig_systemInfoRequested(const proto::system_info::SystemInfoRequest& request);
     void sig_taskManager(const proto::task_manager::ClientToHost& message);
     void sig_metricsRequested();
 
@@ -114,7 +112,6 @@ private:
     DesktopToolBar* toolbar_ = nullptr;
     DesktopWidget* desktop_ = nullptr;
 
-    QPointer<SystemInfoSessionWindow> system_info_;
     QPointer<TaskManagerWindow> task_manager_;
     QPointer<StatisticsDialog> statistics_dialog_;
 

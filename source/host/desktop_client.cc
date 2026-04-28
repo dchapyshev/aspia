@@ -36,7 +36,6 @@
 #include "base/win/session_info.h"
 #include "host/host_storage.h"
 #include "host/service.h"
-#include "host/win/system_info.h"
 #include "host/win/task_manager.h"
 #endif // defined(Q_OS_WINDOWS)
 
@@ -223,17 +222,6 @@ void DesktopClient::onMessage(quint8 net_channel_id, const QByteArray& buffer)
         }
 
         readPowerControl(message.power_control());
-    }
-    else if (net_channel_id == proto::desktop::CHANNEL_ID_SYSTEM_INFO)
-    {
-        proto::system_info::SystemInfoRequest request;
-        if (!base::parse(buffer, &request))
-        {
-            CLOG(ERROR) << "Unable to parse system info message";
-            return;
-        }
-
-        readSystemInfo(request);
     }
     else if (net_channel_id == proto::desktop::CHANNEL_ID_TASK_MANAGER)
     {
@@ -495,16 +483,6 @@ void DesktopClient::readPowerControl(const proto::power::Control& control)
             CLOG(ERROR) << "Unhandled power control action:" << control.action();
             break;
     }
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopClient::readSystemInfo(const proto::system_info::SystemInfoRequest& request)
-{
-#if defined(Q_OS_WINDOWS)
-    proto::system_info::SystemInfo reply;
-    createSystemInfo(request, &reply);
-    send(proto::desktop::CHANNEL_ID_SYSTEM_INFO, base::serialize(reply), true);
-#endif // defined(Q_OS_WINDOWS)
 }
 
 //--------------------------------------------------------------------------------------------------
