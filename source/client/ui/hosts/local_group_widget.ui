@@ -38,7 +38,7 @@
       <bool>true</bool>
      </property>
      <property name="columnCount">
-      <number>6</number>
+      <number>7</number>
      </property>
      <column>
       <property name="text">
@@ -68,6 +68,11 @@
      <column>
       <property name="text">
        <string>Last Connect</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Status</string>
       </property>
      </column>
     </widget>

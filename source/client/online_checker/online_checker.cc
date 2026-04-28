@@ -52,7 +52,7 @@ OnlineChecker::~OnlineChecker()
 }
 
 //--------------------------------------------------------------------------------------------------
-void OnlineChecker::checkComputers(const ComputerList& computers)
+void OnlineChecker::start(const ComputerList& computers)
 {
     LOG(INFO) << "Start online checker (total computers:" << computers.size() << ")";
 
@@ -65,16 +65,15 @@ void OnlineChecker::checkComputers(const ComputerList& computers)
             router_computer.router_id = computer.router_id;
             router_computer.host_id = base::stringToHostId(computer.address_or_id);
 
-            router_computers_.emplace_back(router_computer);
+            router_computers_.emplace_back(std::move(router_computer));
         }
         else
         {
             OnlineCheckerDirect::Computer direct_computer;
             direct_computer.computer_id = computer.computer_id;
             direct_computer.address = computer.address_or_id;
-            direct_computer.port = computer.port;
 
-            direct_computers_.emplace_back(direct_computer);
+            direct_computers_.emplace_back(std::move(direct_computer));
         }
     }
 

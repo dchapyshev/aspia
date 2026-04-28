@@ -22,7 +22,9 @@
 #include <QDrag>
 #include <QMimeData>
 #include <QPoint>
+#include <QPointer>
 
+#include "client/online_checker/online_checker.h"
 #include "client/ui/hosts/content_widget.h"
 #include "ui_local_group_widget.h"
 
@@ -46,31 +48,21 @@ public:
     public:
         Item(const ComputerConfig& computer, QTreeWidget* parent);
 
-        qint64 computerId() const { return computer_id_; }
-        qint64 groupId() const { return group_id_; }
-        QString computerName() const { return computer_name_; }
+        ComputerConfig& computer() { return computer_; }
+        qint64 computerId() const { return computer_.id; }
+        qint64 groupId() const { return computer_.group_id; }
+        qint64 routerId() const { return computer_.router_id; }
+        QString computerName() const { return computer_.name; }
+        QString computerAddress() const { return computer_.address; }
         void setConnectTime(qint64 connect_time);
+        void setOnlineStatus(bool online);
+        void clearOnlineStatus();
 
         bool operator<(const QTreeWidgetItem& other) const final;
 
     private:
-        qint64 computer_id_;
-        qint64 group_id_;
-        QString computer_name_;
-        qint64 create_time_;
-        qint64 modify_time_;
-        qint64 connect_time_;
+        ComputerConfig computer_;
     };
-
-    Item* currentItem();
-    void showGroup(qint64 group_id);
-    void setConnectTime(qint64 computer_id, qint64 connect_time);
-    QByteArray saveState() override;
-    void restoreState(const QByteArray& state) override;
-    void attachStatusBar(QStatusBar* statusbar) override;
-    void detachStatusBar(QStatusBar* statusbar) override;
-
-    QString mimeType() const { return mime_type_; }
 
     class ComputerMimeData final : public QMimeData
     {
@@ -107,6 +99,18 @@ public:
         }
     };
 
+    Item* currentItem();
+    void showGroup(qint64 group_id);
+    void setConnectTime(qint64 computer_id, qint64 connect_time);
+
+    // ContentWidget implementation.
+    QByteArray saveState() override;
+    void restoreState(const QByteArray& state) override;
+    void attach(QStatusBar* statusbar) override;
+    void detach(QStatusBar* statusbar) override;
+
+    QString mimeType() const { return mime_type_; }
+
 protected:
     bool eventFilter(QObject* watched, QEvent* event) override;
 
@@ -117,11 +121,15 @@ signals:
 
 private slots:
     void onHeaderContextMenu(const QPoint& pos);
+    void onOnlineCheckerResult(int computer_id, bool online);
+    void onOnlineCheckerFinished();
 
 private:
     void startDrag();
-
     void updateStatusLabels();
+    void startOnlineChecker();
+    void stopOnlineChecker();
+    void clearOnlineStatuses();
 
     Ui::LocalGroupWidget ui;
     QString mime_type_;
@@ -130,6 +138,8 @@ private:
     qint64 current_group_id_ = -1;
     QLabel* status_groups_label_ = nullptr;
     QLabel* status_computers_label_ = nullptr;
+
+    QPointer<OnlineChecker> online_checker_;
 
     Q_DISABLE_COPY_MOVE(LocalGroupWidget)
 };

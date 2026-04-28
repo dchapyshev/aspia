@@ -300,14 +300,14 @@ void HostsTab::attach(QStatusBar* statusbar)
 {
     statusbar_ = statusbar;
     if (current_content_ && statusbar_)
-        current_content_->attachStatusBar(statusbar_);
+        current_content_->attach(statusbar_);
 }
 
 //--------------------------------------------------------------------------------------------------
 void HostsTab::detach(QStatusBar* /* statusbar */)
 {
     if (current_content_ && statusbar_)
-        current_content_->detachStatusBar(statusbar_);
+        current_content_->detach(statusbar_);
     statusbar_ = nullptr;
 }
 
@@ -791,13 +791,13 @@ void HostsTab::switchContent(ContentWidget* new_widget)
         return;
 
     if (current_content_ && statusbar_)
-        current_content_->detachStatusBar(statusbar_);
+        current_content_->detach(statusbar_);
 
     current_content_ = new_widget;
     ui.content_stack->setCurrentWidget(new_widget);
 
     if (statusbar_)
-        current_content_->attachStatusBar(statusbar_);
+        current_content_->attach(statusbar_);
 }
 
 //--------------------------------------------------------------------------------------------------

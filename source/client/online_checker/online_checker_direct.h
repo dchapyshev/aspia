@@ -37,7 +37,6 @@ public:
     {
         qint64 computer_id = -1;
         QString address;
-        quint16 port = 0;
     };
     using ComputerList = QQueue<Computer>;
 

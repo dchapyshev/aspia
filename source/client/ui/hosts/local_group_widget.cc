@@ -41,6 +41,7 @@ const int kColumnComment = 2;
 const int kColumnCreated = 3;
 const int kColumnModified = 4;
 const int kColumnConnect = 5;
+const int kColumnStatus = 6;
 
 //--------------------------------------------------------------------------------------------------
 QString formatTimestamp(qint64 unix_seconds)
@@ -129,6 +130,7 @@ LocalGroupWidget::LocalGroupWidget(QWidget* parent)
 LocalGroupWidget::~LocalGroupWidget()
 {
     LOG(INFO) << "Dtor";
+    stopOnlineChecker();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -150,6 +152,7 @@ void LocalGroupWidget::showGroup(qint64 group_id)
         new Item(computer, ui.tree_computer);
 
     updateStatusLabels();
+    startOnlineChecker();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -164,62 +167,6 @@ void LocalGroupWidget::setConnectTime(qint64 computer_id, qint64 connect_time)
             item->setConnectTime(connect_time);
             break;
         }
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-void LocalGroupWidget::attachStatusBar(QStatusBar* statusbar)
-{
-    if (!statusbar)
-        return;
-
-    if (!status_groups_label_)
-        status_groups_label_ = new QLabel(this);
-    if (!status_computers_label_)
-        status_computers_label_ = new QLabel(this);
-
-    updateStatusLabels();
-
-    statusbar->addWidget(status_groups_label_);
-    statusbar->addWidget(status_computers_label_);
-
-    status_groups_label_->show();
-    status_computers_label_->show();
-}
-
-//--------------------------------------------------------------------------------------------------
-void LocalGroupWidget::detachStatusBar(QStatusBar* statusbar)
-{
-    if (!statusbar)
-        return;
-
-    if (status_groups_label_)
-    {
-        statusbar->removeWidget(status_groups_label_);
-        status_groups_label_->setParent(this);
-    }
-
-    if (status_computers_label_)
-    {
-        statusbar->removeWidget(status_computers_label_);
-        status_computers_label_->setParent(this);
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-void LocalGroupWidget::updateStatusLabels()
-{
-    int child_groups_count = 0;
-    if (current_group_id_ >= 0)
-        child_groups_count = Database::instance().groupList(current_group_id_).size();
-
-    if (status_groups_label_)
-        status_groups_label_->setText(tr("%n child group(s)", "", child_groups_count));
-
-    if (status_computers_label_)
-    {
-        status_computers_label_->setText(
-            tr("%n child computer(s)", "", ui.tree_computer->topLevelItemCount()));
     }
 }
 
@@ -252,6 +199,47 @@ void LocalGroupWidget::restoreState(const QByteArray& state)
 }
 
 //--------------------------------------------------------------------------------------------------
+void LocalGroupWidget::attach(QStatusBar* statusbar)
+{
+    if (!statusbar)
+        return;
+
+    if (!status_groups_label_)
+        status_groups_label_ = new QLabel(this);
+    if (!status_computers_label_)
+        status_computers_label_ = new QLabel(this);
+
+    updateStatusLabels();
+
+    statusbar->addWidget(status_groups_label_);
+    statusbar->addWidget(status_computers_label_);
+
+    status_groups_label_->show();
+    status_computers_label_->show();
+}
+
+//--------------------------------------------------------------------------------------------------
+void LocalGroupWidget::detach(QStatusBar* statusbar)
+{
+    stopOnlineChecker();
+
+    if (!statusbar)
+        return;
+
+    if (status_groups_label_)
+    {
+        statusbar->removeWidget(status_groups_label_);
+        status_groups_label_->setParent(this);
+    }
+
+    if (status_computers_label_)
+    {
+        statusbar->removeWidget(status_computers_label_);
+        status_computers_label_->setParent(this);
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
 bool LocalGroupWidget::eventFilter(QObject* watched, QEvent* event)
 {
     if (watched == ui.tree_computer->viewport())
@@ -281,23 +269,6 @@ bool LocalGroupWidget::eventFilter(QObject* watched, QEvent* event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void LocalGroupWidget::startDrag()
-{
-    Item* computer_item = static_cast<Item*>(ui.tree_computer->itemAt(start_pos_));
-    if (computer_item)
-    {
-        ComputerDrag* drag = new ComputerDrag(this);
-
-        drag->setComputerItem(computer_item, mime_type_);
-
-        QIcon icon = computer_item->icon(0);
-        drag->setPixmap(icon.pixmap(icon.actualSize(QSize(16, 16))));
-
-        drag->exec(Qt::MoveAction);
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
 void LocalGroupWidget::onHeaderContextMenu(const QPoint &pos)
 {
     QHeaderView* header = ui.tree_computer->header();
@@ -318,29 +289,156 @@ void LocalGroupWidget::onHeaderContextMenu(const QPoint &pos)
 }
 
 //--------------------------------------------------------------------------------------------------
+void LocalGroupWidget::onOnlineCheckerResult(int computer_id, bool online)
+{
+    for (int i = 0; i < ui.tree_computer->topLevelItemCount(); ++i)
+    {
+        Item* item = static_cast<Item*>(ui.tree_computer->topLevelItem(i));
+        if (item->computerId() == computer_id)
+        {
+            item->setOnlineStatus(online);
+            break;
+        }
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void LocalGroupWidget::onOnlineCheckerFinished()
+{
+    LOG(INFO) << "Online checker finished";
+
+    if (online_checker_)
+        online_checker_->deleteLater();
+}
+
+//--------------------------------------------------------------------------------------------------
+void LocalGroupWidget::startDrag()
+{
+    Item* computer_item = static_cast<Item*>(ui.tree_computer->itemAt(start_pos_));
+    if (computer_item)
+    {
+        ComputerDrag* drag = new ComputerDrag(this);
+
+        drag->setComputerItem(computer_item, mime_type_);
+
+        QIcon icon = computer_item->icon(0);
+        drag->setPixmap(icon.pixmap(icon.actualSize(QSize(16, 16))));
+
+        drag->exec(Qt::MoveAction);
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void LocalGroupWidget::updateStatusLabels()
+{
+    int child_groups_count = 0;
+    if (current_group_id_ >= 0)
+        child_groups_count = Database::instance().groupList(current_group_id_).size();
+
+    if (status_groups_label_)
+        status_groups_label_->setText(tr("%n child group(s)", "", child_groups_count));
+
+    if (status_computers_label_)
+    {
+        status_computers_label_->setText(
+            tr("%n child computer(s)", "", ui.tree_computer->topLevelItemCount()));
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void LocalGroupWidget::startOnlineChecker()
+{
+    stopOnlineChecker();
+
+    OnlineChecker::ComputerList computers;
+
+    for (int i = 0; i < ui.tree_computer->topLevelItemCount(); ++i)
+    {
+        Item* item = static_cast<Item*>(ui.tree_computer->topLevelItem(i));
+        if (!item)
+            continue;
+
+        OnlineChecker::Computer computer;
+        computer.computer_id = item->computerId();
+        computer.router_id = item->routerId();
+        computer.address_or_id = item->computerAddress();
+
+        computers.emplace_back(std::move(computer));
+    }
+
+    if (computers.isEmpty())
+    {
+        LOG(INFO) << "No computers to check";
+        return;
+    }
+
+    LOG(INFO) << "Start online checker for" << computers.size() << "computer(s)";
+
+    online_checker_ = new OnlineChecker(this);
+
+    connect(online_checker_, &OnlineChecker::sig_checkerResult,
+            this, &LocalGroupWidget::onOnlineCheckerResult);
+    connect(online_checker_, &OnlineChecker::sig_checkerFinished,
+            this, &LocalGroupWidget::onOnlineCheckerFinished);
+
+    online_checker_->start(computers);
+}
+
+//--------------------------------------------------------------------------------------------------
+void LocalGroupWidget::stopOnlineChecker()
+{
+    if (online_checker_)
+    {
+        LOG(INFO) << "Stop online checker";
+        online_checker_->disconnect(this);
+        online_checker_->deleteLater();
+    }
+
+    clearOnlineStatuses();
+}
+
+//--------------------------------------------------------------------------------------------------
+void LocalGroupWidget::clearOnlineStatuses()
+{
+    const int count = ui.tree_computer->topLevelItemCount();
+    for (int i = 0; i < count; ++i)
+    {
+        Item* item = static_cast<Item*>(ui.tree_computer->topLevelItem(i));
+        item->clearOnlineStatus();
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
 LocalGroupWidget::Item::Item(const ComputerConfig& computer, QTreeWidget* parent)
     : QTreeWidgetItem(parent),
-      computer_id_(computer.id),
-      group_id_(computer.group_id),
-      computer_name_(computer.name),
-      create_time_(computer.create_time),
-      modify_time_(computer.modify_time),
-      connect_time_(computer.connect_time)
+      computer_(computer)
 {
     setText(kColumnName, computer.name);
     setText(kColumnAddress, computer.address);
     setText(kColumnComment, computer.comment);
-    setText(kColumnCreated, formatTimestamp(create_time_));
-    setText(kColumnModified, formatTimestamp(modify_time_));
-    setText(kColumnConnect, formatTimestamp(connect_time_));
+    setText(kColumnCreated, formatTimestamp(computer.create_time));
+    setText(kColumnModified, formatTimestamp(computer.modify_time));
+    setText(kColumnConnect, formatTimestamp(computer.connect_time));
     setIcon(kColumnName, QIcon(":/img/computer.svg"));
 }
 
 //--------------------------------------------------------------------------------------------------
 void LocalGroupWidget::Item::setConnectTime(qint64 connect_time)
 {
-    connect_time_ = connect_time;
-    setText(kColumnConnect, formatTimestamp(connect_time_));
+    computer_.connect_time = connect_time;
+    setText(kColumnConnect, formatTimestamp(connect_time));
+}
+
+//--------------------------------------------------------------------------------------------------
+void LocalGroupWidget::Item::setOnlineStatus(bool online)
+{
+    setText(kColumnStatus, online ? tr("Online") : tr("Offline"));
+}
+
+//--------------------------------------------------------------------------------------------------
+void LocalGroupWidget::Item::clearOnlineStatus()
+{
+    setText(kColumnStatus, QString());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -354,10 +452,10 @@ bool LocalGroupWidget::Item::operator<(const QTreeWidgetItem& other) const
         if (other_item)
         {
             if (column == kColumnCreated)
-                return create_time_ < other_item->create_time_;
+                return computer_.create_time < other_item->computer_.create_time;
             if (column == kColumnModified)
-                return modify_time_ < other_item->modify_time_;
-            return connect_time_ < other_item->connect_time_;
+                return computer_.modify_time < other_item->computer_.modify_time;
+            return computer_.connect_time < other_item->computer_.connect_time;
         }
     }
 

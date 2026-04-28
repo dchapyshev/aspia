@@ -40,11 +40,10 @@ public:
         qint64 computer_id = -1;
         qint64 router_id = -1;
         QString address_or_id;
-        quint16 port = 0;
     };
     using ComputerList = QList<Computer>;
 
-    void checkComputers(const ComputerList& computers);
+    void start(const ComputerList& computers);
 
 signals:
     void sig_checkerResult(int computer_id, bool online);

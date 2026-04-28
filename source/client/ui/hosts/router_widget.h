@@ -77,8 +77,8 @@ public:
     void reload() override;
     bool canSave() const override;
     void save() override;
-    void attachStatusBar(QStatusBar* statusbar) override;
-    void detachStatusBar(QStatusBar* statusbar) override;
+    void attach(QStatusBar* statusbar) override;
+    void detach(QStatusBar* statusbar) override;
 
     void connectToRouter();
     void disconnectFromRouter();

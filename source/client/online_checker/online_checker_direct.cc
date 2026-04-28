@@ -23,6 +23,7 @@
 
 #include "base/location.h"
 #include "base/logging.h"
+#include "base/net/address.h"
 #include "base/net/tcp_channel_ng.h"
 #include "build/build_config.h"
 
@@ -166,15 +167,10 @@ void OnlineCheckerDirect::start()
     while (count != 0)
     {
         const Computer& computer = pending_queue_.front();
+        base::Address address = base::Address::fromString(computer.address, DEFAULT_HOST_TCP_PORT);
+        Instance* instance = new Instance(computer.computer_id, address.host(), address.port(), this);
 
-        quint16 port = computer.port;
-        if (port == 0)
-            port = DEFAULT_HOST_TCP_PORT;
-
-        Instance* instance = new Instance(computer.computer_id, computer.address, port, this);
-
-        LOG(INFO) << "Instance for" << computer.computer_id << "is created (address:"
-                  << computer.address << "port:" << port << ")";
+        LOG(INFO) << "Instance for" << computer.computer_id << "is created (" << computer.address << ")";
         work_queue_.emplace_back(instance);
         pending_queue_.pop_front();
 
@@ -196,11 +192,11 @@ void OnlineCheckerDirect::onChecked(int computer_id, bool online)
     if (!pending_queue_.isEmpty())
     {
         const Computer& computer = pending_queue_.front();
+        base::Address address = base::Address::fromString(computer.address, DEFAULT_HOST_TCP_PORT);
         Instance* instance = new Instance(
-            computer.computer_id, computer.address, computer.port, this);
+            computer.computer_id, address.host(), address.port(), this);
 
-        LOG(INFO) << "Instance for" << computer.computer_id << "is created (address:"
-                  << computer.address << "port:" << computer.port << ")";
+        LOG(INFO) << "Instance for" << computer.computer_id << "is created (" << computer.address << ")";
 
         work_queue_.emplace_back(instance);
         work_queue_.back()->start(std::bind(&OnlineCheckerDirect::onChecked, this,
