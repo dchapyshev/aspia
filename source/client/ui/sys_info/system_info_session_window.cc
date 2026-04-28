@@ -86,7 +86,7 @@ private:
 
 //--------------------------------------------------------------------------------------------------
 SystemInfoSessionWindow::SystemInfoSessionWindow(QWidget* parent)
-    : SessionWindow(parent),
+    : SessionWindow(proto::peer::SESSION_TYPE_SYSTEM_INFO, parent),
       ui(std::make_unique<Ui::SystemInfoSessionWindow>())
 {
     LOG(INFO) << "Ctor";

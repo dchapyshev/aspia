@@ -265,7 +265,7 @@ bool startSession(const client::ComputerConfig& computer,
     }
 
     session_window->setAttribute(Qt::WA_DeleteOnClose);
-    if (!session_window->connectToHost(computer, session_type, display_name))
+    if (!session_window->connectToHost(computer, display_name))
         LOG(ERROR) << "Unable to connect to host";
 
     return true;

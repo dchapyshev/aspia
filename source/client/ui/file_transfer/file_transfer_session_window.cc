@@ -35,7 +35,7 @@ namespace client {
 
 //--------------------------------------------------------------------------------------------------
 FileTransferSessionWindow::FileTransferSessionWindow(QWidget* parent)
-    : SessionWindow(parent),
+    : SessionWindow(proto::peer::SESSION_TYPE_FILE_TRANSFER, parent),
       ui(std::make_unique<Ui::FileTransferSessionWindow>())
 {
     LOG(INFO) << "Ctor";

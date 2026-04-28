@@ -73,7 +73,7 @@ QSize scaledSize(const QSize& source_size, int scale)
 //--------------------------------------------------------------------------------------------------
 DesktopSessionWindow::DesktopSessionWindow(
     const proto::control::Config& desktop_config, QWidget* parent)
-    : SessionWindow(parent),
+    : SessionWindow(proto::peer::SESSION_TYPE_DESKTOP, parent),
       desktop_config_(desktop_config)
 {
     LOG(INFO) << "Ctor";
@@ -216,8 +216,7 @@ DesktopSessionWindow::DesktopSessionWindow(
         }
 
         session_window->setAttribute(Qt::WA_DeleteOnClose);
-        if (!session_window->connectToHost(
-                sessionState()->computer(), session_type, sessionState()->displayName()))
+        if (!session_window->connectToHost(sessionState()->computer(), sessionState()->displayName()))
         {
             LOG(ERROR) << "Unable to connect to host";
             session_window->close();

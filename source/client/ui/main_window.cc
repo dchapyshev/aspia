@@ -317,7 +317,7 @@ void MainWindow::onConnect(qint64 /* computer_id */,
         return;
 
     session_window->setAttribute(Qt::WA_DeleteOnClose);
-    if (!session_window->connectToHost(computer, session_type, Settings().displayName()))
+    if (!session_window->connectToHost(computer, Settings().displayName()))
         session_window->close();
 }
 

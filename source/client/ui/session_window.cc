@@ -28,8 +28,9 @@
 namespace client {
 
 //--------------------------------------------------------------------------------------------------
-SessionWindow::SessionWindow(QWidget* parent)
-    : QWidget(parent)
+SessionWindow::SessionWindow(proto::peer::SessionType session_type, QWidget* parent)
+    : QWidget(parent),
+      session_type_(session_type)
 {
     LOG(INFO) << "Ctor";
 
@@ -48,14 +49,12 @@ SessionWindow::~SessionWindow()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool SessionWindow::connectToHost(ComputerConfig computer,
-                                  proto::peer::SessionType session_type,
-                                  const QString& display_name)
+bool SessionWindow::connectToHost(ComputerConfig computer, const QString& display_name)
 {
     LOG(INFO) << "Connecting to host";
 
     // Set the window title.
-    setClientTitle(computer, session_type);
+    setClientTitle(computer, session_type_);
 
     if (computer.username.isEmpty() || computer.password.isEmpty())
     {
@@ -85,7 +84,7 @@ bool SessionWindow::connectToHost(ComputerConfig computer,
         computer.username = u"#" + computer.address;
     }
 
-    session_state_ = std::make_shared<SessionState>(computer, session_type, display_name);
+    session_state_ = std::make_shared<SessionState>(computer, session_type_, display_name);
 
     // Create a client instance.
     Client* client = createClient();

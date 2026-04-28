@@ -42,7 +42,7 @@ QString chatHistoryId(const client::SessionState& session_state)
 
 //--------------------------------------------------------------------------------------------------
 ChatSessionWindow::ChatSessionWindow(QWidget* parent)
-    : SessionWindow(parent),
+    : SessionWindow(proto::peer::SESSION_TYPE_TEXT_CHAT, parent),
       ui(std::make_unique<Ui::ChatSessionWindow>())
 {
     LOG(INFO) << "Ctor";

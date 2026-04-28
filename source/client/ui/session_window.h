@@ -37,15 +37,13 @@ class SessionWindow : public QWidget
     Q_OBJECT
 
 public:
-    explicit SessionWindow(QWidget* parent = nullptr);
+    explicit SessionWindow(proto::peer::SessionType session_type, QWidget* parent = nullptr);
     virtual ~SessionWindow() override;
 
     // Connects to a host.
     // If the username and/or password are not specified in the connection parameters, the
     // authorization dialog will be displayed.
-    bool connectToHost(ComputerConfig computer,
-                       proto::peer::SessionType session_type,
-                       const QString& display_name);
+    bool connectToHost(ComputerConfig computer, const QString& display_name);
 
     std::shared_ptr<SessionState> sessionState() { return session_state_; }
 
@@ -67,6 +65,7 @@ private:
     void setClientTitle(const ComputerConfig& computer, proto::peer::SessionType session_type);
     void onErrorOccurred(const QString& message);
 
+    const proto::peer::SessionType session_type_;
     std::shared_ptr<SessionState> session_state_;
     common::StatusDialog* status_dialog_ = nullptr;
 };
