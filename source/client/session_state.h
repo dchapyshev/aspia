@@ -21,6 +21,7 @@
 
 #include <QVersionNumber>
 
+#include "base/peer/host_id.h"
 #include "client/config.h"
 #include "proto/peer.h"
 
@@ -34,20 +35,21 @@ public:
     SessionState(const ComputerConfig& computer,
                  proto::peer::SessionType session_type,
                  const QString& display_name);
-    ~SessionState();
+    ~SessionState() = default;
 
-    const ComputerConfig& computer() const;
+    const ComputerConfig& computer() const { return computer_; }
 
     bool isConnectionByHostId() const;
 
-    proto::peer::SessionType sessionType() const;
-    qint64 routerId() const;
-    const QString& computerName() const;
-    const QString& displayName() const;
-    const QString& hostAddress() const;
-    quint16 hostPort() const;
-    const QString& hostUserName() const;
-    const QString& hostPassword() const;
+    proto::peer::SessionType sessionType() const { return session_type_; }
+    qint64 routerId() const { return computer_.router_id; }
+    const QString& computerName() const { return computer_.name; }
+    const QString& displayName() const { return display_name_; }
+    base::HostId hostId() const;
+    const QString& hostAddress() const { return host_address_; }
+    quint16 hostPort() const { return host_port_; }
+    const QString& hostUserName() const { return computer_.username; }
+    const QString& hostPassword() const { return computer_.password; }
 
     void setHostUserName(const QString& username);
     void setHostPassword(const QString& password);

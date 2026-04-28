@@ -46,66 +46,18 @@ SessionState::SessionState(const ComputerConfig& computer,
 }
 
 //--------------------------------------------------------------------------------------------------
-SessionState::~SessionState() = default;
-
-//--------------------------------------------------------------------------------------------------
-const ComputerConfig& SessionState::computer() const
-{
-    return computer_;
-}
-
-//--------------------------------------------------------------------------------------------------
 bool SessionState::isConnectionByHostId() const
 {
     return base::isHostId(computer_.address);
 }
 
 //--------------------------------------------------------------------------------------------------
-proto::peer::SessionType SessionState::sessionType() const
+base::HostId SessionState::hostId() const
 {
-    return session_type_;
-}
+    if (!base::isHostId(computer_.address))
+        return base::kInvalidHostId;
 
-//--------------------------------------------------------------------------------------------------
-qint64 SessionState::routerId() const
-{
-    return computer_.router_id;
-}
-
-//--------------------------------------------------------------------------------------------------
-const QString& SessionState::computerName() const
-{
-    return computer_.name;
-}
-
-//--------------------------------------------------------------------------------------------------
-const QString& SessionState::displayName() const
-{
-    return display_name_;
-}
-
-//--------------------------------------------------------------------------------------------------
-const QString& SessionState::hostAddress() const
-{
-    return host_address_;
-}
-
-//--------------------------------------------------------------------------------------------------
-quint16 SessionState::hostPort() const
-{
-    return host_port_;
-}
-
-//--------------------------------------------------------------------------------------------------
-const QString& SessionState::hostUserName() const
-{
-    return computer_.username;
-}
-
-//--------------------------------------------------------------------------------------------------
-const QString& SessionState::hostPassword() const
-{
-    return computer_.password;
+    return base::stringToHostId(computer_.address);
 }
 
 //--------------------------------------------------------------------------------------------------

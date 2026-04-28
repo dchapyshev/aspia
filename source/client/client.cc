@@ -181,7 +181,7 @@ void Client::start()
         connect(relay_peer_, &base::RelayPeer::sig_connectionError, this, &Client::onRelayConnectionError);
         connect(relay_peer_, &base::RelayPeer::sig_connectionReady, this, &Client::onRelayConnectionReady);
 
-        router_->onConnectionRequest(instanceId(), base::stringToHostId(session_state_->hostAddress()));
+        router_->onConnectionRequest(instanceId(), session_state_->hostId());
     }
     else
     {
