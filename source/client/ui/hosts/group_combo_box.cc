@@ -18,7 +18,6 @@
 
 #include "client/ui/hosts/group_combo_box.h"
 
-#include "client/local_data.h"
 #include "client/database.h"
 
 #include <QStandardItemModel>
@@ -89,9 +88,9 @@ void GroupComboBox::showPopup()
 void GroupComboBox::addGroupItems(qint64 parent_id, QStandardItem* parent_item, qint64 exclude_id)
 {
     QIcon folder_icon(":/img/folder.svg");
-    QList<GroupData> groups = Database::instance().groupList(parent_id);
+    QList<GroupConfig> groups = Database::instance().groupList(parent_id);
 
-    for (const GroupData& group : std::as_const(groups))
+    for (const GroupConfig& group : std::as_const(groups))
     {
         if (group.id == exclude_id)
             continue;

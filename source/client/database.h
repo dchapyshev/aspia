@@ -25,7 +25,6 @@
 #include <optional>
 
 #include "client/config.h"
-#include "client/local_data.h"
 
 namespace client {
 
@@ -39,24 +38,24 @@ public:
     bool isValid() const;
 
     // Computers.
-    QList<ComputerData> computerList(qint64 group_id) const;
-    bool addComputer(ComputerData& computer);
-    bool modifyComputer(ComputerData& computer);
+    QList<ComputerConfig> computerList(qint64 group_id) const;
+    bool addComputer(ComputerConfig& computer);
+    bool modifyComputer(ComputerConfig& computer);
     bool removeComputer(qint64 computer_id);
     bool setConnectTime(qint64 computer_id, qint64 connect_time);
-    std::optional<ComputerData> findComputer(qint64 computer_id) const;
+    std::optional<ComputerConfig> findComputer(qint64 computer_id) const;
 
     // Search.
-    QList<ComputerData> searchComputers(const QString& query) const;
+    QList<ComputerConfig> searchComputers(const QString& query) const;
 
     // Groups.
-    QList<GroupData> groupList(qint64 parent_id) const;
-    QList<GroupData> allGroups() const;
-    bool addGroup(GroupData& group);
-    bool modifyGroup(const GroupData& group);
+    QList<GroupConfig> groupList(qint64 parent_id) const;
+    QList<GroupConfig> allGroups() const;
+    bool addGroup(GroupConfig& group);
+    bool modifyGroup(const GroupConfig& group);
     bool moveGroup(qint64 group_id, qint64 new_parent_id);
     bool removeGroup(qint64 group_id);
-    std::optional<GroupData> findGroup(qint64 group_id) const;
+    std::optional<GroupConfig> findGroup(qint64 group_id) const;
 
     // Routers.
     QList<RouterConfig> routerList() const;

@@ -24,7 +24,6 @@
 #include "base/logging.h"
 #include "base/sys_info.h"
 #include "base/peer/host_id.h"
-#include "build/build_config.h"
 #include "build/version.h"
 #include "client/config_factory.h"
 #include "common/ui/msg_box.h"
@@ -229,11 +228,14 @@ bool parseBlockRemoteInputValue(const QString& value, proto::control::Config* co
 }
 
 //--------------------------------------------------------------------------------------------------
-bool startSession(const client::Config& config, const proto::control::Config& desktop_config)
+bool startSession(const client::ComputerConfig& computer,
+                  proto::peer::SessionType session_type,
+                  const QString& display_name,
+                  const proto::control::Config& desktop_config)
 {
     client::SessionWindow* session_window = nullptr;
 
-    switch (config.session_type)
+    switch (session_type)
     {
         case proto::peer::SESSION_TYPE_DESKTOP:
             session_window = new client::DesktopSessionWindow(desktop_config);
@@ -263,15 +265,18 @@ bool startSession(const client::Config& config, const proto::control::Config& de
     }
 
     session_window->setAttribute(Qt::WA_DeleteOnClose);
-    if (!session_window->connectToHost(config))
+    if (!session_window->connectToHost(computer, session_type, display_name))
         LOG(ERROR) << "Unable to connect to host";
 
     return true;
 }
 
 //--------------------------------------------------------------------------------------------------
-void startRouterSession(const client::Config& config, const client::RouterConfig& router_config,
-    const proto::control::Config& desktop_config)
+void startRouterSession(const client::ComputerConfig& computer,
+                        proto::peer::SessionType session_type,
+                        const QString& display_name,
+                        const client::RouterConfig& router_config,
+                        const proto::control::Config& desktop_config)
 {
     QPointer<common::StatusDialog> status_dialog = new common::StatusDialog();
     status_dialog->setAttribute(Qt::WA_DeleteOnClose);
@@ -280,33 +285,33 @@ void startRouterSession(const client::Config& config, const client::RouterConfig
     router->moveToThread(base::GuiApplication::ioThread());
 
     QObject::connect(router, &client::RouterConnection::sig_statusChanged, qApp,
-        [status_dialog, router, config, desktop_config](qint64, client::RouterConnection::Status status)
+        [status_dialog, router, computer, session_type, display_name, desktop_config](
+            qint64, client::RouterConnection::Status status)
     {
         if (!router || !status_dialog)
             return;
 
         const QString& address = router->config().address;
-        const quint16 port = router->config().port;
 
         switch (status)
         {
             case client::RouterConnection::Status::CONNECTING:
                 status_dialog->addMessage(QApplication::translate("Client",
-                    "Connecting to router %1:%2...").arg(address).arg(port));
+                    "Connecting to router %1...").arg(address));
                 break;
 
             case client::RouterConnection::Status::ONLINE:
                 status_dialog->addMessage(QApplication::translate("Client",
-                    "Connection to router %1:%2 established.").arg(address).arg(port));
+                    "Connection to router %1 established.").arg(address));
                 router->disconnect(qApp);
                 status_dialog->hide();
                 status_dialog->deleteLater();
-                startSession(config, desktop_config);
+                startSession(computer, session_type, display_name, desktop_config);
                 break;
 
             case client::RouterConnection::Status::OFFLINE:
                 status_dialog->addMessage(QApplication::translate("Client",
-                    "Disconnected from router %1:%2.").arg(address).arg(port));
+                    "Disconnected from router %1.").arg(address));
                 break;
         }
     }, Qt::QueuedConnection);
@@ -357,11 +362,6 @@ int clientMain(int argc, char* argv[])
     QCommandLineOption address_option("address",
         QApplication::translate("Client", "Remote computer address."),
         "address");
-
-    QCommandLineOption port_option("port",
-        QApplication::translate("Client", "Remote computer port."),
-        "port",
-        QString::number(DEFAULT_HOST_TCP_PORT));
 
     QCommandLineOption name_option("name",
         QApplication::translate("Client", "Name of host."),
@@ -420,11 +420,6 @@ int clientMain(int argc, char* argv[])
         QApplication::translate("Client", "Router address."),
         "router-address");
 
-    QCommandLineOption router_port_option("router-port",
-        QApplication::translate("Client", "Router port."),
-        "router-port",
-        QString::number(8060));
-
     QCommandLineOption router_username_option("router-username",
         QApplication::translate("Client", "Router name of user."),
         "router-username");
@@ -438,7 +433,6 @@ int clientMain(int argc, char* argv[])
     parser.addHelpOption();
     parser.addVersionOption();
     parser.addOption(address_option);
-    parser.addOption(port_option);
     parser.addOption(name_option);
     parser.addOption(username_option);
     parser.addOption(password_option);
@@ -453,7 +447,6 @@ int clientMain(int argc, char* argv[])
     parser.addOption(lock_at_disconnect_option);
     parser.addOption(block_remote_input_option);
     parser.addOption(router_address_option);
-    parser.addOption(router_port_option);
     parser.addOption(router_username_option);
     parser.addOption(router_password_option);
     parser.process(application);
@@ -465,24 +458,25 @@ int clientMain(int argc, char* argv[])
         LOG(INFO) << "Command line start";
 
         proto::control::Config desktop_config = client::ConfigFactory::defaultDesktopConfig();
-        client::Config config;
+        proto::peer::SessionType session_type = proto::peer::SESSION_TYPE_DESKTOP;
+        client::ComputerConfig computer;
+        QString display_name;
 
-        config.address_or_id = parser.value(address_option);
-        config.port = parser.value(port_option).toUShort();
-        config.username = parser.value(username_option);
-        config.password = parser.value(password_option);
+        computer.address = parser.value(address_option);
+        computer.username = parser.value(username_option);
+        computer.password = parser.value(password_option);
 
         if (parser.isSet(display_name_option))
-            config.display_name = parser.value(display_name_option);
+            display_name = parser.value(display_name_option);
 
         if (parser.isSet(name_option))
-            config.computer_name = parser.value(name_option);
+            computer.name = parser.value(name_option);
 
-        QString session_type = parser.value(session_type_option);
+        QString session_type_value = parser.value(session_type_option);
 
-        if (session_type == "desktop")
+        if (session_type_value == "desktop")
         {
-            config.session_type = proto::peer::SESSION_TYPE_DESKTOP;
+            session_type = proto::peer::SESSION_TYPE_DESKTOP;
 
             if (!parseAudioValue(parser.value(audio_option), &desktop_config))
             {
@@ -532,26 +526,26 @@ int clientMain(int argc, char* argv[])
                 return 1;
             }
         }
-        else if (session_type == "file-transfer")
+        else if (session_type_value == "file-transfer")
         {
-            config.session_type = proto::peer::SESSION_TYPE_FILE_TRANSFER;
+            session_type = proto::peer::SESSION_TYPE_FILE_TRANSFER;
         }
-        else if (session_type == "system-info")
+        else if (session_type_value == "system-info")
         {
-            config.session_type = proto::peer::SESSION_TYPE_SYSTEM_INFO;
+            session_type = proto::peer::SESSION_TYPE_SYSTEM_INFO;
         }
-        else if (session_type == "text-chat")
+        else if (session_type_value == "text-chat")
         {
-            config.session_type = proto::peer::SESSION_TYPE_TEXT_CHAT;
+            session_type = proto::peer::SESSION_TYPE_TEXT_CHAT;
         }
         else
         {
-            LOG(ERROR) << "Unknown session type specified:" << session_type;
+            LOG(ERROR) << "Unknown session type specified:" << session_type_value;
             onInvalidValue("session-type", "desktop, file-transfer, system-info, text-chat");
             return 1;
         }
 
-        if (base::isHostId(config.address_or_id))
+        if (base::isHostId(computer.address))
         {
             LOG(INFO) << "Relay connection selected";
 
@@ -568,7 +562,6 @@ int clientMain(int argc, char* argv[])
 
             router_config.router_id = 1;
             router_config.address = parser.value(router_address_option);
-            router_config.port = parser.value(router_port_option).toUShort();
             router_config.username = parser.value(router_username_option);
             router_config.password = parser.value(router_password_option);
             router_config.session_type = proto::router::SESSION_TYPE_CLIENT;
@@ -580,14 +573,14 @@ int clientMain(int argc, char* argv[])
                 return 1;
             }
 
-            config.router_id = router_config.router_id;
-            startRouterSession(config, router_config, desktop_config);
+            computer.router_id = router_config.router_id;
+            startRouterSession(computer, session_type, display_name, router_config, desktop_config);
         }
         else
         {
             LOG(INFO) << "Direct connection selected";
 
-            if (!startSession(config, desktop_config))
+            if (!startSession(computer, session_type, display_name, desktop_config))
                 return 1;
         }
     }

@@ -1084,16 +1084,13 @@ void RouterWidget::onStatusChanged(qint64 router_id, RouterConnection::Status st
     switch (status)
     {
         case RouterConnection::Status::CONNECTING:
-            status_dialog_->addMessage(tr("Connecting to router %1:%2...")
-                .arg(config_.address).arg(config_.port));
+            status_dialog_->addMessage(tr("Connecting to router %1...").arg(config_.address));
             break;
         case RouterConnection::Status::ONLINE:
-            status_dialog_->addMessage(tr("Connection to router %1:%2 established.")
-                .arg(config_.address).arg(config_.port));
+            status_dialog_->addMessage(tr("Connection to router %1 established.").arg(config_.address));
             break;
         case RouterConnection::Status::OFFLINE:
-            status_dialog_->addMessage(tr("Disconnected from router %1:%2.")
-                .arg(config_.address).arg(config_.port));
+            status_dialog_->addMessage(tr("Disconnected from router %1.").arg(config_.address));
             break;
     }
 

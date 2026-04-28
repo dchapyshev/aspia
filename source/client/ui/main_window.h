@@ -23,6 +23,7 @@
 #include <QMainWindow>
 
 #include "client/ui/client_tab.h"
+#include "proto/peer.h"
 #include "ui_main_window.h"
 
 class QLineEdit;
@@ -34,7 +35,7 @@ class UpdateChecker;
 namespace client {
 
 class ClientTab;
-struct Config;
+struct ComputerConfig;
 
 class MainWindow final : public QMainWindow
 {
@@ -57,7 +58,9 @@ private slots:
     void onCurrentTabChanged(int index);
     void onCloseTab(int index);
     void onSearchTextChanged(const QString& text);
-    void onConnect(qint64 computer_id, const client::Config& config);
+    void onConnect(qint64 computer_id,
+                   const client::ComputerConfig& computer,
+                   proto::peer::SessionType session_type);
 
 private:
     void addTab(ClientTab* tab, const QString& title, const QIcon& icon);

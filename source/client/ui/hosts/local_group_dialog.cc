@@ -22,7 +22,6 @@
 #include <QPushButton>
 
 #include "base/logging.h"
-#include "client/local_data.h"
 #include "client/database.h"
 #include "client/ui/hosts/group_combo_box.h"
 #include "common/ui/msg_box.h"
@@ -50,7 +49,7 @@ LocalGroupDialog::LocalGroupDialog(qint64 group_id, qint64 parent_id, QWidget* p
     {
         setWindowTitle(tr("Edit Group"));
 
-        std::optional<GroupData> group = Database::instance().findGroup(group_id_);
+        std::optional<GroupConfig> group = Database::instance().findGroup(group_id_);
         if (group.has_value())
         {
             ui.edit_name->setText(group->name);
@@ -121,8 +120,8 @@ void LocalGroupDialog::onButtonBoxClicked(QAbstractButton* button)
 
     qint64 parent_id = ui.combo_parent_group->currentGroupId();
 
-    QList<GroupData> groups = Database::instance().groupList(parent_id);
-    for (const GroupData& existing : std::as_const(groups))
+    QList<GroupConfig> groups = Database::instance().groupList(parent_id);
+    for (const GroupConfig& existing : std::as_const(groups))
     {
         if (existing.id != group_id_ && existing.name == name)
         {
@@ -133,7 +132,7 @@ void LocalGroupDialog::onButtonBoxClicked(QAbstractButton* button)
         }
     }
 
-    GroupData group;
+    GroupConfig group;
     group.id = group_id_;
     group.parent_id = parent_id;
     group.name = name;

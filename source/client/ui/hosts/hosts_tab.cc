@@ -31,7 +31,6 @@
 #include "base/peer/host_id.h"
 #include "base/peer/user.h"
 #include "build/build_config.h"
-#include "client/local_data.h"
 #include "client/database.h"
 #include "client/settings.h"
 #include "client/ui/hosts/content_widget.h"
@@ -150,7 +149,7 @@ HostsTab::HostsTab(QWidget* parent)
     connect(local_group_widget_, &LocalGroupWidget::sig_doubleClicked, this, &HostsTab::onLocalConnect);
     connect(local_group_widget_, &LocalGroupWidget::sig_contextMenu, this, &HostsTab::onLocalComputerContextMenu);
     connect(this, &HostsTab::sig_connect, local_group_widget_,
-            [this](qint64 computer_id, const Config& /* config */)
+            [this](qint64 computer_id, const ComputerConfig&, proto::peer::SessionType)
     {
         if (computer_id != -1)
             local_group_widget_->setConnectTime(computer_id, QDateTime::currentSecsSinceEpoch());
@@ -438,7 +437,7 @@ void HostsTab::onCopyComputerAction()
 
     Database& db = Database::instance();
 
-    std::optional<ComputerData> computer = db.findComputer(item->computerId());
+    std::optional<ComputerConfig> computer = db.findComputer(item->computerId());
     if (!computer.has_value())
     {
         common::MsgBox::warning(this, tr("Failed to retrieve computer information from the local database."));
@@ -677,22 +676,20 @@ void HostsTab::onCurrentComputerChanged(qint64 computer_id)
 //--------------------------------------------------------------------------------------------------
 void HostsTab::onConnectAction(QAction* action)
 {
-    Config config;
+    proto::peer::SessionType session_type;
 
     if (action == action_desktop_connect_)
-        config.session_type = proto::peer::SESSION_TYPE_DESKTOP;
+        session_type = proto::peer::SESSION_TYPE_DESKTOP;
     else if (action == action_file_transfer_connect_)
-        config.session_type = proto::peer::SESSION_TYPE_FILE_TRANSFER;
+        session_type = proto::peer::SESSION_TYPE_FILE_TRANSFER;
     else if (action == action_chat_connect_)
-        config.session_type = proto::peer::SESSION_TYPE_TEXT_CHAT;
+        session_type = proto::peer::SESSION_TYPE_TEXT_CHAT;
     else if (action == action_system_info_connect_)
-        config.session_type = proto::peer::SESSION_TYPE_SYSTEM_INFO;
+        session_type = proto::peer::SESSION_TYPE_SYSTEM_INFO;
     else
         return;
 
-    Settings settings;
-    config.display_name = settings.displayName();
-
+    ComputerConfig computer;
     qint64 source_computer_id = -1;
 
     if (current_content_ == local_group_widget_)
@@ -701,19 +698,21 @@ void HostsTab::onConnectAction(QAction* action)
         if (!item)
             return;
 
-        std::optional<ComputerData> computer = Database::instance().findComputer(item->computerId());
-        if (!computer.has_value())
+        std::optional<ComputerConfig> found = Database::instance().findComputer(item->computerId());
+        if (!found.has_value())
         {
             common::MsgBox::warning(this,
                 tr("Failed to retrieve computer information from the local database."));
             return;
         }
 
-        if (!fillConfigFromComputer(&config, *computer))
+        computer = *found;
+
+        if (!validateComputerForConnect(computer))
             return;
 
-        Database::instance().setConnectTime(computer->id, QDateTime::currentSecsSinceEpoch());
-        source_computer_id = computer->id;
+        Database::instance().setConnectTime(computer.id, QDateTime::currentSecsSinceEpoch());
+        source_computer_id = computer.id;
     }
     else if (current_content_ == router_group_widget_)
     {
@@ -732,7 +731,7 @@ void HostsTab::onConnectAction(QAction* action)
         Sidebar::Router* router = static_cast<Sidebar::Router*>(router_item);
         std::optional<RouterConfig> router_data = Database::instance().findRouter(router->routerId());
         if (router_data)
-            config.router_id = router_data->router_id;
+            computer.router_id = router_data->router_id;
         // TODO
     }
     else
@@ -740,29 +739,25 @@ void HostsTab::onConnectAction(QAction* action)
         return;
     }
 
-    emit sig_connect(source_computer_id, config);
+    emit sig_connect(source_computer_id, computer, session_type);
 }
 
 //--------------------------------------------------------------------------------------------------
 void HostsTab::onLocalConnect(qint64 computer_id)
 {
-    std::optional<ComputerData> computer = Database::instance().findComputer(computer_id);
+    std::optional<ComputerConfig> computer = Database::instance().findComputer(computer_id);
     if (!computer.has_value())
     {
         common::MsgBox::warning(this, tr("Failed to retrieve computer information from the local database."));
         return;
     }
 
-    Config config;
-    config.session_type = defaultSessionType();
-    config.display_name = Settings().displayName();
-
-    if (!fillConfigFromComputer(&config, *computer))
+    if (!validateComputerForConnect(*computer))
         return;
 
     Database::instance().setConnectTime(computer_id, QDateTime::currentSecsSinceEpoch());
 
-    emit sig_connect(computer_id, config);
+    emit sig_connect(computer_id, *computer, defaultSessionType());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1189,7 +1184,7 @@ void HostsTab::onRemoveHostAction()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool HostsTab::fillConfigFromComputer(Config* config, const ComputerData& computer)
+bool HostsTab::validateComputerForConnect(const ComputerConfig& computer)
 {
     if (computer.router_id != 0)
     {
@@ -1206,10 +1201,6 @@ bool HostsTab::fillConfigFromComputer(Config* config, const ComputerData& comput
             common::MsgBox::warning(this, tr("The computer has an invalid host ID."));
             return false;
         }
-
-        config->router_id = router->router_id;
-        config->address_or_id = computer.address;
-        config->port = 0;
     }
     else
     {
@@ -1219,14 +1210,8 @@ bool HostsTab::fillConfigFromComputer(Config* config, const ComputerData& comput
             common::MsgBox::warning(this, tr("The computer has an incorrect address."));
             return false;
         }
-
-        config->address_or_id = address.host();
-        config->port = address.port();
     }
 
-    config->computer_name = computer.name;
-    config->username = computer.username;
-    config->password = computer.password;
     return true;
 }
 

@@ -49,22 +49,24 @@ SessionWindow::~SessionWindow()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool SessionWindow::connectToHost(Config config)
+bool SessionWindow::connectToHost(ComputerConfig computer,
+                                  proto::peer::SessionType session_type,
+                                  const QString& display_name)
 {
     LOG(INFO) << "Connecting to host";
 
     // Set the window title.
-    setClientTitle(config);
+    setClientTitle(computer, session_type);
 
-    if (config.username.isEmpty() || config.password.isEmpty())
+    if (computer.username.isEmpty() || computer.password.isEmpty())
     {
         LOG(INFO) << "Empty user name or password";
 
         AuthorizationDialog auth_dialog(this);
 
-        auth_dialog.setOneTimePasswordEnabled(config.router_id > 0);
-        auth_dialog.setUserName(config.username);
-        auth_dialog.setPassword(config.password);
+        auth_dialog.setOneTimePasswordEnabled(computer.router_id > 0);
+        auth_dialog.setUserName(computer.username);
+        auth_dialog.setPassword(computer.password);
 
         if (auth_dialog.exec() == AuthorizationDialog::Rejected)
         {
@@ -72,19 +74,19 @@ bool SessionWindow::connectToHost(Config config)
             return false;
         }
 
-        config.username = auth_dialog.userName();
-        config.password = auth_dialog.password();
+        computer.username = auth_dialog.userName();
+        computer.password = auth_dialog.password();
     }
 
     // When connecting with a one-time password, the username must be in the following format:
     // #host_id.
-    if (config.username.isEmpty())
+    if (computer.username.isEmpty())
     {
         LOG(INFO) << "User name is empty. Connection by ID";
-        config.username = u"#" + config.address_or_id;
+        computer.username = u"#" + computer.address;
     }
 
-    session_state_ = std::make_shared<SessionState>(config);
+    session_state_ = std::make_shared<SessionState>(computer, session_type, display_name);
 
     // Create a client instance.
     Client* client = createClient();
@@ -209,18 +211,10 @@ void SessionWindow::onStatusChanged(Client::Status status, const QVariant& data)
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionWindow::setClientTitle(const Config& config)
+void SessionWindow::setClientTitle(const ComputerConfig& computer, proto::peer::SessionType session_type)
 {
-    QString session_name = common::sessionName(config.session_type);
-    QString computer_name = config.computer_name;
-
-    if (computer_name.isEmpty())
-    {
-        if (config.router_id > 0)
-            computer_name = config.address_or_id;
-        else
-            computer_name = QString("%1:%2").arg(config.address_or_id).arg(config.port);
-    }
+    QString session_name = common::sessionName(session_type);
+    QString computer_name = computer.name.isEmpty() ? computer.address : computer.name;
 
     setWindowTitle(QString("%1 - %2").arg(computer_name, session_name));
 }

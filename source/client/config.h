@@ -19,50 +19,65 @@
 #ifndef CLIENT_CONFIG_H
 #define CLIENT_CONFIG_H
 
+#include <QByteArray>
 #include <QList>
 #include <QString>
 
-#include "proto/peer.h"
 #include "proto/router.h"
 
 namespace client {
 
 struct RouterConfig
 {
-    RouterConfig();
-    ~RouterConfig();
+    bool isValid() const
+    {
+        return !address.isEmpty() && !username.isEmpty() && !password.isEmpty();
+    }
 
-    RouterConfig(const RouterConfig& other) = default;
-    RouterConfig& operator=(const RouterConfig& other) = default;
+    bool hasSameConnectionParams(const RouterConfig& other) const
+    {
+        return address == other.address && session_type == other.session_type &&
+               username == other.username && password == other.password;
+    }
 
-    RouterConfig(RouterConfig&& other) noexcept = default;
-    RouterConfig& operator=(RouterConfig&& other) noexcept = default;
-
-    bool isValid() const;
-    bool hasSameConnectionParams(const RouterConfig& other) const;
+    QString displayName() const
+    {
+        if (!display_name.isEmpty())
+            return display_name;
+        return address;
+    }
 
     qint64 router_id = -1;
     QString display_name;
     QString address;
-    quint16 port;
-    proto::router::SessionType session_type;
+    proto::router::SessionType session_type = proto::router::SESSION_TYPE_CLIENT;
     QString username;
     QString password;
 };
 
-struct Config
+struct ComputerConfig
 {
-    Config();
-    ~Config();
-
-    qint64 router_id;
-    QString computer_name;
-    QString display_name;
-    QString address_or_id;
-    quint16 port;
+    qint64 id = -1;
+    qint64 group_id = 0;
+    qint64 router_id = 0;
+    QString name;
+    QString comment;
+    QString address;
     QString username;
     QString password;
-    proto::peer::SessionType session_type;
+    qint64 create_time = 0;
+    qint64 modify_time = 0;
+    qint64 connect_time = 0;
+    QByteArray data;
+};
+
+struct GroupConfig
+{
+    qint64 id = -1;
+    qint64 parent_id = 0;
+    QString name;
+    QString comment;
+    bool expanded = false;
 };
 
 } // namespace client

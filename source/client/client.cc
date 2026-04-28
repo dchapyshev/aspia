@@ -130,8 +130,6 @@ void Client::start()
 
     state_ = State::STARTED;
 
-    Config config = session_state_->config();
-
     std::unique_ptr<base::ClientAuthenticator> authenticator =
         std::make_unique<base::ClientAuthenticator>();
 
@@ -141,11 +139,11 @@ void Client::start()
     authenticator->setSessionType(static_cast<quint32>(session_state_->sessionType()));
     authenticator->setDisplayName(session_state_->displayName());
 
-    if (base::isHostId(config.address_or_id))
+    if (session_state_->isConnectionByHostId())
     {
         CLOG(INFO) << "Starting RELAY connection";
 
-        if (config.router_id <= 0)
+        if (session_state_->routerId() <= 0)
         {
             CLOG(FATAL) << "No router id. Continuation is impossible";
             return;
@@ -158,7 +156,7 @@ void Client::start()
             emit sig_statusChanged(Status::STARTED);
         }
 
-        router_ = RouterConnection::instance(config.router_id);
+        router_ = RouterConnection::instance(session_state_->routerId());
         if (!router_)
         {
             emit sig_statusChanged(Status::NO_ROUTER);
@@ -183,7 +181,7 @@ void Client::start()
         connect(relay_peer_, &base::RelayPeer::sig_connectionError, this, &Client::onRelayConnectionError);
         connect(relay_peer_, &base::RelayPeer::sig_connectionReady, this, &Client::onRelayConnectionReady);
 
-        router_->onConnectionRequest(instanceId(), base::stringToHostId(config.address_or_id));
+        router_->onConnectionRequest(instanceId(), base::stringToHostId(session_state_->hostAddress()));
     }
     else
     {
@@ -214,7 +212,7 @@ void Client::start()
 
         // Now connect to the host.
         emit sig_statusChanged(Status::HOST_CONNECTING);
-        tcp_channel_->connectTo(config.address_or_id, config.port);
+        tcp_channel_->connectTo(session_state_->hostAddress(), session_state_->hostPort());
     }
 }
 
@@ -333,7 +331,7 @@ void Client::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code)
     if (base::kMinimumSupportedVersion < base::kVersion_3_0_0)
     {
         if (error_code == base::TcpChannel::ErrorCode::REMOTE_HOST_CLOSED && !is_legacy_mode_ &&
-            !base::isHostId(session_state_->config().address_or_id) && !tcp_channel_->isAuthenticated())
+            !session_state_->isConnectionByHostId() && !tcp_channel_->isAuthenticated())
         {
             CLOG(INFO) << "Host may be out of date. Trying to connect in legacy mode";
             emit sig_statusChanged(Status::LEGACY_HOST);

@@ -17,12 +17,10 @@
 #
 
 list(APPEND SOURCE_CLIENT_CORE
-    local_data.h
     database.cc
     database.h
     client.cc
     client.h
-    config.cc
     config.h
     client_desktop.cc
     client_desktop.h

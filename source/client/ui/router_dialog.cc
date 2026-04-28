@@ -51,12 +51,8 @@ RouterDialog::RouterDialog(qint64 router_id, QWidget* parent)
         std::optional<RouterConfig> router = Database::instance().findRouter(router_id_);
         if (router.has_value())
         {
-            base::Address address(DEFAULT_ROUTER_TCP_PORT);
-            address.setHost(router->address);
-            address.setPort(router->port);
-
             ui.edit_name->setText(router->display_name);
-            ui.edit_address->setText(address.toString());
+            ui.edit_address->setText(router->address);
 
             int session_type_index = ui.combo_session_type->findData(router->session_type);
             if (session_type_index != -1)
@@ -127,8 +123,7 @@ void RouterDialog::onButtonBoxClicked(QAbstractButton* button)
     RouterConfig data;
     data.router_id = router_id_;
     data.display_name = ui.edit_name->text();
-    data.address = address.host();
-    data.port = address.port();
+    data.address = address_text;
     data.session_type =
         static_cast<proto::router::SessionType>(ui.combo_session_type->currentData().toUInt());
     data.username = username;

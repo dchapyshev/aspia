@@ -30,30 +30,12 @@
 #include <QVBoxLayout>
 
 #include "base/logging.h"
-#include "build/build_config.h"
 #include "client/config.h"
-#include "client/local_data.h"
 #include "client/database.h"
 #include "client/ui/hosts/local_group_widget.h"
 #include "common/ui/msg_box.h"
 
 namespace client {
-
-namespace {
-
-//--------------------------------------------------------------------------------------------------
-QString routerDisplayName(const RouterConfig& router)
-{
-    if (!router.display_name.isEmpty())
-        return router.display_name;
-
-    if (router.port != DEFAULT_ROUTER_TCP_PORT)
-        return QString("%1:%2").arg(router.address).arg(router.port);
-
-    return router.address;
-}
-
-} // namespace
 
 //--------------------------------------------------------------------------------------------------
 Sidebar::Sidebar(QWidget* parent)
@@ -71,7 +53,7 @@ Sidebar::Sidebar(QWidget* parent)
 
     layout->addWidget(tree_widget_);
 
-    GroupData local_root_data;
+    GroupConfig local_root_data;
     local_root_data.id = 0;
     local_root_data.parent_id = 0;
     local_root_data.name = tr("Local");
@@ -103,9 +85,9 @@ Sidebar::~Sidebar() = default;
 //--------------------------------------------------------------------------------------------------
 void Sidebar::loadGroups(qint64 parent_id, QTreeWidgetItem* parent_item)
 {
-    QList<GroupData> groups = Database::instance().groupList(parent_id);
+    QList<GroupConfig> groups = Database::instance().groupList(parent_id);
 
-    for (const GroupData& group : std::as_const(groups))
+    for (const GroupConfig& group : std::as_const(groups))
     {
         LocalGroup* item = new LocalGroup(group, parent_item);
         item->setExpanded(group.expanded);
@@ -150,10 +132,9 @@ void Sidebar::loadRouters()
 {
     QList<RouterConfig> routers = Database::instance().routerList();
 
-    for (const RouterConfig& router_data : std::as_const(routers))
+    for (const RouterConfig& router_config : std::as_const(routers))
     {
-        Router* router = new Router(
-            router_data.router_id, routerDisplayName(router_data), tree_widget_);
+        Router* router = new Router(router_config.router_id, router_config.displayName(), tree_widget_);
         router->setExpanded(true);
     }
 }
@@ -180,18 +161,18 @@ void Sidebar::reloadRouters()
     }
 
     // Update existing routers, append new ones at the end.
-    for (const RouterConfig& router_data : std::as_const(routers))
+    for (const RouterConfig& router_config : std::as_const(routers))
     {
-        const QString name = routerDisplayName(router_data);
+        const QString name = router_config.displayName();
 
-        Router* router = routerById(router_data.router_id);
+        Router* router = routerById(router_config.router_id);
         if (router)
         {
             router->setName(name);
         }
         else
         {
-            Router* new_router = new Router(router_data.router_id, name, tree_widget_);
+            Router* new_router = new Router(router_config.router_id, name, tree_widget_);
             new_router->setExpanded(true);
         }
     }
@@ -413,8 +394,8 @@ bool Sidebar::onDrop(QDropEvent* event)
         Item* target_item = static_cast<Item*>(target_tree_item);
 
         // Check if a group with the same name already exists in the target group.
-        QList<GroupData> target_groups = Database::instance().groupList(target_item->groupId());
-        for (const GroupData& existing : std::as_const(target_groups))
+        QList<GroupConfig> target_groups = Database::instance().groupList(target_item->groupId());
+        for (const GroupConfig& existing : std::as_const(target_groups))
         {
             if (existing.id != source_group->groupId() && existing.name == source_group->groupName())
             {
@@ -478,9 +459,9 @@ bool Sidebar::onDrop(QDropEvent* event)
         }
 
         // Check if a computer with the same name already exists in the target group.
-        QList<ComputerData> target_computers =
+        QList<ComputerConfig> target_computers =
             Database::instance().computerList(target_item->groupId());
-        for (const ComputerData& existing : std::as_const(target_computers))
+        for (const ComputerConfig& existing : std::as_const(target_computers))
         {
             if (existing.name == computer_item->computerName())
             {
@@ -492,7 +473,7 @@ bool Sidebar::onDrop(QDropEvent* event)
         }
 
         // Update the computer's group in the database.
-        std::optional<ComputerData> computer =
+        std::optional<ComputerConfig> computer =
             Database::instance().findComputer(computer_item->computerId());
         if (!computer.has_value())
         {
@@ -604,7 +585,6 @@ bool Sidebar::isAllowedDropTarget(QTreeWidgetItem* target, QTreeWidgetItem* sour
 //--------------------------------------------------------------------------------------------------
 void Sidebar::onCurrentItemChanged(QTreeWidgetItem* current, QTreeWidgetItem* previous)
 {
-    LOG(INFO) << "GROUP ITEM CHANGED";
     if (!current)
         return;
 
@@ -679,7 +659,7 @@ Sidebar::Item::Item(Type type, qint64 group_id, QTreeWidgetItem* parent)
 }
 
 //--------------------------------------------------------------------------------------------------
-Sidebar::LocalGroup::LocalGroup(const GroupData& group, QTreeWidget* parent)
+Sidebar::LocalGroup::LocalGroup(const GroupConfig& group, QTreeWidget* parent)
     : Item(LOCAL_GROUP, group.id, parent),
       parent_id_(group.parent_id),
       group_name_(group.name)
@@ -689,7 +669,7 @@ Sidebar::LocalGroup::LocalGroup(const GroupData& group, QTreeWidget* parent)
 }
 
 //--------------------------------------------------------------------------------------------------
-Sidebar::LocalGroup::LocalGroup(const GroupData& group, QTreeWidgetItem* parent)
+Sidebar::LocalGroup::LocalGroup(const GroupConfig& group, QTreeWidgetItem* parent)
     : Item(LOCAL_GROUP, group.id, parent),
       parent_id_(group.parent_id),
       group_name_(group.name)

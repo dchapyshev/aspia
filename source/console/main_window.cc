@@ -1636,19 +1636,31 @@ void MainWindow::connectToComputer(const proto::address_book::Computer& computer
         return;
     }
 
-    client::Config config;
-    config.router_config = router_config;
-    config.computer_name = QString::fromStdString(computer.name());
-    config.address_or_id = QString::fromStdString(computer.address());
-    config.port          = static_cast<quint16>(computer.port());
-    config.username      = QString::fromStdString(computer.username());
-    config.password      = QString::fromStdString(computer.password());
-    config.session_type  = computer.session_type();
-    config.display_name  = display_name;
+    client::ComputerConfig client_computer;
+    if (router_config.has_value())
+        client_computer.router_id = router_config->router_id;
+    client_computer.name     = QString::fromStdString(computer.name());
+
+    if (host_id_entered)
+    {
+        client_computer.address = QString::fromStdString(computer.address());
+    }
+    else
+    {
+        client_computer.address = QString("%1:%2")
+            .arg(QString::fromStdString(computer.address()))
+            .arg(static_cast<quint16>(computer.port()));
+    }
+
+    client_computer.username = QString::fromStdString(computer.username());
+    client_computer.password = QString::fromStdString(computer.password());
+
+    proto::peer::SessionType session_type =
+        static_cast<proto::peer::SessionType>(computer.session_type());
 
     client::SessionWindow* session_window = nullptr;
 
-    switch (config.session_type)
+    switch (session_type)
     {
         case proto::peer::SESSION_TYPE_DESKTOP:
         {
@@ -1678,7 +1690,7 @@ void MainWindow::connectToComputer(const proto::address_book::Computer& computer
         return;
 
     session_window->setAttribute(Qt::WA_DeleteOnClose);
-    if (!session_window->connectToHost(config))
+    if (!session_window->connectToHost(client_computer, session_type, display_name))
         session_window->close();
 }
 

@@ -31,7 +31,7 @@ class QStatusBar;
 
 namespace client {
 
-struct ComputerData;
+struct ComputerConfig;
 
 class LocalGroupWidget : public ContentWidget
 {
@@ -44,7 +44,7 @@ public:
     class Item : public QTreeWidgetItem
     {
     public:
-        Item(const ComputerData& computer, QTreeWidget* parent);
+        Item(const ComputerConfig& computer, QTreeWidget* parent);
 
         qint64 computerId() const { return computer_id_; }
         qint64 groupId() const { return group_id_; }

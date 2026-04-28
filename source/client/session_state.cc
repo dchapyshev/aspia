@@ -18,72 +18,106 @@
 
 #include "client/session_state.h"
 
+#include "base/net/address.h"
 #include "base/peer/host_id.h"
+#include "build/build_config.h"
 
 namespace client {
 
 //--------------------------------------------------------------------------------------------------
-SessionState::SessionState(const Config& config)
-    : config_(config)
+SessionState::SessionState(const ComputerConfig& computer,
+                           proto::peer::SessionType session_type,
+                           const QString& display_name)
+    : computer_(computer),
+      session_type_(session_type),
+      display_name_(display_name)
 {
-    // Nothing
+    if (base::isHostId(computer_.address))
+    {
+        host_address_ = computer_.address;
+        host_port_ = 0;
+    }
+    else
+    {
+        base::Address address = base::Address::fromString(computer_.address, DEFAULT_HOST_TCP_PORT);
+        host_address_ = address.host();
+        host_port_ = address.port();
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
 SessionState::~SessionState() = default;
 
 //--------------------------------------------------------------------------------------------------
-const Config& SessionState::config() const
+const ComputerConfig& SessionState::computer() const
 {
-    return config_;
+    return computer_;
 }
 
 //--------------------------------------------------------------------------------------------------
 bool SessionState::isConnectionByHostId() const
 {
-    return base::isHostId(config_.address_or_id);
+    return base::isHostId(computer_.address);
 }
 
 //--------------------------------------------------------------------------------------------------
 proto::peer::SessionType SessionState::sessionType() const
 {
-    return config_.session_type;
+    return session_type_;
+}
+
+//--------------------------------------------------------------------------------------------------
+qint64 SessionState::routerId() const
+{
+    return computer_.router_id;
 }
 
 //--------------------------------------------------------------------------------------------------
 const QString& SessionState::computerName() const
 {
-    return config_.computer_name;
+    return computer_.name;
 }
 
 //--------------------------------------------------------------------------------------------------
 const QString& SessionState::displayName() const
 {
-    return config_.display_name;
+    return display_name_;
 }
 
 //--------------------------------------------------------------------------------------------------
 const QString& SessionState::hostAddress() const
 {
-    return config_.address_or_id;
+    return host_address_;
 }
 
 //--------------------------------------------------------------------------------------------------
 quint16 SessionState::hostPort() const
 {
-    return config_.port;
+    return host_port_;
 }
 
 //--------------------------------------------------------------------------------------------------
 const QString& SessionState::hostUserName() const
 {
-    return config_.username;
+    return computer_.username;
 }
 
 //--------------------------------------------------------------------------------------------------
 const QString& SessionState::hostPassword() const
 {
-    return config_.password;
+    return computer_.password;
+}
+
+//--------------------------------------------------------------------------------------------------
+void SessionState::setHostUserName(const QString& username)
+{
+    computer_.username = username;
+}
+
+//--------------------------------------------------------------------------------------------------
+void SessionState::setHostPassword(const QString& password)
+{
+    computer_.password = password;
 }
 
 //--------------------------------------------------------------------------------------------------

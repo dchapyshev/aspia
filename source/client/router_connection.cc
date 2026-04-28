@@ -23,8 +23,10 @@
 
 #include "base/logging.h"
 #include "base/serialization.h"
+#include "base/net/address.h"
 #include "base/net/tcp_channel_ng.h"
 #include "base/peer/client_authenticator.h"
+#include "build/build_config.h"
 #include "proto/router_admin.h"
 #include "proto/router_client.h"
 
@@ -54,7 +56,7 @@ RouterConnection::RouterConnection(const RouterConfig& config, QObject* parent)
     reconnect_timer_->setSingleShot(true);
     connect(reconnect_timer_, &QTimer::timeout, this, [this]()
     {
-        LOG(INFO) << "Reconnecting to router" << config_.address << ":" << config_.port;
+        LOG(INFO) << "Reconnecting to router" << config_.address;
         onConnectToRouter();
     });
 }
@@ -89,7 +91,7 @@ void RouterConnection::onConnectToRouter()
     if (status_ != Status::OFFLINE)
         return;
 
-    LOG(INFO) << "Connecting to router" << config_.address << ":" << config_.port;
+    LOG(INFO) << "Connecting to router" << config_.address;
 
     setStatus(Status::CONNECTING);
 
@@ -108,7 +110,8 @@ void RouterConnection::onConnectToRouter()
     connect(tcp_channel_, &base::TcpChannel::sig_messageReceived,
             this, &RouterConnection::onTcpMessageReceived);
 
-    tcp_channel_->connectTo(config_.address, config_.port);
+    base::Address address = base::Address::fromString(config_.address, DEFAULT_ROUTER_TCP_PORT);
+    tcp_channel_->connectTo(address.host(), address.port());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -372,7 +375,7 @@ void RouterConnection::onTcpReady()
 {
     CHECK(tcp_channel_);
 
-    LOG(INFO) << "Connected to router" << config_.address << ":" << config_.port;
+    LOG(INFO) << "Connected to router" << config_.address;
     reconnect_timer_->stop();
     setStatus(Status::ONLINE);
 

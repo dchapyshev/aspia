@@ -26,7 +26,6 @@
 #include "base/gui_application.h"
 #include "base/logging.h"
 #include "common/ui/msg_box.h"
-#include "base/net/address.h"
 #include "base/peer/user.h"
 #include "build/build_config.h"
 #include "client/config.h"
@@ -290,12 +289,8 @@ void SettingsDialog::reloadRouterList()
     const QList<RouterConfig> routers = Database::instance().routerList();
     for (const RouterConfig& router : std::as_const(routers))
     {
-        base::Address address(DEFAULT_ROUTER_TCP_PORT);
-        address.setHost(router.address);
-        address.setPort(router.port);
-
         QTreeWidgetItem* item = new QTreeWidgetItem(ui.tree_routers);
-        item->setText(kColumnAddress, address.toString());
+        item->setText(kColumnAddress, router.address);
         item->setIcon(kColumnAddress, QIcon(":/img/stack.svg"));
         item->setText(kColumnName, router.display_name);
         item->setText(kColumnSessionType, sessionTypeToString(router.session_type));

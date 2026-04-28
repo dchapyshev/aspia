@@ -275,9 +275,11 @@ void MainWindow::onSearchTextChanged(const QString& text)
 }
 
 //--------------------------------------------------------------------------------------------------
-void MainWindow::onConnect(qint64 /* computer_id */, const Config& config)
+void MainWindow::onConnect(qint64 /* computer_id */,
+                           const ComputerConfig& computer,
+                           proto::peer::SessionType session_type)
 {
-    if (base::isHostId(config.address_or_id) && config.router_id <= 0)
+    if (base::isHostId(computer.address) && computer.router_id <= 0)
     {
         common::MsgBox::warning(this,
             tr("Connection by ID is specified in the properties of the computer, "
@@ -288,7 +290,7 @@ void MainWindow::onConnect(qint64 /* computer_id */, const Config& config)
 
     client::SessionWindow* session_window = nullptr;
 
-    switch (config.session_type)
+    switch (session_type)
     {
         case proto::peer::SESSION_TYPE_DESKTOP:
             session_window = new client::DesktopSessionWindow(Settings().desktopConfig());
@@ -315,7 +317,7 @@ void MainWindow::onConnect(qint64 /* computer_id */, const Config& config)
         return;
 
     session_window->setAttribute(Qt::WA_DeleteOnClose);
-    if (!session_window->connectToHost(config))
+    if (!session_window->connectToHost(computer, session_type, Settings().displayName()))
         session_window->close();
 }
 

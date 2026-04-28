@@ -208,7 +208,7 @@ void FastConnectDialog::onButtonBoxClicked(QAbstractButton* button)
         return;
     }
 
-    client::Config client_config;
+    client::ComputerConfig client_computer;
 
     if (!host_id_entered)
     {
@@ -223,25 +223,25 @@ void FastConnectDialog::onButtonBoxClicked(QAbstractButton* button)
             return;
         }
 
-        client_config.address_or_id = address.host();
-        client_config.port = address.port();
+        client_computer.address = QString("%1:%2").arg(address.host()).arg(address.port());
     }
     else
     {
         LOG(INFO) << "Relay connection selected";
-        client_config.address_or_id = current_address;
+        client_computer.address = current_address;
     }
 
-    client_config.session_type = static_cast<proto::peer::SessionType>(
+    proto::peer::SessionType session_type = static_cast<proto::peer::SessionType>(
         ui.combo_session_type->currentData().toInt());
 
     if (ui.checkbox_use_creds->isChecked())
     {
-        client_config.username = QString::fromStdString(default_config_.username());
-        client_config.password = QString::fromStdString(default_config_.password());
+        client_computer.username = QString::fromStdString(default_config_.username());
+        client_computer.password = QString::fromStdString(default_config_.password());
     }
 
-    client_config.router_config = router_config_;
+    if (router_config_.has_value())
+        client_computer.router_id = router_config_->router_id;
 
     int current_index = combo_address->findText(current_address);
     if (current_index != -1)
@@ -256,7 +256,7 @@ void FastConnectDialog::onButtonBoxClicked(QAbstractButton* button)
 
     client::SessionWindow* session_window = nullptr;
 
-    switch (client_config.session_type)
+    switch (session_type)
     {
         case proto::peer::SESSION_TYPE_DESKTOP:
         {
@@ -293,7 +293,7 @@ void FastConnectDialog::onButtonBoxClicked(QAbstractButton* button)
         return;
 
     session_window->setAttribute(Qt::WA_DeleteOnClose);
-    if (!session_window->connectToHost(client_config))
+    if (!session_window->connectToHost(client_computer, session_type, QString()))
     {
         LOG(ERROR) << "Unable to connect";
         session_window->close();

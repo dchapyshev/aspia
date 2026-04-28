@@ -19,10 +19,10 @@
 #ifndef CLIENT_UI_SESSION_WINDOW_H
 #define CLIENT_UI_SESSION_WINDOW_H
 
-#include "base/net/tcp_channel.h"
 #include "client/client.h"
 #include "client/config.h"
 #include "client/session_state.h"
+#include "proto/peer.h"
 
 #include <QWidget>
 
@@ -43,7 +43,9 @@ public:
     // Connects to a host.
     // If the username and/or password are not specified in the connection parameters, the
     // authorization dialog will be displayed.
-    bool connectToHost(Config config);
+    bool connectToHost(ComputerConfig computer,
+                       proto::peer::SessionType session_type,
+                       const QString& display_name);
 
     std::shared_ptr<SessionState> sessionState() { return session_state_; }
 
@@ -62,7 +64,7 @@ public slots:
     void onStatusChanged(client::Client::Status status, const QVariant& data);
 
 private:
-    void setClientTitle(const Config& config);
+    void setClientTitle(const ComputerConfig& computer, proto::peer::SessionType session_type);
     void onErrorOccurred(const QString& message);
 
     std::shared_ptr<SessionState> session_state_;

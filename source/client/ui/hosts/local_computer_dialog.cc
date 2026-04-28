@@ -27,7 +27,6 @@
 #include "base/peer/user.h"
 #include "build/build_config.h"
 #include "client/config.h"
-#include "client/local_data.h"
 #include "client/database.h"
 #include "client/ui/hosts/group_combo_box.h"
 #include "common/ui/msg_box.h"
@@ -39,18 +38,6 @@ namespace {
 constexpr int kMaxNameLength = 64;
 constexpr int kMinNameLength = 1;
 constexpr int kMaxCommentLength = 2048;
-
-//--------------------------------------------------------------------------------------------------
-QString routerDisplayName(const RouterConfig& router)
-{
-    if (!router.display_name.isEmpty())
-        return router.display_name;
-
-    if (router.port != DEFAULT_ROUTER_TCP_PORT)
-        return QString("%1:%2").arg(router.address).arg(router.port);
-
-    return router.address;
-}
 
 } // namespace
 
@@ -68,7 +55,7 @@ LocalComputerDialog::LocalComputerDialog(qint64 computer_id, qint64 group_id, QW
     QList<RouterConfig> routers = Database::instance().routerList();
     for (const RouterConfig& router : std::as_const(routers))
     {
-        ui.combo_router->addItem(QIcon(":/img/stack.svg"), routerDisplayName(router), QVariant::fromValue(router.router_id));
+        ui.combo_router->addItem(QIcon(":/img/stack.svg"), router.displayName(), QVariant::fromValue(router.router_id));
     }
 
     qint64 selected_router_id = 0;
@@ -77,7 +64,7 @@ LocalComputerDialog::LocalComputerDialog(qint64 computer_id, qint64 group_id, QW
     {
         setWindowTitle(tr("Edit Computer"));
 
-        std::optional<ComputerData> computer = Database::instance().findComputer(computer_id_);
+        std::optional<ComputerConfig> computer = Database::instance().findComputer(computer_id_);
         if (computer.has_value())
         {
             ui.edit_name->setText(computer->name);
@@ -230,8 +217,8 @@ void LocalComputerDialog::onButtonBoxClicked(QAbstractButton* button)
 
     qint64 group_id = ui.combo_group->currentGroupId();
 
-    QList<ComputerData> computers = Database::instance().computerList(group_id);
-    for (const ComputerData& existing : std::as_const(computers))
+    QList<ComputerConfig> computers = Database::instance().computerList(group_id);
+    for (const ComputerConfig& existing : std::as_const(computers))
     {
         if (existing.id != computer_id_ && existing.name == name)
         {
@@ -242,7 +229,7 @@ void LocalComputerDialog::onButtonBoxClicked(QAbstractButton* button)
         }
     }
 
-    ComputerData computer;
+    ComputerConfig computer;
     computer.id = computer_id_;
     computer.group_id = group_id;
     computer.router_id = router_id;

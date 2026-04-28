@@ -37,11 +37,11 @@ namespace {
 const char kConnectionName[] = "client";
 
 //--------------------------------------------------------------------------------------------------
-ComputerData readComputer(const QSqlQuery& query)
+ComputerConfig readComputer(const QSqlQuery& query)
 {
     base::DataCryptor& cryptor = base::DataCryptor::instance();
 
-    ComputerData computer;
+    ComputerConfig computer;
     computer.id = query.value(0).toLongLong();
     computer.group_id = query.value(1).toLongLong();
     computer.router_id = query.value(2).toLongLong();
@@ -64,9 +64,9 @@ ComputerData readComputer(const QSqlQuery& query)
 }
 
 //--------------------------------------------------------------------------------------------------
-GroupData readGroup(const QSqlQuery& query)
+GroupConfig readGroup(const QSqlQuery& query)
 {
-    GroupData group;
+    GroupConfig group;
     group.id = query.value(0).toLongLong();
     group.parent_id = query.value(1).toLongLong();
     group.name = query.value(2).toString();
@@ -84,13 +84,12 @@ RouterConfig readRouter(const QSqlQuery& query)
     router.router_id = query.value(0).toLongLong();
     router.display_name = query.value(1).toString();
     router.address = query.value(2).toString();
-    router.port = static_cast<quint16>(query.value(3).toUInt());
-    router.session_type = static_cast<proto::router::SessionType>(query.value(4).toUInt());
-    router.username = query.value(5).toString();
+    router.session_type = static_cast<proto::router::SessionType>(query.value(3).toUInt());
+    router.username = query.value(4).toString();
 
     QByteArray out;
 
-    cryptor.decrypt(query.value(6).toByteArray(), &out);
+    cryptor.decrypt(query.value(5).toByteArray(), &out);
     router.password = QString::fromUtf8(out);
 
     return router;
@@ -136,7 +135,6 @@ bool createTables(QSqlDatabase& db)
                     "\"id\" INTEGER UNIQUE,"
                     "\"name\" TEXT NOT NULL DEFAULT '',"
                     "\"address\" TEXT NOT NULL DEFAULT '',"
-                    "\"port\" INTEGER NOT NULL DEFAULT 0,"
                     "\"session_type\" INTEGER NOT NULL DEFAULT 0,"
                     "\"username\" TEXT NOT NULL DEFAULT '',"
                     "\"password\" BLOB NOT NULL DEFAULT X'',"
@@ -181,7 +179,7 @@ bool Database::isValid() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QList<ComputerData> Database::computerList(qint64 group_id) const
+QList<ComputerConfig> Database::computerList(qint64 group_id) const
 {
     if (!isValid())
     {
@@ -201,7 +199,7 @@ QList<ComputerData> Database::computerList(qint64 group_id) const
         return {};
     }
 
-    QList<ComputerData> computers;
+    QList<ComputerConfig> computers;
     while (query.next())
         computers.append(readComputer(query));
 
@@ -209,7 +207,7 @@ QList<ComputerData> Database::computerList(qint64 group_id) const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::addComputer(ComputerData& computer)
+bool Database::addComputer(ComputerConfig& computer)
 {
     if (!isValid())
     {
@@ -261,7 +259,7 @@ bool Database::addComputer(ComputerData& computer)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::modifyComputer(ComputerData& computer)
+bool Database::modifyComputer(ComputerConfig& computer)
 {
     if (!isValid())
     {
@@ -346,7 +344,7 @@ bool Database::setConnectTime(qint64 computer_id, qint64 connect_time)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::optional<ComputerData> Database::findComputer(qint64 computer_id) const
+std::optional<ComputerConfig> Database::findComputer(qint64 computer_id) const
 {
     if (!isValid())
     {
@@ -373,7 +371,7 @@ std::optional<ComputerData> Database::findComputer(qint64 computer_id) const
 }
 
 //--------------------------------------------------------------------------------------------------
-QList<ComputerData> Database::searchComputers(const QString& query_text) const
+QList<ComputerConfig> Database::searchComputers(const QString& query_text) const
 {
     if (!isValid())
     {
@@ -397,7 +395,7 @@ QList<ComputerData> Database::searchComputers(const QString& query_text) const
         return {};
     }
 
-    QList<ComputerData> computers;
+    QList<ComputerConfig> computers;
     while (query.next())
         computers.append(readComputer(query));
 
@@ -405,7 +403,7 @@ QList<ComputerData> Database::searchComputers(const QString& query_text) const
 }
 
 //--------------------------------------------------------------------------------------------------
-QList<GroupData> Database::groupList(qint64 parent_id) const
+QList<GroupConfig> Database::groupList(qint64 parent_id) const
 {
     if (!isValid())
     {
@@ -423,7 +421,7 @@ QList<GroupData> Database::groupList(qint64 parent_id) const
         return {};
     }
 
-    QList<GroupData> groups;
+    QList<GroupConfig> groups;
     while (query.next())
         groups.append(readGroup(query));
 
@@ -431,7 +429,7 @@ QList<GroupData> Database::groupList(qint64 parent_id) const
 }
 
 //--------------------------------------------------------------------------------------------------
-QList<GroupData> Database::allGroups() const
+QList<GroupConfig> Database::allGroups() const
 {
     if (!isValid())
     {
@@ -446,7 +444,7 @@ QList<GroupData> Database::allGroups() const
         return {};
     }
 
-    QList<GroupData> groups;
+    QList<GroupConfig> groups;
     while (query.next())
         groups.append(readGroup(query));
 
@@ -454,7 +452,7 @@ QList<GroupData> Database::allGroups() const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::addGroup(GroupData& group)
+bool Database::addGroup(GroupConfig& group)
 {
     if (!isValid())
     {
@@ -481,7 +479,7 @@ bool Database::addGroup(GroupData& group)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::modifyGroup(const GroupData& group)
+bool Database::modifyGroup(const GroupConfig& group)
 {
     if (!isValid())
     {
@@ -552,7 +550,7 @@ bool Database::removeGroup(qint64 group_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::optional<GroupData> Database::findGroup(qint64 group_id) const
+std::optional<GroupConfig> Database::findGroup(qint64 group_id) const
 {
     if (!isValid())
     {
@@ -586,7 +584,7 @@ QList<RouterConfig> Database::routerList() const
     }
 
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    if (!query.exec("SELECT id, name, address, port, session_type, username, password FROM routers"))
+    if (!query.exec("SELECT id, name, address, session_type, username, password FROM routers"))
     {
         LOG(ERROR) << "Unable to get router list:" << query.lastError();
         return {};
@@ -608,7 +606,7 @@ bool Database::addRouter(RouterConfig& router)
         return false;
     }
 
-    if (router.address.isEmpty() || router.port == 0 || router.username.isEmpty())
+    if (router.address.isEmpty() || router.username.isEmpty())
     {
         LOG(ERROR) << "Invalid parameters";
         return false;
@@ -618,11 +616,10 @@ bool Database::addRouter(RouterConfig& router)
     QByteArray out;
 
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    query.prepare("INSERT INTO routers (id, name, address, port, session_type, username, password) "
-                  "VALUES (NULL, ?, ?, ?, ?, ?, ?)");
+    query.prepare("INSERT INTO routers (id, name, address, session_type, username, password) "
+                  "VALUES (NULL, ?, ?, ?, ?, ?)");
     query.addBindValue(router.display_name);
     query.addBindValue(router.address);
-    query.addBindValue(router.port);
     query.addBindValue(static_cast<quint32>(router.session_type));
     query.addBindValue(router.username);
 
@@ -652,11 +649,10 @@ bool Database::modifyRouter(const RouterConfig& router)
     QByteArray out;
 
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    query.prepare("UPDATE routers SET name=?, address=?, port=?, session_type=?, username=?, password=? "
+    query.prepare("UPDATE routers SET name=?, address=?, session_type=?, username=?, password=? "
                   "WHERE id=?");
     query.addBindValue(router.display_name);
     query.addBindValue(router.address);
-    query.addBindValue(router.port);
     query.addBindValue(static_cast<quint32>(router.session_type));
     query.addBindValue(router.username);
 
@@ -706,7 +702,7 @@ std::optional<RouterConfig> Database::findRouter(qint64 router_id) const
     }
 
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    query.prepare("SELECT id, name, address, port, session_type, username, password "
+    query.prepare("SELECT id, name, address, session_type, username, password "
                   "FROM routers WHERE id=?");
     query.addBindValue(router_id);
 

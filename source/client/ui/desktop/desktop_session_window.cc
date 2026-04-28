@@ -208,12 +208,9 @@ DesktopSessionWindow::DesktopSessionWindow(
     connect(toolbar_, &DesktopToolBar::sig_startSession,
             this, [this](proto::peer::SessionType session_type)
     {
-        Config session_config = sessionState()->config();
-        session_config.session_type = session_type;
-
         SessionWindow* session_window = nullptr;
 
-        switch (session_config.session_type)
+        switch (session_type)
         {
             case proto::peer::SESSION_TYPE_FILE_TRANSFER:
                 session_window = new FileTransferSessionWindow();
@@ -233,7 +230,8 @@ DesktopSessionWindow::DesktopSessionWindow(
         }
 
         session_window->setAttribute(Qt::WA_DeleteOnClose);
-        if (!session_window->connectToHost(session_config))
+        if (!session_window->connectToHost(
+                sessionState()->computer(), session_type, sessionState()->displayName()))
         {
             LOG(ERROR) << "Unable to connect to host";
             session_window->close();

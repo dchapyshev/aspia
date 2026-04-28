@@ -27,7 +27,7 @@
 
 namespace client {
 
-struct GroupData;
+struct GroupConfig;
 
 class Sidebar : public QWidget
 {
@@ -57,8 +57,8 @@ public:
     class LocalGroup : public Item
     {
     public:
-        LocalGroup(const GroupData& group, QTreeWidget* parent);
-        LocalGroup(const GroupData& group, QTreeWidgetItem* parent);
+        LocalGroup(const GroupConfig& group, QTreeWidget* parent);
+        LocalGroup(const GroupConfig& group, QTreeWidgetItem* parent);
 
         qint64 parentId() const { return parent_id_; }
         QString groupName() const { return group_name_; }

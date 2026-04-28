@@ -144,9 +144,9 @@ void LocalGroupWidget::showGroup(qint64 group_id)
 
     ui.tree_computer->clear();
 
-    QList<ComputerData> computers = Database::instance().computerList(group_id);
+    QList<ComputerConfig> computers = Database::instance().computerList(group_id);
 
-    for (const ComputerData& computer : std::as_const(computers))
+    for (const ComputerConfig& computer : std::as_const(computers))
         new Item(computer, ui.tree_computer);
 
     updateStatusLabels();
@@ -318,7 +318,7 @@ void LocalGroupWidget::onHeaderContextMenu(const QPoint &pos)
 }
 
 //--------------------------------------------------------------------------------------------------
-LocalGroupWidget::Item::Item(const ComputerData& computer, QTreeWidget* parent)
+LocalGroupWidget::Item::Item(const ComputerConfig& computer, QTreeWidget* parent)
     : QTreeWidgetItem(parent),
       computer_id_(computer.id),
       group_id_(computer.group_id),

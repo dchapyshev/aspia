@@ -24,6 +24,7 @@
 #include "client/config.h"
 #include "client/router_connection.h"
 #include "client/ui/client_tab.h"
+#include "proto/peer.h"
 #include "ui_hosts_tab.h"
 
 class QTreeWidgetItem;
@@ -34,7 +35,6 @@ class User;
 
 namespace client {
 
-struct ComputerData;
 class ContentWidget;
 class LocalGroupWidget;
 class RouterWidget;
@@ -58,7 +58,9 @@ public:
     void reloadRouters();
 
 signals:
-    void sig_connect(qint64 computer_id, const client::Config& config);
+    void sig_connect(qint64 computer_id,
+                     const client::ComputerConfig& computer,
+                     proto::peer::SessionType session_type);
 
 private slots:
     void onRouterStatusChanged(qint64 router_id, client::RouterConnection::Status status);
@@ -99,7 +101,7 @@ private:
     void editRouter(qint64 router_id);
     void deleteRouter(qint64 router_id);
 
-    bool fillConfigFromComputer(Config* config, const ComputerData& computer);
+    bool validateComputerForConnect(const ComputerConfig& computer);
 
     Ui::HostsTab ui;
 

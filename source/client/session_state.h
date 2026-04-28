@@ -22,6 +22,7 @@
 #include <QVersionNumber>
 
 #include "client/config.h"
+#include "proto/peer.h"
 
 #include <mutex>
 
@@ -30,20 +31,26 @@ namespace client {
 class SessionState
 {
 public:
-    explicit SessionState(const Config& config);
+    SessionState(const ComputerConfig& computer,
+                 proto::peer::SessionType session_type,
+                 const QString& display_name);
     ~SessionState();
 
-    const Config& config() const;
+    const ComputerConfig& computer() const;
 
     bool isConnectionByHostId() const;
 
     proto::peer::SessionType sessionType() const;
+    qint64 routerId() const;
     const QString& computerName() const;
     const QString& displayName() const;
     const QString& hostAddress() const;
     quint16 hostPort() const;
     const QString& hostUserName() const;
     const QString& hostPassword() const;
+
+    void setHostUserName(const QString& username);
+    void setHostPassword(const QString& password);
 
     void setRouterVersion(const QVersionNumber& router_version);
     QVersionNumber routerVersion() const;
@@ -58,7 +65,11 @@ public:
     bool isReconnecting() const;
 
 private:
-    const Config config_;
+    ComputerConfig computer_;
+    const proto::peer::SessionType session_type_;
+    const QString display_name_;
+    QString host_address_;
+    quint16 host_port_ = 0;
 
     mutable std::mutex lock_;
     QVersionNumber router_version_;
