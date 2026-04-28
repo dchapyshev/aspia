@@ -26,6 +26,7 @@
 #include "base/peer/host_id.h"
 #include "base/peer/user.h"
 #include "build/build_config.h"
+#include "client/config.h"
 #include "client/local_data.h"
 #include "client/database.h"
 #include "client/ui/hosts/group_combo_box.h"
@@ -40,7 +41,7 @@ constexpr int kMinNameLength = 1;
 constexpr int kMaxCommentLength = 2048;
 
 //--------------------------------------------------------------------------------------------------
-QString routerDisplayName(const RouterData& router)
+QString routerDisplayName(const RouterConfig& router)
 {
     if (!router.name.isEmpty())
         return router.name;
@@ -64,8 +65,8 @@ LocalComputerDialog::LocalComputerDialog(qint64 computer_id, qint64 group_id, QW
 
     ui.combo_router->addItem(QIcon(":/img/connect.svg"), tr("Without Router"), QVariant::fromValue<qint64>(0));
 
-    QList<RouterData> routers = Database::instance().routerList();
-    for (const RouterData& router : std::as_const(routers))
+    QList<RouterConfig> routers = Database::instance().routerList();
+    for (const RouterConfig& router : std::as_const(routers))
     {
         ui.combo_router->addItem(QIcon(":/img/stack.svg"), routerDisplayName(router), QVariant::fromValue(router.id));
     }

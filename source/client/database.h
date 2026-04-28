@@ -24,6 +24,7 @@
 
 #include <optional>
 
+#include "client/config.h"
 #include "client/local_data.h"
 
 namespace client {
@@ -58,11 +59,11 @@ public:
     std::optional<GroupData> findGroup(qint64 group_id) const;
 
     // Routers.
-    QList<RouterData> routerList() const;
-    bool addRouter(RouterData& router);
-    bool modifyRouter(const RouterData& router);
+    QList<RouterConfig> routerList() const;
+    bool addRouter(RouterConfig& router);
+    bool modifyRouter(const RouterConfig& router);
     bool removeRouter(qint64 router_id);
-    std::optional<RouterData> findRouter(qint64 router_id) const;
+    std::optional<RouterConfig> findRouter(qint64 router_id) const;
 
 private:
     Database() = default;

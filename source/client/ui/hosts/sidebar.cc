@@ -31,6 +31,7 @@
 
 #include "base/logging.h"
 #include "build/build_config.h"
+#include "client/config.h"
 #include "client/local_data.h"
 #include "client/database.h"
 #include "client/ui/hosts/local_group_widget.h"
@@ -41,7 +42,7 @@ namespace client {
 namespace {
 
 //--------------------------------------------------------------------------------------------------
-QString routerDisplayName(const RouterData& router)
+QString routerDisplayName(const RouterConfig& router)
 {
     if (!router.name.isEmpty())
         return router.name;
@@ -147,9 +148,9 @@ void Sidebar::reloadGroups(qint64 selected_group_id)
 //--------------------------------------------------------------------------------------------------
 void Sidebar::loadRouters()
 {
-    QList<RouterData> routers = Database::instance().routerList();
+    QList<RouterConfig> routers = Database::instance().routerList();
 
-    for (const RouterData& router_data : std::as_const(routers))
+    for (const RouterConfig& router_data : std::as_const(routers))
     {
         Router* router = new Router(
             router_data.id, routerDisplayName(router_data), tree_widget_);
@@ -160,11 +161,11 @@ void Sidebar::loadRouters()
 //--------------------------------------------------------------------------------------------------
 void Sidebar::reloadRouters()
 {
-    QList<RouterData> routers = Database::instance().routerList();
+    QList<RouterConfig> routers = Database::instance().routerList();
 
     QSet<qint64> new_ids;
     new_ids.reserve(routers.size());
-    for (const RouterData& router_data : std::as_const(routers))
+    for (const RouterConfig& router_data : std::as_const(routers))
         new_ids.insert(router_data.id);
 
     // Remove only Router items whose id no longer exists.
@@ -179,7 +180,7 @@ void Sidebar::reloadRouters()
     }
 
     // Update existing routers, append new ones at the end.
-    for (const RouterData& router_data : std::as_const(routers))
+    for (const RouterConfig& router_data : std::as_const(routers))
     {
         const QString name = routerDisplayName(router_data);
 

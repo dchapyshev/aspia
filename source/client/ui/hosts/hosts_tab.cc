@@ -46,24 +46,6 @@
 
 namespace client {
 
-namespace {
-
-//--------------------------------------------------------------------------------------------------
-RouterConfig dataToConfig(const RouterData& data)
-{
-    RouterConfig config;
-    config.id = data.id;
-    config.name = data.name;
-    config.address = data.address;
-    config.port = data.port;
-    config.session_type = static_cast<proto::router::SessionType>(data.session_type);
-    config.username = data.username;
-    config.password = data.password;
-    return config;
-}
-
-} // namespace
-
 //--------------------------------------------------------------------------------------------------
 HostsTab::HostsTab(QWidget* parent)
     : ClientTab(Type::HOSTS, "hosts", parent)
@@ -203,12 +185,11 @@ HostsTab::HostsTab(QWidget* parent)
     switchContent(local_group_widget_);
     updateActionsState();
 
-    const QList<RouterData> routers = Database::instance().routerList();
-    for (const RouterData& router : std::as_const(routers))
+    const QList<RouterConfig> routers = Database::instance().routerList();
+    for (const RouterConfig& router : std::as_const(routers))
     {
-        RouterConfig config = dataToConfig(router);
-        if (config.isValid())
-            createRouterWidget(config);
+        if (router.isValid())
+            createRouterWidget(router);
     }
 }
 
@@ -341,13 +322,13 @@ bool HostsTab::hasSearchField() const
 void HostsTab::reloadRouters()
 {
     const QList<qint64> old_ids = router_widgets_.keys();
-    const QList<RouterData> routers = Database::instance().routerList();
+    const QList<RouterConfig> routers = Database::instance().routerList();
 
     // Remove widgets for routers that no longer exist.
     for (qint64 id : std::as_const(old_ids))
     {
         bool found = false;
-        for (const RouterData& router : std::as_const(routers))
+        for (const RouterConfig& router : std::as_const(routers))
         {
             if (router.id == id)
             {
@@ -363,17 +344,16 @@ void HostsTab::reloadRouters()
     ui.sidebar->reloadRouters();
 
     // Create new or update existing widgets.
-    for (const RouterData& router : std::as_const(routers))
+    for (const RouterConfig& router : std::as_const(routers))
     {
-        RouterConfig config = dataToConfig(router);
-        if (!config.isValid())
+        if (!router.isValid())
             continue;
 
         auto it = router_widgets_.find(router.id);
         if (it != router_widgets_.end())
-            it.value()->updateConfig(config);
+            it.value()->updateConfig(router);
         else
-            createRouterWidget(config);
+            createRouterWidget(router);
     }
 }
 
@@ -750,7 +730,7 @@ void HostsTab::onConnectAction(QAction* action)
             return;
 
         Sidebar::Router* router = static_cast<Sidebar::Router*>(router_item);
-        std::optional<RouterData> router_data = Database::instance().findRouter(router->routerId());
+        std::optional<RouterConfig> router_data = Database::instance().findRouter(router->routerId());
         if (router_data)
             config.router_id = router_data->id;
         // TODO
@@ -1008,7 +988,7 @@ void HostsTab::deleteRouter(qint64 router_id)
     LOG(INFO) << "[ACTION] Delete router" << router_id;
 
     Database& db = Database::instance();
-    std::optional<RouterData> existing = db.findRouter(router_id);
+    std::optional<RouterConfig> existing = db.findRouter(router_id);
     if (!existing)
     {
         LOG(ERROR) << "Router not found for id:" << router_id;
@@ -1213,7 +1193,7 @@ bool HostsTab::fillConfigFromComputer(Config* config, const ComputerData& comput
 {
     if (computer.router_id != 0)
     {
-        std::optional<RouterData> router = Database::instance().findRouter(computer.router_id);
+        std::optional<RouterConfig> router = Database::instance().findRouter(computer.router_id);
         if (!router.has_value())
         {
             common::MsgBox::warning(this, tr("The router associated with this computer has been deleted. "

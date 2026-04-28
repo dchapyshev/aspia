@@ -76,16 +76,16 @@ GroupData readGroup(const QSqlQuery& query)
 }
 
 //--------------------------------------------------------------------------------------------------
-RouterData readRouter(const QSqlQuery& query)
+RouterConfig readRouter(const QSqlQuery& query)
 {
     base::DataCryptor& cryptor = base::DataCryptor::instance();
 
-    RouterData router;
+    RouterConfig router;
     router.id = query.value(0).toLongLong();
     router.name = query.value(1).toString();
     router.address = query.value(2).toString();
     router.port = static_cast<quint16>(query.value(3).toUInt());
-    router.session_type = query.value(4).toUInt();
+    router.session_type = static_cast<proto::router::SessionType>(query.value(4).toUInt());
     router.username = query.value(5).toString();
 
     QByteArray out;
@@ -577,7 +577,7 @@ std::optional<GroupData> Database::findGroup(qint64 group_id) const
 }
 
 //--------------------------------------------------------------------------------------------------
-QList<RouterData> Database::routerList() const
+QList<RouterConfig> Database::routerList() const
 {
     if (!isValid())
     {
@@ -592,7 +592,7 @@ QList<RouterData> Database::routerList() const
         return {};
     }
 
-    QList<RouterData> routers;
+    QList<RouterConfig> routers;
     while (query.next())
         routers.append(readRouter(query));
 
@@ -600,7 +600,7 @@ QList<RouterData> Database::routerList() const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::addRouter(RouterData& router)
+bool Database::addRouter(RouterConfig& router)
 {
     if (!isValid())
     {
@@ -623,7 +623,7 @@ bool Database::addRouter(RouterData& router)
     query.addBindValue(router.name);
     query.addBindValue(router.address);
     query.addBindValue(router.port);
-    query.addBindValue(router.session_type);
+    query.addBindValue(static_cast<quint32>(router.session_type));
     query.addBindValue(router.username);
 
     cryptor.encrypt(router.password.toUtf8(), &out);
@@ -640,7 +640,7 @@ bool Database::addRouter(RouterData& router)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::modifyRouter(const RouterData& router)
+bool Database::modifyRouter(const RouterConfig& router)
 {
     if (!isValid())
     {
@@ -657,7 +657,7 @@ bool Database::modifyRouter(const RouterData& router)
     query.addBindValue(router.name);
     query.addBindValue(router.address);
     query.addBindValue(router.port);
-    query.addBindValue(router.session_type);
+    query.addBindValue(static_cast<quint32>(router.session_type));
     query.addBindValue(router.username);
 
     cryptor.encrypt(router.password.toUtf8(), &out);
@@ -697,7 +697,7 @@ bool Database::removeRouter(qint64 router_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::optional<RouterData> Database::findRouter(qint64 router_id) const
+std::optional<RouterConfig> Database::findRouter(qint64 router_id) const
 {
     if (!isValid())
     {

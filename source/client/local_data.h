@@ -49,17 +49,6 @@ struct GroupData
     bool expanded = false;
 };
 
-struct RouterData
-{
-    qint64 id = -1;
-    QString name;
-    QString address;
-    quint16 port = 0;
-    quint32 session_type = 0;
-    QString username;
-    QString password;
-};
-
 } // namespace client
 
 #endif // CLIENT_LOCAL_DATA_H

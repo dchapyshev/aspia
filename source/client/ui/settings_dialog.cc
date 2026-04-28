@@ -29,7 +29,7 @@
 #include "base/net/address.h"
 #include "base/peer/user.h"
 #include "build/build_config.h"
-#include "client/local_data.h"
+#include "client/config.h"
 #include "client/database.h"
 #include "client/settings.h"
 #include "client/ui/application.h"
@@ -287,8 +287,8 @@ void SettingsDialog::reloadRouterList()
 {
     ui.tree_routers->clear();
 
-    const QList<RouterData> routers = Database::instance().routerList();
-    for (const RouterData& router : std::as_const(routers))
+    const QList<RouterConfig> routers = Database::instance().routerList();
+    for (const RouterConfig& router : std::as_const(routers))
     {
         base::Address address(DEFAULT_ROUTER_TCP_PORT);
         address.setHost(router.address);
@@ -298,8 +298,7 @@ void SettingsDialog::reloadRouterList()
         item->setText(kColumnAddress, address.toString());
         item->setIcon(kColumnAddress, QIcon(":/img/stack.svg"));
         item->setText(kColumnName, router.name);
-        item->setText(kColumnSessionType, sessionTypeToString(
-            static_cast<proto::router::SessionType>(router.session_type)));
+        item->setText(kColumnSessionType, sessionTypeToString(router.session_type));
         item->setText(kColumnUserName, router.username);
         item->setData(kColumnAddress, kRoleId, router.id);
     }
