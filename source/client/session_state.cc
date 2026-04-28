@@ -32,17 +32,7 @@ SessionState::SessionState(const ComputerConfig& computer,
       session_type_(session_type),
       display_name_(display_name)
 {
-    if (base::isHostId(computer_.address))
-    {
-        host_address_ = computer_.address;
-        host_port_ = 0;
-    }
-    else
-    {
-        base::Address address = base::Address::fromString(computer_.address, DEFAULT_HOST_TCP_PORT);
-        host_address_ = address.host();
-        host_port_ = address.port();
-    }
+    // Nothing
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -56,20 +46,19 @@ base::HostId SessionState::hostId() const
 {
     if (!base::isHostId(computer_.address))
         return base::kInvalidHostId;
-
     return base::stringToHostId(computer_.address);
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionState::setHostUserName(const QString& username)
+QString SessionState::hostAddress() const
 {
-    computer_.username = username;
+    return base::Address::fromString(computer_.address, DEFAULT_HOST_TCP_PORT).host();
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionState::setHostPassword(const QString& password)
+quint16 SessionState::hostPort() const
 {
-    computer_.password = password;
+    return base::Address::fromString(computer_.address, DEFAULT_HOST_TCP_PORT).port();
 }
 
 //--------------------------------------------------------------------------------------------------
