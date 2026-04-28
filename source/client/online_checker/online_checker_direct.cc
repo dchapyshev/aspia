@@ -44,9 +44,7 @@ public:
     Instance(const ComputerConfig& computer, QObject* parent);
     ~Instance() final;
 
-    using FinishCallback = std::function<void(qint64 computer_id, bool online)>;
-
-    void start(FinishCallback finish_callback);
+    void start();
     qint64 computerId() const { return computer_.id; }
 
 private slots:
@@ -58,7 +56,6 @@ private:
 
     const ComputerConfig computer_;
 
-    FinishCallback finish_callback_;
     base::TcpChannel* tcp_channel_ = nullptr;
     QTimer timer_;
     bool finished_ = false;
@@ -88,11 +85,8 @@ OnlineCheckerDirect::Instance::~Instance()
 }
 
 //--------------------------------------------------------------------------------------------------
-void OnlineCheckerDirect::Instance::start(FinishCallback finish_callback)
+void OnlineCheckerDirect::Instance::start()
 {
-    finish_callback_ = std::move(finish_callback);
-    DCHECK(finish_callback_);
-
     base::Address address = base::Address::fromString(computer_.address, DEFAULT_HOST_TCP_PORT);
 
     LOG(INFO) << "Starting connection to" << address.host() << ":" << address.port()
@@ -137,7 +131,8 @@ void OnlineCheckerDirect::Instance::onFinished(const base::Location& location, b
     finished_ = true;
     timer_.stop();
 
-    finish_callback_(computer_.id, online);
+    OnlineCheckerDirect* checker = static_cast<OnlineCheckerDirect*>(parent());
+    checker->onChecked(computer_.id, online);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -181,10 +176,7 @@ void OnlineCheckerDirect::start()
     }
 
     for (const auto& task : std::as_const(work_queue_))
-    {
-        task->start(std::bind(&OnlineCheckerDirect::onChecked, this,
-                              std::placeholders::_1, std::placeholders::_2));
-    }
+        task->start();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -200,8 +192,7 @@ void OnlineCheckerDirect::onChecked(qint64 computer_id, bool online)
         LOG(INFO) << "Instance for" << computer.id << "is created (" << computer.address << ")";
 
         work_queue_.emplace_back(instance);
-        work_queue_.back()->start(std::bind(&OnlineCheckerDirect::onChecked, this,
-                                            std::placeholders::_1, std::placeholders::_2));
+        instance->start();
         pending_queue_.pop_front();
     }
     else

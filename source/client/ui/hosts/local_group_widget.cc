@@ -199,6 +199,12 @@ void LocalGroupWidget::restoreState(const QByteArray& state)
 }
 
 //--------------------------------------------------------------------------------------------------
+void LocalGroupWidget::reload()
+{
+    startOnlineChecker();
+}
+
+//--------------------------------------------------------------------------------------------------
 void LocalGroupWidget::attach(QStatusBar* statusbar)
 {
     if (!statusbar)

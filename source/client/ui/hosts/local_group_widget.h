@@ -106,6 +106,8 @@ public:
     // ContentWidget implementation.
     QByteArray saveState() override;
     void restoreState(const QByteArray& state) override;
+    bool canReload() const override { return true; }
+    void reload() override;
     void attach(QStatusBar* statusbar) override;
     void detach(QStatusBar* statusbar) override;
 
