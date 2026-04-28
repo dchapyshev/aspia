@@ -330,7 +330,7 @@ void HostsTab::reloadRouters()
         bool found = false;
         for (const RouterConfig& router : std::as_const(routers))
         {
-            if (router.id == id)
+            if (router.router_id == id)
             {
                 found = true;
                 break;
@@ -349,7 +349,7 @@ void HostsTab::reloadRouters()
         if (!router.isValid())
             continue;
 
-        auto it = router_widgets_.find(router.id);
+        auto it = router_widgets_.find(router.router_id);
         if (it != router_widgets_.end())
             it.value()->updateConfig(router);
         else
@@ -732,7 +732,7 @@ void HostsTab::onConnectAction(QAction* action)
         Sidebar::Router* router = static_cast<Sidebar::Router*>(router_item);
         std::optional<RouterConfig> router_data = Database::instance().findRouter(router->routerId());
         if (router_data)
-            config.router_id = router_data->id;
+            config.router_id = router_data->router_id;
         // TODO
     }
     else
@@ -952,7 +952,7 @@ RouterWidget* HostsTab::createRouterWidget(const RouterConfig& config)
 {
     RouterWidget* widget = new RouterWidget(config, this);
 
-    router_widgets_.insert(config.id, widget);
+    router_widgets_.insert(config.router_id, widget);
     ui.content_stack->addWidget(widget);
 
     connect(widget, &RouterWidget::sig_statusChanged, this, &HostsTab::onRouterStatusChanged);
@@ -995,7 +995,7 @@ void HostsTab::deleteRouter(qint64 router_id)
         return;
     }
 
-    QString message = tr("Are you sure you want to delete router \"%1\"?").arg(existing->name);
+    QString message = tr("Are you sure you want to delete router \"%1\"?").arg(existing->display_name);
     if (common::MsgBox::question(this, message) == common::MsgBox::No)
     {
         LOG(INFO) << "Action is rejected by user";
@@ -1207,7 +1207,7 @@ bool HostsTab::fillConfigFromComputer(Config* config, const ComputerData& comput
             return false;
         }
 
-        config->router_id = router->id;
+        config->router_id = router->router_id;
         config->address_or_id = computer.address;
         config->port = 0;
     }

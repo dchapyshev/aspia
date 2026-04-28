@@ -566,7 +566,7 @@ int clientMain(int argc, char* argv[])
                 return 1;
             }
 
-            router_config.id = 1;
+            router_config.router_id = 1;
             router_config.address = parser.value(router_address_option);
             router_config.port = parser.value(router_port_option).toUShort();
             router_config.username = parser.value(router_username_option);
@@ -580,7 +580,7 @@ int clientMain(int argc, char* argv[])
                 return 1;
             }
 
-            config.router_id = router_config.id;
+            config.router_id = router_config.router_id;
             startRouterSession(config, router_config, desktop_config);
         }
         else

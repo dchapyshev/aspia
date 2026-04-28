@@ -44,8 +44,8 @@ namespace {
 //--------------------------------------------------------------------------------------------------
 QString routerDisplayName(const RouterConfig& router)
 {
-    if (!router.name.isEmpty())
-        return router.name;
+    if (!router.display_name.isEmpty())
+        return router.display_name;
 
     if (router.port != DEFAULT_ROUTER_TCP_PORT)
         return QString("%1:%2").arg(router.address).arg(router.port);
@@ -153,7 +153,7 @@ void Sidebar::loadRouters()
     for (const RouterConfig& router_data : std::as_const(routers))
     {
         Router* router = new Router(
-            router_data.id, routerDisplayName(router_data), tree_widget_);
+            router_data.router_id, routerDisplayName(router_data), tree_widget_);
         router->setExpanded(true);
     }
 }
@@ -166,7 +166,7 @@ void Sidebar::reloadRouters()
     QSet<qint64> new_ids;
     new_ids.reserve(routers.size());
     for (const RouterConfig& router_data : std::as_const(routers))
-        new_ids.insert(router_data.id);
+        new_ids.insert(router_data.router_id);
 
     // Remove only Router items whose id no longer exists.
     for (int i = tree_widget_->topLevelItemCount() - 1; i >= 0; --i)
@@ -184,14 +184,14 @@ void Sidebar::reloadRouters()
     {
         const QString name = routerDisplayName(router_data);
 
-        Router* router = routerById(router_data.id);
+        Router* router = routerById(router_data.router_id);
         if (router)
         {
             router->setName(name);
         }
         else
         {
-            Router* new_router = new Router(router_data.id, name, tree_widget_);
+            Router* new_router = new Router(router_data.router_id, name, tree_widget_);
             new_router->setExpanded(true);
         }
     }

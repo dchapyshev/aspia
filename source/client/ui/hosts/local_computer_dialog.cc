@@ -43,8 +43,8 @@ constexpr int kMaxCommentLength = 2048;
 //--------------------------------------------------------------------------------------------------
 QString routerDisplayName(const RouterConfig& router)
 {
-    if (!router.name.isEmpty())
-        return router.name;
+    if (!router.display_name.isEmpty())
+        return router.display_name;
 
     if (router.port != DEFAULT_ROUTER_TCP_PORT)
         return QString("%1:%2").arg(router.address).arg(router.port);
@@ -68,7 +68,7 @@ LocalComputerDialog::LocalComputerDialog(qint64 computer_id, qint64 group_id, QW
     QList<RouterConfig> routers = Database::instance().routerList();
     for (const RouterConfig& router : std::as_const(routers))
     {
-        ui.combo_router->addItem(QIcon(":/img/stack.svg"), routerDisplayName(router), QVariant::fromValue(router.id));
+        ui.combo_router->addItem(QIcon(":/img/stack.svg"), routerDisplayName(router), QVariant::fromValue(router.router_id));
     }
 
     qint64 selected_router_id = 0;

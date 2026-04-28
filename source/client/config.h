@@ -41,8 +41,8 @@ struct RouterConfig
     bool isValid() const;
     bool hasSameConnectionParams(const RouterConfig& other) const;
 
-    qint64 id = -1;
-    QString name;
+    qint64 router_id = -1;
+    QString display_name;
     QString address;
     quint16 port;
     proto::router::SessionType session_type;

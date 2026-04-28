@@ -297,10 +297,10 @@ void SettingsDialog::reloadRouterList()
         QTreeWidgetItem* item = new QTreeWidgetItem(ui.tree_routers);
         item->setText(kColumnAddress, address.toString());
         item->setIcon(kColumnAddress, QIcon(":/img/stack.svg"));
-        item->setText(kColumnName, router.name);
+        item->setText(kColumnName, router.display_name);
         item->setText(kColumnSessionType, sessionTypeToString(router.session_type));
         item->setText(kColumnUserName, router.username);
-        item->setData(kColumnAddress, kRoleId, router.id);
+        item->setData(kColumnAddress, kRoleId, router.router_id);
     }
 
     updateRouterButtons();

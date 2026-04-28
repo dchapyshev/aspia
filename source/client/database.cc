@@ -81,8 +81,8 @@ RouterConfig readRouter(const QSqlQuery& query)
     base::DataCryptor& cryptor = base::DataCryptor::instance();
 
     RouterConfig router;
-    router.id = query.value(0).toLongLong();
-    router.name = query.value(1).toString();
+    router.router_id = query.value(0).toLongLong();
+    router.display_name = query.value(1).toString();
     router.address = query.value(2).toString();
     router.port = static_cast<quint16>(query.value(3).toUInt());
     router.session_type = static_cast<proto::router::SessionType>(query.value(4).toUInt());
@@ -620,7 +620,7 @@ bool Database::addRouter(RouterConfig& router)
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
     query.prepare("INSERT INTO routers (id, name, address, port, session_type, username, password) "
                   "VALUES (NULL, ?, ?, ?, ?, ?, ?)");
-    query.addBindValue(router.name);
+    query.addBindValue(router.display_name);
     query.addBindValue(router.address);
     query.addBindValue(router.port);
     query.addBindValue(static_cast<quint32>(router.session_type));
@@ -635,7 +635,7 @@ bool Database::addRouter(RouterConfig& router)
         return false;
     }
 
-    router.id = query.lastInsertId().toLongLong();
+    router.router_id = query.lastInsertId().toLongLong();
     return true;
 }
 
@@ -654,7 +654,7 @@ bool Database::modifyRouter(const RouterConfig& router)
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
     query.prepare("UPDATE routers SET name=?, address=?, port=?, session_type=?, username=?, password=? "
                   "WHERE id=?");
-    query.addBindValue(router.name);
+    query.addBindValue(router.display_name);
     query.addBindValue(router.address);
     query.addBindValue(router.port);
     query.addBindValue(static_cast<quint32>(router.session_type));
@@ -663,7 +663,7 @@ bool Database::modifyRouter(const RouterConfig& router)
     cryptor.encrypt(router.password.toUtf8(), &out);
     query.addBindValue(out);
 
-    query.addBindValue(router.id);
+    query.addBindValue(router.router_id);
 
     if (!query.exec())
     {

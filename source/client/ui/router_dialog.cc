@@ -55,7 +55,7 @@ RouterDialog::RouterDialog(qint64 router_id, QWidget* parent)
             address.setHost(router->address);
             address.setPort(router->port);
 
-            ui.edit_name->setText(router->name);
+            ui.edit_name->setText(router->display_name);
             ui.edit_address->setText(address.toString());
 
             int session_type_index = ui.combo_session_type->findData(router->session_type);
@@ -125,8 +125,8 @@ void RouterDialog::onButtonBoxClicked(QAbstractButton* button)
     }
 
     RouterConfig data;
-    data.id = router_id_;
-    data.name = ui.edit_name->text();
+    data.router_id = router_id_;
+    data.display_name = ui.edit_name->text();
     data.address = address.host();
     data.port = address.port();
     data.session_type =

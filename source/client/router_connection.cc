@@ -63,7 +63,7 @@ RouterConnection::RouterConnection(const RouterConfig& config, QObject* parent)
 RouterConnection::~RouterConnection()
 {
     LOG(INFO) << "Dtor";
-    instances().remove(config_.id);
+    instances().remove(config_.router_id);
     onDisconnectFromRouter();
 }
 
@@ -82,7 +82,7 @@ void RouterConnection::onConnectToRouter()
 {
     // We cannot perform registration in the constructor because the constructor is executed in the
     // GUI thread.
-    instances().insert(config_.id, this);
+    instances().insert(config_.router_id, this);
 
     reconnect_timer_->stop();
 
@@ -135,7 +135,7 @@ const RouterConfig& RouterConnection::config() const
 //--------------------------------------------------------------------------------------------------
 qint64 RouterConnection::routerId() const
 {
-    return config_.id;
+    return config_.router_id;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -391,7 +391,7 @@ void RouterConnection::onTcpErrorOccurred(base::TcpChannel::ErrorCode error_code
         tcp_channel_ = nullptr;
     }
 
-    emit sig_errorOccurred(config_.id, error_code);
+    emit sig_errorOccurred(config_.router_id, error_code);
 
     setStatus(Status::OFFLINE);
 
@@ -497,7 +497,7 @@ void RouterConnection::setStatus(Status status)
     {
         LOG(INFO) << "Status changed from" << status_ << "to" << status;
         status_ = status;
-        emit sig_statusChanged(config_.id, status_);
+        emit sig_statusChanged(config_.router_id, status_);
     }
 }
 
