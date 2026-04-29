@@ -381,61 +381,66 @@ Routers added: %4</source>
 <context>
     <name>Client</name>
     <message>
-        <location filename="../client/main.cc" line="43"/>
+        <location filename="../client/main.cc" line="45"/>
         <source>Incorrect value for &quot;%1&quot;. Possible values: %2.</source>
         <translation>Некорректное значение для &quot;%1&quot;. Возможные значения: %2.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="299"/>
+        <location filename="../client/main.cc" line="301"/>
         <source>Connecting to router %1...</source>
         <translation>Подключение к маршрутизатору %1...</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="304"/>
+        <location filename="../client/main.cc" line="306"/>
         <source>Connection to router %1 established.</source>
         <translation>Соединение с маршрутизатором %1 установлено.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="313"/>
+        <location filename="../client/main.cc" line="315"/>
         <source>Disconnected from router %1.</source>
         <translation>Отключено от маршрутизатора %1.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="325"/>
+        <location filename="../client/main.cc" line="327"/>
         <source>Network error: %1.</source>
         <translation>Сетевая ошибка: %1.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="363"/>
+        <location filename="../client/main.cc" line="365"/>
         <source>Remote computer address.</source>
         <translation>Адрес удаленного компьютера.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="558"/>
+        <location filename="../client/main.cc" line="560"/>
         <source>Connection parameters to the router are not specified.</source>
         <translation>Параметры подключения к маршрутизатору не указаны.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="571"/>
+        <location filename="../client/main.cc" line="573"/>
         <source>Incorrect data for connecting to the router.</source>
         <translation>Неверные данные для подключения к маршрутизатору.</translation>
+    </message>
+    <message>
+        <location filename="../client/main.cc" line="613"/>
+        <source>Invalid master password.</source>
+        <translation>Неверный мастер-пароль.</translation>
     </message>
     <message>
         <source>Remote computer port.</source>
         <translation type="vanished">Порт удаленного компьютера.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="367"/>
+        <location filename="../client/main.cc" line="369"/>
         <source>Name of host.</source>
         <translation>Имя хоста.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="371"/>
+        <location filename="../client/main.cc" line="373"/>
         <source>Name of user.</source>
         <translation>Имя пользователя.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="375"/>
+        <location filename="../client/main.cc" line="377"/>
         <source>Password of user.</source>
         <translation>Пароль пользователя.</translation>
     </message>
@@ -448,7 +453,7 @@ Routers added: %4</source>
         <translation type="vanished">Тип сессии. Возможные значения: desktop-manager, desktop-view, file-transfer, text-chat.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="379"/>
+        <location filename="../client/main.cc" line="381"/>
         <source>Display name when connected</source>
         <translation>Имя отображаемое при подключении</translation>
     </message>
@@ -473,32 +478,32 @@ Routers added: %4</source>
         <translation type="vanished">Уровень сжатия. Возможные значения: 1-22.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="388"/>
+        <location filename="../client/main.cc" line="390"/>
         <source>Enable or disable audio. Possible values: 0 or 1.</source>
         <translation>Включить или отключить звук. Возможные значения: 0 или 1.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="392"/>
+        <location filename="../client/main.cc" line="394"/>
         <source>Enable or disable cursor shape. Possible values: 0 or 1.</source>
         <translation>Включить или отключить изображение курсора мыши. Возможные значения: 0 или 1.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="396"/>
+        <location filename="../client/main.cc" line="398"/>
         <source>Enable or disable cursor position. Possible values: 0 or 1.</source>
         <translation>Включить или отключить положение курсора. Возможные значения: 0 или 1.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="400"/>
+        <location filename="../client/main.cc" line="402"/>
         <source>Enable or disable clipboard. Possible values: 0 or 1.</source>
         <translation>Включить или отключить буфер обмена. Возможные значения: 0 или 1.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="404"/>
+        <location filename="../client/main.cc" line="406"/>
         <source>Enable or disable desktop effects. Possible values: 0 or 1.</source>
         <translation>Включить или отключить эффекты рабочего стола. Возможные значения: 0 или 1.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="408"/>
+        <location filename="../client/main.cc" line="410"/>
         <source>Enable or disable desktop wallpaper. Possible values: 0 or 1.</source>
         <translation>Включить или отключить обои рабочего стола. Возможные значения: 0 или 1.</translation>
     </message>
@@ -515,22 +520,22 @@ Routers added: %4</source>
         <translation type="vanished">Тип кодека. Допустимые значения: vp8, vp9.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="383"/>
+        <location filename="../client/main.cc" line="385"/>
         <source>Session type. Possible values: desktop, file-transfer, system-info, text-chat.</source>
         <translation>Тип сессии. Возможные значения: desktop, file-transfer, system-info, text-chat.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="412"/>
+        <location filename="../client/main.cc" line="414"/>
         <source>Lock computer at disconnect. Possible values: 0 or 1.</source>
         <translation>Блокировать компьютер при отключении. Возможные значения: 0 или 1.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="416"/>
+        <location filename="../client/main.cc" line="418"/>
         <source>Block remote input. Possible values: 0 or 1.</source>
         <translation>Блокировать удаленный ввод. Возможные значения: 0 или 1.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="420"/>
+        <location filename="../client/main.cc" line="422"/>
         <source>Router address.</source>
         <translation>Адрес маршрутизатора.</translation>
     </message>
@@ -539,17 +544,17 @@ Routers added: %4</source>
         <translation type="vanished">Порт машрутизатора.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="424"/>
+        <location filename="../client/main.cc" line="426"/>
         <source>Router name of user.</source>
         <translation>Имя пользователя маршрутизатора.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="428"/>
+        <location filename="../client/main.cc" line="430"/>
         <source>Router password of user.</source>
         <translation>Пароль маршрутизатора.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="432"/>
+        <location filename="../client/main.cc" line="434"/>
         <source>Aspia Client</source>
         <translation>Клиент Aspia</translation>
     </message>
@@ -2732,6 +2737,34 @@ Routers added: %4</source>
     </message>
 </context>
 <context>
+    <name>MasterPasswordDialog</name>
+    <message>
+        <location filename="../client/ui/master_password_dialog.ui" line="23"/>
+        <source>Master Password</source>
+        <translation>Мастер-пароль</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/master_password_dialog.ui" line="53"/>
+        <source>Set the master password to encrypt the address book.</source>
+        <translation>Установка мастер-пароля для шифрования адресной книги.</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/master_password_dialog.ui" line="67"/>
+        <source>Current password:</source>
+        <translation>Текущий пароль:</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/master_password_dialog.ui" line="81"/>
+        <source>New password:</source>
+        <translation>Новый пароль:</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/master_password_dialog.ui" line="95"/>
+        <source>Confirm password:</source>
+        <translation>Подтвердите пароль:</translation>
+    </message>
+</context>
+<context>
     <name>NotifierWindow</name>
     <message>
         <source>Connections</source>
@@ -3653,7 +3686,7 @@ Routers added: %4</source>
         <translation>Параметры</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="85"/>
+        <location filename="../client/ui/settings_dialog.ui" line="133"/>
         <source>Router</source>
         <translation>Маршрутизатор</translation>
     </message>
@@ -3674,92 +3707,92 @@ Routers added: %4</source>
         <translation type="vanished">Пароль:</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="115"/>
+        <location filename="../client/ui/settings_dialog.ui" line="163"/>
         <source>Display Name</source>
         <translation>Отображаемое имя</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="171"/>
+        <location filename="../client/ui/settings_dialog.ui" line="219"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
         <translation>Маршрутизатор необходим для подключения к компьютеру при невозможности прямого подключения (обхода NAT). Aspia не предоставляет публичного маршрутизатора, но вы можете установить свой собственный. Загрузить маршрутизатор вы можете на &lt;a href=&quot;https://aspia.org&quot;&gt;официальном сайте&lt;/a&gt;.</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="188"/>
+        <location filename="../client/ui/settings_dialog.ui" line="236"/>
         <source>Desktop</source>
         <translation>Рабочий стол</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="200"/>
+        <location filename="../client/ui/settings_dialog.ui" line="248"/>
         <source>Features</source>
         <translation>Возможности</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="206"/>
+        <location filename="../client/ui/settings_dialog.ui" line="254"/>
         <source>Enable audio</source>
         <translation>Включить звук</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="213"/>
+        <location filename="../client/ui/settings_dialog.ui" line="261"/>
         <source>Enable clipboard</source>
         <translation>Включить буфер обмена</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="220"/>
+        <location filename="../client/ui/settings_dialog.ui" line="268"/>
         <source>Show shape of remote cursor</source>
         <translation>Показывать форму удаленного курсора</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="227"/>
+        <location filename="../client/ui/settings_dialog.ui" line="275"/>
         <source>Show position of remote cursor</source>
         <translation>Показывать положение удаленного курсора</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="243"/>
+        <location filename="../client/ui/settings_dialog.ui" line="291"/>
         <source>Appearance</source>
         <translation>Внешний вид</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="249"/>
+        <location filename="../client/ui/settings_dialog.ui" line="297"/>
         <source>Disable desktop effects</source>
         <translation>Отключить эффекты рабочего стола</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="256"/>
+        <location filename="../client/ui/settings_dialog.ui" line="304"/>
         <source>Disable desktop wallpaper</source>
         <translation>Отключить обои рабочего стола</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="278"/>
+        <location filename="../client/ui/settings_dialog.ui" line="326"/>
         <source>Lock computer at disconnect</source>
         <translation>Блокировать компьютер при отключении</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="285"/>
+        <location filename="../client/ui/settings_dialog.ui" line="333"/>
         <source>Block remote input</source>
         <translation>Блокировать удаленный ввод</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="309"/>
+        <location filename="../client/ui/settings_dialog.ui" line="357"/>
         <source>Update</source>
         <translation>Обновление</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="315"/>
+        <location filename="../client/ui/settings_dialog.ui" line="363"/>
         <source>Check for updates on startup</source>
         <translation>Проверять обновления при запуске</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="322"/>
+        <location filename="../client/ui/settings_dialog.ui" line="370"/>
         <source>Use custom update server</source>
         <translation>Использовать свой сервер обновлений</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="331"/>
+        <location filename="../client/ui/settings_dialog.ui" line="379"/>
         <source>Server:</source>
         <translation>Сервер:</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="272"/>
+        <location filename="../client/ui/settings_dialog.ui" line="320"/>
         <source>Other</source>
         <translation>Разное</translation>
     </message>
@@ -3769,17 +3802,42 @@ Routers added: %4</source>
         <translation>Основные</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="32"/>
+        <location filename="../client/ui/settings_dialog.ui" line="30"/>
+        <source>Interface</source>
+        <translation>Интерфейс</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_dialog.ui" line="36"/>
         <source>Language:</source>
         <translation>Язык:</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="42"/>
+        <location filename="../client/ui/settings_dialog.ui" line="46"/>
         <source>Theme:</source>
         <translation>Тема:</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="110"/>
+        <location filename="../client/ui/settings_dialog.ui" line="76"/>
+        <source>Master Password</source>
+        <translation>Мастер-пароль</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_dialog.ui" line="82"/>
+        <source>Status: not set</source>
+        <translation>Состояние: не установлен</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_dialog.ui" line="102"/>
+        <source>Set...</source>
+        <translation>Установить...</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_dialog.ui" line="109"/>
+        <source>Remove...</source>
+        <translation>Удалить...</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_dialog.ui" line="158"/>
         <source>Address</source>
         <translation>Адрес</translation>
     </message>
@@ -3788,62 +3846,62 @@ Routers added: %4</source>
         <translation type="vanished">Имя</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="120"/>
+        <location filename="../client/ui/settings_dialog.ui" line="168"/>
         <source>Access Level</source>
         <translation>Уровень доступа</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="125"/>
+        <location filename="../client/ui/settings_dialog.ui" line="173"/>
         <source>User Name</source>
         <translation>Имя пользователя</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="135"/>
+        <location filename="../client/ui/settings_dialog.ui" line="183"/>
         <source>Add...</source>
         <translation>Добавить...</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="142"/>
+        <location filename="../client/ui/settings_dialog.ui" line="190"/>
         <source>Edit...</source>
         <translation>Изменить...</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="149"/>
+        <location filename="../client/ui/settings_dialog.ui" line="197"/>
         <source>Remove</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="371"/>
+        <location filename="../client/ui/settings_dialog.ui" line="419"/>
         <source>Check for updates</source>
         <translation>Проверить обновления</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="52"/>
+        <location filename="../client/ui/settings_dialog.ui" line="56"/>
         <source>Display name when connected:</source>
         <translation>Имя отображаемое при подключении:</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="62"/>
+        <location filename="../client/ui/settings_dialog.ui" line="66"/>
         <source>Enter a name or leave the field empty</source>
         <translation>Введите имя или оставьте поле пустым</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.cc" line="55"/>
+        <location filename="../client/ui/settings_dialog.cc" line="57"/>
         <source>Administrator</source>
         <translation>Администратор</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.cc" line="57"/>
+        <location filename="../client/ui/settings_dialog.cc" line="59"/>
         <source>Manager</source>
         <translation>Менеджер</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.cc" line="59"/>
+        <location filename="../client/ui/settings_dialog.cc" line="61"/>
         <source>Client</source>
         <translation>Клиент</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.cc" line="61"/>
+        <location filename="../client/ui/settings_dialog.cc" line="63"/>
         <source>Unknown</source>
         <translation>Неизвестно</translation>
     </message>
@@ -6800,12 +6858,12 @@ Routers added: %4</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_group_widget.cc" line="500"/>
+        <location filename="../client/ui/hosts/local_group_widget.cc" line="504"/>
         <source>Online</source>
         <translation>В сети</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_group_widget.cc" line="500"/>
+        <location filename="../client/ui/hosts/local_group_widget.cc" line="504"/>
         <source>Offline</source>
         <translation>Не в сети</translation>
     </message>
@@ -6842,6 +6900,98 @@ Routers added: %4</source>
         <location filename="../client/ui/main_window.cc" line="217"/>
         <source>Aspia Client</source>
         <translation>Клиент Aspia</translation>
+    </message>
+</context>
+<context>
+    <name>client::MasterPasswordDialog</name>
+    <message>
+        <location filename="../client/ui/master_password_dialog.cc" line="42"/>
+        <source>Set Master Password</source>
+        <translation>Установка мастер-пароля</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/master_password_dialog.cc" line="43"/>
+        <source>Set the master password to encrypt the address book.</source>
+        <translation>Установка мастер-пароля для шифрования адресной книги.</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/master_password_dialog.cc" line="50"/>
+        <source>Change Master Password</source>
+        <translation>Изменение мастер-пароля</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/master_password_dialog.cc" line="51"/>
+        <source>Enter your current password and choose a new one.</source>
+        <translation>Введите свой текущий пароль и выберите новый.</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/master_password_dialog.cc" line="56"/>
+        <source>Remove Master Password</source>
+        <translation>Удаление мастер-пароля</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/master_password_dialog.cc" line="57"/>
+        <source>Enter your current password to remove encryption from the address book.</source>
+        <translation>Введите ваш текущий пароль для удаления шифрования адресной книги.</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/master_password_dialog.cc" line="113"/>
+        <location filename="../client/ui/master_password_dialog.cc" line="158"/>
+        <source>Password you entered does not meet the security requirements!</source>
+        <translation>Введенный пароль не отвечает требованиям безопасности!</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../client/ui/master_password_dialog.cc" line="114"/>
+        <location filename="../client/ui/master_password_dialog.cc" line="159"/>
+        <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
+        <translation>
+            <numerusform>Пароль должен содержать строчные и заглавные буквы, цифры и не должен быть короче %n символа.</numerusform>
+            <numerusform>Пароль должен содержать строчные и заглавные буквы, цифры и не должен быть короче %n символов.</numerusform>
+            <numerusform>Пароль должен содержать строчные и заглавные буквы, цифры и не должен быть короче %n символов.</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../client/ui/master_password_dialog.cc" line="117"/>
+        <location filename="../client/ui/master_password_dialog.cc" line="162"/>
+        <source>Do you want to enter a different password?</source>
+        <translation>Вы хотите ввести другой пароль?</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/master_password_dialog.cc" line="120"/>
+        <location filename="../client/ui/master_password_dialog.cc" line="165"/>
+        <source>Warning</source>
+        <translation>Предупреждение</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/master_password_dialog.cc" line="130"/>
+        <source>Passwords do not match.</source>
+        <translation>Пароли не совпадают.</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/master_password_dialog.cc" line="136"/>
+        <source>Unable to set master password.</source>
+        <translation>Не удалось установить мастер-пароль.</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/master_password_dialog.cc" line="152"/>
+        <location filename="../client/ui/master_password_dialog.cc" line="195"/>
+        <source>Enter the current password.</source>
+        <translation>Введите текущий пароль.</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/master_password_dialog.cc" line="175"/>
+        <source>New passwords do not match.</source>
+        <translation>Новые пароли не совпадают.</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/master_password_dialog.cc" line="181"/>
+        <source>Invalid current password or unable to change it.</source>
+        <translation>Неверный текущий пароль или невозможно изменить его.</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/master_password_dialog.cc" line="201"/>
+        <source>Invalid current password or unable to remove it.</source>
+        <translation>Неверный текущий пароль или невозможно удалить его.</translation>
     </message>
 </context>
 <context>
@@ -8099,9 +8249,29 @@ Routers added: %4</source>
         <translation type="vanished">Предупреждение</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.cc" line="259"/>
+        <location filename="../client/ui/settings_dialog.cc" line="268"/>
         <source>Are you sure you want to delete router &quot;%1&quot;?</source>
         <translation>Вы уверены, что хотите удалить маршрутизатор &quot;%1&quot;?</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_dialog.cc" line="324"/>
+        <source>Status: set</source>
+        <translation>Состояние: установлен</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_dialog.cc" line="325"/>
+        <source>Change...</source>
+        <translation>Изменить...</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_dialog.cc" line="329"/>
+        <source>Status: not set</source>
+        <translation>Состояние: не установлен</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_dialog.cc" line="330"/>
+        <source>Set...</source>
+        <translation>Установить...</translation>
     </message>
 </context>
 <context>

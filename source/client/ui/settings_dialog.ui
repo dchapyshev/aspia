@@ -25,45 +25,50 @@
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
-        <layout class="QGridLayout" name="gridLayout">
-         <item row="0" column="0">
-          <widget class="QLabel" name="label_language">
-           <property name="text">
-            <string>Language:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QComboBox" name="combo_language"/>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="label_theme">
-           <property name="text">
-            <string>Theme:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QComboBox" name="combo_theme"/>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="label_display_name">
-           <property name="text">
-            <string>Display name when connected:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <widget class="QLineEdit" name="edit_display_name">
-           <property name="maxLength">
-            <number>16</number>
-           </property>
-           <property name="placeholderText">
-            <string>Enter a name or leave the field empty</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
+        <widget class="QGroupBox" name="groupbox_interface">
+         <property name="title">
+          <string>Interface</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_language">
+            <property name="text">
+             <string>Language:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QComboBox" name="combo_language"/>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_theme">
+            <property name="text">
+             <string>Theme:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QComboBox" name="combo_theme"/>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_display_name">
+            <property name="text">
+             <string>Display name when connected:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLineEdit" name="edit_display_name">
+            <property name="maxLength">
+             <number>16</number>
+            </property>
+            <property name="placeholderText">
+             <string>Enter a name or leave the field empty</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
        </item>
        <item>
         <widget class="QGroupBox" name="groupbox_master_password">

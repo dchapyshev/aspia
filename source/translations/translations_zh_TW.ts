@@ -381,43 +381,48 @@ Routers added: %4</source>
         <translation type="vanished">警告</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="43"/>
+        <location filename="../client/main.cc" line="45"/>
         <source>Incorrect value for &quot;%1&quot;. Possible values: %2.</source>
         <translation>&quot;%1&quot; 的值不正確。可能的值：%2。</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="299"/>
+        <location filename="../client/main.cc" line="301"/>
         <source>Connecting to router %1...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="304"/>
+        <location filename="../client/main.cc" line="306"/>
         <source>Connection to router %1 established.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="313"/>
+        <location filename="../client/main.cc" line="315"/>
         <source>Disconnected from router %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="325"/>
+        <location filename="../client/main.cc" line="327"/>
         <source>Network error: %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="363"/>
+        <location filename="../client/main.cc" line="365"/>
         <source>Remote computer address.</source>
         <translation>遠端電腦位址。</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="558"/>
+        <location filename="../client/main.cc" line="560"/>
         <source>Connection parameters to the router are not specified.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="571"/>
+        <location filename="../client/main.cc" line="573"/>
         <source>Incorrect data for connecting to the router.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/main.cc" line="613"/>
+        <source>Invalid master password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -425,17 +430,17 @@ Routers added: %4</source>
         <translation type="vanished">遠端電腦通訊埠。</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="367"/>
+        <location filename="../client/main.cc" line="369"/>
         <source>Name of host.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="371"/>
+        <location filename="../client/main.cc" line="373"/>
         <source>Name of user.</source>
         <translation>使用者名稱。</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="375"/>
+        <location filename="../client/main.cc" line="377"/>
         <source>Password of user.</source>
         <translation>使用者密碼。</translation>
     </message>
@@ -456,27 +461,27 @@ Routers added: %4</source>
         <translation type="vanished">壓縮率。可能的值：1-22。</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="388"/>
+        <location filename="../client/main.cc" line="390"/>
         <source>Enable or disable audio. Possible values: 0 or 1.</source>
         <translation>啟用或停用音訊。可能的值：0 或 1。</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="392"/>
+        <location filename="../client/main.cc" line="394"/>
         <source>Enable or disable cursor shape. Possible values: 0 or 1.</source>
         <translation>啟用或停用游標形狀。可能的值：0 或 1。</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="400"/>
+        <location filename="../client/main.cc" line="402"/>
         <source>Enable or disable clipboard. Possible values: 0 or 1.</source>
         <translation>啟用或停用剪貼簿。可能的值：0 或 1。</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="404"/>
+        <location filename="../client/main.cc" line="406"/>
         <source>Enable or disable desktop effects. Possible values: 0 or 1.</source>
         <translation>啟用或停用桌面特效。可能的值：0 或 1。</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="408"/>
+        <location filename="../client/main.cc" line="410"/>
         <source>Enable or disable desktop wallpaper. Possible values: 0 or 1.</source>
         <translation>啟用或停用桌布。可能的值：0 或 1。</translation>
     </message>
@@ -489,37 +494,37 @@ Routers added: %4</source>
         <translation type="vanished">在中斷連線時清除剪貼簿。可能的值：0 或 1。</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="383"/>
+        <location filename="../client/main.cc" line="385"/>
         <source>Session type. Possible values: desktop, file-transfer, system-info, text-chat.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="412"/>
+        <location filename="../client/main.cc" line="414"/>
         <source>Lock computer at disconnect. Possible values: 0 or 1.</source>
         <translation>在中斷連線時鎖定電腦。可能的值：0 或 1。</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="416"/>
+        <location filename="../client/main.cc" line="418"/>
         <source>Block remote input. Possible values: 0 or 1.</source>
         <translation>阻止遠端輸入。可能的值：0 或 1。</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="420"/>
+        <location filename="../client/main.cc" line="422"/>
         <source>Router address.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="424"/>
+        <location filename="../client/main.cc" line="426"/>
         <source>Router name of user.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="428"/>
+        <location filename="../client/main.cc" line="430"/>
         <source>Router password of user.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="432"/>
+        <location filename="../client/main.cc" line="434"/>
         <source>Aspia Client</source>
         <translation>Aspia Client</translation>
     </message>
@@ -528,12 +533,12 @@ Routers added: %4</source>
         <translation type="vanished">輸入了主機 ID，但未配置路由器。您需要在連線之前配置您的路由器。</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="396"/>
+        <location filename="../client/main.cc" line="398"/>
         <source>Enable or disable cursor position. Possible values: 0 or 1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="379"/>
+        <location filename="../client/main.cc" line="381"/>
         <source>Display name when connected</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2531,6 +2536,34 @@ Routers added: %4</source>
     </message>
 </context>
 <context>
+    <name>MasterPasswordDialog</name>
+    <message>
+        <location filename="../client/ui/master_password_dialog.ui" line="23"/>
+        <source>Master Password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/master_password_dialog.ui" line="53"/>
+        <source>Set the master password to encrypt the address book.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/master_password_dialog.ui" line="67"/>
+        <source>Current password:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/master_password_dialog.ui" line="81"/>
+        <source>New password:</source>
+        <translation type="unfinished">新密碼：</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/master_password_dialog.ui" line="95"/>
+        <source>Confirm password:</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>NotifierWindow</name>
     <message>
         <source>Connections</source>
@@ -3292,7 +3325,7 @@ Routers added: %4</source>
         <translation type="unfinished">設定</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="85"/>
+        <location filename="../client/ui/settings_dialog.ui" line="133"/>
         <source>Router</source>
         <translation type="unfinished">路由器</translation>
     </message>
@@ -3313,92 +3346,92 @@ Routers added: %4</source>
         <translation type="obsolete">密碼：</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="115"/>
+        <location filename="../client/ui/settings_dialog.ui" line="163"/>
         <source>Display Name</source>
         <translation type="unfinished">顯示名稱</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="171"/>
+        <location filename="../client/ui/settings_dialog.ui" line="219"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="188"/>
+        <location filename="../client/ui/settings_dialog.ui" line="236"/>
         <source>Desktop</source>
         <translation type="unfinished">桌面</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="200"/>
+        <location filename="../client/ui/settings_dialog.ui" line="248"/>
         <source>Features</source>
         <translation type="unfinished">功能</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="206"/>
+        <location filename="../client/ui/settings_dialog.ui" line="254"/>
         <source>Enable audio</source>
         <translation type="unfinished">啟用音訊</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="213"/>
+        <location filename="../client/ui/settings_dialog.ui" line="261"/>
         <source>Enable clipboard</source>
         <translation type="unfinished">啟用剪貼簿</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="220"/>
+        <location filename="../client/ui/settings_dialog.ui" line="268"/>
         <source>Show shape of remote cursor</source>
         <translation type="unfinished">顯示遠端游標形狀</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="227"/>
+        <location filename="../client/ui/settings_dialog.ui" line="275"/>
         <source>Show position of remote cursor</source>
         <translation type="unfinished">顯示遠端游標位置</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="243"/>
+        <location filename="../client/ui/settings_dialog.ui" line="291"/>
         <source>Appearance</source>
         <translation type="unfinished">視覺效果</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="249"/>
+        <location filename="../client/ui/settings_dialog.ui" line="297"/>
         <source>Disable desktop effects</source>
         <translation type="unfinished">停用桌面特效</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="256"/>
+        <location filename="../client/ui/settings_dialog.ui" line="304"/>
         <source>Disable desktop wallpaper</source>
         <translation type="unfinished">停用桌布</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="278"/>
+        <location filename="../client/ui/settings_dialog.ui" line="326"/>
         <source>Lock computer at disconnect</source>
         <translation type="unfinished">在中斷連線時鎖定電腦</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="285"/>
+        <location filename="../client/ui/settings_dialog.ui" line="333"/>
         <source>Block remote input</source>
         <translation type="unfinished">阻止遠端輸入</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="309"/>
+        <location filename="../client/ui/settings_dialog.ui" line="357"/>
         <source>Update</source>
         <translation type="unfinished">更新</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="315"/>
+        <location filename="../client/ui/settings_dialog.ui" line="363"/>
         <source>Check for updates on startup</source>
         <translation type="unfinished">啟動時檢查更新</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="322"/>
+        <location filename="../client/ui/settings_dialog.ui" line="370"/>
         <source>Use custom update server</source>
         <translation type="unfinished">使用自訂更新伺服器</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="331"/>
+        <location filename="../client/ui/settings_dialog.ui" line="379"/>
         <source>Server:</source>
         <translation type="unfinished">伺服器：</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="272"/>
+        <location filename="../client/ui/settings_dialog.ui" line="320"/>
         <source>Other</source>
         <translation type="unfinished">其他</translation>
     </message>
@@ -3408,17 +3441,42 @@ Routers added: %4</source>
         <translation type="unfinished">一般</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="32"/>
+        <location filename="../client/ui/settings_dialog.ui" line="30"/>
+        <source>Interface</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_dialog.ui" line="36"/>
         <source>Language:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="42"/>
+        <location filename="../client/ui/settings_dialog.ui" line="46"/>
         <source>Theme:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="110"/>
+        <location filename="../client/ui/settings_dialog.ui" line="76"/>
+        <source>Master Password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_dialog.ui" line="82"/>
+        <source>Status: not set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_dialog.ui" line="102"/>
+        <source>Set...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_dialog.ui" line="109"/>
+        <source>Remove...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_dialog.ui" line="158"/>
         <source>Address</source>
         <translation type="unfinished">位址</translation>
     </message>
@@ -3427,62 +3485,62 @@ Routers added: %4</source>
         <translation type="obsolete">名稱</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="120"/>
+        <location filename="../client/ui/settings_dialog.ui" line="168"/>
         <source>Access Level</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="125"/>
+        <location filename="../client/ui/settings_dialog.ui" line="173"/>
         <source>User Name</source>
         <translation type="unfinished">使用者名稱</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="135"/>
+        <location filename="../client/ui/settings_dialog.ui" line="183"/>
         <source>Add...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="142"/>
+        <location filename="../client/ui/settings_dialog.ui" line="190"/>
         <source>Edit...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="149"/>
+        <location filename="../client/ui/settings_dialog.ui" line="197"/>
         <source>Remove</source>
         <translation type="unfinished">移除</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="371"/>
+        <location filename="../client/ui/settings_dialog.ui" line="419"/>
         <source>Check for updates</source>
         <translation type="unfinished">檢查更新</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="52"/>
+        <location filename="../client/ui/settings_dialog.ui" line="56"/>
         <source>Display name when connected:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="62"/>
+        <location filename="../client/ui/settings_dialog.ui" line="66"/>
         <source>Enter a name or leave the field empty</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.cc" line="55"/>
+        <location filename="../client/ui/settings_dialog.cc" line="57"/>
         <source>Administrator</source>
         <translation type="unfinished">管理員</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.cc" line="57"/>
+        <location filename="../client/ui/settings_dialog.cc" line="59"/>
         <source>Manager</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.cc" line="59"/>
+        <location filename="../client/ui/settings_dialog.cc" line="61"/>
         <source>Client</source>
         <translation type="unfinished">客戶端</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.cc" line="61"/>
+        <location filename="../client/ui/settings_dialog.cc" line="63"/>
         <source>Unknown</source>
         <translation type="unfinished">未知</translation>
     </message>
@@ -6252,12 +6310,12 @@ Routers added: %4</source>
         </translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_group_widget.cc" line="500"/>
+        <location filename="../client/ui/hosts/local_group_widget.cc" line="504"/>
         <source>Online</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/local_group_widget.cc" line="500"/>
+        <location filename="../client/ui/hosts/local_group_widget.cc" line="504"/>
         <source>Offline</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6287,6 +6345,96 @@ Routers added: %4</source>
         <location filename="../client/ui/main_window.cc" line="217"/>
         <source>Aspia Client</source>
         <translation type="unfinished">Aspia Client</translation>
+    </message>
+</context>
+<context>
+    <name>client::MasterPasswordDialog</name>
+    <message>
+        <location filename="../client/ui/master_password_dialog.cc" line="42"/>
+        <source>Set Master Password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/master_password_dialog.cc" line="43"/>
+        <source>Set the master password to encrypt the address book.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/master_password_dialog.cc" line="50"/>
+        <source>Change Master Password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/master_password_dialog.cc" line="51"/>
+        <source>Enter your current password and choose a new one.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/master_password_dialog.cc" line="56"/>
+        <source>Remove Master Password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/master_password_dialog.cc" line="57"/>
+        <source>Enter your current password to remove encryption from the address book.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/master_password_dialog.cc" line="113"/>
+        <location filename="../client/ui/master_password_dialog.cc" line="158"/>
+        <source>Password you entered does not meet the security requirements!</source>
+        <translation type="unfinished">您輸入的密碼不符合安全要求！</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../client/ui/master_password_dialog.cc" line="114"/>
+        <location filename="../client/ui/master_password_dialog.cc" line="159"/>
+        <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
+        <translation type="unfinished">
+            <numerusform>密碼必須包含小寫和大寫字符、數字，並且不得少於 %n 個字元。</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../client/ui/master_password_dialog.cc" line="117"/>
+        <location filename="../client/ui/master_password_dialog.cc" line="162"/>
+        <source>Do you want to enter a different password?</source>
+        <translation type="unfinished">您想輸入其他密碼嗎？</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/master_password_dialog.cc" line="120"/>
+        <location filename="../client/ui/master_password_dialog.cc" line="165"/>
+        <source>Warning</source>
+        <translation type="unfinished">警告</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/master_password_dialog.cc" line="130"/>
+        <source>Passwords do not match.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/master_password_dialog.cc" line="136"/>
+        <source>Unable to set master password.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/master_password_dialog.cc" line="152"/>
+        <location filename="../client/ui/master_password_dialog.cc" line="195"/>
+        <source>Enter the current password.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/master_password_dialog.cc" line="175"/>
+        <source>New passwords do not match.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/master_password_dialog.cc" line="181"/>
+        <source>Invalid current password or unable to change it.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/master_password_dialog.cc" line="201"/>
+        <source>Invalid current password or unable to remove it.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -7343,8 +7491,28 @@ Routers added: %4</source>
         <translation type="obsolete">警告</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.cc" line="259"/>
+        <location filename="../client/ui/settings_dialog.cc" line="268"/>
         <source>Are you sure you want to delete router &quot;%1&quot;?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_dialog.cc" line="324"/>
+        <source>Status: set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_dialog.cc" line="325"/>
+        <source>Change...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_dialog.cc" line="329"/>
+        <source>Status: not set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_dialog.cc" line="330"/>
+        <source>Set...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
