@@ -182,7 +182,7 @@ QString BasePaths::userHome()
     }
 
     return QDir::fromNativeSeparators(QString::fromWCharArray(buffer));
-#elif defined(Q_OS_POSIX)
+#elif defined(Q_OS_UNIX)
     return qEnvironmentVariable("HOME");
 #else
     NOTIMPLEMENTED();
