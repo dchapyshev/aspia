@@ -2,7 +2,6 @@
     <qresource prefix="/img">
         <file>aspia-client.ico</file>
         <file>aspia-host.ico</file>
-        <file>aspia-console.ico</file>
         <file>back.svg</file>
         <file>keyboard.svg</file>
         <file>motherboard.svg</file>
