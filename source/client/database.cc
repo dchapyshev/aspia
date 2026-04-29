@@ -220,6 +220,33 @@ QList<ComputerConfig> Database::computerList(qint64 group_id) const
 }
 
 //--------------------------------------------------------------------------------------------------
+QList<ComputerConfig> Database::allComputers() const
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return {};
+    }
+
+    QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
+    query.prepare("SELECT id, group_id, router_id, name, comment, address, username, password, "
+                  "create_time, modify_time, connect_time, data "
+                  "FROM computers");
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to get computer list:" << query.lastError();
+        return {};
+    }
+
+    QList<ComputerConfig> computers;
+    while (query.next())
+        computers.append(readComputer(query));
+
+    return computers;
+}
+
+//--------------------------------------------------------------------------------------------------
 bool Database::addComputer(ComputerConfig& computer)
 {
     if (!isValid())
@@ -838,7 +865,11 @@ bool Database::hasProperty(const QString& name) const
     }
 
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    query.prepare("SELECT 1 FROM properties WHERE name=? LIMIT 1");
+    if (!query.prepare("SELECT 1 FROM properties WHERE name=? LIMIT 1"))
+    {
+        LOG(ERROR) << "Unable to prepare query:" << query.lastError();
+        return false;
+    }
     query.addBindValue(name);
 
     if (!query.exec())
@@ -911,10 +942,6 @@ bool Database::openDatabase()
         return false;
     }
 
-    bool need_create = !QFileInfo::exists(file_path);
-
-    LOG(INFO) << (need_create ? "Creating" : "Opening") << "book database:" << file_path;
-
     QSqlDatabase db = QSqlDatabase::database(kConnectionName, false);
     if (!db.isValid())
     {
@@ -928,16 +955,13 @@ bool Database::openDatabase()
         return false;
     }
 
-    if (need_create)
+    if (!createTables(db))
     {
-        if (!createTables(db))
-        {
-            db.close();
-            QSqlDatabase::removeDatabase(kConnectionName);
-            QFile::remove(file_path);
-            return false;
-        }
+        db.close();
+        QSqlDatabase::removeDatabase(kConnectionName);
+        return false;
     }
+
     return true;
 }
 

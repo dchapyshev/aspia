@@ -43,11 +43,14 @@ private slots:
     void onAddRouter();
     void onEditRouter();
     void onRemoveRouter();
+    void onSetOrChangeMasterPassword();
+    void onRemoveMasterPassword();
 
 private:
     void showError(const QString& message);
     void updateRouterButtons();
     void reloadRouterList();
+    void updateMasterPasswordUi();
 
     Ui::SettingsDialog ui;
 };

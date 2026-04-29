@@ -46,6 +46,8 @@ list(APPEND SOURCE_CLIENT_CORE
     file_transfer_queue_builder.h
     input_event_filter.cc
     input_event_filter.h
+    master_password.cc
+    master_password.h
     router_connection.cc
     router_connection.h
     session_state.cc
@@ -72,6 +74,9 @@ list(APPEND SOURCE_CLIENT_CORE_UI
     ui/main_window.cc
     ui/main_window.h
     ui/main_window.ui
+    ui/master_password_dialog.cc
+    ui/master_password_dialog.h
+    ui/master_password_dialog.ui
     ui/session_tab.cc
     ui/session_tab.h
     ui/router_dialog.cc

@@ -16,28 +16,42 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_CRYPTO_PASSWORD_HASH_H
-#define BASE_CRYPTO_PASSWORD_HASH_H
+#ifndef CLIENT_UI_MASTER_PASSWORD_DIALOG_H
+#define CLIENT_UI_MASTER_PASSWORD_DIALOG_H
 
-#include <QByteArray>
+#include "ui_master_password_dialog.h"
 
-namespace base {
+#include <QDialog>
 
-class PasswordHash
+class QAbstractButton;
+
+namespace client {
+
+class MasterPasswordDialog final : public QDialog
 {
+    Q_OBJECT
+
 public:
-    enum Type { SCRYPT, ARGON2ID };
+    enum class Mode { SET, CHANGE, REMOVE };
+    Q_ENUM(Mode)
 
-    static const size_t kBitsPerByte = 8;
-    static const size_t kBitsSize = 256;
-    static const size_t kBytesSize = kBitsSize / kBitsPerByte;
+    explicit MasterPasswordDialog(Mode mode, QWidget* parent = nullptr);
+    ~MasterPasswordDialog() final;
 
-    static QByteArray hash(Type type, const QString& password, const QByteArray& salt);
+private slots:
+    void onButtonBoxClicked(QAbstractButton* button);
 
 private:
-    Q_DISABLE_COPY_MOVE(PasswordHash)
+    bool applySet();
+    bool applyChange();
+    bool applyRemove();
+
+    Ui::MasterPasswordDialog ui;
+    const Mode mode_;
+
+    Q_DISABLE_COPY_MOVE(MasterPasswordDialog)
 };
 
-} // namespace base
+} // namespace client
 
-#endif // BASE_CRYPTO_PASSWORD_HASH_H
+#endif // CLIENT_UI_MASTER_PASSWORD_DIALOG_H

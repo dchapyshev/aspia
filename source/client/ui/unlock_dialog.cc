@@ -20,6 +20,7 @@
 
 #include <QAbstractButton>
 #include <QPushButton>
+#include <QTimer>
 
 #include "base/logging.h"
 
@@ -34,13 +35,8 @@ UnlockDialog::UnlockDialog(QWidget* parent,
     LOG(INFO) << "Ctor";
     ui.setupUi(this);
 
-    setFixedHeight(sizeHint().height());
-
-    connect(ui.button_show_password, &QPushButton::toggled,
-            this, &UnlockDialog::onShowPasswordButtonToggled);
-
-    connect(ui.button_box, &QDialogButtonBox::clicked,
-            this, &UnlockDialog::onButtonBoxClicked);
+    connect(ui.button_show_password, &QPushButton::toggled, this, &UnlockDialog::onShowPasswordButtonToggled);
+    connect(ui.button_box, &QDialogButtonBox::clicked, this, &UnlockDialog::onButtonBoxClicked);
 
     if (file_path.isEmpty())
     {
@@ -63,6 +59,8 @@ UnlockDialog::UnlockDialog(QWidget* parent,
     }
 
     ui.edit_password->setFocus();
+
+    QTimer::singleShot(0, this, [this](){ setFixedHeight(sizeHint().height()); });
 }
 
 //--------------------------------------------------------------------------------------------------

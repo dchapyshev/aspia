@@ -26,11 +26,13 @@
 #include "base/peer/host_id.h"
 #include "build/version.h"
 #include "client/config_factory.h"
+#include "client/master_password.h"
 #include "common/ui/msg_box.h"
 #include "common/ui/status_dialog.h"
 #include "client/router_connection.h"
 #include "client/ui/application.h"
 #include "client/ui/main_window.h"
+#include "client/ui/unlock_dialog.h"
 #include "client/ui/chat/chat_session_window.h"
 #include "client/ui/desktop/desktop_session_window.h"
 #include "client/ui/file_transfer/file_transfer_session_window.h"
@@ -587,6 +589,30 @@ int clientMain(int argc, char* argv[])
     else
     {
         LOG(INFO) << "Normal start";
+
+        if (client::MasterPassword::isSet())
+        {
+            LOG(INFO) << "Master password is set, prompting user";
+
+            while (true)
+            {
+                client::UnlockDialog dialog(nullptr, QString(), QString());
+                if (dialog.exec() != QDialog::Accepted)
+                {
+                    LOG(INFO) << "Master password unlock cancelled by user";
+                    return 0;
+                }
+
+                if (client::MasterPassword::unlock(dialog.password()))
+                {
+                    LOG(INFO) << "Master password accepted";
+                    break;
+                }
+
+                common::MsgBox::warning(nullptr,
+                    QApplication::translate("Client", "Invalid master password."));
+            }
+        }
 
         main_window.reset(new client::MainWindow());
         main_window->show();

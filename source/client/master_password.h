@@ -16,28 +16,32 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_CRYPTO_PASSWORD_HASH_H
-#define BASE_CRYPTO_PASSWORD_HASH_H
+#ifndef CLIENT_MASTER_PASSWORD_H
+#define CLIENT_MASTER_PASSWORD_H
 
-#include <QByteArray>
+#include <QString>
 
-namespace base {
+namespace client {
 
-class PasswordHash
+class MasterPassword
 {
 public:
-    enum Type { SCRYPT, ARGON2ID };
+    static const int kSafePasswordLength = 8;
 
-    static const size_t kBitsPerByte = 8;
-    static const size_t kBitsSize = 256;
-    static const size_t kBytesSize = kBitsSize / kBitsPerByte;
+    static bool isSafePassword(const QString& password);
+    static bool isSet();
 
-    static QByteArray hash(Type type, const QString& password, const QByteArray& salt);
+    static bool unlock(const QString& password);
+
+    static bool setNew(const QString& new_password);
+    static bool change(const QString& current_password, const QString& new_password);
+    static bool clear(const QString& current_password);
 
 private:
-    Q_DISABLE_COPY_MOVE(PasswordHash)
+    MasterPassword() = delete;
+    ~MasterPassword() = delete;
 };
 
-} // namespace base
+} // namespace client
 
-#endif // BASE_CRYPTO_PASSWORD_HASH_H
+#endif // CLIENT_MASTER_PASSWORD_H

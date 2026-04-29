@@ -41,6 +41,7 @@ public:
 
     // Computers.
     QList<ComputerConfig> computerList(qint64 group_id) const;
+    QList<ComputerConfig> allComputers() const;
     bool addComputer(ComputerConfig& computer);
     bool modifyComputer(ComputerConfig& computer);
     bool removeComputer(qint64 computer_id);
