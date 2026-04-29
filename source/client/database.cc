@@ -22,9 +22,11 @@
 #include "base/logging.h"
 #include "base/files/base_paths.h"
 
+#include <QDataStream>
 #include <QDateTime>
 #include <QDir>
 #include <QFileInfo>
+#include <QMetaType>
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
@@ -141,6 +143,17 @@ bool createTables(QSqlDatabase& db)
                     "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
     {
         LOG(ERROR) << "Unable to create routers table:" << query.lastError();
+        return false;
+    }
+
+    if (!query.exec("CREATE TABLE IF NOT EXISTS \"properties\" ("
+                    "\"id\" INTEGER UNIQUE,"
+                    "\"name\" TEXT NOT NULL UNIQUE,"
+                    "\"type\" INTEGER NOT NULL DEFAULT 0,"
+                    "\"value\" BLOB NOT NULL DEFAULT X'',"
+                    "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
+    {
+        LOG(ERROR) << "Unable to create properties table:" << query.lastError();
         return false;
     }
 
@@ -716,6 +729,150 @@ std::optional<RouterConfig> Database::findRouter(qint64 router_id) const
         return std::nullopt;
 
     return readRouter(query);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::setProperty(const QString& name, const QVariant& value)
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return false;
+    }
+
+    if (name.isEmpty())
+    {
+        LOG(ERROR) << "Empty property name";
+        return false;
+    }
+
+    QByteArray buffer;
+    QDataStream stream(&buffer, QIODevice::WriteOnly);
+    stream.setVersion(QDataStream::Qt_6_0);
+    stream << value;
+
+    QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
+    query.prepare("INSERT INTO properties (id, name, type, value) "
+                  "VALUES ((SELECT id FROM properties WHERE name=?), ?, ?, ?)");
+    query.addBindValue(name);
+    query.addBindValue(name);
+    query.addBindValue(static_cast<int>(value.metaType().id()));
+    query.addBindValue(buffer);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << query.lastError();
+        return false;
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+QVariant Database::property(const QString& name, const QVariant& default_value) const
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return default_value;
+    }
+
+    QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
+    query.prepare("SELECT value FROM properties WHERE name=?");
+    query.addBindValue(name);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << query.lastError();
+        return default_value;
+    }
+
+    if (!query.next())
+        return default_value;
+
+    QByteArray buffer = query.value(0).toByteArray();
+    QDataStream stream(&buffer, QIODevice::ReadOnly);
+    stream.setVersion(QDataStream::Qt_6_0);
+
+    QVariant value;
+    stream >> value;
+
+    if (stream.status() != QDataStream::Ok || !value.isValid())
+    {
+        LOG(ERROR) << "Unable to deserialize property:" << name;
+        return default_value;
+    }
+
+    return value;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::removeProperty(const QString& name)
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return false;
+    }
+
+    QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
+    query.prepare("DELETE FROM properties WHERE name=?");
+    query.addBindValue(name);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << query.lastError();
+        return false;
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::hasProperty(const QString& name) const
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return false;
+    }
+
+    QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
+    query.prepare("SELECT 1 FROM properties WHERE name=? LIMIT 1");
+    query.addBindValue(name);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << query.lastError();
+        return false;
+    }
+
+    return query.next();
+}
+
+//--------------------------------------------------------------------------------------------------
+QStringList Database::propertyNames() const
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return {};
+    }
+
+    QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
+    query.prepare("SELECT name FROM properties ORDER BY name");
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << query.lastError();
+        return {};
+    }
+
+    QStringList names;
+    while (query.next())
+        names.append(query.value(0).toString());
+
+    return names;
 }
 
 //--------------------------------------------------------------------------------------------------

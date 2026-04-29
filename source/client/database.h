@@ -21,6 +21,8 @@
 
 #include <QList>
 #include <QString>
+#include <QStringList>
+#include <QVariant>
 
 #include <optional>
 
@@ -63,6 +65,13 @@ public:
     bool modifyRouter(const RouterConfig& router);
     bool removeRouter(qint64 router_id);
     std::optional<RouterConfig> findRouter(qint64 router_id) const;
+
+    // Settings.
+    bool setProperty(const QString& name, const QVariant& value);
+    QVariant property(const QString& name, const QVariant& default_value = {}) const;
+    bool removeProperty(const QString& name);
+    bool hasProperty(const QString& name) const;
+    QStringList propertyNames() const;
 
 private:
     Database() = default;
