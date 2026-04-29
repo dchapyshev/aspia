@@ -29,7 +29,6 @@ list(APPEND SOURCE_CLIENT_CORE
     client_file_transfer.cc
     client_file_transfer.h
     main.cc
-    main.h
     client_system_info.cc
     client_system_info.h
     client_text_chat.cc
@@ -53,7 +52,8 @@ list(APPEND SOURCE_CLIENT_CORE
     session_state.cc
     session_state.h
     settings.cc
-    settings.h)
+    settings.h
+    client.rc)
 
 list(APPEND SOURCE_CLIENT_CORE_ONLINE_CHECKER
     online_checker/online_checker.cc
@@ -265,27 +265,6 @@ source_group(ui\\sys_info FILES ${SOURCE_CLIENT_CORE_UI_SYS_INFO})
 source_group(ui\\chat FILES ${SOURCE_CLIENT_CORE_UI_CHAT})
 source_group(ui\\hosts FILES ${SOURCE_CLIENT_CORE_UI_HOSTS_TAB})
 
-add_library(aspia_client_core STATIC
-    ${SOURCE_CLIENT_CORE}
-    ${SOURCE_CLIENT_CORE_ONLINE_CHECKER}
-    ${SOURCE_CLIENT_CORE_UI}
-    ${SOURCE_CLIENT_CORE_UI_DESKTOP}
-    ${SOURCE_CLIENT_CORE_UI_FILE_TRANSFER}
-    ${SOURCE_CLIENT_CORE_UI_ROUTER_MANAGER}
-    ${SOURCE_CLIENT_CORE_UI_SYS_INFO}
-    ${SOURCE_CLIENT_CORE_UI_CHAT}
-    ${SOURCE_CLIENT_CORE_UI_HOSTS_TAB})
-target_link_libraries(aspia_client_core PRIVATE
-    aspia_base
-    aspia_common
-    aspia_proto
-    ${QT_COMMON_LIBS}
-    ${QT_PLATFORM_LIBS}
-    ${THIRD_PARTY_LIBS})
-set_property(TARGET aspia_client_core PROPERTY AUTOMOC ON)
-set_property(TARGET aspia_client_core PROPERTY AUTOUIC ON)
-set_property(TARGET aspia_client_core PROPERTY AUTORCC ON)
-
 if (WIN32)
     set(CLIENT_PLATFORM_LIBS
         avrt crypt32 dbghelp dwmapi imm32 iphlpapi netapi32 shlwapi userenv uxtheme version
@@ -304,8 +283,28 @@ if (APPLE)
     set_source_files_properties(${aspia_client_ICON} PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
 endif()
 
-add_executable(aspia_client MACOSX_BUNDLE ${aspia_client_ICON} client_entry_point.cc client.rc)
-target_link_libraries(aspia_client aspia_client_core ${CLIENT_PLATFORM_LIBS})
+add_executable(aspia_client MACOSX_BUNDLE
+    ${aspia_client_ICON}
+    ${SOURCE_CLIENT_CORE}
+    ${SOURCE_CLIENT_CORE_ONLINE_CHECKER}
+    ${SOURCE_CLIENT_CORE_UI}
+    ${SOURCE_CLIENT_CORE_UI_DESKTOP}
+    ${SOURCE_CLIENT_CORE_UI_FILE_TRANSFER}
+    ${SOURCE_CLIENT_CORE_UI_ROUTER_MANAGER}
+    ${SOURCE_CLIENT_CORE_UI_SYS_INFO}
+    ${SOURCE_CLIENT_CORE_UI_CHAT}
+    ${SOURCE_CLIENT_CORE_UI_HOSTS_TAB})
+target_link_libraries(aspia_client PRIVATE
+    aspia_base
+    aspia_common
+    aspia_proto
+    ${CLIENT_PLATFORM_LIBS}
+    ${QT_COMMON_LIBS}
+    ${QT_PLATFORM_LIBS}
+    ${THIRD_PARTY_LIBS})
+set_property(TARGET aspia_client PROPERTY AUTOMOC ON)
+set_property(TARGET aspia_client PROPERTY AUTOUIC ON)
+set_property(TARGET aspia_client PROPERTY AUTORCC ON)
 qt_import_plugins(aspia_client INCLUDE "" EXCLUDE "" INCLUDE_BY_TYPE imageformats iconengines EXCLUDE_BY_TYPE "")
 
 if (WIN32)

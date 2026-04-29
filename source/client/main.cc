@@ -16,8 +16,6 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "client/main.h"
-
 #include <QCommandLineParser>
 #include <QSysInfo>
 
@@ -335,7 +333,7 @@ void startRouterSession(const client::ComputerConfig& computer,
 }
 
 //--------------------------------------------------------------------------------------------------
-int clientMain(int argc, char* argv[])
+int main(int argc, char* argv[])
 {
     Q_INIT_RESOURCE(common);
     Q_INIT_RESOURCE(common_translations);
