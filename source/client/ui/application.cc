@@ -27,6 +27,12 @@
 
 namespace client {
 
+namespace {
+
+const char kActivateWindow[] = "activate_window";
+
+} // namespace
+
 //--------------------------------------------------------------------------------------------------
 Application::Application(int& argc, char* argv[])
     : base::GuiApplication(argc, argv)
@@ -37,6 +43,18 @@ Application::Application(int& argc, char* argv[])
     setApplicationName("Client");
     setApplicationVersion(ASPIA_VERSION_STRING);
     setWindowIcon(QIcon(":/img/aspia-client.ico"));
+
+    connect(this, &Application::sig_messageReceived, this, [this](const QByteArray& message)
+    {
+        if (message.startsWith(kActivateWindow))
+        {
+            emit sig_windowActivated();
+        }
+        else
+        {
+            LOG(ERROR) << "Unhandled message";
+        }
+    });
 
     Settings settings;
 
@@ -61,6 +79,12 @@ Application::~Application()
 Application* Application::instance()
 {
     return static_cast<Application*>(QApplication::instance());
+}
+
+//--------------------------------------------------------------------------------------------------
+void Application::activateWindow()
+{
+    sendMessage(kActivateWindow);
 }
 
 } // namespace client

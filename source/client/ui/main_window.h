@@ -45,6 +45,9 @@ public:
     explicit MainWindow(QWidget* parent = nullptr);
     ~MainWindow() final;
 
+public slots:
+    void showAndActivate();
+
 protected:
     // QMainWindow implementation.
     void closeEvent(QCloseEvent* event) final;

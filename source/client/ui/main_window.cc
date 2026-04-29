@@ -132,6 +132,17 @@ MainWindow::~MainWindow()
 }
 
 //--------------------------------------------------------------------------------------------------
+void MainWindow::showAndActivate()
+{
+    LOG(INFO) << "Show and activate window";
+
+    show();
+    raise();
+    activateWindow();
+    setFocus();
+}
+
+//--------------------------------------------------------------------------------------------------
 void MainWindow::closeEvent(QCloseEvent* /* event */)
 {
     LOG(INFO) << "Close event detected";

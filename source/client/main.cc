@@ -590,6 +590,13 @@ int clientMain(int argc, char* argv[])
     {
         LOG(INFO) << "Normal start";
 
+        if (application.isRunning())
+        {
+            LOG(INFO) << "Another instance is already running, activating its window";
+            application.activateWindow();
+            return 0;
+        }
+
         if (client::MasterPassword::isSet())
         {
             LOG(INFO) << "Master password is set, prompting user";
@@ -615,6 +622,10 @@ int clientMain(int argc, char* argv[])
         }
 
         main_window.reset(new client::MainWindow());
+
+        QObject::connect(&application, &client::Application::sig_windowActivated,
+                         main_window.get(), &client::MainWindow::showAndActivate);
+
         main_window->show();
         main_window->activateWindow();
     }

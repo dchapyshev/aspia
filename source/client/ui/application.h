@@ -33,6 +33,12 @@ public:
 
     static Application* instance();
 
+public slots:
+    void activateWindow();
+
+signals:
+    void sig_windowActivated();
+
 private:
     Q_DISABLE_COPY_MOVE(Application)
 };
