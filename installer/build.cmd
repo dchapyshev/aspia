@@ -51,8 +51,7 @@ set ALL_LCIDS=1033,1029,1030,1031,1032,1034,1036,1037,1038,1040,1041,1042,1043,1
 set WISUBSTG="%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wisubstg.vbs"
 set WILANGID="%ProgramFiles(x86)%\Windows Kits\10\bin\%SDK_VERSION%\x86\wilangid.vbs"
 
-rem Build multilingual MSI for Console, Client, and Host.
-call :BUILD_MULTILINGUAL_MSI console
+rem Build multilingual MSI for Client, and Host.
 call :BUILD_MULTILINGUAL_MSI client
 call :BUILD_MULTILINGUAL_MSI host
 
