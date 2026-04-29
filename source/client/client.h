@@ -34,6 +34,7 @@
 class QTimer;
 
 namespace base {
+class RelayPeer;
 class StunPeer;
 class UdpChannel;
 } // namespace base
