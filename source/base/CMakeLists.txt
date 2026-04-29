@@ -608,7 +608,7 @@ set_property(TARGET aspia_base PROPERTY AUTORCC ON)
 qt_import_plugins(aspia_base INCLUDE "" EXCLUDE "" INCLUDE_BY_TYPE "" EXCLUDE_BY_TYPE imageformats)
 
 if (LINUX)
-    set(BASE_PLATFORM_LIBS ${X11_LIB} ${XFIXES_LIB} stdc++fs xdg_user_dirs)
+    set(BASE_PLATFORM_LIBS ${X11_LIB} ${XFIXES_LIB} stdc++fs)
 endif()
 
 target_link_libraries(aspia_base PRIVATE aspia_proto

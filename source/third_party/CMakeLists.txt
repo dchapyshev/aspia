@@ -21,7 +21,3 @@ add_subdirectory(libwebm)
 if (APPLE)
     add_subdirectory(portaudio)
 endif()
-
-if (LINUX)
-    add_subdirectory(xdg_user_dirs)
-endif()
