@@ -36,90 +36,60 @@
 <context>
     <name>AddressBookDialog</name>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="17"/>
         <source>Address Book Properties</source>
-        <translation>通訊錄屬性</translation>
+        <translation type="vanished">通訊錄屬性</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="27"/>
         <source>General</source>
-        <translation>一般</translation>
+        <translation type="vanished">一般</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="37"/>
         <source>Name:</source>
-        <translation>名稱：</translation>
+        <translation type="vanished">名稱：</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="44"/>
         <source>File:</source>
-        <translation>檔案：</translation>
+        <translation type="vanished">檔案：</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="51"/>
         <source>Encryption:</source>
-        <translation>加密：</translation>
+        <translation type="vanished">加密：</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="58"/>
-        <location filename="../console/address_book_dialog.ui" line="175"/>
         <source>Password:</source>
-        <translation>密碼：</translation>
+        <translation type="vanished">密碼：</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="65"/>
         <source>Password (repeat):</source>
-        <translation>密碼（再次輸入）：</translation>
+        <translation type="vanished">密碼（再次輸入）：</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="119"/>
         <source>Comment:</source>
-        <translation>註解：</translation>
+        <translation type="vanished">註解：</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="132"/>
         <source>Router</source>
-        <translation>路由器</translation>
+        <translation type="vanished">路由器</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="138"/>
         <source>Use a router</source>
-        <translation>使用路由器</translation>
+        <translation type="vanished">使用路由器</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="147"/>
         <source>Address:</source>
-        <translation>位址：</translation>
+        <translation type="vanished">位址：</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="161"/>
         <source>User Name:</source>
-        <translation>使用者名稱：</translation>
+        <translation type="vanished">使用者名稱：</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="225"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
-        <translation>當無法直接連線（繞過 NAT）到電腦時，就需要透過路由器進行連接。Aspia 不提供公共路由，但您可以搭建自己的路由。您可從&lt;a href=&quot;https://aspia.org&quot;&gt;官網&lt;/a&gt;下載路由。</translation>
+        <translation type="vanished">當無法直接連線（繞過 NAT）到電腦時，就需要透過路由器進行連接。Aspia 不提供公共路由，但您可以搭建自己的路由。您可從&lt;a href=&quot;https://aspia.org&quot;&gt;官網&lt;/a&gt;下載路由。</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="242"/>
-        <source>Default Configuration</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/address_book_dialog.ui" line="300"/>
         <source>Other</source>
-        <translation type="unfinished">其他</translation>
-    </message>
-    <message>
-        <location filename="../console/address_book_dialog.ui" line="308"/>
-        <source>Display name when connected:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/address_book_dialog.ui" line="318"/>
-        <source>Enter a name or leave the field empty</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">其他</translation>
     </message>
 </context>
 <context>
@@ -178,34 +148,28 @@ Routers added: %4</source>
 <context>
     <name>AddressBookTab</name>
     <message>
-        <location filename="../console/address_book_tab.ui" line="98"/>
         <source>Computer Name</source>
-        <translation>電腦名稱</translation>
+        <translation type="vanished">電腦名稱</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.ui" line="103"/>
         <source>Address / ID</source>
-        <translation>位址 / ID</translation>
+        <translation type="vanished">位址 / ID</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.ui" line="108"/>
         <source>Comment</source>
-        <translation>註解</translation>
+        <translation type="vanished">註解</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.ui" line="113"/>
         <source>Created</source>
-        <translation>建立時間</translation>
+        <translation type="vanished">建立時間</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.ui" line="118"/>
         <source>Modified</source>
-        <translation>修改時間</translation>
+        <translation type="vanished">修改時間</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.ui" line="123"/>
         <source>Status</source>
-        <translation type="unfinished">狀態</translation>
+        <translation type="obsolete">狀態</translation>
     </message>
 </context>
 <context>
@@ -421,7 +385,7 @@ Routers added: %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="613"/>
+        <location filename="../client/main.cc" line="620"/>
         <source>Invalid master password.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -640,9 +604,8 @@ Routers added: %4</source>
 <context>
     <name>ComputerDialog</name>
     <message>
-        <location filename="../console/computer_dialog.ui" line="17"/>
         <source>Computer Properties</source>
-        <translation>電腦屬性</translation>
+        <translation type="vanished">電腦屬性</translation>
     </message>
 </context>
 <context>
@@ -664,76 +627,60 @@ Routers added: %4</source>
         <translation type="vanished">最佳</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_desktop.ui" line="33"/>
         <source>Features</source>
-        <translation>功能</translation>
+        <translation type="vanished">功能</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_desktop.ui" line="39"/>
         <source>Enable audio</source>
-        <translation>啟用音訊</translation>
+        <translation type="vanished">啟用音訊</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_desktop.ui" line="46"/>
         <source>Enable clipboard</source>
-        <translation>啟用剪貼簿</translation>
+        <translation type="vanished">啟用剪貼簿</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_desktop.ui" line="53"/>
         <source>Show shape of remote cursor</source>
-        <translation>顯示遠端游標形狀</translation>
+        <translation type="vanished">顯示遠端游標形狀</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_desktop.ui" line="60"/>
         <source>Show position of remote cursor</source>
-        <translation>顯示遠端游標位置</translation>
+        <translation type="vanished">顯示遠端游標位置</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_desktop.ui" line="76"/>
         <source>Appearance</source>
-        <translation>視覺效果</translation>
+        <translation type="vanished">視覺效果</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_desktop.ui" line="82"/>
         <source>Disable desktop effects</source>
-        <translation>停用桌面特效</translation>
+        <translation type="vanished">停用桌面特效</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_desktop.ui" line="89"/>
         <source>Disable desktop wallpaper</source>
-        <translation>停用桌布</translation>
+        <translation type="vanished">停用桌布</translation>
     </message>
     <message>
         <source>Disable font smoothing</source>
         <translation type="vanished">停用字體平滑</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_desktop.ui" line="105"/>
         <source>Other</source>
-        <translation>其他</translation>
+        <translation type="vanished">其他</translation>
     </message>
     <message>
         <source>Clear clipboard at disconnect</source>
         <translation type="vanished">在中斷連線時清除剪貼簿</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_desktop.ui" line="111"/>
         <source>Lock computer at disconnect</source>
-        <translation>在中斷連線時鎖定電腦</translation>
+        <translation type="vanished">在中斷連線時鎖定電腦</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_desktop.ui" line="118"/>
         <source>Block remote input</source>
-        <translation>阻止遠端輸入</translation>
+        <translation type="vanished">阻止遠端輸入</translation>
     </message>
     <message>
         <source>General</source>
         <translation type="obsolete">一般</translation>
-    </message>
-    <message>
-        <location filename="../console/computer_dialog_desktop.ui" line="20"/>
-        <source>Inherit configuration from parent</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Compression ratio: %1</source>
@@ -743,80 +690,58 @@ Routers added: %4</source>
 <context>
     <name>ComputerDialogGeneral</name>
     <message>
-        <location filename="../console/computer_dialog_general.ui" line="34"/>
         <source>Name:</source>
-        <translation>名稱：</translation>
+        <translation type="vanished">名稱：</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_general.ui" line="48"/>
         <source>Parent Group:</source>
-        <translation>父群組：</translation>
+        <translation type="vanished">父群組：</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_general.ui" line="65"/>
         <source>Address / ID:</source>
-        <translation>位址 / ID：</translation>
+        <translation type="vanished">位址 / ID：</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_general.ui" line="93"/>
         <source>User Name:</source>
-        <translation>使用者名稱：</translation>
+        <translation type="vanished">使用者名稱：</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_general.ui" line="107"/>
         <source>Password:</source>
-        <translation>密碼：</translation>
+        <translation type="vanished">密碼：</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_general.ui" line="153"/>
         <source>Comment:</source>
-        <translation>註解：</translation>
-    </message>
-    <message>
-        <location filename="../console/computer_dialog_general.ui" line="81"/>
-        <source>Inherit from parent</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">註解：</translation>
     </message>
 </context>
 <context>
     <name>ComputerDialogParent</name>
     <message>
-        <location filename="../console/computer_dialog_parent.ui" line="20"/>
         <source>Select child item</source>
-        <translation>選擇子項目</translation>
+        <translation type="vanished">選擇子項目</translation>
     </message>
 </context>
 <context>
     <name>ComputerGroupDialog</name>
     <message>
-        <location filename="../console/computer_group_dialog.ui" line="17"/>
         <source>Computer Group Properties</source>
-        <translation>電腦群組屬性</translation>
+        <translation type="vanished">電腦群組屬性</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog.ui" line="37"/>
         <source>Name:</source>
-        <translation>名稱：</translation>
+        <translation type="vanished">名稱：</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog.ui" line="44"/>
         <source>Parent Group:</source>
-        <translation>父群組：</translation>
+        <translation type="vanished">父群組：</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog.ui" line="78"/>
         <source>Comment:</source>
-        <translation>註解：</translation>
+        <translation type="vanished">註解：</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog.ui" line="27"/>
         <source>General</source>
-        <translation type="unfinished">一般</translation>
-    </message>
-    <message>
-        <location filename="../console/computer_group_dialog.ui" line="91"/>
-        <source>Default Configuration</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">一般</translation>
     </message>
 </context>
 <context>
@@ -838,76 +763,60 @@ Routers added: %4</source>
         <translation type="obsolete">最佳</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_desktop.ui" line="33"/>
         <source>Features</source>
-        <translation type="unfinished">功能</translation>
+        <translation type="obsolete">功能</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_desktop.ui" line="39"/>
         <source>Enable audio</source>
-        <translation type="unfinished">啟用音訊</translation>
+        <translation type="obsolete">啟用音訊</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_desktop.ui" line="46"/>
         <source>Enable clipboard</source>
-        <translation type="unfinished">啟用剪貼簿</translation>
+        <translation type="obsolete">啟用剪貼簿</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_desktop.ui" line="53"/>
         <source>Show shape of remote cursor</source>
-        <translation type="unfinished">顯示遠端游標形狀</translation>
+        <translation type="obsolete">顯示遠端游標形狀</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_desktop.ui" line="60"/>
         <source>Show position of remote cursor</source>
-        <translation type="unfinished">顯示遠端游標位置</translation>
+        <translation type="obsolete">顯示遠端游標位置</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_desktop.ui" line="76"/>
         <source>Appearance</source>
-        <translation type="unfinished">視覺效果</translation>
+        <translation type="obsolete">視覺效果</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_desktop.ui" line="82"/>
         <source>Disable desktop effects</source>
-        <translation type="unfinished">停用桌面特效</translation>
+        <translation type="obsolete">停用桌面特效</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_desktop.ui" line="89"/>
         <source>Disable desktop wallpaper</source>
-        <translation type="unfinished">停用桌布</translation>
+        <translation type="obsolete">停用桌布</translation>
     </message>
     <message>
         <source>Disable font smoothing</source>
         <translation type="obsolete">停用字體平滑</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_desktop.ui" line="105"/>
         <source>Other</source>
-        <translation type="unfinished">其他</translation>
+        <translation type="obsolete">其他</translation>
     </message>
     <message>
         <source>Clear clipboard at disconnect</source>
         <translation type="obsolete">在中斷連線時清除剪貼簿</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_desktop.ui" line="111"/>
         <source>Lock computer at disconnect</source>
-        <translation type="unfinished">在中斷連線時鎖定電腦</translation>
+        <translation type="obsolete">在中斷連線時鎖定電腦</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_desktop.ui" line="118"/>
         <source>Block remote input</source>
-        <translation type="unfinished">阻止遠端輸入</translation>
+        <translation type="obsolete">阻止遠端輸入</translation>
     </message>
     <message>
         <source>General</source>
         <translation type="obsolete">一般</translation>
-    </message>
-    <message>
-        <location filename="../console/computer_group_dialog_desktop.ui" line="20"/>
-        <source>Inherit configuration from parent</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -925,39 +834,30 @@ Routers added: %4</source>
         <translation type="obsolete">位址 / ID：</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_general.ui" line="32"/>
         <source>User Name:</source>
-        <translation type="unfinished">使用者名稱：</translation>
+        <translation type="obsolete">使用者名稱：</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_general.ui" line="46"/>
         <source>Password:</source>
-        <translation type="unfinished">密碼：</translation>
+        <translation type="obsolete">密碼：</translation>
     </message>
     <message>
         <source>Comment:</source>
         <translation type="obsolete">註解：</translation>
     </message>
-    <message>
-        <location filename="../console/computer_group_dialog_general.ui" line="20"/>
-        <source>Inherit from parent</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>ComputerGroupDialogParent</name>
     <message>
-        <location filename="../console/computer_group_dialog_parent.ui" line="20"/>
         <source>Select child item</source>
-        <translation type="unfinished">選擇子項目</translation>
+        <translation type="obsolete">選擇子項目</translation>
     </message>
 </context>
 <context>
     <name>ComputerGroupItem</name>
     <message>
-        <location filename="../console/computer_group_item.cc" line="141"/>
         <source>Root Group</source>
-        <translation>根群組</translation>
+        <translation type="vanished">根群組</translation>
     </message>
 </context>
 <context>
@@ -1180,67 +1080,55 @@ Routers added: %4</source>
 <context>
     <name>Console</name>
     <message>
-        <location filename="../console/main.cc" line="57"/>
         <source>Aspia Console</source>
-        <translation>Aspia Console</translation>
+        <translation type="vanished">Aspia Console</translation>
     </message>
     <message>
-        <location filename="../console/main.cc" line="60"/>
         <source>file</source>
-        <translation>檔案</translation>
+        <translation type="vanished">檔案</translation>
     </message>
     <message>
-        <location filename="../console/main.cc" line="61"/>
         <source>The file to open.</source>
-        <translation>要開啟的檔案。</translation>
+        <translation type="vanished">要開啟的檔案。</translation>
     </message>
 </context>
 <context>
     <name>ConsoleMainWindow</name>
     <message>
-        <location filename="../console/main_window.ui" line="14"/>
         <source>Aspia Console</source>
-        <translation>Aspia Console</translation>
+        <translation type="vanished">Aspia Console</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="68"/>
         <source>&amp;File</source>
-        <translation>檔案(&amp;F)</translation>
+        <translation type="vanished">檔案(&amp;F)</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="72"/>
         <source>Recent open</source>
-        <translation>最近開啟</translation>
+        <translation type="vanished">最近開啟</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="91"/>
         <source>&amp;Edit</source>
-        <translation>編輯(&amp;E)</translation>
+        <translation type="vanished">編輯(&amp;E)</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="109"/>
         <source>&amp;Session Type</source>
-        <translation>工作階段類型(&amp;S)</translation>
+        <translation type="vanished">工作階段類型(&amp;S)</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="118"/>
         <source>&amp;Help</source>
-        <translation>說明(&amp;H)</translation>
+        <translation type="vanished">說明(&amp;H)</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="129"/>
         <source>&amp;View</source>
-        <translation>檢視(&amp;V)</translation>
+        <translation type="vanished">檢視(&amp;V)</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="133"/>
         <source>&amp;Language</source>
-        <translation>語言(&amp;L)</translation>
+        <translation type="vanished">語言(&amp;L)</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="142"/>
         <source>&amp;Theme</source>
-        <translation>主題(&amp;T)</translation>
+        <translation type="vanished">主題(&amp;T)</translation>
     </message>
     <message>
         <source>Light</source>
@@ -1251,134 +1139,108 @@ Routers added: %4</source>
         <translation type="vanished">深色</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="165"/>
         <source>Tools</source>
-        <translation>工具</translation>
+        <translation type="vanished">工具</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="179"/>
-        <location filename="../console/main_window.ui" line="453"/>
         <source>Tool Bar</source>
-        <translation>工具列</translation>
+        <translation type="vanished">工具列</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="225"/>
         <source>&amp;New address book</source>
-        <translation>建立新通訊錄(&amp;N)</translation>
+        <translation type="vanished">建立新通訊錄(&amp;N)</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="228"/>
         <source>Ctrl+N</source>
-        <translation>Ctrl+N</translation>
+        <translation type="vanished">Ctrl+N</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="237"/>
         <source>&amp;Open address book...</source>
-        <translation>開啟通訊錄(&amp;O)...</translation>
+        <translation type="vanished">開啟通訊錄(&amp;O)...</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="240"/>
         <source>Ctrl+O</source>
-        <translation>Ctrl+O</translation>
+        <translation type="vanished">Ctrl+O</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="252"/>
         <source>&amp;Save</source>
-        <translation>儲存(&amp;S)</translation>
+        <translation type="vanished">儲存(&amp;S)</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="255"/>
         <source>Ctrl+S</source>
-        <translation>Ctrl+S</translation>
+        <translation type="vanished">Ctrl+S</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="263"/>
         <source>Save &amp;as...</source>
-        <translation>另存為(&amp;A)...</translation>
+        <translation type="vanished">另存為(&amp;A)...</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="266"/>
         <source>Ctrl+Alt+S</source>
-        <translation>Ctrl+Alt+S</translation>
+        <translation type="vanished">Ctrl+Alt+S</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="274"/>
         <source>&amp;Close</source>
-        <translation>關閉(&amp;C)</translation>
+        <translation type="vanished">關閉(&amp;C)</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="277"/>
         <source>Ctrl+W</source>
-        <translation>Ctrl+W</translation>
+        <translation type="vanished">Ctrl+W</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="286"/>
         <source>&amp;Exit</source>
-        <translation>離開(&amp;E)</translation>
+        <translation type="vanished">離開(&amp;E)</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="298"/>
         <source>Add Computer Group</source>
-        <translation>新增電腦群組</translation>
+        <translation type="vanished">新增電腦群組</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="310"/>
         <source>Modify Computer Group</source>
-        <translation>修改電腦群組</translation>
+        <translation type="vanished">修改電腦群組</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="322"/>
         <source>Delete Computer Group</source>
-        <translation>刪除電腦群組</translation>
+        <translation type="vanished">刪除電腦群組</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="334"/>
         <source>Add Computer</source>
-        <translation>新增電腦</translation>
+        <translation type="vanished">新增電腦</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="346"/>
         <source>Modify Computer</source>
-        <translation>修改電腦</translation>
+        <translation type="vanished">修改電腦</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="358"/>
         <source>Delete Computer</source>
-        <translation>刪除電腦</translation>
+        <translation type="vanished">刪除電腦</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="373"/>
         <source>Desktop &amp;Manage</source>
-        <translation>桌面管理(&amp;M)</translation>
+        <translation type="vanished">桌面管理(&amp;M)</translation>
     </message>
     <message>
         <source>Desktop &amp;View</source>
         <translation type="vanished">桌面檢視(&amp;V)</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="385"/>
         <source>&amp;File Transfer</source>
-        <translation>檔案傳輸(&amp;F)</translation>
+        <translation type="vanished">檔案傳輸(&amp;F)</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="394"/>
         <source>&amp;Online Help...</source>
-        <translation>線上說明(&amp;O)...</translation>
+        <translation type="vanished">線上說明(&amp;O)...</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="397"/>
         <source>F1</source>
-        <translation>F1</translation>
+        <translation type="vanished">F1</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="406"/>
         <source>&amp;About</source>
-        <translation>關於(&amp;A)</translation>
+        <translation type="vanished">關於(&amp;A)</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="418"/>
         <source>Address Book Properties</source>
-        <translation>通訊錄屬性</translation>
+        <translation type="vanished">通訊錄屬性</translation>
     </message>
     <message>
         <source>Desktop Manage</source>
@@ -1389,164 +1251,92 @@ Routers added: %4</source>
         <translation type="vanished">桌面檢視</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="439"/>
-        <location filename="../console/main_window.ui" line="442"/>
         <source>File Transfer</source>
-        <translation>檔案傳輸</translation>
+        <translation type="vanished">檔案傳輸</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="464"/>
         <source>Status Bar</source>
-        <translation>狀態列</translation>
+        <translation type="vanished">狀態列</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="476"/>
         <source>Fast Connect</source>
-        <translation>快速連線</translation>
+        <translation type="vanished">快速連線</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="487"/>
         <source>Show tray icon</source>
-        <translation>顯示系統列圖示</translation>
+        <translation type="vanished">顯示系統列圖示</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="495"/>
         <source>Minimize to tray</source>
-        <translation>最小化到系統列</translation>
+        <translation type="vanished">最小化到系統列</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="500"/>
         <source>Hide</source>
-        <translation>隱藏</translation>
+        <translation type="vanished">隱藏</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="512"/>
         <source>Save all</source>
-        <translation>全部儲存</translation>
+        <translation type="vanished">全部儲存</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="515"/>
         <source>Ctrl+Shift+S</source>
-        <translation>Ctrl+Shift+S</translation>
+        <translation type="vanished">Ctrl+Shift+S</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="523"/>
         <source>Close all</source>
-        <translation>全部關閉</translation>
+        <translation type="vanished">全部關閉</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="526"/>
         <source>Ctrl+Shift+W</source>
-        <translation>Ctrl+Shift+W</translation>
+        <translation type="vanished">Ctrl+Shift+W</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="531"/>
         <source>Check for updates...</source>
-        <translation>檢查更新...</translation>
+        <translation type="vanished">檢查更新...</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="536"/>
         <source>Update Settings</source>
-        <translation>更新設定</translation>
+        <translation type="vanished">更新設定</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="541"/>
         <source>Clear</source>
-        <translation>清除</translation>
+        <translation type="vanished">清除</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="552"/>
         <source>Remember latest</source>
-        <translation>記住最新的</translation>
+        <translation type="vanished">記住最新的</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="564"/>
         <source>Copy Computer</source>
-        <translation>複製電腦</translation>
+        <translation type="vanished">複製電腦</translation>
     </message>
     <message>
         <source>Router Manage</source>
         <translation type="vanished">路由器管理</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="572"/>
         <source>Show icons in menus</source>
-        <translation>在選單內顯示圖示</translation>
+        <translation type="vanished">在選單內顯示圖示</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="584"/>
         <source>&amp;System Information</source>
-        <translation>系統資訊(&amp;S)</translation>
+        <translation type="vanished">系統資訊(&amp;S)</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="587"/>
-        <location filename="../console/main_window.ui" line="596"/>
-        <location filename="../console/main_window.ui" line="599"/>
         <source>System Information</source>
-        <translation>系統資訊</translation>
+        <translation type="vanished">系統資訊</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="611"/>
-        <source>&amp;Text Chat</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/main_window.ui" line="614"/>
-        <location filename="../console/main_window.ui" line="623"/>
-        <location filename="../console/main_window.ui" line="626"/>
         <source>Text Chat</source>
-        <translation type="unfinished">文字聊天</translation>
+        <translation type="obsolete">文字聊天</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="656"/>
-        <source>Import Computers/Groups</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/main_window.ui" line="659"/>
-        <source>Import computers from file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/main_window.ui" line="671"/>
-        <source>Export Computer Group</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/main_window.ui" line="674"/>
-        <source>Export computer group to file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/main_window.ui" line="682"/>
-        <source>Large icons</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/main_window.ui" line="479"/>
         <source>F8</source>
-        <translation type="unfinished">F8</translation>
+        <translation type="obsolete">F8</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="427"/>
-        <location filename="../console/main_window.ui" line="430"/>
-        <source>Desktop Management</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/main_window.ui" line="638"/>
-        <source>Update Status</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/main_window.ui" line="641"/>
-        <source>Update the status of computers in the list</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/main_window.ui" line="644"/>
         <source>F5</source>
-        <translation type="unfinished">F5</translation>
+        <translation type="obsolete">F5</translation>
     </message>
 </context>
 <context>
@@ -1977,34 +1767,16 @@ Routers added: %4</source>
 <context>
     <name>FastConnectDialog</name>
     <message>
-        <location filename="../console/fast_connect_dialog.ui" line="20"/>
         <source>Fast Connect</source>
-        <translation>快速連線</translation>
+        <translation type="vanished">快速連線</translation>
     </message>
     <message>
-        <location filename="../console/fast_connect_dialog.ui" line="32"/>
         <source>Address / ID</source>
-        <translation>位址 / ID</translation>
+        <translation type="vanished">位址 / ID</translation>
     </message>
     <message>
-        <location filename="../console/fast_connect_dialog.ui" line="70"/>
         <source>Session Type</source>
-        <translation>工作階段類型</translation>
-    </message>
-    <message>
-        <location filename="../console/fast_connect_dialog.ui" line="104"/>
-        <source>Default configuration from address book</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/fast_connect_dialog.ui" line="110"/>
-        <source>Use credentials from address book</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/fast_connect_dialog.ui" line="117"/>
-        <source>Use session parameters from address book</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">工作階段類型</translation>
     </message>
 </context>
 <context>
@@ -2601,29 +2373,24 @@ Routers added: %4</source>
 <context>
     <name>OpenAddressBookDialog</name>
     <message>
-        <location filename="../console/open_address_book_dialog.ui" line="23"/>
         <source>Open Address Book</source>
-        <translation>開啟通訊錄</translation>
+        <translation type="vanished">開啟通訊錄</translation>
     </message>
     <message>
-        <location filename="../console/open_address_book_dialog.ui" line="53"/>
         <source>Address book is encrypted. To open, you must enter a password.</source>
-        <translation>通訊錄已加密。您必須輸入密碼才能開啟。</translation>
+        <translation type="vanished">通訊錄已加密。您必須輸入密碼才能開啟。</translation>
     </message>
     <message>
-        <location filename="../console/open_address_book_dialog.ui" line="66"/>
         <source>File:</source>
-        <translation>檔案：</translation>
+        <translation type="vanished">檔案：</translation>
     </message>
     <message>
-        <location filename="../console/open_address_book_dialog.ui" line="73"/>
         <source>Encryption Type:</source>
-        <translation>加密類型：</translation>
+        <translation type="vanished">加密類型：</translation>
     </message>
     <message>
-        <location filename="../console/open_address_book_dialog.ui" line="80"/>
         <source>Password:</source>
-        <translation>密碼：</translation>
+        <translation type="vanished">密碼：</translation>
     </message>
 </context>
 <context>
@@ -4884,24 +4651,20 @@ Routers added: %4</source>
 <context>
     <name>UpdateSettingsDialog</name>
     <message>
-        <location filename="../console/update_settings_dialog.ui" line="14"/>
         <source>Update Settings</source>
-        <translation>更新設定</translation>
+        <translation type="vanished">更新設定</translation>
     </message>
     <message>
-        <location filename="../console/update_settings_dialog.ui" line="26"/>
         <source>Check for updates on startup</source>
-        <translation>啟動時檢查更新</translation>
+        <translation type="vanished">啟動時檢查更新</translation>
     </message>
     <message>
-        <location filename="../console/update_settings_dialog.ui" line="33"/>
         <source>Use custom update server</source>
-        <translation>使用自訂更新伺服器</translation>
+        <translation type="vanished">使用自訂更新伺服器</translation>
     </message>
     <message>
-        <location filename="../console/update_settings_dialog.ui" line="42"/>
         <source>Server:</source>
-        <translation>伺服器：</translation>
+        <translation type="vanished">伺服器：</translation>
     </message>
 </context>
 <context>
@@ -6337,12 +6100,12 @@ Routers added: %4</source>
         <translation type="obsolete">警告</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.cc" line="285"/>
+        <location filename="../client/ui/main_window.cc" line="296"/>
         <source>Connection by ID is specified in the properties of the computer, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation type="unfinished">指定使用 ID 連線，但未配置路由器。請在通訊錄的屬性中檢查路由器的參數。</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.cc" line="217"/>
+        <location filename="../client/ui/main_window.cc" line="228"/>
         <source>Aspia Client</source>
         <translation type="unfinished">Aspia Client</translation>
     </message>
@@ -9554,24 +9317,20 @@ Routers added: %4</source>
 <context>
     <name>console::AddressBookDialog</name>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="109"/>
         <source>Without Encryption</source>
-        <translation>沒有加密</translation>
+        <translation type="vanished">沒有加密</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="111"/>
         <source>ChaCha20 + Poly1305 (256-bit key)</source>
-        <translation>ChaCha20 + Poly1305 (256-bit key)</translation>
+        <translation type="vanished">ChaCha20 + Poly1305 (256-bit key)</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="123"/>
         <source>Address Book</source>
-        <translation>通訊錄</translation>
+        <translation type="vanished">通訊錄</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="140"/>
         <source>Double-click to change</source>
-        <translation>點選兩次以修改</translation>
+        <translation type="vanished">點選兩次以修改</translation>
     </message>
     <message>
         <source>Desktop Manage</source>
@@ -9582,9 +9341,8 @@ Routers added: %4</source>
         <translation type="obsolete">桌面檢視</translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/address_book_dialog.cc" line="438"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation>
+        <translation type="vanished">
             <numerusform>名稱過長。名稱的最大長度為 %n 個字元。</numerusform>
         </translation>
     </message>
@@ -9593,82 +9351,58 @@ Routers added: %4</source>
         <translation type="vanished">名稱不能為空。</translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/address_book_dialog.cc" line="451"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation>
+        <translation type="vanished">
             <numerusform>註解過長。註解的最大長度為 %n 個字元。</numerusform>
         </translation>
     </message>
-    <message numerus="yes">
-        <location filename="../console/address_book_dialog.cc" line="459"/>
-        <source>Too long display name. The maximum length of the display name is %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-        </translation>
-    </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="485"/>
         <source>The passwords you entered do not match.</source>
-        <translation>您輸入的密碼不符。</translation>
+        <translation type="vanished">您輸入的密碼不符。</translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/address_book_dialog.cc" line="491"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
-        <translation>
+        <translation type="vanished">
             <numerusform>密碼不能為空且不應超過 %n 個字元。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="499"/>
         <source>Password you entered does not meet the security requirements!</source>
-        <translation>您輸入的密碼不符合安全要求！</translation>
+        <translation type="vanished">您輸入的密碼不符合安全要求！</translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/address_book_dialog.cc" line="502"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation>
+        <translation type="vanished">
             <numerusform>密碼必須包含小寫和大寫字符、數字，並且不得少於 %n 個字元。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="506"/>
         <source>Do you want to enter a different password?</source>
-        <translation>您想輸入其他密碼嗎？</translation>
+        <translation type="vanished">您想輸入其他密碼嗎？</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="509"/>
         <source>Warning</source>
-        <translation>警告</translation>
+        <translation type="vanished">警告</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="444"/>
-        <source>Name cannot be empty.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/address_book_dialog.cc" line="547"/>
         <source>An invalid router address was entered.</source>
-        <translation>輸入的路由器位址無效。</translation>
+        <translation type="vanished">輸入的路由器位址無效。</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="558"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation>使用者名稱不能為空，只能包含字母、數字和 _, -, . 字元。</translation>
+        <translation type="vanished">使用者名稱不能為空，只能包含字母、數字和 _, -, . 字元。</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="567"/>
         <source>Router password cannot be empty.</source>
-        <translation>路由器密碼不能為空。</translation>
+        <translation type="vanished">路由器密碼不能為空。</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="222"/>
         <source>General</source>
-        <translation type="unfinished">一般</translation>
+        <translation type="obsolete">一般</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="226"/>
         <source>Sessions</source>
-        <translation type="unfinished">工作階段</translation>
+        <translation type="obsolete">工作階段</translation>
     </message>
     <message>
         <source>Manage</source>
@@ -9690,89 +9424,72 @@ Routers added: %4</source>
 <context>
     <name>console::AddressBookTab</name>
     <message>
-        <location filename="../console/address_book_tab.cc" line="214"/>
         <source>Unable to open address book file &quot;%1&quot;.</source>
-        <translation>無法開啟通訊錄檔案 &quot;%1&quot;。</translation>
+        <translation type="vanished">無法開啟通訊錄檔案 &quot;%1&quot;。</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="222"/>
         <source>Unable to read address book file &quot;%1&quot;.</source>
-        <translation>無法讀取通訊錄檔案 &quot;%1&quot;。</translation>
+        <translation type="vanished">無法讀取通訊錄檔案 &quot;%1&quot;。</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="232"/>
         <source>The address book file &quot;%1&quot; is corrupted or has an unknown format.</source>
-        <translation>通訊錄檔案 &quot;%1&quot; 已損壞或使用未知格式。</translation>
+        <translation type="vanished">通訊錄檔案 &quot;%1&quot; 已損壞或使用未知格式。</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="261"/>
         <source>The address book file is encrypted with an unsupported encryption type.</source>
-        <translation>通訊錄檔案使用不支援的加密類型加密。</translation>
+        <translation type="vanished">通訊錄檔案使用不支援的加密類型加密。</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="271"/>
         <source>Unable to decrypt the address book with the specified password.</source>
-        <translation>無法使用指定密碼解密通訊錄。</translation>
+        <translation type="vanished">無法使用指定密碼解密通訊錄。</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="278"/>
         <source>The address book file is corrupted or has an unknown format.</source>
-        <translation>通訊錄檔案已損壞或使用未知格式。</translation>
+        <translation type="vanished">通訊錄檔案已損壞或使用未知格式。</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="668"/>
         <source>Are you sure you want to delete computer group &quot;%1&quot; and all child items?</source>
-        <translation>您確定要刪除電腦群組「%1」和所有子項目嗎？</translation>
+        <translation type="vanished">您確定要刪除電腦群組「%1」和所有子項目嗎？</translation>
     </message>
     <message>
         <source>Confirmation</source>
         <translation type="vanished">確認</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="698"/>
         <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
-        <translation>您確定要刪除電腦「%1」嗎?</translation>
+        <translation type="vanished">您確定要刪除電腦「%1」嗎?</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="1171"/>
         <source>Save Address Book</source>
-        <translation>儲存通訊錄</translation>
+        <translation type="vanished">儲存通訊錄</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="1173"/>
         <source>Aspia Address Book (*.aab)</source>
-        <translation>Aspia 通訊錄 (*.aab)</translation>
+        <translation type="vanished">Aspia 通訊錄 (*.aab)</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="1188"/>
         <source>Unable to create or open address book file.</source>
-        <translation>無法建立或開啟通訊錄檔案。</translation>
+        <translation type="vanished">無法建立或開啟通訊錄檔案。</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="1202"/>
         <source>Unable to write address book file.</source>
-        <translation>無法寫入通訊錄檔案。</translation>
+        <translation type="vanished">無法寫入通訊錄檔案。</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="1233"/>
         <source>Root Group</source>
-        <translation>根群組</translation>
+        <translation type="vanished">根群組</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="1245"/>
-        <location filename="../console/address_book_tab.cc" line="1260"/>
         <source>Warning</source>
-        <translation>警告</translation>
+        <translation type="vanished">警告</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="1247"/>
         <source>Could not open address book</source>
-        <translation>無法開啟通訊錄</translation>
+        <translation type="vanished">無法開啟通訊錄</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="1262"/>
         <source>Failed to save address book</source>
-        <translation>儲存通訊錄失敗</translation>
+        <translation type="vanished">儲存通訊錄失敗</translation>
     </message>
     <message>
         <source>Yes</source>
@@ -9782,33 +9499,20 @@ Routers added: %4</source>
         <source>No</source>
         <translation type="obsolete">否</translation>
     </message>
-    <message>
-        <location filename="../console/address_book_tab.cc" line="1044"/>
-        <source>Online</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/address_book_tab.cc" line="1046"/>
-        <source>Offline</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>console::ComputerDialog</name>
     <message>
-        <location filename="../console/computer_dialog.cc" line="59"/>
         <source>(copy)</source>
-        <translation>(複製)</translation>
+        <translation type="vanished">(複製)</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog.cc" line="70"/>
         <source>General</source>
-        <translation>一般</translation>
+        <translation type="vanished">一般</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog.cc" line="74"/>
         <source>Sessions</source>
-        <translation>工作階段</translation>
+        <translation type="vanished">工作階段</translation>
     </message>
     <message>
         <source>Desktop Manage</source>
@@ -9857,9 +9561,8 @@ Routers added: %4</source>
 <context>
     <name>console::ComputerDialogGeneral</name>
     <message numerus="yes">
-        <location filename="../console/computer_dialog_general.cc" line="119"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation>
+        <translation type="vanished">
             <numerusform>名稱過長。名稱的最大長度為 %n 個字元。</numerusform>
         </translation>
     </message>
@@ -9868,26 +9571,18 @@ Routers added: %4</source>
         <translation type="vanished">名稱不能為空。</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_general.cc" line="128"/>
-        <source>Name cannot be empty.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/computer_dialog_general.cc" line="139"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation>使用者名稱不能為空且只能包含字母、數字和 _, -, . 字元。</translation>
+        <translation type="vanished">使用者名稱不能為空且只能包含字母、數字和 _, -, . 字元。</translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/computer_dialog_general.cc" line="150"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation>
+        <translation type="vanished">
             <numerusform>註解過長。註解的最大長度為 %n 個字元。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_general.cc" line="168"/>
         <source>An invalid computer address was entered.</source>
-        <translation>輸入的電腦位址無效。</translation>
+        <translation type="vanished">輸入的電腦位址無效。</translation>
     </message>
     <message>
         <source>Warning</source>
@@ -9928,9 +9623,8 @@ Routers added: %4</source>
         <translation type="obsolete">桌面檢視</translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/computer_group_dialog.cc" line="219"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation>
+        <translation type="vanished">
             <numerusform>名稱過長。名稱的最大長度為 %n 個字元。</numerusform>
         </translation>
     </message>
@@ -9939,9 +9633,8 @@ Routers added: %4</source>
         <translation type="vanished">名稱不能為空。</translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/computer_group_dialog.cc" line="237"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation>
+        <translation type="vanished">
             <numerusform>註解過長。註解的最大長度為 %n 個字元。</numerusform>
         </translation>
     </message>
@@ -9950,19 +9643,12 @@ Routers added: %4</source>
         <translation type="vanished">警告</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog.cc" line="74"/>
         <source>General</source>
-        <translation type="unfinished">一般</translation>
+        <translation type="obsolete">一般</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog.cc" line="78"/>
         <source>Sessions</source>
-        <translation type="unfinished">工作階段</translation>
-    </message>
-    <message>
-        <location filename="../console/computer_group_dialog.cc" line="228"/>
-        <source>Name cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">工作階段</translation>
     </message>
     <message>
         <source>Manage</source>
@@ -10012,11 +9698,6 @@ Routers added: %4</source>
         <source>Name can not be empty.</source>
         <translation type="obsolete">名稱不能為空。</translation>
     </message>
-    <message>
-        <location filename="../console/computer_group_dialog_general.cc" line="100"/>
-        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message numerus="yes">
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
         <translation type="obsolete">
@@ -10031,16 +9712,6 @@ Routers added: %4</source>
         <source>Warning</source>
         <translation type="obsolete">警告</translation>
     </message>
-    <message>
-        <location filename="../console/computer_group_dialog_general.cc" line="42"/>
-        <source>Credentials</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/computer_group_dialog_general.cc" line="47"/>
-        <source>Inherit from parent</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>console::FastConnectDialog</name>
@@ -10049,23 +9720,20 @@ Routers added: %4</source>
         <translation type="vanished">確認</translation>
     </message>
     <message>
-        <location filename="../console/fast_connect_dialog.cc" line="88"/>
         <source>The list of entered addresses will be cleared. Continue?</source>
-        <translation>輸入的位址列表將被清除。是否繼續？</translation>
+        <translation type="vanished">輸入的位址列表將被清除。是否繼續？</translation>
     </message>
     <message>
         <source>Warning</source>
         <translation type="vanished">警告</translation>
     </message>
     <message>
-        <location filename="../console/fast_connect_dialog.cc" line="205"/>
         <source>Connection by ID is specified but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
-        <translation>指定使用 ID 連線，但未配置路由器。請在通訊錄的屬性中檢查路由器的參數。</translation>
+        <translation type="vanished">指定使用 ID 連線，但未配置路由器。請在通訊錄的屬性中檢查路由器的參數。</translation>
     </message>
     <message>
-        <location filename="../console/fast_connect_dialog.cc" line="221"/>
         <source>An invalid computer address was entered.</source>
-        <translation>輸入的電腦位址無效。</translation>
+        <translation type="vanished">輸入的電腦位址無效。</translation>
     </message>
     <message>
         <source>Yes</source>
@@ -10083,135 +9751,76 @@ Routers added: %4</source>
         <translation type="vanished">警告</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="202"/>
         <source>Pinned address book file &quot;%1&quot; was not found.&lt;br/&gt;This file will be unpinned.</source>
-        <translation>找不到釘選的通訊錄檔案「%1」。&lt;br/&gt;此檔案將被取消釘選。</translation>
+        <translation type="vanished">找不到釘選的通訊錄檔案「%1」。&lt;br/&gt;此檔案將被取消釘選。</translation>
     </message>
     <message>
         <source>Information</source>
         <translation type="vanished">詳細資訊</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="281"/>
         <source>Address Book &quot;%1&quot; is already open.</source>
-        <translation>通訊錄「%1」已經開啟。</translation>
+        <translation type="vanished">通訊錄「%1」已經開啟。</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="312"/>
         <source>Open Address Book</source>
-        <translation>開啟通訊錄</translation>
+        <translation type="vanished">開啟通訊錄</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="314"/>
         <source>Aspia Address Book (*.aab)</source>
-        <translation>Aspia 通訊錄 (*.aab)</translation>
+        <translation type="vanished">Aspia 通訊錄 (*.aab)</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="572"/>
-        <source>Open File</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/main_window.cc" line="574"/>
-        <location filename="../console/main_window.cc" line="640"/>
-        <source>JSON files (*.json)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/main_window.cc" line="586"/>
-        <source>Could not open file for reading.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/main_window.cc" line="594"/>
-        <source>Import file is empty.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/main_window.cc" line="638"/>
         <source>Save File</source>
-        <translation type="unfinished">儲存檔案</translation>
+        <translation type="obsolete">儲存檔案</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="652"/>
         <source>Could not open file for writing.</source>
-        <translation type="unfinished">無法開啟檔案進行寫入。</translation>
+        <translation type="obsolete">無法開啟檔案進行寫入。</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="662"/>
-        <source>Unable to write file.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/main_window.cc" line="667"/>
-        <source>Export completed successfully.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/main_window.cc" line="709"/>
-        <location filename="../console/main_window.cc" line="1499"/>
         <source>Aspia Console</source>
-        <translation>Aspia Console</translation>
+        <translation type="vanished">Aspia Console</translation>
     </message>
     <message>
         <source>Confirmation</source>
         <translation type="vanished">確認</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="901"/>
-        <location filename="../console/main_window.cc" line="1318"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
-        <translation>通訊錄「%1」已修改。是否儲存變更？</translation>
+        <translation type="vanished">通訊錄「%1」已修改。是否儲存變更？</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1128"/>
         <source>Close other tabs</source>
-        <translation>關閉其他分頁。</translation>
+        <translation type="vanished">關閉其他分頁。</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1135"/>
         <source>Close tab</source>
-        <translation>關閉分頁</translation>
+        <translation type="vanished">關閉分頁</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1136"/>
-        <location filename="../console/main_window.cc" line="1141"/>
         <source>Pin tab</source>
-        <translation>釘選分頁</translation>
+        <translation type="vanished">釘選分頁</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1234"/>
         <source>The list of recently opened address books will be cleared. Continue?</source>
-        <translation>最近打開的通訊錄清單將被清除。是否繼續？</translation>
+        <translation type="vanished">最近打開的通訊錄清單將被清除。是否繼續？</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1265"/>
         <source>Hide</source>
-        <translation>隱藏</translation>
+        <translation type="vanished">隱藏</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1280"/>
         <source>Show</source>
-        <translation>顯示</translation>
+        <translation type="vanished">顯示</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1633"/>
         <source>Connection by ID is specified in the properties of the computer, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
-        <translation>指定使用 ID 連線，但未配置路由器。請在通訊錄的屬性中檢查路由器的參數。</translation>
+        <translation type="vanished">指定使用 ID 連線，但未配置路由器。請在通訊錄的屬性中檢查路由器的參數。</translation>
     </message>
     <message>
         <source>Yes</source>
         <translation type="obsolete">是</translation>
-    </message>
-    <message>
-        <location filename="../console/main_window.cc" line="604"/>
-        <source>Failed to parse JSON document: %1.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/main_window.cc" line="614"/>
-        <source>Import completed successfully.</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>No</source>
@@ -10221,44 +9830,32 @@ Routers added: %4</source>
 <context>
     <name>console::MruAction</name>
     <message>
-        <location filename="../console/mru_action.cc" line="30"/>
         <source>&lt;empty&gt;</source>
-        <translation>&lt;空&gt;</translation>
+        <translation type="vanished">&lt;空&gt;</translation>
     </message>
 </context>
 <context>
     <name>console::OpenAddressBookDialog</name>
     <message>
-        <location filename="../console/open_address_book_dialog.cc" line="45"/>
         <source>Without Encryption</source>
-        <translation>沒有加密</translation>
+        <translation type="vanished">沒有加密</translation>
     </message>
     <message>
-        <location filename="../console/open_address_book_dialog.cc" line="49"/>
         <source>ChaCha20 + Poly1305 (256-bit key)</source>
-        <translation>ChaCha20 + Poly1305 (256-bit key)</translation>
+        <translation type="vanished">ChaCha20 + Poly1305 (256-bit key)</translation>
     </message>
 </context>
 <context>
     <name>console::StatusBar</name>
-    <message>
-        <location filename="../console/statusbar.cc" line="49"/>
-        <source>Status update</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message numerus="yes">
-        <location filename="../console/statusbar.cc" line="86"/>
-        <location filename="../console/statusbar.cc" line="90"/>
         <source>%n child group(s)</source>
-        <translation>
+        <translation type="vanished">
             <numerusform>%n 個子群組</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/statusbar.cc" line="87"/>
-        <location filename="../console/statusbar.cc" line="91"/>
         <source>%n child computer(s)</source>
-        <translation>
+        <translation type="vanished">
             <numerusform>%n 個子電腦</numerusform>
         </translation>
     </message>

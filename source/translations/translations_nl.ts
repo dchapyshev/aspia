@@ -36,90 +36,56 @@
 <context>
     <name>AddressBookDialog</name>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="17"/>
         <source>Address Book Properties</source>
-        <translation>Adresboek eigenschappen</translation>
+        <translation type="vanished">Adresboek eigenschappen</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="27"/>
         <source>General</source>
-        <translation>Basis</translation>
+        <translation type="vanished">Basis</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="37"/>
         <source>Name:</source>
-        <translation>Naam:</translation>
+        <translation type="vanished">Naam:</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="44"/>
         <source>File:</source>
-        <translation>Bestand:</translation>
+        <translation type="vanished">Bestand:</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="51"/>
         <source>Encryption:</source>
-        <translation>Encryptie:</translation>
+        <translation type="vanished">Encryptie:</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="58"/>
-        <location filename="../console/address_book_dialog.ui" line="175"/>
         <source>Password:</source>
-        <translation>Wachtwoord:</translation>
+        <translation type="vanished">Wachtwoord:</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="65"/>
         <source>Password (repeat):</source>
-        <translation>Wachtwoord (nogmaals):</translation>
+        <translation type="vanished">Wachtwoord (nogmaals):</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="119"/>
         <source>Comment:</source>
-        <translation>Commentaar:</translation>
+        <translation type="vanished">Commentaar:</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="132"/>
         <source>Router</source>
-        <translation>Router</translation>
+        <translation type="vanished">Router</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="138"/>
         <source>Use a router</source>
-        <translation>Gebruik een router</translation>
+        <translation type="vanished">Gebruik een router</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="147"/>
         <source>Address:</source>
-        <translation>Adres:</translation>
+        <translation type="vanished">Adres:</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="161"/>
         <source>User Name:</source>
-        <translation>Gebruikers Naam:</translation>
+        <translation type="vanished">Gebruikers Naam:</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="225"/>
-        <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/address_book_dialog.ui" line="242"/>
-        <source>Default Configuration</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/address_book_dialog.ui" line="300"/>
         <source>Other</source>
-        <translation type="unfinished">Overige</translation>
-    </message>
-    <message>
-        <location filename="../console/address_book_dialog.ui" line="308"/>
-        <source>Display name when connected:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/address_book_dialog.ui" line="318"/>
-        <source>Enter a name or leave the field empty</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Overige</translation>
     </message>
 </context>
 <context>
@@ -178,34 +144,28 @@ Routers added: %4</source>
 <context>
     <name>AddressBookTab</name>
     <message>
-        <location filename="../console/address_book_tab.ui" line="98"/>
         <source>Computer Name</source>
-        <translation>Computer Naam</translation>
+        <translation type="vanished">Computer Naam</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.ui" line="103"/>
         <source>Address / ID</source>
-        <translation>Adres / ID</translation>
+        <translation type="vanished">Adres / ID</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.ui" line="108"/>
         <source>Comment</source>
-        <translation>Commentaar</translation>
+        <translation type="vanished">Commentaar</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.ui" line="113"/>
         <source>Created</source>
-        <translation>Gemaakt</translation>
+        <translation type="vanished">Gemaakt</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.ui" line="118"/>
         <source>Modified</source>
-        <translation>Aangepast</translation>
+        <translation type="vanished">Aangepast</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.ui" line="123"/>
         <source>Status</source>
-        <translation type="unfinished">Status</translation>
+        <translation type="obsolete">Status</translation>
     </message>
 </context>
 <context>
@@ -495,7 +455,7 @@ Routers added: %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="613"/>
+        <location filename="../client/main.cc" line="620"/>
         <source>Invalid master password.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -616,9 +576,8 @@ Routers added: %4</source>
 <context>
     <name>ComputerDialog</name>
     <message>
-        <location filename="../console/computer_dialog.ui" line="17"/>
         <source>Computer Properties</source>
-        <translation>Computer Eigenschappen</translation>
+        <translation type="vanished">Computer Eigenschappen</translation>
     </message>
 </context>
 <context>
@@ -632,118 +591,82 @@ Routers added: %4</source>
         <translation type="vanished">Font smoothing uitschakelen</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_desktop.ui" line="118"/>
         <source>Block remote input</source>
-        <translation>Blokkeer input op afstand</translation>
+        <translation type="vanished">Blokkeer input op afstand</translation>
     </message>
     <message>
         <source>Enable cursor shape</source>
         <translation type="vanished">Cursor vorm inschakelen</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_desktop.ui" line="33"/>
         <source>Features</source>
-        <translation>Features</translation>
+        <translation type="vanished">Features</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_desktop.ui" line="39"/>
         <source>Enable audio</source>
-        <translation>Geluid inschakelen</translation>
+        <translation type="vanished">Geluid inschakelen</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_desktop.ui" line="46"/>
         <source>Enable clipboard</source>
-        <translation>Klembord inschakelen</translation>
+        <translation type="vanished">Klembord inschakelen</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_desktop.ui" line="53"/>
-        <source>Show shape of remote cursor</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/computer_dialog_desktop.ui" line="60"/>
-        <source>Show position of remote cursor</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/computer_dialog_desktop.ui" line="76"/>
         <source>Appearance</source>
-        <translation>Uiterlijk</translation>
+        <translation type="vanished">Uiterlijk</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_desktop.ui" line="82"/>
         <source>Disable desktop effects</source>
-        <translation>Bureaublad effecten uitschakelen</translation>
+        <translation type="vanished">Bureaublad effecten uitschakelen</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_desktop.ui" line="89"/>
         <source>Disable desktop wallpaper</source>
-        <translation>Bureaublad achtergrond verbergen</translation>
+        <translation type="vanished">Bureaublad achtergrond verbergen</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_desktop.ui" line="105"/>
         <source>Other</source>
-        <translation>Overige</translation>
+        <translation type="vanished">Overige</translation>
     </message>
     <message>
         <source>General</source>
         <translation type="obsolete">Basis</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_desktop.ui" line="20"/>
-        <source>Inherit configuration from parent</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/computer_dialog_desktop.ui" line="111"/>
         <source>Lock computer at disconnect</source>
-        <translation>Computer vergrendelen bij verbroken verbinding</translation>
+        <translation type="vanished">Computer vergrendelen bij verbroken verbinding</translation>
     </message>
 </context>
 <context>
     <name>ComputerDialogGeneral</name>
     <message>
-        <location filename="../console/computer_dialog_general.ui" line="34"/>
         <source>Name:</source>
-        <translation>Naam:</translation>
+        <translation type="vanished">Naam:</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_general.ui" line="48"/>
         <source>Parent Group:</source>
-        <translation>Groep:</translation>
+        <translation type="vanished">Groep:</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_general.ui" line="65"/>
         <source>Address / ID:</source>
-        <translation>Adres / ID:</translation>
+        <translation type="vanished">Adres / ID:</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_general.ui" line="81"/>
-        <source>Inherit from parent</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/computer_dialog_general.ui" line="93"/>
         <source>User Name:</source>
-        <translation>Gebruikers Naam:</translation>
+        <translation type="vanished">Gebruikers Naam:</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_general.ui" line="107"/>
         <source>Password:</source>
-        <translation>Wachtwoord:</translation>
+        <translation type="vanished">Wachtwoord:</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_general.ui" line="153"/>
         <source>Comment:</source>
-        <translation>Commentaar:</translation>
+        <translation type="vanished">Commentaar:</translation>
     </message>
 </context>
 <context>
     <name>ComputerDialogParent</name>
     <message>
-        <location filename="../console/computer_dialog_parent.ui" line="20"/>
         <source>Select child item</source>
-        <translation>Selecteer onderliggend item</translation>
+        <translation type="vanished">Selecteer onderliggend item</translation>
     </message>
 </context>
 <context>
@@ -756,34 +679,24 @@ Routers added: %4</source>
 <context>
     <name>ComputerGroupDialog</name>
     <message>
-        <location filename="../console/computer_group_dialog.ui" line="17"/>
         <source>Computer Group Properties</source>
-        <translation>Computer Groep Eigenschappen</translation>
+        <translation type="vanished">Computer Groep Eigenschappen</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog.ui" line="27"/>
         <source>General</source>
-        <translation type="unfinished">Basis</translation>
+        <translation type="obsolete">Basis</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog.ui" line="37"/>
         <source>Name:</source>
-        <translation>Naam:</translation>
+        <translation type="vanished">Naam:</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog.ui" line="44"/>
         <source>Parent Group:</source>
-        <translation>Groep:</translation>
+        <translation type="vanished">Groep:</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog.ui" line="78"/>
         <source>Comment:</source>
-        <translation>Commentaar:</translation>
-    </message>
-    <message>
-        <location filename="../console/computer_group_dialog.ui" line="91"/>
-        <source>Default Configuration</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Commentaar:</translation>
     </message>
 </context>
 <context>
@@ -793,72 +706,48 @@ Routers added: %4</source>
         <translation type="obsolete">Codec</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_desktop.ui" line="33"/>
         <source>Features</source>
-        <translation type="unfinished">Features</translation>
+        <translation type="obsolete">Features</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_desktop.ui" line="39"/>
         <source>Enable audio</source>
-        <translation type="unfinished">Geluid inschakelen</translation>
+        <translation type="obsolete">Geluid inschakelen</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_desktop.ui" line="46"/>
         <source>Enable clipboard</source>
-        <translation type="unfinished">Klembord inschakelen</translation>
+        <translation type="obsolete">Klembord inschakelen</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_desktop.ui" line="53"/>
-        <source>Show shape of remote cursor</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/computer_group_dialog_desktop.ui" line="60"/>
-        <source>Show position of remote cursor</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/computer_group_dialog_desktop.ui" line="76"/>
         <source>Appearance</source>
-        <translation type="unfinished">Uiterlijk</translation>
+        <translation type="obsolete">Uiterlijk</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_desktop.ui" line="82"/>
         <source>Disable desktop effects</source>
-        <translation type="unfinished">Bureaublad effecten uitschakelen</translation>
+        <translation type="obsolete">Bureaublad effecten uitschakelen</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_desktop.ui" line="89"/>
         <source>Disable desktop wallpaper</source>
-        <translation type="unfinished">Bureaublad achtergrond verbergen</translation>
+        <translation type="obsolete">Bureaublad achtergrond verbergen</translation>
     </message>
     <message>
         <source>Disable font smoothing</source>
         <translation type="obsolete">Font smoothing uitschakelen</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_desktop.ui" line="105"/>
         <source>Other</source>
-        <translation type="unfinished">Overige</translation>
+        <translation type="obsolete">Overige</translation>
     </message>
     <message>
         <source>General</source>
         <translation type="obsolete">Basis</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_desktop.ui" line="20"/>
-        <source>Inherit configuration from parent</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/computer_group_dialog_desktop.ui" line="111"/>
         <source>Lock computer at disconnect</source>
-        <translation type="unfinished">Computer vergrendelen bij verbroken verbinding</translation>
+        <translation type="obsolete">Computer vergrendelen bij verbroken verbinding</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_desktop.ui" line="118"/>
         <source>Block remote input</source>
-        <translation type="unfinished">Blokkeer input op afstand</translation>
+        <translation type="obsolete">Blokkeer input op afstand</translation>
     </message>
 </context>
 <context>
@@ -876,19 +765,12 @@ Routers added: %4</source>
         <translation type="obsolete">Adres / ID:</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_general.ui" line="20"/>
-        <source>Inherit from parent</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/computer_group_dialog_general.ui" line="32"/>
         <source>User Name:</source>
-        <translation type="unfinished">Gebruikers Naam:</translation>
+        <translation type="obsolete">Gebruikers Naam:</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_general.ui" line="46"/>
         <source>Password:</source>
-        <translation type="unfinished">Wachtwoord:</translation>
+        <translation type="obsolete">Wachtwoord:</translation>
     </message>
     <message>
         <source>Comment:</source>
@@ -898,9 +780,8 @@ Routers added: %4</source>
 <context>
     <name>ComputerGroupDialogParent</name>
     <message>
-        <location filename="../console/computer_group_dialog_parent.ui" line="20"/>
         <source>Select child item</source>
-        <translation type="unfinished">Selecteer onderliggend item</translation>
+        <translation type="obsolete">Selecteer onderliggend item</translation>
     </message>
 </context>
 <context>
@@ -913,9 +794,8 @@ Routers added: %4</source>
 <context>
     <name>ComputerGroupItem</name>
     <message>
-        <location filename="../console/computer_group_item.cc" line="141"/>
         <source>Root Group</source>
-        <translation>Hoofd Groep</translation>
+        <translation type="vanished">Hoofd Groep</translation>
     </message>
 </context>
 <context>
@@ -1158,67 +1038,55 @@ Routers added: %4</source>
 <context>
     <name>Console</name>
     <message>
-        <location filename="../console/main.cc" line="57"/>
         <source>Aspia Console</source>
-        <translation>Aspia Console</translation>
+        <translation type="vanished">Aspia Console</translation>
     </message>
     <message>
-        <location filename="../console/main.cc" line="60"/>
         <source>file</source>
-        <translation>bestand</translation>
+        <translation type="vanished">bestand</translation>
     </message>
     <message>
-        <location filename="../console/main.cc" line="61"/>
         <source>The file to open.</source>
-        <translation>Het bestand om te openen.</translation>
+        <translation type="vanished">Het bestand om te openen.</translation>
     </message>
 </context>
 <context>
     <name>ConsoleMainWindow</name>
     <message>
-        <location filename="../console/main_window.ui" line="14"/>
         <source>Aspia Console</source>
-        <translation>Aspia Console</translation>
+        <translation type="vanished">Aspia Console</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="68"/>
         <source>&amp;File</source>
-        <translation>&amp;Bestand</translation>
+        <translation type="vanished">&amp;Bestand</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="72"/>
         <source>Recent open</source>
-        <translation>Recentelijk geopend</translation>
+        <translation type="vanished">Recentelijk geopend</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="91"/>
         <source>&amp;Edit</source>
-        <translation>B&amp;ewerken</translation>
+        <translation type="vanished">B&amp;ewerken</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="109"/>
         <source>&amp;Session Type</source>
-        <translation>&amp;Sessie Type</translation>
+        <translation type="vanished">&amp;Sessie Type</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="118"/>
         <source>&amp;Help</source>
-        <translation>&amp;Help</translation>
+        <translation type="vanished">&amp;Help</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="129"/>
         <source>&amp;View</source>
-        <translation>&amp;Beeld</translation>
+        <translation type="vanished">&amp;Beeld</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="133"/>
         <source>&amp;Language</source>
-        <translation>&amp;Taal</translation>
+        <translation type="vanished">&amp;Taal</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="142"/>
         <source>&amp;Theme</source>
-        <translation>&amp;Thema</translation>
+        <translation type="vanished">&amp;Thema</translation>
     </message>
     <message>
         <source>Light</source>
@@ -1229,134 +1097,108 @@ Routers added: %4</source>
         <translation type="vanished">Donker</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="165"/>
         <source>Tools</source>
-        <translation>Gereedschappen</translation>
+        <translation type="vanished">Gereedschappen</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="179"/>
-        <location filename="../console/main_window.ui" line="453"/>
         <source>Tool Bar</source>
-        <translation>Werkbalk</translation>
+        <translation type="vanished">Werkbalk</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="225"/>
         <source>&amp;New address book</source>
-        <translation>&amp;Nieuw adres boek</translation>
+        <translation type="vanished">&amp;Nieuw adres boek</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="228"/>
         <source>Ctrl+N</source>
-        <translation>Ctrl+N</translation>
+        <translation type="vanished">Ctrl+N</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="237"/>
         <source>&amp;Open address book...</source>
-        <translation>&amp;Open adres boek...</translation>
+        <translation type="vanished">&amp;Open adres boek...</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="240"/>
         <source>Ctrl+O</source>
-        <translation>Ctrl+O</translation>
+        <translation type="vanished">Ctrl+O</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="252"/>
         <source>&amp;Save</source>
-        <translation>O&amp;pslaan</translation>
+        <translation type="vanished">O&amp;pslaan</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="255"/>
         <source>Ctrl+S</source>
-        <translation>Ctrl+P</translation>
+        <translation type="vanished">Ctrl+P</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="263"/>
         <source>Save &amp;as...</source>
-        <translation>Opslaan &amp;als...</translation>
+        <translation type="vanished">Opslaan &amp;als...</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="266"/>
         <source>Ctrl+Alt+S</source>
-        <translation>Ctrl+Alt+A</translation>
+        <translation type="vanished">Ctrl+Alt+A</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="274"/>
         <source>&amp;Close</source>
-        <translation>S&amp;luiten</translation>
+        <translation type="vanished">S&amp;luiten</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="277"/>
         <source>Ctrl+W</source>
-        <translation>Ctrl+W</translation>
+        <translation type="vanished">Ctrl+W</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="286"/>
         <source>&amp;Exit</source>
-        <translation>&amp;Beeindigen</translation>
+        <translation type="vanished">&amp;Beeindigen</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="298"/>
         <source>Add Computer Group</source>
-        <translation>Computer Groep Toevoegen</translation>
+        <translation type="vanished">Computer Groep Toevoegen</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="310"/>
         <source>Modify Computer Group</source>
-        <translation>Computer Groep Aanpassen</translation>
+        <translation type="vanished">Computer Groep Aanpassen</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="322"/>
         <source>Delete Computer Group</source>
-        <translation>Computer Groep Verwijderen</translation>
+        <translation type="vanished">Computer Groep Verwijderen</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="334"/>
         <source>Add Computer</source>
-        <translation>Computer Toevoegen</translation>
+        <translation type="vanished">Computer Toevoegen</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="346"/>
         <source>Modify Computer</source>
-        <translation>Computer Aanpassen</translation>
+        <translation type="vanished">Computer Aanpassen</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="358"/>
         <source>Delete Computer</source>
-        <translation>Computer Verwijderen</translation>
+        <translation type="vanished">Computer Verwijderen</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="373"/>
         <source>Desktop &amp;Manage</source>
-        <translation>Bureaublad &amp;Beheren</translation>
+        <translation type="vanished">Bureaublad &amp;Beheren</translation>
     </message>
     <message>
         <source>Desktop &amp;View</source>
         <translation type="vanished">Bureaublad &amp;Weergeven</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="385"/>
         <source>&amp;File Transfer</source>
-        <translation>&amp;Bestands Overdracht</translation>
+        <translation type="vanished">&amp;Bestands Overdracht</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="394"/>
         <source>&amp;Online Help...</source>
-        <translation>Online &amp;Hulp...</translation>
+        <translation type="vanished">Online &amp;Hulp...</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="397"/>
         <source>F1</source>
-        <translation>F1</translation>
+        <translation type="vanished">F1</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="406"/>
         <source>&amp;About</source>
-        <translation>&amp;Over</translation>
+        <translation type="vanished">&amp;Over</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="418"/>
         <source>Address Book Properties</source>
-        <translation>Adresboek eigenschappen</translation>
+        <translation type="vanished">Adresboek eigenschappen</translation>
     </message>
     <message>
         <source>Desktop Manage</source>
@@ -1367,164 +1209,80 @@ Routers added: %4</source>
         <translation type="vanished">Bureaublad Weergeven</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="439"/>
-        <location filename="../console/main_window.ui" line="442"/>
         <source>File Transfer</source>
-        <translation>Bestands Overdracht</translation>
+        <translation type="vanished">Bestands Overdracht</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="464"/>
         <source>Status Bar</source>
-        <translation>Status Balk</translation>
+        <translation type="vanished">Status Balk</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="476"/>
         <source>Fast Connect</source>
-        <translation>Snel Verbinden</translation>
+        <translation type="vanished">Snel Verbinden</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="479"/>
         <source>F8</source>
-        <translation type="unfinished">F8</translation>
+        <translation type="obsolete">F8</translation>
     </message>
     <message>
         <source>Router Manage</source>
         <translation type="vanished">Router Beheer</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="572"/>
-        <source>Show icons in menus</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/main_window.ui" line="584"/>
-        <source>&amp;System Information</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/main_window.ui" line="587"/>
-        <location filename="../console/main_window.ui" line="596"/>
-        <location filename="../console/main_window.ui" line="599"/>
         <source>System Information</source>
-        <translation type="unfinished">Systeem Informatie</translation>
+        <translation type="obsolete">Systeem Informatie</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="611"/>
-        <source>&amp;Text Chat</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/main_window.ui" line="614"/>
-        <location filename="../console/main_window.ui" line="623"/>
-        <location filename="../console/main_window.ui" line="626"/>
-        <source>Text Chat</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/main_window.ui" line="638"/>
-        <source>Update Status</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/main_window.ui" line="641"/>
-        <source>Update the status of computers in the list</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/main_window.ui" line="644"/>
         <source>F5</source>
-        <translation type="unfinished">F5</translation>
+        <translation type="obsolete">F5</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="656"/>
-        <source>Import Computers/Groups</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/main_window.ui" line="659"/>
-        <source>Import computers from file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/main_window.ui" line="671"/>
-        <source>Export Computer Group</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/main_window.ui" line="674"/>
-        <source>Export computer group to file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/main_window.ui" line="682"/>
-        <source>Large icons</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/main_window.ui" line="487"/>
         <source>Show tray icon</source>
-        <translation>Toon tray icon</translation>
+        <translation type="vanished">Toon tray icon</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="427"/>
-        <location filename="../console/main_window.ui" line="430"/>
-        <source>Desktop Management</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/main_window.ui" line="495"/>
         <source>Minimize to tray</source>
-        <translation>Minimaliseer naar de tray</translation>
+        <translation type="vanished">Minimaliseer naar de tray</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="500"/>
         <source>Hide</source>
-        <translation>Verbergen</translation>
+        <translation type="vanished">Verbergen</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="512"/>
         <source>Save all</source>
-        <translation>Alles opslaan</translation>
+        <translation type="vanished">Alles opslaan</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="515"/>
         <source>Ctrl+Shift+S</source>
-        <translation>Ctrl+Shift+S</translation>
+        <translation type="vanished">Ctrl+Shift+S</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="523"/>
         <source>Close all</source>
-        <translation>Alles sluiten</translation>
+        <translation type="vanished">Alles sluiten</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="526"/>
         <source>Ctrl+Shift+W</source>
-        <translation>Ctrl+Shift+W</translation>
+        <translation type="vanished">Ctrl+Shift+W</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="531"/>
         <source>Check for updates...</source>
-        <translation>Controleer voor updates...</translation>
+        <translation type="vanished">Controleer voor updates...</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="536"/>
         <source>Update Settings</source>
-        <translation>Update Instellingen</translation>
+        <translation type="vanished">Update Instellingen</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="541"/>
         <source>Clear</source>
-        <translation>Wissen</translation>
+        <translation type="vanished">Wissen</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="552"/>
         <source>Remember latest</source>
-        <translation>Herinner laatste</translation>
+        <translation type="vanished">Herinner laatste</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="564"/>
         <source>Copy Computer</source>
-        <translation>Kopieer Computer</translation>
+        <translation type="vanished">Kopieer Computer</translation>
     </message>
 </context>
 <context>
@@ -1927,34 +1685,16 @@ Routers added: %4</source>
 <context>
     <name>FastConnectDialog</name>
     <message>
-        <location filename="../console/fast_connect_dialog.ui" line="20"/>
         <source>Fast Connect</source>
-        <translation>Snel Verbinden</translation>
+        <translation type="vanished">Snel Verbinden</translation>
     </message>
     <message>
-        <location filename="../console/fast_connect_dialog.ui" line="32"/>
         <source>Address / ID</source>
-        <translation>Adres / ID</translation>
+        <translation type="vanished">Adres / ID</translation>
     </message>
     <message>
-        <location filename="../console/fast_connect_dialog.ui" line="70"/>
         <source>Session Type</source>
-        <translation>Sessie Type</translation>
-    </message>
-    <message>
-        <location filename="../console/fast_connect_dialog.ui" line="104"/>
-        <source>Default configuration from address book</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/fast_connect_dialog.ui" line="110"/>
-        <source>Use credentials from address book</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/fast_connect_dialog.ui" line="117"/>
-        <source>Use session parameters from address book</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Sessie Type</translation>
     </message>
 </context>
 <context>
@@ -2542,29 +2282,24 @@ Routers added: %4</source>
 <context>
     <name>OpenAddressBookDialog</name>
     <message>
-        <location filename="../console/open_address_book_dialog.ui" line="23"/>
         <source>Open Address Book</source>
-        <translation>Open Adresboek</translation>
+        <translation type="vanished">Open Adresboek</translation>
     </message>
     <message>
-        <location filename="../console/open_address_book_dialog.ui" line="53"/>
         <source>Address book is encrypted. To open, you must enter a password.</source>
-        <translation>Het adresboek is versleuteld. Voer het wachtwoord in.</translation>
+        <translation type="vanished">Het adresboek is versleuteld. Voer het wachtwoord in.</translation>
     </message>
     <message>
-        <location filename="../console/open_address_book_dialog.ui" line="66"/>
         <source>File:</source>
-        <translation>Bestand:</translation>
+        <translation type="vanished">Bestand:</translation>
     </message>
     <message>
-        <location filename="../console/open_address_book_dialog.ui" line="73"/>
         <source>Encryption Type:</source>
-        <translation>Encryptie Type:</translation>
+        <translation type="vanished">Encryptie Type:</translation>
     </message>
     <message>
-        <location filename="../console/open_address_book_dialog.ui" line="80"/>
         <source>Password:</source>
-        <translation>Wachtwoord:</translation>
+        <translation type="vanished">Wachtwoord:</translation>
     </message>
 </context>
 <context>
@@ -4815,25 +4550,21 @@ Routers added: %4</source>
 <context>
     <name>UpdateSettingsDialog</name>
     <message>
-        <location filename="../console/update_settings_dialog.ui" line="14"/>
         <source>Update Settings</source>
-        <translation>Update Instellingen</translation>
+        <translation type="vanished">Update Instellingen</translation>
     </message>
     <message>
-        <location filename="../console/update_settings_dialog.ui" line="26"/>
         <source>Check for updates on startup</source>
         <translatorcomment>This one does not really fit, but I don&apos;t know how to make the text even smaller</translatorcomment>
-        <translation>Controleer op update bij opstarten</translation>
+        <translation type="vanished">Controleer op update bij opstarten</translation>
     </message>
     <message>
-        <location filename="../console/update_settings_dialog.ui" line="33"/>
         <source>Use custom update server</source>
-        <translation>Gebruik andere update server</translation>
+        <translation type="vanished">Gebruik andere update server</translation>
     </message>
     <message>
-        <location filename="../console/update_settings_dialog.ui" line="42"/>
         <source>Server:</source>
-        <translation>Server:</translation>
+        <translation type="vanished">Server:</translation>
     </message>
 </context>
 <context>
@@ -6228,12 +5959,12 @@ Routers added: %4</source>
         <translation type="obsolete">Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.cc" line="285"/>
+        <location filename="../client/ui/main_window.cc" line="296"/>
         <source>Connection by ID is specified in the properties of the computer, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation type="unfinished">Verbinding maken met ID is ingesteld in de eigenschappen van de computer,  maar de router is niet geconfigureerd. Controleer de parameters van de router in de eigenschappen van het adres boek.</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.cc" line="217"/>
+        <location filename="../client/ui/main_window.cc" line="228"/>
         <source>Aspia Client</source>
         <translation type="unfinished">Aspia Client</translation>
     </message>
@@ -9710,35 +9441,29 @@ Routers added: %4</source>
 <context>
     <name>console::AddressBookDialog</name>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="109"/>
         <source>Without Encryption</source>
-        <translation>Zonder Encryptie</translation>
+        <translation type="vanished">Zonder Encryptie</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="111"/>
         <source>ChaCha20 + Poly1305 (256-bit key)</source>
         <translatorcomment>Why are we translating this?</translatorcomment>
-        <translation>ChaCha20 + Poly1305 (256-bit key)</translation>
+        <translation type="vanished">ChaCha20 + Poly1305 (256-bit key)</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="140"/>
         <source>Double-click to change</source>
-        <translation>Dubbelklik om te wijzigen</translation>
+        <translation type="vanished">Dubbelklik om te wijzigen</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="123"/>
         <source>Address Book</source>
-        <translation>Adresboek</translation>
+        <translation type="vanished">Adresboek</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="222"/>
         <source>General</source>
-        <translation type="unfinished">Basis</translation>
+        <translation type="obsolete">Basis</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="226"/>
         <source>Sessions</source>
-        <translation type="unfinished">Sessies</translation>
+        <translation type="obsolete">Sessies</translation>
     </message>
     <message>
         <source>Manage</source>
@@ -9749,9 +9474,8 @@ Routers added: %4</source>
         <translation type="obsolete">Weergave</translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/address_book_dialog.cc" line="438"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation>
+        <translation type="vanished">
             <numerusform>Te lange naam. De maximum lengte is %n karakter.</numerusform>
             <numerusform>Te lange naam. De maximum lengte is %n karakters.</numerusform>
         </translation>
@@ -9760,62 +9484,42 @@ Routers added: %4</source>
         <source>Name can not be empty.</source>
         <translation type="vanished">Naam mag niet leeg zijn.</translation>
     </message>
-    <message>
-        <location filename="../console/address_book_dialog.cc" line="444"/>
-        <source>Name cannot be empty.</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message numerus="yes">
-        <location filename="../console/address_book_dialog.cc" line="451"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation>
+        <translation type="vanished">
             <numerusform>Te lang commentaar. De maximale lengte is %n karakter.</numerusform>
             <numerusform>Te lang commentaar. De maximale lengte is %n karakters.</numerusform>
         </translation>
     </message>
-    <message numerus="yes">
-        <location filename="../console/address_book_dialog.cc" line="459"/>
-        <source>Too long display name. The maximum length of the display name is %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
-    </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="485"/>
         <source>The passwords you entered do not match.</source>
-        <translation>De ingevoerde wachtwoorden komen niet overeen.</translation>
+        <translation type="vanished">De ingevoerde wachtwoorden komen niet overeen.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/address_book_dialog.cc" line="491"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
-        <translation>
+        <translation type="vanished">
             <numerusform>Wachtwoord mag niet leeg zijn en mag niet minder dan %n karakter zijn.</numerusform>
             <numerusform>Wachtwoord mag niet leeg zijn en mag niet minder dan %n karakters zijn.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="499"/>
         <source>Password you entered does not meet the security requirements!</source>
-        <translation>Het ingevoerde wachtwoord komt niet overeen met de beveiligings eisen!</translation>
+        <translation type="vanished">Het ingevoerde wachtwoord komt niet overeen met de beveiligings eisen!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/address_book_dialog.cc" line="502"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation>
+        <translation type="vanished">
             <numerusform>Het wachtwoord moet kleine, hoofdletters en nummers bevatten, en mag niet korter zijn dan %n karakter.</numerusform>
             <numerusform>Het wachtwoord moet kleine, hoofdletters en nummers bevatten, en mag niet korter zijn dan %n karakters.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="506"/>
         <source>Do you want to enter a different password?</source>
-        <translation>Wilt U een ander wachtwoord invoeren?</translation>
+        <translation type="vanished">Wilt U een ander wachtwoord invoeren?</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="509"/>
         <source>Warning</source>
-        <translation>Waarschuwing</translation>
+        <translation type="vanished">Waarschuwing</translation>
     </message>
     <message>
         <source>Desktop Manage</source>
@@ -9834,57 +9538,47 @@ Routers added: %4</source>
         <translation type="obsolete">Nee</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="547"/>
         <source>An invalid router address was entered.</source>
-        <translation>Er is een ongeldig router adres ingevoerd.</translation>
+        <translation type="vanished">Er is een ongeldig router adres ingevoerd.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="558"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation>De gebruikersnaam mag niet leeg zijn, en alleen karakters uit het alfabet, nummers en _, -, . karakters bevatten.</translation>
+        <translation type="vanished">De gebruikersnaam mag niet leeg zijn, en alleen karakters uit het alfabet, nummers en _, -, . karakters bevatten.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="567"/>
         <source>Router password cannot be empty.</source>
-        <translation>Router wachtwoord mag niet leeg zijn.</translation>
+        <translation type="vanished">Router wachtwoord mag niet leeg zijn.</translation>
     </message>
 </context>
 <context>
     <name>console::AddressBookTab</name>
     <message>
-        <location filename="../console/address_book_tab.cc" line="214"/>
         <source>Unable to open address book file &quot;%1&quot;.</source>
-        <translation>Adresboek &quot;%1&quot; kon niet geopend worden.</translation>
+        <translation type="vanished">Adresboek &quot;%1&quot; kon niet geopend worden.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="222"/>
         <source>Unable to read address book file &quot;%1&quot;.</source>
-        <translation>Adresboek &quot;%1&quot; kon niet gelezen worden.</translation>
+        <translation type="vanished">Adresboek &quot;%1&quot; kon niet gelezen worden.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="232"/>
         <source>The address book file &quot;%1&quot; is corrupted or has an unknown format.</source>
-        <translation>Het adresboek &quot;%1&quot; is beschadigd of heeft een onbekende indeling.</translation>
+        <translation type="vanished">Het adresboek &quot;%1&quot; is beschadigd of heeft een onbekende indeling.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="271"/>
         <source>Unable to decrypt the address book with the specified password.</source>
-        <translation>Kan het adresboek niet ontsleutelen met het opgegeven wachtwoord.</translation>
+        <translation type="vanished">Kan het adresboek niet ontsleutelen met het opgegeven wachtwoord.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="278"/>
         <source>The address book file is corrupted or has an unknown format.</source>
-        <translation>Het adresboek bestand is beschadigd of heeft een onbekende indeling.</translation>
+        <translation type="vanished">Het adresboek bestand is beschadigd of heeft een onbekende indeling.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="261"/>
         <source>The address book file is encrypted with an unsupported encryption type.</source>
-        <translation>Het adresboek bestand is versleuteld met een encryptie type dat niet ondersteund wordt.</translation>
+        <translation type="vanished">Het adresboek bestand is versleuteld met een encryptie type dat niet ondersteund wordt.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="668"/>
         <source>Are you sure you want to delete computer group &quot;%1&quot; and all child items?</source>
-        <translation>Weet U zeker dat U de computer groep &quot;%1&quot; en alle onderliggende items wilt verwijderen?</translation>
+        <translation type="vanished">Weet U zeker dat U de computer groep &quot;%1&quot; en alle onderliggende items wilt verwijderen?</translation>
     </message>
     <message>
         <source>Confirmation</source>
@@ -9899,78 +9593,55 @@ Routers added: %4</source>
         <translation type="obsolete">Nee</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="698"/>
         <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
-        <translation>Weet U zeker dat U de computer &quot;%1&quot; wilt verwijderen?</translation>
+        <translation type="vanished">Weet U zeker dat U de computer &quot;%1&quot; wilt verwijderen?</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="1044"/>
-        <source>Online</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/address_book_tab.cc" line="1046"/>
-        <source>Offline</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/address_book_tab.cc" line="1171"/>
         <source>Save Address Book</source>
-        <translation>Adresboek Opslaan</translation>
+        <translation type="vanished">Adresboek Opslaan</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="1173"/>
         <source>Aspia Address Book (*.aab)</source>
-        <translation>Aspia Adresboek (*.aab)</translation>
+        <translation type="vanished">Aspia Adresboek (*.aab)</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="1188"/>
         <source>Unable to create or open address book file.</source>
-        <translation>Kan adresboek bestand niet maken of openen.</translation>
+        <translation type="vanished">Kan adresboek bestand niet maken of openen.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="1202"/>
         <source>Unable to write address book file.</source>
-        <translation>Kan adresboek bestand niet schrijven.</translation>
+        <translation type="vanished">Kan adresboek bestand niet schrijven.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="1233"/>
         <source>Root Group</source>
-        <translation>Hoofd Groep</translation>
+        <translation type="vanished">Hoofd Groep</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="1245"/>
-        <location filename="../console/address_book_tab.cc" line="1260"/>
         <source>Warning</source>
-        <translation>Waarschuwing</translation>
+        <translation type="vanished">Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="1247"/>
         <source>Could not open address book</source>
-        <translation>Kon adresboek niet openen</translation>
+        <translation type="vanished">Kon adresboek niet openen</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="1262"/>
         <source>Failed to save address book</source>
-        <translation>Kon adresboek niet opslaan</translation>
+        <translation type="vanished">Kon adresboek niet opslaan</translation>
     </message>
 </context>
 <context>
     <name>console::ComputerDialog</name>
     <message>
-        <location filename="../console/computer_dialog.cc" line="59"/>
         <source>(copy)</source>
-        <translation>(kopieer)</translation>
+        <translation type="vanished">(kopieer)</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog.cc" line="70"/>
         <source>General</source>
-        <translation>Basis</translation>
+        <translation type="vanished">Basis</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog.cc" line="74"/>
         <source>Sessions</source>
-        <translation>Sessies</translation>
+        <translation type="vanished">Sessies</translation>
     </message>
     <message>
         <source>Desktop Manage</source>
@@ -9992,9 +9663,8 @@ Routers added: %4</source>
 <context>
     <name>console::ComputerDialogGeneral</name>
     <message numerus="yes">
-        <location filename="../console/computer_dialog_general.cc" line="119"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation>
+        <translation type="vanished">
             <numerusform>Te lange naam. De maximum lengte is %n karakter.</numerusform>
             <numerusform>Te lange naam. De maximum lengte is %n karakters.</numerusform>
         </translation>
@@ -10004,27 +9674,19 @@ Routers added: %4</source>
         <translation type="vanished">Naam mag niet leeg zijn.</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_general.cc" line="128"/>
-        <source>Name cannot be empty.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/computer_dialog_general.cc" line="139"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation>De gebruikersnaam mag niet leeg zijn, en alleen karakters uit het alfabet, nummers, _, -, . karakters bevatten.</translation>
+        <translation type="vanished">De gebruikersnaam mag niet leeg zijn, en alleen karakters uit het alfabet, nummers, _, -, . karakters bevatten.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/computer_dialog_general.cc" line="150"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation>
+        <translation type="vanished">
             <numerusform>Te lang commentaar. De maximale lengte is %n karakter.</numerusform>
             <numerusform>Te lang commentaar. De maximale lengte is %n karakters.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_general.cc" line="168"/>
         <source>An invalid computer address was entered.</source>
-        <translation>Er is een ongeldig computer adres ingevoerd.</translation>
+        <translation type="vanished">Er is een ongeldig computer adres ingevoerd.</translation>
     </message>
     <message>
         <source>Warning</source>
@@ -10034,19 +9696,12 @@ Routers added: %4</source>
 <context>
     <name>console::ComputerGroupDialog</name>
     <message>
-        <location filename="../console/computer_group_dialog.cc" line="74"/>
         <source>General</source>
-        <translation type="unfinished">Basis</translation>
+        <translation type="obsolete">Basis</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog.cc" line="78"/>
         <source>Sessions</source>
-        <translation type="unfinished">Sessies</translation>
-    </message>
-    <message>
-        <location filename="../console/computer_group_dialog.cc" line="228"/>
-        <source>Name cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Sessies</translation>
     </message>
     <message>
         <source>Manage</source>
@@ -10065,9 +9720,8 @@ Routers added: %4</source>
         <translation type="obsolete">Bureaublad Weergeven</translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/computer_group_dialog.cc" line="219"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation>
+        <translation type="vanished">
             <numerusform>Te lange naam. De maximum lengte is %n karakter.</numerusform>
             <numerusform>Te lange naam. De maximum lengte is %n karakters.</numerusform>
         </translation>
@@ -10077,9 +9731,8 @@ Routers added: %4</source>
         <translation type="vanished">Naam mag niet leeg zijn.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/computer_group_dialog.cc" line="237"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation>
+        <translation type="vanished">
             <numerusform>Te lang commentaar. De maximale lengte is %n karakter.</numerusform>
             <numerusform>Te lang commentaar. De maximale lengte is %n karakters.</numerusform>
         </translation>
@@ -10101,21 +9754,6 @@ Routers added: %4</source>
     <message>
         <source>Name can not be empty.</source>
         <translation type="obsolete">Naam mag niet leeg zijn.</translation>
-    </message>
-    <message>
-        <location filename="../console/computer_group_dialog_general.cc" line="42"/>
-        <source>Credentials</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/computer_group_dialog_general.cc" line="47"/>
-        <source>Inherit from parent</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/computer_group_dialog_general.cc" line="100"/>
-        <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
@@ -10140,9 +9778,8 @@ Routers added: %4</source>
         <translation type="vanished">Bevestiging</translation>
     </message>
     <message>
-        <location filename="../console/fast_connect_dialog.cc" line="88"/>
         <source>The list of entered addresses will be cleared. Continue?</source>
-        <translation>De lijst van ingevoerde addressen zal leeg gemaakt worden. Doorgaan?</translation>
+        <translation type="vanished">De lijst van ingevoerde addressen zal leeg gemaakt worden. Doorgaan?</translation>
     </message>
     <message>
         <source>Yes</source>
@@ -10157,14 +9794,12 @@ Routers added: %4</source>
         <translation type="vanished">Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../console/fast_connect_dialog.cc" line="205"/>
         <source>Connection by ID is specified but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
-        <translation>Verbinding maken met ID is ingesteld maar de router is niet geconfigureerd. Controleer de parameters van de router in de eigenschappen van het adres boek.</translation>
+        <translation type="vanished">Verbinding maken met ID is ingesteld maar de router is niet geconfigureerd. Controleer de parameters van de router in de eigenschappen van het adres boek.</translation>
     </message>
     <message>
-        <location filename="../console/fast_connect_dialog.cc" line="221"/>
         <source>An invalid computer address was entered.</source>
-        <translation>Er is een ongeldig computer adres ingevoerd.</translation>
+        <translation type="vanished">Er is een ongeldig computer adres ingevoerd.</translation>
     </message>
 </context>
 <context>
@@ -10174,80 +9809,28 @@ Routers added: %4</source>
         <translation type="vanished">Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="202"/>
         <source>Pinned address book file &quot;%1&quot; was not found.&lt;br/&gt;This file will be unpinned.</source>
-        <translation>Het vastgepinde adres boek bestand &quot;%1&quot; is niet gevonden.&lt;br/&gt;Het bestand zal ge-unpind worden.</translation>
+        <translation type="vanished">Het vastgepinde adres boek bestand &quot;%1&quot; is niet gevonden.&lt;br/&gt;Het bestand zal ge-unpind worden.</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="312"/>
         <source>Open Address Book</source>
-        <translation>Open Adresboek</translation>
+        <translation type="vanished">Open Adresboek</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="314"/>
         <source>Aspia Address Book (*.aab)</source>
-        <translation>Aspia Adresboek (*.aab)</translation>
+        <translation type="vanished">Aspia Adresboek (*.aab)</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="572"/>
-        <source>Open File</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/main_window.cc" line="574"/>
-        <location filename="../console/main_window.cc" line="640"/>
-        <source>JSON files (*.json)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/main_window.cc" line="586"/>
-        <source>Could not open file for reading.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/main_window.cc" line="594"/>
-        <source>Import file is empty.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/main_window.cc" line="604"/>
-        <source>Failed to parse JSON document: %1.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/main_window.cc" line="614"/>
-        <source>Import completed successfully.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/main_window.cc" line="638"/>
         <source>Save File</source>
-        <translation type="unfinished">Bestand Opslaan</translation>
-    </message>
-    <message>
-        <location filename="../console/main_window.cc" line="652"/>
-        <source>Could not open file for writing.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/main_window.cc" line="662"/>
-        <source>Unable to write file.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/main_window.cc" line="667"/>
-        <source>Export completed successfully.</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Bestand Opslaan</translation>
     </message>
     <message>
         <source>Confirmation</source>
         <translation type="vanished">Bevestiging</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="901"/>
-        <location filename="../console/main_window.cc" line="1318"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
-        <translation>Adresboek &quot;%1&quot; is aangepast. Wijzigingen opslaan?</translation>
+        <translation type="vanished">Adresboek &quot;%1&quot; is aangepast. Wijzigingen opslaan?</translation>
     </message>
     <message>
         <source>Yes</source>
@@ -10258,99 +9841,76 @@ Routers added: %4</source>
         <translation type="obsolete">Nee</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1128"/>
         <source>Close other tabs</source>
-        <translation>Sluit andere tabs</translation>
+        <translation type="vanished">Sluit andere tabs</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1135"/>
         <source>Close tab</source>
-        <translation>Sluit tab</translation>
+        <translation type="vanished">Sluit tab</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1136"/>
-        <location filename="../console/main_window.cc" line="1141"/>
         <source>Pin tab</source>
-        <translation>Pin tab</translation>
+        <translation type="vanished">Pin tab</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1234"/>
         <source>The list of recently opened address books will be cleared. Continue?</source>
-        <translation>De lijst van recent geopende adres boeken zal leeg gemaakt worden. Doorgaan?</translation>
+        <translation type="vanished">De lijst van recent geopende adres boeken zal leeg gemaakt worden. Doorgaan?</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1265"/>
         <source>Hide</source>
-        <translation>Verbergen</translation>
+        <translation type="vanished">Verbergen</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1280"/>
         <source>Show</source>
-        <translation>Weergeven</translation>
+        <translation type="vanished">Weergeven</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1633"/>
         <source>Connection by ID is specified in the properties of the computer, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
-        <translation>Verbinding maken met ID is ingesteld in de eigenschappen van de computer,  maar de router is niet geconfigureerd. Controleer de parameters van de router in de eigenschappen van het adres boek.</translation>
+        <translation type="vanished">Verbinding maken met ID is ingesteld in de eigenschappen van de computer,  maar de router is niet geconfigureerd. Controleer de parameters van de router in de eigenschappen van het adres boek.</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="709"/>
-        <location filename="../console/main_window.cc" line="1499"/>
         <source>Aspia Console</source>
-        <translation>Aspia Console</translation>
+        <translation type="vanished">Aspia Console</translation>
     </message>
     <message>
         <source>Information</source>
         <translation type="vanished">Informatie</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="281"/>
         <source>Address Book &quot;%1&quot; is already open.</source>
-        <translation>Adresboek &quot;%1&quot; is al geopend.</translation>
+        <translation type="vanished">Adresboek &quot;%1&quot; is al geopend.</translation>
     </message>
 </context>
 <context>
     <name>console::MruAction</name>
     <message>
-        <location filename="../console/mru_action.cc" line="30"/>
         <source>&lt;empty&gt;</source>
-        <translation>&lt;leeg&gt;</translation>
+        <translation type="vanished">&lt;leeg&gt;</translation>
     </message>
 </context>
 <context>
     <name>console::OpenAddressBookDialog</name>
     <message>
-        <location filename="../console/open_address_book_dialog.cc" line="45"/>
         <source>Without Encryption</source>
-        <translation>Zonder Encryptie</translation>
+        <translation type="vanished">Zonder Encryptie</translation>
     </message>
     <message>
-        <location filename="../console/open_address_book_dialog.cc" line="49"/>
         <source>ChaCha20 + Poly1305 (256-bit key)</source>
-        <translation>ChaCha20 + Poly1305 (256-bit key)</translation>
+        <translation type="vanished">ChaCha20 + Poly1305 (256-bit key)</translation>
     </message>
 </context>
 <context>
     <name>console::StatusBar</name>
-    <message>
-        <location filename="../console/statusbar.cc" line="49"/>
-        <source>Status update</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message numerus="yes">
-        <location filename="../console/statusbar.cc" line="86"/>
-        <location filename="../console/statusbar.cc" line="90"/>
         <source>%n child group(s)</source>
-        <translation>
+        <translation type="vanished">
             <numerusform>%n onderliggende groep</numerusform>
             <numerusform>%n onderliggende groepen</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/statusbar.cc" line="87"/>
-        <location filename="../console/statusbar.cc" line="91"/>
         <source>%n child computer(s)</source>
-        <translation>
+        <translation type="vanished">
             <numerusform>%n onderliggende computer</numerusform>
             <numerusform>%n onderliggende computers</numerusform>
         </translation>

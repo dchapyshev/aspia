@@ -36,90 +36,64 @@
 <context>
     <name>AddressBookDialog</name>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="17"/>
         <source>Address Book Properties</source>
-        <translation>Propriedades do Catálogo de Endereços</translation>
+        <translation type="vanished">Propriedades do Catálogo de Endereços</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="27"/>
         <source>General</source>
-        <translation>Geral</translation>
+        <translation type="vanished">Geral</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="37"/>
         <source>Name:</source>
-        <translation>Nome:</translation>
+        <translation type="vanished">Nome:</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="44"/>
         <source>File:</source>
-        <translation>Arquivo:</translation>
+        <translation type="vanished">Arquivo:</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="51"/>
         <source>Encryption:</source>
-        <translation>Criptografia:</translation>
+        <translation type="vanished">Criptografia:</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="58"/>
-        <location filename="../console/address_book_dialog.ui" line="175"/>
         <source>Password:</source>
-        <translation>Senha:</translation>
+        <translation type="vanished">Senha:</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="65"/>
         <source>Password (repeat):</source>
-        <translation>Senha (novamente):</translation>
+        <translation type="vanished">Senha (novamente):</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="119"/>
         <source>Comment:</source>
-        <translation>Comentário:</translation>
+        <translation type="vanished">Comentário:</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="132"/>
         <source>Router</source>
-        <translation>Roteador</translation>
+        <translation type="vanished">Roteador</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="138"/>
         <source>Use a router</source>
-        <translation>Usar roteador</translation>
+        <translation type="vanished">Usar roteador</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="147"/>
         <source>Address:</source>
-        <translation>Endereço:</translation>
+        <translation type="vanished">Endereço:</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="161"/>
         <source>User Name:</source>
-        <translation>Usuário:</translation>
+        <translation type="vanished">Usuário:</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="225"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
-        <translation>É necessário um roteador para se conectar a um computador se não houver uma conexão direta (bypass NAT). O Aspia não fornece um, mas você pode instalar o seu próprio roteador público. Você pode baixar o roteador no &lt;a href=&quot;https://aspia.org&quot;&gt;site oficial&lt;/a&gt;.</translation>
+        <translation type="vanished">É necessário um roteador para se conectar a um computador se não houver uma conexão direta (bypass NAT). O Aspia não fornece um, mas você pode instalar o seu próprio roteador público. Você pode baixar o roteador no &lt;a href=&quot;https://aspia.org&quot;&gt;site oficial&lt;/a&gt;.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="242"/>
         <source>Default Configuration</source>
-        <translation>Configuração padrão</translation>
+        <translation type="vanished">Configuração padrão</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="300"/>
         <source>Other</source>
-        <translation type="unfinished">Outros</translation>
-    </message>
-    <message>
-        <location filename="../console/address_book_dialog.ui" line="308"/>
-        <source>Display name when connected:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/address_book_dialog.ui" line="318"/>
-        <source>Enter a name or leave the field empty</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Outros</translation>
     </message>
 </context>
 <context>
@@ -178,34 +152,28 @@ Routers added: %4</source>
 <context>
     <name>AddressBookTab</name>
     <message>
-        <location filename="../console/address_book_tab.ui" line="98"/>
         <source>Computer Name</source>
-        <translation>Nome do Computador</translation>
+        <translation type="vanished">Nome do Computador</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.ui" line="103"/>
         <source>Address / ID</source>
-        <translation>Endereço / ID</translation>
+        <translation type="vanished">Endereço / ID</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.ui" line="108"/>
         <source>Comment</source>
-        <translation>Comentário</translation>
+        <translation type="vanished">Comentário</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.ui" line="113"/>
         <source>Created</source>
-        <translation>Criado</translation>
+        <translation type="vanished">Criado</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.ui" line="118"/>
         <source>Modified</source>
-        <translation>Modificado</translation>
+        <translation type="vanished">Modificado</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.ui" line="123"/>
         <source>Status</source>
-        <translation>Status</translation>
+        <translation type="vanished">Status</translation>
     </message>
 </context>
 <context>
@@ -495,7 +463,7 @@ Routers added: %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="613"/>
+        <location filename="../client/main.cc" line="620"/>
         <source>Invalid master password.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -616,9 +584,8 @@ Routers added: %4</source>
 <context>
     <name>ComputerDialog</name>
     <message>
-        <location filename="../console/computer_dialog.ui" line="17"/>
         <source>Computer Properties</source>
-        <translation>Propriedades do Computador</translation>
+        <translation type="vanished">Propriedades do Computador</translation>
     </message>
 </context>
 <context>
@@ -628,9 +595,8 @@ Routers added: %4</source>
         <translation type="vanished">Codec</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_desktop.ui" line="118"/>
         <source>Block remote input</source>
-        <translation>Bloquear teclado remoto</translation>
+        <translation type="vanished">Bloquear teclado remoto</translation>
     </message>
     <message>
         <source>Enable cursor shape</source>
@@ -649,71 +615,60 @@ Routers added: %4</source>
         <translation type="vanished">Melhor</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_desktop.ui" line="33"/>
         <source>Features</source>
-        <translation>Funcionalidades</translation>
+        <translation type="vanished">Funcionalidades</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_desktop.ui" line="39"/>
         <source>Enable audio</source>
-        <translation>Ativar audio</translation>
+        <translation type="vanished">Ativar audio</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_desktop.ui" line="46"/>
         <source>Enable clipboard</source>
-        <translation>Ativar área de transferencia</translation>
+        <translation type="vanished">Ativar área de transferencia</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_desktop.ui" line="53"/>
         <source>Show shape of remote cursor</source>
-        <translation>Mostrar formato do cursor remoto</translation>
+        <translation type="vanished">Mostrar formato do cursor remoto</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_desktop.ui" line="60"/>
         <source>Show position of remote cursor</source>
-        <translation>Mostrar posição do cursor remoto</translation>
+        <translation type="vanished">Mostrar posição do cursor remoto</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_desktop.ui" line="76"/>
         <source>Appearance</source>
-        <translation>Aparência</translation>
+        <translation type="vanished">Aparência</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_desktop.ui" line="82"/>
         <source>Disable desktop effects</source>
-        <translation>Desativar efeitos da área de trabalho</translation>
+        <translation type="vanished">Desativar efeitos da área de trabalho</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_desktop.ui" line="89"/>
         <source>Disable desktop wallpaper</source>
-        <translation>Desativar papel de parede</translation>
+        <translation type="vanished">Desativar papel de parede</translation>
     </message>
     <message>
         <source>Disable font smoothing</source>
         <translation type="vanished">Desativar suavisação de fonte</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_desktop.ui" line="105"/>
         <source>Other</source>
-        <translation>Outros</translation>
+        <translation type="vanished">Outros</translation>
     </message>
     <message>
         <source>General</source>
         <translation type="vanished">Geral</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_desktop.ui" line="20"/>
         <source>Inherit configuration from parent</source>
-        <translation>Herdar configuração do catálogo de endereços</translation>
+        <translation type="vanished">Herdar configuração do catálogo de endereços</translation>
     </message>
     <message>
         <source>Clear clipboard at disconnect</source>
         <translation type="vanished">Limpar área de transferência ao desconectar</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_desktop.ui" line="111"/>
         <source>Lock computer at disconnect</source>
-        <translation>Bloquear computador ao desconectar</translation>
+        <translation type="vanished">Bloquear computador ao desconectar</translation>
     </message>
     <message>
         <source>Compression ratio: %1</source>
@@ -723,47 +678,39 @@ Routers added: %4</source>
 <context>
     <name>ComputerDialogGeneral</name>
     <message>
-        <location filename="../console/computer_dialog_general.ui" line="34"/>
         <source>Name:</source>
-        <translation>Nome:</translation>
+        <translation type="vanished">Nome:</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_general.ui" line="48"/>
         <source>Parent Group:</source>
-        <translation>Grupo:</translation>
+        <translation type="vanished">Grupo:</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_general.ui" line="65"/>
         <source>Address / ID:</source>
-        <translation>Endereço / ID:</translation>
+        <translation type="vanished">Endereço / ID:</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_general.ui" line="81"/>
         <source>Inherit from parent</source>
-        <translation>Herdar configuração do catálogo de endereços</translation>
+        <translation type="vanished">Herdar configuração do catálogo de endereços</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_general.ui" line="93"/>
         <source>User Name:</source>
-        <translation>Usuário:</translation>
+        <translation type="vanished">Usuário:</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_general.ui" line="107"/>
         <source>Password:</source>
-        <translation>Senha:</translation>
+        <translation type="vanished">Senha:</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_general.ui" line="153"/>
         <source>Comment:</source>
-        <translation>Comentário:</translation>
+        <translation type="vanished">Comentário:</translation>
     </message>
 </context>
 <context>
     <name>ComputerDialogParent</name>
     <message>
-        <location filename="../console/computer_dialog_parent.ui" line="20"/>
         <source>Select child item</source>
-        <translation>Selecionar item</translation>
+        <translation type="vanished">Selecionar item</translation>
     </message>
 </context>
 <context>
@@ -780,34 +727,28 @@ Routers added: %4</source>
 <context>
     <name>ComputerGroupDialog</name>
     <message>
-        <location filename="../console/computer_group_dialog.ui" line="17"/>
         <source>Computer Group Properties</source>
-        <translation>Propriedades do Grupo</translation>
+        <translation type="vanished">Propriedades do Grupo</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog.ui" line="27"/>
         <source>General</source>
-        <translation>Geral</translation>
+        <translation type="vanished">Geral</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog.ui" line="37"/>
         <source>Name:</source>
-        <translation>Nome:</translation>
+        <translation type="vanished">Nome:</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog.ui" line="44"/>
         <source>Parent Group:</source>
-        <translation>Grupo:</translation>
+        <translation type="vanished">Grupo:</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog.ui" line="78"/>
         <source>Comment:</source>
-        <translation>Comentário:</translation>
+        <translation type="vanished">Comentário:</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog.ui" line="91"/>
         <source>Default Configuration</source>
-        <translation>Configuração padrão</translation>
+        <translation type="vanished">Configuração padrão</translation>
     </message>
 </context>
 <context>
@@ -829,76 +770,64 @@ Routers added: %4</source>
         <translation type="vanished">Melhor</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_desktop.ui" line="33"/>
         <source>Features</source>
-        <translation>Funcionalidades</translation>
+        <translation type="vanished">Funcionalidades</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_desktop.ui" line="39"/>
         <source>Enable audio</source>
-        <translation>Ativar audio</translation>
+        <translation type="vanished">Ativar audio</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_desktop.ui" line="46"/>
         <source>Enable clipboard</source>
-        <translation>Ativar área de transferencia</translation>
+        <translation type="vanished">Ativar área de transferencia</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_desktop.ui" line="53"/>
         <source>Show shape of remote cursor</source>
-        <translation>Mostrar formato do cursor remoto</translation>
+        <translation type="vanished">Mostrar formato do cursor remoto</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_desktop.ui" line="60"/>
         <source>Show position of remote cursor</source>
-        <translation>Mostrar posição do cursor remoto</translation>
+        <translation type="vanished">Mostrar posição do cursor remoto</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_desktop.ui" line="76"/>
         <source>Appearance</source>
-        <translation>Aparência</translation>
+        <translation type="vanished">Aparência</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_desktop.ui" line="82"/>
         <source>Disable desktop effects</source>
-        <translation>Desativar efeitos da área de trabalho</translation>
+        <translation type="vanished">Desativar efeitos da área de trabalho</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_desktop.ui" line="89"/>
         <source>Disable desktop wallpaper</source>
-        <translation>Desativar papel de parede</translation>
+        <translation type="vanished">Desativar papel de parede</translation>
     </message>
     <message>
         <source>Disable font smoothing</source>
         <translation type="vanished">Desativar suavisação de fonte</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_desktop.ui" line="105"/>
         <source>Other</source>
-        <translation>Outros</translation>
+        <translation type="vanished">Outros</translation>
     </message>
     <message>
         <source>General</source>
         <translation type="vanished">Geral</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_desktop.ui" line="20"/>
         <source>Inherit configuration from parent</source>
-        <translation>Herdar configuração do catálogo de endereços</translation>
+        <translation type="vanished">Herdar configuração do catálogo de endereços</translation>
     </message>
     <message>
         <source>Clear clipboard at disconnect</source>
         <translation type="vanished">Limpar área de transferência ao desconectar</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_desktop.ui" line="111"/>
         <source>Lock computer at disconnect</source>
-        <translation>Bloquear computador ao desconectar</translation>
+        <translation type="vanished">Bloquear computador ao desconectar</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_desktop.ui" line="118"/>
         <source>Block remote input</source>
-        <translation>Bloquear teclado remoto</translation>
+        <translation type="vanished">Bloquear teclado remoto</translation>
     </message>
 </context>
 <context>
@@ -916,19 +845,16 @@ Routers added: %4</source>
         <translation type="obsolete">Endereço / ID:</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_general.ui" line="20"/>
         <source>Inherit from parent</source>
-        <translation>Herdar configuração do catálogo de endereços</translation>
+        <translation type="vanished">Herdar configuração do catálogo de endereços</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_general.ui" line="32"/>
         <source>User Name:</source>
-        <translation>Usuário:</translation>
+        <translation type="vanished">Usuário:</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_general.ui" line="46"/>
         <source>Password:</source>
-        <translation>Senha:</translation>
+        <translation type="vanished">Senha:</translation>
     </message>
     <message>
         <source>Comment:</source>
@@ -938,9 +864,8 @@ Routers added: %4</source>
 <context>
     <name>ComputerGroupDialogParent</name>
     <message>
-        <location filename="../console/computer_group_dialog_parent.ui" line="20"/>
         <source>Select child item</source>
-        <translation>Selecionar item</translation>
+        <translation type="vanished">Selecionar item</translation>
     </message>
 </context>
 <context>
@@ -957,9 +882,8 @@ Routers added: %4</source>
 <context>
     <name>ComputerGroupItem</name>
     <message>
-        <location filename="../console/computer_group_item.cc" line="141"/>
         <source>Root Group</source>
-        <translation>Raiz do Grupo</translation>
+        <translation type="vanished">Raiz do Grupo</translation>
     </message>
 </context>
 <context>
@@ -1202,67 +1126,55 @@ Routers added: %4</source>
 <context>
     <name>Console</name>
     <message>
-        <location filename="../console/main.cc" line="57"/>
         <source>Aspia Console</source>
-        <translation>Aspia Console</translation>
+        <translation type="vanished">Aspia Console</translation>
     </message>
     <message>
-        <location filename="../console/main.cc" line="60"/>
         <source>file</source>
-        <translation>arquivo</translation>
+        <translation type="vanished">arquivo</translation>
     </message>
     <message>
-        <location filename="../console/main.cc" line="61"/>
         <source>The file to open.</source>
-        <translation>Arquivo a ser aberto.</translation>
+        <translation type="vanished">Arquivo a ser aberto.</translation>
     </message>
 </context>
 <context>
     <name>ConsoleMainWindow</name>
     <message>
-        <location filename="../console/main_window.ui" line="14"/>
         <source>Aspia Console</source>
-        <translation>Aspia Console</translation>
+        <translation type="vanished">Aspia Console</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="68"/>
         <source>&amp;File</source>
-        <translation>&amp;Arquivo</translation>
+        <translation type="vanished">&amp;Arquivo</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="72"/>
         <source>Recent open</source>
-        <translation>Abrir recentes</translation>
+        <translation type="vanished">Abrir recentes</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="91"/>
         <source>&amp;Edit</source>
-        <translation>&amp;Editar</translation>
+        <translation type="vanished">&amp;Editar</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="109"/>
         <source>&amp;Session Type</source>
-        <translation>Tipo de &amp;Sessão</translation>
+        <translation type="vanished">Tipo de &amp;Sessão</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="118"/>
         <source>&amp;Help</source>
-        <translation>&amp;Ajuda</translation>
+        <translation type="vanished">&amp;Ajuda</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="129"/>
         <source>&amp;View</source>
-        <translation>&amp;Visualizar</translation>
+        <translation type="vanished">&amp;Visualizar</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="133"/>
         <source>&amp;Language</source>
-        <translation>&amp;Idioma</translation>
+        <translation type="vanished">&amp;Idioma</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="142"/>
         <source>&amp;Theme</source>
-        <translation>&amp;Tema</translation>
+        <translation type="vanished">&amp;Tema</translation>
     </message>
     <message>
         <source>Light</source>
@@ -1273,134 +1185,108 @@ Routers added: %4</source>
         <translation type="vanished">Escuro</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="165"/>
         <source>Tools</source>
-        <translation>Ferramentas</translation>
+        <translation type="vanished">Ferramentas</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="179"/>
-        <location filename="../console/main_window.ui" line="453"/>
         <source>Tool Bar</source>
-        <translation>Barra de Ferramentas</translation>
+        <translation type="vanished">Barra de Ferramentas</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="225"/>
         <source>&amp;New address book</source>
-        <translation>&amp;Novo catálogo de endereços</translation>
+        <translation type="vanished">&amp;Novo catálogo de endereços</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="228"/>
         <source>Ctrl+N</source>
-        <translation>Ctrl+N</translation>
+        <translation type="vanished">Ctrl+N</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="237"/>
         <source>&amp;Open address book...</source>
-        <translation>&amp;Abrir catálogo de endereços...</translation>
+        <translation type="vanished">&amp;Abrir catálogo de endereços...</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="240"/>
         <source>Ctrl+O</source>
-        <translation>Ctrl+O</translation>
+        <translation type="vanished">Ctrl+O</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="252"/>
         <source>&amp;Save</source>
-        <translation>&amp;Salvar</translation>
+        <translation type="vanished">&amp;Salvar</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="255"/>
         <source>Ctrl+S</source>
-        <translation>Ctrl+S</translation>
+        <translation type="vanished">Ctrl+S</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="263"/>
         <source>Save &amp;as...</source>
-        <translation>Salvar &amp;como...</translation>
+        <translation type="vanished">Salvar &amp;como...</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="266"/>
         <source>Ctrl+Alt+S</source>
-        <translation>Ctrl+Alt+S</translation>
+        <translation type="vanished">Ctrl+Alt+S</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="274"/>
         <source>&amp;Close</source>
-        <translation>&amp;Fechar</translation>
+        <translation type="vanished">&amp;Fechar</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="277"/>
         <source>Ctrl+W</source>
-        <translation>Ctrl+W</translation>
+        <translation type="vanished">Ctrl+W</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="286"/>
         <source>&amp;Exit</source>
-        <translation>&amp;Sair</translation>
+        <translation type="vanished">&amp;Sair</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="298"/>
         <source>Add Computer Group</source>
-        <translation>Adicionar Grupo</translation>
+        <translation type="vanished">Adicionar Grupo</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="310"/>
         <source>Modify Computer Group</source>
-        <translation>Editar Grupo</translation>
+        <translation type="vanished">Editar Grupo</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="322"/>
         <source>Delete Computer Group</source>
-        <translation>Excluir Grupo</translation>
+        <translation type="vanished">Excluir Grupo</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="334"/>
         <source>Add Computer</source>
-        <translation>Adicionar Computador</translation>
+        <translation type="vanished">Adicionar Computador</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="346"/>
         <source>Modify Computer</source>
-        <translation>Editar Computador</translation>
+        <translation type="vanished">Editar Computador</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="358"/>
         <source>Delete Computer</source>
-        <translation>Excluir Computador</translation>
+        <translation type="vanished">Excluir Computador</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="373"/>
         <source>Desktop &amp;Manage</source>
-        <translation>&amp;Controlar Área de Trabalho</translation>
+        <translation type="vanished">&amp;Controlar Área de Trabalho</translation>
     </message>
     <message>
         <source>Desktop &amp;View</source>
         <translation type="vanished">&amp;Visualizar Área de Trabalho</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="385"/>
         <source>&amp;File Transfer</source>
-        <translation>Trans&amp;ferência de Arquivos</translation>
+        <translation type="vanished">Trans&amp;ferência de Arquivos</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="394"/>
         <source>&amp;Online Help...</source>
-        <translation>Ajuda &amp;Online...</translation>
+        <translation type="vanished">Ajuda &amp;Online...</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="397"/>
         <source>F1</source>
-        <translation>F1</translation>
+        <translation type="vanished">F1</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="406"/>
         <source>&amp;About</source>
-        <translation>&amp;Sobre</translation>
+        <translation type="vanished">&amp;Sobre</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="418"/>
         <source>Address Book Properties</source>
-        <translation>Propriedades do Catálogo de Endereços</translation>
+        <translation type="vanished">Propriedades do Catálogo de Endereços</translation>
     </message>
     <message>
         <source>Desktop Manage</source>
@@ -1411,164 +1297,120 @@ Routers added: %4</source>
         <translation type="vanished">Visualizar Área de Trabalho</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="439"/>
-        <location filename="../console/main_window.ui" line="442"/>
         <source>File Transfer</source>
-        <translation>Transferência de Arquivos</translation>
+        <translation type="vanished">Transferência de Arquivos</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="464"/>
         <source>Status Bar</source>
-        <translation>Barra de Status</translation>
+        <translation type="vanished">Barra de Status</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="476"/>
         <source>Fast Connect</source>
-        <translation>Conexão Rápida</translation>
+        <translation type="vanished">Conexão Rápida</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="479"/>
         <source>F8</source>
-        <translation>F8</translation>
+        <translation type="vanished">F8</translation>
     </message>
     <message>
         <source>Router Manage</source>
         <translation type="vanished">Gerenciamento do Roteador</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="572"/>
         <source>Show icons in menus</source>
-        <translation>Mostrar ícones nos menus</translation>
+        <translation type="vanished">Mostrar ícones nos menus</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="584"/>
         <source>&amp;System Information</source>
-        <translation>&amp;Informação do sistema</translation>
+        <translation type="vanished">&amp;Informação do sistema</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="587"/>
-        <location filename="../console/main_window.ui" line="596"/>
-        <location filename="../console/main_window.ui" line="599"/>
         <source>System Information</source>
-        <translation>Informação do sistema</translation>
+        <translation type="vanished">Informação do sistema</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="611"/>
         <source>&amp;Text Chat</source>
-        <translation>&amp;Bate-papo por texto</translation>
+        <translation type="vanished">&amp;Bate-papo por texto</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="614"/>
-        <location filename="../console/main_window.ui" line="623"/>
-        <location filename="../console/main_window.ui" line="626"/>
         <source>Text Chat</source>
-        <translation>Bate-papo por texto</translation>
+        <translation type="vanished">Bate-papo por texto</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="638"/>
         <source>Update Status</source>
-        <translation>Atualizar o status</translation>
+        <translation type="vanished">Atualizar o status</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="641"/>
         <source>Update the status of computers in the list</source>
-        <translation>Atualizar o status dos computadores na lista</translation>
+        <translation type="vanished">Atualizar o status dos computadores na lista</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="644"/>
         <source>F5</source>
-        <translation>F5</translation>
+        <translation type="vanished">F5</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="656"/>
         <source>Import Computers/Groups</source>
-        <translation>Importar computadores/grupos</translation>
+        <translation type="vanished">Importar computadores/grupos</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="659"/>
         <source>Import computers from file</source>
-        <translation>Importar computadores do arquivo</translation>
+        <translation type="vanished">Importar computadores do arquivo</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="671"/>
         <source>Export Computer Group</source>
-        <translation>Exportar grupo de computadores</translation>
+        <translation type="vanished">Exportar grupo de computadores</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="674"/>
         <source>Export computer group to file</source>
-        <translation>Exportar grupo de computadores para arquivo</translation>
+        <translation type="vanished">Exportar grupo de computadores para arquivo</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="682"/>
-        <source>Large icons</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/main_window.ui" line="487"/>
         <source>Show tray icon</source>
-        <translation>Exibir ícone de bandeja</translation>
+        <translation type="vanished">Exibir ícone de bandeja</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="427"/>
-        <location filename="../console/main_window.ui" line="430"/>
-        <source>Desktop Management</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/main_window.ui" line="495"/>
         <source>Minimize to tray</source>
-        <translation>Minimizar para a bandeja</translation>
+        <translation type="vanished">Minimizar para a bandeja</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="500"/>
         <source>Hide</source>
-        <translation>Ocultar</translation>
+        <translation type="vanished">Ocultar</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="512"/>
         <source>Save all</source>
-        <translation>Salvar todos</translation>
+        <translation type="vanished">Salvar todos</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="515"/>
         <source>Ctrl+Shift+S</source>
-        <translation>Ctrl+Shift+S</translation>
+        <translation type="vanished">Ctrl+Shift+S</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="523"/>
         <source>Close all</source>
-        <translation>Fechar todos</translation>
+        <translation type="vanished">Fechar todos</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="526"/>
         <source>Ctrl+Shift+W</source>
-        <translation>Ctrl+Shift+W</translation>
+        <translation type="vanished">Ctrl+Shift+W</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="531"/>
         <source>Check for updates...</source>
-        <translation>Verificar atualizações...</translation>
+        <translation type="vanished">Verificar atualizações...</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="536"/>
         <source>Update Settings</source>
-        <translation>Configurações de Atualizações</translation>
+        <translation type="vanished">Configurações de Atualizações</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="541"/>
         <source>Clear</source>
-        <translation>Limpar</translation>
+        <translation type="vanished">Limpar</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="552"/>
         <source>Remember latest</source>
-        <translation>Lembrar últimos caminhos</translation>
+        <translation type="vanished">Lembrar últimos caminhos</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="564"/>
         <source>Copy Computer</source>
-        <translation>Copiar Computador</translation>
+        <translation type="vanished">Copiar Computador</translation>
     </message>
 </context>
 <context>
@@ -1991,34 +1833,28 @@ Routers added: %4</source>
 <context>
     <name>FastConnectDialog</name>
     <message>
-        <location filename="../console/fast_connect_dialog.ui" line="20"/>
         <source>Fast Connect</source>
-        <translation>Conexão Rápida</translation>
+        <translation type="vanished">Conexão Rápida</translation>
     </message>
     <message>
-        <location filename="../console/fast_connect_dialog.ui" line="32"/>
         <source>Address / ID</source>
-        <translation>Endereço / ID</translation>
+        <translation type="vanished">Endereço / ID</translation>
     </message>
     <message>
-        <location filename="../console/fast_connect_dialog.ui" line="70"/>
         <source>Session Type</source>
-        <translation>Tipo de Sessão</translation>
+        <translation type="vanished">Tipo de Sessão</translation>
     </message>
     <message>
-        <location filename="../console/fast_connect_dialog.ui" line="104"/>
         <source>Default configuration from address book</source>
-        <translation>Configuração padrão do catálogo de endereços</translation>
+        <translation type="vanished">Configuração padrão do catálogo de endereços</translation>
     </message>
     <message>
-        <location filename="../console/fast_connect_dialog.ui" line="110"/>
         <source>Use credentials from address book</source>
-        <translation>Usar credenciais do catálogo de endereços</translation>
+        <translation type="vanished">Usar credenciais do catálogo de endereços</translation>
     </message>
     <message>
-        <location filename="../console/fast_connect_dialog.ui" line="117"/>
         <source>Use session parameters from address book</source>
-        <translation>Usar parâmetros de sessão do catálogo de endereços</translation>
+        <translation type="vanished">Usar parâmetros de sessão do catálogo de endereços</translation>
     </message>
 </context>
 <context>
@@ -2626,29 +2462,24 @@ Routers added: %4</source>
 <context>
     <name>OpenAddressBookDialog</name>
     <message>
-        <location filename="../console/open_address_book_dialog.ui" line="23"/>
         <source>Open Address Book</source>
-        <translation>Abrir Catálogo de Endereços</translation>
+        <translation type="vanished">Abrir Catálogo de Endereços</translation>
     </message>
     <message>
-        <location filename="../console/open_address_book_dialog.ui" line="53"/>
         <source>Address book is encrypted. To open, you must enter a password.</source>
-        <translation>Catálogo de endereços criptografado. Insira a senha para abrir.</translation>
+        <translation type="vanished">Catálogo de endereços criptografado. Insira a senha para abrir.</translation>
     </message>
     <message>
-        <location filename="../console/open_address_book_dialog.ui" line="66"/>
         <source>File:</source>
-        <translation>Arquivo:</translation>
+        <translation type="vanished">Arquivo:</translation>
     </message>
     <message>
-        <location filename="../console/open_address_book_dialog.ui" line="73"/>
         <source>Encryption Type:</source>
-        <translation>Tipo da Criptografia:</translation>
+        <translation type="vanished">Tipo da Criptografia:</translation>
     </message>
     <message>
-        <location filename="../console/open_address_book_dialog.ui" line="80"/>
         <source>Password:</source>
-        <translation>Senha:</translation>
+        <translation type="vanished">Senha:</translation>
     </message>
 </context>
 <context>
@@ -4896,24 +4727,20 @@ Routers added: %4</source>
 <context>
     <name>UpdateSettingsDialog</name>
     <message>
-        <location filename="../console/update_settings_dialog.ui" line="14"/>
         <source>Update Settings</source>
-        <translation>Configurações de Atualizações</translation>
+        <translation type="vanished">Configurações de Atualizações</translation>
     </message>
     <message>
-        <location filename="../console/update_settings_dialog.ui" line="26"/>
         <source>Check for updates on startup</source>
-        <translation>Verificar atualizações ao iniciar</translation>
+        <translation type="vanished">Verificar atualizações ao iniciar</translation>
     </message>
     <message>
-        <location filename="../console/update_settings_dialog.ui" line="33"/>
         <source>Use custom update server</source>
-        <translation>Usar servidor de atualizações diferente</translation>
+        <translation type="vanished">Usar servidor de atualizações diferente</translation>
     </message>
     <message>
-        <location filename="../console/update_settings_dialog.ui" line="42"/>
         <source>Server:</source>
-        <translation>Servidor:</translation>
+        <translation type="vanished">Servidor:</translation>
     </message>
 </context>
 <context>
@@ -6331,12 +6158,12 @@ Routers added: %4</source>
         <translation type="unfinished">Hosts</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.cc" line="285"/>
+        <location filename="../client/ui/main_window.cc" line="296"/>
         <source>Connection by ID is specified in the properties of the computer, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation type="unfinished">A conexão por ID foi especificada nas propriedades do computador mas o roteador não foi configurado. Verifique os parâmetros do roteador nas propriedades do catálogo de endereços.</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.cc" line="217"/>
+        <location filename="../client/ui/main_window.cc" line="228"/>
         <source>Aspia Client</source>
         <translation type="unfinished">Aspia Client</translation>
     </message>
@@ -9970,38 +9797,32 @@ Routers added: %4</source>
 <context>
     <name>console::AddressBookDialog</name>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="109"/>
         <source>Without Encryption</source>
-        <translation>Sem Criptografia</translation>
+        <translation type="vanished">Sem Criptografia</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="111"/>
         <source>ChaCha20 + Poly1305 (256-bit key)</source>
-        <translation>ChaCha20 + Poly1305 (256-bit key)</translation>
+        <translation type="vanished">ChaCha20 + Poly1305 (256-bit key)</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="140"/>
         <source>Double-click to change</source>
-        <translation>Dê um duplo clique para alterar</translation>
+        <translation type="vanished">Dê um duplo clique para alterar</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="123"/>
         <source>Address Book</source>
-        <translation>Catálogo de Endereços</translation>
+        <translation type="vanished">Catálogo de Endereços</translation>
     </message>
     <message>
         <source>Cancel</source>
         <translation type="vanished">Cancelar</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="222"/>
         <source>General</source>
-        <translation>Geral</translation>
+        <translation type="vanished">Geral</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="226"/>
         <source>Sessions</source>
-        <translation>Sessões</translation>
+        <translation type="vanished">Sessões</translation>
     </message>
     <message>
         <source>Manage</source>
@@ -10012,9 +9833,8 @@ Routers added: %4</source>
         <translation type="vanished">Visualizar</translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/address_book_dialog.cc" line="438"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation>
+        <translation type="vanished">
             <numerusform>Nome muito longo. O nome pode ter no máximo %n caracteres.</numerusform>
             <numerusform>Nome muito longo. O nome pode ter no máximo %n caracteres.</numerusform>
         </translation>
@@ -10023,62 +9843,42 @@ Routers added: %4</source>
         <source>Name can not be empty.</source>
         <translation type="vanished">O nome não pode estar vazio.</translation>
     </message>
-    <message>
-        <location filename="../console/address_book_dialog.cc" line="444"/>
-        <source>Name cannot be empty.</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message numerus="yes">
-        <location filename="../console/address_book_dialog.cc" line="451"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation>
+        <translation type="vanished">
             <numerusform>Comentário muito longo. O comentário pode ter no máximo %n caracteres.</numerusform>
             <numerusform>Comentário muito longo. O comentário pode ter no máximo %n caracteres.</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <location filename="../console/address_book_dialog.cc" line="459"/>
-        <source>Too long display name. The maximum length of the display name is %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="485"/>
         <source>The passwords you entered do not match.</source>
-        <translation>As senhas digitadas não são iguais.</translation>
+        <translation type="vanished">As senhas digitadas não são iguais.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/address_book_dialog.cc" line="491"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
-        <translation>
+        <translation type="vanished">
             <numerusform>A senha não pode estar em branco e não deve ultrapassar%n caracteres.</numerusform>
             <numerusform>A senha não pode estar em branco e não deve ultrapassar%n caracteres.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="499"/>
         <source>Password you entered does not meet the security requirements!</source>
-        <translation>A senha que você digitou não atende aos requisitos de segurança!</translation>
+        <translation type="vanished">A senha que você digitou não atende aos requisitos de segurança!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/address_book_dialog.cc" line="502"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation>
+        <translation type="vanished">
             <numerusform>A senha deve conter letras maiúsculas e minúsculas, números e não deve ter menos de%n caracteres.</numerusform>
             <numerusform>A senha deve conter letras maiúsculas e minúsculas, números e não deve ter menos de%n caracteres.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="506"/>
         <source>Do you want to enter a different password?</source>
-        <translation>Deseja inserir uma senha diferente?</translation>
+        <translation type="vanished">Deseja inserir uma senha diferente?</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="509"/>
         <source>Warning</source>
-        <translation>Alerta</translation>
+        <translation type="vanished">Alerta</translation>
     </message>
     <message>
         <source>Desktop Manage</source>
@@ -10097,57 +9897,47 @@ Routers added: %4</source>
         <translation type="vanished">Não</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="547"/>
         <source>An invalid router address was entered.</source>
-        <translation>Foi inserido um endereço de roteador inválido.</translation>
+        <translation type="vanished">Foi inserido um endereço de roteador inválido.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="558"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation>O usuário não pode estar vazio e pode conter apenas letras, números e _, -,. caracteres.</translation>
+        <translation type="vanished">O usuário não pode estar vazio e pode conter apenas letras, números e _, -,. caracteres.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="567"/>
         <source>Router password cannot be empty.</source>
-        <translation>A senha do roteador não pode estar vazia.</translation>
+        <translation type="vanished">A senha do roteador não pode estar vazia.</translation>
     </message>
 </context>
 <context>
     <name>console::AddressBookTab</name>
     <message>
-        <location filename="../console/address_book_tab.cc" line="214"/>
         <source>Unable to open address book file &quot;%1&quot;.</source>
-        <translation>Não foi possível abrir o arquivo do catálogo de endereços &quot;%1&quot;.</translation>
+        <translation type="vanished">Não foi possível abrir o arquivo do catálogo de endereços &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="222"/>
         <source>Unable to read address book file &quot;%1&quot;.</source>
-        <translation>Não foi possível ler o arquivo do catálogo de endereços &quot;%1&quot;.</translation>
+        <translation type="vanished">Não foi possível ler o arquivo do catálogo de endereços &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="232"/>
         <source>The address book file &quot;%1&quot; is corrupted or has an unknown format.</source>
-        <translation>O arquivo do catálogo de endereços &quot;%1&quot; está corrompido ou tem um formato desconhecido.</translation>
+        <translation type="vanished">O arquivo do catálogo de endereços &quot;%1&quot; está corrompido ou tem um formato desconhecido.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="271"/>
         <source>Unable to decrypt the address book with the specified password.</source>
-        <translation>Não é possível descriptografar o catálogo de endereços com a senha especificada.</translation>
+        <translation type="vanished">Não é possível descriptografar o catálogo de endereços com a senha especificada.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="278"/>
         <source>The address book file is corrupted or has an unknown format.</source>
-        <translation>O arquivo do catálogo de endereços está corrompido ou tem um formato desconhecido.</translation>
+        <translation type="vanished">O arquivo do catálogo de endereços está corrompido ou tem um formato desconhecido.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="261"/>
         <source>The address book file is encrypted with an unsupported encryption type.</source>
-        <translation>O arquivo do catálogo de endereços está criptografado com um tipo de criptografia não compatível.</translation>
+        <translation type="vanished">O arquivo do catálogo de endereços está criptografado com um tipo de criptografia não compatível.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="668"/>
         <source>Are you sure you want to delete computer group &quot;%1&quot; and all child items?</source>
-        <translation>Tem certeza que deseja excluir o grupo &quot;%1&quot; e todos os seus itens?</translation>
+        <translation type="vanished">Tem certeza que deseja excluir o grupo &quot;%1&quot; e todos os seus itens?</translation>
     </message>
     <message>
         <source>Confirmation</source>
@@ -10162,60 +9952,48 @@ Routers added: %4</source>
         <translation type="vanished">Não</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="698"/>
         <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
-        <translation>Tem certeza que deseja excluir o computador &quot;%1&quot;?</translation>
+        <translation type="vanished">Tem certeza que deseja excluir o computador &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="1044"/>
         <source>Online</source>
-        <translation>Online</translation>
+        <translation type="vanished">Online</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="1046"/>
         <source>Offline</source>
-        <translation>Offline</translation>
+        <translation type="vanished">Offline</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="1171"/>
         <source>Save Address Book</source>
-        <translation>Salvar Catálogo de Endereços</translation>
+        <translation type="vanished">Salvar Catálogo de Endereços</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="1173"/>
         <source>Aspia Address Book (*.aab)</source>
-        <translation>Cátalog de Endereços Aspia (*.aab)</translation>
+        <translation type="vanished">Cátalog de Endereços Aspia (*.aab)</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="1188"/>
         <source>Unable to create or open address book file.</source>
-        <translation>Não foi possível criar ou abrir o arquivo do catálogo de endereços.</translation>
+        <translation type="vanished">Não foi possível criar ou abrir o arquivo do catálogo de endereços.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="1202"/>
         <source>Unable to write address book file.</source>
-        <translation>Não foi possível gravar o arquivo do catálogo de endereços.</translation>
+        <translation type="vanished">Não foi possível gravar o arquivo do catálogo de endereços.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="1233"/>
         <source>Root Group</source>
-        <translation>Raiz do Grupo</translation>
+        <translation type="vanished">Raiz do Grupo</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="1245"/>
-        <location filename="../console/address_book_tab.cc" line="1260"/>
         <source>Warning</source>
-        <translation>Alerta</translation>
+        <translation type="vanished">Alerta</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="1247"/>
         <source>Could not open address book</source>
-        <translation>Não foi possível abrir o catálogo de endereços</translation>
+        <translation type="vanished">Não foi possível abrir o catálogo de endereços</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="1262"/>
         <source>Failed to save address book</source>
-        <translation>Falha ao salvar o catálogo de endereços</translation>
+        <translation type="vanished">Falha ao salvar o catálogo de endereços</translation>
     </message>
 </context>
 <context>
@@ -10225,19 +10003,16 @@ Routers added: %4</source>
         <translation type="vanished">Cancelar</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog.cc" line="59"/>
         <source>(copy)</source>
-        <translation>(cópia)</translation>
+        <translation type="vanished">(cópia)</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog.cc" line="70"/>
         <source>General</source>
-        <translation>Geral</translation>
+        <translation type="vanished">Geral</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog.cc" line="74"/>
         <source>Sessions</source>
-        <translation>Sessões</translation>
+        <translation type="vanished">Sessões</translation>
     </message>
     <message>
         <source>Desktop Manage</source>
@@ -10286,9 +10061,8 @@ Routers added: %4</source>
 <context>
     <name>console::ComputerDialogGeneral</name>
     <message numerus="yes">
-        <location filename="../console/computer_dialog_general.cc" line="119"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation>
+        <translation type="vanished">
             <numerusform>Nome muito longo. O nome pode ter no máximo %n caracteres.</numerusform>
             <numerusform>Nome muito longo. O nome pode ter no máximo %n caracteres.</numerusform>
         </translation>
@@ -10298,27 +10072,19 @@ Routers added: %4</source>
         <translation type="vanished">O nome não pode estar vazio.</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_general.cc" line="128"/>
-        <source>Name cannot be empty.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/computer_dialog_general.cc" line="139"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation>O usuário não pode estar vazio e pode conter apenas letras, números e _, -,. caracteres.</translation>
+        <translation type="vanished">O usuário não pode estar vazio e pode conter apenas letras, números e _, -,. caracteres.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/computer_dialog_general.cc" line="150"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation>
+        <translation type="vanished">
             <numerusform>Comentário muito longo. O comentário pode ter no máximo %n caracteres.</numerusform>
             <numerusform>Comentário muito longo. O comentário pode ter no máximo %n caracteres.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_general.cc" line="168"/>
         <source>An invalid computer address was entered.</source>
-        <translation>Foi inserido um endereço de computador inválido.</translation>
+        <translation type="vanished">Foi inserido um endereço de computador inválido.</translation>
     </message>
     <message>
         <source>Warning</source>
@@ -10355,19 +10121,12 @@ Routers added: %4</source>
         <translation type="vanished">Cancelar</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog.cc" line="74"/>
         <source>General</source>
-        <translation>Geral</translation>
+        <translation type="vanished">Geral</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog.cc" line="78"/>
         <source>Sessions</source>
-        <translation>Sessões</translation>
-    </message>
-    <message>
-        <location filename="../console/computer_group_dialog.cc" line="228"/>
-        <source>Name cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Sessões</translation>
     </message>
     <message>
         <source>Manage</source>
@@ -10386,9 +10145,8 @@ Routers added: %4</source>
         <translation type="obsolete">Visualizar Área de Trabalho</translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/computer_group_dialog.cc" line="219"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation>
+        <translation type="vanished">
             <numerusform>Nome muito longo. O nome pode ter no máximo %n caracteres.</numerusform>
             <numerusform>Nome muito longo. O nome pode ter no máximo %n caracteres.</numerusform>
         </translation>
@@ -10398,9 +10156,8 @@ Routers added: %4</source>
         <translation type="vanished">O nome não pode estar vazio.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/computer_group_dialog.cc" line="237"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation>
+        <translation type="vanished">
             <numerusform>Comentário muito longo. O comentário pode ter no máximo %n caracteres.</numerusform>
             <numerusform>Comentário muito longo. O comentário pode ter no máximo %n caracteres.</numerusform>
         </translation>
@@ -10451,19 +10208,16 @@ Routers added: %4</source>
         <translation type="obsolete">O nome não pode estar vazio.</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_general.cc" line="42"/>
         <source>Credentials</source>
-        <translation>Credenciais</translation>
+        <translation type="vanished">Credenciais</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_general.cc" line="47"/>
         <source>Inherit from parent</source>
-        <translation>Herdar configuração do catálogo de endereços</translation>
+        <translation type="vanished">Herdar configuração do catálogo de endereços</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_general.cc" line="100"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation>O usuário não pode estar vazio e pode conter apenas letras, números e _, -,. caracteres.</translation>
+        <translation type="vanished">O usuário não pode estar vazio e pode conter apenas letras, números e _, -,. caracteres.</translation>
     </message>
     <message numerus="yes">
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
@@ -10492,9 +10246,8 @@ Routers added: %4</source>
         <translation type="vanished">Confirmação</translation>
     </message>
     <message>
-        <location filename="../console/fast_connect_dialog.cc" line="88"/>
         <source>The list of entered addresses will be cleared. Continue?</source>
-        <translation>A lista de endereços inseridos será apagada. Deseja Continuar?</translation>
+        <translation type="vanished">A lista de endereços inseridos será apagada. Deseja Continuar?</translation>
     </message>
     <message>
         <source>Yes</source>
@@ -10509,14 +10262,12 @@ Routers added: %4</source>
         <translation type="vanished">Alerta</translation>
     </message>
     <message>
-        <location filename="../console/fast_connect_dialog.cc" line="205"/>
         <source>Connection by ID is specified but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
-        <translation>A conexão por ID foi especificada mas o roteador não foi configurado. Verifique os parâmetros do roteador nas propriedades do catálogo de endereços.</translation>
+        <translation type="vanished">A conexão por ID foi especificada mas o roteador não foi configurado. Verifique os parâmetros do roteador nas propriedades do catálogo de endereços.</translation>
     </message>
     <message>
-        <location filename="../console/fast_connect_dialog.cc" line="221"/>
         <source>An invalid computer address was entered.</source>
-        <translation>Foi inserido um endereço de computador inválido.</translation>
+        <translation type="vanished">Foi inserido um endereço de computador inválido.</translation>
     </message>
 </context>
 <context>
@@ -10526,79 +10277,64 @@ Routers added: %4</source>
         <translation type="vanished">Atenção</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="202"/>
         <source>Pinned address book file &quot;%1&quot; was not found.&lt;br/&gt;This file will be unpinned.</source>
-        <translation>O arquivo da lista de endereços fixada &quot;%1&quot; não foi encontrado. &lt;br/&gt; Este arquivo será desafixado.</translation>
+        <translation type="vanished">O arquivo da lista de endereços fixada &quot;%1&quot; não foi encontrado. &lt;br/&gt; Este arquivo será desafixado.</translation>
     </message>
     <message>
         <source>Information</source>
         <translation type="vanished">Informação</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="281"/>
         <source>Address Book &quot;%1&quot; is already open.</source>
-        <translation>O catálogo de endereços &quot;%1&quot; já está aberto.</translation>
+        <translation type="vanished">O catálogo de endereços &quot;%1&quot; já está aberto.</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="312"/>
         <source>Open Address Book</source>
-        <translation>Abrir Catálogo de Endereços</translation>
+        <translation type="vanished">Abrir Catálogo de Endereços</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="314"/>
         <source>Aspia Address Book (*.aab)</source>
-        <translation>Catálogo de Endereços Aspia (*.aab)</translation>
+        <translation type="vanished">Catálogo de Endereços Aspia (*.aab)</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="572"/>
         <source>Open File</source>
-        <translation>Abrir arquivo</translation>
+        <translation type="vanished">Abrir arquivo</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="574"/>
-        <location filename="../console/main_window.cc" line="640"/>
         <source>JSON files (*.json)</source>
-        <translation>Arquivos JSON (*.json)</translation>
+        <translation type="vanished">Arquivos JSON (*.json)</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="586"/>
         <source>Could not open file for reading.</source>
-        <translation>Não foi possível abrir o arquivo.</translation>
+        <translation type="vanished">Não foi possível abrir o arquivo.</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="594"/>
         <source>Import file is empty.</source>
-        <translation>O arquivo importado está vazio.</translation>
+        <translation type="vanished">O arquivo importado está vazio.</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="638"/>
         <source>Save File</source>
-        <translation>Salvar arquivo</translation>
+        <translation type="vanished">Salvar arquivo</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="652"/>
         <source>Could not open file for writing.</source>
-        <translation>Não foi possível salvar no arquivo selecionado.</translation>
+        <translation type="vanished">Não foi possível salvar no arquivo selecionado.</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="662"/>
         <source>Unable to write file.</source>
-        <translation>Não foi possível gravar no arquivo.</translation>
+        <translation type="vanished">Não foi possível gravar no arquivo.</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="667"/>
         <source>Export completed successfully.</source>
-        <translation>Exportação concluída com sucesso.</translation>
+        <translation type="vanished">Exportação concluída com sucesso.</translation>
     </message>
     <message>
         <source>Confirmation</source>
         <translation type="vanished">Confirmação</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="901"/>
-        <location filename="../console/main_window.cc" line="1318"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
-        <translation>O catálogo de endereços &quot;%1&quot; foi alterado. Salvar alterações?</translation>
+        <translation type="vanished">O catálogo de endereços &quot;%1&quot; foi alterado. Salvar alterações?</translation>
     </message>
     <message>
         <source>Yes</source>
@@ -10613,65 +10349,52 @@ Routers added: %4</source>
         <translation type="vanished">Cancelar</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1128"/>
         <source>Close other tabs</source>
-        <translation>Fechar outras abas</translation>
+        <translation type="vanished">Fechar outras abas</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1135"/>
         <source>Close tab</source>
-        <translation>Fechar aba</translation>
+        <translation type="vanished">Fechar aba</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1136"/>
-        <location filename="../console/main_window.cc" line="1141"/>
         <source>Pin tab</source>
-        <translation>Fixar aba</translation>
+        <translation type="vanished">Fixar aba</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1234"/>
         <source>The list of recently opened address books will be cleared. Continue?</source>
-        <translation>A lista de catálogos de endereços abertos recentemente será apagada. Deseja Continuar?</translation>
+        <translation type="vanished">A lista de catálogos de endereços abertos recentemente será apagada. Deseja Continuar?</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1265"/>
         <source>Hide</source>
-        <translation>Ocultar</translation>
+        <translation type="vanished">Ocultar</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1280"/>
         <source>Show</source>
-        <translation>Exibir</translation>
+        <translation type="vanished">Exibir</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="709"/>
-        <location filename="../console/main_window.cc" line="1499"/>
         <source>Aspia Console</source>
-        <translation>Aspia Console</translation>
+        <translation type="vanished">Aspia Console</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="604"/>
         <source>Failed to parse JSON document: %1.</source>
-        <translation>Falha ao analisar o documento JSON: %1.</translation>
+        <translation type="vanished">Falha ao analisar o documento JSON: %1.</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="614"/>
         <source>Import completed successfully.</source>
-        <translation>Importação concluída com sucesso.</translation>
+        <translation type="vanished">Importação concluída com sucesso.</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1633"/>
         <source>Connection by ID is specified in the properties of the computer, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translatorcomment>A conexão por ID foi especificada mas o roteador não foi configurado. Verifique os parâmetros do roteador nas propriedades do catálogo de endereços.</translatorcomment>
-        <translation>A conexão por ID foi especificada nas propriedades do computador mas o roteador não foi configurado. Verifique os parâmetros do roteador nas propriedades do catálogo de endereços.</translation>
+        <translation type="vanished">A conexão por ID foi especificada nas propriedades do computador mas o roteador não foi configurado. Verifique os parâmetros do roteador nas propriedades do catálogo de endereços.</translation>
     </message>
 </context>
 <context>
     <name>console::MruAction</name>
     <message>
-        <location filename="../console/mru_action.cc" line="30"/>
         <source>&lt;empty&gt;</source>
-        <translation>&lt;empty&gt;</translation>
+        <translation type="vanished">&lt;empty&gt;</translation>
     </message>
 </context>
 <context>
@@ -10681,37 +10404,26 @@ Routers added: %4</source>
         <translation type="vanished">Cancelar</translation>
     </message>
     <message>
-        <location filename="../console/open_address_book_dialog.cc" line="45"/>
         <source>Without Encryption</source>
-        <translation>Sem Criptografia</translation>
+        <translation type="vanished">Sem Criptografia</translation>
     </message>
     <message>
-        <location filename="../console/open_address_book_dialog.cc" line="49"/>
         <source>ChaCha20 + Poly1305 (256-bit key)</source>
-        <translation>ChaCha20 + Poly1305 (256-bit key)</translation>
+        <translation type="vanished">ChaCha20 + Poly1305 (256-bit key)</translation>
     </message>
 </context>
 <context>
     <name>console::StatusBar</name>
-    <message>
-        <location filename="../console/statusbar.cc" line="49"/>
-        <source>Status update</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message numerus="yes">
-        <location filename="../console/statusbar.cc" line="86"/>
-        <location filename="../console/statusbar.cc" line="90"/>
         <source>%n child group(s)</source>
-        <translation>
+        <translation type="vanished">
             <numerusform>%n sub-grupo</numerusform>
             <numerusform>%n sub-grupos</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/statusbar.cc" line="87"/>
-        <location filename="../console/statusbar.cc" line="91"/>
         <source>%n child computer(s)</source>
-        <translation>
+        <translation type="vanished">
             <numerusform>%n computador no grupo</numerusform>
             <numerusform>%n computadores no grupo</numerusform>
         </translation>

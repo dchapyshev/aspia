@@ -36,90 +36,64 @@
 <context>
     <name>AddressBookDialog</name>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="17"/>
         <source>Address Book Properties</source>
-        <translation>Налаштування адресної книги</translation>
+        <translation type="vanished">Налаштування адресної книги</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="27"/>
         <source>General</source>
-        <translation>Основні</translation>
+        <translation type="vanished">Основні</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="37"/>
         <source>Name:</source>
-        <translation>Ім&apos;я:</translation>
+        <translation type="vanished">Ім&apos;я:</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="44"/>
         <source>File:</source>
-        <translation>Файл:</translation>
+        <translation type="vanished">Файл:</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="51"/>
         <source>Encryption:</source>
-        <translation>Шифрування:</translation>
+        <translation type="vanished">Шифрування:</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="58"/>
-        <location filename="../console/address_book_dialog.ui" line="175"/>
         <source>Password:</source>
-        <translation>Пароль:</translation>
+        <translation type="vanished">Пароль:</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="65"/>
         <source>Password (repeat):</source>
-        <translation>Пароль (повторно):</translation>
+        <translation type="vanished">Пароль (повторно):</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="119"/>
         <source>Comment:</source>
-        <translation>Коментар:</translation>
+        <translation type="vanished">Коментар:</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="132"/>
         <source>Router</source>
-        <translation>Маршрутизатор</translation>
+        <translation type="vanished">Маршрутизатор</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="138"/>
         <source>Use a router</source>
-        <translation>Використовувати маршрутизатор</translation>
+        <translation type="vanished">Використовувати маршрутизатор</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="147"/>
         <source>Address:</source>
-        <translation>Адреса:</translation>
+        <translation type="vanished">Адреса:</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="161"/>
         <source>User Name:</source>
-        <translation>Ім&apos;я користувача:</translation>
+        <translation type="vanished">Ім&apos;я користувача:</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="225"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
-        <translation>Потрібен маршрутизатор для підключення до комп&apos;ютера при відсутності прямого підключення (обхід NAT). Aspia не надає публічних маршрутизаторів, але ви можете налаштувати власний. Завантажити маршрутизатор можна на &lt;a href=&quot;https://aspia.org&quot;&gt;офіційному веб-сайті&lt;/a&gt;.</translation>
+        <translation type="vanished">Потрібен маршрутизатор для підключення до комп&apos;ютера при відсутності прямого підключення (обхід NAT). Aspia не надає публічних маршрутизаторів, але ви можете налаштувати власний. Завантажити маршрутизатор можна на &lt;a href=&quot;https://aspia.org&quot;&gt;офіційному веб-сайті&lt;/a&gt;.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="242"/>
         <source>Default Configuration</source>
-        <translation>Стандартні налаштування</translation>
+        <translation type="vanished">Стандартні налаштування</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.ui" line="300"/>
         <source>Other</source>
-        <translation type="unfinished">Інше</translation>
-    </message>
-    <message>
-        <location filename="../console/address_book_dialog.ui" line="308"/>
-        <source>Display name when connected:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/address_book_dialog.ui" line="318"/>
-        <source>Enter a name or leave the field empty</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Інше</translation>
     </message>
 </context>
 <context>
@@ -178,34 +152,28 @@ Routers added: %4</source>
 <context>
     <name>AddressBookTab</name>
     <message>
-        <location filename="../console/address_book_tab.ui" line="98"/>
         <source>Computer Name</source>
-        <translation>Ім&apos;я комп&apos;ютера</translation>
+        <translation type="vanished">Ім&apos;я комп&apos;ютера</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.ui" line="103"/>
         <source>Address / ID</source>
-        <translation>Адреса / ID</translation>
+        <translation type="vanished">Адреса / ID</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.ui" line="108"/>
         <source>Comment</source>
-        <translation>Порт</translation>
+        <translation type="vanished">Порт</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.ui" line="113"/>
         <source>Created</source>
-        <translation>Стоврено</translation>
+        <translation type="vanished">Стоврено</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.ui" line="118"/>
         <source>Modified</source>
-        <translation>Змінено</translation>
+        <translation type="vanished">Змінено</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.ui" line="123"/>
         <source>Status</source>
-        <translation type="unfinished">Статус</translation>
+        <translation type="obsolete">Статус</translation>
     </message>
 </context>
 <context>
@@ -417,7 +385,7 @@ Routers added: %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="613"/>
+        <location filename="../client/main.cc" line="620"/>
         <source>Invalid master password.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -648,9 +616,8 @@ Routers added: %4</source>
 <context>
     <name>ComputerDialog</name>
     <message>
-        <location filename="../console/computer_dialog.ui" line="17"/>
         <source>Computer Properties</source>
-        <translation>Властивості комп&apos;ютера</translation>
+        <translation type="vanished">Властивості комп&apos;ютера</translation>
     </message>
 </context>
 <context>
@@ -664,9 +631,8 @@ Routers added: %4</source>
         <translation type="vanished">Відключити згладжування шрифтів</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_desktop.ui" line="118"/>
         <source>Block remote input</source>
-        <translation>Блокувати віддалений ввід</translation>
+        <translation type="vanished">Блокувати віддалений ввід</translation>
     </message>
     <message>
         <source>Enable cursor shape</source>
@@ -685,67 +651,56 @@ Routers added: %4</source>
         <translation type="vanished">Якісніше</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_desktop.ui" line="33"/>
         <source>Features</source>
-        <translation>Додатково</translation>
+        <translation type="vanished">Додатково</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_desktop.ui" line="39"/>
         <source>Enable audio</source>
-        <translation>Увімкнути аудіо</translation>
+        <translation type="vanished">Увімкнути аудіо</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_desktop.ui" line="46"/>
         <source>Enable clipboard</source>
-        <translation>Включити буфер обміну</translation>
+        <translation type="vanished">Включити буфер обміну</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_desktop.ui" line="53"/>
         <source>Show shape of remote cursor</source>
-        <translation>Показувати форму віддаленого курсора</translation>
+        <translation type="vanished">Показувати форму віддаленого курсора</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_desktop.ui" line="60"/>
         <source>Show position of remote cursor</source>
-        <translation>Показувати позицію віддаленого курсора</translation>
+        <translation type="vanished">Показувати позицію віддаленого курсора</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_desktop.ui" line="76"/>
         <source>Appearance</source>
-        <translation>Вигляд</translation>
+        <translation type="vanished">Вигляд</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_desktop.ui" line="82"/>
         <source>Disable desktop effects</source>
-        <translation>Відключити ефекти робочого стола</translation>
+        <translation type="vanished">Відключити ефекти робочого стола</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_desktop.ui" line="89"/>
         <source>Disable desktop wallpaper</source>
-        <translation>Відключити шпалери робочого стола</translation>
+        <translation type="vanished">Відключити шпалери робочого стола</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_desktop.ui" line="105"/>
         <source>Other</source>
-        <translation>Інше</translation>
+        <translation type="vanished">Інше</translation>
     </message>
     <message>
         <source>General</source>
         <translation type="vanished">Основні</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_desktop.ui" line="20"/>
         <source>Inherit configuration from parent</source>
-        <translation>Унаслідувати налаштування від батьківського</translation>
+        <translation type="vanished">Унаслідувати налаштування від батьківського</translation>
     </message>
     <message>
         <source>Clear clipboard at disconnect</source>
         <translation type="vanished">Очистити буфер обміну при відє&apos;днанні</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_desktop.ui" line="111"/>
         <source>Lock computer at disconnect</source>
-        <translation>Заблокувати комп&apos;ютер після від&apos;єднання</translation>
+        <translation type="vanished">Заблокувати комп&apos;ютер після від&apos;єднання</translation>
     </message>
     <message>
         <source>Compression ratio: %1</source>
@@ -755,47 +710,39 @@ Routers added: %4</source>
 <context>
     <name>ComputerDialogGeneral</name>
     <message>
-        <location filename="../console/computer_dialog_general.ui" line="34"/>
         <source>Name:</source>
-        <translation>Ім&apos;я:</translation>
+        <translation type="vanished">Ім&apos;я:</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_general.ui" line="48"/>
         <source>Parent Group:</source>
-        <translation>Батьківська група:</translation>
+        <translation type="vanished">Батьківська група:</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_general.ui" line="65"/>
         <source>Address / ID:</source>
-        <translation>Адреса / ID:</translation>
+        <translation type="vanished">Адреса / ID:</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_general.ui" line="81"/>
         <source>Inherit from parent</source>
-        <translation>Унаслідувати від батьківського</translation>
+        <translation type="vanished">Унаслідувати від батьківського</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_general.ui" line="93"/>
         <source>User Name:</source>
-        <translation>Ім&apos;я користувача:</translation>
+        <translation type="vanished">Ім&apos;я користувача:</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_general.ui" line="107"/>
         <source>Password:</source>
-        <translation>Пароль:</translation>
+        <translation type="vanished">Пароль:</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_general.ui" line="153"/>
         <source>Comment:</source>
-        <translation>Коментар:</translation>
+        <translation type="vanished">Коментар:</translation>
     </message>
 </context>
 <context>
     <name>ComputerDialogParent</name>
     <message>
-        <location filename="../console/computer_dialog_parent.ui" line="20"/>
         <source>Select child item</source>
-        <translation>Обрати дочірній елемент</translation>
+        <translation type="vanished">Обрати дочірній елемент</translation>
     </message>
 </context>
 <context>
@@ -812,34 +759,28 @@ Routers added: %4</source>
 <context>
     <name>ComputerGroupDialog</name>
     <message>
-        <location filename="../console/computer_group_dialog.ui" line="17"/>
         <source>Computer Group Properties</source>
-        <translation>Налаштування груп комп&apos;ютерів</translation>
+        <translation type="vanished">Налаштування груп комп&apos;ютерів</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog.ui" line="27"/>
         <source>General</source>
-        <translation>Основні</translation>
+        <translation type="vanished">Основні</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog.ui" line="37"/>
         <source>Name:</source>
-        <translation>Ім&apos;я:</translation>
+        <translation type="vanished">Ім&apos;я:</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog.ui" line="44"/>
         <source>Parent Group:</source>
-        <translation>Батьківська група:</translation>
+        <translation type="vanished">Батьківська група:</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog.ui" line="78"/>
         <source>Comment:</source>
-        <translation>Коментар:</translation>
+        <translation type="vanished">Коментар:</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog.ui" line="91"/>
         <source>Default Configuration</source>
-        <translation>Стандартні налаштування</translation>
+        <translation type="vanished">Стандартні налаштування</translation>
     </message>
 </context>
 <context>
@@ -861,76 +802,64 @@ Routers added: %4</source>
         <translation type="vanished">Якісніше</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_desktop.ui" line="33"/>
         <source>Features</source>
-        <translation>Додатково</translation>
+        <translation type="vanished">Додатково</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_desktop.ui" line="39"/>
         <source>Enable audio</source>
-        <translation>Увімкнути аудіо</translation>
+        <translation type="vanished">Увімкнути аудіо</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_desktop.ui" line="46"/>
         <source>Enable clipboard</source>
-        <translation>Включити буфер обміну</translation>
+        <translation type="vanished">Включити буфер обміну</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_desktop.ui" line="53"/>
         <source>Show shape of remote cursor</source>
-        <translation>Показувати форму віддаленого курсора</translation>
+        <translation type="vanished">Показувати форму віддаленого курсора</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_desktop.ui" line="60"/>
         <source>Show position of remote cursor</source>
-        <translation>Показувати позицію віддаленого курсора</translation>
+        <translation type="vanished">Показувати позицію віддаленого курсора</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_desktop.ui" line="76"/>
         <source>Appearance</source>
-        <translation>Вигляд</translation>
+        <translation type="vanished">Вигляд</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_desktop.ui" line="82"/>
         <source>Disable desktop effects</source>
-        <translation>Відключити ефекти робочого стола</translation>
+        <translation type="vanished">Відключити ефекти робочого стола</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_desktop.ui" line="89"/>
         <source>Disable desktop wallpaper</source>
-        <translation>Відключити шпалери робочого стола</translation>
+        <translation type="vanished">Відключити шпалери робочого стола</translation>
     </message>
     <message>
         <source>Disable font smoothing</source>
         <translation type="vanished">Відключити згладжування шрифтів</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_desktop.ui" line="105"/>
         <source>Other</source>
-        <translation>Інше</translation>
+        <translation type="vanished">Інше</translation>
     </message>
     <message>
         <source>General</source>
         <translation type="vanished">Основні</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_desktop.ui" line="20"/>
         <source>Inherit configuration from parent</source>
-        <translation>Унаслідувати налаштування від батьківського</translation>
+        <translation type="vanished">Унаслідувати налаштування від батьківського</translation>
     </message>
     <message>
         <source>Clear clipboard at disconnect</source>
         <translation type="vanished">Очистити буфер обміну при відє&apos;днанні</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_desktop.ui" line="111"/>
         <source>Lock computer at disconnect</source>
-        <translation>Заблокувати комп&apos;ютер після від&apos;єднання</translation>
+        <translation type="vanished">Заблокувати комп&apos;ютер після від&apos;єднання</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_desktop.ui" line="118"/>
         <source>Block remote input</source>
-        <translation>Блокувати віддалений ввід</translation>
+        <translation type="vanished">Блокувати віддалений ввід</translation>
     </message>
 </context>
 <context>
@@ -948,19 +877,16 @@ Routers added: %4</source>
         <translation type="obsolete">Адреса / ID:</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_general.ui" line="20"/>
         <source>Inherit from parent</source>
-        <translation>Унаслідувати від батьківського</translation>
+        <translation type="vanished">Унаслідувати від батьківського</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_general.ui" line="32"/>
         <source>User Name:</source>
-        <translation>Ім&apos;я користувача:</translation>
+        <translation type="vanished">Ім&apos;я користувача:</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_general.ui" line="46"/>
         <source>Password:</source>
-        <translation>Пароль:</translation>
+        <translation type="vanished">Пароль:</translation>
     </message>
     <message>
         <source>Comment:</source>
@@ -970,9 +896,8 @@ Routers added: %4</source>
 <context>
     <name>ComputerGroupDialogParent</name>
     <message>
-        <location filename="../console/computer_group_dialog_parent.ui" line="20"/>
         <source>Select child item</source>
-        <translation>Обрати дочірній елемент</translation>
+        <translation type="vanished">Обрати дочірній елемент</translation>
     </message>
 </context>
 <context>
@@ -989,9 +914,8 @@ Routers added: %4</source>
 <context>
     <name>ComputerGroupItem</name>
     <message>
-        <location filename="../console/computer_group_item.cc" line="141"/>
         <source>Root Group</source>
-        <translation>Корінна група</translation>
+        <translation type="vanished">Корінна група</translation>
     </message>
 </context>
 <context>
@@ -1234,67 +1158,55 @@ Routers added: %4</source>
 <context>
     <name>Console</name>
     <message>
-        <location filename="../console/main.cc" line="57"/>
         <source>Aspia Console</source>
-        <translation>Консоль Aspia</translation>
+        <translation type="vanished">Консоль Aspia</translation>
     </message>
     <message>
-        <location filename="../console/main.cc" line="60"/>
         <source>file</source>
-        <translation>файл</translation>
+        <translation type="vanished">файл</translation>
     </message>
     <message>
-        <location filename="../console/main.cc" line="61"/>
         <source>The file to open.</source>
-        <translation>Файл для відкриття.</translation>
+        <translation type="vanished">Файл для відкриття.</translation>
     </message>
 </context>
 <context>
     <name>ConsoleMainWindow</name>
     <message>
-        <location filename="../console/main_window.ui" line="14"/>
         <source>Aspia Console</source>
-        <translation>Консоль Aspia</translation>
+        <translation type="vanished">Консоль Aspia</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="68"/>
         <source>&amp;File</source>
-        <translation>&amp;Файл</translation>
+        <translation type="vanished">&amp;Файл</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="72"/>
         <source>Recent open</source>
-        <translation>Нещодавно відкриті</translation>
+        <translation type="vanished">Нещодавно відкриті</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="91"/>
         <source>&amp;Edit</source>
-        <translation>&amp;Змінити</translation>
+        <translation type="vanished">&amp;Змінити</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="109"/>
         <source>&amp;Session Type</source>
-        <translation>&amp;Тип сесії</translation>
+        <translation type="vanished">&amp;Тип сесії</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="118"/>
         <source>&amp;Help</source>
-        <translation>&amp;Допомога</translation>
+        <translation type="vanished">&amp;Допомога</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="129"/>
         <source>&amp;View</source>
-        <translation>&amp;Перегляд</translation>
+        <translation type="vanished">&amp;Перегляд</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="133"/>
         <source>&amp;Language</source>
-        <translation>&amp;Мова</translation>
+        <translation type="vanished">&amp;Мова</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="142"/>
         <source>&amp;Theme</source>
-        <translation>&amp;Тема</translation>
+        <translation type="vanished">&amp;Тема</translation>
     </message>
     <message>
         <source>Light</source>
@@ -1305,134 +1217,108 @@ Routers added: %4</source>
         <translation type="vanished">Темна</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="165"/>
         <source>Tools</source>
-        <translation>Інструменти</translation>
+        <translation type="vanished">Інструменти</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="179"/>
-        <location filename="../console/main_window.ui" line="453"/>
         <source>Tool Bar</source>
-        <translation>Панель інструментів</translation>
+        <translation type="vanished">Панель інструментів</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="225"/>
         <source>&amp;New address book</source>
-        <translation>&amp;Нова адресна книга</translation>
+        <translation type="vanished">&amp;Нова адресна книга</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="228"/>
         <source>Ctrl+N</source>
-        <translation>Ctrl+N</translation>
+        <translation type="vanished">Ctrl+N</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="237"/>
         <source>&amp;Open address book...</source>
-        <translation>&amp;Відкрити адресну книгу...</translation>
+        <translation type="vanished">&amp;Відкрити адресну книгу...</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="240"/>
         <source>Ctrl+O</source>
-        <translation>Ctrl+O</translation>
+        <translation type="vanished">Ctrl+O</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="252"/>
         <source>&amp;Save</source>
-        <translation>&amp;Зберегти</translation>
+        <translation type="vanished">&amp;Зберегти</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="255"/>
         <source>Ctrl+S</source>
-        <translation>Ctrl+S</translation>
+        <translation type="vanished">Ctrl+S</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="263"/>
         <source>Save &amp;as...</source>
-        <translation>Зберегти &amp;як...</translation>
+        <translation type="vanished">Зберегти &amp;як...</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="266"/>
         <source>Ctrl+Alt+S</source>
-        <translation>Ctrl+Alt+S</translation>
+        <translation type="vanished">Ctrl+Alt+S</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="274"/>
         <source>&amp;Close</source>
-        <translation>&amp;Закрити</translation>
+        <translation type="vanished">&amp;Закрити</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="277"/>
         <source>Ctrl+W</source>
-        <translation>Ctrl+W</translation>
+        <translation type="vanished">Ctrl+W</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="286"/>
         <source>&amp;Exit</source>
-        <translation>&amp;Вихід</translation>
+        <translation type="vanished">&amp;Вихід</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="298"/>
         <source>Add Computer Group</source>
-        <translation>Додати групу комп&apos;ютерів</translation>
+        <translation type="vanished">Додати групу комп&apos;ютерів</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="310"/>
         <source>Modify Computer Group</source>
-        <translation>Змінити групу комп&apos;ютерів</translation>
+        <translation type="vanished">Змінити групу комп&apos;ютерів</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="322"/>
         <source>Delete Computer Group</source>
-        <translation>Видалити групу комп&apos;ютерів</translation>
+        <translation type="vanished">Видалити групу комп&apos;ютерів</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="334"/>
         <source>Add Computer</source>
-        <translation>Додати комп&apos;ютер</translation>
+        <translation type="vanished">Додати комп&apos;ютер</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="346"/>
         <source>Modify Computer</source>
-        <translation>Змінити комп&apos;ютер</translation>
+        <translation type="vanished">Змінити комп&apos;ютер</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="358"/>
         <source>Delete Computer</source>
-        <translation>Видалити комп&apos;ютер</translation>
+        <translation type="vanished">Видалити комп&apos;ютер</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="373"/>
         <source>Desktop &amp;Manage</source>
-        <translation>Робочий стіл і &amp;керування</translation>
+        <translation type="vanished">Робочий стіл і &amp;керування</translation>
     </message>
     <message>
         <source>Desktop &amp;View</source>
         <translation type="vanished">Робочий стіл і &amp;перегляд</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="385"/>
         <source>&amp;File Transfer</source>
-        <translation>Передача &amp;файлів</translation>
+        <translation type="vanished">Передача &amp;файлів</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="394"/>
         <source>&amp;Online Help...</source>
-        <translation>Онлайн &amp;допомога...</translation>
+        <translation type="vanished">Онлайн &amp;допомога...</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="397"/>
         <source>F1</source>
-        <translation>F1</translation>
+        <translation type="vanished">F1</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="406"/>
         <source>&amp;About</source>
-        <translation>Про пр&amp;ограму</translation>
+        <translation type="vanished">Про пр&amp;ограму</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="418"/>
         <source>Address Book Properties</source>
-        <translation>Налаштування адресної книги</translation>
+        <translation type="vanished">Налаштування адресної книги</translation>
     </message>
     <message>
         <source>Desktop Manage</source>
@@ -1443,164 +1329,96 @@ Routers added: %4</source>
         <translation type="vanished">Перегляд робочого столу</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="439"/>
-        <location filename="../console/main_window.ui" line="442"/>
         <source>File Transfer</source>
-        <translation>Передача файлів</translation>
+        <translation type="vanished">Передача файлів</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="464"/>
         <source>Status Bar</source>
-        <translation>Рядок стану</translation>
+        <translation type="vanished">Рядок стану</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="476"/>
         <source>Fast Connect</source>
-        <translation>Швидке підключення</translation>
+        <translation type="vanished">Швидке підключення</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="479"/>
         <source>F8</source>
-        <translation>F8</translation>
+        <translation type="vanished">F8</translation>
     </message>
     <message>
         <source>Router Manage</source>
         <translation type="vanished">Керування маршрутизатором</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="572"/>
         <source>Show icons in menus</source>
-        <translation>Показувати значки в меню</translation>
+        <translation type="vanished">Показувати значки в меню</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="584"/>
         <source>&amp;System Information</source>
-        <translation>&amp;Інформація про систему</translation>
+        <translation type="vanished">&amp;Інформація про систему</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="587"/>
-        <location filename="../console/main_window.ui" line="596"/>
-        <location filename="../console/main_window.ui" line="599"/>
         <source>System Information</source>
-        <translation>Інформація про систему</translation>
+        <translation type="vanished">Інформація про систему</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="611"/>
         <source>&amp;Text Chat</source>
-        <translation>Текстовий &amp;чат</translation>
+        <translation type="vanished">Текстовий &amp;чат</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="614"/>
-        <location filename="../console/main_window.ui" line="623"/>
-        <location filename="../console/main_window.ui" line="626"/>
         <source>Text Chat</source>
-        <translation>Текстовий чат</translation>
+        <translation type="vanished">Текстовий чат</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="638"/>
-        <source>Update Status</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/main_window.ui" line="641"/>
-        <source>Update the status of computers in the list</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/main_window.ui" line="644"/>
         <source>F5</source>
-        <translation type="unfinished">F5</translation>
+        <translation type="obsolete">F5</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="656"/>
-        <source>Import Computers/Groups</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/main_window.ui" line="659"/>
-        <source>Import computers from file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/main_window.ui" line="671"/>
-        <source>Export Computer Group</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/main_window.ui" line="674"/>
-        <source>Export computer group to file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/main_window.ui" line="682"/>
-        <source>Large icons</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/main_window.ui" line="487"/>
         <source>Show tray icon</source>
-        <translation>Показати піктограму в треї</translation>
+        <translation type="vanished">Показати піктограму в треї</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="427"/>
-        <location filename="../console/main_window.ui" line="430"/>
-        <source>Desktop Management</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/main_window.ui" line="495"/>
         <source>Minimize to tray</source>
-        <translation>Згортати в трей</translation>
+        <translation type="vanished">Згортати в трей</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="500"/>
         <source>Hide</source>
-        <translation>Сховати</translation>
+        <translation type="vanished">Сховати</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="512"/>
         <source>Save all</source>
-        <translation>Зберегти все</translation>
+        <translation type="vanished">Зберегти все</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="515"/>
         <source>Ctrl+Shift+S</source>
-        <translation>Ctrl+Shift+S</translation>
+        <translation type="vanished">Ctrl+Shift+S</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="523"/>
         <source>Close all</source>
-        <translation>Закрити все</translation>
+        <translation type="vanished">Закрити все</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="526"/>
         <source>Ctrl+Shift+W</source>
-        <translation>Ctrl+Shift+W</translation>
+        <translation type="vanished">Ctrl+Shift+W</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="531"/>
         <source>Check for updates...</source>
-        <translation>Перевірити наявність оновлень...</translation>
+        <translation type="vanished">Перевірити наявність оновлень...</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="536"/>
         <source>Update Settings</source>
-        <translation>Налаштування оновлень</translation>
+        <translation type="vanished">Налаштування оновлень</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="541"/>
         <source>Clear</source>
-        <translation>Очистити</translation>
+        <translation type="vanished">Очистити</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="552"/>
         <source>Remember latest</source>
-        <translation>Пам&apos;ятати останні</translation>
+        <translation type="vanished">Пам&apos;ятати останні</translation>
     </message>
     <message>
-        <location filename="../console/main_window.ui" line="564"/>
         <source>Copy Computer</source>
-        <translation>Скопіювати комп&apos;ютер</translation>
+        <translation type="vanished">Скопіювати комп&apos;ютер</translation>
     </message>
 </context>
 <context>
@@ -2047,34 +1865,28 @@ Routers added: %4</source>
 <context>
     <name>FastConnectDialog</name>
     <message>
-        <location filename="../console/fast_connect_dialog.ui" line="20"/>
         <source>Fast Connect</source>
-        <translation>Швидке підключення</translation>
+        <translation type="vanished">Швидке підключення</translation>
     </message>
     <message>
-        <location filename="../console/fast_connect_dialog.ui" line="32"/>
         <source>Address / ID</source>
-        <translation>Адреса / ID</translation>
+        <translation type="vanished">Адреса / ID</translation>
     </message>
     <message>
-        <location filename="../console/fast_connect_dialog.ui" line="70"/>
         <source>Session Type</source>
-        <translation>Тип сесії</translation>
+        <translation type="vanished">Тип сесії</translation>
     </message>
     <message>
-        <location filename="../console/fast_connect_dialog.ui" line="104"/>
         <source>Default configuration from address book</source>
-        <translation>Стандартні налаштування з адресної книги</translation>
+        <translation type="vanished">Стандартні налаштування з адресної книги</translation>
     </message>
     <message>
-        <location filename="../console/fast_connect_dialog.ui" line="110"/>
         <source>Use credentials from address book</source>
-        <translation>Використовувати облікові дані з адресної книги</translation>
+        <translation type="vanished">Використовувати облікові дані з адресної книги</translation>
     </message>
     <message>
-        <location filename="../console/fast_connect_dialog.ui" line="117"/>
         <source>Use session parameters from address book</source>
-        <translation>Використовувати параметри сесії з адресної книги</translation>
+        <translation type="vanished">Використовувати параметри сесії з адресної книги</translation>
     </message>
 </context>
 <context>
@@ -2679,29 +2491,24 @@ Routers added: %4</source>
 <context>
     <name>OpenAddressBookDialog</name>
     <message>
-        <location filename="../console/open_address_book_dialog.ui" line="23"/>
         <source>Open Address Book</source>
-        <translation>Відкрити адресну книгу</translation>
+        <translation type="vanished">Відкрити адресну книгу</translation>
     </message>
     <message>
-        <location filename="../console/open_address_book_dialog.ui" line="53"/>
         <source>Address book is encrypted. To open, you must enter a password.</source>
-        <translation>Адресну книгу зашифровано. Для перегляду введіть пароль.</translation>
+        <translation type="vanished">Адресну книгу зашифровано. Для перегляду введіть пароль.</translation>
     </message>
     <message>
-        <location filename="../console/open_address_book_dialog.ui" line="66"/>
         <source>File:</source>
-        <translation>Файл:</translation>
+        <translation type="vanished">Файл:</translation>
     </message>
     <message>
-        <location filename="../console/open_address_book_dialog.ui" line="73"/>
         <source>Encryption Type:</source>
-        <translation>Тип шифрування:</translation>
+        <translation type="vanished">Тип шифрування:</translation>
     </message>
     <message>
-        <location filename="../console/open_address_book_dialog.ui" line="80"/>
         <source>Password:</source>
-        <translation>Пароль:</translation>
+        <translation type="vanished">Пароль:</translation>
     </message>
 </context>
 <context>
@@ -5067,24 +4874,20 @@ Routers added: %4</source>
 <context>
     <name>UpdateSettingsDialog</name>
     <message>
-        <location filename="../console/update_settings_dialog.ui" line="14"/>
         <source>Update Settings</source>
-        <translation>Налаштування оновлень</translation>
+        <translation type="vanished">Налаштування оновлень</translation>
     </message>
     <message>
-        <location filename="../console/update_settings_dialog.ui" line="26"/>
         <source>Check for updates on startup</source>
-        <translation>Перевіряти оновлення при запуску</translation>
+        <translation type="vanished">Перевіряти оновлення при запуску</translation>
     </message>
     <message>
-        <location filename="../console/update_settings_dialog.ui" line="33"/>
         <source>Use custom update server</source>
-        <translation>Використовувати інший сервер</translation>
+        <translation type="vanished">Використовувати інший сервер</translation>
     </message>
     <message>
-        <location filename="../console/update_settings_dialog.ui" line="42"/>
         <source>Server:</source>
-        <translation>Сервер:</translation>
+        <translation type="vanished">Сервер:</translation>
     </message>
 </context>
 <context>
@@ -6561,12 +6364,12 @@ Routers added: %4</source>
         <translation type="obsolete">Попередження</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.cc" line="285"/>
+        <location filename="../client/ui/main_window.cc" line="296"/>
         <source>Connection by ID is specified in the properties of the computer, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation type="unfinished">В налаштуваннях комп&apos;ютера було обрано підключення за ID, але маршрутизатор не налаштовано. Перевірте параметри маршрутизатора в налаштуваннях адресної книги.</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.cc" line="217"/>
+        <location filename="../client/ui/main_window.cc" line="228"/>
         <source>Aspia Client</source>
         <translation type="unfinished">Клієнт Aspia</translation>
     </message>
@@ -10404,38 +10207,32 @@ Routers added: %4</source>
 <context>
     <name>console::AddressBookDialog</name>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="109"/>
         <source>Without Encryption</source>
-        <translation>Без шифрування</translation>
+        <translation type="vanished">Без шифрування</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="111"/>
         <source>ChaCha20 + Poly1305 (256-bit key)</source>
-        <translation>ChaCha20 + Poly1305 (256-бітний ключ)</translation>
+        <translation type="vanished">ChaCha20 + Poly1305 (256-бітний ключ)</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="140"/>
         <source>Double-click to change</source>
-        <translation>Подвійний клік для зміни</translation>
+        <translation type="vanished">Подвійний клік для зміни</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="123"/>
         <source>Address Book</source>
-        <translation>Адресна книга</translation>
+        <translation type="vanished">Адресна книга</translation>
     </message>
     <message>
         <source>Cancel</source>
         <translation type="vanished">Відмінити</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="222"/>
         <source>General</source>
-        <translation>Основні</translation>
+        <translation type="vanished">Основні</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="226"/>
         <source>Sessions</source>
-        <translation>Сесії</translation>
+        <translation type="vanished">Сесії</translation>
     </message>
     <message>
         <source>Manage</source>
@@ -10446,9 +10243,8 @@ Routers added: %4</source>
         <translation type="vanished">Перегляд</translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/address_book_dialog.cc" line="438"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation>
+        <translation type="vanished">
             <numerusform>Занадто довге ім&apos;я. Максимальна довжина імені: %n символ.</numerusform>
             <numerusform>Занадто довге ім&apos;я. Максимальна довжина імені: %n символи.</numerusform>
             <numerusform>Занадто довге ім&apos;я. Максимальна довжина імені: %n символів.</numerusform>
@@ -10458,66 +10254,45 @@ Routers added: %4</source>
         <source>Name can not be empty.</source>
         <translation type="vanished">Ім&apos;я не може бути порожнім.</translation>
     </message>
-    <message>
-        <location filename="../console/address_book_dialog.cc" line="444"/>
-        <source>Name cannot be empty.</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message numerus="yes">
-        <location filename="../console/address_book_dialog.cc" line="451"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation>
+        <translation type="vanished">
             <numerusform>Занадто довгий коментар. Максимальна довжина коментаря: %n символ.</numerusform>
             <numerusform>Занадто довгий коментар. Максимальна довжина коментаря: %n символи.</numerusform>
             <numerusform>Занадто довгий коментар. Максимальна довжина коментаря: %n символів.</numerusform>
         </translation>
     </message>
-    <message numerus="yes">
-        <location filename="../console/address_book_dialog.cc" line="459"/>
-        <source>Too long display name. The maximum length of the display name is %n characters.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
-    </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="485"/>
         <source>The passwords you entered do not match.</source>
-        <translation>Введені паролі не співпадають.</translation>
+        <translation type="vanished">Введені паролі не співпадають.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/address_book_dialog.cc" line="491"/>
         <source>Password can not be empty and should not exceed %n characters.</source>
-        <translation>
+        <translation type="vanished">
             <numerusform>Пароль не може бути порожнім або довшим за %n символ.</numerusform>
             <numerusform>Пароль не може бути порожнім або довшим за %n символи.</numerusform>
             <numerusform>Пароль не може бути порожнім або довшим за %n символів.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="499"/>
         <source>Password you entered does not meet the security requirements!</source>
-        <translation>Введений пароль не задовільняє вимог безпеки!</translation>
+        <translation type="vanished">Введений пароль не задовільняє вимог безпеки!</translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/address_book_dialog.cc" line="502"/>
         <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
-        <translation>
+        <translation type="vanished">
             <numerusform>Пароль має включати літери нижнього і верхнього регістру, числа і не має бути коротшим за %n символ.</numerusform>
             <numerusform>Пароль має включати літери нижнього і верхнього регістру, числа і не має бути коротшим за %n символи.</numerusform>
             <numerusform>Пароль має включати літери нижнього і верхнього регістру, числа і не має бути коротшим за %n символів.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="506"/>
         <source>Do you want to enter a different password?</source>
-        <translation>Бажаєте ввести інший пароль?</translation>
+        <translation type="vanished">Бажаєте ввести інший пароль?</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="509"/>
         <source>Warning</source>
-        <translation>Попередження</translation>
+        <translation type="vanished">Попередження</translation>
     </message>
     <message>
         <source>Desktop Manage</source>
@@ -10536,57 +10311,47 @@ Routers added: %4</source>
         <translation type="obsolete">Ні</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="547"/>
         <source>An invalid router address was entered.</source>
-        <translation>Введено не коректну адресу маршрутизатора.</translation>
+        <translation type="vanished">Введено не коректну адресу маршрутизатора.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="558"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation>Ім&apos;я користувача не може бути порожнім і має мустити тільки букви алфавіту, цифри, та символи _, ,.</translation>
+        <translation type="vanished">Ім&apos;я користувача не може бути порожнім і має мустити тільки букви алфавіту, цифри, та символи _, ,.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_dialog.cc" line="567"/>
         <source>Router password cannot be empty.</source>
-        <translation>Пароль маршрутизатора не може бути порожнім.</translation>
+        <translation type="vanished">Пароль маршрутизатора не може бути порожнім.</translation>
     </message>
 </context>
 <context>
     <name>console::AddressBookTab</name>
     <message>
-        <location filename="../console/address_book_tab.cc" line="214"/>
         <source>Unable to open address book file &quot;%1&quot;.</source>
-        <translation>Неможливо відкрити файл адресної книги &quot;%1&quot;.</translation>
+        <translation type="vanished">Неможливо відкрити файл адресної книги &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="222"/>
         <source>Unable to read address book file &quot;%1&quot;.</source>
-        <translation>Неможливо прочитати файл адресної книги &quot;%1&quot;.</translation>
+        <translation type="vanished">Неможливо прочитати файл адресної книги &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="232"/>
         <source>The address book file &quot;%1&quot; is corrupted or has an unknown format.</source>
-        <translation>Файл адресної книги &quot;%1&quot; пошкоджено або він має невірний формат.</translation>
+        <translation type="vanished">Файл адресної книги &quot;%1&quot; пошкоджено або він має невірний формат.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="271"/>
         <source>Unable to decrypt the address book with the specified password.</source>
-        <translation>Неможливо розшифрувати адресну книгу даним паролем.</translation>
+        <translation type="vanished">Неможливо розшифрувати адресну книгу даним паролем.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="278"/>
         <source>The address book file is corrupted or has an unknown format.</source>
-        <translation>Файл адресної книги пошкоджено або він має невірний формат.</translation>
+        <translation type="vanished">Файл адресної книги пошкоджено або він має невірний формат.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="261"/>
         <source>The address book file is encrypted with an unsupported encryption type.</source>
-        <translation>Тип шифрування адресної книги не підтримується.</translation>
+        <translation type="vanished">Тип шифрування адресної книги не підтримується.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="668"/>
         <source>Are you sure you want to delete computer group &quot;%1&quot; and all child items?</source>
-        <translation>Ви впевнені, що хочете видалити групу комп&apos;ютерів \&quot;%1\&quot; і всі дочірні об&apos;єкти?</translation>
+        <translation type="vanished">Ви впевнені, що хочете видалити групу комп&apos;ютерів \&quot;%1\&quot; і всі дочірні об&apos;єкти?</translation>
     </message>
     <message>
         <source>Confirmation</source>
@@ -10601,60 +10366,40 @@ Routers added: %4</source>
         <translation type="obsolete">Ні</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="698"/>
         <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
-        <translation>Ви впевнені, що хочете видалити комп&apos;ютер\&quot;%1\&quot;?</translation>
+        <translation type="vanished">Ви впевнені, що хочете видалити комп&apos;ютер\&quot;%1\&quot;?</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="1044"/>
-        <source>Online</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/address_book_tab.cc" line="1046"/>
-        <source>Offline</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/address_book_tab.cc" line="1171"/>
         <source>Save Address Book</source>
-        <translation>Зберегти адресну книгу</translation>
+        <translation type="vanished">Зберегти адресну книгу</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="1173"/>
         <source>Aspia Address Book (*.aab)</source>
-        <translation>Адресна книга Aspia (*.aab)</translation>
+        <translation type="vanished">Адресна книга Aspia (*.aab)</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="1188"/>
         <source>Unable to create or open address book file.</source>
-        <translation>Неможливо створити або відкрити файл адресної книги.</translation>
+        <translation type="vanished">Неможливо створити або відкрити файл адресної книги.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="1202"/>
         <source>Unable to write address book file.</source>
-        <translation>Неможливо записати файл адресної книги.</translation>
+        <translation type="vanished">Неможливо записати файл адресної книги.</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="1233"/>
         <source>Root Group</source>
-        <translation>Корінна група</translation>
+        <translation type="vanished">Корінна група</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="1245"/>
-        <location filename="../console/address_book_tab.cc" line="1260"/>
         <source>Warning</source>
-        <translation>Попередження</translation>
+        <translation type="vanished">Попередження</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="1247"/>
         <source>Could not open address book</source>
-        <translation>Неможливо відкрити адресну книгу</translation>
+        <translation type="vanished">Неможливо відкрити адресну книгу</translation>
     </message>
     <message>
-        <location filename="../console/address_book_tab.cc" line="1262"/>
         <source>Failed to save address book</source>
-        <translation>Неможливо зберегти адресну книгу</translation>
+        <translation type="vanished">Неможливо зберегти адресну книгу</translation>
     </message>
 </context>
 <context>
@@ -10664,19 +10409,16 @@ Routers added: %4</source>
         <translation type="vanished">Відмінити</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog.cc" line="59"/>
         <source>(copy)</source>
-        <translation>(копіювати)</translation>
+        <translation type="vanished">(копіювати)</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog.cc" line="70"/>
         <source>General</source>
-        <translation>Основні</translation>
+        <translation type="vanished">Основні</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog.cc" line="74"/>
         <source>Sessions</source>
-        <translation>Сесії</translation>
+        <translation type="vanished">Сесії</translation>
     </message>
     <message>
         <source>Desktop Manage</source>
@@ -10725,9 +10467,8 @@ Routers added: %4</source>
 <context>
     <name>console::ComputerDialogGeneral</name>
     <message numerus="yes">
-        <location filename="../console/computer_dialog_general.cc" line="119"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation>
+        <translation type="vanished">
             <numerusform>Занадто довге ім&apos;я. Максимальна довжина імені %n символ.</numerusform>
             <numerusform>Занадто довге ім&apos;я. Максимальна довжина імені %n символи.</numerusform>
             <numerusform>Занадто довге ім&apos;я. Максимальна довжина імені %n символів.</numerusform>
@@ -10738,28 +10479,20 @@ Routers added: %4</source>
         <translation type="vanished">Ім&apos;я не може бути порожнім.</translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_general.cc" line="128"/>
-        <source>Name cannot be empty.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/computer_dialog_general.cc" line="139"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation>Ім&apos;я користувача не може бути порожнім і має мустити тільки букви алфавіту, цифри, та символи &quot;&quot;_&quot;&quot;, &quot;&quot;-&quot;&quot;, &quot;&quot;.&quot;&quot;.</translation>
+        <translation type="vanished">Ім&apos;я користувача не може бути порожнім і має мустити тільки букви алфавіту, цифри, та символи &quot;&quot;_&quot;&quot;, &quot;&quot;-&quot;&quot;, &quot;&quot;.&quot;&quot;.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/computer_dialog_general.cc" line="150"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation>
+        <translation type="vanished">
             <numerusform>Занадто довгий коментар. Максимальна довжина коментаря %n символ.</numerusform>
             <numerusform>Занадто довгий коментар. Максимальна довжина коментаря %n символи.</numerusform>
             <numerusform>Занадто довгий коментар. Максимальна довжина коментаря %n символів.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../console/computer_dialog_general.cc" line="168"/>
         <source>An invalid computer address was entered.</source>
-        <translation>Введено невірну адресу комп&apos;ютера.</translation>
+        <translation type="vanished">Введено невірну адресу комп&apos;ютера.</translation>
     </message>
     <message>
         <source>Warning</source>
@@ -10796,19 +10529,12 @@ Routers added: %4</source>
         <translation type="vanished">Відмінити</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog.cc" line="74"/>
         <source>General</source>
-        <translation>Основні</translation>
+        <translation type="vanished">Основні</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog.cc" line="78"/>
         <source>Sessions</source>
-        <translation>Сесії</translation>
-    </message>
-    <message>
-        <location filename="../console/computer_group_dialog.cc" line="228"/>
-        <source>Name cannot be empty.</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Сесії</translation>
     </message>
     <message>
         <source>Manage</source>
@@ -10827,9 +10553,8 @@ Routers added: %4</source>
         <translation type="obsolete">Перегляд робочого столу</translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/computer_group_dialog.cc" line="219"/>
         <source>Too long name. The maximum length of the name is %n characters.</source>
-        <translation>
+        <translation type="vanished">
             <numerusform>Занадто довге ім&apos;я. Максимальна довжина імені %n символ.</numerusform>
             <numerusform>Занадто довге ім&apos;я. Максимальна довжина імені %n символи.</numerusform>
             <numerusform>Занадто довге ім&apos;я. Максимальна довжина імені %n символів.</numerusform>
@@ -10840,9 +10565,8 @@ Routers added: %4</source>
         <translation type="vanished">Ім&apos;я не може бути порожнім.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/computer_group_dialog.cc" line="237"/>
         <source>Too long comment. The maximum length of the comment is %n characters.</source>
-        <translation>
+        <translation type="vanished">
             <numerusform>Занадто довгий коментар. Максимальна довжина коментаря %n символ.</numerusform>
             <numerusform>Занадто довгий коментар. Максимальна довжина коментаря %n символи.</numerusform>
             <numerusform>Занадто довгий коментар. Максимальна довжина коментаря %n символів.</numerusform>
@@ -10887,19 +10611,16 @@ Routers added: %4</source>
         <translation type="obsolete">Ім&apos;я не може бути порожнім.</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_general.cc" line="42"/>
         <source>Credentials</source>
-        <translation>Облікові дані</translation>
+        <translation type="vanished">Облікові дані</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_general.cc" line="47"/>
         <source>Inherit from parent</source>
-        <translation>Унаслідувати від батьківського</translation>
+        <translation type="vanished">Унаслідувати від батьківського</translation>
     </message>
     <message>
-        <location filename="../console/computer_group_dialog_general.cc" line="100"/>
         <source>The user name can not be empty and can contain only alphabet characters, numbers and _, -, . characters.</source>
-        <translation>Ім&apos;я користувача не може бути порожнім і може використовувати тільки символи алфавіту, цифри і знаки _, ., -.</translation>
+        <translation type="vanished">Ім&apos;я користувача не може бути порожнім і може використовувати тільки символи алфавіту, цифри і знаки _, ., -.</translation>
     </message>
     <message>
         <source>An invalid computer address was entered.</source>
@@ -10921,9 +10642,8 @@ Routers added: %4</source>
         <translation type="vanished">Підтвердження</translation>
     </message>
     <message>
-        <location filename="../console/fast_connect_dialog.cc" line="88"/>
         <source>The list of entered addresses will be cleared. Continue?</source>
-        <translation>Буде створено список введених адрес. Продовжити?</translation>
+        <translation type="vanished">Буде створено список введених адрес. Продовжити?</translation>
     </message>
     <message>
         <source>Yes</source>
@@ -10938,14 +10658,12 @@ Routers added: %4</source>
         <translation type="vanished">Попередження</translation>
     </message>
     <message>
-        <location filename="../console/fast_connect_dialog.cc" line="205"/>
         <source>Connection by ID is specified but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
-        <translation>Було обрано підключення за ID, але маршрутизатор не налаштовано. Перевірте параметри маршрутизатора в налаштуваннях адресної книги.</translation>
+        <translation type="vanished">Було обрано підключення за ID, але маршрутизатор не налаштовано. Перевірте параметри маршрутизатора в налаштуваннях адресної книги.</translation>
     </message>
     <message>
-        <location filename="../console/fast_connect_dialog.cc" line="221"/>
         <source>An invalid computer address was entered.</source>
-        <translation>Введено невірну адресу комп&apos;ютера.</translation>
+        <translation type="vanished">Введено невірну адресу комп&apos;ютера.</translation>
     </message>
 </context>
 <context>
@@ -10955,80 +10673,32 @@ Routers added: %4</source>
         <translation type="vanished">Попередження</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="202"/>
         <source>Pinned address book file &quot;%1&quot; was not found.&lt;br/&gt;This file will be unpinned.</source>
-        <translation>Закріплений файл адресної книги &quot;%1&quot; не знайдено. &lt;br/&gt; Цей файл буде відкріплено.</translation>
+        <translation type="vanished">Закріплений файл адресної книги &quot;%1&quot; не знайдено. &lt;br/&gt; Цей файл буде відкріплено.</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="312"/>
         <source>Open Address Book</source>
-        <translation>Відкрити адресну книгу</translation>
+        <translation type="vanished">Відкрити адресну книгу</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="314"/>
         <source>Aspia Address Book (*.aab)</source>
-        <translation>Адресна книга Aspia (*.aab)</translation>
+        <translation type="vanished">Адресна книга Aspia (*.aab)</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="572"/>
-        <source>Open File</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/main_window.cc" line="574"/>
-        <location filename="../console/main_window.cc" line="640"/>
-        <source>JSON files (*.json)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/main_window.cc" line="586"/>
-        <source>Could not open file for reading.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/main_window.cc" line="594"/>
-        <source>Import file is empty.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/main_window.cc" line="604"/>
-        <source>Failed to parse JSON document: %1.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/main_window.cc" line="614"/>
-        <source>Import completed successfully.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/main_window.cc" line="638"/>
         <source>Save File</source>
-        <translation type="unfinished">Зберегти файл</translation>
+        <translation type="obsolete">Зберегти файл</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="652"/>
         <source>Could not open file for writing.</source>
-        <translation type="unfinished">Неможливо відкрити файл для запису.</translation>
-    </message>
-    <message>
-        <location filename="../console/main_window.cc" line="662"/>
-        <source>Unable to write file.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../console/main_window.cc" line="667"/>
-        <source>Export completed successfully.</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Неможливо відкрити файл для запису.</translation>
     </message>
     <message>
         <source>Confirmation</source>
         <translation type="vanished">Підтвердження</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="901"/>
-        <location filename="../console/main_window.cc" line="1318"/>
         <source>Address book &quot;%1&quot; has been changed. Save changes?</source>
-        <translation>Адресну книгу &quot;%1&quot; змінено. Зберегти зміни?</translation>
+        <translation type="vanished">Адресну книгу &quot;%1&quot; змінено. Зберегти зміни?</translation>
     </message>
     <message>
         <source>Yes</source>
@@ -11043,63 +10713,51 @@ Routers added: %4</source>
         <translation type="obsolete">Відмінити</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1128"/>
         <source>Close other tabs</source>
-        <translation>Закрити інші вкладки</translation>
+        <translation type="vanished">Закрити інші вкладки</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1135"/>
         <source>Close tab</source>
-        <translation>Закрити вкладку</translation>
+        <translation type="vanished">Закрити вкладку</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1136"/>
-        <location filename="../console/main_window.cc" line="1141"/>
         <source>Pin tab</source>
-        <translation>Закріпити вкладку</translation>
+        <translation type="vanished">Закріпити вкладку</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1234"/>
         <source>The list of recently opened address books will be cleared. Continue?</source>
-        <translation>Список нещодавніх адрес буде очищено. Продовжити?</translation>
+        <translation type="vanished">Список нещодавніх адрес буде очищено. Продовжити?</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1265"/>
         <source>Hide</source>
-        <translation>Сховати</translation>
+        <translation type="vanished">Сховати</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1280"/>
         <source>Show</source>
-        <translation>Показати</translation>
+        <translation type="vanished">Показати</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="1633"/>
         <source>Connection by ID is specified in the properties of the computer, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
-        <translation>В налаштуваннях комп&apos;ютера було обрано підключення за ID, але маршрутизатор не налаштовано. Перевірте параметри маршрутизатора в налаштуваннях адресної книги.</translation>
+        <translation type="vanished">В налаштуваннях комп&apos;ютера було обрано підключення за ID, але маршрутизатор не налаштовано. Перевірте параметри маршрутизатора в налаштуваннях адресної книги.</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="709"/>
-        <location filename="../console/main_window.cc" line="1499"/>
         <source>Aspia Console</source>
-        <translation>Консоль Aspia</translation>
+        <translation type="vanished">Консоль Aspia</translation>
     </message>
     <message>
         <source>Information</source>
         <translation type="vanished">Інформація</translation>
     </message>
     <message>
-        <location filename="../console/main_window.cc" line="281"/>
         <source>Address Book &quot;%1&quot; is already open.</source>
-        <translation>Адресну книгу &quot;%1&quot; вже відкрито.</translation>
+        <translation type="vanished">Адресну книгу &quot;%1&quot; вже відкрито.</translation>
     </message>
 </context>
 <context>
     <name>console::MruAction</name>
     <message>
-        <location filename="../console/mru_action.cc" line="30"/>
         <source>&lt;empty&gt;</source>
-        <translation>&lt;порожньо&gt;</translation>
+        <translation type="vanished">&lt;порожньо&gt;</translation>
     </message>
 </context>
 <context>
@@ -11109,38 +10767,27 @@ Routers added: %4</source>
         <translation type="vanished">Відмінити</translation>
     </message>
     <message>
-        <location filename="../console/open_address_book_dialog.cc" line="45"/>
         <source>Without Encryption</source>
-        <translation>Без шифрування</translation>
+        <translation type="vanished">Без шифрування</translation>
     </message>
     <message>
-        <location filename="../console/open_address_book_dialog.cc" line="49"/>
         <source>ChaCha20 + Poly1305 (256-bit key)</source>
-        <translation>ChaCha20 + Poly1305 (256-бітний ключ)</translation>
+        <translation type="vanished">ChaCha20 + Poly1305 (256-бітний ключ)</translation>
     </message>
 </context>
 <context>
     <name>console::StatusBar</name>
-    <message>
-        <location filename="../console/statusbar.cc" line="49"/>
-        <source>Status update</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message numerus="yes">
-        <location filename="../console/statusbar.cc" line="86"/>
-        <location filename="../console/statusbar.cc" line="90"/>
         <source>%n child group(s)</source>
-        <translation>
+        <translation type="vanished">
             <numerusform>%n дочірня група</numerusform>
             <numerusform>%n дочірні групи</numerusform>
             <numerusform>%n дочірніх груп</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../console/statusbar.cc" line="87"/>
-        <location filename="../console/statusbar.cc" line="91"/>
         <source>%n child computer(s)</source>
-        <translation>
+        <translation type="vanished">
             <numerusform>%n дочірній комп&apos;ютер</numerusform>
             <numerusform>%n дочірні комп&apos;ютери</numerusform>
             <numerusform>%n дочірніх комп&apos;ютерів</numerusform>

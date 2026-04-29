@@ -214,7 +214,6 @@ message(STATUS "Git commit count: ${GIT_COMMIT_COUNT}")
 add_subdirectory(base)
 add_subdirectory(client)
 add_subdirectory(common)
-add_subdirectory(console)
 add_subdirectory(drivers)
 add_subdirectory(proto)
 add_subdirectory(relay)
@@ -285,59 +284,6 @@ if (LINUX)
     if (APPLE)
         set(CPACK_DMG_HOST_FILE_NAME "${CPACK_COMPONENT_HOST_NAME}-${CPACK_PACKAGE_VERSION}")
     endif()
-endif()
-
-#--------------------------------------------------------------------------------------------------
-# Console
-#--------------------------------------------------------------------------------------------------
-
-install(TARGETS aspia_console
-    BUNDLE DESTINATION . COMPONENT console
-    RUNTIME DESTINATION bin COMPONENT console)
-set(CPACK_COMPONENT_CONSOLE_NAME "aspia-console")
-set(CPACK_COMPONENT_CONSOLE_DISPLAY_NAME "Aspia Console")
-set(CPACK_COMPONENT_CONSOLE_DESCRIPTION "Console for managing hosts and routers.")
-
-if (LINUX)
-    # Desktop file.
-    install(FILES console/linux/aspia-console.desktop
-        DESTINATION share/applications COMPONENT console)
-
-    # Mime types.
-    install(FILES console/linux/aspia-console.xml
-        DESTINATION share/mime/packages COMPONENT console)
-    install(CODE "execute_process(COMMAND update-mime-database /usr/share/mime)")
-
-    # Console icons.
-    install(FILES console/linux/icons/16x16/aspia_console.png
-        DESTINATION share/icons/hicolor/16x16/apps COMPONENT console)
-    install(FILES console/linux/icons/24x24/aspia_console.png
-        DESTINATION share/icons/hicolor/24x24/apps COMPONENT console)
-    install(FILES console/linux/icons/32x32/aspia_console.png
-        DESTINATION share/icons/hicolor/32x32/apps COMPONENT console)
-    install(FILES console/linux/icons/48x48/aspia_console.png
-        DESTINATION share/icons/hicolor/48x48/apps COMPONENT console)
-    install(FILES console/linux/icons/64x64/aspia_console.png
-        DESTINATION share/icons/hicolor/64x64/apps COMPONENT console)
-    install(FILES console/linux/icons/128x128/aspia_console.png
-        DESTINATION share/icons/hicolor/128x128/apps COMPONENT console)
-
-    # Address book icons.
-    install(FILES console/linux/icons/16x16/aspia_address_book.png
-        DESTINATION share/icons/hicolor/16x16/mimetypes COMPONENT console)
-    install(FILES console/linux/icons/24x24/aspia_address_book.png
-        DESTINATION share/icons/hicolor/24x24/mimetypes COMPONENT console)
-    install(FILES console/linux/icons/32x32/aspia_address_book.png
-        DESTINATION share/icons/hicolor/32x32/mimetypes COMPONENT console)
-    install(FILES console/linux/icons/48x48/aspia_address_book.png
-        DESTINATION share/icons/hicolor/48x48/mimetypes COMPONENT console)
-
-    set(CPACK_DEBIAN_CONSOLE_FILE_NAME
-        "${CPACK_COMPONENT_CONSOLE_NAME}-${CPACK_PACKAGE_VERSION}-${CMAKE_SYSTEM_PROCESSOR}.deb")
-endif()
-
-if (APPLE)
-    set(CPACK_DMG_CONSOLE_FILE_NAME "${CPACK_COMPONENT_CONSOLE_NAME}-${CPACK_PACKAGE_VERSION}")
 endif()
 
 #--------------------------------------------------------------------------------------------------
@@ -424,14 +370,14 @@ if (LINUX)
     set(CPACK_DEBIAN_PACKAGE_SECTION "net")
     set(CPACK_DEBIAN_PACKAGE_PRIORITY "optional")
 
-    set(CPACK_COMPONENTS_ALL host console client router relay)
+    set(CPACK_COMPONENTS_ALL host client router relay)
 endif()
 
 if (APPLE)
     set(CPACK_GENERATOR "DragNDrop")
 
     set(CPACK_COMPONENTS_GROUPING "IGNORE")
-    set(CPACK_COMPONENTS_ALL console client)
+    set(CPACK_COMPONENTS_ALL client)
 endif()
 
 include(CPack)
