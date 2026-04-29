@@ -33,17 +33,14 @@ TEST(DataCryptorTest, EncryptDecrypt)
 
     DataCryptor cryptor(key);
 
-    QByteArray encrypted_message;
-    bool ret = cryptor.encrypt(message, &encrypted_message);
-    ASSERT_TRUE(ret);
-    ASSERT_EQ(encrypted_message.size(), message.size() + 28);
+    std::optional<QByteArray> encrypted_message = cryptor.encrypt(message);
+    ASSERT_TRUE(encrypted_message.has_value());
+    ASSERT_EQ(encrypted_message->size(), message.size() + 28);
 
-    QByteArray decrypted_message;
-
-    ret = cryptor.decrypt(encrypted_message, &decrypted_message);
-    ASSERT_TRUE(ret);
-    ASSERT_EQ(decrypted_message.size(), message.size());
-    ASSERT_EQ(decrypted_message, message);
+    std::optional<QByteArray> decrypted_message = cryptor.decrypt(*encrypted_message);
+    ASSERT_TRUE(decrypted_message.has_value());
+    ASSERT_EQ(decrypted_message->size(), message.size());
+    ASSERT_EQ(*decrypted_message, message);
 }
 
 TEST(DataCryptorTest, WrongKey)
@@ -55,15 +52,12 @@ TEST(DataCryptorTest, WrongKey)
     DataCryptor cryptor1(key);
     DataCryptor cryptor2(wrong_key);
 
-    QByteArray encrypted_message;
-    bool ret = cryptor1.encrypt(message, &encrypted_message);
-    ASSERT_TRUE(ret);
-    ASSERT_EQ(encrypted_message.size(), message.size() + 28);
+    std::optional<QByteArray> encrypted_message = cryptor1.encrypt(message);
+    ASSERT_TRUE(encrypted_message.has_value());
+    ASSERT_EQ(encrypted_message->size(), message.size() + 28);
 
-    QByteArray decrypted_message;
-
-    ret = cryptor2.decrypt(encrypted_message, &decrypted_message);
-    ASSERT_FALSE(ret);
+    std::optional<QByteArray> decrypted_message = cryptor2.decrypt(*encrypted_message);
+    ASSERT_FALSE(decrypted_message.has_value());
 }
 
 TEST(DataCryptorTest, Passthrough)
@@ -72,13 +66,13 @@ TEST(DataCryptorTest, Passthrough)
 
     const QByteArray message = QByteArray::fromHex("5ce26794165a808ec425684e9384c27c");
 
-    QByteArray encrypted;
-    ASSERT_TRUE(cryptor.encrypt(message, &encrypted));
-    ASSERT_EQ(encrypted, message);
+    std::optional<QByteArray> encrypted = cryptor.encrypt(message);
+    ASSERT_TRUE(encrypted.has_value());
+    ASSERT_EQ(*encrypted, message);
 
-    QByteArray decrypted;
-    ASSERT_TRUE(cryptor.decrypt(encrypted, &decrypted));
-    ASSERT_EQ(decrypted, message);
+    std::optional<QByteArray> decrypted = cryptor.decrypt(*encrypted);
+    ASSERT_TRUE(decrypted.has_value());
+    ASSERT_EQ(*decrypted, message);
 }
 
 } // namespace base

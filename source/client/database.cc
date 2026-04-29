@@ -51,12 +51,8 @@ ComputerConfig readComputer(const QSqlQuery& query)
     computer.comment = query.value(4).toString();
     computer.address = query.value(5).toString();
     computer.username = query.value(6).toString();
-
-    QByteArray out;
-
-    cryptor.decrypt(query.value(7).toByteArray(), &out);
-    computer.password = QString::fromUtf8(out);
-
+    computer.password = QString::fromUtf8(
+        cryptor.decrypt(query.value(7).toByteArray()).value_or(QByteArray()));
     computer.create_time = query.value(8).toLongLong();
     computer.modify_time = query.value(9).toLongLong();
     computer.connect_time = query.value(10).toLongLong();
@@ -88,11 +84,8 @@ RouterConfig readRouter(const QSqlQuery& query)
     router.address = query.value(2).toString();
     router.session_type = static_cast<proto::router::SessionType>(query.value(3).toUInt());
     router.username = query.value(4).toString();
-
-    QByteArray out;
-
-    cryptor.decrypt(query.value(5).toByteArray(), &out);
-    router.password = QString::fromUtf8(out);
+    router.password = QString::fromUtf8(
+        cryptor.decrypt(query.value(5).toByteArray()).value_or(QByteArray()));
 
     return router;
 }
@@ -262,7 +255,6 @@ bool Database::addComputer(ComputerConfig& computer)
     }
 
     base::DataCryptor& cryptor = base::DataCryptor::instance();
-    QByteArray out;
 
     const qint64 current_time = QDateTime::currentSecsSinceEpoch();
     computer.create_time = current_time;
@@ -279,10 +271,7 @@ bool Database::addComputer(ComputerConfig& computer)
     query.addBindValue(computer.comment);
     query.addBindValue(computer.address);
     query.addBindValue(computer.username);
-
-    cryptor.encrypt(computer.password.toUtf8(), &out);
-    query.addBindValue(out);
-
+    query.addBindValue(cryptor.encrypt(computer.password.toUtf8()).value_or(QByteArray()));
     query.addBindValue(computer.create_time);
     query.addBindValue(computer.modify_time);
     query.addBindValue(computer.connect_time);
@@ -308,7 +297,6 @@ bool Database::modifyComputer(ComputerConfig& computer)
     }
 
     base::DataCryptor& cryptor = base::DataCryptor::instance();
-    QByteArray out;
 
     computer.modify_time = QDateTime::currentSecsSinceEpoch();
 
@@ -321,10 +309,7 @@ bool Database::modifyComputer(ComputerConfig& computer)
     query.addBindValue(computer.comment);
     query.addBindValue(computer.address);
     query.addBindValue(computer.username);
-
-    cryptor.encrypt(computer.password.toUtf8(), &out);
-    query.addBindValue(out);
-
+    query.addBindValue(cryptor.encrypt(computer.password.toUtf8()).value_or(QByteArray()));
     query.addBindValue(computer.modify_time);
     query.addBindValue(computer.data);
     query.addBindValue(computer.id);
@@ -653,7 +638,6 @@ bool Database::addRouter(RouterConfig& router)
     }
 
     base::DataCryptor& cryptor = base::DataCryptor::instance();
-    QByteArray out;
 
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
     query.prepare("INSERT INTO routers (id, name, address, session_type, username, password) "
@@ -662,9 +646,7 @@ bool Database::addRouter(RouterConfig& router)
     query.addBindValue(router.address);
     query.addBindValue(static_cast<quint32>(router.session_type));
     query.addBindValue(router.username);
-
-    cryptor.encrypt(router.password.toUtf8(), &out);
-    query.addBindValue(out);
+    query.addBindValue(cryptor.encrypt(router.password.toUtf8()).value_or(QByteArray()));
 
     if (!query.exec())
     {
@@ -686,7 +668,6 @@ bool Database::modifyRouter(const RouterConfig& router)
     }
 
     base::DataCryptor& cryptor = base::DataCryptor::instance();
-    QByteArray out;
 
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
     query.prepare("UPDATE routers SET name=?, address=?, session_type=?, username=?, password=? "
@@ -695,10 +676,7 @@ bool Database::modifyRouter(const RouterConfig& router)
     query.addBindValue(router.address);
     query.addBindValue(static_cast<quint32>(router.session_type));
     query.addBindValue(router.username);
-
-    cryptor.encrypt(router.password.toUtf8(), &out);
-    query.addBindValue(out);
-
+    query.addBindValue(cryptor.encrypt(router.password.toUtf8()).value_or(QByteArray()));
     query.addBindValue(router.router_id);
 
     if (!query.exec())
@@ -941,6 +919,8 @@ bool Database::openDatabase()
         LOG(ERROR) << "Invalid file path";
         return false;
     }
+
+    LOG(INFO) << (!QFileInfo::exists(file_path) ? "Creating" : "Opening") << "book database:" << file_path;
 
     QSqlDatabase db = QSqlDatabase::database(kConnectionName, false);
     if (!db.isValid())

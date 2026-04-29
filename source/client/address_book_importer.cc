@@ -315,8 +315,8 @@ bool AddressBookImporter::import(QWidget* parent, const QString& file_path)
 
     base::DataCryptor cryptor(key);
 
-    QByteArray decrypted;
-    if (!cryptor.decrypt(proto_file.data(), &decrypted))
+    std::optional<QByteArray> decrypted = cryptor.decrypt(proto_file.data());
+    if (!decrypted.has_value())
     {
         base::memZero(&key);
         common::MsgBox::warning(parent,
@@ -325,16 +325,16 @@ bool AddressBookImporter::import(QWidget* parent, const QString& file_path)
     }
 
     proto::address_book::Data proto_data;
-    if (!base::parse(decrypted, &proto_data))
+    if (!base::parse(*decrypted, &proto_data))
     {
-        base::memZero(&decrypted);
+        base::memZero(&*decrypted);
         base::memZero(&key);
         common::MsgBox::warning(parent,
             tr("The address book file is corrupted or has an unknown format."));
         return false;
     }
 
-    base::memZero(&decrypted);
+    base::memZero(&*decrypted);
     base::memZero(&key);
 
     ImportCounters counters;

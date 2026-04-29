@@ -22,6 +22,8 @@
 #include <QByteArray>
 #include <QByteArrayView>
 
+#include <optional>
+
 namespace base {
 
 class DataCryptor
@@ -35,8 +37,8 @@ public:
     QByteArray key() const;
     bool hasKey() const;
 
-    bool encrypt(QByteArrayView in, QByteArray* out);
-    bool decrypt(QByteArrayView in, QByteArray* out);
+    std::optional<QByteArray> encrypt(QByteArrayView in);
+    std::optional<QByteArray> decrypt(QByteArrayView in);
 
     static DataCryptor& instance();
 

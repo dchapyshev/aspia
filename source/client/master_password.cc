@@ -50,13 +50,13 @@ QByteArray makeVerifier(const QByteArray& key)
     }
 
     base::DataCryptor cryptor(key);
-    QByteArray out;
-    if (!cryptor.encrypt(payload, &out))
+    std::optional<QByteArray> out = cryptor.encrypt(payload);
+    if (!out.has_value())
     {
         LOG(ERROR) << "Unable to encrypt verifier";
         return {};
     }
-    return out;
+    return *out;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -65,8 +65,7 @@ bool checkVerifier(const QByteArray& key, const QByteArray& verifier)
     // ChaCha20-Poly1305 is an AEAD cipher: successful decryption (i.e. valid auth tag)
     // is itself the proof that the key is correct. The plaintext content does not matter.
     base::DataCryptor cryptor(key);
-    QByteArray out;
-    return cryptor.decrypt(verifier, &out);
+    return cryptor.decrypt(verifier).has_value();
 }
 
 //--------------------------------------------------------------------------------------------------

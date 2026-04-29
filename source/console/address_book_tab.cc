@@ -264,22 +264,22 @@ AddressBookTab* AddressBookTab::openFromFile(const QString& file_path, QWidget* 
 
     base::DataCryptor cryptor(key);
 
-    QByteArray decrypted_data;
-    if (!cryptor.decrypt(address_book_file.data(), &decrypted_data))
+    std::optional<QByteArray> decrypted_data = cryptor.decrypt(address_book_file.data());
+    if (!decrypted_data.has_value())
     {
         LOG(ERROR) << "Unable to decrypt address book";
         showOpenError(parent, tr("Unable to decrypt the address book with the specified password."));
         return nullptr;
     }
 
-    if (!base::parse(decrypted_data, &address_book_data))
+    if (!base::parse(*decrypted_data, &address_book_data))
     {
         LOG(ERROR) << "Unable to parse address book";
         showOpenError(parent, tr("The address book file is corrupted or has an unknown format."));
         return nullptr;
     }
 
-    base::memZero(&decrypted_data);
+    base::memZero(&*decrypted_data);
 
     return new AddressBookTab(file_path,
                               std::move(address_book_file),
@@ -1155,11 +1155,11 @@ bool AddressBookTab::saveToFile(const QString& file_path)
     QByteArray serialized_data = base::serialize(data_);
     base::DataCryptor cryptor(key_);
 
-    QByteArray encrypted_data;
-    CHECK(cryptor.encrypt(serialized_data, &encrypted_data));
+    std::optional<QByteArray> encrypted_data = cryptor.encrypt(serialized_data);
+    CHECK(encrypted_data.has_value());
     base::memZero(&serialized_data);
 
-    file_.set_data(encrypted_data.data(), encrypted_data.size());
+    file_.set_data(encrypted_data->data(), encrypted_data->size());
 
     QString path = file_path;
     if (path.isEmpty())

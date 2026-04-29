@@ -119,101 +119,97 @@ bool DataCryptor::hasKey() const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool DataCryptor::encrypt(QByteArrayView in, QByteArray* out)
+std::optional<QByteArray> DataCryptor::encrypt(QByteArrayView in)
 {
     if (key_.isEmpty())
-    {
-        out->assign(in);
-        return true;
-    }
+        return QByteArray(in);
 
     if (in.empty())
     {
         LOG(ERROR) << "Empty buffer passed";
-        return false;
+        return std::nullopt;
     }
 
-    out->resize(in.size() + kHeaderSize);
+    QByteArray out;
+    out.resize(in.size() + kHeaderSize);
 
-    if (!Random::fillBuffer(out->data(), kIVSize))
+    if (!Random::fillBuffer(out.data(), kIVSize))
     {
         LOG(ERROR) << "Random::fillBuffer failed";
-        return false;
+        return std::nullopt;
     }
 
-    EVP_CIPHER_CTX_ptr cipher = createCipher(key_, out->data(), 1);
+    EVP_CIPHER_CTX_ptr cipher = createCipher(key_, out.data(), 1);
     if (!cipher)
     {
         LOG(ERROR) << "Unable to create cipher";
-        return false;
+        return std::nullopt;
     }
 
     int length;
 
     if (EVP_EncryptUpdate(cipher.get(),
-                          reinterpret_cast<quint8*>(out->data()) + kHeaderSize,
+                          reinterpret_cast<quint8*>(out.data()) + kHeaderSize,
                           &length,
                           reinterpret_cast<const quint8*>(in.data()),
                           static_cast<int>(in.size())) != 1)
     {
         LOG(ERROR) << "EVP_EncryptUpdate failed";
-        return false;
+        return std::nullopt;
     }
 
     if (EVP_EncryptFinal_ex(cipher.get(),
-                            reinterpret_cast<quint8*>(out->data()) + kHeaderSize + length,
+                            reinterpret_cast<quint8*>(out.data()) + kHeaderSize + length,
                             &length) != 1)
     {
         LOG(ERROR) << "EVP_EncryptFinal_ex failed";
-        return false;
+        return std::nullopt;
     }
 
     if (EVP_CIPHER_CTX_ctrl(cipher.get(),
                             EVP_CTRL_AEAD_GET_TAG,
                             kTagSize,
-                            reinterpret_cast<quint8*>(out->data()) + kIVSize) != 1)
+                            reinterpret_cast<quint8*>(out.data()) + kIVSize) != 1)
     {
         LOG(ERROR) << "EVP_CIPHER_CTX_ctrl failed";
-        return false;
+        return std::nullopt;
     }
 
-    return true;
+    return out;
 }
 
 //--------------------------------------------------------------------------------------------------
-bool DataCryptor::decrypt(QByteArrayView in, QByteArray* out)
+std::optional<QByteArray> DataCryptor::decrypt(QByteArrayView in)
 {
     if (key_.isEmpty())
-    {
-        out->assign(in);
-        return true;
-    }
+        return QByteArray(in);
 
     if (in.size() <= kHeaderSize)
     {
         LOG(ERROR) << "Header missed";
-        return false;
+        return std::nullopt;
     }
 
     EVP_CIPHER_CTX_ptr cipher = createCipher(key_, in.data(), 0);
     if (!cipher)
     {
         LOG(ERROR) << "Unable to create cipher";
-        return false;
+        return std::nullopt;
     }
 
-    out->resize(in.size() - kHeaderSize);
+    QByteArray out;
+    out.resize(in.size() - kHeaderSize);
 
     int length;
 
     if (EVP_DecryptUpdate(cipher.get(),
-                          reinterpret_cast<quint8*>(out->data()),
+                          reinterpret_cast<quint8*>(out.data()),
                           &length,
                           reinterpret_cast<const quint8*>(in.data()) + kHeaderSize,
                           static_cast<int>(in.size() - kHeaderSize)) != 1)
     {
         LOG(ERROR) << "EVP_DecryptUpdate failed";
-        return false;
+        return std::nullopt;
     }
 
     if (EVP_CIPHER_CTX_ctrl(cipher.get(),
@@ -223,18 +219,18 @@ bool DataCryptor::decrypt(QByteArrayView in, QByteArray* out)
                                 const_cast<char*>(in.data())) + kIVSize) != 1)
     {
         LOG(ERROR) << "EVP_CIPHER_CTX_ctrl failed";
-        return false;
+        return std::nullopt;
     }
 
     if (EVP_DecryptFinal_ex(cipher.get(),
-                            reinterpret_cast<quint8*>(out->data()) + length,
+                            reinterpret_cast<quint8*>(out.data()) + length,
                             &length) <= 0)
     {
         LOG(ERROR) << "EVP_DecryptFinal_ex failed";
-        return false;
+        return std::nullopt;
     }
 
-    return true;
+    return out;
 }
 
 //--------------------------------------------------------------------------------------------------
