@@ -39,7 +39,6 @@ OnlineCheckerRouter::OnlineCheckerRouter(const ComputerList& computers, QObject*
 
     timer_.setSingleShot(true);
     connect(&timer_, &QTimer::timeout, this, [this]() { onFinished(FROM_HERE); });
-    timer_.start(kTimeout);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -51,6 +50,8 @@ OnlineCheckerRouter::~OnlineCheckerRouter()
 //--------------------------------------------------------------------------------------------------
 void OnlineCheckerRouter::start()
 {
+    timer_.start(kTimeout);
+
     if (computers_.isEmpty())
     {
         LOG(INFO) << "No computers in list";

@@ -123,6 +123,59 @@
     </message>
 </context>
 <context>
+    <name>AddressBookImporter</name>
+    <message>
+        <location filename="../client/address_book_importer.cc" line="110"/>
+        <source>%1 (Imported)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/address_book_importer.cc" line="269"/>
+        <source>Unable to open file &quot;%1&quot;: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/address_book_importer.cc" line="278"/>
+        <source>Selected file is empty.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/address_book_importer.cc" line="286"/>
+        <location filename="../client/address_book_importer.cc" line="333"/>
+        <source>The address book file is corrupted or has an unknown format.</source>
+        <translation type="unfinished">Het adresboek bestand is beschadigd of heeft een onbekende indeling.</translation>
+    </message>
+    <message>
+        <location filename="../client/address_book_importer.cc" line="299"/>
+        <source>ChaCha20 + Poly1305 (256-bit key)</source>
+        <translation type="unfinished">ChaCha20 + Poly1305 (256-bit key)</translation>
+    </message>
+    <message>
+        <location filename="../client/address_book_importer.cc" line="312"/>
+        <source>The address book file is encrypted with an unsupported encryption type.</source>
+        <translation type="unfinished">Het adresboek bestand is versleuteld met een encryptie type dat niet ondersteund wordt.</translation>
+    </message>
+    <message>
+        <location filename="../client/address_book_importer.cc" line="323"/>
+        <source>Unable to decrypt the address book with the specified password.</source>
+        <translation type="unfinished">Kan het adresboek niet ontsleutelen met het opgegeven wachtwoord.</translation>
+    </message>
+    <message>
+        <location filename="../client/address_book_importer.cc" line="356"/>
+        <source>Nothing was imported.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/address_book_importer.cc" line="361"/>
+        <source>Import completed successfully.
+Groups added: %1
+Computers added: %2
+Computers skipped: %3
+Routers added: %4</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>AddressBookTab</name>
     <message>
         <location filename="../console/address_book_tab.ui" line="98"/>
@@ -4631,6 +4684,34 @@
     </message>
 </context>
 <context>
+    <name>UnlockDialog</name>
+    <message>
+        <location filename="../client/ui/unlock_dialog.ui" line="23"/>
+        <source>Unlock Address Book</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/unlock_dialog.ui" line="53"/>
+        <source>Address book is encrypted. To open, you must enter a password.</source>
+        <translation type="unfinished">Het adresboek is versleuteld. Voer het wachtwoord in.</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/unlock_dialog.ui" line="66"/>
+        <source>File:</source>
+        <translation type="unfinished">Bestand:</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/unlock_dialog.ui" line="73"/>
+        <source>Encryption Type:</source>
+        <translation type="unfinished">Encryptie Type:</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/unlock_dialog.ui" line="80"/>
+        <source>Password:</source>
+        <translation type="unfinished">Wachtwoord:</translation>
+    </message>
+</context>
+<context>
     <name>UpdateDialog</name>
     <message>
         <location filename="../common/ui/update_dialog.ui" line="14"/>
@@ -5650,123 +5731,128 @@
 <context>
     <name>client::HostsTab</name>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="60"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="62"/>
         <source>Add Group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="61"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="63"/>
         <source>Delete Group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="62"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="64"/>
         <source>Edit Group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="64"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="66"/>
         <source>Add Computer</source>
         <translation type="unfinished">Computer Toevoegen</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="65"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="67"/>
         <source>Delete Computer</source>
         <translation type="unfinished">Computer Verwijderen</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="66"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="68"/>
         <source>Edit Computer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="67"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="69"/>
         <source>Copy Computer</source>
         <translation type="unfinished">Kopieer Computer</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="69"/>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="85"/>
-        <source>Desktop Management</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="70"/>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="86"/>
-        <source>File Transfer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../client/ui/hosts/hosts_tab.cc" line="71"/>
         <location filename="../client/ui/hosts/hosts_tab.cc" line="87"/>
-        <source>Chat</source>
+        <source>Desktop Management</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../client/ui/hosts/hosts_tab.cc" line="72"/>
         <location filename="../client/ui/hosts/hosts_tab.cc" line="88"/>
+        <source>File Transfer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="73"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="89"/>
+        <source>Chat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="74"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="90"/>
         <source>System Information</source>
         <translation type="unfinished">Systeem Informatie</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="116"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="118"/>
         <source>Add User</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="117"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="119"/>
         <source>Edit User</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="118"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="120"/>
         <source>Delete User</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="120"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="122"/>
         <source>Disconnect</source>
         <translation type="unfinished">Verbinding verbreken</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="121"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="123"/>
         <source>Disconnect All</source>
         <translation type="unfinished">Alle verbindingen verbreken</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="123"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="125"/>
         <source>Remove</source>
         <translation type="unfinished">Verwijderen</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="125"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="127"/>
         <source>Save...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="126"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="128"/>
         <source>Reload</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="128"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="130"/>
+        <source>Import Old Address Book...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="133"/>
         <source>Auto-refresh Status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="1003"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="1011"/>
         <source>Are you sure you want to delete router &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="1042"/>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="1067"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="1050"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="1075"/>
         <source>Copy Row</source>
         <translation type="unfinished">Kopieer Rij</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="1043"/>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="1068"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="1051"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="1076"/>
         <source>Copy Value</source>
         <translation type="unfinished">Kopieer Waarde</translation>
     </message>
@@ -5783,24 +5869,24 @@
         <translation type="obsolete">Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="450"/>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="712"/>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="758"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="456"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="718"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="764"/>
         <source>Failed to retrieve computer information from the local database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="454"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="460"/>
         <source>(copy)</source>
         <translation type="unfinished">(kopieer)</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="458"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="464"/>
         <source>Failed to add the computer to the local database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="481"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="487"/>
         <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
         <translation type="unfinished">Weet U zeker dat U de computer &quot;%1&quot; wilt verwijderen?</translation>
     </message>
@@ -5817,47 +5903,57 @@
         <translation type="obsolete">Nee</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="491"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="497"/>
         <source>Unable to remove computer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="569"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="575"/>
         <source>Are you sure you want to delete group &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="581"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="587"/>
         <source>Unable to remove group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="652"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="658"/>
         <source>Status</source>
         <translation type="unfinished">Status</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="653"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="659"/>
         <source>Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="654"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="660"/>
         <source>Delete</source>
         <translation type="unfinished">Verwijderen</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="1214"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="1141"/>
+        <source>Import Old Address Book</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="1143"/>
+        <source>Address Book (*.aab);;All files (*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="1254"/>
         <source>The router associated with this computer has been deleted. Edit the computer to select another router or switch to direct connection.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="1221"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="1261"/>
         <source>The computer has an invalid host ID.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts/hosts_tab.cc" line="1230"/>
+        <location filename="../client/ui/hosts/hosts_tab.cc" line="1270"/>
         <source>The computer has an incorrect address.</source>
         <translation type="unfinished"></translation>
     </message>
