@@ -17,6 +17,8 @@
 #
 
 list(APPEND SOURCE_CLIENT_CORE
+    address_book_importer.cc
+    address_book_importer.h
     database.cc
     database.h
     client.cc
@@ -80,6 +82,9 @@ list(APPEND SOURCE_CLIENT_CORE_UI
     ui/settings_dialog.ui
     ui/session_window.cc
     ui/session_window.h
+    ui/unlock_dialog.cc
+    ui/unlock_dialog.h
+    ui/unlock_dialog.ui
 )
 
 list(APPEND SOURCE_CLIENT_CORE_UI_DESKTOP

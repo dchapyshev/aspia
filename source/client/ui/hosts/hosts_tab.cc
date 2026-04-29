@@ -22,6 +22,7 @@
 
 #include <QActionGroup>
 #include <QDateTime>
+#include <QFileDialog>
 #include <QMenu>
 #include <QStatusBar>
 
@@ -31,6 +32,7 @@
 #include "base/peer/host_id.h"
 #include "base/peer/user.h"
 #include "build/build_config.h"
+#include "client/address_book_importer.h"
 #include "client/database.h"
 #include "client/settings.h"
 #include "client/ui/hosts/content_widget.h"
@@ -125,6 +127,9 @@ HostsTab::HostsTab(QWidget* parent)
     action_save_ = new QAction(QIcon(":/img/save.svg"), tr("Save..."), this);
     action_reload_ = new QAction(QIcon(":/img/reload.svg"), tr("Reload"), this);
 
+    action_import_old_book_ = new QAction(QIcon(":/img/import.svg"), tr("Import Old Address Book..."), this);
+    action_import_old_book_->setProperty(ClientTab::kMenuOnlyProperty, true);
+
     action_online_check_ = new QAction(tr("Auto-refresh Status"), this);
     action_online_check_->setCheckable(true);
     action_online_check_->setChecked(settings.isOnlineCheckEnabled());
@@ -171,6 +176,7 @@ HostsTab::HostsTab(QWidget* parent)
     connect(action_delete_user_, &QAction::triggered, this, &HostsTab::onDeleteUserAction);
     connect(action_reload_, &QAction::triggered, this, &HostsTab::onReloadAction);
     connect(action_save_, &QAction::triggered, this, &HostsTab::onSaveAction);
+    connect(action_import_old_book_, &QAction::triggered, this, &HostsTab::onImportOldBookAction);
     connect(action_disconnect_, &QAction::triggered, this, &HostsTab::onDisconnectAction);
     connect(action_disconnect_all_, &QAction::triggered, this, &HostsTab::onDisconnectAllAction);
     connect(action_host_remove_, &QAction::triggered, this, &HostsTab::onRemoveHostAction);
@@ -178,7 +184,7 @@ HostsTab::HostsTab(QWidget* parent)
     connect(session_connect_group, &QActionGroup::triggered, this, &HostsTab::onConnectAction);
 
     // Register actions for toolbar and menus.
-    addActions(ActionRole::FILE, { action_save_ });
+    addActions(ActionRole::FILE, { action_save_, action_import_old_book_ });
     addActions(ActionRole::EDIT, { action_add_user_, action_edit_user_, action_delete_user_ });
     addActions(ActionRole::EDIT, { action_add_group_, action_edit_group_, action_delete_group_ });
     addActions(ActionRole::EDIT, { action_add_computer_, action_edit_computer_, action_copy_computer_, action_delete_computer_ });
@@ -830,6 +836,7 @@ void HostsTab::updateActionsState()
 
     action_reload_->setVisible(false);
     action_save_->setVisible(false);
+    action_import_old_book_->setVisible(false);
     action_disconnect_->setVisible(false);
     action_disconnect_all_->setVisible(false);
     action_host_remove_->setVisible(false);
@@ -840,6 +847,7 @@ void HostsTab::updateActionsState()
     if (sidebar_item && sidebar_item->itemType() == Sidebar::Item::Type::LOCAL_GROUP)
     {
         action_online_check_->setVisible(true);
+        action_import_old_book_->setVisible(true);
 
         action_add_group_->setVisible(true);
         action_delete_group_->setVisible(sidebar_item->groupId() != 0);
@@ -1114,6 +1122,38 @@ void HostsTab::onDeleteUserAction()
     RouterWidget* widget = router_widgets_.value(router->routerId());
     if (widget)
         widget->onDeleteUser();
+}
+
+//--------------------------------------------------------------------------------------------------
+void HostsTab::onImportOldBookAction()
+{
+    LOG(INFO) << "[ACTION] Import address book";
+
+    Sidebar::Item* sidebar_item = ui.sidebar->currentItem();
+    if (!sidebar_item || sidebar_item->itemType() != Sidebar::Item::Type::LOCAL_GROUP)
+    {
+        LOG(INFO) << "No current local group item";
+        return;
+    }
+
+    QString file_path = QFileDialog::getOpenFileName(
+        this,
+        tr("Import Old Address Book"),
+        QString(),
+        tr("Address Book (*.aab);;All files (*)"));
+
+    if (file_path.isEmpty())
+    {
+        LOG(INFO) << "[ACTION] Cancelled by user";
+        return;
+    }
+
+    if (!AddressBookImporter::import(this, file_path))
+        return;
+
+    reloadRouters();
+    ui.sidebar->reloadGroups();
+    updateActionsState();
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -83,6 +83,7 @@ private slots:
     void onAddUserAction();
     void onEditUserAction();
     void onDeleteUserAction();
+    void onImportOldBookAction();
     void onReloadAction();
     void onSaveAction();
     void onDisconnectAction();
@@ -132,6 +133,7 @@ private:
     QAction* action_save_ = nullptr;
     QAction* action_reload_ = nullptr;
     QAction* action_online_check_ = nullptr;
+    QAction* action_import_old_book_ = nullptr;
 
     QAction* action_disconnect_ = nullptr;
     QAction* action_disconnect_all_ = nullptr;
