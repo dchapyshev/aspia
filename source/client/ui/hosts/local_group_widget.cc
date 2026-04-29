@@ -478,9 +478,13 @@ LocalGroupWidget::Item::Item(const ComputerConfig& computer, QTreeWidget* parent
     : QTreeWidgetItem(parent),
       computer_(computer)
 {
+    QString single_line_comment = computer.comment;
+    single_line_comment.replace('\n', ' ').replace('\r', ' ');
+
     setText(kColumnName, computer.name);
     setText(kColumnAddress, computer.address);
-    setText(kColumnComment, computer.comment);
+    setText(kColumnComment, single_line_comment);
+    setToolTip(kColumnComment, computer.comment);
     setText(kColumnCreated, formatTimestamp(computer.create_time));
     setText(kColumnModified, formatTimestamp(computer.modify_time));
     setText(kColumnConnect, formatTimestamp(computer.connect_time));
