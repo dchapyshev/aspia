@@ -80,6 +80,9 @@ bool startSession(const ComputerConfig& computer,
     }
 
     client_window->setAttribute(Qt::WA_DeleteOnClose);
+
+    QObject::connect(client_window, &ClientWindow::sig_stop, qApp, &QApplication::quit);
+
     if (!client_window->connectToHost(computer, display_name))
         LOG(ERROR) << "Unable to connect to host";
 
@@ -147,7 +150,28 @@ void startRouterSession(const ComputerConfig& computer,
 }
 
 //--------------------------------------------------------------------------------------------------
-// Example of a valid JSON configuration file:
+// Reads a one-time JSON connection config from stdin until EOF and starts a session.
+// The aggregator that launches the client is expected to hold the JSON in memory and pipe it
+// directly to the child's stdin, without touching disk.
+//
+// Example invocations from a parent process:
+//
+//     PowerShell:
+//         $json = ConvertTo-Json @{ session_type = "desktop"; computer = @{ address = "..." } }
+//         $json | & aspia_client.exe --connect
+//
+//     bash (here-doc):
+//         aspia_client --connect <<'EOF'
+//         {"session_type":"desktop","computer":{"address":"..."}}
+//         EOF
+//
+//     Python:
+//         import json, subprocess
+//         config = {"session_type": "desktop", "computer": {"address": "..."}}
+//         proc = subprocess.Popen(['aspia_client', '--connect'], stdin=subprocess.PIPE)
+//         proc.communicate(input=json.dumps(config).encode('utf-8'))
+//
+// Example of a valid JSON document:
 //
 // {
 //     "session_type": "desktop",
@@ -175,40 +199,43 @@ void startRouterSession(const ComputerConfig& computer,
 //     }
 // }
 //
-// Required: "session_type", "computer.address".
-// Optional: "display_name", "computer.name", "computer.username", "computer.password",
+// Required: "computer.address".
+// Optional: "session_type" (defaults to "desktop" if missing or unknown), "display_name",
+//           "computer.name", "computer.username", "computer.password",
 //           "desktop_config" (used only for "session_type": "desktop").
 // The "router" object is required when "computer.address" is a host ID; in that case
 // "router.address", "router.username" and "router.password" are all required.
 // Possible "session_type" values: "desktop", "file-transfer", "system-info", "chat".
 //--------------------------------------------------------------------------------------------------
-bool handleConfigFile(const QString& config_path)
+bool handleConnect()
 {
-    QFile config_file(config_path);
-    if (!config_file.open(QIODevice::ReadOnly))
+    QFile stdin_file;
+    if (!stdin_file.open(stdin, QIODevice::ReadOnly))
     {
-        QString error_string = config_file.errorString();
-        LOG(ERROR) << "Unable to open connection config file:" << config_path << error_string;
+        LOG(ERROR) << "Unable to open stdin for reading";
         MsgBox::warning(nullptr, QApplication::translate("Client",
-            "Unable to open connection config file: %1").arg(error_string));
+            "Unable to read connection config from stdin."));
         return false;
     }
 
-    QByteArray config_data = config_file.readAll();
-    config_file.close();
+    QByteArray config_data = stdin_file.readAll();
+    stdin_file.close();
 
-    if (!QFile::remove(config_path))
-        LOG(ERROR) << "Unable to remove connection config file:" << config_path;
-    else
-        LOG(INFO) << "Connection config file removed:" << config_path;
+    if (config_data.isEmpty())
+    {
+        LOG(ERROR) << "Empty connection config from stdin";
+        MsgBox::warning(nullptr, QApplication::translate("Client",
+            "Empty connection config from stdin."));
+        return false;
+    }
 
     QJsonParseError parse_error;
     QJsonDocument doc = QJsonDocument::fromJson(config_data, &parse_error);
     if (parse_error.error != QJsonParseError::NoError || !doc.isObject())
     {
-        LOG(ERROR) << "Invalid JSON in connection config file:" << parse_error.errorString();
+        LOG(ERROR) << "Invalid JSON in connection config:" << parse_error.errorString();
         MsgBox::warning(nullptr, QApplication::translate("Client",
-            "Invalid JSON in connection config file: %1").arg(parse_error.errorString()));
+            "Invalid JSON in connection config: %1").arg(parse_error.errorString()));
         return false;
     }
 
@@ -225,13 +252,6 @@ bool handleConfigFile(const QString& config_path)
         session_type = proto::peer::SESSION_TYPE_SYSTEM_INFO;
     else if (session_type_value == "chat")
         session_type = proto::peer::SESSION_TYPE_TEXT_CHAT;
-    else
-    {
-        LOG(ERROR) << "Unknown or missing session type:" << session_type_value;
-        MsgBox::warning(nullptr, QApplication::translate("Client",
-            "Unknown or missing session type. Possible values: desktop, file-transfer, system-info, chat."));
-        return false;
-    }
 
     QJsonValue computer_value = root.value("computer");
     if (!computer_value.isObject())
@@ -273,15 +293,15 @@ bool handleConfigFile(const QString& config_path)
             return false;
         }
 
-        QJsonObject desktop_obj = desktop_value.toObject();
+        QJsonObject desktop_object = desktop_value.toObject();
 
-        auto applyDesktopBool = [&desktop_obj, &desktop_config]
+        auto applyDesktopBool = [&desktop_object, &desktop_config]
             (const char* key, void (proto::control::Config::*setter)(bool)) -> bool
         {
-            if (!desktop_obj.contains(key))
+            if (!desktop_object.contains(key))
                 return true;
 
-            QJsonValue value = desktop_obj.value(key);
+            QJsonValue value = desktop_object.value(key);
             if (!value.isBool())
             {
                 LOG(ERROR) << "Field \"desktop_config." << key << "\" must be boolean";
@@ -325,13 +345,13 @@ bool handleConfigFile(const QString& config_path)
             return false;
         }
 
-        QJsonObject router_obj = router_value.toObject();
+        QJsonObject router_object = router_value.toObject();
 
         RouterConfig router_config;
         router_config.router_id = 1;
-        router_config.address = router_obj.value("address").toString();
-        router_config.username = router_obj.value("username").toString();
-        router_config.password = router_obj.value("password").toString();
+        router_config.address = router_object.value("address").toString();
+        router_config.username = router_object.value("username").toString();
+        router_config.password = router_object.value("password").toString();
         router_config.session_type = proto::router::SESSION_TYPE_CLIENT;
 
         if (!router_config.isValid())
@@ -380,20 +400,19 @@ int main(int argc, char* argv[])
     LOG(INFO) << "Qt version:" << QT_VERSION_STR;
     LOG(INFO) << "Command line:" << application.arguments();
 
-    QCommandLineOption config_option("config",
-        QApplication::translate("Client", "Path to one-time JSON connection config file."),
-        "config");
+    QCommandLineOption connect_option("connect",
+        QApplication::translate("Client", "Read JSON connection config from stdin until EOF and start a session."));
 
     QCommandLineParser parser;
     parser.setApplicationDescription(QApplication::translate("Client", "Aspia Client"));
     parser.addHelpOption();
     parser.addVersionOption();
-    parser.addOption(config_option);
+    parser.addOption(connect_option);
     parser.process(application);
 
-    if (parser.isSet(config_option))
+    if (parser.isSet(connect_option))
     {
-        if (!handleConfigFile(parser.value(config_option)))
+        if (!handleConnect())
             return 1;
         return application.exec();
     }
