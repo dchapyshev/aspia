@@ -96,9 +96,9 @@ list(APPEND SOURCE_CLIENT_CORE_UI
     ui/router_dialog.cc
     ui/router_dialog.h
     ui/router_dialog.ui
-    ui/settings_dialog.cc
-    ui/settings_dialog.h
-    ui/settings_dialog.ui
+    ui/settings_tab.cc
+    ui/settings_tab.h
+    ui/settings_tab.ui
     ui/unlock_dialog.cc
     ui/unlock_dialog.h
     ui/unlock_dialog.ui

@@ -34,7 +34,7 @@ class Tab : public QWidget
     Q_OBJECT
 
 public:
-    enum class Type { HOSTS, SESSION };
+    enum class Type { HOSTS, SESSION, SETTINGS };
     enum class ActionRole { FILE, EDIT, VIEW, ACTION, SESSION_TYPE, HELP };
 
     // Property name. If set on a QAction to true, the action will be added only to the menu and

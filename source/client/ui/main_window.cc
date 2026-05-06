@@ -40,7 +40,7 @@
 #include "client/ui/client_tab.h"
 #include "client/ui/client_window.h"
 #include "client/ui/hosts_tab.h"
-#include "client/ui/settings_dialog.h"
+#include "client/ui/settings_tab.h"
 #include "client/ui/tab.h"
 #include "client/ui/tab_bar.h"
 #include "client/ui/tab_widget.h"
@@ -219,25 +219,45 @@ void MainWindow::onUpdateCheckedFinished(const QByteArray& result)
 void MainWindow::onSettings()
 {
     LOG(INFO) << "[ACTION] Settings clicked";
-    if (SettingsDialog(this).exec() == QDialog::Accepted)
+
+    // If a settings tab is already open, just activate it.
+    for (int i = 0; i < ui.tabs->count(); ++i)
+    {
+        Tab* tab = tabAt(i);
+        if (tab && tab->tabType() == Tab::Type::SETTINGS)
+        {
+            ui.tabs->setCurrentIndex(i);
+            return;
+        }
+    }
+
+    SettingsTab* settings_tab = new SettingsTab(this);
+
+    connect(settings_tab, &SettingsTab::sig_languageChanged, this, [this]()
     {
         ui.retranslateUi(this);
 
         for (int i = 0; i < ui.tabs->count(); ++i)
         {
-            QWidget* widget = ui.tabs->widget(i);
-
-            if (HostsTab* hosts = dynamic_cast<HostsTab*>(widget))
-            {
+            if (HostsTab* hosts = dynamic_cast<HostsTab*>(ui.tabs->widget(i)))
                 hosts->reloadRouters();
-            }
-            else if (ClientTab* client_tab = dynamic_cast<ClientTab*>(widget))
+        }
+    });
+
+    connect(settings_tab, &SettingsTab::sig_desktopConfigChanged, this, [this]()
+    {
+        for (int i = 0; i < ui.tabs->count(); ++i)
+        {
+            ClientTab* client_tab = dynamic_cast<ClientTab*>(ui.tabs->widget(i));
+            if (client_tab)
             {
                 if (ClientWindow* client_window = client_tab->clientWindow())
                     client_window->applySettings();
             }
         }
-    }
+    });
+
+    addTab(settings_tab, tr("Settings"), QIcon(":/img/settings.svg"));
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -2421,17 +2421,17 @@ Routers added: %4</source>
 <context>
     <name>FileTransferWindow</name>
     <message>
-        <location filename="../client/ui/file_transfer/file_transfer_window.cc" line="44"/>
+        <location filename="../client/ui/file_transfer/file_transfer_window.cc" line="45"/>
         <source>Local Computer</source>
         <translation type="unfinished">Computer Locale</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_transfer_window.cc" line="45"/>
+        <location filename="../client/ui/file_transfer/file_transfer_window.cc" line="46"/>
         <source>Remote Computer</source>
         <translation type="unfinished">Computer Remoto</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_transfer_window.cc" line="149"/>
+        <location filename="../client/ui/file_transfer/file_transfer_window.cc" line="171"/>
         <source>Session error: %1</source>
         <translation type="unfinished">Errore sessione: %1</translation>
     </message>
@@ -3324,7 +3324,7 @@ Computers skipped: %5</source>
     </message>
     <message>
         <location filename="../client/ui/main_window.ui" line="14"/>
-        <location filename="../client/ui/main_window.cc" line="254"/>
+        <location filename="../client/ui/main_window.cc" line="274"/>
         <source>Aspia Client</source>
         <translation type="unfinished">Aspia Client</translation>
     </message>
@@ -3405,7 +3405,12 @@ Computers skipped: %5</source>
         <translation type="unfinished">Hosts</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.cc" line="322"/>
+        <location filename="../client/ui/main_window.cc" line="260"/>
+        <source>Settings</source>
+        <translation type="unfinished">Impostazioni</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/main_window.cc" line="342"/>
         <source>Connection by ID is specified in the properties of the computer, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation type="unfinished">E&apos; stata selezionata la connessione tramite ID ma il router non è configurato. Controllare i parametri del router nelle proprietà della rubrica.</translation>
     </message>
@@ -4540,9 +4545,8 @@ Computers skipped: %5</source>
 <context>
     <name>SettingsDialog</name>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="14"/>
         <source>Settings</source>
-        <translation type="unfinished">Impostazioni</translation>
+        <translation type="obsolete">Impostazioni</translation>
     </message>
     <message>
         <source>Router</source>
@@ -4557,123 +4561,76 @@ Computers skipped: %5</source>
         <translation type="obsolete">E&apos; necessario un router per connettersi ad un computer in assenza di connessione diretta (NAT). Aspia non fornisce un router pubblico, ma è possibile installarne uno proprio. Potete scaricare il router presso il &lt;a href=&quot;https://aspia.org&quot;&gt;sito ufficiale&lt;/a&gt;.</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="119"/>
         <source>Desktop</source>
-        <translation type="unfinished">Desktop</translation>
+        <translation type="obsolete">Desktop</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="131"/>
         <source>Features</source>
-        <translation type="unfinished">Caratteristiche</translation>
+        <translation type="obsolete">Caratteristiche</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="137"/>
         <source>Enable audio</source>
-        <translation type="unfinished">Abilita audio</translation>
+        <translation type="obsolete">Abilita audio</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="144"/>
         <source>Enable clipboard</source>
-        <translation type="unfinished">Abilita appunti</translation>
+        <translation type="obsolete">Abilita appunti</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="151"/>
         <source>Show shape of remote cursor</source>
-        <translation type="unfinished">Visualizza cursore remoto</translation>
+        <translation type="obsolete">Visualizza cursore remoto</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="158"/>
         <source>Show position of remote cursor</source>
-        <translation type="unfinished">Visualizza posizione cursore remoto</translation>
+        <translation type="obsolete">Visualizza posizione cursore remoto</translation>
     </message>
     <message>
         <source>Appearance</source>
         <translation type="obsolete">Aspetto</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="165"/>
         <source>Disable desktop effects</source>
-        <translation type="unfinished">Disabilita effetti desktop</translation>
+        <translation type="obsolete">Disabilita effetti desktop</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="172"/>
         <source>Disable desktop wallpaper</source>
-        <translation type="unfinished">Disabilita sfondo desktop</translation>
+        <translation type="obsolete">Disabilita sfondo desktop</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="179"/>
         <source>Lock computer at disconnect</source>
-        <translation type="unfinished">Blocca il computer alla disconnessione</translation>
+        <translation type="obsolete">Blocca il computer alla disconnessione</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="186"/>
         <source>Block remote input</source>
-        <translation type="unfinished">Blocca input remoto</translation>
+        <translation type="obsolete">Blocca input remoto</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="193"/>
         <source>Send key combinations</source>
-        <translation type="unfinished">Invia combinazioni tasti</translation>
+        <translation type="obsolete">Invia combinazioni tasti</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="209"/>
-        <source>Recording</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/settings_dialog.ui" line="215"/>
         <source>Automatically start recording sessions on connection</source>
-        <translation type="unfinished">Avvia automaticamente la registrazione delle sessioni alla connessione</translation>
+        <translation type="obsolete">Avvia automaticamente la registrazione delle sessioni alla connessione</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="224"/>
         <source>Write path:</source>
-        <translation type="unfinished">Cartella di scrittura:</translation>
+        <translation type="obsolete">Cartella di scrittura:</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="273"/>
-        <source>Update</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/settings_dialog.ui" line="279"/>
         <source>Check for updates on startup</source>
-        <translation type="unfinished">Controlla presenza aggiornamenti all&apos;avvio</translation>
+        <translation type="obsolete">Controlla presenza aggiornamenti all&apos;avvio</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="286"/>
         <source>Use custom update server</source>
-        <translation type="unfinished">Usa server di aggiornamento personalizzato</translation>
+        <translation type="obsolete">Usa server di aggiornamento personalizzato</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="295"/>
         <source>Server:</source>
-        <translation type="unfinished">Server:</translation>
+        <translation type="obsolete">Server:</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="24"/>
         <source>General</source>
-        <translation type="unfinished">Generale</translation>
-    </message>
-    <message>
-        <location filename="../client/ui/settings_dialog.ui" line="30"/>
-        <source>Interface</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/settings_dialog.ui" line="36"/>
-        <source>Language:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/settings_dialog.ui" line="46"/>
-        <source>Theme:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/settings_dialog.ui" line="76"/>
-        <source>Master Password</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Generale</translation>
     </message>
     <message>
         <source>Address</source>
@@ -4688,19 +4645,8 @@ Computers skipped: %5</source>
         <translation type="obsolete">Rimuovi</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="335"/>
         <source>Check for updates</source>
-        <translation type="unfinished">Controlla aggiornamenti</translation>
-    </message>
-    <message>
-        <location filename="../client/ui/settings_dialog.ui" line="56"/>
-        <source>Display name when connected:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/settings_dialog.ui" line="66"/>
-        <source>Enter a name or leave the field empty</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Controlla aggiornamenti</translation>
     </message>
     <message>
         <source>Administrator</source>
@@ -4715,14 +4661,155 @@ Computers skipped: %5</source>
         <translation type="obsolete">Sconosciuto</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.cc" line="215"/>
         <source>Choose path</source>
-        <translation type="unfinished">Seleziona cartella</translation>
+        <translation type="obsolete">Seleziona cartella</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsTab</name>
+    <message>
+        <location filename="../client/ui/settings_tab.ui" line="95"/>
+        <source>Interface</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_dialog.ui" line="95"/>
+        <location filename="../client/ui/settings_tab.ui" line="101"/>
+        <source>Language:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_tab.ui" line="111"/>
+        <source>Theme:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_tab.ui" line="121"/>
+        <source>Display name when connected:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_tab.ui" line="131"/>
+        <source>Enter a name or leave the field empty</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_tab.ui" line="141"/>
+        <source>Master Password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_tab.ui" line="160"/>
         <source>Change...</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_tab.ui" line="207"/>
+        <source>Features</source>
+        <translation type="unfinished">Caratteristiche</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_tab.ui" line="213"/>
+        <source>Enable audio</source>
+        <translation type="unfinished">Abilita audio</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_tab.ui" line="220"/>
+        <source>Enable clipboard</source>
+        <translation type="unfinished">Abilita appunti</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_tab.ui" line="227"/>
+        <source>Show shape of remote cursor</source>
+        <translation type="unfinished">Visualizza cursore remoto</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_tab.ui" line="234"/>
+        <source>Show position of remote cursor</source>
+        <translation type="unfinished">Visualizza posizione cursore remoto</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_tab.ui" line="241"/>
+        <source>Disable desktop effects</source>
+        <translation type="unfinished">Disabilita effetti desktop</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_tab.ui" line="248"/>
+        <source>Disable desktop wallpaper</source>
+        <translation type="unfinished">Disabilita sfondo desktop</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_tab.ui" line="255"/>
+        <source>Lock computer at disconnect</source>
+        <translation type="unfinished">Blocca il computer alla disconnessione</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_tab.ui" line="262"/>
+        <source>Block remote input</source>
+        <translation type="unfinished">Blocca input remoto</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_tab.ui" line="269"/>
+        <source>Send key combinations</source>
+        <translation type="unfinished">Invia combinazioni tasti</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_tab.ui" line="285"/>
+        <source>Recording</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_tab.ui" line="291"/>
+        <source>Automatically start recording sessions on connection</source>
+        <translation type="unfinished">Avvia automaticamente la registrazione delle sessioni alla connessione</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_tab.ui" line="300"/>
+        <source>Write path:</source>
+        <translation type="unfinished">Cartella di scrittura:</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_tab.ui" line="372"/>
+        <location filename="../client/ui/settings_tab.cc" line="76"/>
+        <location filename="../client/ui/settings_tab.cc" line="239"/>
+        <source>Update</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_tab.ui" line="378"/>
+        <source>Check for updates on startup</source>
+        <translation type="unfinished">Controlla presenza aggiornamenti all&apos;avvio</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_tab.ui" line="385"/>
+        <source>Use custom update server</source>
+        <translation type="unfinished">Usa server di aggiornamento personalizzato</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_tab.ui" line="394"/>
+        <source>Server:</source>
+        <translation type="unfinished">Server:</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_tab.ui" line="421"/>
+        <source>Check for updates</source>
+        <translation type="unfinished">Controlla aggiornamenti</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_tab.cc" line="73"/>
+        <location filename="../client/ui/settings_tab.cc" line="234"/>
+        <source>General</source>
+        <translation type="unfinished">Generale</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_tab.cc" line="74"/>
+        <location filename="../client/ui/settings_tab.cc" line="236"/>
+        <source>Desktop</source>
+        <translation type="unfinished">Desktop</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_tab.cc" line="316"/>
+        <source>Choose path</source>
+        <translation type="unfinished">Seleziona cartella</translation>
     </message>
 </context>
 <context>
@@ -6873,137 +6960,137 @@ Computers skipped: %5</source>
         <translation type="unfinished">F5</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_window.cc" line="131"/>
+        <location filename="../client/ui/sys_info/system_info_window.cc" line="132"/>
         <source>Summary</source>
         <translation type="unfinished">Riepilogo</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_window.cc" line="138"/>
+        <location filename="../client/ui/sys_info/system_info_window.cc" line="139"/>
         <source>Hardware</source>
         <translation type="unfinished">Hardware</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_window.cc" line="141"/>
+        <location filename="../client/ui/sys_info/system_info_window.cc" line="142"/>
         <source>Devices</source>
         <translation type="unfinished">Dispositivi</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_window.cc" line="144"/>
+        <location filename="../client/ui/sys_info/system_info_window.cc" line="145"/>
         <source>Video Adapters</source>
         <translation type="unfinished">Schede Video</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_window.cc" line="147"/>
+        <location filename="../client/ui/sys_info/system_info_window.cc" line="148"/>
         <source>Monitors</source>
         <translation type="unfinished">Monitors</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_window.cc" line="150"/>
+        <location filename="../client/ui/sys_info/system_info_window.cc" line="151"/>
         <source>Printers</source>
         <translation type="unfinished">Stampanti</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_window.cc" line="153"/>
+        <location filename="../client/ui/sys_info/system_info_window.cc" line="154"/>
         <source>Power Options</source>
         <translation type="unfinished">Opzioni Risparmio Energia</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_window.cc" line="166"/>
+        <location filename="../client/ui/sys_info/system_info_window.cc" line="167"/>
         <source>Software</source>
         <translation type="unfinished">Software</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_window.cc" line="169"/>
+        <location filename="../client/ui/sys_info/system_info_window.cc" line="170"/>
         <source>Applications</source>
         <translation type="unfinished">Applicazioni</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_window.cc" line="172"/>
+        <location filename="../client/ui/sys_info/system_info_window.cc" line="173"/>
         <source>Drivers</source>
         <translation type="unfinished">Drivers</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_window.cc" line="175"/>
+        <location filename="../client/ui/sys_info/system_info_window.cc" line="176"/>
         <source>Services</source>
         <translation type="unfinished">Servizi</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_window.cc" line="178"/>
+        <location filename="../client/ui/sys_info/system_info_window.cc" line="179"/>
         <source>Processes</source>
         <translation type="unfinished">Processi</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_window.cc" line="181"/>
+        <location filename="../client/ui/sys_info/system_info_window.cc" line="182"/>
         <source>Licenses</source>
         <translation type="unfinished">Licenze</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_window.cc" line="194"/>
+        <location filename="../client/ui/sys_info/system_info_window.cc" line="195"/>
         <source>Network</source>
         <translation type="unfinished">Rete</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_window.cc" line="197"/>
+        <location filename="../client/ui/sys_info/system_info_window.cc" line="198"/>
         <source>Network Adapters</source>
         <translation type="unfinished">Schede di Rete</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_window.cc" line="200"/>
+        <location filename="../client/ui/sys_info/system_info_window.cc" line="201"/>
         <source>Routes</source>
         <translation type="unfinished">Percorsi</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_window.cc" line="203"/>
+        <location filename="../client/ui/sys_info/system_info_window.cc" line="204"/>
         <source>Connections</source>
         <translation type="unfinished">Connessioni</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_window.cc" line="206"/>
+        <location filename="../client/ui/sys_info/system_info_window.cc" line="207"/>
         <source>Network Shares</source>
         <translation type="unfinished">Condivisioni di Rete</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_window.cc" line="209"/>
+        <location filename="../client/ui/sys_info/system_info_window.cc" line="210"/>
         <source>Open Files</source>
         <translation type="unfinished">Files Aperti</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_window.cc" line="222"/>
+        <location filename="../client/ui/sys_info/system_info_window.cc" line="223"/>
         <source>Operating System</source>
         <translation type="unfinished">Sistema Operativo</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_window.cc" line="225"/>
+        <location filename="../client/ui/sys_info/system_info_window.cc" line="226"/>
         <source>Environment Variables</source>
         <translation type="unfinished">Variabili Ambiente</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_window.cc" line="228"/>
+        <location filename="../client/ui/sys_info/system_info_window.cc" line="229"/>
         <source>Event Logs</source>
         <translation type="unfinished">Registro Eventi</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_window.cc" line="231"/>
+        <location filename="../client/ui/sys_info/system_info_window.cc" line="232"/>
         <source>Users</source>
         <translation type="unfinished">Utenti</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_window.cc" line="234"/>
+        <location filename="../client/ui/sys_info/system_info_window.cc" line="235"/>
         <source>User Groups</source>
         <translation type="unfinished">Gruppi Utente</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_window.cc" line="259"/>
+        <location filename="../client/ui/sys_info/system_info_window.cc" line="260"/>
         <source>HTML File</source>
         <translation type="unfinished">File HTML</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_window.cc" line="259"/>
+        <location filename="../client/ui/sys_info/system_info_window.cc" line="260"/>
         <source>HTML File (*.html)</source>
         <translation type="unfinished">HTML File (*.html)</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_window.cc" line="270"/>
+        <location filename="../client/ui/sys_info/system_info_window.cc" line="271"/>
         <source>Failed to save file: %1</source>
         <translation type="unfinished">Non sono riuscito a salvare il file: %1</translation>
     </message>
