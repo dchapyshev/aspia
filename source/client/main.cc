@@ -157,47 +157,118 @@ void startRouterSession(const ComputerConfig& computer,
 // Example invocations from a parent process:
 //
 //     PowerShell:
-//         $json = ConvertTo-Json @{ session_type = "desktop"; computer = @{ address = "..." } }
-//         $json | & aspia_client.exe --connect
+//          $config = @{
+//              session_type = "desktop"
+//              display_name = "Admin"
+//              computer = @{
+//                  name     = "Office PC"
+//                  address  = "192.168.1.10"
+//                  username = "user"
+//                  password = "1"
+//              }
+//              desktop = @{
+//                  audio              = $true
+//                  cursor_shape       = $true
+//                  cursor_position    = $true
+//                  clipboard          = $true
+//                  effects            = $true
+//                  wallpaper          = $false
+//                  lock_at_disconnect = $false
+//                  block_input        = $false
+//              }
+//          } | ConvertTo-Json -Depth 5
+//          $config | & "C:\Test\aspia_client.exe" --connect
 //
 //     bash (here-doc):
 //         aspia_client --connect <<'EOF'
-//         {"session_type":"desktop","computer":{"address":"..."}}
+//         {
+//             "session_type": "desktop",
+//             "display_name": "Admin",
+//             "computer": {
+//                 "name": "Office PC",
+//                 "address": "192.168.1.10",
+//                 "username": "user",
+//                 "password": "1"
+//             },
+//             "desktop": {
+//                 "audio":              true,
+//                 "cursor_shape":       true,
+//                 "cursor_position":    true,
+//                 "clipboard":          true,
+//                 "effects":            true,
+//                 "wallpaper":          false,
+//                 "lock_at_disconnect": false,
+//                 "block_input":        false
+//             }
+//         }
 //         EOF
 //
 //     Python:
 //         import json, subprocess
-//         config = {"session_type": "desktop", "computer": {"address": "..."}}
-//         proc = subprocess.Popen(['aspia_client', '--connect'], stdin=subprocess.PIPE)
+//         config = {
+//             "session_type": "desktop",
+//             "display_name": "Admin",
+//             "computer": {
+//                 "name":     "Office PC",
+//                 "address":  "192.168.1.10",
+//                 "username": "user",
+//                 "password": "1"
+//             },
+//             "desktop": {
+//                 "audio":              True,
+//                 "cursor_shape":       True,
+//                 "cursor_position":    True,
+//                 "clipboard":          True,
+//                 "effects":            True,
+//                 "wallpaper":          False,
+//                 "lock_at_disconnect": False,
+//                 "block_input":        False
+//             }
+//         }
+//         proc = subprocess.Popen(['/usr/bin/aspia_client', '--connect'], stdin=subprocess.PIPE)
 //         proc.communicate(input=json.dumps(config).encode('utf-8'))
 //
-// Example of a valid JSON document:
+//     Win32 (C/C++):
+//         HANDLE read_end, write_end;
+//         SECURITY_ATTRIBUTES sa = { sizeof(sa), nullptr, TRUE };
+//         CreatePipe(&read_end, &write_end, &sa, 0);
+//         SetHandleInformation(write_end, HANDLE_FLAG_INHERIT, 0);
 //
-// {
-//     "session_type": "desktop",
-//     "display_name": "Admin",
-//     "computer": {
-//         "name": "Office PC",
-//         "address": "192.168.1.10",
-//         "username": "user",
-//         "password": "secret"
-//     },
-//     "router": {
-//         "address": "router.example.com",
-//         "username": "router_user",
-//         "password": "router_secret"
-//     },
-//     "desktop": {
-//         "audio": true,
-//         "cursor_shape": true,
-//         "cursor_position": true,
-//         "clipboard": true,
-//         "effects": true,
-//         "wallpaper": true,
-//         "lock_at_disconnect": false,
-//         "block_input": false
-//     }
-// }
+//         STARTUPINFOW si = { sizeof(si) };
+//         si.dwFlags = STARTF_USESTDHANDLES;
+//         si.hStdInput = read_end;
+//
+//         PROCESS_INFORMATION pi = {};
+//         WCHAR cmd[] = L"\"C:\\Test\\aspia_client.exe\" --connect";
+//         CreateProcessW(nullptr, cmd, nullptr, nullptr, TRUE, 0, nullptr, nullptr, &si, &pi);
+//         CloseHandle(read_end);
+//
+//         const char* json =
+//             "{"
+//                 "\"session_type\":\"desktop\","
+//                 "\"display_name\":\"Admin\","
+//                 "\"computer\":{"
+//                     "\"name\":\"Office PC\","
+//                     "\"address\":\"192.168.1.10\","
+//                     "\"username\":\"user\","
+//                     "\"password\":\"1\""
+//                 "},"
+//                 "\"desktop\":{"
+//                     "\"audio\":true,"
+//                     "\"cursor_shape\":true,"
+//                     "\"cursor_position\":true,"
+//                     "\"clipboard\":true,"
+//                     "\"effects\":true,"
+//                     "\"wallpaper\":false,"
+//                     "\"lock_at_disconnect\":false,"
+//                     "\"block_input\":false"
+//                 "}"
+//             "}";
+//         DWORD written;
+//         WriteFile(write_end, json, (DWORD)strlen(json), &written, nullptr);
+//         CloseHandle(write_end);
+//         CloseHandle(pi.hProcess);
+//         CloseHandle(pi.hThread);
 //
 // Required: "computer.address".
 // Optional: "session_type" (defaults to "desktop" if missing or unknown), "display_name",
