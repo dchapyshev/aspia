@@ -51,6 +51,7 @@ struct RouterConfig
     proto::router::SessionType session_type = proto::router::SESSION_TYPE_CLIENT;
     QString username;
     QString password;
+    QByteArray data;
 };
 
 struct ComputerConfig
@@ -75,6 +76,7 @@ struct GroupConfig
     qint64 parent_id = 0;
     QString name;
     QString comment;
+    QByteArray data;
 };
 
 #endif // CLIENT_CONFIG_H

@@ -19,6 +19,8 @@
 #ifndef BASE_CRYPTO_DATA_CRYPTOR_H
 #define BASE_CRYPTO_DATA_CRYPTOR_H
 
+#include "base/crypto/openssl_util.h"
+
 #include <QByteArray>
 #include <QByteArrayView>
 
@@ -42,6 +44,8 @@ public:
 
 private:
     QByteArray key_;
+    EVP_CIPHER_CTX_ptr encrypt_ctx_;
+    EVP_CIPHER_CTX_ptr decrypt_ctx_;
 
     Q_DISABLE_COPY_MOVE(DataCryptor)
 };

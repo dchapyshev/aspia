@@ -27,12 +27,9 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QSqlDatabase>
-#include <QSqlDriver>
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QVariant>
-
-#include <sqlite3.h>
 
 namespace {
 
@@ -46,30 +43,31 @@ constexpr auto kSettingVerifier       = "master_password_verifier";
 constexpr auto kSettingVersion        = "master_password_version";
 
 //--------------------------------------------------------------------------------------------------
-void qtLowerImpl(sqlite3_context* ctx, int argc, sqlite3_value** argv)
+QByteArray encryptBytes(DataCryptor& cryptor, const QByteArray& value)
 {
-    if (argc != 1)
-    {
-        sqlite3_result_null(ctx);
-        return;
-    }
+    if (value.isEmpty())
+        return QByteArray();
+    return cryptor.encrypt(value).value_or(QByteArray());
+}
 
-    const char16_t* text = static_cast<const char16_t*>(sqlite3_value_text16(argv[0]));
-    if (!text)
-    {
-        sqlite3_result_null(ctx);
-        return;
-    }
+//--------------------------------------------------------------------------------------------------
+QByteArray decryptBytes(DataCryptor& cryptor, const QByteArray& blob)
+{
+    if (blob.isEmpty())
+        return QByteArray();
+    return cryptor.decrypt(blob).value_or(QByteArray());
+}
 
-    int bytes = sqlite3_value_bytes16(argv[0]);
-    if (bytes <= 0)
-    {
-        sqlite3_result_null(ctx);
-        return;
-    }
+//--------------------------------------------------------------------------------------------------
+QByteArray encryptString(DataCryptor& cryptor, const QString& value)
+{
+    return encryptBytes(cryptor, value.toUtf8());
+}
 
-    QString result = QString::fromRawData(text, bytes / sizeof(char16_t)).toLower();
-    sqlite3_result_text16(ctx, result.utf16(), int(result.size() * sizeof(char16_t)), SQLITE_TRANSIENT);
+//--------------------------------------------------------------------------------------------------
+QString decryptString(DataCryptor& cryptor, const QByteArray& blob)
+{
+    return QString::fromUtf8(decryptBytes(cryptor, blob));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -82,16 +80,14 @@ ComputerConfig readComputer(const QSqlQuery& query)
     computer.group_id = query.value(1).toLongLong();
     computer.router_id = query.value(2).toLongLong();
     computer.name = query.value(3).toString();
-    computer.comment = query.value(4).toString();
-    computer.address = query.value(5).toString();
-    computer.username = QString::fromUtf8(
-        cryptor.decrypt(query.value(6).toByteArray()).value_or(QByteArray()));
-    computer.password = QString::fromUtf8(
-        cryptor.decrypt(query.value(7).toByteArray()).value_or(QByteArray()));
+    computer.comment = decryptString(cryptor, query.value(4).toByteArray());
+    computer.address = decryptString(cryptor, query.value(5).toByteArray());
+    computer.username = decryptString(cryptor, query.value(6).toByteArray());
+    computer.password = decryptString(cryptor, query.value(7).toByteArray());
     computer.create_time = query.value(8).toLongLong();
     computer.modify_time = query.value(9).toLongLong();
     computer.connect_time = query.value(10).toLongLong();
-    computer.data = query.value(11).toByteArray();
+    computer.data = decryptBytes(cryptor, query.value(11).toByteArray());
 
     return computer;
 }
@@ -99,11 +95,14 @@ ComputerConfig readComputer(const QSqlQuery& query)
 //--------------------------------------------------------------------------------------------------
 GroupConfig readGroup(const QSqlQuery& query)
 {
+    DataCryptor& cryptor = DataCryptor::instance();
+
     GroupConfig group;
     group.id = query.value(0).toLongLong();
     group.parent_id = query.value(1).toLongLong();
     group.name = query.value(2).toString();
-    group.comment = query.value(3).toString();
+    group.comment = decryptString(cryptor, query.value(3).toByteArray());
+    group.data = decryptBytes(cryptor, query.value(4).toByteArray());
     return group;
 }
 
@@ -115,12 +114,11 @@ RouterConfig readRouter(const QSqlQuery& query)
     RouterConfig router;
     router.router_id = query.value(0).toLongLong();
     router.display_name = query.value(1).toString();
-    router.address = query.value(2).toString();
+    router.address = decryptString(cryptor, query.value(2).toByteArray());
     router.session_type = static_cast<proto::router::SessionType>(query.value(3).toUInt());
-    router.username = QString::fromUtf8(
-        cryptor.decrypt(query.value(4).toByteArray()).value_or(QByteArray()));
-    router.password = QString::fromUtf8(
-        cryptor.decrypt(query.value(5).toByteArray()).value_or(QByteArray()));
+    router.username = decryptString(cryptor, query.value(4).toByteArray());
+    router.password = decryptString(cryptor, query.value(5).toByteArray());
+    router.data = decryptBytes(cryptor, query.value(6).toByteArray());
 
     return router;
 }
@@ -134,7 +132,8 @@ bool createTables(QSqlDatabase& db)
                     "\"id\" INTEGER UNIQUE,"
                     "\"parent_id\" INTEGER NOT NULL DEFAULT 0,"
                     "\"name\" TEXT NOT NULL DEFAULT '',"
-                    "\"comment\" TEXT NOT NULL DEFAULT '',"
+                    "\"comment\" BLOB DEFAULT X'',"
+                    "\"data\" BLOB DEFAULT X'',"
                     "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
     {
         LOG(ERROR) << "Unable to create groups table:" << query.lastError();
@@ -146,8 +145,8 @@ bool createTables(QSqlDatabase& db)
                     "\"group_id\" INTEGER NOT NULL DEFAULT 0,"
                     "\"router_id\" INTEGER NOT NULL DEFAULT 0,"
                     "\"name\" TEXT NOT NULL DEFAULT '',"
-                    "\"comment\" TEXT DEFAULT '',"
-                    "\"address\" TEXT NOT NULL DEFAULT '',"
+                    "\"comment\" BLOB DEFAULT X'',"
+                    "\"address\" BLOB DEFAULT X'',"
                     "\"username\" BLOB DEFAULT X'',"
                     "\"password\" BLOB DEFAULT X'',"
                     "\"create_time\" INTEGER NOT NULL DEFAULT 0,"
@@ -163,10 +162,11 @@ bool createTables(QSqlDatabase& db)
     if (!query.exec("CREATE TABLE IF NOT EXISTS \"routers\" ("
                     "\"id\" INTEGER UNIQUE,"
                     "\"name\" TEXT NOT NULL DEFAULT '',"
-                    "\"address\" TEXT NOT NULL DEFAULT '',"
+                    "\"address\" BLOB DEFAULT X'',"
                     "\"session_type\" INTEGER NOT NULL DEFAULT 0,"
-                    "\"username\" BLOB NOT NULL DEFAULT X'',"
-                    "\"password\" BLOB NOT NULL DEFAULT X'',"
+                    "\"username\" BLOB DEFAULT X'',"
+                    "\"password\" BLOB DEFAULT X'',"
+                    "\"data\" BLOB DEFAULT X'',"
                     "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
     {
         LOG(ERROR) << "Unable to create routers table:" << query.lastError();
@@ -299,14 +299,14 @@ bool Database::addComputer(ComputerConfig& computer)
     query.addBindValue(computer.group_id);
     query.addBindValue(computer.router_id);
     query.addBindValue(computer.name);
-    query.addBindValue(computer.comment);
-    query.addBindValue(computer.address);
-    query.addBindValue(cryptor.encrypt(computer.username.toUtf8()).value_or(QByteArray()));
-    query.addBindValue(cryptor.encrypt(computer.password.toUtf8()).value_or(QByteArray()));
+    query.addBindValue(encryptString(cryptor, computer.comment));
+    query.addBindValue(encryptString(cryptor, computer.address));
+    query.addBindValue(encryptString(cryptor, computer.username));
+    query.addBindValue(encryptString(cryptor, computer.password));
     query.addBindValue(computer.create_time);
     query.addBindValue(computer.modify_time);
     query.addBindValue(computer.connect_time);
-    query.addBindValue(computer.data);
+    query.addBindValue(encryptBytes(cryptor, computer.data));
 
     if (!query.exec())
     {
@@ -337,12 +337,12 @@ bool Database::modifyComputer(ComputerConfig& computer)
     query.addBindValue(computer.group_id);
     query.addBindValue(computer.router_id);
     query.addBindValue(computer.name);
-    query.addBindValue(computer.comment);
-    query.addBindValue(computer.address);
-    query.addBindValue(cryptor.encrypt(computer.username.toUtf8()).value_or(QByteArray()));
-    query.addBindValue(cryptor.encrypt(computer.password.toUtf8()).value_or(QByteArray()));
+    query.addBindValue(encryptString(cryptor, computer.comment));
+    query.addBindValue(encryptString(cryptor, computer.address));
+    query.addBindValue(encryptString(cryptor, computer.username));
+    query.addBindValue(encryptString(cryptor, computer.password));
     query.addBindValue(computer.modify_time);
-    query.addBindValue(computer.data);
+    query.addBindValue(encryptBytes(cryptor, computer.data));
     query.addBindValue(computer.id);
 
     if (!query.exec())
@@ -437,15 +437,7 @@ QList<ComputerConfig> Database::searchComputers(const QString& query_text) const
 
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
     query.prepare("SELECT id, group_id, router_id, name, comment, address, username, password, "
-                  "create_time, modify_time, connect_time, data FROM computers "
-                  "WHERE qt_lower(name) LIKE qt_lower(?) "
-                  "OR qt_lower(address) LIKE qt_lower(?) "
-                  "OR qt_lower(comment) LIKE qt_lower(?)");
-
-    QString pattern = QString("%%1%").arg(query_text);
-    query.addBindValue(pattern);
-    query.addBindValue(pattern);
-    query.addBindValue(pattern);
+                  "create_time, modify_time, connect_time, data FROM computers");
 
     if (!query.exec())
     {
@@ -455,7 +447,15 @@ QList<ComputerConfig> Database::searchComputers(const QString& query_text) const
 
     QList<ComputerConfig> computers;
     while (query.next())
-        computers.append(readComputer(query));
+    {
+        ComputerConfig computer = readComputer(query);
+        if (computer.name.contains(query_text, Qt::CaseInsensitive) ||
+            computer.address.contains(query_text, Qt::CaseInsensitive) ||
+            computer.comment.contains(query_text, Qt::CaseInsensitive))
+        {
+            computers.append(computer);
+        }
+    }
 
     return computers;
 }
@@ -470,7 +470,7 @@ QList<GroupConfig> Database::groupList(qint64 parent_id) const
     }
 
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    query.prepare("SELECT id, parent_id, name, comment FROM groups WHERE parent_id=?");
+    query.prepare("SELECT id, parent_id, name, comment, data FROM groups WHERE parent_id=?");
     query.addBindValue(parent_id);
 
     if (!query.exec())
@@ -496,7 +496,7 @@ QList<GroupConfig> Database::allGroups() const
     }
 
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    if (!query.exec("SELECT id, parent_id, name, comment FROM groups"))
+    if (!query.exec("SELECT id, parent_id, name, comment, data FROM groups"))
     {
         LOG(ERROR) << "Unable to get all groups:" << query.lastError();
         return {};
@@ -518,12 +518,15 @@ bool Database::addGroup(GroupConfig& group)
         return false;
     }
 
+    DataCryptor& cryptor = DataCryptor::instance();
+
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    query.prepare("INSERT INTO groups (id, parent_id, name, comment) "
-                  "VALUES (NULL, ?, ?, ?)");
+    query.prepare("INSERT INTO groups (id, parent_id, name, comment, data) "
+                  "VALUES (NULL, ?, ?, ?, ?)");
     query.addBindValue(group.parent_id);
     query.addBindValue(group.name);
-    query.addBindValue(group.comment);
+    query.addBindValue(encryptString(cryptor, group.comment));
+    query.addBindValue(encryptBytes(cryptor, group.data));
 
     if (!query.exec())
     {
@@ -544,11 +547,14 @@ bool Database::modifyGroup(const GroupConfig& group)
         return false;
     }
 
+    DataCryptor& cryptor = DataCryptor::instance();
+
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    query.prepare("UPDATE groups SET parent_id=?, name=?, comment=? WHERE id=?");
+    query.prepare("UPDATE groups SET parent_id=?, name=?, comment=?, data=? WHERE id=?");
     query.addBindValue(group.parent_id);
     query.addBindValue(group.name);
-    query.addBindValue(group.comment);
+    query.addBindValue(encryptString(cryptor, group.comment));
+    query.addBindValue(encryptBytes(cryptor, group.data));
     query.addBindValue(group.id);
 
     if (!query.exec())
@@ -615,7 +621,7 @@ std::optional<GroupConfig> Database::findGroup(qint64 group_id) const
     }
 
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    query.prepare("SELECT id, parent_id, name, comment FROM groups WHERE id=?");
+    query.prepare("SELECT id, parent_id, name, comment, data FROM groups WHERE id=?");
     query.addBindValue(group_id);
 
     if (!query.exec())
@@ -640,7 +646,7 @@ QList<RouterConfig> Database::routerList() const
     }
 
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    if (!query.exec("SELECT id, name, address, session_type, username, password FROM routers"))
+    if (!query.exec("SELECT id, name, address, session_type, username, password, data FROM routers"))
     {
         LOG(ERROR) << "Unable to get router list:" << query.lastError();
         return {};
@@ -671,13 +677,14 @@ bool Database::addRouter(RouterConfig& router)
     DataCryptor& cryptor = DataCryptor::instance();
 
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    query.prepare("INSERT INTO routers (id, name, address, session_type, username, password) "
-                  "VALUES (NULL, ?, ?, ?, ?, ?)");
+    query.prepare("INSERT INTO routers (id, name, address, session_type, username, password, data) "
+                  "VALUES (NULL, ?, ?, ?, ?, ?, ?)");
     query.addBindValue(router.display_name);
-    query.addBindValue(router.address);
+    query.addBindValue(encryptString(cryptor, router.address));
     query.addBindValue(static_cast<quint32>(router.session_type));
-    query.addBindValue(cryptor.encrypt(router.username.toUtf8()).value_or(QByteArray()));
-    query.addBindValue(cryptor.encrypt(router.password.toUtf8()).value_or(QByteArray()));
+    query.addBindValue(encryptString(cryptor, router.username));
+    query.addBindValue(encryptString(cryptor, router.password));
+    query.addBindValue(encryptBytes(cryptor, router.data));
 
     if (!query.exec())
     {
@@ -701,13 +708,14 @@ bool Database::modifyRouter(const RouterConfig& router)
     DataCryptor& cryptor = DataCryptor::instance();
 
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    query.prepare("UPDATE routers SET name=?, address=?, session_type=?, username=?, password=? "
+    query.prepare("UPDATE routers SET name=?, address=?, session_type=?, username=?, password=?, data=? "
                   "WHERE id=?");
     query.addBindValue(router.display_name);
-    query.addBindValue(router.address);
+    query.addBindValue(encryptString(cryptor, router.address));
     query.addBindValue(static_cast<quint32>(router.session_type));
-    query.addBindValue(cryptor.encrypt(router.username.toUtf8()).value_or(QByteArray()));
-    query.addBindValue(cryptor.encrypt(router.password.toUtf8()).value_or(QByteArray()));
+    query.addBindValue(encryptString(cryptor, router.username));
+    query.addBindValue(encryptString(cryptor, router.password));
+    query.addBindValue(encryptBytes(cryptor, router.data));
     query.addBindValue(router.router_id);
 
     if (!query.exec())
@@ -751,7 +759,7 @@ std::optional<RouterConfig> Database::findRouter(qint64 router_id) const
     }
 
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
-    query.prepare("SELECT id, name, address, session_type, username, password "
+    query.prepare("SELECT id, name, address, session_type, username, password, data "
                   "FROM routers WHERE id=?");
     query.addBindValue(router_id);
 
@@ -890,18 +898,6 @@ bool Database::openDatabase()
     {
         LOG(ERROR) << "QSqlDatabase::open failed:" << db.lastError();
         return false;
-    }
-
-    QVariant handle = db.driver()->handle();
-    if (handle.isValid() && qstrcmp(handle.typeName(), "sqlite3*") == 0)
-    {
-        sqlite3* sqlite_handle = *static_cast<sqlite3* const*>(handle.constData());
-        if (sqlite_handle)
-        {
-            sqlite3_create_function(sqlite_handle, "qt_lower", 1,
-                                    SQLITE_UTF16 | SQLITE_DETERMINISTIC, nullptr,
-                                    &qtLowerImpl, nullptr, nullptr);
-        }
     }
 
     if (!createTables(db))

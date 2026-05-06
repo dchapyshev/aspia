@@ -19,7 +19,6 @@
 #include "base/crypto/data_cryptor.h"
 
 #include "base/logging.h"
-#include "base/crypto/openssl_util.h"
 #include "base/crypto/random.h"
 #include "base/crypto/secure_memory.h"
 
@@ -27,57 +26,10 @@
 
 namespace {
 
-const size_t kKeySize = 32; // 256 bits, 32 bytes.
-const size_t kIVSize = 12; // 96 bits, 12 bytes.
-const size_t kTagSize = 16; // 128 bits, 16 bytes.
-const size_t kHeaderSize = kIVSize + kTagSize;
-
-//--------------------------------------------------------------------------------------------------
-EVP_CIPHER_CTX_ptr createCipher(const QByteArray& key, const char* iv, int type)
-{
-    if (key.size() != kKeySize)
-    {
-        LOG(ERROR) << "Wrong key size:" << key.size();
-        return nullptr;
-    }
-
-    EVP_CIPHER_CTX_ptr ctx(EVP_CIPHER_CTX_new());
-    if (!ctx)
-    {
-        LOG(ERROR) << "EVP_CIPHER_CTX_new failed";
-        return nullptr;
-    }
-
-    if (EVP_CipherInit_ex(ctx.get(), EVP_chacha20_poly1305(),
-                          nullptr, nullptr, nullptr, type) != 1)
-    {
-        LOG(ERROR) << "EVP_EncryptInit_ex failed";
-        return nullptr;
-    }
-
-    if (EVP_CIPHER_CTX_ctrl(ctx.get(), EVP_CTRL_AEAD_SET_IVLEN, kIVSize, nullptr) != 1)
-    {
-        LOG(ERROR) << "EVP_CIPHER_CTX_ctrl failed";
-        return nullptr;
-    }
-
-    if (EVP_CIPHER_CTX_set_key_length(ctx.get(), kKeySize) != 1)
-    {
-        LOG(ERROR) << "EVP_CIPHER_CTX_set_key_length failed";
-        return nullptr;
-    }
-
-    if (EVP_CipherInit_ex(ctx.get(), nullptr, nullptr,
-                          reinterpret_cast<const quint8*>(key.data()),
-                          reinterpret_cast<const quint8*>(iv),
-                          type) != 1)
-    {
-        LOG(ERROR) << "EVP_CIPHER_CTX_ctrl failed";
-        return nullptr;
-    }
-
-    return ctx;
-}
+const int kKeySize = 32; // 256 bits, 32 bytes.
+const int kIVSize = 12; // 96 bits, 12 bytes.
+const int kTagSize = 16; // 128 bits, 16 bytes.
+const int kHeaderSize = kIVSize + kTagSize;
 
 } // namespace
 
@@ -86,9 +38,8 @@ DataCryptor::DataCryptor() = default;
 
 //--------------------------------------------------------------------------------------------------
 DataCryptor::DataCryptor(const QByteArray& key)
-    : key_(key)
 {
-    // Nothing
+    setKey(key);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -102,6 +53,26 @@ void DataCryptor::setKey(const QByteArray& key)
 {
     memZero(&key_);
     key_ = key;
+
+    encrypt_ctx_.reset();
+    decrypt_ctx_.reset();
+
+    if (key.isEmpty())
+        return;
+
+    if (key.size() != kKeySize)
+    {
+        LOG(ERROR) << "Wrong key size:" << key.size();
+        return;
+    }
+
+    encrypt_ctx_ = createCipher(CipherType::CHACHA20_POLY1305, CipherMode::ENCRYPT, key, kIVSize);
+    if (!encrypt_ctx_)
+        LOG(ERROR) << "Unable to create encrypt cipher";
+
+    decrypt_ctx_ = createCipher(CipherType::CHACHA20_POLY1305, CipherMode::DECRYPT, key, kIVSize);
+    if (!decrypt_ctx_)
+        LOG(ERROR) << "Unable to create decrypt cipher";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -128,6 +99,12 @@ std::optional<QByteArray> DataCryptor::encrypt(QByteArrayView in)
         return std::nullopt;
     }
 
+    if (!encrypt_ctx_)
+    {
+        LOG(ERROR) << "Encrypt cipher is not initialized";
+        return std::nullopt;
+    }
+
     QByteArray out;
     out.resize(in.size() + kHeaderSize);
 
@@ -137,16 +114,16 @@ std::optional<QByteArray> DataCryptor::encrypt(QByteArrayView in)
         return std::nullopt;
     }
 
-    EVP_CIPHER_CTX_ptr cipher = createCipher(key_, out.data(), 1);
-    if (!cipher)
+    if (EVP_EncryptInit_ex(encrypt_ctx_.get(), nullptr, nullptr, nullptr,
+                           reinterpret_cast<const quint8*>(out.data())) != 1)
     {
-        LOG(ERROR) << "Unable to create cipher";
+        LOG(ERROR) << "EVP_EncryptInit_ex failed";
         return std::nullopt;
     }
 
     int length;
 
-    if (EVP_EncryptUpdate(cipher.get(),
+    if (EVP_EncryptUpdate(encrypt_ctx_.get(),
                           reinterpret_cast<quint8*>(out.data()) + kHeaderSize,
                           &length,
                           reinterpret_cast<const quint8*>(in.data()),
@@ -156,7 +133,7 @@ std::optional<QByteArray> DataCryptor::encrypt(QByteArrayView in)
         return std::nullopt;
     }
 
-    if (EVP_EncryptFinal_ex(cipher.get(),
+    if (EVP_EncryptFinal_ex(encrypt_ctx_.get(),
                             reinterpret_cast<quint8*>(out.data()) + kHeaderSize + length,
                             &length) != 1)
     {
@@ -164,7 +141,7 @@ std::optional<QByteArray> DataCryptor::encrypt(QByteArrayView in)
         return std::nullopt;
     }
 
-    if (EVP_CIPHER_CTX_ctrl(cipher.get(),
+    if (EVP_CIPHER_CTX_ctrl(encrypt_ctx_.get(),
                             EVP_CTRL_AEAD_GET_TAG,
                             kTagSize,
                             reinterpret_cast<quint8*>(out.data()) + kIVSize) != 1)
@@ -188,10 +165,16 @@ std::optional<QByteArray> DataCryptor::decrypt(QByteArrayView in)
         return std::nullopt;
     }
 
-    EVP_CIPHER_CTX_ptr cipher = createCipher(key_, in.data(), 0);
-    if (!cipher)
+    if (!decrypt_ctx_)
     {
-        LOG(ERROR) << "Unable to create cipher";
+        LOG(ERROR) << "Decrypt cipher is not initialized";
+        return std::nullopt;
+    }
+
+    if (EVP_DecryptInit_ex(decrypt_ctx_.get(), nullptr, nullptr, nullptr,
+                           reinterpret_cast<const quint8*>(in.data())) != 1)
+    {
+        LOG(ERROR) << "EVP_DecryptInit_ex failed";
         return std::nullopt;
     }
 
@@ -200,7 +183,7 @@ std::optional<QByteArray> DataCryptor::decrypt(QByteArrayView in)
 
     int length;
 
-    if (EVP_DecryptUpdate(cipher.get(),
+    if (EVP_DecryptUpdate(decrypt_ctx_.get(),
                           reinterpret_cast<quint8*>(out.data()),
                           &length,
                           reinterpret_cast<const quint8*>(in.data()) + kHeaderSize,
@@ -210,7 +193,7 @@ std::optional<QByteArray> DataCryptor::decrypt(QByteArrayView in)
         return std::nullopt;
     }
 
-    if (EVP_CIPHER_CTX_ctrl(cipher.get(),
+    if (EVP_CIPHER_CTX_ctrl(decrypt_ctx_.get(),
                             EVP_CTRL_AEAD_SET_TAG,
                             kTagSize,
                             reinterpret_cast<quint8*>(
@@ -220,7 +203,7 @@ std::optional<QByteArray> DataCryptor::decrypt(QByteArrayView in)
         return std::nullopt;
     }
 
-    if (EVP_DecryptFinal_ex(cipher.get(),
+    if (EVP_DecryptFinal_ex(decrypt_ctx_.get(),
                             reinterpret_cast<quint8*>(out.data()) + length,
                             &length) <= 0)
     {
