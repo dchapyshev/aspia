@@ -634,132 +634,130 @@ Routers added: %4</source>
 <context>
     <name>Client</name>
     <message>
-        <location filename="../client/main.cc" line="44"/>
         <source>Incorrect value for &quot;%1&quot;. Possible values: %2.</source>
-        <translation>Невірне значення для &quot;%1&quot;. Можливі значення: %2.</translation>
+        <translation type="vanished">Невірне значення для &quot;%1&quot;. Можливі значення: %2.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="300"/>
+        <location filename="../client/main.cc" line="114"/>
         <source>Connecting to router %1...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="305"/>
+        <location filename="../client/main.cc" line="119"/>
         <source>Connection to router %1 established.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="314"/>
+        <location filename="../client/main.cc" line="128"/>
         <source>Disconnected from router %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="326"/>
+        <location filename="../client/main.cc" line="140"/>
         <source>Network error: %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="364"/>
-        <source>Remote computer address.</source>
-        <translation>Адреса віддаленого комп&apos;ютера.</translation>
+        <location filename="../client/main.cc" line="192"/>
+        <source>Unable to open connection config file: %1</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="559"/>
+        <location filename="../client/main.cc" line="210"/>
+        <source>Invalid JSON in connection config file: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/main.cc" line="231"/>
+        <source>Unknown or missing session type. Possible values: desktop, file-transfer, system-info, chat.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/main.cc" line="240"/>
+        <source>Missing or invalid &quot;computer&quot; object in connection config.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/main.cc" line="256"/>
+        <source>Missing required computer field: address.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/main.cc" line="271"/>
+        <source>Field &quot;desktop_config&quot; must be an object.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/main.cc" line="288"/>
+        <source>Field &quot;desktop_config.%1&quot; must be boolean.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remote computer address.</source>
+        <translation type="vanished">Адреса віддаленого комп&apos;ютера.</translation>
+    </message>
+    <message>
+        <location filename="../client/main.cc" line="323"/>
         <source>Connection parameters to the router are not specified.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="572"/>
+        <location filename="../client/main.cc" line="339"/>
         <source>Incorrect data for connecting to the router.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="619"/>
+        <location filename="../client/main.cc" line="384"/>
+        <source>Path to one-time JSON connection config file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/main.cc" line="427"/>
         <source>Invalid master password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="368"/>
-        <source>Name of host.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/main.cc" line="372"/>
         <source>Name of user.</source>
-        <translation>Ім&apos;я користувача.</translation>
+        <translation type="vanished">Ім&apos;я користувача.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="376"/>
         <source>Password of user.</source>
-        <translation>Пароль користувача.</translation>
+        <translation type="vanished">Пароль користувача.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="380"/>
-        <source>Display name when connected</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/main.cc" line="389"/>
         <source>Enable or disable audio. Possible values: 0 or 1.</source>
-        <translation>Увімкнути чи вимкнути звук. Можливі значення: 0 або 1.</translation>
+        <translation type="vanished">Увімкнути чи вимкнути звук. Можливі значення: 0 або 1.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="393"/>
         <source>Enable or disable cursor shape. Possible values: 0 or 1.</source>
-        <translation>Увімкнути або вимкнути розмір курсора. Можливі значення: 0 або 1.</translation>
+        <translation type="vanished">Увімкнути або вимкнути розмір курсора. Можливі значення: 0 або 1.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="397"/>
         <source>Enable or disable cursor position. Possible values: 0 or 1.</source>
-        <translation>Увімкнути або вимкнути позицію курсора. Можливі значення: 0 або 1.</translation>
+        <translation type="vanished">Увімкнути або вимкнути позицію курсора. Можливі значення: 0 або 1.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="401"/>
         <source>Enable or disable clipboard. Possible values: 0 or 1.</source>
-        <translation>Увімкнути або вимкнути буфер обміну. Можливі значення: 0 або 1.</translation>
+        <translation type="vanished">Увімкнути або вимкнути буфер обміну. Можливі значення: 0 або 1.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="405"/>
         <source>Enable or disable desktop effects. Possible values: 0 or 1.</source>
-        <translation>Увімкнути або вимкнути ефекти робочого стола. Можливі значення: 0 або 1.</translation>
+        <translation type="vanished">Увімкнути або вимкнути ефекти робочого стола. Можливі значення: 0 або 1.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="409"/>
         <source>Enable or disable desktop wallpaper. Possible values: 0 or 1.</source>
-        <translation>Увімкнути або вимкнути шпалери робочого стола. Можливі значення: 0 або 1.</translation>
+        <translation type="vanished">Увімкнути або вимкнути шпалери робочого стола. Можливі значення: 0 або 1.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="384"/>
-        <source>Session type. Possible values: desktop, file-transfer, system-info, text-chat.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/main.cc" line="413"/>
         <source>Lock computer at disconnect. Possible values: 0 or 1.</source>
-        <translation>Блокувати комп&apos;ютер при від&apos;єднанні. Можливі значення: 0 або 1.</translation>
+        <translation type="vanished">Блокувати комп&apos;ютер при від&apos;єднанні. Можливі значення: 0 або 1.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="417"/>
         <source>Block remote input. Possible values: 0 or 1.</source>
-        <translation>Блокувати віддалене введення. Можливі значення: 0 або 1.</translation>
+        <translation type="vanished">Блокувати віддалене введення. Можливі значення: 0 або 1.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="421"/>
-        <source>Router address.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/main.cc" line="425"/>
-        <source>Router name of user.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/main.cc" line="429"/>
-        <source>Router password of user.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/main.cc" line="433"/>
+        <location filename="../client/main.cc" line="388"/>
         <source>Aspia Client</source>
         <translation>Клієнт Aspia</translation>
     </message>

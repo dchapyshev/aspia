@@ -17,6 +17,11 @@
 //
 
 #include <QCommandLineParser>
+#include <QFile>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonParseError>
+#include <QJsonValue>
 #include <QSysInfo>
 
 #include "base/logging.h"
@@ -36,197 +41,6 @@
 #include "client/ui/desktop/desktop_window.h"
 #include "client/ui/file_transfer/file_transfer_window.h"
 #include "client/ui/sys_info/system_info_window.h"
-
-//--------------------------------------------------------------------------------------------------
-void onInvalidValue(const QString& arg, const QString& values)
-{
-    MsgBox::warning(nullptr,
-        QApplication::translate("Client", "Incorrect value for \"%1\". Possible values: %2.").arg(arg, values));
-}
-
-//--------------------------------------------------------------------------------------------------
-bool parseAudioValue(const QString& value, proto::control::Config* config)
-{
-    if (!value.isEmpty())
-    {
-        if (value == "0")
-        {
-            config->set_audio(false);
-        }
-        else if (value == "1")
-        {
-            config->set_audio(true);
-        }
-        else
-        {
-            onInvalidValue("audio", "0, 1");
-            return false;
-        }
-    }
-
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool parseCursorShapeValue(const QString& value, proto::control::Config* config)
-{
-    if (!value.isEmpty())
-    {
-        if (value == "0")
-        {
-            config->set_cursor_shape(false);
-        }
-        else if (value == "1")
-        {
-            config->set_cursor_shape(true);
-        }
-        else
-        {
-            onInvalidValue("cursor-shape", "0, 1");
-            return false;
-        }
-    }
-
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool parseCursorPositionValue(const QString& value, proto::control::Config* config)
-{
-    if (!value.isEmpty())
-    {
-        if (value == "0")
-        {
-            config->set_cursor_position(false);
-        }
-        else if (value == "1")
-        {
-            config->set_cursor_position(true);
-        }
-        else
-        {
-            onInvalidValue("cursor-position", "0, 1");
-            return false;
-        }
-    }
-
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool parseClipboardValue(const QString& value, proto::control::Config* config)
-{
-    if (!value.isEmpty())
-    {
-        if (value == "0")
-        {
-            config->set_clipboard(false);
-        }
-        else if (value == "1")
-        {
-            config->set_clipboard(true);
-        }
-        else
-        {
-            onInvalidValue("clipboard", "0, 1");
-            return false;
-        }
-    }
-
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool parseDesktopEffectsValue(const QString& value, proto::control::Config* config)
-{
-    if (!value.isEmpty())
-    {
-        if (value == "0")
-        {
-            config->set_effects(false);
-        }
-        else if (value == "1")
-        {
-            config->set_effects(true);
-        }
-        else
-        {
-            onInvalidValue("desktop-effects", "0, 1");
-            return false;
-        }
-    }
-
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool parseDesktopWallpaperValue(const QString& value, proto::control::Config* config)
-{
-    if (!value.isEmpty())
-    {
-        if (value == "0")
-        {
-            config->set_wallpaper(false);
-        }
-        else if (value == "1")
-        {
-            config->set_wallpaper(true);
-        }
-        else
-        {
-            onInvalidValue("desktop-wallpaper", "0, 1");
-            return false;
-        }
-    }
-
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool parseLockAtDisconnectValue(const QString& value, proto::control::Config* config)
-{
-    if (!value.isEmpty())
-    {
-        if (value == "0")
-        {
-            config->set_lock_at_disconnect(false);
-        }
-        else if (value == "1")
-        {
-            config->set_lock_at_disconnect(true);
-        }
-        else
-        {
-            onInvalidValue("lock-at-disconnect", "0, 1");
-            return false;
-        }
-    }
-
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool parseBlockRemoteInputValue(const QString& value, proto::control::Config* config)
-{
-    if (!value.isEmpty())
-    {
-        if (value == "0")
-        {
-            config->set_block_input(false);
-        }
-        else if (value == "1")
-        {
-            config->set_block_input(true);
-        }
-        else
-        {
-            onInvalidValue("block-remote-input", "0, 1");
-            return false;
-        }
-    }
-
-    return true;
-}
 
 //--------------------------------------------------------------------------------------------------
 bool startSession(const ComputerConfig& computer,
@@ -286,8 +100,7 @@ void startRouterSession(const ComputerConfig& computer,
     router->moveToThread(GuiApplication::ioThread());
 
     QObject::connect(router, &Router::sig_statusChanged, qApp,
-        [status_dialog, router, computer, session_type, display_name, desktop_config](
-            qint64, Router::Status status)
+        [status_dialog, router, computer, session_type, display_name, desktop_config](qint64, Router::Status status)
     {
         if (!router || !status_dialog)
             return;
@@ -297,13 +110,13 @@ void startRouterSession(const ComputerConfig& computer,
         switch (status)
         {
             case Router::Status::CONNECTING:
-                status_dialog->addMessage(QApplication::translate("Client",
-                    "Connecting to router %1...").arg(address));
+                status_dialog->addMessage(
+                    QApplication::translate("Client", "Connecting to router %1...").arg(address));
                 break;
 
             case Router::Status::ONLINE:
-                status_dialog->addMessage(QApplication::translate("Client",
-                    "Connection to router %1 established.").arg(address));
+                status_dialog->addMessage(
+                    QApplication::translate("Client", "Connection to router %1 established.").arg(address));
                 router->disconnect(qApp);
                 status_dialog->hide();
                 status_dialog->deleteLater();
@@ -311,8 +124,8 @@ void startRouterSession(const ComputerConfig& computer,
                 break;
 
             case Router::Status::OFFLINE:
-                status_dialog->addMessage(QApplication::translate("Client",
-                    "Disconnected from router %1.").arg(address));
+                status_dialog->addMessage(
+                    QApplication::translate("Client", "Disconnected from router %1.").arg(address));
                 break;
         }
     }, Qt::QueuedConnection);
@@ -323,14 +136,223 @@ void startRouterSession(const ComputerConfig& computer,
         if (!status_dialog)
             return;
 
-        status_dialog->addMessage(QApplication::translate("Client", "Network error: %1.")
-            .arg(TcpChannel::errorToString(error_code)));
+        status_dialog->addMessage(
+            QApplication::translate("Client", "Network error: %1.").arg(TcpChannel::errorToString(error_code)));
     }, Qt::QueuedConnection);
 
     status_dialog->show();
     status_dialog->activateWindow();
 
     QMetaObject::invokeMethod(router, &Router::onConnectToRouter, Qt::QueuedConnection);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Example of a valid JSON configuration file:
+//
+// {
+//     "session_type": "desktop",
+//     "display_name": "Admin",
+//     "computer": {
+//         "name": "Office PC",
+//         "address": "192.168.1.10",
+//         "username": "user",
+//         "password": "secret"
+//     },
+//     "router": {
+//         "address": "router.example.com",
+//         "username": "router_user",
+//         "password": "router_secret"
+//     },
+//     "desktop_config": {
+//         "audio": true,
+//         "cursor_shape": true,
+//         "cursor_position": true,
+//         "clipboard": true,
+//         "effects": true,
+//         "wallpaper": true,
+//         "lock_at_disconnect": false,
+//         "block_input": false
+//     }
+// }
+//
+// Required: "session_type", "computer.address".
+// Optional: "display_name", "computer.name", "computer.username", "computer.password",
+//           "desktop_config" (used only for "session_type": "desktop").
+// The "router" object is required when "computer.address" is a host ID; in that case
+// "router.address", "router.username" and "router.password" are all required.
+// Possible "session_type" values: "desktop", "file-transfer", "system-info", "chat".
+//--------------------------------------------------------------------------------------------------
+bool handleConfigFile(const QString& config_path)
+{
+    QFile config_file(config_path);
+    if (!config_file.open(QIODevice::ReadOnly))
+    {
+        QString error_string = config_file.errorString();
+        LOG(ERROR) << "Unable to open connection config file:" << config_path << error_string;
+        MsgBox::warning(nullptr, QApplication::translate("Client",
+            "Unable to open connection config file: %1").arg(error_string));
+        return false;
+    }
+
+    QByteArray config_data = config_file.readAll();
+    config_file.close();
+
+    if (!QFile::remove(config_path))
+        LOG(ERROR) << "Unable to remove connection config file:" << config_path;
+    else
+        LOG(INFO) << "Connection config file removed:" << config_path;
+
+    QJsonParseError parse_error;
+    QJsonDocument doc = QJsonDocument::fromJson(config_data, &parse_error);
+    if (parse_error.error != QJsonParseError::NoError || !doc.isObject())
+    {
+        LOG(ERROR) << "Invalid JSON in connection config file:" << parse_error.errorString();
+        MsgBox::warning(nullptr, QApplication::translate("Client",
+            "Invalid JSON in connection config file: %1").arg(parse_error.errorString()));
+        return false;
+    }
+
+    QJsonObject root = doc.object();
+
+    QString session_type_value = root.value("session_type").toString();
+    proto::peer::SessionType session_type = proto::peer::SESSION_TYPE_DESKTOP;
+
+    if (session_type_value == "desktop")
+        session_type = proto::peer::SESSION_TYPE_DESKTOP;
+    else if (session_type_value == "file-transfer")
+        session_type = proto::peer::SESSION_TYPE_FILE_TRANSFER;
+    else if (session_type_value == "system-info")
+        session_type = proto::peer::SESSION_TYPE_SYSTEM_INFO;
+    else if (session_type_value == "chat")
+        session_type = proto::peer::SESSION_TYPE_TEXT_CHAT;
+    else
+    {
+        LOG(ERROR) << "Unknown or missing session type:" << session_type_value;
+        MsgBox::warning(nullptr, QApplication::translate("Client",
+            "Unknown or missing session type. Possible values: desktop, file-transfer, system-info, chat."));
+        return false;
+    }
+
+    QJsonValue computer_value = root.value("computer");
+    if (!computer_value.isObject())
+    {
+        LOG(ERROR) << "Missing or invalid \"computer\" object in connection config";
+        MsgBox::warning(nullptr, QApplication::translate("Client",
+            "Missing or invalid \"computer\" object in connection config."));
+        return false;
+    }
+
+    QJsonObject computer_object = computer_value.toObject();
+
+    ComputerConfig computer;
+    computer.address = computer_object.value("address").toString();
+    computer.username = computer_object.value("username").toString();
+    computer.password = computer_object.value("password").toString();
+    computer.name = computer_object.value("name").toString();
+
+    if (computer.address.isEmpty())
+    {
+        LOG(ERROR) << "Missing required computer field (address)";
+        MsgBox::warning(nullptr, QApplication::translate("Client",
+            "Missing required computer field: address."));
+        return false;
+    }
+
+    QString display_name = root.value("display_name").toString();
+
+    proto::control::Config desktop_config = ConfigFactory::defaultDesktopConfig();
+
+    if (session_type == proto::peer::SESSION_TYPE_DESKTOP && root.contains("desktop_config"))
+    {
+        QJsonValue desktop_value = root.value("desktop_config");
+        if (!desktop_value.isObject())
+        {
+            LOG(ERROR) << "Field \"desktop_config\" must be an object";
+            MsgBox::warning(nullptr, QApplication::translate("Client",
+                "Field \"desktop_config\" must be an object."));
+            return false;
+        }
+
+        QJsonObject desktop_obj = desktop_value.toObject();
+
+        auto applyDesktopBool = [&desktop_obj, &desktop_config]
+            (const char* key, void (proto::control::Config::*setter)(bool)) -> bool
+        {
+            if (!desktop_obj.contains(key))
+                return true;
+
+            QJsonValue value = desktop_obj.value(key);
+            if (!value.isBool())
+            {
+                LOG(ERROR) << "Field \"desktop_config." << key << "\" must be boolean";
+                MsgBox::warning(nullptr, QApplication::translate("Client",
+                    "Field \"desktop_config.%1\" must be boolean.").arg(QString::fromUtf8(key)));
+                return false;
+            }
+
+            (desktop_config.*setter)(value.toBool());
+            return true;
+        };
+
+        if (!applyDesktopBool("audio", &proto::control::Config::set_audio))
+            return false;
+        if (!applyDesktopBool("cursor_shape", &proto::control::Config::set_cursor_shape))
+            return false;
+        if (!applyDesktopBool("cursor_position", &proto::control::Config::set_cursor_position))
+            return false;
+        if (!applyDesktopBool("clipboard", &proto::control::Config::set_clipboard))
+            return false;
+        if (!applyDesktopBool("effects", &proto::control::Config::set_effects))
+            return false;
+        if (!applyDesktopBool("wallpaper", &proto::control::Config::set_wallpaper))
+            return false;
+        if (!applyDesktopBool("lock_at_disconnect", &proto::control::Config::set_lock_at_disconnect))
+            return false;
+        if (!applyDesktopBool("block_input", &proto::control::Config::set_block_input))
+            return false;
+    }
+
+    if (isHostId(computer.address))
+    {
+        LOG(INFO) << "Relay connection selected";
+
+        QJsonValue router_value = root.value("router");
+        if (!router_value.isObject())
+        {
+            LOG(INFO) << "Router object not specified";
+            MsgBox::warning(nullptr, QApplication::translate("Client",
+                "Connection parameters to the router are not specified."));
+            return false;
+        }
+
+        QJsonObject router_obj = router_value.toObject();
+
+        RouterConfig router_config;
+        router_config.router_id = 1;
+        router_config.address = router_obj.value("address").toString();
+        router_config.username = router_obj.value("username").toString();
+        router_config.password = router_obj.value("password").toString();
+        router_config.session_type = proto::router::SESSION_TYPE_CLIENT;
+
+        if (!router_config.isValid())
+        {
+            MsgBox::warning(nullptr, QApplication::translate("Client",
+                "Incorrect data for connecting to the router."));
+            return false;
+        }
+
+        computer.router_id = router_config.router_id;
+        startRouterSession(computer, session_type, display_name, router_config, desktop_config);
+    }
+    else
+    {
+        LOG(INFO) << "Direct connection selected";
+
+        if (!startSession(computer, session_type, display_name, desktop_config))
+            return false;
+    }
+
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -344,9 +366,7 @@ int main(int argc, char* argv[])
 
     ScopedLogging scoped_logging(logging_settings);
 
-    Application::setHighDpiScaleFactorRoundingPolicy(
-        Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
-
+    Application::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
     Application application(argc, argv);
 
     LOG(INFO) << "Version:" << ASPIA_VERSION_STRING << "(arch:" << QSysInfo::buildCpuArchitecture() << ")";
@@ -360,287 +380,74 @@ int main(int argc, char* argv[])
     LOG(INFO) << "Qt version:" << QT_VERSION_STR;
     LOG(INFO) << "Command line:" << application.arguments();
 
-    QCommandLineOption address_option("address",
-        QApplication::translate("Client", "Remote computer address."),
-        "address");
-
-    QCommandLineOption name_option("name",
-        QApplication::translate("Client", "Name of host."),
-        "name");
-
-    QCommandLineOption username_option("username",
-        QApplication::translate("Client", "Name of user."),
-        "username");
-
-    QCommandLineOption password_option("password",
-        QApplication::translate("Client", "Password of user."),
-        "password");
-
-    QCommandLineOption display_name_option("display-name",
-        QApplication::translate("Client", "Display name when connected"),
-        "display-name");
-
-    QCommandLineOption session_type_option("session-type",
-        QApplication::translate("Client", "Session type. Possible values: desktop, "
-                                "file-transfer, system-info, text-chat."),
-        "desktop-manage");
-
-    QCommandLineOption audio_option("audio",
-        QApplication::translate("Client", "Enable or disable audio. Possible values: 0 or 1."),
-        "audio");
-
-    QCommandLineOption cursor_shape_option("cursor-shape",
-        QApplication::translate("Client", "Enable or disable cursor shape. Possible values: 0 or 1."),
-        "cursor-shape");
-
-    QCommandLineOption cursor_position_option("cursor-position",
-        QApplication::translate("Client", "Enable or disable cursor position. Possible values: 0 or 1."),
-        "cursor-position");
-
-    QCommandLineOption clipboard_option("clipboard",
-        QApplication::translate("Client", "Enable or disable clipboard. Possible values: 0 or 1."),
-        "clipboard");
-
-    QCommandLineOption desktop_effects_option("desktop-effects",
-        QApplication::translate("Client", "Enable or disable desktop effects. Possible values: 0 or 1."),
-        "desktop-effects");
-
-    QCommandLineOption desktop_wallpaper_option("desktop-wallpaper",
-        QApplication::translate("Client", "Enable or disable desktop wallpaper. Possible values: 0 or 1."),
-        "desktop-wallpaper");
-
-    QCommandLineOption lock_at_disconnect_option("lock-at-disconnect",
-        QApplication::translate("Client", "Lock computer at disconnect. Possible values: 0 or 1."),
-        "lock-at-disconnect");
-
-    QCommandLineOption block_remote_input_option("block-remote-input",
-        QApplication::translate("Client", "Block remote input. Possible values: 0 or 1."),
-        "block-remote-input");
-
-    QCommandLineOption router_address_option("router-address",
-        QApplication::translate("Client", "Router address."),
-        "router-address");
-
-    QCommandLineOption router_username_option("router-username",
-        QApplication::translate("Client", "Router name of user."),
-        "router-username");
-
-    QCommandLineOption router_password_option("router-password",
-        QApplication::translate("Client", "Router password of user."),
-        "router-password");
+    QCommandLineOption config_option("config",
+        QApplication::translate("Client", "Path to one-time JSON connection config file."),
+        "config");
 
     QCommandLineParser parser;
     parser.setApplicationDescription(QApplication::translate("Client", "Aspia Client"));
     parser.addHelpOption();
     parser.addVersionOption();
-    parser.addOption(address_option);
-    parser.addOption(name_option);
-    parser.addOption(username_option);
-    parser.addOption(password_option);
-    parser.addOption(display_name_option);
-    parser.addOption(session_type_option);
-    parser.addOption(audio_option);
-    parser.addOption(cursor_shape_option);
-    parser.addOption(cursor_position_option);
-    parser.addOption(clipboard_option);
-    parser.addOption(desktop_effects_option);
-    parser.addOption(desktop_wallpaper_option);
-    parser.addOption(lock_at_disconnect_option);
-    parser.addOption(block_remote_input_option);
-    parser.addOption(router_address_option);
-    parser.addOption(router_username_option);
-    parser.addOption(router_password_option);
+    parser.addOption(config_option);
     parser.process(application);
 
-    std::unique_ptr<MainWindow> main_window;
-
-    if (parser.isSet(address_option))
+    if (parser.isSet(config_option))
     {
-        LOG(INFO) << "Command line start";
-
-        proto::control::Config desktop_config = ConfigFactory::defaultDesktopConfig();
-        proto::peer::SessionType session_type = proto::peer::SESSION_TYPE_DESKTOP;
-        ComputerConfig computer;
-        QString display_name;
-
-        computer.address = parser.value(address_option);
-        computer.username = parser.value(username_option);
-        computer.password = parser.value(password_option);
-
-        if (parser.isSet(display_name_option))
-            display_name = parser.value(display_name_option);
-
-        if (parser.isSet(name_option))
-            computer.name = parser.value(name_option);
-
-        QString session_type_value = parser.value(session_type_option);
-
-        if (session_type_value == "desktop")
-        {
-            session_type = proto::peer::SESSION_TYPE_DESKTOP;
-
-            if (!parseAudioValue(parser.value(audio_option), &desktop_config))
-            {
-                LOG(ERROR) << "Unable to parse audio value";
-                return 1;
-            }
-
-            if (!parseCursorShapeValue(parser.value(cursor_shape_option), &desktop_config))
-            {
-                LOG(ERROR) << "Unable to parse cursor shape value";
-                return 1;
-            }
-
-            if (!parseCursorPositionValue(parser.value(cursor_position_option), &desktop_config))
-            {
-                LOG(ERROR) << "Unable to parse cursor position value";
-                return 1;
-            }
-
-            if (!parseClipboardValue(parser.value(clipboard_option), &desktop_config))
-            {
-                LOG(ERROR) << "Unable to parse clipboard value";
-                return 1;
-            }
-
-            if (!parseDesktopEffectsValue(parser.value(desktop_effects_option), &desktop_config))
-            {
-                LOG(ERROR) << "Unable to parse desktop effects value";
-                return 1;
-            }
-
-            if (!parseDesktopWallpaperValue(parser.value(desktop_wallpaper_option), &desktop_config))
-            {
-                LOG(ERROR) << "Unable to parse desktop wallpaper value";
-                return 1;
-            }
-
-            if (!parseLockAtDisconnectValue(parser.value(lock_at_disconnect_option), &desktop_config))
-            {
-                LOG(ERROR) << "Unable to parse lock at disconnect value";
-                return 1;
-            }
-
-            if (!parseBlockRemoteInputValue(parser.value(block_remote_input_option), &desktop_config))
-            {
-                LOG(ERROR) << "Unable to parse block remote input value";
-                return 1;
-            }
-        }
-        else if (session_type_value == "file-transfer")
-        {
-            session_type = proto::peer::SESSION_TYPE_FILE_TRANSFER;
-        }
-        else if (session_type_value == "system-info")
-        {
-            session_type = proto::peer::SESSION_TYPE_SYSTEM_INFO;
-        }
-        else if (session_type_value == "text-chat")
-        {
-            session_type = proto::peer::SESSION_TYPE_TEXT_CHAT;
-        }
-        else
-        {
-            LOG(ERROR) << "Unknown session type specified:" << session_type_value;
-            onInvalidValue("session-type", "desktop, file-transfer, system-info, text-chat");
+        if (!handleConfigFile(parser.value(config_option)))
             return 1;
-        }
+        return application.exec();
+    }
 
-        if (isHostId(computer.address))
+    if (application.isRunning())
+    {
+        LOG(INFO) << "Another instance is already running, activating its window";
+        application.activateWindow();
+        return 0;
+    }
+
+    if (MasterPassword::isSet())
+    {
+        LOG(INFO) << "Master password is set, prompting user";
+
+        while (true)
         {
-            LOG(INFO) << "Relay connection selected";
-
-            RouterConfig router_config;
-
-            if (!parser.isSet(router_address_option))
+            UnlockDialog dialog(nullptr, QString(), QString());
+            if (dialog.exec() != QDialog::Accepted)
             {
-                LOG(INFO) << "Router address option not specified";
-                QString message =
-                    QApplication::translate("Client", "Connection parameters to the router are not specified.");
-                MsgBox::warning(nullptr, message);
-                return 1;
+                LOG(INFO) << "Master password unlock cancelled by user";
+                return 0;
             }
 
-            router_config.router_id = 1;
-            router_config.address = parser.value(router_address_option);
-            router_config.username = parser.value(router_username_option);
-            router_config.password = parser.value(router_password_option);
-            router_config.session_type = proto::router::SESSION_TYPE_CLIENT;
-
-            if (!router_config.isValid())
+            if (MasterPassword::unlock(dialog.password()))
             {
-                QString message = QApplication::translate("Client", "Incorrect data for connecting to the router.");
-                MsgBox::warning(nullptr, message);
-                return 1;
+                LOG(INFO) << "Master password accepted";
+                break;
             }
 
-            computer.router_id = router_config.router_id;
-            startRouterSession(computer, session_type, display_name, router_config, desktop_config);
-        }
-        else
-        {
-            LOG(INFO) << "Direct connection selected";
-
-            if (!startSession(computer, session_type, display_name, desktop_config))
-                return 1;
+            MsgBox::warning(nullptr, QApplication::translate("Client", "Invalid master password."));
         }
     }
     else
     {
-        LOG(INFO) << "Normal start";
+        LOG(INFO) << "Master password is not set, prompting user to set one";
 
-        if (application.isRunning())
+        MasterPasswordDialog dialog(MasterPasswordDialog::Mode::SET);
+        if (dialog.exec() != QDialog::Accepted)
         {
-            LOG(INFO) << "Another instance is already running, activating its window";
-            application.activateWindow();
+            LOG(INFO) << "Master password set cancelled by user";
             return 0;
         }
 
-        if (MasterPassword::isSet())
-        {
-            LOG(INFO) << "Master password is set, prompting user";
-
-            while (true)
-            {
-                UnlockDialog dialog(nullptr, QString(), QString());
-                if (dialog.exec() != QDialog::Accepted)
-                {
-                    LOG(INFO) << "Master password unlock cancelled by user";
-                    return 0;
-                }
-
-                if (MasterPassword::unlock(dialog.password()))
-                {
-                    LOG(INFO) << "Master password accepted";
-                    break;
-                }
-
-                MsgBox::warning(nullptr,
-                    QApplication::translate("Client", "Invalid master password."));
-            }
-        }
-        else
-        {
-            LOG(INFO) << "Master password is not set, prompting user to set one";
-
-            MasterPasswordDialog dialog(MasterPasswordDialog::Mode::SET);
-            if (dialog.exec() != QDialog::Accepted)
-            {
-                LOG(INFO) << "Master password set cancelled by user";
-                return 0;
-            }
-
-            LOG(INFO) << "Master password set";
-        }
-
-        main_window.reset(new MainWindow());
-
-        QObject::connect(&application, &Application::sig_windowActivated,
-                         main_window.get(), &MainWindow::showAndActivate);
-
-        main_window->show();
-        main_window->activateWindow();
+        LOG(INFO) << "Master password set";
     }
+
+    std::unique_ptr<MainWindow> main_window = std::make_unique<MainWindow>();
+
+    QObject::connect(&application, &Application::sig_windowActivated,
+                     main_window.get(), &MainWindow::showAndActivate);
+
+    main_window->show();
+    main_window->activateWindow();
 
     return application.exec();
 }

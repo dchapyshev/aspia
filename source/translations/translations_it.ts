@@ -633,132 +633,150 @@ Routers added: %4</source>
 <context>
     <name>Client</name>
     <message>
-        <location filename="../client/main.cc" line="44"/>
         <source>Incorrect value for &quot;%1&quot;. Possible values: %2.</source>
-        <translation>Valore non valido per &quot;%1&quot;. Possibili valori: &quot;%2&quot;.</translation>
+        <translation type="vanished">Valore non valido per &quot;%1&quot;. Possibili valori: &quot;%2&quot;.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="300"/>
+        <location filename="../client/main.cc" line="114"/>
         <source>Connecting to router %1...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="305"/>
+        <location filename="../client/main.cc" line="119"/>
         <source>Connection to router %1 established.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="314"/>
+        <location filename="../client/main.cc" line="128"/>
         <source>Disconnected from router %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="326"/>
+        <location filename="../client/main.cc" line="140"/>
         <source>Network error: %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="364"/>
-        <source>Remote computer address.</source>
-        <translation>Indirizzo computer remoto.</translation>
+        <location filename="../client/main.cc" line="192"/>
+        <source>Unable to open connection config file: %1</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="559"/>
+        <location filename="../client/main.cc" line="210"/>
+        <source>Invalid JSON in connection config file: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/main.cc" line="231"/>
+        <source>Unknown or missing session type. Possible values: desktop, file-transfer, system-info, chat.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/main.cc" line="240"/>
+        <source>Missing or invalid &quot;computer&quot; object in connection config.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/main.cc" line="256"/>
+        <source>Missing required computer field: address.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/main.cc" line="271"/>
+        <source>Field &quot;desktop_config&quot; must be an object.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/main.cc" line="288"/>
+        <source>Field &quot;desktop_config.%1&quot; must be boolean.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remote computer address.</source>
+        <translation type="vanished">Indirizzo computer remoto.</translation>
+    </message>
+    <message>
+        <location filename="../client/main.cc" line="323"/>
         <source>Connection parameters to the router are not specified.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="572"/>
+        <location filename="../client/main.cc" line="339"/>
         <source>Incorrect data for connecting to the router.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="619"/>
+        <location filename="../client/main.cc" line="384"/>
+        <source>Path to one-time JSON connection config file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/main.cc" line="427"/>
         <source>Invalid master password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="368"/>
         <source>Name of host.</source>
-        <translation>Nome host.</translation>
+        <translation type="vanished">Nome host.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="372"/>
         <source>Name of user.</source>
-        <translation>Nome utente.</translation>
+        <translation type="vanished">Nome utente.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="376"/>
         <source>Password of user.</source>
-        <translation>Password utente.</translation>
+        <translation type="vanished">Password utente.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="380"/>
         <source>Display name when connected</source>
-        <translation>Nome da visualizzare quando connesso</translation>
+        <translation type="vanished">Nome da visualizzare quando connesso</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="384"/>
-        <source>Session type. Possible values: desktop, file-transfer, system-info, text-chat.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/main.cc" line="389"/>
         <source>Enable or disable audio. Possible values: 0 or 1.</source>
-        <translation>Abilita o disabilita audio. Possibili valori:0 o 1.</translation>
+        <translation type="vanished">Abilita o disabilita audio. Possibili valori:0 o 1.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="393"/>
         <source>Enable or disable cursor shape. Possible values: 0 or 1.</source>
-        <translation>Abilita o disabilita dimensione cursore. Possibili valori:0 o 1.</translation>
+        <translation type="vanished">Abilita o disabilita dimensione cursore. Possibili valori:0 o 1.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="397"/>
         <source>Enable or disable cursor position. Possible values: 0 or 1.</source>
-        <translation>Abilita o disabilita posizione cursore. Possibili valori:0 o 1.</translation>
+        <translation type="vanished">Abilita o disabilita posizione cursore. Possibili valori:0 o 1.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="401"/>
         <source>Enable or disable clipboard. Possible values: 0 or 1.</source>
-        <translation>Abilita o disabilita appunti. Possibili valori:0 o 1.</translation>
+        <translation type="vanished">Abilita o disabilita appunti. Possibili valori:0 o 1.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="405"/>
         <source>Enable or disable desktop effects. Possible values: 0 or 1.</source>
-        <translation>Abilita o disabilita effetti desktop. Possibili valori:0 o 1.</translation>
+        <translation type="vanished">Abilita o disabilita effetti desktop. Possibili valori:0 o 1.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="409"/>
         <source>Enable or disable desktop wallpaper. Possible values: 0 or 1.</source>
-        <translation>Abilita o disabilita sfondo desktop. Possibili valori:0 o 1.</translation>
+        <translation type="vanished">Abilita o disabilita sfondo desktop. Possibili valori:0 o 1.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="413"/>
         <source>Lock computer at disconnect. Possible values: 0 or 1.</source>
-        <translation>Blocca computre alla disconnessione. Possibili valori:0 o 1.</translation>
+        <translation type="vanished">Blocca computre alla disconnessione. Possibili valori:0 o 1.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="417"/>
         <source>Block remote input. Possible values: 0 or 1.</source>
-        <translation>Blocca input remoto. Possibili valori: 0 o 1.</translation>
+        <translation type="vanished">Blocca input remoto. Possibili valori: 0 o 1.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="421"/>
         <source>Router address.</source>
-        <translation>Indirizzo router.</translation>
+        <translation type="vanished">Indirizzo router.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="425"/>
         <source>Router name of user.</source>
-        <translation>Nome router utente.</translation>
+        <translation type="vanished">Nome router utente.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="429"/>
         <source>Router password of user.</source>
-        <translation>Password router utente.</translation>
+        <translation type="vanished">Password router utente.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="433"/>
+        <location filename="../client/main.cc" line="388"/>
         <source>Aspia Client</source>
         <translation>Aspia Client</translation>
     </message>

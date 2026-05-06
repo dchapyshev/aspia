@@ -662,132 +662,158 @@ Routers added: %4</source>
 <context>
     <name>Client</name>
     <message>
-        <location filename="../client/main.cc" line="44"/>
         <source>Incorrect value for &quot;%1&quot;. Possible values: %2.</source>
-        <translation>Некорректное значение для &quot;%1&quot;. Возможные значения: %2.</translation>
+        <translation type="vanished">Некорректное значение для &quot;%1&quot;. Возможные значения: %2.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="300"/>
+        <location filename="../client/main.cc" line="114"/>
         <source>Connecting to router %1...</source>
         <translation>Подключение к маршрутизатору %1...</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="305"/>
+        <location filename="../client/main.cc" line="119"/>
         <source>Connection to router %1 established.</source>
         <translation>Соединение с маршрутизатором %1 установлено.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="314"/>
+        <location filename="../client/main.cc" line="128"/>
         <source>Disconnected from router %1.</source>
         <translation>Отключено от маршрутизатора %1.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="326"/>
+        <location filename="../client/main.cc" line="140"/>
         <source>Network error: %1.</source>
         <translation>Сетевая ошибка: %1.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="364"/>
-        <source>Remote computer address.</source>
-        <translation>Адрес удаленного компьютера.</translation>
+        <location filename="../client/main.cc" line="192"/>
+        <source>Unable to open connection config file: %1</source>
+        <translation>Не удалось открыть файл конфигурации подключения: %1</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="559"/>
+        <location filename="../client/main.cc" line="210"/>
+        <source>Invalid JSON in connection config file: %1</source>
+        <translation>Некорректный JSON в файле конфигурации подключения: %1</translation>
+    </message>
+    <message>
+        <location filename="../client/main.cc" line="231"/>
+        <source>Unknown or missing session type. Possible values: desktop, file-transfer, system-info, chat.</source>
+        <translation>Неизвестный или отсутствующий тип сессии. Возможные значения: desktop, file-transfer, system-info, chat.</translation>
+    </message>
+    <message>
+        <location filename="../client/main.cc" line="240"/>
+        <source>Missing or invalid &quot;computer&quot; object in connection config.</source>
+        <translation>Отсутствует или некорректен объект &quot;computer&quot; в конфигурации подключения.</translation>
+    </message>
+    <message>
+        <location filename="../client/main.cc" line="256"/>
+        <source>Missing required computer field: address.</source>
+        <translation>Отсутствует обязательное поле компьютера: address.</translation>
+    </message>
+    <message>
+        <source>Missing required computer fields: address, username, password.</source>
+        <translation type="vanished">Отсутствуют обязательные поля компьютера: address, username, password.</translation>
+    </message>
+    <message>
+        <location filename="../client/main.cc" line="271"/>
+        <source>Field &quot;desktop_config&quot; must be an object.</source>
+        <translation>Поле &quot;desktop_config&quot; должно быть объектом.</translation>
+    </message>
+    <message>
+        <location filename="../client/main.cc" line="288"/>
+        <source>Field &quot;desktop_config.%1&quot; must be boolean.</source>
+        <translation>Поле &quot;desktop_config.%1&quot; должно иметь логический тип.</translation>
+    </message>
+    <message>
+        <source>Remote computer address.</source>
+        <translation type="vanished">Адрес удаленного компьютера.</translation>
+    </message>
+    <message>
+        <location filename="../client/main.cc" line="323"/>
         <source>Connection parameters to the router are not specified.</source>
         <translation>Параметры подключения к маршрутизатору не указаны.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="572"/>
+        <location filename="../client/main.cc" line="339"/>
         <source>Incorrect data for connecting to the router.</source>
         <translation>Неверные данные для подключения к маршрутизатору.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="619"/>
+        <location filename="../client/main.cc" line="384"/>
+        <source>Path to one-time JSON connection config file.</source>
+        <translation>Путь к одноразовому JSON-файлу конфигурации подключения.</translation>
+    </message>
+    <message>
+        <location filename="../client/main.cc" line="427"/>
         <source>Invalid master password.</source>
         <translation>Неверный мастер-пароль.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="368"/>
         <source>Name of host.</source>
-        <translation>Имя хоста.</translation>
+        <translation type="vanished">Имя хоста.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="372"/>
         <source>Name of user.</source>
-        <translation>Имя пользователя.</translation>
+        <translation type="vanished">Имя пользователя.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="376"/>
         <source>Password of user.</source>
-        <translation>Пароль пользователя.</translation>
+        <translation type="vanished">Пароль пользователя.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="380"/>
         <source>Display name when connected</source>
-        <translation>Имя отображаемое при подключении</translation>
+        <translation type="vanished">Имя отображаемое при подключении</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="389"/>
         <source>Enable or disable audio. Possible values: 0 or 1.</source>
-        <translation>Включить или отключить звук. Возможные значения: 0 или 1.</translation>
+        <translation type="vanished">Включить или отключить звук. Возможные значения: 0 или 1.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="393"/>
         <source>Enable or disable cursor shape. Possible values: 0 or 1.</source>
-        <translation>Включить или отключить изображение курсора мыши. Возможные значения: 0 или 1.</translation>
+        <translation type="vanished">Включить или отключить изображение курсора мыши. Возможные значения: 0 или 1.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="397"/>
         <source>Enable or disable cursor position. Possible values: 0 or 1.</source>
-        <translation>Включить или отключить положение курсора. Возможные значения: 0 или 1.</translation>
+        <translation type="vanished">Включить или отключить положение курсора. Возможные значения: 0 или 1.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="401"/>
         <source>Enable or disable clipboard. Possible values: 0 or 1.</source>
-        <translation>Включить или отключить буфер обмена. Возможные значения: 0 или 1.</translation>
+        <translation type="vanished">Включить или отключить буфер обмена. Возможные значения: 0 или 1.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="405"/>
         <source>Enable or disable desktop effects. Possible values: 0 or 1.</source>
-        <translation>Включить или отключить эффекты рабочего стола. Возможные значения: 0 или 1.</translation>
+        <translation type="vanished">Включить или отключить эффекты рабочего стола. Возможные значения: 0 или 1.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="409"/>
         <source>Enable or disable desktop wallpaper. Possible values: 0 or 1.</source>
-        <translation>Включить или отключить обои рабочего стола. Возможные значения: 0 или 1.</translation>
+        <translation type="vanished">Включить или отключить обои рабочего стола. Возможные значения: 0 или 1.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="384"/>
         <source>Session type. Possible values: desktop, file-transfer, system-info, text-chat.</source>
-        <translation>Тип сессии. Возможные значения: desktop, file-transfer, system-info, text-chat.</translation>
+        <translation type="vanished">Тип сессии. Возможные значения: desktop, file-transfer, system-info, text-chat.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="413"/>
         <source>Lock computer at disconnect. Possible values: 0 or 1.</source>
-        <translation>Блокировать компьютер при отключении. Возможные значения: 0 или 1.</translation>
+        <translation type="vanished">Блокировать компьютер при отключении. Возможные значения: 0 или 1.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="417"/>
         <source>Block remote input. Possible values: 0 or 1.</source>
-        <translation>Блокировать удаленный ввод. Возможные значения: 0 или 1.</translation>
+        <translation type="vanished">Блокировать удаленный ввод. Возможные значения: 0 или 1.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="421"/>
         <source>Router address.</source>
-        <translation>Адрес маршрутизатора.</translation>
+        <translation type="vanished">Адрес маршрутизатора.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="425"/>
         <source>Router name of user.</source>
-        <translation>Имя пользователя маршрутизатора.</translation>
+        <translation type="vanished">Имя пользователя маршрутизатора.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="429"/>
         <source>Router password of user.</source>
-        <translation>Пароль маршрутизатора.</translation>
+        <translation type="vanished">Пароль маршрутизатора.</translation>
     </message>
     <message>
-        <location filename="../client/main.cc" line="433"/>
+        <location filename="../client/main.cc" line="388"/>
         <source>Aspia Client</source>
         <translation>Клиент Aspia</translation>
     </message>
