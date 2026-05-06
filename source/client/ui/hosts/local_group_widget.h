@@ -118,6 +118,9 @@ public:
     QString mimeType() const { return mime_type_; }
 
 protected:
+    // QWidget implementation.
+    void changeEvent(QEvent* event) final;
+
     // QObject implementation.
     bool eventFilter(QObject* watched, QEvent* event) final;
 

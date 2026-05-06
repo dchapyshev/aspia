@@ -58,6 +58,10 @@ signals:
     void sig_connect(
         qint64 computer_id, const ComputerConfig& computer, proto::peer::SessionType session_type);
 
+protected:
+    // QWidget implementation.
+    void changeEvent(QEvent* event) final;
+
 private slots:
     void onRouterStatusChanged(qint64 router_id, Router::Status status);
     void onSwitchContent(Sidebar::Item::Type type);

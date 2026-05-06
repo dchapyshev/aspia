@@ -22,6 +22,7 @@
 
 #include <QActionGroup>
 #include <QDateTime>
+#include <QEvent>
 #include <QFileDialog>
 #include <QMenu>
 #include <QStatusBar>
@@ -380,6 +381,17 @@ void HostsTab::reloadRouters()
         else
             createRouterWidget(router);
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void HostsTab::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::LanguageChange)
+    {
+        ui.retranslateUi(this);
+        emit sig_titleChanged(tr("Hosts"));
+    }
+    Tab::changeEvent(event);
 }
 
 //--------------------------------------------------------------------------------------------------

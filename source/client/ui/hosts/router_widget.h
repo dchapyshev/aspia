@@ -117,6 +117,10 @@ signals:
     void sig_relayContextMenu(qint64 router_id, const QPoint& global_pos, int column);
     void sig_updateConfig(const RouterConfig& config);
 
+protected:
+    // QWidget implementation.
+    void changeEvent(QEvent* event) final;
+
 private slots:
     void onStatusChanged(qint64 router_id, Router::Status status);
     void onConnectionErrorOccurred(qint64 router_id, TcpChannel::ErrorCode error_code);

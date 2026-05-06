@@ -229,6 +229,8 @@ void SettingsTab::changeEvent(QEvent* event)
 {
     if (event->type() == QEvent::LanguageChange)
     {
+        ui.retranslateUi(this);
+
         int button_id = 0;
         if (QAbstractButton* button = category_group_->button(button_id++))
             button->setText(tr("General"));
@@ -238,6 +240,15 @@ void SettingsTab::changeEvent(QEvent* event)
         if (QAbstractButton* button = category_group_->button(button_id++))
             button->setText(tr("Update"));
 #endif
+
+        QSignalBlocker blocker(ui.combo_theme);
+        for (int i = 0; i < ui.combo_theme->count(); ++i)
+        {
+            QString theme_id = ui.combo_theme->itemData(i).toString();
+            ui.combo_theme->setItemText(i, GuiApplication::themeName(theme_id));
+        }
+
+        emit sig_titleChanged(tr("Settings"));
     }
     else if (event->type() == QEvent::PaletteChange || event->type() == QEvent::StyleChange ||
              event->type() == QEvent::ApplicationPaletteChange)

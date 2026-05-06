@@ -236,6 +236,7 @@ void MainWindow::onSettings()
     connect(settings_tab, &SettingsTab::sig_languageChanged, this, [this]()
     {
         ui.retranslateUi(this);
+        search_field_->setPlaceholderText(tr("Search..."));
 
         for (int i = 0; i < ui.tabs->count(); ++i)
         {

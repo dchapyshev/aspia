@@ -21,6 +21,7 @@
 #include <QAbstractTextDocumentLayout>
 #include <QApplication>
 #include <QDataStream>
+#include <QEvent>
 #include <QFontMetrics>
 #include <QHash>
 #include <QHeaderView>
@@ -438,6 +439,18 @@ void SearchWidget::deactivate(QStatusBar* statusbar)
 
     statusbar->removeWidget(status_results_label_);
     status_results_label_->setParent(this);
+}
+
+//--------------------------------------------------------------------------------------------------
+void SearchWidget::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::LanguageChange)
+    {
+        QStringList headers;
+        headers << tr("Name") << tr("Address / ID") << tr("Group") << tr("Comment");
+        tree_computer_->setHeaderLabels(headers);
+    }
+    ContentWidget::changeEvent(event);
 }
 
 //--------------------------------------------------------------------------------------------------

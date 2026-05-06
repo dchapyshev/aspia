@@ -36,6 +36,10 @@ public:
     QByteArray saveState() final;
     void restoreState(const QByteArray& state) final;
 
+protected:
+    // QWidget implementation.
+    void changeEvent(QEvent* event) final;
+
 private:
     Ui::RouterGroupWidget ui;
 

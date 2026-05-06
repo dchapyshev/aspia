@@ -24,6 +24,7 @@
 #include <QClipboard>
 #include <QCollator>
 #include <QDateTime>
+#include <QEvent>
 #include <QFile>
 #include <QFileDialog>
 #include <QIODevice>
@@ -634,29 +635,6 @@ void RouterWidget::deactivate(QStatusBar* statusbar)
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterWidget::updateStatusLabel()
-{
-    if (!status_label_)
-        return;
-
-    switch (currentTabType())
-    {
-        case TabType::HOSTS:
-            status_label_->setText(tr("%n host(s)", "", ui.tree_hosts->topLevelItemCount()));
-            break;
-        case TabType::RELAYS:
-            status_label_->setText(tr("%n relay(s)", "", ui.tree_relays->topLevelItemCount()));
-            break;
-        case TabType::USERS:
-            status_label_->setText(tr("%n user(s)", "", ui.tree_users->topLevelItemCount()));
-            break;
-        default:
-            status_label_->clear();
-            break;
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
 void RouterWidget::onUpdateRelayList()
 {
     emit sig_relayListRequest();
@@ -870,6 +848,67 @@ void RouterWidget::onDisconnectAllRelays()
 }
 
 //--------------------------------------------------------------------------------------------------
+void RouterWidget::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::LanguageChange)
+        ui.retranslateUi(this);
+    ContentWidget::changeEvent(event);
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::onStatusChanged(qint64 router_id, Router::Status status)
+{
+    status_ = status;
+
+    switch (status)
+    {
+        case Router::Status::CONNECTING:
+            status_dialog_->addMessage(tr("Connecting to router %1...").arg(config_.address));
+            break;
+        case Router::Status::ONLINE:
+            status_dialog_->addMessage(tr("Connection to router %1 established.").arg(config_.address));
+            break;
+        case Router::Status::OFFLINE:
+            status_dialog_->addMessage(tr("Disconnected from router %1.").arg(config_.address));
+            break;
+    }
+
+    if (status == Router::Status::ONLINE)
+    {
+        onUpdateRelayList();
+        onUpdateHostList();
+        onUpdateUserList();
+
+        ui.tree_relays->setEnabled(true);
+        ui.tree_peers->setEnabled(true);
+        ui.tree_hosts->setEnabled(true);
+        ui.tree_users->setEnabled(true);
+    }
+    else
+    {
+        ui.tree_relays->setEnabled(false);
+        ui.tree_peers->setEnabled(false);
+        ui.tree_hosts->setEnabled(false);
+        ui.tree_users->setEnabled(false);
+
+        ui.tree_relays->clear();
+        ui.tree_peers->clear();
+        ui.tree_hosts->clear();
+        ui.tree_users->clear();
+
+        updateStatusLabel();
+    }
+
+    emit sig_statusChanged(router_id, status);
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::onConnectionErrorOccurred(qint64 /* router_id */, TcpChannel::ErrorCode error_code)
+{
+    status_dialog_->addMessage(tr("Network error: %1.").arg(TcpChannel::errorToString(error_code)));
+}
+
+//--------------------------------------------------------------------------------------------------
 void RouterWidget::onTabChanged(int index)
 {
     updateStatusLabel();
@@ -880,6 +919,20 @@ void RouterWidget::onTabChanged(int index)
 void RouterWidget::onCurrentUserChanged()
 {
     emit sig_currentUserChanged(routerId());
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::onCurrentRelayChanged()
+{
+    ui.tree_peers->clear();
+    updateRelayStatistics();
+    emit sig_currentRelayChanged(routerId());
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::onCurrentHostChanged()
+{
+    emit sig_currentHostChanged(routerId());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -989,59 +1042,6 @@ void RouterWidget::onPeerContextMenuRequested(const QPoint& pos)
         if (QClipboard* clipboard = QApplication::clipboard())
             clipboard->setText(text);
     }
-}
-
-//--------------------------------------------------------------------------------------------------
-void RouterWidget::onStatusChanged(qint64 router_id, Router::Status status)
-{
-    status_ = status;
-
-    switch (status)
-    {
-        case Router::Status::CONNECTING:
-            status_dialog_->addMessage(tr("Connecting to router %1...").arg(config_.address));
-            break;
-        case Router::Status::ONLINE:
-            status_dialog_->addMessage(tr("Connection to router %1 established.").arg(config_.address));
-            break;
-        case Router::Status::OFFLINE:
-            status_dialog_->addMessage(tr("Disconnected from router %1.").arg(config_.address));
-            break;
-    }
-
-    if (status == Router::Status::ONLINE)
-    {
-        onUpdateRelayList();
-        onUpdateHostList();
-        onUpdateUserList();
-
-        ui.tree_relays->setEnabled(true);
-        ui.tree_peers->setEnabled(true);
-        ui.tree_hosts->setEnabled(true);
-        ui.tree_users->setEnabled(true);
-    }
-    else
-    {
-        ui.tree_relays->setEnabled(false);
-        ui.tree_peers->setEnabled(false);
-        ui.tree_hosts->setEnabled(false);
-        ui.tree_users->setEnabled(false);
-
-        ui.tree_relays->clear();
-        ui.tree_peers->clear();
-        ui.tree_hosts->clear();
-        ui.tree_users->clear();
-
-        updateStatusLabel();
-    }
-
-    emit sig_statusChanged(router_id, status);
-}
-
-//--------------------------------------------------------------------------------------------------
-void RouterWidget::onConnectionErrorOccurred(qint64 /* router_id */, TcpChannel::ErrorCode error_code)
-{
-    status_dialog_->addMessage(tr("Network error: %1.").arg(TcpChannel::errorToString(error_code)));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1241,6 +1241,87 @@ void RouterWidget::onRelayResultReceived(const proto::router::RelayResult& resul
 }
 
 //--------------------------------------------------------------------------------------------------
+void RouterWidget::updateStatusLabel()
+{
+    if (!status_label_)
+        return;
+
+    switch (currentTabType())
+    {
+        case TabType::HOSTS:
+            status_label_->setText(tr("%n host(s)", "", ui.tree_hosts->topLevelItemCount()));
+            break;
+        case TabType::RELAYS:
+            status_label_->setText(tr("%n relay(s)", "", ui.tree_relays->topLevelItemCount()));
+            break;
+        case TabType::USERS:
+            status_label_->setText(tr("%n user(s)", "", ui.tree_users->topLevelItemCount()));
+            break;
+        default:
+            status_label_->clear();
+            break;
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::updateRelayStatistics()
+{
+    RelayTreeItem* item = static_cast<RelayTreeItem*>(ui.tree_relays->currentItem());
+    if (!item)
+    {
+        ui.tree_peers->setEnabled(false);
+        return;
+    }
+
+    ui.tree_peers->setEnabled(true);
+
+    if (!item->info.has_statistics())
+        return;
+
+    const proto::router::RelayInfo::Statistics& stats = item->info.statistics();
+
+    auto has_with_id = [](const proto::router::RelayInfo::Statistics& stats, quint64 session_id)
+    {
+        for (int i = 0; i < stats.peer_size(); ++i)
+        {
+            if (stats.peer(i).session_id() == session_id)
+                return true;
+        }
+
+        return false;
+    };
+
+    // Remove from the UI all connections that are not in the list.
+    for (int i = ui.tree_peers->topLevelItemCount() - 1; i >= 0; --i)
+    {
+        PeerTreeItem* peer_item = static_cast<PeerTreeItem*>(ui.tree_peers->topLevelItem(i));
+        if (!has_with_id(stats, peer_item->conn.session_id()))
+            delete peer_item;
+    }
+
+    // Adding and updating elements in the UI.
+    for (int i = 0; i < stats.peer_size(); ++i)
+    {
+        const proto::router::Peer& connection = stats.peer(i);
+        bool found = false;
+
+        for (int j = 0; j < ui.tree_peers->topLevelItemCount(); ++j)
+        {
+            PeerTreeItem* peer_item = static_cast<PeerTreeItem*>(ui.tree_peers->topLevelItem(j));
+            if (peer_item->conn.session_id() == connection.session_id())
+            {
+                peer_item->updateItem(connection);
+                found = true;
+                break;
+            }
+        }
+
+        if (!found)
+            ui.tree_peers->addTopLevelItem(new PeerTreeItem(connection));
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
 void RouterWidget::saveHostsToFile()
 {
     LOG(INFO) << "[ACTION] Save hosts to file";
@@ -1389,74 +1470,3 @@ void RouterWidget::saveRelaysToFile()
     }
 }
 
-//--------------------------------------------------------------------------------------------------
-void RouterWidget::onCurrentRelayChanged()
-{
-    ui.tree_peers->clear();
-    updateRelayStatistics();
-    emit sig_currentRelayChanged(routerId());
-}
-
-//--------------------------------------------------------------------------------------------------
-void RouterWidget::onCurrentHostChanged()
-{
-    emit sig_currentHostChanged(routerId());
-}
-
-//--------------------------------------------------------------------------------------------------
-void RouterWidget::updateRelayStatistics()
-{
-    RelayTreeItem* item = static_cast<RelayTreeItem*>(ui.tree_relays->currentItem());
-    if (!item)
-    {
-        ui.tree_peers->setEnabled(false);
-        return;
-    }
-
-    ui.tree_peers->setEnabled(true);
-
-    if (!item->info.has_statistics())
-        return;
-
-    const proto::router::RelayInfo::Statistics& stats = item->info.statistics();
-
-    auto has_with_id = [](const proto::router::RelayInfo::Statistics& stats, quint64 session_id)
-    {
-        for (int i = 0; i < stats.peer_size(); ++i)
-        {
-            if (stats.peer(i).session_id() == session_id)
-                return true;
-        }
-
-        return false;
-    };
-
-    // Remove from the UI all connections that are not in the list.
-    for (int i = ui.tree_peers->topLevelItemCount() - 1; i >= 0; --i)
-    {
-        PeerTreeItem* peer_item = static_cast<PeerTreeItem*>(ui.tree_peers->topLevelItem(i));
-        if (!has_with_id(stats, peer_item->conn.session_id()))
-            delete peer_item;
-    }
-
-    // Adding and updating elements in the UI.
-    for (int i = 0; i < stats.peer_size(); ++i)
-    {
-        const proto::router::Peer& connection = stats.peer(i);
-        bool found = false;
-
-        for (int j = 0; j < ui.tree_peers->topLevelItemCount(); ++j)
-        {
-            PeerTreeItem* peer_item = static_cast<PeerTreeItem*>(ui.tree_peers->topLevelItem(j));
-            if (peer_item->conn.session_id() == connection.session_id())
-            {
-                peer_item->updateItem(connection);
-                found = true;
-                break;
-            }
-        }
-
-        if (!found)
-            ui.tree_peers->addTopLevelItem(new PeerTreeItem(connection));
-    }
-}

@@ -71,6 +71,10 @@ signals:
     void sig_currentChanged(qint64 computer_id);
     void sig_contextMenu(qint64 computer_id, const QPoint& pos);
 
+protected:
+    // QWidget implementation.
+    void changeEvent(QEvent* event) final;
+
 private slots:
     void onHeaderContextMenu(const QPoint& pos);
 

@@ -20,6 +20,7 @@
 
 #include <QApplication>
 #include <QDateTime>
+#include <QEvent>
 #include <QIODevice>
 #include <QLabel>
 #include <QLocale>
@@ -297,6 +298,14 @@ void LocalGroupWidget::deactivate(QStatusBar* statusbar)
 
     statusbar->removeWidget(status_check_label_);
     status_check_label_->setParent(this);
+}
+
+//--------------------------------------------------------------------------------------------------
+void LocalGroupWidget::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::LanguageChange)
+        ui.retranslateUi(this);
+    ContentWidget::changeEvent(event);
 }
 
 //--------------------------------------------------------------------------------------------------

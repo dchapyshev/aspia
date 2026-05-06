@@ -18,6 +18,8 @@
 
 #include "client/ui/hosts/router_group_widget.h"
 
+#include <QEvent>
+
 #include "base/logging.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -51,4 +53,12 @@ QByteArray RouterGroupWidget::saveState()
 void RouterGroupWidget::restoreState(const QByteArray& /* state */)
 {
 
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterGroupWidget::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::LanguageChange)
+        ui.retranslateUi(this);
+    ContentWidget::changeEvent(event);
 }
