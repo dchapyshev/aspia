@@ -474,8 +474,6 @@ QList<QPair<Tab::ActionRole, QList<QAction*>>> DesktopToolBar::tabActionGroups()
     ui.action_statistics->setProperty(Tab::kMenuOnlyProperty, true);
     ui.action_screenshot->setProperty(Tab::kMenuOnlyProperty, true);
     ui.action_autoscroll->setProperty(Tab::kMenuOnlyProperty, true);
-    ui.action_pause_video->setProperty(Tab::kMenuOnlyProperty, true);
-    ui.action_pause_audio->setProperty(Tab::kMenuOnlyProperty, true);
     scale_menu_->menuAction()->setProperty(Tab::kMenuOnlyProperty, true);
 
     QList<QPair<Tab::ActionRole, QList<QAction*>>> groups;
@@ -489,8 +487,7 @@ QList<QPair<Tab::ActionRole, QList<QAction*>>> DesktopToolBar::tabActionGroups()
     groups.append({ Tab::ActionRole::ACTION, actions});
     groups.append({ Tab::ActionRole::VIEW,
     {
-        ui.action_fullscreen, scale_menu_->menuAction(), ui.action_autoscroll, ui.action_pause_video,
-        ui.action_pause_audio,
+        ui.action_fullscreen, scale_menu_->menuAction(), ui.action_autoscroll,
     }});
     groups.append({ Tab::ActionRole::ACTION,
     {
@@ -514,8 +511,6 @@ QByteArray DesktopToolBar::saveState() const
     stream << scale_;
     stream << ui.action_autoscroll->isChecked();
     stream << ui.action_pin->isChecked();
-    stream << ui.action_pause_video->isChecked();
-    stream << ui.action_pause_audio->isChecked();
     stream << wait_for_host_;
 
     return buffer;
@@ -533,16 +528,12 @@ void DesktopToolBar::restoreState(const QByteArray& state)
     qint64 scale = -1;
     bool autoscroll = true;
     bool pinned = false;
-    bool pause_video = true;
-    bool pause_audio = true;
     bool wait_for_host = true;
 
-    stream >> scale >> autoscroll >> pinned >> pause_video >> pause_audio >> wait_for_host;
+    stream >> scale >> autoscroll >> pinned >> wait_for_host;
 
     scale_ = isValidScale(scale) ? scale : -1;
     ui.action_autoscroll->setChecked(autoscroll);
-    ui.action_pause_video->setChecked(pause_video);
-    ui.action_pause_audio->setChecked(pause_audio);
     wait_for_host_ = wait_for_host;
 
     ui.action_pin->setChecked(pinned);
@@ -578,18 +569,6 @@ bool DesktopToolBar::isPanelHidden() const
 bool DesktopToolBar::isPanelPinned() const
 {
     return ui.action_pin->isChecked();
-}
-
-//--------------------------------------------------------------------------------------------------
-bool DesktopToolBar::isVideoPauseEnabled() const
-{
-    return ui.action_pause_video->isChecked();
-}
-
-//--------------------------------------------------------------------------------------------------
-bool DesktopToolBar::isAudioPauseEnabled() const
-{
-    return ui.action_pause_audio->isChecked();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -854,11 +833,8 @@ void DesktopToolBar::createAdditionalMenu()
     updateScaleMenu();
 
     additional_menu_->addAction(ui.action_autoscroll);
-    additional_menu_->addAction(ui.action_pause_video);
-    additional_menu_->addAction(ui.action_pause_audio);
     additional_menu_->addSeparator();
     additional_menu_->addAction(ui.action_screenshot);
-    additional_menu_->addSeparator();
     additional_menu_->addAction(ui.action_start_recording);
     additional_menu_->addSeparator();
     additional_menu_->addAction(ui.action_statistics);
@@ -924,16 +900,6 @@ void DesktopToolBar::createAdditionalMenu()
         emit sig_scaleChanged();
     });
 
-    connect(ui.action_pause_video, &QAction::triggered, this, [this](bool enable)
-    {
-        LOG(INFO) << "[ACTION] Video pause changed:" << enable;
-        emit sig_videoPauseChanged(enable);
-    });
-    connect(ui.action_pause_audio, &QAction::triggered, this, [this](bool enable)
-    {
-        LOG(INFO) << "[ACTION] Audio pause changed:" << enable;
-        emit sig_audioPauseChanged(enable);
-    });
     connect(ui.action_screenshot, &QAction::triggered, this, [this]()
     {
         LOG(INFO) << "[ACTION] Take screenshot";

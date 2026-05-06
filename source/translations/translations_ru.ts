@@ -825,62 +825,62 @@ Routers added: %4</source>
 <context>
     <name>ClientWindow</name>
     <message>
-        <location filename="../client/ui/client_window.cc" line="202"/>
+        <location filename="../client/ui/client_window.cc" line="183"/>
         <source>Session started.</source>
         <translation>Сессия запущена.</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="210"/>
+        <location filename="../client/ui/client_window.cc" line="191"/>
         <source>Error requesting connection via router: %1.</source>
         <translation>Ошибка при запросе соединения через маршрутизатор: %1.</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="214"/>
+        <location filename="../client/ui/client_window.cc" line="195"/>
         <source>The specified router is unavailable.</source>
         <translation>Указанный маршрутизатор недоступен.</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="218"/>
+        <location filename="../client/ui/client_window.cc" line="199"/>
         <source>The specified router is offline.</source>
         <translation>Указанный маршрутизатор не в сети.</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="226"/>
+        <location filename="../client/ui/client_window.cc" line="207"/>
         <source>Connecting to host %1...</source>
         <translation>Подключение к хосту %1...</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="230"/>
+        <location filename="../client/ui/client_window.cc" line="211"/>
         <source>Connecting to host %1:%2...</source>
         <translation>Подключение к хосту %1:%2...</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="241"/>
+        <location filename="../client/ui/client_window.cc" line="222"/>
         <source>Connection to host %1 established.</source>
         <translation>Подключение к хосту %1 установлено.</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="245"/>
+        <location filename="../client/ui/client_window.cc" line="226"/>
         <source>Connection to host %1:%2 established.</source>
         <translation>Подключение к хосту %1:%2 установлено.</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="268"/>
+        <location filename="../client/ui/client_window.cc" line="249"/>
         <source>Host is unavailable yet. Waiting to reconnect...</source>
         <translation>Хост недоступен. Ожидание переподключения...</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="272"/>
+        <location filename="../client/ui/client_window.cc" line="253"/>
         <source>Timeout waiting for reconnection to host.</source>
         <translation>Превышено время ожидания при попытке повторного подключения к хосту.</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="280"/>
+        <location filename="../client/ui/client_window.cc" line="261"/>
         <source>The Host version is newer than the Client version (%1 &gt; %2). Please update the application.</source>
         <translation>Версия Хоста новее версии Клиента (%1 &gt; %2). Пожалуйста, обновите приложение.</translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="286"/>
+        <location filename="../client/ui/client_window.cc" line="267"/>
         <source>Attempting to connect in compatibility mode...</source>
         <translation>Попытка подключения в режиме совместимости...</translation>
     </message>
@@ -1429,7 +1429,7 @@ Routers added: %4</source>
     </message>
     <message>
         <location filename="../client/ui/desktop/desktop_toolbar.ui" line="219"/>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="849"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="828"/>
         <source>Scale</source>
         <translation>Масштаб</translation>
     </message>
@@ -1538,17 +1538,15 @@ Routers added: %4</source>
         <translation>Диспетчер задач</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="427"/>
         <source>Pause video when minimizing</source>
-        <translation>Приостанавливать видео при сворачивании</translation>
+        <translation type="vanished">Приостанавливать видео при сворачивании</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="438"/>
         <source>Pause audio when minimizing</source>
-        <translation>Приостанавливать звук при сворачивании</translation>
+        <translation type="vanished">Приостанавливать звук при сворачивании</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="447"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="425"/>
         <source>Switch Session</source>
         <translation>Переключение сессии</translation>
     </message>
@@ -1573,39 +1571,39 @@ Routers added: %4</source>
         <translation>Остановить запись</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="678"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="657"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation>Вы действительно хотите выключить удаленный компьютер?</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="693"/>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="719"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="672"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="698"/>
         <source>Confirmation</source>
         <translation>Подтверждение</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="694"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="673"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation>Вы действительно хотите перезагрузить удаленный компьютер?</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="699"/>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="725"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="678"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="704"/>
         <source>Wait for host</source>
         <translation>Ожидание хоста</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="720"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="699"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation>Вы действительно хотите перезагрузить удаленный компьютер в безопасном режиме?</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="745"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="724"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation>Вы действительно хотите завершить сеанс пользователя на удаленном компьютере?</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="760"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="739"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation>Вы действительно хотите заблокировать сеанс пользователя на удаленном компьютере?</translation>
     </message>
@@ -1636,17 +1634,17 @@ Routers added: %4</source>
 <context>
     <name>DesktopWindow</name>
     <message>
-        <location filename="../client/ui/desktop/desktop_window.cc" line="861"/>
+        <location filename="../client/ui/desktop/desktop_window.cc" line="803"/>
         <source>Save File</source>
         <translation>Сохранить файл</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_window.cc" line="863"/>
+        <location filename="../client/ui/desktop/desktop_window.cc" line="805"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation>PNG изображение (*.png);;BMP изображение (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_window.cc" line="894"/>
+        <location filename="../client/ui/desktop/desktop_window.cc" line="836"/>
         <source>Could not save image</source>
         <translation>Не удалось сохранить изображение</translation>
     </message>
@@ -3883,8 +3881,12 @@ Computers skipped: %5</source>
     </message>
     <message>
         <location filename="../client/ui/router_dialog.ui" line="59"/>
+        <source>Session Type:</source>
+        <translation>Тип сессии:</translation>
+    </message>
+    <message>
         <source>Access Level:</source>
-        <translation>Уровень доступа:</translation>
+        <translation type="vanished">Уровень доступа:</translation>
     </message>
     <message>
         <location filename="../client/ui/router_dialog.ui" line="69"/>
@@ -5099,12 +5101,12 @@ Computers skipped: %5</source>
         <translation>Статистика</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/statistics_dialog.ui" line="36"/>
+        <location filename="../client/ui/desktop/statistics_dialog.ui" line="33"/>
         <source>Parameter</source>
         <translation>Параметр</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/statistics_dialog.ui" line="41"/>
+        <location filename="../client/ui/desktop/statistics_dialog.ui" line="38"/>
         <source>Value</source>
         <translation>Значение</translation>
     </message>

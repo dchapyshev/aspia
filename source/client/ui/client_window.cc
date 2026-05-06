@@ -19,7 +19,6 @@
 #include "client/ui/client_window.h"
 
 #include <QCursor>
-#include <QEvent>
 #include <QGuiApplication>
 #include <QMoveEvent>
 #include <QTimer>
@@ -116,12 +115,6 @@ bool ClientWindow::connectToHost(ComputerConfig computer, const QString& display
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientWindow::setSessionPaused(bool /* paused */)
-{
-    // Nothing
-}
-
-//--------------------------------------------------------------------------------------------------
 void ClientWindow::setTabbedMode(bool /* tabbed */)
 {
     // Nothing
@@ -177,18 +170,6 @@ void ClientWindow::moveEvent(QMoveEvent* event)
         return;
 
     drag_poll_timer_->start();
-}
-
-//--------------------------------------------------------------------------------------------------
-void ClientWindow::changeEvent(QEvent* event)
-{
-    QWidget::changeEvent(event);
-
-    // Mirror window minimize/restore as a session pause/resume request, but only when this widget
-    // really is the top-level window. In a tabbed setup the container drives setSessionPaused
-    // directly via activate/deactivate.
-    if (event->type() == QEvent::WindowStateChange && isWindow())
-        setSessionPaused(isMinimized());
 }
 
 //--------------------------------------------------------------------------------------------------

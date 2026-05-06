@@ -62,14 +62,10 @@ public:
         int speed_udp_rx = 0;
         int speed_udp_tx = 0;
         qint64 video_packet_count = 0;
-        qint64 video_pause_count = 0;
-        qint64 video_resume_count = 0;
         size_t min_video_packet = 0;
         size_t max_video_packet = 0;
         size_t avg_video_packet = 0;
         qint64 audio_packet_count = 0;
-        qint64 audio_pause_count = 0;
-        qint64 audio_resume_count = 0;
         size_t min_audio_packet = 0;
         size_t max_audio_packet = 0;
         size_t avg_audio_packet = 0;
@@ -92,8 +88,6 @@ public slots:
     void onDesktopConfigChanged(const proto::control::Config& config);
     void onCurrentScreenChanged(const proto::screen::Screen& screen);
     void onPreferredSizeChanged(int width, int height);
-    void onVideoPauseChanged(bool enable);
-    void onAudioPauseChanged(bool enable);
     void onRecordingChanged(bool enable, const QString& file_path);
     void onKeyEvent(const proto::input::KeyEvent& event);
     void onTextEvent(const proto::input::TextEvent& event);
@@ -169,11 +163,7 @@ private:
     using TimePoint = std::chrono::time_point<Clock>;
 
     qint64 video_packet_count_ = 0;
-    qint64 video_pause_count_ = 0;
-    qint64 video_resume_count_ = 0;
     qint64 audio_packet_count_ = 0;
-    qint64 audio_pause_count_ = 0;
-    qint64 audio_resume_count_ = 0;
     int send_mouse_count_ = 0;
     int drop_mouse_count_ = 0;
     int send_key_count_ = 0;

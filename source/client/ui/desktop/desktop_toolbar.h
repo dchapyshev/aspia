@@ -57,8 +57,8 @@ public:
     // dropdown holder (Menu). Items meant to live only inside menus carry Tab::kMenuOnlyProperty.
     QList<QPair<Tab::ActionRole, QList<QAction*>>> tabActionGroups() const;
 
-    // Persistent toolbar state (scale, autoscroll, pin, pause flags, wait-for-host) packed for
-    // storage as part of the owning Tab's state.
+    // Persistent toolbar state (scale, autoscroll, pin, wait-for-host) packed for storage as part
+    // of the owning Tab's state.
     QByteArray saveState() const;
     void restoreState(const QByteArray& state);
 
@@ -66,8 +66,6 @@ public:
     bool autoScrolling() const;
     bool isPanelHidden() const;
     bool isPanelPinned() const;
-    bool isVideoPauseEnabled() const;
-    bool isAudioPauseEnabled() const;
 
 signals:
     void sig_pasteAsKeystrokes();
@@ -86,8 +84,6 @@ signals:
     void sig_closeSession();
     void sig_showHidePanel();
     void sig_recordingStateChanged(bool enable);
-    void sig_videoPauseChanged(bool enable);
-    void sig_audioPauseChanged(bool enable);
     void sig_switchSession(quint32 session_id);
 
     // Emitted when the set of actions exposed via tabActionGroups() may have changed (e.g. a

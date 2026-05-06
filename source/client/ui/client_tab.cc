@@ -105,7 +105,6 @@ void ClientTab::detachToWindow()
     layout()->removeWidget(client_window_);
     client_window_->setParent(nullptr, Qt::Window);
     client_window_->show();
-    client_window_->setSessionPaused(false);
     client_window_->setTabbedMode(false);
 }
 
@@ -146,15 +145,13 @@ void ClientTab::activate(QStatusBar* /* statusbar */)
     if (!client_window_)
         return;
 
-    client_window_->setSessionPaused(false);
     scheduleRepaint();
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClientTab::deactivate(QStatusBar* /* statusbar */)
 {
-    if (client_window_)
-        client_window_->setSessionPaused(true);
+    // Nothing.
 }
 
 //--------------------------------------------------------------------------------------------------

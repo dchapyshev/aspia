@@ -709,62 +709,62 @@ Routers added: %4</source>
 <context>
     <name>ClientWindow</name>
     <message>
-        <location filename="../client/ui/client_window.cc" line="202"/>
+        <location filename="../client/ui/client_window.cc" line="183"/>
         <source>Session started.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="210"/>
+        <location filename="../client/ui/client_window.cc" line="191"/>
         <source>Error requesting connection via router: %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="214"/>
+        <location filename="../client/ui/client_window.cc" line="195"/>
         <source>The specified router is unavailable.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="218"/>
+        <location filename="../client/ui/client_window.cc" line="199"/>
         <source>The specified router is offline.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="226"/>
+        <location filename="../client/ui/client_window.cc" line="207"/>
         <source>Connecting to host %1...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="230"/>
+        <location filename="../client/ui/client_window.cc" line="211"/>
         <source>Connecting to host %1:%2...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="241"/>
+        <location filename="../client/ui/client_window.cc" line="222"/>
         <source>Connection to host %1 established.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="245"/>
+        <location filename="../client/ui/client_window.cc" line="226"/>
         <source>Connection to host %1:%2 established.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="268"/>
+        <location filename="../client/ui/client_window.cc" line="249"/>
         <source>Host is unavailable yet. Waiting to reconnect...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="272"/>
+        <location filename="../client/ui/client_window.cc" line="253"/>
         <source>Timeout waiting for reconnection to host.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="280"/>
+        <location filename="../client/ui/client_window.cc" line="261"/>
         <source>The Host version is newer than the Client version (%1 &gt; %2). Please update the application.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/client_window.cc" line="286"/>
+        <location filename="../client/ui/client_window.cc" line="267"/>
         <source>Attempting to connect in compatibility mode...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1235,7 +1235,7 @@ Routers added: %4</source>
     </message>
     <message>
         <location filename="../client/ui/desktop/desktop_toolbar.ui" line="219"/>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="849"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="828"/>
         <source>Scale</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1336,17 +1336,7 @@ Routers added: %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="427"/>
-        <source>Pause video when minimizing</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="438"/>
-        <source>Pause audio when minimizing</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="447"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.ui" line="425"/>
         <source>Switch Session</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1371,39 +1361,39 @@ Routers added: %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="678"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="657"/>
         <source>Are you sure you want to shutdown the remote computer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="693"/>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="719"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="672"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="698"/>
         <source>Confirmation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="694"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="673"/>
         <source>Are you sure you want to reboot the remote computer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="699"/>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="725"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="678"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="704"/>
         <source>Wait for host</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="720"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="699"/>
         <source>Are you sure you want to reboot the remote computer in Safe Mode?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="745"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="724"/>
         <source>Are you sure you want to end the user session on the remote computer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="760"/>
+        <location filename="../client/ui/desktop/desktop_toolbar.cc" line="739"/>
         <source>Are you sure you want to lock the user session on the remote computer?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1434,17 +1424,17 @@ Routers added: %4</source>
 <context>
     <name>DesktopWindow</name>
     <message>
-        <location filename="../client/ui/desktop/desktop_window.cc" line="861"/>
+        <location filename="../client/ui/desktop/desktop_window.cc" line="803"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_window.cc" line="863"/>
+        <location filename="../client/ui/desktop/desktop_window.cc" line="805"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_window.cc" line="894"/>
+        <location filename="../client/ui/desktop/desktop_window.cc" line="836"/>
         <source>Could not save image</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3383,7 +3373,7 @@ Computers skipped: %5</source>
     </message>
     <message>
         <location filename="../client/ui/router_dialog.ui" line="59"/>
-        <source>Access Level:</source>
+        <source>Session Type:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4285,12 +4275,12 @@ Computers skipped: %5</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/statistics_dialog.ui" line="36"/>
+        <location filename="../client/ui/desktop/statistics_dialog.ui" line="33"/>
         <source>Parameter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/statistics_dialog.ui" line="41"/>
+        <location filename="../client/ui/desktop/statistics_dialog.ui" line="38"/>
         <source>Value</source>
         <translation type="unfinished"></translation>
     </message>

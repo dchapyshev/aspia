@@ -416,28 +416,6 @@
     <bool>false</bool>
    </property>
   </action>
-  <action name="action_pause_video">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="checked">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Pause video when minimizing</string>
-   </property>
-  </action>
-  <action name="action_pause_audio">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="checked">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Pause audio when minimizing</string>
-   </property>
-  </action>
   <action name="action_switch_session">
    <property name="icon">
     <iconset resource="../../../common/resources/common.qrc">

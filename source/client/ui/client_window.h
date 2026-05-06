@@ -46,11 +46,6 @@ public:
     std::shared_ptr<SessionState> sessionState() { return session_state_; }
     proto::peer::SessionType sessionType() const { return session_type_; }
 
-    // Notifies the session that it has been hidden (paused=true) or made visible again
-    // (paused=false). Subclasses override to pause/resume video, audio, etc. The container
-    // (Tab/MainWindow) drives this from tab activation or window state changes.
-    virtual void setSessionPaused(bool paused);
-
     // Notifies the session that it has been embedded in a tab (tabbed=true) or detached into a
     // top-level window (tabbed=false). Subclasses override to hide their own session-level
     // toolbars while in tabbed mode, since their actions are exposed via tabActionGroups().
@@ -113,7 +108,6 @@ protected:
     // QWidget implementation.
     void closeEvent(QCloseEvent* event) override;
     void moveEvent(QMoveEvent* event) override;
-    void changeEvent(QEvent* event) override;
 
 public slots:
     void onStatusChanged(Client::Status status, const QVariant& data);

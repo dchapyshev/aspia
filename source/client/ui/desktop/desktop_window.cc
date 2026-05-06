@@ -111,18 +111,6 @@ DesktopWindow::DesktopWindow(const proto::control::Config& desktop_config, QWidg
     connect(toolbar_, &DesktopToolBar::sig_closeSession, this, &DesktopWindow::close);
     connect(toolbar_, &DesktopToolBar::sig_showHidePanel, this, &DesktopWindow::onShowHidePanel);
 
-    enable_video_pause_ = toolbar_->isVideoPauseEnabled();
-    connect(toolbar_, &DesktopToolBar::sig_videoPauseChanged, this, [this](bool enable)
-    {
-        enable_video_pause_ = enable;
-    });
-
-    enable_audio_pause_ = toolbar_->isAudioPauseEnabled();
-    connect(toolbar_, &DesktopToolBar::sig_audioPauseChanged, this, [this](bool enable)
-    {
-        enable_audio_pause_ = enable;
-    });
-
     connect(toolbar_, &DesktopToolBar::sig_screenSelected, this, &DesktopWindow::sig_screenSelected);
     connect(toolbar_, &DesktopToolBar::sig_powerControl,
             this, [this](proto::power::Control::Action action, bool wait)
@@ -231,10 +219,6 @@ Client* DesktopWindow::createClient()
             Qt::QueuedConnection);
     connect(this, &DesktopWindow::sig_preferredSizeChanged, client, &ClientDesktop::onPreferredSizeChanged,
             Qt::QueuedConnection);
-    connect(this, &DesktopWindow::sig_videoPaused, client, &ClientDesktop::onVideoPauseChanged,
-            Qt::QueuedConnection);
-    connect(this, &DesktopWindow::sig_audioPaused, client, &ClientDesktop::onAudioPauseChanged,
-            Qt::QueuedConnection);
     connect(this, &DesktopWindow::sig_videoRecording, client, &ClientDesktop::onRecordingChanged,
             Qt::QueuedConnection);
     connect(this, &DesktopWindow::sig_keyEvent, client, &ClientDesktop::onKeyEvent,
@@ -254,43 +238,6 @@ Client* DesktopWindow::createClient()
             Qt::QueuedConnection);
 
     return client;
-}
-
-//--------------------------------------------------------------------------------------------------
-void DesktopWindow::setSessionPaused(bool paused)
-{
-    LOG(INFO) << "Session paused:" << paused;
-
-    if (paused)
-    {
-        if (enable_video_pause_)
-        {
-            emit sig_videoPaused(true);
-            video_pause_last_ = true;
-        }
-
-        if (enable_audio_pause_)
-        {
-            emit sig_audioPaused(true);
-            audio_pause_last_ = true;
-        }
-
-        desktop_->userLeftFromWindow();
-    }
-    else
-    {
-        if (video_pause_last_)
-        {
-            emit sig_videoPaused(false);
-            video_pause_last_ = false;
-        }
-
-        if (audio_pause_last_)
-        {
-            emit sig_audioPaused(false);
-            audio_pause_last_ = false;
-        }
-    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -534,11 +481,6 @@ void DesktopWindow::onInternalReset()
     if (scroll_timer_)
         scroll_timer_->stop();
     scroll_delta_ = QPoint();
-
-    enable_video_pause_ = true;
-    video_pause_last_ = false;
-    enable_audio_pause_ = true;
-    audio_pause_last_ = false;
 
     wheel_angle_ = QPoint();
 

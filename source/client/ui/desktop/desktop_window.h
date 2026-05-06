@@ -44,7 +44,6 @@ public:
 
     // ClientWindow implementation.
     Client* createClient() final;
-    void setSessionPaused(bool paused) final;
     void setTabbedMode(bool tabbed) final;
     QList<QPair<Tab::ActionRole, QList<QAction*>>> tabActionGroups() const final;
     void applySettings() final;
@@ -68,8 +67,6 @@ signals:
     void sig_desktopConfigChanged(const proto::control::Config& config);
     void sig_screenSelected(const proto::screen::Screen& screen);
     void sig_preferredSizeChanged(int width, int height);
-    void sig_videoPaused(bool enable);
-    void sig_audioPaused(bool enable);
     void sig_videoRecording(bool enable, const QString& file_path);
     void sig_keyEvent(const proto::input::KeyEvent& event);
     void sig_textEvent(const proto::input::TextEvent& event);
@@ -120,11 +117,6 @@ private:
 
     std::optional<QPoint> start_panel_pos_;
     int panel_pos_x_ = 50;
-
-    bool enable_video_pause_ = true;
-    bool video_pause_last_ = false;
-    bool enable_audio_pause_ = true;
-    bool audio_pause_last_ = false;
 
     QPoint wheel_angle_;
 

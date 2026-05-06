@@ -336,58 +336,6 @@ void ClientDesktop::onPreferredSizeChanged(int width, int height)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientDesktop::onVideoPauseChanged(bool enable)
-{
-    if (isLegacy())
-        return;
-
-    CLOG(INFO) << "Video pause changed:" << enable;
-
-    if (enable)
-    {
-        ++video_pause_count_;
-    }
-    else
-    {
-        if (!video_pause_count_)
-            return;
-        ++video_resume_count_;
-    }
-
-    proto::video::ClientToHost message;
-    proto::video::Pause* pause = message.mutable_pause();
-    pause->set_enable(enable);
-    pause->set_dummy(1);
-    sendMessage(proto::desktop::CHANNEL_ID_VIDEO, serialize(message));
-}
-
-//--------------------------------------------------------------------------------------------------
-void ClientDesktop::onAudioPauseChanged(bool enable)
-{
-    if (isLegacy())
-        return;
-
-    CLOG(INFO) << "Audio pause changed:" << enable;
-
-    if (enable)
-    {
-        ++audio_pause_count_;
-    }
-    else
-    {
-        if (!audio_pause_count_)
-            return;
-        ++audio_resume_count_;
-    }
-
-    proto::audio::ClientToHost message;
-    proto::audio::Pause* pause = message.mutable_pause();
-    pause->set_enable(enable);
-    pause->set_dummy(1);
-    sendMessage(proto::desktop::CHANNEL_ID_AUDIO, serialize(message));
-}
-
-//--------------------------------------------------------------------------------------------------
 void ClientDesktop::onRecordingChanged(bool enable, const QString& file_path)
 {
     proto::user::ClientToHost message;
@@ -586,8 +534,6 @@ void ClientDesktop::onMetricsRequest()
     metrics.max_video_packet = max_video_packet_;
     metrics.avg_video_packet = avg_video_packet_;
     metrics.video_packet_count = video_packet_count_;
-    metrics.video_pause_count = video_pause_count_;
-    metrics.video_resume_count = video_resume_count_;
 
     if (min_audio_packet_ != std::numeric_limits<size_t>::max())
         metrics.min_audio_packet = min_audio_packet_;
@@ -595,8 +541,6 @@ void ClientDesktop::onMetricsRequest()
     metrics.max_audio_packet = max_audio_packet_;
     metrics.avg_audio_packet = avg_audio_packet_;
     metrics.audio_packet_count = audio_packet_count_;
-    metrics.audio_pause_count = audio_pause_count_;
-    metrics.audio_resume_count = audio_resume_count_;
 
     metrics.video_capturer_type = video_capturer_type_;
     metrics.video_encoder_type = video_encoding_;

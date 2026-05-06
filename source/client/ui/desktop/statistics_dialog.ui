@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>352</width>
-    <height>455</height>
+    <height>399</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,9 +18,6 @@
     <widget class="QTreeWidget" name="tree">
      <property name="showDropIndicator" stdset="0">
       <bool>false</bool>
-     </property>
-     <property name="alternatingRowColors">
-      <bool>true</bool>
      </property>
      <property name="indentation">
       <number>0</number>
@@ -76,22 +73,12 @@
      </item>
      <item>
       <property name="text">
-       <string notr="true">Video Pause/Resume Count</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
        <string notr="true">Video Packet MIN/MAX/AVG</string>
       </property>
      </item>
      <item>
       <property name="text">
        <string notr="true">Audio Packet Count</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string notr="true">Audio Pause/Resume Count</string>
       </property>
      </item>
      <item>
