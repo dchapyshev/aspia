@@ -187,7 +187,7 @@ void startRouterSession(const ComputerConfig& computer,
 //         "username": "router_user",
 //         "password": "router_secret"
 //     },
-//     "desktop_config": {
+//     "desktop": {
 //         "audio": true,
 //         "cursor_shape": true,
 //         "cursor_position": true,
@@ -202,7 +202,7 @@ void startRouterSession(const ComputerConfig& computer,
 // Required: "computer.address".
 // Optional: "session_type" (defaults to "desktop" if missing or unknown), "display_name",
 //           "computer.name", "computer.username", "computer.password",
-//           "desktop_config" (used only for "session_type": "desktop").
+//           "desktop" (used only for "session_type": "desktop").
 // The "router" object is required when "computer.address" is a host ID; in that case
 // "router.address", "router.username" and "router.password" are all required.
 // Possible "session_type" values: "desktop", "file-transfer", "system-info", "chat".
@@ -282,14 +282,14 @@ bool handleConnect()
 
     proto::control::Config desktop_config = ConfigFactory::defaultDesktopConfig();
 
-    if (session_type == proto::peer::SESSION_TYPE_DESKTOP && root.contains("desktop_config"))
+    if (session_type == proto::peer::SESSION_TYPE_DESKTOP && root.contains("desktop"))
     {
-        QJsonValue desktop_value = root.value("desktop_config");
+        QJsonValue desktop_value = root.value("desktop");
         if (!desktop_value.isObject())
         {
-            LOG(ERROR) << "Field \"desktop_config\" must be an object";
+            LOG(ERROR) << "Field \"desktop\" must be an object";
             MsgBox::warning(nullptr, QApplication::translate("Client",
-                "Field \"desktop_config\" must be an object."));
+                "Field \"desktop\" must be an object."));
             return false;
         }
 
@@ -304,9 +304,9 @@ bool handleConnect()
             QJsonValue value = desktop_object.value(key);
             if (!value.isBool())
             {
-                LOG(ERROR) << "Field \"desktop_config." << key << "\" must be boolean";
+                LOG(ERROR) << "Field \"desktop." << key << "\" must be boolean";
                 MsgBox::warning(nullptr, QApplication::translate("Client",
-                    "Field \"desktop_config.%1\" must be boolean.").arg(QString::fromUtf8(key)));
+                    "Field \"desktop.%1\" must be boolean.").arg(QString::fromUtf8(key)));
                 return false;
             }
 
