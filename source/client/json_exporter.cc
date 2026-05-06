@@ -64,7 +64,7 @@ QJsonObject buildRouter(const RouterConfig& router, const DataCryptor& cryptor)
 {
     QJsonObject object;
     object.insert("id", static_cast<qint64>(router.router_id));
-    object.insert("display_name", router.display_name);
+    object.insert("display_name", encryptToHex(cryptor, router.display_name));
     object.insert("address", encryptToHex(cryptor, router.address));
     object.insert("session_type", static_cast<int>(router.session_type));
     object.insert("username", encryptToHex(cryptor, router.username));
@@ -78,7 +78,7 @@ QJsonObject buildGroup(const GroupConfig& group, const DataCryptor& cryptor)
     QJsonObject object;
     object.insert("id", static_cast<qint64>(group.id));
     object.insert("parent_id", static_cast<qint64>(group.parent_id));
-    object.insert("name", group.name);
+    object.insert("name", encryptToHex(cryptor, group.name));
     object.insert("comment", encryptToHex(cryptor, group.comment));
     return object;
 }
@@ -90,7 +90,7 @@ QJsonObject buildComputer(const ComputerConfig& computer, const DataCryptor& cry
     object.insert("id", static_cast<qint64>(computer.id));
     object.insert("group_id", static_cast<qint64>(computer.group_id));
     object.insert("router_id", static_cast<qint64>(computer.router_id));
-    object.insert("name", computer.name);
+    object.insert("name", encryptToHex(cryptor, computer.name));
     object.insert("comment", encryptToHex(cryptor, computer.comment));
     object.insert("address", encryptToHex(cryptor, computer.address));
     object.insert("username", encryptToHex(cryptor, computer.username));

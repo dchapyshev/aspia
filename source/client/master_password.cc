@@ -65,6 +65,7 @@ bool changeKeyAndReencrypt(const QByteArray& new_key, const QByteArray& new_salt
 
     // Read decrypted data with the current key.
     QList<ComputerConfig> computers = db.allComputers();
+    QList<GroupConfig> groups = db.allGroups();
     QList<RouterConfig> routers = db.routerList();
 
     // Switch the cryptor to the new key so writes are encrypted with it.
@@ -75,6 +76,16 @@ bool changeKeyAndReencrypt(const QByteArray& new_key, const QByteArray& new_salt
         if (!db.modifyComputer(computer))
         {
             LOG(ERROR) << "Unable to re-encrypt computer:" << computer.id;
+            cryptor.setKey(old_key);
+            return false;
+        }
+    }
+
+    for (const GroupConfig& group : std::as_const(groups))
+    {
+        if (!db.modifyGroup(group))
+        {
+            LOG(ERROR) << "Unable to re-encrypt group:" << group.id;
             cryptor.setKey(old_key);
             return false;
         }

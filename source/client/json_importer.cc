@@ -96,14 +96,15 @@ std::optional<QString> decryptFromHex(const DataCryptor& cryptor, const QJsonVal
 //--------------------------------------------------------------------------------------------------
 qint64 importRouter(const QJsonObject& router_object, const DataCryptor& cryptor, ImportCounters* counters)
 {
-    QString display_name = sanitizedName(router_object.value("display_name").toString());
     int session_type = router_object.value("session_type").toInt(proto::router::SESSION_TYPE_CLIENT);
 
+    std::optional<QString> display_name = decryptFromHex(cryptor, router_object.value("display_name"));
     std::optional<QString> address = decryptFromHex(cryptor, router_object.value("address"));
     std::optional<QString> username = decryptFromHex(cryptor, router_object.value("username"));
     std::optional<QString> password = decryptFromHex(cryptor, router_object.value("password"));
 
-    if (!address.has_value() || !username.has_value() || !password.has_value())
+    if (!display_name.has_value() || !address.has_value() ||
+        !username.has_value() || !password.has_value())
     {
         ++counters->routers_skipped;
         return 0;
@@ -123,8 +124,10 @@ qint64 importRouter(const QJsonObject& router_object, const DataCryptor& cryptor
             return router.router_id;
     }
 
+    QString display_name_value = sanitizedName(*display_name);
+
     RouterConfig config;
-    config.display_name = display_name.isEmpty() ? *address : display_name;
+    config.display_name = display_name_value.isEmpty() ? *address : display_name_value;
     config.address = *address;
     config.username = *username;
     config.password = *password;
@@ -194,15 +197,16 @@ void importGroups(const QJsonArray& groups_array,
             if (!readGroupIds(group_object, &old_id, &old_parent_id))
                 continue;
 
-            QString name = sanitizedName(group_object.value("name").toString());
-            if (name.isEmpty())
+            std::optional<QString> name_decrypted = decryptFromHex(cryptor, group_object.value("name"));
+            std::optional<QString> comment = decryptFromHex(cryptor, group_object.value("comment"));
+            if (!name_decrypted.has_value() || !comment.has_value())
             {
                 ++counters->groups_skipped;
                 continue;
             }
 
-            std::optional<QString> comment = decryptFromHex(cryptor, group_object.value("comment"));
-            if (!comment.has_value())
+            QString name = sanitizedName(*name_decrypted);
+            if (name.isEmpty())
             {
                 ++counters->groups_skipped;
                 continue;
@@ -243,20 +247,21 @@ void importComputers(const QJsonArray& computers_array,
 
         QJsonObject object = value.toObject();
 
-        QString name = sanitizedName(object.value("name").toString());
-        if (name.isEmpty())
-        {
-            ++counters->computers_skipped;
-            continue;
-        }
-
+        std::optional<QString> name_decrypted = decryptFromHex(cryptor, object.value("name"));
         std::optional<QString> address = decryptFromHex(cryptor, object.value("address"));
         std::optional<QString> comment = decryptFromHex(cryptor, object.value("comment"));
         std::optional<QString> username = decryptFromHex(cryptor, object.value("username"));
         std::optional<QString> password = decryptFromHex(cryptor, object.value("password"));
 
-        if (!address.has_value() || !comment.has_value() ||
+        if (!name_decrypted.has_value() || !address.has_value() || !comment.has_value() ||
             !username.has_value() || !password.has_value())
+        {
+            ++counters->computers_skipped;
+            continue;
+        }
+
+        QString name = sanitizedName(*name_decrypted);
+        if (name.isEmpty())
         {
             ++counters->computers_skipped;
             continue;

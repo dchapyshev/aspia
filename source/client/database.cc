@@ -77,7 +77,7 @@ ComputerConfig readComputer(const QSqlQuery& query)
     computer.id = query.value(0).toLongLong();
     computer.group_id = query.value(1).toLongLong();
     computer.router_id = query.value(2).toLongLong();
-    computer.name = query.value(3).toString();
+    computer.name = decryptString(query.value(3).toByteArray());
     computer.comment = decryptString(query.value(4).toByteArray());
     computer.address = decryptString(query.value(5).toByteArray());
     computer.username = decryptString(query.value(6).toByteArray());
@@ -96,7 +96,7 @@ GroupConfig readGroup(const QSqlQuery& query)
     GroupConfig group;
     group.id = query.value(0).toLongLong();
     group.parent_id = query.value(1).toLongLong();
-    group.name = query.value(2).toString();
+    group.name = decryptString(query.value(2).toByteArray());
     group.comment = decryptString(query.value(3).toByteArray());
     group.data = decryptBytes(query.value(4).toByteArray());
     return group;
@@ -107,7 +107,7 @@ RouterConfig readRouter(const QSqlQuery& query)
 {
     RouterConfig router;
     router.router_id = query.value(0).toLongLong();
-    router.display_name = query.value(1).toString();
+    router.display_name = decryptString(query.value(1).toByteArray());
     router.address = decryptString(query.value(2).toByteArray());
     router.session_type = static_cast<proto::router::SessionType>(query.value(3).toUInt());
     router.username = decryptString(query.value(4).toByteArray());
@@ -125,7 +125,7 @@ bool createTables(QSqlDatabase& db)
     if (!query.exec("CREATE TABLE IF NOT EXISTS \"groups\" ("
                     "\"id\" INTEGER UNIQUE,"
                     "\"parent_id\" INTEGER NOT NULL DEFAULT 0,"
-                    "\"name\" TEXT NOT NULL DEFAULT '',"
+                    "\"name\" BLOB DEFAULT X'',"
                     "\"comment\" BLOB DEFAULT X'',"
                     "\"data\" BLOB DEFAULT X'',"
                     "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
@@ -138,7 +138,7 @@ bool createTables(QSqlDatabase& db)
                     "\"id\" INTEGER UNIQUE,"
                     "\"group_id\" INTEGER NOT NULL DEFAULT 0,"
                     "\"router_id\" INTEGER NOT NULL DEFAULT 0,"
-                    "\"name\" TEXT NOT NULL DEFAULT '',"
+                    "\"name\" BLOB DEFAULT X'',"
                     "\"comment\" BLOB DEFAULT X'',"
                     "\"address\" BLOB DEFAULT X'',"
                     "\"username\" BLOB DEFAULT X'',"
@@ -155,7 +155,7 @@ bool createTables(QSqlDatabase& db)
 
     if (!query.exec("CREATE TABLE IF NOT EXISTS \"routers\" ("
                     "\"id\" INTEGER UNIQUE,"
-                    "\"name\" TEXT NOT NULL DEFAULT '',"
+                    "\"name\" BLOB DEFAULT X'',"
                     "\"address\" BLOB DEFAULT X'',"
                     "\"session_type\" INTEGER NOT NULL DEFAULT 0,"
                     "\"username\" BLOB DEFAULT X'',"
@@ -290,7 +290,7 @@ bool Database::addComputer(ComputerConfig& computer)
                   "VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
     query.addBindValue(computer.group_id);
     query.addBindValue(computer.router_id);
-    query.addBindValue(computer.name);
+    query.addBindValue(encryptString(computer.name));
     query.addBindValue(encryptString(computer.comment));
     query.addBindValue(encryptString(computer.address));
     query.addBindValue(encryptString(computer.username));
@@ -326,7 +326,7 @@ bool Database::modifyComputer(ComputerConfig& computer)
                   "password=?, modify_time=?, data=? WHERE id=?");
     query.addBindValue(computer.group_id);
     query.addBindValue(computer.router_id);
-    query.addBindValue(computer.name);
+    query.addBindValue(encryptString(computer.name));
     query.addBindValue(encryptString(computer.comment));
     query.addBindValue(encryptString(computer.address));
     query.addBindValue(encryptString(computer.username));
@@ -512,7 +512,7 @@ bool Database::addGroup(GroupConfig& group)
     query.prepare("INSERT INTO groups (id, parent_id, name, comment, data) "
                   "VALUES (NULL, ?, ?, ?, ?)");
     query.addBindValue(group.parent_id);
-    query.addBindValue(group.name);
+    query.addBindValue(encryptString(group.name));
     query.addBindValue(encryptString(group.comment));
     query.addBindValue(encryptBytes(group.data));
 
@@ -538,7 +538,7 @@ bool Database::modifyGroup(const GroupConfig& group)
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
     query.prepare("UPDATE groups SET parent_id=?, name=?, comment=?, data=? WHERE id=?");
     query.addBindValue(group.parent_id);
-    query.addBindValue(group.name);
+    query.addBindValue(encryptString(group.name));
     query.addBindValue(encryptString(group.comment));
     query.addBindValue(encryptBytes(group.data));
     query.addBindValue(group.id);
@@ -663,7 +663,7 @@ bool Database::addRouter(RouterConfig& router)
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
     query.prepare("INSERT INTO routers (id, name, address, session_type, username, password, data) "
                   "VALUES (NULL, ?, ?, ?, ?, ?, ?)");
-    query.addBindValue(router.display_name);
+    query.addBindValue(encryptString(router.display_name));
     query.addBindValue(encryptString(router.address));
     query.addBindValue(static_cast<quint32>(router.session_type));
     query.addBindValue(encryptString(router.username));
@@ -692,7 +692,7 @@ bool Database::modifyRouter(const RouterConfig& router)
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
     query.prepare("UPDATE routers SET name=?, address=?, session_type=?, username=?, password=?, data=? "
                   "WHERE id=?");
-    query.addBindValue(router.display_name);
+    query.addBindValue(encryptString(router.display_name));
     query.addBindValue(encryptString(router.address));
     query.addBindValue(static_cast<quint32>(router.session_type));
     query.addBindValue(encryptString(router.username));
