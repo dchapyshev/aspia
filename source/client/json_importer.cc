@@ -48,6 +48,7 @@ struct ImportCounters
     int routers = 0;
     int routers_skipped = 0;
     int groups = 0;
+    int groups_skipped = 0;
     int computers = 0;
     int computers_skipped = 0;
 };
@@ -65,18 +66,27 @@ QString sanitizedComment(const QString& comment)
 }
 
 //--------------------------------------------------------------------------------------------------
-QString decryptFromHex(DataCryptor& cryptor, const QJsonValue& value)
+// Returns std::nullopt only if the field is present but cannot be decrypted (corrupted data or
+// wrong key). An absent or empty hex string yields an empty QString.
+std::optional<QString> decryptFromHex(const DataCryptor& cryptor, const QJsonValue& value)
 {
-    if (!value.isString())
+    if (value.isUndefined() || value.isNull())
         return QString();
 
-    QByteArray encrypted = QByteArray::fromHex(value.toString().toLatin1());
-    if (encrypted.isEmpty())
+    if (!value.isString())
+        return std::nullopt;
+
+    QByteArray hex = value.toString().toLatin1();
+    if (hex.isEmpty())
         return QString();
+
+    QByteArray encrypted = QByteArray::fromHex(hex);
+    if (encrypted.isEmpty())
+        return std::nullopt;
 
     std::optional<QByteArray> decrypted = cryptor.decrypt(encrypted);
     if (!decrypted.has_value())
-        return QString();
+        return std::nullopt;
 
     QString result = QString::fromUtf8(*decrypted);
     memZero(&*decrypted);
@@ -84,37 +94,22 @@ QString decryptFromHex(DataCryptor& cryptor, const QJsonValue& value)
 }
 
 //--------------------------------------------------------------------------------------------------
-void readCredentials(const QJsonObject& object, DataCryptor* cryptor, QString* username, QString* password)
-{
-    if (!cryptor)
-    {
-        username->clear();
-        password->clear();
-        return;
-    }
-
-    *username = decryptFromHex(*cryptor, object.value("username"));
-    *password = decryptFromHex(*cryptor, object.value("password"));
-}
-
-//--------------------------------------------------------------------------------------------------
-qint64 importRouter(const QJsonObject& router_object, DataCryptor* cryptor, ImportCounters* counters)
+qint64 importRouter(const QJsonObject& router_object, const DataCryptor& cryptor, ImportCounters* counters)
 {
     QString display_name = sanitizedName(router_object.value("display_name").toString());
-    QString address = router_object.value("address").toString();
     int session_type = router_object.value("session_type").toInt(proto::router::SESSION_TYPE_CLIENT);
 
-    if (address.isEmpty())
+    std::optional<QString> address = decryptFromHex(cryptor, router_object.value("address"));
+    std::optional<QString> username = decryptFromHex(cryptor, router_object.value("username"));
+    std::optional<QString> password = decryptFromHex(cryptor, router_object.value("password"));
+
+    if (!address.has_value() || !username.has_value() || !password.has_value())
     {
         ++counters->routers_skipped;
         return 0;
     }
 
-    QString username;
-    QString password;
-    readCredentials(router_object, cryptor, &username, &password);
-
-    if (username.isEmpty() || password.isEmpty())
+    if (address->isEmpty() || username->isEmpty() || password->isEmpty())
     {
         ++counters->routers_skipped;
         return 0;
@@ -124,15 +119,15 @@ qint64 importRouter(const QJsonObject& router_object, DataCryptor* cryptor, Impo
     const QList<RouterConfig> existing = db.routerList();
     for (const RouterConfig& router : std::as_const(existing))
     {
-        if (router.address == address && router.username == username)
+        if (router.address == *address && router.username == *username)
             return router.router_id;
     }
 
     RouterConfig config;
-    config.display_name = display_name.isEmpty() ? address : display_name;
-    config.address = address;
-    config.username = username;
-    config.password = password;
+    config.display_name = display_name.isEmpty() ? *address : display_name;
+    config.address = *address;
+    config.username = *username;
+    config.password = *password;
     config.session_type = static_cast<proto::router::SessionType>(session_type);
 
     if (!db.addRouter(config))
@@ -158,7 +153,10 @@ bool readGroupIds(const QJsonObject& object, qint64* id, qint64* parent_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool importGroups(const QJsonArray& groups_array, QHash<qint64, qint64>* group_id_map, ImportCounters* counters)
+void importGroups(const QJsonArray& groups_array,
+                  const DataCryptor& cryptor,
+                  QHash<qint64, qint64>* group_id_map,
+                  ImportCounters* counters)
 {
     Database& db = Database::instance();
 
@@ -198,16 +196,27 @@ bool importGroups(const QJsonArray& groups_array, QHash<qint64, qint64>* group_i
 
             QString name = sanitizedName(group_object.value("name").toString());
             if (name.isEmpty())
+            {
+                ++counters->groups_skipped;
                 continue;
+            }
+
+            std::optional<QString> comment = decryptFromHex(cryptor, group_object.value("comment"));
+            if (!comment.has_value())
+            {
+                ++counters->groups_skipped;
+                continue;
+            }
 
             GroupConfig group_config;
             group_config.parent_id = current_new_parent;
             group_config.name = name;
-            group_config.comment = sanitizedComment(group_object.value("comment").toString());
+            group_config.comment = sanitizedComment(*comment);
 
             if (!db.addGroup(group_config))
             {
                 LOG(ERROR) << "Unable to add group during import";
+                ++counters->groups_skipped;
                 continue;
             }
 
@@ -216,15 +225,13 @@ bool importGroups(const QJsonArray& groups_array, QHash<qint64, qint64>* group_i
             queue.append(old_id);
         }
     }
-
-    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
 void importComputers(const QJsonArray& computers_array,
                      const QHash<qint64, qint64>& group_id_map,
                      const QHash<qint64, qint64>& router_id_map,
-                     DataCryptor* cryptor,
+                     const DataCryptor& cryptor,
                      ImportCounters* counters)
 {
     Database& db = Database::instance();
@@ -243,16 +250,23 @@ void importComputers(const QJsonArray& computers_array,
             continue;
         }
 
-        QString address = object.value("address").toString();
-        if (address.isEmpty())
+        std::optional<QString> address = decryptFromHex(cryptor, object.value("address"));
+        std::optional<QString> comment = decryptFromHex(cryptor, object.value("comment"));
+        std::optional<QString> username = decryptFromHex(cryptor, object.value("username"));
+        std::optional<QString> password = decryptFromHex(cryptor, object.value("password"));
+
+        if (!address.has_value() || !comment.has_value() ||
+            !username.has_value() || !password.has_value())
         {
             ++counters->computers_skipped;
             continue;
         }
 
-        QString username;
-        QString password;
-        readCredentials(object, cryptor, &username, &password);
+        if (address->isEmpty())
+        {
+            ++counters->computers_skipped;
+            continue;
+        }
 
         qint64 old_group_id = object.value("group_id").toInteger(0);
         qint64 old_router_id = object.value("router_id").toInteger(0);
@@ -261,10 +275,10 @@ void importComputers(const QJsonArray& computers_array,
         config.group_id = group_id_map.value(old_group_id, 0);
         config.router_id = router_id_map.value(old_router_id, 0);
         config.name = name;
-        config.comment = sanitizedComment(object.value("comment").toString());
-        config.address = address;
-        config.username = username;
-        config.password = password;
+        config.comment = sanitizedComment(*comment);
+        config.address = *address;
+        config.username = *username;
+        config.password = *password;
 
         if (!db.addComputer(config))
         {
@@ -318,41 +332,25 @@ bool JsonImporter::importFromFile(QWidget* parent, const QString& file_path)
 
     QByteArray salt = QByteArray::fromHex(root.value("salt").toString().toLatin1());
     QByteArray verifier = QByteArray::fromHex(root.value("verifier").toString().toLatin1());
-    std::unique_ptr<DataCryptor> cryptor;
 
-    if (!verifier.isEmpty())
+    if (salt.isEmpty() || verifier.isEmpty())
     {
-        if (salt.isEmpty())
-        {
-            MsgBox::warning(parent, tr("Encrypted file is missing salt."));
-            return false;
-        }
+        MsgBox::warning(parent, tr("The file is corrupted or not encrypted."));
+        return false;
+    }
 
-        int answer = MsgBox::question(parent,
-            tr("The file contains encrypted usernames and passwords. To import them, you need to "
-               "enter a password (if no password is entered, they will be imported without them). "
-               "Do you want to enter the password?"),
-            MsgBox::Yes | MsgBox::No | MsgBox::Cancel);
+    UnlockDialog dialog(parent, file_path, tr("ChaCha20 + Poly1305 (256-bit key)"));
+    if (dialog.exec() != QDialog::Accepted)
+        return false;
 
-        if (answer == MsgBox::Cancel)
-            return false;
+    QByteArray key = PasswordHash::hash(PasswordHash::ARGON2ID, dialog.password(), salt);
+    auto cryptor = std::make_unique<DataCryptor>(key);
+    memZero(&key);
 
-        if (answer == MsgBox::Yes)
-        {
-            UnlockDialog dialog(parent, file_path, tr("ChaCha20 + Poly1305 (256-bit key)"));
-            if (dialog.exec() != QDialog::Accepted)
-                return false;
-
-            QByteArray key = PasswordHash::hash(PasswordHash::ARGON2ID, dialog.password(), salt);
-            cryptor = std::make_unique<DataCryptor>(key);
-            memZero(&key);
-
-            if (!cryptor->decrypt(verifier).has_value())
-            {
-                MsgBox::warning(parent, tr("Unable to decrypt the file with the specified password."));
-                return false;
-            }
-        }
+    if (!cryptor->decrypt(verifier).has_value())
+    {
+        MsgBox::warning(parent, tr("Unable to decrypt the file with the specified password."));
+        return false;
     }
 
     Database& db = Database::instance();
@@ -373,17 +371,17 @@ bool JsonImporter::importFromFile(QWidget* parent, const QString& file_path)
 
         QJsonObject router_object = value.toObject();
         qint64 old_id = router_object.value("id").toInteger(0);
-        qint64 new_id = importRouter(router_object, cryptor.get(), &counters);
+        qint64 new_id = importRouter(router_object, *cryptor, &counters);
         if (new_id != 0)
             router_id_map.insert(old_id, new_id);
     }
 
     QHash<qint64, qint64> group_id_map;
     QJsonArray groups_array = root.value("groups").toArray();
-    importGroups(groups_array, &group_id_map, &counters);
+    importGroups(groups_array, *cryptor, &group_id_map, &counters);
 
     QJsonArray computers_array = root.value("computers").toArray();
-    importComputers(computers_array, group_id_map, router_id_map, cryptor.get(), &counters);
+    importComputers(computers_array, group_id_map, router_id_map, *cryptor, &counters);
 
     cryptor.reset();
 
@@ -398,11 +396,13 @@ bool JsonImporter::importFromFile(QWidget* parent, const QString& file_path)
            "Routers added: %1\n"
            "Routers skipped: %2\n"
            "Groups added: %3\n"
-           "Computers added: %4\n"
-           "Computers skipped: %5")
+           "Groups skipped: %4\n"
+           "Computers added: %5\n"
+           "Computers skipped: %6")
             .arg(counters.routers)
             .arg(counters.routers_skipped)
             .arg(counters.groups)
+            .arg(counters.groups_skipped)
             .arg(counters.computers)
             .arg(counters.computers_skipped));
 

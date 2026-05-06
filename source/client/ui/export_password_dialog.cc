@@ -22,6 +22,7 @@
 #include <QTimer>
 
 #include "base/logging.h"
+#include "client/master_password.h"
 #include "common/ui/msg_box.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -31,12 +32,8 @@ ExportPasswordDialog::ExportPasswordDialog(QWidget* parent)
     LOG(INFO) << "Ctor";
     ui.setupUi(this);
 
-    connect(ui.button_show_password, &QPushButton::toggled,
-            this, &ExportPasswordDialog::onShowPasswordButtonToggled);
     connect(ui.button_encrypt, &QPushButton::clicked,
             this, &ExportPasswordDialog::onEncryptClicked);
-    connect(ui.button_skip, &QPushButton::clicked,
-            this, &ExportPasswordDialog::onSkipClicked);
     connect(ui.button_cancel, &QPushButton::clicked, this, &QDialog::reject);
 
     ui.edit_password->setFocus();
@@ -57,27 +54,6 @@ QString ExportPasswordDialog::password() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void ExportPasswordDialog::onShowPasswordButtonToggled(bool checked)
-{
-    QLineEdit::EchoMode mode = checked ? QLineEdit::Normal : QLineEdit::Password;
-    ui.edit_password->setEchoMode(mode);
-    ui.edit_confirm->setEchoMode(mode);
-
-    if (checked)
-    {
-        ui.edit_password->setInputMethodHints(Qt::ImhNone);
-        ui.edit_confirm->setInputMethodHints(Qt::ImhNone);
-    }
-    else
-    {
-        const Qt::InputMethodHints hints = Qt::ImhHiddenText | Qt::ImhSensitiveData |
-            Qt::ImhNoAutoUppercase | Qt::ImhNoPredictiveText;
-        ui.edit_password->setInputMethodHints(hints);
-        ui.edit_confirm->setInputMethodHints(hints);
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
 void ExportPasswordDialog::onEncryptClicked()
 {
     QString password = ui.edit_password->text();
@@ -93,19 +69,22 @@ void ExportPasswordDialog::onEncryptClicked()
         return;
     }
 
-    result_ = Result::ENCRYPT;
-    accept();
-}
+    if (!MasterPassword::isSafePassword(password))
+    {
+        QString unsafe = tr("Password you entered does not meet the security requirements!");
+        QString safe = tr("The password must contain lowercase and uppercase characters, "
+                          "numbers and should not be shorter than %n characters.",
+                          "", MasterPassword::kSafePasswordLength);
+        QString question = tr("Do you want to enter a different password?");
 
-//--------------------------------------------------------------------------------------------------
-void ExportPasswordDialog::onSkipClicked()
-{
-    int answer = MsgBox::question(this,
-        tr("Without a password, user names and passwords will not be exported. Continue?"),
-        MsgBox::Yes | MsgBox::No);
-    if (answer != MsgBox::Yes)
-        return;
+        MsgBox message_box(MsgBox::Warning,
+                           tr("Warning"),
+                           QString("<b>%1</b><br/>%2<br/>%3").arg(unsafe, safe, question),
+                           MsgBox::Yes | MsgBox::No,
+                           this);
+        if (message_box.exec() == MsgBox::Yes)
+            return;
+    }
 
-    result_ = Result::SKIP;
     accept();
 }

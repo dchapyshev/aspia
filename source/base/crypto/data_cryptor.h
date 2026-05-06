@@ -37,15 +37,15 @@ public:
     QByteArray key() const;
     bool hasKey() const;
 
-    std::optional<QByteArray> encrypt(QByteArrayView in);
-    std::optional<QByteArray> decrypt(QByteArrayView in);
+    std::optional<QByteArray> encrypt(QByteArrayView in) const;
+    std::optional<QByteArray> decrypt(QByteArrayView in) const;
 
     static DataCryptor& instance();
 
 private:
     QByteArray key_;
-    EVP_CIPHER_CTX_ptr encrypt_ctx_;
-    EVP_CIPHER_CTX_ptr decrypt_ctx_;
+    mutable EVP_CIPHER_CTX_ptr encrypt_ctx_;
+    mutable EVP_CIPHER_CTX_ptr decrypt_ctx_;
 
     Q_DISABLE_COPY_MOVE(DataCryptor)
 };

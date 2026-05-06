@@ -1559,7 +1559,7 @@ Routers added: %4</source>
     </message>
     <message>
         <location filename="../client/ui/export_password_dialog.ui" line="53"/>
-        <source>Enter a password to encrypt user names and passwords. Press &quot;Skip&quot; to export without them.</source>
+        <source>Enter a password to encrypt the address book.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1568,38 +1568,50 @@ Routers added: %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/export_password_dialog.ui" line="107"/>
+        <location filename="../client/ui/export_password_dialog.ui" line="81"/>
         <source>Confirm password:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/export_password_dialog.ui" line="141"/>
-        <source>Encrypt</source>
+        <location filename="../client/ui/export_password_dialog.ui" line="115"/>
+        <source>OK</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/export_password_dialog.ui" line="151"/>
-        <source>Skip</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/ui/export_password_dialog.ui" line="158"/>
+        <location filename="../client/ui/export_password_dialog.ui" line="125"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/export_password_dialog.cc" line="86"/>
+        <location filename="../client/ui/export_password_dialog.cc" line="62"/>
         <source>Password cannot be empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/export_password_dialog.cc" line="92"/>
+        <location filename="../client/ui/export_password_dialog.cc" line="68"/>
         <source>Passwords do not match.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/export_password_dialog.cc" line="104"/>
-        <source>Without a password, user names and passwords will not be exported. Continue?</source>
+        <location filename="../client/ui/export_password_dialog.cc" line="74"/>
+        <source>Password you entered does not meet the security requirements!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../client/ui/export_password_dialog.cc" line="75"/>
+        <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../client/ui/export_password_dialog.cc" line="78"/>
+        <source>Do you want to enter a different password?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/export_password_dialog.cc" line="81"/>
+        <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2455,27 +2467,27 @@ Routers added: %4</source>
 <context>
     <name>JsonExporter</name>
     <message>
-        <location filename="../client/json_exporter.cc" line="121"/>
+        <location filename="../client/json_exporter.cc" line="110"/>
         <source>Address book database is not available.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/json_exporter.cc" line="151"/>
+        <location filename="../client/json_exporter.cc" line="126"/>
         <source>Failed to generate verifier.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/json_exporter.cc" line="187"/>
+        <location filename="../client/json_exporter.cc" line="160"/>
         <source>Unable to open file &quot;%1&quot;: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/json_exporter.cc" line="193"/>
+        <location filename="../client/json_exporter.cc" line="166"/>
         <source>Unable to write file &quot;%1&quot;: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/json_exporter.cc" line="198"/>
+        <location filename="../client/json_exporter.cc" line="171"/>
         <source>Export completed successfully.
 Routers exported: %1
 Groups exported: %2
@@ -2486,33 +2498,39 @@ Computers exported: %3</source>
 <context>
     <name>JsonImporter</name>
     <message>
-        <location filename="../client/json_importer.cc" line="289"/>
+        <location filename="../client/json_importer.cc" line="303"/>
         <source>Unable to open file &quot;%1&quot;: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/json_importer.cc" line="298"/>
+        <location filename="../client/json_importer.cc" line="312"/>
         <source>Selected file is empty.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/json_importer.cc" line="306"/>
+        <location filename="../client/json_importer.cc" line="320"/>
         <source>The file is not a valid JSON document: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/json_importer.cc" line="315"/>
+        <location filename="../client/json_importer.cc" line="329"/>
         <source>Unsupported file format version: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/json_importer.cc" line="327"/>
-        <source>Encrypted file is missing salt.</source>
+        <location filename="../client/json_importer.cc" line="338"/>
+        <source>The file is corrupted or not encrypted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/json_importer.cc" line="332"/>
-        <source>The file contains encrypted usernames and passwords. To import them, you need to enter a password (if no password is entered, they will be imported without them). Do you want to enter the password?</source>
+        <location filename="../client/json_importer.cc" line="395"/>
+        <source>Import completed successfully.
+Routers added: %1
+Routers skipped: %2
+Groups added: %3
+Groups skipped: %4
+Computers added: %5
+Computers skipped: %6</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2526,23 +2544,13 @@ Computers exported: %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/json_importer.cc" line="361"/>
+        <location filename="../client/json_importer.cc" line="359"/>
         <source>Address book database is not available.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/json_importer.cc" line="392"/>
+        <location filename="../client/json_importer.cc" line="390"/>
         <source>Nothing was imported.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../client/json_importer.cc" line="397"/>
-        <source>Import completed successfully.
-Routers added: %1
-Routers skipped: %2
-Groups added: %3
-Computers added: %4
-Computers skipped: %5</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4181,12 +4189,12 @@ Computers skipped: %5</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.cc" line="244"/>
+        <location filename="../client/ui/settings_tab.cc" line="251"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.cc" line="320"/>
+        <location filename="../client/ui/settings_tab.cc" line="327"/>
         <source>Choose path</source>
         <translation type="unfinished"></translation>
     </message>

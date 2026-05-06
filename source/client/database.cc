@@ -43,51 +43,49 @@ constexpr auto kSettingVerifier       = "master_password_verifier";
 constexpr auto kSettingVersion        = "master_password_version";
 
 //--------------------------------------------------------------------------------------------------
-QByteArray encryptBytes(DataCryptor& cryptor, const QByteArray& value)
+QByteArray encryptBytes(const QByteArray& value)
 {
     if (value.isEmpty())
         return QByteArray();
-    return cryptor.encrypt(value).value_or(QByteArray());
+    return DataCryptor::instance().encrypt(value).value_or(QByteArray());
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray decryptBytes(DataCryptor& cryptor, const QByteArray& blob)
+QByteArray decryptBytes(const QByteArray& blob)
 {
     if (blob.isEmpty())
         return QByteArray();
-    return cryptor.decrypt(blob).value_or(QByteArray());
+    return DataCryptor::instance().decrypt(blob).value_or(QByteArray());
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray encryptString(DataCryptor& cryptor, const QString& value)
+QByteArray encryptString(const QString& value)
 {
-    return encryptBytes(cryptor, value.toUtf8());
+    return encryptBytes(value.toUtf8());
 }
 
 //--------------------------------------------------------------------------------------------------
-QString decryptString(DataCryptor& cryptor, const QByteArray& blob)
+QString decryptString(const QByteArray& blob)
 {
-    return QString::fromUtf8(decryptBytes(cryptor, blob));
+    return QString::fromUtf8(decryptBytes(blob));
 }
 
 //--------------------------------------------------------------------------------------------------
 ComputerConfig readComputer(const QSqlQuery& query)
 {
-    DataCryptor& cryptor = DataCryptor::instance();
-
     ComputerConfig computer;
     computer.id = query.value(0).toLongLong();
     computer.group_id = query.value(1).toLongLong();
     computer.router_id = query.value(2).toLongLong();
     computer.name = query.value(3).toString();
-    computer.comment = decryptString(cryptor, query.value(4).toByteArray());
-    computer.address = decryptString(cryptor, query.value(5).toByteArray());
-    computer.username = decryptString(cryptor, query.value(6).toByteArray());
-    computer.password = decryptString(cryptor, query.value(7).toByteArray());
+    computer.comment = decryptString(query.value(4).toByteArray());
+    computer.address = decryptString(query.value(5).toByteArray());
+    computer.username = decryptString(query.value(6).toByteArray());
+    computer.password = decryptString(query.value(7).toByteArray());
     computer.create_time = query.value(8).toLongLong();
     computer.modify_time = query.value(9).toLongLong();
     computer.connect_time = query.value(10).toLongLong();
-    computer.data = decryptBytes(cryptor, query.value(11).toByteArray());
+    computer.data = decryptBytes(query.value(11).toByteArray());
 
     return computer;
 }
@@ -95,30 +93,26 @@ ComputerConfig readComputer(const QSqlQuery& query)
 //--------------------------------------------------------------------------------------------------
 GroupConfig readGroup(const QSqlQuery& query)
 {
-    DataCryptor& cryptor = DataCryptor::instance();
-
     GroupConfig group;
     group.id = query.value(0).toLongLong();
     group.parent_id = query.value(1).toLongLong();
     group.name = query.value(2).toString();
-    group.comment = decryptString(cryptor, query.value(3).toByteArray());
-    group.data = decryptBytes(cryptor, query.value(4).toByteArray());
+    group.comment = decryptString(query.value(3).toByteArray());
+    group.data = decryptBytes(query.value(4).toByteArray());
     return group;
 }
 
 //--------------------------------------------------------------------------------------------------
 RouterConfig readRouter(const QSqlQuery& query)
 {
-    DataCryptor& cryptor = DataCryptor::instance();
-
     RouterConfig router;
     router.router_id = query.value(0).toLongLong();
     router.display_name = query.value(1).toString();
-    router.address = decryptString(cryptor, query.value(2).toByteArray());
+    router.address = decryptString(query.value(2).toByteArray());
     router.session_type = static_cast<proto::router::SessionType>(query.value(3).toUInt());
-    router.username = decryptString(cryptor, query.value(4).toByteArray());
-    router.password = decryptString(cryptor, query.value(5).toByteArray());
-    router.data = decryptBytes(cryptor, query.value(6).toByteArray());
+    router.username = decryptString(query.value(4).toByteArray());
+    router.password = decryptString(query.value(5).toByteArray());
+    router.data = decryptBytes(query.value(6).toByteArray());
 
     return router;
 }
@@ -285,8 +279,6 @@ bool Database::addComputer(ComputerConfig& computer)
         return false;
     }
 
-    DataCryptor& cryptor = DataCryptor::instance();
-
     const qint64 current_time = QDateTime::currentSecsSinceEpoch();
     computer.create_time = current_time;
     computer.modify_time = current_time;
@@ -299,14 +291,14 @@ bool Database::addComputer(ComputerConfig& computer)
     query.addBindValue(computer.group_id);
     query.addBindValue(computer.router_id);
     query.addBindValue(computer.name);
-    query.addBindValue(encryptString(cryptor, computer.comment));
-    query.addBindValue(encryptString(cryptor, computer.address));
-    query.addBindValue(encryptString(cryptor, computer.username));
-    query.addBindValue(encryptString(cryptor, computer.password));
+    query.addBindValue(encryptString(computer.comment));
+    query.addBindValue(encryptString(computer.address));
+    query.addBindValue(encryptString(computer.username));
+    query.addBindValue(encryptString(computer.password));
     query.addBindValue(computer.create_time);
     query.addBindValue(computer.modify_time);
     query.addBindValue(computer.connect_time);
-    query.addBindValue(encryptBytes(cryptor, computer.data));
+    query.addBindValue(encryptBytes(computer.data));
 
     if (!query.exec())
     {
@@ -327,8 +319,6 @@ bool Database::modifyComputer(ComputerConfig& computer)
         return false;
     }
 
-    DataCryptor& cryptor = DataCryptor::instance();
-
     computer.modify_time = QDateTime::currentSecsSinceEpoch();
 
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
@@ -337,12 +327,12 @@ bool Database::modifyComputer(ComputerConfig& computer)
     query.addBindValue(computer.group_id);
     query.addBindValue(computer.router_id);
     query.addBindValue(computer.name);
-    query.addBindValue(encryptString(cryptor, computer.comment));
-    query.addBindValue(encryptString(cryptor, computer.address));
-    query.addBindValue(encryptString(cryptor, computer.username));
-    query.addBindValue(encryptString(cryptor, computer.password));
+    query.addBindValue(encryptString(computer.comment));
+    query.addBindValue(encryptString(computer.address));
+    query.addBindValue(encryptString(computer.username));
+    query.addBindValue(encryptString(computer.password));
     query.addBindValue(computer.modify_time);
-    query.addBindValue(encryptBytes(cryptor, computer.data));
+    query.addBindValue(encryptBytes(computer.data));
     query.addBindValue(computer.id);
 
     if (!query.exec())
@@ -518,15 +508,13 @@ bool Database::addGroup(GroupConfig& group)
         return false;
     }
 
-    DataCryptor& cryptor = DataCryptor::instance();
-
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
     query.prepare("INSERT INTO groups (id, parent_id, name, comment, data) "
                   "VALUES (NULL, ?, ?, ?, ?)");
     query.addBindValue(group.parent_id);
     query.addBindValue(group.name);
-    query.addBindValue(encryptString(cryptor, group.comment));
-    query.addBindValue(encryptBytes(cryptor, group.data));
+    query.addBindValue(encryptString(group.comment));
+    query.addBindValue(encryptBytes(group.data));
 
     if (!query.exec())
     {
@@ -547,14 +535,12 @@ bool Database::modifyGroup(const GroupConfig& group)
         return false;
     }
 
-    DataCryptor& cryptor = DataCryptor::instance();
-
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
     query.prepare("UPDATE groups SET parent_id=?, name=?, comment=?, data=? WHERE id=?");
     query.addBindValue(group.parent_id);
     query.addBindValue(group.name);
-    query.addBindValue(encryptString(cryptor, group.comment));
-    query.addBindValue(encryptBytes(cryptor, group.data));
+    query.addBindValue(encryptString(group.comment));
+    query.addBindValue(encryptBytes(group.data));
     query.addBindValue(group.id);
 
     if (!query.exec())
@@ -674,17 +660,15 @@ bool Database::addRouter(RouterConfig& router)
         return false;
     }
 
-    DataCryptor& cryptor = DataCryptor::instance();
-
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
     query.prepare("INSERT INTO routers (id, name, address, session_type, username, password, data) "
                   "VALUES (NULL, ?, ?, ?, ?, ?, ?)");
     query.addBindValue(router.display_name);
-    query.addBindValue(encryptString(cryptor, router.address));
+    query.addBindValue(encryptString(router.address));
     query.addBindValue(static_cast<quint32>(router.session_type));
-    query.addBindValue(encryptString(cryptor, router.username));
-    query.addBindValue(encryptString(cryptor, router.password));
-    query.addBindValue(encryptBytes(cryptor, router.data));
+    query.addBindValue(encryptString(router.username));
+    query.addBindValue(encryptString(router.password));
+    query.addBindValue(encryptBytes(router.data));
 
     if (!query.exec())
     {
@@ -705,17 +689,15 @@ bool Database::modifyRouter(const RouterConfig& router)
         return false;
     }
 
-    DataCryptor& cryptor = DataCryptor::instance();
-
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
     query.prepare("UPDATE routers SET name=?, address=?, session_type=?, username=?, password=?, data=? "
                   "WHERE id=?");
     query.addBindValue(router.display_name);
-    query.addBindValue(encryptString(cryptor, router.address));
+    query.addBindValue(encryptString(router.address));
     query.addBindValue(static_cast<quint32>(router.session_type));
-    query.addBindValue(encryptString(cryptor, router.username));
-    query.addBindValue(encryptString(cryptor, router.password));
-    query.addBindValue(encryptBytes(cryptor, router.data));
+    query.addBindValue(encryptString(router.username));
+    query.addBindValue(encryptString(router.password));
+    query.addBindValue(encryptBytes(router.data));
     query.addBindValue(router.router_id);
 
     if (!query.exec())

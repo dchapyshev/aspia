@@ -88,7 +88,7 @@ bool DataCryptor::hasKey() const
 }
 
 //--------------------------------------------------------------------------------------------------
-std::optional<QByteArray> DataCryptor::encrypt(QByteArrayView in)
+std::optional<QByteArray> DataCryptor::encrypt(QByteArrayView in) const
 {
     if (key_.isEmpty())
         return QByteArray(in);
@@ -154,7 +154,7 @@ std::optional<QByteArray> DataCryptor::encrypt(QByteArrayView in)
 }
 
 //--------------------------------------------------------------------------------------------------
-std::optional<QByteArray> DataCryptor::decrypt(QByteArrayView in)
+std::optional<QByteArray> DataCryptor::decrypt(QByteArrayView in) const
 {
     if (key_.isEmpty())
         return QByteArray(in);

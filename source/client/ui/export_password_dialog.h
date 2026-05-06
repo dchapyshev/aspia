@@ -23,30 +23,21 @@
 
 #include "ui_export_password_dialog.h"
 
-class QAbstractButton;
-class QPushButton;
-
 class ExportPasswordDialog final : public QDialog
 {
     Q_OBJECT
 
 public:
-    enum class Result { CANCEL, ENCRYPT, SKIP };
-
     explicit ExportPasswordDialog(QWidget* parent = nullptr);
     ~ExportPasswordDialog() final;
 
-    Result result() const { return result_; }
     QString password() const;
 
 private slots:
-    void onShowPasswordButtonToggled(bool checked);
     void onEncryptClicked();
-    void onSkipClicked();
 
 private:
     Ui::ExportPasswordDialog ui;
-    Result result_ = Result::CANCEL;
 
     Q_DISABLE_COPY_MOVE(ExportPasswordDialog)
 };

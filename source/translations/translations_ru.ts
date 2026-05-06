@@ -1768,9 +1768,13 @@ Routers added: %4</source>
         <translation>Экспорт адресной книги</translation>
     </message>
     <message>
-        <location filename="../client/ui/export_password_dialog.ui" line="53"/>
         <source>Enter a password to encrypt user names and passwords. Press &quot;Skip&quot; to export without them.</source>
-        <translation>Введите пароль для шифрования имён пользователей и паролей. Нажмите &quot;Пропустить&quot;, чтобы выполнить экспорт без них.</translation>
+        <translation type="vanished">Введите пароль для шифрования имён пользователей и паролей. Нажмите &quot;Пропустить&quot;, чтобы выполнить экспорт без них.</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/export_password_dialog.ui" line="53"/>
+        <source>Enter a password to encrypt the address book.</source>
+        <translation>Введите пароль для шифрования адресной книги.</translation>
     </message>
     <message>
         <location filename="../client/ui/export_password_dialog.ui" line="67"/>
@@ -1778,39 +1782,65 @@ Routers added: %4</source>
         <translation>Пароль:</translation>
     </message>
     <message>
-        <location filename="../client/ui/export_password_dialog.ui" line="107"/>
+        <location filename="../client/ui/export_password_dialog.ui" line="81"/>
         <source>Confirm password:</source>
         <translation>Подтвердите пароль:</translation>
     </message>
     <message>
-        <location filename="../client/ui/export_password_dialog.ui" line="141"/>
+        <location filename="../client/ui/export_password_dialog.ui" line="115"/>
+        <source>OK</source>
+        <translation></translation>
+    </message>
+    <message>
         <source>Encrypt</source>
-        <translation>Шифрование</translation>
+        <translation type="vanished">Шифрование</translation>
     </message>
     <message>
-        <location filename="../client/ui/export_password_dialog.ui" line="151"/>
         <source>Skip</source>
-        <translation>Пропустить</translation>
+        <translation type="vanished">Пропустить</translation>
     </message>
     <message>
-        <location filename="../client/ui/export_password_dialog.ui" line="158"/>
+        <location filename="../client/ui/export_password_dialog.ui" line="125"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../client/ui/export_password_dialog.cc" line="86"/>
+        <location filename="../client/ui/export_password_dialog.cc" line="62"/>
         <source>Password cannot be empty.</source>
         <translation>Пароль не может быть пустым.</translation>
     </message>
     <message>
-        <location filename="../client/ui/export_password_dialog.cc" line="92"/>
+        <location filename="../client/ui/export_password_dialog.cc" line="68"/>
         <source>Passwords do not match.</source>
         <translation>Пароли не совпадают.</translation>
     </message>
     <message>
-        <location filename="../client/ui/export_password_dialog.cc" line="104"/>
+        <location filename="../client/ui/export_password_dialog.cc" line="74"/>
+        <source>Password you entered does not meet the security requirements!</source>
+        <translation>Введенный пароль не отвечает требованиям безопасности!</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../client/ui/export_password_dialog.cc" line="75"/>
+        <source>The password must contain lowercase and uppercase characters, numbers and should not be shorter than %n characters.</source>
+        <translation>
+            <numerusform>Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символа.</numerusform>
+            <numerusform>Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символов.</numerusform>
+            <numerusform>Пароль должен содержать строчные и прописные символы, цифры и не должен быть короче %n символов.</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../client/ui/export_password_dialog.cc" line="78"/>
+        <source>Do you want to enter a different password?</source>
+        <translation>Вы хотите ввести другой пароль?</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/export_password_dialog.cc" line="81"/>
+        <source>Warning</source>
+        <translation>Предупреждение</translation>
+    </message>
+    <message>
         <source>Without a password, user names and passwords will not be exported. Continue?</source>
-        <translation>Без пароля имена пользователей и пароли не будут экспортированы. Продолжить?</translation>
+        <translation type="vanished">Без пароля имена пользователей и пароли не будут экспортированы. Продолжить?</translation>
     </message>
 </context>
 <context>
@@ -2890,27 +2920,27 @@ Routers added: %4</source>
 <context>
     <name>JsonExporter</name>
     <message>
-        <location filename="../client/json_exporter.cc" line="121"/>
+        <location filename="../client/json_exporter.cc" line="110"/>
         <source>Address book database is not available.</source>
         <translation>База данных адресной книги недоступна.</translation>
     </message>
     <message>
-        <location filename="../client/json_exporter.cc" line="151"/>
+        <location filename="../client/json_exporter.cc" line="126"/>
         <source>Failed to generate verifier.</source>
         <translation>Не удалось сгенерировать верификатор.</translation>
     </message>
     <message>
-        <location filename="../client/json_exporter.cc" line="187"/>
+        <location filename="../client/json_exporter.cc" line="160"/>
         <source>Unable to open file &quot;%1&quot;: %2</source>
         <translation>Не удалось открыть файл &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../client/json_exporter.cc" line="193"/>
+        <location filename="../client/json_exporter.cc" line="166"/>
         <source>Unable to write file &quot;%1&quot;: %2</source>
         <translation>Не удалось записать файл &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../client/json_exporter.cc" line="198"/>
+        <location filename="../client/json_exporter.cc" line="171"/>
         <source>Export completed successfully.
 Routers exported: %1
 Groups exported: %2
@@ -2924,34 +2954,54 @@ Computers exported: %3</source>
 <context>
     <name>JsonImporter</name>
     <message>
-        <location filename="../client/json_importer.cc" line="289"/>
+        <location filename="../client/json_importer.cc" line="303"/>
         <source>Unable to open file &quot;%1&quot;: %2</source>
         <translation>Не удалось открыть файл &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../client/json_importer.cc" line="298"/>
+        <location filename="../client/json_importer.cc" line="312"/>
         <source>Selected file is empty.</source>
         <translation>Выбранный файл пуст.</translation>
     </message>
     <message>
-        <location filename="../client/json_importer.cc" line="306"/>
+        <location filename="../client/json_importer.cc" line="320"/>
         <source>The file is not a valid JSON document: %1</source>
         <translation>Файл не является допустимым документом в формате JSON: %1</translation>
     </message>
     <message>
-        <location filename="../client/json_importer.cc" line="315"/>
+        <location filename="../client/json_importer.cc" line="329"/>
         <source>Unsupported file format version: %1</source>
         <translation>Неподдерживаемая версия формата файла: %1</translation>
     </message>
     <message>
-        <location filename="../client/json_importer.cc" line="327"/>
-        <source>Encrypted file is missing salt.</source>
-        <translation>В зашифрованном файле отсутствует соль.</translation>
+        <location filename="../client/json_importer.cc" line="338"/>
+        <source>The file is corrupted or not encrypted.</source>
+        <translation>Файл поврежден или не зашифрован.</translation>
     </message>
     <message>
-        <location filename="../client/json_importer.cc" line="332"/>
+        <location filename="../client/json_importer.cc" line="395"/>
+        <source>Import completed successfully.
+Routers added: %1
+Routers skipped: %2
+Groups added: %3
+Groups skipped: %4
+Computers added: %5
+Computers skipped: %6</source>
+        <translation>Импорт успешно завершён.
+Добавлено маршрутизаторов: %1
+Пропущено маршрутизаторов: %2
+Добавлено групп: %3
+Пропущено групп: %4
+Добавлено компьютеров: %5
+Пропущено компьютеров: %6</translation>
+    </message>
+    <message>
+        <source>Encrypted file is missing salt.</source>
+        <translation type="vanished">В зашифрованном файле отсутствует соль.</translation>
+    </message>
+    <message>
         <source>The file contains encrypted usernames and passwords. To import them, you need to enter a password (if no password is entered, they will be imported without them). Do you want to enter the password?</source>
-        <translation>В указанном файле зашифрованы имена пользователей и пароли. Для их импортирования необходимо ввести пароль (без ввода пароля импорт будет произведен без них). Вы хотите ввести пароль?</translation>
+        <translation type="vanished">В указанном файле зашифрованы имена пользователей и пароли. Для их импортирования необходимо ввести пароль (без ввода пароля импорт будет произведен без них). Вы хотите ввести пароль?</translation>
     </message>
     <message>
         <location filename="../client/json_importer.cc" line="342"/>
@@ -2964,24 +3014,23 @@ Computers exported: %3</source>
         <translation>Не удается расшифровать файл с помощью указанного пароля.</translation>
     </message>
     <message>
-        <location filename="../client/json_importer.cc" line="361"/>
+        <location filename="../client/json_importer.cc" line="359"/>
         <source>Address book database is not available.</source>
         <translation>База данных адресной книги недоступна.</translation>
     </message>
     <message>
-        <location filename="../client/json_importer.cc" line="392"/>
+        <location filename="../client/json_importer.cc" line="390"/>
         <source>Nothing was imported.</source>
         <translation>Ничего не было импортировано.</translation>
     </message>
     <message>
-        <location filename="../client/json_importer.cc" line="397"/>
         <source>Import completed successfully.
 Routers added: %1
 Routers skipped: %2
 Groups added: %3
 Computers added: %4
 Computers skipped: %5</source>
-        <translation>Импорт успешно завершён.
+        <translation type="vanished">Импорт успешно завершён.
 Добавлено роутеров: %1
 Пропущено роутеров: %2
 Добавлено групп: %3
@@ -5007,12 +5056,12 @@ Computers skipped: %5</source>
         <translation>Рабочий стол</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.cc" line="244"/>
+        <location filename="../client/ui/settings_tab.cc" line="251"/>
         <source>Settings</source>
         <translation>Параметры</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.cc" line="320"/>
+        <location filename="../client/ui/settings_tab.cc" line="327"/>
         <source>Choose path</source>
         <translation>Выбор пути</translation>
     </message>

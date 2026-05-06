@@ -23,7 +23,6 @@
 #include <QJsonObject>
 #include <QSaveFile>
 
-#include <memory>
 #include <optional>
 
 #include "base/logging.h"
@@ -42,7 +41,7 @@ constexpr int kSaltSize = 32;
 constexpr int kVerifierPayloadSize = 32;
 
 //--------------------------------------------------------------------------------------------------
-QString encryptToHex(DataCryptor& cryptor, const QString& value)
+QString encryptToHex(const DataCryptor& cryptor, const QString& value)
 {
     if (value.isEmpty())
         return QString();
@@ -61,51 +60,41 @@ QString encryptToHex(DataCryptor& cryptor, const QString& value)
 }
 
 //--------------------------------------------------------------------------------------------------
-void writeCredentials(QJsonObject* object, const QString& username, const QString& password, DataCryptor* cryptor)
-{
-    if (!cryptor)
-        return;
-
-    object->insert("username", encryptToHex(*cryptor, username));
-    object->insert("password", encryptToHex(*cryptor, password));
-}
-
-//--------------------------------------------------------------------------------------------------
-QJsonObject buildRouter(const RouterConfig& router, DataCryptor* cryptor)
+QJsonObject buildRouter(const RouterConfig& router, const DataCryptor& cryptor)
 {
     QJsonObject object;
     object.insert("id", static_cast<qint64>(router.router_id));
     object.insert("display_name", router.display_name);
-    object.insert("address", router.address);
+    object.insert("address", encryptToHex(cryptor, router.address));
     object.insert("session_type", static_cast<int>(router.session_type));
-
-    writeCredentials(&object, router.username, router.password, cryptor);
+    object.insert("username", encryptToHex(cryptor, router.username));
+    object.insert("password", encryptToHex(cryptor, router.password));
     return object;
 }
 
 //--------------------------------------------------------------------------------------------------
-QJsonObject buildGroup(const GroupConfig& group)
+QJsonObject buildGroup(const GroupConfig& group, const DataCryptor& cryptor)
 {
     QJsonObject object;
     object.insert("id", static_cast<qint64>(group.id));
     object.insert("parent_id", static_cast<qint64>(group.parent_id));
     object.insert("name", group.name);
-    object.insert("comment", group.comment);
+    object.insert("comment", encryptToHex(cryptor, group.comment));
     return object;
 }
 
 //--------------------------------------------------------------------------------------------------
-QJsonObject buildComputer(const ComputerConfig& computer, DataCryptor* cryptor)
+QJsonObject buildComputer(const ComputerConfig& computer, const DataCryptor& cryptor)
 {
     QJsonObject object;
     object.insert("id", static_cast<qint64>(computer.id));
     object.insert("group_id", static_cast<qint64>(computer.group_id));
     object.insert("router_id", static_cast<qint64>(computer.router_id));
     object.insert("name", computer.name);
-    object.insert("comment", computer.comment);
-    object.insert("address", computer.address);
-
-    writeCredentials(&object, computer.username, computer.password, cryptor);
+    object.insert("comment", encryptToHex(cryptor, computer.comment));
+    object.insert("address", encryptToHex(cryptor, computer.address));
+    object.insert("username", encryptToHex(cryptor, computer.username));
+    object.insert("password", encryptToHex(cryptor, computer.password));
     return object;
 }
 
@@ -126,56 +115,40 @@ bool JsonExporter::exportToFile(QWidget* parent, const QString& file_path)
     if (dialog.exec() != QDialog::Accepted)
         return false;
 
-    const bool encrypted = (dialog.result() == ExportPasswordDialog::Result::ENCRYPT);
+    QByteArray salt = Random::byteArray(kSaltSize);
+    QByteArray key = PasswordHash::hash(PasswordHash::ARGON2ID, dialog.password(), salt);
+    DataCryptor cryptor(key);
+    memZero(&key);
 
-    QByteArray salt;
-    QByteArray key;
-    std::unique_ptr<DataCryptor> cryptor;
-
-    if (encrypted)
+    std::optional<QByteArray> verifier = cryptor.encrypt(Random::byteArray(kVerifierPayloadSize));
+    if (!verifier.has_value())
     {
-        salt = Random::byteArray(kSaltSize);
-        key = PasswordHash::hash(PasswordHash::ARGON2ID, dialog.password(), salt);
-        cryptor = std::make_unique<DataCryptor>(key);
+        MsgBox::warning(parent, tr("Failed to generate verifier."));
+        return false;
     }
 
     QJsonObject root;
     root.insert("version", kFormatVersion);
-
-    if (encrypted)
-    {
-        std::optional<QByteArray> verifier =
-            cryptor->encrypt(Random::byteArray(kVerifierPayloadSize));
-        if (!verifier.has_value())
-        {
-            MsgBox::warning(parent, tr("Failed to generate verifier."));
-            return false;
-        }
-
-        root.insert("salt", QString::fromLatin1(salt.toHex()));
-        root.insert("verifier", QString::fromLatin1(verifier->toHex()));
-    }
+    root.insert("salt", QString::fromLatin1(salt.toHex()));
+    root.insert("verifier", QString::fromLatin1(verifier->toHex()));
 
     QJsonArray routers_array;
     const QList<RouterConfig> routers = db.routerList();
     for (const RouterConfig& router : std::as_const(routers))
-        routers_array.append(buildRouter(router, cryptor.get()));
+        routers_array.append(buildRouter(router, cryptor));
     root.insert("routers", routers_array);
 
     QJsonArray groups_array;
     const QList<GroupConfig> groups = db.allGroups();
     for (const GroupConfig& group : std::as_const(groups))
-        groups_array.append(buildGroup(group));
+        groups_array.append(buildGroup(group, cryptor));
     root.insert("groups", groups_array);
 
     QJsonArray computers_array;
     const QList<ComputerConfig> computers = db.allComputers();
     for (const ComputerConfig& computer : std::as_const(computers))
-        computers_array.append(buildComputer(computer, cryptor.get()));
+        computers_array.append(buildComputer(computer, cryptor));
     root.insert("computers", computers_array);
-
-    cryptor.reset();
-    memZero(&key);
 
     QJsonDocument document(root);
     QByteArray payload = document.toJson(QJsonDocument::Indented);
