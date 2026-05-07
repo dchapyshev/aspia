@@ -30,7 +30,9 @@
 #include "base/desktop/frame_aligned.h"
 #include "base/desktop/mouse_cursor.h"
 #include "common/desktop_session_constants.h"
+#include "proto/desktop_audio.h"
 #include "proto/desktop_channel.h"
+#include "proto/desktop_cursor.h"
 #include "proto/desktop_user.h"
 
 namespace {

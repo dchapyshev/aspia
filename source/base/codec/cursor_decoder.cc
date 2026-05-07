@@ -18,7 +18,9 @@
 
 #include "base/codec/cursor_decoder.h"
 
+#include "base/desktop/mouse_cursor.h"
 #include "base/logging.h"
+#include "proto/desktop_cursor.h"
 
 namespace {
 

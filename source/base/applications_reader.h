@@ -19,7 +19,9 @@
 #ifndef BASE_APPLICATIONS_READER_H
 #define BASE_APPLICATIONS_READER_H
 
-#include "proto/system_info.h"
+namespace proto::system_info {
+class Applications;
+} // namespace proto::system_info
 
 void readApplicationsInformation(proto::system_info::Applications* applications);
 

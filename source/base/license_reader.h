@@ -19,7 +19,9 @@
 #ifndef BASE_LICENSE_READER_H
 #define BASE_LICENSE_READER_H
 
-#include "proto/system_info.h"
+namespace proto::system_info {
+class Licenses;
+} // namespace proto::system_info
 
 void readLicensesInformation(proto::system_info::Licenses* licenses);
 

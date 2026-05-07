@@ -19,6 +19,7 @@
 #include "base/applications_reader.h"
 
 #include "base/logging.h"
+#include "proto/system_info.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/registry.h"

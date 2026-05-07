@@ -19,6 +19,7 @@
 #include "base/codec/audio_decoder.h"
 
 #include "base/logging.h"
+#include "proto/desktop_audio.h"
 
 #include <opus.h>
 

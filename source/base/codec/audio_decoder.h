@@ -21,9 +21,11 @@
 
 #include <memory>
 
-#include "proto/desktop_audio.h"
-
 struct OpusDecoder;
+
+namespace proto::audio {
+class Packet;
+} // namespace proto::audio
 
 class AudioDecoder
 {
