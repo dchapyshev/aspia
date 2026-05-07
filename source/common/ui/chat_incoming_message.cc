@@ -29,6 +29,8 @@ ChatIncomingMessage::ChatIncomingMessage(QWidget* parent)
 
     QString time = QLocale::system().toString(QTime::currentTime(), QLocale::ShortFormat);
     ui.label_time->setText(time);
+
+    applyStyles(palette());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -62,4 +64,19 @@ QString ChatIncomingMessage::messageText() const
 QString ChatIncomingMessage::messageTime() const
 {
     return ui.label_time->text();
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatIncomingMessage::applyStyles(const QPalette& palette)
+{
+    const QColor& bubble = palette.color(QPalette::AlternateBase);
+    const QColor& text = palette.color(QPalette::Text);
+
+    ui.widget_message->setStyleSheet(QString(
+        "#widget_message { background-color: %1; border: 1px solid %1; border-radius: 3px; }")
+        .arg(bubble.name(QColor::HexArgb)));
+
+    ui.label_message->setStyleSheet(QString(
+        "#label_message { color: %1; font-family: Verdana; }")
+        .arg(text.name(QColor::HexArgb)));
 }

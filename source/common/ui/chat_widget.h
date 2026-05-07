@@ -58,6 +58,7 @@ protected:
     // QWidget implementation.
     bool eventFilter(QObject* object, QEvent* event) final;
     void showEvent(QShowEvent* event) final;
+    void changeEvent(QEvent* event) final;
     void resizeEvent(QResizeEvent* event) final;
     void closeEvent(QCloseEvent* event) final;
 
@@ -84,6 +85,7 @@ private:
     void onClearHistory();
     void onSaveChat();
     void onUpdateSize();
+    void refreshStyles();
 
     std::unique_ptr<Ui::ChatWidget> ui;
     QAction* action_save_chat_;

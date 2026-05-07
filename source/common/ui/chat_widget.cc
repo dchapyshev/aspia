@@ -139,6 +139,8 @@ ChatWidget::ChatWidget(QWidget* parent)
     ui->list_messages->horizontalScrollBar()->installEventFilter(this);
     ui->list_messages->verticalScrollBar()->installEventFilter(this);
 
+    refreshStyles();
+
     connect(action_save_chat_, &QAction::triggered, this, &ChatWidget::onSaveChat);
     connect(action_clear_chat_, &QAction::triggered, this, &ChatWidget::onClearHistory);
 
@@ -294,6 +296,17 @@ void ChatWidget::showEvent(QShowEvent* event)
 {
     QWidget::showEvent(event);
     QTimer::singleShot(0, this, &ChatWidget::onUpdateSize);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatWidget::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::PaletteChange || event->type() == QEvent::StyleChange ||
+        event->type() == QEvent::ApplicationPaletteChange)
+    {
+        refreshStyles();
+    }
+    QWidget::changeEvent(event);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -657,4 +670,50 @@ void ChatWidget::onUpdateSize()
     }
 
     list_messages->scrollToBottom();
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatWidget::refreshStyles()
+{
+    const QPalette& plt = palette();
+    const QString text = plt.color(QPalette::Text).name(QColor::HexArgb);
+    const QString placeholder = plt.color(QPalette::PlaceholderText).name(QColor::HexArgb);
+    const QString midlight = plt.color(QPalette::Midlight).name(QColor::HexArgb);
+    const QString mid = plt.color(QPalette::Mid).name(QColor::HexArgb);
+    const QString button = plt.color(QPalette::Button).name(QColor::HexArgb);
+    const QString button_text = plt.color(QPalette::ButtonText).name(QColor::HexArgb);
+    const QString dark = plt.color(QPalette::Dark).name(QColor::HexArgb);
+    const QString shadow = plt.color(QPalette::Shadow).name(QColor::HexArgb);
+
+    ui->edit_message->setStyleSheet(QString(
+        "#edit_message { border: 1px solid %1; border-radius: 3px; background: %2; "
+        "color: %3; padding: 4px; }")
+        .arg(mid, midlight, text));
+
+    ui->label_status->setStyleSheet(QString(
+        "#label_status { color: %1; font-style: italic; font-size: 10px; padding: 2px; }")
+        .arg(placeholder));
+
+    QString button_style = QString(
+        "QToolButton { color: %1; font: bold 11px; background-color: %2; "
+        "border: 1px solid %3; border-radius: 3px; padding: 2px 2px 2px 2px; } "
+        "QToolButton:hover { background: %4; border: 1px solid %5; border-radius: 2px; } "
+        "QToolButton:pressed { background: %5; border: 1px solid %6; border-radius: 2px; }")
+        .arg(button_text, button, mid, midlight, dark, shadow);
+
+    ui->button_send->setStyleSheet(button_style);
+    ui->button_tools->setStyleSheet(button_style);
+
+    // Item widgets in QListWidget live under the viewport and may not receive PaletteChange
+    // when the application palette changes - update them explicitly with our palette so
+    // they do not pick up a stale value from their own (not-yet-propagated) palette.
+    QListWidget* list = ui->list_messages;
+    for (int i = 0; i < list->count(); ++i)
+    {
+        QWidget* item_widget = list->itemWidget(list->item(i));
+        if (auto* incoming = qobject_cast<ChatIncomingMessage*>(item_widget))
+            incoming->applyStyles(plt);
+        else if (auto* outgoing = qobject_cast<ChatOutgoingMessage*>(item_widget))
+            outgoing->applyStyles(plt);
+    }
 }

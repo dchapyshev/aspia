@@ -38,11 +38,7 @@
       </sizepolicy>
      </property>
      <property name="styleSheet">
-      <string notr="true">#widget_message {
-background-color: #EFF1F7;
-border: 1px solid #EFF1F7;
-border-radius: 3px;
-}</string>
+      <string notr="true"/>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <property name="spacing">
@@ -147,10 +143,7 @@ font-family: Verdana;
             </sizepolicy>
            </property>
            <property name="styleSheet">
-            <string notr="true">#label_message {
-color: #606161;
-font-family: Verdana;
-}</string>
+            <string notr="true"/>
            </property>
            <property name="text">
             <string notr="true">Message</string>

@@ -35,6 +35,8 @@ public:
     QString messageText() const final;
     QString messageTime() const final;
 
+    void applyStyles(const QPalette& palette);
+
 protected:
     // QWidget implementation.
     void resizeEvent(QResizeEvent* event) final;

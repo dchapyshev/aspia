@@ -64,14 +64,7 @@ padding: 0px 0px 1px 0px;
       </sizepolicy>
      </property>
      <property name="styleSheet">
-      <string notr="true">#label_message {
-color: white;
-background-color: #52A7FC;
-border: 1px solid #52A7FC;
-border-radius: 4px;
-font-family: Verdana;
-padding:6px;
-}</string>
+      <string notr="true"/>
      </property>
      <property name="text">
       <string notr="true">Message</string>

@@ -37,6 +37,8 @@ public:
     QString messageText() const final;
     QString messageTime() const final;
 
+    void applyStyles(const QPalette& palette);
+
 private:
     Ui::ChatIncomingMessage ui;
 };
