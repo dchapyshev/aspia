@@ -16,40 +16,18 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_PCH_H
-#define BASE_PCH_H
+#ifndef PROTO_PCH_H
+#define PROTO_PCH_H
 
-#include <QApplication>
-#include <QByteArray>
-#include <QDir>
-#include <QEvent>
-#include <QFile>
-#include <QFileInfo>
-#include <QObject>
-#include <QPointer>
-#include <QStringList>
-#include <QTimer>
-#include <QtGlobal>
-#include <QVariant>
+#include <QDebug>
+#include <QMetaType>
+#include <QString>
 
-#include "build/build_config.h"
-#include "base/location.h"
-#include "base/logging.h"
-#include "proto/pch.h"
+#include <google/protobuf/io/coded_stream.h>
+#include <google/protobuf/extension_set.h>
+#include <google/protobuf/generated_message_tctable_impl.h>
+#include <google/protobuf/generated_message_util.h>
+#include <google/protobuf/wire_format_lite.h>
+#include <google/protobuf/io/zero_copy_stream_impl_lite.h>
 
-#include <algorithm>
-#include <atomic>
-#include <chrono>
-#include <cstddef>
-#include <cstdint>
-#include <cstring>
-#include <functional>
-#include <memory>
-#include <mutex>
-#include <optional>
-#include <string>
-#include <type_traits>
-#include <utility>
-#include <vector>
-
-#endif // BASE_PCH_H
+#endif // PROTO_PCH_H
