@@ -29,6 +29,7 @@
 #include "base/crypto/password_generator.h"
 #include "base/desktop/screen_capturer.h"
 #include "base/net/address.h"
+#include "base/peer/user_list.h"
 #include "build/build_config.h"
 #include "host/ui/change_password_dialog.h"
 #include "host/ui/check_password_dialog.h"

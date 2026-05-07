@@ -31,6 +31,7 @@
 #include "base/codec/video_encoder.h"
 #include "base/desktop/desktop_resizer.h"
 #include "base/desktop/desktop_environment.h"
+#include "base/desktop/frame.h"
 #include "base/desktop/mouse_cursor.h"
 #include "base/ipc/ipc_channel.h"
 #include "base/ipc/ipc_server.h"

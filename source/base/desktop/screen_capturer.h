@@ -22,10 +22,9 @@
 #include <QList>
 #include <QObject>
 
-#include "base/desktop/frame.h"
-
 #include <memory>
 
+class Frame;
 class MouseCursor;
 
 class ScreenCapturer : public QObject

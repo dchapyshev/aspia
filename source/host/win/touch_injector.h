@@ -23,7 +23,10 @@
 #include <qt_windows.h>
 
 #include "host/win/touch_injector_defines.h"
-#include "proto/desktop_input.h"
+
+namespace proto::input {
+class TouchEvent;
+} // namespace proto::input
 
 class TouchInjector
 {
