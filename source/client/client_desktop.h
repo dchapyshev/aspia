@@ -19,24 +19,50 @@
 #ifndef CLIENT_CLIENT_DESKTOP_H
 #define CLIENT_CLIENT_DESKTOP_H
 
-#include "base/serialization.h"
-#include "base/desktop/mouse_cursor.h"
 #include "client/client.h"
 #include "common/clipboard_file_transfer.h"
 #include "common/clipboard_monitor.h"
-#include "proto/desktop_clipboard.h"
-#include "proto/desktop_input.h"
-#include "proto/desktop_legacy.h"
+#include "proto/desktop_audio.h"
 #include "proto/desktop_control.h"
-#include "proto/desktop_cursor.h"
 #include "proto/desktop_power.h"
-#include "proto/desktop_screen.h"
-#include "proto/task_manager.h"
+#include "proto/desktop_video.h"
+
+namespace proto::clipboard {
+class Event;
+} // namespace proto::clipboard
+
+namespace proto::cursor {
+class Position;
+class Shape;
+} // namespace proto::cursor
+
+namespace proto::input {
+class KeyEvent;
+class MouseEvent;
+class TextEvent;
+} // namespace proto::input
+
+namespace proto::legacy {
+class Capabilities;
+class Extension;
+} // namespace proto::legacy
+
+namespace proto::screen {
+class Screen;
+class ScreenList;
+class ScreenType;
+} // namespace proto::screen
+
+namespace proto::task_manager {
+class ClientToHost;
+class HostToClient;
+} // namespace proto::task_manager
 
 class AudioDecoder;
 class AudioPlayer;
 class CursorDecoder;
 class Frame;
+class MouseCursor;
 class QTimer;
 class VideoDecoder;
 class WebmFileWriter;

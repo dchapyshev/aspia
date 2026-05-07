@@ -21,6 +21,7 @@
 #include <QTimer>
 
 #include "base/logging.h"
+#include "base/serialization.h"
 #include "base/codec/audio_decoder.h"
 #include "base/audio/audio_player.h"
 #include "base/codec/cursor_decoder.h"
@@ -32,9 +33,14 @@
 #include "common/desktop_session_constants.h"
 #include "proto/desktop_audio.h"
 #include "proto/desktop_channel.h"
+#include "proto/desktop_clipboard.h"
 #include "proto/desktop_cursor.h"
+#include "proto/desktop_input.h"
+#include "proto/desktop_legacy.h"
+#include "proto/desktop_screen.h"
 #include "proto/desktop_user.h"
 #include "proto/desktop_video.h"
+#include "proto/task_manager.h"
 
 namespace {
 

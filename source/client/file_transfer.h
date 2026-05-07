@@ -25,10 +25,11 @@
 #include <QPointer>
 #include <QTimer>
 
-#include "base/location.h"
 #include "base/scoped_qpointer.h"
 #include "common/file_task_factory.h"
 #include "proto/file_transfer.h"
+
+class Location;
 
 class FileTransferQueueBuilder;
 
