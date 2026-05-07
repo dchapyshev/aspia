@@ -25,13 +25,19 @@
 #include <asio/steady_timer.hpp>
 
 #include "base/shared_pointer.h"
-#include "proto/relay_peer.h"
-#include "proto/router_relay.h"
 #include "relay/session_key.h"
 
 class PendingSession;
 class QTimer;
 class Session;
+
+namespace proto::relay {
+class PeerToRelay;
+} // namespace proto::relay
+
+namespace proto::router {
+class RelayStatistics;
+} // namespace proto::router
 
 class SessionManager final : public QObject
 {

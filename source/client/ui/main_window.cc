@@ -53,6 +53,7 @@
 #include "common/update_info.h"
 #include "common/ui/about_dialog.h"
 #include "common/ui/update_dialog.h"
+#include "proto/peer.h"
 
 //--------------------------------------------------------------------------------------------------
 MainWindow::MainWindow(QWidget* parent)

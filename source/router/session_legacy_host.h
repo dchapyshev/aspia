@@ -20,8 +20,13 @@
 #define ROUTER_SESSION_LEGACY_HOST_H
 
 #include "base/peer/host_id.h"
-#include "proto/router_legacy_host.h"
 #include "router/session.h"
+
+namespace proto::router::legacy {
+class ConnectionOffer;
+class HostIdRequest;
+class ResetHostId;
+} // namespace proto::router::legacy
 
 class SessionLegacyHost final : public Session
 {

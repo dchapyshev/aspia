@@ -26,10 +26,13 @@
 
 #include "base/logging.h"
 #include "base/shared_pointer.h"
-#include "proto/relay_peer.h"
 
 class Location;
 class QTimer;
+
+namespace proto::relay {
+class PeerToRelay;
+} // namespace proto::relay
 
 class PendingSession final : public QObject
 {

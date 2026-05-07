@@ -32,6 +32,7 @@
 #include "base/version_constants.h"
 #include "common/ui/msg_box.h"
 #include "client/client_system_info.h"
+#include "proto/peer.h"
 #include "proto/system_info.h"
 #include "client/ui/sys_info/sys_info_widget_applications.h"
 #include "client/ui/sys_info/sys_info_widget_connections.h"

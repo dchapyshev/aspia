@@ -22,6 +22,8 @@
 #include "base/serialization.h"
 #include "base/peer/user.h"
 #include "router/database.h"
+#include "proto/router_admin.h"
+#include "proto/router_host.h"
 #include "router/service.h"
 #include "router/session_host.h"
 #include "router/session_legacy_host.h"

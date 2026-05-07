@@ -22,11 +22,14 @@
 #include <QTreeWidget>
 
 #include "client/ui/client_window.h"
-#include "proto/chat.h"
 
 namespace Ui {
 class ChatWindow;
 } // namespace Ui
+
+namespace proto::chat {
+class Chat;
+} // namespace proto::chat
 
 class ChatWindow final : public ClientWindow
 {

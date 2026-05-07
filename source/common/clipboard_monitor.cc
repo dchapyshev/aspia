@@ -19,6 +19,7 @@
 #include "common/clipboard_monitor.h"
 
 #include "base/logging.h"
+#include "proto/desktop_clipboard.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "common/clipboard_win.h"

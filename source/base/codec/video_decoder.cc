@@ -23,6 +23,7 @@
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/desktop/frame.h"
+#include "proto/desktop_video.h"
 
 #include <libyuv/convert_from.h>
 #include <libyuv/convert_argb.h>

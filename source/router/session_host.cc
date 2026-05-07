@@ -22,6 +22,8 @@
 #include "base/serialization.h"
 #include "base/crypto/generic_hash.h"
 #include "base/crypto/random.h"
+#include "proto/router_host.h"
+#include "proto/router_peer.h"
 #include "router/database.h"
 #include "router/service.h"
 

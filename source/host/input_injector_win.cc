@@ -24,6 +24,7 @@
 #include "base/logging.h"
 #include "base/win/registry.h"
 #include "common/keycode_converter.h"
+#include "proto/desktop_input.h"
 
 namespace {
 

@@ -22,10 +22,13 @@
 #include <QTreeView>
 
 #include "client/file_transfer.h"
-#include "proto/file_transfer.h"
 
 class AddressBarModel;
 class FileListModel;
+
+namespace proto::file_transfer {
+class List;
+} // namespace proto::file_transfer
 
 class FileList final : public QTreeView
 {

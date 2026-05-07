@@ -19,6 +19,7 @@
 #include "common/clipboard.h"
 
 #include "base/logging.h"
+#include "proto/desktop_clipboard.h"
 
 //--------------------------------------------------------------------------------------------------
 Clipboard::Clipboard(QObject* parent)

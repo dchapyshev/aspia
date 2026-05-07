@@ -23,6 +23,8 @@
 #include "base/version_constants.h"
 #include "base/crypto/random.h"
 #include "proto/relay_peer.h"
+#include "proto/router_client.h"
+#include "proto/router_legacy_host.h"
 #include "router/service.h"
 #include "router/session_host.h"
 #include "router/session_legacy_host.h"

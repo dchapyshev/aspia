@@ -41,6 +41,7 @@
 #include "base/win/service_enumerator.h"
 #include "base/win/user_enumerator.h"
 #include "common/system_info_constants.h"
+#include "proto/system_info.h"
 #include "host/win/process_monitor.h"
 
 namespace {

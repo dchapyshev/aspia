@@ -45,6 +45,7 @@
 #include "host/ui/connect_confirm_dialog.h"
 #include "host/ui/notifier_window.h"
 #include "host/ui/user_settings.h"
+#include "proto/user.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/process_util.h"

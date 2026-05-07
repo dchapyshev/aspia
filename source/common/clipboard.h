@@ -22,7 +22,9 @@
 #include <QObject>
 #include <QVector>
 
-#include "proto/desktop_clipboard.h"
+namespace proto::clipboard {
+class Event;
+} // namespace proto::clipboard
 
 struct LocalFileEntry
 {

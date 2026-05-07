@@ -23,8 +23,11 @@
 #include <QMainWindow>
 
 #include "client/ui/tab.h"
-#include "proto/peer.h"
 #include "ui_main_window.h"
+
+namespace proto::peer {
+enum SessionType : int;
+} // namespace proto::peer
 
 class Tab;
 class QLineEdit;

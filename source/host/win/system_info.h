@@ -19,7 +19,10 @@
 #ifndef HOST_WIN_SYSTEM_INFO_H
 #define HOST_WIN_SYSTEM_INFO_H
 
-#include "proto/system_info.h"
+namespace proto::system_info {
+class SystemInfo;
+class SystemInfoRequest;
+} // namespace proto::system_info
 
 void createSystemInfo(const proto::system_info::SystemInfoRequest& request,
                       proto::system_info::SystemInfo* system_info);

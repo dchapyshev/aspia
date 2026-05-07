@@ -22,7 +22,12 @@
 #include <QObject>
 #include <QPoint>
 
-#include "proto/desktop_input.h"
+namespace proto::input {
+class KeyEvent;
+class MouseEvent;
+class TextEvent;
+class TouchEvent;
+} // namespace proto::input
 
 class InputInjector : public QObject
 {

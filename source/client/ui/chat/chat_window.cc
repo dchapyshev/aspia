@@ -24,6 +24,7 @@
 #include "common/ui/chat_widget.h"
 #include "common/ui/session_type.h"
 #include "proto/chat.h"
+#include "proto/peer.h"
 #include "ui_chat_window.h"
 
 namespace {

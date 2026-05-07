@@ -20,6 +20,7 @@
 
 #include "client/ui/file_transfer/address_bar_model.h"
 #include "common/ui/msg_box.h"
+#include "proto/file_transfer.h"
 
 #include <QLineEdit>
 #include <QTreeView>

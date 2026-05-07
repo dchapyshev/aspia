@@ -21,6 +21,7 @@
 #include "base/net/address.h"
 #include "base/peer/host_id.h"
 #include "build/build_config.h"
+#include "proto/peer.h"
 
 //--------------------------------------------------------------------------------------------------
 SessionState::SessionState(const ComputerConfig& computer,

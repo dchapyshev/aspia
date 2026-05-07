@@ -30,6 +30,7 @@
 
 #include "common/ui/msg_box.h"
 #include "common/ui/session_type.h"
+#include "proto/peer.h"
 
 //--------------------------------------------------------------------------------------------------
 FileTransferWindow::FileTransferWindow(QWidget* parent)

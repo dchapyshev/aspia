@@ -20,7 +20,11 @@
 #define BASE_CODEC_VIDEO_DECODER_H
 
 #include "base/codec/scoped_vpx_codec.h"
-#include "proto/desktop_video.h"
+
+namespace proto::video {
+enum Encoding : int;
+class Packet;
+} // namespace proto::video
 
 class Frame;
 

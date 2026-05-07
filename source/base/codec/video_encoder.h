@@ -23,11 +23,15 @@
 #include <QSize>
 
 #include "base/codec/scoped_vpx_codec.h"
-#include "proto/desktop_video.h"
 
 #define VPX_CODEC_DISABLE_COMPAT 1
 #include <vpx/vpx_encoder.h>
 #include <vpx/vp8cx.h>
+
+namespace proto::video {
+enum Encoding : int;
+class Packet;
+} // namespace proto::video
 
 class Frame;
 

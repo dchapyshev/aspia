@@ -23,6 +23,8 @@
 #include "base/asio_event_dispatcher.h"
 #include "base/logging.h"
 #include "base/crypto/stream_decryptor.h"
+#include "proto/relay_peer.h"
+#include "proto/router_relay.h"
 #include "relay/pending_session.h"
 #include "relay/session.h"
 #include "relay/settings.h"

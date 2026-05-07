@@ -21,11 +21,13 @@
 
 #include <QComboBox>
 
-#include "proto/file_transfer.h"
-
 class AddressBarModel;
 class QLineEdit;
 class QTreeView;
+
+namespace proto::file_transfer {
+class DriveList;
+} // namespace proto::file_transfer
 
 class AddressBar final : public QComboBox
 {

@@ -34,6 +34,7 @@
 #include "proto/desktop_channel.h"
 #include "proto/desktop_cursor.h"
 #include "proto/desktop_user.h"
+#include "proto/desktop_video.h"
 
 namespace {
 

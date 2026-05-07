@@ -22,7 +22,9 @@
 #include <QByteArray>
 #include <QString>
 
-#include "proto/router_admin.h"
+namespace proto::router {
+class User;
+} // namespace proto::router
 
 class User
 {

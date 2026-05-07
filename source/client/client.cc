@@ -35,6 +35,7 @@
 #include "base/peer/host_id.h"
 #include "base/peer/relay_peer.h"
 #include "base/peer/stun_peer.h"
+#include "proto/peer.h"
 #include "proto/router_peer.h"
 
 #if defined(Q_OS_MACOS)

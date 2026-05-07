@@ -24,8 +24,11 @@
 #include "client/config.h"
 #include "client/router.h"
 #include "client/ui/tab.h"
-#include "proto/peer.h"
 #include "ui_hosts_tab.h"
+
+namespace proto::peer {
+enum SessionType : int;
+} // namespace proto::peer
 
 class ContentWidget;
 class LocalGroupWidget;

@@ -20,6 +20,7 @@
 
 #include "base/logging.h"
 #include "base/serialization.h"
+#include "proto/system_info.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "host/win/system_info.h"

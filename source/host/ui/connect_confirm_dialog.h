@@ -21,8 +21,11 @@
 
 #include <QDialog>
 
-#include "proto/user.h"
 #include "ui_connect_confirm_dialog.h"
+
+namespace proto::user {
+class ConfirmationRequest;
+} // namespace proto::user
 
 class ConnectConfirmDialog final : public QDialog
 {

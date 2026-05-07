@@ -30,6 +30,7 @@
 #include "client/ui/authorization_dialog.h"
 #include "common/ui/session_type.h"
 #include "common/ui/status_dialog.h"
+#include "proto/peer.h"
 
 namespace {
 

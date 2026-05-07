@@ -37,6 +37,14 @@ class RelayPeer;
 class StunPeer;
 class UdpChannel;
 
+namespace proto::peer {
+class DirectUdpRequest;
+} // namespace proto::peer
+
+namespace proto::router {
+class ConnectionOffer;
+} // namespace proto::router
+
 class Client : public QObject
 {
     Q_OBJECT

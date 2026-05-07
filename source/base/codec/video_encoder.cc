@@ -20,6 +20,7 @@
 
 #include "base/logging.h"
 #include "base/desktop/frame.h"
+#include "proto/desktop_video.h"
 
 #include <libyuv/convert.h>
 #include <libyuv/cpu_id.h>

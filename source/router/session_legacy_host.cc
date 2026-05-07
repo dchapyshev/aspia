@@ -22,6 +22,7 @@
 #include "base/serialization.h"
 #include "base/crypto/generic_hash.h"
 #include "base/crypto/random.h"
+#include "proto/router_legacy_host.h"
 #include "router/database.h"
 
 namespace {

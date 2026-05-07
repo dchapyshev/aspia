@@ -45,6 +45,7 @@
 #include "client/ui/hosts/router_widget.h"
 #include "client/ui/hosts/router_group_widget.h"
 #include "client/ui/hosts/search_widget.h"
+#include "proto/peer.h"
 
 //--------------------------------------------------------------------------------------------------
 HostsTab::HostsTab(QWidget* parent)

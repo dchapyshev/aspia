@@ -23,9 +23,12 @@
 
 #include "base/peer/host_id.h"
 #include "client/config.h"
-#include "proto/peer.h"
 
 #include <mutex>
+
+namespace proto::peer {
+enum SessionType : int;
+} // namespace proto::peer
 
 class SessionState
 {

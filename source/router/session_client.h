@@ -20,8 +20,12 @@
 #define ROUTER_SESSION_CLIENT_H
 
 #include "base/peer/host_id.h"
-#include "proto/router_client.h"
 #include "router/session.h"
+
+namespace proto::router {
+class CheckHostStatus;
+class ConnectionRequest;
+} // namespace proto::router
 
 class SessionClient : public Session
 {

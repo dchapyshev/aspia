@@ -24,6 +24,7 @@
 #include <asio/read.hpp>
 
 #include "base/location.h"
+#include "proto/relay_peer.h"
 
 namespace {
 

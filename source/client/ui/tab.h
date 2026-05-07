@@ -24,7 +24,9 @@
 #include <QPair>
 #include <QWidget>
 
-#include "proto/peer.h"
+namespace proto::peer {
+enum SessionType : int;
+} // namespace proto::peer
 
 class QStatusBar;
 struct ComputerConfig;

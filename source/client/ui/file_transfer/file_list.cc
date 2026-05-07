@@ -21,6 +21,7 @@
 #include "client/ui/file_transfer/address_bar_model.h"
 #include "client/ui/file_transfer/file_item_delegate.h"
 #include "client/ui/file_transfer/file_list_model.h"
+#include "proto/file_transfer.h"
 
 #include <QHeaderView>
 #include <QKeyEvent>

@@ -22,7 +22,9 @@
 #include <QIcon>
 #include <QString>
 
-#include "proto/peer.h"
+namespace proto::peer {
+enum SessionType : int;
+} // namespace proto::peer
 
 QString sessionName(proto::peer::SessionType session_type);
 QString sessionShortName(proto::peer::SessionType session_type);
