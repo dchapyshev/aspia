@@ -407,6 +407,15 @@ void Sidebar::onRemoveRouter()
 }
 
 //--------------------------------------------------------------------------------------------------
+void Sidebar::changeEvent(QEvent* event)
+{
+    QWidget::changeEvent(event);
+
+    if (event->type() == QEvent::LanguageChange && local_root_)
+        local_root_->setText(0, tr("Local"));
+}
+
+//--------------------------------------------------------------------------------------------------
 bool Sidebar::eventFilter(QObject* watched, QEvent* event)
 {
     if (watched == tree_widget_->viewport())
