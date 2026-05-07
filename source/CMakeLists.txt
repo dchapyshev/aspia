@@ -16,7 +16,6 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 #
 
-include(CheckIPOSupported)
 include(GNUInstallDirs)
 
 # Qt configuration.
@@ -146,21 +145,6 @@ if (LINUX)
     # C compiller flags.
     set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -fPIC")
     set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -fPIC")
-endif()
-
-check_ipo_supported(RESULT IPO_SUPPORTED OUTPUT error)
-
-if (IPO_SUPPORTED)
-    if (LINUX)
-        message(STATUS "IPO/LTO supported but disabled for Linux")
-    else()
-        message(STATUS "IPO/LTO supported")
-
-        # Enable link-time code generatation.
-        set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)
-    endif()
-else()
-    message(STATUS "IPO/LTO not supported")
 endif()
 
 # Compiller flags.
