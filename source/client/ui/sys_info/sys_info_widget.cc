@@ -18,6 +18,8 @@
 
 #include "client/ui/sys_info/sys_info_widget.h"
 
+#include "proto/system_info.h"
+
 #include <QApplication>
 #include <QClipboard>
 #include <QDesktopServices>

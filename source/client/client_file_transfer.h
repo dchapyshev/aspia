@@ -24,7 +24,8 @@
 #include "client/file_remover.h"
 #include "client/file_transfer.h"
 #include "common/file_task_factory.h"
-#include "common/file_worker.h"
+
+class FileWorker;
 
 class ClientFileTransfer final : public Client
 {

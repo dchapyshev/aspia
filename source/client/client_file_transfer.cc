@@ -20,6 +20,7 @@
 
 #include "base/logging.h"
 #include "common/file_task_factory.h"
+#include "common/file_worker.h"
 #include "proto/peer.h"
 
 //--------------------------------------------------------------------------------------------------

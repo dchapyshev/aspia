@@ -17,6 +17,7 @@
 //
 
 #include "client/ui/sys_info/sys_info_widget_open_files.h"
+#include "proto/system_info.h"
 
 #include <QMenu>
 

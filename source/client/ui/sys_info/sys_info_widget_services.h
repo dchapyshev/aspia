@@ -20,6 +20,7 @@
 #define CLIENT_UI_SYS_INFO_SYS_INFO_SERVICES_H
 
 #include "client/ui/sys_info/sys_info_widget.h"
+#include "proto/system_info.h"
 #include "ui_sys_info_widget_services.h"
 
 class SysInfoWidgetServices final : public SysInfoWidget

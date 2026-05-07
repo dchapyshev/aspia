@@ -17,6 +17,7 @@
 //
 
 #include "client/ui/sys_info/sys_info_widget_event_logs.h"
+#include "proto/system_info.h"
 
 #include <QMenu>
 

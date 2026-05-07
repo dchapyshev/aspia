@@ -20,6 +20,7 @@
 #define CLIENT_UI_SYS_INFO_SYS_INFO_EVENT_LOGS_H
 
 #include "client/ui/sys_info/sys_info_widget.h"
+#include "proto/system_info.h"
 #include "ui_sys_info_widget_event_logs.h"
 
 class SysInfoWidgetEventLogs final : public SysInfoWidget

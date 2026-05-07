@@ -20,6 +20,7 @@
 #define CLIENT_UI_SYS_INFO_SYS_INFO_POWER_OPTIONS_H
 
 #include "client/ui/sys_info/sys_info_widget.h"
+#include "proto/system_info.h"
 #include "ui_sys_info_widget_power_options.h"
 
 class SysInfoWidgetPowerOptions final : public SysInfoWidget

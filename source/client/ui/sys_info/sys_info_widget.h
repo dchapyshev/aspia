@@ -21,7 +21,10 @@
 
 #include <QWidget>
 
-#include "proto/system_info.h"
+namespace proto::system_info {
+class SystemInfo;
+class SystemInfoRequest;
+} // namespace proto::system_info
 
 class QTreeWidget;
 class QTreeWidgetItem;

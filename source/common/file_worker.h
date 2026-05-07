@@ -22,11 +22,23 @@
 #include <QObject>
 #include <memory>
 
-#include "common/file_task.h"
-
 class FileDepacketizer;
 class FilePacketizer;
+class FileTask;
 class QTimer;
+
+namespace proto::file_transfer {
+class CreateDirectoryRequest;
+class DownloadRequest;
+class ListRequest;
+class Packet;
+class PacketRequest;
+class RemoveRequest;
+class RenameRequest;
+class Reply;
+class Request;
+class UploadRequest;
+} // namespace proto::file_transfer
 
 class FileWorker final : public QObject
 {

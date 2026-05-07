@@ -17,6 +17,7 @@
 //
 
 #include "client/ui/sys_info/sys_info_widget_net_adapters.h"
+#include "proto/system_info.h"
 
 #include <QMenu>
 
