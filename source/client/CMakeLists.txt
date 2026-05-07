@@ -49,6 +49,7 @@ list(APPEND SOURCE_CLIENT_CORE
     json_importer.h
     master_password.cc
     master_password.h
+    pch.h
     router.cc
     router.h
     session_state.cc
@@ -306,6 +307,8 @@ set_property(TARGET aspia_client PROPERTY AUTOMOC ON)
 set_property(TARGET aspia_client PROPERTY AUTOUIC ON)
 set_property(TARGET aspia_client PROPERTY AUTORCC ON)
 qt_import_plugins(aspia_client INCLUDE "" EXCLUDE "" INCLUDE_BY_TYPE imageformats iconengines EXCLUDE_BY_TYPE "")
+
+target_precompile_headers(aspia_client PRIVATE pch.h)
 
 if (WIN32)
     set_target_properties(aspia_client PROPERTIES WIN32_EXECUTABLE TRUE)

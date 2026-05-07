@@ -22,6 +22,7 @@ list(APPEND SOURCE_ROUTER
     main.cc
     migration_utils.cc
     migration_utils.h
+    pch.h
     router_user_list.cc
     router_user_list.h
     service.cc
@@ -80,3 +81,5 @@ target_link_libraries(aspia_router
 set_property(TARGET aspia_router PROPERTY AUTOMOC ON)
 set_property(TARGET aspia_router PROPERTY AUTOUIC ON)
 set_property(TARGET aspia_router PROPERTY AUTORCC ON)
+
+target_precompile_headers(aspia_router PRIVATE pch.h)

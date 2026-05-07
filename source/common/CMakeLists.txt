@@ -41,6 +41,7 @@ list(APPEND SOURCE_COMMON
     http_file_downloader.h
     keycode_converter.cc
     keycode_converter.h
+    pch.h
     system_info_constants.cc
     system_info_constants.h
     update_checker.cc
@@ -156,3 +157,5 @@ target_link_libraries(aspia_common PRIVATE
 set_property(TARGET aspia_common PROPERTY AUTOMOC ON)
 set_property(TARGET aspia_common PROPERTY AUTOUIC ON)
 set_property(TARGET aspia_common PROPERTY AUTORCC ON)
+
+target_precompile_headers(aspia_common PRIVATE pch.h)
