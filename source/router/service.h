@@ -25,6 +25,7 @@
 #include "base/peer/host_id.h"
 #include "base/net/tcp_server.h"
 #include "base/net/tcp_server_legacy.h"
+#include "proto/router.h"
 #include "router/session.h"
 
 class StunServer;

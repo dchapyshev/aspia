@@ -20,8 +20,11 @@
 #define CLIENT_UI_HOSTS_ROUTER_USER_DIALOG_H
 
 #include "base/peer/user.h"
-#include "proto/router.h"
 #include "ui_router_user_dialog.h"
+
+namespace proto::router {
+enum SessionType : int;
+} // namespace proto::router
 
 class RouterUserDialog final : public QDialog
 {

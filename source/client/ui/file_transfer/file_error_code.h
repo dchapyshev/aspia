@@ -19,9 +19,11 @@
 #ifndef CLIENT_UI_FILE_TRANSFER_FILE_ERROR_CODE_H
 #define CLIENT_UI_FILE_TRANSFER_FILE_ERROR_CODE_H
 
-#include "proto/file_transfer.h"
-
 #include <QString>
+
+namespace proto::file_transfer {
+enum ErrorCode : int;
+} // namespace proto::file_transfer
 
 QString fileErrorToString(proto::file_transfer::ErrorCode error_code);
 

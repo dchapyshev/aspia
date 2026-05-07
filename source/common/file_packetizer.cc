@@ -22,6 +22,7 @@
 
 #include "base/logging.h"
 #include "common/file_packet.h"
+#include "proto/file_transfer.h"
 
 namespace {
 

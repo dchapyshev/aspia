@@ -29,6 +29,7 @@
 #include "build/version.h"
 #include "client/config_factory.h"
 #include "proto/desktop_control.h"
+#include "proto/peer.h"
 
 namespace {
 

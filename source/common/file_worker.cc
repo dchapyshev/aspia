@@ -30,6 +30,7 @@
 #include "base/files/file_enumerator.h"
 #include "common/file_depacketizer.h"
 #include "common/file_packetizer.h"
+#include "proto/file_transfer.h"
 
 #if defined(Q_OS_WINDOWS)
 #include <qt_windows.h>

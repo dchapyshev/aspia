@@ -24,7 +24,6 @@
 #include "base/scoped_qpointer.h"
 #include "base/core_service.h"
 #include "host/system_settings.h"
-#include "proto/router_peer.h"
 
 class HttpFileDownloader;
 class Location;

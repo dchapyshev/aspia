@@ -36,6 +36,7 @@
 #include "client/ui/application.h"
 #include "client/ui/master_password_dialog.h"
 #include "common/ui/update_dialog.h"
+#include "proto/desktop_control.h"
 
 //--------------------------------------------------------------------------------------------------
 SettingsTab::SettingsTab(QWidget* parent)

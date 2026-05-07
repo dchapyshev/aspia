@@ -19,6 +19,7 @@
 #include "router/session.h"
 
 #include "base/net/tcp_channel.h"
+#include "proto/router.h"
 
 namespace {
 

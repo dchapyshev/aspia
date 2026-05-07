@@ -21,10 +21,15 @@
 
 #include "client/file_remover.h"
 #include "client/file_transfer.h"
-#include "proto/file_transfer.h"
 #include "ui_file_panel.h"
 
 class FileSendButton;
+
+namespace proto::file_transfer {
+enum ErrorCode : int;
+class DriveList;
+class List;
+} // namespace proto::file_transfer
 
 class FilePanel final : public QWidget
 {

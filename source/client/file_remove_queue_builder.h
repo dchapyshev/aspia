@@ -20,7 +20,10 @@
 #define CLIENT_FILE_REMOVE_QUEUE_BUILDER_H
 
 #include "client/file_remover.h"
-#include "proto/file_transfer.h"
+
+namespace proto::file_transfer {
+enum ErrorCode : int;
+} // namespace proto::file_transfer
 
 // The class prepares the task queue to perform the deletion.
 class FileRemoveQueueBuilder final : public QObject

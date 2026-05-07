@@ -19,8 +19,15 @@
 #ifndef ROUTER_SESSION_ADMIN_H
 #define ROUTER_SESSION_ADMIN_H
 
-#include "proto/router_admin.h"
 #include "router/session_manager.h"
+
+namespace proto::router {
+class HostRequest;
+class PeerRequest;
+class RelayRequest;
+class User;
+class UserRequest;
+} // namespace proto::router
 
 class SessionAdmin final : public SessionManager
 {

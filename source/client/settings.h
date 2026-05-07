@@ -21,8 +21,13 @@
 
 #include <QSettings>
 
-#include "proto/desktop_control.h"
-#include "proto/peer.h"
+namespace proto::control {
+class Config;
+} // namespace proto::control
+
+namespace proto::peer {
+enum SessionType : int;
+} // namespace proto::peer
 
 // Stores non-critical UI/preference settings.
 //

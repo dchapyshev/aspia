@@ -18,6 +18,8 @@
 
 #include "client/ui/file_transfer/file_error_code.h"
 
+#include "proto/file_transfer.h"
+
 #include <QCoreApplication>
 
 //--------------------------------------------------------------------------------------------------

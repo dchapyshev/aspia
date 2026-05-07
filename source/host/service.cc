@@ -47,6 +47,7 @@
 #include "host/system_info_client.h"
 #include "host/chat_client.h"
 #include "host/user_session.h"
+#include "proto/chat.h"
 #include "proto/router_host.h"
 
 #if defined(Q_OS_WINDOWS)

@@ -21,6 +21,7 @@
 #include "common/ui/msg_box.h"
 #include "base/logging.h"
 #include "base/peer/user.h"
+#include "proto/router.h"
 
 #include <QAbstractButton>
 #include <QPushButton>

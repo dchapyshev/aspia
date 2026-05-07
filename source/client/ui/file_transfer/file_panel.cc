@@ -35,6 +35,7 @@
 #include "client/ui/file_transfer/file_item_delegate.h"
 #include "client/ui/file_transfer/file_list_model.h"
 #include "common/file_platform_util.h"
+#include "proto/file_transfer.h"
 
 namespace {
 

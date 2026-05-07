@@ -20,6 +20,7 @@
 
 #include "base/logging.h"
 #include "common/file_task_factory.h"
+#include "proto/file_transfer.h"
 
 //--------------------------------------------------------------------------------------------------
 FileRemoveQueueBuilder::FileRemoveQueueBuilder(FileTask::Target target, QObject* parent)

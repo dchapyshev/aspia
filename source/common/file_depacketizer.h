@@ -21,9 +21,11 @@
 
 #include <memory>
 
-#include "proto/file_transfer.h"
-
 class QFile;
+
+namespace proto::file_transfer {
+class Packet;
+} // namespace proto::file_transfer
 
 class FileDepacketizer
 {

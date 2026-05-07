@@ -21,6 +21,7 @@
 #include <QFile>
 
 #include "base/logging.h"
+#include "proto/file_transfer.h"
 
 //--------------------------------------------------------------------------------------------------
 FileDepacketizer::FileDepacketizer(const QString& file_path, std::unique_ptr<QFile> file)

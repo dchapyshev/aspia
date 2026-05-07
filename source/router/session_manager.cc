@@ -20,6 +20,7 @@
 
 #include "base/logging.h"
 #include "base/serialization.h"
+#include "proto/router.h"
 
 //--------------------------------------------------------------------------------------------------
 SessionManager::SessionManager(TcpChannel* channel, QObject* parent)

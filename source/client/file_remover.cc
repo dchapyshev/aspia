@@ -21,6 +21,7 @@
 #include "base/logging.h"
 #include "client/file_remove_queue_builder.h"
 #include "common/file_task_factory.h"
+#include "proto/file_transfer.h"
 
 namespace {
 

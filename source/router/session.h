@@ -25,7 +25,10 @@
 
 #include "base/logging.h"
 #include "base/net/tcp_channel.h"
-#include "proto/router.h"
+
+namespace proto::router {
+enum SessionType : int;
+} // namespace proto::router
 
 class Session : public QObject
 {

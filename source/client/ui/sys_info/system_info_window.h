@@ -20,11 +20,15 @@
 #define CLIENT_UI_SYS_INFO_SYSTEM_INFO_WINDOW_H
 
 #include "client/ui/client_window.h"
-#include "proto/system_info.h"
 
 namespace Ui {
 class SystemInfoWindow;
 } // namespace Ui
+
+namespace proto::system_info {
+class SystemInfo;
+class SystemInfoRequest;
+} // namespace proto::system_info
 
 class QHBoxLayout;
 class QTreeWidgetItem;
