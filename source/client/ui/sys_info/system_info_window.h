@@ -27,7 +27,6 @@ class SystemInfoWindow;
 } // namespace Ui
 
 class QHBoxLayout;
-class QTreeWidget;
 class QTreeWidgetItem;
 class SysInfoWidget;
 

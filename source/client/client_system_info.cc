@@ -20,6 +20,7 @@
 
 #include "base/logging.h"
 #include "base/serialization.h"
+#include "proto/system_info.h"
 
 //--------------------------------------------------------------------------------------------------
 ClientSystemInfo::ClientSystemInfo(QObject* parent)

@@ -28,8 +28,6 @@ namespace Ui {
 class ChatWindow;
 } // namespace Ui
 
-class QHBoxLayout;
-
 class ChatWindow final : public ClientWindow
 {
     Q_OBJECT

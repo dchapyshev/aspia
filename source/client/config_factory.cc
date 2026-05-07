@@ -19,6 +19,7 @@
 #include "client/config_factory.h"
 
 #include "base/logging.h"
+#include "proto/desktop_control.h"
 
 //--------------------------------------------------------------------------------------------------
 // static

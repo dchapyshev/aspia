@@ -24,9 +24,7 @@
 #include "proto/task_manager.h"
 #include "ui_task_manager_window.h"
 
-class QHBoxLayout;
 class QLabel;
-class QStatusBar;
 
 class TaskManagerWindow final : public QMainWindow
 {

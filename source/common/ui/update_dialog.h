@@ -21,12 +21,13 @@
 
 #include <QDialog>
 
-#include "common/update_checker.h"
 #include "common/update_info.h"
 
 namespace Ui {
 class UpdateDialog;
 } // namespace Ui
+
+class UpdateChecker;
 
 class UpdateDialog final : public QDialog
 {

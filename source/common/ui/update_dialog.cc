@@ -27,6 +27,7 @@
 #include "common/ui/msg_box.h"
 #include "base/logging.h"
 #include "base/version_constants.h"
+#include "common/update_checker.h"
 #include "common/ui/download_dialog.h"
 #include "ui_update_dialog.h"
 

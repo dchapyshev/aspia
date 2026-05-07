@@ -20,7 +20,11 @@
 #define CLIENT_CLIENT_SYSTEM_INFO_H
 
 #include "client/client.h"
-#include "proto/system_info.h"
+
+namespace proto::system_info {
+class SystemInfo;
+class SystemInfoRequest;
+} // namespace proto::system_info
 
 class ClientSystemInfo final : public Client
 {

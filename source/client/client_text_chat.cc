@@ -20,6 +20,7 @@
 
 #include "base/logging.h"
 #include "base/serialization.h"
+#include "proto/chat.h"
 
 //--------------------------------------------------------------------------------------------------
 ClientChat::ClientChat(QObject* parent)

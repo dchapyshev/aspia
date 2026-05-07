@@ -24,8 +24,6 @@
 
 #include <memory>
 
-class SharedMemoryFactory;
-
 class FrameDib final : public Frame
 {
 public:

@@ -28,6 +28,7 @@
 #include "base/xml_settings.h"
 #include "build/version.h"
 #include "client/config_factory.h"
+#include "proto/desktop_control.h"
 
 namespace {
 

@@ -21,14 +21,13 @@
 
 #include <QPointer>
 
-#include "base/desktop/mouse_cursor.h"
 #include "client/client_desktop.h"
 #include "client/ui/client_window.h"
 
+class MouseCursor;
 class QHBoxLayout;
 class QScrollArea;
 
-class DesktopConfigDialog;
 class DesktopToolBar;
 class DesktopWidget;
 class StatisticsDialog;

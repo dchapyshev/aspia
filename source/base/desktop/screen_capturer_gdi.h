@@ -23,7 +23,6 @@
 #include "base/win/scoped_hdc.h"
 
 class Differ;
-class SharedMemoryFactory;
 
 class ScreenCapturerGdi final : public ScreenCapturerWin
 {

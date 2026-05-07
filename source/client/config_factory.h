@@ -19,7 +19,9 @@
 #ifndef CLIENT_CONFIG_FACTORY_H
 #define CLIENT_CONFIG_FACTORY_H
 
-#include "proto/desktop_control.h"
+namespace proto::control {
+class Config;
+} // namespace proto::control
 
 class ConfigFactory
 {

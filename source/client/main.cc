@@ -41,6 +41,7 @@
 #include "client/ui/desktop/desktop_window.h"
 #include "client/ui/file_transfer/file_transfer_window.h"
 #include "client/ui/sys_info/system_info_window.h"
+#include "proto/desktop_control.h"
 
 //--------------------------------------------------------------------------------------------------
 bool startSession(const ComputerConfig& computer,

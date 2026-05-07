@@ -28,7 +28,6 @@
 #include "base/net/anti_replay_window.h"
 
 class QSocketNotifier;
-class QTimer;
 
 typedef struct _ENetAddress ENetAddress;
 typedef struct _ENetHost ENetHost;

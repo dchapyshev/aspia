@@ -20,7 +20,10 @@
 #define CLIENT_CLIENT_CHAT_H
 
 #include "client/client.h"
-#include "proto/chat.h"
+
+namespace proto::chat {
+class Chat;
+} // namespace proto::chat
 
 class ClientChat final : public Client
 {
