@@ -19,11 +19,11 @@
 #ifndef COMMON_FILE_DEPACKETIZER_H
 #define COMMON_FILE_DEPACKETIZER_H
 
-#include <QFile>
-
 #include <memory>
 
 #include "proto/file_transfer.h"
+
+class QFile;
 
 class FileDepacketizer
 {

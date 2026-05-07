@@ -22,8 +22,12 @@
 #include <QVector>
 
 #include "base/codec/scoped_zstd_stream.h"
-#include "base/desktop/mouse_cursor.h"
-#include "proto/desktop_cursor.h"
+
+class MouseCursor;
+
+namespace proto::cursor {
+class Shape;
+} // namespace proto::cursor
 
 class CursorEncoder
 {

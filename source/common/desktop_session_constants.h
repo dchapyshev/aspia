@@ -19,8 +19,6 @@
 #ifndef COMMON_DESKTOP_SESSION_CONSTANTS_H
 #define COMMON_DESKTOP_SESSION_CONSTANTS_H
 
-#include <QtGlobal>
-
 extern const char kSelectScreenExtension[]; // Deprecated.
 extern const char kPreferredSizeExtension[]; // Deprecated.
 extern const char kPowerControlExtension[]; // Deprecated.

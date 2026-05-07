@@ -18,7 +18,9 @@
 
 #include "base/codec/cursor_encoder.h"
 
+#include "base/desktop/mouse_cursor.h"
 #include "base/logging.h"
+#include "proto/desktop_cursor.h"
 
 #include <libyuv/compare.h>
 

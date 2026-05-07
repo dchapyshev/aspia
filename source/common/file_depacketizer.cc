@@ -18,6 +18,8 @@
 
 #include "common/file_depacketizer.h"
 
+#include <QFile>
+
 #include "base/logging.h"
 
 //--------------------------------------------------------------------------------------------------
