@@ -38,6 +38,7 @@
 #include "host/desktop_agent_client.h"
 #include "host/system_settings.h"
 #include "proto/desktop_audio.h"
+#include "proto/desktop_input.h"
 #include "proto/desktop_internal.h"
 
 #if defined(Q_OS_WINDOWS)

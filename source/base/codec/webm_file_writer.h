@@ -21,7 +21,6 @@
 
 #include <QString>
 
-#include "proto/desktop_audio.h"
 #include "proto/desktop_video.h"
 
 #include <chrono>
@@ -29,6 +28,10 @@
 #include <optional>
 
 class WebmFileMuxer;
+
+namespace proto::audio {
+class Packet;
+} // namespace proto::audio
 
 class WebmFileWriter
 {

@@ -23,6 +23,7 @@
 
 #include "base/logging.h"
 #include "base/codec/webm_file_muxer.h"
+#include "proto/desktop_audio.h"
 
 //--------------------------------------------------------------------------------------------------
 WebmFileWriter::WebmFileWriter(const QString& path, const QString& name)

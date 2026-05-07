@@ -18,7 +18,10 @@
 
 #include "base/serialization.h"
 
+#include "proto/desktop_screen.h"
+#include "proto/desktop_video.h"
 #include "proto/file_transfer.h"
+#include "proto/peer.h"
 
 #include <gtest/gtest.h>
 

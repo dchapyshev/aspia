@@ -23,11 +23,20 @@
 #include <QRect>
 #include <QVersionNumber>
 
-#include "proto/desktop_screen.h"
-#include "proto/desktop_video.h"
-#include "proto/peer.h"
-
 #include <google/protobuf/message_lite.h>
+
+namespace proto::peer {
+class Version;
+} // namespace proto::peer
+
+namespace proto::screen {
+class Point;
+class Size;
+} // namespace proto::screen
+
+namespace proto::video {
+class Rect;
+} // namespace proto::video
 
 QByteArray serialize(const google::protobuf::MessageLite& message);
 

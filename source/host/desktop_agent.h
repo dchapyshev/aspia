@@ -28,8 +28,15 @@
 #include "base/desktop/screen_capturer.h"
 #include "proto/desktop_audio.h"
 #include "proto/desktop_cursor.h"
-#include "proto/desktop_input.h"
+#include "proto/desktop_screen.h"
 #include "proto/desktop_video.h"
+
+namespace proto::input {
+class KeyEvent;
+class MouseEvent;
+class TextEvent;
+class TouchEvent;
+} // namespace proto::input
 
 class AudioCapturerWrapper;
 class AudioEncoder;

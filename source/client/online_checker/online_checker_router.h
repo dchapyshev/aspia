@@ -23,7 +23,6 @@
 #include <QQueue>
 
 #include "client/config.h"
-#include "client/router.h"
 
 class Location;
 class QTimer;

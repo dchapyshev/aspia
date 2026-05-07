@@ -29,6 +29,8 @@
 #include "common/ui/msg_box.h"
 #include "base/logging.h"
 #include "client/ui/desktop/select_screen_action.h"
+#include "proto/desktop_control.h"
+#include "proto/desktop_screen.h"
 
 namespace {
 

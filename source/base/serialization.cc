@@ -19,6 +19,9 @@
 #include "base/serialization.h"
 
 #include "base/logging.h"
+#include "proto/desktop_screen.h"
+#include "proto/desktop_video.h"
+#include "proto/peer.h"
 
 //--------------------------------------------------------------------------------------------------
 QByteArray serialize(const google::protobuf::MessageLite& message)

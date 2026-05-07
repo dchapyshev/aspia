@@ -25,7 +25,12 @@
 #include "base/serialization.h"
 #include "base/ipc/ipc_channel.h"
 #include "common/desktop_session_constants.h"
+#include "proto/desktop_audio.h"
 #include "proto/desktop_channel.h"
+#include "proto/desktop_input.h"
+#include "proto/desktop_power.h"
+#include "proto/desktop_screen.h"
+#include "proto/desktop_video.h"
 
 //--------------------------------------------------------------------------------------------------
 DesktopAgentClient::DesktopAgentClient(QObject* parent)

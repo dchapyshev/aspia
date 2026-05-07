@@ -20,6 +20,7 @@
 
 #include "base/logging.h"
 #include "common/file_task_factory.h"
+#include "proto/peer.h"
 
 //--------------------------------------------------------------------------------------------------
 ClientFileTransfer::ClientFileTransfer(QObject* parent)

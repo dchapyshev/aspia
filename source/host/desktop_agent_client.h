@@ -24,13 +24,32 @@
 #include <optional>
 
 #include "base/logging.h"
-#include "proto/desktop_audio.h"
 #include "proto/desktop_control.h"
-#include "proto/desktop_input.h"
 #include "proto/desktop_internal.h"
-#include "proto/desktop_power.h"
-#include "proto/desktop_screen.h"
-#include "proto/desktop_video.h"
+
+namespace proto::audio {
+class Pause;
+} // namespace proto::audio
+
+namespace proto::input {
+class KeyEvent;
+class MouseEvent;
+class TextEvent;
+class TouchEvent;
+} // namespace proto::input
+
+namespace proto::power {
+class Control;
+} // namespace proto::power
+
+namespace proto::screen {
+class Screen;
+} // namespace proto::screen
+
+namespace proto::video {
+class Pause;
+class PreferredSize;
+} // namespace proto::video
 
 class IpcChannel;
 

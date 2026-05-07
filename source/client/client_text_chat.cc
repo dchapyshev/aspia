@@ -21,6 +21,7 @@
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "proto/chat.h"
+#include "proto/peer.h"
 
 //--------------------------------------------------------------------------------------------------
 ClientChat::ClientChat(QObject* parent)

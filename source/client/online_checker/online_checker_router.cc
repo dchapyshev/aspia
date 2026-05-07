@@ -23,6 +23,7 @@
 #include "base/location.h"
 #include "base/logging.h"
 #include "base/peer/host_id.h"
+#include "client/router.h"
 
 namespace {
 

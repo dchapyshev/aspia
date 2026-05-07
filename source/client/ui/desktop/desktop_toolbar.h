@@ -20,11 +20,18 @@
 #define CLIENT_UI_DESKTOP_DESKTOP_TOOLBAR_H
 
 #include "client/ui/tab.h"
-#include "proto/desktop_control.h"
 #include "proto/desktop_power.h"
-#include "proto/desktop_screen.h"
 #include "proto/peer.h"
 #include "ui_desktop_toolbar.h"
+
+namespace proto::control {
+class SessionList;
+} // namespace proto::control
+
+namespace proto::screen {
+class Screen;
+class ScreenList;
+} // namespace proto::screen
 
 class DesktopToolBar final : public QFrame
 {

@@ -19,7 +19,6 @@
 #ifndef CLIENT_UI_HOSTS_ROUTER_WIDGET_H
 #define CLIENT_UI_HOSTS_ROUTER_WIDGET_H
 
-#include "base/peer/user.h"
 #include "base/scoped_qpointer.h"
 #include "client/config.h"
 #include "client/router.h"
@@ -29,6 +28,7 @@
 class QLabel;
 class QStatusBar;
 class StatusDialog;
+class User;
 
 namespace proto::router {
 class HostResult;
