@@ -34,10 +34,6 @@ class TcpChannel;
 class TcpServer;
 class UpdateChecker;
 
-namespace proto::user {
-class RouterState;
-} // proto::user
-
 namespace proto::chat {
 class Chat;
 } // namespace proto::chat

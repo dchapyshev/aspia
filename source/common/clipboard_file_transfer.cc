@@ -18,6 +18,8 @@
 
 #include "common/clipboard_file_transfer.h"
 
+#include <QFile>
+
 #include "base/logging.h"
 
 //--------------------------------------------------------------------------------------------------

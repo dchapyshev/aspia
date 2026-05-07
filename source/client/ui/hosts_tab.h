@@ -29,7 +29,6 @@
 
 class ContentWidget;
 class LocalGroupWidget;
-class QTreeWidgetItem;
 class RouterGroupWidget;
 class RouterWidget;
 class SearchWidget;

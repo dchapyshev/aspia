@@ -29,6 +29,7 @@
 #include "base/ipc/ipc_server.h"
 #include "proto/desktop_channel.h"
 #include "proto/desktop_video.h"
+#include "proto/task_manager.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/safe_mode_util.h"

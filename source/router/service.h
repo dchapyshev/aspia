@@ -27,8 +27,6 @@
 #include "base/net/tcp_server_legacy.h"
 #include "router/session.h"
 
-class SessionHost;
-class SessionRelay;
 class StunServer;
 
 class Service final : public CoreService

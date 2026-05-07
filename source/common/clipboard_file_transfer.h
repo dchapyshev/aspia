@@ -19,7 +19,6 @@
 #ifndef COMMON_CLIPBOARD_FILE_TRANSFER_H
 #define COMMON_CLIPBOARD_FILE_TRANSFER_H
 
-#include <QFile>
 #include <QObject>
 
 #include <array>
@@ -29,6 +28,8 @@
 #include "base/serialization.h"
 #include "common/clipboard.h"
 #include "proto/desktop_file.h"
+
+class QFile;
 
 class ClipboardFileTransfer final : public QObject
 {

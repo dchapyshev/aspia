@@ -28,7 +28,6 @@
 
 class Tab;
 class QLineEdit;
-class ClientTab;
 class UpdateChecker;
 struct ComputerConfig;
 

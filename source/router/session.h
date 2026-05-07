@@ -27,8 +27,6 @@
 #include "base/net/tcp_channel.h"
 #include "proto/router.h"
 
-class Database;
-
 class Session : public QObject
 {
     Q_OBJECT

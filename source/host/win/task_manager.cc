@@ -24,6 +24,7 @@
 #include "base/win/session_enumerator.h"
 #include "base/win/session_info.h"
 #include "host/win/process_monitor.h"
+#include "proto/task_manager.h"
 
 //--------------------------------------------------------------------------------------------------
 TaskManager::TaskManager(QObject* parent)

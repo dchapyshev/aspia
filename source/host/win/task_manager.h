@@ -23,9 +23,12 @@
 
 #include <memory>
 
-#include "proto/task_manager.h"
-
 class ProcessMonitor;
+
+namespace proto::task_manager {
+class ClientToHost;
+class HostToClient;
+} // namespace proto::task_manager
 
 class TaskManager final : public QObject
 {
