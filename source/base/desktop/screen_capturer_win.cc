@@ -21,6 +21,7 @@
 #include <QTimer>
 
 #include "base/logging.h"
+#include "base/desktop/mouse_cursor.h"
 #include "base/desktop/screen_capturer_dxgi.h"
 #include "base/desktop/screen_capturer_gdi.h"
 #include "base/win/scoped_gdi_object.h"

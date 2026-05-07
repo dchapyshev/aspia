@@ -20,9 +20,12 @@
 #define BASE_AUDIO_AUDIO_CAPTURER_WRAPPER_H
 
 #include "base/thread.h"
-#include "proto/desktop_audio.h"
 
 class AudioCapturer;
+
+namespace proto::audio {
+class Packet;
+} // namespace proto::audio
 
 class AudioCapturerWrapper final : public QObject
 {

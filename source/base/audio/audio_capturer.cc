@@ -18,6 +18,8 @@
 
 #include "base/audio/audio_capturer.h"
 
+#include "proto/desktop_audio.h"
+
 #if defined(Q_OS_WINDOWS)
 #include "base/audio/audio_capturer_win.h"
 #endif // defined(Q_OS_WINDOWS)

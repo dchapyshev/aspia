@@ -24,10 +24,6 @@
 
 #include "common/file_task.h"
 
-namespace proto::file_transfer {
-class FilePacket;
-} // namespace proto::file_transfer
-
 class FileTaskFactory final : public QObject
 {
     Q_OBJECT

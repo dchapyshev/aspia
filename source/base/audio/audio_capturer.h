@@ -21,10 +21,12 @@
 
 #include <QObject>
 
-#include "proto/desktop_audio.h"
-
 #include <functional>
 #include <memory>
+
+namespace proto::audio {
+class Packet;
+} // namespace proto::audio
 
 class AudioCapturer : public QObject
 {

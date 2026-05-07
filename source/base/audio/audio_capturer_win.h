@@ -22,6 +22,7 @@
 #include "base/win/scoped_co_mem.h"
 #include "base/audio/audio_capturer.h"
 #include "base/audio/audio_volume_filter_win.h"
+#include "proto/desktop_audio.h"
 
 #include <Audioclient.h>
 #include <mmdeviceapi.h>

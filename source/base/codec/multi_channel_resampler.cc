@@ -20,6 +20,7 @@
 
 #include "base/logging.h"
 #include "base/codec/audio_bus.h"
+#include "base/codec/sinc_resampler.h"
 
 #include <algorithm>
 #include <cstring>

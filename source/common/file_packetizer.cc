@@ -18,6 +18,8 @@
 
 #include "common/file_packetizer.h"
 
+#include <QFile>
+
 #include "base/logging.h"
 #include "common/file_packet.h"
 
@@ -39,6 +41,9 @@ FilePacketizer::FilePacketizer(std::unique_ptr<QFile> file)
     file_size_ = file_->size();
     left_size_ = file_size_;
 }
+
+//--------------------------------------------------------------------------------------------------
+FilePacketizer::~FilePacketizer() = default;
 
 //--------------------------------------------------------------------------------------------------
 std::unique_ptr<FilePacketizer> FilePacketizer::create(const QString& file_path)

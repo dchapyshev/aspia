@@ -20,12 +20,12 @@
 #define BASE_CODEC_MULTI_CHANNEL_RESAMPLER_H
 
 #include <cstddef>
+#include <functional>
 #include <memory>
 #include <vector>
 
-#include "base/codec/sinc_resampler.h"
-
 class AudioBus;
+class SincResampler;
 
 // MultiChannelResampler is a multi channel wrapper for SincResampler; allowing
 // high quality sample rate conversion of multiple channels at once.

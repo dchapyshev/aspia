@@ -19,16 +19,16 @@
 #ifndef COMMON_FILE_PACKETIZER_H
 #define COMMON_FILE_PACKETIZER_H
 
-#include <QFile>
-
 #include <memory>
 
 #include "proto/file_transfer.h"
 
+class QFile;
+
 class FilePacketizer
 {
 public:
-    ~FilePacketizer() = default;
+    ~FilePacketizer();
 
     // Creates an instance of the class.
     // Parameter |file_path| contains the full path to the file.

@@ -18,6 +18,8 @@
 
 #include "base/desktop/win/dxgi_cursor.h"
 
+#include "base/desktop/mouse_cursor.h"
+
 namespace {
 
 constexpr int kBytesPerPixel = 4;

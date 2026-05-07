@@ -19,10 +19,10 @@
 #ifndef BASE_DESKTOP_WIN_DXGI_CURSOR_H
 #define BASE_DESKTOP_WIN_DXGI_CURSOR_H
 
-#include "base/desktop/mouse_cursor.h"
-
 #include <dxgi.h>
 #include <dxgi1_2.h>
+
+class MouseCursor;
 
 class DxgiCursor
 {

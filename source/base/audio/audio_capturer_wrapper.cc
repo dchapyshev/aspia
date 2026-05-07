@@ -20,6 +20,7 @@
 
 #include "base/logging.h"
 #include "base/audio/audio_capturer.h"
+#include "proto/desktop_audio.h"
 
 //--------------------------------------------------------------------------------------------------
 AudioCapturerWrapper::AudioCapturerWrapper(QObject* parent)
