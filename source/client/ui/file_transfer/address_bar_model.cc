@@ -149,6 +149,31 @@ QString AddressBarModel::pathAt(const QModelIndex& index) const
 }
 
 //--------------------------------------------------------------------------------------------------
+void AddressBarModel::retranslate()
+{
+    beginResetModel();
+
+    for (Drive& drive : drives_)
+    {
+        switch (drive.type)
+        {
+            case proto::file_transfer::DriveList::Item::TYPE_HOME_FOLDER:
+                drive.name = tr("Home Folder");
+                break;
+
+            case proto::file_transfer::DriveList::Item::TYPE_DESKTOP_FOLDER:
+                drive.name = tr("Desktop");
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    endResetModel();
+}
+
+//--------------------------------------------------------------------------------------------------
 bool AddressBarModel::isComputerPath(const QString& path) const
 {
     return path == computerPath();

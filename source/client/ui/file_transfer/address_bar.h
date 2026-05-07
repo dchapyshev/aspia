@@ -40,6 +40,7 @@ public:
     QString previousPath() const;
     QString pathAt(const QModelIndex& index) const;
     bool hasCurrentPath() const;
+    void retranslate();
 
     // QComboBox implementation.
     void showPopup() final;

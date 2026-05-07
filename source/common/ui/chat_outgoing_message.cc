@@ -56,12 +56,6 @@ QString ChatOutgoingMessage::messageTime() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void ChatOutgoingMessage::resizeEvent(QResizeEvent* /* event */)
-{
-    adjustSize();
-}
-
-//--------------------------------------------------------------------------------------------------
 void ChatOutgoingMessage::applyStyles(const QPalette& palette)
 {
     const QColor& bubble = palette.color(QPalette::Midlight);
@@ -71,4 +65,10 @@ void ChatOutgoingMessage::applyStyles(const QPalette& palette)
         "#label_message { color: %1; background-color: %2; border: 1px solid %2; "
         "border-radius: 4px; font-family: Verdana; padding: 6px; }")
         .arg(text.name(QColor::HexArgb), bubble.name(QColor::HexArgb)));
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatOutgoingMessage::resizeEvent(QResizeEvent* /* event */)
+{
+    adjustSize();
 }

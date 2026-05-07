@@ -259,30 +259,6 @@ void FilePanel::onRename(proto::file_transfer::ErrorCode error_code)
 }
 
 //--------------------------------------------------------------------------------------------------
-void FilePanel::onPathChanged(const QString& path)
-{
-    emit sig_pathChanged(this, ui.address_bar->currentPath());
-
-    ui.action_up->setEnabled(false);
-    ui.action_add_folder->setEnabled(false);
-    ui.action_delete->setEnabled(false);
-
-    setTransferEnabled(false);
-
-    AddressBarModel* model = static_cast<AddressBarModel*>(ui.address_bar->model());
-
-    if (path == model->computerPath())
-    {
-        ui.list->showDriveList(model);
-        ui.label_status->clear();
-    }
-    else
-    {
-        emit sig_fileList(path);
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
 void FilePanel::setPanelName(const QString& name)
 {
     ui.label_name->setText(name);
@@ -313,18 +289,6 @@ void FilePanel::setMirrored(bool mirrored)
 {
     mirrored_ = mirrored;
     applyMirrored();
-}
-
-//--------------------------------------------------------------------------------------------------
-void FilePanel::applyMirrored()
-{
-    bool effective_rtl = isRightToLeft() ^ mirrored_;
-
-    ui.horizontalLayout->setDirection(
-        effective_rtl ? QBoxLayout::RightToLeft : QBoxLayout::LeftToRight);
-    ui.action_send->setIcon(QIcon(
-        effective_rtl ? ":/img/arrow-left.svg" : ":/img/arrow-right.svg"));
-    send_button_->setIconOnRight(!effective_rtl);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -383,7 +347,39 @@ void FilePanel::changeEvent(QEvent* event)
     QWidget::changeEvent(event);
 
     if (event->type() == QEvent::LayoutDirectionChange)
+    {
         applyMirrored();
+    }
+    else if (event->type() == QEvent::LanguageChange)
+    {
+        ui.retranslateUi(this);
+        ui.address_bar->retranslate();
+        ui.list->retranslate();
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void FilePanel::onPathChanged(const QString& path)
+{
+    emit sig_pathChanged(this, ui.address_bar->currentPath());
+
+    ui.action_up->setEnabled(false);
+    ui.action_add_folder->setEnabled(false);
+    ui.action_delete->setEnabled(false);
+
+    setTransferEnabled(false);
+
+    AddressBarModel* model = static_cast<AddressBarModel*>(ui.address_bar->model());
+
+    if (path == model->computerPath())
+    {
+        ui.list->showDriveList(model);
+        ui.label_status->clear();
+    }
+    else
+    {
+        emit sig_fileList(path);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -418,44 +414,6 @@ void FilePanel::onListSelectionChanged()
     {
         ui.action_delete->setEnabled(false);
         setTransferEnabled(false);
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-void FilePanel::onNameChangeRequest(const QString& old_name, const QString& new_name)
-{
-    if (new_name.isEmpty())
-    {
-        showError(tr("Folder name can not be empty."));
-    }
-    else if (old_name.compare(new_name, Qt::CaseInsensitive) != 0)
-    {
-        if (!FilePlatformUtil::isValidFileName(new_name))
-        {
-            showError(tr("Name contains invalid characters."));
-            return;
-        }
-
-        emit sig_rename(currentPath() + old_name, currentPath() + new_name);
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-void FilePanel::onCreateFolderRequest(const QString& name)
-{
-    if (name.isEmpty())
-    {
-        showError(tr("Folder name can not be empty."));
-    }
-    else
-    {
-        if (!FilePlatformUtil::isValidFileName(name))
-        {
-            showError(tr("Name contains invalid characters."));
-            return;
-        }
-
-        emit sig_createDirectory(currentPath() + name);
     }
 }
 
@@ -497,6 +455,44 @@ void FilePanel::onListContextMenu(const QPoint& point)
         sendSelected();
     else if (selected_action == add_folder_action.get())
         addFolder();
+}
+
+//--------------------------------------------------------------------------------------------------
+void FilePanel::onNameChangeRequest(const QString& old_name, const QString& new_name)
+{
+    if (new_name.isEmpty())
+    {
+        showError(tr("Folder name can not be empty."));
+    }
+    else if (old_name.compare(new_name, Qt::CaseInsensitive) != 0)
+    {
+        if (!FilePlatformUtil::isValidFileName(new_name))
+        {
+            showError(tr("Name contains invalid characters."));
+            return;
+        }
+
+        emit sig_rename(currentPath() + old_name, currentPath() + new_name);
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void FilePanel::onCreateFolderRequest(const QString& name)
+{
+    if (name.isEmpty())
+    {
+        showError(tr("Folder name can not be empty."));
+    }
+    else
+    {
+        if (!FilePlatformUtil::isValidFileName(name))
+        {
+            showError(tr("Name contains invalid characters."));
+            return;
+        }
+
+        emit sig_createDirectory(currentPath() + name);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -576,4 +572,16 @@ void FilePanel::sendSelected()
 void FilePanel::showError(const QString& message)
 {
     MsgBox::warning(this, message);
+}
+
+//--------------------------------------------------------------------------------------------------
+void FilePanel::applyMirrored()
+{
+    bool effective_rtl = isRightToLeft() ^ mirrored_;
+
+    ui.horizontalLayout->setDirection(
+        effective_rtl ? QBoxLayout::RightToLeft : QBoxLayout::LeftToRight);
+    ui.action_send->setIcon(QIcon(
+        effective_rtl ? ":/img/arrow-left.svg" : ":/img/arrow-right.svg"));
+    send_button_->setIconOnRight(!effective_rtl);
 }

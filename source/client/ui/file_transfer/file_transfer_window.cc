@@ -248,6 +248,19 @@ void FileTransferWindow::onInternalReset()
 }
 
 //--------------------------------------------------------------------------------------------------
+void FileTransferWindow::changeEvent(QEvent* event)
+{
+    ClientWindow::changeEvent(event);
+
+    if (event->type() == QEvent::LanguageChange)
+    {
+        ui->retranslateUi(this);
+        ui->local_panel->setPanelName(tr("Local Computer"));
+        ui->remote_panel->setPanelName(tr("Remote Computer"));
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
 void FileTransferWindow::closeEvent(QCloseEvent* event)
 {
     LOG(INFO) << "Close event detected";

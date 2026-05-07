@@ -292,13 +292,6 @@ bool ChatWidget::eventFilter(QObject* object, QEvent* event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void ChatWidget::showEvent(QShowEvent* event)
-{
-    QWidget::showEvent(event);
-    QTimer::singleShot(0, this, &ChatWidget::onUpdateSize);
-}
-
-//--------------------------------------------------------------------------------------------------
 void ChatWidget::changeEvent(QEvent* event)
 {
     if (event->type() == QEvent::PaletteChange || event->type() == QEvent::StyleChange ||
@@ -306,13 +299,13 @@ void ChatWidget::changeEvent(QEvent* event)
     {
         refreshStyles();
     }
+    else if (event->type() == QEvent::LanguageChange)
+    {
+        ui->retranslateUi(this);
+        action_save_chat_->setText(tr("Save chat..."));
+        action_clear_chat_->setText(tr("Clear chat"));
+    }
     QWidget::changeEvent(event);
-}
-
-//--------------------------------------------------------------------------------------------------
-void ChatWidget::resizeEvent(QResizeEvent* /* event */)
-{
-    onUpdateSize();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -322,6 +315,19 @@ void ChatWidget::closeEvent(QCloseEvent* event)
 
     emit sig_textChatClosed();
     QWidget::closeEvent(event);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatWidget::resizeEvent(QResizeEvent* /* event */)
+{
+    onUpdateSize();
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatWidget::showEvent(QShowEvent* event)
+{
+    QWidget::showEvent(event);
+    QTimer::singleShot(0, this, &ChatWidget::onUpdateSize);
 }
 
 //--------------------------------------------------------------------------------------------------

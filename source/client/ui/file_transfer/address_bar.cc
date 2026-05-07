@@ -98,6 +98,17 @@ bool AddressBar::hasCurrentPath() const
 }
 
 //--------------------------------------------------------------------------------------------------
+void AddressBar::retranslate()
+{
+    QString path = currentPath();
+    model_->retranslate();
+
+    // QComboBox caches the displayed text of the current selection and does not refresh it
+    // on dataChanged - re-apply the path so the displayed text is re-read from the model.
+    setCurrentPath(path);
+}
+
+//--------------------------------------------------------------------------------------------------
 void AddressBar::showPopup()
 {
     setRootModelIndex(QModelIndex());

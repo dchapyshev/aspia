@@ -41,6 +41,7 @@ public:
     bool isDriveListShown() const;
     bool isFileListShown() const;
     void createFolder();
+    void retranslate();
 
     void restoreState(const QByteArray& state);
     QByteArray saveState() const;

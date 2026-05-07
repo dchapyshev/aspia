@@ -106,6 +106,7 @@ protected:
     virtual void onInternalReset() = 0;
 
     // QWidget implementation.
+    void changeEvent(QEvent* event) override;
     void closeEvent(QCloseEvent* event) override;
     void moveEvent(QMoveEvent* event) override;
 

@@ -19,6 +19,7 @@
 #include "client/ui/client_window.h"
 
 #include <QCursor>
+#include <QEvent>
 #include <QGuiApplication>
 #include <QMoveEvent>
 #include <QTimer>
@@ -142,6 +143,15 @@ QByteArray ClientWindow::saveState() const
 void ClientWindow::restoreState(const QByteArray& /* state */)
 {
     // Nothing
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientWindow::changeEvent(QEvent* event)
+{
+    QWidget::changeEvent(event);
+
+    if (event->type() == QEvent::LanguageChange && session_state_)
+        setClientTitle(session_state_->computer(), session_type_);
 }
 
 //--------------------------------------------------------------------------------------------------

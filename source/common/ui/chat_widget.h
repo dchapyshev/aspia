@@ -57,10 +57,10 @@ signals:
 protected:
     // QWidget implementation.
     bool eventFilter(QObject* object, QEvent* event) final;
-    void showEvent(QShowEvent* event) final;
     void changeEvent(QEvent* event) final;
-    void resizeEvent(QResizeEvent* event) final;
     void closeEvent(QCloseEvent* event) final;
+    void resizeEvent(QResizeEvent* event) final;
+    void showEvent(QShowEvent* event) final;
 
 private:
     struct HistoryMessage

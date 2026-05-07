@@ -41,6 +41,8 @@ public:
     qint64 sizeAt(const QModelIndex& index) const;
     QModelIndex createFolder();
 
+    void retranslate();
+
     // QAbstractItemModel implementation.
     QModelIndex index(int row, int column, const QModelIndex& parent) const final;
     QModelIndex parent(const QModelIndex& child) const final;
@@ -88,7 +90,7 @@ private:
     QList<File> file_items_;
 
     const QIcon dir_icon_;
-    const QString dir_type_;
+    QString dir_type_;
 
     Qt::SortOrder current_order_ = Qt::AscendingOrder;
     int current_column_ = 0;

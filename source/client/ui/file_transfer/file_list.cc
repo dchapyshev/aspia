@@ -138,6 +138,14 @@ void FileList::createFolder()
 }
 
 //--------------------------------------------------------------------------------------------------
+void FileList::retranslate()
+{
+    // The internal file list model must be retranslated even when the drive list is currently
+    // shown, otherwise its cached translations stay outdated until the next setFileList() call.
+    model_->retranslate();
+}
+
+//--------------------------------------------------------------------------------------------------
 void FileList::restoreState(const QByteArray& state)
 {
     QDataStream stream(state);
