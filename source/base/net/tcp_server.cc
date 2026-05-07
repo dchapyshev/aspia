@@ -18,6 +18,8 @@
 
 #include "base/net/tcp_server.h"
 
+#include <asio/ip/address.hpp>
+
 #include "base/asio_event_dispatcher.h"
 #include "base/logging.h"
 #include "base/net/tcp_channel_ng.h"

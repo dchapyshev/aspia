@@ -27,6 +27,7 @@
 #include <QFileInfo>
 #include <QObject>
 #include <QPointer>
+#include <QRect>
 #include <QStringList>
 #include <QTimer>
 #include <QtGlobal>

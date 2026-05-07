@@ -22,7 +22,6 @@
 #include <QQueue>
 #include <QObject>
 
-#include <asio/ip/address.hpp>
 #include <asio/ip/tcp.hpp>
 
 #include "base/shared_pointer.h"

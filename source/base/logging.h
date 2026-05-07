@@ -20,7 +20,6 @@
 #define BASE_LOGGING_H
 
 #include <QDebug>
-#include <QRect>
 #include <QString>
 #include <QStringList>
 
