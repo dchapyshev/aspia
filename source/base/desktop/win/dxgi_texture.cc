@@ -18,6 +18,7 @@
 
 #include "base/desktop/win/dxgi_texture.h"
 
+#include "base/desktop/frame.h"
 #include "base/logging.h"
 
 #include <d3d11.h>

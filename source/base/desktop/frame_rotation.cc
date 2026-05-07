@@ -18,6 +18,7 @@
 
 #include "base/desktop/frame_rotation.h"
 
+#include "base/desktop/frame.h"
 #include "base/logging.h"
 
 #include <libyuv/rotate_argb.h>

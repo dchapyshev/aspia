@@ -19,12 +19,12 @@
 #ifndef BASE_DESKTOP_WIN_DXGI_TEXTURE_H
 #define BASE_DESKTOP_WIN_DXGI_TEXTURE_H
 
-#include "base/desktop/frame.h"
-
 #include <memory>
 
 #include <d3d11.h>
 #include <dxgi1_2.h>
+
+class Frame;
 
 // A texture copied or mapped from a DXGI_OUTDUPL_FRAME_INFO and IDXGIResource.
 class DxgiTexture

@@ -28,6 +28,7 @@
 #include "base/ipc/ipc_channel.h"
 #include "base/ipc/ipc_server.h"
 #include "proto/desktop_channel.h"
+#include "proto/desktop_power.h"
 #include "proto/desktop_video.h"
 #include "proto/task_manager.h"
 

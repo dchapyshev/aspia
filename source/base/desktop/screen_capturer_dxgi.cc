@@ -19,6 +19,7 @@
 #include "base/desktop/screen_capturer_dxgi.h"
 
 #include "base/logging.h"
+#include "base/desktop/frame.h"
 #include "base/desktop/mouse_cursor.h"
 #include "base/desktop/win/screen_capture_utils.h"
 

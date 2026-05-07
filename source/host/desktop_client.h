@@ -29,8 +29,15 @@
 #include "host/client.h"
 #include "proto/desktop_control.h"
 #include "proto/desktop_internal.h"
-#include "proto/desktop_power.h"
-#include "proto/task_manager.h"
+
+namespace proto::power {
+class Control;
+} // namespace proto::power
+
+namespace proto::task_manager {
+class ClientToHost;
+class HostToClient;
+} // namespace proto::task_manager
 
 class IpcChannel;
 class IpcServer;

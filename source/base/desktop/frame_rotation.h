@@ -19,7 +19,11 @@
 #ifndef BASE_DESKTOP_FRAME_ROTATION_H
 #define BASE_DESKTOP_FRAME_ROTATION_H
 
-#include "base/desktop/frame.h"
+#include <QPoint>
+#include <QRect>
+#include <QSize>
+
+class Frame;
 
 // Represents the rotation of a Frame.
 enum class Rotation

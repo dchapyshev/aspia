@@ -19,6 +19,7 @@
 #include "base/desktop/win/dxgi_output_duplicator.h"
 
 #include "base/logging.h"
+#include "base/desktop/frame.h"
 #include "base/desktop/win/dxgi_texture_mapping.h"
 #include "base/desktop/win/dxgi_texture_staging.h"
 
