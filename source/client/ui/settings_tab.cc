@@ -394,9 +394,14 @@ void SettingsTab::onCheckForUpdatesClicked()
 void SettingsTab::applyCategoryStyle()
 {
     const QPalette& plt = palette();
-    const QColor& highlight = plt.color(QPalette::Highlight);
-    const QColor& highlighted_text = plt.color(QPalette::HighlightedText);
-    const QColor& hover = plt.color(QPalette::Midlight);
+    QColor checked = plt.color(QPalette::Highlight);
+    QColor hover = plt.color(QPalette::Midlight);
+    const QColor& checked_text = plt.color(QPalette::Text);
+
+    // The full Highlight color is too dark for category buttons on a light background.
+    // Tint it to ~25% opacity so the selection is visible but soft.
+    checked.setAlpha(64);
+    hover.setAlpha(128);
 
     ui.category_panel->setStyleSheet(QString(
         "QToolButton {"
@@ -406,7 +411,7 @@ void SettingsTab::applyCategoryStyle()
         "}"
         "QToolButton:hover { background-color: %1; }"
         "QToolButton:checked { background-color: %2; color: %3; }"
-    ).arg(hover.name(QColor::HexArgb), highlight.name(QColor::HexArgb), highlighted_text.name(QColor::HexArgb)));
+    ).arg(hover.name(QColor::HexArgb), checked.name(QColor::HexArgb), checked_text.name(QColor::HexArgb)));
 }
 
 //--------------------------------------------------------------------------------------------------
