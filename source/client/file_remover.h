@@ -25,7 +25,10 @@
 
 #include "base/scoped_qpointer.h"
 #include "common/file_task_factory.h"
-#include "proto/file_transfer.h"
+
+namespace proto::file_transfer {
+enum ErrorCode : int;
+} // namespace proto::file_transfer
 
 class Location;
 

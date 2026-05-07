@@ -22,6 +22,7 @@
 #include "base/logging.h"
 #include "base/desktop/frame.h"
 #include "common/keycode_converter.h"
+#include "proto/desktop_input.h"
 
 #include <QApplication>
 #include <QWheelEvent>

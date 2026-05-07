@@ -26,8 +26,11 @@
 #include "base/logging.h"
 #include "base/shared_pointer.h"
 #include "base/net/tcp_channel.h"
-#include "proto/router.h"
 #include "proto/router_peer.h"
+
+namespace proto::router {
+class RelayKey;
+} // namespace proto::router
 
 class Authenticator;
 class Location;

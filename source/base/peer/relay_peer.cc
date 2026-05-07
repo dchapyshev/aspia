@@ -30,6 +30,7 @@
 #include "base/net/tcp_channel_ng.h"
 #include "base/peer/authenticator.h"
 #include "proto/relay_peer.h"
+#include "proto/router.h"
 
 #include <asio/connect.hpp>
 #include <asio/write.hpp>

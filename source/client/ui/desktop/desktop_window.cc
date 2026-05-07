@@ -45,6 +45,7 @@
 #include "common/desktop_session_constants.h"
 #include "proto/desktop_control.h"
 #include "proto/desktop_cursor.h"
+#include "proto/desktop_input.h"
 #include "proto/peer.h"
 
 #if defined(Q_OS_WINDOWS)

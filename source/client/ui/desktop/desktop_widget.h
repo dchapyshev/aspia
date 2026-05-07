@@ -27,8 +27,12 @@
 
 #include <memory>
 
-#include "proto/desktop_input.h"
 #include "proto/desktop_video.h"
+
+namespace proto::input {
+class KeyEvent;
+class MouseEvent;
+} // namespace proto::input
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/scoped_user_object.h"
