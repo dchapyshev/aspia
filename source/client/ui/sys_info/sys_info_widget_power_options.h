@@ -35,6 +35,10 @@ public:
     void setSystemInfo(const proto::system_info::SystemInfo& system_info) final;
     QTreeWidget* treeWidget() final;
 
+protected:
+    // SysInfoWidget implementation.
+    void retranslate() final;
+
 private slots:
     void onContextMenu(const QPoint& point);
     static QString powerSourceToString(proto::system_info::PowerOptions::PowerSource value);

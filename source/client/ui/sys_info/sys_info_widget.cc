@@ -21,6 +21,7 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QDesktopServices>
+#include <QEvent>
 #include <QHeaderView>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
@@ -147,4 +148,21 @@ void SysInfoWidget::copyColumn(QTreeWidgetItem* item, int column)
         return;
 
     copyTextToClipboard(item->text(column));
+}
+
+//--------------------------------------------------------------------------------------------------
+void SysInfoWidget::changeEvent(QEvent* event)
+{
+    QWidget::changeEvent(event);
+
+    if (event->type() == QEvent::LanguageChange)
+        retranslate();
+}
+
+//--------------------------------------------------------------------------------------------------
+void SysInfoWidget::retranslate()
+{
+    // Re-fetch the data from the host so that setSystemInfo() rebuilds the tree items with
+    // tr() strings in the new language. Subclasses call this after ui.retranslateUi(this).
+    emit sig_systemInfoRequest(request());
 }

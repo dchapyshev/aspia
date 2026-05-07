@@ -20,11 +20,13 @@
 
 #include <QClipboard>
 #include <QDateTime>
+#include <QEvent>
 #include <QFileDialog>
 #include <QHash>
 #include <QPrinter>
 #include <QPrintDialog>
 #include <QTextDocument>
+#include <QTreeWidgetItemIterator>
 
 #include "base/logging.h"
 #include "base/version_constants.h"
@@ -128,131 +130,7 @@ SystemInfoWindow::SystemInfoWindow(QWidget* parent)
                 this, &SystemInfoWindow::sig_systemInfoRequired);
     }
 
-    CategoryItem* summary_category = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/computer.svg", tr("Summary"), kSystemInfo_Summary);
-
-    //----------------------------------------------------------------------------------------------
-    // HARDWARE
-    //----------------------------------------------------------------------------------------------
-
-    CategoryItem* hardware_category = new CategoryItem(
-        CategoryItem::Type::ROOT_ITEM, ":/img/folder.svg", tr("Hardware"));
-
-    CategoryItem* devices = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/network-card.svg", tr("Devices"), kSystemInfo_Devices);
-
-    CategoryItem* video_adapters = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/video-card.svg", tr("Video Adapters"), kSystemInfo_VideoAdapters);
-
-    CategoryItem* monitors = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/imac.svg", tr("Monitors"), kSystemInfo_Monitors);
-
-    CategoryItem* printers = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/printer.svg", tr("Printers"), kSystemInfo_Printers);
-
-    CategoryItem* power_options = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/electrical.svg", tr("Power Options"), kSystemInfo_PowerOptions);
-
-    hardware_category->addChild(devices);
-    hardware_category->addChild(video_adapters);
-    hardware_category->addChild(monitors);
-    hardware_category->addChild(printers);
-    hardware_category->addChild(power_options);
-
-    //----------------------------------------------------------------------------------------------
-    // SOFTWARE
-    //----------------------------------------------------------------------------------------------
-
-    CategoryItem* software_category = new CategoryItem(
-        CategoryItem::Type::ROOT_ITEM, ":/img/folder.svg", tr("Software"));
-
-    CategoryItem* applications = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/software.svg", tr("Applications"), kSystemInfo_Applications);
-
-    CategoryItem* drivers = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/network-card.svg", tr("Drivers"), kSystemInfo_Drivers);
-
-    CategoryItem* services = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/gear.svg", tr("Services"), kSystemInfo_Services);
-
-    CategoryItem* processes = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/heart-monitor.svg", tr("Processes"), kSystemInfo_Processes);
-
-    CategoryItem* licenses = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/certificate.svg", tr("Licenses"), kSystemInfo_Licenses);
-
-    software_category->addChild(applications);
-    software_category->addChild(drivers);
-    software_category->addChild(services);
-    software_category->addChild(processes);
-    software_category->addChild(licenses);
-
-    //----------------------------------------------------------------------------------------------
-    // NETWORK
-    //----------------------------------------------------------------------------------------------
-
-    CategoryItem* network_category = new CategoryItem(
-        CategoryItem::Type::ROOT_ITEM, ":/img/folder.svg", tr("Network"));
-
-    CategoryItem* network_adapters = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/network-card.svg", tr("Network Adapters"), kSystemInfo_NetworkAdapters);
-
-    CategoryItem* routes = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/flow-chart.svg", tr("Routes"), kSystemInfo_Routes);
-
-    CategoryItem* connections = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/connected.svg", tr("Connections"), kSystemInfo_Connections);
-
-    CategoryItem* network_shares = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/nas.svg", tr("Network Shares"), kSystemInfo_NetworkShares);
-
-    CategoryItem* open_files = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/nas.svg", tr("Open Files"), kSystemInfo_OpenFiles);
-
-    network_category->addChild(network_adapters);
-    network_category->addChild(routes);
-    network_category->addChild(connections);
-    network_category->addChild(network_shares);
-    network_category->addChild(open_files);
-
-    //----------------------------------------------------------------------------------------------
-    // OPERATING SYSTEM
-    //----------------------------------------------------------------------------------------------
-
-    CategoryItem* os_category = new CategoryItem(
-        CategoryItem::Type::ROOT_ITEM, ":/img/folder.svg", tr("Operating System"));
-
-    CategoryItem* env_vars = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/day-view.svg", tr("Environment Variables"), kSystemInfo_EnvironmentVariables);
-
-    CategoryItem* event_logs = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/log.svg", tr("Event Logs"), kSystemInfo_EventLogs);
-
-    CategoryItem* local_users = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/user.svg", tr("Users"), kSystemInfo_LocalUsers);
-
-    CategoryItem* local_user_groups = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
-        ":/img/user-account.svg", tr("User Groups"), kSystemInfo_LocalUserGroups);
-
-    os_category->addChild(env_vars);
-    os_category->addChild(event_logs);
-    os_category->addChild(local_users);
-    os_category->addChild(local_user_groups);
-
-    //----------------------------------------------------------------------------------------------
-    // TOP LEVEL CATEGORIES
-    //----------------------------------------------------------------------------------------------
-
-    ui->tree_category->addTopLevelItem(summary_category);
-    ui->tree_category->addTopLevelItem(hardware_category);
-    ui->tree_category->addTopLevelItem(software_category);
-    ui->tree_category->addTopLevelItem(network_category);
-    ui->tree_category->addTopLevelItem(os_category);
-
-    for (int i = 0; i < ui->tree_category->topLevelItemCount(); ++i)
-        ui->tree_category->expandItem(ui->tree_category->topLevelItem(i));
-
-    ui->tree_category->setCurrentItem(summary_category);
+    buildCategoryTree();
 
     connect(ui->action_save, &QAction::triggered, this, [this]()
     {
@@ -489,6 +367,22 @@ void SystemInfoWindow::onInternalReset()
 }
 
 //--------------------------------------------------------------------------------------------------
+void SystemInfoWindow::changeEvent(QEvent* event)
+{
+    ClientWindow::changeEvent(event);
+
+    if (event->type() == QEvent::LanguageChange)
+    {
+        ui->retranslateUi(this);
+
+        // Category labels are tr() strings cached in QTreeWidgetItem text. Rebuild the tree
+        // so the new language is picked up; current selection is restored from current_widget_.
+        ui->tree_category->clear();
+        buildCategoryTree();
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
 void SystemInfoWindow::onCategoryItemClicked(QTreeWidgetItem* item, int /* column */)
 {
     CategoryItem* category_item = static_cast<CategoryItem*>(item);
@@ -539,5 +433,147 @@ void SystemInfoWindow::onRefresh()
     {
         proto::system_info::SystemInfoRequest request = sys_info_widgets_[i]->request();
         emit sig_systemInfoRequired(request);
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void SystemInfoWindow::buildCategoryTree()
+{
+    CategoryItem* summary_category = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
+        ":/img/computer.svg", tr("Summary"), kSystemInfo_Summary);
+
+    //----------------------------------------------------------------------------------------------
+    // HARDWARE
+    //----------------------------------------------------------------------------------------------
+
+    CategoryItem* hardware_category = new CategoryItem(
+        CategoryItem::Type::ROOT_ITEM, ":/img/folder.svg", tr("Hardware"));
+
+    CategoryItem* devices = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
+        ":/img/network-card.svg", tr("Devices"), kSystemInfo_Devices);
+
+    CategoryItem* video_adapters = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
+        ":/img/video-card.svg", tr("Video Adapters"), kSystemInfo_VideoAdapters);
+
+    CategoryItem* monitors = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
+        ":/img/imac.svg", tr("Monitors"), kSystemInfo_Monitors);
+
+    CategoryItem* printers = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
+        ":/img/printer.svg", tr("Printers"), kSystemInfo_Printers);
+
+    CategoryItem* power_options = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
+        ":/img/electrical.svg", tr("Power Options"), kSystemInfo_PowerOptions);
+
+    hardware_category->addChild(devices);
+    hardware_category->addChild(video_adapters);
+    hardware_category->addChild(monitors);
+    hardware_category->addChild(printers);
+    hardware_category->addChild(power_options);
+
+    //----------------------------------------------------------------------------------------------
+    // SOFTWARE
+    //----------------------------------------------------------------------------------------------
+
+    CategoryItem* software_category = new CategoryItem(
+        CategoryItem::Type::ROOT_ITEM, ":/img/folder.svg", tr("Software"));
+
+    CategoryItem* applications = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
+        ":/img/software.svg", tr("Applications"), kSystemInfo_Applications);
+
+    CategoryItem* drivers = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
+        ":/img/network-card.svg", tr("Drivers"), kSystemInfo_Drivers);
+
+    CategoryItem* services = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
+        ":/img/gear.svg", tr("Services"), kSystemInfo_Services);
+
+    CategoryItem* processes = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
+        ":/img/heart-monitor.svg", tr("Processes"), kSystemInfo_Processes);
+
+    CategoryItem* licenses = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
+        ":/img/certificate.svg", tr("Licenses"), kSystemInfo_Licenses);
+
+    software_category->addChild(applications);
+    software_category->addChild(drivers);
+    software_category->addChild(services);
+    software_category->addChild(processes);
+    software_category->addChild(licenses);
+
+    //----------------------------------------------------------------------------------------------
+    // NETWORK
+    //----------------------------------------------------------------------------------------------
+
+    CategoryItem* network_category = new CategoryItem(
+        CategoryItem::Type::ROOT_ITEM, ":/img/folder.svg", tr("Network"));
+
+    CategoryItem* network_adapters = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
+        ":/img/network-card.svg", tr("Network Adapters"), kSystemInfo_NetworkAdapters);
+
+    CategoryItem* routes = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
+        ":/img/flow-chart.svg", tr("Routes"), kSystemInfo_Routes);
+
+    CategoryItem* connections = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
+        ":/img/connected.svg", tr("Connections"), kSystemInfo_Connections);
+
+    CategoryItem* network_shares = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
+        ":/img/nas.svg", tr("Network Shares"), kSystemInfo_NetworkShares);
+
+    CategoryItem* open_files = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
+        ":/img/nas.svg", tr("Open Files"), kSystemInfo_OpenFiles);
+
+    network_category->addChild(network_adapters);
+    network_category->addChild(routes);
+    network_category->addChild(connections);
+    network_category->addChild(network_shares);
+    network_category->addChild(open_files);
+
+    //----------------------------------------------------------------------------------------------
+    // OPERATING SYSTEM
+    //----------------------------------------------------------------------------------------------
+
+    CategoryItem* os_category = new CategoryItem(
+        CategoryItem::Type::ROOT_ITEM, ":/img/folder.svg", tr("Operating System"));
+
+    CategoryItem* env_vars = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
+        ":/img/day-view.svg", tr("Environment Variables"), kSystemInfo_EnvironmentVariables);
+
+    CategoryItem* event_logs = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
+        ":/img/log.svg", tr("Event Logs"), kSystemInfo_EventLogs);
+
+    CategoryItem* local_users = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
+        ":/img/user.svg", tr("Users"), kSystemInfo_LocalUsers);
+
+    CategoryItem* local_user_groups = new CategoryItem(CategoryItem::Type::CATEGORY_ITEM,
+        ":/img/user-account.svg", tr("User Groups"), kSystemInfo_LocalUserGroups);
+
+    os_category->addChild(env_vars);
+    os_category->addChild(event_logs);
+    os_category->addChild(local_users);
+    os_category->addChild(local_user_groups);
+
+    //----------------------------------------------------------------------------------------------
+    // TOP LEVEL CATEGORIES
+    //----------------------------------------------------------------------------------------------
+
+    ui->tree_category->addTopLevelItem(summary_category);
+    ui->tree_category->addTopLevelItem(hardware_category);
+    ui->tree_category->addTopLevelItem(software_category);
+    ui->tree_category->addTopLevelItem(network_category);
+    ui->tree_category->addTopLevelItem(os_category);
+
+    for (int i = 0; i < ui->tree_category->topLevelItemCount(); ++i)
+        ui->tree_category->expandItem(ui->tree_category->topLevelItem(i));
+
+    // Restore selection: pick the category that matches the currently shown widget.
+    const std::string& current_category = sys_info_widgets_[current_widget_]->category();
+    QTreeWidgetItemIterator it(ui->tree_category);
+    while (*it)
+    {
+        CategoryItem* item = static_cast<CategoryItem*>(*it);
+        if (item->type() == CategoryItem::Type::CATEGORY_ITEM && item->category() == current_category)
+        {
+            ui->tree_category->setCurrentItem(item);
+            break;
+        }
+        ++it;
     }
 }

@@ -389,18 +389,13 @@ void DesktopToolBar::setSessionList(const proto::control::SessionList& session_l
                 continue;
 
             QString user_name = QString::fromStdString(session.user_name());
-            QString text;
-
-            if (user_name.isEmpty())
-                text = tr("Session %1").arg(i + 1);
-            else
-                text = tr("Session %1 (%2)").arg(i + 1).arg(user_name);
-
-            if (session.session_id() == session_list.console_session_id())
-                text.append("*");
+            bool is_console = session.session_id() == session_list.console_session_id();
 
             QAction* session_action = new QAction();
-            session_action->setText(text);
+            session_action->setProperty("session_index", i);
+            session_action->setProperty("user_name", user_name);
+            session_action->setProperty("is_console", is_console);
+            session_action->setText(formatSessionText(i, user_name, is_console));
             session_action->setData(session.session_id());
             session_action->setCheckable(true);
 
@@ -569,6 +564,44 @@ bool DesktopToolBar::isPanelHidden() const
 bool DesktopToolBar::isPanelPinned() const
 {
     return ui.action_pin->isChecked();
+}
+
+//--------------------------------------------------------------------------------------------------
+void DesktopToolBar::changeEvent(QEvent* event)
+{
+    QFrame::changeEvent(event);
+
+    if (event->type() == QEvent::LanguageChange)
+    {
+        ui.retranslateUi(this);
+
+        // Programmatically created menu titles and dynamic action texts must be re-applied
+        // because retranslateUi only touches strings declared in the .ui file.
+        if (scale_menu_)
+            scale_menu_->setTitle(tr("Scale"));
+
+        ui.action_start_recording->setText(
+            is_recording_started_ ? tr("Stop recording") : tr("Start recording"));
+
+        // The "Resolution selection" action is the screen action that hosts the resolutions
+        // submenu. Other screen actions show resolution numbers and don't need translation.
+        for (QAction* action : std::as_const(screen_actions_))
+        {
+            if (action->menu() == resolutions_menu_)
+            {
+                QString text = tr("Resolution selection");
+                action->setText(text);
+                action->setToolTip(text);
+            }
+        }
+
+        for (QAction* action : std::as_const(sessions_actions_))
+        {
+            action->setText(formatSessionText(action->property("session_index").toInt(),
+                                              action->property("user_name").toString(),
+                                              action->property("is_console").toBool()));
+        }
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -994,4 +1027,16 @@ void DesktopToolBar::delayedHide()
 {
     if (!ui.action_pin->isChecked() && !hide_timer_->isActive())
         hide_timer_->start(std::chrono::seconds(1));
+}
+
+//--------------------------------------------------------------------------------------------------
+QString DesktopToolBar::formatSessionText(int index, const QString& user_name, bool is_console) const
+{
+    QString text = user_name.isEmpty() ?
+        tr("Session %1").arg(index + 1) : tr("Session %1 (%2)").arg(index + 1).arg(user_name);
+
+    if (is_console)
+        text.append("*");
+
+    return text;
 }

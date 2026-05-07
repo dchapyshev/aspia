@@ -57,11 +57,16 @@ protected:
     // ClientWindow implementation.
     void onInternalReset() final;
 
+    // QWidget implementation.
+    void changeEvent(QEvent* event) final;
+
 private slots:
     void onCategoryItemClicked(QTreeWidgetItem* item, int column);
     void onRefresh();
 
 private:
+    void buildCategoryTree();
+
     std::unique_ptr<Ui::SystemInfoWindow> ui;
     QHBoxLayout* layout_ = nullptr;
     QList<SysInfoWidget*> sys_info_widgets_;

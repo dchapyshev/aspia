@@ -92,6 +92,7 @@ signals:
 
 protected:
     // QFrame implementation.
+    void changeEvent(QEvent* event) final;
     void enterEvent(QEnterEvent* event) final;
     void leaveEvent(QEvent* event) final;
 
@@ -113,6 +114,7 @@ private:
     void updateScaleMenu();
     void updateSize();
     void delayedHide();
+    QString formatSessionText(int index, const QString& user_name, bool is_console) const;
 
     Ui::DesktopToolBar ui;
 

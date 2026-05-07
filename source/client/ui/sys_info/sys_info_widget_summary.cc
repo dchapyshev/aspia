@@ -346,6 +346,13 @@ QTreeWidget* SysInfoWidgetSummary::treeWidget()
 }
 
 //--------------------------------------------------------------------------------------------------
+void SysInfoWidgetSummary::retranslate()
+{
+    ui.retranslateUi(this);
+    SysInfoWidget::retranslate();
+}
+
+//--------------------------------------------------------------------------------------------------
 void SysInfoWidgetSummary::setRouterVersion(const QVersionNumber& router_version)
 {
     if (!router_version.isNull())
