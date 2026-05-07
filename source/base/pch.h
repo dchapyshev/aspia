@@ -19,12 +19,9 @@
 #ifndef BASE_PCH_H
 #define BASE_PCH_H
 
-#include <QApplication>
 #include <QByteArray>
-#include <QDir>
 #include <QEvent>
 #include <QFile>
-#include <QFileInfo>
 #include <QObject>
 #include <QPointer>
 #include <QRect>
