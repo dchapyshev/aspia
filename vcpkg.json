@@ -17,7 +17,6 @@
     "openssl",
     "opus",
     "protobuf",
-    "sqlite3",
     {
       "name": "qtbase",
       "default-features": false,

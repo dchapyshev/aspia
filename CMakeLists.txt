@@ -79,7 +79,6 @@ find_package(Opus CONFIG REQUIRED)
 find_package(protobuf CONFIG REQUIRED)
 find_package(unofficial-libvpx CONFIG REQUIRED)
 find_package(unofficial-enet CONFIG REQUIRED)
-find_package(unofficial-sqlite3 CONFIG REQUIRED)
 find_package(zstd CONFIG REQUIRED)
 find_path(INIPP_INCLUDE_DIRS "inipp.h")
 
