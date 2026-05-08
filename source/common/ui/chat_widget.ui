@@ -52,9 +52,28 @@
       </property>
       <item>
        <widget class="QListWidget" name="list_messages">
+        <property name="focusPolicy">
+         <enum>Qt::FocusPolicy::NoFocus</enum>
+        </property>
         <property name="styleSheet">
          <string notr="true">#list_messages {
 border: 0;
+outline: 0;
+}
+#list_messages::item {
+background: transparent;
+border: 0;
+}
+#list_messages::item:hover {
+background: transparent;
+}
+#list_messages::item:selected {
+background: transparent;
+}
+#list_messages::item:focus {
+background: transparent;
+border: 0;
+outline: 0;
 }</string>
         </property>
         <property name="selectionMode">
