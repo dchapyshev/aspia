@@ -21,6 +21,7 @@
 #include "base/logging.h"
 #include "base/x11/x11_headers.h"
 #include "common/keycode_converter.h"
+#include "proto/desktop_input.h"
 
 namespace {
 
