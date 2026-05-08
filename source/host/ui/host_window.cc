@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "host/ui/main_window.h"
+#include "host/ui/host_window.h"
 
 #include <QActionGroup>
 #include <QCloseEvent>
@@ -45,7 +45,7 @@
 #include "host/ui/notifier_window.h"
 #include "host/ui/user_settings.h"
 #include "proto/user.h"
-#include "ui_main_window.h"
+#include "ui_host_window.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/process_util.h"
@@ -56,9 +56,9 @@
 #endif // defined(Q_OS_WINDOWS)
 
 //--------------------------------------------------------------------------------------------------
-MainWindow::MainWindow(QWidget* parent)
+HostWindow::HostWindow(QWidget* parent)
     : QMainWindow(parent),
-      ui(std::make_unique<Ui::MainWindow>())
+      ui(std::make_unique<Ui::HostWindow>())
 {
     LOG(INFO) << "Ctor";
 
@@ -84,7 +84,7 @@ MainWindow::MainWindow(QWidget* parent)
 
     QTimer* tray_tooltip_timer = new QTimer(this);
 
-    connect(tray_tooltip_timer, &QTimer::timeout, this, &MainWindow::updateTrayIconTooltip);
+    connect(tray_tooltip_timer, &QTimer::timeout, this, &HostWindow::updateTrayIconTooltip);
 
     tray_tooltip_timer->setInterval(std::chrono::seconds(30));
     tray_tooltip_timer->start();
@@ -96,7 +96,7 @@ MainWindow::MainWindow(QWidget* parent)
     ui->action_system_info->setChecked(one_time_sessions & proto::peer::SESSION_TYPE_SYSTEM_INFO);
     ui->action_text_chat->setChecked(one_time_sessions & proto::peer::SESSION_TYPE_TEXT_CHAT);
 
-    connect(ui->menu_access, &QMenu::triggered, this, &MainWindow::onOneTimeSessionsChanged);
+    connect(ui->menu_access, &QMenu::triggered, this, &HostWindow::onOneTimeSessionsChanged);
 
     createLanguageMenu(user_settings.locale());
     createThemeMenu(user_settings.theme());
@@ -112,14 +112,14 @@ MainWindow::MainWindow(QWidget* parent)
         onShowHide();
     });
 
-    connect(ui->menu_language, &QMenu::triggered, this, &MainWindow::onLanguageChanged);
-    connect(ui->menu_theme, &QMenu::triggered, this, &MainWindow::onThemeChanged);
-    connect(ui->action_show_chat, &QAction::triggered, this, &MainWindow::onShowChat);
-    connect(ui->action_settings, &QAction::triggered, this, &MainWindow::onSettings);
-    connect(ui->action_show_hide, &QAction::triggered, this, &MainWindow::onShowHide);
-    connect(ui->action_exit, &QAction::triggered, this, &MainWindow::onExit);
-    connect(ui->action_help, &QAction::triggered, this, &MainWindow::onHelp);
-    connect(ui->action_about, &QAction::triggered, this, &MainWindow::onAbout);
+    connect(ui->menu_language, &QMenu::triggered, this, &HostWindow::onLanguageChanged);
+    connect(ui->menu_theme, &QMenu::triggered, this, &HostWindow::onThemeChanged);
+    connect(ui->action_show_chat, &QAction::triggered, this, &HostWindow::onShowChat);
+    connect(ui->action_settings, &QAction::triggered, this, &HostWindow::onSettings);
+    connect(ui->action_show_hide, &QAction::triggered, this, &HostWindow::onShowHide);
+    connect(ui->action_exit, &QAction::triggered, this, &HostWindow::onExit);
+    connect(ui->action_help, &QAction::triggered, this, &HostWindow::onHelp);
+    connect(ui->action_about, &QAction::triggered, this, &HostWindow::onAbout);
 
     setFixedHeight(sizeHint().height());
 
@@ -151,19 +151,19 @@ MainWindow::MainWindow(QWidget* parent)
     });
 
     connect(GuiApplication::instance(), &GuiApplication::sig_themeChanged,
-            this, &MainWindow::onAfterThemeChanged);
+            this, &HostWindow::onAfterThemeChanged);
 
     onAfterThemeChanged();
 }
 
 //--------------------------------------------------------------------------------------------------
-MainWindow::~MainWindow()
+HostWindow::~HostWindow()
 {
     LOG(INFO) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
-void MainWindow::connectToService()
+void HostWindow::connectToService()
 {
     if (connected_to_service_)
     {
@@ -177,40 +177,40 @@ void MainWindow::connectToService()
 
     agent->moveToThread(GuiApplication::ioThread());
 
-    connect(agent, &UserSessionAgent::sig_statusChanged, this, &MainWindow::onStatusChanged,
+    connect(agent, &UserSessionAgent::sig_statusChanged, this, &HostWindow::onStatusChanged,
             Qt::QueuedConnection);
-    connect(agent, &UserSessionAgent::sig_clientListChanged, this, &MainWindow::onClientListChanged,
+    connect(agent, &UserSessionAgent::sig_clientListChanged, this, &HostWindow::onClientListChanged,
             Qt::QueuedConnection);
-    connect(agent, &UserSessionAgent::sig_credentialsChanged, this, &MainWindow::onCredentialsChanged,
+    connect(agent, &UserSessionAgent::sig_credentialsChanged, this, &HostWindow::onCredentialsChanged,
             Qt::QueuedConnection);
-    connect(agent, &UserSessionAgent::sig_routerStateChanged, this, &MainWindow::onRouterStateChanged,
+    connect(agent, &UserSessionAgent::sig_routerStateChanged, this, &HostWindow::onRouterStateChanged,
             Qt::QueuedConnection);
-    connect(agent, &UserSessionAgent::sig_confirmationRequest, this, &MainWindow::onConfirmationRequest,
+    connect(agent, &UserSessionAgent::sig_confirmationRequest, this, &HostWindow::onConfirmationRequest,
             Qt::QueuedConnection);
-    connect(agent, &UserSessionAgent::sig_recordingStateChanged, this, &MainWindow::onRecordingStateChanged,
+    connect(agent, &UserSessionAgent::sig_recordingStateChanged, this, &HostWindow::onRecordingStateChanged,
             Qt::QueuedConnection);
-    connect(agent, &UserSessionAgent::sig_chat, this, &MainWindow::onChat,
+    connect(agent, &UserSessionAgent::sig_chat, this, &HostWindow::onChat,
             Qt::QueuedConnection);
 
-    connect(this, &MainWindow::sig_connectToService, agent, &UserSessionAgent::onConnectToService,
+    connect(this, &HostWindow::sig_connectToService, agent, &UserSessionAgent::onConnectToService,
             Qt::QueuedConnection);
-    connect(this, &MainWindow::sig_disconnectFromService, agent, &UserSessionAgent::deleteLater,
+    connect(this, &HostWindow::sig_disconnectFromService, agent, &UserSessionAgent::deleteLater,
             Qt::QueuedConnection);
-    connect(this, &MainWindow::sig_updateCredentials, agent, &UserSessionAgent::onUpdateCredentials,
+    connect(this, &HostWindow::sig_updateCredentials, agent, &UserSessionAgent::onUpdateCredentials,
             Qt::QueuedConnection);
-    connect(this, &MainWindow::sig_oneTimeSessions, agent, &UserSessionAgent::onOneTimeSessions,
+    connect(this, &HostWindow::sig_oneTimeSessions, agent, &UserSessionAgent::onOneTimeSessions,
             Qt::QueuedConnection);
-    connect(this, &MainWindow::sig_killClient, agent, &UserSessionAgent::onStopClient,
+    connect(this, &HostWindow::sig_killClient, agent, &UserSessionAgent::onStopClient,
             Qt::QueuedConnection);
-    connect(this, &MainWindow::sig_connectConfirmation, agent, &UserSessionAgent::onConnectConfirmation,
+    connect(this, &HostWindow::sig_connectConfirmation, agent, &UserSessionAgent::onConnectConfirmation,
             Qt::QueuedConnection);
-    connect(this, &MainWindow::sig_mouseLock, agent, &UserSessionAgent::onMouseLock,
+    connect(this, &HostWindow::sig_mouseLock, agent, &UserSessionAgent::onMouseLock,
             Qt::QueuedConnection);
-    connect(this, &MainWindow::sig_keyboardLock, agent, &UserSessionAgent::onKeyboardLock,
+    connect(this, &HostWindow::sig_keyboardLock, agent, &UserSessionAgent::onKeyboardLock,
             Qt::QueuedConnection);
-    connect(this, &MainWindow::sig_pause, agent, &UserSessionAgent::onPause,
+    connect(this, &HostWindow::sig_pause, agent, &UserSessionAgent::onPause,
             Qt::QueuedConnection);
-    connect(this, &MainWindow::sig_chat, agent, &UserSessionAgent::onChat,
+    connect(this, &HostWindow::sig_chat, agent, &UserSessionAgent::onChat,
             Qt::QueuedConnection);
 
     LOG(INFO) << "Connecting to service";
@@ -218,7 +218,7 @@ void MainWindow::connectToService()
 }
 
 //--------------------------------------------------------------------------------------------------
-void MainWindow::activateHost()
+void HostWindow::activateHost()
 {
     LOG(INFO) << "Activating host";
 
@@ -228,7 +228,7 @@ void MainWindow::activateHost()
 }
 
 //--------------------------------------------------------------------------------------------------
-void MainWindow::hideToTray()
+void HostWindow::hideToTray()
 {
     LOG(INFO) << "Hide application to system tray";
 
@@ -237,7 +237,7 @@ void MainWindow::hideToTray()
 }
 
 //--------------------------------------------------------------------------------------------------
-void MainWindow::closeEvent(QCloseEvent* event)
+void HostWindow::closeEvent(QCloseEvent* event)
 {
     if (!should_be_quit_)
     {
@@ -260,7 +260,7 @@ void MainWindow::closeEvent(QCloseEvent* event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void MainWindow::onStatusChanged(UserSessionAgent::Status status)
+void HostWindow::onStatusChanged(UserSessionAgent::Status status)
 {
     if (status == UserSessionAgent::Status::CONNECTED_TO_SERVICE)
     {
@@ -291,17 +291,17 @@ void MainWindow::onStatusChanged(UserSessionAgent::Status status)
 }
 
 //--------------------------------------------------------------------------------------------------
-void MainWindow::onClientListChanged(const UserSessionAgent::ClientList& clients)
+void HostWindow::onClientListChanged(const UserSessionAgent::ClientList& clients)
 {
     if (!notifier_)
     {
         LOG(INFO) << "Create NotifierWindow";
         notifier_ = new NotifierWindow();
 
-        connect(notifier_, &NotifierWindow::sig_killSession, this, &MainWindow::onKillSession);
-        connect(notifier_, &NotifierWindow::sig_lockMouse, this, &MainWindow::sig_mouseLock);
-        connect(notifier_, &NotifierWindow::sig_lockKeyboard, this, &MainWindow::sig_keyboardLock);
-        connect(notifier_, &NotifierWindow::sig_pause, this, &MainWindow::sig_pause);
+        connect(notifier_, &NotifierWindow::sig_killSession, this, &HostWindow::onKillSession);
+        connect(notifier_, &NotifierWindow::sig_lockMouse, this, &HostWindow::sig_mouseLock);
+        connect(notifier_, &NotifierWindow::sig_lockKeyboard, this, &HostWindow::sig_keyboardLock);
+        connect(notifier_, &NotifierWindow::sig_pause, this, &HostWindow::sig_pause);
 
         notifier_->setAttribute(Qt::WA_DeleteOnClose);
         notifier_->show();
@@ -316,7 +316,7 @@ void MainWindow::onClientListChanged(const UserSessionAgent::ClientList& clients
 }
 
 //--------------------------------------------------------------------------------------------------
-void MainWindow::onCredentialsChanged(const proto::user::Credentials& credentials)
+void HostWindow::onCredentialsChanged(const proto::user::Credentials& credentials)
 {
     LOG(INFO) << "Credentials changed (host_id=" << credentials.host_id() << ")";
 
@@ -337,7 +337,7 @@ void MainWindow::onCredentialsChanged(const proto::user::Credentials& credential
 }
 
 //--------------------------------------------------------------------------------------------------
-void MainWindow::onRouterStateChanged(const proto::user::RouterState& state)
+void HostWindow::onRouterStateChanged(const proto::user::RouterState& state)
 {
     LOG(INFO) << "Router state changed (state=" << state.state() << ")";
     last_state_ = state.state();
@@ -409,7 +409,7 @@ void MainWindow::onRouterStateChanged(const proto::user::RouterState& state)
 }
 
 //--------------------------------------------------------------------------------------------------
-void MainWindow::onConfirmationRequest(const proto::user::ConfirmationRequest& request)
+void HostWindow::onConfirmationRequest(const proto::user::ConfirmationRequest& request)
 {
     LOG(INFO) << "Confirmation request (id=" << request.id() << ")";
 
@@ -421,7 +421,7 @@ void MainWindow::onConfirmationRequest(const proto::user::ConfirmationRequest& r
 }
 
 //--------------------------------------------------------------------------------------------------
-void MainWindow::onRecordingStateChanged(bool started)
+void HostWindow::onRecordingStateChanged(bool started)
 {
     LOG(INFO) << "Video recording state changed:" << started;
     QString message;
@@ -435,7 +435,7 @@ void MainWindow::onRecordingStateChanged(bool started)
 }
 
 //--------------------------------------------------------------------------------------------------
-void MainWindow::onChat(const proto::chat::Chat& chat)
+void HostWindow::onChat(const proto::chat::Chat& chat)
 {
     if (chat.has_chat_message())
     {
@@ -454,7 +454,7 @@ void MainWindow::onChat(const proto::chat::Chat& chat)
 }
 
 //--------------------------------------------------------------------------------------------------
-void MainWindow::realClose()
+void HostWindow::realClose()
 {
     LOG(INFO) << "realClose called";
 
@@ -464,7 +464,7 @@ void MainWindow::realClose()
 }
 
 //--------------------------------------------------------------------------------------------------
-void MainWindow::onLanguageChanged(QAction* action)
+void HostWindow::onLanguageChanged(QAction* action)
 {
     QString new_locale = static_cast<LanguageAction*>(action)->locale();
 
@@ -496,7 +496,7 @@ void MainWindow::onLanguageChanged(QAction* action)
 }
 
 //--------------------------------------------------------------------------------------------------
-void MainWindow::onThemeChanged(QAction* action)
+void HostWindow::onThemeChanged(QAction* action)
 {
     if (!action)
         return;
@@ -512,7 +512,7 @@ void MainWindow::onThemeChanged(QAction* action)
 }
 
 //--------------------------------------------------------------------------------------------------
-void MainWindow::onAfterThemeChanged()
+void HostWindow::onAfterThemeChanged()
 {
     QTimer::singleShot(100, this, [this]()
     {
@@ -555,14 +555,14 @@ void MainWindow::onAfterThemeChanged()
 }
 
 //--------------------------------------------------------------------------------------------------
-void MainWindow::onShowChat()
+void HostWindow::onShowChat()
 {
     chat_widget_->show();
     chat_widget_->activateWindow();
 }
 
 //--------------------------------------------------------------------------------------------------
-void MainWindow::onSettings()
+void HostWindow::onSettings()
 {
     LOG(INFO) << "[ACTION] Settings";
 
@@ -662,7 +662,7 @@ void MainWindow::onSettings()
 }
 
 //--------------------------------------------------------------------------------------------------
-void MainWindow::onShowHide()
+void HostWindow::onShowHide()
 {
     if (isVisible())
     {
@@ -677,21 +677,21 @@ void MainWindow::onShowHide()
 }
 
 //--------------------------------------------------------------------------------------------------
-void MainWindow::onHelp()
+void HostWindow::onHelp()
 {
     LOG(INFO) << "[ACTION] Help";
     QDesktopServices::openUrl(QUrl("https://aspia.org/help"));
 }
 
 //--------------------------------------------------------------------------------------------------
-void MainWindow::onAbout()
+void HostWindow::onAbout()
 {
     LOG(INFO) << "[ACTION] About";
     AboutDialog(tr("Aspia Host"), this).exec();
 }
 
 //--------------------------------------------------------------------------------------------------
-void MainWindow::onExit()
+void HostWindow::onExit()
 {
     // If the connection to the service is not established, then exit immediately.
     if (!connected_to_service_)
@@ -717,7 +717,7 @@ void MainWindow::onExit()
         else
         {
             LOG(INFO) << "Has notifier. Application will be terminated after disconnecting all clients";
-            connect(notifier_, &NotifierWindow::sig_finished, this, &MainWindow::realClose);
+            connect(notifier_, &NotifierWindow::sig_finished, this, &HostWindow::realClose);
             notifier_->onStop();
         }
     }
@@ -728,7 +728,7 @@ void MainWindow::onExit()
 }
 
 //--------------------------------------------------------------------------------------------------
-void MainWindow::onSettingsChanged()
+void HostWindow::onSettingsChanged()
 {
     LOG(INFO) << "Settings changed";
     SystemSettings settings;
@@ -736,14 +736,14 @@ void MainWindow::onSettingsChanged()
 }
 
 //--------------------------------------------------------------------------------------------------
-void MainWindow::onKillSession(quint32 session_id)
+void HostWindow::onKillSession(quint32 session_id)
 {
     LOG(INFO) << "Killing session with ID:" << session_id;
     emit sig_killClient(session_id);
 }
 
 //--------------------------------------------------------------------------------------------------
-void MainWindow::onOneTimeSessionsChanged()
+void HostWindow::onOneTimeSessionsChanged()
 {
     LOG(INFO) << "[ACTION] One-time sessions changed";
 
@@ -756,7 +756,7 @@ void MainWindow::onOneTimeSessionsChanged()
 }
 
 //--------------------------------------------------------------------------------------------------
-void MainWindow::createLanguageMenu(const QString& current_locale)
+void HostWindow::createLanguageMenu(const QString& current_locale)
 {
     Application::LocaleList locale_list = GuiApplication::instance()->localeList();
     if (locale_list.isEmpty())
@@ -780,7 +780,7 @@ void MainWindow::createLanguageMenu(const QString& current_locale)
 }
 
 //--------------------------------------------------------------------------------------------------
-void MainWindow::createThemeMenu(const QString& current_theme)
+void HostWindow::createThemeMenu(const QString& current_theme)
 {
     GuiApplication* app = GuiApplication::instance();
     const QStringList available_themes = app->availableThemes();
@@ -800,7 +800,7 @@ void MainWindow::createThemeMenu(const QString& current_theme)
 }
 
 //--------------------------------------------------------------------------------------------------
-void MainWindow::updateStatusBar()
+void HostWindow::updateStatusBar()
 {
     LOG(INFO) << "Update status bar";
 
@@ -851,7 +851,7 @@ void MainWindow::updateStatusBar()
 }
 
 //--------------------------------------------------------------------------------------------------
-void MainWindow::updateTrayIconTooltip()
+void HostWindow::updateTrayIconTooltip()
 {
     QString ipv4;
     QString ipv6;
@@ -905,7 +905,7 @@ void MainWindow::updateTrayIconTooltip()
 }
 
 //--------------------------------------------------------------------------------------------------
-quint32 MainWindow::calcOneTimeSessions()
+quint32 HostWindow::calcOneTimeSessions()
 {
     quint32 sessions = 0;
 

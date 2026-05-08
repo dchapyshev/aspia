@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef HOST_UI_MAIN_WINDOW_H
-#define HOST_UI_MAIN_WINDOW_H
+#ifndef HOST_UI_HOST_WINDOW_H
+#define HOST_UI_HOST_WINDOW_H
 
 #include <QMainWindow>
 #include <QPointer>
@@ -28,20 +28,20 @@
 #include "host/user_session_agent.h"
 
 namespace Ui {
-class MainWindow;
+class HostWindow;
 } // namespace Ui
 
 class ChatWidget;
 class NotifierWindow;
 class StatusDialog;
 
-class MainWindow final : public QMainWindow
+class HostWindow final : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget* parent = nullptr);
-    ~MainWindow() final;
+    explicit HostWindow(QWidget* parent = nullptr);
+    ~HostWindow() final;
 
 public slots:
     void connectToService();
@@ -94,7 +94,7 @@ private:
     void updateTrayIconTooltip();
     quint32 calcOneTimeSessions();
 
-    std::unique_ptr<Ui::MainWindow> ui;
+    std::unique_ptr<Ui::HostWindow> ui;
     bool should_be_quit_ = false;
     bool connected_to_service_ = false;
 
@@ -106,7 +106,7 @@ private:
     StatusDialog* status_dialog_ = nullptr;
     proto::user::RouterState::State last_state_ = proto::user::RouterState::DISABLED;
 
-    Q_DISABLE_COPY_MOVE(MainWindow)
+    Q_DISABLE_COPY_MOVE(HostWindow)
 };
 
-#endif // HOST_UI_MAIN_WINDOW_H
+#endif // HOST_UI_HOST_WINDOW_H

@@ -29,7 +29,7 @@
 #include "host/ui/application.h"
 #include "host/ui/check_password_dialog.h"
 #include "host/ui/config_dialog.h"
-#include "host/ui/main_window.h"
+#include "host/ui/host_window.h"
 #include "host/ui/settings_util.h"
 #include "common/ui/update_dialog.h"
 
@@ -212,9 +212,9 @@ int hostMain(int argc, char* argv[])
         {
             LOG(INFO) << "Application not running yet";
 
-            MainWindow window;
+            HostWindow window;
             QObject::connect(&application, &Application::sig_activated,
-                             &window, &MainWindow::activateHost);
+                             &window, &HostWindow::activateHost);
 
             if (parser.isSet(hidden_option))
             {

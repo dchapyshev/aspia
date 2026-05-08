@@ -95,9 +95,9 @@ list(APPEND SOURCE_HOST_CORE_UI
     ui/connect_confirm_dialog.ui
     ui/host_main.cc
     ui/host_main.h
-    ui/main_window.cc
-    ui/main_window.h
-    ui/main_window.ui
+    ui/host_window.cc
+    ui/host_window.h
+    ui/host_window.ui
     ui/notifier_window.cc
     ui/notifier_window.h
     ui/notifier_window.ui
