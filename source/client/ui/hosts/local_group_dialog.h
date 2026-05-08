@@ -21,7 +21,13 @@
 
 #include <QDialog>
 
-#include "ui_local_group_dialog.h"
+#include <memory>
+
+class QAbstractButton;
+
+namespace Ui {
+class LocalGroupDialog;
+} // namespace Ui
 
 class LocalGroupDialog final : public QDialog
 {
@@ -35,7 +41,7 @@ private slots:
     void onButtonBoxClicked(QAbstractButton* button);
 
 private:
-    Ui::LocalGroupDialog ui;
+    std::unique_ptr<Ui::LocalGroupDialog> ui;
     qint64 group_id_ = -1;
     qint64 parent_id_ = 0;
 

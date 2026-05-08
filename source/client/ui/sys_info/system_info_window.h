@@ -19,6 +19,8 @@
 #ifndef CLIENT_UI_SYS_INFO_SYSTEM_INFO_WINDOW_H
 #define CLIENT_UI_SYS_INFO_SYSTEM_INFO_WINDOW_H
 
+#include <memory>
+
 #include "client/ui/client_window.h"
 
 namespace Ui {

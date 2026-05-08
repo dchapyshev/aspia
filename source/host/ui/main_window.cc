@@ -37,7 +37,6 @@
 #include "common/ui/chat_widget.h"
 #include "common/ui/language_action.h"
 #include "common/ui/status_dialog.h"
-#include "host/user_session_agent.h"
 #include "host/system_settings.h"
 #include "host/ui/application.h"
 #include "host/ui/check_password_dialog.h"
@@ -46,6 +45,7 @@
 #include "host/ui/notifier_window.h"
 #include "host/ui/user_settings.h"
 #include "proto/user.h"
+#include "ui_main_window.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/process_util.h"
@@ -57,23 +57,24 @@
 
 //--------------------------------------------------------------------------------------------------
 MainWindow::MainWindow(QWidget* parent)
-    : QMainWindow(parent)
+    : QMainWindow(parent),
+      ui(std::make_unique<Ui::MainWindow>())
 {
     LOG(INFO) << "Ctor";
 
     UserSettings user_settings;
 
-    ui.setupUi(this);
+    ui->setupUi(this);
     setWindowFlag(Qt::WindowMaximizeButtonHint, false);
 
-    ui.edit_id->setText("-");
-    ui.edit_password->setText("-");
+    ui->edit_id->setText("-");
+    ui->edit_password->setText("-");
 
-    tray_menu_.addAction(ui.action_show_chat);
-    tray_menu_.addAction(ui.action_settings);
+    tray_menu_.addAction(ui->action_show_chat);
+    tray_menu_.addAction(ui->action_settings);
     tray_menu_.addSeparator();
-    tray_menu_.addAction(ui.action_show_hide);
-    tray_menu_.addAction(ui.action_exit);
+    tray_menu_.addAction(ui->action_show_hide);
+    tray_menu_.addAction(ui->action_exit);
 
     tray_icon_.setIcon(QIcon(":/img/aspia-host.ico"));
     tray_icon_.setContextMenu(&tray_menu_);
@@ -90,12 +91,12 @@ MainWindow::MainWindow(QWidget* parent)
 
     quint32 one_time_sessions = user_settings.oneTimeSessions();
 
-    ui.action_desktop_manage->setChecked(one_time_sessions & proto::peer::SESSION_TYPE_DESKTOP);
-    ui.action_file_transfer->setChecked(one_time_sessions & proto::peer::SESSION_TYPE_FILE_TRANSFER);
-    ui.action_system_info->setChecked(one_time_sessions & proto::peer::SESSION_TYPE_SYSTEM_INFO);
-    ui.action_text_chat->setChecked(one_time_sessions & proto::peer::SESSION_TYPE_TEXT_CHAT);
+    ui->action_desktop_manage->setChecked(one_time_sessions & proto::peer::SESSION_TYPE_DESKTOP);
+    ui->action_file_transfer->setChecked(one_time_sessions & proto::peer::SESSION_TYPE_FILE_TRANSFER);
+    ui->action_system_info->setChecked(one_time_sessions & proto::peer::SESSION_TYPE_SYSTEM_INFO);
+    ui->action_text_chat->setChecked(one_time_sessions & proto::peer::SESSION_TYPE_TEXT_CHAT);
 
-    connect(ui.menu_access, &QMenu::triggered, this, &MainWindow::onOneTimeSessionsChanged);
+    connect(ui->menu_access, &QMenu::triggered, this, &MainWindow::onOneTimeSessionsChanged);
 
     createLanguageMenu(user_settings.locale());
     createThemeMenu(user_settings.theme());
@@ -111,18 +112,18 @@ MainWindow::MainWindow(QWidget* parent)
         onShowHide();
     });
 
-    connect(ui.menu_language, &QMenu::triggered, this, &MainWindow::onLanguageChanged);
-    connect(ui.menu_theme, &QMenu::triggered, this, &MainWindow::onThemeChanged);
-    connect(ui.action_show_chat, &QAction::triggered, this, &MainWindow::onShowChat);
-    connect(ui.action_settings, &QAction::triggered, this, &MainWindow::onSettings);
-    connect(ui.action_show_hide, &QAction::triggered, this, &MainWindow::onShowHide);
-    connect(ui.action_exit, &QAction::triggered, this, &MainWindow::onExit);
-    connect(ui.action_help, &QAction::triggered, this, &MainWindow::onHelp);
-    connect(ui.action_about, &QAction::triggered, this, &MainWindow::onAbout);
+    connect(ui->menu_language, &QMenu::triggered, this, &MainWindow::onLanguageChanged);
+    connect(ui->menu_theme, &QMenu::triggered, this, &MainWindow::onThemeChanged);
+    connect(ui->action_show_chat, &QAction::triggered, this, &MainWindow::onShowChat);
+    connect(ui->action_settings, &QAction::triggered, this, &MainWindow::onSettings);
+    connect(ui->action_show_hide, &QAction::triggered, this, &MainWindow::onShowHide);
+    connect(ui->action_exit, &QAction::triggered, this, &MainWindow::onExit);
+    connect(ui->action_help, &QAction::triggered, this, &MainWindow::onHelp);
+    connect(ui->action_about, &QAction::triggered, this, &MainWindow::onAbout);
 
     setFixedHeight(sizeHint().height());
 
-    connect(ui.button_new_password, &QPushButton::clicked, this, [this]()
+    connect(ui->button_new_password, &QPushButton::clicked, this, [this]()
     {
         LOG(INFO) << "[ACTION] New password";
         emit sig_updateCredentials(proto::user::CredentialsRequest::NEW_PASSWORD);
@@ -231,7 +232,7 @@ void MainWindow::hideToTray()
 {
     LOG(INFO) << "Hide application to system tray";
 
-    ui.action_show_hide->setText(tr("Show"));
+    ui->action_show_hide->setText(tr("Show"));
     setVisible(false);
 }
 
@@ -319,18 +320,18 @@ void MainWindow::onCredentialsChanged(const proto::user::Credentials& credential
 {
     LOG(INFO) << "Credentials changed (host_id=" << credentials.host_id() << ")";
 
-    ui.button_new_password->setEnabled(true);
+    ui->button_new_password->setEnabled(true);
 
     bool has_id = credentials.host_id() != kInvalidHostId;
 
-    ui.edit_id->setEnabled(has_id);
-    ui.edit_id->setText(has_id ? QString::number(credentials.host_id()) : tr("Not available"));
+    ui->edit_id->setEnabled(has_id);
+    ui->edit_id->setText(has_id ? QString::number(credentials.host_id()) : tr("Not available"));
 
     bool has_password = !credentials.password().empty();
 
-    ui.button_new_password->setEnabled(has_password);
-    ui.edit_password->setEnabled(has_password);
-    ui.edit_password->setText(QString::fromStdString(credentials.password()));
+    ui->button_new_password->setEnabled(has_password);
+    ui->edit_password->setEnabled(has_password);
+    ui->edit_password->setText(QString::fromStdString(credentials.password()));
 
     updateTrayIconTooltip();
 }
@@ -353,20 +354,20 @@ void MainWindow::onRouterStateChanged(const proto::user::RouterState& state)
     }
 
     if (state.state() == proto::user::RouterState::DISABLED)
-        ui.button_status->setEnabled(false);
+        ui->button_status->setEnabled(false);
     else
-        ui.button_status->setEnabled(true);
+        ui->button_status->setEnabled(true);
 
     if (state.state() != proto::user::RouterState::CONNECTED)
     {
-        ui.button_new_password->setEnabled(false);
+        ui->button_new_password->setEnabled(false);
 
-        ui.edit_id->setText("-");
-        ui.edit_password->setText("-");
+        ui->edit_id->setText("-");
+        ui->edit_password->setText("-");
     }
     else
     {
-        ui.button_status->setEnabled(true);
+        ui->button_status->setEnabled(true);
     }
 
     QString status;
@@ -400,7 +401,7 @@ void MainWindow::onRouterStateChanged(const proto::user::RouterState& state)
     {
         status_dialog_ = new StatusDialog(this);
 
-        connect(ui.button_status, &QPushButton::clicked,
+        connect(ui->button_status, &QPushButton::clicked,
                 status_dialog_, &StatusDialog::show);
     }
 
@@ -475,9 +476,9 @@ void MainWindow::onLanguageChanged(QAction* action)
     user_settings.setLocale(new_locale);
     application->setLocale(new_locale);
 
-    ui.retranslateUi(this);
+    ui->retranslateUi(this);
 
-    for (QAction* theme_action : ui.menu_theme->actions())
+    for (QAction* theme_action : ui->menu_theme->actions())
     {
         const QString theme_id = theme_action->data().toString();
         if (!theme_id.isEmpty())
@@ -534,13 +535,13 @@ void MainWindow::onAfterThemeChanged()
         QPalette window_palette = palette();
         QString edit_color = window_palette.color(QPalette::Window).name(QColor::HexRgb);
 
-        ui.label_id->setStyleSheet(kLabelStyle);
-        ui.label_password->setStyleSheet(kLabelStyle);
+        ui->label_id->setStyleSheet(kLabelStyle);
+        ui->label_password->setStyleSheet(kLabelStyle);
 
-        set_edit_colors(ui.edit_id, edit_color);
-        set_edit_colors(ui.edit_password, edit_color);
+        set_edit_colors(ui->edit_id, edit_color);
+        set_edit_colors(ui->edit_password, edit_color);
 
-        ui.button_status->setStyleSheet("QPushButton {"
+        ui->button_status->setStyleSheet("QPushButton {"
                                             "font: 11px;"
                                             "text-align: left;"
                                             "border: 0;"
@@ -592,11 +593,11 @@ void MainWindow::onSettings()
                 connect(process_watcher, &QWinEventNotifier::activated, this, [this, process_watcher]
                 {
                     process_watcher->deleteLater();
-                    ui.action_settings->setEnabled(true);
+                    ui->action_settings->setEnabled(true);
                     onSettingsChanged();
                 });
 
-                ui.action_settings->setEnabled(false);
+                ui->action_settings->setEnabled(false);
 
                 process_watcher->setHandle(sei.hProcess);
                 process_watcher->setEnabled(true);
@@ -632,11 +633,11 @@ void MainWindow::onSettings()
                       << "(status:" << exit_status << ")";
 
             process->deleteLater();
-            ui.action_settings->setEnabled(true);
+            ui->action_settings->setEnabled(true);
             onSettingsChanged();
         });
 
-        ui.action_settings->setEnabled(false);
+        ui->action_settings->setEnabled(false);
         process->start("pkexec", QStringList() << "env" << "DISPLAY=:0"
             << QApplication::applicationFilePath() << "--config");
         return;
@@ -665,12 +666,12 @@ void MainWindow::onShowHide()
 {
     if (isVisible())
     {
-        ui.action_show_hide->setText(tr("Show"));
+        ui->action_show_hide->setText(tr("Show"));
         setVisible(false);
     }
     else
     {
-        ui.action_show_hide->setText(tr("Hide"));
+        ui->action_show_hide->setText(tr("Hide"));
         setVisible(true);
     }
 }
@@ -731,7 +732,7 @@ void MainWindow::onSettingsChanged()
 {
     LOG(INFO) << "Settings changed";
     SystemSettings settings;
-    ui.action_exit->setEnabled(!settings.isApplicationShutdownDisabled());
+    ui->action_exit->setEnabled(!settings.isApplicationShutdownDisabled());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -774,7 +775,7 @@ void MainWindow::createLanguageMenu(const QString& current_locale)
         if (current_locale == locale.first)
             action_language->setChecked(true);
 
-        ui.menu_language->addAction(action_language);
+        ui->menu_language->addAction(action_language);
     }
 }
 
@@ -794,7 +795,7 @@ void MainWindow::createThemeMenu(const QString& current_theme)
         action->setData(theme_id);
         action->setActionGroup(theme_group);
         action->setChecked(theme_id == current_theme);
-        ui.menu_theme->addAction(action);
+        ui->menu_theme->addAction(action);
     }
 }
 
@@ -833,12 +834,12 @@ void MainWindow::updateStatusBar()
             return;
     }
 
-    ui.button_status->setText(message);
-    ui.button_status->setIcon(QIcon(icon));
+    ui->button_status->setText(message);
+    ui->button_status->setIcon(QIcon(icon));
 
     QString statusbar_text_color = palette().color(QPalette::WindowText).name(QColor::HexRgb);
 
-    ui.button_status->setStyleSheet(QString("QPushButton {"
+    ui->button_status->setStyleSheet(QString("QPushButton {"
                                         "color: %1;"
                                         "font: 11px;"
                                         "text-align: left;"
@@ -897,7 +898,7 @@ void MainWindow::updateTrayIconTooltip()
 
     QString tooltip;
     tooltip += tr("Aspia Host") + "\n\n";
-    tooltip += tr("ID: %1").arg(ui.edit_id->text()) + '\n';
+    tooltip += tr("ID: %1").arg(ui->edit_id->text()) + '\n';
     tooltip += ip;
 
     tray_icon_.setToolTip(tooltip);
@@ -908,16 +909,16 @@ quint32 MainWindow::calcOneTimeSessions()
 {
     quint32 sessions = 0;
 
-    if (ui.action_desktop_manage->isChecked())
+    if (ui->action_desktop_manage->isChecked())
         sessions |= proto::peer::SESSION_TYPE_DESKTOP;
 
-    if (ui.action_file_transfer->isChecked())
+    if (ui->action_file_transfer->isChecked())
         sessions |= proto::peer::SESSION_TYPE_FILE_TRANSFER;
 
-    if (ui.action_system_info->isChecked())
+    if (ui->action_system_info->isChecked())
         sessions |= proto::peer::SESSION_TYPE_SYSTEM_INFO;
 
-    if (ui.action_text_chat->isChecked())
+    if (ui->action_text_chat->isChecked())
         sessions |= proto::peer::SESSION_TYPE_TEXT_CHAT;
 
     return sessions;

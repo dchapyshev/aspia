@@ -20,8 +20,8 @@
 
 #include "common/ui/msg_box.h"
 #include "base/logging.h"
-#include "base/peer/user.h"
 #include "proto/router.h"
+#include "ui_router_user_dialog.h"
 
 #include <QAbstractButton>
 #include <QPushButton>
@@ -29,22 +29,23 @@
 //--------------------------------------------------------------------------------------------------
 RouterUserDialog::RouterUserDialog(const User& user, const QStringList& users, QWidget* parent)
     : QDialog(parent),
+      ui(std::make_unique<Ui::RouterUserDialog>()),
       user_(user),
       users_(users)
 {
     LOG(INFO) << "Ctor";
-    ui.setupUi(this);
+    ui->setupUi(this);
 
     if (user_.isValid())
     {
-        ui.checkbox_disable->setChecked(!(user_.flags & User::ENABLED));
-        ui.edit_username->setText(user_.name);
+        ui->checkbox_disable->setChecked(!(user_.flags & User::ENABLED));
+        ui->edit_username->setText(user_.name);
 
         setAccountChanged(false);
     }
     else
     {
-        ui.checkbox_disable->setChecked(false);
+        ui->checkbox_disable->setChecked(false);
     }
 
     auto add_session = [&](proto::router::SessionType session_type)
@@ -71,15 +72,15 @@ RouterUserDialog::RouterUserDialog(const User& user, const QStringList& users, Q
             item->setCheckState(0, Qt::Unchecked);
         }
 
-        ui.tree_sessions->addTopLevelItem(item);
+        ui->tree_sessions->addTopLevelItem(item);
     };
 
     add_session(proto::router::SESSION_TYPE_ADMIN);
     add_session(proto::router::SESSION_TYPE_MANAGER);
     add_session(proto::router::SESSION_TYPE_CLIENT);
 
-    connect(ui.buttonbox, &QDialogButtonBox::clicked, this, &RouterUserDialog::onButtonBoxClicked);
-    connect(ui.edit_username, &QLineEdit::textEdited, this, [this]()
+    connect(ui->buttonbox, &QDialogButtonBox::clicked, this, &RouterUserDialog::onButtonBoxClicked);
+    connect(ui->edit_username, &QLineEdit::textEdited, this, [this]()
     {
         setAccountChanged(true);
     });
@@ -101,14 +102,14 @@ const User& RouterUserDialog::user() const
 bool RouterUserDialog::eventFilter(QObject* object, QEvent* event)
 {
     if (event->type() == QEvent::MouseButtonDblClick &&
-        (object == ui.edit_password || object == ui.edit_password_retry))
+        (object == ui->edit_password || object == ui->edit_password_retry))
     {
         setAccountChanged(true);
 
-        if (object == ui.edit_password)
-            ui.edit_password->setFocus();
-        else if (object == ui.edit_password_retry)
-            ui.edit_password_retry->setFocus();
+        if (object == ui->edit_password)
+            ui->edit_password->setFocus();
+        else if (object == ui->edit_password_retry)
+            ui->edit_password_retry->setFocus();
     }
 
     return false;
@@ -117,7 +118,7 @@ bool RouterUserDialog::eventFilter(QObject* object, QEvent* event)
 //--------------------------------------------------------------------------------------------------
 void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
 {
-    QDialogButtonBox::StandardButton standard_button = ui.buttonbox->standardButton(button);
+    QDialogButtonBox::StandardButton standard_button = ui->buttonbox->standardButton(button);
     if (standard_button != QDialogButtonBox::Ok)
     {
         LOG(INFO) << "[ACTION] Action rejected";
@@ -128,15 +129,15 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
 
     if (account_changed_)
     {
-        QString username = ui.edit_username->text();
+        QString username = ui->edit_username->text();
 
         if (!User::isValidUserName(username))
         {
             LOG(ERROR) << "Invalid user name:" << username;
             MsgBox::warning(this, tr("The user name can not be empty and can contain only "
                 "alphabet characters, numbers and ""_"", ""-"", ""."", ""@"" characters."));
-            ui.edit_username->selectAll();
-            ui.edit_username->setFocus();
+            ui->edit_username->selectAll();
+            ui->edit_username->setFocus();
             return;
         }
 
@@ -146,22 +147,22 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
             {
                 LOG(ERROR) << "User name already exists:" << username;
                 MsgBox::warning(this, tr("The username you entered already exists."));
-                ui.edit_username->selectAll();
-                ui.edit_username->setFocus();
+                ui->edit_username->selectAll();
+                ui->edit_username->setFocus();
                 return;
             }
         }
 
-        if (ui.edit_password->text() != ui.edit_password_retry->text())
+        if (ui->edit_password->text() != ui->edit_password_retry->text())
         {
             LOG(INFO) << "Passwords do not match";
             MsgBox::warning(this, tr("The passwords you entered do not match."));
-            ui.edit_password->selectAll();
-            ui.edit_password->setFocus();
+            ui->edit_password->selectAll();
+            ui->edit_password->setFocus();
             return;
         }
 
-        QString password = ui.edit_password->text();
+        QString password = ui->edit_password->text();
 
         if (!User::isValidPassword(password))
         {
@@ -169,8 +170,8 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
             MsgBox::warning(this, tr("Password can not be empty and should not exceed %n characters.",
                 "", User::kMaxPasswordLength));
 
-            ui.edit_password->selectAll();
-            ui.edit_password->setFocus();
+            ui->edit_password->selectAll();
+            ui->edit_password->setFocus();
             return;
         }
 
@@ -190,9 +191,9 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
                                     this);
             if (message_box.exec() == MsgBox::Yes)
             {
-                ui.edit_password->clear();
-                ui.edit_password_retry->clear();
-                ui.edit_password->setFocus();
+                ui->edit_password->clear();
+                ui->edit_password_retry->clear();
+                ui->edit_password->setFocus();
                 return;
             }
         }
@@ -215,15 +216,15 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
     }
 
     quint32 sessions = 0;
-    for (int i = 0; i < ui.tree_sessions->topLevelItemCount(); ++i)
+    for (int i = 0; i < ui->tree_sessions->topLevelItemCount(); ++i)
     {
-        QTreeWidgetItem* item = ui.tree_sessions->topLevelItem(i);
+        QTreeWidgetItem* item = ui->tree_sessions->topLevelItem(i);
         if (item->checkState(0) == Qt::Checked)
             sessions |= item->data(0, Qt::UserRole).toUInt();
     }
 
     quint32 flags = 0;
-    if (!ui.checkbox_disable->isChecked())
+    if (!ui->checkbox_disable->isChecked())
         flags |= User::ENABLED;
 
     user_.sessions = sessions;
@@ -239,38 +240,38 @@ void RouterUserDialog::setAccountChanged(bool changed)
 {
     account_changed_ = changed;
 
-    ui.edit_password->setEnabled(changed);
-    ui.edit_password_retry->setEnabled(changed);
+    ui->edit_password->setEnabled(changed);
+    ui->edit_password_retry->setEnabled(changed);
 
     if (changed)
     {
-        ui.edit_password->clear();
-        ui.edit_password_retry->clear();
+        ui->edit_password->clear();
+        ui->edit_password_retry->clear();
 
         Qt::InputMethodHints hints = Qt::ImhHiddenText | Qt::ImhSensitiveData |
             Qt::ImhNoAutoUppercase | Qt::ImhNoPredictiveText;
 
-        ui.edit_password->setEchoMode(QLineEdit::Password);
-        ui.edit_password->setInputMethodHints(hints);
+        ui->edit_password->setEchoMode(QLineEdit::Password);
+        ui->edit_password->setInputMethodHints(hints);
 
-        ui.edit_password_retry->setEchoMode(QLineEdit::Password);
-        ui.edit_password_retry->setInputMethodHints(hints);
+        ui->edit_password_retry->setEchoMode(QLineEdit::Password);
+        ui->edit_password_retry->setInputMethodHints(hints);
     }
     else
     {
         QString text = tr("Double-click to change");
 
-        ui.edit_password->setText(text);
-        ui.edit_password_retry->setText(text);
+        ui->edit_password->setText(text);
+        ui->edit_password_retry->setText(text);
 
-        ui.edit_password->setEchoMode(QLineEdit::Normal);
-        ui.edit_password->setInputMethodHints(Qt::ImhNone);
+        ui->edit_password->setEchoMode(QLineEdit::Normal);
+        ui->edit_password->setInputMethodHints(Qt::ImhNone);
 
-        ui.edit_password_retry->setEchoMode(QLineEdit::Normal);
-        ui.edit_password_retry->setInputMethodHints(Qt::ImhNone);
+        ui->edit_password_retry->setEchoMode(QLineEdit::Normal);
+        ui->edit_password_retry->setInputMethodHints(Qt::ImhNone);
 
-        ui.edit_password->installEventFilter(this);
-        ui.edit_password_retry->installEventFilter(this);
+        ui->edit_password->installEventFilter(this);
+        ui->edit_password_retry->installEventFilter(this);
     }
 }
 

@@ -19,8 +19,13 @@
 #ifndef CLIENT_UI_SYS_INFO_SYS_INFO_LOCAL_USER_GROUPS_H
 #define CLIENT_UI_SYS_INFO_SYS_INFO_LOCAL_USER_GROUPS_H
 
+#include <memory>
+
 #include "client/ui/sys_info/sys_info_widget.h"
-#include "ui_sys_info_widget_local_user_groups.h"
+
+namespace Ui {
+class SysInfoLocalUserGroups;
+} // namespace Ui
 
 class SysInfoWidgetLocalUserGroups final : public SysInfoWidget
 {
@@ -43,7 +48,7 @@ private slots:
     void onContextMenu(const QPoint& point);
 
 private:
-    Ui::SysInfoLocalUserGroups ui;
+    std::unique_ptr<Ui::SysInfoLocalUserGroups> ui;
 };
 
 #endif // CLIENT_UI_SYS_INFO_SYS_INFO_LOCAL_USER_GROUPS_H

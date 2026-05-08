@@ -19,8 +19,13 @@
 #ifndef CLIENT_UI_SYS_INFO_SYS_INFO_LICENSES_H
 #define CLIENT_UI_SYS_INFO_SYS_INFO_LICENSES_H
 
+#include <memory>
+
 #include "client/ui/sys_info/sys_info_widget.h"
-#include "ui_sys_info_widget_licenses.h"
+
+namespace Ui {
+class SysInfoLicenses;
+} // namespace Ui
 
 class SysInfoWidgetLicenses final : public SysInfoWidget
 {
@@ -43,7 +48,7 @@ private slots:
     void onContextMenu(const QPoint& point);
 
 private:
-    Ui::SysInfoLicenses ui;
+    std::unique_ptr<Ui::SysInfoLicenses> ui;
 };
 
 #endif // CLIENT_UI_SYS_INFO_SYS_INFO_LICENSES_H

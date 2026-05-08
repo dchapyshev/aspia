@@ -17,12 +17,12 @@
 //
 
 #include "client/ui/sys_info/sys_info_widget_power_options.h"
-#include "proto/system_info.h"
 
 #include <QMenu>
 
 #include "common/system_info_constants.h"
 #include "common/ui/formatter.h"
+#include "ui_sys_info_widget_power_options.h"
 
 namespace {
 
@@ -89,29 +89,30 @@ QTreeWidgetItem* mk(const QString& param, const std::string& value)
 
 //--------------------------------------------------------------------------------------------------
 SysInfoWidgetPowerOptions::SysInfoWidgetPowerOptions(QWidget* parent)
-    : SysInfoWidget(parent)
+    : SysInfoWidget(parent),
+      ui(std::make_unique<Ui::SysInfoPowerOptions>())
 {
-    ui.setupUi(this);
+    ui->setupUi(this);
 
-    connect(ui.action_copy_row, &QAction::triggered, this, [this]()
+    connect(ui->action_copy_row, &QAction::triggered, this, [this]()
     {
-        copyRow(ui.tree->currentItem());
+        copyRow(ui->tree->currentItem());
     });
 
-    connect(ui.action_copy_name, &QAction::triggered, this, [this]()
+    connect(ui->action_copy_name, &QAction::triggered, this, [this]()
     {
-        copyColumn(ui.tree->currentItem(), 0);
+        copyColumn(ui->tree->currentItem(), 0);
     });
 
-    connect(ui.action_copy_value, &QAction::triggered, this, [this]()
+    connect(ui->action_copy_value, &QAction::triggered, this, [this]()
     {
-        copyColumn(ui.tree->currentItem(), 1);
+        copyColumn(ui->tree->currentItem(), 1);
     });
 
-    connect(ui.tree, &QTreeWidget::customContextMenuRequested,
+    connect(ui->tree, &QTreeWidget::customContextMenuRequested,
             this, &SysInfoWidgetPowerOptions::onContextMenu);
 
-    connect(ui.tree, &QTreeWidget::itemDoubleClicked,
+    connect(ui->tree, &QTreeWidget::itemDoubleClicked,
             this, [this](QTreeWidgetItem* item, int /* column */)
     {
         copyRow(item);
@@ -130,48 +131,48 @@ std::string SysInfoWidgetPowerOptions::category() const
 //--------------------------------------------------------------------------------------------------
 void SysInfoWidgetPowerOptions::setSystemInfo(const proto::system_info::SystemInfo& system_info)
 {
-    ui.tree->clear();
+    ui->tree->clear();
 
     if (!system_info.has_power_options())
     {
-        ui.tree->setEnabled(false);
+        ui->tree->setEnabled(false);
         return;
     }
 
     const proto::system_info::PowerOptions& power_options = system_info.power_options();
     QIcon item_icon(":/img/electrical.svg");
 
-    ui.tree->addTopLevelItem(
+    ui->tree->addTopLevelItem(
         new Item(item_icon, tr("Power Source"), powerSourceToString(power_options.power_source())));
-    ui.tree->addTopLevelItem(
+    ui->tree->addTopLevelItem(
         new Item(item_icon, tr("Battery Status"), batteryStatusToString(power_options.battery_status())));
 
     if (power_options.battery_status() != proto::system_info::PowerOptions::BATTERY_STATUS_NO_BATTERY &&
         power_options.battery_status() != proto::system_info::PowerOptions::BATTERY_STATUS_UNKNOWN)
     {
-        ui.tree->addTopLevelItem(new Item(item_icon,
+        ui->tree->addTopLevelItem(new Item(item_icon,
             tr("Battery Life Percent"),
             QString("%1%").arg(power_options.battery_life_percent())));
 
         if (power_options.full_battery_life_time() != 0)
         {
-            ui.tree->addTopLevelItem(new Item(item_icon,
+            ui->tree->addTopLevelItem(new Item(item_icon,
                 tr("Full Battery Life Time"),
                 Formatter::delayToString(power_options.full_battery_life_time())));
         }
 
         if (power_options.remaining_battery_life_time() != 0)
         {
-            ui.tree->addTopLevelItem(new Item(item_icon,
+            ui->tree->addTopLevelItem(new Item(item_icon,
                 tr("Remaining Battery Life Time"),
                 Formatter::delayToString(power_options.remaining_battery_life_time())));
         }
     }
 
     if (power_options.battery_size() == 0)
-        ui.tree->setIndentation(0);
+        ui->tree->setIndentation(0);
     else
-        ui.tree->setIndentation(20);
+        ui->tree->setIndentation(20);
 
     for (int i = 0; i < power_options.battery_size(); ++i)
     {
@@ -235,46 +236,46 @@ void SysInfoWidgetPowerOptions::setSystemInfo(const proto::system_info::SystemIn
 
         if (!group.isEmpty())
         {
-            ui.tree->addTopLevelItem(
+            ui->tree->addTopLevelItem(
                 new Item(":/img/electrical.svg", tr("Battery #%1").arg(i + 1), group));
         }
     }
 
-    for (int i = 0; i < ui.tree->topLevelItemCount(); ++i)
-        ui.tree->topLevelItem(i)->setExpanded(true);
+    for (int i = 0; i < ui->tree->topLevelItemCount(); ++i)
+        ui->tree->topLevelItem(i)->setExpanded(true);
 
     if (!isStateRestored())
-        ui.tree->resizeColumnToContents(0);
+        ui->tree->resizeColumnToContents(0);
 }
 
 //--------------------------------------------------------------------------------------------------
 QTreeWidget* SysInfoWidgetPowerOptions::treeWidget()
 {
-    return ui.tree;
+    return ui->tree;
 }
 
 //--------------------------------------------------------------------------------------------------
 void SysInfoWidgetPowerOptions::retranslate()
 {
-    ui.retranslateUi(this);
+    ui->retranslateUi(this);
     SysInfoWidget::retranslate();
 }
 
 //--------------------------------------------------------------------------------------------------
 void SysInfoWidgetPowerOptions::onContextMenu(const QPoint& point)
 {
-    QTreeWidgetItem* current_item = ui.tree->itemAt(point);
+    QTreeWidgetItem* current_item = ui->tree->itemAt(point);
     if (!current_item)
         return;
 
-    ui.tree->setCurrentItem(current_item);
+    ui->tree->setCurrentItem(current_item);
 
     QMenu menu;
-    menu.addAction(ui.action_copy_row);
-    menu.addAction(ui.action_copy_name);
-    menu.addAction(ui.action_copy_value);
+    menu.addAction(ui->action_copy_row);
+    menu.addAction(ui->action_copy_name);
+    menu.addAction(ui->action_copy_value);
 
-    menu.exec(ui.tree->viewport()->mapToGlobal(point));
+    menu.exec(ui->tree->viewport()->mapToGlobal(point));
 }
 
 //--------------------------------------------------------------------------------------------------

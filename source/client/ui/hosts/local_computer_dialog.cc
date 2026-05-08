@@ -30,6 +30,7 @@
 #include "client/database.h"
 #include "client/ui/hosts/group_combo_box.h"
 #include "common/ui/msg_box.h"
+#include "ui_local_computer_dialog.h"
 
 namespace {
 
@@ -42,18 +43,19 @@ constexpr int kMaxCommentLength = 2048;
 //--------------------------------------------------------------------------------------------------
 LocalComputerDialog::LocalComputerDialog(qint64 computer_id, qint64 group_id, QWidget* parent)
     : QDialog(parent),
+      ui(std::make_unique<Ui::LocalComputerDialog>()),
       computer_id_(computer_id)
 {
     LOG(INFO) << "Ctor";
 
-    ui.setupUi(this);
+    ui->setupUi(this);
 
-    ui.combo_router->addItem(QIcon(":/img/connect.svg"), tr("Without Router"), QVariant::fromValue<qint64>(0));
+    ui->combo_router->addItem(QIcon(":/img/connect.svg"), tr("Without Router"), QVariant::fromValue<qint64>(0));
 
     QList<RouterConfig> routers = Database::instance().routerList();
     for (const RouterConfig& router : std::as_const(routers))
     {
-        ui.combo_router->addItem(QIcon(":/img/stack.svg"), router.displayName(), QVariant::fromValue(router.router_id));
+        ui->combo_router->addItem(QIcon(":/img/stack.svg"), router.displayName(), QVariant::fromValue(router.router_id));
     }
 
     qint64 selected_router_id = 0;
@@ -65,11 +67,11 @@ LocalComputerDialog::LocalComputerDialog(qint64 computer_id, qint64 group_id, QW
         std::optional<ComputerConfig> computer = Database::instance().findComputer(computer_id_);
         if (computer.has_value())
         {
-            ui.edit_name->setText(computer->name);
-            ui.edit_address->setText(computer->address);
-            ui.edit_username->setText(computer->username);
-            ui.edit_password->setText(computer->password);
-            ui.edit_comment->setPlainText(computer->comment);
+            ui->edit_name->setText(computer->name);
+            ui->edit_address->setText(computer->address);
+            ui->edit_username->setText(computer->username);
+            ui->edit_password->setText(computer->password);
+            ui->edit_comment->setPlainText(computer->comment);
             group_id_ = computer->group_id;
             selected_router_id = computer->router_id;
         }
@@ -86,29 +88,29 @@ LocalComputerDialog::LocalComputerDialog(qint64 computer_id, qint64 group_id, QW
 
     if (selected_router_id != 0)
     {
-        int found_index = ui.combo_router->findData(QVariant::fromValue(selected_router_id));
+        int found_index = ui->combo_router->findData(QVariant::fromValue(selected_router_id));
         if (found_index < 0)
         {
             LOG(WARNING) << "Computer references missing router id" << selected_router_id;
-            ui.combo_router->addItem(QIcon(":/img/high-importance.svg"), tr("<deleted router>"),
+            ui->combo_router->addItem(QIcon(":/img/high-importance.svg"), tr("<deleted router>"),
                                      QVariant::fromValue(selected_router_id));
-            found_index = ui.combo_router->count() - 1;
+            found_index = ui->combo_router->count() - 1;
         }
-        ui.combo_router->setCurrentIndex(found_index);
+        ui->combo_router->setCurrentIndex(found_index);
     }
 
     updateAddressLabel();
 
-    ui.combo_group->loadGroups(tr("Local"));
-    ui.combo_group->selectGroup(group_id_);
+    ui->combo_group->loadGroups(tr("Local"));
+    ui->combo_group->selectGroup(group_id_);
 
-    connect(ui.button_show_password, &QToolButton::toggled,
+    connect(ui->button_show_password, &QToolButton::toggled,
             this, &LocalComputerDialog::onShowPasswordButtonToggled);
-    connect(ui.combo_router, QOverload<int>::of(&QComboBox::currentIndexChanged),
+    connect(ui->combo_router, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &LocalComputerDialog::onRouterChanged);
-    connect(ui.button_box, &QDialogButtonBox::clicked, this, &LocalComputerDialog::onButtonBoxClicked);
+    connect(ui->button_box, &QDialogButtonBox::clicked, this, &LocalComputerDialog::onButtonBoxClicked);
 
-    ui.edit_name->setFocus();
+    ui->edit_name->setFocus();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -122,13 +124,13 @@ void LocalComputerDialog::onShowPasswordButtonToggled(bool checked)
 {
     if (checked)
     {
-        ui.edit_password->setEchoMode(QLineEdit::Normal);
-        ui.edit_password->setInputMethodHints(Qt::ImhNone);
+        ui->edit_password->setEchoMode(QLineEdit::Normal);
+        ui->edit_password->setInputMethodHints(Qt::ImhNone);
     }
     else
     {
-        ui.edit_password->setEchoMode(QLineEdit::Password);
-        ui.edit_password->setInputMethodHints(Qt::ImhHiddenText | Qt::ImhSensitiveData |
+        ui->edit_password->setEchoMode(QLineEdit::Password);
+        ui->edit_password->setInputMethodHints(Qt::ImhHiddenText | Qt::ImhSensitiveData |
                                               Qt::ImhNoAutoUppercase | Qt::ImhNoPredictiveText);
     }
 }
@@ -142,17 +144,17 @@ void LocalComputerDialog::onRouterChanged(int /* index */)
 //--------------------------------------------------------------------------------------------------
 void LocalComputerDialog::onButtonBoxClicked(QAbstractButton* button)
 {
-    if (ui.button_box->standardButton(button) != QDialogButtonBox::Ok)
+    if (ui->button_box->standardButton(button) != QDialogButtonBox::Ok)
     {
         reject();
         return;
     }
 
-    QString name = ui.edit_name->text();
+    QString name = ui->edit_name->text();
     if (name.length() < kMinNameLength)
     {
         MsgBox::warning(this, tr("Name cannot be empty."));
-        ui.edit_name->setFocus();
+        ui->edit_name->setFocus();
         return;
     }
 
@@ -161,59 +163,59 @@ void LocalComputerDialog::onButtonBoxClicked(QAbstractButton* button)
         MsgBox::warning(this,
             tr("Too long name. The maximum length of the name is %n characters.",
                "", kMaxNameLength));
-        ui.edit_name->setFocus();
-        ui.edit_name->selectAll();
+        ui->edit_name->setFocus();
+        ui->edit_name->selectAll();
         return;
     }
 
-    qint64 router_id = ui.combo_router->currentData().toLongLong();
+    qint64 router_id = ui->combo_router->currentData().toLongLong();
 
     if (router_id == 0)
     {
         Address address =
-            Address::fromString(ui.edit_address->text(), DEFAULT_HOST_TCP_PORT);
+            Address::fromString(ui->edit_address->text(), DEFAULT_HOST_TCP_PORT);
         if (!address.isValid())
         {
             MsgBox::warning(this, tr("An invalid computer address was entered."));
-            ui.edit_address->setFocus();
-            ui.edit_address->selectAll();
+            ui->edit_address->setFocus();
+            ui->edit_address->selectAll();
             return;
         }
     }
     else
     {
-        if (!isHostId(ui.edit_address->text()))
+        if (!isHostId(ui->edit_address->text()))
         {
             MsgBox::warning(this, tr("An invalid host ID was entered."));
-            ui.edit_address->setFocus();
-            ui.edit_address->selectAll();
+            ui->edit_address->setFocus();
+            ui->edit_address->selectAll();
             return;
         }
     }
 
-    QString username = ui.edit_username->text();
+    QString username = ui->edit_username->text();
     if (!username.isEmpty() && !User::isValidUserName(username))
     {
         MsgBox::warning(this,
             tr("The user name can not be empty and can contain only"
                " alphabet characters, numbers and \"_\", \"-\", \".\" characters."));
-        ui.edit_username->setFocus();
-        ui.edit_username->selectAll();
+        ui->edit_username->setFocus();
+        ui->edit_username->selectAll();
         return;
     }
 
-    QString comment = ui.edit_comment->toPlainText();
+    QString comment = ui->edit_comment->toPlainText();
     if (comment.length() > kMaxCommentLength)
     {
         MsgBox::warning(this,
             tr("Too long comment. The maximum length of the comment is %n characters.",
                "", kMaxCommentLength));
-        ui.edit_comment->setFocus();
-        ui.edit_comment->selectAll();
+        ui->edit_comment->setFocus();
+        ui->edit_comment->selectAll();
         return;
     }
 
-    qint64 group_id = ui.combo_group->currentGroupId();
+    qint64 group_id = ui->combo_group->currentGroupId();
 
     QList<ComputerConfig> computers = Database::instance().computerList(group_id);
     for (const ComputerConfig& existing : std::as_const(computers))
@@ -222,7 +224,7 @@ void LocalComputerDialog::onButtonBoxClicked(QAbstractButton* button)
         {
             MsgBox::warning(this,
                 tr("A computer with this name already exists in the selected group."));
-            ui.edit_name->setFocus();
+            ui->edit_name->setFocus();
             return;
         }
     }
@@ -231,11 +233,11 @@ void LocalComputerDialog::onButtonBoxClicked(QAbstractButton* button)
     computer.id = computer_id_;
     computer.group_id = group_id;
     computer.router_id = router_id;
-    computer.name = ui.edit_name->text();
-    computer.address = ui.edit_address->text();
-    computer.username = ui.edit_username->text();
-    computer.password = ui.edit_password->text();
-    computer.comment = ui.edit_comment->toPlainText();
+    computer.name = ui->edit_name->text();
+    computer.address = ui->edit_address->text();
+    computer.username = ui->edit_username->text();
+    computer.password = ui->edit_password->text();
+    computer.comment = ui->edit_comment->toPlainText();
 
     Database& db = Database::instance();
 
@@ -265,14 +267,14 @@ void LocalComputerDialog::onButtonBoxClicked(QAbstractButton* button)
 //--------------------------------------------------------------------------------------------------
 void LocalComputerDialog::updateAddressLabel()
 {
-    if (ui.combo_router->currentData().toLongLong() == 0)
+    if (ui->combo_router->currentData().toLongLong() == 0)
     {
-        ui.label_address->setText(tr("Address:"));
-        ui.edit_address->setPlaceholderText(tr("Computer name or IP address"));
+        ui->label_address->setText(tr("Address:"));
+        ui->edit_address->setPlaceholderText(tr("Computer name or IP address"));
     }
     else
     {
-        ui.label_address->setText(tr("ID:"));
-        ui.edit_address->setPlaceholderText(tr("Host ID"));
+        ui->label_address->setText(tr("ID:"));
+        ui->edit_address->setPlaceholderText(tr("Host ID"));
     }
 }

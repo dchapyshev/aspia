@@ -23,27 +23,30 @@
 #include "base/logging.h"
 #include "client/ui/file_transfer/file_error_code.h"
 #include "common/ui/msg_box.h"
+#include "ui_file_remove_widget.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "common/ui/taskbar_button.h"
+#include "common/ui/taskbar_progress.h"
 #endif // defined(Q_OS_WINDOWS)
 
 //--------------------------------------------------------------------------------------------------
 FileRemoveWidget::FileRemoveWidget(QWidget* parent)
-    : QWidget(parent)
+    : QWidget(parent),
+      ui(std::make_unique<Ui::FileRemoveWidget>())
 {
     LOG(INFO) << "Ctor";
 
-    ui.setupUi(this);
+    ui->setupUi(this);
 
-    connect(ui.button_cancel, &QPushButton::clicked, this, &FileRemoveWidget::requestStop);
+    connect(ui->button_cancel, &QPushButton::clicked, this, &FileRemoveWidget::requestStop);
 
 #if defined(Q_OS_WINDOWS)
     TaskbarButton* button = new TaskbarButton(this);
     taskbar_progress_ = button->progress();
 #endif
 
-    label_metrics_ = std::make_unique<QFontMetrics>(ui.label_current_item->font());
+    label_metrics_ = std::make_unique<QFontMetrics>(ui->label_current_item->font());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -64,11 +67,11 @@ void FileRemoveWidget::reset()
     stopping_ = false;
     finished_ = false;
 
-    ui.label_task->setText(tr("Creating a list of files to delete..."));
-    ui.label_current_item->setText("...");
-    ui.progress->setValue(0);
+    ui->label_task->setText(tr("Creating a list of files to delete..."));
+    ui->label_current_item->setText("...");
+    ui->progress->setValue(0);
 
-    ui.button_cancel->setEnabled(true);
+    ui->button_cancel->setEnabled(true);
 
 #if defined(Q_OS_WINDOWS)
     if (taskbar_progress_)
@@ -87,8 +90,8 @@ void FileRemoveWidget::requestStop()
 
     stopping_ = true;
 
-    ui.label_task->setText(tr("Cancel removal of files."));
-    ui.button_cancel->setEnabled(false);
+    ui->label_task->setText(tr("Cancel removal of files."));
+    ui->button_cancel->setEnabled(false);
 
     emit sig_stop();
 }
@@ -126,12 +129,12 @@ void FileRemoveWidget::setCurrentProgress(const QString& name, int percentage)
     if (queue_building_)
     {
         queue_building_ = false;
-        ui.label_task->setText(tr("Deleting items."));
+        ui->label_task->setText(tr("Deleting items."));
     }
 
-    ui.label_current_item->setText(label_metrics_->elidedText(
-        name, Qt::ElideMiddle, ui.label_current_item->width()));
-    ui.progress->setValue(percentage);
+    ui->label_current_item->setText(label_metrics_->elidedText(
+        name, Qt::ElideMiddle, ui->label_current_item->width()));
+    ui->progress->setValue(percentage);
 
 #if defined(Q_OS_WINDOWS)
     if (taskbar_progress_)

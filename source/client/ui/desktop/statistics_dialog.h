@@ -19,10 +19,16 @@
 #ifndef CLIENT_UI_DESKTOP_STATISTICS_DIALOG_H
 #define CLIENT_UI_DESKTOP_STATISTICS_DIALOG_H
 
+#include <QDialog>
 #include <QTime>
 
+#include <memory>
+
 #include "client/client_desktop.h"
-#include "ui_statistics_dialog.h"
+
+namespace Ui {
+class StatisticsDialog;
+} // namespace Ui
 
 class StatisticsDialog final : public QDialog
 {
@@ -38,7 +44,7 @@ signals:
     void sig_metricsRequired();
 
 private:
-    Ui::StatisticsDialog ui;
+    std::unique_ptr<Ui::StatisticsDialog> ui;
     QTimer* update_timer_ = nullptr;
     QTime duration_;
 

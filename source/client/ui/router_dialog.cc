@@ -30,34 +30,36 @@
 #include "client/config.h"
 #include "client/database.h"
 #include "proto/router.h"
+#include "ui_router_dialog.h"
 
 //--------------------------------------------------------------------------------------------------
 RouterDialog::RouterDialog(qint64 router_id, QWidget* parent)
     : QDialog(parent),
+      ui(std::make_unique<Ui::RouterDialog>()),
       router_id_(router_id)
 {
     LOG(INFO) << "Ctor";
-    ui.setupUi(this);
+    ui->setupUi(this);
 
-    ui.combo_session_type->addItem(tr("Administrator"), proto::router::SESSION_TYPE_ADMIN);
-    ui.combo_session_type->addItem(tr("Manager"), proto::router::SESSION_TYPE_MANAGER);
-    ui.combo_session_type->addItem(tr("Client"), proto::router::SESSION_TYPE_CLIENT);
-    ui.combo_session_type->setCurrentIndex(2);
+    ui->combo_session_type->addItem(tr("Administrator"), proto::router::SESSION_TYPE_ADMIN);
+    ui->combo_session_type->addItem(tr("Manager"), proto::router::SESSION_TYPE_MANAGER);
+    ui->combo_session_type->addItem(tr("Client"), proto::router::SESSION_TYPE_CLIENT);
+    ui->combo_session_type->setCurrentIndex(2);
 
     if (router_id_ != -1)
     {
         std::optional<RouterConfig> router = Database::instance().findRouter(router_id_);
         if (router.has_value())
         {
-            ui.edit_name->setText(router->display_name);
-            ui.edit_address->setText(router->address);
+            ui->edit_name->setText(router->display_name);
+            ui->edit_address->setText(router->address);
 
-            int session_type_index = ui.combo_session_type->findData(router->session_type);
+            int session_type_index = ui->combo_session_type->findData(router->session_type);
             if (session_type_index != -1)
-                ui.combo_session_type->setCurrentIndex(session_type_index);
+                ui->combo_session_type->setCurrentIndex(session_type_index);
 
-            ui.edit_username->setText(router->username);
-            ui.edit_password->setText(router->password);
+            ui->edit_username->setText(router->username);
+            ui->edit_password->setText(router->password);
         }
         else
         {
@@ -65,8 +67,8 @@ RouterDialog::RouterDialog(qint64 router_id, QWidget* parent)
         }
     }
 
-    connect(ui.buttonbox, &QDialogButtonBox::clicked, this, &RouterDialog::onButtonBoxClicked);
-    connect(ui.button_show_password, &QToolButton::toggled,
+    connect(ui->buttonbox, &QDialogButtonBox::clicked, this, &RouterDialog::onButtonBoxClicked);
+    connect(ui->button_show_password, &QToolButton::toggled,
             this, &RouterDialog::onShowPasswordButtonToggled);
 }
 
@@ -79,51 +81,51 @@ RouterDialog::~RouterDialog()
 //--------------------------------------------------------------------------------------------------
 void RouterDialog::onButtonBoxClicked(QAbstractButton* button)
 {
-    QDialogButtonBox::StandardButton standard_button = ui.buttonbox->standardButton(button);
+    QDialogButtonBox::StandardButton standard_button = ui->buttonbox->standardButton(button);
     if (standard_button != QDialogButtonBox::Ok)
     {
         reject();
         return;
     }
 
-    QString address_text = ui.edit_address->text();
+    QString address_text = ui->edit_address->text();
     Address address = Address::fromString(address_text, DEFAULT_ROUTER_TCP_PORT);
     if (!address.isValid())
     {
         LOG(ERROR) << "Invalid router address entered";
         showError(tr("An invalid router address was entered."));
-        ui.edit_address->setFocus();
-        ui.edit_address->selectAll();
+        ui->edit_address->setFocus();
+        ui->edit_address->selectAll();
         return;
     }
 
-    QString username = ui.edit_username->text();
+    QString username = ui->edit_username->text();
     if (!User::isValidUserName(username))
     {
         LOG(ERROR) << "Invalid user name entered";
         showError(tr("The user name can not be empty and can contain only"
                      " alphabet characters, numbers and ""_"", ""-"", ""."" characters."));
-        ui.edit_username->setFocus();
-        ui.edit_username->selectAll();
+        ui->edit_username->setFocus();
+        ui->edit_username->selectAll();
         return;
     }
 
-    QString password = ui.edit_password->text();
+    QString password = ui->edit_password->text();
     if (!User::isValidPassword(password))
     {
         LOG(ERROR) << "Invalid password entered";
         showError(tr("Password cannot be empty."));
-        ui.edit_password->setFocus();
-        ui.edit_password->selectAll();
+        ui->edit_password->setFocus();
+        ui->edit_password->selectAll();
         return;
     }
 
     RouterConfig data;
     data.router_id = router_id_;
-    data.display_name = ui.edit_name->text();
+    data.display_name = ui->edit_name->text();
     data.address = address_text;
     data.session_type =
-        static_cast<proto::router::SessionType>(ui.combo_session_type->currentData().toUInt());
+        static_cast<proto::router::SessionType>(ui->combo_session_type->currentData().toUInt());
     data.username = username;
     data.password = password;
 
@@ -156,13 +158,13 @@ void RouterDialog::onShowPasswordButtonToggled(bool checked)
 {
     if (checked)
     {
-        ui.edit_password->setEchoMode(QLineEdit::Normal);
-        ui.edit_password->setInputMethodHints(Qt::ImhNone);
+        ui->edit_password->setEchoMode(QLineEdit::Normal);
+        ui->edit_password->setInputMethodHints(Qt::ImhNone);
     }
     else
     {
-        ui.edit_password->setEchoMode(QLineEdit::Password);
-        ui.edit_password->setInputMethodHints(Qt::ImhHiddenText | Qt::ImhSensitiveData |
+        ui->edit_password->setEchoMode(QLineEdit::Password);
+        ui->edit_password->setInputMethodHints(Qt::ImhHiddenText | Qt::ImhSensitiveData |
                                               Qt::ImhNoAutoUppercase | Qt::ImhNoPredictiveText);
     }
 }

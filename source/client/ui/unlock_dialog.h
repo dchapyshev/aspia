@@ -21,7 +21,13 @@
 
 #include <QDialog>
 
-#include "ui_unlock_dialog.h"
+#include <memory>
+
+class QAbstractButton;
+
+namespace Ui {
+class UnlockDialog;
+} // namespace Ui
 
 class UnlockDialog final : public QDialog
 {
@@ -40,8 +46,7 @@ private slots:
     void onButtonBoxClicked(QAbstractButton* button);
 
 private:
-    Ui::UnlockDialog ui;
-
+    std::unique_ptr<Ui::UnlockDialog> ui;
     Q_DISABLE_COPY_MOVE(UnlockDialog)
 };
 

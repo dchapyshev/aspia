@@ -21,7 +21,11 @@
 
 #include <QDialog>
 
-#include "ui_export_password_dialog.h"
+#include <memory>
+
+namespace Ui {
+class ExportPasswordDialog;
+} // namespace Ui
 
 class ExportPasswordDialog final : public QDialog
 {
@@ -37,8 +41,7 @@ private slots:
     void onEncryptClicked();
 
 private:
-    Ui::ExportPasswordDialog ui;
-
+    std::unique_ptr<Ui::ExportPasswordDialog> ui;
     Q_DISABLE_COPY_MOVE(ExportPasswordDialog)
 };
 

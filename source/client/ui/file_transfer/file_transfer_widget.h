@@ -19,12 +19,19 @@
 #ifndef CLIENT_UI_FILE_TRANSFER_FILE_TRANSFER_WIDGET_H
 #define CLIENT_UI_FILE_TRANSFER_FILE_TRANSFER_WIDGET_H
 
+#include <QWidget>
+
+#include <memory>
+
 #include "client/file_transfer.h"
-#include "ui_file_transfer_widget.h"
 
 #if defined(Q_OS_WINDOWS)
-#include "common/ui/taskbar_progress.h"
+class TaskbarProgress;
 #endif
+
+namespace Ui {
+class FileTransferWidget;
+} // namespace Ui
 
 class FileTransferWidget final : public QWidget
 {
@@ -55,7 +62,7 @@ private:
     QString errorToMessage(const FileTransfer::Error& error);
     void updateTaskbarWindow();
 
-    Ui::FileTransferWidget ui;
+    std::unique_ptr<Ui::FileTransferWidget> ui;
     std::unique_ptr<QFontMetrics> label_metrics_;
 
 #if defined(Q_OS_WINDOWS)

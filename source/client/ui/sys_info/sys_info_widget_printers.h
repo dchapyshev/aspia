@@ -19,8 +19,13 @@
 #ifndef CLIENT_UI_SYS_INFO_SYS_INFO_PRINTERS_H
 #define CLIENT_UI_SYS_INFO_SYS_INFO_PRINTERS_H
 
+#include <memory>
+
 #include "client/ui/sys_info/sys_info_widget.h"
-#include "ui_sys_info_widget_printers.h"
+
+namespace Ui {
+class SysInfoPrinters;
+} // namespace Ui
 
 class SysInfoWidgetPrinters final : public SysInfoWidget
 {
@@ -43,7 +48,7 @@ private slots:
     void onContextMenu(const QPoint& point);
 
 private:
-    Ui::SysInfoPrinters ui;
+    std::unique_ptr<Ui::SysInfoPrinters> ui;
 };
 
 #endif // CLIENT_UI_SYS_INFO_SYS_INFO_PRINTERS_H

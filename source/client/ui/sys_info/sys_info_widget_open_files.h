@@ -19,8 +19,13 @@
 #ifndef CLIENT_UI_SYS_INFO_SYS_INFO_OPEN_FILES_H
 #define CLIENT_UI_SYS_INFO_SYS_INFO_OPEN_FILES_H
 
+#include <memory>
+
 #include "client/ui/sys_info/sys_info_widget.h"
-#include "ui_sys_info_widget_open_files.h"
+
+namespace Ui {
+class SysInfoOpenFiles;
+} // namespace Ui
 
 class SysInfoWidgetOpenFiles final : public SysInfoWidget
 {
@@ -43,7 +48,7 @@ private slots:
     void onContextMenu(const QPoint& point);
 
 private:
-    Ui::SysInfoOpenFiles ui;
+    std::unique_ptr<Ui::SysInfoOpenFiles> ui;
     int current_column_ = 0;
 };
 

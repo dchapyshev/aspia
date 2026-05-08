@@ -19,11 +19,16 @@
 #ifndef CLIENT_UI_HOSTS_ROUTER_WIDGET_H
 #define CLIENT_UI_HOSTS_ROUTER_WIDGET_H
 
+#include <memory>
+
 #include "base/scoped_qpointer.h"
 #include "client/config.h"
 #include "client/router.h"
 #include "client/ui/hosts/content_widget.h"
-#include "ui_router_widget.h"
+
+namespace Ui {
+class RouterWidget;
+} // namespace Ui
 
 class QLabel;
 class QStatusBar;
@@ -145,8 +150,7 @@ private:
     void saveHostsToFile();
     void saveRelaysToFile();
 
-    Ui::RouterWidget ui;
-
+    std::unique_ptr<Ui::RouterWidget> ui;
     RouterConfig config_;
     ScopedQPointer<Router> router_;
     Router::Status status_ = Router::Status::OFFLINE;

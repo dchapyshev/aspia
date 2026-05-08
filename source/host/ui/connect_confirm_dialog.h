@@ -21,7 +21,14 @@
 
 #include <QDialog>
 
-#include "ui_connect_confirm_dialog.h"
+#include <memory>
+
+class QAbstractButton;
+class QTimer;
+
+namespace Ui {
+class ConnectConfirmDialog;
+} // namespace Ui
 
 namespace proto::user {
 class ConfirmationRequest;
@@ -43,7 +50,7 @@ private slots:
 private:
     void updateMessage();
 
-    Ui::ConnectConfirmDialog ui;
+    std::unique_ptr<Ui::ConnectConfirmDialog> ui;
     QTimer* timer_ = nullptr;
 
     QString message_;

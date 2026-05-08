@@ -19,8 +19,15 @@
 #ifndef HOST_UI_NOTIFIER_WINDOW_H
 #define HOST_UI_NOTIFIER_WINDOW_H
 
+#include <QWidget>
+
+#include <memory>
+
 #include "host/user_session_agent.h"
-#include "ui_notifier_window.h"
+
+namespace Ui {
+class NotifierWindow;
+} // namespace Ui
 
 class NotifierWindow final : public QWidget
 {
@@ -65,8 +72,7 @@ private slots:
 private:
     QRect currentAvailableRect();
 
-    Ui::NotifierWindow ui;
-
+    std::unique_ptr<Ui::NotifierWindow> ui;
     bool should_be_close_ = false;
     QPoint start_pos_;
     QRect window_rect_;

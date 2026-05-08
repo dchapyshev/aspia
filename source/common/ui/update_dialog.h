@@ -21,6 +21,8 @@
 
 #include <QDialog>
 
+#include <memory>
+
 #include "common/update_info.h"
 
 namespace Ui {

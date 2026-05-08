@@ -26,21 +26,23 @@
 #include "base/logging.h"
 #include "common/ui/session_type.h"
 #include "proto/user.h"
+#include "ui_connect_confirm_dialog.h"
 
 //--------------------------------------------------------------------------------------------------
 ConnectConfirmDialog::ConnectConfirmDialog(
     const proto::user::ConfirmationRequest& request, QWidget* parent)
     : QDialog(parent),
+      ui(std::make_unique<Ui::ConnectConfirmDialog>()),
       timer_(new QTimer(this)),
       auto_accept_(request.timeout() > 0)
 {
     LOG(INFO) << "Ctor";
 
-    ui.setupUi(this);
+    ui->setupUi(this);
     setWindowFlag(Qt::WindowStaysOnTopHint);
 
     connect(timer_, &QTimer::timeout, this, &ConnectConfirmDialog::onTimeout);
-    connect(ui.button_box, &QDialogButtonBox::clicked,
+    connect(ui->button_box, &QDialogButtonBox::clicked,
             this, &ConnectConfirmDialog::onButtonBoxClicked);
 
     if (auto_accept_)
@@ -84,7 +86,7 @@ ConnectConfirmDialog::~ConnectConfirmDialog()
 //--------------------------------------------------------------------------------------------------
 void ConnectConfirmDialog::onButtonBoxClicked(QAbstractButton* button)
 {
-    QDialogButtonBox::StandardButton standard_button = ui.button_box->standardButton(button);
+    QDialogButtonBox::StandardButton standard_button = ui->button_box->standardButton(button);
     if (standard_button == QDialogButtonBox::Yes)
     {
         LOG(INFO) << "[ACTION] 'Yes' button clicked";
@@ -141,5 +143,5 @@ void ConnectConfirmDialog::updateMessage()
             tr("The connection will be automatically rejected after %n seconds.", "", time_seconds_);
     }
 
-    ui.label_msg->setText(message_ + "<br/>" + timeout_string + "<br/><b>" + question_ + "</b>");
+    ui->label_msg->setText(message_ + "<br/>" + timeout_string + "<br/><b>" + question_ + "</b>");
 }

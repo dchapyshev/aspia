@@ -19,8 +19,13 @@
 #ifndef COMMON_UI_CHAT_OUTGOING_MESSAGE_H
 #define COMMON_UI_CHAT_OUTGOING_MESSAGE_H
 
+#include <memory>
+
 #include "common/ui/chat_message.h"
-#include "ui_chat_outgoing_message.h"
+
+namespace Ui {
+class ChatOutgoingMessage;
+} // namespace Ui
 
 class ChatOutgoingMessage final : public ChatMessage
 {
@@ -42,7 +47,7 @@ protected:
     void resizeEvent(QResizeEvent* event) final;
 
 private:
-    Ui::ChatOutgoingMessage ui;
+    std::unique_ptr<Ui::ChatOutgoingMessage> ui;
 };
 
 #endif // COMMON_UI_CHAT_OUTGOING_MESSAGE_H

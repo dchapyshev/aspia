@@ -18,12 +18,13 @@
 
 #include "client/ui/desktop/statistics_dialog.h"
 
+#include <QTimer>
+
 #include "base/logging.h"
 #include "base/desktop/screen_capturer.h"
 #include "common/ui/formatter.h"
 #include "proto/desktop_video.h"
-
-#include <QTimer>
+#include "ui_statistics_dialog.h"
 
 namespace {
 
@@ -58,12 +59,13 @@ QString encoderToString(quint32 type)
 //--------------------------------------------------------------------------------------------------
 StatisticsDialog::StatisticsDialog(QWidget* parent)
     : QDialog(parent),
+      ui(std::make_unique<Ui::StatisticsDialog>()),
       duration_(0, 0)
 {
     LOG(INFO) << "Ctor";
 
-    ui.setupUi(this);
-    ui.tree->resizeColumnToContents(0);
+    ui->setupUi(this);
+    ui->tree->resizeColumnToContents(0);
 
     update_timer_ = new QTimer(this);
     connect(update_timer_, &QTimer::timeout, this, &StatisticsDialog::sig_metricsRequired);
@@ -79,9 +81,9 @@ StatisticsDialog::~StatisticsDialog()
 //--------------------------------------------------------------------------------------------------
 void StatisticsDialog::setMetrics(const ClientDesktop::Metrics& metrics)
 {
-    for (int i = 0; i < ui.tree->topLevelItemCount(); ++i)
+    for (int i = 0; i < ui->tree->topLevelItemCount(); ++i)
     {
-        QTreeWidgetItem* item = ui.tree->topLevelItem(i);
+        QTreeWidgetItem* item = ui->tree->topLevelItem(i);
 
         switch (i)
         {

@@ -17,47 +17,49 @@
 //
 
 #include "client/ui/sys_info/sys_info_widget_applications.h"
-#include "proto/system_info.h"
 
 #include <QMenu>
 
 #include "common/system_info_constants.h"
+#include "proto/system_info.h"
+#include "ui_sys_info_widget_applications.h"
 
 //--------------------------------------------------------------------------------------------------
 SysInfoWidgetApplications::SysInfoWidgetApplications(QWidget* parent)
-    : SysInfoWidget(parent)
+    : SysInfoWidget(parent),
+      ui(std::make_unique<Ui::SysInfoApplications>())
 {
-    ui.setupUi(this);
-    ui.tree->setMouseTracking(true);
+    ui->setupUi(this);
+    ui->tree->setMouseTracking(true);
 
-    connect(ui.action_copy_row, &QAction::triggered, this, [this]()
+    connect(ui->action_copy_row, &QAction::triggered, this, [this]()
     {
-        copyRow(ui.tree->currentItem());
+        copyRow(ui->tree->currentItem());
     });
 
-    connect(ui.action_copy_value, &QAction::triggered, this, [this]()
+    connect(ui->action_copy_value, &QAction::triggered, this, [this]()
     {
-        copyColumn(ui.tree->currentItem(), current_column_);
+        copyColumn(ui->tree->currentItem(), current_column_);
     });
 
-    connect(ui.tree, &QTreeWidget::customContextMenuRequested,
+    connect(ui->tree, &QTreeWidget::customContextMenuRequested,
             this, &SysInfoWidgetApplications::onContextMenu);
 
-    connect(ui.tree, &QTreeWidget::itemDoubleClicked,
+    connect(ui->tree, &QTreeWidget::itemDoubleClicked,
             this, [this](QTreeWidgetItem* item, int /* column */)
     {
         copyRow(item);
     });
 
-    connect(ui.tree, &QTreeWidget::itemEntered,
+    connect(ui->tree, &QTreeWidget::itemEntered,
             this, [this](QTreeWidgetItem* /* item */, int column)
     {
         current_column_ = column;
     });
 
-    connect(ui.action_search_in_google, &QAction::triggered, this, [this]()
+    connect(ui->action_search_in_google, &QAction::triggered, this, [this]()
     {
-        QTreeWidgetItem* item = ui.tree->currentItem();
+        QTreeWidgetItem* item = ui->tree->currentItem();
         if (!item)
             return;
 
@@ -68,11 +70,11 @@ SysInfoWidgetApplications::SysInfoWidgetApplications(QWidget* parent)
         searchInGoogle(name);
     });
 
-    ui.tree->setColumnWidth(0, 250);
-    ui.tree->setColumnWidth(1, 100);
-    ui.tree->setColumnWidth(2, 170);
-    ui.tree->setColumnWidth(3, 80);
-    ui.tree->setColumnWidth(4, 100);
+    ui->tree->setColumnWidth(0, 250);
+    ui->tree->setColumnWidth(1, 100);
+    ui->tree->setColumnWidth(2, 170);
+    ui->tree->setColumnWidth(3, 80);
+    ui->tree->setColumnWidth(4, 100);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -87,11 +89,11 @@ std::string SysInfoWidgetApplications::category() const
 //--------------------------------------------------------------------------------------------------
 void SysInfoWidgetApplications::setSystemInfo(const proto::system_info::SystemInfo& system_info)
 {
-    ui.tree->clear();
+    ui->tree->clear();
 
     if (!system_info.has_applications())
     {
-        ui.tree->setEnabled(false);
+        ui->tree->setEnabled(false);
         return;
     }
 
@@ -111,37 +113,37 @@ void SysInfoWidgetApplications::setSystemInfo(const proto::system_info::SystemIn
         item->setText(3, QString::fromStdString(application.install_date()));
         item->setText(4, QString::fromStdString(application.install_location()));
 
-        ui.tree->addTopLevelItem(item);
+        ui->tree->addTopLevelItem(item);
     }
 }
 
 //--------------------------------------------------------------------------------------------------
 QTreeWidget* SysInfoWidgetApplications::treeWidget()
 {
-    return ui.tree;
+    return ui->tree;
 }
 
 //--------------------------------------------------------------------------------------------------
 void SysInfoWidgetApplications::retranslate()
 {
-    ui.retranslateUi(this);
+    ui->retranslateUi(this);
     SysInfoWidget::retranslate();
 }
 
 //--------------------------------------------------------------------------------------------------
 void SysInfoWidgetApplications::onContextMenu(const QPoint& point)
 {
-    QTreeWidgetItem* current_item = ui.tree->itemAt(point);
+    QTreeWidgetItem* current_item = ui->tree->itemAt(point);
     if (!current_item)
         return;
 
-    ui.tree->setCurrentItem(current_item);
+    ui->tree->setCurrentItem(current_item);
 
     QMenu menu;
-    menu.addAction(ui.action_copy_row);
-    menu.addAction(ui.action_copy_value);
+    menu.addAction(ui->action_copy_row);
+    menu.addAction(ui->action_copy_value);
     menu.addSeparator();
-    menu.addAction(ui.action_search_in_google);
+    menu.addAction(ui->action_search_in_google);
 
-    menu.exec(ui.tree->viewport()->mapToGlobal(point));
+    menu.exec(ui->tree->viewport()->mapToGlobal(point));
 }

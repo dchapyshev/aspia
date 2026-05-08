@@ -19,8 +19,13 @@
 #ifndef COMMON_UI_CHAT_STATUS_MESSAGE_H
 #define COMMON_UI_CHAT_STATUS_MESSAGE_H
 
+#include <memory>
+
 #include "common/ui/chat_message.h"
-#include "ui_chat_status_message.h"
+
+namespace Ui {
+class ChatStatusMessage;
+} // namespace Ui
 
 class ChatStatusMessage final : public ChatMessage
 {
@@ -35,7 +40,7 @@ public:
     QString messageTime() const final;
 
 private:
-    Ui::ChatStatusMessage ui;
+    std::unique_ptr<Ui::ChatStatusMessage> ui;
 };
 
 #endif // COMMON_UI_CHAT_STATUS_MESSAGE_H

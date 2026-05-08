@@ -21,13 +21,15 @@
 #include <QEvent>
 
 #include "base/logging.h"
+#include "ui_router_group_widget.h"
 
 //--------------------------------------------------------------------------------------------------
 RouterGroupWidget::RouterGroupWidget(QWidget* parent)
-    : ContentWidget(Type::ROUTER_GROUP, parent)
+    : ContentWidget(Type::ROUTER_GROUP, parent),
+      ui(std::make_unique<Ui::RouterGroupWidget>())
 {
     LOG(INFO) << "Ctor";
-    ui.setupUi(this);
+    ui->setupUi(this);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -40,7 +42,7 @@ RouterGroupWidget::~RouterGroupWidget()
 void RouterGroupWidget::showGroup(qint64 /* group_id */)
 {
     // TODO: Load computers from router.
-    ui.tree_computer->clear();
+    ui->tree_computer->clear();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -59,6 +61,6 @@ void RouterGroupWidget::restoreState(const QByteArray& /* state */)
 void RouterGroupWidget::changeEvent(QEvent* event)
 {
     if (event->type() == QEvent::LanguageChange)
-        ui.retranslateUi(this);
+        ui->retranslateUi(this);
     ContentWidget::changeEvent(event);
 }

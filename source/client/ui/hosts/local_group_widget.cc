@@ -33,6 +33,7 @@
 
 #include "base/logging.h"
 #include "client/database.h"
+#include "ui_local_group_widget.h"
 
 namespace {
 
@@ -76,6 +77,7 @@ private:
 //--------------------------------------------------------------------------------------------------
 LocalGroupWidget::LocalGroupWidget(QWidget* parent)
     : ContentWidget(Type::LOCAL_GROUP, parent),
+      ui(std::make_unique<Ui::LocalGroupWidget>()),
       mime_type_(QString("application/%1").arg(QUuid::createUuid().toString())),
       status_groups_label_(new QLabel(this)),
       status_computers_label_(new QLabel(this)),
@@ -83,18 +85,18 @@ LocalGroupWidget::LocalGroupWidget(QWidget* parent)
 {
     LOG(INFO) << "Ctor";
 
-    ui.setupUi(this);
+    ui->setupUi(this);
 
     status_check_label_->setVisible(false);
 
-    ui.tree_computer->viewport()->installEventFilter(this);
+    ui->tree_computer->viewport()->installEventFilter(this);
 
-    ui.tree_computer->header()->setContextMenuPolicy(Qt::CustomContextMenu);
+    ui->tree_computer->header()->setContextMenuPolicy(Qt::CustomContextMenu);
 
-    connect(ui.tree_computer->header(), &QHeaderView::customContextMenuRequested,
+    connect(ui->tree_computer->header(), &QHeaderView::customContextMenuRequested,
             this, &LocalGroupWidget::onHeaderContextMenu);
 
-    connect(ui.tree_computer, &QTreeWidget::itemDoubleClicked,
+    connect(ui->tree_computer, &QTreeWidget::itemDoubleClicked,
             this, [this](QTreeWidgetItem* item, int /* column */)
     {
         if (!item)
@@ -104,7 +106,7 @@ LocalGroupWidget::LocalGroupWidget(QWidget* parent)
         emit sig_doubleClicked(computer_item->computerId());
     });
 
-    connect(ui.tree_computer, &QTreeWidget::currentItemChanged,
+    connect(ui->tree_computer, &QTreeWidget::currentItemChanged,
             this, [this](QTreeWidgetItem* current, QTreeWidgetItem* /* previous */)
     {
         qint64 computer_id = -1;
@@ -118,17 +120,17 @@ LocalGroupWidget::LocalGroupWidget(QWidget* parent)
         emit sig_currentChanged(computer_id);
     });
 
-    connect(ui.tree_computer, &QTreeWidget::customContextMenuRequested,
+    connect(ui->tree_computer, &QTreeWidget::customContextMenuRequested,
             this, [this](const QPoint& pos)
     {
         qint64 computer_id = 0;
-        Item* item = static_cast<Item*>(ui.tree_computer->itemAt(pos));
+        Item* item = static_cast<Item*>(ui->tree_computer->itemAt(pos));
         if (item)
         {
-            ui.tree_computer->setCurrentItem(item);
+            ui->tree_computer->setCurrentItem(item);
             computer_id = item->computerId();
         }
-        emit sig_contextMenu(computer_id, ui.tree_computer->viewport()->mapToGlobal(pos));
+        emit sig_contextMenu(computer_id, ui->tree_computer->viewport()->mapToGlobal(pos));
     });
 }
 
@@ -142,7 +144,7 @@ LocalGroupWidget::~LocalGroupWidget()
 //--------------------------------------------------------------------------------------------------
 LocalGroupWidget::Item* LocalGroupWidget::currentItem()
 {
-    return static_cast<Item*>(ui.tree_computer->currentItem());
+    return static_cast<Item*>(ui->tree_computer->currentItem());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -150,12 +152,12 @@ void LocalGroupWidget::showGroup(qint64 group_id)
 {
     current_group_id_ = group_id;
 
-    ui.tree_computer->clear();
+    ui->tree_computer->clear();
 
     QList<ComputerConfig> computers = Database::instance().computerList(group_id);
 
     for (const ComputerConfig& computer : std::as_const(computers))
-        new Item(computer, ui.tree_computer);
+        new Item(computer, ui->tree_computer);
 
     updateStatusLabels();
 
@@ -166,10 +168,10 @@ void LocalGroupWidget::showGroup(qint64 group_id)
 //--------------------------------------------------------------------------------------------------
 void LocalGroupWidget::setConnectTime(qint64 computer_id, qint64 connect_time)
 {
-    const int count = ui.tree_computer->topLevelItemCount();
+    const int count = ui->tree_computer->topLevelItemCount();
     for (int i = 0; i < count; ++i)
     {
-        Item* item = static_cast<Item*>(ui.tree_computer->topLevelItem(i));
+        Item* item = static_cast<Item*>(ui->tree_computer->topLevelItem(i));
         if (item->computerId() == computer_id)
         {
             item->setConnectTime(connect_time);
@@ -191,8 +193,8 @@ void LocalGroupWidget::setCurrentComputer(qint64 computer_id)
     if (!item)
         return;
 
-    ui.tree_computer->setCurrentItem(item);
-    ui.tree_computer->setFocus();
+    ui->tree_computer->setCurrentItem(item);
+    ui->tree_computer->setFocus();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -219,15 +221,15 @@ void LocalGroupWidget::removeItem(qint64 computer_id)
     if (!item)
         return;
 
-    int row = ui.tree_computer->indexOfTopLevelItem(item);
-    delete ui.tree_computer->takeTopLevelItem(row);
+    int row = ui->tree_computer->indexOfTopLevelItem(item);
+    delete ui->tree_computer->takeTopLevelItem(row);
 
-    int count = ui.tree_computer->topLevelItemCount();
+    int count = ui->tree_computer->topLevelItemCount();
     if (count > 0)
     {
         int next_row = qMin(row, count - 1);
-        ui.tree_computer->setCurrentItem(ui.tree_computer->topLevelItem(next_row));
-        ui.tree_computer->setFocus();
+        ui->tree_computer->setCurrentItem(ui->tree_computer->topLevelItem(next_row));
+        ui->tree_computer->setFocus();
     }
 
     updateStatusLabels();
@@ -242,7 +244,7 @@ QByteArray LocalGroupWidget::saveState()
         QDataStream stream(&buffer, QIODevice::WriteOnly);
         stream.setVersion(QDataStream::Qt_6_10);
 
-        stream << ui.tree_computer->header()->saveState();
+        stream << ui->tree_computer->header()->saveState();
     }
 
     return buffer;
@@ -258,7 +260,7 @@ void LocalGroupWidget::restoreState(const QByteArray& state)
     stream >> columns_state;
 
     if (!columns_state.isEmpty())
-        ui.tree_computer->header()->restoreState(columns_state);
+        ui->tree_computer->header()->restoreState(columns_state);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -304,14 +306,14 @@ void LocalGroupWidget::deactivate(QStatusBar* statusbar)
 void LocalGroupWidget::changeEvent(QEvent* event)
 {
     if (event->type() == QEvent::LanguageChange)
-        ui.retranslateUi(this);
+        ui->retranslateUi(this);
     ContentWidget::changeEvent(event);
 }
 
 //--------------------------------------------------------------------------------------------------
 bool LocalGroupWidget::eventFilter(QObject* watched, QEvent* event)
 {
-    if (watched == ui.tree_computer->viewport())
+    if (watched == ui->tree_computer->viewport())
     {
         if (event->type() == QEvent::MouseButtonPress)
         {
@@ -340,12 +342,12 @@ bool LocalGroupWidget::eventFilter(QObject* watched, QEvent* event)
 //--------------------------------------------------------------------------------------------------
 void LocalGroupWidget::onHeaderContextMenu(const QPoint &pos)
 {
-    QHeaderView* header = ui.tree_computer->header();
+    QHeaderView* header = ui->tree_computer->header();
     QMenu menu;
 
     for (int i = 1; i < header->count(); ++i)
     {
-        ColumnAction* action = new ColumnAction(ui.tree_computer->headerItem()->text(i), i, &menu);
+        ColumnAction* action = new ColumnAction(ui->tree_computer->headerItem()->text(i), i, &menu);
         action->setChecked(!header->isSectionHidden(i));
         menu.addAction(action);
     }
@@ -360,9 +362,9 @@ void LocalGroupWidget::onHeaderContextMenu(const QPoint &pos)
 //--------------------------------------------------------------------------------------------------
 void LocalGroupWidget::onOnlineCheckerResult(qint64 computer_id, bool online)
 {
-    for (int i = 0; i < ui.tree_computer->topLevelItemCount(); ++i)
+    for (int i = 0; i < ui->tree_computer->topLevelItemCount(); ++i)
     {
-        Item* item = static_cast<Item*>(ui.tree_computer->topLevelItem(i));
+        Item* item = static_cast<Item*>(ui->tree_computer->topLevelItem(i));
         if (item->computerId() == computer_id)
         {
             item->setOnlineStatus(online);
@@ -384,7 +386,7 @@ void LocalGroupWidget::onOnlineCheckerFinished()
 //--------------------------------------------------------------------------------------------------
 void LocalGroupWidget::startDrag()
 {
-    Item* computer_item = static_cast<Item*>(ui.tree_computer->itemAt(start_pos_));
+    Item* computer_item = static_cast<Item*>(ui->tree_computer->itemAt(start_pos_));
     if (computer_item)
     {
         ComputerDrag* drag = new ComputerDrag(this);
@@ -407,7 +409,7 @@ void LocalGroupWidget::updateStatusLabels()
 
     status_groups_label_->setText(tr("%n child group(s)", "", child_groups_count));
     status_computers_label_->setText(
-        tr("%n child computer(s)", "", ui.tree_computer->topLevelItemCount()));
+        tr("%n child computer(s)", "", ui->tree_computer->topLevelItemCount()));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -417,9 +419,9 @@ void LocalGroupWidget::startOnlineChecker()
 
     OnlineChecker::ComputerList computers;
 
-    for (int i = 0; i < ui.tree_computer->topLevelItemCount(); ++i)
+    for (int i = 0; i < ui->tree_computer->topLevelItemCount(); ++i)
     {
-        Item* item = static_cast<Item*>(ui.tree_computer->topLevelItem(i));
+        Item* item = static_cast<Item*>(ui->tree_computer->topLevelItem(i));
         if (item)
             computers.emplace_back(item->computer());
     }
@@ -461,10 +463,10 @@ void LocalGroupWidget::stopOnlineChecker()
 //--------------------------------------------------------------------------------------------------
 void LocalGroupWidget::clearOnlineStatuses()
 {
-    const int count = ui.tree_computer->topLevelItemCount();
+    const int count = ui->tree_computer->topLevelItemCount();
     for (int i = 0; i < count; ++i)
     {
-        Item* item = static_cast<Item*>(ui.tree_computer->topLevelItem(i));
+        Item* item = static_cast<Item*>(ui->tree_computer->topLevelItem(i));
         item->clearOnlineStatus();
     }
 }
@@ -472,10 +474,10 @@ void LocalGroupWidget::clearOnlineStatuses()
 //--------------------------------------------------------------------------------------------------
 LocalGroupWidget::Item* LocalGroupWidget::findItemByComputerId(qint64 computer_id) const
 {
-    const int count = ui.tree_computer->topLevelItemCount();
+    const int count = ui->tree_computer->topLevelItemCount();
     for (int i = 0; i < count; ++i)
     {
-        Item* item = static_cast<Item*>(ui.tree_computer->topLevelItem(i));
+        Item* item = static_cast<Item*>(ui->tree_computer->topLevelItem(i));
         if (item->computerId() == computer_id)
             return item;
     }

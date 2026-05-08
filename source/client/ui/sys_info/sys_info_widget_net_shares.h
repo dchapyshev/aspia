@@ -19,8 +19,13 @@
 #ifndef CLIENT_UI_SYS_INFO_SYS_INFO_NET_SHARES_H
 #define CLIENT_UI_SYS_INFO_SYS_INFO_NET_SHARES_H
 
+#include <memory>
+
 #include "client/ui/sys_info/sys_info_widget.h"
-#include "ui_sys_info_widget_net_shares.h"
+
+namespace Ui {
+class SysInfoNetShares;
+} // namespace Ui
 
 class SysInfoWidgetNetShares final : public SysInfoWidget
 {
@@ -43,7 +48,7 @@ private slots:
     void onContextMenu(const QPoint& point);
 
 private:
-    Ui::SysInfoNetShares ui;
+    std::unique_ptr<Ui::SysInfoNetShares> ui;
 };
 
 #endif // CLIENT_UI_SYS_INFO_SYS_INFO_NET_SHARES_H

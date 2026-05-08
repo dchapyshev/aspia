@@ -17,44 +17,46 @@
 //
 
 #include "client/ui/sys_info/sys_info_widget_devices.h"
-#include "proto/system_info.h"
 
 #include <QMenu>
 
 #include "common/system_info_constants.h"
+#include "proto/system_info.h"
+#include "ui_sys_info_widget_devices.h"
 
 //--------------------------------------------------------------------------------------------------
 SysInfoWidgetDevices::SysInfoWidgetDevices(QWidget* parent)
-    : SysInfoWidget(parent)
+    : SysInfoWidget(parent),
+      ui(std::make_unique<Ui::SysInfoDevices>())
 {
-    ui.setupUi(this);
-    ui.tree->setMouseTracking(true);
+    ui->setupUi(this);
+    ui->tree->setMouseTracking(true);
 
-    connect(ui.action_copy_row, &QAction::triggered, this, [this]()
+    connect(ui->action_copy_row, &QAction::triggered, this, [this]()
     {
-        copyRow(ui.tree->currentItem());
+        copyRow(ui->tree->currentItem());
     });
 
-    connect(ui.action_copy_value, &QAction::triggered, this, [this]()
+    connect(ui->action_copy_value, &QAction::triggered, this, [this]()
     {
-        copyColumn(ui.tree->currentItem(), current_column_);
+        copyColumn(ui->tree->currentItem(), current_column_);
     });
 
-    connect(ui.tree, &QTreeWidget::customContextMenuRequested, this, &SysInfoWidgetDevices::onContextMenu);
+    connect(ui->tree, &QTreeWidget::customContextMenuRequested, this, &SysInfoWidgetDevices::onContextMenu);
 
-    connect(ui.tree, &QTreeWidget::itemDoubleClicked, this, [this](QTreeWidgetItem* item, int /* column */)
+    connect(ui->tree, &QTreeWidget::itemDoubleClicked, this, [this](QTreeWidgetItem* item, int /* column */)
     {
         copyRow(item);
     });
 
-    connect(ui.tree, &QTreeWidget::itemEntered, this, [this](QTreeWidgetItem* /* item */, int column)
+    connect(ui->tree, &QTreeWidget::itemEntered, this, [this](QTreeWidgetItem* /* item */, int column)
     {
         current_column_ = column;
     });
 
-    connect(ui.action_find_device, &QAction::triggered, this, [this]()
+    connect(ui->action_find_device, &QAction::triggered, this, [this]()
     {
-        QTreeWidgetItem* item = ui.tree->currentItem();
+        QTreeWidgetItem* item = ui->tree->currentItem();
         if (!item)
             return;
 
@@ -65,11 +67,11 @@ SysInfoWidgetDevices::SysInfoWidgetDevices(QWidget* parent)
         searchInGoogle(device_id);
     });
 
-    ui.tree->setColumnWidth(0, 200);
-    ui.tree->setColumnWidth(1, 90);
-    ui.tree->setColumnWidth(2, 90);
-    ui.tree->setColumnWidth(3, 90);
-    ui.tree->setColumnWidth(4, 200);
+    ui->tree->setColumnWidth(0, 200);
+    ui->tree->setColumnWidth(1, 90);
+    ui->tree->setColumnWidth(2, 90);
+    ui->tree->setColumnWidth(3, 90);
+    ui->tree->setColumnWidth(4, 200);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -84,17 +86,17 @@ std::string SysInfoWidgetDevices::category() const
 //--------------------------------------------------------------------------------------------------
 void SysInfoWidgetDevices::setSystemInfo(const proto::system_info::SystemInfo& system_info)
 {
-    ui.tree->clear();
+    ui->tree->clear();
 
     if (!system_info.has_windows_devices())
     {
-        ui.tree->setEnabled(false);
+        ui->tree->setEnabled(false);
         return;
     }
 
     const proto::system_info::WindowsDevices& devices = system_info.windows_devices();
     QIcon item_icon(":/img/network-card.svg");
-    QTreeWidget* tree = ui.tree;
+    QTreeWidget* tree = ui->tree;
 
     for (int i = 0; i < devices.device_size(); ++i)
     {
@@ -122,30 +124,30 @@ void SysInfoWidgetDevices::setSystemInfo(const proto::system_info::SystemInfo& s
 //--------------------------------------------------------------------------------------------------
 QTreeWidget* SysInfoWidgetDevices::treeWidget()
 {
-    return ui.tree;
+    return ui->tree;
 }
 
 //--------------------------------------------------------------------------------------------------
 void SysInfoWidgetDevices::retranslate()
 {
-    ui.retranslateUi(this);
+    ui->retranslateUi(this);
     SysInfoWidget::retranslate();
 }
 
 //--------------------------------------------------------------------------------------------------
 void SysInfoWidgetDevices::onContextMenu(const QPoint& point)
 {
-    QTreeWidgetItem* current_item = ui.tree->itemAt(point);
+    QTreeWidgetItem* current_item = ui->tree->itemAt(point);
     if (!current_item)
         return;
 
-    ui.tree->setCurrentItem(current_item);
+    ui->tree->setCurrentItem(current_item);
 
     QMenu menu;
-    menu.addAction(ui.action_copy_row);
-    menu.addAction(ui.action_copy_value);
+    menu.addAction(ui->action_copy_row);
+    menu.addAction(ui->action_copy_value);
     menu.addSeparator();
-    menu.addAction(ui.action_find_device);
+    menu.addAction(ui->action_find_device);
 
-    menu.exec(ui.tree->viewport()->mapToGlobal(point));
+    menu.exec(ui->tree->viewport()->mapToGlobal(point));
 }

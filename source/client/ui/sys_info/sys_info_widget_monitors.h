@@ -19,9 +19,14 @@
 #ifndef CLIENT_UI_SYS_INFO_SYS_INFO_MONITORS_H
 #define CLIENT_UI_SYS_INFO_SYS_INFO_MONITORS_H
 
+#include <memory>
+
 #include "client/ui/sys_info/sys_info_widget.h"
 #include "proto/system_info.h"
-#include "ui_sys_info_widget_monitors.h"
+
+namespace Ui {
+class SysInfoMonitors;
+} // namespace Ui
 
 class SysInfoWidgetMonitors final : public SysInfoWidget
 {
@@ -47,7 +52,7 @@ private:
     static QString inputSignalTypeToString(
         proto::system_info::Monitors::Monitor::InputSignalType value);
 
-    Ui::SysInfoMonitors ui;
+    std::unique_ptr<Ui::SysInfoMonitors> ui;
 };
 
 #endif // CLIENT_UI_SYS_INFO_SYS_INFO_MONITORS_H

@@ -24,26 +24,28 @@
 #include "base/logging.h"
 #include "common/ui/session_type.h"
 #include "proto/peer.h"
+#include "ui_user_dialog.h"
 
 //--------------------------------------------------------------------------------------------------
 UserDialog::UserDialog(const User& user, const QStringList& exist_names, QWidget* parent)
     : QDialog(parent),
+      ui(std::make_unique<Ui::UserDialog>()),
       exist_names_(exist_names),
       user_(user)
 {
     LOG(INFO) << "Ctor";
-    ui.setupUi(this);
+    ui->setupUi(this);
 
     if (user.isValid())
     {
-        ui.checkbox_disable_user->setChecked(!(user.flags & User::ENABLED));
-        ui.edit_username->setText(user.name);
+        ui->checkbox_disable_user->setChecked(!(user.flags & User::ENABLED));
+        ui->edit_username->setText(user.name);
 
         setAccountChanged(false);
     }
     else
     {
-        ui.checkbox_disable_user->setChecked(false);
+        ui->checkbox_disable_user->setChecked(false);
     }
 
     auto add_session = [&](proto::peer::SessionType session_type)
@@ -67,7 +69,7 @@ UserDialog::UserDialog(const User& user, const QStringList& exist_names, QWidget
             item->setCheckState(0, Qt::Checked);
         }
 
-        ui.tree_sessions->addTopLevelItem(item);
+        ui->tree_sessions->addTopLevelItem(item);
     };
 
     add_session(proto::peer::SESSION_TYPE_DESKTOP);
@@ -75,11 +77,11 @@ UserDialog::UserDialog(const User& user, const QStringList& exist_names, QWidget
     add_session(proto::peer::SESSION_TYPE_SYSTEM_INFO);
     add_session(proto::peer::SESSION_TYPE_TEXT_CHAT);
 
-    connect(ui.button_check_all, &QPushButton::clicked, this, &UserDialog::onCheckAllButtonPressed);
-    connect(ui.button_check_none, &QPushButton::clicked, this, &UserDialog::onCheckNoneButtonPressed);
-    connect(ui.button_box, &QDialogButtonBox::clicked, this, &UserDialog::onButtonBoxClicked);
+    connect(ui->button_check_all, &QPushButton::clicked, this, &UserDialog::onCheckAllButtonPressed);
+    connect(ui->button_check_none, &QPushButton::clicked, this, &UserDialog::onCheckNoneButtonPressed);
+    connect(ui->button_box, &QDialogButtonBox::clicked, this, &UserDialog::onButtonBoxClicked);
 
-    connect(ui.edit_username, &QLineEdit::textEdited, this, [this]()
+    connect(ui->edit_username, &QLineEdit::textEdited, this, [this]()
     {
         if (!account_changed_)
             setAccountChanged(true);
@@ -96,14 +98,14 @@ UserDialog::~UserDialog()
 bool UserDialog::eventFilter(QObject* object, QEvent* event)
 {
     if (event->type() == QEvent::MouseButtonDblClick &&
-        (object == ui.edit_password || object == ui.edit_password_repeat))
+        (object == ui->edit_password || object == ui->edit_password_repeat))
     {
         setAccountChanged(true);
 
-        if (object == ui.edit_password)
-            ui.edit_password->setFocus();
-        else if (object == ui.edit_password_repeat)
-            ui.edit_password_repeat->setFocus();
+        if (object == ui->edit_password)
+            ui->edit_password->setFocus();
+        else if (object == ui->edit_password_repeat)
+            ui->edit_password_repeat->setFocus();
     }
 
     return false;
@@ -114,8 +116,8 @@ void UserDialog::onCheckAllButtonPressed()
 {
     LOG(INFO) << "[ACTION] Check all button pressed";
 
-    for (int i = 0; i < ui.tree_sessions->topLevelItemCount(); ++i)
-        ui.tree_sessions->topLevelItem(i)->setCheckState(0, Qt::Checked);
+    for (int i = 0; i < ui->tree_sessions->topLevelItemCount(); ++i)
+        ui->tree_sessions->topLevelItem(i)->setCheckState(0, Qt::Checked);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -123,21 +125,21 @@ void UserDialog::onCheckNoneButtonPressed()
 {
     LOG(INFO) << "[ACTION] Check none button pressed";
 
-    for (int i = 0; i < ui.tree_sessions->topLevelItemCount(); ++i)
-        ui.tree_sessions->topLevelItem(i)->setCheckState(0, Qt::Unchecked);
+    for (int i = 0; i < ui->tree_sessions->topLevelItemCount(); ++i)
+        ui->tree_sessions->topLevelItem(i)->setCheckState(0, Qt::Unchecked);
 }
 
 //--------------------------------------------------------------------------------------------------
 void UserDialog::onButtonBoxClicked(QAbstractButton* button)
 {
-    if (ui.button_box->standardButton(button) == QDialogButtonBox::Ok)
+    if (ui->button_box->standardButton(button) == QDialogButtonBox::Ok)
     {
         LOG(INFO) << "[ACTION] Accepted by user";
 
         if (account_changed_)
         {
-            QString username = ui.edit_username->text();
-            QString password = ui.edit_password->text();
+            QString username = ui->edit_username->text();
+            QString password = ui->edit_password->text();
 
             if (!User::isValidUserName(username))
             {
@@ -145,8 +147,8 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
                 MsgBox::warning(this,
                     tr("The user name can not be empty and can contain only alphabet"
                        " characters, numbers and ""_"", ""-"", ""."", ""@"" characters."));
-                ui.edit_username->selectAll();
-                ui.edit_username->setFocus();
+                ui->edit_username->selectAll();
+                ui->edit_username->setFocus();
                 return;
             }
 
@@ -154,17 +156,17 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
             {
                 LOG(ERROR) << "User name already exists:" << username;
                 MsgBox::warning(this, tr("The username you entered already exists."));
-                ui.edit_username->selectAll();
-                ui.edit_username->setFocus();
+                ui->edit_username->selectAll();
+                ui->edit_username->setFocus();
                 return;
             }
 
-            if (password != ui.edit_password_repeat->text())
+            if (password != ui->edit_password_repeat->text())
             {
                 LOG(ERROR) << "Passwords do not match";
                 MsgBox::warning(this, tr("The passwords you entered do not match."));
-                ui.edit_password->selectAll();
-                ui.edit_password->setFocus();
+                ui->edit_password->selectAll();
+                ui->edit_password->setFocus();
                 return;
             }
 
@@ -174,8 +176,8 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
                 MsgBox::warning(this,
                     tr("Password can not be empty and should not exceed %n characters.",
                        "", User::kMaxPasswordLength));
-                ui.edit_password->selectAll();
-                ui.edit_password->setFocus();
+                ui->edit_password->selectAll();
+                ui->edit_password->setFocus();
                 return;
             }
 
@@ -199,9 +201,9 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
 
                 if (message_box.exec() == MsgBox::Yes)
                 {
-                    ui.edit_password->clear();
-                    ui.edit_password_repeat->clear();
-                    ui.edit_password->setFocus();
+                    ui->edit_password->clear();
+                    ui->edit_password_repeat->clear();
+                    ui->edit_password->setFocus();
                     return;
                 }
             }
@@ -217,15 +219,15 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
         }
 
         quint32 sessions = 0;
-        for (int i = 0; i < ui.tree_sessions->topLevelItemCount(); ++i)
+        for (int i = 0; i < ui->tree_sessions->topLevelItemCount(); ++i)
         {
-            QTreeWidgetItem* item = ui.tree_sessions->topLevelItem(i);
+            QTreeWidgetItem* item = ui->tree_sessions->topLevelItem(i);
             if (item->checkState(0) == Qt::Checked)
                 sessions |= item->data(0, Qt::UserRole).toUInt();
         }
 
         quint32 flags = 0;
-        if (!ui.checkbox_disable_user->isChecked())
+        if (!ui->checkbox_disable_user->isChecked())
             flags |= User::ENABLED;
 
         user_.sessions = sessions;
@@ -248,37 +250,37 @@ void UserDialog::setAccountChanged(bool changed)
     LOG(INFO) << "[ACTION] Account changed";
     account_changed_ = changed;
 
-    ui.edit_password->setEnabled(changed);
-    ui.edit_password_repeat->setEnabled(changed);
+    ui->edit_password->setEnabled(changed);
+    ui->edit_password_repeat->setEnabled(changed);
 
     if (changed)
     {
-        ui.edit_password->clear();
-        ui.edit_password_repeat->clear();
+        ui->edit_password->clear();
+        ui->edit_password_repeat->clear();
 
         Qt::InputMethodHints hints = Qt::ImhHiddenText | Qt::ImhSensitiveData |
             Qt::ImhNoAutoUppercase | Qt::ImhNoPredictiveText;
 
-        ui.edit_password->setEchoMode(QLineEdit::Password);
-        ui.edit_password->setInputMethodHints(hints);
+        ui->edit_password->setEchoMode(QLineEdit::Password);
+        ui->edit_password->setInputMethodHints(hints);
 
-        ui.edit_password_repeat->setEchoMode(QLineEdit::Password);
-        ui.edit_password_repeat->setInputMethodHints(hints);
+        ui->edit_password_repeat->setEchoMode(QLineEdit::Password);
+        ui->edit_password_repeat->setInputMethodHints(hints);
     }
     else
     {
         QString text = tr("Double-click to change");
 
-        ui.edit_password->setText(text);
-        ui.edit_password_repeat->setText(text);
+        ui->edit_password->setText(text);
+        ui->edit_password_repeat->setText(text);
 
-        ui.edit_password->setEchoMode(QLineEdit::Normal);
-        ui.edit_password->setInputMethodHints(Qt::ImhNone);
+        ui->edit_password->setEchoMode(QLineEdit::Normal);
+        ui->edit_password->setInputMethodHints(Qt::ImhNone);
 
-        ui.edit_password_repeat->setEchoMode(QLineEdit::Normal);
-        ui.edit_password_repeat->setInputMethodHints(Qt::ImhNone);
+        ui->edit_password_repeat->setEchoMode(QLineEdit::Normal);
+        ui->edit_password_repeat->setInputMethodHints(Qt::ImhNone);
 
-        ui.edit_password->installEventFilter(this);
-        ui.edit_password_repeat->installEventFilter(this);
+        ui->edit_password->installEventFilter(this);
+        ui->edit_password_repeat->installEventFilter(this);
     }
 }

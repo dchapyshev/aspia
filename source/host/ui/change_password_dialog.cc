@@ -25,26 +25,28 @@
 #include "common/ui/msg_box.h"
 #include "base/logging.h"
 #include "host/system_settings.h"
+#include "ui_change_password_dialog.h"
 
 //--------------------------------------------------------------------------------------------------
 ChangePasswordDialog::ChangePasswordDialog(Mode mode, QWidget* parent)
     : QDialog(parent),
+      ui(std::make_unique<Ui::ChangePasswordDialog>()),
       mode_(mode)
 {
     LOG(INFO) << "Ctor (" << static_cast<int>(mode) << ")";
-    ui.setupUi(this);
+    ui->setupUi(this);
 
     if (mode == Mode::CREATE_NEW_PASSWORD)
     {
-        ui.label_old_pass->setVisible(false);
-        ui.edit_old_pass->setVisible(false);
+        ui->label_old_pass->setVisible(false);
+        ui->edit_old_pass->setVisible(false);
     }
     else
     {
         DCHECK_EQ(mode, Mode::CHANGE_PASSWORD);
     }
 
-    connect(ui.button_box, &QDialogButtonBox::clicked,
+    connect(ui->button_box, &QDialogButtonBox::clicked,
             this, &ChangePasswordDialog::onButtonBoxClicked);
 
     QTimer::singleShot(0, this, [this]()
@@ -62,34 +64,34 @@ ChangePasswordDialog::~ChangePasswordDialog()
 //--------------------------------------------------------------------------------------------------
 QString ChangePasswordDialog::oldPassword() const
 {
-    return ui.edit_old_pass->text();
+    return ui->edit_old_pass->text();
 }
 
 //--------------------------------------------------------------------------------------------------
 QString ChangePasswordDialog::newPassword() const
 {
-    return ui.edit_new_pass->text();
+    return ui->edit_new_pass->text();
 }
 
 //--------------------------------------------------------------------------------------------------
 void ChangePasswordDialog::onButtonBoxClicked(QAbstractButton* button)
 {
-    QDialogButtonBox::StandardButton standard_button = ui.button_box->standardButton(button);
+    QDialogButtonBox::StandardButton standard_button = ui->button_box->standardButton(button);
     if (standard_button == QDialogButtonBox::Ok)
     {
         LOG(INFO) << "[ACTION] Accepted by user";
 
         if (mode_ == Mode::CREATE_NEW_PASSWORD)
         {
-            QString new_password = ui.edit_new_pass->text();
-            QString new_password_repeat = ui.edit_new_pass_repeat->text();
+            QString new_password = ui->edit_new_pass->text();
+            QString new_password_repeat = ui->edit_new_pass_repeat->text();
 
             if (new_password.isEmpty())
             {
                 LOG(ERROR) << "Password cannot be empty";
                 MsgBox::warning(this, tr("Password cannot be empty."));
-                ui.edit_new_pass->selectAll();
-                ui.edit_new_pass->setFocus();
+                ui->edit_new_pass->selectAll();
+                ui->edit_new_pass->setFocus();
                 return;
             }
 
@@ -97,8 +99,8 @@ void ChangePasswordDialog::onButtonBoxClicked(QAbstractButton* button)
             {
                 LOG(ERROR) << "Password entered do not match";
                 MsgBox::warning(this, tr("The passwords entered do not match."));
-                ui.edit_new_pass->selectAll();
-                ui.edit_new_pass->setFocus();
+                ui->edit_new_pass->selectAll();
+                ui->edit_new_pass->setFocus();
                 return;
             }
         }
@@ -106,15 +108,15 @@ void ChangePasswordDialog::onButtonBoxClicked(QAbstractButton* button)
         {
             DCHECK_EQ(mode_, Mode::CHANGE_PASSWORD);
 
-            QString old_password = ui.edit_old_pass->text();
-            QString new_password = ui.edit_new_pass->text();
-            QString new_password_repeat = ui.edit_new_pass_repeat->text();
+            QString old_password = ui->edit_old_pass->text();
+            QString new_password = ui->edit_new_pass->text();
+            QString new_password_repeat = ui->edit_new_pass_repeat->text();
 
             if (old_password.isEmpty())
             {
                 LOG(ERROR) << "Old password not entered";
                 MsgBox::warning(this, tr("You must enter your old password."));
-                ui.edit_old_pass->setFocus();
+                ui->edit_old_pass->setFocus();
                 return;
             }
 
@@ -122,8 +124,8 @@ void ChangePasswordDialog::onButtonBoxClicked(QAbstractButton* button)
             {
                 LOG(ERROR) << "Incorrect password entered";
                 MsgBox::warning(this, tr("You entered an incorrect old password."));
-                ui.edit_old_pass->selectAll();
-                ui.edit_old_pass->setFocus();
+                ui->edit_old_pass->selectAll();
+                ui->edit_old_pass->setFocus();
                 return;
             }
 
@@ -131,7 +133,7 @@ void ChangePasswordDialog::onButtonBoxClicked(QAbstractButton* button)
             {
                 LOG(ERROR) << "New password cannot be empty";
                 MsgBox::warning(this, tr("New password cannot be empty."));
-                ui.edit_new_pass->setFocus();
+                ui->edit_new_pass->setFocus();
                 return;
             }
 
@@ -139,8 +141,8 @@ void ChangePasswordDialog::onButtonBoxClicked(QAbstractButton* button)
             {
                 LOG(ERROR) << "Password entered do not match";
                 MsgBox::warning(this, tr("The passwords entered do not match."));
-                ui.edit_new_pass->selectAll();
-                ui.edit_new_pass->setFocus();
+                ui->edit_new_pass->selectAll();
+                ui->edit_new_pass->setFocus();
                 return;
             }
         }

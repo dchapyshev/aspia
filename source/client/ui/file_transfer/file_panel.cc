@@ -29,13 +29,13 @@
 
 #include "common/ui/msg_box.h"
 #include "base/logging.h"
-#include "client/file_remover.h"
 #include "client/ui/file_transfer/address_bar_model.h"
 #include "client/ui/file_transfer/file_error_code.h"
 #include "client/ui/file_transfer/file_item_delegate.h"
 #include "client/ui/file_transfer/file_list_model.h"
 #include "common/file_platform_util.h"
 #include "proto/file_transfer.h"
+#include "ui_file_panel.h"
 
 namespace {
 
@@ -146,28 +146,29 @@ private:
 
 //--------------------------------------------------------------------------------------------------
 FilePanel::FilePanel(QWidget* parent)
-    : QWidget(parent)
+    : QWidget(parent),
+      ui(std::make_unique<Ui::FilePanel>())
 {
     LOG(INFO) << "Ctor";
-    ui.setupUi(this);
+    ui->setupUi(this);
 
-    FileItemDelegate* delegate = static_cast<FileItemDelegate*>(ui.list->itemDelegate());
+    FileItemDelegate* delegate = static_cast<FileItemDelegate*>(ui->list->itemDelegate());
     connect(delegate, &FileItemDelegate::sig_editFinished, this, &FilePanel::refresh);
 
-    connect(ui.address_bar, &AddressBar::sig_pathChanged, this, &FilePanel::onPathChanged);
+    connect(ui->address_bar, &AddressBar::sig_pathChanged, this, &FilePanel::onPathChanged);
 
-    connect(ui.list, &FileList::activated, this, &FilePanel::onListItemActivated);
-    connect(ui.list, &FileList::customContextMenuRequested, this, &FilePanel::onListContextMenu);
-    connect(ui.list, &FileList::sig_nameChangeRequest, this, &FilePanel::onNameChangeRequest);
-    connect(ui.list, &FileList::sig_createFolderRequest, this, &FilePanel::onCreateFolderRequest);
+    connect(ui->list, &FileList::activated, this, &FilePanel::onListItemActivated);
+    connect(ui->list, &FileList::customContextMenuRequested, this, &FilePanel::onListContextMenu);
+    connect(ui->list, &FileList::sig_nameChangeRequest, this, &FilePanel::onNameChangeRequest);
+    connect(ui->list, &FileList::sig_createFolderRequest, this, &FilePanel::onCreateFolderRequest);
 
-    connect(ui.action_up, &QAction::triggered, this, &FilePanel::toParentFolder);
-    connect(ui.action_refresh, &QAction::triggered, this, &FilePanel::refresh);
-    connect(ui.action_add_folder, &QAction::triggered, this, &FilePanel::addFolder);
-    connect(ui.action_delete, &QAction::triggered, this, &FilePanel::removeSelected);
-    connect(ui.action_send, &QAction::triggered, this, &FilePanel::sendSelected);
+    connect(ui->action_up, &QAction::triggered, this, &FilePanel::toParentFolder);
+    connect(ui->action_refresh, &QAction::triggered, this, &FilePanel::refresh);
+    connect(ui->action_add_folder, &QAction::triggered, this, &FilePanel::addFolder);
+    connect(ui->action_delete, &QAction::triggered, this, &FilePanel::removeSelected);
+    connect(ui->action_send, &QAction::triggered, this, &FilePanel::sendSelected);
 
-    connect(ui.list, &FileList::sig_fileListDropped,
+    connect(ui->list, &FileList::sig_fileListDropped,
             this, [this](const QString& folder_name, const QList<FileTransfer::Item>& items)
     {
         QString target_folder = currentPath();
@@ -178,18 +179,24 @@ FilePanel::FilePanel(QWidget* parent)
     });
 
     send_button_ = new FileSendButton(this);
-    send_button_->setDefaultAction(ui.action_send);
-    send_button_->setIconSize(ui.toolbar->iconSize());
+    send_button_->setDefaultAction(ui->action_send);
+    send_button_->setIconSize(ui->toolbar->iconSize());
     send_button_->setAutoRaise(true);
-    ui.horizontalLayout->addWidget(send_button_);
+    ui->horizontalLayout->addWidget(send_button_);
 
-    ui.list->setFocus();
+    ui->list->setFocus();
 }
 
 //--------------------------------------------------------------------------------------------------
 FilePanel::~FilePanel()
 {
     LOG(INFO) << "Dtor";
+}
+
+//--------------------------------------------------------------------------------------------------
+QString FilePanel::currentPath() const
+{
+    return ui->address_bar->currentPath();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -202,7 +209,7 @@ void FilePanel::onDriveList(
     }
     else
     {
-        ui.address_bar->setDriveList(drive_list);
+        ui->address_bar->setDriveList(drive_list);
     }
 
     // Request completed. Turn on the panel.
@@ -216,16 +223,16 @@ void FilePanel::onFileList(
     if (error_code != proto::file_transfer::ERROR_CODE_SUCCESS)
     {
         showError(tr("Failed to get list of files: %1").arg(fileErrorToString(error_code)));
-        ui.address_bar->setCurrentPath(ui.address_bar->previousPath());
+        ui->address_bar->setCurrentPath(ui->address_bar->previousPath());
     }
     else
     {
-        ui.action_up->setEnabled(true);
-        ui.action_add_folder->setEnabled(true);
+        ui->action_up->setEnabled(true);
+        ui->action_add_folder->setEnabled(true);
 
-        ui.list->showFileList(file_list);
+        ui->list->showFileList(file_list);
 
-        QItemSelectionModel* selection_model = ui.list->selectionModel();
+        QItemSelectionModel* selection_model = ui->list->selectionModel();
 
         connect(selection_model, &QItemSelectionModel::selectionChanged,
                 this, &FilePanel::onListSelectionChanged);
@@ -262,27 +269,27 @@ void FilePanel::onRename(proto::file_transfer::ErrorCode error_code)
 //--------------------------------------------------------------------------------------------------
 void FilePanel::setPanelName(const QString& name)
 {
-    ui.label_name->setText(name);
+    ui->label_name->setText(name);
 }
 
 //--------------------------------------------------------------------------------------------------
 void FilePanel::setMimeType(const QString& mime_type)
 {
-    ui.list->setMimeType(mime_type);
+    ui->list->setMimeType(mime_type);
 }
 
 //--------------------------------------------------------------------------------------------------
 void FilePanel::setTransferAllowed(bool allowed)
 {
     transfer_allowed_ = allowed;
-    ui.action_send->setEnabled(transfer_allowed_ && transfer_enabled_);
+    ui->action_send->setEnabled(transfer_allowed_ && transfer_enabled_);
 }
 
 //--------------------------------------------------------------------------------------------------
 void FilePanel::setTransferEnabled(bool enabled)
 {
     transfer_enabled_ = enabled;
-    ui.action_send->setEnabled(transfer_allowed_ && transfer_enabled_);
+    ui->action_send->setEnabled(transfer_allowed_ && transfer_enabled_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -295,13 +302,13 @@ void FilePanel::setMirrored(bool mirrored)
 //--------------------------------------------------------------------------------------------------
 QByteArray FilePanel::saveState() const
 {
-    return ui.list->saveState();
+    return ui->list->saveState();
 }
 
 //--------------------------------------------------------------------------------------------------
 void FilePanel::restoreState(const QByteArray& state)
 {
-    ui.list->restoreState(state);
+    ui->list->restoreState(state);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -320,7 +327,7 @@ void FilePanel::keyPressEvent(QKeyEvent* event)
             break;
 
         case Qt::Key_F4:
-            ui.address_bar->showPopup();
+            ui->address_bar->showPopup();
             break;
 
         case Qt::Key_F5:
@@ -353,29 +360,29 @@ void FilePanel::changeEvent(QEvent* event)
     }
     else if (event->type() == QEvent::LanguageChange)
     {
-        ui.retranslateUi(this);
-        ui.address_bar->retranslate();
-        ui.list->retranslate();
+        ui->retranslateUi(this);
+        ui->address_bar->retranslate();
+        ui->list->retranslate();
     }
 }
 
 //--------------------------------------------------------------------------------------------------
 void FilePanel::onPathChanged(const QString& path)
 {
-    emit sig_pathChanged(this, ui.address_bar->currentPath());
+    emit sig_pathChanged(this, ui->address_bar->currentPath());
 
-    ui.action_up->setEnabled(false);
-    ui.action_add_folder->setEnabled(false);
-    ui.action_delete->setEnabled(false);
+    ui->action_up->setEnabled(false);
+    ui->action_add_folder->setEnabled(false);
+    ui->action_delete->setEnabled(false);
 
     setTransferEnabled(false);
 
-    AddressBarModel* model = static_cast<AddressBarModel*>(ui.address_bar->model());
+    AddressBarModel* model = static_cast<AddressBarModel*>(ui->address_bar->model());
 
     if (path == model->computerPath())
     {
-        ui.list->showDriveList(model);
-        ui.label_status->clear();
+        ui->list->showDriveList(model);
+        ui->label_status->clear();
     }
     else
     {
@@ -386,34 +393,34 @@ void FilePanel::onPathChanged(const QString& path)
 //--------------------------------------------------------------------------------------------------
 void FilePanel::onListItemActivated(const QModelIndex& index)
 {
-    if (ui.list->isFileListShown())
+    if (ui->list->isFileListShown())
     {
-        FileListModel* model = static_cast<FileListModel*>(ui.list->model());
+        FileListModel* model = static_cast<FileListModel*>(ui->list->model());
         if (model->isFolder(index))
             toChildFolder(model->nameAt(index));
     }
     else
     {
-        ui.address_bar->setCurrentPath(ui.address_bar->pathAt(index));
+        ui->address_bar->setCurrentPath(ui->address_bar->pathAt(index));
     }
 }
 
 //--------------------------------------------------------------------------------------------------
 void FilePanel::onListSelectionChanged()
 {
-    QItemSelectionModel* selection_model = ui.list->selectionModel();
+    QItemSelectionModel* selection_model = ui->list->selectionModel();
 
-    ui.label_status->setText(tr("%1 object(s) selected")
+    ui->label_status->setText(tr("%1 object(s) selected")
                              .arg(selection_model->selectedRows().count()));
 
     if (selection_model->hasSelection())
     {
-        ui.action_delete->setEnabled(true);
+        ui->action_delete->setEnabled(true);
         setTransferEnabled(true);
     }
     else
     {
-        ui.action_delete->setEnabled(false);
+        ui->action_delete->setEnabled(false);
         setTransferEnabled(false);
     }
 }
@@ -421,7 +428,7 @@ void FilePanel::onListSelectionChanged()
 //--------------------------------------------------------------------------------------------------
 void FilePanel::onListContextMenu(const QPoint& point)
 {
-    if (!ui.address_bar->hasCurrentPath())
+    if (!ui->address_bar->hasCurrentPath())
         return;
 
     QMenu menu;
@@ -429,7 +436,7 @@ void FilePanel::onListContextMenu(const QPoint& point)
     std::unique_ptr<QAction> copy_action;
     std::unique_ptr<QAction> delete_action;
 
-    if (ui.list->selectionModel()->hasSelection())
+    if (ui->list->selectionModel()->hasSelection())
     {
         copy_action.reset(new QAction(QIcon(":/img/send.svg"), tr("&Send\tF11")));
         delete_action.reset(new QAction(QIcon(":/img/close.svg"), tr("&Delete\tDelete")));
@@ -446,7 +453,7 @@ void FilePanel::onListContextMenu(const QPoint& point)
 
     menu.addAction(add_folder_action.get());
 
-    QAction* selected_action = menu.exec(ui.list->viewport()->mapToGlobal(point));
+    QAction* selected_action = menu.exec(ui->list->viewport()->mapToGlobal(point));
     if (!selected_action)
         return;
 
@@ -501,8 +508,8 @@ void FilePanel::toChildFolder(const QString& child_name)
 {
     LOG(INFO) << "toChildFolder called:" << child_name;
 
-    ui.address_bar->setCurrentPath(ui.address_bar->currentPath() + child_name);
-    ui.action_up->setEnabled(true);
+    ui->address_bar->setCurrentPath(ui->address_bar->currentPath() + child_name);
+    ui->action_up->setEnabled(true);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -510,30 +517,30 @@ void FilePanel::toParentFolder()
 {
     LOG(INFO) << "toParentFolder called";
 
-    if (ui.action_up->isEnabled())
+    if (ui->action_up->isEnabled())
     {
-        QString parent_path = parentPath(ui.address_bar->currentPath());
-        ui.address_bar->setCurrentPath(parent_path);
+        QString parent_path = parentPath(ui->address_bar->currentPath());
+        ui->address_bar->setCurrentPath(parent_path);
     }
 }
 
 //--------------------------------------------------------------------------------------------------
 void FilePanel::addFolder()
 {
-    if (ui.action_add_folder->isEnabled())
-        ui.list->createFolder();
+    if (ui->action_add_folder->isEnabled())
+        ui->list->createFolder();
 }
 
 //--------------------------------------------------------------------------------------------------
 void FilePanel::removeSelected()
 {
-    if (!ui.action_delete->isEnabled())
+    if (!ui->action_delete->isEnabled())
         return;
 
-    FileListModel* model = static_cast<FileListModel*>(ui.list->model());
+    FileListModel* model = static_cast<FileListModel*>(ui->list->model());
     QString current_path = currentPath();
 
-    QModelIndexList selected_rows = ui.list->selectionModel()->selectedRows();
+    QModelIndexList selected_rows = ui->list->selectionModel()->selectedRows();
     FileRemover::TaskList items;
 
     for (const auto& index : std::as_const(selected_rows))
@@ -552,12 +559,12 @@ void FilePanel::removeSelected()
 //--------------------------------------------------------------------------------------------------
 void FilePanel::sendSelected()
 {
-    if (!ui.action_send->isEnabled())
+    if (!ui->action_send->isEnabled())
         return;
 
-    FileListModel* model = static_cast<FileListModel*>(ui.list->model());
+    FileListModel* model = static_cast<FileListModel*>(ui->list->model());
 
-    QModelIndexList selected_rows = ui.list->selectionModel()->selectedRows();
+    QModelIndexList selected_rows = ui->list->selectionModel()->selectedRows();
     QList<FileTransfer::Item> items;
 
     for (const auto& index : std::as_const(selected_rows))
@@ -580,9 +587,9 @@ void FilePanel::applyMirrored()
 {
     bool effective_rtl = isRightToLeft() ^ mirrored_;
 
-    ui.horizontalLayout->setDirection(
+    ui->horizontalLayout->setDirection(
         effective_rtl ? QBoxLayout::RightToLeft : QBoxLayout::LeftToRight);
-    ui.action_send->setIcon(QIcon(
+    ui->action_send->setIcon(QIcon(
         effective_rtl ? ":/img/arrow-left.svg" : ":/img/arrow-right.svg"));
     send_button_->setIconOnRight(!effective_rtl);
 }

@@ -19,9 +19,14 @@
 #ifndef CLIENT_UI_SYS_INFO_SYS_INFO_EVENT_LOGS_H
 #define CLIENT_UI_SYS_INFO_SYS_INFO_EVENT_LOGS_H
 
+#include <memory>
+
 #include "client/ui/sys_info/sys_info_widget.h"
 #include "proto/system_info.h"
-#include "ui_sys_info_widget_event_logs.h"
+
+namespace Ui {
+class SysInfoEventLogs;
+} // namespace Ui
 
 class SysInfoWidgetEventLogs final : public SysInfoWidget
 {
@@ -50,7 +55,7 @@ private:
         proto::system_info::EventLogs::Event::Type type, quint32 start) const;
     static QString levelToString(proto::system_info::EventLogs::Event::Level value);
 
-    Ui::SysInfoEventLogs ui;
+    std::unique_ptr<Ui::SysInfoEventLogs> ui;
     int current_column_ = 0;
 
     static const quint32 kRecordsPerPage = 1000;

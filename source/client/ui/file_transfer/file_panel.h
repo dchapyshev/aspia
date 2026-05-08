@@ -19,9 +19,16 @@
 #ifndef CLIENT_UI_FILE_TRANSFER_FILE_PANEL_H
 #define CLIENT_UI_FILE_TRANSFER_FILE_PANEL_H
 
+#include <QWidget>
+
+#include <memory>
+
 #include "client/file_remover.h"
 #include "client/file_transfer.h"
-#include "ui_file_panel.h"
+
+namespace Ui {
+class FilePanel;
+} // namespace Ui
 
 class FileSendButton;
 
@@ -50,7 +57,7 @@ public:
     void setTransferEnabled(bool enabled);
     void setMirrored(bool mirrored);
 
-    QString currentPath() const { return ui.address_bar->currentPath(); }
+    QString currentPath() const;
 
     QByteArray saveState() const;
     void restoreState(const QByteArray& state);
@@ -93,8 +100,7 @@ private:
     void showError(const QString& message);
     void applyMirrored();
 
-    Ui::FilePanel ui;
-
+    std::unique_ptr<Ui::FilePanel> ui;
     FileSendButton* send_button_ = nullptr;
 
     bool transfer_allowed_ = false;

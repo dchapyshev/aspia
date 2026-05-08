@@ -19,11 +19,15 @@
 #ifndef CLIENT_UI_MASTER_PASSWORD_DIALOG_H
 #define CLIENT_UI_MASTER_PASSWORD_DIALOG_H
 
-#include "ui_master_password_dialog.h"
-
 #include <QDialog>
 
+#include <memory>
+
 class QAbstractButton;
+
+namespace Ui {
+class MasterPasswordDialog;
+} // namespace Ui
 
 class MasterPasswordDialog final : public QDialog
 {
@@ -43,7 +47,7 @@ private:
     bool applySet();
     bool applyChange();
 
-    Ui::MasterPasswordDialog ui;
+    std::unique_ptr<Ui::MasterPasswordDialog> ui;
     const Mode mode_;
 
     Q_DISABLE_COPY_MOVE(MasterPasswordDialog)

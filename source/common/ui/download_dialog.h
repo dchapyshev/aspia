@@ -19,10 +19,16 @@
 #ifndef COMMON_UI_DOWNLOAD_DIALOG_H
 #define COMMON_UI_DOWNLOAD_DIALOG_H
 
+#include <QDialog>
 #include <QFile>
 
+#include <memory>
+
 #include "common/http_file_downloader.h"
-#include "ui_download_dialog.h"
+
+namespace Ui {
+class DownloadDialog;
+} // namespace Ui
 
 class DownloadDialog final : public QDialog
 {
@@ -38,8 +44,7 @@ private slots:
     void onFileDownloaderProgress(int percentage);
 
 private:
-    Ui::DownloadDialog ui;
-
+    std::unique_ptr<Ui::DownloadDialog> ui;
     std::unique_ptr<HttpFileDownloader> downloader_ = nullptr;
     QFile& file_;
 

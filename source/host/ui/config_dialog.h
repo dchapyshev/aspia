@@ -19,8 +19,18 @@
 #ifndef HOST_UI_CONFIG_DIALOG_H
 #define HOST_UI_CONFIG_DIALOG_H
 
+#include <QDialog>
+
+#include <memory>
+
 #include "base/location.h"
-#include "ui_config_dialog.h"
+
+class QAbstractButton;
+class QTreeWidgetItem;
+
+namespace Ui {
+class ConfigDialog;
+} // namespace Ui
 
 class UserList;
 
@@ -53,8 +63,7 @@ private:
     void reloadAll();
     void reloadUserList(const UserList& user_list);
 
-    Ui::ConfigDialog ui;
-
+    std::unique_ptr<Ui::ConfigDialog> ui;
     Q_DISABLE_COPY_MOVE(ConfigDialog)
 };
 

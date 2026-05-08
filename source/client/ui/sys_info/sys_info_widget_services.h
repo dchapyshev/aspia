@@ -19,9 +19,14 @@
 #ifndef CLIENT_UI_SYS_INFO_SYS_INFO_SERVICES_H
 #define CLIENT_UI_SYS_INFO_SYS_INFO_SERVICES_H
 
+#include <memory>
+
 #include "client/ui/sys_info/sys_info_widget.h"
 #include "proto/system_info.h"
-#include "ui_sys_info_widget_services.h"
+
+namespace Ui {
+class SysInfoServices;
+} // namespace Ui
 
 class SysInfoWidgetServices final : public SysInfoWidget
 {
@@ -48,7 +53,7 @@ private:
     static QString startupTypeToString(
         proto::system_info::Services::Service::StartupType startup_type);
 
-    Ui::SysInfoServices ui;
+    std::unique_ptr<Ui::SysInfoServices> ui;
     int current_column_ = 0;
 };
 

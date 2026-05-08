@@ -19,8 +19,13 @@
 #ifndef CLIENT_UI_SYS_INFO_SYS_INFO_APPLICATIONS_H
 #define CLIENT_UI_SYS_INFO_SYS_INFO_APPLICATIONS_H
 
+#include <memory>
+
 #include "client/ui/sys_info/sys_info_widget.h"
-#include "ui_sys_info_widget_applications.h"
+
+namespace Ui {
+class SysInfoApplications;
+} // namespace Ui
 
 class SysInfoWidgetApplications final : public SysInfoWidget
 {
@@ -43,7 +48,7 @@ private slots:
     void onContextMenu(const QPoint& point);
 
 private:
-    Ui::SysInfoApplications ui;
+    std::unique_ptr<Ui::SysInfoApplications> ui;
     int current_column_ = 0;
 };
 

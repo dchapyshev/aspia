@@ -19,8 +19,17 @@
 #ifndef HOST_UI_USER_DIALOG_H
 #define HOST_UI_USER_DIALOG_H
 
+#include <QDialog>
+
+#include <memory>
+
 #include "base/peer/user.h"
-#include "ui_user_dialog.h"
+
+class QAbstractButton;
+
+namespace Ui {
+class UserDialog;
+} // namespace Ui
 
 class UserDialog final : public QDialog
 {
@@ -44,8 +53,7 @@ private slots:
 private:
     void setAccountChanged(bool changed);
 
-    Ui::UserDialog ui;
-
+    std::unique_ptr<Ui::UserDialog> ui;
     QStringList exist_names_;
     User user_;
     bool account_changed_ = true;

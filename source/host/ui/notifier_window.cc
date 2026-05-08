@@ -32,6 +32,7 @@
 #include "base/logging.h"
 #include "common/ui/session_type.h"
 #include "proto/peer.h"
+#include "ui_notifier_window.h"
 
 #if defined(Q_OS_WINDOWS)
 #include <qt_windows.h>
@@ -111,28 +112,29 @@ QToolButton* createSessionButton(QWidget* parent, const QString& icon, const QSt
 
 //--------------------------------------------------------------------------------------------------
 NotifierWindow::NotifierWindow(QWidget* parent)
-    : QWidget(parent, Qt::FramelessWindowHint | Qt::Tool | Qt::WindowStaysOnTopHint)
+    : QWidget(parent, Qt::FramelessWindowHint | Qt::Tool | Qt::WindowStaysOnTopHint),
+      ui(std::make_unique<Ui::NotifierWindow>())
 {
     LOG(INFO) << "Ctor";
-    ui.setupUi(this);
+    ui->setupUi(this);
 
     setAttribute(Qt::WA_TranslucentBackground);
 
-    ui.label_title->installEventFilter(this);
+    ui->label_title->installEventFilter(this);
 
-    ui.button_lock_keyboard->setCheckable(true);
-    ui.button_lock_mouse->setCheckable(true);
-    ui.button_pause->setCheckable(true);
+    ui->button_lock_keyboard->setCheckable(true);
+    ui->button_lock_mouse->setCheckable(true);
+    ui->button_pause->setCheckable(true);
 
     connect(GuiApplication::instance(), &GuiApplication::sig_themeChanged,
             this, &NotifierWindow::onThemeChanged);
 
-    connect(ui.button_hide, &QPushButton::clicked, this, &NotifierWindow::onHideNotifier);
-    connect(ui.button_show, &QToolButton::clicked, this, &NotifierWindow::onShowNotifier);
-    connect(ui.button_lock_mouse, &QToolButton::clicked, this, &NotifierWindow::onLockMouse);
-    connect(ui.button_lock_keyboard, &QToolButton::clicked, this, &NotifierWindow::onLockKeyboard);
-    connect(ui.button_pause, &QToolButton::clicked, this, &NotifierWindow::onPause);
-    connect(ui.button_stop, &QToolButton::clicked, this, &NotifierWindow::onStop);
+    connect(ui->button_hide, &QPushButton::clicked, this, &NotifierWindow::onHideNotifier);
+    connect(ui->button_show, &QToolButton::clicked, this, &NotifierWindow::onShowNotifier);
+    connect(ui->button_lock_mouse, &QToolButton::clicked, this, &NotifierWindow::onLockMouse);
+    connect(ui->button_lock_keyboard, &QToolButton::clicked, this, &NotifierWindow::onLockKeyboard);
+    connect(ui->button_pause, &QToolButton::clicked, this, &NotifierWindow::onPause);
+    connect(ui->button_stop, &QToolButton::clicked, this, &NotifierWindow::onStop);
 
     connect(QApplication::primaryScreen(), &QScreen::availableGeometryChanged,
             this, [this]()
@@ -143,7 +145,7 @@ NotifierWindow::NotifierWindow(QWidget* parent)
             std::chrono::milliseconds(500), this, &NotifierWindow::onUpdateWindowPosition);
     });
 
-    connect(ui.tree, &QTreeWidget::itemDoubleClicked,
+    connect(ui->tree, &QTreeWidget::itemDoubleClicked,
             this, [](QTreeWidgetItem* item, int /* column */)
     {
         SessionTreeItem* session_item = dynamic_cast<SessionTreeItem*>(item);
@@ -164,7 +166,7 @@ NotifierWindow::NotifierWindow(QWidget* parent)
     });
     timer->start(std::chrono::seconds(3));
 
-    ui.show_panel->setVisible(false);
+    ui->show_panel->setVisible(false);
     onThemeChanged();
 
     QTimer::singleShot(std::chrono::milliseconds(15), this, &NotifierWindow::onUpdateWindowPosition);
@@ -181,9 +183,9 @@ QList<quint32> NotifierWindow::sessions(proto::peer::SessionType session_type)
 {
     QList<quint32> result;
 
-    for (int i = 0; i < ui.tree->topLevelItemCount(); ++i)
+    for (int i = 0; i < ui->tree->topLevelItemCount(); ++i)
     {
-        SessionTreeItem* item = static_cast<SessionTreeItem*>(ui.tree->topLevelItem(i));
+        SessionTreeItem* item = static_cast<SessionTreeItem*>(ui->tree->topLevelItem(i));
         if (item->sessionType() == session_type)
             result.emplace_back(item->clientId());
     }
@@ -198,7 +200,7 @@ void NotifierWindow::onClientListChanged(const UserSessionAgent::ClientList& cli
 
     if (!clients.empty())
     {
-        ui.tree->clear();
+        ui->tree->clear();
 
         bool has_desktop = false;
 
@@ -213,10 +215,10 @@ void NotifierWindow::onClientListChanged(const UserSessionAgent::ClientList& cli
             tree_item->setTextAlignment(1, Qt::AlignRight | Qt::AlignVCenter);
             tree_item->setFlags(Qt::ItemIsEnabled);
 
-            ui.tree->addTopLevelItem(tree_item);
+            ui->tree->addTopLevelItem(tree_item);
 
             QToolButton* stop_button =
-                createSessionButton(ui.tree, ":/img/stop.svg", tr("Disconnect"));
+                createSessionButton(ui->tree, ":/img/stop.svg", tr("Disconnect"));
             quint32 tree_item_id = tree_item->clientId();
 
             connect(stop_button, &QToolButton::clicked, this, [this, tree_item_id]()
@@ -224,17 +226,17 @@ void NotifierWindow::onClientListChanged(const UserSessionAgent::ClientList& cli
                 emit sig_killSession(tree_item_id);
             });
 
-            ui.tree->setItemWidget(tree_item, 1, stop_button);
+            ui->tree->setItemWidget(tree_item, 1, stop_button);
         }
 
-        ui.button_lock_keyboard->setVisible(has_desktop);
-        ui.button_lock_mouse->setVisible(has_desktop);
-        ui.button_pause->setVisible(has_desktop);
+        ui->button_lock_keyboard->setVisible(has_desktop);
+        ui->button_lock_mouse->setVisible(has_desktop);
+        ui->button_pause->setVisible(has_desktop);
 
-        ui.tree->resizeColumnToContents(1);
+        ui->tree->resizeColumnToContents(1);
 
-        int first_column_width = ui.tree->header()->width() - ui.tree->columnWidth(1);
-        ui.tree->setColumnWidth(0, first_column_width);
+        int first_column_width = ui->tree->header()->width() - ui->tree->columnWidth(1);
+        ui->tree->setColumnWidth(0, first_column_width);
     }
     else
     {
@@ -249,7 +251,7 @@ void NotifierWindow::onClientListChanged(const UserSessionAgent::ClientList& cli
 void NotifierWindow::onLockMouse(bool value)
 {
     LOG(INFO) << "[ACTION] Lock mouse:" << value;
-    ui.button_lock_mouse->setToolTip(value ? tr("Unlock mouse") : tr("Lock mouse"));
+    ui->button_lock_mouse->setToolTip(value ? tr("Unlock mouse") : tr("Lock mouse"));
     emit sig_lockMouse(value);
 }
 
@@ -257,7 +259,7 @@ void NotifierWindow::onLockMouse(bool value)
 void NotifierWindow::onLockKeyboard(bool value)
 {
     LOG(INFO) << "[ACTION] Lock keyboard:" << value;
-    ui.button_lock_keyboard->setToolTip(value ? tr("Unlock keyboard") : tr("Lock keyboard"));
+    ui->button_lock_keyboard->setToolTip(value ? tr("Unlock keyboard") : tr("Lock keyboard"));
     emit sig_lockKeyboard(value);
 }
 
@@ -265,7 +267,7 @@ void NotifierWindow::onLockKeyboard(bool value)
 void NotifierWindow::onPause(bool value)
 {
     LOG(INFO) << "[ACTION] Pause:" << value;
-    ui.button_pause->setToolTip(value ? tr("Resume") : tr("Pause"));
+    ui->button_pause->setToolTip(value ? tr("Resume") : tr("Pause"));
     emit sig_pause(value);
 }
 
@@ -279,7 +281,7 @@ void NotifierWindow::onStop()
 //--------------------------------------------------------------------------------------------------
 void NotifierWindow::retranslateUi()
 {
-    ui.retranslateUi(this);
+    ui->retranslateUi(this);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -292,7 +294,7 @@ void NotifierWindow::closeNotifier()
 //--------------------------------------------------------------------------------------------------
 bool NotifierWindow::eventFilter(QObject* object, QEvent* event)
 {
-    if (object == ui.label_title)
+    if (object == ui->label_title)
     {
         switch (event->type())
         {
@@ -399,11 +401,11 @@ void NotifierWindow::onShowNotifier()
 {
     LOG(INFO) << "[ACTION] showNotifier called";
 
-    if (ui.content->isHidden() && ui.title->isHidden())
+    if (ui->content->isHidden() && ui->title->isHidden())
     {
-        ui.content->show();
-        ui.title->show();
-        ui.show_panel->hide();
+        ui->content->show();
+        ui->title->show();
+        ui->show_panel->hide();
 
         QPoint window_pos = window_rect_.topLeft();
         QSize window_size = window_rect_.size();
@@ -427,9 +429,9 @@ void NotifierWindow::onHideNotifier()
 
     window_rect_ = frameGeometry();
 
-    ui.content->hide();
-    ui.title->hide();
-    ui.show_panel->show();
+    ui->content->hide();
+    ui->title->hide();
+    ui->show_panel->show();
 
     setFixedSize(minimumSizeHint());
 
@@ -448,31 +450,31 @@ void NotifierWindow::onThemeChanged()
 {
     QString window_color = GuiApplication::palette().color(QPalette::Window).name(QColor::HexRgb);
 
-    ui.tree->setStyleSheet(QString("QTreeWidget {"
+    ui->tree->setStyleSheet(QString("QTreeWidget {"
                                        "background-color: %1;"
                                    "}"
                                    "QTreeWidget::item {"
                                        "border: none;"
                                    "}").arg(window_color));
 
-    ui.content->setStyleSheet(QString("#content {"
+    ui->content->setStyleSheet(QString("#content {"
                                           "background-color: %1;"
                                           "padding: 30px;"
                                       "}").arg(window_color));
 
-    ui.toolbar->setStyleSheet(QString("#toolbar {"
+    ui->toolbar->setStyleSheet(QString("#toolbar {"
                                           "background-color: %1;"
                                       "}"
                                       "QToolButton {"
                                           "padding: 3px;"
                                       "}").arg(window_color));
 
-    ui.title->setStyleSheet(QString("#title { background-color: %1; }").arg(window_color));
+    ui->title->setStyleSheet(QString("#title { background-color: %1; }").arg(window_color));
 
-    ui.label_title->setText(
+    ui->label_title->setText(
         QString("<html><head/><body><p><span style=\"font-weight:700;\">%1</span></p></body></html>")
             .arg(tr("Aspia Host")));
-    ui.label_title->setStyleSheet("padding: 3px;");
+    ui->label_title->setStyleSheet("padding: 3px;");
 }
 
 //--------------------------------------------------------------------------------------------------

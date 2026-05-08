@@ -19,9 +19,14 @@
 #ifndef CLIENT_UI_SYS_INFO_SYS_INFO_DRIVERS_H
 #define CLIENT_UI_SYS_INFO_SYS_INFO_DRIVERS_H
 
+#include <memory>
+
 #include "client/ui/sys_info/sys_info_widget.h"
 #include "proto/system_info.h"
-#include "ui_sys_info_widget_drivers.h"
+
+namespace Ui {
+class SysInfoDrivers;
+} // namespace Ui
 
 class SysInfoWidgetDrivers final : public SysInfoWidget
 {
@@ -48,7 +53,7 @@ private:
     static QString startupTypeToString(
         proto::system_info::Drivers::Driver::StartupType startup_type);
 
-    Ui::SysInfoDrivers ui;
+    std::unique_ptr<Ui::SysInfoDrivers> ui;
     int current_column_ = 0;
 };
 

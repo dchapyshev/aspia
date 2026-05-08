@@ -19,8 +19,17 @@
 #ifndef CLIENT_UI_HOSTS_ROUTER_USER_DIALOG_H
 #define CLIENT_UI_HOSTS_ROUTER_USER_DIALOG_H
 
+#include <QDialog>
+
+#include <memory>
+
 #include "base/peer/user.h"
-#include "ui_router_user_dialog.h"
+
+class QAbstractButton;
+
+namespace Ui {
+class RouterUserDialog;
+} // namespace Ui
 
 namespace proto::router {
 enum SessionType : int;
@@ -45,8 +54,7 @@ private:
     void setAccountChanged(bool changed);
     static QString sessionTypeToString(proto::router::SessionType session_type);
 
-    Ui::RouterUserDialog ui;
-
+    std::unique_ptr<Ui::RouterUserDialog> ui;
     User user_;
     QStringList users_;
     bool account_changed_ = true;

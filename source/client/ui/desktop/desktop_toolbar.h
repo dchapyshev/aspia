@@ -19,10 +19,17 @@
 #ifndef CLIENT_UI_DESKTOP_DESKTOP_TOOLBAR_H
 #define CLIENT_UI_DESKTOP_DESKTOP_TOOLBAR_H
 
+#include <QFrame>
+
+#include <memory>
+
 #include "client/ui/tab.h"
 #include "proto/desktop_power.h"
 #include "proto/peer.h"
-#include "ui_desktop_toolbar.h"
+
+namespace Ui {
+class DesktopToolBar;
+} // namespace Ui
 
 namespace proto::control {
 class SessionList;
@@ -123,8 +130,7 @@ private:
     void delayedHide();
     QString formatSessionText(int index, const QString& user_name, bool is_console) const;
 
-    Ui::DesktopToolBar ui;
-
+    std::unique_ptr<Ui::DesktopToolBar> ui;
     bool is_recording_started_ = false;
 
     QSize current_resolution_;

@@ -21,11 +21,14 @@
 #include <QLocale>
 #include <QTime>
 
+#include "ui_chat_status_message.h"
+
 //--------------------------------------------------------------------------------------------------
 ChatStatusMessage::ChatStatusMessage(QWidget* parent)
-    : ChatMessage(ChatMessage::Direction::STATUS, parent)
+    : ChatMessage(ChatMessage::Direction::STATUS, parent),
+      ui(std::make_unique<Ui::ChatStatusMessage>())
 {
-    ui.setupUi(this);
+    ui->setupUi(this);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -34,13 +37,13 @@ ChatStatusMessage::~ChatStatusMessage() = default;
 //--------------------------------------------------------------------------------------------------
 void ChatStatusMessage::setMessageText(const QString& text)
 {
-    ui.label_message->setText(text);
+    ui->label_message->setText(text);
 }
 
 //--------------------------------------------------------------------------------------------------
 QString ChatStatusMessage::messageText() const
 {
-    return ui.label_message->text();
+    return ui->label_message->text();
 }
 
 //--------------------------------------------------------------------------------------------------

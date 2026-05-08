@@ -39,85 +39,86 @@
 #include "client/json_importer.h"
 #include "client/settings.h"
 #include "client/ui/hosts/content_widget.h"
-#include "client/ui/hosts/sidebar.h"
 #include "client/ui/hosts/local_computer_dialog.h"
 #include "client/ui/hosts/local_group_widget.h"
 #include "client/ui/hosts/router_widget.h"
 #include "client/ui/hosts/router_group_widget.h"
 #include "client/ui/hosts/search_widget.h"
 #include "proto/peer.h"
+#include "ui_hosts_tab.h"
 
 //--------------------------------------------------------------------------------------------------
 HostsTab::HostsTab(QWidget* parent)
-    : Tab(Type::HOSTS, "hosts", parent)
+    : Tab(Type::HOSTS, "hosts", parent),
+      ui(std::make_unique<Ui::HostsTab>())
 {
     LOG(INFO) << "Ctor";
 
     if (!Database::instance().isValid())
         LOG(ERROR) << "Failed to open or create book database";
 
-    ui.setupUi(this);
+    ui->setupUi(this);
 
     // Group session-type actions to make them mutually exclusive.
     QActionGroup* session_type_group = new QActionGroup(this);
-    session_type_group->addAction(ui.action_desktop);
-    session_type_group->addAction(ui.action_file_transfer);
-    session_type_group->addAction(ui.action_chat);
-    session_type_group->addAction(ui.action_system_info);
+    session_type_group->addAction(ui->action_desktop);
+    session_type_group->addAction(ui->action_file_transfer);
+    session_type_group->addAction(ui->action_chat);
+    session_type_group->addAction(ui->action_system_info);
 
     QActionGroup* session_connect_group = new QActionGroup(this);
-    session_connect_group->addAction(ui.action_desktop_connect);
-    session_connect_group->addAction(ui.action_file_transfer_connect);
-    session_connect_group->addAction(ui.action_chat_connect);
-    session_connect_group->addAction(ui.action_system_info_connect);
+    session_connect_group->addAction(ui->action_desktop_connect);
+    session_connect_group->addAction(ui->action_file_transfer_connect);
+    session_connect_group->addAction(ui->action_chat_connect);
+    session_connect_group->addAction(ui->action_system_info_connect);
 
     Settings settings;
 
     switch (settings.sessionType())
     {
         case proto::peer::SESSION_TYPE_DESKTOP:
-            ui.action_desktop->setChecked(true);
+            ui->action_desktop->setChecked(true);
             break;
         case proto::peer::SESSION_TYPE_FILE_TRANSFER:
-            ui.action_file_transfer->setChecked(true);
+            ui->action_file_transfer->setChecked(true);
             break;
         case proto::peer::SESSION_TYPE_TEXT_CHAT:
-            ui.action_chat->setChecked(true);
+            ui->action_chat->setChecked(true);
             break;
         case proto::peer::SESSION_TYPE_SYSTEM_INFO:
-            ui.action_system_info->setChecked(true);
+            ui->action_system_info->setChecked(true);
             break;
         default:
             break;
     }
 
-    ui.action_online_check->setChecked(settings.isOnlineCheckEnabled());
+    ui->action_online_check->setChecked(settings.isOnlineCheckEnabled());
 
-    ui.action_import_old_book->setProperty(Tab::kMenuOnlyProperty, true);
-    ui.action_export_book->setProperty(Tab::kMenuOnlyProperty, true);
-    ui.action_import_book->setProperty(Tab::kMenuOnlyProperty, true);
-    ui.action_online_check->setProperty(Tab::kMenuOnlyProperty, true);
-    ui.action_add_router->setProperty(Tab::kMenuOnlyProperty, true);
-    ui.action_delete_router->setProperty(Tab::kMenuOnlyProperty, true);
+    ui->action_import_old_book->setProperty(Tab::kMenuOnlyProperty, true);
+    ui->action_export_book->setProperty(Tab::kMenuOnlyProperty, true);
+    ui->action_import_book->setProperty(Tab::kMenuOnlyProperty, true);
+    ui->action_online_check->setProperty(Tab::kMenuOnlyProperty, true);
+    ui->action_add_router->setProperty(Tab::kMenuOnlyProperty, true);
+    ui->action_delete_router->setProperty(Tab::kMenuOnlyProperty, true);
 
     // Create content widgets.
     local_group_widget_ = new LocalGroupWidget(this);
     router_group_widget_ = new RouterGroupWidget(this);
     search_widget_ = new SearchWidget(this);
 
-    ui.content_stack->addWidget(local_group_widget_);
-    ui.content_stack->addWidget(router_group_widget_);
-    ui.content_stack->addWidget(search_widget_);
+    ui->content_stack->addWidget(local_group_widget_);
+    ui->content_stack->addWidget(router_group_widget_);
+    ui->content_stack->addWidget(search_widget_);
 
     // Setup drag-and-drop: pass the computer mime type from LocalGroupWidget to Sidebar.
-    ui.sidebar->setComputerMimeType(local_group_widget_->mimeType());
+    ui->sidebar->setComputerMimeType(local_group_widget_->mimeType());
 
     // Connect signals.
-    connect(ui.sidebar, &Sidebar::sig_switchContent, this, &HostsTab::onSwitchContent);
-    connect(ui.sidebar, &Sidebar::sig_contextMenu, this, &HostsTab::onSidebarContextMenu);
-    connect(ui.sidebar, &Sidebar::sig_itemDropped, this, [this]()
+    connect(ui->sidebar, &Sidebar::sig_switchContent, this, &HostsTab::onSwitchContent);
+    connect(ui->sidebar, &Sidebar::sig_contextMenu, this, &HostsTab::onSidebarContextMenu);
+    connect(ui->sidebar, &Sidebar::sig_itemDropped, this, [this]()
     {
-        local_group_widget_->showGroup(ui.sidebar->currentGroupId());
+        local_group_widget_->showGroup(ui->sidebar->currentGroupId());
         updateActionsState();
     });
     connect(local_group_widget_, &LocalGroupWidget::sig_currentChanged, this, &HostsTab::onCurrentComputerChanged);
@@ -129,47 +130,47 @@ HostsTab::HostsTab(QWidget* parent)
         if (computer_id != -1)
             local_group_widget_->setConnectTime(computer_id, QDateTime::currentSecsSinceEpoch());
     });
-    connect(ui.action_add_computer, &QAction::triggered, this, &HostsTab::onAddComputer);
-    connect(ui.action_edit_computer, &QAction::triggered, this, &HostsTab::onEditComputer);
-    connect(ui.action_copy_computer, &QAction::triggered, this, &HostsTab::onCopyComputer);
-    connect(ui.action_delete_computer, &QAction::triggered, this, &HostsTab::onRemoveComputer);
+    connect(ui->action_add_computer, &QAction::triggered, this, &HostsTab::onAddComputer);
+    connect(ui->action_edit_computer, &QAction::triggered, this, &HostsTab::onEditComputer);
+    connect(ui->action_copy_computer, &QAction::triggered, this, &HostsTab::onCopyComputer);
+    connect(ui->action_delete_computer, &QAction::triggered, this, &HostsTab::onRemoveComputer);
     connect(search_widget_, &SearchWidget::sig_currentChanged, this, &HostsTab::onCurrentComputerChanged);
     connect(search_widget_, &SearchWidget::sig_doubleClicked, this, &HostsTab::onLocalConnect);
     connect(search_widget_, &SearchWidget::sig_contextMenu, this, &HostsTab::onLocalComputerContextMenu);
-    connect(ui.action_add_group, &QAction::triggered, ui.sidebar, &Sidebar::onAddGroup);
-    connect(ui.action_edit_group, &QAction::triggered, ui.sidebar, &Sidebar::onEditGroup);
-    connect(ui.action_delete_group, &QAction::triggered, ui.sidebar, &Sidebar::onRemoveGroup);
-    connect(ui.action_add_router, &QAction::triggered, ui.sidebar, &Sidebar::onAddRouter);
-    connect(ui.action_edit_router, &QAction::triggered, ui.sidebar, &Sidebar::onEditRouter);
-    connect(ui.action_delete_router, &QAction::triggered, ui.sidebar, &Sidebar::onRemoveRouter);
-    connect(ui.action_router_status, &QAction::triggered, this, &HostsTab::onRouterStatus);
-    connect(ui.sidebar, &Sidebar::sig_routersChanged, this, &HostsTab::reloadRouters);
-    connect(ui.action_add_user, &QAction::triggered, this, &HostsTab::onAddUserAction);
-    connect(ui.action_edit_user, &QAction::triggered, this, &HostsTab::onEditUserAction);
-    connect(ui.action_delete_user, &QAction::triggered, this, &HostsTab::onDeleteUserAction);
-    connect(ui.action_reload, &QAction::triggered, this, &HostsTab::onReloadAction);
-    connect(ui.action_save, &QAction::triggered, this, &HostsTab::onSaveAction);
-    connect(ui.action_import_old_book, &QAction::triggered, this, &HostsTab::onImportOldBookAction);
-    connect(ui.action_export_book, &QAction::triggered, this, &HostsTab::onExportBookAction);
-    connect(ui.action_import_book, &QAction::triggered, this, &HostsTab::onImportBookAction);
-    connect(ui.action_disconnect, &QAction::triggered, this, &HostsTab::onDisconnectAction);
-    connect(ui.action_disconnect_all, &QAction::triggered, this, &HostsTab::onDisconnectAllAction);
-    connect(ui.action_host_remove, &QAction::triggered, this, &HostsTab::onRemoveHostAction);
-    connect(ui.action_online_check, &QAction::toggled, this, &HostsTab::onOnlineCheckToggled);
+    connect(ui->action_add_group, &QAction::triggered, ui->sidebar, &Sidebar::onAddGroup);
+    connect(ui->action_edit_group, &QAction::triggered, ui->sidebar, &Sidebar::onEditGroup);
+    connect(ui->action_delete_group, &QAction::triggered, ui->sidebar, &Sidebar::onRemoveGroup);
+    connect(ui->action_add_router, &QAction::triggered, ui->sidebar, &Sidebar::onAddRouter);
+    connect(ui->action_edit_router, &QAction::triggered, ui->sidebar, &Sidebar::onEditRouter);
+    connect(ui->action_delete_router, &QAction::triggered, ui->sidebar, &Sidebar::onRemoveRouter);
+    connect(ui->action_router_status, &QAction::triggered, this, &HostsTab::onRouterStatus);
+    connect(ui->sidebar, &Sidebar::sig_routersChanged, this, &HostsTab::reloadRouters);
+    connect(ui->action_add_user, &QAction::triggered, this, &HostsTab::onAddUserAction);
+    connect(ui->action_edit_user, &QAction::triggered, this, &HostsTab::onEditUserAction);
+    connect(ui->action_delete_user, &QAction::triggered, this, &HostsTab::onDeleteUserAction);
+    connect(ui->action_reload, &QAction::triggered, this, &HostsTab::onReloadAction);
+    connect(ui->action_save, &QAction::triggered, this, &HostsTab::onSaveAction);
+    connect(ui->action_import_old_book, &QAction::triggered, this, &HostsTab::onImportOldBookAction);
+    connect(ui->action_export_book, &QAction::triggered, this, &HostsTab::onExportBookAction);
+    connect(ui->action_import_book, &QAction::triggered, this, &HostsTab::onImportBookAction);
+    connect(ui->action_disconnect, &QAction::triggered, this, &HostsTab::onDisconnectAction);
+    connect(ui->action_disconnect_all, &QAction::triggered, this, &HostsTab::onDisconnectAllAction);
+    connect(ui->action_host_remove, &QAction::triggered, this, &HostsTab::onRemoveHostAction);
+    connect(ui->action_online_check, &QAction::toggled, this, &HostsTab::onOnlineCheckToggled);
     connect(session_connect_group, &QActionGroup::triggered, this, &HostsTab::onConnectAction);
 
     // Register actions for toolbar and menus.
-    addActions(ActionRole::FILE, { ui.action_save, ui.action_import_old_book, ui.action_export_book, ui.action_import_book });
-    addActions(ActionRole::EDIT, { ui.action_add_user, ui.action_edit_user, ui.action_delete_user });
-    addActions(ActionRole::EDIT, { ui.action_add_router, ui.action_edit_router, ui.action_delete_router, ui.action_router_status });
-    addActions(ActionRole::EDIT, { ui.action_add_group, ui.action_edit_group, ui.action_delete_group });
-    addActions(ActionRole::EDIT, { ui.action_add_computer, ui.action_edit_computer, ui.action_copy_computer, ui.action_delete_computer });
-    addActions(ActionRole::EDIT, { ui.action_host_remove, ui.action_disconnect, ui.action_disconnect_all });
-    addActions(ActionRole::VIEW, { ui.action_reload, ui.action_online_check });
-    addActions(ActionRole::SESSION_TYPE, { ui.action_desktop, ui.action_file_transfer, ui.action_chat, ui.action_system_info });
+    addActions(ActionRole::FILE, { ui->action_save, ui->action_import_old_book, ui->action_export_book, ui->action_import_book });
+    addActions(ActionRole::EDIT, { ui->action_add_user, ui->action_edit_user, ui->action_delete_user });
+    addActions(ActionRole::EDIT, { ui->action_add_router, ui->action_edit_router, ui->action_delete_router, ui->action_router_status });
+    addActions(ActionRole::EDIT, { ui->action_add_group, ui->action_edit_group, ui->action_delete_group });
+    addActions(ActionRole::EDIT, { ui->action_add_computer, ui->action_edit_computer, ui->action_copy_computer, ui->action_delete_computer });
+    addActions(ActionRole::EDIT, { ui->action_host_remove, ui->action_disconnect, ui->action_disconnect_all });
+    addActions(ActionRole::VIEW, { ui->action_reload, ui->action_online_check });
+    addActions(ActionRole::SESSION_TYPE, { ui->action_desktop, ui->action_file_transfer, ui->action_chat, ui->action_system_info });
 
-    local_group_widget_->setOnlineCheckEnabled(ui.action_online_check->isChecked());
-    local_group_widget_->showGroup(ui.sidebar->currentGroupId());
+    local_group_widget_->setOnlineCheckEnabled(ui->action_online_check->isChecked());
+    local_group_widget_->showGroup(ui->sidebar->currentGroupId());
     switchContent(local_group_widget_);
     updateActionsState();
 
@@ -202,7 +203,7 @@ QByteArray HostsTab::saveState()
         stream << local_group_widget_->saveState();
         stream << router_group_widget_->saveState();
         stream << search_widget_->saveState();
-        stream << ui.splitter->saveState();
+        stream << ui->splitter->saveState();
 
         QByteArray routers_buffer;
         {
@@ -251,14 +252,14 @@ void HostsTab::restoreState(const QByteArray& state)
 
     if (!splitter_state.isEmpty())
     {
-        ui.splitter->restoreState(splitter_state);
+        ui->splitter->restoreState(splitter_state);
     }
     else
     {
         QList<int> sizes;
         sizes.emplace_back(200);
         sizes.emplace_back(width() - 200);
-        ui.splitter->setSizes(sizes);
+        ui->splitter->setSizes(sizes);
     }
 
     if (!routers_buffer.isEmpty())
@@ -368,7 +369,7 @@ void HostsTab::reloadRouters()
             destroyRouterWidget(id);
     }
 
-    ui.sidebar->reloadRouters();
+    ui->sidebar->reloadRouters();
 
     // Create new or update existing widgets.
     for (const RouterConfig& router : std::as_const(routers))
@@ -389,7 +390,7 @@ void HostsTab::changeEvent(QEvent* event)
 {
     if (event->type() == QEvent::LanguageChange)
     {
-        ui.retranslateUi(this);
+        ui->retranslateUi(this);
         emit sig_titleChanged(tr("Hosts"));
     }
     Tab::changeEvent(event);
@@ -398,7 +399,7 @@ void HostsTab::changeEvent(QEvent* event)
 //--------------------------------------------------------------------------------------------------
 void HostsTab::onRouterStatusChanged(qint64 router_id, Router::Status status)
 {
-    Sidebar::Router* router = ui.sidebar->routerById(router_id);
+    Sidebar::Router* router = ui->sidebar->routerById(router_id);
     if (!router)
         return;
 
@@ -424,13 +425,13 @@ void HostsTab::onSwitchContent(Sidebar::Item::Type type)
         case Sidebar::Item::Type::LOCAL_GROUP:
         {
             switchContent(local_group_widget_);
-            local_group_widget_->showGroup(ui.sidebar->currentGroupId());
+            local_group_widget_->showGroup(ui->sidebar->currentGroupId());
         }
         break;
 
         case Sidebar::Item::Type::ROUTER:
         {
-            Sidebar::Item* sidebar_item = ui.sidebar->currentItem();
+            Sidebar::Item* sidebar_item = ui->sidebar->currentItem();
             if (!sidebar_item || sidebar_item->itemType() != Sidebar::Item::ROUTER)
                 break;
 
@@ -444,7 +445,7 @@ void HostsTab::onSwitchContent(Sidebar::Item::Type type)
         case Sidebar::Item::Type::ROUTER_GROUP:
         {
             switchContent(router_group_widget_);
-            router_group_widget_->showGroup(ui.sidebar->currentGroupId());
+            router_group_widget_->showGroup(ui->sidebar->currentGroupId());
         }
         break;
     }
@@ -465,11 +466,11 @@ void HostsTab::onSidebarContextMenu(Sidebar::Item::Type type, const QPoint& pos)
 
     if (type == Sidebar::Item::Type::LOCAL_GROUP)
     {
-        menu.addAction(ui.action_add_group);
-        menu.addAction(ui.action_edit_group);
-        menu.addAction(ui.action_delete_group);
+        menu.addAction(ui->action_add_group);
+        menu.addAction(ui->action_edit_group);
+        menu.addAction(ui->action_delete_group);
         menu.addSeparator();
-        menu.addAction(ui.action_add_computer);
+        menu.addAction(ui->action_add_computer);
     }
     else if (type == Sidebar::Item::Type::ROUTER_GROUP)
     {
@@ -478,13 +479,13 @@ void HostsTab::onSidebarContextMenu(Sidebar::Item::Type type, const QPoint& pos)
     }
     else if (type == Sidebar::Item::Type::ROUTER)
     {
-        Sidebar::Item* item = ui.sidebar->currentItem();
+        Sidebar::Item* item = ui->sidebar->currentItem();
         if (!item || item->itemType() != Sidebar::Item::Type::ROUTER)
             return;
 
-        menu.addAction(ui.action_router_status);
-        menu.addAction(ui.action_edit_router);
-        menu.addAction(ui.action_delete_router);
+        menu.addAction(ui->action_router_status);
+        menu.addAction(ui->action_edit_router);
+        menu.addAction(ui->action_delete_router);
         menu.exec(pos);
         return;
     }
@@ -507,13 +508,13 @@ void HostsTab::onConnectAction(QAction* action)
 {
     proto::peer::SessionType session_type;
 
-    if (action == ui.action_desktop_connect)
+    if (action == ui->action_desktop_connect)
         session_type = proto::peer::SESSION_TYPE_DESKTOP;
-    else if (action == ui.action_file_transfer_connect)
+    else if (action == ui->action_file_transfer_connect)
         session_type = proto::peer::SESSION_TYPE_FILE_TRANSFER;
-    else if (action == ui.action_chat_connect)
+    else if (action == ui->action_chat_connect)
         session_type = proto::peer::SESSION_TYPE_TEXT_CHAT;
-    else if (action == ui.action_system_info_connect)
+    else if (action == ui->action_system_info_connect)
         session_type = proto::peer::SESSION_TYPE_SYSTEM_INFO;
     else
         return;
@@ -557,7 +558,7 @@ void HostsTab::onConnectAction(QAction* action)
     }
     else if (current_content_ == router_group_widget_)
     {
-        Sidebar::Item* sidebar_item = ui.sidebar->currentItem();
+        Sidebar::Item* sidebar_item = ui->sidebar->currentItem();
         if (!sidebar_item)
             return;
 
@@ -608,18 +609,18 @@ void HostsTab::onLocalComputerContextMenu(qint64 computer_id, const QPoint& pos)
 
     if (computer_id)
     {
-        menu.addAction(ui.action_desktop_connect);
-        menu.addAction(ui.action_file_transfer_connect);
-        menu.addAction(ui.action_chat_connect);
-        menu.addAction(ui.action_system_info_connect);
+        menu.addAction(ui->action_desktop_connect);
+        menu.addAction(ui->action_file_transfer_connect);
+        menu.addAction(ui->action_chat_connect);
+        menu.addAction(ui->action_system_info_connect);
         menu.addSeparator();
-        menu.addAction(ui.action_edit_computer);
-        menu.addAction(ui.action_copy_computer);
-        menu.addAction(ui.action_delete_computer);
+        menu.addAction(ui->action_edit_computer);
+        menu.addAction(ui->action_copy_computer);
+        menu.addAction(ui->action_delete_computer);
     }
     else
     {
-        menu.addAction(ui.action_add_computer);
+        menu.addAction(ui->action_add_computer);
     }
 
     menu.exec(pos);
@@ -630,7 +631,7 @@ void HostsTab::onAddComputer()
 {
     LOG(INFO) << "[ACTION] Add computer";
 
-    qint64 group_id = ui.sidebar->currentGroupId();
+    qint64 group_id = ui->sidebar->currentGroupId();
     if (group_id < 0)
     {
         LOG(INFO) << "No current group";
@@ -766,12 +767,12 @@ void HostsTab::onUserContextMenu(qint64 /* router_id */, const User& user, const
     QMenu menu;
     if (user.isValid())
     {
-        menu.addAction(ui.action_edit_user);
-        menu.addAction(ui.action_delete_user);
+        menu.addAction(ui->action_edit_user);
+        menu.addAction(ui->action_delete_user);
     }
     else
     {
-        menu.addAction(ui.action_add_user);
+        menu.addAction(ui->action_add_user);
     }
     menu.exec(pos);
 }
@@ -784,8 +785,8 @@ void HostsTab::onHostContextMenu(qint64 router_id, const QPoint& pos, int column
         return;
 
     QMenu menu;
-    menu.addAction(ui.action_disconnect);
-    menu.addAction(ui.action_host_remove);
+    menu.addAction(ui->action_disconnect);
+    menu.addAction(ui->action_host_remove);
     menu.addSeparator();
 
     QAction* copy_row = menu.addAction(tr("Copy Row"));
@@ -809,8 +810,8 @@ void HostsTab::onRelayContextMenu(qint64 router_id, const QPoint& pos, int colum
         return;
 
     QMenu menu;
-    menu.addAction(ui.action_disconnect);
-    menu.addAction(ui.action_disconnect_all);
+    menu.addAction(ui->action_disconnect);
+    menu.addAction(ui->action_disconnect_all);
     menu.addSeparator();
 
     QAction* copy_row = menu.addAction(tr("Copy Row"));
@@ -829,7 +830,7 @@ void HostsTab::onRelayContextMenu(qint64 router_id, const QPoint& pos, int colum
 //--------------------------------------------------------------------------------------------------
 void HostsTab::onAddUserAction()
 {
-    Sidebar::Item* sidebar_item = ui.sidebar->currentItem();
+    Sidebar::Item* sidebar_item = ui->sidebar->currentItem();
     if (!sidebar_item || sidebar_item->itemType() != Sidebar::Item::ROUTER)
         return;
 
@@ -842,7 +843,7 @@ void HostsTab::onAddUserAction()
 //--------------------------------------------------------------------------------------------------
 void HostsTab::onEditUserAction()
 {
-    Sidebar::Item* sidebar_item = ui.sidebar->currentItem();
+    Sidebar::Item* sidebar_item = ui->sidebar->currentItem();
     if (!sidebar_item || sidebar_item->itemType() != Sidebar::Item::ROUTER)
         return;
 
@@ -855,7 +856,7 @@ void HostsTab::onEditUserAction()
 //--------------------------------------------------------------------------------------------------
 void HostsTab::onDeleteUserAction()
 {
-    Sidebar::Item* sidebar_item = ui.sidebar->currentItem();
+    Sidebar::Item* sidebar_item = ui->sidebar->currentItem();
     if (!sidebar_item || sidebar_item->itemType() != Sidebar::Item::ROUTER)
         return;
 
@@ -868,7 +869,7 @@ void HostsTab::onDeleteUserAction()
 //--------------------------------------------------------------------------------------------------
 void HostsTab::onRouterStatus()
 {
-    Sidebar::Item* sidebar_item = ui.sidebar->currentItem();
+    Sidebar::Item* sidebar_item = ui->sidebar->currentItem();
     if (!sidebar_item || sidebar_item->itemType() != Sidebar::Item::ROUTER)
         return;
 
@@ -883,7 +884,7 @@ void HostsTab::onImportOldBookAction()
 {
     LOG(INFO) << "[ACTION] Import address book";
 
-    Sidebar::Item* sidebar_item = ui.sidebar->currentItem();
+    Sidebar::Item* sidebar_item = ui->sidebar->currentItem();
     if (!sidebar_item || sidebar_item->itemType() != Sidebar::Item::Type::LOCAL_GROUP)
     {
         LOG(INFO) << "No current local group item";
@@ -906,7 +907,7 @@ void HostsTab::onImportOldBookAction()
         return;
 
     reloadRouters();
-    ui.sidebar->reloadGroups();
+    ui->sidebar->reloadGroups();
     updateActionsState();
 }
 
@@ -935,7 +936,7 @@ void HostsTab::onImportBookAction()
 {
     LOG(INFO) << "[ACTION] Import address book (json)";
 
-    Sidebar::Item* sidebar_item = ui.sidebar->currentItem();
+    Sidebar::Item* sidebar_item = ui->sidebar->currentItem();
     if (!sidebar_item || sidebar_item->itemType() != Sidebar::Item::Type::LOCAL_GROUP)
     {
         LOG(INFO) << "No current local group item";
@@ -958,7 +959,7 @@ void HostsTab::onImportBookAction()
         return;
 
     reloadRouters();
-    ui.sidebar->reloadGroups();
+    ui->sidebar->reloadGroups();
     updateActionsState();
 }
 
@@ -979,7 +980,7 @@ void HostsTab::onSaveAction()
 //--------------------------------------------------------------------------------------------------
 void HostsTab::onDisconnectAction()
 {
-    Sidebar::Item* sidebar_item = ui.sidebar->currentItem();
+    Sidebar::Item* sidebar_item = ui->sidebar->currentItem();
     if (!sidebar_item || sidebar_item->itemType() != Sidebar::Item::ROUTER)
         return;
 
@@ -1004,7 +1005,7 @@ void HostsTab::onDisconnectAction()
 //--------------------------------------------------------------------------------------------------
 void HostsTab::onDisconnectAllAction()
 {
-    Sidebar::Item* sidebar_item = ui.sidebar->currentItem();
+    Sidebar::Item* sidebar_item = ui->sidebar->currentItem();
     if (!sidebar_item || sidebar_item->itemType() != Sidebar::Item::ROUTER)
         return;
 
@@ -1029,7 +1030,7 @@ void HostsTab::onDisconnectAllAction()
 //--------------------------------------------------------------------------------------------------
 void HostsTab::onRemoveHostAction()
 {
-    Sidebar::Item* sidebar_item = ui.sidebar->currentItem();
+    Sidebar::Item* sidebar_item = ui->sidebar->currentItem();
     if (!sidebar_item || sidebar_item->itemType() != Sidebar::Item::ROUTER)
         return;
 
@@ -1057,7 +1058,7 @@ void HostsTab::switchContent(ContentWidget* new_widget)
         current_content_->deactivate(statusbar_);
 
     current_content_ = new_widget;
-    ui.content_stack->setCurrentWidget(new_widget);
+    ui->content_stack->setCurrentWidget(new_widget);
 
     if (statusbar_)
         current_content_->activate(statusbar_);
@@ -1066,73 +1067,73 @@ void HostsTab::switchContent(ContentWidget* new_widget)
 //--------------------------------------------------------------------------------------------------
 void HostsTab::updateActionsState()
 {
-    ui.action_add_group->setVisible(false);
-    ui.action_delete_group->setVisible(false);
-    ui.action_edit_group->setVisible(false);
+    ui->action_add_group->setVisible(false);
+    ui->action_delete_group->setVisible(false);
+    ui->action_edit_group->setVisible(false);
 
-    ui.action_add_router->setVisible(true);
-    ui.action_edit_router->setVisible(false);
-    ui.action_delete_router->setVisible(false);
-    ui.action_router_status->setVisible(false);
+    ui->action_add_router->setVisible(true);
+    ui->action_edit_router->setVisible(false);
+    ui->action_delete_router->setVisible(false);
+    ui->action_router_status->setVisible(false);
 
-    ui.action_add_computer->setVisible(false);
-    ui.action_delete_computer->setVisible(false);
-    ui.action_edit_computer->setVisible(false);
-    ui.action_copy_computer->setVisible(false);
+    ui->action_add_computer->setVisible(false);
+    ui->action_delete_computer->setVisible(false);
+    ui->action_edit_computer->setVisible(false);
+    ui->action_copy_computer->setVisible(false);
 
-    ui.action_desktop->setVisible(false);
-    ui.action_file_transfer->setVisible(false);
-    ui.action_chat->setVisible(false);
-    ui.action_system_info->setVisible(false);
+    ui->action_desktop->setVisible(false);
+    ui->action_file_transfer->setVisible(false);
+    ui->action_chat->setVisible(false);
+    ui->action_system_info->setVisible(false);
 
-    ui.action_add_user->setVisible(false);
-    ui.action_edit_user->setVisible(false);
-    ui.action_delete_user->setVisible(false);
+    ui->action_add_user->setVisible(false);
+    ui->action_edit_user->setVisible(false);
+    ui->action_delete_user->setVisible(false);
 
-    ui.action_reload->setVisible(false);
-    ui.action_save->setVisible(false);
-    ui.action_import_old_book->setVisible(false);
-    ui.action_export_book->setVisible(false);
-    ui.action_import_book->setVisible(false);
-    ui.action_disconnect->setVisible(false);
-    ui.action_disconnect_all->setVisible(false);
-    ui.action_host_remove->setVisible(false);
-    ui.action_online_check->setVisible(false);
+    ui->action_reload->setVisible(false);
+    ui->action_save->setVisible(false);
+    ui->action_import_old_book->setVisible(false);
+    ui->action_export_book->setVisible(false);
+    ui->action_import_book->setVisible(false);
+    ui->action_disconnect->setVisible(false);
+    ui->action_disconnect_all->setVisible(false);
+    ui->action_host_remove->setVisible(false);
+    ui->action_online_check->setVisible(false);
 
-    Sidebar::Item* sidebar_item = ui.sidebar->currentItem();
+    Sidebar::Item* sidebar_item = ui->sidebar->currentItem();
 
     if (current_content_ == search_widget_)
     {
         SearchWidget::Item* computer_item = search_widget_->currentItem();
 
-        ui.action_delete_computer->setVisible(computer_item != nullptr);
-        ui.action_edit_computer->setVisible(computer_item != nullptr);
-        ui.action_copy_computer->setVisible(computer_item != nullptr);
+        ui->action_delete_computer->setVisible(computer_item != nullptr);
+        ui->action_edit_computer->setVisible(computer_item != nullptr);
+        ui->action_copy_computer->setVisible(computer_item != nullptr);
     }
     else if (sidebar_item && sidebar_item->itemType() == Sidebar::Item::Type::LOCAL_GROUP)
     {
-        ui.action_online_check->setVisible(true);
-        ui.action_import_old_book->setVisible(true);
-        ui.action_export_book->setVisible(true);
-        ui.action_import_book->setVisible(true);
+        ui->action_online_check->setVisible(true);
+        ui->action_import_old_book->setVisible(true);
+        ui->action_export_book->setVisible(true);
+        ui->action_import_book->setVisible(true);
 
-        ui.action_add_group->setVisible(true);
-        ui.action_delete_group->setVisible(sidebar_item->groupId() != 0);
-        ui.action_edit_group->setVisible(sidebar_item->groupId() != 0);
+        ui->action_add_group->setVisible(true);
+        ui->action_delete_group->setVisible(sidebar_item->groupId() != 0);
+        ui->action_edit_group->setVisible(sidebar_item->groupId() != 0);
 
         LocalGroupWidget::Item* computer_item = local_group_widget_->currentItem();
 
-        ui.action_add_computer->setVisible(true);
-        ui.action_delete_computer->setVisible(computer_item != nullptr);
-        ui.action_edit_computer->setVisible(computer_item != nullptr);
-        ui.action_copy_computer->setVisible(computer_item != nullptr);
+        ui->action_add_computer->setVisible(true);
+        ui->action_delete_computer->setVisible(computer_item != nullptr);
+        ui->action_edit_computer->setVisible(computer_item != nullptr);
+        ui->action_copy_computer->setVisible(computer_item != nullptr);
     }
 
     if (sidebar_item && sidebar_item->itemType() == Sidebar::Item::ROUTER)
     {
-        ui.action_edit_router->setVisible(true);
-        ui.action_delete_router->setVisible(true);
-        ui.action_router_status->setVisible(true);
+        ui->action_edit_router->setVisible(true);
+        ui->action_delete_router->setVisible(true);
+        ui->action_router_status->setVisible(true);
 
         Sidebar::Router* router = static_cast<Sidebar::Router*>(sidebar_item);
         RouterWidget* widget = router_widgets_.value(router->routerId());
@@ -1140,9 +1141,9 @@ void HostsTab::updateActionsState()
         bool on_users_tab = widget && widget->currentTabType() == RouterWidget::TabType::USERS;
         bool has_selection = on_users_tab && widget->hasSelectedUser();
 
-        ui.action_add_user->setVisible(on_users_tab);
-        ui.action_edit_user->setVisible(has_selection);
-        ui.action_delete_user->setVisible(has_selection);
+        ui->action_add_user->setVisible(on_users_tab);
+        ui->action_edit_user->setVisible(has_selection);
+        ui->action_delete_user->setVisible(has_selection);
 
         bool on_hosts_tab = widget && widget->currentTabType() == RouterWidget::TabType::HOSTS;
         bool on_relays_tab = widget && widget->currentTabType() == RouterWidget::TabType::RELAYS;
@@ -1152,32 +1153,32 @@ void HostsTab::updateActionsState()
         bool has_any = (on_hosts_tab && widget->hostCount() > 0) ||
                        (on_relays_tab && widget->relayCount() > 0);
 
-        ui.action_disconnect->setVisible(has_target);
-        ui.action_disconnect_all->setVisible(has_any);
-        ui.action_host_remove->setVisible(on_hosts_tab && widget->hasSelectedHost());
+        ui->action_disconnect->setVisible(has_target);
+        ui->action_disconnect_all->setVisible(has_any);
+        ui->action_host_remove->setVisible(on_hosts_tab && widget->hasSelectedHost());
     }
     else
     {
-        ui.action_desktop->setVisible(true);
-        ui.action_file_transfer->setVisible(true);
-        ui.action_chat->setVisible(true);
-        ui.action_system_info->setVisible(true);
+        ui->action_desktop->setVisible(true);
+        ui->action_file_transfer->setVisible(true);
+        ui->action_chat->setVisible(true);
+        ui->action_system_info->setVisible(true);
     }
 
-    ui.action_reload->setVisible(current_content_ && current_content_->canReload());
-    ui.action_save->setVisible(current_content_ && current_content_->canSave());
+    ui->action_reload->setVisible(current_content_ && current_content_->canReload());
+    ui->action_save->setVisible(current_content_ && current_content_->canSave());
 }
 
 //--------------------------------------------------------------------------------------------------
 proto::peer::SessionType HostsTab::defaultSessionType() const
 {
-    if (ui.action_desktop->isChecked())
+    if (ui->action_desktop->isChecked())
         return proto::peer::SESSION_TYPE_DESKTOP;
-    else if (ui.action_file_transfer->isChecked())
+    else if (ui->action_file_transfer->isChecked())
         return proto::peer::SESSION_TYPE_FILE_TRANSFER;
-    else if (ui.action_chat->isChecked())
+    else if (ui->action_chat->isChecked())
         return proto::peer::SESSION_TYPE_TEXT_CHAT;
-    else if (ui.action_system_info->isChecked())
+    else if (ui->action_system_info->isChecked())
         return proto::peer::SESSION_TYPE_SYSTEM_INFO;
     else
         return proto::peer::SESSION_TYPE_UNKNOWN;
@@ -1206,7 +1207,7 @@ void HostsTab::destroyRouterWidget(qint64 router_id)
     if (previous_content_ == widget)
         previous_content_ = nullptr;
 
-    ui.content_stack->removeWidget(widget);
+    ui->content_stack->removeWidget(widget);
     widget->deleteLater();
 }
 
@@ -1216,7 +1217,7 @@ RouterWidget* HostsTab::createRouterWidget(const RouterConfig& config)
     RouterWidget* widget = new RouterWidget(config, this);
 
     router_widgets_.insert(config.router_id, widget);
-    ui.content_stack->addWidget(widget);
+    ui->content_stack->addWidget(widget);
 
     connect(widget, &RouterWidget::sig_statusChanged, this, &HostsTab::onRouterStatusChanged);
     connect(widget, &RouterWidget::sig_currentTabTypeChanged,

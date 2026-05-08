@@ -19,8 +19,13 @@
 #ifndef CLIENT_UI_SYS_INFO_SYS_INFO_NET_ADAPTERS_H
 #define CLIENT_UI_SYS_INFO_SYS_INFO_NET_ADAPTERS_H
 
+#include <memory>
+
 #include "client/ui/sys_info/sys_info_widget.h"
-#include "ui_sys_info_widget_net_adapters.h"
+
+namespace Ui {
+class SysInfoNetAdapters;
+} // namespace Ui
 
 class SysInfoWidgetNetAdapters final : public SysInfoWidget
 {
@@ -43,7 +48,7 @@ private slots:
     void onContextMenu(const QPoint& point);
 
 private:
-    Ui::SysInfoNetAdapters ui;
+    std::unique_ptr<Ui::SysInfoNetAdapters> ui;
 };
 
 #endif // CLIENT_UI_SYS_INFO_SYS_INFO_NET_ADAPTERS_H

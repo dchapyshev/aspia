@@ -22,23 +22,26 @@
 #include "client/ui/file_transfer/file_error_code.h"
 #include "common/ui/formatter.h"
 #include "common/ui/msg_box.h"
+#include "ui_file_transfer_widget.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "common/ui/taskbar_button.h"
+#include "common/ui/taskbar_progress.h"
 #endif // defined(Q_OS_WINDOWS)
 
 //--------------------------------------------------------------------------------------------------
 FileTransferWidget::FileTransferWidget(QWidget* parent)
-    : QWidget(parent)
+    : QWidget(parent),
+      ui(std::make_unique<Ui::FileTransferWidget>())
 {
     LOG(INFO) << "Ctor";
 
-    ui.setupUi(this);
+    ui->setupUi(this);
 
-    ui.progress_total->setRange(0, 0);
-    ui.progress_current->setRange(0, 0);
+    ui->progress_total->setRange(0, 0);
+    ui->progress_current->setRange(0, 0);
 
-    connect(ui.button_cancel, &QPushButton::clicked, this, &FileTransferWidget::requestStop);
+    connect(ui->button_cancel, &QPushButton::clicked, this, &FileTransferWidget::requestStop);
 
 #if defined(Q_OS_WINDOWS)
     TaskbarButton* button = new TaskbarButton(this);
@@ -47,7 +50,7 @@ FileTransferWidget::FileTransferWidget(QWidget* parent)
         taskbar_progress_->setRange(0, 0);
 #endif
 
-    label_metrics_ = std::make_unique<QFontMetrics>(ui.label_source->font());
+    label_metrics_ = std::make_unique<QFontMetrics>(ui->label_source->font());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -68,17 +71,17 @@ void FileTransferWidget::reset()
     stopping_ = false;
     finished_ = false;
 
-    ui.label_task->setText(tr("Creating a list of files to copy..."));
-    ui.label_source->setText("...");
-    ui.label_target->setText("...");
-    ui.label_speed->setText("...");
+    ui->label_task->setText(tr("Creating a list of files to copy..."));
+    ui->label_source->setText("...");
+    ui->label_target->setText("...");
+    ui->label_speed->setText("...");
 
-    ui.progress_total->setRange(0, 0);
-    ui.progress_total->setValue(0);
-    ui.progress_current->setRange(0, 0);
-    ui.progress_current->setValue(0);
+    ui->progress_total->setRange(0, 0);
+    ui->progress_total->setValue(0);
+    ui->progress_current->setRange(0, 0);
+    ui->progress_current->setValue(0);
 
-    ui.button_cancel->setEnabled(true);
+    ui->button_cancel->setEnabled(true);
 
 #if defined(Q_OS_WINDOWS)
     if (taskbar_progress_)
@@ -98,8 +101,8 @@ void FileTransferWidget::requestStop()
 
     stopping_ = true;
 
-    ui.label_task->setText(tr("Cancel transfer of files."));
-    ui.button_cancel->setEnabled(false);
+    ui->label_task->setText(tr("Cancel transfer of files."));
+    ui->button_cancel->setEnabled(false);
 
     emit sig_stop();
 }
@@ -134,10 +137,10 @@ void FileTransferWidget::setCurrentItem(const QString& source_path, const QStrin
     if (task_queue_building_)
     {
         task_queue_building_ = false;
-        ui.label_task->setText(tr("Copying items."));
+        ui->label_task->setText(tr("Copying items."));
 
-        ui.progress_total->setRange(0, 100);
-        ui.progress_current->setRange(0, 100);
+        ui->progress_total->setRange(0, 100);
+        ui->progress_current->setRange(0, 100);
 
 #if defined(Q_OS_WINDOWS)
         if (taskbar_progress_)
@@ -145,17 +148,17 @@ void FileTransferWidget::setCurrentItem(const QString& source_path, const QStrin
 #endif
     }
 
-    ui.label_source->setText(label_metrics_->elidedText(
-        source_path, Qt::ElideMiddle, ui.label_source->width()));
-    ui.label_target->setText(label_metrics_->elidedText(
-        target_path, Qt::ElideMiddle, ui.label_target->width()));
+    ui->label_source->setText(label_metrics_->elidedText(
+        source_path, Qt::ElideMiddle, ui->label_source->width()));
+    ui->label_target->setText(label_metrics_->elidedText(
+        target_path, Qt::ElideMiddle, ui->label_target->width()));
 }
 
 //--------------------------------------------------------------------------------------------------
 void FileTransferWidget::setCurrentProgress(int total, int current)
 {
-    ui.progress_total->setValue(total);
-    ui.progress_current->setValue(current);
+    ui->progress_total->setValue(total);
+    ui->progress_current->setValue(current);
 
 #if defined(Q_OS_WINDOWS)
     if (taskbar_progress_)
@@ -166,7 +169,7 @@ void FileTransferWidget::setCurrentProgress(int total, int current)
 //--------------------------------------------------------------------------------------------------
 void FileTransferWidget::setCurrentSpeed(qint64 speed)
 {
-    ui.label_speed->setText(Formatter::transferSpeedToString(speed));
+    ui->label_speed->setText(Formatter::transferSpeedToString(speed));
 }
 
 //--------------------------------------------------------------------------------------------------

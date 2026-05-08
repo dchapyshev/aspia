@@ -23,40 +23,42 @@
 #include <QTimer>
 
 #include "base/logging.h"
+#include "ui_unlock_dialog.h"
 
 //--------------------------------------------------------------------------------------------------
 UnlockDialog::UnlockDialog(QWidget* parent,
                            const QString& file_path,
                            const QString& encryption_type)
-    : QDialog(parent)
+    : QDialog(parent),
+      ui(std::make_unique<Ui::UnlockDialog>())
 {
     LOG(INFO) << "Ctor";
-    ui.setupUi(this);
+    ui->setupUi(this);
 
-    connect(ui.button_show_password, &QPushButton::toggled, this, &UnlockDialog::onShowPasswordButtonToggled);
-    connect(ui.button_box, &QDialogButtonBox::clicked, this, &UnlockDialog::onButtonBoxClicked);
+    connect(ui->button_show_password, &QPushButton::toggled, this, &UnlockDialog::onShowPasswordButtonToggled);
+    connect(ui->button_box, &QDialogButtonBox::clicked, this, &UnlockDialog::onButtonBoxClicked);
 
     if (file_path.isEmpty())
     {
-        ui.label_file->setVisible(false);
-        ui.edit_file->setVisible(false);
+        ui->label_file->setVisible(false);
+        ui->edit_file->setVisible(false);
     }
     else
     {
-        ui.edit_file->setText(file_path);
+        ui->edit_file->setText(file_path);
     }
 
     if (encryption_type.isEmpty())
     {
-        ui.label_encryption_type->setVisible(false);
-        ui.edit_encryption_type->setVisible(false);
+        ui->label_encryption_type->setVisible(false);
+        ui->edit_encryption_type->setVisible(false);
     }
     else
     {
-        ui.edit_encryption_type->setText(encryption_type);
+        ui->edit_encryption_type->setText(encryption_type);
     }
 
-    ui.edit_password->setFocus();
+    ui->edit_password->setFocus();
 
     QTimer::singleShot(0, this, [this](){ setFixedHeight(sizeHint().height()); });
 }
@@ -70,7 +72,7 @@ UnlockDialog::~UnlockDialog()
 //--------------------------------------------------------------------------------------------------
 QString UnlockDialog::password() const
 {
-    return ui.edit_password->text();
+    return ui->edit_password->text();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -78,13 +80,13 @@ void UnlockDialog::onShowPasswordButtonToggled(bool checked)
 {
     if (checked)
     {
-        ui.edit_password->setEchoMode(QLineEdit::Normal);
-        ui.edit_password->setInputMethodHints(Qt::ImhNone);
+        ui->edit_password->setEchoMode(QLineEdit::Normal);
+        ui->edit_password->setInputMethodHints(Qt::ImhNone);
     }
     else
     {
-        ui.edit_password->setEchoMode(QLineEdit::Password);
-        ui.edit_password->setInputMethodHints(Qt::ImhHiddenText | Qt::ImhSensitiveData |
+        ui->edit_password->setEchoMode(QLineEdit::Password);
+        ui->edit_password->setInputMethodHints(Qt::ImhHiddenText | Qt::ImhSensitiveData |
                                               Qt::ImhNoAutoUppercase | Qt::ImhNoPredictiveText);
     }
 }
@@ -92,7 +94,7 @@ void UnlockDialog::onShowPasswordButtonToggled(bool checked)
 //--------------------------------------------------------------------------------------------------
 void UnlockDialog::onButtonBoxClicked(QAbstractButton* button)
 {
-    if (ui.button_box->standardButton(button) == QDialogButtonBox::Ok)
+    if (ui->button_box->standardButton(button) == QDialogButtonBox::Ok)
         accept();
     else
         reject();

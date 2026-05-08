@@ -19,11 +19,13 @@
 #ifndef COMMON_UI_CHAT_WIDGET_H
 #define COMMON_UI_CHAT_WIDGET_H
 
-#include "proto/chat.h"
-
 #include <QShowEvent>
 #include <QVector>
 #include <QWidget>
+
+#include <memory>
+
+#include "proto/chat.h"
 
 namespace Ui {
 class ChatWidget;

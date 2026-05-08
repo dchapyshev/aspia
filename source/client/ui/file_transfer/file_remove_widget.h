@@ -19,12 +19,19 @@
 #ifndef CLIENT_UI_FILE_TRANSFER_FILE_REMOVE_WIDGET_H
 #define CLIENT_UI_FILE_TRANSFER_FILE_REMOVE_WIDGET_H
 
+#include <QWidget>
+
+#include <memory>
+
 #include "client/file_remover.h"
-#include "ui_file_remove_widget.h"
 
 #if defined(Q_OS_WINDOWS)
-#include "common/ui/taskbar_progress.h"
+class TaskbarProgress;
 #endif // defined(Q_OS_WINDOWS)
+
+namespace Ui {
+class FileRemoveWidget;
+} // namespace Ui
 
 class FileRemoveWidget final : public QWidget
 {
@@ -54,7 +61,7 @@ signals:
 private:
     void updateTaskbarWindow();
 
-    Ui::FileRemoveWidget ui;
+    std::unique_ptr<Ui::FileRemoveWidget> ui;
     std::unique_ptr<QFontMetrics> label_metrics_;
     bool queue_building_ = true;
     bool stopping_ = false;

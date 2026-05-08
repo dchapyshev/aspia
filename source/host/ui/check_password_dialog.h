@@ -19,7 +19,15 @@
 #ifndef HOST_UI_CHECK_PASSWORD_DIALOG_H
 #define HOST_UI_CHECK_PASSWORD_DIALOG_H
 
-#include "ui_check_password_dialog.h"
+#include <QDialog>
+
+#include <memory>
+
+class QAbstractButton;
+
+namespace Ui {
+class CheckPasswordDialog;
+} // namespace Ui
 
 class CheckPasswordDialog final : public QDialog
 {
@@ -33,7 +41,7 @@ private slots:
     void onButtonBoxClicked(QAbstractButton* button);
 
 private:
-    Ui::CheckPasswordDialog ui;
+    std::unique_ptr<Ui::CheckPasswordDialog> ui;
 };
 
 #endif // HOST_UI_CHECK_PASSWORD_DIALOG_H

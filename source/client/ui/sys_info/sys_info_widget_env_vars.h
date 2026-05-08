@@ -19,8 +19,13 @@
 #ifndef CLIENT_UI_SYS_INFO_SYS_INFO_ENV_VARS_H
 #define CLIENT_UI_SYS_INFO_SYS_INFO_ENV_VARS_H
 
+#include <memory>
+
 #include "client/ui/sys_info/sys_info_widget.h"
-#include "ui_sys_info_widget_env_vars.h"
+
+namespace Ui {
+class SysInfoEnvVars;
+} // namespace Ui
 
 class SysInfoWidgetEnvVars final : public SysInfoWidget
 {
@@ -43,7 +48,7 @@ private slots:
     void onContextMenu(const QPoint& point);
 
 private:
-    Ui::SysInfoEnvVars ui;
+    std::unique_ptr<Ui::SysInfoEnvVars> ui;
 };
 
 #endif // CLIENT_UI_SYS_INFO_SYS_INFO_ENV_VARS_H

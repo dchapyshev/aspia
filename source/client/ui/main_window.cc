@@ -41,7 +41,6 @@
 #include "client/ui/client_window.h"
 #include "client/ui/hosts_tab.h"
 #include "client/ui/settings_tab.h"
-#include "client/ui/tab.h"
 #include "client/ui/tab_bar.h"
 #include "client/ui/tab_widget.h"
 #include "client/ui/chat/chat_window.h"
@@ -54,59 +53,61 @@
 #include "common/ui/about_dialog.h"
 #include "common/ui/update_dialog.h"
 #include "proto/peer.h"
+#include "ui_main_window.h"
 
 //--------------------------------------------------------------------------------------------------
 MainWindow::MainWindow(QWidget* parent)
-    : QMainWindow(parent)
+    : QMainWindow(parent),
+      ui(std::make_unique<Ui::MainWindow>())
 {
     LOG(INFO) << "Ctor";
 
     Settings settings;
 
-    ui.setupUi(this);
+    ui->setupUi(this);
 
-    connect(ui.tabs->tabBar(), &TabBar::sig_tabDetachRequested, this, &MainWindow::onTabDetachRequested);
+    connect(ui->tabs->tabBar(), &TabBar::sig_tabDetachRequested, this, &MainWindow::onTabDetachRequested);
 
     // Create search field at the far right of the toolbar.
     QWidget* spacer = new QWidget(this);
     spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-    ui.toolbar->addWidget(spacer);
+    ui->toolbar->addWidget(spacer);
 
     search_field_ = new QLineEdit(this);
     search_field_->setPlaceholderText(tr("Search..."));
     search_field_->setClearButtonEnabled(true);
     search_field_->setMaximumWidth(250);
-    search_action_ = ui.toolbar->addWidget(search_field_);
+    search_action_ = ui->toolbar->addWidget(search_field_);
     search_action_->setVisible(false);
 
     restoreGeometry(settings.windowGeometry());
     restoreState(settings.windowState());
 
-    ui.action_toolbar->setChecked(settings.isToolBarEnabled());
-    ui.action_statusbar->setChecked(settings.isStatusBarEnabled());
-    ui.statusbar->setVisible(settings.isStatusBarEnabled());
+    ui->action_toolbar->setChecked(settings.isToolBarEnabled());
+    ui->action_statusbar->setChecked(settings.isStatusBarEnabled());
+    ui->statusbar->setVisible(settings.isStatusBarEnabled());
 
     bool large_icons = settings.largeIcons();
-    ui.toolbar->setIconSize(large_icons ? QSize(32, 32) : QSize(24, 24));
-    ui.action_large_icons->setChecked(large_icons);
+    ui->toolbar->setIconSize(large_icons ? QSize(32, 32) : QSize(24, 24));
+    ui->action_large_icons->setChecked(large_icons);
 
-    ui.action_sessions_in_tabs->setChecked(settings.openSessionsInTabs());
+    ui->action_sessions_in_tabs->setChecked(settings.openSessionsInTabs());
 
-    connect(ui.action_settings, &QAction::triggered, this, &MainWindow::onSettings);
-    connect(ui.action_help, &QAction::triggered, this, &MainWindow::onHelp);
-    connect(ui.action_about, &QAction::triggered, this, &MainWindow::onAbout);
-    connect(ui.action_exit, &QAction::triggered, this, &MainWindow::close);
-    connect(ui.toolbar, &QToolBar::visibilityChanged, ui.action_toolbar, &QAction::setChecked);
-    connect(ui.action_toolbar, &QAction::toggled, ui.toolbar, &QToolBar::setVisible);
-    connect(ui.action_statusbar, &QAction::toggled, this, &MainWindow::updateStatusBarVisibility);
-    connect(ui.action_large_icons, &QAction::toggled, this, [this](bool enable)
+    connect(ui->action_settings, &QAction::triggered, this, &MainWindow::onSettings);
+    connect(ui->action_help, &QAction::triggered, this, &MainWindow::onHelp);
+    connect(ui->action_about, &QAction::triggered, this, &MainWindow::onAbout);
+    connect(ui->action_exit, &QAction::triggered, this, &MainWindow::close);
+    connect(ui->toolbar, &QToolBar::visibilityChanged, ui->action_toolbar, &QAction::setChecked);
+    connect(ui->action_toolbar, &QAction::toggled, ui->toolbar, &QToolBar::setVisible);
+    connect(ui->action_statusbar, &QAction::toggled, this, &MainWindow::updateStatusBarVisibility);
+    connect(ui->action_large_icons, &QAction::toggled, this, [this](bool enable)
     {
-        ui.toolbar->setIconSize(enable ? QSize(32, 32) : QSize(24, 24));
+        ui->toolbar->setIconSize(enable ? QSize(32, 32) : QSize(24, 24));
     });
 
     // Tab management.
-    connect(ui.tabs, &QTabWidget::currentChanged, this, &MainWindow::onCurrentTabChanged);
-    connect(ui.tabs, &QTabWidget::tabCloseRequested, this, &MainWindow::onCloseTab);
+    connect(ui->tabs, &QTabWidget::currentChanged, this, &MainWindow::onCurrentTabChanged);
+    connect(ui->tabs, &QTabWidget::tabCloseRequested, this, &MainWindow::onCloseTab);
 
     // Search field.
     connect(search_field_, &QLineEdit::textChanged, this, &MainWindow::onSearchTextChanged);
@@ -131,9 +132,9 @@ MainWindow::MainWindow(QWidget* parent)
     onAfterThemeChanged();
 
     // Hide dynamic menus until a tab populates them.
-    ui.menu_edit->menuAction()->setVisible(false);
-    ui.menu_session_type->menuAction()->setVisible(false);
-    ui.menu_action->menuAction()->setVisible(false);
+    ui->menu_edit->menuAction()->setVisible(false);
+    ui->menu_session_type->menuAction()->setVisible(false);
+    ui->menu_action->menuAction()->setVisible(false);
 
     HostsTab* hosts = new HostsTab(this);
     connect(hosts, &HostsTab::sig_connect, this, &MainWindow::onConnect);
@@ -167,14 +168,14 @@ void MainWindow::closeEvent(QCloseEvent* /* event */)
     Settings settings;
     settings.setWindowGeometry(saveGeometry());
     settings.setWindowState(saveState());
-    settings.setToolBarEnabled(ui.action_toolbar->isChecked());
-    settings.setStatusBarEnabled(ui.action_statusbar->isChecked());
-    settings.setLargeIcons(ui.action_large_icons->isChecked());
-    settings.setOpenSessionsInTabs(ui.action_sessions_in_tabs->isChecked());
+    settings.setToolBarEnabled(ui->action_toolbar->isChecked());
+    settings.setStatusBarEnabled(ui->action_statusbar->isChecked());
+    settings.setLargeIcons(ui->action_large_icons->isChecked());
+    settings.setOpenSessionsInTabs(ui->action_sessions_in_tabs->isChecked());
 
-    for (int i = 0; i < ui.tabs->count(); ++i)
+    for (int i = 0; i < ui->tabs->count(); ++i)
     {
-        Tab* tab = dynamic_cast<Tab*>(ui.tabs->widget(i));
+        Tab* tab = dynamic_cast<Tab*>(ui->tabs->widget(i));
         if (tab)
             settings.setTabState(tab->objectName(), tab->saveState());
     }
@@ -222,12 +223,12 @@ void MainWindow::onSettings()
     LOG(INFO) << "[ACTION] Settings clicked";
 
     // If a settings tab is already open, just activate it.
-    for (int i = 0; i < ui.tabs->count(); ++i)
+    for (int i = 0; i < ui->tabs->count(); ++i)
     {
         Tab* tab = tabAt(i);
         if (tab && tab->tabType() == Tab::Type::SETTINGS)
         {
-            ui.tabs->setCurrentIndex(i);
+            ui->tabs->setCurrentIndex(i);
             return;
         }
     }
@@ -236,21 +237,21 @@ void MainWindow::onSettings()
 
     connect(settings_tab, &SettingsTab::sig_languageChanged, this, [this]()
     {
-        ui.retranslateUi(this);
+        ui->retranslateUi(this);
         search_field_->setPlaceholderText(tr("Search..."));
 
-        for (int i = 0; i < ui.tabs->count(); ++i)
+        for (int i = 0; i < ui->tabs->count(); ++i)
         {
-            if (HostsTab* hosts = dynamic_cast<HostsTab*>(ui.tabs->widget(i)))
+            if (HostsTab* hosts = dynamic_cast<HostsTab*>(ui->tabs->widget(i)))
                 hosts->reloadRouters();
         }
     });
 
     connect(settings_tab, &SettingsTab::sig_desktopConfigChanged, this, [this]()
     {
-        for (int i = 0; i < ui.tabs->count(); ++i)
+        for (int i = 0; i < ui->tabs->count(); ++i)
         {
-            ClientTab* client_tab = dynamic_cast<ClientTab*>(ui.tabs->widget(i));
+            ClientTab* client_tab = dynamic_cast<ClientTab*>(ui->tabs->widget(i));
             if (client_tab)
             {
                 if (ClientWindow* client_window = client_tab->clientWindow())
@@ -288,7 +289,7 @@ void MainWindow::onCurrentTabChanged(int index)
     if (active_tab_)
     {
         removeTabActions();
-        active_tab_->deactivate(ui.statusbar);
+        active_tab_->deactivate(ui->statusbar);
         active_tab_ = nullptr;
     }
 
@@ -301,7 +302,7 @@ void MainWindow::onCurrentTabChanged(int index)
 
     active_tab_ = tab;
     installTabActions(active_tab_);
-    active_tab_->activate(ui.statusbar);
+    active_tab_->activate(ui->statusbar);
     updateSearchFieldVisibility();
     updateStatusBarVisibility();
 }
@@ -316,14 +317,14 @@ void MainWindow::onCloseTab(int index)
     if (tab == active_tab_)
     {
         removeTabActions();
-        tab->deactivate(ui.statusbar);
+        tab->deactivate(ui->statusbar);
         active_tab_ = nullptr;
     }
 
     Settings settings;
     settings.setTabState(tab->objectName(), tab->saveState());
 
-    ui.tabs->removeTab(index);
+    ui->tabs->removeTab(index);
     delete tab;
 }
 
@@ -352,7 +353,7 @@ void MainWindow::onConnect(
     // direct call) fall back to the global "open sessions in tabs" setting.
     Tab* parent_tab = qobject_cast<Tab*>(sender());
     bool detached = (parent_tab && parent_tab->tabType() == Tab::Type::SESSION) ?
-        parent_tab->isDetached() : !ui.action_sessions_in_tabs->isChecked();
+        parent_tab->isDetached() : !ui->action_sessions_in_tabs->isChecked();
 
     ClientWindow* client_window = nullptr;
 
@@ -393,14 +394,14 @@ void MainWindow::onConnect(
 
     if (detached)
     {
-        int index = ui.tabs->indexOf(client_tab);
-        ui.tabs->tabBar()->setTabVisible(index, false);
+        int index = ui->tabs->indexOf(client_tab);
+        ui->tabs->tabBar()->setTabVisible(index, false);
         client_tab->detachToWindow();
     }
 
     if (!client_window->connectToHost(computer, display_name))
     {
-        int index = ui.tabs->indexOf(client_tab);
+        int index = ui->tabs->indexOf(client_tab);
         if (index != -1)
             onCloseTab(index);
     }
@@ -416,7 +417,7 @@ void MainWindow::onTabDetachRequested(int index, const QPoint& global_pos)
     QSize new_size = tab->size() / 2;
 
     tab->detachToWindow();
-    ui.tabs->tabBar()->setTabVisible(index, false);
+    ui->tabs->tabBar()->setTabVisible(index, false);
 
     QWidget* window = tab->detachedWindow();
     if (!window)
@@ -440,11 +441,11 @@ void MainWindow::onTabDragMove(const QPoint& global_pos)
     if (!tab || !tab->isDetached())
         return;
 
-    int index = ui.tabs->indexOf(tab);
+    int index = ui->tabs->indexOf(tab);
     if (index == -1)
         return;
 
-    TabBar* tabbar = ui.tabs->tabBar();
+    TabBar* tabbar = ui->tabs->tabBar();
     bool over = tabBarHitTest(global_pos);
     if (tabbar->isTabVisible(index) != over)
         tabbar->setTabVisible(index, over);
@@ -458,18 +459,18 @@ void MainWindow::onTabDragFinished(const QPoint& global_pos)
     if (!tab || !tab->isDetached())
         return;
 
-    int index = ui.tabs->indexOf(tab);
+    int index = ui->tabs->indexOf(tab);
     if (index == -1)
         return;
 
-    TabBar* tabbar = ui.tabs->tabBar();
+    TabBar* tabbar = ui->tabs->tabBar();
     tabbar->setDropTarget(-1);
 
     if (tabBarHitTest(global_pos))
     {
         tab->attachToTab();
         tabbar->setTabVisible(index, true);
-        ui.tabs->setCurrentIndex(index);
+        ui->tabs->setCurrentIndex(index);
     }
     else if (tabbar->isTabVisible(index))
     {
@@ -485,11 +486,11 @@ void MainWindow::onTabFullscreenRequested(bool enabled)
     if (!tab || !tab->isDetachable())
         return;
 
-    int index = ui.tabs->indexOf(tab);
+    int index = ui->tabs->indexOf(tab);
     if (index == -1)
         return;
 
-    TabBar* tabbar = ui.tabs->tabBar();
+    TabBar* tabbar = ui->tabs->tabBar();
 
     if (enabled)
     {
@@ -515,7 +516,7 @@ void MainWindow::onTabFullscreenRequested(bool enabled)
         {
             tab->attachToTab();
             tabbar->setTabVisible(index, true);
-            ui.tabs->setCurrentIndex(index);
+            ui->tabs->setCurrentIndex(index);
         }
     }
 }
@@ -538,7 +539,7 @@ void MainWindow::onTabShowRequested()
     if (!tab)
         return;
 
-    int index = ui.tabs->indexOf(tab);
+    int index = ui->tabs->indexOf(tab);
     if (index == -1)
         return;
 
@@ -550,16 +551,16 @@ void MainWindow::onTabShowRequested()
             window->activateWindow();
         }
     }
-    else if (ui.tabs->tabBar()->isTabVisible(index))
+    else if (ui->tabs->tabBar()->isTabVisible(index))
     {
-        ui.tabs->setCurrentIndex(index);
+        ui->tabs->setCurrentIndex(index);
     }
 }
 
 //--------------------------------------------------------------------------------------------------
 void MainWindow::addTab(Tab* tab, const QString& title, const QIcon& icon)
 {
-    int index = ui.tabs->addTab(tab, icon, title);
+    int index = ui->tabs->addTab(tab, icon, title);
 
     if (!tab->isClosable())
         hideCloseButtonForTab(index);
@@ -569,14 +570,14 @@ void MainWindow::addTab(Tab* tab, const QString& title, const QIcon& icon)
 
     connect(tab, &Tab::sig_titleChanged, this, [this, tab](const QString& new_title)
     {
-        int tab_index = ui.tabs->indexOf(tab);
+        int tab_index = ui->tabs->indexOf(tab);
         if (tab_index != -1)
-            ui.tabs->setTabText(tab_index, new_title);
+            ui->tabs->setTabText(tab_index, new_title);
     });
 
     connect(tab, &Tab::sig_closeRequested, this, [this, tab]()
     {
-        int tab_index = ui.tabs->indexOf(tab);
+        int tab_index = ui->tabs->indexOf(tab);
         if (tab_index != -1)
             onCloseTab(tab_index);
     }, Qt::QueuedConnection);
@@ -601,13 +602,13 @@ void MainWindow::addTab(Tab* tab, const QString& title, const QIcon& icon)
         }
     });
 
-    ui.tabs->setCurrentIndex(index);
+    ui->tabs->setCurrentIndex(index);
 }
 
 //--------------------------------------------------------------------------------------------------
 bool MainWindow::tabBarHitTest(const QPoint& global_pos) const
 {
-    QTabBar* tabbar = ui.tabs->tabBar();
+    QTabBar* tabbar = ui->tabs->tabBar();
     if (!tabbar->isVisible())
         return false;
 
@@ -618,11 +619,11 @@ bool MainWindow::tabBarHitTest(const QPoint& global_pos) const
 void MainWindow::hideCloseButtonForTab(int index)
 {
     // Hide close button on both sides for cross-platform compatibility.
-    QWidget* close_button = ui.tabs->tabBar()->tabButton(index, QTabBar::RightSide);
+    QWidget* close_button = ui->tabs->tabBar()->tabButton(index, QTabBar::RightSide);
     if (close_button)
         close_button->hide();
 
-    close_button = ui.tabs->tabBar()->tabButton(index, QTabBar::LeftSide);
+    close_button = ui->tabs->tabBar()->tabButton(index, QTabBar::LeftSide);
     if (close_button)
         close_button->hide();
 }
@@ -630,7 +631,7 @@ void MainWindow::hideCloseButtonForTab(int index)
 //--------------------------------------------------------------------------------------------------
 Tab* MainWindow::tabAt(int index)
 {
-    return dynamic_cast<Tab*>(ui.tabs->widget(index));
+    return dynamic_cast<Tab*>(ui->tabs->widget(index));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -658,7 +659,7 @@ void MainWindow::updateSearchFieldVisibility()
 void MainWindow::updateStatusBarVisibility()
 {
     bool tab_has_statusbar = !active_tab_ || active_tab_->hasStatusBar();
-    ui.statusbar->setVisible(ui.action_statusbar->isChecked() && tab_has_statusbar);
+    ui->statusbar->setVisible(ui->action_statusbar->isChecked() && tab_has_statusbar);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -668,7 +669,7 @@ void MainWindow::installTabActions(Tab* tab)
 
     // Find the first static toolbar action to insert before it.
     QAction* before = nullptr;
-    QList<QAction*> toolbar_actions = ui.toolbar->actions();
+    QList<QAction*> toolbar_actions = ui->toolbar->actions();
     if (!toolbar_actions.isEmpty())
         before = toolbar_actions.first();
 
@@ -684,7 +685,7 @@ void MainWindow::installTabActions(Tab* tab)
             if (action->property(Tab::kMenuOnlyProperty).toBool())
                 continue;
 
-            ui.toolbar->insertAction(before, action);
+            ui->toolbar->insertAction(before, action);
             tab_toolbar_actions_.append(action);
 
             // Actions that carry a submenu (e.g. power control, switch session, scale) need
@@ -692,7 +693,7 @@ void MainWindow::installTabActions(Tab* tab)
             if (action->menu())
             {
                 if (QToolButton* button =
-                        qobject_cast<QToolButton*>(ui.toolbar->widgetForAction(action)))
+                        qobject_cast<QToolButton*>(ui->toolbar->widgetForAction(action)))
                 {
                     button->setPopupMode(QToolButton::InstantPopup);
                 }
@@ -707,7 +708,7 @@ void MainWindow::installTabActions(Tab* tab)
         {
             QAction* separator = new QAction(this);
             separator->setSeparator(true);
-            ui.toolbar->insertAction(before, separator);
+            ui->toolbar->insertAction(before, separator);
             tab_toolbar_actions_.append(separator);
         }
 
@@ -768,7 +769,7 @@ void MainWindow::removeTabActions()
         if (!action->isSeparator())
             disconnect(action, &QAction::changed, this, &MainWindow::updateSeparatorVisibility);
 
-        ui.toolbar->removeAction(action);
+        ui->toolbar->removeAction(action);
 
         if (action->isSeparator())
             delete action;
@@ -847,22 +848,22 @@ QMenu* MainWindow::menuForActionGroup(Tab::ActionRole group) const
     switch (group)
     {
         case Tab::ActionRole::FILE:
-            return ui.menu_file;
+            return ui->menu_file;
 
         case Tab::ActionRole::EDIT:
-            return ui.menu_edit;
+            return ui->menu_edit;
 
         case Tab::ActionRole::VIEW:
-            return ui.menu_view;
+            return ui->menu_view;
 
         case Tab::ActionRole::ACTION:
-            return ui.menu_action;
+            return ui->menu_action;
 
         case Tab::ActionRole::SESSION_TYPE:
-            return ui.menu_session_type;
+            return ui->menu_session_type;
 
         case Tab::ActionRole::HELP:
-            return ui.menu_help;
+            return ui->menu_help;
 
         default:
             return nullptr;

@@ -19,6 +19,8 @@
 #ifndef CLIENT_UI_FILE_TRANSFER_FILE_TRANSFER_WINDOW_H
 #define CLIENT_UI_FILE_TRANSFER_FILE_TRANSFER_WINDOW_H
 
+#include <memory>
+
 #include "client/file_remover.h"
 #include "client/file_transfer.h"
 #include "client/ui/client_window.h"

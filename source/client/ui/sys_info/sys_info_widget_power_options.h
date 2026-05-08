@@ -19,9 +19,14 @@
 #ifndef CLIENT_UI_SYS_INFO_SYS_INFO_POWER_OPTIONS_H
 #define CLIENT_UI_SYS_INFO_SYS_INFO_POWER_OPTIONS_H
 
+#include <memory>
+
 #include "client/ui/sys_info/sys_info_widget.h"
 #include "proto/system_info.h"
-#include "ui_sys_info_widget_power_options.h"
+
+namespace Ui {
+class SysInfoPowerOptions;
+} // namespace Ui
 
 class SysInfoWidgetPowerOptions final : public SysInfoWidget
 {
@@ -46,7 +51,7 @@ private slots:
     static QString batteryStatusToString(proto::system_info::PowerOptions::BatteryStatus value);
 
 private:
-    Ui::SysInfoPowerOptions ui;
+    std::unique_ptr<Ui::SysInfoPowerOptions> ui;
 };
 
 #endif // CLIENT_UI_SYS_INFO_SYS_INFO_POWER_OPTIONS_H

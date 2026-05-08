@@ -21,7 +21,13 @@
 
 #include <QDialog>
 
-#include "ui_local_computer_dialog.h"
+#include <memory>
+
+class QAbstractButton;
+
+namespace Ui {
+class LocalComputerDialog;
+} // namespace Ui
 
 class LocalComputerDialog final : public QDialog
 {
@@ -41,7 +47,7 @@ private slots:
 private:
     void updateAddressLabel();
 
-    Ui::LocalComputerDialog ui;
+    std::unique_ptr<Ui::LocalComputerDialog> ui;
     qint64 computer_id_ = -1;
     qint64 group_id_ = 0;
 

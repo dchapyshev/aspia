@@ -19,21 +19,22 @@
 #include "common/ui/download_dialog.h"
 
 #include <QAbstractButton>
-#include <QFile>
 
 #include "base/logging.h"
 #include "common/ui/msg_box.h"
+#include "ui_download_dialog.h"
 
 //--------------------------------------------------------------------------------------------------
 DownloadDialog::DownloadDialog(const QString& url, QFile& file, QWidget* parent)
     : QDialog(parent),
+      ui(std::make_unique<Ui::DownloadDialog>()),
       downloader_(std::make_unique<HttpFileDownloader>(url)),
       file_(file)
 {
     LOG(INFO) << "Ctor";
-    ui.setupUi(this);
+    ui->setupUi(this);
 
-    connect(ui.button_box, &QDialogButtonBox::clicked, this, [this](QAbstractButton* /* button */)
+    connect(ui->button_box, &QDialogButtonBox::clicked, this, [this](QAbstractButton* /* button */)
     {
         LOG(INFO) << "[ACTION] Cancel downloading";
         reject();
@@ -82,5 +83,5 @@ void DownloadDialog::onFileDownloaderCompleted()
 //--------------------------------------------------------------------------------------------------
 void DownloadDialog::onFileDownloaderProgress(int percentage)
 {
-    ui.progress_bar->setValue(percentage);
+    ui->progress_bar->setValue(percentage);
 }

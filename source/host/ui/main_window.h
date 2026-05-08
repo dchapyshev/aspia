@@ -23,8 +23,13 @@
 #include <QPointer>
 #include <QSystemTrayIcon>
 
+#include <memory>
+
 #include "host/user_session_agent.h"
-#include "ui_main_window.h"
+
+namespace Ui {
+class MainWindow;
+} // namespace Ui
 
 class ChatWidget;
 class NotifierWindow;
@@ -89,8 +94,7 @@ private:
     void updateTrayIconTooltip();
     quint32 calcOneTimeSessions();
 
-    Ui::MainWindow ui;
-
+    std::unique_ptr<Ui::MainWindow> ui;
     bool should_be_quit_ = false;
     bool connected_to_service_ = false;
 

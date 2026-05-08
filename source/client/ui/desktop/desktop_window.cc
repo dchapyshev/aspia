@@ -36,7 +36,6 @@
 #include "base/desktop/frame.h"
 #include "common/ui/msg_box.h"
 #include "base/desktop/mouse_cursor.h"
-#include "client/client_desktop.h"
 #include "client/settings.h"
 #include "client/ui/desktop/desktop_toolbar.h"
 #include "client/ui/desktop/desktop_widget.h"

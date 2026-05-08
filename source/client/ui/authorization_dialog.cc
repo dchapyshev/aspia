@@ -18,31 +18,34 @@
 
 #include "client/ui/authorization_dialog.h"
 
+#include <QTimer>
+
 #include "common/ui/msg_box.h"
 #include "base/logging.h"
 #include "client/settings.h"
-#include <QTimer>
+#include "ui_authorization_dialog.h"
 
 //--------------------------------------------------------------------------------------------------
 AuthorizationDialog::AuthorizationDialog(QWidget* parent)
-    : QDialog(parent)
+    : QDialog(parent),
+      ui(std::make_unique<Ui::AuthorizationDialog>())
 {
     LOG(INFO) << "Ctor";
-    ui.setupUi(this);
+    ui->setupUi(this);
 
     Settings settings;
 
     bool is_one_time_password_checked = settings.isOneTimePasswordChecked();
-    ui.checkbox_one_time_password->setChecked(is_one_time_password_checked);
+    ui->checkbox_one_time_password->setChecked(is_one_time_password_checked);
     onOneTimePasswordToggled(is_one_time_password_checked);
 
-    connect(ui.button_show_password, &QPushButton::toggled,
+    connect(ui->button_show_password, &QPushButton::toggled,
             this, &AuthorizationDialog::onShowPasswordButtonToggled);
 
-    connect(ui.buttonbox, &QDialogButtonBox::clicked,
+    connect(ui->buttonbox, &QDialogButtonBox::clicked,
             this, &AuthorizationDialog::onButtonBoxClicked);
 
-    connect(ui.checkbox_one_time_password, &QCheckBox::toggled,
+    connect(ui->checkbox_one_time_password, &QCheckBox::toggled,
             this, &AuthorizationDialog::onOneTimePasswordToggled);
 
     fitSize();
@@ -54,25 +57,25 @@ AuthorizationDialog::~AuthorizationDialog()
     LOG(INFO) << "Dtor";
 
     Settings settings;
-    settings.setOneTimePasswordChecked(ui.checkbox_one_time_password->isChecked());
+    settings.setOneTimePasswordChecked(ui->checkbox_one_time_password->isChecked());
 }
 
 //--------------------------------------------------------------------------------------------------
 void AuthorizationDialog::setOneTimePasswordEnabled(bool enable)
 {
-    ui.checkbox_one_time_password->setVisible(enable);
+    ui->checkbox_one_time_password->setVisible(enable);
 
     if (!enable)
     {
-        ui.label_username->setVisible(true);
-        ui.edit_username->setVisible(true);
+        ui->label_username->setVisible(true);
+        ui->edit_username->setVisible(true);
     }
     else
     {
-        bool is_checked = ui.checkbox_one_time_password->isChecked();
+        bool is_checked = ui->checkbox_one_time_password->isChecked();
 
-        ui.label_username->setVisible(!is_checked);
-        ui.edit_username->setVisible(!is_checked);
+        ui->label_username->setVisible(!is_checked);
+        ui->edit_username->setVisible(!is_checked);
     }
 
     fitSize();
@@ -81,25 +84,25 @@ void AuthorizationDialog::setOneTimePasswordEnabled(bool enable)
 //--------------------------------------------------------------------------------------------------
 QString AuthorizationDialog::userName() const
 {
-    return ui.edit_username->text();
+    return ui->edit_username->text();
 }
 
 //--------------------------------------------------------------------------------------------------
 void AuthorizationDialog::setUserName(const QString& username)
 {
-    ui.edit_username->setText(username);
+    ui->edit_username->setText(username);
 }
 
 //--------------------------------------------------------------------------------------------------
 QString AuthorizationDialog::password() const
 {
-    return ui.edit_password->text();
+    return ui->edit_password->text();
 }
 
 //--------------------------------------------------------------------------------------------------
 void AuthorizationDialog::setPassword(const QString& password)
 {
-    ui.edit_password->setText(password);
+    ui->edit_password->setText(password);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -107,10 +110,10 @@ void AuthorizationDialog::showEvent(QShowEvent* event)
 {
     LOG(INFO) << "Show event detected";
 
-    if (ui.edit_username->text().isEmpty() && !ui.checkbox_one_time_password->isChecked())
-        ui.edit_username->setFocus();
+    if (ui->edit_username->text().isEmpty() && !ui->checkbox_one_time_password->isChecked())
+        ui->edit_username->setFocus();
     else
-        ui.edit_password->setFocus();
+        ui->edit_password->setFocus();
 
     QDialog::showEvent(event);
 }
@@ -122,17 +125,17 @@ void AuthorizationDialog::onShowPasswordButtonToggled(bool checked)
 
     if (checked)
     {
-        ui.edit_password->setEchoMode(QLineEdit::Normal);
-        ui.edit_password->setInputMethodHints(Qt::ImhNone);
+        ui->edit_password->setEchoMode(QLineEdit::Normal);
+        ui->edit_password->setInputMethodHints(Qt::ImhNone);
     }
     else
     {
-        ui.edit_password->setEchoMode(QLineEdit::Password);
-        ui.edit_password->setInputMethodHints(Qt::ImhHiddenText | Qt::ImhSensitiveData |
+        ui->edit_password->setEchoMode(QLineEdit::Password);
+        ui->edit_password->setInputMethodHints(Qt::ImhHiddenText | Qt::ImhSensitiveData |
                                               Qt::ImhNoAutoUppercase | Qt::ImhNoPredictiveText);
     }
 
-    ui.edit_password->setFocus();
+    ui->edit_password->setFocus();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -140,9 +143,9 @@ void AuthorizationDialog::onOneTimePasswordToggled(bool checked)
 {
     LOG(INFO) << "[ACTION] One time password toggled:" << checked;
 
-    ui.label_username->setVisible(!checked);
-    ui.edit_username->setVisible(!checked);
-    ui.edit_username->clear();
+    ui->label_username->setVisible(!checked);
+    ui->edit_username->setVisible(!checked);
+    ui->edit_username->clear();
 
     fitSize();
 }
@@ -150,13 +153,13 @@ void AuthorizationDialog::onOneTimePasswordToggled(bool checked)
 //--------------------------------------------------------------------------------------------------
 void AuthorizationDialog::onButtonBoxClicked(QAbstractButton* button)
 {
-    if (ui.buttonbox->standardButton(button) == QDialogButtonBox::Ok)
+    if (ui->buttonbox->standardButton(button) == QDialogButtonBox::Ok)
     {
         LOG(INFO) << "[ACTION] Accepted by user";
 
-        if (!ui.checkbox_one_time_password->isChecked())
+        if (!ui->checkbox_one_time_password->isChecked())
         {
-            if (ui.edit_username->text().isEmpty())
+            if (ui->edit_username->text().isEmpty())
             {
                 LOG(ERROR) << "Empty user name";
                 MsgBox::warning(this, tr("Username cannot be empty."));
@@ -164,7 +167,7 @@ void AuthorizationDialog::onButtonBoxClicked(QAbstractButton* button)
             }
         }
 
-        if (ui.edit_password->text().isEmpty())
+        if (ui->edit_password->text().isEmpty())
         {
             LOG(ERROR) << "Empty password";
             MsgBox::warning(this, tr("Password cannot be empty."));

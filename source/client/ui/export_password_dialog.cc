@@ -24,19 +24,21 @@
 #include "base/logging.h"
 #include "client/master_password.h"
 #include "common/ui/msg_box.h"
+#include "ui_export_password_dialog.h"
 
 //--------------------------------------------------------------------------------------------------
 ExportPasswordDialog::ExportPasswordDialog(QWidget* parent)
-    : QDialog(parent)
+    : QDialog(parent),
+      ui(std::make_unique<Ui::ExportPasswordDialog>())
 {
     LOG(INFO) << "Ctor";
-    ui.setupUi(this);
+    ui->setupUi(this);
 
-    connect(ui.button_encrypt, &QPushButton::clicked,
+    connect(ui->button_encrypt, &QPushButton::clicked,
             this, &ExportPasswordDialog::onEncryptClicked);
-    connect(ui.button_cancel, &QPushButton::clicked, this, &QDialog::reject);
+    connect(ui->button_cancel, &QPushButton::clicked, this, &QDialog::reject);
 
-    ui.edit_password->setFocus();
+    ui->edit_password->setFocus();
 
     QTimer::singleShot(0, this, [this](){ setFixedHeight(sizeHint().height()); });
 }
@@ -50,20 +52,20 @@ ExportPasswordDialog::~ExportPasswordDialog()
 //--------------------------------------------------------------------------------------------------
 QString ExportPasswordDialog::password() const
 {
-    return ui.edit_password->text();
+    return ui->edit_password->text();
 }
 
 //--------------------------------------------------------------------------------------------------
 void ExportPasswordDialog::onEncryptClicked()
 {
-    QString password = ui.edit_password->text();
+    QString password = ui->edit_password->text();
     if (password.isEmpty())
     {
         MsgBox::warning(this, tr("Password cannot be empty."));
         return;
     }
 
-    if (password != ui.edit_confirm->text())
+    if (password != ui->edit_confirm->text())
     {
         MsgBox::warning(this, tr("Passwords do not match."));
         return;

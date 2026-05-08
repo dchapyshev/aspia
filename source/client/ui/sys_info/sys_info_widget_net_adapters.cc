@@ -17,13 +17,14 @@
 //
 
 #include "client/ui/sys_info/sys_info_widget_net_adapters.h"
-#include "proto/system_info.h"
 
 #include <QMenu>
 
 #include "base/logging.h"
 #include "common/system_info_constants.h"
 #include "common/ui/formatter.h"
+#include "proto/system_info.h"
+#include "ui_sys_info_widget_net_adapters.h"
 
 namespace {
 
@@ -77,29 +78,30 @@ QTreeWidgetItem* mk(const QString& param, const std::string& value)
 
 //--------------------------------------------------------------------------------------------------
 SysInfoWidgetNetAdapters::SysInfoWidgetNetAdapters(QWidget* parent)
-    : SysInfoWidget(parent)
+    : SysInfoWidget(parent),
+      ui(std::make_unique<Ui::SysInfoNetAdapters>())
 {
-    ui.setupUi(this);
+    ui->setupUi(this);
 
-    connect(ui.action_copy_row, &QAction::triggered, this, [this]()
+    connect(ui->action_copy_row, &QAction::triggered, this, [this]()
     {
-        copyRow(ui.tree->currentItem());
+        copyRow(ui->tree->currentItem());
     });
 
-    connect(ui.action_copy_name, &QAction::triggered, this, [this]()
+    connect(ui->action_copy_name, &QAction::triggered, this, [this]()
     {
-        copyColumn(ui.tree->currentItem(), 0);
+        copyColumn(ui->tree->currentItem(), 0);
     });
 
-    connect(ui.action_copy_value, &QAction::triggered, this, [this]()
+    connect(ui->action_copy_value, &QAction::triggered, this, [this]()
     {
-        copyColumn(ui.tree->currentItem(), 1);
+        copyColumn(ui->tree->currentItem(), 1);
     });
 
-    connect(ui.tree, &QTreeWidget::customContextMenuRequested,
+    connect(ui->tree, &QTreeWidget::customContextMenuRequested,
             this, &SysInfoWidgetNetAdapters::onContextMenu);
 
-    connect(ui.tree, &QTreeWidget::itemDoubleClicked,
+    connect(ui->tree, &QTreeWidget::itemDoubleClicked,
             this, [this](QTreeWidgetItem* item, int /* column */)
     {
         copyRow(item);
@@ -118,12 +120,12 @@ std::string SysInfoWidgetNetAdapters::category() const
 //--------------------------------------------------------------------------------------------------
 void SysInfoWidgetNetAdapters::setSystemInfo(const proto::system_info::SystemInfo& system_info)
 {
-    ui.tree->clear();
+    ui->tree->clear();
 
     if (!system_info.has_network_adapters())
     {
         LOG(INFO) << "No network adapters";
-        ui.tree->setEnabled(false);
+        ui->tree->setEnabled(false);
         return;
     }
 
@@ -186,45 +188,45 @@ void SysInfoWidgetNetAdapters::setSystemInfo(const proto::system_info::SystemInf
 
         if (!group.isEmpty())
         {
-            ui.tree->addTopLevelItem(new Item(":/img/network-card.svg",
+            ui->tree->addTopLevelItem(new Item(":/img/network-card.svg",
                                               QString::fromStdString(adapter.connection_name()),
                                               group));
         }
     }
 
-    for (int i = 0; i < ui.tree->topLevelItemCount(); ++i)
-        ui.tree->topLevelItem(i)->setExpanded(true);
+    for (int i = 0; i < ui->tree->topLevelItemCount(); ++i)
+        ui->tree->topLevelItem(i)->setExpanded(true);
 
     if (!isStateRestored())
-        ui.tree->resizeColumnToContents(0);
+        ui->tree->resizeColumnToContents(0);
 }
 
 //--------------------------------------------------------------------------------------------------
 QTreeWidget* SysInfoWidgetNetAdapters::treeWidget()
 {
-    return ui.tree;
+    return ui->tree;
 }
 
 //--------------------------------------------------------------------------------------------------
 void SysInfoWidgetNetAdapters::retranslate()
 {
-    ui.retranslateUi(this);
+    ui->retranslateUi(this);
     SysInfoWidget::retranslate();
 }
 
 //--------------------------------------------------------------------------------------------------
 void SysInfoWidgetNetAdapters::onContextMenu(const QPoint& point)
 {
-    QTreeWidgetItem* current_item = ui.tree->itemAt(point);
+    QTreeWidgetItem* current_item = ui->tree->itemAt(point);
     if (!current_item)
         return;
 
-    ui.tree->setCurrentItem(current_item);
+    ui->tree->setCurrentItem(current_item);
 
     QMenu menu;
-    menu.addAction(ui.action_copy_row);
-    menu.addAction(ui.action_copy_name);
-    menu.addAction(ui.action_copy_value);
+    menu.addAction(ui->action_copy_row);
+    menu.addAction(ui->action_copy_name);
+    menu.addAction(ui->action_copy_value);
 
-    menu.exec(ui.tree->viewport()->mapToGlobal(point));
+    menu.exec(ui->tree->viewport()->mapToGlobal(point));
 }

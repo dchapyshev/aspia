@@ -21,10 +21,16 @@
 
 #include <QHash>
 
+#include <memory>
+
 #include "client/config.h"
 #include "client/router.h"
+#include "client/ui/hosts/sidebar.h"
 #include "client/ui/tab.h"
-#include "ui_hosts_tab.h"
+
+namespace Ui {
+class HostsTab;
+} // namespace Ui
 
 namespace proto::peer {
 enum SessionType : int;
@@ -107,8 +113,7 @@ private:
     void refreshItem(qint64 computer_id);
     void removeItem(qint64 computer_id);
 
-    Ui::HostsTab ui;
-
+    std::unique_ptr<Ui::HostsTab> ui;
     ContentWidget* current_content_ = nullptr;
     ContentWidget* previous_content_ = nullptr;
 

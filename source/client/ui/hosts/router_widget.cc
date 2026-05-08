@@ -43,6 +43,7 @@
 #include "common/ui/msg_box.h"
 #include "common/ui/status_dialog.h"
 #include "proto/router_admin.h"
+#include "ui_router_widget.h"
 
 namespace {
 
@@ -266,10 +267,11 @@ private:
 //--------------------------------------------------------------------------------------------------
 RouterWidget::RouterWidget(const RouterConfig& config, QWidget* parent)
     : ContentWidget(Type::ROUTER, parent),
+      ui(std::make_unique<Ui::RouterWidget>()),
       config_(config)
 {
     LOG(INFO) << "Ctor";
-    ui.setupUi(this);
+    ui->setupUi(this);
 
     status_dialog_ = new StatusDialog(this);
     status_dialog_->setWindowFlag(Qt::WindowStaysOnTopHint);
@@ -299,22 +301,22 @@ RouterWidget::RouterWidget(const RouterConfig& config, QWidget* parent)
     connect(this, &RouterWidget::sig_disconnectPeer, router_, &Router::onDisconnectPeer, Qt::QueuedConnection);
     connect(this, &RouterWidget::sig_updateConfig, router_, &Router::onUpdateConfig, Qt::QueuedConnection);
 
-    connect(ui.tab, &QTabWidget::currentChanged, this, &RouterWidget::onTabChanged);
-    connect(ui.tree_users, &QTreeWidget::itemSelectionChanged, this, &RouterWidget::onCurrentUserChanged);
-    connect(ui.tree_relays, &QTreeWidget::itemSelectionChanged, this, &RouterWidget::onCurrentRelayChanged);
-    connect(ui.tree_hosts, &QTreeWidget::itemSelectionChanged, this, &RouterWidget::onCurrentHostChanged);
+    connect(ui->tab, &QTabWidget::currentChanged, this, &RouterWidget::onTabChanged);
+    connect(ui->tree_users, &QTreeWidget::itemSelectionChanged, this, &RouterWidget::onCurrentUserChanged);
+    connect(ui->tree_relays, &QTreeWidget::itemSelectionChanged, this, &RouterWidget::onCurrentRelayChanged);
+    connect(ui->tree_hosts, &QTreeWidget::itemSelectionChanged, this, &RouterWidget::onCurrentHostChanged);
 
-    ui.tree_users->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(ui.tree_users, &QTreeWidget::customContextMenuRequested, this, &RouterWidget::onUserContextMenuRequested);
+    ui->tree_users->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(ui->tree_users, &QTreeWidget::customContextMenuRequested, this, &RouterWidget::onUserContextMenuRequested);
 
-    ui.tree_hosts->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(ui.tree_hosts, &QTreeWidget::customContextMenuRequested, this, &RouterWidget::onHostContextMenuRequested);
+    ui->tree_hosts->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(ui->tree_hosts, &QTreeWidget::customContextMenuRequested, this, &RouterWidget::onHostContextMenuRequested);
 
-    ui.tree_relays->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(ui.tree_relays, &QTreeWidget::customContextMenuRequested, this, &RouterWidget::onRelayContextMenuRequested);
+    ui->tree_relays->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(ui->tree_relays, &QTreeWidget::customContextMenuRequested, this, &RouterWidget::onRelayContextMenuRequested);
 
-    ui.tree_peers->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(ui.tree_peers, &QTreeWidget::customContextMenuRequested, this, &RouterWidget::onPeerContextMenuRequested);
+    ui->tree_peers->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(ui->tree_peers, &QTreeWidget::customContextMenuRequested, this, &RouterWidget::onPeerContextMenuRequested);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -341,31 +343,31 @@ Router::Status RouterWidget::status() const
 //--------------------------------------------------------------------------------------------------
 RouterWidget::TabType RouterWidget::currentTabType() const
 {
-    return static_cast<TabType>(ui.tab->currentIndex());
+    return static_cast<TabType>(ui->tab->currentIndex());
 }
 
 //--------------------------------------------------------------------------------------------------
 bool RouterWidget::hasSelectedUser() const
 {
-    return ui.tree_users->currentItem() != nullptr;
+    return ui->tree_users->currentItem() != nullptr;
 }
 
 //--------------------------------------------------------------------------------------------------
 bool RouterWidget::hasSelectedHost() const
 {
-    return ui.tree_hosts->currentItem() != nullptr;
+    return ui->tree_hosts->currentItem() != nullptr;
 }
 
 //--------------------------------------------------------------------------------------------------
 int RouterWidget::hostCount() const
 {
-    return ui.tree_hosts->topLevelItemCount();
+    return ui->tree_hosts->topLevelItemCount();
 }
 
 //--------------------------------------------------------------------------------------------------
 void RouterWidget::copyCurrentHostRow()
 {
-    QTreeWidgetItem* item = ui.tree_hosts->currentItem();
+    QTreeWidgetItem* item = ui->tree_hosts->currentItem();
     if (!item)
         return;
 
@@ -389,7 +391,7 @@ void RouterWidget::copyCurrentHostRow()
 //--------------------------------------------------------------------------------------------------
 void RouterWidget::copyCurrentHostColumn(int column)
 {
-    QTreeWidgetItem* item = ui.tree_hosts->currentItem();
+    QTreeWidgetItem* item = ui->tree_hosts->currentItem();
     if (!item || column < 0)
         return;
 
@@ -404,19 +406,19 @@ void RouterWidget::copyCurrentHostColumn(int column)
 //--------------------------------------------------------------------------------------------------
 bool RouterWidget::hasSelectedRelay() const
 {
-    return ui.tree_relays->currentItem() != nullptr;
+    return ui->tree_relays->currentItem() != nullptr;
 }
 
 //--------------------------------------------------------------------------------------------------
 int RouterWidget::relayCount() const
 {
-    return ui.tree_relays->topLevelItemCount();
+    return ui->tree_relays->topLevelItemCount();
 }
 
 //--------------------------------------------------------------------------------------------------
 void RouterWidget::copyCurrentRelayRow()
 {
-    QTreeWidgetItem* item = ui.tree_relays->currentItem();
+    QTreeWidgetItem* item = ui->tree_relays->currentItem();
     if (!item)
         return;
 
@@ -440,7 +442,7 @@ void RouterWidget::copyCurrentRelayRow()
 //--------------------------------------------------------------------------------------------------
 void RouterWidget::copyCurrentRelayColumn(int column)
 {
-    QTreeWidgetItem* item = ui.tree_relays->currentItem();
+    QTreeWidgetItem* item = ui->tree_relays->currentItem();
     if (!item || column < 0)
         return;
 
@@ -496,11 +498,11 @@ QByteArray RouterWidget::saveState()
         QDataStream stream(&buffer, QIODevice::WriteOnly);
         stream.setVersion(QDataStream::Qt_6_10);
 
-        stream << ui.tree_relays->header()->saveState();
-        stream << ui.splitter->saveState();
-        stream << ui.tree_peers->header()->saveState();
-        stream << ui.tree_users->header()->saveState();
-        stream << ui.tree_hosts->header()->saveState();
+        stream << ui->tree_relays->header()->saveState();
+        stream << ui->splitter->saveState();
+        stream << ui->tree_peers->header()->saveState();
+        stream << ui->tree_users->header()->saveState();
+        stream << ui->tree_hosts->header()->saveState();
     }
 
     return buffer;
@@ -526,14 +528,14 @@ void RouterWidget::restoreState(const QByteArray& state)
 
     if (!relays_columns_state.isEmpty())
     {
-        ui.tree_relays->header()->restoreState(relays_columns_state);
-        ui.tree_relays->header()->setSectionsClickable(true);
-        ui.tree_relays->header()->setSortIndicatorShown(true);
+        ui->tree_relays->header()->restoreState(relays_columns_state);
+        ui->tree_relays->header()->setSectionsClickable(true);
+        ui->tree_relays->header()->setSortIndicatorShown(true);
     }
 
     if (!splitter_state.isEmpty())
     {
-        ui.splitter->restoreState(splitter_state);
+        ui->splitter->restoreState(splitter_state);
     }
     else
     {
@@ -542,28 +544,28 @@ void RouterWidget::restoreState(const QByteArray& state)
         QList<int> sizes;
         sizes.emplace_back(side_size);
         sizes.emplace_back(side_size);
-        ui.splitter->setSizes(sizes);
+        ui->splitter->setSizes(sizes);
     }
 
     if (!peers_columns_state.isEmpty())
     {
-        ui.tree_peers->header()->restoreState(peers_columns_state);
-        ui.tree_peers->header()->setSectionsClickable(true);
-        ui.tree_peers->header()->setSortIndicatorShown(true);
+        ui->tree_peers->header()->restoreState(peers_columns_state);
+        ui->tree_peers->header()->setSectionsClickable(true);
+        ui->tree_peers->header()->setSortIndicatorShown(true);
     }
 
     if (!users_columns_state.isEmpty())
     {
-        ui.tree_users->header()->restoreState(users_columns_state);
-        ui.tree_users->header()->setSectionsClickable(true);
-        ui.tree_users->header()->setSortIndicatorShown(true);
+        ui->tree_users->header()->restoreState(users_columns_state);
+        ui->tree_users->header()->setSectionsClickable(true);
+        ui->tree_users->header()->setSortIndicatorShown(true);
     }
 
     if (!hosts_columns_state.isEmpty())
     {
-        ui.tree_hosts->header()->restoreState(hosts_columns_state);
-        ui.tree_hosts->header()->setSectionsClickable(true);
-        ui.tree_hosts->header()->setSortIndicatorShown(true);
+        ui->tree_hosts->header()->restoreState(hosts_columns_state);
+        ui->tree_hosts->header()->setSectionsClickable(true);
+        ui->tree_hosts->header()->setSortIndicatorShown(true);
     }
 }
 
@@ -656,9 +658,9 @@ void RouterWidget::onUpdateUserList()
 void RouterWidget::onAddUser()
 {
     QStringList names;
-    for (int i = 0; i < ui.tree_users->topLevelItemCount(); ++i)
+    for (int i = 0; i < ui->tree_users->topLevelItemCount(); ++i)
     {
-        UserTreeItem* item = static_cast<UserTreeItem*>(ui.tree_users->topLevelItem(i));
+        UserTreeItem* item = static_cast<UserTreeItem*>(ui->tree_users->topLevelItem(i));
         names.append(item->user.name);
     }
 
@@ -676,7 +678,7 @@ void RouterWidget::onAddUser()
 //--------------------------------------------------------------------------------------------------
 void RouterWidget::onModifyUser()
 {
-    UserTreeItem* tree_item = static_cast<UserTreeItem*>(ui.tree_users->currentItem());
+    UserTreeItem* tree_item = static_cast<UserTreeItem*>(ui->tree_users->currentItem());
     if (!tree_item)
     {
         LOG(INFO) << "No selected user";
@@ -684,9 +686,9 @@ void RouterWidget::onModifyUser()
     }
 
     QStringList names;
-    for (int i = 0; i < ui.tree_users->topLevelItemCount(); ++i)
+    for (int i = 0; i < ui->tree_users->topLevelItemCount(); ++i)
     {
-        UserTreeItem* item = static_cast<UserTreeItem*>(ui.tree_users->topLevelItem(i));
+        UserTreeItem* item = static_cast<UserTreeItem*>(ui->tree_users->topLevelItem(i));
         if (item->text(0).compare(tree_item->text(0), Qt::CaseInsensitive) != 0)
             names.append(item->user.name);
     }
@@ -705,7 +707,7 @@ void RouterWidget::onModifyUser()
 //--------------------------------------------------------------------------------------------------
 void RouterWidget::onDeleteUser()
 {
-    UserTreeItem* tree_item = static_cast<UserTreeItem*>(ui.tree_users->currentItem());
+    UserTreeItem* tree_item = static_cast<UserTreeItem*>(ui->tree_users->currentItem());
     if (!tree_item)
     {
         LOG(INFO) << "No selected user";
@@ -735,7 +737,7 @@ void RouterWidget::onDeleteUser()
 //--------------------------------------------------------------------------------------------------
 void RouterWidget::onDisconnectHost()
 {
-    HostTreeItem* tree_item = static_cast<HostTreeItem*>(ui.tree_hosts->currentItem());
+    HostTreeItem* tree_item = static_cast<HostTreeItem*>(ui->tree_hosts->currentItem());
     if (!tree_item)
     {
         LOG(INFO) << "No selected host";
@@ -756,7 +758,7 @@ void RouterWidget::onDisconnectHost()
 //--------------------------------------------------------------------------------------------------
 void RouterWidget::onDisconnectAllHosts()
 {
-    if (ui.tree_hosts->topLevelItemCount() <= 0)
+    if (ui->tree_hosts->topLevelItemCount() <= 0)
     {
         LOG(INFO) << "Host list is empty";
         return;
@@ -776,7 +778,7 @@ void RouterWidget::onDisconnectAllHosts()
 //--------------------------------------------------------------------------------------------------
 void RouterWidget::onRemoveHost()
 {
-    HostTreeItem* tree_item = static_cast<HostTreeItem*>(ui.tree_hosts->currentItem());
+    HostTreeItem* tree_item = static_cast<HostTreeItem*>(ui->tree_hosts->currentItem());
     if (!tree_item)
     {
         LOG(INFO) << "No selected host";
@@ -809,7 +811,7 @@ void RouterWidget::onRemoveHost()
 //--------------------------------------------------------------------------------------------------
 void RouterWidget::onDisconnectRelay()
 {
-    RelayTreeItem* tree_item = static_cast<RelayTreeItem*>(ui.tree_relays->currentItem());
+    RelayTreeItem* tree_item = static_cast<RelayTreeItem*>(ui->tree_relays->currentItem());
     if (!tree_item)
     {
         LOG(INFO) << "No selected relay";
@@ -830,7 +832,7 @@ void RouterWidget::onDisconnectRelay()
 //--------------------------------------------------------------------------------------------------
 void RouterWidget::onDisconnectAllRelays()
 {
-    if (ui.tree_relays->topLevelItemCount() <= 0)
+    if (ui->tree_relays->topLevelItemCount() <= 0)
     {
         LOG(INFO) << "Relay list is empty";
         return;
@@ -851,7 +853,7 @@ void RouterWidget::onDisconnectAllRelays()
 void RouterWidget::changeEvent(QEvent* event)
 {
     if (event->type() == QEvent::LanguageChange)
-        ui.retranslateUi(this);
+        ui->retranslateUi(this);
     ContentWidget::changeEvent(event);
 }
 
@@ -879,22 +881,22 @@ void RouterWidget::onStatusChanged(qint64 router_id, Router::Status status)
         onUpdateHostList();
         onUpdateUserList();
 
-        ui.tree_relays->setEnabled(true);
-        ui.tree_peers->setEnabled(true);
-        ui.tree_hosts->setEnabled(true);
-        ui.tree_users->setEnabled(true);
+        ui->tree_relays->setEnabled(true);
+        ui->tree_peers->setEnabled(true);
+        ui->tree_hosts->setEnabled(true);
+        ui->tree_users->setEnabled(true);
     }
     else
     {
-        ui.tree_relays->setEnabled(false);
-        ui.tree_peers->setEnabled(false);
-        ui.tree_hosts->setEnabled(false);
-        ui.tree_users->setEnabled(false);
+        ui->tree_relays->setEnabled(false);
+        ui->tree_peers->setEnabled(false);
+        ui->tree_hosts->setEnabled(false);
+        ui->tree_users->setEnabled(false);
 
-        ui.tree_relays->clear();
-        ui.tree_peers->clear();
-        ui.tree_hosts->clear();
-        ui.tree_users->clear();
+        ui->tree_relays->clear();
+        ui->tree_peers->clear();
+        ui->tree_hosts->clear();
+        ui->tree_users->clear();
 
         updateStatusLabel();
     }
@@ -924,7 +926,7 @@ void RouterWidget::onCurrentUserChanged()
 //--------------------------------------------------------------------------------------------------
 void RouterWidget::onCurrentRelayChanged()
 {
-    ui.tree_peers->clear();
+    ui->tree_peers->clear();
     updateRelayStatistics();
     emit sig_currentRelayChanged(routerId());
 }
@@ -938,58 +940,58 @@ void RouterWidget::onCurrentHostChanged()
 //--------------------------------------------------------------------------------------------------
 void RouterWidget::onUserContextMenuRequested(const QPoint& pos)
 {
-    QTreeWidgetItem* item = ui.tree_users->itemAt(pos);
+    QTreeWidgetItem* item = ui->tree_users->itemAt(pos);
     if (item)
-        ui.tree_users->setCurrentItem(item);
+        ui->tree_users->setCurrentItem(item);
 
     User user;
     if (item)
         user = static_cast<UserTreeItem*>(item)->user;
 
-    QPoint global_pos = ui.tree_users->viewport()->mapToGlobal(pos);
+    QPoint global_pos = ui->tree_users->viewport()->mapToGlobal(pos);
     emit sig_userContextMenu(routerId(), user, global_pos);
 }
 
 //--------------------------------------------------------------------------------------------------
 void RouterWidget::onHostContextMenuRequested(const QPoint& pos)
 {
-    QTreeWidgetItem* item = ui.tree_hosts->itemAt(pos);
+    QTreeWidgetItem* item = ui->tree_hosts->itemAt(pos);
     if (item)
-        ui.tree_hosts->setCurrentItem(item);
+        ui->tree_hosts->setCurrentItem(item);
 
-    const int column = ui.tree_hosts->indexAt(pos).column();
-    const QPoint global_pos = ui.tree_hosts->viewport()->mapToGlobal(pos);
+    const int column = ui->tree_hosts->indexAt(pos).column();
+    const QPoint global_pos = ui->tree_hosts->viewport()->mapToGlobal(pos);
     emit sig_hostContextMenu(routerId(), global_pos, column);
 }
 
 //--------------------------------------------------------------------------------------------------
 void RouterWidget::onRelayContextMenuRequested(const QPoint& pos)
 {
-    QTreeWidgetItem* item = ui.tree_relays->itemAt(pos);
+    QTreeWidgetItem* item = ui->tree_relays->itemAt(pos);
     if (item)
-        ui.tree_relays->setCurrentItem(item);
+        ui->tree_relays->setCurrentItem(item);
 
-    const int column = ui.tree_relays->indexAt(pos).column();
-    const QPoint global_pos = ui.tree_relays->viewport()->mapToGlobal(pos);
+    const int column = ui->tree_relays->indexAt(pos).column();
+    const QPoint global_pos = ui->tree_relays->viewport()->mapToGlobal(pos);
     emit sig_relayContextMenu(routerId(), global_pos, column);
 }
 
 //--------------------------------------------------------------------------------------------------
 void RouterWidget::onPeerContextMenuRequested(const QPoint& pos)
 {
-    RelayTreeItem* relay_item = static_cast<RelayTreeItem*>(ui.tree_relays->currentItem());
+    RelayTreeItem* relay_item = static_cast<RelayTreeItem*>(ui->tree_relays->currentItem());
     if (!relay_item)
         return;
 
-    QTreeWidgetItem* item = ui.tree_peers->itemAt(pos);
+    QTreeWidgetItem* item = ui->tree_peers->itemAt(pos);
     if (!item)
         return;
 
-    ui.tree_peers->setCurrentItem(item);
+    ui->tree_peers->setCurrentItem(item);
 
     PeerTreeItem* peer_item = static_cast<PeerTreeItem*>(item);
-    const int column = ui.tree_peers->indexAt(pos).column();
-    const QPoint global_pos = ui.tree_peers->viewport()->mapToGlobal(pos);
+    const int column = ui->tree_peers->indexAt(pos).column();
+    const QPoint global_pos = ui->tree_peers->viewport()->mapToGlobal(pos);
 
     QMenu menu;
     QAction* disconnect_action = menu.addAction(tr("Disconnect"));
@@ -1059,9 +1061,9 @@ void RouterWidget::onRelayListReceived(const proto::router::RelayList& relays)
     };
 
     // Remove from the UI all relays that are not in the list.
-    for (int i = ui.tree_relays->topLevelItemCount() - 1; i >= 0; --i)
+    for (int i = ui->tree_relays->topLevelItemCount() - 1; i >= 0; --i)
     {
-        RelayTreeItem* item = static_cast<RelayTreeItem*>(ui.tree_relays->topLevelItem(i));
+        RelayTreeItem* item = static_cast<RelayTreeItem*>(ui->tree_relays->topLevelItem(i));
 
         if (!has_with_id(relays, item->info.entry_id()))
             delete item;
@@ -1073,9 +1075,9 @@ void RouterWidget::onRelayListReceived(const proto::router::RelayList& relays)
         const proto::router::RelayInfo& info = relays.relay(i);
         bool found = false;
 
-        for (int j = 0; j < ui.tree_relays->topLevelItemCount(); ++j)
+        for (int j = 0; j < ui->tree_relays->topLevelItemCount(); ++j)
         {
-            RelayTreeItem* item = static_cast<RelayTreeItem*>(ui.tree_relays->topLevelItem(j));
+            RelayTreeItem* item = static_cast<RelayTreeItem*>(ui->tree_relays->topLevelItem(j));
             if (item->info.entry_id() == info.entry_id())
             {
                 item->updateItem(info);
@@ -1085,7 +1087,7 @@ void RouterWidget::onRelayListReceived(const proto::router::RelayList& relays)
         }
 
         if (!found)
-            ui.tree_relays->addTopLevelItem(new RelayTreeItem(info));
+            ui->tree_relays->addTopLevelItem(new RelayTreeItem(info));
     }
 
     updateRelayStatistics();
@@ -1107,9 +1109,9 @@ void RouterWidget::onHostListReceived(const proto::router::HostList& hosts)
     };
 
     // Remove from the UI all hosts that are not in the list.
-    for (int i = ui.tree_hosts->topLevelItemCount() - 1; i >= 0; --i)
+    for (int i = ui->tree_hosts->topLevelItemCount() - 1; i >= 0; --i)
     {
-        HostTreeItem* item = static_cast<HostTreeItem*>(ui.tree_hosts->topLevelItem(i));
+        HostTreeItem* item = static_cast<HostTreeItem*>(ui->tree_hosts->topLevelItem(i));
 
         if (!has_with_id(hosts, item->info.entry_id()))
             delete item;
@@ -1121,9 +1123,9 @@ void RouterWidget::onHostListReceived(const proto::router::HostList& hosts)
         const proto::router::HostInfo& info = hosts.host(i);
         bool found = false;
 
-        for (int j = 0; j < ui.tree_hosts->topLevelItemCount(); ++j)
+        for (int j = 0; j < ui->tree_hosts->topLevelItemCount(); ++j)
         {
-            HostTreeItem* item = static_cast<HostTreeItem*>(ui.tree_hosts->topLevelItem(j));
+            HostTreeItem* item = static_cast<HostTreeItem*>(ui->tree_hosts->topLevelItem(j));
             if (item->info.entry_id() == info.entry_id())
             {
                 item->updateItem(info);
@@ -1133,7 +1135,7 @@ void RouterWidget::onHostListReceived(const proto::router::HostList& hosts)
         }
 
         if (!found)
-            ui.tree_hosts->addTopLevelItem(new HostTreeItem(info));
+            ui->tree_hosts->addTopLevelItem(new HostTreeItem(info));
     }
 
     emit sig_currentHostChanged(routerId());
@@ -1143,7 +1145,7 @@ void RouterWidget::onHostListReceived(const proto::router::HostList& hosts)
 //--------------------------------------------------------------------------------------------------
 void RouterWidget::onUserListReceived(const proto::router::UserList& list)
 {
-    QTreeWidget* tree_users = ui.tree_users;
+    QTreeWidget* tree_users = ui->tree_users;
 
     qint64 selected_entry_id = 0;
     if (UserTreeItem* current = static_cast<UserTreeItem*>(tree_users->currentItem()))
@@ -1249,13 +1251,13 @@ void RouterWidget::updateStatusLabel()
     switch (currentTabType())
     {
         case TabType::HOSTS:
-            status_label_->setText(tr("%n host(s)", "", ui.tree_hosts->topLevelItemCount()));
+            status_label_->setText(tr("%n host(s)", "", ui->tree_hosts->topLevelItemCount()));
             break;
         case TabType::RELAYS:
-            status_label_->setText(tr("%n relay(s)", "", ui.tree_relays->topLevelItemCount()));
+            status_label_->setText(tr("%n relay(s)", "", ui->tree_relays->topLevelItemCount()));
             break;
         case TabType::USERS:
-            status_label_->setText(tr("%n user(s)", "", ui.tree_users->topLevelItemCount()));
+            status_label_->setText(tr("%n user(s)", "", ui->tree_users->topLevelItemCount()));
             break;
         default:
             status_label_->clear();
@@ -1266,14 +1268,14 @@ void RouterWidget::updateStatusLabel()
 //--------------------------------------------------------------------------------------------------
 void RouterWidget::updateRelayStatistics()
 {
-    RelayTreeItem* item = static_cast<RelayTreeItem*>(ui.tree_relays->currentItem());
+    RelayTreeItem* item = static_cast<RelayTreeItem*>(ui->tree_relays->currentItem());
     if (!item)
     {
-        ui.tree_peers->setEnabled(false);
+        ui->tree_peers->setEnabled(false);
         return;
     }
 
-    ui.tree_peers->setEnabled(true);
+    ui->tree_peers->setEnabled(true);
 
     if (!item->info.has_statistics())
         return;
@@ -1292,9 +1294,9 @@ void RouterWidget::updateRelayStatistics()
     };
 
     // Remove from the UI all connections that are not in the list.
-    for (int i = ui.tree_peers->topLevelItemCount() - 1; i >= 0; --i)
+    for (int i = ui->tree_peers->topLevelItemCount() - 1; i >= 0; --i)
     {
-        PeerTreeItem* peer_item = static_cast<PeerTreeItem*>(ui.tree_peers->topLevelItem(i));
+        PeerTreeItem* peer_item = static_cast<PeerTreeItem*>(ui->tree_peers->topLevelItem(i));
         if (!has_with_id(stats, peer_item->conn.session_id()))
             delete peer_item;
     }
@@ -1305,9 +1307,9 @@ void RouterWidget::updateRelayStatistics()
         const proto::router::Peer& connection = stats.peer(i);
         bool found = false;
 
-        for (int j = 0; j < ui.tree_peers->topLevelItemCount(); ++j)
+        for (int j = 0; j < ui->tree_peers->topLevelItemCount(); ++j)
         {
-            PeerTreeItem* peer_item = static_cast<PeerTreeItem*>(ui.tree_peers->topLevelItem(j));
+            PeerTreeItem* peer_item = static_cast<PeerTreeItem*>(ui->tree_peers->topLevelItem(j));
             if (peer_item->conn.session_id() == connection.session_id())
             {
                 peer_item->updateItem(connection);
@@ -1317,7 +1319,7 @@ void RouterWidget::updateRelayStatistics()
         }
 
         if (!found)
-            ui.tree_peers->addTopLevelItem(new PeerTreeItem(connection));
+            ui->tree_peers->addTopLevelItem(new PeerTreeItem(connection));
     }
 }
 
@@ -1345,10 +1347,10 @@ void RouterWidget::saveHostsToFile()
 
     QJsonArray root_array;
 
-    for (int i = 0; i < ui.tree_hosts->topLevelItemCount(); ++i)
+    for (int i = 0; i < ui->tree_hosts->topLevelItemCount(); ++i)
     {
         const proto::router::HostInfo& info =
-            static_cast<HostTreeItem*>(ui.tree_hosts->topLevelItem(i))->info;
+            static_cast<HostTreeItem*>(ui->tree_hosts->topLevelItem(i))->info;
 
         QJsonObject host_object;
 
@@ -1407,10 +1409,10 @@ void RouterWidget::saveRelaysToFile()
 
     QJsonArray root_array;
 
-    for (int i = 0; i < ui.tree_relays->topLevelItemCount(); ++i)
+    for (int i = 0; i < ui->tree_relays->topLevelItemCount(); ++i)
     {
         const proto::router::RelayInfo& info =
-            static_cast<RelayTreeItem*>(ui.tree_relays->topLevelItem(i))->info;
+            static_cast<RelayTreeItem*>(ui->tree_relays->topLevelItem(i))->info;
 
         QJsonObject relay_object;
 

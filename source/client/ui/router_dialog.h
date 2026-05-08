@@ -19,11 +19,15 @@
 #ifndef CLIENT_UI_ROUTER_DIALOG_H
 #define CLIENT_UI_ROUTER_DIALOG_H
 
-#include "ui_router_dialog.h"
-
 #include <QDialog>
 
+#include <memory>
+
 class QAbstractButton;
+
+namespace Ui {
+class RouterDialog;
+} // namespace Ui
 
 class RouterDialog final : public QDialog
 {
@@ -40,7 +44,7 @@ private slots:
 private:
     void showError(const QString& message);
 
-    Ui::RouterDialog ui;
+    std::unique_ptr<Ui::RouterDialog> ui;
     qint64 router_id_ = -1;
 };
 

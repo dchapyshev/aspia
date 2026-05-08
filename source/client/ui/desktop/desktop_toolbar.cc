@@ -31,6 +31,7 @@
 #include "client/ui/desktop/select_screen_action.h"
 #include "proto/desktop_control.h"
 #include "proto/desktop_screen.h"
+#include "ui_desktop_toolbar.h"
 
 namespace {
 
@@ -56,10 +57,11 @@ bool isValidScale(qint64 scale)
 
 //--------------------------------------------------------------------------------------------------
 DesktopToolBar::DesktopToolBar(QWidget* parent)
-    : QFrame(parent)
+    : QFrame(parent),
+      ui(std::make_unique<Ui::DesktopToolBar>())
 {
     LOG(INFO) << "Ctor";
-    ui.setupUi(this);
+    ui->setupUi(this);
 
     hide_timer_ = new QTimer(this);
     connect(hide_timer_, &QTimer::timeout, this, &DesktopToolBar::onHideTimer);
@@ -77,44 +79,44 @@ DesktopToolBar::DesktopToolBar(QWidget* parent)
 
     sessions_menu_ = new QMenu(this);
     sessions_group_ = new QActionGroup(sessions_menu_);
-    ui.action_switch_session->setMenu(sessions_menu_);
+    ui->action_switch_session->setMenu(sessions_menu_);
 
     QToolButton* switch_session_button = qobject_cast<QToolButton*>(
-        ui.toolbar->widgetForAction(ui.action_switch_session));
+        ui->toolbar->widgetForAction(ui->action_switch_session));
     switch_session_button->setPopupMode(QToolButton::InstantPopup);
 
     connect(sessions_menu_, &QMenu::aboutToShow, this, &DesktopToolBar::onMenuShow);
     connect(sessions_menu_, &QMenu::aboutToHide, this, &DesktopToolBar::onMenuHide);
     connect(sessions_group_, &QActionGroup::triggered, this, &DesktopToolBar::onSwitchSessionAction);
 
-    connect(ui.action_autosize, &QAction::triggered, this, &DesktopToolBar::onAutosizeButton);
-    connect(ui.action_fullscreen, &QAction::triggered, this, &DesktopToolBar::onFullscreenButton);
-    connect(ui.action_autoscroll, &QAction::triggered, this, [this](bool enabled)
+    connect(ui->action_autosize, &QAction::triggered, this, &DesktopToolBar::onAutosizeButton);
+    connect(ui->action_fullscreen, &QAction::triggered, this, &DesktopToolBar::onFullscreenButton);
+    connect(ui->action_autoscroll, &QAction::triggered, this, [this](bool enabled)
     {
         LOG(INFO) << "[ACTION] Auto-scroll changed:" << enabled;
         emit sig_autoScrollChanged(enabled);
     });
-    connect(ui.action_system_info, &QAction::triggered, this, [this]()
+    connect(ui->action_system_info, &QAction::triggered, this, [this]()
     {
         LOG(INFO) << "[ACTION] System info requested";
         emit sig_startSession(proto::peer::SESSION_TYPE_SYSTEM_INFO);
     });
-    connect(ui.action_task_manager, &QAction::triggered, this, [this]()
+    connect(ui->action_task_manager, &QAction::triggered, this, [this]()
     {
         LOG(INFO) << "[ACTION] Task manager requested";
         emit sig_startTaskManager();
     });
-    connect(ui.action_statistics, &QAction::triggered, this, [this]()
+    connect(ui->action_statistics, &QAction::triggered, this, [this]()
     {
         LOG(INFO) << "[ACTION] Statistics requested";
         emit sig_startStatistics();
     });
-    connect(ui.action_minimize, &QAction::triggered, this, [this]()
+    connect(ui->action_minimize, &QAction::triggered, this, [this]()
     {
         LOG(INFO) << "[ACTION] Minimize session";
         emit sig_minimizeSession();
     });
-    connect(ui.action_close, &QAction::triggered, this, [this]()
+    connect(ui->action_close, &QAction::triggered, this, [this]()
     {
         LOG(INFO) << "[ACTION] Close session";
         emit sig_closeSession();
@@ -122,15 +124,15 @@ DesktopToolBar::DesktopToolBar(QWidget* parent)
 
     createAdditionalMenu();
 
-    connect(ui.action_cad, &QAction::triggered, this, &DesktopToolBar::onCtrlAltDel);
+    connect(ui->action_cad, &QAction::triggered, this, &DesktopToolBar::onCtrlAltDel);
 
-    connect(ui.action_file_transfer, &QAction::triggered, this, [this]()
+    connect(ui->action_file_transfer, &QAction::triggered, this, [this]()
     {
         LOG(INFO) << "[ACTION] File transfer requested";
         emit sig_startSession(proto::peer::SESSION_TYPE_FILE_TRANSFER);
     });
 
-    connect(ui.action_text_chat, &QAction::triggered, this, [this]()
+    connect(ui->action_text_chat, &QAction::triggered, this, [this]()
     {
         LOG(INFO) << "[ACTION] Text chat requested";
         emit sig_startSession(proto::peer::SESSION_TYPE_TEXT_CHAT);
@@ -141,7 +143,7 @@ DesktopToolBar::DesktopToolBar(QWidget* parent)
 
 #if defined(Q_OS_MACOS)
     // MacOS has its own button to maximize the window to full screen.
-    ui.action_fullscreen->setVisible(false);
+    ui->action_fullscreen->setVisible(false);
 #endif // defined(Q_OS_MACOS)
 
     showFullScreenButtons(false);
@@ -168,8 +170,8 @@ void DesktopToolBar::enablePowerControl(bool enable)
 {
     LOG(INFO) << "enablePowerControl:" << enable;
 
-    ui.action_power_control->setVisible(enable);
-    ui.action_power_control->setEnabled(enable);
+    ui->action_power_control->setVisible(enable);
+    ui->action_power_control->setEnabled(enable);
 
     if (!enable)
     {
@@ -178,17 +180,17 @@ void DesktopToolBar::enablePowerControl(bool enable)
     else
     {
         power_menu_.reset(new QMenu());
-        power_menu_->addAction(ui.action_shutdown);
-        power_menu_->addAction(ui.action_reboot);
-        power_menu_->addAction(ui.action_reboot_safe_mode);
+        power_menu_->addAction(ui->action_shutdown);
+        power_menu_->addAction(ui->action_reboot);
+        power_menu_->addAction(ui->action_reboot_safe_mode);
         power_menu_->addSeparator();
-        power_menu_->addAction(ui.action_logoff);
-        power_menu_->addAction(ui.action_lock);
+        power_menu_->addAction(ui->action_logoff);
+        power_menu_->addAction(ui->action_lock);
 
-        ui.action_power_control->setMenu(power_menu_.get());
+        ui->action_power_control->setMenu(power_menu_.get());
 
         QToolButton* button = qobject_cast<QToolButton*>(
-            ui.toolbar->widgetForAction(ui.action_power_control));
+            ui->toolbar->widgetForAction(ui->action_power_control));
         button->setPopupMode(QToolButton::InstantPopup);
 
         connect(power_menu_.get(), &QMenu::triggered, this, &DesktopToolBar::onPowerControl);
@@ -203,8 +205,8 @@ void DesktopToolBar::enablePowerControl(bool enable)
 void DesktopToolBar::enableSystemInfo(bool enable)
 {
     LOG(INFO) << "enableSystemInfo:" << enable;
-    ui.action_system_info->setVisible(enable);
-    ui.action_system_info->setEnabled(enable);
+    ui->action_system_info->setVisible(enable);
+    ui->action_system_info->setEnabled(enable);
     updateSize();
 }
 
@@ -212,8 +214,8 @@ void DesktopToolBar::enableSystemInfo(bool enable)
 void DesktopToolBar::enableTextChat(bool enable)
 {
     LOG(INFO) << "enableTextChat:" << enable;
-    ui.action_text_chat->setVisible(enable);
-    ui.action_text_chat->setEnabled(enable);
+    ui->action_text_chat->setVisible(enable);
+    ui->action_text_chat->setEnabled(enable);
     updateSize();
 }
 
@@ -221,8 +223,8 @@ void DesktopToolBar::enableTextChat(bool enable)
 void DesktopToolBar::enableTaskManager(bool enable)
 {
     LOG(INFO) << "enableTaskManager:" << enable;
-    ui.action_task_manager->setVisible(enable);
-    ui.action_task_manager->setEnabled(enable);
+    ui->action_task_manager->setVisible(enable);
+    ui->action_task_manager->setEnabled(enable);
     updateSize();
 }
 
@@ -230,8 +232,8 @@ void DesktopToolBar::enableTaskManager(bool enable)
 void DesktopToolBar::enableCtrlAltDelFeature(bool enable)
 {
     LOG(INFO) << "enableCtrlAltDelFeature:" << enable;
-    ui.action_cad->setVisible(enable);
-    ui.action_cad->setEnabled(enable);
+    ui->action_cad->setVisible(enable);
+    ui->action_cad->setEnabled(enable);
     updateSize();
 }
 
@@ -239,7 +241,7 @@ void DesktopToolBar::enableCtrlAltDelFeature(bool enable)
 void DesktopToolBar::enablePasteAsKeystrokesFeature(bool enable)
 {
     LOG(INFO) << "enablePasteAsKeystrokesFeature:" << enable;
-    ui.action_paste_clipboard_as_keystrokes->setEnabled(enable);
+    ui->action_paste_clipboard_as_keystrokes->setEnabled(enable);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -279,9 +281,9 @@ void DesktopToolBar::setScreenList(const proto::screen::ScreenList& screen_list)
             bool is_primary = screen.id() == screen_list.primary_screen();
 
             SelectScreenAction* action =
-                new SelectScreenAction(i + 1, screen, is_primary, ui.toolbar);
+                new SelectScreenAction(i + 1, screen, is_primary, ui->toolbar);
 
-            ui.toolbar->insertAction(ui.action_power_control, action);
+            ui->toolbar->insertAction(ui->action_power_control, action);
             screen_actions_.append(action);
 
             if (screen_list.current_screen() == screen.id())
@@ -293,7 +295,7 @@ void DesktopToolBar::setScreenList(const proto::screen::ScreenList& screen_list)
                     action->setMenu(resolutions_menu_);
 
                     QToolButton* button = qobject_cast<QToolButton*>(
-                        ui.toolbar->widgetForAction(action));
+                        ui->toolbar->widgetForAction(action));
                     if (button)
                         button->setPopupMode(QToolButton::InstantPopup);
                 }
@@ -305,7 +307,7 @@ void DesktopToolBar::setScreenList(const proto::screen::ScreenList& screen_list)
             });
         }
 
-        SelectScreenAction* full_desktop_action = new SelectScreenAction(ui.toolbar);
+        SelectScreenAction* full_desktop_action = new SelectScreenAction(ui->toolbar);
         if (screen_list.current_screen() == -1)
         {
             full_desktop_action->setChecked(true);
@@ -317,12 +319,12 @@ void DesktopToolBar::setScreenList(const proto::screen::ScreenList& screen_list)
             onChangeScreenAction(full_desktop_action);
         });
 
-        ui.toolbar->insertAction(ui.action_power_control, full_desktop_action);
+        ui->toolbar->insertAction(ui->action_power_control, full_desktop_action);
         screen_actions_.append(full_desktop_action);
     }
     else
     {
-        QAction* resolution_select_action = new QAction(ui.toolbar);
+        QAction* resolution_select_action = new QAction(ui->toolbar);
 
         QString text = tr("Resolution selection");
         resolution_select_action->setText(text);
@@ -330,11 +332,11 @@ void DesktopToolBar::setScreenList(const proto::screen::ScreenList& screen_list)
         resolution_select_action->setIcon(QIcon(":/img/computer.svg"));
         resolution_select_action->setMenu(resolutions_menu_);
 
-        ui.toolbar->insertAction(ui.action_power_control, resolution_select_action);
+        ui->toolbar->insertAction(ui->action_power_control, resolution_select_action);
         screen_actions_.append(resolution_select_action);
 
         QToolButton* button = qobject_cast<QToolButton*>(
-            ui.toolbar->widgetForAction(resolution_select_action));
+            ui->toolbar->widgetForAction(resolution_select_action));
         if (button)
             button->setPopupMode(QToolButton::InstantPopup);
 
@@ -374,8 +376,8 @@ void DesktopToolBar::setSessionList(const proto::control::SessionList& session_l
 
     bool enable = session_list.session_size() != 0;
 
-    ui.action_switch_session->setVisible(enable);
-    ui.action_switch_session->setEnabled(enable);
+    ui->action_switch_session->setVisible(enable);
+    ui->action_switch_session->setEnabled(enable);
 
     for (int i = 0; i < sessions_actions_.size(); ++i)
         delete sessions_actions_[i];
@@ -420,13 +422,13 @@ void DesktopToolBar::startRecording(bool enable)
 
     if (enable)
     {
-        ui.action_start_recording->setIcon(QIcon(":/img/stop.svg"));
-        ui.action_start_recording->setText(tr("Stop recording"));
+        ui->action_start_recording->setIcon(QIcon(":/img/stop.svg"));
+        ui->action_start_recording->setText(tr("Stop recording"));
     }
     else
     {
-        ui.action_start_recording->setIcon(QIcon(":/img/record.svg"));
-        ui.action_start_recording->setText(tr("Start recording"));
+        ui->action_start_recording->setIcon(QIcon(":/img/record.svg"));
+        ui->action_start_recording->setText(tr("Start recording"));
     }
 
     is_recording_started_ = enable;
@@ -454,9 +456,9 @@ void DesktopToolBar::setTabbedMode(bool tabbed)
     {
         // Restore the look the floating-mode constructor would have produced for the current
         // pin-state.
-        bool is_pinned = ui.action_pin->isChecked();
-        ui.toolbar->setVisible(is_pinned);
-        ui.frame->setVisible(!is_pinned);
+        bool is_pinned = ui->action_pin->isChecked();
+        ui->toolbar->setVisible(is_pinned);
+        ui->frame->setVisible(!is_pinned);
         show();
 
         if (!is_pinned)
@@ -467,32 +469,32 @@ void DesktopToolBar::setTabbedMode(bool tabbed)
 //--------------------------------------------------------------------------------------------------
 QList<QPair<Tab::ActionRole, QList<QAction*>>> DesktopToolBar::tabActionGroups() const
 {
-    ui.action_start_recording->setProperty(Tab::kMenuOnlyProperty, true);
-    ui.action_statistics->setProperty(Tab::kMenuOnlyProperty, true);
-    ui.action_screenshot->setProperty(Tab::kMenuOnlyProperty, true);
-    ui.action_autoscroll->setProperty(Tab::kMenuOnlyProperty, true);
+    ui->action_start_recording->setProperty(Tab::kMenuOnlyProperty, true);
+    ui->action_statistics->setProperty(Tab::kMenuOnlyProperty, true);
+    ui->action_screenshot->setProperty(Tab::kMenuOnlyProperty, true);
+    ui->action_autoscroll->setProperty(Tab::kMenuOnlyProperty, true);
     scale_menu_->menuAction()->setProperty(Tab::kMenuOnlyProperty, true);
 
     QList<QPair<Tab::ActionRole, QList<QAction*>>> groups;
 
     QList<QAction*> actions = QList<QAction*>(screen_actions_.cbegin(), screen_actions_.cend());
-    actions.append(ui.action_switch_session);
-    actions.append(ui.action_power_control);
-    actions.append(ui.action_cad);
-    actions.append(ui.action_paste_clipboard_as_keystrokes);
+    actions.append(ui->action_switch_session);
+    actions.append(ui->action_power_control);
+    actions.append(ui->action_cad);
+    actions.append(ui->action_paste_clipboard_as_keystrokes);
 
     groups.append({ Tab::ActionRole::ACTION, actions});
     groups.append({ Tab::ActionRole::VIEW,
     {
-        ui.action_fullscreen, scale_menu_->menuAction(), ui.action_autoscroll,
+        ui->action_fullscreen, scale_menu_->menuAction(), ui->action_autoscroll,
     }});
     groups.append({ Tab::ActionRole::ACTION,
     {
-        ui.action_file_transfer, ui.action_text_chat, ui.action_task_manager, ui.action_system_info
+        ui->action_file_transfer, ui->action_text_chat, ui->action_task_manager, ui->action_system_info
     }});
     groups.append({ Tab::ActionRole::FILE,
     {
-        ui.action_start_recording, ui.action_screenshot, ui.action_statistics
+        ui->action_start_recording, ui->action_screenshot, ui->action_statistics
     }});
 
     return groups;
@@ -506,8 +508,8 @@ QByteArray DesktopToolBar::saveState() const
     stream.setVersion(QDataStream::Qt_6_0);
 
     stream << scale_;
-    stream << ui.action_autoscroll->isChecked();
-    stream << ui.action_pin->isChecked();
+    stream << ui->action_autoscroll->isChecked();
+    stream << ui->action_pin->isChecked();
     stream << wait_for_host_;
 
     return buffer;
@@ -530,12 +532,12 @@ void DesktopToolBar::restoreState(const QByteArray& state)
     stream >> scale >> autoscroll >> pinned >> wait_for_host;
 
     scale_ = isValidScale(scale) ? scale : -1;
-    ui.action_autoscroll->setChecked(autoscroll);
+    ui->action_autoscroll->setChecked(autoscroll);
     wait_for_host_ = wait_for_host;
 
-    ui.action_pin->setChecked(pinned);
-    ui.toolbar->setVisible(pinned);
-    ui.frame->setVisible(!pinned);
+    ui->action_pin->setChecked(pinned);
+    ui->toolbar->setVisible(pinned);
+    ui->frame->setVisible(!pinned);
     if (pinned)
     {
         if (hide_timer_->isActive())
@@ -553,19 +555,19 @@ void DesktopToolBar::restoreState(const QByteArray& state)
 //--------------------------------------------------------------------------------------------------
 bool DesktopToolBar::autoScrolling() const
 {
-    return ui.action_autoscroll->isChecked();
+    return ui->action_autoscroll->isChecked();
 }
 
 //--------------------------------------------------------------------------------------------------
 bool DesktopToolBar::isPanelHidden() const
 {
-    return is_tabbed_ || ui.toolbar->isHidden();
+    return is_tabbed_ || ui->toolbar->isHidden();
 }
 
 //--------------------------------------------------------------------------------------------------
 bool DesktopToolBar::isPanelPinned() const
 {
-    return ui.action_pin->isChecked();
+    return ui->action_pin->isChecked();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -575,14 +577,14 @@ void DesktopToolBar::changeEvent(QEvent* event)
 
     if (event->type() == QEvent::LanguageChange)
     {
-        ui.retranslateUi(this);
+        ui->retranslateUi(this);
 
         // Programmatically created menu titles and dynamic action texts must be re-applied
         // because retranslateUi only touches strings declared in the .ui file.
         if (scale_menu_)
             scale_menu_->setTitle(tr("Scale"));
 
-        ui.action_start_recording->setText(
+        ui->action_start_recording->setText(
             is_recording_started_ ? tr("Stop recording") : tr("Start recording"));
 
         // The "Resolution selection" action is the screen action that hosts the resolutions
@@ -619,10 +621,10 @@ void DesktopToolBar::enterEvent(QEnterEvent* /* event */)
 
     if (allow_hide_)
     {
-        if (ui.toolbar->isHidden())
+        if (ui->toolbar->isHidden())
         {
-            ui.toolbar->show();
-            ui.frame->hide();
+            ui->toolbar->show();
+            ui->frame->hide();
 
             emit sig_showHidePanel();
         }
@@ -646,8 +648,8 @@ void DesktopToolBar::onHideTimer()
 {
     hide_timer_->stop();
 
-    ui.toolbar->hide();
-    ui.frame->show();
+    ui->toolbar->hide();
+    ui->frame->show();
 
     emit sig_showHidePanel();
     adjustSize();
@@ -666,9 +668,9 @@ void DesktopToolBar::onAutosizeButton()
 {
     LOG(INFO) << "[ACTION] Autosize button clicked";
 
-    if (ui.action_fullscreen->isChecked())
+    if (ui->action_fullscreen->isChecked())
     {
-        ui.action_fullscreen->setChecked(false);
+        ui->action_fullscreen->setChecked(false);
         showFullScreenButtons(false);
     }
 
@@ -685,7 +687,7 @@ void DesktopToolBar::onCtrlAltDel()
 //--------------------------------------------------------------------------------------------------
 void DesktopToolBar::onPowerControl(QAction* action)
 {
-    if (action == ui.action_shutdown)
+    if (action == ui->action_shutdown)
     {
         LOG(INFO) << "[ACTION] Shutdown";
         int ret = MsgBox::question(
@@ -700,7 +702,7 @@ void DesktopToolBar::onPowerControl(QAction* action)
             LOG(INFO) << "[ACTION] Shutdown rejected by user";
         }
     }
-    else if (action == ui.action_reboot)
+    else if (action == ui->action_reboot)
     {
         LOG(INFO) << "[ACTION] Reboot";
         MsgBox message_box(MsgBox::Question,
@@ -726,7 +728,7 @@ void DesktopToolBar::onPowerControl(QAction* action)
             LOG(INFO) << "[ACTION] Reboot rejected by user";
         }
     }
-    else if (action == ui.action_reboot_safe_mode)
+    else if (action == ui->action_reboot_safe_mode)
     {
         LOG(INFO) << "[ACTION] Reboot (safe mode)";
         MsgBox message_box(MsgBox::Question,
@@ -752,7 +754,7 @@ void DesktopToolBar::onPowerControl(QAction* action)
             LOG(INFO) << "[ACTION] Reboot (safe mode) rejected by user";
         }
     }
-    else if (action == ui.action_logoff)
+    else if (action == ui->action_logoff)
     {
         LOG(INFO) << "[ACTION] Logoff";
         int ret = MsgBox::question(
@@ -767,7 +769,7 @@ void DesktopToolBar::onPowerControl(QAction* action)
             LOG(INFO) << "[ACTION] Logoff rejected by user";
         }
     }
-    else if (action == ui.action_lock)
+    else if (action == ui->action_lock)
     {
         LOG(INFO) << "[ACTION] Lock";
         int ret = MsgBox::question(
@@ -853,49 +855,49 @@ void DesktopToolBar::createAdditionalMenu()
     additional_menu_ = new QMenu(this);
 
     scale_group_ = new QActionGroup(additional_menu_);
-    scale_group_->addAction(ui.action_scale100);
-    scale_group_->addAction(ui.action_scale90);
-    scale_group_->addAction(ui.action_scale80);
-    scale_group_->addAction(ui.action_scale70);
-    scale_group_->addAction(ui.action_scale60);
-    scale_group_->addAction(ui.action_scale50);
+    scale_group_->addAction(ui->action_scale100);
+    scale_group_->addAction(ui->action_scale90);
+    scale_group_->addAction(ui->action_scale80);
+    scale_group_->addAction(ui->action_scale70);
+    scale_group_->addAction(ui->action_scale60);
+    scale_group_->addAction(ui->action_scale50);
 
     scale_menu_ = additional_menu_->addMenu(tr("Scale"));
-    scale_menu_->addAction(ui.action_fit_window);
+    scale_menu_->addAction(ui->action_fit_window);
     scale_menu_->addSeparator();
     scale_menu_->addActions(scale_group_->actions());
 
     updateScaleMenu();
 
-    additional_menu_->addAction(ui.action_autoscroll);
+    additional_menu_->addAction(ui->action_autoscroll);
     additional_menu_->addSeparator();
-    additional_menu_->addAction(ui.action_screenshot);
-    additional_menu_->addAction(ui.action_start_recording);
+    additional_menu_->addAction(ui->action_screenshot);
+    additional_menu_->addAction(ui->action_start_recording);
     additional_menu_->addSeparator();
-    additional_menu_->addAction(ui.action_statistics);
+    additional_menu_->addAction(ui->action_statistics);
 
     // Set the menu for the button on the toolbar.
-    ui.action_menu->setMenu(additional_menu_);
+    ui->action_menu->setMenu(additional_menu_);
 
-    QToolButton* button = qobject_cast<QToolButton*>(ui.toolbar->widgetForAction(ui.action_menu));
+    QToolButton* button = qobject_cast<QToolButton*>(ui->toolbar->widgetForAction(ui->action_menu));
     button->setPopupMode(QToolButton::InstantPopup);
 
-    connect(ui.action_paste_clipboard_as_keystrokes, &QAction::triggered,
+    connect(ui->action_paste_clipboard_as_keystrokes, &QAction::triggered,
             this, &DesktopToolBar::sig_pasteAsKeystrokes);
 
     connect(scale_group_, &QActionGroup::triggered, this, [this](QAction* action)
     {
-        if (action == ui.action_scale100)
+        if (action == ui->action_scale100)
             scale_ = 100;
-        else if (action == ui.action_scale90)
+        else if (action == ui->action_scale90)
             scale_ = 90;
-        else if (action == ui.action_scale80)
+        else if (action == ui->action_scale80)
             scale_ = 80;
-        else if (action == ui.action_scale70)
+        else if (action == ui->action_scale70)
             scale_ = 70;
-        else if (action == ui.action_scale60)
+        else if (action == ui->action_scale60)
             scale_ = 60;
-        else if (action == ui.action_scale50)
+        else if (action == ui->action_scale50)
             scale_ = 50;
         else
             return;
@@ -905,9 +907,9 @@ void DesktopToolBar::createAdditionalMenu()
         emit sig_scaleChanged();
     });
 
-    connect(ui.action_fit_window, &QAction::toggled, this, [this](bool checked)
+    connect(ui->action_fit_window, &QAction::toggled, this, [this](bool checked)
     {
-        ui.action_autoscroll->setEnabled(!checked);
+        ui->action_autoscroll->setEnabled(!checked);
         scale_group_->setEnabled(!checked);
 
         if (checked)
@@ -916,15 +918,15 @@ void DesktopToolBar::createAdditionalMenu()
         }
         else
         {
-            if (ui.action_scale90->isChecked())
+            if (ui->action_scale90->isChecked())
                 scale_ = 90;
-            else if (ui.action_scale80->isChecked())
+            else if (ui->action_scale80->isChecked())
                 scale_ = 80;
-            else if (ui.action_scale70->isChecked())
+            else if (ui->action_scale70->isChecked())
                 scale_ = 70;
-            else if (ui.action_scale60->isChecked())
+            else if (ui->action_scale60->isChecked())
                 scale_ = 60;
-            else if (ui.action_scale50->isChecked())
+            else if (ui->action_scale50->isChecked())
                 scale_ = 50;
             else
                 scale_ = 100;
@@ -935,7 +937,7 @@ void DesktopToolBar::createAdditionalMenu()
         emit sig_scaleChanged();
     });
 
-    connect(ui.action_screenshot, &QAction::triggered, this, [this]()
+    connect(ui->action_screenshot, &QAction::triggered, this, [this]()
     {
         LOG(INFO) << "[ACTION] Take screenshot";
         emit sig_takeScreenshot();
@@ -943,7 +945,7 @@ void DesktopToolBar::createAdditionalMenu()
     connect(additional_menu_, &QMenu::aboutToShow, this, &DesktopToolBar::onMenuShow);
     connect(additional_menu_, &QMenu::aboutToHide, this, &DesktopToolBar::onMenuHide);
 
-    connect(ui.action_start_recording, &QAction::triggered, this, [this]()
+    connect(ui->action_start_recording, &QAction::triggered, this, [this]()
     {
         startRecording(!is_recording_started_);
     });
@@ -958,17 +960,17 @@ void DesktopToolBar::showFullScreenButtons(bool show)
     // MacOS we disable the minimize button from full screen mode.
     // For more info see: https://bugreports.qt.io/browse/QTBUG-62991
 #if defined(Q_OS_MACOS)
-    ui.action_minimize->setVisible(false);
-    ui.action_minimize->setEnabled(false);
+    ui->action_minimize->setVisible(false);
+    ui->action_minimize->setEnabled(false);
 #else
-    ui.action_minimize->setVisible(show);
-    ui.action_minimize->setEnabled(show);
+    ui->action_minimize->setVisible(show);
+    ui->action_minimize->setEnabled(show);
 #endif
 
-    ui.action_close->setVisible(show);
-    ui.action_close->setEnabled(show);
+    ui->action_close->setVisible(show);
+    ui->action_close->setEnabled(show);
 
-    QList<QAction*> actions = ui.toolbar->actions();
+    QList<QAction*> actions = ui->toolbar->actions();
 
     for (auto it = actions.crbegin(); it != actions.crend(); ++it)
     {
@@ -989,29 +991,29 @@ void DesktopToolBar::updateScaleMenu()
 {
     if (scale_ == -1)
     {
-        ui.action_autoscroll->setEnabled(false);
-        ui.action_fit_window->setChecked(true);
+        ui->action_autoscroll->setEnabled(false);
+        ui->action_fit_window->setChecked(true);
         scale_group_->setEnabled(false);
     }
     else
     {
-        ui.action_autoscroll->setEnabled(true);
-        ui.action_fit_window->setChecked(false);
+        ui->action_autoscroll->setEnabled(true);
+        ui->action_fit_window->setChecked(false);
         scale_group_->setEnabled(true);
 
         if (scale_ == 90)
-            ui.action_scale90->setChecked(true);
+            ui->action_scale90->setChecked(true);
         else if (scale_ == 80)
-            ui.action_scale80->setChecked(true);
+            ui->action_scale80->setChecked(true);
         else if (scale_ == 70)
-            ui.action_scale70->setChecked(true);
+            ui->action_scale70->setChecked(true);
         else if (scale_ == 60)
-            ui.action_scale60->setChecked(true);
+            ui->action_scale60->setChecked(true);
         else if (scale_ == 50)
-            ui.action_scale50->setChecked(true);
+            ui->action_scale50->setChecked(true);
         else
         {
-            ui.action_scale100->setChecked(true);
+            ui->action_scale100->setChecked(true);
             scale_ = 100;
         }
     }
@@ -1020,14 +1022,14 @@ void DesktopToolBar::updateScaleMenu()
 //--------------------------------------------------------------------------------------------------
 void DesktopToolBar::updateSize()
 {
-    ui.toolbar->adjustSize();
+    ui->toolbar->adjustSize();
     adjustSize();
 }
 
 //--------------------------------------------------------------------------------------------------
 void DesktopToolBar::delayedHide()
 {
-    if (!ui.action_pin->isChecked() && !hide_timer_->isActive())
+    if (!ui->action_pin->isChecked() && !hide_timer_->isActive())
         hide_timer_->start(std::chrono::seconds(1));
 }
 

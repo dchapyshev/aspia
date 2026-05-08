@@ -21,6 +21,7 @@
 #include "base/logging.h"
 #include "client/master_password.h"
 #include "common/ui/msg_box.h"
+#include "ui_master_password_dialog.h"
 
 #include <QAbstractButton>
 #include <QPushButton>
@@ -29,29 +30,30 @@
 //--------------------------------------------------------------------------------------------------
 MasterPasswordDialog::MasterPasswordDialog(Mode mode, QWidget* parent)
     : QDialog(parent),
+      ui(std::make_unique<Ui::MasterPasswordDialog>()),
       mode_(mode)
 {
     LOG(INFO) << "Ctor";
-    ui.setupUi(this);
+    ui->setupUi(this);
 
     switch (mode_)
     {
         case Mode::SET:
             setWindowTitle(tr("Set Master Password"));
-            ui.label_description->setText(tr("Set the master password to encrypt the address book."));
-            ui.label_current->setVisible(false);
-            ui.edit_current->setVisible(false);
-            ui.edit_new->setFocus();
+            ui->label_description->setText(tr("Set the master password to encrypt the address book."));
+            ui->label_current->setVisible(false);
+            ui->edit_current->setVisible(false);
+            ui->edit_new->setFocus();
             break;
 
         case Mode::CHANGE:
             setWindowTitle(tr("Change Master Password"));
-            ui.label_description->setText(tr("Enter your current password and choose a new one."));
-            ui.edit_current->setFocus();
+            ui->label_description->setText(tr("Enter your current password and choose a new one."));
+            ui->edit_current->setFocus();
             break;
     }
 
-    connect(ui.button_box, &QDialogButtonBox::clicked, this, &MasterPasswordDialog::onButtonBoxClicked);
+    connect(ui->button_box, &QDialogButtonBox::clicked, this, &MasterPasswordDialog::onButtonBoxClicked);
 
     QTimer::singleShot(0, this, [this](){ setFixedHeight(sizeHint().height()); });
 }
@@ -65,7 +67,7 @@ MasterPasswordDialog::~MasterPasswordDialog()
 //--------------------------------------------------------------------------------------------------
 void MasterPasswordDialog::onButtonBoxClicked(QAbstractButton* button)
 {
-    if (ui.button_box->standardButton(button) != QDialogButtonBox::Ok)
+    if (ui->button_box->standardButton(button) != QDialogButtonBox::Ok)
     {
         reject();
         return;
@@ -90,8 +92,8 @@ void MasterPasswordDialog::onButtonBoxClicked(QAbstractButton* button)
 //--------------------------------------------------------------------------------------------------
 bool MasterPasswordDialog::applySet()
 {
-    QString new_password = ui.edit_new->text();
-    QString confirm = ui.edit_confirm->text();
+    QString new_password = ui->edit_new->text();
+    QString confirm = ui->edit_confirm->text();
 
     if (!MasterPassword::isSafePassword(new_password))
     {
@@ -128,9 +130,9 @@ bool MasterPasswordDialog::applySet()
 //--------------------------------------------------------------------------------------------------
 bool MasterPasswordDialog::applyChange()
 {
-    QString current = ui.edit_current->text();
-    QString new_password = ui.edit_new->text();
-    QString confirm = ui.edit_confirm->text();
+    QString current = ui->edit_current->text();
+    QString new_password = ui->edit_new->text();
+    QString confirm = ui->edit_confirm->text();
 
     if (current.isEmpty())
     {

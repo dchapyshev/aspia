@@ -21,6 +21,8 @@
 
 #include <QTreeWidget>
 
+#include <memory>
+
 #include "client/ui/client_window.h"
 
 namespace Ui {

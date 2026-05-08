@@ -19,8 +19,13 @@
 #ifndef CLIENT_UI_HOSTS_ROUTER_GROUP_WIDGET_H
 #define CLIENT_UI_HOSTS_ROUTER_GROUP_WIDGET_H
 
+#include <memory>
+
 #include "client/ui/hosts/content_widget.h"
-#include "ui_router_group_widget.h"
+
+namespace Ui {
+class RouterGroupWidget;
+} // namespace Ui
 
 class RouterGroupWidget final : public ContentWidget
 {
@@ -41,8 +46,7 @@ protected:
     void changeEvent(QEvent* event) final;
 
 private:
-    Ui::RouterGroupWidget ui;
-
+    std::unique_ptr<Ui::RouterGroupWidget> ui;
     Q_DISABLE_COPY_MOVE(RouterGroupWidget)
 };
 

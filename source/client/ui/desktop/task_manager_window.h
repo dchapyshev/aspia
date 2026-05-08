@@ -19,10 +19,16 @@
 #ifndef CLIENT_UI_DESKTOP_TASK_MANAGER_WINDOW_H
 #define CLIENT_UI_DESKTOP_TASK_MANAGER_WINDOW_H
 
+#include <QMainWindow>
 #include <QTreeWidget>
 
+#include <memory>
+
 #include "proto/task_manager.h"
-#include "ui_task_manager_window.h"
+
+namespace Ui {
+class TaskManagerWindow;
+} // namespace Ui
 
 class QLabel;
 
@@ -73,7 +79,7 @@ private:
     void setMemoryUsage(int usage);
     void addUpdateItems(QMenu* parent_menu);
 
-    Ui::TaskManagerWindow ui;
+    std::unique_ptr<Ui::TaskManagerWindow> ui;
     QLabel* label_process_ = nullptr;
     QLabel* label_cpu_ = nullptr;
     QLabel* label_memory_ = nullptr;

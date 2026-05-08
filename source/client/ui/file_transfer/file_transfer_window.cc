@@ -18,7 +18,6 @@
 
 #include "client/ui/file_transfer/file_transfer_window.h"
 
-#include "ui_file_transfer_window.h"
 #include "base/gui_application.h"
 #include "base/logging.h"
 #include "client/client_file_transfer.h"
@@ -31,6 +30,7 @@
 #include "common/ui/msg_box.h"
 #include "common/ui/session_type.h"
 #include "proto/peer.h"
+#include "ui_file_transfer_window.h"
 
 //--------------------------------------------------------------------------------------------------
 FileTransferWindow::FileTransferWindow(QWidget* parent)

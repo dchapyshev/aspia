@@ -20,9 +20,14 @@
 #define CLIENT_UI_SYS_INFO_SYS_INFO_SUMMARY_H
 
 #include "client/ui/sys_info/sys_info_widget.h"
-#include "ui_sys_info_widget_summary.h"
+
+namespace Ui {
+class SysInfoSummary;
+} // namespace Ui
 
 #include <QVersionNumber>
+
+#include <memory>
 
 class SysInfoWidgetSummary final : public SysInfoWidget
 {
@@ -49,7 +54,7 @@ private slots:
     void onContextMenu(const QPoint& point);
 
 private:
-    Ui::SysInfoSummary ui;
+    std::unique_ptr<Ui::SysInfoSummary> ui;
 
     QString router_version_;
     QString host_version_;

@@ -19,9 +19,15 @@
 #ifndef CLIENT_UI_AUTHORIZATION_DIALOG_H
 #define CLIENT_UI_AUTHORIZATION_DIALOG_H
 
-#include "ui_authorization_dialog.h"
+#include <QDialog>
+
+#include <memory>
 
 class QAbstractButton;
+
+namespace Ui {
+class AuthorizationDialog;
+} // namespace Ui
 
 class AuthorizationDialog final : public QDialog
 {
@@ -51,7 +57,7 @@ private slots:
 private:
     void fitSize();
 
-    Ui::AuthorizationDialog ui;
+    std::unique_ptr<Ui::AuthorizationDialog> ui;
     Q_DISABLE_COPY_MOVE(AuthorizationDialog)
 };
 

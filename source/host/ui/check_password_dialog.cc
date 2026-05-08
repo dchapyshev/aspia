@@ -25,15 +25,17 @@
 #include "common/ui/msg_box.h"
 #include "base/logging.h"
 #include "host/system_settings.h"
+#include "ui_check_password_dialog.h"
 
 //--------------------------------------------------------------------------------------------------
 CheckPasswordDialog::CheckPasswordDialog(QWidget* parent)
-    : QDialog(parent)
+    : QDialog(parent),
+      ui(std::make_unique<Ui::CheckPasswordDialog>())
 {
     LOG(INFO) << "Ctor";
-    ui.setupUi(this);
+    ui->setupUi(this);
 
-    connect(ui.button_box, &QDialogButtonBox::clicked,
+    connect(ui->button_box, &QDialogButtonBox::clicked,
             this, &CheckPasswordDialog::onButtonBoxClicked);
 
     QTimer::singleShot(0, this, [this]()
@@ -51,20 +53,20 @@ CheckPasswordDialog::~CheckPasswordDialog()
 //--------------------------------------------------------------------------------------------------
 void CheckPasswordDialog::onButtonBoxClicked(QAbstractButton* button)
 {
-    QDialogButtonBox::StandardButton standard_button = ui.button_box->standardButton(button);
+    QDialogButtonBox::StandardButton standard_button = ui->button_box->standardButton(button);
     if (standard_button == QDialogButtonBox::Ok)
     {
         LOG(INFO) << "[ACTION] Accepted by user";
 
-        QString password = ui.edit_pass->text();
+        QString password = ui->edit_pass->text();
 
         if (!SystemSettings::isValidPassword(password))
         {
             LOG(INFO) << "Invalid password entered";
 
             MsgBox::warning(this, tr("You entered an incorrect password."));
-            ui.edit_pass->selectAll();
-            ui.edit_pass->setFocus();
+            ui->edit_pass->selectAll();
+            ui->edit_pass->setFocus();
             return;
         }
 

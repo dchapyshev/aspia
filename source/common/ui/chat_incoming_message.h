@@ -19,8 +19,13 @@
 #ifndef COMMON_UI_CHAT_INCOMING_MESSAGE_H
 #define COMMON_UI_CHAT_INCOMING_MESSAGE_H
 
+#include <memory>
+
 #include "common/ui/chat_message.h"
-#include "ui_chat_incoming_message.h"
+
+namespace Ui {
+class ChatIncomingMessage;
+} // namespace Ui
 
 class ChatIncomingMessage final : public ChatMessage
 {
@@ -40,7 +45,7 @@ public:
     void applyStyles(const QPalette& palette);
 
 private:
-    Ui::ChatIncomingMessage ui;
+    std::unique_ptr<Ui::ChatIncomingMessage> ui;
 };
 
 #endif // COMMON_UI_CHAT_INCOMING_MESSAGE_H

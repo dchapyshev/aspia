@@ -17,12 +17,13 @@
 //
 
 #include "client/ui/sys_info/sys_info_widget_summary.h"
-#include "proto/system_info.h"
 
 #include <QMenu>
 
 #include "common/system_info_constants.h"
 #include "common/ui/formatter.h"
+#include "proto/system_info.h"
+#include "ui_sys_info_widget_summary.h"
 
 namespace {
 
@@ -82,29 +83,30 @@ QTreeWidgetItem* mk(const QString& param, const std::string& value)
 
 //--------------------------------------------------------------------------------------------------
 SysInfoWidgetSummary::SysInfoWidgetSummary(QWidget* parent)
-    : SysInfoWidget(parent)
+    : SysInfoWidget(parent),
+      ui(std::make_unique<Ui::SysInfoSummary>())
 {
-    ui.setupUi(this);
+    ui->setupUi(this);
 
-    connect(ui.action_copy_row, &QAction::triggered, this, [this]()
+    connect(ui->action_copy_row, &QAction::triggered, this, [this]()
     {
-        copyRow(ui.tree->currentItem());
+        copyRow(ui->tree->currentItem());
     });
 
-    connect(ui.action_copy_name, &QAction::triggered, this, [this]()
+    connect(ui->action_copy_name, &QAction::triggered, this, [this]()
     {
-        copyColumn(ui.tree->currentItem(), 0);
+        copyColumn(ui->tree->currentItem(), 0);
     });
 
-    connect(ui.action_copy_value, &QAction::triggered, this, [this]()
+    connect(ui->action_copy_value, &QAction::triggered, this, [this]()
     {
-        copyColumn(ui.tree->currentItem(), 1);
+        copyColumn(ui->tree->currentItem(), 1);
     });
 
-    connect(ui.tree, &QTreeWidget::customContextMenuRequested,
+    connect(ui->tree, &QTreeWidget::customContextMenuRequested,
             this, &SysInfoWidgetSummary::onContextMenu);
 
-    connect(ui.tree, &QTreeWidget::itemDoubleClicked,
+    connect(ui->tree, &QTreeWidget::itemDoubleClicked,
             this, [this](QTreeWidgetItem* item, int /* column */)
     {
         copyRow(item);
@@ -123,7 +125,7 @@ std::string SysInfoWidgetSummary::category() const
 //--------------------------------------------------------------------------------------------------
 void SysInfoWidgetSummary::setSystemInfo(const proto::system_info::SystemInfo& system_info)
 {
-    ui.tree->clear();
+    ui->tree->clear();
 
     if (system_info.has_computer())
     {
@@ -143,7 +145,7 @@ void SysInfoWidgetSummary::setSystemInfo(const proto::system_info::SystemInfo& s
             items << mk(tr("Uptime"), Formatter::delayToString(computer.uptime()));
 
         if (!items.isEmpty())
-            ui.tree->addTopLevelItem(new Item(":/img/computer.svg", tr("Computer"), items));
+            ui->tree->addTopLevelItem(new Item(":/img/computer.svg", tr("Computer"), items));
     }
 
     {
@@ -153,7 +155,7 @@ void SysInfoWidgetSummary::setSystemInfo(const proto::system_info::SystemInfo& s
         items << mk(tr("Client Version"), client_version_);
         items << mk(tr("Router Version"), router_version_);
 
-        ui.tree->addTopLevelItem(new Item(":/img/info.svg", tr("Aspia Information"), items));
+        ui->tree->addTopLevelItem(new Item(":/img/info.svg", tr("Aspia Information"), items));
     }
 
     if (system_info.has_operating_system())
@@ -178,7 +180,7 @@ void SysInfoWidgetSummary::setSystemInfo(const proto::system_info::SystemInfo& s
 
         if (!items.isEmpty())
         {
-            ui.tree->addTopLevelItem(
+            ui->tree->addTopLevelItem(
                 new Item(":/img/operating-system.svg", tr("Operating System"), items));
         }
     }
@@ -196,7 +198,7 @@ void SysInfoWidgetSummary::setSystemInfo(const proto::system_info::SystemInfo& s
 
         if (!items.isEmpty())
         {
-            ui.tree->addTopLevelItem(
+            ui->tree->addTopLevelItem(
                 new Item(":/img/motherboard.svg", tr("Motherboard"), items));
         }
     }
@@ -223,7 +225,7 @@ void SysInfoWidgetSummary::setSystemInfo(const proto::system_info::SystemInfo& s
 
         if (!items.isEmpty())
         {
-            ui.tree->addTopLevelItem(
+            ui->tree->addTopLevelItem(
                 new Item(":/img/microchip.svg", tr("Processor"), items));
         }
     }
@@ -244,7 +246,7 @@ void SysInfoWidgetSummary::setSystemInfo(const proto::system_info::SystemInfo& s
 
         if (!items.isEmpty())
         {
-            ui.tree->addTopLevelItem(new Item(":/img/processor.svg", "BIOS", items));
+            ui->tree->addTopLevelItem(new Item(":/img/processor.svg", "BIOS", items));
         }
     }
 
@@ -289,7 +291,7 @@ void SysInfoWidgetSummary::setSystemInfo(const proto::system_info::SystemInfo& s
 
         if (!items.isEmpty())
         {
-            ui.tree->addTopLevelItem(
+            ui->tree->addTopLevelItem(
                 new Item(":/img/memory-slot.svg", tr("Memory"), items));
         }
     }
@@ -329,27 +331,27 @@ void SysInfoWidgetSummary::setSystemInfo(const proto::system_info::SystemInfo& s
 
         if (!items.isEmpty())
         {
-            ui.tree->addTopLevelItem(new Item(":/img/hdd.svg", tr("Logical Drives"), items));
+            ui->tree->addTopLevelItem(new Item(":/img/hdd.svg", tr("Logical Drives"), items));
         }
     }
 
-    for (int i = 0; i < ui.tree->topLevelItemCount(); ++i)
-        ui.tree->topLevelItem(i)->setExpanded(true);
+    for (int i = 0; i < ui->tree->topLevelItemCount(); ++i)
+        ui->tree->topLevelItem(i)->setExpanded(true);
 
     if (!isStateRestored())
-        ui.tree->resizeColumnToContents(0);
+        ui->tree->resizeColumnToContents(0);
 }
 
 //--------------------------------------------------------------------------------------------------
 QTreeWidget* SysInfoWidgetSummary::treeWidget()
 {
-    return ui.tree;
+    return ui->tree;
 }
 
 //--------------------------------------------------------------------------------------------------
 void SysInfoWidgetSummary::retranslate()
 {
-    ui.retranslateUi(this);
+    ui->retranslateUi(this);
     SysInfoWidget::retranslate();
 }
 
@@ -377,16 +379,16 @@ void SysInfoWidgetSummary::setClientVersion(const QVersionNumber& client_version
 //--------------------------------------------------------------------------------------------------
 void SysInfoWidgetSummary::onContextMenu(const QPoint& point)
 {
-    QTreeWidgetItem* current_item = ui.tree->itemAt(point);
+    QTreeWidgetItem* current_item = ui->tree->itemAt(point);
     if (!current_item)
         return;
 
-    ui.tree->setCurrentItem(current_item);
+    ui->tree->setCurrentItem(current_item);
 
     QMenu menu;
-    menu.addAction(ui.action_copy_row);
-    menu.addAction(ui.action_copy_name);
-    menu.addAction(ui.action_copy_value);
+    menu.addAction(ui->action_copy_row);
+    menu.addAction(ui->action_copy_name);
+    menu.addAction(ui->action_copy_value);
 
-    menu.exec(ui.tree->viewport()->mapToGlobal(point));
+    menu.exec(ui->tree->viewport()->mapToGlobal(point));
 }

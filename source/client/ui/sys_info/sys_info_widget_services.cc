@@ -17,51 +17,52 @@
 //
 
 #include "client/ui/sys_info/sys_info_widget_services.h"
-#include "proto/system_info.h"
 
 #include <QMenu>
 
 #include "common/system_info_constants.h"
+#include "ui_sys_info_widget_services.h"
 
 //--------------------------------------------------------------------------------------------------
 SysInfoWidgetServices::SysInfoWidgetServices(QWidget* parent)
-    : SysInfoWidget(parent)
+    : SysInfoWidget(parent),
+      ui(std::make_unique<Ui::SysInfoServices>())
 {
-    ui.setupUi(this);
-    ui.tree->setMouseTracking(true);
+    ui->setupUi(this);
+    ui->tree->setMouseTracking(true);
 
-    connect(ui.action_copy_row, &QAction::triggered, this, [this]()
+    connect(ui->action_copy_row, &QAction::triggered, this, [this]()
     {
-        copyRow(ui.tree->currentItem());
+        copyRow(ui->tree->currentItem());
     });
 
-    connect(ui.action_copy_value, &QAction::triggered, this, [this]()
+    connect(ui->action_copy_value, &QAction::triggered, this, [this]()
     {
-        copyColumn(ui.tree->currentItem(), current_column_);
+        copyColumn(ui->tree->currentItem(), current_column_);
     });
 
-    connect(ui.tree, &QTreeWidget::customContextMenuRequested,
+    connect(ui->tree, &QTreeWidget::customContextMenuRequested,
             this, &SysInfoWidgetServices::onContextMenu);
 
-    connect(ui.tree, &QTreeWidget::itemDoubleClicked,
+    connect(ui->tree, &QTreeWidget::itemDoubleClicked,
             this, [this](QTreeWidgetItem* item, int /* column */)
     {
         copyRow(item);
     });
 
-    connect(ui.tree, &QTreeWidget::itemEntered,
+    connect(ui->tree, &QTreeWidget::itemEntered,
             this, [this](QTreeWidgetItem* /* item */, int column)
     {
         current_column_ = column;
     });
 
-    ui.tree->setColumnWidth(0, 200);
-    ui.tree->setColumnWidth(1, 150);
-    ui.tree->setColumnWidth(2, 200);
-    ui.tree->setColumnWidth(3, 70);
-    ui.tree->setColumnWidth(4, 100);
-    ui.tree->setColumnWidth(5, 150);
-    ui.tree->setColumnWidth(6, 200);
+    ui->tree->setColumnWidth(0, 200);
+    ui->tree->setColumnWidth(1, 150);
+    ui->tree->setColumnWidth(2, 200);
+    ui->tree->setColumnWidth(3, 70);
+    ui->tree->setColumnWidth(4, 100);
+    ui->tree->setColumnWidth(5, 150);
+    ui->tree->setColumnWidth(6, 200);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -76,11 +77,11 @@ std::string SysInfoWidgetServices::category() const
 //--------------------------------------------------------------------------------------------------
 void SysInfoWidgetServices::setSystemInfo(const proto::system_info::SystemInfo& system_info)
 {
-    ui.tree->clear();
+    ui->tree->clear();
 
     if (!system_info.has_services())
     {
-        ui.tree->setEnabled(false);
+        ui->tree->setEnabled(false);
         return;
     }
 
@@ -101,37 +102,37 @@ void SysInfoWidgetServices::setSystemInfo(const proto::system_info::SystemInfo& 
         item->setText(5, QString::fromStdString(service.start_name()));
         item->setText(6, QString::fromStdString(service.binary_path()));
 
-        ui.tree->addTopLevelItem(item);
+        ui->tree->addTopLevelItem(item);
     }
 }
 
 //--------------------------------------------------------------------------------------------------
 QTreeWidget* SysInfoWidgetServices::treeWidget()
 {
-    return ui.tree;
+    return ui->tree;
 }
 
 //--------------------------------------------------------------------------------------------------
 void SysInfoWidgetServices::retranslate()
 {
-    ui.retranslateUi(this);
+    ui->retranslateUi(this);
     SysInfoWidget::retranslate();
 }
 
 //--------------------------------------------------------------------------------------------------
 void SysInfoWidgetServices::onContextMenu(const QPoint& point)
 {
-    QTreeWidgetItem* current_item = ui.tree->itemAt(point);
+    QTreeWidgetItem* current_item = ui->tree->itemAt(point);
     if (!current_item)
         return;
 
-    ui.tree->setCurrentItem(current_item);
+    ui->tree->setCurrentItem(current_item);
 
     QMenu menu;
-    menu.addAction(ui.action_copy_row);
-    menu.addAction(ui.action_copy_value);
+    menu.addAction(ui->action_copy_row);
+    menu.addAction(ui->action_copy_value);
 
-    menu.exec(ui.tree->viewport()->mapToGlobal(point));
+    menu.exec(ui->tree->viewport()->mapToGlobal(point));
 }
 
 //--------------------------------------------------------------------------------------------------

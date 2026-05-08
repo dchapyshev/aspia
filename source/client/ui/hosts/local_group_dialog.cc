@@ -25,6 +25,7 @@
 #include "client/database.h"
 #include "client/ui/hosts/group_combo_box.h"
 #include "common/ui/msg_box.h"
+#include "ui_local_group_dialog.h"
 
 namespace {
 
@@ -37,11 +38,12 @@ constexpr int kMaxCommentLength = 2048;
 //--------------------------------------------------------------------------------------------------
 LocalGroupDialog::LocalGroupDialog(qint64 group_id, qint64 parent_id, QWidget* parent)
     : QDialog(parent),
+      ui(std::make_unique<Ui::LocalGroupDialog>()),
       group_id_(group_id)
 {
     LOG(INFO) << "Ctor";
 
-    ui.setupUi(this);
+    ui->setupUi(this);
 
     if (group_id_ != -1)
     {
@@ -50,8 +52,8 @@ LocalGroupDialog::LocalGroupDialog(qint64 group_id, qint64 parent_id, QWidget* p
         std::optional<GroupConfig> group = Database::instance().findGroup(group_id_);
         if (group.has_value())
         {
-            ui.edit_name->setText(group->name);
-            ui.edit_comment->setPlainText(group->comment);
+            ui->edit_name->setText(group->name);
+            ui->edit_comment->setPlainText(group->comment);
             parent_id_ = group->parent_id;
         }
         else
@@ -65,11 +67,11 @@ LocalGroupDialog::LocalGroupDialog(qint64 group_id, qint64 parent_id, QWidget* p
         parent_id_ = parent_id;
     }
 
-    ui.combo_parent_group->loadGroups(tr("Local"), group_id_);
-    ui.combo_parent_group->selectGroup(parent_id_);
+    ui->combo_parent_group->loadGroups(tr("Local"), group_id_);
+    ui->combo_parent_group->selectGroup(parent_id_);
 
-    connect(ui.button_box, &QDialogButtonBox::clicked, this, &LocalGroupDialog::onButtonBoxClicked);
-    ui.edit_name->setFocus();
+    connect(ui->button_box, &QDialogButtonBox::clicked, this, &LocalGroupDialog::onButtonBoxClicked);
+    ui->edit_name->setFocus();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -81,17 +83,17 @@ LocalGroupDialog::~LocalGroupDialog()
 //--------------------------------------------------------------------------------------------------
 void LocalGroupDialog::onButtonBoxClicked(QAbstractButton* button)
 {
-    if (ui.button_box->standardButton(button) != QDialogButtonBox::Ok)
+    if (ui->button_box->standardButton(button) != QDialogButtonBox::Ok)
     {
         reject();
         return;
     }
 
-    QString name = ui.edit_name->text();
+    QString name = ui->edit_name->text();
     if (name.length() < kMinNameLength)
     {
         MsgBox::warning(this, tr("Name cannot be empty."));
-        ui.edit_name->setFocus();
+        ui->edit_name->setFocus();
         return;
     }
 
@@ -100,23 +102,23 @@ void LocalGroupDialog::onButtonBoxClicked(QAbstractButton* button)
         MsgBox::warning(this,
             tr("Too long name. The maximum length of the name is %n characters.",
                "", kMaxNameLength));
-        ui.edit_name->setFocus();
-        ui.edit_name->selectAll();
+        ui->edit_name->setFocus();
+        ui->edit_name->selectAll();
         return;
     }
 
-    QString comment = ui.edit_comment->toPlainText();
+    QString comment = ui->edit_comment->toPlainText();
     if (comment.length() > kMaxCommentLength)
     {
         MsgBox::warning(this,
             tr("Too long comment. The maximum length of the comment is %n characters.",
                "", kMaxCommentLength));
-        ui.edit_comment->setFocus();
-        ui.edit_comment->selectAll();
+        ui->edit_comment->setFocus();
+        ui->edit_comment->selectAll();
         return;
     }
 
-    qint64 parent_id = ui.combo_parent_group->currentGroupId();
+    qint64 parent_id = ui->combo_parent_group->currentGroupId();
 
     QList<GroupConfig> groups = Database::instance().groupList(parent_id);
     for (const GroupConfig& existing : std::as_const(groups))
@@ -125,7 +127,7 @@ void LocalGroupDialog::onButtonBoxClicked(QAbstractButton* button)
         {
             MsgBox::warning(this,
                 tr("A group with this name already exists in the selected parent group."));
-            ui.edit_name->setFocus();
+            ui->edit_name->setFocus();
             return;
         }
     }
@@ -134,7 +136,7 @@ void LocalGroupDialog::onButtonBoxClicked(QAbstractButton* button)
     group.id = group_id_;
     group.parent_id = parent_id;
     group.name = name;
-    group.comment = ui.edit_comment->toPlainText();
+    group.comment = ui->edit_comment->toPlainText();
 
     Database& db = Database::instance();
 

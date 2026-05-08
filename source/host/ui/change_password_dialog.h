@@ -19,7 +19,15 @@
 #ifndef HOST_UI_CHANGE_PASSWORD_DIALOG_H
 #define HOST_UI_CHANGE_PASSWORD_DIALOG_H
 
-#include "ui_change_password_dialog.h"
+#include <QDialog>
+
+#include <memory>
+
+class QAbstractButton;
+
+namespace Ui {
+class ChangePasswordDialog;
+} // namespace Ui
 
 class ChangePasswordDialog final : public QDialog
 {
@@ -39,7 +47,7 @@ private slots:
     void onButtonBoxClicked(QAbstractButton* button);
 
 private:
-    Ui::ChangePasswordDialog ui;
+    std::unique_ptr<Ui::ChangePasswordDialog> ui;
     const Mode mode_;
 };
 

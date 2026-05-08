@@ -19,8 +19,13 @@
 #ifndef CLIENT_UI_SETTINGS_TAB_H
 #define CLIENT_UI_SETTINGS_TAB_H
 
+#include <memory>
+
 #include "client/ui/tab.h"
-#include "ui_settings_tab.h"
+
+namespace Ui {
+class SettingsTab;
+} // namespace Ui
 
 class QButtonGroup;
 
@@ -66,7 +71,7 @@ private:
     void applyCategoryStyle();
     void saveDesktopConfig();
 
-    Ui::SettingsTab ui;
+    std::unique_ptr<Ui::SettingsTab> ui;
     QButtonGroup* category_group_ = nullptr;
 
     Q_DISABLE_COPY_MOVE(SettingsTab)

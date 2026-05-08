@@ -17,12 +17,13 @@
 //
 
 #include "client/ui/sys_info/sys_info_widget_local_users.h"
-#include "proto/system_info.h"
 
 #include <QMenu>
 
 #include "common/system_info_constants.h"
 #include "common/ui/formatter.h"
+#include "proto/system_info.h"
+#include "ui_sys_info_widget_local_users.h"
 
 namespace {
 
@@ -82,29 +83,30 @@ QTreeWidgetItem* mk(const QString& param, const std::string& value)
 
 //--------------------------------------------------------------------------------------------------
 SysInfoWidgetLocalUsers::SysInfoWidgetLocalUsers(QWidget* parent)
-    : SysInfoWidget(parent)
+    : SysInfoWidget(parent),
+      ui(std::make_unique<Ui::SysInfoLocalUsers>())
 {
-    ui.setupUi(this);
+    ui->setupUi(this);
 
-    connect(ui.action_copy_row, &QAction::triggered, this, [this]()
+    connect(ui->action_copy_row, &QAction::triggered, this, [this]()
     {
-        copyRow(ui.tree->currentItem());
+        copyRow(ui->tree->currentItem());
     });
 
-    connect(ui.action_copy_name, &QAction::triggered, this, [this]()
+    connect(ui->action_copy_name, &QAction::triggered, this, [this]()
     {
-        copyColumn(ui.tree->currentItem(), 0);
+        copyColumn(ui->tree->currentItem(), 0);
     });
 
-    connect(ui.action_copy_value, &QAction::triggered, this, [this]()
+    connect(ui->action_copy_value, &QAction::triggered, this, [this]()
     {
-        copyColumn(ui.tree->currentItem(), 1);
+        copyColumn(ui->tree->currentItem(), 1);
     });
 
-    connect(ui.tree, &QTreeWidget::customContextMenuRequested,
+    connect(ui->tree, &QTreeWidget::customContextMenuRequested,
             this, &SysInfoWidgetLocalUsers::onContextMenu);
 
-    connect(ui.tree, &QTreeWidget::itemDoubleClicked,
+    connect(ui->tree, &QTreeWidget::itemDoubleClicked,
             this, [this](QTreeWidgetItem* item, int /* column */)
     {
         copyRow(item);
@@ -123,11 +125,11 @@ std::string SysInfoWidgetLocalUsers::category() const
 //--------------------------------------------------------------------------------------------------
 void SysInfoWidgetLocalUsers::setSystemInfo(const proto::system_info::SystemInfo& system_info)
 {
-    ui.tree->clear();
+    ui->tree->clear();
 
     if (!system_info.has_local_users())
     {
-        ui.tree->setEnabled(false);
+        ui->tree->setEnabled(false);
         return;
     }
 
@@ -180,44 +182,44 @@ void SysInfoWidgetLocalUsers::setSystemInfo(const proto::system_info::SystemInfo
 
         if (!group.isEmpty())
         {
-            ui.tree->addTopLevelItem(
+            ui->tree->addTopLevelItem(
                 new Item(user.disabled() ? ":/img/locked-user.svg" : ":/img/user.svg",
                          QString::fromStdString(user.name()), group));
         }
     }
 
-    ui.tree->expandAll();
+    ui->tree->expandAll();
 
     if (!isStateRestored())
-        ui.tree->resizeColumnToContents(0);
+        ui->tree->resizeColumnToContents(0);
 }
 
 //--------------------------------------------------------------------------------------------------
 QTreeWidget* SysInfoWidgetLocalUsers::treeWidget()
 {
-    return ui.tree;
+    return ui->tree;
 }
 
 //--------------------------------------------------------------------------------------------------
 void SysInfoWidgetLocalUsers::retranslate()
 {
-    ui.retranslateUi(this);
+    ui->retranslateUi(this);
     SysInfoWidget::retranslate();
 }
 
 //--------------------------------------------------------------------------------------------------
 void SysInfoWidgetLocalUsers::onContextMenu(const QPoint& point)
 {
-    QTreeWidgetItem* current_item = ui.tree->itemAt(point);
+    QTreeWidgetItem* current_item = ui->tree->itemAt(point);
     if (!current_item)
         return;
 
-    ui.tree->setCurrentItem(current_item);
+    ui->tree->setCurrentItem(current_item);
 
     QMenu menu;
-    menu.addAction(ui.action_copy_row);
-    menu.addAction(ui.action_copy_name);
-    menu.addAction(ui.action_copy_value);
+    menu.addAction(ui->action_copy_row);
+    menu.addAction(ui->action_copy_name);
+    menu.addAction(ui->action_copy_value);
 
-    menu.exec(ui.tree->viewport()->mapToGlobal(point));
+    menu.exec(ui->tree->viewport()->mapToGlobal(point));
 }

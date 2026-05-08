@@ -22,8 +22,13 @@
 #include <QByteArray>
 #include <QMainWindow>
 
+#include <memory>
+
 #include "client/ui/tab.h"
-#include "ui_main_window.h"
+
+namespace Ui {
+class MainWindow;
+} // namespace Ui
 
 namespace proto::peer {
 enum SessionType : int;
@@ -78,7 +83,7 @@ private:
     void updateSeparatorVisibility();
     QMenu* menuForActionGroup(Tab::ActionRole group) const;
 
-    Ui::MainWindow ui;
+    std::unique_ptr<Ui::MainWindow> ui;
     std::unique_ptr<UpdateChecker> update_checker_;
 
     QLineEdit* search_field_ = nullptr;

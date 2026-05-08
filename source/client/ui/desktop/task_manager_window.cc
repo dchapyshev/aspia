@@ -27,6 +27,7 @@
 #include "common/ui/msg_box.h"
 #include "base/logging.h"
 #include "client/ui/desktop/task_manager_settings.h"
+#include "ui_task_manager_window.h"
 
 namespace {
 
@@ -330,47 +331,48 @@ private:
 
 //--------------------------------------------------------------------------------------------------
 TaskManagerWindow::TaskManagerWindow(QWidget* parent)
-    : QMainWindow(parent)
+    : QMainWindow(parent),
+      ui(std::make_unique<Ui::TaskManagerWindow>())
 {
     LOG(INFO) << "Ctor";
-    ui.setupUi(this);
+    ui->setupUi(this);
 
-    ui.tree_processes->header()->setContextMenuPolicy(Qt::CustomContextMenu);
-    ui.tree_services->header()->setContextMenuPolicy(Qt::CustomContextMenu);
-    ui.tree_users->header()->setContextMenuPolicy(Qt::CustomContextMenu);
+    ui->tree_processes->header()->setContextMenuPolicy(Qt::CustomContextMenu);
+    ui->tree_services->header()->setContextMenuPolicy(Qt::CustomContextMenu);
+    ui->tree_users->header()->setContextMenuPolicy(Qt::CustomContextMenu);
 
-    connect(ui.tree_processes->header(), &QHeaderView::customContextMenuRequested,
+    connect(ui->tree_processes->header(), &QHeaderView::customContextMenuRequested,
             this, &TaskManagerWindow::onProcessHeaderContextMenu);
-    connect(ui.tree_services->header(), &QHeaderView::customContextMenuRequested,
+    connect(ui->tree_services->header(), &QHeaderView::customContextMenuRequested,
             this, &TaskManagerWindow::onServiceHeaderContextMenu);
-    connect(ui.tree_users->header(), &QHeaderView::customContextMenuRequested,
+    connect(ui->tree_users->header(), &QHeaderView::customContextMenuRequested,
             this, &TaskManagerWindow::onUserHeaderContextMenu);
 
-    ui.tree_processes->setContextMenuPolicy(Qt::CustomContextMenu);
-    ui.tree_services->setContextMenuPolicy(Qt::CustomContextMenu);
-    ui.tree_users->setContextMenuPolicy(Qt::CustomContextMenu);
+    ui->tree_processes->setContextMenuPolicy(Qt::CustomContextMenu);
+    ui->tree_services->setContextMenuPolicy(Qt::CustomContextMenu);
+    ui->tree_users->setContextMenuPolicy(Qt::CustomContextMenu);
 
-    connect(ui.tree_processes, &QTreeWidget::customContextMenuRequested,
+    connect(ui->tree_processes, &QTreeWidget::customContextMenuRequested,
             this, &TaskManagerWindow::onProcessContextMenu);
-    connect(ui.tree_services, &QTreeWidget::customContextMenuRequested,
+    connect(ui->tree_services, &QTreeWidget::customContextMenuRequested,
             this, &TaskManagerWindow::onServiceContextMenu);
-    connect(ui.tree_users, &QTreeWidget::customContextMenuRequested,
+    connect(ui->tree_users, &QTreeWidget::customContextMenuRequested,
             this, &TaskManagerWindow::onUserContextMenu);
 
-    connect(ui.tree_processes, &QTreeWidget::currentItemChanged, this,
+    connect(ui->tree_processes, &QTreeWidget::currentItemChanged, this,
             [this](QTreeWidgetItem* current, QTreeWidgetItem* /* previous */)
     {
-        ui.button_end_task->setEnabled(current != nullptr);
-        ui.action_end_task->setEnabled(current != nullptr);
+        ui->button_end_task->setEnabled(current != nullptr);
+        ui->action_end_task->setEnabled(current != nullptr);
     });
 
-    connect(ui.tree_users, &QTreeWidget::currentItemChanged, this,
+    connect(ui->tree_users, &QTreeWidget::currentItemChanged, this,
             [this](QTreeWidgetItem* current, QTreeWidgetItem* /* previous */)
     {
-        ui.button_disconnect_user->setEnabled(current != nullptr);
-        ui.action_disconnect_user->setEnabled(current != nullptr);
-        ui.button_logoff->setEnabled(current != nullptr);
-        ui.action_logoff_user->setEnabled(current != nullptr);
+        ui->button_disconnect_user->setEnabled(current != nullptr);
+        ui->action_disconnect_user->setEnabled(current != nullptr);
+        ui->button_logoff->setEnabled(current != nullptr);
+        ui->action_logoff_user->setEnabled(current != nullptr);
     });
 
     label_process_ = new QLabel(this);
@@ -382,9 +384,9 @@ TaskManagerWindow::TaskManagerWindow(QWidget* parent)
     label_cpu_->setStyleSheet(labels_style);
     label_memory_->setStyleSheet(labels_style);
 
-    ui.statusbar->addWidget(label_process_);
-    ui.statusbar->addWidget(label_cpu_);
-    ui.statusbar->addWidget(label_memory_);
+    ui->statusbar->addWidget(label_process_);
+    ui->statusbar->addWidget(label_cpu_);
+    ui->statusbar->addWidget(label_memory_);
 
     TaskManagerSettings settings;
     restoreGeometry(settings.windowState());
@@ -392,61 +394,61 @@ TaskManagerWindow::TaskManagerWindow(QWidget* parent)
     QByteArray process_state = settings.processColumnState();
     if (process_state.isEmpty())
     {
-        ui.tree_processes->setColumnHidden(PROC_COL_SESSION_ID, true);
-        ui.tree_processes->setColumnHidden(PROC_COL_MEM_WORKING_SET, true);
-        ui.tree_processes->setColumnHidden(PROC_COL_MEM_PEAK_WORKING_SET, true);
-        ui.tree_processes->setColumnHidden(PROC_COL_MEM_WORKING_SET_DELTA, true);
-        ui.tree_processes->setColumnHidden(PROC_COL_THREAD_COUNT, true);
-        ui.tree_processes->setColumnHidden(PROC_COL_IMAGE_PATH, true);
+        ui->tree_processes->setColumnHidden(PROC_COL_SESSION_ID, true);
+        ui->tree_processes->setColumnHidden(PROC_COL_MEM_WORKING_SET, true);
+        ui->tree_processes->setColumnHidden(PROC_COL_MEM_PEAK_WORKING_SET, true);
+        ui->tree_processes->setColumnHidden(PROC_COL_MEM_WORKING_SET_DELTA, true);
+        ui->tree_processes->setColumnHidden(PROC_COL_THREAD_COUNT, true);
+        ui->tree_processes->setColumnHidden(PROC_COL_IMAGE_PATH, true);
 
-        ui.tree_processes->setColumnWidth(PROC_COL_NAME, 160);
-        ui.tree_processes->setColumnWidth(PROC_COL_PROCESS_ID, 80);
-        ui.tree_processes->setColumnWidth(PROC_COL_USER_NAME, 120);
-        ui.tree_processes->setColumnWidth(PROC_COL_CPU_USAGE, 30);
-        ui.tree_processes->setColumnWidth(PROC_COL_MEM_PRIVATE_WORKING_SET, 110);
+        ui->tree_processes->setColumnWidth(PROC_COL_NAME, 160);
+        ui->tree_processes->setColumnWidth(PROC_COL_PROCESS_ID, 80);
+        ui->tree_processes->setColumnWidth(PROC_COL_USER_NAME, 120);
+        ui->tree_processes->setColumnWidth(PROC_COL_CPU_USAGE, 30);
+        ui->tree_processes->setColumnWidth(PROC_COL_MEM_PRIVATE_WORKING_SET, 110);
     }
     else
     {
-        ui.tree_processes->header()->restoreState(process_state);
+        ui->tree_processes->header()->restoreState(process_state);
     }
 
     QByteArray service_state = settings.serviceColumnState();
     if (service_state.isEmpty())
     {
-        ui.tree_services->setColumnHidden(SERV_COL_DESCRIPTION, true);
-        ui.tree_services->setColumnWidth(SERV_COL_NAME, 270);
+        ui->tree_services->setColumnHidden(SERV_COL_DESCRIPTION, true);
+        ui->tree_services->setColumnWidth(SERV_COL_NAME, 270);
     }
     else
     {
-        ui.tree_services->header()->restoreState(service_state);
+        ui->tree_services->header()->restoreState(service_state);
     }
 
-    ui.tree_users->header()->restoreState(settings.userColumnState());
+    ui->tree_users->header()->restoreState(settings.userColumnState());
 
-    ui.tree_processes->setSortingEnabled(true);
-    ui.tree_processes->header()->setSortIndicatorShown(true);
+    ui->tree_processes->setSortingEnabled(true);
+    ui->tree_processes->header()->setSortIndicatorShown(true);
 
-    ui.tree_services->setSortingEnabled(true);
-    ui.tree_services->header()->setSortIndicatorShown(true);
+    ui->tree_services->setSortingEnabled(true);
+    ui->tree_services->header()->setSortIndicatorShown(true);
 
-    ui.tree_users->setSortingEnabled(true);
-    ui.tree_users->header()->setSortIndicatorShown(true);
+    ui->tree_users->setSortingEnabled(true);
+    ui->tree_users->header()->setSortIndicatorShown(true);
 
-    connect(ui.button_end_task, &QPushButton::clicked, this, &TaskManagerWindow::onEndProcess);
-    connect(ui.button_disconnect_user, &QPushButton::clicked, this, &TaskManagerWindow::onDisconnectUser);
-    connect(ui.button_logoff, &QPushButton::clicked, this, &TaskManagerWindow::onLogoffUser);
-    connect(ui.action_end_task, &QAction::triggered, this, &TaskManagerWindow::onEndProcess);
-    connect(ui.action_update, &QAction::triggered, this, [this]()
+    connect(ui->button_end_task, &QPushButton::clicked, this, &TaskManagerWindow::onEndProcess);
+    connect(ui->button_disconnect_user, &QPushButton::clicked, this, &TaskManagerWindow::onDisconnectUser);
+    connect(ui->button_logoff, &QPushButton::clicked, this, &TaskManagerWindow::onLogoffUser);
+    connect(ui->action_end_task, &QAction::triggered, this, &TaskManagerWindow::onEndProcess);
+    connect(ui->action_update, &QAction::triggered, this, [this]()
     {
         LOG(INFO) << "[ACTION] Update";
         sendProcessListRequest(proto::task_manager::ProcessListRequest::RESET_CACHE);
         sendServiceListRequest();
         sendUserListRequest();
     });
-    connect(ui.action_start_service, &QAction::triggered, this, &TaskManagerWindow::onStartService);
-    connect(ui.action_stop_service, &QAction::triggered, this, &TaskManagerWindow::onStopService);
-    connect(ui.action_disconnect_user, &QAction::triggered, this, &TaskManagerWindow::onDisconnectUser);
-    connect(ui.action_logoff_user, &QAction::triggered, this, &TaskManagerWindow::onLogoffUser);
+    connect(ui->action_start_service, &QAction::triggered, this, &TaskManagerWindow::onStartService);
+    connect(ui->action_stop_service, &QAction::triggered, this, &TaskManagerWindow::onStopService);
+    connect(ui->action_disconnect_user, &QAction::triggered, this, &TaskManagerWindow::onDisconnectUser);
+    connect(ui->action_logoff_user, &QAction::triggered, this, &TaskManagerWindow::onLogoffUser);
 
     update_timer_ = new QTimer(this);
 
@@ -458,13 +460,13 @@ TaskManagerWindow::TaskManagerWindow(QWidget* parent)
 
     std::chrono::milliseconds update_speed = settings.updateSpeed();
     if (update_speed == std::chrono::milliseconds(500))
-        ui.action_high_speed->setChecked(true);
+        ui->action_high_speed->setChecked(true);
     else if (update_speed == std::chrono::milliseconds(1000))
-        ui.action_medium_speed->setChecked(true);
+        ui->action_medium_speed->setChecked(true);
     else if (update_speed == std::chrono::milliseconds(3000))
-        ui.action_low_speed->setChecked(true);
+        ui->action_low_speed->setChecked(true);
     else if (update_speed == std::chrono::milliseconds(0))
-        ui.action_disable_update->setChecked(true);
+        ui->action_disable_update->setChecked(true);
 
     update_timer_->start(update_speed);
 
@@ -483,9 +485,9 @@ TaskManagerWindow::~TaskManagerWindow()
 
     TaskManagerSettings settings;
     settings.setWindowState(saveGeometry());
-    settings.setProcessColumnState(ui.tree_processes->header()->saveState());
-    settings.setServiceColumnState(ui.tree_services->header()->saveState());
-    settings.setUserColumnState(ui.tree_users->header()->saveState());
+    settings.setProcessColumnState(ui->tree_processes->header()->saveState());
+    settings.setServiceColumnState(ui->tree_services->header()->saveState());
+    settings.setUserColumnState(ui->tree_users->header()->saveState());
 
     if (!update_timer_->isActive())
         settings.setUpdateSpeed(std::chrono::milliseconds(0));
@@ -512,7 +514,7 @@ void TaskManagerWindow::changeEvent(QEvent* event)
     QMainWindow::changeEvent(event);
 
     if (event->type() == QEvent::LanguageChange)
-        ui.retranslateUi(this);
+        ui->retranslateUi(this);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -524,12 +526,12 @@ void TaskManagerWindow::closeEvent(QCloseEvent* event)
 //--------------------------------------------------------------------------------------------------
 void TaskManagerWindow::onProcessHeaderContextMenu(const QPoint& pos)
 {
-    QHeaderView* header = ui.tree_processes->header();
+    QHeaderView* header = ui->tree_processes->header();
     QMenu menu;
 
     for (int i = 1; i < header->count(); ++i)
     {
-        ColumnAction* action = new ColumnAction(ui.tree_processes->headerItem()->text(i), i, &menu);
+        ColumnAction* action = new ColumnAction(ui->tree_processes->headerItem()->text(i), i, &menu);
         action->setChecked(!header->isSectionHidden(i));
         menu.addAction(action);
     }
@@ -545,12 +547,12 @@ void TaskManagerWindow::onProcessHeaderContextMenu(const QPoint& pos)
 //--------------------------------------------------------------------------------------------------
 void TaskManagerWindow::onServiceHeaderContextMenu(const QPoint& pos)
 {
-    QHeaderView* header = ui.tree_services->header();
+    QHeaderView* header = ui->tree_services->header();
     QMenu menu;
 
     for (int i = 1; i < header->count(); ++i)
     {
-        ColumnAction* action = new ColumnAction(ui.tree_services->headerItem()->text(i), i, &menu);
+        ColumnAction* action = new ColumnAction(ui->tree_services->headerItem()->text(i), i, &menu);
         action->setChecked(!header->isSectionHidden(i));
         menu.addAction(action);
     }
@@ -566,12 +568,12 @@ void TaskManagerWindow::onServiceHeaderContextMenu(const QPoint& pos)
 //--------------------------------------------------------------------------------------------------
 void TaskManagerWindow::onUserHeaderContextMenu(const QPoint& pos)
 {
-    QHeaderView* header = ui.tree_users->header();
+    QHeaderView* header = ui->tree_users->header();
     QMenu menu;
 
     for (int i = 1; i < header->count(); ++i)
     {
-        ColumnAction* action = new ColumnAction(ui.tree_users->headerItem()->text(i), i, &menu);
+        ColumnAction* action = new ColumnAction(ui->tree_users->headerItem()->text(i), i, &menu);
         action->setChecked(!header->isSectionHidden(i));
         menu.addAction(action);
     }
@@ -587,23 +589,23 @@ void TaskManagerWindow::onUserHeaderContextMenu(const QPoint& pos)
 //--------------------------------------------------------------------------------------------------
 void TaskManagerWindow::onProcessContextMenu(const QPoint& pos)
 {
-    ProcessItem* current_item = static_cast<ProcessItem*>(ui.tree_processes->itemAt(pos));
+    ProcessItem* current_item = static_cast<ProcessItem*>(ui->tree_processes->itemAt(pos));
     if (current_item)
-        ui.tree_processes->setCurrentItem(current_item);
+        ui->tree_processes->setCurrentItem(current_item);
 
     QMenu menu;
-    menu.addAction(ui.action_end_task);
+    menu.addAction(ui->action_end_task);
     menu.addSeparator();
     addUpdateItems(&menu);
-    menu.exec(ui.tree_processes->viewport()->mapToGlobal(pos));
+    menu.exec(ui->tree_processes->viewport()->mapToGlobal(pos));
 }
 
 //--------------------------------------------------------------------------------------------------
 void TaskManagerWindow::onServiceContextMenu(const QPoint& pos)
 {
-    ServiceItem* current_item = static_cast<ServiceItem*>(ui.tree_services->itemAt(pos));
+    ServiceItem* current_item = static_cast<ServiceItem*>(ui->tree_services->itemAt(pos));
     if (current_item)
-        ui.tree_services->setCurrentItem(current_item);
+        ui->tree_services->setCurrentItem(current_item);
 
     QMenu menu;
 
@@ -620,29 +622,29 @@ void TaskManagerWindow::onServiceContextMenu(const QPoint& pos)
             enable_stop = true;
     }
 
-    ui.action_start_service->setEnabled(enable_start);
-    ui.action_stop_service->setEnabled(enable_stop);
+    ui->action_start_service->setEnabled(enable_start);
+    ui->action_stop_service->setEnabled(enable_stop);
 
-    menu.addAction(ui.action_start_service);
-    menu.addAction(ui.action_stop_service);
+    menu.addAction(ui->action_start_service);
+    menu.addAction(ui->action_stop_service);
     menu.addSeparator();
     addUpdateItems(&menu);
-    menu.exec(ui.tree_services->viewport()->mapToGlobal(pos));
+    menu.exec(ui->tree_services->viewport()->mapToGlobal(pos));
 }
 
 //--------------------------------------------------------------------------------------------------
 void TaskManagerWindow::onUserContextMenu(const QPoint& pos)
 {
-    UserItem* current_item = static_cast<UserItem*>(ui.tree_users->itemAt(pos));
+    UserItem* current_item = static_cast<UserItem*>(ui->tree_users->itemAt(pos));
     if (current_item)
-        ui.tree_users->setCurrentItem(current_item);
+        ui->tree_users->setCurrentItem(current_item);
 
     QMenu menu;
-    menu.addAction(ui.action_disconnect_user);
-    menu.addAction(ui.action_logoff_user);
+    menu.addAction(ui->action_disconnect_user);
+    menu.addAction(ui->action_logoff_user);
     menu.addSeparator();
     addUpdateItems(&menu);
-    menu.exec(ui.tree_users->viewport()->mapToGlobal(pos));
+    menu.exec(ui->tree_users->viewport()->mapToGlobal(pos));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -650,7 +652,7 @@ void TaskManagerWindow::onEndProcess()
 {
     LOG(INFO) << "[ACTION] End process";
 
-    ProcessItem* current_item = static_cast<ProcessItem*>(ui.tree_processes->currentItem());
+    ProcessItem* current_item = static_cast<ProcessItem*>(ui->tree_processes->currentItem());
     if (current_item)
     {
         if (MsgBox::question(this,
@@ -676,7 +678,7 @@ void TaskManagerWindow::onStartService()
 {
     LOG(INFO) << "[ACTION] Start service";
 
-    ServiceItem* current_item = static_cast<ServiceItem*>(ui.tree_services->currentItem());
+    ServiceItem* current_item = static_cast<ServiceItem*>(ui->tree_services->currentItem());
     if (current_item)
         sendServiceRequest(current_item->name(), proto::task_manager::ServiceRequest::COMMAND_START);
     else
@@ -688,7 +690,7 @@ void TaskManagerWindow::onStopService()
 {
     LOG(INFO) << "[ACTION] Stop service";
 
-    ServiceItem* current_item = static_cast<ServiceItem*>(ui.tree_services->currentItem());
+    ServiceItem* current_item = static_cast<ServiceItem*>(ui->tree_services->currentItem());
     if (current_item)
         sendServiceRequest(current_item->name(), proto::task_manager::ServiceRequest::COMMAND_STOP);
     else
@@ -700,7 +702,7 @@ void TaskManagerWindow::onDisconnectUser()
 {
     LOG(INFO) << "[ACTION] Disconnect user";
 
-    UserItem* current_item = static_cast<UserItem*>(ui.tree_users->currentItem());
+    UserItem* current_item = static_cast<UserItem*>(ui->tree_users->currentItem());
     if (current_item)
     {
         if (MsgBox::question(this,
@@ -723,7 +725,7 @@ void TaskManagerWindow::onLogoffUser()
 {
     LOG(INFO) << "[ACTION] Logoff user";
 
-    UserItem* current_item = static_cast<UserItem*>(ui.tree_users->currentItem());
+    UserItem* current_item = static_cast<UserItem*>(ui->tree_users->currentItem());
     if (current_item)
     {
         if (MsgBox::question(this,
@@ -803,9 +805,9 @@ void TaskManagerWindow::sendUserRequest(
 void TaskManagerWindow::readProcessList(const proto::task_manager::ProcessList& process_list)
 {
     // Remove dead processes from the list.
-    for (int i = ui.tree_processes->topLevelItemCount() - 1; i >= 0; --i)
+    for (int i = ui->tree_processes->topLevelItemCount() - 1; i >= 0; --i)
     {
-        ProcessItem* temp = static_cast<ProcessItem*>(ui.tree_processes->topLevelItem(i));
+        ProcessItem* temp = static_cast<ProcessItem*>(ui->tree_processes->topLevelItem(i));
 
         bool found = false;
         for (int j = 0; j < process_list.process_size(); ++j)
@@ -827,9 +829,9 @@ void TaskManagerWindow::readProcessList(const proto::task_manager::ProcessList& 
         const proto::task_manager::Process& process = process_list.process(i);
         ProcessItem* process_item = nullptr;
 
-        for (int j = 0; j < ui.tree_processes->topLevelItemCount(); ++j)
+        for (int j = 0; j < ui->tree_processes->topLevelItemCount(); ++j)
         {
-            ProcessItem* temp = static_cast<ProcessItem*>(ui.tree_processes->topLevelItem(j));
+            ProcessItem* temp = static_cast<ProcessItem*>(ui->tree_processes->topLevelItem(j));
             if (temp->processId() == process.process_id())
             {
                 process_item = temp;
@@ -839,7 +841,7 @@ void TaskManagerWindow::readProcessList(const proto::task_manager::ProcessList& 
 
         if (!process_item)
         {
-            ui.tree_processes->addTopLevelItem(new ProcessItem(process));
+            ui->tree_processes->addTopLevelItem(new ProcessItem(process));
         }
         else
         {
@@ -847,11 +849,11 @@ void TaskManagerWindow::readProcessList(const proto::task_manager::ProcessList& 
         }
     }
 
-    if (process_list.process_size() != ui.tree_processes->topLevelItemCount())
+    if (process_list.process_size() != ui->tree_processes->topLevelItemCount())
     {
         LOG(ERROR) << "Number of processes mismatch (expected:"
                    << process_list.process_size() << "actual:"
-                   << ui.tree_processes->topLevelItemCount() << ")";
+                   << ui->tree_processes->topLevelItemCount() << ")";
     }
 
     setProcessCount(process_list.process_size());
@@ -862,7 +864,7 @@ void TaskManagerWindow::readProcessList(const proto::task_manager::ProcessList& 
 //--------------------------------------------------------------------------------------------------
 void TaskManagerWindow::readServiceList(const proto::task_manager::ServiceList& service_list)
 {
-    ui.tree_services->clear();
+    ui->tree_services->clear();
 
     QIcon item_icon = QIcon(":/img/gear.svg");
 
@@ -871,7 +873,7 @@ void TaskManagerWindow::readServiceList(const proto::task_manager::ServiceList& 
         ServiceItem* item = new ServiceItem(service_list.service(i));
         item->setIcon(SERV_COL_NAME, item_icon);
 
-        ui.tree_services->addTopLevelItem(item);
+        ui->tree_services->addTopLevelItem(item);
     }
 }
 
@@ -879,9 +881,9 @@ void TaskManagerWindow::readServiceList(const proto::task_manager::ServiceList& 
 void TaskManagerWindow::readUserList(const proto::task_manager::UserList& user_list)
 {
     // Remove dead sessions from the list.
-    for (int i = ui.tree_users->topLevelItemCount() - 1; i >= 0; --i)
+    for (int i = ui->tree_users->topLevelItemCount() - 1; i >= 0; --i)
     {
-        UserItem* temp = static_cast<UserItem*>(ui.tree_users->topLevelItem(i));
+        UserItem* temp = static_cast<UserItem*>(ui->tree_users->topLevelItem(i));
 
         bool found = false;
         for (int j = 0; j < user_list.user_size(); ++j)
@@ -903,9 +905,9 @@ void TaskManagerWindow::readUserList(const proto::task_manager::UserList& user_l
         const proto::task_manager::User& user = user_list.user(i);
         UserItem* user_item = nullptr;
 
-        for (int j = 0; j < ui.tree_users->topLevelItemCount(); ++j)
+        for (int j = 0; j < ui->tree_users->topLevelItemCount(); ++j)
         {
-            UserItem* temp = static_cast<UserItem*>(ui.tree_users->topLevelItem(j));
+            UserItem* temp = static_cast<UserItem*>(ui->tree_users->topLevelItem(j));
             if (temp->sessionId() == user.session_id())
             {
                 user_item = temp;
@@ -919,7 +921,7 @@ void TaskManagerWindow::readUserList(const proto::task_manager::UserList& user_l
         }
         else
         {
-            ui.tree_users->addTopLevelItem(new UserItem(user));
+            ui->tree_users->addTopLevelItem(new UserItem(user));
         }
     }
 }
@@ -948,23 +950,23 @@ void TaskManagerWindow::addUpdateItems(QMenu* parent_menu)
     QMenu* update_menu = parent_menu->addMenu(tr("Update Speed"));
 
     QActionGroup* update_group = new QActionGroup(update_menu);
-    update_group->addAction(ui.action_high_speed);
-    update_group->addAction(ui.action_medium_speed);
-    update_group->addAction(ui.action_low_speed);
-    update_group->addAction(ui.action_disable_update);
+    update_group->addAction(ui->action_high_speed);
+    update_group->addAction(ui->action_medium_speed);
+    update_group->addAction(ui->action_low_speed);
+    update_group->addAction(ui->action_disable_update);
 
     connect(update_group, &QActionGroup::triggered, this, [this](QAction* action)
     {
-        if (action == ui.action_high_speed)
+        if (action == ui->action_high_speed)
             update_timer_->start(std::chrono::milliseconds(500));
-        else if (action == ui.action_medium_speed)
+        else if (action == ui->action_medium_speed)
             update_timer_->start(std::chrono::milliseconds(1000));
-        else if (action == ui.action_low_speed)
+        else if (action == ui->action_low_speed)
             update_timer_->start(std::chrono::milliseconds(3000));
-        else if (action == ui.action_disable_update)
+        else if (action == ui->action_disable_update)
             update_timer_->stop();
     });
 
     update_menu->addActions(update_group->actions());
-    parent_menu->addAction(ui.action_update);
+    parent_menu->addAction(ui->action_update);
 }

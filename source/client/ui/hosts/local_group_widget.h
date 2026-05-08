@@ -23,11 +23,17 @@
 #include <QMimeData>
 #include <QPoint>
 #include <QPointer>
+#include <QTreeWidget>
+
+#include <memory>
 
 #include "base/scoped_qpointer.h"
 #include "client/online_checker/online_checker.h"
 #include "client/ui/hosts/content_widget.h"
-#include "ui_local_group_widget.h"
+
+namespace Ui {
+class LocalGroupWidget;
+} // namespace Ui
 
 class QLabel;
 class QStatusBar;
@@ -142,7 +148,7 @@ private:
     void clearOnlineStatuses();
     Item* findItemByComputerId(qint64 computer_id) const;
 
-    Ui::LocalGroupWidget ui;
+    std::unique_ptr<Ui::LocalGroupWidget> ui;
     QString mime_type_;
     QPoint start_pos_;
 

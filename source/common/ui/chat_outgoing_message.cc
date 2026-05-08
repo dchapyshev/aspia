@@ -21,14 +21,17 @@
 #include <QLocale>
 #include <QTime>
 
+#include "ui_chat_outgoing_message.h"
+
 //--------------------------------------------------------------------------------------------------
 ChatOutgoingMessage::ChatOutgoingMessage(QWidget* parent)
-    : ChatMessage(ChatMessage::Direction::OUTGOING, parent)
+    : ChatMessage(ChatMessage::Direction::OUTGOING, parent),
+      ui(std::make_unique<Ui::ChatOutgoingMessage>())
 {
-    ui.setupUi(this);
+    ui->setupUi(this);
 
     QString time = QLocale::system().toString(QTime::currentTime(), QLocale::ShortFormat);
-    ui.label_time->setText(time);
+    ui->label_time->setText(time);
 
     applyStyles(palette());
 }
@@ -39,20 +42,20 @@ ChatOutgoingMessage::~ChatOutgoingMessage() = default;
 //--------------------------------------------------------------------------------------------------
 void ChatOutgoingMessage::setMessageText(const QString& text)
 {
-    ui.label_message->setText(text);
+    ui->label_message->setText(text);
     adjustSize();
 }
 
 //--------------------------------------------------------------------------------------------------
 QString ChatOutgoingMessage::messageText() const
 {
-    return ui.label_message->text();
+    return ui->label_message->text();
 }
 
 //--------------------------------------------------------------------------------------------------
 QString ChatOutgoingMessage::messageTime() const
 {
-    return ui.label_time->text();
+    return ui->label_time->text();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -61,7 +64,7 @@ void ChatOutgoingMessage::applyStyles(const QPalette& palette)
     const QColor& bubble = palette.color(QPalette::Midlight);
     const QColor& text = palette.color(QPalette::Text);
 
-    ui.label_message->setStyleSheet(QString(
+    ui->label_message->setStyleSheet(QString(
         "#label_message { color: %1; background-color: %2; border: 1px solid %2; "
         "border-radius: 4px; font-family: Verdana; padding: 6px; }")
         .arg(text.name(QColor::HexArgb), bubble.name(QColor::HexArgb)));
