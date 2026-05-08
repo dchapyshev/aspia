@@ -22,6 +22,7 @@
 #include <QByteArray>
 #include <QEvent>
 #include <QFile>
+#include <QList>
 #include <QObject>
 #include <QPointer>
 #include <QRect>

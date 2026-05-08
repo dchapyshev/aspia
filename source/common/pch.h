@@ -22,6 +22,7 @@
 #include <QAbstractButton>
 #include <QAction>
 #include <QDialog>
+#include <QLabel>
 #include <QMenu>
 #include <QPushButton>
 #include <QWidget>
