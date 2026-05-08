@@ -76,9 +76,6 @@
            <property name="text">
             <string/>
            </property>
-           <property name="pixmap">
-            <pixmap resource="../resources/common.qrc">:/img/user.svg</pixmap>
-           </property>
           </widget>
          </item>
          <item>

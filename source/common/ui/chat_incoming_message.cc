@@ -21,6 +21,7 @@
 #include <QDateTime>
 #include <QLocale>
 
+#include "base/gui_application.h"
 #include "ui_chat_incoming_message.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -29,6 +30,7 @@ ChatIncomingMessage::ChatIncomingMessage(QWidget* parent)
       ui(std::make_unique<Ui::ChatIncomingMessage>())
 {
     ui->setupUi(this);
+    ui->label_icon->setPixmap(GuiApplication::svgPixmap(":/img/user.svg", QSize(24, 24)));
     applyStyles(palette());
 }
 
