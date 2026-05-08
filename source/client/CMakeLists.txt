@@ -295,7 +295,6 @@ target_link_libraries(aspia_client PRIVATE
     aspia_base
     aspia_common
     aspia_proto
-    unofficial::sqlite3::sqlite3
     ${CLIENT_PLATFORM_LIBS}
     ${QT_COMMON_LIBS}
     ${QT_PLATFORM_LIBS}
