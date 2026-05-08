@@ -55,6 +55,8 @@ endif()
 
 if (APPLE)
     message(STATUS "MacOSX detected")
+    enable_language(OBJC)
+    enable_language(OBJCXX)
 endif()
 
 if (WIN32)
