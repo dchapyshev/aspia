@@ -64,6 +64,13 @@ protected:
     void resizeEvent(QResizeEvent* event) final;
     void showEvent(QShowEvent* event) final;
 
+private slots:
+    void onMessageTextChanged();
+    void onClearHistory();
+    void onSaveChat();
+    void onSendMessage();
+    void onUpdateSize();
+
 private:
     struct HistoryMessage
     {
@@ -82,11 +89,7 @@ private:
     void loadHistory();
     void saveHistory() const;
     void clearMessages();
-    void onSendMessage();
-    void onSendStatus(proto::chat::Status::Code code);
-    void onClearHistory();
-    void onSaveChat();
-    void onUpdateSize();
+    void sendStatus(proto::chat::Status::Code code);
     void refreshStyles();
 
     std::unique_ptr<Ui::ChatWidget> ui;

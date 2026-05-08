@@ -32,6 +32,7 @@
 #include <QMenu>
 #include <QSaveFile>
 #include <QScrollBar>
+#include <QTextEdit>
 #include <QTextStream>
 #include <QTimer>
 
@@ -47,6 +48,8 @@ namespace {
 
 const int kMaxMessageLength = 2048;
 const int kMaxStoredMessages = 30;
+const int kEditMessageMinHeight = 32;
+const int kEditMessageMaxHeight = 120;
 const QString kHistoryDirName = "chat";
 
 //--------------------------------------------------------------------------------------------------
@@ -135,6 +138,8 @@ ChatWidget::ChatWidget(QWidget* parent)
     LOG(INFO) << "Ctor";
 
     ui->setupUi(this);
+    ui->edit_message->document()->setDocumentMargin(2);
+    ui->edit_message->setFixedHeight(kEditMessageMinHeight);
     ui->edit_message->installEventFilter(this);
     ui->list_messages->horizontalScrollBar()->installEventFilter(this);
     ui->list_messages->verticalScrollBar()->installEventFilter(this);
@@ -143,8 +148,8 @@ ChatWidget::ChatWidget(QWidget* parent)
 
     connect(action_save_chat_, &QAction::triggered, this, &ChatWidget::onSaveChat);
     connect(action_clear_chat_, &QAction::triggered, this, &ChatWidget::onClearHistory);
-
     connect(status_clear_timer_, &QTimer::timeout, ui->label_status, &QLabel::clear);
+    connect(ui->edit_message, &QTextEdit::textChanged, this, &ChatWidget::onMessageTextChanged);
     connect(ui->button_send, &QToolButton::clicked, this, &ChatWidget::onSendMessage);
     connect(ui->button_tools, &QToolButton::clicked, this, [this]()
     {
@@ -195,27 +200,21 @@ void ChatWidget::readStatus(const proto::chat::Status& status)
         case proto::chat::Status::CODE_TYPING:
             ui->label_status->setText(tr("%1 is typing...").arg(user_name));
             break;
-
         case proto::chat::Status::CODE_STARTED:
             message = tr("User %1 has joined the chat (%2)").arg(user_name, currentTime());
             break;
-
         case proto::chat::Status::CODE_STOPPED:
             message = tr("User %1 has left the chat (%2)").arg(user_name, currentTime());
             break;
-
         case proto::chat::Status::CODE_USER_CONNECTED:
             message = tr("User %1 is logged in (%2)").arg(user_name, currentTime());
             break;
-
         case proto::chat::Status::CODE_USER_DISCONNECTED:
             message = tr("User %1 is not logged in (%2)").arg(user_name, currentTime());
             break;
-
         case proto::chat::Status::CODE_NO_USERS:
             message = tr("There are no connected users (%1)").arg(currentTime());
             break;
-
         default:
             LOG(ERROR) << "Unhandled status code:" << status.code();
             return;
@@ -271,21 +270,20 @@ bool ChatWidget::eventFilter(QObject* object, QEvent* event)
     if (object == ui->edit_message && event->type() == QEvent::KeyPress)
     {
         QKeyEvent* key_event = static_cast<QKeyEvent*>(event);
-        if (key_event->key() == Qt::Key_Return)
+        bool is_return = key_event->key() == Qt::Key_Return || key_event->key() == Qt::Key_Enter;
+        if (is_return && !(key_event->modifiers() & Qt::ShiftModifier))
         {
             onSendMessage();
             return true;
         }
 
-        onSendStatus(proto::chat::Status::CODE_TYPING);
+        sendStatus(proto::chat::Status::CODE_TYPING);
     }
     else if (object == ui->list_messages->horizontalScrollBar() ||
              object == ui->list_messages->verticalScrollBar())
     {
         if (event->type() == QEvent::Show || event->type() == QEvent::Hide)
-        {
             onUpdateSize();
-        }
     }
 
     return QWidget::eventFilter(object, event);
@@ -328,6 +326,150 @@ void ChatWidget::showEvent(QShowEvent* event)
 {
     QWidget::showEvent(event);
     QTimer::singleShot(0, this, &ChatWidget::onUpdateSize);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatWidget::onMessageTextChanged()
+{
+    QTextEdit* edit = ui->edit_message;
+    int doc_h = static_cast<int>(edit->document()->size().height());
+    QMargins cm = edit->contentsMargins();
+    int desired = doc_h + cm.top() + cm.bottom();
+    edit->setFixedHeight(std::clamp(desired, kEditMessageMinHeight, kEditMessageMaxHeight));
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatWidget::onClearHistory()
+{
+    LOG(INFO) << "[ACTION] Clear history";
+    clearMessages();
+    history_messages_.clear();
+    saveHistory();
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatWidget::onSaveChat()
+{
+    LOG(INFO) << "[ACTION] Save chat";
+
+    QString selected_filter;
+    QString file_path = QFileDialog::getSaveFileName(
+        this, tr("Save File"), QString(), tr("TXT files (*.txt)"), &selected_filter);
+    if (file_path.isEmpty() || selected_filter.isEmpty())
+    {
+        LOG(INFO) << "File path not selected";
+        return;
+    }
+
+    LOG(INFO) << "Selected file path:" << file_path;
+
+    QFile file(file_path);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+        LOG(ERROR) << "Unable to open file:" << file.errorString();
+        MsgBox::warning(this, tr("Could not open file for writing."));
+        return;
+    }
+
+    QListWidget* list_messages = ui->list_messages;
+    QTextStream stream(&file);
+
+    for (int i = 0; i < list_messages->count(); ++i)
+    {
+        QListWidgetItem* item = list_messages->item(i);
+        ChatMessage* message_widget =
+            static_cast<ChatMessage*>(list_messages->itemWidget(item));
+
+        if (message_widget->direction() == ChatMessage::Direction::INCOMING)
+        {
+            ChatIncomingMessage* incoming_message_widget =
+                static_cast<ChatIncomingMessage*>(message_widget);
+
+            stream << "[" << incoming_message_widget->messageTime() << "] "
+                   << incoming_message_widget->source() << Qt::endl;
+            stream << incoming_message_widget->messageText() << Qt::endl;
+            stream << Qt::endl;
+        }
+        else if (message_widget->direction() == ChatMessage::Direction::OUTGOING)
+        {
+            ChatOutgoingMessage* outgoing_message_widget =
+                static_cast<ChatOutgoingMessage*>(message_widget);
+
+            stream << "[" << outgoing_message_widget->messageTime() << "] " << Qt::endl;
+            stream << outgoing_message_widget->messageText() << Qt::endl;
+            stream << Qt::endl;
+        }
+        else
+        {
+            DCHECK_EQ(message_widget->direction(), ChatMessage::Direction::STATUS);
+
+            ChatStatusMessage* status_message_widget =
+                static_cast<ChatStatusMessage*>(message_widget);
+
+            stream << status_message_widget->messageText() << Qt::endl;
+            stream << Qt::endl;
+        }
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatWidget::onSendMessage()
+{
+    QTextEdit* edit_message = ui->edit_message;
+    QString message = edit_message->toPlainText();
+    if (message.isEmpty())
+        return;
+
+    if (message.length() > kMaxMessageLength)
+    {
+        LOG(ERROR) << "Too long message:" << message.length();
+        MsgBox::warning(this,
+                        tr("The message is too long. The maximum message length is %n "
+                           "characters.", "", kMaxMessageLength));
+        return;
+    }
+
+    qint64 timestamp = QDateTime::currentSecsSinceEpoch();
+
+    addOutgoingMessage(timestamp, message);
+    appendHistoryMessage(timestamp, display_name_, message, true);
+    edit_message->clear();
+    edit_message->setFocus();
+
+    proto::chat::Message chat_message;
+    chat_message.set_timestamp(timestamp);
+    chat_message.set_source(display_name_.toStdString());
+    chat_message.set_text(message.toStdString());
+
+    emit sig_sendMessage(chat_message);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ChatWidget::onUpdateSize()
+{
+    QListWidget* list_messages = ui->list_messages;
+    int viewport_width = list_messages->viewport()->width();
+    if (viewport_width <= 0)
+        return;
+
+    int count = list_messages->count();
+
+    for (int i = 0; i < count; ++i)
+    {
+        QListWidgetItem* item = list_messages->item(i);
+
+        ChatMessage* message_widget =
+            static_cast<ChatMessage*>(list_messages->itemWidget(item));
+        if (!message_widget)
+            continue;
+
+        message_widget->setFixedWidth(viewport_width);
+        message_widget->setFixedHeight(message_widget->heightForWidth(viewport_width));
+
+        item->setSizeHint(message_widget->size());
+    }
+
+    list_messages->scrollToBottom();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -454,10 +596,8 @@ void ChatWidget::loadHistory()
         message.outgoing = item.value("outgoing").toBool();
         message.status = item.value("status").toBool();
 
-        if (message.text.isEmpty())
-            continue;
-
-        loaded_messages.push_back(message);
+        if (!message.text.isEmpty())
+            loaded_messages.push_back(message);
     }
 
     while (loaded_messages.size() > kMaxStoredMessages)
@@ -529,153 +669,13 @@ void ChatWidget::clearMessages()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ChatWidget::onSendMessage()
-{
-    QLineEdit* edit_message = ui->edit_message;
-    QString message = edit_message->text();
-    if (message.isEmpty())
-        return;
-
-    if (message.length() > kMaxMessageLength)
-    {
-        LOG(ERROR) << "Too long message:" << message.length();
-        MsgBox::warning(this,
-                             tr("The message is too long. The maximum message length is %n "
-                                "characters.", "", kMaxMessageLength));
-        return;
-    }
-
-    qint64 timestamp = QDateTime::currentSecsSinceEpoch();
-
-    addOutgoingMessage(timestamp, message);
-    appendHistoryMessage(timestamp, display_name_, message, true);
-    edit_message->clear();
-    edit_message->setFocus();
-
-    proto::chat::Message chat_message;
-    chat_message.set_timestamp(timestamp);
-    chat_message.set_source(display_name_.toStdString());
-    chat_message.set_text(message.toStdString());
-
-    emit sig_sendMessage(chat_message);
-}
-
-//--------------------------------------------------------------------------------------------------
-void ChatWidget::onSendStatus(proto::chat::Status::Code code)
+void ChatWidget::sendStatus(proto::chat::Status::Code code)
 {
     proto::chat::Status chat_status;
     chat_status.set_timestamp(QDateTime::currentSecsSinceEpoch());
     chat_status.set_source(display_name_.toStdString());
     chat_status.set_code(code);
-
     emit sig_sendStatus(chat_status);
-}
-
-//--------------------------------------------------------------------------------------------------
-void ChatWidget::onClearHistory()
-{
-    LOG(INFO) << "[ACTION] Clear history";
-
-    clearMessages();
-    history_messages_.clear();
-    saveHistory();
-}
-
-//--------------------------------------------------------------------------------------------------
-void ChatWidget::onSaveChat()
-{
-    LOG(INFO) << "[ACTION] Save chat";
-
-    QString selected_filter;
-    QString file_path = QFileDialog::getSaveFileName(this,
-                                                     tr("Save File"),
-                                                     QString(),
-                                                     tr("TXT files (*.txt)"),
-                                                     &selected_filter);
-    if (file_path.isEmpty() || selected_filter.isEmpty())
-    {
-        LOG(INFO) << "File path not selected";
-        return;
-    }
-
-    LOG(INFO) << "Selected file path:" << file_path;
-
-    QFile file(file_path);
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
-    {
-        LOG(ERROR) << "Unable to open file:" << file.errorString();
-        MsgBox::warning(this,
-                             tr("Could not open file for writing."));
-        return;
-    }
-
-    QListWidget* list_messages = ui->list_messages;
-    QTextStream stream(&file);
-
-    for (int i = 0; i < list_messages->count(); ++i)
-    {
-        QListWidgetItem* item = list_messages->item(i);
-        ChatMessage* message_widget =
-            static_cast<ChatMessage*>(list_messages->itemWidget(item));
-
-        if (message_widget->direction() == ChatMessage::Direction::INCOMING)
-        {
-            ChatIncomingMessage* incoming_message_widget =
-                static_cast<ChatIncomingMessage*>(message_widget);
-
-            stream << "[" << incoming_message_widget->messageTime() << "] "
-                   << incoming_message_widget->source() << Qt::endl;
-            stream << incoming_message_widget->messageText() << Qt::endl;
-            stream << Qt::endl;
-        }
-        else if (message_widget->direction() == ChatMessage::Direction::OUTGOING)
-        {
-            ChatOutgoingMessage* outgoing_message_widget =
-                static_cast<ChatOutgoingMessage*>(message_widget);
-
-            stream << "[" << outgoing_message_widget->messageTime() << "] " << Qt::endl;
-            stream << outgoing_message_widget->messageText() << Qt::endl;
-            stream << Qt::endl;
-        }
-        else
-        {
-            DCHECK_EQ(message_widget->direction(), ChatMessage::Direction::STATUS);
-
-            ChatStatusMessage* status_message_widget =
-                static_cast<ChatStatusMessage*>(message_widget);
-
-            stream << status_message_widget->messageText() << Qt::endl;
-            stream << Qt::endl;
-        }
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-void ChatWidget::onUpdateSize()
-{
-    QListWidget* list_messages = ui->list_messages;
-    int viewport_width = list_messages->viewport()->width();
-    if (viewport_width <= 0)
-        return;
-
-    int count = list_messages->count();
-
-    for (int i = 0; i < count; ++i)
-    {
-        QListWidgetItem* item = list_messages->item(i);
-
-        ChatMessage* message_widget =
-            static_cast<ChatMessage*>(list_messages->itemWidget(item));
-        if (!message_widget)
-            continue;
-
-        message_widget->setFixedWidth(viewport_width);
-        message_widget->setFixedHeight(message_widget->heightForWidth(viewport_width));
-
-        item->setSizeHint(message_widget->size());
-    }
-
-    list_messages->scrollToBottom();
 }
 
 //--------------------------------------------------------------------------------------------------
