@@ -16,26 +16,30 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef CLIENT_JSON_IMPORTER_H
-#define CLIENT_JSON_IMPORTER_H
+#ifndef CLIENT_JSON_BACKUP_H
+#define CLIENT_JSON_BACKUP_H
 
 #include <QCoreApplication>
 #include <QString>
 
 class QWidget;
 
-class JsonImporter
+class JsonBackup
 {
-    Q_DECLARE_TR_FUNCTIONS(JsonImporter)
+    Q_DECLARE_TR_FUNCTIONS(JsonBackup)
 
 public:
+    // Exports the local address book (groups, computers, routers) into a JSON file at |file_path|.
+    // Shows password dialog and error/success messages on |parent|. Returns true on success.
+    static bool exportToFile(QWidget* parent, const QString& file_path);
+
     // Imports the address book from |file_path| (JSON format) into the local database.
     // Shows password dialog and error/success messages on |parent|.
     // Returns true if at least one item was imported.
     static bool importFromFile(QWidget* parent, const QString& file_path);
 
 private:
-    Q_DISABLE_COPY_MOVE(JsonImporter)
+    Q_DISABLE_COPY_MOVE(JsonBackup)
 };
 
-#endif // CLIENT_JSON_IMPORTER_H
+#endif // CLIENT_JSON_BACKUP_H

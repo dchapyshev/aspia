@@ -35,8 +35,7 @@
 #include "build/build_config.h"
 #include "client/aab_importer.h"
 #include "client/database.h"
-#include "client/json_exporter.h"
-#include "client/json_importer.h"
+#include "client/json_backup.h"
 #include "client/settings.h"
 #include "client/ui/hosts/content_widget.h"
 #include "client/ui/hosts/local_computer_dialog.h"
@@ -928,7 +927,7 @@ void HostsTab::onExportBookAction()
         return;
     }
 
-    JsonExporter::exportToFile(this, file_path);
+    JsonBackup::exportToFile(this, file_path);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -955,7 +954,7 @@ void HostsTab::onImportBookAction()
         return;
     }
 
-    if (!JsonImporter::importFromFile(this, file_path))
+    if (!JsonBackup::importFromFile(this, file_path))
         return;
 
     reloadRouters();
