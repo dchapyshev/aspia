@@ -24,8 +24,6 @@
 #include <memory>
 
 #include "client/ui/tab.h"
-#include "proto/desktop_power.h"
-#include "proto/peer.h"
 
 namespace Ui {
 class DesktopToolBar;
@@ -34,6 +32,14 @@ class DesktopToolBar;
 namespace proto::control {
 class SessionList;
 } // namespace proto::control
+
+namespace proto::peer {
+enum SessionType : int;
+} // namespace proto::peer
+
+namespace proto::power {
+enum Control_Action : int;
+} // namespace proto::power
 
 namespace proto::screen {
 class Screen;

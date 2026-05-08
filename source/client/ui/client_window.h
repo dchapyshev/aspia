@@ -23,9 +23,12 @@
 #include "client/config.h"
 #include "client/session_state.h"
 #include "client/ui/tab.h"
-#include "proto/peer.h"
 
 #include <QWidget>
+
+namespace proto::peer {
+enum SessionType : int;
+} // namespace proto::peer
 
 class QTimer;
 class StatusDialog;

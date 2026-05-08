@@ -30,7 +30,9 @@
 #include "base/logging.h"
 #include "client/ui/desktop/select_screen_action.h"
 #include "proto/desktop_control.h"
+#include "proto/desktop_power.h"
 #include "proto/desktop_screen.h"
+#include "proto/peer.h"
 #include "ui_desktop_toolbar.h"
 
 namespace {
