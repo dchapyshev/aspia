@@ -335,7 +335,14 @@ void ChatWidget::onMessageTextChanged()
     int doc_h = static_cast<int>(edit->document()->size().height());
     QMargins cm = edit->contentsMargins();
     int desired = doc_h + cm.top() + cm.bottom();
+
+    QScrollBar* vscroll = ui->list_messages->verticalScrollBar();
+    bool was_at_bottom = vscroll->value() == vscroll->maximum();
+
     edit->setFixedHeight(std::clamp(desired, kEditMessageMinHeight, kEditMessageMaxHeight));
+
+    if (was_at_bottom)
+        QTimer::singleShot(0, ui->list_messages, &QListWidget::scrollToBottom);
 }
 
 //--------------------------------------------------------------------------------------------------
