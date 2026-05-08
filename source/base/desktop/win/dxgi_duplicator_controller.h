@@ -19,7 +19,6 @@
 #ifndef BASE_DESKTOP_WIN_DXGI_DUPLICATOR_CONTROLLER_H
 #define BASE_DESKTOP_WIN_DXGI_DUPLICATOR_CONTROLLER_H
 
-#include "base/desktop/win/d3d_device.h"
 #include "base/desktop/win/dxgi_adapter_duplicator.h"
 #include "base/desktop/win/dxgi_context.h"
 #include "base/desktop/win/dxgi_frame.h"
