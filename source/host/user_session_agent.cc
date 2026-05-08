@@ -26,7 +26,6 @@
 #include "common/clipboard_monitor.h"
 #include "proto/desktop_channel.h"
 #include "proto/desktop_clipboard.h"
-#include "proto/desktop_file.h"
 #include "proto/desktop_user.h"
 
 namespace {

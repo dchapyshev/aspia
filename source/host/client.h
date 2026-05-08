@@ -29,7 +29,11 @@
 #include "base/crypto/key_pair.h"
 #include "base/net/tcp_channel.h"
 #include "base/scoped_qpointer.h"
-#include "proto/peer.h"
+
+namespace proto::peer {
+enum SessionType : int;
+class DirectUdpReply;
+} // namespace proto::peer
 
 class Location;
 class QTimer;

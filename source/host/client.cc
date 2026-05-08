@@ -31,6 +31,7 @@
 #include "base/net/net_utils.h"
 #include "base/net/udp_channel.h"
 #include "proto/key_exchange.h"
+#include "proto/peer.h"
 
 namespace {
 

@@ -41,7 +41,6 @@
 #include "base/ipc/ipc_channel.h"
 #include "base/ipc/ipc_server.h"
 #include "proto/file_transfer.h"
-#include "proto/user.h"
 
 namespace {
 
