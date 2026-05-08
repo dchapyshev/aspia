@@ -32,9 +32,9 @@
 #include "base/net/tcp_channel_legacy.h"
 #include "base/net/udp_channel.h"
 #include "base/peer/client_authenticator.h"
-#include "base/peer/host_id.h"
 #include "base/peer/relay_peer.h"
 #include "base/peer/stun_peer.h"
+#include "proto/key_exchange.h"
 #include "proto/peer.h"
 #include "proto/router_peer.h"
 

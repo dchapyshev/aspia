@@ -31,6 +31,7 @@
 #include "base/crypto/stream_decryptor.h"
 #include "base/crypto/stream_encryptor.h"
 #include "base/peer/authenticator.h"
+#include "proto/key_exchange.h"
 
 namespace {
 

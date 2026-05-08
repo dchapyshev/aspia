@@ -27,6 +27,7 @@
 #include "base/net/tcp_channel_ng.h"
 #include "base/peer/client_authenticator.h"
 #include "build/build_config.h"
+#include "proto/key_exchange.h"
 #include "proto/router_admin.h"
 #include "proto/router_client.h"
 

@@ -30,6 +30,7 @@
 #include "base/crypto/key_pair.h"
 #include "base/crypto/random.h"
 #include "base/crypto/srp_math.h"
+#include "proto/key_exchange.h"
 
 namespace {
 

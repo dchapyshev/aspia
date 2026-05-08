@@ -30,6 +30,7 @@
 #include "base/crypto/large_number_increment.h"
 #include "base/crypto/stream_decryptor.h"
 #include "base/crypto/stream_encryptor.h"
+#include "proto/key_exchange.h"
 
 namespace {
 

@@ -19,13 +19,15 @@
 #ifndef BASE_PEER_AUTHENTICATOR_H
 #define BASE_PEER_AUTHENTICATOR_H
 
-#include <QTimer>
 #include <QVersionNumber>
 
-#include "base/logging.h"
-#include "proto/key_exchange.h"
-
 class Location;
+class QTimer;
+
+namespace proto::key_exchange {
+enum Encryption : int;
+enum Identify : int;
+} // namespace proto::key_exchange
 
 class Authenticator : public QObject
 {
@@ -94,8 +96,8 @@ protected:
     void setPeerArch(const QString& arch);
     void setPeerDisplayName(const QString& display_name);
 
-    proto::key_exchange::Encryption encryption_ = proto::key_exchange::ENCRYPTION_UNKNOWN;
-    proto::key_exchange::Identify identify_ = proto::key_exchange::IDENTIFY_SRP;
+    proto::key_exchange::Encryption encryption_;
+    proto::key_exchange::Identify identify_;
     QByteArray session_key_;
     QByteArray encrypt_iv_;
     QByteArray decrypt_iv_;

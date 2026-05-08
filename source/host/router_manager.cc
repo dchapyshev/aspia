@@ -29,6 +29,7 @@
 #include "base/peer/server_authenticator.h"
 #include "host/host_storage.h"
 #include "host/system_settings.h"
+#include "proto/key_exchange.h"
 #include "proto/router_host.h"
 
 namespace {

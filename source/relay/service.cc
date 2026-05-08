@@ -27,6 +27,7 @@
 #include "relay/service.h"
 #include "relay/session_manager.h"
 #include "relay/settings.h"
+#include "proto/key_exchange.h"
 #include "proto/router.h"
 
 namespace {

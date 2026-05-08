@@ -21,8 +21,6 @@
 
 #include <QString>
 
-#include "proto/desktop_video.h"
-
 #include <chrono>
 #include <memory>
 #include <optional>
@@ -32,6 +30,11 @@ class WebmFileMuxer;
 namespace proto::audio {
 class Packet;
 } // namespace proto::audio
+
+namespace proto::video {
+enum Encoding : int;
+class Packet;
+} // namespace proto::video
 
 class WebmFileWriter
 {
@@ -59,7 +62,7 @@ private:
     std::optional<TimePoint> video_start_time_;
     std::optional<TimePoint> audio_start_time_;
 
-    proto::video::Encoding last_video_encoding_ = proto::video::ENCODING_UNKNOWN;
+    proto::video::Encoding last_video_encoding_;
 
     Q_DISABLE_COPY_MOVE(WebmFileWriter)
 };

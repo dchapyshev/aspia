@@ -24,11 +24,13 @@
 #include "base/logging.h"
 #include "base/codec/webm_file_muxer.h"
 #include "proto/desktop_audio.h"
+#include "proto/desktop_video.h"
 
 //--------------------------------------------------------------------------------------------------
 WebmFileWriter::WebmFileWriter(const QString& path, const QString& name)
     : path_(path),
-      name_(name)
+      name_(name),
+      last_video_encoding_(proto::video::ENCODING_UNKNOWN)
 {
     LOG(INFO) << "Ctor (path=" << path << "name=" << name.data() << ")";
 }

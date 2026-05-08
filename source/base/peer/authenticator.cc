@@ -18,8 +18,12 @@
 
 #include "base/peer/authenticator.h"
 
+#include <QTimer>
+
 #include "base/location.h"
+#include "base/logging.h"
 #include "base/serialization.h"
+#include "proto/key_exchange.h"
 
 namespace {
 
@@ -32,6 +36,8 @@ auto g_errorCodeType = qRegisterMetaType<Authenticator::ErrorCode>();
 //--------------------------------------------------------------------------------------------------
 Authenticator::Authenticator(QObject* parent)
     : QObject(parent),
+      encryption_(proto::key_exchange::ENCRYPTION_UNKNOWN),
+      identify_(proto::key_exchange::IDENTIFY_SRP),
       timer_(new QTimer(this))
 {
     CLOG(INFO) << "Ctor";
