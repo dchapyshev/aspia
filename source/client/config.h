@@ -20,35 +20,28 @@
 #define CLIENT_CONFIG_H
 
 #include <QByteArray>
-#include <QList>
 #include <QString>
 
-#include "proto/router.h"
+namespace proto::router {
+enum SessionType : int;
+} // namespace proto::router
+
+namespace proto::control {
+class Config;
+} // namespace proto::control
 
 struct RouterConfig
 {
-    bool isValid() const
-    {
-        return !address.isEmpty() && !username.isEmpty() && !password.isEmpty();
-    }
+    RouterConfig();
 
-    bool hasSameConnectionParams(const RouterConfig& other) const
-    {
-        return address == other.address && session_type == other.session_type &&
-               username == other.username && password == other.password;
-    }
-
-    QString displayName() const
-    {
-        if (!display_name.isEmpty())
-            return display_name;
-        return address;
-    }
+    bool isValid() const;
+    bool hasSameParams(const RouterConfig& other) const;
+    QString displayName() const;
 
     qint64 router_id = -1;
     QString display_name;
     QString address;
-    proto::router::SessionType session_type = proto::router::SESSION_TYPE_CLIENT;
+    proto::router::SessionType session_type;
     QString username;
     QString password;
     QByteArray data;
@@ -78,5 +71,7 @@ struct GroupConfig
     QString comment;
     QByteArray data;
 };
+
+proto::control::Config defaultDesktopConfig();
 
 #endif // CLIENT_CONFIG_H

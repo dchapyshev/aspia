@@ -32,6 +32,7 @@
 #include "client/ui/unlock_dialog.h"
 #include "common/ui/msg_box.h"
 #include "proto/address_book.h"
+#include "proto/router.h"
 
 namespace {
 

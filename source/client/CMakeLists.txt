@@ -23,6 +23,7 @@ list(APPEND SOURCE_CLIENT_CORE
     database.h
     client.cc
     client.h
+    config.cc
     config.h
     client_desktop.cc
     client_desktop.h
@@ -33,8 +34,6 @@ list(APPEND SOURCE_CLIENT_CORE
     client_system_info.h
     client_text_chat.cc
     client_text_chat.h
-    config_factory.cc
-    config_factory.h
     file_remove_queue_builder.cc
     file_remove_queue_builder.h
     file_remover.cc

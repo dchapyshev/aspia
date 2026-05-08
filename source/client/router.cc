@@ -150,7 +150,7 @@ QVersionNumber Router::version() const
 //--------------------------------------------------------------------------------------------------
 void Router::onUpdateConfig(const RouterConfig& config)
 {
-    bool need_reconnect = !config_.hasSameConnectionParams(config);
+    bool need_reconnect = !config_.hasSameParams(config);
     config_ = config;
 
     if (need_reconnect)

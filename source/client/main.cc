@@ -28,7 +28,7 @@
 #include "base/sys_info.h"
 #include "base/peer/host_id.h"
 #include "build/version.h"
-#include "client/config_factory.h"
+#include "client/config.h"
 #include "client/master_password.h"
 #include "common/ui/msg_box.h"
 #include "common/ui/status_dialog.h"
@@ -43,6 +43,7 @@
 #include "client/ui/sys_info/system_info_window.h"
 #include "proto/desktop_control.h"
 #include "proto/peer.h"
+#include "proto/router.h"
 
 //--------------------------------------------------------------------------------------------------
 bool startSession(const ComputerConfig& computer,
@@ -353,7 +354,7 @@ bool handleConnect()
 
     QString display_name = root.value("display_name").toString();
 
-    proto::control::Config desktop_config = ConfigFactory::defaultDesktopConfig();
+    proto::control::Config desktop_config = defaultDesktopConfig();
 
     if (session_type == proto::peer::SESSION_TYPE_DESKTOP && root.contains("desktop"))
     {

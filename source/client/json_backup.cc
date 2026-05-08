@@ -38,6 +38,7 @@
 #include "client/ui/export_password_dialog.h"
 #include "client/ui/unlock_dialog.h"
 #include "common/ui/msg_box.h"
+#include "proto/router.h"
 
 namespace {
 

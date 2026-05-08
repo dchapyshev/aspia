@@ -27,7 +27,7 @@
 #include "base/logging.h"
 #include "base/xml_settings.h"
 #include "build/version.h"
-#include "client/config_factory.h"
+#include "client/config.h"
 #include "proto/desktop_control.h"
 #include "proto/peer.h"
 
@@ -127,7 +127,7 @@ proto::control::Config Settings::desktopConfig() const
             return config;
     }
 
-    return ConfigFactory::defaultDesktopConfig();
+    return defaultDesktopConfig();
 }
 
 //--------------------------------------------------------------------------------------------------
