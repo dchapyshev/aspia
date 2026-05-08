@@ -21,6 +21,8 @@
 
 #include <QList>
 #include <QObject>
+#include <QPoint>
+#include <QSize>
 
 #include <memory>
 
