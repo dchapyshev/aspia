@@ -158,4 +158,4 @@ set_property(TARGET aspia_common PROPERTY AUTOMOC ON)
 set_property(TARGET aspia_common PROPERTY AUTOUIC ON)
 set_property(TARGET aspia_common PROPERTY AUTORCC ON)
 
-target_precompile_headers(aspia_common PRIVATE pch.h)
+target_precompile_headers(aspia_common PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:pch.h>")

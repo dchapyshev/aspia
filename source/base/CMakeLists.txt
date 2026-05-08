@@ -609,7 +609,7 @@ set_property(TARGET aspia_base PROPERTY AUTOUIC ON)
 set_property(TARGET aspia_base PROPERTY AUTORCC ON)
 qt_import_plugins(aspia_base INCLUDE "" EXCLUDE "" INCLUDE_BY_TYPE "" EXCLUDE_BY_TYPE imageformats)
 
-target_precompile_headers(aspia_base PRIVATE pch.h)
+target_precompile_headers(aspia_base PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:pch.h>")
 
 if (LINUX)
     set(BASE_PLATFORM_LIBS ${X11_LIB} ${XFIXES_LIB} stdc++fs)
@@ -653,6 +653,6 @@ set_property(TARGET aspia_base_tests PROPERTY AUTOUIC ON)
 set_property(TARGET aspia_base_tests PROPERTY AUTORCC ON)
 qt_import_plugins(aspia_base_tests INCLUDE "" EXCLUDE "" INCLUDE_BY_TYPE "" EXCLUDE_BY_TYPE imageformats)
 
-target_precompile_headers(aspia_base_tests PRIVATE pch.h)
+target_precompile_headers(aspia_base_tests PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:pch.h>")
 
 add_test(NAME aspia_base_tests COMMAND aspia_base_tests)

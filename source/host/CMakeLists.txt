@@ -153,7 +153,7 @@ set_property(TARGET aspia_host_core PROPERTY AUTOUIC ON)
 set_property(TARGET aspia_host_core PROPERTY AUTORCC ON)
 qt_import_plugins(aspia_host_core INCLUDE "" EXCLUDE "" INCLUDE_BY_TYPE imageformats iconengines EXCLUDE_BY_TYPE "")
 
-target_precompile_headers(aspia_host_core PRIVATE pch.h)
+target_precompile_headers(aspia_host_core PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:pch.h>")
 
 if (LINUX)
     set(HOST_PLATFORM_LIBS
