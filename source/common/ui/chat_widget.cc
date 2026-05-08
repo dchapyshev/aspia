@@ -52,7 +52,7 @@ const QString kHistoryDirName = "chat";
 //--------------------------------------------------------------------------------------------------
 QString currentTime()
 {
-    return QLocale::system().toString(QTime::currentTime(), QLocale::ShortFormat);
+    return QLocale::system().toString(QTime::currentTime(), "HH:mm:ss");
 }
 
 //--------------------------------------------------------------------------------------------------

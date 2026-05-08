@@ -18,8 +18,8 @@
 
 #include "common/ui/chat_incoming_message.h"
 
+#include <QDateTime>
 #include <QLocale>
-#include <QTime>
 
 #include "ui_chat_incoming_message.h"
 
@@ -29,10 +29,6 @@ ChatIncomingMessage::ChatIncomingMessage(QWidget* parent)
       ui(std::make_unique<Ui::ChatIncomingMessage>())
 {
     ui->setupUi(this);
-
-    QString time = QLocale::system().toString(QTime::currentTime(), QLocale::ShortFormat);
-    ui->label_time->setText(time);
-
     applyStyles(palette());
 }
 
@@ -55,6 +51,10 @@ QString ChatIncomingMessage::source() const
 void ChatIncomingMessage::setMessageText(const QString& text)
 {
     ui->label_message->setText(text);
+
+    QDateTime date_time = QDateTime::fromSecsSinceEpoch(timestamp());
+    ui->label_time->setText(QLocale::system().toString(date_time.time(), "HH:mm:ss"));
+    ui->label_time->setToolTip(QLocale::system().toString(date_time, QLocale::LongFormat));
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -60,10 +60,6 @@
 border: 0;
 outline: 0;
 }
-#list_messages::item {
-background: transparent;
-border: 0;
-}
 #list_messages::item:hover {
 background: transparent;
 }
@@ -72,7 +68,6 @@ background: transparent;
 }
 #list_messages::item:focus {
 background: transparent;
-border: 0;
 outline: 0;
 }</string>
         </property>
