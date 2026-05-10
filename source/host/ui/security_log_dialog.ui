@@ -89,7 +89,7 @@
      <item>
       <widget class="QCheckBox" name="check_connect">
        <property name="text">
-        <string>CONNECT</string>
+        <string notr="true">CONNECT</string>
        </property>
        <property name="checked">
         <bool>true</bool>
@@ -99,7 +99,7 @@
      <item>
       <widget class="QCheckBox" name="check_disconnect">
        <property name="text">
-        <string>DISCONNECT</string>
+        <string notr="true">DISCONNECT</string>
        </property>
        <property name="checked">
         <bool>true</bool>
@@ -109,7 +109,7 @@
      <item>
       <widget class="QCheckBox" name="check_error">
        <property name="text">
-        <string>ERROR</string>
+        <string notr="true">ERROR</string>
        </property>
        <property name="checked">
         <bool>true</bool>
@@ -119,7 +119,7 @@
      <item>
       <widget class="QCheckBox" name="check_warning">
        <property name="text">
-        <string>WARNING</string>
+        <string notr="true">WARNING</string>
        </property>
        <property name="checked">
         <bool>true</bool>
@@ -129,7 +129,7 @@
      <item>
       <widget class="QCheckBox" name="check_info">
        <property name="text">
-        <string>INFO</string>
+        <string notr="true">INFO</string>
        </property>
        <property name="checked">
         <bool>true</bool>
@@ -193,7 +193,7 @@
      <item>
       <widget class="QLabel" name="label_count">
        <property name="text">
-        <string>0 / 0</string>
+        <string notr="true">0 / 0</string>
        </property>
       </widget>
      </item>

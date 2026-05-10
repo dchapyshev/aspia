@@ -459,5 +459,5 @@ void SecurityLogDialog::updateStatusBar()
 {
     int total = model_->rowCount();
     int shown = proxy_->rowCount();
-    ui->label_count->setText(tr("%1 / %2").arg(shown).arg(total));
+    ui->label_count->setText(QString("%1 / %2").arg(shown).arg(total));
 }
