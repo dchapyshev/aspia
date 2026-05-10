@@ -27,7 +27,6 @@ enum SessionType : int;
 } // namespace proto::peer
 
 QString sessionName(proto::peer::SessionType session_type);
-QString sessionShortName(proto::peer::SessionType session_type);
 QIcon sessionIcon(proto::peer::SessionType session_type);
 
 #endif // COMMON_UI_SESSION_TYPE_H

@@ -371,7 +371,7 @@ void MainWindow::onConnect(
             client_window = new SystemInfoWindow();
             break;
 
-        case proto::peer::SESSION_TYPE_TEXT_CHAT:
+        case proto::peer::SESSION_TYPE_CHAT:
             client_window = new ChatWindow();
             break;
 

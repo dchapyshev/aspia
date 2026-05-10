@@ -38,29 +38,7 @@ const char* sessionTypeToString(proto::peer::SessionType session_type)
         case proto::peer::SESSION_TYPE_SYSTEM_INFO:
             return QT_TRANSLATE_NOOP("SessionType", "System Information");
 
-        case proto::peer::SESSION_TYPE_TEXT_CHAT:
-            return QT_TRANSLATE_NOOP("SessionType", "Text Chat");
-
-        default:
-            return "";
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-const char* sessionTypeToShortString(proto::peer::SessionType session_type)
-{
-    switch (session_type)
-    {
-        case proto::peer::SESSION_TYPE_DESKTOP:
-            return QT_TRANSLATE_NOOP("SessionType", "Manage");
-
-        case proto::peer::SESSION_TYPE_FILE_TRANSFER:
-            return QT_TRANSLATE_NOOP("SessionType", "Files");
-
-        case proto::peer::SESSION_TYPE_SYSTEM_INFO:
-            return QT_TRANSLATE_NOOP("SessionType", "Info");
-
-        case proto::peer::SESSION_TYPE_TEXT_CHAT:
+        case proto::peer::SESSION_TYPE_CHAT:
             return QT_TRANSLATE_NOOP("SessionType", "Chat");
 
         default:
@@ -77,12 +55,6 @@ QString sessionName(proto::peer::SessionType session_type)
 }
 
 //--------------------------------------------------------------------------------------------------
-QString sessionShortName(proto::peer::SessionType session_type)
-{
-    return QCoreApplication::translate("SessionType", sessionTypeToShortString(session_type));
-}
-
-//--------------------------------------------------------------------------------------------------
 QIcon sessionIcon(proto::peer::SessionType session_type)
 {
     switch (session_type)
@@ -96,7 +68,7 @@ QIcon sessionIcon(proto::peer::SessionType session_type)
         case proto::peer::SESSION_TYPE_SYSTEM_INFO:
             return QIcon(":/img/system-information.svg");
 
-        case proto::peer::SESSION_TYPE_TEXT_CHAT:
+        case proto::peer::SESSION_TYPE_CHAT:
             return QIcon(":/img/chat.svg");
 
         default:

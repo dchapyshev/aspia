@@ -81,7 +81,7 @@ HostsTab::HostsTab(QWidget* parent)
         case proto::peer::SESSION_TYPE_FILE_TRANSFER:
             ui->action_file_transfer->setChecked(true);
             break;
-        case proto::peer::SESSION_TYPE_TEXT_CHAT:
+        case proto::peer::SESSION_TYPE_CHAT:
             ui->action_chat->setChecked(true);
             break;
         case proto::peer::SESSION_TYPE_SYSTEM_INFO:
@@ -512,7 +512,7 @@ void HostsTab::onConnectAction(QAction* action)
     else if (action == ui->action_file_transfer_connect)
         session_type = proto::peer::SESSION_TYPE_FILE_TRANSFER;
     else if (action == ui->action_chat_connect)
-        session_type = proto::peer::SESSION_TYPE_TEXT_CHAT;
+        session_type = proto::peer::SESSION_TYPE_CHAT;
     else if (action == ui->action_system_info_connect)
         session_type = proto::peer::SESSION_TYPE_SYSTEM_INFO;
     else
@@ -1176,7 +1176,7 @@ proto::peer::SessionType HostsTab::defaultSessionType() const
     else if (ui->action_file_transfer->isChecked())
         return proto::peer::SESSION_TYPE_FILE_TRANSFER;
     else if (ui->action_chat->isChecked())
-        return proto::peer::SESSION_TYPE_TEXT_CHAT;
+        return proto::peer::SESSION_TYPE_CHAT;
     else if (ui->action_system_info->isChecked())
         return proto::peer::SESSION_TYPE_SYSTEM_INFO;
     else

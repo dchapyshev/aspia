@@ -190,7 +190,7 @@ SystemInfoWindow::SystemInfoWindow(QWidget* parent)
 
     action_desktop_ = make_action(proto::peer::SESSION_TYPE_DESKTOP);
     action_file_transfer_ = make_action(proto::peer::SESSION_TYPE_FILE_TRANSFER);
-    action_text_chat_ = make_action(proto::peer::SESSION_TYPE_TEXT_CHAT);
+    action_text_chat_ = make_action(proto::peer::SESSION_TYPE_CHAT);
 }
 
 //--------------------------------------------------------------------------------------------------

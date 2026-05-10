@@ -67,7 +67,7 @@ bool startSession(const ComputerConfig& computer,
             client_window = new SystemInfoWindow();
             break;
 
-        case proto::peer::SESSION_TYPE_TEXT_CHAT:
+        case proto::peer::SESSION_TYPE_CHAT:
             client_window = new ChatWindow();
             break;
 
@@ -325,7 +325,7 @@ bool handleConnect()
     else if (session_type_value == "system-info")
         session_type = proto::peer::SESSION_TYPE_SYSTEM_INFO;
     else if (session_type_value == "chat")
-        session_type = proto::peer::SESSION_TYPE_TEXT_CHAT;
+        session_type = proto::peer::SESSION_TYPE_CHAT;
 
     QJsonValue computer_value = root.value("computer");
     if (!computer_value.isObject())

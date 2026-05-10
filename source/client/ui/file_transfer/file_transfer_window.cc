@@ -63,7 +63,7 @@ FileTransferWindow::FileTransferWindow(QWidget* parent)
     };
 
     action_desktop_ = make_action(proto::peer::SESSION_TYPE_DESKTOP);
-    action_text_chat_ = make_action(proto::peer::SESSION_TYPE_TEXT_CHAT);
+    action_text_chat_ = make_action(proto::peer::SESSION_TYPE_CHAT);
     action_system_info_ = make_action(proto::peer::SESSION_TYPE_SYSTEM_INFO);
 
     ui->local_panel->setFocus();

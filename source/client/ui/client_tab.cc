@@ -37,7 +37,7 @@ QString tabObjectName(ClientWindow* client_window)
         case proto::peer::SESSION_TYPE_DESKTOP:       return "session_desktop";
         case proto::peer::SESSION_TYPE_FILE_TRANSFER: return "session_file_transfer";
         case proto::peer::SESSION_TYPE_SYSTEM_INFO:   return "session_system_info";
-        case proto::peer::SESSION_TYPE_TEXT_CHAT:     return "session_text_chat";
+        case proto::peer::SESSION_TYPE_CHAT:          return "session_chat";
         default:                                      return "session";
     }
 }

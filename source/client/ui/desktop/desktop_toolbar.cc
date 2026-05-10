@@ -137,7 +137,7 @@ DesktopToolBar::DesktopToolBar(QWidget* parent)
     connect(ui->action_text_chat, &QAction::triggered, this, [this]()
     {
         LOG(INFO) << "[ACTION] Text chat requested";
-        emit sig_startSession(proto::peer::SESSION_TYPE_TEXT_CHAT);
+        emit sig_startSession(proto::peer::SESSION_TYPE_CHAT);
     });
 
     // Default state matches the .ui defaults: pin off, toolbar hidden, frame visible.

@@ -423,7 +423,7 @@ void Service::onUserSessionAttached()
             }
             break;
 
-            case proto::peer::SESSION_TYPE_TEXT_CHAT:
+            case proto::peer::SESSION_TYPE_CHAT:
             {
                 ChatClient* chat_client = static_cast<ChatClient*>(client);
                 chat_client->onSendStatus(proto::chat::Status::CODE_USER_CONNECTED);
@@ -773,7 +773,7 @@ void Service::startClient(const PendingConfirmation& pending)
         connect(client, &Client::sig_started, user_session_, &UserSession::onClientStarted);
         connect(client, &Client::sig_finished, user_session_, &UserSession::onClientFinished);
     }
-    else if (session_type == proto::peer::SESSION_TYPE_TEXT_CHAT)
+    else if (session_type == proto::peer::SESSION_TYPE_CHAT)
     {
         ChatClient* client = new ChatClient(tcp_channel, this);
         client_to_start = client;
