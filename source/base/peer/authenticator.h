@@ -68,6 +68,7 @@ public:
     [[nodiscard]] const QString& peerDisplayName() const { return peer_display_name_; }
     [[nodiscard]] quint32 sessionType() const { return session_type_; }
     [[nodiscard]] const QString& userName() const { return user_name_; }
+    [[nodiscard]] bool isProbe() const { return is_probe_; }
 
     // Returns the current state.
     [[nodiscard]] State state() const { return state_; }
@@ -104,6 +105,7 @@ protected:
 
     quint32 session_type_ = 0; // Selected session type.
     QString user_name_;
+    bool is_probe_ = false;
 
 private:
     QTimer* timer_ = nullptr;

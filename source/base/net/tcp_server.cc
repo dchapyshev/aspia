@@ -193,7 +193,7 @@ void TcpServer::doAccept()
         {
             accept_error_count_ = 0;
 
-            ServerAuthenticator* authenticator = new ServerAuthenticator();
+            QPointer<ServerAuthenticator> authenticator = new ServerAuthenticator();
             authenticator->setUserList(user_list_);
 
             if (!private_key_.isEmpty())
@@ -216,9 +216,23 @@ void TcpServer::doAccept()
             TcpChannel* channel = new TcpChannelNG(
                 TcpChannel::Type::DIRECT, std::move(socket), authenticator, this);
 
-            connect(channel, &TcpChannel::sig_authenticated, this, [this, channel]()
+            connect(channel, &TcpChannel::sig_authenticated, this, [this, channel, authenticator]()
             {
                 removePendingChannel(channel);
+
+                // Probe connections (e.g. OnlineCheckerDirect) only need a successful auth to
+                // confirm the host is reachable and the credentials are valid. Skip the ready
+                // queue and the confirmation flow - just close the channel cleanly.
+                //
+                // The channel emits sig_authenticated before calling authenticator_.reset(), so
+                // the authenticator is guaranteed alive while this slot runs. The captured
+                // QPointer is still used as a defensive guard in case that ordering ever changes.
+                if (authenticator && authenticator->isProbe())
+                {
+                    channel->deleteLater();
+                    return;
+                }
+
                 ready_.append(channel);
                 emit sig_newConnection();
             });

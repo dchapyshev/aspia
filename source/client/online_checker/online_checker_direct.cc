@@ -46,7 +46,7 @@ public:
     qint64 computerId() const { return computer_.id; }
 
 private slots:
-    void onTcpConnected();
+    void onTcpAuthenticated();
     void onTcpErrorOccurred(TcpChannel::ErrorCode error_code);
 
 private:
@@ -95,19 +95,20 @@ void OnlineCheckerDirect::Instance::start()
     authenticator->setUserName(computer_.username);
     authenticator->setPassword(computer_.password);
     authenticator->setSessionType(proto::peer::SESSION_TYPE_DESKTOP);
+    authenticator->setProbe(true);
 
     tcp_channel_ = new TcpChannelNG(authenticator, this);
 
-    connect(tcp_channel_, &TcpChannel::sig_connected, this, &Instance::onTcpConnected);
+    connect(tcp_channel_, &TcpChannel::sig_authenticated, this, &Instance::onTcpAuthenticated);
     connect(tcp_channel_, &TcpChannel::sig_errorOccurred, this, &Instance::onTcpErrorOccurred);
 
     tcp_channel_->connectTo(address.host(), address.port(), TcpChannel::Seconds(10));
 }
 
 //--------------------------------------------------------------------------------------------------
-void OnlineCheckerDirect::Instance::onTcpConnected()
+void OnlineCheckerDirect::Instance::onTcpAuthenticated()
 {
-    LOG(INFO) << "Connection established (computer:" << computer_.id << ")";
+    LOG(INFO) << "Authentication succeeded (computer:" << computer_.id << ")";
     onFinished(FROM_HERE, true);
 }
 

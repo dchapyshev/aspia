@@ -36,6 +36,7 @@ public:
     void setPassword(const QString& password);
     void setSessionType(quint32 session_type);
     void setDisplayName(const QString& display_name);
+    void setProbe(bool probe);
 
 protected:
     // Authenticator implementation.

@@ -129,4 +129,5 @@ message SessionResponse
     string computer_name = 5;
     string arch          = 6;
     string display_name  = 7;
+    bool probe           = 8;
 }

@@ -547,11 +547,13 @@ void ServerAuthenticator::onSessionResponse(const QByteArray& buffer)
     setPeerArch(QString::fromStdString(response.arch()));
     setPeerDisplayName(QString::fromStdString(response.display_name()));
     setPeerVersion(response.version());
+    is_probe_ = response.probe();
 
     CLOG(INFO) << "Client (session_type:" << response.session_type()
                << "version:" << peerVersion().toString() << "name:" << peerComputerName()
                << "os:" << peerOsName() << "cores:" << response.cpu_cores()
-               << "arch:" << peerArch() << "display_name:" << peerDisplayName() << ")";
+               << "arch:" << peerArch() << "display_name:" << peerDisplayName()
+               << "probe:" << is_probe_ << ")";
 
     if (peerVersion() < kMinimumSupportedVersion)
     {

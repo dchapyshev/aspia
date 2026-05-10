@@ -128,6 +128,13 @@ void ClientAuthenticator::setDisplayName(const QString& display_name)
 }
 
 //--------------------------------------------------------------------------------------------------
+void ClientAuthenticator::setProbe(bool probe)
+{
+    CLOG(INFO) << "Probe flag assigned:" << probe;
+    is_probe_ = probe;
+}
+
+//--------------------------------------------------------------------------------------------------
 bool ClientAuthenticator::onStarted()
 {
     sendClientHello();
@@ -449,6 +456,7 @@ void ClientAuthenticator::sendSessionResponse()
     response.set_cpu_cores(static_cast<quint32>(SysInfo::processorThreads()));
     response.set_display_name(display_name_.toStdString());
     response.set_arch(QSysInfo::buildCpuArchitecture().toStdString());
+    response.set_probe(is_probe_);
 
     QByteArray message = serialize(response);
 
