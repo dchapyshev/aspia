@@ -119,50 +119,6 @@ void TcpChannelNG::doAuthentication()
 }
 
 //--------------------------------------------------------------------------------------------------
-QString TcpChannelNG::peerAddress() const
-{
-    if (!socket_.is_open() || !isConnected())
-        return QString();
-
-    try
-    {
-        std::error_code error_code;
-        asio::ip::tcp::endpoint endpoint = socket_.remote_endpoint(error_code);
-        if (error_code)
-        {
-            CLOG(ERROR) << "Unable to get peer address:" << error_code;
-            return QString();
-        }
-
-        asio::ip::address address = endpoint.address();
-        if (address.is_v4())
-        {
-            asio::ip::address_v4 ipv4_address = address.to_v4();
-            return QString::fromLocal8Bit(ipv4_address.to_string().c_str());
-        }
-        else
-        {
-            asio::ip::address_v6 ipv6_address = address.to_v6();
-            if (ipv6_address.is_v4_mapped())
-            {
-                asio::ip::address_v4 ipv4_address =
-                    asio::ip::make_address_v4(asio::ip::v4_mapped, ipv6_address);
-                return QString::fromLocal8Bit(ipv4_address.to_string().c_str());
-            }
-            else
-            {
-                return QString::fromLocal8Bit(ipv6_address.to_string().c_str());
-            }
-        }
-    }
-    catch (const std::error_code& error_code)
-    {
-        CLOG(ERROR) << "Unable to get peer address:" << error_code;
-        return QString();
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
 void TcpChannelNG::connectTo(const QString& address, quint16 port, const Seconds& timeout)
 {
     if (isConnected() || !resolver_)
@@ -458,6 +414,43 @@ void TcpChannelNG::setConnected(bool connected)
     socket_.get_option(send_option, error_code);
     if (!error_code)
         CLOG(INFO) << "Write buffer size:" << send_option.value();
+
+    try
+    {
+        std::error_code error_code;
+        asio::ip::tcp::endpoint endpoint = socket_.remote_endpoint(error_code);
+        if (error_code)
+        {
+            CLOG(ERROR) << "Unable to get peer address:" << error_code;
+        }
+        else
+        {
+            asio::ip::address address = endpoint.address();
+            if (address.is_v4())
+            {
+                asio::ip::address_v4 ipv4_address = address.to_v4();
+                address_ = QString::fromLocal8Bit(ipv4_address.to_string().c_str());
+            }
+            else
+            {
+                asio::ip::address_v6 ipv6_address = address.to_v6();
+                if (ipv6_address.is_v4_mapped())
+                {
+                    asio::ip::address_v4 ipv4_address =
+                        asio::ip::make_address_v4(asio::ip::v4_mapped, ipv6_address);
+                    address_ =  QString::fromLocal8Bit(ipv4_address.to_string().c_str());
+                }
+                else
+                {
+                    address_ = QString::fromLocal8Bit(ipv6_address.to_string().c_str());
+                }
+            }
+        }
+    }
+    catch (const std::error_code& error_code)
+    {
+        CLOG(ERROR) << "Unable to get peer address:" << error_code;
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -491,6 +484,9 @@ void TcpChannelNG::onErrorOccurred(const Location& location, ErrorCode error_cod
 
     if (!*alive_guard_)
         return;
+
+    if (authenticator_)
+        user_name_ = authenticator_->userName();
 
     setConnected(false);
 

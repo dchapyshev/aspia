@@ -94,7 +94,6 @@ public:
     using Milliseconds = std::chrono::milliseconds;
     using Seconds = std::chrono::seconds;
 
-    virtual QString peerAddress() const = 0;
     virtual void connectTo(const QString& address, quint16 port, const Seconds& timeout = Seconds(30)) = 0;
     virtual bool isConnected() const = 0;
     virtual bool isAuthenticated() const = 0;
@@ -112,6 +111,7 @@ public:
     int speedRx();
     int speedTx();
 
+    QString peerAddress() const { return address_; }
     QVersionNumber peerVersion() const { return version_; }
     QString peerOsName() const { return os_name_; }
     QString peerComputerName() const { return computer_name_; }
@@ -138,6 +138,7 @@ protected:
     void addTxBytes(size_t bytes_count);
     void addRxBytes(size_t bytes_count);
 
+    QString address_;
     QVersionNumber version_;
     QString os_name_;
     QString computer_name_;

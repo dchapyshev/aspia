@@ -28,6 +28,7 @@
 
 #include "base/location.h"
 #include "base/logging.h"
+#include "base/security_log.h"
 #include "base/version_constants.h"
 #include "base/crypto/random.h"
 #include "base/ipc/ipc_channel.h"
@@ -97,6 +98,11 @@ Service::Service(QObject* parent)
     connect(desktop_manager_, &DesktopManager::sig_attached, this, &Service::onDesktopManagerAttached);
     connect(tcp_server_, &TcpServer::sig_newConnection, this, &Service::onNewDirectConnection);
     connect(CoreApplication::instance(), &CoreApplication::sig_powerEvent, this, &Service::onPowerEvent);
+
+    connect(tcp_server_, &TcpServer::sig_errorOccurred, [](const QString& address, const QString& username)
+    {
+        SLOG(ERROR) << "[connection failed] address:" << address << "user:" << username;
+    });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -476,9 +482,13 @@ void Service::onDesktopManagerAttached()
 //--------------------------------------------------------------------------------------------------
 void Service::onClientFinished()
 {
-    QObject* client = sender();
+    Client* client = dynamic_cast<Client*>(sender());
     CHECK(client);
     CHECK_NE(clients_.indexOf(client), -1);
+
+    SLOG(DISCONNECT) << "client id:" << client->clientId()
+                     << "user:" << client->userName()
+                     << "session type:" << client->sessionType();
 
     client->deleteLater();
     clients_.removeOne(client);
@@ -785,6 +795,14 @@ void Service::startClient(const PendingConfirmation& pending)
 
     if (!settings_.isUdpAllowed())
         client_to_start->setFeature(Client::FEATURE_UDP, false);
+
+    SLOG(CONNECT) << "client id:" << client_to_start->clientId()
+                  << "user:" << client_to_start->userName()
+                  << "display name:" << client_to_start->displayName()
+                  << "address:" << client_to_start->address()
+                  << "computer name:" << client_to_start->computerName()
+                  << "version:" << client_to_start->version().toString()
+                  << "session type:" << client_to_start->sessionType();
 
     clients_.append(client_to_start);
     client_to_start->start(pending.direct, pending.stun_host, pending.stun_port, pending.peer_equals);

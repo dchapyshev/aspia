@@ -227,6 +227,7 @@ void TcpServer::doAccept()
                     this, [this, channel](TcpChannel::ErrorCode error_code)
             {
                 removePendingChannel(channel);
+                emit sig_errorOccurred(channel->peerAddress(), channel->peerUserName());
                 channel->deleteLater();
             });
 

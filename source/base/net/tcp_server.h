@@ -56,6 +56,7 @@ public:
 
 signals:
     void sig_newConnection();
+    void sig_errorOccurred(const QString& address, const QString& username);
 
 private:
     void doAccept();

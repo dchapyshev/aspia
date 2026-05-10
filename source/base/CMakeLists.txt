@@ -51,6 +51,8 @@ list(APPEND SOURCE_BASE
     scoped_clear_last_error.cc
     scoped_clear_last_error.h
     scoped_qpointer.h
+    security_log.cc
+    security_log.h
     serialization.cc
     serialization.h
     service_controller.cc

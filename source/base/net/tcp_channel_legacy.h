@@ -45,9 +45,6 @@ public:
     TcpChannelLegacy(Authenticator* authenticator, QObject* parent = nullptr);
     ~TcpChannelLegacy() final;
 
-    // Gets the address of the remote host as a string.
-    QString peerAddress() const final;
-
     // Connects to a host at the specified address and port.
     void connectTo(const QString& address, quint16 port, const Seconds& timeout) final;
 

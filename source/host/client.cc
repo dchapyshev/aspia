@@ -145,6 +145,12 @@ QVersionNumber Client::version() const
 }
 
 //--------------------------------------------------------------------------------------------------
+QString Client::address() const
+{
+    return tcp_channel_->peerAddress();
+}
+
+//--------------------------------------------------------------------------------------------------
 QString Client::osName() const
 {
     return tcp_channel_->peerOsName();

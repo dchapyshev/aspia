@@ -117,50 +117,6 @@ void TcpChannelLegacy::doAuthentication()
 }
 
 //--------------------------------------------------------------------------------------------------
-QString TcpChannelLegacy::peerAddress() const
-{
-    if (!socket_.is_open() || !isConnected())
-        return QString();
-
-    try
-    {
-        std::error_code error_code;
-        asio::ip::tcp::endpoint endpoint = socket_.remote_endpoint(error_code);
-        if (error_code)
-        {
-            CLOG(ERROR) << "Unable to get peer address:" << error_code;
-            return QString();
-        }
-
-        asio::ip::address address = endpoint.address();
-        if (address.is_v4())
-        {
-            asio::ip::address_v4 ipv4_address = address.to_v4();
-            return QString::fromLocal8Bit(ipv4_address.to_string().c_str());
-        }
-        else
-        {
-            asio::ip::address_v6 ipv6_address = address.to_v6();
-            if (ipv6_address.is_v4_mapped())
-            {
-                asio::ip::address_v4 ipv4_address =
-                    asio::ip::make_address_v4(asio::ip::v4_mapped, ipv6_address);
-                return QString::fromLocal8Bit(ipv4_address.to_string().c_str());
-            }
-            else
-            {
-                return QString::fromLocal8Bit(ipv6_address.to_string().c_str());
-            }
-        }
-    }
-    catch (const std::error_code& error_code)
-    {
-        CLOG(ERROR) << "Unable to get peer address:" << error_code;
-        return QString();
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
 void TcpChannelLegacy::connectTo(const QString& address, quint16 port, const Seconds& /* timeout */)
 {
     if (isConnected() || !resolver_)
@@ -419,6 +375,43 @@ void TcpChannelLegacy::setConnected(bool connected)
 
     keep_alive_timer_type_ = KEEP_ALIVE_INTERVAL;
     keep_alive_timer_->start(kKeepAliveInterval);
+
+    try
+    {
+        std::error_code error_code;
+        asio::ip::tcp::endpoint endpoint = socket_.remote_endpoint(error_code);
+        if (error_code)
+        {
+            CLOG(ERROR) << "Unable to get peer address:" << error_code;
+        }
+        else
+        {
+            asio::ip::address address = endpoint.address();
+            if (address.is_v4())
+            {
+                asio::ip::address_v4 ipv4_address = address.to_v4();
+                address_ = QString::fromLocal8Bit(ipv4_address.to_string().c_str());
+            }
+            else
+            {
+                asio::ip::address_v6 ipv6_address = address.to_v6();
+                if (ipv6_address.is_v4_mapped())
+                {
+                    asio::ip::address_v4 ipv4_address =
+                        asio::ip::make_address_v4(asio::ip::v4_mapped, ipv6_address);
+                    address_ =  QString::fromLocal8Bit(ipv4_address.to_string().c_str());
+                }
+                else
+                {
+                    address_ = QString::fromLocal8Bit(ipv6_address.to_string().c_str());
+                }
+            }
+        }
+    }
+    catch (const std::error_code& error_code)
+    {
+        CLOG(ERROR) << "Unable to get peer address:" << error_code;
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -544,10 +537,15 @@ void TcpChannelLegacy::onErrorOccurred(const Location& location, ErrorCode error
 {
     CLOG(ERROR) << "Connection finished with error" << error_code << "from" << location;
 
-    if (authenticator_ && error_code == ErrorCode::CRYPTO_ERROR)
+    if (authenticator_)
     {
-        CLOG(ERROR) << "Invalid key or username/password";
-        error_code = ErrorCode::ACCESS_DENIED;
+        user_name_ = authenticator_->userName();
+
+        if (error_code == ErrorCode::CRYPTO_ERROR)
+        {
+            CLOG(ERROR) << "Invalid key or username/password";
+            error_code = ErrorCode::ACCESS_DENIED;
+        }
     }
 
     disconnectFrom();

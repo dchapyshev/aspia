@@ -62,6 +62,7 @@ public:
     quint32 clientId() const;
     proto::peer::SessionType sessionType() const;
     QVersionNumber version() const;
+    QString address() const;
     QString osName() const;
     QString computerName() const;
     QString displayName() const;
