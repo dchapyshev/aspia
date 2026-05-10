@@ -502,10 +502,13 @@ void TcpChannelLegacy::onAuthenticatorFinished(Authenticator::ErrorCode error_co
     session_type_  = authenticator_->sessionType();
 
     authenticator_->disconnect();
-    authenticator_.reset();
-
     authenticated_ = true;
+
     emit sig_authenticated();
+
+    // Delete (deleteLater) the object after emitting a signal indicating successful
+    // authentication. Do not change this order!
+    authenticator_.reset();
 }
 
 //--------------------------------------------------------------------------------------------------
