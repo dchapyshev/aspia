@@ -41,6 +41,7 @@ public:
 protected:
     // QDialog implementation.
     void closeEvent(QCloseEvent* event) final;
+    void changeEvent(QEvent* event) final;
 
 private slots:
     void onFileSelected(int index);
@@ -49,6 +50,7 @@ private slots:
     void onFilterChanged();
 
 private:
+    void retranslateUi();
     void reloadFileList();
     void switchToFile(const QString& file_path);
     void tailCurrentFile();

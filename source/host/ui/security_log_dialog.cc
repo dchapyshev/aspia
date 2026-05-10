@@ -23,6 +23,7 @@
 #include <QDateTime>
 #include <QDesktopServices>
 #include <QDir>
+#include <QEvent>
 #include <QFile>
 #include <QFileInfo>
 #include <QHeaderView>
@@ -202,9 +203,7 @@ SecurityLogDialog::SecurityLogDialog(QWidget* parent)
     ui->setupUi(this);
 
     model_ = new QStandardItemModel(0, COLUMN_COUNT, this);
-    model_->setHeaderData(COLUMN_TIME,    Qt::Horizontal, tr("Time"));
-    model_->setHeaderData(COLUMN_EVENT,   Qt::Horizontal, tr("Event"));
-    model_->setHeaderData(COLUMN_DETAILS, Qt::Horizontal, tr("Details"));
+    retranslateUi();
 
     proxy_ = new FilterProxyModel(this);
     proxy_->setSourceModel(model_);
@@ -276,6 +275,19 @@ void SecurityLogDialog::closeEvent(QCloseEvent* event)
 }
 
 //--------------------------------------------------------------------------------------------------
+void SecurityLogDialog::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::LanguageChange)
+    {
+        ui->retranslateUi(this);
+        retranslateUi();
+        updateStatusBar();
+    }
+
+    QDialog::changeEvent(event);
+}
+
+//--------------------------------------------------------------------------------------------------
 void SecurityLogDialog::onFileSelected(int index)
 {
     if (index < 0)
@@ -318,6 +330,14 @@ void SecurityLogDialog::onFilterChanged()
     static_cast<FilterProxyModel*>(proxy_)->setSearchText(ui->edit_search->text());
 
     updateStatusBar();
+}
+
+//--------------------------------------------------------------------------------------------------
+void SecurityLogDialog::retranslateUi()
+{
+    model_->setHeaderData(COLUMN_TIME,    Qt::Horizontal, tr("Time"));
+    model_->setHeaderData(COLUMN_EVENT,   Qt::Horizontal, tr("Event"));
+    model_->setHeaderData(COLUMN_DETAILS, Qt::Horizontal, tr("Details"));
 }
 
 //--------------------------------------------------------------------------------------------------
