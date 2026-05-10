@@ -472,6 +472,13 @@ void TcpChannelNG::onErrorOccurred(const Location& location, const std::error_co
         error = ErrorCode::REMOTE_HOST_CLOSED;
     else if (error_code == asio::error::network_down)
         error = ErrorCode::NETWORK_ERROR;
+#if defined(Q_OS_WINDOWS)
+    // asio puts Win32 system errors (e.g. ERROR_SEM_TIMEOUT - kernel-level TCP keep-alive timeout)
+    // into asio::system_category(), which is distinct from std::system_category(). Match against
+    // the asio category explicitly.
+    else if (error_code.category() == asio::system_category() && error_code.value() == ERROR_SEM_TIMEOUT)
+        error = ErrorCode::SOCKET_TIMEOUT;
+#endif
 
     CLOG(ERROR) << "Asio error:" << error_code;
     onErrorOccurred(location, error);
