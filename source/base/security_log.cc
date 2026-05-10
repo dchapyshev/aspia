@@ -43,7 +43,7 @@
 
 namespace {
 
-const qint64 kMaxLogFileAge = 90; // 90 days.
+const qint64 kMaxLogFileAge = 180; // 180 days.
 const char kFileMask[] = "*.log";
 
 #if defined(Q_OS_WINDOWS)
