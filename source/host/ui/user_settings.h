@@ -40,6 +40,9 @@ public:
     quint32 oneTimeSessions() const;
     void setOneTimeSessions(quint32 sessions);
 
+    QByteArray securityLogDialogState() const;
+    void setSecurityLogDialogState(const QByteArray& state);
+
 private:
     QSettings settings_;
 

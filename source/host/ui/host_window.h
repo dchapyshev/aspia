@@ -33,6 +33,7 @@ class HostWindow;
 
 class ChatWidget;
 class NotifierWindow;
+class SecurityLogDialog;
 class StatusDialog;
 
 class HostWindow final : public QMainWindow
@@ -78,6 +79,7 @@ private slots:
     void onThemeChanged(QAction* action);
     void onAfterThemeChanged();
     void onShowChat();
+    void onSecurityLog();
     void onSettings();
     void onShowHide();
     void onHelp();
@@ -101,6 +103,7 @@ private:
     QSystemTrayIcon tray_icon_;
     QMenu tray_menu_;
     QPointer<NotifierWindow> notifier_;
+    QPointer<SecurityLogDialog> security_log_dialog_;
     ChatWidget* chat_widget_ = nullptr;
 
     StatusDialog* status_dialog_ = nullptr;

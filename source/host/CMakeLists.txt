@@ -101,6 +101,9 @@ list(APPEND SOURCE_HOST_CORE_UI
     ui/notifier_window.cc
     ui/notifier_window.h
     ui/notifier_window.ui
+    ui/security_log_dialog.cc
+    ui/security_log_dialog.h
+    ui/security_log_dialog.ui
     ui/settings_util.cc
     ui/settings_util.h
     ui/user_dialog.cc

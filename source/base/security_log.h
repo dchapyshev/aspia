@@ -59,6 +59,10 @@ using SecurityEvent = int;
 [[maybe_unused]] const SecurityEvent SEC_WARNING    = 3;
 [[maybe_unused]] const SecurityEvent SEC_INFO       = 4;
 
+// Returns the directory that holds security log files. The directory is not created here; use it
+// for read-only purposes (locating files, opening in a file manager).
+QString securityLogDirectory();
+
 // Per-record message object. Constructed by the SLOG() macro, formatted in the destructor and
 // appended to the shared security log file.
 class SecurityLogMessage

@@ -28,6 +28,7 @@ namespace {
 const QString kLocaleParam = "Locale";
 const QString kThemeParam = "Theme";
 const QString kOneTimeSessionsParam = "OneTimeSessions";
+const QString kSecurityLogDialogStateParam = "SecurityLogDialogState";
 
 } // namespace
 
@@ -93,4 +94,16 @@ quint32 UserSettings::oneTimeSessions() const
 void UserSettings::setOneTimeSessions(quint32 sessions)
 {
     settings_.setValue(kOneTimeSessionsParam, sessions);
+}
+
+//--------------------------------------------------------------------------------------------------
+QByteArray UserSettings::securityLogDialogState() const
+{
+    return settings_.value(kSecurityLogDialogStateParam).toByteArray();
+}
+
+//--------------------------------------------------------------------------------------------------
+void UserSettings::setSecurityLogDialogState(const QByteArray& state)
+{
+    settings_.setValue(kSecurityLogDialogStateParam, state);
 }

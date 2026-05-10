@@ -70,21 +70,6 @@ const mode_t kDirectoryMode = 0755;
 QMutex g_writer_mutex;
 QFile g_writer_file;
 
-//--------------------------------------------------------------------------------------------------
-QString defaultLogDirectory()
-{
-#if defined(Q_OS_WINDOWS)
-    QString dir = BasePaths::appDataDir();
-    if (dir.isEmpty())
-        return QString();
-    return dir + "/security";
-#elif defined(Q_OS_MACOS)
-    return "/Library/Logs/aspia/security";
-#else
-    return "/var/log/aspia/security";
-#endif
-}
-
 #if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
 bool applyDescriptor(const QString& path, const wchar_t* sddl)
@@ -211,7 +196,7 @@ QString ensureLogDirectory()
     if (!dir_path.isEmpty())
         return dir_path;
 
-    QString path = defaultLogDirectory();
+    QString path = securityLogDirectory();
     if (path.isEmpty())
     {
         LOG(ERROR) << "Security log directory is empty";
@@ -304,6 +289,21 @@ void writeLine(const QString& line)
 }
 
 } // namespace
+
+//--------------------------------------------------------------------------------------------------
+QString securityLogDirectory()
+{
+#if defined(Q_OS_WINDOWS)
+    QString dir = BasePaths::appDataDir();
+    if (dir.isEmpty())
+        return QString();
+    return dir + "/security";
+#elif defined(Q_OS_MACOS)
+    return "/Library/Logs/aspia/security";
+#else
+    return "/var/log/aspia/security";
+#endif
+}
 
 //--------------------------------------------------------------------------------------------------
 SecurityLogMessage::SecurityLogMessage(SecurityEvent event)

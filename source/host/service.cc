@@ -65,6 +65,32 @@ constexpr char kFirewallTcpRuleName[] = "Aspia Host Service (TCP)";
 constexpr char kFirewallUdpRuleName[] = "Aspia Host Service (UDP)";
 constexpr char kFirewallRuleDecription[] = "Allow incoming TCP connections";
 
+QString shortSessionType(proto::peer::SessionType session_type, qint64 client_id)
+{
+    QString name;
+
+    switch (session_type)
+    {
+        case proto::peer::SESSION_TYPE_DESKTOP:
+            name = "DESKTOP";
+            break;
+        case proto::peer::SESSION_TYPE_FILE_TRANSFER:
+            name = "FILE_TRANSFER";
+            break;
+        case proto::peer::SESSION_TYPE_SYSTEM_INFO:
+            name = "SYSTEM_INFO";
+            break;
+        case proto::peer::SESSION_TYPE_CHAT:
+            name = "CHAT";
+            break;
+        default:
+            name = "UNKNOWN";
+            break;
+    }
+
+    return QString("%1 (%2)").arg(name).arg(client_id);
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -486,9 +512,8 @@ void Service::onClientFinished()
     CHECK(client);
     CHECK_NE(clients_.indexOf(client), -1);
 
-    SLOG(DISCONNECT) << "client id:" << client->clientId()
-                     << "user:" << client->userName()
-                     << "session type:" << client->sessionType();
+    SLOG(DISCONNECT) << shortSessionType(client->sessionType(), client->clientId())
+                     << "user:" << client->userName();
 
     client->deleteLater();
     clients_.removeOne(client);
@@ -796,13 +821,12 @@ void Service::startClient(const PendingConfirmation& pending)
     if (!settings_.isUdpAllowed())
         client_to_start->setFeature(Client::FEATURE_UDP, false);
 
-    SLOG(CONNECT) << "client id:" << client_to_start->clientId()
+    SLOG(CONNECT) << shortSessionType(client_to_start->sessionType(), client_to_start->clientId())
                   << "user:" << client_to_start->userName()
-                  << "display name:" << client_to_start->displayName()
-                  << "address:" << client_to_start->address()
-                  << "computer name:" << client_to_start->computerName()
-                  << "version:" << client_to_start->version().toString()
-                  << "session type:" << client_to_start->sessionType();
+                  << "(display name" << client_to_start->displayName()
+                  << ", address:" << client_to_start->address()
+                  << ", computer name:" << client_to_start->computerName()
+                  << ", version:" << client_to_start->version().toString() << ")";
 
     clients_.append(client_to_start);
     client_to_start->start(pending.direct, pending.stun_host, pending.stun_port, pending.peer_equals);

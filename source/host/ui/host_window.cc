@@ -43,6 +43,7 @@
 #include "host/ui/config_dialog.h"
 #include "host/ui/connect_confirm_dialog.h"
 #include "host/ui/notifier_window.h"
+#include "host/ui/security_log_dialog.h"
 #include "host/ui/user_settings.h"
 #include "proto/user.h"
 #include "ui_host_window.h"
@@ -71,6 +72,7 @@ HostWindow::HostWindow(QWidget* parent)
     ui->edit_password->setText("-");
 
     tray_menu_.addAction(ui->action_show_chat);
+    tray_menu_.addAction(ui->action_security_log);
     tray_menu_.addAction(ui->action_settings);
     tray_menu_.addSeparator();
     tray_menu_.addAction(ui->action_show_hide);
@@ -115,6 +117,7 @@ HostWindow::HostWindow(QWidget* parent)
     connect(ui->menu_language, &QMenu::triggered, this, &HostWindow::onLanguageChanged);
     connect(ui->menu_theme, &QMenu::triggered, this, &HostWindow::onThemeChanged);
     connect(ui->action_show_chat, &QAction::triggered, this, &HostWindow::onShowChat);
+    connect(ui->action_security_log, &QAction::triggered, this, &HostWindow::onSecurityLog);
     connect(ui->action_settings, &QAction::triggered, this, &HostWindow::onSettings);
     connect(ui->action_show_hide, &QAction::triggered, this, &HostWindow::onShowHide);
     connect(ui->action_exit, &QAction::triggered, this, &HostWindow::onExit);
@@ -559,6 +562,22 @@ void HostWindow::onShowChat()
 {
     chat_widget_->show();
     chat_widget_->activateWindow();
+}
+
+//--------------------------------------------------------------------------------------------------
+void HostWindow::onSecurityLog()
+{
+    LOG(INFO) << "[ACTION] Security Log";
+
+    if (!security_log_dialog_)
+    {
+        security_log_dialog_ = new SecurityLogDialog(this);
+        security_log_dialog_->setAttribute(Qt::WA_DeleteOnClose);
+    }
+
+    security_log_dialog_->show();
+    security_log_dialog_->raise();
+    security_log_dialog_->activateWindow();
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -241,6 +241,7 @@ border-radius: 2px;
      <string notr="true">Aspia</string>
     </property>
     <addaction name="action_show_chat"/>
+    <addaction name="action_security_log"/>
     <addaction name="action_settings"/>
     <addaction name="separator"/>
     <addaction name="action_show_hide"/>
@@ -301,6 +302,11 @@ border-radius: 2px;
   <action name="action_about">
    <property name="text">
     <string>About</string>
+   </property>
+  </action>
+  <action name="action_security_log">
+   <property name="text">
+    <string>Security Log...</string>
    </property>
   </action>
   <action name="action_settings">
