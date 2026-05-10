@@ -244,14 +244,21 @@ SecurityLogDialog::SecurityLogDialog(QWidget* parent)
     {
         QByteArray geometry;
         QByteArray header_state;
+        quint32 event_mask = 0;
 
         QDataStream stream(state);
-        stream >> geometry >> header_state;
+        stream >> geometry >> header_state >> event_mask;
 
         if (stream.status() == QDataStream::Ok)
         {
             restoreGeometry(geometry);
             ui->table->horizontalHeader()->restoreState(header_state);
+
+            ui->check_connect->setChecked(event_mask & (1u << SEC_CONNECT));
+            ui->check_disconnect->setChecked(event_mask & (1u << SEC_DISCONNECT));
+            ui->check_error->setChecked(event_mask & (1u << SEC_ERROR));
+            ui->check_warning->setChecked(event_mask & (1u << SEC_WARNING));
+            ui->check_info->setChecked(event_mask & (1u << SEC_INFO));
         }
     }
 }
@@ -265,9 +272,16 @@ SecurityLogDialog::~SecurityLogDialog()
 //--------------------------------------------------------------------------------------------------
 void SecurityLogDialog::closeEvent(QCloseEvent* event)
 {
+    quint32 event_mask = 0;
+    if (ui->check_connect->isChecked())    event_mask |= (1u << SEC_CONNECT);
+    if (ui->check_disconnect->isChecked()) event_mask |= (1u << SEC_DISCONNECT);
+    if (ui->check_error->isChecked())      event_mask |= (1u << SEC_ERROR);
+    if (ui->check_warning->isChecked())    event_mask |= (1u << SEC_WARNING);
+    if (ui->check_info->isChecked())       event_mask |= (1u << SEC_INFO);
+
     QByteArray state;
     QDataStream stream(&state, QIODevice::WriteOnly);
-    stream << saveGeometry() << ui->table->horizontalHeader()->saveState();
+    stream << saveGeometry() << ui->table->horizontalHeader()->saveState() << event_mask;
 
     UserSettings().setSecurityLogDialogState(state);
 
