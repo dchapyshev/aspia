@@ -48,6 +48,8 @@ list(APPEND SOURCE_PROTO
     system_info.proto
     task_manager.proto
     user.proto
+    router_constants.h
+    router_constants.cc
     pch.h)
 
 source_group("" FILES ${SOURCE_PROTO} ${PROTO_CC_FILES} ${PROTO_H_FILES})
@@ -55,8 +57,11 @@ source_group("" FILES ${SOURCE_PROTO} ${PROTO_CC_FILES} ${PROTO_H_FILES})
 add_library(aspia_proto STATIC ${SOURCE_PROTO})
 add_dependencies(aspia_proto qtprotoc)
 
+set(PROTO_FILES ${SOURCE_PROTO})
+list(FILTER PROTO_FILES INCLUDE REGEX "\\.proto$")
+
 # Generate standard files (.pb.h, .pb.cc).
-protobuf_generate(LANGUAGE cpp TARGET aspia_proto ${SOURCE_PROTO})
+protobuf_generate(LANGUAGE cpp TARGET aspia_proto ${PROTO_FILES})
 
 # Generate files with Qt meta types.
 protobuf_generate(LANGUAGE qt
@@ -64,7 +69,7 @@ protobuf_generate(LANGUAGE qt
                   PLUGIN "protoc-gen-qt=$<TARGET_FILE:qtprotoc>"
                   DEPENDENCIES qtprotoc
                   GENERATE_EXTENSIONS .h .cc
-                  ${SOURCE_PROTO})
+                  ${PROTO_FILES})
 
 target_link_libraries(aspia_proto ${THIRD_PARTY_LIBS} ${QT_COMMON_LIBS} ${QT_PLATFORM_LIBS})
 

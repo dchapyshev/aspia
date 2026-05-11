@@ -30,6 +30,7 @@
 #include "proto/key_exchange.h"
 #include "proto/router_admin.h"
 #include "proto/router_client.h"
+#include "proto/router_constants.h"
 
 namespace {
 
@@ -222,7 +223,7 @@ void Router::onAddUser(const proto::router::User& user)
 
     proto::router::AdminToRouter message;
     proto::router::UserRequest* request = message.mutable_user_request();
-    request->set_command_name("add");
+    request->set_command_name(proto::router::kCommandUserAdd);
     request->mutable_user()->CopyFrom(user);
 
     LOG(INFO) << "Sending user add request (username:" << user.name()
@@ -241,7 +242,7 @@ void Router::onModifyUser(const proto::router::User& user)
 
     proto::router::AdminToRouter message;
     proto::router::UserRequest* request = message.mutable_user_request();
-    request->set_command_name("modify");
+    request->set_command_name(proto::router::kCommandUserModify);
     request->mutable_user()->CopyFrom(user);
 
     LOG(INFO) << "Sending user modify request (username:" << user.name()
@@ -260,7 +261,7 @@ void Router::onDeleteUser(qint64 entry_id)
 
     proto::router::AdminToRouter message;
     proto::router::UserRequest* request = message.mutable_user_request();
-    request->set_command_name("delete");
+    request->set_command_name(proto::router::kCommandUserDelete);
     request->mutable_user()->set_entry_id(entry_id);
 
     LOG(INFO) << "Sending user delete request (entry_id:" << entry_id << ")";
@@ -278,7 +279,7 @@ void Router::onDisconnectHost(qint64 session_id)
 
     proto::router::AdminToRouter message;
     proto::router::HostRequest* request = message.mutable_host_request();
-    request->set_command_name("disconnect");
+    request->set_command_name(proto::router::kCommandHostDisconnect);
     request->set_entry_id(session_id);
 
     LOG(INFO) << "Sending host disconnect request (entry_id:" << session_id << ")";
@@ -296,10 +297,10 @@ void Router::onRemoveHost(qint64 session_id, bool try_to_uninstall)
 
     proto::router::AdminToRouter message;
     proto::router::HostRequest* request = message.mutable_host_request();
-    request->set_command_name("remove");
+    request->set_command_name(proto::router::kCommandHostRemove);
     request->set_entry_id(session_id);
     if (try_to_uninstall)
-        request->set_params("try_to_uninstall");
+        request->set_params(proto::router::kParamTryToUninstall);
 
     LOG(INFO) << "Sending host remove request (entry_id:" << session_id
               << "try_to_uninstall:" << try_to_uninstall << ")";
@@ -317,7 +318,7 @@ void Router::onDisconnectRelay(qint64 session_id)
 
     proto::router::AdminToRouter message;
     proto::router::RelayRequest* request = message.mutable_relay_request();
-    request->set_command_name("disconnect");
+    request->set_command_name(proto::router::kCommandRelayDisconnect);
     request->set_entry_id(session_id);
 
     LOG(INFO) << "Sending relay disconnect request (entry_id:" << session_id << ")";

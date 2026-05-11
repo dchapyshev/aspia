@@ -43,6 +43,7 @@
 #include "common/ui/msg_box.h"
 #include "common/ui/status_dialog.h"
 #include "proto/router_admin.h"
+#include "proto/router_constants.h"
 #include "ui_router_widget.h"
 
 namespace {
@@ -1175,17 +1176,17 @@ void RouterWidget::onUserListReceived(const proto::router::UserList& list)
 void RouterWidget::onUserResultReceived(const proto::router::UserResult& result)
 {
     const std::string& error_code = result.error_code();
-    if (error_code != "ok")
+    if (error_code != proto::router::kErrorOk)
     {
         const char* message;
 
-        if (error_code == "invalid_request")
+        if (error_code == proto::router::kErrorInvalidRequest)
             message = QT_TR_NOOP("Invalid user request.");
-        else if (error_code == "internal_error")
+        else if (error_code == proto::router::kErrorInternalError)
             message = QT_TR_NOOP("Unknown internal error.");
-        else if (error_code == "invalid_data")
+        else if (error_code == proto::router::kErrorInvalidData)
             message = QT_TR_NOOP("Invalid data was passed.");
-        else if (error_code == "already_exists")
+        else if (error_code == proto::router::kErrorAlreadyExists)
             message = QT_TR_NOOP("A user with the specified name already exists.");
         else
             message = QT_TR_NOOP("Unknown error type.");
@@ -1200,15 +1201,15 @@ void RouterWidget::onUserResultReceived(const proto::router::UserResult& result)
 void RouterWidget::onHostResultReceived(const proto::router::HostResult& result)
 {
     const std::string& error_code = result.error_code();
-    if (error_code != "ok")
+    if (error_code != proto::router::kErrorOk)
     {
         const char* message;
 
-        if (error_code == "invalid_request")
+        if (error_code == proto::router::kErrorInvalidRequest)
             message = QT_TR_NOOP("Invalid host request.");
-        else if (error_code == "internal_error")
+        else if (error_code == proto::router::kErrorInternalError)
             message = QT_TR_NOOP("Unknown internal error.");
-        else if (error_code == "invalid_entry_id")
+        else if (error_code == proto::router::kErrorInvalidEntryId)
             message = QT_TR_NOOP("Invalid entry id.");
         else
             message = QT_TR_NOOP("Unknown error type.");
@@ -1223,15 +1224,15 @@ void RouterWidget::onHostResultReceived(const proto::router::HostResult& result)
 void RouterWidget::onRelayResultReceived(const proto::router::RelayResult& result)
 {
     const std::string& error_code = result.error_code();
-    if (error_code != "ok")
+    if (error_code != proto::router::kErrorOk)
     {
         const char* message;
 
-        if (error_code == "invalid_request")
+        if (error_code == proto::router::kErrorInvalidRequest)
             message = QT_TR_NOOP("Invalid relay request.");
-        else if (error_code == "internal_error")
+        else if (error_code == proto::router::kErrorInternalError)
             message = QT_TR_NOOP("Unknown internal error.");
-        else if (error_code == "invalid_entry_id")
+        else if (error_code == proto::router::kErrorInvalidEntryId)
             message = QT_TR_NOOP("Invalid entry id.");
         else
             message = QT_TR_NOOP("Unknown error type.");
