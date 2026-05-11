@@ -29,6 +29,7 @@
 #include "base/version_constants.h"
 #include "base/crypto/generic_hash.h"
 #include "base/crypto/random.h"
+#include "base/crypto/secure_memory.h"
 #include "base/crypto/srp_math.h"
 #include "proto/key_exchange.h"
 
@@ -287,6 +288,7 @@ void ServerAuthenticator::onClientHello(const QByteArray& buffer)
 
             // Mirror the client: mix x25519_secret first, then ClientHello bytes.
             appendTranscript(x25519_secret);
+            memZero(&x25519_secret);
 
             CDCHECK(!encrypt_iv_.isEmpty());
             server_hello.set_iv(encrypt_iv_.toStdString());
@@ -497,9 +499,11 @@ void ServerAuthenticator::onClientKeyExchange(const QByteArray& buffer)
         case proto::key_exchange::ENCRYPTION_AES256_GCM:
         case proto::key_exchange::ENCRYPTION_CHACHA20_POLY1305:
             appendTranscript(srp_key);
+            memZero(&srp_key);
             break;
 
         default:
+            memZero(&srp_key);
             finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
             return;
     }

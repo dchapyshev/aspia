@@ -28,6 +28,7 @@
 #include "base/version_constants.h"
 #include "base/crypto/key_pair.h"
 #include "base/crypto/random.h"
+#include "base/crypto/secure_memory.h"
 #include "base/crypto/srp_math.h"
 #include "proto/key_exchange.h"
 
@@ -241,6 +242,7 @@ void ClientAuthenticator::sendClientHello()
         // Mix the X25519 shared secret first, before ClientHello bytes. Server applies the same
         // order after parsing ClientHello and deriving the secret from it.
         appendTranscript(x25519_secret);
+        memZero(&x25519_secret);
 
         QByteArray public_key = key_pair.publicKey();
         if (public_key.isEmpty())
@@ -409,7 +411,9 @@ void ClientAuthenticator::sendClientKeyExchange()
     // Mix the SRP key after SrpClientKeyExchange. Transcript now covers ClientHello ||
     // ServerHello || SrpIdentify || SrpServerKeyExchange || SrpClientKeyExchange || srp_key.
     // That is the master from which sessionKey() derives per-direction keys.
-    appendTranscript(key.toByteArray());
+    QByteArray srp_raw_key = key.toByteArray();
+    appendTranscript(srp_raw_key);
+    memZero(&srp_raw_key);
 
     CLOG(INFO) << "Session key is ready";
     setSessionKeyReady();

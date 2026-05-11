@@ -28,6 +28,7 @@
 #include "base/version_constants.h"
 #include "base/crypto/key_pair.h"
 #include "base/crypto/random.h"
+#include "base/crypto/secure_memory.h"
 #include "base/crypto/srp_math.h"
 #include "proto/key_exchange.h"
 
@@ -241,6 +242,7 @@ void ClientAuthenticatorLegacy::sendClientHello()
         // so the resulting session key equals BLAKE2s(x25519_secret) - wire-compatible with the
         // old protocol.
         appendTranscript(temp);
+        memZero(&temp);
 
         QByteArray public_key = key_pair.publicKey();
         if (public_key.isEmpty())
@@ -383,7 +385,9 @@ bool ClientAuthenticatorLegacy::readServerKeyExchange(const QByteArray& buffer)
 
     // Feed only the raw SRP key. Resulting session key is BLAKE2s(srp_key) - wire-compatible
     // with the old protocol.
-    appendTranscript(key.toByteArray());
+    QByteArray srp_raw_key = key.toByteArray();
+    appendTranscript(srp_raw_key);
+    memZero(&srp_raw_key);
     return true;
 }
 
