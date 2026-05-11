@@ -312,18 +312,22 @@ void TcpChannelNG::init()
         if (authenticator_->encryption() == proto::key_exchange::ENCRYPTION_AES256_GCM)
         {
             encryptor_ = StreamEncryptor::createForAes256Gcm(
-                authenticator_->sessionKey(), authenticator_->encryptIv());
+                authenticator_->sessionKey(Authenticator::Direction::ENCRYPT),
+                authenticator_->iv(Authenticator::Direction::ENCRYPT));
             decryptor_ = StreamDecryptor::createForAes256Gcm(
-                authenticator_->sessionKey(), authenticator_->decryptIv());
+                authenticator_->sessionKey(Authenticator::Direction::DECRYPT),
+                authenticator_->iv(Authenticator::Direction::DECRYPT));
         }
         else
         {
             CDCHECK_EQ(authenticator_->encryption(), proto::key_exchange::ENCRYPTION_CHACHA20_POLY1305);
 
             encryptor_ = StreamEncryptor::createForChaCha20Poly1305(
-                authenticator_->sessionKey(), authenticator_->encryptIv());
+                authenticator_->sessionKey(Authenticator::Direction::ENCRYPT),
+                authenticator_->iv(Authenticator::Direction::ENCRYPT));
             decryptor_ = StreamDecryptor::createForChaCha20Poly1305(
-                authenticator_->sessionKey(), authenticator_->decryptIv());
+                authenticator_->sessionKey(Authenticator::Direction::DECRYPT),
+                authenticator_->iv(Authenticator::Direction::DECRYPT));
         }
 
         if (!encryptor_ || !decryptor_)

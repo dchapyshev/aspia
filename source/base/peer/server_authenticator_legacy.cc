@@ -193,6 +193,12 @@ void ServerAuthenticatorLegacy::onReceived(const QByteArray& buffer)
 }
 
 //--------------------------------------------------------------------------------------------------
+QByteArray ServerAuthenticatorLegacy::keyLabel(Direction /*direction*/) const
+{
+    return QByteArray();
+}
+
+//--------------------------------------------------------------------------------------------------
 void ServerAuthenticatorLegacy::onClientHello(const QByteArray& buffer)
 {
     CLOG(INFO) << "Received: ClientHello (" << buffer.size() << ")";

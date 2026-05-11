@@ -180,6 +180,13 @@ void ClientAuthenticator::onReceived(const QByteArray& buffer)
 }
 
 //--------------------------------------------------------------------------------------------------
+QByteArray ClientAuthenticator::keyLabel(Direction direction) const
+{
+    return direction == Direction::ENCRYPT ?
+        QByteArrayLiteral("aspia/v1/c2s") : QByteArrayLiteral("aspia/v1/s2c");
+}
+
+//--------------------------------------------------------------------------------------------------
 void ClientAuthenticator::sendClientHello()
 {
     // We do not allow anonymous connections without a public key.
@@ -305,7 +312,7 @@ bool ClientAuthenticator::readServerHello(const QByteArray& buffer)
     if (is_anonymous)
     {
         // ANONYMOUS path: transcript hash now contains x25519_secret || ClientHello || ServerHello.
-        // That is the session key (read via sessionKey()).
+        // That is the master from which sessionKey() derives per-direction keys.
         CLOG(INFO) << "Session key is ready";
         setSessionKeyReady();
     }
@@ -401,7 +408,7 @@ void ClientAuthenticator::sendClientKeyExchange()
 
     // Mix the SRP key after SrpClientKeyExchange. Transcript now covers ClientHello ||
     // ServerHello || SrpIdentify || SrpServerKeyExchange || SrpClientKeyExchange || srp_key.
-    // That is the session key (read via sessionKey()).
+    // That is the master from which sessionKey() derives per-direction keys.
     appendTranscript(key.toByteArray());
 
     CLOG(INFO) << "Session key is ready";

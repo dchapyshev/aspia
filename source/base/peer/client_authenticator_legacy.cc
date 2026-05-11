@@ -180,6 +180,12 @@ void ClientAuthenticatorLegacy::onReceived(const QByteArray& buffer)
 }
 
 //--------------------------------------------------------------------------------------------------
+QByteArray ClientAuthenticatorLegacy::keyLabel(Direction /*direction*/) const
+{
+    return QByteArray();
+}
+
+//--------------------------------------------------------------------------------------------------
 void ClientAuthenticatorLegacy::sendClientHello()
 {
     // We do not allow anonymous connections without a public key.

@@ -55,6 +55,7 @@ protected:
     // Authenticator implementation.
     [[nodiscard]] bool onStarted() final;
     void onReceived(const QByteArray& buffer) final;
+    [[nodiscard]] QByteArray keyLabel(Direction direction) const final;
 
 private:
     void onClientHello(const QByteArray& buffer);

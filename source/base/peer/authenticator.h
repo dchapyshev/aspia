@@ -59,6 +59,13 @@ public:
     };
     Q_ENUM(ErrorCode)
 
+    enum class Direction
+    {
+        ENCRYPT,
+        DECRYPT
+    };
+    Q_ENUM(Direction)
+
     void start();
 
     [[nodiscard]] proto::key_exchange::Identify identify() const { return identify_; }
@@ -75,13 +82,15 @@ public:
     // Returns the current state.
     [[nodiscard]] State state() const { return state_; }
 
-    // The session key is the digest of every secret and handshake message that was fed into the
-    // transcript hash via appendTranscript(). Channels read it after sig_keyChanged(). Returns an
-    // empty array until setSessionKeyReady() has been called, so accidental reads before the handshake
-    // has finalized the key fail early instead of silently producing a partial-state digest.
-    [[nodiscard]] QByteArray sessionKey() const;
-    [[nodiscard]] const QByteArray& encryptIv() const { return encrypt_iv_; }
-    [[nodiscard]] const QByteArray& decryptIv() const { return decrypt_iv_; }
+    // Key for the requested direction. Channels read it after sig_keyChanged(). Returns an empty
+    // array until setSessionKeyReady() has been called, so accidental reads before the handshake
+    // has finalized the master fail early instead of silently producing a partial-state digest.
+    //
+    // If the derived class returns an empty keyLabel() for the direction, the raw master is
+    // returned (legacy wire-compatible mode). Otherwise the key is BLAKE2s(master || label),
+    // which gives cryptographically independent c2s and s2c keys for NG authenticators.
+    [[nodiscard]] QByteArray sessionKey(Direction direction) const;
+    [[nodiscard]] const QByteArray& iv(Direction direction) const;
 
 public slots:
     void onIncomingMessage(const QByteArray& data);
@@ -97,13 +106,17 @@ protected:
     [[nodiscard]] virtual bool onStarted() = 0;
     virtual void onReceived(const QByteArray& buffer) = 0;
 
+    // Returns a per-direction label that gets mixed with the master to produce direction-specific
+    // keys. Return empty to use the raw master (legacy wire-compatible mode).
+    [[nodiscard]] virtual QByteArray keyLabel(Direction direction) const = 0;
+
     // Feeds key material (handshake bytes and/or raw shared secrets) into the running BLAKE2s256
     // accumulator that produces the session key. Order must match on both peers. NG authenticators
     // feed handshake messages plus secrets; Legacy authenticators feed only raw secrets so that
     // the resulting key matches pre-transcript-binding wire compatibility.
     void appendTranscript(const QByteArray& data);
 
-    // Marks the transcript as finalized: subsequent sessionKey() calls return the digest, and the
+    // Marks the transcript as finalized: subsequent sessionKey() calls return real keys, and the
     // sig_keyChanged signal is emitted so channels can install their encryptor/decryptor.
     void setSessionKeyReady();
 

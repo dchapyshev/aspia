@@ -78,9 +78,26 @@ void Authenticator::start()
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray Authenticator::sessionKey() const
+QByteArray Authenticator::sessionKey(Direction direction) const
 {
-    return key_ready_ ? transcript_hash_.result() : QByteArray();
+    if (!key_ready_)
+        return QByteArray();
+
+    QByteArray label = keyLabel(direction);
+    if (label.isEmpty())
+        return transcript_hash_.result();
+
+    GenericHash hash(GenericHash::Type::BLAKE2s256);
+    hash.addData(transcript_hash_.result());
+    hash.addData(label);
+
+    return hash.result();
+}
+
+//--------------------------------------------------------------------------------------------------
+const QByteArray& Authenticator::iv(Direction direction) const
+{
+    return direction == Direction::ENCRYPT ? encrypt_iv_ : decrypt_iv_;
 }
 
 //--------------------------------------------------------------------------------------------------

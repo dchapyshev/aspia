@@ -192,6 +192,13 @@ void ServerAuthenticator::onReceived(const QByteArray& buffer)
 }
 
 //--------------------------------------------------------------------------------------------------
+QByteArray ServerAuthenticator::keyLabel(Direction direction) const
+{
+    return direction == Direction::ENCRYPT ?
+        QByteArrayLiteral("aspia/v1/s2c") : QByteArrayLiteral("aspia/v1/c2s");
+}
+
+//--------------------------------------------------------------------------------------------------
 void ServerAuthenticator::onClientHello(const QByteArray& buffer)
 {
     CLOG(INFO) << "Received: ClientHello (" << buffer.size() << ")";
@@ -320,7 +327,7 @@ void ServerAuthenticator::onClientHello(const QByteArray& buffer)
     if (identify_ == proto::key_exchange::IDENTIFY_ANONYMOUS)
     {
         // Transcript now contains x25519_secret || ClientHello || ServerHello. That is the
-        // session key (read via sessionKey()).
+        // master from which sessionKey() derives per-direction keys.
         CLOG(INFO) << "Session key is ready";
         setSessionKeyReady();
     }
@@ -485,7 +492,8 @@ void ServerAuthenticator::onClientKeyExchange(const QByteArray& buffer)
     switch (encryption_)
     {
         // AES256-GCM and ChaCha20-Poly1305 require a 256 bit key. Mix the SRP key after CKE -
-        // transcript now covers full handshake plus SRP key, which is the session key.
+        // transcript now covers full handshake plus SRP key - that is the master from which
+        // sessionKey() derives per-direction keys.
         case proto::key_exchange::ENCRYPTION_AES256_GCM:
         case proto::key_exchange::ENCRYPTION_CHACHA20_POLY1305:
             appendTranscript(srp_key);
