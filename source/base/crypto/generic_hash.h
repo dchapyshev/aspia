@@ -49,6 +49,8 @@ public:
     void addData(std::string_view data);
     void addData(const QByteArray& data);
 
+    // Returns the digest of all data fed via addData() so far. Non-destructive: result() may be
+    // called multiple times and may be interleaved with further addData() calls.
     QByteArray result() const;
 
     void reset();

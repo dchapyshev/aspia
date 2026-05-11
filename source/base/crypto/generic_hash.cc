@@ -24,8 +24,8 @@
 
 //--------------------------------------------------------------------------------------------------
 GenericHash::GenericHash(Type type)
+    : ctxt_(EVP_MD_CTX_new())
 {
-    ctxt_ = EVP_MD_CTX_new();
     CHECK(ctxt_) << "EVP_MD_CTX_new failed";
 
     switch (type)
@@ -33,31 +33,24 @@ GenericHash::GenericHash(Type type)
         case SHA1:
             md_ = EVP_sha1();
             break;
-
         case BLAKE2b512:
             md_ = EVP_blake2b512();
             break;
-
         case BLAKE2s256:
             md_ = EVP_blake2s256();
             break;
-
         case SHA224:
             md_ = EVP_sha224();
             break;
-
         case SHA256:
             md_ = EVP_sha256();
             break;
-
         case SHA384:
             md_ = EVP_sha384();
             break;
-
         case SHA512:
             md_ = EVP_sha512();
             break;
-
         default:
             LOG(FATAL) << "Unknown hashing algorithm";
             return;
@@ -125,12 +118,21 @@ QByteArray GenericHash::result() const
     int len = EVP_MD_size(md_);
     CHECK_GT(len, 0);
 
+    // Finalize on a copy of the context so that result() is non-destructive and can be called
+    // multiple times, including interleaved with further addData() calls on the original.
+    EVP_MD_CTX* ctxt_copy = EVP_MD_CTX_new();
+    CHECK(ctxt_copy) << "EVP_MD_CTX_new failed";
+
+    int ret = EVP_MD_CTX_copy_ex(ctxt_copy, ctxt_);
+    CHECK_EQ(ret, 1);
+
     QByteArray result;
     result.resize(static_cast<qsizetype>(len));
 
-    int ret = EVP_DigestFinal(ctxt_, reinterpret_cast<quint8*>(result.data()), nullptr);
+    ret = EVP_DigestFinal_ex(ctxt_copy, reinterpret_cast<quint8*>(result.data()), nullptr);
     CHECK_EQ(ret, 1);
 
+    EVP_MD_CTX_free(ctxt_copy);
     return result;
 }
 
