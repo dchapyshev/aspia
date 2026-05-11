@@ -26,7 +26,6 @@
 #include "base/serialization.h"
 #include "base/sys_info.h"
 #include "base/version_constants.h"
-#include "base/crypto/generic_hash.h"
 #include "base/crypto/key_pair.h"
 #include "base/crypto/random.h"
 #include "base/crypto/srp_math.h"
@@ -225,19 +224,16 @@ void ClientAuthenticator::sendClientHello()
             return;
         }
 
-        QByteArray temp = key_pair.sessionKey(peer_public_key_);
-        if (temp.isEmpty())
+        QByteArray x25519_secret = key_pair.sessionKey(peer_public_key_);
+        if (x25519_secret.isEmpty())
         {
             finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
             return;
         }
 
-        session_key_ = GenericHash::hash(GenericHash::Type::BLAKE2s256, temp);
-        if (session_key_.isEmpty())
-        {
-            finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
-            return;
-        }
+        // Mix the X25519 shared secret first, before ClientHello bytes. Server applies the same
+        // order after parsing ClientHello and deriving the secret from it.
+        appendTranscript(x25519_secret);
 
         QByteArray public_key = key_pair.publicKey();
         if (public_key.isEmpty())
@@ -260,6 +256,7 @@ void ClientAuthenticator::sendClientHello()
     }
 
     QByteArray message = serialize(client_hello);
+    appendTranscript(message);
 
     CLOG(INFO) << "Sending: ClientHello (" << message.size() << ")";
     emit sig_outgoingMessage(message, false);
@@ -270,6 +267,7 @@ void ClientAuthenticator::sendClientHello()
 bool ClientAuthenticator::readServerHello(const QByteArray& buffer)
 {
     CLOG(INFO) << "Received: ServerHello (" << buffer.size() << ")";
+    appendTranscript(buffer);
 
     proto::key_exchange::ServerHello server_hello;
     if (!parse(buffer, &server_hello))
@@ -294,14 +292,20 @@ bool ClientAuthenticator::readServerHello(const QByteArray& buffer)
 
     decrypt_iv_ = QByteArray::fromStdString(server_hello.iv());
 
-    if (session_key_.isEmpty() != decrypt_iv_.isEmpty())
+    // ServerHello.iv must be present in ANONYMOUS mode (server's IV for the X25519-derived
+    // session key) and absent in SRP mode (where the IV arrives later in SrpServerKeyExchange).
+    // Anything else is a protocol violation.
+    const bool is_anonymous = (identify_ == proto::key_exchange::IDENTIFY_ANONYMOUS);
+    if (is_anonymous == decrypt_iv_.isEmpty())
     {
         finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
         return false;
     }
 
-    if (!session_key_.isEmpty())
+    if (is_anonymous)
     {
+        // ANONYMOUS path: transcript hash now contains x25519_secret || ClientHello || ServerHello.
+        // That is the session key (read via sessionKey()).
         CLOG(INFO) << "Session key is ready";
         emit sig_keyChanged();
     }
@@ -318,6 +322,7 @@ void ClientAuthenticator::sendIdentify()
     QByteArray message = serialize(identify);
 
     CLOG(INFO) << "Sending: Identify (" << message.size() << ")";
+    appendTranscript(message);
     emit sig_outgoingMessage(message, false);
     internal_state_ = InternalState::READ_SERVER_KEY_EXCHANGE;
 }
@@ -326,6 +331,7 @@ void ClientAuthenticator::sendIdentify()
 bool ClientAuthenticator::readServerKeyExchange(const QByteArray& buffer)
 {
     CLOG(INFO) << "Received: ServerKeyExchange (" << buffer.size() << ")";
+    appendTranscript(buffer);
 
     proto::key_exchange::SrpServerKeyExchange server_key_exchange;
     if (!parse(buffer, &server_key_exchange))
@@ -365,29 +371,23 @@ bool ClientAuthenticator::readServerKeyExchange(const QByteArray& buffer)
         return false;
     }
 
-    BigNum u = SrpMath::calc_u(A_, B_, N_);
-    BigNum x = SrpMath::calc_x(s_, username_, password_);
-    BigNum key = SrpMath::calcClientKey(N_, B_, g_, x, a_, u);
-    if (!key.isValid())
-    {
-        finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
-        return false;
-    }
-
-    // AES256-GCM and ChaCha20-Poly1305 requires 256 bit key.
-    GenericHash hash(GenericHash::BLAKE2s256);
-
-    if (!session_key_.isEmpty())
-        hash.addData(session_key_);
-    hash.addData(key.toByteArray());
-
-    session_key_ = hash.result();
+    // SRP key computation is deferred to sendClientKeyExchange so that on both sides the
+    // transcript hash absorbs ClientKeyExchange before the SRP key is mixed in.
     return true;
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClientAuthenticator::sendClientKeyExchange()
 {
+    BigNum u = SrpMath::calc_u(A_, B_, N_);
+    BigNum x = SrpMath::calc_x(s_, username_, password_);
+    BigNum key = SrpMath::calcClientKey(N_, B_, g_, x, a_, u);
+    if (!key.isValid())
+    {
+        finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
+        return;
+    }
+
     proto::key_exchange::SrpClientKeyExchange client_key_exchange;
     client_key_exchange.set_a(A_.toStdString());
     client_key_exchange.set_iv(encrypt_iv_.toStdString());
@@ -395,8 +395,14 @@ void ClientAuthenticator::sendClientKeyExchange()
     QByteArray message = serialize(client_key_exchange);
 
     CLOG(INFO) << "Sending: ClientKeyExchange (" << message.size() << ")";
+    appendTranscript(message);
     emit sig_outgoingMessage(message, false);
     internal_state_ = InternalState::READ_SESSION_CHALLENGE;
+
+    // Mix the SRP key after SrpClientKeyExchange. Transcript now covers ClientHello ||
+    // ServerHello || SrpIdentify || SrpServerKeyExchange || SrpClientKeyExchange || srp_key.
+    // That is the session key (read via sessionKey()).
+    appendTranscript(key.toByteArray());
 
     CLOG(INFO) << "Session key is ready";
     emit sig_keyChanged();

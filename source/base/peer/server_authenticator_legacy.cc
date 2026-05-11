@@ -279,12 +279,9 @@ void ServerAuthenticatorLegacy::onClientHello(const QByteArray& buffer)
                 return;
             }
 
-            session_key_ = GenericHash::hash(GenericHash::Type::BLAKE2s256, temp);
-            if (session_key_.isEmpty())
-            {
-                finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
-                return;
-            }
+            // Mirror the legacy client: feed only the X25519 secret. Session key equals
+            // BLAKE2s(x25519_secret) - wire-compatible with the old protocol.
+            appendTranscript(temp);
 
             CDCHECK(!encrypt_iv_.isEmpty());
             server_hello.set_iv(encrypt_iv_.toStdString());
@@ -318,7 +315,7 @@ void ServerAuthenticatorLegacy::onClientHello(const QByteArray& buffer)
     CLOG(INFO) << "Sending: ServerHello (" << message.size() << ")";
     emit sig_outgoingMessage(message, false);
 
-    if (!session_key_.isEmpty())
+    if (identify_ == proto::key_exchange::IDENTIFY_ANONYMOUS)
     {
         CLOG(INFO) << "Session key is ready";
         emit sig_keyChanged();
@@ -480,25 +477,16 @@ void ServerAuthenticatorLegacy::onClientKeyExchange(const QByteArray& buffer)
 
     switch (encryption_)
     {
-        // AES256-GCM and ChaCha20-Poly1305 requires 256 bit key.
+        // AES256-GCM and ChaCha20-Poly1305 require a 256 bit key.
+        // Feed only the raw SRP key. Session key equals BLAKE2s(srp_key) - wire-compatible.
         case proto::key_exchange::ENCRYPTION_AES256_GCM:
         case proto::key_exchange::ENCRYPTION_CHACHA20_POLY1305:
-        {
-            GenericHash hash(GenericHash::BLAKE2s256);
-
-            if (!session_key_.isEmpty())
-                hash.addData(session_key_);
-            hash.addData(srp_key);
-
-            session_key_ = hash.result();
-        }
-        break;
+            appendTranscript(srp_key);
+            break;
 
         default:
-        {
             finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
             return;
-        }
     }
 
     CLOG(INFO) << "Session key is ready";

@@ -21,6 +21,8 @@
 
 #include <QVersionNumber>
 
+#include "base/crypto/generic_hash.h"
+
 class Location;
 class QTimer;
 
@@ -72,7 +74,10 @@ public:
 
     // Returns the current state.
     [[nodiscard]] State state() const { return state_; }
-    [[nodiscard]] const QByteArray& sessionKey() const { return session_key_; }
+
+    // The session key is the digest of every secret and handshake message that was fed into the
+    // transcript hash via appendTranscript(). Channels read it after sig_keyChanged().
+    [[nodiscard]] QByteArray sessionKey() const { return transcript_hash_.result(); }
     [[nodiscard]] const QByteArray& encryptIv() const { return encrypt_iv_; }
     [[nodiscard]] const QByteArray& decryptIv() const { return decrypt_iv_; }
 
@@ -90,6 +95,12 @@ protected:
     [[nodiscard]] virtual bool onStarted() = 0;
     virtual void onReceived(const QByteArray& buffer) = 0;
 
+    // Feeds key material (handshake bytes and/or raw shared secrets) into the running BLAKE2s256
+    // accumulator that produces the session key. Order must match on both peers. NG authenticators
+    // feed handshake messages plus secrets; Legacy authenticators feed only raw secrets so that
+    // the resulting key matches pre-transcript-binding wire compatibility.
+    void appendTranscript(const QByteArray& data);
+
     void finish(const Location& location, ErrorCode error_code);
     void setPeerVersion(const proto::peer::Version& version);
     void setPeerOsName(const QString& name);
@@ -99,7 +110,6 @@ protected:
 
     proto::key_exchange::Encryption encryption_;
     proto::key_exchange::Identify identify_;
-    QByteArray session_key_;
     QByteArray encrypt_iv_;
     QByteArray decrypt_iv_;
 
@@ -108,6 +118,7 @@ protected:
     bool is_probe_ = false;
 
 private:
+    GenericHash transcript_hash_;
     QTimer* timer_ = nullptr;
     State state_ = State::STOPPED;
     QVersionNumber peer_version_; // Remote peer version.

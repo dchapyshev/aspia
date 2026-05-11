@@ -26,7 +26,6 @@
 #include "base/serialization.h"
 #include "base/sys_info.h"
 #include "base/version_constants.h"
-#include "base/crypto/generic_hash.h"
 #include "base/crypto/key_pair.h"
 #include "base/crypto/random.h"
 #include "base/crypto/srp_math.h"
@@ -232,12 +231,10 @@ void ClientAuthenticatorLegacy::sendClientHello()
             return;
         }
 
-        session_key_ = GenericHash::hash(GenericHash::Type::BLAKE2s256, temp);
-        if (session_key_.isEmpty())
-        {
-            finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
-            return;
-        }
+        // Feed the X25519 secret into the transcript. Legacy peers do not bind handshake bytes,
+        // so the resulting session key equals BLAKE2s(x25519_secret) - wire-compatible with the
+        // old protocol.
+        appendTranscript(temp);
 
         QByteArray public_key = key_pair.publicKey();
         if (public_key.isEmpty())
@@ -294,13 +291,17 @@ bool ClientAuthenticatorLegacy::readServerHello(const QByteArray& buffer)
 
     decrypt_iv_ = QByteArray::fromStdString(server_hello.iv());
 
-    if (session_key_.isEmpty() != decrypt_iv_.isEmpty())
+    // ServerHello.iv must be present in ANONYMOUS mode (server's IV for the X25519-derived
+    // session key) and absent in SRP mode (where the IV arrives later in SrpServerKeyExchange).
+    // Anything else is a protocol violation.
+    const bool is_anonymous = (identify_ == proto::key_exchange::IDENTIFY_ANONYMOUS);
+    if (is_anonymous == decrypt_iv_.isEmpty())
     {
         finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
         return false;
     }
 
-    if (!session_key_.isEmpty())
+    if (is_anonymous)
     {
         CLOG(INFO) << "Session key is ready";
         emit sig_keyChanged();
@@ -374,14 +375,9 @@ bool ClientAuthenticatorLegacy::readServerKeyExchange(const QByteArray& buffer)
         return false;
     }
 
-    // AES256-GCM and ChaCha20-Poly1305 requires 256 bit key.
-    GenericHash hash(GenericHash::BLAKE2s256);
-
-    if (!session_key_.isEmpty())
-        hash.addData(session_key_);
-    hash.addData(key.toByteArray());
-
-    session_key_ = hash.result();
+    // Feed only the raw SRP key. Resulting session key is BLAKE2s(srp_key) - wire-compatible
+    // with the old protocol.
+    appendTranscript(key.toByteArray());
     return true;
 }
 

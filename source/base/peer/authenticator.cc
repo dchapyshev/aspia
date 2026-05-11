@@ -38,6 +38,7 @@ Authenticator::Authenticator(QObject* parent)
     : QObject(parent),
       encryption_(proto::key_exchange::ENCRYPTION_UNKNOWN),
       identify_(proto::key_exchange::IDENTIFY_SRP),
+      transcript_hash_(GenericHash::BLAKE2s256),
       timer_(new QTimer(this))
 {
     CLOG(INFO) << "Ctor";
@@ -82,6 +83,12 @@ void Authenticator::onIncomingMessage(const QByteArray& data)
     if (state() != State::PENDING)
         return;
     onReceived(data);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Authenticator::appendTranscript(const QByteArray& data)
+{
+    transcript_hash_.addData(data);
 }
 
 //--------------------------------------------------------------------------------------------------

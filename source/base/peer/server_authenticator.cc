@@ -271,24 +271,23 @@ void ServerAuthenticator::onClientHello(const QByteArray& buffer)
 
         if (!peer_public_key.isEmpty() && !decrypt_iv_.isEmpty())
         {
-            QByteArray temp = key_pair_.sessionKey(peer_public_key);
-            if (temp.isEmpty())
+            QByteArray x25519_secret = key_pair_.sessionKey(peer_public_key);
+            if (x25519_secret.isEmpty())
             {
                 finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
                 return;
             }
 
-            session_key_ = GenericHash::hash(GenericHash::Type::BLAKE2s256, temp);
-            if (session_key_.isEmpty())
-            {
-                finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
-                return;
-            }
+            // Mirror the client: mix x25519_secret first, then ClientHello bytes.
+            appendTranscript(x25519_secret);
 
             CDCHECK(!encrypt_iv_.isEmpty());
             server_hello.set_iv(encrypt_iv_.toStdString());
         }
     }
+
+    // ClientHello bytes go into the transcript after the optional x25519 secret.
+    appendTranscript(buffer);
 
     bool has_aes_ni = false;
 
@@ -315,10 +314,13 @@ void ServerAuthenticator::onClientHello(const QByteArray& buffer)
     QByteArray message = serialize(server_hello);
 
     CLOG(INFO) << "Sending: ServerHello (" << message.size() << ")";
+    appendTranscript(message);
     emit sig_outgoingMessage(message, false);
 
-    if (!session_key_.isEmpty())
+    if (identify_ == proto::key_exchange::IDENTIFY_ANONYMOUS)
     {
+        // Transcript now contains x25519_secret || ClientHello || ServerHello. That is the
+        // session key (read via sessionKey()).
         CLOG(INFO) << "Session key is ready";
         emit sig_keyChanged();
     }
@@ -343,6 +345,7 @@ void ServerAuthenticator::onClientHello(const QByteArray& buffer)
 void ServerAuthenticator::onIdentify(const QByteArray& buffer)
 {
     CLOG(INFO) << "Received: Identify (" << buffer.size() << ")";
+    appendTranscript(buffer);
 
     proto::key_exchange::SrpIdentify identify;
     if (!parse(buffer, &identify))
@@ -445,6 +448,7 @@ void ServerAuthenticator::onIdentify(const QByteArray& buffer)
     QByteArray message = serialize(server_key_exchange);
 
     CLOG(INFO) << "Sending: ServerKeyExchange (" << message.size() << ")";
+    appendTranscript(message);
     emit sig_outgoingMessage(message, false);
     internal_state_ = InternalState::READ_CLIENT_KEY_EXCHANGE;
 }
@@ -453,6 +457,7 @@ void ServerAuthenticator::onIdentify(const QByteArray& buffer)
 void ServerAuthenticator::onClientKeyExchange(const QByteArray& buffer)
 {
     CLOG(INFO) << "Received: ClientKeyExchange (" << buffer.size() << ")";
+    appendTranscript(buffer);
 
     proto::key_exchange::SrpClientKeyExchange client_key_exchange;
     if (!parse(buffer, &client_key_exchange))
@@ -479,25 +484,16 @@ void ServerAuthenticator::onClientKeyExchange(const QByteArray& buffer)
 
     switch (encryption_)
     {
-        // AES256-GCM and ChaCha20-Poly1305 requires 256 bit key.
+        // AES256-GCM and ChaCha20-Poly1305 require a 256 bit key. Mix the SRP key after CKE -
+        // transcript now covers full handshake plus SRP key, which is the session key.
         case proto::key_exchange::ENCRYPTION_AES256_GCM:
         case proto::key_exchange::ENCRYPTION_CHACHA20_POLY1305:
-        {
-            GenericHash hash(GenericHash::BLAKE2s256);
-
-            if (!session_key_.isEmpty())
-                hash.addData(session_key_);
-            hash.addData(srp_key);
-
-            session_key_ = hash.result();
-        }
-        break;
+            appendTranscript(srp_key);
+            break;
 
         default:
-        {
             finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
             return;
-        }
     }
 
     CLOG(INFO) << "Session key is ready";
