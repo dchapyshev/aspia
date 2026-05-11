@@ -75,6 +75,14 @@ void SessionAdmin::onSessionMessage(quint8 channel_id, const QByteArray& buffer)
     {
         doRelayRequest(message.relay_request());
     }
+    else if (message.has_client_list_request())
+    {
+        doClientListRequest();
+    }
+    else if (message.has_client_request())
+    {
+        doClientRequest(message.client_request());
+    }
     else if (message.has_user_list_request())
     {
         doUserListRequest();
@@ -169,6 +177,39 @@ void SessionAdmin::doHostListRequest()
             SessionLegacyHost* legacy_host_session = static_cast<SessionLegacyHost*>(session);
             item->set_host_id(legacy_host_session->hostIdList().first());
         }
+    }
+
+    sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void SessionAdmin::doClientListRequest()
+{
+    const QList<Session*>& sessions = Service::instance()->sessions();
+
+    proto::router::RouterToAdmin message;
+    proto::router::ClientList* result = message.mutable_client_list();
+    result->set_error_code(proto::router::kErrorOk);
+
+    for (const auto& session : sessions)
+    {
+        proto::router::SessionType type = session->sessionType();
+        if (type != proto::router::SESSION_TYPE_CLIENT &&
+            type != proto::router::SESSION_TYPE_MANAGER &&
+            type != proto::router::SESSION_TYPE_ADMIN)
+        {
+            continue;
+        }
+
+        proto::router::ClientInfo* item = result->add_client();
+
+        item->set_entry_id(session->sessionId());
+        item->set_timepoint(session->startTime());
+        item->set_ip_address(session->address().toString().toStdString());
+        item->mutable_version()->CopyFrom(serialize(session->version()));
+        item->set_os_name(session->osName().toStdString());
+        item->set_computer_name(session->computerName().toStdString());
+        item->set_architecture(session->architecture().toStdString());
     }
 
     sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
@@ -369,6 +410,75 @@ void SessionAdmin::doRelayRequest(const proto::router::RelayRequest& request)
     {
         CLOG(ERROR) << "Unknown relay request command:" << request.command_name();
         relay_result->set_error_code(proto::router::kErrorInvalidRequest);
+    }
+
+    sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void SessionAdmin::doClientRequest(const proto::router::ClientRequest& request)
+{
+    proto::router::RouterToAdmin message;
+    proto::router::ClientResult* client_result = message.mutable_client_result();
+    client_result->set_command_name(request.command_name());
+
+    if (request.command_name() == proto::router::kCommandClientDisconnect)
+    {
+        qint64 entry_id = request.entry_id();
+
+        if (entry_id == -1)
+        {
+            const QList<Session*>& sessions = Service::instance()->sessions();
+            QList<qint64> client_session_ids;
+            for (const auto& session : sessions)
+            {
+                proto::router::SessionType type = session->sessionType();
+                if (type == proto::router::SESSION_TYPE_CLIENT ||
+                    type == proto::router::SESSION_TYPE_MANAGER ||
+                    type == proto::router::SESSION_TYPE_ADMIN)
+                {
+                    client_session_ids.append(session->sessionId());
+                }
+            }
+
+            bool all_ok = true;
+            for (qint64 id : client_session_ids)
+            {
+                if (!Service::instance()->stopSession(id))
+                {
+                    CLOG(ERROR) << "Failed to stop client session:" << id;
+                    all_ok = false;
+                }
+            }
+
+            if (all_ok)
+            {
+                CLOG(INFO) << "All client sessions disconnected by" << userName();
+                client_result->set_error_code(proto::router::kErrorOk);
+            }
+            else
+            {
+                client_result->set_error_code(proto::router::kErrorInternalError);
+            }
+        }
+        else
+        {
+            if (!Service::instance()->stopSession(entry_id))
+            {
+                CLOG(ERROR) << "Session not found:" << entry_id;
+                client_result->set_error_code(proto::router::kErrorInvalidEntryId);
+            }
+            else
+            {
+                CLOG(INFO) << "Client session" << entry_id << "disconnected by" << userName();
+                client_result->set_error_code(proto::router::kErrorOk);
+            }
+        }
+    }
+    else
+    {
+        CLOG(ERROR) << "Unknown client request command:" << request.command_name();
+        client_result->set_error_code(proto::router::kErrorInvalidRequest);
     }
 
     sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));

@@ -28,6 +28,8 @@
 class QTimer;
 
 namespace proto::router {
+class ClientList;
+class ClientResult;
 class ConnectionOffer;
 class HostList;
 class HostResult;
@@ -70,6 +72,7 @@ public slots:
     // Administrator methods.
     void onRelayListRequest();
     void onHostListRequest();
+    void onClientListRequest();
     void onUserListRequest();
     void onAddUser(const proto::router::User& user);
     void onModifyUser(const proto::router::User& user);
@@ -77,6 +80,7 @@ public slots:
     void onDisconnectHost(qint64 session_id);
     void onRemoveHost(qint64 session_id, bool try_to_uninstall);
     void onDisconnectRelay(qint64 session_id);
+    void onDisconnectClient(qint64 session_id);
     void onDisconnectPeer(qint64 relay_entry_id, quint64 peer_session_id);
 
     // Manager methods.
@@ -94,10 +98,12 @@ signals:
     // Administrator signals.
     void sig_relayListReceived(const proto::router::RelayList& list);
     void sig_hostListReceived(const proto::router::HostList& list);
+    void sig_clientListReceived(const proto::router::ClientList& list);
     void sig_userListReceived(const proto::router::UserList& list);
     void sig_userResultReceived(const proto::router::UserResult& result);
     void sig_hostResultReceived(const proto::router::HostResult& result);
     void sig_relayResultReceived(const proto::router::RelayResult& result);
+    void sig_clientResultReceived(const proto::router::ClientResult& result);
 
     // Client signals.
     void sig_connectionOffer(const proto::router::ConnectionOffer& offer);

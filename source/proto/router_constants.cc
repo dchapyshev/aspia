@@ -25,6 +25,8 @@ const char* const kCommandHostRemove      = "remove";
 
 const char* const kCommandRelayDisconnect = "disconnect";
 
+const char* const kCommandClientDisconnect = "disconnect";
+
 const char* const kCommandUserAdd         = "add";
 const char* const kCommandUserModify      = "modify";
 const char* const kCommandUserDelete      = "delete";

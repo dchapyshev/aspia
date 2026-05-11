@@ -64,8 +64,7 @@ public:
 
         const proto::peer::Version& version = info.version();
 
-        setText(3, QString("%1.%2.%3.%4")
-            .arg(version.major()).arg(version.minor()).arg(version.patch()).arg(version.revision()));
+        setText(3, QString("%1.%2.%3").arg(version.major()).arg(version.minor()).arg(version.patch()));
         setText(4, QString::fromStdString(info.computer_name()));
         setText(5, QString::fromStdString(info.architecture()));
         setText(6, QString::fromStdString(info.os_name()));
@@ -168,8 +167,7 @@ public:
 
         const proto::peer::Version& version = info.version();
 
-        setText(4, QString("%1.%2.%3.%4")
-            .arg(version.major()).arg(version.minor()).arg(version.patch()).arg(version.revision()));
+        setText(4, QString("%1.%2.%3").arg(version.major()).arg(version.minor()).arg(version.patch()));
         setText(5, QString::fromStdString(info.architecture()));
         setText(6, QString::fromStdString(info.os_name()));
     }
@@ -205,6 +203,54 @@ public:
 
 private:
     Q_DISABLE_COPY_MOVE(HostTreeItem)
+};
+
+class ClientTreeItem final : public QTreeWidgetItem
+{
+public:
+    explicit ClientTreeItem(const proto::router::ClientInfo& info)
+        : info(info)
+    {
+        QString time = QLocale::system().toString(
+            QDateTime::fromSecsSinceEpoch(info.timepoint()), QLocale::ShortFormat);
+
+        setIcon(0, QIcon(":/img/computer.svg"));
+        setText(0, QString::fromStdString(info.computer_name()));
+        setText(1, QString::fromStdString(info.ip_address()));
+        setText(2, time);
+
+        const proto::peer::Version& version = info.version();
+
+        setText(3, QString("%1.%2.%3").arg(version.major()).arg(version.minor()).arg(version.patch()));
+        setText(4, QString::fromStdString(info.architecture()));
+        setText(5, QString::fromStdString(info.os_name()));
+    }
+
+    // QTreeWidgetItem implementation.
+    bool operator<(const QTreeWidgetItem& other) const final
+    {
+        int column = treeWidget()->sortColumn();
+        if (column == 0)
+        {
+            QCollator collator;
+            collator.setCaseSensitivity(Qt::CaseInsensitive);
+            collator.setNumericMode(true);
+
+            return collator.compare(text(0), other.text(0)) <= 0;
+        }
+        else if (column == 2)
+        {
+            const ClientTreeItem* other_item = static_cast<const ClientTreeItem*>(&other);
+            return info.timepoint() < other_item->info.timepoint();
+        }
+
+        return QTreeWidgetItem::operator<(other);
+    }
+
+    proto::router::ClientInfo info;
+
+private:
+    Q_DISABLE_COPY_MOVE(ClientTreeItem)
 };
 
 class UserTreeItem final : public QTreeWidgetItem
@@ -285,13 +331,16 @@ RouterWidget::RouterWidget(const RouterConfig& config, QWidget* parent)
     connect(router_, &Router::sig_errorOccurred, this, &RouterWidget::onConnectionErrorOccurred, Qt::QueuedConnection);
     connect(router_, &Router::sig_relayListReceived, this, &RouterWidget::onRelayListReceived, Qt::QueuedConnection);
     connect(router_, &Router::sig_hostListReceived, this, &RouterWidget::onHostListReceived, Qt::QueuedConnection);
+    connect(router_, &Router::sig_clientListReceived, this, &RouterWidget::onClientListReceived, Qt::QueuedConnection);
     connect(router_, &Router::sig_userListReceived, this, &RouterWidget::onUserListReceived, Qt::QueuedConnection);
     connect(router_, &Router::sig_userResultReceived, this, &RouterWidget::onUserResultReceived, Qt::QueuedConnection);
     connect(router_, &Router::sig_hostResultReceived, this, &RouterWidget::onHostResultReceived, Qt::QueuedConnection);
     connect(router_, &Router::sig_relayResultReceived, this, &RouterWidget::onRelayResultReceived, Qt::QueuedConnection);
+    connect(router_, &Router::sig_clientResultReceived, this, &RouterWidget::onClientResultReceived, Qt::QueuedConnection);
 
     connect(this, &RouterWidget::sig_relayListRequest, router_, &Router::onRelayListRequest, Qt::QueuedConnection);
     connect(this, &RouterWidget::sig_hostListRequest, router_, &Router::onHostListRequest, Qt::QueuedConnection);
+    connect(this, &RouterWidget::sig_clientListRequest, router_, &Router::onClientListRequest, Qt::QueuedConnection);
     connect(this, &RouterWidget::sig_userListRequest, router_, &Router::onUserListRequest, Qt::QueuedConnection);
     connect(this, &RouterWidget::sig_addUser, router_, &Router::onAddUser, Qt::QueuedConnection);
     connect(this, &RouterWidget::sig_modifyUser, router_, &Router::onModifyUser, Qt::QueuedConnection);
@@ -299,6 +348,7 @@ RouterWidget::RouterWidget(const RouterConfig& config, QWidget* parent)
     connect(this, &RouterWidget::sig_disconnectHost, router_, &Router::onDisconnectHost, Qt::QueuedConnection);
     connect(this, &RouterWidget::sig_removeHost, router_, &Router::onRemoveHost, Qt::QueuedConnection);
     connect(this, &RouterWidget::sig_disconnectRelay, router_, &Router::onDisconnectRelay, Qt::QueuedConnection);
+    connect(this, &RouterWidget::sig_disconnectClient, router_, &Router::onDisconnectClient, Qt::QueuedConnection);
     connect(this, &RouterWidget::sig_disconnectPeer, router_, &Router::onDisconnectPeer, Qt::QueuedConnection);
     connect(this, &RouterWidget::sig_updateConfig, router_, &Router::onUpdateConfig, Qt::QueuedConnection);
 
@@ -306,12 +356,16 @@ RouterWidget::RouterWidget(const RouterConfig& config, QWidget* parent)
     connect(ui->tree_users, &QTreeWidget::itemSelectionChanged, this, &RouterWidget::onCurrentUserChanged);
     connect(ui->tree_relays, &QTreeWidget::itemSelectionChanged, this, &RouterWidget::onCurrentRelayChanged);
     connect(ui->tree_hosts, &QTreeWidget::itemSelectionChanged, this, &RouterWidget::onCurrentHostChanged);
+    connect(ui->tree_clients, &QTreeWidget::itemSelectionChanged, this, &RouterWidget::onCurrentClientChanged);
 
     ui->tree_users->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(ui->tree_users, &QTreeWidget::customContextMenuRequested, this, &RouterWidget::onUserContextMenuRequested);
 
     ui->tree_hosts->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(ui->tree_hosts, &QTreeWidget::customContextMenuRequested, this, &RouterWidget::onHostContextMenuRequested);
+
+    ui->tree_clients->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(ui->tree_clients, &QTreeWidget::customContextMenuRequested, this, &RouterWidget::onClientContextMenuRequested);
 
     ui->tree_relays->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(ui->tree_relays, &QTreeWidget::customContextMenuRequested, this, &RouterWidget::onRelayContextMenuRequested);
@@ -393,6 +447,57 @@ void RouterWidget::copyCurrentHostRow()
 void RouterWidget::copyCurrentHostColumn(int column)
 {
     QTreeWidgetItem* item = ui->tree_hosts->currentItem();
+    if (!item || column < 0)
+        return;
+
+    const QString text = item->text(column);
+    if (text.isEmpty())
+        return;
+
+    if (QClipboard* clipboard = QApplication::clipboard())
+        clipboard->setText(text);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool RouterWidget::hasSelectedClient() const
+{
+    return ui->tree_clients->currentItem() != nullptr;
+}
+
+//--------------------------------------------------------------------------------------------------
+int RouterWidget::clientCount() const
+{
+    return ui->tree_clients->topLevelItemCount();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::copyCurrentClientRow()
+{
+    QTreeWidgetItem* item = ui->tree_clients->currentItem();
+    if (!item)
+        return;
+
+    QString result;
+    const int column_count = item->columnCount();
+    for (int i = 0; i < column_count; ++i)
+    {
+        const QString text = item->text(i);
+        if (!text.isEmpty())
+            result += text + ' ';
+    }
+    result.chop(1);
+
+    if (result.isEmpty())
+        return;
+
+    if (QClipboard* clipboard = QApplication::clipboard())
+        clipboard->setText(result);
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::copyCurrentClientColumn(int column)
+{
+    QTreeWidgetItem* item = ui->tree_clients->currentItem();
     if (!item || column < 0)
         return;
 
@@ -504,6 +609,7 @@ QByteArray RouterWidget::saveState()
         stream << ui->tree_peers->header()->saveState();
         stream << ui->tree_users->header()->saveState();
         stream << ui->tree_hosts->header()->saveState();
+        stream << ui->tree_clients->header()->saveState();
     }
 
     return buffer;
@@ -520,12 +626,14 @@ void RouterWidget::restoreState(const QByteArray& state)
     QByteArray peers_columns_state;
     QByteArray users_columns_state;
     QByteArray hosts_columns_state;
+    QByteArray clients_columns_state;
 
     stream >> relays_columns_state;
     stream >> splitter_state;
     stream >> peers_columns_state;
     stream >> users_columns_state;
     stream >> hosts_columns_state;
+    stream >> clients_columns_state;
 
     if (!relays_columns_state.isEmpty())
     {
@@ -568,6 +676,13 @@ void RouterWidget::restoreState(const QByteArray& state)
         ui->tree_hosts->header()->setSectionsClickable(true);
         ui->tree_hosts->header()->setSortIndicatorShown(true);
     }
+
+    if (!clients_columns_state.isEmpty())
+    {
+        ui->tree_clients->header()->restoreState(clients_columns_state);
+        ui->tree_clients->header()->setSectionsClickable(true);
+        ui->tree_clients->header()->setSortIndicatorShown(true);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -577,6 +692,9 @@ void RouterWidget::reload()
     {
         case TabType::HOSTS:
             onUpdateHostList();
+            break;
+        case TabType::CLIENTS:
+            onUpdateClientList();
             break;
         case TabType::RELAYS:
             onUpdateRelayList();
@@ -593,7 +711,7 @@ void RouterWidget::reload()
 bool RouterWidget::canSave() const
 {
     TabType tab = currentTabType();
-    return tab == TabType::HOSTS || tab == TabType::RELAYS;
+    return tab == TabType::HOSTS || tab == TabType::CLIENTS || tab == TabType::RELAYS;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -603,6 +721,9 @@ void RouterWidget::save()
     {
         case TabType::HOSTS:
             saveHostsToFile();
+            break;
+        case TabType::CLIENTS:
+            saveClientsToFile();
             break;
         case TabType::RELAYS:
             saveRelaysToFile();
@@ -647,6 +768,12 @@ void RouterWidget::onUpdateRelayList()
 void RouterWidget::onUpdateHostList()
 {
     emit sig_hostListRequest();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::onUpdateClientList()
+{
+    emit sig_clientListRequest();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -851,6 +978,47 @@ void RouterWidget::onDisconnectAllRelays()
 }
 
 //--------------------------------------------------------------------------------------------------
+void RouterWidget::onDisconnectClient()
+{
+    ClientTreeItem* tree_item = static_cast<ClientTreeItem*>(ui->tree_clients->currentItem());
+    if (!tree_item)
+    {
+        LOG(INFO) << "No selected client";
+        return;
+    }
+
+    if (MsgBox::question(this, tr("Are you sure you want to disconnect client \"%1\"?")
+        .arg(QString::fromStdString(tree_item->info.computer_name()))) != MsgBox::Yes)
+    {
+        LOG(INFO) << "[ACTION] Disconnect client rejected by user";
+        return;
+    }
+
+    LOG(INFO) << "[ACTION] Disconnect client accepted by user";
+    emit sig_disconnectClient(tree_item->info.entry_id());
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::onDisconnectAllClients()
+{
+    if (ui->tree_clients->topLevelItemCount() <= 0)
+    {
+        LOG(INFO) << "Client list is empty";
+        return;
+    }
+
+    if (MsgBox::question(this,
+            tr("Are you sure you want to disconnect all clients?")) != MsgBox::Yes)
+    {
+        LOG(INFO) << "[ACTION] Disconnect all clients rejected by user";
+        return;
+    }
+
+    LOG(INFO) << "[ACTION] Disconnect all clients accepted by user";
+    emit sig_disconnectClient(-1);
+}
+
+//--------------------------------------------------------------------------------------------------
 void RouterWidget::changeEvent(QEvent* event)
 {
     if (event->type() == QEvent::LanguageChange)
@@ -880,11 +1048,13 @@ void RouterWidget::onStatusChanged(qint64 router_id, Router::Status status)
     {
         onUpdateRelayList();
         onUpdateHostList();
+        onUpdateClientList();
         onUpdateUserList();
 
         ui->tree_relays->setEnabled(true);
         ui->tree_peers->setEnabled(true);
         ui->tree_hosts->setEnabled(true);
+        ui->tree_clients->setEnabled(true);
         ui->tree_users->setEnabled(true);
     }
     else
@@ -892,11 +1062,13 @@ void RouterWidget::onStatusChanged(qint64 router_id, Router::Status status)
         ui->tree_relays->setEnabled(false);
         ui->tree_peers->setEnabled(false);
         ui->tree_hosts->setEnabled(false);
+        ui->tree_clients->setEnabled(false);
         ui->tree_users->setEnabled(false);
 
         ui->tree_relays->clear();
         ui->tree_peers->clear();
         ui->tree_hosts->clear();
+        ui->tree_clients->clear();
         ui->tree_users->clear();
 
         updateStatusLabel();
@@ -939,6 +1111,12 @@ void RouterWidget::onCurrentHostChanged()
 }
 
 //--------------------------------------------------------------------------------------------------
+void RouterWidget::onCurrentClientChanged()
+{
+    emit sig_currentClientChanged(routerId());
+}
+
+//--------------------------------------------------------------------------------------------------
 void RouterWidget::onUserContextMenuRequested(const QPoint& pos)
 {
     QTreeWidgetItem* item = ui->tree_users->itemAt(pos);
@@ -963,6 +1141,18 @@ void RouterWidget::onHostContextMenuRequested(const QPoint& pos)
     const int column = ui->tree_hosts->indexAt(pos).column();
     const QPoint global_pos = ui->tree_hosts->viewport()->mapToGlobal(pos);
     emit sig_hostContextMenu(routerId(), global_pos, column);
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::onClientContextMenuRequested(const QPoint& pos)
+{
+    QTreeWidgetItem* item = ui->tree_clients->itemAt(pos);
+    if (item)
+        ui->tree_clients->setCurrentItem(item);
+
+    const int column = ui->tree_clients->indexAt(pos).column();
+    const QPoint global_pos = ui->tree_clients->viewport()->mapToGlobal(pos);
+    emit sig_clientContextMenu(routerId(), global_pos, column);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1144,6 +1334,53 @@ void RouterWidget::onHostListReceived(const proto::router::HostList& hosts)
 }
 
 //--------------------------------------------------------------------------------------------------
+void RouterWidget::onClientListReceived(const proto::router::ClientList& clients)
+{
+    auto has_with_id = [](const proto::router::ClientList& clients, qint64 entry_id)
+    {
+        for (int i = 0; i < clients.client_size(); ++i)
+        {
+            if (clients.client(i).entry_id() == entry_id)
+                return true;
+        }
+
+        return false;
+    };
+
+    // Remove from the UI all clients that are not in the list.
+    for (int i = ui->tree_clients->topLevelItemCount() - 1; i >= 0; --i)
+    {
+        ClientTreeItem* item = static_cast<ClientTreeItem*>(ui->tree_clients->topLevelItem(i));
+
+        if (!has_with_id(clients, item->info.entry_id()))
+            delete item;
+    }
+
+    // Adding new elements in the UI.
+    for (int i = 0; i < clients.client_size(); ++i)
+    {
+        const proto::router::ClientInfo& info = clients.client(i);
+        bool found = false;
+
+        for (int j = 0; j < ui->tree_clients->topLevelItemCount(); ++j)
+        {
+            ClientTreeItem* item = static_cast<ClientTreeItem*>(ui->tree_clients->topLevelItem(j));
+            if (item->info.entry_id() == info.entry_id())
+            {
+                found = true;
+                break;
+            }
+        }
+
+        if (!found)
+            ui->tree_clients->addTopLevelItem(new ClientTreeItem(info));
+    }
+
+    emit sig_currentClientChanged(routerId());
+    updateStatusLabel();
+}
+
+//--------------------------------------------------------------------------------------------------
 void RouterWidget::onUserListReceived(const proto::router::UserList& list)
 {
     QTreeWidget* tree_users = ui->tree_users;
@@ -1244,6 +1481,29 @@ void RouterWidget::onRelayResultReceived(const proto::router::RelayResult& resul
 }
 
 //--------------------------------------------------------------------------------------------------
+void RouterWidget::onClientResultReceived(const proto::router::ClientResult& result)
+{
+    const std::string& error_code = result.error_code();
+    if (error_code != proto::router::kErrorOk)
+    {
+        const char* message;
+
+        if (error_code == proto::router::kErrorInvalidRequest)
+            message = QT_TR_NOOP("Invalid client request.");
+        else if (error_code == proto::router::kErrorInternalError)
+            message = QT_TR_NOOP("Unknown internal error.");
+        else if (error_code == proto::router::kErrorInvalidEntryId)
+            message = QT_TR_NOOP("Invalid entry id.");
+        else
+            message = QT_TR_NOOP("Unknown error type.");
+
+        MsgBox::warning(this, tr(message));
+    }
+
+    onUpdateClientList();
+}
+
+//--------------------------------------------------------------------------------------------------
 void RouterWidget::updateStatusLabel()
 {
     if (!status_label_)
@@ -1253,6 +1513,9 @@ void RouterWidget::updateStatusLabel()
     {
         case TabType::HOSTS:
             status_label_->setText(tr("%n host(s)", "", ui->tree_hosts->topLevelItemCount()));
+            break;
+        case TabType::CLIENTS:
+            status_label_->setText(tr("%n client(s)", "", ui->tree_clients->topLevelItemCount()));
             break;
         case TabType::RELAYS:
             status_label_->setText(tr("%n relay(s)", "", ui->tree_relays->topLevelItemCount()));
@@ -1360,9 +1623,8 @@ void RouterWidget::saveHostsToFile()
         host_object.insert("ip_address", QString::fromStdString(info.ip_address()));
         host_object.insert("architecture", QString::fromStdString(info.architecture()));
 
-        QString version = QString("%1.%2.%3.%4")
-            .arg(info.version().major()).arg(info.version().minor())
-            .arg(info.version().patch()).arg(info.version().revision());
+        QString version = QString("%1.%2.%3")
+            .arg(info.version().major()).arg(info.version().minor()).arg(info.version().patch());
         host_object.insert("version", version);
 
         QString time = QLocale::system().toString(QDateTime::fromSecsSinceEpoch(
@@ -1376,6 +1638,65 @@ void RouterWidget::saveHostsToFile()
 
     QJsonObject root_object;
     root_object.insert("hosts", root_array);
+
+    qint64 written = file.write(QJsonDocument(root_object).toJson());
+    if (written <= 0)
+    {
+        LOG(INFO) << "Unable to write file:" << file.errorString();
+        MsgBox::warning(this, tr("Unable to write file."));
+        return;
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::saveClientsToFile()
+{
+    LOG(INFO) << "[ACTION] Save clients to file";
+
+    QString selected_filter;
+    QString file_path = QFileDialog::getSaveFileName(
+        this, tr("Save File"), QString(), tr("JSON files (*.json)"), &selected_filter);
+    if (file_path.isEmpty() || selected_filter.isEmpty())
+    {
+        LOG(INFO) << "No selected path";
+        return;
+    }
+
+    QFile file(file_path);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+        LOG(INFO) << "Unable to open file:" << file.errorString();
+        MsgBox::warning(this, tr("Could not open file for writing."));
+        return;
+    }
+
+    QJsonArray root_array;
+
+    for (int i = 0; i < ui->tree_clients->topLevelItemCount(); ++i)
+    {
+        const proto::router::ClientInfo& info =
+            static_cast<ClientTreeItem*>(ui->tree_clients->topLevelItem(i))->info;
+
+        QJsonObject client_object;
+
+        client_object.insert("computer_name", QString::fromStdString(info.computer_name()));
+        client_object.insert("operating_system", QString::fromStdString(info.os_name()));
+        client_object.insert("ip_address", QString::fromStdString(info.ip_address()));
+        client_object.insert("architecture", QString::fromStdString(info.architecture()));
+
+        QString version = QString("%1.%2.%3")
+            .arg(info.version().major()).arg(info.version().minor()).arg(info.version().patch());
+        client_object.insert("version", version);
+
+        QString time = QLocale::system().toString(QDateTime::fromSecsSinceEpoch(
+            info.timepoint()), QLocale::ShortFormat);
+        client_object.insert("connect_time", time);
+
+        root_array.append(client_object);
+    }
+
+    QJsonObject root_object;
+    root_object.insert("clients", root_array);
 
     qint64 written = file.write(QJsonDocument(root_object).toJson());
     if (written <= 0)
@@ -1422,9 +1743,8 @@ void RouterWidget::saveRelaysToFile()
         relay_object.insert("ip_address", QString::fromStdString(info.ip_address()));
         relay_object.insert("architecture", QString::fromStdString(info.architecture()));
 
-        QString version = QString("%1.%2.%3.%4")
-            .arg(info.version().major()).arg(info.version().minor())
-            .arg(info.version().patch()).arg(info.version().revision());
+        QString version = QString("%1.%2.%3")
+            .arg(info.version().major()).arg(info.version().minor()).arg(info.version().patch());
         relay_object.insert("version", version);
 
         QString time = QLocale::system().toString(QDateTime::fromSecsSinceEpoch(

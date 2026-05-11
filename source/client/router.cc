@@ -197,6 +197,23 @@ void Router::onHostListRequest()
 }
 
 //--------------------------------------------------------------------------------------------------
+void Router::onClientListRequest()
+{
+    if (config_.session_type != proto::router::SESSION_TYPE_ADMIN)
+    {
+        LOG(ERROR) << "No administrator access level";
+        return;
+    }
+
+    proto::router::AdminToRouter message;
+    proto::router::ClientListRequest* request = message.mutable_client_list_request();
+    request->set_dummy(1);
+
+    LOG(INFO) << "Sending client list request";
+    sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
 void Router::onUserListRequest()
 {
     if (config_.session_type != proto::router::SESSION_TYPE_ADMIN)
@@ -326,6 +343,24 @@ void Router::onDisconnectRelay(qint64 session_id)
 }
 
 //--------------------------------------------------------------------------------------------------
+void Router::onDisconnectClient(qint64 session_id)
+{
+    if (config_.session_type != proto::router::SESSION_TYPE_ADMIN)
+    {
+        LOG(ERROR) << "No administrator access level";
+        return;
+    }
+
+    proto::router::AdminToRouter message;
+    proto::router::ClientRequest* request = message.mutable_client_request();
+    request->set_command_name(proto::router::kCommandClientDisconnect);
+    request->set_entry_id(session_id);
+
+    LOG(INFO) << "Sending client disconnect request (entry_id:" << session_id << ")";
+    sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
 void Router::onDisconnectPeer(qint64 relay_entry_id, quint64 peer_session_id)
 {
     if (config_.session_type != proto::router::SESSION_TYPE_ADMIN)
@@ -428,6 +463,11 @@ void Router::onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer)
             LOG(INFO) << "Host list received";
             emit sig_hostListReceived(message.host_list());
         }
+        else if (message.has_client_list())
+        {
+            LOG(INFO) << "Client list received";
+            emit sig_clientListReceived(message.client_list());
+        }
         else if (message.has_user_list())
         {
             LOG(INFO) << "User list received";
@@ -447,6 +487,11 @@ void Router::onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer)
         {
             LOG(INFO) << "Relay result received";
             emit sig_relayResultReceived(message.relay_result());
+        }
+        else if (message.has_client_result())
+        {
+            LOG(INFO) << "Client result received";
+            emit sig_clientResultReceived(message.client_result());
         }
         else
         {

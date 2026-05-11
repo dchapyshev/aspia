@@ -28,12 +28,15 @@ extern const char* const kCommandHostRemove;
 // Command names for RelayRequest.
 extern const char* const kCommandRelayDisconnect;
 
+// Command names for ClientRequest.
+extern const char* const kCommandClientDisconnect;
+
 // Command names for UserRequest.
 extern const char* const kCommandUserAdd;
 extern const char* const kCommandUserModify;
 extern const char* const kCommandUserDelete;
 
-// Error codes for HostResult/RelayResult/UserList/UserResult.
+// Error codes for HostResult/RelayResult/ClientResult/UserList/UserResult.
 extern const char* const kErrorOk;
 extern const char* const kErrorInvalidRequest;
 extern const char* const kErrorInternalError;

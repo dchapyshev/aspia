@@ -802,6 +802,31 @@ void HostsTab::onHostContextMenu(qint64 router_id, const QPoint& pos, int column
 }
 
 //--------------------------------------------------------------------------------------------------
+void HostsTab::onClientContextMenu(qint64 router_id, const QPoint& pos, int column)
+{
+    RouterWidget* widget = router_widgets_.value(router_id);
+    if (!widget || !widget->hasSelectedClient())
+        return;
+
+    QMenu menu;
+    menu.addAction(ui->action_disconnect);
+    menu.addAction(ui->action_disconnect_all);
+    menu.addSeparator();
+
+    QAction* copy_row = menu.addAction(tr("Copy Row"));
+    QAction* copy_col = menu.addAction(tr("Copy Value"));
+
+    QAction* action = menu.exec(pos);
+    if (!action)
+        return;
+
+    if (action == copy_row)
+        widget->copyCurrentClientRow();
+    else if (action == copy_col)
+        widget->copyCurrentClientColumn(column);
+}
+
+//--------------------------------------------------------------------------------------------------
 void HostsTab::onRelayContextMenu(qint64 router_id, const QPoint& pos, int column)
 {
     RouterWidget* widget = router_widgets_.value(router_id);
@@ -993,6 +1018,9 @@ void HostsTab::onDisconnectAction()
         case RouterWidget::TabType::HOSTS:
             widget->onDisconnectHost();
             break;
+        case RouterWidget::TabType::CLIENTS:
+            widget->onDisconnectClient();
+            break;
         case RouterWidget::TabType::RELAYS:
             widget->onDisconnectRelay();
             break;
@@ -1017,6 +1045,9 @@ void HostsTab::onDisconnectAllAction()
     {
         case RouterWidget::TabType::HOSTS:
             widget->onDisconnectAllHosts();
+            break;
+        case RouterWidget::TabType::CLIENTS:
+            widget->onDisconnectAllClients();
             break;
         case RouterWidget::TabType::RELAYS:
             widget->onDisconnectAllRelays();
@@ -1145,11 +1176,14 @@ void HostsTab::updateActionsState()
         ui->action_delete_user->setVisible(has_selection);
 
         bool on_hosts_tab = widget && widget->currentTabType() == RouterWidget::TabType::HOSTS;
+        bool on_clients_tab = widget && widget->currentTabType() == RouterWidget::TabType::CLIENTS;
         bool on_relays_tab = widget && widget->currentTabType() == RouterWidget::TabType::RELAYS;
 
         bool has_target = (on_hosts_tab && widget->hasSelectedHost()) ||
+                          (on_clients_tab && widget->hasSelectedClient()) ||
                           (on_relays_tab && widget->hasSelectedRelay());
         bool has_any = (on_hosts_tab && widget->hostCount() > 0) ||
+                       (on_clients_tab && widget->clientCount() > 0) ||
                        (on_relays_tab && widget->relayCount() > 0);
 
         ui->action_disconnect->setVisible(has_target);
@@ -1225,10 +1259,13 @@ RouterWidget* HostsTab::createRouterWidget(const RouterConfig& config)
             this, [this](qint64) { updateActionsState(); });
     connect(widget, &RouterWidget::sig_currentHostChanged,
             this, [this](qint64) { updateActionsState(); });
+    connect(widget, &RouterWidget::sig_currentClientChanged,
+            this, [this](qint64) { updateActionsState(); });
     connect(widget, &RouterWidget::sig_currentRelayChanged,
             this, [this](qint64) { updateActionsState(); });
     connect(widget, &RouterWidget::sig_userContextMenu, this, &HostsTab::onUserContextMenu);
     connect(widget, &RouterWidget::sig_hostContextMenu, this, &HostsTab::onHostContextMenu);
+    connect(widget, &RouterWidget::sig_clientContextMenu, this, &HostsTab::onClientContextMenu);
     connect(widget, &RouterWidget::sig_relayContextMenu, this, &HostsTab::onRelayContextMenu);
 
     widget->connectToRouter();

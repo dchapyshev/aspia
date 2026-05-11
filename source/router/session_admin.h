@@ -22,6 +22,7 @@
 #include "router/session_manager.h"
 
 namespace proto::router {
+class ClientRequest;
 class HostRequest;
 class PeerRequest;
 class RelayRequest;
@@ -44,10 +45,12 @@ protected:
 private:
     void doRelayListRequest();
     void doHostListRequest();
+    void doClientListRequest();
     void doUserListRequest();
     void doUserRequest(const proto::router::UserRequest& request);
     void doHostRequest(const proto::router::HostRequest& request);
     void doRelayRequest(const proto::router::RelayRequest& request);
+    void doClientRequest(const proto::router::ClientRequest& request);
     void doPeerRequest(const proto::router::PeerRequest& request);
 
     std::string addUser(const proto::router::User& user);

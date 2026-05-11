@@ -84,6 +84,7 @@ private slots:
     void onRemoveComputer();
     void onUserContextMenu(qint64 router_id, const User& user, const QPoint& pos);
     void onHostContextMenu(qint64 router_id, const QPoint& pos, int column);
+    void onClientContextMenu(qint64 router_id, const QPoint& pos, int column);
     void onRelayContextMenu(qint64 router_id, const QPoint& pos, int column);
     void onAddUserAction();
     void onEditUserAction();
