@@ -32,6 +32,7 @@
 #include "base/net/tcp_channel_legacy.h"
 #include "base/net/udp_channel.h"
 #include "base/peer/client_authenticator.h"
+#include "base/peer/client_authenticator_legacy.h"
 #include "base/peer/relay_peer.h"
 #include "base/peer/stun_peer.h"
 #include "proto/key_exchange.h"
@@ -128,14 +129,14 @@ void Client::start()
 
     state_ = State::STARTED;
 
-    std::unique_ptr<ClientAuthenticator> authenticator =
-        std::make_unique<ClientAuthenticator>();
-
-    authenticator->setIdentify(proto::key_exchange::IDENTIFY_SRP);
-    authenticator->setUserName(session_state_->hostUserName());
-    authenticator->setPassword(session_state_->hostPassword());
-    authenticator->setSessionType(static_cast<quint32>(session_state_->sessionType()));
-    authenticator->setDisplayName(session_state_->displayName());
+    auto setupAuthenticator = [this](auto* auth)
+    {
+        auth->setIdentify(proto::key_exchange::IDENTIFY_SRP);
+        auth->setUserName(session_state_->hostUserName());
+        auth->setPassword(session_state_->hostPassword());
+        auth->setSessionType(static_cast<quint32>(session_state_->sessionType()));
+        auth->setDisplayName(session_state_->displayName());
+    };
 
     if (session_state_->isConnectionByHostId())
     {
@@ -172,7 +173,13 @@ void Client::start()
         connect(router_, &Router::sig_connectionOffer, this, &Client::onRouterOffer, Qt::UniqueConnection);
         connect(router_, &Router::sig_statusChanged, this, &Client::onRouterStatusChanged, Qt::UniqueConnection);
 
-        relay_peer_ = new RelayPeer(authenticator.release(), this);
+        // For relay path the channel type (Legacy/NG) is decided later from the connection
+        // offer. Authenticator implementations are currently identical, so we always use the
+        // non-legacy variant here. When the non-legacy handshake diverges, this will need to
+        // be revisited together with RelayPeer.
+        auto* relay_authenticator = new ClientAuthenticator();
+        setupAuthenticator(relay_authenticator);
+        relay_peer_ = new RelayPeer(relay_authenticator, this);
 
         connect(relay_peer_, &RelayPeer::sig_connectionError, this, &Client::onRelayConnectionError);
         connect(relay_peer_, &RelayPeer::sig_connectionReady, this, &Client::onRelayConnectionReady);
@@ -193,13 +200,23 @@ void Client::start()
         if (kMinimumSupportedVersion < kVersion_3_0_0)
         {
             if (is_legacy_mode_)
-                tcp_channel_ = new TcpChannelLegacy(authenticator.release(), this);
+            {
+                auto* auth = new ClientAuthenticatorLegacy();
+                setupAuthenticator(auth);
+                tcp_channel_ = new TcpChannelLegacy(auth, this);
+            }
             else
-                tcp_channel_ = new TcpChannelNG(authenticator.release(), this);
+            {
+                auto* auth = new ClientAuthenticator();
+                setupAuthenticator(auth);
+                tcp_channel_ = new TcpChannelNG(auth, this);
+            }
         }
         else
         {
-            tcp_channel_ = new TcpChannelNG(authenticator.release(), this);
+            auto* auth = new ClientAuthenticator();
+            setupAuthenticator(auth);
+            tcp_channel_ = new TcpChannelNG(auth, this);
         }
 
         connect(tcp_channel_, &TcpChannel::sig_authenticated, this, &Client::onTcpConnected);

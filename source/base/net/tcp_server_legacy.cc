@@ -23,7 +23,7 @@
 #include "base/asio_event_dispatcher.h"
 #include "base/logging.h"
 #include "base/net/tcp_channel_legacy.h"
-#include "base/peer/server_authenticator.h"
+#include "base/peer/server_authenticator_legacy.h"
 
 //--------------------------------------------------------------------------------------------------
 TcpServerLegacy::TcpServerLegacy(QObject* parent)
@@ -59,7 +59,7 @@ void TcpServerLegacy::setPrivateKey(const QByteArray& private_key)
 
 //--------------------------------------------------------------------------------------------------
 void TcpServerLegacy::setAnonymousAccess(
-    ServerAuthenticator::AnonymousAccess anonymous_access, quint32 session_types)
+    ServerAuthenticatorLegacy::AnonymousAccess anonymous_access, quint32 session_types)
 {
     anonymous_access_ = anonymous_access;
     anonymous_session_types_ = session_types;
@@ -193,7 +193,7 @@ void TcpServerLegacy::doAccept()
         {
             accept_error_count_ = 0;
 
-            ServerAuthenticator* authenticator = new ServerAuthenticator();
+            ServerAuthenticatorLegacy* authenticator = new ServerAuthenticatorLegacy();
             authenticator->setUserList(user_list_);
 
             if (!private_key_.isEmpty())

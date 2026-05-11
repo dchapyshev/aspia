@@ -26,7 +26,7 @@
 
 #include "base/shared_pointer.h"
 #include "base/peer/user_list_base.h"
-#include "base/peer/server_authenticator.h"
+#include "base/peer/server_authenticator_legacy.h"
 
 class TcpChannel;
 
@@ -45,7 +45,7 @@ public:
     QByteArray privateKey() const { return private_key_; }
 
     void setAnonymousAccess(
-        ServerAuthenticator::AnonymousAccess anonymous_access, quint32 session_types);
+        ServerAuthenticatorLegacy::AnonymousAccess anonymous_access, quint32 session_types);
 
     void start(quint16 port, const QString& iface = QString());
 
@@ -68,8 +68,8 @@ private:
     SharedPointer<UserListBase> user_list_;
     QByteArray private_key_;
 
-    ServerAuthenticator::AnonymousAccess anonymous_access_ =
-        ServerAuthenticator::AnonymousAccess::DISABLE;
+    ServerAuthenticatorLegacy::AnonymousAccess anonymous_access_ =
+        ServerAuthenticatorLegacy::AnonymousAccess::DISABLE;
 
     quint32 anonymous_session_types_ = 0;
 

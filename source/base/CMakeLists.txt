@@ -455,6 +455,8 @@ list(APPEND SOURCE_BASE_PEER
     peer/authenticator.h
     peer/client_authenticator.cc
     peer/client_authenticator.h
+    peer/client_authenticator_legacy.cc
+    peer/client_authenticator_legacy.h
     peer/host_id.cc
     peer/host_id.h
     peer/relay_peer.cc
@@ -463,6 +465,8 @@ list(APPEND SOURCE_BASE_PEER
     peer/relay_peer_manager.h
     peer/server_authenticator.cc
     peer/server_authenticator.h
+    peer/server_authenticator_legacy.cc
+    peer/server_authenticator_legacy.h
     peer/stun_peer.cc
     peer/stun_peer.h
     peer/stun_server.cc

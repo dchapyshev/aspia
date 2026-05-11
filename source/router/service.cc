@@ -449,7 +449,7 @@ bool Service::start()
     tcp_server_legacy_->setPrivateKey(private_key);
     tcp_server_legacy_->setUserList(user_list);
     tcp_server_legacy_->setAnonymousAccess(
-        ServerAuthenticator::AnonymousAccess::ENABLE,
+        ServerAuthenticatorLegacy::AnonymousAccess::ENABLE,
         proto::router::SESSION_TYPE_HOST | proto::router::SESSION_TYPE_RELAY);
     tcp_server_legacy_->start(legacy_port, listen_interface);
 
