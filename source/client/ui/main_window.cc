@@ -34,7 +34,6 @@
 #include "base/logging.h"
 #include "base/version_constants.h"
 #include "base/peer/host_id.h"
-#include "build/build_config.h"
 #include "client/database.h"
 #include "client/settings.h"
 #include "client/ui/client_tab.h"
@@ -136,11 +135,8 @@ MainWindow::MainWindow(QWidget* parent)
     ui->menu_session_type->menuAction()->setVisible(false);
     ui->menu_action->menuAction()->setVisible(false);
 
-    HostsTab* hosts = new HostsTab(this);
-    connect(hosts, &HostsTab::sig_connect, this, &MainWindow::onConnect);
-
     // Create default tabs.
-    addTab(hosts, tr("Hosts"), QIcon(":/img/computer.svg"));
+    addTab(new HostsTab(this), tr("Hosts"), QIcon(":/img/computer.svg"));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -336,8 +332,7 @@ void MainWindow::onSearchTextChanged(const QString& text)
 }
 
 //--------------------------------------------------------------------------------------------------
-void MainWindow::onConnect(
-    qint64 /* computer_id */, const ComputerConfig& computer, proto::peer::SessionType session_type)
+void MainWindow::onConnect(const ComputerConfig& computer, proto::peer::SessionType session_type)
 {
     if (isHostId(computer.address) && computer.router_id <= 0)
     {

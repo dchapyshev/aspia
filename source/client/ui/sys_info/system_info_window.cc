@@ -182,8 +182,7 @@ SystemInfoWindow::SystemInfoWindow(QWidget* parent)
         QAction* action = new QAction(sessionIcon(type), sessionName(type), this);
         connect(action, &QAction::triggered, this, [this, type]()
         {
-            const ComputerConfig& computer = sessionState()->computer();
-            emit sig_connectRequested(computer.id, computer, type);
+            emit sig_connectRequested(sessionState()->computer(), type);
         });
         return action;
     };

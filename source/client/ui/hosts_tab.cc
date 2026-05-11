@@ -123,11 +123,11 @@ HostsTab::HostsTab(QWidget* parent)
     connect(local_group_widget_, &LocalGroupWidget::sig_currentChanged, this, &HostsTab::onCurrentComputerChanged);
     connect(local_group_widget_, &LocalGroupWidget::sig_doubleClicked, this, &HostsTab::onLocalConnect);
     connect(local_group_widget_, &LocalGroupWidget::sig_contextMenu, this, &HostsTab::onLocalComputerContextMenu);
-    connect(this, &HostsTab::sig_connect, local_group_widget_,
-            [this](qint64 computer_id, const ComputerConfig&, proto::peer::SessionType)
+    connect(this, &HostsTab::sig_connectRequested, local_group_widget_,
+            [this](const ComputerConfig& computer, proto::peer::SessionType /* session_type */)
     {
-        if (computer_id != -1)
-            local_group_widget_->setConnectTime(computer_id, QDateTime::currentSecsSinceEpoch());
+        if (computer.id != -1)
+            local_group_widget_->setConnectTime(computer.id, QDateTime::currentSecsSinceEpoch());
     });
     connect(ui->action_add_computer, &QAction::triggered, this, &HostsTab::onAddComputer);
     connect(ui->action_edit_computer, &QAction::triggered, this, &HostsTab::onEditComputer);
@@ -519,7 +519,6 @@ void HostsTab::onConnectAction(QAction* action)
         return;
 
     ComputerConfig computer;
-    qint64 source_computer_id = -1;
 
     if (current_content_ == local_group_widget_ || current_content_ == search_widget_)
     {
@@ -553,7 +552,6 @@ void HostsTab::onConnectAction(QAction* action)
             return;
 
         Database::instance().setConnectTime(computer.id, QDateTime::currentSecsSinceEpoch());
-        source_computer_id = computer.id;
     }
     else if (current_content_ == router_group_widget_)
     {
@@ -580,7 +578,7 @@ void HostsTab::onConnectAction(QAction* action)
         return;
     }
 
-    emit sig_connect(source_computer_id, computer, session_type);
+    emit sig_connectRequested(computer, session_type);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -597,8 +595,7 @@ void HostsTab::onLocalConnect(qint64 computer_id)
         return;
 
     Database::instance().setConnectTime(computer_id, QDateTime::currentSecsSinceEpoch());
-
-    emit sig_connect(computer_id, *computer, defaultSessionType());
+    emit sig_connectRequested(*computer, defaultSessionType());
 }
 
 //--------------------------------------------------------------------------------------------------

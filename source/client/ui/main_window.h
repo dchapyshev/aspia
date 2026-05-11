@@ -63,7 +63,7 @@ private slots:
     void onCurrentTabChanged(int index);
     void onCloseTab(int index);
     void onSearchTextChanged(const QString& text);
-    void onConnect(qint64 computer_id, const ComputerConfig& computer, proto::peer::SessionType session_type);
+    void onConnect(const ComputerConfig& computer, proto::peer::SessionType session_type);
     void onTabDetachRequested(int index, const QPoint& global_pos);
     void onTabDragMove(const QPoint& global_pos);
     void onTabDragFinished(const QPoint& global_pos);

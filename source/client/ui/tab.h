@@ -94,8 +94,7 @@ signals:
 
     // Emitted when this tab's ClientWindow asks to launch a secondary session (e.g. desktop
     // launching a file transfer or system info session).
-    void sig_connectRequested(
-        qint64 computer_id, const ComputerConfig& computer, proto::peer::SessionType session_type);
+    void sig_connectRequested(const ComputerConfig& computer, proto::peer::SessionType session_type);
 
     // Emitted when the tab wants the container to clear the search field.
     void sig_clearSearch();
