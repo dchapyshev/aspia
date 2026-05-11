@@ -318,7 +318,7 @@ void ServerAuthenticatorLegacy::onClientHello(const QByteArray& buffer)
     if (identify_ == proto::key_exchange::IDENTIFY_ANONYMOUS)
     {
         CLOG(INFO) << "Session key is ready";
-        emit sig_keyChanged();
+        setSessionKeyReady();
     }
 
     switch (identify_)
@@ -490,7 +490,7 @@ void ServerAuthenticatorLegacy::onClientKeyExchange(const QByteArray& buffer)
     }
 
     CLOG(INFO) << "Session key is ready";
-    emit sig_keyChanged();
+    setSessionKeyReady();
 
     doSessionChallenge();
 }

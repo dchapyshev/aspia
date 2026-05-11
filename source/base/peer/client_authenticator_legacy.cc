@@ -304,7 +304,7 @@ bool ClientAuthenticatorLegacy::readServerHello(const QByteArray& buffer)
     if (is_anonymous)
     {
         CLOG(INFO) << "Session key is ready";
-        emit sig_keyChanged();
+        setSessionKeyReady();
     }
 
     return true;
@@ -395,7 +395,7 @@ void ClientAuthenticatorLegacy::sendClientKeyExchange()
     internal_state_ = InternalState::READ_SESSION_CHALLENGE;
 
     CLOG(INFO) << "Session key is ready";
-    emit sig_keyChanged();
+    setSessionKeyReady();
 }
 
 //--------------------------------------------------------------------------------------------------

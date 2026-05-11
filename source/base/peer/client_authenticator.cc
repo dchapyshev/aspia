@@ -307,7 +307,7 @@ bool ClientAuthenticator::readServerHello(const QByteArray& buffer)
         // ANONYMOUS path: transcript hash now contains x25519_secret || ClientHello || ServerHello.
         // That is the session key (read via sessionKey()).
         CLOG(INFO) << "Session key is ready";
-        emit sig_keyChanged();
+        setSessionKeyReady();
     }
 
     return true;
@@ -405,7 +405,7 @@ void ClientAuthenticator::sendClientKeyExchange()
     appendTranscript(key.toByteArray());
 
     CLOG(INFO) << "Session key is ready";
-    emit sig_keyChanged();
+    setSessionKeyReady();
 }
 
 //--------------------------------------------------------------------------------------------------

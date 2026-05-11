@@ -76,8 +76,10 @@ public:
     [[nodiscard]] State state() const { return state_; }
 
     // The session key is the digest of every secret and handshake message that was fed into the
-    // transcript hash via appendTranscript(). Channels read it after sig_keyChanged().
-    [[nodiscard]] QByteArray sessionKey() const { return transcript_hash_.result(); }
+    // transcript hash via appendTranscript(). Channels read it after sig_keyChanged(). Returns an
+    // empty array until setSessionKeyReady() has been called, so accidental reads before the handshake
+    // has finalized the key fail early instead of silently producing a partial-state digest.
+    [[nodiscard]] QByteArray sessionKey() const;
     [[nodiscard]] const QByteArray& encryptIv() const { return encrypt_iv_; }
     [[nodiscard]] const QByteArray& decryptIv() const { return decrypt_iv_; }
 
@@ -101,6 +103,10 @@ protected:
     // the resulting key matches pre-transcript-binding wire compatibility.
     void appendTranscript(const QByteArray& data);
 
+    // Marks the transcript as finalized: subsequent sessionKey() calls return the digest, and the
+    // sig_keyChanged signal is emitted so channels can install their encryptor/decryptor.
+    void setSessionKeyReady();
+
     void finish(const Location& location, ErrorCode error_code);
     void setPeerVersion(const proto::peer::Version& version);
     void setPeerOsName(const QString& name);
@@ -119,6 +125,7 @@ protected:
 
 private:
     GenericHash transcript_hash_;
+    bool key_ready_ = false;
     QTimer* timer_ = nullptr;
     State state_ = State::STOPPED;
     QVersionNumber peer_version_; // Remote peer version.

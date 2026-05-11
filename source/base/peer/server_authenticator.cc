@@ -322,7 +322,7 @@ void ServerAuthenticator::onClientHello(const QByteArray& buffer)
         // Transcript now contains x25519_secret || ClientHello || ServerHello. That is the
         // session key (read via sessionKey()).
         CLOG(INFO) << "Session key is ready";
-        emit sig_keyChanged();
+        setSessionKeyReady();
     }
 
     switch (identify_)
@@ -497,7 +497,7 @@ void ServerAuthenticator::onClientKeyExchange(const QByteArray& buffer)
     }
 
     CLOG(INFO) << "Session key is ready";
-    emit sig_keyChanged();
+    setSessionKeyReady();
 
     doSessionChallenge();
 }

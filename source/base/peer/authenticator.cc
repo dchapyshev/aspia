@@ -78,6 +78,12 @@ void Authenticator::start()
 }
 
 //--------------------------------------------------------------------------------------------------
+QByteArray Authenticator::sessionKey() const
+{
+    return key_ready_ ? transcript_hash_.result() : QByteArray();
+}
+
+//--------------------------------------------------------------------------------------------------
 void Authenticator::onIncomingMessage(const QByteArray& data)
 {
     if (state() != State::PENDING)
@@ -89,6 +95,13 @@ void Authenticator::onIncomingMessage(const QByteArray& data)
 void Authenticator::appendTranscript(const QByteArray& data)
 {
     transcript_hash_.addData(data);
+}
+
+//--------------------------------------------------------------------------------------------------
+void Authenticator::setSessionKeyReady()
+{
+    key_ready_ = true;
+    emit sig_keyChanged();
 }
 
 //--------------------------------------------------------------------------------------------------
