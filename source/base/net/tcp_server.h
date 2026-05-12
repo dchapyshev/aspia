@@ -24,6 +24,8 @@
 
 #include <asio/ip/tcp.hpp>
 
+#include <chrono>
+
 #include "base/shared_pointer.h"
 #include "base/peer/user_list_base.h"
 #include "base/peer/server_authenticator.h"
@@ -46,6 +48,11 @@ public:
 
     void setAnonymousAccess(
         ServerAuthenticator::AnonymousAccess anonymous_access, quint32 session_types);
+
+    // Maximum number of handshakes that may be in progress simultaneously. New TCP connections
+    // are accepted and immediately closed once the cap is reached. Defaults to 32 - tuned for a
+    // single host. The router serves many peers and should raise this (e.g. to 128).
+    void setMaxPendingConnections(int max_pending);
 
     void start(quint16 port, const QString& iface = QString());
 
@@ -73,6 +80,14 @@ private:
         ServerAuthenticator::AnonymousAccess::DISABLE;
 
     quint32 anonymous_session_types_ = 0;
+    int max_pending_connections_ = 32;
+
+    // Rate-limited logging for the rejection path: an attacker can otherwise flood the log
+    // file by hammering the accept loop. We emit at most one warning per kMinLogInterval and
+    // accumulate a count of suppressed rejections in between. Default-constructed time_point
+    // (epoch of steady_clock) is used as the "never logged yet" sentinel.
+    std::chrono::steady_clock::time_point last_limit_warning_;
+    int rejected_since_last_log_ = 0;
 
     QQueue<TcpChannel*> pending_;
     QQueue<TcpChannel*> ready_;

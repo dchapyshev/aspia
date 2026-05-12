@@ -66,6 +66,18 @@ void TcpServer::setAnonymousAccess(
 }
 
 //--------------------------------------------------------------------------------------------------
+void TcpServer::setMaxPendingConnections(int max_pending)
+{
+    if (max_pending <= 0)
+    {
+        LOG(ERROR) << "Invalid max pending connections:" << max_pending;
+        return;
+    }
+
+    max_pending_connections_ = max_pending;
+}
+
+//--------------------------------------------------------------------------------------------------
 void TcpServer::start(quint16 port, const QString& iface)
 {
     if (acceptor_.is_open())
@@ -192,6 +204,27 @@ void TcpServer::doAccept()
         else
         {
             accept_error_count_ = 0;
+
+            if (pending_.size() >= max_pending_connections_)
+            {
+                ++rejected_since_last_log_;
+
+                constexpr std::chrono::minutes kMinLogInterval{ 1 };
+                const auto now = std::chrono::steady_clock::now();
+                if (last_limit_warning_ == std::chrono::steady_clock::time_point() ||
+                    (now - last_limit_warning_) >= kMinLogInterval)
+                {
+                    LOG(WARNING) << "Pending connection limit reached (" << pending_.size()
+                                 << "); rejected " << rejected_since_last_log_
+                                 << " connection(s) since last warning";
+                    rejected_since_last_log_ = 0;
+                    last_limit_warning_ = now;
+                }
+
+                // socket goes out of scope here - asio's destructor closes the descriptor.
+                doAccept();
+                return;
+            }
 
             QPointer<ServerAuthenticator> authenticator = new ServerAuthenticator();
             authenticator->setUserList(user_list_);
