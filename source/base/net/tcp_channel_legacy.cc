@@ -35,7 +35,7 @@
 namespace {
 
 const int kWriteQueueReservedSize = 128;
-const TcpChannelLegacy::Seconds kKeepAliveInterval { 60 };
+const TcpChannelLegacy::Seconds kKeepAliveInterval { 30 };
 const TcpChannelLegacy::Seconds kKeepAliveTimeout { 30 };
 
 //--------------------------------------------------------------------------------------------------

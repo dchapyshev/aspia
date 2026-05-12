@@ -37,7 +37,7 @@ namespace {
 
 const qint64 kWriteQueueReservedSize = 128;
 const qint64 kWritePoolReservedSize = 32;
-const TcpChannelNG::Seconds kKeepAliveInterval { 60 };
+const TcpChannelNG::Seconds kKeepAliveInterval { 30 };
 const TcpChannelNG::Seconds kKeepAliveTimeout { 30 };
 
 //--------------------------------------------------------------------------------------------------
