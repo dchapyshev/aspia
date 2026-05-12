@@ -419,6 +419,8 @@ list(APPEND SOURCE_BASE_NET
     net/address.h
     net/curl_util.cc
     net/curl_util.h
+    net/flood_guard.cc
+    net/flood_guard.h
     net/net_utils.cc
     net/net_utils.h
     net/tcp_channel.cc
@@ -448,7 +450,8 @@ endif()
 
 list(APPEND SOURCE_BASE_NET_TESTS
     net/address_unittest.cc
-    net/anti_replay_window_unittest.cc)
+    net/anti_replay_window_unittest.cc
+    net/flood_guard_unittest.cc)
 
 list(APPEND SOURCE_BASE_PEER
     peer/authenticator.cc
