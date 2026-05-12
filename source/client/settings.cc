@@ -49,6 +49,7 @@ const QString kOpenSessionsInTabsParam = "open_sessions_in_tabs";
 const QString kRecordingPathParam = "recording_path";
 const QString kRecordSessionsParam = "record_sessions";
 const QString kSendKeyCombinationsParam = "send_key_combinations";
+const QString kUdpAllowedParam = "udp_allowed";
 const QString kTabStateParam = "tab_state";
 const QString kGroupExpandedParam = "group_expanded";
 
@@ -271,6 +272,18 @@ bool Settings::sendKeyCombinations() const
 void Settings::setSendKeyCombinations(bool enable)
 {
     settings_.setValue(kSendKeyCombinationsParam, enable);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Settings::isUdpAllowed() const
+{
+    return settings_.value(kUdpAllowedParam, true).toBool();
+}
+
+//--------------------------------------------------------------------------------------------------
+void Settings::setUdpAllowed(bool enable)
+{
+    settings_.setValue(kUdpAllowedParam, enable);
 }
 
 //--------------------------------------------------------------------------------------------------

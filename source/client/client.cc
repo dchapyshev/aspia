@@ -35,6 +35,7 @@
 #include "base/peer/client_authenticator_legacy.h"
 #include "base/peer/relay_peer.h"
 #include "base/peer/stun_peer.h"
+#include "client/settings.h"
 #include "proto/key_exchange.h"
 #include "proto/peer.h"
 #include "proto/router_peer.h"
@@ -631,6 +632,12 @@ void Client::readDirectUdpRequest(const proto::peer::DirectUdpRequest& request)
     if (qEnvironmentVariableIsSet("ASPIA_DISABLE_UDP"))
     {
         CLOG(INFO) << "UDP is disable by environment variable";
+        return;
+    }
+
+    if (!Settings().isUdpAllowed())
+    {
+        CLOG(INFO) << "UDP is disabled by user settings";
         return;
     }
 

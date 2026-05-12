@@ -818,9 +818,6 @@ void Service::startClient(const PendingConfirmation& pending)
         return;
     }
 
-    if (!settings_.isUdpAllowed())
-        client_to_start->setFeature(Client::FEATURE_UDP, false);
-
     SLOG(CONNECT) << shortSessionType(client_to_start->sessionType(), client_to_start->clientId())
                   << "user:" << client_to_start->userName()
                   << "(display name" << client_to_start->displayName()

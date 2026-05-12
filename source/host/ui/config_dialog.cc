@@ -110,11 +110,6 @@ ConfigDialog::ConfigDialog(QWidget* parent)
     connect(ui->spinbox_port, QOverload<int>::of(&QSpinBox::valueChanged),
             this, &ConfigDialog::onConfigChanged);
 
-    connect(ui->checkbox_allow_udp, &QCheckBox::toggled, this, [this]()
-    {
-        setConfigChanged(FROM_HERE, true);
-    });
-
     connect(ui->button_import, &QPushButton::clicked, this, &ConfigDialog::onImport);
     connect(ui->button_export, &QPushButton::clicked, this, &ConfigDialog::onExport);
 
@@ -612,7 +607,6 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
         // Update the parameters.
         settings.setApplicationShutdownDisabled(ui->checkbox_disable_shutdown->isChecked());
         settings.setTcpPort(static_cast<quint16>(ui->spinbox_port->value()));
-        settings.setUdpAllowed(ui->checkbox_allow_udp->isChecked());
         settings.setUserList(*user_list);
         settings.setAutoUpdateEnabled(ui->checkbox_auto_update->isChecked());
         settings.setUpdateCheckFrequency(ui->combobox_update_check_freq->currentData().toInt());
@@ -687,7 +681,6 @@ void ConfigDialog::reloadAll()
 {
     SystemSettings settings;
 
-    ui->checkbox_allow_udp->setChecked(settings.isUdpAllowed());
     ui->checkbox_auto_update->setChecked(settings.isAutoUpdateEnabled());
 
     int item_index = ui->combobox_update_check_freq->findData(settings.updateCheckFrequency());

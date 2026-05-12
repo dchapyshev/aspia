@@ -57,6 +57,7 @@ private slots:
     void onLanguageChanged();
     void onThemeChanged();
     void onDisplayNameChanged();
+    void onAllowUdpChanged();
     void onDesktopFeatureChanged();
     void onRecordAutostartChanged();
     void onRecordingPathChanged();

@@ -68,8 +68,6 @@ const QString kConnectConfirmationNoUserAction = "connect_confirmation/no_user_a
 const QString kConnectConfirmationAutoConfirmationInterval =
     "connect_confirmation/auto_confirmation_interval";
 
-const QString kAllowUDP = "allow_udp";
-
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -489,16 +487,4 @@ int SystemSettings::updateCheckFrequency() const
 void SystemSettings::setUpdateCheckFrequency(int days)
 {
     settings_.setValue(kUpdateCheckFrequency, days);
-}
-
-//--------------------------------------------------------------------------------------------------
-bool SystemSettings::isUdpAllowed() const
-{
-    return settings_.value(kAllowUDP, true).toBool();
-}
-
-//--------------------------------------------------------------------------------------------------
-void SystemSettings::setUdpAllowed(bool enable)
-{
-    settings_.setValue(kAllowUDP, enable);
 }

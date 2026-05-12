@@ -118,6 +118,7 @@ SettingsTab::SettingsTab(QWidget* parent)
     }
 
     ui->edit_display_name->setText(db.displayName());
+    ui->checkbox_allow_udp->setChecked(settings.isUdpAllowed());
 
     // Desktop page.
     proto::control::Config desktop_config = settings.desktopConfig();
@@ -162,6 +163,7 @@ SettingsTab::SettingsTab(QWidget* parent)
             this, &SettingsTab::onThemeChanged);
     connect(ui->edit_display_name, &QLineEdit::editingFinished,
             this, &SettingsTab::onDisplayNameChanged);
+    connect(ui->checkbox_allow_udp, &QCheckBox::toggled, this, &SettingsTab::onAllowUdpChanged);
     connect(ui->button_change_master_password, &QPushButton::clicked,
             this, &SettingsTab::onChangeMasterPassword);
 
@@ -297,6 +299,13 @@ void SettingsTab::onDisplayNameChanged()
 {
     LOG(INFO) << "[ACTION] Display name changed";
     Database::instance().setDisplayName(ui->edit_display_name->text());
+}
+
+//--------------------------------------------------------------------------------------------------
+void SettingsTab::onAllowUdpChanged()
+{
+    LOG(INFO) << "[ACTION] Allow UDP changed";
+    Settings().setUdpAllowed(ui->checkbox_allow_udp->isChecked());
 }
 
 //--------------------------------------------------------------------------------------------------

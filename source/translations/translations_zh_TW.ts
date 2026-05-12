@@ -760,32 +760,32 @@ Routers added: %4</source>
         <translation>Aspia Client</translation>
     </message>
     <message>
-        <location filename="../client/client.cc" line="481"/>
+        <location filename="../client/client.cc" line="499"/>
         <source>The host with the specified ID is not online</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/client.cc" line="484"/>
+        <location filename="../client/client.cc" line="502"/>
         <source>Access is denied</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/client.cc" line="487"/>
+        <location filename="../client/client.cc" line="505"/>
         <source>There are no relays available or the key pool is empty</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/client.cc" line="490"/>
+        <location filename="../client/client.cc" line="508"/>
         <source>Unknown error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/client.cc" line="528"/>
+        <location filename="../client/client.cc" line="546"/>
         <source>Connection to the router has been lost.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/client.cc" line="570"/>
+        <location filename="../client/client.cc" line="588"/>
         <source>Failed to connect to the relay server</source>
         <translation type="unfinished"></translation>
     </message>
@@ -857,7 +857,7 @@ Routers added: %4</source>
     <name>ConfigDialog</name>
     <message>
         <location filename="../host/ui/config_dialog.ui" line="14"/>
-        <location filename="../host/ui/config_dialog.ui" line="175"/>
+        <location filename="../host/ui/config_dialog.ui" line="168"/>
         <source>Settings</source>
         <translation>設定</translation>
     </message>
@@ -877,340 +877,335 @@ Routers added: %4</source>
         <translation>連入通訊埠：</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="93"/>
+        <location filename="../host/ui/config_dialog.ui" line="86"/>
         <source>Update Server</source>
         <translation>更新伺服器</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="120"/>
+        <location filename="../host/ui/config_dialog.ui" line="113"/>
         <source>Use custom update server</source>
         <translation>使用自訂更新伺服器</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="129"/>
+        <location filename="../host/ui/config_dialog.ui" line="122"/>
         <source>Server:</source>
         <translation>伺服器：</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="163"/>
+        <location filename="../host/ui/config_dialog.ui" line="156"/>
         <source>Check for updates</source>
         <translation>檢查更新</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="364"/>
+        <location filename="../host/ui/config_dialog.ui" line="357"/>
         <source>Other</source>
         <translation>其他</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="194"/>
+        <location filename="../host/ui/config_dialog.ui" line="187"/>
         <source>Import settings</source>
         <translation>匯入設定</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="69"/>
-        <source>Allow UDP connections</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../host/ui/config_dialog.ui" line="201"/>
+        <location filename="../host/ui/config_dialog.ui" line="194"/>
         <source>Export settings</source>
         <translation>匯出設定</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="225"/>
+        <location filename="../host/ui/config_dialog.ui" line="218"/>
         <source>Security</source>
         <translation>安全性</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="231"/>
+        <location filename="../host/ui/config_dialog.ui" line="224"/>
         <source>Password Protection of Settings</source>
         <translation>以密碼保護設定</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="250"/>
+        <location filename="../host/ui/config_dialog.ui" line="243"/>
         <source>Change password</source>
         <translation>變更密碼</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="267"/>
+        <location filename="../host/ui/config_dialog.ui" line="260"/>
         <source>One-time Password</source>
         <translation>一次性密碼</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="273"/>
+        <location filename="../host/ui/config_dialog.ui" line="266"/>
         <source>Enable one-time password</source>
         <translation>啟用一次性密碼</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="282"/>
+        <location filename="../host/ui/config_dialog.ui" line="275"/>
         <source>Change password:</source>
         <translation>變更密碼：</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="292"/>
+        <location filename="../host/ui/config_dialog.ui" line="285"/>
         <source>Characters:</source>
         <translation>字元：</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="302"/>
+        <location filename="../host/ui/config_dialog.ui" line="295"/>
         <source>Characters count:</source>
         <translation>字元長度：</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="324"/>
+        <location filename="../host/ui/config_dialog.ui" line="317"/>
         <source>Connection Confirmation</source>
         <translation>連線確認</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="330"/>
+        <location filename="../host/ui/config_dialog.ui" line="323"/>
         <source>Require confirmation when connected to a computer</source>
         <translation>連線到電腦時要求確認</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="339"/>
+        <location filename="../host/ui/config_dialog.ui" line="332"/>
         <source>Automatic confirmation of connection via:</source>
         <translation>在超過此時間後自動接受連線：</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="349"/>
+        <location filename="../host/ui/config_dialog.ui" line="342"/>
         <source>If there is no active user:</source>
         <translation>若無正在活動的使用者：</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="370"/>
+        <location filename="../host/ui/config_dialog.ui" line="363"/>
         <source>Disable Aspia shutdown</source>
         <translation>停用 Aspia 關閉</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="394"/>
+        <location filename="../host/ui/config_dialog.ui" line="387"/>
         <source>Router</source>
         <translation>路由器</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="400"/>
+        <location filename="../host/ui/config_dialog.ui" line="393"/>
         <source>Enable the use of a router</source>
         <translation>啟用路由器的使用</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="412"/>
+        <location filename="../host/ui/config_dialog.ui" line="405"/>
         <source>Address:</source>
         <translation>位址：</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="431"/>
+        <location filename="../host/ui/config_dialog.ui" line="424"/>
         <source>Public Key:</source>
         <translation>公開金鑰：</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="445"/>
+        <location filename="../host/ui/config_dialog.ui" line="438"/>
         <source>A router is required to connect to a computer if there is no direct connection (bypass NAT). Aspia does not provide a public router, but you can install your own. You can download the router on the &lt;a href=&quot;https://aspia.org&quot;&gt;official website&lt;/a&gt;.</source>
         <translation>當無法直接連線（繞過 NAT）到電腦時，就需要透過路由器進行連接。Aspia 不提供公共路由，但您可以自行搭建。您可從&lt;a href=&quot;https://aspia.org&quot;&gt;官網&lt;/a&gt;下載路由器。</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="462"/>
-        <location filename="../host/ui/config_dialog.ui" line="573"/>
+        <location filename="../host/ui/config_dialog.ui" line="455"/>
+        <location filename="../host/ui/config_dialog.ui" line="566"/>
         <source>Users</source>
         <translation>使用者</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="476"/>
+        <location filename="../host/ui/config_dialog.ui" line="469"/>
         <source>Add new user</source>
         <translation>新增使用者</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="502"/>
+        <location filename="../host/ui/config_dialog.ui" line="495"/>
         <source>Edit user</source>
         <translation>編輯使用者</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="528"/>
+        <location filename="../host/ui/config_dialog.ui" line="521"/>
         <source>Delete user</source>
         <translation>刪除使用者</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="78"/>
+        <location filename="../host/ui/config_dialog.ui" line="71"/>
         <source>Preffered video capturer:</source>
         <translation>偏好的視訊擷取器：</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="596"/>
+        <location filename="../host/ui/config_dialog.ui" line="589"/>
         <source>Add</source>
         <translation>新增</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="605"/>
+        <location filename="../host/ui/config_dialog.ui" line="598"/>
         <source>Modify</source>
         <translation>修改</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="614"/>
+        <location filename="../host/ui/config_dialog.ui" line="607"/>
         <source>Delete</source>
         <translation>刪除</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="99"/>
+        <location filename="../host/ui/config_dialog.ui" line="92"/>
         <source>Automatic checking and installation of updates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.ui" line="108"/>
+        <location filename="../host/ui/config_dialog.ui" line="101"/>
         <source>Check for updates:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="121"/>
+        <location filename="../host/ui/config_dialog.cc" line="116"/>
         <source>Once a day</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="122"/>
+        <location filename="../host/ui/config_dialog.cc" line="117"/>
         <source>Once a week</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="123"/>
+        <location filename="../host/ui/config_dialog.cc" line="118"/>
         <source>Once a month</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="159"/>
+        <location filename="../host/ui/config_dialog.cc" line="154"/>
         <source>Default</source>
         <translation type="unfinished">預設</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="200"/>
+        <location filename="../host/ui/config_dialog.cc" line="195"/>
         <source>On reboot</source>
         <translation type="unfinished">重開機時</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="201"/>
+        <location filename="../host/ui/config_dialog.cc" line="196"/>
         <source>Every 5 minutes</source>
         <translation type="unfinished">每 5 分鐘</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="202"/>
+        <location filename="../host/ui/config_dialog.cc" line="197"/>
         <source>Every 30 minutes</source>
         <translation type="unfinished">每 30 分鐘</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="203"/>
+        <location filename="../host/ui/config_dialog.cc" line="198"/>
         <source>Every 1 hour</source>
         <translation type="unfinished">每 1 小時</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="204"/>
+        <location filename="../host/ui/config_dialog.cc" line="199"/>
         <source>Every 6 hours</source>
         <translation type="unfinished">每 6 小時</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="205"/>
+        <location filename="../host/ui/config_dialog.cc" line="200"/>
         <source>Every 12 hours</source>
         <translation type="unfinished">每 12 小時</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="206"/>
+        <location filename="../host/ui/config_dialog.cc" line="201"/>
         <source>Every 24 hours</source>
         <translation type="unfinished">每 24 小時</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="214"/>
+        <location filename="../host/ui/config_dialog.cc" line="209"/>
         <source>Letters and digits</source>
         <translation type="unfinished">字母及數字</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="217"/>
+        <location filename="../host/ui/config_dialog.cc" line="212"/>
         <source>Letters</source>
         <translation type="unfinished">字母</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="219"/>
+        <location filename="../host/ui/config_dialog.cc" line="214"/>
         <source>Digits</source>
         <translation type="unfinished">數字</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="236"/>
+        <location filename="../host/ui/config_dialog.cc" line="231"/>
         <source>Never</source>
         <translation type="unfinished">永不</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="237"/>
+        <location filename="../host/ui/config_dialog.cc" line="232"/>
         <source>15 seconds</source>
         <translation type="unfinished">15 秒</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="238"/>
+        <location filename="../host/ui/config_dialog.cc" line="233"/>
         <source>30 seconds</source>
         <translation type="unfinished">30 秒</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="239"/>
+        <location filename="../host/ui/config_dialog.cc" line="234"/>
         <source>45 seconds</source>
         <translation type="unfinished">45 秒</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="240"/>
+        <location filename="../host/ui/config_dialog.cc" line="235"/>
         <source>60 seconds</source>
         <translation type="unfinished">60 秒</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="248"/>
+        <location filename="../host/ui/config_dialog.cc" line="243"/>
         <source>Accept connection</source>
         <translation type="unfinished">接受連線</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="250"/>
+        <location filename="../host/ui/config_dialog.cc" line="245"/>
         <source>Reject connection</source>
         <translation type="unfinished">拒絕連線</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="436"/>
+        <location filename="../host/ui/config_dialog.cc" line="431"/>
         <source>Are you sure you want to delete user &quot;%1&quot;?</source>
         <translation type="unfinished">您確定要刪除使用者 &quot;%1&quot; 嗎？</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="471"/>
-        <location filename="../host/ui/config_dialog.cc" line="506"/>
+        <location filename="../host/ui/config_dialog.cc" line="466"/>
+        <location filename="../host/ui/config_dialog.cc" line="501"/>
         <source>An error occurred while processing the password.</source>
         <translation type="unfinished">處理密碼時發生錯誤。</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="525"/>
+        <location filename="../host/ui/config_dialog.cc" line="520"/>
         <source>Import</source>
         <translation type="unfinished">匯入</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="525"/>
-        <location filename="../host/ui/config_dialog.cc" line="542"/>
+        <location filename="../host/ui/config_dialog.cc" line="520"/>
+        <location filename="../host/ui/config_dialog.cc" line="537"/>
         <source>JSON-files (*.json)</source>
         <translation type="unfinished">JSON-檔案 (*.json)</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="542"/>
+        <location filename="../host/ui/config_dialog.cc" line="537"/>
         <source>Export</source>
         <translation type="unfinished">匯出</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="567"/>
+        <location filename="../host/ui/config_dialog.cc" line="562"/>
         <source>The configuration can not be written. Make sure that you have sufficient rights to write.</source>
         <translation type="unfinished">無法寫入配置。請確認您有足夠的寫入權限。</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="581"/>
+        <location filename="../host/ui/config_dialog.cc" line="576"/>
         <source>Incorrect router address entered.</source>
         <translation type="unfinished">輸入了不正確的路由器位址。</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="591"/>
+        <location filename="../host/ui/config_dialog.cc" line="586"/>
         <source>Incorrect router public key entered.</source>
         <translation type="unfinished">輸入了不正確的公開金鑰。</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="760"/>
+        <location filename="../host/ui/config_dialog.cc" line="753"/>
         <source>Install</source>
         <translation type="unfinished">安裝</translation>
     </message>
     <message>
-        <location filename="../host/ui/config_dialog.cc" line="765"/>
+        <location filename="../host/ui/config_dialog.cc" line="758"/>
         <source>Remove</source>
         <translation type="unfinished">移除</translation>
     </message>
@@ -1590,17 +1585,17 @@ Routers added: %4</source>
 <context>
     <name>DesktopWindow</name>
     <message>
-        <location filename="../client/ui/desktop/desktop_window.cc" line="806"/>
+        <location filename="../client/ui/desktop/desktop_window.cc" line="805"/>
         <source>Save File</source>
         <translation type="unfinished">儲存檔案</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_window.cc" line="808"/>
+        <location filename="../client/ui/desktop/desktop_window.cc" line="807"/>
         <source>PNG Image (*.png);;BMP Image (*.bmp)</source>
         <translation type="unfinished">PNG 影像 (*.png);;BMP 影像 (*.bmp)</translation>
     </message>
     <message>
-        <location filename="../client/ui/desktop/desktop_window.cc" line="839"/>
+        <location filename="../client/ui/desktop/desktop_window.cc" line="838"/>
         <source>Could not save image</source>
         <translation type="unfinished">無法儲存影像</translation>
     </message>
@@ -2400,18 +2395,18 @@ Routers added: %4</source>
     <name>FileTransferWindow</name>
     <message>
         <location filename="../client/ui/file_transfer/file_transfer_window.cc" line="46"/>
-        <location filename="../client/ui/file_transfer/file_transfer_window.cc" line="259"/>
+        <location filename="../client/ui/file_transfer/file_transfer_window.cc" line="258"/>
         <source>Local Computer</source>
         <translation type="unfinished">本地電腦</translation>
     </message>
     <message>
         <location filename="../client/ui/file_transfer/file_transfer_window.cc" line="47"/>
-        <location filename="../client/ui/file_transfer/file_transfer_window.cc" line="260"/>
+        <location filename="../client/ui/file_transfer/file_transfer_window.cc" line="259"/>
         <source>Remote Computer</source>
         <translation type="unfinished">遠端電腦</translation>
     </message>
     <message>
-        <location filename="../client/ui/file_transfer/file_transfer_window.cc" line="172"/>
+        <location filename="../client/ui/file_transfer/file_transfer_window.cc" line="171"/>
         <source>Session error: %1</source>
         <translation type="unfinished">工作階段錯誤：%1</translation>
     </message>
@@ -2921,86 +2916,86 @@ Routers added: %4</source>
         <translation type="unfinished">主機</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="546"/>
-        <location filename="../client/ui/hosts_tab.cc" line="592"/>
-        <location filename="../client/ui/hosts_tab.cc" line="667"/>
-        <location filename="../client/ui/hosts_tab.cc" line="698"/>
-        <location filename="../client/ui/hosts_tab.cc" line="741"/>
+        <location filename="../client/ui/hosts_tab.cc" line="545"/>
+        <location filename="../client/ui/hosts_tab.cc" line="590"/>
+        <location filename="../client/ui/hosts_tab.cc" line="664"/>
+        <location filename="../client/ui/hosts_tab.cc" line="695"/>
+        <location filename="../client/ui/hosts_tab.cc" line="738"/>
         <source>Failed to retrieve computer information from the local database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="702"/>
+        <location filename="../client/ui/hosts_tab.cc" line="699"/>
         <source>(copy)</source>
         <translation type="unfinished">(複製)</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="706"/>
+        <location filename="../client/ui/hosts_tab.cc" line="703"/>
         <source>Failed to add the computer to the local database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="745"/>
+        <location filename="../client/ui/hosts_tab.cc" line="742"/>
         <source>Are you sure you want to delete computer &quot;%1&quot;?</source>
         <translation type="unfinished">您確定要刪除電腦「%1」嗎?</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="755"/>
+        <location filename="../client/ui/hosts_tab.cc" line="752"/>
         <source>Unable to remove computer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="791"/>
-        <location filename="../client/ui/hosts_tab.cc" line="816"/>
-        <location filename="../client/ui/hosts_tab.cc" line="841"/>
+        <location filename="../client/ui/hosts_tab.cc" line="788"/>
+        <location filename="../client/ui/hosts_tab.cc" line="813"/>
+        <location filename="../client/ui/hosts_tab.cc" line="838"/>
         <source>Copy Row</source>
         <translation type="unfinished">複製列</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="792"/>
-        <location filename="../client/ui/hosts_tab.cc" line="817"/>
-        <location filename="../client/ui/hosts_tab.cc" line="842"/>
+        <location filename="../client/ui/hosts_tab.cc" line="789"/>
+        <location filename="../client/ui/hosts_tab.cc" line="814"/>
+        <location filename="../client/ui/hosts_tab.cc" line="839"/>
         <source>Copy Value</source>
         <translation type="unfinished">複製值</translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="920"/>
+        <location filename="../client/ui/hosts_tab.cc" line="917"/>
         <source>Import Old Address Book</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="922"/>
+        <location filename="../client/ui/hosts_tab.cc" line="919"/>
         <source>Address Book (*.aab);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="945"/>
+        <location filename="../client/ui/hosts_tab.cc" line="942"/>
         <source>Export Address Book</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="947"/>
-        <location filename="../client/ui/hosts_tab.cc" line="974"/>
+        <location filename="../client/ui/hosts_tab.cc" line="944"/>
+        <location filename="../client/ui/hosts_tab.cc" line="971"/>
         <source>Address Book (*.json);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="972"/>
+        <location filename="../client/ui/hosts_tab.cc" line="969"/>
         <source>Import Address Book</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="1283"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1280"/>
         <source>The router associated with this computer has been deleted. Edit the computer to select another router or switch to direct connection.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="1290"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1287"/>
         <source>The computer has an invalid host ID.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/hosts_tab.cc" line="1299"/>
+        <location filename="../client/ui/hosts_tab.cc" line="1296"/>
         <source>The computer has an incorrect address.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3448,7 +3443,7 @@ Computers skipped: %6</source>
     </message>
     <message>
         <location filename="../client/ui/main_window.ui" line="14"/>
-        <location filename="../client/ui/main_window.cc" line="277"/>
+        <location filename="../client/ui/main_window.cc" line="273"/>
         <source>Aspia Client</source>
         <translation type="unfinished">Aspia Client</translation>
     </message>
@@ -3502,23 +3497,23 @@ Computers skipped: %6</source>
         <translation type="vanished">隱藏</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.cc" line="77"/>
-        <location filename="../client/ui/main_window.cc" line="241"/>
+        <location filename="../client/ui/main_window.cc" line="76"/>
+        <location filename="../client/ui/main_window.cc" line="237"/>
         <source>Search...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.cc" line="143"/>
+        <location filename="../client/ui/main_window.cc" line="139"/>
         <source>Hosts</source>
         <translation type="unfinished">主機</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.cc" line="263"/>
+        <location filename="../client/ui/main_window.cc" line="259"/>
         <source>Settings</source>
         <translation type="unfinished">設定</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.cc" line="345"/>
+        <location filename="../client/ui/main_window.cc" line="340"/>
         <source>Connection by ID is specified in the properties of the computer, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation type="unfinished">指定使用 ID 連線，但未配置路由器。請在通訊錄的屬性中檢查路由器的參數。</translation>
     </message>
@@ -4763,125 +4758,135 @@ Computers skipped: %6</source>
     </message>
     <message>
         <location filename="../client/ui/settings_tab.ui" line="141"/>
+        <source>Connections</source>
+        <translation type="unfinished">連線</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_tab.ui" line="147"/>
+        <source>Allow UDP connections</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/settings_tab.ui" line="157"/>
         <source>Master Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.ui" line="160"/>
+        <location filename="../client/ui/settings_tab.ui" line="176"/>
         <source>Change...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.ui" line="207"/>
+        <location filename="../client/ui/settings_tab.ui" line="223"/>
         <source>Features</source>
         <translation type="unfinished">功能</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.ui" line="213"/>
+        <location filename="../client/ui/settings_tab.ui" line="229"/>
         <source>Enable audio</source>
         <translation type="unfinished">啟用音訊</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.ui" line="220"/>
+        <location filename="../client/ui/settings_tab.ui" line="236"/>
         <source>Enable clipboard</source>
         <translation type="unfinished">啟用剪貼簿</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.ui" line="227"/>
+        <location filename="../client/ui/settings_tab.ui" line="243"/>
         <source>Show shape of remote cursor</source>
         <translation type="unfinished">顯示遠端游標形狀</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.ui" line="234"/>
+        <location filename="../client/ui/settings_tab.ui" line="250"/>
         <source>Show position of remote cursor</source>
         <translation type="unfinished">顯示遠端游標位置</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.ui" line="241"/>
+        <location filename="../client/ui/settings_tab.ui" line="257"/>
         <source>Disable desktop effects</source>
         <translation type="unfinished">停用桌面特效</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.ui" line="248"/>
+        <location filename="../client/ui/settings_tab.ui" line="264"/>
         <source>Disable desktop wallpaper</source>
         <translation type="unfinished">停用桌布</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.ui" line="255"/>
+        <location filename="../client/ui/settings_tab.ui" line="271"/>
         <source>Lock computer at disconnect</source>
         <translation type="unfinished">在中斷連線時鎖定電腦</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.ui" line="262"/>
+        <location filename="../client/ui/settings_tab.ui" line="278"/>
         <source>Block remote input</source>
         <translation type="unfinished">阻止遠端輸入</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.ui" line="269"/>
+        <location filename="../client/ui/settings_tab.ui" line="285"/>
         <source>Send key combinations</source>
         <translation type="unfinished">發送按鍵組合</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.ui" line="285"/>
+        <location filename="../client/ui/settings_tab.ui" line="301"/>
         <source>Recording</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.ui" line="291"/>
+        <location filename="../client/ui/settings_tab.ui" line="307"/>
         <source>Automatically start recording sessions on connection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.ui" line="300"/>
+        <location filename="../client/ui/settings_tab.ui" line="316"/>
         <source>Write path:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.ui" line="372"/>
+        <location filename="../client/ui/settings_tab.ui" line="388"/>
         <location filename="../client/ui/settings_tab.cc" line="79"/>
-        <location filename="../client/ui/settings_tab.cc" line="244"/>
+        <location filename="../client/ui/settings_tab.cc" line="246"/>
         <source>Update</source>
         <translation type="unfinished">更新</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.ui" line="378"/>
+        <location filename="../client/ui/settings_tab.ui" line="394"/>
         <source>Check for updates on startup</source>
         <translation type="unfinished">啟動時檢查更新</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.ui" line="385"/>
+        <location filename="../client/ui/settings_tab.ui" line="401"/>
         <source>Use custom update server</source>
         <translation type="unfinished">使用自訂更新伺服器</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.ui" line="394"/>
+        <location filename="../client/ui/settings_tab.ui" line="410"/>
         <source>Server:</source>
         <translation type="unfinished">伺服器：</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.ui" line="421"/>
+        <location filename="../client/ui/settings_tab.ui" line="437"/>
         <source>Check for updates</source>
         <translation type="unfinished">檢查更新</translation>
     </message>
     <message>
         <location filename="../client/ui/settings_tab.cc" line="76"/>
-        <location filename="../client/ui/settings_tab.cc" line="239"/>
+        <location filename="../client/ui/settings_tab.cc" line="241"/>
         <source>General</source>
         <translation type="unfinished">一般</translation>
     </message>
     <message>
         <location filename="../client/ui/settings_tab.cc" line="77"/>
-        <location filename="../client/ui/settings_tab.cc" line="241"/>
+        <location filename="../client/ui/settings_tab.cc" line="243"/>
         <source>Desktop</source>
         <translation type="unfinished">桌面</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.cc" line="254"/>
+        <location filename="../client/ui/settings_tab.cc" line="256"/>
         <source>Settings</source>
         <translation type="unfinished">設定</translation>
     </message>
     <message>
-        <location filename="../client/ui/settings_tab.cc" line="330"/>
+        <location filename="../client/ui/settings_tab.cc" line="339"/>
         <source>Choose path</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7011,122 +7016,122 @@ Computers skipped: %6</source>
         <translation type="unfinished">F5</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_window.cc" line="445"/>
+        <location filename="../client/ui/sys_info/system_info_window.cc" line="444"/>
         <source>Summary</source>
         <translation type="unfinished">概要</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_window.cc" line="452"/>
+        <location filename="../client/ui/sys_info/system_info_window.cc" line="451"/>
         <source>Hardware</source>
         <translation type="unfinished">硬體</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_window.cc" line="455"/>
+        <location filename="../client/ui/sys_info/system_info_window.cc" line="454"/>
         <source>Devices</source>
         <translation type="unfinished">裝置</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_window.cc" line="458"/>
+        <location filename="../client/ui/sys_info/system_info_window.cc" line="457"/>
         <source>Video Adapters</source>
         <translation type="unfinished">顯示卡</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_window.cc" line="461"/>
+        <location filename="../client/ui/sys_info/system_info_window.cc" line="460"/>
         <source>Monitors</source>
         <translation type="unfinished">顯示器</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_window.cc" line="464"/>
+        <location filename="../client/ui/sys_info/system_info_window.cc" line="463"/>
         <source>Printers</source>
         <translation type="unfinished">印表機</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_window.cc" line="467"/>
+        <location filename="../client/ui/sys_info/system_info_window.cc" line="466"/>
         <source>Power Options</source>
         <translation type="unfinished">電源選項</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_window.cc" line="480"/>
+        <location filename="../client/ui/sys_info/system_info_window.cc" line="479"/>
         <source>Software</source>
         <translation type="unfinished">軟體</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_window.cc" line="483"/>
+        <location filename="../client/ui/sys_info/system_info_window.cc" line="482"/>
         <source>Applications</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_window.cc" line="486"/>
+        <location filename="../client/ui/sys_info/system_info_window.cc" line="485"/>
         <source>Drivers</source>
         <translation type="unfinished">驅動程式</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_window.cc" line="489"/>
+        <location filename="../client/ui/sys_info/system_info_window.cc" line="488"/>
         <source>Services</source>
         <translation type="unfinished">服務</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_window.cc" line="492"/>
+        <location filename="../client/ui/sys_info/system_info_window.cc" line="491"/>
         <source>Processes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_window.cc" line="495"/>
+        <location filename="../client/ui/sys_info/system_info_window.cc" line="494"/>
         <source>Licenses</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_window.cc" line="508"/>
+        <location filename="../client/ui/sys_info/system_info_window.cc" line="507"/>
         <source>Network</source>
         <translation type="unfinished">網路</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_window.cc" line="511"/>
+        <location filename="../client/ui/sys_info/system_info_window.cc" line="510"/>
         <source>Network Adapters</source>
         <translation type="unfinished">網路卡</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_window.cc" line="514"/>
+        <location filename="../client/ui/sys_info/system_info_window.cc" line="513"/>
         <source>Routes</source>
         <translation type="unfinished">路由</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_window.cc" line="517"/>
+        <location filename="../client/ui/sys_info/system_info_window.cc" line="516"/>
         <source>Connections</source>
         <translation type="unfinished">連線</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_window.cc" line="520"/>
+        <location filename="../client/ui/sys_info/system_info_window.cc" line="519"/>
         <source>Network Shares</source>
         <translation type="unfinished">網路分享</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_window.cc" line="523"/>
+        <location filename="../client/ui/sys_info/system_info_window.cc" line="522"/>
         <source>Open Files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_window.cc" line="536"/>
+        <location filename="../client/ui/sys_info/system_info_window.cc" line="535"/>
         <source>Operating System</source>
         <translation type="unfinished">作業系統</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_window.cc" line="539"/>
+        <location filename="../client/ui/sys_info/system_info_window.cc" line="538"/>
         <source>Environment Variables</source>
         <translation type="unfinished">環境變數</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_window.cc" line="542"/>
+        <location filename="../client/ui/sys_info/system_info_window.cc" line="541"/>
         <source>Event Logs</source>
         <translation type="unfinished">事件紀錄</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_window.cc" line="545"/>
+        <location filename="../client/ui/sys_info/system_info_window.cc" line="544"/>
         <source>Users</source>
         <translation type="unfinished">使用者</translation>
     </message>
     <message>
-        <location filename="../client/ui/sys_info/system_info_window.cc" line="548"/>
+        <location filename="../client/ui/sys_info/system_info_window.cc" line="547"/>
         <source>User Groups</source>
         <translation type="unfinished"></translation>
     </message>
