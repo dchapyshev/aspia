@@ -209,10 +209,9 @@ void TcpServer::doAccept()
             {
                 ++rejected_since_last_log_;
 
-                constexpr std::chrono::minutes kMinLogInterval{ 1 };
-                const auto now = std::chrono::steady_clock::now();
-                if (last_limit_warning_ == std::chrono::steady_clock::time_point() ||
-                    (now - last_limit_warning_) >= kMinLogInterval)
+                constexpr Seconds kMinLogInterval{ 30 };
+                const TimePoint now = Clock::now();
+                if (last_limit_warning_ == TimePoint() || (now - last_limit_warning_) >= kMinLogInterval)
                 {
                     LOG(WARNING) << "Pending connection limit reached (" << pending_.size()
                                  << "); rejected " << rejected_since_last_log_

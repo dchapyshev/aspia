@@ -69,6 +69,10 @@ private:
     void doAccept();
     void removePendingChannel(TcpChannel* channel);
 
+    using Clock = std::chrono::steady_clock;
+    using TimePoint = Clock::time_point;
+    using Seconds = std::chrono::seconds;
+
     SharedPointer<bool> alive_guard_ { new bool(true) };
     asio::ip::tcp::acceptor acceptor_;
     int accept_error_count_ = 0;
@@ -86,7 +90,7 @@ private:
     // file by hammering the accept loop. We emit at most one warning per kMinLogInterval and
     // accumulate a count of suppressed rejections in between. Default-constructed time_point
     // (epoch of steady_clock) is used as the "never logged yet" sentinel.
-    std::chrono::steady_clock::time_point last_limit_warning_;
+    TimePoint last_limit_warning_;
     int rejected_since_last_log_ = 0;
 
     QQueue<TcpChannel*> pending_;
