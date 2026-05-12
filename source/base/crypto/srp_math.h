@@ -44,10 +44,6 @@ public:
 
     using NgPair = std::pair<std::string_view, std::string_view>;
 
-    static const NgPair kNgPair_1024;
-    static const NgPair kNgPair_1536;
-    static const NgPair kNgPair_2048;
-    static const NgPair kNgPair_3072;
     static const NgPair kNgPair_4096;
     static const NgPair kNgPair_6144;
     static const NgPair kNgPair_8192;
