@@ -88,7 +88,7 @@ public:
     //
     // If the derived class returns an empty keyLabel() for the direction, the raw master is
     // returned (legacy wire-compatible mode). Otherwise the key is BLAKE2s(master || label),
-    // which gives cryptographically independent c2s and s2c keys for NG authenticators.
+    // which gives cryptographically independent c2s and s2c keys.
     [[nodiscard]] QByteArray sessionKey(Direction direction) const;
     [[nodiscard]] const QByteArray& iv(Direction direction) const;
 
@@ -111,9 +111,9 @@ protected:
     [[nodiscard]] virtual QByteArray keyLabel(Direction direction) const = 0;
 
     // Feeds key material (handshake bytes and/or raw shared secrets) into the running BLAKE2s256
-    // accumulator that produces the session key. Order must match on both peers. NG authenticators
-    // feed handshake messages plus secrets; Legacy authenticators feed only raw secrets so that
-    // the resulting key matches pre-transcript-binding wire compatibility.
+    // accumulator that produces the session key. Order must match on both peers. Subclasses that
+    // bind the full transcript feed handshake messages plus secrets; legacy subclasses feed only
+    // raw secrets so that the resulting key matches pre-transcript-binding wire compatibility.
     void appendTranscript(const QByteArray& data);
 
     // Marks the transcript as finalized: subsequent sessionKey() calls return real keys, and the

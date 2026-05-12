@@ -19,7 +19,9 @@
 #include "base/crypto/key_pair.h"
 
 #include "base/logging.h"
+#include "base/crypto/secure_memory.h"
 
+#include <openssl/crypto.h>
 #include <openssl/evp.h>
 
 //--------------------------------------------------------------------------------------------------
@@ -235,6 +237,19 @@ QByteArray KeyPair::sessionKey(const QByteArray& peer_public_key) const
     if (session_key.size() != session_key_length)
     {
         LOG(ERROR) << "Invalid session key size";
+        return QByteArray();
+    }
+
+    // RFC 7748 section 6.1: the X25519 function produces the all-zero value when operating on
+    // a low-order peer public key, which would force the shared secret to a value the peer can
+    // pick. Modern OpenSSL rejects these inputs internally, but we duplicate the check here as
+    // defense in depth against older or alternative crypto backends. Constant-time compare.
+    static const quint8 kAllZero[32] = {};
+    DCHECK_EQ(session_key.size(), static_cast<qsizetype>(sizeof(kAllZero)));
+    if (CRYPTO_memcmp(session_key.data(), kAllZero, sizeof(kAllZero)) == 0)
+    {
+        LOG(ERROR) << "All-zero shared secret (low-order peer public key)";
+        memZero(&session_key);
         return QByteArray();
     }
 
