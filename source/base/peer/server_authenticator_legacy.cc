@@ -366,68 +366,67 @@ void ServerAuthenticatorLegacy::onIdentify(const QByteArray& buffer)
 
     CLOG(INFO) << "Username:" << user_name_;
 
-    do
+    QByteArray seed_key;
+    User user;
+
+    if (user_list_)
     {
-        QByteArray seed_key;
-        User user;
-
-        if (user_list_)
-        {
-            user = user_list_->find(user_name_);
-            seed_key = user_list_->seedKey();
-        }
-        else
-        {
-            CLOG(INFO) << "UserList is nullptr";
-        }
-
-        if (seed_key.isEmpty())
-        {
-            CLOG(INFO) << "Empty seed key. Using random 64 bytes";
-            seed_key = Random::byteArray(64);
-        }
-
-        if (user.isValid())
-        {
-            CLOG(INFO) << "User" << user_name_ << "is found (enabled:"
-                       << ((user.flags & User::ENABLED) != 0) << ")";
-        }
-        else
-        {
-            CLOG(INFO) << "User" << user_name_ << "is NOT found";
-        }
-
-        if (user.isValid() && (user.flags & User::ENABLED))
-        {
-            session_types_ = user.sessions;
-
-            std::optional<SrpMath::NgPair> Ng_pair = SrpMath::pairByGroup(user.group);
-            if (Ng_pair.has_value())
-            {
-                N_ = BigNum::fromStdString(Ng_pair->first);
-                g_ = BigNum::fromStdString(Ng_pair->second);
-                s_ = BigNum::fromByteArray(user.salt);
-                v_ = BigNum::fromByteArray(user.verifier);
-                break;
-            }
-            else
-            {
-                CLOG(ERROR) << "User" << user.name << "has an invalid SRP group";
-            }
-        }
-
-        session_types_ = 0;
-
-        GenericHash hash(GenericHash::BLAKE2b512);
-        hash.addData(seed_key);
-        hash.addData(user_name_.toUtf8());
-
-        N_ = BigNum::fromStdString(SrpMath::kNgPair_8192.first);
-        g_ = BigNum::fromStdString(SrpMath::kNgPair_8192.second);
-        s_ = BigNum::fromByteArray(hash.result());
-        v_ = SrpMath::calc_v(user_name_, seed_key, s_, N_, g_);
+        user = user_list_->find(user_name_);
+        seed_key = user_list_->seedKey();
     }
-    while (false);
+    else
+    {
+        CLOG(INFO) << "UserList is nullptr";
+    }
+
+    if (seed_key.isEmpty())
+    {
+        CLOG(INFO) << "Empty seed key. Using random 64 bytes";
+        seed_key = Random::byteArray(64);
+    }
+
+    if (user.isValid())
+    {
+        CLOG(INFO) << "User" << user_name_ << "is found (enabled:"
+                   << ((user.flags & User::ENABLED) != 0) << ")";
+    }
+    else
+    {
+        CLOG(INFO) << "User" << user_name_ << "is NOT found";
+    }
+
+    // Always perform the fake verifier derivation, regardless of whether the user exists.
+    // Without this an attacker can distinguish valid from invalid usernames by measuring
+    // response latency - the fake path does a BLAKE2b512 + a full modexp (calc_v at 8192 bits)
+    // that the valid-user path would otherwise skip. By doing the fake compute unconditionally
+    // and then overriding (s, v, N, g) for real users, both paths take the same time up to the
+    // final calc_B step.
+    GenericHash hash(GenericHash::BLAKE2b512);
+    hash.addData(seed_key);
+    hash.addData(user_name_.toUtf8());
+
+    N_ = BigNum::fromStdString(SrpMath::kNgPair_8192.first);
+    g_ = BigNum::fromStdString(SrpMath::kNgPair_8192.second);
+    s_ = BigNum::fromByteArray(hash.result());
+    v_ = SrpMath::calc_v(user_name_, seed_key, s_, N_, g_);
+    session_types_ = 0;
+
+    if (user.isValid() && (user.flags & User::ENABLED))
+    {
+        std::optional<SrpMath::NgPair> Ng_pair = SrpMath::pairByGroup(user.group);
+        if (Ng_pair.has_value())
+        {
+            N_ = BigNum::fromStdString(Ng_pair->first);
+            g_ = BigNum::fromStdString(Ng_pair->second);
+            s_ = BigNum::fromByteArray(user.salt);
+            v_ = BigNum::fromByteArray(user.verifier);
+            session_types_ = user.sessions;
+        }
+        else
+        {
+            CLOG(ERROR) << "User" << user.name << "has an invalid SRP group";
+        }
+    }
 
     b_ = BigNum::fromByteArray(Random::byteArray(128)); // 1024 bits.
     B_ = SrpMath::calc_B(b_, N_, g_, v_);
