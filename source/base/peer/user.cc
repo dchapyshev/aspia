@@ -26,7 +26,7 @@
 namespace {
 
 const size_t kSaltSize = 64; // In bytes.
-const char kDefaultGroup[] = "4096";
+const char kDefaultGroup[] = "8192";
 
 //--------------------------------------------------------------------------------------------------
 bool isValidUserNameChar(QChar username_char)
