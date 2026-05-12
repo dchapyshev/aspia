@@ -374,16 +374,39 @@ void SessionManager::doAccept(SessionManager* self)
 
         if (!error_code)
         {
-            LOG(INFO) << "New accepted connection:" << peerAddress(socket);
+            if (self->pending_sessions_.size() >= kMaxPendingSessions)
+            {
+                ++self->rejected_since_last_log_;
 
-            PendingSession* session = new PendingSession(std::move(socket), self);
-            self->pending_sessions_.emplace_back(session);
+                constexpr Seconds kMinLogInterval{ 30 };
+                const TimePoint now = Clock::now();
 
-            connect(session, &PendingSession::sig_ready, self, &SessionManager::onPendingSessionReady);
-            connect(session, &PendingSession::sig_failed, self, &SessionManager::onPendingSessionFailed);
+                if (self->last_limit_warning_ == TimePoint() ||
+                    (now - self->last_limit_warning_) >= kMinLogInterval)
+                {
+                    LOG(WARNING) << "Pending session limit reached ("
+                                 << self->pending_sessions_.size()
+                                 << "); rejected " << self->rejected_since_last_log_
+                                 << " connection(s) since last warning";
+                    self->rejected_since_last_log_ = 0;
+                    self->last_limit_warning_ = now;
+                }
 
-            // A new peer is connected. Create and start the pending session.
-            session->start();
+                // socket goes out of scope here - asio's destructor closes the descriptor.
+            }
+            else
+            {
+                LOG(INFO) << "New accepted connection:" << peerAddress(socket);
+
+                PendingSession* session = new PendingSession(std::move(socket), self);
+                self->pending_sessions_.emplace_back(session);
+
+                connect(session, &PendingSession::sig_ready, self, &SessionManager::onPendingSessionReady);
+                connect(session, &PendingSession::sig_failed, self, &SessionManager::onPendingSessionFailed);
+
+                // A new peer is connected. Create and start the pending session.
+                session->start();
+            }
         }
         else
         {
