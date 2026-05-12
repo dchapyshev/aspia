@@ -19,7 +19,9 @@
 #include "base/crypto/stream_decryptor.h"
 
 #include "base/logging.h"
+#include "base/crypto/generic_hash.h"
 #include "base/crypto/large_number_increment.h"
+#include "base/crypto/secure_memory.h"
 
 #include <openssl/evp.h>
 
@@ -29,13 +31,18 @@ const qint64 kKeySize = 32; // 256 bits, 32 bytes.
 const qint64 kIVSize = 12; // 96 bits, 12 bytes.
 const qint64 kTagSize = 16; // 128 bits, 16 bytes.
 
+// Number of frames before the working key is ratcheted forward for forward secrecy. Must match
+// the encryptor side so both peers ratchet at the same point.
+constexpr quint64 kRatchetInterval = 256;
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-StreamDecryptor::StreamDecryptor(
-    StreamDecryptor::Type type, EVP_CIPHER_CTX_ptr ctx, const QByteArray& iv)
+StreamDecryptor::StreamDecryptor(CipherType type, EVP_CIPHER_CTX_ptr ctx,
+    const QByteArray& key, const QByteArray& iv)
     : type_(type),
       ctx_(std::move(ctx)),
+      key_(key),
       iv_(iv)
 {
     DCHECK_EQ(EVP_CIPHER_CTX_key_length(ctx_.get()), kKeySize);
@@ -43,7 +50,10 @@ StreamDecryptor::StreamDecryptor(
 }
 
 //--------------------------------------------------------------------------------------------------
-StreamDecryptor::~StreamDecryptor() = default;
+StreamDecryptor::~StreamDecryptor()
+{
+    memZero(&key_);
+}
 
 //--------------------------------------------------------------------------------------------------
 // static
@@ -56,16 +66,15 @@ std::unique_ptr<StreamDecryptor> StreamDecryptor::createForAes256Gcm(
         return nullptr;
     }
 
-    EVP_CIPHER_CTX_ptr ctx =
-        createCipher(CipherType::AES256_GCM, CipherMode::DECRYPT, key, kIVSize);
+    EVP_CIPHER_CTX_ptr ctx = createCipher(CipherType::AES256_GCM, CipherMode::DECRYPT, key, kIVSize);
     if (!ctx)
     {
         LOG(ERROR) << "createCipher failed";
         return nullptr;
     }
 
-    return std::unique_ptr<StreamDecryptor>(
-        new StreamDecryptor(StreamDecryptor::Type::AES256_GCM, std::move(ctx), iv));
+    return std::unique_ptr<StreamDecryptor>(new StreamDecryptor(
+        CipherType::AES256_GCM, std::move(ctx), key, iv));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -79,16 +88,15 @@ std::unique_ptr<StreamDecryptor> StreamDecryptor::createForChaCha20Poly1305(
         return nullptr;
     }
 
-    EVP_CIPHER_CTX_ptr ctx =
-        createCipher(CipherType::CHACHA20_POLY1305, CipherMode::DECRYPT, key, kIVSize);
+    EVP_CIPHER_CTX_ptr ctx = createCipher(CipherType::CHACHA20_POLY1305, CipherMode::DECRYPT, key, kIVSize);
     if (!ctx)
     {
         LOG(ERROR) << "createCipher failed";
         return nullptr;
     }
 
-    return std::unique_ptr<StreamDecryptor>(
-        new StreamDecryptor(StreamDecryptor::Type::CHACHA20_POLY1305, std::move(ctx), iv));
+    return std::unique_ptr<StreamDecryptor>(new StreamDecryptor(
+        CipherType::CHACHA20_POLY1305, std::move(ctx), key, iv));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -145,5 +153,27 @@ bool StreamDecryptor::decrypt(const void* in, qint64 in_size, const void* aad, q
     }
 
     largeNumberIncrement(&iv_);
+
+    if (++msg_count_ >= kRatchetInterval)
+    {
+        GenericHash hash(GenericHash::BLAKE2s256);
+        hash.addData(key_);
+        hash.addData(QByteArrayLiteral("aspia/v1/ratchet"));
+        QByteArray new_key = hash.result();
+
+        EVP_CIPHER_CTX_ptr new_ctx = createCipher(type_, CipherMode::DECRYPT, new_key, kIVSize);
+        if (!new_ctx)
+        {
+            LOG(ERROR) << "ratchet: createCipher failed";
+            memZero(&new_key);
+            return false;
+        }
+
+        memZero(&key_);
+        key_ = std::move(new_key);
+        ctx_ = std::move(new_ctx);
+        msg_count_ = 0;
+    }
+
     return true;
 }

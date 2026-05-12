@@ -19,7 +19,9 @@
 #include "base/crypto/stream_encryptor.h"
 
 #include "base/logging.h"
+#include "base/crypto/generic_hash.h"
 #include "base/crypto/large_number_increment.h"
+#include "base/crypto/secure_memory.h"
 
 #include <openssl/evp.h>
 
@@ -29,13 +31,20 @@ const qint64 kKeySize = 32; // 256 bits, 32 bytes.
 const qint64 kIVSize = 12; // 96 bits, 12 bytes.
 const qint64 kTagSize = 16; // 128 bits, 16 bytes.
 
+// Number of frames before the working key is ratcheted forward for forward secrecy. Low enough
+// that idle connections (only keep-alive pings flowing) still rotate keys within reasonable
+// time; ratchet cost is a single BLAKE2s + AEAD context rebuild (~50 us), so frequent rotation
+// on active streams is negligible CPU.
+constexpr quint64 kRatchetInterval = 256;
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-StreamEncryptor::StreamEncryptor(
-    StreamEncryptor::Type type, EVP_CIPHER_CTX_ptr ctx, const QByteArray& iv)
+StreamEncryptor::StreamEncryptor(CipherType type, EVP_CIPHER_CTX_ptr ctx,
+    const QByteArray& key, const QByteArray& iv)
     : type_(type),
       ctx_(std::move(ctx)),
+      key_(key),
       iv_(iv)
 {
     DCHECK_EQ(EVP_CIPHER_CTX_key_length(ctx_.get()), kKeySize);
@@ -43,7 +52,10 @@ StreamEncryptor::StreamEncryptor(
 }
 
 //--------------------------------------------------------------------------------------------------
-StreamEncryptor::~StreamEncryptor() = default;
+StreamEncryptor::~StreamEncryptor()
+{
+    memZero(&key_);
+}
 
 //--------------------------------------------------------------------------------------------------
 // static
@@ -64,7 +76,7 @@ std::unique_ptr<StreamEncryptor> StreamEncryptor::createForAes256Gcm(
     }
 
     return std::unique_ptr<StreamEncryptor>(new StreamEncryptor(
-        StreamEncryptor::Type::AES256_GCM, std::move(ctx), iv));
+        CipherType::AES256_GCM, std::move(ctx), key, iv));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -78,8 +90,7 @@ std::unique_ptr<StreamEncryptor> StreamEncryptor::createForChaCha20Poly1305(
         return nullptr;
     }
 
-    EVP_CIPHER_CTX_ptr ctx = createCipher(
-        CipherType::CHACHA20_POLY1305, CipherMode::ENCRYPT, key, kIVSize);
+    EVP_CIPHER_CTX_ptr ctx = createCipher(CipherType::CHACHA20_POLY1305, CipherMode::ENCRYPT, key, kIVSize);
     if (!ctx)
     {
         LOG(ERROR) << "createCipher failed";
@@ -87,7 +98,7 @@ std::unique_ptr<StreamEncryptor> StreamEncryptor::createForChaCha20Poly1305(
     }
 
     return std::unique_ptr<StreamEncryptor>(new StreamEncryptor(
-        StreamEncryptor::Type::CHACHA20_POLY1305, std::move(ctx), iv));
+        CipherType::CHACHA20_POLY1305, std::move(ctx), key, iv));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -144,5 +155,27 @@ bool StreamEncryptor::encrypt(const void* in, qint64 in_size, const void* aad, q
     }
 
     largeNumberIncrement(&iv_);
+
+    if (++msg_count_ >= kRatchetInterval)
+    {
+        GenericHash hash(GenericHash::BLAKE2s256);
+        hash.addData(key_);
+        hash.addData(QByteArrayLiteral("aspia/v1/ratchet"));
+        QByteArray new_key = hash.result();
+
+        EVP_CIPHER_CTX_ptr new_ctx = createCipher(type_, CipherMode::ENCRYPT, new_key, kIVSize);
+        if (!new_ctx)
+        {
+            LOG(ERROR) << "ratchet: createCipher failed";
+            memZero(&new_key);
+            return false;
+        }
+
+        memZero(&key_);
+        key_ = std::move(new_key);
+        ctx_ = std::move(new_ctx);
+        msg_count_ = 0;
+    }
+
     return true;
 }

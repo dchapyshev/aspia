@@ -31,32 +31,24 @@ class StreamEncryptor
 public:
     ~StreamEncryptor();
 
-    enum class Type
-    {
-        AES256_GCM,
-        CHACHA20_POLY1305
-    };
-    Q_ENUM(Type)
-
     static std::unique_ptr<StreamEncryptor> createForAes256Gcm(
         const QByteArray& key, const QByteArray& iv);
 
     static std::unique_ptr<StreamEncryptor> createForChaCha20Poly1305(
         const QByteArray& key, const QByteArray& iv);
 
-    Type type() const { return type_; }
-
     qint64 encryptedDataSize(qint64 in_size);
     bool encrypt(const void* in, qint64 in_size, void* out);
     bool encrypt(const void* in, qint64 in_size, const void* aad, qint64 aad_size, void* out);
 
 private:
-    StreamEncryptor(StreamEncryptor::Type type, EVP_CIPHER_CTX_ptr ctx, const QByteArray& iv);
+    StreamEncryptor(CipherType type, EVP_CIPHER_CTX_ptr ctx, const QByteArray& key, const QByteArray& iv);
 
-    const Type type_;
-
+    const CipherType type_;
     EVP_CIPHER_CTX_ptr ctx_;
+    QByteArray key_;
     QByteArray iv_;
+    quint64 msg_count_ = 0;
 
     Q_DISABLE_COPY_MOVE(StreamEncryptor)
 };
