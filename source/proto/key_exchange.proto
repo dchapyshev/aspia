@@ -82,6 +82,7 @@ message ServerHello
 {
     Encryption encryption = 1;
     bytes iv              = 2;
+    bytes public_key      = 3;
 }
 
 // Client to server.

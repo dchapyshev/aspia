@@ -82,6 +82,7 @@ private:
     quint32 session_types_ = 0;
 
     KeyPair key_pair_;
+
     BigNum N_;
     BigNum g_;
     BigNum v_;

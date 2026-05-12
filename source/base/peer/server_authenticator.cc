@@ -187,8 +187,8 @@ void ServerAuthenticator::onReceived(const QByteArray& buffer)
             break;
 
         default:
-            NOTREACHED();
-            break;
+            finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
+            return;
     }
 }
 
@@ -203,6 +203,12 @@ QByteArray ServerAuthenticator::keyLabel(Direction direction) const
 void ServerAuthenticator::onClientHello(const QByteArray& buffer)
 {
     CLOG(INFO) << "Received: ClientHello (" << buffer.size() << ")";
+
+    if (buffer.isEmpty())
+    {
+        finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
+        return;
+    }
 
     proto::key_exchange::ClientHello client_hello;
     if (!parse(buffer, &client_hello))
@@ -235,68 +241,113 @@ void ServerAuthenticator::onClientHello(const QByteArray& buffer)
     switch (identify_)
     {
         case proto::key_exchange::IDENTIFY_SRP:
-        {
-            // SRP authentication uses its own key exchange and must never combine with a public key.
-            if (!client_hello.public_key().empty() || !client_hello.iv().empty())
-            {
-                finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
-                return;
-            }
-        }
-        break;
+            break;
 
         case proto::key_exchange::IDENTIFY_ANONYMOUS:
-        {
             // If anonymous method is not allowed.
             if (anonymous_access_ != AnonymousAccess::ENABLE)
             {
                 finish(FROM_HERE, ErrorCode::ACCESS_DENIED);
                 return;
             }
-        }
-        break;
+            break;
 
         default:
-        {
             // Unsupported identication method.
             finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
             return;
-        }
     }
 
-    proto::key_exchange::ServerHello server_hello ;
-
-    if (key_pair_.isValid())
+    QByteArray client_public_key = QByteArray::fromStdString(client_hello.public_key());
+    if (client_public_key.isEmpty())
     {
-        QByteArray peer_public_key = QByteArray::fromStdString(client_hello.public_key());
-        decrypt_iv_ = QByteArray::fromStdString(client_hello.iv());
+        finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
+        return;
+    }
 
-        if (peer_public_key.isEmpty() != decrypt_iv_.isEmpty())
+    decrypt_iv_ = QByteArray::fromStdString(client_hello.iv());
+    if (decrypt_iv_.isEmpty())
+    {
+        finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
+        return;
+    }
+
+    proto::key_exchange::ServerHello server_hello;
+
+    if (identify_ == proto::key_exchange::IDENTIFY_ANONYMOUS)
+    {
+        // ANONYMOUS: long-term server keypair derives shared with client's ephemeral pubkey.
+        // Order: x25519_secret || ClientHello || ServerHello.
+        if (!key_pair_.isValid())
         {
-            finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
+            finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
             return;
         }
 
-        if (!peer_public_key.isEmpty() && !decrypt_iv_.isEmpty())
+        if (encrypt_iv_.isEmpty())
         {
-            QByteArray x25519_secret = key_pair_.sessionKey(peer_public_key);
-            if (x25519_secret.isEmpty())
-            {
-                finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
-                return;
-            }
-
-            // Mirror the client: mix x25519_secret first, then ClientHello bytes.
-            appendTranscript(x25519_secret);
-            memZero(&x25519_secret);
-
-            CDCHECK(!encrypt_iv_.isEmpty());
-            server_hello.set_iv(encrypt_iv_.toStdString());
+            finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
+            return;
         }
-    }
 
-    // ClientHello bytes go into the transcript after the optional x25519 secret.
-    appendTranscript(buffer);
+        QByteArray x25519_secret = key_pair_.sessionKey(client_public_key);
+        if (x25519_secret.isEmpty())
+        {
+            finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
+            return;
+        }
+
+        appendTranscript(x25519_secret);
+        memZero(&x25519_secret);
+
+        server_hello.set_iv(encrypt_iv_.toStdString());
+        appendTranscript(buffer);
+    }
+    else
+    {
+        // SRP: server generates an ephemeral X25519 keypair, derives shared with the client's
+        // ephemeral pubkey from ClientHello.
+        // Order: ClientHello || x25519_secret || ServerHello (mirrors what the client builds, since
+        // the client cannot derive the secret until it sees this ServerHello).
+        appendTranscript(buffer);
+
+        // Ephemeral X25519 keypair used for the SRP handshake.
+        KeyPair key_pair = KeyPair::create(KeyPair::Type::X25519);
+        if (!key_pair.isValid())
+        {
+            finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
+            return;
+        }
+
+        QByteArray x25519_secret = key_pair.sessionKey(client_public_key);
+        if (x25519_secret.isEmpty())
+        {
+            finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
+            return;
+        }
+
+        appendTranscript(x25519_secret);
+        memZero(&x25519_secret);
+
+        // Ephemeral server IV for the upcoming SrpIdentify / SrpServerKeyExchange /
+        // SrpClientKeyExchange phase. This is overwritten with a fresh final IV in onIdentify.
+        encrypt_iv_ = Random::byteArray(kIvSize);
+        if (encrypt_iv_.isEmpty())
+        {
+            finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
+            return;
+        }
+
+        QByteArray server_public_key = key_pair.publicKey();
+        if (server_public_key.isEmpty())
+        {
+            finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
+            return;
+        }
+
+        server_hello.set_public_key(server_public_key.toStdString());
+        server_hello.set_iv(encrypt_iv_.toStdString());
+    }
 
     bool has_aes_ni = false;
 
@@ -321,18 +372,22 @@ void ServerAuthenticator::onClientHello(const QByteArray& buffer)
     encryption_ = server_hello.encryption();
 
     QByteArray message = serialize(server_hello);
+    if (message.isEmpty())
+    {
+        finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
+        return;
+    }
 
     CLOG(INFO) << "Sending: ServerHello (" << message.size() << ")";
     appendTranscript(message);
     emit sig_outgoingMessage(message, false);
 
-    if (identify_ == proto::key_exchange::IDENTIFY_ANONYMOUS)
-    {
-        // Transcript now contains x25519_secret || ClientHello || ServerHello. That is the
-        // master from which sessionKey() derives per-direction keys.
-        CLOG(INFO) << "Session key is ready";
-        setSessionKeyReady();
-    }
+    // The channel installs its encryptor / decryptor.
+    // For SRP this is the ephemeral phase: it protects SrpIdentify / SrpServerKeyExchange /
+    // SrpClientKeyExchange.
+    // For ANONYMOUS it is the final phase.
+    CLOG(INFO) << "Session key is ready";
+    setSessionKeyReady();
 
     switch (identify_)
     {
@@ -354,6 +409,13 @@ void ServerAuthenticator::onClientHello(const QByteArray& buffer)
 void ServerAuthenticator::onIdentify(const QByteArray& buffer)
 {
     CLOG(INFO) << "Received: Identify (" << buffer.size() << ")";
+
+    if (buffer.isEmpty())
+    {
+        finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
+        return;
+    }
+
     appendTranscript(buffer);
 
     proto::key_exchange::SrpIdentify identify;
@@ -435,19 +497,34 @@ void ServerAuthenticator::onIdentify(const QByteArray& buffer)
     }
     while (false);
 
-    b_ = BigNum::fromByteArray(Random::byteArray(128)); // 1024 bits.
-    B_ = SrpMath::calc_B(b_, N_, g_, v_);
+    if (!N_.isValid() || !g_.isValid() || !s_.isValid() || !v_.isValid())
+    {
+        finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
+        return;
+    }
 
-    if (!N_.isValid() || !g_.isValid() || !s_.isValid() || !B_.isValid())
+    b_ = BigNum::fromByteArray(Random::byteArray(128)); // 1024 bits.
+    if (!b_.isValid())
+    {
+        finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
+        return;
+    }
+
+    B_ = SrpMath::calc_B(b_, N_, g_, v_);
+    if (!B_.isValid())
     {
         finish(FROM_HERE, ErrorCode::PROTOCOL_ERROR);
         return;
     }
 
     encrypt_iv_ = Random::byteArray(kIvSize);
+    if (encrypt_iv_.isEmpty())
+    {
+        finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
+        return;
+    }
 
     proto::key_exchange::SrpServerKeyExchange server_key_exchange;
-
     server_key_exchange.set_number(N_.toStdString());
     server_key_exchange.set_generator(g_.toStdString());
     server_key_exchange.set_salt(s_.toStdString());
@@ -455,10 +532,18 @@ void ServerAuthenticator::onIdentify(const QByteArray& buffer)
     server_key_exchange.set_iv(encrypt_iv_.toStdString());
 
     QByteArray message = serialize(server_key_exchange);
+    if (message.isEmpty())
+    {
+        finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
+        return;
+    }
 
     CLOG(INFO) << "Sending: ServerKeyExchange (" << message.size() << ")";
     appendTranscript(message);
-    emit sig_outgoingMessage(message, false);
+
+    // Encrypted under the ephemeral key. Channel rebuilds its encryptor to the final key on
+    // the next sig_keyChanged (fired after we receive SrpClientKeyExchange).
+    emit sig_outgoingMessage(message, true);
     internal_state_ = InternalState::READ_CLIENT_KEY_EXCHANGE;
 }
 
@@ -466,6 +551,13 @@ void ServerAuthenticator::onIdentify(const QByteArray& buffer)
 void ServerAuthenticator::onClientKeyExchange(const QByteArray& buffer)
 {
     CLOG(INFO) << "Received: ClientKeyExchange (" << buffer.size() << ")";
+
+    if (buffer.isEmpty())
+    {
+        finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
+        return;
+    }
+
     appendTranscript(buffer);
 
     proto::key_exchange::SrpClientKeyExchange client_key_exchange;
@@ -532,6 +624,11 @@ void ServerAuthenticator::doSessionChallenge()
     session_challenge.set_arch(QSysInfo::buildCpuArchitecture().toStdString());
 
     QByteArray message = serialize(session_challenge);
+    if (message.isEmpty())
+    {
+        finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
+        return;
+    }
 
     CLOG(INFO) << "Sending: SessionChallenge (" << message.size() << ")";
     emit sig_outgoingMessage(message, true);
@@ -542,6 +639,12 @@ void ServerAuthenticator::doSessionChallenge()
 void ServerAuthenticator::onSessionResponse(const QByteArray& buffer)
 {
     CLOG(INFO) << "Received: SessionResponse (" << buffer.size() << ")";
+
+    if (buffer.isEmpty())
+    {
+        finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
+        return;
+    }
 
     proto::key_exchange::SessionResponse response;
     if (!parse(buffer, &response))
@@ -590,6 +693,12 @@ void ServerAuthenticator::onSessionResponse(const QByteArray& buffer)
 //--------------------------------------------------------------------------------------------------
 QByteArray ServerAuthenticator::createSrpKey()
 {
+    if (!A_.isValid() || !N_.isValid() || !B_.isValid() || !v_.isValid() || !b_.isValid())
+    {
+        CLOG(ERROR) << "Invalid parameters";
+        return QByteArray();
+    }
+
     if (!SrpMath::verify_A_mod_N(A_, N_))
     {
         CLOG(ERROR) << "SrpMath::verify_A_mod_N failed";
@@ -597,7 +706,18 @@ QByteArray ServerAuthenticator::createSrpKey()
     }
 
     BigNum u = SrpMath::calc_u(A_, B_, N_);
+    if (!u.isValid())
+    {
+        CLOG(ERROR) << "SrpMath::calc_u failed";
+        return QByteArray();
+    }
+
     BigNum server_key = SrpMath::calcServerKey(A_, v_, u, b_, N_);
+    if (!server_key.isValid())
+    {
+        CLOG(ERROR) << "SrpMath::calcServerKey failed";
+        return QByteArray();
+    }
 
     return server_key.toByteArray();
 }

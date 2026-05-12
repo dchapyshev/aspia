@@ -20,6 +20,7 @@
 #define BASE_PEER_CLIENT_AUTHENTICATOR_H
 
 #include "base/crypto/big_num.h"
+#include "base/crypto/key_pair.h"
 #include "base/peer/authenticator.h"
 
 class ClientAuthenticator final : public Authenticator
@@ -66,6 +67,11 @@ private:
     QString username_;
     QString password_;
     QString display_name_;
+
+    // Ephemeral X25519 keypair used for the SRP handshake. Created in sendClientHello, used in
+    // readServerHello to derive the shared secret with the server's ephemeral public key, then
+    // discarded. Not used for ANONYMOUS (which derives the secret immediately in sendClientHello).
+    KeyPair key_pair_;
 
     BigNum N_;
     BigNum g_;
