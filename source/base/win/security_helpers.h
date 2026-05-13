@@ -65,4 +65,12 @@ bool userSidString(QString* user_sid);
 
 ScopedSd convertSddlToSd(const QString& sddl);
 
+// Restricts the DACL of a process kernel object so that PROCESS_TERMINATE,
+// PROCESS_SUSPEND_RESUME, PROCESS_VM_OPERATION, PROCESS_VM_WRITE,
+// PROCESS_CREATE_THREAD and PROCESS_SET_INFORMATION are granted only to
+// LocalSystem and the local Administrators group. The user identified by
+// |user_token| keeps read/query/synchronize access. |process| must have
+// WRITE_DAC access (handles returned by CreateProcessAsUser do by default).
+bool setProtectiveProcessDacl(HANDLE process, HANDLE user_token);
+
 #endif // BASE_WIN_SECURITY_HELPERS_H

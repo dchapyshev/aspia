@@ -18,6 +18,7 @@
 
 #include "base/win/security_helpers.h"
 
+#include <aclapi.h>
 #include <comdef.h>
 #include <ObjIdl.h>
 #include <sddl.h>
@@ -183,5 +184,96 @@ bool userSidString(QString* user_sid)
     }
 
     *user_sid = QString::fromWCharArray(sid_string);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool setProtectiveProcessDacl(HANDLE process, HANDLE user_token)
+{
+    CHECK(process);
+    CHECK(user_token);
+
+    DWORD token_user_size = 0;
+    if (GetTokenInformation(user_token, TokenUser, nullptr, 0, &token_user_size) ||
+        GetLastError() != ERROR_INSUFFICIENT_BUFFER)
+    {
+        PLOG(ERROR) << "GetTokenInformation (size query) failed";
+        return false;
+    }
+
+    std::unique_ptr<BYTE[]> token_user_buf = std::make_unique<BYTE[]>(token_user_size);
+    TOKEN_USER* token_user = reinterpret_cast<TOKEN_USER*>(token_user_buf.get());
+
+    if (!GetTokenInformation(user_token, TokenUser, token_user, token_user_size, &token_user_size))
+    {
+        PLOG(ERROR) << "GetTokenInformation failed";
+        return false;
+    }
+
+    BYTE system_sid[SECURITY_MAX_SID_SIZE];
+    DWORD system_sid_size = sizeof(system_sid);
+    if (!CreateWellKnownSid(WinLocalSystemSid, nullptr, system_sid, &system_sid_size))
+    {
+        PLOG(ERROR) << "CreateWellKnownSid (system) failed";
+        return false;
+    }
+
+    BYTE admins_sid[SECURITY_MAX_SID_SIZE];
+    DWORD admins_sid_size = sizeof(admins_sid);
+    if (!CreateWellKnownSid(WinBuiltinAdministratorsSid, nullptr, admins_sid, &admins_sid_size))
+    {
+        PLOG(ERROR) << "CreateWellKnownSid (admins) failed";
+        return false;
+    }
+
+    // Rights granted to the interactive user: enough to see the process and
+    // wait on it, but not to terminate, suspend, inject into or patch it.
+    const DWORD user_mask = PROCESS_QUERY_LIMITED_INFORMATION |
+                            PROCESS_QUERY_INFORMATION |
+                            SYNCHRONIZE |
+                            READ_CONTROL;
+
+    EXPLICIT_ACCESSW ea[3];
+    memset(ea, 0, sizeof(ea));
+
+    ea[0].grfAccessPermissions = PROCESS_ALL_ACCESS;
+    ea[0].grfAccessMode = SET_ACCESS;
+    ea[0].grfInheritance = NO_INHERITANCE;
+    ea[0].Trustee.TrusteeForm = TRUSTEE_IS_SID;
+    ea[0].Trustee.TrusteeType = TRUSTEE_IS_USER;
+    ea[0].Trustee.ptstrName = reinterpret_cast<LPWSTR>(system_sid);
+
+    ea[1].grfAccessPermissions = PROCESS_ALL_ACCESS;
+    ea[1].grfAccessMode = SET_ACCESS;
+    ea[1].grfInheritance = NO_INHERITANCE;
+    ea[1].Trustee.TrusteeForm = TRUSTEE_IS_SID;
+    ea[1].Trustee.TrusteeType = TRUSTEE_IS_GROUP;
+    ea[1].Trustee.ptstrName = reinterpret_cast<LPWSTR>(admins_sid);
+
+    ea[2].grfAccessPermissions = user_mask;
+    ea[2].grfAccessMode = SET_ACCESS;
+    ea[2].grfInheritance = NO_INHERITANCE;
+    ea[2].Trustee.TrusteeForm = TRUSTEE_IS_SID;
+    ea[2].Trustee.TrusteeType = TRUSTEE_IS_USER;
+    ea[2].Trustee.ptstrName = reinterpret_cast<LPWSTR>(token_user->User.Sid);
+
+    ScopedLocal<PACL> new_dacl;
+    DWORD result = SetEntriesInAclW(_countof(ea), ea, nullptr, new_dacl.recieve());
+    if (result != ERROR_SUCCESS)
+    {
+        SetLastError(result);
+        PLOG(ERROR) << "SetEntriesInAclW failed";
+        return false;
+    }
+
+    result = SetSecurityInfo(process, SE_KERNEL_OBJECT, DACL_SECURITY_INFORMATION,
+                             nullptr, nullptr, new_dacl.get(), nullptr);
+    if (result != ERROR_SUCCESS)
+    {
+        SetLastError(result);
+        PLOG(ERROR) << "SetSecurityInfo failed";
+        return false;
+    }
+
     return true;
 }

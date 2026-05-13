@@ -34,6 +34,7 @@
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/scoped_object.h"
+#include "base/win/security_helpers.h"
 #include "base/win/session_info.h"
 #include <UserEnv.h>
 #endif // defined(Q_OS_WINDOWS)
@@ -97,6 +98,12 @@ bool createProcessWithToken(HANDLE token, const QString& command_line)
         DestroyEnvironmentBlock(environment);
         return false;
     }
+
+    // Restrict the DACL so the interactive user cannot terminate, suspend, inject
+    // into or patch the UI host process that owns NotifierWindow. Failure here is
+    // not fatal - the process is still launched, but log loudly.
+    if (!setProtectiveProcessDacl(process_info.hProcess, token))
+        LOG(ERROR) << "setProtectiveProcessDacl failed";
 
     CloseHandle(process_info.hThread);
     CloseHandle(process_info.hProcess);
