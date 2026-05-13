@@ -24,6 +24,7 @@
 #include <QTimer>
 #include <QVBoxLayout>
 
+#include "client/settings.h"
 #include "client/ui/client_window.h"
 
 namespace {
@@ -104,6 +105,7 @@ void ClientTab::detachToWindow()
 
     layout()->removeWidget(client_window_);
     client_window_->setParent(nullptr, Qt::Window);
+    client_window_->setWindowFlag(Qt::WindowStaysOnTopHint, Settings().alwaysOnTop());
     client_window_->show();
     client_window_->setTabbedMode(false);
 }

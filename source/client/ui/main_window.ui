@@ -81,6 +81,7 @@
     <property name="title">
      <string>View</string>
     </property>
+    <addaction name="action_always_on_top"/>
     <addaction name="action_toolbar"/>
     <addaction name="action_statusbar"/>
     <addaction name="action_large_icons"/>
@@ -193,6 +194,14 @@
    </property>
    <property name="text">
     <string>Open Sessions in Tabs</string>
+   </property>
+  </action>
+  <action name="action_always_on_top">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Always on Top</string>
    </property>
   </action>
  </widget>

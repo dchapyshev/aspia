@@ -70,6 +70,7 @@ private slots:
     void onTabFullscreenRequested(bool enabled);
     void onTabMinimizeRequested();
     void onTabShowRequested();
+    void onAlwaysOnTop(bool checked);
 
 private:
     void addTab(Tab* tab, const QString& title, const QIcon& icon);

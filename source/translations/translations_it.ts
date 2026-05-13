@@ -3465,13 +3465,13 @@ Computers skipped: %6</source>
         <translation type="vanished">Password</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="109"/>
-        <location filename="../client/ui/main_window.ui" line="171"/>
+        <location filename="../client/ui/main_window.ui" line="110"/>
+        <location filename="../client/ui/main_window.ui" line="172"/>
         <source>Tool Bar</source>
         <translation type="unfinished">Barra Strumenti</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="136"/>
+        <location filename="../client/ui/main_window.ui" line="137"/>
         <source>F1</source>
         <translation type="unfinished">F1</translation>
     </message>
@@ -3505,18 +3505,18 @@ Computers skipped: %6</source>
         <translation type="vanished">Accesso</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="163"/>
+        <location filename="../client/ui/main_window.ui" line="164"/>
         <source>Exit</source>
         <translation>Uscita</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="133"/>
+        <location filename="../client/ui/main_window.ui" line="134"/>
         <source>Online Help...</source>
         <translation>Aiuto in linea...</translation>
     </message>
     <message>
         <location filename="../client/ui/main_window.ui" line="14"/>
-        <location filename="../client/ui/main_window.cc" line="273"/>
+        <location filename="../client/ui/main_window.cc" line="279"/>
         <source>Aspia Client</source>
         <translation type="unfinished">Aspia Client</translation>
     </message>
@@ -3531,37 +3531,42 @@ Computers skipped: %6</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="92"/>
+        <location filename="../client/ui/main_window.ui" line="93"/>
         <source>Session Type</source>
         <translation type="unfinished">Tipo Sessione</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="179"/>
+        <location filename="../client/ui/main_window.ui" line="180"/>
         <source>Status Bar</source>
         <translation type="unfinished">Barra di Stato</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="187"/>
+        <location filename="../client/ui/main_window.ui" line="188"/>
         <source>Large icons</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="195"/>
+        <location filename="../client/ui/main_window.ui" line="196"/>
         <source>Open Sessions in Tabs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="145"/>
+        <location filename="../client/ui/main_window.ui" line="204"/>
+        <source>Always on Top</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../client/ui/main_window.ui" line="146"/>
         <source>About</source>
         <translation>Informazioni</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="97"/>
+        <location filename="../client/ui/main_window.ui" line="98"/>
         <source>Actions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="154"/>
+        <location filename="../client/ui/main_window.ui" line="155"/>
         <source>Settings...</source>
         <translation>Impostazioni...</translation>
     </message>
@@ -3580,22 +3585,22 @@ Computers skipped: %6</source>
     </message>
     <message>
         <location filename="../client/ui/main_window.cc" line="76"/>
-        <location filename="../client/ui/main_window.cc" line="237"/>
+        <location filename="../client/ui/main_window.cc" line="243"/>
         <source>Search...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.cc" line="139"/>
+        <location filename="../client/ui/main_window.cc" line="144"/>
         <source>Hosts</source>
         <translation type="unfinished">Hosts</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.cc" line="259"/>
+        <location filename="../client/ui/main_window.cc" line="265"/>
         <source>Settings</source>
         <translation type="unfinished">Impostazioni</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.cc" line="340"/>
+        <location filename="../client/ui/main_window.cc" line="346"/>
         <source>Connection by ID is specified in the properties of the computer, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation type="unfinished">E&apos; stata selezionata la connessione tramite ID ma il router non è configurato. Controllare i parametri del router nelle proprietà della rubrica.</translation>
     </message>

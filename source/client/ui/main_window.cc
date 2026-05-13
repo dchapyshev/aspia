@@ -92,6 +92,11 @@ MainWindow::MainWindow(QWidget* parent)
 
     ui->action_sessions_in_tabs->setChecked(settings.openSessionsInTabs());
 
+    const bool always_on_top = settings.alwaysOnTop();
+    ui->action_always_on_top->setChecked(always_on_top);
+    setWindowFlag(Qt::WindowStaysOnTopHint, always_on_top);
+    connect(ui->action_always_on_top, &QAction::toggled, this, &MainWindow::onAlwaysOnTop);
+
     connect(ui->action_settings, &QAction::triggered, this, &MainWindow::onSettings);
     connect(ui->action_help, &QAction::triggered, this, &MainWindow::onHelp);
     connect(ui->action_about, &QAction::triggered, this, &MainWindow::onAbout);
@@ -168,6 +173,7 @@ void MainWindow::closeEvent(QCloseEvent* /* event */)
     settings.setStatusBarEnabled(ui->action_statusbar->isChecked());
     settings.setLargeIcons(ui->action_large_icons->isChecked());
     settings.setOpenSessionsInTabs(ui->action_sessions_in_tabs->isChecked());
+    settings.setAlwaysOnTop(ui->action_always_on_top->isChecked());
 
     for (int i = 0; i < ui->tabs->count(); ++i)
     {
@@ -549,6 +555,26 @@ void MainWindow::onTabShowRequested()
     else if (ui->tabs->tabBar()->isTabVisible(index))
     {
         ui->tabs->setCurrentIndex(index);
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+void MainWindow::onAlwaysOnTop(bool checked)
+{
+    auto apply = [checked](QWidget* widget)
+    {
+        const bool was_visible = widget->isVisible();
+        widget->setWindowFlag(Qt::WindowStaysOnTopHint, checked);
+        if (was_visible)
+            widget->show();
+    };
+
+    apply(this);
+
+    for (QWidget* widget : QApplication::topLevelWidgets())
+    {
+        if (widget != this && qobject_cast<ClientWindow*>(widget))
+            apply(widget);
     }
 }
 

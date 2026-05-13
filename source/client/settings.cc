@@ -45,6 +45,7 @@ const QString kLargeIconsParam = "large_icons";
 const QString kToolbarParam = "toolbar";
 const QString kStatusbarParam = "statusbar";
 const QString kOnlineCheckParam = "online_check";
+const QString kAlwaysOnTopParam = "always_on_top";
 const QString kOpenSessionsInTabsParam = "open_sessions_in_tabs";
 const QString kRecordingPathParam = "recording_path";
 const QString kRecordSessionsParam = "record_sessions";
@@ -223,6 +224,18 @@ bool Settings::isOnlineCheckEnabled() const
 void Settings::setOnlineCheckEnabled(bool enable)
 {
     settings_.setValue(kOnlineCheckParam, enable);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Settings::alwaysOnTop() const
+{
+    return settings_.value(kAlwaysOnTopParam, false).toBool();
+}
+
+//--------------------------------------------------------------------------------------------------
+void Settings::setAlwaysOnTop(bool enable)
+{
+    settings_.setValue(kAlwaysOnTopParam, enable);
 }
 
 //--------------------------------------------------------------------------------------------------

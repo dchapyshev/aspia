@@ -3691,13 +3691,13 @@ Computers skipped: %5</source>
         <translation type="vanished">Тема</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="109"/>
-        <location filename="../client/ui/main_window.ui" line="171"/>
+        <location filename="../client/ui/main_window.ui" line="110"/>
+        <location filename="../client/ui/main_window.ui" line="172"/>
         <source>Tool Bar</source>
         <translation>Панель инструментов</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="136"/>
+        <location filename="../client/ui/main_window.ui" line="137"/>
         <source>F1</source>
         <translation></translation>
     </message>
@@ -3748,18 +3748,18 @@ Computers skipped: %5</source>
         <translation type="vanished">Доступ</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="163"/>
+        <location filename="../client/ui/main_window.ui" line="164"/>
         <source>Exit</source>
         <translation>Выход</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="133"/>
+        <location filename="../client/ui/main_window.ui" line="134"/>
         <source>Online Help...</source>
         <translation>Онлайн справка...</translation>
     </message>
     <message>
         <location filename="../client/ui/main_window.ui" line="14"/>
-        <location filename="../client/ui/main_window.cc" line="273"/>
+        <location filename="../client/ui/main_window.cc" line="279"/>
         <source>Aspia Client</source>
         <translation>Клиент Aspia</translation>
     </message>
@@ -3774,37 +3774,42 @@ Computers skipped: %5</source>
         <translation>Правка</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="92"/>
+        <location filename="../client/ui/main_window.ui" line="93"/>
         <source>Session Type</source>
         <translation>Тип сессии</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="179"/>
+        <location filename="../client/ui/main_window.ui" line="180"/>
         <source>Status Bar</source>
         <translation>Строка состояния</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="187"/>
+        <location filename="../client/ui/main_window.ui" line="188"/>
         <source>Large icons</source>
         <translation>Большие иконки</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="195"/>
+        <location filename="../client/ui/main_window.ui" line="196"/>
         <source>Open Sessions in Tabs</source>
         <translation>Открывать сессии во вкладках</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="145"/>
+        <location filename="../client/ui/main_window.ui" line="204"/>
+        <source>Always on Top</source>
+        <translation>Поверх всех окон</translation>
+    </message>
+    <message>
+        <location filename="../client/ui/main_window.ui" line="146"/>
         <source>About</source>
         <translation>О программе</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="97"/>
+        <location filename="../client/ui/main_window.ui" line="98"/>
         <source>Actions</source>
         <translation>Действия</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.ui" line="154"/>
+        <location filename="../client/ui/main_window.ui" line="155"/>
         <source>Settings...</source>
         <translation>Параметры...</translation>
     </message>
@@ -3814,22 +3819,22 @@ Computers skipped: %5</source>
     </message>
     <message>
         <location filename="../client/ui/main_window.cc" line="76"/>
-        <location filename="../client/ui/main_window.cc" line="237"/>
+        <location filename="../client/ui/main_window.cc" line="243"/>
         <source>Search...</source>
         <translation>Поиск...</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.cc" line="139"/>
+        <location filename="../client/ui/main_window.cc" line="144"/>
         <source>Hosts</source>
         <translation>Хосты</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.cc" line="259"/>
+        <location filename="../client/ui/main_window.cc" line="265"/>
         <source>Settings</source>
         <translation>Параметры</translation>
     </message>
     <message>
-        <location filename="../client/ui/main_window.cc" line="340"/>
+        <location filename="../client/ui/main_window.cc" line="346"/>
         <source>Connection by ID is specified in the properties of the computer, but the router is not configured. Check the parameters of the router in the properties of the address book.</source>
         <translation>В свойствах компьютера указано подключение по ID, но маршутизатор не настроен. Проверьте параметры маршрутизатора в свойствах адресной книги.</translation>
     </message>

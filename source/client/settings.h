@@ -74,6 +74,9 @@ public:
     bool isOnlineCheckEnabled() const;
     void setOnlineCheckEnabled(bool enable);
 
+    bool alwaysOnTop() const;
+    void setAlwaysOnTop(bool enable);
+
     bool openSessionsInTabs() const;
     void setOpenSessionsInTabs(bool enable);
 
