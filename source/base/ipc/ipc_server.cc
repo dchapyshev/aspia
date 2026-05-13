@@ -18,12 +18,13 @@
 
 #include "base/ipc/ipc_server.h"
 
-#include <QRandomGenerator>
 #include <QTimer>
 
 #include "base/asio_event_dispatcher.h"
 #include "base/location.h"
 #include "base/logging.h"
+#include "base/process_util.h"
+#include "base/crypto/random.h"
 #include "base/ipc/ipc_channel.h"
 
 #if defined(Q_OS_WINDOWS)
@@ -312,20 +313,11 @@ IpcServer::~IpcServer()
 QString IpcServer::createUniqueId()
 {
     static std::atomic_uint32_t last_channel_id = 0;
-    quint32 process_id;
 
-#if defined(Q_OS_WINDOWS)
-    process_id = GetCurrentProcessId();
-#elif defined(Q_OS_UNIX)
-    process_id = getpid();
-#else
-#error Not implemented
-#endif
-
-    quint32 random_number = QRandomGenerator::global()->generate();
-    quint32 channel_id = last_channel_id++;
-
-    return QString("%1.%2.%3").arg(process_id).arg(channel_id).arg(random_number);
+    return QString("%1.%2.%3")
+        .arg(ProcessUtil::currentProcessId())
+        .arg(last_channel_id++)
+        .arg(QString::fromLatin1(Random::byteArray(16).toHex()));
 }
 
 //--------------------------------------------------------------------------------------------------
