@@ -759,7 +759,7 @@ void MainWindow::installTabActions(Tab* tab)
                 }
             }
 
-            QList<QAction*> inserted_items;
+            QList<QPointer<QAction>> inserted_items;
             for (QAction* action : entry.second)
             {
                 if (anchor)
@@ -785,8 +785,11 @@ void MainWindow::installTabActions(Tab* tab)
 void MainWindow::removeTabActions()
 {
     // Remove from toolbar.
-    for (QAction* action : std::as_const(tab_toolbar_actions_))
+    for (const QPointer<QAction>& action : std::as_const(tab_toolbar_actions_))
     {
+        if (!action)
+            continue;
+
         if (!action->isSeparator())
             disconnect(action, &QAction::changed, this, &MainWindow::updateSeparatorVisibility);
 
@@ -801,8 +804,11 @@ void MainWindow::removeTabActions()
     // Remove from menus.
     for (const auto& [menu, actions] : std::as_const(tab_menu_actions_))
     {
-        for (QAction* action : actions)
+        for (const QPointer<QAction>& action : actions)
         {
+            if (!action)
+                continue;
+
             menu->removeAction(action);
             if (action->isSeparator())
                 delete action;
@@ -822,13 +828,15 @@ void MainWindow::updateSeparatorVisibility()
     // Update toolbar separator visibility.
     for (int i = 0; i < tab_toolbar_actions_.size(); ++i)
     {
-        if (!tab_toolbar_actions_[i]->isSeparator())
+        if (!tab_toolbar_actions_[i] || !tab_toolbar_actions_[i]->isSeparator())
             continue;
 
         // Separator is visible if there is at least one visible action in the group before it.
         bool has_visible = false;
         for (int j = i - 1; j >= 0; --j)
         {
+            if (!tab_toolbar_actions_[j])
+                continue;
             if (tab_toolbar_actions_[j]->isSeparator())
                 break;
             if (tab_toolbar_actions_[j]->isVisible())
