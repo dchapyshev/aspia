@@ -54,7 +54,7 @@
 #include <qt_windows.h>
 #include "base/files/file_util.h"
 #include "base/net/firewall_manager.h"
-#include "base/win/process_util.h"
+#include "base/process_util.h"
 #include "base/win/safe_mode_util.h"
 #include "host/host_utils.h"
 #endif // defined(Q_OS_WINDOWS)
@@ -392,7 +392,7 @@ void Service::onFileDownloaderCompleted()
         arguments += file_path; // MSI package file.
         arguments += " /qn"; // No UI during the installation process.
 
-        if (!createProcess("msiexec", arguments, ProcessExecuteMode::ELEVATE))
+        if (!ProcessUtil::createProcess("msiexec", arguments, ProcessUtil::ExecuteMode::ELEVATE))
         {
             LOG(ERROR) << "Unable to create update process (cmd:" << arguments << ")";
 

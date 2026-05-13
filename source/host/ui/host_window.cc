@@ -49,7 +49,7 @@
 #include "ui_host_window.h"
 
 #if defined(Q_OS_WINDOWS)
-#include "base/win/process_util.h"
+#include "base/process_util.h"
 
 #include <QWinEventNotifier>
 #include <qt_windows.h>
@@ -586,7 +586,7 @@ void HostWindow::onSettings()
     LOG(INFO) << "[ACTION] Settings";
 
 #if defined(Q_OS_WINDOWS)
-    if (!isProcessElevated())
+    if (!ProcessUtil::isProcessElevated())
     {
         LOG(INFO) << "Process not elevated";
 

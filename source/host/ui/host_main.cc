@@ -34,7 +34,7 @@
 #include "common/ui/update_dialog.h"
 
 #if defined(Q_OS_WINDOWS)
-#include "base/win/process_util.h"
+#include "base/process_util.h"
 #include "base/win/desktop.h"
 #endif // defined(Q_OS_WINDOWS)
 
@@ -179,7 +179,7 @@ int hostMain(int argc, char* argv[])
     else if (parser.isSet(config_option))
     {
 #if defined(Q_OS_WINDOWS)
-        if (!isProcessElevated())
+        if (!ProcessUtil::isProcessElevated())
         {
             LOG(INFO) << "Process not eleavated";
         }

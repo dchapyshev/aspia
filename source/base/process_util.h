@@ -16,19 +16,34 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_WIN_PROCESS_UTIL_H
-#define BASE_WIN_PROCESS_UTIL_H
+#ifndef BASE_PROCESS_UTIL_H
+#define BASE_PROCESS_UTIL_H
 
 #include <QString>
 
-bool isProcessElevated();
-
-enum class ProcessExecuteMode
+class ProcessUtil
 {
-    NORMAL, ELEVATE
+    Q_GADGET
+
+public:
+    // Returns the PID of the current process.
+    static quint32 currentProcessId();
+
+    // Returns the PID of the parent process of |pid|, or 0 on failure.
+    static quint32 parentProcessId(quint32 pid);
+
+#if defined(Q_OS_WINDOWS)
+    static bool isProcessElevated();
+
+    enum class ExecuteMode { NORMAL, ELEVATE };
+    Q_ENUM(ExecuteMode)
+
+    static bool createProcess(const QString& program, const QString& arguments,
+                              ExecuteMode mode = ExecuteMode::NORMAL);
+#endif // defined(Q_OS_WINDOWS)
+
+private:
+    Q_DISABLE_COPY_MOVE(ProcessUtil)
 };
 
-bool createProcess(const QString& program, const QString& arguments,
-    ProcessExecuteMode mode = ProcessExecuteMode::NORMAL);
-
-#endif // BASE_WIN_PROCESS_UTIL_H
+#endif // BASE_PROCESS_UTIL_H

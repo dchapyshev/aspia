@@ -48,6 +48,8 @@ list(APPEND SOURCE_BASE
     pch.h
     power_controller.cc
     power_controller.h
+    process_util.cc
+    process_util.h
     scoped_clear_last_error.cc
     scoped_clear_last_error.h
     scoped_qpointer.h
@@ -511,8 +513,6 @@ if (WIN32)
         win/power_info.h
         win/printer_enumerator.cc
         win/printer_enumerator.h
-        win/process_util.cc
-        win/process_util.h
         win/registry.cc
         win/registry.h
         win/resource_util.cc

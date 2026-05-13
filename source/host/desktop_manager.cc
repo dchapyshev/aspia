@@ -32,6 +32,7 @@
 #include "proto/desktop_internal.h"
 
 #if defined(Q_OS_WINDOWS)
+#include "base/process_util.h"
 #include "base/win/scoped_impersonator.h"
 #include "base/win/scoped_object.h"
 #include "base/win/security_helpers.h"
@@ -421,6 +422,21 @@ void DesktopManager::onIpcNewConnection()
     CHECK(ipc_channel_);
 
     ipc_channel_->setParent(this);
+
+#if defined(Q_OS_WINDOWS)
+    // Verify the connecting peer is a process we spawned (parent PID == us).
+    // On UNIX the agent is launched via sh/sudo chain plus '&' backgrounding, so its parent
+    // PID is not us; the check would reject legitimate agents and is disabled.
+    const quint32 client_pid = ipc_channel_->processId();
+    if (ProcessUtil::parentProcessId(client_pid) != ProcessUtil::currentProcessId())
+    {
+        LOG(ERROR) << "IPC client is not our child (pid:" << client_pid << ")";
+        ipc_channel_.reset();
+        dettach(FROM_HERE);
+        restart_timer_->start();
+        return;
+    }
+#endif
 
     ipc_server_->disconnect();
     ipc_server_.reset();

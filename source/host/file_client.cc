@@ -23,6 +23,7 @@
 #include <QTimer>
 
 #if defined(Q_OS_WINDOWS)
+#include "base/process_util.h"
 #include "base/win/scoped_object.h"
 #include "base/win/security_helpers.h"
 #include "base/win/session_info.h"
@@ -203,6 +204,20 @@ void FileClient::onIpcNewConnection()
 
     ipc_channel_ = ipc_server_->nextPendingConnection();
     ipc_channel_->setParent(this);
+
+#if defined(Q_OS_WINDOWS)
+    // Verify the connecting peer is a process we spawned (parent PID == us).
+    // On UNIX the agent is launched via sh/sudo chain plus '&' backgrounding, so its parent
+    // PID is not us; the check would reject legitimate agents and is disabled.
+    const quint32 client_pid = ipc_channel_->processId();
+    if (ProcessUtil::parentProcessId(client_pid) != ProcessUtil::currentProcessId())
+    {
+        CLOG(ERROR) << "IPC client is not our child (pid:" << client_pid << ")";
+        ipc_channel_.reset();
+        onError(FROM_HERE);
+        return;
+    }
+#endif
 
     ipc_server_->disconnect(this);
     ipc_server_.reset();

@@ -34,7 +34,7 @@
 #include <wrl/client.h>
 
 #include "base/win/desktop.h"
-#include "base/win/process_util.h"
+#include "base/process_util.h"
 #include "base/win/session_info.h"
 #include "base/win/window_station.h"
 #endif // defined(Q_OS_WINDOWS)
@@ -597,7 +597,7 @@ void HostUtils::printDebugInfo(quint32 features)
 
     LOG(INFO) << "Running as user:" << username;
     LOG(INFO) << "Member of admins group:" << (is_user_admin ? "Yes" : "No");
-    LOG(INFO) << "Process elevated:" << (isProcessElevated() ? "Yes" : "No");
+    LOG(INFO) << "Process elevated:" << (ProcessUtil::isProcessElevated() ? "Yes" : "No");
     LOG(INFO) << "Active console session ID:" << WTSGetActiveConsoleSessionId();
     LOG(INFO) << "Computer name:" << SysInfo::computerName();
 

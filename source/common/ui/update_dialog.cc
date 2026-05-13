@@ -32,7 +32,7 @@
 #include "ui_update_dialog.h"
 
 #if defined(Q_OS_WINDOWS)
-#include "base/win/process_util.h"
+#include "base/process_util.h"
 #endif // defined(Q_OS_WINDOWS)
 
 namespace {
@@ -164,7 +164,7 @@ void UpdateDialog::onUpdateNow()
                 // Basic UI with no modal dialog boxes.
                 arguments += " /qb-!";
 
-                if (createProcess("msiexec", arguments, ProcessExecuteMode::ELEVATE))
+                if (ProcessUtil::createProcess("msiexec", arguments, ProcessUtil::ExecuteMode::ELEVATE))
                 {
                     LOG(INFO) << "msiexec is started";
                     // If the process is successfully launched, then the application is terminated.

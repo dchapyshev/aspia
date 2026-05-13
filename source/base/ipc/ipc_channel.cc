@@ -30,6 +30,15 @@
 #include "base/win/scoped_object.h"
 #endif // defined(Q_OS_WINDOWS)
 
+#if defined(Q_OS_LINUX)
+#include <sys/socket.h>
+#endif // defined(Q_OS_LINUX)
+
+#if defined(Q_OS_MACOS)
+#include <sys/socket.h>
+#include <sys/un.h>
+#endif // defined(Q_OS_MACOS)
+
 namespace {
 
 const int kWriteQueueReservedSize = 64;
@@ -89,6 +98,53 @@ SessionId serverSessionId(PipeHandle pipe_handle)
 #endif
 }
 
+//--------------------------------------------------------------------------------------------------
+// Returns the PID of the peer process. |is_server_side| selects which Windows API to use
+// (GetNamedPipeClientProcessId vs GetNamedPipeServerProcessId); on UNIX both sides of a domain
+// socket are symmetric and the parameter is ignored.
+quint32 peerProcessId(PipeHandle pipe_handle, bool is_server_side)
+{
+#if defined(Q_OS_WINDOWS)
+    ULONG process_id = 0;
+    const BOOL ok = is_server_side ?
+        GetNamedPipeClientProcessId(pipe_handle, &process_id) :
+        GetNamedPipeServerProcessId(pipe_handle, &process_id);
+    if (!ok)
+    {
+        PLOG(ERROR) << "GetNamedPipe" << (is_server_side ? "Client" : "Server") << "ProcessId failed";
+        return 0;
+    }
+
+    return process_id;
+#elif defined(Q_OS_LINUX)
+    Q_UNUSED(is_server_side)
+    struct ucred cred;
+    socklen_t len = sizeof(cred);
+    if (getsockopt(pipe_handle, SOL_SOCKET, SO_PEERCRED, &cred, &len) != 0)
+    {
+        PLOG(ERROR) << "getsockopt(SO_PEERCRED) failed";
+        return 0;
+    }
+
+    return static_cast<quint32>(cred.pid);
+#elif defined(Q_OS_MACOS)
+    Q_UNUSED(is_server_side)
+    pid_t pid = 0;
+    socklen_t len = sizeof(pid);
+    if (getsockopt(pipe_handle, SOL_LOCAL, LOCAL_PEERPID, &pid, &len) != 0)
+    {
+        PLOG(ERROR) << "getsockopt(LOCAL_PEERPID) failed";
+        return 0;
+    }
+
+    return static_cast<quint32>(pid);
+#else
+    Q_UNUSED(pipe_handle)
+    Q_UNUSED(is_server_side)
+    return 0;
+#endif
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -105,6 +161,7 @@ IpcChannel::IpcChannel(const QString& channel_name, Stream&& stream, QObject* pa
     : QObject(parent),
       instance_id_(makeInstanceId()),
       session_id_(clientSessionId(stream.native_handle())),
+      process_id_(peerProcessId(stream.native_handle(), /* is_server_side */ true)),
       channel_name_(channel_name),
       stream_(std::move(stream)),
       is_connected_(true)
@@ -245,6 +302,7 @@ bool IpcChannel::connectAttempt()
 #endif
 
     session_id_ = serverSessionId(stream_.native_handle());
+    process_id_ = peerProcessId(stream_.native_handle(), /* is_server_side */ false);
     return true;
 }
 
