@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>297</width>
+    <width>300</width>
     <height>222</height>
    </rect>
   </property>
@@ -18,7 +18,7 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>250</width>
+    <width>300</width>
     <height>0</height>
    </size>
   </property>
@@ -232,8 +232,8 @@ border-radius: 2px;
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>297</width>
-     <height>26</height>
+     <width>300</width>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_aspia">
