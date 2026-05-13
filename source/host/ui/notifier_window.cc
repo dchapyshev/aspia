@@ -130,6 +130,9 @@ NotifierWindow::NotifierWindow(QWidget* parent)
     ui->button_lock_mouse->setCheckable(true);
     ui->button_pause->setCheckable(true);
 
+    ui->tree->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    ui->tree->setTextElideMode(Qt::ElideRight);
+
     connect(GuiApplication::instance(), &GuiApplication::sig_themeChanged,
             this, &NotifierWindow::onThemeChanged);
 
