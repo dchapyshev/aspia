@@ -33,16 +33,43 @@ size_t FloodGuard::AddressHash::operator()(const asio::ip::address& address) con
 }
 
 //--------------------------------------------------------------------------------------------------
-FloodGuard::FloodGuard(Seconds window, int max_per_window, int max_pending, int max_tracked)
-    : max_pending_(max_pending),
-      max_tracked_(max_tracked),
-      slot_(Nanoseconds(window) / max_per_window),
-      burst_(window)
+bool FloodGuard::check(const asio::ip::tcp::socket& socket, int current_pending)
 {
-    CHECK_GT(max_per_window, 0);
+    const TimePoint now = Clock::now();
+    return checkAddress(now, socket) && checkPending(now, current_pending);
+}
+
+//--------------------------------------------------------------------------------------------------
+void FloodGuard::setRateLimit(Seconds window, int max_per_window)
+{
     CHECK_GT(window.count(), 0);
+    CHECK_GT(max_per_window, 0);
+
+    slot_ = Nanoseconds(window) / max_per_window;
+    burst_ = window;
+}
+
+//--------------------------------------------------------------------------------------------------
+void FloodGuard::setMaxPending(int value)
+{
+    max_pending_ = value;
     CHECK_GT(max_pending_, 0);
-    CHECK_GT(max_tracked_, 0);
+}
+
+//--------------------------------------------------------------------------------------------------
+int FloodGuard::maxPending() const
+{
+    return max_pending_;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool FloodGuard::checkAddress(TimePoint now, const asio::ip::tcp::socket& socket)
+{
+    std::error_code error_code;
+    const asio::ip::tcp::endpoint endpoint = socket.remote_endpoint(error_code);
+    if (error_code)
+        return true;
+    return checkAddress(now, endpoint.address());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -51,7 +78,7 @@ bool FloodGuard::checkAddress(TimePoint now, const asio::ip::address& address)
     auto it = tat_.find(address);
     if (it == tat_.end())
     {
-        if (static_cast<int>(tat_.size()) >= max_tracked_)
+        if (static_cast<int>(tat_.size()) >= kMaxTracked)
         {
             // Map is full. Drop entries whose TAT lies in the past (fully refilled buckets);
             // removing them does not affect rate-limiting accuracy - on their next attempt
@@ -67,7 +94,7 @@ bool FloodGuard::checkAddress(TimePoint now, const asio::ip::address& address)
             // Still full - the guard is overwhelmed by distinct active sources. Fail open:
             // track nothing new, allow the connection. This prevents a botnet-scale flood from
             // implicitly DoSing legitimate peers (they would get evicted on every accept).
-            if (static_cast<int>(tat_.size()) >= max_tracked_)
+            if (static_cast<int>(tat_.size()) >= kMaxTracked)
                 return true;
         }
 

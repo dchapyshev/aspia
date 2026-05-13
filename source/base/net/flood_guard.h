@@ -20,20 +20,22 @@
 #define BASE_NET_FLOOD_GUARD_H
 
 #include <asio/ip/address.hpp>
+#include <asio/ip/tcp.hpp>
 
 #include <chrono>
 #include <unordered_map>
 
-// Two-pronged anti-flood gate for an accept loop:
+// Two-pronged anti-flood gate for an accept loop. Exposes a single public entry point check()
+// that runs both gates against the same time sample:
 //
-//   1) Per-address rate limit (checkAddress) - bounds how often a single source can attempt to
-//      connect over a sliding window, smoothing bursts.
-//   2) Global pending cap (checkPending) - bounds how many half-finished handshakes may be
-//      in flight at once, regardless of source.
+//   1) Per-address rate limit - bounds how often a single source can attempt to connect over a
+//      sliding window, smoothing bursts. Tunable at runtime via setRateLimit().
+//   2) Global pending cap - bounds how many half-finished handshakes may be in flight at once,
+//      regardless of source. Tunable at runtime via setMaxPending().
 //
-// Both methods are advisory: they return a bool that the caller uses to drop the connection.
-// On rejection each method emits a LOG(WARNING) rate-limited to at most one entry per
-// kMinLogInterval, so an attacker can't flood the log by hammering the accept loop.
+// check() is advisory: returns a bool the caller uses to drop the connection. Each rejected
+// gate emits a LOG(WARNING) rate-limited to at most one entry per kMinLogInterval, so an
+// attacker can't flood the log by hammering the accept loop.
 //
 // Per-address algorithm: GCRA (Generic Cell Rate Algorithm, ITU-T I.371), the integer-math
 // equivalent of a token bucket. Per source we store one TimePoint - the Theoretical Arrival
@@ -41,10 +43,9 @@
 // rejected when the new TAT would lie more than |burst_| (= window) ahead of now. The bucket
 // state is implicit: |now - TAT| corresponds to accumulated tokens, |TAT - now| to spent
 // burst credit. Compared to an explicit token bucket this halves per-entry memory and avoids
-// floating point. The map is capped at |max_tracked| entries; when full, fully-refilled
+// floating point. The map is capped at |kMaxTracked| entries; when full, fully-refilled
 // entries (TAT <= now) are evicted first. If none can be freed the guard fails open for new
-// addresses - that prevents a botnet-scale flood from churning out legitimate peers as
-// collateral.
+// addresses - that prevents a botnet-scale flood from evicting legitimate peers as collateral.
 //
 // Pending-cap algorithm: trivial threshold against the caller-supplied current count.
 //
@@ -58,38 +59,51 @@ public:
     using Seconds = std::chrono::seconds;
     using Nanoseconds = std::chrono::nanoseconds;
 
-    // |window|         - sliding window for the per-address rate (seconds).
-    // |max_per_window| - max connections accepted from one address per |window|, with bursts
-    //                    of up to |max_per_window| absorbed before throttling kicks in.
-    // |max_pending|    - global cap on in-flight handshakes; checkPending() enforces it.
-    // |max_tracked|    - cap on the per-address state map. When full, fully-refilled entries
-    //                    are evicted first; if none can be freed the guard fails open for new
-    //                    addresses so a botnet-scale flood does not starve legitimate peers.
-    FloodGuard(Seconds window, int max_per_window, int max_pending, int max_tracked = 10000);
+    // Constructs with conservative defaults: 60 connections/min per address, pending cap 32.
+    // Callers tune the limits to their role via setRateLimit() and setMaxPending() before the
+    // accept loop starts.
+    FloodGuard() = default;
 
-    // |now| is taken as a parameter rather than queried inside the methods so the caller can
-    // fetch Clock::now() once and pass it to both checks for the same accept event.
+    // Single entry point for an accept loop. Runs the per-address rate check on |socket|'s
+    // peer and the global pending-cap check against |current_pending|, both against the same
+    // |now| sampled internally. Returns true only if both gates allow the connection. Each
+    // rejected gate emits a rate-limited LOG(WARNING) summarising suppressed rejections.
+    //
+    // Per-address check runs first so a flooding source is attributed to the per-IP log stream
+    // rather than masked by the global "pending limit reached" warning.
+    bool check(const asio::ip::tcp::socket& socket, int current_pending);
 
-    // Returns true if a connection from |address| is currently within its per-address budget.
-    // On rejection emits a rate-limited LOG(WARNING) summarising suppressed rejections.
-    bool checkAddress(TimePoint now, const asio::ip::address& address);
+    // Updates the per-address sliding-window rate. |window| is the smoothing horizon; over it
+    // each address is allowed |max_per_window| connections, with bursts of the same size
+    // absorbed before throttling. Intended to be called before the accept loop starts. Existing
+    // per-address TAT entries are kept; the new |slot_|/|burst_| apply to subsequent calls.
+    void setRateLimit(Seconds window, int max_per_window);
 
-    // Returns true while |current_pending| is below the cap configured in the constructor.
-    // Once the cap is hit, returns false and emits a rate-limited LOG(WARNING) summarising
-    // suppressed rejections. Independent of checkAddress() - tracks its own rejection counter
-    // so log streams don't get mixed.
-    bool checkPending(TimePoint now, int current_pending);
+    // Updates / reads the global pending cap. Intended to be called before the accept loop
+    // starts so the value is stable for the lifetime of the listener.
+    void setMaxPending(int value);
+    int maxPending() const;
 
 private:
+    // Test-only access to the underlying per-address and per-pending checks.
+    friend class FloodGuardTestPeer;
+
+    bool checkAddress(TimePoint now, const asio::ip::address& address);
+    bool checkAddress(TimePoint now, const asio::ip::tcp::socket& socket);
+    bool checkPending(TimePoint now, int current_pending);
+
     struct AddressHash
     {
         size_t operator()(const asio::ip::address& address) const noexcept;
     };
 
-    const int max_pending_;
-    const int max_tracked_;
-    const Nanoseconds slot_;  // Cost per accept (= window / max_per_window).
-    const Nanoseconds burst_; // Burst tolerance (= window).
+    // Hard cap on the per-address state map. Chosen so that a botnet-scale source diversity
+    // can't blow up memory; ~10K entries of (address + TimePoint) sits well under 1 MB.
+    static constexpr int kMaxTracked = 10000;
+
+    int max_pending_ = 32;
+    Nanoseconds slot_ = std::chrono::seconds(1);   // Cost per accept (= window / max_per_window).
+    Nanoseconds burst_ = std::chrono::seconds(60); // Burst tolerance (= window).
 
     // Per-address theoretical arrival time. Distance from |now| measures how far ahead of the
     // steady rate the source has run; |now - tat| measures how much idle headroom remains.

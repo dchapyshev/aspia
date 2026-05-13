@@ -23,6 +23,7 @@
 #include "base/asio_event_dispatcher.h"
 #include "base/logging.h"
 #include "base/crypto/stream_decryptor.h"
+#include "base/net/flood_guard.h"
 #include "proto/relay_peer.h"
 #include "proto/router_relay.h"
 #include "relay/pending_session.h"
@@ -32,6 +33,14 @@
 namespace {
 
 const std::chrono::minutes kIdleTimerInterval { 1 };
+
+// Caps for the relay role. The relay routes already-paired peers, so concurrent unfinished
+// handshakes are usually few; a tight pending cap protects relay resources without rejecting
+// normal traffic. The per-address rate matches the FloodGuard default but is set explicitly so
+// the policy is visible at the use site.
+constexpr FloodGuard::Seconds kPerAddressWindow{ 60 };
+constexpr int kPerAddressMax = 60;
+constexpr int kMaxPendingSessions = 60;
 
 //--------------------------------------------------------------------------------------------------
 // Decrypts an encrypted pair of peer identifiers using key |session_key|.
@@ -102,9 +111,12 @@ SessionManager::SessionManager(QObject* parent)
     : QObject(parent),
       acceptor_(AsioEventDispatcher::ioContext()),
       idle_timer_(new QTimer(this)),
-      stat_timer_(new QTimer(this))
+      stat_timer_(new QTimer(this)),
+      flood_guard_(std::make_unique<FloodGuard>())
 {
     LOG(INFO) << "Ctor";
+    flood_guard_->setRateLimit(kPerAddressWindow, kPerAddressMax);
+    flood_guard_->setMaxPending(kMaxPendingSessions);
     connect(idle_timer_, &QTimer::timeout, this, &SessionManager::onIdleTimeout);
     connect(stat_timer_, &QTimer::timeout, this, &SessionManager::onStatTimeout);
 }
@@ -374,25 +386,9 @@ void SessionManager::doAccept(SessionManager* self)
 
         if (!error_code)
         {
-            if (self->pending_sessions_.size() >= kMaxPendingSessions)
+            if (!self->flood_guard_->check(socket, self->pending_sessions_.size()))
             {
-                ++self->rejected_since_last_log_;
-
-                constexpr Seconds kMinLogInterval{ 30 };
-                const TimePoint now = Clock::now();
-
-                if (self->last_limit_warning_ == TimePoint() ||
-                    (now - self->last_limit_warning_) >= kMinLogInterval)
-                {
-                    LOG(WARNING) << "Pending session limit reached ("
-                                 << self->pending_sessions_.size()
-                                 << "); rejected " << self->rejected_since_last_log_
-                                 << " connection(s) since last warning";
-                    self->rejected_since_last_log_ = 0;
-                    self->last_limit_warning_ = now;
-                }
-
-                // socket goes out of scope here - asio's destructor closes the descriptor.
+                // |socket| goes out of scope here - asio's destructor closes the descriptor.
             }
             else
             {

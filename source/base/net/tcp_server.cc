@@ -22,15 +22,18 @@
 
 #include "base/asio_event_dispatcher.h"
 #include "base/logging.h"
+#include "base/net/flood_guard.h"
 #include "base/net/tcp_channel_ng.h"
 #include "base/peer/server_authenticator.h"
 
 //--------------------------------------------------------------------------------------------------
 TcpServer::TcpServer(QObject* parent)
     : QObject(parent),
-      acceptor_(AsioEventDispatcher::ioContext())
+      acceptor_(AsioEventDispatcher::ioContext()),
+      flood_guard_(std::make_unique<FloodGuard>())
 {
-    // Nothing
+    // FloodGuard defaults (60/min per address, pending cap 32) suit a single-host listener.
+    // Roles serving many peers (router) call setRateLimit / setMaxPendingConnections directly.
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -74,7 +77,19 @@ void TcpServer::setMaxPendingConnections(int max_pending)
         return;
     }
 
-    max_pending_connections_ = max_pending;
+    flood_guard_->setMaxPending(max_pending);
+}
+
+//--------------------------------------------------------------------------------------------------
+void TcpServer::setMaxConnectionsPerMinute(int max_per_minute)
+{
+    if (max_per_minute <= 0)
+    {
+        LOG(ERROR) << "Invalid max connections per minute:" << max_per_minute;
+        return;
+    }
+
+    flood_guard_->setRateLimit(FloodGuard::Seconds{60}, max_per_minute);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -205,21 +220,8 @@ void TcpServer::doAccept()
         {
             accept_error_count_ = 0;
 
-            if (pending_.size() >= max_pending_connections_)
+            if (!flood_guard_->check(socket, pending_.size()))
             {
-                ++rejected_since_last_log_;
-
-                constexpr Seconds kMinLogInterval{ 30 };
-                const TimePoint now = Clock::now();
-                if (last_limit_warning_ == TimePoint() || (now - last_limit_warning_) >= kMinLogInterval)
-                {
-                    LOG(WARNING) << "Pending connection limit reached (" << pending_.size()
-                                 << "); rejected " << rejected_since_last_log_
-                                 << " connection(s) since last warning";
-                    rejected_since_last_log_ = 0;
-                    last_limit_warning_ = now;
-                }
-
                 // socket goes out of scope here - asio's destructor closes the descriptor.
                 doAccept();
                 return;

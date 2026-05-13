@@ -27,6 +27,9 @@
 #include "base/shared_pointer.h"
 #include "relay/session_key.h"
 
+#include <memory>
+
+class FloodGuard;
 class PendingSession;
 class QTimer;
 class Session;
@@ -92,22 +95,11 @@ private:
 
     using Clock = std::chrono::steady_clock;
     using TimePoint = std::chrono::time_point<Clock>;
-    using Seconds = std::chrono::seconds;
 
     TimePoint start_time_;
 
-    // Maximum number of pending sessions (peers still in the relay handshake). New TCP
-    // connections beyond this cap are accepted and immediately closed to bound the cost an
-    // attacker can impose by flooding the accept loop. Each pending session holds a socket plus
-    // a small amount of state until both peers arrive.
-    static constexpr int kMaxPendingSessions = 128;
-
-    // Rate-limited logging for the rejection path: an attacker can otherwise flood the log file
-    // by hammering the accept loop. We emit at most one warning per kMinLogInterval and
-    // accumulate a count of suppressed rejections in between. Default-constructed time_point
-    // (epoch of steady_clock) is used as the "never logged yet" sentinel.
-    TimePoint last_limit_warning_;
-    int rejected_since_last_log_ = 0;
+    // Anti-flood gate: per-address rate limit + global pending cap + rate-limited logging.
+    std::unique_ptr<FloodGuard> flood_guard_;
 
     Q_DISABLE_COPY_MOVE(SessionManager)
 };

@@ -24,12 +24,13 @@
 
 #include <asio/ip/tcp.hpp>
 
-#include <chrono>
+#include <memory>
 
 #include "base/shared_pointer.h"
 #include "base/peer/user_list_base.h"
 #include "base/peer/server_authenticator.h"
 
+class FloodGuard;
 class TcpChannel;
 
 class TcpServer final : public QObject
@@ -54,6 +55,11 @@ public:
     // single host. The router serves many peers and should raise this (e.g. to 128).
     void setMaxPendingConnections(int max_pending);
 
+    // Maximum number of connection attempts accepted from a single peer address per minute.
+    // Bursts of |max_per_minute| are absorbed before throttling kicks in. Defaults to 60
+    // (~1/s with a burst of 60). Routers facing corporate NAT may need a much higher value.
+    void setMaxConnectionsPerMinute(int max_per_minute);
+
     void start(quint16 port, const QString& iface = QString());
 
     bool hasReadyConnections();
@@ -69,10 +75,6 @@ private:
     void doAccept();
     void removePendingChannel(TcpChannel* channel);
 
-    using Clock = std::chrono::steady_clock;
-    using TimePoint = Clock::time_point;
-    using Seconds = std::chrono::seconds;
-
     SharedPointer<bool> alive_guard_ { new bool(true) };
     asio::ip::tcp::acceptor acceptor_;
     int accept_error_count_ = 0;
@@ -84,14 +86,10 @@ private:
         ServerAuthenticator::AnonymousAccess::DISABLE;
 
     quint32 anonymous_session_types_ = 0;
-    int max_pending_connections_ = 32;
 
-    // Rate-limited logging for the rejection path: an attacker can otherwise flood the log
-    // file by hammering the accept loop. We emit at most one warning per kMinLogInterval and
-    // accumulate a count of suppressed rejections in between. Default-constructed time_point
-    // (epoch of steady_clock) is used as the "never logged yet" sentinel.
-    TimePoint last_limit_warning_;
-    int rejected_since_last_log_ = 0;
+    // Anti-flood gate: handles both per-address rate limiting and the global pending cap, plus
+    // rate-limited rejection logging.
+    std::unique_ptr<FloodGuard> flood_guard_;
 
     QQueue<TcpChannel*> pending_;
     QQueue<TcpChannel*> ready_;

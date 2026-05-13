@@ -433,8 +433,12 @@ bool Service::start()
     SharedPointer<UserListBase> user_list(RouterUserList::open().release());
     user_list->setSeedKey(seed_key);
 
-    // The router serves many concurrent peers; raise the default cap.
-    static constexpr int kRouterMaxPendingConnections = 128;
+    // Caps for the router role. The pending cap is intentionally modest - latecomers retry in
+    // a moment, and the smaller cap prevents a flood from pinning router resources. The
+    // per-address rate is high enough to absorb a thundering herd from one corporate NAT
+    // (e.g. hundreds of hosts reconnecting after a network blip) without false positives.
+    static constexpr int kRouterMaxPendingConnections = 100;
+    static constexpr int kRouterMaxConnectionsPerMinute = 300;
 
     tcp_server_ = new TcpServer(this);
     connect(tcp_server_, &TcpServer::sig_newConnection, this, &Service::onNewConnection);
@@ -445,6 +449,7 @@ bool Service::start()
         ServerAuthenticator::AnonymousAccess::ENABLE,
         proto::router::SESSION_TYPE_HOST | proto::router::SESSION_TYPE_RELAY);
     tcp_server_->setMaxPendingConnections(kRouterMaxPendingConnections);
+    tcp_server_->setMaxConnectionsPerMinute(kRouterMaxConnectionsPerMinute);
     tcp_server_->start(port, listen_interface);
 
     tcp_server_legacy_ = new TcpServerLegacy(this);
@@ -456,6 +461,7 @@ bool Service::start()
         ServerAuthenticatorLegacy::AnonymousAccess::ENABLE,
         proto::router::SESSION_TYPE_HOST | proto::router::SESSION_TYPE_RELAY);
     tcp_server_legacy_->setMaxPendingConnections(kRouterMaxPendingConnections);
+    tcp_server_legacy_->setMaxConnectionsPerMinute(kRouterMaxConnectionsPerMinute);
     tcp_server_legacy_->start(legacy_port, listen_interface);
 
     if (settings.isStunEnabled())
