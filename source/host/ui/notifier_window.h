@@ -62,6 +62,7 @@ protected:
     void closeEvent(QCloseEvent* event) final;
     void moveEvent(QMoveEvent* event) final;
     void paintEvent(QPaintEvent* event) final;
+    void changeEvent(QEvent* event) final;
 
 private slots:
     void onUpdateWindowPosition();

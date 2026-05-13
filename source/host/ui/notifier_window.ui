@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>267</width>
-    <height>176</height>
+    <height>184</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -55,7 +55,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>26</height>
+          <height>32</height>
          </size>
         </property>
         <property name="text">
@@ -67,8 +67,8 @@
         </property>
         <property name="iconSize">
          <size>
-          <width>20</width>
-          <height>20</height>
+          <width>24</width>
+          <height>24</height>
          </size>
         </property>
        </widget>
@@ -118,7 +118,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>26</height>
+          <height>32</height>
          </size>
         </property>
         <property name="text">
@@ -130,8 +130,8 @@
         </property>
         <property name="iconSize">
          <size>
-          <width>20</width>
-          <height>20</height>
+          <width>24</width>
+          <height>24</height>
          </size>
         </property>
        </widget>
@@ -204,8 +204,8 @@
         </property>
         <property name="iconSize">
          <size>
-          <width>22</width>
-          <height>22</height>
+          <width>24</width>
+          <height>24</height>
          </size>
         </property>
         <property name="indentation">
@@ -283,6 +283,12 @@
          </item>
          <item>
           <widget class="QToolButton" name="button_lock_mouse">
+           <property name="maximumSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
            <property name="toolTip">
             <string>Lock mouse</string>
            </property>
@@ -295,14 +301,20 @@
            </property>
            <property name="iconSize">
             <size>
-             <width>18</width>
-             <height>18</height>
+             <width>24</width>
+             <height>24</height>
             </size>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QToolButton" name="button_lock_keyboard">
+           <property name="maximumSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
            <property name="toolTip">
             <string>Lock keyboard</string>
            </property>
@@ -315,14 +327,20 @@
            </property>
            <property name="iconSize">
             <size>
-             <width>18</width>
-             <height>18</height>
+             <width>24</width>
+             <height>24</height>
             </size>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QToolButton" name="button_pause">
+           <property name="maximumSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
            <property name="toolTip">
             <string>Pause</string>
            </property>
@@ -335,14 +353,20 @@
            </property>
            <property name="iconSize">
             <size>
-             <width>18</width>
-             <height>18</height>
+             <width>24</width>
+             <height>24</height>
             </size>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QToolButton" name="button_stop">
+           <property name="maximumSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
            <property name="toolTip">
             <string>Disconnect all</string>
            </property>
@@ -355,8 +379,8 @@
            </property>
            <property name="iconSize">
             <size>
-             <width>18</width>
-             <height>18</height>
+             <width>24</width>
+             <height>24</height>
             </size>
            </property>
           </widget>

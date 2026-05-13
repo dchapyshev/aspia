@@ -18,6 +18,7 @@
 
 #include "host/ui/notifier_window.h"
 
+#include <QGuiApplication>
 #include <QHideEvent>
 #include <QMenu>
 #include <QMouseEvent>
@@ -43,6 +44,9 @@ namespace {
 const int kRightPadding = 10;
 const int kBottonPadding = 10;
 const int kBorderRadius = 4;
+
+const Qt::WindowFlags kWindowFlags = Qt::FramelessWindowHint | Qt::Tool | Qt::WindowStaysOnTopHint |
+    Qt::CustomizeWindowHint | Qt::WindowDoesNotAcceptFocus;
 
 class SessionTreeItem : public QTreeWidgetItem
 {
@@ -98,11 +102,11 @@ QToolButton* createSessionButton(QWidget* parent, const QString& icon, const QSt
 {
     QToolButton* button = new QToolButton(parent);
 
-    button->setIconSize(QSize(18, 18));
+    button->setIconSize(QSize(24, 24));
     button->setIcon(QIcon(icon));
     button->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
-    button->setFixedWidth(24);
-    button->setFixedHeight(24);
+    button->setFixedWidth(30);
+    button->setFixedHeight(30);
     button->setToolTip(tooltip);
 
     return button;
@@ -112,7 +116,7 @@ QToolButton* createSessionButton(QWidget* parent, const QString& icon, const QSt
 
 //--------------------------------------------------------------------------------------------------
 NotifierWindow::NotifierWindow(QWidget* parent)
-    : QWidget(parent, Qt::FramelessWindowHint | Qt::Tool | Qt::WindowStaysOnTopHint),
+    : QWidget(parent, kWindowFlags),
       ui(std::make_unique<Ui::NotifierWindow>())
 {
     LOG(INFO) << "Ctor";
@@ -156,15 +160,33 @@ NotifierWindow::NotifierWindow(QWidget* parent)
     QTimer* timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, [this]
     {
-        setWindowFlag(Qt::WindowStaysOnTopHint);
+        // 1. Re-assert window flags (topmost, customize, no-focus etc.).
+        if ((windowFlags() & kWindowFlags) != kWindowFlags)
+            setWindowFlags(kWindowFlags);
 
+        // 2. Restore visibility / minimized state.
         if (!isVisible())
-        {
             show();
-            activateWindow();
-        }
+        if (windowState() & Qt::WindowMinimized)
+            setWindowState(windowState() & ~Qt::WindowMinimized);
+
+        // 3. Revert opacity tampering.
+        if (windowOpacity() < 0.95)
+            setWindowOpacity(1.0);
+
+        // 4. Revert mouse passthrough / disabled tampering.
+        if (testAttribute(Qt::WA_TransparentForMouseEvents))
+            setAttribute(Qt::WA_TransparentForMouseEvents, false);
+        if (!isEnabled())
+            setEnabled(true);
+
+        // 5. Snap back to the anchor if pushed off-screen, then raise above
+        // any other top-most window created after us.
+        if (!QGuiApplication::screenAt(mapToGlobal(rect().center())))
+            onUpdateWindowPosition();
+        raise();
     });
-    timer->start(std::chrono::seconds(3));
+    timer->start(std::chrono::milliseconds(500));
 
     ui->show_panel->setVisible(false);
     onThemeChanged();
@@ -377,6 +399,26 @@ void NotifierWindow::paintEvent(QPaintEvent* event)
     path.addRoundedRect(rect(), kBorderRadius, kBorderRadius);
     QRegion mask = QRegion(path.toFillPolygon().toPolygon());
     setMask(mask);
+}
+
+//--------------------------------------------------------------------------------------------------
+void NotifierWindow::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::WindowStateChange)
+    {
+        if (windowState() & Qt::WindowMinimized)
+        {
+            setWindowState(windowState() & ~Qt::WindowMinimized);
+            event->accept();
+            return;
+        }
+    }
+    else if (event->type() == QEvent::LanguageChange)
+    {
+        retranslateUi();
+    }
+
+    QWidget::changeEvent(event);
 }
 
 //--------------------------------------------------------------------------------------------------
