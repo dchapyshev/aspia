@@ -34,6 +34,7 @@
 #if defined(Q_OS_WINDOWS)
 #include "base/win/scoped_impersonator.h"
 #include "base/win/scoped_object.h"
+#include "base/win/security_helpers.h"
 #include <UserEnv.h>
 #endif // defined(Q_OS_WINDOWS)
 
@@ -189,6 +190,11 @@ bool startProcessWithToken(HANDLE token, const QString& command_line, ScopedHand
 
     thread->reset(process_info.hThread);
     process->reset(process_info.hProcess);
+
+    // Harden process: only SYSTEM/Administrators may terminate, suspend, inject
+    // into or patch this desktop agent.
+    if (!setProtectiveProcessDacl(process->get(), token))
+        LOG(ERROR) << "setProtectiveProcessDacl failed";
 
     DestroyEnvironmentBlock(environment);
     return true;

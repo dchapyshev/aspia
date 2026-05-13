@@ -24,6 +24,7 @@
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/scoped_object.h"
+#include "base/win/security_helpers.h"
 #include "base/win/session_info.h"
 
 #include <UserEnv.h>
@@ -137,6 +138,11 @@ bool startProcessWithToken(HANDLE token, const QString& command_line, ScopedHand
 
     thread->reset(process_info.hThread);
     process->reset(process_info.hProcess);
+
+    // Harden process: only SYSTEM/Administrators may terminate, suspend, inject
+    // into or patch this file transfer agent.
+    if (!setProtectiveProcessDacl(process->get(), token))
+        LOG(ERROR) << "setProtectiveProcessDacl failed";
 
     DestroyEnvironmentBlock(environment);
     return true;
