@@ -20,12 +20,14 @@
 
 #include <QCoreApplication>
 #include <QDir>
+#include <QFileInfo>
 #include <QTimer>
 
 #include "base/core_application.h"
 #include "base/location.h"
 #include "base/logging.h"
 #include "base/numeric_utils.h"
+#include "base/process_util.h"
 #include "base/ipc/ipc_channel.h"
 #include "base/ipc/ipc_server.h"
 #include "host/client.h"
@@ -455,6 +457,19 @@ void UserSession::onIpcNewConnection()
     if (ipc_channel_)
     {
         LOG(WARNING) << "IPC channel is already connected";
+        ipc_channel->deleteLater();
+        return;
+    }
+
+    // Verify the connecting peer's executable is exactly the UI binary we shipped.
+    const QString expected_path = QFileInfo(
+        QCoreApplication::applicationDirPath() + '/' + kExecutableNameForUi).canonicalFilePath();
+    const QString actual_path = QFileInfo(
+        ProcessUtil::filePath(ipc_channel->processId())).canonicalFilePath();
+    if (actual_path.isEmpty() || actual_path != expected_path)
+    {
+        LOG(ERROR) << "IPC client has unexpected executable (pid:" << ipc_channel->processId()
+                   << "path:" << actual_path << "expected:" << expected_path << ")";
         ipc_channel->deleteLater();
         return;
     }

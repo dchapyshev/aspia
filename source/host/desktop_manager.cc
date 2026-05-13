@@ -20,6 +20,7 @@
 
 #include <QCoreApplication>
 #include <QDir>
+#include <QFileInfo>
 #include <QTimer>
 
 #include "base/core_application.h"
@@ -423,11 +424,25 @@ void DesktopManager::onIpcNewConnection()
 
     ipc_channel_->setParent(this);
 
+    const quint32 client_pid = ipc_channel_->processId();
+
+    // Verify the connecting peer's executable is exactly the agent binary we shipped.
+    const QString expected_path = QFileInfo(filePath()).canonicalFilePath();
+    const QString actual_path = QFileInfo(ProcessUtil::filePath(client_pid)).canonicalFilePath();
+    if (actual_path.isEmpty() || actual_path != expected_path)
+    {
+        LOG(ERROR) << "IPC client has unexpected executable (pid:" << client_pid
+                   << "path:" << actual_path << "expected:" << expected_path << ")";
+        ipc_channel_.reset();
+        dettach(FROM_HERE);
+        restart_timer_->start();
+        return;
+    }
+
 #if defined(Q_OS_WINDOWS)
     // Verify the connecting peer is a process we spawned (parent PID == us).
     // On UNIX the agent is launched via sh/sudo chain plus '&' backgrounding, so its parent
     // PID is not us; the check would reject legitimate agents and is disabled.
-    const quint32 client_pid = ipc_channel_->processId();
     if (ProcessUtil::parentProcessId(client_pid) != ProcessUtil::currentProcessId())
     {
         LOG(ERROR) << "IPC client is not our child (pid:" << client_pid << ")";

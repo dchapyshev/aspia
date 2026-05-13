@@ -53,7 +53,7 @@ private:
     void onError(const Location& location);
 
     ScopedQPointer<IpcServer> ipc_server_;
-    IpcChannel* ipc_channel_ = nullptr;
+    ScopedQPointer<IpcChannel> ipc_channel_;
 
     const SessionId session_id_;
     QTimer* attach_timer_ = nullptr;

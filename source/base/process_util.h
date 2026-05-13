@@ -32,6 +32,10 @@ public:
     // Returns the PID of the parent process of |pid|, or 0 on failure.
     static quint32 parentProcessId(quint32 pid);
 
+    // Returns the absolute path to the executable file of process |pid|, or empty string on
+    // failure.
+    static QString filePath(quint32 pid);
+
 #if defined(Q_OS_WINDOWS)
     static bool isProcessElevated();
 

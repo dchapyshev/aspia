@@ -18,15 +18,18 @@
 
 #include "host/desktop_client.h"
 
+#include <QFileInfo>
 #include <QTimer>
 
 #include "base/core_application.h"
 #include "base/logging.h"
 #include "base/power_controller.h"
 #include "base/numeric_utils.h"
+#include "base/process_util.h"
 #include "base/serialization.h"
 #include "base/ipc/ipc_channel.h"
 #include "base/ipc/ipc_server.h"
+#include "host/desktop_manager.h"
 #include "proto/desktop_channel.h"
 #include "proto/desktop_power.h"
 #include "proto/desktop_video.h"
@@ -266,6 +269,32 @@ void DesktopClient::onIpcNewConnection()
 
     ipc_channel_ = ipc_server_->nextPendingConnection();
     ipc_channel_->setParent(this);
+
+    // Verify the connecting peer's executable is exactly the desktop_agent binary we shipped.
+    const quint32 client_pid = ipc_channel_->processId();
+    const QString expected_path = QFileInfo(DesktopManager::filePath()).canonicalFilePath();
+    const QString actual_path = QFileInfo(ProcessUtil::filePath(client_pid)).canonicalFilePath();
+    if (actual_path.isEmpty() || actual_path != expected_path)
+    {
+        CLOG(ERROR) << "IPC client has unexpected executable (pid:" << client_pid
+                    << "path:" << actual_path << "expected:" << expected_path << ")";
+        ipc_channel_.reset();
+        emit sig_finished();
+        return;
+    }
+
+#if defined(Q_OS_WINDOWS)
+    // desktop_agent is spawned by DesktopManager which lives in the same process as us, so the
+    // agent's parent PID is our PID. On UNIX the agent is launched via sh/sudo chain plus '&'
+    // backgrounding, so its parent PID is not us; the check would reject legitimate agents.
+    if (ProcessUtil::parentProcessId(client_pid) != ProcessUtil::currentProcessId())
+    {
+        CLOG(ERROR) << "IPC client is not our child (pid:" << client_pid << ")";
+        ipc_channel_.reset();
+        emit sig_finished();
+        return;
+    }
+#endif
 
     ipc_server_->disconnect();
     ipc_server_.reset();

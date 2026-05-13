@@ -30,9 +30,12 @@
 
 #if defined(Q_OS_LINUX)
 #include <QFile>
+
+#include <limits.h>
 #endif // defined(Q_OS_LINUX)
 
 #if defined(Q_OS_MACOS)
+#include <libproc.h>
 #include <sys/sysctl.h>
 #include <sys/types.h>
 #endif // defined(Q_OS_MACOS)
@@ -120,6 +123,54 @@ quint32 ProcessUtil::parentProcessId(quint32 pid)
 #else
     Q_UNUSED(pid)
     return 0;
+#endif
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+QString ProcessUtil::filePath(quint32 pid)
+{
+#if defined(Q_OS_WINDOWS)
+    ScopedHandle process(OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, FALSE, pid));
+    if (!process.isValid())
+    {
+        PLOG(ERROR) << "OpenProcess failed (pid:" << pid << ")";
+        return QString();
+    }
+
+    wchar_t buffer[MAX_PATH];
+    DWORD size = static_cast<DWORD>(std::size(buffer));
+    if (!QueryFullProcessImageNameW(process, 0, buffer, &size))
+    {
+        PLOG(ERROR) << "QueryFullProcessImageNameW failed (pid:" << pid << ")";
+        return QString();
+    }
+
+    return QString::fromWCharArray(buffer, static_cast<int>(size));
+#elif defined(Q_OS_LINUX)
+    char buffer[PATH_MAX];
+    ssize_t size = readlink(QString("/proc/%1/exe").arg(pid).toLocal8Bit().constData(),
+                            buffer, sizeof(buffer));
+    if (size <= 0)
+    {
+        PLOG(ERROR) << "readlink(/proc/" << pid << "/exe) failed";
+        return QString();
+    }
+
+    return QString::fromLocal8Bit(buffer, static_cast<int>(size));
+#elif defined(Q_OS_MACOS)
+    char buffer[PROC_PIDPATHINFO_MAXSIZE];
+    int size = proc_pidpath(static_cast<int>(pid), buffer, sizeof(buffer));
+    if (size <= 0)
+    {
+        PLOG(ERROR) << "proc_pidpath failed (pid:" << pid << ")";
+        return QString();
+    }
+
+    return QString::fromLocal8Bit(buffer, size);
+#else
+    Q_UNUSED(pid)
+    return QString();
 #endif
 }
 
