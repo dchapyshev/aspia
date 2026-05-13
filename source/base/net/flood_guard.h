@@ -102,8 +102,8 @@ private:
     static constexpr int kMaxTracked = 10000;
 
     int max_pending_ = 32;
-    Nanoseconds slot_ = std::chrono::seconds(1);   // Cost per accept (= window / max_per_window).
-    Nanoseconds burst_ = std::chrono::seconds(60); // Burst tolerance (= window).
+    Nanoseconds slot_ = Seconds(1);   // Cost per accept (= window / max_per_window).
+    Nanoseconds burst_ = Seconds(60); // Burst tolerance (= window).
 
     // Per-address theoretical arrival time. Distance from |now| measures how far ahead of the
     // steady rate the source has run; |now - tat| measures how much idle headroom remains.
