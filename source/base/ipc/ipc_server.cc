@@ -55,7 +55,10 @@ public:
 
     void dettach() { server_ = nullptr; }
 
-    bool listen(asio::io_context& io_context, const QString& channel_name);
+    bool listen(asio::io_context& io_context,
+                const QString& channel_name,
+                IpcServer::AccessMode access_mode,
+                const QString& target_user_sid);
 
 #if defined(Q_OS_WINDOWS)
     void onNewConnetion(const std::error_code& error_code, size_t bytes_transferred);
@@ -91,21 +94,68 @@ IpcServer::Listener::Listener(IpcServer* server, size_t index)
 IpcServer::Listener::~Listener() = default;
 
 //--------------------------------------------------------------------------------------------------
-bool IpcServer::Listener::listen(asio::io_context& io_context, const QString& channel_path)
+bool IpcServer::Listener::listen(asio::io_context& io_context,
+                                 const QString& channel_path,
+                                 IpcServer::AccessMode access_mode,
+                                 const QString& target_user_sid)
 {
 #if defined(Q_OS_WINDOWS)
-    QString user_sid;
+    QString owner_sid;
 
-    if (!userSidString(&user_sid))
+    if (!userSidString(&owner_sid))
     {
         LOG(ERROR) << "Failed to query the current user SID";
         return false;
     }
 
-    // Create a security descriptor that gives full access to the caller and authenticated users
-    // and denies access by anyone else.
-    QString security_descriptor =
-        QString("O:%1G:%1D:(A;;GA;;;%1)(A;;GA;;;AU)").arg(user_sid);
+    // Common ACE rights:
+    //   GA - GENERIC_ALL for the owner (server must be able to manage pipe instances).
+    //   FRFW - FILE_GENERIC_READ | FILE_GENERIC_WRITE (SYNCHRONIZE already included) for the
+    //          client side. WRITE_DAC/WRITE_OWNER/DELETE intentionally NOT granted so a
+    //          connected client cannot tamper with the pipe's security or kill it.
+    // Mandatory label policy:
+    //   NRNW - SYSTEM_MANDATORY_LABEL_NO_READ_UP | SYSTEM_MANDATORY_LABEL_NO_WRITE_UP.
+    //          Blocks processes whose IL is strictly below the label from opening the pipe.
+    QString security_descriptor;
+
+    switch (access_mode)
+    {
+        case IpcServer::AccessMode::INTERACTIVE_USER:
+        {
+            // UI agent runs under an arbitrary logged-on user's token, so AU is required.
+            // Medium IL label cuts off Low/Untrusted-IL processes (sandboxed browsers,
+            // AppContainers). Server must additionally verify the connecting peer (session id /
+            // SID) after accept.
+            security_descriptor =
+                QString("O:%1G:%1D:(A;;GA;;;%1)(A;;FRFW;;;AU)S:(ML;;NRNW;;;ME)").arg(owner_sid);
+            break;
+        }
+
+        case IpcServer::AccessMode::SPECIFIC_USER:
+        {
+            if (target_user_sid.isEmpty())
+            {
+                LOG(ERROR) << "SPECIFIC_USER requires a target user SID";
+                return false;
+            }
+
+            // Only the server itself and the specific user may connect.
+            security_descriptor = QString("O:%1G:%1D:(A;;GA;;;%1)(A;;FRFW;;;%2)S:(ML;;NRNW;;;ME)")
+                .arg(owner_sid, target_user_sid);
+            break;
+        }
+
+        case IpcServer::AccessMode::SYSTEM_ONLY:
+        {
+            // Only SYSTEM may connect. Mandatory label at System IL blocks everything below.
+            security_descriptor = QString("O:SYG:SYD:(A;;GA;;;SY)S:(ML;;NRNW;;;SI)");
+            break;
+        }
+
+        default:
+            LOG(ERROR) << "Unknown access mode:" << access_mode;
+            return false;
+    }
 
     ScopedSd sd = convertSddlToSd(security_descriptor);
     if (!sd.get())
@@ -161,6 +211,11 @@ bool IpcServer::Listener::listen(asio::io_context& io_context, const QString& ch
     overlapped_->complete(std::error_code(), 0);
     return true;
 #else
+    // TODO: differentiate UNIX socket permissions based on access_mode (chown to target uid
+    // for SPECIFIC_USER, root-only for SYSTEM_ONLY). Current behavior preserved.
+    Q_UNUSED(access_mode)
+    Q_UNUSED(target_user_sid)
+
     std::string channel_file = channel_path.toLocal8Bit().toStdString();
 
     asio::local::stream_protocol::endpoint endpoint(channel_file);
@@ -274,9 +329,9 @@ QString IpcServer::createUniqueId()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool IpcServer::start(const QString& channel_name)
+bool IpcServer::start(const QString& channel_name, AccessMode mode, const QString& target_user_sid)
 {
-    LOG(INFO) << "Starting IPC server (channel" << channel_name << ")";
+    LOG(INFO) << "Starting IPC server (channel" << channel_name << "mode" << mode << ")";
 
     if (channel_name.isEmpty())
     {
@@ -284,7 +339,15 @@ bool IpcServer::start(const QString& channel_name)
         return false;
     }
 
+    if (mode == AccessMode::SPECIFIC_USER && target_user_sid.isEmpty())
+    {
+        LOG(ERROR) << "SPECIFIC_USER mode requires a non-empty target user SID";
+        return false;
+    }
+
     channel_name_ = channel_name;
+    access_mode_ = mode;
+    target_user_sid_ = target_user_sid;
 
     for (size_t i = 0; i < listeners_.size(); ++i)
     {
@@ -342,7 +405,8 @@ bool IpcServer::runListener(size_t index)
         return false;
     }
 
-    return listener->listen(io_context_, IpcChannel::channelPath(channel_name_));
+    return listener->listen(
+        io_context_, IpcChannel::channelPath(channel_name_), access_mode_, target_user_sid_);
 }
 
 //--------------------------------------------------------------------------------------------------

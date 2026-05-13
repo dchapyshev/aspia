@@ -63,6 +63,9 @@ bool initializeComSecurity(const wchar_t* security_descriptor, const wchar_t* ma
 
 bool userSidString(QString* user_sid);
 
+// Extracts the user SID of |token| as an SDDL string ("S-1-5-...").
+bool tokenUserSidString(HANDLE token, QString* user_sid);
+
 ScopedSd convertSddlToSd(const QString& sddl);
 
 // Restricts the DACL of a process kernel object so that PROCESS_TERMINATE,

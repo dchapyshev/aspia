@@ -274,7 +274,15 @@ void FileClient::onStart()
         return;
     }
 
-    if (!startIpcServer(ipc_channel_id))
+    QString target_user_sid;
+    if (!tokenUserSidString(session_token, &target_user_sid))
+    {
+        CLOG(ERROR) << "Failed to query target user SID from session token";
+        onError(FROM_HERE);
+        return;
+    }
+
+    if (!startIpcServer(ipc_channel_id, target_user_sid))
     {
         CLOG(ERROR) << "Unable to start IPC server";
         onError(FROM_HERE);
@@ -322,7 +330,7 @@ void FileClient::onStart()
         if (splitted.isEmpty())
             continue;
 
-        if (!startIpcServer(ipc_channel_id))
+        if (!startIpcServer(ipc_channel_id, QString()))
         {
             CLOG(ERROR) << "Unable to start IPC server";
             onError(FROM_HERE);
@@ -379,7 +387,7 @@ void FileClient::onMessage(quint8 tcp_channel_id, const QByteArray& buffer)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool FileClient::startIpcServer(const QString& ipc_channel_name)
+bool FileClient::startIpcServer(const QString& ipc_channel_name, const QString& target_user_sid)
 {
     CLOG(INFO) << "Starting IPC server for file transfer session";
 
@@ -394,7 +402,12 @@ bool FileClient::startIpcServer(const QString& ipc_channel_name)
     connect(ipc_server_, &IpcServer::sig_newConnection, this, &FileClient::onIpcNewConnection);
     connect(ipc_server_, &IpcServer::sig_errorOccurred, this, &FileClient::onIpcErrorOccurred);
 
-    if (!ipc_server_->start(ipc_channel_name))
+    // File agent runs under the target user's token. On Windows restrict the pipe DACL to
+    // that SID; on UNIX the SID is empty and the default mode is used.
+    const IpcServer::AccessMode mode = target_user_sid.isEmpty() ?
+        IpcServer::AccessMode::INTERACTIVE_USER : IpcServer::AccessMode::SPECIFIC_USER;
+
+    if (!ipc_server_->start(ipc_channel_name, mode, target_user_sid))
     {
         CLOG(ERROR) << "Failed to start IPC server:" << ipc_channel_name;
         return false;

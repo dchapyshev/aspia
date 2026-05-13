@@ -150,15 +150,10 @@ ScopedSd convertSddlToSd(const QString& sddl)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool userSidString(QString* user_sid)
+bool tokenUserSidString(HANDLE token, QString* user_sid)
 {
-    // Get the current token.
-    ScopedHandle token;
-    if (!OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, token.recieve()))
-    {
-        PLOG(ERROR) << "OpenProcessToken failed";
-        return false;
-    }
+    CHECK(token);
+    CHECK(user_sid);
 
     DWORD size = sizeof(TOKEN_USER) + SECURITY_MAX_SID_SIZE;
     std::unique_ptr<BYTE[]> user_bytes = std::make_unique<BYTE[]>(size);
@@ -174,7 +169,6 @@ bool userSidString(QString* user_sid)
     if (!user->User.Sid)
         return false;
 
-    // Convert the data to a string.
     ScopedLocal<wchar_t*> sid_string;
 
     if (!ConvertSidToStringSidW(user->User.Sid, sid_string.recieve()))
@@ -185,6 +179,20 @@ bool userSidString(QString* user_sid)
 
     *user_sid = QString::fromWCharArray(sid_string);
     return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool userSidString(QString* user_sid)
+{
+    // Get the current token.
+    ScopedHandle token;
+    if (!OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, token.recieve()))
+    {
+        PLOG(ERROR) << "OpenProcessToken failed";
+        return false;
+    }
+
+    return tokenUserSidString(token, user_sid);
 }
 
 //--------------------------------------------------------------------------------------------------

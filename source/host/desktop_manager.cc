@@ -491,7 +491,8 @@ void DesktopManager::attach(const Location& location, SessionId session_id)
 
     QString ipc_channel_name = IpcServer::createUniqueId();
 
-    if (!ipc_server_->start(ipc_channel_name))
+    // Desktop agent runs as SYSTEM in the user's session.
+    if (!ipc_server_->start(ipc_channel_name, IpcServer::AccessMode::SYSTEM_ONLY))
     {
         dettach(FROM_HERE);
         restart_timer_->start();

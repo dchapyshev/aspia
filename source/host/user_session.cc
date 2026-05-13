@@ -186,7 +186,9 @@ bool UserSession::start()
     LOG(INFO) << "Start IPC server for UI (channel_name:" << ipc_channel_name << ")";
 
     // Start the server which will accept incoming connections from UI processes in user sessions.
-    if (!ipc_server_->start(ipc_channel_name))
+    // The UI agent runs under an arbitrary logged-on user's token, so any authenticated user
+    // must be able to connect. Session ID of the connecting peer is verified in onIpcNewConnection.
+    if (!ipc_server_->start(ipc_channel_name, IpcServer::AccessMode::INTERACTIVE_USER))
     {
         LOG(ERROR) << "Failed to start IPC server for UI (channel_name:" << ipc_channel_name << ")";
         return false;

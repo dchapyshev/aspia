@@ -108,7 +108,8 @@ QString DesktopClient::attach()
 
     QString channel_name = IpcServer::createUniqueId();
 
-    if (!ipc_server_->start(channel_name))
+    // Desktop agent runs as SYSTEM in the user's session.
+    if (!ipc_server_->start(channel_name, IpcServer::AccessMode::SYSTEM_ONLY))
     {
         CLOG(ERROR) << "Unable to start IPC server";
         emit sig_finished();

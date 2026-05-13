@@ -48,7 +48,7 @@ protected:
     void onMessage(quint8 channel_id, const QByteArray& buffer) final;
 
 private:
-    bool startIpcServer(const QString& ipc_channel_name);
+    bool startIpcServer(const QString& ipc_channel_name, const QString& target_user_sid);
     void onStarted(const Location& location, bool has_user);
     void onError(const Location& location);
 
