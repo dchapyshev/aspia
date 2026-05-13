@@ -184,10 +184,16 @@ void SessionClient::readCheckHostStatus(const proto::router::CheckHostStatus& ch
     proto::router::HostStatus* host_status = message.mutable_host_status();
     host_status->set_request_id(check_host_status.request_id());
 
-    if (sessionByHostId(check_host_status.host_id()))
+    Session* session = sessionByHostId(check_host_status.host_id());
+    if (session)
+    {
         host_status->set_status(proto::router::HostStatus::STATUS_ONLINE);
+        host_status->mutable_version()->CopyFrom(serialize(session->version()));
+    }
     else
+    {
         host_status->set_status(proto::router::HostStatus::STATUS_OFFLINE);
+    }
 
     CLOG(INFO) << "Sending host status:" << *host_status;
     sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));

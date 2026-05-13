@@ -21,6 +21,7 @@ syntax = "proto3";
 option optimize_for = LITE_RUNTIME;
 
 import "router_peer.proto";
+import "peer.proto";
 
 package proto.router;
 
@@ -45,8 +46,9 @@ message HostStatus
         STATUS_ONLINE  = 2;
     }
 
-    int64 request_id = 1;
-    Status status    = 2;
+    int64 request_id     = 1;
+    Status status        = 2;
+    peer.Version version = 3;
 }
 
 message RouterToClient
