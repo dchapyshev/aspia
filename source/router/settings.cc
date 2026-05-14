@@ -20,6 +20,7 @@
 
 #include "base/logging.h"
 #include "base/xml_settings.h"
+#include "base/crypto/secure_byte_array.h"
 #include "base/net/net_utils.h"
 #include "build/build_config.h"
 
@@ -61,7 +62,7 @@ void Settings::reset()
 {
     setPort(DEFAULT_ROUTER_TCP_PORT);
     setLegacyPort(DEFAULT_ROUTER_LEGACY_TCP_PORT);
-    setPrivateKey(QByteArray());
+    setPrivateKey(SecureByteArray());
     setClientWhiteList(WhiteList());
     setHostWhiteList(WhiteList());
     setAdminWhiteList(WhiteList());
@@ -112,15 +113,15 @@ quint16 Settings::port() const
 }
 
 //--------------------------------------------------------------------------------------------------
-void Settings::setPrivateKey(const QByteArray& private_key)
+void Settings::setPrivateKey(const SecureByteArray& private_key)
 {
-    impl_.setValue("private_key", private_key);
+    impl_.setValue("private_key", private_key.toByteArray());
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray Settings::privateKey() const
+SecureByteArray Settings::privateKey() const
 {
-    return impl_.value("private_key").toByteArray();
+    return SecureByteArray(impl_.value("private_key").toByteArray());
 }
 
 //--------------------------------------------------------------------------------------------------

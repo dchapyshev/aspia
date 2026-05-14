@@ -27,6 +27,7 @@
 #include "base/service_controller.h"
 #include "base/crypto/key_pair.h"
 #include "base/crypto/random.h"
+#include "base/crypto/secure_byte_array.h"
 #include "base/crypto/secure_string.h"
 #include "base/files/base_paths.h"
 #include "base/files/file_util.h"
@@ -111,7 +112,7 @@ int removeService(QTextStream& out)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool generateKeys(QByteArray* private_key, QByteArray* public_key)
+bool generateKeys(SecureByteArray* private_key, QByteArray* public_key)
 {
     KeyPair key_pair = KeyPair::create(KeyPair::Type::X25519);
     if (!key_pair.isValid())
@@ -120,7 +121,7 @@ bool generateKeys(QByteArray* private_key, QByteArray* public_key)
         return false;
     }
 
-    *private_key = key_pair.privateKey().toByteArray();
+    *private_key = key_pair.privateKey();
     *public_key = key_pair.publicKey();
 
     if (private_key->isEmpty() || public_key->isEmpty())
@@ -135,13 +136,13 @@ bool generateKeys(QByteArray* private_key, QByteArray* public_key)
 //--------------------------------------------------------------------------------------------------
 int generateAndPrintKeys(QTextStream& out)
 {
-    QByteArray private_key;
+    SecureByteArray private_key;
     QByteArray public_key;
 
     if (!generateKeys(&private_key, &public_key))
         return 1;
 
-    out << "Private key: " << private_key.toHex() << Qt::endl;
+    out << "Private key: " << private_key.toByteArray().toHex() << Qt::endl;
     out << "Public key: " << public_key.toHex() << Qt::endl;
     return 0;
 }
@@ -250,7 +251,7 @@ int createConfig(QTextStream& out)
     out << "User was successfully added to the database." << Qt::endl;
     out << "Generating encryption keys..." << Qt::endl;
 
-    QByteArray private_key;
+    SecureByteArray private_key;
     QByteArray public_key;
     if (!generateKeys(&private_key, &public_key))
         return 1;

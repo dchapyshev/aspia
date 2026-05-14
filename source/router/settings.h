@@ -22,6 +22,8 @@
 #include <QSettings>
 #include <QStringList>
 
+class SecureByteArray;
+
 class Settings
 {
 public:
@@ -43,8 +45,8 @@ public:
     void setPort(quint16 port);
     quint16 port() const;
 
-    void setPrivateKey(const QByteArray& private_key);
-    QByteArray privateKey() const;
+    void setPrivateKey(const SecureByteArray& private_key);
+    SecureByteArray privateKey() const;
 
     using WhiteList = QStringList;
 

@@ -24,6 +24,7 @@
 #include <QJsonObject>
 
 #include "base/logging.h"
+#include "base/crypto/secure_byte_array.h"
 #include "base/files/base_paths.h"
 #include "router/settings.h"
 
@@ -98,7 +99,7 @@ void doConfigMigrate(const QJsonDocument& doc)
     {
         QString value = root_object["PrivateKey"].toString();
         LOG(INFO) << "PrivateKey:" << value;
-        settings.setPrivateKey(QByteArray::fromHex(value.toLatin1()));
+        settings.setPrivateKey(SecureByteArray(QByteArray::fromHex(value.toLatin1())));
     }
 
     if (root_object.contains("SeedKey"))
