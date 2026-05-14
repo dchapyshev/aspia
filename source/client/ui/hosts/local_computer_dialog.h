@@ -40,7 +40,6 @@ public:
     qint64 computerId() const { return computer_id_; }
 
 private slots:
-    void onShowPasswordButtonToggled(bool checked);
     void onRouterChanged(int index);
     void onButtonBoxClicked(QAbstractButton* button);
 

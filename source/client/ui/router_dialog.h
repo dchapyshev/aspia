@@ -39,7 +39,6 @@ public:
 
 private slots:
     void onButtonBoxClicked(QAbstractButton* button);
-    void onShowPasswordButtonToggled(bool checked);
 
 private:
     void showError(const QString& message);

@@ -28,6 +28,7 @@
 #include "base/logging.h"
 #include "base/numeric_utils.h"
 #include "base/process_util.h"
+#include "base/crypto/secure_memory.h"
 #include "base/crypto/secure_string.h"
 #include "base/ipc/ipc_channel.h"
 #include "base/ipc/ipc_server.h"
@@ -222,7 +223,11 @@ void UserSession::onUpdateCredentials(HostId host_id, const SecureString& passwo
     proto::user::Credentials* credentials = outgoing_message_.newMessage().mutable_credentials();
     credentials->set_host_id(host_id);
     credentials->set_password(password.toString().toStdString());
+
     sendMessage();
+
+    // Security cleanup.
+    memZero(credentials->mutable_password());
 }
 
 //--------------------------------------------------------------------------------------------------

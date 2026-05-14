@@ -406,7 +406,7 @@ BigNum SrpMath::calc_x(const BigNum& s, const QString& I, const SecureByteArray&
     hash.addData(QByteArray(":"));
     hash.addData(p);
 
-    QByteArray temp = hash.result();
+    SecureByteArray temp(hash.result());
     QByteArray salt = s.toByteArray();
 
     hash.reset();
@@ -414,7 +414,7 @@ BigNum SrpMath::calc_x(const BigNum& s, const QString& I, const SecureByteArray&
     hash.addData(salt);
     hash.addData(temp);
 
-    return BigNum::fromByteArray(hash.result());
+    return BigNum::fromByteArray(SecureByteArray(hash.result()).toByteArray());
 }
 
 //--------------------------------------------------------------------------------------------------
