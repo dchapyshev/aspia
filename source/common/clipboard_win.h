@@ -51,6 +51,7 @@ private:
     void onClipboardFiles();
     void setDataText(const QByteArray& data);
     void setDataFiles(const QByteArray& data);
+    void clearClipboardContent();
     void onFileDataRequested(int file_index, FileStream* stream);
 
     // Handles messages received by |window_|.

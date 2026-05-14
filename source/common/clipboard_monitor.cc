@@ -71,19 +71,21 @@ void ClipboardMonitor::start()
 //--------------------------------------------------------------------------------------------------
 void ClipboardMonitor::injectClipboardEvent(const proto::clipboard::Event& event)
 {
-    emit sig_injectClipboardEventPrivate(event);
+    QMetaObject::invokeMethod(
+        clipboard_.get(), &Clipboard::injectClipboardEvent, Qt::QueuedConnection, event);
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClipboardMonitor::clearClipboard()
 {
-    emit sig_clearClipboardPrivate();
+    QMetaObject::invokeMethod(clipboard_.get(), &Clipboard::clearClipboard, Qt::QueuedConnection);
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClipboardMonitor::addFileData(int file_index, const QByteArray& data, bool is_last)
 {
-    emit sig_addFileDataPrivate(file_index, data, is_last);
+    QMetaObject::invokeMethod(
+        clipboard_.get(), &Clipboard::addFileData, Qt::QueuedConnection, file_index, data, is_last);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -101,28 +103,11 @@ void ClipboardMonitor::onBeforeThreadRunning()
 #error Not implemented
 #endif
 
-    connect(clipboard_.get(), &Clipboard::sig_clipboardEvent,
-            this, &ClipboardMonitor::sig_clipboardEvent,
+    connect(clipboard_.get(), &Clipboard::sig_clipboardEvent, this, &ClipboardMonitor::sig_clipboardEvent,
             Qt::QueuedConnection);
-
-    connect(this, &ClipboardMonitor::sig_injectClipboardEventPrivate,
-            clipboard_.get(), &Clipboard::injectClipboardEvent,
+    connect(clipboard_.get(), &Clipboard::sig_fileDataRequest, this, &ClipboardMonitor::sig_fileDataRequest,
             Qt::QueuedConnection);
-
-    connect(this, &ClipboardMonitor::sig_clearClipboardPrivate,
-            clipboard_.get(), &Clipboard::clearClipboard,
-            Qt::QueuedConnection);
-
-    connect(clipboard_.get(), &Clipboard::sig_fileDataRequest,
-            this, &ClipboardMonitor::sig_fileDataRequest,
-            Qt::QueuedConnection);
-
-    connect(clipboard_.get(), &Clipboard::sig_localFileListChanged,
-            this, &ClipboardMonitor::sig_localFileListChanged,
-            Qt::QueuedConnection);
-
-    connect(this, &ClipboardMonitor::sig_addFileDataPrivate,
-            clipboard_.get(), &Clipboard::addFileData,
+    connect(clipboard_.get(), &Clipboard::sig_localFileListChanged, this, &ClipboardMonitor::sig_localFileListChanged,
             Qt::QueuedConnection);
 
     clipboard_->start();
@@ -132,5 +117,6 @@ void ClipboardMonitor::onBeforeThreadRunning()
 void ClipboardMonitor::onAfterThreadRunning()
 {
     LOG(INFO) << "Thread stopping";
+    clipboard_->clearClipboard();
     clipboard_.reset();
 }

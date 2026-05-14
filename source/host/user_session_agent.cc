@@ -335,11 +335,19 @@ void UserSessionAgent::onDisconnectEvent(const proto::user::DisconnectEvent& eve
             has_desktop = true;
     }
 
-    if (!has_desktop && clipboard_)
+    if (!has_desktop)
     {
-        clipboard_->clearClipboard();
-        clipboard_->disconnect(this);
-        clipboard_.reset();
+        LOG(INFO) << "Last desktop client is disconnected";
+
+        if (clipboard_)
+        {
+            clipboard_->disconnect(this);
+            clipboard_.reset();
+        }
+        else
+        {
+            LOG(ERROR) << "No clipboard instance";
+        }
 
         clipboard_file_transfer_.reset();
     }

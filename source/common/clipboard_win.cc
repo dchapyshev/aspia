@@ -210,6 +210,50 @@ void addDirectoryContent(const QString& path, QVector<LocalFileEntry>* entries)
     }
 }
 
+//--------------------------------------------------------------------------------------------------
+// Sets clipboard format markers that exclude the current clipboard content from Windows
+// clipboard history (Win+V) and Cloud Clipboard sync. Must be called while the clipboard is open.
+void excludeFromClipboardHistory(ScopedClipboard& clipboard)
+{
+    // Tells clipboard monitors/filters (including the OS history service) to skip this content.
+    static const UINT exclude_format =
+        RegisterClipboardFormatW(L"ExcludeClipboardContentFromMonitorProcessing");
+
+    // Documented opt-out flags for clipboard history and cloud clipboard.
+    static const UINT history_format = RegisterClipboardFormatW(L"CanIncludeInClipboardHistory");
+    static const UINT cloud_format = RegisterClipboardFormatW(L"CanUploadToCloudClipboard");
+
+    auto setFlag = [&clipboard](UINT format, DWORD value)
+    {
+        if (!format)
+            return;
+
+        HGLOBAL handle = GlobalAlloc(GMEM_MOVEABLE, sizeof(DWORD));
+        if (!handle)
+        {
+            PLOG(ERROR) << "GlobalAlloc failed";
+            return;
+        }
+
+        DWORD* locked = reinterpret_cast<DWORD*>(GlobalLock(handle));
+        if (!locked)
+        {
+            PLOG(ERROR) << "GlobalLock failed";
+            GlobalFree(handle);
+            return;
+        }
+
+        *locked = value;
+        GlobalUnlock(handle);
+
+        clipboard.setData(format, handle);
+    };
+
+    setFlag(exclude_format, 0);
+    setFlag(history_format, 0);
+    setFlag(cloud_format, 0);
+}
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -294,7 +338,11 @@ void ClipboardWin::setData(const QString& mime_type, const QByteArray& data)
         return;
     }
 
-    if (mime_type == kMimeTypeTextUtf8)
+    if (mime_type.isEmpty() && data.isEmpty())
+    {
+        clearClipboardContent();
+    }
+    else if (mime_type == kMimeTypeTextUtf8)
     {
         setDataText(data);
     }
@@ -523,6 +571,10 @@ void ClipboardWin::setDataText(const QByteArray& data)
     GlobalUnlock(text_global);
 
     clipboard.setData(CF_UNICODETEXT, text_global);
+
+    // Prevent the text (which may contain passwords typed on the remote machine) from being
+    // stored in the local clipboard history or synchronized via Cloud Clipboard.
+    excludeFromClipboardHistory(clipboard);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -576,6 +628,38 @@ void ClipboardWin::setDataFiles(const QByteArray& data)
         LOG(ERROR) << "OleSetClipboard failed:" << error;
         return;
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClipboardWin::clearClipboardContent()
+{
+    // Release any active file streams and our OLE clipboard data object first, otherwise the
+    // CF_HDROP / IDataObject content stays attached and a subsequent EmptyClipboard has nothing
+    // to remove on the OLE side.
+    for (auto it = active_streams_.begin(); it != active_streams_.end(); ++it)
+    {
+        it.value()->terminate();
+        it.value()->Release();
+    }
+    active_streams_.clear();
+
+    if (file_object_)
+    {
+        OleSetClipboard(nullptr);
+        file_object_.reset();
+    }
+
+    // Make sure no other process owns the clipboard data.
+    OleFlushClipboard();
+
+    ScopedClipboard clipboard;
+    if (!clipboard.init(window_->hwnd()))
+    {
+        PLOG(ERROR) << "Couldn't open the clipboard";
+        return;
+    }
+
+    clipboard.empty();
 }
 
 //--------------------------------------------------------------------------------------------------
