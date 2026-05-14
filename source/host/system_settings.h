@@ -21,6 +21,7 @@
 
 #include <QSettings>
 
+class SecureString;
 class UserList;
 
 class SystemSettings
@@ -31,8 +32,8 @@ public:
     SystemSettings();
     ~SystemSettings();
 
-    static bool createPasswordHash(const QString& password, QByteArray* hash, QByteArray* salt);
-    static bool isValidPassword(const QString& password);
+    static bool createPasswordHash(const SecureString& password, QByteArray* hash, QByteArray* salt);
+    static bool isValidPassword(const SecureString& password);
 
     QString filePath() const;
     bool isWritable() const;

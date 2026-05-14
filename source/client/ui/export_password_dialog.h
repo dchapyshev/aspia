@@ -23,6 +23,8 @@
 
 #include <memory>
 
+class SecureString;
+
 namespace Ui {
 class ExportPasswordDialog;
 } // namespace Ui
@@ -35,7 +37,7 @@ public:
     explicit ExportPasswordDialog(QWidget* parent = nullptr);
     ~ExportPasswordDialog() final;
 
-    QString password() const;
+    SecureString password() const;
 
 private slots:
     void onEncryptClicked();

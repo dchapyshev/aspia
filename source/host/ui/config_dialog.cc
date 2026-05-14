@@ -27,6 +27,7 @@
 #include "common/ui/msg_box.h"
 #include "base/logging.h"
 #include "base/crypto/password_generator.h"
+#include "base/crypto/secure_string.h"
 #include "base/desktop/screen_capturer.h"
 #include "base/net/address.h"
 #include "base/peer/user_list.h"

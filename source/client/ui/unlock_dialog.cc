@@ -23,6 +23,7 @@
 #include <QTimer>
 
 #include "base/logging.h"
+#include "base/crypto/secure_string.h"
 #include "ui_unlock_dialog.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -70,9 +71,9 @@ UnlockDialog::~UnlockDialog()
 }
 
 //--------------------------------------------------------------------------------------------------
-QString UnlockDialog::password() const
+SecureString UnlockDialog::password() const
 {
-    return ui->edit_password->text();
+    return SecureString(ui->edit_password->text());
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -19,20 +19,20 @@
 #ifndef CLIENT_MASTER_PASSWORD_H
 #define CLIENT_MASTER_PASSWORD_H
 
-#include <QString>
+class SecureString;
 
 class MasterPassword
 {
 public:
     static const int kSafePasswordLength = 8;
 
-    static bool isSafePassword(const QString& password);
+    static bool isSafePassword(const SecureString& password);
     static bool isSet();
 
-    static bool unlock(const QString& password);
+    static bool unlock(const SecureString& password);
 
-    static bool setNew(const QString& new_password);
-    static bool change(const QString& current_password, const QString& new_password);
+    static bool setNew(const SecureString& new_password);
+    static bool change(const SecureString& current_password, const SecureString& new_password);
 
 private:
     MasterPassword() = delete;

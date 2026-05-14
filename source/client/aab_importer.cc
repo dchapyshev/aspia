@@ -301,7 +301,7 @@ bool AabImporter::import(QWidget* parent, const QString& file_path)
 
             key = PasswordHash::hash(
                 PasswordHash::SCRYPT,
-                SecureString(dialog.password()),
+                dialog.password(),
                 QByteArray::fromStdString(proto_file.hashing_salt()));
             break;
         }

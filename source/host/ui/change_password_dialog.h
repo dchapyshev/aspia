@@ -24,6 +24,7 @@
 #include <memory>
 
 class QAbstractButton;
+class SecureString;
 
 namespace Ui {
 class ChangePasswordDialog;
@@ -40,8 +41,8 @@ public:
     explicit ChangePasswordDialog(Mode mode, QWidget* parent = nullptr);
     ~ChangePasswordDialog() final;
 
-    QString oldPassword() const;
-    QString newPassword() const;
+    SecureString oldPassword() const;
+    SecureString newPassword() const;
 
 private slots:
     void onButtonBoxClicked(QAbstractButton* button);

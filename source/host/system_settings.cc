@@ -83,7 +83,7 @@ SystemSettings::~SystemSettings() = default;
 
 //--------------------------------------------------------------------------------------------------
 // static
-bool SystemSettings::createPasswordHash(const QString& password, QByteArray* hash, QByteArray* salt)
+bool SystemSettings::createPasswordHash(const SecureString& password, QByteArray* hash, QByteArray* salt)
 {
     if (password.isEmpty() || !hash || !salt)
         return false;
@@ -92,7 +92,7 @@ bool SystemSettings::createPasswordHash(const QString& password, QByteArray* has
     if (salt_temp.isEmpty())
         return false;
 
-    QByteArray hash_temp = PasswordHash::hash(PasswordHash::SCRYPT, SecureString(password), salt_temp);
+    QByteArray hash_temp = PasswordHash::hash(PasswordHash::SCRYPT, password, salt_temp);
     if (hash_temp.isEmpty())
         return false;
 
@@ -103,7 +103,7 @@ bool SystemSettings::createPasswordHash(const QString& password, QByteArray* has
 
 //--------------------------------------------------------------------------------------------------
 // static
-bool SystemSettings::isValidPassword(const QString& password)
+bool SystemSettings::isValidPassword(const SecureString& password)
 {
     if (password.isEmpty())
         return false;
@@ -117,7 +117,7 @@ bool SystemSettings::isValidPassword(const QString& password)
         return false;
 
     QByteArray verifiable_password_hash =
-        PasswordHash::hash(PasswordHash::SCRYPT, SecureString(password), password_hash_salt);
+        PasswordHash::hash(PasswordHash::SCRYPT, password, password_hash_salt);
     if (verifiable_password_hash.isEmpty())
         return false;
 

@@ -22,8 +22,9 @@
 #include <QPushButton>
 #include <QTimer>
 
-#include "common/ui/msg_box.h"
 #include "base/logging.h"
+#include "base/crypto/secure_string.h"
+#include "common/ui/msg_box.h"
 #include "host/system_settings.h"
 #include "ui_change_password_dialog.h"
 
@@ -62,15 +63,15 @@ ChangePasswordDialog::~ChangePasswordDialog()
 }
 
 //--------------------------------------------------------------------------------------------------
-QString ChangePasswordDialog::oldPassword() const
+SecureString ChangePasswordDialog::oldPassword() const
 {
-    return ui->edit_old_pass->text();
+    return SecureString(ui->edit_old_pass->text());
 }
 
 //--------------------------------------------------------------------------------------------------
-QString ChangePasswordDialog::newPassword() const
+SecureString ChangePasswordDialog::newPassword() const
 {
-    return ui->edit_new_pass->text();
+    return SecureString(ui->edit_new_pass->text());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -83,8 +84,8 @@ void ChangePasswordDialog::onButtonBoxClicked(QAbstractButton* button)
 
         if (mode_ == Mode::CREATE_NEW_PASSWORD)
         {
-            QString new_password = ui->edit_new_pass->text();
-            QString new_password_repeat = ui->edit_new_pass_repeat->text();
+            SecureString new_password(ui->edit_new_pass->text());
+            SecureString new_password_repeat(ui->edit_new_pass_repeat->text());
 
             if (new_password.isEmpty())
             {
@@ -108,9 +109,9 @@ void ChangePasswordDialog::onButtonBoxClicked(QAbstractButton* button)
         {
             DCHECK_EQ(mode_, Mode::CHANGE_PASSWORD);
 
-            QString old_password = ui->edit_old_pass->text();
-            QString new_password = ui->edit_new_pass->text();
-            QString new_password_repeat = ui->edit_new_pass_repeat->text();
+            SecureString old_password(ui->edit_old_pass->text());
+            SecureString new_password(ui->edit_new_pass->text());
+            SecureString new_password_repeat(ui->edit_new_pass_repeat->text());
 
             if (old_password.isEmpty())
             {

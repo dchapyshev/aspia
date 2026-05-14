@@ -32,9 +32,9 @@ const int kSaltSize = 32;
 const int kVerifierPayloadSize = 32;
 
 //--------------------------------------------------------------------------------------------------
-QByteArray deriveKey(const QString& password, const QByteArray& salt)
+QByteArray deriveKey(const SecureString& password, const QByteArray& salt)
 {
-    return PasswordHash::hash(PasswordHash::ARGON2ID, SecureString(password), salt);
+    return PasswordHash::hash(PasswordHash::ARGON2ID, password, salt);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -115,9 +115,10 @@ bool changeKeyAndReencrypt(const QByteArray& new_key, const QByteArray& new_salt
 
 //--------------------------------------------------------------------------------------------------
 // static
-bool MasterPassword::isSafePassword(const QString& password)
+bool MasterPassword::isSafePassword(const SecureString& password)
 {
-    qsizetype length = password.length();
+    const QString& password_str = password.toString();
+    qsizetype length = password_str.length();
 
     if (length < kSafePasswordLength)
         return false;
@@ -128,7 +129,7 @@ bool MasterPassword::isSafePassword(const QString& password)
 
     for (qsizetype i = 0; i < length; ++i)
     {
-        QChar character = password.at(i);
+        QChar character = password_str.at(i);
 
         if (character.isUpper())
             has_upper = true;
@@ -156,7 +157,7 @@ bool MasterPassword::isSet()
 
 //--------------------------------------------------------------------------------------------------
 // static
-bool MasterPassword::unlock(const QString& password)
+bool MasterPassword::unlock(const SecureString& password)
 {
     Database& db = Database::instance();
     if (!db.isValid())
@@ -194,7 +195,7 @@ bool MasterPassword::unlock(const QString& password)
 
 //--------------------------------------------------------------------------------------------------
 // static
-bool MasterPassword::setNew(const QString& new_password)
+bool MasterPassword::setNew(const SecureString& new_password)
 {
     if (new_password.isEmpty())
     {
@@ -221,7 +222,7 @@ bool MasterPassword::setNew(const QString& new_password)
 
 //--------------------------------------------------------------------------------------------------
 // static
-bool MasterPassword::change(const QString& current_password, const QString& new_password)
+bool MasterPassword::change(const SecureString& current_password, const SecureString& new_password)
 {
     if (new_password.isEmpty())
     {

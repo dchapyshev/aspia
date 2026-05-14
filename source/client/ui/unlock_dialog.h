@@ -24,6 +24,7 @@
 #include <memory>
 
 class QAbstractButton;
+class SecureString;
 
 namespace Ui {
 class UnlockDialog;
@@ -39,7 +40,7 @@ public:
                  const QString& encryption_type);
     ~UnlockDialog() final;
 
-    QString password() const;
+    SecureString password() const;
 
 private slots:
     void onShowPasswordButtonToggled(bool checked);

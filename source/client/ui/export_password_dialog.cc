@@ -22,6 +22,7 @@
 #include <QTimer>
 
 #include "base/logging.h"
+#include "base/crypto/secure_string.h"
 #include "client/master_password.h"
 #include "common/ui/msg_box.h"
 #include "ui_export_password_dialog.h"
@@ -50,22 +51,23 @@ ExportPasswordDialog::~ExportPasswordDialog()
 }
 
 //--------------------------------------------------------------------------------------------------
-QString ExportPasswordDialog::password() const
+SecureString ExportPasswordDialog::password() const
 {
-    return ui->edit_password->text();
+    return SecureString(ui->edit_password->text());
 }
 
 //--------------------------------------------------------------------------------------------------
 void ExportPasswordDialog::onEncryptClicked()
 {
-    QString password = ui->edit_password->text();
+    SecureString password(ui->edit_password->text());
     if (password.isEmpty())
     {
         MsgBox::warning(this, tr("Password cannot be empty."));
         return;
     }
 
-    if (password != ui->edit_confirm->text())
+    SecureString confirm(ui->edit_confirm->text());
+    if (password != confirm)
     {
         MsgBox::warning(this, tr("Passwords do not match."));
         return;

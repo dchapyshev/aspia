@@ -22,8 +22,9 @@
 #include <QPushButton>
 #include <QTimer>
 
-#include "common/ui/msg_box.h"
 #include "base/logging.h"
+#include "base/crypto/secure_string.h"
+#include "common/ui/msg_box.h"
 #include "host/system_settings.h"
 #include "ui_check_password_dialog.h"
 
@@ -58,7 +59,7 @@ void CheckPasswordDialog::onButtonBoxClicked(QAbstractButton* button)
     {
         LOG(INFO) << "[ACTION] Accepted by user";
 
-        QString password = ui->edit_pass->text();
+        SecureString password(ui->edit_pass->text());
 
         if (!SystemSettings::isValidPassword(password))
         {
