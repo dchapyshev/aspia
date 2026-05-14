@@ -125,12 +125,9 @@ HRESULT FileStream::Read(void* pv, ULONG cb, ULONG* pcbRead)
 
         lock_.lock();
 
-        if (is_terminated_)
-        {
-            lock_.unlock();
-            break;
-        }
-
+        // Drain the buffer before honoring termination. addFileData() with is_last=true
+        // appends the final chunk and then calls terminate() - if we checked is_terminated_
+        // first we would lose that last chunk and return 0 bytes for small files.
         if (!buffer_.isEmpty())
         {
             qsizetype to_copy = std::min(qsizetype(cb - total_read), buffer_.size());
@@ -148,6 +145,9 @@ HRESULT FileStream::Read(void* pv, ULONG cb, ULONG* pcbRead)
         }
 
         lock_.unlock();
+
+        if (is_terminated_)
+            break;
 
         // Wait for data or termination with a timeout. MsgWaitForMultipleObjects pumps
         // messages while waiting - required on the STA thread so that Qt queued connections
