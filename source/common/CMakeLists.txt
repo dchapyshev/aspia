@@ -103,6 +103,8 @@ list(APPEND SOURCE_COMMON_UI
     ui/language_action.h
     ui/msg_box.cc
     ui/msg_box.h
+    ui/password_edit.cc
+    ui/password_edit.h
     ui/session_type.cc
     ui/session_type.h
     ui/status_dialog.cc
