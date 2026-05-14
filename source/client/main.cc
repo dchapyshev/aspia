@@ -341,7 +341,7 @@ bool handleConnect()
     ComputerConfig computer;
     computer.address = computer_object.value("address").toString();
     computer.username = computer_object.value("username").toString();
-    computer.password = computer_object.value("password").toString();
+    computer.password = SecureString(computer_object.value("password").toString());
     computer.name = computer_object.value("name").toString();
 
     if (computer.address.isEmpty())
@@ -425,7 +425,7 @@ bool handleConnect()
         router_config.router_id = 1;
         router_config.address = router_object.value("address").toString();
         router_config.username = router_object.value("username").toString();
-        router_config.password = router_object.value("password").toString();
+        router_config.password = SecureString(router_object.value("password").toString());
         router_config.session_type = proto::router::SESSION_TYPE_CLIENT;
 
         if (!router_config.isValid())

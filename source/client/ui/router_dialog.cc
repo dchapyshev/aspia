@@ -60,7 +60,7 @@ RouterDialog::RouterDialog(qint64 router_id, QWidget* parent)
                 ui->combo_session_type->setCurrentIndex(session_type_index);
 
             ui->edit_username->setText(router->username);
-            ui->edit_password->setText(router->password);
+            ui->edit_password->setText(router->password.toString());
         }
         else
         {
@@ -128,7 +128,7 @@ void RouterDialog::onButtonBoxClicked(QAbstractButton* button)
     data.session_type =
         static_cast<proto::router::SessionType>(ui->combo_session_type->currentData().toUInt());
     data.username = username;
-    data.password = password.toString();
+    data.password = password;
 
     Database& db = Database::instance();
 

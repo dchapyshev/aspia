@@ -59,6 +59,14 @@ QByteArray decryptBytes(const QByteArray& blob)
 }
 
 //--------------------------------------------------------------------------------------------------
+SecureByteArray decryptSecureBytes(const QByteArray& blob)
+{
+    if (blob.isEmpty())
+        return SecureByteArray();
+    return SecureByteArray(DataCryptor::instance().decrypt(blob).value_or(QByteArray()));
+}
+
+//--------------------------------------------------------------------------------------------------
 QByteArray encryptString(const QString& value)
 {
     return encryptBytes(value.toUtf8());
@@ -68,6 +76,18 @@ QByteArray encryptString(const QString& value)
 QString decryptString(const QByteArray& blob)
 {
     return QString::fromUtf8(decryptBytes(blob));
+}
+
+//--------------------------------------------------------------------------------------------------
+QByteArray encryptSecureString(const SecureString& value)
+{
+    return encryptBytes(SecureByteArray(value.toUtf8()).toByteArray());
+}
+
+//--------------------------------------------------------------------------------------------------
+SecureString decryptSecureString(const QByteArray& blob)
+{
+    return SecureString::fromUtf8(decryptSecureBytes(blob));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -81,7 +101,7 @@ ComputerConfig readComputer(const QSqlQuery& query)
     computer.comment = decryptString(query.value(4).toByteArray());
     computer.address = decryptString(query.value(5).toByteArray());
     computer.username = decryptString(query.value(6).toByteArray());
-    computer.password = decryptString(query.value(7).toByteArray());
+    computer.password = decryptSecureString(query.value(7).toByteArray());
     computer.create_time = query.value(8).toLongLong();
     computer.modify_time = query.value(9).toLongLong();
     computer.connect_time = query.value(10).toLongLong();
@@ -111,7 +131,7 @@ RouterConfig readRouter(const QSqlQuery& query)
     router.address = decryptString(query.value(2).toByteArray());
     router.session_type = static_cast<proto::router::SessionType>(query.value(3).toUInt());
     router.username = decryptString(query.value(4).toByteArray());
-    router.password = decryptString(query.value(5).toByteArray());
+    router.password = decryptSecureString(query.value(5).toByteArray());
     router.data = decryptBytes(query.value(6).toByteArray());
 
     return router;
@@ -294,7 +314,7 @@ bool Database::addComputer(ComputerConfig& computer)
     query.addBindValue(encryptString(computer.comment));
     query.addBindValue(encryptString(computer.address));
     query.addBindValue(encryptString(computer.username));
-    query.addBindValue(encryptString(computer.password));
+    query.addBindValue(encryptSecureString(computer.password));
     query.addBindValue(computer.create_time);
     query.addBindValue(computer.modify_time);
     query.addBindValue(computer.connect_time);
@@ -330,7 +350,7 @@ bool Database::modifyComputer(ComputerConfig& computer)
     query.addBindValue(encryptString(computer.comment));
     query.addBindValue(encryptString(computer.address));
     query.addBindValue(encryptString(computer.username));
-    query.addBindValue(encryptString(computer.password));
+    query.addBindValue(encryptSecureString(computer.password));
     query.addBindValue(computer.modify_time);
     query.addBindValue(encryptBytes(computer.data));
     query.addBindValue(computer.id);
@@ -667,7 +687,7 @@ bool Database::addRouter(RouterConfig& router)
     query.addBindValue(encryptString(router.address));
     query.addBindValue(static_cast<quint32>(router.session_type));
     query.addBindValue(encryptString(router.username));
-    query.addBindValue(encryptString(router.password));
+    query.addBindValue(encryptSecureString(router.password));
     query.addBindValue(encryptBytes(router.data));
 
     if (!query.exec())
@@ -696,7 +716,7 @@ bool Database::modifyRouter(const RouterConfig& router)
     query.addBindValue(encryptString(router.address));
     query.addBindValue(static_cast<quint32>(router.session_type));
     query.addBindValue(encryptString(router.username));
-    query.addBindValue(encryptString(router.password));
+    query.addBindValue(encryptSecureString(router.password));
     query.addBindValue(encryptBytes(router.data));
     query.addBindValue(router.router_id);
 

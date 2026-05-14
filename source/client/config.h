@@ -19,8 +19,7 @@
 #ifndef CLIENT_CONFIG_H
 #define CLIENT_CONFIG_H
 
-#include <QByteArray>
-#include <QString>
+#include "base/crypto/secure_string.h"
 
 namespace proto::router {
 enum SessionType : int;
@@ -43,7 +42,7 @@ struct RouterConfig
     QString address;
     proto::router::SessionType session_type;
     QString username;
-    QString password;
+    SecureString password;
     QByteArray data;
 };
 
@@ -56,7 +55,7 @@ struct ComputerConfig
     QString comment;
     QString address;
     QString username;
-    QString password;
+    SecureString password;
     qint64 create_time = 0;
     qint64 modify_time = 0;
     qint64 connect_time = 0;

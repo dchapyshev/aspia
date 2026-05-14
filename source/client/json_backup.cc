@@ -65,9 +65,8 @@ QString encryptToHex(const DataCryptor& cryptor, const QString& value)
     if (value.isEmpty())
         return QString();
 
-    QByteArray plain = value.toUtf8();
-    std::optional<QByteArray> encrypted = cryptor.encrypt(plain);
-    memZero(&plain);
+    SecureByteArray plain(value.toUtf8());
+    std::optional<QByteArray> encrypted = cryptor.encrypt(plain.toByteArray());
 
     if (!encrypted.has_value())
     {
@@ -127,7 +126,7 @@ QJsonObject buildRouter(const RouterConfig& router, const DataCryptor& cryptor)
     object.insert("address", encryptToHex(cryptor, router.address));
     object.insert("session_type", static_cast<int>(router.session_type));
     object.insert("username", encryptToHex(cryptor, router.username));
-    object.insert("password", encryptToHex(cryptor, router.password));
+    object.insert("password", encryptToHex(cryptor, router.password.toString()));
     return object;
 }
 
@@ -153,7 +152,7 @@ QJsonObject buildComputer(const ComputerConfig& computer, const DataCryptor& cry
     object.insert("comment", encryptToHex(cryptor, computer.comment));
     object.insert("address", encryptToHex(cryptor, computer.address));
     object.insert("username", encryptToHex(cryptor, computer.username));
-    object.insert("password", encryptToHex(cryptor, computer.password));
+    object.insert("password", encryptToHex(cryptor, computer.password.toString()));
     return object;
 }
 
@@ -194,7 +193,7 @@ qint64 importRouter(const QJsonObject& router_object, const DataCryptor& cryptor
     config.display_name = display_name_value.isEmpty() ? *address : display_name_value;
     config.address = *address;
     config.username = *username;
-    config.password = *password;
+    config.password = SecureString(std::move(*password));
     config.session_type = static_cast<proto::router::SessionType>(session_type);
 
     if (!db.addRouter(config))
@@ -347,7 +346,7 @@ void importComputers(const QJsonArray& computers_array,
         config.comment = sanitizedComment(*comment);
         config.address = *address;
         config.username = *username;
-        config.password = *password;
+        config.password = SecureString(*password);
 
         if (!db.addComputer(config))
         {

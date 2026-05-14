@@ -94,15 +94,15 @@ void AuthorizationDialog::setUserName(const QString& username)
 }
 
 //--------------------------------------------------------------------------------------------------
-QString AuthorizationDialog::password() const
+SecureString AuthorizationDialog::password() const
 {
-    return ui->edit_password->text();
+    return SecureString(ui->edit_password->text());
 }
 
 //--------------------------------------------------------------------------------------------------
-void AuthorizationDialog::setPassword(const QString& password)
+void AuthorizationDialog::setPassword(const SecureString& password)
 {
-    ui->edit_password->setText(password);
+    ui->edit_password->setText(password.toString());
 }
 
 //--------------------------------------------------------------------------------------------------

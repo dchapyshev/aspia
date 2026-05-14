@@ -49,7 +49,7 @@ public:
     QString hostAddress() const;
     quint16 hostPort() const;
     const QString& hostUserName() const { return computer_.username; }
-    const QString& hostPassword() const { return computer_.password; }
+    const SecureString& hostPassword() const { return computer_.password; }
 
     void setRouterVersion(const QVersionNumber& router_version);
     QVersionNumber routerVersion() const;

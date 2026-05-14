@@ -69,7 +69,7 @@ LocalComputerDialog::LocalComputerDialog(qint64 computer_id, qint64 group_id, QW
             ui->edit_name->setText(computer->name);
             ui->edit_address->setText(computer->address);
             ui->edit_username->setText(computer->username);
-            ui->edit_password->setText(computer->password);
+            ui->edit_password->setText(computer->password.toString());
             ui->edit_comment->setPlainText(computer->comment);
             group_id_ = computer->group_id;
             selected_router_id = computer->router_id;
@@ -235,7 +235,7 @@ void LocalComputerDialog::onButtonBoxClicked(QAbstractButton* button)
     computer.name = ui->edit_name->text();
     computer.address = ui->edit_address->text();
     computer.username = ui->edit_username->text();
-    computer.password = ui->edit_password->text();
+    computer.password = SecureString(ui->edit_password->text());
     computer.comment = ui->edit_comment->toPlainText();
 
     Database& db = Database::instance();

@@ -109,7 +109,7 @@ qint64 ensureRouter(const proto::address_book::Router& proto_router, ImportCount
     config.display_name = AabImporter::tr("%1 (Imported)").arg(address);
     config.address = combined_address;
     config.username = username;
-    config.password = password;
+    config.password = SecureString(password);
     config.session_type = proto::router::SESSION_TYPE_CLIENT;
 
     if (!db.addRouter(config))
@@ -171,7 +171,7 @@ bool importComputer(const proto::address_book::Computer& proto_computer,
     config.comment = comment;
     config.address = address;
     config.username = username;
-    config.password = password;
+    config.password = SecureString(std::move(password));
 
     if (!Database::instance().addComputer(config))
     {

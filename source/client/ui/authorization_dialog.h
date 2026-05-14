@@ -23,6 +23,8 @@
 
 #include <memory>
 
+#include "base/crypto/secure_string.h"
+
 class QAbstractButton;
 
 namespace Ui {
@@ -42,8 +44,8 @@ public:
     QString userName() const;
     void setUserName(const QString& username);
 
-    QString password() const;
-    void setPassword(const QString& password);
+    SecureString password() const;
+    void setPassword(const SecureString& password);
 
 protected:
     // QDialog implementation.
