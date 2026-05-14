@@ -584,19 +584,24 @@ void UdpChannel::onMessageReceived(quint8 channel_id, ScopedENetPacket packet)
         return;
     }
 
-    addRxBytes(packet->dataLength);
-
-    if (packet->dataLength > kMaxMessageSize)
+    // Reject pathological sizes before touching the header. The minimum valid payload is
+    // header + AEAD tag (16 bytes).
+    static const qint64 kMinMessageSize = sizeof(Header) + 16;
+    if (packet->dataLength < kMinMessageSize || packet->dataLength > kMaxMessageSize)
     {
-        CLOG(ERROR) << "Too big incoming message:" << packet->dataLength;
+        CLOG(ERROR) << "Bad incoming message size:" << packet->dataLength;
         onErrorOccurred(FROM_HERE);
         return;
     }
 
+    addRxBytes(packet->dataLength);
+
     Header header;
     memcpy(&header, packet->data, sizeof(Header));
 
-    if (!replay_window_.check(header.counter))
+    // Read-only replay check: rejects obvious replays/too-old without mutating the window.
+    // The window is committed only after authentication succeeds.
+    if (!replay_window_.precheck(header.counter))
     {
         CLOG(WARNING) << "Dropped replayed or too-old packet with counter:" << header.counter;
         return;
@@ -614,6 +619,9 @@ void UdpChannel::onMessageReceived(quint8 channel_id, ScopedENetPacket packet)
         CLOG(WARNING) << "Failed to decrypt incoming message (counter:" << header.counter << ")";
         return;
     }
+
+    // Authentication passed - now it is safe to advance the replay window.
+    replay_window_.commit(header.counter);
 
     if (header.type == USER_DATA)
         emit sig_messageReceived(channel_id, decrypt_buffer_);

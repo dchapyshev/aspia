@@ -26,10 +26,11 @@
 // Sliding window for detecting replayed or too-old packets.
 // Based on the same approach used by WireGuard and RFC 6479.
 //
-// Usage:
+// Usage (two-phase to avoid poisoning the window with unauthenticated input):
 //   AntiReplayWindow window;
-//   if (!window.check(counter))
-//       discard packet;  // replayed or too old
+//   if (!window.precheck(counter)) discard;   // would be rejected anyway
+//   if (!decrypt_and_verify(...))  discard;   // authenticate first
+//   window.commit(counter);                   // only now mutate state
 //
 class AntiReplayWindow
 {
@@ -38,9 +39,14 @@ public:
 
     AntiReplayWindow() = default;
 
-    // Returns true if the counter is valid (not replayed and not too old).
-    // If valid, marks the counter as seen.
-    bool check(quint64 counter);
+    // Read-only check: returns true if the counter would be accepted right now
+    // (not zero, not too old, not already seen). Does not mutate state.
+    bool precheck(quint64 counter) const;
+
+    // Marks the counter as seen and advances the window. Must be called only
+    // after the packet carrying this counter has been successfully authenticated
+    // and only if precheck() returned true for the same counter.
+    void commit(quint64 counter);
 
     // Resets the window to its initial state.
     void reset();

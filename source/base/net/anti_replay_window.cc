@@ -18,12 +18,33 @@
 
 #include "base/net/anti_replay_window.h"
 
+#include "base/logging.h"
+
 //--------------------------------------------------------------------------------------------------
-bool AntiReplayWindow::check(quint64 counter)
+bool AntiReplayWindow::precheck(quint64 counter) const
 {
     // Counter 0 is never valid (counters start from 1).
     if (counter == 0)
         return false;
+
+    // Anything strictly greater than the current maximum is acceptable: it will either
+    // extend the window or fall outside it (and in the latter case the previous state
+    // becomes irrelevant after commit).
+    if (counter > max_counter_)
+        return true;
+
+    // Counter is within or behind the window.
+    if (max_counter_ - counter >= kWindowSize)
+        return false; // Too old - outside the window.
+
+    // Already seen - replay.
+    return !bitmap_.test(static_cast<size_t>(counter % kWindowSize));
+}
+
+//--------------------------------------------------------------------------------------------------
+void AntiReplayWindow::commit(quint64 counter)
+{
+    DCHECK_NE(counter, 0u);
 
     if (counter > max_counter_)
     {
@@ -47,20 +68,12 @@ bool AntiReplayWindow::check(quint64 counter)
 
         max_counter_ = counter;
         bitmap_.set(static_cast<size_t>(counter % kWindowSize));
-        return true;
+        return;
     }
 
-    // Counter is within or behind the window.
-    if (max_counter_ - counter >= kWindowSize)
-        return false; // Too old - outside the window.
-
-    size_t bit_index = static_cast<size_t>(counter % kWindowSize);
-
-    if (bitmap_.test(bit_index))
-        return false; // Already seen - replay.
-
-    bitmap_.set(bit_index);
-    return true;
+    // Counter is within the window (precheck guarantees it is not too old and not a duplicate).
+    DCHECK_LT(max_counter_ - counter, kWindowSize);
+    bitmap_.set(static_cast<size_t>(counter % kWindowSize));
 }
 
 //--------------------------------------------------------------------------------------------------
