@@ -289,7 +289,20 @@ BigNum SrpMath::calc_u(const BigNum& A, const BigNum& B, const BigNum& N)
         return BigNum();
     }
 
-    return calc_xy(A, B, N);
+    BigNum u = calc_xy(A, B, N);
+    if (!u.isValid())
+        return BigNum();
+
+    // RFC 5054: both sides MUST abort if u == 0. With BLAKE2b512(PAD(A) | PAD(B)) the
+    // probability is negligible, but treating it as a protocol violation keeps the SRP
+    // invariant explicit instead of relying on collision resistance alone.
+    if (BN_is_zero(u))
+    {
+        LOG(ERROR) << "u == 0 (RFC 5054 violation)";
+        return BigNum();
+    }
+
+    return u;
 }
 
 //--------------------------------------------------------------------------------------------------
