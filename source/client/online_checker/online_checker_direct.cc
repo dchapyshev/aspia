@@ -93,7 +93,7 @@ void OnlineCheckerDirect::Instance::start()
     ClientAuthenticator* authenticator = new ClientAuthenticator();
     authenticator->setIdentify(proto::key_exchange::IDENTIFY_SRP);
     authenticator->setUserName(computer_.username);
-    authenticator->setPassword(computer_.password);
+    authenticator->setPassword(SecureString(computer_.password));
     authenticator->setSessionType(proto::peer::SESSION_TYPE_DESKTOP);
     authenticator->setProbe(true);
 

@@ -22,13 +22,14 @@
 #include <QComboBox>
 #include <QToolButton>
 
-#include "common/ui/msg_box.h"
 #include "base/logging.h"
+#include "base/crypto/secure_string.h"
 #include "base/net/address.h"
 #include "base/peer/user.h"
 #include "build/build_config.h"
 #include "client/config.h"
 #include "client/database.h"
+#include "common/ui/msg_box.h"
 #include "proto/router.h"
 #include "ui_router_dialog.h"
 
@@ -110,7 +111,7 @@ void RouterDialog::onButtonBoxClicked(QAbstractButton* button)
         return;
     }
 
-    QString password = ui->edit_password->text();
+    SecureString password(ui->edit_password->text());
     if (!User::isValidPassword(password))
     {
         LOG(ERROR) << "Invalid password entered";
@@ -127,7 +128,7 @@ void RouterDialog::onButtonBoxClicked(QAbstractButton* button)
     data.session_type =
         static_cast<proto::router::SessionType>(ui->combo_session_type->currentData().toUInt());
     data.username = username;
-    data.password = password;
+    data.password = password.toString();
 
     Database& db = Database::instance();
 

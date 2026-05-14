@@ -27,6 +27,7 @@
 #include "base/service_controller.h"
 #include "base/crypto/key_pair.h"
 #include "base/crypto/random.h"
+#include "base/crypto/secure_string.h"
 #include "base/files/base_paths.h"
 #include "base/files/file_util.h"
 #include "base/peer/user.h"
@@ -228,7 +229,7 @@ int createConfig(QTextStream& out)
     const char kUserName[] = "admin";
     const char kPassword[] = "admin";
 
-    User user = User::create(kUserName, kPassword);
+    User user = User::create(kUserName, SecureString(kPassword));
     if (!user.isValid())
     {
         out << "Failed to create user." << Qt::endl;

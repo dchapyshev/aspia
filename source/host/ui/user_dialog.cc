@@ -20,8 +20,9 @@
 
 #include <QMouseEvent>
 
-#include "common/ui/msg_box.h"
 #include "base/logging.h"
+#include "base/crypto/secure_string.h"
+#include "common/ui/msg_box.h"
 #include "common/ui/session_type.h"
 #include "proto/peer.h"
 #include "ui_user_dialog.h"
@@ -139,7 +140,8 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
         if (account_changed_)
         {
             QString username = ui->edit_username->text();
-            QString password = ui->edit_password->text();
+            SecureString password(ui->edit_password->text());
+            SecureString password_repeat(ui->edit_password_repeat->text());
 
             if (!User::isValidUserName(username))
             {
@@ -161,7 +163,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
                 return;
             }
 
-            if (password != ui->edit_password_repeat->text())
+            if (password != password_repeat)
             {
                 LOG(ERROR) << "Passwords do not match";
                 MsgBox::warning(this, tr("The passwords you entered do not match."));

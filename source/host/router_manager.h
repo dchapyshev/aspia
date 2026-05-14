@@ -25,6 +25,7 @@
 
 #include "base/scoped_qpointer.h"
 #include "base/shared_pointer.h"
+#include "base/crypto/secure_string.h"
 #include "base/net/tcp_channel.h"
 #include "base/peer/host_id.h"
 #include "base/peer/user_list.h"
@@ -64,7 +65,7 @@ public slots:
 
 signals:
     void sig_routerStateChanged(const proto::user::RouterState& state);
-    void sig_credentialsChanged(HostId host_id, const QString& one_time_password);
+    void sig_credentialsChanged(HostId host_id, const SecureString& one_time_password);
     void sig_clientConnected();
     void sig_removeHost(bool try_to_uninstall);
 
@@ -90,7 +91,7 @@ private:
     QByteArray public_key_;
 
     QTimer* password_expire_timer_ = nullptr;
-    QString one_time_password_;
+    SecureString one_time_password_;
     quint32 one_time_sessions_ = 0;
 
     SharedPointer<UserListBase> user_list_;

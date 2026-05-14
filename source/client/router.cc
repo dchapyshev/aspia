@@ -99,7 +99,7 @@ void Router::onConnectToRouter()
     authenticator->setIdentify(proto::key_exchange::IDENTIFY_SRP);
     authenticator->setSessionType(config_.session_type);
     authenticator->setUserName(config_.username);
-    authenticator->setPassword(config_.password);
+    authenticator->setPassword(SecureString(config_.password));
 
     tcp_channel_ = new TcpChannelNG(authenticator, this);
 

@@ -18,13 +18,14 @@
 
 #include "client/ui/hosts/router_user_dialog.h"
 
-#include "common/ui/msg_box.h"
-#include "base/logging.h"
-#include "proto/router.h"
-#include "ui_router_user_dialog.h"
-
 #include <QAbstractButton>
 #include <QPushButton>
+
+#include "base/logging.h"
+#include "base/crypto/secure_string.h"
+#include "common/ui/msg_box.h"
+#include "proto/router.h"
+#include "ui_router_user_dialog.h"
 
 //--------------------------------------------------------------------------------------------------
 RouterUserDialog::RouterUserDialog(const User& user, const QStringList& users, QWidget* parent)
@@ -162,7 +163,7 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
             return;
         }
 
-        QString password = ui->edit_password->text();
+        SecureString password(ui->edit_password->text());
 
         if (!User::isValidPassword(password))
         {

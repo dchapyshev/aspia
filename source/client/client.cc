@@ -134,7 +134,7 @@ void Client::start()
     {
         auth->setIdentify(proto::key_exchange::IDENTIFY_SRP);
         auth->setUserName(session_state_->hostUserName());
-        auth->setPassword(session_state_->hostPassword());
+        auth->setPassword(SecureString(session_state_->hostPassword()));
         auth->setSessionType(static_cast<quint32>(session_state_->sessionType()));
         auth->setDisplayName(session_state_->displayName());
     };

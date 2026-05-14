@@ -25,6 +25,7 @@
 #include "base/scoped_qpointer.h"
 #include "base/serialization.h"
 #include "base/session_id.h"
+#include "base/crypto/secure_string.h"
 #include "base/peer/host_id.h"
 #include "proto/user.h"
 
@@ -67,7 +68,7 @@ public:
 public slots:
     bool start();
     void onRouterStateChanged(const proto::user::RouterState& state);
-    void onUpdateCredentials(HostId host_id, const QString& password);
+    void onUpdateCredentials(HostId host_id, const SecureString& password);
     void onClientSwitchSession(SessionId session_id);
     void onClientConfirmation(const proto::user::ConfirmationRequest& request);
     void onClientStarted();
