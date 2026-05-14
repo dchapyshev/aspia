@@ -149,7 +149,7 @@ UserSession::~UserSession()
 
 //--------------------------------------------------------------------------------------------------
 void UserSession::sendConnectEvent(quint32 client_id, proto::peer::SessionType session_type,
-    const QString &computer_name, const QString &display_name)
+    const QString& computer_name, const QString& display_name)
 {
     proto::user::ConnectEvent* event = outgoing_message_.newMessage().mutable_connect_event();
     event->set_client_id(client_id);
@@ -248,7 +248,7 @@ void UserSession::onClientConfirmation(const proto::user::ConfirmationRequest& r
     SystemSettings settings;
 
 #if defined(Q_OS_WINDOWS)
-    if (state_ == State::DETTACHED)
+    if (state_ == State::DETTACHED || dettach_timer_->isActive())
     {
         LOG(INFO) << "No active GUI process";
 
@@ -528,6 +528,7 @@ void UserSession::onIpcDisconnected()
 
             LOG(WARNING) << "GUI process terminated during an active user session";
             dettach_timer_->start();
+            ipc_channel_.reset();
         }
     }
 #endif // defined(Q_OS_WINDOWS)
