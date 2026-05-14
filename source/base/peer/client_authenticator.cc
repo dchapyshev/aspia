@@ -28,7 +28,7 @@
 #include "base/version_constants.h"
 #include "base/crypto/key_pair.h"
 #include "base/crypto/random.h"
-#include "base/crypto/secure_memory.h"
+#include "base/crypto/secure_byte_array.h"
 #include "base/crypto/srp_math.h"
 #include "proto/key_exchange.h"
 
@@ -257,7 +257,7 @@ void ClientAuthenticator::sendClientHello()
 
     if (identify_ == proto::key_exchange::IDENTIFY_ANONYMOUS)
     {
-        QByteArray x25519_secret = key_pair_.sessionKey(peer_public_key_);
+        SecureByteArray x25519_secret(key_pair_.sessionKey(peer_public_key_));
         if (x25519_secret.isEmpty())
         {
             finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
@@ -266,8 +266,7 @@ void ClientAuthenticator::sendClientHello()
 
         // ANONYMOUS order: secret before ClientHello bytes (server can compute the secret
         // immediately after parsing the peer's public_key from CH, so it mirrors this).
-        appendTranscript(x25519_secret);
-        memZero(&x25519_secret);
+        appendTranscript(x25519_secret.toByteArray());
 
         // No further use of the keypair.
         key_pair_ = KeyPair();
@@ -361,15 +360,14 @@ bool ClientAuthenticator::readServerHello(const QByteArray& buffer)
 
         // SRP: derive the shared secret with the server's ephemeral pubkey just received.
         // Order on the wire: ClientHello || x25519_secret || ServerHello.
-        QByteArray x25519_secret = key_pair_.sessionKey(server_public_key);
+        SecureByteArray x25519_secret(key_pair_.sessionKey(server_public_key));
         if (x25519_secret.isEmpty())
         {
             finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
             return false;
         }
 
-        appendTranscript(x25519_secret);
-        memZero(&x25519_secret);
+        appendTranscript(x25519_secret.toByteArray());
 
         // No further use of the keypair.
         key_pair_ = KeyPair();
@@ -568,15 +566,14 @@ void ClientAuthenticator::sendClientKeyExchange()
     // Mix the SRP key after SrpClientKeyExchange. Transcript now covers full handshake +
     // srp_raw_key. The new sessionKey() switches the channel to the final key, used for
     // SessionChallenge / SessionResponse.
-    QByteArray srp_raw_key = key.toByteArray();
+    SecureByteArray srp_raw_key(key.toByteArray());
     if (srp_raw_key.isEmpty())
     {
         finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
         return;
     }
 
-    appendTranscript(srp_raw_key);
-    memZero(&srp_raw_key);
+    appendTranscript(srp_raw_key.toByteArray());
 
     CLOG(INFO) << "Session key is ready";
     setSessionKeyReady();

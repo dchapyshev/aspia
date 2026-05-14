@@ -19,12 +19,14 @@
 #include "base/crypto/datagram_encryptor.h"
 #include "base/crypto/datagram_decryptor.h"
 
+#include "base/crypto/secure_byte_array.h"
+
 #include <gtest/gtest.h>
 
 namespace {
 
-const QByteArray kKey =
-    QByteArray::fromHex("5ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014");
+const SecureByteArray kKey(
+    QByteArray::fromHex("5ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014"));
 const QByteArray kIV = QByteArray::fromHex("ee7eb0e6fb24d445597f3e6f");
 const QByteArray kMessage = QByteArray::fromHex(
     "6006ee8029610876ec2facd5fc9ce6bd6dc03d4a5ddb4d6c28f2ff048d4f7eb7bcf5048c901a4adaa7fd");
@@ -105,8 +107,8 @@ TEST(DatagramCryptorAes256GcmTest, WrongCounterFails)
 
 TEST(DatagramCryptorAes256GcmTest, WrongKeyFails)
 {
-    const QByteArray other_key =
-        QByteArray::fromHex("1ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014");
+    const SecureByteArray other_key(
+        QByteArray::fromHex("1ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014"));
 
     auto encryptor = DatagramEncryptor::createForAes256Gcm(kKey, kIV);
     ASSERT_NE(encryptor, nullptr);
@@ -310,8 +312,8 @@ TEST(DatagramCryptorChaCha20Poly1305Test, WrongCounterFails)
 
 TEST(DatagramCryptorChaCha20Poly1305Test, WrongKeyFails)
 {
-    const QByteArray other_key =
-        QByteArray::fromHex("1ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014");
+    const SecureByteArray other_key(
+        QByteArray::fromHex("1ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014"));
 
     auto encryptor = DatagramEncryptor::createForChaCha20Poly1305(kKey, kIV);
     ASSERT_NE(encryptor, nullptr);
@@ -395,7 +397,7 @@ TEST(DatagramCryptorChaCha20Poly1305Test, TamperedCiphertextFails)
 
 TEST(DatagramCryptorTest, InvalidKeySize)
 {
-    const QByteArray short_key = QByteArray::fromHex("5ce26794165a808ec425684e9384c27c");
+    const SecureByteArray short_key(QByteArray::fromHex("5ce26794165a808ec425684e9384c27c"));
     EXPECT_EQ(DatagramEncryptor::createForAes256Gcm(short_key, kIV), nullptr);
     EXPECT_EQ(DatagramDecryptor::createForAes256Gcm(short_key, kIV), nullptr);
     EXPECT_EQ(DatagramEncryptor::createForChaCha20Poly1305(short_key, kIV), nullptr);

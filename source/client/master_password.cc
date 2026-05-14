@@ -32,19 +32,19 @@ const int kSaltSize = 32;
 const int kVerifierPayloadSize = 32;
 
 //--------------------------------------------------------------------------------------------------
-QByteArray deriveKey(const SecureString& password, const QByteArray& salt)
+SecureByteArray deriveKey(const SecureString& password, const QByteArray& salt)
 {
-    return PasswordHash::hash(PasswordHash::ARGON2ID, password, salt);
+    return SecureByteArray(PasswordHash::hash(PasswordHash::ARGON2ID, password, salt));
 }
 
 //--------------------------------------------------------------------------------------------------
-std::optional<QByteArray> makeVerifier(const QByteArray& key)
+std::optional<QByteArray> makeVerifier(const SecureByteArray& key)
 {
     return DataCryptor(key).encrypt(Random::byteArray(kVerifierPayloadSize));
 }
 
 //--------------------------------------------------------------------------------------------------
-bool checkVerifier(const QByteArray& key, const QByteArray& verifier)
+bool checkVerifier(const SecureByteArray& key, const QByteArray& verifier)
 {
     // ChaCha20-Poly1305 is an AEAD cipher: successful decryption (i.e. valid auth tag)
     // is itself the proof that the key is correct. The plaintext content does not matter.
@@ -52,7 +52,7 @@ bool checkVerifier(const QByteArray& key, const QByteArray& verifier)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool changeKeyAndReencrypt(const QByteArray& new_key, const QByteArray& new_salt, const QByteArray& new_verifier)
+bool changeKeyAndReencrypt(const SecureByteArray& new_key, const QByteArray& new_salt, const QByteArray& new_verifier)
 {
     Database& db = Database::instance();
     if (!db.isValid())
@@ -62,7 +62,7 @@ bool changeKeyAndReencrypt(const QByteArray& new_key, const QByteArray& new_salt
     }
 
     DataCryptor& cryptor = DataCryptor::instance();
-    QByteArray old_key = cryptor.key();
+    SecureByteArray old_key = cryptor.key();
 
     // Read decrypted data with the current key.
     QList<ComputerConfig> computers = db.allComputers();
@@ -182,7 +182,7 @@ bool MasterPassword::unlock(const SecureString& password)
         return false;
     }
 
-    QByteArray key = deriveKey(password, salt);
+    SecureByteArray key = deriveKey(password, salt);
     if (!checkVerifier(key, verifier))
     {
         LOG(INFO) << "Invalid master password";
@@ -212,7 +212,7 @@ bool MasterPassword::setNew(const SecureString& new_password)
     QByteArray salt = Random::byteArray(kSaltSize);
     CHECK(!salt.isEmpty());
 
-    QByteArray new_key = deriveKey(new_password, salt);
+    SecureByteArray new_key = deriveKey(new_password, salt);
     std::optional<QByteArray> verifier = makeVerifier(new_key);
     if (!verifier.has_value())
         return false;
@@ -236,7 +236,7 @@ bool MasterPassword::change(const SecureString& current_password, const SecureSt
     QByteArray salt = Random::byteArray(kSaltSize);
     CHECK(!salt.isEmpty());
 
-    QByteArray new_key = deriveKey(new_password, salt);
+    SecureByteArray new_key = deriveKey(new_password, salt);
     std::optional<QByteArray> verifier = makeVerifier(new_key);
     if (!verifier.has_value())
         return false;

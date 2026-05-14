@@ -20,7 +20,6 @@
 
 #include "base/logging.h"
 #include "base/crypto/random.h"
-#include "base/crypto/secure_memory.h"
 
 #include <openssl/evp.h>
 
@@ -37,21 +36,17 @@ const int kHeaderSize = kIVSize + kTagSize;
 DataCryptor::DataCryptor() = default;
 
 //--------------------------------------------------------------------------------------------------
-DataCryptor::DataCryptor(const QByteArray& key)
+DataCryptor::DataCryptor(const SecureByteArray& key)
 {
     setKey(key);
 }
 
 //--------------------------------------------------------------------------------------------------
-DataCryptor::~DataCryptor()
-{
-    memZero(&key_);
-}
+DataCryptor::~DataCryptor() = default;
 
 //--------------------------------------------------------------------------------------------------
-void DataCryptor::setKey(const QByteArray& key)
+void DataCryptor::setKey(const SecureByteArray& key)
 {
-    memZero(&key_);
     key_ = key;
 
     encrypt_ctx_.reset();
@@ -76,7 +71,7 @@ void DataCryptor::setKey(const QByteArray& key)
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray DataCryptor::key() const
+SecureByteArray DataCryptor::key() const
 {
     return key_;
 }

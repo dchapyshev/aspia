@@ -288,14 +288,14 @@ QByteArray RelayPeer::authenticationMessage(const proto::router::RelayKey& key, 
         return QByteArray();
     }
 
-    QByteArray temp = key_pair.sessionKey(QByteArray::fromStdString(key.public_key()));
+    SecureByteArray temp(key_pair.sessionKey(QByteArray::fromStdString(key.public_key())));
     if (temp.isEmpty())
     {
         CLOG(ERROR) << "Failed to create session key";
         return QByteArray();
     }
 
-    QByteArray session_key = GenericHash::hash(GenericHash::Type::BLAKE2s256, temp);
+    SecureByteArray session_key(GenericHash::hash(GenericHash::Type::BLAKE2s256, temp.toByteArray()));
 
     std::unique_ptr<StreamEncryptor> encryptor =
         StreamEncryptor::createForChaCha20Poly1305(session_key, QByteArray::fromStdString(key.iv()));

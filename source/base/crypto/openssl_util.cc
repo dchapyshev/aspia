@@ -19,6 +19,7 @@
 #include "base/crypto/openssl_util.h"
 
 #include "base/logging.h"
+#include "base/crypto/secure_byte_array.h"
 
 #include <openssl/bn.h>
 #include <openssl/evp.h>
@@ -93,7 +94,7 @@ int cipherMode(CipherMode mode)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-EVP_CIPHER_CTX_ptr createCipher(CipherType type, CipherMode mode, const QByteArray& key, int iv_size)
+EVP_CIPHER_CTX_ptr createCipher(CipherType type, CipherMode mode, const SecureByteArray& key, int iv_size)
 {
     EVP_CIPHER_CTX_ptr ctx(EVP_CIPHER_CTX_new());
     if (!ctx)
@@ -121,7 +122,7 @@ EVP_CIPHER_CTX_ptr createCipher(CipherType type, CipherMode mode, const QByteArr
         return nullptr;
     }
 
-    if (EVP_CipherInit_ex(ctx.get(), nullptr, nullptr, reinterpret_cast<const quint8*>(key.data()),
+    if (EVP_CipherInit_ex(ctx.get(), nullptr, nullptr, reinterpret_cast<const quint8*>(key.constData()),
                           nullptr, cipherMode(mode)) != 1)
     {
         LOG(ERROR) << "EVP_CIPHER_CTX_ctrl failed";

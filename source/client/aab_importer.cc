@@ -24,6 +24,7 @@
 #include "base/serialization.h"
 #include "base/crypto/data_cryptor.h"
 #include "base/crypto/password_hash.h"
+#include "base/crypto/secure_byte_array.h"
 #include "base/crypto/secure_memory.h"
 #include "base/crypto/secure_string.h"
 #include "base/net/address.h"
@@ -286,7 +287,7 @@ bool AabImporter::import(QWidget* parent, const QString& file_path)
         return false;
     }
 
-    QByteArray key;
+    SecureByteArray key;
 
     switch (proto_file.encryption_type())
     {
@@ -299,10 +300,10 @@ bool AabImporter::import(QWidget* parent, const QString& file_path)
             if (dialog.exec() != QDialog::Accepted)
                 return false;
 
-            key = PasswordHash::hash(
+            key = SecureByteArray(PasswordHash::hash(
                 PasswordHash::SCRYPT,
                 dialog.password(),
-                QByteArray::fromStdString(proto_file.hashing_salt()));
+                QByteArray::fromStdString(proto_file.hashing_salt())));
             break;
         }
 
@@ -317,7 +318,6 @@ bool AabImporter::import(QWidget* parent, const QString& file_path)
     std::optional<QByteArray> decrypted = cryptor.decrypt(proto_file.data());
     if (!decrypted.has_value())
     {
-        memZero(&key);
         MsgBox::warning(parent,
             tr("Unable to decrypt the address book with the specified password."));
         return false;
@@ -327,14 +327,12 @@ bool AabImporter::import(QWidget* parent, const QString& file_path)
     if (!parse(*decrypted, &proto_data))
     {
         memZero(&*decrypted);
-        memZero(&key);
         MsgBox::warning(parent,
             tr("The address book file is corrupted or has an unknown format."));
         return false;
     }
 
     memZero(&*decrypted);
-    memZero(&key);
 
     ImportCounters counters;
 

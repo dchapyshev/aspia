@@ -25,6 +25,7 @@
 
 class Location;
 class QTimer;
+class SecureByteArray;
 
 namespace proto::key_exchange {
 enum Encryption : int;
@@ -89,7 +90,7 @@ public:
     // If the derived class returns an empty keyLabel() for the direction, the raw master is
     // returned (legacy wire-compatible mode). Otherwise the key is BLAKE2s(master || label),
     // which gives cryptographically independent c2s and s2c keys.
-    [[nodiscard]] QByteArray sessionKey(Direction direction) const;
+    [[nodiscard]] SecureByteArray sessionKey(Direction direction) const;
     [[nodiscard]] const QByteArray& iv(Direction direction) const;
 
 public slots:

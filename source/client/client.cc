@@ -27,6 +27,7 @@
 #include "base/crypto/datagram_decryptor.h"
 #include "base/crypto/datagram_encryptor.h"
 #include "base/crypto/random.h"
+#include "base/crypto/secure_byte_array.h"
 #include "base/net/net_utils.h"
 #include "base/net/tcp_channel_ng.h"
 #include "base/net/tcp_channel_legacy.h"
@@ -777,7 +778,7 @@ void Client::connectToUdp(
         return;
     }
 
-    QByteArray session_key = client_key_pair.sessionKey(context.public_key);
+    SecureByteArray session_key(client_key_pair.sessionKey(context.public_key));
     if (session_key.isEmpty())
     {
         CLOG(ERROR) << "Failed to derive UDP session key";

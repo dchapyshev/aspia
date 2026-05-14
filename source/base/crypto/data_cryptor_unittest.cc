@@ -18,13 +18,15 @@
 
 #include "base/crypto/data_cryptor.h"
 
+#include "base/crypto/secure_byte_array.h"
+
 #include <gtest/gtest.h>
 
 #include <QByteArray>
 
 TEST(DataCryptorTest, EncryptDecrypt)
 {
-    const QByteArray key = QByteArray::fromHex("1ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014");
+    const SecureByteArray key(QByteArray::fromHex("1ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014"));
     const QByteArray message =
         QByteArray::fromHex("5ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014"
                 "5ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014");
@@ -43,8 +45,8 @@ TEST(DataCryptorTest, EncryptDecrypt)
 
 TEST(DataCryptorTest, WrongKey)
 {
-    const QByteArray key = QByteArray::fromHex("1ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014");
-    const QByteArray wrong_key = QByteArray::fromHex("2ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014");
+    const SecureByteArray key(QByteArray::fromHex("1ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014"));
+    const SecureByteArray wrong_key(QByteArray::fromHex("2ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014"));
     const QByteArray message = QByteArray::fromHex("3da8b455bd39746dc50145ce26794165a808ec425684e9384c27c2249951256812125683");
 
     DataCryptor cryptor1(key);

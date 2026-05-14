@@ -19,6 +19,7 @@
 #include "base/crypto/datagram_encryptor.h"
 
 #include "base/logging.h"
+#include "base/crypto/secure_byte_array.h"
 
 #include <openssl/evp.h>
 
@@ -46,7 +47,7 @@ DatagramEncryptor::~DatagramEncryptor() = default;
 //--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<DatagramEncryptor> DatagramEncryptor::createForAes256Gcm(
-    const QByteArray& key, const QByteArray& iv)
+    const SecureByteArray& key, const QByteArray& iv)
 {
     if (key.size() != kKeySize || iv.size() != kIVSize)
     {
@@ -67,7 +68,7 @@ std::unique_ptr<DatagramEncryptor> DatagramEncryptor::createForAes256Gcm(
 //--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<DatagramEncryptor> DatagramEncryptor::createForChaCha20Poly1305(
-    const QByteArray& key, const QByteArray& iv)
+    const SecureByteArray& key, const QByteArray& iv)
 {
     if (key.size() != kKeySize || iv.size() != kIVSize)
     {

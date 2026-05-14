@@ -19,6 +19,8 @@
 #include "base/crypto/stream_encryptor.h"
 #include "base/crypto/stream_decryptor.h"
 
+#include "base/crypto/secure_byte_array.h"
+
 #include <gtest/gtest.h>
 
 void testVector(StreamEncryptor* client_encryptor, StreamDecryptor* client_decryptor,
@@ -137,8 +139,8 @@ void wrongAad(StreamEncryptor* encryptor, StreamDecryptor* decryptor)
 
 TEST(CryptorAes256GcmTest, TestVector)
 {
-    const QByteArray key =
-        QByteArray::fromHex("5ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014");
+    const SecureByteArray key(
+        QByteArray::fromHex("5ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014"));
     const QByteArray encrypt_iv = QByteArray::fromHex("ee7eb0e6fb24d445597f3e6f");
     const QByteArray decrypt_iv = QByteArray::fromHex("924988304848184805f07167");
 
@@ -171,10 +173,10 @@ TEST(CryptorAes256GcmTest, TestVector)
 
 TEST(CryptorAes256GcmTest, WrongKey)
 {
-    const QByteArray client_key =
-        QByteArray::fromHex("5ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014");
-    const QByteArray host_key =
-        QByteArray::fromHex("1ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014");
+    const SecureByteArray client_key(
+        QByteArray::fromHex("5ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014"));
+    const SecureByteArray host_key(
+        QByteArray::fromHex("1ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014"));
     const QByteArray iv = QByteArray::fromHex("ee7eb0e6fb24d445597f3e6f");
 
     EXPECT_EQ(client_key.size(), 32);
@@ -193,8 +195,8 @@ TEST(CryptorAes256GcmTest, WrongKey)
 
 TEST(CryptorAes256GcmTest, WrongAad)
 {
-    const QByteArray key =
-        QByteArray::fromHex("5ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014");
+    const SecureByteArray key(
+        QByteArray::fromHex("5ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014"));
     const QByteArray iv = QByteArray::fromHex("ee7eb0e6fb24d445597f3e6f");
 
     std::unique_ptr<StreamEncryptor> encryptor = StreamEncryptor::createForAes256Gcm(key, iv);
@@ -208,8 +210,8 @@ TEST(CryptorAes256GcmTest, WrongAad)
 
 TEST(CryptorChaCha20Poly1305Test, TestVector)
 {
-    const QByteArray key =
-        QByteArray::fromHex("5ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014");
+    const SecureByteArray key(
+        QByteArray::fromHex("5ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014"));
     const QByteArray encrypt_iv = QByteArray::fromHex("ee7eb0e6fb24d445597f3e6f");
     const QByteArray decrypt_iv = QByteArray::fromHex("924988304848184805f07167");
 
@@ -242,10 +244,10 @@ TEST(CryptorChaCha20Poly1305Test, TestVector)
 
 TEST(CryptorChaCha20Poly1305Test, WrongKey)
 {
-    const QByteArray client_key =
-        QByteArray::fromHex("5ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014");
-    const QByteArray host_key =
-        QByteArray::fromHex("1ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014");
+    const SecureByteArray client_key(
+        QByteArray::fromHex("5ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014"));
+    const SecureByteArray host_key(
+        QByteArray::fromHex("1ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014"));
     const QByteArray iv = QByteArray::fromHex("ee7eb0e6fb24d445597f3e6f");
 
     EXPECT_EQ(client_key.size(), 32);
@@ -264,8 +266,8 @@ TEST(CryptorChaCha20Poly1305Test, WrongKey)
 
 TEST(CryptorChaCha20Poly1305Test, WrongAad)
 {
-    const QByteArray key =
-        QByteArray::fromHex("5ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014");
+    const SecureByteArray key(
+        QByteArray::fromHex("5ce26794165a808ec425684e9384c27c22499512a513da8b455bd39746dc5014"));
     const QByteArray iv = QByteArray::fromHex("ee7eb0e6fb24d445597f3e6f");
 
     std::unique_ptr<StreamEncryptor> encryptor =

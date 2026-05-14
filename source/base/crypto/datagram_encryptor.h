@@ -23,6 +23,8 @@
 
 #include "base/crypto/openssl_util.h"
 
+class SecureByteArray;
+
 // AEAD encryptor for datagrams with explicit counter-based nonce construction. Unlike
 // StreamEncryptor, this class does not maintain internal IV state. The caller provides a counter
 // for each packet, and the nonce is computed as base_iv XOR counter (WireGuard-style).
@@ -32,10 +34,10 @@ public:
     ~DatagramEncryptor();
 
     static std::unique_ptr<DatagramEncryptor> createForAes256Gcm(
-        const QByteArray& key, const QByteArray& iv);
+        const SecureByteArray& key, const QByteArray& iv);
 
     static std::unique_ptr<DatagramEncryptor> createForChaCha20Poly1305(
-        const QByteArray& key, const QByteArray& iv);
+        const SecureByteArray& key, const QByteArray& iv);
 
     // Returns the size of encrypted output for a given input size.
     qint64 encryptedDataSize(qint64 in_size);

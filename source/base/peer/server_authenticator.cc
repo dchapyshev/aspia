@@ -30,7 +30,6 @@
 #include "base/crypto/generic_hash.h"
 #include "base/crypto/random.h"
 #include "base/crypto/secure_byte_array.h"
-#include "base/crypto/secure_memory.h"
 #include "base/crypto/srp_math.h"
 #include "proto/key_exchange.h"
 
@@ -291,15 +290,14 @@ void ServerAuthenticator::onClientHello(const QByteArray& buffer)
             return;
         }
 
-        QByteArray x25519_secret = key_pair_.sessionKey(client_public_key);
+        SecureByteArray x25519_secret(key_pair_.sessionKey(client_public_key));
         if (x25519_secret.isEmpty())
         {
             finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
             return;
         }
 
-        appendTranscript(x25519_secret);
-        memZero(&x25519_secret);
+        appendTranscript(x25519_secret.toByteArray());
 
         server_hello.set_iv(encrypt_iv_.toStdString());
         appendTranscript(buffer);
@@ -320,15 +318,14 @@ void ServerAuthenticator::onClientHello(const QByteArray& buffer)
             return;
         }
 
-        QByteArray x25519_secret = key_pair.sessionKey(client_public_key);
+        SecureByteArray x25519_secret(key_pair.sessionKey(client_public_key));
         if (x25519_secret.isEmpty())
         {
             finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
             return;
         }
 
-        appendTranscript(x25519_secret);
-        memZero(&x25519_secret);
+        appendTranscript(x25519_secret.toByteArray());
 
         // Ephemeral server IV for the upcoming SrpIdentify / SrpServerKeyExchange /
         // SrpClientKeyExchange phase. This is overwritten with a fresh final IV in onIdentify.
@@ -576,7 +573,7 @@ void ServerAuthenticator::onClientKeyExchange(const QByteArray& buffer)
         return;
     }
 
-    QByteArray srp_key = createSrpKey();
+    SecureByteArray srp_key(createSrpKey());
     if (srp_key.isEmpty())
     {
         finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
@@ -590,12 +587,10 @@ void ServerAuthenticator::onClientKeyExchange(const QByteArray& buffer)
         // sessionKey() derives per-direction keys.
         case proto::key_exchange::ENCRYPTION_AES256_GCM:
         case proto::key_exchange::ENCRYPTION_CHACHA20_POLY1305:
-            appendTranscript(srp_key);
-            memZero(&srp_key);
+            appendTranscript(srp_key.toByteArray());
             break;
 
         default:
-            memZero(&srp_key);
             finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
             return;
     }

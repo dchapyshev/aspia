@@ -30,7 +30,6 @@
 #include "base/crypto/generic_hash.h"
 #include "base/crypto/random.h"
 #include "base/crypto/secure_byte_array.h"
-#include "base/crypto/secure_memory.h"
 #include "base/crypto/srp_math.h"
 #include "proto/key_exchange.h"
 
@@ -280,7 +279,7 @@ void ServerAuthenticatorLegacy::onClientHello(const QByteArray& buffer)
 
         if (!peer_public_key.isEmpty() && !decrypt_iv_.isEmpty())
         {
-            QByteArray temp = key_pair_.sessionKey(peer_public_key);
+            SecureByteArray temp(key_pair_.sessionKey(peer_public_key));
             if (temp.isEmpty())
             {
                 finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
@@ -289,8 +288,7 @@ void ServerAuthenticatorLegacy::onClientHello(const QByteArray& buffer)
 
             // Mirror the legacy client: feed only the X25519 secret. Session key equals
             // BLAKE2s(x25519_secret) - wire-compatible with the old protocol.
-            appendTranscript(temp);
-            memZero(&temp);
+            appendTranscript(temp.toByteArray());
 
             CDCHECK(!encrypt_iv_.isEmpty());
             server_hello.set_iv(encrypt_iv_.toStdString());
@@ -476,7 +474,7 @@ void ServerAuthenticatorLegacy::onClientKeyExchange(const QByteArray& buffer)
         return;
     }
 
-    QByteArray srp_key = createSrpKey();
+    SecureByteArray srp_key(createSrpKey());
     if (srp_key.isEmpty())
     {
         finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
@@ -489,12 +487,10 @@ void ServerAuthenticatorLegacy::onClientKeyExchange(const QByteArray& buffer)
         // Feed only the raw SRP key. Session key equals BLAKE2s(srp_key) - wire-compatible.
         case proto::key_exchange::ENCRYPTION_AES256_GCM:
         case proto::key_exchange::ENCRYPTION_CHACHA20_POLY1305:
-            appendTranscript(srp_key);
-            memZero(&srp_key);
+            appendTranscript(srp_key.toByteArray());
             break;
 
         default:
-            memZero(&srp_key);
             finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
             return;
     }

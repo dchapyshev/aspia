@@ -21,7 +21,6 @@
 #include "base/logging.h"
 #include "base/crypto/generic_hash.h"
 #include "base/crypto/large_number_increment.h"
-#include "base/crypto/secure_memory.h"
 
 #include <openssl/evp.h>
 
@@ -39,7 +38,7 @@ constexpr quint64 kRatchetInterval = 256;
 
 //--------------------------------------------------------------------------------------------------
 StreamDecryptor::StreamDecryptor(CipherType type, EVP_CIPHER_CTX_ptr ctx,
-    const QByteArray& key, const QByteArray& iv)
+    const SecureByteArray& key, const QByteArray& iv)
     : type_(type),
       ctx_(std::move(ctx)),
       key_(key),
@@ -50,15 +49,9 @@ StreamDecryptor::StreamDecryptor(CipherType type, EVP_CIPHER_CTX_ptr ctx,
 }
 
 //--------------------------------------------------------------------------------------------------
-StreamDecryptor::~StreamDecryptor()
-{
-    memZero(&key_);
-}
-
-//--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<StreamDecryptor> StreamDecryptor::createForAes256Gcm(
-    const QByteArray& key, const QByteArray& iv)
+    const SecureByteArray& key, const QByteArray& iv)
 {
     if (key.size() != kKeySize || iv.size() != kIVSize)
     {
@@ -80,7 +73,7 @@ std::unique_ptr<StreamDecryptor> StreamDecryptor::createForAes256Gcm(
 //--------------------------------------------------------------------------------------------------
 // static
 std::unique_ptr<StreamDecryptor> StreamDecryptor::createForChaCha20Poly1305(
-    const QByteArray& key, const QByteArray& iv)
+    const SecureByteArray& key, const QByteArray& iv)
 {
     if (key.size() != kKeySize || iv.size() != kIVSize)
     {
@@ -159,17 +152,15 @@ bool StreamDecryptor::decrypt(const void* in, qint64 in_size, const void* aad, q
         GenericHash hash(GenericHash::BLAKE2s256);
         hash.addData(key_);
         hash.addData(QByteArrayLiteral("aspia/v1/ratchet"));
-        QByteArray new_key = hash.result();
+        SecureByteArray new_key(hash.result());
 
         EVP_CIPHER_CTX_ptr new_ctx = createCipher(type_, CipherMode::DECRYPT, new_key, kIVSize);
         if (!new_ctx)
         {
             LOG(ERROR) << "ratchet: createCipher failed";
-            memZero(&new_key);
             return false;
         }
 
-        memZero(&key_);
         key_ = std::move(new_key);
         ctx_ = std::move(new_ctx);
         msg_count_ = 0;

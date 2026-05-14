@@ -27,6 +27,7 @@
 #include "base/crypto/datagram_decryptor.h"
 #include "base/crypto/datagram_encryptor.h"
 #include "base/crypto/random.h"
+#include "base/crypto/secure_byte_array.h"
 #include "base/peer/stun_peer.h"
 #include "base/net/net_utils.h"
 #include "base/net/udp_channel.h"
@@ -564,7 +565,7 @@ void Client::readDirectUdpReply(const proto::peer::DirectUdpReply& reply)
     QByteArray host_iv = QByteArray::fromStdString(reply.iv());
     quint32 encryption = reply.encryption();
 
-    QByteArray session_key = context.key_pair.sessionKey(host_public_key);
+    SecureByteArray session_key(context.key_pair.sessionKey(host_public_key));
     if (session_key.isEmpty())
     {
         CLOG(ERROR) << "Failed to derive UDP session key";

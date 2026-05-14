@@ -19,9 +19,9 @@
 #ifndef BASE_CRYPTO_OPENSSL_UTIL_H
 #define BASE_CRYPTO_OPENSSL_UTIL_H
 
-#include <QByteArray>
-
 #include <memory>
+
+class SecureByteArray;
 
 struct bignum_ctx;
 struct bignum_st;
@@ -72,6 +72,6 @@ enum class CipherMode
     DECRYPT
 };
 
-EVP_CIPHER_CTX_ptr createCipher(CipherType type, CipherMode mode, const QByteArray& key, int iv_size);
+EVP_CIPHER_CTX_ptr createCipher(CipherType type, CipherMode mode, const SecureByteArray& key, int iv_size);
 
 #endif // BASE_CRYPTO_OPENSSL_UTIL_H

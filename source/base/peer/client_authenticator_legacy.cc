@@ -28,7 +28,7 @@
 #include "base/version_constants.h"
 #include "base/crypto/key_pair.h"
 #include "base/crypto/random.h"
-#include "base/crypto/secure_memory.h"
+#include "base/crypto/secure_byte_array.h"
 #include "base/crypto/srp_math.h"
 #include "proto/key_exchange.h"
 
@@ -231,7 +231,7 @@ void ClientAuthenticatorLegacy::sendClientHello()
             return;
         }
 
-        QByteArray temp = key_pair.sessionKey(peer_public_key_);
+        SecureByteArray temp(key_pair.sessionKey(peer_public_key_));
         if (temp.isEmpty())
         {
             finish(FROM_HERE, ErrorCode::UNKNOWN_ERROR);
@@ -241,8 +241,7 @@ void ClientAuthenticatorLegacy::sendClientHello()
         // Feed the X25519 secret into the transcript. Legacy peers do not bind handshake bytes,
         // so the resulting session key equals BLAKE2s(x25519_secret) - wire-compatible with the
         // old protocol.
-        appendTranscript(temp);
-        memZero(&temp);
+        appendTranscript(temp.toByteArray());
 
         QByteArray public_key = key_pair.publicKey();
         if (public_key.isEmpty())
@@ -385,9 +384,8 @@ bool ClientAuthenticatorLegacy::readServerKeyExchange(const QByteArray& buffer)
 
     // Feed only the raw SRP key. Resulting session key is BLAKE2s(srp_key) - wire-compatible
     // with the old protocol.
-    QByteArray srp_raw_key = key.toByteArray();
-    appendTranscript(srp_raw_key);
-    memZero(&srp_raw_key);
+    SecureByteArray srp_raw_key(key.toByteArray());
+    appendTranscript(srp_raw_key.toByteArray());
     return true;
 }
 

@@ -20,6 +20,7 @@
 #define BASE_CRYPTO_DATA_CRYPTOR_H
 
 #include "base/crypto/openssl_util.h"
+#include "base/crypto/secure_byte_array.h"
 
 #include <QByteArray>
 #include <QByteArrayView>
@@ -30,11 +31,11 @@ class DataCryptor
 {
 public:
     DataCryptor();
-    explicit DataCryptor(const QByteArray& key);
+    explicit DataCryptor(const SecureByteArray& key);
     ~DataCryptor();
 
-    void setKey(const QByteArray& key);
-    QByteArray key() const;
+    void setKey(const SecureByteArray& key);
+    SecureByteArray key() const;
     bool hasKey() const;
 
     std::optional<QByteArray> encrypt(QByteArrayView in) const;
@@ -43,7 +44,7 @@ public:
     static DataCryptor& instance();
 
 private:
-    QByteArray key_;
+    SecureByteArray key_;
     mutable EVP_CIPHER_CTX_ptr encrypt_ctx_;
     mutable EVP_CIPHER_CTX_ptr decrypt_ctx_;
 

@@ -23,30 +23,32 @@
 #include <QObject>
 
 #include "base/crypto/openssl_util.h"
+#include "base/crypto/secure_byte_array.h"
 
 class StreamDecryptor
 {
     Q_GADGET
 
 public:
-    ~StreamDecryptor();
+    ~StreamDecryptor() = default;
 
     static std::unique_ptr<StreamDecryptor> createForAes256Gcm(
-        const QByteArray& key, const QByteArray& iv);
+        const SecureByteArray& key, const QByteArray& iv);
 
     static std::unique_ptr<StreamDecryptor> createForChaCha20Poly1305(
-        const QByteArray& key, const QByteArray& iv);
+        const SecureByteArray& key, const QByteArray& iv);
 
     qint64 decryptedDataSize(qint64 in_size);
     bool decrypt(const void* in, qint64 in_size, void* out);
     bool decrypt(const void* in, qint64 in_size, const void* aad, qint64 aad_size, void* out);
 
 private:
-    StreamDecryptor(CipherType type, EVP_CIPHER_CTX_ptr ctx, const QByteArray& key, const QByteArray& iv);
+    StreamDecryptor(CipherType type, EVP_CIPHER_CTX_ptr ctx,
+                    const SecureByteArray& key, const QByteArray& iv);
 
     const CipherType type_;
     EVP_CIPHER_CTX_ptr ctx_;
-    QByteArray key_;
+    SecureByteArray key_;
     QByteArray iv_;
     quint64 msg_count_ = 0;
 
