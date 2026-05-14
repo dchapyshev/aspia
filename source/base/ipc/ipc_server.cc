@@ -37,6 +37,8 @@
 
 #if defined(Q_OS_UNIX)
 #include <asio/local/stream_protocol.hpp>
+
+#include <sys/stat.h>
 #endif // defined(Q_OS_UNIX)
 
 namespace {
@@ -212,10 +214,26 @@ bool IpcServer::Listener::listen(asio::io_context& io_context,
     overlapped_->complete(std::error_code(), 0);
     return true;
 #else
-    // TODO: differentiate UNIX socket permissions based on access_mode (chown to target uid
-    // for SPECIFIC_USER, root-only for SYSTEM_ONLY). Current behavior preserved.
-    Q_UNUSED(access_mode)
+    // TODO: full SPECIFIC_USER isolation on UNIX needs target uid (not SID). For now it shares
+    // mode with INTERACTIVE_USER; peer identity is verified via path + processId checks at accept.
     Q_UNUSED(target_user_sid)
+
+    mode_t socket_mode;
+    switch (access_mode)
+    {
+        case AccessMode::INTERACTIVE_USER:
+        case AccessMode::SPECIFIC_USER:
+            socket_mode = 0666;
+            break;
+
+        case AccessMode::SYSTEM_ONLY:
+            socket_mode = 0600;
+            break;
+
+        default:
+            LOG(ERROR) << "Unknown access mode:" << access_mode;
+            return false;
+    }
 
     std::string channel_file = channel_path.toLocal8Bit().toStdString();
 
@@ -237,10 +255,11 @@ bool IpcServer::Listener::listen(asio::io_context& io_context,
         return false;
     }
 
-    std::string command_line = "chmod 777 " + channel_file;
-
-    int ret = system(command_line.c_str());
-    LOG(INFO) << "Set security attributes:" << command_line << "(ret" << ret << ")";
+    if (chmod(channel_file.c_str(), socket_mode) != 0)
+    {
+        PLOG(ERROR) << "chmod failed (path:" << channel_file << "mode:" << Qt::oct << socket_mode << ")";
+        return false;
+    }
 
     acceptor_->listen(asio::local::stream_protocol::socket::max_listen_connections, error_code);
     if (error_code)
