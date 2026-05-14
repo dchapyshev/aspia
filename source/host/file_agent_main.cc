@@ -18,11 +18,10 @@
 
 #include "host/file_agent_main.h"
 
-#include <QCommandLineParser>
-
 #include "base/core_application.h"
 #include "base/asio_event_dispatcher.h"
 #include "base/logging.h"
+#include "base/ipc/ipc_server.h"
 #include "build/version.h"
 #include "host/file_agent.h"
 #include "host/host_utils.h"
@@ -41,24 +40,15 @@ int fileAgentMain(int& argc, char* argv[])
     CoreApplication application(argc, argv);
     HostUtils::printDebugInfo();
 
-    QCommandLineOption channel_id_option("channel_id",
-        CoreApplication::translate("FileAgentMain", "IPC channel id."), "channel_id");
-
-    QCommandLineParser parser;
-    parser.addOption(channel_id_option);
-    parser.addHelpOption();
-    parser.addVersionOption();
-
-    parser.process(application);
-
-    if (!parser.isSet(channel_id_option))
+    QString channel_id = qEnvironmentVariable(IpcServer::kChannelIdEnvVar);
+    if (channel_id.isEmpty())
     {
-        LOG(ERROR) << "Parameter channel_id is not specified";
+        LOG(ERROR) << "Environment variable" << IpcServer::kChannelIdEnvVar << "is not set";
         return 1;
     }
 
     FileAgent file_agent;
-    file_agent.start(parser.value(channel_id_option));
+    file_agent.start(channel_id);
 
     return application.exec();
 }

@@ -18,11 +18,10 @@
 
 #include "host/desktop_agent_main.h"
 
-#include <QCommandLineParser>
-
 #include "base/core_application.h"
 #include "base/asio_event_dispatcher.h"
 #include "base/logging.h"
+#include "base/ipc/ipc_server.h"
 #include "build/version.h"
 #include "host/desktop_agent.h"
 #include "host/host_utils.h"
@@ -42,24 +41,15 @@ int desktopAgentMain(int& argc, char* argv[])
     HostUtils::printDebugInfo(
         HostUtils::INCLUDE_VIDEO_ADAPTERS | HostUtils::INCLUDE_WINDOW_STATIONS);
 
-    QCommandLineOption channel_id_option("channel_id",
-        CoreApplication::translate("DesktopAgentMain", "IPC channel id."), "channel_id");
-
-    QCommandLineParser parser;
-    parser.addOption(channel_id_option);
-    parser.addHelpOption();
-    parser.addVersionOption();
-
-    parser.process(application);
-
-    if (!parser.isSet(channel_id_option))
+    QString channel_id = qEnvironmentVariable(IpcServer::kChannelIdEnvVar);
+    if (channel_id.isEmpty())
     {
-        LOG(ERROR) << "Parameter channel_id is not specified";
+        LOG(ERROR) << "Environment variable" << IpcServer::kChannelIdEnvVar << "is not set";
         return 1;
     }
 
     DesktopAgent desktop_agent;
-    desktop_agent.start(parser.value(channel_id_option));
+    desktop_agent.start(channel_id);
 
     return application.exec();
 }

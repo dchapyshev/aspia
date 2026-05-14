@@ -162,8 +162,36 @@ bool createSessionToken(DWORD session_id, ScopedHandle* token_out)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool startProcessWithToken(HANDLE token, const QString& command_line, ScopedHandle* process,
-    ScopedHandle* thread)
+std::wstring createEnvironment(HANDLE token, const QString& name, const QString& value)
+{
+    void* environment = nullptr;
+    if (!CreateEnvironmentBlock(&environment, token, FALSE))
+    {
+        PLOG(ERROR) << "CreateEnvironmentBlock failed";
+        return {};
+    }
+
+    const wchar_t* base = reinterpret_cast<const wchar_t*>(environment);
+
+    // Walk the entries of base (each null-terminated; block ends with an extra null).
+    size_t entries_chars = 0;
+    while (base[entries_chars] != L'\0')
+    {
+        while (base[entries_chars] != L'\0')
+            ++entries_chars;
+        ++entries_chars;
+    }
+
+    std::wstring result(base, entries_chars);
+    result += qUtf16Printable(name + '=' + value);
+    result += L'\0';
+
+    DestroyEnvironmentBlock(environment);
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool startProcessWithToken(HANDLE token, const QString& command_line, const QString& channel_id)
 {
     STARTUPINFOW startup_info;
     memset(&startup_info, 0, sizeof(startup_info));
@@ -171,10 +199,10 @@ bool startProcessWithToken(HANDLE token, const QString& command_line, ScopedHand
     startup_info.cb = sizeof(startup_info);
     startup_info.lpDesktop = const_cast<wchar_t*>(kDefaultDesktopName);
 
-    void* environment = nullptr;
-    if (!CreateEnvironmentBlock(&environment, token, FALSE))
+    std::wstring environment = createEnvironment(token, IpcServer::kChannelIdEnvVar, channel_id);
+    if (environment.empty())
     {
-        PLOG(ERROR) << "CreateEnvironmentBlock failed";
+        LOG(ERROR) << "Unable to create environment";
         return false;
     }
 
@@ -182,23 +210,21 @@ bool startProcessWithToken(HANDLE token, const QString& command_line, ScopedHand
     memset(&process_info, 0, sizeof(process_info));
 
     if (!CreateProcessAsUserW(token, nullptr, const_cast<wchar_t*>(qUtf16Printable(command_line)),
-        nullptr, nullptr, FALSE, CREATE_UNICODE_ENVIRONMENT | HIGH_PRIORITY_CLASS, environment,
-        nullptr, &startup_info, &process_info))
+        nullptr, nullptr, FALSE, CREATE_UNICODE_ENVIRONMENT | HIGH_PRIORITY_CLASS,
+        environment.data(), nullptr, &startup_info, &process_info))
     {
         PLOG(ERROR) << "CreateProcessAsUserW failed";
-        DestroyEnvironmentBlock(environment);
         return false;
     }
 
-    thread->reset(process_info.hThread);
-    process->reset(process_info.hProcess);
+    ScopedHandle thread_handle(process_info.hThread);
+    ScopedHandle process_handle(process_info.hProcess);
 
     // Harden process: only SYSTEM/Administrators may terminate, suspend, inject
     // into or patch this desktop agent.
-    if (!setProtectiveProcessDacl(process->get(), token))
+    if (!setProtectiveProcessDacl(process_info.hProcess, token))
         LOG(ERROR) << "setProtectiveProcessDacl failed";
 
-    DestroyEnvironmentBlock(environment);
     return true;
 }
 #endif // defined(Q_OS_WINDOWS)
@@ -596,11 +622,7 @@ bool DesktopManager::startProcess(const QString& ipc_channel_name)
         return false;
     }
 
-    QString command_line = filePath() + " --channel_id " + ipc_channel_name;
-    ScopedHandle process_handle;
-    ScopedHandle thread_handle;
-
-    if (!startProcessWithToken(session_token, command_line, &process_handle, &thread_handle))
+    if (!startProcessWithToken(session_token, filePath(), ipc_channel_name))
     {
         LOG(ERROR) << "startProcessWithToken failed (session_id:" << session_id_ << ")";
         return false;
@@ -638,8 +660,9 @@ bool DesktopManager::startProcess(const QString& ipc_channel_name)
 
         QString user_name = splitted.front();
         QByteArray command_line =
-            QString("sudo DISPLAY=':0' -u %1 %2 --channel_id=%3 &")
-                .arg(user_name, filePath(), ipc_channel_name).toLocal8Bit();
+            QString("sudo DISPLAY=':0' -u %1 env %2=%3 %4 &")
+                .arg(user_name, IpcServer::kChannelIdEnvVar, ipc_channel_name,
+                     filePath()).toLocal8Bit();
 
         LOG(INFO) << "Start desktop session agent:" << command_line;
 
@@ -660,8 +683,8 @@ bool DesktopManager::startProcess(const QString& ipc_channel_name)
     LOG(WARNING) << "Connected X sessions not found";
 
     QByteArray command_line =
-        QString("sudo DISPLAY=':0' -u root %1 --channel_id=%2 &")
-            .arg(filePath(), ipc_channel_name).toLocal8Bit();
+        QString("sudo DISPLAY=':0' -u root env %1=%2 %3 &")
+            .arg(IpcServer::kChannelIdEnvVar, ipc_channel_name, filePath()).toLocal8Bit();
 
     LOG(INFO) << "Start desktop session agent:" << command_line;
 

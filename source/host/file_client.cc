@@ -106,8 +106,36 @@ bool createLoggedOnUserToken(DWORD session_id, ScopedHandle* token_out)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool startProcessWithToken(HANDLE token, const QString& command_line, ScopedHandle* process,
-    ScopedHandle* thread)
+std::wstring createEnvironment(HANDLE token, const QString& name, const QString& value)
+{
+    void* environment = nullptr;
+    if (!CreateEnvironmentBlock(&environment, token, FALSE))
+    {
+        PLOG(ERROR) << "CreateEnvironmentBlock failed";
+        return {};
+    }
+
+    const wchar_t* base = reinterpret_cast<const wchar_t*>(environment);
+
+    // Walk the entries of base (each null-terminated; block ends with an extra null).
+    size_t entries_chars = 0;
+    while (base[entries_chars] != L'\0')
+    {
+        while (base[entries_chars] != L'\0')
+            ++entries_chars;
+        ++entries_chars;
+    }
+
+    std::wstring result(base, entries_chars);
+    result += qUtf16Printable(name + '=' + value);
+    result += L'\0';
+
+    DestroyEnvironmentBlock(environment);
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool startProcessWithToken(HANDLE token, const QString& command_line, const QString& channel_id)
 {
     STARTUPINFOW startup_info;
     memset(&startup_info, 0, sizeof(startup_info));
@@ -115,11 +143,10 @@ bool startProcessWithToken(HANDLE token, const QString& command_line, ScopedHand
     startup_info.cb = sizeof(startup_info);
     startup_info.lpDesktop = const_cast<wchar_t*>(kDefaultDesktopName);
 
-    void* environment = nullptr;
-
-    if (!CreateEnvironmentBlock(&environment, token, FALSE))
+    std::wstring environment = createEnvironment(token, IpcServer::kChannelIdEnvVar, channel_id);
+    if (environment.empty())
     {
-        PLOG(ERROR) << "CreateEnvironmentBlock failed";
+        LOG(ERROR) << "Unable to create environment";
         return false;
     }
 
@@ -127,26 +154,21 @@ bool startProcessWithToken(HANDLE token, const QString& command_line, ScopedHand
     memset(&process_info, 0, sizeof(process_info));
 
     if (!CreateProcessAsUserW(token, nullptr, const_cast<wchar_t*>(qUtf16Printable(command_line)),
-        nullptr, nullptr, FALSE, CREATE_UNICODE_ENVIRONMENT | HIGH_PRIORITY_CLASS, environment,
-        nullptr, &startup_info, &process_info))
+        nullptr, nullptr, FALSE, CREATE_UNICODE_ENVIRONMENT | HIGH_PRIORITY_CLASS,
+        environment.data(), nullptr, &startup_info, &process_info))
     {
         PLOG(ERROR) << "CreateProcessAsUserW failed";
-        if (!DestroyEnvironmentBlock(environment))
-        {
-            PLOG(ERROR) << "DestroyEnvironmentBlock failed";
-        }
         return false;
     }
 
-    thread->reset(process_info.hThread);
-    process->reset(process_info.hProcess);
+    ScopedHandle thread_handle(process_info.hThread);
+    ScopedHandle process_handle(process_info.hProcess);
 
     // Harden process: only SYSTEM/Administrators may terminate, suspend, inject
     // into or patch this file transfer agent.
-    if (!setProtectiveProcessDacl(process->get(), token))
+    if (!setProtectiveProcessDacl(process_info.hProcess, token))
         LOG(ERROR) << "setProtectiveProcessDacl failed";
 
-    DestroyEnvironmentBlock(environment);
     return true;
 }
 #endif // defined(Q_OS_WINDOWS)
@@ -318,13 +340,8 @@ void FileClient::onStart()
         return;
     }
 
-    QString command_line = agentFilePath() + " --channel_id " + ipc_channel_id;
-
-    CLOG(INFO) << "Starting agent process with command line:" << command_line;
-
-    ScopedHandle process_handle;
-    ScopedHandle thread_handle;
-    if (!startProcessWithToken(session_token, command_line, &process_handle, &thread_handle))
+    CLOG(INFO) << "Starting agent process";
+    if (!startProcessWithToken(session_token, agentFilePath(), ipc_channel_id))
     {
         CLOG(ERROR) << "startProcessWithToken failed";
         onError(FROM_HERE);
@@ -367,8 +384,9 @@ void FileClient::onStart()
         }
 
         QString user_name = splitted.front();
-        QByteArray command_line = QString("sudo -u %1 %2 --channel_id=%3 &")
-                                      .arg(user_name, agentFilePath(), ipc_channel_id).toLocal8Bit();
+        QByteArray command_line = QString("sudo -u %1 env %2=%3 %4 &")
+                                      .arg(user_name, IpcServer::kChannelIdEnvVar, ipc_channel_id,
+                                           agentFilePath()).toLocal8Bit();
 
         CLOG(INFO) << "Start file transfer session agent:" << command_line;
 

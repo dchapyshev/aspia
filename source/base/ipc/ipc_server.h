@@ -61,6 +61,9 @@ public:
 
     static QString createUniqueId();
 
+    // Name of the environment variable that carries the channel id to a spawned agent process.
+    static constexpr const char* kChannelIdEnvVar = "ASPIA_IPC_CHANNEL_ID";
+
     bool start(const QString& channel_name,
                AccessMode mode = AccessMode::INTERACTIVE_USER,
                const QString& target_user_sid = QString());
