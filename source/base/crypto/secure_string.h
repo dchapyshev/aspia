@@ -19,8 +19,9 @@
 #ifndef BASE_CRYPTO_SECURE_STRING_H
 #define BASE_CRYPTO_SECURE_STRING_H
 
-#include <QByteArray>
 #include <QString>
+
+#include "base/crypto/secure_byte_array.h"
 
 class SecureString final
 {
@@ -41,7 +42,9 @@ public:
     qsizetype size() const { return data_.size(); }
 
     const QString& toString() const { return data_; }
-    QByteArray toUtf8() const { return data_.toUtf8(); }
+    SecureByteArray toUtf8() const { return SecureByteArray(data_.toUtf8()); }
+
+    static SecureString fromUtf8(const SecureByteArray& utf8);
 
     void clear();
 
@@ -51,5 +54,7 @@ public:
 private:
     QString data_;
 };
+
+Q_DECLARE_METATYPE(SecureString)
 
 #endif // BASE_CRYPTO_SECURE_STRING_H

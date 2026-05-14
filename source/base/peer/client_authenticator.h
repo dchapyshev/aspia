@@ -21,6 +21,7 @@
 
 #include "base/crypto/big_num.h"
 #include "base/crypto/key_pair.h"
+#include "base/crypto/secure_string.h"
 #include "base/peer/authenticator.h"
 
 class ClientAuthenticator final : public Authenticator
@@ -34,7 +35,7 @@ public:
     void setPeerPublicKey(const QByteArray& public_key);
     void setIdentify(proto::key_exchange::Identify identify);
     void setUserName(const QString& username);
-    void setPassword(const QString& password);
+    void setPassword(const SecureString& password);
     void setSessionType(quint32 session_type);
     void setDisplayName(const QString& display_name);
     void setProbe(bool probe);
@@ -65,7 +66,7 @@ private:
 
     QByteArray peer_public_key_;
     QString username_;
-    QString password_;
+    SecureString password_;
     QString display_name_;
 
     // Ephemeral X25519 keypair used for the SRP handshake. Created in sendClientHello, used in

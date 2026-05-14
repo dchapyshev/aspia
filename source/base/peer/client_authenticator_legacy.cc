@@ -102,12 +102,12 @@ void ClientAuthenticatorLegacy::setIdentify(proto::key_exchange::Identify identi
 //--------------------------------------------------------------------------------------------------
 void ClientAuthenticatorLegacy::setUserName(const QString& username)
 {
-    CLOG(INFO) << "User name assigned:" << username;
+    CLOG(INFO) << "User name assigned";
     username_ = username;
 }
 
 //--------------------------------------------------------------------------------------------------
-void ClientAuthenticatorLegacy::setPassword(const QString& password)
+void ClientAuthenticatorLegacy::setPassword(const SecureString& password)
 {
     CLOG(INFO) << "Password assigned";
     password_ = password;

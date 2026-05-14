@@ -20,6 +20,7 @@
 
 #include <gtest/gtest.h>
 
+#include "base/crypto/secure_string.h"
 #include "proto/router_admin.h"
 
 // ============================================================================
@@ -86,31 +87,31 @@ TEST(user_test, invalid_username_forbidden_chars)
 
 TEST(user_test, valid_password_min_length)
 {
-    QString password(User::kMinPasswordLength, 'x');
+    SecureString password(QString(User::kMinPasswordLength, 'x'));
     EXPECT_TRUE(User::isValidPassword(password));
 }
 
 TEST(user_test, valid_password_max_length)
 {
-    QString password(User::kMaxPasswordLength, 'x');
+    SecureString password(QString(User::kMaxPasswordLength, 'x'));
     EXPECT_TRUE(User::isValidPassword(password));
 }
 
 TEST(user_test, invalid_password_empty)
 {
-    EXPECT_FALSE(User::isValidPassword(""));
+    EXPECT_FALSE(User::isValidPassword(SecureString("")));
 }
 
 TEST(user_test, invalid_password_too_long)
 {
-    QString password(User::kMaxPasswordLength + 1, 'x');
+    SecureString password(QString(User::kMaxPasswordLength + 1, 'x'));
     EXPECT_FALSE(User::isValidPassword(password));
 }
 
 TEST(user_test, valid_password_normal)
 {
-    EXPECT_TRUE(User::isValidPassword("secret"));
-    EXPECT_TRUE(User::isValidPassword("P@ssw0rd!"));
+    EXPECT_TRUE(User::isValidPassword(SecureString("secret")));
+    EXPECT_TRUE(User::isValidPassword(SecureString("P@ssw0rd!")));
 }
 
 // ============================================================================
@@ -120,36 +121,36 @@ TEST(user_test, valid_password_normal)
 TEST(user_test, safe_password_meets_all_criteria)
 {
     // >= kSafePasswordLength, has upper, lower, digit.
-    EXPECT_TRUE(User::isSafePassword("Abcdefg1"));
-    EXPECT_TRUE(User::isSafePassword("Password1"));
-    EXPECT_TRUE(User::isSafePassword("12345Abc"));
+    EXPECT_TRUE(User::isSafePassword(SecureString("Abcdefg1")));
+    EXPECT_TRUE(User::isSafePassword(SecureString("Password1")));
+    EXPECT_TRUE(User::isSafePassword(SecureString("12345Abc")));
 }
 
 TEST(user_test, unsafe_password_too_short)
 {
     // Has upper, lower, digit but too short.
-    EXPECT_FALSE(User::isSafePassword("Ab1"));
-    EXPECT_FALSE(User::isSafePassword("Abc123"));
+    EXPECT_FALSE(User::isSafePassword(SecureString("Ab1")));
+    EXPECT_FALSE(User::isSafePassword(SecureString("Abc123")));
 }
 
 TEST(user_test, unsafe_password_no_upper)
 {
     QString password(User::kSafePasswordLength, 'a');
     password[0] = '1'; // Has lower + digit, no upper.
-    EXPECT_FALSE(User::isSafePassword(password));
+    EXPECT_FALSE(User::isSafePassword(SecureString(password)));
 }
 
 TEST(user_test, unsafe_password_no_lower)
 {
     QString password(User::kSafePasswordLength, 'A');
     password[0] = '1'; // Has upper + digit, no lower.
-    EXPECT_FALSE(User::isSafePassword(password));
+    EXPECT_FALSE(User::isSafePassword(SecureString(password)));
 }
 
 TEST(user_test, unsafe_password_no_digit)
 {
     // Has upper + lower, no digit.
-    EXPECT_FALSE(User::isSafePassword("Abcdefgh"));
+    EXPECT_FALSE(User::isSafePassword(SecureString("Abcdefgh")));
 }
 
 TEST(user_test, safe_password_exact_min_length)
@@ -158,7 +159,7 @@ TEST(user_test, safe_password_exact_min_length)
     QString password(User::kSafePasswordLength, 'a');
     password[0] = 'A';
     password[1] = '1';
-    EXPECT_TRUE(User::isSafePassword(password));
+    EXPECT_TRUE(User::isSafePassword(SecureString(password)));
 }
 
 // ============================================================================
@@ -167,7 +168,7 @@ TEST(user_test, safe_password_exact_min_length)
 
 TEST(user_test, create_valid_user)
 {
-    User user = User::create("testuser", "password123");
+    User user = User::create("testuser", SecureString("password123"));
     EXPECT_TRUE(user.isValid());
     EXPECT_EQ(user.name, "testuser");
     EXPECT_FALSE(user.salt.isEmpty());
@@ -177,20 +178,20 @@ TEST(user_test, create_valid_user)
 
 TEST(user_test, create_with_empty_name)
 {
-    User user = User::create("", "password123");
+    User user = User::create("", SecureString("password123"));
     EXPECT_FALSE(user.isValid());
 }
 
 TEST(user_test, create_with_empty_password)
 {
-    User user = User::create("testuser", "");
+    User user = User::create("testuser", SecureString(""));
     EXPECT_FALSE(user.isValid());
 }
 
 TEST(user_test, create_two_users_different_salts)
 {
-    User user1 = User::create("user1", "password");
-    User user2 = User::create("user2", "password");
+    User user1 = User::create("user1", SecureString("password"));
+    User user2 = User::create("user2", SecureString("password"));
 
     EXPECT_TRUE(user1.isValid());
     EXPECT_TRUE(user2.isValid());
@@ -216,7 +217,7 @@ TEST(user_test, kInvalidUser_is_invalid)
 
 TEST(user_test, is_valid_requires_all_fields)
 {
-    User user = User::create("testuser", "password");
+    User user = User::create("testuser", SecureString("password"));
     ASSERT_TRUE(user.isValid());
 
     // Missing name.
@@ -246,7 +247,7 @@ TEST(user_test, is_valid_requires_all_fields)
 
 TEST(user_test, serialize_parseFrom_roundtrip)
 {
-    User original = User::create("admin", "Str0ngPass");
+    User original = User::create("admin", SecureString("Str0ngPass"));
     ASSERT_TRUE(original.isValid());
 
     original.entry_id = 42;
@@ -307,7 +308,7 @@ TEST(user_test, parseFrom_preserves_all_fields)
 
 TEST(user_test, copy_constructor)
 {
-    User original = User::create("alice", "pass1234");
+    User original = User::create("alice", SecureString("pass1234"));
     ASSERT_TRUE(original.isValid());
 
     User copy(original);
@@ -319,7 +320,7 @@ TEST(user_test, copy_constructor)
 
 TEST(user_test, copy_assignment)
 {
-    User original = User::create("alice", "pass1234");
+    User original = User::create("alice", SecureString("pass1234"));
     User copy;
     copy = original;
     EXPECT_EQ(copy.name, original.name);
@@ -328,7 +329,7 @@ TEST(user_test, copy_assignment)
 
 TEST(user_test, move_constructor)
 {
-    User original = User::create("alice", "pass1234");
+    User original = User::create("alice", SecureString("pass1234"));
     QString name = original.name;
     QByteArray salt = original.salt;
 
@@ -339,7 +340,7 @@ TEST(user_test, move_constructor)
 
 TEST(user_test, move_assignment)
 {
-    User original = User::create("alice", "pass1234");
+    User original = User::create("alice", SecureString("pass1234"));
     QString name = original.name;
     QByteArray salt = original.salt;
 
@@ -355,7 +356,7 @@ TEST(user_test, move_assignment)
 
 TEST(user_test, flags_enabled)
 {
-    User user = User::create("flaguser", "password");
+    User user = User::create("flaguser", SecureString("password"));
     user.flags = User::ENABLED;
     EXPECT_EQ(user.flags & User::ENABLED, static_cast<quint32>(User::ENABLED));
 

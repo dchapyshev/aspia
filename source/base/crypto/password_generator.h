@@ -19,7 +19,7 @@
 #ifndef BASE_CRYPTO_PASSWORD_GENERATOR_H
 #define BASE_CRYPTO_PASSWORD_GENERATOR_H
 
-#include <QString>
+#include "base/crypto/secure_string.h"
 
 class PasswordGenerator
 {
@@ -43,7 +43,7 @@ public:
     void setLength(qsizetype value);
     qsizetype length() const { return length_; }
 
-    QString result() const;
+    SecureString result() const;
 
 private:
     quint32 characters_ = kDefaultCharacters;

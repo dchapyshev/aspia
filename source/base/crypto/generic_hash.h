@@ -21,6 +21,8 @@
 
 #include <QByteArray>
 
+class SecureByteArray;
+
 struct evp_md_ctx_st;
 struct evp_md_st;
 
@@ -48,6 +50,7 @@ public:
     void addData(const void* data, size_t size);
     void addData(std::string_view data);
     void addData(const QByteArray& data);
+    void addData(const SecureByteArray& data);
 
     // Returns the digest of all data fed via addData() so far. Non-destructive: result() may be
     // called multiple times and may be interleaved with further addData() calls.

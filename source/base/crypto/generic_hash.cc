@@ -18,9 +18,10 @@
 
 #include "base/crypto/generic_hash.h"
 
-#include "base/logging.h"
-
 #include <openssl/evp.h>
+
+#include "base/logging.h"
+#include "base/crypto/secure_byte_array.h"
 
 //--------------------------------------------------------------------------------------------------
 GenericHash::GenericHash(Type type)
@@ -107,6 +108,12 @@ void GenericHash::addData(std::string_view data)
 void GenericHash::addData(const QByteArray& data)
 {
     addData(data.data(), data.size());
+}
+
+//--------------------------------------------------------------------------------------------------
+void GenericHash::addData(const SecureByteArray& data)
+{
+    addData(data.toByteArray());
 }
 
 //--------------------------------------------------------------------------------------------------

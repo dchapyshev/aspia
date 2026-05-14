@@ -233,6 +233,8 @@ list(APPEND SOURCE_BASE_CRYPTO
     crypto/password_hash.h
     crypto/random.cc
     crypto/random.h
+    crypto/secure_byte_array.cc
+    crypto/secure_byte_array.h
     crypto/secure_memory.cc
     crypto/secure_memory.h
     crypto/secure_string.cc

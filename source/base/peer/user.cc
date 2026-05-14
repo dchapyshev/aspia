@@ -54,12 +54,12 @@ const User User::kInvalidUser;
 // static
 bool User::isValidUserName(const QString& username)
 {
-    QString::size_type length = username.length();
+    qsizetype length = username.length();
 
     if (!length || length > kMaxUserNameLength)
         return false;
 
-    for (QString::size_type i = 0; i < length; ++i)
+    for (qsizetype i = 0; i < length; ++i)
     {
         if (!isValidUserNameChar(username[i]))
             return false;
@@ -70,9 +70,9 @@ bool User::isValidUserName(const QString& username)
 
 //--------------------------------------------------------------------------------------------------
 // static
-bool User::isValidPassword(const QString& password)
+bool User::isValidPassword(const SecureString& password)
 {
-    QString::size_type length = password.length();
+    qsizetype length = password.toString().length();
 
     if (length < kMinPasswordLength || length > kMaxPasswordLength)
         return false;
@@ -82,9 +82,9 @@ bool User::isValidPassword(const QString& password)
 
 //--------------------------------------------------------------------------------------------------
 // static
-bool User::isSafePassword(const QString& password)
+bool User::isSafePassword(const SecureString& password)
 {
-    QString::size_type length = password.length();
+    qsizetype length = password.toString().length();
 
     if (length < kSafePasswordLength)
         return false;
@@ -93,9 +93,9 @@ bool User::isSafePassword(const QString& password)
     bool has_lower = false;
     bool has_digit = false;
 
-    for (QString::size_type i = 0; i < length; ++i)
+    for (qsizetype i = 0; i < length; ++i)
     {
-        QChar character = password.at(i);
+        QChar character = password.toString().at(i);
 
         if (character.isUpper())
             has_upper = true;
@@ -112,7 +112,7 @@ bool User::isSafePassword(const QString& password)
 
 //--------------------------------------------------------------------------------------------------
 // static
-User User::create(const QString& name, const QString& password)
+User User::create(const QString& name, const SecureString& password)
 {
     if (name.isEmpty() || password.isEmpty())
     {

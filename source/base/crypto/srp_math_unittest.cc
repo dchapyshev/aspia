@@ -26,8 +26,8 @@ namespace {
 
 void runRoundTrip(const SrpMath::NgPair& Ng_pair)
 {
-    const QString I = "alice";
-    const QString p = "password123";
+    const QString I(QString("alice"));
+    const SecureString p(QString("password123"));
 
     BigNum N = BigNum::fromStdString(Ng_pair.first);
     BigNum g = BigNum::fromStdString(Ng_pair.second);
@@ -89,14 +89,14 @@ TEST(srp_math_test, round_trip_8192)
 TEST(srp_math_test, wrong_password_yields_different_key)
 {
     const SrpMath::NgPair& Ng_pair = SrpMath::kNgPair_4096;
-    const QString I = "alice";
+    const QString I(QString("alice"));
 
     BigNum N = BigNum::fromStdString(Ng_pair.first);
     BigNum g = BigNum::fromStdString(Ng_pair.second);
     BigNum s = BigNum::fromByteArray(Random::byteArray(64));
 
-    const QString correct_password = "correct_password";
-    const QString wrong_password = "wrong_password";
+    const SecureString correct_password(QString("correct_password"));
+    const SecureString wrong_password(QString("wrong_password"));
 
     BigNum v = SrpMath::calc_v(I, correct_password, s, N, g);
 

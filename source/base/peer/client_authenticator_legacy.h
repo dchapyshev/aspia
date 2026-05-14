@@ -20,6 +20,7 @@
 #define BASE_PEER_CLIENT_AUTHENTICATOR_LEGACY_H
 
 #include "base/crypto/big_num.h"
+#include "base/crypto/secure_string.h"
 #include "base/peer/authenticator.h"
 
 class ClientAuthenticatorLegacy final : public Authenticator
@@ -33,7 +34,7 @@ public:
     void setPeerPublicKey(const QByteArray& public_key);
     void setIdentify(proto::key_exchange::Identify identify);
     void setUserName(const QString& username);
-    void setPassword(const QString& password);
+    void setPassword(const SecureString& password);
     void setSessionType(quint32 session_type);
     void setDisplayName(const QString& display_name);
     void setProbe(bool probe);
@@ -64,7 +65,7 @@ private:
 
     QByteArray peer_public_key_;
     QString username_;
-    QString password_;
+    SecureString password_;
     QString display_name_;
 
     BigNum N_;

@@ -26,6 +26,8 @@ namespace proto::router {
 class User;
 } // namespace proto::router
 
+class SecureString;
+
 class User
 {
 public:
@@ -46,10 +48,10 @@ public:
     static const size_t kSafePasswordLength = 8;
 
     static bool isValidUserName(const QString& username);
-    static bool isValidPassword(const QString& password);
-    static bool isSafePassword(const QString& password);
+    static bool isValidPassword(const SecureString& password);
+    static bool isSafePassword(const SecureString& password);
 
-    static User create(const QString& name, const QString& password);
+    static User create(const QString& name, const SecureString& password);
     bool isValid() const;
 
     static User parseFrom(const proto::router::User& serialized_user);

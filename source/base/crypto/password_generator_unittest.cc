@@ -24,31 +24,31 @@
 
 namespace {
 
-bool hasLower(const QString& str)
+bool hasLower(const SecureString& str)
 {
     for (int i = 0; i < str.size(); ++i)
     {
-        if (str.at(i).isLower())
+        if (str.toString().at(i).isLower())
             return true;
     }
     return false;
 }
 
-bool hasUpper(const QString& str)
+bool hasUpper(const SecureString& str)
 {
     for (int i = 0; i < str.size(); ++i)
     {
-        if (str.at(i).isUpper())
+        if (str.toString().at(i).isUpper())
             return true;
     }
     return false;
 }
 
-bool hasDigit(const QString& str)
+bool hasDigit(const SecureString& str)
 {
     for (int i = 0; i < str.size(); ++i)
     {
-        if (str.at(i).isDigit())
+        if (str.toString().at(i).isDigit())
             return true;
     }
     return false;
@@ -69,11 +69,11 @@ TEST(password_generator_test, default_params)
     EXPECT_EQ(gen.length(), PasswordGenerator::kDefaultLength);
     EXPECT_EQ(gen.characters(), PasswordGenerator::kDefaultCharacters);
 
-    QString res1 = gen.result();
-    QString res2 = gen.result();
+    SecureString res1 = gen.result();
+    SecureString res2 = gen.result();
 
-    EXPECT_EQ(res1.length(), PasswordGenerator::kDefaultLength);
-    EXPECT_EQ(res2.length(), PasswordGenerator::kDefaultLength);
+    EXPECT_EQ(res1.toString().length(), PasswordGenerator::kDefaultLength);
+    EXPECT_EQ(res2.toString().length(), PasswordGenerator::kDefaultLength);
 
     EXPECT_NE(res1, res2);
 }
@@ -87,9 +87,9 @@ TEST(password_generator_test, only_lower_case)
 
     for (int i = 0; i < 10; ++i)
     {
-        QString res = gen.result();
+        SecureString res = gen.result();
 
-        EXPECT_EQ(res.length(), 5);
+        EXPECT_EQ(res.toString().length(), 5);
         EXPECT_TRUE(hasLower(res));
         EXPECT_FALSE(hasUpper(res));
         EXPECT_FALSE(hasDigit(res));
@@ -105,9 +105,9 @@ TEST(password_generator_test, only_upper_case)
 
     for (int i = 0; i < 10; ++i)
     {
-        QString res = gen.result();
+        SecureString res = gen.result();
 
-        EXPECT_EQ(res.length(), 5);
+        EXPECT_EQ(res.toString().length(), 5);
         EXPECT_TRUE(hasUpper(res));
         EXPECT_FALSE(hasLower(res));
         EXPECT_FALSE(hasDigit(res));
@@ -123,9 +123,9 @@ TEST(password_generator_test, only_digits)
 
     for (int i = 0; i < 10; ++i)
     {
-        QString res = gen.result();
+        SecureString res = gen.result();
 
-        EXPECT_EQ(res.length(), 5);
+        EXPECT_EQ(res.toString().length(), 5);
         EXPECT_TRUE(hasDigit(res));
         EXPECT_FALSE(hasLower(res));
         EXPECT_FALSE(hasUpper(res));
@@ -141,8 +141,8 @@ TEST(password_generator_test, DISABLED_benchmark)
 
     for (int i = 0; i < kIterationCount; ++i)
     {
-        QString res = gen1.result();
-        EXPECT_EQ(res.length(), 5);
+        SecureString res = gen1.result();
+        EXPECT_EQ(res.toString().length(), 5);
     }
 
     PasswordGenerator gen2;
@@ -150,8 +150,8 @@ TEST(password_generator_test, DISABLED_benchmark)
 
     for (int i = 0; i < kIterationCount; ++i)
     {
-        QString res = gen2.result();
-        EXPECT_EQ(res.length(), 10);
+        SecureString res = gen2.result();
+        EXPECT_EQ(res.toString().length(), 10);
     }
 
     PasswordGenerator gen3;
@@ -159,7 +159,7 @@ TEST(password_generator_test, DISABLED_benchmark)
 
     for (int i = 0; i < kIterationCount; ++i)
     {
-        QString res = gen3.result();
-        EXPECT_EQ(res.length(), 15);
+        SecureString res = gen3.result();
+        EXPECT_EQ(res.toString().length(), 15);
     }
 }

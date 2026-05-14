@@ -375,8 +375,7 @@ BigNum SrpMath::calc_B(const BigNum& b, const BigNum& N, const BigNum& g, const 
 
 //--------------------------------------------------------------------------------------------------
 // static
-// x = BLAKE2b512(s | BLAKE2b512(I | ":" | p))
-BigNum SrpMath::calc_x(const BigNum& s, const QString& I, const QString& p)
+BigNum SrpMath::calc_x(const BigNum& s, const QString& I, const SecureString& p)
 {
     if (!s.isValid() || I.isEmpty() || p.isEmpty())
     {
@@ -390,7 +389,8 @@ BigNum SrpMath::calc_x(const BigNum& s, const QString& I, const QString& p)
 
 //--------------------------------------------------------------------------------------------------
 // static
-BigNum SrpMath::calc_x(const BigNum& s, const QString& I, const QByteArray& p)
+// x = BLAKE2b512(s | BLAKE2b512(I | ":" | p))
+BigNum SrpMath::calc_x(const BigNum& s, const QString& I, const SecureByteArray& p)
 {
     if (!s.isValid() || I.isEmpty() || p.isEmpty())
     {
@@ -400,7 +400,6 @@ BigNum SrpMath::calc_x(const BigNum& s, const QString& I, const QByteArray& p)
     }
 
     GenericHash hash(GenericHash::BLAKE2b512);
-
     hash.addData(I.toLower().toUtf8());
     hash.addData(QByteArray(":"));
     hash.addData(p);
@@ -618,7 +617,7 @@ bool SrpMath::verify_A_mod_N(const BigNum& A, const BigNum& N)
 
 //--------------------------------------------------------------------------------------------------
 // static
-BigNum SrpMath::calc_v(const QString& I, const QString& p, const BigNum& s,
+BigNum SrpMath::calc_v(const QString& I, const SecureString& p, const BigNum& s,
                        const BigNum& N, const BigNum& g)
 {
     if (I.isEmpty() || p.isEmpty() || !N.isValid() || !g.isValid() || !s.isValid())
@@ -638,6 +637,11 @@ BigNum SrpMath::calc_v(const QString& I, const QString& p, const BigNum& s,
     }
 
     BigNum x = calc_x(s, I, p);
+    if (!x.isValid())
+    {
+        LOG(ERROR) << "calc_x failed";
+        return BigNum();
+    }
 
     if (!BN_mod_exp(v, g, x, N, ctx))
     {
@@ -650,7 +654,7 @@ BigNum SrpMath::calc_v(const QString& I, const QString& p, const BigNum& s,
 
 //--------------------------------------------------------------------------------------------------
 // static
-BigNum SrpMath::calc_v(const QString& I, const QByteArray& p, const BigNum& s,
+BigNum SrpMath::calc_v(const QString& I, const SecureByteArray& p, const BigNum& s,
                        const BigNum& N, const BigNum& g)
 {
     if (I.isEmpty() || p.isEmpty() || !N.isValid() || !g.isValid() || !s.isValid())

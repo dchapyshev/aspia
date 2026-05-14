@@ -39,7 +39,7 @@ void PasswordGenerator::setLength(qsizetype value)
 }
 
 //--------------------------------------------------------------------------------------------------
-QString PasswordGenerator::result() const
+SecureString PasswordGenerator::result() const
 {
     constexpr QByteArrayView lower_case = "abcdefghijklmnopqrstuvwxyz";
     constexpr QByteArrayView upper_case = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -81,5 +81,5 @@ QString PasswordGenerator::result() const
     for (qsizetype i = 0; i < length_; ++i)
         result[i] = table[static_cast<size_t>(uniform_distance(engine))];
 
-    return result;
+    return SecureString(std::move(result));
 }

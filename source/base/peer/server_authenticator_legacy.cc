@@ -408,7 +408,7 @@ void ServerAuthenticatorLegacy::onIdentify(const QByteArray& buffer)
     N_ = BigNum::fromStdString(SrpMath::kNgPair_8192.first);
     g_ = BigNum::fromStdString(SrpMath::kNgPair_8192.second);
     s_ = BigNum::fromByteArray(hash.result());
-    v_ = SrpMath::calc_v(user_name_, seed_key, s_, N_, g_);
+    v_ = SrpMath::calc_v(user_name_, SecureByteArray(seed_key), s_, N_, g_);
     session_types_ = 0;
 
     if (user.isValid() && (user.flags & User::ENABLED))

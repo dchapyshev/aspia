@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/crypto/secure_string.h"
+#include "base/crypto/secure_byte_array.h"
 
 #include "base/crypto/secure_memory.h"
 
@@ -24,7 +24,7 @@ namespace {
 
 void registerTypes()
 {
-    qRegisterMetaType<SecureString>("SecureString");
+    qRegisterMetaType<SecureByteArray>("SecureByteArray");
 }
 
 struct Registrator
@@ -40,71 +40,72 @@ static volatile Registrator registrator;
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-SecureString::SecureString(const QString& string)
-    : data_(string)
+SecureByteArray::SecureByteArray(const QByteArray& data)
+    : data_(data)
 {
     data_.detach();
 }
 
 //--------------------------------------------------------------------------------------------------
-SecureString::SecureString(QString&& string) noexcept
-    : data_(std::move(string))
+SecureByteArray::SecureByteArray(QByteArray&& data) noexcept
+    : data_(std::move(data))
 {
     data_.detach();
 }
 
 //--------------------------------------------------------------------------------------------------
-SecureString::SecureString(const SecureString& other)
+SecureByteArray::SecureByteArray(const char* data, qsizetype size)
+    : data_(data, size)
+{
+    data_.detach();
+}
+
+//--------------------------------------------------------------------------------------------------
+SecureByteArray::SecureByteArray(const SecureByteArray& other)
     : data_(other.data_.constData(), other.data_.size())
 {
     data_.detach();
 }
 
 //--------------------------------------------------------------------------------------------------
-SecureString& SecureString::operator=(const SecureString& other)
+SecureByteArray& SecureByteArray::operator=(const SecureByteArray& other)
 {
     if (this != &other)
     {
         clear();
-        data_ = QString(other.data_.constData(), other.data_.size());
+        data_ = QByteArray(other.data_.constData(), other.data_.size());
         data_.detach();
     }
     return *this;
 }
 
 //--------------------------------------------------------------------------------------------------
-SecureString::SecureString(SecureString&& other) noexcept
+SecureByteArray::SecureByteArray(SecureByteArray&& other) noexcept
     : data_(std::move(other.data_))
 {
-    other.data_ = QString();
+    other.data_ = QByteArray();
 }
 
 //--------------------------------------------------------------------------------------------------
-SecureString& SecureString::operator=(SecureString&& other) noexcept
+SecureByteArray& SecureByteArray::operator=(SecureByteArray&& other) noexcept
 {
     if (this != &other)
     {
         clear();
         data_ = std::move(other.data_);
-        other.data_ = QString();
+        other.data_ = QByteArray();
     }
     return *this;
 }
 
 //--------------------------------------------------------------------------------------------------
-SecureString::~SecureString()
+SecureByteArray::~SecureByteArray()
 {
     clear();
 }
 
 //--------------------------------------------------------------------------------------------------
-SecureString SecureString::fromUtf8(const SecureByteArray& utf8)
-{
-    return SecureString(QString::fromUtf8(utf8.toByteArray()));
-}
-
-//--------------------------------------------------------------------------------------------------
-void SecureString::clear()
+void SecureByteArray::clear()
 {
     if (!data_.isEmpty())
         memZero(&data_);
