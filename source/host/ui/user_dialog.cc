@@ -23,6 +23,7 @@
 #include "base/logging.h"
 #include "base/crypto/secure_string.h"
 #include "common/ui/msg_box.h"
+#include "common/ui/password_edit.h"
 #include "common/ui/session_type.h"
 #include "proto/peer.h"
 #include "ui_user_dialog.h"
@@ -140,8 +141,8 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
         if (account_changed_)
         {
             QString username = ui->edit_username->text();
-            SecureString password(ui->edit_password->text());
-            SecureString password_repeat(ui->edit_password_repeat->text());
+            SecureString password = ui->edit_password->password();
+            SecureString password_repeat = ui->edit_password_repeat->password();
 
             if (!User::isValidUserName(username))
             {
@@ -255,32 +256,22 @@ void UserDialog::setAccountChanged(bool changed)
     ui->edit_password->setEnabled(changed);
     ui->edit_password_repeat->setEnabled(changed);
 
+    ui->edit_password->clear();
+    ui->edit_password_repeat->clear();
+
+    ui->edit_password->setShowPassword(!changed);
+    ui->edit_password_repeat->setShowPassword(!changed);
+
     if (changed)
     {
-        ui->edit_password->clear();
-        ui->edit_password_repeat->clear();
-
-        Qt::InputMethodHints hints = Qt::ImhHiddenText | Qt::ImhSensitiveData |
-            Qt::ImhNoAutoUppercase | Qt::ImhNoPredictiveText;
-
-        ui->edit_password->setEchoMode(QLineEdit::Password);
-        ui->edit_password->setInputMethodHints(hints);
-
-        ui->edit_password_repeat->setEchoMode(QLineEdit::Password);
-        ui->edit_password_repeat->setInputMethodHints(hints);
+        ui->edit_password->setPlaceholderText(QString());
+        ui->edit_password_repeat->setPlaceholderText(QString());
     }
     else
     {
-        QString text = tr("Double-click to change");
-
-        ui->edit_password->setText(text);
-        ui->edit_password_repeat->setText(text);
-
-        ui->edit_password->setEchoMode(QLineEdit::Normal);
-        ui->edit_password->setInputMethodHints(Qt::ImhNone);
-
-        ui->edit_password_repeat->setEchoMode(QLineEdit::Normal);
-        ui->edit_password_repeat->setInputMethodHints(Qt::ImhNone);
+        QString prompt = tr("Double-click to change");
+        ui->edit_password->setPlaceholderText(prompt);
+        ui->edit_password_repeat->setPlaceholderText(prompt);
 
         ui->edit_password->installEventFilter(this);
         ui->edit_password_repeat->installEventFilter(this);

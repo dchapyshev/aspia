@@ -25,6 +25,7 @@
 #include "base/crypto/secure_string.h"
 #include "client/master_password.h"
 #include "common/ui/msg_box.h"
+#include "common/ui/password_edit.h"
 #include "ui_export_password_dialog.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -53,20 +54,20 @@ ExportPasswordDialog::~ExportPasswordDialog()
 //--------------------------------------------------------------------------------------------------
 SecureString ExportPasswordDialog::password() const
 {
-    return SecureString(ui->edit_password->text());
+    return ui->edit_password->password();
 }
 
 //--------------------------------------------------------------------------------------------------
 void ExportPasswordDialog::onEncryptClicked()
 {
-    SecureString password(ui->edit_password->text());
+    SecureString password = ui->edit_password->password();
     if (password.isEmpty())
     {
         MsgBox::warning(this, tr("Password cannot be empty."));
         return;
     }
 
-    SecureString confirm(ui->edit_confirm->text());
+    SecureString confirm = ui->edit_confirm->password();
     if (password != confirm)
     {
         MsgBox::warning(this, tr("Passwords do not match."));

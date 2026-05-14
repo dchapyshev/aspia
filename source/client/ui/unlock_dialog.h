@@ -43,7 +43,6 @@ public:
     SecureString password() const;
 
 private slots:
-    void onShowPasswordButtonToggled(bool checked);
     void onButtonBoxClicked(QAbstractButton* button);
 
 private:

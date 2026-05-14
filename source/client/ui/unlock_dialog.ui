@@ -105,11 +105,7 @@
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout">
             <item>
-             <widget class="QLineEdit" name="edit_password">
-              <property name="echoMode">
-               <enum>QLineEdit::EchoMode::Password</enum>
-              </property>
-             </widget>
+             <widget class="PasswordEdit" name="edit_password"/>
             </item>
             <item>
              <widget class="QPushButton" name="button_show_password">
@@ -161,6 +157,11 @@
    <class>DialogButtonBox</class>
    <extends>QDialogButtonBox</extends>
    <header>common/ui/dialog_button_box.h</header>
+  </customwidget>
+  <customwidget>
+   <class>PasswordEdit</class>
+   <extends>QLineEdit</extends>
+   <header>common/ui/password_edit.h</header>
   </customwidget>
  </customwidgets>
  <resources>

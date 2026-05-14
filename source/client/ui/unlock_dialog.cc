@@ -24,6 +24,7 @@
 
 #include "base/logging.h"
 #include "base/crypto/secure_string.h"
+#include "common/ui/password_edit.h"
 #include "ui_unlock_dialog.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -36,7 +37,7 @@ UnlockDialog::UnlockDialog(QWidget* parent,
     LOG(INFO) << "Ctor";
     ui->setupUi(this);
 
-    connect(ui->button_show_password, &QPushButton::toggled, this, &UnlockDialog::onShowPasswordButtonToggled);
+    connect(ui->button_show_password, &QPushButton::toggled, ui->edit_password, &PasswordEdit::setShowPassword);
     connect(ui->button_box, &QDialogButtonBox::clicked, this, &UnlockDialog::onButtonBoxClicked);
 
     if (file_path.isEmpty())
@@ -73,23 +74,7 @@ UnlockDialog::~UnlockDialog()
 //--------------------------------------------------------------------------------------------------
 SecureString UnlockDialog::password() const
 {
-    return SecureString(ui->edit_password->text());
-}
-
-//--------------------------------------------------------------------------------------------------
-void UnlockDialog::onShowPasswordButtonToggled(bool checked)
-{
-    if (checked)
-    {
-        ui->edit_password->setEchoMode(QLineEdit::Normal);
-        ui->edit_password->setInputMethodHints(Qt::ImhNone);
-    }
-    else
-    {
-        ui->edit_password->setEchoMode(QLineEdit::Password);
-        ui->edit_password->setInputMethodHints(Qt::ImhHiddenText | Qt::ImhSensitiveData |
-                                              Qt::ImhNoAutoUppercase | Qt::ImhNoPredictiveText);
-    }
+    return ui->edit_password->password();
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -25,6 +25,7 @@
 #include "base/logging.h"
 #include "base/crypto/secure_string.h"
 #include "common/ui/msg_box.h"
+#include "common/ui/password_edit.h"
 #include "host/system_settings.h"
 #include "ui_change_password_dialog.h"
 
@@ -65,13 +66,13 @@ ChangePasswordDialog::~ChangePasswordDialog()
 //--------------------------------------------------------------------------------------------------
 SecureString ChangePasswordDialog::oldPassword() const
 {
-    return SecureString(ui->edit_old_pass->text());
+    return ui->edit_old_pass->password();
 }
 
 //--------------------------------------------------------------------------------------------------
 SecureString ChangePasswordDialog::newPassword() const
 {
-    return SecureString(ui->edit_new_pass->text());
+    return ui->edit_new_pass->password();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -84,8 +85,8 @@ void ChangePasswordDialog::onButtonBoxClicked(QAbstractButton* button)
 
         if (mode_ == Mode::CREATE_NEW_PASSWORD)
         {
-            SecureString new_password(ui->edit_new_pass->text());
-            SecureString new_password_repeat(ui->edit_new_pass_repeat->text());
+            SecureString new_password = ui->edit_new_pass->password();
+            SecureString new_password_repeat = ui->edit_new_pass_repeat->password();
 
             if (new_password.isEmpty())
             {
@@ -109,9 +110,9 @@ void ChangePasswordDialog::onButtonBoxClicked(QAbstractButton* button)
         {
             DCHECK_EQ(mode_, Mode::CHANGE_PASSWORD);
 
-            SecureString old_password(ui->edit_old_pass->text());
-            SecureString new_password(ui->edit_new_pass->text());
-            SecureString new_password_repeat(ui->edit_new_pass_repeat->text());
+            SecureString old_password = ui->edit_old_pass->password();
+            SecureString new_password = ui->edit_new_pass->password();
+            SecureString new_password_repeat = ui->edit_new_pass_repeat->password();
 
             if (old_password.isEmpty())
             {

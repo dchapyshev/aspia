@@ -24,6 +24,7 @@
 #include "base/crypto/secure_string.h"
 #include "client/settings.h"
 #include "common/ui/msg_box.h"
+#include "common/ui/password_edit.h"
 #include "ui_authorization_dialog.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -97,13 +98,13 @@ void AuthorizationDialog::setUserName(const QString& username)
 //--------------------------------------------------------------------------------------------------
 SecureString AuthorizationDialog::password() const
 {
-    return SecureString(ui->edit_password->text());
+    return ui->edit_password->password();
 }
 
 //--------------------------------------------------------------------------------------------------
 void AuthorizationDialog::setPassword(const SecureString& password)
 {
-    ui->edit_password->setText(password.toString());
+    ui->edit_password->setPassword(password);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -124,18 +125,7 @@ void AuthorizationDialog::onShowPasswordButtonToggled(bool checked)
 {
     LOG(INFO) << "[ACTION] Show passowrd button toggled:" << checked;
 
-    if (checked)
-    {
-        ui->edit_password->setEchoMode(QLineEdit::Normal);
-        ui->edit_password->setInputMethodHints(Qt::ImhNone);
-    }
-    else
-    {
-        ui->edit_password->setEchoMode(QLineEdit::Password);
-        ui->edit_password->setInputMethodHints(Qt::ImhHiddenText | Qt::ImhSensitiveData |
-                                              Qt::ImhNoAutoUppercase | Qt::ImhNoPredictiveText);
-    }
-
+    ui->edit_password->setShowPassword(checked);
     ui->edit_password->setFocus();
 }
 
@@ -168,7 +158,7 @@ void AuthorizationDialog::onButtonBoxClicked(QAbstractButton* button)
             }
         }
 
-        if (ui->edit_password->text().isEmpty())
+        if (ui->edit_password->password().isEmpty())
         {
             LOG(ERROR) << "Empty password";
             MsgBox::warning(this, tr("Password cannot be empty."));

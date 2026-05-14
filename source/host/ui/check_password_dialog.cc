@@ -25,6 +25,7 @@
 #include "base/logging.h"
 #include "base/crypto/secure_string.h"
 #include "common/ui/msg_box.h"
+#include "common/ui/password_edit.h"
 #include "host/system_settings.h"
 #include "ui_check_password_dialog.h"
 
@@ -59,7 +60,7 @@ void CheckPasswordDialog::onButtonBoxClicked(QAbstractButton* button)
     {
         LOG(INFO) << "[ACTION] Accepted by user";
 
-        SecureString password(ui->edit_pass->text());
+        SecureString password = ui->edit_pass->password();
 
         if (!SystemSettings::isValidPassword(password))
         {

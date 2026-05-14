@@ -30,6 +30,7 @@
 #include "client/config.h"
 #include "client/database.h"
 #include "common/ui/msg_box.h"
+#include "common/ui/password_edit.h"
 #include "proto/router.h"
 #include "ui_router_dialog.h"
 
@@ -60,7 +61,7 @@ RouterDialog::RouterDialog(qint64 router_id, QWidget* parent)
                 ui->combo_session_type->setCurrentIndex(session_type_index);
 
             ui->edit_username->setText(router->username);
-            ui->edit_password->setText(router->password.toString());
+            ui->edit_password->setPassword(router->password);
         }
         else
         {
@@ -70,7 +71,7 @@ RouterDialog::RouterDialog(qint64 router_id, QWidget* parent)
 
     connect(ui->buttonbox, &QDialogButtonBox::clicked, this, &RouterDialog::onButtonBoxClicked);
     connect(ui->button_show_password, &QToolButton::toggled,
-            this, &RouterDialog::onShowPasswordButtonToggled);
+            ui->edit_password, &PasswordEdit::setShowPassword);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -111,7 +112,7 @@ void RouterDialog::onButtonBoxClicked(QAbstractButton* button)
         return;
     }
 
-    SecureString password(ui->edit_password->text());
+    SecureString password = ui->edit_password->password();
     if (!User::isValidPassword(password))
     {
         LOG(ERROR) << "Invalid password entered";
@@ -152,22 +153,6 @@ void RouterDialog::onButtonBoxClicked(QAbstractButton* button)
     }
 
     accept();
-}
-
-//--------------------------------------------------------------------------------------------------
-void RouterDialog::onShowPasswordButtonToggled(bool checked)
-{
-    if (checked)
-    {
-        ui->edit_password->setEchoMode(QLineEdit::Normal);
-        ui->edit_password->setInputMethodHints(Qt::ImhNone);
-    }
-    else
-    {
-        ui->edit_password->setEchoMode(QLineEdit::Password);
-        ui->edit_password->setInputMethodHints(Qt::ImhHiddenText | Qt::ImhSensitiveData |
-                                              Qt::ImhNoAutoUppercase | Qt::ImhNoPredictiveText);
-    }
 }
 
 //--------------------------------------------------------------------------------------------------

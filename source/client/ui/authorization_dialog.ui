@@ -50,7 +50,7 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
-         <widget class="QLineEdit" name="edit_password">
+         <widget class="PasswordEdit" name="edit_password">
           <property name="enabled">
            <bool>true</bool>
           </property>
@@ -59,12 +59,6 @@
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-          <property name="echoMode">
-           <enum>QLineEdit::EchoMode::Password</enum>
           </property>
          </widget>
         </item>
@@ -114,6 +108,11 @@
    <class>DialogButtonBox</class>
    <extends>QDialogButtonBox</extends>
    <header>common/ui/dialog_button_box.h</header>
+  </customwidget>
+  <customwidget>
+   <class>PasswordEdit</class>
+   <extends>QLineEdit</extends>
+   <header>common/ui/password_edit.h</header>
   </customwidget>
  </customwidgets>
  <resources>

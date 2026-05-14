@@ -22,6 +22,7 @@
 #include "base/crypto/secure_string.h"
 #include "client/master_password.h"
 #include "common/ui/msg_box.h"
+#include "common/ui/password_edit.h"
 #include "ui_master_password_dialog.h"
 
 #include <QAbstractButton>
@@ -93,8 +94,8 @@ void MasterPasswordDialog::onButtonBoxClicked(QAbstractButton* button)
 //--------------------------------------------------------------------------------------------------
 bool MasterPasswordDialog::applySet()
 {
-    SecureString new_password(ui->edit_new->text());
-    SecureString confirm(ui->edit_confirm->text());
+    SecureString new_password = ui->edit_new->password();
+    SecureString confirm = ui->edit_confirm->password();
 
     if (!MasterPassword::isSafePassword(new_password))
     {
@@ -131,9 +132,9 @@ bool MasterPasswordDialog::applySet()
 //--------------------------------------------------------------------------------------------------
 bool MasterPasswordDialog::applyChange()
 {
-    SecureString current(ui->edit_current->text());
-    SecureString new_password(ui->edit_new->text());
-    SecureString confirm(ui->edit_confirm->text());
+    SecureString current = ui->edit_current->password();
+    SecureString new_password = ui->edit_new->password();
+    SecureString confirm = ui->edit_confirm->password();
 
     if (current.isEmpty())
     {
