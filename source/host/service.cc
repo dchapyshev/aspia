@@ -189,7 +189,7 @@ void Service::onStart()
     // per-address rate are ever expected from a legitimate client. Keep the caps tight to
     // limit the damage of a flood; latecomers retry in a moment.
     static constexpr int kHostMaxPendingConnections = 10;
-    static constexpr int kHostMaxConnectionsPerMinute = 20;
+    static constexpr int kHostMaxConnectionsPerMinute = 30;
     tcp_server_->setMaxPendingConnections(kHostMaxPendingConnections);
     tcp_server_->setMaxConnectionsPerMinute(kHostMaxConnectionsPerMinute);
 
