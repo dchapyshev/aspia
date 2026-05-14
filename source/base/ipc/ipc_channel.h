@@ -114,10 +114,10 @@ private:
 
     struct Header
     {
+        quint32 magic;
         quint32 message_size;
         quint32 channel_id;
         quint32 reliable;
-        quint32 reserved;
     };
 
     enum class ReadState

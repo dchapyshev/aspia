@@ -44,6 +44,9 @@ namespace {
 const int kWriteQueueReservedSize = 64;
 const quint32 kMaxMessageSize = 16 * 1024 * 1024; // 16MB
 
+// 'A','S','I','C' (Aspia Ipc Channel) read little-endian.
+const quint32 kHeaderMagic = 0x43495341;
+
 #if defined(Q_OS_UNIX)
 const char kNamePrefix[] = "/tmp/aspia_";
 using PipeHandle = int;
@@ -362,6 +365,7 @@ void IpcChannel::doWriteHeader()
 {
     const WriteTask& task = write_queue_.front();
 
+    write_header_.magic = kHeaderMagic;
     write_header_.message_size = task.data().size();
     write_header_.channel_id = task.channelId();
     write_header_.reliable = task.reliable() ? 1 : 0;
@@ -443,6 +447,13 @@ void IpcChannel::doReadHeader()
         }
 
         CDCHECK_EQ(bytes_transferred, sizeof(read_header_));
+
+        if (read_header_.magic != kHeaderMagic)
+        {
+            CLOG(ERROR) << "Invalid header magic:" << Qt::hex << read_header_.magic;
+            onErrorOccurred(FROM_HERE, asio::error::invalid_argument);
+            return;
+        }
 
         if (!read_header_.message_size || read_header_.message_size > kMaxMessageSize)
         {
