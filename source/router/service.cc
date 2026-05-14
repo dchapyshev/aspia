@@ -22,6 +22,7 @@
 
 #include "base/logging.h"
 #include "base/crypto/random.h"
+#include "base/crypto/secure_byte_array.h"
 #include "base/net/tcp_channel.h"
 #include "base/peer/stun_server.h"
 #include "router/migration_utils.h"
@@ -364,7 +365,7 @@ bool Service::start()
 
     Settings settings;
 
-    QByteArray private_key = settings.privateKey();
+    SecureByteArray private_key(settings.privateKey());
     if (private_key.isEmpty())
     {
         LOG(INFO) << "The private key is not specified in the configuration file";

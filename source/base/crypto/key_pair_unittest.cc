@@ -56,7 +56,7 @@ TEST(KeyPair, Convert)
     QByteArray public_key1 = pair1.publicKey();
     EXPECT_FALSE(public_key1.isEmpty());
 
-    KeyPair pair2 = KeyPair::fromPrivateKey(private_key1.toByteArray());
+    KeyPair pair2 = KeyPair::fromPrivateKey(private_key1);
     EXPECT_TRUE(pair2.isValid());
     EXPECT_TRUE(pair2.privateKey().toByteArray() != pair2.publicKey());
 

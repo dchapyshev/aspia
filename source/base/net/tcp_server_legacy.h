@@ -26,6 +26,7 @@
 
 #include <memory>
 
+#include "base/crypto/secure_byte_array.h"
 #include "base/shared_pointer.h"
 #include "base/peer/user_list_base.h"
 #include "base/peer/server_authenticator_legacy.h"
@@ -44,8 +45,8 @@ public:
     void setUserList(SharedPointer<UserListBase> user_list);
     SharedPointer<UserListBase> userList() const { return user_list_; }
 
-    void setPrivateKey(const QByteArray& private_key);
-    QByteArray privateKey() const { return private_key_; }
+    void setPrivateKey(const SecureByteArray& private_key);
+    const SecureByteArray& privateKey() const { return private_key_; }
 
     void setAnonymousAccess(
         ServerAuthenticatorLegacy::AnonymousAccess anonymous_access, quint32 session_types);
@@ -79,7 +80,7 @@ private:
     int accept_error_count_ = 0;
 
     SharedPointer<UserListBase> user_list_;
-    QByteArray private_key_;
+    SecureByteArray private_key_;
 
     ServerAuthenticatorLegacy::AnonymousAccess anonymous_access_ =
         ServerAuthenticatorLegacy::AnonymousAccess::DISABLE;

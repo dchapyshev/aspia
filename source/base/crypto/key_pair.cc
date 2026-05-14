@@ -84,7 +84,7 @@ KeyPair KeyPair::create(Type type)
 
 //--------------------------------------------------------------------------------------------------
 // static
-KeyPair KeyPair::fromPrivateKey(const QByteArray& private_key)
+KeyPair KeyPair::fromPrivateKey(const SecureByteArray& private_key)
 {
     if (private_key.isEmpty())
     {
@@ -93,7 +93,7 @@ KeyPair KeyPair::fromPrivateKey(const QByteArray& private_key)
     }
 
     return KeyPair(EVP_PKEY_ptr(EVP_PKEY_new_raw_private_key(EVP_PKEY_X25519, nullptr,
-        reinterpret_cast<const quint8*>(private_key.data()), private_key.size())));
+        reinterpret_cast<const quint8*>(private_key.constData()), private_key.size())));
 }
 
 //--------------------------------------------------------------------------------------------------

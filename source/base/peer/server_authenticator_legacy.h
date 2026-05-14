@@ -43,7 +43,7 @@ public:
     void setUserList(SharedPointer<UserListBase> user_list);
 
     // Sets the private key.
-    [[nodiscard]] bool setPrivateKey(const QByteArray& private_key);
+    [[nodiscard]] bool setPrivateKey(const SecureByteArray& private_key);
 
     // Enables or disables anonymous access.
     // |session_types] allowed session types for anonymous access.

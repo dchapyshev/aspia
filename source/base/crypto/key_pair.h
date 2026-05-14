@@ -36,7 +36,7 @@ public:
     enum class Type { X25519 };
 
     static KeyPair create(Type type);
-    static KeyPair fromPrivateKey(const QByteArray& private_key);
+    static KeyPair fromPrivateKey(const SecureByteArray& private_key);
 
     bool isValid() const;
     SecureByteArray privateKey() const;

@@ -55,7 +55,7 @@ void TcpServer::setUserList(SharedPointer<UserListBase> user_list)
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpServer::setPrivateKey(const QByteArray& private_key)
+void TcpServer::setPrivateKey(const SecureByteArray& private_key)
 {
     private_key_ = private_key;
 }

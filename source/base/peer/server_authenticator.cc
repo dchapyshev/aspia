@@ -63,7 +63,7 @@ void ServerAuthenticator::setUserList(SharedPointer<UserListBase> user_list)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool ServerAuthenticator::setPrivateKey(const QByteArray& private_key)
+bool ServerAuthenticator::setPrivateKey(const SecureByteArray& private_key)
 {
     // The method must be called before calling start().
     if (state() != State::STOPPED)
