@@ -646,10 +646,12 @@ void TcpChannelNG::addWriteTask(quint8 type, quint8 param, const QByteArray& dat
     const qint64 target_data_size = encrypted ?
         encryptor_->encryptedDataSize(data.size()) : data.size();
     const qint64 total_size = target_data_size + static_cast<qint64>(sizeof(Header));
+    const qint64 max_size = (type == AUTH_DATA && !authenticated_) ?
+        kMaxAuthMessageSize : kMaxMessageSize;
 
-    if (total_size > kMaxMessageSize)
+    if (total_size > max_size)
     {
-        CLOG(ERROR) << "Too big outgoing message:" << total_size;
+        CLOG(ERROR) << "Too big outgoing message:" << total_size << "(limit:" << max_size << ")";
         onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
         return;
     }
@@ -752,9 +754,14 @@ void TcpChannelNG::doReadHeader()
 
         addRxBytes(bytes_transferred); // Update RX statistics.
 
-        if (read_header_.length > kMaxMessageSize)
+        // Until the handshake completes a peer is anonymous, so an inflated header.length
+        // would let it pin |kMaxMessageSize| of memory per channel before authenticating.
+        // Enforce a much tighter cap for AUTH_DATA - real handshake frames stay well below it.
+        const quint32 max_length = authenticated_ ? kMaxMessageSize : kMaxAuthMessageSize;
+        if (read_header_.length > max_length)
         {
-            CLOG(ERROR) << "Too big incoming message:" << read_header_.length;
+            CLOG(ERROR) << "Too big incoming message:" << read_header_.length
+                        << "(limit:" << max_length << ")";
             onErrorOccurred(FROM_HERE, ErrorCode::INVALID_PROTOCOL);
             return;
         }

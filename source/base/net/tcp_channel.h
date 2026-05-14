@@ -41,6 +41,12 @@ public:
 
     static const quint32 kMaxMessageSize;
 
+    // Upper bound on a single handshake frame. Real auth messages stay well under 4 KB
+    // (the largest is SrpServerKeyExchange with 8192-bit N/B - about 3 KB). The lower cap
+    // applies until isAuthenticated() returns true, so an unauthenticated peer cannot force
+    // the channel to allocate the full |kMaxMessageSize| RX buffer.
+    static const quint32 kMaxAuthMessageSize;
+
     enum class ErrorCode
     {
         // Unknown error.

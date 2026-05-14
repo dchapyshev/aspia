@@ -42,6 +42,7 @@ quint32 makeInstanceId()
 
 //--------------------------------------------------------------------------------------------------
 const quint32 TcpChannel::kMaxMessageSize = 7 * 1024 * 1024; // 7 MB
+const quint32 TcpChannel::kMaxAuthMessageSize = 16 * 1024; // 16 KB
 
 //--------------------------------------------------------------------------------------------------
 TcpChannel::TcpChannel(Type type, QObject* parent)
