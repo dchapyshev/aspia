@@ -21,6 +21,8 @@
 
 #include "base/crypto/key_pair.h"
 
+class SecureByteArray;
+
 class SessionKey
 {
 public:
@@ -33,9 +35,9 @@ public:
 
     bool isValid() const;
 
-    QByteArray privateKey() const;
+    SecureByteArray privateKey() const;
     QByteArray publicKey() const;
-    QByteArray sessionKey(const std::string& peer_public_key) const;
+    SecureByteArray sessionKey(const std::string& peer_public_key) const;
     QByteArray iv() const;
 
 private:

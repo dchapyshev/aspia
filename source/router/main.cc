@@ -120,7 +120,7 @@ bool generateKeys(QByteArray* private_key, QByteArray* public_key)
         return false;
     }
 
-    *private_key = key_pair.privateKey();
+    *private_key = key_pair.privateKey().toByteArray();
     *public_key = key_pair.publicKey();
 
     if (private_key->isEmpty() || public_key->isEmpty())

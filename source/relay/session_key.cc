@@ -20,6 +20,7 @@
 
 #include "base/crypto/generic_hash.h"
 #include "base/crypto/random.h"
+#include "base/crypto/secure_byte_array.h"
 
 //--------------------------------------------------------------------------------------------------
 SessionKey::SessionKey() = default;
@@ -76,7 +77,7 @@ bool SessionKey::isValid() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray SessionKey::privateKey() const
+SecureByteArray SessionKey::privateKey() const
 {
     return key_pair_.privateKey();
 }
@@ -88,13 +89,13 @@ QByteArray SessionKey::publicKey() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray SessionKey::sessionKey(const std::string& peer_public_key) const
+SecureByteArray SessionKey::sessionKey(const std::string& peer_public_key) const
 {
-    QByteArray temp = key_pair_.sessionKey(QByteArray::fromStdString(peer_public_key));
+    SecureByteArray temp = key_pair_.sessionKey(QByteArray::fromStdString(peer_public_key));
     if (temp.isEmpty())
-        return QByteArray();
+        return SecureByteArray();
 
-    return GenericHash::hash(GenericHash::Type::BLAKE2s256, temp);
+    return SecureByteArray(GenericHash::hash(GenericHash::Type::BLAKE2s256, temp.toByteArray()));
 }
 
 //--------------------------------------------------------------------------------------------------

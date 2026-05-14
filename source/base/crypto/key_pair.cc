@@ -19,7 +19,7 @@
 #include "base/crypto/key_pair.h"
 
 #include "base/logging.h"
-#include "base/crypto/secure_memory.h"
+#include "base/crypto/secure_byte_array.h"
 
 #include <openssl/crypto.h>
 #include <openssl/evp.h>
@@ -103,20 +103,20 @@ bool KeyPair::isValid() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray KeyPair::privateKey() const
+SecureByteArray KeyPair::privateKey() const
 {
     size_t private_key_length = 0;
 
     if (EVP_PKEY_get_raw_private_key(pkey_.get(), nullptr, &private_key_length) != 1)
     {
         LOG(ERROR) << "EVP_PKEY_get_raw_private_key failed";
-        return QByteArray();
+        return SecureByteArray();
     }
 
     if (!private_key_length)
     {
         LOG(ERROR) << "Invalid private key size";
-        return QByteArray();
+        return SecureByteArray();
     }
 
     QByteArray private_key;
@@ -126,16 +126,16 @@ QByteArray KeyPair::privateKey() const
         &private_key_length) != 1)
     {
         LOG(ERROR) << "EVP_PKEY_get_raw_private_key failed";
-        return QByteArray();
+        return SecureByteArray();
     }
 
     if (private_key.size() != private_key_length)
     {
         LOG(ERROR) << "Invalid private key size";
-        return QByteArray();
+        return SecureByteArray();
     }
 
-    return private_key;
+    return SecureByteArray(std::move(private_key));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -175,12 +175,12 @@ QByteArray KeyPair::publicKey() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray KeyPair::sessionKey(const QByteArray& peer_public_key) const
+SecureByteArray KeyPair::sessionKey(const QByteArray& peer_public_key) const
 {
     if (peer_public_key.isEmpty())
     {
         LOG(ERROR) << "Empty peer public key";
-        return QByteArray();
+        return SecureByteArray();
     }
 
     EVP_PKEY_ptr public_key(EVP_PKEY_new_raw_public_key(EVP_PKEY_X25519, nullptr,
@@ -188,26 +188,26 @@ QByteArray KeyPair::sessionKey(const QByteArray& peer_public_key) const
     if (!public_key)
     {
         LOG(ERROR) << "EVP_PKEY_new_raw_public_key failed";
-        return QByteArray();
+        return SecureByteArray();
     }
 
     EVP_PKEY_CTX_ptr ctx(EVP_PKEY_CTX_new(pkey_.get(), nullptr));
     if (!ctx)
     {
         LOG(ERROR) << "EVP_PKEY_CTX_new failed";
-        return QByteArray();
+        return SecureByteArray();
     }
 
     if (EVP_PKEY_derive_init(ctx.get()) != 1)
     {
         LOG(ERROR) << "EVP_PKEY_derive_init failed";
-        return QByteArray();
+        return SecureByteArray();
     }
 
     if (EVP_PKEY_derive_set_peer(ctx.get(), public_key.get()) != 1)
     {
         LOG(ERROR) << "EVP_PKEY_derive_set_pee failed";
-        return QByteArray();
+        return SecureByteArray();
     }
 
     size_t session_key_length = 0;
@@ -215,13 +215,13 @@ QByteArray KeyPair::sessionKey(const QByteArray& peer_public_key) const
     if (EVP_PKEY_derive(ctx.get(), nullptr, &session_key_length) != 1)
     {
         LOG(ERROR) << "EVP_PKEY_derive failed";
-        return QByteArray();
+        return SecureByteArray();
     }
 
     if (!session_key_length)
     {
         LOG(ERROR) << "Invalid session key size";
-        return QByteArray();
+        return SecureByteArray();
     }
 
     QByteArray session_key;
@@ -231,13 +231,13 @@ QByteArray KeyPair::sessionKey(const QByteArray& peer_public_key) const
         &session_key_length) != 1)
     {
         LOG(ERROR) << "EVP_PKEY_derive failed";
-        return QByteArray();
+        return SecureByteArray();
     }
 
     if (session_key.size() != session_key_length)
     {
         LOG(ERROR) << "Invalid session key size";
-        return QByteArray();
+        return SecureByteArray();
     }
 
     // RFC 7748 section 6.1: the X25519 function produces the all-zero value when operating on
@@ -249,9 +249,8 @@ QByteArray KeyPair::sessionKey(const QByteArray& peer_public_key) const
     if (CRYPTO_memcmp(session_key.data(), kAllZero, sizeof(kAllZero)) == 0)
     {
         LOG(ERROR) << "All-zero shared secret (low-order peer public key)";
-        memZero(&session_key);
-        return QByteArray();
+        return SecureByteArray();
     }
 
-    return session_key;
+    return SecureByteArray(std::move(session_key));
 }

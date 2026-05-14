@@ -24,6 +24,7 @@
 #include <asio/ip/tcp.hpp>
 #include <asio/steady_timer.hpp>
 
+#include "base/crypto/secure_byte_array.h"
 #include "base/shared_pointer.h"
 #include "relay/session_key.h"
 
@@ -50,7 +51,7 @@ public:
     explicit SessionManager(QObject* parent = nullptr);
     ~SessionManager() final;
 
-    using Key = std::pair<QByteArray, QByteArray>;
+    using Key = std::pair<SecureByteArray, QByteArray>;
 
     bool start();
     quint32 addKey(SessionKey&& session_key);

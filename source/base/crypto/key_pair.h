@@ -19,7 +19,11 @@
 #ifndef BASE_CRYPTO_KEY_PAIR_H
 #define BASE_CRYPTO_KEY_PAIR_H
 
+#include <QByteArray>
+
 #include "base/crypto/openssl_util.h"
+
+class SecureByteArray;
 
 class KeyPair
 {
@@ -35,9 +39,9 @@ public:
     static KeyPair fromPrivateKey(const QByteArray& private_key);
 
     bool isValid() const;
-    QByteArray privateKey() const;
+    SecureByteArray privateKey() const;
     QByteArray publicKey() const;
-    QByteArray sessionKey(const QByteArray& peer_public_key) const;
+    SecureByteArray sessionKey(const QByteArray& peer_public_key) const;
 
 private:
     explicit KeyPair(EVP_PKEY_ptr&& pkey) noexcept;
