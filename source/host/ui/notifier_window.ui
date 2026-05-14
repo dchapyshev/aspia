@@ -55,7 +55,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>32</height>
+          <height>30</height>
          </size>
         </property>
         <property name="text">
@@ -67,8 +67,8 @@
         </property>
         <property name="iconSize">
          <size>
-          <width>24</width>
-          <height>24</height>
+          <width>22</width>
+          <height>22</height>
          </size>
         </property>
        </widget>
@@ -118,7 +118,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>32</height>
+          <height>30</height>
          </size>
         </property>
         <property name="text">
@@ -130,8 +130,8 @@
         </property>
         <property name="iconSize">
          <size>
-          <width>24</width>
-          <height>24</height>
+          <width>22</width>
+          <height>22</height>
          </size>
         </property>
        </widget>
@@ -204,8 +204,8 @@
         </property>
         <property name="iconSize">
          <size>
-          <width>24</width>
-          <height>24</height>
+          <width>22</width>
+          <height>22</height>
          </size>
         </property>
         <property name="indentation">
@@ -285,8 +285,8 @@
           <widget class="QToolButton" name="button_lock_mouse">
            <property name="maximumSize">
             <size>
-             <width>32</width>
-             <height>32</height>
+             <width>30</width>
+             <height>30</height>
             </size>
            </property>
            <property name="toolTip">
@@ -301,8 +301,8 @@
            </property>
            <property name="iconSize">
             <size>
-             <width>24</width>
-             <height>24</height>
+             <width>22</width>
+             <height>22</height>
             </size>
            </property>
           </widget>
@@ -311,8 +311,8 @@
           <widget class="QToolButton" name="button_lock_keyboard">
            <property name="maximumSize">
             <size>
-             <width>32</width>
-             <height>32</height>
+             <width>30</width>
+             <height>30</height>
             </size>
            </property>
            <property name="toolTip">
@@ -327,8 +327,8 @@
            </property>
            <property name="iconSize">
             <size>
-             <width>24</width>
-             <height>24</height>
+             <width>22</width>
+             <height>22</height>
             </size>
            </property>
           </widget>
@@ -337,8 +337,8 @@
           <widget class="QToolButton" name="button_pause">
            <property name="maximumSize">
             <size>
-             <width>32</width>
-             <height>32</height>
+             <width>30</width>
+             <height>30</height>
             </size>
            </property>
            <property name="toolTip">
@@ -353,8 +353,8 @@
            </property>
            <property name="iconSize">
             <size>
-             <width>24</width>
-             <height>24</height>
+             <width>22</width>
+             <height>22</height>
             </size>
            </property>
           </widget>
@@ -363,8 +363,8 @@
           <widget class="QToolButton" name="button_stop">
            <property name="maximumSize">
             <size>
-             <width>32</width>
-             <height>32</height>
+             <width>30</width>
+             <height>30</height>
             </size>
            </property>
            <property name="toolTip">
@@ -379,8 +379,8 @@
            </property>
            <property name="iconSize">
             <size>
-             <width>24</width>
-             <height>24</height>
+             <width>22</width>
+             <height>22</height>
             </size>
            </property>
           </widget>

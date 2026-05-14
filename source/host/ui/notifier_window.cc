@@ -102,11 +102,11 @@ QToolButton* createSessionButton(QWidget* parent, const QString& icon, const QSt
 {
     QToolButton* button = new QToolButton(parent);
 
-    button->setIconSize(QSize(24, 24));
+    button->setIconSize(QSize(22, 22));
     button->setIcon(QIcon(icon));
     button->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
-    button->setFixedWidth(30);
-    button->setFixedHeight(30);
+    button->setFixedWidth(28);
+    button->setFixedHeight(28);
     button->setToolTip(tooltip);
 
     return button;
