@@ -25,7 +25,6 @@
 #include "base/scoped_qpointer.h"
 #include "base/serialization.h"
 #include "base/session_id.h"
-#include "base/crypto/secure_string.h"
 #include "base/peer/host_id.h"
 #include "proto/user.h"
 
@@ -33,6 +32,7 @@ class IpcChannel;
 class IpcServer;
 class Location;
 class QTimer;
+class SecureString;
 
 class UserSession final : public QObject
 {

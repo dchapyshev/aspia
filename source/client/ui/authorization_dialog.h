@@ -23,9 +23,8 @@
 
 #include <memory>
 
-#include "base/crypto/secure_string.h"
-
 class QAbstractButton;
+class SecureString;
 
 namespace Ui {
 class AuthorizationDialog;

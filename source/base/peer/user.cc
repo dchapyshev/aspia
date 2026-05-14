@@ -20,6 +20,7 @@
 
 #include "base/logging.h"
 #include "base/crypto/random.h"
+#include "base/crypto/secure_string.h"
 #include "base/crypto/srp_math.h"
 #include "proto/router_admin.h"
 

@@ -21,6 +21,8 @@
 
 #include <QByteArray>
 
+class SecureString;
+
 class PasswordHash
 {
 public:
@@ -30,7 +32,7 @@ public:
     static const size_t kBitsSize = 256;
     static const size_t kBytesSize = kBitsSize / kBitsPerByte;
 
-    static QByteArray hash(Type type, const QString& password, const QByteArray& salt);
+    static QByteArray hash(Type type, const SecureString& password, const QByteArray& salt);
 
 private:
     Q_DISABLE_COPY_MOVE(PasswordHash)

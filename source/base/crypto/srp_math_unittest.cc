@@ -19,6 +19,7 @@
 #include "base/crypto/srp_math.h"
 
 #include "base/crypto/random.h"
+#include "base/crypto/secure_string.h"
 
 #include <gtest/gtest.h>
 

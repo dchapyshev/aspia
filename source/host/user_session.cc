@@ -1,4 +1,4 @@
-﻿//
+//
 // Aspia Project
 // Copyright (C) 2016-2026 Dmitry Chapyshev <dmitry@aspia.ru>
 //
@@ -28,6 +28,7 @@
 #include "base/logging.h"
 #include "base/numeric_utils.h"
 #include "base/process_util.h"
+#include "base/crypto/secure_string.h"
 #include "base/ipc/ipc_channel.h"
 #include "base/ipc/ipc_server.h"
 #include "host/client.h"

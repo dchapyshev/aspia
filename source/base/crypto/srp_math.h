@@ -22,8 +22,9 @@
 #include <optional>
 
 #include "base/crypto/big_num.h"
-#include "base/crypto/secure_byte_array.h"
-#include "base/crypto/secure_string.h"
+
+class SecureByteArray;
+class SecureString;
 
 // This class implements primitives to perform authorization using SRP algorithm.
 class SrpMath

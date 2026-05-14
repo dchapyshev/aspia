@@ -34,6 +34,7 @@
 #include "base/crypto/password_hash.h"
 #include "base/crypto/random.h"
 #include "base/crypto/secure_memory.h"
+#include "base/crypto/secure_string.h"
 #include "client/database.h"
 #include "client/ui/export_password_dialog.h"
 #include "client/ui/unlock_dialog.h"
@@ -377,7 +378,7 @@ bool JsonBackup::exportToFile(QWidget* parent, const QString& file_path)
         return false;
 
     QByteArray salt = Random::byteArray(kSaltSize);
-    QByteArray key = PasswordHash::hash(PasswordHash::ARGON2ID, dialog.password(), salt);
+    QByteArray key = PasswordHash::hash(PasswordHash::ARGON2ID, SecureString(dialog.password()), salt);
     DataCryptor cryptor(key);
     memZero(&key);
 
@@ -490,7 +491,7 @@ bool JsonBackup::importFromFile(QWidget* parent, const QString& file_path)
     if (dialog.exec() != QDialog::Accepted)
         return false;
 
-    QByteArray key = PasswordHash::hash(PasswordHash::ARGON2ID, dialog.password(), salt);
+    QByteArray key = PasswordHash::hash(PasswordHash::ARGON2ID, SecureString(dialog.password()), salt);
     auto cryptor = std::make_unique<DataCryptor>(key);
     memZero(&key);
 

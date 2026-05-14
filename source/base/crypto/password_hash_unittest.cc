@@ -18,6 +18,8 @@
 
 #include "base/crypto/password_hash.h"
 
+#include "base/crypto/secure_string.h"
+
 #include <gtest/gtest.h>
 #include <QString>
 
@@ -51,7 +53,7 @@ TEST(PasswordHashTest, Scrypt)
         {
             QByteArray result = PasswordHash::hash(
                 PasswordHash::Type::SCRYPT,
-                kTestTable[i].password,
+                SecureString(kTestTable[i].password),
                 QByteArray::fromHex(QByteArray::fromStdString(kTestTable[i].salt)));
 
             QByteArray expected = QByteArray::fromHex(QByteArray::fromStdString(kTestTable[i].expected));

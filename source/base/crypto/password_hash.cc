@@ -19,6 +19,8 @@
 #include "crypto/password_hash.h"
 
 #include "base/logging.h"
+#include "base/crypto/secure_byte_array.h"
+#include "base/crypto/secure_string.h"
 
 #include <openssl/evp.h>
 #include <openssl/core_names.h>
@@ -29,7 +31,7 @@ namespace {
 
 //--------------------------------------------------------------------------------------------------
 template <typename InputT, typename OutputT>
-OutputT hashScrypt(const QString& password, InputT salt)
+OutputT hashScrypt(const SecureString& password, InputT salt)
 {
     // CPU/Memory cost parameter, must be larger than 1, a power of 2, and less than 2^(128 * r / 8).
     static const quint64 N = 16384;
@@ -47,9 +49,9 @@ OutputT hashScrypt(const QString& password, InputT salt)
     OutputT result;
     result.resize(PasswordHash::kBytesSize);
 
-    QByteArray password_utf8 = password.toUtf8();
+    SecureByteArray password_utf8 = password.toUtf8();
 
-    int ret = EVP_PBE_scrypt(password_utf8.data(), password_utf8.size(),
+    int ret = EVP_PBE_scrypt(password_utf8.constData(), password_utf8.size(),
                              reinterpret_cast<const quint8*>(salt.data()), salt.size(),
                              N, r, p, max_mem,
                              reinterpret_cast<quint8*>(result.data()), result.size());
@@ -60,7 +62,7 @@ OutputT hashScrypt(const QString& password, InputT salt)
 
 //--------------------------------------------------------------------------------------------------
 template <typename InputT, typename OutputT>
-OutputT hashArgon2id(const QString& password, InputT salt)
+OutputT hashArgon2id(const SecureString& password, InputT salt)
 {
     static const quint32 kMemoryCost = 131072; // 128 MiB
     static const quint32 kIterations = 4;
@@ -70,7 +72,7 @@ OutputT hashArgon2id(const QString& password, InputT salt)
     OutputT result;
     result.resize(PasswordHash::kBytesSize);
 
-    QByteArray password_utf8 = password.toUtf8();
+    SecureByteArray password_utf8 = password.toUtf8();
 
     EVP_KDF* kdf = EVP_KDF_fetch(nullptr, "ARGON2ID", nullptr);
     CHECK(kdf) << "EVP_KDF_fetch(ARGON2ID) failed";
@@ -87,7 +89,7 @@ OutputT hashArgon2id(const QString& password, InputT salt)
     OSSL_PARAM params[] =
     {
         OSSL_PARAM_octet_string(OSSL_KDF_PARAM_PASSWORD,
-                                password_utf8.data(),
+                                const_cast<char*>(password_utf8.constData()),
                                 static_cast<size_t>(password_utf8.size())),
         OSSL_PARAM_octet_string(OSSL_KDF_PARAM_SALT,
                                 const_cast<char*>(salt.data()),
@@ -111,7 +113,7 @@ OutputT hashArgon2id(const QString& password, InputT salt)
 
 //--------------------------------------------------------------------------------------------------
 template <typename InputT, typename OutputT>
-OutputT hashT(PasswordHash::Type type, const QString& password, InputT salt)
+OutputT hashT(PasswordHash::Type type, const SecureString& password, InputT salt)
 {
     switch (type)
     {
@@ -131,7 +133,7 @@ OutputT hashT(PasswordHash::Type type, const QString& password, InputT salt)
 
 //--------------------------------------------------------------------------------------------------
 // static
-QByteArray PasswordHash::hash(Type type, const QString& password, const QByteArray& salt)
+QByteArray PasswordHash::hash(Type type, const SecureString& password, const QByteArray& salt)
 {
     return hashT<const QByteArray, QByteArray>(type, password, salt);
 }

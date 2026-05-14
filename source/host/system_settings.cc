@@ -22,6 +22,7 @@
 #include "base/crypto/password_generator.h"
 #include "base/crypto/password_hash.h"
 #include "base/crypto/random.h"
+#include "base/crypto/secure_string.h"
 #include "base/peer/user_list.h"
 #include "build/build_config.h"
 
@@ -91,7 +92,7 @@ bool SystemSettings::createPasswordHash(const QString& password, QByteArray* has
     if (salt_temp.isEmpty())
         return false;
 
-    QByteArray hash_temp = PasswordHash::hash(PasswordHash::SCRYPT, password, salt_temp);
+    QByteArray hash_temp = PasswordHash::hash(PasswordHash::SCRYPT, SecureString(password), salt_temp);
     if (hash_temp.isEmpty())
         return false;
 
@@ -116,7 +117,7 @@ bool SystemSettings::isValidPassword(const QString& password)
         return false;
 
     QByteArray verifiable_password_hash =
-        PasswordHash::hash(PasswordHash::SCRYPT, password, password_hash_salt);
+        PasswordHash::hash(PasswordHash::SCRYPT, SecureString(password), password_hash_salt);
     if (verifiable_password_hash.isEmpty())
         return false;
 

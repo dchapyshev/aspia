@@ -25,6 +25,7 @@
 #include "base/crypto/data_cryptor.h"
 #include "base/crypto/password_hash.h"
 #include "base/crypto/secure_memory.h"
+#include "base/crypto/secure_string.h"
 #include "base/net/address.h"
 #include "base/peer/host_id.h"
 #include "build/build_config.h"
@@ -300,7 +301,7 @@ bool AabImporter::import(QWidget* parent, const QString& file_path)
 
             key = PasswordHash::hash(
                 PasswordHash::SCRYPT,
-                dialog.password(),
+                SecureString(dialog.password()),
                 QByteArray::fromStdString(proto_file.hashing_salt()));
             break;
         }

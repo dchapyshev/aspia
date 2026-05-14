@@ -19,7 +19,9 @@
 #ifndef BASE_CRYPTO_PASSWORD_GENERATOR_H
 #define BASE_CRYPTO_PASSWORD_GENERATOR_H
 
-#include "base/crypto/secure_string.h"
+#include <QtTypes>
+
+class SecureString;
 
 class PasswordGenerator
 {

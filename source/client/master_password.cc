@@ -22,6 +22,7 @@
 #include "base/crypto/data_cryptor.h"
 #include "base/crypto/password_hash.h"
 #include "base/crypto/random.h"
+#include "base/crypto/secure_string.h"
 #include "client/database.h"
 
 namespace {
@@ -33,7 +34,7 @@ const int kVerifierPayloadSize = 32;
 //--------------------------------------------------------------------------------------------------
 QByteArray deriveKey(const QString& password, const QByteArray& salt)
 {
-    return PasswordHash::hash(PasswordHash::ARGON2ID, password, salt);
+    return PasswordHash::hash(PasswordHash::ARGON2ID, SecureString(password), salt);
 }
 
 //--------------------------------------------------------------------------------------------------

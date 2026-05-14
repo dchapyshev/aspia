@@ -18,6 +18,8 @@
 
 #include "base/crypto/password_generator.h"
 
+#include "base/crypto/secure_string.h"
+
 #include <gtest/gtest.h>
 
 #include <algorithm>

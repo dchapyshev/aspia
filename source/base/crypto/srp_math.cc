@@ -20,6 +20,8 @@
 
 #include "base/logging.h"
 #include "base/crypto/generic_hash.h"
+#include "base/crypto/secure_byte_array.h"
+#include "base/crypto/secure_string.h"
 
 #include <openssl/opensslv.h>
 #include <openssl/bn.h>

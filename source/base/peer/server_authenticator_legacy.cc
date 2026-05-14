@@ -29,6 +29,7 @@
 #include "base/version_constants.h"
 #include "base/crypto/generic_hash.h"
 #include "base/crypto/random.h"
+#include "base/crypto/secure_byte_array.h"
 #include "base/crypto/secure_memory.h"
 #include "base/crypto/srp_math.h"
 #include "proto/key_exchange.h"

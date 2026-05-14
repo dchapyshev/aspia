@@ -20,9 +20,10 @@
 
 #include <QTimer>
 
-#include "common/ui/msg_box.h"
 #include "base/logging.h"
+#include "base/crypto/secure_string.h"
 #include "client/settings.h"
+#include "common/ui/msg_box.h"
 #include "ui_authorization_dialog.h"
 
 //--------------------------------------------------------------------------------------------------
