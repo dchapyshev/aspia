@@ -1,0 +1,55 @@
+//
+// Aspia Project
+// Copyright (C) 2016-2026 Dmitry Chapyshev <dmitry@aspia.ru>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
+//
+
+#ifndef BASE_CRYPTO_SECURE_STRING_H
+#define BASE_CRYPTO_SECURE_STRING_H
+
+#include <QByteArray>
+#include <QString>
+
+class SecureString final
+{
+public:
+    SecureString() = default;
+    explicit SecureString(const QString& string);
+    explicit SecureString(QString&& string) noexcept;
+
+    SecureString(const SecureString& other);
+    SecureString& operator=(const SecureString& other);
+
+    SecureString(SecureString&& other) noexcept;
+    SecureString& operator=(SecureString&& other) noexcept;
+
+    ~SecureString();
+
+    bool isEmpty() const { return data_.isEmpty(); }
+    qsizetype size() const { return data_.size(); }
+
+    const QString& toString() const { return data_; }
+    QByteArray toUtf8() const { return data_.toUtf8(); }
+
+    void clear();
+
+    bool operator==(const SecureString& other) const { return data_ == other.data_; }
+    bool operator!=(const SecureString& other) const { return data_ != other.data_; }
+
+private:
+    QString data_;
+};
+
+#endif // BASE_CRYPTO_SECURE_STRING_H

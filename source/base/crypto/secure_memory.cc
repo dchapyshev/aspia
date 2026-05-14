@@ -53,3 +53,12 @@ void memZero(QByteArray* str)
 
     memZero(str->data(), str->size());
 }
+
+//--------------------------------------------------------------------------------------------------
+void memZero(QString* str)
+{
+    if (!str)
+        return;
+
+    memZero(str->data(), str->size() * sizeof(QChar));
+}

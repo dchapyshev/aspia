@@ -20,11 +20,13 @@
 #define BASE_CRYPTO_SECURE_MEMORY_H
 
 #include <QByteArray>
+#include <QString>
 #include <string>
 
 void memZero(void* data, size_t data_size);
 void memZero(std::string* str);
 void memZero(std::u16string* str);
 void memZero(QByteArray* str);
+void memZero(QString* str);
 
 #endif // BASE_CRYPTO_SECURE_MEMORY_H

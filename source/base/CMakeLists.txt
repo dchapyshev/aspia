@@ -235,6 +235,8 @@ list(APPEND SOURCE_BASE_CRYPTO
     crypto/random.h
     crypto/secure_memory.cc
     crypto/secure_memory.h
+    crypto/secure_string.cc
+    crypto/secure_string.h
     crypto/srp_math.cc
     crypto/srp_math.h)
 
