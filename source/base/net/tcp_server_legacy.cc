@@ -48,7 +48,7 @@ TcpServerLegacy::~TcpServerLegacy()
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpServerLegacy::setUserList(SharedPointer<UserListBase> user_list)
+void TcpServerLegacy::setUserList(SharedPointer<UserList> user_list)
 {
     user_list_ = user_list;
     DCHECK(user_list_);

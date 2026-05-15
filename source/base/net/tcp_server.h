@@ -42,8 +42,8 @@ public:
     explicit TcpServer(QObject* parent = nullptr);
     ~TcpServer();
 
-    void setUserList(SharedPointer<UserListBase> user_list);
-    SharedPointer<UserListBase> userList() const { return user_list_; }
+    void setUserList(SharedPointer<UserList> user_list);
+    SharedPointer<UserList> userList() const { return user_list_; }
 
     void setPrivateKey(const SecureByteArray& private_key);
     const SecureByteArray& privateKey() const { return private_key_; }
@@ -80,7 +80,7 @@ private:
     asio::ip::tcp::acceptor acceptor_;
     int accept_error_count_ = 0;
 
-    SharedPointer<UserListBase> user_list_;
+    SharedPointer<UserList> user_list_;
     SecureByteArray private_key_;
 
     ServerAuthenticator::AnonymousAccess anonymous_access_ =

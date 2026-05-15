@@ -28,7 +28,7 @@
 #include "base/crypto/secure_string.h"
 #include "base/net/tcp_channel.h"
 #include "base/peer/host_id.h"
-#include "base/peer/user_list.h"
+#include "host/host_user_list.h"
 #include "proto/user.h"
 
 class QTimer;
@@ -59,7 +59,7 @@ public:
 
 public slots:
     void start();
-    void onUserListChanged();
+    void onSettingsChanged();
     void onOneTimeSessionsChanged(quint32 one_time_sessions);
     void onUserSessionAttached();
 
@@ -94,7 +94,7 @@ private:
     SecureString one_time_password_;
     quint32 one_time_sessions_ = 0;
 
-    SharedPointer<UserListBase> user_list_;
+    SharedPointer<HostUserList> user_list_;
 
     HostId host_id_ = kInvalidHostId;
     proto::user::RouterState router_state_;

@@ -48,7 +48,7 @@ TcpServer::~TcpServer()
 }
 
 //--------------------------------------------------------------------------------------------------
-void TcpServer::setUserList(SharedPointer<UserListBase> user_list)
+void TcpServer::setUserList(SharedPointer<UserList> user_list)
 {
     user_list_ = user_list;
     DCHECK(user_list_);

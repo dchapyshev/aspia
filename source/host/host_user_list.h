@@ -16,34 +16,27 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_PEER_USER_LIST_H
-#define BASE_PEER_USER_LIST_H
+#ifndef HOST_HOST_USER_LIST_H
+#define HOST_HOST_USER_LIST_H
 
 #include "base/peer/user_list_base.h"
 
-class UserList final : public UserListBase
+class HostUserList final : public UserList
 {
 public:
-    ~UserList() final;
-
-    static std::unique_ptr<UserList> createEmpty();
-    std::unique_ptr<UserList> duplicate() const;
+    HostUserList() = default;
+    ~HostUserList() final = default;
 
     // UserListBase implementation.
-    void add(const User& user) final;
     User find(const QString& username) const final;
-    const QByteArray& seedKey() const final { return seed_key_; }
+    QByteArray seedKey() const final;
     void setSeedKey(const QByteArray& seed_key) final;
-    QVector<User> list() const final { return list_; }
+
+    void setOneTimeUser(const User& user);
 
 private:
-    UserList();
-    UserList(const QVector<User>& list, const QByteArray& seed_key);
-
-    QByteArray seed_key_;
-    QVector<User> list_;
-
-    Q_DISABLE_COPY_MOVE(UserList)
+    User one_time_user_;
+    Q_DISABLE_COPY_MOVE(HostUserList)
 };
 
-#endif // BASE_PEER_USER_LIST_H
+#endif // HOST_HOST_USER_LIST_H

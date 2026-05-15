@@ -43,7 +43,8 @@
 #include "base/logging.h"
 #include "base/sys_info.h"
 #include "base/files/base_paths.h"
-#include "base/peer/user_list.h"
+#include "base/peer/user.h"
+#include "host/database.h"
 #include "host/host_storage.h"
 #include "host/system_settings.h"
 
@@ -196,13 +197,11 @@ void doHostMigrate(const QJsonDocument& doc)
 
     LOG(INFO) << "====== Migrate user list ======";
 
-    std::unique_ptr<UserList> user_list = UserList::createEmpty();
-
     if (root_object.contains("SeedKey"))
     {
         QString value = root_object["SeedKey"].toString();
         LOG(INFO) << "SeedKey:" << value;
-        user_list->setSeedKey(QByteArray::fromHex(value.toLatin1()));
+        Database::instance().setSeedKey(QByteArray::fromHex(value.toLatin1()));
     }
 
     QJsonObject users_object = root_object["Users"].toObject();
@@ -263,7 +262,7 @@ void doHostMigrate(const QJsonDocument& doc)
             if (user.isValid())
             {
                 LOG(INFO) << "Add user" << i << ":" << user.name;
-                user_list->add(user);
+                Database::instance().addUser(user);
             }
             else
             {
@@ -271,8 +270,6 @@ void doHostMigrate(const QJsonDocument& doc)
             }
         }
     }
-
-    settings.setUserList(*user_list);
 }
 
 //--------------------------------------------------------------------------------------------------

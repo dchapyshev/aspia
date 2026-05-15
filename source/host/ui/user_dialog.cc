@@ -21,27 +21,37 @@
 #include <QMouseEvent>
 
 #include "base/logging.h"
+#include "base/crypto/random.h"
 #include "base/crypto/secure_string.h"
 #include "common/ui/msg_box.h"
 #include "common/ui/password_edit.h"
 #include "common/ui/session_type.h"
+#include "host/database.h"
 #include "proto/peer.h"
 #include "ui_user_dialog.h"
 
+namespace {
+
+const int kSeedKeySize = 64;
+
+} // namespace
+
 //--------------------------------------------------------------------------------------------------
-UserDialog::UserDialog(const User& user, const QStringList& exist_names, QWidget* parent)
+UserDialog::UserDialog(qint64 entry_id, QWidget* parent)
     : QDialog(parent),
       ui(std::make_unique<Ui::UserDialog>()),
-      exist_names_(exist_names),
-      user_(user)
+      entry_id_(entry_id)
 {
     LOG(INFO) << "Ctor";
     ui->setupUi(this);
 
-    if (user.isValid())
+    if (entry_id_ != 0)
+        user_ = Database::instance().findUser(entry_id_);
+
+    if (user_.isValid())
     {
-        ui->checkbox_disable_user->setChecked(!(user.flags & User::ENABLED));
-        ui->edit_username->setText(user.name);
+        ui->checkbox_disable_user->setChecked(!(user_.flags & User::ENABLED));
+        ui->edit_username->setText(user_.name);
 
         setAccountChanged(false);
     }
@@ -59,9 +69,9 @@ UserDialog::UserDialog(const User& user, const QStringList& exist_names, QWidget
         item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
         item->setData(0, Qt::UserRole, QVariant(session_type));
 
-        if (user.isValid())
+        if (user_.isValid())
         {
-            if (user.sessions & static_cast<quint32>(session_type))
+            if (user_.sessions & static_cast<quint32>(session_type))
                 item->setCheckState(0, Qt::Checked);
             else
                 item->setCheckState(0, Qt::Unchecked);
@@ -155,7 +165,14 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
                 return;
             }
 
-            if (exist_names_.contains(username, Qt::CaseInsensitive))
+            QStringList exist_names;
+            for (const User& existing : Database::instance().userList())
+            {
+                if (existing.entry_id != entry_id_)
+                    exist_names.append(existing.name);
+            }
+
+            if (exist_names.contains(username, Qt::CaseInsensitive))
             {
                 LOG(ERROR) << "User name already exists:" << username;
                 MsgBox::warning(this, tr("The username you entered already exists."));
@@ -215,8 +232,7 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
             if (!user_.isValid())
             {
                 LOG(ERROR) << "Unable to create user";
-                MsgBox::warning(this,
-                    tr("Unknown internal error when creating or modifying a user."));
+                MsgBox::warning(this, tr("Unknown internal error when creating or modifying a user."));
                 return;
             }
         }
@@ -235,6 +251,31 @@ void UserDialog::onButtonBoxClicked(QAbstractButton* button)
 
         user_.sessions = sessions;
         user_.flags = flags;
+
+        Database& db = Database::instance();
+
+        if (entry_id_ == 0)
+        {
+            if (db.seedKey().isEmpty())
+                db.setSeedKey(Random::byteArray(kSeedKeySize));
+
+            if (!db.addUser(user_))
+            {
+                LOG(ERROR) << "Unable to add user to database";
+                MsgBox::warning(this, tr("Unknown internal error when creating or modifying a user."));
+                return;
+            }
+        }
+        else
+        {
+            user_.entry_id = entry_id_;
+            if (!db.modifyUser(user_))
+            {
+                LOG(ERROR) << "Unable to modify user in database";
+                MsgBox::warning(this, tr("Unknown internal error when creating or modifying a user."));
+                return;
+            }
+        }
 
         accept();
     }

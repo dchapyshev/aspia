@@ -34,14 +34,15 @@
 #include "base/ipc/ipc_channel.h"
 #include "base/net/tcp_channel.h"
 #include "base/net/tcp_server.h"
-#include "base/peer/user_list.h"
 #include "common/http_file_downloader.h"
 #include "common/update_checker.h"
 #include "common/update_info.h"
+#include "host/database.h"
 #include "host/desktop_client.h"
 #include "host/desktop_manager.h"
 #include "host/file_client.h"
 #include "host/host_storage.h"
+#include "host/host_user_list.h"
 #include "host/host_utils.h"
 #include "host/router_manager.h"
 #include "host/service.h"
@@ -194,8 +195,7 @@ void Service::onStart()
     tcp_server_->setMaxConnectionsPerMinute(kHostMaxConnectionsPerMinute);
 
     tcp_server_->start(settings_.tcpPort());
-
-    reloadUserList();
+    tcp_server_->setUserList(SharedPointer<UserList>(new HostUserList));
 
     if (settings_.isRouterEnabled())
         connectToRouter(FROM_HERE);
@@ -664,9 +664,6 @@ void Service::onSettingsChanged(const QString& /* path */)
     // Synchronize the parameters from the file.
     settings_.sync();
 
-    // Reload user lists.
-    reloadUserList();
-
     if (!settings_.isRouterEnabled())
     {
         LOG(INFO) << "Router is disabled";
@@ -674,22 +671,15 @@ void Service::onSettingsChanged(const QString& /* path */)
         state.set_state(proto::user::RouterState::DISABLED);
         user_session_->onRouterStateChanged(state);
         disconnectFromRouter(FROM_HERE);
-        return;
     }
-
-    if (router_manager_)
+    else if (router_manager_)
     {
-        // Check if the connection parameters have changed.
-        if (router_manager_->address() == settings_.routerAddress() &&
-            router_manager_->port() == settings_.routerPort() &&
-            router_manager_->publicKey() == settings_.routerPublicKey())
-        {
-            LOG(INFO) << "Router parameters without changes";
-            return;
-        }
+        router_manager_->onSettingsChanged();
     }
-
-    connectToRouter(FROM_HERE);
+    else
+    {
+        connectToRouter(FROM_HERE);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -883,28 +873,13 @@ void Service::deleteFirewallRules()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Service::reloadUserList()
-{
-    LOG(INFO) << "Reloading user list";
-
-    // Read the list of regular users.
-    SharedPointer<UserListBase> users(settings_.userList().release());
-
-    if (users->seedKey().isEmpty())
-        LOG(ERROR) << "Empty seed key for user list";
-
-    // Updating the list of users.
-    tcp_server_->setUserList(users);
-    if (router_manager_)
-        router_manager_->onUserListChanged();
-}
-
-//--------------------------------------------------------------------------------------------------
 void Service::connectToRouter(const Location& location)
 {
-    // Destroy the previous instance.
-    disconnectFromRouter(FROM_HERE);
-    CHECK(!router_manager_);
+    if (router_manager_)
+    {
+        LOG(INFO) << "Already connected to router";
+        return;
+    }
 
     LOG(INFO) << "Connecting to router from" << location;
     router_manager_ = new RouterManager(this);
@@ -915,7 +890,7 @@ void Service::connectToRouter(const Location& location)
     connect(router_manager_, &RouterManager::sig_removeHost, this, &Service::onRemoveHost);
 
     connect(user_session_, &UserSession::sig_changeOneTimeSessions, router_manager_, &RouterManager::onOneTimeSessionsChanged);
-    connect(user_session_, &UserSession::sig_changeOneTimePassword, router_manager_, &RouterManager::onUserListChanged);
+    connect(user_session_, &UserSession::sig_changeOneTimePassword, router_manager_, &RouterManager::onSettingsChanged);
     connect(user_session_, &UserSession::sig_attached, router_manager_, &RouterManager::onUserSessionAttached);
 
     router_manager_->start();

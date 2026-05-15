@@ -36,10 +36,10 @@ class UserDialog final : public QDialog
     Q_OBJECT
 
 public:
-    UserDialog(const User& user, const QStringList& exist_names, QWidget* parent);
+    // entry_id == 0 - Create a new user.
+    // entry_id != 0 - Edit an existing user.
+    explicit UserDialog(qint64 entry_id, QWidget* parent);
     ~UserDialog() final;
-
-    User user() { return user_; }
 
 protected:
     // QDialog implementation.
@@ -54,7 +54,7 @@ private:
     void setAccountChanged(bool changed);
 
     std::unique_ptr<Ui::UserDialog> ui;
-    QStringList exist_names_;
+    qint64 entry_id_;
     User user_;
     bool account_changed_ = true;
 

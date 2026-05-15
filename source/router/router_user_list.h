@@ -24,7 +24,7 @@
 #include "base/peer/user_list_base.h"
 #include "router/database.h"
 
-class RouterUserList final : public UserListBase
+class RouterUserList final : public UserList
 {
 public:
     ~RouterUserList() final;
@@ -32,11 +32,9 @@ public:
     static std::unique_ptr<RouterUserList> open();
 
     // UserListBase implementation.
-    void add(const User& user) final;
     User find(const QString& username) const final;
-    const QByteArray& seedKey() const final;
+    QByteArray seedKey() const final;
     void setSeedKey(const QByteArray& seed_key) final;
-    QVector<User> list() const final;
 
 private:
     explicit RouterUserList(Database&& db);

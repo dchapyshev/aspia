@@ -22,7 +22,6 @@
 #include <QSettings>
 
 class SecureString;
-class UserList;
 
 class SystemSettings
 {
@@ -53,9 +52,6 @@ public:
 
     QByteArray routerPublicKey() const;
     void setRouterPublicKey(const QByteArray& key);
-
-    std::unique_ptr<UserList> userList() const;
-    void setUserList(const UserList& user_list);
 
     QString updateServer() const;
     void setUpdateServer(const QString& server);

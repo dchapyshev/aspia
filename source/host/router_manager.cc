@@ -43,7 +43,8 @@ RouterManager::RouterManager(QObject* parent)
     : QObject(parent),
       peer_manager_(new RelayPeerManager(this)),
       reconnect_timer_(new QTimer(this)),
-      password_expire_timer_(new QTimer(this))
+      password_expire_timer_(new QTimer(this)),
+      user_list_(new HostUserList())
 {
     LOG(INFO) << "Ctor";
 
@@ -53,7 +54,7 @@ RouterManager::RouterManager(QObject* parent)
     reconnect_timer_->setSingleShot(true);
     connect(reconnect_timer_, &QTimer::timeout, this, &RouterManager::connectToRouter);
 
-    connect(password_expire_timer_, &QTimer::timeout, this, &RouterManager::onUserListChanged);
+    connect(password_expire_timer_, &QTimer::timeout, this, &RouterManager::onSettingsChanged);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -82,22 +83,31 @@ std::optional<RouterManager::ReadyConnection> RouterManager::nextReadyConnection
 //--------------------------------------------------------------------------------------------------
 void RouterManager::start()
 {
-    SystemSettings settings;
-    address_ = settings.routerAddress();
-    port_ = settings.routerPort();
-    public_key_ = settings.routerPublicKey();
-
-    onUserListChanged();
-
-    LOG(INFO) << "Starting host controller for router:" << address_ << ":" << port_;
+    onSettingsChanged();
     connectToRouter();
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterManager::onUserListChanged()
+void RouterManager::onSettingsChanged()
 {
     SystemSettings settings;
-    user_list_.reset(settings.userList().release());
+
+    // Check if the connection parameters have changed.
+    if (address_ != settings.routerAddress() || port_ != settings.routerPort() ||
+        public_key_ != settings.routerPublicKey())
+    {
+        address_ = settings.routerAddress();
+        port_ = settings.routerPort();
+        public_key_ = settings.routerPublicKey();
+
+        if (tcp_channel_)
+        {
+            tcp_channel_->disconnect(this);
+            tcp_channel_.reset();
+        }
+
+        connectToRouter();
+    }
 
     if (!settings.oneTimePassword())
     {
@@ -105,6 +115,7 @@ void RouterManager::onUserListChanged()
         password_expire_timer_->stop();
         one_time_sessions_ = 0;
         one_time_password_.clear();
+        user_list_->setOneTimeUser(User());
     }
     else
     {
@@ -122,7 +133,7 @@ void RouterManager::onUserListChanged()
         else
             password_expire_timer_->stop();
 
-        user_list_->add(createOneTimeUser());
+        user_list_->setOneTimeUser(createOneTimeUser());
     }
 
     emit sig_credentialsChanged(host_id_, one_time_password_);
@@ -132,7 +143,7 @@ void RouterManager::onUserListChanged()
 void RouterManager::onOneTimeSessionsChanged(quint32 one_time_sessions)
 {
     one_time_sessions_ = one_time_sessions;
-    onUserListChanged();
+    onSettingsChanged();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -330,8 +341,6 @@ void RouterManager::connectToRouter()
         return;
     }
 
-    routerStateChanged(proto::user::RouterState::CONNECTING);
-
     ClientAuthenticator* authenticator = new ClientAuthenticator();
 
     authenticator->setIdentify(proto::key_exchange::IDENTIFY_ANONYMOUS);
@@ -344,6 +353,7 @@ void RouterManager::connectToRouter()
     connect(tcp_channel_, &TcpChannel::sig_errorOccurred, this, &RouterManager::onTcpErrorOccurred);
     connect(tcp_channel_, &TcpChannel::sig_messageReceived, this, &RouterManager::onTcpMessageReceived);
 
+    routerStateChanged(proto::user::RouterState::CONNECTING);
     tcp_channel_->connectTo(address_, port_);
 }
 

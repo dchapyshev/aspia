@@ -23,16 +23,14 @@
 
 #include "base/peer/user.h"
 
-class UserListBase
+class UserList
 {
 public:
-    virtual ~UserListBase() = default;
+    virtual ~UserList() = default;
 
-    virtual void add(const User& user) = 0;
     virtual User find(const QString& username) const = 0;
-    virtual const QByteArray& seedKey() const = 0;
+    virtual QByteArray seedKey() const = 0;
     virtual void setSeedKey(const QByteArray& seed_key) = 0;
-    virtual QVector<User> list() const = 0;
 };
 
 #endif // BASE_PEER_USER_LIST_BASE_H

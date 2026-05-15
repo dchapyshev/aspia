@@ -16,48 +16,37 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "router/router_user_list.h"
+#include "host/host_user_list.h"
 
-#include "base/logging.h"
+#include "host/database.h"
 
 //--------------------------------------------------------------------------------------------------
-RouterUserList::RouterUserList(Database&& db)
-    : db_(std::move(db))
+User HostUserList::find(const QString& username) const
 {
-    // Nothing
+    User user(Database::instance().findUser(username));
+    if (user.isValid())
+        return user;
+
+    if (one_time_user_.isValid() && one_time_user_.name.compare(username, Qt::CaseInsensitive) == 0)
+        return one_time_user_;
+
+    return User();
 }
 
 //--------------------------------------------------------------------------------------------------
-RouterUserList::~RouterUserList() = default;
-
-//--------------------------------------------------------------------------------------------------
-// static
-std::unique_ptr<RouterUserList> RouterUserList::open()
+QByteArray HostUserList::seedKey() const
 {
-    Database db = Database::open();
-    if (!db.isValid())
-    {
-        LOG(ERROR) << "Unable to open database";
-        return nullptr;
-    }
-
-    return std::unique_ptr<RouterUserList>(new RouterUserList(std::move(db)));
+    return Database::instance().seedKey();
 }
 
 //--------------------------------------------------------------------------------------------------
-User RouterUserList::find(const QString& username) const
+void HostUserList::setSeedKey(const QByteArray& seed_key)
 {
-    return db_.findUser(username);
+    Database::instance().setSeedKey(seed_key);
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray RouterUserList::seedKey() const
+void HostUserList::setOneTimeUser(const User& user)
 {
-    return seed_key_;
-}
-
-//--------------------------------------------------------------------------------------------------
-void RouterUserList::setSeedKey(const QByteArray& seed_key)
-{
-    seed_key_ = seed_key;
+    one_time_user_ = user;
 }

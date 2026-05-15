@@ -21,6 +21,8 @@ list(APPEND SOURCE_HOST_CORE
     chat_client.h
     client.cc
     client.h
+    database.cc
+    database.h
     desktop_agent.cc
     desktop_agent.h
     desktop_agent_client.cc
@@ -40,6 +42,8 @@ list(APPEND SOURCE_HOST_CORE
     host_export.h
     host_storage.cc
     host_storage.h
+    host_user_list.cc
+    host_user_list.h
     host_utils.cc
     host_utils.h
     input_injector.h

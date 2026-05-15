@@ -53,13 +53,11 @@ ServerAuthenticator::~ServerAuthenticator()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ServerAuthenticator::setUserList(SharedPointer<UserListBase> user_list)
+void ServerAuthenticator::setUserList(SharedPointer<UserList> user_list)
 {
     user_list_ = std::move(user_list);
     CDCHECK(user_list_);
-
-    CLOG(TRACE) << "User list is assigned (count:" << user_list_->list().size() << "seed key:"
-                << user_list_->seedKey().size() << ")";
+    CLOG(TRACE) << "User list is assigned";
 }
 
 //--------------------------------------------------------------------------------------------------

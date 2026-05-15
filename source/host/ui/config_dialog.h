@@ -32,8 +32,6 @@ namespace Ui {
 class ConfigDialog;
 } // namespace Ui
 
-class UserList;
-
 class ConfigDialog final : public QDialog
 {
     Q_OBJECT
@@ -61,7 +59,7 @@ private:
     void setConfigChanged(const Location& location, bool changed);
     bool isConfigChanged() const;
     void reloadAll();
-    void reloadUserList(const UserList& user_list);
+    void reloadUserList();
 
     std::unique_ptr<Ui::ConfigDialog> ui;
     Q_DISABLE_COPY_MOVE(ConfigDialog)

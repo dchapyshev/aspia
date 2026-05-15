@@ -30,8 +30,9 @@
 #include "base/crypto/secure_string.h"
 #include "base/desktop/screen_capturer.h"
 #include "base/net/address.h"
-#include "base/peer/user_list.h"
+#include "base/peer/user.h"
 #include "build/build_config.h"
+#include "host/database.h"
 #include "host/ui/change_password_dialog.h"
 #include "host/ui/check_password_dialog.h"
 #include "host/ui/user_dialog.h"
@@ -47,19 +48,18 @@ class UserTreeItem final : public QTreeWidgetItem
 {
 public:
     explicit UserTreeItem(const User& user)
-        : user_(user)
+        : entry_id_(user.entry_id)
     {
-        updateData();
+        if (user.flags & User::ENABLED)
+            setIcon(0, QIcon(":/img/user.svg"));
+        else
+            setIcon(0, QIcon(":/img/locked-user.svg"));
+
+        setText(0, user.name);
     }
     ~UserTreeItem() final = default;
 
-    const User& user() const { return user_; }
-
-    void setUser(const User& user)
-    {
-        user_ = user;
-        updateData();
-    }
+    qint64 entryId() const { return entry_id_; }
 
     // QTreeWidgetItem implementation.
     bool operator<(const QTreeWidgetItem& other) const final
@@ -80,17 +80,7 @@ public:
     }
 
 private:
-    void updateData()
-    {
-        if (user_.flags & User::ENABLED)
-            setIcon(0, QIcon(":/img/user.svg"));
-        else
-            setIcon(0, QIcon(":/img/locked-user.svg"));
-
-        setText(0, user_.name);
-    }
-
-    User user_;
+    qint64 entry_id_;
     Q_DISABLE_COPY_MOVE(UserTreeItem)
 };
 
@@ -373,17 +363,9 @@ void ConfigDialog::onAddUser()
 {
     LOG(INFO) << "[ACTION] Add user";
 
-    QStringList exist_names;
-
-    for (int i = 0; i < ui->tree_users->topLevelItemCount(); ++i)
-        exist_names.append(ui->tree_users->topLevelItem(i)->text(0));
-
-    UserDialog dialog(User(), exist_names, this);
+    UserDialog dialog(0, this);
     if (dialog.exec() == QDialog::Accepted)
-    {
-        ui->tree_users->addTopLevelItem(new UserTreeItem(dialog.user()));
-        setConfigChanged(FROM_HERE, true);
-    }
+        reloadUserList();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -398,22 +380,9 @@ void ConfigDialog::onModifyUser()
         return;
     }
 
-    QString current_name = current_item->text(0);
-    QStringList exist_names;
-
-    for (int i = 0; i < ui->tree_users->topLevelItemCount(); ++i)
-    {
-        QString name = ui->tree_users->topLevelItem(i)->text(0);
-        if (name.compare(current_name, Qt::CaseInsensitive) != 0)
-            exist_names.append(name);
-    }
-
-    UserDialog dialog(current_item->user(), exist_names, this);
+    UserDialog dialog(current_item->entryId(), this);
     if (dialog.exec() == QDialog::Accepted)
-    {
-        current_item->setUser(dialog.user());
-        setConfigChanged(FROM_HERE, true);
-    }
+        reloadUserList();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -433,18 +402,12 @@ void ConfigDialog::onDeleteUser()
                 .arg(user_item->text(0))) == MsgBox::Yes)
     {
         LOG(INFO) << "[ACTION] Accepted by user";
-        delete user_item;
-        setConfigChanged(FROM_HERE, true);
+        Database::instance().removeUser(user_item->entryId());
+        reloadUserList();
     }
     else
     {
         LOG(INFO) << "[ACTION] Rejected by user";
-    }
-
-    if (ui->tree_users->topLevelItemCount() <= 0)
-    {
-        ui->button_modify->setEnabled(false);
-        ui->button_delete->setEnabled(false);
     }
 }
 
@@ -595,20 +558,9 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
             settings.setRouterPublicKey(router_public_key);
         }
 
-        std::unique_ptr<UserList> user_list = UserList::createEmpty();
-
-        for (int i = 0; i < ui->tree_users->topLevelItemCount(); ++i)
-        {
-            UserTreeItem* user_tree_item =
-                static_cast<UserTreeItem*>(ui->tree_users->topLevelItem(i));
-
-            user_list->add(user_tree_item->user());
-        }
-
         // Update the parameters.
         settings.setApplicationShutdownDisabled(ui->checkbox_disable_shutdown->isChecked());
         settings.setTcpPort(static_cast<quint16>(ui->spinbox_port->value()));
-        settings.setUserList(*user_list);
         settings.setAutoUpdateEnabled(ui->checkbox_auto_update->isChecked());
         settings.setUpdateCheckFrequency(ui->combobox_update_check_freq->currentData().toInt());
         settings.setUpdateServer(ui->edit_update_server->text());
@@ -741,7 +693,7 @@ void ConfigDialog::reloadAll()
     if (current_video_capturer != -1)
         ui->combo_video_capturer->setCurrentIndex(current_video_capturer);
 
-    reloadUserList(*settings.userList());
+    reloadUserList();
 
     ui->spinbox_port->setValue(settings.tcpPort());
     ui->checkbox_use_custom_server->setChecked(settings.updateServer() != DEFAULT_UPDATE_SERVER);
@@ -766,12 +718,12 @@ void ConfigDialog::reloadAll()
 }
 
 //--------------------------------------------------------------------------------------------------
-void ConfigDialog::reloadUserList(const UserList& user_list)
+void ConfigDialog::reloadUserList()
 {
     ui->tree_users->clear();
 
-    QVector<User> list = user_list.list();
-    for (const auto& user : std::as_const(list))
+    const QVector<User> list = Database::instance().userList();
+    for (const auto& user : list)
         ui->tree_users->addTopLevelItem(new UserTreeItem(user));
 
     ui->button_modify->setEnabled(false);

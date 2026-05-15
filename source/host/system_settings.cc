@@ -23,7 +23,6 @@
 #include "base/crypto/password_hash.h"
 #include "base/crypto/random.h"
 #include "base/crypto/secure_string.h"
-#include "base/peer/user_list.h"
 #include "build/build_config.h"
 
 namespace {
@@ -41,15 +40,6 @@ const QString kRouterEnable = "router/enable";
 const QString kRouterAddress = "router/address";
 const QString kRouterPort = "router/port";
 const QString kRouterPublicKey = "router/public_key";
-
-const QString kSeedKey = "seed_key";
-const QString kUsers = "users";
-const QString kUserName = "name";
-const QString kUserGroup = "group";
-const QString kUserSalt = "salt";
-const QString kUserVerifier = "verifier";
-const QString kUserSessions = "sessions";
-const QString kUserFlags = "flags";
 
 const QString kUpdateServer = "update/server";
 const QString kUpdateAutoUpdate = "update/auto_update";
@@ -200,66 +190,6 @@ QByteArray SystemSettings::routerPublicKey() const
 void SystemSettings::setRouterPublicKey(const QByteArray& key)
 {
     settings_.setValue(kRouterPublicKey, key);
-}
-
-//--------------------------------------------------------------------------------------------------
-std::unique_ptr<UserList> SystemSettings::userList() const
-{
-    std::unique_ptr<UserList> users = UserList::createEmpty();
-
-    int count = settings_.beginReadArray(kUsers);
-    for (int i = 0; i < count; ++i)
-    {
-        settings_.setArrayIndex(i);
-
-        User user;
-        user.name     = settings_.value(kUserName).toString();
-        user.group    = settings_.value(kUserGroup).toString();
-        user.salt     = settings_.value(kUserSalt).toByteArray();
-        user.verifier = settings_.value(kUserVerifier).toByteArray();
-        user.sessions = settings_.value(kUserSessions).toUInt();
-        user.flags    = settings_.value(kUserFlags).toUInt();
-
-        users->add(user);
-    }
-    settings_.endArray();
-
-    QByteArray seed_key = settings_.value(kSeedKey).toByteArray();
-    if (seed_key.isEmpty())
-        seed_key = Random::byteArray(64);
-
-    users->setSeedKey(seed_key);
-    return users;
-}
-
-//--------------------------------------------------------------------------------------------------
-void SystemSettings::setUserList(const UserList& users)
-{
-    // Clear the old list of users.
-    settings_.remove(kUsers);
-
-    QVector<User> list = users.list();
-
-    settings_.beginWriteArray(kUsers);
-    for (int i = 0; i < list.size(); ++i)
-    {
-        settings_.setArrayIndex(i);
-
-        const User& user = list.at(i);
-        settings_.setValue(kUserName, user.name);
-        settings_.setValue(kUserGroup, user.group);
-        settings_.setValue(kUserSalt, user.salt);
-        settings_.setValue(kUserVerifier, user.verifier);
-        settings_.setValue(kUserSessions, user.sessions);
-        settings_.setValue(kUserFlags, user.flags);
-    }
-    settings_.endArray();
-
-    QByteArray seed_key = users.seedKey();
-    if (seed_key.isEmpty())
-        seed_key = Random::byteArray(64);
-
-    settings_.setValue(kSeedKey, seed_key);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -97,7 +97,6 @@ private:
     void startClient(const PendingConfirmation& pending);
     void addFirewallRules();
     void deleteFirewallRules();
-    void reloadUserList();
     void connectToRouter(const Location& location);
     void disconnectFromRouter(const Location& location);
     void checkForUpdates();
