@@ -19,7 +19,7 @@
 #ifndef HOST_HOST_USER_LIST_H
 #define HOST_HOST_USER_LIST_H
 
-#include "base/peer/user_list_base.h"
+#include "base/peer/user_list.h"
 
 class HostUserList final : public UserList
 {

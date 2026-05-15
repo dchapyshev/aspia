@@ -28,7 +28,7 @@
 
 #include "base/crypto/secure_byte_array.h"
 #include "base/shared_pointer.h"
-#include "base/peer/user_list_base.h"
+#include "base/peer/user_list.h"
 #include "base/peer/server_authenticator_legacy.h"
 
 class FloodGuard;

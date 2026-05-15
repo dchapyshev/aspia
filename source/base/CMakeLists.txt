@@ -484,7 +484,7 @@ list(APPEND SOURCE_BASE_PEER
     peer/stun_server.h
     peer/user.cc
     peer/user.h
-    peer/user_list_base.h)
+    peer/user_list.h)
 
 list(APPEND SOURCE_BASE_PEER_TESTS
     peer/host_id_unittest.cc

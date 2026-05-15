@@ -21,7 +21,7 @@
 
 #include <memory>
 
-#include "base/peer/user_list_base.h"
+#include "base/peer/user_list.h"
 #include "router/database.h"
 
 class RouterUserList final : public UserList
