@@ -31,7 +31,14 @@ public:
     ~Database() = default;
 
     static Database& instance();
+    static QString directoryPath();
     static QString filePath();
+
+    // Restricts access to the database directory and all files inside it to SYSTEM and elevated
+    // administrators only. Creates the directory if it does not exist yet. Must be called once at
+    // service startup before any database access.
+    static bool applyPermissions();
+
     bool isValid() const;
 
     // Users.

@@ -143,6 +143,9 @@ void Service::onStart()
 {
     LOG(INFO) << "Service is started";
 
+    if (!Database::applyPermissions())
+        LOG(ERROR) << "Unable to apply secure permissions on database directory";
+
 #if defined(Q_OS_WINDOWS)
     if (!SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS))
         PLOG(ERROR) << "SetPriorityClass failed";
