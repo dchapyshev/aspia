@@ -126,8 +126,8 @@ HostsTab::HostsTab(QWidget* parent)
     connect(this, &HostsTab::sig_connectRequested, local_group_widget_,
             [this](const ComputerConfig& computer, proto::peer::SessionType /* session_type */)
     {
-        if (computer.id != -1)
-            local_group_widget_->setConnectTime(computer.id, QDateTime::currentSecsSinceEpoch());
+        if (computer.id() != -1)
+            local_group_widget_->setConnectTime(computer.id(), QDateTime::currentSecsSinceEpoch());
     });
     connect(ui->action_add_computer, &QAction::triggered, this, &HostsTab::onAddComputer);
     connect(ui->action_edit_computer, &QAction::triggered, this, &HostsTab::onEditComputer);
@@ -357,7 +357,7 @@ void HostsTab::reloadRouters()
         bool found = false;
         for (const RouterConfig& router : std::as_const(routers))
         {
-            if (router.router_id == id)
+            if (router.routerId() == id)
             {
                 found = true;
                 break;
@@ -376,7 +376,7 @@ void HostsTab::reloadRouters()
         if (!router.isValid())
             continue;
 
-        auto it = router_widgets_.find(router.router_id);
+        auto it = router_widgets_.find(router.routerId());
         if (it != router_widgets_.end())
             it.value()->updateConfig(router);
         else
@@ -551,7 +551,7 @@ void HostsTab::onConnectAction(QAction* action)
         if (!validateComputerForConnect(computer))
             return;
 
-        Database::instance().setConnectTime(computer.id, QDateTime::currentSecsSinceEpoch());
+        Database::instance().setConnectTime(computer.id(), QDateTime::currentSecsSinceEpoch());
     }
     else if (current_content_ == router_group_widget_)
     {
@@ -570,7 +570,7 @@ void HostsTab::onConnectAction(QAction* action)
         Sidebar::Router* router = static_cast<Sidebar::Router*>(router_item);
         std::optional<RouterConfig> router_data = Database::instance().findRouter(router->routerId());
         if (router_data)
-            computer.router_id = router_data->router_id;
+            computer.setRouterId(router_data->routerId());
         // TODO
     }
     else
@@ -665,7 +665,7 @@ void HostsTab::onEditComputer()
         return;
     }
 
-    LocalComputerDialog dialog(computer_id, computer->group_id, this);
+    LocalComputerDialog dialog(computer_id, computer->groupId(), this);
     if (dialog.exec() == LocalComputerDialog::Rejected)
     {
         LOG(INFO) << "[ACTION] Rejected by user";
@@ -696,7 +696,7 @@ void HostsTab::onCopyComputer()
         return;
     }
 
-    computer->name += " " + tr("(copy)");
+    computer->setName(computer->name() + " " + tr("(copy)"));
 
     if (!db.addComputer(*computer))
     {
@@ -704,9 +704,9 @@ void HostsTab::onCopyComputer()
         return;
     }
 
-    qint64 new_id = computer->id;
+    qint64 new_id = computer->id();
 
-    LocalComputerDialog(new_id, computer->group_id, this).exec();
+    LocalComputerDialog(new_id, computer->groupId(), this).exec();
 
     if (current_content_ == search_widget_)
     {
@@ -739,7 +739,7 @@ void HostsTab::onRemoveComputer()
         return;
     }
 
-    QString message = tr("Are you sure you want to delete computer \"%1\"?").arg(computer->name);
+    QString message = tr("Are you sure you want to delete computer \"%1\"?").arg(computer->name());
 
     if (MsgBox::question(this, message) == MsgBox::No)
     {
@@ -1246,7 +1246,7 @@ RouterWidget* HostsTab::createRouterWidget(const RouterConfig& config)
 {
     RouterWidget* widget = new RouterWidget(config, this);
 
-    router_widgets_.insert(config.router_id, widget);
+    router_widgets_.insert(config.routerId(), widget);
     ui->content_stack->addWidget(widget);
 
     connect(widget, &RouterWidget::sig_statusChanged, this, &HostsTab::onRouterStatusChanged);
@@ -1272,9 +1272,9 @@ RouterWidget* HostsTab::createRouterWidget(const RouterConfig& config)
 //--------------------------------------------------------------------------------------------------
 bool HostsTab::validateComputerForConnect(const ComputerConfig& computer)
 {
-    if (computer.router_id != 0)
+    if (computer.routerId() != 0)
     {
-        std::optional<RouterConfig> router = Database::instance().findRouter(computer.router_id);
+        std::optional<RouterConfig> router = Database::instance().findRouter(computer.routerId());
         if (!router.has_value())
         {
             MsgBox::warning(this, tr("The router associated with this computer has been deleted. "
@@ -1282,7 +1282,7 @@ bool HostsTab::validateComputerForConnect(const ComputerConfig& computer)
             return false;
         }
 
-        if (!isHostId(computer.address))
+        if (!isHostId(computer.address()))
         {
             MsgBox::warning(this, tr("The computer has an invalid host ID."));
             return false;
@@ -1290,7 +1290,7 @@ bool HostsTab::validateComputerForConnect(const ComputerConfig& computer)
     }
     else
     {
-        Address address = Address::fromString(computer.address, DEFAULT_HOST_TCP_PORT);
+        Address address = Address::fromString(computer.address(), DEFAULT_HOST_TCP_PORT);
         if (!address.isValid())
         {
             MsgBox::warning(this, tr("The computer has an incorrect address."));

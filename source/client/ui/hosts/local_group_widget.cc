@@ -495,7 +495,7 @@ LocalGroupWidget::Item::Item(const ComputerConfig& computer, QTreeWidget* parent
 //--------------------------------------------------------------------------------------------------
 void LocalGroupWidget::Item::setConnectTime(qint64 connect_time)
 {
-    computer_.connect_time = connect_time;
+    computer_.setConnectTime(connect_time);
     setText(kColumnConnect, formatTimestamp(connect_time));
 }
 
@@ -518,16 +518,16 @@ void LocalGroupWidget::Item::updateFrom(const ComputerConfig& computer)
 {
     computer_ = computer;
 
-    QString single_line_comment = computer.comment;
+    QString single_line_comment = computer.comment();
     single_line_comment.replace('\n', ' ').replace('\r', ' ');
 
-    setText(kColumnName, computer.name);
-    setText(kColumnAddress, computer.address);
+    setText(kColumnName, computer.name());
+    setText(kColumnAddress, computer.address());
     setText(kColumnComment, single_line_comment);
-    setToolTip(kColumnComment, computer.comment);
-    setText(kColumnCreated, formatTimestamp(computer.create_time));
-    setText(kColumnModified, formatTimestamp(computer.modify_time));
-    setText(kColumnConnect, formatTimestamp(computer.connect_time));
+    setToolTip(kColumnComment, computer.comment());
+    setText(kColumnCreated, formatTimestamp(computer.createTime()));
+    setText(kColumnModified, formatTimestamp(computer.modifyTime()));
+    setText(kColumnConnect, formatTimestamp(computer.connectTime()));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -541,10 +541,10 @@ bool LocalGroupWidget::Item::operator<(const QTreeWidgetItem& other) const
         if (other_item)
         {
             if (column == kColumnCreated)
-                return computer_.create_time < other_item->computer_.create_time;
+                return computer_.createTime() < other_item->computer_.createTime();
             if (column == kColumnModified)
-                return computer_.modify_time < other_item->computer_.modify_time;
-            return computer_.connect_time < other_item->computer_.connect_time;
+                return computer_.modifyTime() < other_item->computer_.modifyTime();
+            return computer_.connectTime() < other_item->computer_.connectTime();
         }
     }
 

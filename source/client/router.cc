@@ -56,7 +56,7 @@ Router::Router(const RouterConfig& config, QObject* parent)
     reconnect_timer_->setSingleShot(true);
     connect(reconnect_timer_, &QTimer::timeout, this, [this]()
     {
-        LOG(INFO) << "Reconnecting to router" << config_.address;
+        LOG(INFO) << "Reconnecting to router" << config_.address();
         onConnectToRouter();
     });
 }
@@ -65,7 +65,7 @@ Router::Router(const RouterConfig& config, QObject* parent)
 Router::~Router()
 {
     LOG(INFO) << "Dtor";
-    instances().remove(config_.router_id);
+    instances().remove(config_.routerId());
     onDisconnectFromRouter();
 }
 
@@ -84,22 +84,22 @@ void Router::onConnectToRouter()
 {
     // We cannot perform registration in the constructor because the constructor is executed in the
     // GUI thread.
-    instances().insert(config_.router_id, this);
+    instances().insert(config_.routerId(), this);
 
     reconnect_timer_->stop();
 
     if (status_ != Status::OFFLINE)
         return;
 
-    LOG(INFO) << "Connecting to router" << config_.address;
+    LOG(INFO) << "Connecting to router" << config_.address();
 
     setStatus(Status::CONNECTING);
 
     ClientAuthenticator* authenticator = new ClientAuthenticator(this);
     authenticator->setIdentify(proto::key_exchange::IDENTIFY_SRP);
-    authenticator->setSessionType(config_.session_type);
-    authenticator->setUserName(config_.username);
-    authenticator->setPassword(SecureString(config_.password));
+    authenticator->setSessionType(config_.sessionType());
+    authenticator->setUserName(config_.username());
+    authenticator->setPassword(SecureString(config_.password()));
 
     tcp_channel_ = new TcpChannelNG(authenticator, this);
 
@@ -110,7 +110,7 @@ void Router::onConnectToRouter()
     connect(tcp_channel_, &TcpChannel::sig_messageReceived,
             this, &Router::onTcpMessageReceived);
 
-    Address address = Address::fromString(config_.address, DEFAULT_ROUTER_TCP_PORT);
+    Address address = Address::fromString(config_.address(), DEFAULT_ROUTER_TCP_PORT);
     tcp_channel_->connectTo(address.host(), address.port());
 }
 
@@ -137,7 +137,7 @@ const RouterConfig& Router::config() const
 //--------------------------------------------------------------------------------------------------
 qint64 Router::routerId() const
 {
-    return config_.router_id;
+    return config_.routerId();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -165,7 +165,7 @@ void Router::onUpdateConfig(const RouterConfig& config)
 //--------------------------------------------------------------------------------------------------
 void Router::onRelayListRequest()
 {
-    if (config_.session_type != proto::router::SESSION_TYPE_ADMIN)
+    if (config_.sessionType() != proto::router::SESSION_TYPE_ADMIN)
     {
         LOG(ERROR) << "No administrator access level";
         return;
@@ -182,7 +182,7 @@ void Router::onRelayListRequest()
 //--------------------------------------------------------------------------------------------------
 void Router::onHostListRequest()
 {
-    if (config_.session_type != proto::router::SESSION_TYPE_ADMIN)
+    if (config_.sessionType() != proto::router::SESSION_TYPE_ADMIN)
     {
         LOG(ERROR) << "No administrator access level";
         return;
@@ -199,7 +199,7 @@ void Router::onHostListRequest()
 //--------------------------------------------------------------------------------------------------
 void Router::onClientListRequest()
 {
-    if (config_.session_type != proto::router::SESSION_TYPE_ADMIN)
+    if (config_.sessionType() != proto::router::SESSION_TYPE_ADMIN)
     {
         LOG(ERROR) << "No administrator access level";
         return;
@@ -216,7 +216,7 @@ void Router::onClientListRequest()
 //--------------------------------------------------------------------------------------------------
 void Router::onUserListRequest()
 {
-    if (config_.session_type != proto::router::SESSION_TYPE_ADMIN)
+    if (config_.sessionType() != proto::router::SESSION_TYPE_ADMIN)
     {
         LOG(ERROR) << "No administrator access level";
         return;
@@ -232,7 +232,7 @@ void Router::onUserListRequest()
 //--------------------------------------------------------------------------------------------------
 void Router::onAddUser(const proto::router::User& user)
 {
-    if (config_.session_type != proto::router::SESSION_TYPE_ADMIN)
+    if (config_.sessionType() != proto::router::SESSION_TYPE_ADMIN)
     {
         LOG(ERROR) << "No administrator access level";
         return;
@@ -251,7 +251,7 @@ void Router::onAddUser(const proto::router::User& user)
 //--------------------------------------------------------------------------------------------------
 void Router::onModifyUser(const proto::router::User& user)
 {
-    if (config_.session_type != proto::router::SESSION_TYPE_ADMIN)
+    if (config_.sessionType() != proto::router::SESSION_TYPE_ADMIN)
     {
         LOG(ERROR) << "No administrator access level";
         return;
@@ -270,7 +270,7 @@ void Router::onModifyUser(const proto::router::User& user)
 //--------------------------------------------------------------------------------------------------
 void Router::onDeleteUser(qint64 entry_id)
 {
-    if (config_.session_type != proto::router::SESSION_TYPE_ADMIN)
+    if (config_.sessionType() != proto::router::SESSION_TYPE_ADMIN)
     {
         LOG(ERROR) << "No administrator access level";
         return;
@@ -288,7 +288,7 @@ void Router::onDeleteUser(qint64 entry_id)
 //--------------------------------------------------------------------------------------------------
 void Router::onDisconnectHost(qint64 session_id)
 {
-    if (config_.session_type != proto::router::SESSION_TYPE_ADMIN)
+    if (config_.sessionType() != proto::router::SESSION_TYPE_ADMIN)
     {
         LOG(ERROR) << "No administrator access level";
         return;
@@ -306,7 +306,7 @@ void Router::onDisconnectHost(qint64 session_id)
 //--------------------------------------------------------------------------------------------------
 void Router::onRemoveHost(qint64 session_id, bool try_to_uninstall)
 {
-    if (config_.session_type != proto::router::SESSION_TYPE_ADMIN)
+    if (config_.sessionType() != proto::router::SESSION_TYPE_ADMIN)
     {
         LOG(ERROR) << "No administrator access level";
         return;
@@ -327,7 +327,7 @@ void Router::onRemoveHost(qint64 session_id, bool try_to_uninstall)
 //--------------------------------------------------------------------------------------------------
 void Router::onDisconnectRelay(qint64 session_id)
 {
-    if (config_.session_type != proto::router::SESSION_TYPE_ADMIN)
+    if (config_.sessionType() != proto::router::SESSION_TYPE_ADMIN)
     {
         LOG(ERROR) << "No administrator access level";
         return;
@@ -345,7 +345,7 @@ void Router::onDisconnectRelay(qint64 session_id)
 //--------------------------------------------------------------------------------------------------
 void Router::onDisconnectClient(qint64 session_id)
 {
-    if (config_.session_type != proto::router::SESSION_TYPE_ADMIN)
+    if (config_.sessionType() != proto::router::SESSION_TYPE_ADMIN)
     {
         LOG(ERROR) << "No administrator access level";
         return;
@@ -363,7 +363,7 @@ void Router::onDisconnectClient(qint64 session_id)
 //--------------------------------------------------------------------------------------------------
 void Router::onDisconnectPeer(qint64 relay_entry_id, quint64 peer_session_id)
 {
-    if (config_.session_type != proto::router::SESSION_TYPE_ADMIN)
+    if (config_.sessionType() != proto::router::SESSION_TYPE_ADMIN)
     {
         LOG(ERROR) << "No administrator access level";
         return;
@@ -409,7 +409,7 @@ void Router::onTcpReady()
 {
     CHECK(tcp_channel_);
 
-    LOG(INFO) << "Connected to router" << config_.address;
+    LOG(INFO) << "Connected to router" << config_.address();
     reconnect_timer_->stop();
     setStatus(Status::ONLINE);
 
@@ -427,7 +427,7 @@ void Router::onTcpErrorOccurred(TcpChannel::ErrorCode error_code)
         tcp_channel_.reset();
     }
 
-    emit sig_errorOccurred(config_.router_id, error_code);
+    emit sig_errorOccurred(config_.routerId(), error_code);
 
     setStatus(Status::OFFLINE);
 
@@ -440,7 +440,7 @@ void Router::onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer)
 {
     if (channel_id == proto::router::CHANNEL_ID_ADMIN)
     {
-        if (config_.session_type != proto::router::SESSION_TYPE_ADMIN)
+        if (config_.sessionType() != proto::router::SESSION_TYPE_ADMIN)
         {
             LOG(ERROR) << "Unexpected message from channel" << channel_id;
             return;
@@ -501,8 +501,8 @@ void Router::onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer)
     }
     else if (channel_id == proto::router::CHANNEL_ID_MANAGER)
     {
-        if (config_.session_type != proto::router::SESSION_TYPE_ADMIN &&
-            config_.session_type != proto::router::SESSION_TYPE_MANAGER)
+        if (config_.sessionType() != proto::router::SESSION_TYPE_ADMIN &&
+            config_.sessionType() != proto::router::SESSION_TYPE_MANAGER)
         {
             LOG(ERROR) << "Unexpected message from channel" << channel_id;
             return;
@@ -543,7 +543,7 @@ void Router::setStatus(Status status)
     {
         LOG(INFO) << "Status changed from" << status_ << "to" << status;
         status_ = status;
-        emit sig_statusChanged(config_.router_id, status_);
+        emit sig_statusChanged(config_.routerId(), status_);
     }
 }
 

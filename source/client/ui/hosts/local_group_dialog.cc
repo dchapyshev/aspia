@@ -51,9 +51,9 @@ LocalGroupDialog::LocalGroupDialog(qint64 group_id, qint64 parent_id, QWidget* p
         std::optional<GroupConfig> group = Database::instance().findGroup(group_id_);
         if (group.has_value())
         {
-            ui->edit_name->setText(group->name);
-            ui->edit_comment->setPlainText(group->comment);
-            parent_id_ = group->parent_id;
+            ui->edit_name->setText(group->name());
+            ui->edit_comment->setPlainText(group->comment());
+            parent_id_ = group->parentId();
         }
         else
         {
@@ -122,7 +122,7 @@ void LocalGroupDialog::onButtonBoxClicked(QAbstractButton* button)
     QList<GroupConfig> groups = Database::instance().groupList(parent_id);
     for (const GroupConfig& existing : std::as_const(groups))
     {
-        if (existing.id != group_id_ && existing.name == name)
+        if (existing.id() != group_id_ && existing.name() == name)
         {
             MsgBox::warning(this,
                 tr("A group with this name already exists in the selected parent group."));
@@ -132,10 +132,10 @@ void LocalGroupDialog::onButtonBoxClicked(QAbstractButton* button)
     }
 
     GroupConfig group;
-    group.id = group_id_;
-    group.parent_id = parent_id;
-    group.name = name;
-    group.comment = ui->edit_comment->toPlainText();
+    group.setId(group_id_);
+    group.setParentId(parent_id);
+    group.setName(name);
+    group.setComment(ui->edit_comment->toPlainText());
 
     Database& db = Database::instance();
 

@@ -111,7 +111,7 @@ void startRouterSession(const ComputerConfig& computer,
         if (!router || !status_dialog)
             return;
 
-        const QString& address = router->config().address;
+        const QString& address = router->config().address();
 
         switch (status)
         {
@@ -339,12 +339,12 @@ bool handleConnect()
     QJsonObject computer_object = computer_value.toObject();
 
     ComputerConfig computer;
-    computer.address = computer_object.value("address").toString();
-    computer.username = computer_object.value("username").toString();
-    computer.password = SecureString(computer_object.value("password").toString());
-    computer.name = computer_object.value("name").toString();
+    computer.setAddress(computer_object.value("address").toString());
+    computer.setUsername(computer_object.value("username").toString());
+    computer.setPassword(SecureString(computer_object.value("password").toString()));
+    computer.setName(computer_object.value("name").toString());
 
-    if (computer.address.isEmpty())
+    if (computer.address().isEmpty())
     {
         LOG(ERROR) << "Missing required computer field (address)";
         MsgBox::warning(nullptr, QApplication::translate("Client",
@@ -406,7 +406,7 @@ bool handleConnect()
             return false;
     }
 
-    if (isHostId(computer.address))
+    if (isHostId(computer.address()))
     {
         LOG(INFO) << "Relay connection selected";
 
@@ -422,11 +422,11 @@ bool handleConnect()
         QJsonObject router_object = router_value.toObject();
 
         RouterConfig router_config;
-        router_config.router_id = 1;
-        router_config.address = router_object.value("address").toString();
-        router_config.username = router_object.value("username").toString();
-        router_config.password = SecureString(router_object.value("password").toString());
-        router_config.session_type = proto::router::SESSION_TYPE_CLIENT;
+        router_config.setRouterId(1);
+        router_config.setAddress(router_object.value("address").toString());
+        router_config.setUsername(router_object.value("username").toString());
+        router_config.setPassword(SecureString(router_object.value("password").toString()));
+        router_config.setSessionType(proto::router::SESSION_TYPE_CLIENT);
 
         if (!router_config.isValid())
         {
@@ -435,7 +435,7 @@ bool handleConnect()
             return false;
         }
 
-        computer.router_id = router_config.router_id;
+        computer.setRouterId(router_config.routerId());
         startRouterSession(computer, session_type, display_name, router_config, desktop_config);
     }
     else

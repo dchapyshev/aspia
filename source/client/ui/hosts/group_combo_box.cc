@@ -90,13 +90,13 @@ void GroupComboBox::addGroupItems(qint64 parent_id, QStandardItem* parent_item, 
 
     for (const GroupConfig& group : std::as_const(groups))
     {
-        if (group.id == exclude_id)
+        if (group.id() == exclude_id)
             continue;
 
-        QStandardItem* item = new QStandardItem(folder_icon, group.name);
-        item->setData(group.id, kGroupIdRole);
+        QStandardItem* item = new QStandardItem(folder_icon, group.name());
+        item->setData(group.id(), kGroupIdRole);
         parent_item->appendRow(item);
 
-        addGroupItems(group.id, item, exclude_id);
+        addGroupItems(group.id(), item, exclude_id);
     }
 }

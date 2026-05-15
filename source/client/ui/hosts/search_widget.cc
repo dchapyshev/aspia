@@ -105,8 +105,8 @@ QString buildGroupPath(qint64 group_id, const QHash<qint64, GroupConfig>& groups
         if (it == groups.end())
             break;
 
-        parts.prepend(it.value().name);
-        current = it.value().parent_id;
+        parts.prepend(it.value().name());
+        current = it.value().parentId();
     }
 
     return parts.join(" / ");
@@ -127,15 +127,15 @@ void SearchWidget::Item::updateFrom(const ComputerConfig& computer, const QStrin
 {
     computer_ = computer;
 
-    QString single_line_comment = computer.comment;
+    QString single_line_comment = computer.comment();
     single_line_comment.replace('\n', ' ').replace('\r', ' ');
 
-    setText(kColumnName, computer.name);
-    setText(kColumnAddress, computer.address);
+    setText(kColumnName, computer.name());
+    setText(kColumnAddress, computer.address());
     setText(kColumnGroup, group_path);
     setToolTip(kColumnGroup, group_path);
     setText(kColumnComment, single_line_comment);
-    setToolTip(kColumnComment, computer.comment);
+    setToolTip(kColumnComment, computer.comment());
 }
 
 class SearchWidget::HighlightDelegate final : public QStyledItemDelegate
@@ -311,12 +311,12 @@ void SearchWidget::search(const QString& query)
     const QList<GroupConfig> all_groups = db.allGroups();
     groups.reserve(all_groups.size());
     for (const GroupConfig& group : std::as_const(all_groups))
-        groups.insert(group.id, group);
+        groups.insert(group.id(), group);
 
     const QList<ComputerConfig> results = db.searchComputers(query);
 
     for (const ComputerConfig& computer : std::as_const(results))
-        new Item(computer, buildGroupPath(computer.group_id, groups), tree_computer_);
+        new Item(computer, buildGroupPath(computer.groupId(), groups), tree_computer_);
 
     updateStatusLabels();
 }
@@ -365,9 +365,9 @@ void SearchWidget::refreshItem(qint64 computer_id)
     const QList<GroupConfig> all_groups = Database::instance().allGroups();
     groups.reserve(all_groups.size());
     for (const GroupConfig& group : std::as_const(all_groups))
-        groups.insert(group.id, group);
+        groups.insert(group.id(), group);
 
-    item->updateFrom(*updated, buildGroupPath(updated->group_id, groups));
+    item->updateFrom(*updated, buildGroupPath(updated->groupId(), groups));
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -71,15 +71,15 @@ bool ClientWindow::connectToHost(ComputerConfig computer, const QString& display
     // Set the window title.
     setClientTitle(computer, session_type_);
 
-    if (computer.username.isEmpty() || computer.password.isEmpty())
+    if (computer.username().isEmpty() || computer.password().isEmpty())
     {
         LOG(INFO) << "Empty user name or password";
 
         AuthorizationDialog auth_dialog(this);
 
-        auth_dialog.setOneTimePasswordEnabled(computer.router_id > 0);
-        auth_dialog.setUserName(computer.username);
-        auth_dialog.setPassword(computer.password);
+        auth_dialog.setOneTimePasswordEnabled(computer.routerId() > 0);
+        auth_dialog.setUserName(computer.username());
+        auth_dialog.setPassword(computer.password());
 
         if (auth_dialog.exec() == AuthorizationDialog::Rejected)
         {
@@ -87,16 +87,16 @@ bool ClientWindow::connectToHost(ComputerConfig computer, const QString& display
             return false;
         }
 
-        computer.username = auth_dialog.userName();
-        computer.password = auth_dialog.password();
+        computer.setUsername(auth_dialog.userName());
+        computer.setPassword(auth_dialog.password());
     }
 
     // When connecting with a one-time password, the username must be in the following format:
     // #host_id.
-    if (computer.username.isEmpty())
+    if (computer.username().isEmpty())
     {
         LOG(INFO) << "User name is empty. Connection by ID";
-        computer.username = u"#" + computer.address;
+        computer.setUsername(u"#" + computer.address());
     }
 
     session_state_ = std::make_shared<SessionState>(computer, session_type_, display_name);
@@ -300,7 +300,7 @@ void ClientWindow::onDragPoll()
 void ClientWindow::setClientTitle(const ComputerConfig& computer, proto::peer::SessionType session_type)
 {
     QString session_name = sessionName(session_type);
-    QString computer_name = computer.name.isEmpty() ? computer.address : computer.name;
+    QString computer_name = computer.name().isEmpty() ? computer.address() : computer.name();
 
     setWindowTitle(QString("%1 - %2").arg(computer_name, session_name));
 }

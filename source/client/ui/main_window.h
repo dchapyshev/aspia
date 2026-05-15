@@ -38,7 +38,7 @@ enum SessionType : int;
 class Tab;
 class QLineEdit;
 class UpdateChecker;
-struct ComputerConfig;
+class ComputerConfig;
 
 class MainWindow final : public QMainWindow
 {

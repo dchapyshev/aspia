@@ -29,7 +29,7 @@ enum SessionType : int;
 } // namespace proto::peer
 
 class QStatusBar;
-struct ComputerConfig;
+class ComputerConfig;
 
 class Tab : public QWidget
 {

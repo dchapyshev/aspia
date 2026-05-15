@@ -43,7 +43,7 @@ public:
     ~Instance() final;
 
     void start();
-    qint64 computerId() const { return computer_.id; }
+    qint64 computerId() const { return computer_.id(); }
 
 private slots:
     void onTcpAuthenticated();
@@ -68,7 +68,7 @@ OnlineCheckerDirect::Instance::Instance(const ComputerConfig& computer, QObject*
 
     connect(&timer_, &QTimer::timeout, this, [this]()
     {
-        LOG(INFO) << "Timeout for computer:" << computer_.id;
+        LOG(INFO) << "Timeout for computer:" << computer_.id();
         onFinished(FROM_HERE, false);
     });
 
@@ -85,15 +85,15 @@ OnlineCheckerDirect::Instance::~Instance()
 //--------------------------------------------------------------------------------------------------
 void OnlineCheckerDirect::Instance::start()
 {
-    Address address = Address::fromString(computer_.address, DEFAULT_HOST_TCP_PORT);
+    Address address = Address::fromString(computer_.address(), DEFAULT_HOST_TCP_PORT);
 
     LOG(INFO) << "Starting connection to" << address.host() << ":" << address.port()
-              << "(computer:" << computer_.id << ")";
+              << "(computer:" << computer_.id() << ")";
 
     ClientAuthenticator* authenticator = new ClientAuthenticator();
     authenticator->setIdentify(proto::key_exchange::IDENTIFY_SRP);
-    authenticator->setUserName(computer_.username);
-    authenticator->setPassword(SecureString(computer_.password));
+    authenticator->setUserName(computer_.username());
+    authenticator->setPassword(SecureString(computer_.password()));
     authenticator->setSessionType(proto::peer::SESSION_TYPE_DESKTOP);
     authenticator->setProbe(true);
 
@@ -108,14 +108,14 @@ void OnlineCheckerDirect::Instance::start()
 //--------------------------------------------------------------------------------------------------
 void OnlineCheckerDirect::Instance::onTcpAuthenticated()
 {
-    LOG(INFO) << "Authentication succeeded (computer:" << computer_.id << ")";
+    LOG(INFO) << "Authentication succeeded (computer:" << computer_.id() << ")";
     onFinished(FROM_HERE, true);
 }
 
 //--------------------------------------------------------------------------------------------------
 void OnlineCheckerDirect::Instance::onTcpErrorOccurred(TcpChannel::ErrorCode /* error_code */)
 {
-    LOG(INFO) << "Connection aborted for computer:" << computer_.id;
+    LOG(INFO) << "Connection aborted for computer:" << computer_.id();
     onFinished(FROM_HERE, false);
 }
 
@@ -131,7 +131,7 @@ void OnlineCheckerDirect::Instance::onFinished(const Location& location, bool on
     timer_.stop();
 
     OnlineCheckerDirect* checker = static_cast<OnlineCheckerDirect*>(parent());
-    checker->onChecked(computer_.id, online);
+    checker->onChecked(computer_.id(), online);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -167,7 +167,7 @@ void OnlineCheckerDirect::start()
         const ComputerConfig& computer = pending_queue_.front();
         Instance* instance = new Instance(computer, this);
 
-        LOG(INFO) << "Instance for" << computer.id << "is created (" << computer.address << ")";
+        LOG(INFO) << "Instance for" << computer.id() << "is created (" << computer.address() << ")";
         work_queue_.emplace_back(instance);
         pending_queue_.pop_front();
 
@@ -188,7 +188,7 @@ void OnlineCheckerDirect::onChecked(qint64 computer_id, bool online)
         const ComputerConfig& computer = pending_queue_.front();
         Instance* instance = new Instance(computer, this);
 
-        LOG(INFO) << "Instance for" << computer.id << "is created (" << computer.address << ")";
+        LOG(INFO) << "Instance for" << computer.id() << "is created (" << computer.address() << ")";
 
         work_queue_.emplace_back(instance);
         instance->start();

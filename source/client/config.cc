@@ -18,12 +18,55 @@
 
 #include "client/config.h"
 
+#include "base/crypto/data_cryptor.h"
+#include "base/crypto/secure_byte_array.h"
 #include "proto/desktop_control.h"
 #include "proto/router.h"
 
+namespace {
+
+QByteArray encryptBytes(const QByteArray& plain)
+{
+    if (plain.isEmpty())
+        return QByteArray();
+    return DataCryptor::instance().encrypt(plain).value_or(QByteArray());
+}
+
+QByteArray decryptBytes(const QByteArray& blob)
+{
+    if (blob.isEmpty())
+        return QByteArray();
+    return DataCryptor::instance().decrypt(blob).value_or(QByteArray());
+}
+
+QByteArray encryptString(const QString& value)
+{
+    return encryptBytes(value.toUtf8());
+}
+
+QString decryptString(const QByteArray& blob)
+{
+    return QString::fromUtf8(decryptBytes(blob));
+}
+
+QByteArray encryptSecureString(const SecureString& value)
+{
+    return encryptBytes(SecureByteArray(value.toUtf8()).toByteArray());
+}
+
+SecureString decryptSecureString(const QByteArray& blob)
+{
+    if (blob.isEmpty())
+        return SecureString();
+    return SecureString::fromUtf8(
+        SecureByteArray(DataCryptor::instance().decrypt(blob).value_or(QByteArray())));
+}
+
+} // namespace
+
 //--------------------------------------------------------------------------------------------------
 RouterConfig::RouterConfig()
-    : session_type(proto::router::SESSION_TYPE_CLIENT)
+    : session_type_(proto::router::SESSION_TYPE_CLIENT)
 {
     // Nothing
 }
@@ -31,22 +74,192 @@ RouterConfig::RouterConfig()
 //--------------------------------------------------------------------------------------------------
 bool RouterConfig::isValid() const
 {
-    return !address.isEmpty() && !username.isEmpty() && !password.isEmpty();
+    return !encrypted_address_.isEmpty() && !encrypted_username_.isEmpty() &&
+           !encrypted_password_.isEmpty();
 }
 
 //--------------------------------------------------------------------------------------------------
 bool RouterConfig::hasSameParams(const RouterConfig& other) const
 {
-    return address == other.address && session_type == other.session_type &&
-           username == other.username && password == other.password;
+    return address() == other.address() && session_type_ == other.session_type_ &&
+           username() == other.username() && password() == other.password();
+}
+
+//--------------------------------------------------------------------------------------------------
+QString RouterConfig::displayLabel() const
+{
+    QString name = displayName();
+    if (!name.isEmpty())
+        return name;
+    return address();
 }
 
 //--------------------------------------------------------------------------------------------------
 QString RouterConfig::displayName() const
 {
-    if (!display_name.isEmpty())
-        return display_name;
-    return address;
+    return decryptString(encrypted_display_name_);
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterConfig::setDisplayName(const QString& value)
+{
+    encrypted_display_name_ = encryptString(value);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString RouterConfig::address() const
+{
+    return decryptString(encrypted_address_);
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterConfig::setAddress(const QString& value)
+{
+    encrypted_address_ = encryptString(value);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString RouterConfig::username() const
+{
+    return decryptString(encrypted_username_);
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterConfig::setUsername(const QString& value)
+{
+    encrypted_username_ = encryptString(value);
+}
+
+//--------------------------------------------------------------------------------------------------
+SecureString RouterConfig::password() const
+{
+    return decryptSecureString(encrypted_password_);
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterConfig::setPassword(const SecureString& value)
+{
+    encrypted_password_ = encryptSecureString(value);
+}
+
+//--------------------------------------------------------------------------------------------------
+QByteArray RouterConfig::data() const
+{
+    return decryptBytes(encrypted_data_);
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterConfig::setData(const QByteArray& value)
+{
+    encrypted_data_ = encryptBytes(value);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString ComputerConfig::name() const
+{
+    return decryptString(encrypted_name_);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ComputerConfig::setName(const QString& value)
+{
+    encrypted_name_ = encryptString(value);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString ComputerConfig::comment() const
+{
+    return decryptString(encrypted_comment_);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ComputerConfig::setComment(const QString& value)
+{
+    encrypted_comment_ = encryptString(value);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString ComputerConfig::address() const
+{
+    return decryptString(encrypted_address_);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ComputerConfig::setAddress(const QString& value)
+{
+    encrypted_address_ = encryptString(value);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString ComputerConfig::username() const
+{
+    return decryptString(encrypted_username_);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ComputerConfig::setUsername(const QString& value)
+{
+    encrypted_username_ = encryptString(value);
+}
+
+//--------------------------------------------------------------------------------------------------
+SecureString ComputerConfig::password() const
+{
+    return decryptSecureString(encrypted_password_);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ComputerConfig::setPassword(const SecureString& value)
+{
+    encrypted_password_ = encryptSecureString(value);
+}
+
+//--------------------------------------------------------------------------------------------------
+QByteArray ComputerConfig::data() const
+{
+    return decryptBytes(encrypted_data_);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ComputerConfig::setData(const QByteArray& value)
+{
+    encrypted_data_ = encryptBytes(value);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString GroupConfig::name() const
+{
+    return decryptString(encrypted_name_);
+}
+
+//--------------------------------------------------------------------------------------------------
+void GroupConfig::setName(const QString& value)
+{
+    encrypted_name_ = encryptString(value);
+}
+
+//--------------------------------------------------------------------------------------------------
+QString GroupConfig::comment() const
+{
+    return decryptString(encrypted_comment_);
+}
+
+//--------------------------------------------------------------------------------------------------
+void GroupConfig::setComment(const QString& value)
+{
+    encrypted_comment_ = encryptString(value);
+}
+
+//--------------------------------------------------------------------------------------------------
+QByteArray GroupConfig::data() const
+{
+    return decryptBytes(encrypted_data_);
+}
+
+//--------------------------------------------------------------------------------------------------
+void GroupConfig::setData(const QByteArray& value)
+{
+    encrypted_data_ = encryptBytes(value);
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -42,9 +42,9 @@ public:
     public:
         Item(const ComputerConfig& computer, const QString& group_path, QTreeWidget* parent);
 
-        qint64 computerId() const { return computer_.id; }
-        qint64 groupId() const { return computer_.group_id; }
-        QString computerName() const { return computer_.name; }
+        qint64 computerId() const { return computer_.id(); }
+        qint64 groupId() const { return computer_.groupId(); }
+        QString computerName() const { return computer_.name(); }
 
         void updateFrom(const ComputerConfig& computer, const QString& group_path);
 

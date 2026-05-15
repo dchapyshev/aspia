@@ -76,7 +76,7 @@ bool changeKeyAndReencrypt(const SecureByteArray& new_key, const QByteArray& new
     {
         if (!db.modifyComputer(computer))
         {
-            LOG(ERROR) << "Unable to re-encrypt computer:" << computer.id;
+            LOG(ERROR) << "Unable to re-encrypt computer:" << computer.id();
             cryptor.setKey(old_key);
             return false;
         }
@@ -86,7 +86,7 @@ bool changeKeyAndReencrypt(const SecureByteArray& new_key, const QByteArray& new
     {
         if (!db.modifyGroup(group))
         {
-            LOG(ERROR) << "Unable to re-encrypt group:" << group.id;
+            LOG(ERROR) << "Unable to re-encrypt group:" << group.id();
             cryptor.setKey(old_key);
             return false;
         }
@@ -96,7 +96,7 @@ bool changeKeyAndReencrypt(const SecureByteArray& new_key, const QByteArray& new
     {
         if (!db.modifyRouter(router))
         {
-            LOG(ERROR) << "Unable to re-encrypt router:" << router.router_id;
+            LOG(ERROR) << "Unable to re-encrypt router:" << router.routerId();
             cryptor.setKey(old_key);
             return false;
         }

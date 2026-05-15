@@ -42,14 +42,14 @@ public:
 
     const ComputerConfig& computer() const { return computer_; }
     proto::peer::SessionType sessionType() const { return session_type_; }
-    qint64 routerId() const { return computer_.router_id; }
-    const QString& computerName() const { return computer_.name; }
+    qint64 routerId() const { return computer_.routerId(); }
+    QString computerName() const { return computer_.name(); }
     const QString& displayName() const { return display_name_; }
     HostId hostId() const;
     QString hostAddress() const;
     quint16 hostPort() const;
-    const QString& hostUserName() const { return computer_.username; }
-    const SecureString& hostPassword() const { return computer_.password; }
+    QString hostUserName() const { return computer_.username(); }
+    SecureString hostPassword() const { return computer_.password(); }
 
     void setRouterVersion(const QVersionNumber& router_version);
     QVersionNumber routerVersion() const;

@@ -57,13 +57,13 @@ Sidebar::Sidebar(QWidget* parent)
     loadRouters();
 
     GroupConfig local_root_data;
-    local_root_data.id = 0;
-    local_root_data.parent_id = 0;
-    local_root_data.name = tr("Local");
+    local_root_data.setId(0);
+    local_root_data.setParentId(0);
+    local_root_data.setName(tr("Local"));
 
     // Create local root after routers so it appears at the bottom.
     local_root_ = new LocalGroup(local_root_data, tree_widget_);
-    local_root_->setExpanded(Settings().isGroupExpanded(local_root_data.id));
+    local_root_->setExpanded(Settings().isGroupExpanded(local_root_data.id()));
 
     // Setup drag-and-drop.
     tree_widget_->setAcceptDrops(true);
@@ -95,10 +95,10 @@ void Sidebar::loadGroups(qint64 parent_id, QTreeWidgetItem* parent_item)
     for (const GroupConfig& group : std::as_const(groups))
     {
         LocalGroup* item = new LocalGroup(group, parent_item);
-        item->setExpanded(settings.isGroupExpanded(group.id));
+        item->setExpanded(settings.isGroupExpanded(group.id()));
 
         // Load child groups recursively.
-        loadGroups(group.id, item);
+        loadGroups(group.id(), item);
     }
 }
 
@@ -139,7 +139,7 @@ void Sidebar::loadRouters()
 
     for (const RouterConfig& router_config : std::as_const(routers))
     {
-        Router* router = new Router(router_config.router_id, router_config.displayName(), tree_widget_);
+        Router* router = new Router(router_config.routerId(), router_config.displayLabel(), tree_widget_);
         router->setExpanded(true);
     }
 }
@@ -152,7 +152,7 @@ void Sidebar::reloadRouters()
     QSet<qint64> new_ids;
     new_ids.reserve(routers.size());
     for (const RouterConfig& router_data : std::as_const(routers))
-        new_ids.insert(router_data.router_id);
+        new_ids.insert(router_data.routerId());
 
     // Remove only Router items whose id no longer exists.
     for (int i = tree_widget_->topLevelItemCount() - 1; i >= 0; --i)
@@ -168,16 +168,16 @@ void Sidebar::reloadRouters()
     // Update existing routers, append new ones at the end.
     for (const RouterConfig& router_config : std::as_const(routers))
     {
-        const QString name = router_config.displayName();
+        const QString name = router_config.displayLabel();
 
-        Router* router = routerById(router_config.router_id);
+        Router* router = routerById(router_config.routerId());
         if (router)
         {
             router->setName(name);
         }
         else
         {
-            Router* new_router = new Router(router_config.router_id, name, tree_widget_);
+            Router* new_router = new Router(router_config.routerId(), name, tree_widget_);
             new_router->setExpanded(true);
 
             // Keep ordering: routers first, local root last.
@@ -395,7 +395,7 @@ void Sidebar::onRemoveRouter()
         return;
     }
 
-    QString message = tr("Are you sure you want to delete router \"%1\"?").arg(existing->display_name);
+    QString message = tr("Are you sure you want to delete router \"%1\"?").arg(existing->displayName());
     if (MsgBox::question(this, message) == MsgBox::No)
     {
         LOG(INFO) << "Action is rejected by user";
@@ -576,7 +576,7 @@ bool Sidebar::onDrop(QDropEvent* event)
         QList<GroupConfig> target_groups = Database::instance().groupList(target_item->groupId());
         for (const GroupConfig& existing : std::as_const(target_groups))
         {
-            if (existing.id != source_group->groupId() && existing.name == source_group->groupName())
+            if (existing.id() != source_group->groupId() && existing.name() == source_group->groupName())
             {
                 MsgBox::warning(tree_widget_,
                     tr("A group with this name already exists in the selected parent group."));
@@ -642,7 +642,7 @@ bool Sidebar::onDrop(QDropEvent* event)
             Database::instance().computerList(target_item->groupId());
         for (const ComputerConfig& existing : std::as_const(target_computers))
         {
-            if (existing.name == computer_item->computerName())
+            if (existing.name() == computer_item->computerName())
             {
                 MsgBox::warning(tree_widget_,
                     tr("A computer with this name already exists in the selected group."));
@@ -660,7 +660,7 @@ bool Sidebar::onDrop(QDropEvent* event)
             return true;
         }
 
-        computer->group_id = target_item->groupId();
+        computer->setGroupId(target_item->groupId());
 
         if (!Database::instance().modifyComputer(*computer))
         {
@@ -863,21 +863,21 @@ Sidebar::Item::Item(Type type, qint64 group_id, QTreeWidgetItem* parent)
 
 //--------------------------------------------------------------------------------------------------
 Sidebar::LocalGroup::LocalGroup(const GroupConfig& group, QTreeWidget* parent)
-    : Item(LOCAL_GROUP, group.id, parent),
-      parent_id_(group.parent_id),
-      group_name_(group.name)
+    : Item(LOCAL_GROUP, group.id(), parent),
+      parent_id_(group.parentId()),
+      group_name_(group.name())
 {
-    setText(0, group.name);
+    setText(0, group.name());
     setIcon(0, QIcon(":/img/folder.svg"));
 }
 
 //--------------------------------------------------------------------------------------------------
 Sidebar::LocalGroup::LocalGroup(const GroupConfig& group, QTreeWidgetItem* parent)
-    : Item(LOCAL_GROUP, group.id, parent),
-      parent_id_(group.parent_id),
-      group_name_(group.name)
+    : Item(LOCAL_GROUP, group.id(), parent),
+      parent_id_(group.parentId()),
+      group_name_(group.name())
 {
-    setText(0, group.name);
+    setText(0, group.name());
     setIcon(0, QIcon(":/img/folder.svg"));
 }
 

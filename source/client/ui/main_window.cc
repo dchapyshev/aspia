@@ -340,7 +340,7 @@ void MainWindow::onSearchTextChanged(const QString& text)
 //--------------------------------------------------------------------------------------------------
 void MainWindow::onConnect(const ComputerConfig& computer, proto::peer::SessionType session_type)
 {
-    if (isHostId(computer.address) && computer.router_id <= 0)
+    if (isHostId(computer.address()) && computer.routerId() <= 0)
     {
         MsgBox::warning(this,
             tr("Connection by ID is specified in the properties of the computer, "
@@ -385,7 +385,7 @@ void MainWindow::onConnect(const ComputerConfig& computer, proto::peer::SessionT
         return;
 
     QString display_name = Database::instance().displayName();
-    QString computer_name = computer.name.isEmpty() ? computer.address : computer.name;
+    QString computer_name = computer.name().isEmpty() ? computer.address() : computer.name();
     QIcon icon = sessionIcon(session_type);
 
     client_window->setWindowIcon(icon);

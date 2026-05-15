@@ -70,7 +70,7 @@ void OnlineCheckerRouter::onHostStatus(qint64 request_id, bool online)
     if (request_id != current_request_id_)
         return;
 
-    emit sig_checkerResult(computers_.front().id, online);
+    emit sig_checkerResult(computers_.front().id(), online);
     computers_.pop_front();
     checkNextComputer();
 }
@@ -86,22 +86,22 @@ void OnlineCheckerRouter::checkNextComputer()
     }
 
     const ComputerConfig& computer = computers_.front();
-    const HostId host_id = stringToHostId(computer.address);
+    const HostId host_id = stringToHostId(computer.address());
 
     LOG(INFO) << "Checking status for host id" << host_id
-              << "(router_id:" << computer.router_id << "computer_id:" << computer.id << ")";
+              << "(router_id:" << computer.routerId() << "computer_id:" << computer.id() << ")";
 
-    Router* connection = Router::instance(computer.router_id);
+    Router* connection = Router::instance(computer.routerId());
 
-    if (!routers_.contains(computer.router_id) && connection)
+    if (!routers_.contains(computer.routerId()) && connection)
     {
         connect(connection, &Router::sig_hostStatus, this, &OnlineCheckerRouter::onHostStatus);
-        routers_.insert(computer.router_id);
+        routers_.insert(computer.routerId());
     }
 
     if (!connection || connection->status() != Router::Status::ONLINE)
     {
-        emit sig_checkerResult(computer.id, false);
+        emit sig_checkerResult(computer.id(), false);
         computers_.pop_front();
 
         QTimer::singleShot(0, this, &OnlineCheckerRouter::checkNextComputer);
@@ -121,7 +121,7 @@ void OnlineCheckerRouter::onFinished(const Location& location)
     LOG(INFO) << "Finished (" << location << ")";
 
     for (const ComputerConfig& computer : std::as_const(computers_))
-        emit sig_checkerResult(computer.id, false);
+        emit sig_checkerResult(computer.id(), false);
 
     emit sig_checkerFinished();
 }

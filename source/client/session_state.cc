@@ -37,27 +37,27 @@ SessionState::SessionState(const ComputerConfig& computer,
 //--------------------------------------------------------------------------------------------------
 bool SessionState::isConnectionByHostId() const
 {
-    return isHostId(computer_.address);
+    return isHostId(computer_.address());
 }
 
 //--------------------------------------------------------------------------------------------------
 HostId SessionState::hostId() const
 {
-    if (!isHostId(computer_.address))
+    if (!isHostId(computer_.address()))
         return kInvalidHostId;
-    return stringToHostId(computer_.address);
+    return stringToHostId(computer_.address());
 }
 
 //--------------------------------------------------------------------------------------------------
 QString SessionState::hostAddress() const
 {
-    return Address::fromString(computer_.address, DEFAULT_HOST_TCP_PORT).host();
+    return Address::fromString(computer_.address(), DEFAULT_HOST_TCP_PORT).host();
 }
 
 //--------------------------------------------------------------------------------------------------
 quint16 SessionState::hostPort() const
 {
-    return Address::fromString(computer_.address, DEFAULT_HOST_TCP_PORT).port();
+    return Address::fromString(computer_.address(), DEFAULT_HOST_TCP_PORT).port();
 }
 
 //--------------------------------------------------------------------------------------------------

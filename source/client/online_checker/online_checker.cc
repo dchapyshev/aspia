@@ -49,7 +49,7 @@ void OnlineChecker::start(const ComputerList& computers)
 
     for (const ComputerConfig& computer : computers)
     {
-        if (isHostId(computer.address))
+        if (isHostId(computer.address()))
             router_computers_.emplace_back(computer);
         else
             direct_computers_.emplace_back(computer);

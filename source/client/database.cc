@@ -18,7 +18,6 @@
 
 #include "client/database.h"
 
-#include "base/crypto/data_cryptor.h"
 #include "base/logging.h"
 #include "base/files/base_paths.h"
 #include "build/build_config.h"
@@ -35,78 +34,29 @@ namespace {
 
 const char kConnectionName[] = "client";
 
-constexpr auto kSettingDisplayName    = "display_name";
-constexpr auto kSettingCheckUpdates   = "check_updates";
-constexpr auto kSettingUpdateServer   = "update_server";
-constexpr auto kSettingSalt           = "master_password_salt";
-constexpr auto kSettingVerifier       = "master_password_verifier";
-constexpr auto kSettingVersion        = "master_password_version";
-
-//--------------------------------------------------------------------------------------------------
-QByteArray encryptBytes(const QByteArray& value)
-{
-    if (value.isEmpty())
-        return QByteArray();
-    return DataCryptor::instance().encrypt(value).value_or(QByteArray());
-}
-
-//--------------------------------------------------------------------------------------------------
-QByteArray decryptBytes(const QByteArray& blob)
-{
-    if (blob.isEmpty())
-        return QByteArray();
-    return DataCryptor::instance().decrypt(blob).value_or(QByteArray());
-}
-
-//--------------------------------------------------------------------------------------------------
-SecureByteArray decryptSecureBytes(const QByteArray& blob)
-{
-    if (blob.isEmpty())
-        return SecureByteArray();
-    return SecureByteArray(DataCryptor::instance().decrypt(blob).value_or(QByteArray()));
-}
-
-//--------------------------------------------------------------------------------------------------
-QByteArray encryptString(const QString& value)
-{
-    return encryptBytes(value.toUtf8());
-}
-
-//--------------------------------------------------------------------------------------------------
-QString decryptString(const QByteArray& blob)
-{
-    return QString::fromUtf8(decryptBytes(blob));
-}
-
-//--------------------------------------------------------------------------------------------------
-QByteArray encryptSecureString(const SecureString& value)
-{
-    return encryptBytes(SecureByteArray(value.toUtf8()).toByteArray());
-}
-
-//--------------------------------------------------------------------------------------------------
-SecureString decryptSecureString(const QByteArray& blob)
-{
-    return SecureString::fromUtf8(decryptSecureBytes(blob));
-}
+constexpr auto kSettingDisplayName  = "display_name";
+constexpr auto kSettingCheckUpdates = "check_updates";
+constexpr auto kSettingUpdateServer = "update_server";
+constexpr auto kSettingSalt         = "master_password_salt";
+constexpr auto kSettingVerifier     = "master_password_verifier";
+constexpr auto kSettingVersion      = "master_password_version";
 
 //--------------------------------------------------------------------------------------------------
 ComputerConfig readComputer(const QSqlQuery& query)
 {
     ComputerConfig computer;
-    computer.id = query.value(0).toLongLong();
-    computer.group_id = query.value(1).toLongLong();
-    computer.router_id = query.value(2).toLongLong();
-    computer.name = decryptString(query.value(3).toByteArray());
-    computer.comment = decryptString(query.value(4).toByteArray());
-    computer.address = decryptString(query.value(5).toByteArray());
-    computer.username = decryptString(query.value(6).toByteArray());
-    computer.password = decryptSecureString(query.value(7).toByteArray());
-    computer.create_time = query.value(8).toLongLong();
-    computer.modify_time = query.value(9).toLongLong();
-    computer.connect_time = query.value(10).toLongLong();
-    computer.data = decryptBytes(query.value(11).toByteArray());
-
+    computer.setId(query.value(0).toLongLong());
+    computer.setGroupId(query.value(1).toLongLong());
+    computer.setRouterId(query.value(2).toLongLong());
+    computer.setEncryptedName(query.value(3).toByteArray());
+    computer.setEncryptedComment(query.value(4).toByteArray());
+    computer.setEncryptedAddress(query.value(5).toByteArray());
+    computer.setEncryptedUsername(query.value(6).toByteArray());
+    computer.setEncryptedPassword(query.value(7).toByteArray());
+    computer.setCreateTime(query.value(8).toLongLong());
+    computer.setModifyTime(query.value(9).toLongLong());
+    computer.setConnectTime(query.value(10).toLongLong());
+    computer.setEncryptedData(query.value(11).toByteArray());
     return computer;
 }
 
@@ -114,11 +64,11 @@ ComputerConfig readComputer(const QSqlQuery& query)
 GroupConfig readGroup(const QSqlQuery& query)
 {
     GroupConfig group;
-    group.id = query.value(0).toLongLong();
-    group.parent_id = query.value(1).toLongLong();
-    group.name = decryptString(query.value(2).toByteArray());
-    group.comment = decryptString(query.value(3).toByteArray());
-    group.data = decryptBytes(query.value(4).toByteArray());
+    group.setId(query.value(0).toLongLong());
+    group.setParentId(query.value(1).toLongLong());
+    group.setEncryptedName(query.value(2).toByteArray());
+    group.setEncryptedComment(query.value(3).toByteArray());
+    group.setEncryptedData(query.value(4).toByteArray());
     return group;
 }
 
@@ -126,14 +76,13 @@ GroupConfig readGroup(const QSqlQuery& query)
 RouterConfig readRouter(const QSqlQuery& query)
 {
     RouterConfig router;
-    router.router_id = query.value(0).toLongLong();
-    router.display_name = decryptString(query.value(1).toByteArray());
-    router.address = decryptString(query.value(2).toByteArray());
-    router.session_type = static_cast<proto::router::SessionType>(query.value(3).toUInt());
-    router.username = decryptString(query.value(4).toByteArray());
-    router.password = decryptSecureString(query.value(5).toByteArray());
-    router.data = decryptBytes(query.value(6).toByteArray());
-
+    router.setRouterId(query.value(0).toLongLong());
+    router.setEncryptedDisplayName(query.value(1).toByteArray());
+    router.setEncryptedAddress(query.value(2).toByteArray());
+    router.setSessionType(static_cast<proto::router::SessionType>(query.value(3).toUInt()));
+    router.setEncryptedUsername(query.value(4).toByteArray());
+    router.setEncryptedPassword(query.value(5).toByteArray());
+    router.setEncryptedData(query.value(6).toByteArray());
     return router;
 }
 
@@ -293,32 +242,32 @@ bool Database::addComputer(ComputerConfig& computer)
         return false;
     }
 
-    if (computer.name.isEmpty() || computer.address.isEmpty() || computer.group_id < 0)
+    if (computer.encryptedName().isEmpty() || computer.encryptedAddress().isEmpty() || computer.groupId() < 0)
     {
         LOG(ERROR) << "Invalid parameters";
         return false;
     }
 
     const qint64 current_time = QDateTime::currentSecsSinceEpoch();
-    computer.create_time = current_time;
-    computer.modify_time = current_time;
-    computer.connect_time = 0;
+    computer.setCreateTime(current_time);
+    computer.setModifyTime(current_time);
+    computer.setConnectTime(0);
 
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
     query.prepare("INSERT INTO computers (id, group_id, router_id, name, comment, address, username, password, "
                   "create_time, modify_time, connect_time, data) "
                   "VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-    query.addBindValue(computer.group_id);
-    query.addBindValue(computer.router_id);
-    query.addBindValue(encryptString(computer.name));
-    query.addBindValue(encryptString(computer.comment));
-    query.addBindValue(encryptString(computer.address));
-    query.addBindValue(encryptString(computer.username));
-    query.addBindValue(encryptSecureString(computer.password));
-    query.addBindValue(computer.create_time);
-    query.addBindValue(computer.modify_time);
-    query.addBindValue(computer.connect_time);
-    query.addBindValue(encryptBytes(computer.data));
+    query.addBindValue(computer.groupId());
+    query.addBindValue(computer.routerId());
+    query.addBindValue(computer.encryptedName());
+    query.addBindValue(computer.encryptedComment());
+    query.addBindValue(computer.encryptedAddress());
+    query.addBindValue(computer.encryptedUsername());
+    query.addBindValue(computer.encryptedPassword());
+    query.addBindValue(computer.createTime());
+    query.addBindValue(computer.modifyTime());
+    query.addBindValue(computer.connectTime());
+    query.addBindValue(computer.encryptedData());
 
     if (!query.exec())
     {
@@ -326,7 +275,7 @@ bool Database::addComputer(ComputerConfig& computer)
         return false;
     }
 
-    computer.id = query.lastInsertId().toLongLong();
+    computer.setId(query.lastInsertId().toLongLong());
     return true;
 }
 
@@ -339,21 +288,21 @@ bool Database::modifyComputer(ComputerConfig& computer)
         return false;
     }
 
-    computer.modify_time = QDateTime::currentSecsSinceEpoch();
+    computer.setModifyTime(QDateTime::currentSecsSinceEpoch());
 
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
     query.prepare("UPDATE computers SET group_id=?, router_id=?, name=?, comment=?, address=?, username=?, "
                   "password=?, modify_time=?, data=? WHERE id=?");
-    query.addBindValue(computer.group_id);
-    query.addBindValue(computer.router_id);
-    query.addBindValue(encryptString(computer.name));
-    query.addBindValue(encryptString(computer.comment));
-    query.addBindValue(encryptString(computer.address));
-    query.addBindValue(encryptString(computer.username));
-    query.addBindValue(encryptSecureString(computer.password));
-    query.addBindValue(computer.modify_time);
-    query.addBindValue(encryptBytes(computer.data));
-    query.addBindValue(computer.id);
+    query.addBindValue(computer.groupId());
+    query.addBindValue(computer.routerId());
+    query.addBindValue(computer.encryptedName());
+    query.addBindValue(computer.encryptedComment());
+    query.addBindValue(computer.encryptedAddress());
+    query.addBindValue(computer.encryptedUsername());
+    query.addBindValue(computer.encryptedPassword());
+    query.addBindValue(computer.modifyTime());
+    query.addBindValue(computer.encryptedData());
+    query.addBindValue(computer.id());
 
     if (!query.exec())
     {
@@ -459,9 +408,9 @@ QList<ComputerConfig> Database::searchComputers(const QString& query_text) const
     while (query.next())
     {
         ComputerConfig computer = readComputer(query);
-        if (computer.name.contains(query_text, Qt::CaseInsensitive) ||
-            computer.address.contains(query_text, Qt::CaseInsensitive) ||
-            computer.comment.contains(query_text, Qt::CaseInsensitive))
+        if (computer.name().contains(query_text, Qt::CaseInsensitive) ||
+            computer.address().contains(query_text, Qt::CaseInsensitive) ||
+            computer.comment().contains(query_text, Qt::CaseInsensitive))
         {
             computers.append(computer);
         }
@@ -531,10 +480,10 @@ bool Database::addGroup(GroupConfig& group)
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
     query.prepare("INSERT INTO groups (id, parent_id, name, comment, data) "
                   "VALUES (NULL, ?, ?, ?, ?)");
-    query.addBindValue(group.parent_id);
-    query.addBindValue(encryptString(group.name));
-    query.addBindValue(encryptString(group.comment));
-    query.addBindValue(encryptBytes(group.data));
+    query.addBindValue(group.parentId());
+    query.addBindValue(group.encryptedName());
+    query.addBindValue(group.encryptedComment());
+    query.addBindValue(group.encryptedData());
 
     if (!query.exec())
     {
@@ -542,7 +491,7 @@ bool Database::addGroup(GroupConfig& group)
         return false;
     }
 
-    group.id = query.lastInsertId().toLongLong();
+    group.setId(query.lastInsertId().toLongLong());
     return true;
 }
 
@@ -557,11 +506,11 @@ bool Database::modifyGroup(const GroupConfig& group)
 
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
     query.prepare("UPDATE groups SET parent_id=?, name=?, comment=?, data=? WHERE id=?");
-    query.addBindValue(group.parent_id);
-    query.addBindValue(encryptString(group.name));
-    query.addBindValue(encryptString(group.comment));
-    query.addBindValue(encryptBytes(group.data));
-    query.addBindValue(group.id);
+    query.addBindValue(group.parentId());
+    query.addBindValue(group.encryptedName());
+    query.addBindValue(group.encryptedComment());
+    query.addBindValue(group.encryptedData());
+    query.addBindValue(group.id());
 
     if (!query.exec())
     {
@@ -674,7 +623,7 @@ bool Database::addRouter(RouterConfig& router)
         return false;
     }
 
-    if (router.address.isEmpty() || router.username.isEmpty())
+    if (router.encryptedAddress().isEmpty() || router.encryptedUsername().isEmpty())
     {
         LOG(ERROR) << "Invalid parameters";
         return false;
@@ -683,12 +632,12 @@ bool Database::addRouter(RouterConfig& router)
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
     query.prepare("INSERT INTO routers (id, name, address, session_type, username, password, data) "
                   "VALUES (NULL, ?, ?, ?, ?, ?, ?)");
-    query.addBindValue(encryptString(router.display_name));
-    query.addBindValue(encryptString(router.address));
-    query.addBindValue(static_cast<quint32>(router.session_type));
-    query.addBindValue(encryptString(router.username));
-    query.addBindValue(encryptSecureString(router.password));
-    query.addBindValue(encryptBytes(router.data));
+    query.addBindValue(router.encryptedDisplayName());
+    query.addBindValue(router.encryptedAddress());
+    query.addBindValue(static_cast<quint32>(router.sessionType()));
+    query.addBindValue(router.encryptedUsername());
+    query.addBindValue(router.encryptedPassword());
+    query.addBindValue(router.encryptedData());
 
     if (!query.exec())
     {
@@ -696,7 +645,7 @@ bool Database::addRouter(RouterConfig& router)
         return false;
     }
 
-    router.router_id = query.lastInsertId().toLongLong();
+    router.setRouterId(query.lastInsertId().toLongLong());
     return true;
 }
 
@@ -712,13 +661,13 @@ bool Database::modifyRouter(const RouterConfig& router)
     QSqlQuery query(QSqlDatabase::database(kConnectionName, false));
     query.prepare("UPDATE routers SET name=?, address=?, session_type=?, username=?, password=?, data=? "
                   "WHERE id=?");
-    query.addBindValue(encryptString(router.display_name));
-    query.addBindValue(encryptString(router.address));
-    query.addBindValue(static_cast<quint32>(router.session_type));
-    query.addBindValue(encryptString(router.username));
-    query.addBindValue(encryptSecureString(router.password));
-    query.addBindValue(encryptBytes(router.data));
-    query.addBindValue(router.router_id);
+    query.addBindValue(router.encryptedDisplayName());
+    query.addBindValue(router.encryptedAddress());
+    query.addBindValue(static_cast<quint32>(router.sessionType()));
+    query.addBindValue(router.encryptedUsername());
+    query.addBindValue(router.encryptedPassword());
+    query.addBindValue(router.encryptedData());
+    query.addBindValue(router.routerId());
 
     if (!query.exec())
     {

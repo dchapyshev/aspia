@@ -122,12 +122,12 @@ QString sanitizedComment(const QString& comment)
 QJsonObject buildRouter(const RouterConfig& router, const DataCryptor& cryptor)
 {
     QJsonObject object;
-    object.insert("id", static_cast<qint64>(router.router_id));
-    object.insert("display_name", encryptToHex(cryptor, router.display_name));
-    object.insert("address", encryptToHex(cryptor, router.address));
-    object.insert("session_type", static_cast<int>(router.session_type));
-    object.insert("username", encryptToHex(cryptor, router.username));
-    object.insert("password", encryptToHex(cryptor, router.password.toString()));
+    object.insert("id", static_cast<qint64>(router.routerId()));
+    object.insert("display_name", encryptToHex(cryptor, router.displayName()));
+    object.insert("address", encryptToHex(cryptor, router.address()));
+    object.insert("session_type", static_cast<int>(router.sessionType()));
+    object.insert("username", encryptToHex(cryptor, router.username()));
+    object.insert("password", encryptToHex(cryptor, router.password().toString()));
     return object;
 }
 
@@ -135,10 +135,10 @@ QJsonObject buildRouter(const RouterConfig& router, const DataCryptor& cryptor)
 QJsonObject buildGroup(const GroupConfig& group, const DataCryptor& cryptor)
 {
     QJsonObject object;
-    object.insert("id", static_cast<qint64>(group.id));
-    object.insert("parent_id", static_cast<qint64>(group.parent_id));
-    object.insert("name", encryptToHex(cryptor, group.name));
-    object.insert("comment", encryptToHex(cryptor, group.comment));
+    object.insert("id", static_cast<qint64>(group.id()));
+    object.insert("parent_id", static_cast<qint64>(group.parentId()));
+    object.insert("name", encryptToHex(cryptor, group.name()));
+    object.insert("comment", encryptToHex(cryptor, group.comment()));
     return object;
 }
 
@@ -146,14 +146,14 @@ QJsonObject buildGroup(const GroupConfig& group, const DataCryptor& cryptor)
 QJsonObject buildComputer(const ComputerConfig& computer, const DataCryptor& cryptor)
 {
     QJsonObject object;
-    object.insert("id", static_cast<qint64>(computer.id));
-    object.insert("group_id", static_cast<qint64>(computer.group_id));
-    object.insert("router_id", static_cast<qint64>(computer.router_id));
-    object.insert("name", encryptToHex(cryptor, computer.name));
-    object.insert("comment", encryptToHex(cryptor, computer.comment));
-    object.insert("address", encryptToHex(cryptor, computer.address));
-    object.insert("username", encryptToHex(cryptor, computer.username));
-    object.insert("password", encryptToHex(cryptor, computer.password.toString()));
+    object.insert("id", static_cast<qint64>(computer.id()));
+    object.insert("group_id", static_cast<qint64>(computer.groupId()));
+    object.insert("router_id", static_cast<qint64>(computer.routerId()));
+    object.insert("name", encryptToHex(cryptor, computer.name()));
+    object.insert("comment", encryptToHex(cryptor, computer.comment()));
+    object.insert("address", encryptToHex(cryptor, computer.address()));
+    object.insert("username", encryptToHex(cryptor, computer.username()));
+    object.insert("password", encryptToHex(cryptor, computer.password().toString()));
     return object;
 }
 
@@ -184,18 +184,18 @@ qint64 importRouter(const QJsonObject& router_object, const DataCryptor& cryptor
     const QList<RouterConfig> existing = db.routerList();
     for (const RouterConfig& router : std::as_const(existing))
     {
-        if (router.address == *address && router.username == *username)
-            return router.router_id;
+        if (router.address() == *address && router.username() == *username)
+            return router.routerId();
     }
 
     QString display_name_value = sanitizedName(*display_name);
 
     RouterConfig config;
-    config.display_name = display_name_value.isEmpty() ? *address : display_name_value;
-    config.address = *address;
-    config.username = *username;
-    config.password = SecureString(std::move(*password));
-    config.session_type = static_cast<proto::router::SessionType>(session_type);
+    config.setDisplayName(display_name_value.isEmpty() ? *address : display_name_value);
+    config.setAddress(*address);
+    config.setUsername(*username);
+    config.setPassword(SecureString(std::move(*password)));
+    config.setSessionType(static_cast<proto::router::SessionType>(session_type));
 
     if (!db.addRouter(config))
     {
@@ -205,7 +205,7 @@ qint64 importRouter(const QJsonObject& router_object, const DataCryptor& cryptor
     }
 
     ++counters->routers;
-    return config.router_id;
+    return config.routerId();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -277,9 +277,9 @@ void importGroups(const QJsonArray& groups_array,
             }
 
             GroupConfig group_config;
-            group_config.parent_id = current_new_parent;
-            group_config.name = name;
-            group_config.comment = sanitizedComment(*comment);
+            group_config.setParentId(current_new_parent);
+            group_config.setName(name);
+            group_config.setComment(sanitizedComment(*comment));
 
             if (!db.addGroup(group_config))
             {
@@ -288,7 +288,7 @@ void importGroups(const QJsonArray& groups_array,
                 continue;
             }
 
-            group_id_map->insert(old_id, group_config.id);
+            group_id_map->insert(old_id, group_config.id());
             ++counters->groups;
             queue.append(old_id);
         }
@@ -341,13 +341,13 @@ void importComputers(const QJsonArray& computers_array,
         qint64 old_router_id = object.value("router_id").toInteger(0);
 
         ComputerConfig config;
-        config.group_id = group_id_map.value(old_group_id, 0);
-        config.router_id = router_id_map.value(old_router_id, 0);
-        config.name = name;
-        config.comment = sanitizedComment(*comment);
-        config.address = *address;
-        config.username = *username;
-        config.password = SecureString(*password);
+        config.setGroupId(group_id_map.value(old_group_id, 0));
+        config.setRouterId(router_id_map.value(old_router_id, 0));
+        config.setName(name);
+        config.setComment(sanitizedComment(*comment));
+        config.setAddress(*address);
+        config.setUsername(*username);
+        config.setPassword(SecureString(*password));
 
         if (!db.addComputer(config))
         {

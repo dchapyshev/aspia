@@ -25,7 +25,7 @@
 #include <QTreeWidget>
 #include <QWidget>
 
-struct GroupConfig;
+class GroupConfig;
 
 class Sidebar final : public QWidget
 {

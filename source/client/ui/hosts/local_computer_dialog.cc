@@ -55,7 +55,7 @@ LocalComputerDialog::LocalComputerDialog(qint64 computer_id, qint64 group_id, QW
     QList<RouterConfig> routers = Database::instance().routerList();
     for (const RouterConfig& router : std::as_const(routers))
     {
-        ui->combo_router->addItem(QIcon(":/img/stack.svg"), router.displayName(), QVariant::fromValue(router.router_id));
+        ui->combo_router->addItem(QIcon(":/img/stack.svg"), router.displayLabel(), QVariant::fromValue(router.routerId()));
     }
 
     qint64 selected_router_id = 0;
@@ -67,13 +67,13 @@ LocalComputerDialog::LocalComputerDialog(qint64 computer_id, qint64 group_id, QW
         std::optional<ComputerConfig> computer = Database::instance().findComputer(computer_id_);
         if (computer.has_value())
         {
-            ui->edit_name->setText(computer->name);
-            ui->edit_address->setText(computer->address);
-            ui->edit_username->setText(computer->username);
-            ui->edit_password->setPassword(computer->password);
-            ui->edit_comment->setPlainText(computer->comment);
-            group_id_ = computer->group_id;
-            selected_router_id = computer->router_id;
+            ui->edit_name->setText(computer->name());
+            ui->edit_address->setText(computer->address());
+            ui->edit_username->setText(computer->username());
+            ui->edit_password->setPassword(computer->password());
+            ui->edit_comment->setPlainText(computer->comment());
+            group_id_ = computer->groupId();
+            selected_router_id = computer->routerId();
         }
         else
         {
@@ -204,7 +204,7 @@ void LocalComputerDialog::onButtonBoxClicked(QAbstractButton* button)
     QList<ComputerConfig> computers = Database::instance().computerList(group_id);
     for (const ComputerConfig& existing : std::as_const(computers))
     {
-        if (existing.id != computer_id_ && existing.name == name)
+        if (existing.id() != computer_id_ && existing.name() == name)
         {
             MsgBox::warning(this,
                 tr("A computer with this name already exists in the selected group."));
@@ -214,14 +214,14 @@ void LocalComputerDialog::onButtonBoxClicked(QAbstractButton* button)
     }
 
     ComputerConfig computer;
-    computer.id = computer_id_;
-    computer.group_id = group_id;
-    computer.router_id = router_id;
-    computer.name = ui->edit_name->text();
-    computer.address = ui->edit_address->text();
-    computer.username = ui->edit_username->text();
-    computer.password = ui->edit_password->password();
-    computer.comment = ui->edit_comment->toPlainText();
+    computer.setId(computer_id_);
+    computer.setGroupId(group_id);
+    computer.setRouterId(router_id);
+    computer.setName(ui->edit_name->text());
+    computer.setAddress(ui->edit_address->text());
+    computer.setUsername(ui->edit_username->text());
+    computer.setPassword(ui->edit_password->password());
+    computer.setComment(ui->edit_comment->toPlainText());
 
     Database& db = Database::instance();
 
@@ -233,7 +233,7 @@ void LocalComputerDialog::onButtonBoxClicked(QAbstractButton* button)
             LOG(INFO) << "Unable to add computer to database";
             return;
         }
-        computer_id_ = computer.id;
+        computer_id_ = computer.id();
     }
     else
     {

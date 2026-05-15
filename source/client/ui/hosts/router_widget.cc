@@ -386,7 +386,7 @@ RouterWidget::~RouterWidget()
 //--------------------------------------------------------------------------------------------------
 qint64 RouterWidget::routerId() const
 {
-    return config_.router_id;
+    return config_.routerId();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1034,13 +1034,13 @@ void RouterWidget::onStatusChanged(qint64 router_id, Router::Status status)
     switch (status)
     {
         case Router::Status::CONNECTING:
-            status_dialog_->addMessage(tr("Connecting to router %1...").arg(config_.address));
+            status_dialog_->addMessage(tr("Connecting to router %1...").arg(config_.address()));
             break;
         case Router::Status::ONLINE:
-            status_dialog_->addMessage(tr("Connection to router %1 established.").arg(config_.address));
+            status_dialog_->addMessage(tr("Connection to router %1 established.").arg(config_.address()));
             break;
         case Router::Status::OFFLINE:
-            status_dialog_->addMessage(tr("Disconnected from router %1.").arg(config_.address));
+            status_dialog_->addMessage(tr("Disconnected from router %1.").arg(config_.address()));
             break;
     }
 

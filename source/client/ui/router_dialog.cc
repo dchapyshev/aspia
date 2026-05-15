@@ -53,15 +53,15 @@ RouterDialog::RouterDialog(qint64 router_id, QWidget* parent)
         std::optional<RouterConfig> router = Database::instance().findRouter(router_id_);
         if (router.has_value())
         {
-            ui->edit_name->setText(router->display_name);
-            ui->edit_address->setText(router->address);
+            ui->edit_name->setText(router->displayName());
+            ui->edit_address->setText(router->address());
 
-            int session_type_index = ui->combo_session_type->findData(router->session_type);
+            int session_type_index = ui->combo_session_type->findData(router->sessionType());
             if (session_type_index != -1)
                 ui->combo_session_type->setCurrentIndex(session_type_index);
 
-            ui->edit_username->setText(router->username);
-            ui->edit_password->setPassword(router->password);
+            ui->edit_username->setText(router->username());
+            ui->edit_password->setPassword(router->password());
         }
         else
         {
@@ -123,13 +123,13 @@ void RouterDialog::onButtonBoxClicked(QAbstractButton* button)
     }
 
     RouterConfig data;
-    data.router_id = router_id_;
-    data.display_name = ui->edit_name->text();
-    data.address = address_text;
-    data.session_type =
-        static_cast<proto::router::SessionType>(ui->combo_session_type->currentData().toUInt());
-    data.username = username;
-    data.password = password;
+    data.setRouterId(router_id_);
+    data.setDisplayName(ui->edit_name->text());
+    data.setAddress(address_text);
+    data.setSessionType(
+        static_cast<proto::router::SessionType>(ui->combo_session_type->currentData().toUInt()));
+    data.setUsername(username);
+    data.setPassword(password);
 
     Database& db = Database::instance();
 

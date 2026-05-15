@@ -103,16 +103,16 @@ qint64 ensureRouter(const proto::address_book::Router& proto_router, ImportCount
 
     for (const RouterConfig& router : std::as_const(routers))
     {
-        if (router.address == combined_address && router.username == username)
-            return router.router_id;
+        if (router.address() == combined_address && router.username() == username)
+            return router.routerId();
     }
 
     RouterConfig config;
-    config.display_name = AabImporter::tr("%1 (Imported)").arg(address);
-    config.address = combined_address;
-    config.username = username;
-    config.password = SecureString(password);
-    config.session_type = proto::router::SESSION_TYPE_CLIENT;
+    config.setDisplayName(AabImporter::tr("%1 (Imported)").arg(address));
+    config.setAddress(combined_address);
+    config.setUsername(username);
+    config.setPassword(SecureString(password));
+    config.setSessionType(proto::router::SESSION_TYPE_CLIENT);
 
     if (!db.addRouter(config))
     {
@@ -121,7 +121,7 @@ qint64 ensureRouter(const proto::address_book::Router& proto_router, ImportCount
     }
 
     ++counters->routers;
-    return config.router_id;
+    return config.routerId();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -167,13 +167,13 @@ bool importComputer(const proto::address_book::Computer& proto_computer,
     qint64 effective_router_id = isHostId(address) ? router_id : 0;
 
     ComputerConfig config;
-    config.group_id = group_id;
-    config.router_id = effective_router_id;
-    config.name = name;
-    config.comment = comment;
-    config.address = address;
-    config.username = username;
-    config.password = SecureString(std::move(password));
+    config.setGroupId(group_id);
+    config.setRouterId(effective_router_id);
+    config.setName(name);
+    config.setComment(comment);
+    config.setAddress(address);
+    config.setUsername(username);
+    config.setPassword(SecureString(std::move(password)));
 
     if (!Database::instance().addComputer(config))
     {
@@ -213,9 +213,9 @@ void importGroup(const proto::address_book::ComputerGroup& proto_group,
         }
 
         GroupConfig group_config;
-        group_config.parent_id = parent_group_id;
-        group_config.name = group_name;
-        group_config.comment = sanitizedComment(QString::fromStdString(proto_group.comment()));
+        group_config.setParentId(parent_group_id);
+        group_config.setName(group_name);
+        group_config.setComment(sanitizedComment(QString::fromStdString(proto_group.comment())));
 
         if (!Database::instance().addGroup(group_config))
         {
@@ -223,7 +223,7 @@ void importGroup(const proto::address_book::ComputerGroup& proto_group,
             return;
         }
 
-        group_id = group_config.id;
+        group_id = group_config.id();
         ++counters->groups;
     }
 

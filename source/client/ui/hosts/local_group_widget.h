@@ -37,7 +37,7 @@ class LocalGroupWidget;
 
 class QLabel;
 class QStatusBar;
-struct ComputerConfig;
+class ComputerConfig;
 
 class LocalGroupWidget final : public ContentWidget
 {
@@ -53,11 +53,11 @@ public:
         Item(const ComputerConfig& computer, QTreeWidget* parent);
 
         ComputerConfig& computer() { return computer_; }
-        qint64 computerId() const { return computer_.id; }
-        qint64 groupId() const { return computer_.group_id; }
-        qint64 routerId() const { return computer_.router_id; }
-        QString computerName() const { return computer_.name; }
-        QString computerAddress() const { return computer_.address; }
+        qint64 computerId() const { return computer_.id(); }
+        qint64 groupId() const { return computer_.groupId(); }
+        qint64 routerId() const { return computer_.routerId(); }
+        QString computerName() const { return computer_.name(); }
+        QString computerAddress() const { return computer_.address(); }
         void setConnectTime(qint64 connect_time);
         void setOnlineStatus(bool online);
         void clearOnlineStatus();
