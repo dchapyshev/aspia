@@ -308,7 +308,7 @@ void HostWindow::onClientListChanged(const UserSessionAgent::ClientList& clients
 
         notifier_->setAttribute(Qt::WA_DeleteOnClose);
         notifier_->show();
-        notifier_->activateWindow();
+        notifier_->raise();
     }
     else
     {
