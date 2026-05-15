@@ -76,61 +76,61 @@ bool verifyNg(std::string_view N, std::string_view g)
 ClientAuthenticator::ClientAuthenticator(QObject* parent)
     : Authenticator(parent)
 {
-    CLOG(INFO) << "Ctor";
+    CLOG(TRACE) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
 ClientAuthenticator::~ClientAuthenticator()
 {
-    CLOG(INFO) << "Dtor";
+    CLOG(TRACE) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClientAuthenticator::setPeerPublicKey(const QByteArray& public_key)
 {
-    CLOG(INFO) << "Public key assigned:" << public_key.size();
+    CLOG(TRACE) << "Public key assigned:" << public_key.size();
     peer_public_key_ = public_key;
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClientAuthenticator::setIdentify(proto::key_exchange::Identify identify)
 {
-    CLOG(INFO) << "Identify assigned:" << identify;
+    CLOG(TRACE) << "Identify assigned:" << identify;
     identify_ = identify;
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClientAuthenticator::setUserName(const QString& username)
 {
-    CLOG(INFO) << "User name assigned";
+    CLOG(TRACE) << "User name assigned";
     username_ = username;
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClientAuthenticator::setPassword(const SecureString& password)
 {
-    CLOG(INFO) << "Password assigned";
+    CLOG(TRACE) << "Password assigned";
     password_ = password;
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClientAuthenticator::setSessionType(quint32 session_type)
 {
-    CLOG(INFO) << "Session type assigned:" << session_type;
+    CLOG(TRACE) << "Session type assigned:" << session_type;
     session_type_ = session_type;
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClientAuthenticator::setDisplayName(const QString& display_name)
 {
-    CLOG(INFO) << "Display name assigned:" << display_name;
+    CLOG(TRACE) << "Display name assigned:" << display_name;
     display_name_ = display_name;
 }
 
 //--------------------------------------------------------------------------------------------------
 void ClientAuthenticator::setProbe(bool probe)
 {
-    CLOG(INFO) << "Probe flag assigned:" << probe;
+    CLOG(TRACE) << "Probe flag assigned:" << probe;
     is_probe_ = probe;
 }
 
@@ -290,7 +290,7 @@ void ClientAuthenticator::sendClientHello()
 
     appendTranscript(message);
 
-    CLOG(INFO) << "Sending: ClientHello (" << message.size() << ")";
+    CLOG(TRACE) << "Sending: ClientHello (" << message.size() << ")";
     emit sig_outgoingMessage(message, false);
     internal_state_ = InternalState::READ_SERVER_HELLO;
 }
@@ -298,7 +298,7 @@ void ClientAuthenticator::sendClientHello()
 //--------------------------------------------------------------------------------------------------
 bool ClientAuthenticator::readServerHello(const QByteArray& buffer)
 {
-    CLOG(INFO) << "Received: ServerHello (" << buffer.size() << ")";
+    CLOG(TRACE) << "Received: ServerHello (" << buffer.size() << ")";
 
     if (buffer.isEmpty())
     {
@@ -313,7 +313,7 @@ bool ClientAuthenticator::readServerHello(const QByteArray& buffer)
         return false;
     }
 
-    CLOG(INFO) << "Encryption:" << server_hello.encryption();
+    CLOG(TRACE) << "Encryption:" << server_hello.encryption();
 
     encryption_ = server_hello.encryption();
     switch (encryption_)
@@ -380,7 +380,7 @@ bool ClientAuthenticator::readServerHello(const QByteArray& buffer)
     // The session_key derived from it protects all subsequent handshake messages (SrpIdentify,
     // SrpServerKeyExchange, SrpClientKeyExchange for SRP;
     // SessionChallenge / SessionResponse for both modes).
-    CLOG(INFO) << "Session key is ready";
+    CLOG(TRACE) << "Session key is ready";
     setSessionKeyReady();
 
     return true;
@@ -405,7 +405,7 @@ void ClientAuthenticator::sendIdentify()
         return;
     }
 
-    CLOG(INFO) << "Sending: Identify (" << message.size() << ")";
+    CLOG(TRACE) << "Sending: Identify (" << message.size() << ")";
     appendTranscript(message);
 
     emit sig_outgoingMessage(message, true);
@@ -415,7 +415,7 @@ void ClientAuthenticator::sendIdentify()
 //--------------------------------------------------------------------------------------------------
 bool ClientAuthenticator::readServerKeyExchange(const QByteArray& buffer)
 {
-    CLOG(INFO) << "Received: ServerKeyExchange (" << buffer.size() << ")";
+    CLOG(TRACE) << "Received: ServerKeyExchange (" << buffer.size() << ")";
 
     if (buffer.isEmpty())
     {
@@ -555,7 +555,7 @@ void ClientAuthenticator::sendClientKeyExchange()
         return;
     }
 
-    CLOG(INFO) << "Sending: ClientKeyExchange (" << message.size() << ")";
+    CLOG(TRACE) << "Sending: ClientKeyExchange (" << message.size() << ")";
     appendTranscript(message);
 
     // Still encrypted under the ephemeral key (channel rebuilds the encryptor on the next
@@ -575,14 +575,14 @@ void ClientAuthenticator::sendClientKeyExchange()
 
     appendTranscript(srp_raw_key.toByteArray());
 
-    CLOG(INFO) << "Session key is ready";
+    CLOG(TRACE) << "Session key is ready";
     setSessionKeyReady();
 }
 
 //--------------------------------------------------------------------------------------------------
 bool ClientAuthenticator::readSessionChallenge(const QByteArray& buffer)
 {
-    CLOG(INFO) << "Received: SessionChallenge (" << buffer.size() << ")";
+    CLOG(TRACE) << "Received: SessionChallenge (" << buffer.size() << ")";
 
     if (buffer.isEmpty())
     {
@@ -609,9 +609,9 @@ bool ClientAuthenticator::readSessionChallenge(const QByteArray& buffer)
     setPeerDisplayName(QString::fromStdString(challenge.display_name()));
     setPeerVersion(challenge.version());
 
-    CLOG(INFO) << "Server (version:" << peerVersion().toString() << "name:" << peerComputerName()
-               << "os:" << peerOsName() << "cores:" << challenge.cpu_cores()
-               << "arch:" << peerArch() << "display_name:" << peerDisplayName() << ")";
+    CLOG(TRACE) << "Server (version:" << peerVersion().toString() << "name:" << peerComputerName()
+                << "os:" << peerOsName() << "cores:" << challenge.cpu_cores()
+                << "arch:" << peerArch() << "display_name:" << peerDisplayName() << ")";
 
     if (peerVersion() < kMinimumSupportedVersion)
     {
@@ -648,7 +648,7 @@ void ClientAuthenticator::sendSessionResponse()
         return;
     }
 
-    CLOG(INFO) << "Sending: SessionResponse (" << message.size() << ")";
+    CLOG(TRACE) << "Sending: SessionResponse (" << message.size() << ")";
     emit sig_outgoingMessage(message, true);
     finish(FROM_HERE, ErrorCode::SUCCESS);
 }

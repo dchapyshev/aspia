@@ -42,7 +42,7 @@ Authenticator::Authenticator(QObject* parent)
       transcript_hash_(GenericHash::BLAKE2s256),
       timer_(new QTimer(this))
 {
-    CLOG(INFO) << "Ctor";
+    CLOG(TRACE) << "Ctor";
 
     timer_->setSingleShot(true);
     connect(timer_, &QTimer::timeout, this, [this]()
@@ -54,7 +54,7 @@ Authenticator::Authenticator(QObject* parent)
 //--------------------------------------------------------------------------------------------------
 Authenticator::~Authenticator()
 {
-    CLOG(INFO) << "Dtor";
+    CLOG(TRACE) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -73,7 +73,7 @@ void Authenticator::start()
     timer_->start(kTimeout);
 
     if (onStarted())
-        CLOG(INFO) << "Authentication started";
+        CLOG(TRACE) << "Authentication started";
     else
         CLOG(ERROR) << "Unable to start authentication";
 }
@@ -132,14 +132,14 @@ void Authenticator::finish(const Location& location, ErrorCode error_code)
     else
         state_ = State::FAILED;
 
-    CLOG(INFO) << "Authenticator finished:" << error_code << "(" << location << ")";
+    CLOG(TRACE) << "Authenticator finished:" << error_code << "(" << location << ")";
     emit sig_finished(error_code);
 }
 
 //--------------------------------------------------------------------------------------------------
 void Authenticator::setPeerVersion(const proto::peer::Version& version)
 {
-    CLOG(INFO) << "Version changed from" << peer_version_ << "to" << version;
+    CLOG(TRACE) << "Version changed from" << peer_version_ << "to" << version;
     peer_version_ = parse(version);
 }
 

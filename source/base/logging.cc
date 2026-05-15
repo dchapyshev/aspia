@@ -60,7 +60,7 @@ LoggingFile g_log_file;
 //--------------------------------------------------------------------------------------------------
 const QString& severityName(LoggingSeverity severity)
 {
-    static const QString kLogSeverityNames[] = { "INFO", "WARNING", "ERROR", "FATAL" };
+    static const QString kLogSeverityNames[] = { "TRACE", "INFO", "WARNING", "ERROR", "FATAL" };
     static const QString kUnknown("UNKNOWN");
 
     static_assert(LOG_NUMBER == std::size(kLogSeverityNames));
@@ -140,6 +140,8 @@ LoggingSeverity qtMessageTypeToSeverity(QtMsgType type)
             return LOG_WARNING;
 
         case QtDebugMsg:
+            return LOG_TRACE;
+
         case QtInfoMsg:
         default:
             return LOG_INFO;
@@ -178,7 +180,7 @@ LoggingSettings::LoggingSettings()
         int log_level_var = qEnvironmentVariableIntValue("ASPIA_LOG_LEVEL", &ok);
         if (ok)
         {
-            int log_level = std::max(log_level_var, LOG_INFO);
+            int log_level = std::max(log_level_var, LOG_TRACE);
             log_level = std::min(log_level, LOG_FATAL);
             min_log_level = log_level;
         }
@@ -289,7 +291,6 @@ bool initLogging(const LoggingSettings& settings)
     LOG(INFO) << "Debug build: Yes";
 #endif // defined(NDEBUG)
 
-    LOG(INFO) << "Logging started";
     return true;
 }
 

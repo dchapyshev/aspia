@@ -34,7 +34,7 @@ const QString kTranslationsDir = ":/tr/";
 //--------------------------------------------------------------------------------------------------
 Translations::Translations()
 {
-    LOG(INFO) << "Ctor";
+    LOG(TRACE) << "Ctor";
 
     const QStringList qm_file_list =
         QDir(kTranslationsDir).entryList(QStringList("*.qm"), QDir::Files);
@@ -54,7 +54,7 @@ Translations::Translations()
             locale_name = locale_name.right(2);
         }
 
-        LOG(INFO) << "Added:" << qm_file << locale_name;
+        LOG(TRACE) << "Added:" << qm_file << locale_name;
 
         if (locale_list_.contains(locale_name))
             locale_list_[locale_name].emplace_back(qm_file);
@@ -66,7 +66,7 @@ Translations::Translations()
 //--------------------------------------------------------------------------------------------------
 Translations::~Translations()
 {
-    LOG(INFO) << "Dtor";
+    LOG(TRACE) << "Dtor";
     removeTranslators();
 }
 

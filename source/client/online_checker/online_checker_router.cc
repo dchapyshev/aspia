@@ -37,7 +37,7 @@ OnlineCheckerRouter::OnlineCheckerRouter(const ComputerList& computers, QObject*
       timer_(new QTimer(this)),
       computers_(computers)
 {
-    LOG(INFO) << "Ctor";
+    LOG(TRACE) << "Ctor";
 
     timer_->setSingleShot(true);
     connect(timer_, &QTimer::timeout, this, [this]() { onFinished(FROM_HERE); });
@@ -46,7 +46,7 @@ OnlineCheckerRouter::OnlineCheckerRouter(const ComputerList& computers, QObject*
 //--------------------------------------------------------------------------------------------------
 OnlineCheckerRouter::~OnlineCheckerRouter()
 {
-    LOG(INFO) << "Dtor";
+    LOG(TRACE) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -56,7 +56,7 @@ void OnlineCheckerRouter::start()
 
     if (computers_.isEmpty())
     {
-        LOG(INFO) << "No computers in list";
+        LOG(TRACE) << "No computers in list";
         onFinished(FROM_HERE);
         return;
     }
@@ -80,7 +80,7 @@ void OnlineCheckerRouter::checkNextComputer()
 {
     if (computers_.isEmpty())
     {
-        LOG(INFO) << "No more computers";
+        LOG(TRACE) << "No more computers";
         onFinished(FROM_HERE);
         return;
     }
@@ -88,8 +88,8 @@ void OnlineCheckerRouter::checkNextComputer()
     const ComputerConfig& computer = computers_.front();
     const HostId host_id = stringToHostId(computer.address());
 
-    LOG(INFO) << "Checking status for host id" << host_id
-              << "(router_id:" << computer.routerId() << "computer_id:" << computer.id() << ")";
+    LOG(TRACE) << "Checking status for host id" << host_id
+               << "(router_id:" << computer.routerId() << "computer_id:" << computer.id() << ")";
 
     Router* connection = Router::instance(computer.routerId());
 
@@ -118,7 +118,7 @@ void OnlineCheckerRouter::checkNextComputer()
 //--------------------------------------------------------------------------------------------------
 void OnlineCheckerRouter::onFinished(const Location& location)
 {
-    LOG(INFO) << "Finished (" << location << ")";
+    LOG(TRACE) << "Finished (" << location << ")";
 
     for (const ComputerConfig& computer : std::as_const(computers_))
         emit sig_checkerResult(computer.id(), false);

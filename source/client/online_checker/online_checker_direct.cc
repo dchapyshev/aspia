@@ -68,7 +68,7 @@ OnlineCheckerDirect::Instance::Instance(const ComputerConfig& computer, QObject*
 
     connect(&timer_, &QTimer::timeout, this, [this]()
     {
-        LOG(INFO) << "Timeout for computer:" << computer_.id();
+        LOG(TRACE) << "Timeout for computer:" << computer_.id();
         onFinished(FROM_HERE, false);
     });
 
@@ -87,8 +87,8 @@ void OnlineCheckerDirect::Instance::start()
 {
     Address address = Address::fromString(computer_.address(), DEFAULT_HOST_TCP_PORT);
 
-    LOG(INFO) << "Starting connection to" << address.host() << ":" << address.port()
-              << "(computer:" << computer_.id() << ")";
+    LOG(TRACE) << "Starting connection to" << address.host() << ":" << address.port()
+               << "(computer:" << computer_.id() << ")";
 
     ClientAuthenticator* authenticator = new ClientAuthenticator();
     authenticator->setIdentify(proto::key_exchange::IDENTIFY_SRP);
@@ -108,21 +108,21 @@ void OnlineCheckerDirect::Instance::start()
 //--------------------------------------------------------------------------------------------------
 void OnlineCheckerDirect::Instance::onTcpAuthenticated()
 {
-    LOG(INFO) << "Authentication succeeded (computer:" << computer_.id() << ")";
+    LOG(TRACE) << "Authentication succeeded (computer:" << computer_.id() << ")";
     onFinished(FROM_HERE, true);
 }
 
 //--------------------------------------------------------------------------------------------------
 void OnlineCheckerDirect::Instance::onTcpErrorOccurred(TcpChannel::ErrorCode /* error_code */)
 {
-    LOG(INFO) << "Connection aborted for computer:" << computer_.id();
+    LOG(TRACE) << "Connection aborted for computer:" << computer_.id();
     onFinished(FROM_HERE, false);
 }
 
 //--------------------------------------------------------------------------------------------------
 void OnlineCheckerDirect::Instance::onFinished(const Location& location, bool online)
 {
-    LOG(INFO) << "Finished:" << location;
+    LOG(TRACE) << "Finished:" << location;
 
     if (finished_)
         return;
@@ -139,13 +139,13 @@ OnlineCheckerDirect::OnlineCheckerDirect(const ComputerList& computers, QObject*
     : QObject(parent),
       pending_queue_(computers)
 {
-    LOG(INFO) << "Ctor";
+    LOG(TRACE) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
 OnlineCheckerDirect::~OnlineCheckerDirect()
 {
-    LOG(INFO) << "Dtor";
+    LOG(TRACE) << "Dtor";
 
     pending_queue_.clear();
     work_queue_.clear();
@@ -156,7 +156,7 @@ void OnlineCheckerDirect::start()
 {
     if (pending_queue_.isEmpty())
     {
-        LOG(INFO) << "No computers in list";
+        LOG(TRACE) << "No computers in list";
         onFinished(FROM_HERE);
         return;
     }
@@ -167,7 +167,7 @@ void OnlineCheckerDirect::start()
         const ComputerConfig& computer = pending_queue_.front();
         Instance* instance = new Instance(computer, this);
 
-        LOG(INFO) << "Instance for" << computer.id() << "is created (" << computer.address() << ")";
+        LOG(TRACE) << "Instance for" << computer.id() << "is created (" << computer.address() << ")";
         work_queue_.emplace_back(instance);
         pending_queue_.pop_front();
 
@@ -188,7 +188,7 @@ void OnlineCheckerDirect::onChecked(qint64 computer_id, bool online)
         const ComputerConfig& computer = pending_queue_.front();
         Instance* instance = new Instance(computer, this);
 
-        LOG(INFO) << "Instance for" << computer.id() << "is created (" << computer.address() << ")";
+        LOG(TRACE) << "Instance for" << computer.id() << "is created (" << computer.address() << ")";
 
         work_queue_.emplace_back(instance);
         instance->start();
@@ -210,7 +210,7 @@ void OnlineCheckerDirect::onChecked(qint64 computer_id, bool online)
 
         if (work_queue_.isEmpty())
         {
-            LOG(INFO) << "No more items in queue";
+            LOG(TRACE) << "No more items in queue";
             onFinished(FROM_HERE);
             return;
         }
@@ -220,6 +220,6 @@ void OnlineCheckerDirect::onChecked(qint64 computer_id, bool online)
 //--------------------------------------------------------------------------------------------------
 void OnlineCheckerDirect::onFinished(const Location& location)
 {
-    LOG(INFO) << "Finished (from" << location << ")";
+    LOG(TRACE) << "Finished (from" << location << ")";
     emit sig_checkerFinished();
 }

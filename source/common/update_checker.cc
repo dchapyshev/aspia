@@ -29,13 +29,13 @@ UpdateChecker::UpdateChecker(const QString& server, const QString& package, QObj
       server_(server),
       package_(package)
 {
-    LOG(INFO) << "Ctor";
+    LOG(TRACE) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
 UpdateChecker::~UpdateChecker()
 {
-    LOG(INFO) << "Dtor";
+    LOG(TRACE) << "Dtor";
 
     interrupted_.store(true, std::memory_order_relaxed);
     wait();
@@ -64,7 +64,7 @@ static int debugFunc(
             if (message.ends_with("\r"))
                 message = message.substr(0, message.size() - 1);
 
-            LOG(INFO) << message;
+            LOG(TRACE) << message;
         }
         break;
 
@@ -78,7 +78,7 @@ static int debugFunc(
 //--------------------------------------------------------------------------------------------------
 void UpdateChecker::run()
 {
-    LOG(INFO) << "run BEGIN";
+    LOG(TRACE) << "run BEGIN";
     interrupted_.store(false, std::memory_order_relaxed);
 
     QString os;
@@ -188,5 +188,5 @@ void UpdateChecker::run()
         emit sig_checkedFinished(response);
     }
 
-    LOG(INFO) << "run END";
+    LOG(TRACE) << "run END";
 }

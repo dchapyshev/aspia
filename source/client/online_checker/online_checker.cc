@@ -27,13 +27,13 @@
 OnlineChecker::OnlineChecker(QObject* parent)
     : QObject(parent)
 {
-    LOG(INFO) << "Ctor";
+    LOG(TRACE) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
 OnlineChecker::~OnlineChecker()
 {
-    LOG(INFO) << "Dtor";
+    LOG(TRACE) << "Dtor";
 
     if (router_checker_)
         router_checker_->disconnect(this);
@@ -45,7 +45,7 @@ OnlineChecker::~OnlineChecker()
 //--------------------------------------------------------------------------------------------------
 void OnlineChecker::start(const ComputerList& computers)
 {
-    LOG(INFO) << "Start online checker (total computers:" << computers.size() << ")";
+    LOG(TRACE) << "Start online checker (total computers:" << computers.size() << ")";
 
     for (const ComputerConfig& computer : computers)
     {
@@ -71,13 +71,13 @@ void OnlineChecker::start(const ComputerList& computers)
     }
     else
     {
-        LOG(INFO) << "Computer list for ROUTER is empty";
+        LOG(TRACE) << "Computer list for ROUTER is empty";
         router_finished_ = true;
     }
 
     if (!direct_computers_.isEmpty())
     {
-        LOG(INFO) << "Computers for DIRECT checking:" << direct_computers_.size();
+        LOG(TRACE) << "Computers for DIRECT checking:" << direct_computers_.size();
 
         direct_checker_ = new OnlineCheckerDirect(direct_computers_);
         direct_checker_->moveToThread(GuiApplication::ioThread());
@@ -93,7 +93,7 @@ void OnlineChecker::start(const ComputerList& computers)
     }
     else
     {
-        LOG(INFO) << "Computer list for DIRECT is empty";
+        LOG(TRACE) << "Computer list for DIRECT is empty";
         direct_finished_ = true;
     }
 }
@@ -109,7 +109,7 @@ void OnlineChecker::onDirectCheckerFinished()
 {
     direct_finished_ = true;
 
-    LOG(INFO) << "DIRECT checker finished (r:" << router_finished_ << ", d:" << direct_finished_ << ")";
+    LOG(TRACE) << "DIRECT checker finished (r:" << router_finished_ << ", d:" << direct_finished_ << ")";
 
     if (direct_finished_ && router_finished_)
         emit sig_checkerFinished();
@@ -126,7 +126,7 @@ void OnlineChecker::onRouterCheckerFinished()
 {
     router_finished_ = true;
 
-    LOG(INFO) << "ROUTER checker finished (r:" << router_finished_ << ", d:" << direct_finished_ << ")";
+    LOG(TRACE) << "ROUTER checker finished (r:" << router_finished_ << ", d:" << direct_finished_ << ")";
 
     if (direct_finished_ && router_finished_)
         emit sig_checkerFinished();

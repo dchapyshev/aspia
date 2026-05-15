@@ -836,7 +836,7 @@ bool Database::openDatabase()
         return false;
     }
 
-    LOG(INFO) << (!QFileInfo::exists(file_path) ? "Creating" : "Opening") << "book database:" << file_path;
+    LOG(INFO) << (!QFileInfo::exists(file_path) ? "Creating" : "Opening") << "database:" << file_path;
 
     QSqlDatabase db = QSqlDatabase::database(kConnectionName, false);
     if (!db.isValid())

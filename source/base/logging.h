@@ -76,7 +76,7 @@
 // Windows and errno on POSIX).
 //
 // The supported severity levels for macros that allow you to specify one are (in increasing order
-// of severity) INFO, WARNING, ERROR, and FATAL.
+// of severity) TRACE, INFO, WARNING, ERROR, and FATAL.
 //
 // Very important: logging a message at the FATAL severity level causes the program to terminate
 // (after the message is logged).
@@ -114,11 +114,12 @@ enum LoggingDestination
 
 using LoggingSeverity = int;
 
-[[maybe_unused]] const LoggingSeverity LOG_INFO = 0;
-[[maybe_unused]] const LoggingSeverity LOG_WARNING = 1;
-[[maybe_unused]] const LoggingSeverity LOG_ERROR = 2;
-[[maybe_unused]] const LoggingSeverity LOG_FATAL = 3;
-[[maybe_unused]] const LoggingSeverity LOG_NUMBER = 4;
+[[maybe_unused]] const LoggingSeverity LOG_TRACE = 0;
+[[maybe_unused]] const LoggingSeverity LOG_INFO = 1;
+[[maybe_unused]] const LoggingSeverity LOG_WARNING = 2;
+[[maybe_unused]] const LoggingSeverity LOG_ERROR = 3;
+[[maybe_unused]] const LoggingSeverity LOG_FATAL = 4;
+[[maybe_unused]] const LoggingSeverity LOG_NUMBER = 5;
 [[maybe_unused]] const LoggingSeverity LOG_DFATAL = LOG_FATAL;
 [[maybe_unused]] const LoggingSeverity LOG_DCHECK = LOG_FATAL;
 
@@ -157,6 +158,8 @@ bool shouldCreateLogMessage(LoggingSeverity severity);
 
 // A few definitions of macros that don't generate much code. These are used by LOG() and LOG_IF,
 // etc. Since these are used all over our code, it's better to have compact code for these operations.
+#define COMPACT_LOG_EX_TRACE(ClassName, ...) \
+    ::ClassName(__FILE__, __LINE__, __FUNCTION__, ::LOG_TRACE, ##__VA_ARGS__)
 #define COMPACT_LOG_EX_INFO(ClassName, ...) \
     ::ClassName(__FILE__, __LINE__, __FUNCTION__, ::LOG_INFO, ##__VA_ARGS__)
 #define COMPACT_LOG_EX_WARNING(ClassName, ...) \
@@ -170,6 +173,7 @@ bool shouldCreateLogMessage(LoggingSeverity severity);
 #define COMPACT_LOG_EX_DCHECK(ClassName, ...) \
     ::ClassName(__FILE__, __LINE__, __FUNCTION__, ::LOG_DCHECK, ##__VA_ARGS__)
 
+#define COMPACT_LOG_TRACE   COMPACT_LOG_EX_TRACE(LogMessage)
 #define COMPACT_LOG_INFO    COMPACT_LOG_EX_INFO(LogMessage)
 #define COMPACT_LOG_WARNING COMPACT_LOG_EX_WARNING(LogMessage)
 #define COMPACT_LOG_ERROR   COMPACT_LOG_EX_ERROR(LogMessage)

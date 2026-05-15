@@ -113,7 +113,7 @@ void TcpChannelNG::doAuthentication()
         return;
     }
 
-    CLOG(INFO) << "Start authentication";
+    CLOG(TRACE) << "Start authentication";
     authenticator_->start();
     setPaused(false);
 }
@@ -127,7 +127,7 @@ void TcpChannelNG::connectTo(const QString& address, quint16 port, const Seconds
     std::string host = address.toLocal8Bit().toStdString();
     std::string service = std::to_string(port);
 
-    CLOG(INFO) << "Start resolving for" << host << ":" << service;
+    CLOG(TRACE) << "Start resolving for" << host << ":" << service;
 
     // Watchdog for the entire connect phase (resolve + TCP handshake). Without it the channel
     // would wait for the OS-level SYN-retransmit timeout (~2 minutes on Linux) before reporting
@@ -157,7 +157,7 @@ void TcpChannelNG::connectTo(const QString& address, quint16 port, const Seconds
             return;
         }
 
-        CLOG(INFO) << "Resolved:" << endpointsToString(endpoints);
+        CLOG(TRACE) << "Resolved:" << endpointsToString(endpoints);
 
         asio::async_connect(socket_, endpoints,
             [](const std::error_code& error_code, const asio::ip::tcp::endpoint& next)
@@ -185,7 +185,7 @@ void TcpChannelNG::connectTo(const QString& address, quint16 port, const Seconds
                 return;
             }
 
-            CLOG(INFO) << "Connected to:" << endpoint.address().to_string() << ":" << endpoint.port();
+            CLOG(TRACE) << "Connected to:" << endpoint.address().to_string() << ":" << endpoint.port();
             watchdog->cancel();
 
             setConnected(true);
@@ -410,17 +410,17 @@ void TcpChannelNG::setConnected(bool connected)
     asio::ip::tcp::no_delay no_delay_option(true);
     socket_.set_option(no_delay_option, error_code);
     if (!error_code)
-        CLOG(INFO) << "Nagle's algorithm is disabled";
+        CLOG(TRACE) << "Nagle's algorithm is disabled";
 
     asio::socket_base::receive_buffer_size receive_option;
     socket_.get_option(receive_option, error_code);
     if (!error_code)
-        CLOG(INFO) << "Read buffer size:" << receive_option.value();
+        CLOG(TRACE) << "Read buffer size:" << receive_option.value();
 
     asio::socket_base::send_buffer_size send_option;
     socket_.get_option(send_option, error_code);
     if (!error_code)
-        CLOG(INFO) << "Write buffer size:" << send_option.value();
+        CLOG(TRACE) << "Write buffer size:" << send_option.value();
 
     try
     {
@@ -487,14 +487,14 @@ void TcpChannelNG::onErrorOccurred(const Location& location, const std::error_co
         error = ErrorCode::SOCKET_TIMEOUT;
 #endif
 
-    CLOG(ERROR) << "Asio error:" << error_code;
+    CLOG(TRACE) << "Asio error:" << error_code;
     onErrorOccurred(location, error);
 }
 
 //--------------------------------------------------------------------------------------------------
 void TcpChannelNG::onErrorOccurred(const Location& location, ErrorCode error_code)
 {
-    CLOG(ERROR) << "Connection finished:" << error_code << "from" << location;
+    CLOG(TRACE) << "Connection finished:" << error_code << "from" << location;
 
     if (!*alive_guard_)
         return;

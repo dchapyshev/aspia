@@ -43,13 +43,13 @@ constexpr size_t kIvSize = 12;
 ServerAuthenticator::ServerAuthenticator(QObject* parent)
     : Authenticator(parent)
 {
-    CLOG(INFO) << "Ctor";
+    CLOG(TRACE) << "Ctor";
 }
 
 //--------------------------------------------------------------------------------------------------
 ServerAuthenticator::~ServerAuthenticator()
 {
-    CLOG(INFO) << "Dtor";
+    CLOG(TRACE) << "Dtor";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -58,8 +58,8 @@ void ServerAuthenticator::setUserList(SharedPointer<UserListBase> user_list)
     user_list_ = std::move(user_list);
     CDCHECK(user_list_);
 
-    CLOG(INFO) << "User list is assigned (count:" << user_list_->list().size() << "seed key:"
-               << user_list_->seedKey().size() << ")";
+    CLOG(TRACE) << "User list is assigned (count:" << user_list_->list().size() << "seed key:"
+                << user_list_->seedKey().size() << ")";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -202,7 +202,7 @@ QByteArray ServerAuthenticator::keyLabel(Direction direction) const
 //--------------------------------------------------------------------------------------------------
 void ServerAuthenticator::onClientHello(const QByteArray& buffer)
 {
-    CLOG(INFO) << "Received: ClientHello (" << buffer.size() << ")";
+    CLOG(TRACE) << "Received: ClientHello (" << buffer.size() << ")";
 
     if (buffer.isEmpty())
     {
@@ -219,15 +219,15 @@ void ServerAuthenticator::onClientHello(const QByteArray& buffer)
 
     const quint32 encryption = client_hello.encryption();
 
-    CLOG(INFO) << "Supported by client:";
+    CLOG(TRACE) << "Supported by client:";
 
     if (encryption & proto::key_exchange::ENCRYPTION_AES256_GCM)
-        CLOG(INFO) << "ENCRYPTION_AES256_GCM";
+        CLOG(TRACE) << "ENCRYPTION_AES256_GCM";
 
     if (encryption & proto::key_exchange::ENCRYPTION_CHACHA20_POLY1305)
-        CLOG(INFO) << "ENCRYPTION_CHACHA20_POLY1305";
+        CLOG(TRACE) << "ENCRYPTION_CHACHA20_POLY1305";
 
-    CLOG(INFO) << "Identify: " << client_hello.identify();
+    CLOG(TRACE) << "Identify: " << client_hello.identify();
 
     if (!(encryption & proto::key_exchange::ENCRYPTION_AES256_GCM) &&
         !(encryption & proto::key_exchange::ENCRYPTION_CHACHA20_POLY1305))
@@ -355,13 +355,13 @@ void ServerAuthenticator::onClientHello(const QByteArray& buffer)
 
     if ((encryption & proto::key_exchange::ENCRYPTION_AES256_GCM) && has_aes_ni)
     {
-        CLOG(INFO) << "Both sides have hardware support AES. Using AES256 GCM";
+        CLOG(TRACE) << "Both sides have hardware support AES. Using AES256 GCM";
         // If both sides of the connection support AES, then method AES256 GCM is the fastest option.
         server_hello.set_encryption(proto::key_exchange::ENCRYPTION_AES256_GCM);
     }
     else
     {
-        CLOG(INFO) << "Using ChaCha20+Poly1305";
+        CLOG(TRACE) << "Using ChaCha20+Poly1305";
         // Otherwise, we use ChaCha20+Poly1305. This works faster in the absence of hardware
         // support AES.
         server_hello.set_encryption(proto::key_exchange::ENCRYPTION_CHACHA20_POLY1305);
@@ -376,7 +376,7 @@ void ServerAuthenticator::onClientHello(const QByteArray& buffer)
         return;
     }
 
-    CLOG(INFO) << "Sending: ServerHello (" << message.size() << ")";
+    CLOG(TRACE) << "Sending: ServerHello (" << message.size() << ")";
     appendTranscript(message);
     emit sig_outgoingMessage(message, false);
 
@@ -384,7 +384,7 @@ void ServerAuthenticator::onClientHello(const QByteArray& buffer)
     // For SRP this is the ephemeral phase: it protects SrpIdentify / SrpServerKeyExchange /
     // SrpClientKeyExchange.
     // For ANONYMOUS it is the final phase.
-    CLOG(INFO) << "Session key is ready";
+    CLOG(TRACE) << "Session key is ready";
     setSessionKeyReady();
 
     switch (identify_)
@@ -406,7 +406,7 @@ void ServerAuthenticator::onClientHello(const QByteArray& buffer)
 //--------------------------------------------------------------------------------------------------
 void ServerAuthenticator::onIdentify(const QByteArray& buffer)
 {
-    CLOG(INFO) << "Received: Identify (" << buffer.size() << ")";
+    CLOG(TRACE) << "Received: Identify (" << buffer.size() << ")";
 
     if (buffer.isEmpty())
     {
@@ -430,7 +430,7 @@ void ServerAuthenticator::onIdentify(const QByteArray& buffer)
         return;
     }
 
-    CLOG(INFO) << "Username:" << user_name_;
+    CLOG(TRACE) << "Username:" << user_name_;
 
     QByteArray seed_key;
     User user;
@@ -453,12 +453,12 @@ void ServerAuthenticator::onIdentify(const QByteArray& buffer)
 
     if (user.isValid())
     {
-        CLOG(INFO) << "User" << user_name_ << "is found (enabled:"
-                   << ((user.flags & User::ENABLED) != 0) << ")";
+        CLOG(TRACE) << "User" << user_name_ << "is found (enabled:"
+                    << ((user.flags & User::ENABLED) != 0) << ")";
     }
     else
     {
-        CLOG(INFO) << "User" << user_name_ << "is NOT found";
+        CLOG(TRACE) << "User" << user_name_ << "is NOT found";
     }
 
     // Always perform the fake verifier derivation, regardless of whether the user exists.
@@ -535,7 +535,7 @@ void ServerAuthenticator::onIdentify(const QByteArray& buffer)
         return;
     }
 
-    CLOG(INFO) << "Sending: ServerKeyExchange (" << message.size() << ")";
+    CLOG(TRACE) << "Sending: ServerKeyExchange (" << message.size() << ")";
     appendTranscript(message);
 
     // Encrypted under the ephemeral key. Channel rebuilds its encryptor to the final key on
@@ -547,7 +547,7 @@ void ServerAuthenticator::onIdentify(const QByteArray& buffer)
 //--------------------------------------------------------------------------------------------------
 void ServerAuthenticator::onClientKeyExchange(const QByteArray& buffer)
 {
-    CLOG(INFO) << "Received: ClientKeyExchange (" << buffer.size() << ")";
+    CLOG(TRACE) << "Received: ClientKeyExchange (" << buffer.size() << ")";
 
     if (buffer.isEmpty())
     {
@@ -595,7 +595,7 @@ void ServerAuthenticator::onClientKeyExchange(const QByteArray& buffer)
             return;
     }
 
-    CLOG(INFO) << "Session key is ready";
+    CLOG(TRACE) << "Session key is ready";
     setSessionKeyReady();
 
     doSessionChallenge();
@@ -625,7 +625,7 @@ void ServerAuthenticator::doSessionChallenge()
         return;
     }
 
-    CLOG(INFO) << "Sending: SessionChallenge (" << message.size() << ")";
+    CLOG(TRACE) << "Sending: SessionChallenge (" << message.size() << ")";
     emit sig_outgoingMessage(message, true);
     internal_state_ = InternalState::READ_SESSION_RESPONSE;
 }
@@ -633,7 +633,7 @@ void ServerAuthenticator::doSessionChallenge()
 //--------------------------------------------------------------------------------------------------
 void ServerAuthenticator::onSessionResponse(const QByteArray& buffer)
 {
-    CLOG(INFO) << "Received: SessionResponse (" << buffer.size() << ")";
+    CLOG(TRACE) << "Received: SessionResponse (" << buffer.size() << ")";
 
     if (buffer.isEmpty())
     {
@@ -655,11 +655,11 @@ void ServerAuthenticator::onSessionResponse(const QByteArray& buffer)
     setPeerVersion(response.version());
     is_probe_ = response.probe();
 
-    CLOG(INFO) << "Client (session_type:" << response.session_type()
-               << "version:" << peerVersion().toString() << "name:" << peerComputerName()
-               << "os:" << peerOsName() << "cores:" << response.cpu_cores()
-               << "arch:" << peerArch() << "display_name:" << peerDisplayName()
-               << "probe:" << is_probe_ << ")";
+    CLOG(TRACE) << "Client (session_type:" << response.session_type()
+                << "version:" << peerVersion().toString() << "name:" << peerComputerName()
+                << "os:" << peerOsName() << "cores:" << response.cpu_cores()
+                << "arch:" << peerArch() << "display_name:" << peerDisplayName()
+                << "probe:" << is_probe_ << ")";
 
     if (peerVersion() < kMinimumSupportedVersion)
     {
