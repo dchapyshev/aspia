@@ -48,7 +48,7 @@ struct FrameInfo
 };
 
 QMutex g_dbghelp_lock;
-std::atomic<int> g_crash_log_fd{-1};
+std::atomic<HANDLE> g_crash_log_handle{INVALID_HANDLE_VALUE};
 std::atomic<bool> g_symbols_initialized{false};
 QString g_dump_file_prefix;
 
@@ -266,9 +266,12 @@ QList<FrameInfo> walkStackFromContext(const CONTEXT* context)
 //--------------------------------------------------------------------------------------------------
 void writeRawToCrashLog(const char* data, size_t size)
 {
-    const int fd = g_crash_log_fd.load(std::memory_order_relaxed);
-    if (fd >= 0)
-        _write(fd, data, static_cast<unsigned int>(size));
+    HANDLE handle = g_crash_log_handle.load(std::memory_order_relaxed);
+    if (handle != INVALID_HANDLE_VALUE && handle != nullptr)
+    {
+        DWORD written = 0;
+        WriteFile(handle, data, static_cast<DWORD>(size), &written, nullptr);
+    }
 
     fwrite(data, 1, size, stderr);
 }
@@ -399,9 +402,10 @@ void installCrashHandler(const QString& dump_file_prefix)
 }
 
 //--------------------------------------------------------------------------------------------------
-void setCrashLogFileDescriptor(int fd)
+void setCrashLogHandle(qintptr handle)
 {
-    g_crash_log_fd.store(fd, std::memory_order_relaxed);
+    HANDLE h = (handle == -1) ? INVALID_HANDLE_VALUE : reinterpret_cast<HANDLE>(handle);
+    g_crash_log_handle.store(h, std::memory_order_relaxed);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -432,9 +436,9 @@ void installCrashHandler(const QString& /* dump_file_prefix */)
 }
 
 //--------------------------------------------------------------------------------------------------
-void setCrashLogFileDescriptor(int /* fd */)
+void setCrashLogHandle(qintptr /* handle */)
 {
-    // Nothing.
+    // TODO: store fd once a POSIX crash handler exists.
 }
 
 //--------------------------------------------------------------------------------------------------

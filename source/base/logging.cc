@@ -19,13 +19,13 @@
 #include "base/logging.h"
 
 #include <QDateTime>
-#include <QFile>
 #include <QDir>
-#include <QMutex>
+#include <QFileInfo>
 #include <QThread>
 
 #include "base/crash_handler.h"
 #include "base/debug.h"
+#include "base/logging_file.h"
 
 #if defined(Q_OS_WINDOWS)
 #include <qt_windows.h>
@@ -46,20 +46,16 @@
 namespace {
 
 const LoggingSeverity kDefaultLogLevel = LOG_FATAL;
-const qint64 kDefaultMaxLogFileSize = 2 * 1024 * 1024; // 2 Mb.
 const qint64 kDefaultMaxLogFileAge = 14; // 14 days.
 
 LoggingSeverity g_min_log_level = LOG_ERROR;
 LoggingDestination g_logging_destination = LOG_DEFAULT;
 
-qint64 g_max_log_file_size = kDefaultMaxLogFileSize;
 qint64 g_max_log_file_age = kDefaultMaxLogFileAge;
-int g_log_file_number = -1;
 
 QString g_log_dir_path;
 QString g_log_file_path;
-QFile g_log_file;
-QMutex g_log_file_lock;
+LoggingFile g_log_file;
 
 //--------------------------------------------------------------------------------------------------
 const QString& severityName(LoggingSeverity severity)
@@ -97,16 +93,10 @@ QString defaultLogFileDir()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool initLoggingUnlocked(const QString& prefix)
+bool initLoggingFile(const QString& prefix)
 {
-    setCrashLogFileDescriptor(-1);
-    g_log_file.close();
-
     if (!(g_logging_destination & LOG_TO_FILE))
         return true;
-
-    // The next log file must have a number higher than the current one.
-    ++g_log_file_number;
 
     QString file_dir = g_log_dir_path;
     if (file_dir.isEmpty())
@@ -123,13 +113,12 @@ bool initLoggingUnlocked(const QString& prefix)
     }
 
     QString time = QDateTime::currentDateTime().toString("yyyyMMdd-hhmmss.zzz");
-    QString file_path = QString("%1/%2-%3.%4.log").arg(file_dir, prefix, time).arg(g_log_file_number);
+    QString file_path = QString("%1/%2-%3.log").arg(file_dir, prefix, time);
 
-    g_log_file.setFileName(file_path);
-    if (!g_log_file.open(QFile::WriteOnly | QFile::Append | QFile::Text))
+    if (!g_log_file.open(file_path))
         return false;
 
-    setCrashLogFileDescriptor(g_log_file.handle());
+    setCrashLogHandle(g_log_file.nativeHandle());
 
     if (g_max_log_file_age != 0)
         removeOldFiles(file_dir, g_max_log_file_age);
@@ -181,7 +170,6 @@ QDebug* g_swallow_stream;
 //--------------------------------------------------------------------------------------------------
 LoggingSettings::LoggingSettings()
     : min_log_level(kDefaultLogLevel),
-      max_log_file_size(kDefaultMaxLogFileSize),
       max_log_file_age(kDefaultMaxLogFileAge)
 {
     if (qEnvironmentVariableIsSet("ASPIA_LOG_LEVEL"))
@@ -228,18 +216,6 @@ LoggingSettings::LoggingSettings()
         destination = LOG_TO_STDOUT;
     else
         destination = LOG_NONE;
-
-    if (qEnvironmentVariableIsSet("ASPIA_MAX_LOG_FILE_SIZE"))
-    {
-        bool ok = false;
-        int value = qEnvironmentVariableIntValue("ASPIA_MAX_LOG_FILE_SIZE", &ok);
-        if (ok)
-        {
-            static const int kMinValue = 1024;
-            static const int kMaxValue = 10 * 1024 * 1024;
-            max_log_file_size = static_cast<size_t>(std::min(std::max(value, kMinValue), kMaxValue));
-        }
-    }
 
     if (qEnvironmentVariableIsSet("ASPIA_MAX_LOG_FILE_AGE"))
     {
@@ -289,18 +265,13 @@ bool initLogging(const LoggingSettings& settings)
 {
     installCrashHandler(logFilePrefix());
 
-    {
-        QMutexLocker lock(&g_log_file_lock);
+    g_logging_destination = settings.destination;
+    g_min_log_level = settings.min_log_level;
+    g_log_dir_path = settings.log_dir;
+    g_max_log_file_age = settings.max_log_file_age;
 
-        g_logging_destination = settings.destination;
-        g_min_log_level = settings.min_log_level;
-        g_log_dir_path = settings.log_dir;
-        g_max_log_file_size = settings.max_log_file_size;
-        g_max_log_file_age = settings.max_log_file_age;
-
-        if (!initLoggingUnlocked(logFilePrefix()))
-            return false;
-    }
+    if (!initLoggingFile(logFilePrefix()))
+        return false;
 
     qInstallMessageHandler(qtMessageHandler);
 
@@ -326,8 +297,7 @@ bool initLogging(const LoggingSettings& settings)
 void shutdownLogging()
 {
     LOG(INFO) << "Logging finished";
-    QMutexLocker lock(&g_log_file_lock);
-    setCrashLogFileDescriptor(-1);
+    setCrashLogHandle(-1);
     g_log_file.close();
 }
 
@@ -468,19 +438,7 @@ LogMessage::~LogMessage()
 
     // Write to log file.
     if ((g_logging_destination & LOG_TO_FILE) != 0)
-    {
-        QMutexLocker lock(&g_log_file_lock);
-
-        if (g_log_file.size() >= g_max_log_file_size)
-        {
-            // The maximum size of the log file has been exceeded. Close the current log file and
-            // create a new one.
-            initLoggingUnlocked(logFilePrefix());
-        }
-
         g_log_file.write(message.data(), message.size());
-        g_log_file.flush();
-    }
 
     if (severity_ == LOG_FATAL)
     {

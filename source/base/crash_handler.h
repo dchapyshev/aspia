@@ -27,9 +27,12 @@
 // log and produces a minidump file. On other platforms this is a no-op for now.
 void installCrashHandler(const QString& dump_file_prefix);
 
-// Provides the active log file descriptor so the crash handler can append
-// crash information to it directly (bypassing Qt locking). Pass -1 to detach.
-void setCrashLogFileDescriptor(int fd);
+// Provides the active log file native descriptor so the crash handler can append
+// crash information to it directly, bypassing CRT and user-space locking. The value
+// is platform-specific (see LoggingFile::nativeHandle): a Win32 HANDLE cast to qintptr
+// on Windows, a POSIX file descriptor elsewhere. Pass -1 to detach.
+// No-op on platforms where the crash handler is not yet implemented.
+void setCrashLogHandle(qintptr handle);
 
 // Returns a symbolized stack trace of the current call stack as a string.
 // |skip_frames| controls how many innermost frames to skip (defaults to the

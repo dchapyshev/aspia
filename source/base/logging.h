@@ -128,7 +128,6 @@ struct LoggingSettings
     //
     //  destination: LOG_DEFAULT
     //  min_log_level: LOG_INFO
-    //  max_log_file_size: 2 Mb
     //  max_log_file_age: 14 days
     LoggingSettings();
 
@@ -137,7 +136,6 @@ struct LoggingSettings
 
     QString log_dir;
 
-    qint64 max_log_file_size;
     qint64 max_log_file_age;
 };
 

@@ -44,6 +44,8 @@ list(APPEND SOURCE_BASE
     location.h
     logging.cc
     logging.h
+    logging_file.cc
+    logging_file.h
     numeric_utils.h
     pch.h
     power_controller.cc
