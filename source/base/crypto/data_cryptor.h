@@ -25,8 +25,14 @@
 #include <QByteArray>
 #include <QByteArrayView>
 
+#include <mutex>
 #include <optional>
 
+// Thread-safe AEAD wrapper around ChaCha20-Poly1305. The singleton accessed via instance()
+// holds a process-wide key shared between all threads. EVP_CIPHER_CTX is not thread-safe, so
+// the cipher state is guarded by a mutex - encrypt() and decrypt() are serialized across
+// threads. For our workload (single-digit calls per second) this is negligible. Per-instance
+// (non-singleton) cryptors are also serialized for consistency.
 class DataCryptor
 {
 public:
@@ -44,9 +50,10 @@ public:
     static DataCryptor& instance();
 
 private:
+    mutable std::mutex mutex_;
     SecureByteArray key_;
-    mutable EVP_CIPHER_CTX_ptr encrypt_ctx_;
-    mutable EVP_CIPHER_CTX_ptr decrypt_ctx_;
+    EVP_CIPHER_CTX_ptr encrypt_ctx_;
+    EVP_CIPHER_CTX_ptr decrypt_ctx_;
 
     Q_DISABLE_COPY_MOVE(DataCryptor)
 };

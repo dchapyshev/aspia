@@ -47,6 +47,8 @@ DataCryptor::~DataCryptor() = default;
 //--------------------------------------------------------------------------------------------------
 void DataCryptor::setKey(const SecureByteArray& key)
 {
+    std::scoped_lock lock(mutex_);
+
     key_ = key;
 
     encrypt_ctx_.reset();
@@ -73,18 +75,22 @@ void DataCryptor::setKey(const SecureByteArray& key)
 //--------------------------------------------------------------------------------------------------
 SecureByteArray DataCryptor::key() const
 {
+    std::scoped_lock lock(mutex_);
     return key_;
 }
 
 //--------------------------------------------------------------------------------------------------
 bool DataCryptor::hasKey() const
 {
+    std::scoped_lock lock(mutex_);
     return !key_.isEmpty();
 }
 
 //--------------------------------------------------------------------------------------------------
 std::optional<QByteArray> DataCryptor::encrypt(QByteArrayView in) const
 {
+    std::scoped_lock lock(mutex_);
+
     if (key_.isEmpty())
         return QByteArray(in);
 
@@ -151,6 +157,8 @@ std::optional<QByteArray> DataCryptor::encrypt(QByteArrayView in) const
 //--------------------------------------------------------------------------------------------------
 std::optional<QByteArray> DataCryptor::decrypt(QByteArrayView in) const
 {
+    std::scoped_lock lock(mutex_);
+
     if (key_.isEmpty())
         return QByteArray(in);
 
@@ -213,6 +221,8 @@ std::optional<QByteArray> DataCryptor::decrypt(QByteArrayView in) const
 // static
 DataCryptor& DataCryptor::instance()
 {
-    static thread_local DataCryptor cryptor;
+    // Process-wide singleton so the master key is shared across all threads (GUI and IO).
+    // EVP_CIPHER_CTX state is guarded by the per-instance mutex.
+    static DataCryptor cryptor;
     return cryptor;
 }
