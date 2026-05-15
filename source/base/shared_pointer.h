@@ -19,6 +19,7 @@
 #ifndef BASE_SHARED_POINTER_H
 #define BASE_SHARED_POINTER_H
 
+#include <type_traits>
 #include <utility>
 
 template<typename T>
@@ -47,6 +48,15 @@ public:
             ++(*ref_count_);
     }
 
+    template<typename U, typename = std::enable_if_t<std::is_convertible_v<U*, T*>>>
+    SharedPointer(const SharedPointer<U>& other)
+        : ptr_(other.ptr_),
+          ref_count_(other.ref_count_)
+    {
+        if (ref_count_)
+            ++(*ref_count_);
+    }
+
     SharedPointer& operator=(const SharedPointer& other)
     {
         if (this != &other)
@@ -63,7 +73,30 @@ public:
         return *this;
     }
 
+    template<typename U, typename = std::enable_if_t<std::is_convertible_v<U*, T*>>>
+    SharedPointer& operator=(const SharedPointer<U>& other)
+    {
+        release();
+
+        ptr_ = other.ptr_;
+        ref_count_ = other.ref_count_;
+
+        if (ref_count_)
+            ++(*ref_count_);
+
+        return *this;
+    }
+
     SharedPointer(SharedPointer&& other) noexcept
+        : ptr_(other.ptr_),
+          ref_count_(other.ref_count_)
+    {
+        other.ptr_ = nullptr;
+        other.ref_count_ = nullptr;
+    }
+
+    template<typename U, typename = std::enable_if_t<std::is_convertible_v<U*, T*>>>
+    SharedPointer(SharedPointer<U>&& other) noexcept
         : ptr_(other.ptr_),
           ref_count_(other.ref_count_)
     {
@@ -83,6 +116,20 @@ public:
             other.ptr_ = nullptr;
             other.ref_count_ = nullptr;
         }
+
+        return *this;
+    }
+
+    template<typename U, typename = std::enable_if_t<std::is_convertible_v<U*, T*>>>
+    SharedPointer& operator=(SharedPointer<U>&& other) noexcept
+    {
+        release();
+
+        ptr_ = other.ptr_;
+        ref_count_ = other.ref_count_;
+
+        other.ptr_ = nullptr;
+        other.ref_count_ = nullptr;
 
         return *this;
     }
@@ -142,6 +189,9 @@ private:
             delete ref_count_;
         }
     }
+
+    template<typename U>
+    friend class SharedPointer;
 
     T* ptr_;
     int* ref_count_;
