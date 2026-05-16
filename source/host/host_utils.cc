@@ -39,10 +39,12 @@
 #include "base/win/window_station.h"
 #endif // defined(Q_OS_WINDOWS)
 
+#include "build/build_config.h"
 #include "build/version.h"
 #include "base/logging.h"
 #include "base/sys_info.h"
 #include "base/files/base_paths.h"
+#include "base/net/address.h"
 #include "base/peer/user.h"
 #include "host/database.h"
 #include "host/host_storage.h"
@@ -147,32 +149,36 @@ void doHostMigrate(const QJsonDocument& doc)
         db.setOneTimePasswordLength(value);
     }
 
+    Address router_address(DEFAULT_ROUTER_TCP_PORT);
+
     if (root_object.contains("RouterAddress"))
     {
         QString value = root_object["RouterAddress"].toString();
         LOG(INFO) << "RouterAddress:" << value;
-        settings.setRouterAddress(value);
+        router_address.setHost(value);
     }
 
     if (root_object.contains("RouterEnabled"))
     {
         bool value = root_object["RouterEnabled"].toString() == "true";
         LOG(INFO) << "RouterEnabled:" << value;
-        settings.setRouterEnabled(value);
+        db.setRouterEnabled(value);
     }
 
     if (root_object.contains("RouterPort"))
     {
         quint16 value = root_object["RouterPort"].toString().toUShort();
         LOG(INFO) << "RouterPort:" << value;
-        settings.setRouterPort(value);
+        router_address.setPort(value);
     }
+
+    db.setRouterAddress(router_address);
 
     if (root_object.contains("RouterPublicKey"))
     {
         QString value = root_object["RouterPublicKey"].toString();
         LOG(INFO) << "RouterPublicKey:" << value;
-        settings.setRouterPublicKey(QByteArray::fromHex(value.toLatin1()));
+        db.setRouterPublicKey(QByteArray::fromHex(value.toLatin1()));
     }
 
     if (root_object.contains("TcpPort"))

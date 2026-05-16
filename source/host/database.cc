@@ -32,6 +32,7 @@
 #include "base/crypto/random.h"
 #include "base/crypto/secure_string.h"
 #include "base/files/base_paths.h"
+#include "build/build_config.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/security_helpers.h"
@@ -47,6 +48,9 @@ namespace {
 
 const char kConnectionName[] = "host";
 const char kSettingSeedKey[] = "seed_key";
+const char kSettingRouterEnabled[] = "router_enabled";
+const char kSettingRouterAddress[] = "router_address";
+const char kSettingRouterPublicKey[] = "router_public_key";
 const char kSettingConnectConfirmation[] = "connect_confirmation";
 const char kSettingNoUserAction[] = "no_user_action";
 const char kSettingAutoConfirmationInterval[] = "auto_confirmation_interval";
@@ -424,6 +428,42 @@ QByteArray Database::seedKey() const
 bool Database::setSeedKey(const QByteArray& seed_key)
 {
     return writeSetting(kSettingSeedKey, QString::fromLatin1(seed_key.toHex()));
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::isRouterEnabled() const
+{
+    return readSetting(kSettingRouterEnabled).toInt() != 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::setRouterEnabled(bool enable)
+{
+    return writeSetting(kSettingRouterEnabled, QString::number(enable ? 1 : 0));
+}
+
+//--------------------------------------------------------------------------------------------------
+Address Database::routerAddress() const
+{
+    return Address::fromString(readSetting(kSettingRouterAddress), DEFAULT_ROUTER_TCP_PORT);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::setRouterAddress(const Address& address)
+{
+    return writeSetting(kSettingRouterAddress, address.toString());
+}
+
+//--------------------------------------------------------------------------------------------------
+QByteArray Database::routerPublicKey() const
+{
+    return QByteArray::fromHex(readSetting(kSettingRouterPublicKey).toLatin1());
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::setRouterPublicKey(const QByteArray& key)
+{
+    return writeSetting(kSettingRouterPublicKey, QString::fromLatin1(key.toHex()));
 }
 
 //--------------------------------------------------------------------------------------------------

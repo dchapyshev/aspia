@@ -30,11 +30,6 @@ const QString kTcpPort = "tcp_port";
 const QString kApplicationShutdown = "application_shutdown";
 const QString kPreferredVideoCapturer = "preferred_video_capturer";
 
-const QString kRouterEnable = "router/enable";
-const QString kRouterAddress = "router/address";
-const QString kRouterPort = "router/port";
-const QString kRouterPublicKey = "router/public_key";
-
 const QString kUpdateServer = "update/server";
 const QString kUpdateAutoUpdate = "update/auto_update";
 const QString kUpdateCheckFrequency = "update/check_frequency";
@@ -79,54 +74,6 @@ quint16 SystemSettings::tcpPort() const
 void SystemSettings::setTcpPort(quint16 port)
 {
     settings_.setValue(kTcpPort, port);
-}
-
-//--------------------------------------------------------------------------------------------------
-bool SystemSettings::isRouterEnabled() const
-{
-    return settings_.value(kRouterEnable, false).toBool();
-}
-
-//--------------------------------------------------------------------------------------------------
-void SystemSettings::setRouterEnabled(bool enable)
-{
-    settings_.setValue(kRouterEnable, enable);
-}
-
-//--------------------------------------------------------------------------------------------------
-QString SystemSettings::routerAddress() const
-{
-    return settings_.value(kRouterAddress).toString();
-}
-
-//--------------------------------------------------------------------------------------------------
-void SystemSettings::setRouterAddress(const QString& address)
-{
-    settings_.setValue(kRouterAddress, address);
-}
-
-//--------------------------------------------------------------------------------------------------
-quint16 SystemSettings::routerPort() const
-{
-    return settings_.value(kRouterPort, DEFAULT_ROUTER_TCP_PORT).toUInt();
-}
-
-//--------------------------------------------------------------------------------------------------
-void SystemSettings::setRouterPort(quint16 port)
-{
-    settings_.setValue(kRouterPort, port);
-}
-
-//--------------------------------------------------------------------------------------------------
-QByteArray SystemSettings::routerPublicKey() const
-{
-    return settings_.value(kRouterPublicKey).toByteArray();
-}
-
-//--------------------------------------------------------------------------------------------------
-void SystemSettings::setRouterPublicKey(const QByteArray& key)
-{
-    settings_.setValue(kRouterPublicKey, key);
 }
 
 //--------------------------------------------------------------------------------------------------

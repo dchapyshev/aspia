@@ -32,8 +32,10 @@
 #include "base/version_constants.h"
 #include "base/crypto/random.h"
 #include "base/ipc/ipc_channel.h"
+#include "base/net/address.h"
 #include "base/net/tcp_channel.h"
 #include "base/net/tcp_server.h"
+#include "build/build_config.h"
 #include "common/http_file_downloader.h"
 #include "common/update_checker.h"
 #include "common/update_info.h"
@@ -146,10 +148,12 @@ void Service::onStart()
     if (!Database::applyPermissions())
         LOG(ERROR) << "Unable to apply secure permissions on database directory";
 
+    Database& db = Database::instance();
+
     // Trigger lazy creation of the database file and verify it's accessible. Without the
     // database the service can't authenticate users or read configuration, so we abort instead
     // of continuing in a half-broken state.
-    if (!Database::instance().isValid())
+    if (!db.isValid())
     {
         LOG(ERROR) << "Database is not available, stopping service";
         QCoreApplication::quit();
@@ -212,7 +216,7 @@ void Service::onStart()
     tcp_server_->start(settings_.tcpPort());
     tcp_server_->setUserList(SharedPointer<UserList>(new HostUserList));
 
-    if (settings_.isRouterEnabled())
+    if (db.isRouterEnabled())
         connectToRouter(FROM_HERE);
 
     LOG(INFO) << "Host server is started successfully";
@@ -238,7 +242,7 @@ void Service::onPowerEvent(quint32 power_event)
 
         case PBT_APMRESUMEAUTOMATIC:
         {
-            if (!settings_.isRouterEnabled())
+            if (!Database::instance().isRouterEnabled())
                 return;
 
             connectToRouter(FROM_HERE);
@@ -685,7 +689,7 @@ void Service::onSettingsChanged(const QString& path)
         settings_.sync();
     }
 
-    if (!settings_.isRouterEnabled())
+    if (!Database::instance().isRouterEnabled())
     {
         LOG(INFO) << "Router is disabled";
         proto::user::RouterState state;
@@ -710,10 +714,10 @@ void Service::onRemoveHost(bool try_to_uninstall)
 
     LOG(INFO) << "Removing settings for connecting to a router";
 
-    settings_.setRouterEnabled(false);
-    settings_.setRouterAddress("");
-    settings_.setRouterPublicKey("");
-    settings_.sync();
+    Database& db = Database::instance();
+    db.setRouterEnabled(false);
+    db.setRouterAddress(Address(DEFAULT_ROUTER_TCP_PORT));
+    db.setRouterPublicKey(QByteArray());
 
     HostStorage storage;
     storage.setLastHostId(kInvalidHostId);

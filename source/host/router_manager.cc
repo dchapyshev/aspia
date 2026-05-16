@@ -29,7 +29,6 @@
 #include "base/peer/server_authenticator.h"
 #include "host/database.h"
 #include "host/host_storage.h"
-#include "host/system_settings.h"
 #include "proto/key_exchange.h"
 #include "proto/router_host.h"
 
@@ -91,16 +90,16 @@ void RouterManager::start()
 //--------------------------------------------------------------------------------------------------
 void RouterManager::onSettingsChanged()
 {
-    SystemSettings settings;
     Database& db = Database::instance();
 
+    Address new_address = db.routerAddress();
+    QByteArray new_public_key = db.routerPublicKey();
+
     // Check if the connection parameters have changed.
-    if (address_ != settings.routerAddress() || port_ != settings.routerPort() ||
-        public_key_ != settings.routerPublicKey())
+    if (router_address_ != new_address || public_key_ != new_public_key)
     {
-        address_ = settings.routerAddress();
-        port_ = settings.routerPort();
-        public_key_ = settings.routerPublicKey();
+        router_address_ = new_address;
+        public_key_ = new_public_key;
 
         if (tcp_channel_)
         {
@@ -319,7 +318,7 @@ void RouterManager::onNewPeerConnected()
 
                 // An empty string means that the router address should be used.
                 if (connection.stun_host.isEmpty())
-                    connection.stun_host = address_;
+                    connection.stun_host = router_address_.host();
             }
         }
 
@@ -356,7 +355,7 @@ void RouterManager::connectToRouter()
     connect(tcp_channel_, &TcpChannel::sig_messageReceived, this, &RouterManager::onTcpMessageReceived);
 
     routerStateChanged(proto::user::RouterState::CONNECTING);
-    tcp_channel_->connectTo(address_, port_);
+    tcp_channel_->connectTo(router_address_.host(), router_address_.port());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -372,8 +371,8 @@ void RouterManager::routerStateChanged(proto::user::RouterState::State state)
     LOG(INFO) << "Router state changed:" << state;
 
     router_state_.set_state(state);
-    router_state_.set_host_name(address_.toStdString());
-    router_state_.set_host_port(port_);
+    router_state_.set_host_name(router_address_.host().toStdString());
+    router_state_.set_host_port(router_address_.port());
 
     emit sig_routerStateChanged(router_state_);
 }

@@ -26,8 +26,10 @@
 #include "base/scoped_qpointer.h"
 #include "base/shared_pointer.h"
 #include "base/crypto/secure_string.h"
+#include "base/net/address.h"
 #include "base/net/tcp_channel.h"
 #include "base/peer/host_id.h"
+#include "build/build_config.h"
 #include "host/host_user_list.h"
 #include "proto/user.h"
 
@@ -42,9 +44,8 @@ public:
     explicit RouterManager(QObject* parent = nullptr);
     ~RouterManager() final;
 
-    const QString& address() const { return address_; }
-    quint16 port() const { return port_; }
-    const QByteArray& publicKey() const { return public_key_; }
+    const Address& routerAddress() const { return router_address_; }
+    const QByteArray& routerPublicKey() const { return public_key_; }
 
     struct ReadyConnection
     {
@@ -86,8 +87,7 @@ private:
     RelayPeerManager* peer_manager_ = nullptr;
     QTimer* reconnect_timer_ = nullptr;
 
-    QString address_;
-    quint16 port_ = 0;
+    Address router_address_ { DEFAULT_ROUTER_TCP_PORT };
     QByteArray public_key_;
 
     QTimer* password_expire_timer_ = nullptr;

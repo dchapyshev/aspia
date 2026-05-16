@@ -36,18 +36,6 @@ public:
     quint16 tcpPort() const;
     void setTcpPort(quint16 port);
 
-    bool isRouterEnabled() const;
-    void setRouterEnabled(bool enable);
-
-    QString routerAddress() const;
-    void setRouterAddress(const QString& address);
-
-    quint16 routerPort() const;
-    void setRouterPort(quint16 port);
-
-    QByteArray routerPublicKey() const;
-    void setRouterPublicKey(const QByteArray& key);
-
     QString updateServer() const;
     void setUpdateServer(const QString& server);
 

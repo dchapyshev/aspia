@@ -19,6 +19,7 @@
 #ifndef HOST_DATABASE_H
 #define HOST_DATABASE_H
 
+#include "base/net/address.h"
 #include "base/peer/user.h"
 
 #include <QByteArray>
@@ -73,6 +74,15 @@ public:
     // Settings.
     QByteArray seedKey() const;
     bool setSeedKey(const QByteArray& seed_key);
+
+    bool isRouterEnabled() const;
+    bool setRouterEnabled(bool enable);
+
+    Address routerAddress() const;
+    bool setRouterAddress(const Address& address);
+
+    QByteArray routerPublicKey() const;
+    bool setRouterPublicKey(const QByteArray& key);
 
     bool connectConfirmation() const;
     bool setConnectConfirmation(bool enable);

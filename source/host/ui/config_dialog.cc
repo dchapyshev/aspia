@@ -507,6 +507,7 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
         LOG(INFO) << "[ACTION] Accepted by user";
 
         SystemSettings settings;
+        Database& db = Database::instance();
 
         if (!settings.isWritable())
         {
@@ -517,7 +518,7 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
             return;
         }
 
-        settings.setRouterEnabled(ui->checkbox_enable_router->isChecked());
+        db.setRouterEnabled(ui->checkbox_enable_router->isChecked());
         if (ui->checkbox_enable_router->isChecked())
         {
             Address router_address = Address::fromString(
@@ -540,9 +541,8 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
                 return;
             }
 
-            settings.setRouterAddress(router_address.host());
-            settings.setRouterPort(router_address.port());
-            settings.setRouterPublicKey(router_public_key);
+            db.setRouterAddress(router_address);
+            db.setRouterPublicKey(router_public_key);
         }
 
         // Update the parameters.
@@ -553,7 +553,6 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
         settings.setUpdateServer(ui->edit_update_server->text());
         settings.setPreferredVideoCapturer(ui->combo_video_capturer->currentData().toUInt());
 
-        Database& db = Database::instance();
         db.setOneTimePassword(ui->checkbox_onetime_password->isChecked());
         db.setOneTimePasswordExpire(std::chrono::minutes(
             ui->combobox_onetime_pass_change->currentData().toInt()));
@@ -661,16 +660,12 @@ void ConfigDialog::reloadAll()
     if (item_index != -1)
         ui->combobox_no_user_action->setCurrentIndex(item_index);
 
-    bool is_router_enabled = settings.isRouterEnabled();
-
-    Address router_address(DEFAULT_ROUTER_TCP_PORT);
-    router_address.setHost(settings.routerAddress());
-    router_address.setPort(settings.routerPort());
+    bool is_router_enabled = db.isRouterEnabled();
 
     ui->checkbox_enable_router->setChecked(is_router_enabled);
-    ui->edit_router_address->setText(router_address.toString());
+    ui->edit_router_address->setText(db.routerAddress().toString());
     ui->edit_router_public_key->setPlainText(
-        QString::fromUtf8(settings.routerPublicKey().toHex()));
+        QString::fromUtf8(db.routerPublicKey().toHex()));
 
     ui->label_router_address->setEnabled(is_router_enabled);
     ui->edit_router_address->setEnabled(is_router_enabled);
