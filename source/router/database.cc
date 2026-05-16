@@ -83,6 +83,18 @@ QSqlDatabase ensureOpenDatabase(const QString& file_path)
         return QSqlDatabase();
     }
 
+    QSqlQuery pragma(db);
+    if (pragma.exec("PRAGMA quick_check") && pragma.next())
+    {
+        const QString result = pragma.value(0).toString();
+        if (result != "ok")
+            LOG(ERROR) << "Database integrity check failed:" << result;
+    }
+    else
+    {
+        LOG(WARNING) << "Unable to run quick_check:" << pragma.lastError();
+    }
+
     return db;
 }
 

@@ -627,6 +627,22 @@ bool Database::openDatabase()
         return false;
     }
 
+    QSqlQuery pragma(db);
+
+    if (!pragma.exec("PRAGMA secure_delete = ON"))
+        LOG(WARNING) << "Unable to enable secure_delete:" << pragma.lastError();
+
+    if (pragma.exec("PRAGMA quick_check") && pragma.next())
+    {
+        const QString result = pragma.value(0).toString();
+        if (result != "ok")
+            LOG(ERROR) << "Database integrity check failed:" << result;
+    }
+    else
+    {
+        LOG(WARNING) << "Unable to run quick_check:" << pragma.lastError();
+    }
+
     if (!createTables(db))
     {
         db.close();
