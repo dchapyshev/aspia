@@ -25,6 +25,8 @@
 #include <QString>
 #include <QVector>
 
+class SecureString;
+
 class Database
 {
 public:
@@ -52,6 +54,15 @@ public:
     // Settings.
     QByteArray seedKey() const;
     bool setSeedKey(const QByteArray& seed_key);
+
+    QByteArray passwordHash() const;
+    bool setPasswordHash(const QByteArray& hash);
+
+    QByteArray passwordHashSalt() const;
+    bool setPasswordHashSalt(const QByteArray& salt);
+
+    static bool createPasswordHash(const SecureString& password, QByteArray* hash, QByteArray* salt);
+    static bool isValidPassword(const SecureString& password);
 
 private:
     Database() = default;

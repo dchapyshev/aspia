@@ -21,8 +21,6 @@
 
 #include <QSettings>
 
-class SecureString;
-
 class SystemSettings
 {
     Q_GADGET
@@ -30,9 +28,6 @@ class SystemSettings
 public:
     SystemSettings();
     ~SystemSettings();
-
-    static bool createPasswordHash(const SecureString& password, QByteArray* hash, QByteArray* salt);
-    static bool isValidPassword(const SecureString& password);
 
     QString filePath() const;
     bool isWritable() const;
@@ -61,12 +56,6 @@ public:
 
     bool passwordProtection() const;
     void setPasswordProtection(bool enable);
-
-    QByteArray passwordHash() const;
-    void setPasswordHash(const QByteArray& hash);
-
-    QByteArray passwordHashSalt() const;
-    void setPasswordHashSalt(const QByteArray& salt);
 
     bool oneTimePassword() const;
     void setOneTimePassword(bool enable);

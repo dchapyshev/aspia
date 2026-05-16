@@ -20,14 +20,9 @@
 
 #include "base/xml_settings.h"
 #include "base/crypto/password_generator.h"
-#include "base/crypto/password_hash.h"
-#include "base/crypto/random.h"
-#include "base/crypto/secure_string.h"
 #include "build/build_config.h"
 
 namespace {
-
-const size_t kPasswordHashSaltSize = 256;
 
 const QString kOrganization = "aspia";
 const QString kApplication = "host";
@@ -46,8 +41,6 @@ const QString kUpdateAutoUpdate = "update/auto_update";
 const QString kUpdateCheckFrequency = "update/check_frequency";
 
 const QString kPasswordProtectionEnable = "password_protection/enable";
-const QString kPasswordProtectionHash = "password_protection/hash";
-const QString kPasswordProtectionSalt = "password_protection/salt";
 
 const QString kOneTimePasswordEnable = "one_time_password/enable";
 const QString kOneTimePasswordExpire = "one_time_password/expire";
@@ -70,49 +63,6 @@ SystemSettings::SystemSettings()
 
 //--------------------------------------------------------------------------------------------------
 SystemSettings::~SystemSettings() = default;
-
-//--------------------------------------------------------------------------------------------------
-// static
-bool SystemSettings::createPasswordHash(const SecureString& password, QByteArray* hash, QByteArray* salt)
-{
-    if (password.isEmpty() || !hash || !salt)
-        return false;
-
-    QByteArray salt_temp = Random::byteArray(kPasswordHashSaltSize);
-    if (salt_temp.isEmpty())
-        return false;
-
-    QByteArray hash_temp = PasswordHash::hash(PasswordHash::SCRYPT, password, salt_temp);
-    if (hash_temp.isEmpty())
-        return false;
-
-    *salt = std::move(salt_temp);
-    *hash = std::move(hash_temp);
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
-bool SystemSettings::isValidPassword(const SecureString& password)
-{
-    if (password.isEmpty())
-        return false;
-
-    SystemSettings settings;
-
-    QByteArray password_hash_salt = settings.passwordHashSalt();
-    QByteArray password_hash = settings.passwordHash();
-
-    if (password_hash_salt.isEmpty() || password_hash.isEmpty())
-        return false;
-
-    QByteArray verifiable_password_hash =
-        PasswordHash::hash(PasswordHash::SCRYPT, password, password_hash_salt);
-    if (verifiable_password_hash.isEmpty())
-        return false;
-
-    return verifiable_password_hash == password_hash;
-}
 
 //--------------------------------------------------------------------------------------------------
 QString SystemSettings::filePath() const
@@ -226,30 +176,6 @@ bool SystemSettings::passwordProtection() const
 void SystemSettings::setPasswordProtection(bool enable)
 {
     settings_.setValue(kPasswordProtectionEnable, enable);
-}
-
-//--------------------------------------------------------------------------------------------------
-QByteArray SystemSettings::passwordHash() const
-{
-    return settings_.value(kPasswordProtectionHash).toByteArray();
-}
-
-//--------------------------------------------------------------------------------------------------
-void SystemSettings::setPasswordHash(const QByteArray& hash)
-{
-    settings_.setValue(kPasswordProtectionHash, hash);
-}
-
-//--------------------------------------------------------------------------------------------------
-QByteArray SystemSettings::passwordHashSalt() const
-{
-    return settings_.value(kPasswordProtectionSalt).toByteArray();
-}
-
-//--------------------------------------------------------------------------------------------------
-void SystemSettings::setPasswordHashSalt(const QByteArray& salt)
-{
-    settings_.setValue(kPasswordProtectionSalt, salt);
 }
 
 //--------------------------------------------------------------------------------------------------

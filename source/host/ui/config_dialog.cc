@@ -231,10 +231,8 @@ ConfigDialog::ConfigDialog(QWidget* parent)
         setConfigChanged(FROM_HERE, true);
     });
 
-    ui->combobox_no_user_action->addItem(tr("Accept connection"),
-                                        static_cast<int>(SystemSettings::NoUserAction::ACCEPT));
-    ui->combobox_no_user_action->addItem(tr("Reject connection"),
-                                        static_cast<int>(SystemSettings::NoUserAction::REJECT));
+    ui->combobox_no_user_action->addItem(tr("Accept connection"), int(SystemSettings::NoUserAction::ACCEPT));
+    ui->combobox_no_user_action->addItem(tr("Reject connection"), int(SystemSettings::NoUserAction::REJECT));
 
     connect(ui->combobox_no_user_action, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, [this]()
@@ -397,9 +395,8 @@ void ConfigDialog::onDeleteUser()
         return;
     }
 
-    if (MsgBox::question(this,
-            tr("Are you sure you want to delete user \"%1\"?")
-                .arg(user_item->text(0))) == MsgBox::Yes)
+    if (MsgBox::question(this, tr("Are you sure you want to delete user \"%1\"?")
+        .arg(user_item->text(0))) == MsgBox::Yes)
     {
         LOG(INFO) << "[ACTION] Accepted by user";
         Database::instance().removeUser(user_item->entryId());
@@ -414,6 +411,7 @@ void ConfigDialog::onDeleteUser()
 //--------------------------------------------------------------------------------------------------
 void ConfigDialog::onPassProtectClicked()
 {
+    Database& db = Database::instance();
     SystemSettings settings;
 
     if (!settings.passwordProtection())
@@ -424,16 +422,15 @@ void ConfigDialog::onPassProtectClicked()
             QByteArray hash;
             QByteArray salt;
 
-            if (!SystemSettings::createPasswordHash(dialog.newPassword(), &hash, &salt))
+            if (!Database::createPasswordHash(dialog.newPassword(), &hash, &salt))
             {
-                MsgBox::warning(this,
-                    tr("An error occurred while processing the password."));
+                MsgBox::warning(this, tr("An error occurred while processing the password."));
                 return;
             }
 
             settings.setPasswordProtection(true);
-            settings.setPasswordHash(hash);
-            settings.setPasswordHashSalt(salt);
+            db.setPasswordHash(hash);
+            db.setPasswordHashSalt(salt);
         }
     }
     else
@@ -442,8 +439,8 @@ void ConfigDialog::onPassProtectClicked()
         if (dialog.exec() == CheckPasswordDialog::Accepted)
         {
             settings.setPasswordProtection(false);
-            settings.setPasswordHash(QByteArray());
-            settings.setPasswordHashSalt(QByteArray());
+            db.setPasswordHash(QByteArray());
+            db.setPasswordHashSalt(QByteArray());
         }
     }
 
@@ -459,17 +456,18 @@ void ConfigDialog::onChangePassClicked()
         QByteArray hash;
         QByteArray salt;
 
-        if (!SystemSettings::createPasswordHash(dialog.newPassword(), &hash, &salt))
+        if (!Database::createPasswordHash(dialog.newPassword(), &hash, &salt))
         {
-            MsgBox::warning(this,
-                tr("An error occurred while processing the password."));
+            MsgBox::warning(this, tr("An error occurred while processing the password."));
             return;
         }
 
         SystemSettings settings;
         settings.setPasswordProtection(true);
-        settings.setPasswordHash(hash);
-        settings.setPasswordHashSalt(salt);
+
+        Database& db = Database::instance();
+        db.setPasswordHash(hash);
+        db.setPasswordHashSalt(salt);
     }
 
     QTimer::singleShot(0, this, &ConfigDialog::reloadAll);
@@ -522,9 +520,8 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
 
         if (!settings.isWritable())
         {
-            QString message =
-                tr("The configuration can not be written. "
-                   "Make sure that you have sufficient rights to write.");
+            QString message = tr("The configuration can not be written. "
+                                 "Make sure that you have sufficient rights to write.");
 
             MsgBox::warning(this, message);
             return;
@@ -688,8 +685,7 @@ void ConfigDialog::reloadAll()
     ui->label_router_public_key->setEnabled(is_router_enabled);
     ui->edit_router_public_key->setEnabled(is_router_enabled);
 
-    int current_video_capturer =
-        ui->combo_video_capturer->findData(settings.preferredVideoCapturer());
+    int current_video_capturer = ui->combo_video_capturer->findData(settings.preferredVideoCapturer());
     if (current_video_capturer != -1)
         ui->combo_video_capturer->setCurrentIndex(current_video_capturer);
 
