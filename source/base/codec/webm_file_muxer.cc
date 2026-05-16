@@ -23,8 +23,6 @@
 #include <cstdio>
 #include <cstring>
 
-#include "third_party/libwebm/webmids.hpp"
-
 //--------------------------------------------------------------------------------------------------
 WebmFileMuxer::WebmFileMuxer() = default;
 

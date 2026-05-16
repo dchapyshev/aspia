@@ -25,8 +25,8 @@
 #include <chrono>
 #include <memory>
 
-#include "third_party/libwebm/mkvmuxer.hpp"
-#include "third_party/libwebm/mkvwriter.hpp"
+#include <mkvmuxer/mkvmuxer.h>
+#include <mkvmuxer/mkvwriter.h>
 
 class WebmFileMuxer
 {

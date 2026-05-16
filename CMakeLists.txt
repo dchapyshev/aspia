@@ -78,6 +78,7 @@ find_package(OpenSSL REQUIRED)
 find_package(Opus CONFIG REQUIRED)
 find_package(protobuf CONFIG REQUIRED)
 find_package(unofficial-libvpx CONFIG REQUIRED)
+find_package(unofficial-libwebm CONFIG REQUIRED)
 find_package(unofficial-enet CONFIG REQUIRED)
 find_package(zstd CONFIG REQUIRED)
 find_path(INIPP_INCLUDE_DIRS "inipp.h")
@@ -137,6 +138,16 @@ endif()
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+
+# libwebm headers cross-include via "common/webmids.h", so we need
+# <prefix>/include/webm on the search path in addition to <prefix>/include.
+get_target_property(_libwebm_inc_dirs unofficial::libwebm::libwebm INTERFACE_INCLUDE_DIRECTORIES)
+set(_libwebm_extra_includes)
+foreach(_dir IN LISTS _libwebm_inc_dirs)
+    list(APPEND _libwebm_extra_includes "${_dir}/webm")
+endforeach()
+set_property(TARGET unofficial::libwebm::libwebm APPEND PROPERTY
+             INTERFACE_INCLUDE_DIRECTORIES ${_libwebm_extra_includes})
 
 enable_testing()
 add_subdirectory(source)

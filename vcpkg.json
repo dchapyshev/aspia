@@ -12,6 +12,7 @@
     },
     "inipp",
     "libvpx",
+    "libwebm",
     "libjpeg-turbo",
     "libyuv",
     "openssl",
