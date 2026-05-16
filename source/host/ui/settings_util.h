@@ -30,11 +30,6 @@ public:
     static bool exportToFile(const QString& path, bool silent, QWidget* parent = nullptr);
 
 private:
-    static bool copySettings(const QString& source_path,
-                             const QString& target_path,
-                             bool silent,
-                             QWidget* parent);
-
     Q_DISABLE_COPY_MOVE(SettingsUtil)
 };
 
