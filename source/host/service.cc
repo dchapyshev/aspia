@@ -75,16 +75,23 @@ constexpr char kFirewallTcpRuleName[] = "Aspia Host Service (TCP)";
 constexpr char kFirewallUdpRuleName[] = "Aspia Host Service (UDP)";
 constexpr char kFirewallRuleDecription[] = "Allow incoming TCP connections";
 
+// Owner: SYSTEM. Protected DACL: SYSTEM and BUILTIN\Administrators have Full Control. Inherited
+// by child containers and objects. Setting an explicit owner closes the implicit READ_CONTROL /
+// WRITE_DAC rights that the previous owner (potentially a regular user who created the directory
+// before the service started) would otherwise retain. Non-elevated administrator processes do
+// not pass this DACL because in their tokens the Administrators SID is deny-only.
+constexpr char kSecureFullDacl[] = "O:SYG:SYD:P(A;OICI;GA;;;SY)(A;OICI;GA;;;BA)";
+
+// Like kSecureFullDacl, but Administrators get Generic Read only - cannot modify, delete or
+// tamper with files. Used for the security log directory so its contents are read-only for
+// admins viewing the log dialog and writable only by the service running as SYSTEM.
+constexpr char kSecureReadOnlyDacl[] = "O:SYG:SYD:P(A;OICI;GA;;;SY)(A;OICI;GR;;;BA)";
+
 #if defined(Q_OS_WINDOWS)
 //--------------------------------------------------------------------------------------------------
-bool applyPathSecurity(const QString& path, bool /* is_dir */)
+bool applyPathSecurity(const QString& path, bool /* is_dir */, const char* sddl)
 {
-    // Owner: SYSTEM. Protected DACL: SYSTEM and BUILTIN\Administrators have Full Control. Inherited
-    // by child containers and objects. Setting an explicit owner closes the implicit READ_CONTROL /
-    // WRITE_DAC rights that the previous owner (potentially a regular user who created the
-    // directory before the service started) would otherwise retain. Non-elevated administrator
-    // processes do not pass this DACL because in their tokens the Administrators SID is deny-only.
-    ScopedSd sd = convertSddlToSd("O:SYG:SYD:P(A;OICI;GA;;;SY)(A;OICI;GA;;;BA)");
+    ScopedSd sd = convertSddlToSd(sddl);
     if (!sd)
     {
         LOG(ERROR) << "convertSddlToSd failed";
@@ -123,7 +130,9 @@ bool applyPathSecurity(const QString& path, bool /* is_dir */)
 
 #if defined(Q_OS_UNIX)
 //--------------------------------------------------------------------------------------------------
-bool applyPathSecurity(const QString& path, bool is_dir)
+// POSIX has no portable way to deny root access. Both DACLs collapse to the same chmod 0700/0600
+// owned by root. Admin (root) keeps full access regardless; this is an OS-level limitation.
+bool applyPathSecurity(const QString& path, bool is_dir, const char* /* sddl */)
 {
     const QByteArray native = QFile::encodeName(path);
 
@@ -148,10 +157,10 @@ bool applyPathSecurity(const QString& path, bool is_dir)
 #endif // defined(Q_OS_UNIX)
 
 //--------------------------------------------------------------------------------------------------
-// Creates the secure directory if needed and recursively applies restrictive permissions to it
-// and all its contents (files and subdirectories). Used at service startup to lock down storage
-// shared by Database (host.db3) and SecurityLog (logs/).
-bool applySecureDirectory(const QString& dir_path)
+// Creates the directory if needed and recursively applies the given DACL to it and all of its
+// contents (files and subdirectories). Used at service startup to lock down storage shared by
+// Database and SecurityLog. The SDDL string is ignored on POSIX.
+bool applySecureDirectory(const QString& dir_path, const char* sddl)
 {
     if (dir_path.isEmpty())
     {
@@ -165,7 +174,7 @@ bool applySecureDirectory(const QString& dir_path)
         return false;
     }
 
-    bool ok = applyPathSecurity(dir_path, true);
+    bool ok = applyPathSecurity(dir_path, true, sddl);
 
     QDirIterator it(dir_path,
         QDir::Files | QDir::Dirs | QDir::Hidden | QDir::System | QDir::NoDotAndDotDot,
@@ -173,7 +182,7 @@ bool applySecureDirectory(const QString& dir_path)
     while (it.hasNext())
     {
         QFileInfo entry(it.next());
-        if (!applyPathSecurity(entry.absoluteFilePath(), entry.isDir()))
+        if (!applyPathSecurity(entry.absoluteFilePath(), entry.isDir(), sddl))
             ok = false;
     }
 
@@ -258,10 +267,10 @@ void Service::onStart()
 {
     LOG(INFO) << "Service is started";
 
-    if (!applySecureDirectory(Database::directoryPath()))
+    if (!applySecureDirectory(Database::directoryPath(), kSecureFullDacl))
         LOG(ERROR) << "Unable to apply secure permissions on database directory";
 
-    if (!applySecureDirectory(securityLogDirectory()))
+    if (!applySecureDirectory(securityLogDirectory(), kSecureReadOnlyDacl))
         LOG(ERROR) << "Unable to apply secure permissions on security log directory";
 
     Database& db = Database::instance();
