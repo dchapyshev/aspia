@@ -21,6 +21,11 @@
 
 #include <QSettings>
 
+// System-wide host settings. Readable by any user but writable only by administrators (UAC
+// elevation on Windows, root on POSIX). Intended for non-sensitive host configuration that
+// non-admin processes may need to read: update server URL, application shutdown behavior,
+// video capturer preference, etc. For data that must be hidden from regular users use
+// Database.
 class SystemSettings
 {
     Q_GADGET

@@ -21,6 +21,9 @@
 
 #include <QSettings>
 
+// Per-user settings. Readable and writable by the owning user without elevation. Intended for
+// personal UI state that does not affect host security or behavior for other users: locale,
+// theme, dialog geometry, etc. Never put security-sensitive or shared configuration here.
 class UserSettings
 {
 public:

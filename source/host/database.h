@@ -30,6 +30,12 @@
 
 class SecureString;
 
+// Host secure storage. Readable and writable only by SYSTEM and elevated administrators
+// (root on POSIX); regular users cannot read or write its contents through any path,
+// including direct file access. Intended for security-sensitive data: user list with SRP
+// verifiers, password hashes, router endpoint and public key, all confirmation/one-time-
+// password settings. Permissions are applied at service startup via applyPermissions(); the
+// service refuses to run if the database is unreachable.
 class Database
 {
     Q_GADGET
