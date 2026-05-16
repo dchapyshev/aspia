@@ -30,6 +30,7 @@
 #include "host/ui/application.h"
 #include "host/ui/check_password_dialog.h"
 #include "host/ui/config_dialog.h"
+#include "host/ui/security_log_dialog.h"
 #include "host/ui/host_window.h"
 #include "host/ui/settings_util.h"
 #include "common/ui/update_dialog.h"
@@ -122,6 +123,8 @@ int hostMain(int argc, char* argv[])
         GuiApplication::translate("HostMain", "Calling the update check dialog."));
     QCommandLineOption config_option("config",
         GuiApplication::translate("HostMain", "Calling the settings dialog."));
+    QCommandLineOption security_log_option("security-log",
+        GuiApplication::translate("HostMain", "Calling the security log dialog."));
 
     QCommandLineParser parser;
     parser.addOption(hidden_option);
@@ -130,6 +133,7 @@ int hostMain(int argc, char* argv[])
     parser.addOption(silent_option);
     parser.addOption(update_option);
     parser.addOption(config_option);
+    parser.addOption(security_log_option);
     parser.addHelpOption();
     parser.addVersionOption();
 
@@ -200,6 +204,41 @@ int hostMain(int argc, char* argv[])
                     CheckPasswordDialog dialog;
                     if (dialog.exec() == CheckPasswordDialog::Accepted)
                         ConfigDialog().exec();
+                }
+                break;
+
+                case Database::PasswordProtection::UNAVAILABLE:
+                {
+                    MsgBox::warning(nullptr,
+                        QApplication::translate("Host", "Settings storage is unavailable."));
+                }
+                break;
+            }
+        }
+    }
+    else if (parser.isSet(security_log_option))
+    {
+#if defined(Q_OS_WINDOWS)
+        if (!ProcessUtil::isProcessElevated())
+        {
+            LOG(INFO) << "Process not eleavated";
+        }
+        else
+#endif // defined(Q_OS_WINDOWS)
+        {
+            switch (Database::instance().passwordProtectionState())
+            {
+                case Database::PasswordProtection::DISABLED:
+                {
+                    SecurityLogDialog().exec();
+                }
+                break;
+
+                case Database::PasswordProtection::ENABLED:
+                {
+                    CheckPasswordDialog dialog;
+                    if (dialog.exec() == CheckPasswordDialog::Accepted)
+                        SecurityLogDialog().exec();
                 }
                 break;
 

@@ -34,8 +34,8 @@ class SecureString;
 // (root on POSIX); regular users cannot read or write its contents through any path,
 // including direct file access. Intended for security-sensitive data: user list with SRP
 // verifiers, password hashes, router endpoint and public key, all confirmation/one-time-
-// password settings. Permissions are applied at service startup via applyPermissions(); the
-// service refuses to run if the database is unreachable.
+// password settings. Permissions are applied by Service at startup; the service refuses to
+// run if the database is unreachable.
 class Database
 {
     Q_GADGET
@@ -61,11 +61,6 @@ public:
     static Database& instance();
     static QString directoryPath();
     static QString filePath();
-
-    // Restricts access to the database directory and all files inside it to SYSTEM and elevated
-    // administrators only. Creates the directory if it does not exist yet. Must be called once at
-    // service startup before any database access.
-    static bool applyPermissions();
 
     bool isValid() const;
 

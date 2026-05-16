@@ -35,15 +35,16 @@
 //   SLOG(WARNING)    << "...";
 //   SLOG(INFO)       << "...";
 //
-// Output goes to a single shared file in a system-wide, access-restricted directory:
-//   Windows: %ProgramData%\aspia\security\YYYY-Www.log
+// Output goes to a single shared file in a platform-specific access-restricted directory:
+//   Windows: %ProgramData%\aspia\secure\logs\YYYY-Www.log
 //   Linux:   /var/log/aspia/security/YYYY-Www.log
 //   macOS:   /Library/Logs/aspia/security/YYYY-Www.log
+// The service applies restrictive permissions to this directory at startup, before any
+// SLOG() call.
 //
 // The file is opened lazily on the first write and rotated weekly (the file name encodes the
-// ISO 8601 year and week number). Files older than 90 days are removed when the directory is
-// initialized. The hosting process must run as SYSTEM (Windows) or root (POSIX); otherwise
-// SLOG() becomes a no-op.
+// ISO 8601 year and week number). Files older than 180 days are removed when the directory is
+// initialized.
 //
 // Each line is formatted as:
 //   <ISO-timestamp> <EVENT> <user-supplied details>

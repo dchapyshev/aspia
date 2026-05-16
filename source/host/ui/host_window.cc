@@ -570,15 +570,83 @@ void HostWindow::onSecurityLog()
 {
     LOG(INFO) << "[ACTION] Security Log";
 
-    if (!security_log_dialog_)
+#if defined(Q_OS_WINDOWS)
+    if (!ProcessUtil::isProcessElevated())
     {
-        security_log_dialog_ = new SecurityLogDialog(this);
-        security_log_dialog_->setAttribute(Qt::WA_DeleteOnClose);
-    }
+        LOG(INFO) << "Process not elevated";
 
-    security_log_dialog_->show();
-    security_log_dialog_->raise();
-    security_log_dialog_->activateWindow();
+        QString current_exec_file =
+            QDir::toNativeSeparators(QCoreApplication::applicationFilePath());
+        if (!current_exec_file.isEmpty())
+        {
+            SHELLEXECUTEINFOW sei;
+            memset(&sei, 0, sizeof(sei));
+
+            sei.cbSize = sizeof(sei);
+            sei.lpVerb = L"runas";
+            sei.lpFile = qUtf16Printable(current_exec_file);
+            sei.hwnd = reinterpret_cast<HWND>(winId());
+            sei.nShow = SW_SHOW;
+            sei.lpParameters = L"--security-log";
+            sei.fMask = SEE_MASK_NOCLOSEPROCESS;
+
+            if (ShellExecuteExW(&sei))
+            {
+                QWinEventNotifier* process_watcher = new QWinEventNotifier(this);
+
+                connect(process_watcher, &QWinEventNotifier::activated, this, [this, process_watcher]
+                {
+                    process_watcher->deleteLater();
+                    ui->action_security_log->setEnabled(true);
+                });
+
+                ui->action_security_log->setEnabled(false);
+
+                process_watcher->setHandle(sei.hProcess);
+                process_watcher->setEnabled(true);
+            }
+            else
+            {
+                PLOG(ERROR) << "ShellExecuteExW failed";
+            }
+        }
+        else
+        {
+            LOG(ERROR) << "Empty file path";
+        }
+
+        return;
+    }
+#endif
+
+#if defined(Q_OS_LINUX)
+    uid_t self_uid = getuid();
+    uid_t effective_uid = geteuid();
+
+    if (self_uid != 0 && self_uid == effective_uid)
+    {
+        LOG(INFO) << "Start security log dialog as super user";
+
+        QProcess* process = new QProcess(this);
+
+        connect(process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
+                this, [this, process](int exit_code, QProcess::ExitStatus exit_status)
+        {
+            LOG(INFO) << "Process finished with exit code:" << exit_code
+                      << "(status:" << exit_status << ")";
+
+            process->deleteLater();
+            ui->action_security_log->setEnabled(true);
+        });
+
+        ui->action_security_log->setEnabled(false);
+        process->start("pkexec", QStringList() << "env" << "DISPLAY=:0"
+            << QApplication::applicationFilePath() << "--security-log");
+        return;
+    }
+#endif // defined(Q_OS_LINUX)
+
+    SecurityLogDialog(this).exec();
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -28,150 +28,13 @@
 #include "base/logging.h"
 #include "base/files/base_paths.h"
 
-#if defined(Q_OS_WINDOWS)
-#include "base/win/scoped_local.h"
-
-#include <aclapi.h>
-#include <sddl.h>
-
-#include <string>
-#elif defined(Q_OS_UNIX)
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <unistd.h>
-#endif
-
 namespace {
 
 const qint64 kMaxLogFileAge = 180; // 180 days.
 const char kFileMask[] = "*.log";
 
-#if defined(Q_OS_WINDOWS)
-// Owner: Local System.
-// Group: Local System.
-// DACL: protected (no inheritance from parent), allow Local System full access, allow
-// BUILTIN\Users read-only access. ACEs are object/container-inherited so files created inside
-// the directory pick up the same restriction.
-const wchar_t kDirectoryDescriptor[] =
-    L"O:SY"
-    L"G:SY"
-    L"D:PAR(A;OICI;FA;;;SY)(A;OICI;FR;;;BU)";
-
-// File descriptor (no inheritance flags, applied to a specific file).
-const wchar_t kFileDescriptor[] =
-    L"O:SY"
-    L"G:SY"
-    L"D:P(A;;FA;;;SY)(A;;FR;;;BU)";
-#elif defined(Q_OS_UNIX)
-const mode_t kFileMode = 0644;
-const mode_t kDirectoryMode = 0755;
-#endif
-
 QMutex g_writer_mutex;
 QFile g_writer_file;
-
-#if defined(Q_OS_WINDOWS)
-//--------------------------------------------------------------------------------------------------
-bool applyDescriptor(const QString& path, const wchar_t* sddl)
-{
-    ScopedLocal<PSECURITY_DESCRIPTOR> sd;
-    if (!ConvertStringSecurityDescriptorToSecurityDescriptorW(sddl, SDDL_REVISION_1, sd.recieve(), nullptr))
-    {
-        PLOG(ERROR) << "ConvertStringSecurityDescriptorToSecurityDescriptorW failed";
-        return false;
-    }
-
-    PSID owner = nullptr;
-    BOOL owner_defaulted = FALSE;
-    if (!GetSecurityDescriptorOwner(sd, &owner, &owner_defaulted))
-    {
-        PLOG(ERROR) << "GetSecurityDescriptorOwner failed";
-        return false;
-    }
-
-    PSID group = nullptr;
-    BOOL group_defaulted = FALSE;
-    if (!GetSecurityDescriptorGroup(sd, &group, &group_defaulted))
-    {
-        PLOG(ERROR) << "GetSecurityDescriptorGroup failed";
-        return false;
-    }
-
-    PACL dacl = nullptr;
-    BOOL dacl_present = FALSE;
-    BOOL dacl_defaulted = FALSE;
-    if (!GetSecurityDescriptorDacl(sd, &dacl_present, &dacl, &dacl_defaulted))
-    {
-        PLOG(ERROR) << "GetSecurityDescriptorDacl failed";
-        return false;
-    }
-
-    std::wstring wpath = path.toStdWString();
-
-    DWORD result = SetNamedSecurityInfoW(const_cast<LPWSTR>(wpath.c_str()), SE_FILE_OBJECT,
-        OWNER_SECURITY_INFORMATION | GROUP_SECURITY_INFORMATION | DACL_SECURITY_INFORMATION |
-        PROTECTED_DACL_SECURITY_INFORMATION, owner, group, dacl, nullptr);
-    if (result != ERROR_SUCCESS)
-    {
-        LOG(ERROR) << "SetNamedSecurityInfoW failed:" << path << "error:" << result;
-        return false;
-    }
-
-    return true;
-}
-#elif defined(Q_OS_UNIX)
-//--------------------------------------------------------------------------------------------------
-bool applyOwnership(const QString& path, mode_t mode)
-{
-    if (geteuid() != 0)
-    {
-        LOG(ERROR) << "Process is not running as root, cannot secure security log path:" << path;
-        return false;
-    }
-
-    QByteArray local = path.toLocal8Bit();
-
-    if (chown(local.constData(), 0, 0) != 0)
-    {
-        PLOG(ERROR) << "chown failed:" << path;
-        return false;
-    }
-
-    if (chmod(local.constData(), mode) != 0)
-    {
-        PLOG(ERROR) << "chmod failed:" << path;
-        return false;
-    }
-
-    return true;
-}
-#endif
-
-//--------------------------------------------------------------------------------------------------
-bool applyFilePermissions(const QString& path)
-{
-#if defined(Q_OS_WINDOWS)
-    return applyDescriptor(path, kFileDescriptor);
-#elif defined(Q_OS_UNIX)
-    return applyOwnership(path, kFileMode);
-#else
-    Q_UNUSED(path)
-    return false;
-#endif
-}
-
-//--------------------------------------------------------------------------------------------------
-bool applyDirectoryPermissions(const QString& path)
-{
-#if defined(Q_OS_WINDOWS)
-    return applyDescriptor(path, kDirectoryDescriptor);
-#elif defined(Q_OS_UNIX)
-    return applyOwnership(path, kDirectoryMode);
-#else
-    Q_UNUSED(path)
-    return false;
-#endif
-}
 
 //--------------------------------------------------------------------------------------------------
 void removeOldFiles(const QString& dir)
@@ -207,12 +70,6 @@ QString ensureLogDirectory()
     if (!dir.exists() && !dir.mkpath(path))
     {
         LOG(ERROR) << "Failed to create security log directory:" << path;
-        return QString();
-    }
-
-    if (!applyDirectoryPermissions(path))
-    {
-        LOG(ERROR) << "Failed to apply security log directory permissions:" << path;
         return QString();
     }
 
@@ -265,14 +122,6 @@ void openFileIfNeeded()
                    << "error:" << g_writer_file.errorString();
         return;
     }
-
-    if (!applyFilePermissions(file_path))
-    {
-        LOG(ERROR) << "Failed to apply security log file permissions:" << file_path;
-        g_writer_file.close();
-        QFile::remove(file_path);
-        return;
-    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -294,10 +143,10 @@ void writeLine(const QString& line)
 QString securityLogDirectory()
 {
 #if defined(Q_OS_WINDOWS)
-    QString dir = BasePaths::appDataDir();
+    QString dir = BasePaths::appConfigDir();
     if (dir.isEmpty())
         return QString();
-    return dir + "/security";
+    return dir + "/secure/logs";
 #elif defined(Q_OS_MACOS)
     return "/Library/Logs/aspia/security";
 #else

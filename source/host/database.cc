@@ -19,7 +19,6 @@
 #include "host/database.h"
 
 #include <QDir>
-#include <QFile>
 #include <QFileInfo>
 #include <QSqlDatabase>
 #include <QSqlError>
@@ -33,16 +32,6 @@
 #include "base/crypto/secure_string.h"
 #include "base/files/base_paths.h"
 #include "build/build_config.h"
-
-#if defined(Q_OS_WINDOWS)
-#include "base/win/security_helpers.h"
-#include <qt_windows.h>
-#include <aclapi.h>
-#endif
-
-#if defined(Q_OS_UNIX)
-#include <sys/stat.h>
-#endif
 
 namespace {
 
@@ -63,78 +52,6 @@ const char kSettingPasswordHash[] = "password_hash";
 const char kSettingPasswordHashSalt[] = "password_hash_salt";
 
 constexpr size_t kPasswordHashSaltSize = 256;
-
-#if defined(Q_OS_WINDOWS)
-//--------------------------------------------------------------------------------------------------
-bool applyPathSecurity(const QString& path, bool /* is_dir */)
-{
-    // Owner: SYSTEM. Protected DACL: SYSTEM and BUILTIN\Administrators have Full Control. Inherited
-    // by child containers and objects. Setting an explicit owner closes the implicit READ_CONTROL /
-    // WRITE_DAC rights that the previous owner (potentially a regular user who created the
-    // directory before the service started) would otherwise retain. Non-elevated administrator
-    // processes do not pass this DACL because in their tokens the Administrators SID is deny-only.
-    ScopedSd sd = convertSddlToSd("O:SYG:SYD:P(A;OICI;GA;;;SY)(A;OICI;GA;;;BA)");
-    if (!sd)
-    {
-        LOG(ERROR) << "convertSddlToSd failed";
-        return false;
-    }
-
-    BOOL present = FALSE;
-    BOOL defaulted = FALSE;
-    PACL dacl = nullptr;
-    if (!GetSecurityDescriptorDacl(sd.get(), &present, &dacl, &defaulted) || !present)
-    {
-        PLOG(ERROR) << "GetSecurityDescriptorDacl failed";
-        return false;
-    }
-
-    PSID owner = nullptr;
-    if (!GetSecurityDescriptorOwner(sd.get(), &owner, &defaulted) || !owner)
-    {
-        PLOG(ERROR) << "GetSecurityDescriptorOwner failed";
-        return false;
-    }
-
-    DWORD result = SetNamedSecurityInfoW(const_cast<wchar_t*>(qUtf16Printable(path)), SE_FILE_OBJECT,
-        OWNER_SECURITY_INFORMATION | DACL_SECURITY_INFORMATION | PROTECTED_DACL_SECURITY_INFORMATION,
-        owner, nullptr, dacl, nullptr);
-
-    if (result != ERROR_SUCCESS)
-    {
-        LOG(ERROR) << "SetNamedSecurityInfoW failed for" << path << "error:" << result;
-        return false;
-    }
-
-    return true;
-}
-#endif // defined(Q_OS_WINDOWS)
-
-#if defined(Q_OS_UNIX)
-//--------------------------------------------------------------------------------------------------
-bool applyPathSecurity(const QString& path, bool is_dir)
-{
-    const QByteArray native = QFile::encodeName(path);
-
-    // Reset the owner to root (uid 0, gid 0). If the entry was pre-created by a non-root user,
-    // chmod alone is not enough - the user remains the owner and would retain access. Service
-    // must run as root for this call to succeed.
-    if (chown(native.constData(), 0, 0) != 0)
-    {
-        PLOG(ERROR) << "chown failed for" << path;
-        return false;
-    }
-
-    const mode_t mode = is_dir ? S_IRWXU : (S_IRUSR | S_IWUSR);
-    if (chmod(native.constData(), mode) != 0)
-    {
-        PLOG(ERROR) << "chmod failed for" << path;
-        return false;
-    }
-
-    return true;
-}
-#endif // defined(Q_OS_UNIX)
 
 //--------------------------------------------------------------------------------------------------
 User readUser(const QSqlQuery& query)
@@ -202,7 +119,7 @@ QString Database::directoryPath()
     if (dir_path.isEmpty())
         return QString();
 
-    return dir_path + "/db";
+    return dir_path + "/secure";
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -214,37 +131,6 @@ QString Database::filePath()
         return QString();
 
     return dir_path + "/host.db3";
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
-bool Database::applyPermissions()
-{
-    QString dir_path = directoryPath();
-    if (dir_path.isEmpty())
-    {
-        LOG(ERROR) << "Invalid directory path";
-        return false;
-    }
-
-    if (!QDir().mkpath(dir_path))
-    {
-        LOG(ERROR) << "Unable to create directory:" << dir_path;
-        return false;
-    }
-
-    bool ok = applyPathSecurity(dir_path, true);
-
-    QDir dir(dir_path);
-    const QFileInfoList entries =
-        dir.entryInfoList(QDir::Files | QDir::Hidden | QDir::System | QDir::NoDotAndDotDot);
-    for (const QFileInfo& entry : entries)
-    {
-        if (!applyPathSecurity(entry.absoluteFilePath(), false))
-            ok = false;
-    }
-
-    return ok;
 }
 
 //--------------------------------------------------------------------------------------------------
