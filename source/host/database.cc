@@ -27,6 +27,7 @@
 #include <QVariant>
 
 #include "base/logging.h"
+#include "base/crypto/password_generator.h"
 #include "base/crypto/password_hash.h"
 #include "base/crypto/random.h"
 #include "base/crypto/secure_string.h"
@@ -49,6 +50,10 @@ const char kSettingSeedKey[] = "seed_key";
 const char kSettingConnectConfirmation[] = "connect_confirmation";
 const char kSettingNoUserAction[] = "no_user_action";
 const char kSettingAutoConfirmationInterval[] = "auto_confirmation_interval";
+const char kSettingOneTimePassword[] = "one_time_password";
+const char kSettingOneTimePasswordExpire[] = "one_time_password_expire";
+const char kSettingOneTimePasswordLength[] = "one_time_password_length";
+const char kSettingOneTimePasswordCharacters[] = "one_time_password_characters";
 const char kSettingPasswordHash[] = "password_hash";
 const char kSettingPasswordHashSalt[] = "password_hash_salt";
 
@@ -475,6 +480,102 @@ bool Database::setAutoConfirmationInterval(const std::chrono::milliseconds& inte
 {
     return writeSetting(kSettingAutoConfirmationInterval,
                         QString::number(static_cast<qint64>(interval.count())));
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::oneTimePassword() const
+{
+    QString value = readSetting(kSettingOneTimePassword);
+    if (value.isEmpty())
+        return true;
+    return value.toInt() != 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::setOneTimePassword(bool enable)
+{
+    return writeSetting(kSettingOneTimePassword, QString::number(enable ? 1 : 0));
+}
+
+//--------------------------------------------------------------------------------------------------
+std::chrono::milliseconds Database::oneTimePasswordExpire() const
+{
+    static const std::chrono::milliseconds kDefaultValue { 5 * 60 * 1000 }; // 5 minutes.
+    static const std::chrono::milliseconds kMinValue { 0 };
+    static const std::chrono::milliseconds kMaxValue { 24 * 60 * 60 * 1000 }; // 24 hours.
+
+    bool ok = false;
+    qint64 value = readSetting(kSettingOneTimePasswordExpire).toLongLong(&ok);
+    if (!ok)
+        return kDefaultValue;
+
+    std::chrono::milliseconds result(value);
+    if (result < kMinValue)
+        result = kMinValue;
+    else if (result > kMaxValue)
+        result = kMaxValue;
+
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::setOneTimePasswordExpire(const std::chrono::milliseconds& interval)
+{
+    return writeSetting(kSettingOneTimePasswordExpire,
+                        QString::number(static_cast<qint64>(interval.count())));
+}
+
+//--------------------------------------------------------------------------------------------------
+int Database::oneTimePasswordLength() const
+{
+    static const int kDefaultValue = 8;
+    static const int kMinValue = 6;
+    static const int kMaxValue = 16;
+
+    bool ok = false;
+    int value = readSetting(kSettingOneTimePasswordLength).toInt(&ok);
+    if (!ok)
+        return kDefaultValue;
+
+    if (value < kMinValue)
+        value = kMinValue;
+    else if (value > kMaxValue)
+        value = kMaxValue;
+
+    return value;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::setOneTimePasswordLength(int length)
+{
+    return writeSetting(kSettingOneTimePasswordLength, QString::number(length));
+}
+
+//--------------------------------------------------------------------------------------------------
+quint32 Database::oneTimePasswordCharacters() const
+{
+    const quint32 kDefaultValue = PasswordGenerator::DIGITS | PasswordGenerator::LOWER_CASE |
+        PasswordGenerator::UPPER_CASE;
+
+    bool ok = false;
+    quint32 value = readSetting(kSettingOneTimePasswordCharacters).toUInt(&ok);
+    if (!ok)
+        return kDefaultValue;
+
+    if (!(value & PasswordGenerator::DIGITS) &&
+        !(value & PasswordGenerator::LOWER_CASE) &&
+        !(value & PasswordGenerator::UPPER_CASE))
+    {
+        value = kDefaultValue;
+    }
+
+    return value;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::setOneTimePasswordCharacters(quint32 characters)
+{
+    return writeSetting(kSettingOneTimePasswordCharacters, QString::number(characters));
 }
 
 //--------------------------------------------------------------------------------------------------

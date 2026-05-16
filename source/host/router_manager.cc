@@ -27,6 +27,7 @@
 #include "base/peer/client_authenticator.h"
 #include "base/peer/relay_peer_manager.h"
 #include "base/peer/server_authenticator.h"
+#include "host/database.h"
 #include "host/host_storage.h"
 #include "host/system_settings.h"
 #include "proto/key_exchange.h"
@@ -91,6 +92,7 @@ void RouterManager::start()
 void RouterManager::onSettingsChanged()
 {
     SystemSettings settings;
+    Database& db = Database::instance();
 
     // Check if the connection parameters have changed.
     if (address_ != settings.routerAddress() || port_ != settings.routerPort() ||
@@ -109,7 +111,7 @@ void RouterManager::onSettingsChanged()
         connectToRouter();
     }
 
-    if (!settings.oneTimePassword())
+    if (!db.oneTimePassword())
     {
         LOG(INFO) << "One-time password is disabled";
         password_expire_timer_->stop();
@@ -122,12 +124,12 @@ void RouterManager::onSettingsChanged()
         LOG(INFO) << "One-time password is enabled";
 
         PasswordGenerator generator;
-        generator.setCharacters(settings.oneTimePasswordCharacters());
-        generator.setLength(settings.oneTimePasswordLength());
+        generator.setCharacters(db.oneTimePasswordCharacters());
+        generator.setLength(db.oneTimePasswordLength());
 
         one_time_password_ = generator.result();
 
-        std::chrono::milliseconds expire_interval = settings.oneTimePasswordExpire();
+        std::chrono::milliseconds expire_interval = db.oneTimePasswordExpire();
         if (expire_interval > std::chrono::milliseconds(0))
             password_expire_timer_->start(expire_interval);
         else

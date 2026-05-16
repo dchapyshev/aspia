@@ -83,6 +83,18 @@ public:
     std::chrono::milliseconds autoConfirmationInterval() const;
     bool setAutoConfirmationInterval(const std::chrono::milliseconds& interval);
 
+    bool oneTimePassword() const;
+    bool setOneTimePassword(bool enable);
+
+    std::chrono::milliseconds oneTimePasswordExpire() const;
+    bool setOneTimePasswordExpire(const std::chrono::milliseconds& interval);
+
+    int oneTimePasswordLength() const;
+    bool setOneTimePasswordLength(int length);
+
+    quint32 oneTimePasswordCharacters() const;
+    bool setOneTimePasswordCharacters(quint32 characters);
+
     // Password protection.
     PasswordProtection passwordProtectionState() const;
     bool setPassword(const SecureString& password);

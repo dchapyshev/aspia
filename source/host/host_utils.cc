@@ -123,28 +123,28 @@ void doHostMigrate(const QJsonDocument& doc)
     {
         bool value = root_object["OneTimePassword"].toString() == "true";
         LOG(INFO) << "OneTimePassword:" << value;
-        settings.setOneTimePassword(value);
+        db.setOneTimePassword(value);
     }
 
     if (root_object.contains("OneTimePasswordCharacters"))
     {
         quint32 value = root_object["OneTimePasswordCharacters"].toString().toUInt();
         LOG(INFO) << "OneTimePasswordCharacters:" << value;
-        settings.setOneTimePasswordCharacters(value);
+        db.setOneTimePasswordCharacters(value);
     }
 
     if (root_object.contains("OneTimePasswordExpire"))
     {
         qint64 value = root_object["OneTimePasswordExpire"].toString().toLongLong();
         LOG(INFO) << "OneTimePasswordExpire:" << value;
-        settings.setOneTimePasswordExpire(std::chrono::milliseconds(value));
+        db.setOneTimePasswordExpire(std::chrono::milliseconds(value));
     }
 
     if (root_object.contains("OneTimePasswordLength"))
     {
         int value = root_object["OneTimePasswordLength"].toString().toInt();
         LOG(INFO) << "OneTimePasswordLength:" << value;
-        settings.setOneTimePasswordLength(value);
+        db.setOneTimePasswordLength(value);
     }
 
     if (root_object.contains("RouterAddress"))

@@ -553,14 +553,14 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
         settings.setUpdateServer(ui->edit_update_server->text());
         settings.setPreferredVideoCapturer(ui->combo_video_capturer->currentData().toUInt());
 
-        settings.setOneTimePassword(ui->checkbox_onetime_password->isChecked());
-        settings.setOneTimePasswordExpire(std::chrono::minutes(
-            ui->combobox_onetime_pass_change->currentData().toInt()));
-        settings.setOneTimePasswordCharacters(
-            ui->combobox_onetime_pass_chars->currentData().toUInt());
-        settings.setOneTimePasswordLength(ui->spinbox_onetime_pass_char_count->value());
-
         Database& db = Database::instance();
+        db.setOneTimePassword(ui->checkbox_onetime_password->isChecked());
+        db.setOneTimePasswordExpire(std::chrono::minutes(
+            ui->combobox_onetime_pass_change->currentData().toInt()));
+        db.setOneTimePasswordCharacters(
+            ui->combobox_onetime_pass_chars->currentData().toUInt());
+        db.setOneTimePasswordLength(ui->spinbox_onetime_pass_char_count->value());
+
         db.setConnectConfirmation(ui->checkbox_conn_confirm_require->isChecked());
         db.setAutoConfirmationInterval(std::chrono::seconds(
             ui->combobox_conn_confirm_auto->currentData().toInt()));
@@ -629,22 +629,22 @@ void ConfigDialog::reloadAll()
     if (item_index != -1)
         ui->combobox_update_check_freq->setCurrentIndex(item_index);
 
-    bool enable_one_time_pass = settings.oneTimePassword();
+    bool enable_one_time_pass = db.oneTimePassword();
     ui->checkbox_onetime_password->setChecked(enable_one_time_pass);
     onOneTimeStateChanged(enable_one_time_pass ? Qt::Checked : Qt::Unchecked);
 
     std::chrono::minutes onetime_pass_change =
-        std::chrono::duration_cast<std::chrono::minutes>(settings.oneTimePasswordExpire());
+        std::chrono::duration_cast<std::chrono::minutes>(db.oneTimePasswordExpire());
     item_index = ui->combobox_onetime_pass_change->findData(static_cast<int>(onetime_pass_change.count()));
     if (item_index != -1)
         ui->combobox_onetime_pass_change->setCurrentIndex(item_index);
 
-    quint32 onetime_pass_chars = settings.oneTimePasswordCharacters();
+    quint32 onetime_pass_chars = db.oneTimePasswordCharacters();
     item_index = ui->combobox_onetime_pass_chars->findData(onetime_pass_chars);
     if (item_index != -1)
         ui->combobox_onetime_pass_chars->setCurrentIndex(item_index);
 
-    ui->spinbox_onetime_pass_char_count->setValue(settings.oneTimePasswordLength());
+    ui->spinbox_onetime_pass_char_count->setValue(db.oneTimePasswordLength());
 
     bool conn_confirm = db.connectConfirmation();
     ui->checkbox_conn_confirm_require->setChecked(conn_confirm);

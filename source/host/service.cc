@@ -146,6 +146,16 @@ void Service::onStart()
     if (!Database::applyPermissions())
         LOG(ERROR) << "Unable to apply secure permissions on database directory";
 
+    // Trigger lazy creation of the database file and verify it's accessible. Without the
+    // database the service can't authenticate users or read configuration, so we abort instead
+    // of continuing in a half-broken state.
+    if (!Database::instance().isValid())
+    {
+        LOG(ERROR) << "Database is not available, stopping service";
+        QCoreApplication::quit();
+        return;
+    }
+
 #if defined(Q_OS_WINDOWS)
     if (!SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS))
         PLOG(ERROR) << "SetPriorityClass failed";
@@ -184,6 +194,8 @@ void Service::onStart()
     }
 
     settings_watcher_->addPath(settings_file_path);
+    settings_watcher_->addPath(Database::filePath());
+
     repeated_timer_->start(std::chrono::seconds(30));
     user_session_->start();
 
@@ -650,22 +662,28 @@ void Service::onUserChatMessage(const proto::chat::Chat& chat)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Service::onSettingsChanged(const QString& /* path */)
+void Service::onSettingsChanged(const QString& path)
 {
-    LOG(INFO) << "Configuration file change detected";
+    LOG(INFO) << "Configuration file change detected:" << path;
 
-    QString settings_file_path = settings_.filePath();
-
-    // While writing the configuration, the file may be empty for a short time. The configuration
-    // monitor has time to detect this, but we must not load an empty configuration.
-    if (QFileInfo(settings_file_path).size() <= 0)
+    // While writing the configuration, the file may be empty for a short time. The watcher has
+    // time to detect this, but we must not act on an empty file.
+    if (QFileInfo(path).size() <= 0)
     {
-        LOG(INFO) << "Configuration file is empty. Configuration update skipped";
+        LOG(INFO) << "File is empty. Configuration update skipped";
         return;
     }
 
-    // Synchronize the parameters from the file.
-    settings_.sync();
+    // QFileSystemWatcher drops the path from the subscription when the file is replaced
+    // (delete + recreate, which SQLite may do on VACUUM). Re-attach defensively.
+    if (!settings_watcher_->files().contains(path))
+        settings_watcher_->addPath(path);
+
+    if (path == settings_.filePath())
+    {
+        // Synchronize the parameters from the file.
+        settings_.sync();
+    }
 
     if (!settings_.isRouterEnabled())
     {

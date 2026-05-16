@@ -54,18 +54,6 @@ public:
     quint32 preferredVideoCapturer() const;
     void setPreferredVideoCapturer(quint32 type);
 
-    bool oneTimePassword() const;
-    void setOneTimePassword(bool enable);
-
-    std::chrono::milliseconds oneTimePasswordExpire() const;
-    void setOneTimePasswordExpire(const std::chrono::milliseconds& interval);
-
-    int oneTimePasswordLength() const;
-    void setOneTimePasswordLength(int length);
-
-    quint32 oneTimePasswordCharacters() const;
-    void setOneTimePasswordCharacters(quint32 characters);
-
     bool isApplicationShutdownDisabled() const;
     void setApplicationShutdownDisabled(bool value);
 

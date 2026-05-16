@@ -19,7 +19,6 @@
 #include "host/system_settings.h"
 
 #include "base/xml_settings.h"
-#include "base/crypto/password_generator.h"
 #include "build/build_config.h"
 
 namespace {
@@ -39,11 +38,6 @@ const QString kRouterPublicKey = "router/public_key";
 const QString kUpdateServer = "update/server";
 const QString kUpdateAutoUpdate = "update/auto_update";
 const QString kUpdateCheckFrequency = "update/check_frequency";
-
-const QString kOneTimePasswordEnable = "one_time_password/enable";
-const QString kOneTimePasswordExpire = "one_time_password/expire";
-const QString kOneTimePasswordLength = "one_time_password/length";
-const QString kOneTimePasswordCharacters = "one_time_password/characters";
 
 } // namespace
 
@@ -157,89 +151,6 @@ quint32 SystemSettings::preferredVideoCapturer() const
 void SystemSettings::setPreferredVideoCapturer(quint32 type)
 {
     settings_.setValue(kPreferredVideoCapturer, type);
-}
-
-//--------------------------------------------------------------------------------------------------
-bool SystemSettings::oneTimePassword() const
-{
-    return settings_.value(kOneTimePasswordEnable, true).toBool();
-}
-
-//--------------------------------------------------------------------------------------------------
-void SystemSettings::setOneTimePassword(bool enable)
-{
-    settings_.setValue(kOneTimePasswordEnable, enable);
-}
-
-//--------------------------------------------------------------------------------------------------
-std::chrono::milliseconds SystemSettings::oneTimePasswordExpire() const
-{
-    static const std::chrono::milliseconds kDefaultValue { 5 * 60 * 1000 }; // 5 minutes.
-    static const std::chrono::milliseconds kMinValue { 0 };
-    static const std::chrono::milliseconds kMaxValue { 24 * 60 * 60 * 1000 }; // 24 hours.
-
-    std::chrono::milliseconds value(
-        settings_.value(kOneTimePasswordExpire, static_cast<qint64>(kDefaultValue.count())).toLongLong());
-
-    if (value < kMinValue)
-        value = kMinValue;
-    else if (value > kMaxValue)
-        value = kMaxValue;
-
-    return value;
-}
-
-//--------------------------------------------------------------------------------------------------
-void SystemSettings::setOneTimePasswordExpire(const std::chrono::milliseconds& interval)
-{
-    settings_.setValue(kOneTimePasswordExpire, static_cast<qint64>(interval.count()));
-}
-
-//--------------------------------------------------------------------------------------------------
-int SystemSettings::oneTimePasswordLength() const
-{
-    static const int kDefaultValue = 8;
-    static const int kMinValue = 6;
-    static const int kMaxValue = 16;
-
-    int value = settings_.value(kOneTimePasswordLength, kDefaultValue).toInt();
-
-    if (value < kMinValue)
-        value = kMinValue;
-    else if (value > kMaxValue)
-        value = kMaxValue;
-
-    return value;
-}
-
-//--------------------------------------------------------------------------------------------------
-void SystemSettings::setOneTimePasswordLength(int length)
-{
-    settings_.setValue(kOneTimePasswordLength, length);
-}
-
-//--------------------------------------------------------------------------------------------------
-quint32 SystemSettings::oneTimePasswordCharacters() const
-{
-    quint32 kDefaultValue = PasswordGenerator::DIGITS | PasswordGenerator::LOWER_CASE |
-        PasswordGenerator::UPPER_CASE;
-
-    quint32 value = settings_.value(kOneTimePasswordCharacters, kDefaultValue).toUInt();
-
-    if (!(value & PasswordGenerator::DIGITS) &&
-        !(value & PasswordGenerator::LOWER_CASE) &&
-        !(value & PasswordGenerator::UPPER_CASE))
-    {
-        value = kDefaultValue;
-    }
-
-    return value;
-}
-
-//--------------------------------------------------------------------------------------------------
-void SystemSettings::setOneTimePasswordCharacters(quint32 characters)
-{
-    settings_.setValue(kOneTimePasswordCharacters, characters);
 }
 
 //--------------------------------------------------------------------------------------------------
