@@ -185,7 +185,7 @@ void doHostMigrate(const QJsonDocument& doc)
     {
         quint16 value = root_object["TcpPort"].toString().toUShort();
         LOG(INFO) << "TcpPort:" << value;
-        settings.setTcpPort(value);
+        db.setTcpPort(value);
     }
 
     if (root_object.contains("UpdateCheckFrequency"))

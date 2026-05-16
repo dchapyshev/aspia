@@ -26,7 +26,6 @@ namespace {
 const QString kOrganization = "aspia";
 const QString kApplication = "host";
 
-const QString kTcpPort = "tcp_port";
 const QString kApplicationShutdown = "application_shutdown";
 const QString kPreferredVideoCapturer = "preferred_video_capturer";
 
@@ -62,18 +61,6 @@ bool SystemSettings::isWritable() const
 void SystemSettings::sync()
 {
     settings_.sync();
-}
-
-//--------------------------------------------------------------------------------------------------
-quint16 SystemSettings::tcpPort() const
-{
-    return settings_.value(kTcpPort, DEFAULT_HOST_TCP_PORT).toUInt();
-}
-
-//--------------------------------------------------------------------------------------------------
-void SystemSettings::setTcpPort(quint16 port)
-{
-    settings_.setValue(kTcpPort, port);
 }
 
 //--------------------------------------------------------------------------------------------------

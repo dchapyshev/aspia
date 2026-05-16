@@ -547,7 +547,7 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
 
         // Update the parameters.
         settings.setApplicationShutdownDisabled(ui->checkbox_disable_shutdown->isChecked());
-        settings.setTcpPort(static_cast<quint16>(ui->spinbox_port->value()));
+        db.setTcpPort(static_cast<quint16>(ui->spinbox_port->value()));
         settings.setAutoUpdateEnabled(ui->checkbox_auto_update->isChecked());
         settings.setUpdateCheckFrequency(ui->combobox_update_check_freq->currentData().toInt());
         settings.setUpdateServer(ui->edit_update_server->text());
@@ -678,7 +678,7 @@ void ConfigDialog::reloadAll()
 
     reloadUserList();
 
-    ui->spinbox_port->setValue(settings.tcpPort());
+    ui->spinbox_port->setValue(db.tcpPort());
     ui->checkbox_use_custom_server->setChecked(settings.updateServer() != DEFAULT_UPDATE_SERVER);
     ui->edit_update_server->setText(settings.updateServer());
 

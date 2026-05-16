@@ -48,6 +48,7 @@ namespace {
 
 const char kConnectionName[] = "host";
 const char kSettingSeedKey[] = "seed_key";
+const char kSettingTcpPort[] = "tcp_port";
 const char kSettingRouterEnabled[] = "router_enabled";
 const char kSettingRouterAddress[] = "router_address";
 const char kSettingRouterPublicKey[] = "router_public_key";
@@ -428,6 +429,22 @@ QByteArray Database::seedKey() const
 bool Database::setSeedKey(const QByteArray& seed_key)
 {
     return writeSetting(kSettingSeedKey, QString::fromLatin1(seed_key.toHex()));
+}
+
+//--------------------------------------------------------------------------------------------------
+quint16 Database::tcpPort() const
+{
+    bool ok = false;
+    uint value = readSetting(kSettingTcpPort).toUInt(&ok);
+    if (!ok)
+        return DEFAULT_HOST_TCP_PORT;
+    return static_cast<quint16>(value);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::setTcpPort(quint16 port)
+{
+    return writeSetting(kSettingTcpPort, QString::number(port));
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -75,6 +75,9 @@ public:
     QByteArray seedKey() const;
     bool setSeedKey(const QByteArray& seed_key);
 
+    quint16 tcpPort() const;
+    bool setTcpPort(quint16 port);
+
     bool isRouterEnabled() const;
     bool setRouterEnabled(bool enable);
 

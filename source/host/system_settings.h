@@ -33,9 +33,6 @@ public:
     bool isWritable() const;
     void sync();
 
-    quint16 tcpPort() const;
-    void setTcpPort(quint16 port);
-
     QString updateServer() const;
     void setUpdateServer(const QString& server);
 

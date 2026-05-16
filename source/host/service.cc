@@ -192,8 +192,8 @@ void Service::onStart()
         LOG(ERROR) << "Configuration file does not exist";
 
         // For QFileSystemWatcher to be able to track configuration changes, the file must exist.
-        // We write the current TCP port to the config and synchronize.
-        settings_.setTcpPort(settings_.tcpPort());
+        // We rewrite the current value of one of the settings to create the file.
+        settings_.setApplicationShutdownDisabled(settings_.isApplicationShutdownDisabled());
         settings_.sync();
     }
 
@@ -213,7 +213,7 @@ void Service::onStart()
     tcp_server_->setMaxPendingConnections(kHostMaxPendingConnections);
     tcp_server_->setMaxConnectionsPerMinute(kHostMaxConnectionsPerMinute);
 
-    tcp_server_->start(settings_.tcpPort());
+    tcp_server_->start(db.tcpPort());
     tcp_server_->setUserList(SharedPointer<UserList>(new HostUserList));
 
     if (db.isRouterEnabled())
