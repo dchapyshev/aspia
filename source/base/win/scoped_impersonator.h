@@ -19,7 +19,7 @@
 #ifndef BASE_WIN_SCOPED_IMPERSONATOR_H
 #define BASE_WIN_SCOPED_IMPERSONATOR_H
 
-#include <QtGlobal>
+#include <QtClassHelperMacros>
 #include <qt_windows.h>
 
 class ScopedImpersonator

@@ -19,7 +19,7 @@
 #ifndef BASE_WIN_SCOPED_GDI_OBJECT_H
 #define BASE_WIN_SCOPED_GDI_OBJECT_H
 
-#include <QtGlobal>
+#include <QtClassHelperMacros>
 #include <qt_windows.h>
 
 // Like ScopedHandle but for GDI objects.

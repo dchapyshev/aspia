@@ -19,7 +19,7 @@
 #ifndef BASE_WIN_SCOPED_HDC_H
 #define BASE_WIN_SCOPED_HDC_H
 
-#include <QtGlobal>
+#include <QtClassHelperMacros>
 #include <qt_windows.h>
 
 // Like ScopedHandle but for HDC. Only use this on HDCs returned from GetDC.

@@ -19,7 +19,7 @@
 #ifndef BASE_AUDIO_AUDIO_PLAYER_H
 #define BASE_AUDIO_AUDIO_PLAYER_H
 
-#include <QtGlobal>
+#include <QtClassHelperMacros>
 
 #include <memory>
 #include <mutex>

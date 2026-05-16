@@ -18,7 +18,8 @@
 
 #include "base/codec/vector_math.h"
 
-#include <QtGlobal>
+#include <QtProcessorDetection>
+#include <QtSystemDetection>
 
 #include "base/logging.h"
 

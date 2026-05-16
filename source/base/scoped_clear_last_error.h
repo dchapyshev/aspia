@@ -19,7 +19,8 @@
 #ifndef BASE_SCOPED_CLEAR_LAST_ERROR_H
 #define BASE_SCOPED_CLEAR_LAST_ERROR_H
 
-#include <QtGlobal>
+#include <QtClassHelperMacros>
+#include <QtSystemDetection>
 
 // ScopedClearLastError stores and resets the value of thread local error codes
 // (errno, GetLastError()), and restores them in the destructor. This is useful

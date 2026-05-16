@@ -19,7 +19,8 @@
 #ifndef BASE_CODEC_WEBM_FILE_MUXER_H
 #define BASE_CODEC_WEBM_FILE_MUXER_H
 
-#include <QtGlobal>
+#include <QtClassHelperMacros>
+#include <QtTypes>
 
 #include <chrono>
 #include <memory>

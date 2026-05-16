@@ -19,7 +19,7 @@
 #ifndef BASE_POSIX_EINTR_WRAPPER_H
 #define BASE_POSIX_EINTR_WRAPPER_H
 
-#include <QtGlobal>
+#include <QtSystemDetection>
 
 #if defined(Q_OS_UNIX)
 

@@ -18,7 +18,9 @@
 
 #include "base/debug.h"
 
-#include <QtGlobal>
+#include <QtCompilerDetection>
+#include <QtProcessorDetection>
+#include <QtSystemDetection>
 
 #if defined(Q_OS_WINDOWS)
 #include <qt_windows.h>

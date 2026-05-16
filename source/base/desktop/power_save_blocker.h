@@ -19,7 +19,8 @@
 #ifndef BASE_DESKTOP_POWER_SAVE_BLOCKER_H
 #define BASE_DESKTOP_POWER_SAVE_BLOCKER_H
 
-#include <QtGlobal>
+#include <QtClassHelperMacros>
+#include <QtSystemDetection>
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/scoped_object.h"

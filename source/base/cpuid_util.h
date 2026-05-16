@@ -19,7 +19,9 @@
 #ifndef BASE_CPUID_UTIL_H
 #define BASE_CPUID_UTIL_H
 
-#include <QtGlobal>
+#include <QtCompilerDetection>
+#include <QtProcessorDetection>
+#include <QtTypes>
 
 #if defined(Q_PROCESSOR_X86)
 

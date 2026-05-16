@@ -19,7 +19,9 @@
 #ifndef BASE_LOGGING_FILE_H
 #define BASE_LOGGING_FILE_H
 
-#include <QtGlobal>
+#include <QtClassHelperMacros>
+#include <QtSystemDetection>
+#include <QtTypes>
 
 #if !defined(Q_OS_WINDOWS)
 #include <QFile>

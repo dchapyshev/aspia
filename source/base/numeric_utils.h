@@ -19,7 +19,7 @@
 #ifndef BASE_NUMERIC_UTILS_H
 #define BASE_NUMERIC_UTILS_H
 
-#include <QtGlobal>
+#include <QtTypes>
 
 //--------------------------------------------------------------------------------------------------
 inline quint32 makeUint32(quint16 high, quint16 low)

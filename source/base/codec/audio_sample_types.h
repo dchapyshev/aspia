@@ -19,7 +19,7 @@
 #ifndef BASE_CODEC_AUDIO_SAMPLE_TYPES_H
 #define BASE_CODEC_AUDIO_SAMPLE_TYPES_H
 
-#include <QtGlobal>
+#include <QtTypes>
 
 #include <cmath>
 #include <limits>

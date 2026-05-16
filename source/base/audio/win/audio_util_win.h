@@ -19,7 +19,7 @@
 #ifndef BASE_AUDIO_WIN_AUDIO_UTIL_WIN_H
 #define BASE_AUDIO_WIN_AUDIO_UTIL_WIN_H
 
-#include <QtGlobal>
+#include <QtTypes>
 
 #include <Audioclient.h>
 #include <audiopolicy.h>

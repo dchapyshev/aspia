@@ -19,7 +19,7 @@
 #ifndef BASE_NET_CURL_UTIL_H
 #define BASE_NET_CURL_UTIL_H
 
-#include <QtGlobal>
+#include <QtClassHelperMacros>
 #include <curl/curl.h>
 
 class ScopedCURL

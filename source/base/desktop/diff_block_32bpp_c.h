@@ -19,7 +19,7 @@
 #ifndef BASE_DESKTOP_DIFF_BLOCK_32BPP_C_H
 #define BASE_DESKTOP_DIFF_BLOCK_32BPP_C_H
 
-#include <QtGlobal>
+#include <QtTypes>
 
 quint8 diffFullBlock_32bpp_32x32_C(
     const quint8* image1, const quint8* image2, int bytes_per_row);

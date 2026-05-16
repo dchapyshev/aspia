@@ -19,7 +19,8 @@
 #ifndef HOST_HOST_UTILS_H
 #define HOST_HOST_UTILS_H
 
-#include <QtGlobal>
+#include <QtClassHelperMacros>
+#include <QtTypes>
 
 class HostUtils
 {

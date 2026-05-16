@@ -19,7 +19,7 @@
 #ifndef BASE_DESKTOP_CAPTURE_SCHEDULER_H
 #define BASE_DESKTOP_CAPTURE_SCHEDULER_H
 
-#include <QtGlobal>
+#include <QtClassHelperMacros>
 #include <chrono>
 
 class CaptureScheduler

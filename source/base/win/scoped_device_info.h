@@ -19,7 +19,7 @@
 #ifndef BASE_WIN_SCOPED_DEVICE_INFO_H
 #define BASE_WIN_SCOPED_DEVICE_INFO_H
 
-#include <QtGlobal>
+#include <QtClassHelperMacros>
 #include <qt_windows.h>
 #include <SetupAPI.h>
 

@@ -48,7 +48,7 @@
 #ifndef BASE_ALIGNED_MEMORY_H
 #define BASE_ALIGNED_MEMORY_H
 
-#include <QtGlobal>
+#include <QtSystemDetection>
 #include <cstddef>
 
 #if defined(Q_OS_WINDOWS)

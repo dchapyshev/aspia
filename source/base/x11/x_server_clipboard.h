@@ -19,7 +19,7 @@
 #ifndef BASE_X11_X_SERVER_CLIPBOARD_H
 #define BASE_X11_X_SERVER_CLIPBOARD_H
 
-#include <QtGlobal>
+#include <QtClassHelperMacros>
 
 #include <chrono>
 #include <functional>

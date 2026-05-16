@@ -20,7 +20,7 @@
 
 #include <gtest/gtest.h>
 
-#include <QtGlobal>
+#include <QtTypes>
 
 TEST(BitSetTest, Range64)
 {

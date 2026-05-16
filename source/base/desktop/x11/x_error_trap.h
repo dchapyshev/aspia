@@ -19,7 +19,7 @@
 #ifndef BASE_DESKTOP_X11_X_ERROR_TRAP_H
 #define BASE_DESKTOP_X11_X_ERROR_TRAP_H
 
-#include <QtGlobal>
+#include <QtClassHelperMacros>
 
 #include "base/x11/x11_headers.h"
 

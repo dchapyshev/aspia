@@ -19,7 +19,7 @@
 #ifndef BASE_AUDIO_WIN_SCOPED_MMCSS_REGISTRATION_H
 #define BASE_AUDIO_WIN_SCOPED_MMCSS_REGISTRATION_H
 
-#include <QtGlobal>
+#include <QtClassHelperMacros>
 #include <qt_windows.h>
 
 class ScopedMMCSSRegistration

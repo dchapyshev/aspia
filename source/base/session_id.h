@@ -19,7 +19,8 @@
 #ifndef BASE_SESSION_ID_H
 #define BASE_SESSION_ID_H
 
-#include <QtGlobal>
+#include <QtSystemDetection>
+#include <QtTypes>
 
 #if defined(Q_OS_UNIX)
 #include <unistd.h>

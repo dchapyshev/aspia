@@ -28,7 +28,11 @@
 #include <QRect>
 #include <QStringList>
 #include <QTimer>
-#include <QtGlobal>
+#include <QtClassHelperMacros>
+#include <QtCompilerDetection>
+#include <QtProcessorDetection>
+#include <QtSystemDetection>
+#include <QtTypes>
 #include <QVariant>
 
 #include "build/build_config.h"

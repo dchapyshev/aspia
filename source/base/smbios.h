@@ -19,7 +19,7 @@
 #ifndef BASE_SMBIOS_H
 #define BASE_SMBIOS_H
 
-#include <QtGlobal>
+#include <QtTypes>
 
 const size_t kSmbiosMaxDataSize = 0xFA00; // 64kB
 

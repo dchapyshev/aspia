@@ -19,7 +19,8 @@
 #ifndef BASE_DESKTOP_DIFF_BLOCK_32BPP_SSE2_H
 #define BASE_DESKTOP_DIFF_BLOCK_32BPP_SSE2_H
 
-#include <QtGlobal>
+#include <QtProcessorDetection>
+#include <QtTypes>
 
 #if defined(Q_PROCESSOR_X86)
 

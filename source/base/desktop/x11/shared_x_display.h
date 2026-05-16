@@ -19,7 +19,7 @@
 #ifndef BASE_DESKTOP_X11_SHARED_X_DISPLAY_H
 #define BASE_DESKTOP_X11_SHARED_X_DISPLAY_H
 
-#include <QtGlobal>
+#include <QtClassHelperMacros>
 
 #include <map>
 #include <memory>

@@ -23,7 +23,7 @@
 #ifndef BASE_DESKTOP_WIN_VIRTUAL_DISPLAY_H
 #define BASE_DESKTOP_WIN_VIRTUAL_DISPLAY_H
 
-#include <QtGlobal>
+#include <QtClassHelperMacros>
 #include <qt_windows.h>
 
 #include "base/desktop/win/swdevice_defines.h"

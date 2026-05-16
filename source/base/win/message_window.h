@@ -19,7 +19,7 @@
 #ifndef BASE_WIN_MESSAGE_WINDOW_H
 #define BASE_WIN_MESSAGE_WINDOW_H
 
-#include <QtGlobal>
+#include <QtClassHelperMacros>
 #include <qt_windows.h>
 
 #include <functional>

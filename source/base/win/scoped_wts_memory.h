@@ -19,7 +19,7 @@
 #ifndef BASE_WIN_SCOPED_WTS_MEMORY_H
 #define BASE_WIN_SCOPED_WTS_MEMORY_H
 
-#include <QtGlobal>
+#include <QtClassHelperMacros>
 #include <qt_windows.h>
 #include <WtsApi32.h>
 

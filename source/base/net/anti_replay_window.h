@@ -19,7 +19,8 @@
 #ifndef BASE_NET_ANTI_REPLAY_WINDOW_H
 #define BASE_NET_ANTI_REPLAY_WINDOW_H
 
-#include <QtGlobal>
+#include <QtClassHelperMacros>
+#include <QtTypes>
 
 #include <bitset>
 

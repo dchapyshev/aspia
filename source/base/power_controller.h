@@ -19,7 +19,7 @@
 #ifndef BASE_POWER_CONTROLLER_H
 #define BASE_POWER_CONTROLLER_H
 
-#include <QtGlobal>
+#include <QtClassHelperMacros>
 
 class PowerController
 {

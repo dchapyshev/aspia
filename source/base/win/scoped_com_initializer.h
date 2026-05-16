@@ -19,7 +19,7 @@
 #ifndef BASE_WIN_SCOPED_COM_INITIALIZER_H
 #define BASE_WIN_SCOPED_COM_INITIALIZER_H
 
-#include <QtGlobal>
+#include <QtClassHelperMacros>
 #include <objbase.h>
 
 // Initializes COM in the constructor (STA or MTA), and uninitializes COM in the

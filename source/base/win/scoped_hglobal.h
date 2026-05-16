@@ -19,7 +19,7 @@
 #ifndef BASE_WIN_SCOPED_HGLOBAL_H
 #define BASE_WIN_SCOPED_HGLOBAL_H
 
-#include <QtGlobal>
+#include <QtClassHelperMacros>
 #include <qt_windows.h>
 
 template<class T>

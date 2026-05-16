@@ -19,7 +19,7 @@
 #ifndef BASE_AUDIO_AUDIO_SILENCE_DETECTOR_H
 #define BASE_AUDIO_AUDIO_SILENCE_DETECTOR_H
 
-#include <QtGlobal>
+#include <QtTypes>
 
 // Helper used in audio capturers to detect and drop silent audio packets.
 class AudioSilenceDetector
