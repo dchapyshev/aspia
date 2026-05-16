@@ -71,6 +71,7 @@ QString hostIpcFilePath()
 //--------------------------------------------------------------------------------------------------
 void doHostMigrate(const QJsonDocument& doc)
 {
+    Database& db = Database::instance();
     SystemSettings settings;
 
     QJsonObject root_object = doc.object();
@@ -94,7 +95,7 @@ void doHostMigrate(const QJsonDocument& doc)
     {
         qint64 value = root_object["AutoConnConfirmInterval"].toString().toLongLong();
         LOG(INFO) << "AutoConnConfirmInterval:" << value;
-        settings.setAutoConfirmationInterval(std::chrono::milliseconds(value));
+        db.setAutoConfirmationInterval(std::chrono::milliseconds(value));
     }
 
     if (root_object.contains("AutoUpdateEnabled"))
@@ -108,14 +109,14 @@ void doHostMigrate(const QJsonDocument& doc)
     {
         bool value = root_object["ConnConfirm"].toString() == "true";
         LOG(INFO) << "ConnConfirm:" << value;
-        settings.setConnectConfirmation(value);
+        db.setConnectConfirmation(value);
     }
 
     if (root_object.contains("ConnConfirmNoUserAction"))
     {
         int value = root_object["ConnConfirmNoUserAction"].toString().toInt();
         LOG(INFO) << "ConnConfirmNoUserAction:" << value;
-        settings.setNoUserAction(static_cast<SystemSettings::NoUserAction>(value));
+        db.setNoUserAction(static_cast<Database::NoUserAction>(value));
     }
 
     if (root_object.contains("OneTimePassword"))
@@ -201,7 +202,7 @@ void doHostMigrate(const QJsonDocument& doc)
     {
         QString value = root_object["SeedKey"].toString();
         LOG(INFO) << "SeedKey:" << value;
-        Database::instance().setSeedKey(QByteArray::fromHex(value.toLatin1()));
+        db.setSeedKey(QByteArray::fromHex(value.toLatin1()));
     }
 
     QJsonObject users_object = root_object["Users"].toObject();
@@ -262,7 +263,7 @@ void doHostMigrate(const QJsonDocument& doc)
             if (user.isValid())
             {
                 LOG(INFO) << "Add user" << i << ":" << user.name;
-                Database::instance().addUser(user);
+                db.addUser(user);
             }
             else
             {

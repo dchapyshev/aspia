@@ -46,6 +46,9 @@ namespace {
 
 const char kConnectionName[] = "host";
 const char kSettingSeedKey[] = "seed_key";
+const char kSettingConnectConfirmation[] = "connect_confirmation";
+const char kSettingNoUserAction[] = "no_user_action";
+const char kSettingAutoConfirmationInterval[] = "auto_confirmation_interval";
 const char kSettingPasswordHash[] = "password_hash";
 const char kSettingPasswordHashSalt[] = "password_hash_salt";
 
@@ -416,6 +419,62 @@ QByteArray Database::seedKey() const
 bool Database::setSeedKey(const QByteArray& seed_key)
 {
     return writeSetting(kSettingSeedKey, QString::fromLatin1(seed_key.toHex()));
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::connectConfirmation() const
+{
+    return readSetting(kSettingConnectConfirmation).toInt() != 0;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::setConnectConfirmation(bool enable)
+{
+    return writeSetting(kSettingConnectConfirmation, QString::number(enable ? 1 : 0));
+}
+
+//--------------------------------------------------------------------------------------------------
+Database::NoUserAction Database::noUserAction() const
+{
+    bool ok = false;
+    int value = readSetting(kSettingNoUserAction).toInt(&ok);
+    if (!ok)
+        return NoUserAction::ACCEPT;
+    return static_cast<NoUserAction>(value);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::setNoUserAction(NoUserAction action)
+{
+    return writeSetting(kSettingNoUserAction, QString::number(static_cast<int>(action)));
+}
+
+//--------------------------------------------------------------------------------------------------
+std::chrono::milliseconds Database::autoConfirmationInterval() const
+{
+    static const std::chrono::milliseconds kDefaultValue { 0 };
+    static const std::chrono::milliseconds kMinValue { 0 };
+    static const std::chrono::milliseconds kMaxValue { 60 * 1000 }; // 60 seconds.
+
+    bool ok = false;
+    qint64 value = readSetting(kSettingAutoConfirmationInterval).toLongLong(&ok);
+    if (!ok)
+        return kDefaultValue;
+
+    std::chrono::milliseconds result(value);
+    if (result < kMinValue)
+        result = kMinValue;
+    else if (result > kMaxValue)
+        result = kMaxValue;
+
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::setAutoConfirmationInterval(const std::chrono::milliseconds& interval)
+{
+    return writeSetting(kSettingAutoConfirmationInterval,
+                        QString::number(static_cast<qint64>(interval.count())));
 }
 
 //--------------------------------------------------------------------------------------------------

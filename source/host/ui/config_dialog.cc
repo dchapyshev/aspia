@@ -231,8 +231,8 @@ ConfigDialog::ConfigDialog(QWidget* parent)
         setConfigChanged(FROM_HERE, true);
     });
 
-    ui->combobox_no_user_action->addItem(tr("Accept connection"), int(SystemSettings::NoUserAction::ACCEPT));
-    ui->combobox_no_user_action->addItem(tr("Reject connection"), int(SystemSettings::NoUserAction::REJECT));
+    ui->combobox_no_user_action->addItem(tr("Accept connection"), int(Database::NoUserAction::ACCEPT));
+    ui->combobox_no_user_action->addItem(tr("Reject connection"), int(Database::NoUserAction::REJECT));
 
     connect(ui->combobox_no_user_action, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, [this]()
@@ -560,10 +560,11 @@ void ConfigDialog::onButtonBoxClicked(QAbstractButton* button)
             ui->combobox_onetime_pass_chars->currentData().toUInt());
         settings.setOneTimePasswordLength(ui->spinbox_onetime_pass_char_count->value());
 
-        settings.setConnectConfirmation(ui->checkbox_conn_confirm_require->isChecked());
-        settings.setAutoConfirmationInterval(std::chrono::seconds(
+        Database& db = Database::instance();
+        db.setConnectConfirmation(ui->checkbox_conn_confirm_require->isChecked());
+        db.setAutoConfirmationInterval(std::chrono::seconds(
             ui->combobox_conn_confirm_auto->currentData().toInt()));
-        settings.setNoUserAction(static_cast<SystemSettings::NoUserAction>(
+        db.setNoUserAction(static_cast<Database::NoUserAction>(
             ui->combobox_no_user_action->currentData().toInt()));
 
         settings.sync();
@@ -619,6 +620,7 @@ bool ConfigDialog::isConfigChanged() const
 //--------------------------------------------------------------------------------------------------
 void ConfigDialog::reloadAll()
 {
+    Database& db = Database::instance();
     SystemSettings settings;
 
     ui->checkbox_auto_update->setChecked(settings.isAutoUpdateEnabled());
@@ -644,17 +646,17 @@ void ConfigDialog::reloadAll()
 
     ui->spinbox_onetime_pass_char_count->setValue(settings.oneTimePasswordLength());
 
-    bool conn_confirm = settings.connectConfirmation();
+    bool conn_confirm = db.connectConfirmation();
     ui->checkbox_conn_confirm_require->setChecked(conn_confirm);
     onConnConfirmStateChanged(conn_confirm ? Qt::Checked : Qt::Unchecked);
 
     std::chrono::seconds auto_conn_confirm =
-        std::chrono::duration_cast<std::chrono::seconds>(settings.autoConfirmationInterval());
+        std::chrono::duration_cast<std::chrono::seconds>(db.autoConfirmationInterval());
     item_index = ui->combobox_conn_confirm_auto->findData(static_cast<int>(auto_conn_confirm.count()));
     if (item_index != -1)
         ui->combobox_conn_confirm_auto->setCurrentIndex(item_index);
 
-    SystemSettings::NoUserAction no_user_action = settings.noUserAction();
+    Database::NoUserAction no_user_action = db.noUserAction();
     item_index = ui->combobox_no_user_action->findData(static_cast<int>(no_user_action));
     if (item_index != -1)
         ui->combobox_no_user_action->setCurrentIndex(item_index);
@@ -687,7 +689,7 @@ void ConfigDialog::reloadAll()
 
     ui->edit_update_server->setEnabled(ui->checkbox_use_custom_server->isChecked());
 
-    switch (Database::instance().passwordProtectionState())
+    switch (db.passwordProtectionState())
     {
         case Database::PasswordProtection::DISABLED:
             ui->button_pass_protection->setText(tr("Install"));

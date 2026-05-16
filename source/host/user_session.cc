@@ -34,7 +34,7 @@
 #include "base/ipc/ipc_server.h"
 #include "host/client.h"
 #include "host/host_storage.h"
-#include "host/system_settings.h"
+#include "host/database.h"
 
 #if defined(Q_OS_WINDOWS)
 #include "base/win/scoped_object.h"
@@ -251,7 +251,7 @@ void UserSession::onClientConfirmation(const proto::user::ConfirmationRequest& r
         return;
     }
 
-    SystemSettings settings;
+    Database& db = Database::instance();
 
 #if defined(Q_OS_WINDOWS)
     if (state_ == State::DETTACHED || dettach_timer_->isActive())
@@ -281,14 +281,14 @@ void UserSession::onClientConfirmation(const proto::user::ConfirmationRequest& r
             return;
         }
 
-        if (!settings.connectConfirmation())
+        if (!db.connectConfirmation())
         {
             LOG(INFO) << "Accept: connect confirmation is disabled";
             emit sig_confirmationReply(request.id(), true);
             return;
         }
 
-        if (settings.noUserAction() == SystemSettings::NoUserAction::ACCEPT)
+        if (db.noUserAction() == Database::NoUserAction::ACCEPT)
         {
             LOG(INFO) << "Accept: no active user";
             emit sig_confirmationReply(request.id(), true);
@@ -301,7 +301,7 @@ void UserSession::onClientConfirmation(const proto::user::ConfirmationRequest& r
     }
 #endif // defined(Q_OS_WINDOWS)
 
-    if (!settings.connectConfirmation())
+    if (!db.connectConfirmation())
     {
         LOG(INFO) << "Accept: connect confirmation is disabled";
         emit sig_confirmationReply(request.id(), true);

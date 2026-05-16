@@ -45,11 +45,6 @@ const QString kOneTimePasswordExpire = "one_time_password/expire";
 const QString kOneTimePasswordLength = "one_time_password/length";
 const QString kOneTimePasswordCharacters = "one_time_password/characters";
 
-const QString kConnectConfirmationEnable = "connect_confirmation/enable";
-const QString kConnectConfirmationNoUserAction = "connect_confirmation/no_user_action";
-const QString kConnectConfirmationAutoConfirmationInterval =
-    "connect_confirmation/auto_confirmation_interval";
-
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -245,55 +240,6 @@ quint32 SystemSettings::oneTimePasswordCharacters() const
 void SystemSettings::setOneTimePasswordCharacters(quint32 characters)
 {
     settings_.setValue(kOneTimePasswordCharacters, characters);
-}
-
-//--------------------------------------------------------------------------------------------------
-bool SystemSettings::connectConfirmation() const
-{
-    return settings_.value(kConnectConfirmationEnable, false).toBool();
-}
-
-//--------------------------------------------------------------------------------------------------
-void SystemSettings::setConnectConfirmation(bool enable)
-{
-    settings_.setValue(kConnectConfirmationEnable, enable);
-}
-
-//--------------------------------------------------------------------------------------------------
-SystemSettings::NoUserAction SystemSettings::noUserAction() const
-{
-    return static_cast<NoUserAction>(settings_.value(
-        kConnectConfirmationNoUserAction, static_cast<int>(NoUserAction::ACCEPT)).toInt());
-}
-
-//--------------------------------------------------------------------------------------------------
-void SystemSettings::setNoUserAction(NoUserAction action)
-{
-    settings_.setValue(kConnectConfirmationNoUserAction, static_cast<int>(action));
-}
-
-//--------------------------------------------------------------------------------------------------
-std::chrono::milliseconds SystemSettings::autoConfirmationInterval() const
-{
-    static const std::chrono::milliseconds kDefaultValue { 0 };
-    static const std::chrono::milliseconds kMinValue { 0 };
-    static const std::chrono::milliseconds kMaxValue { 60 * 1000 }; // 60 seconds.
-
-    std::chrono::milliseconds value(settings_.value(
-        kConnectConfirmationAutoConfirmationInterval, static_cast<qint64>(kDefaultValue.count())).toLongLong());
-
-    if (value < kMinValue)
-        value = kMinValue;
-    else if (value > kMaxValue)
-        value = kMaxValue;
-
-    return value;
-}
-
-//--------------------------------------------------------------------------------------------------
-void SystemSettings::setAutoConfirmationInterval(const std::chrono::milliseconds& interval)
-{
-    settings_.setValue(kConnectConfirmationAutoConfirmationInterval, static_cast<qint64>(interval.count()));
 }
 
 //--------------------------------------------------------------------------------------------------

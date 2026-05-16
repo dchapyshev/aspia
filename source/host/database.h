@@ -25,6 +25,8 @@
 #include <QString>
 #include <QVector>
 
+#include <chrono>
+
 class SecureString;
 
 class Database
@@ -39,6 +41,13 @@ public:
         UNAVAILABLE // Database is invalid or not readable.
     };
     Q_ENUM(PasswordProtection)
+
+    enum class NoUserAction
+    {
+        ACCEPT = 0,
+        REJECT = 1
+    };
+    Q_ENUM(NoUserAction)
 
     ~Database() = default;
 
@@ -64,6 +73,15 @@ public:
     // Settings.
     QByteArray seedKey() const;
     bool setSeedKey(const QByteArray& seed_key);
+
+    bool connectConfirmation() const;
+    bool setConnectConfirmation(bool enable);
+
+    NoUserAction noUserAction() const;
+    bool setNoUserAction(NoUserAction action);
+
+    std::chrono::milliseconds autoConfirmationInterval() const;
+    bool setAutoConfirmationInterval(const std::chrono::milliseconds& interval);
 
     // Password protection.
     PasswordProtection passwordProtectionState() const;

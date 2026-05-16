@@ -728,14 +728,13 @@ void Service::startConfirmation(PendingConfirmation& pending)
 
     proto::peer::SessionType session_type =
         static_cast<proto::peer::SessionType>(tcp_channel->peerSessionType());
-    SystemSettings settings;
 
     proto::user::ConfirmationRequest request;
     request.set_id(pending.tcp_channel->instanceId());
     request.set_session_type(session_type);
     request.set_computer_name(tcp_channel->peerComputerName().toStdString());
     request.set_user_name(tcp_channel->peerUserName().toStdString());
-    request.set_timeout(settings.autoConfirmationInterval().count());
+    request.set_timeout(Database::instance().autoConfirmationInterval().count());
 
     pending_confirmation_.emplace_back(std::move(pending));
     user_session_->onClientConfirmation(request);

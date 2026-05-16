@@ -66,22 +66,6 @@ public:
     quint32 oneTimePasswordCharacters() const;
     void setOneTimePasswordCharacters(quint32 characters);
 
-    bool connectConfirmation() const;
-    void setConnectConfirmation(bool enable);
-
-    enum class NoUserAction
-    {
-        ACCEPT = 0,
-        REJECT = 1
-    };
-    Q_ENUM(NoUserAction)
-
-    NoUserAction noUserAction() const;
-    void setNoUserAction(NoUserAction action);
-
-    std::chrono::milliseconds autoConfirmationInterval() const;
-    void setAutoConfirmationInterval(const std::chrono::milliseconds& interval);
-
     bool isApplicationShutdownDisabled() const;
     void setApplicationShutdownDisabled(bool value);
 
