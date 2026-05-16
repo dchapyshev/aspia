@@ -29,7 +29,17 @@ class SecureString;
 
 class Database
 {
+    Q_GADGET
+
 public:
+    enum class PasswordProtection
+    {
+        DISABLED,   // No password hash stored in the database.
+        ENABLED,    // Password hash stored.
+        UNAVAILABLE // Database is invalid or not readable.
+    };
+    Q_ENUM(PasswordProtection)
+
     ~Database() = default;
 
     static Database& instance();
@@ -55,14 +65,11 @@ public:
     QByteArray seedKey() const;
     bool setSeedKey(const QByteArray& seed_key);
 
-    QByteArray passwordHash() const;
-    bool setPasswordHash(const QByteArray& hash);
-
-    QByteArray passwordHashSalt() const;
-    bool setPasswordHashSalt(const QByteArray& salt);
-
-    static bool createPasswordHash(const SecureString& password, QByteArray* hash, QByteArray* salt);
-    static bool isValidPassword(const SecureString& password);
+    // Password protection.
+    PasswordProtection passwordProtectionState() const;
+    bool setPassword(const SecureString& password);
+    void clearPassword();
+    bool verifyPassword(const SecureString& password) const;
 
 private:
     Database() = default;
@@ -71,6 +78,9 @@ private:
 
     QString readSetting(const QString& name) const;
     bool writeSetting(const QString& name, const QString& value);
+
+    QByteArray passwordHash() const;
+    QByteArray passwordHashSalt() const;
 
     bool valid_ = false;
 

@@ -25,6 +25,7 @@
 #include "common/ui/msg_box.h"
 #include "build/version.h"
 #include "host/host_utils.h"
+#include "host/database.h"
 #include "host/system_settings.h"
 #include "host/ui/application.h"
 #include "host/ui/check_password_dialog.h"
@@ -186,18 +187,28 @@ int hostMain(int argc, char* argv[])
         else
 #endif // defined(Q_OS_WINDOWS)
         {
-            SystemSettings settings;
-            if (settings.passwordProtection())
+            switch (Database::instance().passwordProtectionState())
             {
-                CheckPasswordDialog dialog;
-                if (dialog.exec() == CheckPasswordDialog::Accepted)
+                case Database::PasswordProtection::DISABLED:
                 {
                     ConfigDialog().exec();
                 }
-            }
-            else
-            {
-                ConfigDialog().exec();
+                break;
+
+                case Database::PasswordProtection::ENABLED:
+                {
+                    CheckPasswordDialog dialog;
+                    if (dialog.exec() == CheckPasswordDialog::Accepted)
+                        ConfigDialog().exec();
+                }
+                break;
+
+                case Database::PasswordProtection::UNAVAILABLE:
+                {
+                    MsgBox::warning(nullptr,
+                        QApplication::translate("Host", "Settings storage is unavailable."));
+                }
+                break;
             }
         }
     }

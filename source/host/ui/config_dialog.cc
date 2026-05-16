@@ -412,35 +412,35 @@ void ConfigDialog::onDeleteUser()
 void ConfigDialog::onPassProtectClicked()
 {
     Database& db = Database::instance();
-    SystemSettings settings;
 
-    if (!settings.passwordProtection())
+    switch (db.passwordProtectionState())
     {
-        ChangePasswordDialog dialog(ChangePasswordDialog::Mode::CREATE_NEW_PASSWORD, this);
-        if (dialog.exec() == ChangePasswordDialog::Accepted)
+        case Database::PasswordProtection::DISABLED:
         {
-            QByteArray hash;
-            QByteArray salt;
-
-            if (!Database::createPasswordHash(dialog.newPassword(), &hash, &salt))
+            ChangePasswordDialog dialog(ChangePasswordDialog::Mode::CREATE_NEW_PASSWORD, this);
+            if (dialog.exec() == ChangePasswordDialog::Accepted)
             {
-                MsgBox::warning(this, tr("An error occurred while processing the password."));
-                return;
+                if (!db.setPassword(dialog.newPassword()))
+                {
+                    MsgBox::warning(this, tr("An error occurred while processing the password."));
+                    return;
+                }
             }
-
-            settings.setPasswordProtection(true);
-            db.setPasswordHash(hash);
-            db.setPasswordHashSalt(salt);
         }
-    }
-    else
-    {
-        CheckPasswordDialog dialog(this);
-        if (dialog.exec() == CheckPasswordDialog::Accepted)
+        break;
+
+        case Database::PasswordProtection::ENABLED:
         {
-            settings.setPasswordProtection(false);
-            db.setPasswordHash(QByteArray());
-            db.setPasswordHashSalt(QByteArray());
+            CheckPasswordDialog dialog(this);
+            if (dialog.exec() == CheckPasswordDialog::Accepted)
+                db.clearPassword();
+        }
+        break;
+
+        case Database::PasswordProtection::UNAVAILABLE:
+        {
+            MsgBox::warning(this, tr("Settings storage is unavailable."));
+            return;
         }
     }
 
@@ -453,21 +453,11 @@ void ConfigDialog::onChangePassClicked()
     ChangePasswordDialog dialog(ChangePasswordDialog::Mode::CHANGE_PASSWORD, this);
     if (dialog.exec() == ChangePasswordDialog::Accepted)
     {
-        QByteArray hash;
-        QByteArray salt;
-
-        if (!Database::createPasswordHash(dialog.newPassword(), &hash, &salt))
+        if (!Database::instance().setPassword(dialog.newPassword()))
         {
             MsgBox::warning(this, tr("An error occurred while processing the password."));
             return;
         }
-
-        SystemSettings settings;
-        settings.setPasswordProtection(true);
-
-        Database& db = Database::instance();
-        db.setPasswordHash(hash);
-        db.setPasswordHashSalt(salt);
     }
 
     QTimer::singleShot(0, this, &ConfigDialog::reloadAll);
@@ -697,15 +687,22 @@ void ConfigDialog::reloadAll()
 
     ui->edit_update_server->setEnabled(ui->checkbox_use_custom_server->isChecked());
 
-    if (!settings.passwordProtection())
+    switch (Database::instance().passwordProtectionState())
     {
-        ui->button_pass_protection->setText(tr("Install"));
-        ui->button_change_password->setVisible(false);
-    }
-    else
-    {
-        ui->button_pass_protection->setText(tr("Remove"));
-        ui->button_change_password->setVisible(true);
+        case Database::PasswordProtection::DISABLED:
+            ui->button_pass_protection->setText(tr("Install"));
+            ui->button_change_password->setVisible(false);
+            break;
+
+        case Database::PasswordProtection::ENABLED:
+            ui->button_pass_protection->setText(tr("Remove"));
+            ui->button_change_password->setVisible(true);
+            break;
+
+        case Database::PasswordProtection::UNAVAILABLE:
+            ui->button_pass_protection->setEnabled(false);
+            ui->button_change_password->setVisible(false);
+            break;
     }
 
     ui->checkbox_disable_shutdown->setChecked(settings.isApplicationShutdownDisabled());

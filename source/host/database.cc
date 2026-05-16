@@ -419,68 +419,57 @@ bool Database::setSeedKey(const QByteArray& seed_key)
 }
 
 //--------------------------------------------------------------------------------------------------
-QByteArray Database::passwordHash() const
+Database::PasswordProtection Database::passwordProtectionState() const
 {
-    return QByteArray::fromHex(readSetting(kSettingPasswordHash).toLatin1());
+    if (!isValid())
+        return PasswordProtection::UNAVAILABLE;
+
+    return (!passwordHash().isEmpty() && !passwordHashSalt().isEmpty()) ?
+        PasswordProtection::ENABLED : PasswordProtection::DISABLED;
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::setPasswordHash(const QByteArray& hash)
-{
-    return writeSetting(kSettingPasswordHash, QString::fromLatin1(hash.toHex()));
-}
-
-//--------------------------------------------------------------------------------------------------
-QByteArray Database::passwordHashSalt() const
-{
-    return QByteArray::fromHex(readSetting(kSettingPasswordHashSalt).toLatin1());
-}
-
-//--------------------------------------------------------------------------------------------------
-bool Database::setPasswordHashSalt(const QByteArray& salt)
-{
-    return writeSetting(kSettingPasswordHashSalt, QString::fromLatin1(salt.toHex()));
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
-bool Database::createPasswordHash(const SecureString& password, QByteArray* hash, QByteArray* salt)
-{
-    if (password.isEmpty() || !hash || !salt)
-        return false;
-
-    QByteArray salt_temp = Random::byteArray(kPasswordHashSaltSize);
-    if (salt_temp.isEmpty())
-        return false;
-
-    QByteArray hash_temp = PasswordHash::hash(PasswordHash::SCRYPT, password, salt_temp);
-    if (hash_temp.isEmpty())
-        return false;
-
-    *salt = std::move(salt_temp);
-    *hash = std::move(hash_temp);
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-// static
-bool Database::isValidPassword(const SecureString& password)
+bool Database::setPassword(const SecureString& password)
 {
     if (password.isEmpty())
         return false;
 
-    QByteArray password_hash_salt = instance().passwordHashSalt();
-    QByteArray password_hash = instance().passwordHash();
-
-    if (password_hash_salt.isEmpty() || password_hash.isEmpty())
+    QByteArray salt = Random::byteArray(kPasswordHashSaltSize);
+    if (salt.isEmpty())
         return false;
 
-    QByteArray verifiable_password_hash =
-        PasswordHash::hash(PasswordHash::SCRYPT, password, password_hash_salt);
-    if (verifiable_password_hash.isEmpty())
+    QByteArray hash = PasswordHash::hash(PasswordHash::SCRYPT, password, salt);
+    if (hash.isEmpty())
         return false;
 
-    return verifiable_password_hash == password_hash;
+    return writeSetting(kSettingPasswordHash, QString::fromLatin1(hash.toHex())) &&
+           writeSetting(kSettingPasswordHashSalt, QString::fromLatin1(salt.toHex()));
+}
+
+//--------------------------------------------------------------------------------------------------
+void Database::clearPassword()
+{
+    writeSetting(kSettingPasswordHash, QString());
+    writeSetting(kSettingPasswordHashSalt, QString());
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::verifyPassword(const SecureString& password) const
+{
+    if (password.isEmpty())
+        return false;
+
+    QByteArray salt = passwordHashSalt();
+    QByteArray hash = passwordHash();
+
+    if (salt.isEmpty() || hash.isEmpty())
+        return false;
+
+    QByteArray verifiable_hash = PasswordHash::hash(PasswordHash::SCRYPT, password, salt);
+    if (verifiable_hash.isEmpty())
+        return false;
+
+    return verifiable_hash == hash;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -591,4 +580,16 @@ bool Database::writeSetting(const QString& name, const QString& value)
     }
 
     return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+QByteArray Database::passwordHash() const
+{
+    return QByteArray::fromHex(readSetting(kSettingPasswordHash).toLatin1());
+}
+
+//--------------------------------------------------------------------------------------------------
+QByteArray Database::passwordHashSalt() const
+{
+    return QByteArray::fromHex(readSetting(kSettingPasswordHashSalt).toLatin1());
 }

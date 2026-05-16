@@ -40,8 +40,6 @@ const QString kUpdateServer = "update/server";
 const QString kUpdateAutoUpdate = "update/auto_update";
 const QString kUpdateCheckFrequency = "update/check_frequency";
 
-const QString kPasswordProtectionEnable = "password_protection/enable";
-
 const QString kOneTimePasswordEnable = "one_time_password/enable";
 const QString kOneTimePasswordExpire = "one_time_password/expire";
 const QString kOneTimePasswordLength = "one_time_password/length";
@@ -164,18 +162,6 @@ quint32 SystemSettings::preferredVideoCapturer() const
 void SystemSettings::setPreferredVideoCapturer(quint32 type)
 {
     settings_.setValue(kPreferredVideoCapturer, type);
-}
-
-//--------------------------------------------------------------------------------------------------
-bool SystemSettings::passwordProtection() const
-{
-    return settings_.value(kPasswordProtectionEnable, false).toBool();
-}
-
-//--------------------------------------------------------------------------------------------------
-void SystemSettings::setPasswordProtection(bool enable)
-{
-    settings_.setValue(kPasswordProtectionEnable, enable);
 }
 
 //--------------------------------------------------------------------------------------------------

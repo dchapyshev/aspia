@@ -26,7 +26,7 @@
 #include "base/crypto/secure_string.h"
 #include "common/ui/msg_box.h"
 #include "common/ui/password_edit.h"
-#include "host/system_settings.h"
+#include "host/database.h"
 #include "ui_change_password_dialog.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -122,7 +122,7 @@ void ChangePasswordDialog::onButtonBoxClicked(QAbstractButton* button)
                 return;
             }
 
-            if (!SystemSettings::isValidPassword(old_password))
+            if (!Database::instance().verifyPassword(old_password))
             {
                 LOG(ERROR) << "Incorrect password entered";
                 MsgBox::warning(this, tr("You entered an incorrect old password."));

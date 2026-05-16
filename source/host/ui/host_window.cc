@@ -37,6 +37,7 @@
 #include "common/ui/chat_widget.h"
 #include "common/ui/language_action.h"
 #include "common/ui/status_dialog.h"
+#include "host/database.h"
 #include "host/system_settings.h"
 #include "host/ui/application.h"
 #include "host/ui/check_password_dialog.h"
@@ -663,20 +664,31 @@ void HostWindow::onSettings()
     }
 #endif // defined(Q_OS_LINUX)
 
-    SystemSettings settings;
-    if (settings.passwordProtection())
+    switch (Database::instance().passwordProtectionState())
     {
-        CheckPasswordDialog dialog(this);
-        if (dialog.exec() == CheckPasswordDialog::Accepted)
+        case Database::PasswordProtection::DISABLED:
         {
             ConfigDialog(this).exec();
             onSettingsChanged();
         }
-    }
-    else
-    {
-        ConfigDialog(this).exec();
-        onSettingsChanged();
+        break;
+
+        case Database::PasswordProtection::ENABLED:
+        {
+            CheckPasswordDialog dialog(this);
+            if (dialog.exec() == CheckPasswordDialog::Accepted)
+            {
+                ConfigDialog(this).exec();
+                onSettingsChanged();
+            }
+        }
+        break;
+
+        case Database::PasswordProtection::UNAVAILABLE:
+        {
+            MsgBox::warning(this, tr("Settings storage is unavailable."));
+        }
+        break;
     }
 }
 

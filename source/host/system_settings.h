@@ -54,9 +54,6 @@ public:
     quint32 preferredVideoCapturer() const;
     void setPreferredVideoCapturer(quint32 type);
 
-    bool passwordProtection() const;
-    void setPasswordProtection(bool enable);
-
     bool oneTimePassword() const;
     void setOneTimePassword(bool enable);
 
