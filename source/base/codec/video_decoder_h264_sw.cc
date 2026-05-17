@@ -79,15 +79,15 @@ bool VideoDecoderH264SW::initialize()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool VideoDecoderH264SW::decode(const proto::video::Packet& packet, Frame* frame)
+VideoDecoder::Result VideoDecoderH264SW::decode(const proto::video::Packet& packet, Frame* frame)
 {
     if (!decoder_ || !frame)
-        return false;
+        return Result::PERMANENT_ERROR;
 
     if (packet.data().empty())
     {
         LOG(ERROR) << "Empty H264 packet";
-        return false;
+        return Result::TEMPORARY_ERROR;
     }
 
     uint8_t* planes[3] = { nullptr, nullptr, nullptr };
@@ -101,14 +101,14 @@ bool VideoDecoderH264SW::decode(const proto::video::Packet& packet, Frame* frame
     if (state != dsErrorFree)
     {
         LOG(ERROR) << "DecodeFrameNoDelay failed:" << state;
-        return false;
+        return Result::TEMPORARY_ERROR;
     }
 
     if (info.iBufferStatus != 1 || !planes[0] || !planes[1] || !planes[2])
     {
         // Decoder buffered the bitstream but did not emit a complete frame yet (warm-up after
         // a key frame is reasonably common). The caller will retry on the next packet.
-        return false;
+        return Result::TEMPORARY_ERROR;
     }
 
     const int y_stride = info.UsrData.sSystemBuffer.iStride[0];
@@ -118,7 +118,7 @@ bool VideoDecoderH264SW::decode(const proto::video::Packet& packet, Frame* frame
     if (decoded_size != frame->size())
     {
         LOG(ERROR) << "Size of the decoded frame" << decoded_size << "doesn't match" << frame->size();
-        return false;
+        return Result::TEMPORARY_ERROR;
     }
 
     QRect frame_rect(QPoint(0, 0), frame->size());
@@ -129,7 +129,7 @@ bool VideoDecoderH264SW::decode(const proto::video::Packet& packet, Frame* frame
         if (!frame_rect.contains(rect))
         {
             LOG(ERROR) << "The rectangle is outside the screen area";
-            return false;
+            return Result::TEMPORARY_ERROR;
         }
 
         const int y_offset = rect.y() * y_stride + rect.x();
@@ -142,5 +142,5 @@ bool VideoDecoderH264SW::decode(const proto::video::Packet& packet, Frame* frame
                            rect.width(), rect.height());
     }
 
-    return true;
+    return Result::SUCCESS;
 }

@@ -124,26 +124,7 @@ void ClientDesktop::onStarted()
     if (isLegacy())
         return;
 
-    proto::control::ClientToHost message;
-    proto::control::Capabilities* capabilities = message.mutable_capabilities();
-
-    auto add_flag = [capabilities](const char* name, bool value)
-    {
-        proto::control::Capabilities::Flag* flag = capabilities->add_flag();
-        flag->set_name(name);
-        flag->set_value(value);
-    };
-
-    add_flag(kFlagVideoVP8, true);
-    add_flag(kFlagVideoVP9, true);
-    add_flag(kFlagVideoH264, true);
-    add_flag(kFlagAudioOpus, true);
-
-#if defined(Q_OS_WINDOWS)
-    add_flag(kFlagFileClipboard, true);
-#endif
-
-    sendMessage(proto::desktop::CHANNEL_ID_CONTROL, serialize(message));
+    sendCapabilities();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -748,7 +729,7 @@ void ClientDesktop::readVideoPacket(const proto::video::Packet& packet)
     if (video_encoding_ != packet.encoding())
     {
         CLOG(INFO) << "Video encoding changed from" << video_encoding_ << "to" << packet.encoding();
-        video_decoder_ = VideoDecoder::create(packet.encoding());
+        video_decoder_ = VideoDecoder::create(packet.encoding(), h264_hw_enabled_);
         video_encoding_ = packet.encoding();
         key_frame_received_ = false;
     }
@@ -812,7 +793,37 @@ void ClientDesktop::readVideoPacket(const proto::video::Packet& packet)
         return;
     }
 
-    if (!video_decoder_->decode(packet, desktop_frame_.get()))
+    const VideoDecoder::Result decode_result = video_decoder_->decode(packet, desktop_frame_.get());
+    if (decode_result == VideoDecoder::Result::PERMANENT_ERROR)
+    {
+        if (video_encoding_ != proto::video::ENCODING_H264)
+            return;
+
+        if (h264_hw_enabled_)
+        {
+            // First permanent failure - HW decoder cannot proceed. Swap in OpenH264 SW decoder
+            // and ask the host for a keyframe so the new decoder starts from a known state.
+            CLOG(WARNING) << "Permanent HW H264 decoder failure. Falling back to SW H264";
+            h264_hw_enabled_ = false;
+            video_decoder_ = VideoDecoder::create(video_encoding_, false);
+            key_frame_received_ = false;
+            sendKeyFrameRequest();
+        }
+        else if (h264_sw_enabled_)
+        {
+            // SW decoder also failed - H264 just cannot handle this stream (resolution above the
+            // level limits is the typical reason). Drop H264 from capabilities and re-negotiate;
+            // host will pick VP8 and the decoder gets recreated when readVideoPacket sees the
+            // encoding change.
+            CLOG(WARNING) << "Permanent SW H264 decoder failure. Disabling H264";
+            h264_sw_enabled_ = false;
+            video_decoder_.reset();
+            sendCapabilities();
+        }
+        return;
+    }
+
+    if (decode_result == VideoDecoder::Result::TEMPORARY_ERROR)
     {
         CLOG(ERROR) << "Unable to decode video packet";
         key_frame_received_ = false;
@@ -1042,6 +1053,32 @@ void ClientDesktop::sendKeyFrameRequest()
     proto::video::ClientToHost message;
     message.mutable_key_frame()->set_dummy(1);
     sendMessage(proto::desktop::CHANNEL_ID_VIDEO, serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientDesktop::sendCapabilities()
+{
+    proto::control::ClientToHost message;
+    proto::control::Capabilities* capabilities = message.mutable_capabilities();
+
+    auto add_flag = [capabilities](const char* name, bool value)
+    {
+        proto::control::Capabilities::Flag* flag = capabilities->add_flag();
+        flag->set_name(name);
+        flag->set_value(value);
+    };
+
+    add_flag(kFlagVideoVP8, true);
+    add_flag(kFlagVideoVP9, true);
+    if (h264_sw_enabled_)
+        add_flag(kFlagVideoH264, true);
+    add_flag(kFlagAudioOpus, true);
+
+#if defined(Q_OS_WINDOWS)
+    add_flag(kFlagFileClipboard, true);
+#endif
+
+    sendMessage(proto::desktop::CHANNEL_ID_CONTROL, serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------

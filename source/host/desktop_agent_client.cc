@@ -323,6 +323,11 @@ void DesktopAgentClient::readCapabilities(const proto::control::Capabilities& ca
     file_clipboard_supported_ = has_flag(capabilities, kFlagFileClipboard);
 
     sendCapabilities();
+
+    // If the client has already been configured and is now revoking a capability (e.g. dropping
+    // H264 after the decoder failed) - the agent must re-evaluate which codec to use.
+    if (config_.has_value())
+        emit sig_configured();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -377,13 +382,10 @@ void DesktopAgentClient::sendCapabilities()
         flag->set_value(value);
     };
 
-    add_flag(kFlagVideoVP8, true);
-    add_flag(kFlagVideoVP9, true);
     add_flag(kFlagClipboard, true);
 
 #if defined(Q_OS_WINDOWS)
     add_flag(kFlagOSWindows, true);
-    add_flag(kFlagAudioOpus, true);
     add_flag(kFlagCursorPosition, true);
     add_flag(kFlagCursorShape, true);
     add_flag(kFlagPasteAsKeystrokes, true);

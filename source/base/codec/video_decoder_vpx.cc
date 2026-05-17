@@ -122,7 +122,7 @@ VideoDecoderVpx::~VideoDecoderVpx()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool VideoDecoderVpx::decode(const proto::video::Packet& packet, Frame* frame)
+VideoDecoder::Result VideoDecoderVpx::decode(const proto::video::Packet& packet, Frame* frame)
 {
     // Do the actual decoding.
     vpx_codec_err_t ret =
@@ -138,7 +138,7 @@ bool VideoDecoderVpx::decode(const proto::video::Packet& packet, Frame* frame)
 
         LOG(ERROR) << "Decoding failed:" << (error ? error : "(NULL)") << "\n"
                    << "Details:" << (error_detail ? error_detail : "(NULL)");
-        return false;
+        return Result::TEMPORARY_ERROR;
     }
 
     vpx_codec_iter_t iter = nullptr;
@@ -148,14 +148,16 @@ bool VideoDecoderVpx::decode(const proto::video::Packet& packet, Frame* frame)
     if (!image)
     {
         LOG(ERROR) << "No video frame decoded";
-        return false;
+        return Result::TEMPORARY_ERROR;
     }
 
     if (QSize(static_cast<int>(image->d_w), static_cast<int>(image->d_h)) != frame->size())
     {
         LOG(ERROR) << "Size of the encoded frame doesn't match size in the header";
-        return false;
+        return Result::TEMPORARY_ERROR;
     }
 
-    return convertImage(packet, image, frame);
+    if (!convertImage(packet, image, frame))
+        return Result::TEMPORARY_ERROR;
+    return Result::SUCCESS;
 }

@@ -32,12 +32,24 @@ class Frame;
 
 class VideoDecoder
 {
+    Q_GADGET
+
 public:
-    static std::unique_ptr<VideoDecoder> create(proto::video::Encoding encoding);
+    enum class Result
+    {
+        SUCCESS,         // Frame was decoded successfully.
+        TEMPORARY_ERROR, // Recoverable failure (corrupt bitstream, warm-up, etc.); retry next packet.
+        PERMANENT_ERROR, // Decoder cannot proceed; the caller should fall back to another decoder.
+    };
+    Q_ENUM(Result)
+
+    // When allow_hardware is false the H264 path skips the HW MF decoder and goes straight to
+    // the software backend. Used by clients to recover after a PERMANENT_ERROR from the HW path.
+    static std::unique_ptr<VideoDecoder> create(proto::video::Encoding encoding, bool allow_hardware = true);
 
     virtual ~VideoDecoder() = default;
 
-    virtual bool decode(const proto::video::Packet& packet, Frame* frame) = 0;
+    virtual Result decode(const proto::video::Packet& packet, Frame* frame) = 0;
 
 protected:
     VideoDecoder() = default;

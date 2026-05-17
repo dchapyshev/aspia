@@ -115,52 +115,55 @@ bool VideoDecoderH264MF::initialize()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool VideoDecoderH264MF::decode(const proto::video::Packet& packet, Frame* frame)
+VideoDecoder::Result VideoDecoderH264MF::decode(const proto::video::Packet& packet, Frame* frame)
 {
     if (!mf_started_ || !frame)
-        return false;
+        return Result::PERMANENT_ERROR;
 
     if (packet.data().empty())
     {
         LOG(ERROR) << "Empty H264 packet";
-        return false;
+        return Result::TEMPORARY_ERROR;
     }
 
     if (!decoder_ || last_size_ != frame->size())
     {
-        last_size_ = frame->size();
+        const QSize new_size = frame->size();
 
         destroyDecoder();
-        if (!createDecoder(last_size_))
+        if (!createDecoder(new_size))
         {
-            LOG(ERROR) << "Unable to create H264 decoder";
-            return false;
+            // HW MFT cannot be (re)initialized for this frame size or driver state - signal a
+            // fallback to the software decoder instead of looping forever on the same failure.
+            LOG(ERROR) << "Unable to create H264 decoder for" << new_size;
+            return Result::PERMANENT_ERROR;
         }
+        last_size_ = new_size;
     }
 
     const quint64 sample_time = frame_counter_ * static_cast<quint64>(kFrameDuration100ns);
 
     if (!waitForEvent(METransformNeedInput))
-        return false;
+        return Result::TEMPORARY_ERROR;
 
     if (!feedInput(packet.data(), sample_time))
-        return false;
+        return Result::TEMPORARY_ERROR;
 
     if (!waitForEvent(METransformHaveOutput))
-        return false;
+        return Result::TEMPORARY_ERROR;
 
     ComPtr<IMFSample> sample;
     if (!readOutput(&sample))
-        return false;
+        return Result::TEMPORARY_ERROR;
 
     if (!sample)
-        return false;
+        return Result::TEMPORARY_ERROR;
 
     if (!copySampleToFrame(sample.Get(), packet, frame))
-        return false;
+        return Result::TEMPORARY_ERROR;
 
     ++frame_counter_;
-    return true;
+    return Result::SUCCESS;
 }
 
 //--------------------------------------------------------------------------------------------------

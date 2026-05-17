@@ -329,9 +329,13 @@ void DesktopAgent::onClientConfigured()
     LOG(INFO) << "Merged configuration:" << merged_config << "vp8:" << vp8_supported_
               << "vp9:" << vp9_supported_ << "h264:" << h264_supported_ << "opus:" << opus_supported;
 
-    // Prefer hardware H264 when both endpoints support it; fall back to VP otherwise.
+    // Prefer hardware H264 when both endpoints support it; fall back to VP otherwise. The
+    // explicit reset of an H264 encoding when h264_supported_ flipped to false handles the case
+    // where the client revokes H264 capability mid-session (decoder failure -> renegotiation).
     if (h264_supported_)
         video_encoding_ = proto::video::ENCODING_H264;
+    else if (video_encoding_ == proto::video::ENCODING_H264)
+        video_encoding_ = proto::video::ENCODING_VP8;
 
     video_encoder_ = VideoEncoder::create(video_encoding_);
 

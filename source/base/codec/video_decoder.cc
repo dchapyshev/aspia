@@ -29,7 +29,7 @@
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::unique_ptr<VideoDecoder> VideoDecoder::create(proto::video::Encoding encoding)
+std::unique_ptr<VideoDecoder> VideoDecoder::create(proto::video::Encoding encoding, bool allow_hardware)
 {
     switch (encoding)
     {
@@ -40,11 +40,14 @@ std::unique_ptr<VideoDecoder> VideoDecoder::create(proto::video::Encoding encodi
         case proto::video::ENCODING_H264:
         {
 #if defined(Q_OS_WINDOWS)
-            // Prefer Media Foundation (HW path) on Windows; fall back to OpenH264 if MF
-            // initialization fails (stripped Server SKUs, broken HW driver, etc.).
-            if (auto decoder = VideoDecoderH264MF::create())
-                return decoder;
-            LOG(WARNING) << "Media Foundation H264 decoder unavailable, falling back to OpenH264";
+            if (allow_hardware)
+            {
+                // Prefer Media Foundation (HW path) on Windows; fall back to OpenH264 if MF
+                // initialization fails (stripped Server SKUs, broken HW driver, etc.).
+                if (auto decoder = VideoDecoderH264MF::create())
+                    return decoder;
+                LOG(WARNING) << "Media Foundation H264 decoder unavailable, falling back to OpenH264";
+            }
 #endif
             return VideoDecoderH264SW::create();
         }

@@ -157,6 +157,7 @@ private:
     void sendSessionListRequest();
     void sendConfig(const proto::control::Config& config);
     void sendKeyFrameRequest();
+    void sendCapabilities();
     void setForceReliable(bool enable);
 
     QTimer* repeated_timer_ = nullptr;
@@ -214,6 +215,13 @@ private:
     bool force_reliable_active_ = false;
     int reliable_hold_seconds_ = 0;
     int reliable_disable_count_ = 0;
+
+    // Set once a hardware H264 decoder reports a permanent failure; sticks for the rest of the
+    // session so the software backend is picked on every subsequent VideoDecoder::create() call.
+    bool h264_hw_enabled_ = true;
+    // Set after both HW and SW H264 decoders failed permanently (e.g. resolution exceeds H264
+    // level limits). sendCapabilities() drops kFlagVideoH264 so the host switches to VP.
+    bool h264_sw_enabled_ = true;
 
     Q_DISABLE_COPY_MOVE(ClientDesktop)
 };
