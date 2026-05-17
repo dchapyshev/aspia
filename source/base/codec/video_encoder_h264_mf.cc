@@ -103,22 +103,20 @@ QRect alignRect(const QRect& rect)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
+// static
+std::unique_ptr<VideoEncoderH264MF> VideoEncoderH264MF::create()
+{
+    std::unique_ptr<VideoEncoderH264MF> instance(new VideoEncoderH264MF());
+    if (!instance->initialize())
+        return nullptr;
+    return instance;
+}
+
+//--------------------------------------------------------------------------------------------------
 VideoEncoderH264MF::VideoEncoderH264MF()
     : VideoEncoder(proto::video::ENCODING_H264)
 {
-    if (!mf::isRuntimeAvailable())
-    {
-        LOG(ERROR) << "Media Foundation runtime not available on this system";
-        return;
-    }
-
-    _com_error error = mf::startup(MF_VERSION, MFSTARTUP_LITE);
-    if (FAILED(error.Error()))
-    {
-        LOG(ERROR) << "MFStartup failed:" << error;
-        return;
-    }
-    mf_started_ = true;
+    // All real work happens in initialize(); see create().
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -128,6 +126,25 @@ VideoEncoderH264MF::~VideoEncoderH264MF()
 
     if (mf_started_)
         mf::shutdown();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool VideoEncoderH264MF::initialize()
+{
+    if (!mf::isRuntimeAvailable())
+    {
+        LOG(ERROR) << "Media Foundation runtime not available on this system";
+        return false;
+    }
+
+    _com_error error = mf::startup(MF_VERSION, MFSTARTUP_LITE);
+    if (FAILED(error.Error()))
+    {
+        LOG(ERROR) << "MFStartup failed:" << error;
+        return false;
+    }
+    mf_started_ = true;
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -271,12 +288,12 @@ void VideoEncoderH264MF::setBandwidth(qint64 bandwidth)
         // H264 is more efficient than VP at the same QP, so the bands are tighter. Loosen the
         // ceiling on low-bandwidth links so the encoder can compress aggressively without ever
         // dropping frames; tighten the floor on high-bandwidth links to spend bits on quality.
-        if (bandwidth < 500 * 1024) // < 500 KB/s
+        if (bandwidth < 500 * 1024)            // < 500 KB/s
         {
             min_quantizer_ = 20;
             max_quantizer_ = 38;
         }
-        else if (bandwidth < 2 * 1024 * 1024) // < 2 MB/s
+        else if (bandwidth < 2 * 1024 * 1024)  // < 2 MB/s
         {
             min_quantizer_ = 18;
             max_quantizer_ = 32;

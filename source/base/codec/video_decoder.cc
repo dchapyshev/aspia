@@ -38,7 +38,7 @@ std::unique_ptr<VideoDecoder> VideoDecoder::create(proto::video::Encoding encodi
 
 #if defined(Q_OS_WINDOWS)
         case proto::video::ENCODING_H264:
-            return std::make_unique<VideoDecoderH264MF>();
+            return VideoDecoderH264MF::create();
 #endif
 
         default:

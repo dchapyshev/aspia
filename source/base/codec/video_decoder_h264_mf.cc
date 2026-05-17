@@ -49,21 +49,19 @@ constexpr bool kUseLibyuvForChromaConversion = false;
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
+// static
+std::unique_ptr<VideoDecoderH264MF> VideoDecoderH264MF::create()
+{
+    std::unique_ptr<VideoDecoderH264MF> instance(new VideoDecoderH264MF());
+    if (!instance->initialize())
+        return nullptr;
+    return instance;
+}
+
+//--------------------------------------------------------------------------------------------------
 VideoDecoderH264MF::VideoDecoderH264MF()
 {
-    if (!mf::isRuntimeAvailable())
-    {
-        LOG(ERROR) << "Media Foundation runtime not available on this system";
-        return;
-    }
-
-    _com_error error = mf::startup(MF_VERSION, MFSTARTUP_LITE);
-    if (FAILED(error.Error()))
-    {
-        LOG(ERROR) << "MFStartup failed:" << error;
-        return;
-    }
-    mf_started_ = true;
+    // All real work happens in initialize(); see create().
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -73,6 +71,25 @@ VideoDecoderH264MF::~VideoDecoderH264MF()
 
     if (mf_started_)
         mf::shutdown();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool VideoDecoderH264MF::initialize()
+{
+    if (!mf::isRuntimeAvailable())
+    {
+        LOG(ERROR) << "Media Foundation runtime not available on this system";
+        return false;
+    }
+
+    _com_error error = mf::startup(MF_VERSION, MFSTARTUP_LITE);
+    if (FAILED(error.Error()))
+    {
+        LOG(ERROR) << "MFStartup failed:" << error;
+        return false;
+    }
+    mf_started_ = true;
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------

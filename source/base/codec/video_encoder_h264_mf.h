@@ -44,7 +44,10 @@
 class VideoEncoderH264MF final : public VideoEncoder
 {
 public:
-    VideoEncoderH264MF();
+    // Constructs an encoder instance and brings up the Media Foundation runtime. Returns nullptr
+    // when MF is unavailable on the system or MFStartup fails; callers must handle the null case.
+    static std::unique_ptr<VideoEncoderH264MF> create();
+
     ~VideoEncoderH264MF() final;
 
     // Returns true when a hardware H264 encoder MFT is available on this system. Cheap to call -
@@ -56,6 +59,9 @@ public:
     void setBandwidth(qint64 bandwidth) final;
 
 private:
+    VideoEncoderH264MF();
+    bool initialize();
+
     bool createEncoder(const QSize& size);
     void destroyEncoder();
     bool selectHardwareMft();

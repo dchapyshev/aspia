@@ -40,13 +40,19 @@
 class VideoDecoderH264MF final : public VideoDecoder
 {
 public:
-    VideoDecoderH264MF();
+    // Constructs a decoder instance and brings up the Media Foundation runtime. Returns nullptr
+    // when MF is unavailable on the system or MFStartup fails; callers must handle the null case.
+    static std::unique_ptr<VideoDecoderH264MF> create();
+
     ~VideoDecoderH264MF() final;
 
     // VideoDecoder implementation.
     bool decode(const proto::video::Packet& packet, Frame* frame) final;
 
 private:
+    VideoDecoderH264MF();
+    bool initialize();
+
     bool createDecoder(const QSize& size);
     void destroyDecoder();
     bool activateMft();
