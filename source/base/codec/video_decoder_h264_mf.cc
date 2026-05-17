@@ -65,19 +65,40 @@ bool VideoDecoderH264MF::isHardwareSupported()
     if (!mf::isRuntimeAvailable())
         return false;
 
+    // Two HW paths exist on Windows:
+    //   1. Vendor async MFT (MFT_ENUM_FLAG_HARDWARE | ASYNCMFT) - Intel QuickSync registers one,
+    //      NVIDIA does not (their NVDEC is exposed through CUDA, not MF). AMD varies.
+    //   2. Microsoft H.264 Video Decoder MFT (SYNCMFT) + D3D11 manager - the MFT delegates to
+    //      DXVA2 internally, which routes to NVDEC/QuickSync/UVD inside the GPU driver. This is
+    //      the universal path for NVIDIA and any other GPU that advertises a DXVA2 H.264 profile.
+    // Either one counts as "HW decode available".
+    _com_error error = mf::startup(MF_VERSION, MFSTARTUP_LITE);
+    if (FAILED(error.Error()))
+        return false;
+
     MFT_REGISTER_TYPE_INFO input_info = { MFMediaType_Video, MFVideoFormat_H264 };
     ScopedCoMem<IMFActivate*> activate_arr;
     UINT32 count = 0;
 
-    _com_error error = mf::enumTransforms(MFT_CATEGORY_VIDEO_DECODER,
-        MFT_ENUM_FLAG_HARDWARE | MFT_ENUM_FLAG_SORTANDFILTER, &input_info, nullptr, &activate_arr,
-        &count);
-    if (FAILED(error.Error()) || count == 0)
-        return false;
+    error = mf::enumTransforms(MFT_CATEGORY_VIDEO_DECODER,
+        MFT_ENUM_FLAG_HARDWARE | MFT_ENUM_FLAG_ASYNCMFT | MFT_ENUM_FLAG_SORTANDFILTER,
+        &input_info, nullptr, &activate_arr, &count);
 
-    for (UINT32 i = 0; i < count; ++i)
-        activate_arr.get()[i]->Release();
-    return true;
+    bool vendor_hw_available = SUCCEEDED(error.Error()) && count > 0;
+    if (vendor_hw_available)
+    {
+        for (UINT32 i = 0; i < count; ++i)
+            activate_arr.get()[i]->Release();
+    }
+    mf::shutdown();
+
+    if (vendor_hw_available)
+        return true;
+
+    // No vendor async MFT - check if DXVA2 H.264 decode is available on this GPU. The MS H264
+    // MFT will use it when given a D3D11 manager.
+    auto d3d = D3D11VideoContext::create();
+    return d3d && d3d->supportsH264Decode();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -143,15 +164,18 @@ VideoDecoder::Result VideoDecoderH264MF::decode(const proto::video::Packet& pack
 
     const quint64 sample_time = frame_counter_ * static_cast<quint64>(kFrameDuration100ns);
 
-    if (!waitForEvent(METransformNeedInput))
+    if (is_async_ && !waitForEvent(METransformNeedInput))
         return Result::TEMPORARY_ERROR;
 
     if (!feedInput(packet.data(), sample_time))
         return Result::TEMPORARY_ERROR;
 
-    if (!waitForEvent(METransformHaveOutput))
+    if (is_async_ && !waitForEvent(METransformHaveOutput))
         return Result::TEMPORARY_ERROR;
 
+    // Sync MFTs (MS H.264 decoder) may need an extra packet before producing the first frame -
+    // readOutput returns false with MF_E_TRANSFORM_NEED_MORE_INPUT in that case and the caller
+    // will get the frame on the next packet.
     ComPtr<IMFSample> sample;
     if (!readOutput(&sample))
         return Result::TEMPORARY_ERROR;
@@ -176,11 +200,9 @@ bool VideoDecoderH264MF::createDecoder(const QSize& size)
         return false;
     }
 
-    if (!activateHardwareMft())
+    if (!activateMft())
         return false;
 
-    // Attributes must be retrieved (and the async lock cleared) before any other method is called
-    // on a hardware MFT; otherwise GetStreamIDs and friends return MF_E_TRANSFORM_ASYNC_LOCKED.
     ComPtr<IMFAttributes> attrs;
     _com_error error = decoder_->GetAttributes(&attrs);
     if (FAILED(error.Error()) || !attrs)
@@ -190,17 +212,24 @@ bool VideoDecoderH264MF::createDecoder(const QSize& size)
     }
     attrs->SetUINT32(MF_LOW_LATENCY, TRUE);
 
-    error = attrs->SetUINT32(MF_TRANSFORM_ASYNC_UNLOCK, TRUE);
-    if (FAILED(error.Error()))
+    // Vendor HW MFTs are async and must be unlocked before any further method call. The MS H.264
+    // decoder MFT is sync - this attribute simply doesn't exist on it, which we treat as sync.
+    UINT32 async_flag = 0;
+    if (SUCCEEDED(attrs->GetUINT32(MF_TRANSFORM_ASYNC, &async_flag)) && async_flag)
     {
-        LOG(ERROR) << "Failed to unlock async MFT:" << error;
-        return false;
-    }
-    error = decoder_.As(&event_gen_);
-    if (FAILED(error.Error()))
-    {
-        LOG(ERROR) << "MFT does not expose IMFMediaEventGenerator:" << error;
-        return false;
+        is_async_ = true;
+        error = attrs->SetUINT32(MF_TRANSFORM_ASYNC_UNLOCK, TRUE);
+        if (FAILED(error.Error()))
+        {
+            LOG(ERROR) << "Failed to unlock async MFT:" << error;
+            return false;
+        }
+        error = decoder_.As(&event_gen_);
+        if (FAILED(error.Error()))
+        {
+            LOG(ERROR) << "MFT does not expose IMFMediaEventGenerator:" << error;
+            return false;
+        }
     }
 
     error = decoder_->GetStreamIDs(1, &input_stream_id_, 1, &output_stream_id_);
@@ -274,6 +303,7 @@ void VideoDecoderH264MF::destroyDecoder()
 
     d3d_.reset();
 
+    is_async_ = false;
     output_provides_samples_ = false;
     output_sample_size_ = 0;
     output_width_ = 0;
@@ -283,34 +313,46 @@ void VideoDecoderH264MF::destroyDecoder()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool VideoDecoderH264MF::activateHardwareMft()
+bool VideoDecoderH264MF::activateMft()
 {
     MFT_REGISTER_TYPE_INFO input_info = { MFMediaType_Video, MFVideoFormat_H264 };
 
-    ScopedCoMem<IMFActivate*> activate_arr;
-    UINT32 count = 0;
-
-    _com_error error = mf::enumTransforms(MFT_CATEGORY_VIDEO_DECODER,
-        MFT_ENUM_FLAG_HARDWARE | MFT_ENUM_FLAG_SORTANDFILTER, &input_info, nullptr, &activate_arr,
-        &count);
-    if (FAILED(error.Error()) || count == 0)
+    // Try vendor-supplied HW MFT first (Intel QuickSync registers one; NVIDIA does not). If none
+    // is available, fall back to the Microsoft H.264 Decoder MFT - paired with the D3D11 manager
+    // set later in createDecoder(), it uses DXVA2 internally and routes to whatever HW the GPU
+    // exposes (NVDEC, etc.). Either way the actual decode happens on the GPU.
+    const UINT32 flag_sets[] =
     {
-        LOG(ERROR) << "No hardware H264 decoder MFT found";
-        return false;
-    }
+        MFT_ENUM_FLAG_HARDWARE | MFT_ENUM_FLAG_ASYNCMFT | MFT_ENUM_FLAG_SORTANDFILTER,
+        MFT_ENUM_FLAG_SYNCMFT | MFT_ENUM_FLAG_SORTANDFILTER,
+    };
 
-    error = activate_arr.get()[0]->ActivateObject(IID_PPV_ARGS(&decoder_));
-
-    for (UINT32 i = 0; i < count; ++i)
-        activate_arr.get()[i]->Release();
-
-    if (FAILED(error.Error()))
+    for (UINT32 flags : flag_sets)
     {
-        LOG(ERROR) << "IMFActivate::ActivateObject failed:" << error;
+        ScopedCoMem<IMFActivate*> activate_arr;
+        UINT32 count = 0;
+
+        _com_error error = mf::enumTransforms(MFT_CATEGORY_VIDEO_DECODER, flags,
+            &input_info, nullptr, &activate_arr, &count);
+        if (FAILED(error.Error()) || count == 0)
+            continue;
+
+        error = activate_arr.get()[0]->ActivateObject(IID_PPV_ARGS(&decoder_));
+        for (UINT32 i = 0; i < count; ++i)
+            activate_arr.get()[i]->Release();
+
+        if (SUCCEEDED(error.Error()))
+        {
+            LOG(INFO) << "H264 decoder MFT activated"
+                      << ((flags & MFT_ENUM_FLAG_HARDWARE) ? "(vendor HW)" : "(MS + DXVA2)");
+            return true;
+        }
+        LOG(WARNING) << "IMFActivate::ActivateObject failed:" << error;
         decoder_.Reset();
-        return false;
     }
-    return true;
+
+    LOG(ERROR) << "No H264 decoder MFT available";
+    return false;
 }
 
 //--------------------------------------------------------------------------------------------------

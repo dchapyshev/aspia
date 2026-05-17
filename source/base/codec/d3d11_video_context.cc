@@ -39,6 +39,28 @@ std::unique_ptr<D3D11VideoContext> D3D11VideoContext::create()
 D3D11VideoContext::~D3D11VideoContext() = default;
 
 //--------------------------------------------------------------------------------------------------
+bool D3D11VideoContext::supportsH264Decode() const
+{
+    if (!video_device_)
+        return false;
+
+    // Standard H.264 VLD decoder profile GUID. Defined as D3D11_DECODER_PROFILE_H264_VLD_NOFGT.
+    static const GUID kH264VldProfile =
+        { 0x1b81be68, 0xa0c7, 0x11d3, { 0xb9, 0x84, 0x00, 0xc0, 0x4f, 0x2e, 0x73, 0xc5 } };
+
+    UINT count = video_device_->GetVideoDecoderProfileCount();
+    for (UINT i = 0; i < count; ++i)
+    {
+        GUID profile = GUID_NULL;
+        if (FAILED(video_device_->GetVideoDecoderProfile(i, &profile)))
+            continue;
+        if (profile == kH264VldProfile)
+            return true;
+    }
+    return false;
+}
+
+//--------------------------------------------------------------------------------------------------
 bool D3D11VideoContext::initialize()
 {
     const D3D_FEATURE_LEVEL feature_levels[] =

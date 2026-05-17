@@ -56,7 +56,7 @@ private:
 
     bool createDecoder(const QSize& size);
     void destroyDecoder();
-    bool activateHardwareMft();
+    bool activateMft();
     bool configureMediaTypes(const QSize& size);
     bool selectOutputType();
     bool beginStreaming();
@@ -72,6 +72,7 @@ private:
 
     bool mf_started_ = false;
     bool streaming_ = false;
+    bool is_async_ = false;
     bool output_provides_samples_ = false;
     QSize last_size_;
     quint64 frame_counter_ = 0;

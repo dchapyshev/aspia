@@ -36,6 +36,10 @@ public:
     static std::unique_ptr<D3D11VideoContext> create();
     ~D3D11VideoContext();
 
+    // Returns true when this device exposes a DXVA2 H.264 video decoder profile (the typical
+    // path used by MS H.264 MFT + D3D manager combo on consumer GPUs like NVIDIA/Intel/AMD).
+    bool supportsH264Decode() const;
+
     ID3D11Device* device() const { return device_.Get(); }
     ID3D11DeviceContext* deviceContext() const { return device_context_.Get(); }
     ID3D11VideoDevice* videoDevice() const { return video_device_.Get(); }

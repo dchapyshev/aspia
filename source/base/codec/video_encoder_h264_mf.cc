@@ -154,19 +154,29 @@ bool VideoEncoderH264MF::isHardwareSupported()
     if (!mf::isRuntimeAvailable())
         return false;
 
+    // MFTEnumEx requires Media Foundation to be initialized; bracket the probe so callers can
+    // ask about HW support before any encoder/decoder has called MFStartup for its own use.
+    _com_error error = mf::startup(MF_VERSION, MFSTARTUP_LITE);
+    if (FAILED(error.Error()))
+        return false;
+
     MFT_REGISTER_TYPE_INFO output_info = { MFMediaType_Video, MFVideoFormat_H264 };
     ScopedCoMem<IMFActivate*> activate_arr;
     UINT32 count = 0;
 
-    _com_error error = mf::enumTransforms(MFT_CATEGORY_VIDEO_ENCODER,
-        MFT_ENUM_FLAG_HARDWARE | MFT_ENUM_FLAG_SORTANDFILTER, nullptr, &output_info, &activate_arr,
-        &count);
-    if (FAILED(error.Error()) || count == 0)
-        return false;
+    error = mf::enumTransforms(MFT_CATEGORY_VIDEO_ENCODER,
+        MFT_ENUM_FLAG_HARDWARE | MFT_ENUM_FLAG_ASYNCMFT | MFT_ENUM_FLAG_SORTANDFILTER,
+        nullptr, &output_info, &activate_arr, &count);
 
-    for (UINT32 i = 0; i < count; ++i)
-        activate_arr.get()[i]->Release();
-    return true;
+    const bool supported = SUCCEEDED(error.Error()) && count > 0;
+    if (supported)
+    {
+        for (UINT32 i = 0; i < count; ++i)
+            activate_arr.get()[i]->Release();
+    }
+
+    mf::shutdown();
+    return supported;
 }
 
 //--------------------------------------------------------------------------------------------------
