@@ -147,6 +147,7 @@ DesktopAgent::DesktopAgent(QObject* parent)
       ipc_channel_(new IpcChannel(this)),
       desktop_environment_(DesktopEnvironment::create(this)),
       preferred_capturer_(static_cast<ScreenCapturer::Type>(SystemSettings().preferredVideoCapturer())),
+      h264_enabled_(VideoEncoder::isSupported(proto::video::ENCODING_H264)),
       capture_timer_(new QTimer(this)),
       scale_reducer_(std::make_unique<ScaleReducer>(ScaleReducer::Quality::HIGH)),
       overflow_timer_(new QTimer(this)),
@@ -323,7 +324,7 @@ void DesktopAgent::onClientConfigured()
 
     vp8_supported_ = vp8_supported;
     vp9_supported_ = vp9_supported;
-    h264_supported_ = h264_supported && VideoEncoder::isSupported(proto::video::ENCODING_H264);
+    h264_supported_ = h264_supported && h264_enabled_;
 
     LOG(INFO) << "Merged configuration:" << merged_config << "vp8:" << vp8_supported_
               << "vp9:" << vp9_supported_ << "h264:" << h264_supported_ << "opus:" << opus_supported;
@@ -1029,9 +1030,20 @@ void DesktopAgent::encodeScreen(const Frame* frame)
     proto::video::Packet* packet = message.mutable_packet();
 
     // Encode the frame into a video packet.
-    if (!video_encoder_->encode(scaled_frame, packet))
+    const VideoEncoder::Result encode_result = video_encoder_->encode(scaled_frame, packet);
+    if (encode_result == VideoEncoder::Result::PERMANENT_ERROR)
     {
-        LOG(ERROR) << "Unable to encode video packet";
+        // HW encoder cannot handle this frame size or driver state - fall back to VP8.
+        LOG(ERROR) << "Permanent encoder failure for" << video_encoding_ << "- falling back to VP8";
+        h264_enabled_ = false;
+        video_encoding_ = proto::video::ENCODING_VP8;
+        video_encoder_ = VideoEncoder::create(video_encoding_);
+        return;
+    }
+
+    if (encode_result == VideoEncoder::Result::TEMPORARY_ERROR)
+    {
+        LOG(WARNING) << "Temporary encoder failure - skipping frame";
         return;
     }
 

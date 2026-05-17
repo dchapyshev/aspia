@@ -36,7 +36,7 @@ public:
     ~VideoEncoderVpx() final = default;
 
     // VideoEncoder implementation.
-    bool encode(const Frame* frame, proto::video::Packet* packet) final;
+    Result encode(const Frame* frame, proto::video::Packet* packet) final;
     void setBandwidth(qint64 bandwidth) final;
 
 private:

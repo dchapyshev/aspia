@@ -170,10 +170,10 @@ bool VideoEncoderH264MF::isHardwareSupported()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool VideoEncoderH264MF::encode(const Frame* frame, proto::video::Packet* packet)
+VideoEncoder::Result VideoEncoderH264MF::encode(const Frame* frame, proto::video::Packet* packet)
 {
     if (!mf_started_ || !frame || !packet)
-        return false;
+        return Result::PERMANENT_ERROR;
 
     packet->set_encoding(proto::video::ENCODING_H264);
 
@@ -190,10 +190,11 @@ bool VideoEncoderH264MF::encode(const Frame* frame, proto::video::Packet* packet
         destroyEncoder();
         if (!createEncoder(new_size))
         {
-            LOG(ERROR) << "Unable to create H264 encoder";
-            // Keep last_size_ unchanged so the next encode() call retries from scratch instead of
-            // skipping straight into uploadArgbAndConvert() with no GPU resources allocated.
-            return false;
+            // HW encoders refuse to initialize when the frame size is outside their supported
+            // profile/level (e.g. too small for some Intel SKUs, above 4K on others). This is the
+            // signal for the caller to fall back to a software codec.
+            LOG(ERROR) << "Unable to create H264 encoder for " << new_size;
+            return Result::PERMANENT_ERROR;
         }
 
         last_size_ = new_size;
@@ -230,10 +231,10 @@ bool VideoEncoderH264MF::encode(const Frame* frame, proto::video::Packet* packet
     }
 
     if (!uploadArgbAndConvert(frame))
-        return false;
+        return Result::TEMPORARY_ERROR;
 
     if (!waitForEvent(METransformNeedInput))
-        return false;
+        return Result::TEMPORARY_ERROR;
 
     if (force_key_frame_next_)
     {
@@ -244,28 +245,28 @@ bool VideoEncoderH264MF::encode(const Frame* frame, proto::video::Packet* packet
     const quint64 sample_time = frame_counter_ * static_cast<quint64>(kFrameDuration100ns);
     ComPtr<IMFSample> input_sample;
     if (!buildInputSample(sample_time, &input_sample))
-        return false;
+        return Result::TEMPORARY_ERROR;
 
     _com_error error = encoder_->ProcessInput(input_stream_id_, input_sample.Get(), 0);
     if (FAILED(error.Error()))
     {
         LOG(ERROR) << "IMFTransform::ProcessInput failed:" << error;
-        return false;
+        return Result::TEMPORARY_ERROR;
     }
 
     if (!waitForEvent(METransformHaveOutput))
-        return false;
+        return Result::TEMPORARY_ERROR;
 
     bool output_is_key = false;
     if (!readOutput(packet, &output_is_key))
-        return false;
+        return Result::TEMPORARY_ERROR;
 
     if (is_key_frame || output_is_key)
         packet->set_flags(proto::video::PACKET_FLAG_IS_KEY_FRAME);
 
     ++frame_counter_;
     setKeyFrameRequired(false);
-    return true;
+    return Result::SUCCESS;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -288,12 +289,12 @@ void VideoEncoderH264MF::setBandwidth(qint64 bandwidth)
         // H264 is more efficient than VP at the same QP, so the bands are tighter. Loosen the
         // ceiling on low-bandwidth links so the encoder can compress aggressively without ever
         // dropping frames; tighten the floor on high-bandwidth links to spend bits on quality.
-        if (bandwidth < 500 * 1024)            // < 500 KB/s
+        if (bandwidth < 500 * 1024) // < 500 KB/s
         {
             min_quantizer_ = 20;
             max_quantizer_ = 38;
         }
-        else if (bandwidth < 2 * 1024 * 1024)  // < 2 MB/s
+        else if (bandwidth < 2 * 1024 * 1024) // < 2 MB/s
         {
             min_quantizer_ = 18;
             max_quantizer_ = 32;

@@ -150,7 +150,7 @@ VideoEncoderVpx::VideoEncoderVpx(proto::video::Encoding encoding)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool VideoEncoderVpx::encode(const Frame* frame, proto::video::Packet* packet)
+VideoEncoder::Result VideoEncoderVpx::encode(const Frame* frame, proto::video::Packet* packet)
 {
     packet->set_encoding(encoding_);
 
@@ -172,7 +172,7 @@ bool VideoEncoderVpx::encode(const Frame* frame, proto::video::Packet* packet)
             if (!createVp8Codec(last_size_))
             {
                 LOG(ERROR) << "Unable to create VP8 codec";
-                return false;
+                return Result::PERMANENT_ERROR;
             }
         }
         else
@@ -182,7 +182,7 @@ bool VideoEncoderVpx::encode(const Frame* frame, proto::video::Packet* packet)
             if (!createVp9Codec(last_size_))
             {
                 LOG(ERROR) << "Unable to create VP9 codec";
-                return false;
+                return Result::PERMANENT_ERROR;
             }
         }
 
@@ -198,7 +198,7 @@ bool VideoEncoderVpx::encode(const Frame* frame, proto::video::Packet* packet)
     if (ret != VPX_CODEC_OK)
     {
         LOG(ERROR) << "vpx_codec_control(VP8E_SET_ACTIVEMAP) failed:" << ret;
-        return false;
+        return Result::TEMPORARY_ERROR;
     }
 
     if (encode_buffer_.capacity())
@@ -213,7 +213,7 @@ bool VideoEncoderVpx::encode(const Frame* frame, proto::video::Packet* packet)
         if (ret != VPX_CODEC_OK)
         {
             LOG(ERROR) << "vpx_codec_set_cx_data_buf failed:" << ret;
-            return false;
+            return Result::TEMPORARY_ERROR;
         }
     }
 
@@ -235,7 +235,7 @@ bool VideoEncoderVpx::encode(const Frame* frame, proto::video::Packet* packet)
     if (ret != VPX_CODEC_OK)
     {
         LOG(ERROR) << "vpx_codec_encode failed:" << ret;
-        return false;
+        return Result::TEMPORARY_ERROR;
     }
 
     // Read the encoded data.
@@ -265,7 +265,7 @@ bool VideoEncoderVpx::encode(const Frame* frame, proto::video::Packet* packet)
     }
 
     setKeyFrameRequired(false);
-    return true;
+    return Result::SUCCESS;
 }
 
 //--------------------------------------------------------------------------------------------------

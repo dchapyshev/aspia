@@ -33,7 +33,18 @@ class Frame;
 
 class VideoEncoder
 {
+    Q_GADGET
+
 public:
+    enum class Result
+    {
+        SUCCESS,         // Packet was produced and is ready to send.
+        TEMPORARY_ERROR, // Recoverable failure (transient driver/codec hiccup); retry next frame.
+        PERMANENT_ERROR, // Encoder cannot proceed (e.g. HW does not support this frame size);
+                         // the caller should fall back to another encoding.
+    };
+    Q_ENUM(Result)
+
     static std::unique_ptr<VideoEncoder> create(proto::video::Encoding encoding);
 
     // Returns true when the encoding can be instantiated on this system. Used by callers to pick
@@ -45,7 +56,7 @@ public:
 
     static const size_t kInitialEncodeBufferSize;
 
-    virtual bool encode(const Frame* frame, proto::video::Packet* packet) = 0;
+    virtual Result encode(const Frame* frame, proto::video::Packet* packet) = 0;
 
     // Adjusts internal codec parameters (target bitrate, quantizer bounds, etc.) so the encoder
     // produces output that fits the available network bandwidth. Bandwidth is measured in bytes
