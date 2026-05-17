@@ -400,7 +400,9 @@ bool VideoEncoderH264::configureMediaTypes(const QSize& size)
     output_type->SetGUID(MF_MT_SUBTYPE, MFVideoFormat_H264);
     output_type->SetUINT32(MF_MT_AVG_BITRATE, kInitialBitrateBps);
     output_type->SetUINT32(MF_MT_INTERLACE_MODE, MFVideoInterlace_Progressive);
-    output_type->SetUINT32(MF_MT_MPEG2_PROFILE, eAVEncH264VProfile_Main);
+    // High profile: 8x8 transform + custom quant matrices give ~5-10% better compression at the
+    // same quality compared to Main. CABAC stays enabled below; both profiles support it.
+    output_type->SetUINT32(MF_MT_MPEG2_PROFILE, eAVEncH264VProfile_High);
     MFSetAttributeSize(output_type.Get(), MF_MT_FRAME_SIZE,
                        static_cast<UINT32>(size.width()), static_cast<UINT32>(size.height()));
     MFSetAttributeRatio(output_type.Get(), MF_MT_FRAME_RATE, kTargetFrameRateNum, kTargetFrameRateDen);
@@ -444,13 +446,20 @@ bool VideoEncoderH264::configureCodecApi()
 {
     ICodecAPI* api = codec_api_.Get();
 
-    setUint32CodecAttr(api, CODECAPI_AVEncCommonRateControlMode, eAVEncCommonRateControlMode_Quality);
+    // LowDelayVBR is single-pass without look-ahead - the right mode for real-time encoding.
+    // Bitrate adapts but stays bounded by the mean target; pure Quality mode could spike to many
+    // megabits on a full screen redraw and flood the network.
+    setUint32CodecAttr(api, CODECAPI_AVEncCommonRateControlMode,
+                       eAVEncCommonRateControlMode_LowDelayVBR);
     setUint32CodecAttr(api, CODECAPI_AVEncCommonMeanBitRate, kInitialBitrateBps);
     setUint32CodecAttr(api, CODECAPI_AVEncMPVDefaultBPictureCount, 0);
     setUint32CodecAttr(api, CODECAPI_AVEncVideoMaxNumRefFrame, kMaxRefFrames);
     setBoolCodecAttr(api, CODECAPI_AVEncCommonLowLatency, true);
     setBoolCodecAttr(api, CODECAPI_AVEncH264CABACEnable, true);
     setUint32CodecAttr(api, CODECAPI_AVScenarioInfo, eAVScenarioInfo_DisplayRemoting);
+    // Reliable transport makes periodic IDRs unnecessary for error recovery; a long GOP keeps the
+    // bitrate flat. Keyframes are emitted on demand via CODECAPI_AVEncVideoForceKeyFrame.
+    setUint32CodecAttr(api, CODECAPI_AVEncMPVGOPSize, 60000);
     setUint32CodecAttr(api, CODECAPI_AVEncVideoMinQP, min_quantizer_);
     setUint32CodecAttr(api, CODECAPI_AVEncVideoMaxQP, max_quantizer_);
 
