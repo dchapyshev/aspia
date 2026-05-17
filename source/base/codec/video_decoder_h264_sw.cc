@@ -64,9 +64,7 @@ bool VideoDecoderH264SW::initialize()
 
     SDecodingParam param;
     memset(&param, 0, sizeof(param));
-    // 0xFF means "decode all spatial layers" - we never send SVC, so it just decodes the base.
-    param.uiTargetDqLayer = static_cast<unsigned char>(-1);
-    param.eEcActiveIdc = ERROR_CON_SLICE_COPY;
+    param.eEcActiveIdc = ERROR_CON_FRAME_COPY;
     param.sVideoProperty.eVideoBsType = VIDEO_BITSTREAM_AVC;
 
     if (decoder_->Initialize(&param) != cmResultSuccess)
@@ -94,30 +92,52 @@ VideoDecoder::Result VideoDecoderH264SW::decode(const proto::video::Packet& pack
     SBufferInfo info;
     memset(&info, 0, sizeof(info));
 
-    DECODING_STATE state = decoder_->DecodeFrameNoDelay(
+    DECODING_STATE state = decoder_->DecodeFrame2(
         reinterpret_cast<const uint8_t*>(packet.data().data()),
         static_cast<int>(packet.data().size()),
         planes, &info);
+
+    // DecodeFrame2 may buffer the bitstream without producing output on the first call (typical
+    // warm-up before SPS/PPS arrive). Pump it once more with a null input to drain.
+    if (info.iBufferStatus != 1 && (state == dsErrorFree || state == dsNoParamSets))
+        state = decoder_->DecodeFrame2(nullptr, 0, planes, &info);
+
     if (state != dsErrorFree)
     {
-        LOG(ERROR) << "DecodeFrameNoDelay failed:" << state;
+        LOG(ERROR) << "DecodeFrame2 failed:" << state;
         return Result::TEMPORARY_ERROR;
     }
 
-    if (info.iBufferStatus != 1 || !planes[0] || !planes[1] || !planes[2])
+    if (info.iBufferStatus != 1)
+        return Result::TEMPORARY_ERROR;
+
+    // FlushFrame finalizes the current decoded frame so the planes pointers contain ready data.
+    state = decoder_->FlushFrame(planes, &info);
+    if (state != dsErrorFree)
     {
-        // Decoder buffered the bitstream but did not emit a complete frame yet (warm-up after
-        // a key frame is reasonably common). The caller will retry on the next packet.
+        LOG(ERROR) << "FlushFrame failed:" << state;
         return Result::TEMPORARY_ERROR;
     }
+
+    if (!planes[0] || !planes[1] || !planes[2])
+        return Result::TEMPORARY_ERROR;
 
     const int y_stride = info.UsrData.sSystemBuffer.iStride[0];
     const int uv_stride = info.UsrData.sSystemBuffer.iStride[1];
-    const QSize decoded_size(info.UsrData.sSystemBuffer.iWidth, info.UsrData.sSystemBuffer.iHeight);
 
-    if (decoded_size != frame->size())
+    // OpenH264 reports the coded buffer size (rounded up to a 16-pixel macroblock boundary), so
+    // anything that covers the display size is fine; the dirty rects are within display bounds.
+    if (info.UsrData.sSystemBuffer.iWidth < frame->size().width() ||
+        info.UsrData.sSystemBuffer.iHeight < frame->size().height())
     {
-        LOG(ERROR) << "Size of the decoded frame" << decoded_size << "doesn't match" << frame->size();
+        LOG(ERROR) << "Decoded frame is smaller than expected" << frame->size();
+        return Result::TEMPORARY_ERROR;
+    }
+
+    if (info.UsrData.sSystemBuffer.iFormat != videoFormatI420)
+    {
+        LOG(ERROR) << "Unexpected pixel format from OpenH264:"
+                   << info.UsrData.sSystemBuffer.iFormat;
         return Result::TEMPORARY_ERROR;
     }
 
