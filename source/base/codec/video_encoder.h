@@ -47,30 +47,24 @@ public:
 
     virtual bool encode(const Frame* frame, proto::video::Packet* packet) = 0;
 
+    // Adjusts internal codec parameters (target bitrate, quantizer bounds, etc.) so the encoder
+    // produces output that fits the available network bandwidth. Bandwidth is measured in bytes
+    // per second; pass 0 when the bandwidth has not been measured yet to fall back to defaults.
+    // Each derived class translates the bandwidth into the right knobs for its codec.
+    virtual void setBandwidth(qint64 bandwidth) = 0;
+
     proto::video::Encoding encoding() const { return encoding_; }
 
     void setKeyFrameRequired(bool enable) { key_frame_required_ = enable; }
     bool isKeyFrameRequired() const { return key_frame_required_; }
     void setEncodeBuffer(std::string&& buffer) { encode_buffer_ = std::move(buffer); }
 
-    bool setMinQuantizer(quint32 min_quantizer);
-    quint32 minQuantizer() const { return min_quantizer_; }
-    bool setMaxQuantizer(quint32 max_quantizer);
-    quint32 maxQuantizer() const { return max_quantizer_; }
-
 protected:
     explicit VideoEncoder(proto::video::Encoding encoding);
-
-    // Applies the current min/max quantizer to a live codec instance. Returns true also when
-    // there is no active codec yet - the new value is read on next codec (re)creation.
-    virtual bool applyMinQuantizer() = 0;
-    virtual bool applyMaxQuantizer() = 0;
 
     const proto::video::Encoding encoding_;
     bool key_frame_required_ = false;
     std::string encode_buffer_;
-    quint32 min_quantizer_ = 10;
-    quint32 max_quantizer_ = 30;
 
 private:
     Q_DISABLE_COPY_MOVE(VideoEncoder)

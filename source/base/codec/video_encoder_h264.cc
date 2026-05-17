@@ -41,10 +41,6 @@ const UINT32 kTargetFrameRateNum = 1000;
 const UINT32 kTargetFrameRateDen = 80;
 const LONGLONG kFrameDuration100ns = 800000;
 
-// Sized for a typical 1080p desktop. Reliable transport means we can afford occasional bursts
-// above this number to preserve quality - rate control runs in Quality mode below, so this is
-// effectively a hint rather than a hard cap.
-const UINT32 kInitialBitrateBps = 5 * 1000 * 1000;
 const UINT32 kMaxRefFrames = 1;
 
 // Selects the ARGB-to-NV12 implementation. libyuv handles subpixel-rendered text without
@@ -110,11 +106,6 @@ QRect alignRect(const QRect& rect)
 VideoEncoderH264::VideoEncoderH264()
     : VideoEncoder(proto::video::ENCODING_H264)
 {
-    // Tight QP band keeps perceived quality high. Floor 16 lets the encoder spend bandwidth on
-    // sharp static text; ceiling 28 avoids the heavy blockiness that appears past ~32 on motion.
-    min_quantizer_ = 16;
-    max_quantizer_ = 28;
-
     if (!mf::isRuntimeAvailable())
     {
         LOG(ERROR) << "Media Foundation runtime not available on this system";
@@ -137,6 +128,28 @@ VideoEncoderH264::~VideoEncoderH264()
 
     if (mf_started_)
         mf::shutdown();
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+bool VideoEncoderH264::isHardwareSupported()
+{
+    if (!mf::isRuntimeAvailable())
+        return false;
+
+    MFT_REGISTER_TYPE_INFO output_info = { MFMediaType_Video, MFVideoFormat_H264 };
+    ScopedCoMem<IMFActivate*> activate_arr;
+    UINT32 count = 0;
+
+    _com_error error = mf::enumTransforms(MFT_CATEGORY_VIDEO_ENCODER,
+        MFT_ENUM_FLAG_HARDWARE | MFT_ENUM_FLAG_SORTANDFILTER, nullptr, &output_info, &activate_arr,
+        &count);
+    if (FAILED(error.Error()) || count == 0)
+        return false;
+
+    for (UINT32 i = 0; i < count; ++i)
+        activate_arr.get()[i]->Release();
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -236,6 +249,51 @@ bool VideoEncoderH264::encode(const Frame* frame, proto::video::Packet* packet)
     ++frame_counter_;
     setKeyFrameRequired(false);
     return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void VideoEncoderH264::setBandwidth(qint64 bandwidth)
+{
+    if (bandwidth <= 0)
+    {
+        // Bandwidth is not measured yet - fall back to the defaults baked into the header.
+        min_quantizer_ = 16;
+        max_quantizer_ = 28;
+        target_bitrate_bps_ = 5 * 1000 * 1000;
+    }
+    else
+    {
+        // Keep ~15% headroom under the measured capacity.
+        const quint64 budget_bps = static_cast<quint64>(bandwidth) * 8 * 85 / 100;
+        target_bitrate_bps_ =
+            static_cast<quint32>(std::clamp<quint64>(budget_bps, 200 * 1000, 20 * 1000 * 1000));
+
+        // H264 is more efficient than VP at the same QP, so the bands are tighter. Loosen the
+        // ceiling on low-bandwidth links so the encoder can compress aggressively without ever
+        // dropping frames; tighten the floor on high-bandwidth links to spend bits on quality.
+        if (bandwidth < 500 * 1024)            // < 500 KB/s
+        {
+            min_quantizer_ = 20;
+            max_quantizer_ = 38;
+        }
+        else if (bandwidth < 2 * 1024 * 1024)  // < 2 MB/s
+        {
+            min_quantizer_ = 18;
+            max_quantizer_ = 32;
+        }
+        else
+        {
+            min_quantizer_ = 14;
+            max_quantizer_ = 26;
+        }
+    }
+
+    if (!codec_api_)
+        return;
+
+    setUint32CodecAttr(codec_api_.Get(), CODECAPI_AVEncCommonMeanBitRate, target_bitrate_bps_);
+    setUint32CodecAttr(codec_api_.Get(), CODECAPI_AVEncVideoMinQP, min_quantizer_);
+    setUint32CodecAttr(codec_api_.Get(), CODECAPI_AVEncVideoMaxQP, max_quantizer_);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -365,28 +423,6 @@ void VideoEncoderH264::destroyEncoder()
 }
 
 //--------------------------------------------------------------------------------------------------
-// static
-bool VideoEncoderH264::isHardwareSupported()
-{
-    if (!mf::isRuntimeAvailable())
-        return false;
-
-    MFT_REGISTER_TYPE_INFO output_info = { MFMediaType_Video, MFVideoFormat_H264 };
-    ScopedCoMem<IMFActivate*> activate_arr;
-    UINT32 count = 0;
-
-    _com_error error = mf::enumTransforms(MFT_CATEGORY_VIDEO_ENCODER,
-        MFT_ENUM_FLAG_HARDWARE | MFT_ENUM_FLAG_SORTANDFILTER, nullptr, &output_info, &activate_arr,
-        &count);
-    if (FAILED(error.Error()) || count == 0)
-        return false;
-
-    for (UINT32 i = 0; i < count; ++i)
-        activate_arr.get()[i]->Release();
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
 bool VideoEncoderH264::selectHardwareMft()
 {
     MFT_REGISTER_TYPE_INFO output_info = { MFMediaType_Video, MFVideoFormat_H264 };
@@ -437,7 +473,7 @@ bool VideoEncoderH264::configureMediaTypes(const QSize& size)
 
     output_type->SetGUID(MF_MT_MAJOR_TYPE, MFMediaType_Video);
     output_type->SetGUID(MF_MT_SUBTYPE, MFVideoFormat_H264);
-    output_type->SetUINT32(MF_MT_AVG_BITRATE, kInitialBitrateBps);
+    output_type->SetUINT32(MF_MT_AVG_BITRATE, target_bitrate_bps_);
     output_type->SetUINT32(MF_MT_INTERLACE_MODE, MFVideoInterlace_Progressive);
     // High profile: 8x8 transform + custom quant matrices give ~5-10% better compression at the
     // same quality compared to Main. CABAC stays enabled below; both profiles support it.
@@ -447,7 +483,7 @@ bool VideoEncoderH264::configureMediaTypes(const QSize& size)
     output_type->SetUINT32(MF_MT_YUV_MATRIX, MFVideoTransferMatrix_BT601);
     output_type->SetUINT32(MF_MT_VIDEO_NOMINAL_RANGE, MFNominalRange_16_235);
     MFSetAttributeSize(output_type.Get(), MF_MT_FRAME_SIZE,
-                       static_cast<UINT32>(size.width()), static_cast<UINT32>(size.height()));
+        static_cast<UINT32>(size.width()), static_cast<UINT32>(size.height()));
     MFSetAttributeRatio(output_type.Get(), MF_MT_FRAME_RATE, kTargetFrameRateNum, kTargetFrameRateDen);
     MFSetAttributeRatio(output_type.Get(), MF_MT_PIXEL_ASPECT_RATIO, 1, 1);
 
@@ -470,7 +506,7 @@ bool VideoEncoderH264::configureMediaTypes(const QSize& size)
     input_type->SetGUID(MF_MT_SUBTYPE, MFVideoFormat_NV12);
     input_type->SetUINT32(MF_MT_INTERLACE_MODE, MFVideoInterlace_Progressive);
     MFSetAttributeSize(input_type.Get(), MF_MT_FRAME_SIZE,
-                       static_cast<UINT32>(size.width()), static_cast<UINT32>(size.height()));
+        static_cast<UINT32>(size.width()), static_cast<UINT32>(size.height()));
     MFSetAttributeRatio(input_type.Get(), MF_MT_FRAME_RATE, kTargetFrameRateNum, kTargetFrameRateDen);
     MFSetAttributeRatio(input_type.Get(), MF_MT_PIXEL_ASPECT_RATIO, 1, 1);
 
@@ -493,10 +529,9 @@ bool VideoEncoderH264::configureCodecApi()
     // float to match content complexity. Desktop content is mostly static so the average bitrate
     // stays low naturally, while frames with motion get the bandwidth they need. Reliable transport
     // makes occasional bursts safe.
-    setUint32CodecAttr(api, CODECAPI_AVEncCommonRateControlMode,
-                       eAVEncCommonRateControlMode_Quality);
+    setUint32CodecAttr(api, CODECAPI_AVEncCommonRateControlMode, eAVEncCommonRateControlMode_Quality);
     setUint32CodecAttr(api, CODECAPI_AVEncCommonQuality, 85);
-    setUint32CodecAttr(api, CODECAPI_AVEncCommonMeanBitRate, kInitialBitrateBps);
+    setUint32CodecAttr(api, CODECAPI_AVEncCommonMeanBitRate, target_bitrate_bps_);
     setUint32CodecAttr(api, CODECAPI_AVEncMPVDefaultBPictureCount, 0);
     setUint32CodecAttr(api, CODECAPI_AVEncVideoMaxNumRefFrame, kMaxRefFrames);
     setBoolCodecAttr(api, CODECAPI_AVEncCommonLowLatency, true);
@@ -589,8 +624,7 @@ bool VideoEncoderH264::allocateGpuResources(const QSize& size)
     content_desc.OutputHeight = static_cast<UINT>(size.height());
     content_desc.Usage = D3D11_VIDEO_USAGE_PLAYBACK_NORMAL;
 
-    _com_error error = d3d_->videoDevice()->CreateVideoProcessorEnumerator(&content_desc,
-                                                                           &vp_enumerator_);
+    _com_error error = d3d_->videoDevice()->CreateVideoProcessorEnumerator(&content_desc, &vp_enumerator_);
     if (FAILED(error.Error()))
     {
         LOG(ERROR) << "CreateVideoProcessorEnumerator failed:" << error;
@@ -639,13 +673,13 @@ bool VideoEncoderH264::allocateGpuResources(const QSize& size)
 
     D3D11_VIDEO_PROCESSOR_COLOR_SPACE rgb_cs;
     memset(&rgb_cs, 0, sizeof(rgb_cs));
-    rgb_cs.RGB_Range = 0;        // Full range 0-255 (desktop ARGB).
+    rgb_cs.RGB_Range = 0; // Full range 0-255 (desktop ARGB).
     d3d_->videoContext()->VideoProcessorSetStreamColorSpace(vp_processor_.Get(), 0, &rgb_cs);
 
     D3D11_VIDEO_PROCESSOR_COLOR_SPACE nv12_cs;
     memset(&nv12_cs, 0, sizeof(nv12_cs));
-    nv12_cs.YCbCr_Matrix = 0;    // BT.601 (matches libyuv default).
-    nv12_cs.Nominal_Range = 2;   // Limited range 16-235.
+    nv12_cs.YCbCr_Matrix = 0;  // BT.601 (matches libyuv default).
+    nv12_cs.Nominal_Range = 2; // Limited range 16-235.
     d3d_->videoContext()->VideoProcessorSetOutputColorSpace(vp_processor_.Get(), &nv12_cs);
 
     return true;
@@ -670,17 +704,13 @@ bool VideoEncoderH264::uploadArgbAndConvert(const Frame* frame)
                            uv_plane, nv12_stride_,
                            last_size_.width(), last_size_.height());
 
-        d3d_->deviceContext()->UpdateSubresource(nv12_texture_.Get(), 0, nullptr,
-                                                 y_plane,
-                                                 static_cast<UINT>(nv12_stride_),
-                                                 0);
+        d3d_->deviceContext()->UpdateSubresource(
+            nv12_texture_.Get(), 0, nullptr, y_plane, static_cast<UINT>(nv12_stride_), 0);
         return true;
     }
 
-    d3d_->deviceContext()->UpdateSubresource(argb_texture_.Get(), 0, nullptr,
-                                             frame->frameData(),
-                                             static_cast<UINT>(frame->stride()),
-                                             0);
+    d3d_->deviceContext()->UpdateSubresource(
+        argb_texture_.Get(), 0, nullptr, frame->frameData(), static_cast<UINT>(frame->stride()), 0);
 
     D3D11_VIDEO_PROCESSOR_STREAM stream;
     memset(&stream, 0, sizeof(stream));
@@ -691,9 +721,8 @@ bool VideoEncoderH264::uploadArgbAndConvert(const Frame* frame)
     stream.FutureFrames = 0;
     stream.pInputSurface = vp_input_view_.Get();
 
-    _com_error error = d3d_->videoContext()->VideoProcessorBlt(vp_processor_.Get(),
-                                                               vp_output_view_.Get(),
-                                                               0, 1, &stream);
+    _com_error error = d3d_->videoContext()->VideoProcessorBlt(
+        vp_processor_.Get(), vp_output_view_.Get(), 0, 1, &stream);
     if (FAILED(error.Error()))
     {
         LOG(ERROR) << "VideoProcessorBlt failed:" << error;
@@ -858,20 +887,4 @@ bool VideoEncoderH264::readOutput(proto::video::Packet* packet, bool* is_key_fra
 
     packet->set_data(std::move(encode_buffer_));
     return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool VideoEncoderH264::applyMinQuantizer()
-{
-    if (!codec_api_)
-        return true;
-    return setUint32CodecAttr(codec_api_.Get(), CODECAPI_AVEncVideoMinQP, min_quantizer_);
-}
-
-//--------------------------------------------------------------------------------------------------
-bool VideoEncoderH264::applyMaxQuantizer()
-{
-    if (!codec_api_)
-        return true;
-    return setUint32CodecAttr(codec_api_.Get(), CODECAPI_AVEncVideoMaxQP, max_quantizer_);
 }

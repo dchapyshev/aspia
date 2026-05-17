@@ -269,37 +269,57 @@ bool VideoEncoderVpx::encode(const Frame* frame, proto::video::Packet* packet)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool VideoEncoderVpx::applyMinQuantizer()
+void VideoEncoderVpx::setBandwidth(qint64 bandwidth)
 {
+    if (bandwidth <= 0)
+    {
+        // Bandwidth is not measured yet - fall back to the conservative defaults.
+        min_quantizer_ = 10;
+        max_quantizer_ = 30;
+        target_bitrate_kbps_ = 1000;
+    }
+    else
+    {
+        // Keep ~15% headroom under the measured capacity. libvpx wants kbit/s.
+        const quint64 budget_kbps = static_cast<quint64>(bandwidth) * 8 * 85 / 100 / 1000;
+        target_bitrate_kbps_ = static_cast<quint32>(std::clamp<quint64>(budget_kbps, 100, 16000));
+
+        // Loosen the QP ceiling on low-bandwidth links so the encoder can compress aggressively,
+        // tighten the floor on high-bandwidth links so it can spend bits on quality. The numbers
+        // are picked to keep VP8/VP9 within their useful QP range (10..50 for floor, 25..50 for
+        // ceiling) at every tier.
+        if (bandwidth < 300 * 1024) // < 300 KB/s
+        {
+            min_quantizer_ = 16;
+            max_quantizer_ = 50;
+        }
+        else if (bandwidth < 1024 * 1024) // < 1 MB/s
+        {
+            min_quantizer_ = 12;
+            max_quantizer_ = 40;
+        }
+        else if (bandwidth < 2 * 1024 * 1024) // < 2 MB/s
+        {
+            min_quantizer_ = 10;
+            max_quantizer_ = 32;
+        }
+        else
+        {
+            min_quantizer_ = 8;
+            max_quantizer_ = 25;
+        }
+    }
+
     if (!codec_.get())
-        return true;
+        return;
 
     config_.rc_min_quantizer = min_quantizer_;
-
-    vpx_codec_err_t ret = vpx_codec_enc_config_set(codec_.get(), &config_);
-    if (ret != VPX_CODEC_OK)
-    {
-        LOG(ERROR) << "vpx_codec_enc_config_set failed:" << ret;
-        return false;
-    }
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool VideoEncoderVpx::applyMaxQuantizer()
-{
-    if (!codec_.get())
-        return true;
-
     config_.rc_max_quantizer = max_quantizer_;
+    config_.rc_target_bitrate = target_bitrate_kbps_;
 
     vpx_codec_err_t ret = vpx_codec_enc_config_set(codec_.get(), &config_);
     if (ret != VPX_CODEC_OK)
-    {
         LOG(ERROR) << "vpx_codec_enc_config_set failed:" << ret;
-        return false;
-    }
-    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -341,14 +361,11 @@ bool VideoEncoderVpx::createVp8Codec(const QSize& size)
     // explicitly select real time mode when doing encoding.
     config_.g_profile = 2;
 
-    // To enable remoting to be highly interactive and allow the target bitrate to be met, we relax
-    // the max quantizer. The quality will get topped-off in subsequent frames.
+    // Quantizer bounds and target bitrate are owned by setBandwidth() - read whatever it
+    // last computed (or the unknown-bandwidth defaults if it was never called).
     config_.rc_min_quantizer = min_quantizer_;
     config_.rc_max_quantizer = max_quantizer_;
-
-    // In the absence of a good bandwidth estimator set the target bitrate to a
-    // conservative default.
-    config_.rc_target_bitrate = 1000;
+    config_.rc_target_bitrate = target_bitrate_kbps_;
 
     ret = vpx_codec_enc_init(codec_.get(), algo, &config_, 0);
     if (ret != VPX_CODEC_OK)
@@ -414,14 +431,12 @@ bool VideoEncoderVpx::createVp9Codec(const QSize& size)
     const int thread_count = std::clamp(cpu_count / 2, 2, 4);
     config_.g_threads = thread_count;
 
-    // Configure VP9 for I420 source frames.
+    // Configure VP9 for I420 source frames. Quantizer bounds and target bitrate are owned by
+    // setBandwidth() - read whatever it last computed (or the unknown-bandwidth defaults).
     config_.g_profile = kVp9I420ProfileNumber;
     config_.rc_min_quantizer = min_quantizer_;
     config_.rc_max_quantizer = max_quantizer_;
-
-    // In the absence of a good bandwidth estimator set the target bitrate to a
-    // conservative default.
-    config_.rc_target_bitrate = 1000;
+    config_.rc_target_bitrate = target_bitrate_kbps_;
 
     ret = vpx_codec_enc_init(codec_.get(), algo, &config_, 0);
     if (ret != VPX_CODEC_OK)

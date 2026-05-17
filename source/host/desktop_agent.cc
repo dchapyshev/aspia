@@ -816,6 +816,14 @@ void DesktopAgent::onOverflowCheck()
         video_encoding_ = desired_encoding;
         video_encoder_ = VideoEncoder::create(video_encoding_);
     }
+
+    static qint64 last_bandwidth = 0;
+
+    if (last_bandwidth != bandwidth && video_encoder_)
+    {
+        last_bandwidth = bandwidth;
+        video_encoder_->setBandwidth(bandwidth);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

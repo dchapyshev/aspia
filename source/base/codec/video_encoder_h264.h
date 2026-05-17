@@ -53,11 +53,7 @@ public:
 
     // VideoEncoder implementation.
     bool encode(const Frame* frame, proto::video::Packet* packet) final;
-
-protected:
-    // VideoEncoder implementation.
-    bool applyMinQuantizer() final;
-    bool applyMaxQuantizer() final;
+    void setBandwidth(qint64 bandwidth) final;
 
 private:
     bool createEncoder(const QSize& size);
@@ -83,6 +79,13 @@ private:
     bool output_provides_samples_ = false;
     quint64 frame_counter_ = 0;
     quint32 output_sample_size_ = 0;
+
+    // Bandwidth-tuned codec parameters. Defaults match a "5 Mbps, decent quality" tier and are
+    // shifted by setBandwidth() before each codec (re)creation; configureCodecApi() reads them
+    // when initializing the encoder.
+    quint32 min_quantizer_ = 16;
+    quint32 max_quantizer_ = 28;
+    quint32 target_bitrate_bps_ = 5 * 1000 * 1000;
 
     std::unique_ptr<D3D11VideoContext> d3d_;
 

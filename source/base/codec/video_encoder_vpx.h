@@ -37,11 +37,7 @@ public:
 
     // VideoEncoder implementation.
     bool encode(const Frame* frame, proto::video::Packet* packet) final;
-
-protected:
-    // VideoEncoder implementation.
-    bool applyMinQuantizer() final;
-    bool applyMaxQuantizer() final;
+    void setBandwidth(qint64 bandwidth) final;
 
 private:
     void createActiveMap(const QSize& size);
@@ -53,6 +49,12 @@ private:
     void clearActiveMap();
 
     QSize last_size_;
+
+    // Defaults match a conservative "unknown bandwidth" tier. setBandwidth() may shift these
+    // before each codec (re)creation; createVp{8,9}Codec reads them when initializing config_.
+    quint32 min_quantizer_ = 10;
+    quint32 max_quantizer_ = 30;
+    quint32 target_bitrate_kbps_ = 1000;
 
     vpx_codec_enc_cfg_t config_;
     ScopedVpxCodec codec_;
