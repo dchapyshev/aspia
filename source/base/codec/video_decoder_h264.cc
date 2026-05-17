@@ -22,6 +22,7 @@
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/desktop/frame.h"
+#include "base/win/scoped_co_mem.h"
 #include "proto/desktop_video.h"
 
 #include <libyuv/convert_argb.h>
@@ -248,25 +249,20 @@ bool VideoDecoderH264::activateMft()
         (MFT_ENUM_FLAG_HARDWARE | MFT_ENUM_FLAG_SORTANDFILTER) :
         (MFT_ENUM_FLAG_SYNCMFT | MFT_ENUM_FLAG_SORTANDFILTER);
 
-    IMFActivate** activate_arr = nullptr;
+    ScopedCoMem<IMFActivate*> activate_arr;
     UINT32 count = 0;
 
     HRESULT hr = mf::enumTransforms(
         MFT_CATEGORY_VIDEO_DECODER, flags, &input_info, nullptr, &activate_arr, &count);
     if (FAILED(hr) || count == 0)
-    {
-        if (activate_arr)
-            CoTaskMemFree(activate_arr);
         return false;
-    }
 
-    hr = activate_arr[0]->ActivateObject(IID_PPV_ARGS(&decoder_));
+    hr = activate_arr.get()[0]->ActivateObject(IID_PPV_ARGS(&decoder_));
     if (SUCCEEDED(hr))
-        active_mft_ = activate_arr[0];
+        active_mft_ = activate_arr.get()[0];
 
     for (UINT32 i = 0; i < count; ++i)
-        activate_arr[i]->Release();
-    CoTaskMemFree(activate_arr);
+        activate_arr.get()[i]->Release();
 
     if (FAILED(hr))
     {
@@ -639,19 +635,24 @@ bool VideoDecoderH264::readOutput(ComPtr<IMFSample>* out_sample)
     DWORD status = 0;
     HRESULT hr = decoder_->ProcessOutput(0, 1, &out, &status);
 
-    if (out.pEvents)
+    // Take ownership of refs the MFT may have written into the struct, regardless of hr.
+    ComPtr<IMFCollection> events;
+    events.Attach(out.pEvents);
+    out.pEvents = nullptr;
+
+    ComPtr<IMFSample> sample;
+    if (output_provides_samples_)
     {
-        out.pEvents->Release();
-        out.pEvents = nullptr;
+        sample.Attach(out.pSample);
+        out.pSample = nullptr;
+    }
+    else
+    {
+        sample = allocated_sample;
     }
 
     if (hr == MF_E_TRANSFORM_STREAM_CHANGE)
     {
-        if (output_provides_samples_ && out.pSample)
-        {
-            out.pSample->Release();
-            out.pSample = nullptr;
-        }
         if (!selectOutputType() || !refreshOutputDimensions())
             return false;
         return readOutput(out_sample);
@@ -661,22 +662,16 @@ bool VideoDecoderH264::readOutput(ComPtr<IMFSample>* out_sample)
     {
         if (hr != MF_E_TRANSFORM_NEED_MORE_INPUT)
             LOG(ERROR) << "IMFTransform::ProcessOutput failed:" << hrToString(hr);
-        if (output_provides_samples_ && out.pSample)
-            out.pSample->Release();
         return false;
     }
 
-    if (!out.pSample)
+    if (!sample)
     {
         LOG(ERROR) << "ProcessOutput returned no sample";
         return false;
     }
 
-    if (output_provides_samples_)
-        out_sample->Attach(out.pSample);
-    else
-        *out_sample = allocated_sample;
-
+    *out_sample = sample;
     return true;
 }
 

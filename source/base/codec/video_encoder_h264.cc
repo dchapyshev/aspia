@@ -21,6 +21,7 @@
 #include "base/codec/mf_runtime.h"
 #include "base/logging.h"
 #include "base/desktop/frame.h"
+#include "base/win/scoped_co_mem.h"
 #include "proto/desktop_video.h"
 
 #include <mferror.h>
@@ -351,11 +352,12 @@ bool VideoEncoderH264::selectHardwareMft()
 {
     MFT_REGISTER_TYPE_INFO output_info = { MFMediaType_Video, MFVideoFormat_H264 };
 
-    IMFActivate** activate_arr = nullptr;
+    ScopedCoMem<IMFActivate*> activate_arr;
     UINT32 count = 0;
 
     HRESULT hr = mf::enumTransforms(MFT_CATEGORY_VIDEO_ENCODER,
-        MFT_ENUM_FLAG_HARDWARE | MFT_ENUM_FLAG_SORTANDFILTER, nullptr, &output_info, &activate_arr, &count);
+        MFT_ENUM_FLAG_HARDWARE | MFT_ENUM_FLAG_SORTANDFILTER, nullptr, &output_info, &activate_arr,
+        &count);
     if (FAILED(hr))
     {
         LOG(ERROR) << "MFTEnumEx failed:" << hrToString(hr);
@@ -365,16 +367,13 @@ bool VideoEncoderH264::selectHardwareMft()
     if (count == 0)
     {
         LOG(ERROR) << "No hardware H264 encoders available";
-        if (activate_arr)
-            CoTaskMemFree(activate_arr);
         return false;
     }
 
-    hr = activate_arr[0]->ActivateObject(IID_PPV_ARGS(&encoder_));
+    hr = activate_arr.get()[0]->ActivateObject(IID_PPV_ARGS(&encoder_));
 
     for (UINT32 i = 0; i < count; ++i)
-        activate_arr[i]->Release();
-    CoTaskMemFree(activate_arr);
+        activate_arr.get()[i]->Release();
 
     if (FAILED(hr))
     {
@@ -718,23 +717,29 @@ bool VideoEncoderH264::readOutput(proto::video::Packet* packet, bool* is_key_fra
 
     DWORD status = 0;
     HRESULT hr = encoder_->ProcessOutput(0, 1, &out, &status);
+
+    // Take ownership of refs the MFT may have written into the struct, regardless of hr.
+    ComPtr<IMFCollection> events;
+    events.Attach(out.pEvents);
+    out.pEvents = nullptr;
+
+    ComPtr<IMFSample> sample;
+    if (output_provides_samples_)
+    {
+        sample.Attach(out.pSample);
+        out.pSample = nullptr;
+    }
+    else
+    {
+        sample = allocated_sample;
+    }
+
     if (FAILED(hr))
     {
         LOG(ERROR) << "IMFTransform::ProcessOutput failed:" << hrToString(hr);
-        if (out.pEvents)
-            out.pEvents->Release();
-        if (output_provides_samples_ && out.pSample)
-            out.pSample->Release();
         return false;
     }
 
-    if (out.pEvents)
-    {
-        out.pEvents->Release();
-        out.pEvents = nullptr;
-    }
-
-    IMFSample* sample = out.pSample;
     if (!sample)
     {
         LOG(ERROR) << "ProcessOutput returned no sample";
@@ -750,8 +755,6 @@ bool VideoEncoderH264::readOutput(proto::video::Packet* packet, bool* is_key_fra
     if (FAILED(hr))
     {
         LOG(ERROR) << "ConvertToContiguousBuffer failed:" << hrToString(hr);
-        if (output_provides_samples_)
-            sample->Release();
         return false;
     }
 
@@ -761,8 +764,6 @@ bool VideoEncoderH264::readOutput(proto::video::Packet* packet, bool* is_key_fra
     if (FAILED(hr))
     {
         LOG(ERROR) << "IMFMediaBuffer::Lock (output) failed:" << hrToString(hr);
-        if (output_provides_samples_)
-            sample->Release();
         return false;
     }
 
@@ -772,9 +773,6 @@ bool VideoEncoderH264::readOutput(proto::video::Packet* packet, bool* is_key_fra
     memcpy(encode_buffer_.data(), src, current_length);
 
     out_buffer->Unlock();
-
-    if (output_provides_samples_)
-        sample->Release();
 
     packet->set_data(std::move(encode_buffer_));
     return true;
