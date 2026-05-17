@@ -32,17 +32,18 @@
 
 #include <memory>
 
-// Hardware-first H.264 decoder built on Media Foundation. Falls back to the
-// in-box Microsoft H.264 Decoder MFT (software, synchronous) when no hardware
-// decoder is available. The HW path runs zero-copy through D3D11: decoder
-// produces NV12 textures, ID3D11VideoProcessor converts to ARGB on the GPU,
-// readback through a staging texture lands the pixels in Frame.
+// Hardware H.264 decoder built on a Media Foundation async MFT. Runs zero-copy through D3D11:
+// decoder produces NV12 textures, ID3D11VideoProcessor converts to ARGB on the GPU, staging
+// readback lands the pixels in Frame. Returns nullptr from create() when no HW MFT is available -
+// callers should fall back to a software decoder.
 class VideoDecoderH264MF final : public VideoDecoder
 {
 public:
-    // Constructs a decoder instance and brings up the Media Foundation runtime. Returns nullptr
-    // when MF is unavailable on the system or MFStartup fails; callers must handle the null case.
+    // Returns nullptr when MF runtime or HW H264 decoder MFT is not available on this system.
     static std::unique_ptr<VideoDecoderH264MF> create();
+
+    // Cheap probe - enumerates HW decoder MFTs without activating any.
+    static bool isHardwareSupported();
 
     ~VideoDecoderH264MF() final;
 
@@ -55,8 +56,7 @@ private:
 
     bool createDecoder(const QSize& size);
     void destroyDecoder();
-    bool activateMft();
-    bool setupHardwarePath(const QSize& size);
+    bool activateHardwareMft();
     bool configureMediaTypes(const QSize& size);
     bool selectOutputType();
     bool beginStreaming();
@@ -67,14 +67,10 @@ private:
     bool waitForEvent(MediaEventType expected);
     bool feedInput(const std::string& data, quint64 sample_time_100ns);
     bool readOutput(Microsoft::WRL::ComPtr<IMFSample>* out_sample);
-    bool copyHardwareSampleToFrame(
-        IMFSample* sample, const proto::video::Packet& packet, Frame* frame);
-    bool copySoftwareSampleToFrame(
+    bool copySampleToFrame(
         IMFSample* sample, const proto::video::Packet& packet, Frame* frame);
 
     bool mf_started_ = false;
-    bool is_hardware_ = false;
-    bool is_async_ = false;
     bool streaming_ = false;
     bool output_provides_samples_ = false;
     QSize last_size_;
@@ -89,8 +85,6 @@ private:
 
     Microsoft::WRL::ComPtr<IMFTransform> decoder_;
     Microsoft::WRL::ComPtr<IMFMediaEventGenerator> event_gen_;
-    Microsoft::WRL::ComPtr<IMFActivate> active_mft_;
-    bool prefer_hardware_ = true;
 
     // VideoProcessor path: NV12->ARGB on GPU, then staging readback as ARGB.
     Microsoft::WRL::ComPtr<ID3D11Texture2D> argb_target_;

@@ -19,6 +19,7 @@
 #include "base/codec/video_decoder.h"
 
 #include "base/logging.h"
+#include "base/codec/video_decoder_h264_sw.h"
 #include "base/codec/video_decoder_vpx.h"
 #include "proto/desktop_video.h"
 
@@ -36,10 +37,17 @@ std::unique_ptr<VideoDecoder> VideoDecoder::create(proto::video::Encoding encodi
         case proto::video::ENCODING_VP9:
             return std::make_unique<VideoDecoderVpx>(encoding);
 
-#if defined(Q_OS_WINDOWS)
         case proto::video::ENCODING_H264:
-            return VideoDecoderH264MF::create();
+        {
+#if defined(Q_OS_WINDOWS)
+            // Prefer Media Foundation (HW path) on Windows; fall back to OpenH264 if MF
+            // initialization fails (stripped Server SKUs, broken HW driver, etc.).
+            if (auto decoder = VideoDecoderH264MF::create())
+                return decoder;
+            LOG(WARNING) << "Media Foundation H264 decoder unavailable, falling back to OpenH264";
 #endif
+            return VideoDecoderH264SW::create();
+        }
 
         default:
             LOG(ERROR) << "Unsupported video encoding:" << encoding;

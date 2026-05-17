@@ -40,10 +40,10 @@ const UINT32 kAssumedFrameRateNum = 1000;
 const UINT32 kAssumedFrameRateDen = 80;
 const LONGLONG kFrameDuration100ns = 800000;
 
-// Selects the NV12-to-ARGB implementation on the hardware path. VideoProcessor stays on the GPU
-// (the converted ARGB only crosses GPU->CPU once at the very end) while libyuv reads raw NV12
-// back to system memory before converting. Default to VP since chroma upsampling artifacts on
-// decode are typically much milder than the subsampling artifacts on encode.
+// Selects the NV12-to-ARGB implementation. VideoProcessor stays on the GPU (the converted ARGB
+// only crosses GPU->CPU once at the very end) while libyuv reads raw NV12 back to system memory
+// before converting. Default to VP since chroma upsampling artifacts on decode are typically
+// much milder than the subsampling artifacts on encode.
 constexpr bool kUseLibyuvForChromaConversion = false;
 
 } // namespace
@@ -56,6 +56,28 @@ std::unique_ptr<VideoDecoderH264MF> VideoDecoderH264MF::create()
     if (!instance->initialize())
         return nullptr;
     return instance;
+}
+
+//--------------------------------------------------------------------------------------------------
+// static
+bool VideoDecoderH264MF::isHardwareSupported()
+{
+    if (!mf::isRuntimeAvailable())
+        return false;
+
+    MFT_REGISTER_TYPE_INFO input_info = { MFMediaType_Video, MFVideoFormat_H264 };
+    ScopedCoMem<IMFActivate*> activate_arr;
+    UINT32 count = 0;
+
+    _com_error error = mf::enumTransforms(MFT_CATEGORY_VIDEO_DECODER,
+        MFT_ENUM_FLAG_HARDWARE | MFT_ENUM_FLAG_SORTANDFILTER, &input_info, nullptr, &activate_arr,
+        &count);
+    if (FAILED(error.Error()) || count == 0)
+        return false;
+
+    for (UINT32 i = 0; i < count; ++i)
+        activate_arr.get()[i]->Release();
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -76,9 +98,9 @@ VideoDecoderH264MF::~VideoDecoderH264MF()
 //--------------------------------------------------------------------------------------------------
 bool VideoDecoderH264MF::initialize()
 {
-    if (!mf::isRuntimeAvailable())
+    if (!isHardwareSupported())
     {
-        LOG(ERROR) << "Media Foundation runtime not available on this system";
+        LOG(WARNING) << "No hardware H264 decoder MFT available";
         return false;
     }
 
@@ -118,40 +140,23 @@ bool VideoDecoderH264MF::decode(const proto::video::Packet& packet, Frame* frame
 
     const quint64 sample_time = frame_counter_ * static_cast<quint64>(kFrameDuration100ns);
 
-    if (is_async_)
-    {
-        if (!waitForEvent(METransformNeedInput))
-            return false;
-    }
+    if (!waitForEvent(METransformNeedInput))
+        return false;
 
     if (!feedInput(packet.data(), sample_time))
         return false;
 
-    ComPtr<IMFSample> sample;
+    if (!waitForEvent(METransformHaveOutput))
+        return false;
 
-    if (is_async_)
-    {
-        if (!waitForEvent(METransformHaveOutput))
-            return false;
-        if (!readOutput(&sample))
-            return false;
-    }
-    else
-    {
-        // SW MFT may buffer one frame internally; in that case readOutput returns false with
-        // MF_E_TRANSFORM_NEED_MORE_INPUT and the caller will get the frame on the next packet.
-        if (!readOutput(&sample))
-            return false;
-    }
+    ComPtr<IMFSample> sample;
+    if (!readOutput(&sample))
+        return false;
 
     if (!sample)
         return false;
 
-    const bool ok = is_hardware_ ?
-        copyHardwareSampleToFrame(sample.Get(), packet, frame) :
-        copySoftwareSampleToFrame(sample.Get(), packet, frame);
-
-    if (!ok)
+    if (!copySampleToFrame(sample.Get(), packet, frame))
         return false;
 
     ++frame_counter_;
@@ -161,28 +166,41 @@ bool VideoDecoderH264MF::decode(const proto::video::Packet& packet, Frame* frame
 //--------------------------------------------------------------------------------------------------
 bool VideoDecoderH264MF::createDecoder(const QSize& size)
 {
-    // First attempt: hardware async MFT with D3D11 zero-copy. If anything in the chain fails,
-    // fall back to the in-box software MFT with system-memory NV12 readback.
-    prefer_hardware_ = true;
-    if (activateMft())
+    d3d_ = D3D11VideoContext::create();
+    if (!d3d_)
     {
-        is_hardware_ = true;
-        if (setupHardwarePath(size))
-            return true;
-
-        LOG(WARNING) << "Hardware D3D11 path setup failed, falling back to software decoder";
-        destroyDecoder();
-    }
-
-    prefer_hardware_ = false;
-    if (!activateMft())
-    {
-        LOG(ERROR) << "No H264 decoder MFT available";
+        LOG(ERROR) << "Failed to create D3D11 context";
         return false;
     }
-    is_hardware_ = false;
 
-    _com_error error = decoder_->GetStreamIDs(1, &input_stream_id_, 1, &output_stream_id_);
+    if (!activateHardwareMft())
+        return false;
+
+    // Attributes must be retrieved (and the async lock cleared) before any other method is called
+    // on a hardware MFT; otherwise GetStreamIDs and friends return MF_E_TRANSFORM_ASYNC_LOCKED.
+    ComPtr<IMFAttributes> attrs;
+    _com_error error = decoder_->GetAttributes(&attrs);
+    if (FAILED(error.Error()) || !attrs)
+    {
+        LOG(ERROR) << "GetAttributes failed:" << error;
+        return false;
+    }
+    attrs->SetUINT32(MF_LOW_LATENCY, TRUE);
+
+    error = attrs->SetUINT32(MF_TRANSFORM_ASYNC_UNLOCK, TRUE);
+    if (FAILED(error.Error()))
+    {
+        LOG(ERROR) << "Failed to unlock async MFT:" << error;
+        return false;
+    }
+    error = decoder_.As(&event_gen_);
+    if (FAILED(error.Error()))
+    {
+        LOG(ERROR) << "MFT does not expose IMFMediaEventGenerator:" << error;
+        return false;
+    }
+
+    error = decoder_->GetStreamIDs(1, &input_stream_id_, 1, &output_stream_id_);
     if (error.Error() == E_NOTIMPL)
     {
         input_stream_id_ = 0;
@@ -195,11 +213,13 @@ bool VideoDecoderH264MF::createDecoder(const QSize& size)
         return false;
     }
 
-    ComPtr<IMFAttributes> attrs;
-    if (SUCCEEDED(decoder_->GetAttributes(&attrs)) && attrs)
-        attrs->SetUINT32(MF_LOW_LATENCY, TRUE);
-
-    LOG(INFO) << "H264 decoder selected: software";
+    error = decoder_->ProcessMessage(MFT_MESSAGE_SET_D3D_MANAGER,
+                                     reinterpret_cast<ULONG_PTR>(d3d_->manager()));
+    if (FAILED(error.Error()))
+    {
+        LOG(ERROR) << "MFT_MESSAGE_SET_D3D_MANAGER failed:" << error;
+        return false;
+    }
 
     if (!configureMediaTypes(size))
         return false;
@@ -219,6 +239,9 @@ bool VideoDecoderH264MF::createDecoder(const QSize& size)
         (out_info.dwFlags & (MFT_OUTPUT_STREAM_PROVIDES_SAMPLES |
                              MFT_OUTPUT_STREAM_CAN_PROVIDE_SAMPLES)) != 0;
     output_sample_size_ = out_info.cbSize;
+
+    if (!allocateGpuResources(size))
+        return false;
 
     if (!beginStreaming())
         return false;
@@ -245,12 +268,9 @@ void VideoDecoderH264MF::destroyDecoder()
         decoder_->ProcessMessage(MFT_MESSAGE_SET_D3D_MANAGER, 0);
         decoder_.Reset();
     }
-    active_mft_.Reset();
 
     d3d_.reset();
 
-    is_hardware_ = false;
-    is_async_ = false;
     output_provides_samples_ = false;
     output_sample_size_ = 0;
     output_width_ = 0;
@@ -260,124 +280,33 @@ void VideoDecoderH264MF::destroyDecoder()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool VideoDecoderH264MF::activateMft()
+bool VideoDecoderH264MF::activateHardwareMft()
 {
     MFT_REGISTER_TYPE_INFO input_info = { MFMediaType_Video, MFVideoFormat_H264 };
-
-    const UINT32 flags = prefer_hardware_ ?
-        (MFT_ENUM_FLAG_HARDWARE | MFT_ENUM_FLAG_SORTANDFILTER) :
-        (MFT_ENUM_FLAG_SYNCMFT | MFT_ENUM_FLAG_SORTANDFILTER);
 
     ScopedCoMem<IMFActivate*> activate_arr;
     UINT32 count = 0;
 
-    _com_error error = mf::enumTransforms(
-        MFT_CATEGORY_VIDEO_DECODER, flags, &input_info, nullptr, &activate_arr, &count);
+    _com_error error = mf::enumTransforms(MFT_CATEGORY_VIDEO_DECODER,
+        MFT_ENUM_FLAG_HARDWARE | MFT_ENUM_FLAG_SORTANDFILTER, &input_info, nullptr, &activate_arr,
+        &count);
     if (FAILED(error.Error()) || count == 0)
+    {
+        LOG(ERROR) << "No hardware H264 decoder MFT found";
         return false;
+    }
 
     error = activate_arr.get()[0]->ActivateObject(IID_PPV_ARGS(&decoder_));
-    if (SUCCEEDED(error.Error()))
-        active_mft_ = activate_arr.get()[0];
 
     for (UINT32 i = 0; i < count; ++i)
         activate_arr.get()[i]->Release();
 
     if (FAILED(error.Error()))
     {
-        LOG(WARNING) << "IMFActivate::ActivateObject failed:" << error;
+        LOG(ERROR) << "IMFActivate::ActivateObject failed:" << error;
         decoder_.Reset();
         return false;
     }
-    return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool VideoDecoderH264MF::setupHardwarePath(const QSize& size)
-{
-    d3d_ = D3D11VideoContext::create();
-    if (!d3d_)
-    {
-        LOG(WARNING) << "Failed to create D3D11 context";
-        return false;
-    }
-
-    // Attributes must be retrieved (and the async lock cleared, if any) before any other method
-    // is called on a hardware MFT; otherwise GetStreamIDs and friends return MF_E_TRANSFORM_ASYNC_LOCKED.
-    ComPtr<IMFAttributes> attrs;
-    _com_error error = decoder_->GetAttributes(&attrs);
-    if (FAILED(error.Error()) || !attrs)
-    {
-        LOG(WARNING) << "GetAttributes failed:" << error;
-        return false;
-    }
-    attrs->SetUINT32(MF_LOW_LATENCY, TRUE);
-
-    UINT32 async_flag = 0;
-    if (SUCCEEDED(attrs->GetUINT32(MF_TRANSFORM_ASYNC, &async_flag)) && async_flag)
-    {
-        is_async_ = true;
-        error = attrs->SetUINT32(MF_TRANSFORM_ASYNC_UNLOCK, TRUE);
-        if (FAILED(error.Error()))
-        {
-            LOG(WARNING) << "Failed to unlock async MFT:" << error;
-            return false;
-        }
-        error = decoder_.As(&event_gen_);
-        if (FAILED(error.Error()))
-        {
-            LOG(WARNING) << "MFT does not expose IMFMediaEventGenerator:" << error;
-            return false;
-        }
-    }
-
-    error = decoder_->GetStreamIDs(1, &input_stream_id_, 1, &output_stream_id_);
-    if (error.Error() == E_NOTIMPL)
-    {
-        input_stream_id_ = 0;
-        output_stream_id_ = 0;
-        error = S_OK;
-    }
-    if (FAILED(error.Error()))
-    {
-        LOG(WARNING) << "IMFTransform::GetStreamIDs failed:" << error;
-        return false;
-    }
-
-    error = decoder_->ProcessMessage(MFT_MESSAGE_SET_D3D_MANAGER, reinterpret_cast<ULONG_PTR>(d3d_->manager()));
-    if (FAILED(error.Error()))
-    {
-        LOG(WARNING) << "MFT_MESSAGE_SET_D3D_MANAGER failed:" << error;
-        return false;
-    }
-
-    LOG(INFO) << "H264 decoder selected: hardware (D3D11)";
-
-    if (!configureMediaTypes(size))
-        return false;
-
-    if (!refreshOutputDimensions())
-        return false;
-
-    MFT_OUTPUT_STREAM_INFO out_info;
-    memset(&out_info, 0, sizeof(out_info));
-    error = decoder_->GetOutputStreamInfo(output_stream_id_, &out_info);
-    if (FAILED(error.Error()))
-    {
-        LOG(WARNING) << "GetOutputStreamInfo failed:" << error;
-        return false;
-    }
-    output_provides_samples_ =
-        (out_info.dwFlags & (MFT_OUTPUT_STREAM_PROVIDES_SAMPLES |
-                             MFT_OUTPUT_STREAM_CAN_PROVIDE_SAMPLES)) != 0;
-    output_sample_size_ = out_info.cbSize;
-
-    if (!allocateGpuResources(size))
-        return false;
-
-    if (!beginStreaming())
-        return false;
-
     return true;
 }
 
@@ -561,13 +490,13 @@ bool VideoDecoderH264MF::allocateGpuResources(const QSize& size)
     // libyuv defaults so HW and SW decoder paths produce identical ARGB pixels.
     D3D11_VIDEO_PROCESSOR_COLOR_SPACE nv12_cs;
     memset(&nv12_cs, 0, sizeof(nv12_cs));
-    nv12_cs.YCbCr_Matrix = 0;    // BT.601.
-    nv12_cs.Nominal_Range = 2;   // Limited range 16-235.
+    nv12_cs.YCbCr_Matrix = 0;  // BT.601.
+    nv12_cs.Nominal_Range = 2; // Limited range 16-235.
     d3d_->videoContext()->VideoProcessorSetStreamColorSpace(vp_processor_.Get(), 0, &nv12_cs);
 
     D3D11_VIDEO_PROCESSOR_COLOR_SPACE rgb_cs;
     memset(&rgb_cs, 0, sizeof(rgb_cs));
-    rgb_cs.RGB_Range = 0;        // Full range 0-255 (target ARGB).
+    rgb_cs.RGB_Range = 0; // Full range 0-255 (target ARGB).
     d3d_->videoContext()->VideoProcessorSetOutputColorSpace(vp_processor_.Get(), &rgb_cs);
 
     return true;
@@ -718,7 +647,7 @@ bool VideoDecoderH264MF::readOutput(ComPtr<IMFSample>* out_sample)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool VideoDecoderH264MF::copyHardwareSampleToFrame(
+bool VideoDecoderH264MF::copySampleToFrame(
     IMFSample* sample, const proto::video::Packet& packet, Frame* frame)
 {
     ComPtr<IMFMediaBuffer> buffer;
@@ -858,76 +787,5 @@ bool VideoDecoderH264MF::copyHardwareSampleToFrame(
     }
 
     d3d_->deviceContext()->Unmap(argb_staging_.Get(), 0);
-    return ok;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool VideoDecoderH264MF::copySoftwareSampleToFrame(
-    IMFSample* sample, const proto::video::Packet& packet, Frame* frame)
-{
-    ComPtr<IMFMediaBuffer> buffer;
-    _com_error error = sample->ConvertToContiguousBuffer(&buffer);
-    if (FAILED(error.Error()))
-    {
-        LOG(ERROR) << "ConvertToContiguousBuffer failed:" << error;
-        return false;
-    }
-
-    BYTE* base = nullptr;
-    LONG pitch = 0;
-    ComPtr<IMF2DBuffer> buffer_2d;
-    if (SUCCEEDED(buffer.As(&buffer_2d)))
-    {
-        error = buffer_2d->Lock2D(&base, &pitch);
-        if (FAILED(error.Error()))
-        {
-            LOG(ERROR) << "IMF2DBuffer::Lock2D failed:" << error;
-            return false;
-        }
-    }
-    else
-    {
-        DWORD current_length = 0;
-        error = buffer->Lock(&base, nullptr, &current_length);
-        if (FAILED(error.Error()))
-        {
-            LOG(ERROR) << "IMFMediaBuffer::Lock failed:" << error;
-            return false;
-        }
-        pitch = output_stride_ > 0 ? output_stride_ : output_width_;
-    }
-
-    const int y_stride = pitch;
-    const int uv_stride = pitch;
-    const quint8* y_plane = base;
-    const quint8* uv_plane = base + y_stride * output_height_;
-
-    QRect frame_rect(QPoint(0, 0), frame->size());
-    bool ok = true;
-
-    for (int i = 0; i < packet.dirty_rect_size(); ++i)
-    {
-        QRect rect = parse(packet.dirty_rect(i));
-        if (!frame_rect.contains(rect))
-        {
-            LOG(ERROR) << "The rectangle is outside the screen area";
-            ok = false;
-            break;
-        }
-
-        const int y_offset = rect.y() * y_stride + rect.x();
-        const int uv_offset = (rect.y() / 2) * uv_stride + (rect.x() & ~1);
-
-        libyuv::NV12ToARGB(y_plane + y_offset, y_stride,
-                           uv_plane + uv_offset, uv_stride,
-                           frame->frameDataAtPos(rect.topLeft()), frame->stride(),
-                           rect.width(), rect.height());
-    }
-
-    if (buffer_2d)
-        buffer_2d->Unlock2D();
-    else
-        buffer->Unlock();
-
     return ok;
 }

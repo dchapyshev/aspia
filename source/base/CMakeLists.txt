@@ -193,6 +193,8 @@ list(APPEND SOURCE_BASE_CODEC
     codec/vector_math.h
     codec/video_decoder.cc
     codec/video_decoder.h
+    codec/video_decoder_h264_sw.cc
+    codec/video_decoder_h264_sw.h
     codec/video_decoder_vpx.cc
     codec/video_decoder_vpx.h
     codec/video_encoder.cc

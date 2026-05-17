@@ -87,6 +87,7 @@ set(THIRD_PARTY_LIBS
     OpenSSL::Crypto
     OpenSSL::SSL
     Opus::opus
+    ${OPENH264_LIBRARY}
     unofficial::libwebm::libwebm
     unofficial::libvpx::libvpx
     unofficial::enet::enet
