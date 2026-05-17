@@ -43,6 +43,7 @@ enum Encoding
     // Field 1 (ZSTD) is deprecated.
     ENCODING_VP8     = 2;
     ENCODING_VP9     = 4;
+    ENCODING_H264    = 8;
 }
 
 message PacketFormat

@@ -204,6 +204,18 @@ list(APPEND SOURCE_BASE_CODEC
     codec/zstd_compress.cc
     codec/zstd_compress.h)
 
+if (WIN32)
+    list(APPEND SOURCE_BASE_CODEC
+        codec/d3d11_video_context.cc
+        codec/d3d11_video_context.h
+        codec/mf_runtime.cc
+        codec/mf_runtime.h
+        codec/video_decoder_h264.cc
+        codec/video_decoder_h264.h
+        codec/video_encoder_h264.cc
+        codec/video_encoder_h264.h)
+endif()
+
 list(APPEND SOURCE_BASE_CODEC_TESTS
     codec/scale_reducer_unittest.cc)
 
@@ -623,6 +635,10 @@ set_property(TARGET aspia_base PROPERTY AUTORCC ON)
 qt_import_plugins(aspia_base INCLUDE "" EXCLUDE "" INCLUDE_BY_TYPE "" EXCLUDE_BY_TYPE imageformats)
 
 target_precompile_headers(aspia_base PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:pch.h>")
+
+if (WIN32)
+    set(BASE_PLATFORM_LIBS mfuuid strmiids)
+endif()
 
 if (LINUX)
     set(BASE_PLATFORM_LIBS ${X11_LIB} ${XFIXES_LIB} stdc++fs)
