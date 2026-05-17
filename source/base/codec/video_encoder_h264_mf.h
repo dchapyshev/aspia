@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_CODEC_VIDEO_ENCODER_H264_H
-#define BASE_CODEC_VIDEO_ENCODER_H264_H
+#ifndef BASE_CODEC_VIDEO_ENCODER_H264_MF_H
+#define BASE_CODEC_VIDEO_ENCODER_H264_MF_H
 
 #include "base/codec/d3d11_video_context.h"
 #include "base/codec/video_encoder.h"
@@ -40,12 +40,12 @@
 // high-quality chroma resampling that handles subpixel-rendered text correctly) and an
 // ID3D11VideoProcessor-based GPU path (faster but uses point-sampled chroma on many
 // drivers, producing color fringes on small text). The choice is a compile-time switch
-// in video_encoder_h264.cc.
-class VideoEncoderH264 final : public VideoEncoder
+// in video_encoder_h264_mf.cc.
+class VideoEncoderH264MF final : public VideoEncoder
 {
 public:
-    VideoEncoderH264();
-    ~VideoEncoderH264() final;
+    VideoEncoderH264MF();
+    ~VideoEncoderH264MF() final;
 
     // Returns true when a hardware H264 encoder MFT is available on this system. Cheap to call -
     // probes the MF runtime and enumerates HW encoders without actually activating any of them.
@@ -110,7 +110,7 @@ private:
     DWORD input_stream_id_ = 0;
     DWORD output_stream_id_ = 0;
 
-    Q_DISABLE_COPY_MOVE(VideoEncoderH264)
+    Q_DISABLE_COPY_MOVE(VideoEncoderH264MF)
 };
 
-#endif // BASE_CODEC_VIDEO_ENCODER_H264_H
+#endif // BASE_CODEC_VIDEO_ENCODER_H264_MF_H

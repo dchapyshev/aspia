@@ -16,8 +16,8 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_CODEC_VIDEO_DECODER_H264_H
-#define BASE_CODEC_VIDEO_DECODER_H264_H
+#ifndef BASE_CODEC_VIDEO_DECODER_H264_MF_H
+#define BASE_CODEC_VIDEO_DECODER_H264_MF_H
 
 #include "base/codec/d3d11_video_context.h"
 #include "base/codec/video_decoder.h"
@@ -37,11 +37,11 @@
 // decoder is available. The HW path runs zero-copy through D3D11: decoder
 // produces NV12 textures, ID3D11VideoProcessor converts to ARGB on the GPU,
 // readback through a staging texture lands the pixels in Frame.
-class VideoDecoderH264 final : public VideoDecoder
+class VideoDecoderH264MF final : public VideoDecoder
 {
 public:
-    VideoDecoderH264();
-    ~VideoDecoderH264() final;
+    VideoDecoderH264MF();
+    ~VideoDecoderH264MF() final;
 
     // VideoDecoder implementation.
     bool decode(const proto::video::Packet& packet, Frame* frame) final;
@@ -99,7 +99,7 @@ private:
     DWORD input_stream_id_ = 0;
     DWORD output_stream_id_ = 0;
 
-    Q_DISABLE_COPY_MOVE(VideoDecoderH264)
+    Q_DISABLE_COPY_MOVE(VideoDecoderH264MF)
 };
 
-#endif // BASE_CODEC_VIDEO_DECODER_H264_H
+#endif // BASE_CODEC_VIDEO_DECODER_H264_MF_H

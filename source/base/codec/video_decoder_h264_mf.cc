@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/codec/video_decoder_h264.h"
+#include "base/codec/video_decoder_h264_mf.h"
 
 #include "base/codec/mf_runtime.h"
 #include "base/logging.h"
@@ -49,7 +49,7 @@ constexpr bool kUseLibyuvForChromaConversion = false;
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-VideoDecoderH264::VideoDecoderH264()
+VideoDecoderH264MF::VideoDecoderH264MF()
 {
     if (!mf::isRuntimeAvailable())
     {
@@ -67,7 +67,7 @@ VideoDecoderH264::VideoDecoderH264()
 }
 
 //--------------------------------------------------------------------------------------------------
-VideoDecoderH264::~VideoDecoderH264()
+VideoDecoderH264MF::~VideoDecoderH264MF()
 {
     destroyDecoder();
 
@@ -76,7 +76,7 @@ VideoDecoderH264::~VideoDecoderH264()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool VideoDecoderH264::decode(const proto::video::Packet& packet, Frame* frame)
+bool VideoDecoderH264MF::decode(const proto::video::Packet& packet, Frame* frame)
 {
     if (!mf_started_ || !frame)
         return false;
@@ -142,7 +142,7 @@ bool VideoDecoderH264::decode(const proto::video::Packet& packet, Frame* frame)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool VideoDecoderH264::createDecoder(const QSize& size)
+bool VideoDecoderH264MF::createDecoder(const QSize& size)
 {
     // First attempt: hardware async MFT with D3D11 zero-copy. If anything in the chain fails,
     // fall back to the in-box software MFT with system-memory NV12 readback.
@@ -210,7 +210,7 @@ bool VideoDecoderH264::createDecoder(const QSize& size)
 }
 
 //--------------------------------------------------------------------------------------------------
-void VideoDecoderH264::destroyDecoder()
+void VideoDecoderH264MF::destroyDecoder()
 {
     if (streaming_)
         endStreaming();
@@ -243,7 +243,7 @@ void VideoDecoderH264::destroyDecoder()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool VideoDecoderH264::activateMft()
+bool VideoDecoderH264MF::activateMft()
 {
     MFT_REGISTER_TYPE_INFO input_info = { MFMediaType_Video, MFVideoFormat_H264 };
 
@@ -276,7 +276,7 @@ bool VideoDecoderH264::activateMft()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool VideoDecoderH264::setupHardwarePath(const QSize& size)
+bool VideoDecoderH264MF::setupHardwarePath(const QSize& size)
 {
     d3d_ = D3D11VideoContext::create();
     if (!d3d_)
@@ -365,7 +365,7 @@ bool VideoDecoderH264::setupHardwarePath(const QSize& size)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool VideoDecoderH264::configureMediaTypes(const QSize& size)
+bool VideoDecoderH264MF::configureMediaTypes(const QSize& size)
 {
     ComPtr<IMFMediaType> input_type;
     _com_error error = mf::createMediaType(&input_type);
@@ -394,7 +394,7 @@ bool VideoDecoderH264::configureMediaTypes(const QSize& size)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool VideoDecoderH264::selectOutputType()
+bool VideoDecoderH264MF::selectOutputType()
 {
     DWORD index = 0;
     while (true)
@@ -429,7 +429,7 @@ bool VideoDecoderH264::selectOutputType()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool VideoDecoderH264::beginStreaming()
+bool VideoDecoderH264MF::beginStreaming()
 {
     decoder_->ProcessMessage(MFT_MESSAGE_COMMAND_FLUSH, 0);
     decoder_->ProcessMessage(MFT_MESSAGE_NOTIFY_BEGIN_STREAMING, 0);
@@ -439,7 +439,7 @@ bool VideoDecoderH264::beginStreaming()
 }
 
 //--------------------------------------------------------------------------------------------------
-void VideoDecoderH264::endStreaming()
+void VideoDecoderH264MF::endStreaming()
 {
     if (decoder_)
     {
@@ -451,7 +451,7 @@ void VideoDecoderH264::endStreaming()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool VideoDecoderH264::refreshOutputDimensions()
+bool VideoDecoderH264MF::refreshOutputDimensions()
 {
     ComPtr<IMFMediaType> out_type;
     _com_error error = decoder_->GetOutputCurrentType(output_stream_id_, &out_type);
@@ -477,7 +477,7 @@ bool VideoDecoderH264::refreshOutputDimensions()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool VideoDecoderH264::allocateGpuResources(const QSize& size)
+bool VideoDecoderH264MF::allocateGpuResources(const QSize& size)
 {
     if constexpr (kUseLibyuvForChromaConversion)
     {
@@ -557,7 +557,7 @@ bool VideoDecoderH264::allocateGpuResources(const QSize& size)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool VideoDecoderH264::waitForEvent(MediaEventType expected)
+bool VideoDecoderH264MF::waitForEvent(MediaEventType expected)
 {
     while (true)
     {
@@ -584,7 +584,7 @@ bool VideoDecoderH264::waitForEvent(MediaEventType expected)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool VideoDecoderH264::feedInput(const std::string& data, quint64 sample_time_100ns)
+bool VideoDecoderH264MF::feedInput(const std::string& data, quint64 sample_time_100ns)
 {
     const DWORD data_size = static_cast<DWORD>(data.size());
 
@@ -628,7 +628,7 @@ bool VideoDecoderH264::feedInput(const std::string& data, quint64 sample_time_10
 }
 
 //--------------------------------------------------------------------------------------------------
-bool VideoDecoderH264::readOutput(ComPtr<IMFSample>* out_sample)
+bool VideoDecoderH264MF::readOutput(ComPtr<IMFSample>* out_sample)
 {
     out_sample->Reset();
 
@@ -701,7 +701,7 @@ bool VideoDecoderH264::readOutput(ComPtr<IMFSample>* out_sample)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool VideoDecoderH264::copyHardwareSampleToFrame(
+bool VideoDecoderH264MF::copyHardwareSampleToFrame(
     IMFSample* sample, const proto::video::Packet& packet, Frame* frame)
 {
     ComPtr<IMFMediaBuffer> buffer;
@@ -845,7 +845,7 @@ bool VideoDecoderH264::copyHardwareSampleToFrame(
 }
 
 //--------------------------------------------------------------------------------------------------
-bool VideoDecoderH264::copySoftwareSampleToFrame(
+bool VideoDecoderH264MF::copySoftwareSampleToFrame(
     IMFSample* sample, const proto::video::Packet& packet, Frame* frame)
 {
     ComPtr<IMFMediaBuffer> buffer;

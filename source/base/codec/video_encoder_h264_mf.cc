@@ -16,7 +16,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "base/codec/video_encoder_h264.h"
+#include "base/codec/video_encoder_h264_mf.h"
 
 #include "base/codec/mf_runtime.h"
 #include "base/logging.h"
@@ -103,7 +103,7 @@ QRect alignRect(const QRect& rect)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-VideoEncoderH264::VideoEncoderH264()
+VideoEncoderH264MF::VideoEncoderH264MF()
     : VideoEncoder(proto::video::ENCODING_H264)
 {
     if (!mf::isRuntimeAvailable())
@@ -122,7 +122,7 @@ VideoEncoderH264::VideoEncoderH264()
 }
 
 //--------------------------------------------------------------------------------------------------
-VideoEncoderH264::~VideoEncoderH264()
+VideoEncoderH264MF::~VideoEncoderH264MF()
 {
     destroyEncoder();
 
@@ -132,7 +132,7 @@ VideoEncoderH264::~VideoEncoderH264()
 
 //--------------------------------------------------------------------------------------------------
 // static
-bool VideoEncoderH264::isHardwareSupported()
+bool VideoEncoderH264MF::isHardwareSupported()
 {
     if (!mf::isRuntimeAvailable())
         return false;
@@ -153,7 +153,7 @@ bool VideoEncoderH264::isHardwareSupported()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool VideoEncoderH264::encode(const Frame* frame, proto::video::Packet* packet)
+bool VideoEncoderH264MF::encode(const Frame* frame, proto::video::Packet* packet)
 {
     if (!mf_started_ || !frame || !packet)
         return false;
@@ -252,7 +252,7 @@ bool VideoEncoderH264::encode(const Frame* frame, proto::video::Packet* packet)
 }
 
 //--------------------------------------------------------------------------------------------------
-void VideoEncoderH264::setBandwidth(qint64 bandwidth)
+void VideoEncoderH264MF::setBandwidth(qint64 bandwidth)
 {
     if (bandwidth <= 0)
     {
@@ -271,12 +271,12 @@ void VideoEncoderH264::setBandwidth(qint64 bandwidth)
         // H264 is more efficient than VP at the same QP, so the bands are tighter. Loosen the
         // ceiling on low-bandwidth links so the encoder can compress aggressively without ever
         // dropping frames; tighten the floor on high-bandwidth links to spend bits on quality.
-        if (bandwidth < 500 * 1024)            // < 500 KB/s
+        if (bandwidth < 500 * 1024) // < 500 KB/s
         {
             min_quantizer_ = 20;
             max_quantizer_ = 38;
         }
-        else if (bandwidth < 2 * 1024 * 1024)  // < 2 MB/s
+        else if (bandwidth < 2 * 1024 * 1024) // < 2 MB/s
         {
             min_quantizer_ = 18;
             max_quantizer_ = 32;
@@ -297,7 +297,7 @@ void VideoEncoderH264::setBandwidth(qint64 bandwidth)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool VideoEncoderH264::createEncoder(const QSize& size)
+bool VideoEncoderH264MF::createEncoder(const QSize& size)
 {
     d3d_ = D3D11VideoContext::create();
     if (!d3d_)
@@ -390,7 +390,7 @@ bool VideoEncoderH264::createEncoder(const QSize& size)
 }
 
 //--------------------------------------------------------------------------------------------------
-void VideoEncoderH264::destroyEncoder()
+void VideoEncoderH264MF::destroyEncoder()
 {
     if (streaming_)
         endStreaming();
@@ -423,7 +423,7 @@ void VideoEncoderH264::destroyEncoder()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool VideoEncoderH264::selectHardwareMft()
+bool VideoEncoderH264MF::selectHardwareMft()
 {
     MFT_REGISTER_TYPE_INFO output_info = { MFMediaType_Video, MFVideoFormat_H264 };
 
@@ -460,7 +460,7 @@ bool VideoEncoderH264::selectHardwareMft()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool VideoEncoderH264::configureMediaTypes(const QSize& size)
+bool VideoEncoderH264MF::configureMediaTypes(const QSize& size)
 {
     // Output type must be set before input type for encoders.
     ComPtr<IMFMediaType> output_type;
@@ -521,7 +521,7 @@ bool VideoEncoderH264::configureMediaTypes(const QSize& size)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool VideoEncoderH264::configureCodecApi()
+bool VideoEncoderH264MF::configureCodecApi()
 {
     ICodecAPI* api = codec_api_.Get();
 
@@ -547,7 +547,7 @@ bool VideoEncoderH264::configureCodecApi()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool VideoEncoderH264::beginStreaming()
+bool VideoEncoderH264MF::beginStreaming()
 {
     _com_error error = encoder_->ProcessMessage(MFT_MESSAGE_COMMAND_FLUSH, 0);
     if (FAILED(error.Error()))
@@ -575,7 +575,7 @@ bool VideoEncoderH264::beginStreaming()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool VideoEncoderH264::endStreaming()
+bool VideoEncoderH264MF::endStreaming()
 {
     if (encoder_)
     {
@@ -588,7 +588,7 @@ bool VideoEncoderH264::endStreaming()
 }
 
 //--------------------------------------------------------------------------------------------------
-bool VideoEncoderH264::allocateGpuResources(const QSize& size)
+bool VideoEncoderH264MF::allocateGpuResources(const QSize& size)
 {
     nv12_texture_ = d3d_->createNv12Texture(size.width(), size.height());
     if (!nv12_texture_)
@@ -686,7 +686,7 @@ bool VideoEncoderH264::allocateGpuResources(const QSize& size)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool VideoEncoderH264::uploadArgbAndConvert(const Frame* frame)
+bool VideoEncoderH264MF::uploadArgbAndConvert(const Frame* frame)
 {
     if (!nv12_texture_)
     {
@@ -732,7 +732,7 @@ bool VideoEncoderH264::uploadArgbAndConvert(const Frame* frame)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool VideoEncoderH264::buildInputSample(quint64 sample_time_100ns, ComPtr<IMFSample>* out)
+bool VideoEncoderH264MF::buildInputSample(quint64 sample_time_100ns, ComPtr<IMFSample>* out)
 {
     ComPtr<IMFMediaBuffer> buffer;
     _com_error error = mf::createDxgiSurfaceBuffer(
@@ -767,7 +767,7 @@ bool VideoEncoderH264::buildInputSample(quint64 sample_time_100ns, ComPtr<IMFSam
 }
 
 //--------------------------------------------------------------------------------------------------
-bool VideoEncoderH264::waitForEvent(MediaEventType expected)
+bool VideoEncoderH264MF::waitForEvent(MediaEventType expected)
 {
     while (true)
     {
@@ -799,7 +799,7 @@ bool VideoEncoderH264::waitForEvent(MediaEventType expected)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool VideoEncoderH264::readOutput(proto::video::Packet* packet, bool* is_key_frame_out)
+bool VideoEncoderH264MF::readOutput(proto::video::Packet* packet, bool* is_key_frame_out)
 {
     MFT_OUTPUT_DATA_BUFFER out;
     memset(&out, 0, sizeof(out));

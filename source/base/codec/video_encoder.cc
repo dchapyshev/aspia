@@ -23,7 +23,7 @@
 #include "proto/desktop_video.h"
 
 #if defined(Q_OS_WINDOWS)
-#include "base/codec/video_encoder_h264.h"
+#include "base/codec/video_encoder_h264_mf.h"
 #endif
 
 //--------------------------------------------------------------------------------------------------
@@ -42,7 +42,7 @@ std::unique_ptr<VideoEncoder> VideoEncoder::create(proto::video::Encoding encodi
 
 #if defined(Q_OS_WINDOWS)
         case proto::video::ENCODING_H264:
-            return std::make_unique<VideoEncoderH264>();
+            return std::make_unique<VideoEncoderH264MF>();
 #endif
 
         default:
@@ -63,7 +63,7 @@ bool VideoEncoder::isSupported(proto::video::Encoding encoding)
 
 #if defined(Q_OS_WINDOWS)
         case proto::video::ENCODING_H264:
-            return VideoEncoderH264::isHardwareSupported();
+            return VideoEncoderH264MF::isHardwareSupported();
 #endif
 
         default:

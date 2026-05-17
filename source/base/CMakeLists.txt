@@ -214,10 +214,10 @@ if (WIN32)
         codec/d3d11_video_context.h
         codec/mf_runtime.cc
         codec/mf_runtime.h
-        codec/video_decoder_h264.cc
-        codec/video_decoder_h264.h
-        codec/video_encoder_h264.cc
-        codec/video_encoder_h264.h)
+        codec/video_decoder_h264_mf.cc
+        codec/video_decoder_h264_mf.h
+        codec/video_encoder_h264_mf.cc
+        codec/video_encoder_h264_mf.h)
 endif()
 
 list(APPEND SOURCE_BASE_CODEC_TESTS
