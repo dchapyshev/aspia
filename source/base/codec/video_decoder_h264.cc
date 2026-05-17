@@ -27,6 +27,7 @@
 
 #include <libyuv/convert_argb.h>
 
+#include <comdef.h>
 #include <mferror.h>
 
 #include <algorithm>
@@ -39,12 +40,6 @@ const UINT32 kAssumedFrameRateNum = 1000;
 const UINT32 kAssumedFrameRateDen = 80;
 const LONGLONG kFrameDuration100ns = 800000;
 
-//--------------------------------------------------------------------------------------------------
-QString hrToString(HRESULT hr)
-{
-    return QString("0x") + QString::number(static_cast<quint32>(hr), 16);
-}
-
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -56,10 +51,10 @@ VideoDecoderH264::VideoDecoderH264()
         return;
     }
 
-    HRESULT hr = mf::startup(MF_VERSION, MFSTARTUP_LITE);
-    if (FAILED(hr))
+    _com_error error = mf::startup(MF_VERSION, MFSTARTUP_LITE);
+    if (FAILED(error.Error()))
     {
-        LOG(ERROR) << "MFStartup failed:" << hrToString(hr);
+        LOG(ERROR) << "MFStartup failed:" << error;
         return;
     }
     mf_started_ = true;
@@ -164,16 +159,16 @@ bool VideoDecoderH264::createDecoder(const QSize& size)
     }
     is_hardware_ = false;
 
-    HRESULT hr = decoder_->GetStreamIDs(1, &input_stream_id_, 1, &output_stream_id_);
-    if (hr == E_NOTIMPL)
+    _com_error error = decoder_->GetStreamIDs(1, &input_stream_id_, 1, &output_stream_id_);
+    if (error.Error() == E_NOTIMPL)
     {
         input_stream_id_ = 0;
         output_stream_id_ = 0;
-        hr = S_OK;
+        error = S_OK;
     }
-    if (FAILED(hr))
+    if (FAILED(error.Error()))
     {
-        LOG(ERROR) << "IMFTransform::GetStreamIDs failed:" << hrToString(hr);
+        LOG(ERROR) << "IMFTransform::GetStreamIDs failed:" << error;
         return false;
     }
 
@@ -191,10 +186,10 @@ bool VideoDecoderH264::createDecoder(const QSize& size)
 
     MFT_OUTPUT_STREAM_INFO out_info;
     memset(&out_info, 0, sizeof(out_info));
-    hr = decoder_->GetOutputStreamInfo(output_stream_id_, &out_info);
-    if (FAILED(hr))
+    error = decoder_->GetOutputStreamInfo(output_stream_id_, &out_info);
+    if (FAILED(error.Error()))
     {
-        LOG(ERROR) << "GetOutputStreamInfo failed:" << hrToString(hr);
+        LOG(ERROR) << "GetOutputStreamInfo failed:" << error;
         return false;
     }
     output_provides_samples_ =
@@ -252,21 +247,21 @@ bool VideoDecoderH264::activateMft()
     ScopedCoMem<IMFActivate*> activate_arr;
     UINT32 count = 0;
 
-    HRESULT hr = mf::enumTransforms(
+    _com_error error = mf::enumTransforms(
         MFT_CATEGORY_VIDEO_DECODER, flags, &input_info, nullptr, &activate_arr, &count);
-    if (FAILED(hr) || count == 0)
+    if (FAILED(error.Error()) || count == 0)
         return false;
 
-    hr = activate_arr.get()[0]->ActivateObject(IID_PPV_ARGS(&decoder_));
-    if (SUCCEEDED(hr))
+    error = activate_arr.get()[0]->ActivateObject(IID_PPV_ARGS(&decoder_));
+    if (SUCCEEDED(error.Error()))
         active_mft_ = activate_arr.get()[0];
 
     for (UINT32 i = 0; i < count; ++i)
         activate_arr.get()[i]->Release();
 
-    if (FAILED(hr))
+    if (FAILED(error.Error()))
     {
-        LOG(WARNING) << "IMFActivate::ActivateObject failed:" << hrToString(hr);
+        LOG(WARNING) << "IMFActivate::ActivateObject failed:" << error;
         decoder_.Reset();
         return false;
     }
@@ -283,24 +278,24 @@ bool VideoDecoderH264::setupHardwarePath(const QSize& size)
         return false;
     }
 
-    HRESULT hr = decoder_->GetStreamIDs(1, &input_stream_id_, 1, &output_stream_id_);
-    if (hr == E_NOTIMPL)
+    _com_error error = decoder_->GetStreamIDs(1, &input_stream_id_, 1, &output_stream_id_);
+    if (error.Error() == E_NOTIMPL)
     {
         input_stream_id_ = 0;
         output_stream_id_ = 0;
-        hr = S_OK;
+        error = S_OK;
     }
-    if (FAILED(hr))
+    if (FAILED(error.Error()))
     {
-        LOG(WARNING) << "IMFTransform::GetStreamIDs failed:" << hrToString(hr);
+        LOG(WARNING) << "IMFTransform::GetStreamIDs failed:" << error;
         return false;
     }
 
     ComPtr<IMFAttributes> attrs;
-    hr = decoder_->GetAttributes(&attrs);
-    if (FAILED(hr) || !attrs)
+    error = decoder_->GetAttributes(&attrs);
+    if (FAILED(error.Error()) || !attrs)
     {
-        LOG(WARNING) << "GetAttributes failed:" << hrToString(hr);
+        LOG(WARNING) << "GetAttributes failed:" << error;
         return false;
     }
     attrs->SetUINT32(MF_LOW_LATENCY, TRUE);
@@ -309,24 +304,24 @@ bool VideoDecoderH264::setupHardwarePath(const QSize& size)
     if (SUCCEEDED(attrs->GetUINT32(MF_TRANSFORM_ASYNC, &async_flag)) && async_flag)
     {
         is_async_ = true;
-        hr = attrs->SetUINT32(MF_TRANSFORM_ASYNC_UNLOCK, TRUE);
-        if (FAILED(hr))
+        error = attrs->SetUINT32(MF_TRANSFORM_ASYNC_UNLOCK, TRUE);
+        if (FAILED(error.Error()))
         {
-            LOG(WARNING) << "Failed to unlock async MFT:" << hrToString(hr);
+            LOG(WARNING) << "Failed to unlock async MFT:" << error;
             return false;
         }
-        hr = decoder_.As(&event_gen_);
-        if (FAILED(hr))
+        error = decoder_.As(&event_gen_);
+        if (FAILED(error.Error()))
         {
-            LOG(WARNING) << "MFT does not expose IMFMediaEventGenerator:" << hrToString(hr);
+            LOG(WARNING) << "MFT does not expose IMFMediaEventGenerator:" << error;
             return false;
         }
     }
 
-    hr = decoder_->ProcessMessage(MFT_MESSAGE_SET_D3D_MANAGER, reinterpret_cast<ULONG_PTR>(d3d_->manager()));
-    if (FAILED(hr))
+    error = decoder_->ProcessMessage(MFT_MESSAGE_SET_D3D_MANAGER, reinterpret_cast<ULONG_PTR>(d3d_->manager()));
+    if (FAILED(error.Error()))
     {
-        LOG(WARNING) << "MFT_MESSAGE_SET_D3D_MANAGER failed:" << hrToString(hr);
+        LOG(WARNING) << "MFT_MESSAGE_SET_D3D_MANAGER failed:" << error;
         return false;
     }
 
@@ -340,10 +335,10 @@ bool VideoDecoderH264::setupHardwarePath(const QSize& size)
 
     MFT_OUTPUT_STREAM_INFO out_info;
     memset(&out_info, 0, sizeof(out_info));
-    hr = decoder_->GetOutputStreamInfo(output_stream_id_, &out_info);
-    if (FAILED(hr))
+    error = decoder_->GetOutputStreamInfo(output_stream_id_, &out_info);
+    if (FAILED(error.Error()))
     {
-        LOG(WARNING) << "GetOutputStreamInfo failed:" << hrToString(hr);
+        LOG(WARNING) << "GetOutputStreamInfo failed:" << error;
         return false;
     }
     output_provides_samples_ =
@@ -364,10 +359,10 @@ bool VideoDecoderH264::setupHardwarePath(const QSize& size)
 bool VideoDecoderH264::configureMediaTypes(const QSize& size)
 {
     ComPtr<IMFMediaType> input_type;
-    HRESULT hr = mf::createMediaType(&input_type);
-    if (FAILED(hr))
+    _com_error error = mf::createMediaType(&input_type);
+    if (FAILED(error.Error()))
     {
-        LOG(ERROR) << "MFCreateMediaType (input) failed:" << hrToString(hr);
+        LOG(ERROR) << "MFCreateMediaType (input) failed:" << error;
         return false;
     }
 
@@ -379,10 +374,10 @@ bool VideoDecoderH264::configureMediaTypes(const QSize& size)
     MFSetAttributeRatio(input_type.Get(), MF_MT_FRAME_RATE, kAssumedFrameRateNum, kAssumedFrameRateDen);
     MFSetAttributeRatio(input_type.Get(), MF_MT_PIXEL_ASPECT_RATIO, 1, 1);
 
-    hr = decoder_->SetInputType(input_stream_id_, input_type.Get(), 0);
-    if (FAILED(hr))
+    error = decoder_->SetInputType(input_stream_id_, input_type.Get(), 0);
+    if (FAILED(error.Error()))
     {
-        LOG(ERROR) << "SetInputType failed:" << hrToString(hr);
+        LOG(ERROR) << "SetInputType failed:" << error;
         return false;
     }
 
@@ -396,12 +391,12 @@ bool VideoDecoderH264::selectOutputType()
     while (true)
     {
         ComPtr<IMFMediaType> candidate;
-        HRESULT hr = decoder_->GetOutputAvailableType(output_stream_id_, index, &candidate);
-        if (hr == MF_E_NO_MORE_TYPES)
+        _com_error error = decoder_->GetOutputAvailableType(output_stream_id_, index, &candidate);
+        if (error.Error() == MF_E_NO_MORE_TYPES)
             break;
-        if (FAILED(hr))
+        if (FAILED(error.Error()))
         {
-            LOG(ERROR) << "GetOutputAvailableType failed:" << hrToString(hr);
+            LOG(ERROR) << "GetOutputAvailableType failed:" << error;
             return false;
         }
         ++index;
@@ -411,10 +406,10 @@ bool VideoDecoderH264::selectOutputType()
         if (subtype != MFVideoFormat_NV12)
             continue;
 
-        hr = decoder_->SetOutputType(output_stream_id_, candidate.Get(), 0);
-        if (FAILED(hr))
+        error = decoder_->SetOutputType(output_stream_id_, candidate.Get(), 0);
+        if (FAILED(error.Error()))
         {
-            LOG(ERROR) << "SetOutputType failed:" << hrToString(hr);
+            LOG(ERROR) << "SetOutputType failed:" << error;
             return false;
         }
         return true;
@@ -450,10 +445,10 @@ void VideoDecoderH264::endStreaming()
 bool VideoDecoderH264::refreshOutputDimensions()
 {
     ComPtr<IMFMediaType> out_type;
-    HRESULT hr = decoder_->GetOutputCurrentType(output_stream_id_, &out_type);
-    if (FAILED(hr))
+    _com_error error = decoder_->GetOutputCurrentType(output_stream_id_, &out_type);
+    if (FAILED(error.Error()))
     {
-        LOG(ERROR) << "GetOutputCurrentType failed:" << hrToString(hr);
+        LOG(ERROR) << "GetOutputCurrentType failed:" << error;
         return false;
     }
 
@@ -496,17 +491,17 @@ bool VideoDecoderH264::allocateGpuResources(const QSize& size)
     content_desc.OutputHeight = static_cast<UINT>(size.height());
     content_desc.Usage = D3D11_VIDEO_USAGE_PLAYBACK_NORMAL;
 
-    HRESULT hr = d3d_->videoDevice()->CreateVideoProcessorEnumerator(&content_desc, &vp_enumerator_);
-    if (FAILED(hr))
+    _com_error error = d3d_->videoDevice()->CreateVideoProcessorEnumerator(&content_desc, &vp_enumerator_);
+    if (FAILED(error.Error()))
     {
-        LOG(ERROR) << "CreateVideoProcessorEnumerator failed:" << hrToString(hr);
+        LOG(ERROR) << "CreateVideoProcessorEnumerator failed:" << error;
         return false;
     }
 
-    hr = d3d_->videoDevice()->CreateVideoProcessor(vp_enumerator_.Get(), 0, &vp_processor_);
-    if (FAILED(hr))
+    error = d3d_->videoDevice()->CreateVideoProcessor(vp_enumerator_.Get(), 0, &vp_processor_);
+    if (FAILED(error.Error()))
     {
-        LOG(ERROR) << "CreateVideoProcessor failed:" << hrToString(hr);
+        LOG(ERROR) << "CreateVideoProcessor failed:" << error;
         return false;
     }
 
@@ -515,11 +510,11 @@ bool VideoDecoderH264::allocateGpuResources(const QSize& size)
     ov_desc.ViewDimension = D3D11_VPOV_DIMENSION_TEXTURE2D;
     ov_desc.Texture2D.MipSlice = 0;
 
-    hr = d3d_->videoDevice()->CreateVideoProcessorOutputView(
+    error = d3d_->videoDevice()->CreateVideoProcessorOutputView(
         argb_target_.Get(), vp_enumerator_.Get(), &ov_desc, &vp_output_view_);
-    if (FAILED(hr))
+    if (FAILED(error.Error()))
     {
-        LOG(ERROR) << "CreateVideoProcessorOutputView failed:" << hrToString(hr);
+        LOG(ERROR) << "CreateVideoProcessorOutputView failed:" << error;
         return false;
     }
 
@@ -537,10 +532,10 @@ bool VideoDecoderH264::waitForEvent(MediaEventType expected)
     while (true)
     {
         ComPtr<IMFMediaEvent> event;
-        HRESULT hr = event_gen_->GetEvent(0, &event);
-        if (FAILED(hr))
+        _com_error error = event_gen_->GetEvent(0, &event);
+        if (FAILED(error.Error()))
         {
-            LOG(ERROR) << "IMFMediaEventGenerator::GetEvent failed:" << hrToString(hr);
+            LOG(ERROR) << "IMFMediaEventGenerator::GetEvent failed:" << error;
             return false;
         }
 
@@ -564,18 +559,18 @@ bool VideoDecoderH264::feedInput(const std::string& data, quint64 sample_time_10
     const DWORD data_size = static_cast<DWORD>(data.size());
 
     ComPtr<IMFMediaBuffer> buffer;
-    HRESULT hr = mf::createAlignedMemoryBuffer(data_size, MF_16_BYTE_ALIGNMENT, &buffer);
-    if (FAILED(hr))
+    _com_error error = mf::createAlignedMemoryBuffer(data_size, MF_16_BYTE_ALIGNMENT, &buffer);
+    if (FAILED(error.Error()))
     {
-        LOG(ERROR) << "MFCreateAlignedMemoryBuffer failed:" << hrToString(hr);
+        LOG(ERROR) << "MFCreateAlignedMemoryBuffer failed:" << error;
         return false;
     }
 
     BYTE* dst = nullptr;
-    hr = buffer->Lock(&dst, nullptr, nullptr);
-    if (FAILED(hr))
+    error = buffer->Lock(&dst, nullptr, nullptr);
+    if (FAILED(error.Error()))
     {
-        LOG(ERROR) << "IMFMediaBuffer::Lock failed:" << hrToString(hr);
+        LOG(ERROR) << "IMFMediaBuffer::Lock failed:" << error;
         return false;
     }
     memcpy(dst, data.data(), data_size);
@@ -583,20 +578,20 @@ bool VideoDecoderH264::feedInput(const std::string& data, quint64 sample_time_10
     buffer->SetCurrentLength(data_size);
 
     ComPtr<IMFSample> sample;
-    hr = mf::createSample(&sample);
-    if (FAILED(hr))
+    error = mf::createSample(&sample);
+    if (FAILED(error.Error()))
     {
-        LOG(ERROR) << "MFCreateSample failed:" << hrToString(hr);
+        LOG(ERROR) << "MFCreateSample failed:" << error;
         return false;
     }
     sample->AddBuffer(buffer.Get());
     sample->SetSampleTime(static_cast<LONGLONG>(sample_time_100ns));
     sample->SetSampleDuration(kFrameDuration100ns);
 
-    hr = decoder_->ProcessInput(input_stream_id_, sample.Get(), 0);
-    if (FAILED(hr))
+    error = decoder_->ProcessInput(input_stream_id_, sample.Get(), 0);
+    if (FAILED(error.Error()))
     {
-        LOG(ERROR) << "IMFTransform::ProcessInput failed:" << hrToString(hr);
+        LOG(ERROR) << "IMFTransform::ProcessInput failed:" << error;
         return false;
     }
     return true;
@@ -615,17 +610,17 @@ bool VideoDecoderH264::readOutput(ComPtr<IMFSample>* out_sample)
     ComPtr<IMFMediaBuffer> allocated_buffer;
     if (!output_provides_samples_)
     {
-        HRESULT hr = mf::createSample(&allocated_sample);
-        if (FAILED(hr))
+        _com_error error = mf::createSample(&allocated_sample);
+        if (FAILED(error.Error()))
         {
-            LOG(ERROR) << "MFCreateSample (output) failed:" << hrToString(hr);
+            LOG(ERROR) << "MFCreateSample (output) failed:" << error;
             return false;
         }
-        hr = mf::createAlignedMemoryBuffer(
+        error = mf::createAlignedMemoryBuffer(
             std::max<DWORD>(output_sample_size_, 1u), MF_16_BYTE_ALIGNMENT, &allocated_buffer);
-        if (FAILED(hr))
+        if (FAILED(error.Error()))
         {
-            LOG(ERROR) << "MFCreateAlignedMemoryBuffer (output) failed:" << hrToString(hr);
+            LOG(ERROR) << "MFCreateAlignedMemoryBuffer (output) failed:" << error;
             return false;
         }
         allocated_sample->AddBuffer(allocated_buffer.Get());
@@ -633,9 +628,9 @@ bool VideoDecoderH264::readOutput(ComPtr<IMFSample>* out_sample)
     }
 
     DWORD status = 0;
-    HRESULT hr = decoder_->ProcessOutput(0, 1, &out, &status);
+    _com_error error = decoder_->ProcessOutput(0, 1, &out, &status);
 
-    // Take ownership of refs the MFT may have written into the struct, regardless of hr.
+    // Take ownership of refs the MFT may have written into the struct, regardless of error.
     ComPtr<IMFCollection> events;
     events.Attach(out.pEvents);
     out.pEvents = nullptr;
@@ -651,17 +646,17 @@ bool VideoDecoderH264::readOutput(ComPtr<IMFSample>* out_sample)
         sample = allocated_sample;
     }
 
-    if (hr == MF_E_TRANSFORM_STREAM_CHANGE)
+    if (error.Error() == MF_E_TRANSFORM_STREAM_CHANGE)
     {
         if (!selectOutputType() || !refreshOutputDimensions())
             return false;
         return readOutput(out_sample);
     }
 
-    if (FAILED(hr))
+    if (FAILED(error.Error()))
     {
-        if (hr != MF_E_TRANSFORM_NEED_MORE_INPUT)
-            LOG(ERROR) << "IMFTransform::ProcessOutput failed:" << hrToString(hr);
+        if (error.Error() != MF_E_TRANSFORM_NEED_MORE_INPUT)
+            LOG(ERROR) << "IMFTransform::ProcessOutput failed:" << error;
         return false;
     }
 
@@ -680,26 +675,26 @@ bool VideoDecoderH264::copyHardwareSampleToFrame(
     IMFSample* sample, const proto::video::Packet& packet, Frame* frame)
 {
     ComPtr<IMFMediaBuffer> buffer;
-    HRESULT hr = sample->GetBufferByIndex(0, &buffer);
-    if (FAILED(hr))
+    _com_error error = sample->GetBufferByIndex(0, &buffer);
+    if (FAILED(error.Error()))
     {
-        LOG(ERROR) << "IMFSample::GetBufferByIndex failed:" << hrToString(hr);
+        LOG(ERROR) << "IMFSample::GetBufferByIndex failed:" << error;
         return false;
     }
 
     ComPtr<IMFDXGIBuffer> dxgi_buffer;
-    hr = buffer.As(&dxgi_buffer);
-    if (FAILED(hr))
+    error = buffer.As(&dxgi_buffer);
+    if (FAILED(error.Error()))
     {
-        LOG(ERROR) << "Sample buffer is not DXGI-backed:" << hrToString(hr);
+        LOG(ERROR) << "Sample buffer is not DXGI-backed:" << error;
         return false;
     }
 
     ComPtr<ID3D11Texture2D> nv12_texture;
-    hr = dxgi_buffer->GetResource(IID_PPV_ARGS(&nv12_texture));
-    if (FAILED(hr))
+    error = dxgi_buffer->GetResource(IID_PPV_ARGS(&nv12_texture));
+    if (FAILED(error.Error()))
     {
-        LOG(ERROR) << "IMFDXGIBuffer::GetResource failed:" << hrToString(hr);
+        LOG(ERROR) << "IMFDXGIBuffer::GetResource failed:" << error;
         return false;
     }
 
@@ -714,11 +709,11 @@ bool VideoDecoderH264::copyHardwareSampleToFrame(
     iv_desc.Texture2D.ArraySlice = subresource;
 
     ComPtr<ID3D11VideoProcessorInputView> input_view;
-    hr = d3d_->videoDevice()->CreateVideoProcessorInputView(
+    error = d3d_->videoDevice()->CreateVideoProcessorInputView(
         nv12_texture.Get(), vp_enumerator_.Get(), &iv_desc, &input_view);
-    if (FAILED(hr))
+    if (FAILED(error.Error()))
     {
-        LOG(ERROR) << "CreateVideoProcessorInputView failed:" << hrToString(hr);
+        LOG(ERROR) << "CreateVideoProcessorInputView failed:" << error;
         return false;
     }
 
@@ -729,20 +724,20 @@ bool VideoDecoderH264::copyHardwareSampleToFrame(
     stream.InputFrameOrField = 0;
     stream.pInputSurface = input_view.Get();
 
-    hr = d3d_->videoContext()->VideoProcessorBlt(vp_processor_.Get(), vp_output_view_.Get(), 0, 1, &stream);
-    if (FAILED(hr))
+    error = d3d_->videoContext()->VideoProcessorBlt(vp_processor_.Get(), vp_output_view_.Get(), 0, 1, &stream);
+    if (FAILED(error.Error()))
     {
-        LOG(ERROR) << "VideoProcessorBlt failed:" << hrToString(hr);
+        LOG(ERROR) << "VideoProcessorBlt failed:" << error;
         return false;
     }
 
     d3d_->deviceContext()->CopyResource(argb_staging_.Get(), argb_target_.Get());
 
     D3D11_MAPPED_SUBRESOURCE mapped;
-    hr = d3d_->deviceContext()->Map(argb_staging_.Get(), 0, D3D11_MAP_READ, 0, &mapped);
-    if (FAILED(hr))
+    error = d3d_->deviceContext()->Map(argb_staging_.Get(), 0, D3D11_MAP_READ, 0, &mapped);
+    if (FAILED(error.Error()))
     {
-        LOG(ERROR) << "Map argb_staging_ failed:" << hrToString(hr);
+        LOG(ERROR) << "Map argb_staging_ failed:" << error;
         return false;
     }
 
@@ -778,10 +773,10 @@ bool VideoDecoderH264::copySoftwareSampleToFrame(
     IMFSample* sample, const proto::video::Packet& packet, Frame* frame)
 {
     ComPtr<IMFMediaBuffer> buffer;
-    HRESULT hr = sample->ConvertToContiguousBuffer(&buffer);
-    if (FAILED(hr))
+    _com_error error = sample->ConvertToContiguousBuffer(&buffer);
+    if (FAILED(error.Error()))
     {
-        LOG(ERROR) << "ConvertToContiguousBuffer failed:" << hrToString(hr);
+        LOG(ERROR) << "ConvertToContiguousBuffer failed:" << error;
         return false;
     }
 
@@ -790,20 +785,20 @@ bool VideoDecoderH264::copySoftwareSampleToFrame(
     ComPtr<IMF2DBuffer> buffer_2d;
     if (SUCCEEDED(buffer.As(&buffer_2d)))
     {
-        hr = buffer_2d->Lock2D(&base, &pitch);
-        if (FAILED(hr))
+        error = buffer_2d->Lock2D(&base, &pitch);
+        if (FAILED(error.Error()))
         {
-            LOG(ERROR) << "IMF2DBuffer::Lock2D failed:" << hrToString(hr);
+            LOG(ERROR) << "IMF2DBuffer::Lock2D failed:" << error;
             return false;
         }
     }
     else
     {
         DWORD current_length = 0;
-        hr = buffer->Lock(&base, nullptr, &current_length);
-        if (FAILED(hr))
+        error = buffer->Lock(&base, nullptr, &current_length);
+        if (FAILED(error.Error()))
         {
-            LOG(ERROR) << "IMFMediaBuffer::Lock failed:" << hrToString(hr);
+            LOG(ERROR) << "IMFMediaBuffer::Lock failed:" << error;
             return false;
         }
         pitch = output_stride_ > 0 ? output_stride_ : output_width_;

@@ -18,22 +18,12 @@
 
 #include "base/codec/d3d11_video_context.h"
 
-#include <QString>
-
 #include "base/logging.h"
 #include "base/codec/mf_runtime.h"
 
+#include <comdef.h>
+
 using Microsoft::WRL::ComPtr;
-
-namespace {
-
-//--------------------------------------------------------------------------------------------------
-QString hrToString(HRESULT hr)
-{
-    return QString("0x") + QString::number(static_cast<quint32>(hr), 16);
-}
-
-} // namespace
 
 //--------------------------------------------------------------------------------------------------
 // static
@@ -61,12 +51,12 @@ bool D3D11VideoContext::initialize()
 
     D3D_FEATURE_LEVEL feature_level = D3D_FEATURE_LEVEL_11_0;
 
-    HRESULT hr = mf::d3d11CreateDevice(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr,
+    _com_error error = mf::d3d11CreateDevice(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr,
         D3D11_CREATE_DEVICE_VIDEO_SUPPORT | D3D11_CREATE_DEVICE_BGRA_SUPPORT, feature_levels,
         ARRAYSIZE(feature_levels), D3D11_SDK_VERSION, &device_, &feature_level, &device_context_);
-    if (FAILED(hr))
+    if (FAILED(error.Error()))
     {
-        LOG(ERROR) << "D3D11CreateDevice failed:" << hrToString(hr);
+        LOG(ERROR) << "D3D11CreateDevice failed:" << error;
         return false;
     }
 
@@ -75,31 +65,31 @@ bool D3D11VideoContext::initialize()
     if (SUCCEEDED(device_.As(&multithread)))
         multithread->SetMultithreadProtected(TRUE);
 
-    hr = device_.As(&video_device_);
-    if (FAILED(hr))
+    error = device_.As(&video_device_);
+    if (FAILED(error.Error()))
     {
-        LOG(ERROR) << "QI ID3D11VideoDevice failed:" << hrToString(hr);
+        LOG(ERROR) << "QI ID3D11VideoDevice failed:" << error;
         return false;
     }
 
-    hr = device_context_.As(&video_context_);
-    if (FAILED(hr))
+    error = device_context_.As(&video_context_);
+    if (FAILED(error.Error()))
     {
-        LOG(ERROR) << "QI ID3D11VideoContext failed:" << hrToString(hr);
+        LOG(ERROR) << "QI ID3D11VideoContext failed:" << error;
         return false;
     }
 
-    hr = mf::createDxgiDeviceManager(&reset_token_, &manager_);
-    if (FAILED(hr))
+    error = mf::createDxgiDeviceManager(&reset_token_, &manager_);
+    if (FAILED(error.Error()))
     {
-        LOG(ERROR) << "MFCreateDXGIDeviceManager failed:" << hrToString(hr);
+        LOG(ERROR) << "MFCreateDXGIDeviceManager failed:" << error;
         return false;
     }
 
-    hr = manager_->ResetDevice(device_.Get(), reset_token_);
-    if (FAILED(hr))
+    error = manager_->ResetDevice(device_.Get(), reset_token_);
+    if (FAILED(error.Error()))
     {
-        LOG(ERROR) << "IMFDXGIDeviceManager::ResetDevice failed:" << hrToString(hr);
+        LOG(ERROR) << "IMFDXGIDeviceManager::ResetDevice failed:" << error;
         return false;
     }
 
@@ -122,10 +112,10 @@ ComPtr<ID3D11Texture2D> D3D11VideoContext::createDynamicArgbTexture(int width, i
     desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 
     ComPtr<ID3D11Texture2D> texture;
-    HRESULT hr = device_->CreateTexture2D(&desc, nullptr, &texture);
-    if (FAILED(hr))
+    _com_error error = device_->CreateTexture2D(&desc, nullptr, &texture);
+    if (FAILED(error.Error()))
     {
-        LOG(ERROR) << "CreateTexture2D (dynamic ARGB) failed:" << hrToString(hr);
+        LOG(ERROR) << "CreateTexture2D (dynamic ARGB) failed:" << error;
         return nullptr;
     }
     return texture;
@@ -146,10 +136,10 @@ ComPtr<ID3D11Texture2D> D3D11VideoContext::createDefaultArgbTexture(int width, i
     desc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
 
     ComPtr<ID3D11Texture2D> texture;
-    HRESULT hr = device_->CreateTexture2D(&desc, nullptr, &texture);
-    if (FAILED(hr))
+    _com_error error = device_->CreateTexture2D(&desc, nullptr, &texture);
+    if (FAILED(error.Error()))
     {
-        LOG(ERROR) << "CreateTexture2D (default ARGB) failed:" << hrToString(hr);
+        LOG(ERROR) << "CreateTexture2D (default ARGB) failed:" << error;
         return nullptr;
     }
     return texture;
@@ -170,10 +160,10 @@ ComPtr<ID3D11Texture2D> D3D11VideoContext::createStagingArgbTexture(int width, i
     desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
 
     ComPtr<ID3D11Texture2D> texture;
-    HRESULT hr = device_->CreateTexture2D(&desc, nullptr, &texture);
-    if (FAILED(hr))
+    _com_error error = device_->CreateTexture2D(&desc, nullptr, &texture);
+    if (FAILED(error.Error()))
     {
-        LOG(ERROR) << "CreateTexture2D (staging ARGB) failed:" << hrToString(hr);
+        LOG(ERROR) << "CreateTexture2D (staging ARGB) failed:" << error;
         return nullptr;
     }
     return texture;
@@ -194,10 +184,10 @@ ComPtr<ID3D11Texture2D> D3D11VideoContext::createNv12Texture(int width, int heig
     desc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
 
     ComPtr<ID3D11Texture2D> texture;
-    HRESULT hr = device_->CreateTexture2D(&desc, nullptr, &texture);
-    if (FAILED(hr))
+    _com_error error = device_->CreateTexture2D(&desc, nullptr, &texture);
+    if (FAILED(error.Error()))
     {
-        LOG(ERROR) << "CreateTexture2D (NV12) failed:" << hrToString(hr);
+        LOG(ERROR) << "CreateTexture2D (NV12) failed:" << error;
         return nullptr;
     }
     return texture;
