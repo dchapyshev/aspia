@@ -20,6 +20,7 @@
 #define BASE_CODEC_VIDEO_DECODER_H264_H
 
 #include "base/codec/d3d11_video_context.h"
+#include "base/codec/video_decoder.h"
 
 #include <QSize>
 
@@ -31,25 +32,19 @@
 
 #include <memory>
 
-namespace proto::video {
-enum Encoding : int;
-class Packet;
-} // namespace proto::video
-
-class Frame;
-
 // Hardware-first H.264 decoder built on Media Foundation. Falls back to the
 // in-box Microsoft H.264 Decoder MFT (software, synchronous) when no hardware
 // decoder is available. The HW path runs zero-copy through D3D11: decoder
 // produces NV12 textures, ID3D11VideoProcessor converts to ARGB on the GPU,
 // readback through a staging texture lands the pixels in Frame.
-class VideoDecoderH264 final
+class VideoDecoderH264 final : public VideoDecoder
 {
 public:
-    explicit VideoDecoderH264(proto::video::Encoding encoding);
-    ~VideoDecoderH264();
+    VideoDecoderH264();
+    ~VideoDecoderH264() final;
 
-    bool decode(const proto::video::Packet& packet, Frame* frame);
+    // VideoDecoder implementation.
+    bool decode(const proto::video::Packet& packet, Frame* frame) final;
 
 private:
     bool createDecoder(const QSize& size);
@@ -71,7 +66,6 @@ private:
     bool copySoftwareSampleToFrame(
         IMFSample* sample, const proto::video::Packet& packet, Frame* frame);
 
-    const proto::video::Encoding encoding_;
     bool mf_started_ = false;
     bool is_hardware_ = false;
     bool is_async_ = false;

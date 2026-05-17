@@ -47,8 +47,7 @@ QString hrToString(HRESULT hr)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-VideoDecoderH264::VideoDecoderH264(proto::video::Encoding encoding)
-    : encoding_(encoding)
+VideoDecoderH264::VideoDecoderH264()
 {
     if (!mf::isRuntimeAvailable())
     {

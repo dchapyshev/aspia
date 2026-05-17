@@ -18,144 +18,31 @@
 
 #include "base/codec/video_decoder.h"
 
-#include <QThread>
-
 #include "base/logging.h"
-#include "base/serialization.h"
-#include "base/desktop/frame.h"
+#include "base/codec/video_decoder_vpx.h"
 #include "proto/desktop_video.h"
 
-#include <libyuv/convert_from.h>
-#include <libyuv/convert_argb.h>
-
-#define VPX_CODEC_DISABLE_COMPAT 1
-#include <vpx/vpx_decoder.h>
-#include <vpx/vp8dx.h>
-
-namespace {
+#if defined(Q_OS_WINDOWS)
+#include "base/codec/video_decoder_h264.h"
+#endif
 
 //--------------------------------------------------------------------------------------------------
-bool convertImage(const proto::video::Packet& packet, vpx_image_t* image, Frame* frame)
+// static
+std::unique_ptr<VideoDecoder> VideoDecoder::create(proto::video::Encoding encoding)
 {
-    if (image->fmt != VPX_IMG_FMT_I420)
-        return false;
-
-    QRect frame_rect = QRect(QPoint(0, 0), frame->size());
-
-    quint8* y_data = image->planes[0];
-    quint8* u_data = image->planes[1];
-    quint8* v_data = image->planes[2];
-
-    int y_stride = image->stride[0];
-    int uv_stride = image->stride[1];
-
-    for (int i = 0; i < packet.dirty_rect_size(); ++i)
-    {
-        QRect rect = parse(packet.dirty_rect(i));
-        if (!frame_rect.contains(rect))
-        {
-            LOG(ERROR) << "The rectangle is outside the screen area";
-            return false;
-        }
-
-        int y_offset = y_stride * rect.y() + rect.x();
-        int uv_offset = uv_stride * rect.y() / 2 + rect.x() / 2;
-
-        libyuv::I420ToARGB(y_data + y_offset, y_stride,
-                           u_data + uv_offset, uv_stride,
-                           v_data + uv_offset, uv_stride,
-                           frame->frameDataAtPos(rect.topLeft()),
-                           frame->stride(),
-                           rect.width(),
-                           rect.height());
-    }
-
-    return true;
-}
-
-} // namespace
-
-//--------------------------------------------------------------------------------------------------
-VideoDecoder::VideoDecoder(proto::video::Encoding encoding)
-{
-    const int cpu_count = std::max(1, QThread::idealThreadCount());
-    quint32 thread_count;
-    vpx_codec_iface_t* algo;
-
     switch (encoding)
     {
         case proto::video::ENCODING_VP8:
-            // VP8 does not support tile-based decoding, multithreading is only used for loop
-            // filter, so more than 2 threads provide no benefit.
-            thread_count = (cpu_count >= 4) ? 2 : 1;
-            algo = vpx_codec_vp8_dx();
-            break;
-
         case proto::video::ENCODING_VP9:
-            // VP9 supports tile-based parallel decoding. Use half of the available cores,
-            // clamped to [2, 8] range to balance performance and CPU usage.
-            thread_count = std::clamp(cpu_count / 2, 2, 8);
-            algo = vpx_codec_vp9_dx();
-            break;
+            return std::make_unique<VideoDecoderVpx>(encoding);
+
+#if defined(Q_OS_WINDOWS)
+        case proto::video::ENCODING_H264:
+            return std::make_unique<VideoDecoderH264>();
+#endif
 
         default:
-            LOG(FATAL) << "Unsupported video encoding:" << encoding;
-            return;
+            LOG(ERROR) << "Unsupported video encoding:" << encoding;
+            return nullptr;
     }
-
-    LOG(INFO) << "VPX(" << encoding << ") Ctor (thread_count=" << thread_count << ")";
-    codec_.reset(new vpx_codec_ctx_t());
-
-    vpx_codec_dec_cfg_t config;
-    config.w = 0;
-    config.h = 0;
-    config.threads = thread_count;
-
-    int ret = vpx_codec_dec_init(codec_.get(), algo, &config, 0);
-    CHECK_EQ(ret, VPX_CODEC_OK);
-}
-
-//--------------------------------------------------------------------------------------------------
-VideoDecoder::~VideoDecoder()
-{
-    LOG(INFO) << "Dtor";
-}
-
-//--------------------------------------------------------------------------------------------------
-bool VideoDecoder::decode(const proto::video::Packet& packet, Frame* frame)
-{
-    // Do the actual decoding.
-    vpx_codec_err_t ret =
-        vpx_codec_decode(codec_.get(),
-                         reinterpret_cast<const quint8*>(packet.data().data()),
-                         static_cast<unsigned int>(packet.data().size()),
-                         nullptr,
-                         0);
-    if (ret != VPX_CODEC_OK)
-    {
-        const char* error = vpx_codec_error(codec_.get());
-        const char* error_detail = vpx_codec_error_detail(codec_.get());
-
-        LOG(ERROR) << "Decoding failed:" << (error ? error : "(NULL)") << "\n"
-                   << "Details:" << (error_detail ? error_detail : "(NULL)");
-        return false;
-    }
-
-    vpx_codec_iter_t iter = nullptr;
-
-    // Gets the decoded data.
-    vpx_image_t* image = vpx_codec_get_frame(codec_.get(), &iter);
-    if (!image)
-    {
-        LOG(ERROR) << "No video frame decoded";
-        return false;
-    }
-
-    if (QSize(static_cast<int>(image->d_w), static_cast<int>(image->d_h)) != frame->size())
-    {
-        LOG(ERROR) << "Size of the encoded frame doesn't match size in the header";
-        return false;
-    }
-
-    return convertImage(packet, image, frame);
 }

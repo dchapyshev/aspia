@@ -19,14 +19,10 @@
 #ifndef BASE_CODEC_VIDEO_ENCODER_H
 #define BASE_CODEC_VIDEO_ENCODER_H
 
-#include <QByteArray>
-#include <QSize>
+#include <QtTypes>
 
-#include "base/codec/scoped_vpx_codec.h"
-
-#define VPX_CODEC_DISABLE_COMPAT 1
-#include <vpx/vpx_encoder.h>
-#include <vpx/vp8cx.h>
+#include <memory>
+#include <string>
 
 namespace proto::video {
 enum Encoding : int;
@@ -38,12 +34,13 @@ class Frame;
 class VideoEncoder
 {
 public:
-    explicit VideoEncoder(proto::video::Encoding encoding);
-    ~VideoEncoder() = default;
+    static std::unique_ptr<VideoEncoder> create(proto::video::Encoding encoding);
+
+    virtual ~VideoEncoder() = default;
 
     static const size_t kInitialEncodeBufferSize;
 
-    bool encode(const Frame* frame, proto::video::Packet* packet);
+    virtual bool encode(const Frame* frame, proto::video::Packet* packet) = 0;
 
     proto::video::Encoding encoding() const { return encoding_; }
 
@@ -52,34 +49,25 @@ public:
     void setEncodeBuffer(std::string&& buffer) { encode_buffer_ = std::move(buffer); }
 
     bool setMinQuantizer(quint32 min_quantizer);
-    quint32 minQuantizer() const;
+    quint32 minQuantizer() const { return min_quantizer_; }
     bool setMaxQuantizer(quint32 max_quantizer);
-    quint32 maxQuantizer() const;
+    quint32 maxQuantizer() const { return max_quantizer_; }
 
-private:
-    void createActiveMap(const QSize& size);
-    bool createVp8Codec(const QSize& size);
-    bool createVp9Codec(const QSize& size);
-    void prepareImageAndActiveMap(
-        bool is_key_frame, const Frame* frame, proto::video::Packet* packet);
-    void addRectToActiveMap(const QRect& rect);
-    void clearActiveMap();
+protected:
+    explicit VideoEncoder(proto::video::Encoding encoding);
+
+    // Applies the current min/max quantizer to a live codec instance. Returns true also when
+    // there is no active codec yet - the new value is read on next codec (re)creation.
+    virtual bool applyMinQuantizer() = 0;
+    virtual bool applyMaxQuantizer() = 0;
 
     const proto::video::Encoding encoding_;
-    QSize last_size_;
     bool key_frame_required_ = false;
     std::string encode_buffer_;
+    quint32 min_quantizer_ = 10;
+    quint32 max_quantizer_ = 30;
 
-    vpx_codec_enc_cfg_t config_;
-    ScopedVpxCodec codec_;
-
-    QByteArray active_map_buffer_;
-    vpx_active_map_t active_map_;
-
-    // VPX image and buffer to hold the actual YUV planes.
-    std::unique_ptr<vpx_image_t> image_;
-    QByteArray image_buffer_;
-
+private:
     Q_DISABLE_COPY_MOVE(VideoEncoder)
 };
 

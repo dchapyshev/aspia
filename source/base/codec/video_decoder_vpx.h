@@ -16,34 +16,25 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef BASE_CODEC_VIDEO_DECODER_H
-#define BASE_CODEC_VIDEO_DECODER_H
+#ifndef BASE_CODEC_VIDEO_DECODER_VPX_H
+#define BASE_CODEC_VIDEO_DECODER_VPX_H
 
-#include <QtTypes>
+#include "base/codec/scoped_vpx_codec.h"
+#include "base/codec/video_decoder.h"
 
-#include <memory>
-
-namespace proto::video {
-enum Encoding : int;
-class Packet;
-} // namespace proto::video
-
-class Frame;
-
-class VideoDecoder
+class VideoDecoderVpx final : public VideoDecoder
 {
 public:
-    static std::unique_ptr<VideoDecoder> create(proto::video::Encoding encoding);
+    explicit VideoDecoderVpx(proto::video::Encoding encoding);
+    ~VideoDecoderVpx() final;
 
-    virtual ~VideoDecoder() = default;
-
-    virtual bool decode(const proto::video::Packet& packet, Frame* frame) = 0;
-
-protected:
-    VideoDecoder() = default;
+    // VideoDecoder implementation.
+    bool decode(const proto::video::Packet& packet, Frame* frame) final;
 
 private:
-    Q_DISABLE_COPY_MOVE(VideoDecoder)
+    ScopedVpxCodec codec_;
+
+    Q_DISABLE_COPY_MOVE(VideoDecoderVpx)
 };
 
-#endif // BASE_CODEC_VIDEO_DECODER_H
+#endif // BASE_CODEC_VIDEO_DECODER_VPX_H

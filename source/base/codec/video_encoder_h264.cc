@@ -99,13 +99,12 @@ QRect alignRect(const QRect& rect)
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
-// static
-const size_t VideoEncoderH264::kInitialEncodeBufferSize = 1 * 1024 * 1024;
-
-//--------------------------------------------------------------------------------------------------
 VideoEncoderH264::VideoEncoderH264()
+    : VideoEncoder(proto::video::ENCODING_H264)
 {
-    encode_buffer_.reserve(kInitialEncodeBufferSize);
+    // H264 produces sharper output at higher QP than VP at the same number; tune defaults.
+    min_quantizer_ = 18;
+    max_quantizer_ = 40;
 
     if (!mf::isRuntimeAvailable())
     {
@@ -225,44 +224,6 @@ bool VideoEncoderH264::encode(const Frame* frame, proto::video::Packet* packet)
     ++frame_counter_;
     setKeyFrameRequired(false);
     return true;
-}
-
-//--------------------------------------------------------------------------------------------------
-bool VideoEncoderH264::setMinQuantizer(quint32 min_quantizer)
-{
-    if (min_quantizer < 10 || min_quantizer > 50)
-    {
-        LOG(ERROR) << "Invalid quantizer value:" << min_quantizer;
-        return false;
-    }
-
-    if (min_quantizer_ == min_quantizer)
-    {
-        LOG(INFO) << "Quantizer value not changed";
-        return true;
-    }
-
-    min_quantizer_ = min_quantizer;
-    return applyMinQuantizer();
-}
-
-//--------------------------------------------------------------------------------------------------
-bool VideoEncoderH264::setMaxQuantizer(quint32 max_quantizer)
-{
-    if (max_quantizer < 10 || max_quantizer > 60)
-    {
-        LOG(ERROR) << "Invalid quantizer value:" << max_quantizer;
-        return false;
-    }
-
-    if (max_quantizer_ == max_quantizer)
-    {
-        LOG(INFO) << "Quantizer value not changed";
-        return true;
-    }
-
-    max_quantizer_ = max_quantizer;
-    return applyMaxQuantizer();
 }
 
 //--------------------------------------------------------------------------------------------------

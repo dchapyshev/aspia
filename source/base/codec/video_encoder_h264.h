@@ -20,6 +20,7 @@
 #define BASE_CODEC_VIDEO_ENCODER_H264_H
 
 #include "base/codec/d3d11_video_context.h"
+#include "base/codec/video_encoder.h"
 
 #include <QSize>
 
@@ -33,36 +34,23 @@
 
 #include <memory>
 
-namespace proto::video {
-enum Encoding : int;
-class Packet;
-} // namespace proto::video
-
-class Frame;
-
 // Hardware H.264 encoder built on top of an asynchronous Media Foundation Transform.
 // Frames are uploaded into a D3D11 ARGB texture, converted to NV12 on the GPU via
 // ID3D11VideoProcessor, and handed to the encoder as DXGI-backed samples (zero-copy
-// from the encoder's point of view). Public API mirrors VideoDecoder/VideoEncoder so
-// the class is drop-in once an ENCODING_H264 value is added to the protocol.
-class VideoEncoderH264 final
+// from the encoder's point of view).
+class VideoEncoderH264 final : public VideoEncoder
 {
 public:
-    explicit VideoEncoderH264();
-    ~VideoEncoderH264();
+    VideoEncoderH264();
+    ~VideoEncoderH264() final;
 
-    static const size_t kInitialEncodeBufferSize;
+    // VideoEncoder implementation.
+    bool encode(const Frame* frame, proto::video::Packet* packet) final;
 
-    bool encode(const Frame* frame, proto::video::Packet* packet);
-
-    void setKeyFrameRequired(bool enable) { key_frame_required_ = enable; }
-    bool isKeyFrameRequired() const { return key_frame_required_; }
-    void setEncodeBuffer(std::string&& buffer) { encode_buffer_ = std::move(buffer); }
-
-    bool setMinQuantizer(quint32 min_quantizer);
-    quint32 minQuantizer() const { return min_quantizer_; }
-    bool setMaxQuantizer(quint32 max_quantizer);
-    quint32 maxQuantizer() const { return max_quantizer_; }
+protected:
+    // VideoEncoder implementation.
+    bool applyMinQuantizer() final;
+    bool applyMaxQuantizer() final;
 
 private:
     bool createEncoder(const QSize& size);
@@ -80,12 +68,7 @@ private:
     bool waitForEvent(MediaEventType expected);
     bool readOutput(proto::video::Packet* packet, bool* is_key_frame_out);
 
-    bool applyMinQuantizer();
-    bool applyMaxQuantizer();
-
     QSize last_size_;
-    bool key_frame_required_ = false;
-    std::string encode_buffer_;
 
     bool mf_started_ = false;
     bool streaming_ = false;
@@ -93,9 +76,6 @@ private:
     bool output_provides_samples_ = false;
     quint64 frame_counter_ = 0;
     quint32 output_sample_size_ = 0;
-
-    quint32 min_quantizer_ = 18;
-    quint32 max_quantizer_ = 40;
 
     std::unique_ptr<D3D11VideoContext> d3d_;
 

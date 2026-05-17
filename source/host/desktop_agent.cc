@@ -324,7 +324,7 @@ void DesktopAgent::onClientConfigured()
     LOG(INFO) << "Merged configuration:" << merged_config << "vp8:" << vp8_supported_
               << "vp9:" << vp9_supported_ << "opus:" << opus_supported;
 
-    video_encoder_ = std::make_unique<VideoEncoder>(video_encoding_);
+    video_encoder_ = VideoEncoder::create(video_encoding_);
 
     if (merged_config.audio() && opus_supported)
     {
@@ -802,7 +802,7 @@ void DesktopAgent::onOverflowCheck()
     {
         LOG(INFO) << "Switching video encoding:" << video_encoding_ << "->" << desired_encoding;
         video_encoding_ = desired_encoding;
-        video_encoder_ = std::make_unique<VideoEncoder>(video_encoding_);
+        video_encoder_ = VideoEncoder::create(video_encoding_);
     }
 }
 

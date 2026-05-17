@@ -193,8 +193,12 @@ list(APPEND SOURCE_BASE_CODEC
     codec/vector_math.h
     codec/video_decoder.cc
     codec/video_decoder.h
+    codec/video_decoder_vpx.cc
+    codec/video_decoder_vpx.h
     codec/video_encoder.cc
     codec/video_encoder.h
+    codec/video_encoder_vpx.cc
+    codec/video_encoder_vpx.h
     codec/webm_file_muxer.cc
     codec/webm_file_muxer.h
     codec/webm_file_writer.cc
