@@ -52,6 +52,26 @@ std::unique_ptr<VideoEncoder> VideoEncoder::create(proto::video::Encoding encodi
 }
 
 //--------------------------------------------------------------------------------------------------
+// static
+bool VideoEncoder::isSupported(proto::video::Encoding encoding)
+{
+    switch (encoding)
+    {
+        case proto::video::ENCODING_VP8:
+        case proto::video::ENCODING_VP9:
+            return true;
+
+#if defined(Q_OS_WINDOWS)
+        case proto::video::ENCODING_H264:
+            return VideoEncoderH264::isHardwareSupported();
+#endif
+
+        default:
+            return false;
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
 VideoEncoder::VideoEncoder(proto::video::Encoding encoding)
     : encoding_(encoding)
 {

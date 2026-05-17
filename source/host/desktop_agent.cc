@@ -282,6 +282,7 @@ void DesktopAgent::onClientConfigured()
     bool opus_supported = true;
     bool vp8_supported = true;
     bool vp9_supported = true;
+    bool h264_supported = true;
 
     for (auto* client : std::as_const(clients_))
     {
@@ -296,6 +297,8 @@ void DesktopAgent::onClientConfigured()
             vp8_supported = false;
         if (!client->isVp9Supported())
             vp9_supported = false;
+        if (!client->isH264Supported())
+            h264_supported = false;
         if (!client->isOpusSupported())
             opus_supported = false;
 
@@ -320,9 +323,14 @@ void DesktopAgent::onClientConfigured()
 
     vp8_supported_ = vp8_supported;
     vp9_supported_ = vp9_supported;
+    h264_supported_ = h264_supported && VideoEncoder::isSupported(proto::video::ENCODING_H264);
 
     LOG(INFO) << "Merged configuration:" << merged_config << "vp8:" << vp8_supported_
-              << "vp9:" << vp9_supported_ << "opus:" << opus_supported;
+              << "vp9:" << vp9_supported_ << "h264:" << h264_supported_ << "opus:" << opus_supported;
+
+    // Prefer hardware H264 when both endpoints support it; fall back to VP otherwise.
+    if (h264_supported_)
+        video_encoding_ = proto::video::ENCODING_H264;
 
     video_encoder_ = VideoEncoder::create(video_encoding_);
 
@@ -788,14 +796,18 @@ void DesktopAgent::onOverflowCheck()
     proto::video::Encoding desired_encoding = video_encoding_;
     const qint64 kVp9SwitchingThreshold = 1.5 * 1024 * 1024; // 1.5 MB/s
 
-    if (bandwidth < kVp9SwitchingThreshold && vp9_supported_)
+    // Hardware H264 outperforms VP at every bandwidth - if it was selected at startup, keep it.
+    if (video_encoding_ != proto::video::ENCODING_H264)
     {
-        // For low bandwidth connections, VP9 provides better compression.
-        desired_encoding = proto::video::ENCODING_VP9;
-    }
-    else if (bandwidth >= kVp9SwitchingThreshold && vp8_supported_)
-    {
-        desired_encoding = proto::video::ENCODING_VP8;
+        if (bandwidth < kVp9SwitchingThreshold && vp9_supported_)
+        {
+            // For low bandwidth connections, VP9 provides better compression.
+            desired_encoding = proto::video::ENCODING_VP9;
+        }
+        else if (bandwidth >= kVp9SwitchingThreshold && vp8_supported_)
+        {
+            desired_encoding = proto::video::ENCODING_VP8;
+        }
     }
 
     if (desired_encoding != video_encoding_ && video_encoder_)

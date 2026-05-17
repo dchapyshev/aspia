@@ -41,6 +41,7 @@ const char kFlagDisableBlockInput[] = "disable_block_input";
 
 const char kFlagVideoVP8[] = "vp8";
 const char kFlagVideoVP9[] = "vp9";
+const char kFlagVideoH264[] = "h264";
 const char kFlagAudioOpus[] = "opus";
 const char kFlagOSWindows[] = "windows";
 const char kFlagOSMacOS[] = "macos";

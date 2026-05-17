@@ -343,6 +343,28 @@ void VideoEncoderH264::destroyEncoder()
 }
 
 //--------------------------------------------------------------------------------------------------
+// static
+bool VideoEncoderH264::isHardwareSupported()
+{
+    if (!mf::isRuntimeAvailable())
+        return false;
+
+    MFT_REGISTER_TYPE_INFO output_info = { MFMediaType_Video, MFVideoFormat_H264 };
+    ScopedCoMem<IMFActivate*> activate_arr;
+    UINT32 count = 0;
+
+    _com_error error = mf::enumTransforms(MFT_CATEGORY_VIDEO_ENCODER,
+        MFT_ENUM_FLAG_HARDWARE | MFT_ENUM_FLAG_SORTANDFILTER, nullptr, &output_info, &activate_arr,
+        &count);
+    if (FAILED(error.Error()) || count == 0)
+        return false;
+
+    for (UINT32 i = 0; i < count; ++i)
+        activate_arr.get()[i]->Release();
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
 bool VideoEncoderH264::selectHardwareMft()
 {
     MFT_REGISTER_TYPE_INFO output_info = { MFMediaType_Video, MFVideoFormat_H264 };

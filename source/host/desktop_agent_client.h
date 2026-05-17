@@ -68,6 +68,7 @@ public:
 
     bool isVp8Supported() const { return vp8_supported_; }
     bool isVp9Supported() const { return vp9_supported_; }
+    bool isH264Supported() const { return h264_supported_; }
     bool isOpusSupported() const { return opus_supported_; }
     bool isFileClipboardSupported() const { return file_clipboard_supported_; }
 
@@ -118,6 +119,7 @@ private:
 
     bool vp8_supported_ = false;
     bool vp9_supported_ = false;
+    bool h264_supported_ = false;
     bool opus_supported_ = false;
     bool file_clipboard_supported_ = false;
 

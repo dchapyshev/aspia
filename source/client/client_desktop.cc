@@ -136,6 +136,7 @@ void ClientDesktop::onStarted()
 
     add_flag(kFlagVideoVP8, true);
     add_flag(kFlagVideoVP9, true);
+    add_flag(kFlagVideoH264, true);
     add_flag(kFlagAudioOpus, true);
 
 #if defined(Q_OS_WINDOWS)

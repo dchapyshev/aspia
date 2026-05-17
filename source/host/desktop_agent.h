@@ -109,6 +109,7 @@ private:
 
     bool vp8_supported_ = false;
     bool vp9_supported_ = false;
+    bool h264_supported_ = false;
 
     proto::video::Encoding video_encoding_ = proto::video::ENCODING_VP8;
 

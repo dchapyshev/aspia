@@ -318,6 +318,7 @@ void DesktopAgentClient::readCapabilities(const proto::control::Capabilities& ca
 
     vp8_supported_ = has_flag(capabilities, kFlagVideoVP8);
     vp9_supported_ = has_flag(capabilities, kFlagVideoVP9);
+    h264_supported_ = has_flag(capabilities, kFlagVideoH264);
     opus_supported_ = has_flag(capabilities, kFlagAudioOpus);
     file_clipboard_supported_ = has_flag(capabilities, kFlagFileClipboard);
 

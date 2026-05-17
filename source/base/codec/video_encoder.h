@@ -36,6 +36,11 @@ class VideoEncoder
 public:
     static std::unique_ptr<VideoEncoder> create(proto::video::Encoding encoding);
 
+    // Returns true when the encoding can be instantiated on this system. Used by callers to pick
+    // a supported encoding upfront without paying the cost of constructing and tearing down an
+    // encoder just to probe availability.
+    static bool isSupported(proto::video::Encoding encoding);
+
     virtual ~VideoEncoder() = default;
 
     static const size_t kInitialEncodeBufferSize;

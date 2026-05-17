@@ -35,7 +35,6 @@ using PFN_MFTEnumEx = decltype(&::MFTEnumEx);
 using PFN_D3D11CreateDevice = decltype(&::D3D11CreateDevice);
 
 HMODULE h_mfplat = nullptr;
-HMODULE h_mf = nullptr;
 HMODULE h_d3d11 = nullptr;
 
 PFN_MFStartup pfn_MFStartup = nullptr;
@@ -67,10 +66,9 @@ bool tryLoad()
     static const bool result = []()
     {
         h_mfplat = LoadLibraryW(L"mfplat.dll");
-        h_mf = LoadLibraryW(L"mf.dll");
         h_d3d11 = LoadLibraryW(L"d3d11.dll");
 
-        if (!h_mfplat || !h_mf || !h_d3d11)
+        if (!h_mfplat || !h_d3d11)
         {
             LOG(WARNING) << "MF runtime DLLs not available on this system";
             return false;
@@ -84,7 +82,7 @@ bool tryLoad()
         ok &= resolve(h_mfplat, "MFCreateAlignedMemoryBuffer", &pfn_MFCreateAlignedMemoryBuffer);
         ok &= resolve(h_mfplat, "MFCreateDXGISurfaceBuffer", &pfn_MFCreateDXGISurfaceBuffer);
         ok &= resolve(h_mfplat, "MFCreateDXGIDeviceManager", &pfn_MFCreateDXGIDeviceManager);
-        ok &= resolve(h_mf, "MFTEnumEx", &pfn_MFTEnumEx);
+        ok &= resolve(h_mfplat, "MFTEnumEx", &pfn_MFTEnumEx);
         ok &= resolve(h_d3d11, "D3D11CreateDevice", &pfn_D3D11CreateDevice);
         return ok;
     }();

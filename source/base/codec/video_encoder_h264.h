@@ -44,6 +44,10 @@ public:
     VideoEncoderH264();
     ~VideoEncoderH264() final;
 
+    // Returns true when a hardware H264 encoder MFT is available on this system. Cheap to call -
+    // probes the MF runtime and enumerates HW encoders without actually activating any of them.
+    static bool isHardwareSupported();
+
     // VideoEncoder implementation.
     bool encode(const Frame* frame, proto::video::Packet* packet) final;
 
