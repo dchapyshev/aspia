@@ -50,6 +50,7 @@ QString encoderToString(quint32 type)
     {
         case proto::video::ENCODING_VP8: return "VP8";
         case proto::video::ENCODING_VP9: return "VP9";
+        case proto::video::ENCODING_H264: return "H264";
         default: return "UNKNOWN";
     }
 }

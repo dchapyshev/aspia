@@ -40,6 +40,12 @@ const UINT32 kAssumedFrameRateNum = 1000;
 const UINT32 kAssumedFrameRateDen = 80;
 const LONGLONG kFrameDuration100ns = 800000;
 
+// Selects the NV12-to-ARGB implementation on the hardware path. VideoProcessor stays on the GPU
+// (the converted ARGB only crosses GPU->CPU once at the very end) while libyuv reads raw NV12
+// back to system memory before converting. Default to VP since chroma upsampling artifacts on
+// decode are typically much milder than the subsampling artifacts on encode.
+constexpr bool kUseLibyuvForChromaConversion = false;
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -214,6 +220,7 @@ void VideoDecoderH264::destroyDecoder()
     vp_enumerator_.Reset();
     argb_target_.Reset();
     argb_staging_.Reset();
+    nv12_staging_.Reset();
 
     event_gen_.Reset();
     if (decoder_)
@@ -278,21 +285,10 @@ bool VideoDecoderH264::setupHardwarePath(const QSize& size)
         return false;
     }
 
-    _com_error error = decoder_->GetStreamIDs(1, &input_stream_id_, 1, &output_stream_id_);
-    if (error.Error() == E_NOTIMPL)
-    {
-        input_stream_id_ = 0;
-        output_stream_id_ = 0;
-        error = S_OK;
-    }
-    if (FAILED(error.Error()))
-    {
-        LOG(WARNING) << "IMFTransform::GetStreamIDs failed:" << error;
-        return false;
-    }
-
+    // Attributes must be retrieved (and the async lock cleared, if any) before any other method
+    // is called on a hardware MFT; otherwise GetStreamIDs and friends return MF_E_TRANSFORM_ASYNC_LOCKED.
     ComPtr<IMFAttributes> attrs;
-    error = decoder_->GetAttributes(&attrs);
+    _com_error error = decoder_->GetAttributes(&attrs);
     if (FAILED(error.Error()) || !attrs)
     {
         LOG(WARNING) << "GetAttributes failed:" << error;
@@ -316,6 +312,19 @@ bool VideoDecoderH264::setupHardwarePath(const QSize& size)
             LOG(WARNING) << "MFT does not expose IMFMediaEventGenerator:" << error;
             return false;
         }
+    }
+
+    error = decoder_->GetStreamIDs(1, &input_stream_id_, 1, &output_stream_id_);
+    if (error.Error() == E_NOTIMPL)
+    {
+        input_stream_id_ = 0;
+        output_stream_id_ = 0;
+        error = S_OK;
+    }
+    if (FAILED(error.Error()))
+    {
+        LOG(WARNING) << "IMFTransform::GetStreamIDs failed:" << error;
+        return false;
     }
 
     error = decoder_->ProcessMessage(MFT_MESSAGE_SET_D3D_MANAGER, reinterpret_cast<ULONG_PTR>(d3d_->manager()));
@@ -470,6 +479,14 @@ bool VideoDecoderH264::refreshOutputDimensions()
 //--------------------------------------------------------------------------------------------------
 bool VideoDecoderH264::allocateGpuResources(const QSize& size)
 {
+    if constexpr (kUseLibyuvForChromaConversion)
+    {
+        nv12_staging_ = d3d_->createStagingNv12Texture(size.width(), size.height());
+        if (!nv12_staging_)
+            return false;
+        return true;
+    }
+
     argb_target_ = d3d_->createDefaultArgbTexture(size.width(), size.height());
     if (!argb_target_)
         return false;
@@ -522,6 +539,19 @@ bool VideoDecoderH264::allocateGpuResources(const QSize& size)
     d3d_->videoContext()->VideoProcessorSetStreamSourceRect(vp_processor_.Get(), 0, TRUE, &full_rect);
     d3d_->videoContext()->VideoProcessorSetStreamDestRect(vp_processor_.Get(), 0, TRUE, &full_rect);
     d3d_->videoContext()->VideoProcessorSetOutputTargetRect(vp_processor_.Get(), TRUE, &full_rect);
+
+    // Mirror the encoder's color space pinning - BT.601 Limited matches encoder VP output and
+    // libyuv defaults so HW and SW decoder paths produce identical ARGB pixels.
+    D3D11_VIDEO_PROCESSOR_COLOR_SPACE nv12_cs;
+    memset(&nv12_cs, 0, sizeof(nv12_cs));
+    nv12_cs.YCbCr_Matrix = 0;    // BT.601.
+    nv12_cs.Nominal_Range = 2;   // Limited range 16-235.
+    d3d_->videoContext()->VideoProcessorSetStreamColorSpace(vp_processor_.Get(), 0, &nv12_cs);
+
+    D3D11_VIDEO_PROCESSOR_COLOR_SPACE rgb_cs;
+    memset(&rgb_cs, 0, sizeof(rgb_cs));
+    rgb_cs.RGB_Range = 0;        // Full range 0-255 (target ARGB).
+    d3d_->videoContext()->VideoProcessorSetOutputColorSpace(vp_processor_.Get(), &rgb_cs);
 
     return true;
 }
@@ -700,6 +730,52 @@ bool VideoDecoderH264::copyHardwareSampleToFrame(
 
     UINT subresource = 0;
     dxgi_buffer->GetSubresourceIndex(&subresource);
+
+    if constexpr (kUseLibyuvForChromaConversion)
+    {
+        // Pull raw NV12 from the decoder's pool texture into our CPU-readable staging copy,
+        // then let libyuv handle NV12->ARGB on the CPU (matches the SW decoder path exactly).
+        d3d_->deviceContext()->CopySubresourceRegion(nv12_staging_.Get(), 0, 0, 0, 0,
+                                                    nv12_texture.Get(), subresource, nullptr);
+
+        D3D11_MAPPED_SUBRESOURCE mapped;
+        error = d3d_->deviceContext()->Map(nv12_staging_.Get(), 0, D3D11_MAP_READ, 0, &mapped);
+        if (FAILED(error.Error()))
+        {
+            LOG(ERROR) << "Map nv12_staging_ failed:" << error;
+            return false;
+        }
+
+        const int y_stride = static_cast<int>(mapped.RowPitch);
+        const int uv_stride = y_stride;
+        const quint8* y_plane = static_cast<const quint8*>(mapped.pData);
+        const quint8* uv_plane = y_plane + y_stride * output_height_;
+
+        QRect frame_rect(QPoint(0, 0), frame->size());
+        bool ok = true;
+
+        for (int i = 0; i < packet.dirty_rect_size(); ++i)
+        {
+            QRect rect = parse(packet.dirty_rect(i));
+            if (!frame_rect.contains(rect))
+            {
+                LOG(ERROR) << "The rectangle is outside the screen area";
+                ok = false;
+                break;
+            }
+
+            const int y_offset = rect.y() * y_stride + rect.x();
+            const int uv_offset = (rect.y() / 2) * uv_stride + (rect.x() & ~1);
+
+            libyuv::NV12ToARGB(y_plane + y_offset, y_stride,
+                               uv_plane + uv_offset, uv_stride,
+                               frame->frameDataAtPos(rect.topLeft()), frame->stride(),
+                               rect.width(), rect.height());
+        }
+
+        d3d_->deviceContext()->Unmap(nv12_staging_.Get(), 0);
+        return ok;
+    }
 
     D3D11_VIDEO_PROCESSOR_INPUT_VIEW_DESC iv_desc;
     memset(&iv_desc, 0, sizeof(iv_desc));

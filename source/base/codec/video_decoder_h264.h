@@ -86,11 +86,15 @@ private:
     Microsoft::WRL::ComPtr<IMFActivate> active_mft_;
     bool prefer_hardware_ = true;
 
+    // VideoProcessor path: NV12->ARGB on GPU, then staging readback as ARGB.
     Microsoft::WRL::ComPtr<ID3D11Texture2D> argb_target_;
     Microsoft::WRL::ComPtr<ID3D11Texture2D> argb_staging_;
     Microsoft::WRL::ComPtr<ID3D11VideoProcessorEnumerator> vp_enumerator_;
     Microsoft::WRL::ComPtr<ID3D11VideoProcessor> vp_processor_;
     Microsoft::WRL::ComPtr<ID3D11VideoProcessorOutputView> vp_output_view_;
+
+    // libyuv path: raw NV12 readback to CPU, then libyuv::NV12ToARGB into the Frame.
+    Microsoft::WRL::ComPtr<ID3D11Texture2D> nv12_staging_;
 
     DWORD input_stream_id_ = 0;
     DWORD output_stream_id_ = 0;

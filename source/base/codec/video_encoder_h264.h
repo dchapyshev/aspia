@@ -22,6 +22,7 @@
 #include "base/codec/d3d11_video_context.h"
 #include "base/codec/video_encoder.h"
 
+#include <QByteArray>
 #include <QSize>
 
 #include <codecapi.h>
@@ -35,9 +36,11 @@
 #include <memory>
 
 // Hardware H.264 encoder built on top of an asynchronous Media Foundation Transform.
-// Frames are uploaded into a D3D11 ARGB texture, converted to NV12 on the GPU via
-// ID3D11VideoProcessor, and handed to the encoder as DXGI-backed samples (zero-copy
-// from the encoder's point of view).
+// Two ARGB-to-NV12 implementations are compiled in: a libyuv-based CPU path (default,
+// high-quality chroma resampling that handles subpixel-rendered text correctly) and an
+// ID3D11VideoProcessor-based GPU path (faster but uses point-sampled chroma on many
+// drivers, producing color fringes on small text). The choice is a compile-time switch
+// in video_encoder_h264.cc.
 class VideoEncoderH264 final : public VideoEncoder
 {
 public:
@@ -87,8 +90,15 @@ private:
     Microsoft::WRL::ComPtr<ICodecAPI> codec_api_;
     Microsoft::WRL::ComPtr<IMFMediaEventGenerator> event_gen_;
 
-    Microsoft::WRL::ComPtr<ID3D11Texture2D> argb_texture_;
     Microsoft::WRL::ComPtr<ID3D11Texture2D> nv12_texture_;
+
+    // libyuv path: ARGB-to-NV12 done on the CPU, result uploaded via UpdateSubresource.
+    QByteArray nv12_buffer_;
+    int nv12_stride_ = 0;
+    int nv12_y_rows_ = 0;
+
+    // VideoProcessor path: ARGB-to-NV12 done on the GPU via ID3D11VideoProcessor.
+    Microsoft::WRL::ComPtr<ID3D11Texture2D> argb_texture_;
     Microsoft::WRL::ComPtr<ID3D11VideoProcessorEnumerator> vp_enumerator_;
     Microsoft::WRL::ComPtr<ID3D11VideoProcessor> vp_processor_;
     Microsoft::WRL::ComPtr<ID3D11VideoProcessorInputView> vp_input_view_;

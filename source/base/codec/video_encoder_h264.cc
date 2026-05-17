@@ -24,6 +24,8 @@
 #include "base/win/scoped_co_mem.h"
 #include "proto/desktop_video.h"
 
+#include <libyuv/convert_from_argb.h>
+
 #include <comdef.h>
 #include <mferror.h>
 
@@ -39,8 +41,16 @@ const UINT32 kTargetFrameRateNum = 1000;
 const UINT32 kTargetFrameRateDen = 80;
 const LONGLONG kFrameDuration100ns = 800000;
 
-const UINT32 kInitialBitrateBps = 1000 * 1000;
+// Sized for a typical 1080p desktop. Reliable transport means we can afford occasional bursts
+// above this number to preserve quality - rate control runs in Quality mode below, so this is
+// effectively a hint rather than a hard cap.
+const UINT32 kInitialBitrateBps = 5 * 1000 * 1000;
 const UINT32 kMaxRefFrames = 1;
+
+// Selects the ARGB-to-NV12 implementation. libyuv handles subpixel-rendered text without
+// color fringes; the GPU VideoProcessor path is faster but exhibits visible chroma artifacts
+// on small text with many drivers. Flip to false to fall back to the VP path.
+constexpr bool kUseLibyuvForChromaConversion = true;
 
 //--------------------------------------------------------------------------------------------------
 bool setUint32CodecAttr(ICodecAPI* api, REFGUID key, UINT32 value)
@@ -53,7 +63,9 @@ bool setUint32CodecAttr(ICodecAPI* api, REFGUID key, UINT32 value)
     VariantClear(&var);
     if (FAILED(error.Error()))
     {
-        LOG(ERROR) << "ICodecAPI::SetValue failed:" << error;
+        // Different vendor MFTs accept different subsets of CODECAPI_* hints. Failures are
+        // expected and non-fatal - the encoder simply keeps its default for that attribute.
+        LOG(WARNING) << "ICodecAPI::SetValue (uint32) skipped:" << error;
         return false;
     }
     return true;
@@ -70,7 +82,7 @@ bool setBoolCodecAttr(ICodecAPI* api, REFGUID key, bool value)
     VariantClear(&var);
     if (FAILED(error.Error()))
     {
-        LOG(ERROR) << "ICodecAPI::SetValue failed:" << error;
+        LOG(WARNING) << "ICodecAPI::SetValue (bool) skipped:" << error;
         return false;
     }
     return true;
@@ -98,9 +110,10 @@ QRect alignRect(const QRect& rect)
 VideoEncoderH264::VideoEncoderH264()
     : VideoEncoder(proto::video::ENCODING_H264)
 {
-    // H264 produces sharper output at higher QP than VP at the same number; tune defaults.
-    min_quantizer_ = 18;
-    max_quantizer_ = 40;
+    // Tight QP band keeps perceived quality high. Floor 16 lets the encoder spend bandwidth on
+    // sharp static text; ceiling 28 avoids the heavy blockiness that appears past ~32 on motion.
+    min_quantizer_ = 16;
+    max_quantizer_ = 28;
 
     if (!mf::isRuntimeAvailable())
     {
@@ -138,19 +151,22 @@ bool VideoEncoderH264::encode(const Frame* frame, proto::video::Packet* packet)
 
     if (last_size_ != frame->size())
     {
-        last_size_ = frame->size();
+        const QSize new_size = frame->size();
 
         proto::video::Rect* video_rect = packet->mutable_format()->mutable_video_rect();
-        video_rect->set_width(last_size_.width());
-        video_rect->set_height(last_size_.height());
+        video_rect->set_width(new_size.width());
+        video_rect->set_height(new_size.height());
 
         destroyEncoder();
-        if (!createEncoder(last_size_))
+        if (!createEncoder(new_size))
         {
             LOG(ERROR) << "Unable to create H264 encoder";
+            // Keep last_size_ unchanged so the next encode() call retries from scratch instead of
+            // skipping straight into uploadArgbAndConvert() with no GPU resources allocated.
             return false;
         }
 
+        last_size_ = new_size;
         is_key_frame = true;
     }
 
@@ -235,21 +251,10 @@ bool VideoEncoderH264::createEncoder(const QSize& size)
     if (!selectHardwareMft())
         return false;
 
-    _com_error error = encoder_->GetStreamIDs(1, &input_stream_id_, 1, &output_stream_id_);
-    if (error.Error() == E_NOTIMPL)
-    {
-        input_stream_id_ = 0;
-        output_stream_id_ = 0;
-        error = S_OK;
-    }
-    if (FAILED(error.Error()))
-    {
-        LOG(ERROR) << "IMFTransform::GetStreamIDs failed:" << error;
-        return false;
-    }
-
+    // Async MFT contract: every method on IMFTransform (except GetAttributes) returns
+    // MF_E_TRANSFORM_ASYNC_LOCKED until MF_TRANSFORM_ASYNC_UNLOCK is set. Unlock first, then talk.
     ComPtr<IMFAttributes> attrs;
-    error = encoder_->GetAttributes(&attrs);
+    _com_error error = encoder_->GetAttributes(&attrs);
     if (FAILED(error.Error()))
     {
         LOG(ERROR) << "IMFTransform::GetAttributes failed:" << error;
@@ -260,6 +265,19 @@ bool VideoEncoderH264::createEncoder(const QSize& size)
     if (FAILED(error.Error()))
     {
         LOG(ERROR) << "Failed to unlock async MFT:" << error;
+        return false;
+    }
+
+    error = encoder_->GetStreamIDs(1, &input_stream_id_, 1, &output_stream_id_);
+    if (error.Error() == E_NOTIMPL)
+    {
+        input_stream_id_ = 0;
+        output_stream_id_ = 0;
+        error = S_OK;
+    }
+    if (FAILED(error.Error()))
+    {
+        LOG(ERROR) << "IMFTransform::GetStreamIDs failed:" << error;
         return false;
     }
 
@@ -325,6 +343,10 @@ void VideoEncoderH264::destroyEncoder()
     vp_enumerator_.Reset();
     argb_texture_.Reset();
     nv12_texture_.Reset();
+
+    nv12_buffer_.clear();
+    nv12_stride_ = 0;
+    nv12_y_rows_ = 0;
 
     event_gen_.Reset();
     codec_api_.Reset();
@@ -420,6 +442,10 @@ bool VideoEncoderH264::configureMediaTypes(const QSize& size)
     // High profile: 8x8 transform + custom quant matrices give ~5-10% better compression at the
     // same quality compared to Main. CABAC stays enabled below; both profiles support it.
     output_type->SetUINT32(MF_MT_MPEG2_PROFILE, eAVEncH264VProfile_High);
+    // VUI color metadata - declares the matrix and range we actually feed the encoder so any
+    // decoder reproduces matching colors. BT.601 Limited is what libyuv::ARGBToNV12 outputs.
+    output_type->SetUINT32(MF_MT_YUV_MATRIX, MFVideoTransferMatrix_BT601);
+    output_type->SetUINT32(MF_MT_VIDEO_NOMINAL_RANGE, MFNominalRange_16_235);
     MFSetAttributeSize(output_type.Get(), MF_MT_FRAME_SIZE,
                        static_cast<UINT32>(size.width()), static_cast<UINT32>(size.height()));
     MFSetAttributeRatio(output_type.Get(), MF_MT_FRAME_RATE, kTargetFrameRateNum, kTargetFrameRateDen);
@@ -463,11 +489,13 @@ bool VideoEncoderH264::configureCodecApi()
 {
     ICodecAPI* api = codec_api_.Get();
 
-    // LowDelayVBR is single-pass without look-ahead - the right mode for real-time encoding.
-    // Bitrate adapts but stays bounded by the mean target; pure Quality mode could spike to many
-    // megabits on a full screen redraw and flood the network.
+    // Quality-controlled rate: encoder picks QP to keep visual quality steady and lets bitrate
+    // float to match content complexity. Desktop content is mostly static so the average bitrate
+    // stays low naturally, while frames with motion get the bandwidth they need. Reliable transport
+    // makes occasional bursts safe.
     setUint32CodecAttr(api, CODECAPI_AVEncCommonRateControlMode,
-                       eAVEncCommonRateControlMode_LowDelayVBR);
+                       eAVEncCommonRateControlMode_Quality);
+    setUint32CodecAttr(api, CODECAPI_AVEncCommonQuality, 85);
     setUint32CodecAttr(api, CODECAPI_AVEncCommonMeanBitRate, kInitialBitrateBps);
     setUint32CodecAttr(api, CODECAPI_AVEncMPVDefaultBPictureCount, 0);
     setUint32CodecAttr(api, CODECAPI_AVEncVideoMaxNumRefFrame, kMaxRefFrames);
@@ -527,12 +555,25 @@ bool VideoEncoderH264::endStreaming()
 //--------------------------------------------------------------------------------------------------
 bool VideoEncoderH264::allocateGpuResources(const QSize& size)
 {
-    argb_texture_ = d3d_->createDynamicArgbTexture(size.width(), size.height());
-    if (!argb_texture_)
-        return false;
-
     nv12_texture_ = d3d_->createNv12Texture(size.width(), size.height());
     if (!nv12_texture_)
+        return false;
+
+    if constexpr (kUseLibyuvForChromaConversion)
+    {
+        // 16-byte alignment matches the alignment libyuv's NV12 fast paths expect, and is what
+        // NV12 textures use internally on every consumer GPU we care about.
+        nv12_stride_ = ((size.width() + 15) & ~15);
+        nv12_y_rows_ = ((size.height() + 1) & ~1);
+
+        const int y_bytes = nv12_stride_ * nv12_y_rows_;
+        const int uv_bytes = nv12_stride_ * (nv12_y_rows_ / 2);
+        nv12_buffer_.resize(y_bytes + uv_bytes);
+        return true;
+    }
+
+    argb_texture_ = d3d_->createDefaultArgbTexture(size.width(), size.height());
+    if (!argb_texture_)
         return false;
 
     D3D11_VIDEO_PROCESSOR_CONTENT_DESC content_desc;
@@ -548,7 +589,8 @@ bool VideoEncoderH264::allocateGpuResources(const QSize& size)
     content_desc.OutputHeight = static_cast<UINT>(size.height());
     content_desc.Usage = D3D11_VIDEO_USAGE_PLAYBACK_NORMAL;
 
-    _com_error error = d3d_->videoDevice()->CreateVideoProcessorEnumerator(&content_desc, &vp_enumerator_);
+    _com_error error = d3d_->videoDevice()->CreateVideoProcessorEnumerator(&content_desc,
+                                                                           &vp_enumerator_);
     if (FAILED(error.Error()))
     {
         LOG(ERROR) << "CreateVideoProcessorEnumerator failed:" << error;
@@ -590,11 +632,21 @@ bool VideoEncoderH264::allocateGpuResources(const QSize& size)
         return false;
     }
 
-    // Restrict color conversion to a single full-frame stream by default.
     const RECT full_rect = { 0, 0, size.width(), size.height() };
     d3d_->videoContext()->VideoProcessorSetStreamSourceRect(vp_processor_.Get(), 0, TRUE, &full_rect);
     d3d_->videoContext()->VideoProcessorSetStreamDestRect(vp_processor_.Get(), 0, TRUE, &full_rect);
     d3d_->videoContext()->VideoProcessorSetOutputTargetRect(vp_processor_.Get(), TRUE, &full_rect);
+
+    D3D11_VIDEO_PROCESSOR_COLOR_SPACE rgb_cs;
+    memset(&rgb_cs, 0, sizeof(rgb_cs));
+    rgb_cs.RGB_Range = 0;        // Full range 0-255 (desktop ARGB).
+    d3d_->videoContext()->VideoProcessorSetStreamColorSpace(vp_processor_.Get(), 0, &rgb_cs);
+
+    D3D11_VIDEO_PROCESSOR_COLOR_SPACE nv12_cs;
+    memset(&nv12_cs, 0, sizeof(nv12_cs));
+    nv12_cs.YCbCr_Matrix = 0;    // BT.601 (matches libyuv default).
+    nv12_cs.Nominal_Range = 2;   // Limited range 16-235.
+    d3d_->videoContext()->VideoProcessorSetOutputColorSpace(vp_processor_.Get(), &nv12_cs);
 
     return true;
 }
@@ -602,31 +654,33 @@ bool VideoEncoderH264::allocateGpuResources(const QSize& size)
 //--------------------------------------------------------------------------------------------------
 bool VideoEncoderH264::uploadArgbAndConvert(const Frame* frame)
 {
-    D3D11_MAPPED_SUBRESOURCE mapped;
-    _com_error error = d3d_->deviceContext()->Map(argb_texture_.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mapped);
-    if (FAILED(error.Error()))
+    if (!nv12_texture_)
     {
-        LOG(ERROR) << "Map argb_texture_ failed:" << error;
+        LOG(ERROR) << "GPU resources not allocated";
         return false;
     }
 
-    const quint8* src = frame->frameData();
-    const int src_stride = frame->stride();
-    const int row_bytes = last_size_.width() * 4;
-    const int height = last_size_.height();
-    quint8* dst = static_cast<quint8*>(mapped.pData);
-
-    if (src_stride == static_cast<int>(mapped.RowPitch) && src_stride == row_bytes)
+    if constexpr (kUseLibyuvForChromaConversion)
     {
-        memcpy(dst, src, static_cast<size_t>(row_bytes) * height);
-    }
-    else
-    {
-        for (int y = 0; y < height; ++y)
-            memcpy(dst + y * mapped.RowPitch, src + y * src_stride, row_bytes);
+        quint8* y_plane = reinterpret_cast<quint8*>(nv12_buffer_.data());
+        quint8* uv_plane = y_plane + nv12_stride_ * nv12_y_rows_;
+
+        libyuv::ARGBToNV12(frame->frameData(), frame->stride(),
+                           y_plane, nv12_stride_,
+                           uv_plane, nv12_stride_,
+                           last_size_.width(), last_size_.height());
+
+        d3d_->deviceContext()->UpdateSubresource(nv12_texture_.Get(), 0, nullptr,
+                                                 y_plane,
+                                                 static_cast<UINT>(nv12_stride_),
+                                                 0);
+        return true;
     }
 
-    d3d_->deviceContext()->Unmap(argb_texture_.Get(), 0);
+    d3d_->deviceContext()->UpdateSubresource(argb_texture_.Get(), 0, nullptr,
+                                             frame->frameData(),
+                                             static_cast<UINT>(frame->stride()),
+                                             0);
 
     D3D11_VIDEO_PROCESSOR_STREAM stream;
     memset(&stream, 0, sizeof(stream));
@@ -637,7 +691,9 @@ bool VideoEncoderH264::uploadArgbAndConvert(const Frame* frame)
     stream.FutureFrames = 0;
     stream.pInputSurface = vp_input_view_.Get();
 
-    error = d3d_->videoContext()->VideoProcessorBlt(vp_processor_.Get(), vp_output_view_.Get(), 0, 1, &stream);
+    _com_error error = d3d_->videoContext()->VideoProcessorBlt(vp_processor_.Get(),
+                                                               vp_output_view_.Get(),
+                                                               0, 1, &stream);
     if (FAILED(error.Error()))
     {
         LOG(ERROR) << "VideoProcessorBlt failed:" << error;

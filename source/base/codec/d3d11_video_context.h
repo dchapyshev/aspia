@@ -47,6 +47,7 @@ public:
     Microsoft::WRL::ComPtr<ID3D11Texture2D> createDefaultArgbTexture(int width, int height);
     Microsoft::WRL::ComPtr<ID3D11Texture2D> createStagingArgbTexture(int width, int height);
     Microsoft::WRL::ComPtr<ID3D11Texture2D> createNv12Texture(int width, int height);
+    Microsoft::WRL::ComPtr<ID3D11Texture2D> createStagingNv12Texture(int width, int height);
 
 private:
     D3D11VideoContext() = default;

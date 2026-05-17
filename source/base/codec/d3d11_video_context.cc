@@ -192,3 +192,27 @@ ComPtr<ID3D11Texture2D> D3D11VideoContext::createNv12Texture(int width, int heig
     }
     return texture;
 }
+
+//--------------------------------------------------------------------------------------------------
+ComPtr<ID3D11Texture2D> D3D11VideoContext::createStagingNv12Texture(int width, int height)
+{
+    D3D11_TEXTURE2D_DESC desc;
+    memset(&desc, 0, sizeof(desc));
+    desc.Width = static_cast<UINT>((width + 1) & ~1);
+    desc.Height = static_cast<UINT>((height + 1) & ~1);
+    desc.MipLevels = 1;
+    desc.ArraySize = 1;
+    desc.Format = DXGI_FORMAT_NV12;
+    desc.SampleDesc.Count = 1;
+    desc.Usage = D3D11_USAGE_STAGING;
+    desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
+
+    ComPtr<ID3D11Texture2D> texture;
+    _com_error error = device_->CreateTexture2D(&desc, nullptr, &texture);
+    if (FAILED(error.Error()))
+    {
+        LOG(ERROR) << "CreateTexture2D (staging NV12) failed:" << error;
+        return nullptr;
+    }
+    return texture;
+}
