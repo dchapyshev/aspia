@@ -153,36 +153,3 @@ bool User::isValid() const
 {
     return !name.isEmpty() && !salt.isEmpty() && !group.isEmpty() && !verifier.isEmpty();
 }
-
-//--------------------------------------------------------------------------------------------------
-// static
-User User::parseFrom(const proto::router::User& serialized_user)
-{
-    User user;
-
-    user.entry_id = serialized_user.entry_id();
-    user.name     = QString::fromStdString(serialized_user.name());
-    user.group    = QString::fromStdString(serialized_user.group());
-    user.salt     = QByteArray::fromStdString(serialized_user.salt());
-    user.verifier = QByteArray::fromStdString(serialized_user.verifier());
-    user.sessions = serialized_user.sessions();
-    user.flags    = serialized_user.flags();
-
-    return user;
-}
-
-//--------------------------------------------------------------------------------------------------
-proto::router::User User::serialize() const
-{
-    proto::router::User user;
-
-    user.set_entry_id(entry_id);
-    user.set_name(name.toStdString());
-    user.set_group(group.toStdString());
-    user.set_salt(salt.toStdString());
-    user.set_verifier(verifier.toStdString());
-    user.set_sessions(sessions);
-    user.set_flags(flags);
-
-    return user;
-}

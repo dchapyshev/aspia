@@ -31,7 +31,7 @@
 #include "base/crypto/secure_string.h"
 #include "base/files/base_paths.h"
 #include "base/files/file_util.h"
-#include "base/peer/user.h"
+#include "base/peer/router_user.h"
 #include "build/version.h"
 #include "router/database.h"
 #include "router/service.h"
@@ -230,7 +230,7 @@ int createConfig(QTextStream& out)
     const char kUserName[] = "admin";
     const char kPassword[] = "admin";
 
-    User user = User::create(kUserName, SecureString(kPassword));
+    RouterUser user = RouterUser::create(kUserName, SecureString(kPassword));
     if (!user.isValid())
     {
         out << "Failed to create user." << Qt::endl;

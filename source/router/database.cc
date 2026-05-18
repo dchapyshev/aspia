@@ -43,17 +43,37 @@ QSqlDatabase databaseByName(const QString& connection_name)
 }
 
 //--------------------------------------------------------------------------------------------------
-User readUser(const QSqlQuery& query)
+RouterUser readUser(const QSqlQuery& query)
 {
-    User user;
-    user.entry_id = query.value(0).toLongLong();
-    user.name = query.value(1).toString();
-    user.group = query.value(2).toString();
-    user.salt = query.value(3).toByteArray();
-    user.verifier = query.value(4).toByteArray();
-    user.sessions = query.value(5).toUInt();
-    user.flags = query.value(6).toUInt();
+    RouterUser user;
+    user.entry_id         = query.value(0).toLongLong();
+    user.name             = query.value(1).toString();
+    user.group            = query.value(2).toString();
+    user.salt             = query.value(3).toByteArray();
+    user.verifier         = query.value(4).toByteArray();
+    user.sessions         = query.value(5).toUInt();
+    user.flags            = query.value(6).toUInt();
+    user.public_key       = query.value(7).toByteArray();
+    user.wrap_private_key = query.value(8).toByteArray();
+    user.wrap_salt        = query.value(9).toByteArray();
     return user;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool hasColumn(QSqlDatabase& sql_db, const QString& table, const QString& column)
+{
+    QSqlQuery query(sql_db);
+    query.prepare(QStringLiteral("SELECT 1 FROM pragma_table_info(?) WHERE name=?"));
+    query.addBindValue(table);
+    query.addBindValue(column);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to query table info:" << query.lastError();
+        return true; // Pessimistic: pretend it exists, do not attempt ALTER.
+    }
+
+    return query.next();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -75,6 +95,9 @@ bool ensureSchema(QSqlDatabase& sql_db)
                     "\"verifier\" BLOB NOT NULL,"
                     "\"sessions\" INTEGER DEFAULT 0,"
                     "\"flags\" INTEGER DEFAULT 0,"
+                    "\"public_key\" BLOB NOT NULL DEFAULT X'',"
+                    "\"wrap_private_key\" BLOB NOT NULL DEFAULT X'',"
+                    "\"wrap_salt\" BLOB NOT NULL DEFAULT X'',"
                     "PRIMARY KEY(\"id\" AUTOINCREMENT))") ||
         !query.exec("CREATE TABLE IF NOT EXISTS \"hosts\" ("
                     "\"id\" INTEGER UNIQUE,"
@@ -88,6 +111,26 @@ bool ensureSchema(QSqlDatabase& sql_db)
         LOG(ERROR) << "Unable to execute query:" << query.lastError();
         sql_db.rollback();
         return false;
+    }
+
+    static const struct { const char* name; } kUserColumns[] = {
+        { "public_key" },
+        { "wrap_private_key" },
+        { "wrap_salt" }
+    };
+
+    for (const auto& column : kUserColumns)
+    {
+        if (hasColumn(sql_db, QStringLiteral("users"), QString::fromLatin1(column.name)))
+            continue;
+
+        if (!query.exec(QStringLiteral("ALTER TABLE \"users\" ADD COLUMN \"%1\" BLOB NOT NULL DEFAULT X''")
+                            .arg(QString::fromLatin1(column.name))))
+        {
+            LOG(ERROR) << "Unable to add column" << column.name << ":" << query.lastError();
+            sql_db.rollback();
+            return false;
+        }
     }
 
     if (!sql_db.commit())
@@ -264,7 +307,7 @@ bool Database::isValid() const
 }
 
 //--------------------------------------------------------------------------------------------------
-QVector<User> Database::userList() const
+QVector<RouterUser> Database::userList() const
 {
     if (!isValid())
     {
@@ -274,13 +317,14 @@ QVector<User> Database::userList() const
 
     QSqlQuery query(databaseByName(connection_name_));
     if (!query.exec(QStringLiteral(
-        "SELECT id, name, \"group\", salt, verifier, sessions, flags FROM users")))
+        "SELECT id, name, \"group\", salt, verifier, sessions, flags, "
+        "public_key, wrap_private_key, wrap_salt FROM users")))
     {
         LOG(ERROR) << "Unable to get user list:" << query.lastError();
         return {};
     }
 
-    QVector<User> users;
+    QVector<RouterUser> users;
     while (query.next())
         users.append(readUser(query));
 
@@ -288,7 +332,7 @@ QVector<User> Database::userList() const
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::addUser(const User& user)
+bool Database::addUser(const RouterUser& user)
 {
     if (!isValid())
     {
@@ -304,14 +348,18 @@ bool Database::addUser(const User& user)
 
     QSqlQuery query(databaseByName(connection_name_));
     query.prepare(QStringLiteral(
-        "INSERT INTO users (id, name, \"group\", salt, verifier, sessions, flags) "
-        "VALUES (NULL, ?, ?, ?, ?, ?, ?)"));
+        "INSERT INTO users (id, name, \"group\", salt, verifier, sessions, flags, "
+        "public_key, wrap_private_key, wrap_salt) "
+        "VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?)"));
     query.addBindValue(user.name);
     query.addBindValue(user.group);
     query.addBindValue(user.salt);
     query.addBindValue(user.verifier);
     query.addBindValue(static_cast<qulonglong>(user.sessions));
     query.addBindValue(static_cast<qulonglong>(user.flags));
+    query.addBindValue(user.public_key);
+    query.addBindValue(user.wrap_private_key);
+    query.addBindValue(user.wrap_salt);
 
     if (!query.exec())
     {
@@ -323,7 +371,7 @@ bool Database::addUser(const User& user)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::modifyUser(const User& user)
+bool Database::modifyUser(const RouterUser& user)
 {
     if (!isValid())
     {
@@ -339,13 +387,17 @@ bool Database::modifyUser(const User& user)
 
     QSqlQuery query(databaseByName(connection_name_));
     query.prepare(QStringLiteral(
-        "UPDATE users SET name=?, \"group\"=?, salt=?, verifier=?, sessions=?, flags=? WHERE id=?"));
+        "UPDATE users SET name=?, \"group\"=?, salt=?, verifier=?, sessions=?, flags=?, "
+        "public_key=?, wrap_private_key=?, wrap_salt=? WHERE id=?"));
     query.addBindValue(user.name);
     query.addBindValue(user.group);
     query.addBindValue(user.salt);
     query.addBindValue(user.verifier);
     query.addBindValue(static_cast<qulonglong>(user.sessions));
     query.addBindValue(static_cast<qulonglong>(user.flags));
+    query.addBindValue(user.public_key);
+    query.addBindValue(user.wrap_private_key);
+    query.addBindValue(user.wrap_salt);
     query.addBindValue(user.entry_id);
 
     if (!query.exec())
@@ -380,27 +432,28 @@ bool Database::removeUser(qint64 entry_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-User Database::findUser(const QString& username) const
+RouterUser Database::findUser(const QString& username) const
 {
     if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
-        return User::kInvalidUser;
+        return RouterUser();
     }
 
     QSqlQuery query(databaseByName(connection_name_));
     query.prepare(QStringLiteral(
-        "SELECT id, name, \"group\", salt, verifier, sessions, flags FROM users WHERE name=?"));
+        "SELECT id, name, \"group\", salt, verifier, sessions, flags, "
+        "public_key, wrap_private_key, wrap_salt FROM users WHERE name=?"));
     query.addBindValue(username);
 
     if (!query.exec())
     {
         LOG(ERROR) << "Unable to execute query:" << query.lastError();
-        return User::kInvalidUser;
+        return RouterUser();
     }
 
     if (!query.next())
-        return User::kInvalidUser;
+        return RouterUser();
 
     return readUser(query);
 }

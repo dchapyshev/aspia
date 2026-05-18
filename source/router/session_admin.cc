@@ -20,7 +20,7 @@
 
 #include "base/logging.h"
 #include "base/serialization.h"
-#include "base/peer/user.h"
+#include "base/peer/router_user.h"
 #include "router/database.h"
 #include "proto/router_admin.h"
 #include "proto/router_constants.h"
@@ -239,7 +239,7 @@ void SessionAdmin::doUserListRequest()
     {
         list->set_error_code(proto::router::kErrorOk);
 
-        QVector<User> users = database.userList();
+        QVector<RouterUser> users = database.userList();
         for (const auto& user : std::as_const(users))
             list->add_user()->CopyFrom(user.serialize());
     }
@@ -587,7 +587,7 @@ std::string SessionAdmin::addUser(const proto::router::User& user)
 {
     CLOG(INFO) << "User add request:" << user.name();
 
-    User new_user = User::parseFrom(user);
+    RouterUser new_user = RouterUser::parseFrom(user);
     if (!new_user.isValid())
     {
         CLOG(ERROR) << "Failed to create user";
@@ -624,7 +624,7 @@ std::string SessionAdmin::modifyUser(const proto::router::User& user)
         return proto::router::kErrorInvalidData;
     }
 
-    User new_user = User::parseFrom(user);
+    RouterUser new_user = RouterUser::parseFrom(user);
     if (!new_user.isValid())
     {
         CLOG(ERROR) << "Failed to create user";

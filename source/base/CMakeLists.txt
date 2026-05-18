@@ -251,6 +251,8 @@ list(APPEND SOURCE_BASE_CRYPTO
     crypto/password_generator.h
     crypto/password_hash.cc
     crypto/password_hash.h
+    crypto/private_key_cryptor.cc
+    crypto/private_key_cryptor.h
     crypto/random.cc
     crypto/random.h
     crypto/sealed_box.cc
@@ -286,6 +288,7 @@ list(APPEND SOURCE_BASE_CRYPTO_TESTS
     crypto/large_number_increment_unittest.cc
     crypto/password_generator_unittest.cc
     crypto/password_hash_unittest.cc
+    crypto/private_key_cryptor_unittest.cc
     crypto/sealed_box_unittest.cc
     crypto/srp_math_unittest.cc)
 
@@ -495,6 +498,8 @@ list(APPEND SOURCE_BASE_PEER
     peer/relay_peer.h
     peer/relay_peer_manager.cc
     peer/relay_peer_manager.h
+    peer/router_user.cc
+    peer/router_user.h
     peer/server_authenticator.cc
     peer/server_authenticator.h
     peer/server_authenticator_legacy.cc
@@ -509,6 +514,7 @@ list(APPEND SOURCE_BASE_PEER
 
 list(APPEND SOURCE_BASE_PEER_TESTS
     peer/host_id_unittest.cc
+    peer/router_user_unittest.cc
     peer/user_unittest.cc)
 
 if (UNIX)

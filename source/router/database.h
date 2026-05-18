@@ -24,7 +24,7 @@
 #include <string_view>
 
 #include "base/peer/host_id.h"
-#include "base/peer/user.h"
+#include "base/peer/router_user.h"
 #include "router/workspace.h"
 
 class Database
@@ -40,11 +40,11 @@ public:
     static QString filePath();
 
     bool isValid() const;
-    QVector<User> userList() const;
-    bool addUser(const User& user);
-    bool modifyUser(const User& user);
+    QVector<RouterUser> userList() const;
+    bool addUser(const RouterUser& user);
+    bool modifyUser(const RouterUser& user);
     bool removeUser(qint64 entry_id);
-    User findUser(const QString& username) const;
+    RouterUser findUser(const QString& username) const;
     std::string_view hostId(const QByteArray& key_hash, HostId* host_id) const;
     bool addHost(const QByteArray& key_hash);
 

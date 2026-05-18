@@ -23,7 +23,7 @@
 
 #include <memory>
 
-#include "base/peer/user.h"
+#include "base/peer/router_user.h"
 
 class QAbstractButton;
 
@@ -40,10 +40,10 @@ class RouterUserDialog final : public QDialog
     Q_OBJECT
 
 public:
-    RouterUserDialog(const User& user, const QStringList& users, QWidget* parent);
+    RouterUserDialog(const RouterUser& user, const QStringList& users, QWidget* parent);
     ~RouterUserDialog() final;
 
-    const User& user() const;
+    const RouterUser& user() const;
 
 protected:
     // QDialog implementation.
@@ -55,7 +55,7 @@ private:
     static QString sessionTypeToString(proto::router::SessionType session_type);
 
     std::unique_ptr<Ui::RouterUserDialog> ui;
-    User user_;
+    RouterUser user_;
     QStringList users_;
     bool account_changed_ = true;
 

@@ -21,7 +21,6 @@
 #include <gtest/gtest.h>
 
 #include "base/crypto/secure_string.h"
-#include "proto/router_admin.h"
 
 // ============================================================================
 // isValidUserName
@@ -239,67 +238,6 @@ TEST(user_test, is_valid_requires_all_fields)
     User u4 = user;
     u4.verifier.clear();
     EXPECT_FALSE(u4.isValid());
-}
-
-// ============================================================================
-// serialize / parseFrom roundtrip
-// ============================================================================
-
-TEST(user_test, serialize_parseFrom_roundtrip)
-{
-    User original = User::create("admin", SecureString("Str0ngPass"));
-    ASSERT_TRUE(original.isValid());
-
-    original.entry_id = 42;
-    original.sessions = 5;
-    original.flags = User::ENABLED;
-
-    proto::router::User proto_user = original.serialize();
-    User restored = User::parseFrom(proto_user);
-
-    EXPECT_EQ(restored.entry_id, original.entry_id);
-    EXPECT_EQ(restored.name, original.name);
-    EXPECT_EQ(restored.group, original.group);
-    EXPECT_EQ(restored.salt, original.salt);
-    EXPECT_EQ(restored.verifier, original.verifier);
-    EXPECT_EQ(restored.sessions, original.sessions);
-    EXPECT_EQ(restored.flags, original.flags);
-}
-
-TEST(user_test, serialize_default_user)
-{
-    User user;
-    proto::router::User proto_user = user.serialize();
-
-    EXPECT_EQ(proto_user.entry_id(), 0);
-    EXPECT_TRUE(proto_user.name().empty());
-    EXPECT_TRUE(proto_user.group().empty());
-    EXPECT_TRUE(proto_user.salt().empty());
-    EXPECT_TRUE(proto_user.verifier().empty());
-    EXPECT_EQ(proto_user.sessions(), 0u);
-    EXPECT_EQ(proto_user.flags(), 0u);
-}
-
-TEST(user_test, parseFrom_preserves_all_fields)
-{
-    proto::router::User proto_user;
-    proto_user.set_entry_id(99);
-    proto_user.set_name("bob");
-    proto_user.set_group("4096");
-    proto_user.set_salt("salt_data");
-    proto_user.set_verifier("verifier_data");
-    proto_user.set_sessions(3);
-    proto_user.set_flags(User::ENABLED);
-
-    User user = User::parseFrom(proto_user);
-
-    EXPECT_EQ(user.entry_id, 99);
-    EXPECT_EQ(user.name, "bob");
-    EXPECT_EQ(user.group, "4096");
-    EXPECT_EQ(user.salt, QByteArray("salt_data"));
-    EXPECT_EQ(user.verifier, QByteArray("verifier_data"));
-    EXPECT_EQ(user.sessions, 3u);
-    EXPECT_EQ(user.flags, static_cast<quint32>(User::ENABLED));
 }
 
 // ============================================================================

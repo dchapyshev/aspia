@@ -22,10 +22,6 @@
 #include <QByteArray>
 #include <QString>
 
-namespace proto::router {
-class User;
-} // namespace proto::router
-
 class SecureString;
 
 class User
@@ -53,9 +49,6 @@ public:
 
     static User create(const QString& name, const SecureString& password);
     bool isValid() const;
-
-    static User parseFrom(const proto::router::User& serialized_user);
-    proto::router::User serialize() const;
 
     static const User kInvalidUser;
 

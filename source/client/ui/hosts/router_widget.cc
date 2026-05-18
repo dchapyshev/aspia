@@ -37,7 +37,7 @@
 
 #include "base/gui_application.h"
 #include "base/logging.h"
-#include "base/peer/user.h"
+#include "base/peer/router_user.h"
 #include "client/ui/hosts/router_user_dialog.h"
 #include "client/ui/hosts/router_workspace_dialog.h"
 #include "common/ui/formatter.h"
@@ -297,7 +297,7 @@ class UserTreeItem final : public QTreeWidgetItem
 
 public:
     explicit UserTreeItem(const proto::router::User& user)
-        : user(User::parseFrom(user))
+        : user(RouterUser::parseFrom(user))
     {
         setText(0, QString::fromStdString(user.name()));
         setText(1, user.flags() & User::ENABLED ? tr("Yes") : tr("No"));
@@ -341,7 +341,7 @@ public:
         return list.join(", ");
     }
 
-    User user;
+    RouterUser user;
 
 private:
     Q_DISABLE_COPY_MOVE(UserTreeItem)
@@ -866,7 +866,7 @@ void RouterWidget::onAddUser()
         names.append(item->user.name);
     }
 
-    RouterUserDialog dialog(User(), names, this);
+    RouterUserDialog dialog(RouterUser(), names, this);
     if (dialog.exec() != QDialog::Accepted)
     {
         LOG(INFO) << "[ACTION] Add user rejected by user";

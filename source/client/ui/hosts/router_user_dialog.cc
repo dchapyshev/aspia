@@ -29,7 +29,7 @@
 #include "ui_router_user_dialog.h"
 
 //--------------------------------------------------------------------------------------------------
-RouterUserDialog::RouterUserDialog(const User& user, const QStringList& users, QWidget* parent)
+RouterUserDialog::RouterUserDialog(const RouterUser& user, const QStringList& users, QWidget* parent)
     : QDialog(parent),
       ui(std::make_unique<Ui::RouterUserDialog>()),
       user_(user),
@@ -95,7 +95,7 @@ RouterUserDialog::~RouterUserDialog()
 }
 
 //--------------------------------------------------------------------------------------------------
-const User& RouterUserDialog::user() const
+const RouterUser& RouterUserDialog::user() const
 {
     return user_;
 }
@@ -204,7 +204,7 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
         qint64 entry_id = user_.entry_id;
 
         // Create new user.
-        user_ = User::create(username, password);
+        user_ = RouterUser::create(username, password);
 
         // Restore entry ID.
         user_.entry_id = entry_id;
