@@ -20,7 +20,6 @@
 #define CLIENT_UI_HOSTS_ROUTER_WIDGET_H
 
 #include <QHash>
-#include <QPointer>
 
 #include <memory>
 
@@ -48,8 +47,6 @@ class Workspace;
 class WorkspaceList;
 class WorkspaceResult;
 } // namespace proto::router
-
-class RouterWorkspaceDialog;
 
 class RouterWidget final : public ContentWidget
 {
@@ -187,8 +184,6 @@ private slots:
     void onClientResultReceived(const proto::router::ClientResult& result);
     void onWorkspaceListReceived(const proto::router::WorkspaceList& list);
     void onWorkspaceResultReceived(const proto::router::WorkspaceResult& result);
-    void onAccessDialogGrant(qint64 workspace_id, qint64 target_user_id, const QByteArray& target_public_key);
-    void onAccessDialogRevoke(qint64 workspace_id, qint64 target_user_id);
 
 private:
     void updateStatusLabel();
@@ -203,7 +198,6 @@ private:
     Router::Status status_ = Router::Status::OFFLINE;
 
     StatusDialog* status_dialog_ = nullptr;
-    QPointer<RouterWorkspaceDialog> workspace_dialog_;
 
     QLabel* status_label_ = nullptr;
 

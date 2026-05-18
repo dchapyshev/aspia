@@ -51,6 +51,12 @@ RouterWorkspaceDialog::RouterWorkspaceDialog(
     connect(ui->buttonbox, &QDialogButtonBox::clicked, this, &RouterWorkspaceDialog::onButtonBoxClicked);
     connect(ui->button_add, &QPushButton::clicked, this, &RouterWorkspaceDialog::onAddClicked);
     connect(ui->button_remove, &QPushButton::clicked, this, &RouterWorkspaceDialog::onRemoveClicked);
+    connect(ui->list_available, &QListWidget::itemSelectionChanged,
+            this, &RouterWorkspaceDialog::updateButtonsState);
+    connect(ui->list_with_access, &QListWidget::itemSelectionChanged,
+            this, &RouterWorkspaceDialog::updateButtonsState);
+
+    updateButtonsState();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -137,22 +143,14 @@ void RouterWorkspaceDialog::onAddClicked()
 
     if (it->public_key.isEmpty())
     {
-        MsgBox::warning(this, tr("This user has no encryption keys and cannot be granted access. "
-                                 "Recreate the user or ask them to change their password to "
-                                 "generate the keys."));
+        MsgBox::warning(this, tr("This user does not have encryption keys configured. "
+                                 "Recreate the user or change the password to generate them."));
         return;
     }
 
-    if (entry_id_ > 0)
-    {
-        emit sig_grantClicked(entry_id_, user_id, it->public_key);
-    }
-    else
-    {
-        // Create mode - mutate locally; final access list is committed on accept().
-        access_user_ids_.insert(user_id);
-        rebuildLists();
-    }
+    // Changes are committed on accept(); just mutate the working set locally.
+    access_user_ids_.insert(user_id);
+    rebuildLists();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -169,15 +167,8 @@ void RouterWorkspaceDialog::onRemoveClicked()
         return;
     }
 
-    if (entry_id_ > 0)
-    {
-        emit sig_revokeClicked(entry_id_, user_id);
-    }
-    else
-    {
-        access_user_ids_.remove(user_id);
-        rebuildLists();
-    }
+    access_user_ids_.remove(user_id);
+    rebuildLists();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -200,4 +191,17 @@ void RouterWorkspaceDialog::rebuildLists()
 
     ui->list_with_access->sortItems();
     ui->list_available->sortItems();
+
+    updateButtonsState();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWorkspaceDialog::updateButtonsState()
+{
+    ui->button_add->setEnabled(ui->list_available->currentItem() != nullptr);
+
+    QListWidgetItem* selected_with_access = ui->list_with_access->currentItem();
+    const bool can_remove = selected_with_access &&
+        selected_with_access->data(Qt::UserRole).toLongLong() != self_user_id_;
+    ui->button_remove->setEnabled(can_remove);
 }

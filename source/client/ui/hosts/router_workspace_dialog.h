@@ -53,20 +53,15 @@ public:
     void setUsers(const QVector<UserEntry>& users);
     void setAccessUserIds(const QSet<qint64>& user_ids_with_access);
 
-    // Self user_id is protected from revoke and always present in access list in create mode.
+    // Self user_id is protected from revoke (in both create and modify modes).
     void setSelfUserId(qint64 user_id);
-
-signals:
-    // Emitted only in modify mode (entry_id > 0). In create mode the dialog mutates its own
-    // access list locally and the final set is read via accessUserIds() after accept().
-    void sig_grantClicked(qint64 workspace_id, qint64 target_user_id, const QByteArray& target_public_key);
-    void sig_revokeClicked(qint64 workspace_id, qint64 target_user_id);
 
 private:
     void onButtonBoxClicked(QAbstractButton* button);
     void onAddClicked();
     void onRemoveClicked();
     void rebuildLists();
+    void updateButtonsState();
 
     std::unique_ptr<Ui::RouterWorkspaceDialog> ui;
     qint64 entry_id_ = -1;
