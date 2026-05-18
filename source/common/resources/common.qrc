@@ -120,5 +120,6 @@
         <file>arrow-left.svg</file>
         <file>arrow-right.svg</file>
         <file>clean.svg</file>
+        <file>user-disable.svg</file>
     </qresource>
 </RCC>

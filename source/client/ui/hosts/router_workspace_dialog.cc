@@ -135,6 +135,14 @@ void RouterWorkspaceDialog::onAddClicked()
     if (it == users_.constEnd())
         return;
 
+    if (it->public_key.isEmpty())
+    {
+        MsgBox::warning(this, tr("This user has no encryption keys and cannot be granted access. "
+                                 "Recreate the user or ask them to change their password to "
+                                 "generate the keys."));
+        return;
+    }
+
     if (entry_id_ > 0)
     {
         emit sig_grantClicked(entry_id_, user_id, it->public_key);
@@ -180,22 +188,14 @@ void RouterWorkspaceDialog::rebuildLists()
 
     for (const UserEntry& user : std::as_const(users_))
     {
-        QListWidgetItem* item = new QListWidgetItem(QIcon(":/img/user.svg"), user.name);
+        const QIcon icon(user.public_key.isEmpty() ? ":/img/user-disable.svg" : ":/img/user.svg");
+        QListWidgetItem* item = new QListWidgetItem(icon, user.name);
         item->setData(Qt::UserRole, user.entry_id);
 
         if (access_user_ids_.contains(user.entry_id))
-        {
             ui->list_with_access->addItem(item);
-        }
-        else if (user.public_key.isEmpty())
-        {
-            // Legacy users without keys cannot receive workspace access.
-            delete item;
-        }
         else
-        {
             ui->list_available->addItem(item);
-        }
     }
 
     ui->list_with_access->sortItems();
