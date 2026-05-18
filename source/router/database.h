@@ -51,10 +51,8 @@ public:
 
     QVector<Workspace> workspaceList() const;
     Workspace findWorkspace(qint64 entry_id) const;
-    // Workspace is always created together with the first access record for the creator,
-    // otherwise the GK would be unrecoverable.
     std::string_view addWorkspace(
-        const QString& name, qint64 grantor_user_id, const QByteArray& grantor_wrapped_gk, qint64* entry_id);
+        const QString& name, const QVector<Workspace::Access>& initial_access, qint64* entry_id);
     std::string_view modifyWorkspace(qint64 entry_id, const QString& name);
     std::string_view removeWorkspace(qint64 entry_id);
 

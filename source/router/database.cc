@@ -598,7 +598,7 @@ Workspace Database::findWorkspace(qint64 entry_id) const
 
 //--------------------------------------------------------------------------------------------------
 std::string_view Database::addWorkspace(
-    const QString& name, qint64 grantor_user_id, const QByteArray& grantor_wrapped_gk, qint64* entry_id)
+    const QString& name, const QVector<Workspace::Access>& initial_access, qint64* entry_id)
 {
     CHECK(entry_id);
 
@@ -616,10 +616,13 @@ std::string_view Database::addWorkspace(
         return proto::router::kErrorInvalidData;
     }
 
-    if (grantor_user_id <= 0 || grantor_wrapped_gk.isEmpty())
+    for (const Workspace::Access& access : initial_access)
     {
-        LOG(ERROR) << "Invalid grantor data";
-        return proto::router::kErrorInvalidData;
+        if (access.user_id <= 0 || access.wrapped_gk.isEmpty())
+        {
+            LOG(ERROR) << "Invalid access record";
+            return proto::router::kErrorInvalidData;
+        }
     }
 
     QSqlDatabase sql_db = databaseByName(connection_name_);
@@ -662,15 +665,19 @@ std::string_view Database::addWorkspace(
     QSqlQuery insert_access(sql_db);
     insert_access.prepare(QStringLiteral(
         "INSERT INTO workspace_access (workspace_id, user_id, wrapped_gk) VALUES (?, ?, ?)"));
-    insert_access.addBindValue(new_id);
-    insert_access.addBindValue(grantor_user_id);
-    insert_access.addBindValue(grantor_wrapped_gk);
 
-    if (!insert_access.exec())
+    for (const Workspace::Access& access : initial_access)
     {
-        LOG(ERROR) << "Unable to execute query:" << insert_access.lastError();
-        sql_db.rollback();
-        return proto::router::kErrorInternalError;
+        insert_access.bindValue(0, new_id);
+        insert_access.bindValue(1, access.user_id);
+        insert_access.bindValue(2, access.wrapped_gk);
+
+        if (!insert_access.exec())
+        {
+            LOG(ERROR) << "Unable to execute query:" << insert_access.lastError();
+            sql_db.rollback();
+            return proto::router::kErrorInternalError;
+        }
     }
 
     if (!sql_db.commit())

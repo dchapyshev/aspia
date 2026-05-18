@@ -1114,6 +1114,7 @@ void RouterWidget::onAddWorkspace()
         return;
     }
 
+    qint64 self_user_id = 0;
     QByteArray self_public_key;
     const QString self_name = config_.username();
 
@@ -1122,6 +1123,7 @@ void RouterWidget::onAddWorkspace()
         UserTreeItem* item = static_cast<UserTreeItem*>(ui->tree_users->topLevelItem(i));
         if (item->user.name.compare(self_name, Qt::CaseInsensitive) == 0)
         {
+            self_user_id = item->user.entry_id;
             self_public_key = item->user.public_key;
             break;
         }
@@ -1146,21 +1148,61 @@ void RouterWidget::onAddWorkspace()
     dialog->setAttribute(Qt::WA_DeleteOnClose);
     workspace_dialog_ = dialog;
 
-    connect(dialog, &QDialog::accepted, this, [this, dialog, self_public_key]()
+    QVector<RouterWorkspaceDialog::UserEntry> users;
+    for (int i = 0; i < ui->tree_users->topLevelItemCount(); ++i)
     {
-        QByteArray wrapped_gk = SealedBox::seal(Random::byteArray(32), self_public_key);
-        if (wrapped_gk.isEmpty())
-        {
-            LOG(ERROR) << "Failed to seal group key";
-            MsgBox::warning(this, tr("Failed to encrypt workspace key."));
-            return;
-        }
+        UserTreeItem* item = static_cast<UserTreeItem*>(ui->tree_users->topLevelItem(i));
+        RouterWorkspaceDialog::UserEntry entry;
+        entry.entry_id   = item->user.entry_id;
+        entry.name       = item->user.name;
+        entry.public_key = item->user.public_key;
+        users.append(entry);
+    }
+    dialog->setUsers(users);
+    dialog->setSelfUserId(self_user_id);
 
-        LOG(INFO) << "[ACTION] Add workspace accepted by user";
+    connect(dialog, &QDialog::accepted, this, [this]()
+    {
+        if (!workspace_dialog_)
+            return;
+
+        const QByteArray group_key = Random::byteArray(32);
 
         proto::router::Workspace workspace;
-        workspace.set_name(dialog->name().toStdString());
-        workspace.add_access()->set_wrapped_gk(wrapped_gk.toStdString());
+        workspace.set_name(workspace_dialog_->name().toStdString());
+
+        const QSet<qint64> access_ids = workspace_dialog_->accessUserIds();
+        for (qint64 user_id : access_ids)
+        {
+            QByteArray target_public_key;
+            for (int i = 0; i < ui->tree_users->topLevelItemCount(); ++i)
+            {
+                UserTreeItem* item = static_cast<UserTreeItem*>(ui->tree_users->topLevelItem(i));
+                if (item->user.entry_id == user_id)
+                {
+                    target_public_key = item->user.public_key;
+                    break;
+                }
+            }
+
+            if (target_public_key.isEmpty())
+                continue;
+
+            QByteArray wrapped_group_key = SealedBox::seal(group_key, target_public_key);
+            if (wrapped_group_key.isEmpty())
+            {
+                LOG(ERROR) << "Failed to seal group key for user_id:" << user_id;
+                MsgBox::warning(this, tr("Failed to encrypt workspace key for one of the users."));
+                return;
+            }
+
+            proto::router::WorkspaceAccess* access = workspace.add_access();
+            access->set_user_id(user_id);
+            access->set_wrapped_gk(wrapped_group_key.toStdString());
+        }
+
+        LOG(INFO) << "[ACTION] Add workspace accepted by user (access entries:"
+                  << workspace.access_size() << ")";
         emit sig_addWorkspace(workspace);
     });
 
@@ -1858,8 +1900,8 @@ void RouterWidget::onAccessDialogGrant(
         return;
     }
 
-    // Locate this workspace and find self's wrapped_gk inside its access list.
-    QByteArray self_wrapped_gk;
+    // Locate this workspace and find self's wrapped_gk inside its access list (if any).
+    QByteArray self_wrapped_group_key;
     for (int i = 0; i < ui->tree_workspaces->topLevelItemCount(); ++i)
     {
         WorkspaceTreeItem* ws_item =
@@ -1871,43 +1913,59 @@ void RouterWidget::onAccessDialogGrant(
         {
             if (ws_item->workspace.access(j).user_id() == self_item->user.entry_id)
             {
-                self_wrapped_gk = QByteArray::fromStdString(ws_item->workspace.access(j).wrapped_gk());
+                self_wrapped_group_key = QByteArray::fromStdString(ws_item->workspace.access(j).wrapped_gk());
                 break;
             }
         }
         break;
     }
 
-    if (self_wrapped_gk.isEmpty())
+    QByteArray group_key;
+
+    if (self_wrapped_group_key.isEmpty())
     {
-        MsgBox::warning(this, tr("You do not have access to this workspace."));
-        return;
+        // Bootstrap: workspace has no GK yet (no access records, or self is not among them).
+        // Generate a fresh GK, grant access to self first, then continue with the target.
+        group_key = Random::byteArray(32);
+
+        QByteArray self_wrapped = SealedBox::seal(group_key, self_item->user.public_key);
+        if (self_wrapped.isEmpty())
+        {
+            MsgBox::warning(this, tr("Failed to wrap workspace key for your account."));
+            return;
+        }
+
+        emit sig_grantWorkspaceAccess(workspace_id, self_item->user.entry_id, self_wrapped);
+    }
+    else
+    {
+        // Decrypt own private key with the password kept in the router config.
+        SecureByteArray self_private_key = PrivateKeyCryptor::decrypt(
+            self_item->user.wrap_private_key, config_.password(), self_item->user.wrap_salt);
+        if (self_private_key.isEmpty())
+        {
+            MsgBox::warning(this, tr("Failed to decrypt your private key."));
+            return;
+        }
+
+        KeyPair self_key_pair = KeyPair::fromPrivateKey(self_private_key);
+        if (!self_key_pair.isValid())
+        {
+            MsgBox::warning(this, tr("Failed to load your key pair."));
+            return;
+        }
+
+        std::optional<QByteArray> opened = SealedBox::open(self_wrapped_group_key, self_key_pair);
+        if (!opened.has_value() || opened->isEmpty())
+        {
+            MsgBox::warning(this, tr("Failed to unwrap workspace key."));
+            return;
+        }
+
+        group_key = *opened;
     }
 
-    // Decrypt own private key with the password kept in the router config.
-    SecureByteArray self_private_key = PrivateKeyCryptor::decrypt(
-        self_item->user.wrap_private_key, config_.password(), self_item->user.wrap_salt);
-    if (self_private_key.isEmpty())
-    {
-        MsgBox::warning(this, tr("Failed to decrypt your private key."));
-        return;
-    }
-
-    KeyPair self_key_pair = KeyPair::fromPrivateKey(self_private_key);
-    if (!self_key_pair.isValid())
-    {
-        MsgBox::warning(this, tr("Failed to load your key pair."));
-        return;
-    }
-
-    std::optional<QByteArray> group_key = SealedBox::open(self_wrapped_gk, self_key_pair);
-    if (!group_key.has_value() || group_key->isEmpty())
-    {
-        MsgBox::warning(this, tr("Failed to unwrap workspace key."));
-        return;
-    }
-
-    QByteArray target_wrapped_gk = SealedBox::seal(*group_key, target_public_key);
+    QByteArray target_wrapped_gk = SealedBox::seal(group_key, target_public_key);
     if (target_wrapped_gk.isEmpty())
     {
         MsgBox::warning(this, tr("Failed to wrap workspace key for the target user."));

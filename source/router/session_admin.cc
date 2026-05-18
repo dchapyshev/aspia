@@ -564,21 +564,21 @@ void SessionAdmin::doWorkspaceRequest(const proto::router::WorkspaceRequest& req
 
     if (request.command_name() == proto::router::kCommandWorkspaceAdd)
     {
-        CLOG(INFO) << "Workspace add request:" << name;
+        CLOG(INFO) << "Workspace add request:" << name << "with" << workspace.access_size() << "access entries";
 
-        if (workspace.access_size() != 1)
+        QVector<Workspace::Access> initial_access;
+        initial_access.reserve(workspace.access_size());
+        for (int i = 0; i < workspace.access_size(); ++i)
         {
-            CLOG(ERROR) << "Workspace add expects exactly one access entry";
-            result->set_error_code(proto::router::kErrorInvalidData);
-            sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
-            return;
+            const proto::router::WorkspaceAccess& src = workspace.access(i);
+            Workspace::Access dst;
+            dst.user_id    = src.user_id();
+            dst.wrapped_gk = QByteArray::fromStdString(src.wrapped_gk());
+            initial_access.append(dst);
         }
 
-        const QByteArray grantor_wrapped_gk =
-            QByteArray::fromStdString(workspace.access(0).wrapped_gk());
-
         qint64 new_id = -1;
-        std::string_view error_code = database.addWorkspace(name, userId(), grantor_wrapped_gk, &new_id);
+        std::string_view error_code = database.addWorkspace(name, initial_access, &new_id);
         result->set_error_code(error_code);
         if (error_code == proto::router::kErrorOk)
             result->set_entry_id(new_id);

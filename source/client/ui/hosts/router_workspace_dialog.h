@@ -48,13 +48,17 @@ public:
 
     qint64 entryId() const { return entry_id_; }
     QString name() const { return name_; }
+    const QSet<qint64>& accessUserIds() const { return access_user_ids_; }
 
-    // Access management is only meaningful when editing an existing workspace. In create
-    // mode (entry_id == -1) the access section is hidden.
     void setUsers(const QVector<UserEntry>& users);
     void setAccessUserIds(const QSet<qint64>& user_ids_with_access);
 
+    // Self user_id is protected from revoke and always present in access list in create mode.
+    void setSelfUserId(qint64 user_id);
+
 signals:
+    // Emitted only in modify mode (entry_id > 0). In create mode the dialog mutates its own
+    // access list locally and the final set is read via accessUserIds() after accept().
     void sig_grantClicked(qint64 workspace_id, qint64 target_user_id, const QByteArray& target_public_key);
     void sig_revokeClicked(qint64 workspace_id, qint64 target_user_id);
 
@@ -66,6 +70,7 @@ private:
 
     std::unique_ptr<Ui::RouterWorkspaceDialog> ui;
     qint64 entry_id_ = -1;
+    qint64 self_user_id_ = 0;
     QString name_;
     QStringList existing_names_;
     QHash<qint64, UserEntry> users_;

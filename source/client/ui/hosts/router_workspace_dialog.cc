@@ -47,10 +47,6 @@ RouterWorkspaceDialog::RouterWorkspaceDialog(
     ui->edit_name->setMaxLength(kMaxNameLength);
     ui->edit_name->setText(name_);
 
-    // Access section only makes sense when editing an existing workspace.
-    const bool edit_mode = entry_id_ > 0;
-    ui->group_access->setVisible(edit_mode);
-
     connect(ui->buttonbox, &QDialogButtonBox::clicked, this, &RouterWorkspaceDialog::onButtonBoxClicked);
     connect(ui->button_add, &QPushButton::clicked, this, &RouterWorkspaceDialog::onAddClicked);
     connect(ui->button_remove, &QPushButton::clicked, this, &RouterWorkspaceDialog::onRemoveClicked);
@@ -121,6 +117,12 @@ void RouterWorkspaceDialog::setAccessUserIds(const QSet<qint64>& user_ids_with_a
 }
 
 //--------------------------------------------------------------------------------------------------
+void RouterWorkspaceDialog::setSelfUserId(qint64 user_id)
+{
+    self_user_id_ = user_id;
+}
+
+//--------------------------------------------------------------------------------------------------
 void RouterWorkspaceDialog::onAddClicked()
 {
     QListWidgetItem* item = ui->list_available->currentItem();
@@ -132,7 +134,16 @@ void RouterWorkspaceDialog::onAddClicked()
     if (it == users_.constEnd())
         return;
 
-    emit sig_grantClicked(entry_id_, user_id, it->public_key);
+    if (entry_id_ > 0)
+    {
+        emit sig_grantClicked(entry_id_, user_id, it->public_key);
+    }
+    else
+    {
+        // Create mode - mutate locally; final access list is committed on accept().
+        access_user_ids_.insert(user_id);
+        rebuildLists();
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -143,7 +154,21 @@ void RouterWorkspaceDialog::onRemoveClicked()
         return;
 
     const qint64 user_id = item->data(Qt::UserRole).toLongLong();
-    emit sig_revokeClicked(entry_id_, user_id);
+    if (user_id == self_user_id_)
+    {
+        MsgBox::warning(this, tr("You cannot revoke your own access to the workspace."));
+        return;
+    }
+
+    if (entry_id_ > 0)
+    {
+        emit sig_revokeClicked(entry_id_, user_id);
+    }
+    else
+    {
+        access_user_ids_.remove(user_id);
+        rebuildLists();
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
