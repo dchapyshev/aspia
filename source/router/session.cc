@@ -89,6 +89,12 @@ QString Session::userName() const
 }
 
 //--------------------------------------------------------------------------------------------------
+qint64 Session::userId() const
+{
+    return tcp_channel_->peerUserId();
+}
+
+//--------------------------------------------------------------------------------------------------
 proto::router::SessionType Session::sessionType() const
 {
     return static_cast<proto::router::SessionType>(tcp_channel_->peerSessionType());

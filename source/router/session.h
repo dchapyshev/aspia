@@ -45,6 +45,7 @@ public:
     QString computerName() const;
     QString architecture() const;
     QString userName() const;
+    qint64 userId() const;
     proto::router::SessionType sessionType() const;
 
     qint64 sessionId() const { return session_id_; }
