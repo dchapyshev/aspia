@@ -19,6 +19,9 @@
 #ifndef CLIENT_UI_HOSTS_ROUTER_WIDGET_H
 #define CLIENT_UI_HOSTS_ROUTER_WIDGET_H
 
+#include <QHash>
+#include <QPointer>
+
 #include <memory>
 
 #include "base/scoped_qpointer.h"
@@ -45,6 +48,8 @@ class Workspace;
 class WorkspaceList;
 class WorkspaceResult;
 } // namespace proto::router
+
+class RouterWorkspaceDialog;
 
 class RouterWidget final : public ContentWidget
 {
@@ -137,6 +142,8 @@ signals:
     void sig_addWorkspace(const proto::router::Workspace& workspace);
     void sig_modifyWorkspace(const proto::router::Workspace& workspace);
     void sig_deleteWorkspace(qint64 entry_id);
+    void sig_grantWorkspaceAccess(qint64 workspace_id, qint64 user_id, const QByteArray& wrapped_gk);
+    void sig_revokeWorkspaceAccess(qint64 workspace_id, qint64 user_id);
     void sig_statusChanged(qint64 router_id, Router::Status status);
     void sig_currentTabTypeChanged(qint64 router_id, RouterWidget::TabType tab);
     void sig_currentUserChanged(qint64 router_id);
@@ -180,6 +187,8 @@ private slots:
     void onClientResultReceived(const proto::router::ClientResult& result);
     void onWorkspaceListReceived(const proto::router::WorkspaceList& list);
     void onWorkspaceResultReceived(const proto::router::WorkspaceResult& result);
+    void onAccessDialogGrant(qint64 workspace_id, qint64 target_user_id, const QByteArray& target_public_key);
+    void onAccessDialogRevoke(qint64 workspace_id, qint64 target_user_id);
 
 private:
     void updateStatusLabel();
@@ -194,6 +203,7 @@ private:
     Router::Status status_ = Router::Status::OFFLINE;
 
     StatusDialog* status_dialog_ = nullptr;
+    QPointer<RouterWorkspaceDialog> workspace_dialog_;
 
     QLabel* status_label_ = nullptr;
 

@@ -178,11 +178,17 @@ message UserResult
     string error_code   = 2; // "ok" | "invalid_request" | "internal_error" | "invalid_data" | "already_exists"
 }
 
+message WorkspaceAccess
+{
+    int64 user_id    = 1;
+    bytes wrapped_gk = 2;
+}
+
 message Workspace
 {
-    int64 entry_id           = 1;
-    string name              = 2;
-    bytes grantor_wrapped_gk = 3; // For "add" only: wrapped GK for the creator (current session user).
+    int64 entry_id                  = 1;
+    string name                     = 2;
+    repeated WorkspaceAccess access = 3;
 }
 
 message WorkspaceListRequest
@@ -198,7 +204,12 @@ message WorkspaceList
 
 message WorkspaceRequest
 {
-    string command_name = 1; // "add" | "modify" | "delete"
+    // "add"    - Workspace with name and exactly one access entry (creator + wrapped_gk).
+    // "modify" - Workspace with entry_id and new name.
+    // "delete" - Workspace with entry_id.
+    // "grant"  - Workspace with entry_id and exactly one access entry (target user_id + wrapped_gk).
+    // "revoke" - Workspace with entry_id and exactly one access entry (target user_id only).
+    string command_name = 1;
     Workspace workspace = 2;
 }
 
@@ -210,68 +221,31 @@ message WorkspaceResult
     int64 entry_id      = 3; // Id of created workspace for "add".
 }
 
-message WorkspaceAccess
-{
-    int64 workspace_id = 1;
-    int64 user_id      = 2;
-    bytes wrapped_gk   = 3;
-}
-
-message WorkspaceAccessListRequest
-{
-    int64 workspace_id = 1; // -1 means all accesses for current user.
-}
-
-message WorkspaceAccessList
-{
-    string error_code               = 1; // "ok" | "internal_error"
-    repeated WorkspaceAccess access = 2;
-}
-
-message WorkspaceAccessRequest
-{
-    string command_name = 1; // "grant" | "revoke"
-    int64 workspace_id  = 2;
-    int64 user_id       = 3;
-    bytes wrapped_gk    = 4; // For "grant" only.
-}
-
-message WorkspaceAccessResult
-{
-    string command_name = 1; // Same as request command_name.
-    string error_code   = 2; // "ok" | "invalid_request" | "internal_error" | "invalid_data" |
-                             // "already_exists" | "not_found"
-}
-
 message RouterToAdmin
 {
-    RelayList relay_list                          = 1;
-    RelayResult relay_result                      = 2;
-    HostList host_list                            = 3;
-    HostResult host_result                        = 4;
-    ClientList client_list                        = 5;
-    ClientResult client_result                    = 6;
-    UserList user_list                            = 7;
-    UserResult user_result                        = 8;
-    WorkspaceList workspace_list                  = 9;
-    WorkspaceResult workspace_result              = 10;
-    WorkspaceAccessList workspace_access_list     = 11;
-    WorkspaceAccessResult workspace_access_result = 12;
+    RelayList relay_list             = 1;
+    RelayResult relay_result         = 2;
+    HostList host_list               = 3;
+    HostResult host_result           = 4;
+    ClientList client_list           = 5;
+    ClientResult client_result       = 6;
+    UserList user_list               = 7;
+    UserResult user_result           = 8;
+    WorkspaceList workspace_list     = 9;
+    WorkspaceResult workspace_result = 10;
 }
 
 message AdminToRouter
 {
-    RelayListRequest relay_list_request                       = 1;
-    RelayRequest relay_request                                = 2;
-    HostListRequest host_list_request                         = 3;
-    HostRequest host_request                                  = 4;
-    ClientListRequest client_list_request                     = 5;
-    ClientRequest client_request                              = 6;
-    UserListRequest user_list_request                         = 7;
-    UserRequest user_request                                  = 8;
-    PeerRequest peer_request                                  = 9;
-    WorkspaceListRequest workspace_list_request               = 10;
-    WorkspaceRequest workspace_request                        = 11;
-    WorkspaceAccessListRequest workspace_access_list_request  = 12;
-    WorkspaceAccessRequest workspace_access_request           = 13;
+    RelayListRequest relay_list_request         = 1;
+    RelayRequest relay_request                  = 2;
+    HostListRequest host_list_request           = 3;
+    HostRequest host_request                    = 4;
+    ClientListRequest client_list_request       = 5;
+    ClientRequest client_request                = 6;
+    UserListRequest user_list_request           = 7;
+    UserRequest user_request                    = 8;
+    PeerRequest peer_request                    = 9;
+    WorkspaceListRequest workspace_list_request = 10;
+    WorkspaceRequest workspace_request          = 11;
 }

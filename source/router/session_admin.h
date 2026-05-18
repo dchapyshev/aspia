@@ -28,8 +28,6 @@ class PeerRequest;
 class RelayRequest;
 class User;
 class UserRequest;
-class WorkspaceAccessListRequest;
-class WorkspaceAccessRequest;
 class WorkspaceRequest;
 } // namespace proto::router
 
@@ -57,8 +55,6 @@ private:
     void doPeerRequest(const proto::router::PeerRequest& request);
     void doWorkspaceListRequest();
     void doWorkspaceRequest(const proto::router::WorkspaceRequest& request);
-    void doWorkspaceAccessListRequest(const proto::router::WorkspaceAccessListRequest& request);
-    void doWorkspaceAccessRequest(const proto::router::WorkspaceAccessRequest& request);
 
     std::string addUser(const proto::router::User& user);
     std::string modifyUser(const proto::router::User& user);

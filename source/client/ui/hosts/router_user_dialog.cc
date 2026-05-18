@@ -38,7 +38,7 @@ RouterUserDialog::RouterUserDialog(const RouterUser& user, const QStringList& us
     LOG(INFO) << "Ctor";
     ui->setupUi(this);
 
-    if (user_.isValid())
+    if (user_.User::isValid())
     {
         ui->checkbox_disable->setChecked(!(user_.flags & User::ENABLED));
         ui->edit_username->setText(user_.name);
@@ -58,7 +58,7 @@ RouterUserDialog::RouterUserDialog(const RouterUser& user, const QStringList& us
         item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
         item->setData(0, Qt::UserRole, QVariant(session_type));
 
-        if (user_.isValid())
+        if (user_.User::isValid())
         {
             if (user_.sessions & static_cast<quint32>(session_type))
                 item->setCheckState(0, Qt::Checked);

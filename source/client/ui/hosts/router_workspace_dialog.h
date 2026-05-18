@@ -20,6 +20,8 @@
 #define CLIENT_UI_HOSTS_ROUTER_WORKSPACE_DIALOG_H
 
 #include <QDialog>
+#include <QHash>
+#include <QSet>
 
 #include <memory>
 
@@ -34,22 +36,40 @@ class RouterWorkspaceDialog final : public QDialog
     Q_OBJECT
 
 public:
-    RouterWorkspaceDialog(qint64 entry_id,
-                          const QString& name,
-                          const QStringList& existing_names,
-                          QWidget* parent);
+    struct UserEntry
+    {
+        qint64 entry_id = 0;
+        QString name;
+        QByteArray public_key;
+    };
+
+    RouterWorkspaceDialog(qint64 entry_id, const QString& name, const QStringList& existing_names, QWidget* parent);
     ~RouterWorkspaceDialog() final;
 
     qint64 entryId() const { return entry_id_; }
     QString name() const { return name_; }
 
+    // Access management is only meaningful when editing an existing workspace. In create
+    // mode (entry_id == -1) the access section is hidden.
+    void setUsers(const QVector<UserEntry>& users);
+    void setAccessUserIds(const QSet<qint64>& user_ids_with_access);
+
+signals:
+    void sig_grantClicked(qint64 workspace_id, qint64 target_user_id, const QByteArray& target_public_key);
+    void sig_revokeClicked(qint64 workspace_id, qint64 target_user_id);
+
 private:
     void onButtonBoxClicked(QAbstractButton* button);
+    void onAddClicked();
+    void onRemoveClicked();
+    void rebuildLists();
 
     std::unique_ptr<Ui::RouterWorkspaceDialog> ui;
     qint64 entry_id_ = -1;
     QString name_;
     QStringList existing_names_;
+    QHash<qint64, UserEntry> users_;
+    QSet<qint64> access_user_ids_;
 
     Q_DISABLE_COPY_MOVE(RouterWorkspaceDialog)
 };
