@@ -103,6 +103,14 @@ void SessionAdmin::onSessionMessage(quint8 channel_id, const QByteArray& buffer)
     {
         doWorkspaceRequest(message.workspace_request());
     }
+    else if (message.has_workspace_access_list_request())
+    {
+        doWorkspaceAccessListRequest(message.workspace_access_list_request());
+    }
+    else if (message.has_workspace_access_request())
+    {
+        doWorkspaceAccessRequest(message.workspace_access_request());
+    }
     else
     {
         CLOG(ERROR) << "Unhandled message from manager";
@@ -557,8 +565,18 @@ void SessionAdmin::doWorkspaceRequest(const proto::router::WorkspaceRequest& req
     {
         CLOG(INFO) << "Workspace add request:" << name;
 
+        const QByteArray grantor_wrapped_gk =
+            QByteArray::fromStdString(request.workspace().grantor_wrapped_gk());
+        if (grantor_wrapped_gk.isEmpty())
+        {
+            CLOG(ERROR) << "Workspace add requires grantor_wrapped_gk";
+            result->set_error_code(proto::router::kErrorInvalidData);
+            sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
+            return;
+        }
+
         qint64 new_id = -1;
-        std::string_view error_code = database.addWorkspace(name, &new_id);
+        std::string_view error_code = database.addWorkspace(name, userId(), grantor_wrapped_gk, &new_id);
         result->set_error_code(error_code);
         if (error_code == proto::router::kErrorOk)
             result->set_entry_id(new_id);
@@ -576,6 +594,83 @@ void SessionAdmin::doWorkspaceRequest(const proto::router::WorkspaceRequest& req
     else
     {
         CLOG(ERROR) << "Unknown workspace request command:" << request.command_name();
+        result->set_error_code(proto::router::kErrorInvalidRequest);
+    }
+
+    sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void SessionAdmin::doWorkspaceAccessListRequest(const proto::router::WorkspaceAccessListRequest& request)
+{
+    proto::router::RouterToAdmin message;
+    proto::router::WorkspaceAccessList* list = message.mutable_workspace_access_list();
+
+    Database database = Database::open();
+    if (!database.isValid())
+    {
+        CLOG(ERROR) << "Failed to connect to database";
+        list->set_error_code(proto::router::kErrorInternalError);
+        sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
+        return;
+    }
+
+    QVector<Workspace::Access> accesses;
+    if (request.workspace_id() < 0)
+    {
+        // -1 means: return all accesses for the currently authenticated user.
+        accesses = database.workspaceAccessListForUser(userId());
+    }
+    else
+    {
+        accesses = database.workspaceAccessList(request.workspace_id());
+    }
+
+    list->set_error_code(proto::router::kErrorOk);
+    for (const auto& access : std::as_const(accesses))
+    {
+        proto::router::WorkspaceAccess* item = list->add_access();
+        item->set_workspace_id(access.workspace_id);
+        item->set_user_id(access.user_id);
+        item->set_wrapped_gk(access.wrapped_gk.toStdString());
+    }
+
+    sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void SessionAdmin::doWorkspaceAccessRequest(const proto::router::WorkspaceAccessRequest& request)
+{
+    proto::router::RouterToAdmin message;
+    proto::router::WorkspaceAccessResult* result = message.mutable_workspace_access_result();
+    result->set_command_name(request.command_name());
+
+    Database database = Database::open();
+    if (!database.isValid())
+    {
+        CLOG(ERROR) << "Failed to connect to database";
+        result->set_error_code(proto::router::kErrorInternalError);
+        sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
+        return;
+    }
+
+    const qint64 workspace_id = request.workspace_id();
+    const qint64 user_id = request.user_id();
+
+    if (request.command_name() == proto::router::kCommandWorkspaceAccessGrant)
+    {
+        const QByteArray wrapped_gk = QByteArray::fromStdString(request.wrapped_gk());
+        CLOG(INFO) << "Grant workspace access:" << workspace_id << "->" << user_id;
+        result->set_error_code(database.grantWorkspaceAccess(workspace_id, user_id, wrapped_gk));
+    }
+    else if (request.command_name() == proto::router::kCommandWorkspaceAccessRevoke)
+    {
+        CLOG(INFO) << "Revoke workspace access:" << workspace_id << "->" << user_id;
+        result->set_error_code(database.revokeWorkspaceAccess(workspace_id, user_id));
+    }
+    else
+    {
+        CLOG(ERROR) << "Unknown workspace access command:" << request.command_name();
         result->set_error_code(proto::router::kErrorInvalidRequest);
     }
 

@@ -37,6 +37,8 @@
 
 #include "base/gui_application.h"
 #include "base/logging.h"
+#include "base/crypto/random.h"
+#include "base/crypto/sealed_box.h"
 #include "base/peer/router_user.h"
 #include "client/ui/hosts/router_user_dialog.h"
 #include "client/ui/hosts/router_workspace_dialog.h"
@@ -1101,6 +1103,27 @@ void RouterWidget::onUpdateWorkspaceList()
 //--------------------------------------------------------------------------------------------------
 void RouterWidget::onAddWorkspace()
 {
+    QByteArray self_public_key;
+    const QString self_name = config_.username();
+
+    for (int i = 0; i < ui->tree_users->topLevelItemCount(); ++i)
+    {
+        UserTreeItem* item = static_cast<UserTreeItem*>(ui->tree_users->topLevelItem(i));
+        if (item->user.name.compare(self_name, Qt::CaseInsensitive) == 0)
+        {
+            self_public_key = item->user.public_key;
+            break;
+        }
+    }
+
+    if (self_public_key.isEmpty())
+    {
+        LOG(ERROR) << "Cannot create workspace: current user has no public key";
+        MsgBox::warning(this, tr("Your account does not have encryption keys configured. "
+                                 "Recreate your user to generate them before creating a workspace."));
+        return;
+    }
+
     QStringList names;
     for (int i = 0; i < ui->tree_workspaces->topLevelItemCount(); ++i)
     {
@@ -1115,10 +1138,21 @@ void RouterWidget::onAddWorkspace()
         return;
     }
 
+    QByteArray group_key = Random::byteArray(32);
+    QByteArray wrapped_gk = SealedBox::seal(group_key, self_public_key);
+
+    if (wrapped_gk.isEmpty())
+    {
+        LOG(ERROR) << "Failed to seal group key";
+        MsgBox::warning(this, tr("Failed to encrypt workspace key."));
+        return;
+    }
+
     LOG(INFO) << "[ACTION] Add workspace accepted by user";
 
     proto::router::Workspace workspace;
     workspace.set_name(dialog.name().toStdString());
+    workspace.set_grantor_wrapped_gk(wrapped_gk.toStdString());
     emit sig_addWorkspace(workspace);
 }
 

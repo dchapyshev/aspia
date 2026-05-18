@@ -19,6 +19,7 @@
 #ifndef ROUTER_WORKSPACE_H
 #define ROUTER_WORKSPACE_H
 
+#include <QByteArray>
 #include <QString>
 
 class Workspace
@@ -38,6 +39,13 @@ public:
     static bool isValidName(const QString& name);
 
     bool isValid() const;
+
+    struct Access
+    {
+        qint64 workspace_id = 0;
+        qint64 user_id = 0;
+        QByteArray wrapped_gk;
+    };
 
     qint64 entry_id = 0;
     QString name;

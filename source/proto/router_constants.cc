@@ -20,29 +20,32 @@
 
 namespace proto::router {
 
-const char* const kCommandHostDisconnect  = "disconnect";
-const char* const kCommandHostRemove      = "remove";
+const char* const kCommandHostDisconnect = "disconnect";
+const char* const kCommandHostRemove     = "remove";
 
 const char* const kCommandRelayDisconnect = "disconnect";
 
 const char* const kCommandClientDisconnect = "disconnect";
 
-const char* const kCommandUserAdd         = "add";
-const char* const kCommandUserModify      = "modify";
-const char* const kCommandUserDelete      = "delete";
+const char* const kCommandUserAdd    = "add";
+const char* const kCommandUserModify = "modify";
+const char* const kCommandUserDelete = "delete";
 
 const char* const kCommandWorkspaceAdd    = "add";
 const char* const kCommandWorkspaceModify = "modify";
 const char* const kCommandWorkspaceDelete = "delete";
 
-const char* const kErrorOk                = "ok";
-const char* const kErrorInvalidRequest    = "invalid_request";
-const char* const kErrorInternalError     = "internal_error";
-const char* const kErrorInvalidEntryId    = "invalid_entry_id";
-const char* const kErrorInvalidData       = "invalid_data";
-const char* const kErrorAlreadyExists     = "already_exists";
-const char* const kErrorNotFound          = "not_found";
+const char* const kCommandWorkspaceAccessGrant  = "grant";
+const char* const kCommandWorkspaceAccessRevoke = "revoke";
 
-const char* const kParamTryToUninstall    = "try_to_uninstall";
+const char* const kErrorOk             = "ok";
+const char* const kErrorInvalidRequest = "invalid_request";
+const char* const kErrorInternalError  = "internal_error";
+const char* const kErrorInvalidEntryId = "invalid_entry_id";
+const char* const kErrorInvalidData    = "invalid_data";
+const char* const kErrorAlreadyExists  = "already_exists";
+const char* const kErrorNotFound       = "not_found";
+
+const char* const kParamTryToUninstall = "try_to_uninstall";
 
 } // namespace proto::router

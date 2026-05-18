@@ -19,6 +19,7 @@
 #ifndef ROUTER_DATABASE_H
 #define ROUTER_DATABASE_H
 
+#include <QByteArray>
 #include <QString>
 
 #include <string_view>
@@ -50,9 +51,17 @@ public:
 
     QVector<Workspace> workspaceList() const;
     Workspace findWorkspace(qint64 entry_id) const;
-    std::string_view addWorkspace(const QString& name, qint64* entry_id);
+    // Workspace is always created together with the first access record for the creator,
+    // otherwise the GK would be unrecoverable.
+    std::string_view addWorkspace(
+        const QString& name, qint64 grantor_user_id, const QByteArray& grantor_wrapped_gk, qint64* entry_id);
     std::string_view modifyWorkspace(qint64 entry_id, const QString& name);
     std::string_view removeWorkspace(qint64 entry_id);
+
+    QVector<Workspace::Access> workspaceAccessList(qint64 workspace_id) const;
+    QVector<Workspace::Access> workspaceAccessListForUser(qint64 user_id) const;
+    std::string_view grantWorkspaceAccess(qint64 workspace_id, qint64 user_id, const QByteArray& wrapped_gk);
+    std::string_view revokeWorkspaceAccess(qint64 workspace_id, qint64 user_id);
 
 private:
     explicit Database(const QString& connection_name);

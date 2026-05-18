@@ -452,6 +452,63 @@ void Router::onDeleteWorkspace(qint64 entry_id)
 }
 
 //--------------------------------------------------------------------------------------------------
+void Router::onWorkspaceAccessListRequest(qint64 workspace_id)
+{
+    if (config_.sessionType() != proto::router::SESSION_TYPE_ADMIN)
+    {
+        LOG(ERROR) << "No administrator access level";
+        return;
+    }
+
+    proto::router::AdminToRouter message;
+    message.mutable_workspace_access_list_request()->set_workspace_id(workspace_id);
+
+    LOG(INFO) << "Sending workspace access list request (workspace_id:" << workspace_id << ")";
+    sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void Router::onGrantWorkspaceAccess(qint64 workspace_id, qint64 user_id, const QByteArray& wrapped_gk)
+{
+    if (config_.sessionType() != proto::router::SESSION_TYPE_ADMIN)
+    {
+        LOG(ERROR) << "No administrator access level";
+        return;
+    }
+
+    proto::router::AdminToRouter message;
+    proto::router::WorkspaceAccessRequest* request = message.mutable_workspace_access_request();
+    request->set_command_name(proto::router::kCommandWorkspaceAccessGrant);
+    request->set_workspace_id(workspace_id);
+    request->set_user_id(user_id);
+    request->set_wrapped_gk(wrapped_gk.toStdString());
+
+    LOG(INFO) << "Sending workspace access grant (workspace_id:" << workspace_id
+              << ", user_id:" << user_id << ")";
+    sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void Router::onRevokeWorkspaceAccess(qint64 workspace_id, qint64 user_id)
+{
+    if (config_.sessionType() != proto::router::SESSION_TYPE_ADMIN)
+    {
+        LOG(ERROR) << "No administrator access level";
+        return;
+    }
+
+    proto::router::AdminToRouter message;
+    proto::router::WorkspaceAccessRequest* request = message.mutable_workspace_access_request();
+    request->set_command_name(proto::router::kCommandWorkspaceAccessRevoke);
+    request->set_workspace_id(workspace_id);
+    request->set_user_id(user_id);
+
+    LOG(INFO) << "Sending workspace access revoke (workspace_id:" << workspace_id
+              << ", user_id:" << user_id << ")";
+    sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
 void Router::onConnectionRequest(qint64 request_id, quint64 host_id)
 {
     proto::router::ClientToRouter message;
@@ -573,6 +630,16 @@ void Router::onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer)
         {
             LOG(INFO) << "Workspace result received";
             emit sig_workspaceResultReceived(message.workspace_result());
+        }
+        else if (message.has_workspace_access_list())
+        {
+            LOG(INFO) << "Workspace access list received";
+            emit sig_workspaceAccessListReceived(message.workspace_access_list());
+        }
+        else if (message.has_workspace_access_result())
+        {
+            LOG(INFO) << "Workspace access result received";
+            emit sig_workspaceAccessResultReceived(message.workspace_access_result());
         }
         else
         {

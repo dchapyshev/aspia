@@ -106,7 +106,14 @@ bool ensureSchema(QSqlDatabase& sql_db)
         !query.exec("CREATE TABLE IF NOT EXISTS \"workspaces\" ("
                     "\"id\" INTEGER UNIQUE,"
                     "\"name\" TEXT NOT NULL UNIQUE,"
-                    "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
+                    "PRIMARY KEY(\"id\" AUTOINCREMENT))") ||
+        !query.exec("CREATE TABLE IF NOT EXISTS \"workspace_access\" ("
+                    "\"workspace_id\" INTEGER NOT NULL,"
+                    "\"user_id\" INTEGER NOT NULL,"
+                    "\"wrapped_gk\" BLOB NOT NULL,"
+                    "PRIMARY KEY(\"workspace_id\", \"user_id\"),"
+                    "FOREIGN KEY(\"workspace_id\") REFERENCES \"workspaces\"(\"id\") ON DELETE CASCADE,"
+                    "FOREIGN KEY(\"user_id\") REFERENCES \"users\"(\"id\") ON DELETE CASCADE)"))
     {
         LOG(ERROR) << "Unable to execute query:" << query.lastError();
         sql_db.rollback();
@@ -182,6 +189,11 @@ QSqlDatabase ensureOpenDatabase(const QString& file_path)
     {
         LOG(WARNING) << "Unable to run quick_check:" << pragma.lastError();
     }
+
+    // Foreign keys are off by default in SQLite, enable per-connection so
+    // ON DELETE CASCADE on workspace_access actually triggers.
+    if (!pragma.exec("PRAGMA foreign_keys = ON"))
+        LOG(WARNING) << "Unable to enable foreign keys:" << pragma.lastError();
 
     return db;
 }
@@ -585,7 +597,8 @@ Workspace Database::findWorkspace(qint64 entry_id) const
 }
 
 //--------------------------------------------------------------------------------------------------
-std::string_view Database::addWorkspace(const QString& name, qint64* entry_id)
+std::string_view Database::addWorkspace(
+    const QString& name, qint64 grantor_user_id, const QByteArray& grantor_wrapped_gk, qint64* entry_id)
 {
     CHECK(entry_id);
 
@@ -603,30 +616,71 @@ std::string_view Database::addWorkspace(const QString& name, qint64* entry_id)
         return proto::router::kErrorInvalidData;
     }
 
-    QSqlQuery check(databaseByName(connection_name_));
+    if (grantor_user_id <= 0 || grantor_wrapped_gk.isEmpty())
+    {
+        LOG(ERROR) << "Invalid grantor data";
+        return proto::router::kErrorInvalidData;
+    }
+
+    QSqlDatabase sql_db = databaseByName(connection_name_);
+    if (!sql_db.transaction())
+    {
+        LOG(ERROR) << "Unable to start transaction:" << sql_db.lastError();
+        return proto::router::kErrorInternalError;
+    }
+
+    QSqlQuery check(sql_db);
     check.prepare(QStringLiteral("SELECT 1 FROM workspaces WHERE name=?"));
     check.addBindValue(name);
 
     if (!check.exec())
     {
         LOG(ERROR) << "Unable to execute query:" << check.lastError();
+        sql_db.rollback();
         return proto::router::kErrorInternalError;
     }
 
     if (check.next())
-        return proto::router::kErrorAlreadyExists;
-
-    QSqlQuery query(databaseByName(connection_name_));
-    query.prepare(QStringLiteral("INSERT INTO workspaces (id, name) VALUES (NULL, ?)"));
-    query.addBindValue(name);
-
-    if (!query.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << query.lastError();
+        sql_db.rollback();
+        return proto::router::kErrorAlreadyExists;
+    }
+
+    QSqlQuery insert_workspace(sql_db);
+    insert_workspace.prepare(QStringLiteral("INSERT INTO workspaces (id, name) VALUES (NULL, ?)"));
+    insert_workspace.addBindValue(name);
+
+    if (!insert_workspace.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << insert_workspace.lastError();
+        sql_db.rollback();
         return proto::router::kErrorInternalError;
     }
 
-    *entry_id = query.lastInsertId().toLongLong();
+    const qint64 new_id = insert_workspace.lastInsertId().toLongLong();
+
+    QSqlQuery insert_access(sql_db);
+    insert_access.prepare(QStringLiteral(
+        "INSERT INTO workspace_access (workspace_id, user_id, wrapped_gk) VALUES (?, ?, ?)"));
+    insert_access.addBindValue(new_id);
+    insert_access.addBindValue(grantor_user_id);
+    insert_access.addBindValue(grantor_wrapped_gk);
+
+    if (!insert_access.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << insert_access.lastError();
+        sql_db.rollback();
+        return proto::router::kErrorInternalError;
+    }
+
+    if (!sql_db.commit())
+    {
+        LOG(ERROR) << "Unable to commit transaction:" << sql_db.lastError();
+        sql_db.rollback();
+        return proto::router::kErrorInternalError;
+    }
+
+    *entry_id = new_id;
     return proto::router::kErrorOk;
 }
 
@@ -699,6 +753,152 @@ std::string_view Database::removeWorkspace(qint64 entry_id)
     QSqlQuery query(databaseByName(connection_name_));
     query.prepare(QStringLiteral("DELETE FROM workspaces WHERE id=?"));
     query.addBindValue(entry_id);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << query.lastError();
+        return proto::router::kErrorInternalError;
+    }
+
+    if (query.numRowsAffected() == 0)
+        return proto::router::kErrorNotFound;
+
+    return proto::router::kErrorOk;
+}
+
+//--------------------------------------------------------------------------------------------------
+QVector<Workspace::Access> Database::workspaceAccessList(qint64 workspace_id) const
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return {};
+    }
+
+    QSqlQuery query(databaseByName(connection_name_));
+    query.prepare(QStringLiteral(
+        "SELECT workspace_id, user_id, wrapped_gk FROM workspace_access WHERE workspace_id=?"));
+    query.addBindValue(workspace_id);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to get workspace access list:" << query.lastError();
+        return {};
+    }
+
+    QVector<Workspace::Access> result;
+    while (query.next())
+    {
+        Workspace::Access access;
+        access.workspace_id = query.value(0).toLongLong();
+        access.user_id      = query.value(1).toLongLong();
+        access.wrapped_gk   = query.value(2).toByteArray();
+        result.append(access);
+    }
+
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+QVector<Workspace::Access> Database::workspaceAccessListForUser(qint64 user_id) const
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return {};
+    }
+
+    QSqlQuery query(databaseByName(connection_name_));
+    query.prepare(QStringLiteral(
+        "SELECT workspace_id, user_id, wrapped_gk FROM workspace_access WHERE user_id=?"));
+    query.addBindValue(user_id);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to get workspace access list for user:" << query.lastError();
+        return {};
+    }
+
+    QVector<Workspace::Access> result;
+    while (query.next())
+    {
+        Workspace::Access access;
+        access.workspace_id = query.value(0).toLongLong();
+        access.user_id      = query.value(1).toLongLong();
+        access.wrapped_gk   = query.value(2).toByteArray();
+        result.append(access);
+    }
+
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+std::string_view Database::grantWorkspaceAccess(
+    qint64 workspace_id, qint64 user_id, const QByteArray& wrapped_gk)
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return proto::router::kErrorInternalError;
+    }
+
+    if (workspace_id <= 0 || user_id <= 0 || wrapped_gk.isEmpty())
+    {
+        LOG(ERROR) << "Invalid grant access parameters";
+        return proto::router::kErrorInvalidData;
+    }
+
+    QSqlQuery check(databaseByName(connection_name_));
+    check.prepare(QStringLiteral(
+        "SELECT 1 FROM workspace_access WHERE workspace_id=? AND user_id=?"));
+    check.addBindValue(workspace_id);
+    check.addBindValue(user_id);
+
+    if (!check.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << check.lastError();
+        return proto::router::kErrorInternalError;
+    }
+
+    if (check.next())
+        return proto::router::kErrorAlreadyExists;
+
+    QSqlQuery query(databaseByName(connection_name_));
+    query.prepare(QStringLiteral(
+        "INSERT INTO workspace_access (workspace_id, user_id, wrapped_gk) VALUES (?, ?, ?)"));
+    query.addBindValue(workspace_id);
+    query.addBindValue(user_id);
+    query.addBindValue(wrapped_gk);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << query.lastError();
+        return proto::router::kErrorInternalError;
+    }
+
+    return proto::router::kErrorOk;
+}
+
+//--------------------------------------------------------------------------------------------------
+std::string_view Database::revokeWorkspaceAccess(qint64 workspace_id, qint64 user_id)
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return proto::router::kErrorInternalError;
+    }
+
+    if (workspace_id <= 0 || user_id <= 0)
+    {
+        LOG(ERROR) << "Invalid revoke access parameters";
+        return proto::router::kErrorInvalidData;
+    }
+
+    QSqlQuery query(databaseByName(connection_name_));
+    query.prepare(QStringLiteral(
+        "DELETE FROM workspace_access WHERE workspace_id=? AND user_id=?"));
+    query.addBindValue(workspace_id);
+    query.addBindValue(user_id);
 
     if (!query.exec())
     {

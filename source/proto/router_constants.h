@@ -41,6 +41,10 @@ extern const char* const kCommandWorkspaceAdd;
 extern const char* const kCommandWorkspaceModify;
 extern const char* const kCommandWorkspaceDelete;
 
+// Command names for WorkspaceAccessRequest.
+extern const char* const kCommandWorkspaceAccessGrant;
+extern const char* const kCommandWorkspaceAccessRevoke;
+
 // Error codes for HostResult/RelayResult/ClientResult/UserList/UserResult/WorkspaceList/
 // WorkspaceResult/HostIdResponse.
 extern const char* const kErrorOk;

@@ -39,6 +39,8 @@ class User;
 class UserList;
 class UserResult;
 class Workspace;
+class WorkspaceAccessList;
+class WorkspaceAccessResult;
 class WorkspaceList;
 class WorkspaceResult;
 } // namespace proto::router
@@ -89,6 +91,9 @@ public slots:
     void onAddWorkspace(const proto::router::Workspace& workspace);
     void onModifyWorkspace(const proto::router::Workspace& workspace);
     void onDeleteWorkspace(qint64 entry_id);
+    void onWorkspaceAccessListRequest(qint64 workspace_id);
+    void onGrantWorkspaceAccess(qint64 workspace_id, qint64 user_id, const QByteArray& wrapped_gk);
+    void onRevokeWorkspaceAccess(qint64 workspace_id, qint64 user_id);
 
     // Manager methods.
     // TODO
@@ -113,6 +118,8 @@ signals:
     void sig_clientResultReceived(const proto::router::ClientResult& result);
     void sig_workspaceListReceived(const proto::router::WorkspaceList& list);
     void sig_workspaceResultReceived(const proto::router::WorkspaceResult& result);
+    void sig_workspaceAccessListReceived(const proto::router::WorkspaceAccessList& list);
+    void sig_workspaceAccessResultReceived(const proto::router::WorkspaceAccessResult& result);
 
     // Client signals.
     void sig_connectionOffer(const proto::router::ConnectionOffer& offer);
