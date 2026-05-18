@@ -368,6 +368,7 @@ void TcpChannelNG::init()
         display_name_  = authenticator_->peerDisplayName();
         architecture_  = authenticator_->peerArch();
         user_name_     = authenticator_->userName();
+        user_id_       = authenticator_->userId();
         session_type_  = authenticator_->sessionType();
 
         authenticator_->disconnect();
@@ -500,7 +501,10 @@ void TcpChannelNG::onErrorOccurred(const Location& location, ErrorCode error_cod
         return;
 
     if (authenticator_)
+    {
         user_name_ = authenticator_->userName();
+        user_id_   = authenticator_->userId();
+    }
 
     setConnected(false);
 

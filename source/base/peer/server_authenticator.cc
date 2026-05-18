@@ -485,6 +485,7 @@ void ServerAuthenticator::onIdentify(const QByteArray& buffer)
             s_ = BigNum::fromByteArray(user.salt);
             v_ = BigNum::fromByteArray(user.verifier);
             session_types_ = user.sessions;
+            user_id_ = user.entry_id;
         }
         else
         {

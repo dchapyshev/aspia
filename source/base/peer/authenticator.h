@@ -78,6 +78,7 @@ public:
     [[nodiscard]] const QString& peerDisplayName() const { return peer_display_name_; }
     [[nodiscard]] quint32 sessionType() const { return session_type_; }
     [[nodiscard]] const QString& userName() const { return user_name_; }
+    [[nodiscard]] qint64 userId() const { return user_id_; }
     [[nodiscard]] bool isProbe() const { return is_probe_; }
 
     // Returns the current state.
@@ -135,6 +136,7 @@ protected:
 
     quint32 session_type_ = 0; // Selected session type.
     QString user_name_;
+    qint64 user_id_ = 0; // Database id of the authenticated user (server-side only).
     bool is_probe_ = false;
 
 private:

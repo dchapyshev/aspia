@@ -124,6 +124,7 @@ public:
     QString peerDisplayName() const { return display_name_; }
     QString peerArchitecture() const { return architecture_; }
     QString peerUserName() const { return user_name_; }
+    qint64 peerUserId() const { return user_id_; }
     quint32 peerSessionType() const { return session_type_; }
 
 signals:
@@ -151,6 +152,7 @@ protected:
     QString display_name_;
     QString architecture_;
     QString user_name_;
+    qint64 user_id_ = 0;
     quint32 session_type_ = 0;
 
 private:
