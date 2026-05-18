@@ -19,6 +19,7 @@
 #include "client/ui/hosts/router_workspace_dialog.h"
 
 #include <QAbstractButton>
+#include <QIcon>
 #include <QListWidgetItem>
 #include <QPushButton>
 
@@ -179,7 +180,7 @@ void RouterWorkspaceDialog::rebuildLists()
 
     for (const UserEntry& user : std::as_const(users_))
     {
-        QListWidgetItem* item = new QListWidgetItem(user.name);
+        QListWidgetItem* item = new QListWidgetItem(QIcon(":/img/user.svg"), user.name);
         item->setData(Qt::UserRole, user.entry_id);
 
         if (access_user_ids_.contains(user.entry_id))

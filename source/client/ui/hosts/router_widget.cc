@@ -1133,7 +1133,8 @@ void RouterWidget::onAddWorkspace()
     {
         LOG(ERROR) << "Cannot create workspace: current user has no public key";
         MsgBox::warning(this, tr("Your account does not have encryption keys configured. "
-                                 "Recreate your user to generate them before creating a workspace."));
+                                 "Recreate your user or change your password to generate them "
+                                 "before creating a workspace."));
         return;
     }
 
@@ -1896,7 +1897,7 @@ void RouterWidget::onAccessDialogGrant(
     if (!self_item || self_item->user.wrap_private_key.isEmpty() || self_item->user.wrap_salt.isEmpty())
     {
         MsgBox::warning(this, tr("Your account does not have encryption keys configured. "
-                                 "Change your password to generate them."));
+                                 "Recreate your user or change your password to generate them."));
         return;
     }
 
