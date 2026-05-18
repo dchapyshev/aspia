@@ -22,6 +22,7 @@
 #include "base/serialization.h"
 #include "base/crypto/generic_hash.h"
 #include "base/crypto/random.h"
+#include "proto/router_constants.h"
 #include "proto/router_legacy_host.h"
 #include "router/database.h"
 
@@ -118,37 +119,26 @@ void SessionLegacyHost::readHostIdRequest(const proto::router::legacy::HostIdReq
     }
 
     HostId host_id = kInvalidHostId;
+    std::string_view error_code = database.hostId(key_hash, &host_id);
 
-    switch (database.hostId(key_hash, &host_id))
+    if (error_code == proto::router::kErrorOk)
     {
-        case Database::ErrorCode::SUCCESS:
+        host_id_response->set_error_code(proto::router::legacy::HostIdResponse::SUCCESS);
+        host_id_response->set_host_id(host_id);
+
+        if (!host_id_list_.contains(host_id))
         {
-            if (host_id != kInvalidHostId)
-            {
-                host_id_response->set_error_code(proto::router::legacy::HostIdResponse::SUCCESS);
-                host_id_response->set_host_id(host_id);
-
-                if (!host_id_list_.contains(host_id))
-                {
-                    host_id_list_.emplace_back(host_id);
-                    emit sig_hostIdAssigned(host_id);
-                }
-            }
-            else
-            {
-                host_id_response->set_error_code(proto::router::legacy::HostIdResponse::UNKNOWN);
-                CLOG(ERROR) << "Invalid host id";
-            }
+            host_id_list_.emplace_back(host_id);
+            emit sig_hostIdAssigned(host_id);
         }
-        break;
-
-        case Database::ErrorCode::NO_HOST_FOUND:
-            host_id_response->set_error_code(proto::router::legacy::HostIdResponse::NO_HOST_FOUND);
-            break;
-
-        default:
-            host_id_response->set_error_code(proto::router::legacy::HostIdResponse::UNKNOWN);
-            break;
+    }
+    else if (error_code == proto::router::kErrorNotFound)
+    {
+        host_id_response->set_error_code(proto::router::legacy::HostIdResponse::NO_HOST_FOUND);
+    }
+    else
+    {
+        host_id_response->set_error_code(proto::router::legacy::HostIdResponse::UNKNOWN);
     }
 
     sendMessage(0, serialize(message));

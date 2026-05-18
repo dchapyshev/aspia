@@ -21,8 +21,11 @@
 
 #include <QString>
 
+#include <string_view>
+
 #include "base/peer/host_id.h"
 #include "base/peer/user.h"
+#include "router/workspace.h"
 
 class Database
 {
@@ -31,13 +34,6 @@ public:
     Database(Database&& other) noexcept;
     Database& operator=(Database&& other) noexcept;
     ~Database();
-
-    enum class ErrorCode
-    {
-        SUCCESS = 0,
-        UNKNOWN = 1,
-        NO_HOST_FOUND = 2
-    };
 
     static Database create();
     static Database open();
@@ -49,8 +45,14 @@ public:
     bool modifyUser(const User& user);
     bool removeUser(qint64 entry_id);
     User findUser(const QString& username) const;
-    ErrorCode hostId(const QByteArray& key_hash, HostId* host_id) const;
+    std::string_view hostId(const QByteArray& key_hash, HostId* host_id) const;
     bool addHost(const QByteArray& key_hash);
+
+    QVector<Workspace> workspaceList() const;
+    Workspace findWorkspace(qint64 entry_id) const;
+    std::string_view addWorkspace(const QString& name, qint64* entry_id);
+    std::string_view modifyWorkspace(qint64 entry_id, const QString& name);
+    std::string_view removeWorkspace(qint64 entry_id);
 
 private:
     explicit Database(const QString& connection_name);

@@ -22,6 +22,7 @@
 #include "base/serialization.h"
 #include "base/crypto/generic_hash.h"
 #include "base/crypto/random.h"
+#include "proto/router_constants.h"
 #include "proto/router_host.h"
 #include "proto/router_peer.h"
 #include "router/database.h"
@@ -123,31 +124,13 @@ void SessionHost::readHostIdRequest(const proto::router::HostIdRequest& host_id_
         return;
     }
 
-    switch (database.hostId(key_hash, &host_id_))
+    std::string_view error_code = database.hostId(key_hash, &host_id_);
+    host_id_response->set_error_code(error_code);
+
+    if (error_code == proto::router::kErrorOk)
     {
-        case Database::ErrorCode::SUCCESS:
-        {
-            if (host_id_ != kInvalidHostId)
-            {
-                host_id_response->set_error_code("ok");
-                host_id_response->set_host_id(host_id_);
-                emit sig_hostIdAssigned(host_id_);
-            }
-            else
-            {
-                host_id_response->set_error_code("unknown");
-                CLOG(ERROR) << "Invalid host id";
-            }
-        }
-        break;
-
-        case Database::ErrorCode::NO_HOST_FOUND:
-            host_id_response->set_error_code("no_host_found");
-            break;
-
-        default:
-            host_id_response->set_error_code("unknown");
-            break;
+        host_id_response->set_host_id(host_id_);
+        emit sig_hostIdAssigned(host_id_);
     }
 
     sendMessage(0, serialize(message));

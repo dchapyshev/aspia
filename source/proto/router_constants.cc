@@ -31,12 +31,17 @@ const char* const kCommandUserAdd         = "add";
 const char* const kCommandUserModify      = "modify";
 const char* const kCommandUserDelete      = "delete";
 
+const char* const kCommandWorkspaceAdd    = "add";
+const char* const kCommandWorkspaceModify = "modify";
+const char* const kCommandWorkspaceDelete = "delete";
+
 const char* const kErrorOk                = "ok";
 const char* const kErrorInvalidRequest    = "invalid_request";
 const char* const kErrorInternalError     = "internal_error";
 const char* const kErrorInvalidEntryId    = "invalid_entry_id";
 const char* const kErrorInvalidData       = "invalid_data";
 const char* const kErrorAlreadyExists     = "already_exists";
+const char* const kErrorNotFound          = "not_found";
 
 const char* const kParamTryToUninstall    = "try_to_uninstall";
 

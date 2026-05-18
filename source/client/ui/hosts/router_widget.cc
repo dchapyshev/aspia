@@ -39,6 +39,7 @@
 #include "base/logging.h"
 #include "base/peer/user.h"
 #include "client/ui/hosts/router_user_dialog.h"
+#include "client/ui/hosts/router_workspace_dialog.h"
 #include "common/ui/formatter.h"
 #include "common/ui/msg_box.h"
 #include "common/ui/status_dialog.h"
@@ -253,6 +254,43 @@ private:
     Q_DISABLE_COPY_MOVE(ClientTreeItem)
 };
 
+class WorkspaceTreeItem final : public QTreeWidgetItem
+{
+public:
+    explicit WorkspaceTreeItem(const proto::router::Workspace& workspace)
+        : workspace(workspace)
+    {
+        setIcon(0, QIcon(":/img/workspace.svg"));
+        setText(0, QString::fromStdString(workspace.name()));
+    }
+
+    void updateItem(const proto::router::Workspace& updated)
+    {
+        workspace = updated;
+        setText(0, QString::fromStdString(workspace.name()));
+    }
+
+    // QTreeWidgetItem implementation.
+    bool operator<(const QTreeWidgetItem& other) const final
+    {
+        if (treeWidget()->sortColumn() == 0)
+        {
+            QCollator collator;
+            collator.setCaseSensitivity(Qt::CaseInsensitive);
+            collator.setNumericMode(true);
+
+            return collator.compare(text(0), other.text(0)) <= 0;
+        }
+
+        return QTreeWidgetItem::operator<(other);
+    }
+
+    proto::router::Workspace workspace;
+
+private:
+    Q_DISABLE_COPY_MOVE(WorkspaceTreeItem)
+};
+
 class UserTreeItem final : public QTreeWidgetItem
 {
     Q_DECLARE_TR_FUNCTIONS(UserTreeItem)
@@ -337,6 +375,8 @@ RouterWidget::RouterWidget(const RouterConfig& config, QWidget* parent)
     connect(router_, &Router::sig_hostResultReceived, this, &RouterWidget::onHostResultReceived, Qt::QueuedConnection);
     connect(router_, &Router::sig_relayResultReceived, this, &RouterWidget::onRelayResultReceived, Qt::QueuedConnection);
     connect(router_, &Router::sig_clientResultReceived, this, &RouterWidget::onClientResultReceived, Qt::QueuedConnection);
+    connect(router_, &Router::sig_workspaceListReceived, this, &RouterWidget::onWorkspaceListReceived, Qt::QueuedConnection);
+    connect(router_, &Router::sig_workspaceResultReceived, this, &RouterWidget::onWorkspaceResultReceived, Qt::QueuedConnection);
 
     connect(this, &RouterWidget::sig_relayListRequest, router_, &Router::onRelayListRequest, Qt::QueuedConnection);
     connect(this, &RouterWidget::sig_hostListRequest, router_, &Router::onHostListRequest, Qt::QueuedConnection);
@@ -350,6 +390,10 @@ RouterWidget::RouterWidget(const RouterConfig& config, QWidget* parent)
     connect(this, &RouterWidget::sig_disconnectRelay, router_, &Router::onDisconnectRelay, Qt::QueuedConnection);
     connect(this, &RouterWidget::sig_disconnectClient, router_, &Router::onDisconnectClient, Qt::QueuedConnection);
     connect(this, &RouterWidget::sig_disconnectPeer, router_, &Router::onDisconnectPeer, Qt::QueuedConnection);
+    connect(this, &RouterWidget::sig_workspaceListRequest, router_, &Router::onWorkspaceListRequest, Qt::QueuedConnection);
+    connect(this, &RouterWidget::sig_addWorkspace, router_, &Router::onAddWorkspace, Qt::QueuedConnection);
+    connect(this, &RouterWidget::sig_modifyWorkspace, router_, &Router::onModifyWorkspace, Qt::QueuedConnection);
+    connect(this, &RouterWidget::sig_deleteWorkspace, router_, &Router::onDeleteWorkspace, Qt::QueuedConnection);
     connect(this, &RouterWidget::sig_updateConfig, router_, &Router::onUpdateConfig, Qt::QueuedConnection);
 
     connect(ui->tab, &QTabWidget::currentChanged, this, &RouterWidget::onTabChanged);
@@ -357,6 +401,8 @@ RouterWidget::RouterWidget(const RouterConfig& config, QWidget* parent)
     connect(ui->tree_relays, &QTreeWidget::itemSelectionChanged, this, &RouterWidget::onCurrentRelayChanged);
     connect(ui->tree_hosts, &QTreeWidget::itemSelectionChanged, this, &RouterWidget::onCurrentHostChanged);
     connect(ui->tree_clients, &QTreeWidget::itemSelectionChanged, this, &RouterWidget::onCurrentClientChanged);
+    connect(ui->tree_workspaces, &QTreeWidget::itemSelectionChanged, this, &RouterWidget::onCurrentWorkspaceChanged);
+    connect(ui->tree_workspaces, &QTreeWidget::itemDoubleClicked, this, [this](QTreeWidgetItem*, int) { onModifyWorkspace(); });
 
     ui->tree_users->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(ui->tree_users, &QTreeWidget::customContextMenuRequested, this, &RouterWidget::onUserContextMenuRequested);
@@ -372,6 +418,9 @@ RouterWidget::RouterWidget(const RouterConfig& config, QWidget* parent)
 
     ui->tree_peers->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(ui->tree_peers, &QTreeWidget::customContextMenuRequested, this, &RouterWidget::onPeerContextMenuRequested);
+
+    ui->tree_workspaces->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(ui->tree_workspaces, &QTreeWidget::customContextMenuRequested, this, &RouterWidget::onWorkspaceContextMenuRequested);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -522,6 +571,18 @@ int RouterWidget::relayCount() const
 }
 
 //--------------------------------------------------------------------------------------------------
+bool RouterWidget::hasSelectedWorkspace() const
+{
+    return ui->tree_workspaces->currentItem() != nullptr;
+}
+
+//--------------------------------------------------------------------------------------------------
+int RouterWidget::workspaceCount() const
+{
+    return ui->tree_workspaces->topLevelItemCount();
+}
+
+//--------------------------------------------------------------------------------------------------
 void RouterWidget::copyCurrentRelayRow()
 {
     QTreeWidgetItem* item = ui->tree_relays->currentItem();
@@ -610,6 +671,7 @@ QByteArray RouterWidget::saveState()
         stream << ui->tree_users->header()->saveState();
         stream << ui->tree_hosts->header()->saveState();
         stream << ui->tree_clients->header()->saveState();
+        stream << ui->tree_workspaces->header()->saveState();
     }
 
     return buffer;
@@ -627,6 +689,7 @@ void RouterWidget::restoreState(const QByteArray& state)
     QByteArray users_columns_state;
     QByteArray hosts_columns_state;
     QByteArray clients_columns_state;
+    QByteArray workspaces_columns_state;
 
     stream >> relays_columns_state;
     stream >> splitter_state;
@@ -634,6 +697,7 @@ void RouterWidget::restoreState(const QByteArray& state)
     stream >> users_columns_state;
     stream >> hosts_columns_state;
     stream >> clients_columns_state;
+    stream >> workspaces_columns_state;
 
     if (!relays_columns_state.isEmpty())
     {
@@ -683,6 +747,13 @@ void RouterWidget::restoreState(const QByteArray& state)
         ui->tree_clients->header()->setSectionsClickable(true);
         ui->tree_clients->header()->setSortIndicatorShown(true);
     }
+
+    if (!workspaces_columns_state.isEmpty())
+    {
+        ui->tree_workspaces->header()->restoreState(workspaces_columns_state);
+        ui->tree_workspaces->header()->setSectionsClickable(true);
+        ui->tree_workspaces->header()->setSortIndicatorShown(true);
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -690,6 +761,9 @@ void RouterWidget::reload()
 {
     switch (currentTabType())
     {
+        case TabType::WORKSPACES:
+            onUpdateWorkspaceList();
+            break;
         case TabType::HOSTS:
             onUpdateHostList();
             break;
@@ -1019,6 +1093,94 @@ void RouterWidget::onDisconnectAllClients()
 }
 
 //--------------------------------------------------------------------------------------------------
+void RouterWidget::onUpdateWorkspaceList()
+{
+    emit sig_workspaceListRequest();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::onAddWorkspace()
+{
+    QStringList names;
+    for (int i = 0; i < ui->tree_workspaces->topLevelItemCount(); ++i)
+    {
+        WorkspaceTreeItem* item = static_cast<WorkspaceTreeItem*>(ui->tree_workspaces->topLevelItem(i));
+        names.append(QString::fromStdString(item->workspace.name()));
+    }
+
+    RouterWorkspaceDialog dialog(-1, QString(), names, this);
+    if (dialog.exec() != QDialog::Accepted)
+    {
+        LOG(INFO) << "[ACTION] Add workspace rejected by user";
+        return;
+    }
+
+    LOG(INFO) << "[ACTION] Add workspace accepted by user";
+
+    proto::router::Workspace workspace;
+    workspace.set_name(dialog.name().toStdString());
+    emit sig_addWorkspace(workspace);
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::onModifyWorkspace()
+{
+    WorkspaceTreeItem* tree_item = static_cast<WorkspaceTreeItem*>(ui->tree_workspaces->currentItem());
+    if (!tree_item)
+    {
+        LOG(INFO) << "No selected workspace";
+        return;
+    }
+
+    const QString current_name = QString::fromStdString(tree_item->workspace.name());
+
+    QStringList names;
+    for (int i = 0; i < ui->tree_workspaces->topLevelItemCount(); ++i)
+    {
+        WorkspaceTreeItem* item = static_cast<WorkspaceTreeItem*>(ui->tree_workspaces->topLevelItem(i));
+        const QString item_name = QString::fromStdString(item->workspace.name());
+        if (item_name.compare(current_name, Qt::CaseInsensitive) != 0)
+            names.append(item_name);
+    }
+
+    RouterWorkspaceDialog dialog(tree_item->workspace.entry_id(), current_name, names, this);
+    if (dialog.exec() != QDialog::Accepted)
+    {
+        LOG(INFO) << "[ACTION] Modify workspace rejected by user";
+        return;
+    }
+
+    LOG(INFO) << "[ACTION] Modify workspace accepted by user";
+
+    proto::router::Workspace workspace;
+    workspace.set_entry_id(dialog.entryId());
+    workspace.set_name(dialog.name().toStdString());
+    emit sig_modifyWorkspace(workspace);
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::onDeleteWorkspace()
+{
+    WorkspaceTreeItem* tree_item = static_cast<WorkspaceTreeItem*>(ui->tree_workspaces->currentItem());
+    if (!tree_item)
+    {
+        LOG(INFO) << "No selected workspace";
+        return;
+    }
+
+    const QString name = QString::fromStdString(tree_item->workspace.name());
+    if (MsgBox::question(this,
+            tr("Are you sure you want to delete workspace \"%1\"?").arg(name)) != MsgBox::Yes)
+    {
+        LOG(INFO) << "[ACTION] Delete workspace rejected by user";
+        return;
+    }
+
+    LOG(INFO) << "[ACTION] Delete workspace accepted by user";
+    emit sig_deleteWorkspace(tree_item->workspace.entry_id());
+}
+
+//--------------------------------------------------------------------------------------------------
 void RouterWidget::changeEvent(QEvent* event)
 {
     if (event->type() == QEvent::LanguageChange)
@@ -1050,12 +1212,14 @@ void RouterWidget::onStatusChanged(qint64 router_id, Router::Status status)
         onUpdateHostList();
         onUpdateClientList();
         onUpdateUserList();
+        onUpdateWorkspaceList();
 
         ui->tree_relays->setEnabled(true);
         ui->tree_peers->setEnabled(true);
         ui->tree_hosts->setEnabled(true);
         ui->tree_clients->setEnabled(true);
         ui->tree_users->setEnabled(true);
+        ui->tree_workspaces->setEnabled(true);
     }
     else
     {
@@ -1064,12 +1228,14 @@ void RouterWidget::onStatusChanged(qint64 router_id, Router::Status status)
         ui->tree_hosts->setEnabled(false);
         ui->tree_clients->setEnabled(false);
         ui->tree_users->setEnabled(false);
+        ui->tree_workspaces->setEnabled(false);
 
         ui->tree_relays->clear();
         ui->tree_peers->clear();
         ui->tree_hosts->clear();
         ui->tree_clients->clear();
         ui->tree_users->clear();
+        ui->tree_workspaces->clear();
 
         updateStatusLabel();
     }
@@ -1114,6 +1280,12 @@ void RouterWidget::onCurrentHostChanged()
 void RouterWidget::onCurrentClientChanged()
 {
     emit sig_currentClientChanged(routerId());
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::onCurrentWorkspaceChanged()
+{
+    emit sig_currentWorkspaceChanged(routerId());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1235,6 +1407,17 @@ void RouterWidget::onPeerContextMenuRequested(const QPoint& pos)
         if (QClipboard* clipboard = QApplication::clipboard())
             clipboard->setText(text);
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::onWorkspaceContextMenuRequested(const QPoint& pos)
+{
+    QTreeWidgetItem* item = ui->tree_workspaces->itemAt(pos);
+    if (item)
+        ui->tree_workspaces->setCurrentItem(item);
+
+    const QPoint global_pos = ui->tree_workspaces->viewport()->mapToGlobal(pos);
+    emit sig_workspaceContextMenu(routerId(), global_pos);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1504,6 +1687,62 @@ void RouterWidget::onClientResultReceived(const proto::router::ClientResult& res
 }
 
 //--------------------------------------------------------------------------------------------------
+void RouterWidget::onWorkspaceListReceived(const proto::router::WorkspaceList& list)
+{
+    QTreeWidget* tree_workspaces = ui->tree_workspaces;
+
+    qint64 selected_entry_id = 0;
+    if (WorkspaceTreeItem* current = static_cast<WorkspaceTreeItem*>(tree_workspaces->currentItem()))
+        selected_entry_id = current->workspace.entry_id();
+
+    tree_workspaces->clear();
+
+    WorkspaceTreeItem* to_select = nullptr;
+    for (int i = 0; i < list.workspace_size(); ++i)
+    {
+        WorkspaceTreeItem* item = new WorkspaceTreeItem(list.workspace(i));
+        tree_workspaces->addTopLevelItem(item);
+
+        if (item->workspace.entry_id() == selected_entry_id)
+            to_select = item;
+    }
+
+    if (to_select)
+        tree_workspaces->setCurrentItem(to_select);
+    else
+        emit sig_currentWorkspaceChanged(routerId());
+
+    updateStatusLabel();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::onWorkspaceResultReceived(const proto::router::WorkspaceResult& result)
+{
+    const std::string& error_code = result.error_code();
+    if (error_code != proto::router::kErrorOk)
+    {
+        const char* message;
+
+        if (error_code == proto::router::kErrorInvalidRequest)
+            message = QT_TR_NOOP("Invalid workspace request.");
+        else if (error_code == proto::router::kErrorInternalError)
+            message = QT_TR_NOOP("Unknown internal error.");
+        else if (error_code == proto::router::kErrorInvalidData)
+            message = QT_TR_NOOP("Invalid data was passed.");
+        else if (error_code == proto::router::kErrorAlreadyExists)
+            message = QT_TR_NOOP("A workspace with the specified name already exists.");
+        else if (error_code == proto::router::kErrorNotFound)
+            message = QT_TR_NOOP("Workspace not found.");
+        else
+            message = QT_TR_NOOP("Unknown error type.");
+
+        MsgBox::warning(this, tr(message));
+    }
+
+    onUpdateWorkspaceList();
+}
+
+//--------------------------------------------------------------------------------------------------
 void RouterWidget::updateStatusLabel()
 {
     if (!status_label_)
@@ -1511,6 +1750,9 @@ void RouterWidget::updateStatusLabel()
 
     switch (currentTabType())
     {
+        case TabType::WORKSPACES:
+            status_label_->setText(tr("%n workspace(s)", "", ui->tree_workspaces->topLevelItemCount()));
+            break;
         case TabType::HOSTS:
             status_label_->setText(tr("%n host(s)", "", ui->tree_hosts->topLevelItemCount()));
             break;

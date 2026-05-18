@@ -381,6 +381,77 @@ void Router::onDisconnectPeer(qint64 relay_entry_id, quint64 peer_session_id)
 }
 
 //--------------------------------------------------------------------------------------------------
+void Router::onWorkspaceListRequest()
+{
+    if (config_.sessionType() != proto::router::SESSION_TYPE_ADMIN)
+    {
+        LOG(ERROR) << "No administrator access level";
+        return;
+    }
+
+    proto::router::AdminToRouter message;
+    message.mutable_workspace_list_request()->set_dummy(1);
+
+    LOG(INFO) << "Sending workspace list request";
+    sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void Router::onAddWorkspace(const proto::router::Workspace& workspace)
+{
+    if (config_.sessionType() != proto::router::SESSION_TYPE_ADMIN)
+    {
+        LOG(ERROR) << "No administrator access level";
+        return;
+    }
+
+    proto::router::AdminToRouter message;
+    proto::router::WorkspaceRequest* request = message.mutable_workspace_request();
+    request->set_command_name(proto::router::kCommandWorkspaceAdd);
+    request->mutable_workspace()->CopyFrom(workspace);
+
+    LOG(INFO) << "Sending workspace add request (name:" << workspace.name() << ")";
+    sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void Router::onModifyWorkspace(const proto::router::Workspace& workspace)
+{
+    if (config_.sessionType() != proto::router::SESSION_TYPE_ADMIN)
+    {
+        LOG(ERROR) << "No administrator access level";
+        return;
+    }
+
+    proto::router::AdminToRouter message;
+    proto::router::WorkspaceRequest* request = message.mutable_workspace_request();
+    request->set_command_name(proto::router::kCommandWorkspaceModify);
+    request->mutable_workspace()->CopyFrom(workspace);
+
+    LOG(INFO) << "Sending workspace modify request (entry_id:" << workspace.entry_id()
+              << ", name:" << workspace.name() << ")";
+    sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void Router::onDeleteWorkspace(qint64 entry_id)
+{
+    if (config_.sessionType() != proto::router::SESSION_TYPE_ADMIN)
+    {
+        LOG(ERROR) << "No administrator access level";
+        return;
+    }
+
+    proto::router::AdminToRouter message;
+    proto::router::WorkspaceRequest* request = message.mutable_workspace_request();
+    request->set_command_name(proto::router::kCommandWorkspaceDelete);
+    request->mutable_workspace()->set_entry_id(entry_id);
+
+    LOG(INFO) << "Sending workspace delete request (entry_id:" << entry_id << ")";
+    sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
 void Router::onConnectionRequest(qint64 request_id, quint64 host_id)
 {
     proto::router::ClientToRouter message;
@@ -492,6 +563,16 @@ void Router::onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer)
         {
             LOG(INFO) << "Client result received";
             emit sig_clientResultReceived(message.client_result());
+        }
+        else if (message.has_workspace_list())
+        {
+            LOG(INFO) << "Workspace list received";
+            emit sig_workspaceListReceived(message.workspace_list());
+        }
+        else if (message.has_workspace_result())
+        {
+            LOG(INFO) << "Workspace result received";
+            emit sig_workspaceResultReceived(message.workspace_result());
         }
         else
         {

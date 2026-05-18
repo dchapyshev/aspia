@@ -41,6 +41,9 @@ class ClientResult;
 class HostResult;
 class RelayList;
 class RelayResult;
+class Workspace;
+class WorkspaceList;
+class WorkspaceResult;
 } // namespace proto::router
 
 class RouterWidget final : public ContentWidget
@@ -71,6 +74,8 @@ public:
     int clientCount() const;
     bool hasSelectedRelay() const;
     int relayCount() const;
+    bool hasSelectedWorkspace() const;
+    int workspaceCount() const;
 
     void copyCurrentHostRow();
     void copyCurrentHostColumn(int column);
@@ -110,6 +115,10 @@ public slots:
     void onDisconnectAllRelays();
     void onDisconnectClient();
     void onDisconnectAllClients();
+    void onUpdateWorkspaceList();
+    void onAddWorkspace();
+    void onModifyWorkspace();
+    void onDeleteWorkspace();
 
 signals:
     void sig_relayListRequest();
@@ -124,16 +133,22 @@ signals:
     void sig_disconnectRelay(qint64 session_id);
     void sig_disconnectClient(qint64 session_id);
     void sig_disconnectPeer(qint64 relay_entry_id, quint64 peer_session_id);
+    void sig_workspaceListRequest();
+    void sig_addWorkspace(const proto::router::Workspace& workspace);
+    void sig_modifyWorkspace(const proto::router::Workspace& workspace);
+    void sig_deleteWorkspace(qint64 entry_id);
     void sig_statusChanged(qint64 router_id, Router::Status status);
     void sig_currentTabTypeChanged(qint64 router_id, RouterWidget::TabType tab);
     void sig_currentUserChanged(qint64 router_id);
     void sig_currentHostChanged(qint64 router_id);
     void sig_currentClientChanged(qint64 router_id);
     void sig_currentRelayChanged(qint64 router_id);
+    void sig_currentWorkspaceChanged(qint64 router_id);
     void sig_userContextMenu(qint64 router_id, const User& user, const QPoint& global_pos);
     void sig_hostContextMenu(qint64 router_id, const QPoint& global_pos, int column);
     void sig_clientContextMenu(qint64 router_id, const QPoint& global_pos, int column);
     void sig_relayContextMenu(qint64 router_id, const QPoint& global_pos, int column);
+    void sig_workspaceContextMenu(qint64 router_id, const QPoint& global_pos);
     void sig_updateConfig(const RouterConfig& config);
 
 protected:
@@ -148,11 +163,13 @@ private slots:
     void onCurrentRelayChanged();
     void onCurrentHostChanged();
     void onCurrentClientChanged();
+    void onCurrentWorkspaceChanged();
     void onUserContextMenuRequested(const QPoint& pos);
     void onHostContextMenuRequested(const QPoint& pos);
     void onClientContextMenuRequested(const QPoint& pos);
     void onRelayContextMenuRequested(const QPoint& pos);
     void onPeerContextMenuRequested(const QPoint& pos);
+    void onWorkspaceContextMenuRequested(const QPoint& pos);
     void onRelayListReceived(const proto::router::RelayList& relays);
     void onHostListReceived(const proto::router::HostList& hosts);
     void onClientListReceived(const proto::router::ClientList& clients);
@@ -161,6 +178,8 @@ private slots:
     void onHostResultReceived(const proto::router::HostResult& result);
     void onRelayResultReceived(const proto::router::RelayResult& result);
     void onClientResultReceived(const proto::router::ClientResult& result);
+    void onWorkspaceListReceived(const proto::router::WorkspaceList& list);
+    void onWorkspaceResultReceived(const proto::router::WorkspaceResult& result);
 
 private:
     void updateStatusLabel();

@@ -42,7 +42,9 @@ list(APPEND SOURCE_ROUTER
     session_relay.cc
     session_relay.h
     settings.cc
-    settings.h)
+    settings.h
+    workspace.cc
+    workspace.h)
 
 if (WIN32)
     list(APPEND SOURCE_ROUTER_WIN win/router.rc)

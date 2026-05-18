@@ -16,48 +16,18 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-syntax = "proto3";
+#include "router/workspace.h"
 
-option optimize_for = LITE_RUNTIME;
-
-import "router_peer.proto";
-
-package proto.router;
-
-message HostIdRequest
+//--------------------------------------------------------------------------------------------------
+// static
+bool Workspace::isValidName(const QString& name)
 {
-    enum Type
-    {
-        UNKNOWN     = 0;
-        NEW_ID      = 1;
-        EXISTING_ID = 2;
-    }
-
-    Type type = 1;
-    bytes key = 2;
+    const QString trimmed = name.trimmed();
+    return !trimmed.isEmpty() && trimmed.length() <= kMaxNameLength;
 }
 
-message HostIdResponse
+//--------------------------------------------------------------------------------------------------
+bool Workspace::isValid() const
 {
-    string error_code = 1; // "ok" | "internal_error" | "invalid_data" | "not_found"
-    uint64 host_id    = 2;
-    bytes key         = 3;
-}
-
-message HostCommand
-{
-    string command_name = 1;
-    string params       = 2;
-}
-
-message RouterToHost
-{
-    HostIdResponse host_id_response  = 1;
-    ConnectionOffer connection_offer = 2;
-    HostCommand host_command         = 3;
-}
-
-message HostToRouter
-{
-    HostIdRequest host_id_request = 1;
+    return entry_id > 0 && isValidName(name);
 }

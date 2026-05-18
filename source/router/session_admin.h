@@ -28,6 +28,7 @@ class PeerRequest;
 class RelayRequest;
 class User;
 class UserRequest;
+class WorkspaceRequest;
 } // namespace proto::router
 
 class SessionAdmin final : public SessionManager
@@ -52,6 +53,8 @@ private:
     void doRelayRequest(const proto::router::RelayRequest& request);
     void doClientRequest(const proto::router::ClientRequest& request);
     void doPeerRequest(const proto::router::PeerRequest& request);
+    void doWorkspaceListRequest();
+    void doWorkspaceRequest(const proto::router::WorkspaceRequest& request);
 
     std::string addUser(const proto::router::User& user);
     std::string modifyUser(const proto::router::User& user);

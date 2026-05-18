@@ -38,6 +38,9 @@ class RelayResult;
 class User;
 class UserList;
 class UserResult;
+class Workspace;
+class WorkspaceList;
+class WorkspaceResult;
 } // namespace proto::router
 
 class Router final : public QObject
@@ -82,6 +85,10 @@ public slots:
     void onDisconnectRelay(qint64 session_id);
     void onDisconnectClient(qint64 session_id);
     void onDisconnectPeer(qint64 relay_entry_id, quint64 peer_session_id);
+    void onWorkspaceListRequest();
+    void onAddWorkspace(const proto::router::Workspace& workspace);
+    void onModifyWorkspace(const proto::router::Workspace& workspace);
+    void onDeleteWorkspace(qint64 entry_id);
 
     // Manager methods.
     // TODO
@@ -104,6 +111,8 @@ signals:
     void sig_hostResultReceived(const proto::router::HostResult& result);
     void sig_relayResultReceived(const proto::router::RelayResult& result);
     void sig_clientResultReceived(const proto::router::ClientResult& result);
+    void sig_workspaceListReceived(const proto::router::WorkspaceList& list);
+    void sig_workspaceResultReceived(const proto::router::WorkspaceResult& result);
 
     // Client signals.
     void sig_connectionOffer(const proto::router::ConnectionOffer& offer);

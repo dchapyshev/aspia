@@ -36,13 +36,20 @@ extern const char* const kCommandUserAdd;
 extern const char* const kCommandUserModify;
 extern const char* const kCommandUserDelete;
 
-// Error codes for HostResult/RelayResult/ClientResult/UserList/UserResult.
+// Command names for WorkspaceRequest.
+extern const char* const kCommandWorkspaceAdd;
+extern const char* const kCommandWorkspaceModify;
+extern const char* const kCommandWorkspaceDelete;
+
+// Error codes for HostResult/RelayResult/ClientResult/UserList/UserResult/WorkspaceList/
+// WorkspaceResult/HostIdResponse.
 extern const char* const kErrorOk;
 extern const char* const kErrorInvalidRequest;
 extern const char* const kErrorInternalError;
 extern const char* const kErrorInvalidEntryId;
 extern const char* const kErrorInvalidData;
 extern const char* const kErrorAlreadyExists;
+extern const char* const kErrorNotFound;
 
 // Values for HostRequest::params.
 extern const char* const kParamTryToUninstall;

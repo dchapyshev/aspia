@@ -147,6 +147,9 @@ HostsTab::HostsTab(QWidget* parent)
     connect(ui->action_add_user, &QAction::triggered, this, &HostsTab::onAddUserAction);
     connect(ui->action_edit_user, &QAction::triggered, this, &HostsTab::onEditUserAction);
     connect(ui->action_delete_user, &QAction::triggered, this, &HostsTab::onDeleteUserAction);
+    connect(ui->action_add_workspace, &QAction::triggered, this, &HostsTab::onAddWorkspaceAction);
+    connect(ui->action_edit_workspace, &QAction::triggered, this, &HostsTab::onEditWorkspaceAction);
+    connect(ui->action_delete_workspace, &QAction::triggered, this, &HostsTab::onDeleteWorkspaceAction);
     connect(ui->action_reload, &QAction::triggered, this, &HostsTab::onReloadAction);
     connect(ui->action_save, &QAction::triggered, this, &HostsTab::onSaveAction);
     connect(ui->action_import_old_book, &QAction::triggered, this, &HostsTab::onImportOldBookAction);
@@ -161,6 +164,7 @@ HostsTab::HostsTab(QWidget* parent)
     // Register actions for toolbar and menus.
     addActions(ActionRole::FILE, { ui->action_save, ui->action_import_old_book, ui->action_export_book, ui->action_import_book });
     addActions(ActionRole::EDIT, { ui->action_add_user, ui->action_edit_user, ui->action_delete_user });
+    addActions(ActionRole::EDIT, { ui->action_add_workspace, ui->action_edit_workspace, ui->action_delete_workspace });
     addActions(ActionRole::EDIT, { ui->action_add_router, ui->action_edit_router, ui->action_delete_router, ui->action_router_status });
     addActions(ActionRole::EDIT, { ui->action_add_group, ui->action_edit_group, ui->action_delete_group });
     addActions(ActionRole::EDIT, { ui->action_add_computer, ui->action_edit_computer, ui->action_copy_computer, ui->action_delete_computer });
@@ -849,6 +853,26 @@ void HostsTab::onRelayContextMenu(qint64 router_id, const QPoint& pos, int colum
 }
 
 //--------------------------------------------------------------------------------------------------
+void HostsTab::onWorkspaceContextMenu(qint64 router_id, const QPoint& pos)
+{
+    RouterWidget* widget = router_widgets_.value(router_id);
+    if (!widget)
+        return;
+
+    QMenu menu;
+    if (widget->hasSelectedWorkspace())
+    {
+        menu.addAction(ui->action_edit_workspace);
+        menu.addAction(ui->action_delete_workspace);
+    }
+    else
+    {
+        menu.addAction(ui->action_add_workspace);
+    }
+    menu.exec(pos);
+}
+
+//--------------------------------------------------------------------------------------------------
 void HostsTab::onAddUserAction()
 {
     Sidebar::Item* sidebar_item = ui->sidebar->currentItem();
@@ -885,6 +909,45 @@ void HostsTab::onDeleteUserAction()
     RouterWidget* widget = router_widgets_.value(router->routerId());
     if (widget)
         widget->onDeleteUser();
+}
+
+//--------------------------------------------------------------------------------------------------
+void HostsTab::onAddWorkspaceAction()
+{
+    Sidebar::Item* sidebar_item = ui->sidebar->currentItem();
+    if (!sidebar_item || sidebar_item->itemType() != Sidebar::Item::ROUTER)
+        return;
+
+    Sidebar::Router* router = static_cast<Sidebar::Router*>(sidebar_item);
+    RouterWidget* widget = router_widgets_.value(router->routerId());
+    if (widget)
+        widget->onAddWorkspace();
+}
+
+//--------------------------------------------------------------------------------------------------
+void HostsTab::onEditWorkspaceAction()
+{
+    Sidebar::Item* sidebar_item = ui->sidebar->currentItem();
+    if (!sidebar_item || sidebar_item->itemType() != Sidebar::Item::ROUTER)
+        return;
+
+    Sidebar::Router* router = static_cast<Sidebar::Router*>(sidebar_item);
+    RouterWidget* widget = router_widgets_.value(router->routerId());
+    if (widget)
+        widget->onModifyWorkspace();
+}
+
+//--------------------------------------------------------------------------------------------------
+void HostsTab::onDeleteWorkspaceAction()
+{
+    Sidebar::Item* sidebar_item = ui->sidebar->currentItem();
+    if (!sidebar_item || sidebar_item->itemType() != Sidebar::Item::ROUTER)
+        return;
+
+    Sidebar::Router* router = static_cast<Sidebar::Router*>(sidebar_item);
+    RouterWidget* widget = router_widgets_.value(router->routerId());
+    if (widget)
+        widget->onDeleteWorkspace();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1117,6 +1180,10 @@ void HostsTab::updateActionsState()
     ui->action_edit_user->setVisible(false);
     ui->action_delete_user->setVisible(false);
 
+    ui->action_add_workspace->setVisible(false);
+    ui->action_edit_workspace->setVisible(false);
+    ui->action_delete_workspace->setVisible(false);
+
     ui->action_reload->setVisible(false);
     ui->action_save->setVisible(false);
     ui->action_import_old_book->setVisible(false);
@@ -1171,6 +1238,13 @@ void HostsTab::updateActionsState()
         ui->action_add_user->setVisible(on_users_tab);
         ui->action_edit_user->setVisible(has_selection);
         ui->action_delete_user->setVisible(has_selection);
+
+        bool on_workspaces_tab = widget && widget->currentTabType() == RouterWidget::TabType::WORKSPACES;
+        bool has_workspace_selection = on_workspaces_tab && widget->hasSelectedWorkspace();
+
+        ui->action_add_workspace->setVisible(on_workspaces_tab);
+        ui->action_edit_workspace->setVisible(has_workspace_selection);
+        ui->action_delete_workspace->setVisible(has_workspace_selection);
 
         bool on_hosts_tab = widget && widget->currentTabType() == RouterWidget::TabType::HOSTS;
         bool on_clients_tab = widget && widget->currentTabType() == RouterWidget::TabType::CLIENTS;
@@ -1260,10 +1334,13 @@ RouterWidget* HostsTab::createRouterWidget(const RouterConfig& config)
             this, [this](qint64) { updateActionsState(); });
     connect(widget, &RouterWidget::sig_currentRelayChanged,
             this, [this](qint64) { updateActionsState(); });
+    connect(widget, &RouterWidget::sig_currentWorkspaceChanged,
+            this, [this](qint64) { updateActionsState(); });
     connect(widget, &RouterWidget::sig_userContextMenu, this, &HostsTab::onUserContextMenu);
     connect(widget, &RouterWidget::sig_hostContextMenu, this, &HostsTab::onHostContextMenu);
     connect(widget, &RouterWidget::sig_clientContextMenu, this, &HostsTab::onClientContextMenu);
     connect(widget, &RouterWidget::sig_relayContextMenu, this, &HostsTab::onRelayContextMenu);
+    connect(widget, &RouterWidget::sig_workspaceContextMenu, this, &HostsTab::onWorkspaceContextMenu);
 
     widget->connectToRouter();
     return widget;

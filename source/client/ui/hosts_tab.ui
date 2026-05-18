@@ -230,6 +230,33 @@
     <string>System Information</string>
    </property>
   </action>
+  <action name="action_add_workspace">
+   <property name="icon">
+    <iconset resource="../../common/resources/common.qrc">
+     <normaloff>:/img/workspace-add.svg</normaloff>:/img/workspace-add.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Add Workspace</string>
+   </property>
+  </action>
+  <action name="action_edit_workspace">
+   <property name="icon">
+    <iconset resource="../../common/resources/common.qrc">
+     <normaloff>:/img/workspace-edit.svg</normaloff>:/img/workspace-edit.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Edit Workspace</string>
+   </property>
+  </action>
+  <action name="action_delete_workspace">
+   <property name="icon">
+    <iconset resource="../../common/resources/common.qrc">
+     <normaloff>:/img/workspace-delete.svg</normaloff>:/img/workspace-delete.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Delete Workspace</string>
+   </property>
+  </action>
   <action name="action_add_user">
    <property name="icon">
     <iconset resource="../../common/resources/common.qrc">

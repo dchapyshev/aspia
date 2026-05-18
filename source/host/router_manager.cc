@@ -30,6 +30,7 @@
 #include "host/database.h"
 #include "host/host_storage.h"
 #include "proto/key_exchange.h"
+#include "proto/router_constants.h"
 #include "proto/router_host.h"
 
 namespace {
@@ -198,11 +199,11 @@ void RouterManager::onTcpMessageReceived(quint8 /* channel_id */, const QByteArr
         const proto::router::HostIdResponse& host_id_response = in_message.host_id_response();
         const std::string& error_code = host_id_response.error_code();
 
-        if (error_code == "ok")
+        if (error_code == proto::router::kErrorOk)
         {
             // Continue below.
         }
-        else if (error_code == "no_host_found")
+        else if (error_code == proto::router::kErrorNotFound)
         {
             // The specified host is not in the router's database.
             LOG(INFO) << "Host is not in the router's database. Reset ID";

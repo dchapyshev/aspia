@@ -20,6 +20,7 @@
 
 #include "base/logging.h"
 #include "base/files/base_paths.h"
+#include "proto/router_constants.h"
 
 #include <utility>
 
@@ -53,6 +54,50 @@ User readUser(const QSqlQuery& query)
     user.sessions = query.value(5).toUInt();
     user.flags = query.value(6).toUInt();
     return user;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool ensureSchema(QSqlDatabase& sql_db)
+{
+    if (!sql_db.transaction())
+    {
+        LOG(ERROR) << "Unable to execute transaction:" << sql_db.lastError();
+        return false;
+    }
+
+    QSqlQuery query(sql_db);
+
+    if (!query.exec("CREATE TABLE IF NOT EXISTS \"users\" ("
+                    "\"id\" INTEGER UNIQUE,"
+                    "\"name\" TEXT NOT NULL UNIQUE,"
+                    "\"group\" TEXT NOT NULL,"
+                    "\"salt\" BLOB NOT NULL,"
+                    "\"verifier\" BLOB NOT NULL,"
+                    "\"sessions\" INTEGER DEFAULT 0,"
+                    "\"flags\" INTEGER DEFAULT 0,"
+                    "PRIMARY KEY(\"id\" AUTOINCREMENT))") ||
+        !query.exec("CREATE TABLE IF NOT EXISTS \"hosts\" ("
+                    "\"id\" INTEGER UNIQUE,"
+                    "\"key\" BLOB NOT NULL UNIQUE,"
+                    "PRIMARY KEY(\"id\" AUTOINCREMENT))") ||
+        !query.exec("CREATE TABLE IF NOT EXISTS \"workspaces\" ("
+                    "\"id\" INTEGER UNIQUE,"
+                    "\"name\" TEXT NOT NULL UNIQUE,"
+                    "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
+    {
+        LOG(ERROR) << "Unable to execute query:" << query.lastError();
+        sql_db.rollback();
+        return false;
+    }
+
+    if (!sql_db.commit())
+    {
+        LOG(ERROR) << "Unable to commit transaction:" << sql_db.lastError();
+        sql_db.rollback();
+        return false;
+    }
+
+    return true;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -173,69 +218,7 @@ Database Database::create()
         return Database();
     }
 
-    Database db = open();
-    if (!db.isValid())
-        return Database();
-
-    QSqlDatabase sql_db = databaseByName(db.connection_name_);
-    if (!sql_db.isValid())
-    {
-        LOG(ERROR) << "Invalid database connection";
-        return Database();
-    }
-
-    if (!sql_db.transaction())
-    {
-        LOG(ERROR) << "Unable to execute transaction:" << sql_db.lastError();
-        return Database();
-    }
-
-    bool success = false;
-
-    do
-    {
-        QSqlQuery query(sql_db);
-        if (!query.exec("CREATE TABLE IF NOT EXISTS \"users\" ("
-                        "\"id\" INTEGER UNIQUE,"
-                        "\"name\" TEXT NOT NULL UNIQUE,"
-                        "\"group\" TEXT NOT NULL,"
-                        "\"salt\" BLOB NOT NULL,"
-                        "\"verifier\" BLOB NOT NULL,"
-                        "\"sessions\" INTEGER DEFAULT 0,"
-                        "\"flags\" INTEGER DEFAULT 0,"
-                        "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
-        {
-            LOG(ERROR) << "Unable to execute query:" << query.lastError();
-            break;
-        }
-
-        if (!query.exec("CREATE TABLE IF NOT EXISTS \"hosts\" ("
-                        "\"id\" INTEGER UNIQUE,"
-                        "\"key\" BLOB NOT NULL UNIQUE,"
-                        "PRIMARY KEY(\"id\" AUTOINCREMENT))"))
-        {
-            LOG(ERROR) << "Unable to execute query:" << query.lastError();
-            break;
-        }
-
-        success = true;
-    }
-    while (false);
-
-    if (!success)
-    {
-        sql_db.rollback();
-        return Database();
-    }
-
-    if (!sql_db.commit())
-    {
-        LOG(ERROR) << "Unable to common transaction:" << sql_db.lastError();
-        sql_db.rollback();
-        return Database();
-    }
-
-    return db;
+    return open();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -253,6 +236,9 @@ Database Database::open()
 
     QSqlDatabase db = ensureOpenDatabase(file_path);
     if (!db.isValid() || !db.isOpen())
+        return Database();
+
+    if (!ensureSchema(db))
         return Database();
 
     return Database(db.connectionName());
@@ -420,27 +406,23 @@ User Database::findUser(const QString& username) const
 }
 
 //--------------------------------------------------------------------------------------------------
-Database::ErrorCode Database::hostId(const QByteArray& key_hash, HostId* host_id) const
+std::string_view Database::hostId(const QByteArray& key_hash, HostId* host_id) const
 {
+    CHECK(host_id);
+
+    *host_id = kInvalidHostId;
+
     if (!isValid())
     {
         LOG(ERROR) << "Database is not valid";
-        return ErrorCode::UNKNOWN;
+        return proto::router::kErrorInternalError;
     }
 
     if (key_hash.isEmpty())
     {
         LOG(ERROR) << "Invalid key hash";
-        return ErrorCode::UNKNOWN;
+        return proto::router::kErrorInvalidData;
     }
-
-    if (!host_id)
-    {
-        LOG(ERROR) << "Invalid host id";
-        return ErrorCode::UNKNOWN;
-    }
-
-    *host_id = kInvalidHostId;
 
     QSqlQuery query(databaseByName(connection_name_));
     query.prepare(QStringLiteral("SELECT id FROM hosts WHERE key=?"));
@@ -449,14 +431,14 @@ Database::ErrorCode Database::hostId(const QByteArray& key_hash, HostId* host_id
     if (!query.exec())
     {
         LOG(ERROR) << "Unable to execute query:" << query.lastError();
-        return ErrorCode::UNKNOWN;
+        return proto::router::kErrorInternalError;
     }
 
     if (!query.next())
-        return ErrorCode::NO_HOST_FOUND;
+        return proto::router::kErrorNotFound;
 
     *host_id = static_cast<HostId>(query.value(0).toLongLong());
-    return ErrorCode::SUCCESS;
+    return proto::router::kErrorOk;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -485,6 +467,196 @@ bool Database::addHost(const QByteArray& key_hash)
     }
 
     return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+QVector<Workspace> Database::workspaceList() const
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return {};
+    }
+
+    QSqlQuery query(databaseByName(connection_name_));
+    if (!query.exec(QStringLiteral("SELECT id, name FROM workspaces")))
+    {
+        LOG(ERROR) << "Unable to get workspace list:" << query.lastError();
+        return {};
+    }
+
+    QVector<Workspace> workspaces;
+    while (query.next())
+    {
+        Workspace workspace;
+        workspace.entry_id = query.value(0).toLongLong();
+        workspace.name = query.value(1).toString();
+        workspaces.append(workspace);
+    }
+
+    return workspaces;
+}
+
+//--------------------------------------------------------------------------------------------------
+Workspace Database::findWorkspace(qint64 entry_id) const
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return Workspace();
+    }
+
+    if (entry_id <= 0)
+    {
+        LOG(ERROR) << "Invalid workspace id:" << entry_id;
+        return Workspace();
+    }
+
+    QSqlQuery query(databaseByName(connection_name_));
+    query.prepare(QStringLiteral("SELECT id, name FROM workspaces WHERE id=?"));
+    query.addBindValue(entry_id);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << query.lastError();
+        return Workspace();
+    }
+
+    if (!query.next())
+        return Workspace();
+
+    Workspace workspace;
+    workspace.entry_id = query.value(0).toLongLong();
+    workspace.name = query.value(1).toString();
+    return workspace;
+}
+
+//--------------------------------------------------------------------------------------------------
+std::string_view Database::addWorkspace(const QString& name, qint64* entry_id)
+{
+    CHECK(entry_id);
+
+    *entry_id = -1;
+
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return proto::router::kErrorInternalError;
+    }
+
+    if (!Workspace::isValidName(name))
+    {
+        LOG(ERROR) << "Invalid workspace name:" << name;
+        return proto::router::kErrorInvalidData;
+    }
+
+    QSqlQuery check(databaseByName(connection_name_));
+    check.prepare(QStringLiteral("SELECT 1 FROM workspaces WHERE name=?"));
+    check.addBindValue(name);
+
+    if (!check.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << check.lastError();
+        return proto::router::kErrorInternalError;
+    }
+
+    if (check.next())
+        return proto::router::kErrorAlreadyExists;
+
+    QSqlQuery query(databaseByName(connection_name_));
+    query.prepare(QStringLiteral("INSERT INTO workspaces (id, name) VALUES (NULL, ?)"));
+    query.addBindValue(name);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << query.lastError();
+        return proto::router::kErrorInternalError;
+    }
+
+    *entry_id = query.lastInsertId().toLongLong();
+    return proto::router::kErrorOk;
+}
+
+//--------------------------------------------------------------------------------------------------
+std::string_view Database::modifyWorkspace(qint64 entry_id, const QString& name)
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return proto::router::kErrorInternalError;
+    }
+
+    if (entry_id <= 0)
+    {
+        LOG(ERROR) << "Invalid workspace id:" << entry_id;
+        return proto::router::kErrorInvalidData;
+    }
+
+    if (!Workspace::isValidName(name))
+    {
+        LOG(ERROR) << "Invalid workspace name:" << name;
+        return proto::router::kErrorInvalidData;
+    }
+
+    QSqlQuery check(databaseByName(connection_name_));
+    check.prepare(QStringLiteral("SELECT id FROM workspaces WHERE name=?"));
+    check.addBindValue(name);
+
+    if (!check.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << check.lastError();
+        return proto::router::kErrorInternalError;
+    }
+
+    if (check.next() && check.value(0).toLongLong() != entry_id)
+        return proto::router::kErrorAlreadyExists;
+
+    QSqlQuery query(databaseByName(connection_name_));
+    query.prepare(QStringLiteral("UPDATE workspaces SET name=? WHERE id=?"));
+    query.addBindValue(name);
+    query.addBindValue(entry_id);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << query.lastError();
+        return proto::router::kErrorInternalError;
+    }
+
+    if (query.numRowsAffected() == 0)
+        return proto::router::kErrorNotFound;
+
+    return proto::router::kErrorOk;
+}
+
+//--------------------------------------------------------------------------------------------------
+std::string_view Database::removeWorkspace(qint64 entry_id)
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return proto::router::kErrorInternalError;
+    }
+
+    if (entry_id <= 0)
+    {
+        LOG(ERROR) << "Invalid workspace id:" << entry_id;
+        return proto::router::kErrorInvalidData;
+    }
+
+    QSqlQuery query(databaseByName(connection_name_));
+    query.prepare(QStringLiteral("DELETE FROM workspaces WHERE id=?"));
+    query.addBindValue(entry_id);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << query.lastError();
+        return proto::router::kErrorInternalError;
+    }
+
+    if (query.numRowsAffected() == 0)
+        return proto::router::kErrorNotFound;
+
+    return proto::router::kErrorOk;
 }
 
 //--------------------------------------------------------------------------------------------------

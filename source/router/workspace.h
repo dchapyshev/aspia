@@ -16,48 +16,31 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 
-syntax = "proto3";
+#ifndef ROUTER_WORKSPACE_H
+#define ROUTER_WORKSPACE_H
 
-option optimize_for = LITE_RUNTIME;
+#include <QString>
 
-import "router_peer.proto";
-
-package proto.router;
-
-message HostIdRequest
+class Workspace
 {
-    enum Type
-    {
-        UNKNOWN     = 0;
-        NEW_ID      = 1;
-        EXISTING_ID = 2;
-    }
+public:
+    Workspace() = default;
+    ~Workspace() = default;
 
-    Type type = 1;
-    bytes key = 2;
-}
+    Workspace(const Workspace& other) = default;
+    Workspace& operator=(const Workspace& other) = default;
 
-message HostIdResponse
-{
-    string error_code = 1; // "ok" | "internal_error" | "invalid_data" | "not_found"
-    uint64 host_id    = 2;
-    bytes key         = 3;
-}
+    Workspace(Workspace&& other) noexcept = default;
+    Workspace& operator=(Workspace&& other) noexcept = default;
 
-message HostCommand
-{
-    string command_name = 1;
-    string params       = 2;
-}
+    static const qsizetype kMaxNameLength = 64;
 
-message RouterToHost
-{
-    HostIdResponse host_id_response  = 1;
-    ConnectionOffer connection_offer = 2;
-    HostCommand host_command         = 3;
-}
+    static bool isValidName(const QString& name);
 
-message HostToRouter
-{
-    HostIdRequest host_id_request = 1;
-}
+    bool isValid() const;
+
+    qint64 entry_id = 0;
+    QString name;
+};
+
+#endif // ROUTER_WORKSPACE_H

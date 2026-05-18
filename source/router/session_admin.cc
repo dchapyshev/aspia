@@ -95,6 +95,14 @@ void SessionAdmin::onSessionMessage(quint8 channel_id, const QByteArray& buffer)
     {
         doPeerRequest(message.peer_request());
     }
+    else if (message.has_workspace_list_request())
+    {
+        doWorkspaceListRequest();
+    }
+    else if (message.has_workspace_request())
+    {
+        doWorkspaceRequest(message.workspace_request());
+    }
     else
     {
         CLOG(ERROR) << "Unhandled message from manager";
@@ -496,6 +504,82 @@ void SessionAdmin::doPeerRequest(const proto::router::PeerRequest& request)
     }
 
     relay_session->disconnectPeerSession(request);
+}
+
+//--------------------------------------------------------------------------------------------------
+void SessionAdmin::doWorkspaceListRequest()
+{
+    proto::router::RouterToAdmin message;
+    proto::router::WorkspaceList* list = message.mutable_workspace_list();
+
+    Database database = Database::open();
+    if (!database.isValid())
+    {
+        CLOG(ERROR) << "Failed to connect to database";
+        list->set_error_code(proto::router::kErrorInternalError);
+    }
+    else
+    {
+        list->set_error_code(proto::router::kErrorOk);
+
+        const QVector<Workspace> workspaces = database.workspaceList();
+        for (const auto& workspace : std::as_const(workspaces))
+        {
+            proto::router::Workspace* item = list->add_workspace();
+            item->set_entry_id(workspace.entry_id);
+            item->set_name(workspace.name.toStdString());
+        }
+    }
+
+    sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void SessionAdmin::doWorkspaceRequest(const proto::router::WorkspaceRequest& request)
+{
+    proto::router::RouterToAdmin message;
+    proto::router::WorkspaceResult* result = message.mutable_workspace_result();
+    result->set_command_name(request.command_name());
+
+    Database database = Database::open();
+    if (!database.isValid())
+    {
+        CLOG(ERROR) << "Failed to connect to database";
+        result->set_error_code(proto::router::kErrorInternalError);
+        sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
+        return;
+    }
+
+    const QString name = QString::fromStdString(request.workspace().name()).trimmed();
+    const qint64 entry_id = request.workspace().entry_id();
+
+    if (request.command_name() == proto::router::kCommandWorkspaceAdd)
+    {
+        CLOG(INFO) << "Workspace add request:" << name;
+
+        qint64 new_id = -1;
+        std::string_view error_code = database.addWorkspace(name, &new_id);
+        result->set_error_code(error_code);
+        if (error_code == proto::router::kErrorOk)
+            result->set_entry_id(new_id);
+    }
+    else if (request.command_name() == proto::router::kCommandWorkspaceModify)
+    {
+        CLOG(INFO) << "Workspace modify request:" << entry_id << name;
+        result->set_error_code(database.modifyWorkspace(entry_id, name));
+    }
+    else if (request.command_name() == proto::router::kCommandWorkspaceDelete)
+    {
+        CLOG(INFO) << "Workspace delete request:" << entry_id;
+        result->set_error_code(database.removeWorkspace(entry_id));
+    }
+    else
+    {
+        CLOG(ERROR) << "Unknown workspace request command:" << request.command_name();
+        result->set_error_code(proto::router::kErrorInvalidRequest);
+    }
+
+    sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
