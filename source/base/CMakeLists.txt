@@ -253,6 +253,8 @@ list(APPEND SOURCE_BASE_CRYPTO
     crypto/password_hash.h
     crypto/random.cc
     crypto/random.h
+    crypto/sealed_box.cc
+    crypto/sealed_box.h
     crypto/secure_byte_array.cc
     crypto/secure_byte_array.h
     crypto/secure_memory.cc
@@ -284,6 +286,7 @@ list(APPEND SOURCE_BASE_CRYPTO_TESTS
     crypto/large_number_increment_unittest.cc
     crypto/password_generator_unittest.cc
     crypto/password_hash_unittest.cc
+    crypto/sealed_box_unittest.cc
     crypto/srp_math_unittest.cc)
 
 list(APPEND SOURCE_BASE_DESKTOP
