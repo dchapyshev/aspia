@@ -35,9 +35,6 @@ const char* const kCommandWorkspaceAdd    = "add";
 const char* const kCommandWorkspaceModify = "modify";
 const char* const kCommandWorkspaceDelete = "delete";
 
-const char* const kCommandWorkspaceAccessGrant  = "grant";
-const char* const kCommandWorkspaceAccessRevoke = "revoke";
-
 const char* const kErrorOk             = "ok";
 const char* const kErrorInvalidRequest = "invalid_request";
 const char* const kErrorInternalError  = "internal_error";

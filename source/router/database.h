@@ -51,15 +51,20 @@ public:
 
     QVector<Workspace> workspaceList() const;
     Workspace findWorkspace(qint64 entry_id) const;
+    // Initial access list may be empty - in that case the workspace has no GK yet; it will
+    // be generated when the first access is granted via modifyWorkspace().
     std::string_view addWorkspace(
         const QString& name, const QVector<Workspace::Access>& initial_access, qint64* entry_id);
-    std::string_view modifyWorkspace(qint64 entry_id, const QString& name);
+    // Updates name and synchronizes access in a single transaction. desired_access is the
+    // complete final access list: user_ids missing from it are revoked, user_ids absent from
+    // the current DB record are inserted with the supplied wrapped_gk, and user_ids already
+    // present preserve their existing wrapped_gk (the value in desired_access is ignored).
+    std::string_view modifyWorkspace(
+        qint64 entry_id, const QString& name, const QVector<Workspace::Access>& desired_access);
     std::string_view removeWorkspace(qint64 entry_id);
 
     QVector<Workspace::Access> workspaceAccessList(qint64 workspace_id) const;
     QVector<Workspace::Access> workspaceAccessListForUser(qint64 user_id) const;
-    std::string_view grantWorkspaceAccess(qint64 workspace_id, qint64 user_id, const QByteArray& wrapped_gk);
-    std::string_view revokeWorkspaceAccess(qint64 workspace_id, qint64 user_id);
 
 private:
     explicit Database(const QString& connection_name);

@@ -204,11 +204,15 @@ message WorkspaceList
 
 message WorkspaceRequest
 {
-    // "add"    - Workspace with name and exactly one access entry (creator + wrapped_gk).
-    // "modify" - Workspace with entry_id and new name.
+    // "add"    - Workspace with name and full initial access list (each entry has user_id +
+    //            wrapped_gk). Empty access list is allowed; the workspace has no GK until the
+    //            first access is granted via "modify".
+    // "modify" - Workspace with entry_id, new name and the full desired access list. Server
+    //            computes the diff against the current state: for user_ids not yet present in
+    //            DB it inserts the supplied wrapped_gk, for user_ids missing from the request
+    //            it removes the access record. For user_ids already present wrapped_gk in the
+    //            request is ignored (existing wrapped_gk is preserved).
     // "delete" - Workspace with entry_id.
-    // "grant"  - Workspace with entry_id and exactly one access entry (target user_id + wrapped_gk).
-    // "revoke" - Workspace with entry_id and exactly one access entry (target user_id only).
     string command_name = 1;
     Workspace workspace = 2;
 }

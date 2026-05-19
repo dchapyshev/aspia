@@ -398,8 +398,6 @@ RouterWidget::RouterWidget(const RouterConfig& config, QWidget* parent)
     connect(this, &RouterWidget::sig_addWorkspace, router_, &Router::onAddWorkspace, Qt::QueuedConnection);
     connect(this, &RouterWidget::sig_modifyWorkspace, router_, &Router::onModifyWorkspace, Qt::QueuedConnection);
     connect(this, &RouterWidget::sig_deleteWorkspace, router_, &Router::onDeleteWorkspace, Qt::QueuedConnection);
-    connect(this, &RouterWidget::sig_grantWorkspaceAccess, router_, &Router::onGrantWorkspaceAccess, Qt::QueuedConnection);
-    connect(this, &RouterWidget::sig_revokeWorkspaceAccess, router_, &Router::onRevokeWorkspaceAccess, Qt::QueuedConnection);
     connect(this, &RouterWidget::sig_updateConfig, router_, &Router::onUpdateConfig, Qt::QueuedConnection);
 
     connect(ui->tab, &QTabWidget::currentChanged, this, &RouterWidget::onTabChanged);
@@ -1219,14 +1217,23 @@ void RouterWidget::onModifyWorkspace()
     }
 
     QVector<RouterWorkspaceDialog::UserEntry> users;
+    QHash<qint64, QByteArray> user_public_keys;
+    UserTreeItem* self_user_item = nullptr;
+    const QString self_user_name = config_.username();
+
     for (int i = 0; i < ui->tree_users->topLevelItemCount(); ++i)
     {
         UserTreeItem* item = static_cast<UserTreeItem*>(ui->tree_users->topLevelItem(i));
+
         RouterWorkspaceDialog::UserEntry entry;
         entry.entry_id   = item->user.entry_id;
         entry.name       = item->user.name;
         entry.public_key = item->user.public_key;
         users.append(entry);
+
+        user_public_keys.insert(item->user.entry_id, item->user.public_key);
+        if (item->user.name.compare(self_user_name, Qt::CaseInsensitive) == 0)
+            self_user_item = item;
     }
 
     QSet<qint64> initial_access_user_ids;
@@ -1240,107 +1247,97 @@ void RouterWidget::onModifyWorkspace()
     if (dialog.exec() != QDialog::Accepted)
         return;
 
-    if (dialog.name() != current_name)
-    {
-        LOG(INFO) << "[ACTION] Modify workspace: renaming to" << dialog.name();
-
-        proto::router::Workspace workspace;
-        workspace.set_entry_id(workspace_id);
-        workspace.set_name(dialog.name().toStdString());
-        emit sig_modifyWorkspace(workspace);
-    }
-
     const QSet<qint64> final_access = dialog.accessUserIds();
     const QSet<qint64> added = final_access - initial_access_user_ids;
-    const QSet<qint64> removed = initial_access_user_ids - final_access;
 
-    for (qint64 target_user_id : removed)
-        emit sig_revokeWorkspaceAccess(workspace_id, target_user_id);
-
-    if (added.isEmpty())
-        return;
-
-    // Find current session's user record (with wrap_* fields) and snapshot all known users.
-    UserTreeItem* self_item = nullptr;
-    QHash<qint64, QByteArray> user_public_keys;
-    const QString self_name = config_.username();
-    for (int i = 0; i < ui->tree_users->topLevelItemCount(); ++i)
-    {
-        UserTreeItem* item = static_cast<UserTreeItem*>(ui->tree_users->topLevelItem(i));
-        user_public_keys.insert(item->user.entry_id, item->user.public_key);
-        if (item->user.name.compare(self_name, Qt::CaseInsensitive) == 0)
-            self_item = item;
-    }
-
-    if (!self_item || self_item->user.wrap_private_key.isEmpty() || self_item->user.wrap_salt.isEmpty())
-    {
-        MsgBox::warning(this, tr("Your account does not have encryption keys configured. "
-                                 "Recreate your user or change your password to generate them."));
-        return;
-    }
-
-    // Locate self's wrapped_gk inside the workspace's access list (if any).
-    QByteArray self_wrapped_group_key;
-    for (int j = 0; j < tree_item->workspace.access_size(); ++j)
-    {
-        if (tree_item->workspace.access(j).user_id() == self_item->user.entry_id)
-        {
-            self_wrapped_group_key = QByteArray::fromStdString(tree_item->workspace.access(j).wrapped_gk());
-            break;
-        }
-    }
-
+    // Resolve GK (if needed) for sealing for newly added users.
     QByteArray group_key;
-
-    if (self_wrapped_group_key.isEmpty())
+    if (!added.isEmpty())
     {
-        // Bootstrap: workspace has no GK yet (no access records, or self is not among them).
-        // Generate a fresh GK for the new set of grantees.
-        group_key = Random::byteArray(32);
+        if (!self_user_item || self_user_item->user.wrap_private_key.isEmpty() || self_user_item->user.wrap_salt.isEmpty())
+        {
+            MsgBox::warning(this, tr("Your account does not have encryption keys configured. "
+                                     "Recreate your user or change your password to generate them."));
+            return;
+        }
+
+        QByteArray self_wrapped_group_key;
+        for (int j = 0; j < tree_item->workspace.access_size(); ++j)
+        {
+            if (tree_item->workspace.access(j).user_id() == self_user_item->user.entry_id)
+            {
+                self_wrapped_group_key = QByteArray::fromStdString(tree_item->workspace.access(j).wrapped_gk());
+                break;
+            }
+        }
+
+        if (self_wrapped_group_key.isEmpty())
+        {
+            // Bootstrap: workspace has no GK yet (no access records, or self is not among them).
+            // Generate a fresh GK for the new set of grantees.
+            group_key = Random::byteArray(32);
+        }
+        else
+        {
+            SecureByteArray self_private_key = PrivateKeyCryptor::decrypt(
+                self_user_item->user.wrap_private_key, config_.password(), self_user_item->user.wrap_salt);
+            if (self_private_key.isEmpty())
+            {
+                MsgBox::warning(this, tr("Failed to decrypt your private key."));
+                return;
+            }
+
+            KeyPair self_key_pair = KeyPair::fromPrivateKey(self_private_key);
+            if (!self_key_pair.isValid())
+            {
+                MsgBox::warning(this, tr("Failed to load your key pair."));
+                return;
+            }
+
+            std::optional<QByteArray> opened = SealedBox::open(self_wrapped_group_key, self_key_pair);
+            if (!opened.has_value() || opened->isEmpty())
+            {
+                MsgBox::warning(this, tr("Failed to unwrap workspace key."));
+                return;
+            }
+
+            group_key = *opened;
+        }
     }
-    else
+
+    proto::router::Workspace workspace;
+    workspace.set_entry_id(workspace_id);
+    workspace.set_name(dialog.name().toStdString());
+
+    for (qint64 user_id : std::as_const(final_access))
     {
-        SecureByteArray self_private_key = PrivateKeyCryptor::decrypt(
-            self_item->user.wrap_private_key, config_.password(), self_item->user.wrap_salt);
-        if (self_private_key.isEmpty())
-        {
-            MsgBox::warning(this, tr("Failed to decrypt your private key."));
-            return;
-        }
+        proto::router::WorkspaceAccess* access = workspace.add_access();
+        access->set_user_id(user_id);
 
-        KeyPair self_key_pair = KeyPair::fromPrivateKey(self_private_key);
-        if (!self_key_pair.isValid())
-        {
-            MsgBox::warning(this, tr("Failed to load your key pair."));
-            return;
-        }
-
-        std::optional<QByteArray> opened = SealedBox::open(self_wrapped_group_key, self_key_pair);
-        if (!opened.has_value() || opened->isEmpty())
-        {
-            MsgBox::warning(this, tr("Failed to unwrap workspace key."));
-            return;
-        }
-
-        group_key = *opened;
-    }
-
-    for (qint64 target_user_id : added)
-    {
-        const QByteArray target_public_key = user_public_keys.value(target_user_id);
-        if (target_public_key.isEmpty())
+        if (!added.contains(user_id))
             continue;
 
-        QByteArray target_wrapped_group_key = SealedBox::seal(group_key, target_public_key);
-        if (target_wrapped_group_key.isEmpty())
+        const QByteArray target_public_key = user_public_keys.value(user_id);
+        if (target_public_key.isEmpty())
         {
-            LOG(ERROR) << "Failed to seal group key for user_id:" << target_user_id;
+            LOG(ERROR) << "Missing public key for user_id:" << user_id;
             MsgBox::warning(this, tr("Failed to encrypt workspace key for one of the users."));
             return;
         }
 
-        emit sig_grantWorkspaceAccess(workspace_id, target_user_id, target_wrapped_group_key);
+        QByteArray target_wrapped_group_key = SealedBox::seal(group_key, target_public_key);
+        if (target_wrapped_group_key.isEmpty())
+        {
+            LOG(ERROR) << "Failed to seal group key for user_id:" << user_id;
+            MsgBox::warning(this, tr("Failed to encrypt workspace key for one of the users."));
+            return;
+        }
+
+        access->set_wrapped_gk(target_wrapped_group_key.toStdString());
     }
+
+    LOG(INFO) << "[ACTION] Modify workspace accepted by user (access entries:" << workspace.access_size() << ")";
+    emit sig_modifyWorkspace(workspace);
 }
 
 //--------------------------------------------------------------------------------------------------

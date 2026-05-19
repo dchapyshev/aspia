@@ -585,42 +585,26 @@ void SessionAdmin::doWorkspaceRequest(const proto::router::WorkspaceRequest& req
     }
     else if (request.command_name() == proto::router::kCommandWorkspaceModify)
     {
-        CLOG(INFO) << "Workspace modify request:" << entry_id << name;
-        result->set_error_code(database.modifyWorkspace(entry_id, name));
+        CLOG(INFO) << "Workspace modify request:" << entry_id << name
+                   << "with" << workspace.access_size() << "access entries";
+
+        QVector<Workspace::Access> desired_access;
+        desired_access.reserve(workspace.access_size());
+        for (int i = 0; i < workspace.access_size(); ++i)
+        {
+            const proto::router::WorkspaceAccess& src = workspace.access(i);
+            Workspace::Access dst;
+            dst.user_id    = src.user_id();
+            dst.wrapped_gk = QByteArray::fromStdString(src.wrapped_gk());
+            desired_access.append(dst);
+        }
+
+        result->set_error_code(database.modifyWorkspace(entry_id, name, desired_access));
     }
     else if (request.command_name() == proto::router::kCommandWorkspaceDelete)
     {
         CLOG(INFO) << "Workspace delete request:" << entry_id;
         result->set_error_code(database.removeWorkspace(entry_id));
-    }
-    else if (request.command_name() == proto::router::kCommandWorkspaceAccessGrant)
-    {
-        if (workspace.access_size() != 1)
-        {
-            CLOG(ERROR) << "Workspace grant expects exactly one access entry";
-            result->set_error_code(proto::router::kErrorInvalidData);
-            sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
-            return;
-        }
-
-        const qint64 target_user_id = workspace.access(0).user_id();
-        const QByteArray wrapped_gk = QByteArray::fromStdString(workspace.access(0).wrapped_gk());
-        CLOG(INFO) << "Grant workspace access:" << entry_id << "->" << target_user_id;
-        result->set_error_code(database.grantWorkspaceAccess(entry_id, target_user_id, wrapped_gk));
-    }
-    else if (request.command_name() == proto::router::kCommandWorkspaceAccessRevoke)
-    {
-        if (workspace.access_size() != 1)
-        {
-            CLOG(ERROR) << "Workspace revoke expects exactly one access entry";
-            result->set_error_code(proto::router::kErrorInvalidData);
-            sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
-            return;
-        }
-
-        const qint64 target_user_id = workspace.access(0).user_id();
-        CLOG(INFO) << "Revoke workspace access:" << entry_id << "->" << target_user_id;
-        result->set_error_code(database.revokeWorkspaceAccess(entry_id, target_user_id));
     }
     else
     {

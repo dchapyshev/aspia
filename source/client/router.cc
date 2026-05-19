@@ -429,7 +429,8 @@ void Router::onModifyWorkspace(const proto::router::Workspace& workspace)
     request->mutable_workspace()->CopyFrom(workspace);
 
     LOG(INFO) << "Sending workspace modify request (entry_id:" << workspace.entry_id()
-              << ", name:" << workspace.name() << ")";
+              << ", name:" << workspace.name()
+              << ", access entries:" << workspace.access_size() << ")";
     sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
 }
 
@@ -448,50 +449,6 @@ void Router::onDeleteWorkspace(qint64 entry_id)
     request->mutable_workspace()->set_entry_id(entry_id);
 
     LOG(INFO) << "Sending workspace delete request (entry_id:" << entry_id << ")";
-    sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
-}
-
-//--------------------------------------------------------------------------------------------------
-void Router::onGrantWorkspaceAccess(qint64 workspace_id, qint64 user_id, const QByteArray& wrapped_gk)
-{
-    if (config_.sessionType() != proto::router::SESSION_TYPE_ADMIN)
-    {
-        LOG(ERROR) << "No administrator access level";
-        return;
-    }
-
-    proto::router::AdminToRouter message;
-    proto::router::WorkspaceRequest* request = message.mutable_workspace_request();
-    request->set_command_name(proto::router::kCommandWorkspaceAccessGrant);
-    proto::router::Workspace* workspace = request->mutable_workspace();
-    workspace->set_entry_id(workspace_id);
-    proto::router::WorkspaceAccess* access = workspace->add_access();
-    access->set_user_id(user_id);
-    access->set_wrapped_gk(wrapped_gk.toStdString());
-
-    LOG(INFO) << "Sending workspace access grant (workspace_id:" << workspace_id
-              << ", user_id:" << user_id << ")";
-    sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
-}
-
-//--------------------------------------------------------------------------------------------------
-void Router::onRevokeWorkspaceAccess(qint64 workspace_id, qint64 user_id)
-{
-    if (config_.sessionType() != proto::router::SESSION_TYPE_ADMIN)
-    {
-        LOG(ERROR) << "No administrator access level";
-        return;
-    }
-
-    proto::router::AdminToRouter message;
-    proto::router::WorkspaceRequest* request = message.mutable_workspace_request();
-    request->set_command_name(proto::router::kCommandWorkspaceAccessRevoke);
-    proto::router::Workspace* workspace = request->mutable_workspace();
-    workspace->set_entry_id(workspace_id);
-    workspace->add_access()->set_user_id(user_id);
-
-    LOG(INFO) << "Sending workspace access revoke (workspace_id:" << workspace_id
-              << ", user_id:" << user_id << ")";
     sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
 }
 

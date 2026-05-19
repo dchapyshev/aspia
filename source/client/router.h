@@ -89,8 +89,6 @@ public slots:
     void onAddWorkspace(const proto::router::Workspace& workspace);
     void onModifyWorkspace(const proto::router::Workspace& workspace);
     void onDeleteWorkspace(qint64 entry_id);
-    void onGrantWorkspaceAccess(qint64 workspace_id, qint64 user_id, const QByteArray& wrapped_gk);
-    void onRevokeWorkspaceAccess(qint64 workspace_id, qint64 user_id);
 
     // Manager methods.
     // TODO
