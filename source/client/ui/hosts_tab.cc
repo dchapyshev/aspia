@@ -44,6 +44,7 @@
 #include "client/ui/hosts/router_group_widget.h"
 #include "client/ui/hosts/search_widget.h"
 #include "proto/peer.h"
+#include "proto/router.h"
 #include "ui_hosts_tab.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -402,22 +403,19 @@ void HostsTab::changeEvent(QEvent* event)
 //--------------------------------------------------------------------------------------------------
 void HostsTab::onRouterStatusChanged(qint64 router_id, Router::Status status)
 {
-    Sidebar::Router* router = ui->sidebar->routerById(router_id);
-    if (!router)
-        return;
-
+    Sidebar::RouterItem::Status sidebar_status = Sidebar::RouterItem::Status::OFFLINE;
     switch (status)
     {
-        case Router::Status::OFFLINE:
-            router->setStatus(Sidebar::Router::Status::OFFLINE);
-            break;
-        case Router::Status::CONNECTING:
-            router->setStatus(Sidebar::Router::Status::CONNECTING);
-            break;
-        case Router::Status::ONLINE:
-            router->setStatus(Sidebar::Router::Status::ONLINE);
-            break;
+        case Router::Status::OFFLINE:    sidebar_status = Sidebar::RouterItem::Status::OFFLINE;    break;
+        case Router::Status::CONNECTING: sidebar_status = Sidebar::RouterItem::Status::CONNECTING; break;
+        case Router::Status::ONLINE:     sidebar_status = Sidebar::RouterItem::Status::ONLINE;     break;
     }
+
+    std::optional<RouterConfig> router_config = Database::instance().findRouter(router_id);
+    const bool is_admin = router_config &&
+        router_config->sessionType() == proto::router::SESSION_TYPE_ADMIN;
+
+    ui->sidebar->setRouterStatus(router_id, sidebar_status, is_admin);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -438,7 +436,7 @@ void HostsTab::onSwitchContent(Sidebar::Item::Type type)
             if (!sidebar_item || sidebar_item->itemType() != Sidebar::Item::ROUTER)
                 break;
 
-            Sidebar::Router* router = static_cast<Sidebar::Router*>(sidebar_item);
+            Sidebar::RouterItem* router = static_cast<Sidebar::RouterItem*>(sidebar_item);
             RouterWidget* widget = router_widgets_.value(router->routerId());
             if (widget)
                 switchContent(widget);
@@ -449,6 +447,12 @@ void HostsTab::onSwitchContent(Sidebar::Item::Type type)
         {
             switchContent(router_group_widget_);
             router_group_widget_->showGroup(ui->sidebar->currentGroupId());
+        }
+        break;
+
+        case Sidebar::Item::Type::UNASSIGNED:
+        {
+            // TODO: show list of unassigned computers for the parent router.
         }
         break;
     }
@@ -571,7 +575,7 @@ void HostsTab::onConnectAction(QAction* action)
         if (!router_item)
             return;
 
-        Sidebar::Router* router = static_cast<Sidebar::Router*>(router_item);
+        Sidebar::RouterItem* router = static_cast<Sidebar::RouterItem*>(router_item);
         std::optional<RouterConfig> router_data = Database::instance().findRouter(router->routerId());
         if (router_data)
             computer.setRouterId(router_data->routerId());
@@ -879,7 +883,7 @@ void HostsTab::onAddUserAction()
     if (!sidebar_item || sidebar_item->itemType() != Sidebar::Item::ROUTER)
         return;
 
-    Sidebar::Router* router = static_cast<Sidebar::Router*>(sidebar_item);
+    Sidebar::RouterItem* router = static_cast<Sidebar::RouterItem*>(sidebar_item);
     RouterWidget* widget = router_widgets_.value(router->routerId());
     if (widget)
         widget->onAddUser();
@@ -892,7 +896,7 @@ void HostsTab::onEditUserAction()
     if (!sidebar_item || sidebar_item->itemType() != Sidebar::Item::ROUTER)
         return;
 
-    Sidebar::Router* router = static_cast<Sidebar::Router*>(sidebar_item);
+    Sidebar::RouterItem* router = static_cast<Sidebar::RouterItem*>(sidebar_item);
     RouterWidget* widget = router_widgets_.value(router->routerId());
     if (widget)
         widget->onModifyUser();
@@ -905,7 +909,7 @@ void HostsTab::onDeleteUserAction()
     if (!sidebar_item || sidebar_item->itemType() != Sidebar::Item::ROUTER)
         return;
 
-    Sidebar::Router* router = static_cast<Sidebar::Router*>(sidebar_item);
+    Sidebar::RouterItem* router = static_cast<Sidebar::RouterItem*>(sidebar_item);
     RouterWidget* widget = router_widgets_.value(router->routerId());
     if (widget)
         widget->onDeleteUser();
@@ -918,7 +922,7 @@ void HostsTab::onAddWorkspaceAction()
     if (!sidebar_item || sidebar_item->itemType() != Sidebar::Item::ROUTER)
         return;
 
-    Sidebar::Router* router = static_cast<Sidebar::Router*>(sidebar_item);
+    Sidebar::RouterItem* router = static_cast<Sidebar::RouterItem*>(sidebar_item);
     RouterWidget* widget = router_widgets_.value(router->routerId());
     if (widget)
         widget->onAddWorkspace();
@@ -931,7 +935,7 @@ void HostsTab::onEditWorkspaceAction()
     if (!sidebar_item || sidebar_item->itemType() != Sidebar::Item::ROUTER)
         return;
 
-    Sidebar::Router* router = static_cast<Sidebar::Router*>(sidebar_item);
+    Sidebar::RouterItem* router = static_cast<Sidebar::RouterItem*>(sidebar_item);
     RouterWidget* widget = router_widgets_.value(router->routerId());
     if (widget)
         widget->onModifyWorkspace();
@@ -944,7 +948,7 @@ void HostsTab::onDeleteWorkspaceAction()
     if (!sidebar_item || sidebar_item->itemType() != Sidebar::Item::ROUTER)
         return;
 
-    Sidebar::Router* router = static_cast<Sidebar::Router*>(sidebar_item);
+    Sidebar::RouterItem* router = static_cast<Sidebar::RouterItem*>(sidebar_item);
     RouterWidget* widget = router_widgets_.value(router->routerId());
     if (widget)
         widget->onDeleteWorkspace();
@@ -957,7 +961,7 @@ void HostsTab::onRouterStatus()
     if (!sidebar_item || sidebar_item->itemType() != Sidebar::Item::ROUTER)
         return;
 
-    Sidebar::Router* router = static_cast<Sidebar::Router*>(sidebar_item);
+    Sidebar::RouterItem* router = static_cast<Sidebar::RouterItem*>(sidebar_item);
     RouterWidget* widget = router_widgets_.value(router->routerId());
     if (widget)
         widget->showStatusDialog();
@@ -1068,7 +1072,7 @@ void HostsTab::onDisconnectAction()
     if (!sidebar_item || sidebar_item->itemType() != Sidebar::Item::ROUTER)
         return;
 
-    Sidebar::Router* router = static_cast<Sidebar::Router*>(sidebar_item);
+    Sidebar::RouterItem* router = static_cast<Sidebar::RouterItem*>(sidebar_item);
     RouterWidget* widget = router_widgets_.value(router->routerId());
     if (!widget)
         return;
@@ -1096,7 +1100,7 @@ void HostsTab::onDisconnectAllAction()
     if (!sidebar_item || sidebar_item->itemType() != Sidebar::Item::ROUTER)
         return;
 
-    Sidebar::Router* router = static_cast<Sidebar::Router*>(sidebar_item);
+    Sidebar::RouterItem* router = static_cast<Sidebar::RouterItem*>(sidebar_item);
     RouterWidget* widget = router_widgets_.value(router->routerId());
     if (!widget)
         return;
@@ -1124,7 +1128,7 @@ void HostsTab::onRemoveHostAction()
     if (!sidebar_item || sidebar_item->itemType() != Sidebar::Item::ROUTER)
         return;
 
-    Sidebar::Router* router = static_cast<Sidebar::Router*>(sidebar_item);
+    Sidebar::RouterItem* router = static_cast<Sidebar::RouterItem*>(sidebar_item);
     RouterWidget* widget = router_widgets_.value(router->routerId());
     if (widget)
         widget->onRemoveHost();
@@ -1229,7 +1233,7 @@ void HostsTab::updateActionsState()
         ui->action_delete_router->setVisible(true);
         ui->action_router_status->setVisible(true);
 
-        Sidebar::Router* router = static_cast<Sidebar::Router*>(sidebar_item);
+        Sidebar::RouterItem* router = static_cast<Sidebar::RouterItem*>(sidebar_item);
         RouterWidget* widget = router_widgets_.value(router->routerId());
 
         bool on_users_tab = widget && widget->currentTabType() == RouterWidget::TabType::USERS;

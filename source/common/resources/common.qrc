@@ -121,5 +121,6 @@
         <file>arrow-right.svg</file>
         <file>clean.svg</file>
         <file>user-disable.svg</file>
+        <file>computer-unknown.svg</file>
     </qresource>
 </RCC>

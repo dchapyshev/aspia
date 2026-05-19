@@ -62,7 +62,7 @@ Sidebar::Sidebar(QWidget* parent)
     local_root_data.setName(tr("Local"));
 
     // Create local root after routers so it appears at the bottom.
-    local_root_ = new LocalGroup(local_root_data, tree_widget_);
+    local_root_ = new LocalGroupItem(local_root_data, tree_widget_);
     local_root_->setExpanded(Settings().isGroupExpanded(local_root_data.id()));
 
     // Setup drag-and-drop.
@@ -94,7 +94,7 @@ void Sidebar::loadGroups(qint64 parent_id, QTreeWidgetItem* parent_item)
 
     for (const GroupConfig& group : std::as_const(groups))
     {
-        LocalGroup* item = new LocalGroup(group, parent_item);
+        LocalGroupItem* item = new LocalGroupItem(group, parent_item);
         item->setExpanded(settings.isGroupExpanded(group.id()));
 
         // Load child groups recursively.
@@ -139,7 +139,7 @@ void Sidebar::loadRouters()
 
     for (const RouterConfig& router_config : std::as_const(routers))
     {
-        Router* router = new Router(router_config.routerId(), router_config.displayLabel(), tree_widget_);
+        RouterItem* router = new RouterItem(router_config.routerId(), router_config.displayLabel(), tree_widget_);
         router->setExpanded(true);
     }
 }
@@ -161,23 +161,24 @@ void Sidebar::reloadRouters()
         if (item->itemType() != Item::ROUTER)
             continue;
 
-        if (!new_ids.contains(static_cast<Router*>(item)->routerId()))
+        if (!new_ids.contains(static_cast<RouterItem*>(item)->routerId()))
             delete tree_widget_->takeTopLevelItem(i);
     }
 
-    // Update existing routers, append new ones at the end.
+    // Update existing routers, append new ones at the end. Child items (Unassigned, ...) are
+    // managed by setRouterStatus() based on the current connection state, not here.
     for (const RouterConfig& router_config : std::as_const(routers))
     {
         const QString name = router_config.displayLabel();
 
-        Router* router = routerById(router_config.routerId());
+        RouterItem* router = routerById(router_config.routerId());
         if (router)
         {
             router->setName(name);
         }
         else
         {
-            Router* new_router = new Router(router_config.routerId(), name, tree_widget_);
+            RouterItem* new_router = new RouterItem(router_config.routerId(), name, tree_widget_);
             new_router->setExpanded(true);
 
             // Keep ordering: routers first, local root last.
@@ -193,6 +194,39 @@ void Sidebar::reloadRouters()
 }
 
 //--------------------------------------------------------------------------------------------------
+void Sidebar::setRouterStatus(qint64 router_id, RouterItem::Status status, bool is_admin)
+{
+    RouterItem* router = routerById(router_id);
+    if (!router)
+        return;
+
+    router->setStatus(status);
+
+    if (status != RouterItem::Status::ONLINE)
+    {
+        while (router->childCount() > 0)
+            delete router->child(0);
+        return;
+    }
+
+    UnassignedItem* unassigned = nullptr;
+    for (int i = 0; i < router->childCount(); ++i)
+    {
+        Item* child = static_cast<Item*>(router->child(i));
+        if (child->itemType() == Item::UNASSIGNED)
+        {
+            unassigned = static_cast<UnassignedItem*>(child);
+            break;
+        }
+    }
+
+    if (is_admin && !unassigned)
+        new UnassignedItem(router_id, router);
+    else if (!is_admin && unassigned)
+        delete unassigned;
+}
+
+//--------------------------------------------------------------------------------------------------
 qint64 Sidebar::currentGroupId() const
 {
     return current_group_id_;
@@ -205,7 +239,7 @@ Sidebar::Item* Sidebar::currentItem() const
 }
 
 //--------------------------------------------------------------------------------------------------
-Sidebar::Router* Sidebar::routerById(qint64 router_id) const
+Sidebar::RouterItem* Sidebar::routerById(qint64 router_id) const
 {
     for (int i = 0; i < tree_widget_->topLevelItemCount(); ++i)
     {
@@ -213,7 +247,7 @@ Sidebar::Router* Sidebar::routerById(qint64 router_id) const
         if (item->itemType() != Item::ROUTER)
             continue;
 
-        Router* router = static_cast<Router*>(item);
+        RouterItem* router = static_cast<RouterItem*>(item);
         if (router->routerId() == router_id)
             return router;
     }
@@ -232,7 +266,7 @@ QList<qint64> Sidebar::routerIds() const
         if (item->itemType() != Item::ROUTER)
             continue;
 
-        ids.append(static_cast<Router*>(item)->routerId());
+        ids.append(static_cast<RouterItem*>(item)->routerId());
     }
 
     return ids;
@@ -287,7 +321,7 @@ void Sidebar::onEditGroup()
     if (item->itemType() != Item::LOCAL_GROUP)
         return;
 
-    LocalGroup* local_group = static_cast<LocalGroup*>(item);
+    LocalGroupItem* local_group = static_cast<LocalGroupItem*>(item);
     if (local_group->groupId() == 0)
         return;
 
@@ -316,7 +350,7 @@ void Sidebar::onRemoveGroup()
     if (item->itemType() != Item::Type::LOCAL_GROUP || item->groupId() == 0) // Root group.
         return;
 
-    LocalGroup* local_group = static_cast<LocalGroup*>(item);
+    LocalGroupItem* local_group = static_cast<LocalGroupItem*>(item);
 
     QString message = tr("Are you sure you want to delete group \"%1\"?").arg(local_group->groupName());
 
@@ -363,7 +397,7 @@ void Sidebar::onEditRouter()
     if (!item || item->itemType() != Item::ROUTER)
         return;
 
-    qint64 router_id = static_cast<Router*>(item)->routerId();
+    qint64 router_id = static_cast<RouterItem*>(item)->routerId();
     LOG(INFO) << "[ACTION] Edit router" << router_id;
 
     RouterDialog dialog(router_id, this);
@@ -383,7 +417,7 @@ void Sidebar::onRemoveRouter()
     if (!item || item->itemType() != Item::ROUTER)
         return;
 
-    Router* router_item = static_cast<Router*>(item);
+    RouterItem* router_item = static_cast<RouterItem*>(item);
     qint64 router_id = router_item->routerId();
     LOG(INFO) << "[ACTION] Delete router" << router_id;
 
@@ -411,8 +445,25 @@ void Sidebar::changeEvent(QEvent* event)
 {
     QWidget::changeEvent(event);
 
-    if (event->type() == QEvent::LanguageChange && local_root_)
+    if (event->type() != QEvent::LanguageChange)
+        return;
+
+    if (local_root_)
         local_root_->setText(0, tr("Local"));
+
+    for (int i = 0; i < tree_widget_->topLevelItemCount(); ++i)
+    {
+        Item* top = static_cast<Item*>(tree_widget_->topLevelItem(i));
+        if (top->itemType() != Item::ROUTER)
+            continue;
+
+        for (int j = 0; j < top->childCount(); ++j)
+        {
+            Item* child = static_cast<Item*>(top->child(j));
+            if (child->itemType() == Item::UNASSIGNED)
+                static_cast<UnassignedItem*>(child)->retranslate();
+        }
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -556,7 +607,7 @@ bool Sidebar::onDrop(QDropEvent* event)
             return true;
         }
 
-        LocalGroup* source_group = group_mime_data->groupItem();
+        LocalGroupItem* source_group = group_mime_data->groupItem();
         if (!source_group)
         {
             restoreSelection();
@@ -715,7 +766,7 @@ void Sidebar::startDrag()
     if (item->itemType() != Item::LOCAL_GROUP)
         return;
 
-    LocalGroup* group_item = static_cast<LocalGroup*>(item);
+    LocalGroupItem* group_item = static_cast<LocalGroupItem*>(item);
 
     // Don't allow dragging the root "Local" group.
     if (group_item->groupId() == 0)
@@ -784,6 +835,10 @@ void Sidebar::onCurrentItemChanged(QTreeWidgetItem* current, QTreeWidgetItem* pr
 
         case Item::ROUTER_GROUP:
             current_group_id_ = item->groupId();
+            break;
+
+        case Item::UNASSIGNED:
+            // Nothing
             break;
     }
 
@@ -862,7 +917,7 @@ Sidebar::Item::Item(Type type, qint64 group_id, QTreeWidgetItem* parent)
 }
 
 //--------------------------------------------------------------------------------------------------
-Sidebar::LocalGroup::LocalGroup(const GroupConfig& group, QTreeWidget* parent)
+Sidebar::LocalGroupItem::LocalGroupItem(const GroupConfig& group, QTreeWidget* parent)
     : Item(LOCAL_GROUP, group.id(), parent),
       parent_id_(group.parentId()),
       group_name_(group.name())
@@ -872,7 +927,7 @@ Sidebar::LocalGroup::LocalGroup(const GroupConfig& group, QTreeWidget* parent)
 }
 
 //--------------------------------------------------------------------------------------------------
-Sidebar::LocalGroup::LocalGroup(const GroupConfig& group, QTreeWidgetItem* parent)
+Sidebar::LocalGroupItem::LocalGroupItem(const GroupConfig& group, QTreeWidgetItem* parent)
     : Item(LOCAL_GROUP, group.id(), parent),
       parent_id_(group.parentId()),
       group_name_(group.name())
@@ -882,7 +937,7 @@ Sidebar::LocalGroup::LocalGroup(const GroupConfig& group, QTreeWidgetItem* paren
 }
 
 //--------------------------------------------------------------------------------------------------
-Sidebar::Router::Router(qint64 router_id, const QString& name, QTreeWidget* parent)
+Sidebar::RouterItem::RouterItem(qint64 router_id, const QString& name, QTreeWidget* parent)
     : Item(ROUTER, -1, parent),
       router_id_(router_id),
       name_(name)
@@ -892,20 +947,20 @@ Sidebar::Router::Router(qint64 router_id, const QString& name, QTreeWidget* pare
 }
 
 //--------------------------------------------------------------------------------------------------
-qint64 Sidebar::Router::routerId() const
+qint64 Sidebar::RouterItem::routerId() const
 {
     return router_id_;
 }
 
 //--------------------------------------------------------------------------------------------------
-void Sidebar::Router::setName(const QString& name)
+void Sidebar::RouterItem::setName(const QString& name)
 {
     name_ = name;
     setText(0, name);
 }
 
 //--------------------------------------------------------------------------------------------------
-void Sidebar::Router::setStatus(Status status)
+void Sidebar::RouterItem::setStatus(Status status)
 {
     switch (status)
     {
@@ -917,9 +972,24 @@ void Sidebar::Router::setStatus(Status status)
 }
 
 //--------------------------------------------------------------------------------------------------
-Sidebar::RouterGroup::RouterGroup(qint64 group_id, const QString& name, QTreeWidgetItem* parent)
+Sidebar::RouterGroupItem::RouterGroupItem(qint64 group_id, const QString& name, QTreeWidgetItem* parent)
     : Item(ROUTER_GROUP, group_id, parent)
 {
     setText(0, name);
     setIcon(0, QIcon(":/img/folder.svg"));
+}
+
+//--------------------------------------------------------------------------------------------------
+Sidebar::UnassignedItem::UnassignedItem(qint64 router_id, QTreeWidgetItem* parent)
+    : Item(UNASSIGNED, 0, parent),
+      router_id_(router_id)
+{
+    setIcon(0, QIcon(":/img/computer-unknown.svg"));
+    retranslate();
+}
+
+//--------------------------------------------------------------------------------------------------
+void Sidebar::UnassignedItem::retranslate()
+{
+    setText(0, tr("Unassigned"));
 }

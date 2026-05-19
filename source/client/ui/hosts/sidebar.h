@@ -19,6 +19,7 @@
 #ifndef CLIENT_UI_HOSTS_SIDEBAR_H
 #define CLIENT_UI_HOSTS_SIDEBAR_H
 
+#include <QCoreApplication>
 #include <QDrag>
 #include <QMimeData>
 #include <QPoint>
@@ -38,7 +39,7 @@ public:
     class Item : public QTreeWidgetItem
     {
     public:
-        enum Type { LOCAL_GROUP, ROUTER, ROUTER_GROUP };
+        enum Type { LOCAL_GROUP, ROUTER, ROUTER_GROUP, UNASSIGNED };
 
         Type itemType() const { return type_; }
         qint64 groupId() const { return group_id_; }
@@ -52,11 +53,11 @@ public:
         qint64 group_id_;
     };
 
-    class LocalGroup final : public Item
+    class LocalGroupItem final : public Item
     {
     public:
-        LocalGroup(const GroupConfig& group, QTreeWidget* parent);
-        LocalGroup(const GroupConfig& group, QTreeWidgetItem* parent);
+        LocalGroupItem(const GroupConfig& group, QTreeWidget* parent);
+        LocalGroupItem(const GroupConfig& group, QTreeWidgetItem* parent);
 
         qint64 parentId() const { return parent_id_; }
         QString groupName() const { return group_name_; }
@@ -66,10 +67,10 @@ public:
         QString group_name_;
     };
 
-    class Router final : public Item
+    class RouterItem final : public Item
     {
     public:
-        Router(qint64 router_id, const QString& name, QTreeWidget* parent);
+        RouterItem(qint64 router_id, const QString& name, QTreeWidget* parent);
 
         enum class Status { OFFLINE, CONNECTING, ONLINE };
 
@@ -83,10 +84,26 @@ public:
         QString name_;
     };
 
-    class RouterGroup final : public Item
+    class RouterGroupItem final : public Item
     {
     public:
-        RouterGroup(qint64 group_id, const QString& name, QTreeWidgetItem* parent);
+        RouterGroupItem(qint64 group_id, const QString& name, QTreeWidgetItem* parent);
+    };
+
+    // Bucket under a Router that lists hosts known to the router but not yet placed into any
+    // workspace. Only created for routers the user is connected to as an administrator.
+    class UnassignedItem final : public Item
+    {
+        Q_DECLARE_TR_FUNCTIONS(Unassigned)
+
+    public:
+        UnassignedItem(qint64 router_id, QTreeWidgetItem* parent);
+
+        qint64 routerId() const { return router_id_; }
+        void retranslate();
+
+    private:
+        qint64 router_id_;
     };
 
     class GroupMimeData final : public QMimeData
@@ -95,16 +112,16 @@ public:
         GroupMimeData() = default;
         ~GroupMimeData() final = default;
 
-        void setGroupItem(LocalGroup* group_item, const QString& mime_type)
+        void setGroupItem(LocalGroupItem* group_item, const QString& mime_type)
         {
             group_item_ = group_item;
             setData(mime_type, QByteArray());
         }
 
-        LocalGroup* groupItem() const { return group_item_; }
+        LocalGroupItem* groupItem() const { return group_item_; }
 
     private:
-        LocalGroup* group_item_ = nullptr;
+        LocalGroupItem* group_item_ = nullptr;
     };
 
     class GroupDrag final : public QDrag
@@ -116,7 +133,7 @@ public:
             // Nothing
         }
 
-        void setGroupItem(LocalGroup* group_item, const QString& mime_type)
+        void setGroupItem(LocalGroupItem* group_item, const QString& mime_type)
         {
             GroupMimeData* mime_data = new GroupMimeData();
             mime_data->setGroupItem(group_item, mime_type);
@@ -131,9 +148,12 @@ public:
     void reloadGroups(qint64 selected_group_id = 0);
     void loadRouters();
     void reloadRouters();
+    // Updates the router's icon and synchronizes its visible children: children (Unassigned, etc.)
+    // are only present while the router is ONLINE. is_admin reflects the current session type.
+    void setRouterStatus(qint64 router_id, RouterItem::Status status, bool is_admin);
     qint64 currentGroupId() const;
     Item* currentItem() const;
-    Router* routerById(qint64 router_id) const;
+    RouterItem* routerById(qint64 router_id) const;
     QList<qint64> routerIds() const;
 
 public slots:
@@ -178,7 +198,7 @@ private:
 
     QTreeWidget* tree_widget_ = nullptr;
 
-    LocalGroup* local_root_ = nullptr;
+    LocalGroupItem* local_root_ = nullptr;
 
     qint64 current_group_id_ = 0;
     QString computer_mime_type_;
