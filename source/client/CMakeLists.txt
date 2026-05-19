@@ -252,6 +252,9 @@ list(APPEND SOURCE_CLIENT_CORE_UI_HOSTS_TAB
     ui/hosts/router_group_widget.cc
     ui/hosts/router_group_widget.h
     ui/hosts/router_group_widget.ui
+    ui/hosts/unassigned_widget.cc
+    ui/hosts/unassigned_widget.h
+    ui/hosts/unassigned_widget.ui
     ui/hosts/search_widget.cc
     ui/hosts/search_widget.h)
 

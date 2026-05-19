@@ -43,6 +43,7 @@
 #include "client/ui/hosts/router_widget.h"
 #include "client/ui/hosts/router_group_widget.h"
 #include "client/ui/hosts/search_widget.h"
+#include "client/ui/hosts/unassigned_widget.h"
 #include "proto/peer.h"
 #include "proto/router.h"
 #include "ui_hosts_tab.h"
@@ -104,10 +105,12 @@ HostsTab::HostsTab(QWidget* parent)
     // Create content widgets.
     local_group_widget_ = new LocalGroupWidget(this);
     router_group_widget_ = new RouterGroupWidget(this);
+    unassigned_widget_ = new UnassignedWidget(this);
     search_widget_ = new SearchWidget(this);
 
     ui->content_stack->addWidget(local_group_widget_);
     ui->content_stack->addWidget(router_group_widget_);
+    ui->content_stack->addWidget(unassigned_widget_);
     ui->content_stack->addWidget(search_widget_);
 
     // Setup drag-and-drop: pass the computer mime type from LocalGroupWidget to Sidebar.
@@ -206,6 +209,7 @@ QByteArray HostsTab::saveState()
 
         stream << local_group_widget_->saveState();
         stream << router_group_widget_->saveState();
+        stream << unassigned_widget_->saveState();
         stream << search_widget_->saveState();
         stream << ui->splitter->saveState();
 
@@ -235,12 +239,14 @@ void HostsTab::restoreState(const QByteArray& state)
 
     QByteArray local_group_state;
     QByteArray router_group_state;
+    QByteArray unassigned_state;
     QByteArray search_state;
     QByteArray splitter_state;
     QByteArray routers_buffer;
 
     stream >> local_group_state;
     stream >> router_group_state;
+    stream >> unassigned_state;
     stream >> search_state;
     stream >> splitter_state;
     stream >> routers_buffer;
@@ -250,6 +256,9 @@ void HostsTab::restoreState(const QByteArray& state)
 
     if (!router_group_state.isEmpty())
         router_group_widget_->restoreState(router_group_state);
+
+    if (!unassigned_state.isEmpty())
+        unassigned_widget_->restoreState(unassigned_state);
 
     if (!search_state.isEmpty())
         search_widget_->restoreState(search_state);
@@ -452,7 +461,13 @@ void HostsTab::onSwitchContent(Sidebar::Item::Type type)
 
         case Sidebar::Item::Type::UNASSIGNED:
         {
-            // TODO: show list of unassigned computers for the parent router.
+            Sidebar::Item* sidebar_item = ui->sidebar->currentItem();
+            if (!sidebar_item || sidebar_item->itemType() != Sidebar::Item::UNASSIGNED)
+                break;
+
+            Sidebar::UnassignedItem* unassigned = static_cast<Sidebar::UnassignedItem*>(sidebar_item);
+            switchContent(unassigned_widget_);
+            unassigned_widget_->showForRouter(unassigned->routerId());
         }
         break;
     }
