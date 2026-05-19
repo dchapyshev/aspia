@@ -28,6 +28,22 @@
 #include "base/peer/router_user.h"
 #include "router/workspace.h"
 
+struct ComputerInfo
+{
+    qint64 entry_id     = 0;
+    qint64 workspace_id = 0;
+    qint64 group_id     = 0;
+    qint64 host_id      = 0;
+    QString name;
+    QString computer_name;
+    QString address;
+    QByteArray comment;
+    QByteArray user_name;
+    QByteArray password;
+    qint64 last_connect = 0;
+    qint64 last_modify  = 0;
+};
+
 class Database
 {
 public:
@@ -71,6 +87,10 @@ public:
 
     QVector<Workspace::Access> workspaceAccessList(qint64 workspace_id) const;
     QVector<Workspace::Access> workspaceAccessListForUser(qint64 user_id) const;
+
+    // Returns computers within the given workspace and group; workspace_id == 0 returns the
+    // unassigned bucket, group_id == 0 returns rows at the workspace root.
+    QVector<ComputerInfo> computers(qint64 workspace_id, qint64 group_id) const;
 
 private:
     explicit Database(const QString& connection_name);

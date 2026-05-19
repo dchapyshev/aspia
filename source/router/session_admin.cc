@@ -18,6 +18,8 @@
 
 #include "router/session_admin.h"
 
+#include <QSet>
+
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/peer/router_user.h"
@@ -102,6 +104,10 @@ void SessionAdmin::onSessionMessage(quint8 channel_id, const QByteArray& buffer)
     else if (message.has_workspace_request())
     {
         doWorkspaceRequest(message.workspace_request());
+    }
+    else if (message.has_computer_list_request())
+    {
+        doComputerListRequest(message.computer_list_request());
     }
     else
     {
@@ -610,6 +616,73 @@ void SessionAdmin::doWorkspaceRequest(const proto::router::WorkspaceRequest& req
     {
         CLOG(ERROR) << "Unknown workspace request command:" << request.command_name();
         result->set_error_code(proto::router::kErrorInvalidRequest);
+    }
+
+    sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void SessionAdmin::doComputerListRequest(const proto::router::ComputerListRequest& request)
+{
+    const qint64 workspace_id = request.workspace_id();
+    const qint64 group_id = request.group_id();
+
+    proto::router::RouterToAdmin message;
+    proto::router::ComputerList* result = message.mutable_computer_list();
+    result->set_workspace_id(workspace_id);
+    result->set_group_id(group_id);
+
+    Database database = Database::open();
+    if (!database.isValid())
+    {
+        CLOG(ERROR) << "Failed to connect to database";
+        result->set_error_code(proto::router::kErrorInternalError);
+        sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
+        return;
+    }
+
+    // Collect host_ids of currently connected hosts to mark them online.
+    QSet<qint64> online_host_ids;
+    const QList<Session*>& sessions = Service::instance()->sessions();
+    for (Session* session : std::as_const(sessions))
+    {
+        if (session->sessionType() != proto::router::SESSION_TYPE_HOST)
+            continue;
+
+        SessionHost* host_session = dynamic_cast<SessionHost*>(session);
+        if (host_session)
+        {
+            online_host_ids.insert(static_cast<qint64>(host_session->hostId()));
+            continue;
+        }
+
+        SessionLegacyHost* legacy_host_session = dynamic_cast<SessionLegacyHost*>(session);
+        if (legacy_host_session)
+        {
+            for (HostId host_id : legacy_host_session->hostIdList())
+                online_host_ids.insert(static_cast<qint64>(host_id));
+        }
+    }
+
+    const QVector<ComputerInfo> computers = database.computers(workspace_id, group_id);
+    result->set_error_code(proto::router::kErrorOk);
+
+    for (const ComputerInfo& info : std::as_const(computers))
+    {
+        proto::router::Computer* item = result->add_computer();
+        item->set_entry_id(info.entry_id);
+        item->set_workspace_id(info.workspace_id);
+        item->set_group_id(info.group_id);
+        item->set_host_id(info.host_id);
+        item->set_name(info.name.toStdString());
+        item->set_computer_name(info.computer_name.toStdString());
+        item->set_address(info.address.toStdString());
+        item->set_comment(info.comment.toStdString());
+        item->set_user_name(info.user_name.toStdString());
+        item->set_password(info.password.toStdString());
+        item->set_last_connect(info.last_connect);
+        item->set_last_modify(info.last_modify);
+        item->set_online(online_host_ids.contains(info.host_id));
     }
 
     sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));

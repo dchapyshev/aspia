@@ -225,6 +225,37 @@ message WorkspaceResult
     int64 entry_id      = 3; // Id of created workspace for "add".
 }
 
+message Computer
+{
+    int64 entry_id       = 1;  // computers.id.
+    int64 workspace_id   = 2;  // 0 means unassigned.
+    int64 group_id       = 3;  // 0 means workspace root.
+    int64 host_id        = 4;  // Host id assigned by the router (hosts.id).
+    string name          = 5;  // Display label (plain).
+    string computer_name = 6;  // Plain OS hostname reported by the host.
+    string address       = 7;  // Last seen peer address.
+    bytes comment        = 8;  // AEAD-encrypted with workspace GK.
+    bytes user_name      = 9;  // AEAD-encrypted with workspace GK.
+    bytes password       = 10; // AEAD-encrypted with workspace GK.
+    int64 last_connect   = 11; // Unix timestamp of the last connection.
+    int64 last_modify    = 12; // Unix timestamp of the last edit by the admin.
+    bool online          = 13; // Live host session currently exists for this host_id.
+}
+
+message ComputerListRequest
+{
+    int64 workspace_id = 1; // 0 means list unassigned computers.
+    int64 group_id     = 2; // 0 means rows at the workspace root.
+}
+
+message ComputerList
+{
+    string error_code          = 1; // "ok" | "internal_error"
+    int64 workspace_id         = 2; // Echo of the request, so the client can route the response.
+    int64 group_id             = 3; // Echo of the request.
+    repeated Computer computer = 4;
+}
+
 message RouterToAdmin
 {
     RelayList relay_list             = 1;
@@ -237,6 +268,7 @@ message RouterToAdmin
     UserResult user_result           = 8;
     WorkspaceList workspace_list     = 9;
     WorkspaceResult workspace_result = 10;
+    ComputerList computer_list       = 11;
 }
 
 message AdminToRouter
@@ -252,4 +284,5 @@ message AdminToRouter
     PeerRequest peer_request                    = 9;
     WorkspaceListRequest workspace_list_request = 10;
     WorkspaceRequest workspace_request          = 11;
+    ComputerListRequest computer_list_request   = 12;
 }

@@ -1063,6 +1063,51 @@ QVector<Workspace::Access> Database::workspaceAccessListForUser(qint64 user_id) 
 }
 
 //--------------------------------------------------------------------------------------------------
+QVector<ComputerInfo> Database::computers(qint64 workspace_id, qint64 group_id) const
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return {};
+    }
+
+    QSqlQuery query(databaseByName(connection_name_));
+    query.prepare(QStringLiteral(
+        "SELECT id, workspace_id, group_id, host_id, name, computer_name, address, "
+        "comment, user_name, password, last_connect, last_modify "
+        "FROM computers WHERE workspace_id=? AND group_id=?"));
+    query.addBindValue(workspace_id);
+    query.addBindValue(group_id);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to get computers:" << query.lastError();
+        return {};
+    }
+
+    QVector<ComputerInfo> result;
+    while (query.next())
+    {
+        ComputerInfo info;
+        info.entry_id      = query.value(0).toLongLong();
+        info.workspace_id  = query.value(1).toLongLong();
+        info.group_id      = query.value(2).toLongLong();
+        info.host_id       = query.value(3).toLongLong();
+        info.name          = query.value(4).toString();
+        info.computer_name = query.value(5).toString();
+        info.address       = query.value(6).toString();
+        info.comment       = query.value(7).toByteArray();
+        info.user_name     = query.value(8).toByteArray();
+        info.password      = query.value(9).toByteArray();
+        info.last_connect  = query.value(10).toLongLong();
+        info.last_modify   = query.value(11).toLongLong();
+        result.append(info);
+    }
+
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
 // static
 QString Database::databaseDirectory()
 {
