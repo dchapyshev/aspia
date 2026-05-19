@@ -25,6 +25,9 @@
 
 #include <memory>
 
+#include "base/crypto/secure_string.h"
+#include "proto/router_admin.h"
+
 class QAbstractButton;
 
 namespace Ui {
@@ -43,18 +46,27 @@ public:
         QByteArray public_key;
     };
 
-    RouterWorkspaceDialog(qint64 entry_id, const QString& name, const QStringList& existing_names, QWidget* parent);
+    struct SelfCredentials
+    {
+        qint64 user_id = 0;
+        QByteArray wrap_private_key;
+        QByteArray wrap_salt;
+        SecureString password;
+    };
+
+    // current.entry_id() == 0 means create mode; > 0 means modify mode. For modify, the
+    // initial name and access list are taken from current.
+    RouterWorkspaceDialog(
+        const proto::router::Workspace& current, const QStringList& existing_names, QWidget* parent);
     ~RouterWorkspaceDialog() final;
 
-    qint64 entryId() const { return entry_id_; }
-    QString name() const { return name_; }
-    const QSet<qint64>& accessUserIds() const { return access_user_ids_; }
-
     void setUsers(const QVector<UserEntry>& users);
-    void setAccessUserIds(const QSet<qint64>& user_ids_with_access);
+    void setSelfCredentials(const SelfCredentials& self);
 
-    // Self user_id is protected from revoke (in both create and modify modes).
-    void setSelfUserId(qint64 user_id);
+    // Valid after a successful exec() (returns QDialog::Accepted). Contains the new workspace
+    // state ready to send to the router: entry_id (>0 for modify), name, full desired access
+    // list with wrapped_gk filled in for newly granted users.
+    const proto::router::Workspace& workspace() const { return workspace_; }
 
 private:
     void onButtonBoxClicked(QAbstractButton* button);
@@ -62,14 +74,17 @@ private:
     void onRemoveClicked();
     void rebuildLists();
     void updateButtonsState();
+    bool buildWorkspaceProto();
 
     std::unique_ptr<Ui::RouterWorkspaceDialog> ui;
     qint64 entry_id_ = -1;
-    qint64 self_user_id_ = 0;
     QString name_;
     QStringList existing_names_;
     QHash<qint64, UserEntry> users_;
+    QHash<qint64, QByteArray> initial_access_;
     QSet<qint64> access_user_ids_;
+    SelfCredentials self_;
+    proto::router::Workspace workspace_;
 
     Q_DISABLE_COPY_MOVE(RouterWorkspaceDialog)
 };
