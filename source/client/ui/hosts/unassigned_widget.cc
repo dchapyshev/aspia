@@ -19,12 +19,18 @@
 #include "client/ui/hosts/unassigned_widget.h"
 
 #include <QDataStream>
+#include <QDateTime>
 #include <QEvent>
 #include <QHeaderView>
 #include <QIODevice>
+#include <QLocale>
 #include <QTreeWidget>
+#include <QTreeWidgetItem>
 
 #include "base/logging.h"
+#include "client/ui/hosts/router_widget.h"
+#include "proto/router_client.h"
+#include "proto/router_constants.h"
 #include "ui_unassigned_widget.h"
 
 //--------------------------------------------------------------------------------------------------
@@ -43,11 +49,58 @@ UnassignedWidget::~UnassignedWidget()
 }
 
 //--------------------------------------------------------------------------------------------------
-void UnassignedWidget::showForRouter(qint64 router_id)
+void UnassignedWidget::showForRouter(RouterWidget* router_widget)
 {
-    router_id_ = router_id;
-    // TODO: request unassigned computers list from the router and populate the tree.
     ui->tree_computer->clear();
+
+    if (router_widget_)
+    {
+        disconnect(router_widget_, &RouterWidget::sig_computerListReceived,
+                   this, &UnassignedWidget::onListReceived);
+    }
+
+    router_widget_ = router_widget;
+    if (!router_widget_)
+        return;
+
+    connect(router_widget_, &RouterWidget::sig_computerListReceived,
+            this, &UnassignedWidget::onListReceived);
+    router_widget_->onUpdateComputerList(0, 0);
+}
+
+//--------------------------------------------------------------------------------------------------
+void UnassignedWidget::onListReceived(const proto::router::ComputerList& list)
+{
+    // We only care about the unassigned bucket here. Other workspace lists may travel through
+    // the same signal once other widgets start using it.
+    if (list.workspace_id() != 0 || list.group_id() != 0)
+        return;
+
+    ui->tree_computer->clear();
+
+    if (list.error_code() != proto::router::kErrorOk)
+    {
+        LOG(WARNING) << "Computer list error:" << list.error_code();
+        return;
+    }
+
+    for (int i = 0; i < list.computer_size(); ++i)
+    {
+        const proto::router::Computer& computer = list.computer(i);
+
+        QTreeWidgetItem* item = new QTreeWidgetItem(ui->tree_computer);
+        item->setText(0, QString::number(computer.host_id()));
+        item->setText(1, QString::fromStdString(computer.computer_name()));
+        item->setText(2, QString::fromStdString(computer.address()));
+
+        if (computer.last_connect() > 0)
+        {
+            QDateTime time = QDateTime::fromSecsSinceEpoch(computer.last_connect());
+            item->setText(3, QLocale::system().toString(time, QLocale::ShortFormat));
+        }
+
+        item->setText(4, computer.online() ? tr("Online") : tr("Offline"));
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -87,6 +87,7 @@ public:
 
     QVector<Workspace::Access> workspaceAccessList(qint64 workspace_id) const;
     QVector<Workspace::Access> workspaceAccessListForUser(qint64 user_id) const;
+    bool hasWorkspaceAccess(qint64 user_id, qint64 workspace_id) const;
 
     // Returns computers within the given workspace and group; workspace_id == 0 returns the
     // unassigned bucket, group_id == 0 returns rows at the workspace root.

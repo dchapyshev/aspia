@@ -30,6 +30,7 @@ class QTimer;
 namespace proto::router {
 class ClientList;
 class ClientResult;
+class ComputerList;
 class ConnectionOffer;
 class HostList;
 class HostResult;
@@ -96,6 +97,7 @@ public slots:
     // Client methods.
     void onConnectionRequest(qint64 request_id, quint64 host_id);
     void onCheckHostStatus(qint64 request_id, quint64 host_id);
+    void onComputerListRequest(qint64 workspace_id, qint64 group_id);
 
 signals:
     // Generic signals.
@@ -117,6 +119,7 @@ signals:
     // Client signals.
     void sig_connectionOffer(const proto::router::ConnectionOffer& offer);
     void sig_hostStatus(qint64 request_id, bool online);
+    void sig_computerListReceived(const proto::router::ComputerList& list);
 
 private slots:
     void onTcpReady();

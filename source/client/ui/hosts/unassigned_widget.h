@@ -19,13 +19,21 @@
 #ifndef CLIENT_UI_HOSTS_UNASSIGNED_WIDGET_H
 #define CLIENT_UI_HOSTS_UNASSIGNED_WIDGET_H
 
+#include <QPointer>
+
 #include <memory>
 
 #include "client/ui/hosts/content_widget.h"
 
+namespace proto::router {
+class ComputerList;
+} // namespace proto::router
+
 namespace Ui {
 class UnassignedWidget;
 } // namespace Ui
+
+class RouterWidget;
 
 class UnassignedWidget final : public ContentWidget
 {
@@ -35,7 +43,9 @@ public:
     explicit UnassignedWidget(QWidget* parent = nullptr);
     ~UnassignedWidget() final;
 
-    void showForRouter(qint64 router_id);
+    // |router_widget| owns the IO-thread Router. We only ever talk to RouterWidget's signals,
+    // which it has already bridged to the Router with Qt::QueuedConnection.
+    void showForRouter(RouterWidget* router_widget);
 
     // ContentWidget implementation.
     QByteArray saveState() final;
@@ -45,9 +55,12 @@ protected:
     // QWidget implementation.
     void changeEvent(QEvent* event) final;
 
+private slots:
+    void onListReceived(const proto::router::ComputerList& list);
+
 private:
     std::unique_ptr<Ui::UnassignedWidget> ui;
-    qint64 router_id_ = 0;
+    QPointer<RouterWidget> router_widget_;
 
     Q_DISABLE_COPY_MOVE(UnassignedWidget)
 };

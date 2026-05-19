@@ -377,6 +377,7 @@ RouterWidget::RouterWidget(const RouterConfig& config, QWidget* parent)
     connect(router_, &Router::sig_clientResultReceived, this, &RouterWidget::onClientResultReceived, Qt::QueuedConnection);
     connect(router_, &Router::sig_workspaceListReceived, this, &RouterWidget::onWorkspaceListReceived, Qt::QueuedConnection);
     connect(router_, &Router::sig_workspaceResultReceived, this, &RouterWidget::onWorkspaceResultReceived, Qt::QueuedConnection);
+    connect(router_, &Router::sig_computerListReceived, this, &RouterWidget::sig_computerListReceived, Qt::QueuedConnection);
 
     connect(this, &RouterWidget::sig_relayListRequest, router_, &Router::onRelayListRequest, Qt::QueuedConnection);
     connect(this, &RouterWidget::sig_hostListRequest, router_, &Router::onHostListRequest, Qt::QueuedConnection);
@@ -394,6 +395,7 @@ RouterWidget::RouterWidget(const RouterConfig& config, QWidget* parent)
     connect(this, &RouterWidget::sig_addWorkspace, router_, &Router::onAddWorkspace, Qt::QueuedConnection);
     connect(this, &RouterWidget::sig_modifyWorkspace, router_, &Router::onModifyWorkspace, Qt::QueuedConnection);
     connect(this, &RouterWidget::sig_deleteWorkspace, router_, &Router::onDeleteWorkspace, Qt::QueuedConnection);
+    connect(this, &RouterWidget::sig_computerListRequest, router_, &Router::onComputerListRequest, Qt::QueuedConnection);
     connect(this, &RouterWidget::sig_updateConfig, router_, &Router::onUpdateConfig, Qt::QueuedConnection);
 
     connect(ui->tab, &QTabWidget::currentChanged, this, &RouterWidget::onTabChanged);
@@ -1096,6 +1098,12 @@ void RouterWidget::onDisconnectAllClients()
 void RouterWidget::onUpdateWorkspaceList()
 {
     emit sig_workspaceListRequest();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::onUpdateComputerList(qint64 workspace_id, qint64 group_id)
+{
+    emit sig_computerListRequest(workspace_id, group_id);
 }
 
 //--------------------------------------------------------------------------------------------------

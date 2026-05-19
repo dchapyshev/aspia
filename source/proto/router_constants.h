@@ -50,6 +50,7 @@ extern const char* const kErrorInvalidEntryId;
 extern const char* const kErrorInvalidData;
 extern const char* const kErrorAlreadyExists;
 extern const char* const kErrorNotFound;
+extern const char* const kErrorAccessDenied;
 
 // Values for HostRequest::params.
 extern const char* const kParamTryToUninstall;

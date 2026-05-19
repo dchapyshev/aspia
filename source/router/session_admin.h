@@ -23,7 +23,6 @@
 
 namespace proto::router {
 class ClientRequest;
-class ComputerListRequest;
 class HostRequest;
 class PeerRequest;
 class RelayRequest;
@@ -56,7 +55,6 @@ private:
     void doPeerRequest(const proto::router::PeerRequest& request);
     void doWorkspaceListRequest();
     void doWorkspaceRequest(const proto::router::WorkspaceRequest& request);
-    void doComputerListRequest(const proto::router::ComputerListRequest& request);
 
     std::string addUser(const proto::router::User& user);
     std::string modifyUser(const proto::router::User& user);

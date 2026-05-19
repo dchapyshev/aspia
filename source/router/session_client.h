@@ -24,6 +24,7 @@
 
 namespace proto::router {
 class CheckHostStatus;
+class ComputerListRequest;
 class ConnectionRequest;
 } // namespace proto::router
 
@@ -44,6 +45,7 @@ protected:
 private:
     void readConnectionRequest(const proto::router::ConnectionRequest& request);
     void readCheckHostStatus(const proto::router::CheckHostStatus& check_host_status);
+    void readComputerListRequest(const proto::router::ComputerListRequest& request);
     Session* sessionByHostId(HostId host_id);
 
     quint16 stun_port_ = 0;

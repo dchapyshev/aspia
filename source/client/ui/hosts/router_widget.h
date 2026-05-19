@@ -40,6 +40,7 @@ class User;
 namespace proto::router {
 class ClientList;
 class ClientResult;
+class ComputerList;
 class HostResult;
 class RelayList;
 class RelayResult;
@@ -121,6 +122,7 @@ public slots:
     void onAddWorkspace();
     void onModifyWorkspace();
     void onDeleteWorkspace();
+    void onUpdateComputerList(qint64 workspace_id, qint64 group_id);
 
 signals:
     void sig_relayListRequest();
@@ -139,6 +141,8 @@ signals:
     void sig_addWorkspace(const proto::router::Workspace& workspace);
     void sig_modifyWorkspace(const proto::router::Workspace& workspace);
     void sig_deleteWorkspace(qint64 entry_id);
+    void sig_computerListRequest(qint64 workspace_id, qint64 group_id);
+    void sig_computerListReceived(const proto::router::ComputerList& list);
     void sig_statusChanged(qint64 router_id, Router::Status status);
     void sig_currentTabTypeChanged(qint64 router_id, RouterWidget::TabType tab);
     void sig_currentUserChanged(qint64 router_id);

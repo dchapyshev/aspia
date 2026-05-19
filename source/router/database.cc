@@ -1063,6 +1063,27 @@ QVector<Workspace::Access> Database::workspaceAccessListForUser(qint64 user_id) 
 }
 
 //--------------------------------------------------------------------------------------------------
+bool Database::hasWorkspaceAccess(qint64 user_id, qint64 workspace_id) const
+{
+    if (!isValid() || user_id <= 0 || workspace_id <= 0)
+        return false;
+
+    QSqlQuery query(databaseByName(connection_name_));
+    query.prepare(QStringLiteral(
+        "SELECT 1 FROM workspace_access WHERE workspace_id=? AND user_id=?"));
+    query.addBindValue(workspace_id);
+    query.addBindValue(user_id);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << query.lastError();
+        return false;
+    }
+
+    return query.next();
+}
+
+//--------------------------------------------------------------------------------------------------
 QVector<ComputerInfo> Database::computers(qint64 workspace_id, qint64 group_id) const
 {
     if (!isValid())

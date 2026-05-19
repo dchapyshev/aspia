@@ -51,14 +51,49 @@ message HostStatus
     peer.Version version = 3;
 }
 
+message Computer
+{
+    int64 entry_id       = 1;  // computers.id.
+    int64 workspace_id   = 2;  // 0 means unassigned (admin-only listing).
+    int64 group_id       = 3;  // 0 means workspace root.
+    int64 host_id        = 4;  // Host id assigned by the router (hosts.id).
+    string name          = 5;  // Display label (plain).
+    string computer_name = 6;  // Plain OS hostname reported by the host.
+    string address       = 7;  // Last seen peer address.
+    bytes comment        = 8;  // AEAD-encrypted with workspace GK.
+    bytes user_name      = 9;  // AEAD-encrypted with workspace GK.
+    bytes password       = 10; // AEAD-encrypted with workspace GK.
+    int64 last_connect   = 11; // Unix timestamp of the last connection.
+    int64 last_modify    = 12; // Unix timestamp of the last edit by the admin.
+    bool online          = 13; // Live host session currently exists for this host_id.
+}
+
+message ComputerListRequest
+{
+    // 0 = unassigned bucket (admin-only). Otherwise the router checks that the caller has
+    // workspace access before returning the list.
+    int64 workspace_id = 1;
+    int64 group_id     = 2; // 0 means rows at the workspace root.
+}
+
+message ComputerList
+{
+    string error_code          = 1; // "ok" | "access_denied" | "internal_error"
+    int64 workspace_id         = 2; // Echo of the request, so the client can route the response.
+    int64 group_id             = 3; // Echo of the request.
+    repeated Computer computer = 4;
+}
+
 message RouterToClient
 {
     ConnectionOffer connection_offer = 1;
     HostStatus host_status           = 2;
+    ComputerList computer_list       = 3;
 }
 
 message ClientToRouter
 {
-    ConnectionRequest connection_request = 1;
-    CheckHostStatus check_host_status    = 2;
+    ConnectionRequest connection_request      = 1;
+    CheckHostStatus check_host_status         = 2;
+    ComputerListRequest computer_list_request = 3;
 }

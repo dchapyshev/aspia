@@ -466,8 +466,12 @@ void HostsTab::onSwitchContent(Sidebar::Item::Type type)
                 break;
 
             Sidebar::UnassignedItem* unassigned = static_cast<Sidebar::UnassignedItem*>(sidebar_item);
+            RouterWidget* widget = router_widgets_.value(unassigned->routerId());
+            if (!widget)
+                break;
+
             switchContent(unassigned_widget_);
-            unassigned_widget_->showForRouter(unassigned->routerId());
+            unassigned_widget_->showForRouter(widget);
         }
         break;
     }
