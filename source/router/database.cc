@@ -24,6 +24,7 @@
 
 #include <utility>
 
+#include <QDateTime>
 #include <QDir>
 #include <QFileInfo>
 #include <QSet>
@@ -115,12 +116,12 @@ bool ensureSchema(QSqlDatabase& sql_db)
                     "PRIMARY KEY(\"workspace_id\", \"user_id\"),"
                     "FOREIGN KEY(\"workspace_id\") REFERENCES \"workspaces\"(\"id\") ON DELETE CASCADE,"
                     "FOREIGN KEY(\"user_id\") REFERENCES \"users\"(\"id\") ON DELETE CASCADE)") ||
-        // name and comment are AEAD-encrypted with the workspace GK.
+        // comment is AEAD-encrypted with the workspace GK; name is plain text.
         !query.exec("CREATE TABLE IF NOT EXISTS \"computer_groups\" ("
                     "\"id\" INTEGER UNIQUE,"
                     "\"workspace_id\" INTEGER NOT NULL,"
                     "\"parent_id\" INTEGER,"
-                    "\"name\" BLOB NOT NULL,"
+                    "\"name\" TEXT NOT NULL,"
                     "\"comment\" BLOB NOT NULL DEFAULT X'',"
                     "PRIMARY KEY(\"id\" AUTOINCREMENT),"
                     "FOREIGN KEY(\"workspace_id\") REFERENCES \"workspaces\"(\"id\") ON DELETE CASCADE,"
@@ -129,16 +130,16 @@ bool ensureSchema(QSqlDatabase& sql_db)
         // means the computer is shown at the workspace root. No FKs on these columns because 0 is
         // a sentinel value; for any non-zero value the application enforces that it points to an
         // existing row in workspaces/computer_groups.
-        // name, comment, user_name and password are AEAD-encrypted with the workspace GK (only
-        // meaningful when workspace_id != 0). computer_name (real OS hostname), address and
-        // last_connect are plain values updated by the router on every host connection - they
-        // reflect the latest connect attempt.
+        // comment, user_name and password are AEAD-encrypted with the workspace GK (only
+        // meaningful when workspace_id != 0). name, computer_name (real OS hostname), address and
+        // last_connect are plain values; computer_name/address/last_connect are updated by the
+        // router on every host connection and reflect the latest connect attempt.
         !query.exec("CREATE TABLE IF NOT EXISTS \"computers\" ("
                     "\"id\" INTEGER UNIQUE,"
                     "\"workspace_id\" INTEGER NOT NULL DEFAULT 0,"
                     "\"group_id\" INTEGER NOT NULL DEFAULT 0,"
                     "\"host_id\" INTEGER NOT NULL,"
-                    "\"name\" BLOB NOT NULL,"
+                    "\"name\" TEXT NOT NULL DEFAULT '',"
                     "\"computer_name\" TEXT NOT NULL DEFAULT '',"
                     "\"address\" TEXT NOT NULL DEFAULT '',"
                     "\"comment\" BLOB NOT NULL DEFAULT X'',"
@@ -562,6 +563,77 @@ bool Database::addHost(const QByteArray& key_hash)
     if (!query.exec())
     {
         LOG(ERROR) << "Unable to execute query:" << query.lastError();
+        return false;
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::updateComputerInfo(HostId host_id, const QString& computer_name, const QString& address)
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return false;
+    }
+
+    if (host_id == kInvalidHostId)
+    {
+        LOG(ERROR) << "Invalid host id";
+        return false;
+    }
+
+    const qint64 timestamp = QDateTime::currentSecsSinceEpoch();
+
+    QSqlDatabase sql_db = databaseByName(connection_name_);
+    if (!sql_db.transaction())
+    {
+        LOG(ERROR) << "Unable to start transaction:" << sql_db.lastError();
+        return false;
+    }
+
+    QSqlQuery update(sql_db);
+    update.prepare(QStringLiteral(
+        "UPDATE computers SET computer_name=?, address=?, last_connect=? WHERE host_id=?"));
+    update.addBindValue(computer_name);
+    update.addBindValue(address);
+    update.addBindValue(timestamp);
+    update.addBindValue(static_cast<qulonglong>(host_id));
+
+    if (!update.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << update.lastError();
+        sql_db.rollback();
+        return false;
+    }
+
+    if (update.numRowsAffected() == 0)
+    {
+        // Seed name with the plain computer_name so the host has a readable label until an
+        // admin renames it.
+        QSqlQuery insert(sql_db);
+        insert.prepare(QStringLiteral(
+            "INSERT INTO computers (host_id, name, computer_name, address, last_connect) "
+            "VALUES (?, ?, ?, ?, ?)"));
+        insert.addBindValue(static_cast<qulonglong>(host_id));
+        insert.addBindValue(computer_name);
+        insert.addBindValue(computer_name);
+        insert.addBindValue(address);
+        insert.addBindValue(timestamp);
+
+        if (!insert.exec())
+        {
+            LOG(ERROR) << "Unable to execute query:" << insert.lastError();
+            sql_db.rollback();
+            return false;
+        }
+    }
+
+    if (!sql_db.commit())
+    {
+        LOG(ERROR) << "Unable to commit transaction:" << sql_db.lastError();
+        sql_db.rollback();
         return false;
     }
 

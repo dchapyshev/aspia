@@ -130,6 +130,12 @@ void SessionHost::readHostIdRequest(const proto::router::HostIdRequest& host_id_
     if (error_code == proto::router::kErrorOk)
     {
         host_id_response->set_host_id(host_id_);
+
+        if (!database.updateComputerInfo(host_id_, computerName(), address().toString()))
+        {
+            CLOG(WARNING) << "Failed to update computer info for host_id:" << host_id_;
+        }
+
         emit sig_hostIdAssigned(host_id_);
     }
 

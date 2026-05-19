@@ -49,6 +49,12 @@ public:
     std::string_view hostId(const QByteArray& key_hash, HostId* host_id) const;
     bool addHost(const QByteArray& key_hash);
 
+    // Called by the router on every host connection to keep computers in sync. If at least one
+    // computers row references this host_id, all of them get their computer_name, address and
+    // last_connect refreshed. Otherwise an unassigned (workspace_id=0, group_id=0) row is
+    // inserted so the host shows up in the admin UI awaiting assignment.
+    bool updateComputerInfo(HostId host_id, const QString& computer_name, const QString& address);
+
     QVector<Workspace> workspaceList() const;
     Workspace findWorkspace(qint64 entry_id) const;
     // Initial access list may be empty - in that case the workspace has no GK yet; it will
