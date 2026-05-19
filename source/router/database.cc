@@ -19,6 +19,7 @@
 #include "router/database.h"
 
 #include "base/logging.h"
+#include "base/crypto/random.h"
 #include "base/files/base_paths.h"
 #include "proto/router_constants.h"
 
@@ -102,6 +103,7 @@ bool ensureSchema(QSqlDatabase& sql_db)
                     "PRIMARY KEY(\"id\" AUTOINCREMENT))") ||
         !query.exec("CREATE TABLE IF NOT EXISTS \"hosts\" ("
                     "\"id\" INTEGER UNIQUE,"
+                    "\"host_id\" INTEGER NOT NULL UNIQUE,"
                     "\"key\" BLOB NOT NULL UNIQUE,"
                     "PRIMARY KEY(\"id\" AUTOINCREMENT))") ||
         !query.exec("CREATE TABLE IF NOT EXISTS \"workspaces\" ("
@@ -136,6 +138,20 @@ bool ensureSchema(QSqlDatabase& sql_db)
                             .arg(QString::fromLatin1(column.name))))
         {
             LOG(ERROR) << "Unable to add column" << column.name << ":" << query.lastError();
+            sql_db.rollback();
+            return false;
+        }
+    }
+
+    // Split hosts.id (autoincrement entry id) and hosts.host_id (externally visible host id).
+    // Existing rows had id == host_id, so preserve their values during migration.
+    if (!hasColumn(sql_db, QStringLiteral("hosts"), QStringLiteral("host_id")))
+    {
+        if (!query.exec("ALTER TABLE \"hosts\" ADD COLUMN \"host_id\" INTEGER NOT NULL DEFAULT 0") ||
+            !query.exec("UPDATE \"hosts\" SET \"host_id\" = \"id\"") ||
+            !query.exec("CREATE UNIQUE INDEX IF NOT EXISTS \"idx_hosts_host_id\" ON \"hosts\"(\"host_id\")"))
+        {
+            LOG(ERROR) << "Unable to migrate hosts.host_id:" << query.lastError();
             sql_db.rollback();
             return false;
         }
@@ -491,7 +507,7 @@ std::string_view Database::hostId(const QByteArray& key_hash, HostId* host_id) c
     }
 
     QSqlQuery query(databaseByName(connection_name_));
-    query.prepare(QStringLiteral("SELECT id FROM hosts WHERE key=?"));
+    query.prepare(QStringLiteral("SELECT host_id FROM hosts WHERE key=?"));
     query.addBindValue(key_hash);
 
     if (!query.exec())
@@ -522,13 +538,44 @@ bool Database::addHost(const QByteArray& key_hash)
         return false;
     }
 
-    QSqlQuery query(databaseByName(connection_name_));
-    query.prepare(QStringLiteral("INSERT INTO hosts (id, key) VALUES (NULL, ?)"));
-    query.addBindValue(key_hash);
-
-    if (!query.exec())
+    QSqlDatabase sql_db = databaseByName(connection_name_);
+    if (!sql_db.transaction())
     {
-        LOG(ERROR) << "Unable to execute query:" << query.lastError();
+        LOG(ERROR) << "Unable to start transaction:" << sql_db.lastError();
+        return false;
+    }
+
+    QSqlQuery max_query(sql_db);
+    if (!max_query.exec(QStringLiteral("SELECT MAX(host_id) FROM hosts")))
+    {
+        LOG(ERROR) << "Unable to execute query:" << max_query.lastError();
+        sql_db.rollback();
+        return false;
+    }
+
+    // First host gets a random 6-digit id; the counter grows monotonically from there.
+    qint64 next_host_id;
+    if (max_query.next() && !max_query.value(0).isNull())
+        next_host_id = max_query.value(0).toLongLong() + 1;
+    else
+        next_host_id = 100'000 + static_cast<qint64>(Random::number32() % 900'000);
+
+    QSqlQuery insert(sql_db);
+    insert.prepare(QStringLiteral("INSERT INTO hosts (id, host_id, key) VALUES (NULL, ?, ?)"));
+    insert.addBindValue(next_host_id);
+    insert.addBindValue(key_hash);
+
+    if (!insert.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << insert.lastError();
+        sql_db.rollback();
+        return false;
+    }
+
+    if (!sql_db.commit())
+    {
+        LOG(ERROR) << "Unable to commit transaction:" << sql_db.lastError();
+        sql_db.rollback();
         return false;
     }
 
