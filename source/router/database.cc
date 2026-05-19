@@ -19,7 +19,6 @@
 #include "router/database.h"
 
 #include "base/logging.h"
-#include "base/crypto/random.h"
 #include "base/files/base_paths.h"
 #include "proto/router_constants.h"
 
@@ -103,7 +102,6 @@ bool ensureSchema(QSqlDatabase& sql_db)
                     "PRIMARY KEY(\"id\" AUTOINCREMENT))") ||
         !query.exec("CREATE TABLE IF NOT EXISTS \"hosts\" ("
                     "\"id\" INTEGER UNIQUE,"
-                    "\"host_id\" INTEGER NOT NULL UNIQUE,"
                     "\"key\" BLOB NOT NULL UNIQUE,"
                     "PRIMARY KEY(\"id\" AUTOINCREMENT))") ||
         !query.exec("CREATE TABLE IF NOT EXISTS \"workspaces\" ("
@@ -116,7 +114,40 @@ bool ensureSchema(QSqlDatabase& sql_db)
                     "\"wrapped_gk\" BLOB NOT NULL,"
                     "PRIMARY KEY(\"workspace_id\", \"user_id\"),"
                     "FOREIGN KEY(\"workspace_id\") REFERENCES \"workspaces\"(\"id\") ON DELETE CASCADE,"
-                    "FOREIGN KEY(\"user_id\") REFERENCES \"users\"(\"id\") ON DELETE CASCADE)"))
+                    "FOREIGN KEY(\"user_id\") REFERENCES \"users\"(\"id\") ON DELETE CASCADE)") ||
+        // name and comment are AEAD-encrypted with the workspace GK.
+        !query.exec("CREATE TABLE IF NOT EXISTS \"computer_groups\" ("
+                    "\"id\" INTEGER UNIQUE,"
+                    "\"workspace_id\" INTEGER NOT NULL,"
+                    "\"parent_id\" INTEGER,"
+                    "\"name\" BLOB NOT NULL,"
+                    "\"comment\" BLOB NOT NULL DEFAULT X'',"
+                    "PRIMARY KEY(\"id\" AUTOINCREMENT),"
+                    "FOREIGN KEY(\"workspace_id\") REFERENCES \"workspaces\"(\"id\") ON DELETE CASCADE,"
+                    "FOREIGN KEY(\"parent_id\") REFERENCES \"computer_groups\"(\"id\") ON DELETE CASCADE)") ||
+        // workspace_id == 0 means the computer is not yet assigned to any workspace; group_id == 0
+        // means the computer is shown at the workspace root. No FKs on these columns because 0 is
+        // a sentinel value; for any non-zero value the application enforces that it points to an
+        // existing row in workspaces/computer_groups.
+        // name, comment, user_name and password are AEAD-encrypted with the workspace GK (only
+        // meaningful when workspace_id != 0). computer_name (real OS hostname), address and
+        // last_connect are plain values updated by the router on every host connection - they
+        // reflect the latest connect attempt.
+        !query.exec("CREATE TABLE IF NOT EXISTS \"computers\" ("
+                    "\"id\" INTEGER UNIQUE,"
+                    "\"workspace_id\" INTEGER NOT NULL DEFAULT 0,"
+                    "\"group_id\" INTEGER NOT NULL DEFAULT 0,"
+                    "\"host_id\" INTEGER NOT NULL,"
+                    "\"name\" BLOB NOT NULL,"
+                    "\"computer_name\" TEXT NOT NULL DEFAULT '',"
+                    "\"address\" TEXT NOT NULL DEFAULT '',"
+                    "\"comment\" BLOB NOT NULL DEFAULT X'',"
+                    "\"user_name\" BLOB NOT NULL DEFAULT X'',"
+                    "\"password\" BLOB NOT NULL DEFAULT X'',"
+                    "\"last_connect\" INTEGER NOT NULL DEFAULT 0,"
+                    "\"last_modify\" INTEGER NOT NULL DEFAULT 0,"
+                    "PRIMARY KEY(\"id\" AUTOINCREMENT),"
+                    "FOREIGN KEY(\"host_id\") REFERENCES \"hosts\"(\"id\") ON DELETE CASCADE)"))
     {
         LOG(ERROR) << "Unable to execute query:" << query.lastError();
         sql_db.rollback();
@@ -138,20 +169,6 @@ bool ensureSchema(QSqlDatabase& sql_db)
                             .arg(QString::fromLatin1(column.name))))
         {
             LOG(ERROR) << "Unable to add column" << column.name << ":" << query.lastError();
-            sql_db.rollback();
-            return false;
-        }
-    }
-
-    // Split hosts.id (autoincrement entry id) and hosts.host_id (externally visible host id).
-    // Existing rows had id == host_id, so preserve their values during migration.
-    if (!hasColumn(sql_db, QStringLiteral("hosts"), QStringLiteral("host_id")))
-    {
-        if (!query.exec("ALTER TABLE \"hosts\" ADD COLUMN \"host_id\" INTEGER NOT NULL DEFAULT 0") ||
-            !query.exec("UPDATE \"hosts\" SET \"host_id\" = \"id\"") ||
-            !query.exec("CREATE UNIQUE INDEX IF NOT EXISTS \"idx_hosts_host_id\" ON \"hosts\"(\"host_id\")"))
-        {
-            LOG(ERROR) << "Unable to migrate hosts.host_id:" << query.lastError();
             sql_db.rollback();
             return false;
         }
@@ -507,7 +524,7 @@ std::string_view Database::hostId(const QByteArray& key_hash, HostId* host_id) c
     }
 
     QSqlQuery query(databaseByName(connection_name_));
-    query.prepare(QStringLiteral("SELECT host_id FROM hosts WHERE key=?"));
+    query.prepare(QStringLiteral("SELECT id FROM hosts WHERE key=?"));
     query.addBindValue(key_hash);
 
     if (!query.exec())
@@ -538,44 +555,13 @@ bool Database::addHost(const QByteArray& key_hash)
         return false;
     }
 
-    QSqlDatabase sql_db = databaseByName(connection_name_);
-    if (!sql_db.transaction())
+    QSqlQuery query(databaseByName(connection_name_));
+    query.prepare(QStringLiteral("INSERT INTO hosts (id, key) VALUES (NULL, ?)"));
+    query.addBindValue(key_hash);
+
+    if (!query.exec())
     {
-        LOG(ERROR) << "Unable to start transaction:" << sql_db.lastError();
-        return false;
-    }
-
-    QSqlQuery max_query(sql_db);
-    if (!max_query.exec(QStringLiteral("SELECT MAX(host_id) FROM hosts")))
-    {
-        LOG(ERROR) << "Unable to execute query:" << max_query.lastError();
-        sql_db.rollback();
-        return false;
-    }
-
-    // First host gets a random 6-digit id; the counter grows monotonically from there.
-    qint64 next_host_id;
-    if (max_query.next() && !max_query.value(0).isNull())
-        next_host_id = max_query.value(0).toLongLong() + 1;
-    else
-        next_host_id = 100'000 + static_cast<qint64>(Random::number32() % 900'000);
-
-    QSqlQuery insert(sql_db);
-    insert.prepare(QStringLiteral("INSERT INTO hosts (id, host_id, key) VALUES (NULL, ?, ?)"));
-    insert.addBindValue(next_host_id);
-    insert.addBindValue(key_hash);
-
-    if (!insert.exec())
-    {
-        LOG(ERROR) << "Unable to execute query:" << insert.lastError();
-        sql_db.rollback();
-        return false;
-    }
-
-    if (!sql_db.commit())
-    {
-        LOG(ERROR) << "Unable to commit transaction:" << sql_db.lastError();
-        sql_db.rollback();
+        LOG(ERROR) << "Unable to execute query:" << query.lastError();
         return false;
     }
 
