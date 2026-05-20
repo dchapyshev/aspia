@@ -27,6 +27,7 @@
 #include <QEvent>
 #include <QFile>
 #include <QFileDialog>
+#include <QHeaderView>
 #include <QIODevice>
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -180,7 +181,12 @@ public:
         setText(4, QString::fromStdString(info.version()));
         setText(5, QString::fromStdString(info.cpu_arch()));
         setText(6, QString::fromStdString(info.os_name()));
-        setText(7, info.online() ? tr("Online") : tr("Offline"));
+        setText(8, info.online() ? tr("Online") : tr("Offline"));
+    }
+
+    void setWorkspaceName(const QString& name)
+    {
+        setText(7, name);
     }
 
     // QTreeWidgetItem implementation.
@@ -356,6 +362,23 @@ private:
     Q_DISABLE_COPY_MOVE(UserTreeItem)
 };
 
+class ColumnAction : public QAction
+{
+public:
+    ColumnAction(const QString& text, int index, QObject* parent)
+        : QAction(text, parent),
+          index_(index)
+    {
+        setCheckable(true);
+    }
+
+    int columnIndex() const { return index_; }
+
+private:
+    const int index_;
+    Q_DISABLE_COPY_MOVE(ColumnAction)
+};
+
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -418,6 +441,10 @@ RouterWidget::RouterWidget(const RouterConfig& config, QWidget* parent)
 
     ui->tree_hosts->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(ui->tree_hosts, &QTreeWidget::customContextMenuRequested, this, &RouterWidget::onHostContextMenuRequested);
+
+    ui->tree_hosts->header()->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(ui->tree_hosts->header(), &QHeaderView::customContextMenuRequested,
+            this, &RouterWidget::onHostsHeaderContextMenu);
 
     ui->tree_clients->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(ui->tree_clients, &QTreeWidget::customContextMenuRequested, this, &RouterWidget::onClientContextMenuRequested);
@@ -1368,6 +1395,26 @@ void RouterWidget::onHostContextMenuRequested(const QPoint& pos)
 }
 
 //--------------------------------------------------------------------------------------------------
+void RouterWidget::onHostsHeaderContextMenu(const QPoint& pos)
+{
+    QHeaderView* header = ui->tree_hosts->header();
+    QMenu menu;
+
+    for (int i = 1; i < header->count(); ++i)
+    {
+        ColumnAction* action = new ColumnAction(ui->tree_hosts->headerItem()->text(i), i, &menu);
+        action->setChecked(!header->isSectionHidden(i));
+        menu.addAction(action);
+    }
+
+    ColumnAction* action = dynamic_cast<ColumnAction*>(menu.exec(header->viewport()->mapToGlobal(pos)));
+    if (!action)
+        return;
+
+    header->setSectionHidden(action->columnIndex(), !action->isChecked());
+}
+
+//--------------------------------------------------------------------------------------------------
 void RouterWidget::onClientContextMenuRequested(const QPoint& pos)
 {
     QTreeWidgetItem* item = ui->tree_clients->itemAt(pos);
@@ -1552,7 +1599,7 @@ void RouterWidget::onHostListReceived(const proto::router::HostList& list)
     for (int i = 0; i < list.host_size(); ++i)
     {
         const proto::router::Host& info = list.host(i);
-        bool found = false;
+        HostTreeItem* target = nullptr;
 
         for (int j = 0; j < ui->tree_hosts->topLevelItemCount(); ++j)
         {
@@ -1560,13 +1607,18 @@ void RouterWidget::onHostListReceived(const proto::router::HostList& list)
             if (item->info.host_id() == info.host_id())
             {
                 item->updateItem(info);
-                found = true;
+                target = item;
                 break;
             }
         }
 
-        if (!found)
-            ui->tree_hosts->addTopLevelItem(new HostTreeItem(info));
+        if (!target)
+        {
+            target = new HostTreeItem(info);
+            ui->tree_hosts->addTopLevelItem(target);
+        }
+
+        target->setWorkspaceName(workspaceNameById(info.workspace_id()));
     }
 
     emit sig_currentHostChanged(routerId());
@@ -1769,6 +1821,7 @@ void RouterWidget::onWorkspaceListReceived(const proto::router::WorkspaceList& l
     else
         emit sig_currentWorkspaceChanged(routerId());
 
+    refreshHostsWorkspaceColumn();
     updateStatusLabel();
 }
 
@@ -1797,6 +1850,33 @@ void RouterWidget::onWorkspaceResultReceived(const proto::router::WorkspaceResul
     }
 
     onUpdateWorkspaceList();
+}
+
+//--------------------------------------------------------------------------------------------------
+QString RouterWidget::workspaceNameById(qint64 workspace_id) const
+{
+    if (workspace_id <= 0)
+        return QString();
+
+    for (int i = 0; i < ui->tree_workspaces->topLevelItemCount(); ++i)
+    {
+        WorkspaceTreeItem* item =
+            static_cast<WorkspaceTreeItem*>(ui->tree_workspaces->topLevelItem(i));
+        if (item->workspace.entry_id() == workspace_id)
+            return QString::fromStdString(item->workspace.name());
+    }
+
+    return QString();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::refreshHostsWorkspaceColumn()
+{
+    for (int i = 0; i < ui->tree_hosts->topLevelItemCount(); ++i)
+    {
+        HostTreeItem* item = static_cast<HostTreeItem*>(ui->tree_hosts->topLevelItem(i));
+        item->setWorkspaceName(workspaceNameById(item->info.workspace_id()));
+    }
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -170,6 +170,7 @@ private slots:
     void onCurrentWorkspaceChanged();
     void onUserContextMenuRequested(const QPoint& pos);
     void onHostContextMenuRequested(const QPoint& pos);
+    void onHostsHeaderContextMenu(const QPoint& pos);
     void onClientContextMenuRequested(const QPoint& pos);
     void onRelayContextMenuRequested(const QPoint& pos);
     void onPeerContextMenuRequested(const QPoint& pos);
@@ -189,6 +190,8 @@ private:
     void updateStatusLabel();
     void updateRelayStatistics();
     void saveHostsToFile();
+    QString workspaceNameById(qint64 workspace_id) const;
+    void refreshHostsWorkspaceColumn();
     void saveClientsToFile();
     void saveRelaysToFile();
 
