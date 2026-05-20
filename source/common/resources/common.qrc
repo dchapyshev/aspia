@@ -110,8 +110,6 @@
         <file>workspace-add.svg</file>
         <file>workspace-delete.svg</file>
         <file>workspace-edit.svg</file>
-        <file>host-disconnect.svg</file>
-        <file>host-disconnect-all.svg</file>
         <file>connect.svg</file>
         <file>computer-offline.svg</file>
         <file>computer-online.svg</file>
@@ -122,5 +120,7 @@
         <file>clean.svg</file>
         <file>user-disable.svg</file>
         <file>computer-unknown.svg</file>
+        <file>disconnect-all.svg</file>
+        <file>disconnect-one.svg</file>
     </qresource>
 </RCC>

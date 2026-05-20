@@ -22,6 +22,7 @@
 #include <QDateTime>
 #include <QEvent>
 #include <QHeaderView>
+#include <QIcon>
 #include <QIODevice>
 #include <QLocale>
 #include <QTreeWidget>
@@ -89,6 +90,7 @@ void UnassignedWidget::onListReceived(const proto::router::ComputerList& list)
         const proto::router::Computer& computer = list.computer(i);
 
         QTreeWidgetItem* item = new QTreeWidgetItem(ui->tree_computer);
+        item->setIcon(0, QIcon(":/img/computer.svg"));
         item->setText(0, QString::number(computer.host_id()));
         item->setText(1, QString::fromStdString(computer.computer_name()));
         item->setText(2, QString::fromStdString(computer.address()));

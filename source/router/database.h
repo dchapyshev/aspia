@@ -36,6 +36,9 @@ struct ComputerInfo
     qint64 host_id      = 0;
     QString name;
     QString computer_name;
+    QString cpu_arch;
+    QString version;
+    QString os_name;
     QString address;
     QByteArray comment;
     QByteArray user_name;
@@ -66,10 +69,16 @@ public:
     bool addHost(const QByteArray& key_hash);
 
     // Called by the router on every host connection to keep computers in sync. If at least one
-    // computers row references this host_id, all of them get their computer_name, address and
-    // last_connect refreshed. Otherwise an unassigned (workspace_id=0, group_id=0) row is
-    // inserted so the host shows up in the admin UI awaiting assignment.
-    bool updateComputerInfo(HostId host_id, const QString& computer_name, const QString& address);
+    // computers row references this host_id, all of them get their computer_name, cpu_arch,
+    // version, os_name, address and last_connect refreshed. Otherwise an unassigned
+    // (workspace_id=0, group_id=0) row is inserted so the host shows up in the admin UI awaiting
+    // assignment.
+    bool updateComputerInfo(HostId host_id,
+                            const QString& computer_name,
+                            const QString& cpu_arch,
+                            const QString& version,
+                            const QString& os_name,
+                            const QString& address);
 
     QVector<Workspace> workspaceList() const;
     Workspace findWorkspace(qint64 entry_id) const;

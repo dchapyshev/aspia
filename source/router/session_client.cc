@@ -284,6 +284,9 @@ void SessionClient::readComputerListRequest(const proto::router::ComputerListReq
         item->set_host_id(info.host_id);
         item->set_name(info.name.toStdString());
         item->set_computer_name(info.computer_name.toStdString());
+        item->set_cpu_arch(info.cpu_arch.toStdString());
+        item->set_version(info.version.toStdString());
+        item->set_os_name(info.os_name.toStdString());
         item->set_address(info.address.toStdString());
         item->set_comment(info.comment.toStdString());
         item->set_user_name(info.user_name.toStdString());

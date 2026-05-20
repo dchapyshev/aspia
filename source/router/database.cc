@@ -141,6 +141,9 @@ bool ensureSchema(QSqlDatabase& sql_db)
                     "\"host_id\" INTEGER NOT NULL,"
                     "\"name\" TEXT NOT NULL DEFAULT '',"
                     "\"computer_name\" TEXT NOT NULL DEFAULT '',"
+                    "\"cpu_arch\" TEXT NOT NULL DEFAULT '',"
+                    "\"version\" TEXT NOT NULL DEFAULT '',"
+                    "\"os_name\" TEXT NOT NULL DEFAULT '',"
                     "\"address\" TEXT NOT NULL DEFAULT '',"
                     "\"comment\" BLOB NOT NULL DEFAULT X'',"
                     "\"user_name\" BLOB NOT NULL DEFAULT X'',"
@@ -570,7 +573,12 @@ bool Database::addHost(const QByteArray& key_hash)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::updateComputerInfo(HostId host_id, const QString& computer_name, const QString& address)
+bool Database::updateComputerInfo(HostId host_id,
+                                  const QString& computer_name,
+                                  const QString& cpu_arch,
+                                  const QString& version,
+                                  const QString& os_name,
+                                  const QString& address)
 {
     if (!isValid())
     {
@@ -595,8 +603,12 @@ bool Database::updateComputerInfo(HostId host_id, const QString& computer_name, 
 
     QSqlQuery update(sql_db);
     update.prepare(QStringLiteral(
-        "UPDATE computers SET computer_name=?, address=?, last_connect=? WHERE host_id=?"));
+        "UPDATE computers SET computer_name=?, cpu_arch=?, version=?, os_name=?, "
+        "address=?, last_connect=? WHERE host_id=?"));
     update.addBindValue(computer_name);
+    update.addBindValue(cpu_arch);
+    update.addBindValue(version);
+    update.addBindValue(os_name);
     update.addBindValue(address);
     update.addBindValue(timestamp);
     update.addBindValue(static_cast<qulonglong>(host_id));
@@ -614,11 +626,15 @@ bool Database::updateComputerInfo(HostId host_id, const QString& computer_name, 
         // admin renames it.
         QSqlQuery insert(sql_db);
         insert.prepare(QStringLiteral(
-            "INSERT INTO computers (host_id, name, computer_name, address, last_connect) "
-            "VALUES (?, ?, ?, ?, ?)"));
+            "INSERT INTO computers (host_id, name, computer_name, cpu_arch, version, os_name, "
+            "address, last_connect) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?)"));
         insert.addBindValue(static_cast<qulonglong>(host_id));
         insert.addBindValue(computer_name);
         insert.addBindValue(computer_name);
+        insert.addBindValue(cpu_arch);
+        insert.addBindValue(version);
+        insert.addBindValue(os_name);
         insert.addBindValue(address);
         insert.addBindValue(timestamp);
 
@@ -1094,7 +1110,8 @@ QVector<ComputerInfo> Database::computers(qint64 workspace_id, qint64 group_id) 
 
     QSqlQuery query(databaseByName(connection_name_));
     query.prepare(QStringLiteral(
-        "SELECT id, workspace_id, group_id, host_id, name, computer_name, address, "
+        "SELECT id, workspace_id, group_id, host_id, name, computer_name, "
+        "cpu_arch, version, os_name, address, "
         "comment, user_name, password, last_connect, last_modify "
         "FROM computers WHERE workspace_id=? AND group_id=?"));
     query.addBindValue(workspace_id);
@@ -1116,12 +1133,15 @@ QVector<ComputerInfo> Database::computers(qint64 workspace_id, qint64 group_id) 
         info.host_id       = query.value(3).toLongLong();
         info.name          = query.value(4).toString();
         info.computer_name = query.value(5).toString();
-        info.address       = query.value(6).toString();
-        info.comment       = query.value(7).toByteArray();
-        info.user_name     = query.value(8).toByteArray();
-        info.password      = query.value(9).toByteArray();
-        info.last_connect  = query.value(10).toLongLong();
-        info.last_modify   = query.value(11).toLongLong();
+        info.cpu_arch      = query.value(6).toString();
+        info.version       = query.value(7).toString();
+        info.os_name       = query.value(8).toString();
+        info.address       = query.value(9).toString();
+        info.comment       = query.value(10).toByteArray();
+        info.user_name     = query.value(11).toByteArray();
+        info.password      = query.value(12).toByteArray();
+        info.last_connect  = query.value(13).toLongLong();
+        info.last_modify   = query.value(14).toLongLong();
         result.append(info);
     }
 

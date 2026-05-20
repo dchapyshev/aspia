@@ -287,7 +287,7 @@
   <action name="action_disconnect">
    <property name="icon">
     <iconset resource="../../common/resources/common.qrc">
-     <normaloff>:/img/host-disconnect.svg</normaloff>:/img/host-disconnect.svg</iconset>
+     <normaloff>:/img/disconnect-one.svg</normaloff>:/img/disconnect-one.svg</iconset>
    </property>
    <property name="text">
     <string>Disconnect</string>
@@ -296,7 +296,7 @@
   <action name="action_disconnect_all">
    <property name="icon">
     <iconset resource="../../common/resources/common.qrc">
-     <normaloff>:/img/host-disconnect-all.svg</normaloff>:/img/host-disconnect-all.svg</iconset>
+     <normaloff>:/img/disconnect-all.svg</normaloff>:/img/disconnect-all.svg</iconset>
    </property>
    <property name="text">
     <string>Disconnect All</string>

@@ -59,13 +59,16 @@ message Computer
     int64 host_id        = 4;  // Host id assigned by the router (hosts.id).
     string name          = 5;  // Display label (plain).
     string computer_name = 6;  // Plain OS hostname reported by the host.
-    string address       = 7;  // Last seen peer address.
-    bytes comment        = 8;  // AEAD-encrypted with workspace GK.
-    bytes user_name      = 9;  // AEAD-encrypted with workspace GK.
-    bytes password       = 10; // AEAD-encrypted with workspace GK.
-    int64 last_connect   = 11; // Unix timestamp of the last connection.
-    int64 last_modify    = 12; // Unix timestamp of the last edit by the admin.
-    bool online          = 13; // Live host session currently exists for this host_id.
+    string cpu_arch      = 7;  // CPU architecture reported by the host.
+    string version       = 8;  // Aspia version reported by the host.
+    string os_name       = 9;  // Operating system name reported by the host.
+    string address       = 10; // Last seen peer address.
+    bytes comment        = 11; // AEAD-encrypted with workspace GK.
+    bytes user_name      = 12; // AEAD-encrypted with workspace GK.
+    bytes password       = 13; // AEAD-encrypted with workspace GK.
+    int64 last_connect   = 14; // Unix timestamp of the last connection.
+    int64 last_modify    = 15; // Unix timestamp of the last edit by the admin.
+    bool online          = 16; // Live host session currently exists for this host_id.
 }
 
 message ComputerListRequest
