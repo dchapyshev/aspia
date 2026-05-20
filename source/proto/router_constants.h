@@ -52,9 +52,6 @@ extern const char* const kErrorAlreadyExists;
 extern const char* const kErrorNotFound;
 extern const char* const kErrorAccessDenied;
 
-// Values for HostRequest::params.
-extern const char* const kParamTryToUninstall;
-
 } // namespace proto::router
 
 #endif // PROTO_ROUTER_CONSTANTS_H

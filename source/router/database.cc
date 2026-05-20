@@ -146,7 +146,13 @@ bool ensureSchema(QSqlDatabase& sql_db)
                     "\"comment\" BLOB NOT NULL DEFAULT X'',"
                     "PRIMARY KEY(\"id\" AUTOINCREMENT),"
                     "FOREIGN KEY(\"workspace_id\") REFERENCES \"workspaces\"(\"id\") ON DELETE CASCADE,"
-                    "FOREIGN KEY(\"parent_id\") REFERENCES \"host_groups\"(\"id\") ON DELETE CASCADE)"))
+                    "FOREIGN KEY(\"parent_id\") REFERENCES \"host_groups\"(\"id\") ON DELETE CASCADE)") ||
+        // Pending host removals. When an admin requests host removal we move the row from hosts
+        // into this table and wait for the host to acknowledge the remove command.
+        !query.exec("CREATE TABLE IF NOT EXISTS \"hosts_remove\" ("
+                    "\"host_id\" INTEGER PRIMARY KEY,"
+                    "\"key\" BLOB NOT NULL UNIQUE,"
+                    "\"timestamp\" INTEGER NOT NULL DEFAULT 0)"))
     {
         LOG(ERROR) << "Unable to execute query:" << query.lastError();
         sql_db.rollback();
@@ -565,10 +571,29 @@ std::string_view Database::hostId(const QByteArray& key_hash, HostId* host_id) c
         return proto::router::kErrorInternalError;
     }
 
-    if (!query.next())
+    if (query.next())
+    {
+        *host_id = static_cast<HostId>(query.value(0).toLongLong());
+        return proto::router::kErrorOk;
+    }
+
+    // Not found in hosts - check hosts_remove. A reconnecting host whose removal was scheduled
+    // while it was offline will be matched here; the caller is expected to send the remove
+    // command using the returned host_id and wait for the ack before finalizing the deletion.
+    QSqlQuery pending(databaseByName(connection_name_));
+    pending.prepare(QStringLiteral("SELECT host_id FROM hosts_remove WHERE key=?"));
+    pending.addBindValue(key_hash);
+
+    if (!pending.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << pending.lastError();
+        return proto::router::kErrorInternalError;
+    }
+
+    if (!pending.next())
         return proto::router::kErrorNotFound;
 
-    *host_id = static_cast<HostId>(query.value(0).toLongLong());
+    *host_id = static_cast<HostId>(pending.value(0).toLongLong());
     return proto::router::kErrorOk;
 }
 
@@ -647,6 +672,137 @@ bool Database::updateHostInfo(HostId host_id,
     }
 
     return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::scheduleHostRemoval(HostId host_id)
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return false;
+    }
+
+    if (host_id == kInvalidHostId)
+    {
+        LOG(ERROR) << "Invalid host id";
+        return false;
+    }
+
+    QSqlDatabase sql_db = databaseByName(connection_name_);
+    if (!sql_db.transaction())
+    {
+        LOG(ERROR) << "Unable to start transaction:" << sql_db.lastError();
+        return false;
+    }
+
+    QSqlQuery select(sql_db);
+    select.prepare(QStringLiteral("SELECT key FROM hosts WHERE id=?"));
+    select.addBindValue(static_cast<qulonglong>(host_id));
+
+    if (!select.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << select.lastError();
+        sql_db.rollback();
+        return false;
+    }
+
+    if (!select.next())
+    {
+        LOG(ERROR) << "Host not found:" << host_id;
+        sql_db.rollback();
+        return false;
+    }
+
+    const QByteArray key = select.value(0).toByteArray();
+    const qint64 timestamp = QDateTime::currentSecsSinceEpoch();
+
+    QSqlQuery insert(sql_db);
+    insert.prepare(QStringLiteral(
+        "INSERT INTO hosts_remove (host_id, key, timestamp) VALUES (?, ?, ?)"));
+    insert.addBindValue(static_cast<qulonglong>(host_id));
+    insert.addBindValue(key);
+    insert.addBindValue(timestamp);
+
+    if (!insert.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << insert.lastError();
+        sql_db.rollback();
+        return false;
+    }
+
+    QSqlQuery del(sql_db);
+    del.prepare(QStringLiteral("DELETE FROM hosts WHERE id=?"));
+    del.addBindValue(static_cast<qulonglong>(host_id));
+
+    if (!del.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << del.lastError();
+        sql_db.rollback();
+        return false;
+    }
+
+    if (!sql_db.commit())
+    {
+        LOG(ERROR) << "Unable to commit transaction:" << sql_db.lastError();
+        sql_db.rollback();
+        return false;
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::hasPendingHostRemoval(HostId host_id) const
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return false;
+    }
+
+    if (host_id == kInvalidHostId)
+        return false;
+
+    QSqlQuery query(databaseByName(connection_name_));
+    query.prepare(QStringLiteral("SELECT 1 FROM hosts_remove WHERE host_id=?"));
+    query.addBindValue(static_cast<qulonglong>(host_id));
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << query.lastError();
+        return false;
+    }
+
+    return query.next();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Database::finalizeHostRemoval(HostId host_id)
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return false;
+    }
+
+    if (host_id == kInvalidHostId)
+    {
+        LOG(ERROR) << "Invalid host id";
+        return false;
+    }
+
+    QSqlQuery query(databaseByName(connection_name_));
+    query.prepare(QStringLiteral("DELETE FROM hosts_remove WHERE host_id=?"));
+    query.addBindValue(static_cast<qulonglong>(host_id));
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << query.lastError();
+        return false;
+    }
+
+    return query.numRowsAffected() > 0;
 }
 
 //--------------------------------------------------------------------------------------------------

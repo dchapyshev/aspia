@@ -44,6 +44,4 @@ const char* const kErrorAlreadyExists  = "already_exists";
 const char* const kErrorNotFound       = "not_found";
 const char* const kErrorAccessDenied   = "access_denied";
 
-const char* const kParamTryToUninstall = "try_to_uninstall";
-
 } // namespace proto::router

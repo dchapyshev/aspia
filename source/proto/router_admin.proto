@@ -61,8 +61,7 @@ message HostRequest
     int64 host_id       = 2; // For "disconnect": -1 means all host sessions, otherwise the host
                              // session is looked up by host_id (hosts.id).
                              // For "remove": host_id of the host to uninstall.
-    string params       = 3; // Additional parameters separated by ';'.
-                             // For "remove": "try_to_uninstall"
+    string params       = 3; // Additional parameters separated by ';'. Currently unused.
 }
 
 message HostResult

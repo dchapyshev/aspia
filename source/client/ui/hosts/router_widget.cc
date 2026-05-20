@@ -20,7 +20,6 @@
 
 #include <QAction>
 #include <QApplication>
-#include <QCheckBox>
 #include <QClipboard>
 #include <QCollator>
 #include <QDateTime>
@@ -1055,15 +1054,11 @@ void RouterWidget::onRemoveHost()
     MsgBox message_box(this);
     message_box.setWindowTitle(tr("Confirmation"));
     message_box.setText(tr("Deleting a host will result in all its configuration for connecting "
-                           "to the router being deleted. This operation is irreversible. After "
-                           "deleting, the host will no longer connect to the router. Are you sure "
-                           "you want to do this?"));
+                           "to the router being deleted, and the application will be uninstalled "
+                           "on the host. This operation is irreversible. Are you sure you want to "
+                           "do this?"));
     message_box.setIcon(MsgBox::Question);
     message_box.setStandardButtons(MsgBox::Yes | MsgBox::No);
-
-    QCheckBox* check_box = new QCheckBox(&message_box);
-    check_box->setText(tr("Try to uninstall the application (result is not guaranteed)"));
-    message_box.setCheckBox(check_box);
 
     if (message_box.exec() == MsgBox::No)
     {
@@ -1072,7 +1067,7 @@ void RouterWidget::onRemoveHost()
     }
 
     LOG(INFO) << "[ACTION] Remove host accepted by user";
-    emit sig_removeHost(tree_item->info.host_id(), check_box->isChecked());
+    emit sig_removeHost(tree_item->info.host_id());
 }
 
 //--------------------------------------------------------------------------------------------------

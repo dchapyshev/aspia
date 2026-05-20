@@ -833,7 +833,7 @@ void Service::onSettingsChanged(const QString& path)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Service::onRemoveHost(bool try_to_uninstall)
+void Service::onRemoveHost()
 {
     LOG(WARNING) << "Received command to remove host!";
 
@@ -848,11 +848,8 @@ void Service::onRemoveHost(bool try_to_uninstall)
     storage.setLastHostId(kInvalidHostId);
     storage.setHostKey("");
 
-    if (try_to_uninstall)
-    {
-        LOG(INFO) << "Attempting to uninstall the application";
-        HostUtils::uninstallApplication();
-    }
+    LOG(INFO) << "Uninstalling the application";
+    HostUtils::uninstallApplication();
 }
 
 //--------------------------------------------------------------------------------------------------

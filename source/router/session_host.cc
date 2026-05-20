@@ -45,6 +45,23 @@ SessionHost::SessionHost(TcpChannel* channel, QObject* parent)
 SessionHost::~SessionHost()
 {
     CLOG(INFO) << "Dtor";
+
+    // If a remove command was sent during this session, the host has either processed it (and
+    // disconnected/uninstalled) or got dropped before it could; either way the host_id will not
+    // resurface, so finalize the hosts_remove row here.
+    if (remove_command_sent_ && host_id_ != kInvalidHostId)
+    {
+        Database database = Database::open();
+        if (database.isValid())
+        {
+            if (!database.finalizeHostRemoval(host_id_))
+                CLOG(WARNING) << "Nothing to finalize for host_id:" << host_id_;
+        }
+        else
+        {
+            CLOG(ERROR) << "Failed to connect to database during finalize";
+        }
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -56,11 +73,13 @@ void SessionHost::sendConnectionOffer(const proto::router::ConnectionOffer& offe
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionHost::sendHostCommand(const proto::router::HostCommand& command)
+void SessionHost::sendRemoveCommand()
 {
     proto::router::RouterToHost message;
-    message.mutable_host_command()->CopyFrom(command);
+    message.mutable_host_command()->set_command_name(proto::router::kCommandHostRemove);
     sendMessage(0, serialize(message));
+
+    remove_command_sent_ = true;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -130,19 +149,26 @@ void SessionHost::readHostIdRequest(const proto::router::HostIdRequest& host_id_
     if (error_code == proto::router::kErrorOk)
     {
         host_id_response->set_host_id(host_id_);
-
-        if (!database.updateHostInfo(host_id_,
-                                     computerName(),
-                                     architecture(),
-                                     version().toString(),
-                                     osName(),
-                                     address().toString()))
-        {
-            CLOG(WARNING) << "Failed to update host info for host_id:" << host_id_;
-        }
-
         emit sig_hostIdAssigned(host_id_);
     }
 
     sendMessage(0, serialize(message));
+
+    if (error_code != proto::router::kErrorOk)
+        return;
+
+    // If the host has a pending removal record, ignore connect metadata and reissue the remove
+    // command; the destructor will finalize the hosts_remove row when this session disconnects.
+    if (database.hasPendingHostRemoval(host_id_))
+    {
+        CLOG(INFO) << "Host" << host_id_ << "has pending removal, sending remove command";
+        sendRemoveCommand();
+        return;
+    }
+
+    if (!database.updateHostInfo(
+            host_id_, computerName(), architecture(), version().toString(), osName(), address().toString()))
+    {
+        CLOG(WARNING) << "Failed to update host info for host_id:" << host_id_;
+    }
 }

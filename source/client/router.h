@@ -81,7 +81,7 @@ public slots:
     void onModifyUser(const proto::router::User& user);
     void onDeleteUser(qint64 entry_id);
     void onDisconnectHost(qint64 host_id);
-    void onRemoveHost(qint64 host_id, bool try_to_uninstall);
+    void onRemoveHost(qint64 host_id);
     void onDisconnectRelay(qint64 session_id);
     void onDisconnectClient(qint64 session_id);
     void onDisconnectPeer(qint64 relay_entry_id, quint64 peer_session_id);

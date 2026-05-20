@@ -68,7 +68,7 @@ signals:
     void sig_routerStateChanged(const proto::user::RouterState& state);
     void sig_credentialsChanged(HostId host_id, const SecureString& one_time_password);
     void sig_clientConnected();
-    void sig_removeHost(bool try_to_uninstall);
+    void sig_removeHost();
 
 private slots:
     void onTcpReady();

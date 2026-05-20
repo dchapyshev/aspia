@@ -78,6 +78,15 @@ public:
                         const QString& os_name,
                         const QString& address);
 
+    // Schedules a host removal: copies hosts.id/key into hosts_remove (together with the current
+    // timestamp) and deletes the original hosts row. The host_id is kept intact so that a
+    // reconnecting offline host can be matched by key in hostId().
+    bool scheduleHostRemoval(HostId host_id);
+    // Returns true if host_id has a pending removal in hosts_remove.
+    bool hasPendingHostRemoval(HostId host_id) const;
+    // Removes the hosts_remove row once the host has acknowledged the removal command.
+    bool finalizeHostRemoval(HostId host_id);
+
     QVector<Workspace> workspaceList() const;
     Workspace findWorkspace(qint64 entry_id) const;
     // Initial access list may be empty - in that case the workspace has no GK yet; it will

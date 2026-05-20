@@ -24,7 +24,6 @@
 
 namespace proto::router {
 class ConnectionOffer;
-class HostCommand;
 class HostIdRequest;
 } // namespace proto::router
 
@@ -39,7 +38,10 @@ public:
     HostId hostId() const { return host_id_; }
 
     void sendConnectionOffer(const proto::router::ConnectionOffer& offer);
-    void sendHostCommand(const proto::router::HostCommand& command);
+    // Sends the "remove" host command and marks the session so that on disconnect the
+    // hosts_remove row for this host_id is finalized. TCP delivers the command reliably; the
+    // host's disconnect is treated as a proof of receipt.
+    void sendRemoveCommand();
 
 signals:
     void sig_hostIdAssigned(HostId host_id);
@@ -52,6 +54,7 @@ private:
     void readHostIdRequest(const proto::router::HostIdRequest& host_id_request);
 
     HostId host_id_ = kInvalidHostId;
+    bool remove_command_sent_ = false;
 
     Q_DISABLE_COPY_MOVE(SessionHost)
 };

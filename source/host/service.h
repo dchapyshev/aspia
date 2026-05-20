@@ -80,7 +80,7 @@ private slots:
     void onChatClientMessage(const proto::chat::Chat& chat);
     void onUserChatMessage(const proto::chat::Chat& chat);
     void onSettingsChanged(const QString& path);
-    void onRemoveHost(bool try_to_uninstall);
+    void onRemoveHost();
 
 private:
     struct PendingConfirmation

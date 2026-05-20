@@ -287,7 +287,7 @@ void Router::onDisconnectHost(qint64 host_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Router::onRemoveHost(qint64 host_id, bool try_to_uninstall)
+void Router::onRemoveHost(qint64 host_id)
 {
     if (config_.sessionType() != proto::router::SESSION_TYPE_ADMIN)
     {
@@ -299,11 +299,8 @@ void Router::onRemoveHost(qint64 host_id, bool try_to_uninstall)
     proto::router::HostRequest* request = message.mutable_host_request();
     request->set_command_name(proto::router::kCommandHostRemove);
     request->set_host_id(host_id);
-    if (try_to_uninstall)
-        request->set_params(proto::router::kParamTryToUninstall);
 
-    LOG(INFO) << "Sending host remove request (host_id:" << host_id
-              << "try_to_uninstall:" << try_to_uninstall << ")";
+    LOG(INFO) << "Sending host remove request (host_id:" << host_id << ")";
     sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
 }
 

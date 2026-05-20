@@ -310,20 +310,29 @@ void SessionAdmin::doHostRequest(const proto::router::HostRequest& request)
     else if (request.command_name() == proto::router::kCommandHostRemove)
     {
         const qint64 host_id = request.host_id();
-        SessionHost* host_session = find_host_session(static_cast<HostId>(host_id));
-        if (!host_session)
+
+        Database database = Database::open();
+        if (!database.isValid())
         {
-            CLOG(ERROR) << "No live session for host_id:" << host_id;
-            host_result->set_error_code(proto::router::kErrorInvalidEntryId);
+            CLOG(ERROR) << "Failed to connect to database";
+            host_result->set_error_code(proto::router::kErrorInternalError);
+        }
+        else if (!database.scheduleHostRemoval(static_cast<HostId>(host_id)))
+        {
+            CLOG(ERROR) << "Failed to schedule host removal for host_id:" << host_id;
+            host_result->set_error_code(proto::router::kErrorInternalError);
         }
         else
         {
-            proto::router::HostCommand command;
-            command.set_command_name(request.command_name());
-            command.set_params(request.params());
-            host_session->sendHostCommand(command);
+            // The hosts row is now in hosts_remove; if the host is online send it the remove
+            // command and let SessionHost finalize the hosts_remove row on disconnect. Otherwise
+            // the command is issued on reconnect.
+            SessionHost* host_session = find_host_session(static_cast<HostId>(host_id));
+            if (host_session)
+                host_session->sendRemoveCommand();
 
-            CLOG(INFO) << "Host" << host_id << "removed by" << userName();
+            CLOG(INFO) << "Host" << host_id << "removal scheduled by" << userName()
+                       << "(online:" << (host_session != nullptr) << ")";
             host_result->set_error_code(proto::router::kErrorOk);
         }
     }

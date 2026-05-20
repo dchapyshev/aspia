@@ -136,7 +136,7 @@ signals:
     void sig_modifyUser(const proto::router::User& user);
     void sig_deleteUser(qint64 entry_id);
     void sig_disconnectHost(qint64 host_id);
-    void sig_removeHost(qint64 host_id, bool try_to_uninstall);
+    void sig_removeHost(qint64 host_id);
     void sig_disconnectRelay(qint64 session_id);
     void sig_disconnectClient(qint64 session_id);
     void sig_disconnectPeer(qint64 relay_entry_id, quint64 peer_session_id);
