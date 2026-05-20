@@ -53,22 +53,21 @@ message HostStatus
 
 message Computer
 {
-    int64 entry_id       = 1;  // computers.id.
+    int64 host_id        = 1;  // hosts.id - the dialable host identifier.
     int64 workspace_id   = 2;  // 0 means unassigned (admin-only listing).
     int64 group_id       = 3;  // 0 means workspace root.
-    int64 host_id        = 4;  // Host id assigned by the router (hosts.id).
-    string name          = 5;  // Display label (plain).
-    string computer_name = 6;  // Plain OS hostname reported by the host.
-    string cpu_arch      = 7;  // CPU architecture reported by the host.
-    string version       = 8;  // Aspia version reported by the host.
-    string os_name       = 9;  // Operating system name reported by the host.
-    string address       = 10; // Last seen peer address.
-    bytes comment        = 11; // AEAD-encrypted with workspace GK.
-    bytes user_name      = 12; // AEAD-encrypted with workspace GK.
-    bytes password       = 13; // AEAD-encrypted with workspace GK.
-    int64 last_connect   = 14; // Unix timestamp of the last connection.
-    int64 last_modify    = 15; // Unix timestamp of the last edit by the admin.
-    bool online          = 16; // Live host session currently exists for this host_id.
+    string display_name  = 4;  // Admin-editable display label (plain).
+    string computer_name = 5;  // Plain OS hostname reported by the host.
+    string cpu_arch      = 6;  // CPU architecture reported by the host.
+    string version       = 7;  // Aspia version reported by the host.
+    string os_name       = 8;  // Operating system name reported by the host.
+    string address       = 9;  // Last seen peer address.
+    bytes comment        = 10; // AEAD-encrypted with workspace GK.
+    bytes user_name      = 11; // AEAD-encrypted with workspace GK.
+    bytes password       = 12; // AEAD-encrypted with workspace GK.
+    int64 last_connect   = 13; // Unix timestamp of the last connection.
+    int64 last_modify    = 14; // Unix timestamp of the last edit by the admin.
+    bool online          = 15; // Live host session currently exists for this host_id.
 }
 
 message ComputerListRequest

@@ -101,9 +101,30 @@ bool ensureSchema(QSqlDatabase& sql_db)
                     "\"wrap_private_key\" BLOB NOT NULL DEFAULT X'',"
                     "\"wrap_salt\" BLOB NOT NULL DEFAULT X'',"
                     "PRIMARY KEY(\"id\" AUTOINCREMENT))") ||
+        // workspace_id == 0 means the host is not yet assigned to any workspace; group_id == 0
+        // means the host is shown at the workspace root. No FKs on these columns because 0 is a
+        // sentinel value; for any non-zero value the application enforces that it points to an
+        // existing row in workspaces/host_groups.
+        // comment, user_name and password are AEAD-encrypted with the workspace GK (only
+        // meaningful when workspace_id != 0). name, computer_name (real OS hostname), cpu_arch,
+        // version, os_name, address and last_connect are plain values; the latter five are
+        // updated by the router on every host connection and reflect the latest connect attempt.
         !query.exec("CREATE TABLE IF NOT EXISTS \"hosts\" ("
                     "\"id\" INTEGER UNIQUE,"
                     "\"key\" BLOB NOT NULL UNIQUE,"
+                    "\"workspace_id\" INTEGER NOT NULL DEFAULT 0,"
+                    "\"group_id\" INTEGER NOT NULL DEFAULT 0,"
+                    "\"display_name\" TEXT NOT NULL DEFAULT '',"
+                    "\"computer_name\" TEXT NOT NULL DEFAULT '',"
+                    "\"cpu_arch\" TEXT NOT NULL DEFAULT '',"
+                    "\"version\" TEXT NOT NULL DEFAULT '',"
+                    "\"os_name\" TEXT NOT NULL DEFAULT '',"
+                    "\"address\" TEXT NOT NULL DEFAULT '',"
+                    "\"comment\" BLOB NOT NULL DEFAULT X'',"
+                    "\"user_name\" BLOB NOT NULL DEFAULT X'',"
+                    "\"password\" BLOB NOT NULL DEFAULT X'',"
+                    "\"last_connect\" INTEGER NOT NULL DEFAULT 0,"
+                    "\"last_modify\" INTEGER NOT NULL DEFAULT 0,"
                     "PRIMARY KEY(\"id\" AUTOINCREMENT))") ||
         !query.exec("CREATE TABLE IF NOT EXISTS \"workspaces\" ("
                     "\"id\" INTEGER UNIQUE,"
@@ -117,7 +138,7 @@ bool ensureSchema(QSqlDatabase& sql_db)
                     "FOREIGN KEY(\"workspace_id\") REFERENCES \"workspaces\"(\"id\") ON DELETE CASCADE,"
                     "FOREIGN KEY(\"user_id\") REFERENCES \"users\"(\"id\") ON DELETE CASCADE)") ||
         // comment is AEAD-encrypted with the workspace GK; name is plain text.
-        !query.exec("CREATE TABLE IF NOT EXISTS \"computer_groups\" ("
+        !query.exec("CREATE TABLE IF NOT EXISTS \"host_groups\" ("
                     "\"id\" INTEGER UNIQUE,"
                     "\"workspace_id\" INTEGER NOT NULL,"
                     "\"parent_id\" INTEGER,"
@@ -125,33 +146,7 @@ bool ensureSchema(QSqlDatabase& sql_db)
                     "\"comment\" BLOB NOT NULL DEFAULT X'',"
                     "PRIMARY KEY(\"id\" AUTOINCREMENT),"
                     "FOREIGN KEY(\"workspace_id\") REFERENCES \"workspaces\"(\"id\") ON DELETE CASCADE,"
-                    "FOREIGN KEY(\"parent_id\") REFERENCES \"computer_groups\"(\"id\") ON DELETE CASCADE)") ||
-        // workspace_id == 0 means the computer is not yet assigned to any workspace; group_id == 0
-        // means the computer is shown at the workspace root. No FKs on these columns because 0 is
-        // a sentinel value; for any non-zero value the application enforces that it points to an
-        // existing row in workspaces/computer_groups.
-        // comment, user_name and password are AEAD-encrypted with the workspace GK (only
-        // meaningful when workspace_id != 0). name, computer_name (real OS hostname), address and
-        // last_connect are plain values; computer_name/address/last_connect are updated by the
-        // router on every host connection and reflect the latest connect attempt.
-        !query.exec("CREATE TABLE IF NOT EXISTS \"computers\" ("
-                    "\"id\" INTEGER UNIQUE,"
-                    "\"workspace_id\" INTEGER NOT NULL DEFAULT 0,"
-                    "\"group_id\" INTEGER NOT NULL DEFAULT 0,"
-                    "\"host_id\" INTEGER NOT NULL,"
-                    "\"name\" TEXT NOT NULL DEFAULT '',"
-                    "\"computer_name\" TEXT NOT NULL DEFAULT '',"
-                    "\"cpu_arch\" TEXT NOT NULL DEFAULT '',"
-                    "\"version\" TEXT NOT NULL DEFAULT '',"
-                    "\"os_name\" TEXT NOT NULL DEFAULT '',"
-                    "\"address\" TEXT NOT NULL DEFAULT '',"
-                    "\"comment\" BLOB NOT NULL DEFAULT X'',"
-                    "\"user_name\" BLOB NOT NULL DEFAULT X'',"
-                    "\"password\" BLOB NOT NULL DEFAULT X'',"
-                    "\"last_connect\" INTEGER NOT NULL DEFAULT 0,"
-                    "\"last_modify\" INTEGER NOT NULL DEFAULT 0,"
-                    "PRIMARY KEY(\"id\" AUTOINCREMENT),"
-                    "FOREIGN KEY(\"host_id\") REFERENCES \"hosts\"(\"id\") ON DELETE CASCADE)"))
+                    "FOREIGN KEY(\"parent_id\") REFERENCES \"host_groups\"(\"id\") ON DELETE CASCADE)"))
     {
         LOG(ERROR) << "Unable to execute query:" << query.lastError();
         sql_db.rollback();
@@ -171,6 +166,39 @@ bool ensureSchema(QSqlDatabase& sql_db)
 
         if (!query.exec(QStringLiteral("ALTER TABLE \"users\" ADD COLUMN \"%1\" BLOB NOT NULL DEFAULT X''")
                             .arg(QString::fromLatin1(column.name))))
+        {
+            LOG(ERROR) << "Unable to add column" << column.name << ":" << query.lastError();
+            sql_db.rollback();
+            return false;
+        }
+    }
+
+    // hosts used to be a thin (id, key) table; everything below moved in from the now-gone
+    // computers table. Backfill any column that's missing on upgraded databases.
+    static const struct { const char* name; const char* definition; } kHostColumns[] = {
+        { "workspace_id",  "INTEGER NOT NULL DEFAULT 0"  },
+        { "group_id",      "INTEGER NOT NULL DEFAULT 0"  },
+        { "display_name",  "TEXT NOT NULL DEFAULT ''"    },
+        { "computer_name", "TEXT NOT NULL DEFAULT ''"    },
+        { "cpu_arch",      "TEXT NOT NULL DEFAULT ''"    },
+        { "version",       "TEXT NOT NULL DEFAULT ''"    },
+        { "os_name",       "TEXT NOT NULL DEFAULT ''"    },
+        { "address",       "TEXT NOT NULL DEFAULT ''"    },
+        { "comment",       "BLOB NOT NULL DEFAULT X''"   },
+        { "user_name",     "BLOB NOT NULL DEFAULT X''"   },
+        { "password",      "BLOB NOT NULL DEFAULT X''"   },
+        { "last_connect",  "INTEGER NOT NULL DEFAULT 0"  },
+        { "last_modify",   "INTEGER NOT NULL DEFAULT 0"  }
+    };
+
+    for (const auto& column : kHostColumns)
+    {
+        if (hasColumn(sql_db, QStringLiteral("hosts"), QString::fromLatin1(column.name)))
+            continue;
+
+        if (!query.exec(QStringLiteral("ALTER TABLE \"hosts\" ADD COLUMN \"%1\" %2")
+                            .arg(QString::fromLatin1(column.name))
+                            .arg(QString::fromLatin1(column.definition))))
         {
             LOG(ERROR) << "Unable to add column" << column.name << ":" << query.lastError();
             sql_db.rollback();
@@ -573,12 +601,12 @@ bool Database::addHost(const QByteArray& key_hash)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Database::updateComputerInfo(HostId host_id,
-                                  const QString& computer_name,
-                                  const QString& cpu_arch,
-                                  const QString& version,
-                                  const QString& os_name,
-                                  const QString& address)
+bool Database::updateHostInfo(HostId host_id,
+                              const QString& computer_name,
+                              const QString& cpu_arch,
+                              const QString& version,
+                              const QString& os_name,
+                              const QString& address)
 {
     if (!isValid())
     {
@@ -594,62 +622,27 @@ bool Database::updateComputerInfo(HostId host_id,
 
     const qint64 timestamp = QDateTime::currentSecsSinceEpoch();
 
-    QSqlDatabase sql_db = databaseByName(connection_name_);
-    if (!sql_db.transaction())
+    // The hosts row is created by addHost() before this method runs, so a plain UPDATE is
+    // enough. If display name has never been set by the admin we seed it from computer_name so
+    // the host has a readable label in the UI.
+    QSqlQuery query(databaseByName(connection_name_));
+    query.prepare(QStringLiteral(
+        "UPDATE hosts SET "
+        "display_name = CASE WHEN display_name='' THEN ? ELSE display_name END, "
+        "computer_name=?, cpu_arch=?, version=?, os_name=?, address=?, last_connect=? "
+        "WHERE id=?"));
+    query.addBindValue(computer_name);
+    query.addBindValue(computer_name);
+    query.addBindValue(cpu_arch);
+    query.addBindValue(version);
+    query.addBindValue(os_name);
+    query.addBindValue(address);
+    query.addBindValue(timestamp);
+    query.addBindValue(static_cast<qulonglong>(host_id));
+
+    if (!query.exec())
     {
-        LOG(ERROR) << "Unable to start transaction:" << sql_db.lastError();
-        return false;
-    }
-
-    QSqlQuery update(sql_db);
-    update.prepare(QStringLiteral(
-        "UPDATE computers SET computer_name=?, cpu_arch=?, version=?, os_name=?, "
-        "address=?, last_connect=? WHERE host_id=?"));
-    update.addBindValue(computer_name);
-    update.addBindValue(cpu_arch);
-    update.addBindValue(version);
-    update.addBindValue(os_name);
-    update.addBindValue(address);
-    update.addBindValue(timestamp);
-    update.addBindValue(static_cast<qulonglong>(host_id));
-
-    if (!update.exec())
-    {
-        LOG(ERROR) << "Unable to execute query:" << update.lastError();
-        sql_db.rollback();
-        return false;
-    }
-
-    if (update.numRowsAffected() == 0)
-    {
-        // Seed name with the plain computer_name so the host has a readable label until an
-        // admin renames it.
-        QSqlQuery insert(sql_db);
-        insert.prepare(QStringLiteral(
-            "INSERT INTO computers (host_id, name, computer_name, cpu_arch, version, os_name, "
-            "address, last_connect) "
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?)"));
-        insert.addBindValue(static_cast<qulonglong>(host_id));
-        insert.addBindValue(computer_name);
-        insert.addBindValue(computer_name);
-        insert.addBindValue(cpu_arch);
-        insert.addBindValue(version);
-        insert.addBindValue(os_name);
-        insert.addBindValue(address);
-        insert.addBindValue(timestamp);
-
-        if (!insert.exec())
-        {
-            LOG(ERROR) << "Unable to execute query:" << insert.lastError();
-            sql_db.rollback();
-            return false;
-        }
-    }
-
-    if (!sql_db.commit())
-    {
-        LOG(ERROR) << "Unable to commit transaction:" << sql_db.lastError();
-        sql_db.rollback();
+        LOG(ERROR) << "Unable to execute query:" << query.lastError();
         return false;
     }
 
@@ -1100,7 +1093,7 @@ bool Database::hasWorkspaceAccess(qint64 user_id, qint64 workspace_id) const
 }
 
 //--------------------------------------------------------------------------------------------------
-QVector<ComputerInfo> Database::computers(qint64 workspace_id, qint64 group_id) const
+QVector<HostInfo> Database::hosts(qint64 workspace_id, qint64 group_id) const
 {
     if (!isValid())
     {
@@ -1110,38 +1103,37 @@ QVector<ComputerInfo> Database::computers(qint64 workspace_id, qint64 group_id) 
 
     QSqlQuery query(databaseByName(connection_name_));
     query.prepare(QStringLiteral(
-        "SELECT id, workspace_id, group_id, host_id, name, computer_name, "
+        "SELECT id, workspace_id, group_id, display_name, computer_name, "
         "cpu_arch, version, os_name, address, "
         "comment, user_name, password, last_connect, last_modify "
-        "FROM computers WHERE workspace_id=? AND group_id=?"));
+        "FROM hosts WHERE workspace_id=? AND group_id=?"));
     query.addBindValue(workspace_id);
     query.addBindValue(group_id);
 
     if (!query.exec())
     {
-        LOG(ERROR) << "Unable to get computers:" << query.lastError();
+        LOG(ERROR) << "Unable to get hosts:" << query.lastError();
         return {};
     }
 
-    QVector<ComputerInfo> result;
+    QVector<HostInfo> result;
     while (query.next())
     {
-        ComputerInfo info;
-        info.entry_id      = query.value(0).toLongLong();
+        HostInfo info;
+        info.host_id       = query.value(0).toLongLong();
         info.workspace_id  = query.value(1).toLongLong();
         info.group_id      = query.value(2).toLongLong();
-        info.host_id       = query.value(3).toLongLong();
-        info.name          = query.value(4).toString();
-        info.computer_name = query.value(5).toString();
-        info.cpu_arch      = query.value(6).toString();
-        info.version       = query.value(7).toString();
-        info.os_name       = query.value(8).toString();
-        info.address       = query.value(9).toString();
-        info.comment       = query.value(10).toByteArray();
-        info.user_name     = query.value(11).toByteArray();
-        info.password      = query.value(12).toByteArray();
-        info.last_connect  = query.value(13).toLongLong();
-        info.last_modify   = query.value(14).toLongLong();
+        info.display_name  = query.value(3).toString();
+        info.computer_name = query.value(4).toString();
+        info.cpu_arch      = query.value(5).toString();
+        info.version       = query.value(6).toString();
+        info.os_name       = query.value(7).toString();
+        info.address       = query.value(8).toString();
+        info.comment       = query.value(9).toByteArray();
+        info.user_name     = query.value(10).toByteArray();
+        info.password      = query.value(11).toByteArray();
+        info.last_connect  = query.value(12).toLongLong();
+        info.last_modify   = query.value(13).toLongLong();
         result.append(info);
     }
 

@@ -28,13 +28,12 @@
 #include "base/peer/router_user.h"
 #include "router/workspace.h"
 
-struct ComputerInfo
+struct HostInfo
 {
-    qint64 entry_id     = 0;
+    qint64 host_id      = 0; // hosts.id - the dialable host identifier.
     qint64 workspace_id = 0;
     qint64 group_id     = 0;
-    qint64 host_id      = 0;
-    QString name;
+    QString display_name;
     QString computer_name;
     QString cpu_arch;
     QString version;
@@ -68,17 +67,16 @@ public:
     std::string_view hostId(const QByteArray& key_hash, HostId* host_id) const;
     bool addHost(const QByteArray& key_hash);
 
-    // Called by the router on every host connection to keep computers in sync. If at least one
-    // computers row references this host_id, all of them get their computer_name, cpu_arch,
-    // version, os_name, address and last_connect refreshed. Otherwise an unassigned
-    // (workspace_id=0, group_id=0) row is inserted so the host shows up in the admin UI awaiting
-    // assignment.
-    bool updateComputerInfo(HostId host_id,
-                            const QString& computer_name,
-                            const QString& cpu_arch,
-                            const QString& version,
-                            const QString& os_name,
-                            const QString& address);
+    // Called by the router on every host connection to refresh the host's last-seen metadata
+    // (computer_name, cpu_arch, version, os_name, address, last_connect). If display_name has
+    // never been set by the admin it is seeded from computer_name so the host has a readable
+    // label in the UI.
+    bool updateHostInfo(HostId host_id,
+                        const QString& computer_name,
+                        const QString& cpu_arch,
+                        const QString& version,
+                        const QString& os_name,
+                        const QString& address);
 
     QVector<Workspace> workspaceList() const;
     Workspace findWorkspace(qint64 entry_id) const;
@@ -98,9 +96,9 @@ public:
     QVector<Workspace::Access> workspaceAccessListForUser(qint64 user_id) const;
     bool hasWorkspaceAccess(qint64 user_id, qint64 workspace_id) const;
 
-    // Returns computers within the given workspace and group; workspace_id == 0 returns the
+    // Returns hosts within the given workspace and group; workspace_id == 0 returns the
     // unassigned bucket, group_id == 0 returns rows at the workspace root.
-    QVector<ComputerInfo> computers(qint64 workspace_id, qint64 group_id) const;
+    QVector<HostInfo> hosts(qint64 workspace_id, qint64 group_id) const;
 
 private:
     explicit Database(const QString& connection_name);

@@ -272,17 +272,16 @@ void SessionClient::readComputerListRequest(const proto::router::ComputerListReq
         }
     }
 
-    const QVector<ComputerInfo> computers = database.computers(workspace_id, group_id);
+    const QVector<HostInfo> hosts = database.hosts(workspace_id, group_id);
     result->set_error_code(proto::router::kErrorOk);
 
-    for (const ComputerInfo& info : std::as_const(computers))
+    for (const HostInfo& info : std::as_const(hosts))
     {
         proto::router::Computer* item = result->add_computer();
-        item->set_entry_id(info.entry_id);
+        item->set_host_id(info.host_id);
         item->set_workspace_id(info.workspace_id);
         item->set_group_id(info.group_id);
-        item->set_host_id(info.host_id);
-        item->set_name(info.name.toStdString());
+        item->set_display_name(info.display_name.toStdString());
         item->set_computer_name(info.computer_name.toStdString());
         item->set_cpu_arch(info.cpu_arch.toStdString());
         item->set_version(info.version.toStdString());
