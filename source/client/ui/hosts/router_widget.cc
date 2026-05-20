@@ -157,12 +157,12 @@ class HostTreeItem final : public QTreeWidgetItem
     Q_DECLARE_TR_FUNCTIONS(HostTreeItem)
 
 public:
-    explicit HostTreeItem(const proto::router::Computer& info)
+    explicit HostTreeItem(const proto::router::Host& info)
     {
         updateItem(info);
     }
 
-    void updateItem(const proto::router::Computer& updated_info)
+    void updateItem(const proto::router::Host& updated_info)
     {
         info = updated_info;
 
@@ -209,7 +209,7 @@ public:
         return QTreeWidgetItem::operator<(other);
     }
 
-    proto::router::Computer info;
+    proto::router::Host info;
 
 private:
     Q_DISABLE_COPY_MOVE(HostTreeItem)
@@ -385,7 +385,7 @@ RouterWidget::RouterWidget(const RouterConfig& config, QWidget* parent)
     connect(router_, &Router::sig_clientResultReceived, this, &RouterWidget::onClientResultReceived, Qt::QueuedConnection);
     connect(router_, &Router::sig_workspaceListReceived, this, &RouterWidget::onWorkspaceListReceived, Qt::QueuedConnection);
     connect(router_, &Router::sig_workspaceResultReceived, this, &RouterWidget::onWorkspaceResultReceived, Qt::QueuedConnection);
-    connect(router_, &Router::sig_computerListReceived, this, &RouterWidget::onComputerListReceived, Qt::QueuedConnection);
+    connect(router_, &Router::sig_hostListReceived, this, &RouterWidget::onHostListReceived, Qt::QueuedConnection);
 
     connect(this, &RouterWidget::sig_relayListRequest, router_, &Router::onRelayListRequest, Qt::QueuedConnection);
     connect(this, &RouterWidget::sig_clientListRequest, router_, &Router::onClientListRequest, Qt::QueuedConnection);
@@ -402,7 +402,7 @@ RouterWidget::RouterWidget(const RouterConfig& config, QWidget* parent)
     connect(this, &RouterWidget::sig_addWorkspace, router_, &Router::onAddWorkspace, Qt::QueuedConnection);
     connect(this, &RouterWidget::sig_modifyWorkspace, router_, &Router::onModifyWorkspace, Qt::QueuedConnection);
     connect(this, &RouterWidget::sig_deleteWorkspace, router_, &Router::onDeleteWorkspace, Qt::QueuedConnection);
-    connect(this, &RouterWidget::sig_computerListRequest, router_, &Router::onComputerListRequest, Qt::QueuedConnection);
+    connect(this, &RouterWidget::sig_hostListRequest, router_, &Router::onHostListRequest, Qt::QueuedConnection);
     connect(this, &RouterWidget::sig_updateConfig, router_, &Router::onUpdateConfig, Qt::QueuedConnection);
 
     connect(ui->tab, &QTabWidget::currentChanged, this, &RouterWidget::onTabChanged);
@@ -850,9 +850,9 @@ void RouterWidget::onUpdateRelayList()
 //--------------------------------------------------------------------------------------------------
 void RouterWidget::onUpdateHostList()
 {
-    proto::router::ComputerListRequest request;
-    request.set_mode(proto::router::ComputerListRequest::MODE_ALL);
-    emit sig_computerListRequest(request);
+    proto::router::HostListRequest request;
+    request.set_mode(proto::router::HostListRequest::MODE_ALL);
+    emit sig_hostListRequest(request);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1521,18 +1521,18 @@ void RouterWidget::onRelayListReceived(const proto::router::RelayList& relays)
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterWidget::onComputerListReceived(const proto::router::ComputerList& list)
+void RouterWidget::onHostListReceived(const proto::router::HostList& list)
 {
     // The Hosts tab subscribes to the "any workspace / any group" response only; per-workspace
     // responses will be handled by future workspace widgets.
     if (list.workspace_id() != 0 || list.group_id() != 0)
         return;
 
-    auto has_with_id = [](const proto::router::ComputerList& list, qint64 host_id)
+    auto has_with_id = [](const proto::router::HostList& list, qint64 host_id)
     {
-        for (int i = 0; i < list.computer_size(); ++i)
+        for (int i = 0; i < list.host_size(); ++i)
         {
-            if (list.computer(i).host_id() == host_id)
+            if (list.host(i).host_id() == host_id)
                 return true;
         }
 
@@ -1549,9 +1549,9 @@ void RouterWidget::onComputerListReceived(const proto::router::ComputerList& lis
     }
 
     // Adding and updating elements in the UI.
-    for (int i = 0; i < list.computer_size(); ++i)
+    for (int i = 0; i < list.host_size(); ++i)
     {
-        const proto::router::Computer& info = list.computer(i);
+        const proto::router::Host& info = list.host(i);
         bool found = false;
 
         for (int j = 0; j < ui->tree_hosts->topLevelItemCount(); ++j)
@@ -1912,7 +1912,7 @@ void RouterWidget::saveHostsToFile()
 
     for (int i = 0; i < ui->tree_hosts->topLevelItemCount(); ++i)
     {
-        const proto::router::Computer& info =
+        const proto::router::Host& info =
             static_cast<HostTreeItem*>(ui->tree_hosts->topLevelItem(i))->info;
 
         QJsonObject host_object;

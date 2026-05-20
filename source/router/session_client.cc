@@ -74,9 +74,9 @@ void SessionClient::onSessionMessage(quint8 channel_id, const QByteArray& buffer
     {
         readCheckHostStatus(message.check_host_status());
     }
-    else if (message.has_computer_list_request())
+    else if (message.has_host_list_request())
     {
-        readComputerListRequest(message.computer_list_request());
+        readHostListRequest(message.host_list_request());
     }
     else
     {
@@ -208,9 +208,9 @@ void SessionClient::readCheckHostStatus(const proto::router::CheckHostStatus& ch
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionClient::readComputerListRequest(const proto::router::ComputerListRequest& request)
+void SessionClient::readHostListRequest(const proto::router::HostListRequest& request)
 {
-    const proto::router::ComputerListRequest::Mode mode = request.mode();
+    const proto::router::HostListRequest::Mode mode = request.mode();
     const qint64 workspace_id = request.workspace_id();
     const qint64 group_id = request.group_id();
     const qint64 start_item = request.start_item();
@@ -218,22 +218,22 @@ void SessionClient::readComputerListRequest(const proto::router::ComputerListReq
     const bool is_admin = sessionType() == proto::router::SESSION_TYPE_ADMIN;
 
     proto::router::RouterToClient message;
-    proto::router::ComputerList* result = message.mutable_computer_list();
+    proto::router::HostList* result = message.mutable_host_list();
     result->set_workspace_id(workspace_id);
     result->set_group_id(group_id);
 
-    if (mode != proto::router::ComputerListRequest::MODE_ALL &&
-        mode != proto::router::ComputerListRequest::MODE_FILTERED)
+    if (mode != proto::router::HostListRequest::MODE_ALL &&
+        mode != proto::router::HostListRequest::MODE_FILTERED)
     {
-        CLOG(ERROR) << "Unknown computer list mode:" << mode;
+        CLOG(ERROR) << "Unknown host list mode:" << mode;
         result->set_error_code(proto::router::kErrorInvalidRequest);
         sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
         return;
     }
 
-    if (mode == proto::router::ComputerListRequest::MODE_ALL && !is_admin)
+    if (mode == proto::router::HostListRequest::MODE_ALL && !is_admin)
     {
-        CLOG(ERROR) << "Non-admin requested MODE_ALL computer list";
+        CLOG(ERROR) << "Non-admin requested MODE_ALL host list";
         result->set_error_code(proto::router::kErrorAccessDenied);
         sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
         return;
@@ -248,7 +248,7 @@ void SessionClient::readComputerListRequest(const proto::router::ComputerListReq
         return;
     }
 
-    if (mode == proto::router::ComputerListRequest::MODE_FILTERED &&
+    if (mode == proto::router::HostListRequest::MODE_FILTERED &&
         !database.hasWorkspaceAccess(userId(), workspace_id))
     {
         CLOG(ERROR) << "User" << userId() << "has no access to workspace" << workspace_id;
@@ -280,13 +280,13 @@ void SessionClient::readComputerListRequest(const proto::router::ComputerListReq
         }
     }
 
-    const QVector<HostInfo> hosts = mode == proto::router::ComputerListRequest::MODE_ALL ?
+    const QVector<HostInfo> hosts = mode == proto::router::HostListRequest::MODE_ALL ?
         database.hosts(start_item, end_item) : database.hosts(workspace_id, group_id, start_item, end_item);
     result->set_error_code(proto::router::kErrorOk);
 
     for (const HostInfo& info : std::as_const(hosts))
     {
-        proto::router::Computer* item = result->add_computer();
+        proto::router::Host* item = result->add_host();
         item->set_host_id(info.host_id);
         item->set_workspace_id(info.workspace_id);
         item->set_group_id(info.group_id);

@@ -40,8 +40,8 @@ class User;
 namespace proto::router {
 class ClientList;
 class ClientResult;
-class ComputerList;
-class ComputerListRequest;
+class HostList;
+class HostListRequest;
 class HostResult;
 class RelayList;
 class RelayResult;
@@ -140,7 +140,7 @@ signals:
     void sig_addWorkspace(const proto::router::Workspace& workspace);
     void sig_modifyWorkspace(const proto::router::Workspace& workspace);
     void sig_deleteWorkspace(qint64 entry_id);
-    void sig_computerListRequest(const proto::router::ComputerListRequest& request);
+    void sig_hostListRequest(const proto::router::HostListRequest& request);
     void sig_statusChanged(qint64 router_id, Router::Status status);
     void sig_currentTabTypeChanged(qint64 router_id, RouterWidget::TabType tab);
     void sig_currentUserChanged(qint64 router_id);
@@ -175,7 +175,7 @@ private slots:
     void onPeerContextMenuRequested(const QPoint& pos);
     void onWorkspaceContextMenuRequested(const QPoint& pos);
     void onRelayListReceived(const proto::router::RelayList& relays);
-    void onComputerListReceived(const proto::router::ComputerList& list);
+    void onHostListReceived(const proto::router::HostList& list);
     void onClientListReceived(const proto::router::ClientList& clients);
     void onUserListReceived(const proto::router::UserList& list);
     void onUserResultReceived(const proto::router::UserResult& result);

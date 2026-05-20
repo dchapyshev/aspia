@@ -51,7 +51,7 @@ message HostStatus
     peer.Version version = 3;
 }
 
-message Computer
+message Host
 {
     int64 host_id        = 1;  // hosts.id - the dialable host identifier.
     int64 workspace_id   = 2;  // 0 means the host is not assigned to any workspace.
@@ -70,7 +70,7 @@ message Computer
     bool online          = 15; // Live host session currently exists for this host_id.
 }
 
-message ComputerListRequest
+message HostListRequest
 {
     enum Mode
     {
@@ -86,24 +86,24 @@ message ComputerListRequest
     int64 group_id     = 5;
 }
 
-message ComputerList
+message HostList
 {
-    string error_code          = 1; // "ok" | "access_denied" | "internal_error"
-    int64 workspace_id         = 2; // Echo of the request, so the client can route the response.
-    int64 group_id             = 3; // Echo of the request.
-    repeated Computer computer = 4;
+    string error_code  = 1; // "ok" | "access_denied" | "internal_error"
+    int64 workspace_id = 2; // Echo of the request, so the client can route the response.
+    int64 group_id     = 3; // Echo of the request.
+    repeated Host host = 4;
 }
 
 message RouterToClient
 {
     ConnectionOffer connection_offer = 1;
     HostStatus host_status           = 2;
-    ComputerList computer_list       = 3;
+    HostList host_list               = 3;
 }
 
 message ClientToRouter
 {
-    ConnectionRequest connection_request      = 1;
-    CheckHostStatus check_host_status         = 2;
-    ComputerListRequest computer_list_request = 3;
+    ConnectionRequest connection_request = 1;
+    CheckHostStatus check_host_status    = 2;
+    HostListRequest host_list_request    = 3;
 }

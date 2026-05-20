@@ -460,12 +460,12 @@ void Router::onCheckHostStatus(qint64 request_id, quint64 host_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Router::onComputerListRequest(const proto::router::ComputerListRequest& request)
+void Router::onHostListRequest(const proto::router::HostListRequest& request)
 {
     proto::router::ClientToRouter message;
-    message.mutable_computer_list_request()->CopyFrom(request);
+    message.mutable_host_list_request()->CopyFrom(request);
 
-    LOG(INFO) << "Sending computer list request (mode:" << request.mode()
+    LOG(INFO) << "Sending host list request (mode:" << request.mode()
               << ", workspace_id:" << request.workspace_id()
               << ", group_id:" << request.group_id() << ")";
     sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
@@ -601,10 +601,10 @@ void Router::onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer)
             bool online = host_status.status() == proto::router::HostStatus::STATUS_ONLINE;
             emit sig_hostStatus(host_status.request_id(), online);
         }
-        else if (message.has_computer_list())
+        else if (message.has_host_list())
         {
-            LOG(INFO) << "Computer list received";
-            emit sig_computerListReceived(message.computer_list());
+            LOG(INFO) << "Host list received";
+            emit sig_hostListReceived(message.host_list());
         }
     }
     else
