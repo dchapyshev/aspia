@@ -812,8 +812,9 @@ void HostsTab::onHostContextMenu(qint64 router_id, const QPoint& pos, int column
     }
     menu.addSeparator();
 
-    QAction* copy_row = menu.addAction(tr("Copy Row"));
-    QAction* copy_col = menu.addAction(tr("Copy Value"));
+    const QIcon copy_icon(":/img/copy.svg");
+    QAction* copy_row = menu.addAction(copy_icon, tr("Copy Row"));
+    QAction* copy_col = menu.addAction(copy_icon, tr("Copy Value"));
 
     QAction* action = menu.exec(pos);
     if (!action)
