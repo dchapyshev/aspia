@@ -1093,7 +1093,7 @@ bool Database::hasWorkspaceAccess(qint64 user_id, qint64 workspace_id) const
 }
 
 //--------------------------------------------------------------------------------------------------
-QVector<HostInfo> Database::hosts(qint64 workspace_id, qint64 group_id) const
+QVector<HostInfo> Database::hosts(qint64 start_item, qint64 end_item) const
 {
     if (!isValid())
     {
@@ -1101,14 +1101,82 @@ QVector<HostInfo> Database::hosts(qint64 workspace_id, qint64 group_id) const
         return {};
     }
 
+    QString sql = QStringLiteral(
+        "SELECT id, workspace_id, group_id, display_name, computer_name, "
+        "cpu_arch, version, os_name, address, "
+        "comment, user_name, password, last_connect, last_modify FROM hosts");
+
+    const bool paginate = end_item > 0 && end_item >= start_item;
+    if (paginate)
+        sql += QStringLiteral(" LIMIT ? OFFSET ?");
+
     QSqlQuery query(databaseByName(connection_name_));
-    query.prepare(QStringLiteral(
+    query.prepare(sql);
+    if (paginate)
+    {
+        query.addBindValue(end_item - start_item + 1);
+        query.addBindValue(start_item);
+    }
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to get hosts:" << query.lastError();
+        return {};
+    }
+
+    QVector<HostInfo> result;
+    while (query.next())
+    {
+        HostInfo info;
+        info.host_id       = query.value(0).toLongLong();
+        info.workspace_id  = query.value(1).toLongLong();
+        info.group_id      = query.value(2).toLongLong();
+        info.display_name  = query.value(3).toString();
+        info.computer_name = query.value(4).toString();
+        info.cpu_arch      = query.value(5).toString();
+        info.version       = query.value(6).toString();
+        info.os_name       = query.value(7).toString();
+        info.address       = query.value(8).toString();
+        info.comment       = query.value(9).toByteArray();
+        info.user_name     = query.value(10).toByteArray();
+        info.password      = query.value(11).toByteArray();
+        info.last_connect  = query.value(12).toLongLong();
+        info.last_modify   = query.value(13).toLongLong();
+        result.append(info);
+    }
+
+    return result;
+}
+
+//--------------------------------------------------------------------------------------------------
+QVector<HostInfo> Database::hosts(
+    qint64 workspace_id, qint64 group_id, qint64 start_item, qint64 end_item) const
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return {};
+    }
+
+    QString sql = QStringLiteral(
         "SELECT id, workspace_id, group_id, display_name, computer_name, "
         "cpu_arch, version, os_name, address, "
         "comment, user_name, password, last_connect, last_modify "
-        "FROM hosts WHERE workspace_id=? AND group_id=?"));
+        "FROM hosts WHERE workspace_id=? AND group_id=?");
+
+    const bool paginate = end_item > 0 && end_item >= start_item;
+    if (paginate)
+        sql += QStringLiteral(" LIMIT ? OFFSET ?");
+
+    QSqlQuery query(databaseByName(connection_name_));
+    query.prepare(sql);
     query.addBindValue(workspace_id);
     query.addBindValue(group_id);
+    if (paginate)
+    {
+        query.addBindValue(end_item - start_item + 1);
+        query.addBindValue(start_item);
+    }
 
     if (!query.exec())
     {

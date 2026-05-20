@@ -194,36 +194,13 @@ void Sidebar::reloadRouters()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Sidebar::setRouterStatus(qint64 router_id, RouterItem::Status status, bool is_admin)
+void Sidebar::setRouterStatus(qint64 router_id, RouterItem::Status status)
 {
     RouterItem* router = routerById(router_id);
     if (!router)
         return;
 
     router->setStatus(status);
-
-    if (status != RouterItem::Status::ONLINE)
-    {
-        while (router->childCount() > 0)
-            delete router->child(0);
-        return;
-    }
-
-    UnassignedItem* unassigned = nullptr;
-    for (int i = 0; i < router->childCount(); ++i)
-    {
-        Item* child = static_cast<Item*>(router->child(i));
-        if (child->itemType() == Item::UNASSIGNED)
-        {
-            unassigned = static_cast<UnassignedItem*>(child);
-            break;
-        }
-    }
-
-    if (is_admin && !unassigned)
-        new UnassignedItem(router_id, router);
-    else if (!is_admin && unassigned)
-        delete unassigned;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -445,25 +422,8 @@ void Sidebar::changeEvent(QEvent* event)
 {
     QWidget::changeEvent(event);
 
-    if (event->type() != QEvent::LanguageChange)
-        return;
-
-    if (local_root_)
+    if (event->type() == QEvent::LanguageChange && local_root_)
         local_root_->setText(0, tr("Local"));
-
-    for (int i = 0; i < tree_widget_->topLevelItemCount(); ++i)
-    {
-        Item* top = static_cast<Item*>(tree_widget_->topLevelItem(i));
-        if (top->itemType() != Item::ROUTER)
-            continue;
-
-        for (int j = 0; j < top->childCount(); ++j)
-        {
-            Item* child = static_cast<Item*>(top->child(j));
-            if (child->itemType() == Item::UNASSIGNED)
-                static_cast<UnassignedItem*>(child)->retranslate();
-        }
-    }
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -836,10 +796,6 @@ void Sidebar::onCurrentItemChanged(QTreeWidgetItem* current, QTreeWidgetItem* pr
         case Item::ROUTER_GROUP:
             current_group_id_ = item->groupId();
             break;
-
-        case Item::UNASSIGNED:
-            // Nothing
-            break;
     }
 
     emit sig_switchContent(item->itemType());
@@ -977,19 +933,4 @@ Sidebar::RouterGroupItem::RouterGroupItem(qint64 group_id, const QString& name, 
 {
     setText(0, name);
     setIcon(0, QIcon(":/img/folder.svg"));
-}
-
-//--------------------------------------------------------------------------------------------------
-Sidebar::UnassignedItem::UnassignedItem(qint64 router_id, QTreeWidgetItem* parent)
-    : Item(UNASSIGNED, 0, parent),
-      router_id_(router_id)
-{
-    setIcon(0, QIcon(":/img/computer-unknown.svg"));
-    retranslate();
-}
-
-//--------------------------------------------------------------------------------------------------
-void Sidebar::UnassignedItem::retranslate()
-{
-    setText(0, tr("Unassigned"));
 }

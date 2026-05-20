@@ -31,8 +31,8 @@ namespace proto::router {
 class ClientList;
 class ClientResult;
 class ComputerList;
+class ComputerListRequest;
 class ConnectionOffer;
-class HostList;
 class HostResult;
 class RelayList;
 class RelayResult;
@@ -75,14 +75,13 @@ public slots:
 
     // Administrator methods.
     void onRelayListRequest();
-    void onHostListRequest();
     void onClientListRequest();
     void onUserListRequest();
     void onAddUser(const proto::router::User& user);
     void onModifyUser(const proto::router::User& user);
     void onDeleteUser(qint64 entry_id);
-    void onDisconnectHost(qint64 session_id);
-    void onRemoveHost(qint64 session_id, bool try_to_uninstall);
+    void onDisconnectHost(qint64 host_id);
+    void onRemoveHost(qint64 host_id, bool try_to_uninstall);
     void onDisconnectRelay(qint64 session_id);
     void onDisconnectClient(qint64 session_id);
     void onDisconnectPeer(qint64 relay_entry_id, quint64 peer_session_id);
@@ -97,7 +96,7 @@ public slots:
     // Client methods.
     void onConnectionRequest(qint64 request_id, quint64 host_id);
     void onCheckHostStatus(qint64 request_id, quint64 host_id);
-    void onComputerListRequest(qint64 workspace_id, qint64 group_id);
+    void onComputerListRequest(const proto::router::ComputerListRequest& request);
 
 signals:
     // Generic signals.
@@ -106,7 +105,6 @@ signals:
 
     // Administrator signals.
     void sig_relayListReceived(const proto::router::RelayList& list);
-    void sig_hostListReceived(const proto::router::HostList& list);
     void sig_clientListReceived(const proto::router::ClientList& list);
     void sig_userListReceived(const proto::router::UserList& list);
     void sig_userResultReceived(const proto::router::UserResult& result);

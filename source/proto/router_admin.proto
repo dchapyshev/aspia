@@ -44,18 +44,6 @@ message RelayInfo
     Statistics statistics = 9;
 }
 
-message HostInfo
-{
-    int64 entry_id       = 1;
-    int64 timepoint      = 2;
-    string ip_address    = 3;
-    peer.Version version = 4;
-    string os_name       = 5;
-    string computer_name = 6;
-    string architecture  = 7;
-    uint64 host_id       = 8;
-}
-
 message ClientInfo
 {
     int64 entry_id       = 1;
@@ -70,8 +58,9 @@ message ClientInfo
 message HostRequest
 {
     string command_name = 1; // "disconnect" | "remove"
-    int64 entry_id      = 2; // For "disconnect": -1 means all host sessions.
-                             // For "remove": specific entry id.
+    int64 host_id       = 2; // For "disconnect": -1 means all host sessions, otherwise the host
+                             // session is looked up by host_id (hosts.id).
+                             // For "remove": host_id of the host to uninstall.
     string params       = 3; // Additional parameters separated by ';'.
                              // For "remove": "try_to_uninstall"
 }
@@ -104,17 +93,6 @@ message RelayList
 {
     string error_code        = 1;
     repeated RelayInfo relay = 2;
-}
-
-message HostListRequest
-{
-    int64 dummy = 1;
-}
-
-message HostList
-{
-    string error_code      = 1;
-    repeated HostInfo host = 2;
 }
 
 message ClientRequest
@@ -229,27 +207,25 @@ message RouterToAdmin
 {
     RelayList relay_list             = 1;
     RelayResult relay_result         = 2;
-    HostList host_list               = 3;
-    HostResult host_result           = 4;
-    ClientList client_list           = 5;
-    ClientResult client_result       = 6;
-    UserList user_list               = 7;
-    UserResult user_result           = 8;
-    WorkspaceList workspace_list     = 9;
-    WorkspaceResult workspace_result = 10;
+    HostResult host_result           = 3;
+    ClientList client_list           = 4;
+    ClientResult client_result       = 5;
+    UserList user_list               = 6;
+    UserResult user_result           = 7;
+    WorkspaceList workspace_list     = 8;
+    WorkspaceResult workspace_result = 9;
 }
 
 message AdminToRouter
 {
     RelayListRequest relay_list_request         = 1;
     RelayRequest relay_request                  = 2;
-    HostListRequest host_list_request           = 3;
-    HostRequest host_request                    = 4;
-    ClientListRequest client_list_request       = 5;
-    ClientRequest client_request                = 6;
-    UserListRequest user_list_request           = 7;
-    UserRequest user_request                    = 8;
-    PeerRequest peer_request                    = 9;
-    WorkspaceListRequest workspace_list_request = 10;
-    WorkspaceRequest workspace_request          = 11;
+    HostRequest host_request                    = 3;
+    ClientListRequest client_list_request       = 4;
+    ClientRequest client_request                = 5;
+    UserListRequest user_list_request           = 6;
+    UserRequest user_request                    = 7;
+    PeerRequest peer_request                    = 8;
+    WorkspaceListRequest workspace_list_request = 9;
+    WorkspaceRequest workspace_request          = 10;
 }

@@ -41,6 +41,7 @@ namespace proto::router {
 class ClientList;
 class ClientResult;
 class ComputerList;
+class ComputerListRequest;
 class HostResult;
 class RelayList;
 class RelayResult;
@@ -122,18 +123,16 @@ public slots:
     void onAddWorkspace();
     void onModifyWorkspace();
     void onDeleteWorkspace();
-    void onUpdateComputerList(qint64 workspace_id, qint64 group_id);
 
 signals:
     void sig_relayListRequest();
-    void sig_hostListRequest();
     void sig_clientListRequest();
     void sig_userListRequest();
     void sig_addUser(const proto::router::User& user);
     void sig_modifyUser(const proto::router::User& user);
     void sig_deleteUser(qint64 entry_id);
-    void sig_disconnectHost(qint64 session_id);
-    void sig_removeHost(qint64 session_id, bool try_to_uninstall);
+    void sig_disconnectHost(qint64 host_id);
+    void sig_removeHost(qint64 host_id, bool try_to_uninstall);
     void sig_disconnectRelay(qint64 session_id);
     void sig_disconnectClient(qint64 session_id);
     void sig_disconnectPeer(qint64 relay_entry_id, quint64 peer_session_id);
@@ -141,8 +140,7 @@ signals:
     void sig_addWorkspace(const proto::router::Workspace& workspace);
     void sig_modifyWorkspace(const proto::router::Workspace& workspace);
     void sig_deleteWorkspace(qint64 entry_id);
-    void sig_computerListRequest(qint64 workspace_id, qint64 group_id);
-    void sig_computerListReceived(const proto::router::ComputerList& list);
+    void sig_computerListRequest(const proto::router::ComputerListRequest& request);
     void sig_statusChanged(qint64 router_id, Router::Status status);
     void sig_currentTabTypeChanged(qint64 router_id, RouterWidget::TabType tab);
     void sig_currentUserChanged(qint64 router_id);
@@ -177,7 +175,7 @@ private slots:
     void onPeerContextMenuRequested(const QPoint& pos);
     void onWorkspaceContextMenuRequested(const QPoint& pos);
     void onRelayListReceived(const proto::router::RelayList& relays);
-    void onHostListReceived(const proto::router::HostList& hosts);
+    void onComputerListReceived(const proto::router::ComputerList& list);
     void onClientListReceived(const proto::router::ClientList& clients);
     void onUserListReceived(const proto::router::UserList& list);
     void onUserResultReceived(const proto::router::UserResult& result);

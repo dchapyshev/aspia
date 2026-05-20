@@ -45,7 +45,6 @@ protected:
 
 private:
     void doRelayListRequest();
-    void doHostListRequest();
     void doClientListRequest();
     void doUserListRequest();
     void doUserRequest(const proto::router::UserRequest& request);

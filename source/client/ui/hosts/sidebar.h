@@ -19,7 +19,6 @@
 #ifndef CLIENT_UI_HOSTS_SIDEBAR_H
 #define CLIENT_UI_HOSTS_SIDEBAR_H
 
-#include <QCoreApplication>
 #include <QDrag>
 #include <QMimeData>
 #include <QPoint>
@@ -39,7 +38,7 @@ public:
     class Item : public QTreeWidgetItem
     {
     public:
-        enum Type { LOCAL_GROUP, ROUTER, ROUTER_GROUP, UNASSIGNED };
+        enum Type { LOCAL_GROUP, ROUTER, ROUTER_GROUP };
 
         Type itemType() const { return type_; }
         qint64 groupId() const { return group_id_; }
@@ -90,22 +89,6 @@ public:
         RouterGroupItem(qint64 group_id, const QString& name, QTreeWidgetItem* parent);
     };
 
-    // Bucket under a Router that lists hosts known to the router but not yet placed into any
-    // workspace. Only created for routers the user is connected to as an administrator.
-    class UnassignedItem final : public Item
-    {
-        Q_DECLARE_TR_FUNCTIONS(Unassigned)
-
-    public:
-        UnassignedItem(qint64 router_id, QTreeWidgetItem* parent);
-
-        qint64 routerId() const { return router_id_; }
-        void retranslate();
-
-    private:
-        qint64 router_id_;
-    };
-
     class GroupMimeData final : public QMimeData
     {
     public:
@@ -148,9 +131,7 @@ public:
     void reloadGroups(qint64 selected_group_id = 0);
     void loadRouters();
     void reloadRouters();
-    // Updates the router's icon and synchronizes its visible children: children (Unassigned, etc.)
-    // are only present while the router is ONLINE. is_admin reflects the current session type.
-    void setRouterStatus(qint64 router_id, RouterItem::Status status, bool is_admin);
+    void setRouterStatus(qint64 router_id, RouterItem::Status status);
     qint64 currentGroupId() const;
     Item* currentItem() const;
     RouterItem* routerById(qint64 router_id) const;

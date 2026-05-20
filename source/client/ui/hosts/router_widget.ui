@@ -124,22 +124,22 @@
          </property>
          <column>
           <property name="text">
+           <string>Host ID</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
            <string>Computer Name</string>
           </property>
          </column>
          <column>
           <property name="text">
-           <string>IP Address</string>
+           <string>Address</string>
           </property>
          </column>
          <column>
           <property name="text">
-           <string>Connect Time</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>ID</string>
+           <string>Last Connect</string>
           </property>
          </column>
          <column>
@@ -155,6 +155,11 @@
          <column>
           <property name="text">
            <string>Operating System</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Status</string>
           </property>
          </column>
         </widget>

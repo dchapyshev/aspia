@@ -63,10 +63,6 @@ void SessionAdmin::onSessionMessage(quint8 channel_id, const QByteArray& buffer)
     {
         doRelayListRequest();
     }
-    else if (message.has_host_list_request())
-    {
-        doHostListRequest();
-    }
     else if (message.has_host_request())
     {
         doHostRequest(message.host_request());
@@ -145,46 +141,6 @@ void SessionAdmin::doRelayListRequest()
 
         // Other info.
         item->set_pool_size(Service::instance()->keyCountForRelay(session->sessionId()));
-    }
-
-    sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
-}
-
-//--------------------------------------------------------------------------------------------------
-void SessionAdmin::doHostListRequest()
-{
-    const QList<Session*>& sessions = Service::instance()->sessions();
-
-    proto::router::RouterToAdmin message;
-    proto::router::HostList* result = message.mutable_host_list();
-    result->set_error_code(proto::router::kErrorOk);
-
-    for (const auto& session : sessions)
-    {
-        if (session->sessionType() != proto::router::SESSION_TYPE_HOST)
-            continue;
-
-        proto::router::HostInfo* item = result->add_host();
-
-        // Generic session info.
-        item->set_entry_id(session->sessionId());
-        item->set_timepoint(session->startTime());
-        item->set_ip_address(session->address().toString().toStdString());
-        item->mutable_version()->CopyFrom(serialize(session->version()));
-        item->set_os_name(session->osName().toStdString());
-        item->set_computer_name(session->computerName().toStdString());
-        item->set_architecture(session->architecture().toStdString());
-
-        SessionHost* host_session = dynamic_cast<SessionHost*>(session);
-        if (host_session)
-        {
-            item->set_host_id(host_session->hostId());
-        }
-        else
-        {
-            SessionLegacyHost* legacy_host_session = static_cast<SessionLegacyHost*>(session);
-            item->set_host_id(legacy_host_session->hostIdList().first());
-        }
     }
 
     sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
@@ -278,15 +234,30 @@ void SessionAdmin::doUserRequest(const proto::router::UserRequest& request)
 //--------------------------------------------------------------------------------------------------
 void SessionAdmin::doHostRequest(const proto::router::HostRequest& request)
 {
+    auto find_host_session = [](HostId host_id) -> SessionHost*
+    {
+        const QList<Session*>& sessions = Service::instance()->sessions();
+        for (Session* session : std::as_const(sessions))
+        {
+            if (session->sessionType() != proto::router::SESSION_TYPE_HOST)
+                continue;
+
+            SessionHost* host_session = dynamic_cast<SessionHost*>(session);
+            if (host_session && host_session->hostId() == host_id)
+                return host_session;
+        }
+        return nullptr;
+    };
+
     proto::router::RouterToAdmin message;
     proto::router::HostResult* host_result = message.mutable_host_result();
     host_result->set_command_name(request.command_name());
 
     if (request.command_name() == proto::router::kCommandHostDisconnect)
     {
-        qint64 entry_id = request.entry_id();
+        const qint64 host_id = request.host_id();
 
-        if (entry_id == -1)
+        if (host_id == -1)
         {
             const QList<Session*>& sessions = Service::instance()->sessions();
             QList<qint64> host_session_ids;
@@ -318,25 +289,31 @@ void SessionAdmin::doHostRequest(const proto::router::HostRequest& request)
         }
         else
         {
-            if (!Service::instance()->stopSession(entry_id))
+            SessionHost* host_session = find_host_session(static_cast<HostId>(host_id));
+            if (!host_session)
             {
-                CLOG(ERROR) << "Session not found:" << entry_id;
+                CLOG(ERROR) << "No live session for host_id:" << host_id;
                 host_result->set_error_code(proto::router::kErrorInvalidEntryId);
+            }
+            else if (!Service::instance()->stopSession(host_session->sessionId()))
+            {
+                CLOG(ERROR) << "Failed to stop session for host_id:" << host_id;
+                host_result->set_error_code(proto::router::kErrorInternalError);
             }
             else
             {
-                CLOG(INFO) << "Host session" << entry_id << "disconnected by" << userName();
+                CLOG(INFO) << "Host" << host_id << "disconnected by" << userName();
                 host_result->set_error_code(proto::router::kErrorOk);
             }
         }
     }
     else if (request.command_name() == proto::router::kCommandHostRemove)
     {
-        qint64 entry_id = request.entry_id();
-        SessionHost* host_session = dynamic_cast<SessionHost*>(Service::instance()->session(entry_id));
+        const qint64 host_id = request.host_id();
+        SessionHost* host_session = find_host_session(static_cast<HostId>(host_id));
         if (!host_session)
         {
-            CLOG(ERROR) << "Host with id" << entry_id << "is not found";
+            CLOG(ERROR) << "No live session for host_id:" << host_id;
             host_result->set_error_code(proto::router::kErrorInvalidEntryId);
         }
         else
@@ -346,7 +323,7 @@ void SessionAdmin::doHostRequest(const proto::router::HostRequest& request)
             command.set_params(request.params());
             host_session->sendHostCommand(command);
 
-            CLOG(INFO) << "Host" << entry_id << "removed by" << userName();
+            CLOG(INFO) << "Host" << host_id << "removed by" << userName();
             host_result->set_error_code(proto::router::kErrorOk);
         }
     }

@@ -44,6 +44,7 @@
 #include "common/ui/msg_box.h"
 #include "common/ui/status_dialog.h"
 #include "proto/router_admin.h"
+#include "proto/router_client.h"
 #include "proto/router_constants.h"
 #include "ui_router_widget.h"
 
@@ -153,30 +154,33 @@ private:
 
 class HostTreeItem final : public QTreeWidgetItem
 {
+    Q_DECLARE_TR_FUNCTIONS(HostTreeItem)
+
 public:
-    explicit HostTreeItem(const proto::router::HostInfo& info)
+    explicit HostTreeItem(const proto::router::Computer& info)
     {
         updateItem(info);
-
-        QString time = QLocale::system().toString(
-            QDateTime::fromSecsSinceEpoch(info.timepoint()), QLocale::ShortFormat);
-
-        setIcon(0, QIcon(":/img/computer.svg"));
-        setText(0, QString::fromStdString(info.computer_name()));
-        setText(1, QString::fromStdString(info.ip_address()));
-        setText(2, time);
-
-        const proto::peer::Version& version = info.version();
-
-        setText(4, QString("%1.%2.%3").arg(version.major()).arg(version.minor()).arg(version.patch()));
-        setText(5, QString::fromStdString(info.architecture()));
-        setText(6, QString::fromStdString(info.os_name()));
     }
 
-    void updateItem(const proto::router::HostInfo& updated_info)
+    void updateItem(const proto::router::Computer& updated_info)
     {
         info = updated_info;
-        setText(3, QString::number(info.host_id()));
+
+        const QString last_connect = info.last_connect() > 0
+            ? QLocale::system().toString(
+                QDateTime::fromSecsSinceEpoch(info.last_connect()), QLocale::ShortFormat)
+            : QString();
+
+        setIcon(0, QIcon(info.online() ? ":/img/computer-online.svg"
+                                       : ":/img/computer-offline.svg"));
+        setText(0, QString::number(info.host_id()));
+        setText(1, QString::fromStdString(info.computer_name()));
+        setText(2, QString::fromStdString(info.address()));
+        setText(3, last_connect);
+        setText(4, QString::fromStdString(info.version()));
+        setText(5, QString::fromStdString(info.cpu_arch()));
+        setText(6, QString::fromStdString(info.os_name()));
+        setText(7, info.online() ? tr("Online") : tr("Offline"));
     }
 
     // QTreeWidgetItem implementation.
@@ -185,22 +189,27 @@ public:
         int column = treeWidget()->sortColumn();
         if (column == 0)
         {
+            const HostTreeItem* other_item = static_cast<const HostTreeItem*>(&other);
+            return info.host_id() < other_item->info.host_id();
+        }
+        else if (column == 1)
+        {
             QCollator collator;
             collator.setCaseSensitivity(Qt::CaseInsensitive);
             collator.setNumericMode(true);
 
-            return collator.compare(text(0), other.text(0)) <= 0;
+            return collator.compare(text(1), other.text(1)) <= 0;
         }
-        else if (column == 2)
+        else if (column == 3)
         {
             const HostTreeItem* other_item = static_cast<const HostTreeItem*>(&other);
-            return info.timepoint() < other_item->info.timepoint();
+            return info.last_connect() < other_item->info.last_connect();
         }
 
         return QTreeWidgetItem::operator<(other);
     }
 
-    proto::router::HostInfo info;
+    proto::router::Computer info;
 
 private:
     Q_DISABLE_COPY_MOVE(HostTreeItem)
@@ -368,7 +377,6 @@ RouterWidget::RouterWidget(const RouterConfig& config, QWidget* parent)
     connect(router_, &Router::sig_statusChanged, this, &RouterWidget::onStatusChanged, Qt::QueuedConnection);
     connect(router_, &Router::sig_errorOccurred, this, &RouterWidget::onConnectionErrorOccurred, Qt::QueuedConnection);
     connect(router_, &Router::sig_relayListReceived, this, &RouterWidget::onRelayListReceived, Qt::QueuedConnection);
-    connect(router_, &Router::sig_hostListReceived, this, &RouterWidget::onHostListReceived, Qt::QueuedConnection);
     connect(router_, &Router::sig_clientListReceived, this, &RouterWidget::onClientListReceived, Qt::QueuedConnection);
     connect(router_, &Router::sig_userListReceived, this, &RouterWidget::onUserListReceived, Qt::QueuedConnection);
     connect(router_, &Router::sig_userResultReceived, this, &RouterWidget::onUserResultReceived, Qt::QueuedConnection);
@@ -377,10 +385,9 @@ RouterWidget::RouterWidget(const RouterConfig& config, QWidget* parent)
     connect(router_, &Router::sig_clientResultReceived, this, &RouterWidget::onClientResultReceived, Qt::QueuedConnection);
     connect(router_, &Router::sig_workspaceListReceived, this, &RouterWidget::onWorkspaceListReceived, Qt::QueuedConnection);
     connect(router_, &Router::sig_workspaceResultReceived, this, &RouterWidget::onWorkspaceResultReceived, Qt::QueuedConnection);
-    connect(router_, &Router::sig_computerListReceived, this, &RouterWidget::sig_computerListReceived, Qt::QueuedConnection);
+    connect(router_, &Router::sig_computerListReceived, this, &RouterWidget::onComputerListReceived, Qt::QueuedConnection);
 
     connect(this, &RouterWidget::sig_relayListRequest, router_, &Router::onRelayListRequest, Qt::QueuedConnection);
-    connect(this, &RouterWidget::sig_hostListRequest, router_, &Router::onHostListRequest, Qt::QueuedConnection);
     connect(this, &RouterWidget::sig_clientListRequest, router_, &Router::onClientListRequest, Qt::QueuedConnection);
     connect(this, &RouterWidget::sig_userListRequest, router_, &Router::onUserListRequest, Qt::QueuedConnection);
     connect(this, &RouterWidget::sig_addUser, router_, &Router::onAddUser, Qt::QueuedConnection);
@@ -843,7 +850,9 @@ void RouterWidget::onUpdateRelayList()
 //--------------------------------------------------------------------------------------------------
 void RouterWidget::onUpdateHostList()
 {
-    emit sig_hostListRequest();
+    proto::router::ComputerListRequest request;
+    request.set_mode(proto::router::ComputerListRequest::MODE_ALL);
+    emit sig_computerListRequest(request);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -956,7 +965,7 @@ void RouterWidget::onDisconnectHost()
     }
 
     LOG(INFO) << "[ACTION] Disconnect host accepted by user";
-    emit sig_disconnectHost(tree_item->info.entry_id());
+    emit sig_disconnectHost(tree_item->info.host_id());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1009,7 +1018,7 @@ void RouterWidget::onRemoveHost()
     }
 
     LOG(INFO) << "[ACTION] Remove host accepted by user";
-    emit sig_removeHost(tree_item->info.entry_id(), check_box->isChecked());
+    emit sig_removeHost(tree_item->info.host_id(), check_box->isChecked());
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1098,12 +1107,6 @@ void RouterWidget::onDisconnectAllClients()
 void RouterWidget::onUpdateWorkspaceList()
 {
     emit sig_workspaceListRequest();
-}
-
-//--------------------------------------------------------------------------------------------------
-void RouterWidget::onUpdateComputerList(qint64 workspace_id, qint64 group_id)
-{
-    emit sig_computerListRequest(workspace_id, group_id);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1518,13 +1521,18 @@ void RouterWidget::onRelayListReceived(const proto::router::RelayList& relays)
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterWidget::onHostListReceived(const proto::router::HostList& hosts)
+void RouterWidget::onComputerListReceived(const proto::router::ComputerList& list)
 {
-    auto has_with_id = [](const proto::router::HostList& hosts, qint64 entry_id)
+    // The Hosts tab subscribes to the "any workspace / any group" response only; per-workspace
+    // responses will be handled by future workspace widgets.
+    if (list.workspace_id() != 0 || list.group_id() != 0)
+        return;
+
+    auto has_with_id = [](const proto::router::ComputerList& list, qint64 host_id)
     {
-        for (int i = 0; i < hosts.host_size(); ++i)
+        for (int i = 0; i < list.computer_size(); ++i)
         {
-            if (hosts.host(i).entry_id() == entry_id)
+            if (list.computer(i).host_id() == host_id)
                 return true;
         }
 
@@ -1536,20 +1544,20 @@ void RouterWidget::onHostListReceived(const proto::router::HostList& hosts)
     {
         HostTreeItem* item = static_cast<HostTreeItem*>(ui->tree_hosts->topLevelItem(i));
 
-        if (!has_with_id(hosts, item->info.entry_id()))
+        if (!has_with_id(list, item->info.host_id()))
             delete item;
     }
 
     // Adding and updating elements in the UI.
-    for (int i = 0; i < hosts.host_size(); ++i)
+    for (int i = 0; i < list.computer_size(); ++i)
     {
-        const proto::router::HostInfo& info = hosts.host(i);
+        const proto::router::Computer& info = list.computer(i);
         bool found = false;
 
         for (int j = 0; j < ui->tree_hosts->topLevelItemCount(); ++j)
         {
             HostTreeItem* item = static_cast<HostTreeItem*>(ui->tree_hosts->topLevelItem(j));
-            if (item->info.entry_id() == info.entry_id())
+            if (item->info.host_id() == info.host_id())
             {
                 item->updateItem(info);
                 found = true;
@@ -1904,23 +1912,23 @@ void RouterWidget::saveHostsToFile()
 
     for (int i = 0; i < ui->tree_hosts->topLevelItemCount(); ++i)
     {
-        const proto::router::HostInfo& info =
+        const proto::router::Computer& info =
             static_cast<HostTreeItem*>(ui->tree_hosts->topLevelItem(i))->info;
 
         QJsonObject host_object;
 
         host_object.insert("computer_name", QString::fromStdString(info.computer_name()));
         host_object.insert("operating_system", QString::fromStdString(info.os_name()));
-        host_object.insert("ip_address", QString::fromStdString(info.ip_address()));
-        host_object.insert("architecture", QString::fromStdString(info.architecture()));
+        host_object.insert("ip_address", QString::fromStdString(info.address()));
+        host_object.insert("architecture", QString::fromStdString(info.cpu_arch()));
+        host_object.insert("version", QString::fromStdString(info.version()));
 
-        QString version = QString("%1.%2.%3")
-            .arg(info.version().major()).arg(info.version().minor()).arg(info.version().patch());
-        host_object.insert("version", version);
-
-        QString time = QLocale::system().toString(QDateTime::fromSecsSinceEpoch(
-            info.timepoint()), QLocale::ShortFormat);
-        host_object.insert("connect_time", time);
+        if (info.last_connect() > 0)
+        {
+            QString time = QLocale::system().toString(QDateTime::fromSecsSinceEpoch(
+                info.last_connect()), QLocale::ShortFormat);
+            host_object.insert("connect_time", time);
+        }
 
         host_object.insert("host_id", QString::number(info.host_id()));
 

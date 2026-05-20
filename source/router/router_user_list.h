@@ -19,8 +19,7 @@
 #ifndef ROUTER_ROUTER_USER_LIST_H
 #define ROUTER_ROUTER_USER_LIST_H
 
-#include <memory>
-
+#include "base/shared_pointer.h"
 #include "base/peer/user_list.h"
 #include "router/database.h"
 
@@ -29,7 +28,7 @@ class RouterUserList final : public UserList
 public:
     ~RouterUserList() final;
 
-    static std::unique_ptr<RouterUserList> open();
+    static SharedPointer<RouterUserList> open();
 
     // UserListBase implementation.
     User find(const QString& username) const final;

@@ -96,9 +96,13 @@ public:
     QVector<Workspace::Access> workspaceAccessListForUser(qint64 user_id) const;
     bool hasWorkspaceAccess(qint64 user_id, qint64 workspace_id) const;
 
-    // Returns hosts within the given workspace and group; workspace_id == 0 returns the
-    // unassigned bucket, group_id == 0 returns rows at the workspace root.
-    QVector<HostInfo> hosts(qint64 workspace_id, qint64 group_id) const;
+    // Returns every host in the database (admin-only call site). [start_item, end_item] gives an
+    // inclusive paging window; pass end_item <= 0 to disable paging.
+    QVector<HostInfo> hosts(qint64 start_item, qint64 end_item) const;
+    // Returns hosts in the given workspace and group with exact match on both columns.
+    // [start_item, end_item] gives an inclusive paging window; pass end_item <= 0 to disable.
+    QVector<HostInfo> hosts(
+        qint64 workspace_id, qint64 group_id, qint64 start_item, qint64 end_item) const;
 
 private:
     explicit Database(const QString& connection_name);

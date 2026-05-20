@@ -210,8 +210,11 @@ void SessionClient::readCheckHostStatus(const proto::router::CheckHostStatus& ch
 //--------------------------------------------------------------------------------------------------
 void SessionClient::readComputerListRequest(const proto::router::ComputerListRequest& request)
 {
+    const proto::router::ComputerListRequest::Mode mode = request.mode();
     const qint64 workspace_id = request.workspace_id();
     const qint64 group_id = request.group_id();
+    const qint64 start_item = request.start_item();
+    const qint64 end_item = request.end_item();
     const bool is_admin = sessionType() == proto::router::SESSION_TYPE_ADMIN;
 
     proto::router::RouterToClient message;
@@ -219,17 +222,21 @@ void SessionClient::readComputerListRequest(const proto::router::ComputerListReq
     result->set_workspace_id(workspace_id);
     result->set_group_id(group_id);
 
-    // Only admins can list the unassigned bucket; regular clients must specify a workspace they
-    // have explicit access to.
-    if (!is_admin)
+    if (mode != proto::router::ComputerListRequest::MODE_ALL &&
+        mode != proto::router::ComputerListRequest::MODE_FILTERED)
     {
-        if (workspace_id <= 0)
-        {
-            CLOG(ERROR) << "Non-admin requested unassigned computers";
-            result->set_error_code(proto::router::kErrorAccessDenied);
-            sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
-            return;
-        }
+        CLOG(ERROR) << "Unknown computer list mode:" << mode;
+        result->set_error_code(proto::router::kErrorInvalidRequest);
+        sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
+        return;
+    }
+
+    if (mode == proto::router::ComputerListRequest::MODE_ALL && !is_admin)
+    {
+        CLOG(ERROR) << "Non-admin requested MODE_ALL computer list";
+        result->set_error_code(proto::router::kErrorAccessDenied);
+        sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
+        return;
     }
 
     Database database = Database::open();
@@ -241,7 +248,8 @@ void SessionClient::readComputerListRequest(const proto::router::ComputerListReq
         return;
     }
 
-    if (!is_admin && !database.hasWorkspaceAccess(userId(), workspace_id))
+    if (mode == proto::router::ComputerListRequest::MODE_FILTERED &&
+        !database.hasWorkspaceAccess(userId(), workspace_id))
     {
         CLOG(ERROR) << "User" << userId() << "has no access to workspace" << workspace_id;
         result->set_error_code(proto::router::kErrorAccessDenied);
@@ -272,7 +280,8 @@ void SessionClient::readComputerListRequest(const proto::router::ComputerListReq
         }
     }
 
-    const QVector<HostInfo> hosts = database.hosts(workspace_id, group_id);
+    const QVector<HostInfo> hosts = mode == proto::router::ComputerListRequest::MODE_ALL ?
+        database.hosts(start_item, end_item) : database.hosts(workspace_id, group_id, start_item, end_item);
     result->set_error_code(proto::router::kErrorOk);
 
     for (const HostInfo& info : std::as_const(hosts))

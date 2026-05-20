@@ -180,23 +180,6 @@ void Router::onRelayListRequest()
 }
 
 //--------------------------------------------------------------------------------------------------
-void Router::onHostListRequest()
-{
-    if (config_.sessionType() != proto::router::SESSION_TYPE_ADMIN)
-    {
-        LOG(ERROR) << "No administrator access level";
-        return;
-    }
-
-    proto::router::AdminToRouter message;
-    proto::router::HostListRequest* request = message.mutable_host_list_request();
-    request->set_dummy(1);
-
-    LOG(INFO) << "Sending host list request";
-    sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
-}
-
-//--------------------------------------------------------------------------------------------------
 void Router::onClientListRequest()
 {
     if (config_.sessionType() != proto::router::SESSION_TYPE_ADMIN)
@@ -286,7 +269,7 @@ void Router::onDeleteUser(qint64 entry_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Router::onDisconnectHost(qint64 session_id)
+void Router::onDisconnectHost(qint64 host_id)
 {
     if (config_.sessionType() != proto::router::SESSION_TYPE_ADMIN)
     {
@@ -297,14 +280,14 @@ void Router::onDisconnectHost(qint64 session_id)
     proto::router::AdminToRouter message;
     proto::router::HostRequest* request = message.mutable_host_request();
     request->set_command_name(proto::router::kCommandHostDisconnect);
-    request->set_entry_id(session_id);
+    request->set_host_id(host_id);
 
-    LOG(INFO) << "Sending host disconnect request (entry_id:" << session_id << ")";
+    LOG(INFO) << "Sending host disconnect request (host_id:" << host_id << ")";
     sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
-void Router::onRemoveHost(qint64 session_id, bool try_to_uninstall)
+void Router::onRemoveHost(qint64 host_id, bool try_to_uninstall)
 {
     if (config_.sessionType() != proto::router::SESSION_TYPE_ADMIN)
     {
@@ -315,11 +298,11 @@ void Router::onRemoveHost(qint64 session_id, bool try_to_uninstall)
     proto::router::AdminToRouter message;
     proto::router::HostRequest* request = message.mutable_host_request();
     request->set_command_name(proto::router::kCommandHostRemove);
-    request->set_entry_id(session_id);
+    request->set_host_id(host_id);
     if (try_to_uninstall)
         request->set_params(proto::router::kParamTryToUninstall);
 
-    LOG(INFO) << "Sending host remove request (entry_id:" << session_id
+    LOG(INFO) << "Sending host remove request (host_id:" << host_id
               << "try_to_uninstall:" << try_to_uninstall << ")";
     sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
 }
@@ -477,15 +460,14 @@ void Router::onCheckHostStatus(qint64 request_id, quint64 host_id)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Router::onComputerListRequest(qint64 workspace_id, qint64 group_id)
+void Router::onComputerListRequest(const proto::router::ComputerListRequest& request)
 {
     proto::router::ClientToRouter message;
-    proto::router::ComputerListRequest* request = message.mutable_computer_list_request();
-    request->set_workspace_id(workspace_id);
-    request->set_group_id(group_id);
+    message.mutable_computer_list_request()->CopyFrom(request);
 
-    LOG(INFO) << "Sending computer list request (workspace_id:" << workspace_id
-              << ", group_id:" << group_id << ")";
+    LOG(INFO) << "Sending computer list request (mode:" << request.mode()
+              << ", workspace_id:" << request.workspace_id()
+              << ", group_id:" << request.group_id() << ")";
     sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
 }
 
@@ -542,11 +524,6 @@ void Router::onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer)
         {
             LOG(INFO) << "Relay list received";
             emit sig_relayListReceived(message.relay_list());
-        }
-        else if (message.has_host_list())
-        {
-            LOG(INFO) << "Host list received";
-            emit sig_hostListReceived(message.host_list());
         }
         else if (message.has_client_list())
         {

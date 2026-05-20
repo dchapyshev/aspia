@@ -431,7 +431,13 @@ bool Service::start()
         settings.setSeedKey(seed_key);
     }
 
-    SharedPointer<UserList> user_list(RouterUserList::open().release());
+    SharedPointer<UserList> user_list = RouterUserList::open();
+    if (!user_list)
+    {
+        LOG(ERROR) << "Unable to open user list";
+        return false;
+    }
+
     user_list->setSeedKey(seed_key);
 
     // Caps for the router role. The pending cap is intentionally modest - latecomers retry in

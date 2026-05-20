@@ -54,8 +54,8 @@ message HostStatus
 message Computer
 {
     int64 host_id        = 1;  // hosts.id - the dialable host identifier.
-    int64 workspace_id   = 2;  // 0 means unassigned (admin-only listing).
-    int64 group_id       = 3;  // 0 means workspace root.
+    int64 workspace_id   = 2;  // 0 means the host is not assigned to any workspace.
+    int64 group_id       = 3;  // 0 means the host is at the workspace root.
     string display_name  = 4;  // Admin-editable display label (plain).
     string computer_name = 5;  // Plain OS hostname reported by the host.
     string cpu_arch      = 6;  // CPU architecture reported by the host.
@@ -72,10 +72,18 @@ message Computer
 
 message ComputerListRequest
 {
-    // 0 = unassigned bucket (admin-only). Otherwise the router checks that the caller has
-    // workspace access before returning the list.
-    int64 workspace_id = 1;
-    int64 group_id     = 2; // 0 means rows at the workspace root.
+    enum Mode
+    {
+        MODE_UNKNOWN  = 0;
+        MODE_ALL      = 1;
+        MODE_FILTERED = 2;
+    }
+
+    Mode mode          = 1;
+    int64 start_item   = 2;
+    int64 end_item     = 3;
+    int64 workspace_id = 4;
+    int64 group_id     = 5;
 }
 
 message ComputerList

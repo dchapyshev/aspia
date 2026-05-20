@@ -32,7 +32,7 @@ RouterUserList::~RouterUserList() = default;
 
 //--------------------------------------------------------------------------------------------------
 // static
-std::unique_ptr<RouterUserList> RouterUserList::open()
+SharedPointer<RouterUserList> RouterUserList::open()
 {
     Database db = Database::open();
     if (!db.isValid())
@@ -41,7 +41,7 @@ std::unique_ptr<RouterUserList> RouterUserList::open()
         return nullptr;
     }
 
-    return std::unique_ptr<RouterUserList>(new RouterUserList(std::move(db)));
+    return SharedPointer<RouterUserList>(new RouterUserList(std::move(db)));
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -28,7 +28,7 @@ class ContentWidget : public QWidget
     Q_OBJECT
 
 public:
-    enum class Type { LOCAL_GROUP, ROUTER, ROUTER_GROUP, UNASSIGNED, SEARCH };
+    enum class Type { LOCAL_GROUP, ROUTER, ROUTER_GROUP, SEARCH };
 
     explicit ContentWidget(Type type, QWidget* parent = nullptr);
     ~ContentWidget() override;

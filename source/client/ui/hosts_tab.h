@@ -41,7 +41,6 @@ class LocalGroupWidget;
 class RouterGroupWidget;
 class RouterWidget;
 class SearchWidget;
-class UnassignedWidget;
 class User;
 
 class HostsTab final : public Tab
@@ -123,7 +122,6 @@ private:
 
     LocalGroupWidget* local_group_widget_ = nullptr;
     RouterGroupWidget* router_group_widget_ = nullptr;
-    UnassignedWidget* unassigned_widget_ = nullptr;
     SearchWidget* search_widget_ = nullptr;
 
     QHash<qint64, RouterWidget*> router_widgets_;
