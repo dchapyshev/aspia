@@ -169,6 +169,8 @@ HostsTab::HostsTab(QWidget* parent)
     addActions(ActionRole::EDIT, { ui->action_add_group, ui->action_edit_group, ui->action_delete_group });
     addActions(ActionRole::EDIT, { ui->action_add_computer, ui->action_edit_computer, ui->action_copy_computer, ui->action_delete_computer });
     addActions(ActionRole::EDIT, { ui->action_host_remove, ui->action_disconnect, ui->action_disconnect_all });
+    addActions(ActionRole::ACTION, { ui->action_desktop_connect, ui->action_file_transfer_connect,
+                                     ui->action_chat_connect, ui->action_system_info_connect });
     addActions(ActionRole::VIEW, { ui->action_reload, ui->action_online_check });
     addActions(ActionRole::SESSION_TYPE, { ui->action_desktop, ui->action_file_transfer, ui->action_chat, ui->action_system_info });
 
@@ -573,7 +575,26 @@ void HostsTab::onConnectAction(QAction* action)
     }
     else
     {
-        return;
+        // Connect from the Hosts tab of a RouterWidget: pull selected host_id from the widget
+        // and dial it via the matching router.
+        Sidebar::Item* sidebar_item = ui->sidebar->currentItem();
+        if (!sidebar_item || sidebar_item->itemType() != Sidebar::Item::ROUTER)
+            return;
+
+        Sidebar::RouterItem* router = static_cast<Sidebar::RouterItem*>(sidebar_item);
+        RouterWidget* widget = router_widgets_.value(router->routerId());
+        if (!widget || widget->currentTabType() != RouterWidget::TabType::HOSTS ||
+            !widget->hasSelectedHost())
+        {
+            return;
+        }
+
+        computer.setRouterId(router->routerId());
+        computer.setAddress(QString::number(widget->selectedHostId()));
+        computer.setName(widget->selectedHostName());
+
+        if (!validateComputerForConnect(computer))
+            return;
     }
 
     emit sig_connectRequested(computer, session_type);
@@ -781,6 +802,14 @@ void HostsTab::onHostContextMenu(qint64 router_id, const QPoint& pos, int column
     QMenu menu;
     menu.addAction(ui->action_disconnect);
     menu.addAction(ui->action_host_remove);
+    if (widget->isSelectedHostOnline())
+    {
+        menu.addSeparator();
+        menu.addAction(ui->action_desktop_connect);
+        menu.addAction(ui->action_file_transfer_connect);
+        menu.addAction(ui->action_chat_connect);
+        menu.addAction(ui->action_system_info_connect);
+    }
     menu.addSeparator();
 
     QAction* copy_row = menu.addAction(tr("Copy Row"));
@@ -1187,6 +1216,10 @@ void HostsTab::updateActionsState()
     ui->action_disconnect_all->setVisible(false);
     ui->action_host_remove->setVisible(false);
     ui->action_online_check->setVisible(false);
+    ui->action_desktop_connect->setVisible(false);
+    ui->action_file_transfer_connect->setVisible(false);
+    ui->action_chat_connect->setVisible(false);
+    ui->action_system_info_connect->setVisible(false);
 
     Sidebar::Item* sidebar_item = ui->sidebar->currentItem();
 
@@ -1254,6 +1287,12 @@ void HostsTab::updateActionsState()
         ui->action_disconnect->setVisible(has_target);
         ui->action_disconnect_all->setVisible(has_any);
         ui->action_host_remove->setVisible(on_hosts_tab && widget->hasSelectedHost());
+
+        const bool can_connect_to_host = on_hosts_tab && widget->isSelectedHostOnline();
+        ui->action_desktop_connect->setVisible(can_connect_to_host);
+        ui->action_file_transfer_connect->setVisible(can_connect_to_host);
+        ui->action_chat_connect->setVisible(can_connect_to_host);
+        ui->action_system_info_connect->setVisible(can_connect_to_host);
     }
     else
     {

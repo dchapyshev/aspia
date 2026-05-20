@@ -23,6 +23,7 @@
 
 #include <memory>
 
+#include "base/peer/host_id.h"
 #include "base/scoped_qpointer.h"
 #include "client/config.h"
 #include "client/router.h"
@@ -73,6 +74,9 @@ public:
     TabType currentTabType() const;
     bool hasSelectedUser() const;
     bool hasSelectedHost() const;
+    bool isSelectedHostOnline() const;
+    HostId selectedHostId() const;
+    QString selectedHostName() const;
     int hostCount() const;
     bool hasSelectedClient() const;
     int clientCount() const;

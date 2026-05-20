@@ -499,6 +499,33 @@ bool RouterWidget::hasSelectedHost() const
 }
 
 //--------------------------------------------------------------------------------------------------
+bool RouterWidget::isSelectedHostOnline() const
+{
+    HostTreeItem* item = static_cast<HostTreeItem*>(ui->tree_hosts->currentItem());
+    return item && item->info.online();
+}
+
+//--------------------------------------------------------------------------------------------------
+HostId RouterWidget::selectedHostId() const
+{
+    HostTreeItem* item = static_cast<HostTreeItem*>(ui->tree_hosts->currentItem());
+    return item ? static_cast<HostId>(item->info.host_id()) : kInvalidHostId;
+}
+
+//--------------------------------------------------------------------------------------------------
+QString RouterWidget::selectedHostName() const
+{
+    HostTreeItem* item = static_cast<HostTreeItem*>(ui->tree_hosts->currentItem());
+    if (!item)
+        return QString();
+
+    QString name = QString::fromStdString(item->info.display_name());
+    if (name.isEmpty())
+        name = QString::fromStdString(item->info.computer_name());
+    return name;
+}
+
+//--------------------------------------------------------------------------------------------------
 int RouterWidget::hostCount() const
 {
     return ui->tree_hosts->topLevelItemCount();
