@@ -514,6 +514,7 @@ void SessionAdmin::doWorkspaceListRequest()
             proto::router::Workspace* item = list->add_workspace();
             item->set_entry_id(workspace.entry_id);
             item->set_name(workspace.name.toStdString());
+            item->set_comment(workspace.comment.toStdString());
 
             const QVector<Workspace::Access> accesses = database.workspaceAccessList(workspace.entry_id);
             for (const auto& access : std::as_const(accesses))
@@ -546,6 +547,7 @@ void SessionAdmin::doWorkspaceRequest(const proto::router::WorkspaceRequest& req
 
     const proto::router::Workspace& workspace = request.workspace();
     const QString name = QString::fromStdString(workspace.name()).trimmed();
+    const QByteArray comment = QByteArray::fromStdString(workspace.comment());
     const qint64 entry_id = workspace.entry_id();
 
     if (request.command_name() == proto::router::kCommandWorkspaceAdd)
@@ -564,7 +566,7 @@ void SessionAdmin::doWorkspaceRequest(const proto::router::WorkspaceRequest& req
         }
 
         qint64 new_id = -1;
-        std::string_view error_code = database.addWorkspace(name, initial_access, &new_id);
+        std::string_view error_code = database.addWorkspace(name, comment, initial_access, &new_id);
         result->set_error_code(error_code);
         if (error_code == proto::router::kErrorOk)
             result->set_entry_id(new_id);
@@ -585,7 +587,7 @@ void SessionAdmin::doWorkspaceRequest(const proto::router::WorkspaceRequest& req
             desired_access.append(dst);
         }
 
-        result->set_error_code(database.modifyWorkspace(entry_id, name, desired_access));
+        result->set_error_code(database.modifyWorkspace(entry_id, name, comment, desired_access));
     }
     else if (request.command_name() == proto::router::kCommandWorkspaceDelete)
     {

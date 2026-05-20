@@ -165,7 +165,8 @@ message Workspace
 {
     int64 entry_id                  = 1;
     string name                     = 2;
-    repeated WorkspaceAccess access = 3;
+    bytes comment                   = 3; // AEAD-encrypted with the workspace GK.
+    repeated WorkspaceAccess access = 4;
 }
 
 message WorkspaceListRequest

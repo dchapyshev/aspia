@@ -126,9 +126,11 @@ bool ensureSchema(QSqlDatabase& sql_db)
                     "\"last_connect\" INTEGER NOT NULL DEFAULT 0,"
                     "\"last_modify\" INTEGER NOT NULL DEFAULT 0,"
                     "PRIMARY KEY(\"id\" AUTOINCREMENT))") ||
+        // comment is AEAD-encrypted with the workspace GK; name is plain text.
         !query.exec("CREATE TABLE IF NOT EXISTS \"workspaces\" ("
                     "\"id\" INTEGER UNIQUE,"
                     "\"name\" TEXT NOT NULL UNIQUE,"
+                    "\"comment\" BLOB NOT NULL DEFAULT X'',"
                     "PRIMARY KEY(\"id\" AUTOINCREMENT))") ||
         !query.exec("CREATE TABLE IF NOT EXISTS \"workspace_access\" ("
                     "\"workspace_id\" INTEGER NOT NULL,"
@@ -815,7 +817,7 @@ QVector<Workspace> Database::workspaceList() const
     }
 
     QSqlQuery query(databaseByName(connection_name_));
-    if (!query.exec(QStringLiteral("SELECT id, name FROM workspaces")))
+    if (!query.exec(QStringLiteral("SELECT id, name, comment FROM workspaces")))
     {
         LOG(ERROR) << "Unable to get workspace list:" << query.lastError();
         return {};
@@ -826,7 +828,8 @@ QVector<Workspace> Database::workspaceList() const
     {
         Workspace workspace;
         workspace.entry_id = query.value(0).toLongLong();
-        workspace.name = query.value(1).toString();
+        workspace.name     = query.value(1).toString();
+        workspace.comment  = query.value(2).toByteArray();
         workspaces.append(workspace);
     }
 
@@ -849,7 +852,7 @@ Workspace Database::findWorkspace(qint64 entry_id) const
     }
 
     QSqlQuery query(databaseByName(connection_name_));
-    query.prepare(QStringLiteral("SELECT id, name FROM workspaces WHERE id=?"));
+    query.prepare(QStringLiteral("SELECT id, name, comment FROM workspaces WHERE id=?"));
     query.addBindValue(entry_id);
 
     if (!query.exec())
@@ -863,13 +866,15 @@ Workspace Database::findWorkspace(qint64 entry_id) const
 
     Workspace workspace;
     workspace.entry_id = query.value(0).toLongLong();
-    workspace.name = query.value(1).toString();
+    workspace.name     = query.value(1).toString();
+    workspace.comment  = query.value(2).toByteArray();
     return workspace;
 }
 
 //--------------------------------------------------------------------------------------------------
 std::string_view Database::addWorkspace(
-    const QString& name, const QVector<Workspace::Access>& initial_access, qint64* entry_id)
+    const QString& name, const QByteArray& comment,
+    const QVector<Workspace::Access>& initial_access, qint64* entry_id)
 {
     CHECK(entry_id);
 
@@ -921,8 +926,10 @@ std::string_view Database::addWorkspace(
     }
 
     QSqlQuery insert_workspace(sql_db);
-    insert_workspace.prepare(QStringLiteral("INSERT INTO workspaces (id, name) VALUES (NULL, ?)"));
+    insert_workspace.prepare(QStringLiteral(
+        "INSERT INTO workspaces (id, name, comment) VALUES (NULL, ?, ?)"));
     insert_workspace.addBindValue(name);
+    insert_workspace.addBindValue(comment);
 
     if (!insert_workspace.exec())
     {
@@ -964,7 +971,8 @@ std::string_view Database::addWorkspace(
 
 //--------------------------------------------------------------------------------------------------
 std::string_view Database::modifyWorkspace(
-    qint64 entry_id, const QString& name, const QVector<Workspace::Access>& desired_access)
+    qint64 entry_id, const QString& name, const QByteArray& comment,
+    const QVector<Workspace::Access>& desired_access)
 {
     if (!isValid())
     {
@@ -1044,14 +1052,15 @@ std::string_view Database::modifyWorkspace(
         return proto::router::kErrorAlreadyExists;
     }
 
-    QSqlQuery update_name(sql_db);
-    update_name.prepare(QStringLiteral("UPDATE workspaces SET name=? WHERE id=?"));
-    update_name.addBindValue(name);
-    update_name.addBindValue(entry_id);
+    QSqlQuery update_workspace(sql_db);
+    update_workspace.prepare(QStringLiteral("UPDATE workspaces SET name=?, comment=? WHERE id=?"));
+    update_workspace.addBindValue(name);
+    update_workspace.addBindValue(comment);
+    update_workspace.addBindValue(entry_id);
 
-    if (!update_name.exec())
+    if (!update_workspace.exec())
     {
-        LOG(ERROR) << "Unable to execute query:" << update_name.lastError();
+        LOG(ERROR) << "Unable to execute query:" << update_workspace.lastError();
         sql_db.rollback();
         return proto::router::kErrorInternalError;
     }

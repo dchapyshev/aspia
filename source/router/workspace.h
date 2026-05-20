@@ -49,6 +49,7 @@ public:
 
     qint64 entry_id = 0;
     QString name;
+    QByteArray comment; // AEAD-encrypted with the workspace GK.
 };
 
 #endif // ROUTER_WORKSPACE_H
