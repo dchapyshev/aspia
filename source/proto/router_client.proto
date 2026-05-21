@@ -25,6 +25,18 @@ import "peer.proto";
 
 package proto.router;
 
+// Credentials of the authenticated user, pushed by the router right after the session is
+// established so the client can derive its private key (via password + wrap_salt) and perform
+// workspace-scoped crypto operations without having to retrieve the admin user list.
+message UserKeys
+{
+    int64 user_id          = 1;
+    string name            = 2;
+    bytes public_key       = 3;
+    bytes wrap_private_key = 4;
+    bytes wrap_salt        = 5;
+}
+
 message ConnectionRequest
 {
     int64 request_id = 1;
@@ -96,9 +108,10 @@ message HostList
 
 message RouterToClient
 {
-    ConnectionOffer connection_offer = 1;
-    HostStatus host_status           = 2;
-    HostList host_list               = 3;
+    UserKeys user_keys               = 1;
+    ConnectionOffer connection_offer = 2;
+    HostStatus host_status           = 3;
+    HostList host_list               = 4;
 }
 
 message ClientToRouter

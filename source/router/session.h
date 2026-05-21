@@ -54,6 +54,7 @@ public:
     std::chrono::seconds duration() const;
 
 signals:
+    void sig_started(qint64 session_id);
     void sig_finished(qint64 session_id);
 
 protected:

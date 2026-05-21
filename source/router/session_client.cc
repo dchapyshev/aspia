@@ -39,6 +39,7 @@ SessionClient::SessionClient(TcpChannel* channel, QObject* parent)
     : Session(channel, parent)
 {
     CLOG(INFO) << "Ctor";
+    connect(this, &Session::sig_started, this, &SessionClient::onStarted);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -82,6 +83,34 @@ void SessionClient::onSessionMessage(quint8 channel_id, const QByteArray& buffer
     {
         CLOG(ERROR) << "Unhandled message from client";
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void SessionClient::onStarted()
+{
+    Database database = Database::open();
+    if (!database.isValid())
+    {
+        CLOG(ERROR) << "Failed to connect to database";
+        return;
+    }
+
+    RouterUser user = database.findUser(userName());
+    if (!user.isValid())
+    {
+        CLOG(WARNING) << "Authenticated user not found in database:" << userName();
+        return;
+    }
+
+    proto::router::RouterToClient message;
+    proto::router::UserKeys* user_keys = message.mutable_user_keys();
+    user_keys->set_user_id(user.entry_id);
+    user_keys->set_name(user.name.toStdString());
+    user_keys->set_public_key(user.public_key.toStdString());
+    user_keys->set_wrap_private_key(user.wrap_private_key.toStdString());
+    user_keys->set_wrap_salt(user.wrap_salt.toStdString());
+
+    sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------

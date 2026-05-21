@@ -42,6 +42,9 @@ protected:
     // Session implementation.
     void onSessionMessage(quint8 channel_id, const QByteArray& buffer) override;
 
+private slots:
+    void onStarted();
+
 private:
     void readConnectionRequest(const proto::router::ConnectionRequest& request);
     void readCheckHostStatus(const proto::router::CheckHostStatus& check_host_status);
