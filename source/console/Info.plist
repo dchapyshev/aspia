@@ -9,9 +9,9 @@
 	<key>CFBundleGetInfoString</key>
 	<string>Aspia Console</string>
 	<key>CFBundleIconFile</key>
-	<string></string>
+	<string>aspia-console.icns</string>
 	<key>CFBundleIdentifier</key>
-	<string></string>
+	<string>org.aspia.console</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleLongVersionString</key>
@@ -26,8 +26,47 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>3.0.0</string>
-    <key>NSAppleEventsUsageDescription</key>
-    <string></string>
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeIconFile</key>
+			<string>aspia-console.icns</string>
+			<key>CFBundleTypeName</key>
+			<string>Aspia Address Book</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>org.aspia.address-book</string>
+			</array>
+		</dict>
+	</array>
+	<key>UTExportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Aspia Address Book</string>
+			<key>UTTypeIconFile</key>
+			<string>aspia-console.icns</string>
+			<key>UTTypeIdentifier</key>
+			<string>org.aspia.address-book</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>aab</string>
+				</array>
+				<key>public.mime-type</key>
+				<string>application/aab</string>
+			</dict>
+		</dict>
+	</array>
 	<key>CSResourcesFileMapped</key>
 	<true/>
 	<key>NSHumanReadableCopyright</key>

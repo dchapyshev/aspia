@@ -21,6 +21,8 @@
 
 #include "base/gui_application.h"
 
+class QEvent;
+
 namespace console {
 
 class Application final : public base::GuiApplication
@@ -36,6 +38,9 @@ public:
 public slots:
     void activateWindow();
     void openFile(const QString& file_path);
+
+protected:
+    bool event(QEvent* event) final;
 
 signals:
     void sig_windowActivated();

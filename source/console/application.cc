@@ -20,6 +20,11 @@
 
 #include <QIcon>
 
+#if defined(OS_MAC)
+#include <QFileOpenEvent>
+#include <QUrl>
+#endif
+
 #include "base/logging.h"
 #include "build/build_config.h"
 #include "build/version.h"
@@ -81,6 +86,34 @@ Application::Application(int& argc, char* argv[])
 Application::~Application()
 {
     LOG(INFO) << "Dtor";
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Application::event(QEvent* event)
+{
+#if defined(OS_MAC)
+    if (event->type() == QEvent::FileOpen)
+    {
+        QFileOpenEvent* open_event = static_cast<QFileOpenEvent*>(event);
+        QString file_path;
+
+        const QUrl url = open_event->url();
+        if (url.isLocalFile())
+            file_path = url.toLocalFile();
+        else
+            file_path = open_event->file();
+
+        if (!file_path.isEmpty())
+        {
+            LOG(INFO) << "Open file from macOS event: " << file_path;
+            emit sig_fileOpened(file_path);
+            open_event->accept();
+            return true;
+        }
+    }
+#endif
+
+    return base::GuiApplication::event(event);
 }
 
 //--------------------------------------------------------------------------------------------------
