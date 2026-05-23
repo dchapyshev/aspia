@@ -53,13 +53,14 @@ message Workspace
 
 message WorkspaceListRequest
 {
-    uint32 dummy = 1;
+    int64 request_id = 1;
 }
 
 message WorkspaceList
 {
-    string error_code            = 1; // "ok" | "internal_error"
-    repeated Workspace workspace = 2;
+    int64 request_id             = 1;
+    string error_code            = 2; // "ok" | "internal_error"
+    repeated Workspace workspace = 3;
 }
 
 message ConnectionRequest
@@ -116,19 +117,21 @@ message HostListRequest
         MODE_FILTERED = 2;
     }
 
-    Mode mode          = 1;
-    int64 start_item   = 2;
-    int64 end_item     = 3;
-    int64 workspace_id = 4;
-    int64 group_id     = 5;
+    int64 request_id   = 1;
+    Mode mode          = 2;
+    int64 start_item   = 3;
+    int64 end_item     = 4;
+    int64 workspace_id = 5;
+    int64 group_id     = 6;
 }
 
 message HostList
 {
-    string error_code  = 1; // "ok" | "access_denied" | "internal_error"
-    int64 workspace_id = 2; // Echo of the request, so the client can route the response.
-    int64 group_id     = 3; // Echo of the request.
-    repeated Host host = 4;
+    int64 request_id   = 1;
+    string error_code  = 2; // "ok" | "access_denied" | "internal_error"
+    int64 workspace_id = 3; // Echo of the request, so the client can route the response.
+    int64 group_id     = 4; // Echo of the request.
+    repeated Host host = 5;
 }
 
 message RouterToClient

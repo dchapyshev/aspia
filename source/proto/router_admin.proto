@@ -26,6 +26,10 @@ import "router_client.proto";
 
 package proto.router;
 
+// Every request/response pair below carries request_id - the client allocates a unique value
+// per outbound request and the server echoes it back on the corresponding response. The
+// dispatcher on the client uses it to route the response to the originating caller.
+
 message RelayInfo
 {
     message Statistics
@@ -58,65 +62,73 @@ message ClientInfo
 
 message HostRequest
 {
-    string command_name = 1; // "disconnect" | "remove"
-    int64 host_id       = 2; // For "disconnect": -1 means all host sessions, otherwise the host
+    int64 request_id    = 1;
+    string command_name = 2; // "disconnect" | "remove"
+    int64 host_id       = 3; // For "disconnect": -1 means all host sessions, otherwise the host
                              // session is looked up by host_id (hosts.id).
                              // For "remove": host_id of the host to uninstall.
-    string params       = 3; // Additional parameters separated by ';'. Currently unused.
+    string params       = 4; // Additional parameters separated by ';'. Currently unused.
 }
 
 message HostResult
 {
-    string command_name = 1; // Same as request command_name.
-    string error_code   = 2; // "ok" | "invalid_request" | "internal_error" | "invalid_entry_id"
+    int64 request_id    = 1;
+    string command_name = 2; // Same as request command_name.
+    string error_code   = 3; // "ok" | "invalid_request" | "internal_error" | "invalid_entry_id"
 }
 
 message RelayRequest
 {
-    string command_name = 1; // "disconnect"
-    int64 entry_id      = 2; // For "disconnect": -1 means all relay sessions.
-    string params       = 3; // Reserved for future use.
+    int64 request_id    = 1;
+    string command_name = 2; // "disconnect"
+    int64 entry_id      = 3; // For "disconnect": -1 means all relay sessions.
+    string params       = 4; // Reserved for future use.
 }
 
 message RelayResult
 {
-    string command_name = 1; // Same as request command_name.
-    string error_code   = 2; // "ok" | "invalid_request" | "internal_error" | "invalid_entry_id"
+    int64 request_id    = 1;
+    string command_name = 2; // Same as request command_name.
+    string error_code   = 3; // "ok" | "invalid_request" | "internal_error" | "invalid_entry_id"
 }
 
 message RelayListRequest
 {
-    int64 dummy = 1;
+    int64 request_id = 1;
 }
 
 message RelayList
 {
-    string error_code        = 1;
-    repeated RelayInfo relay = 2;
+    int64 request_id         = 1;
+    string error_code        = 2;
+    repeated RelayInfo relay = 3;
 }
 
 message ClientRequest
 {
-    string command_name = 1; // "disconnect"
-    int64 entry_id      = 2; // For "disconnect": -1 means all client sessions.
-    string params       = 3; // Reserved for future use.
+    int64 request_id    = 1;
+    string command_name = 2; // "disconnect"
+    int64 entry_id      = 3; // For "disconnect": -1 means all client sessions.
+    string params       = 4; // Reserved for future use.
 }
 
 message ClientResult
 {
-    string command_name = 1; // Same as request command_name.
-    string error_code   = 2; // "ok" | "invalid_request" | "internal_error" | "invalid_entry_id"
+    int64 request_id    = 1;
+    string command_name = 2; // Same as request command_name.
+    string error_code   = 3; // "ok" | "invalid_request" | "internal_error" | "invalid_entry_id"
 }
 
 message ClientListRequest
 {
-    int64 dummy = 1;
+    int64 request_id = 1;
 }
 
 message ClientList
 {
-    string error_code          = 1;
-    repeated ClientInfo client = 2;
+    int64 request_id           = 1;
+    string error_code          = 2;
+    repeated ClientInfo client = 3;
 }
 
 message User
@@ -135,25 +147,28 @@ message User
 
 message UserListRequest
 {
-    uint32 dummy = 1;
+    int64 request_id = 1;
 }
 
 message UserList
 {
-    string error_code  = 1; // "ok" | "internal_error"
-    repeated User user = 2;
+    int64 request_id   = 1;
+    string error_code  = 2; // "ok" | "internal_error"
+    repeated User user = 3;
 }
 
 message UserRequest
 {
-    string command_name = 1; // "add" | "modify" | "delete"
-    User user           = 2;
+    int64 request_id    = 1;
+    string command_name = 2; // "add" | "modify" | "delete"
+    User user           = 3;
 }
 
 message UserResult
 {
-    string command_name = 1; // Same as request command_name.
-    string error_code   = 2; // "ok" | "invalid_request" | "internal_error" | "invalid_data" | "already_exists"
+    int64 request_id    = 1;
+    string command_name = 2; // Same as request command_name.
+    string error_code   = 3; // "ok" | "invalid_request" | "internal_error" | "invalid_data" | "already_exists"
 }
 
 message WorkspaceRequest
@@ -167,16 +182,18 @@ message WorkspaceRequest
     //            it removes the access record. For user_ids already present wrapped_gk in the
     //            request is ignored (existing wrapped_gk is preserved).
     // "delete" - Workspace with entry_id.
-    string command_name = 1;
-    Workspace workspace = 2;
+    int64 request_id    = 1;
+    string command_name = 2;
+    Workspace workspace = 3;
 }
 
 message WorkspaceResult
 {
-    string command_name = 1; // Same as request command_name.
-    string error_code   = 2; // "ok" | "invalid_request" | "internal_error" | "invalid_data" |
+    int64 request_id    = 1;
+    string command_name = 2; // Same as request command_name.
+    string error_code   = 3; // "ok" | "invalid_request" | "internal_error" | "invalid_data" |
                              // "already_exists" | "not_found"
-    int64 entry_id      = 3; // Id of created workspace for "add".
+    int64 entry_id      = 4; // Id of created workspace for "add".
 }
 
 message RouterToAdmin

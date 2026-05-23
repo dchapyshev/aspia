@@ -81,7 +81,7 @@ void SessionClient::onSessionMessage(quint8 channel_id, const QByteArray& buffer
     }
     else if (message.has_workspace_list_request())
     {
-        readWorkspaceListRequest();
+        readWorkspaceListRequest(message.workspace_list_request());
     }
     else
     {
@@ -252,6 +252,7 @@ void SessionClient::readHostListRequest(const proto::router::HostListRequest& re
 
     proto::router::RouterToClient message;
     proto::router::HostList* result = message.mutable_host_list();
+    result->set_request_id(request.request_id());
     result->set_workspace_id(workspace_id);
     result->set_group_id(group_id);
 
@@ -341,10 +342,11 @@ void SessionClient::readHostListRequest(const proto::router::HostListRequest& re
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionClient::readWorkspaceListRequest()
+void SessionClient::readWorkspaceListRequest(const proto::router::WorkspaceListRequest& request)
 {
     proto::router::RouterToClient message;
     proto::router::WorkspaceList* list = message.mutable_workspace_list();
+    list->set_request_id(request.request_id());
 
     Database database = Database::open();
     if (!database.isValid())

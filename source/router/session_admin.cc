@@ -61,7 +61,7 @@ void SessionAdmin::onSessionMessage(quint8 channel_id, const QByteArray& buffer)
 
     if (message.has_relay_list_request())
     {
-        doRelayListRequest();
+        doRelayListRequest(message.relay_list_request());
     }
     else if (message.has_host_request())
     {
@@ -73,7 +73,7 @@ void SessionAdmin::onSessionMessage(quint8 channel_id, const QByteArray& buffer)
     }
     else if (message.has_client_list_request())
     {
-        doClientListRequest();
+        doClientListRequest(message.client_list_request());
     }
     else if (message.has_client_request())
     {
@@ -81,7 +81,7 @@ void SessionAdmin::onSessionMessage(quint8 channel_id, const QByteArray& buffer)
     }
     else if (message.has_user_list_request())
     {
-        doUserListRequest();
+        doUserListRequest(message.user_list_request());
     }
     else if (message.has_user_request())
     {
@@ -102,12 +102,13 @@ void SessionAdmin::onSessionMessage(quint8 channel_id, const QByteArray& buffer)
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionAdmin::doRelayListRequest()
+void SessionAdmin::doRelayListRequest(const proto::router::RelayListRequest& request)
 {
     const QList<Session*>& sessions = Service::instance()->sessions();
 
     proto::router::RouterToAdmin message;
     proto::router::RelayList* result = message.mutable_relay_list();
+    result->set_request_id(request.request_id());
     result->set_error_code(proto::router::kErrorOk);
 
     for (const auto& session : sessions)
@@ -143,12 +144,13 @@ void SessionAdmin::doRelayListRequest()
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionAdmin::doClientListRequest()
+void SessionAdmin::doClientListRequest(const proto::router::ClientListRequest& request)
 {
     const QList<Session*>& sessions = Service::instance()->sessions();
 
     proto::router::RouterToAdmin message;
     proto::router::ClientList* result = message.mutable_client_list();
+    result->set_request_id(request.request_id());
     result->set_error_code(proto::router::kErrorOk);
 
     for (const auto& session : sessions)
@@ -176,10 +178,11 @@ void SessionAdmin::doClientListRequest()
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionAdmin::doUserListRequest()
+void SessionAdmin::doUserListRequest(const proto::router::UserListRequest& request)
 {
     proto::router::RouterToAdmin message;
     proto::router::UserList* list = message.mutable_user_list();
+    list->set_request_id(request.request_id());
 
     Database database = Database::open();
     if (!database.isValid())
@@ -204,6 +207,7 @@ void SessionAdmin::doUserRequest(const proto::router::UserRequest& request)
 {
     proto::router::RouterToAdmin message;
     proto::router::UserResult* result = message.mutable_user_result();
+    result->set_request_id(request.request_id());
     result->set_command_name(request.command_name());
 
     if (request.command_name() == proto::router::kCommandUserAdd)
@@ -247,6 +251,7 @@ void SessionAdmin::doHostRequest(const proto::router::HostRequest& request)
 
     proto::router::RouterToAdmin message;
     proto::router::HostResult* host_result = message.mutable_host_result();
+    host_result->set_request_id(request.request_id());
     host_result->set_command_name(request.command_name());
 
     if (request.command_name() == proto::router::kCommandHostDisconnect)
@@ -346,6 +351,7 @@ void SessionAdmin::doRelayRequest(const proto::router::RelayRequest& request)
 {
     proto::router::RouterToAdmin message;
     proto::router::RelayResult* relay_result = message.mutable_relay_result();
+    relay_result->set_request_id(request.request_id());
     relay_result->set_command_name(request.command_name());
 
     if (request.command_name() == proto::router::kCommandRelayDisconnect)
@@ -410,6 +416,7 @@ void SessionAdmin::doClientRequest(const proto::router::ClientRequest& request)
 {
     proto::router::RouterToAdmin message;
     proto::router::ClientResult* client_result = message.mutable_client_result();
+    client_result->set_request_id(request.request_id());
     client_result->set_command_name(request.command_name());
 
     if (request.command_name() == proto::router::kCommandClientDisconnect)
@@ -493,6 +500,7 @@ void SessionAdmin::doWorkspaceRequest(const proto::router::WorkspaceRequest& req
 {
     proto::router::RouterToAdmin message;
     proto::router::WorkspaceResult* result = message.mutable_workspace_result();
+    result->set_request_id(request.request_id());
     result->set_command_name(request.command_name());
 
     Database database = Database::open();

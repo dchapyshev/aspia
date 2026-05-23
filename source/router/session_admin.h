@@ -22,11 +22,14 @@
 #include "router/session_manager.h"
 
 namespace proto::router {
+class ClientListRequest;
 class ClientRequest;
 class HostRequest;
 class PeerRequest;
+class RelayListRequest;
 class RelayRequest;
 class User;
+class UserListRequest;
 class UserRequest;
 class WorkspaceRequest;
 } // namespace proto::router
@@ -44,9 +47,9 @@ protected:
     void onSessionMessage(quint8 channel_id, const QByteArray& buffer) final;
 
 private:
-    void doRelayListRequest();
-    void doClientListRequest();
-    void doUserListRequest();
+    void doRelayListRequest(const proto::router::RelayListRequest& request);
+    void doClientListRequest(const proto::router::ClientListRequest& request);
+    void doUserListRequest(const proto::router::UserListRequest& request);
     void doUserRequest(const proto::router::UserRequest& request);
     void doHostRequest(const proto::router::HostRequest& request);
     void doRelayRequest(const proto::router::RelayRequest& request);
