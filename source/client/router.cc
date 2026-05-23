@@ -21,8 +21,17 @@
 #include <QHash>
 #include <QTimer>
 
+#include <optional>
+#include <string_view>
+
 #include "base/logging.h"
 #include "base/serialization.h"
+#include "base/crypto/data_cryptor.h"
+#include "base/crypto/key_pair.h"
+#include "base/crypto/private_key_cryptor.h"
+#include "base/crypto/random.h"
+#include "base/crypto/sealed_box.h"
+#include "base/crypto/secure_string.h"
 #include "base/net/address.h"
 #include "base/net/tcp_channel_ng.h"
 #include "base/peer/client_authenticator.h"
@@ -35,6 +44,7 @@
 namespace {
 
 const std::chrono::seconds kReconnectTimeout{ 5 };
+constexpr int kGroupKeySize = 32;
 
 //--------------------------------------------------------------------------------------------------
 QHash<qint64, Router*>& instances()
@@ -42,6 +52,52 @@ QHash<qint64, Router*>& instances()
     static thread_local QHash<qint64, Router*> g_instances;
     return g_instances;
 }
+
+//--------------------------------------------------------------------------------------------------
+QByteArray encryptWithGroupKey(const QString& plaintext, const SecureByteArray& gk)
+{
+    if (plaintext.isEmpty() || gk.isEmpty())
+        return QByteArray();
+
+    DataCryptor cryptor(gk);
+    std::optional<QByteArray> encrypted = cryptor.encrypt(plaintext.toUtf8());
+    if (!encrypted.has_value())
+    {
+        LOG(ERROR) << "Failed to encrypt with group key";
+        return QByteArray();
+    }
+
+    return *encrypted;
+}
+
+//--------------------------------------------------------------------------------------------------
+QString decryptWithGroupKey(std::string_view ciphertext, const SecureByteArray& gk)
+{
+    if (ciphertext.empty() || gk.isEmpty())
+        return QString();
+
+    DataCryptor cryptor(gk);
+    std::optional<QByteArray> decrypted = cryptor.decrypt(
+        QByteArrayView(ciphertext.data(), static_cast<qsizetype>(ciphertext.size())));
+    if (!decrypted.has_value())
+    {
+        LOG(ERROR) << "Failed to decrypt with group key";
+        return QString();
+    }
+
+    return QString::fromUtf8(*decrypted);
+}
+
+struct Registrator
+{
+    Registrator()
+    {
+        qRegisterMetaType<Router::Workspace>("Router::Workspace");
+        qRegisterMetaType<Router::WorkspaceList>("Router::WorkspaceList");
+    }
+};
+
+static volatile Registrator registrator;
 
 } // namespace
 
@@ -124,6 +180,10 @@ void Router::onDisconnectFromRouter()
         tcp_channel_->disconnect();
         tcp_channel_.reset();
     }
+
+    user_id_ = 0;
+    user_private_key_.clear();
+    workspace_group_keys_.clear();
 
     setStatus(Status::OFFLINE);
 }
@@ -363,39 +423,37 @@ void Router::onDisconnectPeer(qint64 relay_entry_id, quint64 peer_session_id)
 //--------------------------------------------------------------------------------------------------
 void Router::onWorkspaceListRequest()
 {
-    if (config_.sessionType() != proto::router::SESSION_TYPE_ADMIN)
-    {
-        LOG(ERROR) << "No administrator access level";
-        return;
-    }
-
-    proto::router::AdminToRouter message;
+    proto::router::ClientToRouter message;
     message.mutable_workspace_list_request()->set_dummy(1);
 
     LOG(INFO) << "Sending workspace list request";
-    sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
+    sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
-void Router::onAddWorkspace(const proto::router::Workspace& workspace)
+void Router::onAddWorkspace(const Router::Workspace& workspace)
 {
     if (config_.sessionType() != proto::router::SESSION_TYPE_ADMIN)
     {
         LOG(ERROR) << "No administrator access level";
         return;
     }
+
+    proto::router::Workspace out;
+    if (!buildWorkspace(workspace, &out))
+        return;
 
     proto::router::AdminToRouter message;
     proto::router::WorkspaceRequest* request = message.mutable_workspace_request();
     request->set_command_name(proto::router::kCommandWorkspaceAdd);
-    request->mutable_workspace()->CopyFrom(workspace);
+    request->mutable_workspace()->Swap(&out);
 
-    LOG(INFO) << "Sending workspace add request (name:" << workspace.name() << ")";
+    LOG(INFO) << "Sending workspace add request (name:" << workspace.name << ")";
     sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
-void Router::onModifyWorkspace(const proto::router::Workspace& workspace)
+void Router::onModifyWorkspace(const Router::Workspace& workspace)
 {
     if (config_.sessionType() != proto::router::SESSION_TYPE_ADMIN)
     {
@@ -403,14 +461,17 @@ void Router::onModifyWorkspace(const proto::router::Workspace& workspace)
         return;
     }
 
+    proto::router::Workspace out;
+    if (!buildWorkspace(workspace, &out))
+        return;
+
     proto::router::AdminToRouter message;
     proto::router::WorkspaceRequest* request = message.mutable_workspace_request();
     request->set_command_name(proto::router::kCommandWorkspaceModify);
-    request->mutable_workspace()->CopyFrom(workspace);
+    request->mutable_workspace()->Swap(&out);
 
-    LOG(INFO) << "Sending workspace modify request (entry_id:" << workspace.entry_id()
-              << ", name:" << workspace.name()
-              << ", access entries:" << workspace.access_size() << ")";
+    LOG(INFO) << "Sending workspace modify request (entry_id:" << workspace.entry_id
+              << ", name:" << workspace.name << ", access entries:" << workspace.access.size() << ")";
     sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
 }
 
@@ -475,8 +536,9 @@ void Router::onTcpReady()
 
     LOG(INFO) << "Connected to router" << config_.address();
     reconnect_timer_->stop();
-    setStatus(Status::ONLINE);
 
+    // Status stays CONNECTING until the router pushes UserKeys; only then we consider the
+    // session usable and allow outgoing requests.
     tcp_channel_->setPaused(false);
 }
 
@@ -490,6 +552,10 @@ void Router::onTcpErrorOccurred(TcpChannel::ErrorCode error_code)
         tcp_channel_->disconnect();
         tcp_channel_.reset();
     }
+
+    user_id_ = 0;
+    user_private_key_.clear();
+    workspace_group_keys_.clear();
 
     emit sig_errorOccurred(config_.routerId(), error_code);
 
@@ -552,11 +618,6 @@ void Router::onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer)
             LOG(INFO) << "Client result received";
             emit sig_clientResultReceived(message.client_result());
         }
-        else if (message.has_workspace_list())
-        {
-            LOG(INFO) << "Workspace list received";
-            emit sig_workspaceListReceived(message.workspace_list());
-        }
         else if (message.has_workspace_result())
         {
             LOG(INFO) << "Workspace result received";
@@ -603,6 +664,17 @@ void Router::onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer)
             LOG(INFO) << "Host list received";
             emit sig_hostListReceived(message.host_list());
         }
+        else if (message.has_user_keys())
+        {
+            LOG(INFO) << "User keys received (user_id:" << message.user_keys().user_id() << ")";
+            readUserKeys(message.user_keys());
+            setStatus(Status::ONLINE);
+        }
+        else if (message.has_workspace_list())
+        {
+            LOG(INFO) << "Workspace list received";
+            readWorkspaceList(message.workspace_list());
+        }
     }
     else
     {
@@ -617,7 +689,7 @@ void Router::setStatus(Status status)
     {
         LOG(INFO) << "Status changed from" << status_ << "to" << status;
         status_ = status;
-        emit sig_statusChanged(config_.routerId(), status_);
+        emit sig_statusChanged(config_.routerId(), user_id_, status_);
     }
 }
 
@@ -627,5 +699,174 @@ void Router::sendMessage(quint8 channel_id, const QByteArray& data)
     if (!tcp_channel_)
         return;
 
+    if (status_ != Status::ONLINE)
+    {
+        LOG(WARNING) << "Dropping outgoing message, router not online yet (status:" << status_ << ")";
+        return;
+    }
+
     tcp_channel_->send(channel_id, data);
+}
+
+//--------------------------------------------------------------------------------------------------
+SecureByteArray Router::unwrapGroupKey(const QByteArray& wrapped_gk) const
+{
+    if (wrapped_gk.isEmpty() || user_private_key_.isEmpty())
+        return SecureByteArray();
+
+    KeyPair key_pair = KeyPair::fromPrivateKey(user_private_key_);
+    if (!key_pair.isValid())
+    {
+        LOG(ERROR) << "Failed to load key pair from private key";
+        return SecureByteArray();
+    }
+
+    std::optional<QByteArray> opened = SealedBox::open(wrapped_gk, key_pair);
+    if (!opened.has_value() || opened->isEmpty())
+    {
+        LOG(ERROR) << "Failed to open sealed group key";
+        return SecureByteArray();
+    }
+
+    return SecureByteArray(std::move(*opened));
+}
+
+//--------------------------------------------------------------------------------------------------
+void Router::readUserKeys(const proto::router::UserKeys& user_keys)
+{
+    user_id_ = user_keys.user_id();
+
+    const QByteArray wrap_private_key = QByteArray::fromStdString(user_keys.wrap_private_key());
+    const QByteArray wrap_salt = QByteArray::fromStdString(user_keys.wrap_salt());
+
+    if (wrap_private_key.isEmpty() || wrap_salt.isEmpty())
+    {
+        LOG(WARNING) << "UserKeys missing wrap key/salt; crypto features unavailable";
+        user_private_key_.clear();
+        return;
+    }
+
+    user_private_key_ = PrivateKeyCryptor::decrypt(wrap_private_key, config_.password(), wrap_salt);
+    if (user_private_key_.isEmpty())
+        LOG(WARNING) << "Failed to decrypt self private key for user_id:" << user_id_;
+}
+
+//--------------------------------------------------------------------------------------------------
+void Router::readWorkspaceList(const proto::router::WorkspaceList& list)
+{
+    workspace_group_keys_.clear();
+
+    Router::WorkspaceList decoded;
+    decoded.error_code = QString::fromStdString(list.error_code());
+    decoded.workspaces.reserve(list.workspace_size());
+
+    for (int i = 0; i < list.workspace_size(); ++i)
+    {
+        const proto::router::Workspace& src = list.workspace(i);
+
+        Router::Workspace& dst = decoded.workspaces.emplaceBack();
+        dst.entry_id = src.entry_id();
+        dst.name     = QString::fromStdString(src.name());
+        dst.access.reserve(src.access_size());
+
+        QByteArray self_wrapped_gk;
+        for (int j = 0; j < src.access_size(); ++j)
+        {
+            const proto::router::WorkspaceAccess& access = src.access(j);
+            dst.access.emplaceBack().user_id = access.user_id();
+
+            if (access.user_id() == user_id_)
+                self_wrapped_gk = QByteArray::fromStdString(access.wrapped_gk());
+        }
+
+        if (!self_wrapped_gk.isEmpty())
+        {
+            SecureByteArray gk = unwrapGroupKey(self_wrapped_gk);
+            if (!gk.isEmpty())
+            {
+                if (!src.comment().empty())
+                    dst.comment = decryptWithGroupKey(src.comment(), gk);
+
+                workspace_group_keys_.insert(src.entry_id(), std::move(gk));
+            }
+        }
+    }
+
+    emit sig_workspaceListReceived(decoded);
+}
+
+//--------------------------------------------------------------------------------------------------
+bool Router::buildWorkspace(const Workspace& workspace, proto::router::Workspace* out)
+{
+    CHECK(out);
+
+    if (workspace.entry_id > 0)
+        out->set_entry_id(workspace.entry_id);
+    out->set_name(workspace.name.toStdString());
+
+    // Detect whether we need a workspace group key: required when adding new users (to seal it
+    // for them) and/or when the comment is non-empty (to encrypt it).
+    bool has_added = false;
+    for (const auto& access : workspace.access)
+    {
+        if (!access.public_key.isEmpty())
+        {
+            has_added = true;
+            break;
+        }
+    }
+
+    SecureByteArray group_key;
+    const bool needs_gk = has_added || !workspace.comment.isEmpty();
+    if (needs_gk)
+    {
+        if (user_private_key_.isEmpty())
+        {
+            LOG(ERROR) << "User private key unavailable";
+            return false;
+        }
+
+        auto it = workspace_group_keys_.constFind(workspace.entry_id);
+        if (it == workspace_group_keys_.constEnd())
+        {
+            // Bootstrap: no workspace GK known to us (either a new workspace or none of the
+            // existing access entries belong to us). Generate a fresh GK to seal for the new
+            // grantees.
+            group_key = SecureByteArray(Random::byteArray(kGroupKeySize));
+        }
+        else
+        {
+            group_key = *it;
+        }
+    }
+
+    if (!workspace.comment.isEmpty())
+    {
+        QByteArray encrypted = encryptWithGroupKey(workspace.comment, group_key);
+        if (encrypted.isEmpty())
+        {
+            LOG(ERROR) << "Failed to encrypt comment";
+            return false;
+        }
+        out->set_comment(encrypted.toStdString());
+    }
+
+    for (const auto& access : workspace.access)
+    {
+        proto::router::WorkspaceAccess* dst = out->add_access();
+        dst->set_user_id(access.user_id);
+
+        if (access.public_key.isEmpty())
+            continue; // Existing user - server preserves their wrapped_gk.
+
+        QByteArray wrapped_gk = SealedBox::seal(group_key.toByteArray(), access.public_key);
+        if (wrapped_gk.isEmpty())
+        {
+            LOG(ERROR) << "Failed to seal group key for user_id:" << access.user_id;
+            return false;
+        }
+        dst->set_wrapped_gk(wrapped_gk.toStdString());
+    }
+
+    return true;
 }

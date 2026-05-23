@@ -18,50 +18,43 @@
 
 #include "client/ui/hosts/router_workspace_dialog.h"
 
-#include <optional>
-
 #include <QAbstractButton>
 #include <QIcon>
 #include <QListWidgetItem>
 #include <QPushButton>
 
 #include "base/logging.h"
-#include "base/crypto/key_pair.h"
-#include "base/crypto/private_key_cryptor.h"
-#include "base/crypto/random.h"
-#include "base/crypto/sealed_box.h"
-#include "base/crypto/secure_byte_array.h"
 #include "common/ui/msg_box.h"
 #include "ui_router_workspace_dialog.h"
 
 namespace {
 
 constexpr int kMaxNameLength = 64;
-constexpr int kGroupKeySize  = 32;
 
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
 RouterWorkspaceDialog::RouterWorkspaceDialog(
-    const proto::router::Workspace& current, const QStringList& existing_names, QWidget* parent)
+    const Router::Workspace& current, qint64 self_user_id,
+    const QStringList& existing_names, QWidget* parent)
     : QDialog(parent),
       ui(std::make_unique<Ui::RouterWorkspaceDialog>()),
-      entry_id_(current.entry_id()),
-      name_(QString::fromStdString(current.name())),
+      entry_id_(current.entry_id),
+      self_user_id_(self_user_id),
       existing_names_(existing_names)
 {
     LOG(INFO) << "Ctor";
     ui->setupUi(this);
 
-    for (int i = 0; i < current.access_size(); ++i)
+    for (const Router::Workspace::Access& access : std::as_const(current.access))
     {
-        const qint64 user_id = current.access(i).user_id();
-        initial_access_.insert(user_id, QByteArray::fromStdString(current.access(i).wrapped_gk()));
-        access_user_ids_.insert(user_id);
+        initial_access_user_ids_.insert(access.user_id);
+        access_user_ids_.insert(access.user_id);
     }
 
     ui->edit_name->setMaxLength(kMaxNameLength);
-    ui->edit_name->setText(name_);
+    ui->edit_name->setText(current.name);
+    ui->edit_comment->setPlainText(current.comment);
 
     connect(ui->buttonbox, &QDialogButtonBox::clicked, this, &RouterWorkspaceDialog::onButtonBoxClicked);
     connect(ui->button_add, &QPushButton::clicked, this, &RouterWorkspaceDialog::onAddClicked);
@@ -81,19 +74,13 @@ RouterWorkspaceDialog::~RouterWorkspaceDialog()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterWorkspaceDialog::setUsers(const QVector<UserEntry>& users)
+void RouterWorkspaceDialog::setUsers(const QList<UserEntry>& users)
 {
     users_.clear();
     for (const UserEntry& user : users)
         users_.insert(user.entry_id, user);
 
     rebuildLists();
-}
-
-//--------------------------------------------------------------------------------------------------
-void RouterWorkspaceDialog::setSelfCredentials(const SelfCredentials& self)
-{
-    self_ = self;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -130,10 +117,26 @@ void RouterWorkspaceDialog::onButtonBoxClicked(QAbstractButton* button)
         }
     }
 
-    name_ = new_name;
+    workspace_ = Router::Workspace();
+    workspace_.entry_id = entry_id_;
+    workspace_.name = new_name;
+    workspace_.comment = ui->edit_comment->toPlainText();
 
-    if (!buildWorkspaceProto())
-        return;
+    workspace_.access.reserve(access_user_ids_.size());
+    for (qint64 user_id : std::as_const(access_user_ids_))
+    {
+        Router::Workspace::Access& access = workspace_.access.emplaceBack();
+        access.user_id = user_id;
+
+        // Newly granted users need a sealed GK from the router; pass the public key. For
+        // already-granted users public_key stays empty, signalling "keep existing access".
+        if (!initial_access_user_ids_.contains(user_id))
+        {
+            auto it = users_.constFind(user_id);
+            if (it != users_.constEnd())
+                access.public_key = it->public_key;
+        }
+    }
 
     LOG(INFO) << "[ACTION] Action accepted";
     accept();
@@ -171,7 +174,7 @@ void RouterWorkspaceDialog::onRemoveClicked()
         return;
 
     const qint64 user_id = item->data(Qt::UserRole).toLongLong();
-    if (user_id == self_.user_id)
+    if (user_id == self_user_id_)
     {
         MsgBox::warning(this, tr("You cannot revoke your own access to the workspace."));
         return;
@@ -212,102 +215,6 @@ void RouterWorkspaceDialog::updateButtonsState()
 
     QListWidgetItem* selected_with_access = ui->list_with_access->currentItem();
     const bool can_remove = selected_with_access &&
-        selected_with_access->data(Qt::UserRole).toLongLong() != self_.user_id;
+        selected_with_access->data(Qt::UserRole).toLongLong() != self_user_id_;
     ui->button_remove->setEnabled(can_remove);
-}
-
-//--------------------------------------------------------------------------------------------------
-bool RouterWorkspaceDialog::buildWorkspaceProto()
-{
-    workspace_.Clear();
-    if (entry_id_ > 0)
-        workspace_.set_entry_id(entry_id_);
-    workspace_.set_name(name_.toStdString());
-
-    QSet<qint64> added;
-    for (qint64 user_id : std::as_const(access_user_ids_))
-    {
-        if (!initial_access_.contains(user_id))
-            added.insert(user_id);
-    }
-
-    QByteArray group_key;
-
-    if (!added.isEmpty())
-    {
-        if (self_.wrap_private_key.isEmpty() || self_.wrap_salt.isEmpty())
-        {
-            LOG(ERROR) << "Self credentials missing wrap key/salt";
-            MsgBox::warning(this, tr("Your account does not have encryption keys configured. "
-                                     "Recreate your user or change your password to generate them."));
-            return false;
-        }
-
-        const QByteArray self_wrapped_gk = initial_access_.value(self_.user_id);
-
-        if (self_wrapped_gk.isEmpty())
-        {
-            // Bootstrap: workspace has no GK yet (no access records, or self is not among them).
-            // Generate a fresh GK for the new set of grantees.
-            group_key = Random::byteArray(kGroupKeySize);
-        }
-        else
-        {
-            SecureByteArray self_private_key = PrivateKeyCryptor::decrypt(
-                self_.wrap_private_key, self_.password, self_.wrap_salt);
-            if (self_private_key.isEmpty())
-            {
-                LOG(ERROR) << "Failed to decrypt private key";
-                MsgBox::warning(this, tr("Failed to decrypt your private key."));
-                return false;
-            }
-
-            KeyPair self_key_pair = KeyPair::fromPrivateKey(self_private_key);
-            if (!self_key_pair.isValid())
-            {
-                LOG(ERROR) << "Failed to load key pair";
-                MsgBox::warning(this, tr("Failed to load your key pair."));
-                return false;
-            }
-
-            std::optional<QByteArray> opened = SealedBox::open(self_wrapped_gk, self_key_pair);
-            if (!opened.has_value() || opened->isEmpty())
-            {
-                LOG(ERROR) << "Failed to unwrap workspace key";
-                MsgBox::warning(this, tr("Failed to unwrap workspace key."));
-                return false;
-            }
-
-            group_key = *opened;
-        }
-    }
-
-    for (qint64 user_id : std::as_const(access_user_ids_))
-    {
-        proto::router::WorkspaceAccess* access = workspace_.add_access();
-        access->set_user_id(user_id);
-
-        if (!added.contains(user_id))
-            continue;
-
-        auto it = users_.constFind(user_id);
-        if (it == users_.constEnd() || it->public_key.isEmpty())
-        {
-            LOG(ERROR) << "Missing public key for user_id:" << user_id;
-            MsgBox::warning(this, tr("Failed to encrypt workspace key for one of the users."));
-            return false;
-        }
-
-        QByteArray wrapped_gk = SealedBox::seal(group_key, it->public_key);
-        if (wrapped_gk.isEmpty())
-        {
-            LOG(ERROR) << "Failed to seal group key for user_id:" << user_id;
-            MsgBox::warning(this, tr("Failed to encrypt workspace key for one of the users."));
-            return false;
-        }
-
-        access->set_wrapped_gk(wrapped_gk.toStdString());
-    }
-
-    return true;
 }

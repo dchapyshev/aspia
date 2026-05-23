@@ -46,8 +46,9 @@ class HostListRequest;
 class HostResult;
 class RelayList;
 class RelayResult;
+class User;
+class UserList;
 class Workspace;
-class WorkspaceList;
 class WorkspaceResult;
 } // namespace proto::router
 
@@ -141,8 +142,8 @@ signals:
     void sig_disconnectClient(qint64 session_id);
     void sig_disconnectPeer(qint64 relay_entry_id, quint64 peer_session_id);
     void sig_workspaceListRequest();
-    void sig_addWorkspace(const proto::router::Workspace& workspace);
-    void sig_modifyWorkspace(const proto::router::Workspace& workspace);
+    void sig_addWorkspace(const Router::Workspace& workspace);
+    void sig_modifyWorkspace(const Router::Workspace& workspace);
     void sig_deleteWorkspace(qint64 entry_id);
     void sig_hostListRequest(const proto::router::HostListRequest& request);
     void sig_statusChanged(qint64 router_id, Router::Status status);
@@ -164,7 +165,7 @@ protected:
     void changeEvent(QEvent* event) final;
 
 private slots:
-    void onStatusChanged(qint64 router_id, Router::Status status);
+    void onStatusChanged(qint64 router_id, qint64 user_id, Router::Status status);
     void onConnectionErrorOccurred(qint64 router_id, TcpChannel::ErrorCode error_code);
     void onTabChanged(int index);
     void onCurrentUserChanged();
@@ -187,7 +188,7 @@ private slots:
     void onHostResultReceived(const proto::router::HostResult& result);
     void onRelayResultReceived(const proto::router::RelayResult& result);
     void onClientResultReceived(const proto::router::ClientResult& result);
-    void onWorkspaceListReceived(const proto::router::WorkspaceList& list);
+    void onWorkspaceListReceived(const Router::WorkspaceList& list);
     void onWorkspaceResultReceived(const proto::router::WorkspaceResult& result);
 
 private:
@@ -207,6 +208,10 @@ private:
     StatusDialog* status_dialog_ = nullptr;
 
     QLabel* status_label_ = nullptr;
+
+    // ID of the user currently logged in to this router. Cached from sig_authenticated so the
+    // dialogs can flag the current user (e.g. to block revoking own access).
+    qint64 self_user_id_ = 0;
 
     Q_DISABLE_COPY_MOVE(RouterWidget)
 };

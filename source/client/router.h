@@ -19,8 +19,11 @@
 #ifndef CLIENT_ROUTER_H
 #define CLIENT_ROUTER_H
 
+#include <QHash>
+#include <QList>
 #include <QObject>
 
+#include "base/crypto/secure_byte_array.h"
 #include "base/net/tcp_channel.h"
 #include "base/scoped_qpointer.h"
 #include "client/config.h"
@@ -37,6 +40,7 @@ class HostResult;
 class RelayList;
 class RelayResult;
 class User;
+class UserKeys;
 class UserList;
 class UserResult;
 class Workspace;
@@ -56,6 +60,33 @@ public:
         ONLINE
     };
     Q_ENUM(Status)
+
+    // Plain (decrypted) workspace data. Used for both directions:
+    //   * incoming (router to UI): filled from the decoded server list. access entries carry
+    //     only user_id; public_key is always empty (UI has no use for it).
+    //   * outgoing (UI to router): a workspace edit. entry_id == 0 means add, > 0 means modify.
+    //     For each access entry public_key is non-empty when the user is being newly granted
+    //     access (router will seal the workspace GK with it) and empty when the user already
+    //     had access (server preserves their existing wrapped_gk).
+    struct Workspace
+    {
+        struct Access
+        {
+            qint64 user_id = 0;
+            QByteArray public_key;
+        };
+
+        qint64 entry_id = 0;
+        QString name;
+        QString comment;
+        QList<Access> access;
+    };
+
+    struct WorkspaceList
+    {
+        QString error_code;
+        QList<Workspace> workspaces;
+    };
 
     explicit Router(const RouterConfig& config, QObject* parent = nullptr);
     ~Router() final;
@@ -86,8 +117,8 @@ public slots:
     void onDisconnectClient(qint64 session_id);
     void onDisconnectPeer(qint64 relay_entry_id, quint64 peer_session_id);
     void onWorkspaceListRequest();
-    void onAddWorkspace(const proto::router::Workspace& workspace);
-    void onModifyWorkspace(const proto::router::Workspace& workspace);
+    void onAddWorkspace(const Router::Workspace& workspace);
+    void onModifyWorkspace(const Router::Workspace& workspace);
     void onDeleteWorkspace(qint64 entry_id);
 
     // Manager methods.
@@ -100,7 +131,7 @@ public slots:
 
 signals:
     // Generic signals.
-    void sig_statusChanged(qint64 router_id, Router::Status status);
+    void sig_statusChanged(qint64 router_id, qint64 user_id, Router::Status status);
     void sig_errorOccurred(qint64 router_id, TcpChannel::ErrorCode error_code);
 
     // Administrator signals.
@@ -111,7 +142,7 @@ signals:
     void sig_hostResultReceived(const proto::router::HostResult& result);
     void sig_relayResultReceived(const proto::router::RelayResult& result);
     void sig_clientResultReceived(const proto::router::ClientResult& result);
-    void sig_workspaceListReceived(const proto::router::WorkspaceList& list);
+    void sig_workspaceListReceived(const Router::WorkspaceList& list);
     void sig_workspaceResultReceived(const proto::router::WorkspaceResult& result);
 
     // Client signals.
@@ -128,12 +159,29 @@ private:
     void setStatus(Status status);
     void sendMessage(quint8 channel_id, const QByteArray& data);
 
+    SecureByteArray unwrapGroupKey(const QByteArray& wrapped_gk) const;
+    void readUserKeys(const proto::router::UserKeys& user_keys);
+    void readWorkspaceList(const proto::router::WorkspaceList& list);
+    bool buildWorkspace(const Workspace& workspace, proto::router::Workspace* out);
+
     RouterConfig config_;
     ScopedQPointer<TcpChannel> tcp_channel_;
     QTimer* reconnect_timer_ = nullptr;
     Status status_ = Status::OFFLINE;
 
+    // Crypto state for the authenticated user. Populated when UserKeys arrives and cleared on disconnect.
+    qint64 user_id_ = 0;
+    SecureByteArray user_private_key_;
+
+    // Per-workspace group keys, unwrapped from the user's wrapped_gk when the workspace list
+    // arrives. Kept so that comment decryption (per workspace) and modify-time encryption do
+    // not repeat the SealedBox::open work.
+    QHash<qint64, SecureByteArray> workspace_group_keys_;
+
     Q_DISABLE_COPY_MOVE(Router)
 };
+
+Q_DECLARE_METATYPE(Router::Workspace)
+Q_DECLARE_METATYPE(Router::WorkspaceList)
 
 #endif // CLIENT_ROUTER_H

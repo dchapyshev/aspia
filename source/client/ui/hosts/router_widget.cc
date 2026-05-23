@@ -271,17 +271,12 @@ private:
 class WorkspaceTreeItem final : public QTreeWidgetItem
 {
 public:
-    explicit WorkspaceTreeItem(const proto::router::Workspace& workspace)
+    explicit WorkspaceTreeItem(const Router::Workspace& workspace)
         : workspace(workspace)
     {
         setIcon(0, QIcon(":/img/workspace.svg"));
-        setText(0, QString::fromStdString(workspace.name()));
-    }
-
-    void updateItem(const proto::router::Workspace& updated)
-    {
-        workspace = updated;
-        setText(0, QString::fromStdString(workspace.name()));
+        setText(0, workspace.name);
+        setText(1, workspace.comment);
     }
 
     // QTreeWidgetItem implementation.
@@ -299,7 +294,7 @@ public:
         return QTreeWidgetItem::operator<(other);
     }
 
-    proto::router::Workspace workspace;
+    Router::Workspace workspace;
 
 private:
     Q_DISABLE_COPY_MOVE(WorkspaceTreeItem)
@@ -1165,41 +1160,28 @@ void RouterWidget::onAddWorkspace()
     for (int i = 0; i < ui->tree_workspaces->topLevelItemCount(); ++i)
     {
         WorkspaceTreeItem* item = static_cast<WorkspaceTreeItem*>(ui->tree_workspaces->topLevelItem(i));
-        names.append(QString::fromStdString(item->workspace.name()));
+        names.append(item->workspace.name);
     }
 
-    QVector<RouterWorkspaceDialog::UserEntry> users;
-    RouterWorkspaceDialog::SelfCredentials self;
-    const QString self_user_name = config_.username();
-
+    QList<RouterWorkspaceDialog::UserEntry> users;
     for (int i = 0; i < ui->tree_users->topLevelItemCount(); ++i)
     {
         UserTreeItem* item = static_cast<UserTreeItem*>(ui->tree_users->topLevelItem(i));
 
-        RouterWorkspaceDialog::UserEntry entry;
+        RouterWorkspaceDialog::UserEntry& entry = users.emplaceBack();
         entry.entry_id   = item->user.entry_id;
         entry.name       = item->user.name;
         entry.public_key = item->user.public_key;
-        users.append(entry);
-
-        if (item->user.name.compare(self_user_name, Qt::CaseInsensitive) == 0)
-        {
-            self.user_id          = item->user.entry_id;
-            self.wrap_private_key = item->user.wrap_private_key;
-            self.wrap_salt        = item->user.wrap_salt;
-            self.password         = config_.password();
-        }
     }
 
-    RouterWorkspaceDialog dialog(proto::router::Workspace(), names, this);
+    RouterWorkspaceDialog dialog(Router::Workspace(), self_user_id_, names, this);
     dialog.setUsers(users);
-    dialog.setSelfCredentials(self);
 
     if (dialog.exec() != QDialog::Accepted)
         return;
 
     LOG(INFO) << "[ACTION] Add workspace accepted by user (access entries:"
-              << dialog.workspace().access_size() << ")";
+              << dialog.workspace().access.size() << ")";
     emit sig_addWorkspace(dialog.workspace());
 }
 
@@ -1213,49 +1195,35 @@ void RouterWidget::onModifyWorkspace()
         return;
     }
 
-    const QString current_name = QString::fromStdString(tree_item->workspace.name());
+    const QString current_name = tree_item->workspace.name;
 
     QStringList names;
     for (int i = 0; i < ui->tree_workspaces->topLevelItemCount(); ++i)
     {
         WorkspaceTreeItem* item = static_cast<WorkspaceTreeItem*>(ui->tree_workspaces->topLevelItem(i));
-        const QString item_name = QString::fromStdString(item->workspace.name());
-        if (item_name.compare(current_name, Qt::CaseInsensitive) != 0)
-            names.append(item_name);
+        if (item->workspace.name.compare(current_name, Qt::CaseInsensitive) != 0)
+            names.append(item->workspace.name);
     }
 
-    QVector<RouterWorkspaceDialog::UserEntry> users;
-    RouterWorkspaceDialog::SelfCredentials self;
-    const QString self_user_name = config_.username();
-
+    QList<RouterWorkspaceDialog::UserEntry> users;
     for (int i = 0; i < ui->tree_users->topLevelItemCount(); ++i)
     {
         UserTreeItem* item = static_cast<UserTreeItem*>(ui->tree_users->topLevelItem(i));
 
-        RouterWorkspaceDialog::UserEntry entry;
+        RouterWorkspaceDialog::UserEntry& entry = users.emplaceBack();
         entry.entry_id   = item->user.entry_id;
         entry.name       = item->user.name;
         entry.public_key = item->user.public_key;
-        users.append(entry);
-
-        if (item->user.name.compare(self_user_name, Qt::CaseInsensitive) == 0)
-        {
-            self.user_id          = item->user.entry_id;
-            self.wrap_private_key = item->user.wrap_private_key;
-            self.wrap_salt        = item->user.wrap_salt;
-            self.password         = config_.password();
-        }
     }
 
-    RouterWorkspaceDialog dialog(tree_item->workspace, names, this);
+    RouterWorkspaceDialog dialog(tree_item->workspace, self_user_id_, names, this);
     dialog.setUsers(users);
-    dialog.setSelfCredentials(self);
 
     if (dialog.exec() != QDialog::Accepted)
         return;
 
     LOG(INFO) << "[ACTION] Modify workspace accepted by user (access entries:"
-              << dialog.workspace().access_size() << ")";
+              << dialog.workspace().access.size() << ")";
     emit sig_modifyWorkspace(dialog.workspace());
 }
 
@@ -1269,7 +1237,7 @@ void RouterWidget::onDeleteWorkspace()
         return;
     }
 
-    const QString name = QString::fromStdString(tree_item->workspace.name());
+    const QString name = tree_item->workspace.name;
     if (MsgBox::question(this,
             tr("Are you sure you want to delete workspace \"%1\"?").arg(name)) != MsgBox::Yes)
     {
@@ -1278,7 +1246,7 @@ void RouterWidget::onDeleteWorkspace()
     }
 
     LOG(INFO) << "[ACTION] Delete workspace accepted by user";
-    emit sig_deleteWorkspace(tree_item->workspace.entry_id());
+    emit sig_deleteWorkspace(tree_item->workspace.entry_id);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1290,9 +1258,10 @@ void RouterWidget::changeEvent(QEvent* event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterWidget::onStatusChanged(qint64 router_id, Router::Status status)
+void RouterWidget::onStatusChanged(qint64 router_id, qint64 user_id, Router::Status status)
 {
     status_ = status;
+    self_user_id_ = user_id;
 
     switch (status)
     {
@@ -1818,23 +1787,23 @@ void RouterWidget::onClientResultReceived(const proto::router::ClientResult& res
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterWidget::onWorkspaceListReceived(const proto::router::WorkspaceList& list)
+void RouterWidget::onWorkspaceListReceived(const Router::WorkspaceList& list)
 {
     QTreeWidget* tree_workspaces = ui->tree_workspaces;
 
     qint64 selected_entry_id = 0;
     if (WorkspaceTreeItem* current = static_cast<WorkspaceTreeItem*>(tree_workspaces->currentItem()))
-        selected_entry_id = current->workspace.entry_id();
+        selected_entry_id = current->workspace.entry_id;
 
     tree_workspaces->clear();
 
     WorkspaceTreeItem* to_select = nullptr;
-    for (int i = 0; i < list.workspace_size(); ++i)
+    for (const Router::Workspace& workspace : std::as_const(list.workspaces))
     {
-        WorkspaceTreeItem* item = new WorkspaceTreeItem(list.workspace(i));
+        WorkspaceTreeItem* item = new WorkspaceTreeItem(workspace);
         tree_workspaces->addTopLevelItem(item);
 
-        if (item->workspace.entry_id() == selected_entry_id)
+        if (item->workspace.entry_id == selected_entry_id)
             to_select = item;
     }
 
@@ -1884,8 +1853,8 @@ QString RouterWidget::workspaceNameById(qint64 workspace_id) const
     {
         WorkspaceTreeItem* item =
             static_cast<WorkspaceTreeItem*>(ui->tree_workspaces->topLevelItem(i));
-        if (item->workspace.entry_id() == workspace_id)
-            return QString::fromStdString(item->workspace.name());
+        if (item->workspace.entry_id == workspace_id)
+            return item->workspace.name;
     }
 
     return QString();
@@ -2193,4 +2162,3 @@ void RouterWidget::saveRelaysToFile()
         return;
     }
 }
-
