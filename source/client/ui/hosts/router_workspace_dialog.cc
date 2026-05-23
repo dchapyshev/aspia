@@ -91,6 +91,21 @@ void RouterWorkspaceDialog::setUsers(const QList<UserEntry>& users)
 }
 
 //--------------------------------------------------------------------------------------------------
+void RouterWorkspaceDialog::setUnassignedHosts(const QList<HostEntry>& hosts)
+{
+    ui->list_hosts_available->clear();
+
+    for (const HostEntry& host : hosts)
+    {
+        QListWidgetItem* item = new QListWidgetItem(QIcon(":/img/computer.svg"), host.name);
+        item->setData(Qt::UserRole, host.host_id);
+        ui->list_hosts_available->addItem(item);
+    }
+
+    ui->list_hosts_available->sortItems();
+}
+
+//--------------------------------------------------------------------------------------------------
 void RouterWorkspaceDialog::onButtonBoxClicked(QAbstractButton* button)
 {
     QDialogButtonBox::StandardButton standard_button = ui->buttonbox->standardButton(button);

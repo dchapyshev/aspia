@@ -46,6 +46,12 @@ public:
         QByteArray public_key;
     };
 
+    struct HostEntry
+    {
+        qint64 host_id = 0;
+        QString name;
+    };
+
     // current.entry_id == 0 means create mode; > 0 means modify mode. For modify, the initial
     // name, plaintext comment and access user list are taken from current.
     RouterWorkspaceDialog(
@@ -53,6 +59,9 @@ public:
     ~RouterWorkspaceDialog() final;
 
     void setUsers(const QList<UserEntry>& users);
+    // Hosts not assigned to any workspace - shown in the right-hand "Unassigned hosts" list of
+    // the Hosts tab, available for the operator to add to this workspace.
+    void setUnassignedHosts(const QList<HostEntry>& hosts);
 
     // Valid after a successful exec() (returns QDialog::Accepted). The router will encrypt
     // comment + seal GK for newly granted users before sending to the server.
