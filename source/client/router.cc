@@ -689,7 +689,7 @@ void Router::setStatus(Status status)
     {
         LOG(INFO) << "Status changed from" << status_ << "to" << status;
         status_ = status;
-        emit sig_statusChanged(config_.routerId(), user_id_, status_);
+        emit sig_statusChanged(config_.routerId(), status_);
     }
 }
 

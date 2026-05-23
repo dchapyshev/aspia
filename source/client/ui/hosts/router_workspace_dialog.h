@@ -41,16 +41,15 @@ public:
     struct UserEntry
     {
         qint64 entry_id = 0;
+        bool is_admin   = false;
         QString name;
         QByteArray public_key;
     };
 
     // current.entry_id == 0 means create mode; > 0 means modify mode. For modify, the initial
-    // name, plaintext comment and access user list are taken from current. self_user_id is the
-    // current admin's id, used to block revoking own access.
+    // name, plaintext comment and access user list are taken from current.
     RouterWorkspaceDialog(
-        const Router::Workspace& current, qint64 self_user_id,
-        const QStringList& existing_names, QWidget* parent);
+        const Router::Workspace& current, const QStringList& existing_names, QWidget* parent);
     ~RouterWorkspaceDialog() final;
 
     void setUsers(const QList<UserEntry>& users);
@@ -68,7 +67,6 @@ private:
 
     std::unique_ptr<Ui::RouterWorkspaceDialog> ui;
     qint64 entry_id_ = 0;
-    qint64 self_user_id_ = 0;
     QStringList existing_names_;
     QHash<qint64, UserEntry> users_;
     QSet<qint64> initial_access_user_ids_;

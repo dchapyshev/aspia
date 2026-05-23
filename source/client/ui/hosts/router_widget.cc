@@ -1170,11 +1170,12 @@ void RouterWidget::onAddWorkspace()
 
         RouterWorkspaceDialog::UserEntry& entry = users.emplaceBack();
         entry.entry_id   = item->user.entry_id;
+        entry.is_admin   = (item->user.sessions & proto::router::SESSION_TYPE_ADMIN) != 0;
         entry.name       = item->user.name;
         entry.public_key = item->user.public_key;
     }
 
-    RouterWorkspaceDialog dialog(Router::Workspace(), self_user_id_, names, this);
+    RouterWorkspaceDialog dialog(Router::Workspace(), names, this);
     dialog.setUsers(users);
 
     if (dialog.exec() != QDialog::Accepted)
@@ -1212,11 +1213,12 @@ void RouterWidget::onModifyWorkspace()
 
         RouterWorkspaceDialog::UserEntry& entry = users.emplaceBack();
         entry.entry_id   = item->user.entry_id;
+        entry.is_admin   = (item->user.sessions & proto::router::SESSION_TYPE_ADMIN) != 0;
         entry.name       = item->user.name;
         entry.public_key = item->user.public_key;
     }
 
-    RouterWorkspaceDialog dialog(tree_item->workspace, self_user_id_, names, this);
+    RouterWorkspaceDialog dialog(tree_item->workspace, names, this);
     dialog.setUsers(users);
 
     if (dialog.exec() != QDialog::Accepted)
@@ -1258,10 +1260,9 @@ void RouterWidget::changeEvent(QEvent* event)
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterWidget::onStatusChanged(qint64 router_id, qint64 user_id, Router::Status status)
+void RouterWidget::onStatusChanged(qint64 router_id, Router::Status status)
 {
     status_ = status;
-    self_user_id_ = user_id;
 
     switch (status)
     {

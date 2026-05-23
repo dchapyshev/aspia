@@ -35,12 +35,10 @@ constexpr int kMaxNameLength = 64;
 
 //--------------------------------------------------------------------------------------------------
 RouterWorkspaceDialog::RouterWorkspaceDialog(
-    const Router::Workspace& current, qint64 self_user_id,
-    const QStringList& existing_names, QWidget* parent)
+    const Router::Workspace& current, const QStringList& existing_names, QWidget* parent)
     : QDialog(parent),
       ui(std::make_unique<Ui::RouterWorkspaceDialog>()),
       entry_id_(current.entry_id),
-      self_user_id_(self_user_id),
       existing_names_(existing_names)
 {
     LOG(INFO) << "Ctor";
@@ -78,7 +76,16 @@ void RouterWorkspaceDialog::setUsers(const QList<UserEntry>& users)
 {
     users_.clear();
     for (const UserEntry& user : users)
+    {
         users_.insert(user.entry_id, user);
+
+        // On add (entry_id_ == 0) every admin is auto-included in the new workspace's access
+        // so the workspace is reachable by all admins from creation. On modify the access list
+        // comes from the workspace itself; admins not already in it stay out (the constraint
+        // is enforced only at creation).
+        if (entry_id_ == 0 && user.is_admin)
+            access_user_ids_.insert(user.entry_id);
+    }
 
     rebuildLists();
 }
@@ -174,9 +181,10 @@ void RouterWorkspaceDialog::onRemoveClicked()
         return;
 
     const qint64 user_id = item->data(Qt::UserRole).toLongLong();
-    if (user_id == self_user_id_)
+    auto it = users_.constFind(user_id);
+    if (it != users_.constEnd() && it->is_admin)
     {
-        MsgBox::warning(this, tr("You cannot revoke your own access to the workspace."));
+        MsgBox::warning(this, tr("Administrators cannot be removed from the workspace access list."));
         return;
     }
 
@@ -213,8 +221,12 @@ void RouterWorkspaceDialog::updateButtonsState()
 {
     ui->button_add->setEnabled(ui->list_available->currentItem() != nullptr);
 
-    QListWidgetItem* selected_with_access = ui->list_with_access->currentItem();
-    const bool can_remove = selected_with_access &&
-        selected_with_access->data(Qt::UserRole).toLongLong() != self_user_id_;
+    bool can_remove = false;
+    if (QListWidgetItem* item = ui->list_with_access->currentItem())
+    {
+        const qint64 user_id = item->data(Qt::UserRole).toLongLong();
+        auto it = users_.constFind(user_id);
+        can_remove = (it == users_.constEnd() || !it->is_admin);
+    }
     ui->button_remove->setEnabled(can_remove);
 }

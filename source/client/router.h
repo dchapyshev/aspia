@@ -131,7 +131,7 @@ public slots:
 
 signals:
     // Generic signals.
-    void sig_statusChanged(qint64 router_id, qint64 user_id, Router::Status status);
+    void sig_statusChanged(qint64 router_id, Router::Status status);
     void sig_errorOccurred(qint64 router_id, TcpChannel::ErrorCode error_code);
 
     // Administrator signals.

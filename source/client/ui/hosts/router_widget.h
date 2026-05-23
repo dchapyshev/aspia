@@ -165,7 +165,7 @@ protected:
     void changeEvent(QEvent* event) final;
 
 private slots:
-    void onStatusChanged(qint64 router_id, qint64 user_id, Router::Status status);
+    void onStatusChanged(qint64 router_id, Router::Status status);
     void onConnectionErrorOccurred(qint64 router_id, TcpChannel::ErrorCode error_code);
     void onTabChanged(int index);
     void onCurrentUserChanged();
@@ -208,10 +208,6 @@ private:
     StatusDialog* status_dialog_ = nullptr;
 
     QLabel* status_label_ = nullptr;
-
-    // ID of the user currently logged in to this router. Cached from sig_authenticated so the
-    // dialogs can flag the current user (e.g. to block revoking own access).
-    qint64 self_user_id_ = 0;
 
     Q_DISABLE_COPY_MOVE(RouterWidget)
 };
