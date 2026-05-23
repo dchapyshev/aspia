@@ -79,6 +79,10 @@ void SessionClient::onSessionMessage(quint8 channel_id, const QByteArray& buffer
     {
         readHostListRequest(message.host_list_request());
     }
+    else if (message.has_workspace_list_request())
+    {
+        readWorkspaceListRequest();
+    }
     else
     {
         CLOG(ERROR) << "Unhandled message from client";
@@ -331,6 +335,55 @@ void SessionClient::readHostListRequest(const proto::router::HostListRequest& re
         item->set_last_connect(info.last_connect);
         item->set_last_modify(info.last_modify);
         item->set_online(online_host_ids.contains(info.host_id));
+    }
+
+    sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void SessionClient::readWorkspaceListRequest()
+{
+    proto::router::RouterToClient message;
+    proto::router::WorkspaceList* list = message.mutable_workspace_list();
+
+    Database database = Database::open();
+    if (!database.isValid())
+    {
+        CLOG(ERROR) << "Failed to connect to database";
+        list->set_error_code(proto::router::kErrorInternalError);
+        sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
+        return;
+    }
+
+    list->set_error_code(proto::router::kErrorOk);
+
+    // Each session sees only the workspaces it has a workspace_access entry for. Admin gets
+    // the full access list for each (needed to manage membership); other session types get
+    // only their own entry (only their own wrapped_gk is needed to decrypt the workspace GK).
+    const bool is_admin = sessionType() == proto::router::SESSION_TYPE_ADMIN;
+    const QSet<qint64> accessible_ids = database.workspaceAccessListForUser(userId());
+    const QVector<Workspace> workspaces = database.workspaceList();
+
+    for (const Workspace& workspace : std::as_const(workspaces))
+    {
+        if (!accessible_ids.contains(workspace.entry_id))
+            continue;
+
+        proto::router::Workspace* item = list->add_workspace();
+        item->set_entry_id(workspace.entry_id);
+        item->set_name(workspace.name.toStdString());
+        item->set_comment(workspace.comment.toStdString());
+
+        const QVector<Workspace::Access> accesses = database.workspaceAccessList(workspace.entry_id);
+        for (const Workspace::Access& access : std::as_const(accesses))
+        {
+            if (!is_admin && access.user_id != userId())
+                continue;
+
+            proto::router::WorkspaceAccess* access_item = item->add_access();
+            access_item->set_user_id(access.user_id);
+            access_item->set_wrapped_gk(access.wrapped_gk.toStdString());
+        }
     }
 
     sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));

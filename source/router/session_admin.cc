@@ -91,10 +91,6 @@ void SessionAdmin::onSessionMessage(quint8 channel_id, const QByteArray& buffer)
     {
         doPeerRequest(message.peer_request());
     }
-    else if (message.has_workspace_list_request())
-    {
-        doWorkspaceListRequest();
-    }
     else if (message.has_workspace_request())
     {
         doWorkspaceRequest(message.workspace_request());
@@ -490,43 +486,6 @@ void SessionAdmin::doPeerRequest(const proto::router::PeerRequest& request)
     }
 
     relay_session->disconnectPeerSession(request);
-}
-
-//--------------------------------------------------------------------------------------------------
-void SessionAdmin::doWorkspaceListRequest()
-{
-    proto::router::RouterToAdmin message;
-    proto::router::WorkspaceList* list = message.mutable_workspace_list();
-
-    Database database = Database::open();
-    if (!database.isValid())
-    {
-        CLOG(ERROR) << "Failed to connect to database";
-        list->set_error_code(proto::router::kErrorInternalError);
-    }
-    else
-    {
-        list->set_error_code(proto::router::kErrorOk);
-
-        const QVector<Workspace> workspaces = database.workspaceList();
-        for (const auto& workspace : std::as_const(workspaces))
-        {
-            proto::router::Workspace* item = list->add_workspace();
-            item->set_entry_id(workspace.entry_id);
-            item->set_name(workspace.name.toStdString());
-            item->set_comment(workspace.comment.toStdString());
-
-            const QVector<Workspace::Access> accesses = database.workspaceAccessList(workspace.entry_id);
-            for (const auto& access : std::as_const(accesses))
-            {
-                proto::router::WorkspaceAccess* access_item = item->add_access();
-                access_item->set_user_id(access.user_id);
-                access_item->set_wrapped_gk(access.wrapped_gk.toStdString());
-            }
-        }
-    }
-
-    sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------

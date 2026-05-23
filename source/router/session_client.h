@@ -49,6 +49,7 @@ private:
     void readConnectionRequest(const proto::router::ConnectionRequest& request);
     void readCheckHostStatus(const proto::router::CheckHostStatus& check_host_status);
     void readHostListRequest(const proto::router::HostListRequest& request);
+    void readWorkspaceListRequest();
     Session* sessionByHostId(HostId host_id);
 
     quint16 stun_port_ = 0;

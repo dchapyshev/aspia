@@ -20,6 +20,7 @@
 #define ROUTER_DATABASE_H
 
 #include <QByteArray>
+#include <QSet>
 #include <QString>
 
 #include <string_view>
@@ -106,7 +107,8 @@ public:
     std::string_view removeWorkspace(qint64 entry_id);
 
     QVector<Workspace::Access> workspaceAccessList(qint64 workspace_id) const;
-    QVector<Workspace::Access> workspaceAccessListForUser(qint64 user_id) const;
+    // Returns the set of workspace ids the given user has a workspace_access entry for.
+    QSet<qint64> workspaceAccessListForUser(qint64 user_id) const;
     bool hasWorkspaceAccess(qint64 user_id, qint64 workspace_id) const;
 
     // Returns every host in the database (admin-only call site). [start_item, end_item] gives an

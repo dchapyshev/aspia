@@ -1204,7 +1204,7 @@ QVector<Workspace::Access> Database::workspaceAccessList(qint64 workspace_id) co
 }
 
 //--------------------------------------------------------------------------------------------------
-QVector<Workspace::Access> Database::workspaceAccessListForUser(qint64 user_id) const
+QSet<qint64> Database::workspaceAccessListForUser(qint64 user_id) const
 {
     if (!isValid())
     {
@@ -1213,8 +1213,7 @@ QVector<Workspace::Access> Database::workspaceAccessListForUser(qint64 user_id) 
     }
 
     QSqlQuery query(databaseByName(connection_name_));
-    query.prepare(QStringLiteral(
-        "SELECT workspace_id, user_id, wrapped_gk FROM workspace_access WHERE user_id=?"));
+    query.prepare(QStringLiteral("SELECT workspace_id FROM workspace_access WHERE user_id=?"));
     query.addBindValue(user_id);
 
     if (!query.exec())
@@ -1223,15 +1222,9 @@ QVector<Workspace::Access> Database::workspaceAccessListForUser(qint64 user_id) 
         return {};
     }
 
-    QVector<Workspace::Access> result;
+    QSet<qint64> result;
     while (query.next())
-    {
-        Workspace::Access access;
-        access.workspace_id = query.value(0).toLongLong();
-        access.user_id      = query.value(1).toLongLong();
-        access.wrapped_gk   = query.value(2).toByteArray();
-        result.append(access);
-    }
+        result.insert(query.value(0).toLongLong());
 
     return result;
 }

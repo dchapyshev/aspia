@@ -37,6 +37,31 @@ message UserKeys
     bytes wrap_salt        = 5;
 }
 
+message WorkspaceAccess
+{
+    int64 user_id    = 1;
+    bytes wrapped_gk = 2;
+}
+
+message Workspace
+{
+    int64 entry_id                  = 1;
+    string name                     = 2;
+    bytes comment                   = 3; // AEAD-encrypted with the workspace GK.
+    repeated WorkspaceAccess access = 4;
+}
+
+message WorkspaceListRequest
+{
+    uint32 dummy = 1;
+}
+
+message WorkspaceList
+{
+    string error_code            = 1; // "ok" | "internal_error"
+    repeated Workspace workspace = 2;
+}
+
 message ConnectionRequest
 {
     int64 request_id = 1;
@@ -112,11 +137,13 @@ message RouterToClient
     ConnectionOffer connection_offer = 2;
     HostStatus host_status           = 3;
     HostList host_list               = 4;
+    WorkspaceList workspace_list     = 5;
 }
 
 message ClientToRouter
 {
-    ConnectionRequest connection_request = 1;
-    CheckHostStatus check_host_status    = 2;
-    HostListRequest host_list_request    = 3;
+    ConnectionRequest connection_request         = 1;
+    CheckHostStatus check_host_status            = 2;
+    HostListRequest host_list_request            = 3;
+    WorkspaceListRequest workspace_list_request  = 4;
 }

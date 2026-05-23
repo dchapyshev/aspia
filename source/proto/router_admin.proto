@@ -22,6 +22,7 @@ option optimize_for = LITE_RUNTIME;
 
 import "peer.proto";
 import "router.proto";
+import "router_client.proto";
 
 package proto.router;
 
@@ -155,31 +156,6 @@ message UserResult
     string error_code   = 2; // "ok" | "invalid_request" | "internal_error" | "invalid_data" | "already_exists"
 }
 
-message WorkspaceAccess
-{
-    int64 user_id    = 1;
-    bytes wrapped_gk = 2;
-}
-
-message Workspace
-{
-    int64 entry_id                  = 1;
-    string name                     = 2;
-    bytes comment                   = 3; // AEAD-encrypted with the workspace GK.
-    repeated WorkspaceAccess access = 4;
-}
-
-message WorkspaceListRequest
-{
-    uint32 dummy = 1;
-}
-
-message WorkspaceList
-{
-    string error_code            = 1; // "ok" | "internal_error"
-    repeated Workspace workspace = 2;
-}
-
 message WorkspaceRequest
 {
     // "add"    - Workspace with name and full initial access list (each entry has user_id +
@@ -212,20 +188,18 @@ message RouterToAdmin
     ClientResult client_result       = 5;
     UserList user_list               = 6;
     UserResult user_result           = 7;
-    WorkspaceList workspace_list     = 8;
-    WorkspaceResult workspace_result = 9;
+    WorkspaceResult workspace_result = 8;
 }
 
 message AdminToRouter
 {
-    RelayListRequest relay_list_request         = 1;
-    RelayRequest relay_request                  = 2;
-    HostRequest host_request                    = 3;
-    ClientListRequest client_list_request       = 4;
-    ClientRequest client_request                = 5;
-    UserListRequest user_list_request           = 6;
-    UserRequest user_request                    = 7;
-    PeerRequest peer_request                    = 8;
-    WorkspaceListRequest workspace_list_request = 9;
-    WorkspaceRequest workspace_request          = 10;
+    RelayListRequest relay_list_request   = 1;
+    RelayRequest relay_request            = 2;
+    HostRequest host_request              = 3;
+    ClientListRequest client_list_request = 4;
+    ClientRequest client_request          = 5;
+    UserListRequest user_list_request     = 6;
+    UserRequest user_request              = 7;
+    PeerRequest peer_request              = 8;
+    WorkspaceRequest workspace_request    = 9;
 }
