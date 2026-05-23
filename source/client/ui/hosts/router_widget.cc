@@ -274,9 +274,13 @@ public:
     explicit WorkspaceTreeItem(const Router::Workspace& workspace)
         : workspace(workspace)
     {
+        QString single_line_comment = workspace.comment;
+        single_line_comment.replace('\n', ' ').replace('\r', ' ');
+
         setIcon(0, QIcon(":/img/workspace.svg"));
         setText(0, workspace.name);
-        setText(1, workspace.comment);
+        setText(1, single_line_comment);
+        setToolTip(1, workspace.comment);
     }
 
     // QTreeWidgetItem implementation.
