@@ -554,8 +554,10 @@ void SessionAdmin::doWorkspaceRequest(const proto::router::WorkspaceRequest& req
     {
         CLOG(INFO) << "Workspace add request:" << name << "with" << workspace.access_size() << "access entries";
 
+        bool self_present = false;
         QVector<Workspace::Access> initial_access;
         initial_access.reserve(workspace.access_size());
+
         for (int i = 0; i < workspace.access_size(); ++i)
         {
             const proto::router::WorkspaceAccess& src = workspace.access(i);
@@ -563,21 +565,34 @@ void SessionAdmin::doWorkspaceRequest(const proto::router::WorkspaceRequest& req
             dst.user_id    = src.user_id();
             dst.wrapped_gk = QByteArray::fromStdString(src.wrapped_gk());
             initial_access.append(dst);
+
+            if (dst.user_id == userId())
+                self_present = true;
         }
 
-        qint64 new_id = -1;
-        std::string_view error_code = database.addWorkspace(name, comment, initial_access, &new_id);
-        result->set_error_code(error_code);
-        if (error_code == proto::router::kErrorOk)
-            result->set_entry_id(new_id);
+        if (!self_present)
+        {
+            CLOG(ERROR) << "Admin" << userName() << "tried to create workspace without own access";
+            result->set_error_code(proto::router::kErrorInvalidData);
+        }
+        else
+        {
+            qint64 new_id = -1;
+            std::string_view error_code = database.addWorkspace(name, comment, initial_access, &new_id);
+            result->set_error_code(error_code);
+            if (error_code == proto::router::kErrorOk)
+                result->set_entry_id(new_id);
+        }
     }
     else if (request.command_name() == proto::router::kCommandWorkspaceModify)
     {
         CLOG(INFO) << "Workspace modify request:" << entry_id << name
                    << "with" << workspace.access_size() << "access entries";
 
+        bool self_present = false;
         QVector<Workspace::Access> desired_access;
         desired_access.reserve(workspace.access_size());
+
         for (int i = 0; i < workspace.access_size(); ++i)
         {
             const proto::router::WorkspaceAccess& src = workspace.access(i);
@@ -585,9 +600,20 @@ void SessionAdmin::doWorkspaceRequest(const proto::router::WorkspaceRequest& req
             dst.user_id    = src.user_id();
             dst.wrapped_gk = QByteArray::fromStdString(src.wrapped_gk());
             desired_access.append(dst);
+
+            if (dst.user_id == userId())
+                self_present = true;
         }
 
-        result->set_error_code(database.modifyWorkspace(entry_id, name, comment, desired_access));
+        if (!self_present)
+        {
+            CLOG(ERROR) << "Admin" << userName() << "tried to revoke own access to workspace" << entry_id;
+            result->set_error_code(proto::router::kErrorInvalidData);
+        }
+        else
+        {
+            result->set_error_code(database.modifyWorkspace(entry_id, name, comment, desired_access));
+        }
     }
     else if (request.command_name() == proto::router::kCommandWorkspaceDelete)
     {
