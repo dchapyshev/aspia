@@ -66,6 +66,8 @@ private:
     void onButtonBoxClicked(QAbstractButton* button);
     void onAddClicked();
     void onRemoveClicked();
+    void onHostAddClicked();
+    void onHostRemoveClicked();
     void rebuildLists();
     void updateButtonsState();
     void updateLoadingState();

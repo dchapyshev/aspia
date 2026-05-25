@@ -52,9 +52,15 @@ RouterWorkspaceDialog::RouterWorkspaceDialog(
     connect(ui->buttonbox, &QDialogButtonBox::clicked, this, &RouterWorkspaceDialog::onButtonBoxClicked);
     connect(ui->button_add, &QPushButton::clicked, this, &RouterWorkspaceDialog::onAddClicked);
     connect(ui->button_remove, &QPushButton::clicked, this, &RouterWorkspaceDialog::onRemoveClicked);
+    connect(ui->button_host_add, &QPushButton::clicked, this, &RouterWorkspaceDialog::onHostAddClicked);
+    connect(ui->button_host_remove, &QPushButton::clicked, this, &RouterWorkspaceDialog::onHostRemoveClicked);
     connect(ui->list_available, &QListWidget::itemSelectionChanged,
             this, &RouterWorkspaceDialog::updateButtonsState);
     connect(ui->list_with_access, &QListWidget::itemSelectionChanged,
+            this, &RouterWorkspaceDialog::updateButtonsState);
+    connect(ui->list_hosts_available, &QListWidget::itemSelectionChanged,
+            this, &RouterWorkspaceDialog::updateButtonsState);
+    connect(ui->list_hosts_in_workspace, &QListWidget::itemSelectionChanged,
             this, &RouterWorkspaceDialog::updateButtonsState);
 
     updateLoadingState();
@@ -140,11 +146,21 @@ void RouterWorkspaceDialog::onUserListReceived(const proto::router::UserList& li
 void RouterWorkspaceDialog::onHostListReceived(const proto::router::HostList& list)
 {
     ui->list_hosts_available->clear();
+    ui->list_hosts_in_workspace->clear();
 
     for (int i = 0; i < list.host_size(); ++i)
     {
         const proto::router::Host& host = list.host(i);
-        if (host.workspace_id() != 0)
+        const qint64 host_workspace_id = host.workspace_id();
+
+        // Hosts of other workspaces are not visible in this dialog. Only the unassigned ones
+        // (available to add) and the ones already in the workspace we are editing.
+        QListWidget* target = nullptr;
+        if (host_workspace_id == 0)
+            target = ui->list_hosts_available;
+        else if (entry_id_ > 0 && host_workspace_id == entry_id_)
+            target = ui->list_hosts_in_workspace;
+        else
             continue;
 
         const qint64 host_id = host.host_id();
@@ -154,10 +170,11 @@ void RouterWorkspaceDialog::onHostListReceived(const proto::router::HostList& li
 
         QListWidgetItem* item = new QListWidgetItem(QIcon(":/img/computer.svg"), name);
         item->setData(Qt::UserRole, host_id);
-        ui->list_hosts_available->addItem(item);
+        target->addItem(item);
     }
 
     ui->list_hosts_available->sortItems();
+    ui->list_hosts_in_workspace->sortItems();
 
     hosts_loaded_ = true;
     updateLoadingState();
@@ -216,6 +233,13 @@ void RouterWorkspaceDialog::onButtonBoxClicked(QAbstractButton* button)
             if (it != users_.constEnd())
                 access.public_key = it->public_key;
         }
+    }
+
+    workspace_.host_ids.reserve(ui->list_hosts_in_workspace->count());
+    for (int i = 0; i < ui->list_hosts_in_workspace->count(); ++i)
+    {
+        QListWidgetItem* item = ui->list_hosts_in_workspace->item(i);
+        workspace_.host_ids.append(item->data(Qt::UserRole).toLongLong());
     }
 
     Router* router = Router::instance(router_id_);
@@ -311,6 +335,34 @@ void RouterWorkspaceDialog::onRemoveClicked()
 }
 
 //--------------------------------------------------------------------------------------------------
+void RouterWorkspaceDialog::onHostAddClicked()
+{
+    QListWidgetItem* item = ui->list_hosts_available->currentItem();
+    if (!item)
+        return;
+
+    ui->list_hosts_available->takeItem(ui->list_hosts_available->row(item));
+    ui->list_hosts_in_workspace->addItem(item);
+    ui->list_hosts_in_workspace->sortItems();
+
+    updateButtonsState();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWorkspaceDialog::onHostRemoveClicked()
+{
+    QListWidgetItem* item = ui->list_hosts_in_workspace->currentItem();
+    if (!item)
+        return;
+
+    ui->list_hosts_in_workspace->takeItem(ui->list_hosts_in_workspace->row(item));
+    ui->list_hosts_available->addItem(item);
+    ui->list_hosts_available->sortItems();
+
+    updateButtonsState();
+}
+
+//--------------------------------------------------------------------------------------------------
 void RouterWorkspaceDialog::rebuildLists()
 {
     ui->list_with_access->clear();
@@ -347,6 +399,9 @@ void RouterWorkspaceDialog::updateButtonsState()
         can_remove = (it == users_.constEnd() || !it->is_admin);
     }
     ui->button_remove->setEnabled(can_remove);
+
+    ui->button_host_add->setEnabled(ui->list_hosts_available->currentItem() != nullptr);
+    ui->button_host_remove->setEnabled(ui->list_hosts_in_workspace->currentItem() != nullptr);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -359,6 +414,7 @@ void RouterWorkspaceDialog::updateLoadingState()
     ui->list_available->setEnabled(ready);
     ui->list_with_access->setEnabled(ready);
     ui->list_hosts_available->setEnabled(ready);
+    ui->list_hosts_in_workspace->setEnabled(ready);
 
     if (QPushButton* ok_button = ui->buttonbox->button(QDialogButtonBox::Ok))
         ok_button->setEnabled(ready);
@@ -371,5 +427,7 @@ void RouterWorkspaceDialog::updateLoadingState()
     {
         ui->button_add->setEnabled(false);
         ui->button_remove->setEnabled(false);
+        ui->button_host_add->setEnabled(false);
+        ui->button_host_remove->setEnabled(false);
     }
 }

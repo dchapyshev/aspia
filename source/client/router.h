@@ -74,6 +74,7 @@ public:
         QString name;
         QString comment;
         QList<Access> access;
+        QList<qint64> host_ids;
     };
 
     struct WorkspaceList

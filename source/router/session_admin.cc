@@ -527,9 +527,15 @@ void SessionAdmin::doWorkspaceRequest(const proto::router::WorkspaceRequest& req
     const QByteArray comment = QByteArray::fromStdString(workspace.comment());
     const qint64 entry_id = workspace.entry_id();
 
+    QSet<qint64> desired_host_ids;
+    desired_host_ids.reserve(workspace.host_id_size());
+    for (int i = 0; i < workspace.host_id_size(); ++i)
+        desired_host_ids.insert(workspace.host_id(i));
+
     if (request.command_name() == proto::router::kCommandWorkspaceAdd)
     {
-        CLOG(INFO) << "Workspace add request:" << name << "with" << workspace.access_size() << "access entries";
+        CLOG(INFO) << "Workspace add request:" << name << "with" << workspace.access_size()
+                   << "access entries and" << desired_host_ids.size() << "hosts";
 
         bool self_present = false;
         QVector<Workspace::Access> initial_access;
@@ -558,13 +564,25 @@ void SessionAdmin::doWorkspaceRequest(const proto::router::WorkspaceRequest& req
             std::string_view error_code = database.addWorkspace(name, comment, initial_access, &new_id);
             result->set_error_code(error_code);
             if (error_code == proto::router::kErrorOk)
+            {
                 result->set_entry_id(new_id);
+                if (!desired_host_ids.isEmpty())
+                {
+                    error_code = database.setWorkspaceHosts(new_id, desired_host_ids);
+                    if (error_code != proto::router::kErrorOk)
+                    {
+                        CLOG(ERROR) << "Workspace" << new_id
+                                    << "created but host assignments failed:" << error_code;
+                    }
+                }
+            }
         }
     }
     else if (request.command_name() == proto::router::kCommandWorkspaceModify)
     {
         CLOG(INFO) << "Workspace modify request:" << entry_id << name
-                   << "with" << workspace.access_size() << "access entries";
+                   << "with" << workspace.access_size() << "access entries and"
+                   << desired_host_ids.size() << "hosts";
 
         bool self_present = false;
         QVector<Workspace::Access> desired_access;
@@ -589,7 +607,17 @@ void SessionAdmin::doWorkspaceRequest(const proto::router::WorkspaceRequest& req
         }
         else
         {
-            result->set_error_code(database.modifyWorkspace(entry_id, name, comment, desired_access));
+            std::string_view error_code = database.modifyWorkspace(entry_id, name, comment, desired_access);
+            result->set_error_code(error_code);
+            if (error_code == proto::router::kErrorOk)
+            {
+                error_code = database.setWorkspaceHosts(entry_id, desired_host_ids);
+                if (error_code != proto::router::kErrorOk)
+                {
+                    CLOG(ERROR) << "Workspace" << entry_id
+                                << "modified but host assignments failed:" << error_code;
+                }
+            }
         }
     }
     else if (request.command_name() == proto::router::kCommandWorkspaceDelete)

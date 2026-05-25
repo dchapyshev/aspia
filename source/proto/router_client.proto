@@ -49,6 +49,7 @@ message Workspace
     string name                     = 2;
     bytes comment                   = 3; // AEAD-encrypted with the workspace GK.
     repeated WorkspaceAccess access = 4;
+    repeated int64 host_id          = 5;
 }
 
 message WorkspaceListRequest

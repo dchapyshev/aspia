@@ -106,6 +106,13 @@ public:
         const QVector<Workspace::Access>& desired_access);
     std::string_view removeWorkspace(qint64 entry_id);
 
+    // Assigns hosts to the given workspace. desired_host_ids is the complete final set: hosts
+    // currently in this workspace but absent from the set are released (workspace_id <- 0);
+    // hosts in the set with workspace_id 0 are claimed (workspace_id <- entry_id); hosts in
+    // the set that already belong to another workspace are left alone (the operator cannot
+    // hijack a host from another workspace through this call).
+    std::string_view setWorkspaceHosts(qint64 entry_id, const QSet<qint64>& desired_host_ids);
+
     QVector<Workspace::Access> workspaceAccessList(qint64 workspace_id) const;
     // Returns the set of workspace ids the given user has a workspace_access entry for.
     QSet<qint64> workspaceAccessListForUser(qint64 user_id) const;

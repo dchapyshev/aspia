@@ -1140,6 +1140,93 @@ std::string_view Database::modifyWorkspace(
 }
 
 //--------------------------------------------------------------------------------------------------
+std::string_view Database::setWorkspaceHosts(qint64 entry_id, const QSet<qint64>& desired_host_ids)
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return proto::router::kErrorInternalError;
+    }
+
+    if (entry_id <= 0)
+    {
+        LOG(ERROR) << "Invalid workspace id:" << entry_id;
+        return proto::router::kErrorInvalidData;
+    }
+
+    for (qint64 host_id : std::as_const(desired_host_ids))
+    {
+        if (host_id <= 0)
+        {
+            LOG(ERROR) << "Invalid host_id in desired list:" << host_id;
+            return proto::router::kErrorInvalidData;
+        }
+    }
+
+    QSqlDatabase sql_db = databaseByName(connection_name_);
+    if (!sql_db.transaction())
+    {
+        LOG(ERROR) << "Unable to start transaction:" << sql_db.lastError();
+        return proto::router::kErrorInternalError;
+    }
+
+    // Release: hosts currently in this workspace but no longer wanted.
+    QSqlQuery select_current(sql_db);
+    select_current.prepare(QStringLiteral("SELECT id FROM hosts WHERE workspace_id=?"));
+    select_current.addBindValue(entry_id);
+    if (!select_current.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << select_current.lastError();
+        sql_db.rollback();
+        return proto::router::kErrorInternalError;
+    }
+
+    QSqlQuery release(sql_db);
+    release.prepare(QStringLiteral("UPDATE hosts SET workspace_id=0, group_id=0 WHERE id=?"));
+    while (select_current.next())
+    {
+        const qint64 host_id = select_current.value(0).toLongLong();
+        if (desired_host_ids.contains(host_id))
+            continue;
+
+        release.bindValue(0, host_id);
+        if (!release.exec())
+        {
+            LOG(ERROR) << "Unable to execute query:" << release.lastError();
+            sql_db.rollback();
+            return proto::router::kErrorInternalError;
+        }
+    }
+
+    // Claim: hosts the operator wants in this workspace. Only hosts that are unassigned or
+    // already in this workspace are touched; hosts in another workspace stay put.
+    QSqlQuery claim(sql_db);
+    claim.prepare(QStringLiteral(
+        "UPDATE hosts SET workspace_id=? WHERE id=? AND workspace_id IN (0, ?)"));
+    for (qint64 host_id : std::as_const(desired_host_ids))
+    {
+        claim.bindValue(0, entry_id);
+        claim.bindValue(1, host_id);
+        claim.bindValue(2, entry_id);
+        if (!claim.exec())
+        {
+            LOG(ERROR) << "Unable to execute query:" << claim.lastError();
+            sql_db.rollback();
+            return proto::router::kErrorInternalError;
+        }
+    }
+
+    if (!sql_db.commit())
+    {
+        LOG(ERROR) << "Unable to commit transaction:" << sql_db.lastError();
+        sql_db.rollback();
+        return proto::router::kErrorInternalError;
+    }
+
+    return proto::router::kErrorOk;
+}
+
+//--------------------------------------------------------------------------------------------------
 std::string_view Database::removeWorkspace(qint64 entry_id)
 {
     if (!isValid())
