@@ -35,9 +35,9 @@
 #include <QMenu>
 #include <QStatusBar>
 
-#include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/peer/router_user.h"
+#include "client/router.h"
 #include "client/ui/hosts/router_user_dialog.h"
 #include "client/ui/hosts/router_workspace_dialog.h"
 #include "common/ui/formatter.h"
@@ -383,7 +383,7 @@ private:
 RouterWidget::RouterWidget(const RouterConfig& config, QWidget* parent)
     : ContentWidget(Type::ROUTER, parent),
       ui(std::make_unique<Ui::RouterWidget>()),
-      config_(config)
+      router_(new Router(config, this))
 {
     LOG(INFO) << "Ctor";
     ui->setupUi(this);
@@ -392,39 +392,8 @@ RouterWidget::RouterWidget(const RouterConfig& config, QWidget* parent)
     status_dialog_->setWindowFlag(Qt::WindowStaysOnTopHint);
     status_dialog_->hide();
 
-    router_ = new Router(config);
-    router_->moveToThread(GuiApplication::ioThread());
-
-    connect(router_, &Router::sig_statusChanged, this, &RouterWidget::onStatusChanged, Qt::QueuedConnection);
-    connect(router_, &Router::sig_errorOccurred, this, &RouterWidget::onConnectionErrorOccurred, Qt::QueuedConnection);
-    connect(router_, &Router::sig_relayListReceived, this, &RouterWidget::onRelayListReceived, Qt::QueuedConnection);
-    connect(router_, &Router::sig_clientListReceived, this, &RouterWidget::onClientListReceived, Qt::QueuedConnection);
-    connect(router_, &Router::sig_userListReceived, this, &RouterWidget::onUserListReceived, Qt::QueuedConnection);
-    connect(router_, &Router::sig_userResultReceived, this, &RouterWidget::onUserResultReceived, Qt::QueuedConnection);
-    connect(router_, &Router::sig_hostResultReceived, this, &RouterWidget::onHostResultReceived, Qt::QueuedConnection);
-    connect(router_, &Router::sig_relayResultReceived, this, &RouterWidget::onRelayResultReceived, Qt::QueuedConnection);
-    connect(router_, &Router::sig_clientResultReceived, this, &RouterWidget::onClientResultReceived, Qt::QueuedConnection);
-    connect(router_, &Router::sig_workspaceListReceived, this, &RouterWidget::onWorkspaceListReceived, Qt::QueuedConnection);
-    connect(router_, &Router::sig_workspaceResultReceived, this, &RouterWidget::onWorkspaceResultReceived, Qt::QueuedConnection);
-    connect(router_, &Router::sig_hostListReceived, this, &RouterWidget::onHostListReceived, Qt::QueuedConnection);
-
-    connect(this, &RouterWidget::sig_relayListRequest, router_, &Router::onRelayListRequest, Qt::QueuedConnection);
-    connect(this, &RouterWidget::sig_clientListRequest, router_, &Router::onClientListRequest, Qt::QueuedConnection);
-    connect(this, &RouterWidget::sig_userListRequest, router_, &Router::onUserListRequest, Qt::QueuedConnection);
-    connect(this, &RouterWidget::sig_addUser, router_, &Router::onAddUser, Qt::QueuedConnection);
-    connect(this, &RouterWidget::sig_modifyUser, router_, &Router::onModifyUser, Qt::QueuedConnection);
-    connect(this, &RouterWidget::sig_deleteUser, router_, &Router::onDeleteUser, Qt::QueuedConnection);
-    connect(this, &RouterWidget::sig_disconnectHost, router_, &Router::onDisconnectHost, Qt::QueuedConnection);
-    connect(this, &RouterWidget::sig_removeHost, router_, &Router::onRemoveHost, Qt::QueuedConnection);
-    connect(this, &RouterWidget::sig_disconnectRelay, router_, &Router::onDisconnectRelay, Qt::QueuedConnection);
-    connect(this, &RouterWidget::sig_disconnectClient, router_, &Router::onDisconnectClient, Qt::QueuedConnection);
-    connect(this, &RouterWidget::sig_disconnectPeer, router_, &Router::onDisconnectPeer, Qt::QueuedConnection);
-    connect(this, &RouterWidget::sig_workspaceListRequest, router_, &Router::onWorkspaceListRequest, Qt::QueuedConnection);
-    connect(this, &RouterWidget::sig_addWorkspace, router_, &Router::onAddWorkspace, Qt::QueuedConnection);
-    connect(this, &RouterWidget::sig_modifyWorkspace, router_, &Router::onModifyWorkspace, Qt::QueuedConnection);
-    connect(this, &RouterWidget::sig_deleteWorkspace, router_, &Router::onDeleteWorkspace, Qt::QueuedConnection);
-    connect(this, &RouterWidget::sig_hostListRequest, router_, &Router::onHostListRequest, Qt::QueuedConnection);
-    connect(this, &RouterWidget::sig_updateConfig, router_, &Router::onUpdateConfig, Qt::QueuedConnection);
+    connect(router_, &Router::sig_statusChanged, this, &RouterWidget::onStatusChanged);
+    connect(router_, &Router::sig_errorOccurred, this, &RouterWidget::onConnectionErrorOccurred);
 
     connect(ui->tab, &QTabWidget::currentChanged, this, &RouterWidget::onTabChanged);
     connect(ui->tree_users, &QTreeWidget::itemSelectionChanged, this, &RouterWidget::onCurrentUserChanged);
@@ -461,21 +430,18 @@ RouterWidget::RouterWidget(const RouterConfig& config, QWidget* parent)
 RouterWidget::~RouterWidget()
 {
     LOG(INFO) << "Dtor";
-
-    if (router_)
-        router_->disconnect(this);
 }
 
 //--------------------------------------------------------------------------------------------------
 qint64 RouterWidget::routerId() const
 {
-    return config_.routerId();
+    return router_->routerId();
 }
 
 //--------------------------------------------------------------------------------------------------
 Router::Status RouterWidget::status() const
 {
-    return status_;
+    return router_->status();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -530,6 +496,42 @@ int RouterWidget::hostCount() const
 }
 
 //--------------------------------------------------------------------------------------------------
+bool RouterWidget::hasSelectedClient() const
+{
+    return ui->tree_clients->currentItem() != nullptr;
+}
+
+//--------------------------------------------------------------------------------------------------
+int RouterWidget::clientCount() const
+{
+    return ui->tree_clients->topLevelItemCount();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool RouterWidget::hasSelectedRelay() const
+{
+    return ui->tree_relays->currentItem() != nullptr;
+}
+
+//--------------------------------------------------------------------------------------------------
+int RouterWidget::relayCount() const
+{
+    return ui->tree_relays->topLevelItemCount();
+}
+
+//--------------------------------------------------------------------------------------------------
+bool RouterWidget::hasSelectedWorkspace() const
+{
+    return ui->tree_workspaces->currentItem() != nullptr;
+}
+
+//--------------------------------------------------------------------------------------------------
+int RouterWidget::workspaceCount() const
+{
+    return ui->tree_workspaces->topLevelItemCount();
+}
+
+//--------------------------------------------------------------------------------------------------
 void RouterWidget::copyCurrentHostRow()
 {
     QTreeWidgetItem* item = ui->tree_hosts->currentItem();
@@ -566,18 +568,6 @@ void RouterWidget::copyCurrentHostColumn(int column)
 
     if (QClipboard* clipboard = QApplication::clipboard())
         clipboard->setText(text);
-}
-
-//--------------------------------------------------------------------------------------------------
-bool RouterWidget::hasSelectedClient() const
-{
-    return ui->tree_clients->currentItem() != nullptr;
-}
-
-//--------------------------------------------------------------------------------------------------
-int RouterWidget::clientCount() const
-{
-    return ui->tree_clients->topLevelItemCount();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -620,30 +610,6 @@ void RouterWidget::copyCurrentClientColumn(int column)
 }
 
 //--------------------------------------------------------------------------------------------------
-bool RouterWidget::hasSelectedRelay() const
-{
-    return ui->tree_relays->currentItem() != nullptr;
-}
-
-//--------------------------------------------------------------------------------------------------
-int RouterWidget::relayCount() const
-{
-    return ui->tree_relays->topLevelItemCount();
-}
-
-//--------------------------------------------------------------------------------------------------
-bool RouterWidget::hasSelectedWorkspace() const
-{
-    return ui->tree_workspaces->currentItem() != nullptr;
-}
-
-//--------------------------------------------------------------------------------------------------
-int RouterWidget::workspaceCount() const
-{
-    return ui->tree_workspaces->topLevelItemCount();
-}
-
-//--------------------------------------------------------------------------------------------------
 void RouterWidget::copyCurrentRelayRow()
 {
     QTreeWidgetItem* item = ui->tree_relays->currentItem();
@@ -680,41 +646,6 @@ void RouterWidget::copyCurrentRelayColumn(int column)
 
     if (QClipboard* clipboard = QApplication::clipboard())
         clipboard->setText(text);
-}
-
-//--------------------------------------------------------------------------------------------------
-void RouterWidget::connectToRouter()
-{
-    if (router_)
-    {
-        QMetaObject::invokeMethod(
-            router_, &Router::onConnectToRouter, Qt::QueuedConnection);
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-void RouterWidget::disconnectFromRouter()
-{
-    if (router_)
-    {
-        QMetaObject::invokeMethod(
-            router_, &Router::onDisconnectFromRouter, Qt::QueuedConnection);
-    }
-}
-
-//--------------------------------------------------------------------------------------------------
-void RouterWidget::updateConfig(const RouterConfig& config)
-{
-    config_ = config;
-    emit sig_updateConfig(config);
-}
-
-//--------------------------------------------------------------------------------------------------
-void RouterWidget::showStatusDialog()
-{
-    status_dialog_->show();
-    status_dialog_->activateWindow();
-    status_dialog_->raise();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -894,9 +825,35 @@ void RouterWidget::deactivate(QStatusBar* statusbar)
 }
 
 //--------------------------------------------------------------------------------------------------
+void RouterWidget::connectToRouter()
+{
+    router_->connectToRouter();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::disconnectFromRouter()
+{
+    router_->disconnectFromRouter();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::updateConfig(const RouterConfig& config)
+{
+    router_->updateConfig(config);
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::showStatusDialog()
+{
+    status_dialog_->show();
+    status_dialog_->activateWindow();
+    status_dialog_->raise();
+}
+
+//--------------------------------------------------------------------------------------------------
 void RouterWidget::onUpdateRelayList()
 {
-    emit sig_relayListRequest();
+    router_->relayList(this, &RouterWidget::onRelayListReceived);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -904,19 +861,19 @@ void RouterWidget::onUpdateHostList()
 {
     proto::router::HostListRequest request;
     request.set_mode(proto::router::HostListRequest::MODE_ALL);
-    emit sig_hostListRequest(request);
+    router_->hostList(std::move(request), this, &RouterWidget::onHostListReceived);
 }
 
 //--------------------------------------------------------------------------------------------------
 void RouterWidget::onUpdateClientList()
 {
-    emit sig_clientListRequest();
+    router_->clientList(this, &RouterWidget::onClientListReceived);
 }
 
 //--------------------------------------------------------------------------------------------------
 void RouterWidget::onUpdateUserList()
 {
-    emit sig_userListRequest();
+    router_->userList(this, &RouterWidget::onUserListReceived);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -937,7 +894,7 @@ void RouterWidget::onAddUser()
     }
 
     LOG(INFO) << "[ACTION] Add user accepted by user";
-    emit sig_addUser(dialog.user().serialize());
+    router_->userAdd(dialog.user().serialize(), this, &RouterWidget::onUserResultReceived);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -966,7 +923,7 @@ void RouterWidget::onModifyUser()
     }
 
     LOG(INFO) << "[ACTION] Modify user accepted by user";
-    emit sig_modifyUser(dialog.user().serialize());
+    router_->userModify(dialog.user().serialize(), this, &RouterWidget::onUserResultReceived);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -996,7 +953,7 @@ void RouterWidget::onDeleteUser()
     }
 
     LOG(INFO) << "[ACTION] Delete user accepted by user";
-    emit sig_deleteUser(entry_id);
+    router_->userDelete(entry_id, this, &RouterWidget::onUserResultReceived);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1017,7 +974,7 @@ void RouterWidget::onDisconnectHost()
     }
 
     LOG(INFO) << "[ACTION] Disconnect host accepted by user";
-    emit sig_disconnectHost(tree_item->info.host_id());
+    router_->hostDisconnect(tree_item->info.host_id(), this, &RouterWidget::onHostResultReceived);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1037,7 +994,7 @@ void RouterWidget::onDisconnectAllHosts()
     }
 
     LOG(INFO) << "[ACTION] Disconnect all hosts accepted by user";
-    emit sig_disconnectHost(-1);
+    router_->hostDisconnect(-1, this, &RouterWidget::onHostResultReceived);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1066,7 +1023,7 @@ void RouterWidget::onRemoveHost()
     }
 
     LOG(INFO) << "[ACTION] Remove host accepted by user";
-    emit sig_removeHost(tree_item->info.host_id());
+    router_->hostRemove(tree_item->info.host_id(), this, &RouterWidget::onHostResultReceived);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1087,7 +1044,7 @@ void RouterWidget::onDisconnectRelay()
     }
 
     LOG(INFO) << "[ACTION] Disconnect relay accepted by user";
-    emit sig_disconnectRelay(tree_item->info.entry_id());
+    router_->relayDisconnect(tree_item->info.entry_id(), this, &RouterWidget::onRelayResultReceived);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1107,7 +1064,7 @@ void RouterWidget::onDisconnectAllRelays()
     }
 
     LOG(INFO) << "[ACTION] Disconnect all relays accepted by user";
-    emit sig_disconnectRelay(-1);
+    router_->relayDisconnect(-1, this, &RouterWidget::onRelayResultReceived);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1128,7 +1085,7 @@ void RouterWidget::onDisconnectClient()
     }
 
     LOG(INFO) << "[ACTION] Disconnect client accepted by user";
-    emit sig_disconnectClient(tree_item->info.entry_id());
+    router_->clientDisconnect(tree_item->info.entry_id(), this, &RouterWidget::onClientResultReceived);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1148,13 +1105,13 @@ void RouterWidget::onDisconnectAllClients()
     }
 
     LOG(INFO) << "[ACTION] Disconnect all clients accepted by user";
-    emit sig_disconnectClient(-1);
+    router_->clientDisconnect(-1, this, &RouterWidget::onClientResultReceived);
 }
 
 //--------------------------------------------------------------------------------------------------
 void RouterWidget::onUpdateWorkspaceList()
 {
-    emit sig_workspaceListRequest();
+    router_->workspaceList(this, &RouterWidget::onWorkspaceListReceived);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1202,7 +1159,7 @@ void RouterWidget::onAddWorkspace()
 
     LOG(INFO) << "[ACTION] Add workspace accepted by user (access entries:"
               << dialog.workspace().access.size() << ")";
-    emit sig_addWorkspace(dialog.workspace());
+    router_->workspaceAdd(dialog.workspace(), this, &RouterWidget::onWorkspaceResultReceived);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1260,7 +1217,7 @@ void RouterWidget::onModifyWorkspace()
 
     LOG(INFO) << "[ACTION] Modify workspace accepted by user (access entries:"
               << dialog.workspace().access.size() << ")";
-    emit sig_modifyWorkspace(dialog.workspace());
+    router_->workspaceModify(dialog.workspace(), this, &RouterWidget::onWorkspaceResultReceived);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1282,7 +1239,7 @@ void RouterWidget::onDeleteWorkspace()
     }
 
     LOG(INFO) << "[ACTION] Delete workspace accepted by user";
-    emit sig_deleteWorkspace(tree_item->workspace.entry_id);
+    router_->workspaceDelete(tree_item->workspace.entry_id, this, &RouterWidget::onWorkspaceResultReceived);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1296,18 +1253,16 @@ void RouterWidget::changeEvent(QEvent* event)
 //--------------------------------------------------------------------------------------------------
 void RouterWidget::onStatusChanged(qint64 router_id, Router::Status status)
 {
-    status_ = status;
-
     switch (status)
     {
         case Router::Status::CONNECTING:
-            status_dialog_->addMessage(tr("Connecting to router %1...").arg(config_.address()));
+            status_dialog_->addMessage(tr("Connecting to router %1...").arg(router_->config().address()));
             break;
         case Router::Status::ONLINE:
-            status_dialog_->addMessage(tr("Connection to router %1 established.").arg(config_.address()));
+            status_dialog_->addMessage(tr("Connection to router %1 established.").arg(router_->config().address()));
             break;
         case Router::Status::OFFLINE:
-            status_dialog_->addMessage(tr("Disconnected from router %1.").arg(config_.address()));
+            status_dialog_->addMessage(tr("Disconnected from router %1.").arg(router_->config().address()));
             break;
     }
 
@@ -1503,7 +1458,8 @@ void RouterWidget::onPeerContextMenuRequested(const QPoint& pos)
         }
 
         LOG(INFO) << "[ACTION] Disconnect peer accepted by user";
-        emit sig_disconnectPeer(relay_item->info.entry_id(), peer_item->conn.session_id());
+        router_->peerDisconnect(relay_item->info.entry_id(), peer_item->conn.peer_id(),
+            this, &RouterWidget::onPeerResultReceived);
     }
     else if (selected == copy_row_action)
     {
@@ -1822,6 +1778,25 @@ void RouterWidget::onClientResultReceived(const proto::router::ClientResult& res
 }
 
 //--------------------------------------------------------------------------------------------------
+void RouterWidget::onPeerResultReceived(const proto::router::PeerResult& result)
+{
+    const std::string& error_code = result.error_code();
+    if (error_code != proto::router::kErrorOk)
+    {
+        const char* message;
+
+        if (error_code == proto::router::kErrorNotFound)
+            message = QT_TR_NOOP("Relay session not found.");
+        else if (error_code == proto::router::kErrorInternalError)
+            message = QT_TR_NOOP("Unknown internal error.");
+        else
+            message = QT_TR_NOOP("Unknown error type.");
+
+        MsgBox::warning(this, tr(message));
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
 void RouterWidget::onWorkspaceListReceived(const Router::WorkspaceList& list)
 {
     QTreeWidget* tree_workspaces = ui->tree_workspaces;
@@ -1951,11 +1926,11 @@ void RouterWidget::updateRelayStatistics()
 
     const proto::router::RelayInfo::Statistics& stats = item->info.statistics();
 
-    auto has_with_id = [](const proto::router::RelayInfo::Statistics& stats, quint64 session_id)
+    auto has_with_id = [](const proto::router::RelayInfo::Statistics& stats, qint64 peer_id)
     {
         for (int i = 0; i < stats.peer_size(); ++i)
         {
-            if (stats.peer(i).session_id() == session_id)
+            if (stats.peer(i).peer_id() == peer_id)
                 return true;
         }
 
@@ -1966,7 +1941,7 @@ void RouterWidget::updateRelayStatistics()
     for (int i = ui->tree_peers->topLevelItemCount() - 1; i >= 0; --i)
     {
         PeerTreeItem* peer_item = static_cast<PeerTreeItem*>(ui->tree_peers->topLevelItem(i));
-        if (!has_with_id(stats, peer_item->conn.session_id()))
+        if (!has_with_id(stats, peer_item->conn.peer_id()))
             delete peer_item;
     }
 
@@ -1979,7 +1954,7 @@ void RouterWidget::updateRelayStatistics()
         for (int j = 0; j < ui->tree_peers->topLevelItemCount(); ++j)
         {
             PeerTreeItem* peer_item = static_cast<PeerTreeItem*>(ui->tree_peers->topLevelItem(j));
-            if (peer_item->conn.session_id() == connection.session_id())
+            if (peer_item->conn.peer_id() == connection.peer_id())
             {
                 peer_item->updateItem(connection);
                 found = true;

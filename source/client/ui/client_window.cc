@@ -27,14 +27,18 @@
 #include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/version_constants.h"
+#include "client/router.h"
 #include "client/ui/authorization_dialog.h"
 #include "common/ui/session_type.h"
 #include "common/ui/status_dialog.h"
 #include "proto/peer.h"
+#include "proto/router_client.h"
 
 namespace {
 
 constexpr int kDragPollIntervalMs = 50;
+const std::chrono::seconds kReconnectRetryDelay { 5 };
+const std::chrono::minutes kReconnectBudget { 5 };
 
 } // namespace
 
@@ -42,7 +46,8 @@ constexpr int kDragPollIntervalMs = 50;
 ClientWindow::ClientWindow(proto::peer::SessionType session_type, QWidget* parent)
     : QWidget(parent),
       session_type_(session_type),
-      drag_poll_timer_(new QTimer(this))
+      drag_poll_timer_(new QTimer(this)),
+      reconnect_timeout_timer_(new QTimer(this))
 {
     LOG(INFO) << "Ctor";
 
@@ -55,6 +60,14 @@ ClientWindow::ClientWindow(proto::peer::SessionType session_type, QWidget* paren
 
     drag_poll_timer_->setInterval(kDragPollIntervalMs);
     connect(drag_poll_timer_, &QTimer::timeout, this, &ClientWindow::onDragPoll);
+
+    reconnect_timeout_timer_->setSingleShot(true);
+    connect(reconnect_timeout_timer_, &QTimer::timeout, this, [this]()
+    {
+        session_state_->setReconnecting(false);
+        session_state_->setAutoReconnect(false);
+        onStatusChanged(Client::Status::WAIT_FOR_HOST_TIMEOUT, QVariant());
+    });
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -101,18 +114,16 @@ bool ClientWindow::connectToHost(ComputerConfig computer, const QString& display
 
     session_state_ = std::make_shared<SessionState>(computer, session_type_, display_name);
 
-    // Create a client instance.
-    Client* client = createClient();
-
-    client->moveToThread(GuiApplication::ioThread());
-    client->setSessionState(session_state_);
-
-    connect(client, &Client::sig_statusChanged, this, &ClientWindow::onStatusChanged, Qt::QueuedConnection);
-    connect(this, &ClientWindow::sig_start, client, &Client::start, Qt::QueuedConnection);
-    connect(this, &ClientWindow::sig_stop, client, &Client::deleteLater, Qt::QueuedConnection);
-
     LOG(INFO) << "Start client";
-    emit sig_start();
+    if (session_state_->isConnectionByHostId())
+    {
+        // Relay path: fetch the ConnectionOffer first; Client will be created once we have it.
+        fetchConnectionOffer();
+    }
+    else
+    {
+        startNewClient();
+    }
     return true;
 }
 
@@ -160,6 +171,7 @@ void ClientWindow::closeEvent(QCloseEvent* /* event */)
 {
     LOG(INFO) << "Close event";
     drag_poll_timer_->stop();
+    client_.reset();
     emit sig_stop();
 }
 
@@ -239,6 +251,7 @@ void ClientWindow::onStatusChanged(Client::Status status, const QVariant& data)
             }
 
             status_dialog_->setVisible(false);
+            reconnect_timeout_timer_->stop();
         }
         break;
 
@@ -258,6 +271,18 @@ void ClientWindow::onStatusChanged(Client::Status status, const QVariant& data)
 
         case Client::Status::WAIT_FOR_HOST:
             onErrorOccurred(tr("Host is unavailable yet. Waiting to reconnect..."));
+            if (!session_state_->isAutoReconnect())
+                break;
+            // First disconnect in this auto-reconnect cycle: arm the overall timeout. Subsequent
+            // WAIT_FOR_HOST signals during the same cycle keep the deadline rolling.
+            if (!reconnect_timeout_timer_->isActive())
+                reconnect_timeout_timer_->start(kReconnectBudget);
+            // Relay path fetches a fresh ConnectionOffer (which then triggers startNewClient).
+            // Direct path doesn't need an offer - just rebuild the Client after the same delay.
+            if (session_state_->isConnectionByHostId())
+                QTimer::singleShot(kReconnectRetryDelay, this, &ClientWindow::fetchConnectionOffer);
+            else
+                QTimer::singleShot(kReconnectRetryDelay, this, &ClientWindow::startNewClient);
             break;
 
         case Client::Status::WAIT_FOR_HOST_TIMEOUT:
@@ -312,4 +337,78 @@ void ClientWindow::onErrorOccurred(const QString& message)
     onInternalReset();
 
     status_dialog_->addMessageAndActivate(message);
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientWindow::fetchConnectionOffer()
+{
+    // If auto-reconnect was disabled (e.g. Client's reconnect timeout elapsed), stop trying.
+    if (session_state_->isReconnecting() && !session_state_->isAutoReconnect())
+        return;
+
+    Router* router = Router::instance(session_state_->routerId());
+    if (!router)
+    {
+        onStatusChanged(Client::Status::NO_ROUTER, QVariant());
+        return;
+    }
+
+    if (router->status() != Router::Status::ONLINE)
+    {
+        onStatusChanged(Client::Status::ROUTER_OFFLINE, QVariant());
+        return;
+    }
+
+    session_state_->setRouterVersion(router->version());
+    router->connectionRequest(session_state_->hostId(), this,
+        [this](const proto::router::ConnectionOffer& offer)
+    {
+        if (offer.error_code() == proto::router::ConnectionOffer::SUCCESS)
+        {
+            session_state_->setConnectionOffer(offer);
+            startNewClient();
+            return;
+        }
+
+        if (offer.error_code() == proto::router::ConnectionOffer::PEER_NOT_FOUND &&
+            session_state_->isReconnecting())
+        {
+            // Host is offline - wait a few seconds and try again. Client's internal
+            // timeout_timer will eventually flip isAutoReconnect to false;
+            // fetchConnectionOffer() guards on that.
+            QTimer::singleShot(kReconnectRetryDelay, this, &ClientWindow::fetchConnectionOffer);
+            return;
+        }
+
+        QString error;
+        switch (offer.error_code())
+        {
+            case proto::router::ConnectionOffer::PEER_NOT_FOUND:
+                error = tr("The host with the specified ID is not online");
+                break;
+            case proto::router::ConnectionOffer::ACCESS_DENIED:
+                error = tr("Access is denied");
+                break;
+            case proto::router::ConnectionOffer::KEY_POOL_EMPTY:
+                error = tr("There are no relays available or the key pool is empty");
+                break;
+            default:
+                error = tr("Unknown error");
+                break;
+        }
+        onStatusChanged(Client::Status::ROUTER_ERROR, error);
+    });
+}
+
+//--------------------------------------------------------------------------------------------------
+void ClientWindow::startNewClient()
+{
+    // A Client is single-use - tear down the previous one (if any) before creating a fresh one.
+    client_ = createClient();
+    client_->moveToThread(GuiApplication::ioThread());
+    client_->setSessionState(session_state_);
+
+    connect(client_, &Client::sig_statusChanged, this, &ClientWindow::onStatusChanged, Qt::QueuedConnection);
+
+    QMetaObject::invokeMethod(client_, &Client::start, Qt::QueuedConnection);
 }

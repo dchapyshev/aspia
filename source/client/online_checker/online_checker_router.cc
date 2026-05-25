@@ -24,6 +24,7 @@
 #include "base/logging.h"
 #include "base/peer/host_id.h"
 #include "client/router.h"
+#include "proto/router_client.h"
 
 namespace {
 
@@ -65,11 +66,12 @@ void OnlineCheckerRouter::start()
 }
 
 //--------------------------------------------------------------------------------------------------
-void OnlineCheckerRouter::onHostStatus(qint64 request_id, bool online)
+void OnlineCheckerRouter::onHostStatusReceived(const proto::router::HostStatus& host_status)
 {
-    if (request_id != current_request_id_)
+    if (computers_.isEmpty())
         return;
 
+    const bool online = host_status.status() == proto::router::HostStatus::STATUS_ONLINE;
     emit sig_checkerResult(computers_.front().id(), online);
     computers_.pop_front();
     checkNextComputer();
@@ -91,15 +93,8 @@ void OnlineCheckerRouter::checkNextComputer()
     LOG(TRACE) << "Checking status for host id" << host_id
                << "(router_id:" << computer.routerId() << "computer_id:" << computer.id() << ")";
 
-    Router* connection = Router::instance(computer.routerId());
-
-    if (!routers_.contains(computer.routerId()) && connection)
-    {
-        connect(connection, &Router::sig_hostStatus, this, &OnlineCheckerRouter::onHostStatus);
-        routers_.insert(computer.routerId());
-    }
-
-    if (!connection || connection->status() != Router::Status::ONLINE)
+    Router* router = Router::instance(computer.routerId());
+    if (!router || router->status() != Router::Status::ONLINE)
     {
         emit sig_checkerResult(computer.id(), false);
         computers_.pop_front();
@@ -108,11 +103,7 @@ void OnlineCheckerRouter::checkNextComputer()
         return;
     }
 
-    static thread_local qint64 request_id_counter = 100000;
-    ++request_id_counter;
-
-    current_request_id_ = request_id_counter;
-    connection->onCheckHostStatus(current_request_id_, host_id);
+    router->checkHostStatus(host_id, this, &OnlineCheckerRouter::onHostStatusReceived);
 }
 
 //--------------------------------------------------------------------------------------------------

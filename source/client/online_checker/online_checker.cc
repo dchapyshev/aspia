@@ -57,17 +57,14 @@ void OnlineChecker::start(const ComputerList& computers)
 
     if (!router_computers_.isEmpty())
     {
-        router_checker_ = new OnlineCheckerRouter(router_computers_);
-        router_checker_->moveToThread(GuiApplication::ioThread());
+        router_checker_ = new OnlineCheckerRouter(router_computers_, this);
 
         connect(router_checker_, &OnlineCheckerRouter::sig_checkerResult,
-                this, &OnlineChecker::onRouterCheckerResult,
-                Qt::QueuedConnection);
+                this, &OnlineChecker::onRouterCheckerResult);
         connect(router_checker_, &OnlineCheckerRouter::sig_checkerFinished,
-                this, &OnlineChecker::onRouterCheckerFinished,
-                Qt::QueuedConnection);
+                this, &OnlineChecker::onRouterCheckerFinished);
 
-        QMetaObject::invokeMethod(router_checker_, &OnlineCheckerRouter::start, Qt::QueuedConnection);
+        router_checker_->start();
     }
     else
     {

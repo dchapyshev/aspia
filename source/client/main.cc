@@ -103,7 +103,6 @@ void startRouterSession(const ComputerConfig& computer,
     status_dialog->setAttribute(Qt::WA_DeleteOnClose);
 
     QPointer<Router> router = new Router(router_config);
-    router->moveToThread(GuiApplication::ioThread());
 
     QObject::connect(router, &Router::sig_statusChanged, qApp,
         [status_dialog, router, computer, session_type, display_name, desktop_config](qint64, Router::Status status)
@@ -134,7 +133,7 @@ void startRouterSession(const ComputerConfig& computer,
                     QApplication::translate("Client", "Disconnected from router %1.").arg(address));
                 break;
         }
-    }, Qt::QueuedConnection);
+    });
 
     QObject::connect(router, &Router::sig_errorOccurred, qApp,
         [status_dialog](qint64, TcpChannel::ErrorCode error_code)
@@ -144,12 +143,12 @@ void startRouterSession(const ComputerConfig& computer,
 
         status_dialog->addMessage(
             QApplication::translate("Client", "Network error: %1.").arg(TcpChannel::errorToString(error_code)));
-    }, Qt::QueuedConnection);
+    });
 
     status_dialog->show();
     status_dialog->activateWindow();
 
-    QMetaObject::invokeMethod(router, &Router::onConnectToRouter, Qt::QueuedConnection);
+    router->connectToRouter();
 }
 
 //--------------------------------------------------------------------------------------------------

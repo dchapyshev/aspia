@@ -19,13 +19,16 @@
 #ifndef CLIENT_ONLINE_CHECKER_ONLINE_CHECKER_ROUTER_H
 #define CLIENT_ONLINE_CHECKER_ONLINE_CHECKER_ROUTER_H
 
-#include <QSet>
 #include <QQueue>
 
 #include "client/config.h"
 
 class Location;
 class QTimer;
+
+namespace proto::router {
+class HostStatus;
+} // namespace proto::router
 
 class OnlineCheckerRouter final : public QObject
 {
@@ -44,16 +47,13 @@ signals:
     void sig_checkerFinished();
 
 private slots:
-    void onHostStatus(qint64 request_id, bool online);
+    void onHostStatusReceived(const proto::router::HostStatus& host_status);
 
 private:
     void checkNextComputer();
     void onFinished(const Location& location);
 
-    qint64 current_request_id_ = 0;
-    QSet<qint64> routers_;
     QTimer* timer_ = nullptr;
-
     ComputerList computers_;
 };
 

@@ -75,6 +75,20 @@ QVersionNumber SessionState::routerVersion() const
 }
 
 //--------------------------------------------------------------------------------------------------
+void SessionState::setConnectionOffer(const proto::router::ConnectionOffer& offer)
+{
+    std::scoped_lock lock(lock_);
+    connection_offer_ = offer;
+}
+
+//--------------------------------------------------------------------------------------------------
+proto::router::ConnectionOffer SessionState::connectionOffer() const
+{
+    std::scoped_lock lock(lock_);
+    return connection_offer_;
+}
+
+//--------------------------------------------------------------------------------------------------
 void SessionState::setHostVersion(const QVersionNumber& host_version)
 {
     std::scoped_lock lock(lock_);

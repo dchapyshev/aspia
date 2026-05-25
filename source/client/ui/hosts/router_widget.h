@@ -19,12 +19,11 @@
 #ifndef CLIENT_UI_HOSTS_ROUTER_WIDGET_H
 #define CLIENT_UI_HOSTS_ROUTER_WIDGET_H
 
-#include <QHash>
+#include <QPointer>
 
 #include <memory>
 
 #include "base/peer/host_id.h"
-#include "base/scoped_qpointer.h"
 #include "client/config.h"
 #include "client/router.h"
 #include "client/ui/hosts/content_widget.h"
@@ -42,12 +41,13 @@ namespace proto::router {
 class ClientList;
 class ClientResult;
 class HostList;
-class HostListRequest;
 class HostResult;
+class PeerResult;
 class RelayList;
 class RelayResult;
 class User;
 class UserList;
+class UserResult;
 class Workspace;
 class WorkspaceResult;
 } // namespace proto::router
@@ -109,6 +109,11 @@ public:
 
     void showStatusDialog();
 
+    // Factory for issuing correlated router requests. Pass it to dialogs/other widgets that
+    // need to talk to the router without going through RouterWidget. QPointer guards against
+    // dangling access if the widget (and its router_) goes away.
+    QPointer<Router> router() const { return router_; }
+
 public slots:
     void onUpdateRelayList();
     void onUpdateHostList();
@@ -130,22 +135,6 @@ public slots:
     void onDeleteWorkspace();
 
 signals:
-    void sig_relayListRequest();
-    void sig_clientListRequest();
-    void sig_userListRequest();
-    void sig_addUser(const proto::router::User& user);
-    void sig_modifyUser(const proto::router::User& user);
-    void sig_deleteUser(qint64 entry_id);
-    void sig_disconnectHost(qint64 host_id);
-    void sig_removeHost(qint64 host_id);
-    void sig_disconnectRelay(qint64 session_id);
-    void sig_disconnectClient(qint64 session_id);
-    void sig_disconnectPeer(qint64 relay_entry_id, quint64 peer_session_id);
-    void sig_workspaceListRequest();
-    void sig_addWorkspace(const Router::Workspace& workspace);
-    void sig_modifyWorkspace(const Router::Workspace& workspace);
-    void sig_deleteWorkspace(qint64 entry_id);
-    void sig_hostListRequest(const proto::router::HostListRequest& request);
     void sig_statusChanged(qint64 router_id, Router::Status status);
     void sig_currentTabTypeChanged(qint64 router_id, RouterWidget::TabType tab);
     void sig_currentUserChanged(qint64 router_id);
@@ -158,7 +147,6 @@ signals:
     void sig_clientContextMenu(qint64 router_id, const QPoint& global_pos, int column);
     void sig_relayContextMenu(qint64 router_id, const QPoint& global_pos, int column);
     void sig_workspaceContextMenu(qint64 router_id, const QPoint& global_pos);
-    void sig_updateConfig(const RouterConfig& config);
 
 protected:
     // QWidget implementation.
@@ -188,6 +176,7 @@ private slots:
     void onHostResultReceived(const proto::router::HostResult& result);
     void onRelayResultReceived(const proto::router::RelayResult& result);
     void onClientResultReceived(const proto::router::ClientResult& result);
+    void onPeerResultReceived(const proto::router::PeerResult& result);
     void onWorkspaceListReceived(const Router::WorkspaceList& list);
     void onWorkspaceResultReceived(const proto::router::WorkspaceResult& result);
 
@@ -201,9 +190,7 @@ private:
     void saveRelaysToFile();
 
     std::unique_ptr<Ui::RouterWidget> ui;
-    RouterConfig config_;
-    ScopedQPointer<Router> router_;
-    Router::Status status_ = Router::Status::OFFLINE;
+    Router* router_ = nullptr;
 
     StatusDialog* status_dialog_ = nullptr;
 

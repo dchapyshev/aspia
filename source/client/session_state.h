@@ -23,6 +23,7 @@
 
 #include "base/peer/host_id.h"
 #include "client/config.h"
+#include "proto/router_client.h"
 
 #include <mutex>
 
@@ -54,6 +55,9 @@ public:
     void setRouterVersion(const QVersionNumber& router_version);
     QVersionNumber routerVersion() const;
 
+    void setConnectionOffer(const proto::router::ConnectionOffer& offer);
+    proto::router::ConnectionOffer connectionOffer() const;
+
     void setHostVersion(const QVersionNumber& host_version);
     QVersionNumber hostVersion() const;
 
@@ -71,6 +75,7 @@ private:
     mutable std::mutex lock_;
     QVersionNumber router_version_;
     QVersionNumber host_version_;
+    proto::router::ConnectionOffer connection_offer_;
     bool auto_reconnect_ = false;
     bool reconnecting_ = false;
 };

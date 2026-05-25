@@ -19,6 +19,7 @@
 #ifndef CLIENT_UI_CLIENT_WINDOW_H
 #define CLIENT_UI_CLIENT_WINDOW_H
 
+#include "base/scoped_qpointer.h"
 #include "client/client.h"
 #include "client/config.h"
 #include "client/session_state.h"
@@ -70,7 +71,6 @@ public:
     virtual void restoreState(const QByteArray& state);
 
 signals:
-    void sig_start();
     void sig_stop();
 
     // Emitted on each drag-poll tick while the user is dragging this widget as a top-level
@@ -121,11 +121,21 @@ private slots:
 private:
     void setClientTitle(const ComputerConfig& computer, proto::peer::SessionType session_type);
     void onErrorOccurred(const QString& message);
+    // For relay-path sessions: fetches a ConnectionOffer from the router (via Router) and
+    // handles the response inline. Called both for the initial connect and for every reconnect
+    // attempt after host disconnects.
+    void fetchConnectionOffer();
+    // Destroys the current Client (if any) and creates a fresh one bound to session_state_.
+    // Called on the initial start and on every reconnect (a Client is single-use - reconnects
+    // discard the old instance and build a new one).
+    void startNewClient();
 
     const proto::peer::SessionType session_type_;
     std::shared_ptr<SessionState> session_state_;
+    ScopedQPointer<Client> client_;
     StatusDialog* status_dialog_ = nullptr;
     QTimer* drag_poll_timer_ = nullptr;
+    QTimer* reconnect_timeout_timer_ = nullptr;
 };
 
 #endif // CLIENT_UI_CLIENT_WINDOW_H

@@ -20,7 +20,6 @@
 #define CLIENT_CLIENT_H
 
 #include <QObject>
-#include <QPointer>
 #include <QVariant>
 
 #include <memory>
@@ -30,9 +29,7 @@
 #include "base/net/tcp_channel.h"
 #include "base/scoped_qpointer.h"
 #include "client/session_state.h"
-#include "client/router.h"
 
-class QTimer;
 class RelayPeer;
 class StunPeer;
 class UdpChannel;
@@ -40,10 +37,6 @@ class UdpChannel;
 namespace proto::peer {
 class DirectUdpRequest;
 } // namespace proto::peer
-
-namespace proto::router {
-class ConnectionOffer;
-} // namespace proto::router
 
 class Client : public QObject
 {
@@ -55,8 +48,6 @@ public:
 
     // Starts a session.
     void start();
-
-    qint64 instanceId() const { return instance_id_; }
 
     // Sets an instance of a class that stores session state.
     // The method must be called before calling method start().
@@ -113,8 +104,6 @@ private slots:
     void onUdpReady();
     void onUdpErrorOccurred();
     void onUdpMessageReceived(quint8 channel_id, const QByteArray& buffer);
-    void onRouterOffer(const proto::router::ConnectionOffer& offer);
-    void onRouterStatusChanged(qint64 router_id, Router::Status status);
     void onRelayConnectionReady();
     void onRelayConnectionError();
 
@@ -128,18 +117,13 @@ private:
         QByteArray iv;
     };
 
-    void delayedReconnect();
     void tcpChannelReady();
     void readDirectUdpRequest(const proto::peer::DirectUdpRequest& request);
     void connectToUdp(const PendingUdp& context, qintptr socket = -1,
         const QString& external_address = QString(), quint16 external_port = 0);
     void startUdpHolePunching(const PendingUdp& context, const QString& stun_host, quint16 stun_port);
 
-    const qint64 instance_id_;
     bool is_legacy_mode_ = false;
-    QTimer* timeout_timer_ = nullptr;
-    QTimer* reconnect_timer_ = nullptr;
-    QPointer<Router> router_ = nullptr;
     ScopedQPointer<TcpChannel> tcp_channel_;
     ScopedQPointer<UdpChannel> udp_channel_;
     ScopedQPointer<RelayPeer> relay_peer_;

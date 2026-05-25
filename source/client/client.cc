@@ -19,7 +19,6 @@
 #include "client/client.h"
 
 #include <QHostAddress>
-#include <QTimer>
 
 #include "base/version_constants.h"
 #include "base/serialization.h"
@@ -39,6 +38,7 @@
 #include "client/settings.h"
 #include "proto/key_exchange.h"
 #include "proto/peer.h"
+#include "proto/router_client.h"
 #include "proto/router_peer.h"
 
 #if defined(Q_OS_MACOS)
@@ -51,50 +51,13 @@ auto g_statusType = qRegisterMetaType<Client::Status>();
 static const int kReadBufferSize = 2 * 1024 * 1024; // 2 Mb.
 static const int kWriteBufferSize = 2 * 1024 * 1024; // 2 Mb.
 
-//--------------------------------------------------------------------------------------------------
-quint32 makeInstanceId()
-{
-    static qint32 instance_id = 0;
-    ++instance_id;
-    return instance_id;
-}
-
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
 Client::Client(QObject* parent)
-    : QObject(parent),
-      instance_id_(makeInstanceId()),
-      timeout_timer_(new QTimer(this)),
-      reconnect_timer_(new QTimer(this))
+    : QObject(parent)
 {
     CLOG(INFO) << "Ctor";
-
-    timeout_timer_->setSingleShot(true);
-    connect(timeout_timer_, &QTimer::timeout, this, [this]()
-    {
-        CLOG(INFO) << "Reconnect timeout";
-
-        emit sig_statusChanged(Status::WAIT_FOR_HOST_TIMEOUT);
-
-        session_state_->setReconnecting(false);
-        session_state_->setAutoReconnect(false);
-
-        if (tcp_channel_)
-        {
-            CLOG(INFO) << "Destroy channel";
-            tcp_channel_->disconnect();
-            tcp_channel_.reset();
-        }
-    });
-
-    reconnect_timer_->setSingleShot(true);
-    connect(reconnect_timer_, &QTimer::timeout, this, [this]()
-    {
-        CLOG(INFO) << "Reconnecting...";
-        state_ = State::CREATED;
-        start();
-    });
 
 #if defined(Q_OS_MACOS)
     addAppNapBlock();
@@ -150,30 +113,18 @@ void Client::start()
             return;
         }
 
-        bool reconnecting = session_state_->isReconnecting();
-        if (!reconnecting)
+        const proto::router::ConnectionOffer offer = session_state_->connectionOffer();
+        if (offer.error_code() != proto::router::ConnectionOffer::SUCCESS)
+        {
+            CLOG(ERROR) << "Connection offer not provided or has error";
+            return;
+        }
+
+        if (!session_state_->isReconnecting())
         {
             // Show the status window.
             emit sig_statusChanged(Status::STARTED);
         }
-
-        router_ = Router::instance(session_state_->routerId());
-        if (!router_)
-        {
-            emit sig_statusChanged(Status::NO_ROUTER);
-            return;
-        }
-
-        if (router_->status() != Router::Status::ONLINE)
-        {
-            emit sig_statusChanged(Status::ROUTER_OFFLINE);
-            return;
-        }
-
-        session_state_->setRouterVersion(router_->version());
-
-        connect(router_, &Router::sig_connectionOffer, this, &Client::onRouterOffer, Qt::UniqueConnection);
-        connect(router_, &Router::sig_statusChanged, this, &Client::onRouterStatusChanged, Qt::UniqueConnection);
 
         // For relay path the channel type (Legacy/NG) is decided later from the connection
         // offer. Authenticator implementations are currently identical, so we always use the
@@ -186,7 +137,7 @@ void Client::start()
         connect(relay_peer_, &RelayPeer::sig_connectionError, this, &Client::onRelayConnectionError);
         connect(relay_peer_, &RelayPeer::sig_connectionReady, this, &Client::onRelayConnectionReady);
 
-        router_->onConnectionRequest(instanceId(), session_state_->hostId());
+        relay_peer_->start(offer);
     }
     else
     {
@@ -378,20 +329,9 @@ void Client::onTcpErrorOccurred(TcpChannel::ErrorCode error_code)
     CLOG(INFO) << "Reconnect to host is enabled";
     session_state_->setReconnecting(true);
 
-    timeout_timer_->start(std::chrono::minutes(5));
-
-    if (session_state_->isConnectionByHostId())
-    {
-        // If you are using an ID connection, then start the connection immediately. The Router
-        // will notify you when the Host comes online again.
-        state_ = State::CREATED;
-        start();
-    }
-    else
-    {
-        emit sig_statusChanged(Status::WAIT_FOR_HOST);
-        delayedReconnect();
-    }
+    // Both relay and direct paths are handled the same way: the owner (ClientWindow)
+    // observes WAIT_FOR_HOST, destroys this Client, and builds a fresh one when ready.
+    emit sig_statusChanged(Status::WAIT_FOR_HOST);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -482,72 +422,6 @@ void Client::onUdpMessageReceived(quint8 channel_id, const QByteArray& buffer)
 }
 
 //--------------------------------------------------------------------------------------------------
-void Client::onRouterOffer(const proto::router::ConnectionOffer& offer)
-{
-    if (offer.request_id() != instanceId())
-        return;
-
-    CHECK(relay_peer_);
-    CHECK(router_);
-
-    if (offer.error_code() != proto::router::ConnectionOffer::SUCCESS)
-    {
-        QString error;
-
-        switch (offer.error_code())
-        {
-            case proto::router::ConnectionOffer::PEER_NOT_FOUND:
-                error = tr("The host with the specified ID is not online");
-                break;
-            case proto::router::ConnectionOffer::ACCESS_DENIED:
-                error = tr("Access is denied");
-                break;
-            case proto::router::ConnectionOffer::KEY_POOL_EMPTY:
-                error = tr("There are no relays available or the key pool is empty");
-                break;
-            default:
-                error = tr("Unknown error");
-                break;
-        }
-
-        if (offer.error_code() == proto::router::ConnectionOffer::PEER_NOT_FOUND &&
-            session_state_->isReconnecting())
-        {
-            LOG(INFO) << "Host is OFFLINE. Wait for host";
-
-            router_->disconnect(this);
-            router_ = nullptr;
-
-            relay_peer_->disconnect();
-            relay_peer_.reset();
-
-            delayedReconnect();
-        }
-        else
-        {
-            emit sig_statusChanged(Status::ROUTER_ERROR, error);
-        }
-        return;
-    }
-
-    relay_peer_->start(offer);
-}
-
-//--------------------------------------------------------------------------------------------------
-void Client::onRouterStatusChanged(qint64 router_id, Router::Status status)
-{
-    CHECK(router_);
-
-    if (status == Router::Status::ONLINE)
-        return;
-
-    router_->disconnect(this);
-    router_ = nullptr;
-
-    emit sig_statusChanged(Status::ROUTER_ERROR, tr("Connection to the router has been lost."));
-}
-
-//--------------------------------------------------------------------------------------------------
 void Client::onRelayConnectionReady()
 {
     LOG(INFO) << "Relay connection ready";
@@ -558,12 +432,6 @@ void Client::onRelayConnectionReady()
 
     relay_peer_->disconnect();
     relay_peer_.reset();
-
-    if (router_)
-    {
-        router_->disconnect(this);
-        router_ = nullptr;
-    }
 
     connect(tcp_channel_, &TcpChannel::sig_errorOccurred, this, &Client::onTcpErrorOccurred);
     connect(tcp_channel_, &TcpChannel::sig_messageReceived, this, &Client::onTcpMessageReceived);
@@ -580,27 +448,13 @@ void Client::onRelayConnectionError()
     relay_peer_->disconnect();
     relay_peer_.reset();
 
-    if (router_)
-    {
-        router_->disconnect(this);
-        router_ = nullptr;
-    }
-
     emit sig_statusChanged(Status::ROUTER_ERROR, tr("Failed to connect to the relay server"));
-}
-
-//--------------------------------------------------------------------------------------------------
-void Client::delayedReconnect()
-{
-    reconnect_timer_->start(std::chrono::seconds(5));
 }
 
 //--------------------------------------------------------------------------------------------------
 void Client::tcpChannelReady()
 {
     session_state_->setReconnecting(false);
-    reconnect_timer_->stop();
-    timeout_timer_->stop();
 
     const QVersionNumber& host_version = tcp_channel_->peerVersion();
     session_state_->setHostVersion(host_version);

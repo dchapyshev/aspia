@@ -18,12 +18,9 @@
 
 #include "client/router.h"
 
-#include <QHash>
 #include <QTimer>
 
-#include <optional>
-#include <string_view>
-
+#include "base/gui_application.h"
 #include "base/logging.h"
 #include "base/serialization.h"
 #include "base/crypto/data_cryptor.h"
@@ -31,20 +28,27 @@
 #include "base/crypto/private_key_cryptor.h"
 #include "base/crypto/random.h"
 #include "base/crypto/sealed_box.h"
-#include "base/crypto/secure_string.h"
 #include "base/net/address.h"
 #include "base/net/tcp_channel_ng.h"
 #include "base/peer/client_authenticator.h"
-#include "build/build_config.h"
 #include "proto/key_exchange.h"
-#include "proto/router_admin.h"
-#include "proto/router_client.h"
-#include "proto/router_constants.h"
 
 namespace {
 
-const std::chrono::seconds kReconnectTimeout{ 5 };
 constexpr int kGroupKeySize = 32;
+const std::chrono::seconds kReconnectTimeout { 5 };
+
+//--------------------------------------------------------------------------------------------------
+struct Registrator
+{
+    Registrator()
+    {
+        qRegisterMetaType<Router::Workspace>("Router::Workspace");
+        qRegisterMetaType<Router::WorkspaceList>("Router::WorkspaceList");
+    }
+};
+
+static volatile Registrator registrator;
 
 //--------------------------------------------------------------------------------------------------
 QHash<qint64, Router*>& instances()
@@ -88,17 +92,6 @@ QString decryptWithGroupKey(std::string_view ciphertext, const SecureByteArray& 
     return QString::fromUtf8(*decrypted);
 }
 
-struct Registrator
-{
-    Registrator()
-    {
-        qRegisterMetaType<Router::Workspace>("Router::Workspace");
-        qRegisterMetaType<Router::WorkspaceList>("Router::WorkspaceList");
-    }
-};
-
-static volatile Registrator registrator;
-
 } // namespace
 
 //--------------------------------------------------------------------------------------------------
@@ -109,12 +102,10 @@ Router::Router(const RouterConfig& config, QObject* parent)
 {
     LOG(INFO) << "Ctor";
 
+    instances().insert(config_.routerId(), this);
+
     reconnect_timer_->setSingleShot(true);
-    connect(reconnect_timer_, &QTimer::timeout, this, [this]()
-    {
-        LOG(INFO) << "Reconnecting to router" << config_.address();
-        onConnectToRouter();
-    });
+    connect(reconnect_timer_, &QTimer::timeout, this, &Router::onReconnectTimeout);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -122,424 +113,56 @@ Router::~Router()
 {
     LOG(INFO) << "Dtor";
     instances().remove(config_.routerId());
-    onDisconnectFromRouter();
 }
 
 //--------------------------------------------------------------------------------------------------
 // static
 Router* Router::instance(qint64 router_id)
 {
-    if (!instances().contains(router_id))
-        return nullptr;
-
     return instances().value(router_id);
 }
 
 //--------------------------------------------------------------------------------------------------
-void Router::onConnectToRouter()
+void Router::connectToRouter()
 {
-    // We cannot perform registration in the constructor because the constructor is executed in the
-    // GUI thread.
-    instances().insert(config_.routerId(), this);
-
-    reconnect_timer_->stop();
-
-    if (status_ != Status::OFFLINE)
-        return;
-
-    LOG(INFO) << "Connecting to router" << config_.address();
-
     setStatus(Status::CONNECTING);
-
-    ClientAuthenticator* authenticator = new ClientAuthenticator(this);
-    authenticator->setIdentify(proto::key_exchange::IDENTIFY_SRP);
-    authenticator->setSessionType(config_.sessionType());
-    authenticator->setUserName(config_.username());
-    authenticator->setPassword(SecureString(config_.password()));
-
-    tcp_channel_ = new TcpChannelNG(authenticator, this);
-
-    connect(tcp_channel_, &TcpChannel::sig_authenticated,
-            this, &Router::onTcpReady);
-    connect(tcp_channel_, &TcpChannel::sig_errorOccurred,
-            this, &Router::onTcpErrorOccurred);
-    connect(tcp_channel_, &TcpChannel::sig_messageReceived,
-            this, &Router::onTcpMessageReceived);
-
-    Address address = Address::fromString(config_.address(), DEFAULT_ROUTER_TCP_PORT);
-    tcp_channel_->connectTo(address.host(), address.port());
+    setupChannel();
 }
 
 //--------------------------------------------------------------------------------------------------
-void Router::onDisconnectFromRouter()
+void Router::disconnectFromRouter()
 {
     reconnect_timer_->stop();
-
-    if (tcp_channel_)
-    {
-        tcp_channel_->disconnect();
-        tcp_channel_.reset();
-    }
-
-    user_id_ = 0;
-    user_private_key_.clear();
-    workspace_group_keys_.clear();
-
+    destroyChannel();
     setStatus(Status::OFFLINE);
 }
 
 //--------------------------------------------------------------------------------------------------
-const RouterConfig& Router::config() const
+void Router::updateConfig(const RouterConfig& config)
 {
-    return config_;
-}
-
-//--------------------------------------------------------------------------------------------------
-qint64 Router::routerId() const
-{
-    return config_.routerId();
-}
-
-//--------------------------------------------------------------------------------------------------
-QVersionNumber Router::version() const
-{
-    if (!tcp_channel_)
-        return QVersionNumber();
-
-    return tcp_channel_->peerVersion();
-}
-
-//--------------------------------------------------------------------------------------------------
-void Router::onUpdateConfig(const RouterConfig& config)
-{
-    bool need_reconnect = !config_.hasSameParams(config);
+    const bool need_reconnect = !config_.hasSameParams(config);
     config_ = config;
 
-    if (need_reconnect)
+    if (need_reconnect && status_ != Status::OFFLINE)
     {
-        onDisconnectFromRouter();
-        onConnectToRouter();
+        destroyChannel();
+        setStatus(Status::CONNECTING);
+        setupChannel();
     }
 }
 
 //--------------------------------------------------------------------------------------------------
-void Router::onRelayListRequest()
+void Router::onTcpAuthenticated()
 {
-    if (config_.sessionType() != proto::router::SESSION_TYPE_ADMIN)
-    {
-        LOG(ERROR) << "No administrator access level";
+    if (!tcp_channel_)
         return;
-    }
-
-    proto::router::AdminToRouter message;
-    proto::router::RelayListRequest* request = message.mutable_relay_list_request();
-    request->set_dummy(1);
-
-    LOG(INFO) << "Sending relay list request";
-    sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
-}
-
-//--------------------------------------------------------------------------------------------------
-void Router::onClientListRequest()
-{
-    if (config_.sessionType() != proto::router::SESSION_TYPE_ADMIN)
-    {
-        LOG(ERROR) << "No administrator access level";
-        return;
-    }
-
-    proto::router::AdminToRouter message;
-    proto::router::ClientListRequest* request = message.mutable_client_list_request();
-    request->set_dummy(1);
-
-    LOG(INFO) << "Sending client list request";
-    sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
-}
-
-//--------------------------------------------------------------------------------------------------
-void Router::onUserListRequest()
-{
-    if (config_.sessionType() != proto::router::SESSION_TYPE_ADMIN)
-    {
-        LOG(ERROR) << "No administrator access level";
-        return;
-    }
-
-    proto::router::AdminToRouter message;
-    message.mutable_user_list_request()->set_dummy(1);
-
-    LOG(INFO) << "Sending user list request";
-    sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
-}
-
-//--------------------------------------------------------------------------------------------------
-void Router::onAddUser(const proto::router::User& user)
-{
-    if (config_.sessionType() != proto::router::SESSION_TYPE_ADMIN)
-    {
-        LOG(ERROR) << "No administrator access level";
-        return;
-    }
-
-    proto::router::AdminToRouter message;
-    proto::router::UserRequest* request = message.mutable_user_request();
-    request->set_command_name(proto::router::kCommandUserAdd);
-    request->mutable_user()->CopyFrom(user);
-
-    LOG(INFO) << "Sending user add request (username:" << user.name()
-              << ", entry_id:" << user.entry_id() << ")";
-    sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
-}
-
-//--------------------------------------------------------------------------------------------------
-void Router::onModifyUser(const proto::router::User& user)
-{
-    if (config_.sessionType() != proto::router::SESSION_TYPE_ADMIN)
-    {
-        LOG(ERROR) << "No administrator access level";
-        return;
-    }
-
-    proto::router::AdminToRouter message;
-    proto::router::UserRequest* request = message.mutable_user_request();
-    request->set_command_name(proto::router::kCommandUserModify);
-    request->mutable_user()->CopyFrom(user);
-
-    LOG(INFO) << "Sending user modify request (username:" << user.name()
-              << ", entry_id:" << user.entry_id() << ")";
-    sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
-}
-
-//--------------------------------------------------------------------------------------------------
-void Router::onDeleteUser(qint64 entry_id)
-{
-    if (config_.sessionType() != proto::router::SESSION_TYPE_ADMIN)
-    {
-        LOG(ERROR) << "No administrator access level";
-        return;
-    }
-
-    proto::router::AdminToRouter message;
-    proto::router::UserRequest* request = message.mutable_user_request();
-    request->set_command_name(proto::router::kCommandUserDelete);
-    request->mutable_user()->set_entry_id(entry_id);
-
-    LOG(INFO) << "Sending user delete request (entry_id:" << entry_id << ")";
-    sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
-}
-
-//--------------------------------------------------------------------------------------------------
-void Router::onDisconnectHost(qint64 host_id)
-{
-    if (config_.sessionType() != proto::router::SESSION_TYPE_ADMIN)
-    {
-        LOG(ERROR) << "No administrator access level";
-        return;
-    }
-
-    proto::router::AdminToRouter message;
-    proto::router::HostRequest* request = message.mutable_host_request();
-    request->set_command_name(proto::router::kCommandHostDisconnect);
-    request->set_host_id(host_id);
-
-    LOG(INFO) << "Sending host disconnect request (host_id:" << host_id << ")";
-    sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
-}
-
-//--------------------------------------------------------------------------------------------------
-void Router::onRemoveHost(qint64 host_id)
-{
-    if (config_.sessionType() != proto::router::SESSION_TYPE_ADMIN)
-    {
-        LOG(ERROR) << "No administrator access level";
-        return;
-    }
-
-    proto::router::AdminToRouter message;
-    proto::router::HostRequest* request = message.mutable_host_request();
-    request->set_command_name(proto::router::kCommandHostRemove);
-    request->set_host_id(host_id);
-
-    LOG(INFO) << "Sending host remove request (host_id:" << host_id << ")";
-    sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
-}
-
-//--------------------------------------------------------------------------------------------------
-void Router::onDisconnectRelay(qint64 session_id)
-{
-    if (config_.sessionType() != proto::router::SESSION_TYPE_ADMIN)
-    {
-        LOG(ERROR) << "No administrator access level";
-        return;
-    }
-
-    proto::router::AdminToRouter message;
-    proto::router::RelayRequest* request = message.mutable_relay_request();
-    request->set_command_name(proto::router::kCommandRelayDisconnect);
-    request->set_entry_id(session_id);
-
-    LOG(INFO) << "Sending relay disconnect request (entry_id:" << session_id << ")";
-    sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
-}
-
-//--------------------------------------------------------------------------------------------------
-void Router::onDisconnectClient(qint64 session_id)
-{
-    if (config_.sessionType() != proto::router::SESSION_TYPE_ADMIN)
-    {
-        LOG(ERROR) << "No administrator access level";
-        return;
-    }
-
-    proto::router::AdminToRouter message;
-    proto::router::ClientRequest* request = message.mutable_client_request();
-    request->set_command_name(proto::router::kCommandClientDisconnect);
-    request->set_entry_id(session_id);
-
-    LOG(INFO) << "Sending client disconnect request (entry_id:" << session_id << ")";
-    sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
-}
-
-//--------------------------------------------------------------------------------------------------
-void Router::onDisconnectPeer(qint64 relay_entry_id, quint64 peer_session_id)
-{
-    if (config_.sessionType() != proto::router::SESSION_TYPE_ADMIN)
-    {
-        LOG(ERROR) << "No administrator access level";
-        return;
-    }
-
-    proto::router::AdminToRouter message;
-    proto::router::PeerRequest* request = message.mutable_peer_request();
-    request->set_relay_session_id(relay_entry_id);
-    request->set_peer_session_id(peer_session_id);
-    request->set_command_name("disconnect");
-
-    LOG(INFO) << "Sending peer disconnect request (relay_entry_id:" << relay_entry_id
-              << "peer_session_id:" << peer_session_id << ")";
-    sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
-}
-
-//--------------------------------------------------------------------------------------------------
-void Router::onWorkspaceListRequest()
-{
-    proto::router::ClientToRouter message;
-    message.mutable_workspace_list_request()->set_dummy(1);
-
-    LOG(INFO) << "Sending workspace list request";
-    sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
-}
-
-//--------------------------------------------------------------------------------------------------
-void Router::onAddWorkspace(const Router::Workspace& workspace)
-{
-    if (config_.sessionType() != proto::router::SESSION_TYPE_ADMIN)
-    {
-        LOG(ERROR) << "No administrator access level";
-        return;
-    }
-
-    proto::router::Workspace out;
-    if (!buildWorkspace(workspace, &out))
-        return;
-
-    proto::router::AdminToRouter message;
-    proto::router::WorkspaceRequest* request = message.mutable_workspace_request();
-    request->set_command_name(proto::router::kCommandWorkspaceAdd);
-    request->mutable_workspace()->Swap(&out);
-
-    LOG(INFO) << "Sending workspace add request (name:" << workspace.name << ")";
-    sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
-}
-
-//--------------------------------------------------------------------------------------------------
-void Router::onModifyWorkspace(const Router::Workspace& workspace)
-{
-    if (config_.sessionType() != proto::router::SESSION_TYPE_ADMIN)
-    {
-        LOG(ERROR) << "No administrator access level";
-        return;
-    }
-
-    proto::router::Workspace out;
-    if (!buildWorkspace(workspace, &out))
-        return;
-
-    proto::router::AdminToRouter message;
-    proto::router::WorkspaceRequest* request = message.mutable_workspace_request();
-    request->set_command_name(proto::router::kCommandWorkspaceModify);
-    request->mutable_workspace()->Swap(&out);
-
-    LOG(INFO) << "Sending workspace modify request (entry_id:" << workspace.entry_id
-              << ", name:" << workspace.name << ", access entries:" << workspace.access.size() << ")";
-    sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
-}
-
-//--------------------------------------------------------------------------------------------------
-void Router::onDeleteWorkspace(qint64 entry_id)
-{
-    if (config_.sessionType() != proto::router::SESSION_TYPE_ADMIN)
-    {
-        LOG(ERROR) << "No administrator access level";
-        return;
-    }
-
-    proto::router::AdminToRouter message;
-    proto::router::WorkspaceRequest* request = message.mutable_workspace_request();
-    request->set_command_name(proto::router::kCommandWorkspaceDelete);
-    request->mutable_workspace()->set_entry_id(entry_id);
-
-    LOG(INFO) << "Sending workspace delete request (entry_id:" << entry_id << ")";
-    sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
-}
-
-//--------------------------------------------------------------------------------------------------
-void Router::onConnectionRequest(qint64 request_id, quint64 host_id)
-{
-    proto::router::ClientToRouter message;
-    proto::router::ConnectionRequest* request = message.mutable_connection_request();
-    request->set_request_id(request_id);
-    request->set_host_id(host_id);
-
-    LOG(INFO) << "Sending connection request:" << *request;
-    sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
-}
-
-//--------------------------------------------------------------------------------------------------
-void Router::onCheckHostStatus(qint64 request_id, quint64 host_id)
-{
-    proto::router::ClientToRouter message;
-    proto::router::CheckHostStatus* request = message.mutable_check_host_status();
-    request->set_request_id(request_id);
-    request->set_host_id(host_id);
-
-    LOG(INFO) << "Sending check host status:" << *request;
-    sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
-}
-
-//--------------------------------------------------------------------------------------------------
-void Router::onHostListRequest(const proto::router::HostListRequest& request)
-{
-    proto::router::ClientToRouter message;
-    message.mutable_host_list_request()->CopyFrom(request);
-
-    LOG(INFO) << "Sending host list request (mode:" << request.mode()
-              << ", workspace_id:" << request.workspace_id()
-              << ", group_id:" << request.group_id() << ")";
-    sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
-}
-
-//--------------------------------------------------------------------------------------------------
-void Router::onTcpReady()
-{
-    CHECK(tcp_channel_);
 
     LOG(INFO) << "Connected to router" << config_.address();
     reconnect_timer_->stop();
+    version_ = tcp_channel_->peerVersion();
 
-    // Status stays CONNECTING until the router pushes UserKeys; only then we consider the
-    // session usable and allow outgoing requests.
-    tcp_channel_->setPaused(false);
+    QMetaObject::invokeMethod(tcp_channel_, &TcpChannel::setPaused, Qt::QueuedConnection, false);
+    // Stay in CONNECTING; transition to ONLINE happens when UserKeys arrives.
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -547,133 +170,86 @@ void Router::onTcpErrorOccurred(TcpChannel::ErrorCode error_code)
 {
     LOG(INFO) << "Router connection error:" << error_code;
 
-    if (tcp_channel_)
+    destroyChannel();
+
+    // Schedule auto-reconnect unless the user has explicitly torn the session down.
+    if (status_ != Status::OFFLINE)
     {
-        tcp_channel_->disconnect();
-        tcp_channel_.reset();
+        setStatus(Status::CONNECTING);
+        LOG(INFO) << "Reconnect scheduled in" << kReconnectTimeout.count() << "seconds";
+        reconnect_timer_->start(kReconnectTimeout);
     }
 
-    user_id_ = 0;
-    user_private_key_.clear();
-    workspace_group_keys_.clear();
-
     emit sig_errorOccurred(config_.routerId(), error_code);
-
-    setStatus(Status::OFFLINE);
-
-    LOG(INFO) << "Reconnect scheduled in" << kReconnectTimeout.count() << "seconds";
-    reconnect_timer_->start(kReconnectTimeout);
 }
 
 //--------------------------------------------------------------------------------------------------
-void Router::onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer)
+void Router::onTcpMessageReceived(quint8 channel_id, const QByteArray& bytes)
 {
     if (channel_id == proto::router::CHANNEL_ID_ADMIN)
     {
-        if (config_.sessionType() != proto::router::SESSION_TYPE_ADMIN)
-        {
-            LOG(ERROR) << "Unexpected message from channel" << channel_id;
-            return;
-        }
-
         proto::router::RouterToAdmin message;
-        if (!parse(buffer, &message))
+        if (!parse(bytes, &message))
         {
             LOG(ERROR) << "Unable to parse admin message";
             return;
         }
 
         if (message.has_relay_list())
-        {
-            LOG(INFO) << "Relay list received";
-            emit sig_relayListReceived(message.relay_list());
-        }
+            dispatch(message.relay_list().request_id(), message.relay_list());
         else if (message.has_client_list())
-        {
-            LOG(INFO) << "Client list received";
-            emit sig_clientListReceived(message.client_list());
-        }
+            dispatch(message.client_list().request_id(), message.client_list());
         else if (message.has_user_list())
-        {
-            LOG(INFO) << "User list received";
-            emit sig_userListReceived(message.user_list());
-        }
+            dispatch(message.user_list().request_id(), message.user_list());
         else if (message.has_user_result())
-        {
-            LOG(INFO) << "User result received";
-            emit sig_userResultReceived(message.user_result());
-        }
+            dispatch(message.user_result().request_id(), message.user_result());
         else if (message.has_host_result())
-        {
-            LOG(INFO) << "Host result received";
-            emit sig_hostResultReceived(message.host_result());
-        }
+            dispatch(message.host_result().request_id(), message.host_result());
         else if (message.has_relay_result())
-        {
-            LOG(INFO) << "Relay result received";
-            emit sig_relayResultReceived(message.relay_result());
-        }
+            dispatch(message.relay_result().request_id(), message.relay_result());
         else if (message.has_client_result())
-        {
-            LOG(INFO) << "Client result received";
-            emit sig_clientResultReceived(message.client_result());
-        }
+            dispatch(message.client_result().request_id(), message.client_result());
         else if (message.has_workspace_result())
-        {
-            LOG(INFO) << "Workspace result received";
-            emit sig_workspaceResultReceived(message.workspace_result());
-        }
+            dispatch(message.workspace_result().request_id(), message.workspace_result());
+        else if (message.has_peer_result())
+            dispatch(message.peer_result().request_id(), message.peer_result());
         else
-        {
             LOG(WARNING) << "Unhandled admin message";
-            return;
-        }
-    }
-    else if (channel_id == proto::router::CHANNEL_ID_MANAGER)
-    {
-        if (config_.sessionType() != proto::router::SESSION_TYPE_ADMIN &&
-            config_.sessionType() != proto::router::SESSION_TYPE_MANAGER)
-        {
-            LOG(ERROR) << "Unexpected message from channel" << channel_id;
-            return;
-        }
-
-        // TODO
     }
     else if (channel_id == proto::router::CHANNEL_ID_CLIENT)
     {
         proto::router::RouterToClient message;
-        if (!parse(buffer, &message))
+        if (!parse(bytes, &message))
         {
             LOG(ERROR) << "Unable to parse client message";
             return;
         }
 
-        if (message.has_connection_offer())
-        {
-            emit sig_connectionOffer(message.connection_offer());
-        }
-        else if (message.has_host_status())
-        {
-            const proto::router::HostStatus& host_status = message.host_status();
-            bool online = host_status.status() == proto::router::HostStatus::STATUS_ONLINE;
-            emit sig_hostStatus(host_status.request_id(), online);
-        }
-        else if (message.has_host_list())
-        {
-            LOG(INFO) << "Host list received";
-            emit sig_hostListReceived(message.host_list());
-        }
-        else if (message.has_user_keys())
+        if (message.has_user_keys())
         {
             LOG(INFO) << "User keys received (user_id:" << message.user_keys().user_id() << ")";
             readUserKeys(message.user_keys());
             setStatus(Status::ONLINE);
         }
+        else if (message.has_connection_offer())
+        {
+            dispatch(message.connection_offer().request_id(), message.connection_offer());
+        }
+        else if (message.has_host_status())
+        {
+            dispatch(message.host_status().request_id(), message.host_status());
+        }
+        else if (message.has_host_list())
+        {
+            dispatch(message.host_list().request_id(), message.host_list());
+        }
         else if (message.has_workspace_list())
         {
-            LOG(INFO) << "Workspace list received";
-            readWorkspaceList(message.workspace_list());
+            dispatch(message.workspace_list().request_id(), message.workspace_list());
+        }
+        else
+        {
+            LOG(WARNING) << "Unhandled client message";
         }
     }
     else
@@ -683,52 +259,156 @@ void Router::onTcpMessageReceived(quint8 channel_id, const QByteArray& buffer)
 }
 
 //--------------------------------------------------------------------------------------------------
+void Router::onReconnectTimeout()
+{
+    if (status_ == Status::OFFLINE)
+        return;
+    LOG(INFO) << "Reconnecting to router" << config_.address();
+    setupChannel();
+}
+
+//--------------------------------------------------------------------------------------------------
 void Router::setStatus(Status status)
 {
-    if (status_ != status)
-    {
-        LOG(INFO) << "Status changed from" << status_ << "to" << status;
-        status_ = status;
-        emit sig_statusChanged(config_.routerId(), status_);
-    }
+    if (status_ == status)
+        return;
+    status_ = status;
+    emit sig_statusChanged(config_.routerId(), status_);
 }
 
 //--------------------------------------------------------------------------------------------------
-void Router::sendMessage(quint8 channel_id, const QByteArray& data)
+bool Router::buildWorkspace(const Router::Workspace& workspace, proto::router::Workspace* out)
+{
+    CHECK(out);
+
+    if (workspace.entry_id > 0)
+        out->set_entry_id(workspace.entry_id);
+    out->set_name(workspace.name.toStdString());
+
+    bool has_added = false;
+    for (const auto& access : workspace.access)
+    {
+        if (!access.public_key.isEmpty())
+        {
+            has_added = true;
+            break;
+        }
+    }
+
+    SecureByteArray group_key;
+    const bool needs_gk = has_added || !workspace.comment.isEmpty();
+    if (needs_gk)
+    {
+        if (user_private_key_.isEmpty())
+        {
+            LOG(ERROR) << "User private key unavailable";
+            return false;
+        }
+
+        auto it = workspace_group_keys_.constFind(workspace.entry_id);
+        if (it == workspace_group_keys_.constEnd())
+            group_key = SecureByteArray(Random::byteArray(kGroupKeySize));
+        else
+            group_key = *it;
+    }
+
+    if (!workspace.comment.isEmpty())
+    {
+        QByteArray encrypted = encryptWithGroupKey(workspace.comment, group_key);
+        if (encrypted.isEmpty())
+        {
+            LOG(ERROR) << "Failed to encrypt comment";
+            return false;
+        }
+        out->set_comment(encrypted.toStdString());
+    }
+
+    for (const auto& access : workspace.access)
+    {
+        proto::router::WorkspaceAccess* dst = out->add_access();
+        dst->set_user_id(access.user_id);
+
+        if (access.public_key.isEmpty())
+            continue; // Existing user - server preserves their wrapped_gk.
+
+        QByteArray wrapped_gk = SealedBox::seal(group_key.toByteArray(), access.public_key);
+        if (wrapped_gk.isEmpty())
+        {
+            LOG(ERROR) << "Failed to seal group key for user_id:" << access.user_id;
+            return false;
+        }
+        dst->set_wrapped_gk(wrapped_gk.toStdString());
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void Router::setupChannel()
+{
+    if (tcp_channel_)
+        return;
+
+    LOG(INFO) << "Connecting to router" << config_.address();
+
+    Address address = Address::fromString(config_.address(), DEFAULT_ROUTER_TCP_PORT);
+
+    // TcpChannelNG (and its underlying socket) must be constructed in the thread where it
+    // will live. Hop into the IO thread via a scratch QObject, build everything there, and
+    // block until the channel pointer is ready - construction is microseconds, connectTo()
+    // only initiates the async connect. The scratch object is cleaned up via deleteLater()
+    // by ScopedQPointer when it goes out of scope.
+    ScopedQPointer<QObject> io_bridge(new QObject());
+    io_bridge->moveToThread(GuiApplication::ioThread());
+
+    TcpChannel* channel = nullptr;
+    QMetaObject::invokeMethod(io_bridge, [this, &channel, host = address.host(), port = address.port()]()
+    {
+        auto* authenticator = new ClientAuthenticator();
+        authenticator->setIdentify(proto::key_exchange::IDENTIFY_SRP);
+        authenticator->setSessionType(config_.sessionType());
+        authenticator->setUserName(config_.username());
+        authenticator->setPassword(config_.password());
+
+        TcpChannel* tcp_channel = new TcpChannelNG(authenticator, nullptr);
+        authenticator->setParent(tcp_channel);
+
+        connect(tcp_channel, &TcpChannel::sig_authenticated,
+                this, &Router::onTcpAuthenticated, Qt::QueuedConnection);
+        connect(tcp_channel, &TcpChannel::sig_errorOccurred,
+                this, &Router::onTcpErrorOccurred, Qt::QueuedConnection);
+        connect(tcp_channel, &TcpChannel::sig_messageReceived,
+                this, &Router::onTcpMessageReceived, Qt::QueuedConnection);
+
+        tcp_channel->connectTo(host, port);
+        channel = tcp_channel;
+    }, Qt::BlockingQueuedConnection);
+
+    tcp_channel_ = channel;
+}
+
+//--------------------------------------------------------------------------------------------------
+void Router::destroyChannel()
+{
+    user_id_ = 0;
+    user_private_key_.clear();
+    workspace_group_keys_.clear();
+    pending_.clear();
+    version_ = QVersionNumber();
+    tcp_channel_.reset();
+}
+
+//--------------------------------------------------------------------------------------------------
+void Router::emitSend(quint8 channel_id, const google::protobuf::MessageLite& message)
 {
     if (!tcp_channel_)
-        return;
-
-    if (status_ != Status::ONLINE)
     {
-        LOG(WARNING) << "Dropping outgoing message, router not online yet (status:" << status_ << ")";
+        LOG(WARNING) << "Dropping outgoing message, channel not ready";
         return;
     }
 
-    tcp_channel_->send(channel_id, data);
-}
-
-//--------------------------------------------------------------------------------------------------
-SecureByteArray Router::unwrapGroupKey(const QByteArray& wrapped_gk) const
-{
-    if (wrapped_gk.isEmpty() || user_private_key_.isEmpty())
-        return SecureByteArray();
-
-    KeyPair key_pair = KeyPair::fromPrivateKey(user_private_key_);
-    if (!key_pair.isValid())
-    {
-        LOG(ERROR) << "Failed to load key pair from private key";
-        return SecureByteArray();
-    }
-
-    std::optional<QByteArray> opened = SealedBox::open(wrapped_gk, key_pair);
-    if (!opened.has_value() || opened->isEmpty())
-    {
-        LOG(ERROR) << "Failed to open sealed group key";
-        return SecureByteArray();
-    }
-
-    return SecureByteArray(std::move(*opened));
+    QMetaObject::invokeMethod(tcp_channel_, &TcpChannel::send, Qt::QueuedConnection,
+                              channel_id, serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -746,13 +426,14 @@ void Router::readUserKeys(const proto::router::UserKeys& user_keys)
         return;
     }
 
-    user_private_key_ = PrivateKeyCryptor::decrypt(wrap_private_key, config_.password(), wrap_salt);
+    user_private_key_ = PrivateKeyCryptor::decrypt(
+        wrap_private_key, SecureString(config_.password()), wrap_salt);
     if (user_private_key_.isEmpty())
         LOG(WARNING) << "Failed to decrypt self private key for user_id:" << user_id_;
 }
 
 //--------------------------------------------------------------------------------------------------
-void Router::readWorkspaceList(const proto::router::WorkspaceList& list)
+Router::WorkspaceList Router::decodeWorkspaceList(const proto::router::WorkspaceList& list)
 {
     workspace_group_keys_.clear();
 
@@ -792,81 +473,28 @@ void Router::readWorkspaceList(const proto::router::WorkspaceList& list)
         }
     }
 
-    emit sig_workspaceListReceived(decoded);
+    return decoded;
 }
 
 //--------------------------------------------------------------------------------------------------
-bool Router::buildWorkspace(const Workspace& workspace, proto::router::Workspace* out)
+SecureByteArray Router::unwrapGroupKey(const QByteArray& wrapped_gk) const
 {
-    CHECK(out);
+    if (wrapped_gk.isEmpty() || user_private_key_.isEmpty())
+        return SecureByteArray();
 
-    if (workspace.entry_id > 0)
-        out->set_entry_id(workspace.entry_id);
-    out->set_name(workspace.name.toStdString());
-
-    // Detect whether we need a workspace group key: required when adding new users (to seal it
-    // for them) and/or when the comment is non-empty (to encrypt it).
-    bool has_added = false;
-    for (const auto& access : workspace.access)
+    KeyPair key_pair = KeyPair::fromPrivateKey(user_private_key_);
+    if (!key_pair.isValid())
     {
-        if (!access.public_key.isEmpty())
-        {
-            has_added = true;
-            break;
-        }
+        LOG(ERROR) << "Failed to load key pair from private key";
+        return SecureByteArray();
     }
 
-    SecureByteArray group_key;
-    const bool needs_gk = has_added || !workspace.comment.isEmpty();
-    if (needs_gk)
+    std::optional<QByteArray> opened = SealedBox::open(wrapped_gk, key_pair);
+    if (!opened.has_value() || opened->isEmpty())
     {
-        if (user_private_key_.isEmpty())
-        {
-            LOG(ERROR) << "User private key unavailable";
-            return false;
-        }
-
-        auto it = workspace_group_keys_.constFind(workspace.entry_id);
-        if (it == workspace_group_keys_.constEnd())
-        {
-            // Bootstrap: no workspace GK known to us (either a new workspace or none of the
-            // existing access entries belong to us). Generate a fresh GK to seal for the new
-            // grantees.
-            group_key = SecureByteArray(Random::byteArray(kGroupKeySize));
-        }
-        else
-        {
-            group_key = *it;
-        }
+        LOG(ERROR) << "Failed to open sealed group key";
+        return SecureByteArray();
     }
 
-    if (!workspace.comment.isEmpty())
-    {
-        QByteArray encrypted = encryptWithGroupKey(workspace.comment, group_key);
-        if (encrypted.isEmpty())
-        {
-            LOG(ERROR) << "Failed to encrypt comment";
-            return false;
-        }
-        out->set_comment(encrypted.toStdString());
-    }
-
-    for (const auto& access : workspace.access)
-    {
-        proto::router::WorkspaceAccess* dst = out->add_access();
-        dst->set_user_id(access.user_id);
-
-        if (access.public_key.isEmpty())
-            continue; // Existing user - server preserves their wrapped_gk.
-
-        QByteArray wrapped_gk = SealedBox::seal(group_key.toByteArray(), access.public_key);
-        if (wrapped_gk.isEmpty())
-        {
-            LOG(ERROR) << "Failed to seal group key for user_id:" << access.user_id;
-            return false;
-        }
-        dst->set_wrapped_gk(wrapped_gk.toStdString());
-    }
-
-    return true;
+    return SecureByteArray(std::move(*opened));
 }
