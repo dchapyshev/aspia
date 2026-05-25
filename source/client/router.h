@@ -159,9 +159,10 @@ public:
     void peerDisconnect(qint64 relay_id, qint64 peer_id, ReceiverT* receiver,
                         void (ReceiverT::*slot)(const proto::router::PeerResult&));
 
-    // Client: workspace list (response is the decoded plain struct).
+    // Client: workspace list (response is the decoded plain struct). workspace_id == 0
+    // returns all visible workspaces; > 0 narrows to a single entry.
     template<typename ReceiverT>
-    void workspaceList(ReceiverT* receiver,
+    void workspaceList(qint64 workspace_id, ReceiverT* receiver,
                        void (ReceiverT::*slot)(const Router::WorkspaceList&));
 
     // Client: host list. Caller supplies a pre-filled request (mode, filters, etc).
@@ -268,13 +269,9 @@ private:
 Q_DECLARE_METATYPE(Router::Workspace)
 Q_DECLARE_METATYPE(Router::WorkspaceList)
 
-// ============================================================================================
-// Template method definitions.
-// ============================================================================================
-
+//--------------------------------------------------------------------------------------------------
 template<typename ReceiverT>
-void Router::relayList(ReceiverT* receiver,
-                          void (ReceiverT::*slot)(const proto::router::RelayList&))
+void Router::relayList(ReceiverT* receiver, void (ReceiverT::*slot)(const proto::router::RelayList&))
 {
     proto::router::AdminToRouter message;
     auto* request = message.mutable_relay_list_request();
@@ -283,9 +280,9 @@ void Router::relayList(ReceiverT* receiver,
     emitSend(proto::router::CHANNEL_ID_ADMIN, message);
 }
 
+//--------------------------------------------------------------------------------------------------
 template<typename ReceiverT>
-void Router::clientList(ReceiverT* receiver,
-                           void (ReceiverT::*slot)(const proto::router::ClientList&))
+void Router::clientList(ReceiverT* receiver, void (ReceiverT::*slot)(const proto::router::ClientList&))
 {
     proto::router::AdminToRouter message;
     auto* request = message.mutable_client_list_request();
@@ -294,9 +291,9 @@ void Router::clientList(ReceiverT* receiver,
     emitSend(proto::router::CHANNEL_ID_ADMIN, message);
 }
 
+//--------------------------------------------------------------------------------------------------
 template<typename ReceiverT>
-void Router::userList(ReceiverT* receiver,
-                         void (ReceiverT::*slot)(const proto::router::UserList&))
+void Router::userList(ReceiverT* receiver, void (ReceiverT::*slot)(const proto::router::UserList&))
 {
     proto::router::AdminToRouter message;
     auto* request = message.mutable_user_list_request();
@@ -305,9 +302,10 @@ void Router::userList(ReceiverT* receiver,
     emitSend(proto::router::CHANNEL_ID_ADMIN, message);
 }
 
+//--------------------------------------------------------------------------------------------------
 template<typename ReceiverT>
 void Router::userAdd(const proto::router::User& user, ReceiverT* receiver,
-                        void (ReceiverT::*slot)(const proto::router::UserResult&))
+                     void (ReceiverT::*slot)(const proto::router::UserResult&))
 {
     proto::router::AdminToRouter message;
     auto* request = message.mutable_user_request();
@@ -318,9 +316,10 @@ void Router::userAdd(const proto::router::User& user, ReceiverT* receiver,
     emitSend(proto::router::CHANNEL_ID_ADMIN, message);
 }
 
+//--------------------------------------------------------------------------------------------------
 template<typename ReceiverT>
 void Router::userModify(const proto::router::User& user, ReceiverT* receiver,
-                           void (ReceiverT::*slot)(const proto::router::UserResult&))
+                        void (ReceiverT::*slot)(const proto::router::UserResult&))
 {
     proto::router::AdminToRouter message;
     auto* request = message.mutable_user_request();
@@ -331,9 +330,10 @@ void Router::userModify(const proto::router::User& user, ReceiverT* receiver,
     emitSend(proto::router::CHANNEL_ID_ADMIN, message);
 }
 
+//--------------------------------------------------------------------------------------------------
 template<typename ReceiverT>
 void Router::userDelete(qint64 entry_id, ReceiverT* receiver,
-                           void (ReceiverT::*slot)(const proto::router::UserResult&))
+                        void (ReceiverT::*slot)(const proto::router::UserResult&))
 {
     proto::router::AdminToRouter message;
     auto* request = message.mutable_user_request();
@@ -344,9 +344,10 @@ void Router::userDelete(qint64 entry_id, ReceiverT* receiver,
     emitSend(proto::router::CHANNEL_ID_ADMIN, message);
 }
 
+//--------------------------------------------------------------------------------------------------
 template<typename ReceiverT>
 void Router::hostDisconnect(qint64 host_id, ReceiverT* receiver,
-                               void (ReceiverT::*slot)(const proto::router::HostResult&))
+                            void (ReceiverT::*slot)(const proto::router::HostResult&))
 {
     proto::router::AdminToRouter message;
     auto* request = message.mutable_host_request();
@@ -357,9 +358,10 @@ void Router::hostDisconnect(qint64 host_id, ReceiverT* receiver,
     emitSend(proto::router::CHANNEL_ID_ADMIN, message);
 }
 
+//--------------------------------------------------------------------------------------------------
 template<typename ReceiverT>
 void Router::hostRemove(qint64 host_id, ReceiverT* receiver,
-                           void (ReceiverT::*slot)(const proto::router::HostResult&))
+                        void (ReceiverT::*slot)(const proto::router::HostResult&))
 {
     proto::router::AdminToRouter message;
     auto* request = message.mutable_host_request();
@@ -370,9 +372,10 @@ void Router::hostRemove(qint64 host_id, ReceiverT* receiver,
     emitSend(proto::router::CHANNEL_ID_ADMIN, message);
 }
 
+//--------------------------------------------------------------------------------------------------
 template<typename ReceiverT>
 void Router::relayDisconnect(qint64 session_id, ReceiverT* receiver,
-                                void (ReceiverT::*slot)(const proto::router::RelayResult&))
+                             void (ReceiverT::*slot)(const proto::router::RelayResult&))
 {
     proto::router::AdminToRouter message;
     auto* request = message.mutable_relay_request();
@@ -383,9 +386,10 @@ void Router::relayDisconnect(qint64 session_id, ReceiverT* receiver,
     emitSend(proto::router::CHANNEL_ID_ADMIN, message);
 }
 
+//--------------------------------------------------------------------------------------------------
 template<typename ReceiverT>
 void Router::clientDisconnect(qint64 session_id, ReceiverT* receiver,
-                                 void (ReceiverT::*slot)(const proto::router::ClientResult&))
+                              void (ReceiverT::*slot)(const proto::router::ClientResult&))
 {
     proto::router::AdminToRouter message;
     auto* request = message.mutable_client_request();
@@ -396,9 +400,10 @@ void Router::clientDisconnect(qint64 session_id, ReceiverT* receiver,
     emitSend(proto::router::CHANNEL_ID_ADMIN, message);
 }
 
+//--------------------------------------------------------------------------------------------------
 template<typename ReceiverT>
 void Router::workspaceAdd(const Router::Workspace& workspace, ReceiverT* receiver,
-                             void (ReceiverT::*slot)(const proto::router::WorkspaceResult&))
+                          void (ReceiverT::*slot)(const proto::router::WorkspaceResult&))
 {
     proto::router::Workspace ws;
     if (!buildWorkspace(workspace, &ws))
@@ -412,9 +417,10 @@ void Router::workspaceAdd(const Router::Workspace& workspace, ReceiverT* receive
     emitSend(proto::router::CHANNEL_ID_ADMIN, message);
 }
 
+//--------------------------------------------------------------------------------------------------
 template<typename ReceiverT>
 void Router::workspaceModify(const Router::Workspace& workspace, ReceiverT* receiver,
-                                void (ReceiverT::*slot)(const proto::router::WorkspaceResult&))
+                             void (ReceiverT::*slot)(const proto::router::WorkspaceResult&))
 {
     proto::router::Workspace ws;
     if (!buildWorkspace(workspace, &ws))
@@ -428,9 +434,10 @@ void Router::workspaceModify(const Router::Workspace& workspace, ReceiverT* rece
     emitSend(proto::router::CHANNEL_ID_ADMIN, message);
 }
 
+//--------------------------------------------------------------------------------------------------
 template<typename ReceiverT>
 void Router::workspaceDelete(qint64 entry_id, ReceiverT* receiver,
-                                void (ReceiverT::*slot)(const proto::router::WorkspaceResult&))
+                             void (ReceiverT::*slot)(const proto::router::WorkspaceResult&))
 {
     proto::router::AdminToRouter message;
     auto* request = message.mutable_workspace_request();
@@ -441,9 +448,10 @@ void Router::workspaceDelete(qint64 entry_id, ReceiverT* receiver,
     emitSend(proto::router::CHANNEL_ID_ADMIN, message);
 }
 
+//--------------------------------------------------------------------------------------------------
 template<typename ReceiverT>
 void Router::peerDisconnect(qint64 relay_id, qint64 peer_id, ReceiverT* receiver,
-                               void (ReceiverT::*slot)(const proto::router::PeerResult&))
+                            void (ReceiverT::*slot)(const proto::router::PeerResult&))
 {
     proto::router::AdminToRouter message;
     auto* request = message.mutable_peer_request();
@@ -455,13 +463,15 @@ void Router::peerDisconnect(qint64 relay_id, qint64 peer_id, ReceiverT* receiver
     emitSend(proto::router::CHANNEL_ID_ADMIN, message);
 }
 
+//--------------------------------------------------------------------------------------------------
 template<typename ReceiverT>
-void Router::workspaceList(ReceiverT* receiver,
-                              void (ReceiverT::*slot)(const Router::WorkspaceList&))
+void Router::workspaceList(qint64 workspace_id, ReceiverT* receiver,
+                           void (ReceiverT::*slot)(const Router::WorkspaceList&))
 {
     proto::router::ClientToRouter message;
     auto* request = message.mutable_workspace_list_request();
     request->set_request_id(nextRequestId());
+    request->set_workspace_id(workspace_id);
     registerPending<proto::router::WorkspaceList>(request, receiver, slot,
         [this](const proto::router::WorkspaceList& raw)
     {
@@ -470,9 +480,10 @@ void Router::workspaceList(ReceiverT* receiver,
     emitSend(proto::router::CHANNEL_ID_CLIENT, message);
 }
 
+//--------------------------------------------------------------------------------------------------
 template<typename ReceiverT>
 void Router::hostList(proto::router::HostListRequest request, ReceiverT* receiver,
-                         void (ReceiverT::*slot)(const proto::router::HostList&))
+                      void (ReceiverT::*slot)(const proto::router::HostList&))
 {
     request.set_request_id(nextRequestId());
     proto::router::ClientToRouter message;
@@ -481,9 +492,10 @@ void Router::hostList(proto::router::HostListRequest request, ReceiverT* receive
     emitSend(proto::router::CHANNEL_ID_CLIENT, message);
 }
 
+//--------------------------------------------------------------------------------------------------
 template<typename ReceiverT>
 void Router::checkHostStatus(qint64 host_id, ReceiverT* receiver,
-                                void (ReceiverT::*slot)(const proto::router::HostStatus&))
+                             void (ReceiverT::*slot)(const proto::router::HostStatus&))
 {
     proto::router::ClientToRouter message;
     auto* request = message.mutable_check_host_status();
@@ -493,6 +505,7 @@ void Router::checkHostStatus(qint64 host_id, ReceiverT* receiver,
     emitSend(proto::router::CHANNEL_ID_CLIENT, message);
 }
 
+//--------------------------------------------------------------------------------------------------
 template<typename ReceiverT, typename HandlerT>
 void Router::connectionRequest(qint64 host_id, ReceiverT* receiver, HandlerT handler)
 {

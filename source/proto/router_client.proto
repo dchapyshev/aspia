@@ -53,7 +53,8 @@ message Workspace
 
 message WorkspaceListRequest
 {
-    int64 request_id = 1;
+    int64 request_id   = 1;
+    int64 workspace_id = 2; // 0 - all workspaces. > 0 - only the workspace with this workspace_id.
 }
 
 message WorkspaceList

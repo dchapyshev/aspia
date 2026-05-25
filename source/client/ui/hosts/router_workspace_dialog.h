@@ -33,11 +33,28 @@ namespace Ui {
 class RouterWorkspaceDialog;
 } // namespace Ui
 
+namespace proto::router {
+class HostList;
+class UserList;
+class WorkspaceResult;
+} // namespace proto::router
+
 class RouterWorkspaceDialog final : public QDialog
 {
     Q_OBJECT
 
 public:
+    // workspace_id == 0 means create mode; > 0 means modify mode.
+    RouterWorkspaceDialog(qint64 router_id, qint64 workspace_id, QWidget* parent);
+    ~RouterWorkspaceDialog() final;
+
+private slots:
+    void onWorkspaceListReceived(const Router::WorkspaceList& list);
+    void onUserListReceived(const proto::router::UserList& list);
+    void onHostListReceived(const proto::router::HostList& list);
+    void onWorkspaceResultReceived(const proto::router::WorkspaceResult& result);
+
+private:
     struct UserEntry
     {
         qint64 entry_id = 0;
@@ -46,41 +63,24 @@ public:
         QByteArray public_key;
     };
 
-    struct HostEntry
-    {
-        qint64 host_id = 0;
-        QString name;
-    };
-
-    // current.entry_id == 0 means create mode; > 0 means modify mode. For modify, the initial
-    // name, plaintext comment and access user list are taken from current.
-    RouterWorkspaceDialog(
-        const Router::Workspace& current, const QStringList& existing_names, QWidget* parent);
-    ~RouterWorkspaceDialog() final;
-
-    void setUsers(const QList<UserEntry>& users);
-    // Hosts not assigned to any workspace - shown in the right-hand "Unassigned hosts" list of
-    // the Hosts tab, available for the operator to add to this workspace.
-    void setUnassignedHosts(const QList<HostEntry>& hosts);
-
-    // Valid after a successful exec() (returns QDialog::Accepted). The router will encrypt
-    // comment + seal GK for newly granted users before sending to the server.
-    const Router::Workspace& workspace() const { return workspace_; }
-
-private:
     void onButtonBoxClicked(QAbstractButton* button);
     void onAddClicked();
     void onRemoveClicked();
     void rebuildLists();
     void updateButtonsState();
+    void updateLoadingState();
 
     std::unique_ptr<Ui::RouterWorkspaceDialog> ui;
+    qint64 router_id_ = 0;
     qint64 entry_id_ = 0;
     QStringList existing_names_;
     QHash<qint64, UserEntry> users_;
     QSet<qint64> initial_access_user_ids_;
     QSet<qint64> access_user_ids_;
     Router::Workspace workspace_;
+    bool workspaces_loaded_ = false;
+    bool users_loaded_ = false;
+    bool hosts_loaded_ = false;
 
     Q_DISABLE_COPY_MOVE(RouterWorkspaceDialog)
 };

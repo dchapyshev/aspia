@@ -1111,55 +1111,15 @@ void RouterWidget::onDisconnectAllClients()
 //--------------------------------------------------------------------------------------------------
 void RouterWidget::onUpdateWorkspaceList()
 {
-    router_->workspaceList(this, &RouterWidget::onWorkspaceListReceived);
+    router_->workspaceList(0, this, &RouterWidget::onWorkspaceListReceived);
 }
 
 //--------------------------------------------------------------------------------------------------
 void RouterWidget::onAddWorkspace()
 {
-    QStringList names;
-    for (int i = 0; i < ui->tree_workspaces->topLevelItemCount(); ++i)
-    {
-        WorkspaceTreeItem* item = static_cast<WorkspaceTreeItem*>(ui->tree_workspaces->topLevelItem(i));
-        names.append(item->workspace.name);
-    }
-
-    QList<RouterWorkspaceDialog::UserEntry> users;
-    for (int i = 0; i < ui->tree_users->topLevelItemCount(); ++i)
-    {
-        UserTreeItem* item = static_cast<UserTreeItem*>(ui->tree_users->topLevelItem(i));
-
-        RouterWorkspaceDialog::UserEntry& entry = users.emplaceBack();
-        entry.entry_id   = item->user.entry_id;
-        entry.is_admin   = (item->user.sessions & proto::router::SESSION_TYPE_ADMIN) != 0;
-        entry.name       = item->user.name;
-        entry.public_key = item->user.public_key;
-    }
-
-    QList<RouterWorkspaceDialog::HostEntry> unassigned_hosts;
-    for (int i = 0; i < ui->tree_hosts->topLevelItemCount(); ++i)
-    {
-        HostTreeItem* item = static_cast<HostTreeItem*>(ui->tree_hosts->topLevelItem(i));
-        if (item->info.workspace_id() != 0)
-            continue;
-
-        RouterWorkspaceDialog::HostEntry& entry = unassigned_hosts.emplaceBack();
-        entry.host_id = item->info.host_id();
-        const QString computer_name = QString::fromStdString(item->info.computer_name());
-        entry.name = computer_name.isEmpty() ?
-            QString::number(entry.host_id) : QString("%1 (%2)").arg(entry.host_id).arg(computer_name);
-    }
-
-    RouterWorkspaceDialog dialog(Router::Workspace(), names, this);
-    dialog.setUsers(users);
-    dialog.setUnassignedHosts(unassigned_hosts);
-
-    if (dialog.exec() != QDialog::Accepted)
-        return;
-
-    LOG(INFO) << "[ACTION] Add workspace accepted by user (access entries:"
-              << dialog.workspace().access.size() << ")";
-    router_->workspaceAdd(dialog.workspace(), this, &RouterWidget::onWorkspaceResultReceived);
+    RouterWorkspaceDialog dialog(router_->routerId(), 0, this);
+    if (dialog.exec() == QDialog::Accepted)
+        onUpdateWorkspaceList();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1172,52 +1132,9 @@ void RouterWidget::onModifyWorkspace()
         return;
     }
 
-    const QString current_name = tree_item->workspace.name;
-
-    QStringList names;
-    for (int i = 0; i < ui->tree_workspaces->topLevelItemCount(); ++i)
-    {
-        WorkspaceTreeItem* item = static_cast<WorkspaceTreeItem*>(ui->tree_workspaces->topLevelItem(i));
-        if (item->workspace.name.compare(current_name, Qt::CaseInsensitive) != 0)
-            names.append(item->workspace.name);
-    }
-
-    QList<RouterWorkspaceDialog::UserEntry> users;
-    for (int i = 0; i < ui->tree_users->topLevelItemCount(); ++i)
-    {
-        UserTreeItem* item = static_cast<UserTreeItem*>(ui->tree_users->topLevelItem(i));
-
-        RouterWorkspaceDialog::UserEntry& entry = users.emplaceBack();
-        entry.entry_id   = item->user.entry_id;
-        entry.is_admin   = (item->user.sessions & proto::router::SESSION_TYPE_ADMIN) != 0;
-        entry.name       = item->user.name;
-        entry.public_key = item->user.public_key;
-    }
-
-    QList<RouterWorkspaceDialog::HostEntry> unassigned_hosts;
-    for (int i = 0; i < ui->tree_hosts->topLevelItemCount(); ++i)
-    {
-        HostTreeItem* item = static_cast<HostTreeItem*>(ui->tree_hosts->topLevelItem(i));
-        if (item->info.workspace_id() != 0)
-            continue;
-
-        RouterWorkspaceDialog::HostEntry& entry = unassigned_hosts.emplaceBack();
-        entry.host_id = item->info.host_id();
-        const QString computer_name = QString::fromStdString(item->info.computer_name());
-        entry.name = computer_name.isEmpty() ?
-            QString::number(entry.host_id) : QString("%1 (%2)").arg(entry.host_id).arg(computer_name);
-    }
-
-    RouterWorkspaceDialog dialog(tree_item->workspace, names, this);
-    dialog.setUsers(users);
-    dialog.setUnassignedHosts(unassigned_hosts);
-
-    if (dialog.exec() != QDialog::Accepted)
-        return;
-
-    LOG(INFO) << "[ACTION] Modify workspace accepted by user (access entries:"
-              << dialog.workspace().access.size() << ")";
-    router_->workspaceModify(dialog.workspace(), this, &RouterWidget::onWorkspaceResultReceived);
+    RouterWorkspaceDialog dialog(router_->routerId(), tree_item->workspace.entry_id, this);
+    if (dialog.exec() == QDialog::Accepted)
+        onUpdateWorkspaceList();
 }
 
 //--------------------------------------------------------------------------------------------------

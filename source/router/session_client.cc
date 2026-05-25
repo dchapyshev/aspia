@@ -366,8 +366,13 @@ void SessionClient::readWorkspaceListRequest(const proto::router::WorkspaceListR
     const QSet<qint64> accessible_ids = database.workspaceAccessListForUser(userId());
     const QVector<Workspace> workspaces = database.workspaceList();
 
+    // workspace_id == 0 means "all visible workspaces"; > 0 narrows to a single entry.
+    const qint64 filter_id = request.workspace_id();
+
     for (const Workspace& workspace : std::as_const(workspaces))
     {
+        if (filter_id > 0 && workspace.entry_id != filter_id)
+            continue;
         if (!accessible_ids.contains(workspace.entry_id))
             continue;
 

@@ -25,6 +25,9 @@
 
 #include "base/logging.h"
 #include "common/ui/msg_box.h"
+#include "proto/router_admin.h"
+#include "proto/router_client.h"
+#include "proto/router_constants.h"
 #include "ui_router_workspace_dialog.h"
 
 namespace {
@@ -35,24 +38,16 @@ constexpr int kMaxNameLength = 64;
 
 //--------------------------------------------------------------------------------------------------
 RouterWorkspaceDialog::RouterWorkspaceDialog(
-    const Router::Workspace& current, const QStringList& existing_names, QWidget* parent)
+    qint64 router_id, qint64 workspace_id, QWidget* parent)
     : QDialog(parent),
       ui(std::make_unique<Ui::RouterWorkspaceDialog>()),
-      entry_id_(current.entry_id),
-      existing_names_(existing_names)
+      router_id_(router_id),
+      entry_id_(workspace_id)
 {
     LOG(INFO) << "Ctor";
     ui->setupUi(this);
 
-    for (const Router::Workspace::Access& access : std::as_const(current.access))
-    {
-        initial_access_user_ids_.insert(access.user_id);
-        access_user_ids_.insert(access.user_id);
-    }
-
     ui->edit_name->setMaxLength(kMaxNameLength);
-    ui->edit_name->setText(current.name);
-    ui->edit_comment->setPlainText(current.comment);
 
     connect(ui->buttonbox, &QDialogButtonBox::clicked, this, &RouterWorkspaceDialog::onButtonBoxClicked);
     connect(ui->button_add, &QPushButton::clicked, this, &RouterWorkspaceDialog::onAddClicked);
@@ -62,7 +57,19 @@ RouterWorkspaceDialog::RouterWorkspaceDialog(
     connect(ui->list_with_access, &QListWidget::itemSelectionChanged,
             this, &RouterWorkspaceDialog::updateButtonsState);
 
-    updateButtonsState();
+    updateLoadingState();
+
+    Router* router = Router::instance(router_id_);
+    CHECK(router);
+
+    // Always fetch the full list so we have all the other names available for uniqueness
+    // validation; in modify mode the entry matching entry_id_ also populates the form.
+    router->workspaceList(0, this, &RouterWorkspaceDialog::onWorkspaceListReceived);
+    router->userList(this, &RouterWorkspaceDialog::onUserListReceived);
+
+    proto::router::HostListRequest host_request;
+    host_request.set_mode(proto::router::HostListRequest::MODE_ALL);
+    router->hostList(std::move(host_request), this, &RouterWorkspaceDialog::onHostListReceived);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -72,37 +79,88 @@ RouterWorkspaceDialog::~RouterWorkspaceDialog()
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterWorkspaceDialog::setUsers(const QList<UserEntry>& users)
+void RouterWorkspaceDialog::onWorkspaceListReceived(const Router::WorkspaceList& list)
+{
+    existing_names_.clear();
+
+    for (const Router::Workspace& workspace : std::as_const(list.workspaces))
+    {
+        if (entry_id_ > 0 && workspace.entry_id == entry_id_)
+        {
+            // The workspace we are editing - populate the form. Its own name is excluded from
+            // existing_names_ so the uniqueness check does not flag the unchanged name.
+            ui->edit_name->setText(workspace.name);
+            ui->edit_comment->setPlainText(workspace.comment);
+
+            initial_access_user_ids_.clear();
+            access_user_ids_.clear();
+            for (const Router::Workspace::Access& access : std::as_const(workspace.access))
+            {
+                initial_access_user_ids_.insert(access.user_id);
+                access_user_ids_.insert(access.user_id);
+            }
+        }
+        else
+        {
+            existing_names_.append(workspace.name);
+        }
+    }
+
+    workspaces_loaded_ = true;
+    updateLoadingState();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWorkspaceDialog::onUserListReceived(const proto::router::UserList& list)
 {
     users_.clear();
-    for (const UserEntry& user : users)
+    for (int i = 0; i < list.user_size(); ++i)
     {
-        users_.insert(user.entry_id, user);
+        const proto::router::User& user = list.user(i);
+
+        UserEntry& entry = users_[user.entry_id()];
+        entry.entry_id   = user.entry_id();
+        entry.is_admin   = (user.sessions() & proto::router::SESSION_TYPE_ADMIN) != 0;
+        entry.name       = QString::fromStdString(user.name());
+        entry.public_key = QByteArray::fromStdString(user.public_key());
 
         // On add (entry_id_ == 0) every admin is auto-included in the new workspace's access
         // so the workspace is reachable by all admins from creation. On modify the access list
         // comes from the workspace itself; admins not already in it stay out (the constraint
         // is enforced only at creation).
-        if (entry_id_ == 0 && user.is_admin)
-            access_user_ids_.insert(user.entry_id);
+        if (entry_id_ == 0 && entry.is_admin)
+            access_user_ids_.insert(entry.entry_id);
     }
 
-    rebuildLists();
+    users_loaded_ = true;
+    updateLoadingState();
 }
 
 //--------------------------------------------------------------------------------------------------
-void RouterWorkspaceDialog::setUnassignedHosts(const QList<HostEntry>& hosts)
+void RouterWorkspaceDialog::onHostListReceived(const proto::router::HostList& list)
 {
     ui->list_hosts_available->clear();
 
-    for (const HostEntry& host : hosts)
+    for (int i = 0; i < list.host_size(); ++i)
     {
-        QListWidgetItem* item = new QListWidgetItem(QIcon(":/img/computer.svg"), host.name);
-        item->setData(Qt::UserRole, host.host_id);
+        const proto::router::Host& host = list.host(i);
+        if (host.workspace_id() != 0)
+            continue;
+
+        const qint64 host_id = host.host_id();
+        const QString computer_name = QString::fromStdString(host.computer_name());
+        const QString name = computer_name.isEmpty() ?
+            QString::number(host_id) : QString("%1 (%2)").arg(host_id).arg(computer_name);
+
+        QListWidgetItem* item = new QListWidgetItem(QIcon(":/img/computer.svg"), name);
+        item->setData(Qt::UserRole, host_id);
         ui->list_hosts_available->addItem(item);
     }
 
     ui->list_hosts_available->sortItems();
+
+    hosts_loaded_ = true;
+    updateLoadingState();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -160,9 +218,54 @@ void RouterWorkspaceDialog::onButtonBoxClicked(QAbstractButton* button)
         }
     }
 
-    LOG(INFO) << "[ACTION] Action accepted";
-    accept();
-    close();
+    Router* router = Router::instance(router_id_);
+    if (!router)
+    {
+        LOG(ERROR) << "Router instance is gone";
+        return;
+    }
+
+    // Disable the dialog while waiting for the server response so the operator cannot submit
+    // again or close-and-resubmit; re-enabled by onWorkspaceResultReceived on error.
+    setEnabled(false);
+
+    LOG(INFO) << "[ACTION] Submitting workspace (entry_id:" << entry_id_
+              << ", access entries:" << workspace_.access.size() << ")";
+    if (entry_id_ > 0)
+        router->workspaceModify(workspace_, this, &RouterWorkspaceDialog::onWorkspaceResultReceived);
+    else
+        router->workspaceAdd(workspace_, this, &RouterWorkspaceDialog::onWorkspaceResultReceived);
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWorkspaceDialog::onWorkspaceResultReceived(const proto::router::WorkspaceResult& result)
+{
+    const std::string& error_code = result.error_code();
+    if (error_code == proto::router::kErrorOk)
+    {
+        LOG(INFO) << "[ACTION] Workspace saved";
+        accept();
+        close();
+        return;
+    }
+
+    const char* message;
+    if (error_code == proto::router::kErrorInvalidRequest)
+        message = QT_TR_NOOP("Invalid workspace request.");
+    else if (error_code == proto::router::kErrorInternalError)
+        message = QT_TR_NOOP("Unknown internal error.");
+    else if (error_code == proto::router::kErrorInvalidData)
+        message = QT_TR_NOOP("Invalid data was passed.");
+    else if (error_code == proto::router::kErrorAlreadyExists)
+        message = QT_TR_NOOP("A workspace with the specified name already exists.");
+    else if (error_code == proto::router::kErrorNotFound)
+        message = QT_TR_NOOP("Workspace not found.");
+    else
+        message = QT_TR_NOOP("Unknown error type.");
+
+    LOG(ERROR) << "Workspace save failed:" << error_code;
+    setEnabled(true);
+    MsgBox::warning(this, tr(message));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -244,4 +347,29 @@ void RouterWorkspaceDialog::updateButtonsState()
         can_remove = (it == users_.constEnd() || !it->is_admin);
     }
     ui->button_remove->setEnabled(can_remove);
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWorkspaceDialog::updateLoadingState()
+{
+    const bool ready = workspaces_loaded_ && users_loaded_ && hosts_loaded_;
+
+    ui->edit_name->setEnabled(ready);
+    ui->edit_comment->setEnabled(ready);
+    ui->list_available->setEnabled(ready);
+    ui->list_with_access->setEnabled(ready);
+    ui->list_hosts_available->setEnabled(ready);
+
+    if (QPushButton* ok_button = ui->buttonbox->button(QDialogButtonBox::Ok))
+        ok_button->setEnabled(ready);
+
+    if (ready)
+    {
+        rebuildLists();
+    }
+    else
+    {
+        ui->button_add->setEnabled(false);
+        ui->button_remove->setEnabled(false);
+    }
 }
