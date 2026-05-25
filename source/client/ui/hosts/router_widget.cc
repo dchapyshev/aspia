@@ -879,22 +879,9 @@ void RouterWidget::onUpdateUserList()
 //--------------------------------------------------------------------------------------------------
 void RouterWidget::onAddUser()
 {
-    QStringList names;
-    for (int i = 0; i < ui->tree_users->topLevelItemCount(); ++i)
-    {
-        UserTreeItem* item = static_cast<UserTreeItem*>(ui->tree_users->topLevelItem(i));
-        names.append(item->user.name);
-    }
-
-    RouterUserDialog dialog(RouterUser(), names, this);
-    if (dialog.exec() != QDialog::Accepted)
-    {
-        LOG(INFO) << "[ACTION] Add user rejected by user";
-        return;
-    }
-
-    LOG(INFO) << "[ACTION] Add user accepted by user";
-    router_->userAdd(dialog.user().serialize(), this, &RouterWidget::onUserResultReceived);
+    RouterUserDialog dialog(router_->routerId(), 0, this);
+    if (dialog.exec() == QDialog::Accepted)
+        onUpdateUserList();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -907,23 +894,9 @@ void RouterWidget::onModifyUser()
         return;
     }
 
-    QStringList names;
-    for (int i = 0; i < ui->tree_users->topLevelItemCount(); ++i)
-    {
-        UserTreeItem* item = static_cast<UserTreeItem*>(ui->tree_users->topLevelItem(i));
-        if (item->text(0).compare(tree_item->text(0), Qt::CaseInsensitive) != 0)
-            names.append(item->user.name);
-    }
-
-    RouterUserDialog dialog(tree_item->user, names, this);
-    if (dialog.exec() != QDialog::Accepted)
-    {
-        LOG(INFO) << "[ACTION] Modify user rejected by user";
-        return;
-    }
-
-    LOG(INFO) << "[ACTION] Modify user accepted by user";
-    router_->userModify(dialog.user().serialize(), this, &RouterWidget::onUserResultReceived);
+    RouterUserDialog dialog(router_->routerId(), tree_item->user.entry_id, this);
+    if (dialog.exec() == QDialog::Accepted)
+        onUpdateUserList();
 }
 
 //--------------------------------------------------------------------------------------------------

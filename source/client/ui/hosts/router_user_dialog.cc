@@ -23,32 +23,25 @@
 
 #include "base/logging.h"
 #include "base/crypto/secure_string.h"
+#include "client/router.h"
 #include "common/ui/msg_box.h"
 #include "common/ui/password_edit.h"
 #include "proto/router.h"
+#include "proto/router_admin.h"
+#include "proto/router_constants.h"
 #include "ui_router_user_dialog.h"
 
 //--------------------------------------------------------------------------------------------------
-RouterUserDialog::RouterUserDialog(const RouterUser& user, const QStringList& users, QWidget* parent)
+RouterUserDialog::RouterUserDialog(qint64 router_id, qint64 user_id, QWidget* parent)
     : QDialog(parent),
       ui(std::make_unique<Ui::RouterUserDialog>()),
-      user_(user),
-      users_(users)
+      router_id_(router_id),
+      entry_id_(user_id)
 {
     LOG(INFO) << "Ctor";
     ui->setupUi(this);
 
-    if (user_.User::isValid())
-    {
-        ui->checkbox_disable->setChecked(!(user_.flags & User::ENABLED));
-        ui->edit_username->setText(user_.name);
-
-        setAccountChanged(false);
-    }
-    else
-    {
-        ui->checkbox_disable->setChecked(false);
-    }
+    ui->checkbox_disable->setChecked(false);
 
     auto add_session = [&](proto::router::SessionType session_type)
     {
@@ -58,21 +51,10 @@ RouterUserDialog::RouterUserDialog(const RouterUser& user, const QStringList& us
         item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
         item->setData(0, Qt::UserRole, QVariant(session_type));
 
-        if (user_.User::isValid())
-        {
-            if (user_.sessions & static_cast<quint32>(session_type))
-                item->setCheckState(0, Qt::Checked);
-            else
-                item->setCheckState(0, Qt::Unchecked);
-        }
-        else if (session_type == proto::router::SESSION_TYPE_CLIENT)
-        {
+        if (entry_id_ == 0 && session_type == proto::router::SESSION_TYPE_CLIENT)
             item->setCheckState(0, Qt::Checked);
-        }
         else
-        {
             item->setCheckState(0, Qt::Unchecked);
-        }
 
         ui->tree_sessions->addTopLevelItem(item);
     };
@@ -86,18 +68,18 @@ RouterUserDialog::RouterUserDialog(const RouterUser& user, const QStringList& us
     {
         setAccountChanged(true);
     });
+
+    updateLoadingState();
+
+    Router* router = Router::instance(router_id_);
+    CHECK(router);
+    router->userList(this, &RouterUserDialog::onUserListReceived);
 }
 
 //--------------------------------------------------------------------------------------------------
 RouterUserDialog::~RouterUserDialog()
 {
     LOG(INFO) << "Dtor";
-}
-
-//--------------------------------------------------------------------------------------------------
-const RouterUser& RouterUserDialog::user() const
-{
-    return user_;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -115,6 +97,73 @@ bool RouterUserDialog::eventFilter(QObject* object, QEvent* event)
     }
 
     return false;
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterUserDialog::onUserListReceived(const proto::router::UserList& list)
+{
+    existing_names_.clear();
+
+    for (int i = 0; i < list.user_size(); ++i)
+    {
+        const proto::router::User& user = list.user(i);
+
+        if (entry_id_ > 0 && user.entry_id() == entry_id_)
+        {
+            // The user we are editing - populate the form. Its name is excluded from
+            // existing_names_ so the uniqueness check does not flag the unchanged name.
+            user_ = RouterUser::parseFrom(user);
+
+            ui->checkbox_disable->setChecked(!(user_.flags & User::ENABLED));
+            ui->edit_username->setText(user_.name);
+
+            for (int j = 0; j < ui->tree_sessions->topLevelItemCount(); ++j)
+            {
+                QTreeWidgetItem* item = ui->tree_sessions->topLevelItem(j);
+                const quint32 session_type = item->data(0, Qt::UserRole).toUInt();
+                item->setCheckState(0,
+                    (user_.sessions & session_type) ? Qt::Checked : Qt::Unchecked);
+            }
+
+            setAccountChanged(false);
+        }
+        else
+        {
+            existing_names_.append(QString::fromStdString(user.name()));
+        }
+    }
+
+    users_loaded_ = true;
+    updateLoadingState();
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterUserDialog::onUserResultReceived(const proto::router::UserResult& result)
+{
+    const std::string& error_code = result.error_code();
+    if (error_code == proto::router::kErrorOk)
+    {
+        LOG(INFO) << "[ACTION] User saved";
+        accept();
+        close();
+        return;
+    }
+
+    const char* message;
+    if (error_code == proto::router::kErrorInvalidRequest)
+        message = QT_TR_NOOP("Invalid user request.");
+    else if (error_code == proto::router::kErrorInternalError)
+        message = QT_TR_NOOP("Unknown internal error.");
+    else if (error_code == proto::router::kErrorInvalidData)
+        message = QT_TR_NOOP("Invalid data was passed.");
+    else if (error_code == proto::router::kErrorAlreadyExists)
+        message = QT_TR_NOOP("A user with the specified name already exists.");
+    else
+        message = QT_TR_NOOP("Unknown error type.");
+
+    LOG(ERROR) << "User save failed:" << error_code;
+    setEnabled(true);
+    MsgBox::warning(this, tr(message));
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -143,9 +192,9 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
             return;
         }
 
-        for (QStringList::size_type i = 0; i < users_.size(); ++i)
+        for (QStringList::size_type i = 0; i < existing_names_.size(); ++i)
         {
-            if (username.compare(users_.at(i), Qt::CaseInsensitive) == 0)
+            if (username.compare(existing_names_.at(i), Qt::CaseInsensitive) == 0)
             {
                 LOG(ERROR) << "User name already exists:" << username;
                 MsgBox::warning(this, tr("The username you entered already exists."));
@@ -200,14 +249,9 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
             }
         }
 
-        // Save entry ID.
-        qint64 entry_id = user_.entry_id;
-
-        // Create new user.
+        // Create new user (regenerates keys). entry_id is preserved for modify mode.
         user_ = RouterUser::create(username, password);
-
-        // Restore entry ID.
-        user_.entry_id = entry_id;
+        user_.entry_id = entry_id_;
 
         if (!user_.isValid())
         {
@@ -232,9 +276,20 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
     user_.sessions = sessions;
     user_.flags = flags;
 
-    LOG(INFO) << "[ACTION] Action accepted";
-    accept();
-    close();
+    Router* router = Router::instance(router_id_);
+    if (!router)
+    {
+        LOG(ERROR) << "Router instance is gone";
+        return;
+    }
+
+    setEnabled(false);
+
+    LOG(INFO) << "[ACTION] Submitting user (entry_id:" << entry_id_ << ")";
+    if (entry_id_ > 0)
+        router->userModify(user_.serialize(), this, &RouterUserDialog::onUserResultReceived);
+    else
+        router->userAdd(user_.serialize(), this, &RouterUserDialog::onUserResultReceived);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -265,6 +320,21 @@ void RouterUserDialog::setAccountChanged(bool changed)
         ui->edit_password->installEventFilter(this);
         ui->edit_password_retry->installEventFilter(this);
     }
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterUserDialog::updateLoadingState()
+{
+    const bool ready = users_loaded_;
+
+    ui->edit_username->setEnabled(ready);
+    ui->checkbox_disable->setEnabled(ready);
+    ui->tree_sessions->setEnabled(ready);
+    ui->edit_password->setEnabled(ready && account_changed_);
+    ui->edit_password_retry->setEnabled(ready && account_changed_);
+
+    if (QPushButton* ok_button = ui->buttonbox->button(QDialogButtonBox::Ok))
+        ok_button->setEnabled(ready);
 }
 
 //--------------------------------------------------------------------------------------------------

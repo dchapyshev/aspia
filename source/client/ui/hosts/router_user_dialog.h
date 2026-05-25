@@ -32,6 +32,8 @@ class RouterUserDialog;
 } // namespace Ui
 
 namespace proto::router {
+class UserList;
+class UserResult;
 enum SessionType : int;
 } // namespace proto::router
 
@@ -40,24 +42,31 @@ class RouterUserDialog final : public QDialog
     Q_OBJECT
 
 public:
-    RouterUserDialog(const RouterUser& user, const QStringList& users, QWidget* parent);
+    // user_id == 0 means create mode; > 0 means modify mode.
+    RouterUserDialog(qint64 router_id, qint64 user_id, QWidget* parent);
     ~RouterUserDialog() final;
-
-    const RouterUser& user() const;
 
 protected:
     // QDialog implementation.
     bool eventFilter(QObject* object, QEvent* event) final;
 
+private slots:
+    void onUserListReceived(const proto::router::UserList& list);
+    void onUserResultReceived(const proto::router::UserResult& result);
+
 private:
     void onButtonBoxClicked(QAbstractButton* button);
     void setAccountChanged(bool changed);
+    void updateLoadingState();
     static QString sessionTypeToString(proto::router::SessionType session_type);
 
     std::unique_ptr<Ui::RouterUserDialog> ui;
+    qint64 router_id_ = 0;
+    qint64 entry_id_ = 0;
     RouterUser user_;
-    QStringList users_;
+    QStringList existing_names_;
     bool account_changed_ = true;
+    bool users_loaded_ = false;
 
     Q_DISABLE_COPY_MOVE(RouterUserDialog)
 };
