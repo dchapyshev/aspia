@@ -282,7 +282,7 @@ std::optional<SessionManager::Key> SessionManager::keyFromPool(
 }
 
 //--------------------------------------------------------------------------------------------------
-void SessionManager::onDisconnectSession(quint64 session_id)
+void SessionManager::onDisconnectSession(qint64 session_id)
 {
     LOG(INFO) << "Disconnect session by session id:" << session_id;
 
@@ -456,7 +456,7 @@ void SessionManager::onStatTimeout()
     for (const auto& session : std::as_const(active_sessions_))
     {
         proto::router::Peer* peer = statistics.add_peer();
-        peer->set_session_id(session->sessionId());
+        peer->set_peer_id(session->sessionId());
         peer->set_status(proto::router::Peer::STATUS_ACTIVE);
         peer->set_client_address(session->clientAddress().toStdString());
         peer->set_client_user_name(session->clientUserName().toStdString());

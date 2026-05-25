@@ -30,7 +30,7 @@ Session::Session(std::pair<asio::ip::tcp::socket, asio::ip::tcp::socket>&& socke
     : QObject(parent),
       socket_{ std::move(sockets.first), std::move(sockets.second) }
 {
-    static quint64 session_id = 0;
+    static qint64 session_id = 0;
     ++session_id;
     session_id_ = session_id;
 

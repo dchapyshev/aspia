@@ -205,7 +205,8 @@ message RouterToAdmin
     ClientResult client_result       = 5;
     UserList user_list               = 6;
     UserResult user_result           = 7;
-    WorkspaceResult workspace_result = 8;
+    PeerResult peer_result           = 8;
+    WorkspaceResult workspace_result = 9;
 }
 
 message AdminToRouter

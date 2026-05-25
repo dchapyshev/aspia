@@ -41,6 +41,9 @@ extern const char* const kCommandWorkspaceAdd;
 extern const char* const kCommandWorkspaceModify;
 extern const char* const kCommandWorkspaceDelete;
 
+// Command names for PeerRequest.
+extern const char* const kCommandPeerDisconnect;
+
 // Error codes for HostResult/RelayResult/ClientResult/UserList/UserResult/WorkspaceList/
 // WorkspaceResult/HostIdResponse.
 extern const char* const kErrorOk;

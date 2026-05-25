@@ -178,7 +178,7 @@ void Service::onTcpMessageReceived(quint8 /* channel_id */, const QByteArray& bu
 
         if (request.command_name() == "disconnect")
         {
-            session_manager_->onDisconnectSession(request.peer_session_id());
+            session_manager_->onDisconnectSession(request.peer_id());
         }
         else
         {

@@ -88,7 +88,7 @@ message Peer
         STATUS_FINISHED = 2;
     }
 
-    uint64 session_id       = 1;
+    int64 peer_id           = 1;
     Status status           = 2;
     string client_address   = 3;
     string client_user_name = 4;
@@ -101,7 +101,16 @@ message Peer
 
 message PeerRequest
 {
-    int64 relay_session_id = 1;
-    string command_name    = 2; // "disconnect"
-    uint64 peer_session_id = 3;
+    int64 request_id    = 1;
+    string command_name = 2; // "disconnect"
+    string params       = 3;
+    int64 relay_id      = 4;
+    int64 peer_id       = 5;
+}
+
+message PeerResult
+{
+    int64 request_id    = 1;
+    string command_name = 2; // Same as request command_name.
+    string error_code   = 3; // "ok" | "not_found" | "internal_error"
 }

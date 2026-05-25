@@ -484,15 +484,25 @@ void SessionAdmin::doClientRequest(const proto::router::ClientRequest& request)
 //--------------------------------------------------------------------------------------------------
 void SessionAdmin::doPeerRequest(const proto::router::PeerRequest& request)
 {
+    proto::router::RouterToAdmin message;
+    proto::router::PeerResult* result = message.mutable_peer_result();
+    result->set_request_id(request.request_id());
+    result->set_command_name(request.command_name());
+
     SessionRelay* relay_session =
-        dynamic_cast<SessionRelay*>(Service::instance()->session(request.relay_session_id()));
+        dynamic_cast<SessionRelay*>(Service::instance()->session(request.relay_id()));
     if (!relay_session)
     {
-        CLOG(ERROR) << "Relay with id" << request.relay_session_id() << "is not found";
-        return;
+        CLOG(ERROR) << "Relay with id" << request.relay_id() << "is not found";
+        result->set_error_code(proto::router::kErrorNotFound);
+    }
+    else
+    {
+        relay_session->disconnectPeerSession(request);
+        result->set_error_code(proto::router::kErrorOk);
     }
 
-    relay_session->disconnectPeerSession(request);
+    sendMessage(proto::router::CHANNEL_ID_ADMIN, serialize(message));
 }
 
 //--------------------------------------------------------------------------------------------------

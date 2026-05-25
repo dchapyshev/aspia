@@ -61,7 +61,7 @@ public:
     void clearKeys();
 
 public slots:
-    void onDisconnectSession(quint64 session_id);
+    void onDisconnectSession(qint64 session_id);
 
 signals:
     void sig_started();

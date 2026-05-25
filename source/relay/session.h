@@ -44,7 +44,7 @@ public:
 
     void start();
 
-    quint64 sessionId() const { return session_id_; }
+    qint64 sessionId() const { return session_id_; }
     const QString& clientAddress() const { return client_address_; }
     const QString& clientUserName() const { return client_user_name_; }
     const QString& hostAddress() const { return host_address_; }
@@ -60,7 +60,7 @@ private:
     static void doReadSome(Session* session, int source);
     void onErrorOccurred(const Location& location, const std::error_code& error_code);
 
-    quint64 session_id_ = 0;
+    qint64 session_id_ = 0;
     QString client_address_;
     QString client_user_name_;
     QString host_address_;
