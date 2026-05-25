@@ -83,6 +83,10 @@ void SessionClient::onSessionMessage(quint8 channel_id, const QByteArray& buffer
     {
         readWorkspaceListRequest(message.workspace_list_request());
     }
+    else if (message.has_change_password_request())
+    {
+        readChangePasswordRequest(message.change_password_request());
+    }
     else
     {
         CLOG(ERROR) << "Unhandled message from client";
@@ -92,6 +96,12 @@ void SessionClient::onSessionMessage(quint8 channel_id, const QByteArray& buffer
 //--------------------------------------------------------------------------------------------------
 void SessionClient::onStarted()
 {
+    sendUserKeys();
+}
+
+//--------------------------------------------------------------------------------------------------
+void SessionClient::sendUserKeys()
+{
     Database database = Database::open();
     if (!database.isValid())
     {
@@ -99,10 +109,10 @@ void SessionClient::onStarted()
         return;
     }
 
-    RouterUser user = database.findUser(userName());
+    RouterUser user = database.findUser(userId());
     if (!user.isValid())
     {
-        CLOG(WARNING) << "Authenticated user not found in database:" << userName();
+        CLOG(WARNING) << "Authenticated user not found in database (user_id:" << userId() << ")";
         return;
     }
 
@@ -394,6 +404,63 @@ void SessionClient::readWorkspaceListRequest(const proto::router::WorkspaceListR
     }
 
     sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
+}
+
+//--------------------------------------------------------------------------------------------------
+void SessionClient::readChangePasswordRequest(const proto::router::ChangePasswordRequest& request)
+{
+    proto::router::RouterToClient message;
+    proto::router::ChangePasswordResult* result = message.mutable_change_password_result();
+    result->set_request_id(request.request_id());
+
+    Database database = Database::open();
+    if (!database.isValid())
+    {
+        CLOG(ERROR) << "Failed to connect to database";
+        result->set_error_code(proto::router::kErrorInternalError);
+        sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
+        return;
+    }
+
+    RouterUser user = database.findUser(userId());
+    if (!user.isValid())
+    {
+        CLOG(WARNING) << "Authenticated user not found in database (user_id:" << userId() << ")";
+        result->set_error_code(proto::router::kErrorInvalidData);
+        sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
+        return;
+    }
+
+    // Replace only the password-derived fields; keep name, group, sessions, flags intact.
+    user.salt             = QByteArray::fromStdString(request.salt());
+    user.verifier         = QByteArray::fromStdString(request.verifier());
+    user.public_key       = QByteArray::fromStdString(request.public_key());
+    user.wrap_private_key = QByteArray::fromStdString(request.wrap_private_key());
+    user.wrap_salt        = QByteArray::fromStdString(request.wrap_salt());
+
+    if (!user.isValid())
+    {
+        CLOG(ERROR) << "Rotated credentials produced an invalid user record";
+        result->set_error_code(proto::router::kErrorInvalidData);
+        sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
+        return;
+    }
+
+    if (!database.modifyUser(user))
+    {
+        CLOG(ERROR) << "Failed to persist rotated user credentials";
+        result->set_error_code(proto::router::kErrorInternalError);
+        sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
+        return;
+    }
+
+    CLOG(INFO) << "User" << userName() << "rotated own credentials";
+    result->set_error_code(proto::router::kErrorOk);
+    sendMessage(proto::router::CHANNEL_ID_CLIENT, serialize(message));
+
+    // Push a fresh UserKeys so the client can decrypt with the new wrap key and transition
+    // from CONNECTING to ONLINE.
+    sendUserKeys();
 }
 
 //--------------------------------------------------------------------------------------------------

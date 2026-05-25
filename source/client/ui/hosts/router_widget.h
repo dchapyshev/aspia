@@ -155,6 +155,7 @@ protected:
 private slots:
     void onStatusChanged(qint64 router_id, Router::Status status);
     void onConnectionErrorOccurred(qint64 router_id, TcpChannel::ErrorCode error_code);
+    void onPasswordChangeRequired();
     void onTabChanged(int index);
     void onCurrentUserChanged();
     void onCurrentRelayChanged();

@@ -300,17 +300,6 @@ void RouterWorkspaceDialog::onAddClicked()
         return;
 
     const qint64 user_id = item->data(Qt::UserRole).toLongLong();
-    auto it = users_.constFind(user_id);
-    if (it == users_.constEnd())
-        return;
-
-    if (it->public_key.isEmpty())
-    {
-        MsgBox::warning(this, tr("This user does not have encryption keys configured. "
-                                 "Recreate the user or change the password to generate them."));
-        return;
-    }
-
     access_user_ids_.insert(user_id);
     rebuildLists();
 }
@@ -370,8 +359,7 @@ void RouterWorkspaceDialog::rebuildLists()
 
     for (const UserEntry& user : std::as_const(users_))
     {
-        const QIcon icon(user.public_key.isEmpty() ? ":/img/user-disable.svg" : ":/img/user.svg");
-        QListWidgetItem* item = new QListWidgetItem(icon, user.name);
+        QListWidgetItem* item = new QListWidgetItem(QIcon(":/img/user.svg"), user.name);
         item->setData(Qt::UserRole, user.entry_id);
 
         if (access_user_ids_.contains(user.entry_id))

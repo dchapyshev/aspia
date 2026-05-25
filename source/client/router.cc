@@ -226,31 +226,19 @@ void Router::onTcpMessageReceived(quint8 channel_id, const QByteArray& bytes)
         }
 
         if (message.has_user_keys())
-        {
-            LOG(INFO) << "User keys received (user_id:" << message.user_keys().user_id() << ")";
             readUserKeys(message.user_keys());
-            setStatus(Status::ONLINE);
-        }
         else if (message.has_connection_offer())
-        {
             dispatch(message.connection_offer().request_id(), message.connection_offer());
-        }
         else if (message.has_host_status())
-        {
             dispatch(message.host_status().request_id(), message.host_status());
-        }
         else if (message.has_host_list())
-        {
             dispatch(message.host_list().request_id(), message.host_list());
-        }
         else if (message.has_workspace_list())
-        {
             dispatch(message.workspace_list().request_id(), message.workspace_list());
-        }
+        else if (message.has_change_password_result())
+            dispatch(message.change_password_result().request_id(), message.change_password_result());
         else
-        {
             LOG(WARNING) << "Unhandled client message";
-        }
     }
     else
     {
@@ -417,22 +405,31 @@ void Router::emitSend(quint8 channel_id, const google::protobuf::MessageLite& me
 //--------------------------------------------------------------------------------------------------
 void Router::readUserKeys(const proto::router::UserKeys& user_keys)
 {
-    user_id_ = user_keys.user_id();
+    LOG(INFO) << "User keys received (user_id:" << user_keys.user_id() << ")";
+
+    user_id_   = user_keys.user_id();
+    user_name_ = QString::fromStdString(user_keys.name());
 
     const QByteArray wrap_private_key = QByteArray::fromStdString(user_keys.wrap_private_key());
     const QByteArray wrap_salt = QByteArray::fromStdString(user_keys.wrap_salt());
 
     if (wrap_private_key.isEmpty() || wrap_salt.isEmpty())
     {
-        LOG(WARNING) << "UserKeys missing wrap key/salt; crypto features unavailable";
         user_private_key_.clear();
+        LOG(WARNING) << "User has no wrap key/salt; prompting password change";
+        emit sig_passwordChangeRequired(config_.routerId());
         return;
     }
 
     user_private_key_ = PrivateKeyCryptor::decrypt(
         wrap_private_key, SecureString(config_.password()), wrap_salt);
     if (user_private_key_.isEmpty())
+    {
         LOG(WARNING) << "Failed to decrypt self private key for user_id:" << user_id_;
+        return;
+    }
+
+    setStatus(Status::ONLINE);
 }
 
 //--------------------------------------------------------------------------------------------------

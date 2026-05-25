@@ -37,7 +37,9 @@
 
 #include "base/logging.h"
 #include "base/peer/router_user.h"
+#include "base/peer/user.h"
 #include "client/router.h"
+#include "client/ui/hosts/router_password_dialog.h"
 #include "client/ui/hosts/router_user_dialog.h"
 #include "client/ui/hosts/router_workspace_dialog.h"
 #include "common/ui/formatter.h"
@@ -394,6 +396,7 @@ RouterWidget::RouterWidget(const RouterConfig& config, QWidget* parent)
 
     connect(router_, &Router::sig_statusChanged, this, &RouterWidget::onStatusChanged);
     connect(router_, &Router::sig_errorOccurred, this, &RouterWidget::onConnectionErrorOccurred);
+    connect(router_, &Router::sig_passwordChangeRequired, this, &RouterWidget::onPasswordChangeRequired);
 
     connect(ui->tab, &QTabWidget::currentChanged, this, &RouterWidget::onTabChanged);
     connect(ui->tree_users, &QTreeWidget::itemSelectionChanged, this, &RouterWidget::onCurrentUserChanged);
@@ -1197,6 +1200,17 @@ void RouterWidget::onStatusChanged(qint64 router_id, Router::Status status)
 void RouterWidget::onConnectionErrorOccurred(qint64 /* router_id */, TcpChannel::ErrorCode error_code)
 {
     status_dialog_->addMessage(tr("Network error: %1.").arg(TcpChannel::errorToString(error_code)));
+}
+
+//--------------------------------------------------------------------------------------------------
+void RouterWidget::onPasswordChangeRequired()
+{
+    MsgBox::information(this,
+        tr("To complete the migration from a previous version, you need to change your password."));
+
+    RouterPasswordDialog dialog(router_->routerId(), this);
+    if (dialog.exec() == QDialog::Accepted)
+        status_dialog_->addMessage(tr("Password updated. Waiting for new encryption keys..."));
 }
 
 //--------------------------------------------------------------------------------------------------

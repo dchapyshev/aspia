@@ -23,6 +23,7 @@
 #include "router/session.h"
 
 namespace proto::router {
+class ChangePasswordRequest;
 class CheckHostStatus;
 class ConnectionRequest;
 class HostListRequest;
@@ -51,6 +52,8 @@ private:
     void readCheckHostStatus(const proto::router::CheckHostStatus& check_host_status);
     void readHostListRequest(const proto::router::HostListRequest& request);
     void readWorkspaceListRequest(const proto::router::WorkspaceListRequest& request);
+    void readChangePasswordRequest(const proto::router::ChangePasswordRequest& request);
+    void sendUserKeys();
     Session* sessionByHostId(HostId host_id);
 
     quint16 stun_port_ = 0;

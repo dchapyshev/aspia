@@ -65,6 +65,7 @@ public:
     bool modifyUser(const RouterUser& user);
     bool removeUser(qint64 entry_id);
     RouterUser findUser(const QString& username) const;
+    RouterUser findUser(qint64 entry_id) const;
     std::string_view hostId(const QByteArray& key_hash, HostId* host_id) const;
     bool addHost(const QByteArray& key_hash);
 

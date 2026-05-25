@@ -31,6 +31,7 @@
 
 #include "base/crypto/secure_byte_array.h"
 #include "base/net/tcp_channel.h"
+#include "base/peer/router_user.h"
 #include "base/scoped_qpointer.h"
 #include "client/config.h"
 #include "proto/router_admin.h"
@@ -182,9 +183,15 @@ public:
     template<typename ReceiverT, typename HandlerT>
     void connectionRequest(qint64 host_id, ReceiverT* receiver, HandlerT handler);
 
+    // Client: rotate the password of the authenticated user.
+    template<typename ReceiverT>
+    void changePassword(const SecureString& new_password, ReceiverT* receiver,
+                        void (ReceiverT::*slot)(const proto::router::ChangePasswordResult&));
+
 signals:
     void sig_statusChanged(qint64 router_id, Router::Status status);
     void sig_errorOccurred(qint64 router_id, TcpChannel::ErrorCode error_code);
+    void sig_passwordChangeRequired(qint64 router_id);
 
 private slots:
     void onTcpAuthenticated();
@@ -261,6 +268,7 @@ private:
     QHash<qint64, Pending> pending_;
 
     qint64 user_id_ = 0;
+    QString user_name_;
     SecureByteArray user_private_key_;
     QHash<qint64, SecureByteArray> workspace_group_keys_;
 
@@ -522,6 +530,25 @@ void Router::connectionRequest(qint64 host_id, ReceiverT* receiver, HandlerT han
         handler(*static_cast<const proto::router::ConnectionOffer*>(parsed));
     });
 
+    emitSend(proto::router::CHANNEL_ID_CLIENT, message);
+}
+
+//--------------------------------------------------------------------------------------------------
+template<typename ReceiverT>
+void Router::changePassword(const SecureString& new_password, ReceiverT* receiver,
+                            void (ReceiverT::*slot)(const proto::router::ChangePasswordResult&))
+{
+    RouterUser new_user = RouterUser::create(user_name_, new_password);
+
+    proto::router::ClientToRouter message;
+    auto* request = message.mutable_change_password_request();
+    request->set_request_id(nextRequestId());
+    request->set_salt(new_user.salt.toStdString());
+    request->set_verifier(new_user.verifier.toStdString());
+    request->set_public_key(new_user.public_key.toStdString());
+    request->set_wrap_private_key(new_user.wrap_private_key.toStdString());
+    request->set_wrap_salt(new_user.wrap_salt.toStdString());
+    registerPending(request, receiver, slot);
     emitSend(proto::router::CHANNEL_ID_CLIENT, message);
 }
 

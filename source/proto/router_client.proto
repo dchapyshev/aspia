@@ -65,6 +65,22 @@ message WorkspaceList
     repeated Workspace workspace = 3;
 }
 
+message ChangePasswordRequest
+{
+    int64 request_id       = 1;
+    bytes salt             = 2;
+    bytes verifier         = 3;
+    bytes public_key       = 4;
+    bytes wrap_private_key = 5;
+    bytes wrap_salt        = 6;
+}
+
+message ChangePasswordResult
+{
+    int64 request_id  = 1;
+    string error_code = 2; // "ok" | "invalid_request" | "invalid_data" | "internal_error"
+}
+
 message ConnectionRequest
 {
     int64 request_id = 1;
@@ -138,17 +154,19 @@ message HostList
 
 message RouterToClient
 {
-    UserKeys user_keys               = 1;
-    ConnectionOffer connection_offer = 2;
-    HostStatus host_status           = 3;
-    HostList host_list               = 4;
-    WorkspaceList workspace_list     = 5;
+    UserKeys user_keys                          = 1;
+    ChangePasswordResult change_password_result = 2;
+    ConnectionOffer connection_offer            = 3;
+    HostStatus host_status                      = 4;
+    HostList host_list                          = 5;
+    WorkspaceList workspace_list                = 6;
 }
 
 message ClientToRouter
 {
-    ConnectionRequest connection_request         = 1;
-    CheckHostStatus check_host_status            = 2;
-    HostListRequest host_list_request            = 3;
-    WorkspaceListRequest workspace_list_request  = 4;
+    ChangePasswordRequest change_password_request = 1;
+    ConnectionRequest connection_request          = 2;
+    CheckHostStatus check_host_status             = 3;
+    HostListRequest host_list_request             = 4;
+    WorkspaceListRequest workspace_list_request   = 5;
 }

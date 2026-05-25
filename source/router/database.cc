@@ -545,6 +545,33 @@ RouterUser Database::findUser(const QString& username) const
 }
 
 //--------------------------------------------------------------------------------------------------
+RouterUser Database::findUser(qint64 entry_id) const
+{
+    if (!isValid())
+    {
+        LOG(ERROR) << "Database is not valid";
+        return RouterUser();
+    }
+
+    QSqlQuery query(databaseByName(connection_name_));
+    query.prepare(QStringLiteral(
+        "SELECT id, name, \"group\", salt, verifier, sessions, flags, "
+        "public_key, wrap_private_key, wrap_salt FROM users WHERE id=?"));
+    query.addBindValue(entry_id);
+
+    if (!query.exec())
+    {
+        LOG(ERROR) << "Unable to execute query:" << query.lastError();
+        return RouterUser();
+    }
+
+    if (!query.next())
+        return RouterUser();
+
+    return readUser(query);
+}
+
+//--------------------------------------------------------------------------------------------------
 std::string_view Database::hostId(const QByteArray& key_hash, HostId* host_id) const
 {
     CHECK(host_id);
