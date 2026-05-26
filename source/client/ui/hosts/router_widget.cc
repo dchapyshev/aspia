@@ -885,7 +885,7 @@ void RouterWidget::showStatusDialog()
 //--------------------------------------------------------------------------------------------------
 void RouterWidget::onUpdateRelayList()
 {
-    router_->relayList(this, &RouterWidget::onRelayListReceived);
+    router_->listRelays(this, &RouterWidget::onRelayListReceived);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -897,19 +897,19 @@ void RouterWidget::onUpdateHostList()
     request.set_mode(proto::router::HostListRequest::MODE_ALL);
     request.set_start_item(start);
     request.set_end_item(start + hosts_page_size_ - 1);
-    router_->hostList(std::move(request), this, &RouterWidget::onHostListReceived);
+    router_->listHosts(std::move(request), this, &RouterWidget::onHostListReceived);
 }
 
 //--------------------------------------------------------------------------------------------------
 void RouterWidget::onUpdateClientList()
 {
-    router_->clientList(this, &RouterWidget::onClientListReceived);
+    router_->listClients(this, &RouterWidget::onClientListReceived);
 }
 
 //--------------------------------------------------------------------------------------------------
 void RouterWidget::onUpdateUserList()
 {
-    router_->userList(this, &RouterWidget::onUserListReceived);
+    router_->listUsers(this, &RouterWidget::onUserListReceived);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -962,7 +962,7 @@ void RouterWidget::onDeleteUser()
     }
 
     LOG(INFO) << "[ACTION] Delete user accepted by user";
-    router_->userDelete(entry_id, this, &RouterWidget::onUserResultReceived);
+    router_->deleteUser(entry_id, this, &RouterWidget::onUserResultReceived);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -983,7 +983,7 @@ void RouterWidget::onDisconnectHost()
     }
 
     LOG(INFO) << "[ACTION] Disconnect host accepted by user";
-    router_->hostDisconnect(tree_item->info.host_id(), this, &RouterWidget::onHostResultReceived);
+    router_->disconnectHost(tree_item->info.host_id(), this, &RouterWidget::onHostResultReceived);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1003,7 +1003,7 @@ void RouterWidget::onDisconnectAllHosts()
     }
 
     LOG(INFO) << "[ACTION] Disconnect all hosts accepted by user";
-    router_->hostDisconnect(kAllHostsId, this, &RouterWidget::onHostResultReceived);
+    router_->disconnectHost(kAllHostsId, this, &RouterWidget::onHostResultReceived);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1032,7 +1032,7 @@ void RouterWidget::onRemoveHost()
     }
 
     LOG(INFO) << "[ACTION] Remove host accepted by user";
-    router_->hostRemove(tree_item->info.host_id(), this, &RouterWidget::onHostResultReceived);
+    router_->removeHost(tree_item->info.host_id(), this, &RouterWidget::onHostResultReceived);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1053,7 +1053,7 @@ void RouterWidget::onDisconnectRelay()
     }
 
     LOG(INFO) << "[ACTION] Disconnect relay accepted by user";
-    router_->relayDisconnect(tree_item->info.entry_id(), this, &RouterWidget::onRelayResultReceived);
+    router_->disconnectRelay(tree_item->info.entry_id(), this, &RouterWidget::onRelayResultReceived);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1073,7 +1073,7 @@ void RouterWidget::onDisconnectAllRelays()
     }
 
     LOG(INFO) << "[ACTION] Disconnect all relays accepted by user";
-    router_->relayDisconnect(-1, this, &RouterWidget::onRelayResultReceived);
+    router_->disconnectRelay(-1, this, &RouterWidget::onRelayResultReceived);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1094,7 +1094,7 @@ void RouterWidget::onDisconnectClient()
     }
 
     LOG(INFO) << "[ACTION] Disconnect client accepted by user";
-    router_->clientDisconnect(tree_item->info.entry_id(), this, &RouterWidget::onClientResultReceived);
+    router_->disconnectClient(tree_item->info.entry_id(), this, &RouterWidget::onClientResultReceived);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1114,13 +1114,13 @@ void RouterWidget::onDisconnectAllClients()
     }
 
     LOG(INFO) << "[ACTION] Disconnect all clients accepted by user";
-    router_->clientDisconnect(-1, this, &RouterWidget::onClientResultReceived);
+    router_->disconnectClient(-1, this, &RouterWidget::onClientResultReceived);
 }
 
 //--------------------------------------------------------------------------------------------------
 void RouterWidget::onUpdateWorkspaceList()
 {
-    router_->workspaceList(0, this, &RouterWidget::onWorkspaceListReceived);
+    router_->listWorkspaces(0, this, &RouterWidget::onWorkspaceListReceived);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1165,7 +1165,7 @@ void RouterWidget::onDeleteWorkspace()
     }
 
     LOG(INFO) << "[ACTION] Delete workspace accepted by user";
-    router_->workspaceDelete(tree_item->workspace.entry_id, this, &RouterWidget::onWorkspaceResultReceived);
+    router_->deleteWorkspace(tree_item->workspace.entry_id, this, &RouterWidget::onWorkspaceResultReceived);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -1395,7 +1395,7 @@ void RouterWidget::onPeerContextMenuRequested(const QPoint& pos)
         }
 
         LOG(INFO) << "[ACTION] Disconnect peer accepted by user";
-        router_->peerDisconnect(relay_item->info.entry_id(), peer_item->conn.peer_id(),
+        router_->disconnectPeer(relay_item->info.entry_id(), peer_item->conn.peer_id(),
             this, &RouterWidget::onPeerResultReceived);
     }
     else if (selected == copy_row_action)

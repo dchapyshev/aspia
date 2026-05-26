@@ -418,7 +418,7 @@ void HostsTab::onRouterStatusChanged(qint64 router_id, Router::Status status)
     {
         if (Router* router = Router::instance(router_id))
         {
-            router->workspaceList(0, this, [this, router_id](const Router::WorkspaceList& list)
+            router->listWorkspaces(0, this, [this, router_id](const Router::WorkspaceList& list)
             {
                 ui->sidebar->setRouterWorkspaces(router_id, list.workspaces);
             });

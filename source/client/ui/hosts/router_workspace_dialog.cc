@@ -70,12 +70,12 @@ RouterWorkspaceDialog::RouterWorkspaceDialog(
 
     // Always fetch the full list so we have all the other names available for uniqueness
     // validation; in modify mode the entry matching entry_id_ also populates the form.
-    router->workspaceList(0, this, &RouterWorkspaceDialog::onWorkspaceListReceived);
-    router->userList(this, &RouterWorkspaceDialog::onUserListReceived);
+    router->listWorkspaces(0, this, &RouterWorkspaceDialog::onWorkspaceListReceived);
+    router->listUsers(this, &RouterWorkspaceDialog::onUserListReceived);
 
     proto::router::HostListRequest host_request;
     host_request.set_mode(proto::router::HostListRequest::MODE_ALL);
-    router->hostList(std::move(host_request), this, &RouterWorkspaceDialog::onHostListReceived);
+    router->listHosts(std::move(host_request), this, &RouterWorkspaceDialog::onHostListReceived);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -256,9 +256,9 @@ void RouterWorkspaceDialog::onButtonBoxClicked(QAbstractButton* button)
     LOG(INFO) << "[ACTION] Submitting workspace (entry_id:" << entry_id_
               << ", access entries:" << workspace_.access.size() << ")";
     if (entry_id_ > 0)
-        router->workspaceModify(workspace_, this, &RouterWorkspaceDialog::onWorkspaceResultReceived);
+        router->modifyWorkspace(workspace_, this, &RouterWorkspaceDialog::onWorkspaceResultReceived);
     else
-        router->workspaceAdd(workspace_, this, &RouterWorkspaceDialog::onWorkspaceResultReceived);
+        router->addWorkspace(workspace_, this, &RouterWorkspaceDialog::onWorkspaceResultReceived);
 }
 
 //--------------------------------------------------------------------------------------------------

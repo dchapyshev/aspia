@@ -73,7 +73,7 @@ RouterUserDialog::RouterUserDialog(qint64 router_id, qint64 user_id, QWidget* pa
 
     Router* router = Router::instance(router_id_);
     CHECK(router);
-    router->userList(this, &RouterUserDialog::onUserListReceived);
+    router->listUsers(this, &RouterUserDialog::onUserListReceived);
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -287,9 +287,9 @@ void RouterUserDialog::onButtonBoxClicked(QAbstractButton* button)
 
     LOG(INFO) << "[ACTION] Submitting user (entry_id:" << entry_id_ << ")";
     if (entry_id_ > 0)
-        router->userModify(user_.serialize(), this, &RouterUserDialog::onUserResultReceived);
+        router->modifyUser(user_.serialize(), this, &RouterUserDialog::onUserResultReceived);
     else
-        router->userAdd(user_.serialize(), this, &RouterUserDialog::onUserResultReceived);
+        router->addUser(user_.serialize(), this, &RouterUserDialog::onUserResultReceived);
 }
 
 //--------------------------------------------------------------------------------------------------

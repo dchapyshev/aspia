@@ -105,60 +105,60 @@ public:
 
     // Admin: list queries.
     template<typename HandlerT>
-    void relayList(QObject* receiver, HandlerT handler);
+    void listRelays(QObject* receiver, HandlerT handler);
 
     template<typename HandlerT>
-    void clientList(QObject* receiver, HandlerT handler);
+    void listClients(QObject* receiver, HandlerT handler);
 
     template<typename HandlerT>
-    void userList(QObject* receiver, HandlerT handler);
+    void listUsers(QObject* receiver, HandlerT handler);
 
     // Admin: user operations.
     template<typename HandlerT>
-    void userAdd(const proto::router::User& user, QObject* receiver, HandlerT handler);
+    void addUser(const proto::router::User& user, QObject* receiver, HandlerT handler);
 
     template<typename HandlerT>
-    void userModify(const proto::router::User& user, QObject* receiver, HandlerT handler);
+    void modifyUser(const proto::router::User& user, QObject* receiver, HandlerT handler);
 
     template<typename HandlerT>
-    void userDelete(qint64 entry_id, QObject* receiver, HandlerT handler);
+    void deleteUser(qint64 entry_id, QObject* receiver, HandlerT handler);
 
     // Admin: host operations. Pass kAllHostsId to target all hosts.
     template<typename HandlerT>
-    void hostDisconnect(HostId host_id, QObject* receiver, HandlerT handler);
+    void disconnectHost(HostId host_id, QObject* receiver, HandlerT handler);
 
     template<typename HandlerT>
-    void hostRemove(HostId host_id, QObject* receiver, HandlerT handler);
+    void removeHost(HostId host_id, QObject* receiver, HandlerT handler);
 
     // Admin: relay/client disconnect. session_id == -1 means "all".
     template<typename HandlerT>
-    void relayDisconnect(qint64 session_id, QObject* receiver, HandlerT handler);
+    void disconnectRelay(qint64 session_id, QObject* receiver, HandlerT handler);
 
     template<typename HandlerT>
-    void clientDisconnect(qint64 session_id, QObject* receiver, HandlerT handler);
+    void disconnectClient(qint64 session_id, QObject* receiver, HandlerT handler);
 
     // Admin: workspace operations. Add/modify encrypt the workspace data with the user's key.
     template<typename HandlerT>
-    void workspaceAdd(const Router::Workspace& workspace, QObject* receiver, HandlerT handler);
+    void addWorkspace(const Router::Workspace& workspace, QObject* receiver, HandlerT handler);
 
     template<typename HandlerT>
-    void workspaceModify(const Router::Workspace& workspace, QObject* receiver, HandlerT handler);
+    void modifyWorkspace(const Router::Workspace& workspace, QObject* receiver, HandlerT handler);
 
     template<typename HandlerT>
-    void workspaceDelete(qint64 entry_id, QObject* receiver, HandlerT handler);
+    void deleteWorkspace(qint64 entry_id, QObject* receiver, HandlerT handler);
 
     // Admin: peer disconnect.
     template<typename HandlerT>
-    void peerDisconnect(qint64 relay_id, qint64 peer_id, QObject* receiver, HandlerT handler);
+    void disconnectPeer(qint64 relay_id, qint64 peer_id, QObject* receiver, HandlerT handler);
 
     // Client: workspace list (response is the decoded plain struct). workspace_id == 0
     // returns all visible workspaces; > 0 narrows to a single entry.
     template<typename HandlerT>
-    void workspaceList(qint64 workspace_id, QObject* receiver, HandlerT handler);
+    void listWorkspaces(qint64 workspace_id, QObject* receiver, HandlerT handler);
 
     // Client: host list. Caller supplies a pre-filled request (mode, filters, etc).
     template<typename HandlerT>
-    void hostList(proto::router::HostListRequest request, QObject* receiver, HandlerT handler);
+    void listHosts(proto::router::HostListRequest request, QObject* receiver, HandlerT handler);
 
     // Client: ask the router whether a host is currently online.
     template<typename HandlerT>
@@ -166,7 +166,7 @@ public:
 
     // Client: ask the router for a relay connection offer to the given host.
     template<typename HandlerT>
-    void connectionRequest(HostId host_id, QObject* receiver, HandlerT handler);
+    void requestConnection(HostId host_id, QObject* receiver, HandlerT handler);
 
     // Client: rotate the password of the authenticated user.
     template<typename HandlerT>
@@ -309,7 +309,7 @@ Q_DECLARE_METATYPE(Router::WorkspaceList)
 
 //--------------------------------------------------------------------------------------------------
 template<typename HandlerT>
-void Router::relayList(QObject* receiver, HandlerT handler)
+void Router::listRelays(QObject* receiver, HandlerT handler)
 {
     proto::router::AdminToRouter message;
     auto* request = message.mutable_relay_list_request();
@@ -320,7 +320,7 @@ void Router::relayList(QObject* receiver, HandlerT handler)
 
 //--------------------------------------------------------------------------------------------------
 template<typename HandlerT>
-void Router::clientList(QObject* receiver, HandlerT handler)
+void Router::listClients(QObject* receiver, HandlerT handler)
 {
     proto::router::AdminToRouter message;
     auto* request = message.mutable_client_list_request();
@@ -331,7 +331,7 @@ void Router::clientList(QObject* receiver, HandlerT handler)
 
 //--------------------------------------------------------------------------------------------------
 template<typename HandlerT>
-void Router::userList(QObject* receiver, HandlerT handler)
+void Router::listUsers(QObject* receiver, HandlerT handler)
 {
     proto::router::AdminToRouter message;
     auto* request = message.mutable_user_list_request();
@@ -342,7 +342,7 @@ void Router::userList(QObject* receiver, HandlerT handler)
 
 //--------------------------------------------------------------------------------------------------
 template<typename HandlerT>
-void Router::userAdd(const proto::router::User& user, QObject* receiver, HandlerT handler)
+void Router::addUser(const proto::router::User& user, QObject* receiver, HandlerT handler)
 {
     proto::router::AdminToRouter message;
     auto* request = message.mutable_user_request();
@@ -355,7 +355,7 @@ void Router::userAdd(const proto::router::User& user, QObject* receiver, Handler
 
 //--------------------------------------------------------------------------------------------------
 template<typename HandlerT>
-void Router::userModify(const proto::router::User& user, QObject* receiver, HandlerT handler)
+void Router::modifyUser(const proto::router::User& user, QObject* receiver, HandlerT handler)
 {
     proto::router::AdminToRouter message;
     auto* request = message.mutable_user_request();
@@ -368,7 +368,7 @@ void Router::userModify(const proto::router::User& user, QObject* receiver, Hand
 
 //--------------------------------------------------------------------------------------------------
 template<typename HandlerT>
-void Router::userDelete(qint64 entry_id, QObject* receiver, HandlerT handler)
+void Router::deleteUser(qint64 entry_id, QObject* receiver, HandlerT handler)
 {
     proto::router::AdminToRouter message;
     auto* request = message.mutable_user_request();
@@ -381,7 +381,7 @@ void Router::userDelete(qint64 entry_id, QObject* receiver, HandlerT handler)
 
 //--------------------------------------------------------------------------------------------------
 template<typename HandlerT>
-void Router::hostDisconnect(HostId host_id, QObject* receiver, HandlerT handler)
+void Router::disconnectHost(HostId host_id, QObject* receiver, HandlerT handler)
 {
     proto::router::AdminToRouter message;
     auto* request = message.mutable_host_request();
@@ -394,7 +394,7 @@ void Router::hostDisconnect(HostId host_id, QObject* receiver, HandlerT handler)
 
 //--------------------------------------------------------------------------------------------------
 template<typename HandlerT>
-void Router::hostRemove(HostId host_id, QObject* receiver, HandlerT handler)
+void Router::removeHost(HostId host_id, QObject* receiver, HandlerT handler)
 {
     proto::router::AdminToRouter message;
     auto* request = message.mutable_host_request();
@@ -407,7 +407,7 @@ void Router::hostRemove(HostId host_id, QObject* receiver, HandlerT handler)
 
 //--------------------------------------------------------------------------------------------------
 template<typename HandlerT>
-void Router::relayDisconnect(qint64 session_id, QObject* receiver, HandlerT handler)
+void Router::disconnectRelay(qint64 session_id, QObject* receiver, HandlerT handler)
 {
     proto::router::AdminToRouter message;
     auto* request = message.mutable_relay_request();
@@ -420,7 +420,7 @@ void Router::relayDisconnect(qint64 session_id, QObject* receiver, HandlerT hand
 
 //--------------------------------------------------------------------------------------------------
 template<typename HandlerT>
-void Router::clientDisconnect(qint64 session_id, QObject* receiver, HandlerT handler)
+void Router::disconnectClient(qint64 session_id, QObject* receiver, HandlerT handler)
 {
     proto::router::AdminToRouter message;
     auto* request = message.mutable_client_request();
@@ -433,7 +433,7 @@ void Router::clientDisconnect(qint64 session_id, QObject* receiver, HandlerT han
 
 //--------------------------------------------------------------------------------------------------
 template<typename HandlerT>
-void Router::workspaceAdd(const Router::Workspace& workspace, QObject* receiver, HandlerT handler)
+void Router::addWorkspace(const Router::Workspace& workspace, QObject* receiver, HandlerT handler)
 {
     proto::router::Workspace ws;
     if (!buildWorkspace(workspace, &ws))
@@ -449,7 +449,7 @@ void Router::workspaceAdd(const Router::Workspace& workspace, QObject* receiver,
 
 //--------------------------------------------------------------------------------------------------
 template<typename HandlerT>
-void Router::workspaceModify(const Router::Workspace& workspace, QObject* receiver, HandlerT handler)
+void Router::modifyWorkspace(const Router::Workspace& workspace, QObject* receiver, HandlerT handler)
 {
     proto::router::Workspace ws;
     if (!buildWorkspace(workspace, &ws))
@@ -465,7 +465,7 @@ void Router::workspaceModify(const Router::Workspace& workspace, QObject* receiv
 
 //--------------------------------------------------------------------------------------------------
 template<typename HandlerT>
-void Router::workspaceDelete(qint64 entry_id, QObject* receiver, HandlerT handler)
+void Router::deleteWorkspace(qint64 entry_id, QObject* receiver, HandlerT handler)
 {
     proto::router::AdminToRouter message;
     auto* request = message.mutable_workspace_request();
@@ -478,7 +478,7 @@ void Router::workspaceDelete(qint64 entry_id, QObject* receiver, HandlerT handle
 
 //--------------------------------------------------------------------------------------------------
 template<typename HandlerT>
-void Router::peerDisconnect(qint64 relay_id, qint64 peer_id, QObject* receiver, HandlerT handler)
+void Router::disconnectPeer(qint64 relay_id, qint64 peer_id, QObject* receiver, HandlerT handler)
 {
     proto::router::AdminToRouter message;
     auto* request = message.mutable_peer_request();
@@ -492,7 +492,7 @@ void Router::peerDisconnect(qint64 relay_id, qint64 peer_id, QObject* receiver, 
 
 //--------------------------------------------------------------------------------------------------
 template<typename HandlerT>
-void Router::workspaceList(qint64 workspace_id, QObject* receiver, HandlerT handler)
+void Router::listWorkspaces(qint64 workspace_id, QObject* receiver, HandlerT handler)
 {
     proto::router::ClientToRouter message;
     auto* request = message.mutable_workspace_list_request();
@@ -508,7 +508,7 @@ void Router::workspaceList(qint64 workspace_id, QObject* receiver, HandlerT hand
 
 //--------------------------------------------------------------------------------------------------
 template<typename HandlerT>
-void Router::hostList(proto::router::HostListRequest request, QObject* receiver, HandlerT handler)
+void Router::listHosts(proto::router::HostListRequest request, QObject* receiver, HandlerT handler)
 {
     request.set_request_id(nextRequestId());
     proto::router::ClientToRouter message;
@@ -532,7 +532,7 @@ void Router::checkHostStatus(HostId host_id, QObject* receiver, HandlerT handler
 
 //--------------------------------------------------------------------------------------------------
 template<typename HandlerT>
-void Router::connectionRequest(HostId host_id, QObject* receiver, HandlerT handler)
+void Router::requestConnection(HostId host_id, QObject* receiver, HandlerT handler)
 {
     proto::router::ClientToRouter message;
     auto* request = message.mutable_connection_request();
