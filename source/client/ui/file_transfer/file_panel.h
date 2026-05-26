@@ -30,7 +30,7 @@ namespace Ui {
 class FilePanel;
 } // namespace Ui
 
-class FileSendButton;
+class IconTextButton;
 
 namespace proto::file_transfer {
 enum ErrorCode : int;
@@ -101,7 +101,7 @@ private:
     void applyMirrored();
 
     std::unique_ptr<Ui::FilePanel> ui;
-    FileSendButton* send_button_ = nullptr;
+    IconTextButton* send_button_ = nullptr;
 
     bool transfer_allowed_ = false;
     bool transfer_enabled_ = false;
