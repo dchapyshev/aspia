@@ -253,8 +253,8 @@ SearchWidget::SearchWidget(QWidget* parent)
         if (!item)
             return;
 
-        Item* computer_item = static_cast<Item*>(item);
-        emit sig_doubleClicked(computer_item->computerId());
+        Item* host_item = static_cast<Item*>(item);
+        emit sig_doubleClicked(host_item->entryId());
     });
 
     connect(tree_computer_, &QTreeWidget::currentItemChanged,
@@ -264,8 +264,8 @@ SearchWidget::SearchWidget(QWidget* parent)
 
         if (current)
         {
-            Item* computer_item = static_cast<Item*>(current);
-            entry_id = computer_item->computerId();
+            Item* host_item = static_cast<Item*>(current);
+            entry_id = host_item->entryId();
         }
 
         emit sig_currentChanged(entry_id);
@@ -278,7 +278,7 @@ SearchWidget::SearchWidget(QWidget* parent)
         if (item)
         {
             tree_computer_->setCurrentItem(item);
-            entry_id = item->computerId();
+            entry_id = item->entryId();
         }
         emit sig_contextMenu(entry_id, tree_computer_->viewport()->mapToGlobal(pos));
     });
@@ -339,7 +339,7 @@ SearchWidget::Item* SearchWidget::currentItem()
 //--------------------------------------------------------------------------------------------------
 void SearchWidget::setCurrentHost(qint64 entry_id)
 {
-    Item* item = findItemByComputerId(entry_id);
+    Item* item = findItemByEntryId(entry_id);
     if (!item)
         return;
 
@@ -350,7 +350,7 @@ void SearchWidget::setCurrentHost(qint64 entry_id)
 //--------------------------------------------------------------------------------------------------
 void SearchWidget::refreshItem(qint64 entry_id)
 {
-    Item* item = findItemByComputerId(entry_id);
+    Item* item = findItemByEntryId(entry_id);
     if (!item)
         return;
 
@@ -373,7 +373,7 @@ void SearchWidget::refreshItem(qint64 entry_id)
 //--------------------------------------------------------------------------------------------------
 void SearchWidget::removeItem(qint64 entry_id)
 {
-    Item* item = findItemByComputerId(entry_id);
+    Item* item = findItemByEntryId(entry_id);
     if (!item)
         return;
 
@@ -474,13 +474,13 @@ void SearchWidget::onHeaderContextMenu(const QPoint& pos)
 }
 
 //--------------------------------------------------------------------------------------------------
-SearchWidget::Item* SearchWidget::findItemByComputerId(qint64 entry_id) const
+SearchWidget::Item* SearchWidget::findItemByEntryId(qint64 entry_id) const
 {
     const int count = tree_computer_->topLevelItemCount();
     for (int i = 0; i < count; ++i)
     {
         Item* item = static_cast<Item*>(tree_computer_->topLevelItem(i));
-        if (item->computerId() == entry_id)
+        if (item->entryId() == entry_id)
             return item;
     }
     return nullptr;

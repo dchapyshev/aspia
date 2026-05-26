@@ -52,7 +52,7 @@ public:
         Item(const HostConfig& host, QTreeWidget* parent);
 
         HostConfig& host() { return computer_; }
-        qint64 computerId() const { return computer_.id(); }
+        qint64 entryId() const { return computer_.id(); }
         qint64 groupId() const { return computer_.groupId(); }
         qint64 routerId() const { return computer_.routerId(); }
         QString computerName() const { return computer_.name(); }
@@ -74,9 +74,9 @@ public:
         HostMimeData() = default;
         virtual ~HostMimeData() final = default;
 
-        void setComputerItem(Item* computer_item, const QString& mime_type)
+        void setComputerItem(Item* host_item, const QString& mime_type)
         {
-            computer_item_ = computer_item;
+            computer_item_ = host_item;
             setData(mime_type, QByteArray());
         }
 
@@ -95,10 +95,10 @@ public:
             // Nothing
         }
 
-        void setComputerItem(Item* computer_item, const QString& mime_type)
+        void setComputerItem(Item* host_item, const QString& mime_type)
         {
             HostMimeData* mime_data = new HostMimeData();
-            mime_data->setComputerItem(computer_item, mime_type);
+            mime_data->setComputerItem(host_item, mime_type);
             setMimeData(mime_data);
         }
     };
@@ -144,7 +144,7 @@ private:
     void updateStatusLabels();
     void startOnlineChecker();
     void clearOnlineStatuses();
-    Item* findItemByComputerId(qint64 entry_id) const;
+    Item* findItemByEntryId(qint64 entry_id) const;
 
     std::unique_ptr<Ui::LocalGroupWidget> ui;
     QString mime_type_;
@@ -153,7 +153,7 @@ private:
     qint64 current_group_id_ = -1;
     bool online_check_enabled_ = true;
     QLabel* status_groups_label_ = nullptr;
-    QLabel* status_computers_label_ = nullptr;
+    QLabel* status_hosts_label_ = nullptr;
     QLabel* status_check_label_ = nullptr;
 
     OnlineChecker* online_checker_ = nullptr;

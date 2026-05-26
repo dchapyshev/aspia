@@ -532,12 +532,12 @@ bool Sidebar::onDragMove(QDragMoveEvent* event)
         if (!host_mime_data)
             return true;
 
-        LocalGroupWidget::Item* computer_item = host_mime_data->computerItem();
-        if (!computer_item)
+        LocalGroupWidget::Item* host_item = host_mime_data->computerItem();
+        if (!host_item)
             return true;
 
         // Don't allow drop to the same group.
-        if (computer_item->groupId() == target_item->groupId())
+        if (host_item->groupId() == target_item->groupId())
             return true;
 
         tree_widget_->clearSelection();
@@ -642,8 +642,8 @@ bool Sidebar::onDrop(QDropEvent* event)
             return true;
         }
 
-        LocalGroupWidget::Item* computer_item = host_mime_data->computerItem();
-        if (!computer_item)
+        LocalGroupWidget::Item* host_item = host_mime_data->computerItem();
+        if (!host_item)
         {
             restoreSelection();
             return true;
@@ -663,7 +663,7 @@ bool Sidebar::onDrop(QDropEvent* event)
             return true;
         }
 
-        if (computer_item->groupId() == target_item->groupId())
+        if (host_item->groupId() == target_item->groupId())
         {
             restoreSelection();
             return true;
@@ -674,7 +674,7 @@ bool Sidebar::onDrop(QDropEvent* event)
             Database::instance().hostList(target_item->groupId());
         for (const HostConfig& existing : std::as_const(target_computers))
         {
-            if (existing.name() == computer_item->computerName())
+            if (existing.name() == host_item->computerName())
             {
                 MsgBox::warning(tree_widget_,
                     tr("A host with this name already exists in the selected group."));
@@ -685,7 +685,7 @@ bool Sidebar::onDrop(QDropEvent* event)
 
         // Update the host's group in the database.
         std::optional<HostConfig> host =
-            Database::instance().findHost(computer_item->computerId());
+            Database::instance().findHost(host_item->entryId());
         if (!host.has_value())
         {
             restoreSelection();

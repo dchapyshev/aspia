@@ -42,7 +42,7 @@ public:
     public:
         Item(const HostConfig& host, const QString& group_path, QTreeWidget* parent);
 
-        qint64 computerId() const { return computer_.id(); }
+        qint64 entryId() const { return computer_.id(); }
         qint64 groupId() const { return computer_.groupId(); }
         QString computerName() const { return computer_.name(); }
 
@@ -81,7 +81,7 @@ private slots:
 private:
     class HighlightDelegate;
 
-    Item* findItemByComputerId(qint64 entry_id) const;
+    Item* findItemByEntryId(qint64 entry_id) const;
     void updateStatusLabels();
 
     QTreeWidget* tree_computer_ = nullptr;

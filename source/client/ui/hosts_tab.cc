@@ -548,14 +548,14 @@ void HostsTab::onConnectAction(QAction* action)
             LocalGroupWidget::Item* item = local_group_widget_->currentItem();
             if (!item)
                 return;
-            entry_id = item->computerId();
+            entry_id = item->entryId();
         }
         else
         {
             SearchWidget::Item* item = search_widget_->currentItem();
             if (!item)
                 return;
-            entry_id = item->computerId();
+            entry_id = item->entryId();
         }
 
         std::optional<HostConfig> found = Database::instance().findHost(entry_id);
@@ -1265,11 +1265,11 @@ void HostsTab::updateActionsState()
 
     if (current_content_ == search_widget_)
     {
-        SearchWidget::Item* computer_item = search_widget_->currentItem();
+        SearchWidget::Item* host_item = search_widget_->currentItem();
 
-        ui->action_delete_computer->setVisible(computer_item != nullptr);
-        ui->action_edit_computer->setVisible(computer_item != nullptr);
-        ui->action_copy_computer->setVisible(computer_item != nullptr);
+        ui->action_delete_computer->setVisible(host_item != nullptr);
+        ui->action_edit_computer->setVisible(host_item != nullptr);
+        ui->action_copy_computer->setVisible(host_item != nullptr);
     }
     else if (sidebar_item && sidebar_item->itemType() == Sidebar::Item::Type::LOCAL_GROUP)
     {
@@ -1282,12 +1282,12 @@ void HostsTab::updateActionsState()
         ui->action_delete_group->setVisible(sidebar_item->groupId() != 0);
         ui->action_edit_group->setVisible(sidebar_item->groupId() != 0);
 
-        LocalGroupWidget::Item* computer_item = local_group_widget_->currentItem();
+        LocalGroupWidget::Item* host_item = local_group_widget_->currentItem();
 
         ui->action_add_computer->setVisible(true);
-        ui->action_delete_computer->setVisible(computer_item != nullptr);
-        ui->action_edit_computer->setVisible(computer_item != nullptr);
-        ui->action_copy_computer->setVisible(computer_item != nullptr);
+        ui->action_delete_computer->setVisible(host_item != nullptr);
+        ui->action_edit_computer->setVisible(host_item != nullptr);
+        ui->action_copy_computer->setVisible(host_item != nullptr);
     }
 
     if (sidebar_item && sidebar_item->itemType() == Sidebar::Item::ROUTER)
@@ -1472,13 +1472,13 @@ qint64 HostsTab::currentHostEntryId() const
     if (current_content_ == local_group_widget_)
     {
         LocalGroupWidget::Item* item = local_group_widget_->currentItem();
-        return item ? item->computerId() : -1;
+        return item ? item->entryId() : -1;
     }
 
     if (current_content_ == search_widget_)
     {
         SearchWidget::Item* item = search_widget_->currentItem();
-        return item ? item->computerId() : -1;
+        return item ? item->entryId() : -1;
     }
 
     return -1;

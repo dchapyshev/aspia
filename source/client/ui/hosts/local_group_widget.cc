@@ -81,7 +81,7 @@ LocalGroupWidget::LocalGroupWidget(QWidget* parent)
       ui(std::make_unique<Ui::LocalGroupWidget>()),
       mime_type_(QString("application/%1").arg(QUuid::createUuid().toString())),
       status_groups_label_(new QLabel(this)),
-      status_computers_label_(new QLabel(this)),
+      status_hosts_label_(new QLabel(this)),
       status_check_label_(new QLabel(tr("Status update..."), this)),
       online_checker_(new OnlineChecker(this))
 {
@@ -104,8 +104,8 @@ LocalGroupWidget::LocalGroupWidget(QWidget* parent)
         if (!item)
             return;
 
-        Item* computer_item = static_cast<Item*>(item);
-        emit sig_doubleClicked(computer_item->computerId());
+        Item* host_item = static_cast<Item*>(item);
+        emit sig_doubleClicked(host_item->entryId());
     });
 
     connect(ui->tree_computer, &QTreeWidget::currentItemChanged,
@@ -115,8 +115,8 @@ LocalGroupWidget::LocalGroupWidget(QWidget* parent)
 
         if (current)
         {
-            Item* computer_item = static_cast<Item*>(current);
-            entry_id = computer_item->computerId();
+            Item* host_item = static_cast<Item*>(current);
+            entry_id = host_item->entryId();
         }
 
         emit sig_currentChanged(entry_id);
@@ -130,7 +130,7 @@ LocalGroupWidget::LocalGroupWidget(QWidget* parent)
         if (item)
         {
             ui->tree_computer->setCurrentItem(item);
-            entry_id = item->computerId();
+            entry_id = item->entryId();
         }
         emit sig_contextMenu(entry_id, ui->tree_computer->viewport()->mapToGlobal(pos));
     });
@@ -178,7 +178,7 @@ void LocalGroupWidget::setConnectTime(qint64 entry_id, qint64 connect_time)
     for (int i = 0; i < count; ++i)
     {
         Item* item = static_cast<Item*>(ui->tree_computer->topLevelItem(i));
-        if (item->computerId() == entry_id)
+        if (item->entryId() == entry_id)
         {
             item->setConnectTime(connect_time);
             break;
@@ -195,7 +195,7 @@ void LocalGroupWidget::setOnlineCheckEnabled(bool enable)
 //--------------------------------------------------------------------------------------------------
 void LocalGroupWidget::setCurrentHost(qint64 entry_id)
 {
-    Item* item = findItemByComputerId(entry_id);
+    Item* item = findItemByEntryId(entry_id);
     if (!item)
         return;
 
@@ -206,7 +206,7 @@ void LocalGroupWidget::setCurrentHost(qint64 entry_id)
 //--------------------------------------------------------------------------------------------------
 void LocalGroupWidget::refreshItem(qint64 entry_id)
 {
-    Item* item = findItemByComputerId(entry_id);
+    Item* item = findItemByEntryId(entry_id);
     if (!item)
         return;
 
@@ -223,7 +223,7 @@ void LocalGroupWidget::refreshItem(qint64 entry_id)
 //--------------------------------------------------------------------------------------------------
 void LocalGroupWidget::removeItem(qint64 entry_id)
 {
-    Item* item = findItemByComputerId(entry_id);
+    Item* item = findItemByEntryId(entry_id);
     if (!item)
         return;
 
@@ -278,7 +278,7 @@ void LocalGroupWidget::reload()
     {
         Item* item = static_cast<Item*>(ui->tree_computer->topLevelItem(i));
         if (item)
-            ids.append(item->computerId());
+            ids.append(item->entryId());
     }
     online_checker_->invalidate(ids);
 
@@ -294,11 +294,11 @@ void LocalGroupWidget::activate(QStatusBar* statusbar)
     updateStatusLabels();
 
     statusbar->addWidget(status_groups_label_);
-    statusbar->addWidget(status_computers_label_);
+    statusbar->addWidget(status_hosts_label_);
     statusbar->addWidget(status_check_label_);
 
     status_groups_label_->show();
-    status_computers_label_->show();
+    status_hosts_label_->show();
     status_check_label_->setVisible(false);
 }
 
@@ -311,8 +311,8 @@ void LocalGroupWidget::deactivate(QStatusBar* statusbar)
     statusbar->removeWidget(status_groups_label_);
     status_groups_label_->setParent(this);
 
-    statusbar->removeWidget(status_computers_label_);
-    status_computers_label_->setParent(this);
+    statusbar->removeWidget(status_hosts_label_);
+    status_hosts_label_->setParent(this);
 
     statusbar->removeWidget(status_check_label_);
     status_check_label_->setParent(this);
@@ -381,7 +381,7 @@ void LocalGroupWidget::onOnlineCheckerResult(qint64 entry_id, bool online)
     for (int i = 0; i < ui->tree_computer->topLevelItemCount(); ++i)
     {
         Item* item = static_cast<Item*>(ui->tree_computer->topLevelItem(i));
-        if (item->computerId() == entry_id)
+        if (item->entryId() == entry_id)
         {
             item->setOnlineStatus(online);
             break;
@@ -399,14 +399,14 @@ void LocalGroupWidget::onOnlineCheckerFinished()
 //--------------------------------------------------------------------------------------------------
 void LocalGroupWidget::startDrag()
 {
-    Item* computer_item = static_cast<Item*>(ui->tree_computer->itemAt(start_pos_));
-    if (computer_item)
+    Item* host_item = static_cast<Item*>(ui->tree_computer->itemAt(start_pos_));
+    if (host_item)
     {
         ComputerDrag* drag = new ComputerDrag(this);
 
-        drag->setComputerItem(computer_item, mime_type_);
+        drag->setComputerItem(host_item, mime_type_);
 
-        QIcon icon = computer_item->icon(0);
+        QIcon icon = host_item->icon(0);
         drag->setPixmap(icon.pixmap(icon.actualSize(QSize(16, 16))));
 
         drag->exec(Qt::MoveAction);
@@ -421,7 +421,7 @@ void LocalGroupWidget::updateStatusLabels()
         child_groups_count = Database::instance().groupList(current_group_id_).size();
 
     status_groups_label_->setText(tr("%n child group(s)", "", child_groups_count));
-    status_computers_label_->setText(
+    status_hosts_label_->setText(
         tr("%n child host(s)", "", ui->tree_computer->topLevelItemCount()));
 }
 
@@ -463,13 +463,13 @@ void LocalGroupWidget::clearOnlineStatuses()
 }
 
 //--------------------------------------------------------------------------------------------------
-LocalGroupWidget::Item* LocalGroupWidget::findItemByComputerId(qint64 entry_id) const
+LocalGroupWidget::Item* LocalGroupWidget::findItemByEntryId(qint64 entry_id) const
 {
     const int count = ui->tree_computer->topLevelItemCount();
     for (int i = 0; i < count; ++i)
     {
         Item* item = static_cast<Item*>(ui->tree_computer->topLevelItem(i));
-        if (item->computerId() == entry_id)
+        if (item->entryId() == entry_id)
             return item;
     }
     return nullptr;
