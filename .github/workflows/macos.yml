@@ -70,7 +70,8 @@ jobs:
           mkdir -p $VCPKG_DOWNLOADS
 
           # Qt 6.10+ requires full Xcode, switch from CommandLineTools
-          sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
+          export DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer
+          echo "DEVELOPER_DIR=$DEVELOPER_DIR" >> $GITHUB_ENV
           xcodebuild -version
 
           export PATH="/Applications/CMake.app/Contents/bin:$PATH"
