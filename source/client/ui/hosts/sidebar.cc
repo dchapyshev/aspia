@@ -204,6 +204,27 @@ void Sidebar::setRouterStatus(qint64 router_id, RouterItem::Status status)
 }
 
 //--------------------------------------------------------------------------------------------------
+void Sidebar::setRouterWorkspaces(qint64 router_id, const QList<Router::Workspace>& workspaces)
+{
+    RouterItem* router = routerById(router_id);
+    if (!router)
+        return;
+
+    // Drop existing ROUTER_GROUP children, keep anything else untouched.
+    for (int i = router->childCount() - 1; i >= 0; --i)
+    {
+        Item* child = static_cast<Item*>(router->child(i));
+        if (child->itemType() == Item::ROUTER_GROUP)
+            delete router->takeChild(i);
+    }
+
+    for (const Router::Workspace& workspace : workspaces)
+        new RouterGroupItem(workspace.entry_id, workspace.name, router);
+
+    router->setExpanded(true);
+}
+
+//--------------------------------------------------------------------------------------------------
 qint64 Sidebar::currentGroupId() const
 {
     return current_group_id_;
@@ -932,5 +953,5 @@ Sidebar::RouterGroupItem::RouterGroupItem(qint64 group_id, const QString& name, 
     : Item(ROUTER_GROUP, group_id, parent)
 {
     setText(0, name);
-    setIcon(0, QIcon(":/img/folder.svg"));
+    setIcon(0, QIcon(":/img/workspace.svg"));
 }

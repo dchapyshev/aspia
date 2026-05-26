@@ -25,6 +25,8 @@
 #include <QTreeWidget>
 #include <QWidget>
 
+#include "client/router.h"
+
 class GroupConfig;
 
 class Sidebar final : public QWidget
@@ -132,6 +134,7 @@ public:
     void loadRouters();
     void reloadRouters();
     void setRouterStatus(qint64 router_id, RouterItem::Status status);
+    void setRouterWorkspaces(qint64 router_id, const QList<Router::Workspace>& workspaces);
     qint64 currentGroupId() const;
     Item* currentItem() const;
     RouterItem* routerById(qint64 router_id) const;

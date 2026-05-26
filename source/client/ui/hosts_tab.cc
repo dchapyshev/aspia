@@ -413,6 +413,21 @@ void HostsTab::onRouterStatusChanged(qint64 router_id, Router::Status status)
     }
 
     ui->sidebar->setRouterStatus(router_id, sidebar_status);
+
+    if (status == Router::Status::ONLINE)
+    {
+        if (Router* router = Router::instance(router_id))
+        {
+            router->workspaceList(0, this, [this, router_id](const Router::WorkspaceList& list)
+            {
+                ui->sidebar->setRouterWorkspaces(router_id, list.workspaces);
+            });
+        }
+    }
+    else
+    {
+        ui->sidebar->setRouterWorkspaces(router_id, {});
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
