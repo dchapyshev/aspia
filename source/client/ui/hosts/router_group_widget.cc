@@ -150,6 +150,9 @@ RouterGroupWidget::RouterGroupWidget(QWidget* parent)
     ui->tree_host->header()->setContextMenuPolicy(Qt::CustomContextMenu);
     ui->tree_host->header()->setSectionHidden(COLUMN_USER_NAME, true);
     ui->tree_host->header()->setSectionHidden(COLUMN_ARCH, true);
+    ui->tree_host->header()->setSectionHidden(COLUMN_COMMENT, true);
+    ui->tree_host->header()->setSectionHidden(COLUMN_ADDRESS, true);
+
     connect(ui->tree_host->header(), &QHeaderView::customContextMenuRequested,
             this, &RouterGroupWidget::onHeaderContextMenu);
 
