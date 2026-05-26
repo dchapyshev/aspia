@@ -22,7 +22,7 @@ Currently supported
 - Direct connections
 - Audio support
 - Video recording
-- Client and Console for Windows, MacOSX and Linux
+- Client for Windows, MacOSX and Linux
 - Host for Windows only
 - Router/Relay for Windows and Linux
 - And much more
