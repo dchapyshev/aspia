@@ -69,6 +69,10 @@ jobs:
           mkdir -p $VCPKG_DEFAULT_BINARY_CACHE
           mkdir -p $VCPKG_DOWNLOADS
 
+          # Qt 6.10+ requires full Xcode, switch from CommandLineTools
+          sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
+          xcodebuild -version
+
           export PATH="/Applications/CMake.app/Contents/bin:$PATH"
 
           # Build vcpkg dependencies
